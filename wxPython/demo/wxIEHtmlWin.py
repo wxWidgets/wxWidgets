@@ -8,9 +8,10 @@ if wxPlatform == '__WXMSW__':
 
 class TestPanel(wxWindow):
     def __init__(self, parent, log, frame=None):
-        wxWindow.__init__(self, parent, -1, style=wxCLIP_CHILDREN)
+        wxWindow.__init__(self, parent, -1,
+                          style=wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE)
         self.log = log
-        self.current = "http://wxPython.org/"
+        self.current = "http://wxWindows.org/"
         self.frame = frame
         if frame:
             self.titleBase = frame.GetTitle()
@@ -19,7 +20,7 @@ class TestPanel(wxWindow):
         sizer = wxBoxSizer(wxVERTICAL)
         btnSizer = wxBoxSizer(wxHORIZONTAL)
 
-        self.ie = wxIEHtmlWin(self, -1) ##, style=wxSUNKEN_BORDER)
+        self.ie = wxIEHtmlWin(self, -1, style = wxNO_FULL_REPAINT_ON_RESIZE)
 
 
         btn = wxButton(self, wxNewId(), "Open", style=wxBU_EXACTFIT)

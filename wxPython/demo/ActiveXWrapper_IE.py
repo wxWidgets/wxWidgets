@@ -34,7 +34,8 @@ if wxPlatform == '__WXMSW__':
 
 class TestPanel(wxWindow):
     def __init__(self, parent, log, frame=None):
-        wxWindow.__init__(self, parent, -1)#, style=wxCLIP_CHILDREN)
+        wxWindow.__init__(self, parent, -1,
+                          style=wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE)
         self.ie = None
         self.log = log
         self.current = "http://wxPython.org/"
@@ -53,33 +54,45 @@ class TestPanel(wxWindow):
                                     eventObj = self)
 
         # Create an instance of that class
-        self.ie = theClass(self, -1, style=wxSUNKEN_BORDER)
+        self.ie = theClass(self, -1) ##, style=wxSUNKEN_BORDER)
 
 
-        #btn = wxButton(self, wxNewId(), " Open ")
-        #EVT_BUTTON(self, btn.GetId(), self.OnOpenButton)
-        #btnSizer.Add(btn, 0, wxEXPAND|wxALL, 5)
+        btn = wxButton(self, wxNewId(), "Open", style=wxBU_EXACTFIT)
+        EVT_BUTTON(self, btn.GetId(), self.OnOpenButton)
+        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
 
-        btn = wxButton(self, wxNewId(), " Home ")
+        btn = wxButton(self, wxNewId(), "Home", style=wxBU_EXACTFIT)
         EVT_BUTTON(self, btn.GetId(), self.OnHomeButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 5)
+        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
 
-        btn = wxButton(self, wxNewId(), " <-- ")
+        btn = wxButton(self, wxNewId(), "<--", style=wxBU_EXACTFIT)
         EVT_BUTTON(self, btn.GetId(), self.OnPrevPageButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 5)
+        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
 
-        btn = wxButton(self, wxNewId(), " --> ")
+        btn = wxButton(self, wxNewId(), "-->", style=wxBU_EXACTFIT)
         EVT_BUTTON(self, btn.GetId(), self.OnNextPageButton)
-        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 5)
+        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
+
+        btn = wxButton(self, wxNewId(), "Stop", style=wxBU_EXACTFIT)
+        EVT_BUTTON(self, btn.GetId(), self.OnStopButton)
+        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
+
+        btn = wxButton(self, wxNewId(), "Search", style=wxBU_EXACTFIT)
+        EVT_BUTTON(self, btn.GetId(), self.OnSearchPageButton)
+        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
+
+        btn = wxButton(self, wxNewId(), "Refresh", style=wxBU_EXACTFIT)
+        EVT_BUTTON(self, btn.GetId(), self.OnRefreshPageButton)
+        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 2)
 
         txt = wxStaticText(self, -1, "Location:")
-        btnSizer.Add(txt, 0, wxCENTER|wxALL, 5)
+        btnSizer.Add(txt, 0, wxCENTER|wxALL, 2)
 
         self.location = wxComboBox(self, wxNewId(), "", style=wxCB_DROPDOWN)
         EVT_COMBOBOX(self, self.location.GetId(), self.OnLocationSelect)
         EVT_KEY_UP(self.location, self.OnLocationKey)
         EVT_CHAR(self.location, self.IgnoreReturn)
-        btnSizer.Add(self.location, 1, wxEXPAND|wxALL, 5)
+        btnSizer.Add(self.location, 1, wxEXPAND|wxALL, 2)
 
         sizer.Add(btnSizer, 0, wxEXPAND)
         sizer.Add(self.ie, 1, wxEXPAND)
@@ -134,9 +147,18 @@ class TestPanel(wxWindow):
     def OnPrevPageButton(self, event):
         self.ie.GoBack()
 
-
     def OnNextPageButton(self, event):
         self.ie.GoForward()
+
+    def OnStopButton(self, evt):
+        self.ie.Stop()
+
+    def OnSearchPageButton(self, evt):
+        self.ie.GoSearch()
+
+    def OnRefreshPageButton(self, evt):
+        self.ie.Refresh2(3)
+
 
 
     # The following event handlers are called by the web browser COM

@@ -659,7 +659,8 @@ _wxCallAfterId = None
 def wxCallAfter(callable, *args, **kw):
     """
     Call the specified function after the current and pending event
-    handlers have been completed.
+    handlers have been completed.  This is also good for making GUI
+    method calls from non-GUI threads.
     """
     app = wxGetApp()
     assert app, 'No wxApp created yet'

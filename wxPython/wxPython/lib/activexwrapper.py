@@ -87,7 +87,7 @@ def MakeActiveXClass(CoClass, eventClass=None, eventObj=None):
 def axw__init__(self, parent, ID, pos=wxDefaultPosition, size=wxDefaultSize, style=0):
     # init base classes
     pywin.mfc.activex.Control.__init__(self)
-    wxWindow.__init__(self, parent, -1, pos, size, style)
+    wxWindow.__init__(self, parent, -1, pos, size, style|wxNO_FULL_REPAINT_ON_RESIZE)
 
     win32ui.EnableControlContainer()
     self._eventObj = self._eventObj  # move from class to instance
@@ -106,7 +106,7 @@ def axw__init__(self, parent, ID, pos=wxDefaultPosition, size=wxDefaultSize, sty
 
     # hook some wx events
     EVT_SIZE(self, self.axw_OnSize)
-    EVT_ERASE_BACKGROUND(self, self.axw_OEB)
+    #EVT_ERASE_BACKGROUND(self, self.axw_OEB)
 
 
 def axw__getattr__(self, attr):
@@ -132,6 +132,7 @@ def axw_OEB(self, event):
 def axw_Cleanup(self):
     del self._wnd
     self.close()
+    pass
     ## anything else???
 
 
