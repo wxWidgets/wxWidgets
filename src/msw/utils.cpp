@@ -1097,6 +1097,8 @@ extern long wxEncodingToCharset(wxFontEncoding encoding)
 
         case wxFONTENCODING_CP437:
             return OEM_CHARSET;
+        default: // fix GCC warning
+            return -1;
     }
 
     // no way to translate this encoding into a Windows charset
