@@ -154,12 +154,17 @@ bool wxCommandProcessor::Redo()
 {
     wxCommand *redoCommand = (wxCommand *) NULL;
     wxNode *redoNode = (wxNode *) NULL;
-    if (m_currentCommand && m_currentCommand->Next())
+
+    if ( m_currentCommand )
     {
-        redoCommand = (wxCommand *)m_currentCommand->Next()->Data();
-        redoNode = m_currentCommand->Next();
+        // is there anything to redo?
+        if ( m_currentCommand->Next() )
+        {
+            redoCommand = (wxCommand *)m_currentCommand->Next()->Data();
+            redoNode = m_currentCommand->Next();
+        }
     }
-    else
+    else // no current command, redo the first one
     {
         if (m_commands.Number() > 0)
         {
