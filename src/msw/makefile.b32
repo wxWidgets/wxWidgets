@@ -28,8 +28,8 @@ THISDIR = $(WXDIR)\src\msw
 
 # Set all these to 1 if you want to build a dynamic library
 !if "$(DLL)" == "1"
-WXMAKINGDLL=0
-WXBUILDDLL=0
+WXMAKINGDLL=1
+WXBUILDDLL=1
 !endif
 
 !include $(WXDIR)\src\makeb32.env
