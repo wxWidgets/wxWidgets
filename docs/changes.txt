@@ -133,6 +133,10 @@ wxMotif:
 
 - added 3 state checkbox
 
+wxWinCE:
+
+- added automatized but customizable handling of native SmartPhone menus
+
 
 2.5.2
 -----
