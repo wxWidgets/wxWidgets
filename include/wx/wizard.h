@@ -63,10 +63,10 @@ public:
     // cases - override this method if you want to create the bitmap to be used
     // dynamically or to do something even more fancy. It's ok to return
     // wxNullBitmap from here - the default one will be used then.
-    virtual wxBitmap GetBitmap() const { return m_PageBitmap; }
+    virtual wxBitmap GetBitmap() const { return m_bitmap; }
 
 protected:
-    wxBitmap m_PageBitmap;
+    wxBitmap m_bitmap;
 
 private:
     DECLARE_ABSTRACT_CLASS(wxWizardPage)

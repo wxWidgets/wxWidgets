@@ -94,7 +94,7 @@ wxWizardPage::wxWizardPage(wxWizard *parent,
 #endif // wxUSE_RESOURCES
     }
 
-    m_PageBitmap = bitmap;
+    m_bitmap = bitmap;
 
     // initially the page is hidden, it's shown only when it becomes current
     Hide();
@@ -133,6 +133,7 @@ bool wxWizard::Create(wxWindow *parent,
 {
     m_posWizard = pos;
     m_bitmap = bitmap ;
+
     // just create the dialog itself here, the controls will be created in
     // DoCreateControls() called later when we know our final size
     m_page = (wxWizardPage *)NULL;
