@@ -26,19 +26,19 @@ class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxToolBar;
 class WXDLLEXPORT wxStatusBar;
 
-class WXDLLEXPORT wxFrame;
+class WXDLLEXPORT wxFrameMGL;
 
 //-----------------------------------------------------------------------------
 // wxFrame
 //-----------------------------------------------------------------------------
 
 //FIXME_MGL
-class WXDLLEXPORT wxFrame : public wxFrameBase
+class WXDLLEXPORT wxFrameMGL : public wxFrameBase
 {
 public:
     // construction
-    wxFrame() { Init(); }
-    wxFrame(wxWindow *parent,
+    wxFrameMGL() { Init(); }
+    wxFrameMGL(wxWindow *parent,
             wxWindowID id,
             const wxString& title,
             const wxPoint& pos = wxDefaultPosition,
@@ -59,7 +59,7 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr) {}
 
-    virtual ~wxFrame() {}
+    virtual ~wxFrameMGL() {}
 
     // implement base class pure virtuals
     virtual void Maximize(bool maximize = TRUE) {}
@@ -126,7 +126,7 @@ protected:
     virtual void DoGetClientSize( int *width, int *height ) const {}
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFrame)
+    DECLARE_DYNAMIC_CLASS(wxFrameMGL)
 };
 
 #endif // __WX_FRAME_H__

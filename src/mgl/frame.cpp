@@ -20,4 +20,4 @@
 #endif
 
 #include "wx/frame.h"
-IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxFrameMGL,wxWindow)

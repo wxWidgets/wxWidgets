@@ -15,7 +15,8 @@
 #endif
 
 #include "wx/dc.h"
-#include "wx/window.h"
+
+class WXDLLEXPORT wxWindowMGL;
 
 //-----------------------------------------------------------------------------
 // classes
@@ -29,12 +30,15 @@ class WXDLLEXPORT wxClientDC;
 // wxWindowDC
 //-----------------------------------------------------------------------------
 
-//FIXME_MGL
 class WXDLLEXPORT wxWindowDC : public wxDC
 {
 public:
     wxWindowDC() {}
-    wxWindowDC( wxWindow *win ) {}
+    virtual ~wxWindowDC();
+    wxWindowDC(wxWindow *win);
+
+protected:
+    wxWindow *m_wnd;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowDC)
@@ -47,10 +51,11 @@ private:
 class WXDLLEXPORT wxClientDC : public wxWindowDC
 {
 public:
-    wxClientDC() {}
-    wxClientDC( wxWindow *win ) {}
+    wxClientDC() : wxWindowDC() {}
+    wxClientDC(wxWindow *win);
 
 private:
+    wxWindowMGL *m_wnd;
     DECLARE_DYNAMIC_CLASS(wxClientDC)
 };
 
@@ -58,6 +63,7 @@ private:
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
+// FIXME_MGL
 class WXDLLEXPORT wxPaintDC : public wxClientDC
 {
 public:

@@ -28,7 +28,7 @@ public:
         { Init(); }
     ~wxTimer() {}
 
-    virtual bool Start( int millisecs = -1, bool oneShot = FALSE ) {}
+    virtual bool Start( int millisecs = -1, bool oneShot = FALSE ) { return TRUE; }
     virtual void Stop() {}
 
     virtual bool IsRunning() const { return m_tag != -1; }

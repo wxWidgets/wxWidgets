@@ -21,11 +21,6 @@
 // Global data
 //-----------------------------------------------------------------------------
 
-// MGL's display DC:
-MGLDevCtx *g_displayDC = NULL;
-
-// ----
-
 wxApp *wxTheApp = (wxApp *)  NULL;
 wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 

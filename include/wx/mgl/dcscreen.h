@@ -26,16 +26,15 @@ class WXDLLEXPORT wxScreenDC;
 // wxScreenDC
 //-----------------------------------------------------------------------------
 
-//FIXME_MGL
-class WXDLLEXPORT wxScreenDC: public wxPaintDC
+class WXDLLEXPORT wxScreenDC: public wxDC
 {
 public:
-    wxScreenDC() {}
+    wxScreenDC();
     ~wxScreenDC() {}
 
-    static bool StartDrawingOnTop( wxWindow *window ) {}
-    static bool StartDrawingOnTop( wxRect *rect = (wxRect *) NULL ) {}
-    static bool EndDrawingOnTop() {}
+    static bool StartDrawingOnTop(wxWindow *WXUNUSED(window)) { return TRUE; }
+    static bool StartDrawingOnTop(wxRect *WXUNUSED(rect) = NULL) { return TRUE; }
+    static bool EndDrawingOnTop() { return TRUE; }
   
 private:
     DECLARE_DYNAMIC_CLASS(wxScreenDC)

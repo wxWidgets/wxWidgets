@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcscreen.cpp
-// Purpose:
-// Author:      Robert Roebling
+// Author:      Vaclav Slavik
 // Id:          $Id$
-// Copyright:   (c) 1998 Robert Roebling
+// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -11,8 +10,19 @@
 #pragma implementation "dcscreen.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #include "wx/dcscreen.h"
-#include "wx/window.h"
+#include "wx/mgl/private.h"
 
+IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxDC)
 
-IMPLEMENT_DYNAMIC_CLASS(wxScreenDC,wxPaintDC)
+wxScreenDC::wxScreenDC() : wxDC()
+{
+    SetMGLDC(g_displayDC, FALSE /* no ownership */);
+}

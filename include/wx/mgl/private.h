@@ -23,6 +23,7 @@ class WXDLLEXPORT wxBitmap;
 // ---------------------------------------------------------------------------
 
 extern MGLDevCtx *g_displayDC;
+extern winmng_t  *g_winMng;
 
 // ---------------------------------------------------------------------------
 // helper functions
@@ -47,5 +48,8 @@ public:
     MGLDC *m_old;
 };
 
+
+extern bool wxCreateMGL_WM();
+extern void wxDestroyMGL_WM();
 
 #endif // _WX_PRIVATE_H_

@@ -765,7 +765,7 @@ void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
     if ( m_font.GetUnderlined() )
     {
         int x1 = xx, y1 = yy;
-        int x2, y2;
+        int x2 = 0 , y2 = 0;
         int w = m_MGLDC->textWidth(c_text);
         m_MGLDC->underScoreLocation(x1, y1, c_text);
         switch (m_MGLDC->getTextDirection())
@@ -1397,7 +1397,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
     xsrc = source->LogicalToDeviceX(xsrc);
     ysrc = source->LogicalToDeviceY(ysrc);
 
-    /* TODO: use the mask origin when drawing transparently */
+    /* FIXME_MGL: use the mask origin when drawing transparently */
     if (xsrcMask == -1 && ysrcMask == -1)
     {
         xsrcMask = xsrc; ysrcMask = ysrc;

@@ -12,7 +12,6 @@
 
 #include "wx/intl.h"
 #include "wx/log.h"
-
 #include "wx/process.h"
 
 #include <stdarg.h>
@@ -25,6 +24,8 @@
 #ifdef __UNIX__
 #include "wx/unix/execute.h"
 #endif
+
+#include "wx/mgl/private.h"
 
 //----------------------------------------------------------------------------
 // misc.
@@ -39,20 +40,23 @@ void wxBell()
 // display characterstics
 // ----------------------------------------------------------------------------
 
-extern MGLDevCtx *g_displayDC;
-
-void wxDisplaySize( int *width, int *height )
+void wxDisplaySize(int *width, int *height)
 {
     wxASSERT_MSG( g_displayDC, wxT("MGL display DC not created yet.") );
     if (width) *width = g_displayDC->sizex();
     if (height) *height = g_displayDC->sizey();
 }
 
-void wxGetMousePosition( int* x, int* y )
+void wxGetMousePosition(int* x, int* y)
 {
-#if 0 // FIXME_MGL
-    gdk_window_get_pointer( (GdkWindow*) NULL, x, y, (GdkModifierType*) NULL );
-#endif
+    MS_getPos(x, y);
+}
+
+wxPoint wxGetMousePosition()
+{
+    wxPoint pt;
+    wxGetMousePosition(&pt.x, &pt.y);
+    return pt;
 }
 
 bool wxColourDisplay()
@@ -72,7 +76,7 @@ int wxDisplayDepth()
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
 #if 0 // FIXME_MGL
-        // FIXME_MGL : wxGetOsVersion, too
+        // FIXME_MGL : fix wxGetOsVersion, too
   if (majorVsn) *majorVsn = GTK_MAJOR_VERSION;
   if (minorVsn) *minorVsn = GTK_MINOR_VERSION;
 

@@ -306,7 +306,7 @@ wxImage wxBitmap::ConvertToImage() const
 {
     wxCHECK_MSG( Ok(), FALSE, wxT("invalid bitmap") );
 
-    long width, height;
+    int width, height;
     width = GetWidth();
     height = GetHeight();
     
@@ -517,6 +517,7 @@ MGLDevCtx *wxBitmap::CreateTmpDC() const
             case  4: cnt = 16;  break;
             case  8: cnt = 256; break;
             default:
+                cnt = 0;
                 wxFAIL_MSG( wxT("bitmap with this depth cannot have palette") );
                 break;
         }
