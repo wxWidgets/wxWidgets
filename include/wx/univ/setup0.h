@@ -587,9 +587,6 @@
 #define wxUSE_TOOLBAR 1
 #define wxUSE_TOOLBAR_NATIVE 0
 
-// this setting is obsolete, value is ignored
-#define wxUSE_BUTTONBAR 0
-
 // wxNotebook is a control with several "tabs" located on one of its sides. It
 // may be used ot logically organise the data presented to the user instead of
 // putting everything in one huge dialog. It replaces wxTabControl and related
