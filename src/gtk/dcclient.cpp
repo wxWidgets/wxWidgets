@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcclient.cpp
+// Name:        gtk/dcclient.cpp
 // Purpose:
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Markus Holzem, Chris Breeze
-// Licence:           wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -14,9 +14,12 @@
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/image.h"
+#include "wx/module.h"
+
 #include "wx/gtk/win_gtk.h"
 
 #include <math.h>               // for floating-point functions
+
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
