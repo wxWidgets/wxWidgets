@@ -1,5 +1,6 @@
 %define pref /usr
 %define ver 2.3.1
+%define ver2 2.3
 %define rel 1
 
 Summary: wxBase library - non-GUI support classes of wxWindows toolkit
@@ -68,6 +69,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{pref}/lib/wx/include/wx/base
 %{pref}/lib/wx/include/wx/base/setup.h
 %defattr (644, root, root, 755)
-%attr(755, -, -) %{pref}/bin/wxbase-config
+%attr(755, -, -) %{pref}/bin/wxbase-%{ver2}-config
 %attr(755, -, -) %{pref}/bin/wx-config
 
