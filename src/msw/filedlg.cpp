@@ -400,10 +400,15 @@ int wxFileDialog::ShowModal()
     }
 
 #if wxUSE_UNICODE_MSLU && defined(OFN_EXPLORER)
-    // VS: these's a bug in unicows.dll - when multiple files are
-    //     selected, of.nFileOffset doesn't point to the first 
-    //     filename but rather to the last component of directory
-    //     name. Let's try to fix it:
+    // VS: there's a bug in unicows.dll - when multiple files are selected, 
+    //     of.nFileOffset doesn't point to the first filename but rather to 
+    //     the last component of directory name. This bug is known to MSLU
+    //     developers, but they are not going to fix it: "this is a true 
+    //     limitation, that we have decided to live with" and "working
+    //     harder on this case just did not seem worth the effort"...
+    //
+    //     Our only option is to try to fix it ourselves:
+
     if ( (m_dialogStyle & wxMULTIPLE) &&
          (fileNameBuffer[of.nFileOffset-1] != wxT('\0')) &&
          wxGetOsVersion() == wxWIN95 /*using unicows.dll*/)
@@ -470,6 +475,17 @@ int wxFileDialog::ShowModal()
                  (of.nFileExtension && fileNameBuffer[of.nFileExtension] == wxT('\0')) )
             {
                 // User has typed a filename without an extension:
+
+                // A filename can end in a "." here ("abc."), this means it
+                // does not have an extension. Because later on a "." with
+                // the default extension is appended we remove the "." if
+                // filename ends with one (We don't want files called
+                // "abc..ext")
+                int idx = wxStrlen(fileNameBuffer) - 1;
+                if ( fileNameBuffer[idx] == wxT('.') )
+                {
+                    fileNameBuffer[idx] = wxT('\0');
+                }
 
                 int   maxFilter = (int)(of.nFilterIndex*2L-1L);
                 extension = filterBuffer;
