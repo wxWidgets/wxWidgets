@@ -258,6 +258,10 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
   if ( GetAutoLayout() )
     Layout();
   else {
+    // no child: go out !
+    if (!GetChildren()->First())
+      return;
+
     // do we have exactly one child?
     wxWindow *child = NULL;
     for(wxNode *node = GetChildren()->First(); node; node = node->Next())
