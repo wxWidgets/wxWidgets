@@ -70,7 +70,7 @@ public:
     void OnText(wxCommandEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
 
-    bool  m_hasCapture;
+    bool m_hasCapture;
 
 private:
     static inline wxChar GetChar(bool on, wxChar c) { return on ? c : _T('-'); }
@@ -139,6 +139,8 @@ public:
     void OnFileSave(wxCommandEvent& event);
     void OnFileLoad(wxCommandEvent& event);
 
+    void OnSetEditable(wxCommandEvent& event);
+
     void OnIdle( wxIdleEvent& event );
 
 private:
@@ -173,9 +175,10 @@ enum
     TEXT_TOOLTIPS_SETDELAY = 300,
     TEXT_TOOLTIPS_ENABLE,
 
-    // move menu
+    // text menu
     TEXT_MOVE_ENDTEXT = 400,
-    TEXT_MOVE_ENDENTRY
+    TEXT_MOVE_ENDENTRY,
+    TEXT_SET_EDITABLE
 };
 
 bool MyApp::OnInit()
@@ -219,10 +222,12 @@ bool MyApp::OnInit()
     menu_bar->Append(menuClipboard, "&Clipboard");
 #endif // wxUSE_CLIPBOARD
 
-    wxMenu *menuMove = new wxMenu;
-    menuMove->Append(TEXT_MOVE_ENDTEXT, "To the end of &text");
-    menuMove->Append(TEXT_MOVE_ENDENTRY, "To the end of &entry");
-    menu_bar->Append(menuMove, "&Move");
+    wxMenu *menuText = new wxMenu;
+    menuText->Append(TEXT_MOVE_ENDTEXT, "Move cursor to the end of &text");
+    menuText->Append(TEXT_MOVE_ENDENTRY, "Move cursor to the end of &entry");
+    menuText->Append(TEXT_SET_EDITABLE, "Toggle &editable state", "", TRUE);
+    menuText->Check(TEXT_SET_EDITABLE, TRUE);
+    menu_bar->Append(menuText, "&Text");
 
     frame->SetMenuBar(menu_bar);
 
@@ -562,7 +567,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     // single line text controls
 
     m_text = new MyTextCtrl( this, -1, "Single line.",
-      wxPoint(10,10), wxSize(140,-1), 0);
+                             wxPoint(10,10), wxSize(140,-1),
+                             wxTE_PROCESS_ENTER);
     m_text->SetForegroundColour(*wxBLUE);
     m_text->SetBackgroundColour(*wxLIGHT_GREY);
     (*m_text) << " Appended.";
@@ -763,6 +769,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_MOVE_ENDTEXT,       MyFrame::OnMoveToEndOfText)
     EVT_MENU(TEXT_MOVE_ENDENTRY,      MyFrame::OnMoveToEndOfEntry)
 
+    EVT_MENU(TEXT_SET_EDITABLE,       MyFrame::OnSetEditable)
+
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
@@ -834,6 +842,14 @@ void MyFrame::OnToggleTooltips(wxCommandEvent& event)
 void MyFrame::OnLogClear(wxCommandEvent& WXUNUSED(event))
 {
     m_panel->m_log->Clear();
+}
+
+void MyFrame::OnSetEditable(wxCommandEvent& WXUNUSED(event))
+{
+    static bool s_editable = TRUE;
+
+    s_editable = !s_editable;
+    m_panel->m_text->SetEditable(s_editable);
 }
 
 void MyFrame::OnFileSave(wxCommandEvent& event)
