@@ -1173,6 +1173,14 @@ wxVariant::wxVariant( void* val, const wxString& name)
    m_name = name;
 }
 
+#if wxUSE_DATETIME
+wxVariant::wxVariant(const wxDateTime& val, const wxString& name) // Date
+{
+	m_data = new wxVariantDataDateTime(val);
+	m_name = name;
+}
+#endif // wxUSE_DATETIME    
+
 #if wxUSE_ODBC
 wxVariant::wxVariant(const TIME_STRUCT* valptr, const wxString& name) // Date
 {
