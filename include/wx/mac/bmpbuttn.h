@@ -12,7 +12,7 @@
 #ifndef _WX_BMPBUTTN_H_
 #define _WX_BMPBUTTN_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "bmpbuttn.h"
 #endif
 

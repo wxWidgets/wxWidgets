@@ -12,8 +12,8 @@
 #ifndef _WX_GAUGE_H_BASE_
 #define _WX_GAUGE_H_BASE_
 
-#ifdef __GNUG__
-    #pragma implementation "gaugebase.h"
+#if defined(__GNUG__) && !defined(__APPLE__)
+    #pragma interface "gaugebase.h"
 #endif
 
 #include "wx/defs.h"

@@ -12,7 +12,7 @@
 #ifndef _WX_CMNDATA_H_BASE_
 #define _WX_CMNDATA_H_BASE_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "cmndata.h"
 #endif
 

@@ -14,7 +14,7 @@
 #ifndef _WX_SASHWIN_H_G_
 #define _WX_SASHWIN_H_G_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "sashwin.h"
 #endif
 

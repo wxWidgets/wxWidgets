@@ -10,8 +10,8 @@
 #ifndef __FILESYS_H__
 #define __FILESYS_H__
 
-#ifdef __GNUG__
-#pragma interface
+#if defined(__GNUG__) && !defined(__APPLE__)
+#pragma interface "filesys.h"
 #endif
 
 #include "wx/setup.h"

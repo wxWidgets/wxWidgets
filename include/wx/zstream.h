@@ -11,8 +11,8 @@
 #ifndef _WX_WXZSTREAM_H__
 #define _WX_WXZSTREAM_H__
 
-#ifdef __GNUG__
-#pragma interface
+#if defined(__GNUG__) && !defined(__APPLE__)
+#pragma interface "zstream.h"
 #endif
 
 #include "wx/defs.h"

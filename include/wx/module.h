@@ -12,7 +12,7 @@
 #ifndef _WX_MODULEH__
 #define _WX_MODULEH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "module.h"
 #endif
 

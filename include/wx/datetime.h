@@ -13,7 +13,7 @@
 #ifndef _WX_DATETIME_H
 #define _WX_DATETIME_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "datetime.h"
 #endif
 

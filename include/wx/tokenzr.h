@@ -12,7 +12,7 @@
 #ifndef _WX_TOKENZRH
 #define _WX_TOKENZRH
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "tokenzr.h"
 #endif
 

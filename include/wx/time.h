@@ -21,7 +21,7 @@
 #include "wx/datetime.h"
 #include "wx/date.h"
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "time.h"
 #endif
 

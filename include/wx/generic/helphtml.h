@@ -11,7 +11,7 @@
 
 #if wxUSE_HELP
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #   pragma interface "helphtml.h"
 #endif
 

@@ -12,7 +12,7 @@
 #ifndef _WX_GENERIC_FONTDLGG_H
 #define _WX_GENERIC_FONTDLGG_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "fontdlgg.h"
 #endif
 

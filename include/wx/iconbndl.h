@@ -12,7 +12,7 @@
 #ifndef _WX_ICONBNDL_H_
 #define _WX_ICONBNDL_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "iconbndl.h"
 #endif
 

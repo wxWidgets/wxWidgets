@@ -12,8 +12,8 @@
 #ifndef _WX_URL_H
 #define _WX_URL_H
 
-#ifdef __GNUG__
-#pragma interface
+#if defined(__GNUG__) && !defined(__APPLE__)
+#pragma interface "url.h"
 #endif
 
 #include "wx/defs.h"

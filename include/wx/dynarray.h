@@ -12,7 +12,7 @@
 #ifndef   _DYNARRAY_H
 #define   _DYNARRAY_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "dynarray.h"
 #endif
 

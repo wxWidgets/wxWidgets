@@ -12,11 +12,11 @@
 #ifndef _WX_GDIOBJ_H_
 #define _WX_GDIOBJ_H_
 
-#include "wx/object.h"
-
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "gdiobj.h"
 #endif
+
+#include "wx/object.h"
 
 class WXDLLEXPORT wxGDIRefData: public wxObjectRefData {
 public:

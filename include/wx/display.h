@@ -14,7 +14,7 @@
 
 #if wxUSE_DISPLAY
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "display.h"
 #endif
 

@@ -12,7 +12,7 @@
 #ifndef __COLORDLGH_G__
 #define __COLORDLGH_G__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "colrdlgg.h"
 #endif
 

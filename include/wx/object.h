@@ -13,7 +13,7 @@
 #ifndef _WX_OBJECTH__
 #define _WX_OBJECTH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "object.h"
 #endif
 

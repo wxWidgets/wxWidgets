@@ -10,7 +10,7 @@
 #ifndef _WX_ENCCONV_H_
 #define _WX_ENCCONV_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "encconv.h"
 #endif
 

@@ -9,7 +9,7 @@
 #ifndef _WX_FS_MEM_H_
 #define _WX_FS_MEM_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "fs_mem.h"
 #endif
 

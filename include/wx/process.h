@@ -12,7 +12,7 @@
 #ifndef _WX_PROCESSH__
 #define _WX_PROCESSH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "process.h"
 #endif
 

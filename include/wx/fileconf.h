@@ -13,7 +13,7 @@
 #ifndef   _FILECONF_H
 #define   _FILECONF_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "fileconf.h"
 #endif
 

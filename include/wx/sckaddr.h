@@ -12,8 +12,8 @@
 #ifndef _WX_NETWORK_ADDRESS_H
 #define _WX_NETWORK_ADDRESS_H
 
-#ifdef __GNUG__
-#pragma interface
+#if defined(__GNUG__) && !defined(__APPLE__)
+#pragma interface "sckaddr.h"
 #endif
 
 #include "wx/defs.h"

@@ -12,7 +12,7 @@
 #ifndef _WX_HASHMAP_H_
 #define _WX_HASHMAP_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "hashmap.h"
 #endif
 

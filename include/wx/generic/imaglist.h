@@ -11,7 +11,7 @@
 #ifndef __IMAGELISTH_G__
 #define __IMAGELISTH_G__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "imaglist.h"
 #endif
 

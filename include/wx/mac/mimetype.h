@@ -12,7 +12,7 @@
 #ifndef _MIMETYPE_IMPL_H
 #define _MIMETYPE_IMPL_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "mimetype.h"
 #endif
 
@@ -43,8 +43,8 @@ public :
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
     // this are NOPs under MacOS
-    bool ReadMailcap(const wxString& filename, bool fallback = TRUE) { return TRUE; }
-    bool ReadMimeTypes(const wxString& filename) { return TRUE; }
+    bool ReadMailcap(const wxString& WXUNUSED(filename), bool WXUNUSED(fallback) = TRUE) { return TRUE; }
+    bool ReadMimeTypes(const wxString& WXUNUSED(filename)) { return TRUE; }
 
     void AddFallback(const wxFileTypeInfo& ft) { m_fallbacks.Add(ft); }
 

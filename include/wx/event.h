@@ -12,7 +12,7 @@
 #ifndef _WX_EVENTH__
 #define _WX_EVENTH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "event.h"
 #endif
 

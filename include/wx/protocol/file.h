@@ -12,7 +12,7 @@
 #ifndef __WX_PROTO_FILE_H__
 #define __WX_PROTO_FILE_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "sckfile.h"
 #endif
 

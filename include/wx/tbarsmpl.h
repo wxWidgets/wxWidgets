@@ -12,7 +12,7 @@
 #ifndef _WX_TBARSMPLH__
 #define _WX_TBARSMPLH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "tbarsmpl.h"
 #endif
 

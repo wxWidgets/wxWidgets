@@ -21,7 +21,7 @@ limitation)
 #ifndef _WX_FS_INET_H_
 #define _WX_FS_INET_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "fs_inet.h"
 #endif
 

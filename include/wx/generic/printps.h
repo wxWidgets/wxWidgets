@@ -13,7 +13,7 @@
 #ifndef __PRINTPSH__
 #define __PRINTPSH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "printps.h"
 #endif
 

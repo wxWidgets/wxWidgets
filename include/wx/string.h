@@ -18,7 +18,7 @@
 #ifndef _WX_WXSTRINGH__
 #define _WX_WXSTRINGH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "string.h"
 #endif
 

@@ -13,7 +13,7 @@
 #ifndef _WX_APP_H_BASE_
 #define _WX_APP_H_BASE_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "appbase.h"
 #endif
 
@@ -539,7 +539,7 @@ public:
 #elif defined(__WXMAC__) && defined(__UNIX__)
     // wxMac seems to have a specific wxEntry prototype
     #define IMPLEMENT_WXWIN_MAIN \
-        extern int wxEntry( int argc, char *argv[], bool enterLoop = 1 ); \
+        extern int wxEntry( int argc, char *argv[], bool enterLoop = TRUE ); \
         int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
 #elif defined(__WXMSW__) && defined(WXUSINGDLL)
     // NT defines APIENTRY, 3.x not

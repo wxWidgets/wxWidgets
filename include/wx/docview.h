@@ -12,7 +12,7 @@
 #ifndef _WX_DOCH__
 #define _WX_DOCH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "docview.h"
 #endif
 

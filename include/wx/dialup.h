@@ -12,7 +12,7 @@
 #ifndef _WX_DIALUP_H
 #define _WX_DIALUP_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "dialup.h"
 #endif
 

@@ -23,7 +23,7 @@
 #if wxUSE_THREADS
 
 // only for wxUSE_THREADS - otherwise we'd get undefined symbols
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "thread.h"
 #endif
 

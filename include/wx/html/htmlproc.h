@@ -11,7 +11,7 @@
 #ifndef _WX_HTMLPREP_H_
 #define _WX_HTMLPREP_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "htmlproc.h"
 // (implementation is in htmlwin.cpp, there's no htmlprep.cpp!)
 #endif

@@ -13,7 +13,7 @@
 #ifndef _WX_DYNAMICLOADER_H__
 #define _WX_DYNAMICLOADER_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "dynload.h"
 #endif
 

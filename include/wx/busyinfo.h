@@ -10,8 +10,8 @@
 #ifndef __INFOWIN_H__
 #define __INFOWIN_H__
 
-#ifdef __GNUG__
-#pragma interface
+#if defined(__GNUG__) && !defined(__APPLE__)
+#pragma interface "busyinfo.h"
 #endif
 
 #include "wx/wxprec.h"

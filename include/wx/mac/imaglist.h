@@ -14,7 +14,7 @@
 #ifndef _WX_IMAGLIST_H_
 #define _WX_IMAGLIST_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "imaglist.h"
 #endif
 

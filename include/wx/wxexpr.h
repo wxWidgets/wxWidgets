@@ -12,7 +12,7 @@
 #ifndef _WX_WXEXPRH__
 #define _WX_WXEXPRH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "wxexpr.h"
 #endif
 

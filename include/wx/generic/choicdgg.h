@@ -12,7 +12,7 @@
 #ifndef __CHOICEDLGH_G__
 #define __CHOICEDLGH_G__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "choicdgg.h"
 #endif
 

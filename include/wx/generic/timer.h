@@ -11,7 +11,7 @@
 #ifndef __WX_TIMER_H__
 #define __WX_TIMER_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "timer.h"
 #endif
 

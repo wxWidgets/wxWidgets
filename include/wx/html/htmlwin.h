@@ -11,7 +11,7 @@
 #ifndef _WX_HTMLWIN_H_
 #define _WX_HTMLWIN_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "htmlwin.h"
 #endif
 

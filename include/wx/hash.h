@@ -12,7 +12,7 @@
 #ifndef _WX_HASH_H__
 #define _WX_HASH_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "hash.h"
 #endif
 

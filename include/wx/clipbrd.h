@@ -12,7 +12,7 @@
 #ifndef _WX_CLIPBRD_H_BASE_
 #define _WX_CLIPBRD_H_BASE_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "clipboardbase.h"
 #endif
 

@@ -11,7 +11,7 @@
 #ifndef _WX_GIFDECOD_H
 #define _WX_GIFDECOD_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "gifdecod.h"
 #endif
 

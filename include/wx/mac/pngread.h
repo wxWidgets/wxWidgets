@@ -11,7 +11,7 @@
 #ifndef _WX_PNGREAD__
 #define _WX_PNGREAD__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "pngread.h"
 #endif
 

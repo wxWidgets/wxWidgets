@@ -15,7 +15,7 @@
 #ifndef _WX_LAYWIN_H_G_
 #define _WX_LAYWIN_H_G_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "laywin.h"
 #endif
 

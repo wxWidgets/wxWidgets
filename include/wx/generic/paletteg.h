@@ -12,7 +12,7 @@
 #ifndef __WX_PALETTEG_H__
 #define __WX_PALETTEG_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "paletteg.h"
 #endif
 

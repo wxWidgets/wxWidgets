@@ -11,7 +11,7 @@
 #define __WX_BITMAP_H__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "bitmap.h"
 #endif
 
 #include "wx/defs.h"
