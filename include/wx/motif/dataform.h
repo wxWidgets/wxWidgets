@@ -15,6 +15,8 @@
 class wxDataFormat
 {
 public:
+    typedef unsigned long /* Atom */ NativeFormat;
+
     wxDataFormat();
     wxDataFormat( wxDataFormatId type );
     wxDataFormat( const wxString &id );
@@ -23,7 +25,7 @@ public:
     wxDataFormat( const Atom atom );
 
     void SetType( wxDataFormatId type );
-    wxDataFormatId GetType() const;
+    NativeFormat GetType() const { return m_type; }
 
     /* the string Id identifies the format of clipboard or DnD data. a word
      * processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
@@ -31,20 +33,20 @@ public:
      * image manipulation program would put a wxBitmapDataObject and a
      * wxPrivateDataObject to the clipboard - the latter with "image/png". */
 
-    wxString GetId() const;
+    wxString GetId() const { return m_id; }
     void SetId( const wxChar *id );
 
     Atom GetAtom();
     void SetAtom(Atom atom) { m_hasAtom = TRUE; m_atom = atom; }
 
     // implicit conversion to wxDataFormatId
-    operator wxDataFormatId() const { return m_type; }
+    operator NativeFormat() const { return m_type; }
 
-    bool operator==(wxDataFormatId type) const { return m_type == type; }
-    bool operator!=(wxDataFormatId type) const { return m_type != type; }
+    bool operator==(NativeFormat type) const { return m_type == type; }
+    bool operator!=(NativeFormat type) const { return m_type != type; }
 
 private:
-    wxDataFormatId  m_type;
+    NativeFormat  m_type;
     wxString    m_id;
     bool        m_hasAtom;
     Atom        m_atom;

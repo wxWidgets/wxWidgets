@@ -29,6 +29,7 @@
 #endif
 
 #include "wx/clipbrd.h"
+#include "wx/module.h"
 
 //--------------------------------------------------------------------------
 // wxClipboardBase

@@ -45,11 +45,11 @@
 #include "wx/socket.h"
 
 
-#if defined(__WXMSW__) || defined(__WXPM__)
-#define PROCESS_EVENTS() wxYield()
+#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMOTIF__)
+    #define PROCESS_EVENTS() wxYield()
 #elif defined(__WXGTK__)
-#include <gtk/gtk.h>
-#define PROCESS_EVENTS() gtk_main_iteration()
+    #include <gtk/gtk.h>
+    #define PROCESS_EVENTS() gtk_main_iteration()
 #endif
 
 

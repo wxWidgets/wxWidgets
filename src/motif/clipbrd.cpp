@@ -275,30 +275,36 @@ bool wxClipboard::SetData( wxDataObject *data )
     wxCHECK_MSG( data, FALSE, "data is invalid" );
     wxCHECK_MSG( m_open, FALSE, "clipboard not open" );
 
-    switch (data->GetFormat())
+    Clear();
+
+    return AddData( data );
+}
+
+bool wxClipboard::AddData( wxDataObject *data )
+{
+    wxCHECK_MSG( data, FALSE, "data is invalid" );
+    wxCHECK_MSG( m_open, FALSE, "clipboard not open" );
+
+    wxDataFormat::NativeFormat format = data->GetPreferredFormat().GetType();
+    switch ( format )
     {
         case wxDF_TEXT:
         case wxDF_OEMTEXT:
         {
             wxTextDataObject* textDataObject = (wxTextDataObject*) data;
             wxString str(textDataObject->GetText());
-            return wxSetClipboardData(data->GetFormat(), (wxObject*) (const char*) str);
-            break;
+            return wxSetClipboardData(format, (wxObject*) (const char*) str);
         }
-/*
+#if 0
         case wxDF_BITMAP:
         case wxDF_DIB:
         {
             wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data;
             wxBitmap bitmap(bitmapDataObject->GetBitmap());
-            return wxSetClipboardData(data->GetFormat(), & bitmap);
+            return wxSetClipboardData(data->GetType(), & bitmap);
             break;
         }
-*/
-        default:
-        {
-            return FALSE;
-        }
+#endif // 0
     }
   
     return FALSE;
@@ -312,25 +318,26 @@ void wxClipboard::Close()
     wxCloseClipboard();
 }
 
-bool wxClipboard::IsSupported( wxDataFormat format)
+bool wxClipboard::IsSupported( const wxDataFormat& format)
 {
     return wxIsClipboardFormatAvailable(format);
 }
 
-bool wxClipboard::GetData( wxDataObject *data )
+bool wxClipboard::GetData( wxDataObject& data )
 {
     wxCHECK_MSG( m_open, FALSE, "clipboard not open" );
     
-    switch (data->GetFormat())
+    wxDataFormat::NativeFormat format = data.GetPreferredFormat().GetType();
+    switch ( format )
     {
         case wxDF_TEXT:
         case wxDF_OEMTEXT:
         {
-            wxTextDataObject* textDataObject = (wxTextDataObject*) data;
-            char* s = (char*) wxGetClipboardData(data->GetFormat());
+            wxTextDataObject& textDataObject = (wxTextDataObject &) data;
+            char* s = (char*) wxGetClipboardData(format);
             if (s)
             {
-                textDataObject->SetText(s);
+                textDataObject.SetText(s);
                 delete[] s;
                 return TRUE;
             }
@@ -343,7 +350,7 @@ bool wxClipboard::GetData( wxDataObject *data )
         case wxDF_DIB:
         {
             wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data;
-            wxBitmap* bitmap = (wxBitmap*) wxGetClipboardData(data->GetFormat());
+            wxBitmap* bitmap = (wxBitmap*) wxGetClipboardData(data->GetType());
             if (bitmap)
             {
                 bitmapDataObject->SetBitmap(* bitmap);

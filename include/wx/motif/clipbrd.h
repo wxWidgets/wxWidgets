@@ -1,9 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        clipbrd.h
 // Purpose:     Clipboard functionality.
-//              Note: this functionality is under review, and
-//              is derived from wxWindows 1.xx code. Please contact
-//              the wxWindows developers for further information.
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
@@ -16,14 +13,12 @@
 #define _WX_CLIPBRD_H_
 
 #ifdef __GNUG__
-#pragma interface "clipbrd.h"
+    #pragma interface "clipbrd.h"
 #endif
 
 #if wxUSE_CLIPBOARD
 
-#include "wx/dataobj.h"
-
-#include "wx/module.h"
+#include "wx/list.h"
 
 bool WXDLLEXPORT wxOpenClipboard();
 bool WXDLLEXPORT wxClipboardOpen();
@@ -52,18 +47,26 @@ public:
     // close the clipboard after SetData() and GetData()
     virtual void Close();
 
-    // can be called several times
+    // opened?
+    virtual bool IsOpened() const { return m_open; }
+
+    // replaces the data on the clipboard with data
     virtual bool SetData( wxDataObject *data );
 
+    // adds data to the clipboard
+    virtual bool AddData( wxDataObject *data );
+
     // format available on the clipboard ?
-    // supply ID if private format, the same as wxPrivateDataObject::SetId()
-    virtual bool IsSupported( wxDataFormat format );
+    virtual bool IsSupported( const wxDataFormat& format );
 
     // fill data with data on the clipboard (if available)
-    virtual bool GetData( wxDataObject *data );
+    virtual bool GetData( wxDataObject& data );
 
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear();
+
+    virtual void UsePrimarySelection(bool primary = TRUE)
+        { m_usePrimary = primary; }
 
     // implementation from now on
 
@@ -74,9 +77,6 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxClipboard)
 };
-
-/* The clipboard */
-WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
 
 #endif // wxUSE_CLIPBOARD
 

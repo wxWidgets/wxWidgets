@@ -412,7 +412,7 @@ private:
 #if defined(__WXMSW__)
     #include "wx/msw/ole/dataobj2.h"
 #elif defined(__WXMOTIF__)
-    #include "wx/motif/dataobj2.h"
+    // #include "wx/motif/dataobj2.h" -- not yet
 #elif defined(__WXGTK__)
     #include "wx/gtk/dataobj2.h"
 #endif
