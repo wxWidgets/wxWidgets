@@ -158,6 +158,7 @@ void wxColour::InitFromName( const wxString &colourName )
     else
     {
         m_refData = new wxColourRefData();
+        
         if (!gdk_color_parse( colourName.mb_str(), &M_COLDATA->m_color ))
         {
             // VZ: asserts are good in general but this one is triggered by

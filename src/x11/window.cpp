@@ -357,7 +357,7 @@ void wxWindowX11::DoCaptureMouse()
             return;
         }
 
-        wxLogDebug("Grabbed pointer");
+        /// wxLogDebug("Grabbed pointer");
 
 #if 0
         res = XGrabButton(wxGlobalDisplay(), AnyButton, AnyModifier,
@@ -416,7 +416,8 @@ void wxWindowX11::DoReleaseMouse()
         XUngrabKeyboard( wxGlobalDisplay(), CurrentTime );
 #endif
     }
-    wxLogDebug("Ungrabbed pointer");
+    
+    // wxLogDebug("Ungrabbed pointer");
 
     m_winCaptured = FALSE;
 }
@@ -940,8 +941,11 @@ void wxWindowX11::Update()
 {
     if (!m_updateRegion.IsEmpty())
     {
-        // Actually send erase and paint events.
-        X11SendPaintEvents();
+        // Actually send erase events.
+        SendEraseEvents();
+        
+        // Actually send paint events.
+        SendPaintEvents();
     }
 }
 
@@ -953,12 +957,12 @@ void wxWindowX11::Clear()
     dc.Clear();
 }
 
-void wxWindowX11::X11SendPaintEvents()
+void wxWindowX11::SendEraseEvents()
 {
-    m_clipPaintRegion = TRUE;
-
     if (!m_clearRegion.IsEmpty())
     {
+        m_clipPaintRegion = TRUE;
+
         wxWindowDC dc( (wxWindow*)this );
         dc.SetClippingRegion( m_clearRegion );
         
@@ -982,7 +986,15 @@ void wxWindowX11::X11SendPaintEvents()
             XFreeGC( xdisplay, xgc );
         }
         m_clearRegion.Clear();
+
+        m_clipPaintRegion = FALSE;
     }
+}
+
+
+void wxWindowX11::SendPaintEvents()
+{
+    m_clipPaintRegion = TRUE;
 
     wxNcPaintEvent nc_paint_event( GetId() );
     nc_paint_event.SetEventObject( this );

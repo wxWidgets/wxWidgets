@@ -741,7 +741,7 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
         if (m_pen.GetStyle () != wxTRANSPARENT)
         {
             XDrawRectangle( (Display*) m_display, (Window) m_window,
-                (GC) m_penGC, xx, yy, ww, hh );
+                (GC) m_penGC, xx, yy, ww-1, hh-1 );
         }
     }
 

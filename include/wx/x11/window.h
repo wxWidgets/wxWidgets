@@ -120,8 +120,11 @@ public:
     // arrange status bar, toolbar etc.
     virtual bool PreResize();
     
-    // Generates paint events
-    void X11SendPaintEvents();
+    // Generates paint events from m_updateRegion
+    void SendPaintEvents();
+    
+    // Generates erase events from m_clearRegion
+    void SendEraseEvents();
     
     // Clip to paint region?
     bool GetClipPaintRegion() { return m_clipPaintRegion; }

@@ -188,6 +188,18 @@ void MyCanvas::OnPaint( wxPaintEvent &event )
     
     dc.SetBrush( *wxRED_BRUSH );
     dc.DrawRectangle( 100, 100, 200, 200 );
+    
+    dc.DestroyClipingRegion();
+
+    dc.SetPen( *wxTRANSPARENT_PEN );
+    
+    wxRegion strip( 110, 200, 30, 1 );
+    wxRegionIterator it( strip );
+    while (it)
+    {
+        dc.DrawRectangle( it.GetX(), it.GetY(), it.GetWidth(), it.GetHeight() );
+        it ++;
+    }
 }
 
 void MyCanvas::OnEraseBackground( wxEraseEvent &event )

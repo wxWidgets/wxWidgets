@@ -15,6 +15,7 @@
 #endif
 
 #include "wx/gdicmn.h"
+#include "wx/app.h"
 
 #include "wx/x11/private.h"
 
@@ -154,6 +155,9 @@ void wxColour::InitFromName( const wxString &colourName )
     else
     {
         m_refData = new wxColourRefData();
+        
+        M_COLDATA->m_colormap = wxTheApp->GetMainColormap( wxGlobalDisplay() );
+        
         if (!XParseColor( wxGlobalDisplay(), (Colormap) M_COLDATA->m_colormap, colourName.mb_str(), &M_COLDATA->m_color ))
         {
             // VZ: asserts are good in general but this one is triggered by
@@ -234,7 +238,9 @@ unsigned char wxColour::Blue() const
 
 void wxColour::CalcPixel( WXColormap cmap )
 {
-    if (!Ok()) return;
+    wxCHECK_RET( Ok(), wxT("invalid colour") );
+
+    wxCHECK_RET( cmap, wxT("invalid colormap") );
 
     M_COLDATA->AllocColour( cmap );
 }

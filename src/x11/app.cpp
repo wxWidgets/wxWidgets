@@ -544,9 +544,12 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                                               
                 win->GetClearRegion().Union( event->xexpose.x, event->xexpose.y,
                                              event->xexpose.width, event->xexpose.height);
-                                              
-                // if (event->xexpose.count == 0)
-                //    win->Update();
+                
+                if (event->xexpose.count == 0)
+                {
+                    // Only erase background, paint in idle time.
+                    win->SendEraseEvents();
+                }
             }
 
             return;
@@ -565,8 +568,11 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 win->GetClearRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
                                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);
                                               
-                // if (event->xgraphicsexpose.count == 0)
-                //    win->Update();
+                if (event->xgraphicsexpose.count == 0)
+                {
+                    // Only erase background, paint in idle time.
+                    win->SendEraseEvents();
+                }
             }
 
             return;
