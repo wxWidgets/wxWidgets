@@ -348,6 +348,22 @@ private:
     DECLARE_NO_COPY_CLASS(ScreenHDC)
 };
 
+// the same as ScreenHDC but for window DCs
+class WindowHDC
+{
+public:
+    WindowHDC(HWND hwnd) { m_hdc = ::GetDC(m_hwnd = hwnd); }
+   ~WindowHDC() { ::ReleaseDC(m_hwnd, m_hdc); }
+
+    operator HDC() const { return m_hdc; }
+
+private:
+   HWND m_hwnd;
+   HDC m_hdc;
+
+   DECLARE_NO_COPY_CLASS(WindowHDC)
+};
+
 // the same as ScreenHDC but for memory DCs: creates the HDC compatible with
 // the given one (screen by default) in ctor and destroys it in dtor
 class MemoryHDC
