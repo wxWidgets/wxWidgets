@@ -1096,9 +1096,11 @@ dist: @GUIDIST@
 debian-dist: @GUIDIST@ MANUAL_DIST PYTHON_DIST
 	mkdir $(DISTDIR)/debian
 	-cp $(WXDIR)/debian/* $(DISTDIR)/debian
+	cp $(WXDIR)/src/files.lst $(DISTDIR)/src/
 	cp $(DOCDIR)/licence.txt $(DISTDIR)/docs
 	cp $(DOCDIR)/licendoc.txt $(DISTDIR)/docs
 	cp $(DOCDIR)/preamble.txt $(DISTDIR)/docs
+	rm -f $(DISTDIR)/*.spec
 	rm -rf $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 
