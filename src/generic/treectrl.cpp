@@ -935,19 +935,20 @@ void wxTreeCtrl::AdjustMyScrollbars()
 void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 {
   // render bold items in bold
-  wxFont *fontOld = (wxFont *)NULL,
-         *fontNew = (wxFont *)NULL;
+  wxFont fontOld;
+  wxFont fontNew;
+  
   if ( item->IsBold() )
   {
       fontOld = dc.GetFont();
-      if ( fontOld )
+      if (fontOld.Ok())
       {
         // @@ is there any better way to make a bold variant of old font?
-        fontNew = new wxFont(fontOld->GetPointSize(),
-                             fontOld->GetFamily(),
-                             fontOld->GetStyle(),
-                             wxBOLD,
-                             fontOld->GetUnderlined());
+        fontNew = wxFont( fontOld.GetPointSize(),
+                          fontOld.GetFamily(),
+                          fontOld.GetStyle(),
+                          wxBOLD,
+                          fontOld.GetUnderlined());
         dc.SetFont(fontNew);
       }
       else
@@ -982,10 +983,9 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
   dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY() );
 
   // restore normal font for bold items
-  if ( fontOld )
+  if (fontOld.Ok())
   {
-      dc.SetFont(fontOld);
-      delete fontNew;
+      dc.SetFont( fontOld);
   }
 }
 
