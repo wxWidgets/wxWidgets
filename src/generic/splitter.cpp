@@ -433,22 +433,30 @@ void wxSplitterWindow::DrawBorders(wxDC& dc)
 
     if ( GetWindowStyleFlag() & wxSP_3D )
     {
+		
+        dc.SetPen(*m_facePen);
+        dc.SetBrush(*m_faceBrush);
+        dc.DrawRectangle(1, 1 , w-1, m_borderSize-2 ); //high
+        dc.DrawRectangle(1, m_borderSize-2 , m_borderSize-2, h-1 ); // left
+        dc.DrawRectangle(w-m_borderSize+2, m_borderSize-2 , w-1, h-1 ); // right
+        dc.DrawRectangle(m_borderSize-2, h-m_borderSize+2 , w-m_borderSize+2, h-1 ); //bottom
+
         dc.SetPen(*m_mediumShadowPen);
-        dc.DrawLine(0, 0, w-1, 0);
-        dc.DrawLine(0, 0, 0, h - 1);
+        dc.DrawLine(m_borderSize-2, m_borderSize-2, w-m_borderSize+1, m_borderSize-2);
+        dc.DrawLine(m_borderSize-2, m_borderSize-2, m_borderSize-2, h-m_borderSize+1);
 
         dc.SetPen(*m_darkShadowPen);
-        dc.DrawLine(1, 1, w-2, 1);
-        dc.DrawLine(1, 1, 1, h-2);
+        dc.DrawLine(m_borderSize-1, m_borderSize-1, w-m_borderSize, m_borderSize-1);
+        dc.DrawLine(m_borderSize-1, m_borderSize-1, m_borderSize-1, h-m_borderSize);
 
         dc.SetPen(*m_hilightPen);
-        dc.DrawLine(0, h-1, w-1, h-1);
-        dc.DrawLine(w-1, 0, w-1, h); // Surely the maximum y pos. should be h - 1.
+        dc.DrawLine(m_borderSize - 2, h-m_borderSize+1, w-m_borderSize+1, h-m_borderSize+1);
+        dc.DrawLine(w-m_borderSize+1, m_borderSize - 2, w-m_borderSize+1, h-m_borderSize+2); // Surely the maximum y pos. should be h - 1.
                                      /// Anyway, h is required for MSW.
 
         dc.SetPen(*m_lightShadowPen);
-        dc.DrawLine(w-2, 1, w-2, h-2); // Right hand side
-        dc.DrawLine(1, h-2, w-1, h-2);     // Bottom
+        dc.DrawLine(w-m_borderSize, m_borderSize-1, w-m_borderSize, h-m_borderSize); // Right hand side
+        dc.DrawLine(m_borderSize-1, h-m_borderSize, w-m_borderSize+1, h-m_borderSize);     // Bottom
     }
     else if ( GetWindowStyleFlag() & wxSP_BORDER )
     {
@@ -476,41 +484,43 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
         {
             dc.SetPen(*m_facePen);
             dc.SetBrush(*m_faceBrush);
-            dc.DrawRectangle(m_sashPosition + 2, 0, m_sashSize - 4, h);
+            dc.DrawRectangle(m_sashPosition + 2, 0 , m_sashSize - 4, h );
 
             dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
             dc.SetPen(*m_lightShadowPen);
-            dc.DrawLine(m_sashPosition, 1, m_sashPosition, h-2);
+			int xShadow = m_borderSize ? m_borderSize - 1 : 0 ;
+            dc.DrawLine(m_sashPosition, xShadow , m_sashPosition, h-m_borderSize);
 
             dc.SetPen(*m_hilightPen);
-            dc.DrawLine(m_sashPosition+1, 0, m_sashPosition+1, h);
+            dc.DrawLine(m_sashPosition+1, m_borderSize - 2, m_sashPosition+1, h - m_borderSize+2);
 
             dc.SetPen(*m_mediumShadowPen);
-            dc.DrawLine(m_sashPosition+m_sashSize-2, 1, m_sashPosition+m_sashSize-2, h-1);
+			int yMedium = m_borderSize ? h-m_borderSize+1 : h ;
+            dc.DrawLine(m_sashPosition+m_sashSize-2, xShadow, m_sashPosition+m_sashSize-2, yMedium);
 
             dc.SetPen(*m_darkShadowPen);
-            dc.DrawLine(m_sashPosition+m_sashSize-1, 2, m_sashPosition+m_sashSize-1, h-2);
+            dc.DrawLine(m_sashPosition+m_sashSize-1, m_borderSize, m_sashPosition+m_sashSize-1, h-m_borderSize );
         }
         else
         {
             dc.SetPen(*m_facePen);
             dc.SetBrush(*m_faceBrush);
-            dc.DrawRectangle(0, m_sashPosition + 2, w, m_sashSize - 4);
+            dc.DrawRectangle( m_borderSize-2, m_sashPosition + 2, w-m_borderSize+2, m_sashSize - 4);
 
             dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
             dc.SetPen(*m_lightShadowPen);
-            dc.DrawLine(1, m_sashPosition, w-2, m_sashPosition);
+            dc.DrawLine(m_borderSize-1, m_sashPosition, w-m_borderSize, m_sashPosition);
 
             dc.SetPen(*m_hilightPen);
-            dc.DrawLine(0, m_sashPosition+1, w, m_sashPosition+1);
+            dc.DrawLine(m_borderSize-2, m_sashPosition+1, w-m_borderSize+1, m_sashPosition+1);
 
             dc.SetPen(*m_mediumShadowPen);
-            dc.DrawLine(1, m_sashPosition+m_sashSize-2, w-1, m_sashPosition+m_sashSize-2);
+            dc.DrawLine(m_borderSize-1, m_sashPosition+m_sashSize-2, w-m_borderSize+1, m_sashPosition+m_sashSize-2);
 
             dc.SetPen(*m_darkShadowPen);
-            dc.DrawLine(2, m_sashPosition+m_sashSize-1, w-2, m_sashPosition+m_sashSize-1);
+            dc.DrawLine(m_borderSize, m_sashPosition+m_sashSize-1, w-m_borderSize, m_sashPosition+m_sashSize-1);
         }
     }
     else
@@ -648,7 +658,8 @@ void wxSplitterWindow::SizeWindows()
         }
     }
     wxClientDC dc(this);
-    DrawBorders(dc);
+	if ( m_borderSize > 0 )
+		DrawBorders(dc);
     DrawSash(dc);
 }
 
