@@ -201,6 +201,24 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     wm_protocols[0] = XInternAtom( xdisplay, "WM_DELETE_WINDOW", False );
     wm_protocols[1] = XInternAtom( xdisplay, "WM_TAKE_FOCUS", False );
     XSetWMProtocols( xdisplay, xwindow, wm_protocols, 2);
+
+#if 0 // TODO
+    // You will need a compliant window manager for this to work
+    // (e.g. sawfish/enlightenment/kde/icewm/windowmaker)
+    if (style & wxSTAY_ON_TOP)
+    {
+        CARD32 data = 4; // or should this be 6? According to http://developer.gnome.org/doc/standards/wm/c44.html
+        XChangeProperty (xdisplay,
+                    xwindow,
+                    XInternAtom (xdisplay, "_WIN_LAYER", False),
+                    XA_CARDINAL,
+                    32,
+                    PropModeReplace,
+                    (unsigned char *)&data,
+                    1);
+    }
+#endif
+
 #endif
     
     wxSetWMDecorations( xwindow, style);

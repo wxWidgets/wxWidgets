@@ -32,6 +32,9 @@
 #include "wx/x11/private.h"
 #include "X11/Xlib.h"
 
+#include <sys/time.h>
+#include <unistd.h>
+
 // ----------------------------------------------------------------------------
 // wxEventLoopImpl
 // ----------------------------------------------------------------------------
@@ -223,7 +226,41 @@ bool wxEventLoop::Dispatch()
 
     // TODO allowing for threads, as per e.g. wxMSW
 
+#if 0
     XNextEvent((Display*) wxGetDisplay(), & event);
+#endif
+
+    // This now waits until either an X event is received,
+    // or the select times out. So we should now process
+    // wxTimers in a reasonably timely fashion. However it
+    // does also mean that idle processing will happen more
+    // often, so we should probably limit idle processing to
+    // not be repeated more than every N milliseconds.
+    
+    if (XPending((Display*) wxGetDisplay()) == 0)
+    {
+        struct timeval tv;
+        tv.tv_sec=0;
+        tv.tv_usec=10000; // TODO make this configurable
+        int fd = ConnectionNumber(dsp);
+        fd_set readset;
+        FD_ZERO(&readset);
+        FD_SET(fd, &readset);
+        if (select(fd+1, &readset, NULL, NULL, & tv) == 0)
+        {
+            // Timed out, so no event to process
+            return TRUE;
+        }
+        else
+        {
+            // An event was pending, so get it
+            XNextEvent((Display*) wxGetDisplay(), & event);
+        }
+    } else
+    {
+       XNextEvent((Display*) wxGetDisplay(), & event);
+    }
+    
     (void) m_impl->ProcessEvent(& event);
     return TRUE;
 }
