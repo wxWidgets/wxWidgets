@@ -77,7 +77,7 @@ void wxFontPreviewer::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.SetFont(GetFont());
         // Calculate vertical centre
         long w, h;
-        dc.GetTextExtent("X", &w, &h);
+        dc.GetTextExtent( wxT("X"), &w, &h);
         dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);
         dc.DrawText(_("ABCDEFGabcdefg12345"), 
@@ -237,8 +237,8 @@ void wxGenericFontDialog::CreateWidgets()
   int i;
   for ( i = 0; i < 40; i++)
   {
-    char buf[5];
-    sprintf(buf, "%d", i + 1);
+    wxChar buf[5];
+    wxSprintf(buf, wxT("%d"), i + 1);
     pointSizes[i] = buf;
   }
 

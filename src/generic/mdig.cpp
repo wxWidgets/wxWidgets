@@ -34,8 +34,6 @@
     #include "wx/intl.h"
 #endif //WX_PRECOMP
 
-#define _(x) wxT(x)
-
 #include "wx/generic/mdig.h"
 
 enum MDI_MENU_ID
@@ -457,7 +455,7 @@ bool wxGenericMDIChildFrame::Create( wxGenericMDIParentFrame *parent,
 {
     wxGenericMDIClientWindow* pClientWindow = parent->GetClientWindow();
 
-    wxASSERT_MSG((pClientWindow != (wxWindow*) NULL), "Missing MDI client window.");
+    wxASSERT_MSG((pClientWindow != (wxWindow*) NULL), wxT("Missing MDI client window.") );
 
     wxPanel::Create(pClientWindow, id, wxDefaultPosition, size, style, name);
 
