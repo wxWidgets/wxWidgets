@@ -31,18 +31,24 @@ enum {
 
 // Flags
 enum {
-    wxZLIB_NO_HEADER = 0,   // raw deflate stream, no header or checksum
-    wxZLIB_ZLIB = 1,        // zlib header and checksum
-    wxZLIB_GZIP = 2         // gzip header and checksum, requires zlib 1.2+
+#if WXWIN_COMPATIBILITY_2_4
+    wxZLIB_24COMPATIBLE = 4, // read v2.4.x data without error
+#endif
+    wxZLIB_NO_HEADER = 0,    // raw deflate stream, no header or checksum
+    wxZLIB_ZLIB = 1,         // zlib header and checksum
+    wxZLIB_GZIP = 2,         // gzip header and checksum, requires zlib 1.2.1+
+    wxZLIB_AUTO = 3          // autodetect header zlib or gzip
 };
 
 class WXDLLIMPEXP_BASE wxZlibInputStream: public wxFilterInputStream {
  public:
-  wxZlibInputStream(wxInputStream& stream, int flags = wxZLIB_ZLIB | wxZLIB_GZIP);
+  wxZlibInputStream(wxInputStream& stream, int flags = wxZLIB_AUTO);
   virtual ~wxZlibInputStream();
 
   char Peek() { return wxInputStream::Peek(); }
   size_t GetSize() const { return wxInputStream::GetSize(); }
+
+  static bool CanHandleGZip();
 
  protected:
   size_t OnSysRead(void *buffer, size_t size);
@@ -53,8 +59,11 @@ class WXDLLIMPEXP_BASE wxZlibInputStream: public wxFilterInputStream {
   unsigned char *m_z_buffer;
   struct z_stream_s *m_inflate;
   off_t m_pos;
+#if WXWIN_COMPATIBILITY_2_4
+  bool m_24compatibilty;
+#endif
 
-    DECLARE_NO_COPY_CLASS(wxZlibInputStream)
+  DECLARE_NO_COPY_CLASS(wxZlibInputStream)
 };
 
 class WXDLLIMPEXP_BASE wxZlibOutputStream: public wxFilterOutputStream {
@@ -64,6 +73,8 @@ class WXDLLIMPEXP_BASE wxZlibOutputStream: public wxFilterOutputStream {
 
   void Sync() { DoFlush(false); }
   size_t GetSize() const { return (size_t)m_pos; }
+
+  static bool CanHandleGZip();
 
  protected:
   size_t OnSysWrite(const void *buffer, size_t size);
@@ -77,7 +88,7 @@ class WXDLLIMPEXP_BASE wxZlibOutputStream: public wxFilterOutputStream {
   struct z_stream_s *m_deflate;
   off_t m_pos;
 
-    DECLARE_NO_COPY_CLASS(wxZlibOutputStream)
+  DECLARE_NO_COPY_CLASS(wxZlibOutputStream)
 };
 
 #endif

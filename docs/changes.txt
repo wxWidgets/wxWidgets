@@ -42,6 +42,9 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - wxTaskBarIcon objects must now be destroyed before the application can exit.
   Previously, the application terminated if there were no top level windows;
   now it terminates if there are no top level windows or taskbar icons left.
+- wxZlibInputStream is not by default compatible with the output of the
+  2.4.x version of wxZlibOutputStream. However, there is a compatibilty mode,
+  switched on by passing wxZLIB_24COMPATIBLE to the constructor.
 
 wxTaskBarIcon must be explicitly destroyed now, otherwise the application
   won't exit even though there are no top level windows
