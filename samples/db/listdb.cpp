@@ -406,7 +406,7 @@ void ClookUpDlg::OnClose(wxCloseEvent& event)
 	if (lookup2)
 		delete lookup2;
 
-	wxEndBusyCursor();
+	while (wxIsBusy()) wxEndBusyCursor();
    event.Skip();
 
 //	return TRUE;
