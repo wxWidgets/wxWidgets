@@ -32,6 +32,8 @@ All GUI ports:
 - fixed handling of URLs and filenames in wxFileSystem
 - implemented alignment for wxGrid bool editor and renderer
 - support wxListCtrl columns alignment for all platforms and not just MSW
+- added wxToolBar Add/InsertTool(tool) (Janusz Piwowarski)
+
 - Changed to type-safe wxSizerItemList for wxSizer child items.
 
     Deprecated:

@@ -324,6 +324,9 @@ public:
                                     wxObject *clientData = NULL
                                );
 
+    virtual wxToolBarToolBase *AddTool (wxToolBarToolBase *tool);
+    virtual wxToolBarToolBase *InsertTool (size_t pos, wxToolBarToolBase *tool);
+
     // add an arbitrary control to the toolbar, return TRUE if ok (notice that
     // the control will be deleted by the toolbar and that it will also adjust
     // its position/size)

@@ -186,9 +186,12 @@ Adds a separator for spacing groups of tools.
 \param{const wxString\& }{longHelpString = ""},\rtfsp
 \param{wxObject* }{clientData = NULL}}
 
+\func{wxToolBarTool*}{AddTool}{\param{wxToolBarTool* }{tool}}
+
 Adds a tool to the toolbar. The first (short and most commonly used) version
 has fewer parameters than the full version at the price of not being able to
-specify some of the more rarely used button features.
+specify some of the more rarely used button features. The last version allows
+to add an existing tool.
 
 \wxheading{Parameters}
 
@@ -216,6 +219,8 @@ parent frame when the mouse pointer is inside the tool}
 
 \docparam{clientData}{An optional pointer to client data which can be
 retrieved later using \helpref{wxToolBar::GetToolClientData}{wxtoolbargettoolclientdata}.}
+
+\docparam{tool}{The tool to be added.}
 
 \wxheading{Remarks}
 
@@ -517,6 +522,9 @@ You must call \helpref{Realize}{wxtoolbarrealize} for the change to take place.
 \param{int}{ toolId}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
 \param{const wxBitmap\&}{ bitmap2 = wxNullBitmap}, \param{bool}{ isToggle = false},\rtfsp
 \param{wxObject* }{clientData = NULL}, \param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
+
+\func{wxToolBarTool *}{InsertTool}{\param{size\_t }{pos},\rtfsp
+\param{wxToolBarTool* }{tool}}
 
 Inserts the tool with the specified attributes into the toolbar at the given
 position.

@@ -164,10 +164,29 @@ wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
     wxToolBarToolBase *tool = CreateTool(id, label, bitmap, bmpDisabled, kind,
                                          clientData, shortHelp, longHelp);
 
-    if ( !tool || !DoInsertTool(pos, tool) )
+    if ( !InsertTool(pos, tool) )
     {
         delete tool;
 
+        return NULL;
+    }
+
+    return tool;
+}
+
+wxToolBarToolBase *wxToolBarBase::AddTool(wxToolBarToolBase *tool)
+{
+    return InsertTool(GetToolsCount(), tool);
+}
+
+wxToolBarToolBase *
+wxToolBarBase::InsertTool(size_t pos, wxToolBarToolBase *tool)
+{
+    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarToolBase *)NULL,
+                 _T("invalid position in wxToolBar::InsertTool()") );
+
+    if ( !tool || !DoInsertTool(pos, tool) )
+    {
         return NULL;
     }
 
@@ -194,14 +213,12 @@ wxToolBarToolBase *wxToolBarBase::InsertControl(size_t pos, wxControl *control)
 
     wxToolBarToolBase *tool = CreateTool(control);
 
-    if ( !tool || !DoInsertTool(pos, tool) )
+    if ( !InsertTool(pos, tool) )
     {
         delete tool;
 
         return NULL;
     }
-
-    m_tools.Insert(pos, tool);
 
     return tool;
 }
@@ -213,7 +230,7 @@ wxControl *wxToolBarBase::FindControl( int id )
           node = node->GetNext() )
     {
         wxControl *control = node->GetData()->GetControl();
-        
+
         if (control)
         {
             if (control->GetId() == id)
