@@ -30,6 +30,8 @@ class GDIObjectPtr(GDIObject):
         self.__class__ = GDIObject
 _gdi.GDIObject_swigregister(GDIObjectPtr)
 
+#---------------------------------------------------------------------------
+
 class Colour(core.Object):
     def __init__(self, *args, **kwargs):
         newobj = _gdi.new_Colour(*args, **kwargs)
@@ -57,8 +59,6 @@ class Colour(core.Object):
     def __getstate__(self):             return self.asTuple()
     def __setstate__(self, state):      self.Set(*state)
 
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxColour instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
 class ColourPtr(Colour):
     def __init__(self, this):

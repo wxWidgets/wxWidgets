@@ -1808,6 +1808,7 @@ class TreeItemId(object):
         except: pass
     def IsOk(*args, **kwargs): return _controls.TreeItemId_IsOk(*args, **kwargs)
     def __eq__(*args, **kwargs): return _controls.TreeItemId___eq__(*args, **kwargs)
+    def __ne__(*args, **kwargs): return _controls.TreeItemId___ne__(*args, **kwargs)
     m_pItem = property(_controls.TreeItemId_m_pItem_get, _controls.TreeItemId_m_pItem_set)
     Ok = IsOk
     def __nonzero__(self): return self.IsOk() 
