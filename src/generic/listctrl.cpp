@@ -2649,7 +2649,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     int y = event.GetY();
     CalcUnscrolledPosition( x, y, &x, &y );
 
-    /* Did we actually hit an item ? */
+    // where did we hit it (if we did)?
     long hitResult = 0;
 
     size_t count = GetItemCount(),
@@ -2658,7 +2658,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     if ( HasFlag(wxLC_REPORT) )
     {
         current = y / GetLineHeight();
-        hitResult = HitTestLine(current, x, y);
+        if ( current < count )
+            hitResult = HitTestLine(current, x, y);
     }
     else // !report
     {
