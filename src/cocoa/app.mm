@@ -134,6 +134,7 @@ void wxApp::Exit()
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
+    EVT_IDLE(wxApp::OnIdle)
 //    EVT_END_SESSION(wxApp::OnEndSession)
 //    EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
 END_EVENT_TABLE()
@@ -275,6 +276,37 @@ bool wxApp::Pending()
 // Dispatch a message.
 void wxApp::Dispatch()
 {
+}
+
+void wxApp::OnIdle(wxIdleEvent& event)
+{
+    wxLogDebug("wxApp::OnIdle");
+#if 0
+   static bool s_inOnIdle = FALSE;
+
+    // Avoid recursion (via ProcessEvent default case)
+    if ( s_inOnIdle )
+        return;
+    s_inOnIdle = TRUE;
+#endif
+
+
+    DeletePendingObjects();
+
+    // flush the logged messages if any
+    wxLog *pLog = wxLog::GetActiveTarget();
+    if ( pLog != NULL && pLog->HasPendingMessages() )
+        pLog->Flush();
+
+#if 0
+    // Send OnIdle events to all windows
+    bool needMore = SendIdleEvents();
+
+    if (needMore)
+      event.RequestMore(TRUE);
+
+    s_inOnIdle = FALSE;
+#endif
 }
 
 // Yield to other processes
