@@ -56,7 +56,7 @@ public:
 
     // Convert to string
 #ifndef __SALFORDC__
-    operator char *   (void);
+    operator wxChar * (void);
     operator wxDate() const;
 #endif
 
@@ -94,7 +94,7 @@ public:
     wxTime Min(const wxTime&) const;
     static void SetFormat(const tFormat lFormat = wx12h,
                   const tPrecision lPrecision = wxStdMinSec);
-    char *FormatTime() const;
+    wxChar *FormatTime() const;
 /*
     virtual int compare(const Object&) const;
     virtual void deepenShallowCopy();       // {}
