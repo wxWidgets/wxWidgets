@@ -2965,3 +2965,42 @@ This is the same as \helpref{wxCHECK2}{wxcheck2}, but
 \helpref{wxFAIL\_MSG}{wxfailmsg} with the specified {\it msg} is called
 instead of wxFAIL() if the {\it condition} is false.
 
+\section{Environment access functions}\label{environfunctions}
+
+The functions in this section allow to access (get) or change value of
+environment variables in a portable way. They are currently implemented under
+Win32 and POSIX-like systems (Unix).
+
+% TODO add some stuff about env var inheriting but not propagating upwards (VZ)
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+\membersection{wxGetEnv}\label{wxgetenv}
+
+\func{wxChar *}{wxGetEnv}{\param{const wxString\&}{ var}}
+
+Returns the current value of the environment variable {\it var} or {\tt NULL} 
+if it doesn't exist.
+
+\membersection{wxSetEnv}\label{wxsetenv}
+
+\func{bool}{wxSetEnv}{\param{const wxString\&}{ var}, \param{const wxChar *}{value}}
+
+Sets the value of the environment variable {\it var} (adding it if necessary)
+to {\it value}.
+
+Returns {\tt TRUE} on success.
+
+\membersection{wxUnsetEnv}\label{wxunsetenv}
+
+\func{bool}{wxUnsetEnv}{\param{const wxString\&}{ var}}
+
+Removes the variable {\it var} from the environment. 
+\helpref{wxGetEnv}[wxgetenv} will return {\tt NULL} after the call to this
+function.
+
+Returns {\tt TRUE} on success.
+
+
