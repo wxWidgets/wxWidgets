@@ -113,6 +113,7 @@ wxPalmOS:
 - native wxProgressDialog implementation
 - native wxColourDialog implementation
 - native wxSystemSettings colours
+- native wxButton implementation
 
 
 2.5.3

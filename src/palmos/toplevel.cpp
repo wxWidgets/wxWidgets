@@ -43,15 +43,6 @@
 
 #include "wx/display.h"
 
-#ifndef ICON_BIG
-    #define ICON_BIG 1
-#endif
-
-#ifndef ICON_SMALL
-    #define ICON_SMALL 0
-#endif
-
-
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -60,7 +51,7 @@
 extern const wxChar *wxCanvasClassName;
 
 // Pointer to the currently active frame for the form event handler.
-wxFrame* ActiveParentFrame;
+wxTopLevelWindowPalm* ActiveParentFrame;
 
 // ============================================================================
 // wxTopLevelWindowPalm implementation
@@ -88,21 +79,6 @@ WXHWND wxTopLevelWindowPalm::PalmGetParent() const
     return NULL;
 }
 
-bool wxTopLevelWindowPalm::CreateDialog(const void *dlgTemplate,
-                                       const wxString& title,
-                                       const wxPoint& pos,
-                                       const wxSize& size)
-{
-    return false;
-}
-
-bool wxTopLevelWindowPalm::CreateFrame(const wxString& title,
-                                      const wxPoint& pos,
-                                      const wxSize& size)
-{
-    return false;
-}
-
 bool wxTopLevelWindowPalm::Create(wxWindow *parent,
                                   wxWindowID id,
                                   const wxString& title,
@@ -111,6 +87,10 @@ bool wxTopLevelWindowPalm::Create(wxWindow *parent,
                                   long style,
                                   const wxString& name)
 {
+    // this is a check for limitation mentioned before FrameFormHandleEvent() code
+    if(wxTopLevelWindows.GetCount()>0)
+        return false;
+
     ActiveParentFrame=NULL;
 
     wxTopLevelWindows.Append(this);
@@ -120,54 +100,37 @@ bool wxTopLevelWindowPalm::Create(wxWindow *parent,
 
     m_windowId = id == wxID_ANY ? NewControlId() : id;
 
-    wxCoord x = ( ( pos.x == wxDefaultCoord ) ? 0 : pos.x ) ;
-    wxCoord y = ( ( pos.y == wxDefaultCoord ) ? 0 : pos.y ) ;
-    wxCoord w = ( ( size.x == wxDefaultCoord ) ? 160 : size.x ) ;
-    wxCoord h = ( ( size.y == wxDefaultCoord ) ? 160 : size.y ) ;
+    WinConstraintsType constraints;
+    memset(&constraints, 0, sizeof(WinConstraintsType));
+    constraints.x_pos = ( pos.x == wxDefaultCoord ) ? winUndefConstraint : pos.x;
+    constraints.y_pos = ( pos.y == wxDefaultCoord ) ? winUndefConstraint : pos.y;
+    constraints.x_min = winUndefConstraint;
+    constraints.x_max = winMaxConstraint;
+    constraints.x_pref = ( size.x == wxDefaultCoord ) ? winUndefConstraint : size.x;
+    constraints.y_min = winUndefConstraint;
+    constraints.y_max = winMaxConstraint;
+    constraints.y_pref = ( size.y == wxDefaultCoord ) ? winUndefConstraint : size.y;
 
-    FrameForm = FrmNewForm( m_windowId,
-                            title,
-                            x, y,
-                            w, h,
-                            false,
-                            0,
-                            NULL,
-                            0,
-                            NULL,
-                            0);
-    if(FrameForm==0)
-        return false;
+    FrameForm = FrmNewFormWithConstraints(
+                    m_windowId,
+                    title.c_str(),
+                    winFlagBackBuffer,
+                    &constraints,
+                    0,
+                    NULL,
+                    0,
+                    NULL,
+                    0
+                );
 
-    FrmSetEventHandler(FrameForm,FrameFormHandleEvent);
-
-    return true;
-}
-
-bool wxTopLevelWindowPalm::Create(wxWindow *parent,
-                                  wxWindowID id,
-                                  const wxString& title,
-                                  const wxPoint& pos,
-                                  const wxSize& size,
-                                  long style,
-                                  const wxString& name,
-                                  wxFrame* PFrame)
-{
-    wxTopLevelWindows.Append(this);
-
-    if ( parent )
-        parent->AddChild(this);
-
-    m_windowId = id == -1 ? NewControlId() : id;
-
-    FrameForm=FrmNewForm(m_windowId,title,0,0,160,160,false,0,NULL,0,NULL,0);
-    if(FrameForm==0)
+    if(FrameForm==NULL)
         return false;
 
     FrmSetEventHandler(FrameForm,FrameFormHandleEvent);
 
     FrmSetActiveForm(FrameForm);
 
-    ActiveParentFrame=PFrame;
+    ActiveParentFrame=this;
 
     return true;
 }
@@ -280,21 +243,22 @@ void wxTopLevelWindowPalm::OnActivate(wxActivateEvent& event)
  */
 static Boolean FrameFormHandleEvent(EventType* pEvent)
 {
+    wxFrame*    frame = wxDynamicCast(ActiveParentFrame,wxFrame);
     Boolean     fHandled = false;
-    FormType*     pForm;
-    WinHandle    hWindow;
-    int ItemID=0;
+    FormType*   pForm;
+    WinHandle   hWindow;
+    int         ItemID=0;
 
     switch (pEvent->eType) {
         case ctlSelectEvent:
             break;
 #if wxUSE_MENUS_NATIVE
         case menuOpenEvent:
-            fHandled=ActiveParentFrame->HandleMenuOpen();
+            fHandled = frame->HandleMenuOpen();
             break;
         case menuEvent:
-            ItemID=pEvent->data.menu.itemID;
-            fHandled=ActiveParentFrame->HandleMenuSelect(ItemID);
+            ItemID = pEvent->data.menu.itemID;
+            fHandled = frame->HandleMenuSelect(ItemID);
             break;
 #endif
         default:

@@ -2,10 +2,10 @@
 // Name:        wx/palmos/toplevel.h
 // Purpose:     wxTopLevelWindow
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - more than minimal functionality
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -47,15 +47,6 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    bool Create(wxWindow *parent,
-                wxWindowID id,
-                const wxString& title,
-                const wxPoint& pos,
-                const wxSize& size,
-                long style,
-                const wxString& name,
-                wxFrame* PFrame);
-
     virtual ~wxTopLevelWindowPalm();
 
     // implement base class pure virtuals
@@ -93,18 +84,6 @@ public:
 protected:
     // common part of all ctors
     void Init();
-
-    // create a new frame, return false if it couldn't be created
-    bool CreateFrame(const wxString& title,
-                     const wxPoint& pos,
-                     const wxSize& size);
-
-    // create a new dialog using the given dialog template from resources,
-    // return false if it couldn't be created
-    bool CreateDialog(const void *dlgTemplate,
-                      const wxString& title,
-                      const wxPoint& pos,
-                      const wxSize& size);
 
     // common part of Iconize(), Maximize() and Restore()
     void DoShowWindow(int nShowCmd);

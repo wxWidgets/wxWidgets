@@ -453,7 +453,7 @@ public:
     bool Disable() { return Enable(false); }
 
     virtual bool IsShown() const { return m_isShown; }
-    bool IsEnabled() const { return m_isEnabled; }
+    virtual bool IsEnabled() const { return m_isEnabled; }
 
         // get/set window style (setting style won't update the window and so
         // is only useful for internal usage)

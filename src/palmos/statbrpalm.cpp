@@ -150,6 +150,7 @@ wxString wxStatusBarPalm::GetStatusText(int nField) const
 
 void wxStatusBarPalm::DrawStatusBar()
 {
+#if 0
     int i=0;
     int leftPos=0;
     wxArrayInt widthsAbs;
@@ -172,6 +173,7 @@ void wxStatusBarPalm::DrawStatusBar()
         leftPos+=widthsAbs[i]+2;
     }
     WinDrawLine(0,160-FntCharHeight()-1,159,160-FntCharHeight()-1);
+#endif
 }
 
 void wxStatusBarPalm::SetStatusBufferText(const wxString& text, int number)
@@ -187,7 +189,7 @@ wxString wxStatusBarPalm::GetStatusBufferText(int number)
 {
     wxListString *st = GetStatusBufferStack(number);
     if(st==0)
-        return "";
+        return wxEmptyString;
 
     wxListString::compatibility_iterator top = st->GetFirst();
     return(*top->GetData());

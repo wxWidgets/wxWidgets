@@ -509,13 +509,14 @@
 // Default is 1
 //
 // Recommended setting: 1
-#define wxUSE_BUTTON       0    // wxButton
+#define wxUSE_BUTTON       1    // wxButton
 #define wxUSE_BMPBUTTON    0    // wxBitmapButton
 #define wxUSE_CALENDARCTRL 0    // wxCalendarCtrl
 #define wxUSE_CHECKBOX     0    // wxCheckBox
 #define wxUSE_CHECKLISTBOX 0    // wxCheckListBox (requires wxUSE_OWNER_DRAWN)
 #define wxUSE_CHOICE       0    // wxChoice
 #define wxUSE_COMBOBOX     0    // wxComboBox
+#define wxUSE_DATEPICKCTRL 0    // wxDatePickerCtrl
 #define wxUSE_GAUGE        0    // wxGauge
 #define wxUSE_LISTBOX      0    // wxListBox
 #define wxUSE_LISTCTRL     0    // wxListCtrl
@@ -534,15 +535,15 @@
 #define wxUSE_TREECTRL     0    // wxTreeCtrl
 
 // Use a status bar class? Depending on the value of wxUSE_NATIVE_STATUSBAR
-// below either wxStatusBar95 or a generic wxStatusBar will be used.
+// below either wxStatusBarPalm or a generic wxStatusBar will be used.
 //
 // Default is 1
 //
 // Recommended setting: 1
 #define wxUSE_STATUSBAR    1
 
-// Two status bar implementations are available under Win32: the generic one
-// or the wrapper around native control. For native look and feel the native
+// Two status bar implementations are available under PalmOS: the generic one
+// or the wrapper around native status bar. For native look and feel the native
 // version should be used.
 //
 // Default is 1.

@@ -2,10 +2,10 @@
 // Name:        wx/palmos/button.h
 // Purpose:     wxButton class
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native wxButton implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -26,7 +26,7 @@ public:
     wxButton() { }
     wxButton(wxWindow *parent,
              wxWindowID id,
-             const wxString& label,
+             const wxString& label = wxEmptyString,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
@@ -51,7 +51,6 @@ public:
 
     // implementation from now on
     virtual void Command(wxCommandEvent& event);
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
 
     virtual void ApplyParentThemeBackground(const wxColour& bg)

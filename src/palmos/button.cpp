@@ -2,10 +2,10 @@
 // Name:        src/palmos/button.cpp
 // Purpose:     wxButton
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native wxButton implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -39,8 +39,6 @@
     #include "wx/settings.h"
     #include "wx/dcscreen.h"
 #endif
-
-#include "wx/palmos/private.h"
 
 // ----------------------------------------------------------------------------
 // macros
@@ -128,8 +126,8 @@ bool wxButton::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    // remember about stock IDs
-    return false;
+    wxControl::PalmCreateControl(buttonCtl, parent, id, label, pos, size);
+    return true;
 }
 
 wxButton::~wxButton()

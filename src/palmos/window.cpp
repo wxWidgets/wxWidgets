@@ -334,7 +334,7 @@ void wxWindowPalm::SetTitle( const wxString& title)
 
 wxString wxWindowPalm::GetTitle() const
 {
-    return wxString("");
+    return wxEmptyString;
 }
 
 void wxWindowPalm::DoCaptureMouse()
@@ -1095,21 +1095,6 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 {
     return NULL;
 }
-
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-
-void wxSetKeyboardHook(bool doIt)
-{
-}
-
-#endif // !__WXMICROWIN__
-
-#ifdef __WXDEBUG__
-const char *wxGetMessageName(int message)
-{
-    return "";
-}
-#endif //__WXDEBUG__
 
 // Find the wxWindow at the current mouse position, returning the mouse
 // position.

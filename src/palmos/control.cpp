@@ -60,7 +60,7 @@ END_EVENT_TABLE()
 
 wxControl::~wxControl()
 {
-    m_isBeingDeleted = TRUE;
+    m_isBeingDeleted = true;
 }
 
 // ----------------------------------------------------------------------------
@@ -76,34 +76,44 @@ bool wxControl::Create(wxWindow *parent,
                        const wxString& name)
 {
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
-        return FALSE;
+        return false;
 
 #if wxUSE_VALIDATORS
     SetValidator(validator);
 #endif
 
-    return TRUE;
+    return true;
 }
 
-bool wxControl::MSWCreateControl(const wxChar *classname,
-                                 const wxString& label,
-                                 const wxPoint& pos,
-                                 const wxSize& size)
+bool wxControl::PalmCreateControl(ControlStyleType style,
+                                  wxWindow *parent,
+                                  wxWindowID id,
+                                  const wxString& label,
+                                  const wxPoint& pos,
+                                  const wxSize& size)
 {
-    WXDWORD exstyle;
-    WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), &exstyle);
+    FormType* form = FrmGetActiveForm ();
+    m_control = CtlNewControl (
+                    (void **)&form,
+                    id,
+                    style,
+                    label.c_str(),
+                    pos.x,
+                    pos.y,
+                    size.x,
+                    size.y,
+                    boldFont,
+                    0,
+                    false
+                );
 
-    return MSWCreateControl(classname, msStyle, pos, size, label, exstyle);
-}
+    if(m_control==NULL)
+        return false;
 
-bool wxControl::MSWCreateControl(const wxChar *classname,
-                                 WXDWORD style,
-                                 const wxPoint& pos,
-                                 const wxSize& size,
-                                 const wxString& label,
-                                 WXDWORD exstyle)
-{
-    return TRUE;
+    form = FrmGetActiveForm ();
+    m_objectIndex = FrmGetObjectIndex(form, id);
+    Show();
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -118,14 +128,40 @@ wxBorder wxControl::GetDefaultBorder() const
     return wxBORDER_SUNKEN;
 }
 
-WXDWORD wxControl::MSWGetStyle(long style, WXDWORD *exstyle) const
-{
-    return 0;
-}
-
 wxSize wxControl::DoGetBestSize() const
 {
     return wxSize(16, 16);
+}
+
+bool wxControl::Enable(bool enable)
+{
+    if( m_control == NULL )
+        return false;
+    if( IsEnabled() == enable)
+        return false;
+    CtlSetEnabled( m_control, enable);
+    return true;
+}
+
+bool wxControl::IsEnabled() const
+{
+    if( m_control == NULL )
+        return false;
+    return CtlEnabled(m_control);
+}
+
+bool wxControl::IsShown() const
+{
+    return StatGetAttribute ( statAttrBarVisible , NULL );
+}
+
+bool wxControl::Show( bool show )
+{
+    if(show)
+        FrmShowObject(FrmGetActiveForm(), m_objectIndex);
+    else
+        FrmHideObject(FrmGetActiveForm(), m_objectIndex);
+    return true;
 }
 
 /* static */ wxVisualAttributes
@@ -166,14 +202,6 @@ bool wxControl::ProcessCommand(wxCommandEvent& event)
 {
     return GetEventHandler()->ProcessEvent(event);
 }
-
-#ifdef __WIN95__
-bool wxControl::MSWOnNotify(int idCtrl,
-                            WXLPARAM lParam,
-                            WXLPARAM* result)
-{
-}
-#endif // Win95
 
 void wxControl::OnEraseBackground(wxEraseEvent& event)
 {

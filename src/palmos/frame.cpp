@@ -2,10 +2,10 @@
 // Name:        src/palmos/frame.cpp
 // Purpose:     wxFrame
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - more than minimal functionality
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -162,7 +162,7 @@ bool wxFrame::Create(wxWindow *parent,
                      long style,
                      const wxString& name)
 {
-    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name, this) )
+    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return false;
 
     return true;
@@ -255,7 +255,7 @@ void wxFrame::OnPaint(wxPaintEvent& event)
 #endif // wxUSE_STATUSBAR
 }
 
-// Pass TRUE to show full screen, FALSE to restore.
+// Pass true to show full screen, false to restore.
 bool wxFrame::ShowFullScreen(bool show, long style)
 {
     return false;
