@@ -18,7 +18,7 @@
 #include <wx/splitter.h>
 #include <wx/imaglist.h>
 #ifdef __WXMSW__
-#include <wx/msw/taskbar.h>
+#include <wx/taskbar.h>
 #endif
 %}
 

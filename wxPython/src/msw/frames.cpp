@@ -685,6 +685,42 @@ static PyObject *_wrap_wxTopLevelWindow_GetTitle(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxTopLevelWindow_SetShape(_swigobj,_swigarg0)  (_swigobj->SetShape(_swigarg0))
+static PyObject *_wrap_wxTopLevelWindow_SetShape(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTopLevelWindow * _arg0;
+    wxRegion * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","region", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTopLevelWindow_SetShape",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTopLevelWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTopLevelWindow_SetShape. Expected _wxTopLevelWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTopLevelWindow_SetShape. Expected _wxRegion_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTopLevelWindow_SetShape(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxFrameTowxTopLevelWindow(void *ptr) {
     wxFrame *src;
     wxTopLevelWindow *dest;
@@ -1395,7 +1431,7 @@ static PyObject *_wrap_wxFrame_CreateToolBar(PyObject *self, PyObject *args, PyO
     PyObject * _resultobj;
     wxToolBar * _result;
     wxFrame * _arg0;
-    long  _arg1 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
+    long  _arg1 = (long ) -1;
     wxWindowID  _arg2 = (wxWindowID ) -1;
     wxString * _arg3 = (wxString *) &wxPyToolBarNameStr;
     PyObject * _argo0 = 0;
@@ -1517,6 +1553,72 @@ static PyObject *_wrap_wxFrame_SendSizeEvent(PyObject *self, PyObject *args, PyO
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxFrame_SendSizeEvent(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFrame_DoMenuUpdates(_swigobj,_swigarg0)  (_swigobj->DoMenuUpdates(_swigarg0))
+static PyObject *_wrap_wxFrame_DoMenuUpdates(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFrame * _arg0;
+    wxMenu * _arg1 = (wxMenu *) NULL;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","menu", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxFrame_DoMenuUpdates",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_DoMenuUpdates. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMenu_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFrame_DoMenuUpdates. Expected _wxMenu_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFrame_DoMenuUpdates(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFrame_UpdateWindowUI(_swigobj,_swigarg0)  (_swigobj->UpdateWindowUI(_swigarg0))
+static PyObject *_wrap_wxFrame_UpdateWindowUI(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFrame * _arg0;
+    long  _arg1 = (long ) wxUPDATE_UI_NONE;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","flags", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|l:wxFrame_UpdateWindowUI",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_UpdateWindowUI. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFrame_UpdateWindowUI(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2613,6 +2715,8 @@ static PyMethodDef framescMethods[] = {
 	 { "wxDialog_Create", (PyCFunction) _wrap_wxDialog_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreDialog", (PyCFunction) _wrap_new_wxPreDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDialog", (PyCFunction) _wrap_new_wxDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_UpdateWindowUI", (PyCFunction) _wrap_wxFrame_UpdateWindowUI, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_DoMenuUpdates", (PyCFunction) _wrap_wxFrame_DoMenuUpdates, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_SendSizeEvent", (PyCFunction) _wrap_wxFrame_SendSizeEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_SetToolBar", (PyCFunction) _wrap_wxFrame_SetToolBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_GetToolBar", (PyCFunction) _wrap_wxFrame_GetToolBar, METH_VARARGS | METH_KEYWORDS },
@@ -2634,6 +2738,7 @@ static PyMethodDef framescMethods[] = {
 	 { "wxFrame_Create", (PyCFunction) _wrap_wxFrame_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreFrame", (PyCFunction) _wrap_new_wxPreFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFrame", (PyCFunction) _wrap_new_wxFrame, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTopLevelWindow_SetShape", (PyCFunction) _wrap_wxTopLevelWindow_SetShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_GetTitle", (PyCFunction) _wrap_wxTopLevelWindow_GetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_SetTitle", (PyCFunction) _wrap_wxTopLevelWindow_SetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_IsFullScreen", (PyCFunction) _wrap_wxTopLevelWindow_IsFullScreen, METH_VARARGS | METH_KEYWORDS },

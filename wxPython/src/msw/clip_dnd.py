@@ -18,22 +18,22 @@ class wxDataFormatPtr :
             except:
                 pass
     def SetType(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataFormat_SetType,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataFormat_SetType(self, *_args, **_kwargs)
         return val
     def GetType(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataFormat_GetType,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataFormat_GetType(self, *_args, **_kwargs)
         return val
     def GetId(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataFormat_GetId,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataFormat_GetId(self, *_args, **_kwargs)
         return val
     def SetId(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataFormat_SetId,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataFormat_SetId(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxDataFormat instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDataFormat instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxDataFormat(wxDataFormatPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxDataFormat,_args,_kwargs)
+        self.this = clip_dndc.new_wxDataFormat(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -53,29 +53,29 @@ class wxDataObjectPtr :
             except:
                 pass
     def GetPreferredFormat(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObject_GetPreferredFormat,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataObject_GetPreferredFormat(self, *_args, **_kwargs)
         if val: val = wxDataFormatPtr(val) ; val.thisown = 1
         return val
     def GetFormatCount(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObject_GetFormatCount,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataObject_GetFormatCount(self, *_args, **_kwargs)
         return val
     def GetAllFormats(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObject_GetAllFormats,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataObject_GetAllFormats(self, *_args, **_kwargs)
         return val
     def GetDataHere(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObject_GetDataHere,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataObject_GetDataHere(self, *_args, **_kwargs)
         return val
     def GetDataSize(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObject_GetDataSize,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataObject_GetDataSize(self, *_args, **_kwargs)
         return val
     def SetData(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObject_SetData,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataObject_SetData(self, *_args, **_kwargs)
         return val
     def IsSupportedFormat(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObject_IsSupportedFormat,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataObject_IsSupportedFormat(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxDataObject instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxDataObject(wxDataObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -88,17 +88,17 @@ class wxDataObjectSimplePtr(wxDataObjectPtr):
         self.this = this
         self.thisown = 0
     def GetFormat(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObjectSimple_GetFormat,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataObjectSimple_GetFormat(self, *_args, **_kwargs)
         if val: val = wxDataFormatPtr(val) 
         return val
     def SetFormat(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObjectSimple_SetFormat,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataObjectSimple_SetFormat(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxDataObjectSimple instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDataObjectSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxDataObjectSimple(wxDataObjectSimplePtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxDataObjectSimple,_args,_kwargs)
+        self.this = clip_dndc.new_wxDataObjectSimple(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -109,13 +109,13 @@ class wxPyDataObjectSimplePtr(wxDataObjectSimplePtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxPyDataObjectSimple__setCallbackInfo,(self,) + _args, _kwargs)
+        val = clip_dndc.wxPyDataObjectSimple__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyDataObjectSimple instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyDataObjectSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPyDataObjectSimple(wxPyDataObjectSimplePtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxPyDataObjectSimple,_args,_kwargs)
+        self.this = clip_dndc.new_wxPyDataObjectSimple(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyDataObjectSimple)
 
@@ -127,14 +127,14 @@ class wxDataObjectCompositePtr(wxDataObjectPtr):
         self.this = this
         self.thisown = 0
     def Add(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDataObjectComposite_Add,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDataObjectComposite_Add(self, *_args, **_kwargs)
         _args[0].thisown = 0
         return val
     def __repr__(self):
-        return "<C wxDataObjectComposite instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDataObjectComposite instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxDataObjectComposite(wxDataObjectCompositePtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxDataObjectComposite,_args,_kwargs)
+        self.this = clip_dndc.new_wxDataObjectComposite(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -145,19 +145,19 @@ class wxTextDataObjectPtr(wxDataObjectSimplePtr):
         self.this = this
         self.thisown = 0
     def GetTextLength(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxTextDataObject_GetTextLength,(self,) + _args, _kwargs)
+        val = clip_dndc.wxTextDataObject_GetTextLength(self, *_args, **_kwargs)
         return val
     def GetText(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxTextDataObject_GetText,(self,) + _args, _kwargs)
+        val = clip_dndc.wxTextDataObject_GetText(self, *_args, **_kwargs)
         return val
     def SetText(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxTextDataObject_SetText,(self,) + _args, _kwargs)
+        val = clip_dndc.wxTextDataObject_SetText(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxTextDataObject instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxTextDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxTextDataObject(wxTextDataObjectPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxTextDataObject,_args,_kwargs)
+        self.this = clip_dndc.new_wxTextDataObject(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -168,13 +168,13 @@ class wxPyTextDataObjectPtr(wxTextDataObjectPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxPyTextDataObject__setCallbackInfo,(self,) + _args, _kwargs)
+        val = clip_dndc.wxPyTextDataObject__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyTextDataObject instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyTextDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPyTextDataObject(wxPyTextDataObjectPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxPyTextDataObject,_args,_kwargs)
+        self.this = clip_dndc.new_wxPyTextDataObject(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyTextDataObject)
 
@@ -186,17 +186,17 @@ class wxBitmapDataObjectPtr(wxDataObjectSimplePtr):
         self.this = this
         self.thisown = 0
     def GetBitmap(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxBitmapDataObject_GetBitmap,(self,) + _args, _kwargs)
+        val = clip_dndc.wxBitmapDataObject_GetBitmap(self, *_args, **_kwargs)
         if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
     def SetBitmap(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxBitmapDataObject_SetBitmap,(self,) + _args, _kwargs)
+        val = clip_dndc.wxBitmapDataObject_SetBitmap(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxBitmapDataObject instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxBitmapDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxBitmapDataObject(wxBitmapDataObjectPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxBitmapDataObject,_args,_kwargs)
+        self.this = clip_dndc.new_wxBitmapDataObject(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -207,13 +207,13 @@ class wxPyBitmapDataObjectPtr(wxBitmapDataObjectPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxPyBitmapDataObject__setCallbackInfo,(self,) + _args, _kwargs)
+        val = clip_dndc.wxPyBitmapDataObject__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyBitmapDataObject instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyBitmapDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPyBitmapDataObject(wxPyBitmapDataObjectPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxPyBitmapDataObject,_args,_kwargs)
+        self.this = clip_dndc.new_wxPyBitmapDataObject(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyBitmapDataObject)
 
@@ -225,16 +225,16 @@ class wxFileDataObjectPtr(wxDataObjectSimplePtr):
         self.this = this
         self.thisown = 0
     def GetFilenames(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxFileDataObject_GetFilenames,(self,) + _args, _kwargs)
+        val = clip_dndc.wxFileDataObject_GetFilenames(self, *_args, **_kwargs)
         return val
     def AddFile(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxFileDataObject_AddFile,(self,) + _args, _kwargs)
+        val = clip_dndc.wxFileDataObject_AddFile(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxFileDataObject instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxFileDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxFileDataObject(wxFileDataObjectPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxFileDataObject,_args,_kwargs)
+        self.this = clip_dndc.new_wxFileDataObject(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -245,22 +245,22 @@ class wxCustomDataObjectPtr(wxDataObjectSimplePtr):
         self.this = this
         self.thisown = 0
     def TakeData(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxCustomDataObject_TakeData,(self,) + _args, _kwargs)
+        val = clip_dndc.wxCustomDataObject_TakeData(self, *_args, **_kwargs)
         return val
     def SetData(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxCustomDataObject_SetData,(self,) + _args, _kwargs)
+        val = clip_dndc.wxCustomDataObject_SetData(self, *_args, **_kwargs)
         return val
     def GetSize(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxCustomDataObject_GetSize,(self,) + _args, _kwargs)
+        val = clip_dndc.wxCustomDataObject_GetSize(self, *_args, **_kwargs)
         return val
     def GetData(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxCustomDataObject_GetData,(self,) + _args, _kwargs)
+        val = clip_dndc.wxCustomDataObject_GetData(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxCustomDataObject instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxCustomDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxCustomDataObject(wxCustomDataObjectPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxCustomDataObject,_args,_kwargs)
+        self.this = clip_dndc.new_wxCustomDataObject(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -271,16 +271,16 @@ class wxURLDataObjectPtr(wxDataObjectCompositePtr):
         self.this = this
         self.thisown = 0
     def GetURL(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxURLDataObject_GetURL,(self,) + _args, _kwargs)
+        val = clip_dndc.wxURLDataObject_GetURL(self, *_args, **_kwargs)
         return val
     def SetURL(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxURLDataObject_SetURL,(self,) + _args, _kwargs)
+        val = clip_dndc.wxURLDataObject_SetURL(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxURLDataObject instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxURLDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxURLDataObject(wxURLDataObjectPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxURLDataObject,_args,_kwargs)
+        self.this = clip_dndc.new_wxURLDataObject(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -291,16 +291,16 @@ class wxMetafileDataObjectPtr(wxDataObjectSimplePtr):
         self.this = this
         self.thisown = 0
     def SetMetafile(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxMetafileDataObject_SetMetafile,(self,) + _args, _kwargs)
+        val = clip_dndc.wxMetafileDataObject_SetMetafile(self, *_args, **_kwargs)
         return val
     def GetMetafile(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxMetafileDataObject_GetMetafile,(self,) + _args, _kwargs)
+        val = clip_dndc.wxMetafileDataObject_GetMetafile(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxMetafileDataObject instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxMetafileDataObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxMetafileDataObject(wxMetafileDataObjectPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxMetafileDataObject,_args,_kwargs)
+        self.this = clip_dndc.new_wxMetafileDataObject(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -311,42 +311,42 @@ class wxClipboardPtr(wxObjectPtr):
         self.this = this
         self.thisown = 0
     def Open(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxClipboard_Open,(self,) + _args, _kwargs)
+        val = clip_dndc.wxClipboard_Open(self, *_args, **_kwargs)
         return val
     def Close(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxClipboard_Close,(self,) + _args, _kwargs)
+        val = clip_dndc.wxClipboard_Close(self, *_args, **_kwargs)
         return val
     def IsOpened(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxClipboard_IsOpened,(self,) + _args, _kwargs)
+        val = clip_dndc.wxClipboard_IsOpened(self, *_args, **_kwargs)
         return val
     def AddData(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxClipboard_AddData,(self,) + _args, _kwargs)
+        val = clip_dndc.wxClipboard_AddData(self, *_args, **_kwargs)
         _args[0].thisown = 0
         return val
     def SetData(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxClipboard_SetData,(self,) + _args, _kwargs)
+        val = clip_dndc.wxClipboard_SetData(self, *_args, **_kwargs)
         _args[0].thisown = 0
         return val
     def IsSupported(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxClipboard_IsSupported,(self,) + _args, _kwargs)
+        val = clip_dndc.wxClipboard_IsSupported(self, *_args, **_kwargs)
         return val
     def GetData(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxClipboard_GetData,(self,) + _args, _kwargs)
+        val = clip_dndc.wxClipboard_GetData(self, *_args, **_kwargs)
         return val
     def Clear(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxClipboard_Clear,(self,) + _args, _kwargs)
+        val = clip_dndc.wxClipboard_Clear(self, *_args, **_kwargs)
         return val
     def Flush(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxClipboard_Flush,(self,) + _args, _kwargs)
+        val = clip_dndc.wxClipboard_Flush(self, *_args, **_kwargs)
         return val
     def UsePrimarySelection(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxClipboard_UsePrimarySelection,(self,) + _args, _kwargs)
+        val = clip_dndc.wxClipboard_UsePrimarySelection(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxClipboard instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxClipboard instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxClipboard(wxClipboardPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxClipboard,_args,_kwargs)
+        self.this = clip_dndc.new_wxClipboard(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -357,7 +357,7 @@ class wxDropSourcePtr :
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDropSource__setCallbackInfo,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDropSource__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def __del__(self, delfunc=clip_dndc.delete_wxDropSource):
         if self.thisown == 1:
@@ -366,26 +366,26 @@ class wxDropSourcePtr :
             except:
                 pass
     def SetData(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDropSource_SetData,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDropSource_SetData(self, *_args, **_kwargs)
         return val
     def GetDataObject(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDropSource_GetDataObject,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDropSource_GetDataObject(self, *_args, **_kwargs)
         if val: val = wxDataObjectPtr(val) 
         return val
     def SetCursor(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDropSource_SetCursor,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDropSource_SetCursor(self, *_args, **_kwargs)
         return val
     def DoDragDrop(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDropSource_DoDragDrop,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDropSource_DoDragDrop(self, *_args, **_kwargs)
         return val
     def base_GiveFeedback(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxDropSource_base_GiveFeedback,(self,) + _args, _kwargs)
+        val = clip_dndc.wxDropSource_base_GiveFeedback(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxDropSource instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDropSource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxDropSource(wxDropSourcePtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxDropSource,_args,_kwargs)
+        self.this = clip_dndc.new_wxDropSource(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxDropSource, 0)
 
@@ -397,7 +397,7 @@ class wxDropTargetPtr :
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxDropTarget instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDropTarget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxDropTarget(wxDropTargetPtr):
     def __init__(self,this):
         self.this = this
@@ -410,7 +410,7 @@ class wxPyDropTargetPtr(wxDropTargetPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxPyDropTarget__setCallbackInfo,(self,) + _args, _kwargs)
+        val = clip_dndc.wxPyDropTarget__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def __del__(self, delfunc=clip_dndc.delete_wxPyDropTarget):
         if self.thisown == 1:
@@ -419,33 +419,33 @@ class wxPyDropTargetPtr(wxDropTargetPtr):
             except:
                 pass
     def GetDataObject(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxPyDropTarget_GetDataObject,(self,) + _args, _kwargs)
+        val = clip_dndc.wxPyDropTarget_GetDataObject(self, *_args, **_kwargs)
         if val: val = wxDataObjectPtr(val) 
         return val
     def SetDataObject(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxPyDropTarget_SetDataObject,(self,) + _args, _kwargs)
+        val = clip_dndc.wxPyDropTarget_SetDataObject(self, *_args, **_kwargs)
         if _args:_args[0].thisown = 0
         return val
     def base_OnEnter(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxPyDropTarget_base_OnEnter,(self,) + _args, _kwargs)
+        val = clip_dndc.wxPyDropTarget_base_OnEnter(self, *_args, **_kwargs)
         return val
     def base_OnDragOver(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxPyDropTarget_base_OnDragOver,(self,) + _args, _kwargs)
+        val = clip_dndc.wxPyDropTarget_base_OnDragOver(self, *_args, **_kwargs)
         return val
     def base_OnLeave(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxPyDropTarget_base_OnLeave,(self,) + _args, _kwargs)
+        val = clip_dndc.wxPyDropTarget_base_OnLeave(self, *_args, **_kwargs)
         return val
     def base_OnDrop(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxPyDropTarget_base_OnDrop,(self,) + _args, _kwargs)
+        val = clip_dndc.wxPyDropTarget_base_OnDrop(self, *_args, **_kwargs)
         return val
     def GetData(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxPyDropTarget_GetData,(self,) + _args, _kwargs)
+        val = clip_dndc.wxPyDropTarget_GetData(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyDropTarget instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyDropTarget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPyDropTarget(wxPyDropTargetPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxPyDropTarget,_args,_kwargs)
+        self.this = clip_dndc.new_wxPyDropTarget(*_args,**_kwargs)
         self.thisown = 1
         if _args:_args[0].thisown = 0
         self._setCallbackInfo(self, wxPyDropTarget)
@@ -458,28 +458,28 @@ class wxTextDropTargetPtr(wxPyDropTargetPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxTextDropTarget__setCallbackInfo,(self,) + _args, _kwargs)
+        val = clip_dndc.wxTextDropTarget__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def base_OnEnter(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxTextDropTarget_base_OnEnter,(self,) + _args, _kwargs)
+        val = clip_dndc.wxTextDropTarget_base_OnEnter(self, *_args, **_kwargs)
         return val
     def base_OnDragOver(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxTextDropTarget_base_OnDragOver,(self,) + _args, _kwargs)
+        val = clip_dndc.wxTextDropTarget_base_OnDragOver(self, *_args, **_kwargs)
         return val
     def base_OnLeave(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxTextDropTarget_base_OnLeave,(self,) + _args, _kwargs)
+        val = clip_dndc.wxTextDropTarget_base_OnLeave(self, *_args, **_kwargs)
         return val
     def base_OnDrop(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxTextDropTarget_base_OnDrop,(self,) + _args, _kwargs)
+        val = clip_dndc.wxTextDropTarget_base_OnDrop(self, *_args, **_kwargs)
         return val
     def base_OnData(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxTextDropTarget_base_OnData,(self,) + _args, _kwargs)
+        val = clip_dndc.wxTextDropTarget_base_OnData(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxTextDropTarget instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxTextDropTarget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxTextDropTarget(wxTextDropTargetPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxTextDropTarget,_args,_kwargs)
+        self.this = clip_dndc.new_wxTextDropTarget(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxTextDropTarget)
 
@@ -491,28 +491,28 @@ class wxFileDropTargetPtr(wxPyDropTargetPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxFileDropTarget__setCallbackInfo,(self,) + _args, _kwargs)
+        val = clip_dndc.wxFileDropTarget__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def base_OnEnter(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxFileDropTarget_base_OnEnter,(self,) + _args, _kwargs)
+        val = clip_dndc.wxFileDropTarget_base_OnEnter(self, *_args, **_kwargs)
         return val
     def base_OnDragOver(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxFileDropTarget_base_OnDragOver,(self,) + _args, _kwargs)
+        val = clip_dndc.wxFileDropTarget_base_OnDragOver(self, *_args, **_kwargs)
         return val
     def base_OnLeave(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxFileDropTarget_base_OnLeave,(self,) + _args, _kwargs)
+        val = clip_dndc.wxFileDropTarget_base_OnLeave(self, *_args, **_kwargs)
         return val
     def base_OnDrop(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxFileDropTarget_base_OnDrop,(self,) + _args, _kwargs)
+        val = clip_dndc.wxFileDropTarget_base_OnDrop(self, *_args, **_kwargs)
         return val
     def base_OnData(self, *_args, **_kwargs):
-        val = apply(clip_dndc.wxFileDropTarget_base_OnData,(self,) + _args, _kwargs)
+        val = clip_dndc.wxFileDropTarget_base_OnData(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxFileDropTarget instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxFileDropTarget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxFileDropTarget(wxFileDropTargetPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(clip_dndc.new_wxFileDropTarget,_args,_kwargs)
+        self.this = clip_dndc.new_wxFileDropTarget(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxFileDropTarget)
 
@@ -524,7 +524,7 @@ class wxFileDropTarget(wxFileDropTargetPtr):
 #-------------- FUNCTION WRAPPERS ------------------
 
 def wxCustomDataFormat(*_args, **_kwargs):
-    val = apply(clip_dndc.wxCustomDataFormat,_args,_kwargs)
+    val = clip_dndc.wxCustomDataFormat(*_args,**_kwargs)
     if val: val = wxDataFormatPtr(val); val.thisown = 1
     return val
 

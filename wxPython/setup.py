@@ -106,7 +106,7 @@ HYBRID = 1         # If set and not debug or FINAL, then build a
                    # wxWindows must have been built with /MD, not /MDd
                    # (using FINAL=hybrid will do it.)
 
-WXDLLVER = '250'   # Version part of wxWindows DLL name
+WXDLLVER = '25'    # Version part of wxWindows DLL name
 
 
 #----------------------------------------------------------------------
@@ -321,7 +321,8 @@ def makeLibName(name):
     if os.name == 'posix':
         libname = '%s_%s-%s' % (WXBASENAME, name, WXRELEASE)
     else:
-        raise NotImplementedError
+        libname = "FUBAR"
+        #raise NotImplementedError
 
     return [libname]
 
@@ -401,17 +402,18 @@ if os.name == 'nt':
     GENDIR = 'msw'
 
     includes = ['src',
-                opj(WXDIR, 'lib', 'mswdll' + libFlag()),
+                opj(WXDIR, 'lib', 'vc_msw' + libFlag() + 'dll'),
                 opj(WXDIR, 'include'),
+                opj(WXDIR, 'contrib', 'include'),
                 ]
 
     defines = [ ('WIN32', None),
-                ('__WIN32__', None),
                 ('_WINDOWS', None),
-                ('__WINDOWS__', None),
-                ('WINVER', '0x0400'),
-                ('__WIN95__', None),
-                ('STRICT', None),
+##                 ('__WIN32__', None),
+##                 ('__WINDOWS__', None),
+##                 ('WINVER', '0x0400'),
+##                 ('__WIN95__', None),
+##                 ('STRICT', None),
 
                 (WXPLAT, None),
                 ('WXUSINGDLL', '1'),
@@ -428,7 +430,7 @@ if os.name == 'nt':
     if not FINAL or HYBRID:
         defines.append( ('__WXDEBUG__', None) )
 
-    libdirs = [ opj(WXDIR, 'lib') ]
+    libdirs = [ opj(WXDIR, 'lib', 'vc_msw' + libFlag() + 'dll') ]
     wxdll = 'wxmsw' + WXDLLVER + libFlag()
     libs = [ wxdll ]
 
@@ -786,7 +788,10 @@ if BUILD_OGL:
 if BUILD_STC:
     msg('Preparing STC...')
     location = 'contrib/stc'
-    STC_H = opj(WXPREFIX, 'include/wx/stc')
+    if os.name == 'nt':
+        STC_H = opj(WXDIR, 'contrib', 'include/wx/stc')
+    else:
+        STC_H = opj(WXPREFIX, 'include/wx/stc')
 
 ## NOTE: need to add this to the stc.bkl...
 
