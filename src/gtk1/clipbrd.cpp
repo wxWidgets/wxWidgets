@@ -229,7 +229,11 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
 //-----------------------------------------------------------------------------
 
 static void
-selection_handler( GtkWidget *WXUNUSED(widget), GtkSelectionData *selection_data, gpointer WXUNUSED(data) )
+selection_handler( GtkWidget *WXUNUSED(widget),
+                   GtkSelectionData *selection_data,
+                   guint WXUNUSED(info),
+                   guint WXUNUSED(time),
+                   gpointer WXUNUSED(data) )
 {
     if (!wxTheClipboard) return;
 

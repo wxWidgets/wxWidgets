@@ -2352,10 +2352,15 @@ wxLayoutList::Draw(wxDC &dc,
    }
    InvalidateUpdateRect();
 
-   WXLO_DEBUG(("Selection is %s : l%d,%ld/%ld,%ld",
-               m_Selection.m_valid ? "valid" : "invalid",
-               m_Selection.m_CursorA.x, m_Selection.m_CursorA.y,
-               m_Selection.m_CursorB.x, m_Selection.m_CursorB.y));
+#ifdef DEBUG
+   if ( m_Selection.m_valid )
+   {
+       WXLO_DEBUG(("Selection is %s : %ld,%ld/%ld,%ld",
+                   m_Selection.m_valid ? "valid" : "invalid",
+                   m_Selection.m_CursorA.x, m_Selection.m_CursorA.y,
+                   m_Selection.m_CursorB.x, m_Selection.m_CursorB.y));
+   }
+#endif
 }
 
 wxLayoutObject *

@@ -88,7 +88,7 @@ static const int Y_SCROLL_PAGE = 20;
 
 
 
-#define wxUSE_PRIVATE_CLIPBOARD_FORMAT 0
+#define wxUSE_PRIVATE_CLIPBOARD_FORMAT 1
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -1079,12 +1079,11 @@ wxLayoutWindow::Paste(bool primary)
    {
 #if wxUSE_PRIVATE_CLIPBOARD_FORMAT
       wxLayoutDataObject wxldo;
-      if (wxTheClipboard->IsSupported( wxldo.GetFormat() ))
+      if ( wxTheClipboard->GetData(wxldo) )
       {
-         wxTheClipboard->GetData(wxldo);
-         {
-         }
          //FIXME: missing functionality  m_llist->Insert(wxldo.GetList());
+         wxLayoutImportText(m_llist, wxldo.GetLayoutData());
+         SetDirty();
       }
       else
 #endif
@@ -1113,8 +1112,14 @@ wxLayoutWindow::Copy(bool invalidate)
       m_llist->EndSelection();
    }
 
-   wxLayoutDataObject wldo;
-   wxLayoutList *llist = m_llist->GetSelection(&wldo, invalidate);
+#if wxUSE_PRIVATE_CLIPBOARD_FORMAT
+   // the data object which holds all different data objects, one for each
+   // format we support
+   wxDataObjectComposite *data = new wxDataObjectComposite;
+#endif
+
+   wxLayoutDataObject *wldo = new wxLayoutDataObject;
+   wxLayoutList *llist = m_llist->GetSelection(wldo, invalidate);
    if(! llist)
       return FALSE;
    // Export selection as text:
@@ -1139,18 +1144,20 @@ wxLayoutWindow::Copy(bool invalidate)
          text = text.Mid(0,len-1);
    }
 
-   if (wxTheClipboard->Open())
-   {
-      wxTextDataObject *data = new wxTextDataObject( text );
-      bool  rc = wxTheClipboard->SetData( data );
+   if (!wxTheClipboard->Open())
+       return FALSE;
+
 #if wxUSE_PRIVATE_CLIPBOARD_FORMAT
-      rc |= wxTheClipboard->AddData( &wldo );
+   data->Add(wldo, TRUE /* preferred */);
+   data->Add(new wxTextDataObject(text));
+#else
+   wxTextDataObject *data = new wxTextDataObject( text );
 #endif
-      wxTheClipboard->Close();
-      return rc;
-   }
-   
-   return FALSE;
+
+   bool rc = wxTheClipboard->SetData( data );
+
+   wxTheClipboard->Close();
+   return rc;
 }
 
 bool
