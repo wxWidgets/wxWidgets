@@ -3,7 +3,6 @@
 Classes: \helpref{wxSizer}{wxsizer}, \helpref{wxGridSizer}{wxgridsizer}, 
 \helpref{wxFlexGridSizer}{wxflexgridsizer}, \helpref{wxBoxSizer}{wxboxsizer}, 
 \helpref{wxStaticBoxSizer}{wxstaticboxsizer}, 
-\helpref{wxNotebookSizer}{wxnotebooksizer},
 \helpref{CreateButtonSizer}{createbuttonsizer}
 
 Sizers, as represented by the wxSizer class and its descendants in
@@ -182,14 +181,6 @@ the same dialog as the one above, but using a flex grid sizer:
 \myimage{sizer11.eps}
 \end{center}
 
-\wxheading{wxNotebookSizer}
-
-\helpref{wxNotebookSizer}{wxnotebooksizer} can be used
-with notebooks. It calculates the size of each
-notebook page and sets the size of the notebook to the size
-of the biggest page plus some extra space required for the
-notebook tabs and decorations.
-
 \subsection{Programming with wxBoxSizer}\label{boxsizerprogramming}
 
 The basic idea behind a \helpref{wxBoxSizer}{wxboxsizer} is that windows will most often be laid out in rather
@@ -288,39 +279,6 @@ table with all table fields in one row having the same
 height and all fields in one column having the same width, but all
 rows or all columns are not necessarily the same height or width as in
 the \helpref{wxGridSizer}{wxgridsizer}.
-
-\subsection{Programming with wxNotebookSizer}\label{notebooksizerprogramming}
-
-\helpref{wxNotebookSizer}{wxnotebooksizer} is a specialized sizer to make sizers work in connection
-with using notebooks. This sizer is different from any other sizer as 
-you must not add any children to it - instead, it queries the notebook class itself.
-The only thing this sizer does is to determine the size of the biggest
-page of the notebook and report an adjusted minimal size to a more toplevel
-sizer.
-
-In order to query the size of notebook page, this page needs to have its
-own sizer, otherwise the wxNotebookSizer will ignore it. Notebook pages
-get their sizer by assigning one to them using \helpref{wxWindow::SetSizer}{wxwindowsetsizer} 
-and setting the auto-layout option to true using 
-\helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout}. Here is one
-example showing how to add a notebook page that the notebook sizer is
-aware of:
-
-\begin{verbatim}
-    wxNotebook *notebook = new wxNotebook( &dialog, -1 );
-    wxNotebookSizer *nbs = new wxNotebookSizer( notebook );
-
-    // Add panel as notebook page
-    wxPanel *panel = new wxPanel( notebook, -1 );
-    notebook->AddPage( panel, "My Notebook Page" );
-
-    wxBoxSizer *panelsizer = new wxBoxSizer( wxVERTICAL );
-
-    // Add controls to panel and panelsizer here...
-
-    panel->SetAutoLayout( true );
-    panel->SetSizer( panelsizer );
-\end{verbatim}
 
 \subsection{Programming with wxStaticBoxSizer}\label{staticboxsizerprogramming}
 
