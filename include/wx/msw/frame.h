@@ -73,7 +73,7 @@ public:
     virtual wxMenuBar *GetMenuBar() const;
 
     // Call this to simulate a menu command
-    bool Command(int id) { ProcessCommand(id); }
+    bool Command(int id) { return ProcessCommand(id); }
 
     // process menu command: returns TRUE if processed
     bool ProcessCommand(int id);
