@@ -265,9 +265,9 @@ void wxFrameBase::OnSize(wxSizeEvent& WXUNUSED(event))
             // for whatever reasons, wxGTK wants to have a small offset - it
             // probably looks better with it?
 #ifdef __WXGTK__
-            static const int ofs = 0;
-#else
             static const int ofs = 1;
+#else
+            static const int ofs = 0;
 #endif
 
             child->SetSize(ofs, ofs, clientW - 2*ofs, clientH - 2*ofs);
