@@ -711,8 +711,8 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {
 #if wxUSE_GUI
 
-    // We have to use the actual window or processing events from wxWindowNative
-    // destructor won't work (we don't see the wxWindow class)
+    // We have to use the actual window or processing events from
+    // wxWindowNative destructor won't work (we don't see the wxWindow class)
 #ifdef __WXDEBUG__
     // check that our flag corresponds to reality
     wxClassInfo* info = NULL;
@@ -735,7 +735,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 #endif
 
     wxASSERT_MSG( m_isWindow == IsKindOf(info),
-                  _T("this should [not] be a window but it is [not]") );
+                  wxString(GetClassInfo()->GetClassName()) + _T(" should [not] be a window but it is [not]") );
 #endif
 
 #endif // wxUSE_GUI
