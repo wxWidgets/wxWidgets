@@ -1812,6 +1812,8 @@ void wxTreeListMainWindow::Init()
     m_lineHeight = LINEHEIGHT;
     m_indent = MININDENT; // min. indent
     m_linespacing = 4;
+    m_imgWidth = 0, m_imgWidth2 = 0;
+    m_imgHeight = 0, m_imgHeight2 = 0;
 
     m_hilightBrush = new wxBrush
                          (
