@@ -11961,9 +11961,9 @@ echo "$ac_t""$wx_cv_prog_icc" 1>&6
       ;;
 
       *-*-darwin* )
-        CFLAGS="$CFLAGS -fno-common"
-        CXXFLAGS="$CXXFLAGS -fno-common"
-        SHARED_LD="$CXX -dynamiclib -o"
+        CFLAGS="$CFLAGS -fno-common -DDYLIB_INIT"
+        CXXFLAGS="$CXXFLAGS -fno-common -DDYLIB_INIT"
+        SHARED_LD="$CXX -dynamiclib -init _wxWindowsDylibInit -o"
         PIC_FLAG="-dynamic -fPIC"
       ;;
 
@@ -15338,10 +15338,10 @@ if test "$TOOLKIT" != "MSW"; then
 
     if test "$wxUSE_THREADS" = "yes" ; then
         if test "$wxUSE_WINE" = 1 ; then
-            echo "configure: warning: Threads are not supported under WINE" 1>&2
+            echo "configure: warning: Threads are not supported under WINE... disabled" 1>&2
             wxUSE_THREADS="no"
         elif test "$USE_BEOS" = 1; then
-            echo "configure: warning: BeOS threads are not yet supported" 1>&2
+            echo "configure: warning: BeOS threads are not yet supported... disabled" 1>&2
             wxUSE_THREADS="no"
         fi
     fi
@@ -15482,7 +15482,7 @@ fi
 
         if test -z "$THREADS_OBJ" ; then
             wxUSE_THREADS=no
-            echo "configure: warning: No thread support on this system" 1>&2
+            echo "configure: warning: No thread support on this system... disabled" 1>&2
         fi
     fi
 
@@ -16340,7 +16340,7 @@ fi
 
 if test "$wxUSE_TEXTFILE" = "yes"; then
   if test "$wxUSE_FILE" != "yes" -o "$wxUSE_TEXTBUFFER" != "yes" ; then
-    echo "configure: warning: wxTextFile requires wxFile and wxTextBuffer and won't be compiled without them" 1>&2
+    echo "configure: warning: wxTextFile requires wxFile and wxTextBuffer... disabled" 1>&2
   else
     cat >> confdefs.h <<\EOF
 #define wxUSE_TEXTFILE 1
@@ -16351,7 +16351,7 @@ fi
 
 if test "$wxUSE_CONFIG" = "yes" ; then
   if test "$wxUSE_TEXTFILE" != "yes"; then
-    echo "configure: warning: wxConfig requires wxTextFile and it won't be compiled without it" 1>&2
+    echo "configure: warning: wxConfig requires wxTextFile... disabled" 1>&2
   else
     cat >> confdefs.h <<\EOF
 #define wxUSE_CONFIG 1
@@ -16363,7 +16363,7 @@ fi
 
 if test "$wxUSE_INTL" = "yes" ; then
   if test "$wxUSE_FILE" != "yes"; then
-    echo "configure: warning: I18n code requires wxFile and it won't be compiled without it" 1>&2
+    echo "configure: warning: I18n code requires wxFile... disabled" 1>&2
   else
     cat >> confdefs.h <<\EOF
 #define wxUSE_INTL 1
@@ -17065,23 +17065,32 @@ fi
 
 if test "$wxUSE_GUI" = "yes"; then
 
+    if test "$TOOLKIT" = "MAC"; then
+        echo "configure: warning: Joystick not yet supported under Mac OS X... disabled" 1>&2
+        wxUSE_JOYSTICK=no
+     fi
+    if test "$TOOLKIT" = "MOTIF"; then
+        echo "configure: warning: Joystick not yet supported under Motif... disabled" 1>&2
+        wxUSE_JOYSTICK=no
+     fi
+
         if test "$TOOLKIT" != "MSW"; then
         if test "$wxUSE_JOYSTICK" = "yes"; then
                         for ac_hdr in linux/joystick.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:17075: checking for $ac_hdr" >&5
+echo "configure:17084: checking for $ac_hdr" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 17080 "configure"
+#line 17089 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:17085: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:17094: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -17109,7 +17118,7 @@ done
 
             if test "$ac_cv_header_linux_joystick_h" != "yes"; then
                 wxUSE_JOYSTICK=no
-                echo "configure: warning: Joystick not supported by this system" 1>&2
+                echo "configure: warning: Joystick not supported by this system... disabled" 1>&2
             fi
         fi
     fi
@@ -17135,12 +17144,12 @@ if test "$TOOLKIT" != "MSW"; then
                                                 for ac_func in dlopen
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
-echo "configure:17139: checking for $ac_func" >&5
+echo "configure:17148: checking for $ac_func" >&5
 if eval "test \"`echo '$''{'ac_cv_func_$ac_func'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 17144 "configure"
+#line 17153 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $ac_func(); below.  */
@@ -17163,7 +17172,7 @@ $ac_func();
 
 ; return 0; }
 EOF
-if { (eval echo configure:17167: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:17176: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_$ac_func=yes"
 else
@@ -17191,7 +17200,7 @@ EOF
 else
   echo "$ac_t""no" 1>&6
 echo $ac_n "checking for dlopen in -ldl""... $ac_c" 1>&6
-echo "configure:17195: checking for dlopen in -ldl" >&5
+echo "configure:17204: checking for dlopen in -ldl" >&5
 ac_lib_var=`echo dl'_'dlopen | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -17199,7 +17208,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-ldl  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 17203 "configure"
+#line 17212 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -17210,7 +17219,7 @@ int main() {
 dlopen()
 ; return 0; }
 EOF
-if { (eval echo configure:17214: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:17223: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -17239,12 +17248,12 @@ else
                                 for ac_func in shl_load
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
-echo "configure:17243: checking for $ac_func" >&5
+echo "configure:17252: checking for $ac_func" >&5
 if eval "test \"`echo '$''{'ac_cv_func_$ac_func'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 17248 "configure"
+#line 17257 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $ac_func(); below.  */
@@ -17267,7 +17276,7 @@ $ac_func();
 
 ; return 0; }
 EOF
-if { (eval echo configure:17271: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:17280: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_$ac_func=yes"
 else
@@ -17295,7 +17304,7 @@ EOF
 else
   echo "$ac_t""no" 1>&6
 echo $ac_n "checking for dld in -lshl_load""... $ac_c" 1>&6
-echo "configure:17299: checking for dld in -lshl_load" >&5
+echo "configure:17308: checking for dld in -lshl_load" >&5
 ac_lib_var=`echo shl_load'_'dld | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -17303,7 +17312,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lshl_load  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 17307 "configure"
+#line 17316 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -17314,7 +17323,7 @@ int main() {
 dld()
 ; return 0; }
 EOF
-if { (eval echo configure:17318: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:17327: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -17353,12 +17362,12 @@ done
             for ac_func in dlerror
 do
 echo $ac_n "checking for $ac_func""... $ac_c" 1>&6
-echo "configure:17357: checking for $ac_func" >&5
+echo "configure:17366: checking for $ac_func" >&5
 if eval "test \"`echo '$''{'ac_cv_func_$ac_func'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 17362 "configure"
+#line 17371 "configure"
 #include "confdefs.h"
 /* System header to define __stub macros and hopefully few prototypes,
     which can conflict with char $ac_func(); below.  */
@@ -17381,7 +17390,7 @@ $ac_func();
 
 ; return 0; }
 EOF
-if { (eval echo configure:17385: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:17394: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_func_$ac_func=yes"
 else
@@ -17406,7 +17415,7 @@ EOF
 else
   echo "$ac_t""no" 1>&6
 echo $ac_n "checking for dlerror in -ldl""... $ac_c" 1>&6
-echo "configure:17410: checking for dlerror in -ldl" >&5
+echo "configure:17419: checking for dlerror in -ldl" >&5
 ac_lib_var=`echo dl'_'dlerror | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -17414,7 +17423,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-ldl  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 17418 "configure"
+#line 17427 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -17425,7 +17434,7 @@ int main() {
 dlerror()
 ; return 0; }
 EOF
-if { (eval echo configure:17429: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:17438: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -17547,7 +17556,7 @@ fi
 
 if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
     if test "$wxUSE_UNIVERSAL" = "yes"; then
-        echo "configure: warning: MDI is not supported for wxUNIVERSAL yet... disabled" 1>&2
+        echo "configure: warning: MDI not yet supported for wxUNIVERSAL... disabled" 1>&2
         wxUSE_MDI_ARCHITECTURE=no
     fi
 
@@ -17582,17 +17591,17 @@ EOF
       if test "$wxUSE_MS_HTML_HELP" = "yes"; then
         ac_safe=`echo "htmlhelp.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for htmlhelp.h""... $ac_c" 1>&6
-echo "configure:17586: checking for htmlhelp.h" >&5
+echo "configure:17595: checking for htmlhelp.h" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 17591 "configure"
+#line 17600 "configure"
 #include "confdefs.h"
 #include <htmlhelp.h>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:17596: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:17605: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -17680,17 +17689,17 @@ if test "$wxUSE_MSW" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:17684: checking for $ac_hdr" >&5
+echo "configure:17693: checking for $ac_hdr" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 17689 "configure"
+#line 17698 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:17694: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:17703: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -17756,7 +17765,7 @@ fi
 
 if test "$wxUSE_IPC" = "yes"; then
     if test "$wxUSE_SOCKETS" != "yes"; then
-        echo "configure: warning: wxWindows IPC classes require sockets" 1>&2
+        echo "configure: warning: wxWindows IPC classes require sockets... disabled" 1>&2
     fi
 
     cat >> confdefs.h <<\EOF
@@ -17780,18 +17789,18 @@ fi
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
     if test "$wxUSE_GTK" = 1; then
         if test "$WXGTK12" != 1; then
-            echo "configure: warning: Drag and drop is only supported under GTK+ 1.2" 1>&2
+            echo "configure: warning: Drag and drop is only supported under GTK+ 1.2... disabled" 1>&2
             wxUSE_DRAG_AND_DROP=no
         fi
     fi
 
     if test "$wxUSE_MOTIF" = 1; then
-        echo "configure: warning: Drag and drop is not yet supported under Motif" 1>&2
+        echo "configure: warning: Drag and drop not yet supported under Motif... disabled" 1>&2
         wxUSE_DRAG_AND_DROP=no
     fi
 
     if test "$wxUSE_MAC" = 1; then
-        echo "configure: warning: Drag and drop is not yet supported under Mac OS X" 1>&2
+        echo "configure: warning: Drag and drop not yet supported under Mac OS X... disabled" 1>&2
         wxUSE_DRAG_AND_DROP=no
     fi
 
@@ -18095,8 +18104,12 @@ EOF
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_UNIVERSAL" = "yes"; then
-        echo "configure: warning: Toggle button not yet supported under Mac OS X or wxUNIVERSAL... disabled" 1>&2
+    if test "$wxUSE_MAC" = 1; then
+        echo "configure: warning: Toggle button not yet supported under Mac OS X... disabled" 1>&2
+        wxUSE_TOGGLEBTN=no
+    fi
+    if test "$wxUSE_UNIVERSAL" = "yes"; then
+        echo "configure: warning: Toggle button not yet supported under wxUNIVERSAL... disabled" 1>&2
         wxUSE_TOGGLEBTN=no
     fi
 
@@ -18142,13 +18155,13 @@ fi
 
 if test "$wxUSE_TOOLTIPS" = "yes"; then
     if test "$wxUSE_MOTIF" = 1; then
-        echo "configure: warning: wxTooltip not supported yet under Motif ... disabled" 1>&2
+        echo "configure: warning: wxTooltip not supported yet under Motif... disabled" 1>&2
     else
         if test "$wxUSE_WINE" = 1; then
-            echo "configure: warning: wxTooltip not supported under WINE ... disabled" 1>&2
+            echo "configure: warning: wxTooltip not supported under WINE... disabled" 1>&2
         else
             if test "$wxUSE_UNIVERSAL" = "yes"; then
-                echo "configure: warning: wxTooltip not supported yet in wxUNIVERSAL ... disabled" 1>&2
+                echo "configure: warning: wxTooltip not supported yet in wxUNIVERSAL... disabled" 1>&2
             else
                 cat >> confdefs.h <<\EOF
 #define wxUSE_TOOLTIPS 1
@@ -18174,7 +18187,7 @@ fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
     if test "$wxUSE_MAC" = 1; then
-        echo "configure: warning: Popup window is not yet supported under Mac OS" 1>&2
+        echo "configure: warning: Popup window not yet supported under Mac OS X... disabled" 1>&2
     else
         cat >> confdefs.h <<\EOF
 #define wxUSE_POPUPWIN 1
@@ -18574,10 +18587,8 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 
-
-
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:18581: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:18592: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

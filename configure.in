@@ -2532,9 +2532,9 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
 
       *-*-darwin* )
-        CFLAGS="$CFLAGS -fno-common"
-        CXXFLAGS="$CXXFLAGS -fno-common"
-        SHARED_LD="$CXX -dynamiclib -o"
+        CFLAGS="$CFLAGS -fno-common -DDYLIB_INIT"
+        CXXFLAGS="$CXXFLAGS -fno-common -DDYLIB_INIT"
+        SHARED_LD="$CXX -dynamiclib -init _wxWindowsDylibInit -o"
         PIC_FLAG="-dynamic -fPIC"
       ;;
 
@@ -3233,10 +3233,10 @@ if test "$TOOLKIT" != "MSW"; then
 
     if test "$wxUSE_THREADS" = "yes" ; then
         if test "$wxUSE_WINE" = 1 ; then
-            AC_MSG_WARN([Threads are not supported under WINE])
+            AC_MSG_WARN([Threads are not supported under WINE... disabled])
             wxUSE_THREADS="no"
         elif test "$USE_BEOS" = 1; then
-            AC_MSG_WARN([BeOS threads are not yet supported])
+            AC_MSG_WARN([BeOS threads are not yet supported... disabled])
             wxUSE_THREADS="no"
         fi
     fi
@@ -3272,7 +3272,7 @@ if test "$TOOLKIT" != "MSW"; then
 
         if test -z "$THREADS_OBJ" ; then
             wxUSE_THREADS=no
-            AC_MSG_WARN(No thread support on this system)
+            AC_MSG_WARN([No thread support on this system... disabled])
         fi
     fi
 
@@ -3650,7 +3650,7 @@ fi
 
 if test "$wxUSE_TEXTFILE" = "yes"; then
   if test "$wxUSE_FILE" != "yes" -o "$wxUSE_TEXTBUFFER" != "yes" ; then
-    AC_MSG_WARN(wxTextFile requires wxFile and wxTextBuffer and won't be compiled without them)
+    AC_MSG_WARN(wxTextFile requires wxFile and wxTextBuffer... disabled)
   else
     AC_DEFINE(wxUSE_TEXTFILE)
   fi
@@ -3658,7 +3658,7 @@ fi
 
 if test "$wxUSE_CONFIG" = "yes" ; then
   if test "$wxUSE_TEXTFILE" != "yes"; then
-    AC_MSG_WARN(wxConfig requires wxTextFile and it won't be compiled without it)
+    AC_MSG_WARN(wxConfig requires wxTextFile... disabled)
   else
     AC_DEFINE(wxUSE_CONFIG)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS config"
@@ -3667,7 +3667,7 @@ fi
 
 if test "$wxUSE_INTL" = "yes" ; then
   if test "$wxUSE_FILE" != "yes"; then
-    AC_MSG_WARN(I18n code requires wxFile and it won't be compiled without it)
+    AC_MSG_WARN(I18n code requires wxFile... disabled)
   else
     AC_DEFINE(wxUSE_INTL)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS internat"
@@ -3935,6 +3935,15 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_GUI" = "yes"; then
 
+    if test "$TOOLKIT" = "MAC"; then
+        AC_MSG_WARN([Joystick not yet supported under Mac OS X... disabled])
+        wxUSE_JOYSTICK=no
+     fi
+    if test "$TOOLKIT" = "MOTIF"; then
+        AC_MSG_WARN([Joystick not yet supported under Motif... disabled])
+        wxUSE_JOYSTICK=no
+     fi
+
     dnl under MSW we always have joystick support
     if test "$TOOLKIT" != "MSW"; then
         if test "$wxUSE_JOYSTICK" = "yes"; then
@@ -3942,7 +3951,7 @@ if test "$wxUSE_GUI" = "yes"; then
             AC_CHECK_HEADERS(linux/joystick.h)
             if test "$ac_cv_header_linux_joystick_h" != "yes"; then
                 wxUSE_JOYSTICK=no
-                AC_MSG_WARN(Joystick not supported by this system, disabled)
+                AC_MSG_WARN(Joystick not supported by this system... disabled)
             fi
         fi
     fi
@@ -4084,7 +4093,7 @@ fi
 
 if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
     if test "$wxUSE_UNIVERSAL" = "yes"; then
-        AC_MSG_WARN(MDI is not supported for wxUNIVERSAL yet... disabled)
+        AC_MSG_WARN(MDI not yet supported for wxUNIVERSAL... disabled)
         wxUSE_MDI_ARCHITECTURE=no
     fi
 
@@ -4191,7 +4200,7 @@ fi
 
 if test "$wxUSE_IPC" = "yes"; then
     if test "$wxUSE_SOCKETS" != "yes"; then
-        AC_MSG_WARN(wxWindows IPC classes require sockets, disabled)
+        AC_MSG_WARN(wxWindows IPC classes require sockets... disabled)
     fi
 
     AC_DEFINE(wxUSE_IPC)
@@ -4207,18 +4216,18 @@ fi
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
     if test "$wxUSE_GTK" = 1; then
         if test "$WXGTK12" != 1; then
-            AC_MSG_WARN([Drag and drop is only supported under GTK+ 1.2])
+            AC_MSG_WARN([Drag and drop is only supported under GTK+ 1.2... disabled])
             wxUSE_DRAG_AND_DROP=no
         fi
     fi
 
     if test "$wxUSE_MOTIF" = 1; then
-        AC_MSG_WARN([Drag and drop is not yet supported under Motif])
+        AC_MSG_WARN([Drag and drop not yet supported under Motif... disabled])
         wxUSE_DRAG_AND_DROP=no
     fi
 
     if test "$wxUSE_MAC" = 1; then
-        AC_MSG_WARN([Drag and drop is not yet supported under Mac OS X])
+        AC_MSG_WARN([Drag and drop not yet supported under Mac OS X... disabled])
         wxUSE_DRAG_AND_DROP=no
     fi
 
@@ -4423,8 +4432,12 @@ if test "$wxUSE_TEXTCTRL" = "yes"; then
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_UNIVERSAL" = "yes"; then
-        AC_MSG_WARN([Toggle button not yet supported under Mac OS X or wxUNIVERSAL... disabled])
+    if test "$wxUSE_MAC" = 1; then
+        AC_MSG_WARN([Toggle button not yet supported under Mac OS X... disabled])
+        wxUSE_TOGGLEBTN=no
+    fi
+    if test "$wxUSE_UNIVERSAL" = "yes"; then
+        AC_MSG_WARN([Toggle button not yet supported under wxUNIVERSAL... disabled])
         wxUSE_TOGGLEBTN=no
     fi
 
@@ -4459,13 +4472,13 @@ fi
 
 if test "$wxUSE_TOOLTIPS" = "yes"; then
     if test "$wxUSE_MOTIF" = 1; then
-        AC_MSG_WARN(wxTooltip not supported yet under Motif ... disabled)
+        AC_MSG_WARN([wxTooltip not supported yet under Motif... disabled])
     else
         if test "$wxUSE_WINE" = 1; then
-            AC_MSG_WARN(wxTooltip not supported under WINE ... disabled)
+            AC_MSG_WARN([wxTooltip not supported under WINE... disabled])
         else
             if test "$wxUSE_UNIVERSAL" = "yes"; then
-                AC_MSG_WARN(wxTooltip not supported yet in wxUNIVERSAL ... disabled)
+                AC_MSG_WARN([wxTooltip not supported yet in wxUNIVERSAL... disabled])
             else
                 AC_DEFINE(wxUSE_TOOLTIPS)
             fi
@@ -4485,7 +4498,7 @@ fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
     if test "$wxUSE_MAC" = 1; then
-        AC_MSG_WARN(Popup window is not yet supported under Mac OS)
+        AC_MSG_WARN([Popup window not yet supported under Mac OS X... disabled])
     else
         AC_DEFINE(wxUSE_POPUPWIN)
         USES_CONTROLS=1
@@ -4847,10 +4860,8 @@ AC_SUBST(LD)
 AC_SUBST(MAKEINFO)
 AC_SUBST(INSTALL_LIBRARY)
 
-
-
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
-dnl itself (this is macro is required if SUBDIRS variable is used in Makefile.am
+dnl itself (this macro is required if SUBDIRS variable is used in Makefile.am
 dnl - and we do use it)
 AC_PROG_MAKE_SET
 
