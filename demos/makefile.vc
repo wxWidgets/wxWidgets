@@ -44,6 +44,8 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\demos\poem
         nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\demos\dbbrowse
+        nmake -f makefile.vc FINAL=$(FINAL)
 
 clean:
         cd $(WXDIR)\demos\bombs
@@ -55,5 +57,7 @@ clean:
         cd $(WXDIR)\demos\life
         nmake -f makefile.vc clean
         cd $(WXDIR)\demos\poem
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\demos\dbbrowse
         nmake -f makefile.vc clean
 

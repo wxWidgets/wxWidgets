@@ -25,3 +25,4 @@ all clean:
 	-$(MAKE) -C forty -f $(MAKEFILE) $@
 	-$(MAKE) -C fractal -f $(MAKEFILE) $@
 	-$(MAKE) -C poem -f $(MAKEFILE) $@
+	-$(MAKE) -C dbbrowse -f $(MAKEFILE) $@
