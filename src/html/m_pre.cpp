@@ -32,7 +32,7 @@
 FORCE_LINK_ME(m_pre)
 
 // replaces '\t', ' ' and '\n' with HTML markup:
-static wxString HtmlizeWhitespaces(const wxString& str)
+static wxString LINKAGEMODE HtmlizeWhitespaces(const wxString& str)
 {
     wxString out;
     size_t i = 0, j = 0, len = str.Len();
