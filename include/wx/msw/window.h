@@ -295,7 +295,7 @@ public:
   inline bool GetDoubleClick(void) const;
   inline void AllowDoubleClick(bool value)  { SetDoubleClick(value); }
 
-  // Old way to handle a control command
+  // Handle a control command
   virtual void OnCommand(wxWindow& win, wxCommandEvent& event);
 
   // Set/get event handler

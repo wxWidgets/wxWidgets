@@ -18,12 +18,12 @@
 #include "wx/stubs/wave.h"
 
 wxWave::wxWave()
-  : m_waveLength(0), m_isResource(FALSE), m_waveData(NULL)
+  : m_waveData(NULL), m_waveLength(0), m_isResource(FALSE)
 {
 }
 
 wxWave::wxWave(const wxString& sFileName, bool isResource)
-  : m_waveLength(0), m_isResource(isResource), m_waveData(NULL)
+  : m_waveData(NULL), m_waveLength(0), m_isResource(FALSE)
 {
     Create(sFileName, isResource);
 }

@@ -30,11 +30,28 @@
 #endif
 #endif
 
+#include <Xm/Text.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <ctype.h>
+
+#include "wx/motif/private.h"
+
+static void 
+wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr);
+static void 
+wxTextWindowModifyProc (Widget w, XtPointer clientData, XmTextVerifyCallbackStruct *cbs);
+static void 
+wxTextWindowGainFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs);
+static void 
+wxTextWindowLoseFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs);
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
 	EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
+	EVT_CHAR(wxTextCtrl::OnChar)
 END_EVENT_TABLE()
 #endif
 
@@ -45,6 +62,8 @@ wxTextCtrl::wxTextCtrl()
 #endif
 {
     m_fileName = "";
+    m_tempCallbackStruct = (void*) NULL;
+    m_modified = FALSE;
 }
 
 bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -54,7 +73,10 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    m_tempCallbackStruct = (void*) NULL;
+    m_modified = FALSE;
     m_fileName = "";
+
     SetName(name);
     SetValidator(validator);
     if (parent) parent->AddChild(this);
@@ -66,7 +88,67 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     else
 	    m_windowId = id;
 
+    Widget parentWidget = (Widget) parent->GetClientWidget();
+
+    bool wantHorizScrolling = ((m_windowStyle & wxHSCROLL) != 0);
+
+    // If we don't have horizontal scrollbars, we want word wrap.
+    bool wantWordWrap = !wantHorizScrolling;
+
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        Arg args[2];
+        XtSetArg (args[0], XmNscrollHorizontal, wantHorizScrolling ? True : False);
+        XtSetArg (args[1], XmNwordWrap, wantWordWrap ? True : False);
+
+        m_mainWidget = (WXWidget) XmCreateScrolledText (parentWidget, (char*) (const char*) name, args, 2);
+
+        XtVaSetValues ((Widget) m_mainWidget,
+		 XmNeditable, ((style & wxTE_READONLY) ? False : True),
+		 XmNeditMode, XmMULTI_LINE_EDIT,
+		 NULL);
+        XtManageChild ((Widget) m_mainWidget);
+    }
+    else
+    {
+        m_mainWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) name,
+                 xmTextWidgetClass, parentWidget,
+		 NULL);
+
+        // TODO: Is this relevant? What does it do?
+        int noCols = 2;
+        if (!value.IsNull() && (value.Length() > (unsigned int) noCols))
+            noCols = value.Length();
+        XtVaSetValues ((Widget) m_mainWidget,
+		 XmNcolumns, noCols,
+		 NULL);
+    }
+
+    if (!value.IsNull())
+        XmTextSetString ((Widget) m_mainWidget, (char*) (const char*) value);
+
+    XtAddCallback((Widget) m_mainWidget, XmNvalueChangedCallback, (XtCallbackProc)wxTextWindowChangedProc, (XtPointer)this);
+
+    XtAddCallback((Widget) m_mainWidget, XmNmodifyVerifyCallback, (XtCallbackProc)wxTextWindowModifyProc, (XtPointer)this);
+
+//    XtAddCallback((Widget) m_mainWidget, XmNactivateCallback, (XtCallbackProc)wxTextWindowModifyProc, (XtPointer)this);
+
+    XtAddCallback((Widget) m_mainWidget, XmNfocusCallback, (XtCallbackProc)wxTextWindowGainFocusProc, (XtPointer)this);
+
+    XtAddCallback((Widget) m_mainWidget, XmNlosingFocusCallback, (XtCallbackProc)wxTextWindowLoseFocusProc, (XtPointer)this);
+
+    SetCanAddEventHandler(TRUE);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+
+    SetFont(* parent->GetFont());
+    ChangeColour(m_mainWidget);
+
     return TRUE;
+}
+
+WXWidget wxTextCtrl::GetTopWidget() const
+{
+  return ((m_windowStyle & wxTE_MULTILINE) ? (WXWidget) XtParent((Widget) m_mainWidget) : m_mainWidget);
 }
 
 wxString wxTextCtrl::GetValue() const
@@ -76,11 +158,6 @@ wxString wxTextCtrl::GetValue() const
 }
 
 void wxTextCtrl::SetValue(const wxString& value)
-{
-    // TODO
-}
-
-void wxTextCtrl::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
     // TODO
 }
@@ -213,13 +290,15 @@ void wxTextCtrl::WriteText(const wxString& text)
 
 void wxTextCtrl::Clear()
 {
-    // TODO
+    XmTextSetString ((Widget) m_mainWidget, "");
+    // TODO: do we need position flag?
+    //    m_textPosition = 0;
+    m_modified = FALSE;
 }
 
 bool wxTextCtrl::IsModified() const
 {
-    // TODO
-    return FALSE;
+    return m_modified;
 }
 
 // Makes 'unmodified'
@@ -436,3 +515,109 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
     return *this;
 }
 
+void wxTextCtrl::OnChar(wxKeyEvent& event)
+{
+  if (m_tempCallbackStruct)
+  {
+    XmTextVerifyCallbackStruct *textStruct =
+        (XmTextVerifyCallbackStruct *) m_tempCallbackStruct;
+    textStruct->doit = True;
+    if (isascii(event.m_keyCode) && (textStruct->text->length == 1))
+    {
+      textStruct->text->ptr[0] = ((event.m_keyCode == WXK_RETURN) ? 10 : event.m_keyCode);
+    }
+  }
+}
+
+static void 
+wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)
+{
+  if (!wxGetWindowFromTable(w))
+    // Widget has been deleted!
+    return;
+
+  wxTextCtrl *tw = (wxTextCtrl *) clientData;
+  tw->SetModified(TRUE);
+}
+
+static void 
+wxTextWindowModifyProc (Widget w, XtPointer clientData, XmTextVerifyCallbackStruct *cbs)
+{
+  wxTextCtrl *tw = (wxTextCtrl *) clientData;
+
+  // If we're already within an OnChar, return: probably
+  // a programmatic insertion.
+  if (tw->m_tempCallbackStruct)
+    return;
+
+  // Check for a backspace
+  if (cbs->startPos == (cbs->currInsert - 1))
+  {
+    tw->m_tempCallbackStruct = (void*) cbs;
+
+    wxKeyEvent event (wxEVT_CHAR);
+    event.SetId(tw->GetId());
+    event.m_keyCode = WXK_DELETE;
+    event.SetEventObject(tw);
+
+    // Only if wxTextCtrl::OnChar is called
+    // will this be set to True (and the character
+    // passed through)
+    cbs->doit = False;
+
+    tw->GetEventHandler()->ProcessEvent(event);
+
+    tw->m_tempCallbackStruct = NULL;
+
+    return;
+  }
+
+  // Pasting operation: let it through without
+  // calling OnChar
+  if (cbs->text->length > 1)
+    return;
+
+  // Something other than text
+  if (cbs->text->ptr == NULL)
+    return;
+
+  tw->m_tempCallbackStruct = (void*) cbs;
+
+  wxKeyEvent event (wxEVT_CHAR);
+  event.SetId(tw->GetId());
+  event.SetEventObject(tw);
+  event.m_keyCode = (cbs->text->ptr[0] == 10 ? 13 : cbs->text->ptr[0]);
+
+  // Only if wxTextCtrl::OnChar is called
+  // will this be set to True (and the character
+  // passed through)
+  cbs->doit = False;
+
+  tw->GetEventHandler()->ProcessEvent(event);
+
+  tw->m_tempCallbackStruct = NULL;
+}
+
+static void 
+wxTextWindowGainFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs)
+{
+  if (!wxGetWindowFromTable(w))
+    return;
+
+  wxTextCtrl *tw = (wxTextCtrl *) clientData;
+  wxFocusEvent event(wxEVT_SET_FOCUS, tw->GetId());
+  event.SetEventObject(tw);
+  tw->GetEventHandler()->ProcessEvent(event);
+}
+
+static void 
+wxTextWindowLoseFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs)
+{
+  if (!wxGetWindowFromTable(w))
+    return;
+
+  wxTextCtrl *tw = (wxTextCtrl *) clientData;
+  wxFocusEvent event(wxEVT_KILL_FOCUS, tw->GetId());
+  event.SetEventObject(tw);
+  tw->GetEventHandler()->ProcessEvent(event);
+}

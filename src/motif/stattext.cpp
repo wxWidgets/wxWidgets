@@ -18,6 +18,10 @@
 
 #include <stdio.h>
 
+#include <Xm/Label.h>
+#include <Xm/LabelG.h>
+#include <Xm/PushBG.h>
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
 #endif
@@ -42,19 +46,33 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
   m_windowStyle = style;
 
+  char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
+
+  Widget parentWidget = (Widget) parent->GetClientWidget();
+
+  XmString text = XmStringCreateSimple (label1);
+
+  m_mainWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) name,
+                                         xmLabelWidgetClass,
+                                         parentWidget,
+                                         XmNlabelString, text,
+                                         XmNalignment,
+                     ((style & wxALIGN_RIGHT) ? XmALIGNMENT_END :
+                     ((style & wxALIGN_CENTRE) ? XmALIGNMENT_CENTER :
+                     XmALIGNMENT_BEGINNING)),
+                                         NULL);
+
+  XmStringFree (text);
+
+  SetCanAddEventHandler(TRUE);
+  AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+
   SetFont(* parent->GetFont());
 
-  // TODO
-  return FALSE;
+  ChangeColour (m_mainWidget);
+  //  ChangeFont (m_mainWidget);
+
+  return TRUE;
 }
 
-void wxStaticText::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    // TODO
-}
-
-void wxStaticText::SetLabel(const wxString& label)
-{
-    // TODO
-}
 

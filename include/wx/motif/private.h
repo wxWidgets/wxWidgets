@@ -28,6 +28,20 @@ extern char * wxFindAccelerator (char *s);
 extern XmString wxFindAcceleratorText (char *s);
 extern int wxCharCodeXToWX(KeySym keySym);
 extern KeySym wxCharCodeWXToX(int id);
+bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
+bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
+
+#define	wxNO_COLORS   0x00
+#define wxBACK_COLORS 0x01
+#define wxFORE_COLORS 0x02
+
+extern XColor itemColors[5] ;
+
+#define wxBACK_INDEX 0
+#define wxFORE_INDEX 1
+#define wxSELE_INDEX 2
+#define wxTOPS_INDEX 3
+#define wxBOTS_INDEX 4
 
 #endif
     // _WX_PRIVATE_H_

@@ -52,6 +52,10 @@ void wxCanvasRepaintProc (Widget, XtPointer, XmDrawingAreaCallbackStruct * cbs);
 void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallbackStruct * cbs);
 void wxCanvasMotionEvent (Widget, XButtonEvent * event);
 void wxCanvasEnterLeave (Widget drawingArea, XtPointer clientData, XCrossingEvent * event);
+void wxPanelItemEventHandler (Widget    wid,
+                              XtPointer client_data,
+                              XEvent*   event,
+                              Boolean *continueToDispatch);
 
 #define event_left_is_down(x) ((x)->xbutton.state & Button1Mask)
 #define event_middle_is_down(x) ((x)->xbutton.state & Button2Mask)
@@ -127,12 +131,16 @@ wxWindow::wxWindow()
     m_pixmapOffsetY = 0;
     m_lastTS = 0;
     m_lastButton = 0;
+    m_canAddEventHandler = FALSE;
 }
 
 // Destructor
 wxWindow::~wxWindow()
 {
   //// Motif-specific
+
+  if (GetMainWidget())
+    DetachWidget(GetMainWidget()); // Removes event handlers
 
   // If m_drawingArea, we're a fully-fledged window with drawing area, scrollbars etc. (what wxCanvas used to be)
   if (m_drawingArea)
@@ -178,7 +186,6 @@ wxWindow::~wxWindow()
       m_borderWidget = (WXWidget) 0;
     }
   }
-
 
   //// Generic stuff
 
@@ -271,6 +278,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     m_windowParent = NULL;
 
     // Motif-specific
+    m_canAddEventHandler = FALSE;
     m_mainWidget = (WXWidget) 0;
     m_button1Pressed = FALSE;
     m_button2Pressed = FALSE;
@@ -504,7 +512,7 @@ void wxWindow::GetSize(int *x, int *y) const
     return;
   }
 
-  Widget widget = (Widget) GetMainWidget();
+  Widget widget = (Widget) GetTopWidget();
   Dimension xx, yy;
   XtVaGetValues(widget, XmNwidth, &xx, XmNheight, &yy, NULL);
   *x = xx; *y = yy;
@@ -517,7 +525,7 @@ void wxWindow::GetPosition(int *x, int *y) const
     CanvasGetPosition(x, y);
     return;
   }
-  Widget widget = (Widget) GetMainWidget();
+  Widget widget = (Widget) GetTopWidget();
   Position xx, yy;
   XtVaGetValues(widget, XmNx, &xx, XmNy, &yy, NULL);
   *x = xx; *y = yy;
@@ -530,7 +538,7 @@ void wxWindow::ScreenToClient(int *x, int *y) const
 
 void wxWindow::ClientToScreen(int *x, int *y) const
 {
-  Widget widget = (Widget) GetMainWidget();
+  Widget widget = (Widget) GetClientWidget();
   Display *display = XtDisplay(widget);
   Window rootWindow = RootWindowOfScreen(XtScreen(widget));
   Window thisWindow;
@@ -569,7 +577,7 @@ void wxWindow::SetCursor(const wxCursor& cursor)
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindow::GetClientSize(int *x, int *y) const
 {
-  Widget widget = (Widget) GetMainWidget();
+  Widget widget = (Widget) GetTopWidget();
   Dimension xx, yy;
   XtVaGetValues(widget, XmNwidth, &xx, XmNheight, &yy, NULL);
   *x = xx; *y = yy;
@@ -582,7 +590,13 @@ void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
     CanvasSetSize(x, y, width, height, sizeFlags);
     return;
   }
-  Widget widget = (Widget) GetMainWidget();
+  Widget widget = (Widget) GetTopWidget();
+  if (!widget)
+    return;
+
+  bool managed = XtIsManaged( widget );
+  if (managed)
+    XtUnmanageChild(widget);
 
   if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     XtVaSetValues(widget, XmNx, x, NULL);
@@ -592,6 +606,9 @@ void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
     XtVaSetValues(widget, XmNwidth, width, NULL);
   if (height > -1)
     XtVaSetValues(widget, XmNheight, height, NULL);
+
+  if (managed)
+    XtManageChild(widget);
 
   wxSizeEvent sizeEvent(wxSize(width, height), GetId());
   sizeEvent.SetEventObject(this);
@@ -607,7 +624,7 @@ void wxWindow::SetClientSize(int width, int height)
     return;
   }
 
-  Widget widget = (Widget) GetMainWidget();
+  Widget widget = (Widget) GetTopWidget();
 
   if (width > -1)
     XtVaSetValues(widget, XmNwidth, width, NULL);
@@ -648,7 +665,7 @@ bool wxWindow::Show(bool show)
        }
        else
        {
-           XtMapWidget((Widget) GetMainWidget());
+           XtMapWidget((Widget) GetTopWidget());
        }
     }
     else
@@ -659,7 +676,7 @@ bool wxWindow::Show(bool show)
        }
        else
        {
-           XtUnmapWidget((Widget) GetMainWidget());
+           XtUnmapWidget((Widget) GetTopWidget());
        }
     }
 
@@ -1070,6 +1087,17 @@ void wxWindow::MakeModal(bool modal)
       node = node->Next();
     }
   }
+}
+
+// If nothing defined for this, try the parent.
+// E.g. we may be a button loaded from a resource, with no callback function
+// defined.
+void wxWindow::OnCommand(wxWindow& win, wxCommandEvent& event)
+{
+  if (GetEventHandler()->ProcessEvent(event) )
+    return;
+  if (m_windowParent)
+    m_windowParent->GetEventHandler()->OnCommand(win, event);
 }
 
 void wxWindow::SetConstraints(wxLayoutConstraints *c)
@@ -1619,15 +1647,15 @@ void wxWindow::OnIdle(wxIdleEvent& event)
 // Raise the window to the top of the Z order
 void wxWindow::Raise()
 {
-    Window window = XtWindow((Widget) GetMainWidget());
-    XRaiseWindow(XtDisplay((Widget) GetMainWidget()), window);
+    Window window = XtWindow((Widget) GetTopWidget());
+    XRaiseWindow(XtDisplay((Widget) GetTopWidget()), window);
 }
 
 // Lower the window to the bottom of the Z order
 void wxWindow::Lower()
 {
-    Window window = XtWindow((Widget) GetMainWidget());
-    XLowerWindow(XtDisplay((Widget) GetMainWidget()), window);
+    Window window = XtWindow((Widget) GetTopWidget());
+    XLowerWindow(XtDisplay((Widget) GetTopWidget()), window);
 }
 
 bool wxWindow::AcceptsFocus() const
@@ -1718,11 +1746,6 @@ wxWindow *wxGetWindowFromTable(Widget w)
 
 void wxDeleteWindowFromTable(Widget w)
 {
-#if DEBUG
-//  printf("Deleting widget %ld\n", w);
-#endif
-//  wxWindow *win = (wxWindow *)wxWidgetHashTable->Get ((long) w);
-
   wxWidgetHashTable->Delete((long)w);
 }
   
@@ -1750,7 +1773,12 @@ WXWidget wxWindow::GetClientWidget() const
     if (m_drawingArea != (WXWidget) 0)
         return m_drawingArea;
     else
-        return m_mainWidget;
+        return GetMainWidget();
+}
+
+WXWidget wxWindow::GetTopWidget() const
+{
+    return GetMainWidget();
 }
 
 void wxCanvasRepaintProc (Widget drawingArea, XtPointer clientData,
@@ -2289,4 +2317,350 @@ void wxWindow::CanvasGetPosition (int *x, int *y) const
   XtVaGetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow, XmNx, &xx, XmNy, &yy, NULL);
   *x = xx;
   *y = yy;
+}
+
+// Add to hash table, add event handler
+bool wxWindow::AttachWidget (wxWindow* parent, WXWidget mainWidget,
+	      WXWidget formWidget, int x, int y, int width, int height)
+{
+    wxAddWindowToTable((Widget) mainWidget, this);
+    if (CanAddEventHandler())
+    {
+        XtAddEventHandler((Widget) mainWidget,
+          ButtonPressMask | ButtonReleaseMask | PointerMotionMask, // | KeyPressMask,
+        False,
+        wxPanelItemEventHandler,
+        (XtPointer) this);
+    }
+
+    if (!formWidget)
+    {
+        XtTranslations ptr;
+        XtOverrideTranslations ((Widget) mainWidget,
+               ptr = XtParseTranslationTable ("<Configure>: resize()"));
+        XtFree ((char *) ptr);
+    }
+
+    // Some widgets have a parent form widget, e.g. wxRadioBox
+    if (formWidget)
+    {
+      if (!wxAddWindowToTable((Widget) formWidget, this))
+        return FALSE;
+
+      XtTranslations ptr;
+      XtOverrideTranslations ((Widget) formWidget,
+    		   ptr = XtParseTranslationTable ("<Configure>: resize()"));
+      XtFree ((char *) ptr);
+    }
+
+    if (x == -1)
+      x = 0;
+    if (y == -1)
+      y = 0;
+    SetSize (x, y, width, height);
+
+    return TRUE;
+}
+
+// Remove event handler, remove from hash table
+bool wxWindow::DetachWidget(WXWidget widget)
+{
+    if (CanAddEventHandler())
+    {
+      XtRemoveEventHandler((Widget) widget,
+         ButtonPressMask | ButtonReleaseMask | PointerMotionMask, // | KeyPressMask,
+         False,
+         wxPanelItemEventHandler,
+         (XtPointer)this);
+    }
+
+    wxDeleteWindowFromTable((Widget) widget);
+    return TRUE;
+}
+
+void wxPanelItemEventHandler (Widget    wid,
+                              XtPointer client_data,
+                              XEvent*   event,
+                              Boolean *continueToDispatch)
+{
+  // Widget can be a label or the actual widget.
+
+  wxWindow *window = (wxWindow *)wxWidgetHashTable->Get((long)wid);
+  if (window)
+  {
+    wxMouseEvent wxevent(0);
+    if (wxTranslateMouseEvent(wxevent, window, wid, event))
+    {
+      window->GetEventHandler()->ProcessEvent(wxevent);
+    }
+  }
+  // TODO: probably the key to allowing default behaviour
+  // to happen.
+  // Say we set a m_doDefault flag to FALSE at the start of this
+  // function. Then in e.g. wxWindow::OnMouseEvent we can
+  // call Default() which sets this flag to TRUE, indicating
+  // that default processing can happen. Thus, behaviour can appear
+  // to be overridden just by adding an event handler and not calling
+  // wxWindow::OnWhatever.
+  // ALSO, maybe we can use this instead of the current way of handling
+  // drawing area events, to simplify things.
+  *continueToDispatch = True;
+}
+
+bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent)
+{
+  switch (xevent->xany.type)
+  {
+    case EnterNotify:
+    case LeaveNotify:
+    case ButtonPress:
+    case ButtonRelease:
+    case MotionNotify:
+      {
+	wxEventType eventType = wxEVT_NULL;
+
+        if (xevent->xany.type == LeaveNotify)
+	{
+          win->m_button1Pressed = FALSE;
+          win->m_button2Pressed = FALSE;
+          win->m_button3Pressed = FALSE;
+          return FALSE;
+	}
+	else if (xevent->xany.type == MotionNotify)
+	  {
+	    eventType = wxEVT_MOTION;
+	  }
+	else if (xevent->xany.type == ButtonPress)
+	  {
+	    if (xevent->xbutton.button == Button1)
+	      {
+		eventType = wxEVT_LEFT_DOWN;
+		win->m_button1Pressed = TRUE;
+	      }
+	    else if (xevent->xbutton.button == Button2)
+	      {
+		eventType = wxEVT_MIDDLE_DOWN;
+		win->m_button2Pressed = TRUE;
+	      }
+	    else if (xevent->xbutton.button == Button3)
+	      {
+		eventType = wxEVT_RIGHT_DOWN;
+		win->m_button3Pressed = TRUE;
+	      }
+	  }
+	else if (xevent->xany.type == ButtonRelease)
+	  {
+	    if (xevent->xbutton.button == Button1)
+	      {
+		eventType = wxEVT_LEFT_UP;
+		win->m_button1Pressed = FALSE;
+	      }
+	    else if (xevent->xbutton.button == Button2)
+	      {
+		eventType = wxEVT_MIDDLE_UP;
+		win->m_button2Pressed = FALSE;
+	      }
+	    else if (xevent->xbutton.button == Button3)
+	      {
+		eventType = wxEVT_RIGHT_UP;
+		win->m_button3Pressed = FALSE;
+	      }
+            else return FALSE;
+	  }
+          else return FALSE;
+
+	wxevent.m_eventHandle = (char *)xevent;
+        wxevent.SetEventType(eventType);
+
+        Position x1, y1;
+        XtVaGetValues(widget, XmNx, &x1, XmNy, &y1, NULL);
+
+        int x2, y2;
+        win->GetPosition(&x2, &y2);
+
+        // The button x/y must be translated to wxWindows
+        // window space - the widget might be a label or button,
+        // within a form.
+        int dx = 0;
+        int dy = 0;
+        if (widget != (Widget)win->GetMainWidget())
+        {
+          dx = x1;
+          dy = y1;
+	}
+
+        wxevent.m_x = xevent->xbutton.x + dx;
+	wxevent.m_y = xevent->xbutton.y + dy;
+
+	wxevent.m_leftDown = ((eventType == wxEVT_LEFT_DOWN)
+			    || (event_left_is_down (xevent) 
+				&& (eventType != wxEVT_LEFT_UP)));
+	wxevent.m_middleDown = ((eventType == wxEVT_MIDDLE_DOWN)
+			      || (event_middle_is_down (xevent) 
+				  && (eventType != wxEVT_MIDDLE_UP)));
+	wxevent.m_rightDown = ((eventType == wxEVT_RIGHT_DOWN)
+			     || (event_right_is_down (xevent) 
+				 && (eventType != wxEVT_RIGHT_UP)));
+
+	wxevent.m_shiftDown = xevent->xbutton.state & ShiftMask;
+	wxevent.m_controlDown = xevent->xbutton.state & ControlMask;
+        return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent)
+{
+  switch (xevent->xany.type)
+  {
+    case KeyPress:
+      {
+        char buf[20];
+        
+	KeySym keySym;
+//	XComposeStatus compose;
+//	(void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, &compose);
+	(void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, NULL);
+	int id = wxCharCodeXToWX (keySym);
+
+	if (xevent->xkey.state & ShiftMask)
+	  wxevent.m_shiftDown = TRUE;
+	if (xevent->xkey.state & ControlMask)
+	  wxevent.m_controlDown = TRUE;
+	if (xevent->xkey.state & Mod3Mask)
+	  wxevent.m_altDown = TRUE;
+	if (xevent->xkey.state & Mod1Mask)
+	  wxevent.m_metaDown = TRUE;
+	wxevent.SetEventObject(win);
+	wxevent.m_keyCode = id;
+        wxevent.SetTimestamp(xevent->xkey.time);
+
+        wxevent.m_x = xevent->xbutton.x;
+	wxevent.m_y = xevent->xbutton.y;
+
+	if (id > -1)
+	  return TRUE;
+        else
+          return FALSE;
+	break;
+      }
+    default:
+      break;
+  }
+  return FALSE;
+}
+
+// TODO From wxWin 1.68. What does it do exactly?
+#define YAllocColor XAllocColor
+
+XColor itemColors[5];
+int wxComputeColors (Display *display, wxColour * back, wxColour * fore)
+{
+  int result;
+  static XmColorProc colorProc;
+
+  result = wxNO_COLORS;
+
+  if (back)
+    {
+      itemColors[0].red = (((long) back->Red ()) << 8);
+      itemColors[0].green = (((long) back->Green ()) << 8);
+      itemColors[0].blue = (((long) back->Blue ()) << 8);
+      itemColors[0].flags = DoRed | DoGreen | DoBlue;
+      if (colorProc == (XmColorProc) NULL)
+	{
+	  // Get a ptr to the actual function
+	  colorProc = XmSetColorCalculation ((XmColorProc) NULL);
+	  // And set it back to motif.
+	  XmSetColorCalculation (colorProc);
+	}
+      (*colorProc) (&itemColors[wxBACK_INDEX],
+		    &itemColors[wxFORE_INDEX],
+		    &itemColors[wxSELE_INDEX],
+		    &itemColors[wxTOPS_INDEX],
+		    &itemColors[wxBOTS_INDEX]);
+      result = wxBACK_COLORS;
+    }
+  if (fore)
+    {
+      itemColors[wxFORE_INDEX].red = (((long) fore->Red ()) << 8);
+      itemColors[wxFORE_INDEX].green = (((long) fore->Green ()) << 8);
+      itemColors[wxFORE_INDEX].blue = (((long) fore->Blue ()) << 8);
+      itemColors[wxFORE_INDEX].flags = DoRed | DoGreen | DoBlue;
+      if (result == wxNO_COLORS)
+	result = wxFORE_COLORS;
+    }
+
+  Display *dpy = display;
+  Colormap cmap = (Colormap) wxTheApp->GetMainColormap((WXDisplay*) dpy);
+
+  if (back)
+    {
+      /* 5 Colours to allocate */
+      for (int i = 0; i < 5; i++)
+	if (!YAllocColor (dpy, cmap, &itemColors[i]))
+	  result = wxNO_COLORS;
+    }
+  else if (fore)
+    {
+      /* Only 1 colour to allocate */
+      if (!YAllocColor (dpy, cmap, &itemColors[wxFORE_INDEX]))
+	result = wxNO_COLORS;
+    }
+
+  return (result);
+
+}
+
+void wxWindow::ChangeColour(WXWidget widget)
+{
+  // TODO
+#if 0
+  int change;
+
+  // TODO: how to determine whether we can change this item's colours?
+  // We used to have wxUSER_COLOURS. Now perhaps we assume we always
+  // can change it.
+  //  if (!(parent->GetWindowStyleFlag() & wxUSER_COLOURS))
+  //    return;
+
+  change = wxComputeColors (XtDisplay((Widget)widget), panel->GetBackgroundColour(),
+			    panel->GetLabelColour());
+  if (change == wxBACK_COLORS)
+    XtVaSetValues ((Widget) widget,
+		   XmNbackground, itemColors[wxBACK_INDEX].pixel,
+		   XmNtopShadowColor, itemColors[wxTOPS_INDEX].pixel,
+		   XmNbottomShadowColor, itemColors[wxBOTS_INDEX].pixel,
+		   XmNforeground, itemColors[wxFORE_INDEX].pixel,
+		   NULL);
+  else if (change == wxFORE_COLORS)
+    XtVaSetValues (formWidget,
+		   XmNforeground, itemColors[wxFORE_INDEX].pixel,
+		   NULL);
+
+  change = wxComputeColors (XtDisplay((Widget)formWidget), GetBackgroundColour(), GetLabelColour());
+  if (change == wxBACK_COLORS)
+    XtVaSetValues (labelWidget,
+		   XmNbackground, itemColors[wxBACK_INDEX].pixel,
+		   XmNtopShadowColor, itemColors[wxTOPS_INDEX].pixel,
+		   XmNbottomShadowColor, itemColors[wxBOTS_INDEX].pixel,
+		   XmNarmColor, itemColors[wxSELE_INDEX].pixel,
+		   XmNforeground, itemColors[wxFORE_INDEX].pixel,
+		   NULL);
+  else if (change == wxFORE_COLORS)
+    XtVaSetValues (labelWidget,
+		   XmNforeground, itemColors[wxFORE_INDEX].pixel,
+		   NULL);
+#endif
+}
+
+void wxWindow::ChangeFont(WXWidget widget)
+{
+  /* TODO
+  if (widget && GetFont() && GetFont()->IsOk())
+    XtVaSetValues ((Widget) widget,
+		   XmNfontList, GetFont()->GetInternalFont (),
+		   NULL);
+  */
 }

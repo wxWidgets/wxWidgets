@@ -14,6 +14,9 @@
 #endif
 
 #include "wx/control.h"
+#include "wx/utils.h"
+
+#include <Xm/Xm.h>
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
@@ -44,13 +47,42 @@ wxControl::~wxControl()
 
 void wxControl::SetLabel(const wxString& label)
 {
-    // TODO
+  if (!GetMainWidget())
+    return;
+ 
+  wxStripMenuCodes((char*) (const char*) label, wxBuffer);
+
+  XmString text = XmStringCreateSimple (wxBuffer);
+  XtVaSetValues ((Widget) GetMainWidget(),
+		 XmNlabelString, text,
+                 XmNlabelType, XmSTRING,
+		 NULL);
+  XmStringFree (text);
 }
 
 wxString wxControl::GetLabel() const
 {
-    // TODO
-    return wxString("");
+  if (!GetMainWidget())
+    return wxEmptyString;
+
+  XmString text;
+  char *s;
+  XtVaGetValues ((Widget) GetMainWidget(),
+		 XmNlabelString, &text,
+		 NULL);
+
+  if (XmStringGetLtoR (text, XmSTRING_DEFAULT_CHARSET, &s))
+    {
+      wxString str(s);
+      XtFree (s);
+      XmStringFree(text);
+      return str;
+    }
+  else
+    {
+      XmStringFree(text);
+      return wxEmptyString;
+    }
 }
 
 void wxControl::ProcessCommand (wxCommandEvent & event)

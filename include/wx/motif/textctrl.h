@@ -78,7 +78,6 @@ public:
 
   // operations
   // ----------
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   
   // Clipboard operations
   virtual void Copy();
@@ -122,16 +121,23 @@ public:
   // callbacks
   // ---------
   void OnDropFiles(wxDropFilesEvent& event);
-//  void OnChar(wxKeyEvent& event); // Process 'enter' if required
+  void OnChar(wxKeyEvent& event);
 //  void OnEraseBackground(wxEraseEvent& event);
   
   // Implementation
   // --------------
   virtual void Command(wxCommandEvent& event);
 
+  //// Motif-specific
+  inline void SetModified(bool mod) { m_modified = mod; }
+  virtual WXWidget GetTopWidget() const;
+
 protected:
   wxString  m_fileName;
-  
+public:
+  // Motif-specific
+  void*     m_tempCallbackStruct;
+  bool      m_modified;
   DECLARE_EVENT_TABLE()
 };
 

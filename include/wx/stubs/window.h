@@ -283,6 +283,9 @@ public:
   inline void SetWindowStyleFlag(long flag);
   inline long GetWindowStyleFlag() const;
 
+  // Handle a control command
+  virtual void OnCommand(wxWindow& win, wxCommandEvent& event);
+
   // Set/get event handler
   inline void SetEventHandler(wxEvtHandler *handler);
   inline wxEvtHandler *GetEventHandler() const;

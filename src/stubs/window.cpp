@@ -687,6 +687,17 @@ void wxWindow::MakeModal(bool modal)
   }
 }
 
+// If nothing defined for this, try the parent.
+// E.g. we may be a button loaded from a resource, with no callback function
+// defined.
+void wxWindow::OnCommand(wxWindow& win, wxCommandEvent& event)
+{
+  if (GetEventHandler()->ProcessEvent(event) )
+    return;
+  if (m_windowParent)
+    m_windowParent->GetEventHandler()->OnCommand(win, event);
+}
+
 void wxWindow::SetConstraints(wxLayoutConstraints *c)
 {
   if (m_constraints)

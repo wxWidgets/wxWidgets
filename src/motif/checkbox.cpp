@@ -15,6 +15,16 @@
 
 #include "wx/checkbox.h"
 
+#include <Xm/Label.h>
+#include <Xm/LabelG.h>
+#include <Xm/ToggleB.h>
+#include <Xm/ToggleBG.h>
+
+#include "wx/motif/private.h"
+
+void wxCheckBoxCallback (Widget w, XtPointer clientData,
+		    XtPointer ptr);
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
@@ -38,30 +48,42 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     else
         m_windowId = id;
 
-    // TODO: create checkbox
+    char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
 
-    return FALSE;
-}
+    XmString text = XmStringCreateSimple (label1);
+    Widget parentWidget = (Widget) parent->GetClientWidget();
 
-void wxCheckBox::SetLabel(const wxString& label)
-{
-    // TODO
-}
+    m_mainWidget = (WXWidget) XtVaCreateManagedWidget ("toggle",
+                                xmToggleButtonWidgetClass, parentWidget,
+                                XmNlabelString, text,
+                                NULL);
+    XmStringFree (text);
 
-void wxCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    // TODO
+    XtAddCallback ((Widget) m_mainWidget, XmNvalueChangedCallback, (XtCallbackProc) wxCheckBoxCallback,
+		 (XtPointer) this);
+
+    XmToggleButtonSetState ((Widget) m_mainWidget, FALSE, TRUE);
+
+    SetCanAddEventHandler(TRUE);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+
+    ChangeColour(m_mainWidget);
+    SetFont(* parent->GetFont());
+
+    return TRUE;
 }
 
 void wxCheckBox::SetValue(bool val)
 {
-    // TODO
+    // TODO: m_inSetValue
+    //  inSetValue = TRUE;
+    XmToggleButtonSetState ((Widget) m_mainWidget, (Boolean) val, TRUE);
+    //  inSetValue = FALSE;
 }
 
 bool wxCheckBox::GetValue() const
 {
-    // TODO
-    return FALSE;
+    return (XmToggleButtonGetState ((Widget) m_mainWidget) != 0);
 }
 
 void wxCheckBox::Command (wxCommandEvent & event)
@@ -114,4 +136,16 @@ bool wxBitmapCheckBox::GetValue() const
     return FALSE;
 }
 
-
+void wxCheckBoxCallback (Widget w, XtPointer clientData,
+		    XtPointer ptr)
+{
+  wxCheckBox *item = (wxCheckBox *) clientData;
+  // TODO
+  //  if (item->inSetValue)
+  //    return;
+    
+  wxCommandEvent event (wxEVT_COMMAND_CHECKBOX_CLICKED, item->GetId());
+  event.SetInt((int) item->GetValue ());
+  event.SetEventObject(item);
+  item->ProcessCommand (event);
+}

@@ -44,8 +44,6 @@ class WXDLLEXPORT wxCheckBox: public wxControl
            const wxString& name = wxCheckBoxNameStr);
   virtual void SetValue(bool);
   virtual bool GetValue() const ;
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  virtual void SetLabel(const wxString& label);
   virtual void Command(wxCommandEvent& event);
 };
 

@@ -283,6 +283,9 @@ public:
   inline void SetWindowStyleFlag(long flag);
   inline long GetWindowStyleFlag() const;
 
+  // Handle a control command
+  virtual void OnCommand(wxWindow& win, wxCommandEvent& event);
+
   // Set/get event handler
   inline void SetEventHandler(wxEvtHandler *handler);
   inline wxEvtHandler *GetEventHandler() const;
@@ -460,16 +463,31 @@ public:
   // message, e.g. arrange status bar, toolbar etc.
   virtual bool PreResize() { return TRUE; }
 
-  // Get main widget for this window
+  // Get main widget for this window, e.g. a text widget
   virtual WXWidget GetMainWidget() const;
   // Get the client widget for this window (something we can
   // create other windows on)
   virtual WXWidget GetClientWidget() const;
+  // Get the top widget for this window, e.g. the scrolled widget parent
+  // of a multi-line text widget. Top means, top in the window hierarchy
+  // that implements this window.
+  virtual WXWidget GetTopWidget() const;
   virtual void SetMainWidget(WXWidget w) { m_mainWidget = w; }
+  bool CanAddEventHandler() const { return m_canAddEventHandler; }
+  void SetCanAddEventHandler(bool flag) { m_canAddEventHandler = flag; }
 
   // Get the underlying X window and display
   virtual WXWindow GetXWindow() const;
   virtual WXDisplay *GetXDisplay() const;
+
+  // Change properties
+  virtual void ChangeColour(WXWidget widget);
+  virtual void ChangeFont(WXWidget widget);
+
+  // Adds the widget to the hash table and adds event handlers.
+  bool AttachWidget (wxWindow* parent, WXWidget mainWidget,
+	      WXWidget formWidget, int x, int y, int width, int height);
+  bool DetachWidget(WXWidget widget);
 
   // Generates a paint event
   virtual void DoPaint();
@@ -520,6 +538,7 @@ public:
 
 public:
   /// Motif-specific
+  bool                  m_canAddEventHandler;
   bool                  m_button1Pressed;
   bool                  m_button2Pressed;
   bool                  m_button3Pressed;
