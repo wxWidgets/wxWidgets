@@ -24,9 +24,9 @@ bool TestApp::OnInit()
 {
   bool is_use_display = 
                         #if wxUSE_DISPLAY
-                        TRUE
+                        true
                         #else
-                        FALSE
+                        false
                         #endif
                         ;
   if( !is_use_display )
@@ -45,10 +45,10 @@ bool TestApp::OnInit()
 		wxRect r = display.GetGeometry();
       wxLogDebug ( _T("Display #%i \"%s\" = ( %i, %i, %i, %i ) @ %i bits"),
 			i, display.GetName().c_str(), r.GetLeft(), r.GetTop(), r.GetWidth(), r.GetHeight(),
-			display.GetDepth() );
+			display.GetCurrentMode().GetDepth() );
 		i++;
 	}
   }
   #endif
-	return FALSE;
+	return false;
 }
