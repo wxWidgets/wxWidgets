@@ -447,22 +447,6 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
 // other
 // ---------------------------------------------------------------------------
 
-void wxMenu::Attach(wxMenuBar *menubar)
-{
-    // menu can be in at most one menubar because otherwise they would both
-    // delete the menu pointer
-    wxASSERT_MSG( !m_menuBar, wxT("menu belongs to 2 menubars, expect a crash") );
-
-    m_menuBar = menubar;
-}
-
-void wxMenu::Detach()
-{
-    wxASSERT_MSG( m_menuBar, wxT("can't detach menu if it's not attached") );
-
-    m_menuBar = NULL;
-}
-
 wxWindow *wxMenu::GetWindow() const
 {
     if ( m_invokingWindow != NULL )

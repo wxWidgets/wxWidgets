@@ -233,13 +233,19 @@ protected:
 
 // include the real class declaration
 #if defined(__WXMSW__)
+    #ifndef __WXUNIVERSAL__
+        #define wxFrameMSW wxFrame
+        #define sm_classwxFrameMSW sm_classwxFrame
+    #endif
     #include "wx/msw/frame.h"
-    #define wxFrameNative wxFrameMSW
 #elif defined(__WXMOTIF__)
     #include "wx/motif/frame.h"
 #elif defined(__WXGTK__)
+    #ifndef __WXUNIVERSAL__
+        #define wxFrameGTK wxFrame
+        #define sm_classwxFrameGTK sm_classwxFrame
+    #endif
     #include "wx/gtk/frame.h"
-    #define wxFrameNative wxFrameGTK
 #elif defined(__WXMGL__)
     #include "wx/mgl/frame.h"
 #elif defined(__WXQT__)
@@ -254,8 +260,6 @@ protected:
 
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/frame.h"
-#else
-    #define wxFrame wxFrameNative
 #endif
 
 #endif

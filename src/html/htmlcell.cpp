@@ -715,7 +715,7 @@ void wxHtmlWidgetCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
         c = c -> GetParent();
     }
 
-    ((wxScrolledWindow*)(m_Wnd -> GetParent())) -> ViewStart(&stx, &sty);
+    ((wxScrolledWindow*)(m_Wnd -> GetParent())) -> GetViewStart(&stx, &sty);
     m_Wnd -> SetSize(absx - wxHTML_SCROLL_STEP * stx, absy  - wxHTML_SCROLL_STEP * sty, m_Width, m_Height);
 
     wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
@@ -734,7 +734,7 @@ void wxHtmlWidgetCell::DrawInvisible(wxDC& dc, int x, int y)
         c = c -> GetParent();
     }
 
-    ((wxScrolledWindow*)(m_Wnd -> GetParent())) -> ViewStart(&stx, &sty);
+    ((wxScrolledWindow*)(m_Wnd -> GetParent())) -> GetViewStart(&stx, &sty);
     m_Wnd -> SetSize(absx - wxHTML_SCROLL_STEP * stx, absy  - wxHTML_SCROLL_STEP * sty, m_Width, m_Height);
 
     wxHtmlCell::DrawInvisible(dc, x, y);

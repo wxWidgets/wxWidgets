@@ -624,6 +624,13 @@ public:
     // scrollbars
     // ----------
 
+        // does the window have the scrollbar for this orientation?
+    bool HasScrollbar(int orient) const
+    {
+        return (m_windowStyle &
+                (orient == wxHORIZONTAL ? wxHSCROLL : wxVSCROLL)) != 0;
+    }
+
         // configure the window scrollbars
     virtual void SetScrollbar( int orient,
                                int pos,
@@ -923,13 +930,19 @@ private:
 
 // include the declaration of the platform-specific class
 #if defined(__WXMSW__)
+    #if !defined(__WXUNIVERSAL__)
+        #define wxWindowMSW wxWindow
+        #define sm_classwxWindowMSW sm_classwxWindow
+    #endif // wxUniv
     #include "wx/msw/window.h"
-    #define wxWindowNative wxWindowMSW
 #elif defined(__WXMOTIF__)
     #include "wx/motif/window.h"
 #elif defined(__WXGTK__)
+    #if !defined(__WXUNIVERSAL__)
+        #define wxWindowGTK wxWindow
+        #define sm_classwxWindowGTK sm_classwxWindow
+    #endif // wxUniv
     #include "wx/gtk/window.h"
-    #define wxWindowNative wxWindowGTK
 #elif defined(__WXQT__)
     #include "wx/qt/window.h"
 #elif defined(__WXMAC__)
@@ -939,12 +952,10 @@ private:
 #endif
 
 // for wxUniversal, we now derive the real wxWindow from wxWindow<platform>,
-// for the native ports we just rename wxWindow<platform> into wxWindows
+// for the native ports we already have defined it above
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/window.h"
-#else
-    #define wxWindow wxWindowNative
-#endif
+#endif // wxUniv
 
 // ----------------------------------------------------------------------------
 // inline functions which couldn't be declared in the class body because of

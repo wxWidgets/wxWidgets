@@ -100,6 +100,21 @@ static WXFARPROC s_wndprocRadioBtn = (WXFARPROC)NULL;
 // wxRadioBox
 // ---------------------------------------------------------------------------
 
+int wxRadioBox::GetCount() const
+{
+    return m_noItems;
+}
+
+int wxRadioBox::GetColumnCount() const
+{
+    return GetNumHor();
+}
+
+int wxRadioBox::GetRowCount() const
+{
+    return GetNumVer();
+}
+
 // returns the number of rows
 int wxRadioBox::GetNumVer() const
 {
@@ -316,39 +331,12 @@ wxRadioBox::~wxRadioBox()
 
 }
 
-wxString wxRadioBox::GetLabel(int item) const
-{
-    wxCHECK_MSG( item >= 0 && item < m_noItems, wxT(""), wxT("invalid radiobox index") );
-
-    return wxGetWindowText(m_radioButtons[item]);
-}
-
-void wxRadioBox::SetLabel(int item, const wxString& label)
+void wxRadioBox::SetString(int item, const wxString& label)
 {
     wxCHECK_RET( item >= 0 && item < m_noItems, wxT("invalid radiobox index") );
 
     m_radioWidth[item] = m_radioHeight[item] = -1;
     SetWindowText((HWND)m_radioButtons[item], label.c_str());
-}
-
-void wxRadioBox::SetLabel(int item, wxBitmap *bitmap)
-{
-    /*
-       m_radioWidth[item] = bitmap->GetWidth() + FB_MARGIN;
-       m_radioHeight[item] = bitmap->GetHeight() + FB_MARGIN;
-     */
-    wxFAIL_MSG(wxT("not implemented"));
-}
-
-int wxRadioBox::FindString(const wxString& s) const
-{
-    for (int i = 0; i < m_noItems; i++)
-    {
-        if ( s == wxGetWindowText(m_radioButtons[i]) )
-            return i;
-    }
-
-    return wxNOT_FOUND;
 }
 
 void wxRadioBox::SetSelection(int N)
@@ -372,9 +360,12 @@ int wxRadioBox::GetSelection() const
 }
 
 // Find string for position
-wxString wxRadioBox::GetString(int N) const
+wxString wxRadioBox::GetString(int item) const
 {
-    return wxGetWindowText(m_radioButtons[N]);
+    wxCHECK_MSG( item >= 0 && item < m_noItems, wxEmptyString,
+                 wxT("invalid radiobox index") );
+
+    return wxGetWindowText(m_radioButtons[item]);
 }
 
 // ----------------------------------------------------------------------------
@@ -706,35 +697,12 @@ void wxRadioBox::Show(int item, bool show)
     ::ShowWindow((HWND)m_radioButtons[item], show ? SW_SHOW : SW_HIDE);
 }
 
-// For single selection items only
-wxString wxRadioBox::GetStringSelection() const
-{
-    wxString result;
-    int sel = GetSelection();
-    if (sel > -1)
-        result = GetString(sel);
-
-    return result;
-}
-
-bool wxRadioBox::SetStringSelection(const wxString& s)
-{
-    int sel = FindString (s);
-    if (sel > -1)
-    {
-        SetSelection (sel);
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
 bool wxRadioBox::ContainsHWND(WXHWND hWnd) const
 {
-    int i;
-    for (i = 0; i < Number(); i++)
+    size_t count = GetCount();
+    for ( size_t i = 0; i < count; i++ )
     {
-        if (GetRadioButtons()[i] == hWnd)
+        if ( GetRadioButtons()[i] == hWnd )
             return TRUE;
     }
 
@@ -951,6 +919,9 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
                     default:
                         processed = FALSE;
+
+                        // just to suppress the compiler warning
+                        dir = wxALL;
                 }
 
                 if ( processed )

@@ -71,10 +71,6 @@ public:
         // get the menu handle
     WXHMENU GetHMenu() const { return m_hMenu; }
 
-    // attach/detach menu to/from wxMenuBar
-    void Attach(wxMenuBar *menubar);
-    void Detach();
-
 #if wxUSE_ACCEL
     // called by wxMenuBar to build its accel table from the accels of all menus
     bool HasAccels() const { return !m_accels.IsEmpty(); }

@@ -273,7 +273,7 @@ void wxMDIParentFrame::InternalSetMenuBar()
     m_parentFrameActive = TRUE;
 
     wxMenu *menu = GetWindowMenu();
-    HMENU subMenu = menu ? GetHMenuOf(menu) : 0;
+    HMENU subMenu = menu ? GetHmenuOf(menu) : 0;
 
     InsertWindowMenu(GetClientWindow(), m_hMenu, subMenu);
 }

@@ -842,7 +842,7 @@ bool wxScrollHelper::SendAutoScrollEvents(wxScrollWinEvent& event) const
 {
     // only send the event if the window is scrollable in this direction
     wxWindow *win = (wxWindow *)event.GetEventObject();
-    return win->GetScrollbar(event.GetOrientation()) != NULL;
+    return win->HasScrollbar(event.GetOrientation());
 }
 
 void wxScrollHelper::StopAutoScrolling()
@@ -910,7 +910,7 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
 
         // only start the auto scroll timer if the window can be scrolled in
         // this direction
-        if ( !m_targetWindow->GetScrollbar(orient) )
+        if ( !m_targetWindow->HasScrollbar(orient) )
             return;
 
         delete m_timerAutoScroll;

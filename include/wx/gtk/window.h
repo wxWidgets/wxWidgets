@@ -28,8 +28,6 @@ typedef void (*wxInsertChildFunction)( wxWindowGTK*, wxWindowGTK* );
 
 class wxWindowGTK : public wxWindowBase
 {
-    DECLARE_DYNAMIC_CLASS(wxWindowGTK)
-
 public:
     // creating the window
     // -------------------
@@ -229,6 +227,7 @@ public:
     void Init();
 
 private:
+    DECLARE_DYNAMIC_CLASS(wxWindowGTK)
     DECLARE_NO_COPY_CLASS(wxWindowGTK);
 };
 

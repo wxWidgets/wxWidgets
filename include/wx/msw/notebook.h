@@ -93,8 +93,6 @@ public:
   // ----------
     // remove one page from the notebook
   bool DeletePage(int nPage);
-    // remove one page from the notebook, without deleting
-  bool RemovePage(int nPage);
     // remove all pages
   bool DeleteAllPages();
     // adds a new page to the notebook (it will be deleted ny the notebook,
@@ -130,6 +128,9 @@ public:
 protected:
   // common part of all ctors
   void Init();
+
+  // remove one page from the notebook, without deleting
+  virtual wxNotebookPage *DoRemovePage(int nPage);
 
   // helper functions
   void ChangePage(int nOldSel, int nSel); // change pages

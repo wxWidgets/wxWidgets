@@ -41,12 +41,6 @@ class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxWindowList;
 
-// FIXME should use wxStricmp() instead
-#if defined(__GNUWIN32__)
-    #define stricmp strcasecmp
-    #define strnicmp strncasecmp
-#endif
-
 // ----------------------------------------------------------------------------
 // Macros
 // ----------------------------------------------------------------------------

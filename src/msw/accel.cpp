@@ -101,26 +101,25 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
     m_refData = new wxAcceleratorRefData;
 
     ACCEL* arr = new ACCEL[n];
-    int i;
-    for (i = 0; i < n; i++)
+    for ( int i = 0; i < n; i++ )
     {
+        int flags = entries[i].GetFlags();
+
         BYTE fVirt = 0;
-        if (entries[i].m_flags & wxACCEL_ALT)
+        if ( flags & wxACCEL_ALT )
             fVirt |= FALT;
-        if (entries[i].m_flags & wxACCEL_SHIFT)
+        if ( flags & wxACCEL_SHIFT )
             fVirt |= FSHIFT;
-        if (entries[i].m_flags & wxACCEL_CTRL)
+        if ( flags & wxACCEL_CTRL )
             fVirt |= FCONTROL;
 
         bool isVirtual;
-        WORD key = wxCharCodeWXToMSW(entries[i].m_keyCode, & isVirtual);
+        WORD key = wxCharCodeWXToMSW(entries[i].GetKeyCode(), &isVirtual);
         fVirt |= FVIRTKEY;
-
-        WORD cmd = entries[i].m_command;
 
         arr[i].fVirt = fVirt;
         arr[i].key = key;
-        arr[i].cmd = cmd;
+        arr[i].cmd = entries[i].GetCommand();
     }
 
     M_ACCELDATA->m_hAccel = ::CreateAcceleratorTable(arr, n);

@@ -87,6 +87,8 @@ WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
 
 #if wxUSE_WCHAR_T
 
+#ifdef WC_UTF16
+
 static size_t encode_utf16(wxUint32 input,wxUint16*output)
 {
   if (input<=0xffff) {
@@ -118,6 +120,8 @@ static size_t decode_utf16(wxUint16*input,wxUint32&output)
     return 2;
   }
 }
+
+#endif // WC_UTF16
 
 // ----------------------------------------------------------------------------
 // wxMBConv

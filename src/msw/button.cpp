@@ -28,7 +28,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_BMPBUTTN
+#if wxUSE_BUTTON
 
 #ifndef WX_PRECOMP
     #include "wx/button.h"
@@ -163,7 +163,7 @@ wxSize wxButton::DoGetBestSize() const
 }
 
 /* static */
-wxSize wxButton::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize()
 {
     static wxSize s_sizeBtn;
 
@@ -527,4 +527,5 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 
 #endif // __WIN32__
 
-#endif // wxUSE_BMPBUTTN
+#endif // wxUSE_BUTTON
+

@@ -128,14 +128,14 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
     wxFSFile *f;
     bool rt_val;
     bool needs_refresh = FALSE;
-    
+
     SetCursor(*wxHOURGLASS_CURSOR);
     wxYield(); Refresh(FALSE);
 
     m_tmpCanDrawLocks++;
     if (m_HistoryOn && (m_HistoryPos != -1)) { // store scroll position into history item
         int x, y;
-        ViewStart(&x, &y);
+        GetViewStart(&x, &y);
         m_History[m_HistoryPos].SetPos(y);
     }
 
@@ -151,7 +151,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         rt_val = ScrollToAnchor(anch);
         m_tmpCanDrawLocks++;
     }
-    else if (location.Find(wxT('#')) != wxNOT_FOUND && 
+    else if (location.Find(wxT('#')) != wxNOT_FOUND &&
              (m_FS -> GetPath() + location.BeforeFirst(wxT('#'))) == m_OpenedPage) {
         wxString anch = location.AfterFirst(wxT('#'));
         m_tmpCanDrawLocks--;
@@ -168,7 +168,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         }
 
         f = m_FS -> OpenFile(location);
-        
+
         if (f == NULL) {
             wxString err;
 
@@ -230,7 +230,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         OnSetTitle(wxFileNameFromPath(m_OpenedPage));
     SetCursor(*wxSTANDARD_CURSOR);
 
-    if (needs_refresh) {    
+    if (needs_refresh) {
         wxYield();
         m_tmpCanDrawLocks--;
         Refresh();
@@ -456,17 +456,17 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
     int v_y, v_h;
 
     if (m_tmpCanDrawLocks > 0) return;
-    
+
     dc.SetMapMode(wxMM_TEXT);
 #if 0
-/* VS - I don't think this is neccessary any longer 
+/* VS - I don't think this is neccessary any longer
         MSC_VER 1200 means MSVC 6.0 and it works fine */
 #if defined(_MSC_VER) && (_MSC_VER == 1200)
     ::SetMapMode((HDC)dc.GetHDC(), MM_TEXT);
 #endif
 #endif
     dc.SetBackgroundMode(wxTRANSPARENT);
-    ViewStart(&x, &y);
+    GetViewStart(&x, &y);
 
     while (upd) {
         v_y = upd.GetY();
@@ -496,7 +496,7 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
         wxPoint pos;
         wxString lnk;
 
-        ViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
+        GetViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
         pos = event.GetPosition();
 
         if (m_Cell)
@@ -508,7 +508,7 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
 
 void wxHtmlWindow::OnIdle(wxIdleEvent& event)
 {
-    if (s_cur_hand == NULL) 
+    if (s_cur_hand == NULL)
     {
         s_cur_hand = new wxCursor(wxCURSOR_HAND);
         s_cur_arrow = new wxCursor(wxCURSOR_ARROW);
@@ -519,7 +519,7 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& event)
         int x, y;
         wxHtmlLinkInfo *lnk;
 
-        ViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
+        GetViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
         wxGetMousePosition(&x, &y);
         ScreenToClient(&x, &y);
         lnk = m_Cell -> GetLink(sx + x, sy + y);
@@ -531,7 +531,7 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& event)
             }
             else {
                 SetCursor(*s_cur_hand);
-                if (m_RelatedStatusBar != -1) 
+                if (m_RelatedStatusBar != -1)
                     m_RelatedFrame -> SetStatusText(lnk -> GetHref(), m_RelatedStatusBar);
             }
             m_tmpLastLink = lnk;

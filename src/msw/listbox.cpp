@@ -446,11 +446,6 @@ void wxListBox::DoSetItemClientData(int n, void *clientData)
         wxLogDebug(wxT("LB_SETITEMDATA failed"));
 }
 
-bool wxListBox::HasMultipleSelection() const
-{
-    return (m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED);
-}
-
 // Return number of selections and an array of selected integers
 int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
@@ -533,9 +528,9 @@ void wxListBox::SetString(int N, const wxString& s)
 
     void *oldData = NULL;
     wxClientData *oldObjData = NULL;
-    if ( m_clientDataItemsType == ClientData_Void )
+    if ( m_clientDataItemsType == wxClientData_Void )
         oldData = GetClientData(N);
-    else if ( m_clientDataItemsType == ClientData_Object )
+    else if ( m_clientDataItemsType == wxClientData_Object )
         oldObjData = GetClientObject(N);
 
     // delete and recreate it

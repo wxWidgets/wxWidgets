@@ -54,9 +54,9 @@ public:
 
     // assert failure is provoked by an attempt to get an icon from bitmap or
     // vice versa
-    const wxIcon& GetIcon() const
+    wxIcon GetIcon() const
         { wxASSERT( m_isIcon ); return *(wxIcon *)m_image; }
-    const wxBitmap& GetBitmap() const
+    wxBitmap GetBitmap() const
         { wxASSERT( !m_isIcon ); return *(wxBitmap *)m_image; }
 
     // IMPLEMENTATION

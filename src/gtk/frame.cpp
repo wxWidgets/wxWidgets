@@ -60,7 +60,7 @@ extern int g_openDialogs;
 // event tables
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxFrameGTK, wxFrameBase)
 
 // ----------------------------------------------------------------------------
 // data
@@ -104,7 +104,7 @@ static gint gtk_frame_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUS
 // "size_allocate"
 //-----------------------------------------------------------------------------
 
-static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxFrame *win )
+static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxFrameGTK *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -135,7 +135,7 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
 // "delete_event"
 //-----------------------------------------------------------------------------
 
-static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxFrame *win )
+static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxFrameGTK *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -151,7 +151,7 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
 // "child_attached" of menu bar
 //-----------------------------------------------------------------------------
 
-static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
+static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrameGTK *win )
 {
     if (!win->m_hasVMT) return;
 
@@ -163,7 +163,7 @@ static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
 // "child_detached" of menu bar
 //-----------------------------------------------------------------------------
 
-static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
+static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrameGTK *win )
 {
     if (!win->m_hasVMT) return;
 
@@ -177,7 +177,7 @@ static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
 // "child_attached" of tool bar
 //-----------------------------------------------------------------------------
 
-static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
+static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrameGTK *win )
 {
     if (!win->m_hasVMT) return;
 
@@ -190,7 +190,7 @@ static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 // "child_detached" of tool bar
 //-----------------------------------------------------------------------------
 
-static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
+static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrameGTK *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -208,9 +208,9 @@ static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 
 static gint
 #if (GTK_MINOR_VERSION > 0)
-gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxFrame *win )
+gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxFrameGTK *win )
 #else
-gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxFrame *win )
+gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxFrameGTK *win )
 #endif
 {
     if (g_isIdle)
@@ -245,7 +245,7 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *ev
    so we do this directly after realization */
 
 static gint
-gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
+gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxFrameGTK *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -324,26 +324,26 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
 }
 
 // ----------------------------------------------------------------------------
-// wxFrame itself
+// wxFrameGTK itself
 // ----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// InsertChild for wxFrame
+// InsertChild for wxFrameGTK
 //-----------------------------------------------------------------------------
 
-/* Callback for wxFrame. This very strange beast has to be used because
+/* Callback for wxFrameGTK. This very strange beast has to be used because
  * C++ has no virtual methods in a constructor. We have to emulate a
  * virtual function here as wxWindows requires different ways to insert
  * a child in container classes. */
 
-static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
+static void wxInsertChildInFrame( wxFrameGTK* parent, wxWindow* child )
 {
     wxASSERT( GTK_IS_WIDGET(child->m_widget) );
 
     if (!parent->m_insertInClientArea)
     {
         /* these are outside the client area */
-        wxFrame* frame = (wxFrame*) parent;
+        wxFrameGTK* frame = (wxFrameGTK*) parent;
         gtk_pizza_put( GTK_PIZZA(frame->m_mainWidget),
                          GTK_WIDGET(child->m_widget),
                          child->m_x,
@@ -384,10 +384,10 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
 }
 
 // ----------------------------------------------------------------------------
-// wxFrame creation
+// wxFrameGTK creation
 // ----------------------------------------------------------------------------
 
-void wxFrame::Init()
+void wxFrameGTK::Init()
 {
     m_sizeSet = FALSE;
     m_miniEdge = 0;
@@ -398,7 +398,7 @@ void wxFrame::Init()
     m_insertInClientArea = TRUE;
 }
 
-bool wxFrame::Create( wxWindow *parent,
+bool wxFrameGTK::Create( wxWindow *parent,
                       wxWindowID id,
                       const wxString &title,
                       const wxPoint &pos,
@@ -413,7 +413,7 @@ bool wxFrame::Create( wxWindow *parent,
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
-        wxFAIL_MSG( wxT("wxFrame creation failed") );
+        wxFAIL_MSG( wxT("wxFrameGTK creation failed") );
         return FALSE;
     }
 
@@ -432,7 +432,7 @@ bool wxFrame::Create( wxWindow *parent,
         gtk_window_set_wmclass( GTK_WINDOW(m_widget), name.mb_str(), name.mb_str() );
 
 #ifdef __WXDEBUG__
-    debug_focus_in( m_widget, wxT("wxFrame::m_widget"), name );
+    debug_focus_in( m_widget, wxT("wxFrameGTK::m_widget"), name );
 #endif
 
     gtk_window_set_title( GTK_WINDOW(m_widget), title.mbc_str() );
@@ -448,7 +448,7 @@ bool wxFrame::Create( wxWindow *parent,
     gtk_container_add( GTK_CONTAINER(m_widget), m_mainWidget );
 
 #ifdef __WXDEBUG__
-    debug_focus_in( m_mainWidget, wxT("wxFrame::m_mainWidget"), name );
+    debug_focus_in( m_mainWidget, wxT("wxFrameGTK::m_mainWidget"), name );
 #endif
 
     /* m_wxwindow only represents the client area without toolbar and menubar */
@@ -457,7 +457,7 @@ bool wxFrame::Create( wxWindow *parent,
     gtk_container_add( GTK_CONTAINER(m_mainWidget), m_wxwindow );
 
 #ifdef __WXDEBUG__
-    debug_focus_in( m_wxwindow, wxT("wxFrame::m_wxwindow"), name );
+    debug_focus_in( m_wxwindow, wxT("wxFrameGTK::m_wxwindow"), name );
 #endif
 
     /* we donm't allow the frame to get the focus as otherwise
@@ -492,7 +492,7 @@ bool wxFrame::Create( wxWindow *parent,
     return TRUE;
 }
 
-wxFrame::~wxFrame()
+wxFrameGTK::~wxFrameGTK()
 {
     m_isBeingDeleted = TRUE;
 
@@ -514,7 +514,7 @@ wxFrame::~wxFrame()
 // overridden wxWindow methods
 // ----------------------------------------------------------------------------
 
-bool wxFrame::Show( bool show )
+bool wxFrameGTK::Show( bool show )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
@@ -531,16 +531,16 @@ bool wxFrame::Show( bool show )
     return wxWindow::Show( show );
 }
 
-void wxFrame::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )
+void wxFrameGTK::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )
 {
-    wxFAIL_MSG( wxT("DoMoveWindow called for wxFrame") );
+    wxFAIL_MSG( wxT("DoMoveWindow called for wxFrameGTK") );
 }
 
-void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
+void wxFrameGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    /* this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow */
+    /* this shouldn't happen: wxFrameGTK, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow */
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
 
     /* avoid recursions */
@@ -607,7 +607,7 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     m_resizing = FALSE;
 }
 
-void wxFrame::DoGetClientSize( int *width, int *height ) const
+void wxFrameGTK::DoGetClientSize( int *width, int *height ) const
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
@@ -663,7 +663,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
     }
 }
 
-void wxFrame::DoSetClientSize( int width, int height )
+void wxFrameGTK::DoSetClientSize( int width, int height )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
@@ -710,7 +710,7 @@ void wxFrame::DoSetClientSize( int width, int height )
     DoSetSize( -1, -1, width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle, 0 );
 }
 
-void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
+void wxFrameGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
                          int width, int height )
 {
     // due to a bug in gtk, x,y are always 0
@@ -721,7 +721,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     if (m_resizing) return;
     m_resizing = TRUE;
 
-    /* this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow */
+    /* this shouldn't happen: wxFrameGTK, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow */
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
 
     m_width = width;
@@ -731,9 +731,9 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     int client_area_x_offset = 0,
         client_area_y_offset = 0;
 
-    /* wxMDIChildFrame derives from wxFrame but it _is_ a wxWindow as it uses
+    /* wxMDIChildFrame derives from wxFrameGTK but it _is_ a wxWindow as it uses
        wxWindow::Create to create it's GTK equivalent. m_mainWidget is only
-       set in wxFrame::Create so it is used to check what kind of frame we
+       set in wxFrameGTK::Create so it is used to check what kind of frame we
        have here. if m_mainWidget is NULL it is a wxMDIChildFrame and so we
        skip the part which handles m_frameMenuBar, m_frameToolBar and (most
        importantly) m_mainWidget */
@@ -880,7 +880,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     m_resizing = FALSE;
 }
 
-void wxFrame::MakeModal( bool modal )
+void wxFrameGTK::MakeModal( bool modal )
 {
     if (modal)
         gtk_grab_add( m_widget );
@@ -888,7 +888,7 @@ void wxFrame::MakeModal( bool modal )
         gtk_grab_remove( m_widget );
 }
 
-void wxFrame::OnInternalIdle()
+void wxFrameGTK::OnInternalIdle()
 {
     if (!m_sizeSet && GTK_WIDGET_REALIZED(m_wxwindow))
     {
@@ -919,7 +919,7 @@ void wxFrame::OnInternalIdle()
 
 #if wxUSE_MENUS
 
-void wxFrame::SetMenuBar( wxMenuBar *menuBar )
+void wxFrameGTK::SetMenuBar( wxMenuBar *menuBar )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
@@ -979,7 +979,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 
 #if wxUSE_TOOLBAR
 
-wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& name )
+wxToolBar* wxFrameGTK::CreateToolBar( long style, wxWindowID id, const wxString& name )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
@@ -994,7 +994,7 @@ wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& na
     return m_frameToolBar;
 }
 
-void wxFrame::SetToolBar(wxToolBar *toolbar)
+void wxFrameGTK::SetToolBar(wxToolBar *toolbar)
 {
     wxFrameBase::SetToolBar(toolbar);
 
@@ -1016,7 +1016,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
 
 #if wxUSE_STATUSBAR
 
-wxStatusBar* wxFrame::CreateStatusBar(int number,
+wxStatusBar* wxFrameGTK::CreateStatusBar(int number,
                                       long style,
                                       wxWindowID id,
                                       const wxString& name)
@@ -1029,7 +1029,7 @@ wxStatusBar* wxFrame::CreateStatusBar(int number,
     return wxFrameBase::CreateStatusBar( number, style, id, name );
 }
 
-void wxFrame::PositionStatusBar()
+void wxFrameGTK::PositionStatusBar()
 {
     if ( !m_frameStatusBar )
         return;
@@ -1042,7 +1042,7 @@ void wxFrame::PositionStatusBar()
 // frame title/icon
 // ----------------------------------------------------------------------------
 
-void wxFrame::SetTitle( const wxString &title )
+void wxFrameGTK::SetTitle( const wxString &title )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
@@ -1050,7 +1050,7 @@ void wxFrame::SetTitle( const wxString &title )
     gtk_window_set_title( GTK_WINDOW(m_widget), title.mbc_str() );
 }
 
-void wxFrame::SetIcon( const wxIcon &icon )
+void wxFrameGTK::SetIcon( const wxIcon &icon )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
@@ -1073,20 +1073,20 @@ void wxFrame::SetIcon( const wxIcon &icon )
 // frame state: maximized/iconized/normal (TODO)
 // ----------------------------------------------------------------------------
 
-void wxFrame::Maximize(bool WXUNUSED(maximize))
+void wxFrameGTK::Maximize(bool WXUNUSED(maximize))
 {
 }
 
-bool wxFrame::IsMaximized() const
+bool wxFrameGTK::IsMaximized() const
 {
     return FALSE;
 }
 
-void wxFrame::Restore()
+void wxFrameGTK::Restore()
 {
 }
 
-void wxFrame::Iconize( bool iconize )
+void wxFrameGTK::Iconize( bool iconize )
 {
    if (iconize)
    {
@@ -1096,7 +1096,7 @@ void wxFrame::Iconize( bool iconize )
    }
 }
 
-bool wxFrame::IsIconized() const
+bool wxFrameGTK::IsIconized() const
 {
     return FALSE;
 }

@@ -81,6 +81,9 @@ private:
 
     // the menu item this entry corresponds to, may be NULL
     wxMenuItem *m_item;
+
+    // for compatibility with old code, use accessors now!
+    friend class WXDLLEXPORT wxMenu;
 };
 
 // ----------------------------------------------------------------------------

@@ -26,24 +26,22 @@ class wxMenuBar;
 class wxToolBar;
 class wxStatusBar;
 
-class wxFrame;
-
 //-----------------------------------------------------------------------------
-// wxFrame
+// wxFrameGTK
 //-----------------------------------------------------------------------------
 
-class wxFrame : public wxFrameBase
+class wxFrameGTK : public wxFrameBase
 {
 public:
     // construction
-    wxFrame() { Init(); }
-    wxFrame(wxWindow *parent,
-            wxWindowID id,
-            const wxString& title,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE,
-            const wxString& name = wxFrameNameStr)
+    wxFrameGTK() { Init(); }
+    wxFrameGTK(wxWindow *parent,
+               wxWindowID id,
+               const wxString& title,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxDEFAULT_FRAME_STYLE,
+               const wxString& name = wxFrameNameStr)
     {
         Init();
 
@@ -58,7 +56,7 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual ~wxFrame();
+    virtual ~wxFrameGTK();
 
     // implement base class pure virtuals
     virtual void Maximize(bool maximize = TRUE);
@@ -98,9 +96,9 @@ public:
     // --------------------------
 
     // move the window to the specified location and resize it: this is called
-    // from both DoSetSize() and DoSetClientSize() 
+    // from both DoSetSize() and DoSetClientSize()
     virtual void DoMoveWindow(int x, int y, int width, int height);
-    
+
     // GTK callbacks
     virtual void GtkOnSize( int x, int y, int width, int height );
     virtual void OnInternalIdle();
@@ -126,7 +124,7 @@ protected:
     virtual void DoGetClientSize( int *width, int *height ) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFrame)
+    DECLARE_DYNAMIC_CLASS(wxFrameGTK)
 };
 
 #endif // __GTKFRAMEH__

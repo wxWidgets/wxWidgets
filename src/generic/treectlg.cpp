@@ -180,10 +180,10 @@ public:
 
     // status inquiries
     bool HasChildren() const { return !m_children.IsEmpty(); }
-    bool IsSelected()  const { return m_hasHilight; }
+    bool IsSelected()  const { return m_hasHilight != 0; }
     bool IsExpanded()  const { return !m_isCollapsed; }
     bool HasPlus()     const { return m_hasPlus || HasChildren(); }
-    bool IsBold()      const { return m_isBold; }
+    bool IsBold()      const { return m_isBold != 0; }
 
     // attributes
         // get them - may be NULL
@@ -1473,7 +1473,7 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
 
     int start_x = 0;
     int start_y = 0;
-    ViewStart( &start_x, &start_y );
+    GetViewStart( &start_x, &start_y );
     start_y *= PIXELS_PER_UNIT;
 
     int client_h = 0;

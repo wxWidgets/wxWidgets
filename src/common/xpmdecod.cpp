@@ -521,7 +521,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
     // lot of gray...
 
     // so first extract ' '
-    while ((p = strchr(name, ' '))) 
+    while ((p = strchr(name, ' ')) != NULL) 
     {
         while (*(p))            // till eof of string
         {
@@ -539,11 +539,11 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
 
     // substitute Grey with Gray, else rgbtab.h would have more than 100
     // 'duplicate' entries
-    if ( (grey = strstr(name, "grey")) )
+    if ( (grey = strstr(name, "grey")) != NULL )
         grey[2] = 'a';
 
     // check for special 'none' colour:
-    if ( strcasecmp(name, "none") == 0 )
+    if ( wxStricmp(name, "none") == 0 )
     {
         *isNone = TRUE;
         return TRUE;
@@ -555,7 +555,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
     do 
     {
         middle = (left + right) / 2;
-        cmp = strcasecmp(name, theRGBRecords[middle].name);
+        cmp = wxStricmp(name, theRGBRecords[middle].name);
         if ( cmp == 0 )
         {
             rgbVal = theRGBRecords[middle].rgb;

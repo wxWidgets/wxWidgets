@@ -190,8 +190,6 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 bool wxSlider95::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
                              WXWORD pos, WXHWND control)
 {
-    int position = 0; // Dummy - not used in this mode
-
     wxEventType scrollEvent;
     switch ( wParam )
     {

@@ -20,7 +20,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_BMPBUTTN
+#if wxUSE_BMPBUTTON
 
 #ifndef WX_PRECOMP
     #include "wx/bmpbuttn.h"
@@ -380,4 +380,4 @@ void wxBitmapButton::SetDefault()
     wxButton::SetDefault();
 }
 
-#endif // wxUSE_BMPBUTTN
+#endif // wxUSE_BMPBUTTON

@@ -245,11 +245,13 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
         win = new wxSpinButton;
     }
 #endif
+#if wxUSE_SLIDER
     else if (str == wxT("MSCTLS_TRACKBAR32"))
     {
         // Need to ascertain if it's horiz or vert
         win = new wxSlider;
     }
+#endif // wxUSE_SLIDER
     else if (str == wxT("STATIC"))
     {
         int style1 = (style & 0xFF);

@@ -153,7 +153,7 @@ static bool IsMouseInWindow(HWND hwnd);
 #ifdef __WXUNIVERSAL__
     IMPLEMENT_ABSTRACT_CLASS(wxWindowMSW, wxWindowBase)
 #else // __WXMSW__
-    IMPLEMENT_DYNAMIC_CLASS(wxWindowMSW, wxWindowBase)
+    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 #endif // __WXUNIVERSAL__/__WXMSW__
 
 BEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
