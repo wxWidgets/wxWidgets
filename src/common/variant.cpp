@@ -1167,6 +1167,12 @@ wxVariant::wxVariant(const wxList& val, const wxString& name) // List of variant
     m_name = name;
 }
 
+wxVariant::wxVariant( void* val, const wxString& name)
+{
+   m_data = new wxVariantDataVoidPtr(val);
+   m_name = name;
+}
+
 #if wxUSE_ODBC
 wxVariant::wxVariant(const TIME_STRUCT* valptr, const wxString& name) // Date
 {
