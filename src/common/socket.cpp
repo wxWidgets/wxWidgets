@@ -1070,7 +1070,10 @@ wxSocketBase *wxSocketServer::Accept(bool wait)
   sock->SetFlags(m_flags);
 
   if (!AcceptWith(*sock, wait))
-    return NULL;
+  {
+    sock->Destroy();
+    sock = NULL;
+  }
 
   return sock;
 }

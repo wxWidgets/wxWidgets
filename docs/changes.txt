@@ -19,6 +19,7 @@ OTHER CHANGES
 wxBase:
 
 - crash when reading certain malformed mailcap entries under Unix fixed
+- memory/resource leak in wxSocket::Accept() fixed (Kruba Fabien)
 
 All (GUI):
 
@@ -35,7 +36,7 @@ wxMSW:
 -----
 
 - fixed memory corruption/crash in wxStreamBuffer
-- wxTree/ListCtrl position fix (Mike Oliver <oliver@math.ucla.edu>)
+- wxTree/ListCtrl position fix (Mike Oliver)
 - Italian translations updated
 - Windows 2000 toolbar colours problem fixed
 
