@@ -24,8 +24,7 @@ We will use these substitutions in tags descriptions:
                 BOTTOM
                 CENTER
                 
-[color]         #nnnnnn
-                where n is hexadecimal digit
+[color]         HTML 4.0-compliant colour specification
 
 [fontsize]      -2
                 -1
@@ -60,111 +59,45 @@ We will use these substitutions in tags descriptions:
 \wxheading{List of supported tags}
 
 \begin{verbatim}
-P               ALIGN=[alignment]
-
-BR              ALIGN=[alignment]
-
-DIV             ALIGN=[alignment]
-
-CENTER
-
-BLOCKQUOTE
-
-TITLE
-
-BODY            TEXT=[color]
-                LINK=[color]
-                BGCOLOR=[color]
-                
-HR              ALIGN=[alignment]
-                SIZE=[pixels]
-                WIDTH=[percent]
-                WIDTH=[pixels]
-                
-FONT            COLOR=[color]
-                SIZE=[fontsize]
-        FACE=[comma-separated list of facenames]
-                
-U
-
-B
-
-I
-
-EM
-
-STRONG
-
-CITE
-
-ADDRESS
-
-CODE
-
-KBD
-
-SAMP
-
-TT
-
-H1
-
-H2
-
-H3
-
-H4
-
-H5
-
-H6
 
 A               NAME=[string]
                 HREF=[url]
-
-PRE
-
-LI
-
-UL
-
-OL
-
-DL
-
-DT
-
+                TARGET=[target window spec]
+ADDRESS
+AREA            SHAPE=POLY
+                SHAPE=CIRCLE
+                SHAPE=RECT
+                COORDS=[coords]
+                HREF=[url]
+B
+BIG
+BLOCKQUOTE
+BODY            TEXT=[color]
+                LINK=[color]
+                BGCOLOR=[color]
+BR              ALIGN=[alignment]
+CENTER
+CITE
+CODE
 DD
-
-TABLE           ALIGN=[alignment]
-                WIDTH=[percent]
-                WIDTH=[pixels]
-                BORDER=[pixels]
-                VALIGN=[v_alignment]
-                BGCOLOR=[color]
-                CELLSPACING=[pixels]
-                CELLPADDING=[pixels]
-
-TR              ALIGN=[alignment]
-                VALIGN=[v_alignment]
-                BGCOLOR=[color]
-                
-TH              ALIGN=[alignment]
-                VALIGN=[v_alignment]
-                BGCOLOR=[color]
-                WIDTH=[percent]
-                WIDTH=[pixels]
-                COLSPAN=[pixels]
-                ROWSPAN=[pixels]
-                
-TD              ALIGN=[alignment]
-                VALIGN=[v_alignment]
-                BGCOLOR=[color]
-                WIDTH=[percent]
-                WIDTH=[pixels]
-                COLSPAN=[pixels]
-                ROWSPAN=[pixels]
-
+DIV             ALIGN=[alignment]
+DL
+DT
+EM
+FONT            COLOR=[color]
+                SIZE=[fontsize]
+                FACE=[comma-separated list of facenames]
+HR              ALIGN=[alignment]
+                SIZE=[pixels]
+                WIDTH=[percent|pixels]
+                NOSHADE
+H1
+H2
+H3
+H4
+H5
+H6
+I
 IMG             SRC=[url]
                 WIDTH=[pixels]
                 HEIGHT=[pixels]
@@ -173,18 +106,45 @@ IMG             SRC=[url]
                 ALIGN=ABSCENTER
                 ALIGN=BOTTOM
                 USEMAP=[url]
-                
+KBD
+LI
 MAP             NAME=[string]
-
-AREA            SHAPE=POLY
-                SHAPE=CIRCLE
-                SHAPE=RECT
-                COORDS=[coords]
-                HREF=[url]
-                
 META            HTTP-EQUIV="Content-Type"
                 CONTENT=[string]
-                
+OL
+P               ALIGN=[alignment]
+PRE
+SAMP
+SMALL
+STRIKE
+STRONG
+TABLE           ALIGN=[alignment]
+                WIDTH=[percent|pixels]
+                BORDER=[pixels]
+                VALIGN=[v_alignment]
+                BGCOLOR=[color]
+                CELLSPACING=[pixels]
+                CELLPADDING=[pixels]
+TD              ALIGN=[alignment]
+                VALIGN=[v_alignment]
+                BGCOLOR=[color]
+                WIDTH=[percent|pixels]
+                COLSPAN=[pixels]
+                ROWSPAN=[pixels]
+TH              ALIGN=[alignment]
+                VALIGN=[v_alignment]
+                BGCOLOR=[color]
+                WIDTH=[percent|pixels]
+                COLSPAN=[pixels]
+                ROWSPAN=[pixels]
+TITLE
+TR              ALIGN=[alignment]
+                VALIGN=[v_alignment]
+                BGCOLOR=[color]
+TT
+U
+UL
+
 \end{verbatim}
 
 
