@@ -24,7 +24,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 wxScreenDC::wxScreenDC()
 {
 #if TARGET_CARBON
-    m_macPort = GetQDGlobalsThePort() ;
+    m_macPort = CreateNewPort() ;
     GrafPtr port ;
     GetPort( &port ) ;
     SetPort( (GrafPtr) m_macPort ) ;
@@ -57,7 +57,7 @@ wxScreenDC::wxScreenDC()
 }
 
 wxScreenDC::~wxScreenDC()
-{
-    // TODO
+{   
+    DisposePort( (CGrafPtr) m_macPort ) ;
 }
 
