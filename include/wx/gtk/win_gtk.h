@@ -14,7 +14,9 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkadjustment.h>
+#ifndef __WXGTK20__
 #include <gtk/gtkfeatures.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
