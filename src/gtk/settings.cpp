@@ -21,9 +21,6 @@
 #include <gdk/gdkprivate.h>
 #include <gtk/gtk.h>
 
-extern GdkFont *GtkGetDefaultGuiFont();
-
-
 /*
 #define wxSYS_COLOUR_SCROLLBAR         0
 #define wxSYS_COLOUR_BACKGROUND        1
@@ -348,19 +345,6 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
         {
             if (!g_systemFont)
             {
-#if 0
-                GdkFont *gdk_font = GtkGetDefaultGuiFont();
-                if (gdk_font)
-                {
-                    GSList *font_list = ((GdkFontPrivate*)gdk_font)->names;
-                    char *name = (char*)font_list->data;
-                    wxString font_string( name );
-                    wxFontData font_data;
-                    g_systemFont = new wxFont( font_string, font_data );
-                }
-                gtk_widget_destroy( widget );
-#endif
-
                 g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
 
             }

@@ -36,7 +36,10 @@ class WXDLLEXPORT wxFont;
 // font constants
 // ----------------------------------------------------------------------------
 
-// standard font families
+// standard font families: these may be used only for the font creation, it
+// doesn't make sense to query an existing font for its font family as,
+// especially if the font had been created from a native font description, it
+// may be unknown
 enum wxFontFamily
 {
     wxFONTFAMILY_DEFAULT = wxDEFAULT,
@@ -46,7 +49,8 @@ enum wxFontFamily
     wxFONTFAMILY_SWISS = wxSWISS,
     wxFONTFAMILY_MODERN = wxMODERN,
     wxFONTFAMILY_TELETYPE = wxTELETYPE,
-    wxFONTFAMILY_MAX
+    wxFONTFAMILY_MAX,
+    wxFONTFAMILY_UNKNOWN = wxFONTFAMILY_MAX
 };
 
 // font styles

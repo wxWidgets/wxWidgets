@@ -76,43 +76,7 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
 
     gchar *fontname = gtk_font_selection_dialog_get_font_name(fontdlg);
 
-    // extract the relevant bits from it
-    wxString xregistry, xencoding;
-    char *dash = strrchr(fontname, '-');    // find the last dash
-    if ( dash )
-    {
-        xencoding = dash + 1;
-        *dash = '\0';
-        dash = strrchr(fontname, '-');      // the last before one
-        if ( dash )
-        {
-            xregistry = dash + 1;
-        }
-        else
-        {
-            wxFAIL_MSG( wxT("no registry in X font spec?") );
-        }
-
-        // restore the dash we changed to NUL above
-        *(fontname + strlen(fontname)) = '-';
-    }
-    else
-    {
-        wxFAIL_MSG( wxT("no encoding in X font spec?") );
-    }
-
-    // transfer the X registry/encoding to wxFontData - they are used by
-    // wxFontMapper after wxFontDialog returns
-    wxFontData& fontdata = dialog->m_fontData;
-
-    // we ignore the facename here - should be enough to choose an arbitrary
-    // one if the registry/encoding are specified
-    fontdata.EncodingInfo().xregistry = xregistry;
-    fontdata.EncodingInfo().xencoding = xencoding;
-
-    // pass fontdata to wxFont ctor so that it can get the encoding from there
-    // if it is already known (otherwise it will try to deduce it itself)
-    dialog->m_fontData.SetChosenFont(wxFont(fontname, fontdata.GetEncoding()));
+    dialog->m_fontData.SetChosenFont(wxFont(fontname));
 
     g_free( fontname );
 
@@ -187,11 +151,14 @@ wxFontDialog::wxFontDialog( wxWindow *parent, wxFontData *fontdata )
 
         if ( info )
         {
-            const wxString& fontname = info->xFontName;
+            const wxString& fontname = info->GetXFontName();
             if ( !fontname )
                 font.GetInternalFont();
-            gtk_font_selection_dialog_set_font_name(sel,
-                                                    wxConvCurrent->cWX2MB(fontname));
+            gtk_font_selection_dialog_set_font_name
+            (
+                sel,
+                wxConvCurrent->cWX2MB(fontname)
+            );
         }
         else
         {

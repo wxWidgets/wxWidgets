@@ -85,8 +85,13 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+
     void OnIncFont(wxCommandEvent& event) { DoResizeFont(+2); }
     void OnDecFont(wxCommandEvent& event) { DoResizeFont(-2); }
+
+    void OnBold(wxCommandEvent& event);
+    void OnItalic(wxCommandEvent& event);
+    void OnUnderline(wxCommandEvent& event);
 
     void OnViewMsg(wxCommandEvent& event);
     void OnSelectFont(wxCommandEvent& event);
@@ -130,6 +135,9 @@ enum
     Font_ViewMsg,
     Font_IncSize,
     Font_DecSize,
+    Font_Bold,
+    Font_Italic,
+    Font_Underlined,
     Font_Choose = 100,
     Font_EnumFamiliesForEncoding,
     Font_EnumFamilies,
@@ -148,16 +156,21 @@ enum
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_Quit,  MyFrame::OnQuit)
+    EVT_MENU(Font_ViewMsg, MyFrame::OnViewMsg)
     EVT_MENU(Font_About, MyFrame::OnAbout)
+
     EVT_MENU(Font_IncSize, MyFrame::OnIncFont)
     EVT_MENU(Font_DecSize, MyFrame::OnDecFont)
-    EVT_MENU(Font_ViewMsg, MyFrame::OnViewMsg)
+    EVT_MENU(Font_Bold, MyFrame::OnBold)
+    EVT_MENU(Font_Italic, MyFrame::OnItalic)
+    EVT_MENU(Font_Underlined, MyFrame::OnUnderline)
+    EVT_MENU(Font_CheckNativeToFromString, MyFrame::OnCheckNativeToFromString)
+
     EVT_MENU(Font_Choose, MyFrame::OnSelectFont)
     EVT_MENU(Font_EnumFamiliesForEncoding, MyFrame::OnEnumerateFamiliesForEncoding)
     EVT_MENU(Font_EnumFamilies, MyFrame::OnEnumerateFamilies)
     EVT_MENU(Font_EnumFixedFamilies, MyFrame::OnEnumerateFixedFamilies)
     EVT_MENU(Font_EnumEncodings, MyFrame::OnEnumerateEncodings)
-    EVT_MENU(Font_CheckNativeToFromString, MyFrame::OnCheckNativeToFromString)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -216,25 +229,32 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFont->Append(Font_IncSize, "&Increase font size by 2 points\tCtrl-I");
     menuFont->Append(Font_DecSize, "&Decrease font size by 2 points\tCtrl-D");
     menuFont->AppendSeparator();
-    menuFont->Append(Font_Choose, "&Select font...\tCtrl-S",
-                     "Select a standard font");
-    menuFont->AppendSeparator();
-    menuFont->Append(Font_EnumFamilies, "Enumerate font &families\tCtrl-F");
-    menuFont->Append(Font_EnumFixedFamilies,
-                     "Enumerate fi&xed font families\tCtrl-X");
-    menuFont->Append(Font_EnumEncodings,
-                     "Enumerate &encodings\tCtrl-E");
-    menuFont->Append(Font_EnumFamiliesForEncoding,
-                     "Find font for en&coding...\tCtrl-C",
-                     "Find font families for given encoding");
+    menuFont->Append(Font_Bold, "&Bold\tCtrl-B", "Toggle bold state", TRUE);
+    menuFont->Append(Font_Italic, "&Oblique\tCtrl-O", "Toggle italic state", TRUE);
+    menuFont->Append(Font_Underlined, "&Underlined\tCtrl-U",
+                     "Toggle underlined state", TRUE);
     menuFont->AppendSeparator();
     menuFont->Append(Font_CheckNativeToFromString,
                      "Check Native Font Info To/From String");
+
+    wxMenu *menuSelect = new wxMenu;
+    menuSelect->Append(Font_Choose, "&Select font...\tCtrl-S",
+                     "Select a standard font");
+    menuSelect->AppendSeparator();
+    menuSelect->Append(Font_EnumFamilies, "Enumerate font &families\tCtrl-F");
+    menuSelect->Append(Font_EnumFixedFamilies,
+                     "Enumerate fi&xed font families\tCtrl-X");
+    menuSelect->Append(Font_EnumEncodings,
+                     "Enumerate &encodings\tCtrl-E");
+    menuSelect->Append(Font_EnumFamiliesForEncoding,
+                     "Find font for en&coding...\tCtrl-C",
+                     "Find font families for given encoding");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(menuFile, "&File");
     menuBar->Append(menuFont, "F&ont");
+    menuBar->Append(menuSelect, "&Select");
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -440,6 +460,30 @@ void MyFrame::DoResizeFont(int diff)
     DoChangeFont(font);
 }
 
+void MyFrame::OnBold(wxCommandEvent& event)
+{
+    wxFont font = m_canvas->GetTextFont();
+
+    font.SetWeight(event.IsChecked() ? wxFONTWEIGHT_BOLD : wxFONTWEIGHT_NORMAL);
+    DoChangeFont(font);
+}
+
+void MyFrame::OnItalic(wxCommandEvent& event)
+{
+    wxFont font = m_canvas->GetTextFont();
+
+    font.SetStyle(event.IsChecked() ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL);
+    DoChangeFont(font);
+}
+
+void MyFrame::OnUnderline(wxCommandEvent& event)
+{
+    wxFont font = m_canvas->GetTextFont();
+
+    font.SetUnderlined(event.IsChecked());
+    DoChangeFont(font);
+}
+
 void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
 {
     m_canvas->SetTextFont(font);
@@ -466,6 +510,15 @@ void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
         wxColour colour = retData.GetColour();
 
         DoChangeFont(font, colour);
+
+        // update the state of the bold/italic/underlined menu items
+        wxMenuBar *mbar = GetMenuBar();
+        if ( mbar )
+        {
+            mbar->Check(Font_Bold, font.GetWeight() == wxFONTWEIGHT_BOLD);
+            mbar->Check(Font_Italic, font.GetStyle() == wxFONTSTYLE_ITALIC);
+            mbar->Check(Font_Underlined, font.GetUnderlined());
+        }
     }
 }
 
@@ -653,11 +706,17 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     if ( m_font.Ok() )
     {
-        wxString fontDesc = m_font.GetNativeFontInfoUserDesc();
-        fontInfo.Printf(wxT("Native font info: %s"), fontDesc.c_str());
+        wxNativeFontInfo *info = m_font.GetNativeFontInfo();
+        if ( info )
+        {
+            delete info;
 
-        dc.DrawText(fontInfo, x, y);
-        y += hLine;
+            wxString fontDesc = m_font.GetNativeFontInfoUserDesc();
+            fontInfo.Printf(wxT("Native font info: %s"), fontDesc.c_str());
+
+            dc.DrawText(fontInfo, x, y);
+            y += hLine;
+        }
     }
 
     y += hLine;

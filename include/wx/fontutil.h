@@ -34,6 +34,9 @@
 #if defined(_WX_X_FONTLIKE)
 
 // the symbolic names for the XLFD fields (with examples for their value)
+//
+// NB: we suppose that the font always starts with the empty token (font name
+//     registry field) as we never use nor generate it anyhow
 enum wxXLFDField
 {
     wxXLFD_FOUNDRY,     // adobe
@@ -70,24 +73,39 @@ enum wxXLFDField
 struct WXDLLEXPORT wxNativeFontInfo
 {
 #if defined(_WX_X_FONTLIKE)
-    // the fonts array can't be accessed directly as we only parse the
-    // xFontName when needed
+    // the members can't be accessed directly as we only parse the
+    // xFontName on demand
 private:
     // the components of the XLFD
     wxString     fontElements[wxXLFD_MAX];
 
-public:
     // the full XLFD
     wxString     xFontName;
 
+    // true until SetXFontName() is called
+    bool         m_isDefault;
+
+    // return true if we have already initialized fontElements
+    inline bool HasElements() const;
+
+public:
     // init the elements from an XLFD, return TRUE if ok
     bool FromXFontName(const wxString& xFontName);
 
-    // generate an XLFD using the fontElements
+    // return false if we were never initialized with a valid XLFD
+    bool IsDefault() const { return m_isDefault; }
+
+    // return the XLFD (using the fontElements if necessary)
     wxString GetXFontName() const;
 
     // get the given XFLD component
     wxString GetXFontComponent(wxXLFDField field) const;
+
+    // change the font component
+    void SetXFontComponent(wxXLFDField field, const wxString& value);
+
+    // set the XFLD
+    void SetXFontName(const wxString& xFontName);
 #elif defined(__WXMSW__)
     LOGFONT      lf;
 #elif defined(__WXPM__)

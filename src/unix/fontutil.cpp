@@ -71,22 +71,22 @@ static wxHashTable *g_fontHash = (wxHashTable*) NULL;
 
 // define the functions to create and destroy native fonts for this toolkit
 #ifdef __X__
-    static inline wxNativeFont wxLoadFont(const wxString& fontSpec)
+    inline wxNativeFont wxLoadFont(const wxString& fontSpec)
     {
         return XLoadQueryFont((Display *)wxGetDisplay(), fontSpec);
     }
 
-    static inline void wxFreeFont(wxNativeFont font)
+    inline void wxFreeFont(wxNativeFont font)
     {
         XFreeFont((Display *)wxGetDisplay(), (XFontStruct *)font);
     }
 #elif defined(__WXGTK__)
-    static inline wxNativeFont wxLoadFont(const wxString& fontSpec)
+    inline wxNativeFont wxLoadFont(const wxString& fontSpec)
     {
        return gdk_font_load( wxConvertWX2MB(fontSpec) );
     }
 
-    static inline void wxFreeFont(wxNativeFont font)
+    inline void wxFreeFont(wxNativeFont font)
     {
         gdk_font_unref(font);
     }
@@ -159,7 +159,7 @@ wxString wxNativeEncodingInfo::ToString() const
 
 void wxNativeFontInfo::Init()
 {
-    xFontName.clear();
+    m_isDefault = TRUE;
 }
 
 bool wxNativeFontInfo::FromString(const wxString& s)
@@ -196,11 +196,18 @@ wxString wxNativeFontInfo::ToUserString() const
     return GetXFontName();
 }
 
+bool wxNativeFontInfo::HasElements() const
+{
+    // we suppose that the foundry is never empty, so if it is it means that we
+    // had never parsed the XLFD
+    return !fontElements[0].empty();
+}
+
 wxString wxNativeFontInfo::GetXFontComponent(wxXLFDField field) const
 {
     wxCHECK_MSG( field < wxXLFD_MAX, _T(""), _T("invalid XLFD field") );
 
-    if ( fontElements[0].empty() )
+    if ( !HasElements() )
     {
         // const_cast
         if ( !((wxNativeFontInfo *)this)->FromXFontName(xFontName) )
@@ -213,7 +220,13 @@ wxString wxNativeFontInfo::GetXFontComponent(wxXLFDField field) const
 bool wxNativeFontInfo::FromXFontName(const wxString& fontname)
 {
     // TODO: we should be able to handle the font aliases here, but how?
-    wxStringTokenizer tokenizer(fontname, _T("-"), wxTOKEN_STRTOK);
+    wxStringTokenizer tokenizer(fontname, _T("-"));
+
+    // skip the leading, usually empty field (font name registry)
+    if ( !tokenizer.HasMoreTokens() )
+        return FALSE;
+
+    (void)tokenizer.GetNextToken();
 
     for ( size_t n = 0; n < WXSIZEOF(fontElements); n++ )
     {
@@ -239,7 +252,7 @@ wxString wxNativeFontInfo::GetXFontName() const
             // replace the non specified elements with '*' except for the
             // additional style which is usually just omitted
             wxString elt = fontElements[n];
-            if ( elt.empty() && n != 5 )
+            if ( elt.empty() && n != wxXLFD_ADDSTYLE )
             {
                 elt = _T('*');
             }
@@ -250,6 +263,42 @@ wxString wxNativeFontInfo::GetXFontName() const
     }
 
     return xFontName;
+}
+
+void
+wxNativeFontInfo::SetXFontComponent(wxXLFDField field, const wxString& value)
+{
+    wxCHECK_RET( field < wxXLFD_MAX, _T("invalid XLFD field") );
+
+    // this class should be initialized with a valid font spec first and only
+    // then the fields may be modified!
+    wxASSERT_MSG( !IsDefault(), _T("can't modify an uninitialized XLFD") );
+
+    if ( !HasElements() )
+    {
+        // const_cast
+        if ( !((wxNativeFontInfo *)this)->FromXFontName(xFontName) )
+        {
+            wxFAIL_MSG( _T("can't set font element for invalid XLFD") );
+
+            return;
+        }
+    }
+
+    fontElements[field] = value;
+
+    // invalidate the XFLD, it doesn't correspond to the font elements any more
+    xFontName.clear();
+}
+
+void wxNativeFontInfo::SetXFontName(const wxString& xFontName_)
+{
+    // invalidate the font elements, GetXFontComponent() will reparse the XLFD
+    fontElements[0].clear();
+
+    xFontName = xFontName_;
+
+    m_isDefault = FALSE;
 }
 
 // ----------------------------------------------------------------------------

@@ -31,4 +31,7 @@ wxLoadQueryNearestFont(int pointSize,
                        wxFontEncoding encoding,
                        wxString* xFontName = (wxString *)NULL);
 
+// returns the font specified by the given XLFD
+extern inline wxNativeFont wxLoadFont(const wxString& fontSpec);
+
 #endif // _WX_UNIX_FONTUTIL_H_

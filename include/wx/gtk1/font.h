@@ -36,12 +36,13 @@ public:
     // ctors and such
     wxFont() { Init(); }
     wxFont(const wxFont& font) : wxFontBase() { Init(); Ref(font); }
-    wxFont(const wxString& fontname,
-           wxFontEncoding fontenc = wxFONTENCODING_DEFAULT)
+
+    // wxGTK-specific
+    wxFont(const wxString& fontname)
     {
         Init();
 
-        Create(fontname, fontenc);
+        Create(fontname);
     }
 
     wxFont(const wxNativeFontInfo& info);
@@ -68,9 +69,7 @@ public:
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     // wxGTK-specific
-    bool Create(const wxString& fontname,
-                wxFontEncoding fontenc = wxFONTENCODING_DEFAULT);
-    bool Create(const wxNativeFontInfo& fontinfo);
+    bool Create(const wxString& fontname);
 
     ~wxFont();
 
@@ -107,9 +106,6 @@ public:
 protected:
     // common part of all ctors
     void Init();
-
-    // do we have the XFLD for this font (or just wxWin description)?
-    inline bool HasNativeFont() const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFont)
