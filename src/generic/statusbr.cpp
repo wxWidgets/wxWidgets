@@ -391,9 +391,9 @@ void wxStatusBarGeneric::InitColours()
 
     wxColour                        vColour;
 
-    vColour.Set(DawStr_CString("LIGHT GREY"));
+    vColour.Set(wxString("LIGHT GREY"));
     SetBackgroundColour(vColour);
-    vColour.Set(DawStr_CString("BLACK"));
+    vColour.Set(wxString("BLACK"));
     SetForegroundColour(vColour);
     m_defaultStatusBarFont = *wxSMALL_FONT;
 #else
