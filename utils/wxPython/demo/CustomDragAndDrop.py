@@ -169,12 +169,15 @@ class CustomDnDPanel(wxPanel):
         self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, false))
 
         sizer = wxBoxSizer(wxHORIZONTAL)
-        sizer.Add(wxStaticText(self, -1,
-                               "Draw a little picture in this window\n"
-                               "then Ctrl-Drag it to the lower \n"
-                               "window or to another application\n"
-                               "that accepts BMP's as a drop target."),
-                  1, wxEXPAND|wxALL, 10)
+        text = wxStaticText(self, -1,
+                            "Draw a little picture in this window\n"
+                            "then Ctrl-Drag it to the lower \n"
+                            "window or to another application\n"
+                            "that accepts BMP's as a drop target.\n\n"
+                            "The lower window is accepting a\n"
+                            "custom data type that is a pickled\n"
+                            "Python list of lines data.")
+        sizer.Add(text, 1, wxALL, 10)
 
         insizer = wxBoxSizer(wxVERTICAL)
         insizer.Add(DoodlePad(self, log), 1, wxEXPAND|wxALL, 5)
@@ -218,6 +221,35 @@ def runTest(frame, nb, log):
     win = TestPanel(nb, log)
     return win
 
+
+if __name__ == '__main__':
+    import sys
+    class DummyLog:
+        def WriteText(self, text):
+            sys.stdout.write(text)
+
+    class TestApp(wxApp):
+        def OnInit(self):
+            self.MakeFrame()
+            return true
+
+        def MakeFrame(self, event=None):
+            frame = wxFrame(None, -1, "Custom Drag and Drop", size=(550,400))
+            menu = wxMenu()
+            menu.Append(6543, "Window")
+            mb = wxMenuBar()
+            mb.Append(menu, "New")
+            frame.SetMenuBar(mb)
+            EVT_MENU(frame, 6543, self.MakeFrame)
+            panel = TestPanel(frame, DummyLog())
+            frame.Show(true)
+            self.SetTopWindow(frame)
+
+
+
+    app = TestApp(0)
+    app.MainLoop()
+
 #----------------------------------------------------------------------
 
 
@@ -238,3 +270,4 @@ A second data object is also created containing a bitmap of the image and is mad
 
 The two data objects are combined in a wxDataObjectComposite and the rest is handled by the framework.
 """
+
