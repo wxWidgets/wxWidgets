@@ -1,6 +1,6 @@
 #Makefile from wxHatch for Symantec/Digital Mars compiler 
-WXDIR=..\..\..\..\wxWindows
+WXDIR=..\..\..
 TARGET=stctest
 OBJECTS = $(TARGET).obj 
-EXTRALIBS = $(WXDIR)\lib\stc_sc.lib
+EXTRALIBS=$(WXDIR)\lib\stc_sc.lib
 include $(WXDIR)\src\makeprog.sc
