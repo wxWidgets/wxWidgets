@@ -26,7 +26,9 @@
 #include "glib.h"
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
+#ifndef __WXGTK20__
 #include "gtk/gtkfeatures.h"
+#endif
 #include "gdk/gdkx.h"
 
 #ifdef HAVE_X11_XKBLIB_H
