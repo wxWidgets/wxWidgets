@@ -453,7 +453,7 @@ XmComboBoxClassRec xmComboBoxClassRec = {
     /* accept_focus	 	    */	NULL,
     /* version			    */	XtVersion,
     /* callback_private   	    */	NULL,
-    /* tm_table		   	    */	NULL,
+    /* tm_table		   	    */	XtInheritTranslations, /* Changed from NULL: Bug #406153 */
     /* query_geometry		    */	(XtGeometryHandler) QueryGeometry,
     /* display_accelerator	    */	XtInheritDisplayAccelerator,
     /* extension          	    */	NULL
