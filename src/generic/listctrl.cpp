@@ -781,7 +781,7 @@ void wxListHeaderWindow::DrawCurrent()
     m_owner->ClientToScreen( &x2, &y2 );
 
     wxScreenDC dc;
-    dc.SetLogicalFunction( wxXOR );
+    dc.SetLogicalFunction( wxINVERT );
     dc.SetPen( wxPen( *wxBLACK, 2, wxSOLID ) );
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 

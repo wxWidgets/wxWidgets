@@ -170,6 +170,16 @@ wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
     m_commandInt = pos;
 }
 
+void wxScrollWinEvent::CopyObject(wxObject& obj_d) const
+{
+    wxScrollWinEvent *obj = (wxScrollWinEvent*)&obj_d; 
+
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_extraLong    = m_extraLong;
+    obj->m_commandInt   = m_commandInt;
+}
+
 /*
  * Mouse events
  *

@@ -537,7 +537,7 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
     ClientToScreen(&x1, &y1);
     ClientToScreen(&x2, &y2);
 
-    screenDC.SetLogicalFunction(wxXOR);
+    screenDC.SetLogicalFunction(wxINVERT);
     screenDC.SetPen(*m_sashTrackerPen);
     screenDC.SetBrush(*wxTRANSPARENT_BRUSH);
 
@@ -599,9 +599,13 @@ void wxSplitterWindow::SizeWindows()
 	        m_windowTwo->Layout();
         }
     }
+#ifdef __WXGTK__
+    Refresh();
+#else
     wxClientDC dc(this);
     DrawBorders(dc);
     DrawSash(dc);
+#endif
 }
 
 // Set pane for unsplit window

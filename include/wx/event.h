@@ -478,6 +478,7 @@ public:
     void SetOrientation(int orient) { m_extraLong = (long) orient; }
     void SetPosition(int pos) { m_commandInt = pos; }
 
+    void CopyObject(wxObject& object_dest) const;
 public:
     int               m_commandInt;    // Additional information
     long              m_extraLong;     

@@ -1541,6 +1541,10 @@ gtk_window_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
         win->SetForegroundColour( win->GetForegroundColour() );
 
     win->SetCursor( win->GetCursor() );
+    
+    wxWindowCreateEvent event( win );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
 
     return FALSE;
 }

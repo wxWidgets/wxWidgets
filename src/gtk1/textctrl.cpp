@@ -44,9 +44,10 @@ extern bool   g_blockEventsOnDrag;
 static void
 gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (!win->m_hasVMT) return;
+
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     win->SetModified();
 
@@ -63,11 +64,12 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 static void
 gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (!win->m_hasVMT) return;
+    
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     win->CalculateScrollbar();
-    
-    if (!win->m_hasVMT) return;
 }
 
 //-----------------------------------------------------------------------------
@@ -273,7 +275,6 @@ void wxTextCtrl::CalculateScrollbar()
         if (m_vScrollbarVisible)
         {
             gtk_widget_hide( m_vScrollbar );
-
             m_vScrollbarVisible = FALSE;
         }
     }
@@ -282,7 +283,6 @@ void wxTextCtrl::CalculateScrollbar()
         if (!m_vScrollbarVisible)
         {
             gtk_widget_show( m_vScrollbar );
-
             m_vScrollbarVisible = TRUE;
         }
     }

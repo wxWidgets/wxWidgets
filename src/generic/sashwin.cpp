@@ -516,7 +516,7 @@ void wxSashWindow::DrawSashTracker(wxSashEdgePosition edge, int x, int y)
 
     wxPen sashTrackerPen(*wxBLACK, 2, wxSOLID);
 
-    screenDC.SetLogicalFunction(wxXOR);
+    screenDC.SetLogicalFunction(wxINVERT);
     screenDC.SetPen(sashTrackerPen);
     screenDC.SetBrush(*wxTRANSPARENT_BRUSH);
 
