@@ -26,10 +26,12 @@
 #include "wx/log.h"
 #include "wx/gdicmn.h"
 #include "wx/tokenzr.h"
+#include "wx/settings.h"
 
 #include <strings.h>
 
 #include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 // ----------------------------------------------------------------------------
 // wxFontRefData
@@ -388,6 +390,20 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
 // get internal representation of font
 // ----------------------------------------------------------------------------
 
+static GdkFont *g_systemDefaultGuiFont = (GdkFont*) NULL;
+
+static GdkFont *GtkGetDefaultGuiFont()
+{
+    if (!g_systemDefaultGuiFont)
+    {
+        GtkWidget *widget = gtk_button_new();
+        GtkStyle *def = gtk_rc_get_style( widget );
+        g_systemDefaultGuiFont = gdk_font_ref( def->font );
+        gtk_widget_destroy( widget );
+    }
+    return g_systemDefaultGuiFont;
+}
+
 GdkFont *wxFont::GetInternalFont( float scale ) const
 {
     if (!Ok())
@@ -408,18 +424,11 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
     }
     else
     {
-#if 0
-        if ((int_scale == 100) &&
-                (M_FONTDATA->m_family == wxSWISS) &&
-                (M_FONTDATA->m_style == wxNORMAL) &&
-                (M_FONTDATA->m_pointSize == 12) &&
-                (M_FONTDATA->m_weight == wxNORMAL) &&
-                (M_FONTDATA->m_underlined == FALSE))
+        if (*this == wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT))
         {
-            font = gdk_font_load( "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*" );
+            font = GtkGetDefaultGuiFont();
         }
         else
-#endif // 0
         {
             font = wxLoadQueryNearestFont( point_scale,
                                            M_FONTDATA->m_family,
