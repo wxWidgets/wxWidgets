@@ -36,6 +36,7 @@ TOOLKIT_VERSION = @TOOLKIT_VERSION@
 VENDOR = @VENDOR@
 includedir = @includedir@
 libdir = @libdir@
+srcdir = @srcdir@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 
@@ -45,8 +46,8 @@ LIBDIRNAME = $(top_builddir)lib
 MMEDIADLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I../../src/mmedia/../../include -DWXUSINGDLL -DWXMAKINGDLL_MMEDIA \
-	$(CXXFLAGS) $(PIC_FLAG)
+	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_MMEDIA $(CXXFLAGS) \
+	$(PIC_FLAG)
 MMEDIADLL_OBJECTS =  \
 	$(__MMEDIA_PLATFORM_SRC_OBJECTS) \
 	mmediadll_cdbase.o \
@@ -69,7 +70,7 @@ MMEDIADLL_OBJECTS =  \
 MMEDIALIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I../../src/mmedia/../../include $(CXXFLAGS)
+	-I$(srcdir)/../../include $(CXXFLAGS)
 MMEDIALIB_OBJECTS =  \
 	$(__MMEDIA_PLATFORM_SRC_OBJECTS_1) \
 	mmedialib_cdbase.o \
@@ -236,7 +237,7 @@ install: all $(__install_mmediadll___depname) $(__install_mmedialib___depname)
 	if test ! -d $(includedir)/`dirname $$f` ; then \
 	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) ../../src/mmedia/../../include//$$f $(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
 	done
 
 install-strip: install
@@ -256,76 +257,76 @@ install-strip: install
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(MMEDIADLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__mmediadll___macinstnamecmd) $(__mmediadll___importlib) $(__mmediadll___soname_flags) $(__mmediadll___macver) $(EXTRALIBS_ESD)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__mmediadll___so_symlinks_cmd)
 
-mmediadll_cdbase.o: ../../src/mmedia/cdbase.cpp
+mmediadll_cdbase.o: $(srcdir)/cdbase.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_cdunix.o: ../../src/mmedia/cdunix.cpp
+mmediadll_cdunix.o: $(srcdir)/cdunix.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_cdwin.o: ../../src/mmedia/cdwin.cpp
+mmediadll_cdwin.o: $(srcdir)/cdwin.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_g711.o: ../../src/mmedia/g711.cpp
+mmediadll_g711.o: $(srcdir)/g711.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_g721.o: ../../src/mmedia/g721.cpp
+mmediadll_g721.o: $(srcdir)/g721.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_g723_24.o: ../../src/mmedia/g723_24.cpp
+mmediadll_g723_24.o: $(srcdir)/g723_24.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_g723_40.o: ../../src/mmedia/g723_40.cpp
+mmediadll_g723_40.o: $(srcdir)/g723_40.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_g72x.o: ../../src/mmedia/g72x.cpp
+mmediadll_g72x.o: $(srcdir)/g72x.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndaiff.o: ../../src/mmedia/sndaiff.cpp
+mmediadll_sndaiff.o: $(srcdir)/sndaiff.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndbase.o: ../../src/mmedia/sndbase.cpp
+mmediadll_sndbase.o: $(srcdir)/sndbase.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndcodec.o: ../../src/mmedia/sndcodec.cpp
+mmediadll_sndcodec.o: $(srcdir)/sndcodec.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndcpcm.o: ../../src/mmedia/sndcpcm.cpp
+mmediadll_sndcpcm.o: $(srcdir)/sndcpcm.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndesd.o: ../../src/mmedia/sndesd.cpp
+mmediadll_sndesd.o: $(srcdir)/sndesd.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndfile.o: ../../src/mmedia/sndfile.cpp
+mmediadll_sndfile.o: $(srcdir)/sndfile.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndg72x.o: ../../src/mmedia/sndg72x.cpp
+mmediadll_sndg72x.o: $(srcdir)/sndg72x.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndmsad.o: ../../src/mmedia/sndmsad.cpp
+mmediadll_sndmsad.o: $(srcdir)/sndmsad.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndoss.o: ../../src/mmedia/sndoss.cpp
+mmediadll_sndoss.o: $(srcdir)/sndoss.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndpcm.o: ../../src/mmedia/sndpcm.cpp
+mmediadll_sndpcm.o: $(srcdir)/sndpcm.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndulaw.o: ../../src/mmedia/sndulaw.cpp
+mmediadll_sndulaw.o: $(srcdir)/sndulaw.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndwav.o: ../../src/mmedia/sndwav.cpp
+mmediadll_sndwav.o: $(srcdir)/sndwav.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_sndwin.o: ../../src/mmedia/sndwin.cpp
+mmediadll_sndwin.o: $(srcdir)/sndwin.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_vidbase.o: ../../src/mmedia/vidbase.cpp
+mmediadll_vidbase.o: $(srcdir)/vidbase.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_vidwin.o: ../../src/mmedia/vidwin.cpp
+mmediadll_vidwin.o: $(srcdir)/vidwin.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-mmediadll_vidxanm.o: ../../src/mmedia/vidxanm.cpp
+mmediadll_vidxanm.o: $(srcdir)/vidxanm.cpp
 	$(CXXC) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
 @COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia-2.5$(HOST_SUFFIX).a: $(MMEDIALIB_OBJECTS)
@@ -333,76 +334,76 @@ mmediadll_vidxanm.o: ../../src/mmedia/vidxanm.cpp
 @COND_SHARED_0@	$(AR) rcu $@ $(MMEDIALIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-mmedialib_cdbase.o: ../../src/mmedia/cdbase.cpp
+mmedialib_cdbase.o: $(srcdir)/cdbase.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_cdunix.o: ../../src/mmedia/cdunix.cpp
+mmedialib_cdunix.o: $(srcdir)/cdunix.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_cdwin.o: ../../src/mmedia/cdwin.cpp
+mmedialib_cdwin.o: $(srcdir)/cdwin.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_g711.o: ../../src/mmedia/g711.cpp
+mmedialib_g711.o: $(srcdir)/g711.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_g721.o: ../../src/mmedia/g721.cpp
+mmedialib_g721.o: $(srcdir)/g721.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_g723_24.o: ../../src/mmedia/g723_24.cpp
+mmedialib_g723_24.o: $(srcdir)/g723_24.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_g723_40.o: ../../src/mmedia/g723_40.cpp
+mmedialib_g723_40.o: $(srcdir)/g723_40.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_g72x.o: ../../src/mmedia/g72x.cpp
+mmedialib_g72x.o: $(srcdir)/g72x.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndaiff.o: ../../src/mmedia/sndaiff.cpp
+mmedialib_sndaiff.o: $(srcdir)/sndaiff.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndbase.o: ../../src/mmedia/sndbase.cpp
+mmedialib_sndbase.o: $(srcdir)/sndbase.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndcodec.o: ../../src/mmedia/sndcodec.cpp
+mmedialib_sndcodec.o: $(srcdir)/sndcodec.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndcpcm.o: ../../src/mmedia/sndcpcm.cpp
+mmedialib_sndcpcm.o: $(srcdir)/sndcpcm.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndesd.o: ../../src/mmedia/sndesd.cpp
+mmedialib_sndesd.o: $(srcdir)/sndesd.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndfile.o: ../../src/mmedia/sndfile.cpp
+mmedialib_sndfile.o: $(srcdir)/sndfile.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndg72x.o: ../../src/mmedia/sndg72x.cpp
+mmedialib_sndg72x.o: $(srcdir)/sndg72x.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndmsad.o: ../../src/mmedia/sndmsad.cpp
+mmedialib_sndmsad.o: $(srcdir)/sndmsad.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndoss.o: ../../src/mmedia/sndoss.cpp
+mmedialib_sndoss.o: $(srcdir)/sndoss.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndpcm.o: ../../src/mmedia/sndpcm.cpp
+mmedialib_sndpcm.o: $(srcdir)/sndpcm.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndulaw.o: ../../src/mmedia/sndulaw.cpp
+mmedialib_sndulaw.o: $(srcdir)/sndulaw.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndwav.o: ../../src/mmedia/sndwav.cpp
+mmedialib_sndwav.o: $(srcdir)/sndwav.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_sndwin.o: ../../src/mmedia/sndwin.cpp
+mmedialib_sndwin.o: $(srcdir)/sndwin.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_vidbase.o: ../../src/mmedia/vidbase.cpp
+mmedialib_vidbase.o: $(srcdir)/vidbase.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_vidwin.o: ../../src/mmedia/vidwin.cpp
+mmedialib_vidwin.o: $(srcdir)/vidwin.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-mmedialib_vidxanm.o: ../../src/mmedia/vidxanm.cpp
+mmedialib_vidxanm.o: $(srcdir)/vidxanm.cpp
 	$(CXXC) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 uninstall: 

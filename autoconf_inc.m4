@@ -82,6 +82,12 @@ dnl ### begin block COND_MONOLITHIC_0_SHARED_0_USE_GUI_1 ###
         COND_MONOLITHIC_0_SHARED_0_USE_GUI_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1)
+dnl ### begin block COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1 ###
+    COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_ODBC" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1=""
+    fi
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1)
 dnl ### begin block COND_MONOLITHIC_0_SHARED_0_USE_HTML_1 ###
     COND_MONOLITHIC_0_SHARED_0_USE_HTML_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_HTML" = "x1" ; then
@@ -100,6 +106,12 @@ dnl ### begin block COND_MONOLITHIC_0_SHARED_1_USE_GUI_1 ###
         COND_MONOLITHIC_0_SHARED_1_USE_GUI_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1)
+dnl ### begin block COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1 ###
+    COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_ODBC" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1=""
+    fi
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1)
 dnl ### begin block COND_MONOLITHIC_0_SHARED_1_USE_HTML_1 ###
     COND_MONOLITHIC_0_SHARED_1_USE_HTML_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_HTML" = "x1" ; then
@@ -172,6 +184,12 @@ dnl ### begin block COND_PLATFORM_MACOSX_1_USE_SOVERSION_1 ###
         COND_PLATFORM_MACOSX_1_USE_SOVERSION_1=""
     fi
     AC_SUBST(COND_PLATFORM_MACOSX_1_USE_SOVERSION_1)
+dnl ### begin block COND_PLATFORM_UNIX_0 ###
+    COND_PLATFORM_UNIX_0="#"
+    if test "x$PLATFORM_UNIX" = "x0" ; then
+        COND_PLATFORM_UNIX_0=""
+    fi
+    AC_SUBST(COND_PLATFORM_UNIX_0)
 dnl ### begin block COND_PLATFORM_UNIX_1 ###
     COND_PLATFORM_UNIX_1="#"
     if test "x$PLATFORM_UNIX" = "x1" ; then
@@ -244,6 +262,12 @@ dnl ### begin block COND_TOOLKIT_MAC ###
         COND_TOOLKIT_MAC=""
     fi
     AC_SUBST(COND_TOOLKIT_MAC)
+dnl ### begin block COND_TOOLKIT_MAC_USE_GUI_1 ###
+    COND_TOOLKIT_MAC_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xMAC" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_MAC_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_TOOLKIT_MAC_USE_GUI_1)
 dnl ### begin block COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0 ###
     COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xMAC" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
@@ -316,6 +340,12 @@ dnl ### begin block COND_TOOLKIT_OS2 ###
         COND_TOOLKIT_OS2=""
     fi
     AC_SUBST(COND_TOOLKIT_OS2)
+dnl ### begin block COND_TOOLKIT_OS2_USE_GUI_1 ###
+    COND_TOOLKIT_OS2_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xOS2" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_OS2_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_TOOLKIT_OS2_USE_GUI_1)
 dnl ### begin block COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0 ###
     COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xOS2" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
@@ -478,33 +508,3 @@ dnl ### begin block COND_SHARED_0 ###
         COND_SHARED_0=""
     fi
     AC_SUBST(COND_SHARED_0)
-dnl ### begin block COND_TOOLKIT_MAC_USE_GUI_1 ###
-    COND_TOOLKIT_MAC_USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xMAC" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_MAC_USE_GUI_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_MAC_USE_GUI_1)
-dnl ### begin block COND_TOOLKIT_OS2_USE_GUI_1 ###
-    COND_TOOLKIT_OS2_USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xOS2" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_OS2_USE_GUI_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_OS2_USE_GUI_1)
-dnl ### begin block COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1 ###
-    COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1="#"
-    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_ODBC" = "x1" ; then
-        COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1=""
-    fi
-    AC_SUBST(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1)
-dnl ### begin block COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1 ###
-    COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1="#"
-    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_ODBC" = "x1" ; then
-        COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1=""
-    fi
-    AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1)
-dnl ### begin block COND_PLATFORM_UNIX_0 ###
-    COND_PLATFORM_UNIX_0="#"
-    if test "x$PLATFORM_UNIX" = "x0" ; then
-        COND_PLATFORM_UNIX_0=""
-    fi
-    AC_SUBST(COND_PLATFORM_UNIX_0)

@@ -133,15 +133,17 @@ def onSubmakefile(type, dirname, names):
     
     if type==SAMPLES_DIR:
         prefix = ''.join(['../' for i in range(0,depth)])
-        dirflags = '-DWXTOPDIR=%s../' % prefix
+        topdirflags = '-DWXTOPDIR=%s../' % prefix
+        srcdirflags = ''
         cfgbase = '%s../build/msw/config.' % prefix
     elif type==CONTRIB_DIR:
-        dirflags = '-DSRCDIR=../../src/%s' % dirname.split('/')[-1]
-        dirflags += ' -DWXTOPDIR=../../../'
+        srcdirflags = '-DSRCDIR=../../src/%s' % dirname.split('/')[-1]
+        topdirflags = ' -DWXTOPDIR=../../../'
         cfgbase = '../../../build/msw/config.'
 
     args = {
-        'all':dirflags,
+        'all':topdirflags,
+        'not_autoconf':srcdirflags,
         'autoconf':'-DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4',
         'msvc':'-DOPTIONS_FILE='+cfgbase+'vc -DWRITE_OPTIONS_FILE=0',
         'mingw':'-DOPTIONS_FILE='+cfgbase+'gcc -DWRITE_OPTIONS_FILE=0',

@@ -37,6 +37,7 @@ TOOLKIT_VERSION = @TOOLKIT_VERSION@
 VENDOR = @VENDOR@
 includedir = @includedir@
 libdir = @libdir@
+srcdir = @srcdir@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 
@@ -45,13 +46,13 @@ top_srcdir = @top_srcdir@
 DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I../../src/deprecated/../../include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED \
-	$(CFLAGS) $(PIC_FLAG)
+	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED $(CFLAGS) \
+	$(PIC_FLAG)
 DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I../../src/deprecated/../../include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED \
-	$(CXXFLAGS) $(PIC_FLAG)
+	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED $(CXXFLAGS) \
+	$(PIC_FLAG)
 DEPRECATEDDLL_OBJECTS =  \
 	deprecateddll_prop.o \
 	deprecateddll_propform.o \
@@ -63,11 +64,11 @@ DEPRECATEDDLL_OBJECTS =  \
 DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I../../src/deprecated/../../include $(CFLAGS)
+	-I$(srcdir)/../../include $(CFLAGS)
 DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I../../src/deprecated/../../include $(CXXFLAGS)
+	-I$(srcdir)/../../include $(CXXFLAGS)
 DEPRECATEDLIB_OBJECTS =  \
 	deprecatedlib_prop.o \
 	deprecatedlib_propform.o \
@@ -203,25 +204,25 @@ clean:
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(DEPRECATEDDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__deprecateddll___macinstnamecmd) $(__deprecateddll___importlib) $(__deprecateddll___soname_flags) $(__deprecateddll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__deprecateddll___so_symlinks_cmd)
 
-deprecateddll_dosyacc.o: ../../src/deprecated/dosyacc.c
+deprecateddll_dosyacc.o: $(srcdir)/dosyacc.c
 	$(CCC) -c -o $@ $(DEPRECATEDDLL_CFLAGS) $<
 
-deprecateddll_prop.o: ../../src/deprecated/prop.cpp
+deprecateddll_prop.o: $(srcdir)/prop.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-deprecateddll_propform.o: ../../src/deprecated/propform.cpp
+deprecateddll_propform.o: $(srcdir)/propform.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-deprecateddll_proplist.o: ../../src/deprecated/proplist.cpp
+deprecateddll_proplist.o: $(srcdir)/proplist.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-deprecateddll_resource.o: ../../src/deprecated/resource.cpp
+deprecateddll_resource.o: $(srcdir)/resource.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-deprecateddll_treelay.o: ../../src/deprecated/treelay.cpp
+deprecateddll_treelay.o: $(srcdir)/treelay.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-deprecateddll_wxexpr.o: ../../src/deprecated/wxexpr.cpp
+deprecateddll_wxexpr.o: $(srcdir)/wxexpr.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
 @COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated-2.5$(HOST_SUFFIX).a: $(DEPRECATEDLIB_OBJECTS)
@@ -229,25 +230,25 @@ deprecateddll_wxexpr.o: ../../src/deprecated/wxexpr.cpp
 @COND_SHARED_0@	$(AR) rcu $@ $(DEPRECATEDLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
 
-deprecatedlib_dosyacc.o: ../../src/deprecated/dosyacc.c
+deprecatedlib_dosyacc.o: $(srcdir)/dosyacc.c
 	$(CCC) -c -o $@ $(DEPRECATEDLIB_CFLAGS) $<
 
-deprecatedlib_prop.o: ../../src/deprecated/prop.cpp
+deprecatedlib_prop.o: $(srcdir)/prop.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-deprecatedlib_propform.o: ../../src/deprecated/propform.cpp
+deprecatedlib_propform.o: $(srcdir)/propform.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-deprecatedlib_proplist.o: ../../src/deprecated/proplist.cpp
+deprecatedlib_proplist.o: $(srcdir)/proplist.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-deprecatedlib_resource.o: ../../src/deprecated/resource.cpp
+deprecatedlib_resource.o: $(srcdir)/resource.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-deprecatedlib_treelay.o: ../../src/deprecated/treelay.cpp
+deprecatedlib_treelay.o: $(srcdir)/treelay.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-deprecatedlib_wxexpr.o: ../../src/deprecated/wxexpr.cpp
+deprecatedlib_wxexpr.o: $(srcdir)/wxexpr.cpp
 	$(CXXC) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 distclean: clean
@@ -260,7 +261,7 @@ install: all $(__install_deprecateddll___depname) $(__install_deprecatedlib___de
 	if test ! -d $(includedir)/`dirname $$f` ; then \
 	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
 	fi; \
-	$(INSTALL_DATA) ../../src/deprecated/../../include//$$f $(includedir)/$$f; \
+	$(INSTALL_DATA) $(srcdir)/../../include//$$f $(includedir)/$$f; \
 	done
 
 install-strip: install
