@@ -12,15 +12,11 @@
 #   pragma interface "wxlwindow.h"
 #endif
 
-#include   <wx/wx.h>
+#ifndef USE_PCH
+#  include   <wx/wx.h>
+#endif
 
 #include   "wxllist.h"
-
-#define   BROKEN_COMPILER
-
-#ifdef   BROKEN_COMPILER
-#   define   virtual
-#endif
 
 class wxLayoutWindow : public wxScrolledWindow
 {
@@ -38,18 +34,24 @@ public:
          SetBackgroundColour( *GetLayoutList().GetDefaults()->GetBGColour());
       }
 
-   //virtual void OnDraw(wxDC &dc);
+   // callbacks
+   // NB: these functions are used as event handlers and must not be virtual
+   //void OnDraw(wxDC &dc);
    void OnPaint(wxPaintEvent &WXUNUSED(event));
-   virtual void OnMouse(wxMouseEvent& event);
-   virtual void OnChar(wxKeyEvent& event);
+   void OnMouse(wxMouseEvent& event);
+   void OnChar(wxKeyEvent& event);
+
+#ifdef __WXMSW__
+   virtual long MSWGetDlgCode();
+#endif //MSW
+
    void UpdateScrollbars(void);
    void Print(void);
-   void Erase(void)
-      { m_llist.Clear(); Clear(); }
+   void Erase(void) { m_llist.Clear(); Clear(); }
    void SetEventId(int id) { m_EventId = id; }
-   wxPoint const &GetClickPosition(void) const { return
-                                                    m_ClickPosition; }
-   virtual ~wxLayoutWindow() {} ;
+   wxPoint const &GetClickPosition(void) const { return m_ClickPosition; }
+   virtual ~wxLayoutWindow() {}
+
 private:
    /// for sending events
    wxWindow *m_Parent;
@@ -62,11 +64,8 @@ private:
    wxPoint m_FindPos;
    wxLayoutObjectBase *m_FoundObject;
    wxPoint m_ClickPosition;
+
    DECLARE_EVENT_TABLE()
 };
-
-#ifdef   BROKEN_COMPILER
-#undef   virtual
-#endif
 
 #endif

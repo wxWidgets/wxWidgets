@@ -31,7 +31,7 @@ IMPLEMENT_APP(MyApp)
 //-----------------------------------------------------------------------------
 
    enum ids{ ID_EDIT = 1, ID_ADD_SAMPLE, ID_CLEAR, ID_PRINT, ID_DPRINT,
-             ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT };
+             ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT, ID_TEST };
 
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
@@ -58,6 +58,7 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
    file_menu->Append( ID_DPRINT, "Direct Print");
    file_menu->Append( ID_TEXT, "Export Text");
    file_menu->Append( ID_HTML, "Export HTML");
+   file_menu->Append( ID_TEST, "Test");
    file_menu->Append( ID_QUIT, "Exit");
   
    wxMenuBar *menu_bar = new wxMenuBar();
@@ -217,6 +218,15 @@ void MyFrame::OnCommand( wxCommandEvent &event )
    case ID_CLICK:
       cerr << "Received click event." << endl;
       break;
+   case ID_TEST:
+   {
+      Clear();
+      m_lwin->GetLayoutList().LineBreak();
+      m_lwin->GetLayoutList().Insert("abc");
+      m_lwin->GetLayoutList().LineBreak();
+      m_lwin->GetLayoutList().Insert("def");
+      break;
+   }
    case ID_HTML:
    {
       wxLayoutExportObject *export;

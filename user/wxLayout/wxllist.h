@@ -14,7 +14,7 @@
 
 #include   "kbList.h"
 
-#include   <wx/wx.h>
+#include   "wx/wx.h"
 
 // skip the following defines if embedded in M application
 #ifdef   M_BASEDIR
@@ -47,8 +47,9 @@ typedef long CoordType;
 class wxLayoutList;
 class wxLayoutObjectBase;
 
-/// Define a list type of wxLayoutObjectBase pointers.
-KBLIST_DEFINE(wxLayoutObjectList, wxLayoutObjectBase);
+class wxDC;
+class wxColour;
+class wxFont;
 
 /** The base class defining the interface to each object which can be
     part of the layout. Each object needs to draw itself and calculate 
@@ -99,6 +100,10 @@ private:
    void * m_UserData;
 };
 
+/// Define a list type of wxLayoutObjectBase pointers.
+KBLIST_DEFINE(wxLayoutObjectList, wxLayoutObjectBase);
+
+
 /// object for text block
 class wxLayoutObjectText : public wxLayoutObjectBase
 {
@@ -138,8 +143,9 @@ public:
                      bool draw = true);
    virtual wxPoint GetSize(CoordType *baseLine) const;
    wxLayoutObjectIcon(wxIcon *icon);
+
 private:
-   wxIcon * m_Icon;
+   wxIcon *m_Icon;
 };
 
 /// for export to html:
@@ -294,7 +300,7 @@ protected:
    bool      m_Editable;
    /// find the object to the cursor position and returns the offset
    /// in there
-   wxLayoutObjectList::iterator FindObjectCursor(wxPoint const &cpos, CoordType *offset = NULL);
+   wxLayoutObjectList::iterator FindObjectCursor(wxPoint *cpos, CoordType *offset = NULL);
    
 };
 

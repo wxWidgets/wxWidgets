@@ -24,22 +24,17 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    : wxScrolledWindow(parent)
 {
    m_ScrollbarsSet = false;
-   m_EventId = 0;
+   m_EventId = -1;
 }
 
 void
 wxLayoutWindow::OnMouse(wxMouseEvent& event)
 {
-   if(m_EventId == 0) // nothing to do
+   if(m_EventId == -1) // nothing to do
       return;
    
-   // this is unintuitive
-   wxClientDC dc(this);
-   PrepareDC( dc );
-
-   m_FindPos.x = dc.DeviceToLogicalX( event.GetX() );
-   m_FindPos.y = dc.DeviceToLogicalY( event.GetY() );
-
+   m_FindPos.x = event.GetX();
+   m_FindPos.y = event.GetY();
    m_FoundObject = NULL;
 
 #ifdef   WXLAYOUT_DEBUG
@@ -48,7 +43,7 @@ wxLayoutWindow::OnMouse(wxMouseEvent& event)
    Refresh();
    if(m_FoundObject)
    {
-      if(m_EventId)
+      if(m_EventId != -1)
       {
          wxCommandEvent commandEvent(wxEVENT_TYPE_MENU_COMMAND, m_EventId);
          commandEvent.SetEventObject( this );
@@ -138,7 +133,7 @@ wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event)w)  // or: OnDraw(wxDC& dc
    wxPaintDC dc( this );  // only when used as OnPaint for OnDraw we
    PrepareDC( dc );       // can skip the first two lines
 
-   if(m_EventId) // look for keyclicks
+   if(m_EventId != -1) // look for keyclicks
       m_FoundObject = m_llist.Draw(dc,true,m_FindPos);
    else
       m_llist.Draw(dc);

@@ -4,14 +4,6 @@
  * (C) 1998 by Karsten Ballüder (Ballueder@usa.net)                 *
  *                                                                  *
  * $Id$
- * $Log$
- * Revision 1.1  1998/06/29 12:44:36  KB
- * Added my wxWindows based layout engine to the repository.
- * It arranges text and graphics for display on a wxDC.
- * This code is licensed under the LGPL.
- *
- * Revision 1.6  1998/06/27 20:06:10  KB
- * Added my layout code.
  *
  *******************************************************************/
 
@@ -209,7 +201,7 @@ public:
    bool empty(void) const
       { return first == NULL ; }
 
-private:
+protected:
    /// if true, list owns entries
    bool        ownsEntries;
    /// pointer to first element in list
@@ -217,6 +209,7 @@ private:
    /// pointer to last element in list
    kbListNode *last;
 
+private:
    /// forbid copy construction
    kbList(kbList const &foo);
    /// forbid assignments
@@ -251,7 +244,7 @@ public: \
          /* the cast is needed for MS VC++ 5.0 */ \
          { return (type *)((kbList::iterator *)this)->operator*() ; } \
    }; \
-   inline name(bool ownsEntriesFlag = true) \
+   inline name(bool ownsEntriesFlag = FALSE) \
       : kbList(ownsEntriesFlag) {} \
    \
    inline void push_back(type *element) \
@@ -269,7 +262,7 @@ public: \
    inline void insert(iterator & i, type *element) \
       { kbList::insert(i, (void *) element); } \
    \
-   void erase(iterator & i) \
+   inline void erase(iterator & i) \
       { kbList::erase(i); } \
    \
    inline iterator begin(void) const \
@@ -280,7 +273,22 @@ public: \
    \
    inline iterator tail(void) const \
       { return kbList::tail(); } \
-}
+   ~name() \
+   { \
+      kbListNode *next; \
+      while ( first != NULL ) \
+      { \
+         next = first->next; \
+         if(ownsEntries) \
+            delete typecast(first->element); \
+         delete first; \
+         first = next; \
+      } \
+   } \
+   private: \
+   inline type * typecast(void *ptr) \
+      { return (type *) ptr; } \
+   }
 
 #ifdef   MCONFIG_H
 /// define the most commonly used list type once:

@@ -6,10 +6,16 @@
  * $Id$          *
  *                                                                  *
  * $Log$
- * Revision 1.1  1998/06/29 12:44:36  KB
- * Added my wxWindows based layout engine to the repository.
- * It arranges text and graphics for display on a wxDC.
- * This code is licensed under the LGPL.
+ * Revision 1.2  1998/08/12 08:33:23  KB
+ * Cursor and insert/delete work much better now, code streamlined, still
+ * a minor problem left.
+ *
+ * Revision 1.6  1998/07/08 11:56:56  KB
+ * M compiles and runs on Solaris 2.5/gcc 2.8/c-client gso
+ *
+ * Revision 1.5  1998/06/27 20:07:18  KB
+ * several bug fixes for kbList
+ * started adding my layout stuff
  *
  * Revision 1.1.1.1  1998/06/13 21:51:12  karsten
  * initial code
@@ -34,8 +40,11 @@
 #   pragma implementation "kbList.h"
 #endif
 
-#include   "kbList.h"
+#ifdef   M_BASEDIR
+#   include   "Mconfig.h"
+#endif
 
+#include   "kbList.h"
 
 kbListNode::kbListNode( void *ielement,
                         kbListNode *iprev,
@@ -178,11 +187,7 @@ kbList::insert(kbList::iterator & i, void *element)
    else if(i.Node() == first)
    {
       push_front(element);
-      return;
-   }
-   else if(i.Node() == last)
-   {
-      push_back(element);
+      i = first;
       return;
    }
    i = kbList::iterator(new kbListNode(element, i.Node()->prev, i.Node()));
