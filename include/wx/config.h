@@ -60,12 +60,12 @@
   $VARNAME or ${VARNAME} where VARNAME contains alphanumeric characters and
   '_' only. '$' must be escaped ('\$') in order to be taken literally.
  */
-extern wxString ExpandEnvVars(const wxString& str);
+extern wxString wxExpandEnvVars(const char *sz);
 
 /*
   Split path into parts removing '..' in progress
  */
-extern void SplitPath(wxArrayString& aParts, const char *sz);
+extern void wxSplitPath(wxArrayString& aParts, const char *sz);
 
 // ----------------------------------------------------------------------------
 // abstract base class wxConfig which defines the interface for derived classes
@@ -89,7 +89,7 @@ public:
   static void Create();
 
   // ctor & virtual dtor
-  wxConfig() { }
+  wxConfig() { m_bExpandEnvVars = TRUE; }
   virtual ~wxConfig();
 
   // path management
@@ -108,6 +108,10 @@ public:
     // enumerate entries
   virtual bool GetFirstEntry(wxString& str, long& lIndex) = 0;
   virtual bool GetNextEntry (wxString& str, long& lIndex) = 0;
+    // get number of entries/subgroups in the current group, with or without
+    // it's subgroups
+  virtual uint GetNumberOfEntries(bool bRecursive = FALSE) const = 0;
+  virtual uint GetNumberOfGroups(bool bRecursive = FALSE) const = 0;
 
   // tests of existence
     // returns TRUE if the group by this name exists
@@ -150,6 +154,15 @@ public:
     // primarly for use by desinstallation routine.
   virtual bool DeleteAll() = 0;
 
+  // options
+    // we can automatically expand environment variables in the config entries
+    // (this option is on by default, you can turn it on/off at any time)
+  bool IsExpandingEnvVars() const { return m_bExpandEnvVars; }
+  void SetExpandEnvVars(bool bDoIt = TRUE) { m_bExpandEnvVars = bDoIt; }
+    // does expansion only if needed
+  wxString ExpandEnvVars(const wxString& str) const
+    { return IsExpandingEnvVars() ? wxExpandEnvVars(str) : str; }
+
 protected:
   static bool IsImmutable(const char *szKey) 
     { return *szKey == APPCONF_IMMUTABLE_PREFIX; }
@@ -157,7 +170,7 @@ protected:
   // a handy little class which changes current path to the path of given entry
   // and restores it in dtor: so if you declare a local variable of this type,
   // you work in the entry directory and the path is automatically restored
-  // when function returns
+  // when the function returns
   class PathChanger
   {
   public:
@@ -175,6 +188,7 @@ protected:
     bool      m_bChanged;     // was the path changed?
   };
 
+private:
   // are we doing automatic environment variable expansion?
   bool m_bExpandEnvVars;
 
