@@ -1570,6 +1570,12 @@ wxStaticBoxSizer::wxStaticBoxSizer( wxStaticBox *box, int orient )
     wxASSERT_MSG( box, wxT("wxStaticBoxSizer needs a static box") );
 }
 
+wxStaticBoxSizer::wxStaticBoxSizer(int orient, wxWindow *win, const wxString& s)
+                : wxBoxSizer(orient),
+                  m_staticBox(new wxStaticBox(win, wxID_ANY, s))
+{
+}
+
 static void GetStaticBoxBorders( wxStaticBox *box,
                                  int *borderTop,
                                  int *borderOther)
