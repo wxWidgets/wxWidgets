@@ -1157,6 +1157,12 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     if ( flags & wxCLIP_SIBLINGS )
         style |= WS_CLIPSIBLINGS;
 
+    if ( flags & wxVSCROLL )
+        style |= WS_VSCROLL;
+
+    if ( flags & wxHSCROLL )
+        style |= WS_HSCROLL;
+
     wxBorder border = (wxBorder)(flags & wxBORDER_MASK);
     
     // Check if we want to automatically give it a sunken style.
