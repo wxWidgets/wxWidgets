@@ -14,6 +14,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_IMAGLIST
+
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
@@ -226,4 +228,5 @@ bool wxGenericImageList::Draw( int index, wxDC &dc, int x, int y,
     return true;
 }
 
+#endif // wxUSE_IMAGLIST
 #endif // __WXPALMOS__
