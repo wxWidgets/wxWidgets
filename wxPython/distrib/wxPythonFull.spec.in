@@ -85,6 +85,7 @@ cd build
 ../configure --with-%{lcport} \
 	--prefix=%{wxpref} \
 	--disable-soname \
+	--enable-rpath=%{wxpref}/lib \
 	--with-opengl \
 %if %{debug}
 	--enable-debug \

@@ -156,6 +156,8 @@ fi
 # Make the spec file and copy to ${builddir}/${tarver} so it will be
 # in the tar file when it's built
 
+# TODO?  Output all combinations of spec files to put in the tar file??
+
 makespec
 cp ${distdir}/wxPython${port}.spec ${builddir}/${tarver}/wxPython${port}.spec
 
