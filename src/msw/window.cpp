@@ -3200,6 +3200,7 @@ void wxWindow::InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags)
     event.m_altDown = (::GetKeyState(VK_MENU) & 0x80000000) != 0;
     event.SetTimestamp(s_currentMsg.time);
     event.m_eventObject = this;
+    event.SetId(GetId());
 
 #if wxUSE_MOUSEEVENT_HACK
     m_lastMouseX = x;
