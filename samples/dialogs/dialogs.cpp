@@ -460,6 +460,8 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                     _T("C++ files (*.h;*.cpp)|*.h;*.cpp")
                  );
 
+    dialog.SetDirectory(wxGetHomeDir());
+
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString info;
@@ -708,11 +710,14 @@ void MyFrame::ShowBusyInfo(wxCommandEvent& WXUNUSED(event))
 
     wxBusyInfo info("Working, please wait...", this);
 
-    for ( int i = 0; i < 30; i++ )
+    for ( int i = 0; i < 18; i++ )
     {
-        wxUsleep(100);
+        //wxUsleep(100);
         wxTheApp->Yield();
     }
+
+    wxSleep(2);
+    //wxWakeUpIdle();
 }
 
 #endif // wxUSE_BUSYINFO
