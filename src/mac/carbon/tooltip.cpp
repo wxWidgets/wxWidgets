@@ -148,7 +148,7 @@ void wxToolTip::RelayEvent( wxWindow *win , wxMouseEvent &event )
 				s_ToolTipArea = wxRect2DInt( event.m_x - 2 , event.m_y - 2 , 4 , 4 ) ;
 				s_LastWindowEntered = win ;
 				
-				WindowRef window = win->GetMacRootWindow() ;
+				WindowRef window = win->MacGetRootWindow() ;
 				int x = event.m_x ;
 				int y = event.m_y ;
 				wxPoint local( x , y ) ;
@@ -209,94 +209,104 @@ void wxMacToolTip::Draw()
 		
 	if ( m_window == s_ToolTipWindowRef )
 	{
-		#if TARGET_CARBON
-		AGAPortHelper help( GetWindowPort( m_window ) );
-		#else
-		AGAPortHelper help( ( m_window ) );
-		#endif
-		m_shown = true ;
+#if TARGET_CARBON
+/*
+	  if ( HMDisplayTag != (void*) kUnresolvedCFragSymbolAddress )
+	  {
+	    HMDisplayTag( 
+	  }
+	  else
+*/
+#endif
+	  {
+  		#if TARGET_CARBON
+  		AGAPortHelper help( GetWindowPort( m_window ) );
+  		#else
+  		AGAPortHelper help( ( m_window ) );
+  		#endif
+  		m_shown = true ;
 
-		SetOrigin( 0 , 0 ) ;
-		TextFont( kFontIDGeneva ) ;
-		TextSize( 10 ) ;
-		TextFace( 0 ) ;
-		FontInfo fontInfo;
-		::GetFontInfo(&fontInfo);
-		short lineh = fontInfo.ascent + fontInfo.descent + fontInfo.leading;
-		short height = 0 ;
-	//	short width = TextWidth( m_label , 0 ,m_label.Length() ) ;
-		
-		int i = 0 ;
-		int length = m_label.Length() ;
-		int width = 0 ;
-		int thiswidth = 0 ;
-		int laststop = 0 ;
-		const char *text = m_label ;
-		while( i < length )
-		{
-			if( text[i] == 13 || text[i] == 10)
-			{
-				thiswidth = ::TextWidth( text , laststop , i - laststop ) ;
-				if ( thiswidth > width )
-					width = thiswidth ;
-					
-				height += lineh ;
-				laststop = i+1 ;
-			}
-			i++ ;
-		}
-		if ( i - laststop > 0 )
-		{
-			thiswidth = ::TextWidth( text , laststop , i - laststop ) ;
-			if ( thiswidth > width )
-				width = thiswidth ;
-			height += lineh ;
-		}
+  		SetOrigin( 0 , 0 ) ;
+  		TextFont( kFontIDGeneva ) ;
+  		TextSize( 10 ) ;
+  		TextFace( 0 ) ;
+  		FontInfo fontInfo;
+  		::GetFontInfo(&fontInfo);
+  		short lineh = fontInfo.ascent + fontInfo.descent + fontInfo.leading;
+  		short height = 0 ;
+  	//	short width = TextWidth( m_label , 0 ,m_label.Length() ) ;
+  		
+  		int i = 0 ;
+  		int length = m_label.Length() ;
+  		int width = 0 ;
+  		int thiswidth = 0 ;
+  		int laststop = 0 ;
+  		const char *text = m_label ;
+  		while( i < length )
+  		{
+  			if( text[i] == 13 || text[i] == 10)
+  			{
+  				thiswidth = ::TextWidth( text , laststop , i - laststop ) ;
+  				if ( thiswidth > width )
+  					width = thiswidth ;
+  					
+  				height += lineh ;
+  				laststop = i+1 ;
+  			}
+  			i++ ;
+  		}
+  		if ( i - laststop > 0 )
+  		{
+  			thiswidth = ::TextWidth( text , laststop , i - laststop ) ;
+  			if ( thiswidth > width )
+  				width = thiswidth ;
+  			height += lineh ;
+  		}
 
 
-		m_rect.left = m_position.x + kTipOffset;
-		m_rect.top = m_position.y + kTipOffset;
-		m_rect.right = m_rect.left + width + 2 * kTipBorder;
-		m_rect.bottom = m_rect.top + height + 2 * kTipBorder;
-		ClipRect( &m_rect ) ;
-		BackColor( whiteColor ) ;
-		ForeColor(blackColor ) ;
-		m_backpict = OpenPicture(&m_rect);
+  		m_rect.left = m_position.x + kTipOffset;
+  		m_rect.top = m_position.y + kTipOffset;
+  		m_rect.right = m_rect.left + width + 2 * kTipBorder;
+  		m_rect.bottom = m_rect.top + height + 2 * kTipBorder;
+  		ClipRect( &m_rect ) ;
+  		BackColor( whiteColor ) ;
+  		ForeColor(blackColor ) ;
+  		m_backpict = OpenPicture(&m_rect);
 
-		CopyBits(GetPortBitMapForCopyBits(GetWindowPort(m_window)), 
-				   GetPortBitMapForCopyBits(GetWindowPort(m_window)), 
-				   &m_rect, 
-				   &m_rect, 
-				   srcCopy, 
-				   NULL);
+  		CopyBits(GetPortBitMapForCopyBits(GetWindowPort(m_window)), 
+  				   GetPortBitMapForCopyBits(GetWindowPort(m_window)), 
+  				   &m_rect, 
+  				   &m_rect, 
+  				   srcCopy, 
+  				   NULL);
 
-		ClosePicture();
-    PenNormal() ;
-		SetThemeBackground(kThemeBrushNotificationWindowBackground,32,true) ;
-		BackColor( yellowColor ) ;
-		ForeColor( blackColor ) ;
-		EraseRect( &m_rect ) ;
-		FrameRect( &m_rect ) ;
-		::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder);
+  		ClosePicture();
+      PenNormal() ;
+  		SetThemeBackground(kThemeBrushNotificationWindowBackground,32,true) ;
+  		SetThemeTextColor(kThemeTextColorNotification,32,true) ;
+  		EraseRect( &m_rect ) ;
+  		FrameRect( &m_rect ) ;
+  		::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder);
 
-		i = 0 ;
-		laststop = 0 ;
-		height = 0 ;
-		while( i < length )
-		{
-			if( text[i] == 13 || text[i] == 10)
-			{
-				::DrawText( text , laststop , i - laststop ) ;
-				height += lineh ;
-				::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder + height );
-				laststop = i+1 ;
-			}
-			i++ ;
-		}
-					
-		::DrawText( text , laststop , i - laststop ) ;
-		::TextMode( srcOr ) ;		
-	//	DrawText( m_label , 0 , m_label.Length() ) ;
+  		i = 0 ;
+  		laststop = 0 ;
+  		height = 0 ;
+  		while( i < length )
+  		{
+  			if( text[i] == 13 || text[i] == 10)
+  			{
+  				::DrawText( text , laststop , i - laststop ) ;
+  				height += lineh ;
+  				::MoveTo( m_rect.left + kTipBorder , m_rect.top + fontInfo.ascent + kTipBorder + height );
+  				laststop = i+1 ;
+  			}
+  			i++ ;
+  		}
+  					
+  		::DrawText( text , laststop , i - laststop ) ;
+  		::TextMode( srcOr ) ;		
+  	//	DrawText( m_label , 0 , m_label.Length() ) ;
+  	}
 	}
 }
 
