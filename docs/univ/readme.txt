@@ -1,10 +1,10 @@
-			      wxUniversal README
-			      ==================
+                              wxUniversal README
+                              ==================
 
  Welcome to wxUniversal!
 
  Acknowledgements: wxUniversal wouldn't have been written without the
-generous support of SciTech Software. Many thanks to Kendall Benett and
+generous support of SciTech Software. Many thanks to Kendall Bennett and
 Tom Ryan!
 
 0. Introduction
@@ -13,7 +13,7 @@ Tom Ryan!
  wxUniversal is a port of wxWindows which implements the various GUI controls
 by drawing them itself (using low level wxWindows classes). Please see
 
-		     http://www.wxwindows.org/wxuniv.htm
+                     http://www.wxwindows.org/wxuniv.htm
 
 for more details about it.
 
@@ -34,8 +34,8 @@ other wxWindows ports - this is the price to pay for the extra flexibility.
 ---------------------------------------
 
  wxUniversal is used together with another wxWindows port which provides the
-"low level classes" mentioned above. Currently it can be built either with
-wxMSW or wxGTK. In any case, you should download the sources for the
+"low level classes" mentioned above. Currently it can be built with wxMSW,
+wxGTK or wxX11. In any case, you should download the sources for the
 appropriate toolkit in addition to wxUniversal - in fact, you should download
 them first and then unpack wxUniversal in the same directory.
 
@@ -66,9 +66,10 @@ documented here. Please see docs/univ/readme.txt for further information.
 3. Installing under Unix
 ------------------------
 
-Please refer to the installation instructions for wxGTK. The only change for
-wxUniversal is that you must add "--enable-univ" switch to the configure
-command line.
+Please refer to the installation instructions for wxGTK or wxX11. The only
+change for wxUniversal is that you must add "--enable-universal" switch to
+the configure command line and for wxX11 even this is unnecessary, i.e. it
+is enabled by default.
 
 4. Documentation and support
 ----------------------------
@@ -93,10 +94,9 @@ itself, namely:
 
  Hope you find wxUniversal useful!
 
-								 Vadim Zeitlin
+                                                                 Vadim Zeitlin
 
 
-This file is accurate for the version 2.3.2 of wxUniversal. It was last
-modified on Dec 11, 2001.
-
+This file is accurate for the version 2.3.3 of wxUniversal. It was last
+modified on Apr 11, 2002.
 
