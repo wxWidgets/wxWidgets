@@ -2,4 +2,5 @@ configure
 config.cache
 config.status
 Linux.system.cache
+linux-gnu.system.cache
 system.list
