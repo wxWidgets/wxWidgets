@@ -310,7 +310,13 @@ bool wxDialog::Show(bool show)
   {
     if (show)
     {
-      m_hwndOldFocus = (WXHWND)::GetFocus();
+      // find the top level window which had focus before - we will restore
+      // focus to it later
+      m_hwndOldFocus = 0;
+      for ( HWND hwnd = ::GetFocus(); hwnd; hwnd = ::GetParent(hwnd) )
+      {
+        m_hwndOldFocus = (WXHWND)hwnd;
+      }
 
       if (m_modalShowing)
       {
