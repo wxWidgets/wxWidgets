@@ -310,6 +310,11 @@ extern void WXDLLEXPORT wxExit();
 // Yield to other apps/messages
 extern bool WXDLLEXPORT wxYield();
 
+#ifdef __WXGTK__
+// Yield to other apps/messages
+extern void WXDLLEXPORT wxWakeUpIdle();
+#endif
+
 // Post a message to the given eventhandler which will be processed during the
 // next event loop iteration
 inline void WXDLLEXPORT wxPostEvent(wxEvtHandler *dest, wxEvent& event)

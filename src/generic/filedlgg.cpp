@@ -543,6 +543,7 @@ void wxFileCtrl::OnListEndLabelEdit( wxListEvent &event )
 #define  ID_TEXT          wxID_FILEDLGG + 9
 #define  ID_LIST_CTRL     wxID_FILEDLGG + 10
 #define  ID_ACTIVATED     wxID_FILEDLGG + 11
+#define  ID_CHECK         wxID_FILEDLGG + 12
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxDialog)
 
@@ -557,6 +558,7 @@ BEGIN_EVENT_TABLE(wxFileDialog,wxDialog)
         EVT_LIST_ITEM_ACTIVATED(ID_LIST_CTRL, wxFileDialog::OnActivated)
         EVT_CHOICE(ID_CHOICE,wxFileDialog::OnChoice)
         EVT_TEXT_ENTER(ID_TEXT,wxFileDialog::OnTextEnter)
+        EVT_CHECKBOX(ID_CHECK,wxFileDialog::OnCheck)
 END_EVENT_TABLE()
 
 wxFileDialog::wxFileDialog(wxWindow *parent,
@@ -668,6 +670,9 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     wxBoxSizer *choicesizer = new wxBoxSizer( wxHORIZONTAL );
     m_choice = new wxChoice( this, ID_CHOICE );
     choicesizer->Add( m_choice, 1, wxCENTER|wxALL, 10 );
+    m_check = new wxCheckBox( this, ID_CHECK, _("Show hidden files") );
+    m_check->SetValue( FALSE );
+    choicesizer->Add( m_check, 0, wxCENTER|wxALL, 10 );
     choicesizer->Add( new wxButton( this, wxID_CANCEL, _("Cancel") ), 0, wxCENTER | wxALL, 10 );
     mainsizer->Add( choicesizer, 0, wxEXPAND );
 
@@ -704,6 +709,11 @@ void wxFileDialog::OnChoice( wxCommandEvent &event )
 {
     wxString *str = (wxString*) m_choice->GetClientData( event.GetInt() );
     m_list->SetWild( *str );
+}
+
+void wxFileDialog::OnCheck( wxCommandEvent &event )
+{
+    m_list->ShowHidden( event.GetInt() );
 }
 
 void wxFileDialog::OnActivated( wxListEvent &event )

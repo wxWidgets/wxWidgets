@@ -123,6 +123,15 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
+// InsertChild callback for wxToolBar
+//-----------------------------------------------------------------------------
+
+static void wxInsertChildInToolBar( wxToolBar* WXUNUSED(parent), wxWindow* WXUNUSED(child) )
+{
+    /* we don't do anything here but pray */
+}
+
+//-----------------------------------------------------------------------------
 // wxToolBar
 //-----------------------------------------------------------------------------
 
@@ -155,6 +164,7 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
 {
     m_needParent = TRUE;
     m_blockNextEvent = FALSE;
+    m_insertCallback = (wxInsertChildFunction)wxInsertChildInToolBar;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
@@ -304,7 +314,7 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
 
     GtkWidget *item = gtk_toolbar_append_element
                      (
-                      GTK_TOOLBAR(m_toolbar),
+                      m_toolbar,
                       ctype,
                       (GtkWidget *)NULL,
                       (const char *)NULL,
@@ -330,6 +340,29 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
     m_tools.Append( tool );
 
     return tool;
+}
+
+bool wxToolBar::AddControl(wxControl *control)
+{
+    wxCHECK_MSG( control, FALSE, wxT("toolbar: can't insert NULL control") );
+
+    wxCHECK_MSG( control->GetParent() == this, FALSE,
+                 wxT("control must have toolbar as parent") );
+
+    m_hasToolAlready = TRUE;
+    
+    wxToolBarTool *tool = new wxToolBarTool(control);
+    
+    gtk_toolbar_append_widget( m_toolbar, control->m_widget, (const char *) NULL, (const char *) NULL );
+    
+    GtkRequisition req;
+    (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
+    m_width = req.width;
+    m_height = req.height;
+
+    m_tools.Append( tool );
+    
+    return TRUE;
 }
 
 void wxToolBar::AddSeparator()
@@ -635,12 +668,12 @@ void wxToolBar::OnInternalIdle()
 	while (node)
         {
 	    wxToolBarTool *tool = (wxToolBarTool*)node->Data();
-	    if (!tool->m_item->window)
-		break;
+	    node = node->Next();
+	    
+	    if (!tool->m_item || !tool->m_item->window)
+		continue;
 	    else
 	        gdk_window_set_cursor( tool->m_item->window, cursor.GetCursor() );
-		
-	    node = node->Next();
         }
     }
 

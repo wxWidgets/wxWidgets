@@ -224,6 +224,8 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
   combo->Append("toolbar");
   toolBar->AddControl(combo);
 
+  toolBar->AddSeparator();
+  
   if ( !smallicons )
   {
       currentX += width + 5;
@@ -238,11 +240,6 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
       currentX += width + 5;
       toolBar->AddSeparator();
       toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Help button");
-
-      toolBar->ToggleTool( wxID_SAVE, TRUE );
-      toolBar->ToggleTool( wxID_COPY, TRUE );
-      toolBar->ToggleTool( wxID_COPY, FALSE );
-      toolBar->EnableTool( wxID_PRINT, FALSE );
   }
 
   toolBar->Realize();
@@ -303,7 +300,7 @@ MyFrame::MyFrame(wxFrame* parent,
                                     wxTB_FLAT | wxTB_DOCKABLE,
                                     ID_TOOLBAR);
 
-    tbar->SetMargins( 2, 2 );
+    tbar->SetMargins( 4, 4 );
 
     wxGetApp().InitToolbar(tbar);
 }

@@ -1304,7 +1304,9 @@ wxString wxFindNextFile()
           nextDir != NULL;
           nextDir = readdir(gs_dirStream) )
     {
-        if (wxMatchWild(name, nextDir->d_name))
+        if (wxMatchWild(name, nextDir->d_name, FALSE) &&   // RR: added FALSE to find hidden files
+	    strcmp(nextDir->d_name, ".") && 
+	    strcmp(nextDir->d_name, "..") )
         {
             result.Empty();
             if ( !path.IsEmpty() )

@@ -611,10 +611,7 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
     // TODO: Wake up idle handler for the other platforms.
 #ifdef __WXGTK__
-    extern bool g_isIdle;
-    extern void wxapp_install_idle_handler();
-    if ( g_isIdle )
-        wxapp_install_idle_handler();
+    wxWakeUpIdle();
 #elif wxUSE_GUI // this works for wxMSW, but may be for others too?
     // might also send a dummy message to the top level window, this would
     // probably be cleaner?

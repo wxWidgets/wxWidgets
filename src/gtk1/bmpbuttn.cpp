@@ -43,7 +43,8 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;

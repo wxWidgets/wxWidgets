@@ -124,8 +124,13 @@ unsigned char g_palette[64*3] =
 
 extern void wxFlushResources();
 
+/* forward declaration */
+gint        wxapp_idle_callback( gpointer WXUNUSED(data) );
+void        wxapp_install_idle_handler();
+static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) );
+
 //-----------------------------------------------------------------------------
-// global functions
+// wxExit
 //-----------------------------------------------------------------------------
 
 void wxExit()
@@ -133,8 +138,9 @@ void wxExit()
     gtk_main_quit();
 }
 
-/* forward declaration */
-gint wxapp_idle_callback( gpointer WXUNUSED(data) );
+//-----------------------------------------------------------------------------
+// wxYield
+//-----------------------------------------------------------------------------
 
 bool wxYield()
 {
@@ -164,6 +170,20 @@ bool wxYield()
 
     return TRUE;
 }
+
+//-----------------------------------------------------------------------------
+// wxWakeUpIdle
+//-----------------------------------------------------------------------------
+
+void wxWakeUpIdle()
+{
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
+}
+
+//-----------------------------------------------------------------------------
+// local functions
+//-----------------------------------------------------------------------------
 
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
@@ -212,9 +232,6 @@ void wxapp_install_idle_handler()
 }
 
 #if wxUSE_THREADS
-
-/* forward declaration */
-static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) );
 
 void wxapp_install_thread_wakeup()
 {

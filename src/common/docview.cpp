@@ -1191,7 +1191,7 @@ wxDocTemplate *wxDocManager::FindTemplateForPath(const wxString& path)
 // template extension.
 
 wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXGTK__)
                                                 int noTemplates,
 #else
                                                 int WXUNUSED(noTemplates),
@@ -1200,8 +1200,8 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                                                 long WXUNUSED(flags),
                                                 bool WXUNUSED(save))
 {
-    // We can only have multiple filters in Windows
-#ifdef __WXMSW__
+    // We can only have multiple filters in Windows and GTK
+#if defined(__WXMSW__) || defined(__WXGTK__)
     wxString descrBuf;
 
     int i;
