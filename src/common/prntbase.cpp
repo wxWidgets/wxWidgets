@@ -504,7 +504,11 @@ wxPreviewFrame::~wxPreviewFrame()
 
 void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
+    // MakeModal doesn't work on wxMac, especially when there
+    // are multiple top-level windows.
+#ifndef __WXMAC__
     MakeModal(FALSE);
+#endif    
 
     // Need to delete the printout and the print preview
     wxPrintout *printout = m_printPreview->GetPrintout();
@@ -537,7 +541,11 @@ void wxPreviewFrame::Initialize()
     SetAutoLayout( TRUE );
     SetSizer( item0 );
 
+    // MakeModal doesn't work on wxMac, especially when there
+    // are multiple top-level windows.
+#ifndef __WXMAC__
     MakeModal(TRUE);
+#endif
 
     Layout();
 }
