@@ -139,6 +139,10 @@ wxMotif:
 
 - added 3 state checkbox
 
+wxMSW:
+
+- fixed UNC paths handling in wxFileSystem (Daniel Nash)
+
 wxWinCE:
 
 - added automatized but customizable handling of native SmartPhone menus

@@ -519,7 +519,7 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
     // unc notation, wxMSW
     if ( url.Find(wxT("\\\\")) == 0 ) 
     {
-        url = url.Mid(2);
+        url = wxT("//") + url.Mid(2);
     }
     else
     {
