@@ -48,9 +48,9 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     SetBackground( bitmap, 0, wxTILE );
 #endif
     
-    new wxStaticText( this, -1, _T("This is text"), wxPoint( 20,50 ) );
+    new wxStaticText( this, wxID_ANY, _T("This is text"), wxPoint( 20,50 ) );
     
-    new wxCheckBox( this, -1, _T("This is a checkbox"), wxPoint( 20,70 ) );
+    new wxCheckBox( this, wxID_ANY, _T("This is a checkbox"), wxPoint( 20,70 ) );
 }
 
 void MyFrame::CreateMyMenuBar()
@@ -72,7 +72,7 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 {
-     Close( TRUE );
+     Close( true );
 }
 
 void MyFrame::OnCloseWindow( wxCloseEvent &WXUNUSED(event) )
@@ -97,10 +97,10 @@ bool MyApp::OnInit()
     SetVendorName(_T("Free world"));
     SetAppName(_T("Styles"));
     
-    MyFrame *frame = new MyFrame( NULL, -1, _T("Styles"), wxPoint(20,20), wxSize(500,340) );
-    frame->Show( TRUE );
+    MyFrame *frame = new MyFrame( NULL, wxID_ANY, _T("Styles"), wxPoint(20,20), wxSize(500,340) );
+    frame->Show( true );
     
-    return TRUE;
+    return true;
 }
 
 int MyApp::OnExit()
