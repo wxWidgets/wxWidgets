@@ -36894,10 +36894,16 @@ _ACEOF
 fi
 
 if test "$wxUSE_EXCEPTIONS" = "yes"; then
-    cat >>confdefs.h <<\_ACEOF
+    if test "$wxUSE_NO_EXCEPTIONS" = "yes" ; then
+        { echo "$as_me:$LINENO: WARNING: --enable-exceptions can't be used with --enable-no_exceptions" >&5
+echo "$as_me: WARNING: --enable-exceptions can't be used with --enable-no_exceptions" >&2;}
+    else
+        cat >>confdefs.h <<\_ACEOF
 #define wxUSE_EXCEPTIONS 1
 _ACEOF
 
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS except"
+    fi
 fi
 
 USE_HTML=0
@@ -36912,13 +36918,86 @@ _ACEOF
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html/htmlctrl"
     fi
 fi
-
 if test "$wxUSE_WEBKIT" = "yes"; then
-    cat >>confdefs.h <<\_ACEOF
+    if test "$wxUSE_MAC" = 1; then
+        old_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="$CPPFLAGS -x objective-c++"
+        echo "$as_me:$LINENO: checking for WebKit/HIWebView.h" >&5
+echo $ECHO_N "checking for WebKit/HIWebView.h... $ECHO_C" >&6
+if test "${ac_cv_header_WebKit_HIWebView_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <Carbon/Carbon.h>
+
+#include <WebKit/HIWebView.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_header_WebKit_HIWebView_h=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_header_WebKit_HIWebView_h=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_WebKit_HIWebView_h" >&5
+echo "${ECHO_T}$ac_cv_header_WebKit_HIWebView_h" >&6
+if test $ac_cv_header_WebKit_HIWebView_h = yes; then
+
+                           cat >>confdefs.h <<\_ACEOF
 #define wxUSE_WEBKIT 1
 _ACEOF
 
+                           WEBKIT_LINK="-framework WebKit"
+
+else
+
+                           { echo "$as_me:$LINENO: WARNING: WebKit headers not found; disabling wxWebKit" >&5
+echo "$as_me: WARNING: WebKit headers not found; disabling wxWebKit" >&2;}
+                           wxUSE_WEBKIT=no
+
 fi
+
+
+        CPPFLAGS="$old_CPPFLAGS"
+    elif test "$wxUSE_COCOA" = 1; then
+        cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WEBKIT 1
+_ACEOF
+
+    else
+        wxUSE_WEBKIT=no
+    fi
+fi
+
 
 if test "$wxUSE_MENUS" = "yes"; then
     cat >>confdefs.h <<\_ACEOF
@@ -37194,7 +37273,10 @@ fi
 
 
 if test "$wxUSE_MAC" = 1 ; then
-    LDFLAGS="$LDFLAGS -framework Carbon -framework Cocoa -framework WebKit -framework System"
+    if test "$wxUSE_SOUND" = "yes"; then
+       LDFLAGS="$LDFLAGS -framework QuickTime"
+    fi
+    LDFLAGS="$LDFLAGS -framework Carbon -framework Cocoa -framework System"
 fi
 if test "$wxUSE_COCOA" = 1 ; then
     LDFLAGS="$LDFLAGS -framework Cocoa -framework System"
@@ -37672,7 +37754,7 @@ EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_ODBC="$ODBC_LINK"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK | sed 's/ \+/ /g'`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK | sed 's/ \+/ /g'`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"

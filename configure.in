@@ -5638,10 +5638,28 @@ if test "$wxUSE_HTML" = "yes"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html/htmlctrl"
     fi
 fi
-
 if test "$wxUSE_WEBKIT" = "yes"; then
-    AC_DEFINE(wxUSE_WEBKIT)
+    if test "$wxUSE_MAC" = 1; then
+        old_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="$CPPFLAGS -x objective-c++"
+        AC_CHECK_HEADER([WebKit/HIWebView.h],
+                        [
+                           AC_DEFINE(wxUSE_WEBKIT)
+                           WEBKIT_LINK="-framework WebKit"
+                        ],
+                        [
+                           AC_MSG_WARN([WebKit headers not found; disabling wxWebKit])
+                           wxUSE_WEBKIT=no
+                        ],
+                        [#include <Carbon/Carbon.h>])
+        CPPFLAGS="$old_CPPFLAGS"
+    elif test "$wxUSE_COCOA" = 1; then
+        AC_DEFINE(wxUSE_WEBKIT)
+    else
+        wxUSE_WEBKIT=no
+    fi
 fi
+
 
 if test "$wxUSE_MENUS" = "yes"; then
     AC_DEFINE(wxUSE_MENUS)
@@ -5855,7 +5873,7 @@ if test "$wxUSE_MAC" = 1 ; then
     if test "$wxUSE_SOUND" = "yes"; then
        LDFLAGS="$LDFLAGS -framework QuickTime"
     fi
-    LDFLAGS="$LDFLAGS -framework Carbon -framework Cocoa -framework WebKit -framework System"
+    LDFLAGS="$LDFLAGS -framework Carbon -framework Cocoa -framework System"
 fi
 if test "$wxUSE_COCOA" = 1 ; then
     LDFLAGS="$LDFLAGS -framework Cocoa -framework System"
@@ -5958,7 +5976,7 @@ EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_ODBC="$ODBC_LINK"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK | sed 's/ \+/ /g'`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK | sed 's/ \+/ /g'`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
