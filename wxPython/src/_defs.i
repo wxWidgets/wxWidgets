@@ -18,16 +18,12 @@
 typedef int             wxWindowID;
 typedef int             wxCoord;
 typedef int             wxInt32;
-typedef unsigned int    wxUInt32;
+typedef unsigned int    wxUint32;
 typedef int             wxEventType;
-// typedef unsigned char   byte;
-// typedef short int       WXTYPE;
-// typedef unsigned int    uint;
-// typedef signed   int    EBool;
-// typedef unsigned int    size_t
-// typedef unsigned int    time_t
-// typedef int             wxPrintQuality;
-// typedef char            wxChar;
+typedef unsigned int    size_t;
+typedef unsigned int    time_t
+typedef unsigned char   byte;
+
 
 //----------------------------------------------------------------------
 // Various SWIG macros and such
@@ -45,12 +41,6 @@ typedef int             wxEventType;
 #define %pythoncode     %insert("python")
 #endif 
 
-%define %newgroup
-%pythoncode {
-%#---------------------------------------------------------------------------
-} 
-%enddef
-
 #define WXUNUSED(x)     x
 
 
@@ -66,8 +56,15 @@ typedef int             wxEventType;
 
 // Generate code in the module init for the event types, since they may not be
 // initialized yet when they are used in the static swig_const_table.
-%typemap(consttab) wxEventType;
+%typemap(consttab) wxEventType; // TODO: how to prevent code inserted into the consttab?
 %typemap(constcode) wxEventType "PyDict_SetItemString(d, \"$symname\", PyInt_FromLong($value));";
+
+
+%define %newgroup
+%pythoncode {
+%#---------------------------------------------------------------------------
+} 
+%enddef
 
 //---------------------------------------------------------------------------
 
