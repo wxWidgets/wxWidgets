@@ -144,6 +144,7 @@ bool wxDialog::Show(bool show)
         {
             wxLogTrace(wxTRACE_COCOA,wxT("abortModal"));
             [wxTheApp->GetNSApplication() abortModal];
+            [m_cocoaNSWindow orderOut:m_cocoaNSWindow];
             wxModalDialogs.DeleteObject(this);
         }
     }
