@@ -69,7 +69,7 @@ Name: core;     Description: "wxPython modules and library";  Types: full compac
 Name: docs;     Description: "Documentation";                 Types: full
 Name: demo;     Description: "Demo application";              Types: full
 Name: samples;  Description: "Sample applications";           Types: full
-Name: ; Description: "Manifest files for XP LnF";     Types: full
+Name: manifest; Description: "Manifest files for XP LnF";     Types: full
 
 ;;------------------------------------------------------------
 
