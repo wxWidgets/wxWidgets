@@ -99,6 +99,8 @@ OLEDIR=ole
 MSWDIR=$(WXDIR)\src\msw
 DOCDIR = $(WXDIR)\docs
 HTMLDIR = $(WXDIR)\src\html
+JPEGDIR = $(WXDIR)\src\jpeg
+TIFFDIR = $(WXDIR)\src\tiff
 
 {..\generic}.cpp{..\generic\$D}.obj:
 	cl @<<
@@ -162,7 +164,7 @@ setuph:
     if not exist setup.h copy setup0.h setup.h
     cd $(WXDIR)\src\msw
 
-dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D
+dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D $(JPEGDIR)\$D $(TIFFDIR)\$D
 
 $D:
     mkdir $D
@@ -181,6 +183,12 @@ $(OLEDIR)\$D:
 
 $(HTMLDIR)\$D:
     mkdir $(HTMLDIR)\$D
+
+$(JPEGDIR)\$D:
+    mkdir $(JPEGDIR)\$D
+
+$(TIFFDIR)\$D:
+    mkdir $(TIFFDIR)\$D
 
 # wxWindows library as DLL
 dll:
@@ -424,17 +432,29 @@ clean: $(PERIPH_CLEAN_TARGET)
         -erase $(MSWDIR)\$D\*.obj
         -erase $(MSWDIR)\$D\*.sbr
         -erase $(MSWDIR)\$D\*.pdb
+        -erase $(MSWDIR)\$D\*.pch
         -erase $(OLEDIR)\$D\*.obj
         -erase $(OLEDIR)\$D\*.sbr
         -erase $(OLEDIR)\$D\*.pdb
         -erase $(HTMLDIR)\$D\*.obj
         -erase $(HTMLDIR)\$D\*.sbr
         -erase $(HTMLDIR)\$D\*.pdb
+        -erase $(JPEGDIR)\$D\*.obj
+        -erase $(JPEGDIR)\$D\*.sbr
+        -erase $(JPEGDIR)\$D\*.idb
+        -erase $(JPEGDIR)\$D\*.pdb
+        -erase $(TIFFDIR)\$D\*.obj
+        -erase $(TIFFDIR)\$D\*.sbr
+        -erase $(TIFFDIR)\$D\*.pdb
+        -erase $(TIFFDIR)\$D\*.idb
         -rmdir $(D)
-        -rmdir ole\$(D)
-        -rmdir ..\generic\$(D)
-        -rmdir ..\common\$(D)
-        -rmdir ..\html\$(D)
+        -rmdir $(GENDIR)\$(D)
+        -rmdir $(COMMDIR)\$(D)
+        -rmdir $(MSWDIR)\$(D)
+        -rmdir $(OLEDIR)\$(D)
+        -rmdir $(HTMLDIR)\$(D)
+        -rmdir $(JPEGDIR)\$(D)
+        -rmdir $(TIFFDIR)\$(D)
 
 # Making documents
 docs:   allhlp allhtml allpdfrtf allhtb allhtmlhelp

@@ -273,8 +273,8 @@ wxLongLong wxGetLocalTimeMillis()
 {
     wxLongLong val = 1000l;
 
-    // If possible, use a functin which avoids conversions from
-    // broken-up time structures to milliseconds,
+    // If possible, use a function which avoids conversions from
+    // broken-up time structures to milliseconds
 
 #if defined(HAVE_GETTIMEOFDAY)
     struct timeval tp;

@@ -64,7 +64,7 @@ wxTextCtrlBase::~wxTextCtrlBase()
 {
 #ifndef NO_TEXT_WINDOW_STREAM
 #if !wxUSE_IOSTREAMH
-  delete m_streambuf;
+  delete[] m_streambuf;
 #endif
 #endif
 }
