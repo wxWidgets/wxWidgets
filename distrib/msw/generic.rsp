@@ -219,6 +219,18 @@ samples/dynamic/*.bmp
 samples/dynamic/*.rc
 samples/dynamic/*.wav
 
+samples/erase/*.cpp
+samples/erase/*.h
+samples/erase/*.def
+samples/erase/makefile*
+samples/erase/*.xbm
+samples/erase/*.xpm
+samples/erase/*.txt
+samples/erase/*.ico
+samples/erase/*.bmp
+samples/erase/*.rc
+samples/erase/*.wav
+
 samples/sockets/*.cpp
 samples/sockets/*.h
 samples/sockets/*.def

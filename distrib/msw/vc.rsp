@@ -64,6 +64,9 @@ samples/drawing/DrawingVC.dsw
 samples/dynamic/DynamicVC.dsp
 samples/dynamic/DynamicVC.dsw
 
+samples/dynamic/EraseVC.dsp
+samples/dynamic/EraseVC.dsw
+
 samples/event/EventVC.dsp
 samples/event/EventVC.dsw
 

@@ -320,6 +320,8 @@
 // Miscellaneous geometry code: needed for Canvas library
 #define wxUSE_GEOMETRY            1
 
+// Use menus
+#define wxUSE_MENUS               1
 
 // ----------------------------------------------------------------------------
 // Optional controls

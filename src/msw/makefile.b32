@@ -125,6 +125,7 @@ COMMONOBJS = \
 		$(MSWDIR)\datetime.obj \
 		$(MSWDIR)\datstrm.obj \
 		$(MSWDIR)\db.obj \
+		$(MSWDIR)\dbgrid.obj \
 		$(MSWDIR)\dbtable.obj \
 		$(MSWDIR)\dcbase.obj \
 		$(MSWDIR)\dircmn.obj \
@@ -626,6 +627,8 @@ $(MSWDIR)\datetime.obj: $(COMMDIR)\datetime.$(SRCSUFF)
 $(MSWDIR)\datstrm.obj: $(COMMDIR)\datstrm.$(SRCSUFF)
 
 $(MSWDIR)\db.obj: $(COMMDIR)\db.$(SRCSUFF)
+
+$(MSWDIR)\dbgrid.obj: $(COMMDIR)\dbgrid.$(SRCSUFF)
 
 $(MSWDIR)\dbtable.obj: $(COMMDIR)\dbtable.$(SRCSUFF)
 

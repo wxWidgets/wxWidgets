@@ -110,6 +110,7 @@ COMMONOBJS  = \
 		$(COMMDIR)/datetime.$(OBJSUFF) \
 		$(COMMDIR)/datstrm.$(OBJSUFF) \
 		$(COMMDIR)/db.$(OBJSUFF) \
+		$(COMMDIR)/dbgrid.$(OBJSUFF) \
 		$(COMMDIR)/dbtable.$(OBJSUFF) \
 		$(COMMDIR)/dcbase.$(OBJSUFF) \
 		$(COMMDIR)/dircmn.$(OBJSUFF) \

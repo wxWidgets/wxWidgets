@@ -15,6 +15,7 @@ samples/docvwmdi/Makefile.in
 samples/dragimag/Makefile.in
 samples/drawing/Makefile.in
 samples/dynamic/Makefile.in
+samples/erase/Makefile.in
 samples/exec/Makefile.in
 samples/event/Makefile.in
 samples/grid/Makefile.in

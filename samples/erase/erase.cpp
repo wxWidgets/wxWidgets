@@ -18,8 +18,8 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "minimal.cpp"
-    #pragma interface "minimal.cpp"
+    #pragma implementation "erase.cpp"
+    #pragma interface "erase.cpp"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -157,10 +157,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( _T("This is the about dialog of minimal sample.\n")
+    msg.Printf( _T("This is the about dialog of tghe Erase sample.\n")
                 _T("Welcome to %s"), wxVERSION_STRING);
 
-    wxMessageBox(msg, "About Minimal", wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, "About Erase", wxOK | wxICON_INFORMATION, this);
 }
 
 
