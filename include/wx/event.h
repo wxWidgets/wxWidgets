@@ -1455,7 +1455,7 @@ typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 struct WXDLLEXPORT wxEventTableEntry
 {
     // For some reason, this can't be wxEventType, or VC++ complains.
-    const int &m_eventType;     // main event type
+    int m_eventType;            // main event type
     int m_id;                   // control/menu/toolbar id
     int m_lastId;               // used for ranges of ids
     wxObjectEventFunction m_fn; // function to call: not wxEventFunction,
