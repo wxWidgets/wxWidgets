@@ -56,7 +56,7 @@
 
 #define SHIFT (8*(sizeof(short int)-sizeof(char)))
 
-wxColour *g_systemWinColour          = (wxColour *) NULL;
+//wxColour *g_systemWinColour          = (wxColour *) NULL;
 wxColour *g_systemBtnFaceColour      = (wxColour *) NULL;
 wxColour *g_systemBtnShadowColour    = (wxColour *) NULL;
 wxColour *g_systemBtnHighlightColour = (wxColour *) NULL;
@@ -66,7 +66,7 @@ wxFont *g_systemFont = (wxFont *) NULL;
 
 void wxSystemSettings::Done() 
 {
-    delete g_systemWinColour;
+//    delete g_systemWinColour;
     delete g_systemBtnFaceColour;
     delete g_systemBtnShadowColour;
     delete g_systemBtnHighlightColour;
@@ -88,62 +88,50 @@ wxColour wxSystemSettings::GetSystemColour( int index )
     case wxSYS_COLOUR_INACTIVEBORDER:
     case wxSYS_COLOUR_BTNFACE:
     {
-      GtkStyle *style = gtk_widget_get_default_style();
       if (!g_systemBtnFaceColour)
       {
         g_systemBtnFaceColour = 
-	  new wxColour( style->bg[0].red >> SHIFT,
-	                style->bg[0].green >> SHIFT,
-			style->bg[0].blue >> SHIFT );
+	  new wxColour( 0xd6d6 >> SHIFT,
+	                0xd6d6 >> SHIFT,
+			0xd6d6 >> SHIFT );
       }
       return *g_systemBtnFaceColour;
     }
     case wxSYS_COLOUR_WINDOW:
     {
-      GtkStyle *style = gtk_widget_get_default_style();
-      if (!g_systemWinColour)
-      {
-        g_systemWinColour = 
-	  new wxColour( style->base[0].red >> SHIFT,
-	                style->base[0].green >> SHIFT,
-			style->base[0].blue >> SHIFT );
-      }
-      return *g_systemWinColour;
+      return *wxWHITE;
     }
     case wxSYS_COLOUR_GRAYTEXT:
     case wxSYS_COLOUR_BTNSHADOW:
     {
-      GtkStyle *style = gtk_widget_get_default_style();
       if (!g_systemBtnShadowColour)
       {
         g_systemBtnShadowColour = 
-	  new wxColour( style->dark[0].red >> SHIFT,
-	                style->dark[0].green >> SHIFT,
-			style->dark[0].blue >> SHIFT );
+	  new wxColour( 0x7530 >> SHIFT,
+	                0x7530 >> SHIFT,
+			0x7530 >> SHIFT );
       }
       return *g_systemBtnShadowColour;
     }
     case wxSYS_COLOUR_BTNHIGHLIGHT:
     {
-      GtkStyle *style = gtk_widget_get_default_style();
       if (!g_systemBtnHighlightColour)
       {
         g_systemBtnHighlightColour = 
-	  new wxColour( style->light[0].red >> SHIFT,
-	                style->light[0].green >> SHIFT,
-			style->light[0].blue >> SHIFT );
+	  new wxColour( 0xea60 >> SHIFT,
+	                0xea60 >> SHIFT,
+			0xea60 >> SHIFT );
       }
       return *g_systemBtnHighlightColour;
     }
     case wxSYS_COLOUR_HIGHLIGHT:
     {
-      GtkStyle *style = gtk_widget_get_default_style();
       if (!g_systemHighlightColour)
       {
         g_systemHighlightColour = 
-	  new wxColour( style->bg[GTK_STATE_SELECTED].red >> SHIFT,
-	                style->bg[GTK_STATE_SELECTED].green >> SHIFT,
-			style->bg[GTK_STATE_SELECTED].blue >> SHIFT );
+	  new wxColour( 0      >> SHIFT,
+	                0      >> SHIFT,
+			0x9c40 >> SHIFT );
       }
       return *g_systemHighlightColour;
     }

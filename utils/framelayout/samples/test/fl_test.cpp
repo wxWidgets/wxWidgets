@@ -127,13 +127,7 @@ MyFrame::MyFrame(wxFrame *frame)
 			   wxTHICK_FRAME   | wxSYSTEM_MENU  | wxCAPTION, 
 			   "freimas" )
 {
-#ifdef __WXMSW__
 	mpInternalFrm = (wxPanel*)this;
-#else
-	mpInternalFrm = new wxPanel( this, -1 );
-#endif
-
-	
 	mpClientWnd = CreateTextCtrl( "Client window" );
 
 
@@ -210,38 +204,7 @@ MyFrame::MyFrame(wxFrame *frame)
 					  TRUE
                    );
 
-    mpLayout->AddBar( CreateTextCtrl("Fixed0"),  // bar window
-                      sizes1, wxTOP,         // alignment ( 0-top,1-bottom, etc)
-                      0,                     // insert into 0th row (vert. position)
-                      0,                     // offset from the start of row (in pixels)
-                      "ToolBar1",            // name to refere in customization pop-ups
-					  TRUE
-                   );
-
-	wxDynamicToolBar* pToolBar = new wxDynamicToolBar();
-
-	pToolBar->Create( mpInternalFrm, -1 );
-							 
-	// 1001-1006 ids of command events fired by added tool-buttons
-	
-	pToolBar->AddTool( 1001, "new.bmp" );
-	pToolBar->AddTool( 1002, "open.bmp" );
-	pToolBar->AddTool( 1003, "save.bmp" );
-
-	pToolBar->AddTool( 1004, "cut.bmp" );
-	pToolBar->AddTool( 1005, "copy.bmp" );
-	pToolBar->AddTool( 1006, "paste.bmp" );
-
-
-    mpLayout->AddBar( pToolBar,  // bar window (can be NULL)
-                      sizes2, wxTOP,         // alignment ( 0-top,1-bottom, etc)
-                      0,                     // insert into 0th row (vert. position)
-                      0,                     // offset from the start of row (in pixels)
-                      "ToolBar2",            // name to refere in customization pop-ups
-					  FALSE
-                   );
-
-	mpLayout->EnableFloating( TRUE ); // off, thinking bout wxGtk...
+	mpLayout->EnableFloating( FALSE ); // off, thinking bout wxGtk...
 }
 
 MyFrame::~MyFrame()
