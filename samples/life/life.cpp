@@ -22,7 +22,7 @@
     toolBar->AddTool(a, b, wxNullBitmap, FALSE, -1, -1, (wxObject *)0, c, d)
 
 #define GET_FRAME() \
-    ((wxFrame *) wxGetApp().GetTopWindow())
+    ((LifeFrame *) wxGetApp().GetTopWindow())
 
 // --------------------------------------------------------------------------
 // headers
@@ -90,9 +90,9 @@ public:
     inline bool HasChanged(int x, int y) const;
     inline void SetCell(int x, int y, bool alive = TRUE);
 
-    // game operations
+    // member funcions
     void Clear();
-    void NextTic();
+    bool NextTic();
 
 private:
     enum CellFlags {
@@ -142,7 +142,6 @@ private:
     };
 
     Life        *m_life;
-    wxFrame     *m_frame;
     wxBitmap    *m_bmp;
     int          m_height;
     int          m_width;
@@ -156,11 +155,7 @@ private:
 class LifeTimer : public wxTimer
 {
 public:
-    LifeTimer(LifeFrame *parent);
     void Notify();
-
-private:
-    LifeFrame *m_parent;
 };
 
 // Life main frame
@@ -176,11 +171,11 @@ public:
 
     // event handlers
     void OnMenu(wxCommandEvent& event);
-    void OnSlider(wxScrollEvent& event);
-    void OnNewGame();
+    void OnNewGame(wxCommandEvent& event);
     void OnStart();
     void OnStop();
     void OnTimer();
+    void OnSlider(wxScrollEvent& event);
 
 private:
     // any class wishing to process wxWindows events must use this macro
@@ -204,7 +199,6 @@ public:
 
     // event handlers
     void OnOK(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
 
 private:
     // any class wishing to process wxWindows events must use this macro
@@ -232,7 +226,7 @@ public:
 enum
 {
     // menu items and toolbar buttons
-    ID_NEWGAME = 101,
+    ID_NEWGAME = 1001,
     ID_CLEAR,
     ID_START,
     ID_STOP,
@@ -240,7 +234,7 @@ enum
     ID_ABOUT,
 
     // slider
-    ID_SLIDER
+    ID_SLIDER,
 };
 
 // --------------------------------------------------------------------------
@@ -248,21 +242,24 @@ enum
 // --------------------------------------------------------------------------
 
 // Event tables
-
 BEGIN_EVENT_TABLE(LifeFrame, wxFrame)
-    EVT_MENU_RANGE      (ID_NEWGAME, ID_ABOUT,  LifeFrame::OnMenu)
-    EVT_COMMAND_SCROLL  (ID_SLIDER,             LifeFrame::OnSlider)
-END_EVENT_TABLE()
+    EVT_MENU           (ID_NEWGAME, LifeFrame::OnNewGame)
+    EVT_MENU           (ID_CLEAR,   LifeFrame::OnMenu)
+    EVT_MENU           (ID_START,   LifeFrame::OnMenu)
+    EVT_MENU           (ID_STOP,    LifeFrame::OnMenu)
+    EVT_MENU           (ID_ABOUT,   LifeFrame::OnMenu)
+    EVT_MENU           (ID_EXIT,    LifeFrame::OnMenu)
+    EVT_COMMAND_SCROLL (ID_SLIDER,  LifeFrame::OnSlider)
+END_EVENT_TABLE()                           
 
 BEGIN_EVENT_TABLE(LifeCanvas, wxScrolledWindow)
-    EVT_PAINT           (                       LifeCanvas::OnPaint)
-    EVT_SIZE            (                       LifeCanvas::OnSize)
-    EVT_MOUSE_EVENTS    (                       LifeCanvas::OnMouse)
+    EVT_PAINT          (            LifeCanvas::OnPaint)
+    EVT_SIZE           (            LifeCanvas::OnSize)
+    EVT_MOUSE_EVENTS   (            LifeCanvas::OnMouse)
 END_EVENT_TABLE()                     
 
 BEGIN_EVENT_TABLE(LifeNewGameDialog, wxDialog)
-    EVT_BUTTON          (wxID_OK,               LifeNewGameDialog::OnOK)
-    EVT_BUTTON          (wxID_CANCEL,           LifeNewGameDialog::OnCancel)
+    EVT_BUTTON         (wxID_OK,    LifeNewGameDialog::OnOK)
 END_EVENT_TABLE()
 
 
@@ -343,7 +340,7 @@ LifeFrame::LifeFrame() : wxFrame((wxFrame *)0, -1, _("Life!"), wxPoint(50, 50))
     // game
     m_life     = new Life(20, 20);
     m_canvas   = new LifeCanvas(panel, m_life);
-    m_timer    = new LifeTimer(this);
+    m_timer    = new LifeTimer();
     m_interval = 500;
     m_tics     = 0;
     m_text     = new wxStaticText(panel, -1, "");
@@ -386,7 +383,6 @@ void LifeFrame::OnMenu(wxCommandEvent& event)
     {
         case ID_START   : OnStart(); break;
         case ID_STOP    : OnStop(); break;
-        case ID_NEWGAME : OnNewGame(); break;
         case ID_CLEAR   :
         {
             OnStop();
@@ -416,21 +412,7 @@ void LifeFrame::OnMenu(wxCommandEvent& event)
     }
 }
 
-void LifeFrame::OnSlider(wxScrollEvent& event)
-{
-    m_interval = event.GetPosition() * 100;
-
-    // restart timer if running, to set the new interval
-    if (m_running)
-    {
-        m_timer->Stop();
-        m_timer->Start(m_interval);
-    }
-
-    UpdateInfoText();
-}
-
-void LifeFrame::OnNewGame()
+void LifeFrame::OnNewGame(wxCommandEvent& WXUNUSED(event))
 {
     int w = m_life->GetWidth();
     int h = m_life->GetHeight();
@@ -491,26 +473,43 @@ void LifeFrame::OnStop()
 
 void LifeFrame::OnTimer()
 {
-    m_tics++;
-    UpdateInfoText();
+    if (m_life->NextTic())
+        m_tics++;
+    else
+        OnStop();
 
-    m_life->NextTic();
+    UpdateInfoText();
     m_canvas->DrawEverything();
     m_canvas->Refresh(FALSE);
+}
+
+void LifeFrame::OnSlider(wxScrollEvent& event)
+{
+    m_interval = event.GetPosition() * 100;
+
+    // restart timer if running, to set the new interval
+    if (m_running)
+    {
+        m_timer->Stop();
+        m_timer->Start(m_interval);
+    }
+
+    UpdateInfoText();
 }
 
 // --------------------------------------------------------------------------
 // LifeTimer
 // --------------------------------------------------------------------------
 
-LifeTimer::LifeTimer(LifeFrame *parent) : wxTimer()
+/*
+LifeTimer::LifeTimer() : wxTimer()
 {
-    m_parent = parent;
 }
+*/
 
 void LifeTimer::Notify()
 {
-    m_parent->OnTimer();
+    GET_FRAME()->OnTimer();
 }
 
 // --------------------------------------------------------------------------
@@ -766,14 +765,6 @@ void LifeNewGameDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     EndModal(wxID_OK);
 }
 
-void LifeNewGameDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
-{
-    *m_w = -1;
-    *m_h = -1;
-
-    EndModal(wxID_CANCEL);
-}
-
 // --------------------------------------------------------------------------
 // Life
 // --------------------------------------------------------------------------
@@ -827,12 +818,13 @@ void Life::SetCell(int x, int y, bool alive)
 {
     wxASSERT(x < m_width || y < m_height);
 
-    // set the CELL_MARK flag to notify that this cell has changed
     m_cells[y * m_width + x] = (alive? CELL_ALIVE : CELL_DEAD);
 }
 
-void Life::NextTic()
+bool Life::NextTic()
 {
+    long changed = 0;
+
     /* 1st pass. Find and mark deaths and births for this generation.
      *
      * Rules:
@@ -869,8 +861,13 @@ void Life::NextTic()
              * thus must be updated in the screen.
              */
             if (m_cells[j * m_width + i] & CELL_MARK)
+            {
                 m_cells[j * m_width + i] ^= CELL_ALIVE;
+                changed++;
+            }
         }
+
+    return (changed != 0);
 }
 
 int Life::GetNeighbors(int x, int y) const
