@@ -121,10 +121,8 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
             m_Table[out_tbl[i]] = (tchar)(128 + i);
 
         m_UnicodeInput = TRUE;
-        return TRUE;
     }
-
-    else
+    else // input !Unicode
     {
         if ((in_tbl = GetEncTable(input_enc)) == NULL) return FALSE;
         if (output_enc != wxFONTENCODING_UNICODE)
@@ -142,7 +140,7 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
         }
         // FIXME: write a substitute for bsearch
 #ifndef __WXWINCE__
-        else
+        else // output !Unicode
         {
             CharsetItem *rev = BuildReverseTable(out_tbl);
             CharsetItem *item;
@@ -166,11 +164,11 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
             }
 
             delete[] rev;
-            return TRUE;
         }
-#endif
-        return TRUE;
+#endif // !__WXWINCE__
     }
+
+    return TRUE;
 }
 
 
