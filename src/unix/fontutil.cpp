@@ -132,26 +132,30 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxFONTENCODING_SYSTEM;
 }
 
-bool wxNativeFontInfo::FromString(const wxString& s)
+bool wxNativeFontInfo::FromString( const wxString& str )
 {
     if (description)
         pango_font_description_free( description );
 
-    description = pango_font_description_from_string( wxGTK_CONV( s ) );
+    description = pango_font_description_from_string( wxGTK_CONV( str ) );
+    
+    // wxPrintf( L"FromString result: %s\n", ToString().c_str() );
 
     return TRUE;
 }
 
 wxString wxNativeFontInfo::ToString() const
 {
-    wxString tmp = wxGTK_CONV_BACK( pango_font_description_to_string( description ) );
+    char *str = pango_font_description_to_string( description );
+    wxString tmp = wxGTK_CONV_BACK(  str );
+    g_free( str );
 
     return tmp;
 }
 
-bool wxNativeFontInfo::FromUserString(const wxString& s)
+bool wxNativeFontInfo::FromUserString( const wxString& str )
 {
-    return FromString( s );
+    return FromString( str );
 }
 
 wxString wxNativeFontInfo::ToUserString() const

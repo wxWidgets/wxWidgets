@@ -343,8 +343,6 @@ bool wxToolBar::Create( wxWindow *parent,
 
     g_style->bg[GTK_STATE_NORMAL] = *m_bg;
 
-    SET_STYLE_FONT(g_style, GtkGetDefaultGuiFont());
-
     gtk_widget_set_style( GTK_TOOLBAR(m_toolbar)->tooltips->tip_window, g_style );
 
     m_parent->DoAddChild( this );

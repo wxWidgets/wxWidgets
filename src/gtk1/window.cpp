@@ -1695,6 +1695,20 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     wxPrintf( wxT(".\n") );
 */
 
+#ifndef __WXGTK20__
+    if (event_type == wxEVT_LEFT_DCLICK)
+    {
+        // GTK 1.2 crashes when intercepting double
+        // click events from both wxSpinButton and
+        // wxSpinCtrl
+        if (GTK_IS_SPIN_BUTTON(win->m_widget))
+        {
+            // Just disable this event for now.
+            return FALSE;
+        }
+    }
+#endif
+
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "button_press_event" );
@@ -3406,9 +3420,31 @@ int wxWindowGTK::GetCharHeight() const
 
     wxCHECK_MSG( m_font.Ok(), 12, wxT("invalid font") );
 
+#ifdef __WXGTK20__
+    PangoContext *context = NULL;
+    if (m_widget)
+        context = gtk_widget_get_pango_context( m_widget );
+
+    if (!context)
+        return 0;
+
+    PangoFontDescription *desc = m_font.GetNativeFontInfo()->description;
+    PangoLayout *layout = pango_layout_new(context);
+    pango_layout_set_font_description(layout, desc);
+    pango_layout_set_text(layout, "H", 1);
+    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+
+    PangoRectangle rect;
+    pango_layout_line_get_extents(line, NULL, &rect);
+
+    g_object_unref( G_OBJECT( layout ) );
+    
+    return (int) (rect.height / PANGO_SCALE);
+#else
     GdkFont *font = m_font.GetInternalFont( 1.0 );
 
     return font->ascent + font->descent;
+#endif
 }
 
 int wxWindowGTK::GetCharWidth() const
@@ -3417,9 +3453,31 @@ int wxWindowGTK::GetCharWidth() const
 
     wxCHECK_MSG( m_font.Ok(), 8, wxT("invalid font") );
 
+#ifdef __WXGTK20__
+    PangoContext *context = NULL;
+    if (m_widget)
+        context = gtk_widget_get_pango_context( m_widget );
+
+    if (!context)
+        return 0;
+
+    PangoFontDescription *desc = m_font.GetNativeFontInfo()->description;
+    PangoLayout *layout = pango_layout_new(context);
+    pango_layout_set_font_description(layout, desc);
+    pango_layout_set_text(layout, "H", 1);
+    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+
+    PangoRectangle rect;
+    pango_layout_line_get_extents(line, NULL, &rect);
+
+    g_object_unref( G_OBJECT( layout ) );
+    
+    return (int) (rect.width / PANGO_SCALE);
+#else
     GdkFont *font = m_font.GetInternalFont( 1.0 );
 
     return gdk_string_width( font, "H" );
+#endif
 }
 
 void wxWindowGTK::GetTextExtent( const wxString& string,
@@ -4089,7 +4147,13 @@ void wxWindowGTK::SetWidgetStyle()
 
     if (m_font != wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ))
     {
-        SET_STYLE_FONT(style, m_font.GetInternalFont( 1.0 ));
+#ifdef __WXGTK20__
+        pango_font_description_free( style->font_desc );
+        pango_font_description_copy( m_font.GetNativeFontInfo()->description );
+#else
+        gdk_font_unref( style->font );
+        style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+#endif
     }
 
     if (m_foregroundColour.Ok())

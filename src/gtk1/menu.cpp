@@ -145,7 +145,7 @@ static wxString wxReplaceUnderscore( const wxString& title )
 #endif
         else
         {
-#if __WXGTK12__
+#ifdef __WXGTK12__
             if ( *pc == wxT('_') )
             {
                 // underscores must be doubled to prevent them from being
@@ -907,7 +907,7 @@ void wxMenuItem::DoSetText( const wxString& str )
 #if GTK_CHECK_VERSION(2, 0, 0)
         else if ( *pc == wxT('_') )    // escape underscores
         {
-            // m_text << wxT("__");    doesn't work
+            m_text << wxT("__"); 
         }
         else if (*pc == wxT('/'))      // we have to escape slashes
         {
@@ -1010,8 +1010,12 @@ wxString wxMenuItem::GetFactoryPath() const
     {
         if ( *pc == wxT('_') )
         {
+#ifdef __WXGTK20__
+            pc++;
+#else
             // remove '_' unconditionally
             continue;
+#endif
         }
 
         // don't remove ampersands '&' since if we have them in the menu item title

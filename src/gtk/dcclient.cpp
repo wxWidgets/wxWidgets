@@ -1436,27 +1436,56 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 #ifdef __WXGTK20__
     // TODO: the layout engine should be abstracted at a higher level!
     PangoLayout *layout = pango_layout_new(m_context);
-    pango_layout_set_font_description(layout, m_fontdesc);
-    {
-#if wxUSE_UNICODE
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
-        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
-#else
-        const wxWCharBuffer wdata = wxConvLocal.cMB2WC( text );
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
-        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
-#endif
-    }
     
-    // Measure layout.
+#if wxUSE_UNICODE
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
+#else
+    const wxWCharBuffer wdata = wxConvLocal.cMB2WC( text );
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
+#endif
+
+    pango_layout_set_text( layout, (const char*)data, strlen((const char*)data) );
+
+    if (m_scaleY != 1.0)
+    {
+         // If there is a user or actually any scale applied to
+         // the device context, scale the font.
+         
+         // scale font description
+         gint oldSize = pango_font_description_get_size( m_fontdesc );
+         double size = oldSize;
+         size = size * m_scaleY;
+         pango_font_description_set_size( m_fontdesc, (gint)size );
+         
+         // actually apply scaled font
+         pango_layout_set_font_description( layout, m_fontdesc );
+         
+         // Draw layout.
+         gdk_draw_layout( m_window, m_textGC, x, y, layout );
+         
+         // reset unscaled size
+         pango_font_description_set_size( m_fontdesc, oldSize );
+    }
+    else
+    {
+         // actually apply font
+         pango_layout_set_font_description( layout, m_fontdesc );
+         
+         // Draw layout.
+         gdk_draw_layout( m_window, m_textGC, x, y, layout );
+    }
+
+#if 0
+    // Measure layout
     int w,h;
-    pango_layout_get_pixel_size(layout, &w, &h);
+    pango_layout_get_pixel_size( m_layout, &w, &h );
+#else
+    int w = 10;
+    int h = 10;
+#endif
     wxCoord width = w;
     wxCoord height = h;
-    
-    // Draw layout.
-    gdk_draw_layout( m_window, m_textGC, x, y, layout );
-    
+
     g_object_unref( G_OBJECT( layout ) );
 #else // GTK+ 1.x
     wxCoord width = gdk_string_width( font, text.mbc_str() );
@@ -1614,25 +1643,24 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
     
 #ifdef __WXGTK20__
     // Create layout and set font description
-    PangoLayout *layout = pango_layout_new(m_context);
+    PangoLayout *layout = pango_layout_new( m_context );
     if (theFont)
         pango_layout_set_font_description( layout, theFont->GetNativeFontInfo()->description );
     else
-        pango_layout_set_font_description(layout, m_fontdesc);
+        pango_layout_set_font_description( layout, m_fontdesc );
         
     // Set layout's text
 #if wxUSE_UNICODE
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
-        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
 #else
-        const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
-        const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
-        pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+    const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
 #endif
+    pango_layout_set_text( layout, (const char*) data, strlen((const char*)data) );
  
     // Measure text.
     int w,h;
-    pango_layout_get_pixel_size(layout, &w, &h);
+    pango_layout_get_pixel_size( layout, &w, &h );
     
     if (width) (*width) = (wxCoord) w; 
     if (height) (*height) = (wxCoord) h;
@@ -1681,7 +1709,7 @@ wxCoord wxWindowDC::GetCharHeight() const
     // There should be an easier way.
     PangoLayout *layout = pango_layout_new(m_context);
     pango_layout_set_font_description(layout, m_fontdesc);
-    pango_layout_set_text(layout, "H", 1 );
+    pango_layout_set_text(layout, "H", 1);
     int w,h;
     pango_layout_get_pixel_size(layout, &w, &h);
     g_object_unref( G_OBJECT( layout ) );
