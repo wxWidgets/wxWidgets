@@ -37449,10 +37449,16 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"TE_DONTWRAP", SWIG_From_int((int)(wxTE_DONTWRAP))); 
     }
     {
-        PyDict_SetItemString(d,"TE_LINEWRAP", SWIG_From_int((int)(wxTE_LINEWRAP))); 
+        PyDict_SetItemString(d,"TE_CHARWRAP", SWIG_From_int((int)(wxTE_CHARWRAP))); 
     }
     {
         PyDict_SetItemString(d,"TE_WORDWRAP", SWIG_From_int((int)(wxTE_WORDWRAP))); 
+    }
+    {
+        PyDict_SetItemString(d,"TE_BESTWRAP", SWIG_From_int((int)(wxTE_BESTWRAP))); 
+    }
+    {
+        PyDict_SetItemString(d,"TE_LINEWRAP", SWIG_From_int((int)(wxTE_LINEWRAP))); 
     }
     {
         PyDict_SetItemString(d,"TE_RICH2", SWIG_From_int((int)(wxTE_RICH2))); 
