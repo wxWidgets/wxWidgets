@@ -125,8 +125,9 @@ public:
 
     // Called when the sash position is about to be changed, return
     // FALSE from here to prevent the change from taking place.
+    // Repositions sash to minimum position if pane would be too small.
     // newSashPosition here is always positive or zero.
-    virtual bool OnSashPositionChange(int newSashPosition);
+    virtual bool OnSashPositionChange(int& newSashPosition);
 
     // If the sash is moved to an extreme position, a subwindow
     // is removed from the splitter window, and the app is
