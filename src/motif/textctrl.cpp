@@ -401,7 +401,7 @@ void wxTextCtrl::WriteText(const wxString& text)
 
 void wxTextCtrl::AppendText(const wxString& text)
 {
-    long textPosition = GetLastPosition() + strlen(text);
+    long textPosition = GetLastPosition() + text.length();
     XmTextInsert ((Widget) m_mainWidget, GetLastPosition(),
                   wxConstCast(text.c_str(), char));
     XtVaSetValues ((Widget) m_mainWidget, XmNcursorPosition, textPosition, NULL);
