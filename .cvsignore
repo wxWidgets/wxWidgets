@@ -21,6 +21,7 @@ linux-gnu.system.cache
 *.d
 *.swp
 *.swo
+*.swq
 Release
 Debug
 ReleaseDLL
