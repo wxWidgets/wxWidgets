@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.5.1\n"
 "POT-Creation-Date: 2004-02-04 18:56+0100\n"
-"PO-Revision-Date: 2004-05-05 13:43+0100\n"
+"PO-Revision-Date: 2004-05-06 18:28+0100\n"
 "Last-Translator: W³odzimierz ABX Skiba <abx@abx.art.pl>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
@@ -57,7 +57,7 @@ msgstr "%i z %i"
 #: ../src/generic/filedlgg.cpp:277
 #, c-format
 msgid "%ld bytes"
-msgstr ""
+msgstr "%ld bajtów"
 
 #: ../src/common/cmdline.cpp:825
 #, c-format
@@ -452,7 +452,7 @@ msgstr "Arabski (ISO-8859-6)"
 
 #: ../src/generic/filedlgg.cpp:428
 msgid "Attributes"
-msgstr ""
+msgstr "W³a¶ciwo¶ci"
 
 #: ../src/common/paper.cpp:146
 msgid "B4 Envelope, 250 x 353 mm"
@@ -553,14 +553,12 @@ msgstr "Koperta C65, 114 x 229 mm"
 
 #: ../src/html/chm.cpp:783
 #: ../src/html/chm.cpp:842
-#, fuzzy
 msgid "CHM handler currently supports only local files!"
-msgstr "Obs³ugiwane s± tylko lokalne pliki ZIP!"
+msgstr "Obs³uga CHM obecnie wspiera tylko pliki lokalne!"
 
 #: ../src/os2/thread.cpp:121
-#, fuzzy
 msgid "Can not create mutex."
-msgstr "Nie mo¿na utworzyæ w±tku"
+msgstr "Nie mo¿na utworzyæ muteksu."
 
 #: ../src/common/filefn.cpp:1462
 #, c-format
@@ -684,14 +682,12 @@ msgid "Can't get info about registry key '%s'"
 msgstr "Nie mo¿na uzyskaæ informacji o kluczu rejestru '%s'"
 
 #: ../src/common/zstream.cpp:197
-#, fuzzy
 msgid "Can't initialize zlib deflate stream."
-msgstr "Nie mo¿na zainicjowaæ obs³ugi wy¶wietlania."
+msgstr "Nie mo¿na zainicjowaæ strumienia kompresji biblioteki zlib."
 
 #: ../src/common/zstream.cpp:88
-#, fuzzy
 msgid "Can't initialize zlib inflate stream."
-msgstr "Nie mo¿na zainicjowaæ obs³ugi wy¶wietlania."
+msgstr "Nie mo¿na zainicjowaæ strumienia dekompresji biblioteki zlib."
 
 #: ../src/common/image.cpp:1028
 #: ../src/common/image.cpp:1048
@@ -772,9 +768,9 @@ msgid "Cannot convert dialog units: dialog unknown."
 msgstr "Nie mo¿na wykonaæ konwersji okien dialogowych: nieznane okno dialogowe."
 
 #: ../src/common/strconv.cpp:1567
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert from the charset '%s'!"
-msgstr "Nie mo¿na skonwertowaæ z kodowania '%s'!"
+msgstr "Nie mo¿na dokonaæ konwersji z tablicy '%s'!"
 
 #: ../src/msw/dialup.cpp:497
 #, c-format
@@ -870,9 +866,9 @@ msgid "Cannot open index file: %s"
 msgstr "Nie mo¿na otworzyæ pliku indeksowego: %s"
 
 #: ../src/common/intl.cpp:1196
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse Plural-Forms:'%s'"
-msgstr "Nie mo¿na wyci±gn±æ koordynatów z '%s'."
+msgstr "Nie mo¿na przetworzyæ formy liczby mnogiej: '%s'"
 
 #: ../contrib/src/xrc/xmlres.cpp:975
 #, c-format
@@ -991,9 +987,9 @@ msgid "Copies:"
 msgstr "Kopie:"
 
 #: ../src/html/chm.cpp:689
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create temporary file '%s'"
-msgstr "nie mo¿na usun±æ tymczasowego pliku '%s'"
+msgstr "Nie mo¿na utworzyæ tymczasowego pliku '%s'"
 
 #: ../src/html/chm.cpp:274
 #, c-format
@@ -1010,9 +1006,9 @@ msgid "Could not load Rich Edit DLL '%s'"
 msgstr "Nie mo¿na wczytaæ biblioteki Rich Edit '%s'"
 
 #: ../src/html/chm.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "Could not locate file '%s'."
-msgstr "Nie mo¿na otworzyæ pliku '%s'."
+msgstr "Nie odnaleziono pliku '%s'."
 
 #: ../src/common/prntbase.cpp:810
 msgid "Could not start document preview."
@@ -1029,9 +1025,8 @@ msgid "Could not transfer data to window"
 msgstr "Nie mo¿na przenie¶æ danych do okna"
 
 #: ../src/os2/thread.cpp:154
-#, fuzzy
 msgid "Couldn't acquire a mutex lock"
-msgstr "Nie mo¿na utworzyæ stopera"
+msgstr "Nie mo¿na przechwyciæ muteksu"
 
 #: ../src/msw/dragimag.cpp:166
 #: ../src/msw/dragimag.cpp:206
@@ -1067,14 +1062,14 @@ msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
 msgstr "Nie mo¿na wczytaæ obrazu PNG - plik jest uszkodzony lub zabrak³o pamiêci."
 
 #: ../src/unix/sound.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't load sound data from '%s'."
-msgstr "Nie mo¿na wczytaæ ikony z '%s'."
+msgstr "Nie mo¿na wczytaæ danych d¼wiêkowych '%s'."
 
 #: ../src/unix/sound_sdl.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't open audio: %s"
-msgstr "Nie mo¿na otworzyæ pliku '%s'"
+msgstr "Nie mo¿na otworzyæ d¼wiêku: %s"
 
 #: ../src/msw/ole/dataobj.cpp:147
 #, c-format
@@ -1082,9 +1077,8 @@ msgid "Couldn't register clipboard format '%s'."
 msgstr "Nie mo¿na zarejestrowaæ formatu schowka '%s'."
 
 #: ../src/os2/thread.cpp:171
-#, fuzzy
 msgid "Couldn't release a mutex"
-msgstr "Nie mo¿na utworzyæ stopera"
+msgstr "Muteks nie móg³ byæ uwolniony"
 
 #: ../src/msw/listctrl.cpp:828
 #, c-format
@@ -1169,9 +1163,8 @@ msgid "Default encoding"
 msgstr "Kodowanie domy¶lne"
 
 #: ../contrib/src/gizmos/editlbox.cpp:163
-#, fuzzy
 msgid "Delete item"
-msgstr "&Usuñ"
+msgstr "Usuñ pozycjê"
 
 #: ../src/unix/snglinst.cpp:269
 #, c-format
@@ -1201,9 +1194,8 @@ msgid "Directory does not exist"
 msgstr "Katalog nie istnieje"
 
 #: ../src/generic/filedlgg.cpp:1191
-#, fuzzy
 msgid "Directory doesn't exist."
-msgstr "Katalog nie istnieje"
+msgstr "Katalog nie istnieje."
 
 #: ../src/html/helpfrm.cpp:409
 msgid "Display all index items that contain given substring. Search is case insensitive."
@@ -1255,7 +1247,7 @@ msgstr "Arkusz E, 34 x 44 cale"
 
 #: ../contrib/src/gizmos/editlbox.cpp:161
 msgid "Edit item"
-msgstr ""
+msgstr "Edytuj pozycjê"
 
 #: ../src/generic/progdlgg.cpp:183
 msgid "Elapsed time : "
@@ -1306,9 +1298,8 @@ msgid "Error in reading image DIB ."
 msgstr "B³±d odczytu obrazu DIB."
 
 #: ../src/common/fileconf.cpp:505
-#, fuzzy
 msgid "Error reading config options."
-msgstr "B³±d odczytu obrazu DIB."
+msgstr "B³±d odczytu opcji konfiguracji."
 
 #: ../src/common/log.cpp:478
 msgid "Error: "
@@ -2242,9 +2233,8 @@ msgid "Move down"
 msgstr ""
 
 #: ../contrib/src/gizmos/editlbox.cpp:164
-#, fuzzy
 msgid "Move up"
-msgstr "Prz&enie¶"
+msgstr "Przenie¶ w górê"
 
 #: ../src/generic/filedlgg.cpp:419
 msgid "Name"
@@ -2960,12 +2950,12 @@ msgstr ""
 "Utworzyæ go teraz?"
 
 #: ../src/common/docview.cpp:1859
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file '%s' couldn't be opened.\n"
 "It has been removed from the most recently used files list."
 msgstr ""
-"Plik '%s' nie istnieje i nie mo¿na go otworzyæ.\n"
+"Nie mo¿na otworzyæ pliku '%s'.\n"
 "Informacja o nim zosta³a usuniêta z listy ostatnio u¿ywanych plików."
 
 #: ../src/common/docview.cpp:1869
@@ -3030,9 +3020,8 @@ msgid "Tile &Vertically"
 msgstr "S±si&aduj±co w pionie"
 
 #: ../src/msw/timer.cpp:111
-#, fuzzy
 msgid "Timer creation failed."
-msgstr "Nie uda³o siê utworzyæ potoku."
+msgstr "Nie powiod³o siê utworzenie stopera."
 
 #: ../src/generic/tipdlg.cpp:205
 msgid "Tip of the Day"
@@ -3069,9 +3058,8 @@ msgid "Turkish (ISO-8859-9)"
 msgstr "Turecki (ISO-8859-9)"
 
 #: ../src/generic/filedlgg.cpp:421
-#, fuzzy
 msgid "Type"
-msgstr "Teletype"
+msgstr "Typ"
 
 #: ../src/common/xtistrm.cpp:279
 #: ../src/common/xtixml.cpp:351
