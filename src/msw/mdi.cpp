@@ -609,7 +609,7 @@ bool wxMDIParentFrame::MSWProcessMessage(WXMSG* msg)
      return TRUE;
 	
   if (m_acceleratorTable != (WXHANDLE) NULL &&
-          ::TranslateAccelerator((HWND) GetHWND(), (HANDLE) m_acceleratorTable, pMsg))
+          ::TranslateAccelerator((HWND) GetHWND(), (HACCEL) m_acceleratorTable, pMsg))
     return TRUE;
 
   if (pMsg->message == WM_KEYDOWN || pMsg->message == WM_SYSKEYDOWN)
@@ -818,7 +818,7 @@ void wxMDIChildFrame::SetMenuBar(wxMenuBar *menu_bar)
    wxMDIParentFrame *parent = (wxMDIParentFrame *)GetParent();
 
    parent->m_parentFrameActive = FALSE;
-   HMENU subMenu = GetSubMenu((HWND) parent->GetWindowMenu(), 0);
+   HMENU subMenu = GetSubMenu((HMENU) parent->GetWindowMenu(), 0);
 
    // Try to insert Window menu in front of Help, otherwise append it.
    int N = GetMenuItemCount(menu);
@@ -960,7 +960,7 @@ bool wxMDIChildFrame::MSWProcessMessage(WXMSG *msg)
   {
     wxFrame *parent = (wxFrame *)GetParent();
     HWND parent_hwnd = (HWND) parent->GetHWND();
-    return (::TranslateAccelerator(parent_hwnd, (HANDLE) m_acceleratorTable, pMsg) != 0);
+    return (::TranslateAccelerator(parent_hwnd, (HACCEL) m_acceleratorTable, pMsg) != 0);
   }
   return FALSE;
 }

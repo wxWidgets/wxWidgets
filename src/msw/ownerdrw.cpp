@@ -128,7 +128,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
   #ifdef  O_DRAW_NATIVE_API
     int nPrevMode = SetBkMode(hdc, TRANSPARENT);
     HBRUSH  hbr = CreateSolidBrush(colBack),
-            hPrevBrush = SelectObject(hdc, hbr);
+            hPrevBrush = (HBRUSH) SelectObject(hdc, hbr);
 
     RECT rectAll = { rc.GetLeft(), rc.GetTop(), rc.GetRight(), rc.GetBottom() };
     FillRect(hdc, &rectAll, hbr);
@@ -143,7 +143,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODSt
       hfont = (HFONT)::GetStockObject(SYSTEM_FONT);
     }
 
-    HFONT hPrevFont = ::SelectObject(hdc, hfont);
+    HFONT hPrevFont = (HFONT) ::SelectObject(hdc, hfont);
     DrawState(hdc, NULL, NULL, 
               (LPARAM)(const char *)m_strName, m_strName.Length(), 
               x, rc.y, rc.GetWidth(), rc.GetHeight(),

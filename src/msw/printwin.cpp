@@ -171,7 +171,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
   wxWindow *win = CreateAbortWindow(parent, printout);
   wxYield();
-  ::SetAbortProc((HDC) dc->GetHDC(), (FARPROC) lpAbortProc);
+  ::SetAbortProc((HDC) dc->GetHDC(), (int (_stdcall *)(HDC, int)) lpAbortProc);
 
   if (!win)
   {

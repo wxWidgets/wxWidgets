@@ -171,7 +171,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   HWND edit = CreateWindowEx(exStyle, windowClass, NULL,
                         msStyle,
                         0, 0, 0, 0, (HWND) ((wxWindow*)parent)->GetHWND(), (HMENU)m_windowId,
-                        m_globalHandle ? (HANDLE) m_globalHandle : wxGetInstance(), NULL);
+                        m_globalHandle ? (HINSTANCE) m_globalHandle : wxGetInstance(), NULL);
 
 #if CTL3D
   if ( want3D )

@@ -130,7 +130,7 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 	HDC hDC = lpDIS->hDC;
 	HDC memDC = ::CreateCompatibleDC(hDC);
 
-	HBITMAP old = ::SelectObject(memDC, (HBITMAP) bitmap->GetHBITMAP());
+	HBITMAP old = (HBITMAP) ::SelectObject(memDC, (HBITMAP) bitmap->GetHBITMAP());
 
 	if (!old)
 		return FALSE;
@@ -194,8 +194,8 @@ void wxBitmapButton::DrawFace( WXHDC dc, int left, int top, int right, int botto
 	ms_color = GetSysColor(COLOR_BTNFACE) ;
 	brushFace = CreateSolidBrush(ms_color) ;
 
-	oldp = SelectObject( (HDC) dc, GetStockObject( NULL_PEN ) ) ;
-	oldb = SelectObject( (HDC) dc, brushFace ) ;
+	oldp = (HPEN) SelectObject( (HDC) dc, GetStockObject( NULL_PEN ) ) ;
+	oldb = (HBRUSH) SelectObject( (HDC) dc, brushFace ) ;
 	Rectangle( (HDC) dc, left, top, right, bottom ) ;
 	SelectObject( (HDC) dc, penBorder) ;
         MoveToEx((HDC) dc,left+1,top,NULL);LineTo((HDC) dc,right-1,top);
@@ -252,7 +252,7 @@ void wxBitmapButton::DrawButtonFocus( WXHDC dc, int left, int top, int right, in
 extern HBRUSH wxDisableButtonBrush;
 void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg )
 {
-	HBRUSH	old = SelectObject( (HDC) dc, wxDisableButtonBrush ) ;
+	HBRUSH	old = (HBRUSH) SelectObject( (HDC) dc, wxDisableButtonBrush ) ;
 
 	if ( with_marg )
 		::PatBlt( (HDC) dc, left + m_marginX, top + m_marginY,

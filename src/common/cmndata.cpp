@@ -387,7 +387,7 @@ void wxPageSetupData::ConvertToNative(void)
         pd->Flags |= PSD_SHOWHELP;
 
     pd->lStructSize = sizeof( PAGESETUPDLG );
-    pd->hwndOwner=(HANDLE)NULL;
+    pd->hwndOwner=(HWND)NULL;
     pd->hDevNames=(HWND)NULL;
     pd->hInstance=(HINSTANCE)NULL;
 

@@ -59,7 +59,7 @@ extern wxList wxPendingDelete;
 extern void wxSetKeyboardHook(bool doIt);
 extern wxCursor *g_globalCursor;
 
-HANDLE wxhInstance = 0;
+HINSTANCE wxhInstance = 0;
 static MSG s_currentMsg;
 wxApp *wxTheApp = NULL;
 
@@ -94,9 +94,9 @@ long wxApp::sm_lastMessageTime = 0;
 static HINSTANCE gs_hRichEdit = NULL;
 #endif
 
-bool wxApp::Initialize(WXHANDLE instance)
+bool wxApp::Initialize(WXHINSTANCE instance)
 {
-  HANDLE hInstance = (HANDLE)instance;
+  HINSTANCE hInstance = (HINSTANCE) instance;
 
   CommonInit();
 
@@ -248,7 +248,7 @@ bool wxApp::RegisterWindowClasses()
   wndclass2.hIcon         = NULL;
   wndclass2.hCursor       = NULL;
 //  wndclass2.hbrBackground = (HBRUSH)(COLOR_BTNFACE+1) ;
-  wndclass2.hbrBackground = GetStockObject( LTGRAY_BRUSH );
+  wndclass2.hbrBackground = (HBRUSH) GetStockObject( LTGRAY_BRUSH );
   wndclass2.lpszMenuName  = NULL;
   wndclass2.lpszClassName = wxPanelClassName;
   if (!RegisterClass( &wndclass2 ))

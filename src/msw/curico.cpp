@@ -772,7 +772,7 @@ HCURSOR MakeCursorFromBitmap(HINSTANCE hInst, HBITMAP hBitmap, POINT *pPoint)
   hAndBmp = CreateCompatibleBitmap(hDCMono, 32, 32);
   hXorBmp = CreateCompatibleBitmap(hDCMono, 32, 32);
 
-  hBmpOld = SelectObject(hDCColor, hBitmap);
+  hBmpOld = (HBITMAP) SelectObject(hDCColor, hBitmap);
   SelectObject(hDCMono, hAndBmp);
   SetBkColor(hDCColor, RGB(191, 191, 191));
 
@@ -849,7 +849,7 @@ HICON MakeIconFromBitmap(HINSTANCE hInst, HBITMAP hBitmap)
   hAndBmp = CreateCompatibleBitmap(hDCMono, 32, 32);
   hXorBmp = CreateCompatibleBitmap(hDCMono, 32, 32);
 
-  hBmpOld = SelectObject(hDCColor, hBitmap);
+  hBmpOld = (HBITMAP) SelectObject(hDCColor, hBitmap);
   SelectObject(hDCMono, hAndBmp);
   SetBkColor(hDCColor, RGB(191, 191, 191));
 

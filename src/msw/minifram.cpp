@@ -841,13 +841,13 @@ BOOL PASCAL DrawCaption( HDC hDC, HWND hWnd, LPRECT lprc,
     DRAWFASTRECT( hDC, &rc ) ;
 
     hbrCaption = CreateSolidBrush( rgbCaptionBG ) ;
-    hbrCaption = SelectObject( hDC, hbrCaption ) ;
-    SelectObject( hDC, GetStockObject( NULL_PEN ) ) ;
+    hbrCaption = (HBRUSH) SelectObject( hDC, hbrCaption ) ;
+    SelectObject( hDC, (HPEN) GetStockObject( NULL_PEN ) ) ;
     if (fVert)
         Rectangle( hDC, rcCap.left, rcCap.top, rcCap.right, rcCap.bottom + 1 ) ;
     else
         Rectangle( hDC, rcCap.left, rcCap.top, rcCap.right+1, rcCap.bottom ) ;
-    hbrCaption = SelectObject( hDC, hbrCaption ) ;
+    hbrCaption = (HBRUSH) SelectObject( hDC, hbrCaption ) ;
     DeleteObject( hbrCaption ) ;
 
     
@@ -901,7 +901,7 @@ BOOL PASCAL DrawCaption( HDC hDC, HWND hWnd, LPRECT lprc,
                 lf.lfOrientation = 900 ;
                 
                 hFont = CreateFontIndirect( &lf ) ;
-                hFont = SelectObject( hDC, hFont ) ;
+                hFont = (HFONT) SelectObject( hDC, hFont ) ;
                 
                 GetTextExtentPoint( hDC, lpsz, ui, &Size ) ;
                 cx = rcCap.bottom - ((rcCap.bottom - rcCap.top - Size.cx) / 2) ;
@@ -920,7 +920,7 @@ BOOL PASCAL DrawCaption( HDC hDC, HWND hWnd, LPRECT lprc,
                                lpsz, ui, NULL ) ;
                 }
                 
-                hFont = SelectObject( hDC, hFont ) ;
+                hFont = (HFONT) SelectObject( hDC, hFont ) ;
                 DeleteObject( hFont ) ;
             }
             else
@@ -931,7 +931,7 @@ BOOL PASCAL DrawCaption( HDC hDC, HWND hWnd, LPRECT lprc,
                 lf.lfPitchAndFamily = FF_SWISS ;
                 
                 hFont = CreateFontIndirect( &lf ) ;
-                hFont = SelectObject( hDC, hFont ) ;
+                hFont = (HFONT) SelectObject( hDC, hFont ) ;
                 
                 GetTextExtentPoint( hDC, lpsz, ui, &Size ) ;
                 cx = rcCap.left + ((rcCap.right - rcCap.left - Size.cx) / 2) ;
@@ -945,7 +945,7 @@ BOOL PASCAL DrawCaption( HDC hDC, HWND hWnd, LPRECT lprc,
                             ETO_CLIPPED, &rcCap,
                             lpsz, ui, NULL ) ;
                 
-                hFont = SelectObject( hDC, hFont ) ;
+                hFont = (HFONT) SelectObject( hDC, hFont ) ;
                 DeleteObject( hFont ) ;
             }
 

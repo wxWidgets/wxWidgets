@@ -188,7 +188,7 @@ bool wxToolBar95::CreateTools(void)
   
   // Now blit all the tools onto this bitmap
   HDC memoryDC = ::CreateCompatibleDC(NULL);
-  HBITMAP oldBitmap = ::SelectObject(memoryDC, (HBITMAP) m_hBitmap);
+  HBITMAP oldBitmap = (HBITMAP) ::SelectObject(memoryDC, (HBITMAP) m_hBitmap);
 
   HDC memoryDC2 = ::CreateCompatibleDC(NULL);
   int x = 0;
@@ -201,7 +201,7 @@ bool wxToolBar95::CreateTools(void)
     {
 //      wxPalette *palette = tool->m_bitmap1->GetPalette();
 
-      HBITMAP oldBitmap2 = ::SelectObject(memoryDC2, (HBITMAP) tool->m_bitmap1.GetHBITMAP());
+      HBITMAP oldBitmap2 = (HBITMAP) ::SelectObject(memoryDC2, (HBITMAP) tool->m_bitmap1.GetHBITMAP());
       /* int bltResult = */
 	  BitBlt(memoryDC, x, 0, (int) m_defaultWidth, (int) m_defaultHeight, memoryDC2,
                         0, 0, SRCCOPY);
@@ -506,7 +506,7 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
 
   if (hdcMem)
   {
-    hbmOld = SelectObject(hdcMem, hBitmap);
+    hbmOld = (HBITMAP) SelectObject(hdcMem, hBitmap);
 
     int i, j, k;
     for ( i = 0; i < width; i++)

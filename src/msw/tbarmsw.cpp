@@ -439,7 +439,7 @@ void wxToolBarMSW::CreateMask(WXHDC hdc, int xoffset, int yoffset, int dx, int d
     // krj - create a new bitmap and copy the image from hdc.
     //HBITMAP bitmapOld = SelectObject(hdcGlyphs, hBitmap);
     HBITMAP hBitmap = CreateCompatibleBitmap((HDC) hdc, dx, dy);
-    HBITMAP bitmapOld = SelectObject(hdcGlyphs, hBitmap);
+    HBITMAP bitmapOld = (HBITMAP) SelectObject(hdcGlyphs, hBitmap);
     BitBlt(hdcGlyphs, 0,0, dx, dy, (HDC) hdc, 0, 0, SRCCOPY);
 
     // initalize whole area with 1's
@@ -528,11 +528,11 @@ void wxToolBarMSW::DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBar
 #if !defined(__WIN32__) && !defined(__WIN386__)
     HBITMAP bitmapOld;
     if (tool->m_bitmap2.Ok())
-      bitmapOld = SelectObject(hdcGlyphs, (HBITMAP) tool->m_bitmap2.GetHBITMAP());
+      bitmapOld = (HBITMAP) SelectObject(hdcGlyphs, (HBITMAP) tool->m_bitmap2.GetHBITMAP());
     else
-      bitmapOld = SelectObject(hdcGlyphs, (HBITMAP) tool->m_bitmap1.GetHBITMAP());
+      bitmapOld = (HBITMAP) SelectObject(hdcGlyphs, (HBITMAP) tool->m_bitmap1.GetHBITMAP());
 #else
-    HBITMAP bitmapOld = SelectObject(hdcGlyphs, (HBITMAP) tool->m_bitmap1.GetHBITMAP());
+    HBITMAP bitmapOld = (HBITMAP) SelectObject(hdcGlyphs, (HBITMAP) tool->m_bitmap1.GetHBITMAP());
 #endif    
 
     // calculate offset of face from (x,y).  y is always from the top,
@@ -564,7 +564,7 @@ void wxToolBarMSW::DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBar
 	if (!(state & wxTBSTATE_INDETERMINATE)) {
 	    hbr = CreateSolidBrush(m_rgbHilight);
 	    if (hbr) {
-	        hbrOld = SelectObject((HDC) hdc, hbr);
+	        hbrOld = (HBRUSH) SelectObject((HDC) hdc, hbr);
 	        if (hbrOld) {
 	            // draw hilight color where we have 0's in the mask
                     BitBlt((HDC) hdc, x + 1, y + 1, dxFace, dyFace, (HDC) m_hdcMono, 0, 0, 0x00B8074A);
@@ -577,7 +577,7 @@ void wxToolBarMSW::DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBar
 	// gray out glyph
 	hbr = CreateSolidBrush(m_rgbShadow);
 	if (hbr) {
-	    hbrOld = SelectObject((HDC) hdc, hbr);
+	    hbrOld = (HBRUSH) SelectObject((HDC) hdc, hbr);
 	    if (hbrOld) {
 	        // draw the shadow color where we have 0's in the mask
                 BitBlt((HDC) hdc, x, y, dxFace, dyFace, (HDC) m_hdcMono, 0, 0, 0x00B8074A);
@@ -593,7 +593,7 @@ void wxToolBarMSW::DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBar
 
     if (state & (wxTBSTATE_CHECKED | wxTBSTATE_INDETERMINATE)) {
 
-        hbrOld = SelectObject((HDC) hdc, (HBRUSH) m_hbrDither);
+        hbrOld = (HBRUSH) SelectObject((HDC) hdc, (HBRUSH) m_hbrDither);
 	if (hbrOld) {
 
 	    if (!bMaskCreated)
@@ -817,7 +817,7 @@ WXHBITMAP wxToolBarMSW::CreateMappedBitmap(WXHINSTANCE WXUNUSED(hInstance), void
 //    hbm = CreateDiscardableBitmap(hdc, i, hgt);
     hbm = CreateCompatibleBitmap(hdc, i, hgt);
     if (hbm) {
-        hbmOld = SelectObject(hdcMem, hbm);
+        hbmOld = (HBITMAP) SelectObject(hdcMem, hbm);
 
         // set the main image
         StretchDIBits(hdcMem, 0, 0, wid, hgt, 0, 0, wid, hgt, lpBits,

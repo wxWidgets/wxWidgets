@@ -75,7 +75,7 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
 
   if ( !wxGaugeMSWInitialised )
   {
-    if (!gaugeInit((HWND) wxGetInstance()))
+    if (!gaugeInit((HINSTANCE) wxGetInstance()))
     	wxFatalError("Cannot initalize Gauge library");
 	wxGaugeMSWInitialised = TRUE;
   }
@@ -540,13 +540,13 @@ void FAR PASCAL Draw3DLine(HDC hdc, WORD x, WORD y, WORD nLen,
     else return;
 
     /* select NULL_PEN for no borders */
-    hOldPen = SelectObject(hdc, GetStockObject(NULL_PEN));
+    hOldPen = (HPEN) SelectObject(hdc, GetStockObject(NULL_PEN));
 
     /* select the appropriate color for the fill */
     if (fDark)
-        hOldBrush = SelectObject(hdc, GetStockObject(GRAY_BRUSH));
+        hOldBrush = (HBRUSH) SelectObject(hdc, GetStockObject(GRAY_BRUSH));
     else
-        hOldBrush = SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+        hOldBrush = (HBRUSH) SelectObject(hdc, GetStockObject(WHITE_BRUSH));
 
     /* finally, draw the dern thing */
     Polygon(hdc, (LPPOINT)&Point, 4);
@@ -857,7 +857,7 @@ static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
     GetClientRect(hwnd, &rc1);
 
     /* draw a black border on the _outside_ */
-    FrameRect(hdc, &rc1, GetStockObject(BLACK_BRUSH));
+    FrameRect(hdc, &rc1, (HBRUSH) GetStockObject(BLACK_BRUSH));
 
     /* we want to draw _just inside_ the black border */
     InflateRect(&rc1, -1, -1);
@@ -878,7 +878,7 @@ static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
 	InflateRect(&rc1, ~(pgauge->wWidth3D), ~(pgauge->wWidth3D));
 
         /* draw a black border on the _inside_ */
-        FrameRect(hdc, &rc1, GetStockObject(BLACK_BRUSH));
+        FrameRect(hdc, &rc1, (HBRUSH) GetStockObject(BLACK_BRUSH));
 
         /* we want to draw _just inside_ the black border */
         InflateRect(&rc1, -1, -1);
@@ -925,7 +925,7 @@ static void PASCAL gaugePaint(HWND hwnd, HDC hdc)
     } /* switch () */
 
     /* select the correct font */
-    hFont = SelectObject(hdc, pgauge->hFont);
+    hFont = (HFONT) SelectObject(hdc, pgauge->hFont);
 
     /* build up a string to blit out--ie the meaning of life: "42%" */
     wsprintf(ach, "%3d%%", (WORD)((DWORD)iPos * 100 / iRange));
@@ -1148,7 +1148,7 @@ zyzgForceRepaint3D:
         case WM_SETFONT:
             /* if NULL hFont, use system font */
             if (!(hFont = (HFONT)wParam))
-                hFont = GetStockObject(SYSTEM_FONT);
+                hFont = (HFONT) GetStockObject(SYSTEM_FONT);
 
             pgauge->hFont = hFont;
 

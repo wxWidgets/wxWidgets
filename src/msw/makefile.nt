@@ -71,6 +71,8 @@ GENERICOBJS= \
   $(GENDIR)\tabg.obj \
   $(GENDIR)\textdlgg.obj
 
+#  $(COMMDIR)\fileconf.obj \
+
 COMMONOBJS = \
   $(COMMDIR)\cmndata.obj \
   $(COMMDIR)\config.obj \
@@ -78,7 +80,6 @@ COMMONOBJS = \
   $(COMMDIR)\dynarray.obj \
   $(COMMDIR)\event.obj \
   $(COMMDIR)\file.obj \
-  $(COMMDIR)\fileconf.obj \
   $(COMMDIR)\filefn.obj \
   $(COMMDIR)\gdicmn.obj \
   $(COMMDIR)\intl.obj \

@@ -682,7 +682,7 @@ HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
     ** some good color choices.
     */
     else
-	return(GetStockObject(DEFAULT_PALETTE));
+	return((HPALETTE) GetStockObject(DEFAULT_PALETTE));
 }
 
 bool wxLoadIntoBitmap(char *filename, wxBitmap *bitmap, wxColourMap **pal)

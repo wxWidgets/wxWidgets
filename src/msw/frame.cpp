@@ -739,7 +739,7 @@ void wxFrame::MSWOnMenuHighlight(WXWORD nItem, WXWORD nFlags, WXHMENU hSysMenu)
 bool wxFrame::MSWProcessMessage(WXMSG* pMsg)
 {
   if (m_acceleratorTable != 0 &&
-          ::TranslateAccelerator((HWND) GetHWND(), (HANDLE) m_acceleratorTable, (MSG *)pMsg))
+          ::TranslateAccelerator((HWND) GetHWND(), (HACCEL) m_acceleratorTable, (MSG *)pMsg))
     return TRUE;
   
   return FALSE;

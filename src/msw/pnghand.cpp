@@ -271,7 +271,7 @@ bool wxPNGReader::InstantiateBitmap(wxBitmap *bitmap)
         HDC dc2 = GetDC(NULL);
         HBITMAP tmpBitmap = ::CreateCompatibleBitmap(dc2, GetWidth(), GetHeight());
         ReleaseDC(NULL, dc2);
-        HBITMAP oldBitmap = ::SelectObject(dc, tmpBitmap);
+        HBITMAP oldBitmap = (HBITMAP) ::SelectObject(dc, tmpBitmap);
 
         if ( Palette )
         {
@@ -342,7 +342,7 @@ wxMask *wxPNGReader::CreateMask(void)
     HBITMAP hBitmap = ::CreateBitmap(GetWidth(), GetHeight(), 1, 1, NULL);
 
 	HDC dc = ::CreateCompatibleDC(NULL);
-    HBITMAP oldBitmap = ::SelectObject(dc, hBitmap);
+    HBITMAP oldBitmap = (HBITMAP) ::SelectObject(dc, hBitmap);
 
     int bgIndex = GetBGIndex();
 

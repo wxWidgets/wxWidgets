@@ -154,7 +154,7 @@ bool wxStaticBitmap::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 	HDC hDC = lpDIS->hDC;
 	HDC memDC = ::CreateCompatibleDC(hDC);
 
-	HBITMAP old = ::SelectObject(memDC, (HBITMAP) bitmap->GetHBITMAP());
+	HBITMAP old = (HBITMAP) ::SelectObject(memDC, (HBITMAP) bitmap->GetHBITMAP());
 
 	if (!old)
 		return FALSE;

@@ -92,7 +92,7 @@ bool wxSetClipboardData(int dataFormat, wxObject *obj, int width, int height)
 
       HDC hdcMem = CreateCompatibleDC(NULL);
       HDC hdcSrc = CreateCompatibleDC(NULL);
-      HBITMAP old = ::SelectObject(hdcSrc, (HBITMAP) wxBM->GetHBITMAP());
+      HBITMAP old = (HBITMAP) ::SelectObject(hdcSrc, (HBITMAP) wxBM->GetHBITMAP());
       HBITMAP hBitmap = CreateCompatibleBitmap(hdcSrc,
                                               wxBM->GetWidth(), wxBM->GetHeight());
       if (!hBitmap)
@@ -102,7 +102,7 @@ bool wxSetClipboardData(int dataFormat, wxObject *obj, int width, int height)
         DeleteDC(hdcSrc);
         return FALSE;
       }
-      HBITMAP old1 = SelectObject(hdcMem, hBitmap);
+      HBITMAP old1 = (HBITMAP) SelectObject(hdcMem, hBitmap);
       BitBlt(hdcMem, 0, 0, wxBM->GetWidth(), wxBM->GetHeight(),
              hdcSrc, 0, 0, SRCCOPY);
 
@@ -145,7 +145,7 @@ bool wxSetClipboardData(int dataFormat, wxObject *obj, int width, int height)
       mf->mm = wxMF->GetWindowsMappingMode();
       mf->xExt = width;
       mf->yExt = height;
-      mf->hMF = (HANDLE) wxMF->GetHMETAFILE();
+      mf->hMF = (HMETAFILE) wxMF->GetHMETAFILE();
       GlobalUnlock(data);
       wxMF->SetHMETAFILE((WXHANDLE) NULL);
 
@@ -206,14 +206,14 @@ wxObject *wxGetClipboardData(int dataFormat, long *len)
     case wxCF_BITMAP:
     {
       BITMAP bm;
-      HBITMAP hBitmap = GetClipboardData(CF_BITMAP);
+      HBITMAP hBitmap = (HBITMAP) GetClipboardData(CF_BITMAP);
       if (!hBitmap)
         return NULL;
 
       HDC hdcMem = CreateCompatibleDC(NULL);
       HDC hdcSrc = CreateCompatibleDC(NULL);
 
-      HBITMAP old = ::SelectObject(hdcSrc, hBitmap);
+      HBITMAP old = (HBITMAP) ::SelectObject(hdcSrc, hBitmap);
       GetObject(hBitmap, sizeof(BITMAP), (LPSTR)&bm);
 
       HBITMAP hNewBitmap = CreateBitmapIndirect(&bm);
@@ -226,7 +226,7 @@ wxObject *wxGetClipboardData(int dataFormat, long *len)
         return NULL;
       }
 
-      HBITMAP old1 = SelectObject(hdcMem, hNewBitmap);
+      HBITMAP old1 = (HBITMAP) SelectObject(hdcMem, hNewBitmap);
       BitBlt(hdcMem, 0, 0, bm.bmWidth, bm.bmHeight,
              hdcSrc, 0, 0, SRCCOPY);
 

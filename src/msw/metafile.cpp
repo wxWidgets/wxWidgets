@@ -62,7 +62,7 @@ wxMetaFile::wxMetaFile(const wxString& file)
 wxMetaFile::~wxMetaFile(void)
 {
   if (m_metaFile)
-    { DeleteMetaFile((HANDLE) m_metaFile); m_metaFile = 0; }
+    { DeleteMetaFile((HMETAFILE) m_metaFile); m_metaFile = 0; }
 }
 
 bool wxMetaFile::SetClipboard(int width, int height)
@@ -83,7 +83,7 @@ bool wxMetaFile::Play(wxDC *dc)
   dc->BeginDrawing();
 
   if (dc->GetHDC() && m_metaFile)
-    PlayMetaFile((HDC) dc->GetHDC(), (HANDLE) m_metaFile);
+    PlayMetaFile((HDC) dc->GetHDC(), (HMETAFILE) m_metaFile);
 
   dc->EndDrawing();
 

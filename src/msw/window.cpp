@@ -807,7 +807,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
   if (fontToUse && fontToUse->Ok())
   {
     if ((fnt=(HFONT) fontToUse->GetResourceHandle()))
-      was = SelectObject(dc,fnt) ;
+      was = (HFONT) SelectObject(dc,fnt) ;
   }
 
   SIZE sizeRect;
@@ -1686,7 +1686,7 @@ void wxWindow::MSWOnDropFiles(WXWPARAM wParam)
   wxDebugMsg("wxWindow::MSWOnDropFiles %d\n", m_hWnd);
 #endif
 
-  HANDLE hFilesInfo = (HANDLE)wParam;
+  HDROP hFilesInfo = (HDROP) wParam;
   POINT dropPoint;
   DragQueryPoint(hFilesInfo, (LPPOINT) &dropPoint);
 
@@ -2647,7 +2647,7 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font)
 //    the_font->UseResource();
 //    the_font->RealizeResource();
     if ((fnt=(HFONT) the_font->GetResourceHandle()))
-      was = SelectObject(dc,fnt) ;
+      was = (HFONT) SelectObject(dc,fnt) ;
   }
   GetTextMetrics(dc, &tm);
   if (the_font && fnt && was)

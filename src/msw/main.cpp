@@ -41,7 +41,7 @@ int PASCAL
 int APIENTRY
 #endif
 
- WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR m_lpCmdLine, int nCmdShow )
+ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR m_lpCmdLine, int nCmdShow )
 {
   return wxEntry((WXHINSTANCE) hInstance, (WXHINSTANCE) hPrevInstance, m_lpCmdLine, nCmdShow);
 }
