@@ -172,7 +172,7 @@ WXDLLEXPORT int wxKill(long pid, wxSignal sig = wxSIGTERM);
 // If no command then just the shell
 WXDLLEXPORT bool wxShell(const wxString& command = wxEmptyString);
 
-// Sleep for nSecs seconds under UNIX, do nothing under Windows
+// Sleep for nSecs seconds
 WXDLLEXPORT void wxSleep(int nSecs);
 
 // Sleep for a given amount of milliseconds

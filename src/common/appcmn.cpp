@@ -47,7 +47,7 @@
 void wxAppBase::ProcessPendingEvents()
 {
     // ensure that we're the only thread to modify the pending events list
-    wxCRIT_SECT_LOCKER(locker, wxPendingEventsLocker);
+    wxCRIT_SECT_LOCKER(locker, *wxPendingEventsLocker);
 
     if ( !wxPendingEvents )
         return;

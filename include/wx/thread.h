@@ -53,7 +53,14 @@ enum wxThreadError
   wxTHREAD_NO_RESOURCE,       // No resource left to create a new thread
   wxTHREAD_RUNNING,           // The thread is already running
   wxTHREAD_NOT_RUNNING,       // The thread isn't running
+  wxTHREAD_KILLED,            // Thread we waited for had to be killed
   wxTHREAD_MISC_ERROR         // Some other error
+};
+
+enum wxThreadKind
+{
+    wxTHREAD_DETACHED,
+    wxTHREAD_JOINABLE
 };
 
 // defines the interval of priority
@@ -231,15 +238,18 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// Thread management class
+// Thread class
 // ----------------------------------------------------------------------------
 
-// FIXME Thread termination model is still unclear. Delete() should probably
-//       have a timeout after which the thread must be Kill()ed.
+// there are two different kinds of threads: joinable and detached (default)
+// ones. Only joinable threads can return a return code and only detached
+// threads auto-delete themselves - the user should delete the joinable
+// threads manually.
 
 // NB: in the function descriptions the words "this thread" mean the thread
 //     created by the wxThread object while "main thread" is the thread created
 //     during the process initialization (a.k.a. the GUI thread)
+
 class wxThreadInternal;
 class WXDLLEXPORT wxThread
 {
@@ -266,34 +276,52 @@ public:
         // NB: at least under MSW worker threads can not call ::wxSleep()!
     static void Sleep(unsigned long milliseconds);
 
-    // default constructor
-    wxThread();
+    // constructor only creates the C++ thread object and doesn't create (or
+    // start) the real thread
+    wxThread(wxThreadKind kind = wxTHREAD_DETACHED);
 
-    // function that change the thread state
+    // functions that change the thread state: all these can only be called
+    // from _another_ thread (typically the thread that created this one, e.g.
+    // the main thread), not from the thread itself
+
         // create a new thread - call Run() to start it
     wxThreadError Create();
 
-        // starts execution of the thread - from the moment Run() is called the
-        // execution of wxThread::Entry() may start at any moment, caller
+        // starts execution of the thread - from the moment Run() is called
+        // the execution of wxThread::Entry() may start at any moment, caller
         // shouldn't suppose that it starts after (or before) Run() returns.
     wxThreadError Run();
 
-        // stops the thread if it's running and deletes the wxThread object
-        // freeing its memory. This function should also be called if the
-        // Create() or Run() fails to free memory (otherwise it will be done by
-        // the thread itself when it terminates). The return value is the
-        // thread exit code if the thread was gracefully terminated, 0 if it
-        // wasn't running and -1 if an error occured.
-    ExitCode Delete();
+        // stops the thread if it's running and deletes the wxThread object if
+        // this is a detached thread freeing its memory - otherwise (for
+        // joinable threads) you still need to delete wxThread object
+        // yourself.
+        //
+        // this function only works if the thread calls TestDestroy()
+        // periodically - the thread will only be deleted the next time it
+        // does it!
+        //
+        // will fill the rc pointer with the thread exit code if it's !NULL
+    wxThreadError Delete(ExitCode *rc = (ExitCode *)NULL);
+
+        // waits for a joinable thread to finish and returns its exit code
+        //
+        // Returns (ExitCode)-1 on error (for example, if the thread is not
+        // joinable)
+    ExitCode Wait();
 
         // kills the thread without giving it any chance to clean up - should
         // not be used in normal circumstances, use Delete() instead. It is a
         // dangerous function that should only be used in the most extreme
-        // cases! The wxThread object is deleted by Kill() if thread was
-        // killed (i.e. no errors occured).
+        // cases!
+        //
+        // The wxThread object is deleted by Kill() if the thread is
+        // detachable, but you still have to delete it manually for joinable
+        // threads.
     wxThreadError Kill();
 
-        // pause a running thread
+        // pause a running thread: as Delete(), this only works if the thread
+        // calls TestDestroy() regularly
     wxThreadError Pause();
 
         // resume a paused thread
@@ -308,10 +336,6 @@ public:
         // Get the current priority.
     unsigned int GetPriority() const;
 
-    // Get the thread ID - a platform dependent number which uniquely
-    // identifies a thread inside a process
-    unsigned long GetID() const;
-
     // thread status inquiries
         // Returns true if the thread is alive: i.e. running or suspended
     bool IsAlive() const;
@@ -320,10 +344,21 @@ public:
         // Returns true if the thread is suspended
     bool IsPaused() const;
 
+        // is the thread of detached kind?
+    bool IsDetached() const { return m_isDetached; }
+
+    // Get the thread ID - a platform dependent number which uniquely
+    // identifies a thread inside a process
+    unsigned long GetId() const;
+
     // called when the thread exits - in the context of this thread
     //
     // NB: this function will not be called if the thread is Kill()ed
     virtual void OnExit() { }
+
+    // dtor is public, but the detached threads should never be deleted - use
+    // Delete() instead (or leave the thread terminate by itself)
+    virtual ~wxThread();
 
 protected:
     // Returns TRUE if the thread was asked to terminate: this function should
@@ -332,14 +367,7 @@ protected:
     bool TestDestroy();
 
     // exits from the current thread - can be called only from this thread
-    void Exit(void *exitcode = 0);
-
-    // destructor is private - user code can't delete thread objects, they will
-    // auto-delete themselves (and thus must be always allocated on the heap).
-    // Use Delete() or Kill() instead.
-    //
-    // NB: derived classes dtors shouldn't be public neither!
-    virtual ~wxThread();
+    void Exit(ExitCode exitcode = 0);
 
     // entry point for the thread - called by Run() and executes in the context
     // of this thread.
@@ -357,6 +385,9 @@ private:
 
     // protects access to any methods of wxThreadInternal object
     wxCriticalSection m_critsect;
+
+    // true if the thread is detached, false if it is joinable
+    bool m_isDetached;
 };
 
 // ----------------------------------------------------------------------------
@@ -369,9 +400,9 @@ void WXDLLEXPORT wxMutexGuiLeave();
 
 // macros for entering/leaving critical sections which may be used without
 // having to take them inside "#if wxUSE_THREADS"
-#define wxENTER_CRIT_SECT(cs)   (cs)->Enter()
-#define wxLEAVE_CRIT_SECT(cs)   (cs)->Leave()
-#define wxCRIT_SECT_LOCKER(name, cs)  wxCriticalSectionLocker name(*cs)
+#define wxENTER_CRIT_SECT(cs)   (cs).Enter()
+#define wxLEAVE_CRIT_SECT(cs)   (cs).Leave()
+#define wxCRIT_SECT_LOCKER(name, cs)  wxCriticalSectionLocker name(cs)
 
 #else // !wxUSE_THREADS
 

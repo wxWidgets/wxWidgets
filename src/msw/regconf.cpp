@@ -160,11 +160,23 @@ void wxRegConfig::SetPath(const wxString& strPath)
   }
 
   // recombine path parts in one variable
-  wxString strRegPath;
+  wxString strOldPath = m_strPath, strRegPath;
   m_strPath.Empty();
   for ( size_t n = 0; n < aParts.Count(); n++ ) {
     strRegPath << '\\' << aParts[n];
     m_strPath << wxCONFIG_PATH_SEPARATOR << aParts[n];
+  }
+
+  if ( m_strPath == strOldPath )
+      return;
+
+  // as we create the registry key when SetPath(key) is done, we can be left
+  // with plenty of empty keys if this was only done to try to read some value
+  // which, in fact, doesn't exist - to prevent this from happening we
+  // automatically delete the old key if it was empty
+  if ( m_keyLocal.IsEmpty() )
+  {
+      m_keyLocal.DeleteSelf();
   }
 
   // change current key(s)

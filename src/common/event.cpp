@@ -609,13 +609,13 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
     m_pendingEvents->Append(event2);
 
-    wxENTER_CRIT_SECT(wxPendingEventsLocker);
+    wxENTER_CRIT_SECT(*wxPendingEventsLocker);
 
     if ( !wxPendingEvents )
         wxPendingEvents = new wxList;
     wxPendingEvents->Append(this);
 
-    wxLEAVE_CRIT_SECT(wxPendingEventsLocker);
+    wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
 
     wxWakeUpIdle();
 }
@@ -623,9 +623,9 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 void wxEvtHandler::ProcessPendingEvents()
 {
 #if defined(__VISAGECPP__)
-    wxCRIT_SECT_LOCKER(locker, &m_eventsLocker);
-#else
     wxCRIT_SECT_LOCKER(locker, m_eventsLocker);
+#else
+    wxCRIT_SECT_LOCKER(locker, *m_eventsLocker);
 #endif
 
     wxNode *node = m_pendingEvents->First();

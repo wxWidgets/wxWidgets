@@ -187,6 +187,19 @@
     }
 #endif
 
+// FindResource
+#ifdef FindResource
+    #undef FindResource
+    inline HRSRC FindResource(HMODULE hModule, LPCTSTR lpName, LPCTSTR lpType)
+    {
+    #ifdef _UNICODE
+        return FindResourceW(hModule, lpName, lpType);
+    #else
+        return FindResourceA(hModule, lpName, lpType);
+    #endif
+    }
+#endif
+
 // IsMaximized
 
 #ifdef IsMaximized

@@ -43,6 +43,8 @@ static const double pt2mm = (1/(METRIC_CONVERSION_CONSTANT*72));
 // standard icons from the resources
 // ---------------------------------------------------------------------------
 
+#if wxUSE_GUI
+
 WXDLLEXPORT_DATA(extern HICON) wxSTD_FRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxSTD_MDIPARENTFRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxSTD_MDICHILDFRAME_ICON;
@@ -50,6 +52,8 @@ WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_FRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDIPARENTFRAME_ICON;
 WXDLLEXPORT_DATA(extern HICON) wxDEFAULT_MDICHILDFRAME_ICON;
 WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
+
+#endif // wxUSE_GUI
 
 // ---------------------------------------------------------------------------
 // define things missing from some compilers' headers
@@ -268,9 +272,13 @@ private:
 // global data
 // ---------------------------------------------------------------------------
 
+#if 0 // where is this??
 // The MakeProcInstance version of the function wxSubclassedGenericControlProc
 WXDLLEXPORT_DATA(extern FARPROC) wxGenericControlSubClassProc;
+#endif // 0
+
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
+
 WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
 
 // ---------------------------------------------------------------------------
@@ -279,10 +287,12 @@ WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
 
 extern "C"
 {
-WXDLLEXPORT HINSTANCE wxGetInstance();
+    WXDLLEXPORT HINSTANCE wxGetInstance();
 }
 
 WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
+
+#if wxUSE_GUI
 
 WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 
@@ -315,6 +325,8 @@ inline bool wxStyleHasBorder(long style)
   return (style & (wxSIMPLE_BORDER | wxRAISED_BORDER |
                    wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
+
+#endif // wxUSE_GUI
 
 #endif
     // _WX_PRIVATE_H_

@@ -100,7 +100,6 @@ extern wxList WXDLLEXPORT wxPendingDelete;
 extern void wxSetKeyboardHook(bool doIt);
 extern wxCursor *g_globalCursor;
 
-HINSTANCE wxhInstance = 0;
 MSG s_currentMsg;
 wxApp *wxTheApp = NULL;
 
@@ -1217,11 +1216,16 @@ void wxWakeUpIdle()
 {
     // Send the top window a dummy message so idle handler processing will
     // start up again.  Doing it this way ensures that the idle handler
-    // wakes up in the right thread.
+    // wakes up in the right thread (see also wxWakeUpMainThread() which does
+    // the same for the main app thread only)
     wxWindow *topWindow = wxTheApp->GetTopWindow();
-    if ( topWindow ) {
-        HWND hWnd = (HWND)topWindow->GetHWND();
-        ::PostMessage(hWnd, WM_NULL, 0, 0);
+    if ( topWindow )
+    {
+        if ( !::PostMessage(GetHwndOf(topWindow), WM_NULL, 0, 0) )
+        {
+            // should never happen
+            wxLogLastError("PostMessage(WM_NULL)");
+        }
     }
 }
 
@@ -1248,17 +1252,6 @@ wxApp::GetStdIcon(int which) const
         case wxICON_HAND:
             return wxIcon("wxICON_ERROR");
     }
-}
-
-
-HINSTANCE wxGetInstance()
-{
-    return wxhInstance;
-}
-
-void wxSetInstance(HINSTANCE hInst)
-{
-    wxhInstance = hInst;
 }
 
 // For some reason, with MSVC++ 1.5, WinMain isn't linked in properly

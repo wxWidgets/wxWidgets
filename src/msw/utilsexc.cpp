@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utilsexec.cpp
+// Name:        msw/utilsexec.cpp
 // Purpose:     Various utilities
 // Author:      Julian Smart
 // Modified by:
@@ -9,48 +9,51 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation
+    #pragma implementation
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/setup.h"
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/intl.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/log.h"
 
 #ifdef __WIN32__
-#include "wx/process.h"
+    #include "wx/process.h"
 #endif
 
 #include "wx/msw/private.h"
 
-#include <windows.h>
-
 #include <ctype.h>
 
 #if !defined(__GNUWIN32__) && !defined(__WXWINE__) && !defined(__SALFORDC__)
-#include <direct.h>
+    #include <direct.h>
 #ifndef __MWERKS__
-#include <dos.h>
+    #include <dos.h>
 #endif
 #endif
 
-#ifdef __GNUWIN32__
-#ifndef __TWIN32__
-#include <sys/unistd.h>
-#include <sys/stat.h>
-#endif
+#if defined(__GNUWIN32__) && !defined(__TWIN32__)
+    #include <sys/unistd.h>
+    #include <sys/stat.h>
 #endif
 
 #if defined(__WIN32__) && !defined(__WXWINE__)
@@ -71,8 +74,25 @@
 #endif
 #include <stdarg.h>
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
 // this message is sent when the process we're waiting for terminates
 #define wxWM_PROC_TERMINATED (WM_USER + 10000)
+
+// ----------------------------------------------------------------------------
+// this module globals
+// ----------------------------------------------------------------------------
+
+// we need to create a hidden window to receive the process termination
+// notifications and for this we need a (Win) class name for it which we will
+// register the first time it's needed
+static const wxChar *gs_classForHiddenWindow = NULL;
+
+// ----------------------------------------------------------------------------
+// private types
+// ----------------------------------------------------------------------------
 
 // structure describing the process we're being waiting for
 struct wxExecuteData
@@ -96,6 +116,9 @@ public:
     bool       state;         // set to FALSE when the process finishes
 };
 
+// ============================================================================
+// implementation
+// ============================================================================
 
 #ifdef __WIN32__
 static DWORD wxExecuteThread(wxExecuteData *data)
@@ -149,8 +172,6 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
     return 0;
 }
 #endif
-
-extern wxChar wxPanelClassName[];
 
 long wxExecute(const wxString& command, bool sync, wxProcess *handler)
 {
@@ -242,16 +263,30 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
     if ( !::CloseHandle(pi.hThread) )
         wxLogLastError("CloseHandle(hThread)");
 
+    if ( !gs_classForHiddenWindow )
+    {
+        gs_classForHiddenWindow = _T("wxHiddenWindow");
+
+        WNDCLASS wndclass;
+        wxZeroMemory(wndclass);
+        wndclass.lpfnWndProc   = (WNDPROC)wxExecuteWindowCbk;
+        wndclass.hInstance     = wxGetInstance();
+        wndclass.lpszClassName = gs_classForHiddenWindow;
+
+        if ( !::RegisterClass(&wndclass) )
+        {
+            wxLogLastError("RegisterClass(hidden window)");
+
+            return FALSE;
+        }
+    }
+
     // create a hidden window to receive notification about process
     // termination
-    HWND hwnd = ::CreateWindow(wxPanelClassName, NULL, 0, 0, 0, 0, 0, NULL,
+    HWND hwnd = ::CreateWindow(gs_classForHiddenWindow, NULL,
+                               0, 0, 0, 0, 0, NULL,
                                (HMENU)NULL, wxGetInstance(), 0);
     wxASSERT_MSG( hwnd, wxT("can't create a hidden window for wxExecute") );
-
-    FARPROC ExecuteWindowInstance = MakeProcInstance((FARPROC)wxExecuteWindowCbk,
-                                                     wxGetInstance());
-
-    ::SetWindowLong(hwnd, GWL_WNDPROC, (LONG) ExecuteWindowInstance);
 
     // Alloc data
     wxExecuteData *data = new wxExecuteData;
@@ -338,33 +373,3 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
     return wxExecute(command, sync, handler);
 }
 
-bool wxGetFullHostName(wxChar *buf, int maxSize)
-{
-#if defined(__WIN32__) && !defined(__TWIN32__)
-    DWORD nSize = maxSize ;
-    if ( !::GetComputerName(buf, &nSize) )
-    {
-        wxLogLastError("GetComputerName");
-
-        return FALSE;
-    }
-#else
-    char *sysname;
-    const char *default_host = "noname";
-static const char WX_SECTION[] = "wxWindows";
-static const char eHOSTNAME[]  = "HostName";
-
-    if ((sysname = getenv("SYSTEM_NAME")) == NULL) {
-       GetProfileString(WX_SECTION, eHOSTNAME, default_host, buf, maxSize - 1);
-    } else
-      strncpy(buf, sysname, maxSize - 1);
-    buf[maxSize] = '\0';
-    if ( *buf == '\0' )
-    {
-        wxLogLastError("GetComputerName");
-
-        return FALSE;
-    }
-#endif
-    return TRUE;
-}

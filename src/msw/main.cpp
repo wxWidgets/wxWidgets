@@ -1,36 +1,59 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        main.cpp
+// Name:        msw/main.cpp
 // Purpose:     Main/DllMain
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation
+    #pragma implementation
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #include "wx/event.h"
 #include "wx/app.h"
-#include <windows.h>
+
+#include "wx/msw/private.h"
+
+// ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+
+HINSTANCE wxhInstance = 0;
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// various entry points
+// ----------------------------------------------------------------------------
 
 // May wish not to have a DllMain or WinMain, e.g. if we're programming
-// a Netscape plugin.
-#ifndef NOMAIN
+// a Netscape plugin or if we're writing a console application
+#if wxUSE_GUI && !defined(NOMAIN)
 
 // NT defines APIENTRY, 3.x not
 #if !defined(APIENTRY)
-#define APIENTRY FAR PASCAL
+    #define APIENTRY FAR PASCAL
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -78,25 +101,39 @@ BOOL WINAPI DllMain (HANDLE hModule, DWORD fdwReason, LPVOID lpReserved)
 #endif
 {
     switch (fdwReason)
-	{
-	case DLL_PROCESS_ATTACH:
-        // Only call wxEntry if the application itself is part of the DLL.
-        // If only the wxWindows library is in the DLL, then the initialisation
-        // will be called when the application implicitly calls WinMain.
+    {
+        case DLL_PROCESS_ATTACH:
+            // Only call wxEntry if the application itself is part of the DLL.
+            // If only the wxWindows library is in the DLL, then the initialisation
+            // will be called when the application implicitly calls WinMain.
 
 #if !defined(WXMAKINGDLL)
-        return wxEntry((WXHINSTANCE) hModule);
+            return wxEntry((WXHINSTANCE) hModule);
 #endif
-	    break;
+            break;
 
-	case DLL_PROCESS_DETACH:
-	default:
-	    break;
-	}
-  return TRUE;
+        case DLL_PROCESS_DETACH:
+        default:
+            break;
+    }
+    return TRUE;
 }
 
-#endif
+#endif // _WINDLL
 
-#endif
+#endif // !NOMAIN
+
+// ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
+
+HINSTANCE wxGetInstance()
+{
+    return wxhInstance;
+}
+
+void wxSetInstance(HINSTANCE hInst)
+{
+    wxhInstance = hInst;
+}
 

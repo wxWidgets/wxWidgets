@@ -48,6 +48,7 @@
 #include  "wx/utils.h"
 #include  "wx/wxchar.h"
 #include  "wx/log.h"
+#include  "wx/thread.h"
 
 // other standard headers
 #include  <errno.h>
@@ -55,9 +56,7 @@
 #include  <time.h>
 
 #ifdef  __WXMSW__
-  #include  <windows.h>
-  // Redefines OutputDebugString if necessary
-  #include  "wx/msw/private.h"
+  #include  "wx/msw/private.h"      // includes windows.h for OutputDebugString
 #else   //Unix
   #include  <signal.h>
 #endif  //Win/Unix
@@ -78,23 +77,36 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// implementation of Log functions
-//
-// NB: unfortunately we need all these distinct functions, we can't make them
-//     macros and not all compilers inline vararg functions.
+// globals
 // ----------------------------------------------------------------------------
 
 // log functions can't allocate memory (LogError("out of memory...") should
 // work!), so we use a static buffer for all log messages
 #define LOG_BUFFER_SIZE   (4096)
 
-// static buffer for error messages (FIXME MT-unsafe)
+// static buffer for error messages
 static wxChar s_szBuf[LOG_BUFFER_SIZE];
+
+#if wxUSE_THREADS
+
+// the critical section protecting the static buffer
+static wxCriticalSection gs_csLogBuf;
+
+#endif // wxUSE_THREADS
+
+// ----------------------------------------------------------------------------
+// implementation of Log functions
+//
+// NB: unfortunately we need all these distinct functions, we can't make them
+//     macros and not all compilers inline vararg functions.
+// ----------------------------------------------------------------------------
 
 // generic log function
 void wxLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
 {
   if ( wxLog::GetActiveTarget() != NULL ) {
+    wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
+
     va_list argptr;
     va_start(argptr, szFormat);
     wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
@@ -108,6 +120,8 @@ void wxLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
   void wxLog##level(const wxChar *szFormat, ...)                  \
   {                                                               \
     if ( wxLog::GetActiveTarget() != NULL ) {                     \
+      wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);                    \
+                                                                  \
       va_list argptr;                                             \
       va_start(argptr, szFormat);                                 \
       wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);  \
@@ -129,6 +143,8 @@ void wxLogVerbose(const wxChar *szFormat, ...)
 {
   wxLog *pLog = wxLog::GetActiveTarget();
   if ( pLog != NULL && pLog->GetVerbose() ) {
+    wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
+
     va_list argptr;
     va_start(argptr, szFormat);
     wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
@@ -144,6 +160,8 @@ void wxLogVerbose(const wxChar *szFormat, ...)
   void wxLog##level(const wxChar *szFormat, ...)                  \
   {                                                               \
     if ( wxLog::GetActiveTarget() != NULL ) {                     \
+      wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);                    \
+                                                                  \
       va_list argptr;                                             \
       va_start(argptr, szFormat);                                 \
       wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);  \
@@ -158,6 +176,8 @@ void wxLogVerbose(const wxChar *szFormat, ...)
     wxLog *pLog = wxLog::GetActiveTarget();
 
     if ( pLog != NULL && wxLog::IsAllowedTraceMask(mask) ) {
+      wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
+
       va_list argptr;
       va_start(argptr, szFormat);
       wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
@@ -175,6 +195,8 @@ void wxLogVerbose(const wxChar *szFormat, ...)
     // that wxLogTrace(wxTraceRefCount | wxTraceOle) will only do something
     // if both bits are set.
     if ( pLog != NULL && ((pLog->GetTraceMask() & mask) == mask) ) {
+      wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
+
       va_list argptr;
       va_start(argptr, szFormat);
       wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
@@ -207,6 +229,8 @@ void wxLogSysErrorHelper(long lErrCode)
 
 void WXDLLEXPORT wxLogSysError(const wxChar *szFormat, ...)
 {
+    wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
+
     va_list argptr;
     va_start(argptr, szFormat);
     wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
@@ -217,6 +241,8 @@ void WXDLLEXPORT wxLogSysError(const wxChar *szFormat, ...)
 
 void WXDLLEXPORT wxLogSysError(long lErrCode, const wxChar *szFormat, ...)
 {
+    wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
+
     va_list argptr;
     va_start(argptr, szFormat);
     wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
@@ -361,15 +387,16 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
     wxString str;
     TimeStamp(&str);
-    str << szString << wxT('\n');
+    str << szString;
 
     fputs(str.mb_str(), m_fp);
+    fputc(_T('\n'), m_fp);
     fflush(m_fp);
 
     // under Windows, programs usually don't have stderr at all, so show the
-    // messages also under debugger
-#ifdef __WXMSW__
-    OutputDebugString(str + wxT('\r'));
+    // messages also under debugger - unless it's a console program
+#if defined(__WXMSW__) && wxUSE_GUI
+    OutputDebugString(str + wxT("\r\n"));
 #endif // MSW
 }
 

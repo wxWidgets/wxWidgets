@@ -150,7 +150,7 @@ void *MyThread::Entry()
     wxString text;
 
     text.Printf("Thread 0x%x started (priority = %d).\n",
-                GetID(), GetPriority());
+                GetId(), GetPriority());
     WriteText(text);
 
     for ( m_count = 0; m_count < 10; m_count++ )
@@ -159,14 +159,14 @@ void *MyThread::Entry()
         if ( TestDestroy() )
             break;
 
-        text.Printf("[%u] Thread 0x%x here.\n", m_count, GetID());
+        text.Printf("[%u] Thread 0x%x here.\n", m_count, GetId());
         WriteText(text);
 
         // wxSleep() can't be called from non-GUI thread!
         wxThread::Sleep(1000);
     }
 
-    text.Printf("Thread 0x%x finished.\n", GetID());
+    text.Printf("Thread 0x%x finished.\n", GetId());
     WriteText(text);
 
     return NULL;
@@ -266,17 +266,18 @@ MyThread *MyFrame::CreateThread()
 
 void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
 {
-    static wxString s_str;
-    s_str = wxGetTextFromUser("How many threads to start: ",
-                              "wxThread sample",
-                              s_str, this);
-    if ( s_str.IsEmpty() )
-        return;
+    static long s_num = 10;
 
-    size_t count, n;
-    sscanf(s_str, "%u", &count);
-    if ( count == 0 )
+    s_num = wxGetNumberFromUser("How many threads to start: ", "",
+                                "wxThread sample", s_num, 1, 10000, this);
+    if ( s_num == -1 )
+    {
+        s_num = 10;
+
         return;
+    }
+
+    size_t count = (size_t)s_num, n;
 
     wxArrayThread threads;
 

@@ -685,7 +685,14 @@ wxThreadError wxThread::Resume()
 // exiting thread
 // -----------------------------------------------------------------------------
 
-wxThread::ExitCode wxThread::Delete()
+wxThread::ExitCode Wait()
+{
+    wxFAIL_MSG("TODO");
+
+    return 0;
+}
+
+wxThreadError wxThread::Delete(ExitCode *rc)
 {
     if (IsPaused())
       Resume();
@@ -745,7 +752,7 @@ wxThreadError wxThread::Kill()
     }
 }
 
-void wxThread::Exit(void *status)
+void wxThread::Exit(ExitCode status)
 {
     // first call user-level clean up code
     OnExit();

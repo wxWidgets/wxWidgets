@@ -282,7 +282,10 @@ protected:
         #include "wx/stubs/app.h"
     #endif
 #else // !GUI
-    typedef wxAppBase wxApp;
+    // can't use typedef because wxApp forward declared as a class
+    class WXDLLEXPORT wxApp : public wxAppBase
+    {
+    };
 #endif // GUI/!GUI
 
 // ----------------------------------------------------------------------------
@@ -322,13 +325,13 @@ inline void WXDLLEXPORT wxPostEvent(wxEvtHandler *dest, wxEvent& event)
     dest->AddPendingEvent(event);
 }
 
-#endif // wxUSE_GUI/!wxUSE_GUI
+#endif // wxUSE_GUI
 
 // console applications may avoid using DECLARE_APP and IMPLEMENT_APP macros
 // and call these functions instead at the program startup and termination
 // -------------------------------------------------------------------------
 
-#if wxUSE_NOGUI
+#if !wxUSE_GUI
 
 // initialize the library (may be called as many times as needed, but each
 // call to wxInitialize() must be matched by wxUninitialize())
@@ -338,7 +341,7 @@ extern bool WXDLLEXPORT wxInitialize();
 // wxUninitialize()
 extern void WXDLLEXPORT wxUninitialize();
 
-#endif // wxUSE_NOGUI
+#endif // !wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // macros for dynamic creation of the application object

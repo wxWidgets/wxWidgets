@@ -239,7 +239,7 @@ iniconf.cpp	M	16
 joystick.cpp	M
 listbox.cpp	M
 listctrl.cpp	M	32
-main.cpp	M
+main.cpp	M	B
 mdi.cpp	M
 menu.cpp	M
 menuitem.cpp	M
@@ -258,9 +258,9 @@ printdlg.cpp	M
 printwin.cpp	M
 radiobox.cpp	M
 radiobut.cpp	M
-regconf.cpp	M	32
+regconf.cpp	M	32,B
 region.cpp	M
-registry.cpp	M	32
+registry.cpp	M	32,B
 scrolbar.cpp	M
 settings.cpp	M
 slider95.cpp	M	32
@@ -277,12 +277,12 @@ taskbar.cpp	M	32
 tbar95.cpp	M	32
 tbarmsw.cpp	M	16
 textctrl.cpp	M
-thread.cpp	M	32
+thread.cpp	M	32,B
 timer.cpp	M
 tooltip.cpp	M	32
 treectrl.cpp	M	32
-utils.cpp	M
-utilsexc.cpp	M
+utils.cpp	M	B
+utilsexc.cpp	M	B
 uuid.cpp	M	O
 wave.cpp	M
 window.cpp	M
@@ -292,7 +292,7 @@ gsocket.c	M	S
 dialup.cpp	U
 fontenum.cpp	U
 fontutil.cpp	U
-threadpsx.cpp	U
+threadpsx.cpp	U	B
 utilsunx.cpp	U	B
 gsocket.c	U
 

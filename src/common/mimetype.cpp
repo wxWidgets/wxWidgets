@@ -771,6 +771,7 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
 
 bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
 {
+#if wxUSE_GUI
     if ( m_info ) {
         // we don't have icons in the fallback resources
         return FALSE;
@@ -819,6 +820,8 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
     }
 
     // no such file type or no value or incorrect icon entry
+#endif // wxUSE_GUI
+
     return FALSE;
 }
 

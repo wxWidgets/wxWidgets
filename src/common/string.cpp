@@ -200,7 +200,12 @@ extern int WXDLLEXPORT wxVsnprintf(wxChar *buf, size_t len,
 
     return iLen;
 #else // ANSI
-    return wxVsnprintfA(buf, len, format, argptr);
+    // vsnprintf() will not terminate the string with '\0' if there is not
+    // enough place, but we want the string to always be NUL terminated
+    int rc = wxVsnprintfA(buf, len - 1, format, argptr);
+    buf[len] = 0;
+
+    return rc;
 #endif // Unicode/ANSI
 }
 
