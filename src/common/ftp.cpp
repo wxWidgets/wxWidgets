@@ -83,7 +83,7 @@ wxFTP::wxFTP()
 {
     m_lastError = wxPROTO_NOERR;
     m_streaming = FALSE;
-    m_modeSet = FALSE;
+	m_currentTransfermode = NONE;
 
     m_user = wxT("anonymous");
     m_passwd << wxGetUserId() << wxT('@') << wxGetFullHostName();
@@ -204,7 +204,20 @@ char wxFTP::SendCommand(const wxString& command)
         return 0;
     }
 
-    wxLogTrace(_T("ftp"), _T("==> %s"), command.c_str());
+#ifdef __WXDEBUG__
+    // don't show the passwords in the logs (even in debug ones)
+    wxString cmd, password;
+    if ( command.Upper().StartsWith(_T("PASS "), &password) )
+    {
+        cmd << _T("PASS ") << wxString(_T('*'), password.length());
+    }
+    else
+    {
+        cmd = command;
+    }
+
+    wxLogTrace(FTP_TRACE_MASK, _T("==> %s"), cmd.c_str());
+#endif // __WXDEBUG__
 
     return GetResult();
 }
@@ -256,7 +269,7 @@ char wxFTP::GetResult()
             }
             else
             {
-                wxLogTrace(_T("ftp"), _T("<== %s %s"),
+                wxLogTrace(FTP_TRACE_MASK, _T("<== %s %s"),
                            code.c_str(), line.c_str());
             }
         }
@@ -268,7 +281,7 @@ char wxFTP::GetResult()
             if ( firstLine )
             {
                 code = wxString(line, LEN_CODE);
-                wxLogTrace(_T("ftp"), _T("<== %s %s"),
+                wxLogTrace(FTP_TRACE_MASK, _T("<== %s %s"),
                            code.c_str(), line.c_str() + LEN_CODE + 1);
 
                 switch ( chMarker )
@@ -295,13 +308,13 @@ char wxFTP::GetResult()
                         endOfReply = TRUE;
                     }
 
-                    wxLogTrace(_T("ftp"), _T("<== %s %s"),
+                    wxLogTrace(FTP_TRACE_MASK, _T("<== %s %s"),
                                code.c_str(), line.c_str() + LEN_CODE + 1);
                 }
                 else
                 {
                     // just part of reply
-                    wxLogTrace(_T("ftp"), _T("<== %s %s"),
+                    wxLogTrace(FTP_TRACE_MASK, _T("<== %s %s"),
                                code.c_str(), line.c_str());
                 }
             }
@@ -328,6 +341,12 @@ char wxFTP::GetResult()
 
 bool wxFTP::SetTransferMode(TransferMode transferMode)
 {
+    if ( transferMode == m_currentTransfermode )
+    {
+        // nothing to do
+        return TRUE;
+    }
+
     wxString mode;
     switch ( transferMode )
     {
@@ -352,7 +371,9 @@ bool wxFTP::SetTransferMode(TransferMode transferMode)
         return FALSE;
     }
 
-    m_modeSet = TRUE;
+	// If we get here the operation has been succesfully completed
+	// Set the status-member
+	m_currentTransfermode = transferMode;
 
     return TRUE;
 }
@@ -497,6 +518,8 @@ public:
         {
             m_ftp->Abort();
         }
+
+        // delete m_i_socket; // moved to top of destructor to accomodate wu-FTPd >= 2.6.0
     }
 
     wxFTP *m_ftp;
@@ -608,7 +631,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
     int pos_size;
     wxInputFTPStream *in_stream;
 
-    if ( !m_modeSet && !SetTransferMode(BINARY) )
+	if ( ( m_currentTransfermode == NONE ) && !SetTransferMode(BINARY) )
         return NULL;
 
     wxSocketClient *sock = GetPort();
@@ -642,7 +665,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
 
 wxOutputStream *wxFTP::GetOutputStream(const wxString& path)
 {
-    if ( !m_modeSet && !SetTransferMode(BINARY) )
+	if ( ( m_currentTransfermode == NONE ) && !SetTransferMode(BINARY) )
         return NULL;
 
     wxSocketClient *sock = GetPort();
@@ -696,6 +719,170 @@ bool wxFTP::GetList(wxArrayString& files,
 
     return TRUE;
 }
+
+bool wxFTP::FileExists(const wxString& fileName)
+{
+	// This function checks if the file specified in fileName exists in the 
+	// current dir. It does so by simply doing an NLST (via GetList).
+	// If this succeeds (and the list is not empty) the file exists.
+	
+	bool retval = FALSE;
+	wxArrayString fileList;
+
+	if ( GetList(fileList, fileName, FALSE) )
+	{
+		// Some ftp-servers (Ipswitch WS_FTP Server 1.0.5 does this)
+		// displays this behaviour when queried on a non-existing file:
+		// NLST this_file_does_not_exist
+		// 150 Opening ASCII data connection for directory listing
+		// (no data transferred)
+		// 226 Transfer complete
+        // Here wxFTP::GetList(...) will succeed but it will return an empty
+        // list.
+        retval = !fileList.IsEmpty();
+	}
+
+	return retval;
+}
+
+// ----------------------------------------------------------------------------
+// FTP GetSize
+// ----------------------------------------------------------------------------
+
+int wxFTP::GetFileSize(const wxString& fileName)
+{
+	// return the filesize of the given file if possible
+	// return -1 otherwise (predominantly if file doesn't exist
+	// in current dir)
+
+	int filesize = -1;
+	
+	// Check for existance of file via wxFTP::FileExists(...)
+    if ( FileExists(fileName) )
+    {
+        wxString command;
+
+        // First try "SIZE" command using BINARY(IMAGE) transfermode
+        // Especially UNIX ftp-servers distinguish between the different
+        // transfermodes and reports different filesizes accordingly.
+        // The BINARY size is the interesting one: How much memory
+        // will we need to hold this file?
+	    TransferMode oldTransfermode = m_currentTransfermode;
+        SetTransferMode(BINARY);
+        command << _T("SIZE ") << fileName;
+
+        bool ok = CheckCommand(command, '2');
+
+        if ( ok )
+        {
+            // The answer should be one line: "213 <filesize>\n"
+            // 213 is File Status (STD9)
+			// "SIZE" is not described anywhere..? It works on most servers
+			int statuscode;
+			if ( wxSscanf(GetLastResult().c_str(), _T("%i %i"),
+                          &statuscode, &filesize) == 2 )
+			{
+				// We've gotten a good reply.
+				ok = TRUE; 
+			}
+			else
+			{
+				// Something bad happened.. A "2yz" reply with no size
+				// Fallback
+				ok = FALSE;
+			}
+        }
+		
+		// Set transfermode back to the original. Only the "SIZE"-command
+		// is dependant on transfermode
+        if ( oldTransfermode != NONE )
+        {
+            SetTransferMode(oldTransfermode);
+        }
+		
+		if ( !ok ) // this is not a direct else clause.. The size command might return an invalid "2yz" reply
+        {
+			// The server didn't understand the "SIZE"-command or it
+			// returned an invalid reply.
+			// We now try to get details for the file with a "LIST"-command
+			// and then parse the output from there..
+			wxArrayString fileList;
+			if ( GetList(fileList, fileName, TRUE) )
+			{
+				if ( !fileList.IsEmpty() )
+				{
+                    // We _should_ only get one line in return, but just to be
+                    // safe we run through the line(s) returned and look for a
+                    // substring containing the name we are looking for. We
+                    // stop the iteration at the first occurrence of the
+                    // filename. The search is not case-sensitive.
+					bool foundIt = FALSE;
+
+                    size_t i;
+					for ( i = 0; !foundIt && i < fileList.Count(); i++ )
+					{
+						foundIt = fileList[i].Upper().Contains(fileName.Upper());
+					}
+
+					if ( foundIt )
+					{
+                        // The index i points to the first occurrence of
+                        // fileName in the array Now we have to find out what
+                        // format the LIST has returned. There are two
+                        // "schools": Unix-like
+                        //
+                        // '-rw-rw-rw- owner group size month day time filename'
+                        //
+                        // or Windows-like
+                        //
+                        // 'date size filename'
+
+                        // check if the first character is '-'. This would
+                        // indicate Unix-style (this also limits this function
+                        // to searching for files, not directories)
+                        if ( fileList[i].Mid(0, 1) == _T("-") )
+						{
+
+							if ( wxSscanf(fileList[i].c_str(),
+                                          _("%*s %*s %*s %*s %i %*s %*s %*s %*s"), 
+                                          &filesize) == 9 )
+							{
+								// We've gotten a good response
+								ok = TRUE;
+							}
+							else
+							{
+								// Hmm... Invalid response
+								wxLogTrace(FTP_TRACE_MASK,
+                                           _T("Invalid LIST response"));
+							}
+						}
+						else // Windows-style response (?)
+						{
+							if ( wxSscanf(fileList[i].c_str(),
+                                          _T("%*s %*s %i %*s"),
+                                          &filesize) == 4 )
+							{
+								// valid response
+								ok = TRUE;
+							}
+							else
+							{
+								// something bad happened..?
+								wxLogTrace(FTP_TRACE_MASK,
+                                           _T("Invalid or unknown LIST response"));
+							}
+						}
+					}
+				}
+			}
+        }
+    }
+
+	// filesize might still be -1 when exiting
+	return filesize;
+}
+
 
 #ifdef WXWIN_COMPATIBILITY_2
 // deprecated

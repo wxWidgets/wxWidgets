@@ -14,7 +14,7 @@
 #define __WX_FTP_H__
 
 #ifdef __GNUG__
-#pragma interface
+    #pragma interface "ftp.h"
 #endif
 
 #include "wx/object.h"
@@ -27,6 +27,7 @@ class WXDLLEXPORT wxFTP : public wxProtocol
 public:
     enum TransferMode
     {
+        NONE,       // not set by user explicitly
         ASCII,
         BINARY
     };
@@ -76,6 +77,16 @@ public:
     wxString Pwd();
     bool Rename(const wxString& src, const wxString& dst);
     bool RmFile(const wxString& path);
+
+	// Get the size of a file in the current dir.
+	// this function tries its best to deliver the size in bytes using BINARY
+	// (the SIZE command reports different sizes depending on whether 
+	// type is set to ASCII or BINARY)
+	// returns -1 if file is non-existant or size could not be found
+	int GetFileSize(const wxString& fileName);
+
+       // Check to see if a file exists in the current dir
+	bool FileExists(const wxString& fileName);
 
     // Download methods
     bool Abort();
@@ -135,8 +146,9 @@ protected:
     // true if there is an FTP transfer going on
     bool m_streaming;
 
-    // true if the user had set the transfer mode
-    bool m_modeSet;
+    // although this should be set to ASCII by default according to STD9,
+    // we will use BINARY transfer mode by default for backwards compatibility
+    TransferMode m_currentTransfermode;
 
     friend class wxInputFTPStream;
     friend class wxOutputFTPStream;
@@ -144,5 +156,9 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxFTP)
     DECLARE_PROTOCOL(wxFTP)
 };
+
+// the trace mask used by assorted wxLogTrace() in ftp code, do
+// wxLog::AddTraceMask(FTP_TRACE_MASK) to see them in output
+#define FTP_TRACE_MASK _T("ftp")
 
 #endif // __WX_FTP_H__
