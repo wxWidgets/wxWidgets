@@ -1306,6 +1306,11 @@ extern char wxPanelClassName[];
 LRESULT APIENTRY _EXPORT wxSocketHandlerWndProc(HWND hWnd, UINT message,
    WPARAM wParam, LPARAM lParam)
 {
+  if(message==WM_DESTROY)
+  {
+	  ::SetWindowLong(hWnd, GWL_WNDPROC, (LONG) DefWindowProc);
+	  return DefWindowProc(hWnd, message, wParam, lParam);
+  }
   wxSocketHandler *h_sock = (wxSocketHandler *)GetWindowLong(hWnd, GWL_USERDATA);
   wxNode *node = h_sock->smsg_list->Find(message);
   wxSocketBase *sock;
