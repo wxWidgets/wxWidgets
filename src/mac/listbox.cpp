@@ -15,6 +15,7 @@
 
 #include "wx/app.h"
 #include "wx/listbox.h"
+#include "wx/button.h"
 #include "wx/settings.h"
 #include "wx/toplevel.h"
 #include "wx/dynarray.h"
@@ -26,7 +27,7 @@
   IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxListBox, wxControl)
-	EVT_SIZE( wxListBox::OnSize ) 
+	EVT_SIZE( wxListBox::OnSize )
 	EVT_CHAR( wxListBox::OnChar )
 END_EVENT_TABLE()
 #endif
@@ -81,9 +82,9 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
   grafPtr = (**listHandle).port ;
     // typecast our refCon
     list = (wxListBox*) GetControlReference( (ControlHandle) GetListRefCon(listHandle) );
-    
+
     //  Calculate the cell rect.
-    
+
     switch( message ) {
         case lInitMsg:
             break;
@@ -97,13 +98,13 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
 
             //  Save the current clip region, and set the clip region to the area we are about
             //  to draw.
-            
+
             savedClipRegion = NewRgn();
             GetClip( savedClipRegion );
 
             ClipRect( drawRect );
             EraseRect( drawRect );
-            
+
 #if TARGET_CARBON
 	        bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
 
@@ -130,28 +131,28 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
 		        ::TextFace( 0 ) ;
         		DrawText(text, 0 , text.Length());
 		    }
- 
+
             //  If the cell is hilited, do the hilite now. Paint the cell contents with the
             //  appropriate QuickDraw transform mode.
-            
+
             if( isSelected ) {
                 savedPenMode = GetPortPenMode( (CGrafPtr) grafPtr );
                 SetPortPenMode( (CGrafPtr)grafPtr, hilitetransfermode );
                 PaintRect( drawRect );
                 SetPortPenMode( (CGrafPtr)grafPtr, savedPenMode );
             }
-            
+
             //  Restore the saved clip region.
-            
+
             SetClip( savedClipRegion );
             DisposeRgn( savedClipRegion );
             }
             break;
         case lHiliteMsg:
-            
+
             //  Hilite or unhilite the cell. Paint the cell contents with the
             //  appropriate QuickDraw transform mode.
-            
+
             GetPort( &grafPtr );
             savedPenMode = GetPortPenMode( (CGrafPtr)grafPtr );
             SetPortPenMode( (CGrafPtr)grafPtr, hilitetransfermode );
@@ -161,7 +162,7 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
         default :
           break ;
     }
-    SetPort(savePort);  
+    SetPort(savePort);
 }
 
 extern "C" void MacDrawStringCell(Rect *cellRect, Cell lCell, ListHandle theList, long refCon) ;
@@ -191,17 +192,17 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 {
     m_noItems = 0 ; // this will be increased by our append command
     m_selected = 0;
-    
+
     Rect bounds ;
     Str255 title ;
-    
+
     MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
 
     ListDefSpec listDef;
     listDef.defType = kListDefUserProcType;
     if ( macListDefUPP == NULL )
     {
-      macListDefUPP = NewListDefUPP( wxMacListDefinition ); 
+      macListDefUPP = NewListDefUPP( wxMacListDefinition );
     }
         listDef.u.userProc = macListDefUPP ;
 
@@ -223,7 +224,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     long    result ;
     wxStAppResource resload ;
     m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false ,
-                  kwxMacListWithVerticalScrollbar , 0 , 0, 
+                  kwxMacListWithVerticalScrollbar , 0 , 0,
                   kControlListBoxProc , (long) this ) ;
     ::GetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
                sizeof( ListHandle ) , (char*) &m_macList  , &result ) ;
@@ -237,7 +238,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
       (**ldef).function = (void(*)()) listDef.u.userProc;
       (**(ListHandle)m_macList).listDefProc = (Handle) ldef ;
     }
-        
+
     Point pt = (**(ListHandle)m_macList).cellSize ;
     pt.v = kwxMacListItemHeight ;
     LCellSize( pt , (ListHandle)m_macList ) ;
@@ -257,14 +258,14 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         options = lOnlyOne ;
     }
     SetListSelectionFlags((ListHandle)m_macList, options);
-    
+
     MacPostControlCreate() ;
-    
+
     for ( int i = 0 ; i < n ; i++ )
     {
         Append( choices[i] ) ;
     }
-    
+
     LSetDrawingMode( true , (ListHandle)m_macList ) ;
 
     return TRUE;
@@ -322,7 +323,7 @@ void  wxListBox::DoSetSize(int x, int y,
         GetControlBounds( control , &scrollbounds ) ;
         if( scrollbounds.right != bounds.right + 1 )
         {
-            UMAMoveControl( control , bounds.right - (scrollbounds.right - scrollbounds.left) + 1 , 
+            UMAMoveControl( control , bounds.right - (scrollbounds.right - scrollbounds.left) + 1 ,
                 scrollbounds.top ) ;
         }
     }
@@ -350,7 +351,7 @@ void wxListBox::Delete(int N)
     m_stringArray.RemoveAt( N ) ;
     m_dataArray.RemoveAt( N ) ;
     m_noItems --;
-    
+
     MacDelete( N ) ;
 }
 
@@ -374,9 +375,9 @@ int wxListBox::DoAppend(const wxString& item)
 }
 
 void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
-{ 
+{
   MacSetRedraw( false ) ;
-  Clear() ;  
+  Clear() ;
   int n = choices.GetCount();
 
   for( int i = 0 ; i < n ; ++i )
@@ -429,7 +430,7 @@ int wxListBox::FindString(const wxString& st) const
     }
     else
         s = st ;
-        
+
     if ( s.Right(1) == "*" )
     {
         wxString search = s.Left( s.Length() - 1 ) ;
@@ -463,7 +464,7 @@ int wxListBox::FindString(const wxString& st) const
                 if ( GetString(i).Lower().Matches(s) )
                     return i ;
             }
-        }   
+        }
 
     }
     else
@@ -544,7 +545,7 @@ void wxListBox::DoSetItemClientData(int N, void *Client_data)
     }
 #endif // wxUSE_OWNER_DRAWN
     wxASSERT_MSG( m_dataArray.GetCount() >= N , "invalid client_data array" ) ;
-    
+
     if ( m_dataArray.GetCount() > N )
     {
         m_dataArray[N] = (char*) Client_data ;
@@ -665,14 +666,14 @@ void MacDrawStringCell(Rect *cellRect, Cell lCell, ListHandle theList, long refC
     wxListBox*          list;
     // typecast our refCon
     list = (wxListBox*)refCon;
-        
+
     MoveTo(cellRect->left + 4 , cellRect->top + 10 );
     const wxString text = list->m_stringArray[lCell.v] ;
     ::TextFont( kFontIDMonaco ) ;
     ::TextSize( 9  );
     ::TextFace( 0 ) ;
     DrawText(text, 0 , text.Length());
-        
+
 }
 
 void wxListBox::MacDelete( int N )
@@ -681,7 +682,7 @@ void wxListBox::MacDelete( int N )
     Refresh();
 }
 
-void wxListBox::MacInsert( int n , const char * text) 
+void wxListBox::MacInsert( int n , const char * text)
 {
     Cell cell = { 0 , 0 } ;
     cell.v = n ;
@@ -690,7 +691,7 @@ void wxListBox::MacInsert( int n , const char * text)
     Refresh();
 }
 
-void wxListBox::MacAppend( const char * text) 
+void wxListBox::MacAppend( const char * text)
 {
     Cell cell = { 0 , 0 } ;
     cell.v = (**(ListHandle)m_macList).dataBounds.bottom ;
@@ -699,7 +700,7 @@ void wxListBox::MacAppend( const char * text)
     Refresh();
 }
 
-void wxListBox::MacClear() 
+void wxListBox::MacClear()
 {
     LDelRow( (**(ListHandle)m_macList).dataBounds.bottom , 0 ,(ListHandle) m_macList ) ;
     Refresh();
@@ -715,7 +716,7 @@ void wxListBox::MacSetSelection( int n , bool select )
             LSetSelect( false , cell , (ListHandle)m_macList ) ;
         }
     }
-    
+
     cell.v = n ;
     LSetSelect( select , cell , (ListHandle)m_macList ) ;
     LAutoScroll( (ListHandle)m_macList ) ;
@@ -746,12 +747,12 @@ int wxListBox::MacGetSelection() const
 int wxListBox::MacGetSelections( wxArrayInt& aSelections ) const
 {
     int no_sel = 0 ;
-    
+
     aSelections.Empty();
 
     Cell cell = { 0 , 0 } ;
     cell.v = 0 ;
-    
+
     while ( LGetSelect( true , &cell ,(ListHandle) m_macList ) )
     {
         aSelections.Add( cell.v ) ;
@@ -789,7 +790,7 @@ void wxListBox::OnSize( const wxSizeEvent &event)
     LCellSize( pt , (ListHandle)m_macList ) ;
 }
 
-void wxListBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
+void wxListBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
 {
     Boolean wasDoubleClick = false ;
     long    result ;
@@ -805,17 +806,17 @@ void wxListBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
     }
 }
 
-void wxListBox::MacSetRedraw( bool doDraw ) 
+void wxListBox::MacSetRedraw( bool doDraw )
 {
     LSetDrawingMode( doDraw , (ListHandle)m_macList ) ;
-    
+
 }
 
 void wxListBox::MacDoClick()
 {
     wxArrayInt aSelections;
     int n, count = GetSelections(aSelections);
-    
+
     if ( count == m_selectionPreImage.GetCount() )
     {
         bool hasChanged = false ;
@@ -832,9 +833,9 @@ void wxListBox::MacDoClick()
             return ;
         }
     }
-    
+
     m_selectionPreImage = aSelections;
-    
+
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
     event.SetEventObject( this );
 
@@ -851,7 +852,7 @@ void wxListBox::MacDoClick()
     {
          n = -1;
     }
-    
+
     event.m_commandInt = n;
 
     GetEventHandler()->ProcessEvent(event);
@@ -861,7 +862,7 @@ void wxListBox::MacDoDoubleClick()
 {
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, m_windowId);
     event.SetEventObject( this );
-	GetEventHandler()->ProcessEvent(event) ; 
+	GetEventHandler()->ProcessEvent(event) ;
 }
 
 static long sLastTypeIn = 0 ;
@@ -873,7 +874,7 @@ void wxListBox::OnChar(wxKeyEvent& event)
     	wxWindow* parent = GetParent() ;
     	while( parent  && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL )
     		parent = parent->GetParent() ;
-    		
+
     	if ( parent && parent->GetDefaultItem() )
     	{
         	wxButton *def = wxDynamicCast(parent->GetDefaultItem(),
@@ -911,7 +912,7 @@ void wxListBox::OnChar(wxKeyEvent& event)
 	{
 		// perform the default key handling first
 		wxControl::OnKeyDown( event ) ;
-			
+
         wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
         event.SetEventObject( this );
 
