@@ -65,12 +65,6 @@ Construction from a list of wxVariant objects. This constructor
 copies {\it value}, the application is still responsible for
 deleting {\it value} and its contents.
 
-\func{}{wxVariant}{\param{const wxStringList\&}{ value}, \param{const wxString\& }{name = ``"}}
-
-Construction from a list of strings. This constructor
-copies {\it value}, the application is still responsible for
-deleting {\it value} and its contents.
-
 \func{}{wxVariant}{\param{void*}{ value}, \param{const wxString\& }{name = ``"}}
 
 Construction from a void pointer.
@@ -303,8 +297,6 @@ Sets the internal variant data, deleting the existing data if there is any.
 
 \func{void}{operator $=$}{\param{const wxList\& }{value}}
 
-\func{void}{operator $=$}{\param{const wxStringList\& }{value}}
-
 \func{void}{operator $=$}{\param{const wxDateTime\& }{value}}
 
 \func{void}{operator $=$}{\param{const wxArrayString\& }{value}}
@@ -337,8 +329,6 @@ Assignment operators.
 
 \constfunc{bool}{operator $==$}{\param{const wxList\& }{value}}
 
-\constfunc{bool}{operator $==$}{\param{const wxStringList\& }{value}}
-
 \constfunc{bool}{operator $==$}{\param{const wxArrayString\& }{value}}
 
 \constfunc{bool}{operator $==$}{\param{const wxDateTime\& }{value}}
@@ -364,8 +354,6 @@ Equality test operators.
 \constfunc{bool}{operator $!=$}{\param{void* }{value}}
 
 \constfunc{bool}{operator $!=$}{\param{const wxList\& }{value}}
-
-\constfunc{bool}{operator $!=$}{\param{const wxStringList\& }{value}}
 
 \constfunc{bool}{operator $!=$}{\param{const wxArrayString\& }{value}}
 
