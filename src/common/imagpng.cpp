@@ -717,6 +717,9 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         iElements++;
     }
 
+    if ( iBitDepth == 16 )
+        iElements *= 2;
+
     png_set_sBIT( png_ptr, info_ptr, &sig_bit );
     png_write_info( png_ptr, info_ptr );
     png_set_shift( png_ptr, &sig_bit );
@@ -757,36 +760,34 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 
                 case wxPNG_TYPE_COLOUR:
                     *pData++ = uchRed;
-                    if (iBitDepth > 8)
+                    if ( iBitDepth == 16 )
                         *pData++ = 0;
                     *pData++ = uchGreen;
-                    if (iBitDepth > 8)
+                    if ( iBitDepth == 16 )
                         *pData++ = 0;
                     *pData++ = uchBlue;
-                    if (iBitDepth > 8)
+                    if ( iBitDepth == 16 )
                         *pData++ = 0;
                     break;
 
                 case wxPNG_TYPE_GREY:
                     {
+                        // where do these coefficients come from? maybe we
+                        // should have image options for them as well?
                         unsigned uiColor =
                             (unsigned) (76.544*(unsigned)uchRed +
                                         150.272*(unsigned)uchGreen +
                                         36.864*(unsigned)uchBlue);
-                        uiColor >>= (16 - iBitDepth);
-                        if (iBitDepth > 8)
-                        {
-                            *pData++ = (unsigned char)((uiColor >> 8) & 0xFF);
+
+                        *pData++ = (unsigned char)((uiColor >> 8) & 0xFF);
+                        if ( iBitDepth == 16 )
                             *pData++ = (unsigned char)(uiColor & 0xFF);
-                        } else {
-                            *pData++ = (unsigned char)(uiColor & 0xFF);
-                        }
                     }
                     break;
 
                 case wxPNG_TYPE_GREY_RED:
                     *pData++ = uchRed;
-                    if (iBitDepth > 8)
+                    if ( iBitDepth == 16 )
                         *pData++ = 0;
                     break;
             }
@@ -806,7 +807,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                 }
 
                 *pData++ = uchAlpha;
-                if (iBitDepth > 8)
+                if ( iBitDepth == 16 )
                     *pData++ = 0;
             }
         }
