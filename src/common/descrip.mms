@@ -44,6 +44,7 @@ LEX=flex
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
 OBJECTS = \
+		appbase.obj,\
 		appcmn.obj,\
 		artprov.obj,\
 		artstd.obj,\
@@ -81,6 +82,8 @@ OBJECTS = \
 		filename.obj,\
 		filefn.obj,\
 		filesys.obj,\
+		fldlgcmn.obj,\
+		fmapbase.obj,\
 		fontcmn.obj,\
 		fontmap.obj,\
 		framecmn.obj
@@ -136,6 +139,7 @@ OBJECTS1=fs_inet.obj,\
 		socket.obj,\
 		settcmn.obj,\
 		statbar.obj,\
+		stopwatch.obj,\
 		strconv.obj,\
 		stream.obj,\
 		string.obj,\
@@ -168,6 +172,7 @@ OBJECTS2=utilscmn.obj,\
 OBJECTS_MOTIF=bmpbase.obj,gaugecmn.obj
 
 SOURCES = \
+		appbase.cpp,\
 		appcmn.cpp,\
 		artprov.cpp,\
 		artstd.cpp,\
@@ -206,6 +211,8 @@ SOURCES = \
 		filename.cpp,\
 		filefn.cpp,\
 		filesys.cpp,\
+		fldlgcmn.cpp,\
+		fmapbase.cpp,\
 		fontcmn.cpp,\
 		fontmap.cpp,\
 		framecmn.cpp,\
@@ -262,6 +269,7 @@ SOURCES = \
 		socket.cpp,\
 		settcmn.cpp,\
 		statbar.cpp,\
+		stopwatch.cpp,\
 		strconv.cpp,\
 		stream.cpp,\
 		sysopt.cpp,\
@@ -313,6 +321,7 @@ all : $(SOURCES)
 .endif
 .endif
 
+appbase.obj : appbase.cpp
 appcmn.obj : appcmn.cpp
 artprov.obj : artprov.cpp
 artstd.obj : artstd.cpp
@@ -351,6 +360,8 @@ fileconf.obj : fileconf.cpp
 filefn.obj : filefn.cpp
 filename.obj : filename.cpp
 filesys.obj : filesys.cpp
+fldlgcmn.obj : fldlgcmn.cpp
+fmapbase.obj : fmapbase.cpp
 fontcmn.obj : fontcmn.cpp
 fontmap.obj : fontmap.cpp
 framecmn.obj : framecmn.cpp
@@ -407,6 +418,7 @@ sizer.obj : sizer.cpp
 socket.obj : socket.cpp
 settcmn.obj : settcmn.cpp
 statbar.obj : statbar.cpp
+stopwatch.obj : stopwatch.cpp
 strconv.obj : strconv.cpp
 stream.obj : stream.cpp
 sysopt.obj : sysopt.cpp

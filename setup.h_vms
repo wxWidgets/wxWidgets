@@ -225,6 +225,9 @@
  */
 #define wxUSE_NOGUI 0
 
+#define wxUSE_BASE 1
+#define __WXBASE__ 1
+
 /*
  * Catch fatal program exceptions
  */

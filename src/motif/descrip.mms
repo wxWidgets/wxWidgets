@@ -75,7 +75,6 @@ OBJECTS = \
 		toplevel.obj,\
 		timer.obj,\
 		toolbar.obj,\
-		utils.obj,\
 		window.obj
 
 SOURCES = \
@@ -129,7 +128,6 @@ SOURCES = \
 		toplevel.cpp,\
 		timer.cpp,\
 		toolbar.cpp,\
-		utils.cpp,\
 		window.cpp,\
 		[.xmcombo]xmcombo.c\
 
@@ -192,5 +190,4 @@ textctrl.obj : textctrl.cpp
 toplevel.obj : toplevel.cpp
 timer.obj : timer.cpp
 toolbar.obj : toolbar.cpp
-utils.obj : utils.cpp
 window.obj : window.cpp
