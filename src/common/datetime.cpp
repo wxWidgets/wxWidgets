@@ -103,6 +103,15 @@
     #elif defined(__MWERKS__)
         long wxmw_timezone = 28800;
         #define WX_TIMEZONE wxmw_timezone;
+    #elif defined(__DJGPP__)
+        #include <sys/timeb.h>
+        static long wxGetTimeZone()
+        {
+            struct timeb tb;
+            ftime(&tb);
+            return tb.timezone;
+        }
+        #define WX_TIMEZONE wxGetTimeZone()
     #else // unknown platform - try timezone
         #define WX_TIMEZONE timezone
     #endif
