@@ -106,25 +106,25 @@ pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long re
 
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon )
 {
-    wxApp* app = (wxApp*) refcon ;
+    // GD: UNUSED wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEODoc( (AppleEvent*) event , reply) ;
 }
 
 pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon )
 {
-    wxApp* app = (wxApp*) refcon ;
+    // GD: UNUSED wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEOApp( (AppleEvent*) event , reply ) ;
 }
 
 pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long refcon )
 {
-    wxApp* app = (wxApp*) refcon ;
+    // GD: UNUSED wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEPDoc( (AppleEvent*) event , reply ) ;
 }
 
 pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon )
 {
-    wxApp* app = (wxApp*) refcon ;
+    // GD: UNUSED wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
 }
 
@@ -260,7 +260,7 @@ void wxMacConvertFromPCForControls( char * p )
     int len = strlen ( p ) ;
 
     wxMacConvertFromPC( ptr , ptr , len ) ;
-    for ( int i = 0 ; i < strlen ( ptr ) ; i++ )
+    for ( unsigned int i = 0 ; i < strlen ( ptr ) ; i++ )
     {
         if ( ptr[i] == '&' && ptr[i]+1 != ' ' )
         {
@@ -1486,11 +1486,11 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
             handled = focus->GetEventHandler()->ProcessEvent( event ) ;
             if ( !handled )
             {
-                #if wxUSE_ACCEL
+#if wxUSE_ACCEL
                 if (!handled)
                 {
-                    wxWindow *ancestor = focus;
                     /*
+                    wxWindow *ancestor = focus;
                     while (ancestor)
                     {
                         int command = ancestor->GetAcceleratorTable()->GetCommand( event );
@@ -1506,7 +1506,7 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
                     }
                     */
                 }
-                #endif // wxUSE_ACCEL
+#endif // wxUSE_ACCEL
             }
             if (!handled)
             {
