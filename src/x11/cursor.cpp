@@ -219,7 +219,7 @@ void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
     wxSetCursor( wxCursor(wxCURSOR_WATCH) );
 
     if (wxTheApp)
-        wxTheApp->SendIdleEvents();
+        wxTheApp->ProcessIdle();
 }
 
 bool wxIsBusy()

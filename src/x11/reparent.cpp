@@ -169,7 +169,7 @@ bool wxReparenter::WaitAndReparent(wxWindow* newParent, wxAdoptedWindow* toRepar
         {
 #if wxUSE_TIMER
             wxTimer::NotifyTimers();
-            wxTheApp->SendIdleEvents();
+            wxTheApp->ProcessIdle();
 #endif
         }
     }
