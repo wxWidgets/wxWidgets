@@ -61,106 +61,121 @@ static const int NO_IMAGE = -1;
 class WXDLLEXPORT wxGenericTreeItem
 {
 public:
-  // ctors & dtor
-  wxGenericTreeItem() { m_data = NULL; }
-  wxGenericTreeItem( wxGenericTreeItem *parent,
-                     const wxString& text,
-                     wxDC& dc,
-                     int image, int selImage,
-                     wxTreeItemData *data );
+    // ctors & dtor
+    wxGenericTreeItem() { m_data = NULL; }
+    wxGenericTreeItem( wxGenericTreeItem *parent,
+            const wxString& text,
+            wxDC& dc,
+            int image, int selImage,
+            wxTreeItemData *data );
 
-  ~wxGenericTreeItem();
+    ~wxGenericTreeItem();
 
-  // trivial accessors
-  wxArrayGenericTreeItems& GetChildren() { return m_children; }
+    // trivial accessors
+    wxArrayGenericTreeItems& GetChildren() { return m_children; }
 
-  const wxString& GetText() const { return m_text; }
-  int GetImage(wxTreeItemIcon which = wxTreeItemIcon_Normal) const
+    const wxString& GetText() const { return m_text; }
+    int GetImage(wxTreeItemIcon which = wxTreeItemIcon_Normal) const
     { return m_images[which]; }
-  wxTreeItemData *GetData() const { return m_data; }
+    wxTreeItemData *GetData() const { return m_data; }
 
-  // returns the current image for the item (depending on its
-  // selected/expanded/whatever state)
-  int GetCurrentImage() const;
+    // returns the current image for the item (depending on its
+    // selected/expanded/whatever state)
+    int GetCurrentImage() const;
 
-  void SetText( const wxString &text );
-  void SetImage(int image, wxTreeItemIcon which) { m_images[which] = image; }
-  void SetData(wxTreeItemData *data) { m_data = data; }
+    void SetText( const wxString &text );
+    void SetImage(int image, wxTreeItemIcon which) { m_images[which] = image; }
+    void SetData(wxTreeItemData *data) { m_data = data; }
 
-  void SetHasPlus(bool has = TRUE) { m_hasPlus = has; }
+    void SetHasPlus(bool has = TRUE) { m_hasPlus = has; }
 
-  void SetBold(bool bold) { m_isBold = bold; }
+    void SetBold(bool bold) { m_isBold = bold; }
 
-  int GetX() const { return m_x; }
-  int GetY() const { return m_y; }
+    int GetX() const { return m_x; }
+    int GetY() const { return m_y; }
 
-  void SetX(int x) { m_x = x; }
-  void SetY(int y) { m_y = y; }
+    void SetX(int x) { m_x = x; }
+    void SetY(int y) { m_y = y; }
 
-  int  GetHeight() const { return m_height; }
-  int  GetWidth()  const { return m_width; }
+    int  GetHeight() const { return m_height; }
+    int  GetWidth()  const { return m_width; }
 
-  void SetHeight(int h) { m_height = h; }
-  void SetWidth(int w) { m_width = w; }
+    void SetHeight(int h) { m_height = h; }
+    void SetWidth(int w) { m_width = w; }
 
 
-  wxGenericTreeItem *GetParent() const { return m_parent; }
+    wxGenericTreeItem *GetParent() const { return m_parent; }
 
-  // operations
-    // deletes all children notifying the treectrl about it if !NULL pointer
-    // given
-  void DeleteChildren(wxTreeCtrl *tree = NULL);
-    // FIXME don't know what is it for
-  void Reset();
+    // operations
+        // deletes all children notifying the treectrl about it if !NULL
+        // pointer given
+    void DeleteChildren(wxTreeCtrl *tree = NULL);
+        // FIXME don't know what is it for
+    void Reset();
 
-  // get count of all children (and grand children if 'recursively')
-  size_t GetChildrenCount(bool recursively = TRUE) const;
+    // get count of all children (and grand children if 'recursively')
+    size_t GetChildrenCount(bool recursively = TRUE) const;
 
-  void Insert(wxGenericTreeItem *child, size_t index)
+    void Insert(wxGenericTreeItem *child, size_t index)
     { m_children.Insert(child, index); }
 
-  void SetCross( int x, int y );
-  void GetSize( int &x, int &y, const wxTreeCtrl* );
+    void SetCross( int x, int y );
+    void GetSize( int &x, int &y, const wxTreeCtrl* );
 
-  // return the item at given position (or NULL if no item), onButton is TRUE
-  // if the point belongs to the item's button, otherwise it lies on the
-  // button's label
-  wxGenericTreeItem *HitTest( const wxPoint& point, const wxTreeCtrl *, int &flags);
+        // return the item at given position (or NULL if no item), onButton is
+        // TRUE if the point belongs to the item's button, otherwise it lies
+        // on the button's label
+    wxGenericTreeItem *HitTest( const wxPoint& point, const wxTreeCtrl *, int &flags);
 
-  void Expand() { m_isCollapsed = FALSE; }
-  void Collapse() { m_isCollapsed = TRUE; }
+    void Expand() { m_isCollapsed = FALSE; }
+    void Collapse() { m_isCollapsed = TRUE; }
 
-  void SetHilight( bool set = TRUE ) { m_hasHilight = set; }
+    void SetHilight( bool set = TRUE ) { m_hasHilight = set; }
 
-  // status inquiries
-  bool HasChildren() const { return !m_children.IsEmpty(); }
-  bool IsSelected()  const { return m_hasHilight; }
-  bool IsExpanded()  const { return !m_isCollapsed; }
-  bool HasPlus()     const { return m_hasPlus || HasChildren(); }
-  bool IsBold()      const { return m_isBold; }
+    // status inquiries
+    bool HasChildren() const { return !m_children.IsEmpty(); }
+    bool IsSelected()  const { return m_hasHilight; }
+    bool IsExpanded()  const { return !m_isCollapsed; }
+    bool HasPlus()     const { return m_hasPlus || HasChildren(); }
+    bool IsBold()      const { return m_isBold; }
+
+    // attributes
+        // get them - may be NULL
+    wxTreeItemAttr *GetAttributes() const { return m_attr; }
+        // get them ensuring that the pointer is not NULL
+    wxTreeItemAttr& Attr()
+    {
+        if ( !m_attr )
+            m_attr = new wxTreeItemAttr;
+
+        return *m_attr;
+    }
 
 private:
-  wxString            m_text;
+    wxString            m_text;
 
-  // tree ctrl images for the normal, selected, expanded and expanded+selected
-  // states
-  int                 m_images[wxTreeItemIcon_Max];
+    // tree ctrl images for the normal, selected, expanded and
+    // expanded+selected states
+    int                 m_images[wxTreeItemIcon_Max];
 
-  wxTreeItemData     *m_data;
+    wxTreeItemData     *m_data;
 
-  // use bitfields to save size
-  int                 m_isCollapsed :1;
-  int                 m_hasHilight  :1; // same as focused
-  int                 m_hasPlus     :1; // used for item which doesn't have
-                                        // children but still has a [+] button
-  int                 m_isBold      :1; // render the label in bold font
+    // use bitfields to save size
+    int                 m_isCollapsed :1;
+    int                 m_hasHilight  :1; // same as focused
+    int                 m_hasPlus     :1; // used for item which doesn't have
+                                          // children but has a [+] button
+    int                 m_isBold      :1; // render the label in bold font
 
-  int                 m_x, m_y;
-  long                m_height, m_width;
-  int                 m_xCross, m_yCross;
-  int                 m_level;
-  wxArrayGenericTreeItems m_children;
-  wxGenericTreeItem  *m_parent;
+    int                 m_x, m_y;
+    long                m_height, m_width;
+    int                 m_xCross, m_yCross;
+    int                 m_level;
+
+    wxArrayGenericTreeItems m_children;
+    wxGenericTreeItem  *m_parent;
+
+    wxTreeItemAttr     *m_attr;
 };
 
 // =============================================================================
@@ -281,6 +296,8 @@ wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
 
   m_parent = parent;
 
+  m_attr = (wxTreeItemAttr *)NULL;
+
   dc.GetTextExtent( m_text, &m_width, &m_height );
   // TODO : Add the width of the image
   // PB   : We don't know which image is shown (image, selImage)
@@ -291,6 +308,8 @@ wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
 wxGenericTreeItem::~wxGenericTreeItem()
 {
   delete m_data;
+
+  delete m_attr;
 
   wxASSERT_MSG( m_children.IsEmpty(),
                 wxT("please call DeleteChildren() before deleting the item") );
@@ -659,15 +678,44 @@ void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
 
 void wxTreeCtrl::SetItemBold(const wxTreeItemId& item, bool bold)
 {
-  wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
+    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
 
-  // avoid redrawing the tree if no real change
-  wxGenericTreeItem *pItem = item.m_pItem;
-  if ( pItem->IsBold() != bold )
-  {
-    pItem->SetBold(bold);
+    // avoid redrawing the tree if no real change
+    wxGenericTreeItem *pItem = item.m_pItem;
+    if ( pItem->IsBold() != bold )
+    {
+        pItem->SetBold(bold);
+        RefreshLine(pItem);
+    }
+}
+
+void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
+                                   const wxColour& col)
+{
+    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
+
+    wxGenericTreeItem *pItem = item.m_pItem;
+    pItem->Attr().SetTextColour(col);
     RefreshLine(pItem);
-  }
+}
+
+void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
+                                         const wxColour& col)
+{
+    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
+
+    wxGenericTreeItem *pItem = item.m_pItem;
+    pItem->Attr().SetBackgroundColour(col);
+    RefreshLine(pItem);
+}
+
+void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
+{
+    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
+
+    wxGenericTreeItem *pItem = item.m_pItem;
+    pItem->Attr().SetFont(font);
+    RefreshLine(pItem);
 }
 
 // -----------------------------------------------------------------------------
@@ -1409,7 +1457,10 @@ int wxTreeCtrl::GetLineHeight(wxGenericTreeItem *item) const
 
 void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 {
-    if (item->IsBold())
+    wxTreeItemAttr *attr = item->GetAttributes();
+    if ( attr && attr->HasFont() )
+        dc.SetFont(attr->GetFont());
+    else if (item->IsBold())
         dc.SetFont(m_boldFont);
 
     long text_w = 0;
@@ -1439,7 +1490,10 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         dc.DestroyClippingRegion();
     }
 
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    bool hasBgCol = attr && attr->HasBackgroundColour();
+    dc.SetBackgroundMode(hasBgCol ? wxSOLID : wxTRANSPARENT);
+    if ( hasBgCol )
+        dc.SetTextBackground(attr->GetBackgroundColour());
     dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY()
                  + ((total_h > text_h) ? (total_h - text_h)/2 : 0));
 
@@ -1488,32 +1542,43 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
             dc.SetPen( m_dottedPen );
         }
 
-        if (item->IsSelected())
+        wxPen *pen = wxTRANSPARENT_PEN;
+        wxBrush *brush;                 // FIXME is this really needed?
+        wxColour colText;
+
+        if ( item->IsSelected() )
         {
-            dc.SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+            colText = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
 
-            dc.SetBrush( *m_hilightBrush );
+            brush = m_hilightBrush;
 
-            if (m_hasFocus)
-                dc.SetPen( *wxBLACK_PEN );
-            else
-                dc.SetPen( *wxTRANSPARENT_PEN );
+            if ( m_hasFocus )
+               pen = wxBLACK_PEN;
 
-            PaintItem(item, dc);
-
-            dc.SetPen( m_dottedPen );
-            dc.SetTextForeground( *wxBLACK );
-            dc.SetBrush( *wxWHITE_BRUSH );
         }
         else
         {
-            dc.SetBrush( *wxWHITE_BRUSH );
-            dc.SetPen( *wxTRANSPARENT_PEN );
+            wxTreeItemAttr *attr = item->GetAttributes();
+            if ( attr && attr->HasTextColour() )
+                colText = attr->GetTextColour();
+            else
+                colText = *wxBLACK;
 
-            PaintItem(item, dc);
-
-            dc.SetPen( m_dottedPen );
+            brush = wxWHITE_BRUSH;
         }
+
+        // prepare to draw
+        dc.SetTextForeground(colText);
+        dc.SetPen(*pen);
+        dc.SetBrush(*brush);
+
+        // draw
+        PaintItem(item, dc);
+
+        // restore DC objects
+        dc.SetBrush( *wxWHITE_BRUSH );
+        dc.SetPen( m_dottedPen );
+        dc.SetTextForeground( *wxBLACK );
     }
 
     y = oldY+GetLineHeight(item);
@@ -1521,7 +1586,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
     if (item->IsExpanded())
     {
         oldY+=GetLineHeight(item)/2;
-        int semiOldY=y; // (=y) for stupid compilator
+        int semiOldY=0;
 
         wxArrayGenericTreeItems& children = item->GetChildren();
         size_t n, count = children.Count();
@@ -1535,10 +1600,10 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
         // delete all its children for example) - don't draw the vertical line
         // in this case
         if (count > 0)
-          {
+        {
             semiOldY+=GetLineHeight(children[--n])/2;
             dc.DrawLine( horizX+m_indent, oldY+5, horizX+m_indent, semiOldY );
-          }
+        }
     }
 }
 

@@ -565,6 +565,18 @@ void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
     SetItemImage(rootId, TreeCtrlIcon_FolderOpened, wxTreeItemIcon_Expanded);
 
     AddItemsRecursively(rootId, numChildren, depth, 0);
+
+    // set some colours/fonts for testing
+    SetItemFont(rootId, *wxITALIC_FONT);
+
+    long cookie;
+    wxTreeItemId id = GetFirstChild(rootId, cookie);
+    SetItemTextColour(id, *wxBLUE);
+
+    id = GetNextChild(rootId, cookie);
+    id = GetNextChild(rootId, cookie);
+    SetItemTextColour(id, *wxRED);
+    SetItemBackgroundColour(id, *wxLIGHT_GREY);
 }
 
 void MyTreeCtrl::GetItemsRecursively(const wxTreeItemId& idParent, long cookie)

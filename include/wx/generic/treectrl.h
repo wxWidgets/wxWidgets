@@ -16,12 +16,6 @@
     #pragma interface "treectrl.h"
 #endif
 
-#ifdef __WXMSW__
-WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
-#else
-#define wxTreeCtrlNameStr "wxTreeCtrl"
-#endif
-
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/object.h"
@@ -31,51 +25,6 @@ WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
 #include "wx/pen.h"
 #include "wx/dynarray.h"
 #include "wx/timer.h"
-
-//those defines should only be done in generic/treectrl.h,
-//because wxMSW doesn't allow mutiple selection
-
-#ifndef wxTR_SINGLE
-#define wxTR_SINGLE                 0x0000
-#define wxTR_MULTIPLE               0x0020
-#define wxTR_EXTENDED               0x0040
-#define wxTR_HAS_VARIABLE_ROW_HIGHT 0x0080
-#endif
-
-// -----------------------------------------------------------------------------
-// constants
-// -----------------------------------------------------------------------------
-
-// values for the `flags' parameter of wxTreeCtrl::HitTest() which determine
-// where exactly the specified point is situated:
-
-static const int wxTREE_HITTEST_ABOVE            = 0x0001;
-static const int wxTREE_HITTEST_BELOW            = 0x0002;
-static const int wxTREE_HITTEST_NOWHERE          = 0x0004;
-    // on the button associated with an item.
-static const int wxTREE_HITTEST_ONITEMBUTTON     = 0x0008;
-    // on the bitmap associated with an item.
-static const int wxTREE_HITTEST_ONITEMICON       = 0x0010;
-    // on the ident associated with an item.
-static const int wxTREE_HITTEST_ONITEMIDENT      = 0x0020;
-    // on the label (string) associated with an item.
-static const int wxTREE_HITTEST_ONITEMLABEL      = 0x0040;
-    // on the right of the label associated with an item.
-static const int wxTREE_HITTEST_ONITEMRIGHT      = 0x0080;
-    // on the label (string) associated with an item.
-//static const int wxTREE_HITTEST_ONITEMSTATEICON  = 0x0100;
-    // on the left of the wxTreeCtrl.
-static const int wxTREE_HITTEST_TOLEFT           = 0x0200;
-    // on the right of the wxTreeCtrl.
-static const int wxTREE_HITTEST_TORIGHT          = 0x0400;
-    // on the upper part (first half) of the item.
-static const int wxTREE_HITTEST_ONITEMUPPERPART  = 0x0800;
-    // on the lower part (second half) of the item.
-static const int wxTREE_HITTEST_ONITEMLOWERPART  = 0x1000;
-
-    // anywhere on the item
-static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
-                                          wxTREE_HITTEST_ONITEMLABEL;
 
 // -----------------------------------------------------------------------------
 // forward declaration
@@ -181,8 +130,9 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
                     bool *accept, wxString *res, wxTreeCtrl *owner,
                     const wxString &value = wxEmptyString,
                     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+                    int style = 0,
 #if wxUSE_VALIDATORS
-                    int style = 0, const wxValidator& validator = wxDefaultValidator,
+                    const wxValidator& validator = wxDefaultValidator,
 #endif
                     const wxString &name = wxTextCtrlNameStr );
     void OnChar( wxKeyEvent &event );
@@ -289,6 +239,15 @@ public:
 
         // the item will be shown in bold
     void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
+
+        // set the items text colour
+    void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);
+
+        // set the items background colour
+    void SetItemBackgroundColour(const wxTreeItemId& item, const wxColour& col);
+
+        // set the items font (should be of the same height for all items)
+    void SetItemFont(const wxTreeItemId& item, const wxFont& font);
 
     // item status inquiries
     // ---------------------

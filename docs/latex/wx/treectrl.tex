@@ -530,6 +530,12 @@ Sets the indentation for the tree control.
 
 Sets the normal image list.
 
+\membersection{wxTreeCtrl::SetItemBackgroundColour}\label{wxtreectrlsetitembackgroundcolour}
+
+\func{void}{SetItemBackgroundColour}{\param{const wxTreeItemId\&}{ item}, \param{const wxColour\& }{col}}
+
+Sets the colour of the items background.
+
 \membersection{wxTreeCtrl::SetItemBold}\label{wxtreectrlsetitembold}
 
 \func{void}{SetItemBold}{\param{const wxTreeItemId\& }{item}, \param{bool}{ bold = TRUE}}
@@ -551,6 +557,18 @@ Sets the item client data.
 Object with the wxTreeItemData for the given item Id.}
 \end{twocollist}}
 }
+
+\membersection{wxTreeCtrl::SetItemFont}\label{wxtreectrlsetitemfont}
+
+\func{void}{SetItemFont}{\param{const wxTreeItemId\&}{ item}, \param{const wxFont\& }{font}}
+
+Sets the items font. All items in the tree should have the same height to avoid
+text clipping, so the fonts height should be the same for all of them,
+although font attributes may vary.
+
+\wxheading{See also}
+
+\helpref{SetItemBold}{wxtreectrlsetitembold}
 
 \membersection{wxTreeCtrl::SetItemHasChildren}\label{wxtreectrlsetitemhaschildren}
 
@@ -582,6 +600,12 @@ Sets the selected item image (this function is obsolete, use
 \func{void}{SetItemText}{\param{const wxTreeItemId\&}{ item}, \param{const wxString\& }{text}}
 
 Sets the item label.
+
+\membersection{wxTreeCtrl::SetItemTextColour}\label{wxtreectrlsetitemtextcolour}
+
+\func{void}{SetItemTextColour}{\param{const wxTreeItemId\&}{ item}, \param{const wxColour\& }{col}}
+
+Sets the colour of the items text.
 
 \membersection{wxTreeCtrl::SetStateImageList}\label{wxtreectrlsetstateimagelist}
 

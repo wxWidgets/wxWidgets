@@ -20,7 +20,9 @@ all (GUI):
 - wxMenu(Bar)::Insert() and Remove() functions for dynamic menu menagament
 - wxToolBar supports arbitrary controls (not only buttons) and can be
   dynamically changed (Delete/Insert functions)
-- wxListCtrl allows setting colour/fonts for individual items
+- wxTreeCtrl and wxListCtrl allow setting colour/fonts for individual items
+- "file open" dialog allows selecting multiple files at once (contributed by
+  John Norris)
 - wxDC::DrawRotatedText() (contributed by Hans-Joachim Baader, limited to
   +/-90 degrees for now - contributions to improve it are welcome!)
 
@@ -28,6 +30,7 @@ wxMSW:
 
 - wxTreeCtrl::IsVisible() bug fixed (thanks to Gary Chessun)
 - tooltips work with wxRadioBox
+- returning FALSE from OnPrintPage() aborts printing
 
 wxGTK:
 

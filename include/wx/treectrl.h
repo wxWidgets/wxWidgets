@@ -22,12 +22,74 @@ enum wxTreeItemIcon
     wxTreeItemIcon_Max
 };
 
+
+// values for the `flags' parameter of wxTreeCtrl::HitTest() which determine
+// where exactly the specified point is situated:
+
+static const int wxTREE_HITTEST_ABOVE            = 0x0001;
+static const int wxTREE_HITTEST_BELOW            = 0x0002;
+static const int wxTREE_HITTEST_NOWHERE          = 0x0004;
+    // on the button associated with an item.
+static const int wxTREE_HITTEST_ONITEMBUTTON     = 0x0008;
+    // on the bitmap associated with an item.
+static const int wxTREE_HITTEST_ONITEMICON       = 0x0010;
+    // on the ident associated with an item.
+static const int wxTREE_HITTEST_ONITEMIDENT      = 0x0020;
+    // on the label (string) associated with an item.
+static const int wxTREE_HITTEST_ONITEMLABEL      = 0x0040;
+    // on the right of the label associated with an item.
+static const int wxTREE_HITTEST_ONITEMRIGHT      = 0x0080;
+    // on the label (string) associated with an item.
+//static const int wxTREE_HITTEST_ONITEMSTATEICON  = 0x0100;
+    // on the left of the wxTreeCtrl.
+static const int wxTREE_HITTEST_TOLEFT           = 0x0200;
+    // on the right of the wxTreeCtrl.
+static const int wxTREE_HITTEST_TORIGHT          = 0x0400;
+    // on the upper part (first half) of the item.
+static const int wxTREE_HITTEST_ONITEMUPPERPART  = 0x0800;
+    // on the lower part (second half) of the item.
+static const int wxTREE_HITTEST_ONITEMLOWERPART  = 0x1000;
+
+    // anywhere on the item
+static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
+                                          wxTREE_HITTEST_ONITEMLABEL;
+
 // tree ctrl default name
-#ifdef __WXMSW__
-    WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
-#else
-    #define wxTreeCtrlNameStr "wxTreeCtrl"
-#endif
+WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
+
+// ----------------------------------------------------------------------------
+// wxTreeItemAttr: a structure containing the visual attributes of an item
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxTreeItemAttr
+{
+public:
+    // ctors
+    wxTreeItemAttr() { }
+    wxTreeItemAttr(const wxColour& colText,
+                   const wxColour& colBack,
+                   const wxFont& font)
+        : m_colText(colText), m_colBack(colBack), m_font(font) { }
+
+    // setters
+    void SetTextColour(const wxColour& colText) { m_colText = colText; }
+    void SetBackgroundColour(const wxColour& colBack) { m_colBack = colBack; }
+    void SetFont(const wxFont& font) { m_font = font; }
+
+    // accessors
+    bool HasTextColour() const { return m_colText.Ok(); }
+    bool HasBackgroundColour() const { return m_colBack.Ok(); }
+    bool HasFont() const { return m_font.Ok(); }
+
+    const wxColour& GetTextColour() const { return m_colText; }
+    const wxColour& GetBackgroundColour() const { return m_colBack; }
+    const wxFont& GetFont() const { return m_font; }
+
+private:
+    wxColour m_colText,
+             m_colBack;
+    wxFont   m_font;
+};
 
 // ----------------------------------------------------------------------------
 // include the platform-dependent wxTreeCtrl class

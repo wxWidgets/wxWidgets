@@ -41,39 +41,6 @@ struct WXDLLEXPORT wxTreeViewItem;
 // they're equivalent
 class wxTreeItemData;
 
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// values for the `flags' parameter of wxTreeCtrl::HitTest() which determine
-// where exactly the specified point is situated:
-    // above the client area.
-static const int wxTREE_HITTEST_ABOVE            = 0x0001;
-    // below the client area.
-static const int wxTREE_HITTEST_BELOW            = 0x0002;
-    // in the client area but below the last item.
-static const int wxTREE_HITTEST_NOWHERE          = 0x0004;
-    // on the button associated with an item.
-static const int wxTREE_HITTEST_ONITEMBUTTON     = 0x0010;
-    // on the bitmap associated with an item.
-static const int wxTREE_HITTEST_ONITEMICON       = 0x0020;
-    // in the indentation associated with an item.
-static const int wxTREE_HITTEST_ONITEMINDENT     = 0x0040;
-    // on the label (string) associated with an item.
-static const int wxTREE_HITTEST_ONITEMLABEL      = 0x0080;
-    // in the area to the right of an item.
-static const int wxTREE_HITTEST_ONITEMRIGHT      = 0x0100;
-    // on the state icon for a tree view item that is in a user-defined state.
-static const int wxTREE_HITTEST_ONITEMSTATEICON  = 0x0200;
-    // to the right of the client area.
-static const int wxTREE_HITTEST_TOLEFT           = 0x0400;
-    // to the left of the client area.
-static const int wxTREE_HITTEST_TORIGHT          = 0x0800;
-    // anywhere on the item
-static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
-                                          wxTREE_HITTEST_ONITEMLABEL |
-                                          wxTREE_HITTEST_ONITEMSTATEICON;
-
 // NB: all the following flags are for compatbility only and will be removed in the
 //     next versions
 
@@ -252,6 +219,15 @@ public:
 
         // the item will be shown with a drop highlight
     void SetItemDropHighlight(const wxTreeItemId& item, bool highlight = TRUE);
+
+        // set the items text colour
+    void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);
+
+        // set the items background colour
+    void SetItemBackgroundColour(const wxTreeItemId& item, const wxColour& col);
+
+        // set the items font (should be of the same height for all items)
+    void SetItemFont(const wxTreeItemId& item, const wxFont& font);
 
     // item status inquiries
     // ---------------------
