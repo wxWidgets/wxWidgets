@@ -87,6 +87,8 @@ WXDLLEXPORT wxString wxNow();
 
 // Return path where wxWindows is installed (mostly useful in Unices)
 WXDLLEXPORT const wxChar *wxGetInstallPrefix();
+// Return path to wxWin data (/usr/share/wx/%{version}) (Unices)
+WXDLLEXPORT wxString wxGetDataDir();
 
 
 #if wxUSE_GUI
