@@ -1168,7 +1168,7 @@ INTL_DIST:
 	mkdir $(DISTDIR)/locale
 	cp $(INTLDIR)/Makefile $(DISTDIR)/locale
 	cp $(INTLDIR)/*.po $(DISTDIR)/locale
-	cp $(INTLDIR)/*.mo $(DISTDIR)/locale
+	-cp $(INTLDIR)/*.mo $(DISTDIR)/locale
 
 MANUAL_DIST:
 	mkdir $(DISTDIR)/docs
