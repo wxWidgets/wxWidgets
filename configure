@@ -10781,7 +10781,8 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   for ac_declaration in \
-   '' \
+   ''\
+   '#include <stdlib.h>' \
    'extern "C" void std::exit (int) throw (); using std::exit;' \
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
@@ -10795,8 +10796,8 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-$ac_declaration
 #include <stdlib.h>
+$ac_declaration
 int
 main ()
 {
@@ -11421,7 +11422,8 @@ else
   fi
 fi
 for ac_declaration in \
-   '' \
+   ''\
+   '#include <stdlib.h>' \
    'extern "C" void std::exit (int) throw (); using std::exit;' \
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
@@ -11435,8 +11437,8 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-$ac_declaration
 #include <stdlib.h>
+$ac_declaration
 int
 main ()
 {
@@ -18039,8 +18041,7 @@ SEARCH_INCLUDE="\
                               \
     /usr/openwin/share/include"
 
-SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` " \
-    /usr/lib64 /usr/X11R6/lib64
+SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` /usr/lib64 /usr/X11R6/lib64"
 
 
 cat >confcache <<\_ACEOF
@@ -36535,7 +36536,6 @@ EOF
         COND_WXUSE_ZLIB_BUILTIN=""
     fi
 
-USE_ZLIB_BUILTIN)
 
 
 
