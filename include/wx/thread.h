@@ -21,7 +21,8 @@
 #include "wx/setup.h"
 
 #if wxUSE_THREADS
-/* otherwise we get undefined references for non-thread case (KB)*/
+
+// only for wxUSE_THREADS - otherwise we'd get undefined symbols
 #ifdef __GNUG__
     #pragma interface "thread.h"
 #endif
@@ -37,28 +38,31 @@
 // constants
 // ----------------------------------------------------------------------------
 
-typedef enum
+enum wxMutexError
 {
   wxMUTEX_NO_ERROR = 0,
   wxMUTEX_DEAD_LOCK,      // Mutex has been already locked by THE CALLING thread
   wxMUTEX_BUSY,           // Mutex has been already locked by ONE thread
   wxMUTEX_UNLOCKED,
   wxMUTEX_MISC_ERROR
-} wxMutexError;
+};
 
-typedef enum
+enum wxThreadError
 {
   wxTHREAD_NO_ERROR = 0,      // No error
   wxTHREAD_NO_RESOURCE,       // No resource left to create a new thread
   wxTHREAD_RUNNING,           // The thread is already running
   wxTHREAD_NOT_RUNNING,       // The thread isn't running
   wxTHREAD_MISC_ERROR         // Some other error
-} wxThreadError;
+};
 
 // defines the interval of priority
-#define WXTHREAD_MIN_PRIORITY     0u
-#define WXTHREAD_DEFAULT_PRIORITY 50u
-#define WXTHREAD_MAX_PRIORITY     100u
+enum
+{
+    WXTHREAD_MIN_PRIORITY      = 0u,
+    WXTHREAD_DEFAULT_PRIORITY  = 50u,
+    WXTHREAD_MAX_PRIORITY      = 100u
+};
 
 // ----------------------------------------------------------------------------
 // A mutex object is a synchronization object whose state is set to signaled
@@ -129,21 +133,24 @@ private:
 // Critical section: this is the same as mutex but is only visible to the
 // threads of the same process. For the platforms which don't have native
 // support for critical sections, they're implemented entirely in terms of
-// mutexes
+// mutexes.
+//
+// NB: wxCriticalSection object does not allocate any memory in its ctor
+//     which makes it possible to have static globals of this class
 // ----------------------------------------------------------------------------
 
-// in order to avoid any overhead under !MSW make all wxCriticalSection class
-// functions inline - but this can't be done under MSW
-#if defined(__WXMSW__)
-    class WXDLLEXPORT wxCriticalSectionInternal;
-    #define WXCRITICAL_INLINE
-#elif defined(__WXMAC__)
-    class WXDLLEXPORT wxCriticalSectionInternal;
-    #define WXCRITICAL_INLINE
-#elif defined(__WXPM__)
-    #define WXCRITICAL_INLINE
-#else // !MSW && !PM
+class WXDLLEXPORT wxCriticalSectionInternal;
+
+// in order to avoid any overhead under platforms where critical sections are
+// just mutexes make all wxCriticalSection class functions inline
+#if !defined(__WXMSW__) && !defined(__WXPM__) && !defined(__WXMAC__)
     #define WXCRITICAL_INLINE   inline
+
+    #define wxCRITSECT_IS_MUTEX 1
+#else // MSW || Mac || OS2
+    #define WXCRITICAL_INLINE
+
+    #define wxCRITSECT_IS_MUTEX 0
 #endif // MSW/!MSW
 
 // you should consider wxCriticalSectionLocker whenever possible instead of
@@ -165,11 +172,18 @@ private:
     wxCriticalSection(const wxCriticalSection&);
     wxCriticalSection& operator=(const wxCriticalSection&);
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
-    wxCriticalSectionInternal *m_critsect;
-#else // !MSW
+#if wxCRITSECT_IS_MUTEX
     wxMutex m_mutex;
-#endif // MSW/!MSW
+#elif defined(__WXMSW__)
+    // we can't allocate any memory in the ctor, so use placement new -
+    // unfortunately, we have to hardcode the sizeof() here because we can't
+    // include windows.h from this public header
+    char m_buffer[24];
+#elif !defined(__WXPM__)
+    wxCriticalSectionInternal *m_critsect;
+#else
+    // nothing for OS/2
+#endif // !Unix/Unix
 };
 
 // keep your preprocessor name space clean

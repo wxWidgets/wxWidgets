@@ -499,7 +499,8 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
   for (wxNode * node = First (); node; node = node->Next ())
     {
       wxPen *each_pen = (wxPen *) node->Data ();
-      if (each_pen && each_pen->GetVisible() &&
+      if (each_pen &&
+          each_pen->GetVisible() &&
           each_pen->GetWidth () == width &&
           each_pen->GetStyle () == style &&
           each_pen->GetColour ().Red () == colour.Red () &&
@@ -514,6 +515,7 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
   // returning a pointer to an automatic variable and hanging on to it
   // (dangling pointer).
   pen->SetVisible(TRUE);
+
   return pen;
 }
 
@@ -542,19 +544,23 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
   for (wxNode * node = First (); node; node = node->Next ())
     {
       wxBrush *each_brush = (wxBrush *) node->Data ();
-      if (each_brush && each_brush->GetVisible() &&
+      if (each_brush &&
+          each_brush->GetVisible() &&
           each_brush->GetStyle () == style &&
           each_brush->GetColour ().Red () == colour.Red () &&
           each_brush->GetColour ().Green () == colour.Green () &&
           each_brush->GetColour ().Blue () == colour.Blue ())
         return each_brush;
     }
+
   // Yes, we can return a pointer to this in a later FindOrCreateBrush call,
   // because we created it within FindOrCreateBrush. Safeguards against
   // returning a pointer to an automatic variable and hanging on to it
   // (dangling pointer).
   wxBrush *brush = new wxBrush (colour, style);
+
   brush->SetVisible(TRUE);
+
   return brush;
 }
 
@@ -565,19 +571,19 @@ void wxBrushList::RemoveBrush (wxBrush * brush)
 
 wxFontList::~wxFontList ()
 {
-  wxNode *node = First ();
-  while (node)
+    wxNode *node = First ();
+    while (node)
     {
-          // Only delete objects that are 'visible', i.e.
-          // that have been created using FindOrCreate...,
-          // where the pointers are expected to be shared
-          // (and therefore not deleted by any one part of an app).
-      wxFont *font = (wxFont *) node->Data ();
-      wxNode *next = node->Next ();
-          if (font->GetVisible())
-                delete font;
-      node = next;
-}
+        // Only delete objects that are 'visible', i.e.
+        // that have been created using FindOrCreate...,
+        // where the pointers are expected to be shared
+        // (and therefore not deleted by any one part of an app).
+        wxFont *font = (wxFont *) node->Data ();
+        wxNode *next = node->Next ();
+        if (font->GetVisible())
+            delete font;
+        node = next;
+    }
 }
 
 void wxFontList::AddFont (wxFont * font)
@@ -596,27 +602,27 @@ wxFont *wxFontList::
   for (wxNode * node = First (); node; node = node->Next ())
     {
       wxFont *each_font = (wxFont *) node->Data ();
-      if (each_font && each_font->GetVisible() && each_font->Ok() &&
+      if (each_font &&
+          each_font->GetVisible() &&
+          each_font->Ok() &&
           each_font->GetPointSize () == PointSize &&
           each_font->GetStyle () == Style &&
           each_font->GetWeight () == Weight &&
           each_font->GetUnderlined () == underline &&
-          //#if defined(__X__)
-          //          each_font->GetFontId () == FamilyOrFontId) /* New font system */
-          //#else
 #if defined(__WXGTK__)
           (each_font->GetFamily() == FamilyOrFontId ||
-           (each_font->GetFamily() == wxSWISS && FamilyOrFontId == wxDEFAULT)) &&
+          (each_font->GetFamily() == wxSWISS && FamilyOrFontId == wxDEFAULT)) &&
 #else
           each_font->GetFamily() == FamilyOrFontId &&
 #endif
           ((each_font->GetFaceName() == wxT("")) || each_font->GetFaceName() == Face) &&
           (encoding == wxFONTENCODING_DEFAULT || each_font->GetEncoding() == encoding))
-        //#endif
         return each_font;
     }
   wxFont *font = new wxFont (PointSize, FamilyOrFontId, Style, Weight, underline, Face, encoding);
+
   font->SetVisible(TRUE);
+
   return font;
 }
 

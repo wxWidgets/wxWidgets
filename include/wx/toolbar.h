@@ -1,5 +1,24 @@
-#ifndef _TOOLBAR_H_BASE_
-#define _TOOLBAR_H_BASE_
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/toolbar.h
+// Purpose:     wxToolBar interface declaration
+// Author:      Vadim Zeitlin
+// Modified by:
+// Created:     20.11.99
+// RCS-ID:      $Id$
+// Copyright:   (c) wxWindows team
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef _WX_TOOLBAR_H_BASE_
+#define _WX_TOOLBAR_H_BASE_
+
+#include "wx/tbarbase.h"     // the base class for all toolbars
+
+#if 0
+class WXDLLEXPORT wxToolBar : public wxControl
+{
+};
+#endif // 0
 
 #if defined(__WXMSW__) && defined(__WIN95__)
 #   include "wx/msw/tbar95.h"
@@ -20,4 +39,4 @@
 #endif
 
 #endif
-    // _TOOLBAR_H_BASE_
+    // _WX_TOOLBAR_H_BASE_

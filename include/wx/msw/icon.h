@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        icon.h
+// Name:        wx/msw/icon.h
 // Purpose:     wxIcon class
 // Author:      Julian Smart
 // Modified by:
@@ -16,34 +16,49 @@
     #pragma interface "icon.h"
 #endif
 
-#include "wx/bitmap.h"
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+// compatible (even if incorrect) behaviour by default: derive wxIcon from
+// wxBitmap
+#ifndef wxICON_IS_BITMAP
+    #define wxICON_IS_BITMAP 1
+#endif
+
+#if wxICON_IS_BITMAP
+    #include "wx/bitmap.h"
+
+    #define wxIconRefDataBase   wxBitmapRefData
+    #define wxIconBase          wxBitmap
+#else
+    #include "wx/msw/gdiimage.h"
+
+    #define wxIconRefDataBase   wxGDIImageRefData
+    #define wxIconBase          wxGDIImage
+#endif
 
 // ---------------------------------------------------------------------------
 // icon data
 // ---------------------------------------------------------------------------
-class WXDLLEXPORT wxIconRefData: public wxBitmapRefData
+
+// notice that although wxIconRefData inherits from wxBitmapRefData, it is not
+// a valid wxBitmapRefData
+class WXDLLEXPORT wxIconRefData : public wxIconRefDataBase
 {
-    friend class WXDLLEXPORT wxBitmap;
-    friend class WXDLLEXPORT wxIcon;
-
 public:
-    wxIconRefData();
-    ~wxIconRefData();
+    wxIconRefData() { }
+    virtual ~wxIconRefData() { Free(); }
 
-public:
-    WXHICON m_hIcon;
+    virtual void Free();
 };
-
-#define M_ICONDATA ((wxIconRefData *)m_refData)
-#define M_ICONHANDLERDATA ((wxIconRefData *)bitmap->GetRefData())
 
 // ---------------------------------------------------------------------------
 // Icon
 // ---------------------------------------------------------------------------
-class WXDLLEXPORT wxIcon : public wxBitmap
-{
-    DECLARE_DYNAMIC_CLASS(wxIcon)
 
+class WXDLLEXPORT wxIcon : public wxIconBase
+{
 public:
     wxIcon();
 
@@ -51,61 +66,35 @@ public:
     wxIcon(const wxIcon& icon) { Ref(icon); }
 
     wxIcon(const char bits[], int width, int height);
-    wxIcon(const wxString& name, long flags = wxBITMAP_TYPE_ICO_RESOURCE,
+    wxIcon(const wxString& name,
+           long type = wxBITMAP_TYPE_ICO_RESOURCE,
            int desiredWidth = -1, int desiredHeight = -1);
-    ~wxIcon();
+    virtual ~wxIcon();
 
-    bool LoadFile(const wxString& name, long flags = wxBITMAP_TYPE_ICO_RESOURCE,
-                  int desiredWidth = -1, int desiredHeight = -1);
+    virtual bool LoadFile(const wxString& name,
+                          long type = wxBITMAP_TYPE_ICO_RESOURCE,
+                          int desiredWidth = -1, int desiredHeight = -1);
 
     wxIcon& operator = (const wxIcon& icon)
-        { if (*this == icon) return (*this); Ref(icon); return *this; }
+        { if ( *this != icon ) Ref(icon); return *this; }
     bool operator == (const wxIcon& icon) const
         { return m_refData == icon.m_refData; }
     bool operator != (const wxIcon& icon) const
         { return m_refData != icon.m_refData; }
 
-    void SetHICON(WXHICON ico);
-    WXHICON GetHICON() const { return (M_ICONDATA ? M_ICONDATA->m_hIcon : 0); }
+    wxIconRefData *GetIconData() const { return (wxIconRefData *)m_refData; }
 
-    bool Ok() const { return (m_refData != NULL && M_ICONDATA->m_hIcon != 0) ; }
+    void SetHICON(WXHICON icon) { SetHandle((WXHANDLE)icon); }
+    WXHICON GetHICON() const { return (WXHICON)GetHandle(); }
 
-    bool FreeResource(bool force = FALSE);
-};
-
-// TODO: Put these in separate, private header
-
-class WXDLLEXPORT wxICOFileHandler: public wxBitmapHandler
-{
-DECLARE_DYNAMIC_CLASS(wxICOFileHandler)
-
-public:
-    wxICOFileHandler()
+protected:
+    virtual wxGDIImageRefData *CreateData() const
     {
-        m_name = "ICO icon file";
-        m_extension = "ico";
-        m_type = wxBITMAP_TYPE_ICO;
-    };
+        return new wxIconRefData;
+    }
 
-    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-                          int desiredWidth = -1, int desiredHeight = -1);
-};
-
-class WXDLLEXPORT wxICOResourceHandler: public wxBitmapHandler
-{
-DECLARE_DYNAMIC_CLASS(wxICOResourceHandler)
-
-public:
-    wxICOResourceHandler()
-    {
-        m_name = "ICO resource";
-        m_extension = "ico";
-        m_type = wxBITMAP_TYPE_ICO_RESOURCE;
-    };
-
-    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-                          int desiredWidth = -1, int desiredHeight = -1);
-
+private:
+    DECLARE_DYNAMIC_CLASS(wxIcon)
 };
 
 #endif

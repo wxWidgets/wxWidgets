@@ -19,12 +19,29 @@
 // define this to 0 when building wxBase library
 #define wxUSE_GUI            1
 
+// ----------------------------------------------------------------------------
+// compatibility settings
+// ----------------------------------------------------------------------------
+
 #define WXWIN_COMPATIBILITY  0
                                 // Compatibility with 1.68 API.
                                 // Level 0: no backward compatibility, all new features
                                 // Level 1: Some compatibility. In fact
                                 // the compatibility code is now very minimal so there
                                 // is little advantage to setting it to 1.
+
+// in wxMSW version 2.1.11 and earlier, wxIcon always derives from wxBitmap,
+// but this is very dangerous because you can mistakenly pass an icon instead
+// of a bitmap to a function taking "const wxBitmap&" - which will *not* work
+// because an icon is not a valid bitmap
+//
+// Starting from 2.1.12, you have the choice under this backwards compatible
+// behaviour (your code will still compile, but probably won't behave as
+// expected!) and not deriving wxIcon class from wxBitmap, but providing a
+// conversion ctor wxBitmap(const wxIcon&) instead.
+//
+// Recommended setting: 0
+#define wxICON_IS_BITMAP    0
 
 // ----------------------------------------------------------------------------
 // General features
@@ -298,6 +315,13 @@
 #define wxUSE_CTL3D                      1
                                 // Define 1 to use Microsoft CTL3D library.
                                 // See note above about using FAFA and CTL3D.
+#endif
+
+// can we use RICHEDIT control?
+#if defined(__WIN95__) && !defined(__TWIN32__) && !defined(__GNUWIN32_OLD__)
+#define wxUSE_RICHEDIT 1
+#else
+#define wxUSE_RICHEDIT 0
 #endif
 
 #define wxUSE_COMMON_DIALOGS         1

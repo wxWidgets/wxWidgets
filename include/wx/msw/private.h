@@ -221,6 +221,23 @@ inline void wxRGBToColour(wxColour& c, COLORREF rgb)
 }
 
 // ---------------------------------------------------------------------------
+// small helper classes
+// ---------------------------------------------------------------------------
+
+// create an instance of this class and use it as the HDC for screen, will
+// automatically release the DC going out of scope
+class ScreenHDC
+{
+public:
+    ScreenHDC() { m_hdc = GetDC(NULL);    }
+   ~ScreenHDC() { ReleaseDC(NULL, m_hdc); }
+    operator HDC() const { return m_hdc;  }
+
+private:
+    HDC m_hdc;
+};
+
+// ---------------------------------------------------------------------------
 // macros to make casting between WXFOO and FOO a bit easier: the GetFoo()
 // returns Foo cast to the Windows type for oruselves, while GetFooOf() takes
 // an argument which should be a pointer or reference to the object of the

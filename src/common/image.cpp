@@ -894,11 +894,10 @@ wxBitmap wxImage::ConvertToBitmap() const
     free(lpDIBh);
     free(lpBits);
 
+#if WXWIN_COMPATIBILITY_2
     // check the wxBitmap object
-    if( bitmap.GetHBITMAP() )
-        bitmap.SetOk( TRUE );
-    else
-        bitmap.SetOk( FALSE );
+    bitmap.GetBitmapData()->SetOk();
+#endif // WXWIN_COMPATIBILITY_2
 
     return bitmap;
 }

@@ -319,7 +319,9 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
                 wxBM->SetWidth(bm.bmWidth);
                 wxBM->SetHeight(bm.bmHeight);
                 wxBM->SetDepth(bm.bmPlanes);
+#if WXWIN_COMPATIBILITY_2
                 wxBM->SetOk(TRUE);
+#endif // WXWIN_COMPATIBILITY_2
                 retval = wxBM;
                 break;
             }

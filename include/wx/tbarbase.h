@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tbarbase.h
+// Name:        wx/tbarbase.h
 // Purpose:     Base class for toolbar classes
 // Author:      Julian Smart
 // Modified by:

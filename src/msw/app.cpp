@@ -129,14 +129,10 @@ HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
 LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 
-#if defined(__WIN95__) && !defined(__TWIN32__)
-    #define wxUSE_RICHEDIT 1
-#else
-    #define wxUSE_RICHEDIT 0
-#endif
-
 #if wxUSE_RICHEDIT
-    static HINSTANCE gs_hRichEdit = (HINSTANCE) NULL;
+    // the handle to richedit DLL and the version of the DLL loaded
+    static HINSTANCE gs_hRichEdit = (HINSTANCE)NULL;
+    static int gs_verRichEdit = -1;
 #endif
 
 // ===========================================================================
@@ -192,15 +188,6 @@ bool wxApp::Initialize()
 
 #if defined(__WIN95__)
     InitCommonControls();
-
-#if wxUSE_RICHEDIT
-    gs_hRichEdit = LoadLibrary(wxT("RICHED32.DLL"));
-
-    if (gs_hRichEdit == (HINSTANCE) NULL)
-    {
-        wxLogError(_("Could not initialise Rich Edit DLL"));
-    }
-#endif // wxUSE_RICHEDIT
 
 #endif // __WIN95__
 
@@ -517,13 +504,9 @@ void wxApp::CleanUp()
 
     wxSetKeyboardHook(FALSE);
 
-#ifdef __WIN95__
-
 #if wxUSE_RICHEDIT
     if (gs_hRichEdit != (HINSTANCE) NULL)
         FreeLibrary(gs_hRichEdit);
-#endif
-
 #endif
 
 #if wxUSE_PENWINDOWS
@@ -1098,47 +1081,105 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
     }
 }
 
-int wxApp::GetComCtl32Version() const
+#if wxUSE_RICHEDIT
+
+/* static */
+bool wxApp::InitRichEdit(int version)
 {
-    // have we loaded COMCTL32 yet?
-    HMODULE theModule = ::GetModuleHandle(wxT("COMCTL32"));
-    int version = 0;
+    wxCHECK_MSG( version >= 1 && version <= 3, FALSE,
+                 _T("incorrect richedit control version requested") );
 
-    // if so, then we can check for the version
-    if (theModule)
+    if ( version <= gs_verRichEdit )
     {
-        // InitCommonControlsEx is unique to 4.7 and later
-        FARPROC theProc = ::GetProcAddress(theModule, "InitCommonControlsEx");
+        // we've already got this or better
+        return TRUE;
+    }
 
-        if (! theProc)
-        {                    // not found, must be 4.00
-            version = 400;
-        }
-        else
+    if ( gs_hRichEdit )
+    {
+        ::FreeLibrary(gs_hRichEdit);
+    }
+
+    // always try load riched20.dll first - like this we won't have to reload
+    // it later if we're first asked for RE 1 and then for RE 2 or 3
+    wxString dllname = _T("riched20.dll");
+    gs_hRichEdit = ::LoadLibrary(dllname);
+    if ( !gs_hRichEdit && (version == 1) )
+    {
+        // fall back to RE 1
+        dllname = _T("riched32.dll");
+        gs_hRichEdit = ::LoadLibrary(dllname);
+    }
+
+    if ( !gs_hRichEdit )
+    {
+        wxLogSysError(_("Could not load Rich Edit DLL '%s'"), dllname.c_str());
+
+        gs_verRichEdit = -1;
+
+        return FALSE;
+    }
+
+    gs_verRichEdit = version;
+
+    return TRUE;
+}
+
+#endif // wxUSE_RICHEDIT
+
+/* static */
+int wxApp::GetComCtl32Version()
+{
+    // TODO should use DllGetVersion() instead of this hack
+
+    // cache the result
+    static int s_verComCtl32 = -1;      // MT-FIXME
+
+    if ( s_verComCtl32 == -1 )
+    {
+        s_verComCtl32 = 0;
+
+        // have we loaded COMCTL32 yet?
+        HMODULE theModule = ::GetModuleHandle(wxT("COMCTL32"));
+
+        // if so, then we can check for the version
+        if (theModule)
         {
-            // The following symbol are unique to 4.71
-            //   DllInstall
-            //   FlatSB_EnableScrollBar FlatSB_GetScrollInfo FlatSB_GetScrollPos
-            //   FlatSB_GetScrollProp FlatSB_GetScrollRange FlatSB_SetScrollInfo
-            //   FlatSB_SetScrollPos FlatSB_SetScrollProp FlatSB_SetScrollRange
-            //   FlatSB_ShowScrollBar
-            //   _DrawIndirectImageList _DuplicateImageList
-            //   InitializeFlatSB
-            //   UninitializeFlatSB
-            // we could check for any of these - I chose DllInstall
-            FARPROC theProc = ::GetProcAddress(theModule, "DllInstall");
-            if (! theProc)
-            {
-                // not found, must be 4.70
-                version = 470;
+            // InitCommonControlsEx is unique to 4.7 and later
+            FARPROC theProc = ::GetProcAddress(theModule,
+                                               _T("InitCommonControlsEx"));
+
+            if ( !theProc )
+            {                    // not found, must be 4.00
+                s_verComCtl32 = 400;
             }
             else
-            {                         // found, must be 4.71
-                version = 471;
+            {
+                // The following symbol are unique to 4.71
+                //   DllInstall
+                //   FlatSB_EnableScrollBar FlatSB_GetScrollInfo FlatSB_GetScrollPos
+                //   FlatSB_GetScrollProp FlatSB_GetScrollRange FlatSB_SetScrollInfo
+                //   FlatSB_SetScrollPos FlatSB_SetScrollProp FlatSB_SetScrollRange
+                //   FlatSB_ShowScrollBar
+                //   _DrawIndirectImageList _DuplicateImageList
+                //   InitializeFlatSB
+                //   UninitializeFlatSB
+                // we could check for any of these - I chose DllInstall
+                FARPROC theProc = ::GetProcAddress(theModule, _T("DllInstall"));
+                if ( !theProc )
+                {
+                    // not found, must be 4.70
+                    s_verComCtl32 = 470;
+                }
+                else
+                {                         // found, must be 4.71
+                    s_verComCtl32 = 471;
+                }
             }
         }
     }
-    return version;
+
+    return s_verComCtl32;
 }
 
 void wxExit()

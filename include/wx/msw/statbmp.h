@@ -31,7 +31,7 @@ public:
 
     wxStaticBitmap(wxWindow *parent,
                    wxWindowID id,
-                   const wxBitmap& label,
+                   const wxGDIImage& label,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
@@ -42,7 +42,7 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& label,
+                const wxGDIImage& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -50,15 +50,15 @@ public:
 
     virtual ~wxStaticBitmap() { Free(); }
 
-    virtual void SetIcon(const wxIcon& icon) { SetBitmap(icon); }
-    virtual void SetBitmap(const wxBitmap& bitmap);
+    void SetIcon(const wxIcon& icon) { SetImage(icon); }
+    void SetBitmap(const wxBitmap& bitmap) { SetImage(bitmap); }
 
     // assert failure is provoked by an attempt to get an icon from bitmap or
     // vice versa
     const wxIcon& GetIcon() const
-        { wxASSERT( m_isIcon ); return *m_image.icon; }
+        { wxASSERT( m_isIcon ); return *(wxIcon *)m_image; }
     const wxBitmap& GetBitmap() const
-        { wxASSERT( !m_isIcon ); return *m_image.bitmap; }
+        { wxASSERT( !m_isIcon ); return *(wxBitmap *)m_image; }
 
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return FALSE; }
@@ -70,21 +70,19 @@ public:
 #endif // __WIN16__
 
 protected:
-    void Init() { m_isIcon = TRUE; m_image.icon = NULL; }
+    virtual wxSize DoGetBestSize() const;
+
+    void Init() { m_isIcon = TRUE; m_image = NULL; }
     void Free();
 
     // TRUE if icon/bitmap is valid
     bool ImageIsOk() const;
 
+    void SetImage(const wxGDIImage& image);
+
     // we can have either an icon or a bitmap
     bool m_isIcon;
-    union
-    {
-        wxIcon *icon;
-        wxBitmap *bitmap;
-    } m_image;
-
-    virtual wxSize DoGetBestSize() const;
+    wxGDIImage *m_image;
 };
 
 #endif

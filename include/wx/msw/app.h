@@ -83,7 +83,16 @@ public:
     virtual bool ProcessMessage(WXMSG* pMsg);
     void DeletePendingObjects();
     bool ProcessIdle();
-    int GetComCtl32Version() const;
+
+#if wxUSE_RICHEDIT
+    // initialize the richedit DLL of (at least) given version, return TRUE if
+    // ok (Win95 has version 1, Win98/NT4 has 1 and 2, W2K has 3)
+    static bool InitRichEdit(int version = 2);
+#endif // wxUSE_RICHEDIT
+
+    // returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
+    // wasn't found at all
+    static int GetComCtl32Version();
 
 public:
     int               m_nCmdShow;
