@@ -185,9 +185,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             m_dragMode = wxSPLIT_DRAG_DRAGGING;
 
             if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
-	    {
-	        DrawSashTracker(x, y);
-	    }
+            {
+                DrawSashTracker(x, y);
+            }
 
             m_oldX = x;
             m_oldY = y;
@@ -202,9 +202,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 
         // Erase old tracker
         if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
-	{
+        {
             DrawSashTracker(m_oldX, m_oldY);
-	}
+        }
 
         // Obtain window size. We are only interested in the dimension the sash
         // splits up
@@ -304,9 +304,9 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 
         // Erase old tracker
         if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
-	{
+        {
             DrawSashTracker(m_oldX, m_oldY);
-	}
+        }
 
         if (m_splitMode == wxSPLIT_VERTICAL)
             x = new_sash_position;
@@ -335,14 +335,14 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 
         // Draw new one
         if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
-	{
+        {
             DrawSashTracker(m_oldX, m_oldY);
-	}
-	else
-	{
+        }
+        else
+        {
             m_sashPosition = new_sash_position;
-	    m_needUpdating = TRUE;
-	}
+            m_needUpdating = TRUE;
+        }
     }
     else if ( event.LeftDClick() )
     {
@@ -492,14 +492,14 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
             dc.SetPen(*m_lightShadowPen);
-			int xShadow = m_borderSize ? m_borderSize - 1 : 0 ;
+                        int xShadow = m_borderSize ? m_borderSize - 1 : 0 ;
             dc.DrawLine(m_sashPosition, xShadow , m_sashPosition, h-m_borderSize);
 
             dc.SetPen(*m_hilightPen);
             dc.DrawLine(m_sashPosition+1, m_borderSize - 2, m_sashPosition+1, h - m_borderSize+2);
 
             dc.SetPen(*m_mediumShadowPen);
-			int yMedium = m_borderSize ? h-m_borderSize+1 : h ;
+                        int yMedium = m_borderSize ? h-m_borderSize+1 : h ;
             dc.DrawLine(m_sashPosition+m_sashSize-2, xShadow, m_sashPosition+m_sashSize-2, yMedium);
 
             dc.SetPen(*m_darkShadowPen);
@@ -651,8 +651,8 @@ void wxSplitterWindow::SizeWindows()
         }
     }
     wxClientDC dc(this);
-	if ( m_borderSize > 0 )
-		DrawBorders(dc);
+    if ( m_borderSize > 0 )
+        DrawBorders(dc);
     DrawSash(dc);
 }
 
@@ -893,8 +893,7 @@ void wxSplitterWindow::OnDoubleClick(wxSplitterEvent& event)
     // for compatibility, call the virtual function
     OnDoubleClickSash(event.GetX(), event.GetY());
 
-    if ( GetMinimumPaneSize() == 0
-        || m_permitUnsplitAlways)
+    if ( GetMinimumPaneSize() == 0 || m_permitUnsplitAlways )
     {
         Unsplit();
     }
@@ -904,8 +903,9 @@ void wxSplitterWindow::OnUnsplitEvent(wxSplitterEvent& event)
 {
     wxWindow *win = event.GetWindowBeingRemoved();
 
+    // do it before calling OnUnsplit() which may delete the window
+    win->Show(FALSE);
+
     // for compatibility, call the virtual function
     OnUnsplit(win);
-
-    win->Show(FALSE);
 }
