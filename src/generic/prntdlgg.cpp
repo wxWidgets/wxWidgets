@@ -137,7 +137,8 @@ void wxGenericPrintDialog::Init(wxWindow *parent)
 
     m_fromText = (wxTextCtrl*)NULL;
     m_toText = (wxTextCtrl*)NULL;
-
+    m_rangeRadioBox = (wxRadioBox *)NULL;
+    
     if (m_printDialogData.GetFromPage() != 0)
     {
         m_rangeRadioBox = new wxRadioBox(this, wxPRINTID_RANGE, _("Print Range"),
@@ -287,17 +288,21 @@ bool wxGenericPrintDialog::TransferDataToWindow()
              m_fromText->SetValue(buf);
              sprintf(buf, "%d", m_printDialogData.GetToPage());
              m_toText->SetValue(buf);
-             if (m_printDialogData.GetAllPages())
-                m_rangeRadioBox->SetSelection(0);
-             else
-                m_rangeRadioBox->SetSelection(1);
+             if(m_rangeRadioBox)
+                if (m_printDialogData.GetAllPages())
+                   m_rangeRadioBox->SetSelection(0);
+                else
+                   m_rangeRadioBox->SetSelection(1);
           }
           else
           {
              m_fromText->Enable(FALSE);
              m_toText->Enable(FALSE);
-             m_rangeRadioBox->SetSelection(0);
-             m_rangeRadioBox->wxRadioBox::Enable(1, FALSE);
+             if(m_rangeRadioBox)
+             {
+                m_rangeRadioBox->SetSelection(0);
+                m_rangeRadioBox->wxRadioBox::Enable(1, FALSE);
+             }
           }
        }
     }
@@ -318,10 +323,13 @@ bool wxGenericPrintDialog::TransferDataFromWindow()
            if(m_fromText) m_printDialogData.SetFromPage(atoi(m_fromText->GetValue()));
            if(m_toText)   m_printDialogData.SetToPage(atoi(m_toText->GetValue()));
         }
-        if (m_rangeRadioBox->GetSelection() == 0)
-            m_printDialogData.SetAllPages(TRUE);
-        else
-            m_printDialogData.SetAllPages(FALSE);
+        if(m_rangeRadioBox)
+        {
+           if (m_rangeRadioBox->GetSelection() == 0)
+              m_printDialogData.SetAllPages(TRUE);
+           else
+              m_printDialogData.SetAllPages(FALSE);
+        }
     }
     else
     { // continuous printing
