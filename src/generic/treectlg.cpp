@@ -108,6 +108,7 @@ private:
     wxGenericTreeItem  *m_itemEdited;
     wxString            m_startValue;
     bool                m_finished;
+    bool                m_aboutToFinish;
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxTreeTextCtrl)
@@ -341,6 +342,7 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
 {
     m_owner = owner;
     m_finished = false;
+    m_aboutToFinish = false;
 
     int w = m_itemEdited->GetWidth(),
         h = m_itemEdited->GetHeight();
@@ -413,7 +415,7 @@ bool wxTreeTextCtrl::AcceptChanges()
 
 void wxTreeTextCtrl::Finish()
 {
-    if ( !m_finished )
+    if ( !m_finished && !m_aboutToFinish )
     {
         m_owner->ResetTextControl();
 
@@ -430,12 +432,11 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
+            m_aboutToFinish = true;
             // Notify the owner about the changes
             AcceptChanges();
-
             // Even if vetoed, close the control (consistent with MSW)
             Finish();
-
             break;
 
         case WXK_ESCAPE:
@@ -471,14 +472,16 @@ void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
     if ( !m_finished )
     {
-        AcceptChanges();
         // We must finish regardless of success, otherwise we'll get
         // focus problems:
         Finish();
+        
+        if ( !AcceptChanges() )
+            m_owner->OnRenameCancelled( m_itemEdited );
     }
 
     // We must let the native text control handle focus, too, otherwise
-    // it could have problems with the cursor (e.g., in wxGTK):
+    // it could have problems with the cursor (e.g., in wxGTK).
     event.Skip();
 }
 

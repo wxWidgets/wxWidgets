@@ -494,6 +494,7 @@ private:
     wxString            m_startValue;
     size_t              m_itemEdited;
     bool                m_finished;
+    bool                m_aboutToFinish;
 
     DECLARE_EVENT_TABLE()
 };
@@ -2032,6 +2033,7 @@ wxListTextCtrl::wxListTextCtrl(wxListMainWindow *owner, size_t itemEdit)
 {
     m_owner = owner;
     m_finished = false;
+    m_aboutToFinish = false;
 
     wxRect rectLabel = owner->GetLineLabelRect(itemEdit);
 
@@ -2082,12 +2084,11 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
+            m_aboutToFinish = true;
             // Notify the owner about the changes
             AcceptChanges();
-
             // Even if vetoed, close the control (consistent with MSW)
             Finish();
-
             break;
 
         case WXK_ESCAPE:
@@ -2136,7 +2137,7 @@ void wxListTextCtrl::OnKillFocus( wxFocusEvent &event )
     }
 
     // We must let the native text control handle focus, too, otherwise
-    // it could have problems with the cursor (e.g., in wxGTK):
+    // it could have problems with the cursor (e.g., in wxGTK).
     event.Skip();
 }
 
