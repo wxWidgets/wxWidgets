@@ -975,7 +975,7 @@ dnl ---------------------------------------------------------------------------
 
 AC_DEFUN(WX_ARG_CACHE_INIT,
         [
-          wx_arg_cache_file="./configarg.cache"
+          wx_arg_cache_file="configarg.cache"
           echo "loading argument cache $wx_arg_cache_file"
           rm -f ${wx_arg_cache_file}.tmp
           touch ${wx_arg_cache_file}.tmp

@@ -270,7 +270,7 @@
 /* ------------------------------------------------------------------------ */
 
 /*
- * Use wXLongLong (a.k.a. int64) class
+ * Use wxLongLong (a.k.a. int64) class
  */
 #define wxUSE_LONGLONG 0
 
@@ -363,6 +363,13 @@
  * should really be size_t, but a lot of old, broken code uses int indices.
  */
 #define wxUSE_SIZE_T_STRING_OPERATOR 0
+
+/*
+ * Use the new experimental implementation of wxString::Printf()?
+ *
+ * Warning: enabling this may cause internal compiler errors with gcc!
+ */
+#define wxUSE_EXPERIMENTAL_PRINTF 0
 
 /* ------------------------------------------------------------------------ */
 /* misc options                                                             */

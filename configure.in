@@ -83,6 +83,9 @@ USE_CYGWIN=
 USE_MINGW32=
 USE_DATA_GENERAL=
 
+dnl the list of all available toolkits
+ALL_TOOLKITS="CYGWIN GTK MINGW MOTIF WINE"
+
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
 DEFAULT_wxUSE_GTK=0
@@ -417,20 +420,20 @@ dnl                            [  --with-gtk-exec-prefix=PFX  exec prefix where 
 
 dnl these options use AC_ARG_WITH and not WX_ARG_WITH on purpose - we cache
 dnl these values manually
-for toolkit in GTK MOTIF MSW; do
+for toolkit in `echo $ALL_TOOLKITS`; do
   LINE=`grep "wxUSE_$toolkit" ${wx_arg_cache_file}`
   if test "x$LINE" != x ; then
     has_toolkit_in_cache=1
     eval "DEFAULT_$LINE"
-    echo $LINE >> ${wx_arg_cache_file}.tmp
+    eval "CACHE_$toolkit=1"
   fi
 done
 
-AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$withval" TOOLKIT_GIVEN=1])
-AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" TOOLKIT_GIVEN=1])
-AC_ARG_WITH(wine,          [  --with-wine             use WINE], [wxUSE_WINE="$withval" TOOLKIT_GIVEN=1])
-AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows], [wxUSE_CYGWIN="$withval" TOOLKIT_GIVEN=1])
-AC_ARG_WITH(mingw,         [  --with-mingw            use GCC Minimal MS-Windows], [wxUSE_MINGW="$withval" TOOLKIT_GIVEN=1])
+AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(wine,          [  --with-wine             use WINE], [wxUSE_WINE="$withval" CACHE_WINE=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows], [wxUSE_CYGWIN="$withval" CACHE_CYGWIN=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(mingw,         [  --with-mingw            use GCC Minimal MS-Windows], [wxUSE_MINGW="$withval" CACHE_MINGW=1 TOOLKIT_GIVEN=1])
 
 WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)], wxUSE_DMALLOC)
 WX_ARG_WITH(zlib,          [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
@@ -495,6 +498,7 @@ WX_ARG_ENABLE(file,        [  --enable-file           use wxFile classes], wxUSE
 WX_ARG_ENABLE(textfile,    [  --enable-textfile       use wxTextFile classes], wxUSE_TEXTFILE)
 WX_ARG_ENABLE(unicode,     [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE(wcsrtombs,   [  --enable-wcsrtombs      use wcsrtombs instead of buggy (GNU libc1/Linux libc5) wcstombs], wxUSE_WCSRTOMBS)
+WX_ARG_ENABLE(wxprintfv,   [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
 WX_ARG_ENABLE(joystick,    [  --enable-joystick       compile in joystick support (Linux only)], wxUSE_JOYSTICK)
 
 dnl ---------------------------------------------------------------------------
@@ -655,14 +659,14 @@ AC_MSG_CHECKING(for toolkit)
 
 if test "$TOOLKIT_GIVEN" = 1; then
   dnl convert "yes" to 1 and "no" to 0
-  for toolkit in GTK MOTIF MSW WINE; do
+  for toolkit in `echo $ALL_TOOLKITS`; do
     var=wxUSE_$toolkit
     eval "value=\$${var}"
     eval "$var=`echo \$value | sed -e "s/yes/1/" -e "s/no/0/"`"
   done
 else
   dnl try to guess the most apropriate toolkit for this platform
-  for toolkit in GTK MOTIF MSW WINE; do
+  for toolkit in `echo $ALL_TOOLKITS`; do
     if test "$has_toolkit_in_cache" != 1; then
       var=DEFAULT_DEFAULT_wxUSE_$toolkit
     else
@@ -672,9 +676,8 @@ else
   done
 fi
 
-dnl NB: this supposes that the shell is able to handle arithmetic expansion and
-dnl     the ${VAR:-VALUE} construction. It does simplify our life though...
-NUM_TOOLKITS="$((${wxUSE_GTK:-0}+${wxUSE_MOTIF:-0}+${wxUSE_WINE:-0}+${wxUSE_MSW:-0}))"
+dnl we suppose that expr exists...
+NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_WINE:-0} + ${wxUSE_MINGW:-0} + ${wxUSE_CYGWIN:-0}`
 
 case "$NUM_TOOLKITS" in
   1)
@@ -687,11 +690,15 @@ case "$NUM_TOOLKITS" in
 esac
 
 dnl cache the wxUSE_<TOOLKIT> values too
-for toolkit in GTK MOTIF MSW WINE; do
+for toolkit in `echo $ALL_TOOLKITS`; do
   var=wxUSE_$toolkit
   eval "value=\$${var}"
   if test "x$value" != x; then
-    echo "$var=$value" >> ${wx_arg_cache_file}
+    cache_var=CACHE_$toolkit
+    eval "cache=\$${cache_var}"
+    if test "$cache" = 1; then
+      echo "$var=$value" >> ${wx_arg_cache_file}
+    fi
     if test "$value" = 1; then
       AC_MSG_RESULT(`echo $toolkit | tr [[A-Z]] [[a-z]]`)
     fi
@@ -1562,7 +1569,7 @@ if test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl Unicode
+dnl String stuff
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_UNICODE" = "yes" ; then
@@ -1571,6 +1578,10 @@ fi
 
 if test "$wxUSE_WCSRTOMBS" = "yes" ; then
   AC_DEFINE(wxUSE_WCSRTOMBS)
+fi
+
+if test "$wxUSE_wxUSE_EXPERIMENTAL_PRINTF" = "yes"; then
+  AC_DEFINE(wxUSE_EXPERIMENTAL_PRINTF)
 fi
 
 dnl ----------------------------------------------------------------
@@ -1793,7 +1804,7 @@ if test "$wxUSE_TOOLBAR" = "yes"; then
 fi
 
 if test "$wxUSE_TOOLTIPS" = "yes" ; then
-    if test "$wxUSE_MOTIF" = "yes"; then
+    if test "$wxUSE_MOTIF" = 1; then
       AC_MSG_WARN(tooltips are not supported yet under Motif)
     else
       AC_DEFINE(wxUSE_TOOLTIPS)
