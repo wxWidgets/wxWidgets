@@ -3971,7 +3971,7 @@ void wxWindowGTK::GtkSendPaintEvents()
     // widget to draw on
     GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
 
-    if (GetThemeEnabled() && GetBackgroundStyle() == wxBG_STYLE_SYSTEM)
+    if (GetThemeEnabled() && (GetBackgroundStyle() == wxBG_STYLE_SYSTEM) && !IsTopLevel())
     {
         // find ancestor from which to steal background
         wxWindow *parent = GetParent();
