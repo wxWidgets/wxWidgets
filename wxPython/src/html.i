@@ -329,15 +329,17 @@ public:
 
         // First, make a new instance of the tag handler
         wxPyBeginBlockThreads();
-        PyObject* arg = Py_BuildValue("()");
-        PyObject* obj = PyInstance_New(m_tagHandlerClass, arg, NULL);
+        PyObject* arg = PyTuple_New(0);
+        PyObject* obj = PyObject_CallObject(m_tagHandlerClass, arg);
         Py_DECREF(arg);
-        wxPyEndBlockThreads();
-
+        
         // now figure out where it's C++ object is...
         wxPyHtmlWinTagHandler* thPtr;
-        if (! wxPyConvertSwigPtr(obj, (void **)&thPtr, wxT("wxPyHtmlWinTagHandler")))
+        if (! wxPyConvertSwigPtr(obj, (void **)&thPtr, wxT("wxPyHtmlWinTagHandler"))) {
+            wxPyEndBlockThreads();
             return;
+        }
+        wxPyEndBlockThreads();
 
         // add it,
         parser->AddTagHandler(thPtr);
