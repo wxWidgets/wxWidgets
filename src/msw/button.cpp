@@ -74,7 +74,7 @@ bool wxButton::Create(wxWindow *parent,
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
 
-	long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD /* | WS_CLIPSIBLINGS */ ;
+    long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD /* | WS_CLIPSIBLINGS */ ;
 
 #ifdef __WIN32__
     if(m_windowStyle & wxBU_LEFT)
@@ -280,11 +280,16 @@ long wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
         // let the default processign take place too
     }
+    // VZ: I don't remember any more why was this needed but everything seems
+    //     to work just fine without this code and it prevents LDCLICK events
+    //     from being generated, so I will probably remoe it completely soon
+#if 0
     else if ( nMsg == WM_LBUTTONDBLCLK )
     {
         // trick the base class into thinking that this was just a click
         nMsg = WM_LBUTTONDOWN;
     }
+#endif // 0
 
     // let the base class do all real processing
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);

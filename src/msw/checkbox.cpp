@@ -142,29 +142,39 @@ bool wxCheckBox::Create(wxWindow *parent,
 
 void wxCheckBox::SetLabel(const wxString& label)
 {
-  SetWindowText(GetHwnd(), label);
+    SetWindowText(GetHwnd(), label);
 }
-
-#define CHECK_SIZE 13
 
 wxSize wxCheckBox::DoGetBestSize() const
 {
-    int wCheckbox, hCheckbox;
+    static int s_checkSize = 0;
+
+    if ( !s_checkSize )
+    {
+        wxScreenDC dc;
+        dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+
+        // the height of a standard button in the dialog units is 8,
+        // translate this to pixels (as one dialog unit is precisely equal to
+        // 8 character heights, it's just the char height)
+        s_checkSize = dc.GetCharHeight();
+    }
 
     wxString str = wxGetWindowText(GetHWND());
 
+    int wCheckbox, hCheckbox;
     if ( !str.IsEmpty() )
     {
         GetTextExtent(str, &wCheckbox, &hCheckbox);
-        wCheckbox += CHECK_SIZE + GetCharWidth();
+        wCheckbox += s_checkSize + GetCharWidth();
 
-        if ( hCheckbox < CHECK_SIZE )
-            hCheckbox = CHECK_SIZE;
+        if ( hCheckbox < s_checkSize )
+            hCheckbox = s_checkSize;
     }
     else
     {
-        wCheckbox = CHECK_SIZE;
-        hCheckbox = CHECK_SIZE;
+        wCheckbox = s_checkSize;
+        hCheckbox = s_checkSize;
     }
 
     return wxSize(wCheckbox, hCheckbox);

@@ -1624,7 +1624,10 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 #endif // 0
 
         if ( ::IsDialogMessage(GetHwnd(), msg) )
+        {
+            // IsDialogMessage() did something...
             return TRUE;
+        }
     }
 
 #if wxUSE_TOOLTIPS
@@ -2435,8 +2438,6 @@ bool wxWindow::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         if ( child->MSWOnNotify(idCtrl, lParam, result) )
         {
             return TRUE;
-
-            break;
         }
 
         node = node->GetNext();

@@ -221,8 +221,6 @@ bool wxListBox::Create(wxWindow *parent,
 
     SetSize(x, y, width, height);
 
-    Show(TRUE);
-
     return TRUE;
 }
 
@@ -292,7 +290,12 @@ int wxListBox::DoAppend(const wxString& item)
 
 void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 {
-    ShowWindow(GetHwnd(), SW_HIDE);
+    // avoid flicker - but don't need to do this for a hidden listbox
+    bool hideAndShow = IsShown();
+    if ( hideAndShow )
+    {
+        ShowWindow(GetHwnd(), SW_HIDE);
+    }
 
     ListBox_ResetContent(GetHwnd());
 
@@ -333,7 +336,11 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 
     SetHorizontalExtent();
 
-    ShowWindow(GetHwnd(), SW_SHOW);
+    if ( hideAndShow )
+    {
+        // show the listbox back if we hid it
+        ShowWindow(GetHwnd(), SW_SHOW);
+    }
 }
 
 int wxListBox::FindString(const wxString& s) const

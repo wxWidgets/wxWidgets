@@ -1940,25 +1940,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     switch ( hdr->code )
     {
-        case NM_RCLICK:
-            {
-                if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
-                    return TRUE;
-
-                TV_HITTESTINFO tvhti;
-                ::GetCursorPos(&(tvhti.pt));
-                ::ScreenToClient(GetHwnd(),&(tvhti.pt));
-                if ( TreeView_HitTest(GetHwnd(),&tvhti) )
-                {
-                    if( tvhti.flags & TVHT_ONITEM )
-                    {
-                        event.m_item = (WXHTREEITEM) tvhti.hItem;
-                        eventType = wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
-                    }
-                }
-            }
-            break;
-
         case TVN_BEGINDRAG:
             eventType = wxEVT_COMMAND_TREE_BEGIN_DRAG;
             // fall through
@@ -2203,6 +2184,27 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 #endif // _WIN32_IE >= 0x300
 
+        case NM_DBLCLK:
+        case NM_RCLICK:
+            {
+                TV_HITTESTINFO tvhti;
+                ::GetCursorPos(&tvhti.pt);
+                ::ScreenToClient(GetHwnd(), &tvhti.pt);
+                if ( TreeView_HitTest(GetHwnd(), &tvhti) )
+                {
+                    if ( tvhti.flags & TVHT_ONITEM )
+                    {
+                        event.m_item = (WXHTREEITEM) tvhti.hItem;
+                        eventType = hdr->code == NM_DBLCLK
+                                    ? wxEVT_COMMAND_TREE_ITEM_ACTIVATED
+                                    : wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
+                    }
+
+                    break;
+                }
+            }
+            // fall through
+
         default:
             return wxControl::MSWOnNotify(idCtrl, lParam, result);
     }
@@ -2215,6 +2217,12 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // post processing
     switch ( hdr->code )
     {
+        case NM_DBLCLK:
+            // return TRUE to prevent the default processing which consists in
+            // toggling the state of the item under the mouse
+            *result = processed;
+            break;
+
         case TVN_BEGINDRAG:
         case TVN_BEGINRDRAG:
             if ( event.IsAllowed() )
