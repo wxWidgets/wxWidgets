@@ -16,34 +16,45 @@
 #pragma interface "radiobox.h"
 #endif
 
-#include "wx/control.h"
+#ifndef wxWIDGET_ARRAY_DEFINED
+    #define wxWIDGET_ARRAY_DEFINED
 
-// List box item
-class WXDLLEXPORT wxBitmap ;
+    #include "wx/dynarray.h"
+    WX_DEFINE_ARRAY(WXWidget, wxWidgetArray);
+#endif
+
+#include "wx/arrstr.h"
 
 class WXDLLEXPORT wxRadioBox : public wxControl, public wxRadioBoxBase
 {
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 
 public:
-    wxRadioBox();
+    wxRadioBox() { Init(); }
 
     wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
-        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        int n = 0, const wxString choices[] = NULL,
-        int majorDim = 0, long style = wxRA_HORIZONTAL,
-        const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr)
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int n = 0, const wxString choices[] = NULL,
+               int majorDim = 0, long style = wxRA_HORIZONTAL,
+               const wxValidator& val = wxDefaultValidator,
+               const wxString& name = wxRadioBoxNameStr)
     {
-        Create(parent, id, title, pos, size, n, choices, majorDim, style, val, name);
+        Init();
+
+        Create(parent, id, title, pos, size, n, choices,
+               majorDim, style, val, name);
     }
 
     ~wxRadioBox();
 
     bool Create(wxWindow *parent, wxWindowID id, const wxString& title,
-        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        int n = 0, const wxString choices[] = NULL,
-        int majorDim = 0, long style = wxRA_HORIZONTAL,
-        const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr);
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                int n = 0, const wxString choices[] = NULL,
+                int majorDim = 0, long style = wxRA_HORIZONTAL,
+                const wxValidator& val = wxDefaultValidator,
+                const wxString& name = wxRadioBoxNameStr);
 
     int FindString(const wxString& s) const;
     void SetSelection(int N);
@@ -71,9 +82,12 @@ public:
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
-    WXWidget* GetRadioButtons() const { return m_radioButtons; }
+    const wxWidgetArray& GetRadioButtons() const { return m_radioButtons; }
     void SetSel(int i) { m_selectedButton = i; }
     virtual WXWidget GetLabelWidget() const { return m_labelWidget; }
+
+private:
+    void Init();
 
 protected:
     int               m_majorDim;
@@ -81,9 +95,9 @@ protected:
     int               m_noRowsOrCols;
     int               m_selectedButton;
 
-    WXWidget*         m_radioButtons;
+    wxWidgetArray     m_radioButtons;
     WXWidget          m_labelWidget;
-    wxString*         m_radioButtonLabels;
+    wxArrayString     m_radioButtonLabels;
 
     virtual void DoSetSize(int x, int y,
         int width, int height,

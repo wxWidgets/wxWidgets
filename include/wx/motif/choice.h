@@ -17,9 +17,13 @@
 #endif
 
 #include "wx/clntdata.h"
-#include "wx/dynarray.h"
 
-WX_DEFINE_ARRAY(WXWidget, wxWidgetArray);
+#ifndef wxWIDGET_ARRAY_DEFINED
+    #define wxWIDGET_ARRAY_DEFINED
+
+    #include "wx/dynarray.h"
+    WX_DEFINE_ARRAY(WXWidget, wxWidgetArray);
+#endif
 
 // Choice item
 class WXDLLEXPORT wxChoice: public wxChoiceBase
