@@ -478,6 +478,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   // Without this, the cursor may not be restored properly
   // (e.g. in splitter sample).
   SetCursor(*wxSTANDARD_CURSOR);
+  SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
   SetSize(pos.x, pos.y, size.x, size.y);
 
   return TRUE;
@@ -929,7 +930,10 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
         wxClientDC dc(this);
         wxBrush backgroundBrush(GetBackgroundColour(), wxSOLID);
         dc.SetBackground(backgroundBrush);
-        dc.Clear();
+        if (rect)
+          dc.Clear(*rect);
+        else
+          dc.Clear();
     }
 
     XSendEvent(display, thisWindow, False, ExposureMask, (XEvent *)&dummyEvent);

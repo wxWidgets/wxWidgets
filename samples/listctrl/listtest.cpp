@@ -325,12 +325,7 @@ void MyListCtrl::OnBeginDrag(wxListEvent& WXUNUSED(event))
 	if ( !text )
 		return;
 
-#ifndef __GNUWIN32__
-	ostream str(text);
-
-	str << "OnBeginDrag\n";
-	str.flush();
-#endif
+        text->WriteText("OnBeginDrag\n");
 }
 
 void MyListCtrl::OnBeginRDrag(wxListEvent& WXUNUSED(event))
@@ -341,12 +336,7 @@ void MyListCtrl::OnBeginRDrag(wxListEvent& WXUNUSED(event))
 	wxTextCtrl *text = ((MyFrame *)wxGetApp().GetTopWindow())->m_logWindow;
 	if ( !text )
 		return;
-#ifndef __GNUWIN32__
-	ostream str(text);
-
-	str << "OnBeginRDrag\n";
-	str.flush();
-#endif
+        text->WriteText("OnBeginRDrag\n");
 }
 
 void MyListCtrl::OnBeginLabelEdit(wxListEvent& WXUNUSED(event))
@@ -358,12 +348,7 @@ void MyListCtrl::OnBeginLabelEdit(wxListEvent& WXUNUSED(event))
 	if ( !text )
 		return;
 
-#ifndef __GNUWIN32__
-	ostream str(text);
-
-	str << "OnBeginLabelEdit\n";
-	str.flush();
-#endif
+        text->WriteText("OnBeginLabelEdit\n");
 }
 
 void MyListCtrl::OnEndLabelEdit(wxListEvent& WXUNUSED(event))
@@ -375,12 +360,7 @@ void MyListCtrl::OnEndLabelEdit(wxListEvent& WXUNUSED(event))
 	if ( !text )
 		return;
 
-#ifndef __GNUWIN32__
-	ostream str(text);
-
-	str << "OnEndLabelEdit\n";
-	str.flush();
-#endif
+        text->WriteText("OnEndLabelEdit\n");
 }
 
 void MyListCtrl::OnDeleteItem(wxListEvent& WXUNUSED(event))
@@ -392,12 +372,7 @@ void MyListCtrl::OnDeleteItem(wxListEvent& WXUNUSED(event))
 	if ( !text )
 		return;
 
-#ifndef __GNUWIN32__
-	ostream str(text);
-
-	str << "OnDeleteItem\n";
-	str.flush();
-#endif
+        text->WriteText("OnDeleteItem\n");
 }
 
 void MyListCtrl::OnGetInfo(wxListEvent& event)
@@ -409,7 +384,9 @@ void MyListCtrl::OnGetInfo(wxListEvent& event)
 	if ( !text )
 		return;
 
-#ifndef __GNUWIN32__
+        text->WriteText("OnGetInfo\n");
+
+/*
 	ostream str(text);
 
 	str << "OnGetInfo (" << event.m_item.m_itemId << ", " << event.m_item.m_col << ")";
@@ -434,7 +411,7 @@ void MyListCtrl::OnGetInfo(wxListEvent& event)
 	}
 	str << "\n";
 	str.flush();
-#endif
+*/
 }
 
 void MyListCtrl::OnSetInfo(wxListEvent& WXUNUSED(event))
@@ -446,12 +423,7 @@ void MyListCtrl::OnSetInfo(wxListEvent& WXUNUSED(event))
 	if ( !text )
 		return;
 
-#ifndef __GNUWIN32__
-	ostream str(text);
-
-	str << "OnSetInfo\n";
-	str.flush();
-#endif
+	text->WriteText("OnSetInfo\n");
 }
 
 void MyListCtrl::OnSelected(wxListEvent& WXUNUSED(event))
@@ -463,12 +435,7 @@ void MyListCtrl::OnSelected(wxListEvent& WXUNUSED(event))
 	if ( !text )
 		return;
 
-#ifndef __GNUWIN32__
-	ostream str(text);
-
-	str << "OnSelected\n";
-	str.flush();
-#endif
+	text->WriteText("OnSelected\n");
 }
 
 void MyListCtrl::OnDeselected(wxListEvent& WXUNUSED(event))
@@ -480,12 +447,7 @@ void MyListCtrl::OnDeselected(wxListEvent& WXUNUSED(event))
 	if ( !text )
 		return;
 
-#ifndef __GNUWIN32__
-	ostream str(text);
-
-	str << "OnDeselected\n";
-	str.flush();
-#endif
+	text->WriteText("OnDeselected\n");
 }
 
 void MyListCtrl::OnKeyDown(wxListEvent& WXUNUSED(event))
@@ -497,11 +459,6 @@ void MyListCtrl::OnKeyDown(wxListEvent& WXUNUSED(event))
 	if ( !text )
 		return;
 
-#ifndef __GNUWIN32__
-	ostream str(text);
-
-	str << "OnKeyDown\n";
-	str.flush();
-#endif
+	text->WriteText("OnKeyDown\n");
 }
 

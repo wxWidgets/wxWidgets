@@ -42,9 +42,7 @@ High Priority
 - Tidy dialogs such as the colour and font selectors.
 
 - Use generic wxTreeCtrl, wxListCtrl: debug and enhance these.
-  wxTreeCtrl: crashes in wxImageList::Draw because it assumes
-  that wxBitmap == wxIcon, which is only true in wxGTK.
-  So add wxDC::DrawBitmap and use this instead.
+  We're close to having these working: mostly scrolling to work out.
 
 - Find out why modal dialogs give a grab warning.
 
@@ -146,3 +144,5 @@ Low Priority
 
 - Get ODBC classes and sample working.
 
+- Work out why wxTextCtrl doesn't work as a stream buffer under
+  gcc

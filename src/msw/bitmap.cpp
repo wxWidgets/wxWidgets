@@ -394,6 +394,7 @@ wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
     LPBITMAPINFO    lpDib;
     void            *lpBits = NULL;
 
+/*
     wxASSERT( this->GetPalette() && this->GetPalette()->Ok() && (this->GetPalette()->GetHPALETTE() != 0) );
 
     tmpBitmap.SetPalette(this->GetPalette());
@@ -401,6 +402,23 @@ wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
     memDC.SetPalette(this->GetPalette());
 
     hPal = (HPALETTE) this->GetPalette()->GetHPALETTE();
+*/
+    if( this->GetPalette() && this->GetPalette()->Ok() && (this->GetPalette()->GetHPALETTE() != 0) )
+    {
+        tmpBitmap.SetPalette(this->GetPalette());
+        memDC.SelectObject(tmpBitmap);
+        memDC.SetPalette(this->GetPalette());
+        hPal = (HPALETTE) this->GetPalette()->GetHPALETTE();
+    }
+    else
+    {
+        hPal = (HPALETTE) ::GetStockObject(DEFAULT_PALETTE);
+        wxPalette palette;
+        palette.SetHPALETTE( (WXHPALETTE)hPal );
+        tmpBitmap.SetPalette( palette );
+        memDC.SelectObject(tmpBitmap);
+        memDC.SetPalette( palette );
+    }
 
     // set the height negative because in a DIB the order of the lines is reversed
     createDIB(this->GetWidth(), -this->GetHeight(), this->GetDepth(), hPal, &lpDib);

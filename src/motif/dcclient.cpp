@@ -172,7 +172,7 @@ wxWindowDC::~wxWindowDC(void)
 };
 
 void wxWindowDC::FloodFill( long WXUNUSED(x1), long WXUNUSED(y1), 
-  wxColour* WXUNUSED(col), int WXUNUSED(style) )
+  const wxColour& WXUNUSED(col), int WXUNUSED(style) )
 {
   // TODO
 };
@@ -1229,7 +1229,8 @@ void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *heigh
   if (!theFont->Ok())
   {
     // TODO: this should be an error log function
-    cerr << "wxWindows warning - set a valid font before calling GetTextExtent!\n";
+    wxFAIL_MSG("set a valid font before calling GetTextExtent!");
+
     *width = -1;
     *height = -1;
     return;
@@ -1298,7 +1299,6 @@ void wxWindowDC::Clear(void)
   int w, h;
   if (m_window)
     {
-      // TODO: should we get the virtual size?
       m_window->GetSize(&w, &h);
 
       if (m_window && m_window->GetBackingPixmap())
@@ -1326,6 +1326,24 @@ void wxWindowDC::Clear(void)
 
   if (m_window && m_window->GetBackingPixmap())
     XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, 0, 0, w, h);
+
+  m_brush = saveBrush;
+};
+
+void wxWindowDC::Clear(const wxRect& rect)
+{
+  if (!Ok()) return;
+  
+  int x = rect.x; int y = rect.y;
+  int w = rect.width; int h = rect.height;
+
+  wxBrush saveBrush = m_brush;
+  SetBrush (m_backgroundBrush);
+
+  XFillRectangle ((Display*) m_display, (Pixmap) m_pixmap, (GC) m_gc, x, y, w, h);
+
+  if (m_window && m_window->GetBackingPixmap())
+    XFillRectangle ((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(),(GC) m_gcBacking, x, y, w, h);
 
   m_brush = saveBrush;
 };

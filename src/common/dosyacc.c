@@ -209,7 +209,11 @@ YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
 #line 118 "parser.y"
 
+#ifdef IDE_INVOKED
+#include "../common/doslex.c"
+#else
 #include "../common/lex_yy.c"
+#endif
 
 /*
 void yyerror(s)

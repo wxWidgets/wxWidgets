@@ -69,7 +69,7 @@ wxColour wxSystemSettings::GetSystemColour(int index)
     }
     case wxSYS_COLOUR_HIGHLIGHTTEXT:
     {
-      return *wxWHITE;
+      return *wxBLUE;
     }
     case wxSYS_COLOUR_INFOBK:
     case wxSYS_COLOUR_APPWORKSPACE:

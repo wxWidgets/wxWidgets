@@ -50,7 +50,7 @@ wxWindowDC::~wxWindowDC(void)
 };
 
 void wxWindowDC::FloodFill( long WXUNUSED(x1), long WXUNUSED(y1), 
-  wxColour* WXUNUSED(col), int WXUNUSED(style) )
+  const wxColour& WXUNUSED(col), int WXUNUSED(style) )
 {
 };
 

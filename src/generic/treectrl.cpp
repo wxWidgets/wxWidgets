@@ -328,7 +328,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 {
   Init();
 
-  wxScrolledWindow::Create( parent, id, pos, size, style, name );
+  wxScrolledWindow::Create( parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, name );
 
   SetBackgroundColour( *wxWHITE );
   m_dottedPen = wxPen( *wxBLACK, 0, 0 );
@@ -913,6 +913,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
     if (item->HasHilight())
     {
       dc.SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+
       dc.SetBrush( *m_hilightBrush );
 
       long text_w = 0;
@@ -1154,7 +1155,6 @@ void wxTreeCtrl::RefreshLine( wxGenericTreeItem *item )
   rect.y = dc.LogicalToDeviceY( item->GetY() - 2 );
   rect.width = 1000;
   rect.height = dc.GetCharHeight() + 6;
-
   Refresh( TRUE, &rect );
 }
 

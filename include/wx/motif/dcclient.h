@@ -43,7 +43,7 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     
     ~wxWindowDC(void);
     
-    virtual void FloodFill( long x1, long y1, wxColour* col, int style=wxFLOOD_SURFACE );
+    virtual void FloodFill( long x1, long y1, const wxColour& col, int style=wxFLOOD_SURFACE );
     virtual bool GetPixel( long x1, long y1, wxColour *col ) const;
 
     virtual void DrawLine( long x1, long y1, long x2, long y2 );
@@ -77,6 +77,7 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     virtual long GetCharHeight(void);
     
     virtual void Clear(void);
+    virtual void Clear(const wxRect& rect);
             
     virtual void SetFont( const wxFont &font );
     virtual void SetPen( const wxPen &pen );

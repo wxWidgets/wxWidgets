@@ -685,6 +685,11 @@ wxListHeaderWindow::wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMain
   m_isDraging = FALSE;
 }
 
+wxListHeaderWindow::~wxListHeaderWindow( void )
+{
+  delete m_resizeCursor;
+}
+
 void wxListHeaderWindow::DoDrawRect( wxPaintDC *dc, int x, int y, int w, int h )
 {
   const int m_corner = 1;
@@ -751,7 +756,8 @@ void wxListHeaderWindow::DrawCurrent()
   int y1 = 0;
   int x2 = m_currentX-1;
   int y2 = 0;
-  m_owner->GetClientSize( (int*)NULL, &y2 );
+  int dummy;
+  m_owner->GetClientSize( &dummy, &y2 );
   ClientToScreen( &x1, &y1 );
   m_owner->ClientToScreen( &x2, &y2 );
 
@@ -784,7 +790,8 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     else
     {
       int size_x = 0;
-      GetClientSize( &size_x, (int*) NULL );
+      int dummy;
+      GetClientSize( &size_x, & dummy );
       if (x > m_minX+7)
         m_currentX = x;
       else
@@ -947,7 +954,7 @@ wxListMainWindow::wxListMainWindow( void )
 wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name ) :
-  wxScrolledWindow( parent, id, pos, size, style, name )
+  wxScrolledWindow( parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, name )
 {
   m_mode = style;
   m_lines.DeleteContents( TRUE );
@@ -2227,6 +2234,8 @@ wxListCtrl::wxListCtrl(void)
   m_imageListNormal = (wxImageList *) NULL;
   m_imageListSmall = (wxImageList *) NULL;
   m_imageListState = (wxImageList *) NULL;
+  m_mainWin = (wxListMainWindow*) NULL;
+  m_headerWin = (wxListHeaderWindow*) NULL;
 }
 
 wxListCtrl::~wxListCtrl(void)
@@ -2241,6 +2250,8 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
   m_imageListNormal = (wxImageList *) NULL;
   m_imageListSmall = (wxImageList *) NULL;
   m_imageListState = (wxImageList *) NULL;
+  m_mainWin = (wxListMainWindow*) NULL;
+  m_headerWin = (wxListHeaderWindow*) NULL;
 
   long s = style;
 
@@ -2710,22 +2721,34 @@ void wxListCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
 
 void wxListCtrl::SetBackgroundColour( const wxColour &colour )
 {
-  m_mainWin->SetBackgroundColour( colour );
-  m_headerWin->SetBackgroundColour( colour );
-  m_mainWin->m_dirty = TRUE;
+  if (m_mainWin)
+  {
+    m_mainWin->SetBackgroundColour( colour );
+    m_mainWin->m_dirty = TRUE;
+  }
+  if (m_headerWin)
+    m_headerWin->SetBackgroundColour( colour );
 }
 
 void wxListCtrl::SetForegroundColour( const wxColour &colour )
 {
-  m_mainWin->SetForegroundColour( colour );
-  m_headerWin->SetForegroundColour( colour );
-  m_mainWin->m_dirty = TRUE;
+  if (m_mainWin)
+  {
+    m_mainWin->SetForegroundColour( colour );
+    m_mainWin->m_dirty = TRUE;
+  }
+  if (m_headerWin)
+    m_headerWin->SetForegroundColour( colour );
 }
 
 void wxListCtrl::SetFont( const wxFont &font )
 {
-  m_mainWin->SetFont( font );
-  m_headerWin->SetFont( font );
-  m_mainWin->m_dirty = TRUE;
+  if (m_mainWin)
+  {
+    m_mainWin->SetFont( font );
+    m_mainWin->m_dirty = TRUE;
+  }
+  if (m_headerWin)
+    m_headerWin->SetFont( font );
 }
 

@@ -488,7 +488,7 @@ int wxTextCtrl::overflow(int c)
   // Verify that there are no characters in get area
   if ( gptr() && gptr() < egptr() )
   {
-     wxError("Who's trespassing my get area?","Internal error");
+     wxError("wxTextCtrl::overflow: Who's trespassing my get area?","Internal error");
      return EOF;
   }
 

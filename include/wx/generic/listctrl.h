@@ -366,6 +366,7 @@ class wxListHeaderWindow : public wxWindow
 
   public:
     wxListHeaderWindow( void );
+    ~wxListHeaderWindow( void );
     wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
       long style = 0, const wxString &name = "columntitles" );
@@ -614,11 +615,13 @@ class wxListCtrl: public wxControl
     wxDropTarget *GetDropTarget() const
       { return m_mainWin->GetDropTarget(); }
     void SetCursor( const wxCursor &cursor )
-      { m_mainWin->SetCursor( cursor); }
+      { if (m_mainWin) m_mainWin->wxWindow::SetCursor( cursor); }
     wxColour GetBackgroundColour() const
-      { return m_mainWin->GetBackgroundColour(); }
+      { if (m_mainWin) return m_mainWin->GetBackgroundColour();
+        else return wxColour(); }
     wxColour GetForegroundColour() const
-      { return m_mainWin->GetForegroundColour(); }
+      { if (m_mainWin) return m_mainWin->GetForegroundColour();
+        else return wxColour(); }
     bool PopupMenu( wxMenu *menu, int x, int y )
       { return m_mainWin->PopupMenu( menu, x, y ); }
 

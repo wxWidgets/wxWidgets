@@ -61,10 +61,10 @@ class WXDLLEXPORT wxDC: public wxObject
     
     virtual bool Ok(void) const { return m_ok; };
 
-    virtual void FloodFill( long x1, long y1, wxColour* col, int style=wxFLOOD_SURFACE ) = 0;
+    virtual void FloodFill( long x1, long y1, const wxColour& col, int style=wxFLOOD_SURFACE ) = 0;
     inline void FloodFill(const wxPoint& pt, const wxColour& col, int style=wxFLOOD_SURFACE)
     {
-        FloodFill(pt.x, pt.y, (wxColour*) & col, style);
+        FloodFill(pt.x, pt.y, col, style);
     }
 
     virtual bool GetPixel( long x1, long y1, wxColour *col ) const = 0;

@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/dc.h"
+#include "wx/dcmemory.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
@@ -93,6 +94,31 @@ wxDC::~wxDC(void)
 void wxDC::DrawIcon( const wxIcon &WXUNUSED(icon), long WXUNUSED(x), long WXUNUSED(y), bool WXUNUSED(useMask) )
 {
 };
+
+void wxDC::DrawBitmap( const wxBitmap& bitmap, long x, long y, bool useMask )
+{
+    if (!bitmap.Ok())
+        return;
+
+    wxMemoryDC memDC;
+    memDC.SelectObject(bitmap);
+
+/* Not sure if we need this. The mask should leave the
+ * masked areas as per the original background of this DC.
+    if (useMask)
+    {
+        // There might be transparent areas, so make these
+        // the same colour as this DC
+        memDC.SetBackground(* GetBackground());
+        memDC.Clear();
+    }
+*/
+
+    Blit(x, y, bitmap.GetWidth(), bitmap.GetHeight(), & memDC, 0, 0, wxCOPY, useMask);
+
+    memDC.SelectObject(wxNullBitmap);
+};
+
 
 void wxDC::DrawPoint( wxPoint& point ) 
 { 

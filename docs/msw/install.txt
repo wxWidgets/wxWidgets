@@ -18,6 +18,7 @@ wx200doc.zip            Documentation source code (not required)
 wx200hlp.zip            WinHelp documentation
 wx200pdf.zip            Acrobat PDF documentation
 wx200htm.zip            HTML documentation
+wx200vc.zip             MS VC++ 5.0 project files
 
 Unarchive the required files plus any optional documentation
 files into a suitable directory such as c:\wx. Alter your
@@ -33,6 +34,19 @@ been tested lately.
 
 Visual C++ 4.0/5.0/6.0 compilation
 ----------------------------------
+
+Using project files:
+
+1. Unarchive wx200vc.zip, the VC++ 5 project makefiles.
+2. Open src/wxvc.dsp, set Debug or Release configuration, and
+   compile. This will produce lib/wxvc.lib or lib/wxvc_debug.lib.
+3. Open a sample project file, choose a configuration, and compile.
+   Currently only the minimal and mdi samples have project files.
+   To create others, copy the .dsp/.dsw files from the minimal
+   sample and globally replace 'MinimalVC' and 'minimal' with
+   suitable names. Add any other required source files.
+
+Using makefiles:
 
 1. Change directory to wx\src\msw. Type 'nmake -f makefile.nt' to
    make the wxWindows core library.

@@ -61,10 +61,10 @@ class WXDLLEXPORT wxDC: public wxObject
     
     virtual bool Ok(void) const { return m_ok; };
 
-    virtual void FloodFill( long x1, long y1, wxColour* col, int style=wxFLOOD_SURFACE ) = 0;
+    virtual void FloodFill( long x1, long y1, const wxColour& col, int style=wxFLOOD_SURFACE ) = 0;
     inline void FloodFill(const wxPoint& pt, const wxColour& col, int style=wxFLOOD_SURFACE)
     {
-        FloodFill(pt.x, pt.y, (wxColour*) & col, style);
+        FloodFill(pt.x, pt.y, col, style);
     }
 
     virtual bool GetPixel( long x1, long y1, wxColour *col ) const = 0;
@@ -148,10 +148,9 @@ class WXDLLEXPORT wxDC: public wxObject
         DrawIcon(icon, pt.x, pt.y);
     }
 
-    // TODO DrawBitmap is not always the same as DrawIcon, especially if bitmaps and
+    // DrawBitmap is not always the same as DrawIcon, especially if bitmaps and
     // icons are implemented differently.
-    void DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask=FALSE )
-	      { DrawIcon( *((wxIcon*)(&bmp)), x, y, useMask ); }
+    virtual void DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask=FALSE ) ;
 
     virtual bool Blit( long xdest, long ydest, long width, long height,
        wxDC *source, long xsrc, long ysrc, int logical_func = wxCOPY, bool useMask=FALSE ) = 0;

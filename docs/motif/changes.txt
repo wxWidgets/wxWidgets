@@ -61,3 +61,17 @@ More recently:
 - Added SetClippingRegion( const wxRegion& region ).
 - Added wxPoint, wxSize, wxRect versions of SetSize etc.
 - Diagnosed but not yet cured a wxTreeCtrl bug (see todo.txt).
+
+4/12/98
+-------
+
+- Got further with wxTreeCtrl, fixing wxWindow::Refresh on the way,
+  and adding Clear(const wxRect&). Mainly the scrolling to sort out now,
+  and inter-line spacing.
+- Fixed some problems with wxListCtrl espec. trying to call m_mainWin
+  functions when it wasn't initialised. As with the wxTreeCtrl sample,
+  removed usage of wxTextCtrl as a stream (doesn't seem to agree
+  with gcc) and the sample is now partially working. Some work
+  on the scrollbars is required.
+- wxListCtrl assumed that one of the args to GetClientSize can be NULL:
+  corrected.
