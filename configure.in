@@ -198,20 +198,21 @@ AC_DEFUN(WX_CPP_BOOL,
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
 
-    AC_TRY_RUN([
-        int main()
-        {
-            bool b = true;
+    AC_TRY_COMPILE(
+      [
+      ],
+      [
+        bool b = true;
 
-            return 0;
-        }
+        return 0;
       ],
       [
         AC_DEFINE(HAVE_BOOL)
         wx_cv_cpp_bool=yes
       ],
-      wx_cv_cpp_bool=no,
-      wx_cv_cpp_bool=no
+      [
+        wx_cv_cpp_bool=no
+      ]
     )
 
     AC_LANG_RESTORE
@@ -1755,20 +1756,34 @@ AC_LANG_CPLUSPLUS
 
 AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
 [
-  AC_TRY_COMPILE(
+  AC_TRY_RUN(
              [
                 #include <stdio.h>
                 #include <stdarg.h>
-             ],
-             [
-                va_list ap;
-                vsscanf("", "", ap);
+
+                int try_vsscanf(const char *format, ...)
+                {
+                  va_list ap;
+                  va_start(ap, format);
+
+                  vsscanf("17", format, ap);
+
+                  va_end(ap);
+                }
+
+                int main()
+                {
+                  int i;
+                  try_vsscanf("%d", &i);
+                  return i == 17 ? 0 : 1;
+                }
              ], [
-                wx_cv_func_vsscanf=yes
                 AC_DEFINE(HAVE_VSSCANF)
-             ], [
-                wx_cv_func_vsscanf=no
-             ])
+                wx_cv_func_vsscanf=yes
+             ],
+             wx_cv_func_vsscanf=no,
+             wx_cv_func_vsscanf=no
+             )
 ])
 
 AC_LANG_RESTORE
