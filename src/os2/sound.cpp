@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wave.cpp
-// Purpose:     wxWave class implementation: optional
+// Name:        sound.cpp
+// Purpose:     wxSound class implementation: optional
 // Author:      David Webster
 // Modified by:
 // Created:     10/17/99
@@ -17,7 +17,7 @@
 #endif
 
 #include "wx/file.h"
-#include "wx/os2/wave.h"
+#include "wx/sound.h"
 #define INCL_32                         /* force 32 bit compile */
 #define INCL_GPIBITMAPS
 #define INCL_DOSFILEMGR
@@ -31,29 +31,29 @@
 #include <os2medef.h>
 #include <mmioos2.h>
 
-wxWave::wxWave()
+wxSound::wxSound()
   : m_waveData(NULL), m_waveLength(0), m_isResource(FALSE)
 {
 }
 
-wxWave::wxWave(const wxString& sFileName, bool isResource)
+wxSound::wxSound(const wxString& sFileName, bool isResource)
   : m_waveData(NULL), m_waveLength(0), m_isResource(isResource)
 {
   Create(sFileName, isResource);
 }
 
-wxWave::wxWave(int size, const wxByte* data)
+wxSound::wxSound(int size, const wxByte* data)
   : m_waveData(NULL), m_waveLength(0), m_isResource(FALSE)
 {
   Create(size, data);
 }
 
-wxWave::~wxWave()
+wxSound::~wxSound()
 {
   Free();
 }
 
-bool wxWave::Create(const wxString& fileName, bool isResource)
+bool wxSound::Create(const wxString& fileName, bool isResource)
 {
   Free();
 
@@ -108,7 +108,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
   }
 }
 
-bool wxWave::Create(int size, const wxByte* data)
+bool wxSound::Create(int size, const wxByte* data)
 {
   Free();
   m_isResource = FALSE;
@@ -121,7 +121,7 @@ bool wxWave::Create(int size, const wxByte* data)
   return TRUE;
 }
 
-bool wxWave::Play(bool async, bool looped) const
+bool wxSound::DoPlay(unsigned flags) const
 {
   if (!IsOk())
     return FALSE;
@@ -133,7 +133,7 @@ bool wxWave::Play(bool async, bool looped) const
     return FALSE;
 }
 
-bool wxWave::Free()
+bool wxSound::Free()
 {
   if (m_waveData)
   {

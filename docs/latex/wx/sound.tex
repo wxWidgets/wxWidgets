@@ -1,4 +1,4 @@
-\section{\class{wxWave}}\label{wxwave}
+\section{\class{wxSound}}\label{wxsound}
 
 This class represents a short wave file, in Windows WAV format, that
 can be stored in memory and played. Currently this class is implemented
@@ -14,15 +14,15 @@ on Windows and Linux only.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxWave::wxWave}\label{wxwaveconstr}
+\membersection{wxSound::wxSound}\label{wxsoundconstr}
 
-\func{}{wxWave}{\void}
+\func{}{wxSound}{\void}
 
 Default constructor.
 
-\func{}{wxWave}{\param{const wxString\&}{ fileName}, \param{bool}{ isResource = false}}
+\func{}{wxSound}{\param{const wxString\&}{ fileName}, \param{bool}{ isResource = false}}
 
-Constructs a wave object from a file or resource. Call \helpref{wxWave::IsOk}{wxwaveisok} to
+Constructs a wave object from a file or resource. Call \helpref{wxSound::IsOk}{wxsoundisok} to
 determine whether this succeeded.
 
 \wxheading{Parameters}
@@ -31,13 +31,13 @@ determine whether this succeeded.
 
 \docparam{isResource}{true if {\it fileName} is a resource, false if it is a filename.}
 
-\membersection{wxWave::\destruct{wxWave}}
+\membersection{wxSound::\destruct{wxSound}}
 
-\func{}{\destruct{wxWave}}{\void}
+\func{}{\destruct{wxSound}}{\void}
 
-Destroys the wxWave object.
+Destroys the wxSound object.
 
-\membersection{wxWave::Create}\label{wxwavecreate}
+\membersection{wxSound::Create}\label{wxsoundcreate}
 
 \func{bool}{Create}{\param{const wxString\&}{ fileName}, \param{bool}{ isResource = false}}
 
@@ -53,13 +53,13 @@ Constructs a wave object from a file or resource.
 
 true if the call was successful, false otherwise.
 
-\membersection{wxWave::IsOk}\label{wxwaveisok}
+\membersection{wxSound::IsOk}\label{wxsoundisok}
 
 \constfunc{bool}{IsOk}{\void}
 
 Returns true if the object contains a successfully loaded file or resource, false otherwise.
 
-\membersection{wxWave::Play}\label{wxwaveplay}
+\membersection{wxSound::Play}\label{wxsoundplay}
 
 \constfunc{bool}{Play}{\param{bool}{ async = true}, \param{bool}{ looped = false}}
 

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wave.cpp
-// Purpose:     wxWave class implementation: optional
+// Name:        sound.cpp
+// Purpose:     wxSound class implementation: optional
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
@@ -10,14 +10,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "wave.h"
+#pragma implementation "sound.h"
 #endif
 
 #include "wx/object.h"
 #include "wx/string.h"
-#include "wx/wave.h"
+#include "wx/sound.h"
 
-#if wxUSE_WAVE
+#if wxUSE_SOUND
 
 #ifdef __WXMAC__
 #include "wx/mac/private.h"
@@ -26,30 +26,30 @@
 #endif
 #endif
 
-wxWave::wxWave()
+wxSound::wxSound()
   : m_sndChan(0), m_hSnd(NULL), m_waveLength(0), m_isResource(true)
 {
 }
 
-wxWave::wxWave(const wxString& sFileName, bool isResource)
+wxSound::wxSound(const wxString& sFileName, bool isResource)
   : m_sndChan(0), m_hSnd(NULL), m_waveLength(0), m_isResource(true)
 {
     Create(sFileName, isResource);
 }
 
 
-wxWave::~wxWave()
+wxSound::~wxSound()
 {
     FreeData();
 }
 
-wxWave::wxWave(int size, const wxByte* data)
+wxSound::wxSound(int size, const wxByte* data)
   : m_sndChan(0), m_hSnd(NULL), m_waveLength(0), m_isResource(false)
 {
     //TODO convert data
 }
 
-bool wxWave::Create(const wxString& fileName, bool isResource)
+bool wxSound::Create(const wxString& fileName, bool isResource)
 {
     bool ret = false;
     m_sndname = fileName;
@@ -133,7 +133,7 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
 
 
 //don't know what to do with looped, wth
-bool wxWave::Play(bool async, bool looped) const
+bool wxSound::DoPlay(unsigned flags) const
 {
     bool ret = false;
 
@@ -145,7 +145,7 @@ bool wxWave::Play(bool async, bool looped) const
 
       	hSnd = (SndListHandle) GetNamedResource('snd ', snd);
 
-      	if ((hSnd != NULL) && (SndPlay((SndChannelPtr)m_sndChan, (SndListHandle) hSnd, async) == noErr))
+      	if ((hSnd != NULL) && (SndPlay((SndChannelPtr)m_sndChan, (SndListHandle) hSnd, (flags & wxSOUND_ASYNC)) == noErr))
         	ret = true;
     }
 
@@ -153,7 +153,7 @@ bool wxWave::Play(bool async, bool looped) const
 }
 
 
-bool wxWave::FreeData()
+bool wxSound::FreeData()
 {
     bool ret = false;
 

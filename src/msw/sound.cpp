@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wave.cpp
-// Purpose:     wxWave
+// Name:        sound.cpp
+// Purpose:     wxSound
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "wave.h"
+#pragma implementation "sound.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -20,14 +20,14 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_WAVE
+#if wxUSE_SOUND
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
 
 #include "wx/file.h"
-#include "wx/msw/wave.h"
+#include "wx/sound.h"
 #include "wx/msw/private.h"
 
 #include <windowsx.h>
@@ -38,29 +38,29 @@
     #include <mmsystem.h>
 #endif
 
-wxWave::wxWave()
-  : m_waveData(NULL), m_waveLength(0), m_isResource(FALSE)
+wxSound::wxSound()
+  : m_waveData(NULL), m_waveLength(0), m_isResource(false)
 {
 }
 
-wxWave::wxWave(const wxString& sFileName, bool isResource)
+wxSound::wxSound(const wxString& sFileName, bool isResource)
   : m_waveData(NULL), m_waveLength(0), m_isResource(isResource)
 {
   Create(sFileName, isResource);
 }
 
-wxWave::wxWave(int size, const wxByte* data)
-  : m_waveData(NULL), m_waveLength(0), m_isResource(FALSE)
+wxSound::wxSound(int size, const wxByte* data)
+  : m_waveData(NULL), m_waveLength(0), m_isResource(false)
 {
   Create(size, data);
 }
 
-wxWave::~wxWave()
+wxSound::~wxSound()
 {
   Free();
 }
 
-bool wxWave::Create(const wxString& fileName, bool isResource)
+bool wxSound::Create(const wxString& fileName, bool isResource)
 {
   Free();
 
@@ -69,17 +69,9 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
     m_isResource = TRUE;
 
     HRSRC hresInfo;
-#if defined(__WIN32__)
-#ifdef _UNICODE
-    hresInfo = ::FindResourceW((HMODULE) wxhInstance, fileName, wxT("WAVE"));
-#else
-    hresInfo = ::FindResourceA((HMODULE) wxhInstance, fileName, wxT("WAVE"));
-#endif
-#else
     hresInfo = ::FindResource((HMODULE) wxhInstance, fileName, wxT("WAVE"));
-#endif
     if (!hresInfo)
-        return FALSE;
+        return false;
 
     HGLOBAL waveData = ::LoadResource((HMODULE) wxhInstance, hresInfo);
 
@@ -89,65 +81,61 @@ bool wxWave::Create(const wxString& fileName, bool isResource)
       m_waveLength = (int) ::SizeofResource((HMODULE) wxhInstance, hresInfo);
     }
 
-    return (m_waveData ? TRUE : FALSE);
+    return (m_waveData ? true : false);
   }
   else
   {
-    m_isResource = FALSE;
+    m_isResource = false;
 
     wxFile fileWave;
     if (!fileWave.Open(fileName, wxFile::read))
-        return FALSE;
+        return false;
 
     m_waveLength = (int) fileWave.Length();
 
     m_waveData = (wxByte*)GlobalLock(GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
     if (!m_waveData)
-        return FALSE;
+        return false;
 
     fileWave.Read(m_waveData, m_waveLength);
 
-    return TRUE;
+    return true;
   }
 }
 
-bool wxWave::Create(int size, const wxByte* data)
+bool wxSound::Create(int size, const wxByte* data)
 {
   Free();
-  m_isResource = FALSE;
+  m_isResource = true;
   m_waveLength=size;
   m_waveData = (wxByte*)GlobalLock(GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, m_waveLength));
   if (!m_waveData)
-     return FALSE;
+     return false;
 
   for (int i=0; i<size; i++) m_waveData[i] = data[i];
-  return TRUE;
+  return true;
 }
 
-bool wxWave::Play(bool async, bool looped) const
+bool wxSound::DoPlay(unsigned flags) const
 {
   if (!IsOk())
-    return FALSE;
+    return false;
 
-#ifdef __WIN32__
-  return ( ::PlaySound((LPCTSTR)m_waveData, NULL, SND_MEMORY |
-    SND_NODEFAULT | (async ? SND_ASYNC : SND_SYNC) | (looped ? (SND_LOOP | SND_ASYNC) : 0)) != 0 );
-#else
-  return ( ::sndPlaySound((LPCSTR)m_waveData, SND_MEMORY |
-    SND_NODEFAULT | (async ? SND_ASYNC : SND_SYNC) | (looped ? (SND_LOOP | SND_ASYNC) : 0)) != 0 );
-#endif
+  return (::PlaySound((LPCTSTR)m_waveData, NULL,
+                      SND_MEMORY | SND_NODEFAULT |
+                      ((flags & wxSOUND_ASYNC) ? SND_ASYNC : SND_SYNC) |
+                      ((flags & wxSOUND_LOOP) ? (SND_LOOP | SND_ASYNC) : 0))
+          != 0);
 }
 
-bool wxWave::Free()
+bool wxSound::Free()
 {
   if (m_waveData)
   {
 #ifdef __WXWINCE__
     HGLOBAL waveData = (HGLOBAL) m_waveData;
-#elif defined(__WIN32__)
-    HGLOBAL waveData = GlobalHandle(m_waveData);
 #else
-    HGLOBAL waveData = GlobalPtrHandle(m_waveData);
+    HGLOBAL waveData = GlobalHandle(m_waveData);
 #endif
 
     if (waveData)
@@ -164,10 +152,15 @@ bool wxWave::Free()
 
       m_waveData = NULL;
       m_waveLength = 0;
-      return TRUE;
+      return true;
     }
   }
-  return FALSE;
+  return false;
 }
 
-#endif // wxUSE_WAVE
+/*static*/ void wxSound::Stop()
+{
+    ::PlaySound(NULL, NULL, 0);
+}
+
+#endif // wxUSE_SOUND

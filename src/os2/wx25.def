@@ -13989,23 +13989,23 @@ EXPORTS
       wxExecute__FRC8wxStringiP9wxProcess
   ;From object file:  ..\os2\wave.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxWave::Create(const wxString&,unsigned long)
-      Create__6wxWaveFRC8wxStringUl
-      __vft6wxWave8wxObject
-      ;wxWave::~wxWave()
-      __dt__6wxWaveFv
-      ;wxWave::Free()
-      Free__6wxWaveFv
-      ;wxWave::wxWave(const wxString&,unsigned long)
-      __ct__6wxWaveFRC8wxStringUl
-      ;wxWave::wxWave(int,const unsigned char*)
-      __ct__6wxWaveFiPCUc
-      ;wxWave::Create(int,const unsigned char*)
-      Create__6wxWaveFiPCUc
-      ;wxWave::Play(unsigned long,unsigned long) const
-      Play__6wxWaveCFUlT1
-      ;wxWave::wxWave()
-      __ct__6wxWaveFv
+      ;wxSound::Create(const wxString&,unsigned long)
+      Create__6wxSoundFRC8wxStringUl
+      __vft6wxSound8wxObject
+      ;wxSound::~wxSound()
+      __dt__6wxSoundFv
+      ;wxSound::Free()
+      Free__6wxSoundFv
+      ;wxSound::wxSound(const wxString&,unsigned long)
+      __ct__6wxSoundFRC8wxStringUl
+      ;wxSound::wxSound(int,const unsigned char*)
+      __ct__6wxSoundFiPCUc
+      ;wxSound::Create(int,const unsigned char*)
+      Create__6wxSoundFiPCUc
+      ;wxSound::Play(unsigned long,unsigned long) const
+      Play__6wxSoundCFUlT1
+      ;wxSound::wxSound()
+      __ct__6wxSoundFv
   ;From object file:  ..\os2\window.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxFindWinFromHandle(unsigned long)

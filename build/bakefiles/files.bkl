@@ -2004,31 +2004,31 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_MSW_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/msw/joystick.cpp
+    src/msw/sound.cpp
     src/msw/taskbar.cpp
-    src/msw/wave.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
     wx/msw/joystick.h
+    wx/msw/sound.h
     wx/msw/taskbar.h
-    wx/msw/wave.h
 </set>
 
 <set var="ADVANCED_MAC_SRC" hints="files">
     src/mac/joystick.cpp
-    src/mac/wave.cpp
+    src/mac/sound.cpp
 </set>
 <set var="ADVANCED_MAC_HDR" hints="files">
     wx/mac/joystick.h
-    wx/mac/wave.h
+    wx/mac/sound.h
 </set>
 
 <set var="ADVANCED_OS2_SRC" hints="files">
     src/os2/joystick.cpp
-    src/os2/wave.cpp
+    src/os2/sound.cpp
 </set>
 <set var="ADVANCED_OS2_HDR" hints="files">
     wx/os2/joystick.h
-    wx/os2/wave.h
+    wx/os2/sound.h
 </set>
 
 <set var="ADVANCED_UNIX_SRC" hints="files">
