@@ -86,6 +86,7 @@ void wxMenuItem::UpdateItemBitmap()
         
     if ( m_bitmap.Ok() )
     {
+#if wxUSE_BMPBUTTON
         ControlButtonContentInfo info ;
         wxMacCreateBitmapButton( &info , m_bitmap ) ;
         if ( info.contentType != kControlNoContent )
@@ -95,7 +96,7 @@ void wxMenuItem::UpdateItemBitmap()
                     kMenuIconRefType , (Handle) info.u.iconRef ) ;
         }
         wxMacReleaseBitmapButton( &info ) ;
-            
+#endif            
     }
 }
 
