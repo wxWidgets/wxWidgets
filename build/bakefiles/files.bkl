@@ -176,6 +176,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/object.cpp
     src/common/process.cpp
     src/common/regex.cpp
+    src/common/sstream.cpp
     src/common/stopwatch.cpp
     src/common/strconv.cpp
     src/common/stream.cpp
@@ -272,6 +273,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/regex.h
     wx/scopeguard.h
     wx/snglinst.h
+    wx/sstream.h
     wx/stack.h
     wx/stockitem.h
     wx/stopwatch.h
