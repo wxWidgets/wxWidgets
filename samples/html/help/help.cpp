@@ -55,7 +55,7 @@
     // event handlers (these functions should _not_ be virtual)
       void OnQuit(wxCommandEvent& event);
       void OnHelp(wxCommandEvent& event);
-
+      void OnClose(wxCloseEvent& event);
    private:
       wxHtmlHelpController help;
       wxConfig* config;
@@ -86,6 +86,7 @@
    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
    EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
    EVT_MENU(Minimal_Help, MyFrame::OnHelp)
+   EVT_CLOSE(MyFrame::OnClose)
    END_EVENT_TABLE()
 
    // Create a new application object: this macro will allow wxWindows to create
@@ -168,16 +169,23 @@
    void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
    {
     // TRUE is to force the frame to close
-      delete config;    
       Close(TRUE);
    }
-
-
-
 
    void MyFrame::OnHelp(wxCommandEvent& WXUNUSED(event))
    {
        help.Display("Main page");
+   }
+
+   void MyFrame::OnClose(wxCloseEvent& event)
+   {
+       // Close the help frame; this will cause the config data to
+       // get written.
+       if ( help.GetFrame() ) // returns NULL if no help frame active
+           help.GetFrame()->Close(TRUE);
+       // now we can safely delete the config pointer
+       delete config;
+       event.Skip();   
    }
 
 
