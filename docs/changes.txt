@@ -154,6 +154,7 @@ wxHTML:
 - added SetFonts to HTML printing classes (Adrian Philip Look)
 - it is now possible to force page break when printing by inserting
   <div style="page-break-before:always"> into the markup (Greg Chicares)
+- wxHtmlWindow now uses double buffering to prevent flicker
 
 
 OLD CHANGES
