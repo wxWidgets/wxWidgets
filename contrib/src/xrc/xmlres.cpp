@@ -547,6 +547,40 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
 }
 
 
+#include "wx/listimpl.cpp"
+WX_DECLARE_LIST(wxXmlSubclassFactory, wxXmlSubclassFactoriesList);
+WX_DEFINE_LIST(wxXmlSubclassFactoriesList);
+
+wxXmlSubclassFactoriesList *wxXmlResource::ms_subclassFactories = NULL;
+
+/*static*/ void wxXmlResource::AddSubclassFactory(wxXmlSubclassFactory *factory)
+{
+    if (!ms_subclassFactories)
+    {
+        ms_subclassFactories = new wxXmlSubclassFactoriesList;
+        ms_subclassFactories->DeleteContents(TRUE);
+    }
+    ms_subclassFactories->Append(factory);
+}
+
+class wxXmlSubclassFactoryCXX : public wxXmlSubclassFactory
+{
+public:
+    ~wxXmlSubclassFactoryCXX() {}
+
+    wxObject *Create(const wxString& className)
+    {
+        wxClassInfo* classInfo = wxClassInfo::FindClass(className);
+
+        if (classInfo)
+            return classInfo->CreateObject();
+        else
+            return NULL;
+    }
+};
+
+
+
 
 
 wxXmlResourceHandler::wxXmlResourceHandler()
@@ -568,18 +602,23 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
         !(m_resource->GetFlags() & wxXRC_NO_SUBCLASSING))
     {
         wxString subclass = node->GetPropVal(wxT("subclass"), wxEmptyString);
-        wxClassInfo* classInfo = wxClassInfo::FindClass(subclass);
-
-        if (classInfo)
-            m_instance = classInfo->CreateObject();
-
-        if (!m_instance)
+        if (!subclass.empty())
         {
-            wxLogError(_("Subclass '%s' not found for resource '%s', not subclassing!"),
-                       subclass.c_str(), node->GetPropVal(wxT("name"), wxEmptyString).c_str());
-        }
+            for (wxXmlSubclassFactoriesList::Node *i = wxXmlResource::ms_subclassFactories->GetFirst();
+                 i; i = i->GetNext())
+            {
+                m_instance = i->GetData()->Create(subclass);
+                if (m_instance)
+                    break;
+            }
 
-        m_instance = classInfo->CreateObject();
+            if (!m_instance)
+            {
+                wxString name = node->GetPropVal(wxT("name"), wxEmptyString);
+                wxLogError(_("Subclass '%s' not found for resource '%s', not subclassing!"),
+                           subclass.c_str(), name.c_str());
+            }
+        }
     }
 
     m_node = node;
@@ -1167,11 +1206,13 @@ public:
     wxXmlResourceModule() {}
     bool OnInit()
     {
+        wxXmlResource::AddSubclassFactory(new wxXmlSubclassFactoryCXX);
         return TRUE;
     }
     void OnExit()
     {
         delete wxXmlResource::Set(NULL);
+        wxDELETE(wxXmlResource::ms_subclassFactories);
         CleanXRCID_Records();
     }
 };
