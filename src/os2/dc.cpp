@@ -77,10 +77,11 @@ int QueryTextBkColor(
 {
     CHARBUNDLE                      vCbnd;
 
-    ::GpiQueryAttrs(hPS            // presentation-space handle
-                    PRIM_CHAR      // Char primitive.
-                    CBB_BACK_COLOR // Background color.
-                    &vCbnd         // buffer for attributes.
+    ::GpiQueryAttrs( hPS            // presentation-space handle
+                    ,PRIM_CHAR      // Char primitive.
+                    ,CBB_BACK_COLOR // Background color.
+                    ,&vCbnd         // buffer for attributes.
+                   );
     return vCbnd.lBackColor;
 }
 
@@ -338,7 +339,7 @@ void wxDC::DoDrawLines( int n, wxPoint points[]
 }
 
 void wxDC::DoDrawRectangle(
-  wxCoord                           vS
+  wxCoord                           vX
 , wxCoord                           vY
 , wxCoord                           vWidth
 , wxCoord                           vHeight
@@ -348,8 +349,8 @@ void wxDC::DoDrawRectangle(
 
     vPoint[0].x = vX;
     vPoint[0].y = vY;
-    vPoint[1].x = vX + Width;
-    vPoint[1].y = vY - Height;      //mustdie !!! ??
+    vPoint[1].x = vX + vWidth;
+    vPoint[1].y = vY - vHeight;      //mustdie !!! ??
 
     ::GpiMove(m_hPS, &vPoint[0]);
     ::GpiBox( m_hPS       // handle to a presentation space
@@ -376,11 +377,11 @@ void wxDC::DoDrawRoundedRectangle(
     vPoint[1].y = vY + vHeight;      //or -height aka mustdie !!! ??
 
     ::GpiMove(m_hPS, &vPoint[0]);
-    ::GpiBox( m_hPS        // handle to a presentation space
-             ,DRO_OUTLINE  // draw the box outline ? or ?
-             ,&vPoint[1]   // address of the corner
-             ,(LONG)radius // horizontal corner radius
-             ,(LONG)radius // vertical corner radius
+    ::GpiBox( m_hPS         // handle to a presentation space
+             ,DRO_OUTLINE   // draw the box outline ? or ?
+             ,&vPoint[1]    // address of the corner
+             ,(LONG)dRadius // horizontal corner radius
+             ,(LONG)dRadius // vertical corner radius
             );
 }
 
@@ -617,8 +618,8 @@ void wxDC::SetPen(
     else
     {
         double                      dW = 0.5 +
-                                       ( fabs((double) XLOG2DEVREL(width)) +
-                                         fabs((double) YLOG2DEVREL(width))
+                                       ( fabs((double) XLOG2DEVREL(nWidth)) +
+                                         fabs((double) YLOG2DEVREL(nWidth))
                                        ) / 2.0;
         nWidth = (int)dW;
     }
@@ -721,7 +722,7 @@ void wxDC::DoGetTextExtent(
   const wxString&                   rsString
 , wxCoord*                          pvX
 , wxCoord*                          pvY
-, wxCoord*                          pvDecent
+, wxCoord*                          pvDescent
 , wxCoord*                          pvExternalLeading
 , wxFont*                           pTheFont
 ) const
@@ -750,7 +751,7 @@ void wxDC::DoGetTextExtent(
                             ,pStr
                             ,TXTBOX_COUNT // return maximum information
                             ,avPoint      // array of coordinates points
-                           )
+                           );
     if(!bRc)
     {
        vErrorCode = ::WinGetLastError(wxGetInstance());
@@ -778,7 +779,7 @@ void wxDC::DoGetTextExtent(
         *pvY = (wxCoord)(vPtMax.y - vPtMin.y + 1);
     if (pvDescent)
         *pvDescent = vFM.lMaxDescender;
-    if (externalLeading)
+    if (pvExternalLeading)
         *pvExternalLeading = vFM.lExternalLeading;
 }
 

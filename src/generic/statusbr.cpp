@@ -182,7 +182,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
   dc.SetBackgroundMode(wxTRANSPARENT);
 
 #ifdef __WXPM__
-  ::WinFillRect(vDC.m_hPS, &vDC.m_rclPaint, CLR_GREEN);
+  ::WinFillRect(dc.m_hPS, &dc.m_vRclPaint, CLR_GREEN);
 #endif
 
   for ( i = 0; i < m_nFields; i ++ )

@@ -150,7 +150,7 @@ wxClientDC::wxClientDC(wxWindow *the_canvas)
     m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(the_canvas));
     m_hPS = ::GpiCreatePS( wxGetInstance()
                           ,m_hDC
-                          ,&sizl
+                          ,&vSizl
                           ,PU_PELS | GPIF_LONG | GPIA_ASSOC
                          );
 
@@ -208,7 +208,7 @@ wxPaintDC::wxPaintDC(
   wxWindow*                         pCanvas
 )
 {
-    wxCHECK_RET( canvas, wxT("NULL canvas in wxPaintDC ctor") );
+    wxCHECK_RET(pCanvas, wxT("NULL canvas in wxPaintDC ctor"));
 
 #ifdef __WXDEBUG__
     if (g_isPainting <= 0)
@@ -265,7 +265,7 @@ wxPaintDC::~wxPaintDC()
         if ( !--info->count )
         {
             ::WinEndPaint(m_hPS);
-            m_hPS          = m_OldhPS;
+            m_hPS          = m_hOldPS;
             m_bIsPaintTime = FALSE;
             ms_cache.Remove(index);
         }

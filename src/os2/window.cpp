@@ -2861,7 +2861,7 @@ bool wxWindow::HandlePaint()
     //
 #ifdef __WXDEBUG__
     {
-        HWND                        hWnd
+        HWND                        hWnd;
         HWND                        hWnd0 = NULLHANDLE;
 
         hWnd = GetHwnd();
@@ -4012,28 +4012,43 @@ static void TranslateKbdEventToMouse(
 
 // Find the wxWindow at the current mouse position, returning the mouse
 // position.
-wxWindow* wxFindWindowAtPointer(wxPoint& pt)
+wxWindow* wxFindWindowAtPointer(
+  wxPoint&                          rPt
+)
 {
     return wxFindWindowAtPoint(wxGetMousePosition());
 }
 
-wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+wxWindow* wxFindWindowAtPoint(
+  const wxPoint&                    rPt
+)
 {
-    POINT pt2;
-    pt2.x = pt.x;
-    pt2.y = pt.y;
-    HWND hWndHit = ::WindowFromPoint(pt2);
+    POINTL                          vPt2;
 
-    wxWindow* win = wxFindWinFromHandle((WXHWND) hWndHit) ;
-    HWND hWnd = hWndHit;
+    vPt2.x = rPt.x;
+    vPt2.y = rPt.y;
 
+    HWND                            hWndHit = ::WinWindowFromPoint(HWND_DESKTOP, &vPt2, FALSE);
+    wxWindow*                       pWin = wxFindWinFromHandle((WXHWND)hWndHit) ;
+    HWND                            hWnd = hWndHit;
+
+    //
     // Try to find a window with a wxWindow associated with it
-    while (!win && (hWnd != 0))
+    //
+    while (!pWin && (hWnd != 0))
     {
-        hWnd = ::GetParent(hWnd);
-        win = wxFindWinFromHandle((WXHWND) hWnd) ;
+        hWnd = ::WinQueryWindow(hWnd, QW_PARENT);
+        pWin = wxFindWinFromHandle((WXHWND)hWnd) ;
     }
-    return win;
+    return pWin;
 }
 
+// Get the current mouse position.
+wxPoint wxGetMousePosition()
+{
+    POINTL                          vPt;
+
+    ::WinQueryPointerPos(HWND_DESKTOP, &vPt);
+    return wxPoint(vPt.x, vPt.y);
+}
 
