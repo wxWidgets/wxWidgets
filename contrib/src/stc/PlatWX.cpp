@@ -698,7 +698,7 @@ void Window::SetTitle(const char *s) {
 // Helper classes for ListBox
 
 
-// This is a simple subclass of wxLIstView that just resets focus to the
+// This is a simple subclass of wxListView that just resets focus to the
 // parent when it gets it.
 class wxSTCListBox : public wxListView {
 public:
@@ -713,12 +713,17 @@ public:
         event.Skip();
     }
 
+    void OnKillFocus(wxFocusEvent& event) {
+        // Do nothing.  Prevents base class from resetting the colors...
+    }
+
 private:
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(wxSTCListBox, wxListView)
     EVT_SET_FOCUS( wxSTCListBox::OnFocus)
+    EVT_KILL_FOCUS(wxSTCListBox::OnKillFocus)
 END_EVENT_TABLE()
 
 
@@ -741,6 +746,11 @@ public:
         lv->SetCursor(wxCursor(wxCURSOR_ARROW));
         lv->InsertColumn(0, wxEmptyString);
         lv->InsertColumn(1, wxEmptyString);
+
+        // Eventhough we immediately reset the focus to the parent, this helps
+        // things to look right...
+        lv->SetFocus();
+
         Hide();
     }
 
