@@ -15,13 +15,17 @@ all : setup.h
 	$(MMS)$(MMSQUALIFIERS)
 	set default [-.motif]
 	$(MMS)$(MMSQUALIFIERS)
-	set default [--.samples.dialogs]
+	set default [--.samples.bombs]
 	$(MMS)$(MMSQUALIFIERS)
-	set default [-.samples.image]
+	set default [-.caret]
 	$(MMS)$(MMSQUALIFIERS)
-	set default [-.samples.menu]
+	set default [-.dialogs]
 	$(MMS)$(MMSQUALIFIERS)
-	set default [-.samples.minimal]
+	set default [-.image]
+	$(MMS)$(MMSQUALIFIERS)
+	set default [-.menu]
+	$(MMS)$(MMSQUALIFIERS)
+	set default [-.minimal]
 	$(MMS)$(MMSQUALIFIERS)
 
 setup.h : setup.h_vms
