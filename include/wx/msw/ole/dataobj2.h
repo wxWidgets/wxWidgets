@@ -73,6 +73,9 @@ class WXDLLEXPORT wxFileDataObject : public wxFileDataObjectBase
 public:
     // implement base class pure virtuals
     virtual bool SetData(size_t len, const void *buf);
+    virtual size_t GetDataSize() const;
+    virtual bool GetDataHere(void *pData) const;
+    virtual void AddFile(const wxString& file);
 };
 
 #endif // _WX_MSW_OLE_DATAOBJ2_H

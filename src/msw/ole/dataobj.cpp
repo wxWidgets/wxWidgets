@@ -48,6 +48,8 @@
   #include <olestd.h>
 #endif
 
+#include <shlobj.h>
+
 #include  "wx/msw/ole/oleutils.h"
 
 // ----------------------------------------------------------------------------
@@ -942,6 +944,68 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
                            " %d characters, %d expected."), len2, len - 1);
         }
     }
+
+    return TRUE;
+}
+
+void wxFileDataObject::AddFile(const wxString& file)
+{
+    // just add file to filenames array
+    // all useful data (such as DROPFILES struct) will be
+    // created later as necessary
+    m_filenames.Add(file);
+}
+
+size_t wxFileDataObject::GetDataSize() const
+{
+    // size returned will be the size of the DROPFILES structure,
+    // plus the list of filesnames (null byte separated), plus
+    // a double null at the end
+
+    // if no filenames in list, size is 0
+    if (m_filenames.GetCount() == 0) return 0;
+
+    // inital size of DROPFILES struct + null byte
+    size_t sz = sizeof(DROPFILES) + 1;
+
+    int i;
+    for (i=0; i<m_filenames.GetCount(); ++i)
+    {
+        // add filename length plus null byte
+        sz += m_filenames[i].Len() + 1;
+    }
+    return sz;
+}
+
+bool wxFileDataObject::GetDataHere(void *pData) const
+{
+    // pData points to an externally allocated memory block
+    // created using the size returned by GetDataSize()
+
+    // if pData is NULL, or there are no files, return
+    if (!pData || m_filenames.GetCount() == 0) return FALSE;
+
+    // convert data pointer to a DROPFILES struct pointer
+    LPDROPFILES pDrop = (LPDROPFILES) pData;
+
+    // initialize DROPFILES struct
+    pDrop->pFiles = sizeof(DROPFILES);
+    pDrop->fNC = FALSE;
+    pDrop->fWide = FALSE;
+
+    // set start of filenames list (null separated)
+    char *pbuf = (char*)pDrop + sizeof(DROPFILES);
+
+    size_t i;
+    for (i=0; i<m_filenames.GetCount(); ++i)
+    {
+        // copy filename to pbuf and add null terminator
+        size_t len = m_filenames[i].Len();
+        memcpy(pbuf, m_filenames[i], len);
+        pbuf += len;
+        *pbuf++ = '\0';
+    }
+    *pbuf = '\0';	// add final null terminator
 
     return TRUE;
 }
