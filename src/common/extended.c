@@ -96,7 +96,7 @@ void ConvertToIeeeExtended(double num, unsigned char *bytes)
 	bytes[6] = (unsigned char) ((loMant >> 24) & 0xff);
 	bytes[7] = (unsigned char) ((loMant >> 16) & 0xff);
 	bytes[8] = (unsigned char) ((loMant >> 8) & 0xff);
-	bytes[9] = (unsigned char) (loMant & 0xff;
+	bytes[9] = (unsigned char) (loMant & 0xff);
 
     #ifdef _MSC_VER
         #pragma warning(default: 4244)
