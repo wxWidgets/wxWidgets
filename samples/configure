@@ -688,6 +688,7 @@ trap 'rm -fr `echo "
             minimal/Makefile
             mobile/Makefile
             mobile/wxedit/Makefile
+            mobile/styles/Makefile
             newgrid/Makefile
             notebook/Makefile
             png/Makefile
@@ -841,6 +842,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             minimal/Makefile
             mobile/Makefile
             mobile/wxedit/Makefile
+            mobile/styles/Makefile
             newgrid/Makefile
             notebook/Makefile
             png/Makefile

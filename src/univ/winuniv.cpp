@@ -180,39 +180,6 @@ const wxBitmap& wxWindow::GetBackgroundBitmap(int *alignment,
 // painting
 // ----------------------------------------------------------------------------
 
-// the event handler executed when the window background must be painted
-void wxWindow::OnErase(wxEraseEvent& event)
-{
-    if ( !m_renderer )
-    {
-        event.Skip();
-
-        return;
-    }
-    
-    DoDrawBackground(*event.GetDC());
-
-    // if we have both scrollbars, we also have a square in the corner between
-    // them which we must paint
-    if ( m_scrollbarVert && m_scrollbarHorz )
-    {
-        wxSize size = GetSize();
-        wxRect rectClient = GetClientRect(),
-               rectBorder = m_renderer->GetBorderDimensions(GetBorder());
-
-        wxRect rectCorner;
-        rectCorner.x = rectClient.GetRight() + 1;
-        rectCorner.y = rectClient.GetBottom() + 1;
-        rectCorner.SetRight(size.x - rectBorder.width);
-        rectCorner.SetBottom(size.y - rectBorder.height);
-
-        if ( GetUpdateRegion().Contains(rectCorner) )
-        {
-            m_renderer->DrawScrollCorner(*event.GetDC(), rectCorner);
-        }
-    }
-}
-
 // the event handlers executed when the window must be repainted
 void wxWindow::OnNcPaint(wxPaintEvent& event)
 {
@@ -263,47 +230,97 @@ void wxWindow::OnPaint(wxPaintEvent& event)
     }
 }
 
-bool wxWindow::DoDrawBackground(wxDC& dc)
+// the event handler executed when the window background must be painted
+void wxWindow::OnErase(wxEraseEvent& event)
 {
-    // FIXME: Leaving this code in leads to partial bg redraws
-    //        sometimes under MSW.
-    //        The same happens under X11 because it has a clear
-    //        region and an update region and these are sometimes
-    //        different. RR.
-    wxRect rect;
-// #ifndef __WXMSW__
-#if 0
-    rect = GetUpdateRegion().GetBox();
-    if ( !rect.width && !rect.height )
-#endif
+    if ( !m_renderer )
+    {
+        event.Skip();
+
+        return;
+    }
+    
+    DoDrawBackground(*event.GetDC());
+
+    // if we have both scrollbars, we also have a square in the corner between
+    // them which we must paint
+    if ( m_scrollbarVert && m_scrollbarHorz )
     {
         wxSize size = GetSize();
-        rect.width = size.x;
-        rect.height = size.y;
-    }
+        wxRect rectClient = GetClientRect(),
+               rectBorder = m_renderer->GetBorderDimensions(GetBorder());
 
-    if ( GetBackgroundBitmap().Ok() )
-    {
-        // get the bitmap and the flags
-        int alignment;
-        wxStretch stretch;
-        wxBitmap bmp = GetBackgroundBitmap(&alignment, &stretch);
-        wxControlRenderer::DrawBitmap(dc, bmp, rect, alignment, stretch);
-    }
-    else // just fill it with bg colour if no bitmap
-    {
-        m_renderer->DrawBackground(dc, wxTHEME_BG_COLOUR(this),
-                                   rect, GetStateFlags());
-    }
+        wxRect rectCorner;
+        rectCorner.x = rectClient.GetRight() + 1;
+        rectCorner.y = rectClient.GetBottom() + 1;
+        rectCorner.SetRight(size.x - rectBorder.width);
+        rectCorner.SetBottom(size.y - rectBorder.height);
 
+        if ( GetUpdateRegion().Contains(rectCorner) )
+        {
+            m_renderer->DrawScrollCorner(*event.GetDC(), rectCorner);
+        }
+    }
+}
+
+bool wxWindow::DoDrawBackground(wxDC& dc)
+{
+    wxRect rect;
+    
+    wxSize size = GetSize();  // Why not GetClientSize() ?
+    rect.x = 0;
+    rect.y = 0;
+    rect.width = size.x;
+    rect.height = size.y;
+    
+    if (HasTransparentBackground() && GetParent() && GetParent()->ProvidesBackground())
+    {
+        wxASSERT( !IsTopLevel() );
+    
+        wxPoint pos = GetPosition();
+        
+        AdjustForParentClientOrigin( pos.x, pos.y, 0 );
+        
+        // Adjust DC logical origin
+        wxCoord x,y;
+        dc.GetLogicalOrigin( &x, &y );
+        x += pos.x;
+        y += pos.y;
+        dc.SetLogicalOrigin( x, y );
+        
+        // Adjust draw rect
+        rect.x = pos.x;
+        rect.y = pos.y;
+        
+        // Let parent draw the background
+        GetParent()->EraseBackground( dc, rect );
+    }
+    else
+    {
+        // Draw background ouselves
+         EraseBackground( dc, rect );
+    }
+    
     return TRUE;
 }
 
 void wxWindow::EraseBackground(wxDC& dc, const wxRect& rect)
 {
-    // TODO: handle bg bitmaps here!
+    if ( GetBackgroundBitmap().Ok() )
+    {
+        // Get the bitmap and the flags
+        int alignment;
+        wxStretch stretch;
+        wxBitmap bmp = GetBackgroundBitmap(&alignment, &stretch);
+        wxControlRenderer::DrawBitmap(dc, bmp, rect, alignment, stretch);
+    }
+    else 
+    {
+        // Just fill it with bg colour if no bitmap
     
-    m_renderer->DrawBackground(dc, wxTHEME_BG_COLOUR(this), rect, GetStateFlags());
+        m_renderer->DrawBackground(dc, wxTHEME_BG_COLOUR(this),
+                                   rect, GetStateFlags());
+    }
 }
 
 void wxWindow::DoDrawBorder(wxDC& dc, const wxRect& rect)

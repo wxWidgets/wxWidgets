@@ -4,6 +4,8 @@
 
 all:
 	cd wxedit && $(MAKE)
+	cd styles && $(MAKE)
 
 clean:
 	cd wxedit && $(MAKE) clean
+	cd styles && $(MAKE) clean

@@ -1,0 +1,25 @@
+#
+# File:		makefile
+# Author:	Robert Roebling
+# Created:	2002
+# Updated:	
+# Copyright:	(c) 2002 Robert Roebling
+#
+# "%W% %G%"
+#
+# Makefile for wxedit
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../../..
+program_dir = samples/mobile/styles
+
+PROGRAM=styles
+
+DATAFILES=marble.jpg
+
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
+
+include ../../../src/makeprog.env
+
+@IF_GNU_MAKE@-include $(DEPFILES)

@@ -56,6 +56,7 @@ AC_OUTPUT([
             minimal/Makefile
             mobile/Makefile
             mobile/wxedit/Makefile
+            mobile/styles/Makefile
             newgrid/Makefile
             notebook/Makefile
             png/Makefile
