@@ -50,7 +50,7 @@
 #include "wx/imaglist.h"
 #include "wx/listctrl.h"
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__)
     #include <gtk/gtk.h>
     #include "wx/gtk/win_gtk.h"
 #endif
@@ -1796,7 +1796,7 @@ wxListHeaderWindow::~wxListHeaderWindow()
 
 void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 {
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     GtkStateType state = m_parent->IsEnabled() ? GTK_STATE_NORMAL
                                                : GTK_STATE_INSENSITIVE;
 
@@ -1866,7 +1866,7 @@ void wxListHeaderWindow::AdjustDC(wxDC& dc)
 
 void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
-#ifdef __WXGTK__
+#if defined(__WXGTK__)
     wxClientDC dc( this );
 #else
     wxPaintDC dc( this );
@@ -1950,9 +1950,9 @@ void wxListHeaderWindow::DrawCurrent()
 {
     int x1 = m_currentX;
     int y1 = 0;
-    ClientToScreen( &x1, &y1 );
+    m_owner->ClientToScreen( &x1, &y1 );
 
-    int x2 = m_currentX-1;
+    int x2 = m_currentX;
     int y2 = 0;
     m_owner->GetClientSize( NULL, &y2 );
     m_owner->ClientToScreen( &x2, &y2 );
