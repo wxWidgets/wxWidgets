@@ -589,6 +589,7 @@ bool wxRegKey::QueryValue(const char *szValue, wxString& strValue) const
         RegString pBuf = (RegString)strValue.GetWriteBuf(dwSize);
         m_dwLastError = RegQueryValueEx(m_hKey, szValue, RESERVED, 
                                         &dwType, pBuf, &dwSize);
+        strValue.UngetWriteBuf();
         if ( m_dwLastError == ERROR_SUCCESS ) {
           // check that it was the right type
           wxASSERT_MSG( dwType == REG_SZ, 
@@ -602,6 +603,7 @@ bool wxRegKey::QueryValue(const char *szValue, wxString& strValue) const
       wxASSERT( IsEmpty(szValue) );
 
       m_dwLastError = RegQueryValue(m_hKey, 0, strValue.GetWriteBuf(256), &l);
+      strValue.UngetWriteBuf();
       if ( m_dwLastError == ERROR_SUCCESS )
         return TRUE;
     #endif  //WIN16/32
