@@ -1385,7 +1385,7 @@ bool wxGNOMEIconHandler::GetIcon(const wxString& mimetype, wxIcon *icon)
 // KDE stores the icon info in its .kdelnk files. The file for mimetype/subtype
 // may be found in either of the following locations
 //
-//  1. /usr/share/mimelnk/mimetype/subtype.kdelnk
+//  1. $KDEDIR/share/mimelnk/mimetype/subtype.kdelnk
 //  2. ~/.kde/share/mimelnk/mimetype/subtype.kdelnk
 //
 // The format of a .kdelnk file is almost the same as the one used by
@@ -1498,12 +1498,21 @@ void wxKDEIconHandler::LoadLinkFilesFromDir(const wxString& dirbase)
 void wxKDEIconHandler::Init()
 {
     wxArrayString dirs;
-    dirs.Add(_T("/usr/share"));
-    
-    wxString kdedir;
-    wxGetHomeDir( &kdedir );
-    kdedir += _T("/.kde/share");
-    dirs.Add( kdedir );
+
+    // the variable KDEDIR is set when KDE is running
+    const char *kdedir = getenv("KDEDIR");
+    if ( kdedir )
+    {
+        dirs.Add(wxString(kdedir) + _T("/share"));
+    }
+    else
+    {
+        // try to guess KDEDIR
+        dirs.Add(_T("/usr/share"));
+        dirs.Add(_T("/opt/kde/share"));
+    }
+
+    dirs.Add(wxGetHomeDir() + _T("/.kde/share"));
 
     size_t nDirs = dirs.GetCount();
     for ( size_t nDir = 0; nDir < nDirs; nDir++ )
