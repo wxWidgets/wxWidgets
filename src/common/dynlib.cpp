@@ -255,7 +255,7 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
     char zError[256] = "";
     wxDllOpen(zError, libname, handle);
 #else // !Mac
-    handle = wxDllOpen(libname);
+    handle = wxDllOpen(libname.c_str());
 #endif // OS
 
     if ( !handle )
