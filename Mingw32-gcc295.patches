@@ -1,0 +1,118 @@
+*** \gcc-inc\basetyps.h Sat Jul 31 16:48:36 1999
+--- basetyps.h Fri Aug 06 11:14:36 1999
+***************
+*** 74,91 ****
+--- 74,97 ----
+   STDMETHOD(Clone)(IENUM_THIS_(I) I**) PURE; \
+  }
+  #define DECLARE_ENUMERATOR(T) DECLARE_ENUMERATOR_(IEnum##T,T)
+
++ #ifndef GUID_DEFINED
++ #define GUID_DEFINED
+  typedef struct _GUID
+  {
+      unsigned long Data1;
+      unsigned short Data2;
+      unsigned short Data3;
+      unsigned char Data4[8];
+  } GUID;
++ #endif /* GUID_DEFINED */
+  typedef GUID *REFGUID;
+  typedef GUID *LPGUID;
++ #ifndef UUID_DEFINED
++ #define UUID_DEFINED
+  typedef GUID UUID;
++ #endif /* UUID_DEFINED */
+  typedef GUID IID;
+  typedef GUID CLSID;
+  typedef CLSID *LPCLSID;
+  typedef IID *LPIID;
+
+
+*** \gcc-inc\oaidl.h Sat Jul 31 16:48:42 1999
+--- oaidl.h Fri Aug 06 13:18:48 1999
+***************
+*** 39,44 ****
+--- 39,53 ----
+  #define IMPLTYPEFLAG_FRESTRICTED 4
+  #define IMPLTYPEFLAG_FDEFAULTVTABLE 8
+
++ #define DISPID_UNKNOWN ( -1 )
++ #define DISPID_VALUE ( 0 )
++ #define DISPID_PROPERTYPUT ( -3 )
++ #define DISPID_NEWENUM ( -4 )
++ #define DISPID_EVALUATE ( -5 )
++ #define DISPID_CONSTRUCTOR ( -6 )
++ #define DISPID_DESTRUCTOR ( -7 )
++ #define DISPID_COLLECT ( -8 )
++
+  typedef interface ITypeLib *LPTYPELIB;
+  typedef interface ICreateTypeInfo *LPCREATETYPEINFO;
+  typedef interface ICreateTypeInfo2 *LPCREATETYPEINFO2;
+***************
+*** 49,54 ****
+--- 58,73 ----
+  typedef interface IDispatch *LPDISPATCH;
+  typedef interface ICreateErrorInfo *LPCREATEERRORINFO;
+
++ extern "C" const IID IID_ITypeLib;
++ extern "C" const IID IID_ICreateTypeInfo;
++ extern "C" const IID IID_ICreateTypeInfo2;
++ extern "C" const IID IID_ICreateTypeLib;
++ extern "C" const IID IID_ICreateTypeLib2;
++ extern "C" const IID IID_ITypeInfo;
++ extern "C" const IID IID_IErrorInfo;
++ extern "C" const IID IID_IDispatch;
++ extern "C" const IID IID_ICreateErrorInfo;
++
+  typedef enum tagSYSKIND {
+   SYS_WIN16,SYS_WIN32,SYS_MAC
+  } SYSKIND;
+***************
+*** 375,382 ****
+   STDMETHOD_(ULONG,Release)(THIS) PURE;
+   STDMETHOD(GetTypeInfoCount)(THIS_ UINT*) PURE;
+   STDMETHOD(GetTypeInfo)(THIS_ UINT,LCID,LPTYPEINFO*) PURE;
+!  STDMETHOD(GetIDsOfNames)(THIS_ REFIID,LPOLESTR*,UINT,LCID,DISPID)
+PURE;
+!  STDMETHOD(Invoked)(THIS_
+DISPID,REFIID,LCID,WORD,DISPPARAMS*,VARIANT*,EXCEPINFO*,UINT*) PURE;
+  };
+
+  #ifdef __cplusplus
+--- 394,401 ----
+   STDMETHOD_(ULONG,Release)(THIS) PURE;
+   STDMETHOD(GetTypeInfoCount)(THIS_ UINT*) PURE;
+   STDMETHOD(GetTypeInfo)(THIS_ UINT,LCID,LPTYPEINFO*) PURE;
+!  STDMETHOD(GetIDsOfNames)(THIS_ REFIID,LPOLESTR*,UINT,LCID,DISPID*)
+PURE;
+!  STDMETHOD(Invoke)(THIS_
+DISPID,REFIID,LCID,WORD,DISPPARAMS*,VARIANT*,EXCEPINFO*,UINT*) PURE;
+  };
+
+  #ifdef __cplusplus
+
+
+*** \gcc-inc\objidl.h Sat Jul 31 16:48:42 1999
+--- objidl.h Fri Aug 06 11:00:19 1999
+***************
+*** 627,633 ****
+   STDMETHOD(QueryGetData)(THIS_ FORMATETC*) PURE;
+   STDMETHOD(GetCanonicalFormatEtc)(THIS_ FORMATETC*,FORMATETC*) PURE;
+   STDMETHOD(SetData)(THIS_ FORMATETC*,STGMEDIUM*,BOOL) PURE;
+!  STDMETHOD(EnumFormatEtc)(THIS_ DWORD,IEnumFORMATETC*) PURE;
+   STDMETHOD(DAdvise)(THIS_ FORMATETC*,DWORD,IAdviseSink*,PDWORD) PURE;
+   STDMETHOD(DUnadvise)(THIS_ DWORD) PURE;
+   STDMETHOD(EnumDAdvise)(THIS_ IEnumSTATDATA**);
+--- 627,633 ----
+   STDMETHOD(QueryGetData)(THIS_ FORMATETC*) PURE;
+   STDMETHOD(GetCanonicalFormatEtc)(THIS_ FORMATETC*,FORMATETC*) PURE;
+   STDMETHOD(SetData)(THIS_ FORMATETC*,STGMEDIUM*,BOOL) PURE;
+!  STDMETHOD(EnumFormatEtc)(THIS_ DWORD,IEnumFORMATETC**) PURE;
+   STDMETHOD(DAdvise)(THIS_ FORMATETC*,DWORD,IAdviseSink*,PDWORD) PURE;
+   STDMETHOD(DUnadvise)(THIS_ DWORD) PURE;
+   STDMETHOD(EnumDAdvise)(THIS_ IEnumSTATDATA**);
+
+
+
+
