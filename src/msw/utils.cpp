@@ -111,6 +111,22 @@ static const wxChar eUSERNAME[]  = wxT("UserName");
 // implementation
 // ============================================================================
 
+#if !wxUSE_UNICODE_MSLU
+
+bool wxUsingUnicowsDll()
+{ 
+    return false; 
+}
+
+#else
+
+bool wxUsingUnicowsDll()
+{
+    return (wxGetOsVersion() == wxWIN95);
+}
+
+#endif
+
 // ----------------------------------------------------------------------------
 // get host name and related
 // ----------------------------------------------------------------------------

@@ -27,14 +27,7 @@
 
 //------------------------------------------------------------------------
 
-#if !wxUSE_UNICODE_MSLU
-
-bool wxUsingUnicowsDll()
-{ 
-    return false; 
-}
-
-#else
+#if wxUSE_UNICODE_MSLU
 
 //------------------------------------------------------------------------
 //
@@ -64,13 +57,6 @@ bool wxUsingUnicowsDll()
 #undef DrawStateW
 #undef GetOpenFileNameW
 #undef GetSaveFileNameW
-
-// Returns true if we are running under Unicode emulation in Win9x environment.
-// Workaround hacks take effect only if this condition is met
-bool wxUsingUnicowsDll()
-{
-    return (wxGetOsVersion() == wxWIN95);
-}
 
 //------------------------------------------------------------------------
 // Wrongly implemented functions from unicows.dll
