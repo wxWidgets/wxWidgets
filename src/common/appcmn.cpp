@@ -74,15 +74,6 @@
 
 wxAppBase::wxAppBase()
 {
-    // this function is defined by IMPLEMENT_APP() macro in the user code
-    extern const wxBuildOptions& wxGetBuildOptions();
-
-    if ( !CheckBuildOptions(wxGetBuildOptions()) )
-    {
-        wxLogFatalError(_T("Mismatch between the program and library build ")
-                        _T("versions detected."));
-    }
-
     wxTheApp = (wxApp *)this;
 
 #if WXWIN_COMPATIBILITY_2_2
@@ -375,9 +366,17 @@ bool wxAppBase::CheckBuildOptions(const wxBuildOptions& opts)
     int verMaj = wxMAJOR_VERSION,
         verMin = wxMINOR_VERSION;
 
-    return wxCMP(isDebug) && wxCMP(verMaj) && wxCMP(verMin);
+    if ( !(wxCMP(isDebug) && wxCMP(verMaj) && wxCMP(verMin)) )
+    {
+        wxLogFatalError(_T("Mismatch between the program and library build ")
+                        _T("versions detected."));
 
+        // normally wxLogFatalError doesn't return
+        return FALSE;
+    }
 #undef wxCMP
+
+    return TRUE;
 }
 
 #ifdef  __WXDEBUG__

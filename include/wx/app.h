@@ -548,20 +548,14 @@ public:
     #define IMPLEMENT_WX_THEME_SUPPORT
 #endif
 
-// define the build options object for the application which is compared to the
-// one used for building the library on the program startup
-#define WX_DEFINE_BUILDOPTS()                            \
-    const wxBuildOptions& wxGetBuildOptions()            \
-    {                                                    \
-        static wxBuildOptions s_buildOptions;            \
-        return s_buildOptions;                           \
-    }
-
 // Use this macro if you want to define your own main() or WinMain() function
 // and call wxEntry() from there.
 #define IMPLEMENT_APP_NO_MAIN(appname)                   \
-    WX_DEFINE_BUILDOPTS()                                \
-    wxApp *wxCreateApp() { return new appname; }         \
+    wxApp *wxCreateApp()                                 \
+    {                                                    \
+        wxApp::CheckBuildOptions(wxBuildOptions());      \
+        return new appname;                              \
+    }                                                    \
     wxAppInitializer wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp); \
     appname& wxGetApp() { return *(appname *)wxTheApp; }
 
