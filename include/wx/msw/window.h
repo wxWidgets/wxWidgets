@@ -419,6 +419,9 @@ protected:
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
 
+    // has the window been frozen by Freeze()?
+    bool IsFrozen() const { return m_frozenness > 0; }
+
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just call
     // ::MoveWindow() except for composite controls which will want to arrange
