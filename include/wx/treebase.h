@@ -331,6 +331,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_END_DRAG, 617)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, 618)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, 619)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_MENU, 620)
 END_DECLARE_EVENT_TYPES()
 
 // GetItem() returns the item being dragged, GetPoint() the mouse coords
@@ -378,6 +379,9 @@ END_DECLARE_EVENT_TYPES()
 
 // GetItem() returns the item that was activated (double click, enter, space)
 #define EVT_TREE_ITEM_ACTIVATED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
+
+// GetItem() returns the item for which the context menu shall be shown
+#define EVT_TREE_ITEM_MENU(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_MENU, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
 
 // GetItem() returns the item that was clicked on
 #define EVT_TREE_ITEM_RIGHT_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),

@@ -2653,6 +2653,14 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
             }
             break;
 
+        case WXK_MENU:
+            {
+                wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_MENU, GetId() );
+                event.m_item = m_current;
+                event.SetEventObject( this );
+                GetEventHandler()->ProcessEvent( event );
+                break;
+            }
         case ' ':
         case WXK_RETURN:
             if ( !event.HasModifiers() )
