@@ -73,7 +73,7 @@ class MyFrame(wxFrame):
         EVT_MENU(self, 101, self.Menu101)
         EVT_MENU(self, 102, self.Menu102)
         EVT_MENU(self, 103, self.Menu103)
-        EVT_MENU(self, 104, self.OnCloseWindow)
+        EVT_MENU(self, 104, self.CloseWindow)
 
         EVT_MENU(self, 201, self.Menu201)
         EVT_MENU(self, 202, self.Menu202)
@@ -103,8 +103,8 @@ class MyFrame(wxFrame):
     def Menu103(self, event):
         self.log.write('Welcome to the Earth\n')
 
-    def OnCloseWindow(self, event):
-        self.Destroy()
+    def CloseWindow(self, event):
+        self.Close()
 
     def Menu201(self, event):
         self.log.write('Chemical element number 1\n')
