@@ -137,9 +137,12 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) {
     if (m_myInst.findCallback("GetDataHere")) {
         PyObject* ro;
         ro = m_myInst.callCallbackObj(Py_BuildValue("()"));
-        rval = (ro != Py_None && PyString_Check(ro));
-        if (rval)
-            memcpy(buf, PyString_AsString(ro), PyString_Size(ro));
+        if (ro) {
+            rval = (ro != Py_None && PyString_Check(ro));
+            if (rval)
+                memcpy(buf, PyString_AsString(ro), PyString_Size(ro));
+            Py_DECREF(ro);
+        }
     }
     wxPySaveThread(doSave);
     return rval;
@@ -192,8 +195,11 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() {
         PyObject* ro;
         wxBitmap* ptr;
         ro = m_myInst.callCallbackObj(Py_BuildValue("()"));
-        if (! SWIG_GetPtrObj(ro, (void **)&ptr, "_wxBitmap_p"))
-            rval = ptr;
+        if (ro) {
+            if (!SWIG_GetPtrObj(ro, (void **)&ptr, "_wxBitmap_p"))
+                rval = ptr;
+            Py_DECREF(ro);
+        }
     }
     wxPySaveThread(doSave);
     return *rval;

@@ -131,7 +131,10 @@ public:
         if (self->m_myInst.findCallback("Clone")) {
             PyObject* ro;
             ro = self->m_myInst.callCallbackObj(Py_BuildValue("()"));
-            SWIG_GetPtrObj(ro, (void **)&ptr, "_wxPyValidator_p");
+            if (ro) {
+                SWIG_GetPtrObj(ro, (void **)&ptr, "_wxPyValidator_p");
+                Py_DECREF(ro);
+            }
         }
         // This is very dangerous!!! But is the only way I could find
         // to squash a memory leak.  Currently it is okay, but if the
