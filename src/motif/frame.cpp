@@ -400,7 +400,7 @@ wxFrame::~wxFrame()
 }
 
 // Get size *available for subwindows* i.e. excluding menu bar, toolbar etc.
-void wxFrame::GetClientSize(int *x, int *y) const
+void wxFrame::DoGetClientSize(int *x, int *y) const
 {
     Dimension xx, yy;
     XtVaGetValues((Widget) m_workArea, XmNwidth, &xx, XmNheight, &yy, NULL);
@@ -488,14 +488,14 @@ void wxFrame::DoSetClientSize(int width, int height)
 
 }
 
-void wxFrame::GetSize(int *width, int *height) const
+void wxFrame::DoGetSize(int *width, int *height) const
 {
     Dimension xx, yy;
     XtVaGetValues((Widget) m_frameShell, XmNwidth, &xx, XmNheight, &yy, NULL);
     *width = xx; *height = yy;
 }
 
-void wxFrame::GetPosition(int *x, int *y) const
+void wxFrame::DoGetPosition(int *x, int *y) const
 {
     Window parent_window = XtWindow((Widget) m_frameShell),
         next_parent   = XtWindow((Widget) m_frameShell),

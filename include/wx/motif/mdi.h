@@ -65,14 +65,9 @@ public:
   void OnSize(wxSizeEvent& event);
   void OnActivate(wxActivateEvent& event);
   void OnSysColourChanged(wxSysColourChangedEvent& event);
+  void OnMenuHighlight(wxMenuEvent& event);
 
   void SetMenuBar(wxMenuBar *menu_bar);
-
-  // Gets the size available for subwindows after menu size, toolbar size
-  // and status bar size have been subtracted. If you want to manage your own
-  // toolbar(s), don't call SetToolBar.
-  void GetClientSize(int *width, int *height) const;
-  wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
 
   // Get the active MDI child window
   wxMDIChildFrame *GetActiveChild() const ;
@@ -110,6 +105,10 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
   virtual void DoSetClientSize(int width, int height);
 
+  // Gets the size available for subwindows after menu size, toolbar size
+  // and status bar size have been subtracted. If you want to manage your own
+  // toolbar(s), don't call SetToolBar.
+  void DoGetClientSize(int *width, int *height) const;
 
 protected:
 
@@ -150,10 +149,6 @@ public:
     // Set menu bar
     void SetMenuBar(wxMenuBar *menu_bar);
     void SetTitle(const wxString& title);
-
-    void GetClientSize(int *width, int *height) const;
-    void GetSize(int *width, int *height) const;
-    void GetPosition(int *x, int *y) const ;
 
     // Set icon
     virtual void SetIcon(const wxIcon& icon);
@@ -199,6 +194,10 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
+
+    void DoGetClientSize(int *width, int *height) const;
+    void DoGetSize(int *width, int *height) const;
+    void DoGetPosition(int *x, int *y) const ;
 };
 
 /* The client window is a child of the parent MDI frame, and itself
@@ -221,10 +220,6 @@ public:
 
     ~wxMDIClientWindow();
 
-    void GetClientSize(int *width, int *height) const;
-    void GetSize(int *width, int *height) const ;
-    void GetPosition(int *x, int *y) const ;
-
     // Note: this is virtual, to allow overridden behaviour.
     virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);
 
@@ -239,6 +234,11 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
+
+    void DoGetClientSize(int *width, int *height) const;
+    void DoGetSize(int *width, int *height) const ;
+    void DoGetPosition(int *x, int *y) const ;
+
 
 private:
     DECLARE_EVENT_TABLE()

@@ -47,6 +47,7 @@ BEGIN_EVENT_TABLE(wxMDIParentFrame, wxFrame)
     EVT_SIZE(wxMDIParentFrame::OnSize)
     EVT_ACTIVATE(wxMDIParentFrame::OnActivate)
     EVT_SYS_COLOUR_CHANGED(wxMDIParentFrame::OnSysColourChanged)
+    EVT_MENU_HIGHLIGHT_ALL(wxMDIParentFrame::OnMenuHighlight)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMDIClientWindow, wxNotebook)
@@ -131,9 +132,9 @@ void wxMDIParentFrame::OnSize(wxSizeEvent& WXUNUSED(event))
         GetClientWindow()->SetSize(x, y, width, height);
 }
 
-void wxMDIParentFrame::GetClientSize(int *width, int *height) const
+void wxMDIParentFrame::DoGetClientSize(int *width, int *height) const
 {
-    wxFrame::GetClientSize(width, height);
+    wxFrame::DoGetClientSize(width, height);
 }
 
 void wxMDIParentFrame::OnActivate(wxActivateEvent& WXUNUSED(event))
@@ -281,6 +282,30 @@ void wxMDIParentFrame::ActivateNext()
 void wxMDIParentFrame::ActivatePrevious()
 {
     // TODO
+}
+
+// Default menu selection behaviour - display a help string
+void wxMDIParentFrame::OnMenuHighlight(wxMenuEvent& event)
+{
+    if (GetStatusBar())
+    {
+        if (event.GetMenuId() == -1)
+            SetStatusText("");
+        else
+        {
+            wxMenuBar *menuBar = (wxMenuBar*) NULL;
+            if (GetActiveChild())
+              menuBar = GetActiveChild()->GetMenuBar();
+            else
+              menuBar = GetMenuBar();
+            if (menuBar)
+            {
+                wxString helpString(menuBar->GetHelpString(event.GetMenuId()));
+                if (helpString != "")
+                    SetStatusText(helpString);
+            }
+        }
+    }
 }
 
 // Child frame
@@ -453,9 +478,9 @@ void wxMDIChildFrame::DoSetClientSize(int width, int height)
     wxWindow::DoSetClientSize(width, height);
 }
 
-void wxMDIChildFrame::GetClientSize(int* width, int* height) const
+void wxMDIChildFrame::DoGetClientSize(int* width, int* height) const
 {
-    wxWindow::GetSize(width, height);
+    wxWindow::DoGetSize(width, height);
 }
 
 void wxMDIChildFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
@@ -463,14 +488,14 @@ void wxMDIChildFrame::DoSetSize(int x, int y, int width, int height, int sizeFla
     wxWindow::DoSetSize(x, y, width, height, sizeFlags);
 }
 
-void wxMDIChildFrame::GetSize(int* width, int* height) const
+void wxMDIChildFrame::DoGetSize(int* width, int* height) const
 {
-    wxWindow::GetSize(width, height);
+    wxWindow::DoGetSize(width, height);
 }
 
-void wxMDIChildFrame::GetPosition(int *x, int *y) const
+void wxMDIChildFrame::DoGetPosition(int *x, int *y) const
 {
-    wxWindow::GetPosition(x, y);
+    wxWindow::DoGetPosition(x, y);
 }
 
 bool wxMDIChildFrame::Show(bool show)
@@ -614,19 +639,19 @@ void wxMDIClientWindow::DoSetClientSize(int width, int height)
     wxWindow::DoSetClientSize(width, height);
 }
 
-void wxMDIClientWindow::GetClientSize(int *width, int *height) const
+void wxMDIClientWindow::DoGetClientSize(int *width, int *height) const
 {
-    wxWindow::GetClientSize(width, height);
+    wxWindow::DoGetClientSize(width, height);
 }
 
-void wxMDIClientWindow::GetSize(int *width, int *height) const
+void wxMDIClientWindow::DoGetSize(int *width, int *height) const
 {
-    wxWindow::GetSize(width, height);
+    wxWindow::DoGetSize(width, height);
 }
 
-void wxMDIClientWindow::GetPosition(int *x, int *y) const
+void wxMDIClientWindow::DoGetPosition(int *x, int *y) const
 {
-    wxWindow::GetPosition(x, y);
+    wxWindow::DoGetPosition(x, y);
 }
 
 // Explicitly call default scroll behaviour

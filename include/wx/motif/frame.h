@@ -56,14 +56,6 @@ public:
 
     virtual bool Destroy();
 
-    void GetClientSize(int *width, int *height) const;
-    void GetSize(int *width, int *height) const ;
-    void GetPosition(int *x, int *y) const ;
-
-    wxSize GetSize() const { return wxWindow::GetSize(); }
-    wxPoint GetPosition() const { return wxWindow::GetPosition(); }
-    wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
-
     void ClientToScreen(int *x, int *y) const;
     wxPoint ClientToScreen(const wxPoint& pt) const { return wxWindow::ClientToScreen(pt); }
 
@@ -173,6 +165,11 @@ public:
     bool GetVisibleStatus() const { return m_visibleStatus; }
 
     bool PreResize();
+
+protected:
+    void DoGetClientSize(int *width, int *height) const;
+    void DoGetSize(int *width, int *height) const ;
+    void DoGetPosition(int *x, int *y) const ;
 
 protected:
     wxMenuBar *           m_frameMenuBar;
