@@ -79,9 +79,9 @@ public:
     // same as Create() but with (another) file name
   bool Create(const wxString& strFile);
     // Open() also loads file in memory on success
-  bool Open();
+  bool Open(wxMBConv& conv = wxConvLibc);
     // same as Open() but with (another) file name
-  bool Open(const wxString& strFile);
+  bool Open(const wxString& strFile, wxMBConv& conv = wxConvLibc);
     // closes the file and frees memory, losing all changes
   bool Close();
     // is file currently opened?
@@ -135,7 +135,8 @@ public:
 
   // change the file on disk (default argument means "don't change type")
   // possibly in another format
-  bool Write(wxTextFileType typeNew = wxTextFileType_None);
+  bool Write(wxTextFileType typeNew = wxTextFileType_None,
+             wxMBConv& conv = wxConvLibc);
 
   // dtor
   ~wxTextFile();
@@ -146,7 +147,7 @@ private:
   wxTextFile& operator=(const wxTextFile&);
 
   // read the file in memory (m_file is supposed to be just opened)
-  bool Read();
+  bool Read(wxMBConv& conv);
 
   wxFile        m_file;     // current file
 
