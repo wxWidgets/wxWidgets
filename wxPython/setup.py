@@ -833,7 +833,11 @@ if BUILD_STC:
 
 
     ext = Extension('stc_c',
-                    ['%s/scintilla/src/AutoComplete.cxx' % STCLOC,
+                    ['%s/PlatWX.cpp' % STCLOC,
+                     '%s/ScintillaWX.cpp' % STCLOC,
+                     '%s/stc.cpp' % STCLOC,
+
+                     '%s/scintilla/src/AutoComplete.cxx' % STCLOC,
                      '%s/scintilla/src/CallTip.cxx' % STCLOC,
                      '%s/scintilla/src/CellBuffer.cxx' % STCLOC,
                      '%s/scintilla/src/ContractionState.cxx' % STCLOC,
@@ -853,35 +857,9 @@ if BUILD_STC:
                      '%s/scintilla/src/ViewStyle.cxx' % STCLOC,
                      '%s/scintilla/src/WindowAccessor.cxx' % STCLOC,
                      '%s/scintilla/src/XPM.cxx' % STCLOC,
-
-                     '%s/scintilla/src/LexAda.cxx' % STCLOC,
-                     '%s/scintilla/src/LexAsm.cxx' % STCLOC,
-                     '%s/scintilla/src/LexAVE.cxx' % STCLOC,
-                     '%s/scintilla/src/LexBaan.cxx' % STCLOC,
-                     '%s/scintilla/src/LexBullant.cxx' % STCLOC,
-                     '%s/scintilla/src/LexCPP.cxx' % STCLOC,
-                     '%s/scintilla/src/LexConf.cxx' % STCLOC,
-                     '%s/scintilla/src/LexCrontab.cxx' % STCLOC,
-                     '%s/scintilla/src/LexCSS.cxx' % STCLOC,
-                     '%s/scintilla/src/LexEiffel.cxx' % STCLOC,
-                     '%s/scintilla/src/LexFortran.cxx' % STCLOC,
-                     '%s/scintilla/src/LexHTML.cxx' % STCLOC,
-                     '%s/scintilla/src/LexLisp.cxx' % STCLOC,
-                     '%s/scintilla/src/LexLua.cxx' % STCLOC,
-                     '%s/scintilla/src/LexMatlab.cxx' % STCLOC,
-                     '%s/scintilla/src/LexOthers.cxx' % STCLOC,
-                     '%s/scintilla/src/LexPOV.cxx' % STCLOC,
-                     '%s/scintilla/src/LexPascal.cxx' % STCLOC,
-                     '%s/scintilla/src/LexPerl.cxx' % STCLOC,
-                     '%s/scintilla/src/LexPython.cxx' % STCLOC,
-                     '%s/scintilla/src/LexRuby.cxx' % STCLOC,
-                     '%s/scintilla/src/LexSQL.cxx' % STCLOC,
-                     '%s/scintilla/src/LexVB.cxx' % STCLOC,
-
-                     '%s/PlatWX.cpp' % STCLOC,
-                     '%s/ScintillaWX.cpp' % STCLOC,
-                     '%s/stc.cpp' % STCLOC,
-                     ] + swig_sources,
+                     ]
+                    + glob.glob('%s/scintilla/src/Lex*.cxx' % STCLOC)
+                    + swig_sources,
 
                     include_dirs = stc_includes,
                     define_macros = stc_defines,
@@ -954,54 +932,17 @@ if BUILD_XRC:
         contrib_copy_tree(opj(CTRB_INC, 'xrc'), opj(XMLINC, 'wx/xrc'))
         contrib_copy_tree(opj(CTRB_SRC, 'xrc'), XMLLOC)
 
-    ext = Extension('xrcc', ['%s/expat/xmlparse/xmlparse.c' % XMLLOC,
-                                '%s/expat/xmltok/xmlrole.c' % XMLLOC,
-                                '%s/expat/xmltok/xmltok.c' % XMLLOC,
+    ext = Extension('xrcc',
+                    ['%s/expat/xmlparse/xmlparse.c' % XMLLOC,
+                     '%s/expat/xmltok/xmlrole.c' % XMLLOC,
+                     '%s/expat/xmltok/xmltok.c' % XMLLOC,
 
-                                '%s/xh_bmp.cpp' % XMLLOC,
-                                '%s/xh_bmpbt.cpp' % XMLLOC,
-                                '%s/xh_bttn.cpp' % XMLLOC,
-                                '%s/xh_cald.cpp' % XMLLOC,
-                                '%s/xh_chckb.cpp' % XMLLOC,
+                     ] + glob.glob('%s/xh_*.cpp' % XMLLOC) +
 
-                                '%s/xh_chckl.cpp' % XMLLOC,
-                                '%s/xh_choic.cpp' % XMLLOC,
-                                '%s/xh_combo.cpp' % XMLLOC,
-                                '%s/xh_dlg.cpp' % XMLLOC,
-                                '%s/xh_frame.cpp' % XMLLOC,
-
-                                '%s/xh_gauge.cpp' % XMLLOC,
-                                '%s/xh_gdctl.cpp' % XMLLOC,
-                                '%s/xh_html.cpp' % XMLLOC,
-                                '%s/xh_listb.cpp' % XMLLOC,
-                                '%s/xh_listc.cpp' % XMLLOC,
-                                '%s/xh_menu.cpp' % XMLLOC,
-
-                                '%s/xh_notbk.cpp' % XMLLOC,
-                                '%s/xh_panel.cpp' % XMLLOC,
-                                '%s/xh_radbt.cpp' % XMLLOC,
-                                '%s/xh_radbx.cpp' % XMLLOC,
-                                '%s/xh_scrol.cpp' % XMLLOC,
-                                '%s/xh_scwin.cpp' % XMLLOC,
-
-                                '%s/xh_sizer.cpp' % XMLLOC,
-                                '%s/xh_slidr.cpp' % XMLLOC,
-                                '%s/xh_spin.cpp' % XMLLOC,
-                                '%s/xh_stbmp.cpp' % XMLLOC,
-                                '%s/xh_stbox.cpp' % XMLLOC,
-
-                                '%s/xh_stlin.cpp' % XMLLOC,
-                                '%s/xh_sttxt.cpp' % XMLLOC,
-                                '%s/xh_text.cpp' % XMLLOC,
-                                '%s/xh_toolb.cpp' % XMLLOC,
-                                '%s/xh_tree.cpp' % XMLLOC,
-
-                                '%s/xh_unkwn.cpp' % XMLLOC,
-                                '%s/xml.cpp' % XMLLOC,
-                                '%s/xmlres.cpp' % XMLLOC,
-                                '%s/xmlrsall.cpp' % XMLLOC,
-
-                             ] + swig_sources,
+                    [ '%s/xml.cpp' % XMLLOC,
+                      '%s/xmlres.cpp' % XMLLOC,
+                      '%s/xmlrsall.cpp' % XMLLOC,
+                      ] + swig_sources,
 
                     include_dirs =  xmlres_includes,
                     define_macros = defines,
