@@ -69,6 +69,11 @@ LDFLAGS = -L$(BCCDIR)\lib
 MONOLITHIC = 0
 !endif
 
+# Use MSLU library when building Unicode version. [0,1]
+!ifndef MSLU
+MSLU = 0
+!endif
+
 # Is this official build by wxWindows developers? [0,1]
 !ifndef OFFICIAL_BUILD
 OFFICIAL_BUILD = 0

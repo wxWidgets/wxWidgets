@@ -252,17 +252,17 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=../../src/mmedia\..\..\..\src\msw\dummy.cpp
-# ADD BASE CPP /Yc"wx/wxprec.h"
-# ADD CPP /Yc"wx/wxprec.h"
-# End Source File
-# Begin Source File
-
 SOURCE=../../src/mmedia\cdbase.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=../../src/mmedia\cdwin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=../../src/mmedia\..\..\..\src\msw\dummy.cpp
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
 

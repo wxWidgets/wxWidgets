@@ -247,72 +247,26 @@ LINK32=link.exe
 # Name "htmldll - Win32 DLL Universal Release"
 # Name "htmldll - Win32 DLL Universal Unicode Debug"
 # Name "htmldll - Win32 DLL Universal Unicode Release"
-# Begin Group "Common Headers"
+# Begin Group "MSW Sources"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\wx\html\forcelnk.h
+SOURCE=..\..\src\msw\dummy.cpp
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\html\helpctrl.h
+SOURCE=..\..\src\msw\helpbest.cpp
 # End Source File
+# End Group
+# Begin Group "Generic Sources"
+
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\wx\html\helpdata.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\helpfrm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\htmlcell.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\htmldefs.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\htmlfilt.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\htmlpars.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\htmlproc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\htmltag.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\htmlwin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\htmprint.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\m_templ.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\winpars.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\htmllbox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\wxhtml.h
+SOURCE=..\..\src\generic\htmllbox.cpp
 # End Source File
 # End Group
 # Begin Group "wxHTML Sources"
@@ -399,26 +353,76 @@ SOURCE=..\..\src\html\m_tables.cpp
 SOURCE=..\..\src\html\winpars.cpp
 # End Source File
 # End Group
-# Begin Group "Generic Sources"
+# Begin Group "wxHTML Headers"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\generic\htmllbox.cpp
+SOURCE=..\..\include\wx\html\forcelnk.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\helpctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\helpdata.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\helpfrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmlcell.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmldefs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmlfilt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmlpars.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmlproc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmltag.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmlwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\htmprint.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\m_templ.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\winpars.h
 # End Source File
 # End Group
-# Begin Group "MSW Sources"
+# Begin Group "Common Headers"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\msw\dummy.cpp
-# ADD BASE CPP /Yc"wx/wxprec.h"
-# ADD CPP /Yc"wx/wxprec.h"
+SOURCE=..\..\include\wx\htmllbox.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\helpbest.cpp
+SOURCE=..\..\include\wx\wxhtml.h
 # End Source File
 # End Group
 # End Target

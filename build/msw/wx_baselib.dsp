@@ -46,8 +46,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\lib\vc_mswd"
 # PROP Intermediate_Dir "vc_mswd\baselib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswd" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswd\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswd" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswd\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswd" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswd\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswd" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswd\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -69,8 +69,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_msw"
 # PROP Intermediate_Dir "vc_msw\baselib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_msw" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_msw\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_msw" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_msw\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_msw" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_msw\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_msw" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_msw\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -92,8 +92,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_mswud"
 # PROP Intermediate_Dir "vc_mswud\baselib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswud" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswud\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswud" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswud\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswud" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswud\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswud" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswud\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -115,8 +115,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_mswu"
 # PROP Intermediate_Dir "vc_mswu\baselib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswu" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswu\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswu" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswu\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswu" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswu\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswu" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswu\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -138,8 +138,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_mswunivd"
 # PROP Intermediate_Dir "vc_mswunivd\baselib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswunivd" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswunivd\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswunivd" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswunivd\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswunivd" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswunivd\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswunivd" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswunivd\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -161,8 +161,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_mswuniv"
 # PROP Intermediate_Dir "vc_mswuniv\baselib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswuniv" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswuniv\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswuniv" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswuniv\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswuniv" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswuniv\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswuniv" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswuniv\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -184,8 +184,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_mswunivud"
 # PROP Intermediate_Dir "vc_mswunivud\baselib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswunivud" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswunivud\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswunivud" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswunivud\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswunivud" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswunivud\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\include" /I "..\..\lib\vc_mswunivud" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Zi /Gm /GZ /Fd..\..\lib\vc_mswunivud\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -207,8 +207,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_mswunivu"
 # PROP Intermediate_Dir "vc_mswunivu\baselib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswunivu" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswunivu\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswunivu" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswunivu\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=1 /D wxUSE_GUI=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswunivu" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswunivu\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\include" /I "..\..\lib\vc_mswunivu" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /Fd..\..\lib\vc_mswunivu\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_baselib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -230,465 +230,6 @@ LIB32=link.exe -lib
 # Name "baselib - Win32 Universal Release"
 # Name "baselib - Win32 Universal Unicode Debug"
 # Name "baselib - Win32 Universal Unicode Release"
-# Begin Group "Setup Headers"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\setup.h
-
-!IF  "$(CFG)" == "baselib - Win32 Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_mswd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_mswd\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "baselib - Win32 Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_msw\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_msw\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "baselib - Win32 Unicode Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_mswud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_mswud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "baselib - Win32 Unicode Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_mswu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_mswu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_mswunivd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_mswunivd\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_mswuniv\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_mswuniv\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Unicode Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_mswunivud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_mswunivud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Unicode Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_mswunivu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_mswunivu\wx\setup.h
-
-# End Custom Build
-
-!ENDIF
-
-# End Source File
-# End Group
-# Begin Group "Common Headers"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\include\wx\app.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\apptrait.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\arrstr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\beforestd.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\buffer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\build.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\chkconf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\clntdata.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\cmdline.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\confbase.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\config.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\containr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\datetime.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\datstrm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\dde.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\debug.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\defs.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\dir.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\dynarray.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\dynlib.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\dynload.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\encconv.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\event.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\features.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\ffile.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\file.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\fileconf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\filefn.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\filename.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\filesys.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\fontenc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\fontmap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\fs_mem.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\fs_zip.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\hash.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\hashmap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\iconloc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\init.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\intl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\iosfwrap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\ioswrap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\ipc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\ipcbase.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\isql.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\isqlext.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\list.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\log.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\longlong.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\math.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\memconf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\memory.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\memtext.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\mimetype.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\module.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msgout.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\mstream.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\chkconf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\crashrpt.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\dde.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\gccpriv.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\mimetype.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\winundef.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\wrapcctl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\wrapwin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\object.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\platform.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\process.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\regex.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\snglinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\stopwatch.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\strconv.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\stream.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\string.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\sysopt.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\textbuf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\textfile.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\thread.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\tokenzr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\txtstrm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\types.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\utils.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\variant.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\vector.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\version.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\volume.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\wfstream.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\wx.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\wxchar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\wxprec.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\zipstrm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\zstream.h
-# End Source File
-# End Group
 # Begin Group "Common Sources"
 
 # PROP Default_Filter ""
@@ -975,6 +516,469 @@ SOURCE=..\..\src\msw\utilsexc.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\volume.cpp
+# End Source File
+# End Group
+# Begin Group "Setup Headers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\setup.h
+
+!IF  "$(CFG)" == "baselib - Win32 Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_mswd\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_mswd\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "baselib - Win32 Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_msw\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_msw\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "baselib - Win32 Unicode Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_mswud\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_mswud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "baselib - Win32 Unicode Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_mswu\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_mswu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_mswunivd\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_mswunivd\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_mswuniv\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_mswuniv\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Unicode Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_mswunivud\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_mswunivud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "baselib - Win32 Universal Unicode Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_mswunivu\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_mswunivu\wx\setup.h
+
+# End Custom Build
+
+!ENDIF
+
+# End Source File
+# End Group
+# Begin Group "MSW Headers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\chkconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\crashrpt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\dde.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\gccpriv.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\mimetype.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\winundef.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\wrapcctl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\wrapwin.h
+# End Source File
+# End Group
+# Begin Group "Common Headers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\app.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\apptrait.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\arrstr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\beforestd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\buffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\build.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\chkconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\clntdata.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\cmdline.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\confbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\config.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\containr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\datetime.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\datstrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dde.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\debug.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\defs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dir.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dynarray.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dynlib.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dynload.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\encconv.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\event.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\features.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ffile.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\file.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\fileconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\filefn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\filename.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\filesys.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\fontenc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\fontmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\fs_mem.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\fs_zip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\hash.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\hashmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\iconloc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\init.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\intl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\iosfwrap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ioswrap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ipc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ipcbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\isql.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\isqlext.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\list.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\log.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\longlong.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\math.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\memconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\memory.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\memtext.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\mimetype.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\module.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msgout.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\mstream.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\object.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\platform.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\process.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\regex.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\snglinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\stopwatch.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\strconv.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\stream.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\string.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\sysopt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\textbuf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\textfile.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\thread.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\tokenzr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\txtstrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\types.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\utils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\variant.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\vector.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\version.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\volume.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\wfstream.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\wx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\wxchar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\wxprec.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\zipstrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\zstream.h
 # End Source File
 # End Group
 # End Target

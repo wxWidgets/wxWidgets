@@ -247,14 +247,6 @@ LINK32=link.exe
 # Name "dbgriddll - Win32 DLL Universal Release"
 # Name "dbgriddll - Win32 DLL Universal Unicode Debug"
 # Name "dbgriddll - Win32 DLL Universal Unicode Release"
-# Begin Group "Common Headers"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\include\wx\dbgrid.h
-# End Source File
-# End Group
 # Begin Group "Common Sources"
 
 # PROP Default_Filter ""
@@ -271,6 +263,14 @@ SOURCE=..\..\src\common\dbgrid.cpp
 SOURCE=..\..\src\msw\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
+# End Source File
+# End Group
+# Begin Group "Common Headers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\dbgrid.h
 # End Source File
 # End Group
 # End Target

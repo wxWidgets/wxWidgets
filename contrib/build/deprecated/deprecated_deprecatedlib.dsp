@@ -235,13 +235,13 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=../../src/deprecated\..\..\..\src\msw\dummy.cpp
-# ADD BASE CPP /Yc"wx/wxprec.h"
-# ADD CPP /Yc"wx/wxprec.h"
+SOURCE=../../src/deprecated\dosyacc.c
 # End Source File
 # Begin Source File
 
-SOURCE=../../src/deprecated\dosyacc.c
+SOURCE=../../src/deprecated\..\..\..\src\msw\dummy.cpp
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
 

@@ -230,100 +230,34 @@ LIB32=link.exe -lib
 # Name "advlib - Win32 Universal Release"
 # Name "advlib - Win32 Universal Unicode Debug"
 # Name "advlib - Win32 Universal Unicode Release"
-# Begin Group "Common Headers"
+# Begin Group "Common Sources"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\wx\calctrl.h
+SOURCE=..\..\src\common\taskbarcmn.cpp
+# End Source File
+# End Group
+# Begin Group "MSW Sources"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\msw\dummy.cpp
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\dcbuffer.h
+SOURCE=..\..\src\msw\joystick.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\calctrl.h
+SOURCE=..\..\src\msw\taskbar.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\grid.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\gridctrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\gridsel.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\helpext.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\laywin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\sashwin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\splash.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\wizard.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\grid.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\joystick.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\laywin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\joystick.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\taskbar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\wave.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\sashwin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\splash.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\taskbar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\tipdlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\wave.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\wizard.h
+SOURCE=..\..\src\msw\wave.cpp
 # End Source File
 # End Group
 # Begin Group "Generic Sources"
@@ -374,34 +308,108 @@ SOURCE=..\..\src\generic\tipdlg.cpp
 SOURCE=..\..\src\generic\wizard.cpp
 # End Source File
 # End Group
-# Begin Group "Common Sources"
+# Begin Group "MSW Headers"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\common\taskbarcmn.cpp
+SOURCE=..\..\include\wx\msw\joystick.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\taskbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\wave.h
 # End Source File
 # End Group
-# Begin Group "MSW Sources"
+# Begin Group "Generic Headers"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\msw\dummy.cpp
-# ADD BASE CPP /Yc"wx/wxprec.h"
-# ADD CPP /Yc"wx/wxprec.h"
+SOURCE=..\..\include\wx\generic\calctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\joystick.cpp
+SOURCE=..\..\include\wx\generic\grid.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\taskbar.cpp
+SOURCE=..\..\include\wx\generic\gridctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\wave.cpp
+SOURCE=..\..\include\wx\generic\gridsel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\helpext.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\laywin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\sashwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\splash.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\wizard.h
+# End Source File
+# End Group
+# Begin Group "Common Headers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\calctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dcbuffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\grid.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\joystick.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\laywin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\sashwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\splash.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\taskbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\tipdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\wave.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\wizard.h
 # End Source File
 # End Group
 # End Target

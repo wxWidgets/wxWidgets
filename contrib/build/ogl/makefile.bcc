@@ -145,6 +145,9 @@ __RUNTIME_LIBS_7 =
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
 !endif
+!if "$(MSLU)" == "1"
+__UNICOWS_LIB_p = unicows.lib
+!endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
@@ -167,8 +170,6 @@ __ogldll___depname = \
 __ogllib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl.lib
 !endif
-
-MAKEARGS = -DBUILD=$(BUILD) -DCFG=$(CFG) -DCPPFLAGS=$(CPPFLAGS) -DCXX=$(CXX) -DCXXFLAGS=$(CXXFLAGS) -DDEBUG_FLAG=$(DEBUG_FLAG) -DDEBUG_INFO=$(DEBUG_INFO) -DLDFLAGS=$(LDFLAGS) -DMONOLITHIC=$(MONOLITHIC) -DOFFICIAL_BUILD=$(OFFICIAL_BUILD) -DRUNTIME_LIBS=$(RUNTIME_LIBS) -DSHARED=$(SHARED) -DUNICODE=$(UNICODE) -DUSE_GUI=$(USE_GUI) -DVENDOR=$(VENDOR) -DWXUNIV=$(WXUNIV)
 
 
 all: $(OBJS)
@@ -267,7 +268,7 @@ clean:
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl_bcc$(VENDORTAG).dll: $(OGLDLL_OBJECTS) $(OBJS)\ogldll_dummy.obj
 	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
-	c0d32.obj $(OGLDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
+	c0d32.obj $(OGLDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl $@
 !endif

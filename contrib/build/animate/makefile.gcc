@@ -120,6 +120,9 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
 endif
+ifeq ($(MSLU),1)
+__UNICOWS_LIB_p = -lunicows
+endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_BASE_p = -lwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 endif
@@ -142,8 +145,6 @@ ifeq ($(SHARED),0)
 __animatelib___depname = \
 	$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.a
 endif
-
-MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) GCC_VERSION=$(GCC_VERSION) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) VENDOR=$(VENDOR) WXUNIV=$(WXUNIV)
 
 
 all: $(OBJS)
@@ -168,7 +169,7 @@ $(OBJS)\animatelib_dummy.o: ../../src/animate\..\..\..\src\msw\dummy.cpp
 
 ifeq ($(SHARED),1)
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate_gcc$(VENDORTAG).dll: $(ANIMATEDLL_OBJECTS)
-	$(CXX) -shared -o $@ $(ANIMATEDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
+	$(CXX) -shared -o $@ $(ANIMATEDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.a  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 endif
 
 ifeq ($(SHARED),0)

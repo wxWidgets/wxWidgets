@@ -230,14 +230,6 @@ LIB32=link.exe -lib
 # Name "gllib - Win32 Universal Release"
 # Name "gllib - Win32 Universal Unicode Debug"
 # Name "gllib - Win32 Universal Unicode Release"
-# Begin Group "Common Headers"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\glcanvas.h
-# End Source File
-# End Group
 # Begin Group "MSW Sources"
 
 # PROP Default_Filter ""
@@ -250,6 +242,14 @@ SOURCE=..\..\src\msw\dummy.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\glcanvas.cpp
+# End Source File
+# End Group
+# Begin Group "MSW Headers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\glcanvas.h
 # End Source File
 # End Group
 # End Target

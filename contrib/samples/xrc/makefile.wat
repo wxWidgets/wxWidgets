@@ -171,14 +171,12 @@ XRCDEMO_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
 	-i=.\..\..\..\src\zlib -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib &
-	-i=. $(__DLLFLAG_p) -i=.\..\..\include $(CXXFLAGS)
+	-i=. $(__DLLFLAG_p) -i=..\..\..\samples -i=.\..\..\include $(CXXFLAGS)
 XRCDEMO_OBJECTS =  &
 	$(OBJS)\xrcdemo_xrcdemo.obj &
 	$(OBJS)\xrcdemo_myframe.obj &
 	$(OBJS)\xrcdemo_derivdlg.obj &
 	$(OBJS)\xrcdemo_custclas.obj
-
-MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all : $(OBJS)
@@ -202,7 +200,7 @@ $(OBJS)\xrcdemo_xrcdemo.obj :  .AUTODEPEND .\xrcdemo.cpp
 	$(CXX) -zq -fo=$^@ $(XRCDEMO_CXXFLAGS) $<
 
 $(OBJS)\xrcdemo_xrcdemo.res :  .AUTODEPEND .\xrcdemo.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\include $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=..\..\..\samples -i=.\..\..\include $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -212,8 +210,8 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\xrcdemo.exe del $(OBJS)\xrcdemo.exe
 
 data : .SYMBOLIC 
-	if not exist $(OBJS)/rc mkdir $(OBJS)/rc
-	for %f in (appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc scanning.gif sppicon.ico toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc) do if not exist $(OBJS)/rc\%f copy ./rc\%f $(OBJS)/rc
+	if not exist $(OBJS)\rc mkdir $(OBJS)\rc
+	for %f in (appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc scanning.gif sppicon.ico toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc) do if not exist $(OBJS)\rc\%f copy .\rc\%f $(OBJS)\rc
 
 $(OBJS)\xrcdemo.exe :  $(XRCDEMO_OBJECTS) $(OBJS)\xrcdemo_xrcdemo.res
 	@%create $(OBJS)\xrcdemo.lbc
@@ -222,6 +220,6 @@ $(OBJS)\xrcdemo.exe :  $(XRCDEMO_OBJECTS) $(OBJS)\xrcdemo_xrcdemo.res
 	@%append $(OBJS)\xrcdemo.lbc option incremental
 	@%append $(OBJS)\xrcdemo.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(XRCDEMO_OBJECTS)) do @%append $(OBJS)\xrcdemo.lbc file %i
-	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_XML_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\xrcdemo.lbc library %i
+	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_XML_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\xrcdemo.lbc library %i
 	@%append $(OBJS)\xrcdemo.lbc option resource=$(OBJS)\xrcdemo_xrcdemo.res
 	wlink @$(OBJS)\xrcdemo.lbc
