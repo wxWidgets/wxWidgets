@@ -8882,14 +8882,24 @@ void wxGrid::SetDefaultCellFont( const wxFont& font )
     m_defaultCellAttr->SetFont(font);
 }
 
+
+// For editors and renderers the type registry takes precedence over the
+// default attr, so we need to register the new editor/renderer for the string
+// data type in order to make setting a default editor/renderer appear to
+// work correctly.
+
 void wxGrid::SetDefaultRenderer(wxGridCellRenderer *renderer)
 {
-    m_defaultCellAttr->SetRenderer(renderer);
+    RegisterDataType(wxGRID_VALUE_STRING,
+                     renderer,
+                     GetDefaultEditorForType(wxGRID_VALUE_STRING));
 }
 
 void wxGrid::SetDefaultEditor(wxGridCellEditor *editor)
 {
-    m_defaultCellAttr->SetEditor(editor);
+    RegisterDataType(wxGRID_VALUE_STRING,
+                     GetDefaultRendererForType(wxGRID_VALUE_STRING),
+                     editor);                     
 }
 
 // ----------------------------------------------------------------------------
