@@ -1,0 +1,9 @@
+#
+# Makefile : Builds wxWindows samples for Unix.
+#
+
+all:
+	cd wxedit && $(MAKE)
+
+clean:
+	cd wxedit && $(MAKE) clean

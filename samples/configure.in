@@ -54,6 +54,8 @@ AC_OUTPUT([
             memcheck/Makefile
             minifram/Makefile
             minimal/Makefile
+            mobile/Makefile
+            mobile/wxedit/Makefile
             newgrid/Makefile
             notebook/Makefile
             png/Makefile

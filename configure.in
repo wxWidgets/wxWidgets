@@ -335,8 +335,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_OPTIMISE=no
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
-  DEFAULT_wxUSE_NO_RTTI=yes
-  DEFAULT_wxUSE_NO_EXCEPTIONS=yes
+  DEFAULT_wxUSE_NO_RTTI=no
+  DEFAULT_wxUSE_NO_EXCEPTIONS=no
   DEFAULT_wxUSE_PERMISSIVE=no
   DEFAULT_wxUSE_DEBUG_FLAG=yes
   DEFAULT_wxUSE_DEBUG_INFO=yes
@@ -509,8 +509,8 @@ else
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
-  DEFAULT_wxUSE_NO_RTTI=yes
-  DEFAULT_wxUSE_NO_EXCEPTIONS=yes
+  DEFAULT_wxUSE_NO_RTTI=no
+  DEFAULT_wxUSE_NO_EXCEPTIONS=no
   DEFAULT_wxUSE_PERMISSIVE=no
   DEFAULT_wxUSE_DEBUG_FLAG=no
   DEFAULT_wxUSE_DEBUG_INFO=no
@@ -4937,7 +4937,7 @@ if test "$wxUSE_GUI" = "yes"; then
     export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
            wx_cv_path_ifs wx_cv_program_ext \
            wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype
-    AC_CONFIG_SUBDIRS(demos samples utils contrib mobile)
+    AC_CONFIG_SUBDIRS(demos samples utils contrib)
 fi
 
 dnl create each of the files in the space separated list from the file.in

@@ -10,14 +10,14 @@
 # Makefile for wxedit
 
 top_srcdir = @top_srcdir@/..
-top_builddir = ../..
-program_dir = mobile/wxedit
+top_builddir = ../../..
+program_dir = samples/mobile/wxedit
 
 PROGRAM=wxedit
 
 OBJECTS =$(PROGRAM).o
 DEPFILES=$(PROGRAM).d
 
-include ../../src/makeprog.env
+include ../../../src/makeprog.env
 
 @IF_GNU_MAKE@-include $(DEPFILES)
