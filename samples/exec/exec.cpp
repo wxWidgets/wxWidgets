@@ -56,6 +56,7 @@
 
 #include "wx/txtstrm.h"
 #include "wx/numdlg.h"
+#include "wx/ffile.h"
 
 #include "wx/process.h"
 
@@ -195,7 +196,9 @@ public:
 protected:
     void OnTextEnter(wxCommandEvent& WXUNUSED(event)) { DoSend(); }
     void OnBtnSend(wxCommandEvent& WXUNUSED(event)) { DoSend(); }
+    void OnBtnSendFile(wxCommandEvent& WXUNUSED(event));
     void OnBtnGet(wxCommandEvent& WXUNUSED(event)) { DoGet(); }
+    void OnBtnClose(wxCommandEvent& WXUNUSED(event)) { DoClose(); }
 
     void OnClose(wxCloseEvent& event);
 
@@ -203,22 +206,32 @@ protected:
 
     void DoSend()
     {
-        m_out.WriteString(m_textIn->GetValue() + _T('\n'));
-        m_textIn->Clear();
+        wxString s(m_textOut->GetValue());
+        s += _T('\n');
+        m_out.Write(s.c_str(), s.length());
+        m_textOut->Clear();
 
         DoGet();
     }
 
     void DoGet();
+    void DoClose();
 
 private:
+    void DoGetFromStream(wxTextCtrl *text, wxInputStream& in);
+    void DisableInput();
+    void DisableOutput();
+
+
     wxProcess *m_process;
 
-    wxTextInputStream m_in;
-    wxTextOutputStream m_out;
+    wxOutputStream &m_out;
+    wxInputStream &m_in,
+                  &m_err;
 
-    wxTextCtrl *m_textIn,
-               *m_textOut;
+    wxTextCtrl *m_textOut,
+               *m_textIn,
+               *m_textErr;
 
     DECLARE_EVENT_TABLE()
 };
@@ -302,7 +315,9 @@ enum
 
     // control ids
     Exec_Btn_Send = 1000,
-    Exec_Btn_Get
+    Exec_Btn_SendFile,
+    Exec_Btn_Get,
+    Exec_Btn_Close
 };
 
 static const wxChar *DIALOG_TITLE = _T("Exec sample");
@@ -343,7 +358,9 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
     EVT_BUTTON(Exec_Btn_Send, MyPipeFrame::OnBtnSend)
+    EVT_BUTTON(Exec_Btn_SendFile, MyPipeFrame::OnBtnSendFile)
     EVT_BUTTON(Exec_Btn_Get, MyPipeFrame::OnBtnGet)
+    EVT_BUTTON(Exec_Btn_Close, MyPipeFrame::OnBtnClose)
 
     EVT_TEXT_ENTER(wxID_ANY, MyPipeFrame::OnTextEnter)
 
@@ -1037,29 +1054,41 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
              m_process(process),
              // in a real program we'd check that the streams are !NULL here
              m_in(*process->GetInputStream()),
+             m_err(*process->GetErrorStream()),
              m_out(*process->GetOutputStream())
 {
     m_process->SetNextHandler(this);
 
     wxPanel *panel = new wxPanel(this, wxID_ANY);
 
-    m_textIn = new wxTextCtrl(panel, wxID_ANY, _T(""),
+    m_textOut = new wxTextCtrl(panel, wxID_ANY, _T(""),
                               wxDefaultPosition, wxDefaultSize,
                               wxTE_PROCESS_ENTER);
-    m_textOut = new wxTextCtrl(panel, wxID_ANY, _T(""));
-    m_textOut->SetEditable(false);
+    m_textIn = new wxTextCtrl(panel, wxID_ANY, _T(""),
+                               wxDefaultPosition, wxDefaultSize,
+                               wxTE_MULTILINE | wxTE_RICH);
+    m_textIn->SetEditable(false);
+    m_textErr = new wxTextCtrl(panel, wxID_ANY, _T(""),
+                               wxDefaultPosition, wxDefaultSize,
+                               wxTE_MULTILINE | wxTE_RICH);
+    m_textErr->SetEditable(false);
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
-    sizerTop->Add(m_textIn, 0, wxGROW | wxALL, 5);
+    sizerTop->Add(m_textOut, 0, wxGROW | wxALL, 5);
 
     wxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
-    sizerBtns->Add(new wxButton(panel, Exec_Btn_Send, _T("&Send")), 0,
-                   wxALL, 10);
-    sizerBtns->Add(new wxButton(panel, Exec_Btn_Get, _T("&Get")), 0,
-                   wxALL, 10);
+    sizerBtns->
+        Add(new wxButton(panel, Exec_Btn_Send, _T("&Send")), 0, wxALL, 5);
+    sizerBtns->
+        Add(new wxButton(panel, Exec_Btn_SendFile, _T("&File...")), 0, wxALL, 5);
+    sizerBtns->
+        Add(new wxButton(panel, Exec_Btn_Get, _T("&Get")), 0, wxALL, 5);
+    sizerBtns->
+        Add(new wxButton(panel, Exec_Btn_Close, _T("&Close")), 0, wxALL, 5);
 
     sizerTop->Add(sizerBtns, 0, wxCENTRE | wxALL, 5);
-    sizerTop->Add(m_textOut, 0, wxGROW | wxALL, 5);
+    sizerTop->Add(m_textIn, 1, wxGROW | wxALL, 5);
+    sizerTop->Add(m_textErr, 1, wxGROW | wxALL, 5);
 
     panel->SetSizer(sizerTop);
     sizerTop->Fit(this);
@@ -1067,18 +1096,72 @@ MyPipeFrame::MyPipeFrame(wxFrame *parent,
     Show();
 }
 
+void MyPipeFrame::OnBtnSendFile(wxCommandEvent& WXUNUSED(event))
+{
+    wxFileDialog filedlg(this, _T("Select file to send"));
+    if ( filedlg.ShowModal() != wxID_OK )
+        return;
+
+    wxFFile file(filedlg.GetFilename(), _T("r"));
+    wxString data;
+    if ( !file.IsOpened() || !file.ReadAll(&data) )
+        return;
+
+    // can't write the entire string at once, this risk overflowing the pipe
+    // and we would dead lock
+    size_t len = data.length();
+    const wxChar *pc = data.c_str();
+    while ( len )
+    {
+        const size_t CHUNK_SIZE = 4096;
+        size_t lenChunk = len > CHUNK_SIZE ? CHUNK_SIZE : len;
+
+        m_out.Write(pc, lenChunk);
+
+        pc += lenChunk;
+        len -= lenChunk;
+
+        DoGet();
+    }
+}
+
 void MyPipeFrame::DoGet()
 {
     // we don't have any way to be notified when any input appears on the
     // stream so we have to poll it :-(
-    //
-    // NB: this really must be done because otherwise the other program might
-    //     not have enough time to receive or process our data and we'd read
-    //     an empty string
-    while ( !m_process->IsInputAvailable() && m_process->IsInputOpened() )
-        ;
+    DoGetFromStream(m_textIn, m_in);
+    DoGetFromStream(m_textErr, m_err);
+}
 
-    m_textOut->SetValue(m_in.ReadLine());
+void MyPipeFrame::DoGetFromStream(wxTextCtrl *text, wxInputStream& in)
+{
+    while ( in.CanRead() )
+    {
+        wxChar buffer[4096];
+        buffer[in.Read(buffer, WXSIZEOF(buffer) - 1).LastRead()] = _T('\0');
+
+        text->AppendText(buffer);
+    }
+}
+
+void MyPipeFrame::DoClose()
+{
+    m_process->CloseOutput();
+
+    DisableInput();
+}
+
+void MyPipeFrame::DisableInput()
+{
+    m_textOut->SetEditable(false);
+    FindWindow(Exec_Btn_Send)->Disable();
+    FindWindow(Exec_Btn_SendFile)->Disable();
+    FindWindow(Exec_Btn_Close)->Disable();
+}
+
+void MyPipeFrame::DisableOutput()
+{
+    FindWindow(Exec_Btn_Get)->Disable();
 }
 
 void MyPipeFrame::OnClose(wxCloseEvent& event)
@@ -1099,10 +1182,13 @@ void MyPipeFrame::OnClose(wxCloseEvent& event)
 
 void MyPipeFrame::OnProcessTerm(wxProcessEvent& WXUNUSED(event))
 {
+    DoGet();
+
     delete m_process;
     m_process = NULL;
 
     wxLogWarning(_T("The other process has terminated, closing"));
 
-    Close();
+    DisableInput();
+    DisableOutput();
 }
