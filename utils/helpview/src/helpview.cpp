@@ -71,8 +71,6 @@ bool hvApp::OnInit()
     bool hasWindowName = FALSE;
     bool createServer = FALSE;
 	
-    m_server = NULL;
-	
     // Help books are recognized by extension ".hhp" ".htb" or ".zip".
     // Service and window_name can occur anywhere in arguments,
     // but service must be first
