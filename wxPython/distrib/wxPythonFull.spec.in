@@ -15,7 +15,7 @@
 # Allow the release tag to be specified on the rpmbuild command 
 # line with --define 'release SOMETHING'  If no such definition is 
 # used then the release number is 1.
-%if %{release:0}%{!?release:1}
+%if %{?release:0}%{!?release:1}
 %define release 1
 %endif
 
