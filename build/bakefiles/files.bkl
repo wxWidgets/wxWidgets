@@ -1900,7 +1900,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/display.mm
     src/cocoa/drawer.mm
     src/cocoa/evtloop.mm
-    src/cocoa/filedlg.mm
     src/cocoa/font.cpp
     src/cocoa/fontdlg.mm
     src/cocoa/fontenum.mm
@@ -1996,7 +1995,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/dialog.h
     wx/cocoa/display.h
     wx/cocoa/drawer.h
-    wx/cocoa/filedlg.h
     wx/cocoa/font.h
     wx/cocoa/fontdlg.h
     wx/cocoa/frame.h
