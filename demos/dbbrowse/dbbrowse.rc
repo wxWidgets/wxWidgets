@@ -13,4 +13,3 @@ FolderOpen              ICON    "bitmaps\\f_open.ico"
 PgmCtrl                 BITMAP  "bitmaps\\pgmctrl.bmp"
 
 #include "wx/msw/wx.rc"
-#include "wx/html/msw/wxhtml.rc"
