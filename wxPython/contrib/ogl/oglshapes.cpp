@@ -201,82 +201,6 @@ static PyObject *_wrap_wxPseudoMetaFile_Draw(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-#define wxPseudoMetaFile_WriteAttributes(_swigobj,_swigarg0,_swigarg1)  (_swigobj->WriteAttributes(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPseudoMetaFile_WriteAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPseudoMetaFile * _arg0;
-    wxExpr * _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","clause","whichAngle", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxPseudoMetaFile_WriteAttributes",_kwnames,&_argo0,&_argo1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPseudoMetaFile_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPseudoMetaFile_WriteAttributes. Expected _wxPseudoMetaFile_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxExpr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPseudoMetaFile_WriteAttributes. Expected _wxExpr_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPseudoMetaFile_WriteAttributes(_arg0,_arg1,_arg2);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPseudoMetaFile_ReadAttributes(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ReadAttributes(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPseudoMetaFile_ReadAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPseudoMetaFile * _arg0;
-    wxExpr * _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","clause","whichAngle", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxPseudoMetaFile_ReadAttributes",_kwnames,&_argo0,&_argo1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPseudoMetaFile_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPseudoMetaFile_ReadAttributes. Expected _wxPseudoMetaFile_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxExpr_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPseudoMetaFile_ReadAttributes. Expected _wxExpr_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPseudoMetaFile_ReadAttributes(_arg0,_arg1,_arg2);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxPseudoMetaFile_Clear(_swigobj)  (_swigobj->Clear())
 static PyObject *_wrap_wxPseudoMetaFile_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -12742,8 +12666,6 @@ static PyMethodDef oglshapescMethods[] = {
 	 { "wxPseudoMetaFile_Scale", (PyCFunction) _wrap_wxPseudoMetaFile_Scale, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPseudoMetaFile_Copy", (PyCFunction) _wrap_wxPseudoMetaFile_Copy, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPseudoMetaFile_Clear", (PyCFunction) _wrap_wxPseudoMetaFile_Clear, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPseudoMetaFile_ReadAttributes", (PyCFunction) _wrap_wxPseudoMetaFile_ReadAttributes, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPseudoMetaFile_WriteAttributes", (PyCFunction) _wrap_wxPseudoMetaFile_WriteAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPseudoMetaFile_Draw", (PyCFunction) _wrap_wxPseudoMetaFile_Draw, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPseudoMetaFile", (PyCFunction) _wrap_delete_wxPseudoMetaFile, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPseudoMetaFile", (PyCFunction) _wrap_new_wxPseudoMetaFile, METH_VARARGS | METH_KEYWORDS },
