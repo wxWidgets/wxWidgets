@@ -1305,7 +1305,7 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 
 // EVT_COMMAND
 #define EVT_COMMAND(id, event, fn)  { event, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
-#define EVT_COMMAND_RANGE(id1, id2, event, fn)  { eventId, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
+#define EVT_COMMAND_RANGE(id1, id2, event, fn)  { event, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
 
 // Scrolling
 #define EVT_SCROLL(func) \

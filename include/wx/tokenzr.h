@@ -20,17 +20,28 @@
 #include "wx/string.h"
 #include "wx/filefn.h"
 
-class wxStringTokenizer : wxObject {
+class wxStringTokenizer : public wxObject {
 public:
   wxStringTokenizer(const wxString& to_tokenize,
                     const wxString& delims = " \t\r\n",
                     bool ret_delim = FALSE);
+  wxStringTokenizer() {  m_string = "";  m_delims = "";  m_retdelims = FALSE;}
   ~wxStringTokenizer();
 
   int CountTokens();
   bool HasMoreToken();
   wxString NextToken();
   wxString GetString() { return m_string; }
+
+  void SetString(const wxString& to_tokenize,
+                    const wxString& delims = " \t\r\n",
+                    bool ret_delim = FALSE)
+  {
+    m_string = to_tokenize;
+    m_delims = delims;
+    m_retdelims = ret_delim;
+  }
+
 protected:
   off_t FindDelims(const wxString& str, const wxString& delims);
 protected:

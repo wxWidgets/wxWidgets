@@ -462,9 +462,10 @@ void wxDocument::SetFilename(const wxString& filename, bool notifyViews)
  * Document view
  */
  
-wxView::wxView(wxDocument *doc)
+wxView::wxView()
 {
-  SetDocument(doc);
+//  SetDocument(doc);
+  m_viewDocument = (wxDocument*) NULL;
   
   m_viewTypeName = "";
   m_viewFrame = (wxFrame *) NULL;

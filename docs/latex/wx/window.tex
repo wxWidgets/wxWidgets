@@ -1551,6 +1551,75 @@ calling this function.
 \helpref{wxWindow::Refresh}{wxwindowrefresh},\rtfsp
 \helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground}
 
+\membersection{wxWindow::SetClientSize}\label{wxwindowsetclientsize}
+
+\func{virtual void}{SetClientSize}{\param{int}{ width}, \param{int}{ height}}
+
+\func{virtual void}{SetClientSize}{\param{const wxSize\&}{ size}}
+
+This sets the size of the window client area in pixels. Using this function to size a window
+tends to be more device-independent than \helpref{wxWindow::SetSize}{wxwindowsetsize}, since the application need not
+worry about what dimensions the border or title bar have when trying to fit the window
+around panel items, for example.
+
+\wxheading{Parameters}
+
+\docparam{width}{The required client area width.}
+
+\docparam{height}{The required client area height.}
+
+\docparam{size}{The required client size.}
+
+\membersection{wxWindow::SetCursor}\label{wxwindowsetcursor}
+
+\func{virtual void}{SetCursor}{\param{const wxCursor\&}{cursor}}
+
+Sets the window's cursor.
+
+\wxheading{Parameters}
+
+\docparam{cursor}{Specifies the cursor that the window should normally display.}
+
+\wxheading{Remarks}
+
+Under Windows, you sometimes need to call ::wxSetCursor in addition to this
+function if you want the cursor to change immediately, because under Windows,
+wxWindows only sets the global cursor when it detects mouse movement.
+
+\wxheading{See also}
+
+\helpref{::wxSetCursor}{wxsetcursor}, \helpref{wxCursor}{wxcursor}
+
+\membersection{wxWindow::SetEventHandler}\label{wxwindowseteventhandler}
+
+\func{void}{SetEventHandler}{\param{wxEvtHandler* }{handler}}
+
+Sets the event handler for this window.
+
+\wxheading{Parameters}
+
+\docparam{handler}{Specifies the handler to be set.}
+
+\wxheading{Remarks}
+
+An event handler is an object that is capable of processing the events
+sent to a window. By default, the window is its own event handler, but
+an application may wish to substitute another, for example to allow
+central implementation of event-handling for a variety of different
+window classes.
+
+It is usually better to use \helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler} since
+this sets up a chain of event handlers, where an event not handled by one event handler is
+handed to the next one in the chain.
+
+\wxheading{See also}
+
+\helpref{wxWindow::GetEventHandler}{wxwindowgeteventhandler},\rtfsp
+\helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler},\rtfsp
+\helpref{wxWindow::PopEventHandler}{wxwindowpusheventhandler},\rtfsp
+\helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent},\rtfsp
+\helpref{wxEvtHandler}{wxevthandler}
+
 \membersection{wxWindow::SetConstraints}\label{wxwindowsetconstraints}
 
 \func{void}{SetConstraints}{\param{wxLayoutConstraints* }{constraints}}
@@ -1656,6 +1725,12 @@ Sets the window's name.
 \wxheading{See also}
 
 \helpref{wxWindow::GetName}{wxwindowgetname}
+
+\membersection{wxWindow::SetPalette}\label{wxwindowsetpalette}
+
+\func{virtual void}{SetPalette}{\param{wxPalette* }{palette}}
+
+Obsolete - use \helpref{wxDC::SetPalette}{wxdcsetpalette} instead.
 
 \membersection{wxWindow::SetReturnCode}\label{wxwindowsetreturncode}
 
@@ -1912,81 +1987,6 @@ If this function is called, the user will not be able to size the window outside
 given bounds.
 
 The resizing increments are only significant under Motif or Xt.
-
-\membersection{wxWindow::SetClientSize}
-
-\func{virtual void}{SetClientSize}{\param{int}{ width}, \param{int}{ height}}
-
-\func{virtual void}{SetClientSize}{\param{const wxSize\&}{ size}}
-
-This sets the size of the window client area in pixels. Using this function to size a window
-tends to be more device-independent than \helpref{wxWindow::SetSize}{wxwindowsetsize}, since the application need not
-worry about what dimensions the border or title bar have when trying to fit the window
-around panel items, for example.
-
-\wxheading{Parameters}
-
-\docparam{width}{The required client area width.}
-
-\docparam{height}{The required client area height.}
-
-\docparam{size}{The required client size.}
-
-\membersection{wxWindow::SetPalette}
-
-\func{virtual void}{SetPalette}{\param{wxPalette* }{palette}}
-
-Obsolete - use \helpref{wxDC::SetPalette}{wxdcsetpalette} instead.
-
-\membersection{wxWindow::SetCursor}\label{wxwindowsetcursor}
-
-\func{virtual void}{SetCursor}{\param{const wxCursor\&}{cursor}}
-
-Sets the window's cursor.
-
-\wxheading{Parameters}
-
-\docparam{cursor}{Specifies the cursor that the window should normally display.}
-
-\wxheading{Remarks}
-
-Under Windows, you sometimes need to call ::wxSetCursor in addition to this
-function if you want the cursor to change immediately, because under Windows,
-wxWindows only sets the global cursor when it detects mouse movement.
-
-\wxheading{See also}
-
-\helpref{::wxSetCursor}{wxsetcursor}, \helpref{wxCursor}{wxcursor}
-
-\membersection{wxWindow::SetEventHandler}\label{wxwindowseteventhandler}
-
-\func{void}{SetEventHandler}{\param{wxEvtHandler* }{handler}}
-
-Sets the event handler for this window.
-
-\wxheading{Parameters}
-
-\docparam{handler}{Specifies the handler to be set.}
-
-\wxheading{Remarks}
-
-An event handler is an object that is capable of processing the events
-sent to a window. By default, the window is its own event handler, but
-an application may wish to substitute another, for example to allow
-central implementation of event-handling for a variety of different
-window classes.
-
-It is usually better to use \helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler} since
-this sets up a chain of event handlers, where an event not handled by one event handler is
-handed to the next one in the chain.
-
-\wxheading{See also}
-
-\helpref{wxWindow::GetEventHandler}{wxwindowgeteventhandler},\rtfsp
-\helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler},\rtfsp
-\helpref{wxWindow::PopEventHandler}{wxwindowpusheventhandler},\rtfsp
-\helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent},\rtfsp
-\helpref{wxEvtHandler}{wxevthandler}
 
 \membersection{wxWindow::SetTitle}\label{wxwindowsettitle}
 

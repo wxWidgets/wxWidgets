@@ -67,7 +67,7 @@ class TextEditView: public wxView
   wxFrame *frame;
   MyTextWindow *textsw;
   
-  TextEditView(wxDocument *doc = (wxDocument *) NULL): wxView(doc) { frame = (wxFrame *) NULL; textsw = (MyTextWindow *) NULL; }
+  TextEditView(): wxView() { frame = (wxFrame *) NULL; textsw = (MyTextWindow *) NULL; }
   ~TextEditView(void) {}
 
   bool OnCreate(wxDocument *doc, long flags);

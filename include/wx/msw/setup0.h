@@ -282,6 +282,11 @@
 
 #endif
 
+#if defined(__WXMSW__) && defined(__BORLANDC__)
+#undef wxUSE_ODBC
+#define wxUSE_ODBC 0
+#endif
+
 #if defined(__WXMSW__) && !defined(__WIN32__)
 
 #undef wxUSE_THREADS

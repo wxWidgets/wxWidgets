@@ -46,7 +46,7 @@ class WXDLLEXPORT wxToolBarTool: public wxObject
                 const wxString& shortHelpString = "", const wxString& longHelpString = "",
                 GtkWidget *item = (GtkWidget *) NULL );
 #else
-  wxToolBarTool(int theIndex = 0, const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
+  wxToolBarTool(int theIndex, const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
                 bool toggle = FALSE, long xPos = -1, long yPos = -1,
                 const wxString& shortHelpString = wxEmptyString, const wxString& longHelpString = wxEmptyString);
 #endif

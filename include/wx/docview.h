@@ -157,7 +157,8 @@ class WXDLLEXPORT wxView: public wxEvtHandler
 {
   DECLARE_ABSTRACT_CLASS(wxView)
  public:
-  wxView(wxDocument *doc = (wxDocument *) NULL);
+//  wxView(wxDocument *doc = (wxDocument *) NULL);
+  wxView();
   ~wxView(void);
 
   inline wxDocument *GetDocument(void) const { return m_viewDocument; }

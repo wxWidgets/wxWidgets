@@ -965,7 +965,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         case '\\':
             {
                 char c = (char)event.KeyCode();
-                *this << c;
+                WriteText(c);
             }
             break;
 

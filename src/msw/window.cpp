@@ -3715,6 +3715,21 @@ void wxWindow::OnChar(wxKeyEvent& event)
         (void) MSWDefWindowProc(m_lastMsg, (WPARAM) id, m_lastLParam);
 }
 
+void wxWindow::OnKeyDown(wxKeyEvent& event)
+{
+    Default();
+}
+
+void wxWindow::OnKeyUp(wxKeyEvent& event)
+{
+    Default();
+}
+
+void wxWindow::OnPaint(wxPaintEvent& event)
+{
+    Default();
+}
+
 bool wxWindow::IsEnabled(void) const
 {
     return (::IsWindowEnabled((HWND) GetHWND()) != 0);
