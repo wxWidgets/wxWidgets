@@ -1296,7 +1296,7 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
 
     // check for the special case of dtor
     wxString dtor;
-    if ( (funcname[0] == '~') && (m_classname == funcname.c_str() + 1) ) {
+    if ( (funcname[0u] == '~') && (m_classname == funcname.c_str() + 1) ) {
         dtor.Printf("\\destruct{%s}", m_classname.c_str());
         funcname = dtor;
     }
@@ -2203,6 +2203,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.22.2.1  2004/05/29 20:23:33  DS
+   blind compilation fix for first warning and error reported by "i686-pc-linux-gnu+RH" tinderbox compilation
+
    Revision 1.22  2002/01/21 21:18:50  JS
    Now adds 'include file' heading
 
