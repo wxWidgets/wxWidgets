@@ -50,9 +50,10 @@
 #include "wx/spinbutt.h"
 #include "wx/settings.h"
 #include "wx/menu.h"
+#include "wx/artprov.h"
+#include "wx/toplevel.h"
 
 #include "wx/univ/scrtimer.h"
-#include "wx/toplevel.h"
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
@@ -320,8 +321,6 @@ public:
     virtual wxSize GetFrameMinSize(int flags) const;
     virtual wxSize GetFrameIconSize() const;
     virtual int HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags) const;
-
-    virtual wxIcon GetStdIcon(int which) const;
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpFocus,
@@ -629,6 +628,18 @@ public:
 };
 
 // ----------------------------------------------------------------------------
+// wxWin32ArtProvider
+// ----------------------------------------------------------------------------
+
+class wxWin32ArtProvider : public wxArtProvider
+{
+protected:
+    virtual wxBitmap CreateBitmap(const wxArtID& id,
+                                  const wxArtClient& client,
+                                  const wxSize& size);
+};
+
+// ----------------------------------------------------------------------------
 // wxWin32Theme
 // ----------------------------------------------------------------------------
 
@@ -641,6 +652,7 @@ public:
     virtual ~wxWin32Theme();
 
     virtual wxRenderer *GetRenderer();
+    virtual wxArtProvider *GetArtProvider();
     virtual wxInputHandler *GetInputHandler(const wxString& control);
     virtual wxColourScheme *GetColourScheme();
 
@@ -649,6 +661,8 @@ private:
     wxInputHandler *GetDefaultInputHandler();
 
     wxWin32Renderer *m_renderer;
+    
+    wxWin32ArtProvider *m_artProvider;
 
     // the names of the already created handlers and the handlers themselves
     // (these arrays are synchronized)
@@ -1185,6 +1199,16 @@ wxRenderer *wxWin32Theme::GetRenderer()
     }
 
     return m_renderer;
+}
+
+wxArtProvider *wxWin32Theme::GetArtProvider()
+{
+    if ( !m_artProvider )
+    {
+        m_artProvider = new wxWin32ArtProvider;
+    }
+
+    return m_artProvider;
 }
 
 wxInputHandler *wxWin32Theme::GetDefaultInputHandler()
@@ -3857,26 +3881,19 @@ static char *warning_xpm[]={
 "....ddddddddddddddddddddddddddd.",
 ".....ddddddddddddddddddddddddd.."};
 
-wxIcon wxWin32Renderer::GetStdIcon(int which) const
+wxBitmap wxWin32ArtProvider::CreateBitmap(const wxArtID& id,
+                                          const wxArtClient& WXUNUSED(client),
+                                          const wxSize& WXUNUSED(size))
 {
-    switch(which)
-    {
-        case wxICON_INFORMATION:
-            return wxIcon(info_xpm);
-
-        case wxICON_QUESTION:
-            return wxIcon(question_xpm);
-
-        case wxICON_EXCLAMATION:
-            return wxIcon(warning_xpm);
-
-        default:
-            wxFAIL_MSG(wxT("requested non existent standard icon"));
-            // still fall through
-
-        case wxICON_HAND:
-            return wxIcon(error_xpm);
-    }
+    if ( id == wxART_INFORMATION )
+        return wxBitmap(info_xpm);
+    if ( id == wxART_ERROR )
+        return wxBitmap(error_xpm);
+    if ( id == wxART_WARNING )
+        return wxBitmap(warning_xpm);
+    if ( id == wxART_QUESTION )
+        return wxBitmap(question_xpm);
+    return wxNullBitmap;
 }
 
 

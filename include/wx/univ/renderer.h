@@ -438,12 +438,6 @@ public:
                              const wxPoint& pt,
                              int flags = 0) const = 0;
 
-
-    // get the standard icon used by wxWin dialogs - this allows the user
-    // to customize the standard dialogs. The 'which' parameter is one of
-    // wxICON_XXX values
-    virtual wxIcon GetStdIcon(int which) const = 0;
-
     // virtual dtor for any base class
     virtual ~wxRenderer();
 
@@ -799,8 +793,6 @@ public:
                              const wxPoint& pt,
                              int flags) const
         { return m_renderer->HitTestFrame(rect, pt, flags); }
-    virtual wxIcon GetStdIcon(int which) const
-        { return m_renderer->GetStdIcon(which); }
 
 protected:
     wxRenderer *m_renderer;

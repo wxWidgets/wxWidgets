@@ -42,6 +42,7 @@
 #include "wx/confbase.h"
 #include "wx/tokenzr.h"
 #include "wx/utils.h"
+#include "wx/artprov.h"
 
 #if !defined(__WXMSW__) || defined(__WXMICROWIN__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
@@ -107,6 +108,9 @@ bool wxAppBase::OnInitGui()
 #ifdef __WXUNIVERSAL__
     if ( !wxTheme::Get() && !wxTheme::CreateDefault() )
         return FALSE;
+    wxArtProvider *art = wxTheme::Get()->GetArtProvider();
+    if ( art )
+        wxArtProvider::PushProvider(art);
 #endif // __WXUNIVERSAL__
 
     return TRUE;

@@ -25,6 +25,7 @@
 class WXDLLEXPORT wxRenderer;
 class WXDLLEXPORT wxColourScheme;
 class WXDLLEXPORT wxInputHandler;
+class WXDLLEXPORT wxArtProvider;
 struct WXDLLEXPORT wxThemeInfo;
 
 class WXDLLEXPORT wxTheme
@@ -51,6 +52,9 @@ public:
     // get the renderer implementing all the control-drawing operations in
     // this theme
     virtual wxRenderer *GetRenderer() = 0;
+    
+    // get the art provider to be used together with this theme
+    virtual wxArtProvider *GetArtProvider() = 0;
 
     // get the input handler of the given type
     virtual wxInputHandler *GetInputHandler(const wxString& handlerType) = 0;

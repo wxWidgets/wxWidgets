@@ -48,12 +48,13 @@
 
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
+#include "wx/toplevel.h"
+#include "wx/artprov.h"
 
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
-#include "wx/toplevel.h"
 
 class WXDLLEXPORT wxGTKMenuGeometryInfo;
 
@@ -256,8 +257,6 @@ public:
     virtual wxSize GetFrameIconSize() const;
     virtual int HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags) const;
     
-    virtual wxIcon GetStdIcon(int which) const;
-
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
@@ -567,6 +566,18 @@ public:
 };
 
 // ----------------------------------------------------------------------------
+// wxGTKArtProvider
+// ----------------------------------------------------------------------------
+
+class wxGTKArtProvider : public wxArtProvider
+{
+protected:
+    virtual wxBitmap CreateBitmap(const wxArtID& id,
+                                  const wxArtClient& client,
+                                  const wxSize& size);
+};
+
+// ----------------------------------------------------------------------------
 // wxGTKTheme
 // ----------------------------------------------------------------------------
 
@@ -579,6 +590,7 @@ public:
     virtual ~wxGTKTheme();
 
     virtual wxRenderer *GetRenderer();
+    virtual wxArtProvider *GetArtProvider();
     virtual wxInputHandler *GetInputHandler(const wxString& control);
     virtual wxColourScheme *GetColourScheme();
 
@@ -587,6 +599,8 @@ private:
     wxInputHandler *GetDefaultInputHandler();
 
     wxGTKRenderer *m_renderer;
+    
+    wxGTKArtProvider *m_artProvider;
 
     // the names of the already created handlers and the handlers themselves
     // (these arrays are synchronized)
@@ -639,6 +653,16 @@ wxRenderer *wxGTKTheme::GetRenderer()
     }
 
     return m_renderer;
+}
+
+wxArtProvider *wxGTKTheme::GetArtProvider()
+{
+    if ( !m_artProvider )
+    {
+        m_artProvider = new wxGTKArtProvider;
+    }
+
+    return m_artProvider;
 }
 
 wxColourScheme *wxGTKTheme::GetColourScheme()
@@ -4384,27 +4408,19 @@ static char *question_xpm[] = {
 "$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$.$."
 };
 
-
-wxIcon wxGTKRenderer::GetStdIcon(int which) const
+wxBitmap wxGTKArtProvider::CreateBitmap(const wxArtID& id,
+                                        const wxArtClient& WXUNUSED(client),
+                                        const wxSize& WXUNUSED(size))
 {
-    switch(which)
-    {
-        case wxICON_INFORMATION:
-            return wxIcon(info_xpm);
-
-        case wxICON_QUESTION:
-            return wxIcon(question_xpm);
-
-        case wxICON_EXCLAMATION:
-            return wxIcon(warning_xpm);
-
-        default:
-            wxFAIL_MSG(wxT("requested non existent standard icon"));
-            // still fall through
-
-        case wxICON_HAND:
-            return wxIcon(error_xpm);
-    }
+    if ( id == wxART_INFORMATION )
+        return wxBitmap(info_xpm);
+    if ( id == wxART_ERROR )
+        return wxBitmap(error_xpm);
+    if ( id == wxART_WARNING )
+        return wxBitmap(warning_xpm);
+    if ( id == wxART_QUESTION )
+        return wxBitmap(question_xpm);
+    return wxNullBitmap;
 }
 
 
