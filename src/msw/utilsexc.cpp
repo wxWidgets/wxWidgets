@@ -33,7 +33,9 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+#if wxUSE_GUI			// See 'dirty hack' below.
     #include "wx/frame.h"
+#endif
 #endif
 
 #ifdef __WIN32__
