@@ -16,6 +16,9 @@ WXDIR = $(WXWIN)
 
 all:    $(EXTRATARGETS) $(LIBTARGET)
 
+$(D) :
+	mkdir $(D)
+
 wx:
         cd $(WXDIR)\src\msw
         nmake -f makefile.vc FINAL=$(FINAL)
