@@ -327,25 +327,23 @@ void wxFrame::DoSetClientSize(
     // and the client area; add this to the new client size to move the
     // window.  Remember OS/2's backwards y coord system!
     //
-    int                             nActualWidth = vRect2.xRight - vRect2.xLeft - vRect.xRight + nWidth;
-    int                             nActualHeight = vRect2.yTop + vRect2.yTop - vRect.yTop + nHeight;
+    int                             nActualWidth = vRect2.xRight - vRect2.xLeft - vRect.xRight;
+    int                             nActualHeight = vRect2.yTop + vRect2.yTop - vRect.yTop;
 
 #if wxUSE_STATUSBAR
-    if ( GetStatusBar() )
-    {
-        int                         nStatusX;
-        int                         nStatusY;
+    wxStatusBar*                    pStatusBar = GetStatusBar();
 
-        GetStatusBar()->GetClientSize( &nStatusX
-                                      ,&nStatusY
-                                     );
-        nActualHeight += nStatusY;
+    if (pStatusBar && pStatusBar->IsShown())
+    {
+        nActualHeight += pStatusBar->GetSize().y;
     }
+
 #endif // wxUSE_STATUSBAR
 
     wxPoint                         vPoint(GetClientAreaOrigin());
-    nActualWidth  += vPoint.y;
-    nActualHeight += vPoint.x;
+
+    nActualWidth  += vPoint.x;
+    nActualHeight += vPoint.y;
 
     POINTL                          vPointl;
 
@@ -412,9 +410,19 @@ bool wxFrame::Show(
   bool                              bShow
 )
 {
+    int                             nShowCmd;
     SWP                             vSwp;
 
-    DoShowWindow((int)bShow);
+    if (bShow)
+    {
+        nShowCmd = SWP_SHOW;
+    }
+    else // hide
+    {
+        nShowCmd = SWP_HIDE;
+    }
+
+    DoShowWindow(nShowCmd);
 
     if (bShow)
     {
@@ -1407,7 +1415,40 @@ bool wxFrame::HandlePaint()
         }
         else
         {
-            return(wxWindow::HandlePaint());
+            if (!wxWindow::HandlePaint())
+            {
+                HPS                     hPS;
+                RECTL                   vRect;
+
+                hPS = ::WinBeginPaint( GetHwnd()
+                                      ,NULLHANDLE
+                                      ,&vRect
+                                     );
+                if(hPS)
+                {
+                    ::GpiCreateLogColorTable( hPS
+                                             ,0L
+                                             ,LCOLF_CONSECRGB
+                                             ,0L
+                                             ,(LONG)wxTheColourDatabase->m_nSize
+                                             ,(PLONG)wxTheColourDatabase->m_palTable
+                                            );
+                    ::GpiCreateLogColorTable( hPS
+                                             ,0L
+                                             ,LCOLF_RGB
+                                             ,0L
+                                             ,0L
+                                             ,NULL
+                                            );
+
+                    ::WinFillRect( hPS
+                                  ,&vRect
+                                  ,GetBackgroundColour().GetPixel()
+                                 );
+                   ::WinEndPaint(hPS);
+                }
+            }
+            return TRUE;
         }
     }
     else

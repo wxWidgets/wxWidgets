@@ -1410,49 +1410,36 @@ void wxWindowOS2::DoGetPosition(
 ) const
 {
     HWND                            hWnd = GetHwnd();
-    RECT                            vRect;
+    SWP                             vSwp;
     POINTL                          vPoint;
-
-    ::WinQueryWindowRect(hWnd, &vRect);
-
-    vPoint.x = vRect.xLeft;
-    vPoint.y = vRect.yBottom;
+    wxWindow*                       pParent = GetParent();
 
     //
-    // We do the adjustments with respect to the parent only for the "real"
-    // children, not for the dialogs/frames
+    // It would seem that WinQueryWindowRect would be the correlary to
+    // the WIN32 WinGetRect, but unlike WinGetRect which returns the window
+    // origin position in screen coordinates, WinQueryWindowRect returns it
+    // relative to itself, i.e. (0,0).  To get the same under PM we must
+    // us WinQueryWindowPos.  This call, unlike the WIN32 call, however,
+    // returns a position relative to it's parent, so no parent adujstments
+    // are needed under OS/2.  Also, windows should be created using
+    // wxWindow coordinates, i.e 0,0 is the TOP left so vSwp will already
+    // reflect that.
     //
-    if (!IsTopLevel())
+    ::WinQueryWindowPos(hWnd, &vSwp);
+
+    vPoint.x = vSwp.x;
+    vPoint.y = vSwp.y;
+
+    //
+    // We may be faking the client origin. So a window that's really at (0,
+    // 30) may appear (to wxWin apps) to be at (0, 0).
+    //
+    if (pParent)
     {
-        HWND                        hParentWnd = 0;
-        wxWindow*                   pParent = GetParent();
+        wxPoint                     vPt(pParent->GetClientAreaOrigin());
 
-        if (pParent)
-            hParentWnd = GetWinHwnd(pParent);
-
-        //
-        // Since we now have the absolute screen coords, if there's a parent we
-        // must subtract its bottom left corner
-        //
-        if (hParentWnd)
-        {
-            RECTL                   vRect2;
-
-            ::WinQueryWindowRect(hParentWnd, &vRect2);
-            vPoint.x -= vRect.xLeft;
-            vPoint.y -= vRect.yBottom;
-        }
-
-        //
-        // We may be faking the client origin. So a window that's really at (0,
-        // 30) may appear (to wxWin apps) to be at (0, 0).
-        //
-        if (pParent) {
-            wxPoint                     vPt(pParent->GetClientAreaOrigin());
-
-            vPoint.x -= vPt.x;
-            vPoint.y -= vPt.y;
-        }
+        vPoint.x -= vPt.x;
+        vPoint.y -= vPt.y;
     }
 
     if (pX)
@@ -1467,18 +1454,14 @@ void wxWindowOS2::DoScreenToClient(
 ) const
 {
     HWND                            hWnd = GetHwnd();
-    POINTL                          ptl;
+    SWP                             vSwp;
 
-    ptl.x = pX ? *pX : 0;
-    ptl.y = pY ? *pY : 0;
-
-    ::WinMapWindowPoints(HWND_DESKTOP, hWnd, &ptl, 1);
+    ::WinQueryWindowPos(hWnd, &vSwp);
 
     if (pX)
-        *pX = ptl.x;
+        *pX += vSwp.x;
     if (pY)
-        *pY = ptl.y;
-
+        *pY += vSwp.y;
 } // end of wxWindowOS2::DoScreenToClient
 
 void wxWindowOS2::DoClientToScreen(
@@ -1487,17 +1470,14 @@ void wxWindowOS2::DoClientToScreen(
 ) const
 {
     HWND                            hWnd = GetHwnd();
-    POINTL                          ptl;
+    SWP                             vSwp;
 
-    ptl.x = pX ? *pX : 0;
-    ptl.y = pY ? *pY : 0;
-
-    ::WinMapWindowPoints(hWnd, HWND_DESKTOP, &ptl, 1);
+    ::WinQueryWindowPos(hWnd, &vSwp);
 
     if (pX)
-        *pX = ptl.x;
+        *pX += vSwp.x;
     if (pY)
-        *pY = ptl.y;
+        *pY += vSwp.y;
 } // end of wxWindowOS2::DoClientToScreen
 
 //
@@ -1663,79 +1643,28 @@ void wxWindowOS2::DoSetClientSize(
 {
     wxWindow*                       pParent = GetParent();
     HWND                            hWnd = GetHwnd();
-#if 0
     HWND                            hParentWnd = (HWND)0;
-    HWND                            hClientWnd = (HWND)0;
+    POINTL                          vPoint;
     RECTL                           vRect;
-    RECT                            vRect2;
-    RECT                            vRect3;
+    RECTL                           vRect2;
+    RECTL                           vRect3;
+    HWND                            hClientWnd = (HWND)0;
 
-    hClientWnd = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
+    hClientWnd = ::WinWindowFromID(hWnd, FID_CLIENT);
     ::WinQueryWindowRect(hClientWnd, &vRect2);
-
-    if (pParent)
-        hParentWnd = (HWND) pParent->GetHWND();
-
     ::WinQueryWindowRect(hWnd, &vRect);
     ::WinQueryWindowRect(hParentWnd, &vRect3);
-    //
-    // Find the difference between the entire window (title bar and all)
-    // and the client area; add this to the new client size to move the
-    // window. OS/2 is backward from windows on height
-    //
+
     int                             nActualWidth = vRect2.xRight - vRect2.xLeft - vRect.xRight + nWidth;
     int                             nActualHeight = vRect2.yTop - vRect2.yBottom - vRect.yTop + nHeight;
-
-    //
-    // If there's a parent, must subtract the parent's bottom left corner
-    // since MoveWindow moves relative to the parent
-    //
-    POINTL                          vPoint;
-
-    vPoint.x = vRect2.xLeft;
-    vPoint.y = vRect2.yBottom;
-    if (pParent)
-    {             x
-        vPoint.x -= vRect3.xLeft;
-        vPoint.y -= vRect3.yBottom;
-    }
-#else
-    HWND                            hParentWnd = (HWND)0;
-    HWND                            hClientWnd = (HWND)0;
-    RECTL                           vRect;
-    RECT                            vRect2;
-
-    hClientWnd = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
-    ::WinQueryWindowRect(hClientWnd, &vRect2);
-    ::WinQueryWindowRect(hWnd, &vRect2);
-
-    if (pParent)
-        hParentWnd = (HWND) pParent->GetHWND();
-
-    ::WinQueryWindowRect(hWnd, &vRect);
-    //
-    // Find the difference between the entire window (title bar and all)
-    // and the client area; add this to the new client size to move the
-    // window. OS/2 is backward from windows on height
-    //
-    int nActualWidth  = vRect2.xRight - vRect2.xLeft - vRect.xRight + nWidth;
-    int nActualHeight = vRect2.yTop - vRect2.yBottom - vRect.yTop + nHeight;
-
-    nActualWidth  = nWidth;
-    nActualHeight = nHeight;
-    //
-    // If there's a parent, must subtract the parent's bottom left corner
-    // since MoveWindow moves relative to the parent
-    //
-    POINTL                          vPoint;
 
     vPoint.x = vRect2.xLeft;
     vPoint.y = vRect2.yBottom;
     if (pParent)
     {
-        ::WinMapWindowPoints(hWnd, hParentWnd, &vPoint, 1);
+        vPoint.x -= vRect3.xLeft;
+        vPoint.y -= vRect3.yBottom;
     }
-#endif
 
     DoMoveWindow(vPoint.x, vPoint.y, nActualWidth, nActualHeight);
 
