@@ -205,58 +205,62 @@ wxNotebook::~wxNotebook()
 {
 }
 
-wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
-{
-    wxSize sizeTotal = sizePage;
-
-    int major,minor;
-    wxGetOsVersion( &major, &minor );
-
-    // Mac has large notebook borders. Aqua even more so.
-
-    if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
-    {
-        sizeTotal.x += 90;
-
-        if (major >= 10)
-            sizeTotal.y += 28;
-        else
-            sizeTotal.y += 20;
-    }
-    else
-    {
-        if (major >= 10)
-        {
-            sizeTotal.x += 34;
-            sizeTotal.y += 46;
-        }
-        else
-        {
-            sizeTotal.x += 22;
-            sizeTotal.y += 44;
-        }
-    }
-
-    return sizeTotal;
-}
-
 // ----------------------------------------------------------------------------
 // wxNotebook accessors
 // ----------------------------------------------------------------------------
 
 void wxNotebook::SetPadding(const wxSize& padding)
 {
-    wxFAIL_MSG( wxT("wxNotebook::SetPadding not implemented") );
+    // unsupported by OS
 }
 
 void wxNotebook::SetTabSize(const wxSize& sz)
 {
-    wxFAIL_MSG( wxT("wxNotebook::SetTabSize not implemented") );
+    // unsupported by OS
 }
 
 void wxNotebook::SetPageSize(const wxSize& size)
 {
-    wxFAIL_MSG( wxT("wxNotebook::SetPageSize not implemented") );
+    SetSize( CalcSizeFromPage( size ) );
+}
+
+wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
+{
+    wxSize sizeTotal = sizePage;
+    sizeTotal.x += 2 * m_macHorizontalBorder + wxMacTabLeftMargin(GetWindowStyle()) + 
+        wxMacTabRightMargin(GetWindowStyle()) ;
+    sizeTotal.y += 2 * m_macVerticalBorder + wxMacTabTopMargin(GetWindowStyle()) + 
+        wxMacTabBottomMargin(GetWindowStyle()) ;
+
+    return sizeTotal;
+}
+
+wxSize wxNotebook::DoGetBestSize() const
+{
+    // calculate the max page size
+    wxSize size(0, 0);
+
+    size_t count = GetPageCount();
+    if ( count )
+    {
+        for ( size_t n = 0; n < count; n++ )
+        {
+            wxSize sizePage = m_pages[n]->GetSize();
+
+            if ( size.x < sizePage.x )
+                size.x = sizePage.x;
+            if ( size.y < sizePage.y )
+                size.y = sizePage.y;
+        }
+    }
+    else // no pages
+    {
+        // use some arbitrary default size
+        size.x =
+        size.y = 100;
+    }
+
+    return CalcSizeFromPage(size);
 }
 
 int wxNotebook::SetSelection(size_t nPage)
@@ -382,12 +386,8 @@ bool wxNotebook::InsertPage(size_t nPage,
 
     MacSetupTabs();
 
-    int h, w;
-    GetSize(&w, &h);
-    pPage->SetSize(wxMacTabLeftMargin(GetWindowStyle()) + m_macHorizontalBorder,
-                   wxMacTabTopMargin(GetWindowStyle()) + m_macVerticalBorder,
-                   w - wxMacTabLeftMargin(GetWindowStyle()) - wxMacTabRightMargin(GetWindowStyle()) - 2*m_macHorizontalBorder,
-                   h - wxMacTabTopMargin(GetWindowStyle()) - wxMacTabBottomMargin(GetWindowStyle()) - 2*m_macVerticalBorder);
+    wxRect rect = GetPageRect() ;
+    pPage->SetSize(rect);
     if ( pPage->GetAutoLayout() ) {
         pPage->Layout();
     }
@@ -490,6 +490,18 @@ void wxNotebook::MacSetupTabs()
     InvalWindowRect((WindowRef)MacGetRootWindow(), &bounds);
 }
 
+wxRect wxNotebook::GetPageRect() const
+{
+    // fit the notebook page to the tab control's display area
+    int w, h;
+    GetSize(&w, &h);
+    
+    return wxRect( 
+        wxMacTabLeftMargin(GetWindowStyle()) + m_macHorizontalBorder, 
+        wxMacTabTopMargin(GetWindowStyle()) + m_macVerticalBorder,
+        w - wxMacTabLeftMargin(GetWindowStyle()) - wxMacTabRightMargin(GetWindowStyle()) - 2*m_macHorizontalBorder,
+        h - wxMacTabTopMargin(GetWindowStyle()) - wxMacTabBottomMargin(GetWindowStyle()) - 2*m_macVerticalBorder);    
+}
 // ----------------------------------------------------------------------------
 // wxNotebook callbacks
 // ----------------------------------------------------------------------------
@@ -498,25 +510,12 @@ void wxNotebook::MacSetupTabs()
 //     time because doing it in ::Create() doesn't work (for unknown reasons)
 void wxNotebook::OnSize(wxSizeEvent& event)
 {
-    // emulate page change (it's esp. important to do it first time because
-    // otherwise our page would stay invisible)
-    /*
-    int nSel = m_nSelection;
-    m_nSelection = -1;
-    SetSelection(nSel);
-    */
-
-    // fit the notebook page to the tab control's display area
-    int w, h;
-    GetSize(&w, &h);
 
     unsigned int nCount = m_pages.Count();
+    wxRect rect = GetPageRect() ;
     for ( unsigned int nPage = 0; nPage < nCount; nPage++ ) {
         wxNotebookPage *pPage = m_pages[nPage];
-        pPage->SetSize(wxMacTabLeftMargin(GetWindowStyle()) + m_macHorizontalBorder,
-                       wxMacTabTopMargin(GetWindowStyle()) + m_macVerticalBorder,
-                       w - wxMacTabLeftMargin(GetWindowStyle()) - wxMacTabRightMargin(GetWindowStyle()) - 2*m_macHorizontalBorder,
-                       h - wxMacTabTopMargin(GetWindowStyle()) - wxMacTabBottomMargin(GetWindowStyle()) - 2*m_macVerticalBorder);
+        pPage->SetSize(rect);
         if ( pPage->GetAutoLayout() ) {
             pPage->Layout();
         }
