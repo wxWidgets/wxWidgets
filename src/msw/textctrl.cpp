@@ -921,16 +921,35 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 	{
 		wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
 		event.SetEventObject( this );
-		if ( !GetEventHandler()->ProcessEvent(event) )
-			event.Skip();
+		if ( GetEventHandler()->ProcessEvent(event) )
+      return;
 	}
-	else
-		event.Skip();
+  else if ( event.KeyCode() == WXK_TAB ) {
+    wxNavigationKeyEvent event;
+    event.SetDirection(!(::GetKeyState(VK_SHIFT) & 0x100));
+    event.SetWindowChange(FALSE);
+    event.SetEventObject(this);
+
+    if ( GetEventHandler()->ProcessEvent(event) )
+      return;
+  }
+
+  event.Skip();
 }
 
+long wxTextCtrl::MSWGetDlgCode()
+{
+  long lRc = DLGC_WANTCHARS | DLGC_WANTARROWS;
+  if ( m_windowStyle & wxPROCESS_ENTER ) {
+    lRc |= DLGC_WANTMESSAGE;
+  }
+
+  return lRc;
+}
+
+/*
 long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-/*
     switch (nMsg)
     {
       case WM_GETDLGCODE:
@@ -954,10 +973,10 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     default:
         break;
     }
-*/
 
   return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 }
+*/
 
 void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
 {
@@ -1016,44 +1035,42 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
       break;
   }
 */
-  wxEventType eventTyp = wxEVT_NULL;
   switch (param)
   {
     case EN_SETFOCUS:
-      eventTyp = wxEVENT_TYPE_SET_FOCUS;
-      break;
     case EN_KILLFOCUS:
-      eventTyp = wxEVENT_TYPE_KILL_FOCUS;
+      {
+        wxFocusEvent event(param == EN_KILLFOCUS ? wxEVT_KILL_FOCUS
+                                                 : wxEVT_SET_FOCUS,
+                           m_windowId);
+        event.SetEventObject( this );
+        ProcessEvent(event);
+      }
       break;
-    case EN_UPDATE:
-	  break;
-    case EN_CHANGE:
-      eventTyp = wxEVENT_TYPE_TEXT_COMMAND;
-      break;
-    case EN_ERRSPACE:
-      break;
-    case EN_MAXTEXT:
-      break;
-    case EN_HSCROLL:
-       break;
-    case EN_VSCROLL:
-      break;
-    default:
-      break;
-  }
-  if (eventTyp != 0)
-  {
-    wxCommandEvent event(eventTyp, m_windowId);
-	wxString val(GetValue());
-	if ( !val.IsNull() )
-      event.m_commandString = WXSTRINGCAST val;
-    event.SetEventObject( this );
-    ProcessCommand(event);
 
-    return TRUE;
+    case EN_CHANGE:
+      {
+        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+        wxString val(GetValue());
+        if ( !val.IsNull() )
+          event.m_commandString = WXSTRINGCAST val;
+        event.SetEventObject( this );
+        ProcessCommand(event);
+      }
+      break;
+
+    // the other notification messages are not processed
+    case EN_UPDATE:
+    case EN_ERRSPACE:
+    case EN_MAXTEXT:
+    case EN_HSCROLL:
+    case EN_VSCROLL:
+    default:
+      return FALSE;
   }
-  else
-    return FALSE;
+
+  // processed
+  return TRUE;
 }
 
 
