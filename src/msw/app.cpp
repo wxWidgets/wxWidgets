@@ -100,16 +100,16 @@ extern void wxSetKeyboardHook(bool doIt);
 // NB: all "NoRedraw" classes must have the same names as the "normal" classes
 //     with NR suffix - wxWindow::MSWCreate() supposes this
 #ifdef __WXWINCE__
-      wxChar *wxCanvasClassName;
-      wxChar *wxCanvasClassNameNR;
+WXDLLIMPEXP_CORE       wxChar *wxCanvasClassName;
+WXDLLIMPEXP_CORE       wxChar *wxCanvasClassNameNR;
 #else
-const wxChar *wxCanvasClassName        = wxT("wxWindowClass");
-const wxChar *wxCanvasClassNameNR      = wxT("wxWindowClassNR");
+WXDLLIMPEXP_CORE const wxChar *wxCanvasClassName        = wxT("wxWindowClass");
+WXDLLIMPEXP_CORE const wxChar *wxCanvasClassNameNR      = wxT("wxWindowClassNR");
 #endif
-const wxChar *wxMDIFrameClassName      = wxT("wxMDIFrameClass");
-const wxChar *wxMDIFrameClassNameNoRedraw = wxT("wxMDIFrameClassNR");
-const wxChar *wxMDIChildFrameClassName = wxT("wxMDIChildFrameClass");
-const wxChar *wxMDIChildFrameClassNameNoRedraw = wxT("wxMDIChildFrameClassNR");
+WXDLLIMPEXP_CORE const wxChar *wxMDIFrameClassName      = wxT("wxMDIFrameClass");
+WXDLLIMPEXP_CORE const wxChar *wxMDIFrameClassNameNoRedraw = wxT("wxMDIFrameClassNR");
+WXDLLIMPEXP_CORE const wxChar *wxMDIChildFrameClassName = wxT("wxMDIChildFrameClass");
+WXDLLIMPEXP_CORE const wxChar *wxMDIChildFrameClassNameNoRedraw = wxT("wxMDIChildFrameClassNR");
 
 // ----------------------------------------------------------------------------
 // private functions
