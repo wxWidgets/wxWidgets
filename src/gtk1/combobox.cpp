@@ -12,6 +12,7 @@
 #endif
 
 #include "wx/combobox.h"
+#include "wx/settings.h"
 
 #include <wx/intl.h>
 
@@ -145,7 +146,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     gtk_signal_connect( GTK_OBJECT(GTK_COMBO(m_widget)->entry), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
-    SetBackgroundColour( parent->GetBackgroundColour() );
+    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_WINDOW ) );
     SetForegroundColour( parent->GetForegroundColour() );
     SetFont( parent->GetFont() );
 
@@ -590,7 +591,7 @@ void wxComboBox::ApplyWidgetStyle()
 {
     SetWidgetStyle();
 
-    gtk_widget_set_style( GTK_COMBO(m_widget)->button, m_widgetStyle );
+//    gtk_widget_set_style( GTK_COMBO(m_widget)->button, m_widgetStyle );
     gtk_widget_set_style( GTK_COMBO(m_widget)->entry, m_widgetStyle );
     gtk_widget_set_style( GTK_COMBO(m_widget)->list, m_widgetStyle );
 

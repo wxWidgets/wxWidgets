@@ -17,6 +17,7 @@
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/checklst.h"
+#include "wx/settings.h"
 
 #if wxUSE_TOOLTIPS
 #include "wx/tooltip.h"
@@ -287,7 +288,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     PostCreation();
 
-    SetBackgroundColour( parent->GetBackgroundColour() );
+    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_WINDOW ) );
     SetForegroundColour( parent->GetForegroundColour() );
     SetFont( parent->GetFont() );
 

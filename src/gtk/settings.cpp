@@ -56,6 +56,7 @@
 
 #define SHIFT (8*(sizeof(short int)-sizeof(char)))
 
+wxColour *g_systemWinColour          = (wxColour *) NULL;
 wxColour *g_systemBtnFaceColour      = (wxColour *) NULL;
 wxColour *g_systemBtnShadowColour    = (wxColour *) NULL;
 wxColour *g_systemBtnHighlightColour = (wxColour *) NULL;
@@ -65,11 +66,12 @@ wxFont *g_systemFont = (wxFont *) NULL;
 
 void wxSystemSettings::Done() 
 {
-    wxDELETE(g_systemBtnFaceColour);
-    wxDELETE(g_systemBtnShadowColour);
-    wxDELETE(g_systemBtnHighlightColour);
-    wxDELETE(g_systemHighlightColour);
-    wxDELETE(g_systemFont);
+    delete g_systemWinColour;
+    delete g_systemBtnFaceColour;
+    delete g_systemBtnShadowColour;
+    delete g_systemBtnHighlightColour;
+    delete g_systemHighlightColour;
+    delete g_systemFont;
 }
 
 wxColour wxSystemSettings::GetSystemColour( int index )
@@ -81,7 +83,6 @@ wxColour wxSystemSettings::GetSystemColour( int index )
     case wxSYS_COLOUR_ACTIVECAPTION:
     case wxSYS_COLOUR_INACTIVECAPTION:
     case wxSYS_COLOUR_MENU:
-    case wxSYS_COLOUR_WINDOW:
     case wxSYS_COLOUR_WINDOWFRAME:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_INACTIVEBORDER:
@@ -96,6 +97,18 @@ wxColour wxSystemSettings::GetSystemColour( int index )
 			style->bg[0].blue >> SHIFT );
       }
       return *g_systemBtnFaceColour;
+    }
+    case wxSYS_COLOUR_WINDOW:
+    {
+      GtkStyle *style = gtk_widget_get_default_style();
+      if (!g_systemWinColour)
+      {
+        g_systemWinColour = 
+	  new wxColour( style->base[0].red >> SHIFT,
+	                style->base[0].green >> SHIFT,
+			style->base[0].blue >> SHIFT );
+      }
+      return *g_systemWinColour;
     }
     case wxSYS_COLOUR_GRAYTEXT:
     case wxSYS_COLOUR_BTNSHADOW:
