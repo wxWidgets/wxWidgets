@@ -563,13 +563,10 @@ void wxSizer::DeleteWindows()
 
 wxSize wxSizer::Fit( wxWindow *window )
 {
-    wxSize size;
-    if (window->IsTopLevel())
-        size = FitSize( window );
-    else
-        size = GetMinWindowSize( window );
+    wxSize size(window->IsTopLevel() ? FitSize(window)
+                                     : GetMinWindowSize(window));
 
-    window->SetSize( size );
+    window->SetClientSize( size );
 
     return size;
 }
