@@ -12,6 +12,10 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/colour.h"
+#endif
+
 #include "wx/gdicmn.h"
 #define INCL_GPI
 #define INCL_PM
