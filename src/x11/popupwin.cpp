@@ -102,11 +102,7 @@ bool wxPopupWindow::Show( bool show )
 {
     bool ret = wxWindowX11::Show( show );
 
-#if 0    
-    int x,y;
-    GetSize( &x, &y );
-    printf( "popup size %d, %d\n", x, y );
-#endif
+    Raise();
     
     return ret;
 }
