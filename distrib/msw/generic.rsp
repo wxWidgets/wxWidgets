@@ -67,6 +67,7 @@ src/makeenvs/*.env
 src/make.env
 src/makeprog.env
 src/makelib.env
+src/files.lst
 
 src/*.inc
 src/mkdir
