@@ -72,6 +72,8 @@
 #elif defined(__MWERKS__)
     #if __option(longlong)
         #define wxLongLong_t long long
+        #define wxLongLongSuffix ll
+        #define wxLongLongFmtSpec _T("ll")
     #else
         #error "The 64 bit integer support in CodeWarrior has been disabled."
         #error "See the documentation on the 'longlong' pragma."
