@@ -130,19 +130,19 @@ inline WORD wxMSW_ctype(wxChar ch)
   return ret;
 }
 
-int WXDLLEXPORT wxIsalnum(wxChar ch) { return IsCharAlphaNumeric(ch); }
-int WXDLLEXPORT wxIsalpha(wxChar ch) { return IsCharAlpha(ch); }
-int WXDLLEXPORT wxIsctrl(wxChar ch) { return wxMSW_ctype(ch) & C1_CNTRL; }
-int WXDLLEXPORT wxIsdigit(wxChar ch) { return wxMSW_ctype(ch) & C1_DIGIT; }
-int WXDLLEXPORT wxIsgraph(wxChar ch) { return wxMSW_ctype(ch) & (C1_DIGIT|C1_PUNCT|C1_ALPHA); }
-int WXDLLEXPORT wxIslower(wxChar ch) { return IsCharLower(ch); }
-int WXDLLEXPORT wxIsprint(wxChar ch) { return wxMSW_ctype(ch) & (C1_DIGIT|C1_SPACE|C1_PUNCT|C1_ALPHA); }
-int WXDLLEXPORT wxIspunct(wxChar ch) { return wxMSW_ctype(ch) & C1_PUNCT; }
-int WXDLLEXPORT wxIsspace(wxChar ch) { return wxMSW_ctype(ch) & C1_SPACE; }
-int WXDLLEXPORT wxIsupper(wxChar ch) { return IsCharUpper(ch); }
-int WXDLLEXPORT wxIsxdigit(wxChar ch) { return wxMSW_ctype(ch) & C1_XDIGIT; }
-int WXDLLEXPORT wxTolower(wxChar ch) { return (wxChar)CharLower((LPTSTR)(ch)); }
-int WXDLLEXPORT wxToupper(wxChar ch) { return (wxChar)CharUpper((LPTSTR)(ch)); }
+WXDLLEXPORT int wxIsalnum(wxChar ch) { return IsCharAlphaNumeric(ch); }
+WXDLLEXPORT int wxIsalpha(wxChar ch) { return IsCharAlpha(ch); }
+WXDLLEXPORT int wxIsctrl(wxChar ch) { return wxMSW_ctype(ch) & C1_CNTRL; }
+WXDLLEXPORT int wxIsdigit(wxChar ch) { return wxMSW_ctype(ch) & C1_DIGIT; }
+WXDLLEXPORT int wxIsgraph(wxChar ch) { return wxMSW_ctype(ch) & (C1_DIGIT|C1_PUNCT|C1_ALPHA); }
+WXDLLEXPORT int wxIslower(wxChar ch) { return IsCharLower(ch); }
+WXDLLEXPORT int wxIsprint(wxChar ch) { return wxMSW_ctype(ch) & (C1_DIGIT|C1_SPACE|C1_PUNCT|C1_ALPHA); }
+WXDLLEXPORT int wxIspunct(wxChar ch) { return wxMSW_ctype(ch) & C1_PUNCT; }
+WXDLLEXPORT int wxIsspace(wxChar ch) { return wxMSW_ctype(ch) & C1_SPACE; }
+WXDLLEXPORT int wxIsupper(wxChar ch) { return IsCharUpper(ch); }
+WXDLLEXPORT int wxIsxdigit(wxChar ch) { return wxMSW_ctype(ch) & C1_XDIGIT; }
+WXDLLEXPORT int wxTolower(wxChar ch) { return (wxChar)CharLower((LPTSTR)(ch)); }
+WXDLLEXPORT int wxToupper(wxChar ch) { return (wxChar)CharUpper((LPTSTR)(ch)); }
 #endif
 
 #ifndef wxStrdup
@@ -188,11 +188,147 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 #endif
 
 #ifndef wxSetlocale
-wxChar * WXDLLEXPORT wxSetlocale(int category, const wxChar *locale)
+WXDLLEXPORT wxChar * wxSetlocale(int category, const wxChar *locale)
 {
   setlocale(category, wxConvLibc.cWX2MB(locale));
   // FIXME
   return (wxChar *)NULL;
+}
+#endif
+
+#ifdef wxNEED_WX_STRING_H
+WXDLLEXPORT wxChar * wxStrcat(wxChar *dest, const wxChar *src)
+{
+  wxChar *ret = dest;
+  while (*dest) dest++;
+  while ((*dest++ = *src++));
+  return ret;
+}
+
+WXDLLEXPORT wxChar * wxStrchr(const wxChar *s, wxChar c)
+{
+  while (*s && *s != c) s++;
+  return (*s) ? (wxChar *)s : (wxChar *)NULL;
+}
+
+WXDLLEXPORT int wxStrcmp(const wxChar *s1, const wxChar *s2)
+{
+  while ((*s1 == *s2) && *s1) s1++, s2++;
+  if ((wxUChar)*s1 < (wxUChar)*s2) return -1;
+  if ((wxUChar)*s1 > (wxUChar)*s2) return 1;
+  return 0;
+}
+
+WXDLLEXPORT wxChar * wxStrcpy(wxChar *dest, const wxChar *src)
+{
+  wxChar *ret = dest;
+  while ((*dest++ = *src++));
+  return ret;
+}
+
+WXDLLEXPORT wxChar * wxStrncat(wxChar *dest, const wxChar *src, size_t n)
+{
+  wxChar *ret = dest;
+  while (*dest) dest++;
+  while (n && (*dest++ = *src++)) n--;
+  return ret;
+}
+
+WXDLLEXPORT wxChar * wxStrncpy(wxChar *dest, const wxChar *src, size_t n)
+{
+  wxChar *ret = dest;
+  while (n && (*dest++ = *src++)) n--;
+  while (n) *dest++=0, n--; // the docs specify padding with zeroes
+  return ret;
+}
+
+WXDLLEXPORT wxChar * wxStrpbrk(const wxChar *s, const wxChar *accept)
+{
+  while (*s && !wxStrchr(accept, *s)) s++;
+  return (*s) ? (wxChar *)s : (wxChar *)NULL;
+}
+
+WXDLLEXPORT wxChar * wxStrrchr(const wxChar *s, wxChar c)
+{
+  wxChar *ret = (wxChar *)NULL;
+  while (*s) {
+    if (*s == c) ret = (wxChar *)s;
+    s++;
+  }
+  return ret;
+}
+
+WXDLLEXPORT size_t wxStrspn(const wxChar *s, const wxChar *accept)
+{
+  size_t len = 0;
+  while (wxStrchr(accept, *s++)) len++;
+  return len;
+}
+
+WXDLLEXPORT wxChar * wxStrstr(const wxChar *haystack, const wxChar *needle)
+{
+  wxChar *fnd;
+  while ((fnd = wxStrchr(haystack, *needle))) {
+    if (!wxStrcmp(fnd, needle)) return fnd;
+    haystack = fnd + 1;
+  }
+  return (wxChar *)NULL;
+}
+
+WXDLLEXPORT double wxStrtod(const wxChar *nptr, wxChar **endptr)
+{
+  const wxChar *start = nptr;
+
+  // FIXME: only correct for C locale
+  while (wxIsspace(*nptr)) nptr++;
+  if (*nptr == _T('+') || *nptr == _T('-')) nptr++;
+  while (wxIsdigit(*nptr)) nptr++;
+  if (*nptr == _T('.')) {
+    nptr++;
+    while (wxIsdigit(*nptr)) nptr++;
+  }
+  if (*nptr == _T('E') || *nptr == _T('e')) {
+    nptr++;
+    if (*nptr == _T('+') || *nptr == _T('-')) nptr++;
+    while (wxIsdigit(*nptr)) nptr++;
+  }
+
+  wxString data(nptr, nptr-start);
+  wxWX2MBbuf dat = data.mb_str(wxConvLibc);
+  char *rdat = MBSTRINGCAST dat;
+  double ret = strtod(dat, &rdat);
+
+  if (endptr) *endptr = (wxChar *)(start + (rdat - (const char *)dat));
+
+  return ret;
+}
+
+WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
+{
+  const wxChar *start = nptr;
+
+  // FIXME: only correct for C locale
+  while (wxIsspace(*nptr)) nptr++;
+  if (*nptr == _T('+') || *nptr == _T('-')) nptr++;
+  if (((base == 0) || (base == 16)) &&
+      (nptr[0] == _T('0') && nptr[1] == _T('x'))) {
+    nptr += 2;
+    base = 16;
+  }
+  else if ((base == 0) && (nptr[0] == _T('0'))) base = 8;
+  else if (base == 0) base = 10;
+
+  while ((wxIsdigit(*nptr) && (*nptr - _T('0') < base)) ||
+         (wxIsalpha(*nptr) && (wxToupper(*nptr) - _T('A') + 10 < base))) nptr++;
+
+  wxString data(nptr, nptr-start);
+  wxWX2MBbuf dat = data.mb_str(wxConvLibc);
+  char *rdat = MBSTRINGCAST dat;
+  long int ret = strtol(dat, &rdat, base);
+
+  if (endptr) *endptr = (wxChar *)(start + (rdat - (const char *)dat));
+
+  return ret;
 }
 #endif
 
