@@ -5005,3 +5005,9 @@ void wxTreeListCtrl::Refresh(bool erase, const wxRect* rect)
 void wxTreeListCtrl::SetFocus()
 { m_main_win->SetFocus(); }
 
+
+wxSize wxTreeListCtrl::DoGetBestSize() const
+{
+    // something is better than nothing...
+    return wxSize(100,80);
+}

@@ -211,6 +211,8 @@ public:
     virtual bool ShouldInheritColours() const { return false; }
     virtual void SetFocus();
 
+    virtual wxSize DoGetBestSize() const;
+    
     // implementation
     // --------------
 

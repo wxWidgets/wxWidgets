@@ -3476,6 +3476,15 @@ void wxGenericTreeCtrl::OnGetToolTip( wxTreeEvent &event )
 }
 
 
+wxSize wxGenericTreeCtrl::DoGetBestSize() const
+{
+    // something is better than nothing...
+    // 100x80 is what the MSW version will get from the default
+    // wxControl::DoGetBestSize
+    return wxSize(100,80);
+}
+
+
 // NOTE: If using the wxListBox visual attributes works everywhere then this can
 // be removed, as well as the #else case below.
 #define _USE_VISATTR 0

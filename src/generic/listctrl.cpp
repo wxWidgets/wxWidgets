@@ -5351,6 +5351,14 @@ void wxGenericListCtrl::SetFocus()
         m_mainWin->SetFocus();
 }
 
+wxSize wxGenericListCtrl::DoGetBestSize() const
+{
+    // Something is better than nothing...
+    // 100x80 is what the MSW version will get from the default
+    // wxControl::DoGetBestSize
+    return wxSize(100,80);
+}
+
 // ----------------------------------------------------------------------------
 // virtual list control support
 // ----------------------------------------------------------------------------

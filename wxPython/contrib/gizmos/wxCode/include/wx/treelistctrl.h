@@ -530,6 +530,8 @@ public:
     wxTreeListMainWindow* GetMainWindow() const
     { return m_main_win; }
 
+    virtual wxSize DoGetBestSize() const;
+    
 protected:
     // header window, responsible for column visualization and manipulation
     wxTreeListHeaderWindow* m_header_win;

@@ -391,6 +391,8 @@ public:
     void OnGetToolTip( wxTreeEvent &event );
     void OnInternalIdle( );
 
+    virtual wxSize DoGetBestSize() const;
+
     virtual wxVisualAttributes GetDefaultAttributes() const
     {
         return GetClassDefaultAttributes(GetWindowVariant());
