@@ -59,10 +59,6 @@
 
 #ifndef WX_PRECOMP
   #include "wx/string.h"
-  #if wxUSE_GUI
-    #include "wx/icon.h"
-
-  #endif
 #endif //WX_PRECOMP
 
 
