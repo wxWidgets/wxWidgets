@@ -36,6 +36,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_formatconverter.obj \
 	$(OBJS)\test_regex.obj \
 	$(OBJS)\test_wxregex.obj \
+	$(OBJS)\test_fileconf.obj \
 	$(OBJS)\test_filename.obj \
 	$(OBJS)\test_filesys.obj \
 	$(OBJS)\test_arrays.obj \
@@ -190,6 +191,9 @@ $(OBJS)\test_regex.obj: .\regex\regex.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_wxregex.obj: .\regex\wxregex.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_fileconf.obj: .\fileconf\fileconf.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_filename.obj: .\filename\filename.cpp

@@ -455,6 +455,10 @@ SOURCE=.\streams\ffilestream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\fileconf\fileconf.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\filename\filename.cpp
 # End Source File
 # Begin Source File
