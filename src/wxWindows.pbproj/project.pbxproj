@@ -412,7 +412,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"${DERIVED_SOURCES_DIR}/include/wx\" ]; then\n    mkdir -p \"${DERIVED_SOURCES_DIR}/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\ncp \"$SRCROOT/../include/wx/mac/setup0.h\" \"${DERIVED_SOURCES_DIR}/include/wx/setup.h\" || exit 1\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
+			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${DERIVED_SOURCES_DIR}\"";
 		};
 		CA89560204D6EE8C00000080 = {
 			buildActionMask = 2147483647;
@@ -3205,7 +3205,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"${DERIVED_SOURCES_DIR}/include/wx\" ]; then\n    mkdir -p \"${DERIVED_SOURCES_DIR}/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\ncp \"$SRCROOT/../include/wx/mac/setup0.h\" \"${DERIVED_SOURCES_DIR}/include/wx/setup.h\" || exit 1\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
+			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${DERIVED_SOURCES_DIR}\"";
 		};
 		CA8957A704D707E000000080 = {
 			buildActionMask = 2147483647;
@@ -6136,7 +6136,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"${DERIVED_SOURCES_DIR}/include/wx\" ]; then\n    mkdir -p \"${DERIVED_SOURCES_DIR}/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\ncp \"$SRCROOT/../include/wx/mac/setup0.h\" \"${DERIVED_SOURCES_DIR}/include/wx/setup.h\" || exit 1\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
+			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${DERIVED_SOURCES_DIR}\"";
 		};
 		F5955E9D02CBA8B501000133 = {
 			fileRef = F5A8619E01FA022C0175ACA7;
@@ -16235,7 +16235,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Create wx include directory if necessary\nif [ ! -d \"${DERIVED_SOURCES_DIR}/include/wx\" ]; then\n    mkdir -p \"${DERIVED_SOURCES_DIR}/include/wx\" || exit 1\nfi\n# Copy setup0.h to setup.h\ncp \"$SRCROOT/../include/wx/mac/setup0.h\" \"${DERIVED_SOURCES_DIR}/include/wx/setup.h\" || exit 1\n# Generate lexer\nif [ ! -f \"$SYMROOT/lexer.c\" -o \"$SYMROOT/lexer.c\" -ot \"$SRCROOT/common/lexer.l\" ]; then\n    flex \"$SRCROOT/common/lexer.l\" || exit 1\n    sed -e \"s;$SRCROOT/common/lex.yy.c;lexer.l;g\" < lex.yy.c | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/lexer.c\" || exit 1\n    rm -f lex.yy.c\nfi\n# Generate parser\nif [ ! -f \"$SYMROOT/parser.c\" -o \"$SYMROOT/parser.c\" -ot \"$SRCROOT/common/parser.y\" ]; then\n    bison -y \"$SRCROOT/common/parser.y\" || exit 1\n    sed -e \"s;$SRCROOT/common/y.tab.c;parser.y;g\" < y.tab.c | \\\n    sed -e \"s/BUFSIZ/5000/g\"            | \\\n    sed -e \"s/YYLMAX 200/YYLMAX 5000/g\" | \\\n    sed -e \"s/yy/PROIO_yy/g\"            | \\\n    sed -e \"s/input/PROIO_input/g\"      | \\\n    sed -e \"s/unput/PROIO_unput/g\"      > \"$SYMROOT/parser.c\" || exit 1\n    rm -f y.tab.c\nfi";
+			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${DERIVED_SOURCES_DIR}\"";
 		};
 		F5CC83D90379C17C01000133 = {
 			fileEncoding = 30;
