@@ -1,7 +1,7 @@
 \section{\class{wxTextCtrl}}\label{wxtextctrl}
 
 A text control allows text to be displayed and edited. It may be
-single line or multiline.
+single line or multi-line.
 
 \wxheading{Derived from}
 
@@ -22,15 +22,15 @@ Windows.}
 \twocolitem{\windowstyle{wxTE\_MULTILINE}}{The text control allows multiple lines.}
 \twocolitem{\windowstyle{wxTE\_PASSWORD}}{The text will be echoed as asterisks.}
 \twocolitem{\windowstyle{wxTE\_READONLY}}{The text will not be user-editable.}
-\twocolitem{\windowstyle{wxHSCROLL}}{A vertical scrollbar will be present.}
+\twocolitem{\windowstyle{wxHSCROLL}}{A horizontal scrollbar will be created.}
 \end{twocollist}
 
-See also \helpref{window styles overview}{windowstyles}.
+See also \helpref{window styles overview}{windowstyles} and 
+\helpref{wxtextctrlconstr}.
 
 \wxheading{Remarks}
 
-This class multiply-inherits from {\bf streambuf} where compilers allow, allowing code such
-as the following:
+This class multiply-inherits from {\bf streambuf} where compilers allow, allowing code such as the following:
 
 {\small%
 \begin{verbatim}
@@ -97,9 +97,19 @@ Constructor, creating and showing a text control.
 
 \wxheading{Remarks}
 
+The horizontal scrollbar ({\bf wxTE\_HSCROLL} style flag) will only be created for multi-line text controls. 
+Without a horizontal scrollbar, text lines that don't fit in the control's 
+size will be wrapped (but no newline character is inserted). Single line
+controls don't have a horizontal scrollbar, the text is automatically scrolled
+so that the \helpref{insertion point}{wxtextctrlgetinsertionpoint} is always 
+visible.
+
 Under Windows, if the {\bf wxTE\_MULTILINE} style is used, the window is implemented
 as a Windows rich text control with unlimited capacity. Otherwise, normal edit control limits
 apply.
+
+For the GTK, the single line text control is implemented as a gtk\_entry, 
+while the multi-line control is a gtk\_text.
 
 \wxheading{See also}
 
@@ -149,19 +159,38 @@ Resets the internal `modified' flag as if the current edits had been saved.
 
 \constfunc{virtual long}{GetInsertionPoint}{\void}
 
-Returns the insertion point.
+Returns the insertion point. This is defined as the zero based index of the
+character position to the right of the insertion point. For example, if
+the insertion point is at the end of the text control, it is equal to
+both \helpref{GetValue()}{wxtextctrlgetvalue}.Length() and 
+\helpref{GetLastPosition()}{wxtextctrlgetlastposition}. 
+
+The following code snippet safely returns the character at the insertion
+point or the zero character if the point is at the end of the control.
+
+{\small%
+\begin{verbatim}
+  char GetCurrentChar(wxTextCtrl *tc) {
+    if (tc->GetInsertionPoint() == tc->GetLastPosition())
+      return '\0';
+    return tc->GetValue[tc->GetInsertionPoint()];
+  }	
+\end{verbatim}
+}%
 
 \membersection{wxTextCtrl::GetLastPosition}\label{wxtextctrlgetlastposition}
 
 \constfunc{virtual long}{GetLastPosition}{\void}
 
-Returns the last position in the text control.
+Returns the zero based index of the last position in the text control, 
+which is equal to the number of characters in the control.
 
 \membersection{wxTextCtrl::GetLineLength}\label{wxtextctrlgetlinelength}
 
 \constfunc{int}{GetLineLength}{\param{long}{ lineNo}}
 
-Gets the length of the specified line.
+Gets the length of the specified line, not including any trailing newline 
+character(s).
 
 \wxheading{Parameters}
 
@@ -175,7 +204,8 @@ The length of the line, or -1 if {\it lineNo} was invalid.
 
 \constfunc{wxString}{GetLineText}{\param{long}{ lineNo}}
 
-Returns the contents of a given line in the text control.
+Returns the contents of a given line in the text control, not including
+any trailing newline character(s).
 
 \wxheading{Parameters}
 
@@ -190,6 +220,16 @@ The contents of the line.
 \constfunc{int}{GetNumberOfLines}{\void}
 
 Returns the number of lines in the text control buffer.
+
+\wxheading{Remarks}
+
+Note that even empty text controls have one line (where the insertion point
+is), so GetNumberOfLines() never returns 0.
+
+For gtk\_text (multi-line) controls, the number of lines is
+calculated by actually counting newline characters in the buffer. You
+may wish to avoid using functions that work with line numbers if you are
+working with controls that contain large amounts of text.
 
 \membersection{wxTextCtrl::GetValue}\label{wxtextctrlgetvalue}
 
@@ -256,6 +296,10 @@ is to load the first dropped file into the control.
 
 \docparam{event}{The drop files event.}
 
+\wxheading{Remarks}
+
+This is not yet implemented for the GTK.
+
 \wxheading{See also}
 
 \helpref{wxDropFilesEvent}{wxdropfilesevent}
@@ -270,25 +314,35 @@ Pastes text from the clipboard to the text item.
 
 \constfunc{long}{PositionToXY}{\param{long }{pos}, \param{long *}{x}, \param{long *}{y}}
 
-Converts given character and line position to a position.
+Converts given position to a zero-based column, line number pair.
 
 \wxheading{Parameters}
 
 \docparam{pos}{Position.}
 
-\docparam{x}{Receives character position.}
+\docparam{x}{Receives zero based column number.}
 
-\docparam{y}{Receives line position.}
+\docparam{y}{Receives zero based line number.}
+
+\wxheading{Return value}
+
+Non-zero on success, zero on failure (most likely due to a too large position
+parameter).
 
 \wxheading{See also}
 
 \helpref{wxTextCtrl::XYToPosition}{wxtextctrlxytoposition}
 
+\pythonnote{In Python, PositionToXY() returns a tuple containing the x and
+y values, so (x,y) = PositionToXY() is equivalent to the call described
+above.}
+
 \membersection{wxTextCtrl::Remove}\label{wxtextctrlremove}
 
 \func{virtual void}{Remove}{\param{long}{ from}, \param{long}{ to}}
 
-Removes the text between the two positions.
+Removes the text starting at the first given position up to (but not including)
+the character at the last position.
 
 \wxheading{Parameters}
 
@@ -300,7 +354,8 @@ Removes the text between the two positions.
 
 \func{virtual void}{Replace}{\param{long}{ from}, \param{long}{ to}, \param{const wxString\& }{value}}
 
-Replaces the text between two positions with the given text.
+Replaces the text starting at the first position up to (but not including) 
+the character at the last position with the given text.
 
 \wxheading{Parameters}
 
@@ -318,7 +373,7 @@ Saves the contents of the control in a text file.
 
 \wxheading{Parameters}
 
-\docparam{filename}{The name of file in which to save the text.}
+\docparam{filename}{The name of the file in which to save the text.}
 
 \wxheading{Return value}
 
@@ -328,7 +383,8 @@ TRUE if the operation was successful, FALSE otherwise.
 
 \func{virtual void}{SetEditable}{\param{const bool}{ editable}}
 
-Makes the text item editable or read-only.
+Makes the text item editable or read-only, overriding the {\bf wxTE\_READONLY}
+flag.
 
 \wxheading{Parameters}
 
@@ -338,7 +394,7 @@ Makes the text item editable or read-only.
 
 \func{virtual void}{SetInsertionPoint}{\param{long}{ pos}}
 
-Sets the insertion point. Windows only. ??
+Sets the insertion point at the given position.
 
 \wxheading{Parameters}
 
@@ -348,13 +404,14 @@ Sets the insertion point. Windows only. ??
 
 \func{virtual void}{SetInsertionPointEnd}{\void}
 
-Sets the insertion point at the end of the text control.
+Sets the insertion point at the end of the text control. This is equivalent
+to \helpref{SetInsertionPoint}{wxtextctrlsetinsertionpoint}(\helpref{GetLastPosition}{wxtextctrlgetlastposition}()).
 
 \membersection{wxTextCtrl::SetSelection}\label{wxtextctrlsetselection}
 
 \func{virtual void}{SetSelection}{\param{long}{ from}, \param{long}{ to}}
 
-Selects the text between the two positions.
+Selects the text starting at the first position up to (but not including) the character at the last position.
 
 \wxheading{Parameters}
 
@@ -386,7 +443,7 @@ Makes the line containing the given position visible.
 
 \func{void}{WriteText}{\param{const wxString\& }{ text}}
 
-Writes the text into the text control at the current position.
+Writes the text into the text control at the current insertion position. 
 
 \wxheading{Parameters}
 
@@ -396,20 +453,21 @@ Writes the text into the text control at the current position.
 
 Newlines in the text string
 are the only control characters allowed, and they will cause appropriate
-line breaks.  See \helpref{wxTextCtrl::\cinsert}{wxtextctrlinsert} for more convenient ways of writing to the
-window.
+line breaks.  See \helpref{wxTextCtrl::\cinsert}{wxtextctrlinsert} for more convenient ways of writing to the window.
+
+After the write operation, the insertion point will be at the end of the inserted text, so subsequent write operations will be appended. To append text after the user may have interacted with the control, call \helpref{wxTextCtrl::SetInsertionPointEnd}{wxtextctrlsetinsertionpointend} before writing.
 
 \membersection{wxTextCtrl::XYToPosition}\label{wxtextctrlxytoposition}
 
 \func{long}{XYToPosition}{\param{long}{ x}, \param{long}{ y}}
 
-Converts the given character and line position to a position.
+Converts the given zero based column and line number to a position.
 
 \wxheading{Parameters}
 
-\docparam{x}{The character position.}
+\docparam{x}{The column number.}
 
-\docparam{y}{The line position.}
+\docparam{y}{The line number.}
 
 \wxheading{Return value}
 
