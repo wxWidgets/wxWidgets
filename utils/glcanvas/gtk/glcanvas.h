@@ -94,6 +94,13 @@ private:
 class wxGLCanvas: public wxScrolledWindow
 {
 public:
+   inline wxGLCanvas() {
+      m_glContext = (wxGLContext*) NULL;
+      m_sharedContext = (wxGLContext*) NULL;
+      m_glWidget = (GtkWidget*) NULL;
+      m_vi = (void*) NULL;
+      m_exposed = FALSE;
+   }
    wxGLCanvas( wxWindow *parent, wxWindowID id = -1, 
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, 
@@ -107,16 +114,17 @@ public:
         long style = 0, const wxString& name = "GLCanvas", 
         int *attribList = (int*) NULL, 
         const wxPalette& palette = wxNullPalette );
+   wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared = (wxGLCanvas *)NULL,
+        wxWindowID id = -1, 
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, 
+        long style = 0, const wxString& name = "GLCanvas", 
+        int *attribList = (int*) NULL, 
+        const wxPalette& palette = wxNullPalette );
 
-   inline wxGLCanvas() {
-      m_glContext = (wxGLContext*) NULL;
-      m_sharedContext = (wxGLContext*) NULL;
-      m_glWidget = (GtkWidget*) NULL;
-      m_vi = (void*) NULL;
-      m_exposed = FALSE;
-   }
-
-   bool Create( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
+   bool Create( wxWindow *parent, 
+	const wxGLContext *shared = (wxGLContext*)NULL,
+	const wxGLCanvas *shared_context_of = (wxGLCanvas*)NULL,
         wxWindowID id = -1, 
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, 
@@ -140,6 +148,7 @@ public:
   
     wxGLContext      *m_glContext,
                      *m_sharedContext;
+    wxGLCanvas       *m_sharedContextOf;
     void             *m_vi;
     GtkWidget        *m_glWidget;
     bool              m_exposed;

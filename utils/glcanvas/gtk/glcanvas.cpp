@@ -149,7 +149,10 @@ wxPalette wxGLContext::CreateDefaultPalette()
 static gint
 gtk_glwindow_realized_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
-    win->m_glContext = new wxGLContext( TRUE, win, wxNullPalette, win->m_sharedContext );
+    wxGLContext *share= win->m_sharedContext;
+    if (share==NULL && win->m_sharedContextOf) share=win->m_sharedContextOf->GetContext();
+
+    win->m_glContext = new wxGLContext( TRUE, win, wxNullPalette, share );
 
     return FALSE;
 }
@@ -242,7 +245,7 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent, wxWindowID id,
                         int *attribList, 
 			const wxPalette& palette )
 {
-    Create( parent, NULL, id, pos, size, style, name, attribList, palette );
+    Create( parent, NULL, NULL, id, pos, size, style, name, attribList, palette );
 }
 
 wxGLCanvas::wxGLCanvas( wxWindow *parent, 
@@ -253,11 +256,23 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent,
                         int *attribList, 
 			const wxPalette& palette )
 {			
-    Create( parent, shared, id, pos, size, style, name, attribList, palette );
+    Create( parent, shared, NULL, id, pos, size, style, name, attribList, palette );
+}
+
+wxGLCanvas::wxGLCanvas( wxWindow *parent, 
+                        const wxGLCanvas *shared,
+                        wxWindowID id,
+                        const wxPoint& pos, const wxSize& size, 
+			long style, const wxString& name,
+                        int *attribList, 
+			const wxPalette& palette )
+{			
+    Create( parent, NULL, shared, id, pos, size, style, name, attribList, palette );
 }
 
 bool wxGLCanvas::Create( wxWindow *parent, 
                          const wxGLContext *shared,
+                         const wxGLCanvas *shared_context_of,
                          wxWindowID id,
                          const wxPoint& pos, const wxSize& size, 
 			 long style, const wxString& name,
@@ -265,6 +280,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
 			 const wxPalette& palette)
 {
     m_sharedContext = (wxGLContext*)shared;  // const_cast
+    m_sharedContextOf = (wxGLCanvas*)shared_context_of;  // const_cast
     m_glContext = (wxGLContext*) NULL;
     
     m_exposed = FALSE;
@@ -356,9 +372,7 @@ wxGLCanvas::~wxGLCanvas()
 {
     XVisualInfo *vi = (XVisualInfo *) m_vi;
     
-    if (vi)
-        XFree( vi );
-    
+    if (vi) XFree( vi );
     if (m_glContext) delete m_glContext;
 }
 
