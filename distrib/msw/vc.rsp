@@ -1,8 +1,3 @@
-wxBaseVC.dsp
-wxBaseVC.dsw
-wxBaseDll.dsp
-wxBaseDll.dsw
-
 src/wxWindows.dsp
 src/wxWindows.dsw
 src/wxUniv.dsp
@@ -157,9 +152,6 @@ samples/oleauto/Oleauto.dsw
 samples/ownerdrw/OwnerDrw.dsp
 samples/ownerdrw/OwnerDrw.dsw
 
-samples/plot/Plot.dsp
-samples/plot/Plot.dsw
-
 samples/png/Png.dsp
 samples/png/Png.dsw
 
@@ -231,8 +223,8 @@ samples/validate/Validate.dsw
 samples/wizard/Wizard.dsp
 samples/wizard/Wizard.dsw
 
-samples/widgets/Treelay.dsp
-samples/widgets/Treelay.dsw
+samples/widgets/widgets.dsp
+samples/widgets/widgets.dsw
 
 samples/opengl/cube/Cube.dsp
 samples/opengl/cube/Cube.dsw
@@ -279,8 +271,8 @@ contrib/samples/ogl/ogledit/OgleditVC.dsw
 contrib/samples/ogl/studio/StudioVC.dsp
 contrib/samples/ogl/studio/StudioVC.dsw
 
-contrib/src/xrc/wxXrcVC.dsp
-contrib/src/xrc/wxXrcVC.dsw
+contrib/src/xrc/XrcVC.dsp
+contrib/src/xrc/XrcVC.dsw
 
 contrib/samples/xrc/XrcDemoVC.dsp
 contrib/samples/xrc/XrcDemoVC.dsw
