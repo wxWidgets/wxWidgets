@@ -1918,8 +1918,9 @@ Dialog is centered on its {\it parent} unless an explicit position is given in
 
 \membersection{::wxGetPasswordFromUser}\label{wxgetpasswordfromuser}
 
-\func{wxString}{wxGetPasswordFromUser}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Input Text"},\\
- \param{const wxString\& }{default\_value = ``"}, \param{wxWindow *}{parent = NULL}}
+\func{wxString}{wxGetPasswordFromUser}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Input text"},\\
+ \param{const wxString\& }{default\_value = ``"}, \param{wxWindow *}{parent = NULL},\\
+ \param{int}{ x = wxDefaultCoord}, \param{int}{ y = wxDefaultCoord}, \param{bool}{ centre = true}}
 
 Similar to \helpref{wxGetTextFromUser}{wxgettextfromuser} but the text entered
 in the dialog is not shown on screen but replaced with stars. This is intended
@@ -1934,7 +1935,7 @@ to be used for entering passwords as the function name implies.
 
 \func{wxString}{wxGetTextFromUser}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Input text"},\\
  \param{const wxString\& }{default\_value = ``"}, \param{wxWindow *}{parent = NULL},\\
- \param{int}{ x = -1}, \param{int}{ y = -1}, \param{bool}{ centre = true}}
+ \param{int}{ x = wxDefaultCoord}, \param{int}{ y = wxDefaultCoord}, \param{bool}{ centre = true}}
 
 Pop up a dialog box with title set to {\it caption}, {\it message}, and a
 \rtfsp{\it default\_value}.  The user may type in text and press OK to return this text,
