@@ -220,9 +220,18 @@ void PreviewFrame::PreviewPanel()
 }
 
 
+#ifdef __WXMSW__
+// avoid Problems with setting the focus to a no longer existing child
+void PreviewFrame::OnActivate(wxActivateEvent &event)
+{
+}
+#endif
 
 BEGIN_EVENT_TABLE(PreviewFrame, wxFrame)
     EVT_ENTER_WINDOW(PreviewFrame::OnMouseEnter)
+#ifdef __WXMSW__
+    EVT_ACTIVATE(PreviewFrame::OnActivate)
+#endif
 END_EVENT_TABLE()
 
 void PreviewFrame::OnMouseEnter(wxMouseEvent& event)

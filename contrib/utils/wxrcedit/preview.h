@@ -57,6 +57,9 @@ class PreviewFrame : public wxFrame
         
         DECLARE_EVENT_TABLE()
         void OnMouseEnter(wxMouseEvent& event);
+#ifdef __WXMSW__
+        void OnActivate(wxActivateEvent &event);
+#endif
 };
 
 
