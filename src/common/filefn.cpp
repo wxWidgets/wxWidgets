@@ -112,7 +112,7 @@
 
 #define _MAXPATHLEN 500
 
-extern char *wxBuffer;
+extern wxChar *wxBuffer;
 
 #ifdef __WXMAC__
 
@@ -978,9 +978,9 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
       (fp2 = fopen (wxUnix2MacFilename( file2 ), "rb")) == NULL ||
       (fp3 = fopen (wxUnix2MacFilename( outfile ), "wb")) == NULL)
 #else
-  if ((fp1 = fopen (WXSTRINGCAST file1, "rb")) == NULL ||
-      (fp2 = fopen (WXSTRINGCAST file2, "rb")) == NULL ||
-      (fp3 = fopen (outfile, "wb")) == NULL)
+  if ((fp1 = wxFopen (WXSTRINGCAST file1, wxT("rb"))) == NULL ||
+      (fp2 = wxFopen (WXSTRINGCAST file2, wxT("rb"))) == NULL ||
+      (fp3 = wxFopen (outfile, wxT("wb"))) == NULL)
 #endif
     {
       if (fp1)
@@ -1020,9 +1020,9 @@ wxCopyFile (const wxString& file1, const wxString& file2)
     return FALSE;
   if ((fd2 = fopen (wxUnix2MacFilename( file2 ), "wb")) == NULL)
 #else
-  if ((fd1 = fopen (WXSTRINGCAST file1, "rb")) == NULL)
+  if ((fd1 = wxFopen (WXSTRINGCAST file1, wxT("rb"))) == NULL)
     return FALSE;
-  if ((fd2 = fopen (WXSTRINGCAST file2, "wb")) == NULL)
+  if ((fd2 = wxFopen (WXSTRINGCAST file2, wxT("wb"))) == NULL)
 #endif
     {
       fclose (fd1);
