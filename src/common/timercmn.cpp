@@ -52,10 +52,11 @@
 #include "windows.h"
 #endif
 
-#if defined(__SUN__) || defined(__OSF__)
+#if defined(__SUN__) || defined(__OSF__) || defined(__FreeBSD__)
 // At least on Sun, ftime is undeclared.
 // Need to be verified on other platforms.
 extern "C" int ftime(struct timeb *tp);
+//extern "C" int gettimeofday(struct timeval *tp, void *);
 // extern "C" time_t time(time_t);
 // #include <sys/timeb.h>
 #if defined(__SVR4__) && !defined(__ALPHA__)
@@ -80,7 +81,7 @@ void wxStartTimer(void)
   gettimeofday(&tp);
 #endif
   wxStartTime = 1000*tp.tv_sec + tp.tv_usec/1000;
-#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || defined(__MINGW32__) || defined(__MWERKS__))
+#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || defined(__MINGW32__) || defined(__MWERKS__) || defined(__FreeBSD__) ) 
   time_t t0;
   struct tm *tp;
   time(&t0);
@@ -107,7 +108,7 @@ long wxGetElapsedTime(bool resetTimer)
   long newTime = 1000*tp.tv_sec + tp.tv_usec / 1000;
   if (resetTimer)
     wxStartTime = newTime;
-#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || defined(__MINGW32__)|| defined(__MWERKS__))
+#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || defined(__MINGW32__)|| defined(__MWERKS__) || defined(__FreeBSD__))
   time_t t0;
   struct tm *tp;
   time(&t0);
@@ -204,7 +205,7 @@ long wxGetCurrentTime(void)
 {
 #if defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) // || defined(__AIXV3__)
   struct timeval tp;
-#if defined(__SYSV__) || (defined (__GNUWIN32__) && !defined (__MINGW32__))
+#if defined(__SYSV__) || (defined (__GNUWIN32__) && !defined (__MINGW32__) || defined(__FreeBSD__))
   gettimeofday(&tp, (struct timezone *)NULL);
 #else
   gettimeofday(&tp);
