@@ -65,6 +65,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{pref}/lib/wx
 %dir %{pref}/lib/wx/include
 %dir %{pref}/lib/wx/include/wx
+%dir %{pref}/lib/wx/include/wx/base
 %{pref}/lib/wx/include/wx/base/setup.h
 %defattr (644, root, root, 755)
 %attr(755, -, -) %{pref}/bin/wxbase-config
