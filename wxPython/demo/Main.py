@@ -30,7 +30,7 @@ import images
 
 _treeList = [
     # new stuff
-    ('Recent Additions and Updates', [
+    ('Recent Additions/Updates', [
         'OGL',
         'FloatCanvas',
         ]),

@@ -10,6 +10,8 @@ fi
 
 rm -r docs/api/*
 
+export PTYHONPATH=$PWD
+
 epydoc --name wxPython \
     --html \
     --output docs/api \
@@ -19,12 +21,21 @@ epydoc --name wxPython \
     --no-private \
     --css docs/wxPython-epydoc.css \
     --docformat restructuredtext \
+    --url http://wxPython.org/ \
+    --no-frames \
     $* \
-    ./wx/__init__.py
+    wx
+
+#    wx/__init__.py \
+
+#    wx/calendar.py wx/grid.py wx/html.py wx/wizard.py \
+#    wx/gizmos.py wx/ogl.py wx/stc.py wx/xrc.py
+
 
 #    --no-frames \
 #    --docformat epytext \
 #    --debug \
+#    --inheritance grouped \
 
 
 # TODO: 
