@@ -1520,6 +1520,7 @@
     src/generic/paletteg.cpp
     src/generic/timer.cpp
     src/generic/caret.cpp
+    src/generic/mdig.cpp
 </set>
 <set var="COCOA_HDR">
     wx/cocoa/NSBox.h
@@ -1574,6 +1575,7 @@
     wx/generic/fdrepdlg.h
     wx/generic/tabg.h
     wx/generic/caret.h
+    wx/generic/mdig.h
 </set>
 
 
