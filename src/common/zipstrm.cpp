@@ -24,6 +24,7 @@
 #include "wx/stream.h"
 #include "wx/wfstream.h"
 #include "wx/zipstrm.h"
+#include "wx/utils.h"
 
 /* Not the right solution (paths in makefiles) but... */
 #ifdef __BORLANDC__
@@ -106,10 +107,14 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t bufsize)
 
 off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
 {
-    off_t nextpos;
-    void *buf;
+    // NB: since ZIP files don't natively support seeking, we have to 
+    //     implement a brute force workaround -- reading all the data
+    //     between current and the new position (or between beginning of 
+    //     the file and new position...)
 
-    switch (mode)
+    off_t nextpos;
+
+    switch ( mode )
     {
         case wxFromCurrent : nextpos = seek + m_Pos; break;
         case wxFromStart : nextpos = seek; break;
@@ -117,23 +122,33 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
         default : nextpos = m_Pos; break; /* just to fool compiler, never happens */
     }
 
-    // cheated seeking :
-    if (nextpos > m_Pos)
+    size_t toskip = 0;
+    if ( nextpos > m_Pos )
     {
-        buf = malloc(nextpos - m_Pos);
-        unzReadCurrentFile((unzFile)m_Archive, buf, nextpos -  m_Pos);
-        free(buf);
+        toskip = nextpos - m_Pos;
     }
-    else if (nextpos < m_Pos) {
+    else
+    {
         unzCloseCurrentFile((unzFile)m_Archive);
         if (unzOpenCurrentFile((unzFile)m_Archive) != UNZ_OK)
         {
             m_lasterror = wxStream_READ_ERR;
             return m_Pos;
         }
-        buf = malloc(nextpos);
-        unzReadCurrentFile((unzFile)m_Archive, buf, nextpos);
-        free(buf);
+        toskip = nextpos;
+    }
+        
+    if ( toskip > 0 )
+    {
+        const size_t BUFSIZE = 4096;
+        size_t sz;
+        char buffer[BUFSIZE];
+        while ( toskip > 0 )
+        {
+            sz = wxMin(toskip, BUFSIZE);
+            unzReadCurrentFile((unzFile)m_Archive, buffer, sz);
+            toskip -= sz;
+        }
     }
 
     m_Pos = nextpos;
