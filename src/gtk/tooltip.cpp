@@ -69,7 +69,7 @@ void wxToolTip::Apply( wxWindow *win )
     m_window = win;
 
     if (m_text.IsEmpty())
-        m_window->ApplyToolTip( ss_tooltips, (char*) NULL );
+        m_window->ApplyToolTip( ss_tooltips, (wxChar*) NULL );
     else
         m_window->ApplyToolTip( ss_tooltips, m_text );
 }
