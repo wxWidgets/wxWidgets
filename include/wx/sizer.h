@@ -198,6 +198,8 @@ protected:
 // wxNotebookSizer
 //---------------------------------------------------------------------------
 
+#if wxUSE_NOTEBOOK
+
 class WXDLLEXPORT wxNotebookSizer: public wxSizer
 {
     DECLARE_CLASS(wxNotebookSizer);
@@ -213,6 +215,9 @@ public:
 protected:
    wxNotebook   *m_notebook;
 };
+
+#endif
+
 
 #endif
   // __WXSIZER_H__
