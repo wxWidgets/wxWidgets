@@ -53,7 +53,7 @@ class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxColourMap;
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxMenu;
-class WXDLLEXPORT wxRectangle;
+class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxSizer;
 class WXDLLEXPORT wxList;
@@ -228,7 +228,7 @@ public:
   virtual bool PopupMenu(wxMenu *menu, int x, int y);
 
   // Send the window a refresh event
-  virtual void Refresh(bool eraseBack = TRUE, const wxRectangle *rect = NULL);
+  virtual void Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL);
 
 #if WXWIN_COMPATIBILITY
   // Set/get scroll attributes
@@ -247,7 +247,7 @@ public:
   virtual int GetScrollRange(int orient) const;
   virtual int GetScrollThumb(int orient) const;
 
-  virtual void ScrollWindow(int dx, int dy, const wxRectangle *rect = NULL);
+  virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL);
 
   // Caret manipulation
   virtual void CreateCaret(int w, int h);
@@ -668,7 +668,7 @@ public:
 
   wxRegion              m_updateRegion;
 /*
-  wxRectangle           m_updateRect;             // Bounding box for screen damage area
+  wxRect           m_updateRect;             // Bounding box for screen damage area
 #ifdef __WIN32__
   WXHRGN                m_updateRgn;                  // NT allows access to the rectangle list
 #endif

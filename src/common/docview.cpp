@@ -46,8 +46,6 @@
 #include "wx/choicdlg.h"
 #include "wx/docview.h"
 #include "wx/printdlg.h"
-#include "wx/generic/prntdlgg.h"
-#include "wx/generic/printps.h"
 #include "wx/confbase.h"
 
 #include <stdio.h>
@@ -744,20 +742,8 @@ void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
   wxPrintout *printout = view->OnCreatePrintout();
   if (printout)
   {
-    // TODO: trouble about this is that it pulls in the postscript
-    // code unecessarily
-#ifdef __WXMSW__
-    if ( wxTheApp->GetPrintMode() == wxPRINT_WINDOWS )
-    {
-      wxWindowsPrinter printer;
-      printer.Print(view->GetFrame(), printout, TRUE);
-    }
-    else
-#endif
-    {
-      wxPostScriptPrinter printer;
-      printer.Print(view->GetFrame(), printout, TRUE);
-    }
+    wxPrinter printer;
+    printer.Print(view->GetFrame(), printout, TRUE);
 
     delete printout;
   }
@@ -772,20 +758,9 @@ void wxDocManager::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
 
   wxPrintData data;
 
-#ifdef __WXMSW__
-  if ( wxTheApp->GetPrintMode() == wxPRINT_WINDOWS )
-  {
-    wxPrintDialog printerDialog(parentWin, & data);
-    printerDialog.GetPrintData().SetSetupDialog(TRUE);
-    printerDialog.ShowModal();
-  }
-  else
-#endif
-  {
-    wxGenericPrintDialog printerDialog(parentWin, & data);
-    printerDialog.GetPrintData().SetSetupDialog(TRUE);
-    printerDialog.ShowModal();
-  }
+  wxPrintDialog printerDialog(parentWin, & data);
+  printerDialog.GetPrintData().SetSetupDialog(TRUE);
+  printerDialog.ShowModal();
 }
 
 void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
@@ -799,12 +774,7 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
   {
     // Pass two printout objects: for preview, and possible printing.
     wxPrintPreviewBase *preview = (wxPrintPreviewBase *) NULL;
-#ifdef __WXMSW__
-    if ( wxTheApp->GetPrintMode() == wxPRINT_WINDOWS )
-        preview = new wxWindowsPrintPreview(printout, view->OnCreatePrintout());
-    else
-#endif
-       preview = new wxPostScriptPrintPreview(printout, view->OnCreatePrintout());
+    preview = new wxPrintPreview(printout, view->OnCreatePrintout());
 
     wxPreviewFrame *frame = new wxPreviewFrame(preview, (wxFrame *)wxTheApp->GetTopWindow(), _("Print Preview"),
 		wxPoint(100, 100), wxSize(600, 650));

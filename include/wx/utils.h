@@ -97,9 +97,9 @@ int WXDLLEXPORT wxHexToDec(char *buf);
 void WXDLLEXPORT wxDecToHex(int dec, char *buf);
 
 // Execute another program. Returns 0 if there was an error, a PID otherwise.
-long WXDLLEXPORT wxExecute(char **argv, bool Async = FALSE,
+long WXDLLEXPORT wxExecute(char **argv, bool sync = FALSE,
                            wxProcess *process = (wxProcess *) NULL);
-long WXDLLEXPORT wxExecute(const wxString& command, bool Async = FALSE,
+long WXDLLEXPORT wxExecute(const wxString& command, bool sync = FALSE,
                            wxProcess *process = (wxProcess *) NULL);
 
 #define wxSIGTERM 1
