@@ -3803,8 +3803,8 @@ A class for setting miscellaneous options that do not fit in with the wxWindows 
             <setting type="bool-check">
                 <active>1</active>
                 <enabled>1</enabled>
-                <name>wxUSE_WAVE</name>
-                <description>&lt;B&gt;wxWave&lt;/B&gt;&lt;P&gt;
+                <name>wxUSE_SOUND</name>
+                <description>&lt;B&gt;wxSound&lt;/B&gt;&lt;P&gt;
 
 Simple .wav class for short sounds.</description>
                 <default-state>1</default-state>
@@ -3815,8 +3815,8 @@ Simple .wav class for short sounds.</description>
                 <indeterminate-if></indeterminate-if>
                 <exclusivity></exclusivity>
                 <context></context>
-                <configure-command>--enable-wave</configure-command>
-                <help-topic>wxWave</help-topic>
+                <configure-command>--enable-sound</configure-command>
+                <help-topic>wxSound</help-topic>
                 <notes></notes>
             </setting>
             <setting type="bool-check">

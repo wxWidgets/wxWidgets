@@ -19,9 +19,9 @@ public:
     int     m_maxX;
     int     m_maxY;
 
-#if wxUSE_WAVE
-    wxWave  m_fire;
-#endif // wxUSE_WAVE
+#if wxUSE_SOUND
+    wxSound  m_fire;
+#endif // wxUSE_SOUND
 };
 
 DECLARE_APP(MyApp)

@@ -28,7 +28,7 @@
 #   error You must set wxUSE_STATUSBAR to 1 in setup.h
 #endif
 
-#include "wx/wave.h"
+#include "wx/sound.h"
 #include "wx/joystick.h"
 
 #include "joytest.h"
@@ -53,9 +53,9 @@ bool MyApp::OnInit()
         return FALSE;
     }
 
-#if wxUSE_WAVE
+#if wxUSE_SOUND
     m_fire.Create(_T("gun.wav"));
-#endif // wxUSE_WAVE
+#endif // wxUSE_SOUND
 
     m_maxX = stick.GetXMax();
     m_maxY = stick.GetYMax();
@@ -143,12 +143,12 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
 
     frame->SetStatusText(buf);
 
-#if wxUSE_WAVE
+#if wxUSE_SOUND
     if (event.ButtonDown() && wxGetApp().m_fire.IsOk())
     {
         wxGetApp().m_fire.Play();
     }
-#endif // wxUSE_WAVE
+#endif // wxUSE_SOUND
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)

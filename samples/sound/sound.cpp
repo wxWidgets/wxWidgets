@@ -24,7 +24,7 @@
     #include "wx/msgdlg.h"
 #endif
 
-#include "wx/wave.h"
+#include "wx/sound.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -65,7 +65,7 @@ public:
     void OnAbout(wxCommandEvent& event);
 
 private:
-    wxWave *m_sound;
+    wxSound *m_sound;
     
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
@@ -180,35 +180,35 @@ void MyFrame::OnPlaySync(wxCommandEvent& WXUNUSED(event))
 {
     wxBusyCursor busy;
     if (!m_sound)
-        m_sound = new wxWave(WAV_FILE);
+        m_sound = new wxSound(WAV_FILE);
     if (m_sound->IsOk())
-        m_sound->Play(false/*async*/);
+        m_sound->Play(wxSOUND_SYNC);
 }
 
 void MyFrame::OnPlayAsync(wxCommandEvent& WXUNUSED(event))
 {
     wxBusyCursor busy;
     if (!m_sound)
-        m_sound = new wxWave(WAV_FILE);
+        m_sound = new wxSound(WAV_FILE);
     if (m_sound->IsOk())
-        m_sound->Play(true/*async*/);
+        m_sound->Play(wxSOUND_ASYNC);
 }
 
 void MyFrame::OnPlayAsyncOnStack(wxCommandEvent& WXUNUSED(event))
 {
     wxBusyCursor busy;
-    wxWave snd(WAV_FILE);
+    wxSound snd(WAV_FILE);
     if (snd.IsOk())
-        snd.Play(true/*async*/);
+        snd.Play(wxSOUND_ASYNC);
 }
 
 void MyFrame::OnPlayLoop(wxCommandEvent& WXUNUSED(event))
 {
     wxBusyCursor busy;
     if (!m_sound)
-        m_sound = new wxWave(WAV_FILE);
+        m_sound = new wxSound(WAV_FILE);
     if (m_sound->IsOk())
-        m_sound->Play(true/*async*/, true/*loop*/);
+        m_sound->Play(wxSOUND_ASYNC | wxSOUND_LOOP);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
