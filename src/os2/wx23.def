@@ -1827,8 +1827,8 @@ EXPORTS
       DeleteEntry__11ConfigGroupFPCc
   ;From object file:  ..\common\filefn.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxCopyFile(const wxString&,const wxString&)
-      wxCopyFile__FRC8wxStringT1
+      ;wxCopyFile(const wxString&,const wxString&,unsigned long)
+      wxCopyFile__FRC8wxStringT1Ul
       ;wxSplitPath(const char*,wxString*,wxString*,wxString*)
       wxSplitPath__FPCcP8wxStringN22
       ;wxPathList::Add(const wxString&)
@@ -1927,6 +1927,8 @@ EXPORTS
       Clear__10wxFileNameFv
       ;wxFileName::wxFileExists()
       wxFileExists__10wxFileNameFv
+      ;wxFileName::GetModificationTime()
+      GetModificationTime__10wxFileNameFv
       ;wxFileName::GetFullName() const
       GetFullName__10wxFileNameCFv
       ;wxFileName::AssignHomeDir()
@@ -2712,8 +2714,8 @@ EXPORTS
       SetMaskColour__7wxImageFUcN21
       ;wxImageHandler::GetImageCount(wxInputStream&)
       GetImageCount__14wxImageHandlerFR13wxInputStream
-      ;wxImage::ConvertToMono(unsigned char,unsigned char,unsigned char)
-      ConvertToMono__7wxImageFUcN21
+      ;wxImage::ConvertToMono(unsigned char,unsigned char,unsigned char) const
+      ConvertToMono__7wxImageCFUcN21
       ;wxImage::ConvertToBitmap() const
       ConvertToBitmap__7wxImageCFv
       ;wxImage::SetData(unsigned char*,int,int)
