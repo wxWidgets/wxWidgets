@@ -124,6 +124,7 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
 
 extern "C" void MacDrawStringCell(Rect *cellRect, Cell lCell, ListHandle theList, long refCon) ;
 const short kwxMacListWithVerticalScrollbar = 128 ;
+const short kwxMacListItemHeight = 14 ;
 
 // ============================================================================
 // list box control implementation
@@ -168,7 +169,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
 
     CreateListBoxControl( parent->MacGetRootWindow(), &bounds, false, 0, 1, false, true,
-                          14, 14, false, &listDef, &m_macControl );
+                          kwxMacListItemHeight, kwxMacListItemHeight, false, &listDef, &m_macControl );
 
     GetControlData(m_macControl, kControlNoPart, kControlListBoxListHandleTag,
                    sizeof(ListHandle), (Ptr) &m_macList, &asize);
@@ -197,7 +198,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     }
         
     Point pt = (**m_macList).cellSize ;
-    pt.v = 14 ;
+    pt.v = kwxMacListItemHeight ;
     LCellSize( pt , m_macList ) ;
     LAddColumn( 1 , 0 , m_macList ) ;
 #endif
