@@ -20,6 +20,8 @@
 
 #include "wx/dynarray.h"
 
+class WXDLLEXPORT wxWindow;
+
 // ----------------------------------------------------------------------------
 // wxVideoMode: contains video mode parameters for a display
 // ----------------------------------------------------------------------------
