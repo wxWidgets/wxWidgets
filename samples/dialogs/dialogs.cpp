@@ -41,6 +41,10 @@
 #endif // wxUSE_STARTUP_TIPS
 
 #if wxUSE_PROGRESSDLG
+#if wxUSE_STOPWATCH && wxUSE_LONGLONG
+    #include <wx/datetime.h>      // wxDateTime
+#endif
+
     #include "wx/progdlg.h"
 #endif // wxUSE_PROGRESSDLG
 
@@ -180,6 +184,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_FIND_REPLACE_ALL(wxID_ANY, MyFrame::OnFindDialog)
     EVT_FIND_CLOSE(wxID_ANY, MyFrame::OnFindDialog)
 #endif // wxUSE_FINDREPLDLG
+
+    EVT_MENU(DIALOGS_REQUEST, MyFrame::OnRequestUserAttention)
 
     EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
 END_EVENT_TABLE()
@@ -341,6 +347,8 @@ bool MyApp::OnInit()
     modal_menu->AppendCheckItem(DIALOGS_MODELESS, _T("Modeless &dialog\tCtrl-Z"));
     file_menu->Append(wxID_ANY,_T("&Modal/Modeless"),modal_menu);
 #endif // USE_MODAL_PRESENTATION
+
+    file_menu->Append(DIALOGS_REQUEST, _T("&Request user attention\tCtrl-R"));
 
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, _T("E&xit\tAlt-X"));
@@ -919,6 +927,15 @@ void MyFrame::ShowTip(wxCommandEvent& WXUNUSED(event))
 }
 #endif // wxUSE_STARTUP_TIPS
 
+void MyFrame::OnRequestUserAttention(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogStatus(_T("Sleeping for 3 seconds to allow you to switch to another window"));
+
+    wxSleep(3);
+
+    RequestUserAttention(wxUSER_ATTENTION_ERROR);
+}
+
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
 {
     Close(true);
@@ -928,7 +945,33 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 {
+    #if wxUSE_STOPWATCH && wxUSE_LONGLONG
+    // check the performance
+    int countrandomnumbers = 0, count = 0;
+    wxTimeSpan tsTest(0,0,0,250);
+    wxDateTime DT2, DT1 = wxDateTime::UNow();
+    srand(0);
+    while(1)
+    {
+        rand();
+        ++countrandomnumbers;
+        if ( countrandomnumbers == 1000 )
+        {
+            srand(0);
+            countrandomnumbers = 0;
+            ++count;
+            DT2 = wxDateTime::UNow();
+            wxTimeSpan ts = DT2.Subtract( DT1 );
+            if ( ts.IsLongerThan( tsTest ) )
+            {
+                break;
+            }
+        }
+    }
+    const int max = 40 * count;
+    #else
     static const int max = 10;
+    #endif // wxUSE_STOPWATCH && wxUSE_LONGLONG
 
     wxProgressDialog dialog(_T("Progress dialog example"),
                             _T("An informative message"),
@@ -944,7 +987,25 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
     bool cont = true;
     for ( int i = 0; i <= max; i++ )
     {
+        #if wxUSE_STOPWATCH && wxUSE_LONGLONG
+        // do (almost) the same operations as we did for the performance test
+        srand(0);
+        for ( int j = 0; j < 1000; j++ )
+        {
+            rand();
+            if ( j == 999 )
+            {
+                DT2 = wxDateTime::UNow();
+                wxTimeSpan ts = DT2.Subtract( DT1 );
+                if ( ts.IsLongerThan( tsTest ) )
+                {
+                    // nothing to do
+                }
+            }
+        }
+        #else
         wxSleep(1);
+        #endif
         if ( i == max )
         {
             cont = dialog.Update(i, _T("That's all, folks!"));
@@ -955,9 +1016,15 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
         }
         else
         {
+            #if wxUSE_STOPWATCH && wxUSE_LONGLONG
+            if ( (i % (max/100)) == 0 ) // // only 100 updates, this makes it much faster
+            {
+                cont = dialog.Update(i);
+            }
+            #else
             cont = dialog.Update(i);
+            #endif
         }
-
         if ( !cont )
         {
             if ( wxMessageBox(_T("Do you really want to cancel?"),
@@ -965,6 +1032,7 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
                               wxYES_NO | wxICON_QUESTION) == wxYES )
                 break;
 
+            cont = true;
             dialog.Resume();
         }
     }
