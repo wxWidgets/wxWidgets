@@ -702,6 +702,7 @@ slider.h	W
 socket.h	W	B
 spinbutt.h	W
 spinctrl.h	W
+splash.h	W
 splitter.h	W
 statbmp.h	W
 statbox.h	W
@@ -1117,6 +1118,7 @@ prntdlgg.h	N
 progdlgg.h	N
 sashwin.h	N
 scrolwin.h	N
+splash.h	N
 splitter.h	N
 statusbr.h	N
 tabg.h	N	16
