@@ -230,12 +230,12 @@ static GdkGC *g_eraseGC = NULL;
 static wxWindowGTK  *g_captureWindow = (wxWindowGTK*) NULL;
 static bool g_captureWindowHasMouse = FALSE;
 
-/* extern */ wxWindowGTK  *g_focusWindow = (wxWindowGTK*) NULL;
+wxWindowGTK  *g_focusWindow = (wxWindowGTK*) NULL;
 
 // the last window which had the focus - this is normally never NULL (except
 // if we never had focus at all) as even when g_focusWindow is NULL it still
 // keeps its previous value
-static wxWindowGTK *g_focusWindowLast = (wxWindowGTK*) NULL;
+wxWindowGTK *g_focusWindowLast = (wxWindowGTK*) NULL;
 
 // If a window get the focus set but has not been realized
 // yet, defer setting the focus to idle time.
