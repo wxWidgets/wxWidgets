@@ -53,12 +53,6 @@
 #include "wx/msw/missing.h"
 #include "wx/msw/winundef.h"
 
-// This can't be undefed in winundef.h or
-// there are further errors
-#if defined(__WXWINCE__) && defined(CreateDialog)
-#undef CreateDialog
-#endif
-
 #include "wx/display.h"
 
 #ifndef ICON_BIG
@@ -166,34 +160,24 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
         msflags |= WS_POPUP;
     else
     {
-#ifdef __WXWINCE__
         if (msflags & WS_BORDER)
-#endif
             msflags |= WS_OVERLAPPED;
     }
 
     // border and caption styles
     if ( style & wxRESIZE_BORDER )
-    {
-#ifndef __WXWINCE__
         msflags |= WS_THICKFRAME;
-#endif
-    }
     else if ( exflags && ((style & wxBORDER_DOUBLE) || (style & wxBORDER_RAISED)) )
         *exflags |= WS_EX_DLGMODALFRAME;
     else if ( !(style & wxBORDER_NONE) )
         msflags |= WS_BORDER;
-#ifndef __WXWINCE__
     else
         msflags |= WS_POPUP;
-#endif
 
     if ( style & wxCAPTION )
         msflags |= WS_CAPTION;
-#ifndef __WXWINCE__
     else
         msflags |= WS_POPUP;
-#endif
 
     // next translate the individual flags
     if ( style & wxMINIMIZE_BOX )
@@ -202,23 +186,20 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
         msflags |= WS_MAXIMIZEBOX;
     if ( style & wxSYSTEM_MENU )
         msflags |= WS_SYSMENU;
-#ifndef __WXWINCE__
+
+    // under CE these 2 styles are not defined currently
+#ifdef WS_MINIMIZE
     if ( style & wxMINIMIZE )
         msflags |= WS_MINIMIZE;
+#endif // WS_MINIMIZE
+#ifdef WS_MAXIMIZE
     if ( style & wxMAXIMIZE )
         msflags |= WS_MAXIMIZE;
-#endif
+#endif // WS_MAXIMIZE
 
     // Keep this here because it saves recoding this function in wxTinyFrame
-#if wxUSE_ITSY_BITSY && !defined(__WIN32__)
-    if ( style & wxTINY_CAPTION_VERT )
-        msflags |= IBS_VERTCAPTION;
-    if ( style & wxTINY_CAPTION_HORIZ )
-        msflags |= IBS_HORZCAPTION;
-#else
     if ( style & (wxTINY_CAPTION_VERT | wxTINY_CAPTION_HORIZ) )
         msflags |= WS_CAPTION;
-#endif
 
     if ( exflags )
     {
@@ -233,6 +214,8 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
                 style |= wxFRAME_NO_TASKBAR;
             }
 
+            // again, support for this is missing under CE
+#ifdef WS_EX_APPWINDOW
             // We have to solve 2 different problems here:
             //
             // 1. frames with wxFRAME_NO_TASKBAR flag shouldn't appear in the
@@ -245,23 +228,20 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
             // The second one is solved here by using WS_EX_APPWINDOW flag, the
             // first one is dealt with in our MSWGetParent() method
             // implementation
-#ifndef __WXWINCE__
             if ( !(style & wxFRAME_NO_TASKBAR) && GetParent() )
             {
                 // need to force the frame to appear in the taskbar
                 *exflags |= WS_EX_APPWINDOW;
             }
-#endif
             //else: nothing to do [here]
+#endif // WS_EX_APPWINDOW
         }
 
         if ( style & wxSTAY_ON_TOP )
             *exflags |= WS_EX_TOPMOST;
 
-#ifdef __WIN32__
         if ( GetExtraStyle() & wxFRAME_EX_CONTEXTHELP )
             *exflags |= WS_EX_CONTEXTHELP;
-#endif // __WIN32__
     }
 
     return msflags;
@@ -433,12 +413,15 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
                                  const wxString& name)
 {
     bool ret wxDUMMY_INITIALIZE(false);
-    int w, h;
-    
+
     // init our fields
     Init();
-    w = WidthDefault(size.x);
-    h = HeightDefault(size.y);
+
+    wxSize sizeReal = size;
+    if ( !sizeReal.IsFullySpecified() )
+    {
+        sizeReal.SetDefaults(GetDefaultSize());
+    }
 
     m_windowStyle = style;
 
@@ -481,12 +464,12 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         if ( style & (wxRESIZE_BORDER | wxCAPTION) )
             dlgTemplate->style |= DS_MODALFRAME;
 
-        ret = CreateDialog(dlgTemplate, title, pos, wxSize(w,h));
+        ret = CreateDialog(dlgTemplate, title, pos, sizeReal);
         free(dlgTemplate);
     }
     else // !dialog
     {
-        ret = CreateFrame(title, pos, wxSize(w,h));
+        ret = CreateFrame(title, pos, sizeReal);
     }
 
     if ( ret && !(GetWindowStyleFlag() & wxCLOSE_BOX) )
@@ -822,11 +805,10 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
     return TRUE;
 }
 
+#ifndef __WXWINCE__
+
 bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
 {
-#ifdef __WXWINCE__
-    return FALSE;
-#else
     wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), FALSE,
                  _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
@@ -867,8 +849,9 @@ bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
         return FALSE;
     }
     return TRUE;
-#endif
 }
+
+#endif // !__WXWINCE__
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindow event handling
