@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/cocoa/display.cpp
+// Name:        src/cocoa/display.mm
 // Purpose:     Cocoa implementation of wxDisplay class
 // Author:      Ryan Norton
 // Modified by: 
 // Created:     2004-10-03
 // RCS-ID:      $Id$
-// Copyright:   (c) wxWidgets team
+// Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -25,7 +25,6 @@
 #import <AppKit/NSColor.h>
 #import <AppKit/NSClipView.h>
 #import <Foundation/NSException.h>
-#import <Foundation/NSString.h>
 
 #include <objc/objc-runtime.h>
 
@@ -611,21 +610,19 @@ void wxWindowCocoa::DoSetSize(int x, int y, int width, int height, int sizeFlags
     DoMoveWindow(x,y,width,height);
 }
 
-//We should really get rid of wxToolTip :)
-IMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject)
+#if wxUSE_TOOLTIPS
 
 void wxWindowCocoa::DoSetToolTip( wxToolTip *tip )
 {
     wxWindowBase::DoSetToolTip(tip);
 
-    wxAutoNSAutoreleasePool pool;
-
     if ( m_tooltip )
     {
         m_tooltip->SetWindow((wxWindow *)this);
-        [GetNSView() setToolTip:wxNSStringWithWxString(m_tooltip->GetTip())];
     }
 }
+
+#endif
 
 void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 {

@@ -262,6 +262,10 @@ wxCOCOA:
 
 - Added UNICODE layer for OSX so that you can build wxWidgets in UNICODE mode in OSX 10.2 (and possibly lower) with wxMAC and wxCOCOA (RN)
 - Fixed so that wxCOCOA runs in 10.2 (and possibly lower) (RN)
+- Tooltips now supported - Enable and SetDelay not implemented (RN)
+- wxSound now supported (RN)
+- wxDisplay now supported (RN)
+- Cursors (hopefully) now supported (RN)
 
 wxMac:
 
