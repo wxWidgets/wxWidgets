@@ -46,7 +46,9 @@ IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 #define mm2pt            2.83464566929
 #define pt2mm            0.352777777778
 #if !defined( __DARWIN__ ) || defined(__MWERKS__)
+#ifndef M_PI
 const double M_PI = 3.14159265358979 ;
+#endif
 #endif
 const double RAD2DEG  = 180.0 / M_PI;
 const short kEmulatedMode = -1 ;
