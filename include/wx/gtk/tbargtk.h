@@ -17,6 +17,7 @@
 #include "wx/defs.h"
 #include "wx/control.h"
 #include "wx/bitmap.h"
+#include "wx/tbarbase.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -37,42 +38,6 @@ class wxToolBar;
 //-----------------------------------------------------------------------------
 
 extern const char *wxToolBarNameStr;
-
-//-----------------------------------------------------------------------------
-// wxToolBarTool
-//-----------------------------------------------------------------------------
-
-class wxToolBarTool: public wxObject
-{
-  DECLARE_DYNAMIC_CLASS(wxToolBarTool)
-  
-  public:
-
-    wxToolBarTool(void) {}; 
-    wxToolBarTool( wxToolBar *owner, int theIndex = 0, 
-      const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
-      bool toggle = FALSE, wxObject *clientData = (wxObject *) NULL, 
-      const wxString& shortHelpString = "", const wxString& longHelpString = "",
-      GtkWidget *item = (GtkWidget *) NULL );
-   ~wxToolBarTool(void);
-
-  public:
-  
-    int                   m_toolStyle;
-    wxObject             *m_clientData;
-    int                   m_index;
-    bool                  m_toggleState;
-    bool                  m_isToggle;
-    bool                  m_deleteSecondBitmap;
-    bool                  m_enabled;
-    wxBitmap              m_bitmap1;
-    wxBitmap              m_bitmap2;
-    bool                  m_isMenuCommand;
-    wxString              m_shortHelpString;
-    wxString              m_longHelpString;
-    wxToolBar            *m_owner;
-    GtkWidget            *m_item;
-};
 
 //-----------------------------------------------------------------------------
 // wxToolBar

@@ -971,9 +971,12 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
   
     gdk_gc_set_fill( m_brushGC, fillStyle );
   
-    if (m_brush.GetStyle() == wxSTIPPLE)
+    if ((m_brush.GetStyle() == wxSTIPPLE) && (m_brush.GetStipple()->Ok()))
     {
-        gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetPixmap() );
+        if (m_brush.GetStipple()->GetPixmap())
+            gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetPixmap() );
+	else
+            gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetBitmap() );
     }
   
     if (IS_HATCH(m_brush.GetStyle()))

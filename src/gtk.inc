@@ -64,6 +64,7 @@ LIB_CPP_SRC=\
  common/http.cpp \
  common/ftp.cpp \
  common/url.cpp \
+ common/tbarbase.cpp \
  common/tokenzr.cpp \
  common/resource.cpp \
  common/wxexpr.cpp \

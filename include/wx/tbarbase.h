@@ -30,13 +30,26 @@ WXDLLEXPORT_DATA(extern const wxPoint) wxDefaultPosition;
 #define wxTOOL_STYLE_BUTTON          1
 #define wxTOOL_STYLE_SEPARATOR       2
 
+#ifdef __WXGTK__
+class WXDLLEXPORT wxToolBar;
+#endif
+
 class WXDLLEXPORT wxToolBarTool: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxToolBarTool)
  public:
+  wxToolBarTool() {}
+#ifdef __WXGTK__
+  wxToolBarTool(wxToolBar *owner, 
+                int theIndex = 0, const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
+                bool toggle = FALSE, wxObject *clientData = (wxObject *) NULL, 
+                const wxString& shortHelpString = "", const wxString& longHelpString = "",
+                GtkWidget *item = (GtkWidget *) NULL );
+#else
   wxToolBarTool(int theIndex = 0, const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
                 bool toggle = FALSE, long xPos = -1, long yPos = -1,
                 const wxString& shortHelpString = wxEmptyString, const wxString& longHelpString = wxEmptyString);
+#endif
   ~wxToolBarTool ();
   inline void SetSize( long w, long h ) { m_width = w; m_height = h; }
   inline long GetWidth () const { return m_width; }
@@ -59,6 +72,10 @@ public:
   bool                  m_isMenuCommand;
   wxString              m_shortHelpString;
   wxString              m_longHelpString;
+#ifdef __WXGTK__
+  wxToolBar            *m_owner;
+  GtkWidget            *m_item;
+#endif
 };
 
 class WXDLLEXPORT wxToolBarBase : public wxControl

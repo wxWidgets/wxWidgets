@@ -24,39 +24,6 @@
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// wxToolBarTool
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxToolBarTool,wxObject)
-
-wxToolBarTool::wxToolBarTool( wxToolBar *owner, int theIndex,
-                              const wxBitmap& bitmap1, const  wxBitmap& bitmap2,
-                              bool toggle, 
-                              wxObject *clientData,
-                              const wxString& shortHelpString,
-                              const wxString& longHelpString,
-                              GtkWidget *item  )
-{
-    m_owner = owner;
-    m_index = theIndex;
-    m_bitmap1 = bitmap1;
-    m_bitmap2 = bitmap2;
-    m_isToggle = toggle;
-    m_enabled = TRUE;
-    m_toggleState = FALSE;
-    m_shortHelpString = shortHelpString;
-    m_longHelpString = longHelpString;
-    m_isMenuCommand = TRUE;
-    m_clientData = clientData;
-    m_deleteSecondBitmap = FALSE;
-    m_item = item;
-}
-
-wxToolBarTool::~wxToolBarTool()
-{
-}
-
-//-----------------------------------------------------------------------------
 // "clicked" (internal from gtk_toolbar)
 //-----------------------------------------------------------------------------
 

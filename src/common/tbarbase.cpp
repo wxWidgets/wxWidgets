@@ -48,20 +48,36 @@ END_EVENT_TABLE()
 // is still valid: a tool may have quit the toolbar.
 static wxList gs_ToolBars;
 
+#ifdef __WXGTK__
+wxToolBarTool::wxToolBarTool(wxToolBar *owner, int theIndex,
+                    const wxBitmap& theBitmap1, const  wxBitmap& theBitmap2, 
+		    bool toggle, wxObject *clientData, 
+     		    const wxString& helpS1, const wxString& helpS2,
+                    GtkWidget *item  )
+#else
 wxToolBarTool::wxToolBarTool(int theIndex,
                     const wxBitmap& theBitmap1, const wxBitmap& theBitmap2, bool toggle,
                     long xPos, long yPos, const wxString& helpS1, const wxString& helpS2)
+#endif
 {
   m_toolStyle = wxTOOL_STYLE_BUTTON;
+#ifdef __WXGTK__
+  m_owner = owner;
+  m_item = item;
+  m_clientData = clientData;
+  m_x = 0;
+  m_y = 0;
+#else
   m_clientData = NULL;
+  m_x = xPos;
+  m_y = yPos;
+#endif
   m_index = theIndex;
   m_isToggle = toggle;
   m_toggleState = FALSE;
   m_enabled = TRUE;
   m_bitmap1 = theBitmap1;
   m_bitmap2 = theBitmap2;
-  m_x = xPos;
-  m_y = yPos;
   m_width = m_height = 0;
   m_deleteSecondBitmap = FALSE;
   if (m_bitmap1.Ok())
@@ -167,7 +183,12 @@ wxToolBarTool *wxToolBarBase::AddTool(int index, const wxBitmap& bitmap, const w
              bool toggle, long xPos, long yPos, wxObject *clientData,
              const wxString& helpString1, const wxString& helpString2)
 {
+#ifdef __WXGTK__
+  wxToolBarTool *tool = new wxToolBarTool( (wxToolBar*)this, index, bitmap, pushedBitmap, toggle, 
+                                           (wxObject*) NULL, helpString1, helpString2);
+#else
   wxToolBarTool *tool = new wxToolBarTool(index, bitmap, pushedBitmap, toggle, xPos, yPos, helpString1, helpString2);
+#endif
   tool->m_clientData = clientData;
 
   if (xPos > -1)
@@ -698,7 +719,9 @@ void wxToolBarBase::ViewStart (int *x, int *y) const
 
 void wxToolBarBase::OnIdle(wxIdleEvent& event)
 {
+#ifndef __WXGTK__
     wxWindow::OnIdle(event);
+#endif
 
 	DoToolbarUpdates();
 }

@@ -67,7 +67,6 @@
 //------------------------------------------------------------------------
 // GUI control options (always enabled in wxGTK)
 //------------------------------------------------------------------------
-
 /*
  * Use gauge item
  */
@@ -84,6 +83,10 @@
  * Use scrollbar item
  */
 #define wxUSE_RADIOBUTTON 1
+/*
+ * Use toolbar item
+ */
+#define wxUSE_TOOLBAR 1
 
 //------------------------------------------------------------------------
 // non-GUI options
