@@ -120,6 +120,8 @@ class MyTextDropTarget(wxTextDropTarget):
     def OnDropText(self, x, y, text):
         self.window.WriteText("(%d, %d)\n%s\n" % (x, y, text))
 
+    def OnDragOver(self, x, y, d):
+        return wxDragCopy
 
 
 class FileDropPanel(wxPanel):
