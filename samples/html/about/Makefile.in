@@ -38,6 +38,7 @@ ABOUT_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples $(CXXFLAGS)
 ABOUT_OBJECTS =  \
+	$(__about_os2_lib_res) \
 	about_about.o \
 	$(__about___win32rc)
 DESTDIR = 
@@ -102,6 +103,8 @@ COND_PLATFORM_OS2_1___about___os2_emxbindcmd = $(NM) about$(EXEEXT) | if grep -q
 @COND_PLATFORM_OS2_1@__about___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___about___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__about___win32rc = about_about_rc.o
 @COND_PLATFORM_MACOSX_1@__about_bundle___depname = about_bundle
+@COND_PLATFORM_OS2_1@__about_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -132,8 +135,8 @@ about.app/Contents/PkgInfo: about$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $
 	ln -f about$(EXEEXT) about.app/Contents/MacOS/about
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc about.app/Contents/Resources/about.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns about.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc about.app/Contents/Resources/about.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns about.app/Contents/Resources/wxmac.icns
 
 about_about.o: $(srcdir)/about.cpp
 	$(CXXC) -c -o $@ $(ABOUT_CXXFLAGS) $<

@@ -38,10 +38,12 @@ BOMBS_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 BOMBS_OBJECTS =  \
+	$(__bombs_os2_lib_res) \
 	bombs_bombs.o \
 	bombs_bombs1.o \
 	bombs_game.o \
 	$(__bombs___win32rc)
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 
@@ -100,6 +102,8 @@ COND_PLATFORM_OS2_1___bombs___os2_emxbindcmd = $(NM) bombs$(EXEEXT) | if grep -q
 @COND_PLATFORM_OS2_1@__bombs___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___bombs___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__bombs___win32rc = bombs_bombs_rc.o
 @COND_PLATFORM_MACOSX_1@__bombs_bundle___depname = bombs_bundle
+@COND_PLATFORM_OS2_1@__bombs_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -130,8 +134,8 @@ bombs.app/Contents/PkgInfo: bombs$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $
 	ln -f bombs$(EXEEXT) bombs.app/Contents/MacOS/bombs
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc bombs.app/Contents/Resources/bombs.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns bombs.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc bombs.app/Contents/Resources/bombs.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns bombs.app/Contents/Resources/wxmac.icns
 
 bombs_bombs.o: $(srcdir)/bombs.cpp
 	$(CXXC) -c -o $@ $(BOMBS_CXXFLAGS) $<

@@ -39,6 +39,7 @@ DRAWING_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 DRAWING_OBJECTS =  \
+	$(__drawing_os2_lib_res) \
 	drawing_drawing.o \
 	$(__drawing___win32rc)
 LIBDIRNAME = $(top_builddir)lib
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___drawing___os2_emxbindcmd = $(NM) drawing$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__drawing___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___drawing___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__drawing___win32rc = drawing_drawing_rc.o
 @COND_PLATFORM_MACOSX_1@__drawing_bundle___depname = drawing_bundle
+@COND_PLATFORM_OS2_1@__drawing_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -146,8 +149,8 @@ drawing.app/Contents/PkgInfo: drawing$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f drawing$(EXEEXT) drawing.app/Contents/MacOS/drawing
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc drawing.app/Contents/Resources/drawing.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns drawing.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc drawing.app/Contents/Resources/drawing.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns drawing.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@drawing_bundle: drawing.app/Contents/PkgInfo
 

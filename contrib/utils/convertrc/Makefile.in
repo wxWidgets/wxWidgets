@@ -41,11 +41,13 @@ CONVERTRC_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples -I$(srcdir)/../../include $(CXXFLAGS)
 CONVERTRC_OBJECTS =  \
+	$(__convertrc_os2_lib_res) \
 	convertrc_convert.o \
 	convertrc_rc2wxr.o \
 	convertrc_rc2xml.o \
 	convertrc_wxr2xml.o \
 	$(__convertrc___win32rc)
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 
 ### Conditionally set variables: ###
@@ -105,6 +107,8 @@ COND_PLATFORM_OS2_1___convertrc___os2_emxbindcmd = $(NM) convertrc$(EXEEXT) | \
 	if grep -q pmwin.763 ; then emxbind -ep convertrc$(EXEEXT) ; fi
 @COND_PLATFORM_OS2_1@__convertrc___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___convertrc___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__convertrc___win32rc = convertrc_wxconvert_rc.o
+@COND_PLATFORM_OS2_1@__convertrc_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,11 +146,11 @@ distclean: clean
 install: all install_convertrc
 
 install-strip: install
-	$(STRIP) $(bindir)/convertrc$(EXEEXT)
+	$(STRIP) $(DESTDIR)$(bindir)/convertrc$(EXEEXT)
 
 install_convertrc: 
-	$(INSTALL_DIR) $(bindir)
-	$(INSTALL_PROGRAM) convertrc$(EXEEXT) $(bindir)
+	$(INSTALL_DIR) $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) convertrc$(EXEEXT) $(DESTDIR)$(bindir)
 
 uninstall: 
 

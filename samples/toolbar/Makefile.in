@@ -40,6 +40,7 @@ TOOLBAR_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 TOOLBAR_OBJECTS =  \
+	$(__toolbar_os2_lib_res) \
 	toolbar_toolbar.o \
 	$(__toolbar___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___toolbar___os2_emxbindcmd = $(NM) toolbar$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__toolbar___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___toolbar___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__toolbar___win32rc = toolbar_toolbar_rc.o
 @COND_PLATFORM_MACOSX_1@__toolbar_bundle___depname = toolbar_bundle
+@COND_PLATFORM_OS2_1@__toolbar_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ toolbar.app/Contents/PkgInfo: toolbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f toolbar$(EXEEXT) toolbar.app/Contents/MacOS/toolbar
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc toolbar.app/Contents/Resources/toolbar.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns toolbar.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc toolbar.app/Contents/Resources/toolbar.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns toolbar.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@toolbar_bundle: toolbar.app/Contents/PkgInfo
 

@@ -34,11 +34,13 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 DYNSASH_SWITCH_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../../samples -I$(srcdir)/../../../include $(CXXFLAGS)
 DYNSASH_SWITCH_OBJECTS =  \
 	$(__dynsash_switch___win32rc) \
+	$(__dynsash_switch_os2_lib_res) \
 	dynsash_switch_dynsash_switch.o
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
@@ -103,6 +105,8 @@ COND_PLATFORM_OS2_1___dynsash_switch___os2_emxbindcmd = $(NM) \
 @COND_PLATFORM_WIN32_1@	dynsash_switch_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__dynsash_switch_bundle___depname \
 @COND_PLATFORM_MACOSX_1@	= dynsash_switch_bundle
+@COND_PLATFORM_OS2_1@__dynsash_switch_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +146,8 @@ dynsash_switch.app/Contents/PkgInfo: dynsash_switch$(EXEEXT) $(top_srcdir)/src/m
 	ln -f dynsash_switch$(EXEEXT) dynsash_switch.app/Contents/MacOS/dynsash_switch
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc dynsash_switch.app/Contents/Resources/dynsash_switch.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns dynsash_switch.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc dynsash_switch.app/Contents/Resources/dynsash_switch.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns dynsash_switch.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@dynsash_switch_bundle: dynsash_switch.app/Contents/PkgInfo
 

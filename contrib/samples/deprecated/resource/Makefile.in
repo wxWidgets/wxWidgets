@@ -34,11 +34,13 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 RESOURCE_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../../samples -I$(srcdir)/../../../include $(CXXFLAGS)
 RESOURCE_OBJECTS =  \
+	$(__resource_os2_lib_res) \
 	resource_resource.o \
 	$(__resource___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +101,8 @@ COND_PLATFORM_OS2_1___resource___os2_emxbindcmd = $(NM) resource$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__resource___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___resource___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__resource___win32rc = resource_resource_rc.o
 @COND_PLATFORM_MACOSX_1@__resource_bundle___depname = resource_bundle
+@COND_PLATFORM_OS2_1@__resource_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +146,8 @@ resource.app/Contents/PkgInfo: resource$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	ln -f resource$(EXEEXT) resource.app/Contents/MacOS/resource
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc resource.app/Contents/Resources/resource.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns resource.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc resource.app/Contents/Resources/resource.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns resource.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@resource_bundle: resource.app/Contents/PkgInfo
 

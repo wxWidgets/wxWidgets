@@ -41,6 +41,7 @@ LISTBOX_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 LISTBOX_OBJECTS =  \
 	$(__listbox___win32rc) \
+	$(__listbox_os2_lib_res) \
 	listbox_lboxtest.o
 WX_VERSION = 2.5.1
 
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___listbox___os2_emxbindcmd = $(NM) listbox$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__listbox___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___listbox___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__listbox___win32rc = listbox_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__listbox_bundle___depname = listbox_bundle
+@COND_PLATFORM_OS2_1@__listbox_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ listbox.app/Contents/PkgInfo: listbox$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f listbox$(EXEEXT) listbox.app/Contents/MacOS/listbox
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc listbox.app/Contents/Resources/listbox.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns listbox.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc listbox.app/Contents/Resources/listbox.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns listbox.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@listbox_bundle: listbox.app/Contents/PkgInfo
 

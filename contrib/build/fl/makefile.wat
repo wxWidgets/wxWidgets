@@ -112,6 +112,13 @@ __DEBUG_DEFINE_p = -d__WXDEBUG__
 !ifeq DEBUG_FLAG 1
 __DEBUG_DEFINE_p = -d__WXDEBUG__
 !endif
+__EXCEPTIONSFLAG =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG = -xs
+!endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -177,7 +184,7 @@ FLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\fl\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\fl\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_FL $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_fldll.pch
+	/fh=$(OBJS)\wxprec_fldll.pch $(__EXCEPTIONSFLAG)
 FLDLL_OBJECTS =  &
 	$(OBJS)\fldll_dummy.obj &
 	$(OBJS)\fldll_antiflickpl.obj &
@@ -200,7 +207,8 @@ FLDLL_OBJECTS =  &
 FLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\fl\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\fl\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_fllib.pch
+	-i=..\..\src\fl\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_fllib.pch &
+	$(__EXCEPTIONSFLAG)
 FLLIB_OBJECTS =  &
 	$(OBJS)\fllib_dummy.obj &
 	$(OBJS)\fllib_antiflickpl.obj &

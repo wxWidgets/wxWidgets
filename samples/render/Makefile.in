@@ -49,6 +49,7 @@ RENDER_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 RENDER_OBJECTS =  \
 	$(__render___win32rc) \
+	$(__render_os2_lib_res) \
 	render_render.o
 WX_VERSION = 2.5.1
 
@@ -113,6 +114,8 @@ COND_PLATFORM_OS2_1___render___os2_emxbindcmd = $(NM) render$(EXEEXT) | if grep 
 @COND_PLATFORM_OS2_1@__render___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___render___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__render___win32rc = render_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__render_bundle___depname = render_bundle
+@COND_PLATFORM_OS2_1@__render_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -163,8 +166,8 @@ render.app/Contents/PkgInfo: render$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f render$(EXEEXT) render.app/Contents/MacOS/render
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc render.app/Contents/Resources/render.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns render.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc render.app/Contents/Resources/render.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns render.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@render_bundle: render.app/Contents/PkgInfo
 

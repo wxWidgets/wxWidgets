@@ -47,385 +47,385 @@ RSC=rc.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP BASE Intermediate_Dir "vc_mswunivudll\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase251u_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase251u_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_basedll.pch" /Fd..\..\..\..\lib\vc_dll\wxbase251u_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_basedll.pch" /Fd..\..\..\..\lib\vc_dll\wxbase251u_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswunivu" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswunivu" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25u.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25u.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251u_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25u.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251u_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25u.lib"
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP BASE Intermediate_Dir "vc_mswunivuddll\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase251ud_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase251ud_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswunivud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_dll\wxbase251ud_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswunivud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_dll\wxbase251ud_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivud" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivud" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswunivud" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswunivud" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25ud.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25ud.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251ud_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25ud.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251ud_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25ud.lib" /debug
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP BASE Intermediate_Dir "vc_mswunivdll\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase251_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase251_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_basedll.pch" /Fd..\..\..\..\lib\vc_dll\wxbase251_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_basedll.pch" /Fd..\..\..\..\lib\vc_dll\wxbase251_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\include" /i "..\..\lib\vc_dll\mswuniv" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\include" /i "..\..\lib\vc_dll\mswuniv" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswuniv" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswuniv" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25.lib"
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP BASE Intermediate_Dir "vc_mswunivddll\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase251d_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase251d_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_dll\wxbase251d_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_dll\wxbase251d_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswunivd" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswunivd" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25d.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25d.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251d_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25d.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251d_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25d.lib" /debug
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP BASE Intermediate_Dir "vc_mswudll\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase251u_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase251u_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_basedll.pch" /Fd..\..\..\..\lib\vc_dll\wxbase251u_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_basedll.pch" /Fd..\..\..\..\lib\vc_dll\wxbase251u_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x405 /d "__WXMSW__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "_UNICODE" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswu" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "_UNICODE" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswu" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25u.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251u_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25u.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251u_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25u.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251u_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25u.lib"
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP BASE Intermediate_Dir "vc_mswuddll\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase251ud_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase251ud_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_dll\wxbase251ud_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_dll\wxbase251ud_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswud" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswud" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswud" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswud" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25ud.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251ud_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25ud.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251ud_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25ud.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251ud_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25ud.lib" /debug
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP BASE Intermediate_Dir "vc_mswdll\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase251_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_basedll.pch" /Fd..\..\lib\vc_dll\wxbase251_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_basedll.pch" /Fd..\..\..\..\lib\vc_dll\wxbase251_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_basedll.pch" /Fd..\..\..\..\lib\vc_dll\wxbase251_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /i "..\..\include" /i "..\..\lib\vc_dll\msw" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x405 /d "__WXMSW__" /i "..\..\include" /i "..\..\lib\vc_dll\msw" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\msw" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD RSC /l 0x405 /d "__WXMSW__" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\msw" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25.lib"
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP BASE Intermediate_Dir "vc_mswddll\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Output_Dir "..\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase251d_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxbase251d_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_dll\wxbase251d_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_basedll.pch" /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_dll\wxbase251d_vc_custom.pdb /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "WXMAKINGDLL_BASE" /D wxUSE_BASE=1 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
-# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswd" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
+# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\..\..\include" /i "..\..\..\..\lib\vc_dll\mswd" /i "..\..\..\..\src\tiff" /i "..\..\..\..\src\jpeg" /i "..\..\..\..\src\png" /i "..\..\..\..\src\zlib" /i "..\..\..\..\src\regex" /i "..\..\..\..\src\expat\lib" /d wxUSE_GUI=0 /d "WXMAKINGDLL_BASE" /d wxUSE_BASE=1
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25d.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxbase251d_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxbase25d.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251d_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25d.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib /nologo /dll /machine:i386 /out:"..\..\..\..\lib\vc_dll\wxbase251d_vc_custom.dll" /libpath:"..\..\..\..\lib\vc_dll" /implib:"..\..\..\..\lib\vc_dll\wxbase25d.lib" /debug
 
 !ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP BASE Intermediate_Dir "vc_mswunivu\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\lib\vc_lib\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\lib\vc_lib\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\..\..\lib\vc_lib\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\..\..\lib\vc_lib\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25u.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25u.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25u.lib"
+# ADD LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25u.lib"
 
 !ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP BASE Intermediate_Dir "vc_mswunivud\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_lib\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_lib\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25ud.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25ud.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25ud.lib"
+# ADD LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25ud.lib"
 
 !ELSEIF  "$(CFG)" == "base - Win32 Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP BASE Intermediate_Dir "vc_mswuniv\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\lib\vc_lib\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\lib\vc_lib\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\..\..\lib\vc_lib\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\..\..\lib\vc_lib\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25.lib"
+# ADD LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25.lib"
 
 !ELSEIF  "$(CFG)" == "base - Win32 Universal Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP BASE Intermediate_Dir "vc_mswunivd\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_lib\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_lib\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25d.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25d.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25d.lib"
+# ADD LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25d.lib"
 
 !ELSEIF  "$(CFG)" == "base - Win32 Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP BASE Intermediate_Dir "vc_mswu\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswu" /W4 /Fd..\..\lib\vc_lib\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswu" /W4 /Fd..\..\lib\vc_lib\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswu" /W4 /Fd..\..\..\..\lib\vc_lib\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswu" /W4 /Fd..\..\..\..\lib\vc_lib\wxbase25u.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25u.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25u.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25u.lib"
+# ADD LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25u.lib"
 
 !ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP BASE Intermediate_Dir "vc_mswud\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_lib\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_lib\wxbase25ud.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25ud.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25ud.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25ud.lib"
+# ADD LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25ud.lib"
 
 !ELSEIF  "$(CFG)" == "base - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP BASE Intermediate_Dir "vc_msw\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\msw" /W4 /Fd..\..\lib\vc_lib\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\msw" /W4 /Fd..\..\lib\vc_lib\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\msw" /W4 /Fd..\..\..\..\lib\vc_lib\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\msw" /W4 /Fd..\..\..\..\lib\vc_lib\wxbase25.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25.lib"
+# ADD LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25.lib"
 
 !ELSEIF  "$(CFG)" == "base - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP BASE Intermediate_Dir "vc_mswd\base"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Output_Dir "..\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\base"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_baselib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_lib\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\..\..\include" /I "..\..\..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\..\..\lib\vc_lib\wxbase25d.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_baselib.pch" /I "..\..\..\..\src\tiff" /I "..\..\..\..\src\jpeg" /I "..\..\..\..\src\png" /I "..\..\..\..\src\zlib" /I "..\..\..\..\src\regex" /I "..\..\..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_GUI=0 /D wxUSE_BASE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25d.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxbase25d.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25d.lib"
+# ADD LIB32 /nologo /out:"..\..\..\..\lib\vc_lib\wxbase25d.lib"
 
 !ENDIF
 
@@ -702,12 +702,6 @@ SOURCE=..\..\src\msw\dir.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\dummy.cpp
-# ADD BASE CPP /Yc"wx/wxprec.h"
-# ADD CPP /Yc"wx/wxprec.h"
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\msw\main.cpp
 # End Source File
 # Begin Source File
@@ -756,161 +750,161 @@ SOURCE=..\..\include\wx\msw\setup.h
 
 !IF  "$(CFG)" == "base - Win32 DLL Universal Unicode Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_dll\mswunivu\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_dll\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivu\wx\setup.h
+"..\..\..\..\lib\vc_dll\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_dll\mswunivu\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Unicode Debug"
 
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivud\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_dll\mswunivud\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_dll\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivud\wx\setup.h
+"..\..\..\..\lib\vc_dll\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_dll\mswunivud\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswuniv\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_dll\mswuniv\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_dll\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswuniv\wx\setup.h
+"..\..\..\..\lib\vc_dll\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_dll\mswuniv\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Universal Debug"
 
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivd\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_dll\mswunivd\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_dll\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivd\wx\setup.h
+"..\..\..\..\lib\vc_dll\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_dll\mswunivd\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_dll\mswu\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_dll\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswu\wx\setup.h
+"..\..\..\..\lib\vc_dll\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_dll\mswu\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Unicode Debug"
 
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_dll\mswud\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_dll\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswud\wx\setup.h
+"..\..\..\..\lib\vc_dll\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_dll\mswud\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_dll\msw\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_dll\msw\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_dll\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\msw\wx\setup.h
+"..\..\..\..\lib\vc_dll\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_dll\msw\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 DLL Debug"
 
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswd\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_dll\mswd\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_dll\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswd\wx\setup.h
+"..\..\..\..\lib\vc_dll\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_dll\mswd\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_lib\mswunivu\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_lib\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivu\wx\setup.h
+"..\..\..\..\lib\vc_lib\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_lib\mswunivu\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 Universal Unicode Debug"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_lib\mswunivud\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_lib\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivud\wx\setup.h
+"..\..\..\..\lib\vc_lib\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_lib\mswunivud\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 Universal Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswuniv\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_lib\mswuniv\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_lib\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswuniv\wx\setup.h
+"..\..\..\..\lib\vc_lib\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_lib\mswuniv\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 Universal Debug"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivd\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_lib\mswunivd\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_lib\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivd\wx\setup.h
+"..\..\..\..\lib\vc_lib\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_lib\mswunivd\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 Unicode Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_lib\mswu\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_lib\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswu\wx\setup.h
+"..\..\..\..\lib\vc_lib\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_lib\mswu\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 Unicode Debug"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_lib\mswud\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_lib\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswud\wx\setup.h
+"..\..\..\..\lib\vc_lib\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_lib\mswud\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\msw\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_lib\msw\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_lib\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\msw\wx\setup.h
+"..\..\..\..\lib\vc_lib\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_lib\msw\wx\setup.h
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "base - Win32 Debug"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswd\wx\setup.h
+# Begin Custom Build - Creating ..\..\..\..\lib\vc_lib\mswd\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_lib\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswd\wx\setup.h
+"..\..\..\..\lib\vc_lib\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\..\lib\vc_lib\mswd\wx\setup.h
 
 # End Custom Build
 
@@ -1336,6 +1330,16 @@ SOURCE=..\..\include\wx\zipstrm.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\zstream.h
+# End Source File
+# End Group
+# Begin Group "Source Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\..\src\msw\dummy.cpp
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # End Group
 # End Target

@@ -112,6 +112,13 @@ __DEBUG_DEFINE_p = -d__WXDEBUG__
 !ifeq DEBUG_FLAG 1
 __DEBUG_DEFINE_p = -d__WXDEBUG__
 !endif
+__EXCEPTIONSFLAG =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG = -xs
+!endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -177,7 +184,7 @@ MMEDIADLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\mmedia\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_MMEDIA &
-	$(CXXFLAGS) /fh=$(OBJS)\wxprec_mmediadll.pch
+	$(CXXFLAGS) /fh=$(OBJS)\wxprec_mmediadll.pch $(__EXCEPTIONSFLAG)
 MMEDIADLL_OBJECTS =  &
 	$(OBJS)\mmediadll_dummy.obj &
 	$(OBJS)\mmediadll_cdwin.obj &
@@ -204,7 +211,7 @@ MMEDIALIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\mmedia\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\mmedia\..\..\include $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_mmedialib.pch
+	/fh=$(OBJS)\wxprec_mmedialib.pch $(__EXCEPTIONSFLAG)
 MMEDIALIB_OBJECTS =  &
 	$(OBJS)\mmedialib_dummy.obj &
 	$(OBJS)\mmedialib_cdwin.obj &

@@ -34,12 +34,14 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 SVGTEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples -I$(srcdir)/../../include $(CXXFLAGS)
 SVGTEST_OBJECTS =  \
 	$(__svgtest___win32rc) \
+	$(__svgtest_os2_lib_res) \
 	svgtest_svgtest.o
 WX_VERSION = 2.5.1
 
@@ -99,6 +101,8 @@ COND_PLATFORM_OS2_1___svgtest___os2_emxbindcmd = $(NM) svgtest$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__svgtest___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___svgtest___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__svgtest___win32rc = svgtest_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__svgtest_bundle___depname = svgtest_bundle
+@COND_PLATFORM_OS2_1@__svgtest_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +146,8 @@ svgtest.app/Contents/PkgInfo: svgtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f svgtest$(EXEEXT) svgtest.app/Contents/MacOS/svgtest
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc svgtest.app/Contents/Resources/svgtest.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns svgtest.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc svgtest.app/Contents/Resources/svgtest.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns svgtest.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@svgtest_bundle: svgtest.app/Contents/PkgInfo
 

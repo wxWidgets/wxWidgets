@@ -112,6 +112,13 @@ __DEBUG_DEFINE_p = -d__WXDEBUG__
 !ifeq DEBUG_FLAG 1
 __DEBUG_DEFINE_p = -d__WXDEBUG__
 !endif
+__EXCEPTIONSFLAG =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG = -xs
+!endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -177,7 +184,8 @@ ANIMATEDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\animate\..\..\..\include &
 	-i=$(SETUPHDIR) -i=..\..\src\animate\..\..\include -dWXUSINGDLL &
-	-dWXMAKINGDLL_ANIMATE $(CXXFLAGS) /fh=$(OBJS)\wxprec_animatedll.pch
+	-dWXMAKINGDLL_ANIMATE $(CXXFLAGS) /fh=$(OBJS)\wxprec_animatedll.pch &
+	$(__EXCEPTIONSFLAG)
 ANIMATEDLL_OBJECTS =  &
 	$(OBJS)\animatedll_dummy.obj &
 	$(OBJS)\animatedll_animate.obj
@@ -185,7 +193,7 @@ ANIMATELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\animate\..\..\..\include &
 	-i=$(SETUPHDIR) -i=..\..\src\animate\..\..\include $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_animatelib.pch
+	/fh=$(OBJS)\wxprec_animatelib.pch $(__EXCEPTIONSFLAG)
 ANIMATELIB_OBJECTS =  &
 	$(OBJS)\animatelib_dummy.obj &
 	$(OBJS)\animatelib_animate.obj

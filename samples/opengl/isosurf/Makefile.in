@@ -41,6 +41,7 @@ ISOSURF_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../../samples $(CXXFLAGS)
 ISOSURF_OBJECTS =  \
 	$(__isosurf___win32rc) \
+	$(__isosurf_os2_lib_res) \
 	isosurf_isosurf.o
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
@@ -100,6 +101,8 @@ COND_PLATFORM_OS2_1___isosurf___os2_emxbindcmd = $(NM) isosurf$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__isosurf___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___isosurf___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__isosurf___win32rc = isosurf_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__isosurf_bundle___depname = isosurf_bundle
+@COND_PLATFORM_OS2_1@__isosurf_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -151,8 +154,8 @@ isosurf.app/Contents/PkgInfo: isosurf$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f isosurf$(EXEEXT) isosurf.app/Contents/MacOS/isosurf
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc isosurf.app/Contents/Resources/isosurf.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns isosurf.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc isosurf.app/Contents/Resources/isosurf.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns isosurf.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@isosurf_bundle: isosurf.app/Contents/PkgInfo
 

@@ -19,7 +19,7 @@ SETUPHDIR = \
 WXRC_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\..\include -I$(SETUPHDIR) -Wall -I. \
-	$(__DLLFLAG_p) $(CXXFLAGS)
+	$(__DLLFLAG_p) $(CXXFLAGS) $(__EXCEPTIONSFLAG_4) $(__EXCEPTIONSFLAG_5)
 WXRC_OBJECTS =  \
 	$(OBJS)\wxrc_wxrc.o
 
@@ -83,6 +83,18 @@ __DEBUG_DEFINE_p = -D__WXDEBUG__
 endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG_4 = -fno-rtti
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG_4 = 
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG_5 = -fno-exceptions
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG_5 = 
 endif
 ifeq ($(USE_GUI),1)
 __LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)

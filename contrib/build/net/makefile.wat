@@ -112,6 +112,13 @@ __DEBUG_DEFINE_p = -d__WXDEBUG__
 !ifeq DEBUG_FLAG 1
 __DEBUG_DEFINE_p = -d__WXDEBUG__
 !endif
+__EXCEPTIONSFLAG =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG = -xs
+!endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -177,7 +184,7 @@ NETUTILSDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\net\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_NETUTILS &
-	$(CXXFLAGS) /fh=$(OBJS)\wxprec_netutilsdll.pch
+	$(CXXFLAGS) /fh=$(OBJS)\wxprec_netutilsdll.pch $(__EXCEPTIONSFLAG)
 NETUTILSDLL_OBJECTS =  &
 	$(OBJS)\netutilsdll_dummy.obj &
 	$(OBJS)\netutilsdll_email.obj &
@@ -187,7 +194,7 @@ NETUTILSLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\net\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\net\..\..\include $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_netutilslib.pch
+	/fh=$(OBJS)\wxprec_netutilslib.pch $(__EXCEPTIONSFLAG)
 NETUTILSLIB_OBJECTS =  &
 	$(OBJS)\netutilslib_dummy.obj &
 	$(OBJS)\netutilslib_email.obj &

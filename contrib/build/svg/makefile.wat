@@ -112,6 +112,13 @@ __DEBUG_DEFINE_p = -d__WXDEBUG__
 !ifeq DEBUG_FLAG 1
 __DEBUG_DEFINE_p = -d__WXDEBUG__
 !endif
+__EXCEPTIONSFLAG =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG = -xs
+!endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -181,14 +188,15 @@ SVGDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\svg\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\svg\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_SVG $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_svgdll.pch
+	/fh=$(OBJS)\wxprec_svgdll.pch $(__EXCEPTIONSFLAG)
 SVGDLL_OBJECTS =  &
 	$(OBJS)\svgdll_dummy.obj &
 	$(OBJS)\svgdll_dcsvg.obj
 SVGLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\svg\..\..\..\include -i=$(SETUPHDIR) &
-	-i=..\..\src\svg\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_svglib.pch
+	-i=..\..\src\svg\..\..\include $(CXXFLAGS) /fh=$(OBJS)\wxprec_svglib.pch &
+	$(__EXCEPTIONSFLAG)
 SVGLIB_OBJECTS =  &
 	$(OBJS)\svglib_dummy.obj &
 	$(OBJS)\svglib_dcsvg.obj

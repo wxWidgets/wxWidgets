@@ -39,6 +39,7 @@ DYNAMIC_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 DYNAMIC_OBJECTS =  \
+	$(__dynamic_os2_lib_res) \
 	dynamic_dynamic.o \
 	$(__dynamic___win32rc)
 LIBDIRNAME = $(top_builddir)lib
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___dynamic___os2_emxbindcmd = $(NM) dynamic$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__dynamic___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___dynamic___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__dynamic___win32rc = dynamic_dynamic_rc.o
 @COND_PLATFORM_MACOSX_1@__dynamic_bundle___depname = dynamic_bundle
+@COND_PLATFORM_OS2_1@__dynamic_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -138,8 +141,8 @@ dynamic.app/Contents/PkgInfo: dynamic$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f dynamic$(EXEEXT) dynamic.app/Contents/MacOS/dynamic
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc dynamic.app/Contents/Resources/dynamic.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns dynamic.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc dynamic.app/Contents/Resources/dynamic.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns dynamic.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@dynamic_bundle: dynamic.app/Contents/PkgInfo
 

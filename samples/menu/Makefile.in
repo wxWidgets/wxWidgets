@@ -40,6 +40,7 @@ MENU_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 MENU_OBJECTS =  \
+	$(__menu_os2_lib_res) \
 	menu_menu.o \
 	$(__menu___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___menu___os2_emxbindcmd = $(NM) menu$(EXEEXT) | if grep -q \
 @COND_PLATFORM_OS2_1@__menu___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___menu___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__menu___win32rc = menu_menu_rc.o
 @COND_PLATFORM_MACOSX_1@__menu_bundle___depname = menu_bundle
+@COND_PLATFORM_OS2_1@__menu_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ menu.app/Contents/PkgInfo: menu$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f menu$(EXEEXT) menu.app/Contents/MacOS/menu
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc menu.app/Contents/Resources/menu.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns menu.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc menu.app/Contents/Resources/menu.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns menu.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@menu_bundle: menu.app/Contents/PkgInfo
 

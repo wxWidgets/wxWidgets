@@ -112,6 +112,13 @@ __DEBUG_DEFINE_p = -d__WXDEBUG__
 !ifeq DEBUG_FLAG 1
 __DEBUG_DEFINE_p = -d__WXDEBUG__
 !endif
+__EXCEPTIONSFLAG =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG = -xs
+!endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -182,7 +189,7 @@ STCDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\stc\..\..\include -i=..\..\src\stc\scintilla\include &
 	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
-	-dWXUSINGDLL -dWXMAKINGDLL_STC $(CXXFLAGS)
+	-dWXUSINGDLL -dWXMAKINGDLL_STC $(CXXFLAGS) $(__EXCEPTIONSFLAG)
 STCDLL_OBJECTS =  &
 	$(OBJS)\stcdll_PlatWX.obj &
 	$(OBJS)\stcdll_ScintillaWX.obj &
@@ -242,7 +249,7 @@ STCLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\stc\..\..\..\include -i=$(SETUPHDIR) &
 	-i=..\..\src\stc\..\..\include -i=..\..\src\stc\scintilla\include &
 	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
-	$(CXXFLAGS)
+	$(CXXFLAGS) $(__EXCEPTIONSFLAG)
 STCLIB_OBJECTS =  &
 	$(OBJS)\stclib_PlatWX.obj &
 	$(OBJS)\stclib_ScintillaWX.obj &

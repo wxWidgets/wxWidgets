@@ -36,6 +36,7 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 TEX2RTF_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) -DNO_GUI $(CXXFLAGS)
@@ -44,6 +45,7 @@ TEX2RTF_GUI_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../../samples $(CXXFLAGS)
 TEX2RTF_GUI_OBJECTS =  \
 	$(__tex2rtf_gui___win32rc) \
+	$(__tex2rtf_gui_os2_lib_res) \
 	tex2rtf_gui_tex2rtf.o \
 	tex2rtf_gui_tex2any.o \
 	tex2rtf_gui_texutils.o \
@@ -122,6 +124,8 @@ COND_PLATFORM_OS2_1___tex2rtf_gui___os2_emxbindcmd = $(NM) \
 	tex2rtf_gui$(EXEEXT) ; fi
 @COND_PLATFORM_OS2_1@__tex2rtf_gui___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___tex2rtf_gui___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__tex2rtf_gui___win32rc = tex2rtf_gui_sample_rc.o
+@COND_PLATFORM_OS2_1@__tex2rtf_gui_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -139,16 +143,16 @@ distclean: clean
 install: all install_tex2rtf install_tex2rtf_gui
 
 install-strip: install
-	$(STRIP) $(bindir)/tex2rtf$(EXEEXT)
-	$(STRIP) $(bindir)/tex2rtf_gui$(EXEEXT)
+	$(STRIP) $(DESTDIR)$(bindir)/tex2rtf$(EXEEXT)
+	$(STRIP) $(DESTDIR)$(bindir)/tex2rtf_gui$(EXEEXT)
 
 install_tex2rtf: 
-	$(INSTALL_DIR) $(bindir)
-	$(INSTALL_PROGRAM) tex2rtf$(EXEEXT) $(bindir)
+	$(INSTALL_DIR) $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) tex2rtf$(EXEEXT) $(DESTDIR)$(bindir)
 
 install_tex2rtf_gui: 
-	$(INSTALL_DIR) $(bindir)
-	$(INSTALL_PROGRAM) tex2rtf_gui$(EXEEXT) $(bindir)
+	$(INSTALL_DIR) $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) tex2rtf_gui$(EXEEXT) $(DESTDIR)$(bindir)
 
 tex2rtf$(EXEEXT): $(TEX2RTF_OBJECTS)
 	$(CXX) -o $@ $(TEX2RTF_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)   $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS)

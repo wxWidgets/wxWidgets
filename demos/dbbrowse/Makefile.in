@@ -39,6 +39,7 @@ DBBROWSE_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 DBBROWSE_OBJECTS =  \
+	$(__dbbrowse_os2_lib_res) \
 	dbbrowse_dbbrowse.o \
 	dbbrowse_doc.o \
 	dbbrowse_pgmctrl.o \
@@ -48,6 +49,7 @@ DBBROWSE_OBJECTS =  \
 	dbbrowse_dbgrid.o \
 	dbbrowse_dlguser.o \
 	$(__dbbrowse___win32rc)
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 
@@ -118,6 +120,8 @@ COND_PLATFORM_OS2_1___dbbrowse___os2_emxbindcmd = $(NM) dbbrowse$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__dbbrowse___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___dbbrowse___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__dbbrowse___win32rc = dbbrowse_dbbrowse_rc.o
 @COND_PLATFORM_MACOSX_1@__dbbrowse_bundle___depname = dbbrowse_bundle
+@COND_PLATFORM_OS2_1@__dbbrowse_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -154,8 +158,8 @@ dbbrowse.app/Contents/PkgInfo: dbbrowse$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	ln -f dbbrowse$(EXEEXT) dbbrowse.app/Contents/MacOS/dbbrowse
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc dbbrowse.app/Contents/Resources/dbbrowse.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns dbbrowse.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc dbbrowse.app/Contents/Resources/dbbrowse.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns dbbrowse.app/Contents/Resources/wxmac.icns
 
 dbbrowse_browsedb.o: $(srcdir)/browsedb.cpp
 	$(CXXC) -c -o $@ $(DBBROWSE_CXXFLAGS) $<

@@ -34,11 +34,13 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WXPOEM_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 WXPOEM_OBJECTS =  \
+	$(__wxpoem_os2_lib_res) \
 	wxpoem_wxpoem.o \
 	$(__wxpoem___win32rc)
 WX_VERSION = 2.5.1
@@ -101,6 +103,8 @@ COND_PLATFORM_OS2_1___wxpoem___os2_emxbindcmd = $(NM) wxpoem$(EXEEXT) | if grep 
 @COND_PLATFORM_OS2_1@__wxpoem___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___wxpoem___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__wxpoem___win32rc = wxpoem_wxpoem_rc.o
 @COND_PLATFORM_MACOSX_1@__wxpoem_bundle___depname = wxpoem_bundle
+@COND_PLATFORM_OS2_1@__wxpoem_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -154,8 +158,8 @@ wxpoem.app/Contents/PkgInfo: wxpoem$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f wxpoem$(EXEEXT) wxpoem.app/Contents/MacOS/wxpoem
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc wxpoem.app/Contents/Resources/wxpoem.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns wxpoem.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc wxpoem.app/Contents/Resources/wxpoem.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns wxpoem.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@wxpoem_bundle: wxpoem.app/Contents/PkgInfo
 

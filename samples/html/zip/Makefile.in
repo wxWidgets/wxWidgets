@@ -41,6 +41,7 @@ ZIP_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples $(CXXFLAGS)
 ZIP_OBJECTS =  \
+	$(__zip_os2_lib_res) \
 	zip_zip.o \
 	$(__zip___win32rc)
 
@@ -101,6 +102,8 @@ COND_PLATFORM_OS2_1___zip___os2_emxbindcmd = $(NM) zip$(EXEEXT) | if grep -q \
 @COND_PLATFORM_OS2_1@__zip___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___zip___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__zip___win32rc = zip_zip_rc.o
 @COND_PLATFORM_MACOSX_1@__zip_bundle___depname = zip_bundle
+@COND_PLATFORM_OS2_1@__zip_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -154,8 +157,8 @@ zip.app/Contents/PkgInfo: zip$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f zip$(EXEEXT) zip.app/Contents/MacOS/zip
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc zip.app/Contents/Resources/zip.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns zip.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc zip.app/Contents/Resources/zip.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns zip.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@zip_bundle: zip.app/Contents/PkgInfo
 

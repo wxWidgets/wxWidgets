@@ -39,6 +39,7 @@ INTERNAT_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 INTERNAT_OBJECTS =  \
+	$(__internat_os2_lib_res) \
 	internat_internat.o \
 	$(__internat___win32rc)
 LIBDIRNAME = $(top_builddir)lib
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___internat___os2_emxbindcmd = $(NM) internat$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__internat___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___internat___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__internat___win32rc = internat_internat_rc.o
 @COND_PLATFORM_MACOSX_1@__internat_bundle___depname = internat_bundle
+@COND_PLATFORM_OS2_1@__internat_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ internat.app/Contents/PkgInfo: internat$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	ln -f internat$(EXEEXT) internat.app/Contents/MacOS/internat
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc internat.app/Contents/Resources/internat.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns internat.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc internat.app/Contents/Resources/internat.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns internat.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@internat_bundle: internat.app/Contents/PkgInfo
 

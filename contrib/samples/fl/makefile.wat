@@ -65,36 +65,36 @@ WXUNIVNAME = univ
 __DEBUGINFO =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
-__DEBUGINFO = debug all
+__DEBUGINFO = -d2
 !endif
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO = 
+__DEBUGINFO = -d0
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO = 
+__DEBUGINFO = -d0
 !endif
 !ifeq DEBUG_INFO 1
-__DEBUGINFO = debug all
+__DEBUGINFO = -d2
 !endif
-__DEBUGINFO_3 =
+__DEBUGINFO_4 =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
-__DEBUGINFO_3 = -d2
+__DEBUGINFO_4 = debug all
 !endif
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO_3 = -d0
+__DEBUGINFO_4 = 
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO_3 = -d0
+__DEBUGINFO_4 = 
 !endif
 !ifeq DEBUG_INFO 1
-__DEBUGINFO_3 = -d2
+__DEBUGINFO_4 = debug all
 !endif
 __DEBUG_DEFINE_p =
 !ifeq BUILD debug
@@ -108,6 +108,13 @@ __DEBUG_DEFINE_p = -d__WXDEBUG__
 __DLLFLAG_p =
 !ifeq SHARED 1
 __DLLFLAG_p = -dWXUSINGDLL
+!endif
+__EXCEPTIONSFLAG =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG = -xs
 !endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
@@ -160,39 +167,39 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ### Variables: ###
 
-FL_DEMO1_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_3) $(__OPTIMIZEFLAG) -bm &
+FL_DEMO1_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
 	$(__DLLFLAG_p) -i=.\..\..\..\samples -i=.\..\..\include &
-	-dBMP_DIR="bitmaps/" $(CXXFLAGS)
+	-dBMP_DIR="bitmaps/" $(CXXFLAGS) $(__EXCEPTIONSFLAG)
 FL_DEMO1_OBJECTS =  &
 	$(OBJS)\fl_demo1_fl_demo1.obj
-FL_DEMO2_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_3) $(__OPTIMIZEFLAG) -bm &
+FL_DEMO2_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
 	$(__DLLFLAG_p) -i=.\..\..\..\samples -i=.\..\..\include &
-	-dBMP_DIR="bitmaps/" $(CXXFLAGS)
+	-dBMP_DIR="bitmaps/" $(CXXFLAGS) $(__EXCEPTIONSFLAG)
 FL_DEMO2_OBJECTS =  &
 	$(OBJS)\fl_demo2_fl_demo2.obj
-FL_SAMPLE1_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_3) $(__OPTIMIZEFLAG) -bm &
+FL_SAMPLE1_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
 	$(__DLLFLAG_p) -i=.\..\..\..\samples -i=.\..\..\include &
-	-dBMP_DIR="bitmaps/" $(CXXFLAGS)
+	-dBMP_DIR="bitmaps/" $(CXXFLAGS) $(__EXCEPTIONSFLAG)
 FL_SAMPLE1_OBJECTS =  &
 	$(OBJS)\fl_sample1_fl_sample1.obj
-FL_SAMPLE2_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_3) $(__OPTIMIZEFLAG) -bm &
+FL_SAMPLE2_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
 	$(__DLLFLAG_p) -i=.\..\..\..\samples -i=.\..\..\include &
-	-dBMP_DIR="bitmaps/" $(CXXFLAGS)
+	-dBMP_DIR="bitmaps/" $(CXXFLAGS) $(__EXCEPTIONSFLAG)
 FL_SAMPLE2_OBJECTS =  &
 	$(OBJS)\fl_sample2_fl_sample2.obj
-FL_SAMPLE3_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_3) $(__OPTIMIZEFLAG) -bm &
+FL_SAMPLE3_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
 	$(__DLLFLAG_p) -i=.\..\..\..\samples -i=.\..\..\include &
-	-dBMP_DIR="bitmaps/" $(CXXFLAGS)
+	-dBMP_DIR="bitmaps/" $(CXXFLAGS) $(__EXCEPTIONSFLAG)
 FL_SAMPLE3_OBJECTS =  &
 	$(OBJS)\fl_sample3_fl_sample3.obj
 OBJS = &
@@ -259,7 +266,7 @@ $(OBJS)\fl_demo1.exe :  $(FL_DEMO1_OBJECTS) $(OBJS)\fl_demo1_fl_demo1.res
 	@%append $(OBJS)\fl_demo1.lbc option quiet
 	@%append $(OBJS)\fl_demo1.lbc name $^@
 	@%append $(OBJS)\fl_demo1.lbc option caseexact
-	@%append $(OBJS)\fl_demo1.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\fl_demo1.lbc $(LDFLAGS) $(__DEBUGINFO_4)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(FL_DEMO1_OBJECTS)) do @%append $(OBJS)\fl_demo1.lbc file %i
 	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\fl_demo1.lbc library %i
 	@%append $(OBJS)\fl_demo1.lbc option resource=$(OBJS)\fl_demo1_fl_demo1.res
@@ -270,7 +277,7 @@ $(OBJS)\fl_demo2.exe :  $(FL_DEMO2_OBJECTS) $(OBJS)\fl_demo2_fl_demo2.res
 	@%append $(OBJS)\fl_demo2.lbc option quiet
 	@%append $(OBJS)\fl_demo2.lbc name $^@
 	@%append $(OBJS)\fl_demo2.lbc option caseexact
-	@%append $(OBJS)\fl_demo2.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\fl_demo2.lbc $(LDFLAGS) $(__DEBUGINFO_4)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(FL_DEMO2_OBJECTS)) do @%append $(OBJS)\fl_demo2.lbc file %i
 	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\fl_demo2.lbc library %i
 	@%append $(OBJS)\fl_demo2.lbc option resource=$(OBJS)\fl_demo2_fl_demo2.res
@@ -281,7 +288,7 @@ $(OBJS)\fl_sample1.exe :  $(FL_SAMPLE1_OBJECTS) $(OBJS)\fl_sample1_fl_sample1.re
 	@%append $(OBJS)\fl_sample1.lbc option quiet
 	@%append $(OBJS)\fl_sample1.lbc name $^@
 	@%append $(OBJS)\fl_sample1.lbc option caseexact
-	@%append $(OBJS)\fl_sample1.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\fl_sample1.lbc $(LDFLAGS) $(__DEBUGINFO_4)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(FL_SAMPLE1_OBJECTS)) do @%append $(OBJS)\fl_sample1.lbc file %i
 	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\fl_sample1.lbc library %i
 	@%append $(OBJS)\fl_sample1.lbc option resource=$(OBJS)\fl_sample1_fl_sample1.res
@@ -292,7 +299,7 @@ $(OBJS)\fl_sample2.exe :  $(FL_SAMPLE2_OBJECTS) $(OBJS)\fl_sample2_fl_sample2.re
 	@%append $(OBJS)\fl_sample2.lbc option quiet
 	@%append $(OBJS)\fl_sample2.lbc name $^@
 	@%append $(OBJS)\fl_sample2.lbc option caseexact
-	@%append $(OBJS)\fl_sample2.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\fl_sample2.lbc $(LDFLAGS) $(__DEBUGINFO_4)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(FL_SAMPLE2_OBJECTS)) do @%append $(OBJS)\fl_sample2.lbc file %i
 	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\fl_sample2.lbc library %i
 	@%append $(OBJS)\fl_sample2.lbc option resource=$(OBJS)\fl_sample2_fl_sample2.res
@@ -303,7 +310,7 @@ $(OBJS)\fl_sample3.exe :  $(FL_SAMPLE3_OBJECTS) $(OBJS)\fl_sample3_fl_sample3.re
 	@%append $(OBJS)\fl_sample3.lbc option quiet
 	@%append $(OBJS)\fl_sample3.lbc name $^@
 	@%append $(OBJS)\fl_sample3.lbc option caseexact
-	@%append $(OBJS)\fl_sample3.lbc $(LDFLAGS) $(__DEBUGINFO)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\fl_sample3.lbc $(LDFLAGS) $(__DEBUGINFO_4)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(FL_SAMPLE3_OBJECTS)) do @%append $(OBJS)\fl_sample3.lbc file %i
 	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\fl_sample3.lbc library %i
 	@%append $(OBJS)\fl_sample3.lbc option resource=$(OBJS)\fl_sample3_fl_sample3.res

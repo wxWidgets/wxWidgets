@@ -39,6 +39,7 @@ HELP_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 HELP_OBJECTS =  \
+	$(__help_os2_lib_res) \
 	help_demo.o \
 	$(__help___win32rc)
 LIBDIRNAME = $(top_builddir)lib
@@ -102,6 +103,8 @@ COND_PLATFORM_OS2_1___help___os2_emxbindcmd = $(NM) help$(EXEEXT) | if grep -q \
 @COND_PLATFORM_OS2_1@__help___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___help___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__help___win32rc = help_demo_rc.o
 @COND_PLATFORM_MACOSX_1@__help_bundle___depname = help_bundle
+@COND_PLATFORM_OS2_1@__help_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -141,8 +144,8 @@ help.app/Contents/PkgInfo: help$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f help$(EXEEXT) help.app/Contents/MacOS/help
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc help.app/Contents/Resources/help.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns help.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc help.app/Contents/Resources/help.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns help.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@help_bundle: help.app/Contents/PkgInfo
 

@@ -13,7 +13,7 @@
 ### Variables: ###
 
 DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
-	/DWIN32 $(__DEBUGINFO) \
+	/DWIN32 $(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
@@ -21,13 +21,14 @@ DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	/I..\..\src\deprecated\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_DEPRECATED \
 	/I..\..\src\deprecated $(CFLAGS)
 DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
-	/DWIN32 $(__DEBUGINFO) \
+	/DWIN32 $(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)251$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) /W4 \
 	/I..\..\src\deprecated\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_DEPRECATED \
-	/I..\..\src\deprecated $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
+	/I..\..\src\deprecated $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_deprecateddll.pch"
 DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_dummy.obj \
@@ -39,21 +40,22 @@ DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_treelay.obj \
 	$(OBJS)\deprecateddll_wxexpr.obj \
 	$(OBJS)\deprecateddll_dosyacc.obj
-DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_13) \
-	/DWIN32 $(__DEBUGINFO) \
+DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) \
+	/DWIN32 $(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated.pdb \
-	$(____DEBUGRUNTIME_12_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
+	$(____DEBUGRUNTIME_14_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) /W4 \
 	/I..\..\src\deprecated\..\..\include /I..\..\src\deprecated $(CFLAGS)
-DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_13) \
-	/DWIN32 $(__DEBUGINFO) \
+DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_15) \
+	/DWIN32 $(__DEBUGINFO_2) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated.pdb \
-	$(____DEBUGRUNTIME_12_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
+	$(____DEBUGRUNTIME_14_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) /W4 \
-	/I..\..\src\deprecated\..\..\include /I..\..\src\deprecated $(CXXFLAGS) /GR \
-	/GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_deprecatedlib.pch"
+	/I..\..\src\deprecated\..\..\include /I..\..\src\deprecated $(CXXFLAGS) \
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_deprecatedlib.pch"
 DEPRECATEDLIB_OBJECTS =  \
 	$(OBJS)\deprecatedlib_dummy.obj \
 	$(OBJS)\deprecatedlib_prop.obj \
@@ -105,7 +107,7 @@ WXUNICODEFLAG = u
 WXUNIVNAME = univ
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO = /Zi
+__DEBUGINFO = d
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO = 
@@ -114,7 +116,7 @@ __DEBUGINFO =
 __DEBUGINFO = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO = /Zi
+__DEBUGINFO = d
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_1 = /DEBUG
@@ -129,7 +131,7 @@ __DEBUGINFO_1 =
 __DEBUGINFO_1 = /DEBUG
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_2 = d
+__DEBUGINFO_2 = /Zi
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_2 = 
@@ -138,16 +140,16 @@ __DEBUGINFO_2 =
 __DEBUGINFO_2 = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_2 = d
+__DEBUGINFO_2 = /Zi
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_13 = 
+__DEBUGRUNTIME_15 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_13 = d
+__DEBUGRUNTIME_15 = d
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_13 = $(__DEBUGINFO_2)
+__DEBUGRUNTIME_15 = $(__DEBUGINFO)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 __DEBUGRUNTIME_3 = 
@@ -156,13 +158,25 @@ __DEBUGRUNTIME_3 =
 __DEBUGRUNTIME_3 = d
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_3 = $(__DEBUGINFO_2)
+__DEBUGRUNTIME_3 = $(__DEBUGINFO)
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
 __DEBUG_DEFINE_p = /D__WXDEBUG__
 !endif
 !if "$(DEBUG_FLAG)" == "1"
 __DEBUG_DEFINE_p = /D__WXDEBUG__
+!endif
+!if "$(USE_EXCEPTIONS)" == "0"
+__EXCEPTIONSFLAG = 
+!endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__EXCEPTIONSFLAG = /GR
+!endif
+!if "$(USE_EXCEPTIONS)" == "0"
+__EXCEPTIONSFLAG_0 = 
+!endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__EXCEPTIONSFLAG_0 = /GX
 !endif
 !if "$(USE_GUI)" == "1"
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -224,13 +238,13 @@ ____DEBUGINFO =
 ____DEBUGINFO = /D_DEBUG
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_12_p = 
+____DEBUGRUNTIME_14_p = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_12_p = /D_DEBUG
+____DEBUGRUNTIME_14_p = /D_DEBUG
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_12_p = $(____DEBUGINFO)
+____DEBUGRUNTIME_14_p = $(____DEBUGINFO)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 ____DEBUGRUNTIME_2_p = 

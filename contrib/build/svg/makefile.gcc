@@ -19,14 +19,16 @@ SETUPHDIR = \
 SVGDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\svg\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_SVG $(CXXFLAGS)
+	-I..\..\src\svg\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_SVG $(CXXFLAGS) \
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0)
 SVGDLL_OBJECTS =  \
 	$(OBJS)\svgdll_dummy.o \
 	$(OBJS)\svgdll_dcsvg.o
 SVGLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\svg\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\svg\..\..\include $(CXXFLAGS)
+	-I..\..\src\svg\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_0)
 SVGLIB_OBJECTS =  \
 	$(OBJS)\svglib_dummy.o \
 	$(OBJS)\svglib_dcsvg.o
@@ -94,6 +96,18 @@ endif
 endif
 ifeq ($(DEBUG_FLAG),1)
 __DEBUG_DEFINE_p = -D__WXDEBUG__
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG = -fno-rtti
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG = 
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG_0 = -fno-exceptions
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG_0 = 
 endif
 ifeq ($(USE_GUI),1)
 __LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)

@@ -40,6 +40,7 @@ TREECTRL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 TREECTRL_OBJECTS =  \
+	$(__treectrl_os2_lib_res) \
 	treectrl_treetest.o \
 	$(__treectrl___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___treectrl___os2_emxbindcmd = $(NM) treectrl$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__treectrl___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___treectrl___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__treectrl___win32rc = treectrl_treetest_rc.o
 @COND_PLATFORM_MACOSX_1@__treectrl_bundle___depname = treectrl_bundle
+@COND_PLATFORM_OS2_1@__treectrl_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ treectrl.app/Contents/PkgInfo: treectrl$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	ln -f treectrl$(EXEEXT) treectrl.app/Contents/MacOS/treectrl
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc treectrl.app/Contents/Resources/treectrl.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns treectrl.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc treectrl.app/Contents/Resources/treectrl.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns treectrl.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@treectrl_bundle: treectrl.app/Contents/PkgInfo
 

@@ -38,8 +38,10 @@ ACCESSTEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 ACCESSTEST_OBJECTS =  \
+	$(__accesstest_os2_lib_res) \
 	accesstest_accesstest.o \
 	$(__accesstest___win32rc)
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
 
@@ -98,6 +100,8 @@ COND_PLATFORM_OS2_1___accesstest___os2_emxbindcmd = $(NM) accesstest$(EXEEXT) \
 @COND_PLATFORM_OS2_1@__accesstest___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___accesstest___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__accesstest___win32rc = accesstest_accesstest_rc.o
 @COND_PLATFORM_MACOSX_1@__accesstest_bundle___depname = accesstest_bundle
+@COND_PLATFORM_OS2_1@__accesstest_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -128,8 +132,8 @@ accesstest.app/Contents/PkgInfo: accesstest$(EXEEXT) $(top_srcdir)/src/mac/Info.
 	ln -f accesstest$(EXEEXT) accesstest.app/Contents/MacOS/accesstest
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc accesstest.app/Contents/Resources/accesstest.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns accesstest.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc accesstest.app/Contents/Resources/accesstest.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns accesstest.app/Contents/Resources/wxmac.icns
 
 accesstest_accesstest.o: $(srcdir)/accesstest.cpp
 	$(CXXC) -c -o $@ $(ACCESSTEST_CXXFLAGS) $<

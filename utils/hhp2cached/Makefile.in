@@ -36,10 +36,12 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 HHP2CACHED_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 HHP2CACHED_OBJECTS =  \
+	$(__hhp2cached_os2_lib_res) \
 	hhp2cached_hhp2cached.o \
 	$(__hhp2cached___win32rc)
 LIBDIRNAME = $(top_builddir)lib
@@ -101,6 +103,8 @@ COND_PLATFORM_OS2_1___hhp2cached___os2_emxbindcmd = $(NM) hhp2cached$(EXEEXT) \
 	| if grep -q pmwin.763 ; then emxbind -ep hhp2cached$(EXEEXT) ; fi
 @COND_PLATFORM_OS2_1@__hhp2cached___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___hhp2cached___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__hhp2cached___win32rc = hhp2cached_hhp2cached_rc.o
+@COND_PLATFORM_OS2_1@__hhp2cached_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -129,11 +133,11 @@ hhp2cached_hhp2cached_rc.o: $(srcdir)/hhp2cached.rc
 install: all install_hhp2cached
 
 install-strip: install
-	$(STRIP) $(bindir)/hhp2cached$(EXEEXT)
+	$(STRIP) $(DESTDIR)$(bindir)/hhp2cached$(EXEEXT)
 
 install_hhp2cached: 
-	$(INSTALL_DIR) $(bindir)
-	$(INSTALL_PROGRAM) hhp2cached$(EXEEXT) $(bindir)
+	$(INSTALL_DIR) $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) hhp2cached$(EXEEXT) $(DESTDIR)$(bindir)
 
 uninstall: 
 

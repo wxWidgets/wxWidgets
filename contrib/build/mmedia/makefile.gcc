@@ -16,7 +16,7 @@ MMEDIADLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) \
 	-Wall -I..\..\src\mmedia\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_MMEDIA \
-	$(CXXFLAGS)
+	$(CXXFLAGS) $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0)
 MMEDIADLL_OBJECTS =  \
 	$(OBJS)\mmediadll_dummy.o \
 	$(OBJS)\mmediadll_cdwin.o \
@@ -42,7 +42,8 @@ MMEDIADLL_OBJECTS =  \
 MMEDIALIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) \
-	-Wall -I..\..\src\mmedia\..\..\include $(CXXFLAGS)
+	-Wall -I..\..\src\mmedia\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_0)
 MMEDIALIB_OBJECTS =  \
 	$(OBJS)\mmedialib_dummy.o \
 	$(OBJS)\mmedialib_cdwin.o \
@@ -133,6 +134,18 @@ endif
 endif
 ifeq ($(DEBUG_FLAG),1)
 __DEBUG_DEFINE_p = -D__WXDEBUG__
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG = -fno-rtti
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG = 
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG_0 = -fno-exceptions
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG_0 = 
 endif
 ifeq ($(USE_GUI),1)
 __LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)

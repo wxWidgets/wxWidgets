@@ -40,6 +40,7 @@ VALIDATE_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 VALIDATE_OBJECTS =  \
+	$(__validate_os2_lib_res) \
 	validate_validate.o \
 	$(__validate___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___validate___os2_emxbindcmd = $(NM) validate$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__validate___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___validate___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__validate___win32rc = validate_validate_rc.o
 @COND_PLATFORM_MACOSX_1@__validate_bundle___depname = validate_bundle
+@COND_PLATFORM_OS2_1@__validate_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -144,8 +147,8 @@ validate.app/Contents/PkgInfo: validate$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	ln -f validate$(EXEEXT) validate.app/Contents/MacOS/validate
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc validate.app/Contents/Resources/validate.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns validate.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc validate.app/Contents/Resources/validate.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns validate.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@validate_bundle: validate.app/Contents/PkgInfo
 

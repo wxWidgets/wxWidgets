@@ -40,6 +40,7 @@ ROTATE_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 ROTATE_OBJECTS =  \
+	$(__rotate_os2_lib_res) \
 	rotate_rotate.o \
 	$(__rotate___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___rotate___os2_emxbindcmd = $(NM) rotate$(EXEEXT) | if grep 
 @COND_PLATFORM_OS2_1@__rotate___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___rotate___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__rotate___win32rc = rotate_rotate_rc.o
 @COND_PLATFORM_MACOSX_1@__rotate_bundle___depname = rotate_bundle
+@COND_PLATFORM_OS2_1@__rotate_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -150,8 +153,8 @@ rotate.app/Contents/PkgInfo: rotate$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f rotate$(EXEEXT) rotate.app/Contents/MacOS/rotate
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc rotate.app/Contents/Resources/rotate.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns rotate.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc rotate.app/Contents/Resources/rotate.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns rotate.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@rotate_bundle: rotate.app/Contents/PkgInfo
 

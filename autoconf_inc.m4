@@ -496,6 +496,12 @@ dnl ### begin block 1_COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN ###
         COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN=""
     fi
     AC_SUBST(COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN)
+dnl ### begin block 1_COND_USE_ODBC_1 ###
+    COND_USE_ODBC_1="#"
+    if test "x$USE_ODBC" = "x1" ; then
+        COND_USE_ODBC_1=""
+    fi
+    AC_SUBST(COND_USE_ODBC_1)
 dnl ### begin block 1_COND_USE_SOSYMLINKS_1 ###
     COND_USE_SOSYMLINKS_1="#"
     if test "x$USE_SOSYMLINKS" = "x1" ; then

@@ -39,6 +39,7 @@ HTLBOX_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 HTLBOX_OBJECTS =  \
+	$(__htlbox_os2_lib_res) \
 	htlbox_htlbox.o \
 	$(__htlbox___win32rc)
 LIBDIRNAME = $(top_builddir)lib
@@ -102,6 +103,8 @@ COND_PLATFORM_OS2_1___htlbox___os2_emxbindcmd = $(NM) htlbox$(EXEEXT) | if grep 
 @COND_PLATFORM_OS2_1@__htlbox___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___htlbox___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__htlbox___win32rc = htlbox_htlbox_rc.o
 @COND_PLATFORM_MACOSX_1@__htlbox_bundle___depname = htlbox_bundle
+@COND_PLATFORM_OS2_1@__htlbox_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -141,8 +144,8 @@ htlbox.app/Contents/PkgInfo: htlbox$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f htlbox$(EXEEXT) htlbox.app/Contents/MacOS/htlbox
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc htlbox.app/Contents/Resources/htlbox.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns htlbox.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc htlbox.app/Contents/Resources/htlbox.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns htlbox.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@htlbox_bundle: htlbox.app/Contents/PkgInfo
 

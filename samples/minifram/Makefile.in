@@ -40,6 +40,7 @@ MINIFRAM_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 MINIFRAM_OBJECTS =  \
+	$(__minifram_os2_lib_res) \
 	minifram_minifram.o \
 	$(__minifram___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___minifram___os2_emxbindcmd = $(NM) minifram$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__minifram___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___minifram___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__minifram___win32rc = minifram_minifram_rc.o
 @COND_PLATFORM_MACOSX_1@__minifram_bundle___depname = minifram_bundle
+@COND_PLATFORM_OS2_1@__minifram_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ minifram.app/Contents/PkgInfo: minifram$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	ln -f minifram$(EXEEXT) minifram.app/Contents/MacOS/minifram
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc minifram.app/Contents/Resources/minifram.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns minifram.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc minifram.app/Contents/Resources/minifram.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns minifram.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@minifram_bundle: minifram.app/Contents/PkgInfo
 

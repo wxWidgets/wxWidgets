@@ -32,12 +32,14 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WXEMULATOR_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples $(CXXFLAGS)
 WXEMULATOR_OBJECTS =  \
 	$(__wxemulator___win32rc) \
+	$(__wxemulator_os2_lib_res) \
 	wxemulator_emulator.o
 
 ### Conditionally set variables: ###
@@ -94,6 +96,8 @@ COND_PLATFORM_OS2_1___wxemulator___os2_emxbindcmd = $(NM) wxemulator$(EXEEXT) \
 	| if grep -q pmwin.763 ; then emxbind -ep wxemulator$(EXEEXT) ; fi
 @COND_PLATFORM_OS2_1@__wxemulator___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___wxemulator___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__wxemulator___win32rc = wxemulator_sample_rc.o
+@COND_PLATFORM_OS2_1@__wxemulator_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 

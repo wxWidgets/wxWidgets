@@ -40,6 +40,7 @@ PROPSIZE_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 PROPSIZE_OBJECTS =  \
+	$(__propsize_os2_lib_res) \
 	propsize_propsize.o \
 	$(__propsize___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___propsize___os2_emxbindcmd = $(NM) propsize$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__propsize___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___propsize___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__propsize___win32rc = propsize_propsize_rc.o
 @COND_PLATFORM_MACOSX_1@__propsize_bundle___depname = propsize_bundle
+@COND_PLATFORM_OS2_1@__propsize_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ propsize.app/Contents/PkgInfo: propsize$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	ln -f propsize$(EXEEXT) propsize.app/Contents/MacOS/propsize
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc propsize.app/Contents/Resources/propsize.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns propsize.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc propsize.app/Contents/Resources/propsize.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns propsize.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@propsize_bundle: propsize.app/Contents/PkgInfo
 

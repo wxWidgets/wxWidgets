@@ -38,6 +38,7 @@ ARTTEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 ARTTEST_OBJECTS =  \
+	$(__arttest_os2_lib_res) \
 	arttest_arttest.o \
 	arttest_artbrows.o \
 	$(__arttest___win32rc)
@@ -100,6 +101,8 @@ COND_PLATFORM_OS2_1___arttest___os2_emxbindcmd = $(NM) arttest$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__arttest___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___arttest___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__arttest___win32rc = arttest_arttest_rc.o
 @COND_PLATFORM_MACOSX_1@__arttest_bundle___depname = arttest_bundle
+@COND_PLATFORM_OS2_1@__arttest_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -130,8 +133,8 @@ arttest.app/Contents/PkgInfo: arttest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f arttest$(EXEEXT) arttest.app/Contents/MacOS/arttest
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc arttest.app/Contents/Resources/arttest.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns arttest.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc arttest.app/Contents/Resources/arttest.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns arttest.app/Contents/Resources/wxmac.icns
 
 arttest_artbrows.o: $(srcdir)/artbrows.cpp
 	$(CXXC) -c -o $@ $(ARTTEST_CXXFLAGS) $<

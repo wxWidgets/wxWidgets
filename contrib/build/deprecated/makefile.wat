@@ -112,6 +112,13 @@ __DEBUG_DEFINE_p = -d__WXDEBUG__
 !ifeq DEBUG_FLAG 1
 __DEBUG_DEFINE_p = -d__WXDEBUG__
 !endif
+__EXCEPTIONSFLAG =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONSFLAG = 
+!endif
+!ifeq USE_EXCEPTIONS 1
+__EXCEPTIONSFLAG = -xs
+!endif
 __LIB_JPEG_p =
 !ifeq USE_GUI 1
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -183,7 +190,7 @@ DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\deprecated\..\..\..\include &
 	-i=$(SETUPHDIR) -i=..\..\src\deprecated\..\..\include -dWXUSINGDLL &
 	-dWXMAKINGDLL_DEPRECATED -i=..\..\src\deprecated $(CXXFLAGS) &
-	/fh=$(OBJS)\wxprec_deprecateddll.pch
+	/fh=$(OBJS)\wxprec_deprecateddll.pch $(__EXCEPTIONSFLAG)
 DEPRECATEDDLL_OBJECTS =  &
 	$(OBJS)\deprecateddll_dummy.obj &
 	$(OBJS)\deprecateddll_prop.obj &
@@ -203,7 +210,8 @@ DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\src\deprecated\..\..\..\include &
 	-i=$(SETUPHDIR) -i=..\..\src\deprecated\..\..\include &
-	-i=..\..\src\deprecated $(CXXFLAGS) /fh=$(OBJS)\wxprec_deprecatedlib.pch
+	-i=..\..\src\deprecated $(CXXFLAGS) /fh=$(OBJS)\wxprec_deprecatedlib.pch &
+	$(__EXCEPTIONSFLAG)
 DEPRECATEDLIB_OBJECTS =  &
 	$(OBJS)\deprecatedlib_dummy.obj &
 	$(OBJS)\deprecatedlib_prop.obj &

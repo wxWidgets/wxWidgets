@@ -40,6 +40,7 @@ SPLITTER_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 SPLITTER_OBJECTS =  \
+	$(__splitter_os2_lib_res) \
 	splitter_splitter.o \
 	$(__splitter___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___splitter___os2_emxbindcmd = $(NM) splitter$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__splitter___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___splitter___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__splitter___win32rc = splitter_splitter_rc.o
 @COND_PLATFORM_MACOSX_1@__splitter_bundle___depname = splitter_bundle
+@COND_PLATFORM_OS2_1@__splitter_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ splitter.app/Contents/PkgInfo: splitter$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	ln -f splitter$(EXEEXT) splitter.app/Contents/MacOS/splitter
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc splitter.app/Contents/Resources/splitter.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns splitter.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc splitter.app/Contents/Resources/splitter.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns splitter.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@splitter_bundle: splitter.app/Contents/PkgInfo
 

@@ -38,6 +38,7 @@ CONFTEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 CONFTEST_OBJECTS =  \
+	$(__conftest_os2_lib_res) \
 	conftest_conftest.o \
 	$(__conftest___win32rc)
 DESTDIR = 
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___conftest___os2_emxbindcmd = $(NM) conftest$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__conftest___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___conftest___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__conftest___win32rc = conftest_conftest_rc.o
 @COND_PLATFORM_MACOSX_1@__conftest_bundle___depname = conftest_bundle
+@COND_PLATFORM_OS2_1@__conftest_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -135,8 +138,8 @@ conftest.app/Contents/PkgInfo: conftest$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	ln -f conftest$(EXEEXT) conftest.app/Contents/MacOS/conftest
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc conftest.app/Contents/Resources/conftest.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns conftest.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc conftest.app/Contents/Resources/conftest.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns conftest.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@conftest_bundle: conftest.app/Contents/PkgInfo
 

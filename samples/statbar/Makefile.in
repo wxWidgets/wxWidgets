@@ -40,6 +40,7 @@ STATBAR_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 STATBAR_OBJECTS =  \
+	$(__statbar_os2_lib_res) \
 	statbar_statbar.o \
 	$(__statbar___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___statbar___os2_emxbindcmd = $(NM) statbar$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__statbar___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___statbar___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__statbar___win32rc = statbar_statbar_rc.o
 @COND_PLATFORM_MACOSX_1@__statbar_bundle___depname = statbar_bundle
+@COND_PLATFORM_OS2_1@__statbar_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ statbar.app/Contents/PkgInfo: statbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f statbar$(EXEEXT) statbar.app/Contents/MacOS/statbar
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc statbar.app/Contents/Resources/statbar.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns statbar.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc statbar.app/Contents/Resources/statbar.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns statbar.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@statbar_bundle: statbar.app/Contents/PkgInfo
 

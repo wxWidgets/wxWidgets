@@ -41,6 +41,7 @@ MINIMAL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 MINIMAL_OBJECTS =  \
 	$(__minimal___win32rc) \
+	$(__minimal_os2_lib_res) \
 	minimal_minimal.o
 WX_VERSION = 2.5.1
 
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___minimal___os2_emxbindcmd = $(NM) minimal$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__minimal___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___minimal___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__minimal___win32rc = minimal_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__minimal_bundle___depname = minimal_bundle
+@COND_PLATFORM_OS2_1@__minimal_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ minimal.app/Contents/PkgInfo: minimal$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f minimal$(EXEEXT) minimal.app/Contents/MacOS/minimal
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc minimal.app/Contents/Resources/minimal.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns minimal.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc minimal.app/Contents/Resources/minimal.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns minimal.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@minimal_bundle: minimal.app/Contents/PkgInfo
 

@@ -40,6 +40,7 @@ OLEAUTO_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 OLEAUTO_OBJECTS =  \
+	$(__oleauto_os2_lib_res) \
 	oleauto_oleauto.o \
 	$(__oleauto___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___oleauto___os2_emxbindcmd = $(NM) oleauto$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__oleauto___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___oleauto___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__oleauto___win32rc = oleauto_oleauto_rc.o
 @COND_PLATFORM_MACOSX_1@__oleauto_bundle___depname = oleauto_bundle
+@COND_PLATFORM_OS2_1@__oleauto_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ oleauto.app/Contents/PkgInfo: oleauto$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f oleauto$(EXEEXT) oleauto.app/Contents/MacOS/oleauto
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc oleauto.app/Contents/Resources/oleauto.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns oleauto.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc oleauto.app/Contents/Resources/oleauto.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns oleauto.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@oleauto_bundle: oleauto.app/Contents/PkgInfo
 

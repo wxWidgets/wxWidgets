@@ -46,6 +46,7 @@ PENGUIN_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples $(CXXFLAGS)
 PENGUIN_OBJECTS =  \
+	$(__penguin_os2_lib_res) \
 	penguin_penguin.o \
 	penguin_lw.o \
 	penguin_trackball.o \
@@ -109,6 +110,8 @@ COND_PLATFORM_OS2_1___penguin___os2_emxbindcmd = $(NM) penguin$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__penguin___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___penguin___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__penguin___win32rc = penguin_penguin_rc.o
 @COND_PLATFORM_MACOSX_1@__penguin_bundle___depname = penguin_bundle
+@COND_PLATFORM_OS2_1@__penguin_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -160,8 +163,8 @@ penguin.app/Contents/PkgInfo: penguin$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f penguin$(EXEEXT) penguin.app/Contents/MacOS/penguin
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc penguin.app/Contents/Resources/penguin.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns penguin.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc penguin.app/Contents/Resources/penguin.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns penguin.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@penguin_bundle: penguin.app/Contents/PkgInfo
 

@@ -40,6 +40,7 @@ PNG_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 PNG_OBJECTS =  \
+	$(__png_os2_lib_res) \
 	png_pngdemo.o \
 	$(__png___win32rc)
 WX_VERSION = 2.5.1
@@ -98,6 +99,8 @@ COND_PLATFORM_OS2_1___png___os2_emxbindcmd = $(NM) png$(EXEEXT) | if grep -q \
 @COND_PLATFORM_OS2_1@__png___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___png___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__png___win32rc = png_pngdemo_rc.o
 @COND_PLATFORM_MACOSX_1@__png_bundle___depname = png_bundle
+@COND_PLATFORM_OS2_1@__png_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -141,8 +144,8 @@ png.app/Contents/PkgInfo: png$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f png$(EXEEXT) png.app/Contents/MacOS/png
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc png.app/Contents/Resources/png.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns png.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc png.app/Contents/Resources/png.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns png.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@png_bundle: png.app/Contents/PkgInfo
 

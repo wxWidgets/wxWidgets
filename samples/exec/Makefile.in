@@ -39,6 +39,7 @@ EXEC_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 EXEC_OBJECTS =  \
+	$(__exec_os2_lib_res) \
 	exec_exec.o \
 	$(__exec___win32rc)
 LIBDIRNAME = $(top_builddir)lib
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___exec___os2_emxbindcmd = $(NM) exec$(EXEEXT) | if grep -q \
 @COND_PLATFORM_OS2_1@__exec___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___exec___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__exec___win32rc = exec_exec_rc.o
 @COND_PLATFORM_MACOSX_1@__exec_bundle___depname = exec_bundle
+@COND_PLATFORM_OS2_1@__exec_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -138,8 +141,8 @@ exec.app/Contents/PkgInfo: exec$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f exec$(EXEEXT) exec.app/Contents/MacOS/exec
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc exec.app/Contents/Resources/exec.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns exec.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc exec.app/Contents/Resources/exec.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns exec.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@exec_bundle: exec.app/Contents/PkgInfo
 

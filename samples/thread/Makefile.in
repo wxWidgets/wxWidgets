@@ -40,6 +40,7 @@ THREAD_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 THREAD_OBJECTS =  \
+	$(__thread_os2_lib_res) \
 	thread_thread.o \
 	$(__thread___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___thread___os2_emxbindcmd = $(NM) thread$(EXEEXT) | if grep 
 @COND_PLATFORM_OS2_1@__thread___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___thread___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__thread___win32rc = thread_thread_rc.o
 @COND_PLATFORM_MACOSX_1@__thread_bundle___depname = thread_bundle
+@COND_PLATFORM_OS2_1@__thread_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ thread.app/Contents/PkgInfo: thread$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f thread$(EXEEXT) thread.app/Contents/MacOS/thread
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc thread.app/Contents/Resources/thread.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns thread.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc thread.app/Contents/Resources/thread.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns thread.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@thread_bundle: thread.app/Contents/PkgInfo
 

@@ -534,6 +534,10 @@ SOURCE=.\common\gifdecod.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\gzstream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\hash.cpp
 # End Source File
 # Begin Source File
@@ -940,6 +944,10 @@ SOURCE=.\generic\panelg.cpp
 # Begin Source File
 
 SOURCE=.\generic\printps.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\prntdlgg.cpp
 # End Source File
 # Begin Source File
 
@@ -1958,11 +1966,19 @@ SOURCE=..\include\wx\encconv.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\encinfo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\event.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\include\wx\evtloop.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\except.h
 # End Source File
 # Begin Source File
 
@@ -2075,6 +2091,10 @@ SOURCE=..\include\wx\grid.h
 # Begin Source File
 
 SOURCE=..\include\wx\gsocket.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\gzstream.h
 # End Source File
 # Begin Source File
 
@@ -2643,6 +2663,10 @@ SOURCE=..\include\wx\vector.h
 # Begin Source File
 
 SOURCE=..\include\wx\version.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\vidmode.h
 # End Source File
 # Begin Source File
 

@@ -37,11 +37,13 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WXRCEDIT_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples -I$(srcdir)/../../include $(CXXFLAGS)
 WXRCEDIT_OBJECTS =  \
+	$(__wxrcedit_os2_lib_res) \
 	wxrcedit_edapp.o \
 	wxrcedit_editor.o \
 	wxrcedit_nodehnd.o \
@@ -118,6 +120,8 @@ COND_PLATFORM_OS2_1___wxrcedit___os2_emxbindcmd = $(NM) wxrcedit$(EXEEXT) | if \
 	grep -q pmwin.763 ; then emxbind -ep wxrcedit$(EXEEXT) ; fi
 @COND_PLATFORM_OS2_1@__wxrcedit___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___wxrcedit___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__wxrcedit___win32rc = wxrcedit_wxrcedit_rc.o
+@COND_PLATFORM_OS2_1@__wxrcedit_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -134,11 +138,11 @@ distclean: clean
 install: all install_wxrcedit
 
 install-strip: install
-	$(STRIP) $(bindir)/wxrcedit$(EXEEXT)
+	$(STRIP) $(DESTDIR)$(bindir)/wxrcedit$(EXEEXT)
 
 install_wxrcedit: 
-	$(INSTALL_DIR) $(bindir)
-	$(INSTALL_PROGRAM) wxrcedit$(EXEEXT) $(bindir)
+	$(INSTALL_DIR) $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) wxrcedit$(EXEEXT) $(DESTDIR)$(bindir)
 
 uninstall: 
 

@@ -33,6 +33,7 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
 WXRC_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
@@ -94,11 +95,11 @@ distclean: clean
 install: all install_wxrc
 
 install-strip: install
-	$(STRIP) $(bindir)/wxrc$(EXEEXT)
+	$(STRIP) $(DESTDIR)$(bindir)/wxrc$(EXEEXT)
 
 install_wxrc: 
-	$(INSTALL_DIR) $(bindir)
-	$(INSTALL_PROGRAM) wxrc$(EXEEXT) $(bindir)
+	$(INSTALL_DIR) $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) wxrc$(EXEEXT) $(DESTDIR)$(bindir)
 
 uninstall: 
 

@@ -41,6 +41,7 @@ MULTIMON_TEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 MULTIMON_TEST_OBJECTS =  \
 	$(__multimon_test___win32rc) \
+	$(__multimon_test_os2_lib_res) \
 	multimon_test_multimon_test.o
 WX_VERSION = 2.5.1
 
@@ -103,6 +104,8 @@ COND_PLATFORM_OS2_1___multimon_test___os2_emxbindcmd = $(NM) \
 @COND_PLATFORM_WIN32_1@	multimon_test_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__multimon_test_bundle___depname \
 @COND_PLATFORM_MACOSX_1@	= multimon_test_bundle
+@COND_PLATFORM_OS2_1@__multimon_test_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -146,8 +149,8 @@ multimon_test.app/Contents/PkgInfo: multimon_test$(EXEEXT) $(top_srcdir)/src/mac
 	ln -f multimon_test$(EXEEXT) multimon_test.app/Contents/MacOS/multimon_test
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc multimon_test.app/Contents/Resources/multimon_test.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns multimon_test.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc multimon_test.app/Contents/Resources/multimon_test.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns multimon_test.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@multimon_test_bundle: multimon_test.app/Contents/PkgInfo
 

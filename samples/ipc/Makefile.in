@@ -39,6 +39,7 @@ CLIENT_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 CLIENT_OBJECTS =  \
 	$(__client___win32rc) \
+	$(os2_lib_res) \
 	client_client.o
 DESTDIR = 
 LIBDIRNAME = $(top_builddir)lib
@@ -47,6 +48,7 @@ SERVER_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 SERVER_OBJECTS =  \
 	$(__server___win32rc) \
+	$(os2_lib_res) \
 	server_server.o
 WX_VERSION = 2.5.1
 
@@ -120,6 +122,7 @@ COND_PLATFORM_OS2_1___server___os2_emxbindcmd = $(NM) server$(EXEEXT) | if grep 
 @COND_PLATFORM_OS2_1@__server___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___server___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__server___win32rc = server_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__server_bundle___depname = server_bundle
+@COND_PLATFORM_OS2_1@os2_lib_res = $(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -158,8 +161,8 @@ client.app/Contents/PkgInfo: client$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f client$(EXEEXT) client.app/Contents/MacOS/client
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc client.app/Contents/Resources/client.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns client.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc client.app/Contents/Resources/client.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns client.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@client_bundle: client.app/Contents/PkgInfo
 
@@ -201,8 +204,8 @@ server.app/Contents/PkgInfo: server$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f server$(EXEEXT) server.app/Contents/MacOS/server
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc server.app/Contents/Resources/server.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns server.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc server.app/Contents/Resources/server.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns server.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@server_bundle: server.app/Contents/PkgInfo
 

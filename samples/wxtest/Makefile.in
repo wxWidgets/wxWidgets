@@ -41,6 +41,7 @@ WXTEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 WXTEST_OBJECTS =  \
 	$(__wxtest___win32rc) \
+	$(__wxtest_os2_lib_res) \
 	wxtest_test.o \
 	wxtest_test_wdr.o
 WX_VERSION = 2.5.1
@@ -100,6 +101,8 @@ COND_PLATFORM_OS2_1___wxtest___os2_emxbindcmd = $(NM) wxtest$(EXEEXT) | if grep 
 @COND_PLATFORM_OS2_1@__wxtest___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___wxtest___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__wxtest___win32rc = wxtest_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__wxtest_bundle___depname = wxtest_bundle
+@COND_PLATFORM_OS2_1@__wxtest_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -145,8 +148,8 @@ wxtest.app/Contents/PkgInfo: wxtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f wxtest$(EXEEXT) wxtest.app/Contents/MacOS/wxtest
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc wxtest.app/Contents/Resources/wxtest.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns wxtest.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc wxtest.app/Contents/Resources/wxtest.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns wxtest.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@wxtest_bundle: wxtest.app/Contents/PkgInfo
 

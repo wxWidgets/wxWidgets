@@ -39,6 +39,7 @@ KEYBOARD_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 KEYBOARD_OBJECTS =  \
+	$(__keyboard_os2_lib_res) \
 	keyboard_keyboard.o \
 	$(__keyboard___win32rc)
 LIBDIRNAME = $(top_builddir)lib
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___keyboard___os2_emxbindcmd = $(NM) keyboard$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__keyboard___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___keyboard___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__keyboard___win32rc = keyboard_keyboard_rc.o
 @COND_PLATFORM_MACOSX_1@__keyboard_bundle___depname = keyboard_bundle
+@COND_PLATFORM_OS2_1@__keyboard_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ keyboard.app/Contents/PkgInfo: keyboard$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	ln -f keyboard$(EXEEXT) keyboard.app/Contents/MacOS/keyboard
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc keyboard.app/Contents/Resources/keyboard.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns keyboard.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc keyboard.app/Contents/Resources/keyboard.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns keyboard.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@keyboard_bundle: keyboard.app/Contents/PkgInfo
 

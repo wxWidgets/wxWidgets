@@ -40,6 +40,7 @@ WIDGETS_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 WIDGETS_OBJECTS =  \
+	$(__widgets_os2_lib_res) \
 	widgets_button.o \
 	widgets_checkbox.o \
 	widgets_combobox.o \
@@ -110,6 +111,8 @@ COND_PLATFORM_OS2_1___widgets___os2_emxbindcmd = $(NM) widgets$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__widgets___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___widgets___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__widgets___win32rc = widgets_widgets_rc.o
 @COND_PLATFORM_MACOSX_1@__widgets_bundle___depname = widgets_bundle
+@COND_PLATFORM_OS2_1@__widgets_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -155,8 +158,8 @@ widgets.app/Contents/PkgInfo: widgets$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f widgets$(EXEEXT) widgets.app/Contents/MacOS/widgets
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc widgets.app/Contents/Resources/widgets.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns widgets.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc widgets.app/Contents/Resources/widgets.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns widgets.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@widgets_bundle: widgets.app/Contents/PkgInfo
 

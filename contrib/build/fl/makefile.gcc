@@ -15,7 +15,8 @@ include ../../../build/msw/config.gcc
 FLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\fl\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\fl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_FL $(CXXFLAGS)
+	-I..\..\src\fl\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_FL $(CXXFLAGS) \
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_0)
 FLDLL_OBJECTS =  \
 	$(OBJS)\fldll_dummy.o \
 	$(OBJS)\fldll_antiflickpl.o \
@@ -38,7 +39,8 @@ FLDLL_OBJECTS =  \
 FLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\src\fl\..\..\..\include -I$(SETUPHDIR) -Wall \
-	-I..\..\src\fl\..\..\include $(CXXFLAGS)
+	-I..\..\src\fl\..\..\include $(CXXFLAGS) $(__EXCEPTIONSFLAG) \
+	$(__EXCEPTIONSFLAG_0)
 FLLIB_OBJECTS =  \
 	$(OBJS)\fllib_dummy.o \
 	$(OBJS)\fllib_antiflickpl.o \
@@ -126,6 +128,18 @@ endif
 endif
 ifeq ($(DEBUG_FLAG),1)
 __DEBUG_DEFINE_p = -D__WXDEBUG__
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG = -fno-rtti
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG = 
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG_0 = -fno-exceptions
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG_0 = 
 endif
 ifeq ($(USE_GUI),1)
 __LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)

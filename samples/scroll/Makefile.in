@@ -40,6 +40,7 @@ SCROLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 SCROLL_OBJECTS =  \
+	$(__scroll_os2_lib_res) \
 	scroll_scroll.o \
 	$(__scroll___win32rc)
 WX_VERSION = 2.5.1
@@ -99,6 +100,8 @@ COND_PLATFORM_OS2_1___scroll___os2_emxbindcmd = $(NM) scroll$(EXEEXT) | if grep 
 @COND_PLATFORM_OS2_1@__scroll___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___scroll___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__scroll___win32rc = scroll_scroll_rc.o
 @COND_PLATFORM_MACOSX_1@__scroll_bundle___depname = scroll_bundle
+@COND_PLATFORM_OS2_1@__scroll_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -142,8 +145,8 @@ scroll.app/Contents/PkgInfo: scroll$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f scroll$(EXEEXT) scroll.app/Contents/MacOS/scroll
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc scroll.app/Contents/Resources/scroll.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns scroll.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc scroll.app/Contents/Resources/scroll.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns scroll.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@scroll_bundle: scroll.app/Contents/PkgInfo
 

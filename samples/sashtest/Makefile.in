@@ -40,6 +40,7 @@ SASHTEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 SASHTEST_OBJECTS =  \
+	$(__sashtest_os2_lib_res) \
 	sashtest_sashtest.o \
 	$(__sashtest___win32rc)
 WX_VERSION = 2.5.1
@@ -102,6 +103,8 @@ COND_PLATFORM_OS2_1___sashtest___os2_emxbindcmd = $(NM) sashtest$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__sashtest___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___sashtest___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__sashtest___win32rc = sashtest_sashtest_rc.o
 @COND_PLATFORM_MACOSX_1@__sashtest_bundle___depname = sashtest_bundle
+@COND_PLATFORM_OS2_1@__sashtest_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -145,8 +148,8 @@ sashtest.app/Contents/PkgInfo: sashtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 	ln -f sashtest$(EXEEXT) sashtest.app/Contents/MacOS/sashtest
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc sashtest.app/Contents/Resources/sashtest.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns sashtest.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc sashtest.app/Contents/Resources/sashtest.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns sashtest.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@sashtest_bundle: sashtest.app/Contents/PkgInfo
 

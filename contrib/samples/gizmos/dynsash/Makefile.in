@@ -34,11 +34,13 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 DYNSASH_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../../samples -I$(srcdir)/../../../include $(CXXFLAGS)
 DYNSASH_OBJECTS =  \
 	$(__dynsash___win32rc) \
+	$(__dynsash_os2_lib_res) \
 	dynsash_dynsash.o
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.1
@@ -102,6 +104,8 @@ COND_PLATFORM_OS2_1___dynsash___os2_emxbindcmd = $(NM) dynsash$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__dynsash___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___dynsash___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__dynsash___win32rc = dynsash_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__dynsash_bundle___depname = dynsash_bundle
+@COND_PLATFORM_OS2_1@__dynsash_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -141,8 +145,8 @@ dynsash.app/Contents/PkgInfo: dynsash$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 	ln -f dynsash$(EXEEXT) dynsash.app/Contents/MacOS/dynsash
 	
 	
-	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc dynsash.app/Contents/Resources/dynsash.rsrc
-	ln -f $(top_srcdir)/src/mac/wxmac.icns dynsash.app/Contents/Resources/wxmac.icns
+	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc dynsash.app/Contents/Resources/dynsash.rsrc
+	ln -sf $(top_srcdir)/src/mac/wxmac.icns dynsash.app/Contents/Resources/wxmac.icns
 
 @COND_PLATFORM_MACOSX_1@dynsash_bundle: dynsash.app/Contents/PkgInfo
 

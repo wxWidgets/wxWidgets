@@ -36,10 +36,12 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
+DESTDIR = 
 HELPVIEW_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples $(CXXFLAGS)
 HELPVIEW_OBJECTS =  \
+	$(__helpview_os2_lib_res) \
 	helpview_helpview.o \
 	$(__helpview___win32rc)
 LIBDIRNAME = $(top_builddir)lib
@@ -103,6 +105,8 @@ COND_PLATFORM_OS2_1___helpview___os2_emxbindcmd = $(NM) helpview$(EXEEXT) | if \
 	grep -q pmwin.763 ; then emxbind -ep helpview$(EXEEXT) ; fi
 @COND_PLATFORM_OS2_1@__helpview___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___helpview___os2_emxbindcmd)
 @COND_PLATFORM_WIN32_1@__helpview___win32rc = helpview_helpview_rc.o
+@COND_PLATFORM_OS2_1@__helpview_os2_lib_res = \
+@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 
 ### Targets: ###
 
@@ -139,11 +143,11 @@ helpview_helpview_rc.o: $(srcdir)/helpview.rc
 install: all install_helpview
 
 install-strip: install
-	$(STRIP) $(bindir)/helpview$(EXEEXT)
+	$(STRIP) $(DESTDIR)$(bindir)/helpview$(EXEEXT)
 
 install_helpview: 
-	$(INSTALL_DIR) $(bindir)
-	$(INSTALL_PROGRAM) helpview$(EXEEXT) $(bindir)
+	$(INSTALL_DIR) $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) helpview$(EXEEXT) $(DESTDIR)$(bindir)
 
 uninstall: 
 

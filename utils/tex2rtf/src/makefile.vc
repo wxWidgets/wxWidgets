@@ -17,16 +17,17 @@ OBJS = \
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEX2RTF_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
-	$(__DEBUGINFO_2) /Fd$(OBJS)\tex2rtf.pdb $(____DEBUGRUNTIME_2_p) \
+	$(__DEBUGINFO) /Fd$(OBJS)\tex2rtf.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
-	/I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE /DNO_GUI $(CXXFLAGS) /GR /GX
-TEX2RTF_GUI_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_14) \
-	/DWIN32 $(__DEBUGINFO_2) /Fd$(OBJS)\tex2rtf_gui.pdb \
-	$(____DEBUGRUNTIME_13_p) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
-	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	/I.\..\..\..\include /I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
-	/I.\..\..\..\samples $(CXXFLAGS) /GR /GX
+	/I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE /DNO_GUI $(CXXFLAGS) \
+	$(__EXCEPTIONSFLAG_0) $(__EXCEPTIONSFLAG)
+TEX2RTF_GUI_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_16) \
+	/DWIN32 $(__DEBUGINFO) /Fd$(OBJS)\tex2rtf_gui.pdb $(____DEBUGRUNTIME_15_p) \
+	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\..\include \
+	/I$(SETUPHDIR) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples \
+	$(CXXFLAGS) $(__EXCEPTIONSFLAG_0) $(__EXCEPTIONSFLAG)
 TEX2RTF_GUI_OBJECTS =  \
 	$(OBJS)\tex2rtf_gui_sample.res \
 	$(OBJS)\tex2rtf_gui_tex2rtf.obj \
@@ -77,7 +78,7 @@ WXUNICODEFLAG = u
 WXUNIVNAME = univ
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO = d
+__DEBUGINFO = /Zi
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO = 
@@ -86,7 +87,7 @@ __DEBUGINFO =
 __DEBUGINFO = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO = d
+__DEBUGINFO = /Zi
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_1 = /DEBUG
@@ -101,7 +102,7 @@ __DEBUGINFO_1 =
 __DEBUGINFO_1 = /DEBUG
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_2 = /Zi
+__DEBUGINFO_2 = d
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_2 = 
@@ -110,16 +111,16 @@ __DEBUGINFO_2 =
 __DEBUGINFO_2 = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_2 = /Zi
+__DEBUGINFO_2 = d
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_14 = 
+__DEBUGRUNTIME_16 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_14 = d
+__DEBUGRUNTIME_16 = d
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_14 = $(__DEBUGINFO)
+__DEBUGRUNTIME_16 = $(__DEBUGINFO_2)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 __DEBUGRUNTIME_3 = 
@@ -128,7 +129,7 @@ __DEBUGRUNTIME_3 =
 __DEBUGRUNTIME_3 = d
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_3 = $(__DEBUGINFO)
+__DEBUGRUNTIME_3 = $(__DEBUGINFO_2)
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
 __DEBUG_DEFINE_p = /D__WXDEBUG__
@@ -147,6 +148,18 @@ __DLLFLAG_p = /DWXUSINGDLL
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p_3 = /d WXUSINGDLL
+!endif
+!if "$(USE_EXCEPTIONS)" == "0"
+__EXCEPTIONSFLAG = 
+!endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__EXCEPTIONSFLAG = /GX
+!endif
+!if "$(USE_EXCEPTIONS)" == "0"
+__EXCEPTIONSFLAG_0 = 
+!endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__EXCEPTIONSFLAG_0 = /GR
 !endif
 !if "$(USE_GUI)" == "1"
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
@@ -224,34 +237,34 @@ ____DEBUGINFO =
 ____DEBUGINFO = /D_DEBUG
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_13_p_1 = /d _DEBUG
+____DEBUGINFO_15_p_1 = /d _DEBUG
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_13_p_1 = 
+____DEBUGINFO_15_p_1 = 
 !endif
 !if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO_13_p_1 = 
+____DEBUGINFO_15_p_1 = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-____DEBUGINFO_13_p_1 = /d _DEBUG
+____DEBUGINFO_15_p_1 = /d _DEBUG
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_13_p = 
+____DEBUGRUNTIME_15_p = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_13_p = /D_DEBUG
+____DEBUGRUNTIME_15_p = /D_DEBUG
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_13_p = $(____DEBUGINFO)
+____DEBUGRUNTIME_15_p = $(____DEBUGINFO)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_13_p_1 = 
+____DEBUGRUNTIME_15_p_1 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_13_p_1 = /d _DEBUG
+____DEBUGRUNTIME_15_p_1 = /d _DEBUG
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_13_p_1 = $(____DEBUGINFO_13_p_1)
+____DEBUGRUNTIME_15_p_1 = $(____DEBUGINFO_15_p_1)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
 ____DEBUGRUNTIME_2_p = 
@@ -282,7 +295,7 @@ $(OBJS)\tex2rtf_gui_rtfutils.obj: .\rtfutils.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEX2RTF_GUI_CXXFLAGS) $**
 
 $(OBJS)\tex2rtf_gui_sample.res: .\..\..\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_13_p_1) $(__NO_VC_CRTDBG_p_3) /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_3) /d _WINDOWS /i .\..\..\..\samples $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_15_p_1) $(__NO_VC_CRTDBG_p_3) /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) /i .\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_3) /d _WINDOWS /i .\..\..\..\samples $**
 
 $(OBJS)\tex2rtf_gui_table.obj: .\table.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEX2RTF_GUI_CXXFLAGS) $**
