@@ -157,24 +157,11 @@ wxString wxFileSystemHandler::GetRightLocation(const wxString& location) const
 
     for (i = l-1; 
          (i >= 0) && 
-         ((location[i] != wxT(':')) || (i == 1) ||
-              (location[i-2] == wxT(':'))
-#ifdef __WXMSW__
-              || ((i > 3) && location[i-4] == wxT(':')) // E.g. file://C:/thing.jpg
-#endif
-              );
+         ((location[i] != wxT(':')) || (i == 1) || (location[i-2] == wxT(':')));
          i--)
     {
         if (location[i] == wxT('#')) l2 = i + 1;
     }
-#ifdef __WXMSW__
-    // We may now have //c:/thing.jpg
-    if (((i + 4) < l) && location[i+1] == wxT('/') && location[i+2] == wxT('/') &&
-                         location[i+4] == wxT(':'))
-    {
-        i = i + 2;
-    }
-#endif
     if (i == 0) return wxEmptyString;
     else return location.Mid(i + 1, l2 - i - 2);
 }
