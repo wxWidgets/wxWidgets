@@ -737,8 +737,8 @@ void wxPrintPreviewBase::AdjustScrollbars(wxPreviewCanvas *canvas)
     double actualHeight = (zoomScale*m_pageHeight*m_previewScale);
 
     // Set the scrollbars appropriately
-    int totalWidth = actualWidth + 2*m_leftMargin;
-    int totalHeight = actualHeight + 2*m_topMargin;
+    int totalWidth = (int)(actualWidth + 2*m_leftMargin);
+    int totalHeight = (int)(actualHeight + 2*m_topMargin);
     int scrollUnitsX = totalWidth/10;
     int scrollUnitsY = totalHeight/10;
     wxSize virtualSize = canvas->GetVirtualSize();
