@@ -78,6 +78,25 @@ void *wxULongLongNative::asArray() const
     return temp;
 }
 
+#if wxUSE_LONGLONG_WX
+wxLongLongNative::wxLongLongNative(wxLongLongWx ll)
+{
+    // assign first to avoid precision loss!
+    m_ll = ll.GetHi();
+    m_ll <<= 32;
+    m_ll |= ll.GetLo();
+}
+
+wxLongLongNative& wxLongLongNative::operator=(wxLongLongWx ll)
+{
+    // assign first to avoid precision loss!
+    m_ll = ll.GetHi();
+    m_ll <<= 32;
+    m_ll |= ll.GetLo();
+    return *this;
+}
+#endif
+
 #endif // wxUSE_LONGLONG_NATIVE
 
 // ============================================================================
@@ -426,10 +445,14 @@ wxLongLongWx wxLongLongWx::operator-(const wxLongLongWx& ll) const
     return res;
 }
 
-wxULongLongWx wxULongLongWx::operator-(const wxULongLongWx& ll) const
+wxLongLongWx wxULongLongWx::operator-(const wxULongLongWx& ll) const
 {
-    wxULongLongWx res(*this);
-    res -= ll;
+    wxASSERT(m_hi <= LONG_MAX );
+    wxASSERT(ll.m_hi <= LONG_MAX );
+
+    wxLongLongWx res( (long)m_hi , m_lo );
+    wxLongLongWx op( (long)ll.m_hi , ll.m_lo );
+    res -= op;
 
     return res;
 }
@@ -819,7 +842,7 @@ void wxLongLongWx::Divide(const wxLongLongWx& divisorIn,
     }
     else
     {
-        // here: dividend > divisor and both are positibe: do unsigned division
+        // here: dividend > divisor and both are positive: do unsigned division
         size_t nBits = 64u;
         wxLongLongWx d;
 
@@ -1062,66 +1085,68 @@ void *wxULongLongWx::asArray(void) const
 
 #endif // wxUSE_LONGLONG_WX
 
-wxString
+#define LL_TO_STRING(name)                                           \
+    wxString name::ToString() const                                  \
+    {                                                                \
+        /* TODO: this is awfully inefficient, anything better? */    \
+        wxString result;                                             \
+                                                                     \
+        name ll = *this;                                             \
+                                                                     \
+        bool neg;                                                    \
+        if ( ll < 0 )                                                \
+        {                                                            \
+            ll.Negate();                                             \
+            neg = true;                                              \
+        }                                                            \
+        else                                                         \
+        {                                                            \
+            neg = false;                                             \
+        }                                                            \
+                                                                     \
+        while ( ll != 0 )                                            \
+        {                                                            \
+            result.Prepend((wxChar)(_T('0') + (ll % 10).ToLong()));  \
+            ll /= 10;                                                \
+        }                                                            \
+                                                                     \
+        if ( result.empty() )                                        \
+            result = _T('0');                                        \
+        else if ( neg )                                              \
+            result.Prepend(_T('-'));                                 \
+                                                                     \
+        return result;                                               \
+    }
+
+#define ULL_TO_STRING(name)                                          \
+    wxString name::ToString() const                                  \
+    {                                                                \
+        /* TODO: this is awfully inefficient, anything better? */    \
+        wxString result;                                             \
+                                                                     \
+        name ll = *this;                                             \
+                                                                     \
+        while ( ll != 0 )                                            \
+        {                                                            \
+            result.Prepend((wxChar)(_T('0') + (ll % 10).ToULong())); \
+            ll /= 10;                                                \
+        }                                                            \
+                                                                     \
+        if ( result.empty() )                                        \
+            result = _T('0');                                        \
+                                                                     \
+        return result;                                               \
+    }
+
 #if wxUSE_LONGLONG_NATIVE
-wxLongLongNative::ToString() const
-#else
-wxLongLongWx::ToString() const
+    LL_TO_STRING(wxLongLongNative)
+    ULL_TO_STRING(wxULongLongNative)
 #endif
-{
-    // TODO: this is awfully inefficient, anything better?
-    wxString result;
 
-    wxLongLong ll = *this;
-
-    bool neg;
-    if ( ll < 0 )
-    {
-        ll.Negate();
-        neg = true;
-    }
-    else
-    {
-        neg = false;
-    }
-
-    while ( ll != 0 )
-    {
-        result.Prepend((wxChar)(_T('0') + (ll % 10).ToLong()));
-        ll /= 10;
-    }
-
-    if ( result.empty() )
-        result = _T('0');
-    else if ( neg )
-        result.Prepend(_T('-'));
-
-    return result;
-}
-
-wxString
-#if wxUSE_LONGLONG_NATIVE
-wxULongLongNative::ToString() const
-#else
-wxULongLongWx::ToString() const
+#if wxUSE_LONGLONG_WX
+    LL_TO_STRING(wxLongLongWx)
+    ULL_TO_STRING(wxULongLongWx)
 #endif
-{
-    // TODO: this is awfully inefficient, anything better?
-    wxString result;
-
-    wxULongLong ll = *this;
-
-    while ( ll != 0 )
-    {
-        result.Prepend((wxChar)(_T('0') + (ll % 10).ToULong()));
-        ll /= 10;
-    }
-
-    if ( result.empty() )
-        result = _T('0');
-
-    return result;
-}
 
 #if wxUSE_STD_IOSTREAM
 

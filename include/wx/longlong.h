@@ -115,6 +115,9 @@ public:
         m_ll = ((wxLongLong_t) hi) << 32;
         m_ll |= (wxLongLong_t) lo;
     }
+#if wxUSE_LONGLONG_WX
+    wxLongLongNative(wxLongLongWx ll);
+#endif
 
     // default copy ctor is ok
 
@@ -124,6 +127,10 @@ public:
         // from native 64 bit integer
     wxLongLongNative& operator=(wxLongLong_t ll)
         { m_ll = ll; return *this; }
+#if wxUSE_LONGLONG_WX
+    wxLongLongNative& operator=(wxLongLongWx ll);
+#endif
+
 
         // from double: this one has an explicit name because otherwise we
         // would have ambiguity with "ll = int" and also because we don't want
@@ -623,6 +630,10 @@ public:
     // comparison
     bool operator==(const wxLongLongWx& ll) const
         { return m_lo == ll.m_lo && m_hi == ll.m_hi; }
+#if wxUSE_LONGLONG_NATIVE
+    bool operator==(const wxLongLongNative& ll) const
+        { return m_lo == ll.GetLo() && m_hi == ll.GetHi(); }
+#endif
     bool operator!=(const wxLongLongWx& ll) const
         { return !(*this == ll); }
     bool operator<(const wxLongLongWx& ll) const;
@@ -717,6 +728,14 @@ public:
 #endif // wxLONGLONG_TEST_MODE
     }
 
+    // from signed to unsigned
+    wxULongLongWx(wxLongLongWx ll)
+    {
+        wxASSERT(ll.GetHi() >= 0);
+        m_hi = (unsigned long)ll.GetHi();
+        m_lo = ll.GetLo();
+    }
+
     // default copy ctor is ok in both cases
 
     // no dtor
@@ -767,8 +786,8 @@ public:
         // post increment operator
     wxULongLongWx& operator++(int) { return ++(*this); }
 
-        // subraction (FIXME: should return wxLongLong)
-    wxULongLongWx operator-(const wxULongLongWx& ll) const;
+        // substraction
+    wxLongLongWx operator-(const wxULongLongWx& ll) const;
     wxULongLongWx& operator-=(const wxULongLongWx& ll);
 
         // pre decrement operator
@@ -886,10 +905,10 @@ inline bool operator!=(unsigned long l, const wxULongLong& ull) { return ull != 
 
 inline wxULongLong operator+(unsigned long l, const wxULongLong& ull) { return ull + l; }
 
-// FIXME: this should return wxLongLong
-inline wxULongLong operator-(unsigned long l, const wxULongLong& ull)
+inline wxLongLong operator-(unsigned long l, const wxULongLong& ull)
 {
-    return wxULongLong(l) - ull;
+    wxULongLong ret = wxULongLong(l) - ull;
+    return wxLongLong((long)ret.GetHi(),ret.GetLo());
 }
 
 #endif // _WX_LONGLONG_H
