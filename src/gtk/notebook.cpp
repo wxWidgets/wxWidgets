@@ -189,6 +189,8 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
     if ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab))
     {
         int sel = win->GetSelection();
+        if (sel == -1)
+            return TRUE;
         wxGtkNotebookPage *nb_page = win->GetNotebookPage(sel);
         wxCHECK_MSG( nb_page, FALSE, _T("invalid selection in wxNotebook") );
 
