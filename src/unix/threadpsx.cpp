@@ -532,8 +532,17 @@ wxSemaError wxSemaphoreInternal::WaitTimeout(unsigned long milliseconds)
             return wxSEMA_TIMEOUT;
         }
 
-        if ( m_cond.WaitTimeout(remainingTime) != wxCOND_NO_ERROR )
-            return wxSEMA_MISC_ERROR;
+        switch ( m_cond.WaitTimeout(remainingTime) )
+        {
+            case wxCOND_TIMEOUT:
+                return wxSEMA_TIMEOUT;
+
+            default:
+                return wxSEMA_MISC_ERROR;
+
+            case wxCOND_NO_ERROR:
+                ;
+        }
     }
 
     m_count--;

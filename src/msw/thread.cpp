@@ -267,7 +267,16 @@ public:
     bool IsOk() const { return m_semaphore != NULL; }
 
     wxSemaError Wait() { return WaitTimeout(INFINITE); }
-    wxSemaError TryWait() { return WaitTimeout(0); }
+
+    wxSemaError TryWait()
+    {
+        wxSemaError rc = WaitTimeout(0);
+        if ( rc == wxSEMA_TIMEOUT )
+            rc = wxSEMA_BUSY;
+
+        return rc;
+    }
+
     wxSemaError WaitTimeout(unsigned long milliseconds);
 
     wxSemaError Post();
@@ -321,7 +330,7 @@ wxSemaError wxSemaphoreInternal::WaitTimeout(unsigned long milliseconds)
            return wxSEMA_NO_ERROR;
 
         case WAIT_TIMEOUT:
-           return wxSEMA_BUSY;
+           return wxSEMA_TIMEOUT;
 
         default:
             wxLogLastError(_T("WaitForSingleObject(semaphore)"));
