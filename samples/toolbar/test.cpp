@@ -349,7 +349,7 @@ void MyFrame::OnToolLeftClick(wxCommandEvent& event)
     {
         DoToggleHelp();
     }
-    
+
     if (event.GetId() == wxID_PRINT)
     {
         DoDeletePrint();
@@ -373,8 +373,9 @@ void MyFrame::DoEnablePrint()
 void MyFrame::DoDeletePrint()
 {
     wxToolBar *tb = GetToolBar();
-    // Not implemented in MSW
-#ifdef __WXMSW__
+
+    // only implemented in wxGTK for now
+#ifndef __WXGTK__
     wxMessageBox("Sorry, wxToolBar::DeleteTool is not implemented under Windows.");
 #else
     tb->DeleteTool( wxID_PRINT );

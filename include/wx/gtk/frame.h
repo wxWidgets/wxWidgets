@@ -109,7 +109,7 @@ protected:
     // common part of all ctors
     void Init();
 
-    // override wxWindow methods to take into account tool/menu/statusbars 
+    // override wxWindow methods to take into account tool/menu/statusbars
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);

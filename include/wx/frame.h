@@ -85,6 +85,10 @@ public:
     // make the window modal (all other windows unresponsive)
     virtual void MakeModal(bool modal = TRUE);
 
+    // get the origin of the client area (which may be different from (0, 0)
+    // if the frame has a toolbar) in client coordinates
+    virtual wxPoint GetClientAreaOrigin() const;
+
     // menu bar functions
     // ------------------
 
@@ -189,6 +193,11 @@ protected:
 
     wxToolBar *m_frameToolBar;
 #endif // wxUSE_TOOLBAR
+
+    // the frame client to screen translation should take account of the
+    // toolbar which may shift the origin of the client area
+    virtual void DoClientToScreen(int *x, int *y) const;
+    virtual void DoScreenToClient(int *x, int *y) const;
 
     // the frame icon
     wxIcon m_icon;

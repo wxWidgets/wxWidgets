@@ -587,57 +587,6 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 }
 
 // ----------------------------------------------------------------------------
-// wxFrame size management: we exclude the areas taken by menu/status/toolbars
-// from the client area, so the client area is what's really available for the
-// frame contents
-// ----------------------------------------------------------------------------
-
-// Checks if there is a toolbar, and returns the first free client position
-wxPoint wxFrame::GetClientAreaOrigin() const
-{
-    wxPoint pt(0, 0);
-    if (GetToolBar())
-    {
-        int w, h;
-        GetToolBar()->GetSize(& w, & h);
-
-        if (GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL)
-        {
-            pt.x += w;
-        }
-        else
-        {
-            pt.y += h;
-        }
-    }
-    return pt;
-}
-
-void wxFrame::DoScreenToClient(int *x, int *y) const
-{
-    wxWindow::DoScreenToClient(x, y);
-
-    // We may be faking the client origin.
-    // So a window that's really at (0, 30) may appear
-    // (to wxWin apps) to be at (0, 0).
-    wxPoint pt(GetClientAreaOrigin());
-    *x -= pt.x;
-    *y -= pt.y;
-}
-
-void wxFrame::DoClientToScreen(int *x, int *y) const
-{
-    // We may be faking the client origin.
-    // So a window that's really at (0, 30) may appear
-    // (to wxWin apps) to be at (0, 0).
-    wxPoint pt1(GetClientAreaOrigin());
-    *x += pt1.x;
-    *y += pt1.y;
-
-    wxWindow::DoClientToScreen(x, y);
-}
-
-// ----------------------------------------------------------------------------
 // tool/status bar stuff
 // ----------------------------------------------------------------------------
 

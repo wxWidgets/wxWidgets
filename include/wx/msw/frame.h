@@ -94,10 +94,6 @@ public:
 
     WXHMENU GetWinMenu() const { return m_hMenu; }
 
-    // Returns the origin of client area (may be different from (0,0) if the
-    // frame has a toolbar)
-    virtual wxPoint GetClientAreaOrigin() const;
-
     // event handlers
     bool HandlePaint();
     bool HandleSize(int x, int y, WXUINT flag);
@@ -127,9 +123,6 @@ protected:
     virtual void DoGetPosition(int *x, int *y) const;
 
     virtual void DoSetClientSize(int width, int height);
-
-    virtual void DoClientToScreen(int *x, int *y) const;
-    virtual void DoScreenToClient(int *x, int *y) const;
 
     // helper
     void DetachMenuBar();

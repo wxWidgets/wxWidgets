@@ -363,7 +363,7 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
 {
     if (m_mainWidget)
     {
-        XtVaSetValues((Widget) parent->GetMainWindowWidget(), XmNmenuBar, (Widget) m_mainWidget, NULL);
+        XtVaSetValues((Widget) parent->GetMainWidget(), XmNmenuBar, (Widget) m_mainWidget, NULL);
         /*
         if (!XtIsManaged((Widget) m_mainWidget))
         XtManageChild((Widget) m_mainWidget);
@@ -372,7 +372,7 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
         return TRUE;
     }
 
-    Widget menuBarW = XmCreateMenuBar ((Widget) parent->GetMainWindowWidget(), "MenuBar", NULL, 0);
+    Widget menuBarW = XmCreateMenuBar ((Widget) parent->GetMainWidget(), "MenuBar", NULL, 0);
     m_mainWidget = (WXWidget) menuBarW;
 
     size_t menuCount = GetMenuCount();
@@ -403,7 +403,7 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
     SetForegroundColour(m_foregroundColour);
     SetFont(m_font);
 
-    XtVaSetValues((Widget) parent->GetMainWindowWidget(), XmNmenuBar, (Widget) m_mainWidget, NULL);
+    XtVaSetValues((Widget) parent->GetMainWidget(), XmNmenuBar, (Widget) m_mainWidget, NULL);
     XtRealizeWidget ((Widget) menuBarW);
     XtManageChild ((Widget) menuBarW);
     SetMenuBarFrame(parent);
