@@ -76,7 +76,7 @@ public:
 
   void InitFromName(const wxString& col);
 
-  const WXCOLORREF GetPixel() const { return m_pixel; };
+  const WXCOLORREF& GetPixel() const { return m_pixel; };
 
 private:
   bool          m_isInit;
