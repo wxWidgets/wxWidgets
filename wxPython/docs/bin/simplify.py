@@ -63,14 +63,14 @@ def processModule(newDocNode, modulename):
     node = topNode.children
     while node is not None:
         if node.name == "include":
-            processInclude(moduleNode, node, 0)
+            processInclude(moduleNode, node)
         node = node.next
 
     doc.freeDoc()
 
 
 
-def processInclude(moduleNode, includeNode, level):
+def processInclude(moduleNode, includeNode):
     """
     Almost everything we are interested in is inside an <include>,
     which may also be nested.
@@ -91,10 +91,10 @@ def processInclude(moduleNode, includeNode, level):
     node = includeNode.children
     while node is not None:
         if node.name == "insert":
-            processInsert(moduleNode, node, level)
+            processInsert(moduleNode, node)
 
         elif node.name == "class":
-            processClass(moduleNode, node, level)
+            processClass(moduleNode, node)
 
         elif node.name == "cdecl" and getAttr(node, "view") == "globalfunctionHandler":
             func = libxml2.newNode("method")
@@ -108,13 +108,13 @@ def processInclude(moduleNode, includeNode, level):
             
                           
         elif node.name == "include":
-            processInclude(moduleNode, node, level+1)
+            processInclude(moduleNode, node)
 
         node = node.next
 
 
 
-def processInsert(parentNode, insertNode, level):
+def processInsert(parentNode, insertNode):
     """
     Check for pythoncode
     """
@@ -126,7 +126,7 @@ def processInsert(parentNode, insertNode, level):
 
 
 
-def processClass(parentNode, classNode, level):
+def processClass(parentNode, classNode):
     """
     Handle classes, constructors, methods, etc.
     """

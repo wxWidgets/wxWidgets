@@ -24,7 +24,7 @@ echo "Modules:    " $MODULES
 
 
 echo "<?xml version='1.0'?>"  > $DEST
-echo "<top>"                 >> $DEST
+echo "<wxPython-metadata>"   >> $DEST
 
 for m in $MODULES; do
     F=$SRC/${m}_swig.xml
@@ -32,4 +32,4 @@ for m in $MODULES; do
     xsltproc $XSLT  $F       >> $DEST
 done
 
-echo "</top>"                >> $DEST
+echo "</wxPython-metadata>"  >> $DEST
