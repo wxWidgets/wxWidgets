@@ -206,11 +206,6 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               const wxValidator& validator,
                               const wxString& name)
 {
-    // m_isWindow is set to TRUE in wxWindowBase::Init() as well as many other
-    // member variables - check that it has been called (will catch the case
-    // when a new ctor is added which doesn't call InitWindow)
-    wxASSERT_MSG( m_isWindow, wxT("Init() must have been called before!") );
-
 #if wxUSE_STATBOX
     // wxGTK doesn't allow to create controls with static box as the parent so
     // this will result in a crash when the program is ported to wxGTK so warn
