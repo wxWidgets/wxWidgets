@@ -384,8 +384,12 @@ gtk_myfixed_size_request (GtkWidget      *widget,
 
   myfixed = GTK_MYFIXED (widget);
   
+/*
   requisition->width = 0;
   requisition->height = 0;
+*/
+  requisition->width = widget->requisition.width;
+  requisition->height = widget->requisition.height;
 
   children = myfixed->children;
   while (children)
@@ -415,7 +419,7 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
   g_return_if_fail (allocation != NULL);
 
   myfixed = GTK_MYFIXED (widget);
-
+  
     widget->allocation = *allocation;
 #if (GTK_MINOR_VERSION > 0)
   if (myfixed->shadow_type == GTK_SHADOW_NONE)

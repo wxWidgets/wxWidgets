@@ -1443,13 +1443,13 @@ static void wxInsertChildInWindow( wxWindow* parent, wxWindow* child )
 {
     gtk_myfixed_put( GTK_MYFIXED(parent->m_wxwindow),
                      GTK_WIDGET(child->m_widget),
-                       child->m_x,
+                     child->m_x,
                      child->m_y );
 
-    gtk_widget_set_usize( GTK_WIDGET(child->m_widget),
+    gtk_widget_set_usize( child->m_widget,
                           child->m_width,
                           child->m_height );
-
+    
     if (parent->m_windowStyle & wxTAB_TRAVERSAL)
     {
         /* we now allow a window to get the focus as long as it
@@ -1994,7 +1994,7 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     if (m_resizing) return; /* I don't like recursions */
     m_resizing = TRUE;
 
-    if (m_parent->m_wxwindow == NULL) /* i.e. wxNotebook */
+    if (m_parent->m_wxwindow == NULL) /* i.e. wxNotebook page */
     {
         /* don't set the size for children of wxNotebook, just take the values. */
         m_x = x;
@@ -2053,15 +2053,27 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
             if ((old_width != m_width) || (old_height != m_height))
 	    {
 /*
-	        GtkAllocation alloc;
-	        alloc.x = m_x;
-	        alloc.y = m_y;
-	        alloc.width = m_width;
-	        alloc.height = m_height;
-		gtk_widget_size_allocate( m_widget, &alloc );
-*/
+                wxPrintf( _T("On DoSetSize from ") );
+                wxPrintf( GetClassInfo()->GetClassName() );
+                wxPrintf( _T(": %d %d.\n"), m_width, m_height );
+*/	
+	    
                 gtk_widget_set_usize( m_widget, m_width, m_height );
+		
+		/* this is the result of hours of debugging: the followomg code
+		   means that if we have a m_wxwindow and we set the size of
+		   m_widget, m_widget (which is a GtkScrolledWindow) does NOT
+		   automatically propagate its size down to its m_wxwindow,
+		   which is its client area. therefore, we have to tell the
+		   client area directly that it has to get resize itself */
+		GtkAllocation alloc;
+		alloc.x = m_x;
+		alloc.y = m_y;
+		alloc.width = m_width;
+		alloc.height = m_height;
+		gtk_widget_size_allocate( m_widget, &alloc );
 	    }
+	    
 	}
     }
 

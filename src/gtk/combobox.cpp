@@ -584,11 +584,13 @@ void wxComboBox::OnSize( wxSizeEvent &event )
 {
     wxControl::OnSize( event );
 
+/*
     int w = 21;
     gtk_widget_set_usize( GTK_COMBO(m_widget)->entry, m_width-w-1, m_height );
 
     gtk_widget_set_uposition( GTK_COMBO(m_widget)->button, m_x+m_width-w, m_y );
     gtk_widget_set_usize( GTK_COMBO(m_widget)->button, w, m_height );
+*/
 }
 
 void wxComboBox::ApplyWidgetStyle()

@@ -667,6 +667,9 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             m_frameMenuBar->m_height = hh;
 
             gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_frameMenuBar->m_widget, xx, yy );
+	    
+//	    m_frameMenuBar->m_widget->requisition.width = ww;
+//	    m_frameMenuBar->m_widget->requisition.height = hh;
             gtk_widget_set_usize( m_frameMenuBar->m_widget, ww, hh );
 	
 	    client_area_y_offset += hh;
@@ -692,6 +695,9 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             m_frameToolBar->m_width = ww;
 
             gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_frameToolBar->m_widget, xx, yy );
+	    
+//	    m_frameToolBar->m_widget->requisition.width = ww;
+//	    m_frameToolBar->m_widget->requisition.height = hh;
             gtk_widget_set_usize( m_frameToolBar->m_widget, ww, hh );
 	
 	    client_area_y_offset += hh;
@@ -703,7 +709,10 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
         int client_w = m_width - 2*m_miniEdge;
 	int client_h = m_height - client_area_y_offset- 2*m_miniEdge - m_miniTitle;
+//	m_wxwindow->requisition.width = client_w;
+//	m_wxwindow->requisition.height = client_h;
         gtk_widget_set_usize( m_wxwindow, client_w, client_h );
+
     }
     else
     {
@@ -724,12 +733,15 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         m_frameStatusBar->m_height = hh;
 
         gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameStatusBar->m_widget, xx, yy );
+	
+//	m_frameStatusBar->m_widget->requisition.width = ww;
+//	m_frameStatusBar->m_widget->requisition.height = hh;
         gtk_widget_set_usize( m_frameStatusBar->m_widget, ww, hh );
     }
 
     /* we actually set the size of a frame here and no-where else */
     gtk_widget_set_usize( m_widget, m_width, m_height );
-
+    
     m_sizeSet = TRUE;
 
     /* send size event to frame */
