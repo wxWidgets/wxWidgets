@@ -52,7 +52,7 @@
 #include "wx/wx.h"
 
 #if defined(_WINDOWS_) || !wxUSE_MFC
-#error Sorry, you need to edit include/wx/msw/setup.h, set wxUSE_MFC to 1, and recompile.
+#error "Sorry, you need to edit include/wx/msw/setup.h, set wxUSE_MFC to 1, and recompile the library."
 #endif
 
 #ifdef new
