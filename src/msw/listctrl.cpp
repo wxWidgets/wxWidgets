@@ -1284,6 +1284,12 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
     m_textCtrl->SubclassWin(hWnd);
     m_textCtrl->SetParent(this);
 
+    // we must disallow TABbing away from the control while the edit contol is
+    // shown because this leaves it in some strange state (just try removing
+    // this line and then pressing TAB while editing an item in  listctrl
+    // inside a panel)
+    m_textCtrl->SetWindowStyle(m_textCtrl->GetWindowStyle() | wxTE_PROCESS_TAB);
+
     return m_textCtrl;
 }
 
