@@ -500,18 +500,18 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
         {
           wxString strTime = TimeStamp();
 
-          #if (defined(__WIN32__) || defined(__WIN16__)) && !defined(__WXSTUBS__)
+          #ifdef __WXMSW__
               // don't prepend debug/trace here: it goes to the debug window
               // anyhow, but do put a timestamp
               OutputDebugString(strTime + szString + "\n\r");
-          #else   //!WIN32
+          #else  
             // send them to stderr
             fprintf(stderr, "%s %s: %s\n",
                     strTime.c_str(),
                     level == wxLOG_Trace ? _("Trace") : _("Debug"),
                     szString);
             fflush(stderr);
-          #endif  // WIN32
+          #endif
         }
       #endif
       break;

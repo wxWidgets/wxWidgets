@@ -191,6 +191,13 @@ bool wxFrame::Show( bool show )
         m_sizeSet = FALSE;
         GetEventHandler()->ProcessEvent( event );
 */
+
+        // here we give wxFrame a chance to do resize updates
+	// before appearing on screen. resize updates have to
+	// be handled in idle time because of GTK's super smart
+	// resize propagation algorithm.
+	
+        wxYield();
     }
     return wxWindow::Show( show );
 }
