@@ -14,7 +14,9 @@ enum
     wxCHANGE_DIR        = 0x0040
 };
 
-#if defined(__WXMSW__)
+#if defined (__WXUNIVERSAL__)
+#include "wx/generic/filedlgg.h"
+#elif defined(__WXMSW__)
 #include "wx/msw/filedlg.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/filedlg.h"

@@ -13,7 +13,7 @@ inkey /W4 `Press any key to continue...` %%input
 
 erase %dest\xml.zip
 cd %src
-zip32 -@ %dest\xml.zip < %src\distrib\msw\xml.rsp
+zip -@ %dest\xml.zip < %src\distrib\msw\xml.rsp
 
 cd %dest
 

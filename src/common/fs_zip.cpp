@@ -15,7 +15,7 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
@@ -39,9 +39,9 @@
 #endif
 
 
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // wxZipFSHandler
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 
 
@@ -87,10 +87,20 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
         return NULL;
     }
 
+    if (right.Contains(wxT("./")))
+    {
+        if (right.GetChar(0) != wxT('/')) right = wxT('/') + right;
+        wxFileName rightPart(right, wxPATH_UNIX);
+        rightPart.Normalize(wxPATH_NORM_DOTS, wxT("/"), wxPATH_UNIX);
+        right = rightPart.GetFullPath(wxPATH_UNIX);
+    }
+    
     if (right.GetChar(0) == wxT('/')) right = right.Mid(1);
 
-    s = new wxZipInputStream(left, right);
-    if (s && (s->LastError() == wxStream_NOERROR))
+    wxFileName leftFilename = wxFileSystem::URLToFileName(left);
+
+    s = new wxZipInputStream(leftFilename.GetFullPath(), right);
+    if (s && s->IsOk() )
     {
         return new wxFSFile(s,
                             left + wxT("#zip:") + right,
@@ -135,7 +145,8 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
     }
 
     m_ZipFile = left;
-    m_Archive = (void*) unzOpen(m_ZipFile.mb_str());
+    wxString nativename = wxFileSystem::URLToFileName(m_ZipFile).GetFullPath();
+    m_Archive = (void*) unzOpen(nativename.mb_str());
     m_Pattern = right.AfterLast(wxT('/'));
     m_BaseDir = right.BeforeLast(wxT('/'));
 
@@ -179,8 +190,8 @@ wxString wxZipFSHandler::DoFind()
     while (match == wxEmptyString)
     {
         unzGetCurrentFileInfo((unzFile)m_Archive, NULL, namebuf, 1024, NULL, 0, NULL, 0);
-        for (c = namebuf; *c; c++) if (*c == wxT('\\')) *c = wxT('/');
-        namestr = namebuf;
+        for (c = namebuf; *c; c++) if (*c == '\\') *c = '/';
+        namestr = wxString::FromAscii( namebuf );    // TODO what encoding does ZIP use?
 
         if (m_AllowDirs)
         {

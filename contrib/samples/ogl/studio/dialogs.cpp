@@ -25,6 +25,11 @@
 #endif
 
 #include <wx/resource.h>
+
+#if !wxUSE_WX_RESOURCES 
+#error "OGL studio sample requires wxUSE_WX_RESOURCES" 
+#endif // wxUSE_WX_RESOURCES 
+
 #include "dialogs.h"
 #include "doc.h"
 #include "view.h"

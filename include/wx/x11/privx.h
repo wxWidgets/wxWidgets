@@ -14,6 +14,8 @@
 
 #include "wx/defs.h"
 #include "wx/utils.h"
+#include "wx/colour.h"
+
 #include "X11/Xlib.h"
 #include "X11/Xatom.h"
 #include "X11/Xutil.h"

@@ -28,7 +28,6 @@
 %import _defs.i
 
 %pragma(python) code = "import wx"
-%pragma(python) code = "import string"
 
 //----------------------------------------------------------------------
 // typemaps for wxInputStream
@@ -61,7 +60,7 @@
     if ($source) {
         _ptr = new wxPyInputStream($source);
     }
-    $target = wxPyConstructObject(_ptr, "wxInputStream", TRUE);
+    $target = wxPyConstructObject(_ptr, wxT("wxInputStream"), TRUE);
 }
 
 //----------------------------------------------------------------------
@@ -88,6 +87,12 @@
 //          $target=0;
 //  }
 
+enum wxSeekMode
+{
+  wxFromStart,
+  wxFromCurrent,
+  wxFromEnd
+};
 
 
 
@@ -118,6 +123,16 @@ public:
       void write(wxString data);
       void writelines(wxStringPtrList);
     */
+
+    char Peek();
+    char GetC();
+    size_t LastRead();
+    bool CanRead();
+    bool Eof();
+    bool Ungetch(char c);
+
+    long SeekI(long pos, wxSeekMode mode = wxFromStart);
+    long TellI();
 }
 
 

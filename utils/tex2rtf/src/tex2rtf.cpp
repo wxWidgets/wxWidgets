@@ -58,7 +58,7 @@ char *contentsString = NULL;
 bool suppressNameDecoration = FALSE;
 bool OkToClose = TRUE;
 int passNumber = 1;
-int errorCount = 0;
+unsigned long errorCount = 0UL;
 
 #ifndef NO_GUI
 
@@ -330,7 +330,7 @@ bool MyApp::OnInit()
 
     if (InputFile)
     {
-      sprintf(buf, "Tex2RTF [%s]", FileNameFromPath(InputFile));
+      sprintf(buf, "Tex2RTF [%s]", wxFileNameFromPath(InputFile));
       frame->SetTitle(buf);
     }
 
@@ -432,7 +432,7 @@ bool MyApp::OnInit()
 #ifdef NO_GUI
     return 0;
 #else
-    return NULL;
+    return FALSE;
 #endif
   }
 
@@ -440,7 +440,7 @@ bool MyApp::OnInit()
   // Return the main frame window
   return TRUE;
 #else
-  return FALSE;
+  return 0;
 #endif
 }
 
@@ -967,7 +967,7 @@ bool Go(void)
 
   if (InputFile && OutputFile)
   {
-    if (!FileExists(InputFile))
+    if (!wxFileExists(InputFile))
     {
       OnError("Cannot open input file!");
       TexCleanUp();
@@ -1208,7 +1208,6 @@ bool SplitCommand(char *data, char *firstArg, char *secondArg)
   firstArg[0] = 0;
   secondArg[0] = 0;
   int i = 0;
-  int len = strlen(data);
   bool stop = FALSE;
   // Find first argument (command name)
   while (!stop)

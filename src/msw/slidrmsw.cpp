@@ -50,6 +50,9 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
+        style |= wxBORDER_NONE;
+
   SetName(name);
 #if wxUSE_VALIDATORS
   SetValidator(validator);
@@ -78,13 +81,13 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
 
   // non-Win95 implementation
   
-  long msStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | SS_CENTER;
+  long msStyle = SS_CENTER;
 
    if ( m_windowStyle & wxCLIP_SIBLINGS )
         msStyle |= WS_CLIPSIBLINGS;
 
-  bool want3D;
-  WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
+  WXDWORD exStyle = 0;
+  msStyle |= MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
   m_staticValue = (WXHWND) CreateWindowEx(exStyle, wxT("STATIC"), NULL,
                            msStyle,
@@ -92,11 +95,12 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
                            wxGetInstance(), NULL);
 
   // Now create min static control
-  wxSprintf(wxBuffer, wxT("%d"), minValue);
+  wxString buf;
+  buf.Printf(wxT("%d"), minValue);
   DWORD wstyle = STATIC_FLAGS;
   if ( m_windowStyle & wxCLIP_SIBLINGS )
         wstyle |= WS_CLIPSIBLINGS;
-  m_staticMin = (WXHWND) CreateWindowEx(0, wxT("STATIC"), wxBuffer,
+  m_staticMin = (WXHWND) CreateWindowEx(0, wxT("STATIC"), buf,
                          wstyle,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                          wxGetInstance(), NULL);
@@ -107,7 +111,7 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
   else
     msStyle = SBS_HORZ | WS_CHILD | WS_VISIBLE | WS_TABSTOP ;
 
-  HWND scroll_bar = CreateWindowEx(MakeExtendedStyle(m_windowStyle), wxT("SCROLLBAR"), wxBuffer,
+  HWND scroll_bar = CreateWindowEx(MakeExtendedStyle(m_windowStyle), wxT("SCROLLBAR"), wxT(""),
                          msStyle,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                          wxGetInstance(), NULL);
@@ -126,11 +130,11 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
   SubclassWin(GetHWND());
 
   // Finally, create max value static item
-  wxSprintf(wxBuffer, wxT("%d"), maxValue);
+  buf.Printf(wxT("%d"), maxValue);
   wstyle = STATIC_FLAGS;
   if ( m_windowStyle & wxCLIP_SIBLINGS )
         wstyle |= WS_CLIPSIBLINGS;
-  m_staticMax = (WXHWND) CreateWindowEx(0, wxT("STATIC"), wxBuffer,
+  m_staticMax = (WXHWND) CreateWindowEx(0, wxT("STATIC"), buf,
                          wstyle,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                          wxGetInstance(), NULL);
@@ -261,8 +265,9 @@ void wxSliderMSW::SetValue(int value)
   ::SetScrollPos(GetHwnd(), SB_CTL, value, TRUE);
   if (m_staticValue)
   {
-    wxSprintf(wxBuffer, wxT("%d"), value);
-    SetWindowText((HWND) m_staticValue, wxBuffer);
+    wxString buf;
+    buf.Printf(wxT("%d"), value);
+    SetWindowText((HWND) m_staticValue, buf);
   }
 }
 

@@ -6,7 +6,7 @@
 WXDIR = ../../..
 
 TARGET = stctest
-OBJECTS = $(TARGET).o
+OBJECTS = $(TARGET).o edit.o prefs.o
 EXTRAINC = -I$(WXDIR)/contrib/include
 EXTRALIBS = -lstc
 

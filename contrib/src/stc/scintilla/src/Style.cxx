@@ -16,13 +16,13 @@ Style::Style() {
 	aliasOfDefaultFont = true;
 	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
 	      Platform::DefaultFontSize(), 0, SC_CHARSET_DEFAULT,
-	      false, false, false, false, caseMixed, true, true);
+	      false, false, false, false, caseMixed, true, true, false);
 }
 
 Style::Style(const Style &source) {
 	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
 	      0, 0, 0,
-	      false, false, false, false, caseMixed, true, true);
+	      false, false, false, false, caseMixed, true, true, false);
 	fore.desired = source.fore.desired;
 	back.desired = source.back.desired;
 	characterSet = source.characterSet;
@@ -34,6 +34,7 @@ Style::Style(const Style &source) {
 	caseForce = source.caseForce;
 	visible = source.visible;
 	changeable = source.changeable;
+	hotspot = source.hotspot;
 }
 
 Style::~Style() {
@@ -49,7 +50,7 @@ Style &Style::operator=(const Style &source) {
 		return * this;
 	Clear(ColourDesired(0, 0, 0), ColourDesired(0xff, 0xff, 0xff),
 	      0, 0, SC_CHARSET_DEFAULT,
-	      false, false, false, false, caseMixed, true, true);
+	      false, false, false, false, caseMixed, true, true, false);
 	fore.desired = source.fore.desired;
 	back.desired = source.back.desired;
 	characterSet = source.characterSet;
@@ -68,7 +69,7 @@ void Style::Clear(ColourDesired fore_, ColourDesired back_, int size_,
                   const char *fontName_, int characterSet_,
                   bool bold_, bool italic_, bool eolFilled_, 
                   bool underline_, ecaseForced caseForce_, 
-		  bool visible_, bool changeable_) {
+		  bool visible_, bool changeable_, bool hotspot_) {
 	fore.desired = fore_;
 	back.desired = back_;
 	characterSet = characterSet_;
@@ -81,6 +82,7 @@ void Style::Clear(ColourDesired fore_, ColourDesired back_, int size_,
 	caseForce = caseForce_;
 	visible = visible_;
 	changeable = changeable_;
+	hotspot = hotspot_;
 	if (aliasOfDefaultFont)
 		font.SetID(0);
 	else
@@ -101,7 +103,8 @@ void Style::ClearTo(const Style &source) {
 		source.underline,
 		source.caseForce,
 		source.visible, 
-		source.changeable);
+		source.changeable,
+		source.hotspot);
 }
 
 bool Style::EquivalentFontTo(const Style *other) const {

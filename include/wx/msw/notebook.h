@@ -40,14 +40,14 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = "notebook");
+             const wxString& name = wxNOTEBOOK_NAME);
     // Create() function
   bool Create(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
-              const wxString& name = "notebook");
+              const wxString& name = wxNOTEBOOK_NAME);
 
   // accessors
   // ---------
@@ -133,14 +133,18 @@ protected:
   // remove one page from the notebook, without deleting
   virtual wxNotebookPage *DoRemovePage(int nPage);
 
-  // helper functions
-  void ChangePage(int nOldSel, int nSel); // change pages
-
-  int m_nSelection;           // the current selection (-1 if none)
+  // the current selection (-1 if none)
+  int m_nSelection;
 
   DECLARE_DYNAMIC_CLASS(wxNotebook)
   DECLARE_EVENT_TABLE()
 };
+
+// Windows only: attempts to get colour for UX theme page background
+WXDLLEXPORT wxColour wxNotebookGetThemeBackgroundColour(wxNotebook* notebook);
+
+// Windows only: attempts to apply the UX theme page background to this page
+WXDLLEXPORT void wxNotebookApplyThemeBackground(wxNotebook* notebook, wxWindow* window, const wxColour& colour);
 
 #endif // wxUSE_NOTEBOOK
 

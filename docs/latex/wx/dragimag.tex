@@ -28,6 +28,14 @@ override \helpref{wxDragImage::DoDrawImage}{wxdragimagedodrawimage} and
 
 Please see {\tt samples/dragimag} for an example.
 
+%\wxheading{Notes}
+%
+%Using the native Windows implementation, you must supply an image with a mask, or
+%the image will not show when dragged. It is not clear if this is a bug
+%in Windows or in the wxDragImage implementation. You can add a mask
+%with a call to wxImage::SetMaskColour, passing RGB values not likely
+%to be in the image. [CURED by creating the ImageList with ILC_MASK]
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}

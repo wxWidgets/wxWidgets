@@ -456,6 +456,9 @@ void cbRowLayoutPlugin::ApplyLengthRatios( cbRowInfo* pRow )
         }
     }  // for
 
+    if (pcntSum == 0.0)
+        pcntSum = 1.0;
+
     if ( haveSquished )
         unit = freeSpc / pcntSum;
 

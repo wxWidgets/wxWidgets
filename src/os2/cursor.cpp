@@ -311,6 +311,7 @@ wxCursor::wxCursor(
                                                                   );
             break;
     }
+    ((wxCursorRefData *)m_refData)->m_bDestroyCursor = FALSE;
 } // end of wxCursor::wxCursor
 
 // Global cursor setting

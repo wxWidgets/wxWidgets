@@ -27,6 +27,7 @@
 
 #include "wx/string.h"
 #include "wx/file.h"
+#include "wx/log.h"
 #include "wx/app.h"
 
 // without this pragma, the stupid compiler precompiles #defines below so that
@@ -93,7 +94,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_PRINTF
+    #define TEST_DATETIME
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -1766,7 +1767,7 @@ static void TestMimeFilename()
                                      wxFileType::MessageParameters(fname, _T(""))) )
                 cmd = _T("<no command available>");
             else
-                cmd = wxString('"') + cmd + '"';
+                cmd = wxString(_T('"')) + cmd + _T('"');
 
             wxPrintf(_T("To open %s (%s) do %s.\n"),
                      fname.c_str(), desc.c_str(), cmd.c_str());
@@ -2169,9 +2170,9 @@ static void TestLongLongComparison()
 #endif // wxUSE_LONGLONG_WX
 }
 
-static void TestLongLongPrint()
+static void TestLongLongToString()
 {
-    wxPuts(_T("*** Testing wxLongLong printing ***\n"));
+    wxPuts(_T("*** Testing wxLongLong::ToString() ***\n"));
 
     for ( size_t n = 0; n < WXSIZEOF(testLongs); n++ )
     {
@@ -2184,6 +2185,20 @@ static void TestLongLongPrint()
 
     ll.Negate();
     wxPrintf(_T("-0x1234567887654321 = %s\n"), ll.ToString().c_str());
+}
+
+static void TestLongLongPrintf()
+{
+    wxPuts(_T("*** Testing wxLongLong printing ***\n"));
+
+#ifdef wxLongLongFmtSpec
+    wxLongLong ll = wxLL(0x1234567890abcdef);
+    wxString s = wxString::Format(_T("%") wxLongLongFmtSpec _T("x"), ll);
+    wxPrintf(_T("0x1234567890abcdef -> %s (%s)\n"),
+             s.c_str(), s == _T("1234567890abcdef") ? _T("ok") : _T("ERROR"));
+#else // !wxLongLongFmtSpec
+    #error "wxLongLongFmtSpec not defined for this compiler/platform"
+#endif
 }
 
 #undef MAKE_LL
@@ -2713,7 +2728,7 @@ I am ready for my first lesson today.");
   {
       wxChar buf[200];
 
-      wxSprintf (buf, _T("%07Lo"), (wxLongLong_t)040000000000);
+      wxSprintf(buf, _T("%07") wxLongLongFmtSpec _T("o"), wxLL(040000000000));
       wxPrintf (_T("sprintf (buf, \"%%07Lo\", 040000000000ll) = %s"), buf);
 
       if (wxStrcmp (buf, _T("40000000000")) != 0)
@@ -3156,7 +3171,7 @@ static void TestFtpWuFtpd()
         }
         else
         {
-            size_t size = in->StreamSize();
+            size_t size = in->GetSize();
             wxPrintf(_T("Reading file %s (%u bytes)..."), filename, size);
 
             wxChar *data = new wxChar[size];
@@ -3239,7 +3254,7 @@ static void TestFtpDownload()
     }
     else
     {
-        size_t size = in->StreamSize();
+        size_t size = in->GetSize();
         wxPrintf(_T("Reading file %s (%u bytes)..."), filename, size);
         fflush(stdout);
 
@@ -3858,7 +3873,7 @@ static void TestUnicodeToFromAscii()
 #include "wx/encconv.h"
 #include "wx/buffer.h"
 
-static const unsigned char textInUtf8_[] =
+static const unsigned char utf8koi8r[] =
 {
     208, 157, 208, 181, 209, 129, 208, 186, 208, 176, 208, 183, 208, 176,
     208, 189, 208, 189, 208, 190, 32, 208, 191, 208, 190, 209, 128, 208,
@@ -3869,7 +3884,36 @@ static const unsigned char textInUtf8_[] =
     178, 208, 190, 209, 129, 209, 130, 209, 140, 209, 142, 0
 };
 
-#define textInUtf8 ((const char *)textInUtf8_)
+static const unsigned char utf8iso8859_1[] =
+{
+    0x53, 0x79, 0x73, 0x74, 0xc3, 0xa8, 0x6d, 0x65, 0x73, 0x20, 0x49, 0x6e,
+    0x74, 0xc3, 0xa9, 0x67, 0x72, 0x61, 0x62, 0x6c, 0x65, 0x73, 0x20, 0x65,
+    0x6e, 0x20, 0x4d, 0xc3, 0xa9, 0x63, 0x61, 0x6e, 0x69, 0x71, 0x75, 0x65,
+    0x20, 0x43, 0x6c, 0x61, 0x73, 0x73, 0x69, 0x71, 0x75, 0x65, 0x20, 0x65,
+    0x74, 0x20, 0x51, 0x75, 0x61, 0x6e, 0x74, 0x69, 0x71, 0x75, 0x65, 0
+};
+
+static const unsigned char utf8Invalid[] =
+{
+    0x3c, 0x64, 0x69, 0x73, 0x70, 0x6c, 0x61, 0x79, 0x3e, 0x32, 0x30, 0x30,
+    0x32, 0xe5, 0xb9, 0xb4, 0x30, 0x39, 0xe6, 0x9c, 0x88, 0x32, 0x35, 0xe6,
+    0x97, 0xa5, 0x20, 0x30, 0x37, 0xe6, 0x99, 0x82, 0x33, 0x39, 0xe5, 0x88,
+    0x86, 0x35, 0x37, 0xe7, 0xa7, 0x92, 0x3c, 0x2f, 0x64, 0x69, 0x73, 0x70,
+    0x6c, 0x61, 0x79, 0
+};
+
+static const struct Utf8Data
+{
+    const unsigned char *text;
+    size_t len;
+    const wxChar *charset;
+    wxFontEncoding encoding;
+} utf8data[] =
+{
+    { utf8Invalid, WXSIZEOF(utf8Invalid), _T("iso8859-1"), wxFONTENCODING_ISO8859_1 },
+    { utf8koi8r, WXSIZEOF(utf8koi8r), _T("koi8-r"), wxFONTENCODING_KOI8 },
+    { utf8iso8859_1, WXSIZEOF(utf8iso8859_1), _T("iso8859-1"), wxFONTENCODING_ISO8859_1 },
+};
 
 static void TestUtf8()
 {
@@ -3877,30 +3921,33 @@ static void TestUtf8()
 
     char buf[1024];
     wchar_t wbuf[1024];
-    if ( wxConvUTF8.MB2WC(wbuf, textInUtf8, WXSIZEOF(textInUtf8)) <= 0 )
+
+    for ( size_t n = 0; n < WXSIZEOF(utf8data); n++ )
     {
-        wxPuts(_T("ERROR: UTF-8 decoding failed."));
-    }
-    else
-    {
-        wxCSConv conv(_T("koi8-r"));
-        if ( conv.WC2MB(buf, wbuf, 0 /* not needed wcslen(wbuf) */) <= 0 )
+        const Utf8Data& u8d = utf8data[n];
+        if ( wxConvUTF8.MB2WC(wbuf, (const char *)u8d.text,
+                              WXSIZEOF(wbuf)) == (size_t)-1 )
         {
-            wxPuts(_T("ERROR: conversion to KOI8-R failed."));
+            wxPuts(_T("ERROR: UTF-8 decoding failed."));
         }
         else
         {
-            wxPrintf(_T("The resulting string (in KOI8-R): %s\n"), buf);
+            wxCSConv conv(u8d.charset);
+            if ( conv.WC2MB(buf, wbuf, WXSIZEOF(buf)) == (size_t)-1 )
+            {
+                wxPrintf(_T("ERROR: conversion to %s failed.\n"), u8d.charset);
+            }
+            else
+            {
+                wxPrintf(_T("String in %s: %s\n"), u8d.charset, buf);
+            }
         }
-    }
 
-    if ( wxConvUTF8.WC2MB(buf, L"à la", WXSIZEOF(buf)) <= 0 )
-    {
-        wxPuts(_T("ERROR: conversion to UTF-8 failed."));
-    }
-    else
-    {
-        wxPrintf(_T("The string in UTF-8: %s\n"), buf);
+        wxString s(wxConvUTF8.cMB2WC((const char *)u8d.text), *wxConvCurrent);
+        if ( s.empty() )
+            s = _T("<< conversion failed >>");
+        wxPrintf(_T("String in current cset: %s\n"), s.c_str());
+
     }
 
     wxPuts(_T(""));
@@ -3913,7 +3960,8 @@ static void TestEncodingConverter()
     // using wxEncodingConverter should give the same result as above
     char buf[1024];
     wchar_t wbuf[1024];
-    if ( wxConvUTF8.MB2WC(wbuf, textInUtf8, WXSIZEOF(textInUtf8)) <= 0 )
+    if ( wxConvUTF8.MB2WC(wbuf, (const char *)utf8koi8r,
+                          WXSIZEOF(utf8koi8r)) == (size_t)-1 )
     {
         wxPuts(_T("ERROR: UTF-8 decoding failed."));
     }
@@ -3922,7 +3970,7 @@ static void TestEncodingConverter()
         wxEncodingConverter ec;
         ec.Init(wxFONTENCODING_UNICODE, wxFONTENCODING_KOI8);
         ec.Convert(wbuf, buf);
-        wxPrintf(_T("The same string obtained using wxEC: %s\n"), buf);
+        wxPrintf(_T("The same KOI8-R string using wxEC: %s\n"), buf);
     }
 
     wxPuts(_T(""));
@@ -4579,44 +4627,40 @@ for n in range(20):
             wmon2 = dt.GetWeekOfMonth(wxDateTime::Sunday_First),
             dnum = dt.GetDayOfYear();
 
-        wxPrintf(_T("%s: the day number is %d"), d.FormatDate().c_str(), dnum);
-        if ( dnum == wn.dnum )
-        {
-            wxPrintf(_T(" (ok)"));
-        }
-        else
+        wxPrintf(_T("%s: the day number = %d"), d.FormatDate().c_str(), dnum);
+        if ( dnum != wn.dnum )
         {
             wxPrintf(_T(" (ERROR: should be %d)"), wn.dnum);
         }
 
-        wxPrintf(_T(", week in month is %d"), wmon);
-        if ( wmon == wn.wmon )
-        {
-            wxPrintf(_T(" (ok)"));
-        }
-        else
+        wxPrintf(_T(", week in month = %d"), wmon);
+        if ( wmon != wn.wmon )
         {
             wxPrintf(_T(" (ERROR: should be %d)"), wn.wmon);
         }
 
-        wxPrintf(_T(" or %d"), wmon2);
-        if ( wmon2 == wn.wmon2 )
-        {
-            wxPrintf(_T(" (ok)"));
-        }
-        else
+        wxPrintf(_T(" (%d)"), wmon2);
+        if ( wmon2 != wn.wmon2 )
         {
             wxPrintf(_T(" (ERROR: should be %d)"), wn.wmon2);
         }
 
-        wxPrintf(_T(", week in year is %d"), week);
-        if ( week == wn.week )
+        wxPrintf(_T(", week in year = %d"), week);
+        if ( week != wn.week )
         {
-            wxPuts(_T(" (ok)"));
+            wxPrintf(_T(" (ERROR: should be %d)"), wn.week);
         }
-        else
+
+        wxPutchar(_T('\n'));
+
+        wxDateTime dt2(1, wxDateTime::Jan, d.year);
+        dt2.SetToTheWeek(wn.week, dt.GetWeekDay());
+        if ( dt2 != dt )
         {
-            wxPrintf(_T(" (ERROR: should be %d)\n"), wn.week);
+            Date d2;
+            d2.Init(dt2.GetTm());
+            wxPrintf(_T("ERROR: SetToTheWeek() returned %s\n"),
+                     d2.FormatDate().c_str());
         }
     }
 }
@@ -6391,7 +6435,8 @@ int main(int argc, char **argv)
         TestLongLongConversion();
         TestBitOperations();
         TestLongLongComparison();
-        TestLongLongPrint();
+        TestLongLongToString();
+        TestLongLongPrintf();
     }
 #endif // TEST_LONGLONG
 
@@ -6516,7 +6561,8 @@ int main(int argc, char **argv)
 
         TestTimeZoneBug();
     }
-        TestTimeFormat();
+
+    TestTimeWNumber();
 
     if ( TEST_INTERACTIVE )
         TestDateTimeInteractive();

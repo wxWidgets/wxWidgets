@@ -118,6 +118,8 @@ public:
     wxWindow     *m_owner;
     wxRegion      m_currentClippingRegion;
     wxRegion      m_paintClippingRegion;
+    
+    // PangoContext stuff for GTK 2.0
 #ifdef __WXGTK20__
     PangoContext *m_context;
     PangoFontDescription *m_fontdesc;

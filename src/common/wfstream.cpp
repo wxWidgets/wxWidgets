@@ -71,19 +71,23 @@ size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
 {
     off_t ret = m_file->Read(buffer, size);
 
-    switch ( ret )
+    // NB: we can't use a switch here because HP-UX CC doesn't allow
+    //     switching over long long (which off_t is in 64bit mode)
+
+    if ( !ret )
     {
-        case 0:
-            m_lasterror = wxSTREAM_EOF;
-            break;
-
-        case wxInvalidOffset:
-            m_lasterror = wxSTREAM_READ_ERROR;
-            ret = 0;
-            break;
-
-        default:
-            m_lasterror = wxSTREAM_NO_ERROR;
+        // nothing read, so nothing more to read
+        m_lasterror = wxSTREAM_EOF;
+    }
+    else if ( ret == wxInvalidOffset )
+    {
+        m_lasterror = wxSTREAM_READ_ERROR;
+        ret = 0;
+    }
+    else
+    {
+        // normal case
+        m_lasterror = wxSTREAM_NO_ERROR;
     }
 
     return ret;
@@ -235,10 +239,10 @@ size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
     ret = m_file->Read(buffer, size);
 
     if (m_file->Eof())
-        m_lasterror = wxStream_EOF;
+        m_lasterror = wxSTREAM_EOF;
     if (ret == wxInvalidOffset)
     {
-        m_lasterror = wxStream_READ_ERR;
+        m_lasterror = wxSTREAM_READ_ERROR;
         ret = 0;
     }
 
@@ -307,9 +311,9 @@ size_t wxFFileOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
     size_t ret = m_file->Write(buffer, size);
     if (m_file->Error())
-        m_lasterror = wxStream_WRITE_ERR;
+        m_lasterror = wxSTREAM_WRITE_ERROR;
     else
-        m_lasterror = wxStream_NOERROR;
+        m_lasterror = wxSTREAM_NO_ERROR;
     return ret;
 }
 

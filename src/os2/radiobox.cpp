@@ -263,9 +263,7 @@ bool wxRadioBox::Create(
 , const wxString                    asChoices[]
 , int                               nMajorDim
 , long                              lStyle
-#if wxUSE_VALIDATORS
 , const wxValidator&                rVal
-#endif
 , const wxString&                   rsName
 )
 {
@@ -288,9 +286,7 @@ bool wxRadioBox::Create(
                        ,rPos
                        ,rSize
                        ,lStyle
-#if wxUSE_VALIDATORS
                        ,rVal
-#endif
                        ,rsName
                       ))
         return FALSE;

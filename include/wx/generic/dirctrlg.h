@@ -102,9 +102,9 @@ public:
               int defaultFilter = 0,
               const wxString& name = wxTreeCtrlNameStr );
 
-    void Init();
+    virtual void Init();
 
-    ~wxGenericDirCtrl();
+    virtual ~wxGenericDirCtrl();
 
     void OnExpandItem(wxTreeEvent &event );
     void OnCollapseItem(wxTreeEvent &event );
@@ -113,52 +113,52 @@ public:
     void OnSize(wxSizeEvent &event );
 
     // Try to expand as much of the given path as possible.
-    bool ExpandPath(const wxString& path);
+    virtual bool ExpandPath(const wxString& path);
 
     // Accessors
 
-    inline wxString GetDefaultPath() const { return m_defaultPath; }
-    void SetDefaultPath(const wxString& path) { m_defaultPath = path; }
+    virtual inline wxString GetDefaultPath() const { return m_defaultPath; }
+    virtual void SetDefaultPath(const wxString& path) { m_defaultPath = path; }
 
     // Get dir or filename
-    wxString GetPath() const;
+    virtual wxString GetPath() const;
     
     // Get selected filename path only (else empty string).
     // I.e. don't count a directory as a selection
-    wxString GetFilePath() const;
-    void SetPath(const wxString& path);
+    virtual wxString GetFilePath() const;
+    virtual void SetPath(const wxString& path);
     
-    void ShowHidden( bool show );
-    bool GetShowHidden() { return m_showHidden; }
+    virtual void ShowHidden( bool show );
+    virtual bool GetShowHidden() { return m_showHidden; }
 
-    wxString GetFilter() const { return m_filter; }
-    void SetFilter(const wxString& filter);
+    virtual wxString GetFilter() const { return m_filter; }
+    virtual void SetFilter(const wxString& filter);
 
-    int GetFilterIndex() const { return m_currentFilter; }
-    void SetFilterIndex(int n);
+    virtual int GetFilterIndex() const { return m_currentFilter; }
+    virtual void SetFilterIndex(int n);
 
-    wxTreeItemId GetRootId() { return m_rootId; }
+    virtual wxTreeItemId GetRootId() { return m_rootId; }
 
-    wxTreeCtrl* GetTreeCtrl() const { return m_treeCtrl; }
-    wxDirFilterListCtrl* GetFilterListCtrl() const { return m_filterListCtrl; }
+    virtual wxTreeCtrl* GetTreeCtrl() const { return m_treeCtrl; }
+    virtual wxDirFilterListCtrl* GetFilterListCtrl() const { return m_filterListCtrl; }
 
     // Helper
-    void SetupSections();
+    virtual void SetupSections();
     
     // Parse the filter into an array of filters and an array of descriptions
-    int ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions);
+    virtual int ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions);
     
     // Find the child that matches the first part of 'path'.
     // E.g. if a child path is "/usr" and 'path' is "/usr/include"
     // then the child for /usr is returned.
     // If the path string has been used (we're at the leaf), done is set to TRUE
-    wxTreeItemId FindChild(wxTreeItemId parentId, const wxString& path, bool& done);
+    virtual wxTreeItemId FindChild(wxTreeItemId parentId, const wxString& path, bool& done);
     
     // Resize the components of the control
-    void DoResize();
+    virtual void DoResize();
     
     // Collapse & expand the tree, thus re-creating it from scratch:
-    void ReCreateTree();
+    virtual void ReCreateTree();
     
 protected:
     void ExpandDir(wxTreeItemId parentId);

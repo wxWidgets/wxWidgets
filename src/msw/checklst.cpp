@@ -73,7 +73,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 
 class wxCheckListBoxItem : public wxOwnerDrawn
 {
-friend class wxCheckListBox;
+friend class WXDLLEXPORT wxCheckListBox;
 public:
   // ctor
   wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex);
@@ -81,10 +81,13 @@ public:
   // drawing functions
   virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat);
 
-  // simple accessors
+  // simple accessors and operations
   bool IsChecked() const  { return m_bChecked;        }
+
   void Check(bool bCheck);
   void Toggle() { Check(!IsChecked()); }
+
+  void SendEvent();
 
 private:
   bool            m_bChecked;
@@ -93,7 +96,7 @@ private:
 };
 
 wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
-                  : wxOwnerDrawn("", TRUE)   // checkable
+                  : wxOwnerDrawn(wxEmptyString, TRUE)   // checkable
 {
   m_bChecked = FALSE;
   m_pParent  = pParent;
@@ -149,7 +152,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
       HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcMem, hbmpCheck);
 
       // then draw a check mark into it
-#if defined(__WIN32__) && !defined(__SC__)
+#if defined(__WIN32__) && !defined(__SYMANTEC__)
       RECT rect;
       rect.left   = 0;
       rect.top    = 0;
@@ -220,7 +223,7 @@ void wxCheckListBoxItem::Check(bool check)
 {
     m_bChecked = check;
 
-    // index may be chanegd because new items were added/deleted
+    // index may be changed because new items were added/deleted
     if ( m_pParent->GetItemIndex(this) != (int)m_nIndex )
     {
         // update it
@@ -253,7 +256,11 @@ void wxCheckListBoxItem::Check(bool check)
     #endif  // Win32/16
 
     InvalidateRect(hwndListbox, &rcUpdate, FALSE);
+}
 
+// send an "item checked" event
+void wxCheckListBoxItem::SendEvent()
+{
     wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, m_pParent->GetId());
     event.SetInt(m_nIndex);
     event.SetEventObject(m_pParent);
@@ -298,8 +305,10 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     return wxListBox::Create(parent, id, pos, size, n, choices,
                              style | wxLB_OWNERDRAW, validator, name);
 }
-                            
 
+
+// misc overloaded methods
+// -----------------------
 
 void wxCheckListBox::Delete(int N)
 {
@@ -329,7 +338,7 @@ bool wxCheckListBox::SetFont( const wxFont &font )
 // --------------------
 
 // create a check list box item
-wxOwnerDrawn *wxCheckListBox::CreateItem(size_t nIndex)
+wxOwnerDrawn *wxCheckListBox::CreateLboxItem(size_t nIndex)
 {
   wxCheckListBoxItem *pItem = new wxCheckListBoxItem(this, nIndex);
   return pItem;
@@ -408,15 +417,19 @@ void wxCheckListBox::OnKeyDown(wxKeyEvent& event)
     if ( oper != None )
     {
         wxArrayInt selections;
-        int count;
+        int count = 0;
         if ( HasMultipleSelection() )
         {
             count = GetSelections(selections);
         }
         else
         {
-            count = 1;
-            selections.Add(GetSelection());
+            int sel = GetSelection();
+            if (sel != -1)
+            {
+                count = 1;
+                selections.Add(sel);
+            }
         }
 
         for ( int i = 0; i < count; i++ )
@@ -442,6 +455,10 @@ void wxCheckListBox::OnKeyDown(wxKeyEvent& event)
                 default:
                     wxFAIL_MSG( _T("what should this key do?") );
             }
+
+            // we should send an event as this has been done by the user and
+            // not by the program
+            item->SendEvent();
         }
     }
     else // nothing to do
@@ -456,8 +473,11 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
   if ( event.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth() ) {
     int nItem = HitTest(event.GetX(), event.GetY());
 
-    if ( nItem != wxNOT_FOUND )
-      GetItem(nItem)->Toggle();
+    if ( nItem != wxNOT_FOUND ) {
+      wxCheckListBoxItem *item = GetItem(nItem);
+      item->Toggle();
+      item->SendEvent();
+    }
     //else: it's not an error, just click outside of client zone
   }
   else {

@@ -2,7 +2,7 @@
 /** @file LexMatlab.cxx
  ** Lexer for Matlab.
  ** Written by José Fonseca
- **/ 
+ **/
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
@@ -165,4 +165,9 @@ static void FoldMatlabDoc(unsigned int startPos, int length, int,
 	}
 }
 
-LexerModule lmMatlab(SCLEX_MATLAB, ColouriseMatlabDoc, "matlab", FoldMatlabDoc);
+static const char * const matlabWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+LexerModule lmMatlab(SCLEX_MATLAB, ColouriseMatlabDoc, "matlab", FoldMatlabDoc, matlabWordListDesc);

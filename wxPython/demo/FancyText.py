@@ -36,6 +36,13 @@ def runTest(frame, nb, log):
 
 
 
-import string
-overview = string.replace(fancytext.__doc__, "<", "&lt;")
+overview = fancytext.__doc__.replace("<", "&lt;")
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
 

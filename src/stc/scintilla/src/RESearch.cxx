@@ -30,8 +30,29 @@
  * Modification history:
  *
  * $Log$
- * Revision 1.5  2002/09/11 00:55:27  RD
- * Update to Scintilla 1.48
+ * Revision 1.5.2.4  2003/09/18 18:14:11  RD
+ * Updated wxSTC in 2.4 branch to Scintilla 1.54.
+ * Also includes patches from ABX and new sample from Otto Wyss
+ *
+ * Revision 1.8  2003/09/18 05:05:38  RD
+ * Updated to Scintilla 1.54
+ * Applied most of patch #806092
+ * Added new wxSTC sample from Otto Wyss
+ *
+ * Revision 1.9  2003/03/21 10:36:08  nyamatongwe
+ * Detect patterns too long in regular expression search.
+ *
+ * Revision 1.8  2003/03/04 10:53:59  nyamatongwe
+ * Patch from Jakub to optionally implement more POSIX compatible regular
+ * expressions. \(..\) changes to (..)
+ * Fixes problem where find previous would not find earlier matches on same
+ * line.
+ *
+ * Revision 1.8  2003/03/03 20:12:56  vrana
+ * Added posix syntax.
+ *
+ * Revision 1.7  2002/09/28 00:33:28  nyamatongwe
+ * Fixed problem with character ranges caused by expansion to 8 bits.
  *
  * Revision 1.6  2001/04/29 13:32:10  nyamatongwe
  * Addition of new target methods - versions of ReplaceTarget that take counted
@@ -332,10 +353,11 @@ const char escapeValue(char ch) {
 	return 0;
 }
 
-const char *RESearch::Compile(const char *pat, int length, bool caseSensitive) {
+const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, bool posix) {
 	char *mp=nfa;          /* nfa pointer       */
 	char *lp;              /* saved pointer..   */
 	char *sp=nfa;          /* another one..     */
+    char *mpMax = mp + MAXNFA - BITBLK - 10;
 
 	int tagi = 0;          /* tag stack index   */
 	int tagc = 1;          /* actual tag count  */
@@ -353,6 +375,8 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive) {
 
 	const char *p=pat;               /* pattern pointer   */
 	for (int i=0; i<length; i++, p++) {
+		if (mp > mpMax)
+			return badpat("Pattern too long");
 		lp = mp;
 		switch(*p) {
 
@@ -467,25 +491,6 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive) {
 			i++;
 			switch(*++p) {
 
-			case '(':
-				if (tagc < MAXTAG) {
-					tagstk[++tagi] = tagc;
-					*mp++ = BOT;
-					*mp++ = static_cast<char>(tagc++);
-				}
-				else
-					return badpat("Too many \\(\\) pairs");
-				break;
-			case ')':
-				if (*sp == BOT)
-					return badpat("Null pattern inside \\(\\)");
-				if (tagi > 0) {
-					*mp++ = static_cast<char>(EOT);
-					*mp++ = static_cast<char>(tagstk[tagi--]);
-				}
-				else
-					return badpat("Unmatched \\)");
-				break;
 			case '<':
 				*mp++ = BOW;
 				break;
@@ -524,13 +529,49 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive) {
 				*mp++ = escapeValue(*p);
 				break;
 			default:
-				*mp++ = CHR;
-				*mp++ = *p;
+				if (!posix && *p == '(') {
+					if (tagc < MAXTAG) {
+						tagstk[++tagi] = tagc;
+						*mp++ = BOT;
+						*mp++ = static_cast<char>(tagc++);
+					}
+					else
+						return badpat("Too many \\(\\) pairs");
+				} else if (!posix && *p == ')') {
+					if (*sp == BOT)
+						return badpat("Null pattern inside \\(\\)");
+					if (tagi > 0) {
+						*mp++ = static_cast<char>(EOT);
+						*mp++ = static_cast<char>(tagstk[tagi--]);
+					}
+					else
+						return badpat("Unmatched \\)");
+				} else {
+					*mp++ = CHR;
+					*mp++ = *p;
+				}
 			}
 			break;
 
 		default :               /* an ordinary char  */
-			if (caseSensitive) {
+			if (posix && *p == '(') {
+				if (tagc < MAXTAG) {
+					tagstk[++tagi] = tagc;
+					*mp++ = BOT;
+					*mp++ = static_cast<char>(tagc++);
+				}
+				else
+					return badpat("Too many () pairs");
+			} else if (posix && *p == ')') {
+				if (*sp == BOT)
+					return badpat("Null pattern inside ()");
+				if (tagi > 0) {
+					*mp++ = static_cast<char>(EOT);
+					*mp++ = static_cast<char>(tagstk[tagi--]);
+				}
+				else
+					return badpat("Unmatched )");
+			} else if (caseSensitive) {
 				*mp++ = CHR;
 				*mp++ = *p;
 			} else {
@@ -545,7 +586,7 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive) {
 		sp = lp;
 	}
 	if (tagi > 0)
-		return badpat("Unmatched \\(");
+		return badpat((posix ? "Unmatched (" : "Unmatched \\("));
 	*mp = END;
 	sta = OKP;
 	return 0;
@@ -688,7 +729,7 @@ static char chrtyp[MAXCHR] = {
 
 #define ANYSKIP	2 	/* [CLO] ANY END ...	     */
 #define CHRSKIP	3	/* [CLO] CHR chr END ...     */
-#define CCLSKIP 18	/* [CLO] CCL 16bytes END ... */
+#define CCLSKIP 34	/* [CLO] CCL 32bytes END ... */
 
 int RESearch::PMatch(CharacterIndexer &ci, int lp, int endp, char *ap) {
 	int op, c, n;

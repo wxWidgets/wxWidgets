@@ -25,7 +25,8 @@ class wxOGLConstraintType: public wxObject
 {
  DECLARE_DYNAMIC_CLASS(wxOGLConstraintType)
 public:
-  wxOGLConstraintType(int type = 0, const wxString& name = "", const wxString& phrase = "");
+  wxOGLConstraintType(int type = 0, const wxString& name = wxEmptyString,
+                      const wxString& phrase = wxEmptyString);
   ~wxOGLConstraintType();
 
 public:
@@ -60,8 +61,10 @@ class wxOGLConstraint: public wxObject
 {
  DECLARE_DYNAMIC_CLASS(wxOGLConstraint)
  public:
-  wxOGLConstraint() { m_xSpacing = 0.0; m_ySpacing = 0.0; m_constraintType = 0; m_constraintName = ""; m_constraintId = 0;
-                        m_constrainingObject = NULL; }
+  wxOGLConstraint() {
+     m_xSpacing = 0.0; m_ySpacing = 0.0; m_constraintType = 0;
+     m_constraintName = wxEmptyString; m_constraintId = 0;
+     m_constrainingObject = NULL; }
   wxOGLConstraint(int type, wxShape *constraining, wxList& constrained);
   ~wxOGLConstraint();
 

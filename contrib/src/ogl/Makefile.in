@@ -4,11 +4,12 @@ top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
 libsrc_dir = contrib/src/ogl
 
-TARGET_LIBNAME=libogl
+TARGET_LIBNAME=lib@WX_LIBRARY_BASENAME@_ogl-@WX_RELEASE@
 
-LIBVERSION_CURRENT=1
-LIBVERSION_REVISION=0
-LIBVERSION_AGE=0
+LIBVERSION_CURRENT=@WX_CURRENT@
+LIBVERSION_REVISION=@WX_REVISION@
+LIBVERSION_AGE=@WX_AGE@
+
 
 HEADER_PATH=$(top_srcdir)/contrib/include/wx
 HEADER_SUBDIR=ogl
@@ -17,7 +18,7 @@ HEADERS=basic.h basicp.h bmpshape.h canvas.h composit.h constrnt.h \
 	divided.h drawn.h drawnp.h lines.h linesp.h mfutils.h misc.h \
 	ogl.h ogldiag.h
 
-OBJECTS=basic.o bmpshape.o composit.o divided.o lines.o misc.o \
+OBJECTS=basic.o bmpshape.o composit.o divided.o lines.o oglmisc.o \
         basic2.o canvas.o constrnt.o drawn.o mfutils.o ogldiag.o
 DEPFILES=$(OBJECTS:.o=.d)
 

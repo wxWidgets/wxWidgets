@@ -33,6 +33,7 @@
     #include "wx/frame.h"
     #include "wx/listbox.h"
     #include "wx/button.h"
+    #include "wx/bmpbuttn.h"
     #include "wx/msgdlg.h"
     #include "wx/scrolwin.h"
     #include "wx/radiobox.h"
@@ -2233,6 +2234,8 @@ static void wxYieldForCommandsOnly()
     {
         wxTheApp->DoMessage((WXMSG*)&vMsg);
     }
+    if (vMsg.msg == WM_QUIT)
+        ::WinPostMsg(NULL, WM_QUIT, 0, 0);
 }
 #endif // wxUSE_MENUS_NATIVE
 
@@ -2425,6 +2428,14 @@ bool wxWindowOS2::OS2ProcessMessage(
                                 //
                                 pBtn->OS2Command(BN_CLICKED, 0 /* unused */);
                                 return TRUE;
+                            }
+                            else if (!IsTopLevel())
+                            {
+                                //
+                                // if not a top level window, let parent
+                                // handle it
+                                //
+                                return FALSE;
                             }
                             // else: but if it does not it makes sense to make
                             //       it work like a TAB - and that's what we do.
@@ -2814,6 +2825,11 @@ MRESULT wxWindowOS2::OS2WindowProc(
                                                                    ,&nX
                                                                    ,&nY
                                                                   );
+                    if (!pWin->IsOfStandardClass())
+                    {
+                        if (uMsg == WM_BUTTON1DOWN && pWin->AcceptsFocus() )
+                            pWin->SetFocus();
+                    }
                     bProcessed = pWin->HandleMouseEvent( uMsg
                                                         ,nX
                                                         ,nY
@@ -3471,7 +3487,7 @@ bool wxWindowOS2::OS2Create(
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError("Error creating frame. Error: %s\n", sError);
+        wxLogError("Error creating frame. Error: %s\n", sError.c_str());
         return FALSE;
     }
     SetSize( nX
@@ -3505,7 +3521,7 @@ bool wxWindowOS2::HandleCreate(
 bool wxWindowOS2::HandleDestroy()
 {
     wxWindowDestroyEvent            vEvent((wxWindow*)this);
-
+    vEvent.SetId(GetId());
     (void)GetEventHandler()->ProcessEvent(vEvent);
 
     //
@@ -3723,7 +3739,7 @@ bool wxWindowOS2::OS2OnDrawItem(
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Unable to set current color table. Error: %s\n", sError);
+            wxLogError("Unable to set current color table. Error: %s\n", sError.c_str());
         }
         //
         // Set the color table to RGB mode
@@ -3738,7 +3754,7 @@ bool wxWindowOS2::OS2OnDrawItem(
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError("Unable to set current color table. Error: %s\n", sError);
+            wxLogError("Unable to set current color table. Error: %s\n", sError.c_str());
         }
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );

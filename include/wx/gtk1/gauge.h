@@ -42,25 +42,32 @@ extern const wxChar* wxGaugeNameStr;
 class wxGauge: public wxControl
 {
 public:
-    inline wxGauge() { m_rangeMax = 0; m_gaugePos = 0; m_useProgressBar = TRUE; }
+    wxGauge() { Init(); }
 
-    inline wxGauge( wxWindow *parent, wxWindowID id, int range,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxGA_HORIZONTAL,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxGaugeNameStr )
+    wxGauge( wxWindow *parent,
+             wxWindowID id,
+             int range,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = wxGA_HORIZONTAL,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = wxGaugeNameStr )
     {
-      Create(parent, id, range, pos, size, style, validator, name);
+        Init();
+
+        Create(parent, id, range, pos, size, style, validator, name);
     }
-    bool Create( wxWindow *parent, wxWindowID id, int range,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxGA_HORIZONTAL,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxGaugeNameStr );
-    void SetShadowWidth( int WXUNUSED(w) ) {};
-    void SetBezelFace( int WXUNUSED(w) ) {};
+
+    bool Create( wxWindow *parent,
+                 wxWindowID id, int range,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxGA_HORIZONTAL,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxGaugeNameStr );
+
+    void SetShadowWidth( int WXUNUSED(w) ) { }
+    void SetBezelFace( int WXUNUSED(w) ) { }
     void SetRange( int r );
     void SetValue( int pos );
     int GetShadowWidth() const { return 0; };
@@ -68,17 +75,27 @@ public:
     int GetRange() const;
     int GetValue() const;
 
-    // Are we a Win95/GTK progress bar, or a normal gauge?
-    inline bool GetProgressBar() const { return m_useProgressBar; }
-    
     // implementation
     // -------------
-    
+
     void ApplyWidgetStyle();
-    int      m_rangeMax;
-    int      m_gaugePos;
-    bool     m_useProgressBar;
-   
+
+    // the max and current gauge values
+    int m_rangeMax,
+        m_gaugePos;
+
+    // obsolete functions, don't use
+#ifdef WXWIN_COMPATIBILITY_2_2
+    bool GetProgressBar() const { return TRUE; }
+#endif // WXWIN_COMPATIBILITY_2_2
+
+protected:
+    // common part of all ctors
+    void Init() { m_rangeMax = m_gaugePos = 0; }
+
+    // set the gauge value to the value of m_gaugePos
+    void DoSetGauge();
+
 private:
     DECLARE_DYNAMIC_CLASS(wxGauge)
 };

@@ -231,7 +231,33 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 	    {
 	    	m_frameMenuBar->MacInstallMenuBar() ;
 	    }
+	    else if (wxTheApp->GetTopWindow() && wxTheApp->GetTopWindow()->IsKindOf(CLASSINFO(wxFrame)))
+        {
+            // Trying toplevel frame menbar
+            if( ((wxFrame*)wxTheApp->GetTopWindow())->GetMenuBar() )
+	            ((wxFrame*)wxTheApp->GetTopWindow())->GetMenuBar()->MacInstallMenuBar();
+ 	    }
 	}
+}
+
+void wxFrame::DetachMenuBar()
+{
+    if ( m_frameMenuBar )
+    {
+        m_frameMenuBar->UnsetInvokingWindow();
+    }
+
+    wxFrameBase::DetachMenuBar();
+}
+
+void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
+{
+    wxFrameBase::AttachMenuBar(menuBar);
+
+    if (m_frameMenuBar)
+    {
+        m_frameMenuBar->SetInvokingWindow( this );
+    }
 }
 
 void wxFrame::DoGetClientSize(int *x, int *y) const

@@ -37,7 +37,8 @@ struct _ScintillaClass {
 guint		scintilla_get_type	(void);
 GtkWidget*	scintilla_new		(void);
 void		scintilla_set_id	(ScintillaObject *sci,int id);
-sptr_t	scintilla_send_message	(ScintillaObject *sci,unsigned int iMessage, uptr_t wParam, sptr_t lParam);
+sptr_t		scintilla_send_message	(ScintillaObject *sci,unsigned int iMessage, uptr_t wParam, sptr_t lParam);
+void		scintilla_release_resources(void);
 
 #if GTK_MAJOR_VERSION < 2
 #define SCINTILLA_NOTIFY "notify"

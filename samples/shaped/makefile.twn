@@ -1,0 +1,35 @@
+# Purpose: makefile for shaped example (TWIN)
+# Created: 2000-01-03
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/shaped.$(OBJSUFF) $(OBJDIR)/shaped.$(OBJSUFF)
+
+all:    $(OBJDIR) shaped$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+shaped$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o shaped$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/shaped.$(OBJSUFF):	shaped.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ shaped.$(SRCSUFF)
+
+shaped.c:  shaped.rc
+	$(RESCOMP) $(RCINPUTSWITCH) shaped.rc $(RCOUTPUTSWITCH) shaped.c $(RESFLAGS)
+
+$(OBJDIR)/shaped.$(OBJSUFF):	shaped.c
+	$(CC) -c $(CPPFLAGS) -o $@ shaped.c
+
+#$(OBJDIR)/shaped.o:  shaped.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) shaped.rc $(RCOUTPUTSWITCH) $(OBJDIR)/shaped.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) shaped$(GUISUFFIX).exe core *.rsc *.res

@@ -378,39 +378,39 @@ bool MyApp::OnInit()
     //wxLog::AddTraceMask("thread");
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame((wxFrame *)NULL, "wxWindows threads sample",
+    MyFrame *frame = new MyFrame((wxFrame *)NULL, _T("wxWindows threads sample"),
                                  50, 50, 450, 340);
 
     // Make a menubar
     wxMenuBar *menuBar = new wxMenuBar;
 
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(THREAD_CLEAR, "&Clear log\tCtrl-L");
+    menuFile->Append(THREAD_CLEAR, _T("&Clear log\tCtrl-L"));
     menuFile->AppendSeparator();
-    menuFile->Append(THREAD_QUIT, "E&xit\tAlt-X");
-    menuBar->Append(menuFile, "&File");
+    menuFile->Append(THREAD_QUIT, _T("E&xit\tAlt-X"));
+    menuBar->Append(menuFile, _T("&File"));
 
     wxMenu *menuThread = new wxMenu;
-    menuThread->Append(THREAD_START_THREAD, "&Start a new thread\tCtrl-N");
-    menuThread->Append(THREAD_START_THREADS, "Start &many threads at once");
-    menuThread->Append(THREAD_STOP_THREAD, "S&top a running thread\tCtrl-S");
+    menuThread->Append(THREAD_START_THREAD, _T("&Start a new thread\tCtrl-N"));
+    menuThread->Append(THREAD_START_THREADS, _T("Start &many threads at once"));
+    menuThread->Append(THREAD_STOP_THREAD, _T("S&top a running thread\tCtrl-S"));
     menuThread->AppendSeparator();
-    menuThread->Append(THREAD_PAUSE_THREAD, "&Pause a running thread\tCtrl-P");
-    menuThread->Append(THREAD_RESUME_THREAD, "&Resume suspended thread\tCtrl-R");
+    menuThread->Append(THREAD_PAUSE_THREAD, _T("&Pause a running thread\tCtrl-P"));
+    menuThread->Append(THREAD_RESUME_THREAD, _T("&Resume suspended thread\tCtrl-R"));
     menuThread->AppendSeparator();
-    menuThread->Append(THREAD_START_WORKER, "Start &worker thread\tCtrl-W");
-    menuBar->Append(menuThread, "&Thread");
+    menuThread->Append(THREAD_START_WORKER, _T("Start &worker thread\tCtrl-W"));
+    menuBar->Append(menuThread, _T("&Thread"));
 
     wxMenu *menuExec = new wxMenu;
-    menuExec->Append(THREAD_EXEC_MAIN, "&Launch a program from main thread\tF5");
-    menuExec->Append(THREAD_EXEC_THREAD, "L&aunch a program from a thread\tCtrl-F5");
-    menuBar->Append(menuExec, "&Execute");
+    menuExec->Append(THREAD_EXEC_MAIN, _T("&Launch a program from main thread\tF5"));
+    menuExec->Append(THREAD_EXEC_THREAD, _T("L&aunch a program from a thread\tCtrl-F5"));
+    menuBar->Append(menuExec, _T("&Execute"));
 
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(THREAD_SHOWCPUS, "&Show CPU count");
+    menuHelp->Append(THREAD_SHOWCPUS, _T("&Show CPU count"));
     menuHelp->AppendSeparator();
-    menuHelp->Append(THREAD_ABOUT, "&About...");
-    menuBar->Append(menuHelp, "&Help");
+    menuHelp->Append(THREAD_ABOUT, _T("&About..."));
+    menuBar->Append(menuHelp, _T("&Help"));
 
     frame->SetMenuBar(menuBar);
 
@@ -433,7 +433,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title,
 
     CreateStatusBar(2);
 
-    m_txtctrl = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(0, 0),
+    m_txtctrl = new wxTextCtrl(this, -1, _T(""), wxPoint(0, 0), wxSize(0, 0),
                                wxTE_MULTILINE | wxTE_READONLY);
 
 }
@@ -457,8 +457,8 @@ void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
 {
     static long s_num = 10;
 
-    s_num = wxGetNumberFromUser("How many threads to start: ", "",
-                                "wxThread sample", s_num, 1, 10000, this);
+    s_num = wxGetNumberFromUser(_T("How many threads to start: "), _T(""),
+                                _T("wxThread sample"), s_num, 1, 10000, this);
     if ( s_num == -1 )
     {
         s_num = 10;
@@ -508,7 +508,7 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
         wxLogError(wxT("Can't start thread!"));
     }
 
-    SetStatusText("New thread started.", 1);
+    SetStatusText(_T("New thread started."), 1);
 }
 
 void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
@@ -533,7 +533,7 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 
         thread->Delete();
 
-        SetStatusText("Thread stopped.", 1);
+        SetStatusText(_T("Thread stopped."), 1);
     }
 }
 
@@ -554,7 +554,7 @@ void MyFrame::OnResumeThread(wxCommandEvent& WXUNUSED(event) )
     {
         wxGetApp().m_threads[n]->Resume();
 
-        SetStatusText("Thread resumed.", 1);
+        SetStatusText(_T("Thread resumed."), 1);
     }
 }
 
@@ -575,7 +575,7 @@ void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
     {
         wxGetApp().m_threads[n]->Pause();
 
-        SetStatusText("Thread paused.", 1);
+        SetStatusText(_T("Thread paused."), 1);
     }
 }
 
@@ -652,7 +652,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnExecMain(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(wxT("The exit code from the main program is %ld"),
-                 EXEC("/bin/echo \"main program\""));
+                 EXEC(_T("/bin/echo \"main program\"")));
 }
 
 void MyFrame::OnExecThread(wxCommandEvent& WXUNUSED(event))
@@ -672,15 +672,15 @@ void MyFrame::OnShowCPUs(wxCommandEvent& WXUNUSED(event))
     switch ( nCPUs )
     {
         case -1:
-            msg = "Unknown number of CPUs";
+            msg = _T("Unknown number of CPUs");
             break;
 
         case 0:
-            msg = "WARNING: you're running without any CPUs!";
+            msg = _T("WARNING: you're running without any CPUs!");
             break;
 
         case 1:
-            msg = "This system only has one CPU.";
+            msg = _T("This system only has one CPU.");
             break;
 
         default:
@@ -692,11 +692,12 @@ void MyFrame::OnShowCPUs(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    wxMessageDialog dialog(this, "wxWindows multithreaded application sample\n"
-                                 "(c) 1998 Julian Smart, Guilhem Lavaux\n"
-                                 "(c) 1999 Vadim Zeitlin\n"
-                                 "(c) 2000 Robert Roebling",
-                           "About wxThread sample",
+    wxMessageDialog dialog(this, 
+                           _T("wxWindows multithreaded application sample\n")
+                           _T("(c) 1998 Julian Smart, Guilhem Lavaux\n")
+                           _T("(c) 1999 Vadim Zeitlin\n")
+                           _T("(c) 2000 Robert Roebling"),
+                           _T("About wxThread sample"),
                            wxOK | wxICON_INFORMATION);
 
     dialog.ShowModal();
@@ -723,8 +724,8 @@ void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
 
     m_dlgProgress = new wxProgressDialog
                         (
-                         "Progress dialog",
-                         "Wait until the thread terminates or press [Cancel]",
+                         _T("Progress dialog"),
+                         _T("Wait until the thread terminates or press [Cancel]"),
                          100,
                          this,
                          wxPD_CAN_ABORT |
@@ -743,9 +744,9 @@ void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnWorkerEvent(wxCommandEvent& event)
 {
 #if 0
-    WriteText( "Got message from worker thread: " );
+    WriteText( _T("Got message from worker thread: ") );
     WriteText( event.GetString() );
-    WriteText( "\n" );
+    WriteText( _T("\n") );
 #else
     int n = event.GetInt();
     if ( n == -1 )

@@ -241,7 +241,8 @@ and is used in many popular Windows applications, such as Microsoft Word(TM).
 There may be multiple MDI parent frames in a single application, but this probably only makes sense
 within programming development environments.
 
-Child frames may be either \helpref{wxMDIChildFrame}{wxmdichildframe}, or \helpref{wxFrame}{wxframe}.
+Child frames may be of class \helpref{wxMDIChildFrame}{wxmdichildframe} (contained
+within the parent frame) or \helpref{wxFrame}{wxframe} (shown as a top-level frame).
 
 An MDI parent frame always has a \helpref{wxMDIClientWindow}{wxmdiclientwindow} associated with it, which
 is the parent for MDI client frames.

@@ -144,7 +144,7 @@ END_EVENT_TABLE()
 
 MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
-        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER, "test canvas" )
+        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER, _T("test canvas") )
 {
     MyTopLabels *top = new MyTopLabels( this, -1, wxDefaultPosition, wxSize(-1,25) );
     MyRightLabels *right = new MyRightLabels( this, -1, wxDefaultPosition, wxSize(60,-1) );
@@ -222,9 +222,9 @@ void MyTopLabels::OnPaint( wxPaintEvent &event )
     m_owner->GetScrollPixelsPerUnit( &xScrollUnits, 0 );
     dc.SetDeviceOrigin( -xOrigin * xScrollUnits, 0 );
 
-    dc.DrawText( "Column 1", 5, 5 );
-    dc.DrawText( "Column 2", 105, 5 );
-    dc.DrawText( "Column 3", 205, 5 );
+    dc.DrawText( _T("Column 1"), 5, 5 );
+    dc.DrawText( _T("Column 2"), 105, 5 );
+    dc.DrawText( _T("Column 3"), 205, 5 );
 }
 
 // MyRightLabels
@@ -256,12 +256,12 @@ void MyRightLabels::OnPaint( wxPaintEvent &event )
     m_owner->GetScrollPixelsPerUnit( 0, &yScrollUnits );
     dc.SetDeviceOrigin( 0, -yOrigin * yScrollUnits );
 
-    dc.DrawText( "Row 1", 5, 5 );
-    dc.DrawText( "Row 2", 5, 30 );
-    dc.DrawText( "Row 3", 5, 55 );
-    dc.DrawText( "Row 4", 5, 80 );
-    dc.DrawText( "Row 5", 5, 105 );
-    dc.DrawText( "Row 6", 5, 130 );
+    dc.DrawText( _T("Row 1"), 5, 5 );
+    dc.DrawText( _T("Row 2"), 5, 30 );
+    dc.DrawText( _T("Row 3"), 5, 55 );
+    dc.DrawText( _T("Row 4"), 5, 80 );
+    dc.DrawText( _T("Row 5"), 5, 105 );
+    dc.DrawText( _T("Row 6"), 5, 130 );
 }
 
 // MyCanvas
@@ -274,20 +274,20 @@ END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxScrolledWindow *parent, MyTopLabels *top, MyRightLabels *right,
     wxWindowID id, const wxPoint &pos, const wxSize &size )
-        : wxPanel( parent, id, pos, size, wxSUNKEN_BORDER, "test canvas" )
+        : wxPanel( parent, id, pos, size, wxSUNKEN_BORDER, _T("test canvas") )
 {
     m_owner = parent;
     m_topLabels = top;
     m_rightLabels = right;
 
-    (void)new wxButton( this, -1, "Hallo I", wxPoint(0,50), wxSize(100,25) );
-    (void)new wxButton( this, -1, "Hallo II", wxPoint(200,50), wxSize(100,25) );
+    (void)new wxButton( this, -1, _T("Hallo I"), wxPoint(0,50), wxSize(100,25) );
+    (void)new wxButton( this, -1, _T("Hallo II"), wxPoint(200,50), wxSize(100,25) );
 
-    (void)new wxTextCtrl( this, -1, "Text I", wxPoint(0,100), wxSize(100,25) );
-    (void)new wxTextCtrl( this, -1, "Text II", wxPoint(200,100), wxSize(100,25) );
+    (void)new wxTextCtrl( this, -1, _T("Text I"), wxPoint(0,100), wxSize(100,25) );
+    (void)new wxTextCtrl( this, -1, _T("Text II"), wxPoint(200,100), wxSize(100,25) );
 
-    (void)new wxComboBox( this, -1, "ComboBox I", wxPoint(0,150), wxSize(100,25), 0, NULL );
-    (void)new wxComboBox( this, -1, "ComboBox II", wxPoint(200,150), wxSize(100,25), 0, NULL );
+    (void)new wxComboBox( this, -1, _T("ComboBox I"), wxPoint(0,150), wxSize(100,25), 0, NULL );
+    (void)new wxComboBox( this, -1, _T("ComboBox II"), wxPoint(200,150), wxSize(100,25), 0, NULL );
 
     SetBackgroundColour( wxT("WHEAT") );
 
@@ -335,7 +335,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             wxLogMessage( wxT("Redraw first cell") );
             dc.DrawRectangle( 0, 0, 100, 25 );
-            dc.DrawText( "First Cell", 5, 5 );
+            dc.DrawText( _T("First Cell"), 5, 5 );
         }
     }
 
@@ -350,7 +350,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             wxLogMessage( wxT("Redraw second cell") );
             dc.DrawRectangle( 200, 0, 100, 25 );
-            dc.DrawText( "Second Cell", 205, 5 );
+            dc.DrawText( _T("Second Cell"), 205, 5 );
         }
     }
 
@@ -378,16 +378,16 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame( (wxFrame *)NULL, -1, "wxScrolledWindow sample",
+       : wxFrame( (wxFrame *)NULL, -1, _T("wxScrolledWindow sample"),
                   wxPoint(20,20), wxSize(470,500) )
 {
     wxMenu *file_menu = new wxMenu();
-    file_menu->Append( ID_ABOUT, "&About...");
-    file_menu->Append( ID_FULL, "&Full screen on/off");
-    file_menu->Append( ID_QUIT, "E&xit\tAlt-X");
+    file_menu->Append( ID_ABOUT, _T("&About..."));
+    file_menu->Append( ID_FULL, _T("&Full screen on/off"));
+    file_menu->Append( ID_QUIT, _T("E&xit\tAlt-X"));
 
     wxMenuBar *menu_bar = new wxMenuBar();
-    menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(file_menu, _T("&File"));
 
     SetMenuBar( menu_bar );
 
@@ -398,7 +398,7 @@ MyFrame::MyFrame()
     m_scrolled = new MyScrolledWindow( this, -1, wxDefaultPosition, wxSize(100,100) );
     m_scrolled->SetScrollbars( 10, 10, 50, 100 );
 
-    m_log = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
+    m_log = new wxTextCtrl( this, -1, _T("This is the log window.\n"), wxPoint(0,0), wxSize(100,100), wxTE_MULTILINE );
     wxLog *old_log = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
     delete old_log;
 
@@ -422,9 +422,9 @@ void MyFrame::OnFullScreen( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-  (void)wxMessageBox( "wxScroll demo II\n"
-                      "Robert Roebling (c) 1998",
-                      "About wxScroll II Demo", wxICON_INFORMATION | wxOK );
+  (void)wxMessageBox( _T("wxScroll demo II\n")
+                      _T("Robert Roebling (c) 1998"),
+                      _T("About wxScroll II Demo"), wxICON_INFORMATION | wxOK );
 }
 
 //-----------------------------------------------------------------------------

@@ -21,7 +21,7 @@ getwxPythonImage
 
 PythonBitmaps
 
-    --This takes a single argument.  If it tests true,
+    --This takes a single argument.  If it tests True,
     getPythonPoweredBitmap() is returned, else getwxPythonBitmap() is
     returned.
 

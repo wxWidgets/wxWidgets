@@ -17,6 +17,8 @@
     #pragma interface "datetime.h"
 #endif
 
+#include "wx/defs.h"
+
 #if wxUSE_DATETIME
 
 #include <time.h>
@@ -48,12 +50,8 @@ class WXDLLEXPORT wxDateSpan;
 // set this to the corresponding value in seconds 1/1/1970 has on your
 // systems c-runtime
 
-#ifdef __WXMAC__
-#if __MSL__ < 0x6000
+#if defined(__WXMAC__) && !defined(__DARWIN__) && __MSL__ < 0x6000
     #define WX_TIME_BASE_OFFSET ( 2082844800L + 126144000L )
-#else
-    #define WX_TIME_BASE_OFFSET 0
-#endif
 #else
     #define WX_TIME_BASE_OFFSET 0
 #endif
@@ -657,8 +655,10 @@ public:
     // ------------------------------------------------------------------------
 
         // set to the given week day in the same week as this one
-    wxDateTime& SetToWeekDayInSameWeek(WeekDay weekday);
-    inline wxDateTime GetWeekDayInSameWeek(WeekDay weekday) const;
+    wxDateTime& SetToWeekDayInSameWeek(WeekDay weekday,
+                                       WeekFlags flags = Monday_First);
+    inline wxDateTime GetWeekDayInSameWeek(WeekDay weekday,
+                                           WeekFlags flags = Monday_First) const;
 
         // set to the next week day following this one
     wxDateTime& SetToNextWeekDay(WeekDay weekday);
@@ -692,8 +692,12 @@ public:
         // sets the date to the given day of the given week in the year,
         // returns TRUE on success and FALSE if given date doesn't exist (e.g.
         // numWeek is > 53)
-    bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon);
-    inline wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon) const;
+    bool SetToTheWeek(wxDateTime_t numWeek,
+                      WeekDay weekday = Mon,
+                      WeekFlags flags = Monday_First);
+    inline wxDateTime GetWeek(wxDateTime_t numWeek,
+                              WeekDay weekday = Mon,
+                              WeekFlags flags = Monday_First) const;
 
         // sets the date to the last day of the given (or current) month or the
         // given (or current) year
@@ -842,6 +846,15 @@ public:
         //     the matter. Besides, for some countries the exact date of
         //     adoption of the Gregorian calendar is simply unknown.
     bool IsGregorianDate(GregorianAdoption country = Gr_Standard) const;
+
+    // dos date and time format
+    // ------------------------------------------------------------------------
+
+        // set from the DOS packed format
+    wxDateTime& SetFromDOS(unsigned long ddt);
+
+        // pack the date in DOS format
+    unsigned long GetAsDOS() const;
 
     // comparison (see also functions below for operator versions)
     // ------------------------------------------------------------------------
@@ -1506,6 +1519,24 @@ inline bool WXDLLEXPORT operator!=(const wxTimeSpan &t1, const wxTimeSpan &t2)
 // ----------------------------------------------------------------------------
 // wxDateSpan
 // ----------------------------------------------------------------------------
+
+// comparison
+// ----------
+
+// ds1 == d2 if and only if for every wxDateTime t t + ds1 == t + ds2
+inline WXDLLEXPORT bool operator==(const wxDateSpan& ds1,
+                                   const wxDateSpan& ds2)
+{
+    return ds1.GetYears() == ds2.GetYears() &&
+           ds1.GetMonths() == ds2.GetMonths() &&
+           ds1.GetTotalDays() == ds2.GetTotalDays();
+}
+
+inline WXDLLEXPORT bool operator!=(const wxDateSpan& ds1,
+                                   const wxDateSpan& ds2)
+{
+  return !(ds1 == ds2);
+}
 
 // arithmetics
 // -----------

@@ -28,5 +28,7 @@ extern void wxHandleProcessTermination(wxEndProcessData *proc_data);
 // this function is called to associate the port-specific callback with the
 // child process. The return valus is port-specific.
 extern int wxAddProcessCallback(wxEndProcessData *proc_data, int fd);
+// For ports (e.g. DARWIN) which can add callbacks based on the pid
+extern int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid);
 
 #endif // _WX_UNIX_EXECUTE_H

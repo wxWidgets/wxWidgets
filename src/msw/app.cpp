@@ -712,7 +712,7 @@ int wxEntry(WXHINSTANCE hInstance,
             if ( enterLoop )
             {
                 // run the main loop
-                retValue = wxTheApp->OnRun();
+                wxTheApp->OnRun();
             }
             else
             {
@@ -739,7 +739,7 @@ int wxEntry(WXHINSTANCE hInstance,
             }
         }
 
-        wxTheApp->OnExit();
+        retValue = wxTheApp->OnExit();
 
         wxEntryCleanup();
 
@@ -1066,15 +1066,21 @@ bool wxApp::ProcessMessage(WXMSG *wxmsg)
     return FALSE;
 }
 
+// this is a temporary hack and will be replaced by using wxEventLoop in the
+// future
+//
+// it is needed to allow other event loops (currently only one: the modal
+// dialog one) to reset the OnIdle() semaphore because otherwise OnIdle()
+// wouldn't do anything while a modal dialog shown from OnIdle() call is shown.
+bool wxIsInOnIdleFlag = FALSE;
+
 void wxApp::OnIdle(wxIdleEvent& event)
 {
-    static bool s_inOnIdle = FALSE;
-
     // Avoid recursion (via ProcessEvent default case)
-    if ( s_inOnIdle )
+    if ( wxIsInOnIdleFlag )
         return;
 
-    s_inOnIdle = TRUE;
+    wxIsInOnIdleFlag = TRUE;
 
     // If there are pending events, we must process them: pending events
     // are either events to the threads other than main or events posted
@@ -1109,7 +1115,7 @@ void wxApp::OnIdle(wxIdleEvent& event)
         event.RequestMore(TRUE);
     }
 
-    s_inOnIdle = FALSE;
+    wxIsInOnIdleFlag = FALSE;
 }
 
 // Send idle event to all top-level windows

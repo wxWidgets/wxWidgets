@@ -44,6 +44,16 @@ public:
             );
     wxRegion(const wxRect& rRect);
     wxRegion(WXHRGN hRegion, WXHDC hPS); // Hangs on to this region
+    wxRegion( const wxBitmap& rBmp
+             ,const wxColour& rTransColour = wxNullColour
+             ,int             nTolerance = 0
+            )
+    {
+        Union( rBmp
+              ,rTransColour
+              ,nTolerance
+             );
+    }
 
     wxRegion();
     ~wxRegion();
@@ -188,6 +198,23 @@ public:
     // Does the region contain the rectangle rect?
     //
     wxRegionContain Contains(const wxRect& rRect) const;
+
+    //
+    // Convert the region to a B&W bitmap with the black pixels being inside
+    // the region.
+    //
+    wxBitmap ConvertToBitmap(void) const;
+
+    //
+    // Use the non-transparent pixels of a wxBitmap for the region to combine
+    // with this region.  If the bitmap has a mask then it will be used,
+    // otherwise the colour to be treated as transparent may be specified,
+    // along with an optional tolerance value.
+    //
+    bool Union( const wxBitmap& rBmp
+               ,const wxColour& rTransColour = wxNullColour
+               ,int             nTolerance = 0
+              );
 
     //
     // Internal

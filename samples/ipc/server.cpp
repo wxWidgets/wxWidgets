@@ -70,7 +70,7 @@ MyConnection *the_connection = NULL;
 bool MyApp::OnInit()
 {
     // Create the main frame window
-    (new MyFrame(NULL, "Server"))->Show(TRUE);
+    (new MyFrame(NULL, _T("Server")))->Show(TRUE);
 
     // service name (DDE classes) or port number (TCP/IP based classes)
     wxString service = IPC_SERVICE;
@@ -108,22 +108,22 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(SERVER_EXIT, "&Quit\tCtrl-Q");
+    file_menu->Append(SERVER_EXIT, _T("&Quit\tCtrl-Q"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(file_menu, _T("&File"));
 
     // Associate the menu bar with the frame
     SetMenuBar(menu_bar);
 
     // Make a listbox
     wxListBox *list = new wxListBox(this, SERVER_LISTBOX, wxPoint(5, 5));
-    list->Append("Apple");
-    list->Append("Pear");
-    list->Append("Orange");
-    list->Append("Banana");
-    list->Append("Fruit");
+    list->Append(_T("Apple"));
+    list->Append(_T("Pear"));
+    list->Append(_T("Orange"));
+    list->Append(_T("Banana"));
+    list->Append(_T("Fruit"));
 }
 
 // Set the client process's listbox to this item
@@ -138,7 +138,7 @@ void MyFrame::OnListBoxClick(wxCommandEvent& WXUNUSED(event))
            one connection can receive advise messages */
         if (the_connection)
         {
-            the_connection->Advise(IPC_ADVISE_NAME, (wxChar *)value.c_str());
+            the_connection->Advise(IPC_ADVISE_NAME, (wxChar*)value.c_str());
         }
     }
 }
@@ -158,7 +158,7 @@ IPCDialogBox::IPCDialogBox(wxWindow *parent, const wxString& title,
             : wxDialog(parent, -1, title, pos, size)
 {
     m_connection = connection;
-    (void)new wxButton(this, SERVER_QUIT_BUTTON, "Quit this connection",
+    (void)new wxButton(this, SERVER_QUIT_BUTTON, _T("Quit this connection"),
                        wxPoint(5, 5));
     Fit();
 }
@@ -197,7 +197,7 @@ wxConnectionBase *MyServer::OnAcceptConnection(const wxString& topic)
 MyConnection::MyConnection()
             : wxConnection()
 {
-    dialog = new IPCDialogBox(wxTheApp->GetTopWindow(), "Connection",
+    dialog = new IPCDialogBox(wxTheApp->GetTopWindow(), _T("Connection"),
                               wxPoint(100, 100), wxSize(500, 500), this);
     dialog->Show(TRUE);
     the_connection = this;
@@ -217,7 +217,7 @@ MyConnection::~MyConnection()
 }
 
 bool MyConnection::OnExecute(const wxString& WXUNUSED(topic),
-                             char *data,
+                             wxChar *data,
                              int WXUNUSED(size),
                              wxIPCFormat WXUNUSED(format))
 {
@@ -227,7 +227,7 @@ bool MyConnection::OnExecute(const wxString& WXUNUSED(topic),
 
 bool MyConnection::OnPoke(const wxString& WXUNUSED(topic),
                           const wxString& item,
-                          char *data,
+                          wxChar *data,
                           int WXUNUSED(size),
                           wxIPCFormat WXUNUSED(format))
 {
@@ -235,12 +235,12 @@ bool MyConnection::OnPoke(const wxString& WXUNUSED(topic),
     return TRUE;
 }
 
-char *MyConnection::OnRequest(const wxString& WXUNUSED(topic),
+wxChar *MyConnection::OnRequest(const wxString& WXUNUSED(topic),
                               const wxString& WXUNUSED(item),
                               int * WXUNUSED(size),
                               wxIPCFormat WXUNUSED(format))
 {
-    return "Here, have your data, client!";
+    return _T("Here, have your data, client!");
 }
 
 bool MyConnection::OnStartAdvise(const wxString& WXUNUSED(topic),

@@ -1,15 +1,12 @@
-#
-# Makefile for WATCOM
-#
-# Created by Julian Smart, January 1999
 # 
-#
-
-WXDIR = $(%WXWIN)
-
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+# 
 PROGRAM = dbtest
-OBJECTS = $(PROGRAM).obj listdb.obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj $(OUTPUTDIR)\listdb.obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

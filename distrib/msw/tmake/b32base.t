@@ -85,8 +85,8 @@ wxUSE_GUI=0
 !include $(WXDIR)\src\makeb32.env
 
 PERIPH_LIBS=
-PERIPH_TARGET=zlib png jpeg tiff regex $(PERIPH_TARGET)
-PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg clean_tiff clean_regex $(PERIPH_CLEAN_TARGET)
+PERIPH_TARGET=zlib regex $(PERIPH_TARGET)
+PERIPH_CLEAN_TARGET=clean_zlib clean_regex $(PERIPH_CLEAN_TARGET)
 
 !if "$(DLL)" == "0"
 DUMMY=dummy
@@ -106,7 +106,6 @@ MSWDIR=.
 DOCDIR = $(WXDIR)\docs
 
 COMMONOBJS = \
-    $(MSWDIR)\y_tab.obj \
     #$ ExpandList("WXCOMMONOBJS");
 
 MSWOBJS = #$ ExpandList("WXMSWOBJS");
@@ -133,12 +132,12 @@ makearchsetuph:
 $(ARCHINCDIR)\wx:
     -mkdir $(ARCHINCDIR)
     -mkdir $(ARCHINCDIR)\wx
-    -erase $(CFG)
+    -$(RM) $(CFG)
 
 !if "$(DLL)" == "0"
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
-    -erase $(WXLIB)
+    -$(RM) $(WXLIB)
     tlib "$(WXLIB)" /P1024 @&&!
 +$(OBJECTS:.obj =.obj +) +$(PERIPH_LIBS:.lib =.lib +)
 !
@@ -146,8 +145,8 @@ $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
 !else
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
-    -erase $(WXLIB)
-    -erase $(WXDLL)
+    -$(RM) $(WXLIB)
+    -$(RM) $(WXDLL)
         $(LINK) $(LINK_FLAGS) /L$(WXLIBDIR);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk /v @&&!
 c0d32.obj $(OBJECTS)
 $(WXLIBDIR)\$(WXLIBNAME)
@@ -163,19 +162,6 @@ dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\includ
 
 version.res:
     brc32 -r -i$(WXDIR)\include\ $(MSWDIR)\version.rc
-
-$(MSWDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-
-#        cl @<<
-# $(CPPFLAGS2) /c $*.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
-# <<
-
-$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
-
 
 #${
     $_ = $project{"WXMSWOBJS"};
@@ -299,14 +285,12 @@ $(WIN95FLAG)
 ! $(CFG)
 
 clean: $(PERIPH_CLEAN_TARGET)
-    -erase $(WXLIBDIR)\wx.tds
-    -erase $(WXLIBDIR)\wx.il?
-    -erase *.obj
-    -erase *.pch
-    -erase *.csm
-    -erase "wx32.#??"
-    -erase ..\common\y_tab.c
-    -erase ..\common\lex_yy.c
+    -$(RM) $(WXLIBDIR)\wx.tds
+    -$(RM) $(WXLIBDIR)\wx.il?
+    -$(RM) *.obj
+    -$(RM) *.pch
+    -$(RM) *.csm
+    -$(RM) "wx32.#??"
 
 cleanall: clean
 

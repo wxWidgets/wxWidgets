@@ -20,6 +20,9 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#define KEYWORD_BOXHEADER 1
+#define KEYWORD_FOLDCONTRACTED 2
+
 static bool IsOKBeforeRE(const int ch) {
 	return (ch == '(') || (ch == '=') || (ch == ',');
 }
@@ -34,17 +37,17 @@ static inline bool IsAWordStart(const int ch) {
 
 static inline bool IsADoxygenChar(const int ch) {
 	return (islower(ch) || ch == '$' || ch == '@' ||
-		    ch == '\\' || ch == '&' || ch == '<' ||
-			ch == '>' || ch == '#' || ch == '{' ||
-			ch == '}' || ch == '[' || ch == ']');
+	        ch == '\\' || ch == '&' || ch == '<' ||
+	        ch == '>' || ch == '#' || ch == '{' ||
+	        ch == '}' || ch == '[' || ch == ']');
 }
 
 static inline bool IsStateComment(const int state) {
 	return ((state == SCE_C_COMMENT) ||
-		      (state == SCE_C_COMMENTLINE) ||
-		      (state == SCE_C_COMMENTDOC) ||
-		      (state == SCE_C_COMMENTDOCKEYWORD) ||
-		      (state == SCE_C_COMMENTDOCKEYWORDERROR));
+	        (state == SCE_C_COMMENTLINE) ||
+	        (state == SCE_C_COMMENTDOC) ||
+	        (state == SCE_C_COMMENTDOCKEYWORD) ||
+	        (state == SCE_C_COMMENTDOCKEYWORDERROR));
 }
 
 static inline bool IsStateString(const int state) {
@@ -52,11 +55,12 @@ static inline bool IsStateString(const int state) {
 }
 
 static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
-                            Accessor &styler) {
+                            Accessor &styler, bool caseSensitive) {
 
 	WordList &keywords = *keywordlists[0];
 	WordList &keywords2 = *keywordlists[1];
 	WordList &keywords3 = *keywordlists[2];
+	WordList &keywords4 = *keywordlists[3];
 
 	bool stylingWithinPreprocessor = styler.GetPropertyInt("styling.within.preprocessor") != 0;
 
@@ -71,7 +75,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 	StyleContext sc(startPos, length, initStyle, styler);
 
 	for (; sc.More(); sc.Forward()) {
-	
+
 		if (sc.atLineStart && (sc.state == SCE_C_STRING)) {
 			// Prevent SCE_C_STRINGEOL from leaking back to previous line
 			sc.SetState(SCE_C_STRING);
@@ -98,12 +102,18 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 		} else if (sc.state == SCE_C_IDENTIFIER) {
 			if (!IsAWordChar(sc.ch) || (sc.ch == '.')) {
 				char s[100];
-				sc.GetCurrent(s, sizeof(s));
+				if (caseSensitive) {
+					sc.GetCurrent(s, sizeof(s));
+				} else {
+					sc.GetCurrentLowered(s, sizeof(s));
+				}
 				if (keywords.InList(s)) {
 					lastWordWasUUID = strcmp(s, "uuid") == 0;
 					sc.ChangeState(SCE_C_WORD);
 				} else if (keywords2.InList(s)) {
 					sc.ChangeState(SCE_C_WORD2);
+				} else if (keywords4.InList(s)) {
+					sc.ChangeState(SCE_C_GLOBALCLASS);
 				}
 				sc.SetState(SCE_C_DEFAULT);
 			}
@@ -141,8 +151,12 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				sc.ForwardSetState(SCE_C_DEFAULT);
 			} else if (!IsADoxygenChar(sc.ch)) {
 				char s[100];
-				sc.GetCurrent(s, sizeof(s));
-				if (!isspace(sc.ch) || !keywords3.InList(s+1)) {
+				if (caseSensitive) {
+					sc.GetCurrent(s, sizeof(s));
+				} else {
+					sc.GetCurrentLowered(s, sizeof(s));
+				}
+				if (!isspace(sc.ch) || !keywords3.InList(s + 1)) {
 					sc.ChangeState(SCE_C_COMMENTDOCKEYWORDERROR);
 				}
 				sc.SetState(SCE_C_COMMENTDOC);
@@ -237,7 +251,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				// Skip whitespace between # and preprocessor word
 				do {
 					sc.Forward();
-				} while ((sc.ch == ' ') && (sc.ch == '\t') && sc.More());
+				} while ((sc.ch == ' ' || sc.ch == '\t') && sc.More());
 				if (sc.atLineEnd) {
 					sc.SetState(SCE_C_DEFAULT);
 				}
@@ -245,9 +259,9 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				sc.SetState(SCE_C_OPERATOR);
 			}
 		}
-		
+
 		if (sc.atLineEnd) {
-			// Reset states to begining of colourise so no surprises 
+			// Reset states to begining of colourise so no surprises
 			// if different sets of lines lexed.
 			chPrevNonWhite = ' ';
 			visibleChars = 0;
@@ -262,22 +276,29 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 }
 
 static bool IsStreamCommentStyle(int style) {
-	return style == SCE_C_COMMENT || 
-		style == SCE_C_COMMENTDOC ||
-		style == SCE_C_COMMENTDOCKEYWORD ||
-		style == SCE_C_COMMENTDOCKEYWORDERROR;
+	return style == SCE_C_COMMENT ||
+	       style == SCE_C_COMMENTDOC ||
+	       style == SCE_C_COMMENTDOCKEYWORD ||
+	       style == SCE_C_COMMENTDOCKEYWORDERROR;
 }
 
-static void FoldCppDoc(unsigned int startPos, int length, int initStyle, WordList *[],
+// Store both the current line's fold level and the next lines in the
+// level store to make it easy to pick up with each increment
+// and to make it possible to fiddle the current level for "} else {".
+static void FoldNoBoxCppDoc(unsigned int startPos, int length, int initStyle,
                             Accessor &styler) {
 	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
 	bool foldPreprocessor = styler.GetPropertyInt("fold.preprocessor") != 0;
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
+	bool foldAtElse = styler.GetPropertyInt("fold.at.else", 0) != 0;
 	unsigned int endPos = startPos + length;
 	int visibleChars = 0;
 	int lineCurrent = styler.GetLine(startPos);
-	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
-	int levelCurrent = levelPrev;
+	int levelCurrent = SC_FOLDLEVELBASE;
+	if (lineCurrent > 0)
+		levelCurrent = styler.LevelAt(lineCurrent-1) >> 16;
+	int levelMinCurrent = levelCurrent;
+	int levelNext = levelCurrent;
 	char chNext = styler[startPos];
 	int styleNext = styler.StyleAt(startPos);
 	int style = initStyle;
@@ -290,69 +311,94 @@ static void FoldCppDoc(unsigned int startPos, int length, int initStyle, WordLis
 		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
 		if (foldComment && IsStreamCommentStyle(style)) {
 			if (!IsStreamCommentStyle(stylePrev)) {
-				levelCurrent++;
+				levelNext++;
 			} else if (!IsStreamCommentStyle(styleNext) && !atEOL) {
 				// Comments don't end at end of line and the next character may be unstyled.
-				levelCurrent--;
+				levelNext--;
 			}
 		}
 		if (foldComment && (style == SCE_C_COMMENTLINE)) {
 			if ((ch == '/') && (chNext == '/')) {
 				char chNext2 = styler.SafeGetCharAt(i + 2);
 				if (chNext2 == '{') {
-					levelCurrent++;
+					levelNext++;
 				} else if (chNext2 == '}') {
-					levelCurrent--;
+					levelNext--;
 				}
 			}
 		}
 		if (foldPreprocessor && (style == SCE_C_PREPROCESSOR)) {
 			if (ch == '#') {
-				unsigned int j=i+1;
-				while ((j<endPos) && IsASpaceOrTab(styler.SafeGetCharAt(j))) {
+				unsigned int j = i + 1;
+				while ((j < endPos) && IsASpaceOrTab(styler.SafeGetCharAt(j))) {
 					j++;
 				}
 				if (styler.Match(j, "region") || styler.Match(j, "if")) {
-					levelCurrent++;
+					levelNext++;
 				} else if (styler.Match(j, "end")) {
-					levelCurrent--;
+					levelNext--;
 				}
 			}
 		}
 		if (style == SCE_C_OPERATOR) {
 			if (ch == '{') {
-				levelCurrent++;
+				// Measure the minimum before a '{' to allow
+				// folding on "} else {"
+				if (levelMinCurrent > levelNext) {
+					levelMinCurrent = levelNext;
+				}
+				levelNext++;
 			} else if (ch == '}') {
-				levelCurrent--;
+				levelNext--;
 			}
 		}
 		if (atEOL) {
-			int lev = levelPrev;
+			int levelUse = levelCurrent;
+			if (foldAtElse) {
+				levelUse = levelMinCurrent;
+			}
+			int lev = levelUse | levelNext << 16;
 			if (visibleChars == 0 && foldCompact)
 				lev |= SC_FOLDLEVELWHITEFLAG;
-			if ((levelCurrent > levelPrev) && (visibleChars > 0))
+			if (levelUse < levelNext)
 				lev |= SC_FOLDLEVELHEADERFLAG;
 			if (lev != styler.LevelAt(lineCurrent)) {
 				styler.SetLevel(lineCurrent, lev);
 			}
 			lineCurrent++;
-			levelPrev = levelCurrent;
+			levelCurrent = levelNext;
+			levelMinCurrent = levelCurrent;
 			visibleChars = 0;
 		}
 		if (!isspacechar(ch))
 			visibleChars++;
 	}
-	// Fill in the real level of the next line, keeping the current flags as they will be filled in later
-	int flagsNext = styler.LevelAt(lineCurrent) & ~SC_FOLDLEVELNUMBERMASK;
-	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
+}
+
+static void FoldCppDoc(unsigned int startPos, int length, int initStyle, WordList *[],
+                       Accessor &styler) {
+	FoldNoBoxCppDoc(startPos, length, initStyle, styler);
 }
 
 static const char * const cppWordLists[] = {
-	"Primary keywords and identifiers",
-	"Secondary keywords and identifiers",
-	"Documentation comment keywords",
-	0,
-};
+            "Primary keywords and identifiers",
+            "Secondary keywords and identifiers",
+            "Documentation comment keywords",
+            "Unused",
+            "Global classes and typedefs",
+            0,
+        };
 
-LexerModule lmCPP(SCLEX_CPP, ColouriseCppDoc, "cpp", FoldCppDoc, cppWordLists);
-LexerModule lmTCL(SCLEX_TCL, ColouriseCppDoc, "tcl", FoldCppDoc, cppWordLists);
+static void ColouriseCppDocSensitive(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
+                                     Accessor &styler) {
+	ColouriseCppDoc(startPos, length, initStyle, keywordlists, styler, true);
+}
+
+static void ColouriseCppDocInsensitive(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
+                                       Accessor &styler) {
+	ColouriseCppDoc(startPos, length, initStyle, keywordlists, styler, false);
+}
+
+LexerModule lmCPP(SCLEX_CPP, ColouriseCppDocSensitive, "cpp", FoldCppDoc, cppWordLists);
+LexerModule lmCPPNoCase(SCLEX_CPPNOCASE, ColouriseCppDocInsensitive, "cppnocase", FoldCppDoc, cppWordLists);
+LexerModule lmTCL(SCLEX_TCL, ColouriseCppDocSensitive, "tcl", FoldCppDoc, cppWordLists);

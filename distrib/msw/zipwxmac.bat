@@ -7,7 +7,7 @@ set webfiles=c:\wx2dev\wxWebSite
 set stuffit="c:\Program Files\Aladdin Systems\StuffIt 7.5\StuffIt.exe"
 
 Rem Set this to the required version
-set version=2.3.3
+set version=2.3.4
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -31,34 +31,36 @@ echo Zipping wxMac distribution
 cd %src%
 copy %src%\include\wx\mac\setup0.h %src%\include\wx\setup.h
 
-zip32 -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\generic.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\mac.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\cw_mac.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tiff.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\jpeg.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\utils.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\dialoged.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\ogl.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\xml.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\stc.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
+zip -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\generic.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\mac.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\cw_mac.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tiff.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\jpeg.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\utils.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\dialoged.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\ogl.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\xml.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\stc.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
 
 erase /Y %src%\include\wx\setup.h
 
-if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
+if direxist %dest%\wxMac-%version% erase /sxyz %dest%\wxMac-%version%
 
-mkdir %dest%\wxWindows-%version%
-cd %dest%\wxWindows-%version%
-unzip32 ..\wxMac-%version%.zip
+mkdir %dest%\wxMac-%version%
+cd %dest%\wxMac-%version%
+unzip ..\wxMac-%version%.zip
 erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
 erase /SXY docs\html\dialoged docs\html\tex2rtf
 
 cd %dest%
 
 erase wxMac-%version%.zip
-zip32 -r wxMac-%version%.zip wxWindows-%version%/*
+zip -r wxMac-%version%.zip wxMac-%version%/*
+
+erase /sxyz %dest%\wxMac-%version%
 
 Rem echo Making StuffIt archive...
 Rem set stuffitcmd=%stuffit% -stuff -create wxMac-%version%.sit wxWindows-%version%\*

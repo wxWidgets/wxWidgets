@@ -37,15 +37,36 @@ Constructor.
 
 \constfunc{virtual size\_t}{MB2WC}{\param{wchar\_t* }{buf}, \param{const char* }{psz}, \param{size\_t }{n}}
 
-Converts from multibyte encoding to Unicode, using the libc routine mbstowcs()
-(this is overridden by derived classes). Returns the size of the destination buffer.
+Converts from a string {\it psz} in multibyte encoding to Unicode putting the
+output into the buffer {\it buf} of the size {\it n} (in wide characters, not
+bytes). If {\it buf} is {\tt NULL}, nothing is written to it but the length of
+the string which would result from the conversion is calculated and returned.
+Note that this is the length and not size, i.e. the returned value does 
+{\bf not} include the trailing NUL. But when the function is called with a
+non-{\tt NULL} buffer, the {\it n} parameter should be the size of the buffer
+and so it {\bf should} take into account the trailing NUL.
+
+\wxheading{Parameters}
+
+\docparam{buf}{the output buffer, may be {\tt NULL} if the caller is only
+interested in the length of the resulting string}
+
+\docparam{psz}{the {\tt NUL}-terminated input string, cannot be {\tt NULL}}
+
+\docparam{n}{the size of the output buffer, ignored if {\it buf} is {\tt NULL}}
+
+\wxheading{Return value}
+
+The length of the converted string.
 
 \membersection{wxMBConv::WC2MB}\label{wxmbconvwc2mb}
 
 \constfunc{virtual size\_t}{WC2MB}{\param{char* }{buf}, \param{const wchar\_t* }{psz}, \param{size\_t }{n}}
 
-Converts from Unicode to multibyte encoding, using the libc routine wcstombs()
-(this is overridden by derived classes). Returns the size of the destination buffer.
+Converts from Unicode to multibyte encoding. The semantics of this function
+(including the return value meaning) is the same as for 
+\helpref{MB2WC}{wxmbconvmb2wc}.
+
 
 \membersection{wxMBConv::cMB2WC}\label{wxmbconvcmb2wc}
 

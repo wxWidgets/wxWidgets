@@ -274,9 +274,7 @@ wxCheckListBox::wxCheckListBox (
 , int                               nStrings
 , const wxString                    asChoices[]
 , long                              lStyle
-#if wxUSE_VALIDATORS
 , const wxValidator&                rVal
-#endif
 , const wxString&                   rsName
 )
               : wxListBox()
@@ -288,9 +286,7 @@ wxCheckListBox::wxCheckListBox (
            ,nStrings
            ,asChoices
            ,lStyle | wxLB_OWNERDRAW
-#if wxUSE_VALIDATORS
            ,rVal
-#endif
            ,rsName
           );
 } // end of wxCheckListBox::wxCheckListBox

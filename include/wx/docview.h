@@ -64,8 +64,6 @@ enum
 
 class WXDLLEXPORT wxDocument : public wxEvtHandler
 {
-    DECLARE_ABSTRACT_CLASS(wxDocument)
-
 public:
     wxDocument(wxDocument *parent = (wxDocument *) NULL);
     ~wxDocument();
@@ -160,12 +158,13 @@ protected:
     wxDocument*           m_documentParent;
     wxCommandProcessor*   m_commandProcessor;
     bool                  m_savedYet;
+    
+private:
+    DECLARE_ABSTRACT_CLASS(wxDocument)
 };
 
 class WXDLLEXPORT wxView: public wxEvtHandler
 {
-    DECLARE_ABSTRACT_CLASS(wxView)
-
 public:
     //  wxView(wxDocument *doc = (wxDocument *) NULL);
     wxView();
@@ -222,12 +221,14 @@ protected:
     wxDocument*       m_viewDocument;
     wxString          m_viewTypeName;
     wxWindow*         m_viewFrame;
+    
+private:
+    DECLARE_ABSTRACT_CLASS(wxView)
 };
 
 // Represents user interface (and other) properties of documents and views
 class WXDLLEXPORT wxDocTemplate: public wxObject
 {
-DECLARE_CLASS(wxDocTemplate)
 
 friend class WXDLLEXPORT wxDocManager;
 
@@ -286,6 +287,9 @@ protected:
     // For dynamic creation of appropriate instances.
     wxClassInfo*      m_docClassInfo;
     wxClassInfo*      m_viewClassInfo;
+    
+private:
+    DECLARE_CLASS(wxDocTemplate)
 };
 
 // One object of this class may be created in an application, to manage all
@@ -333,9 +337,6 @@ public:
 
     // called when file format detection didn't work, can be overridden to do
     // something in this case
-    // This is of course completely stupid, because if the file dialog is
-    // cancelled you get an assert. Brilliant. -- JACS
-//    virtual void OnOpenFileFailure() { wxFAIL_MSG(_T("file format mismatch")); }
     virtual void OnOpenFileFailure() { }
 
     virtual wxDocument *CreateDocument(const wxString& path, long flags = 0);
@@ -427,8 +428,6 @@ protected:
 
 class WXDLLEXPORT wxDocChildFrame : public wxFrame
 {
-    DECLARE_CLASS(wxDocChildFrame)
-
 public:
     wxDocChildFrame(wxDocument *doc,
                     wxView *view,
@@ -438,7 +437,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long type = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = "frame");
+                    const wxString& name = wxT("frame"));
     ~wxDocChildFrame();
 
     // Extend event processing to search the view's event table
@@ -457,6 +456,8 @@ protected:
     wxDocument*       m_childDocument;
     wxView*           m_childView;
 
+private:
+    DECLARE_CLASS(wxDocChildFrame)
     DECLARE_EVENT_TABLE()
 };
 
@@ -466,8 +467,6 @@ protected:
 
 class WXDLLEXPORT wxDocParentFrame : public wxFrame
 {
-    DECLARE_CLASS(wxDocParentFrame)
-
 public:
     wxDocParentFrame(wxDocManager *manager,
                      wxFrame *frame,
@@ -476,7 +475,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long type = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = "frame");
+                     const wxString& name = wxT("frame"));
 
     // Extend event processing to search the document manager's event table
     virtual bool ProcessEvent(wxEvent& event);
@@ -490,6 +489,8 @@ public:
 protected:
     wxDocManager *m_docManager;
 
+private:
+    DECLARE_CLASS(wxDocParentFrame)
     DECLARE_EVENT_TABLE()
 };
 
@@ -500,10 +501,8 @@ protected:
 #if wxUSE_PRINTING_ARCHITECTURE
 class WXDLLEXPORT wxDocPrintout : public wxPrintout
 {
-    DECLARE_DYNAMIC_CLASS(wxDocPrintout)
-
 public:
-    wxDocPrintout(wxView *view = (wxView *) NULL, const wxString& title = "Printout");
+    wxDocPrintout(wxView *view = (wxView *) NULL, const wxString& title = wxT("Printout"));
     bool OnPrintPage(int page);
     bool HasPage(int page);
     bool OnBeginDocument(int startPage, int endPage);
@@ -513,6 +512,9 @@ public:
 
 protected:
     wxView*       m_printoutView;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxDocPrintout)
 };
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
@@ -522,8 +524,6 @@ protected:
 
 class WXDLLEXPORT wxFileHistory : public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxFileHistory)
-
 public:
     wxFileHistory(int maxFiles = 9);
     ~wxFileHistory();
@@ -563,6 +563,9 @@ protected:
     wxList            m_fileMenus;
     // Max files to maintain
     int               m_fileMaxFiles;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxFileHistory)
 };
 
 #if wxUSE_STD_IOSTREAM

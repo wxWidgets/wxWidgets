@@ -5,9 +5,9 @@ member functions that take a wxScrollEvent argument. You can use
 {\tt EVT\_COMMAND\_SCROLL...} macros with window IDs for when intercepting
 scroll events from controls, or {\tt EVT\_SCROLL...} macros without window IDs
 for intercepting scroll events from the receiving window - except for this,
-the macros behave exactly the same
+the macros behave exactly the same.
 
-\twocolwidtha{7cm}
+\twocolwidtha{9cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_SCROLL(func)}}{Process all scroll events.}
 \twocolitem{{\bf EVT\_SCROLL\_TOP(func)}}{Process wxEVT\_SCROLL\_TOP scroll-to-top events (minium position).}
@@ -33,4 +33,23 @@ sent as the user drags the thumbtrack).}
 \twocolitem{{\bf EVT\_COMMAND\_SCROLL\_ENDSCROLL(func)}}{Process wxEVT\_SCROLL\_ENDSCROLL end of scrolling events (MSW only).}
 \end{twocollist}%
 
+
+
+\wxheading{The difference between {\tt EVT\_SCROLL\_THUMBRELEASE} and {\tt EVT\_SCROLL\_ENDSCROLL}}
+
+The {\tt EVT\_SCROLL\_THUMBRELEASE} event is only emitted when actually dragging
+the thumb using the mouse and releasing it (This {\tt EVT\_SCROLL\_THUMBRELEASE}
+event is also followed by an {\tt EVT\_SCROLL\_ENDSCROLL} event).
+
+The {\tt EVT\_SCROLL\_ENDSCROLL} event also occurs when using the keyboard to
+change the thumb position, and when clicking next to the thumb (In all these
+cases the {\tt EVT\_SCROLL\_THUMBRELEASE} event does not happen).
+
+In short, the {\tt EVT\_SCROLL\_ENDSCROLL} event is triggered when scrolling/
+moving has finished. The only exception (unfortunately) is that changing the
+thumb position using the mousewheel does give a {\tt EVT\_SCROLL\_THUMBRELEASE}
+event but NOT an {\tt EVT\_SCROLL\_ENDSCROLL} event.
+
+Please see the widgets sample ("Slider" page) to see the difference
+between {\tt EVT\_SCROLL\_THUMBRELEASE} and {\tt EVT\_SCROLL\_ENDSCROLL} in action.
 

@@ -49,7 +49,7 @@
     } else {
 	$project{"VC_PROJ_TYPE"} = 'Win32 (x86) Console Application';
 	$project{"VC_PROJ_CODE"} = '0x0103';
-	$vc_base_libs = 'kernel32.lib user32.lib advapi32.lib ';
+	$vc_base_libs = 'kernel32.lib user32.lib advapi32.lib shell32.lib ';
 	if ( Config("wx") ) {
 	    $vc_base_libs .= 'wsock32.lib ';
 	}

@@ -46,7 +46,7 @@ int wxMenuItem::MacBuildMenuString(StringPtr outMacItemText, SInt16 *outMacShort
 {
 	char *p = (char *) &outMacItemText[1] ;
 	short macModifiers = 0 ;
-	char macShortCut = 0 ;
+	SInt16 macShortCut = 0 ;
 	const char *inItemName ;
 	wxString inItemTextMac ;
 	
@@ -72,31 +72,6 @@ int wxMenuItem::MacBuildMenuString(StringPtr outMacItemText, SInt16 *outMacShort
 	{
 		switch ( *inItemName )
 		{
-			// special characters for macintosh menus -> use some replacement
-			case ';' :
-				*p++ = ',' ;
-				break ;
-			case '^' :
-				*p++ = ' ' ;
-				break ;
-			case '!' :
-				*p++ = ' ' ;
-				break ;
-			case '<' :
-				*p++ = '[' ;
-				break ;
-			case '>' :
-				*p++ = ']' ;
-				break ;
-			case '/' :
-				*p++ = '|' ;
-				break ;
-			case '(' :
-				*p++ = '[' ;
-				break ;
-			case ')' :	
-				*p++ = ']' ;
-				break ;
 			// shortcuts
 			case '&' :
 				{
@@ -115,43 +90,71 @@ int wxMenuItem::MacBuildMenuString(StringPtr outMacItemText, SInt16 *outMacShort
 			case '\t' :
 				{
 					++inItemName ;
-					while( *inItemName )
+					bool skip = false ;
+					bool explicitCommandKey = false ;
+					while( *inItemName && !skip )
 					{
-						if (strncmp("Ctrl", inItemName, 4) == 0) 
+						if (wxStrnicmp("Ctrl", inItemName, 4) == 0) 
 						{
 							inItemName = inItemName + 5;
-							macShortCut = *inItemName;
+							explicitCommandKey = true ;
 						}
-						else if (strncmp("Cntrl", inItemName, 5) == 0) 
+						else if (wxStrnicmp("Cntrl", inItemName, 5) == 0) 
 						{
 							inItemName = inItemName + 6;
-							macShortCut = *inItemName;
+							explicitCommandKey = true ;
 						}
-						else if (strncmp("Alt", inItemName, 3) == 0) 
+						else if (wxStrnicmp("Alt", inItemName, 3) == 0) 
 						{
 							inItemName = inItemName + 4;
 							macModifiers |= kMenuOptionModifier ;
-							macShortCut = *inItemName ;
 						}
-						else if (strncmp("Shift", inItemName, 5) == 0) 
+						else if (wxStrnicmp("Shift", inItemName, 5) == 0) 
 						{
 							inItemName = inItemName + 6;
 							macModifiers |= kMenuShiftModifier ;
-							macShortCut = *inItemName ;
-						}
-						else if (strncmp("F", inItemName, 1) == 0) 
-						{
-							inItemName += strlen( inItemName ) ;
-							// no function keys at the moment
-							// macModifiers |= kMenuShiftModifier ;
-							// macShortCut = *inItemName ;
 						}
 						else
 						{
-							break ;
+						    skip = true ;
 						}
 					}
-
+					if ( *inItemName )
+				    {
+				        if ( strlen(inItemName) == 1 )
+				        {
+						    macShortCut = *inItemName;
+						}
+						else if ( !wxStricmp( inItemName , "Delete" ) || !wxStricmp( inItemName , "Del" ) )
+						{
+						    macShortCut = WXK_DELETE ;
+						}
+						else if ( !wxStricmp( inItemName , "Back" ) || !wxStricmp( inItemName , "Backspace" ) )
+						{
+						    macShortCut = WXK_BACK ;
+						}
+						else if ( !wxStricmp( inItemName , "Return" ) )
+						{
+						    macShortCut = WXK_RETURN ;
+						}
+						else if ( !wxStricmp( inItemName , "Enter" ) )
+						{
+						    macShortCut = kEnterCharCode ;
+						}
+						else if ( *inItemName == 'F' )
+						{
+						    int fkey = atol(inItemName+1) ;
+						    if (fkey >= 1 && fkey < 15 )
+						    {
+                                macShortCut = WXK_F1 + fkey - 1 ;
+						    }
+                            if ( !explicitCommandKey )
+                                macModifiers |= kMenuNoCommandModifier ;
+						}
+					}
+						
+					inItemName += strlen( inItemName ) ;
+					
 					if ( *inItemName == 0 )
 						--inItemName ;
 						

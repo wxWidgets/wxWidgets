@@ -121,20 +121,21 @@ bool wxMask::Create( const wxBitmap& bitmap,
     GdkVisual *visual = wxTheApp->GetGdkVisual();
 
     int bpp = visual->depth;
-    if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
+    if ((bpp == 16) && (visual->red_mask != 0xf800))
+        bpp = 15;
     if (bpp == 15)
     {
         red = red & 0xf8;
         green = green & 0xf8;
         blue = blue & 0xf8;
-    } else
-    if (bpp == 16)
+    }
+    else if (bpp == 16)
     {
         red = red & 0xf8;
         green = green & 0xfc;
         blue = blue & 0xf8;
-    } else
-    if (bpp == 12)
+    }
+    else if (bpp == 12)
     {
         red = red & 0xf0;
         green = green & 0xf0;
@@ -319,7 +320,14 @@ bool wxBitmap::CreateFromXpm( const char **bits )
 
     M_BMPDATA->m_pixmap = gdk_pixmap_create_from_xpm_d( wxGetRootWindow()->window, &mask, NULL, (gchar **) bits );
 
-    wxCHECK_MSG( M_BMPDATA->m_pixmap, FALSE, wxT("couldn't create pixmap") );
+    if (!M_BMPDATA->m_pixmap)
+    {
+        UnRef();
+        
+        wxFAIL_MSG( wxT("couldn't create pixmap") );
+        
+        return FALSE;
+    }
 
     if (mask)
     {
@@ -328,7 +336,7 @@ bool wxBitmap::CreateFromXpm( const char **bits )
     }
 
     gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
-    
+
     M_BMPDATA->m_bpp = visual->depth;  // Can we get a different depth from create_from_xpm_d() ?
 
     return TRUE;
@@ -344,7 +352,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     m_refData = new wxBitmapRefData();
 
     // ------
-    // convertion to mono bitmap:
+    // conversion to mono bitmap:
     // ------
     if (depth == 1)
     {
@@ -357,7 +365,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         SetBitmap( gdk_pixmap_new( wxGetRootWindow()->window, width, height, 1 ) );
 
         SetDepth( 1 );
-        
+
         GdkVisual *visual = wxTheApp->GetGdkVisual();
 
         // Create picture image
@@ -440,7 +448,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     }
 
     // ------
-    // convertion to colour bitmap:
+    // conversion to colour bitmap:
     // ------
     else
     {
@@ -457,11 +465,13 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         int bpp = visual->depth;
 
         SetDepth( bpp );
-        
-        if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
-        if (bpp < 8) bpp = 8;
 
-        // We handle 8-bit bitmaps ourselves using the colour cube, 12-bit 
+        if ((bpp == 16) && (visual->red_mask != 0xf800))
+            bpp = 15;
+        else if (bpp < 8)
+            bpp = 8;
+
+        // We handle 8-bit bitmaps ourselves using the colour cube, 12-bit
         // visuals are not supported by GDK so we do these ourselves, too.
         // 15-bit and 16-bit should actually work and 24-bit certainly does.
 #ifdef __sgi
@@ -568,7 +578,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
                             GdkColormap *cmap = gtk_widget_get_default_colormap();
                             GdkColor *colors = cmap->colors;
                             int max = 3 * (65536);
-    
+
                             for (int i = 0; i < cmap->size; i++)
                             {
                                 int rdiff = (r << 8) - colors[i].red;
@@ -578,9 +588,9 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
                                 if (sum < max) { pixel = i; max = sum; }
                             }
                         }
-    
+
                         gdk_image_put_pixel( data_image, x, y, pixel );
-    
+
                         break;
                     }
                     case 12:  // SGI only
@@ -677,6 +687,13 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
 wxImage wxBitmap::ConvertToImage() const
 {
+    // the colour used as transparent one in wxImage and the one it is replaced
+    // with when it really occurs in the bitmap
+    static const int MASK_RED = 1;
+    static const int MASK_GREEN = 2;
+    static const int MASK_BLUE = 3;
+    static const int MASK_BLUE_REPLACEMENT = 2;
+
     wxImage image;
 
     wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
@@ -685,15 +702,16 @@ wxImage wxBitmap::ConvertToImage() const
     if (GetPixmap())
     {
         gdk_image = gdk_image_get( GetPixmap(),
-            0, 0,
-            GetWidth(), GetHeight() );
-    } else
-    if (GetBitmap())
+                                   0, 0,
+                                   GetWidth(), GetHeight() );
+    }
+    else if (GetBitmap())
     {
         gdk_image = gdk_image_get( GetBitmap(),
-            0, 0,
-            GetWidth(), GetHeight() );
-    } else
+                                   0, 0,
+                                   GetWidth(), GetHeight() );
+    }
+    else
     {
         wxFAIL_MSG( wxT("Ill-formed bitmap") );
     }
@@ -702,7 +720,7 @@ wxImage wxBitmap::ConvertToImage() const
 
     image.Create( GetWidth(), GetHeight() );
     char unsigned *data = image.GetData();
-    
+
     if (!data)
     {
         gdk_image_destroy( gdk_image );
@@ -714,10 +732,10 @@ wxImage wxBitmap::ConvertToImage() const
     if (GetMask())
     {
         gdk_image_mask = gdk_image_get( GetMask()->GetBitmap(),
-            0, 0,
-            GetWidth(), GetHeight() );
+                                        0, 0,
+                                        GetWidth(), GetHeight() );
 
-        image.SetMaskColour( 16, 16, 16 );  // anything unlikely and dividable
+        image.SetMaskColour( MASK_RED, MASK_GREEN, MASK_BLUE );
     }
 
     int bpp = -1;
@@ -734,9 +752,10 @@ wxImage wxBitmap::ConvertToImage() const
         GdkVisual *visual = gdk_window_get_visual( GetPixmap() );
         if (visual == NULL)
             visual = wxTheApp->GetGdkVisual();
-        
+
         bpp = visual->depth;
-        if (bpp == 16) bpp = visual->red_prec + visual->green_prec + visual->blue_prec;
+        if (bpp == 16)
+            bpp = visual->red_prec + visual->green_prec + visual->blue_prec;
         red_shift_right = visual->red_shift;
         red_shift_left = 8-visual->red_prec;
         green_shift_right = visual->green_shift;
@@ -797,9 +816,15 @@ wxImage wxBitmap::ConvertToImage() const
                 int mask_pixel = gdk_image_get_pixel( gdk_image_mask, i, j );
                 if (mask_pixel == 0)
                 {
-                    data[pos] = 16;
-                    data[pos+1] = 16;
-                    data[pos+2] = 16;
+                    data[pos] = MASK_RED;
+                    data[pos+1] = MASK_GREEN;
+                    data[pos+2] = MASK_BLUE;
+                }
+                else if ( data[pos] == MASK_RED &&
+                            data[pos+1] == MASK_GREEN &&
+                                data[pos+2] == MASK_BLUE )
+                {
+                    data[pos+2] = MASK_BLUE_REPLACEMENT;
                 }
             }
 
@@ -835,7 +860,12 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth
     M_BMPDATA->m_height = height;
     M_BMPDATA->m_bpp = 1;
 
-    wxCHECK_RET( M_BMPDATA->m_bitmap, wxT("couldn't create bitmap") );
+    if (!M_BMPDATA->m_bitmap)
+    {
+        UnRef();
+        
+        wxFAIL_MSG( wxT("couldn't create bitmap") );
+    }
 }
 
 wxBitmap::~wxBitmap()

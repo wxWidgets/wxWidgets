@@ -108,7 +108,7 @@
    {
     wxImage::AddHandler(new wxPNGHandler);
     // Create the main application window
-      MyFrame *frame = new MyFrame("wxHtmlWindow testing application",
+      MyFrame *frame = new MyFrame(_("wxHtmlWindow testing application"),
          wxPoint(50, 50), wxSize(150, 50));
 
     // Show it and tell the application that it's our main window
@@ -135,12 +135,12 @@
     // create a menu bar
       wxMenu *menuFile = new wxMenu;
 
-      menuFile->Append(Minimal_About, "&About");
-      menuFile->Append(Minimal_Quit, "E&xit");
+      menuFile->Append(Minimal_About, _("&About"));
+      menuFile->Append(Minimal_Quit, _("E&xit"));
 
     // now append the freshly created menu to the menu bar...
       wxMenuBar *menuBar = new wxMenuBar;
-      menuBar->Append(menuFile, "&File");
+      menuBar->Append(menuFile, _("&File"));
 
     // ... and attach this menu bar to the frame
       SetMenuBar(menuBar);
@@ -159,13 +159,13 @@
    {
         wxBoxSizer *topsizer;
         wxHtmlWindow *html;
-        wxDialog dlg(this, -1, wxString("About"));
+        wxDialog dlg(this, -1, wxString(_("About")));
 
         topsizer = new wxBoxSizer(wxVERTICAL);
 
         html = new wxHtmlWindow(&dlg, -1, wxDefaultPosition, wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
         html -> SetBorders(0);
-        html -> LoadPage("data/about.htm");
+        html -> LoadPage(wxT("data/about.htm"));
         html -> SetSize(html -> GetInternalRepresentation() -> GetWidth(), 
                         html -> GetInternalRepresentation() -> GetHeight());
 
@@ -173,7 +173,7 @@
 
         topsizer -> Add(new wxStaticLine(&dlg, -1), 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
                         
-        wxButton *bu1 = new wxButton(&dlg, wxID_OK, "Okay");
+        wxButton *bu1 = new wxButton(&dlg, wxID_OK, _("OK"));
         bu1 -> SetDefault();
 
         topsizer -> Add(bu1, 0, wxALL | wxALIGN_RIGHT, 15);

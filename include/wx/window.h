@@ -271,7 +271,18 @@ public:
             *h = s.y;
     }
 
-        // the generic centre function - centers the window on parent by
+        // There are times (and windows) where 'Best' size and 'Min' size
+        // are vastly out of sync.  This should be remedied somehow, but in
+        // the meantime, this method will return the larger of BestSize
+        // (the window's smallest legible size), and any user specified
+        // MinSize hint.
+    wxSize GetAdjustedBestSize() const
+    {
+        wxSize  s( DoGetBestSize() );
+        return wxSize( wxMax( s.x, GetMinWidth() ), wxMax( s.y, GetMinHeight() ) );
+    }
+
+        // the generic centre function - centers the window on parent by`
         // default or on screen if it doesn't have parent or
         // wxCENTER_ON_SCREEN flag is given
     void Centre( int direction = wxBOTH );
@@ -287,6 +298,9 @@ public:
 
         // set window size to wrap around its children
     virtual void Fit();
+
+        // set virtual size to satisfy children
+    virtual void FitInside();
 
         // set min/max size of the window
     virtual void SetSizeHints( int minW, int minH,
@@ -330,6 +344,17 @@ public:
 
     virtual void DoSetVirtualSize( int x, int y );
     virtual wxSize DoGetVirtualSize() const; // { return m_virtualSize; }
+
+        // Return the largest of ClientSize and BestSize (as determined
+        // by a sizer, interior children, or other means)
+
+    virtual wxSize GetBestVirtualSize() const
+    {
+        wxSize  client( GetClientSize() );
+        wxSize  best( GetBestSize() );
+
+        return wxSize( wxMax( client.x, best.x ), wxMax( client.y, best.y ) );
+    }
 
     // window state
     // ------------
@@ -958,8 +983,16 @@ protected:
     // set the best size for the control if the default size was given:
     // replaces the fields of size == -1 with the best values for them and
     // calls SetSize() if needed
+    //
+    // This function is rather unfortunately named..  it's really just a
+    // smarter SetSize / convenience function for expanding wxDefaultSize.
+    // Note that it does not influence the value returned by GetBestSize
+    // at all.
     void SetBestSize(const wxSize& size)
     {
+        // the size only needs to be changed if the current size is incomplete,
+        // i.e. one of the components was specified as default -- so if both
+        // were given, simply don't do anything
         if ( size.x == -1 || size.y == -1 )
         {
             wxSize sizeBest = DoGetBestSize();

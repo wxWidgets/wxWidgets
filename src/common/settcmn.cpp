@@ -44,17 +44,9 @@ wxSystemScreenType wxSystemSettings::ms_screen = wxSYS_SCREEN_NONE;
 wxSystemScreenType wxSystemSettings::GetScreenType()
 {
     if (ms_screen == wxSYS_SCREEN_NONE)
-#ifndef __WXUNIV__
-    {
-        // As a start, all GUI are desktops.
-        ms_screen = wxSYS_SCREEN_DESKTOP;
-    }
-#else
     {
         // wxUniv will be used on small devices, too.
-        int x = 0;
-        int y = 0;
-        wxGetDisplaySize( &x, &y );
+        int x = GetMetric( wxSYS_SCREEN_X );
 
         ms_screen = wxSYS_SCREEN_DESKTOP;
             
@@ -67,7 +59,6 @@ wxSystemScreenType wxSystemSettings::GetScreenType()
         if (x < 200)
             ms_screen = wxSYS_SCREEN_TINY;
     }
-#endif
 
     return ms_screen;
 }

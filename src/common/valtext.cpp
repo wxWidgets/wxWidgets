@@ -205,6 +205,9 @@ bool wxTextValidator::TransferToWindow(void)
 {
     if( !CheckValidator() )
         return FALSE;
+    
+    if (!m_stringValue)
+        return TRUE;
 
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
     control->SetValue(* m_stringValue) ;
@@ -217,6 +220,9 @@ bool wxTextValidator::TransferFromWindow(void)
 {
     if( !CheckValidator() )
         return FALSE;
+
+    if (!m_stringValue)
+        return TRUE;
 
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
     * m_stringValue = control->GetValue() ;
@@ -303,8 +309,7 @@ static bool wxIsNumeric(const wxString& val)
     {
         // Allow for "," (French) as well as "." -- in future we should
         // use wxSystemSettings or other to do better localisation
-        if ((!isdigit(val[i])) && (val[i] != '.') && (val[i] != ','))
-          if(!((i == 0) && (val[i] == '-')))
+        if ((!isdigit(val[i])) && (val[i] != '.') && (val[i] != ',') && (val[i] != wxT('e')) && (val[i] != wxT('E')) && (val[i] != wxT('+')) && (val[i] != wxT('-')))
             return FALSE;
     }
     return TRUE;

@@ -157,6 +157,17 @@ public:
     // and sets m_widgetStyle to this value.
     GtkStyle *GetWidgetStyle();
 
+#ifdef __WXGTK20__
+    // Returns the default context which usually is anti-aliased
+    PangoContext   *GtkGetPangoDefaultContext();
+    
+    // Returns the X11 context which renders on the X11 client
+    // side (which can be remote) and which usually is not
+    // anti-aliased and is thus faster
+    PangoContext   *GtkGetPangoX11Context();
+    PangoContext   *m_x11Context;
+#endif
+
     // Called by SetFont() and SetXXXColour etc
     void SetWidgetStyle();
 
@@ -195,10 +206,14 @@ public:
     // this widget will be queried for GTK's focus events
     GtkWidget           *m_focusWidget;
 
+#ifdef __WXGTK20__
+    GtkIMMulticontext   *m_imContext;
+#else
 #if HAVE_XIM
     // XIM support for wxWindows
     GdkIC               *m_ic;
     GdkICAttr           *m_icattr;
+#endif
 #endif
 
 #ifndef __WXGTK20__

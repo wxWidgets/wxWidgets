@@ -76,7 +76,7 @@ class ColourSelect(wxButton):
 
     def OnClick(self, event):
         data = wxColourData()
-        data.SetChooseFull(true)
+        data.SetChooseFull(True)
         data.SetColour(self.set_colour_val)
         dlg = wxColourDialog(self.GetParent(), data)
         changed = dlg.ShowModal() == wxID_OK

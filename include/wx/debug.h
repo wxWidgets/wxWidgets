@@ -123,12 +123,13 @@
 // Use of wxFalse instead of FALSE suppresses compiler warnings about testing
 // constant expression
 WXDLLEXPORT_DATA(extern const bool) wxFalse;
+#define wxAssertFailure wxFalse
 
 // special form of assert: always triggers it (in debug mode)
-#define wxFAIL                 wxASSERT(wxFalse)
+#define wxFAIL                 wxASSERT(wxAssertFailure)
 
 // FAIL with some message
-#define wxFAIL_MSG(msg)        wxASSERT_MSG(wxFalse, msg)
+#define wxFAIL_MSG(msg)        wxASSERT_MSG(wxAssertFailure, msg)
 
 // NB: the following macros work also in release mode!
 
@@ -178,11 +179,18 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
   particular, this is why we define a struct and not an object (which would
   result in a warning about unused variable) and a named struct (otherwise we'd
   get a warning about an unnamed struct not used to define an object!).
+  The _n__ part is to stop VC++ 7 being confused since it encloses __LINE++ in
+  parentheses. Unfortunately this does not work with other compilers, so
+  we will only enable it when we know the _precise_ symbols to test for.
  */
 
 #define wxMAKE_ASSERT_NAME_HELPER(line)     wxAssert_ ## line
 #define wxMAKE_ASSERT_NAME(line)            wxMAKE_ASSERT_NAME_HELPER(line)
+#if 0
+#define wxMAKE_UNIQUE_ASSERT_NAME           wxMAKE_ASSERT_NAME(_n___ ## __LINE__)
+#else
 #define wxMAKE_UNIQUE_ASSERT_NAME           wxMAKE_ASSERT_NAME(__LINE__)
+#endif
 #define wxMAKE_UNIQUE_ASSERT_NAME2(text)    wxMAKE_ASSERT_NAME(text)
 
 /*

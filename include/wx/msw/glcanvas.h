@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -16,10 +16,11 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
-#include <wx/palette.h>
-#include <wx/scrolwin.h>
+#include "wx/palette.h"
+#include "wx/scrolwin.h"
 
 #include <windows.h>
+#include "wx/msw/winundef.h"
 
 #include <GL/gl.h>
 
@@ -57,15 +58,15 @@ class WXDLLEXPORT wxGLContext: public wxObject
 {
 public:
    wxGLContext(bool isRGB, wxGLCanvas *win, const wxPalette& palette = wxNullPalette);
-   wxGLContext( 
-               bool isRGB, wxGLCanvas *win, 
+   wxGLContext(
+               bool isRGB, wxGLCanvas *win,
                const wxPalette& WXUNUSED(palette),
                const wxGLContext *other        /* for sharing display lists */
     );
    ~wxGLContext();
 
    void SetCurrent();
-   void SetColour(const char *colour);
+   void SetColour(const wxChar *colour);
    void SwapBuffers();
 
 
@@ -85,15 +86,16 @@ class WXDLLEXPORT wxGLCanvas: public wxWindow
  public:
    wxGLCanvas(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
-        const wxString& name = "GLCanvas", int *attribList = 0, const wxPalette& palette = wxNullPalette);
+        const wxString& name = wxGLCanvasName, int *attribList = 0, const wxPalette& palette = wxNullPalette);
    wxGLCanvas( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
         wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "GLCanvas", 
+        const wxSize& size = wxDefaultSize, long style = 0, const wxString&
+        name = wxGLCanvasName,
         int *attribList = (int*) NULL, const wxPalette& palette = wxNullPalette );
 
    wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared = (wxGLCanvas *)NULL, wxWindowID id = -1,
-        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, 
-        const wxString& name = "GLCanvas", int *attribList = 0, const wxPalette& palette = wxNullPalette );
+        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0,
+        const wxString& name = wxGLCanvasName, int *attribList = 0, const wxPalette& palette = wxNullPalette );
 
    ~wxGLCanvas();
 
@@ -102,7 +104,7 @@ class WXDLLEXPORT wxGLCanvas: public wxWindow
           const wxPoint& pos, const wxSize& size, long style, const wxString& name);
 
    void SetCurrent();
-   void SetColour(const char *colour);
+   void SetColour(const wxChar *colour);
    void SwapBuffers();
 
    void OnSize(wxSizeEvent& event);

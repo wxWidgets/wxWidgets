@@ -1,11 +1,12 @@
-# Purpose: makefile for treectrl example (Watcom)
-# Created: 2000-03-15
-
-WXDIR = $(%WXWIN)
-
-PROGRAM = treetest
-OBJECTS = $(PROGRAM).obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+# 
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+# 
+PROGRAM = treetest 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

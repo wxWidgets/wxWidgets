@@ -16,17 +16,17 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
-
-
-
 overview = """\
-This class represents a dialog that shows a list of strings, and allows the user to select one. Double-clicking on a list item is equivalent to single-clicking and then pressing OK.
+This class represents a dialog that shows a list of strings, and allows the user
+to select one. Double-clicking on a list item is equivalent to single-clicking
+and then pressing OK.
 
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
 

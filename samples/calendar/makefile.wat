@@ -1,11 +1,12 @@
-# Purpose: makefile for calendar example (Watcom)
-# Created: 2000-01-03
-
-WXDIR = $(%WXWIN)
-
-PROGRAM = calendar
-OBJECTS = $(PROGRAM).obj
-
-!include $(WXDIR)\src\makeprog.wat
-
-
+# 
+# Makefile for WATCOM 
+# 
+# Created by Julian Smart, January 1999 
+#  
+# 
+# 
+# 
+PROGRAM = calendar 
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
+# 
+!include $(%WXWIN)\src\makeprog.wat 

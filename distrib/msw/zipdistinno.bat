@@ -7,7 +7,7 @@ set webfiles=c:\wx2dev\wxWebSite
 set inno=0
 
 Rem Set this to the required version
-set version=2.3.3
+set version=2.4.2
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -45,7 +45,7 @@ if direxist %dest\wx erase /sxyz %dest\wx\
 if not direxist %dest mkdir %dest
 if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
 
-# Copy FAQ from wxWebSite CVS
+Rem Copy FAQ from wxWebSite CVS
 if not direxist %webfiles% echo Error - %webfiles% does not exist
 if not direxist %webfiles% goto end
 echo Copying FAQ and other files from %webfiles
@@ -56,33 +56,34 @@ copy %webfiles%\site\i18n.htm %src\docs\html
 Rem Copy setup0.h files to setup.h
 copy %src%\include\wx\os2\setup0.h %src%\include\wx\os2\setup.h
 copy %src%\include\wx\msw\setup0.h %src%\include\wx\msw\setup.h
+copy %src%\include\wx\univ\setup0.h %src%\include\wx\univ\setup.h
 
 cd %src%
 echo Zipping...
 
 Rem Zip up the complete wxOS2-xxx.zip file
-zip32 -@ %dest\wxOS2-%version%.zip < %src\distrib\msw\generic.rsp
-zip32 -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\os2.rsp
-zip32 -@ -u %dest%\wxOS2-%version%.zip  < %src\distrib\msw\jpeg.rsp
-zip32 -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\tiff.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\tiff.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\jpeg.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\utils.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\dialoged.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\ogl.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\xml.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\contrib.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\makefile.rsp
+zip -@ %dest\wxOS2-%version%.zip < %src\distrib\msw\generic.rsp
+zip -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\os2.rsp
+zip -@ -u %dest%\wxOS2-%version%.zip  < %src\distrib\msw\jpeg.rsp
+zip -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\tiff.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\tiff.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\jpeg.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\utils.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\dialoged.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\ogl.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\xml.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\contrib.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\makefile.rsp
 
 Rem Rearchive under wxWindows-%version%
 if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
 
 mkdir %dest%\wxWindows-%version%
 cd %dest%\wxWindows-%version%
-unzip32 ..\wxOS2-%version%.zip
+unzip ..\wxOS2-%version%.zip
 echo Overwriting with OS2-specific versions of configure files...
-unzip32 -o %src%\distrib\os2\os2-specific.zip
+unzip -o %src%\distrib\os2\os2-specific.zip
 erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
 erase /Y src\tiff\*.mcp src\jpeg\*.mcp src\png\*.mcp src\zlib\*.mcp
 erase /SXY docs\html\dialoged docs\html\tex2rtf
@@ -96,7 +97,7 @@ call %src%\distrib\msw\lower.bat
 cd %dest%
 
 erase wxOS2-%version%.zip
-zip32 -r wxOS2-%version%.zip wxWindows-%version%/*
+zip -r wxOS2-%version%.zip wxWindows-%version%/*
 
 cd %src%
 
@@ -104,19 +105,21 @@ echo Zipping wxMac distribution
 
 copy %src%\include\wx\mac\setup0.h %src%\include\wx\setup.h
 
-zip32 -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\generic.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\mac.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\cw_mac.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tiff.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\jpeg.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\utils.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\dialoged.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\ogl.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\xml.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\stc.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
-zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
+zip -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\generic.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\mac.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\cw_mac.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tiff.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\jpeg.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\utils.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\dialoged.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\ogl.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\xml.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\stc.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
+zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
+
+zip -@ %dest%\wxWindows-%version%-CW-Mac.zip < %src%\distrib\msw\cw_mac.rsp
 
 erase /Y %src%\include\wx\setup.h
 
@@ -124,85 +127,105 @@ if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
 
 mkdir %dest%\wxWindows-%version%
 cd %dest%\wxWindows-%version%
-unzip32 ..\wxMac-%version%.zip
+unzip ..\wxMac-%version%.zip
 erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
 erase /SXY docs\html\dialoged docs\html\tex2rtf docs\htmlhelp
 
 cd %dest%
 
 erase wxMac-%version%.zip
-zip32 -r wxMac-%version%.zip wxWindows-%version%/*
+zip -r wxMac-%version%.zip wxWindows-%version%/*
 
 cd %src%
 
 Rem Create wxWindows-%version%-win.zip which is used to create wxMSW
 echo Zipping individual components
-zip32 -@ %dest\wxWindows-%version%-win.zip < %src\distrib\msw\generic.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\makefile.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\msw.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\ogl.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\mmedia.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\stc.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\tex2rtf.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\jpeg.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\tiff.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\xml.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\contrib.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\dialoged.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\utils.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\utilmake.rsp
-zip32 -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\univ.rsp
+zip -@ %dest\wxWindows-%version%-win.zip < %src\distrib\msw\generic.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\makefile.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\msw.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\ogl.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\mmedia.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\stc.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\tex2rtf.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\jpeg.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\tiff.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\xml.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\contrib.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\dialoged.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\utils.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\utilmake.rsp
+zip -@ -u %dest\wxWindows-%version%-win.zip < %src\distrib\msw\univ.rsp
 
+echo Re-archiving wxWindows-%version%-win.zip
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-win.zip wxWindows-%version% %dest%
 
-zip32 -d %dest%\wxWindows-%version%-win.zip %dest%/src/gtk/descrip.mms %dest%/src/motif/descrip.mms
+echo Removing .mms files
+zip -d %dest%\wxWindows-%version%-win.zip wxWindows-%version%/src/gtk/descrip.mms wxWindows-%version%/src/motif/descrip.mms
 
-zip32 -@ %dest\wxWindows-%version%-DocSource.zip < %src\distrib\msw\docsrc.rsp
+echo Creating %dest\wxWindows-%version%-DocSource.zip
+zip -@ %dest\wxWindows-%version%-DocSource.zip < %src\distrib\msw\docsrc.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-DocSource.zip wxWindows-%version% %dest%
 
-zip32 -@ %dest\wxWindows-%version%-WinHelp.zip < %src\distrib\msw\wx_hlp.rsp
+echo Creating %dest\wxWindows-%version%-WinHelp.zip
+zip -@ %dest\wxWindows-%version%-WinHelp.zip < %src\distrib\msw\wx_hlp.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-WinHelp.zip wxWindows-%version% %dest%
 
-zip32 -@ %dest\wxWindows-%version%-HTML.zip < %src\distrib\msw\wx_html.rsp
+echo Creating %dest\wxWindows-%version%-HTML.zip
+zip -@ %dest\wxWindows-%version%-HTML.zip < %src\distrib\msw\wx_html.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-HTML.zip wxWindows-%version% %dest%
 
-zip32 -@ %dest\wxWindows-%version%-PDF.zip < %src\distrib\msw\wx_pdf.rsp
+echo Creating %dest\wxWindows-%version%-PDF.zip
+zip -@ %dest\wxWindows-%version%-PDF.zip < %src\distrib\msw\wx_pdf.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-PDF.zip wxWindows-%version% %dest%
 
-Rem zip32 -@ %dest\wxWindows-%version%-Word.zip < %src\distrib\msw\wx_word.rsp
+Rem zip -@ %dest\wxWindows-%version%-Word.zip < %src\distrib\msw\wx_word.rsp
 Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-Word.zip wxWindows-%version% %dest%
 
-zip32 -@ %dest\wxWindows-%version%-HTB.zip < %src\distrib\msw\wx_htb.rsp
+echo Creating %dest\wxWindows-%version%-HTB.zip
+zip -@ %dest\wxWindows-%version%-HTB.zip < %src\distrib\msw\wx_htb.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-HTB.zip wxWindows-%version% %dest%
 
-zip32 -@ %dest\wxWindows-%version%-HTMLHelp.zip < %src\distrib\msw\wx_chm.rsp
+echo Creating %dest\wxWindows-%version%-HTMLHelp.zip
+zip -@ %dest\wxWindows-%version%-HTMLHelp.zip < %src\distrib\msw\wx_chm.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-HTMLHelp.zip wxWindows-%version% %dest%
+
+Rem Add Linuxy docs to a separate archive to be transported to Linux for the
+Rem Linux-based releases
+echo Creating %dest\wxWindows-%version%-LinuxDocs.zip
+zip -@ %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_html.rsp
+zip -@ -u %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_pdf.rsp
+zip -@ -u %dest\wxWindows-%version%-LinuxDocs.zip < %src\distrib\msw\wx_htb.rsp
 
 Rem PDF/HTML docs that should go into the Windows setup because
 Rem there are no WinHelp equivalents
-zip32 -@ %dest\wxWindows-%version%-ExtraDoc.zip < %src\distrib\msw\extradoc.rsp
+echo Creating %dest\wxWindows-%version%-ExtraDoc.zip
+zip -@ %dest\wxWindows-%version%-ExtraDoc.zip < %src\distrib\msw\extradoc.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-ExtraDoc.zip wxWindows-%version% %dest%
 
 Rem zip up Univ-specific files
-zip32 -@ %dest\wxWindows-%version%-Univ.zip < %src\distrib\msw\univ.rsp
+echo Creating %dest\wxWindows-%version%-Univ.zip
+zip -@ %dest\wxWindows-%version%-Univ.zip < %src\distrib\msw\univ.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-Univ.zip wxWindows-%version% %dest%
 
 rem VC++ project files
-zip32 -@ %dest\wxWindows-%version%-VC.zip < %src\distrib\msw\vc.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-VC.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWindows-%version%-VC.zip
+zip -@ %dest\wxWindows-%version%-VC.zip < %src\distrib\msw\vc.rsp
+Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-VC.zip wxWindows-%version% %dest%
 
 rem BC++ project files
-zip32 -@ %dest\wxWindows-%version%-BC.zip < %src\distrib\msw\bc.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-BC.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWindows-%version%-BC.zip
+zip -@ %dest\wxWindows-%version%-BC.zip < %src\distrib\msw\bc.rsp
+Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-BC.zip wxWindows-%version% %dest%
 
 rem CodeWarrior project files
-zip32 -@ %dest\wxWindows-%version%-CW.zip < %src\distrib\msw\cw.rsp
-call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-CW.zip wxWindows-%version% %dest%
+echo Creating %dest\wxWindows-%version%-CW.zip
+zip -@ %dest\wxWindows-%version%-CW.zip < %src\distrib\msw\cw.rsp
+Rem call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-CW.zip wxWindows-%version% %dest%
 
 rem Dialog Editor source and binary
 Rem erase %dest\dialoged-source.zip
-Rem zip32 -@ %dest\dialoged-source.zip < %src\distrib\msw\dialoged.rsp
-Rem zip32 -j %dest\dialoged-%version%.zip %dest\dialoged-source.zip %src\bin\dialoged.exe %src\docs\winhelp\dialoged.hlp %src\docs\winhelp\dialoged.cnt
+Rem zip -@ %dest\dialoged-source.zip < %src\distrib\msw\dialoged.rsp
+Rem zip -j %dest\dialoged-%version%.zip %dest\dialoged-source.zip %src\bin\dialoged.exe %src\docs\winhelp\dialoged.hlp %src\docs\winhelp\dialoged.cnt
 Rem erase %dest\dialoged-source.zip
 
 copy %src\docs\changes.txt %dest\changes-%version%.txt
@@ -233,21 +256,27 @@ if "%inno" == "0" goto end
 Rem Make dialoged-win32.zip and tex2rtf-win32.zip
 
 Rem cd %src\bin
-Rem zip32 %dest\dialoged-win32-%version%.zip dialoged.*
-Rem zip32 %dest\tex2rtf-win32-%version%.zip tex2rtf.*
+Rem zip %dest\dialoged-win32-%version%.zip dialoged.*
+Rem zip %dest\tex2rtf-win32-%version%.zip tex2rtf.*
 
 cd %dest
 
-rem Unzip the Windows files into 'wxWindows-%version%'
+rem Put all archives for transit to Linux in a zip file
+echo Creating %dest\wxWindows-%version%-LinuxTransit.zip
+erase %dest\wxWindows-%version%-LinuxTransit.zip
+zip %dest\wxWindows-%version%-LinuxTransit.zip wxWindows-%version%-LinuxDocs.zip wxWindows-%version%-VC.zip wxWindows-%version%-CW-Mac.zip
 
-unzip32 -o wxWindows-%version%-win.zip
-unzip32 -o wxWindows-%version%-VC.zip
-unzip32 -o wxWindows-%version%-BC.zip
-unzip32 -o wxWindows-%version%-HTMLHelp.zip
-unzip32 -o wxWindows-%version%-ExtraDoc.zip
+echo Unzipping the Windows files into wxWindows-%version%
+
+unzip -o wxWindows-%version%-win.zip
+unzip -o wxWindows-%version%-VC.zip -d wxWindows-%version
+unzip -o wxWindows-%version%-BC.zip -d wxWindows-%version
+unzip -o wxWindows-%version%-CW.zip -d wxWindows-%version
+unzip -o wxWindows-%version%-HTMLHelp.zip
+unzip -o wxWindows-%version%-ExtraDoc.zip
 Rem Need Word file, for Remstar DB classes
 Rem Not any more
-Rem unzip32 -o wxWindows-%version%-Word.zip
+Rem unzip -o wxWindows-%version%-Word.zip
 
 Rem After this change of directory, we're in the
 Rem temporary 'wx' directory and not acting on
@@ -270,27 +299,27 @@ erase /Y distrib
 
 rem Now copy some binary files to 'bin'
 if not isdir bin mkdir bin
-copy %src\bin\dialoged.exe bin
-copy %src\bin\dialoged.hlp bin
-copy %src\bin\dialoged.chm bin
+Rem copy %src\bin\dialoged.exe bin
+Rem copy %src\bin\dialoged.hlp bin
+Rem copy %src\bin\dialoged.chm bin
 copy %src\bin\tex2rtf.exe bin
 copy %src\bin\tex2rtf.hlp bin
 copy %src\bin\tex2rtf.cnt bin
-copy %src\bin\dbgview.* bin
+Rem copy %src\bin\dbgview.* bin
 copy %src\bin\widgets.exe bin
 copy %src\bin\widgets.exe.manifest bin
 copy %src\bin\life.exe bin
 copy %src\bin\life.exe.manifest bin
 copy %src\demos\life\breeder.lif bin
-copy %src\docs\htmlhelp\dialoged.chm bin
+Rem copy %src\docs\htmlhelp\dialoged.chm bin
 copy %src\docs\htmlhelp\tex2rtf.chm bin
 
 if not direxist docs\pdf mkdir docs\pdf
-copy %src\docs\pdf\wxTutorial.pdf docs\pdf
+Rem copy %src\docs\pdf\wxTutorial.pdf docs\pdf
 
 Rem Make wxMSW-xxx.zip
 cd %dest%
-zip32 -r wxMSW-%version%.zip wxWindows-%version%/*
+zip -r wxMSW-%version%.zip wxWindows-%version%/*
 cd wxWindows-%version%
 
 echo Calling 'makeinno' to generate wxwin2.iss...
@@ -308,7 +337,7 @@ Rem pause Press any key to continue with the wxWindows distribution...
 cd %dest
 
 rem Put all the setup files into a single zip archive.
-zip32 wxMSW-%version%-setup.zip readme-%version%.txt setup*.*
+zip wxMSW-%version%-setup.zip readme-%version%.txt setup*.*
 
 erase /Y wxWindows-%version%-win.zip
 erase /Y wxWindows-%version%-ExtraDoc.zip

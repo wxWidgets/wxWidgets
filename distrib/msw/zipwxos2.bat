@@ -5,7 +5,7 @@ set dest=%src\deliver
 set webfiles=c:\wx2dev\wxWebSite
 
 Rem Set this to the required version
-set version=2.3.3
+set version=2.3.4
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -28,29 +28,29 @@ echo Zipping wxOS2 distribution
 cd %src%
 Rem copy %src%\include\wx\os2\setup0.h %src%\include\wx\setup.h
 
-zip32 -@ %dest\wxOS2-%version%.zip < %src\distrib\msw\generic.rsp
-zip32 -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\os2.rsp
-zip32 -@ -u %dest%\wxOS2-%version%.zip  < %src\distrib\msw\jpeg.rsp
-zip32 -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\tiff.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\tiff.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\jpeg.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\utils.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\dialoged.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\ogl.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\xml.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\contrib.rsp
-zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\makefile.rsp
+zip -@ %dest\wxOS2-%version%.zip < %src\distrib\msw\generic.rsp
+zip -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\os2.rsp
+zip -@ -u %dest%\wxOS2-%version%.zip  < %src\distrib\msw\jpeg.rsp
+zip -@ -u %dest%\wxOS2-%version%.zip < %src\distrib\msw\tiff.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\tiff.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\jpeg.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\utils.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\dialoged.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\ogl.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\xml.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\contrib.rsp
+zip -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\makefile.rsp
 
 Rem erase /Y %src%\include\wx\setup.h
 
-if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
+if direxist %dest%\wxOS2-%version% erase /sxyz %dest%\wxOS2-%version%
 
-mkdir %dest%\wxWindows-%version%
-cd %dest%\wxWindows-%version%
-unzip32 ..\wxOS2-%version%.zip
+mkdir %dest%\wxOS2-%version%
+cd %dest%\wxOS2-%version%
+unzip ..\wxOS2-%version%.zip
 echo Overwriting with OS2-specific versions of configure files...
-unzip32 -o %src%\distrib\os2\os2-specific.zip
+unzip -o %src%\distrib\os2\os2-specific.zip
 erase /Y src\gtk\descrip.mms src\motif\descrip.mms docs\pdf\*.pdf
 erase /Y src\tiff\*.mcp src\jpeg\*.mcp src\png\*.mcp src\zlib\*.mcp
 erase /SXY docs\html\dialoged docs\html\tex2rtf
@@ -64,7 +64,8 @@ call %src%\distrib\msw\lower.bat
 cd %dest%
 
 erase wxOS2-%version%.zip
-zip32 -r wxOS2-%version%.zip wxWindows-%version%/*
+zip -r wxOS2-%version%.zip wxOS2-%version%/*
+erase /sxyz wxOS2-%version%
 
 echo wxOS2 archived.
 
