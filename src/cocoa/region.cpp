@@ -96,6 +96,14 @@ wxRegion::wxRegion()
 {
 }
 
+wxRegion::wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
+{
+}
+
+wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
+{
+}
+
 wxRegionIterator::wxRegionIterator()
 {
 }

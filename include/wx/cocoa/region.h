@@ -40,7 +40,7 @@ class WXDLLEXPORT wxRegion : public wxGDIObject {
 DECLARE_DYNAMIC_CLASS(wxRegion);
 	friend class WXDLLEXPORT wxRegionIterator;
 public:
-    wxRegion(long x, long y, long w, long h);
+    wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegion(const wxRect& rect);
     wxRegion();
