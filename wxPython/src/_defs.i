@@ -233,11 +233,15 @@ enum {
 
     wxRETAINED,
     wxBACKINGSTORE,
-    wxTB_3DBUTTONS,
+
     wxTB_HORIZONTAL,
     wxTB_VERTICAL,
+    wxTB_3DBUTTONS,
     wxTB_FLAT,
     wxTB_DOCKABLE,
+    wxTB_NOICONS,
+    wxTB_TEXT,
+
     wxCOLOURED,
     wxFIXED_LENGTH,
     wxALIGN_LEFT,

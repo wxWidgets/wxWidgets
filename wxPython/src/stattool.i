@@ -94,13 +94,13 @@ class wxToolBarToolBase : public wxObject {
 public:
 //      wxToolBarToolBase(wxToolBarBase *tbar = (wxToolBarBase *)NULL,
 //                        int id = wxID_SEPARATOR,
-//                        const wxBitmap& bitmap1 = wxNullBitmap,
-//                        const wxBitmap& bitmap2 = wxNullBitmap,
-//                        bool toggle = FALSE,
+//                        const wxString& label = wxEmptyString,
+//                        const wxBitmap& bmpNormal = wxNullBitmap,
+//                        const wxBitmap& bmpDisabled = wxNullBitmap,
+//                        wxItemKind kind = wxITEM_NORMAL,
 //                        wxObject *clientData = (wxObject *) NULL,
-//                        const wxString& shortHelpString = wxPyEmptyString,
-//                        const wxString& longHelpString = wxPyEmptyString);
-//      wxToolBarToolBase(wxToolBarBase *tbar, wxControl *control);
+//                        const wxString& shortHelpString = wxEmptyString,
+//                        const wxString& longHelpString = wxEmptyString)
 //      ~wxToolBarToolBase();
 
     %addmethods { void Destroy() { delete self; } }
@@ -112,6 +112,7 @@ public:
     int IsControl();
     int IsSeparator();
     int GetStyle();
+    wxItemKind GetKind();
     bool IsEnabled();
     bool IsToggled();
     bool CanBeToggled();
@@ -167,57 +168,102 @@ public:
     // This is an Abstract Base Class
 
     %addmethods {
-        // wrap ClientData in a class that knows about PyObjects
+
+        // the full AddTool() function
+        //
+        // If bmpDisabled is wxNullBitmap, a shadowed version of the normal bitmap
+        // is created and used as the disabled image.
         wxToolBarToolBase *AddTool(int id,
+                                   const wxString& label,
                                    const wxBitmap& bitmap,
-                                   const wxBitmap& pushedBitmap = wxNullBitmap,
-                                   int isToggle = FALSE,
-                                   PyObject *clientData = NULL,
-                                   const wxString& shortHelpString = wxPyEmptyString,
-                                   const wxString& longHelpString = wxPyEmptyString) {
+                                   const wxBitmap& bmpDisabled,
+                                   wxItemKind kind = wxITEM_NORMAL,
+                                   const wxString& shortHelp = wxPyEmptyString,
+                                   const wxString& longHelp = wxPyEmptyString,
+                                   PyObject *clientData = NULL)
+        {
             wxPyUserData* udata = NULL;
             if (clientData)
                 udata = new wxPyUserData(clientData);
-            return self->AddTool(id, bitmap, pushedBitmap, (bool)isToggle,
-                                 udata, shortHelpString, longHelpString);
+            return self->AddTool(id, label, bitmap, bmpDisabled, kind,
+                                 shortHelp, longHelp, udata);
         }
 
-        // This one is easier to use...
+        // The most common version of AddTool
         wxToolBarToolBase *AddSimpleTool(int id,
+                                         const wxString& label,
                                          const wxBitmap& bitmap,
-                                         const wxString& shortHelpString = wxPyEmptyString,
-                                         const wxString& longHelpString = wxPyEmptyString,
-                                         int isToggle = FALSE) {
-            return self->AddTool(id, bitmap, wxNullBitmap, isToggle, NULL,
-                                 shortHelpString, longHelpString);
+                                         const wxString& shortHelp = wxPyEmptyString,
+                                         const wxString& longHelp = wxPyEmptyString,
+                                         wxItemKind kind = wxITEM_NORMAL)
+        {
+            return self->AddTool(id, label, bitmap, wxNullBitmap, kind,
+                                 shortHelp, longHelp, NULL);
         }
 
+        // add a check tool, i.e. a tool which can be toggled
+        wxToolBarToolBase *AddCheckTool(int id,
+                                        const wxString& label,
+                                        const wxBitmap& bitmap,
+                                        const wxBitmap& bmpDisabled = wxNullBitmap,
+                                        const wxString& shortHelp = wxEmptyString,
+                                        const wxString& longHelp = wxEmptyString,
+                                        PyObject *clientData = NULL)
+        {
+            wxPyUserData* udata = NULL;
+            if (clientData)
+                udata = new wxPyUserData(clientData);
+            return self->AddCheckTool(id, label, bitmap, bmpDisabled,
+                                      shortHelp, longHelp, udata);
+        }
 
-        // wrap ClientData in a class that knows about PyObjects
+        // add a radio tool, i.e. a tool which can be toggled and releases any
+        // other toggled radio tools in the same group when it happens
+        wxToolBarToolBase *AddRadioTool(int id,
+                                    const wxString& label,
+                                    const wxBitmap& bitmap,
+                                    const wxBitmap& bmpDisabled = wxNullBitmap,
+                                    const wxString& shortHelp = wxEmptyString,
+                                    const wxString& longHelp = wxEmptyString,
+                                    PyObject *clientData = NULL)
+        {
+            wxPyUserData* udata = NULL;
+            if (clientData)
+                udata = new wxPyUserData(clientData);
+            return self->AddRadioTool(id, label, bitmap, bmpDisabled,
+                                      shortHelp, longHelp, udata);
+        }
+
+        // insert the new tool at the given position, if pos == GetToolsCount(), it
+        // is equivalent to AddTool()
         wxToolBarToolBase *InsertTool(size_t pos,
                                       int id,
+                                      const wxString& label,
                                       const wxBitmap& bitmap,
-                                      const wxBitmap& pushedBitmap = wxNullBitmap,
-                                      int isToggle = FALSE,
-                                      PyObject *clientData = NULL,
-                                      const wxString& shortHelpString = wxPyEmptyString,
-                                      const wxString& longHelpString = wxPyEmptyString) {
+                                      const wxBitmap& bmpDisabled = wxNullBitmap,
+                                      wxItemKind kind = wxITEM_NORMAL,
+                                      const wxString& shortHelp = wxEmptyString,
+                                      const wxString& longHelp = wxEmptyString,
+                                      PyObject *clientData = NULL)
+        {
             wxPyUserData* udata = NULL;
             if (clientData)
                 udata = new wxPyUserData(clientData);
-            return self->InsertTool(pos, id, bitmap, pushedBitmap, (bool)isToggle,
-                                    udata, shortHelpString, longHelpString);
+            return self->InsertTool(pos, id, label, bitmap, bmpDisabled, kind,
+                                    shortHelp, longHelp, udata);
         }
 
-        // This one is easier to use...
+        // A simpler InsertTool
         wxToolBarToolBase *InsertSimpleTool(size_t pos,
-                                            int id,
-                                            const wxBitmap& bitmap,
-                                            const wxString& shortHelpString = wxPyEmptyString,
-                                            const wxString& longHelpString = wxPyEmptyString,
-                                            int isToggle = FALSE) {
-            return self->InsertTool(pos, id, bitmap, wxNullBitmap, isToggle, NULL,
-                                    shortHelpString, longHelpString);
+                                      int id,
+                                      const wxString& label,
+                                      const wxBitmap& bitmap,
+                                      wxItemKind kind = wxITEM_NORMAL,
+                                      const wxString& shortHelp = wxEmptyString,
+                                      const wxString& longHelp = wxEmptyString)
+        {
+            return self->InsertTool(pos, id, label, bitmap, wxNullBitmap, kind,
+                                    shortHelp, longHelp);
         }
     }
 

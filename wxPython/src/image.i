@@ -116,10 +116,6 @@ public:
     wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
     ~wxImage();
 
-    wxBitmap ConvertToBitmap(); // deprecated
-#ifdef __WXGTK__
-    wxBitmap ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue ) const;
-#endif
     void Create( int width, int height );
     void Destroy();
 
@@ -207,6 +203,22 @@ public:
     static void AddHandler( wxImageHandler *handler );
     static void InsertHandler( wxImageHandler *handler );
     static bool RemoveHandler( const wxString& name );
+
+
+    %addmethods {
+        wxBitmap ConvertToBitmap() {
+            wxBitmap bitmap(*self);
+            return bitmap;
+        }
+
+        wxBitmap ConvertToMonoBitmap( unsigned char red,
+                                      unsigned char green,
+                                      unsigned char blue ) {
+            wxImage mono = self->ConvertToMono( red, green, blue );
+            wxBitmap bitmap( mono, 1 );
+            return bitmap;
+        }
+    }
 };
 
 
@@ -233,7 +245,7 @@ public:
 
 
     wxImage* wxImageFromBitmap(const wxBitmap &bitmap) {
-        return new wxImage(bitmap);
+        return new wxImage(bitmap.ConvertToImage());
     }
 
 

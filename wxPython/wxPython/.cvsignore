@@ -1,3 +1,4 @@
+*.py
 *.pyc
 *.pyd
-*.py
+wxc.pyd.manifest

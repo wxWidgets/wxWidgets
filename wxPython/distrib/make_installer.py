@@ -7,9 +7,10 @@ will be created.
 """
 
 
-import os, string
+import sys, os, string
 
 KEEP_TEMPS = 0
+ISCC = r"C:\TOOLS\InnoSetup2Ex\ISCC.exe %s"
 
 #----------------------------------------------------------------------
 
@@ -68,12 +69,12 @@ Source: "%(SYSDIR)s\MSVCRT.dll";            DestDir: "{sys}"; CopyMode: alwayssk
 Source: "%(SYSDIR)s\MSVCIRT.dll";           DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace; Components: core
 
 Source: "%(WXDIR)s\lib\%(WXDLL)s";          DestDir: "{app}\wxPython"; Components: core
+;;%(MSLU)s
 Source: "wxPython\wxc.pyd";                 DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\wxc.pyd.manifest";        DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\gridc.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\helpc.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\htmlc.pyd";               DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\utilsc.pyd";              DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\calendarc.pyd";           DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\glcanvasc.pyd";           DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\oglc.pyd";                DestDir: "{app}\wxPython"; Components: core
@@ -308,6 +309,10 @@ def main():
     if string.find(WXDLL, "h") != -1:
         PYVER = PYVER + "-hybrid"
 
+    MSLU=''
+##     if len(sys.argv) > 1 and sys.argv[1] == "UNICODE=1":
+##         MSLU=r'Source: "%(WXDIR)s\lib\unicows.dll";  DestDir: "{app}\wxPython"; Components: core' % vars()
+
     f = open(ISSFILE, "w")
     f.write(ISS_Template % vars())
     f.close()
@@ -316,7 +321,7 @@ def main():
     f.write(IFS_Template % vars())
     f.close()
 
-    os.system(r"C:\TOOLS\InnoSetup2Ex\ISCC.exe %s" % ISSFILE)
+    os.system(ISCC % ISSFILE)
 
     if not KEEP_TEMPS:
         os.remove(ISSFILE)

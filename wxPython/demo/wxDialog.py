@@ -4,7 +4,7 @@ from wxPython.wx import *
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = wxDialog(frame, -1, "This is a wxDialog", size=wxSize(350, 200))
+    win = wxDialog(frame, -1, "This is a wxDialog", size=wxSize(350, 200), style=wxCAPTION)
 
     sizer = wxBoxSizer(wxVERTICAL)
 

@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.3.3pre"
+VERSION          = "2.3.3pre2u"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -267,7 +267,7 @@ if os.name == 'nt':
 
     elif bcpp_compiling and not FINAL:
         cflags = cflags + ['/Od', '/v', '/y']
-        lflags = lflags + ['/v', ]   ## '/PDB:NONE']
+        lflags = lflags + ['/v', ]
 
 
 
@@ -365,7 +365,7 @@ if not GL_ONLY:
 
     copy_file('src/__init__.py', PKGDIR, update=1, verbose=0)
     copy_file('src/__version__.py', PKGDIR, update=1, verbose=0)
-
+    copy_file('src/wxc.pyd.manifest', PKGDIR, update=1, verbose=0)
 
     if IN_CVS_TREE:   # update the licence files
         mkpath('licence')

@@ -113,10 +113,6 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def SetUseBestVisual(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_SetUseBestVisual,(self,) + _args, _kwargs)
         return val
-    def GetStdIcon(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_GetStdIcon,(self,) + _args, _kwargs)
-        if val: val = wxIconPtr(val) ; val.thisown = 1
-        return val
     def __repr__(self):
         return "<C wxPyApp instance at %s>" % (self.this,)
 class wxPyApp(wxPyAppPtr):
@@ -216,11 +212,13 @@ wxCLIP_CHILDREN = wxc.wxCLIP_CHILDREN
 wxCLIP_SIBLINGS = wxc.wxCLIP_SIBLINGS
 wxRETAINED = wxc.wxRETAINED
 wxBACKINGSTORE = wxc.wxBACKINGSTORE
-wxTB_3DBUTTONS = wxc.wxTB_3DBUTTONS
 wxTB_HORIZONTAL = wxc.wxTB_HORIZONTAL
 wxTB_VERTICAL = wxc.wxTB_VERTICAL
+wxTB_3DBUTTONS = wxc.wxTB_3DBUTTONS
 wxTB_FLAT = wxc.wxTB_FLAT
 wxTB_DOCKABLE = wxc.wxTB_DOCKABLE
+wxTB_NOICONS = wxc.wxTB_NOICONS
+wxTB_TEXT = wxc.wxTB_TEXT
 wxCOLOURED = wxc.wxCOLOURED
 wxFIXED_LENGTH = wxc.wxFIXED_LENGTH
 wxALIGN_LEFT = wxc.wxALIGN_LEFT

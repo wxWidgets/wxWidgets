@@ -806,9 +806,16 @@ public:
 };
 
 
+enum {
+    wxEXEC_ASYNC    = 0,    // execute the process asynchronously
+    wxEXEC_SYNC     = 1,    //                     synchronously
+    wxEXEC_NOHIDE   = 2     // under Windows, don't hide the child even if it's
+                            // IO is redirected (this is done by default)
+};
+
 
 long wxExecute(const wxString& command,
-               int sync = FALSE,
+               int flags = wxEXEC_ASYNC,
                wxPyProcess *process = NULL);
 
 //----------------------------------------------------------------------

@@ -26,7 +26,7 @@ set SETUP=%PYTHON% -u setup.py
 rem "c" --> clean
 iff "%1" == "c" then
 	shift
-	set CMD=%SETUP% %FLAGS% clean
+	set CMD=%SETUP% %FLAGS% clean %1 %2 %3 %4 %5 %6 %7 %8 %9
 	set OTHERCMD=del wxPython\*.pyd
 
 rem just remove the *.pyd's
@@ -48,7 +48,7 @@ elseiff "%1" == "i" then
 rem "r" --> make installer
 elseiff "%1" == "r" then
 	shift
-	set CMD=%PYTHON% distrib\make_installer.py
+	set CMD=%PYTHON% distrib\make_installer.py %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 rem "s" --> source dist
 elseiff "%1" == "s" then

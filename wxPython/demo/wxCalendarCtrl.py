@@ -10,11 +10,18 @@ class TestPanel(wxPanel):
         wxPanel.__init__(self, parent, ID)
         self.log = log
 
-        cal = wxCalendarCtrl(self, 101, wxDateTime_Now(), pos = (25,50),
+        cal = wxCalendarCtrl(self, -1, wxDateTime_Now(), pos = (25,50),
                              style = wxCAL_SHOW_HOLIDAYS | wxCAL_SUNDAY_FIRST)
 
-        EVT_CALENDAR(self, 101, self.OnCalSelected)
+        EVT_CALENDAR(self, cal.GetId(), self.OnCalSelected)
 
+        b = wxButton(self, -1, "Destroy the Calendar", pos = (250, 50))
+        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        self.cal = cal
+
+    def OnButton(self, evt):
+        self.cal.Destroy()
+        self.cal = None
 
     def OnCalSelected(self, evt):
         self.log.write('OnCalSelected: %s\n' % evt.GetDate())

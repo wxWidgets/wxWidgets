@@ -16,7 +16,6 @@
 #include "helpers.h"
 %}
 
-
 //----------------------------------------------------------------------
 // This is where we include the other wrapper definition files for SWIG
 //----------------------------------------------------------------------
@@ -102,7 +101,6 @@ public:
     void SetTopWindow(wxWindow* window);
     void SetVendorName(const wxString& name);
     void SetUseBestVisual(bool flag);
-    wxIcon GetStdIcon(int which);
 };
 
 %inline %{
