@@ -111,6 +111,8 @@ protected:
     // the last focused child: we restore focus to it on activation
     wxWindow             *m_winLastFocused;
 
+    virtual bool        MacIsChildOfClientArea( const wxWindow* child ) const ;
+
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxFrame)

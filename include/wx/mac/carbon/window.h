@@ -207,6 +207,7 @@ public:
     
     // return the rectangle that would be visible of this control, regardless whether controls are hidden
     // only taking into account clipping by parent windows
+    const wxRect&       MacGetClippedClientRect() const ;
     const wxRect&       MacGetClippedRect() const ;
     const wxRect&       MacGetClippedRectWithOuterStructure() const ;
     // returns the visible region of this control in window ie non-client coordinates
@@ -272,8 +273,10 @@ protected:
     mutable bool        m_cachedClippedRectValid ;
     mutable wxRect      m_cachedClippedRectWithOuterStructure ;
     mutable wxRect      m_cachedClippedRect ;
+    mutable wxRect      m_cachedClippedClientRect ;
     mutable wxRegion    m_cachedClippedRegionWithOuterStructure ;
     mutable wxRegion    m_cachedClippedRegion ;
+    mutable wxRegion    m_cachedClippedClientRegion ;
     // true if is is not a native control but a wxWindow control
 	bool				m_macIsUserPane ;
     wxBrush             m_macBackgroundBrush ;
@@ -289,6 +292,8 @@ protected:
     // must be dynamic as eg a panel normally is not clipping precisely, but if
     // it becomes the target window of a scrolled window it has to...
     bool                m_clipChildren ;
+    
+    virtual bool        MacIsChildOfClientArea( const wxWindow* child ) const ;
     
     void                MacCreateScrollBars( long style ) ;
     void                MacRepositionScrollBars() ;
