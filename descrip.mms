@@ -11,7 +11,7 @@
 	wx_sub = f$element(0,"]",wx_curdir)
 	wx_fuldir = "''wx_sub'.]"
 	define/job/trans=(concealed) wx_root "''wx_fuldir'"
-	set def [.wxwindows]
+	set def [.wxwidgets]
 
 all :
 	set default [.include.wx]

@@ -1,4 +1,4 @@
-wx_root:[wxwindows.lib]libwx_motif.olb/lib
+wx_root:[wxwidgets.lib]libwx_motif.olb/lib
 sys$library:libjpeg.olb/lib
 sys$library:libpng.olb/lib
 sys$library:libz.olb/lib

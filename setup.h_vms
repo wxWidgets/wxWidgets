@@ -63,6 +63,9 @@
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
 
+/* Define this if you want to use GPE features */
+/* #undef __WXGPE__ */
+
 /* Define this if your version of Motif is greater than 2.0 */
 /* #undef __WXMOTIF20__ */
 
