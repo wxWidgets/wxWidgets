@@ -309,7 +309,7 @@ static PyThreadState* myPyThreadState_Get() {
 }
 
 
-HELPEREXPORT bool wxPyRestoreThread() {
+bool wxPyRestoreThread() {
     // NOTE: The Python API docs state that if a thread already has the
     // interpreter lock and calls PyEval_RestoreThread again a deadlock
     // occurs, so I put in this code as a guard condition since there are
@@ -328,7 +328,7 @@ HELPEREXPORT bool wxPyRestoreThread() {
 }
 
 
-HELPEREXPORT void wxPySaveThread(bool doSave) {
+void wxPySaveThread(bool doSave) {
 #ifdef WXP_WITH_THREAD
     if (doSave) {
         wxPyEventThreadState = PyEval_SaveThread();

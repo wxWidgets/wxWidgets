@@ -323,15 +323,11 @@ public:
         bool doSave;
 #ifdef wxPyUSE_EXPORT
         doSave = wxPyCoreAPIPtr->p_wxPyRestoreThread();
-#else
-        doSave = wxPyRestoreThread();
-#endif
-
         Py_DECREF(m_obj);
-
-#ifdef wxPyUSE_EXPORT
         wxPyCoreAPIPtr->p_wxPySaveThread(doSave);
 #else
+        doSave = wxPyRestoreThread();
+        Py_DECREF(m_obj);
         wxPySaveThread(doSave);
 #endif
     }
