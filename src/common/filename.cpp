@@ -504,8 +504,7 @@ bool wxFileName::SameAs( const wxFileName &filepath, wxPathFormat format)
 bool wxFileName::IsCaseSensitive( wxPathFormat format )
 {
     // only DOS and OpenVMS filenames are case-sensitive
-    return ( GetFormat(format) != wxPATH_DOS &
-	     GetFormat(format) != wxPATH_VMS );
+    return GetFormat(format) != wxPATH_DOS && GetFormat(format) != wxPATH_VMS;
 }
 
 bool wxFileName::IsRelative( wxPathFormat format )
