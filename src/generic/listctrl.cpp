@@ -2111,21 +2111,14 @@ wxListCtrl::wxListCtrl(void)
   m_imageListState = (wxImageList *) NULL;
 }
 
-wxListCtrl::wxListCtrl( wxWindow *parent, wxWindowID id, 
-      const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
-
-{
-  Create( parent, id, pos, size, style, name );
-}
-
 wxListCtrl::~wxListCtrl(void)
 {
 }
 
 bool wxListCtrl::Create( wxWindow *parent, wxWindowID id, 
       const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
+      long style, const wxValidator &validator, 
+      const wxString &name )
 {
   m_imageListNormal = (wxImageList *) NULL;
   m_imageListSmall = (wxImageList *) NULL;
@@ -2139,6 +2132,8 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
     s = s | wxLC_LIST;
   
   bool ret = wxControl::Create( parent, id, pos, size, s, name );
+  
+  SetValidator( validator );
   
   m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, s );
   

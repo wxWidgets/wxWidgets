@@ -280,6 +280,7 @@ public:
   bool                 m_hasVMT;
   bool                 m_sizeSet;
   bool                 m_resizing;
+  GdkGC               *m_scrollGC;
 
 public:
 

@@ -2,7 +2,7 @@
 // Name:        accel.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:
+// Id:          $id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

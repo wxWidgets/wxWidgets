@@ -135,7 +135,10 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
   m_title = title;
 
-  m_widget = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+  GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
+  if (style & wxSIMPLE_BORDER) win_type = GTK_WINDOW_POPUP;
+  
+  m_widget = gtk_window_new( win_type );
   if ((size.x != -1) && (size.y != -1))
     gtk_widget_set_usize( m_widget, m_width, m_height );
   if ((pos.x != -1) && (pos.y != -1))

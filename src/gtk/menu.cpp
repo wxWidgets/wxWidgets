@@ -31,13 +31,9 @@ wxMenuBar::wxMenuBar()
 
   m_menus.DeleteContents( TRUE );
 
-  m_widget = gtk_handle_box_new();
-
   m_menubar = gtk_menu_bar_new();
-
-  gtk_container_add( GTK_CONTAINER(m_widget), m_menubar );
-
-  gtk_widget_show( m_menubar );
+  
+  m_widget = GTK_WIDGET(m_menubar);
 
   PostCreation();
 

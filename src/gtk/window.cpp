@@ -913,6 +913,7 @@ wxWindow::wxWindow()
   m_pDropTarget = (wxDropTarget *) NULL;
   m_resizing = FALSE;
   m_hasOwnStyle = FALSE;
+  m_scrollGC = (GdkGC*) NULL;
 }
 
 bool wxWindow::Create( wxWindow *parent, wxWindowID id,
@@ -982,7 +983,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
   m_wxwindow = gtk_myfixed_new();
 
-  if (m_wxwindow) GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
+  GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
   if (m_windowStyle & wxTAB_TRAVERSAL == wxTAB_TRAVERSAL)
     GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
@@ -1014,7 +1015,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
   gtk_widget_show( m_wxwindow );
 
   PostCreation();
-
+  
   Show( TRUE );
 
   return TRUE;
@@ -1031,6 +1032,8 @@ wxWindow::~wxWindow()
 
   DestroyChildren();
 
+  if (m_scrollGC) gdk_gc_unref( m_scrollGC );
+    
   if (m_wxwindow) gtk_widget_destroy( m_wxwindow );
 
   if (m_widget) gtk_widget_destroy( m_widget );
@@ -1129,11 +1132,7 @@ void wxWindow::PostCreation()
 
   if (m_widget && m_parent) gtk_widget_realize( m_widget );
 
-  if (m_wxwindow)
-  {
-    gtk_widget_realize( m_wxwindow );
-    gdk_gc_set_exposures( m_wxwindow->style->fg_gc[0], TRUE );
-  }
+  if (m_wxwindow) gtk_widget_realize( m_wxwindow );
 
   SetCursor( *wxSTANDARD_CURSOR );
 
@@ -2430,7 +2429,14 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     int d_y = 0;
     if (dx > 0) d_x = dx;
     if (dy > 0) d_y = dy;
-    gdk_window_copy_area( m_wxwindow->window, m_wxwindow->style->fg_gc[0], d_x, d_y,
+    
+    if (!m_scrollGC)
+    {
+      m_scrollGC = gdk_gc_new( m_wxwindow->window );
+      gdk_gc_set_exposures( m_scrollGC, TRUE );
+    }
+    
+    gdk_window_copy_area( m_wxwindow->window, m_scrollGC, d_x, d_y,
       m_wxwindow->window, s_x, s_y, w, h );
 
     wxRect rect;

@@ -2,9 +2,7 @@
 // Name:        tbargtk.cpp
 // Purpose:     GTK toolbar
 // Author:      Robert Roebling
-// Modified by:
-// Created:     01/02/97
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -113,15 +111,12 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
 
   m_tools.DeleteContents( TRUE );
 
-  m_widget = gtk_handle_box_new();
-
   m_toolbar = GTK_TOOLBAR( gtk_toolbar_new( GTK_ORIENTATION_HORIZONTAL,
                                             GTK_TOOLBAR_ICONS ) );
+
+  m_widget = GTK_WIDGET(m_toolbar);					    
+					    
   gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
-
-  gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
-
-  gtk_widget_show( GTK_WIDGET(m_toolbar) );
 
   PostCreation();
 
@@ -209,12 +204,6 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
                       (gpointer)tool
                      );
 
-  // VZ: we don't want GDK_NO_EXPOSE events because for some reason our
-  // toolbar buttons get them (it doesn't happen in a standalone GTK+ program
-  // for unknown reasons) and it prevents tooltips from appearing.
-  gtk_widget_set_events( GTK_WIDGET(item),
-                         gtk_widget_get_events( GTK_WIDGET(item) ) &
-                         ~GDK_EXPOSURE_MASK);
   tool->m_item = item;
 
   gtk_signal_connect( GTK_OBJECT(tool->m_item),
