@@ -902,6 +902,10 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
     	}
     	InvalWindowRect( GetMacRootWindow() , &clientrect ) ;
 	}
+	if ( !eraseBack )
+		m_macEraseOnRedraw = false ;
+	else
+		m_macEraseOnRedraw = true ;
 }
 
 // Responds to colour changes: passes event on to children.
@@ -1767,6 +1771,9 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
 {
 	// updatergn is always already clipped to our boundaries
 	WindowRef window = GetMacRootWindow() ;
+	// ownUpdateRgn is the area that this window has to invalidate i.e. its own area without its children
+	RgnHandle ownUpdateRgn = NewRgn() ;
+	CopyRgn( updatergn , ownUpdateRgn ) ;
 	wxWindow* win = wxFindWinFromMacWindow( window ) ;
 	{
 		wxMacDrawingHelper focus( this ) ; // was client
@@ -1831,25 +1838,42 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
 			{
 		  		RGBBackColor( &m_backgroundColour.GetPixel()) ;
 			}
+            // subtract all non transparent children from updatergn
+
+    	    RgnHandle childarea = NewRgn() ;
+        	for (wxNode *node = GetChildren().First(); node; node = node->Next())
+        	{
+        		wxWindow *child = (wxWindow*)node->Data();
+        		// eventually test for transparent windows
+		        if ( child->GetMacRootWindow() == window && child->IsShown() )
+		        {
+        		    SetRectRgn( childarea , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
+        		    DiffRgn( ownUpdateRgn , childarea , ownUpdateRgn ) ;
+        		}
+         	}		
+         	DisposeRgn( childarea ) ;
+
 	  		if ( GetParent() && m_backgroundColour != GetParent()->GetBackgroundColour() )
 	  			eraseBackground = true ;
 			SetClip( updatergn ) ;
-			if ( eraseBackground && m_macEraseOnRedraw )
-			{
-                // todo : find a clever algorithm, which only will do this
-                // if really necessary
-				EraseRgn( updatergn ) ;	
-			}
+			if ( m_macEraseOnRedraw ) {
+    			if ( eraseBackground  )
+    			{
+    				EraseRgn( ownUpdateRgn ) ;	
+    			}
+    		}
+    		else {
+    		    m_macEraseOnRedraw = true ;
+    		}
 		}
 
-		m_macUpdateRgn = updatergn ;
 		{
 			RgnHandle newupdate = NewRgn() ;
 			wxSize point = GetClientSize() ;
 			wxPoint origin = GetClientAreaOrigin() ;
 
 			SetRectRgn( newupdate , origin.x , origin.y , origin.x + point.x , origin.y+point.y ) ;
-			SectRgn( newupdate , m_macUpdateRgn , newupdate ) ;
+			SectRgn( newupdate , ownUpdateRgn , newupdate ) ;
 			OffsetRgn( newupdate , -origin.x , -origin.y ) ;
 			m_updateRegion = newupdate ;
 			DisposeRgn( newupdate ) ;
@@ -1869,7 +1893,7 @@ void wxWindow::MacRedraw( RgnHandle updatergn , long time)
 	{
 		wxWindow *child = (wxWindow*)node->Data();
 		SetRectRgn( childupdate , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
-		SectRgn( childupdate , m_macUpdateRgn , childupdate ) ;
+		SectRgn( childupdate , updatergn , childupdate ) ;
 		OffsetRgn( childupdate , -child->m_x , -child->m_y ) ;
 		if ( child->GetMacRootWindow() == window && child->IsShown() && !EmptyRgn( childupdate ) )
 		{
