@@ -282,6 +282,8 @@ bool wxTextFile::Read()
   wxASSERT( m_file.IsOpened() && m_file.Tell() == 0 );
 
   wxString str;
+  str.reserve(1024);
+
   char ch, chLast = '\0';
   char buf[1024];
   int n, nRead;

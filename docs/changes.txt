@@ -16,6 +16,10 @@ OTHER CHANGES
 2.2.7
 -----
 
+All:
+
+- quite significant speed optimizations in several classes
+
 wxBase:
 
 - wxLongLong compilation fixed for SGI native compiler

@@ -29,10 +29,10 @@ class WXDLLEXPORT wxRegConfig : public wxConfigBase
 public:
   // ctor & dtor
     // will store data in HKLM\appName and HKCU\appName
-  wxRegConfig(const wxString& appName = "",
-              const wxString& vendorName = "",
-              const wxString& localFilename = "",
-              const wxString& globalFilename = "",
+  wxRegConfig(const wxString& appName = _T(""),
+              const wxString& vendorName = _T(""),
+              const wxString& localFilename = _T(""),
+              const wxString& globalFilename = _T(""),
               long style = 0);
 
     // dtor will save unsaved data
@@ -65,37 +65,37 @@ public:
   // read/write
   bool Read(const wxString& key, wxString *pStr) const;
   bool Read(const wxString& key, wxString *pStr, const wxString& szDefault) const;
-	wxString Read(const wxString& key, const wxString& defVal) const
-			{ return wxConfigBase::Read(key, defVal); }
-  
+  wxString Read(const wxString& key, const wxString& defVal) const
+      { return wxConfigBase::Read(key, defVal); }
+
   bool Read(const wxString& key, long *plResult) const;
-	bool Read(const wxString& key, long *pl, long defVal) const
-			{ return wxConfigBase::Read(key, pl, defVal); }
+  bool Read(const wxString& key, long *pl, long defVal) const
+      { return wxConfigBase::Read(key, pl, defVal); }
   long Read(const wxString& key, long defVal) const
-			{ return wxConfigBase::Read(key, defVal); }
-  
+      { return wxConfigBase::Read(key, defVal); }
+
   // The following are necessary to satisfy the compiler
   bool Read(const wxString& key, int *pi, int defVal) const
-			{ return wxConfigBase::Read(key, pi, defVal); }
-	bool Read(const wxString& key, int *pi) const
-			{ return wxConfigBase::Read(key, pi); }
+      { return wxConfigBase::Read(key, pi, defVal); }
+  bool Read(const wxString& key, int *pi) const
+      { return wxConfigBase::Read(key, pi); }
 
-	bool Read(const wxString& key, double* val, double defVal) const
-			{ return wxConfigBase::Read(key, val, defVal); }
-	bool Read(const wxString& key, double* val) const
-			{ return wxConfigBase::Read(key, val); }
-  
-	bool Read(const wxString& key, bool *pb, bool defVal) const
-			{ return wxConfigBase::Read(key, pb, defVal); }
-	bool Read(const wxString& key, bool *pb) const
-			{ return wxConfigBase::Read(key, pb); }
-  
+  bool Read(const wxString& key, double* val, double defVal) const
+      { return wxConfigBase::Read(key, val, defVal); }
+  bool Read(const wxString& key, double* val) const
+      { return wxConfigBase::Read(key, val); }
+
+  bool Read(const wxString& key, bool *pb, bool defVal) const
+      { return wxConfigBase::Read(key, pb, defVal); }
+  bool Read(const wxString& key, bool *pb) const
+      { return wxConfigBase::Read(key, pb); }
+
   bool Write(const wxString& key, const wxString& szValue);
   bool Write(const wxString& key, long lValue);
-	bool Write(const wxString& key, double dValue)
-			{ return wxConfigBase::Write(key, dValue); }
-	bool Write(const wxString& key, bool bValue)
-			{ return wxConfigBase::Write(key, bValue); }
+  bool Write(const wxString& key, double dValue)
+      { return wxConfigBase::Write(key, dValue); }
+  bool Write(const wxString& key, bool bValue)
+      { return wxConfigBase::Write(key, bValue); }
 
   virtual bool Flush(bool /* bCurrentOnly = FALSE */ ) { return TRUE; }
 
@@ -107,6 +107,21 @@ public:
   virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso);
   virtual bool DeleteGroup(const wxString& key);
   virtual bool DeleteAll();
+
+protected:
+  // opens the local key creating it if necessary and returns it
+  wxRegKey& LocalKey() const // must be const to be callable from const funcs
+  {
+      wxRegConfig* self = wxConstCast(this, wxRegConfig);
+
+      if ( !m_keyLocal.IsOpened() )
+      {
+          // create on demand
+          self->m_keyLocal.Create();
+      }
+
+      return self->m_keyLocal;
+  }
 
 private:
   // no copy ctor/assignment operator

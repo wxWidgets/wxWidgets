@@ -968,10 +968,22 @@ void wxGetMousePosition( int* x, int* y )
 // Return TRUE if we have a colour display
 bool wxColourDisplay()
 {
-    ScreenHDC dc;
-    int noCols = GetDeviceCaps(dc, NUMCOLORS);
+    // this function is called from wxDC ctor so it is called a *lot* of times
+    // hence we optimize it a bit but doign the check only once
+    //
+    // this should be MT safe as only the GUI thread (holding the GUI mutex)
+    // can call us
+    static int s_isColour = -1;
 
-    return (noCols == -1) || (noCols > 2);
+    if ( s_isColour == -1 )
+    {
+        ScreenHDC dc;
+        int noCols = ::GetDeviceCaps(dc, NUMCOLORS);
+
+        s_isColour = (noCols == -1) || (noCols > 2);
+    }
+
+    return s_isColour != 0;
 }
 
 // Returns depth of screen
