@@ -65,10 +65,10 @@ public:
 
   virtual void GetClientSize( int *width, int *height ) const;
   virtual void SetClientSize( int const width, int const height );
-  
+
     // set minimal/maxmimal size for the frame
   virtual void SetSizeHints(int minW, int minH,
-                            int maxW = -1, int maxH = -1, 
+                            int maxW = -1, int maxH = -1,
                             int incW = -1 );
 
   virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
@@ -79,22 +79,22 @@ public:
   virtual void SetStatusText( const wxString &text, int number = 0 );
   virtual void SetStatusWidths( int n, const int widths_field[] );
 
-  virtual wxToolBar* CreateToolBar( long style = wxNO_BORDER|wxTB_HORIZONTAL, wxWindowID id = -1, 
+  virtual wxToolBar* CreateToolBar( long style = wxNO_BORDER|wxTB_HORIZONTAL, wxWindowID id = -1,
                                     const wxString& name = wxToolBarNameStr);
   virtual wxToolBar *OnCreateToolBar( long style, wxWindowID id, const wxString& name );
   virtual wxToolBar *GetToolBar(void) const;
-  
+
   virtual void SetMenuBar( wxMenuBar *menuBar );
   virtual wxMenuBar *GetMenuBar() const;
 
   virtual void SetTitle( const wxString &title );
   virtual wxString GetTitle() const { return m_title; }
-  
+
   virtual void SetIcon( const wxIcon &icon );
   virtual void Iconize( bool WXUNUSED(iconize)) { }
   virtual bool IsIconized(void) const { return FALSE; }
   bool Iconized(void) const { return IsIconized(); }
-  virtual void Maximize(void) {}
+  virtual void Maximize(bool WXUNUSED(maximize)) {}
   virtual void Restore(void) {}
 
   void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
