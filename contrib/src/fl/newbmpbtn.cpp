@@ -523,7 +523,7 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
     }
     destDc.SelectObject( wxNullBitmap );
     
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     // Map to system colours
     (void) wxToolBar::MapBitmap(destBmp->GetHBITMAP(), destBmp->GetWidth(), destBmp->GetHeight());
 #endif    
