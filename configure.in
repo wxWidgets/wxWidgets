@@ -3348,6 +3348,9 @@ if test "$TOOLKIT" != "MSW"; then
             *-aix* | *-freebsd*)
                 flag="-D_THREAD_SAFE"
                 ;;
+            *-hp-hpux* )
+                flag="-D_REENTRANT"
+                ;;
             *solaris* | alpha*-osf*)
                 flag="-D_REENTRANT"
                 ;;
