@@ -1,0 +1,25 @@
+#
+# File:		makefile.b32
+# Author:       Andre Beltman
+# Created:	1995
+# Updated:	
+# Copyright:    (c) 1995, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Imports ctl3d library
+# and Borland C++ 4.x
+
+WXDIR = $(WXWIN)
+WXLIB = $(WXDIR)\lib
+
+LIBTARGET= $(WXLIB)\ctl3dv2.lib
+
+all:    $(LIBTARGET)
+
+$(LIBTARGET):
+	erase $(LIBTARGET)
+        implib $(LIBTARGET) ..\ctl3dv2.dll
+
+clean:
+        -erase $(LIBTARGET)

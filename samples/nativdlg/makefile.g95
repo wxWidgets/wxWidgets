@@ -1,0 +1,36 @@
+#
+# File:		makefile.g95
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for nativdlg example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS=$(OBJDIR)/nativdlg.$(OBJSUFF) $(OBJDIR)/nativdlg_resources.$(OBJSUFF)
+
+all:	$(OBJDIR) nativdlg$(GUISUFFIX)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+$(OBJDIR)/nativdlg.$(OBJSUFF):        nativdlg.$(SRCSUFF) nativdlg.h
+	$(CC) -c $(CPPFLAGS) -o $@ nativdlg.$(SRCSUFF)
+
+nativdlg$(GUISUFFIX): $(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o nativdlg$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/nativdlg_resources.o:  nativdlg.rc
+	$(RESCOMP) -i nativdlg.rc -o $(OBJDIR)/nativdlg_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) nativdlg$(GUISUFFIX).exe core *.rsc *.res
+

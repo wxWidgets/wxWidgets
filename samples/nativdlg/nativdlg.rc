@@ -1,0 +1,4 @@
+#include "wx/msw/wx.rc"
+
+#include "dialog1.rc"
+

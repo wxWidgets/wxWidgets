@@ -1,0 +1,11 @@
+Using this package should be no big problem. You only need to change your
+wx_setup.h for including the CTL3D stuff, compile ctl3d32.c and add
+ctl3d32.obj to wx.lib (or just link it with your application).
+
+Please send bug reports to 'patrick@zaphod.ruhr.de'.
+
+
+Good luck
+
+- patrick
+

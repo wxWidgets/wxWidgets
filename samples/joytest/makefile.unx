@@ -1,0 +1,55 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for joytest example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/make.env
+
+OBJECTS = $(OBJDIR)/joytest.$(OBJSUFF)
+
+.SUFFIXES:
+
+all:    $(OBJDIR) joytest$(GUISUFFIX)
+
+wx:
+#	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx
+motif:
+	$(MAKE) -f makefile.unx GUISUFFIX=_motif GUI=-Dwx_motif GUISUFFIX=_motif OPT='$(OPT)' LDLIBS='$(MOTIFLDLIBS)' OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)' XVIEW_LINK=
+
+xview:
+	$(MAKE) -f makefile.unx GUI=-Dwx_xview GUISUFFIX=_ol CC=$(CC) OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)'
+
+hp:
+	$(MAKE) -f makefile.unx GUI=-Dwx_motif GUISUFFIX=_hp CC=CC DEBUG='$(DEBUG)' WARN='-w' \
+         XINCLUDE='$(HPXINCLUDE)' XLIB='$(HPXLIB)' XVIEW_LINK='' LDLIBS='$(HPLDLIBS)'
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+joytest$(GUISUFFIX): $(OBJDIR)/joytest.$(OBJSUFF) $(WXLIB)
+	$(CC) $(LDFLAGS) -o joytest$(GUISUFFIX) $(OBJDIR)/joytest.$(OBJSUFF) $(XVIEW_LINK) $(LDLIBS)
+
+$(OBJDIR)/joytest.$(OBJSUFF):        joytest.$(SRCSUFF) joytest.h
+	$(CC) -c $(CPPFLAGS) -o $@ joytest.$(SRCSUFF)
+
+clean_motif:
+	$(MAKE) -f makefile.unx GUISUFFIX=_motif cleanany
+
+clean_ol:
+	$(MAKE) -f makefile.unx GUISUFFIX=_ol cleanany
+
+clean_hp:
+	$(MAKE) -f makefile.unx GUISUFFIX=_hp cleanany
+
+cleanany:
+	rm -f $(OBJECTS) joytest$(GUISUFFIX) core

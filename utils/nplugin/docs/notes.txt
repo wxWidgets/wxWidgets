@@ -1,0 +1,32 @@
+Notes about plugins
+
+
+ I have users that want to visit my pages with tclets, but they do not
+    have the plugin. What can I do?
+
+	Add a pluginspage=http://www.sunlabs.com/tcl/plugin/ name=value
+	pair to the embed statement. This will cause Navigator to find
+	the plugin for your user and suggest they install it. The user
+	is then prompted to download and install the plugin, and then she
+	has to restart the browser and revisit your page. Very inconvenient
+	and only slightly better than giving your users the broken image
+	icon. Netscape says they are working on a more automatic solution.
+
+
+
+
+14. Your demos work just fine, but when I visit my own pages with tclets in
+    them, at http://www.myserver.com/~mypages/mypage.html, I still get the
+    broken image icon. Why doesn't it work for me?
+
+	This is likely because your web server -- the program that sends
+	the pages to your browser when you click on a URL -- is not
+	sending the right mime-type when it sends the '.tcl' file. You
+	can work around this by adding a type=application/x-tcl name=value
+	pair to the embed statement, which will cause Navigator to infer
+	that it should use the Tcl plugin anyways. A better solution is
+	to ask your system administrator to configure the web server to
+	send the mime type application/x-tcl when it sends files with a
+	'.tcl' extension. Nearly all web servers in the world nowadays
+	are already configured to do this, the only ones we are aware of
+	that do not are some older versions of Apache.

@@ -1,0 +1,37 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for ownerdrw example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/ownerdrw.$(OBJSUFF) $(OBJDIR)/ownerdrw_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) ownerdrw$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+ownerdrw$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o ownerdrw$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/ownerdrw.$(OBJSUFF):	ownerdrw.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ ownerdrw.$(SRCSUFF)
+
+$(OBJDIR)/ownerdrw_resources.o:  ownerdrw.rc
+	$(RESCOMP) -i ownerdrw.rc -o $(OBJDIR)/ownerdrw_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) ownerdrw$(GUISUFFIX).exe core *.rsc *.res

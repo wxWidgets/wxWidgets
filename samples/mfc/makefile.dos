@@ -1,0 +1,89 @@
+#
+# File:		makefile.dos
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds MFC compatibility example (DOS).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info.
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+!include $(WXDIR)\src\makemsc.env
+
+THISDIR = $(WXDIR)\samples\mfc
+WXLIB = $(WXDIR)\lib\wx.lib
+MFCINC = c:\msvc\mfc\include
+LIBS=lafxcwD $(WXLIB) oldnames libw llibcew commdlg ddeml shell mmsystem  # mfcoleui compobj storage ole2 ole2disp
+#LIBS=lafxcwD llibcew libw commdlg shell
+INC=-I$(MFCINC) -I$(WXDIR)\include\base -I$(WXDIR)\include\msw
+DUMMY=$(WXDIR)\src\msw\dummy.obj
+
+# Set this to nothing if using MS C++ 7
+ZOPTION=/Z7
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+PRECOMP = # /YuWX_PREC.H /Fp$(WXDIR)\src\msw\wx.pch
+
+!if "$(FINAL)" == "0"
+CPPFLAGS=/D_DEBUG /AL /W3 /Zi $(ZOPTION) /G2sw /Od $(INC) $(PRECOMP) /Dwx_msw
+#CPPFLAGS=/AL /Zp /GA /G2 /Gyf /Od /W3 $(INC) /D_DEBUG
+LINKFLAGS=/NOD /CO /NOE /ONERROR:NOEXE /SEG:256 /STACK:12000
+!else
+CPPFLAGS=/AL /W3 /G2sw $(INC) /Ox $(PRECOMP) /Dwx_msw
+LINKFLAGS=/NOD /NOE /ONERROR:NOEXE /SEG:256
+!endif
+
+HEADERS = hello.h
+SOURCES = hello.$(SRCSUFF)
+OBJECTS = hello.obj
+
+hello:    hello.exe
+
+all:    wx hello.exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos clean
+        cd $(THISDIR)
+
+
+hello.exe:      $(DUMMY) $(WXLIB) hello.obj hello.def hello.res
+        link $(LINKFLAGS) @<<
+$(DUMMY) hello.obj,
+hello,
+NUL,
+$(LIBS),
+hello.def
+;
+<<
+        rc -31 -K hello.res
+
+hello.obj:      hello.h hello.$(SRCSUFF) $(DUMMY)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+hello.res :      hello.rc $(WXDIR)\include\msw\wx.rc
+    rc -r /i$(MFCINC) /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa hello
+
+clean:
+        -erase *.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb

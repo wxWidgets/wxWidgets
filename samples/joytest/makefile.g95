@@ -1,0 +1,35 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for joytest example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/joytest.$(OBJSUFF) $(OBJDIR)/joytest_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) joytest$(GUISUFFIX)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+joytest$(GUISUFFIX): $(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o joytest$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/joytest.$(OBJSUFF):        joytest.$(SRCSUFF) joytest.h
+	$(CC) -c $(CPPFLAGS) -o $@ joytest.$(SRCSUFF)
+
+$(OBJDIR)/joytest_resources.o:  joytest.rc
+	$(RESCOMP) -i joytest.rc -o $(OBJDIR)/joytest_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) joytest$(GUISUFFIX).exe core *.res *.rsc
