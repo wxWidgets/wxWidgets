@@ -72,7 +72,8 @@ enum wxPathNormalize
     wxPATH_NORM_CASE     = 0x0008,  // if case insensitive => tolower
     wxPATH_NORM_ABSOLUTE = 0x0010,  // make the path absolute
     wxPATH_NORM_LONG =     0x0020,  // make the path the long form
-    wxPATH_NORM_ALL      = 0x003f & ~wxPATH_NORM_CASE
+    wxPATH_NORM_SHORTCUT = 0x0040,  // resolve the shortcut, if it is a shortcut
+    wxPATH_NORM_ALL      = 0x00ff & ~wxPATH_NORM_CASE
 };
 
 // what exactly should GetPath() return?
@@ -282,6 +283,12 @@ public:
                       wxPathFormat format = wxPATH_NATIVE)
         { return Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE |
                            wxPATH_NORM_TILDE, cwd, format); }
+
+#ifdef __WIN32__
+        // if the path is a shortcut, return the target and optionally,
+        // the arguments
+    bool GetShortcutTarget(const wxString& shortcutPath, wxString& targetFilename, wxString* arguments = NULL);
+#endif
 
     // Comparison
 

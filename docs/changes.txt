@@ -84,6 +84,8 @@ All:
 - check if file exists in wxFileConfig::DeleteFile() (Christian Sturmlechner)
 - when wxUSE_STL == 1 wxHashTable will not be implemented using wxHashMap
   (as in 2.5.0).
+- Added some extra convenience functions to wxRect such as
+  GetBottomRight (Hajo Kirchhoff)
 
 All (GUI):
 
@@ -114,6 +116,7 @@ wxMSW:
 - MDI child frames are not always resizeable any more (Andrei Fortuna)
 - fixed enumerating of entries/groups under '/' in wxRegConfig
 - added wxSYS_ICONTITLE_FONT (Andreas Pflug)
+- added wxPATH_NORM_SHORTCUT to wxFileName
 
 wxGTK:
 

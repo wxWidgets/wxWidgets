@@ -945,6 +945,23 @@ bool wxFileName::Normalize(int flags,
 
         m_dirs.Add(dir);
     }
+    
+#ifdef __WIN32__
+    if ( (flags & wxPATH_NORM_SHORTCUT) )
+    {
+        wxString filename;
+        if (GetShortcutTarget(GetFullPath(format), filename))
+        {
+            // Repeat this since we may now have a new path
+            if ( (flags & wxPATH_NORM_CASE) && !IsCaseSensitive(format) )
+            {
+                filename.MakeLower();
+            }
+            m_relative = false;
+            Assign(filename);
+        }
+    }
+#endif
 
     if ( (flags & wxPATH_NORM_CASE) && !IsCaseSensitive(format) )
     {
@@ -968,6 +985,71 @@ bool wxFileName::Normalize(int flags,
 
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// get the shortcut target
+// ----------------------------------------------------------------------------
+
+#if defined(__WIN32__) && !defined(__WXWINCE__)
+#include <shlobj.h>
+#endif
+
+#ifdef __WIN32__
+bool wxFileName::GetShortcutTarget(const wxString& shortcutPath, wxString& targetFilename, wxString* arguments)
+{
+#ifdef __WXWINCE__
+    // Not tested on WinCE, so don't compile yet
+    return shortcutPath;
+#else
+    wxString path, file, ext;
+    wxSplitPath(shortcutPath, & path, & file, & ext);
+    
+	HRESULT hres;	
+	IShellLink* psl;
+    bool success = FALSE;
+
+    // Assume it's not a shortcut if it doesn't end with lnk
+    if (ext.Lower() != wxT("lnk"))
+        return FALSE;
+    
+	// create a ShellLink object
+	hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+				IID_IShellLink, (LPVOID*) &psl);
+	
+	if (SUCCEEDED(hres))
+	{
+		IPersistFile* ppf;
+		hres = psl->QueryInterface( IID_IPersistFile, (LPVOID *) &ppf);
+		if (SUCCEEDED(hres))
+		{
+			WORD wsz[MAX_PATH];
+
+			MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, shortcutPath.mb_str(), -1, wsz,
+                MAX_PATH);
+			
+			hres = ppf->Load(wsz, 0);			
+			if (SUCCEEDED(hres))
+			{
+                wxChar buf[2048];
+				psl->GetPath(buf, 2048, NULL, SLGP_UNCPRIORITY);
+				targetFilename = wxString(buf);
+                success = (shortcutPath != targetFilename);
+
+				psl->GetArguments(buf, 2048);
+                wxString args(buf);
+                if (!args.IsEmpty() && arguments)
+                {
+                    *arguments = args;
+                }                
+			}
+		}
+	}
+	psl->Release();
+	return success;
+#endif
+}
+#endif
+
 
 // ----------------------------------------------------------------------------
 // absolute/relative paths
