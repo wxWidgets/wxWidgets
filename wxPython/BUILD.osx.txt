@@ -33,7 +33,7 @@ get things from various CVS repositories as needed.
 3. Run configure from that build directory.
 
         cd build
-	../configure --with-mac
+	../configure --with-mac \
 		     --with-opengl \
 		     --enable-geometry \
                      --enable-optimise \
