@@ -18,7 +18,7 @@
 
 #include <wx/stream.h>
 
-class wxDataInputStream: public wxFilterInputStream {
+class wxDataInputStream: virtual public wxFilterInputStream {
 public:
   wxDataInputStream(wxInputStream& s);
   virtual ~wxDataInputStream();
@@ -31,7 +31,7 @@ public:
   wxString ReadString();
 };
 
-class wxDataOutputStream: public wxFilterOutputStream {
+class wxDataOutputStream: virtual public wxFilterOutputStream {
  public:
   wxDataOutputStream(wxOutputStream& s);
   virtual ~wxDataOutputStream();
@@ -42,6 +42,12 @@ class wxDataOutputStream: public wxFilterOutputStream {
   void WriteDouble(double d);
   void WriteLine(const wxString& line);
   void WriteString(const wxString& string);
+};
+
+class wxDataStream: public wxDataInputStream, public wxDataOutputStream,
+                    public wxFilterStream {
+ public:
+  wxDataStream(wxStream& stream);
 };
 
 #endif

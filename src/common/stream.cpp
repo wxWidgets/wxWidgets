@@ -550,8 +550,22 @@ wxOutputStream& wxOutputStream::operator<<(wxObject& obj)
 }
 
 // ----------------------------------------------------------------------------
+// wxStream
+// ----------------------------------------------------------------------------
+
+wxStream::wxStream()
+  : wxInputStream(), wxOutputStream()
+{
+}
+
+// ----------------------------------------------------------------------------
 // wxFilterInputStream
 // ----------------------------------------------------------------------------
+wxFilterInputStream::wxFilterInputStream()
+  : wxInputStream(NULL)
+{
+}
+
 wxFilterInputStream::wxFilterInputStream(wxInputStream& stream)
   : wxInputStream(NULL)
 {
@@ -578,10 +592,14 @@ off_t wxFilterInputStream::DoTellInput() const
   return m_parent_i_stream->TellI();
 }
 
-
 // ----------------------------------------------------------------------------
 // wxFilterOutputStream
 // ----------------------------------------------------------------------------
+wxFilterOutputStream::wxFilterOutputStream()
+  : wxOutputStream(NULL)
+{
+}
+
 wxFilterOutputStream::wxFilterOutputStream(wxOutputStream& stream)
   : wxOutputStream(NULL)
 {
@@ -606,6 +624,19 @@ off_t wxFilterOutputStream::DoSeekOutput(off_t pos, wxSeekMode mode)
 off_t wxFilterOutputStream::DoTellOutput() const
 {
   return m_parent_o_stream->TellO();
+}
+
+// ----------------------------------------------------------------------------
+// wxFilterStream
+// ----------------------------------------------------------------------------
+
+wxFilterStream::wxFilterStream()
+{
+}
+
+wxFilterStream::wxFilterStream(wxStream& stream)
+  : wxFilterInputStream(stream), wxFilterOutputStream(stream)
+{
 }
 
 // ----------------------------------------------------------------------------

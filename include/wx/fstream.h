@@ -22,7 +22,8 @@ protected:
   bool m_file_destroy;
 };
 
-class wxFileInputStream: public wxInputStream, virtual public wxFileStreamBase {
+class wxFileInputStream: virtual public wxInputStream,
+                         virtual public wxFileStreamBase {
  public:
   wxFileInputStream(const wxString& fileName);
   virtual ~wxFileInputStream();
@@ -39,7 +40,8 @@ class wxFileInputStream: public wxInputStream, virtual public wxFileStreamBase {
   off_t DoTellInput() const;
 };
 
-class wxFileOutputStream: public wxOutputStream, virtual public wxFileStreamBase {
+class wxFileOutputStream: virtual public wxOutputStream,
+                          virtual public wxFileStreamBase {
  public:
   wxFileOutputStream(const wxString& fileName);
   virtual ~wxFileOutputStream();
@@ -60,7 +62,8 @@ class wxFileOutputStream: public wxOutputStream, virtual public wxFileStreamBase
   off_t DoTellOutput() const;
 };
 
-class wxFileStream: public wxFileInputStream, public wxFileOutputStream {
+class wxFileStream: public wxStream,
+                    public wxFileInputStream, public wxFileOutputStream {
  public:
   wxFileStream(const wxString& fileName);
   virtual ~wxFileStream();

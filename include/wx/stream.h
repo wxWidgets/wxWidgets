@@ -29,6 +29,10 @@ typedef wxOutputStream& (*__wxOutputManip)(wxOutputStream&);
 
 wxOutputStream& WXDLLEXPORT wxEndL(wxOutputStream& o_stream);
 
+// ---------------------------------------------------------------------------
+// Stream buffer
+// ---------------------------------------------------------------------------
+
 class WXDLLEXPORT wxStreamBuffer {
  public:
   wxStreamBuffer(wxInputStream& stream);
@@ -63,16 +67,17 @@ class WXDLLEXPORT wxStreamBuffer {
   wxOutputStream *m_ostream;
 };
 
-/*
- * wxStream: base classes
- */
+// ---------------------------------------------------------------------------
+// wxStream: base classes
+// ---------------------------------------------------------------------------
+
 class WXDLLEXPORT wxInputStream {
  public:
   wxInputStream();
   virtual ~wxInputStream();
 
   // IO functions
-  virtual char Peek() = 0;
+  virtual char Peek() { return 0; }
   virtual char GetC();
   virtual wxInputStream& Read(void *buffer, size_t size);
   wxInputStream& Read(wxOutputStream& stream_out);
@@ -108,9 +113,11 @@ class WXDLLEXPORT wxInputStream {
 
   wxInputStream(wxStreamBuffer *buffer);
 
-  virtual size_t DoRead(void *buffer, size_t size) = 0;
-  virtual off_t DoSeekInput(off_t pos, wxSeekMode mode) = 0;
-  virtual off_t DoTellInput() const = 0;
+  virtual size_t DoRead(void *buffer, size_t size) { return 0; }
+  virtual off_t DoSeekInput(off_t pos, wxSeekMode mode)
+         { return wxInvalidOffset; }
+  virtual off_t DoTellInput() const
+         { return wxInvalidOffset; }
 
  protected:
   bool m_eof, m_i_destroybuf;
@@ -158,9 +165,11 @@ class WXDLLEXPORT wxOutputStream {
 
   wxOutputStream(wxStreamBuffer *buffer);
 
-  virtual size_t DoWrite(const void *buffer, size_t size) = 0;
-  virtual off_t DoSeekOutput(off_t pos, wxSeekMode mode) = 0;
-  virtual off_t DoTellOutput() const = 0;
+  virtual size_t DoWrite(const void *buffer, size_t size) { return 0; }
+  virtual off_t DoSeekOutput(off_t pos, wxSeekMode mode)
+            { return wxInvalidOffset; }
+  virtual off_t DoTellOutput() const
+            { return wxInvalidOffset; }
 
  protected:
   bool m_bad, m_o_destroybuf;
@@ -168,48 +177,65 @@ class WXDLLEXPORT wxOutputStream {
   wxStreamBuffer *m_o_streambuf;
 };
 
-/*
- * "Filter" streams
- */
-
-class WXDLLEXPORT wxFilterInputStream: public wxInputStream {
+class wxStream: virtual public wxInputStream,
+		virtual public wxOutputStream
+{
  public:
+  wxStream();
+};
+
+// ---------------------------------------------------------------------------
+// "Filter" streams
+// ---------------------------------------------------------------------------
+
+class WXDLLEXPORT wxFilterInputStream: virtual public wxInputStream {
+ public:
+  wxFilterInputStream();
   wxFilterInputStream(wxInputStream& stream);
-  virtual ~wxFilterInputStream();
+  ~wxFilterInputStream();
 
-  virtual char Peek() { return m_parent_i_stream->Peek(); }
+  char Peek() { return m_parent_i_stream->Peek(); }
 
-  virtual bool Eof() const { return m_parent_i_stream->Eof(); } 
-  virtual size_t LastRead() const { return m_parent_i_stream->LastRead(); } 
-  virtual off_t TellI() const { return m_parent_i_stream->TellI(); }
+  bool Eof() const { return m_parent_i_stream->Eof(); } 
+  size_t LastRead() const { return m_parent_i_stream->LastRead(); } 
+  off_t TellI() const { return m_parent_i_stream->TellI(); }
 
  protected:
-  virtual size_t DoRead(void *buffer, size_t size);
-  virtual off_t DoSeekInput(off_t pos, wxSeekMode mode);
-  virtual off_t DoTellInput() const;
+  size_t DoRead(void *buffer, size_t size);
+  off_t DoSeekInput(off_t pos, wxSeekMode mode);
+  off_t DoTellInput() const;
 
  protected:
   wxInputStream *m_parent_i_stream;
 };
 
-class WXDLLEXPORT wxFilterOutputStream: public wxOutputStream {
+class WXDLLEXPORT wxFilterOutputStream: virtual public wxOutputStream {
  public:
+  wxFilterOutputStream();
   wxFilterOutputStream(wxOutputStream& stream);
   virtual ~wxFilterOutputStream();
 
-  virtual bool Bad() const { return m_parent_o_stream->Bad(); }
-  virtual size_t LastWrite() const { return m_parent_o_stream->LastWrite(); }
-  virtual off_t TellO() const { return m_parent_o_stream->TellO(); }
+  bool Bad() const { return m_parent_o_stream->Bad(); }
+  size_t LastWrite() const { return m_parent_o_stream->LastWrite(); }
+  off_t TellO() const { return m_parent_o_stream->TellO(); }
 
  protected:
   // The forward is implicitely done by wxStreamBuffer.
 
-  virtual size_t DoWrite(const void *buffer, size_t size);
-  virtual off_t DoSeekOutput(off_t pos, wxSeekMode mode);
-  virtual off_t DoTellOutput() const;
+  size_t DoWrite(const void *buffer, size_t size);
+  off_t DoSeekOutput(off_t pos, wxSeekMode mode);
+  off_t DoTellOutput() const;
 
  protected:
   wxOutputStream *m_parent_o_stream;
+};
+
+class WXDLLEXPORT wxFilterStream: public wxStream,
+				  virtual public wxFilterInputStream,
+				  virtual public wxFilterOutputStream {
+ public:
+  wxFilterStream(wxStream& stream);
+  wxFilterStream();
 };
 
 #endif

@@ -1,0 +1,75 @@
+#
+# File:		makefile.unx
+# Author:	Stefan Hammes
+# Created:	1995
+# Updated:	
+# Copyright:	(c) 1995
+#
+# "%W% %G%"
+#
+# Makefile for wxString example (UNIX).
+# Change the WXDIR directory, and CPPFLAGS and LDFLAGS, for your system.
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+WXSOCKDIR = $(WXDIR)/contrib/wxsock
+WXSOCKLIB = $(WXSOCKDIR)/libwxsock.a
+
+OBJECTS = $(OBJDIR)/wx_sock.$(OBJSUFF) $(OBJDIR)/wx_addr.$(OBJSUFF) \
+	$(OBJDIR)/wx_pkman.$(OBJSUFF) $(OBJDIR)/wx_skflt.$(OBJSUFF) \
+	$(OBJDIR)/wx_lzw.$(OBJSUFF) \
+	$(OBJDIR)/wx_url.$(OBJSUFF) $(OBJDIR)/wx_ftp.$(OBJSUFF) \
+	$(OBJDIR)/wx_file.$(OBJSUFF) $(OBJDIR)/wx_nipc.$(OBJSUFF) \
+	$(OBJDIR)/wx_wipc.$(OBJSUFF) $(OBJDIR)/wx_sipc.$(OBJSUFF)
+
+TESTOBJECTS = $(OBJDIR)/test.$(OBJSUFF)
+TESTPROGRAM = $(WXSTRINGDIR)/test$(GUISUFFIX)
+
+LDFLAGS =  $(XLIB) -L$(WXSOCKDIR) -L$(WXDIR)/lib
+
+XVIEWLDLIBS = -lwxstring_ol -lwx_ol -lxview -lolgx -lX11 -lm $(COMPLIBS)
+MOTIFLDLIBS = -lwxstring_motif -lwx_motif -lXm -lXt -lX11 -lm $(COMPLIBS)
+HPLDLIBS = -lwxstring_hp -lwx_hp -lXm -lXt -lX11 -lm $(HPCOMPLIBS)
+# Default
+LDLIBS=$(MOTIFLDLIBS)
+
+all:	$(OBJDIR) $(WXSOCKLIB)
+
+demo:	$(TESTPROGRAM)
+
+.SUFFIXES:
+
+# Comment this out if 'say' doesn't speak on your system, or make it beep perhaps!
+done:
+	say dun
+
+wx:
+	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx GUI=$(GUI)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+$(WXSOCKLIB): $(OBJECTS)	
+	rm -f $@
+	ar $(AROPTIONS) libwxsock.a $(OBJECTS)
+	$(RANLIB) libwxsock.a
+
+$(OBJDIR)/wx_sock.$(OBJSUFF):	wx_sock.$(SRCSUFF) wx_sock.h
+	$(CC) -c $(CPPFLAGS) -o $@ wx_sock.$(SRCSUFF)
+
+$(OBJDIR)/wx_addr.$(OBJSUFF):	wx_addr.$(SRCSUFF) wx_addr.h
+	$(CC) -c $(CPPFLAGS) -o $@ wx_addr.$(SRCSUFF)
+
+$(OBJDIR)/test.$(OBJSUFF):   test.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ test.$(SRCSUFF)
+
+$(TESTPROGRAM): $(OBJDIR)/test.$(OBJSUFF) $(WXLIB) $(WXSOCKLIB)
+	$(CC) $(CPPFLAGS) $(LDFLAGS) -o test$(GUISUFFIX) $(OBJDIR)/test.$(OBJSUFF) $(XVIEW_LINK) $(LDLIBS)
+
+clean:
+	rm -f $(OBJECTS) test$(GUISUFFIX) $(WXSTRINGLIB) $(OBJDIR)/test.$(OBJSUFF) core
+

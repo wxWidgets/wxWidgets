@@ -26,6 +26,10 @@
 
 #include "wx/datstrm.h"
 
+// ---------------------------------------------------------------------------
+// wxDataInputStream
+// ---------------------------------------------------------------------------
+
 wxDataInputStream::wxDataInputStream(wxInputStream& s)
   : wxFilterInputStream(s)
 {
@@ -126,6 +130,10 @@ wxString wxDataInputStream::ReadString()
   return wx_string;
 }
 
+// ---------------------------------------------------------------------------
+// wxDataOutputStream
+// ---------------------------------------------------------------------------
+
 wxDataOutputStream::wxDataOutputStream(wxOutputStream& s)
  : wxFilterOutputStream(s)
 {
@@ -191,4 +199,13 @@ void wxDataOutputStream::WriteDouble(double d)
  buf[0] = '\0';
 #endif
   Write(buf, 10);
+}
+
+// ---------------------------------------------------------------------------
+// wxDataStream
+// ---------------------------------------------------------------------------
+
+wxDataStream::wxDataStream(wxStream& stream)
+ : wxDataInputStream(stream), wxDataOutputStream(stream)
+{
 }

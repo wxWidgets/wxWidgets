@@ -51,9 +51,19 @@ LIB_CPP_SRC=\
  common/mstream.cpp \
  common/zstream.cpp \
  common/objstrm.cpp \
+ common/sckstrm.cpp \
  common/validate.cpp \
  common/valtext.cpp \
  common/wxexpr.cpp \
+ common/tokenzr.cpp \
+ common/socket.cpp \
+ common/sckaddr.cpp \
+ common/protocol.cpp \
+ common/url.cpp \
+ common/http.cpp \
+ common/ftp.cpp \
+ common/sckfile.cpp \
+ common/sckipc.cpp \
 \
  gtk/accel.cpp \
  gtk/app.cpp \

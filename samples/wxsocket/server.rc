@@ -1,0 +1,4 @@
+mondrian ICON "mondrian.ico"
+conn_icn ICON "connect.ico"
+#include "wx.rc"
+
