@@ -347,6 +347,8 @@ private:
     DECLARE_NO_COPY_CLASS(wxUxThemeEngine)
 };
 
+#if wxUSE_UXTHEME
+
 /* static */ inline wxUxThemeEngine *wxUxThemeEngine::GetIfActive()
 {
     wxUxThemeEngine *engine = Get();
@@ -355,7 +357,7 @@ private:
                 : NULL;
 }
 
-#if !wxUSE_UXTHEME
+#else // !wxUSE_UXTHEME
 
 /* static */ inline wxUxThemeEngine *wxUxThemeEngine::Get()
 {
@@ -367,7 +369,7 @@ private:
     return NULL;
 }
 
-#endif // !wxUSE_UXTHEME
+#endif // wxUSE_UXTHEME/!wxUSE_UXTHEME
 
 // ----------------------------------------------------------------------------
 // wxUxThemeHandle: encapsulates ::Open/CloseThemeData()
