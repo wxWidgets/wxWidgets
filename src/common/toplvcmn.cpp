@@ -134,6 +134,9 @@ void wxTopLevelWindowBase::OnSize(wxSizeEvent& WXUNUSED(event))
             {
                 if ( child )
                 {
+#ifdef __WXPM__
+                    AlterChildPos();
+#endif
                     return;     // it's our second subwindow - nothing to do
                 }
 
@@ -157,6 +160,10 @@ void wxTopLevelWindowBase::OnSize(wxSizeEvent& WXUNUSED(event))
 #endif
 
             child->SetSize(ofs, ofs, clientW - 2*ofs, clientH - 2*ofs);
+#ifdef __WXPM__
+            child->MoveChildren(m_vSwpClient.cy - clientH);
+            ::WinQueryWindowPos(GetHwnd(), &m_vSwpClient);
+#endif
         }
     }
 }
@@ -201,7 +208,7 @@ class wxInteractiveMoveHandler : public wxEvtHandler
 {
 public:
     wxInteractiveMoveHandler(wxInteractiveMoveData& data) : m_data(data) {}
-    
+
 private:
     DECLARE_EVENT_TABLE()
     void OnMouseMove(wxMouseEvent& event);
@@ -220,7 +227,7 @@ BEGIN_EVENT_TABLE(wxInteractiveMoveHandler, wxEvtHandler)
 END_EVENT_TABLE()
 
 
-static inline LINKAGEMODE 
+static inline LINKAGEMODE
 void wxApplyResize(wxInteractiveMoveData& data, const wxPoint& diff)
 {
     if ( data.m_flags & wxINTERACTIVE_RESIZE_W )
@@ -241,7 +248,7 @@ void wxApplyResize(wxInteractiveMoveData& data, const wxPoint& diff)
     {
         data.m_rect.height += diff.y;
     }
-    
+
     if ( data.m_minSize.x != -1 && data.m_rect.width < data.m_minSize.x )
     {
         if ( data.m_flags & wxINTERACTIVE_RESIZE_W )
@@ -306,9 +313,9 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
         m_data.m_flags &= ~wxINTERACTIVE_WAIT_FOR_INPUT;
         m_data.m_pos = wxGetMousePosition();
     }
-    
+
     wxPoint diff(-1,-1);
-    
+
     switch ( event.GetKeyCode() )
     {
         case WXK_UP:    diff = wxPoint(0, -16); break;
@@ -323,7 +330,7 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
             m_data.m_evtLoop->Exit();
             return;
     }
-    
+
     if ( diff.x != -1 )
     {
         if ( m_data.m_flags & wxINTERACTIVE_MOVE )
@@ -362,15 +369,15 @@ void wxTopLevelWindowBase::InteractiveMove(int flags)
     wxASSERT_MSG( !((flags & wxINTERACTIVE_MOVE) && (flags & wxINTERACTIVE_RESIZE)),
                   wxT("can't move and resize window at the same time") );
 
-    wxASSERT_MSG( !(flags & wxINTERACTIVE_RESIZE) || 
-                  (flags & wxINTERACTIVE_WAIT_FOR_INPUT) || 
+    wxASSERT_MSG( !(flags & wxINTERACTIVE_RESIZE) ||
+                  (flags & wxINTERACTIVE_WAIT_FOR_INPUT) ||
                   (flags & wxINTERACTIVE_RESIZE_DIR),
                   wxT("direction of resizing not specified") );
 
     wxInteractiveMoveData data;
     wxEventLoop loop;
     wxWindow *focus = FindFocus();
-    
+
     // FIXME - display resize cursor if waiting for initial input
 
     data.m_window = this;
