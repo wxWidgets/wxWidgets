@@ -36,6 +36,7 @@ public:
     void SetTitleFormat(const wxString& format);
     void SetTempDir(const wxString& path) { m_helpData.SetTempDir(path); }
     bool AddBook(const wxString& book, bool show_wait_msg = FALSE);
+    bool AddBook(const wxFileName& book_file, bool show_wait_msg = FALSE);
 
     bool Display(const wxString& x);
     bool Display(int id);
