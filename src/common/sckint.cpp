@@ -375,8 +375,8 @@ void wxSocketInternal::ReleaseFD()
 // ----------------------------------------------------------------------
 void wxSocketInternal::InitializeSocket()
 {
-  wxASSERT( ((m_thread_waiter->IsAlive() && !m_thread_waiter->IsPaused()) ||
-	     (m_thread_requester->IsAlive() && !m_thread_requester->IsPaused())));
+//  wxASSERT( ((m_thread_waiter->IsAlive() && !m_thread_waiter->IsPaused()) ||
+//	     (m_thread_requester->IsAlive() && !m_thread_requester->IsPaused())));
 
   m_thread_waiter->m_fd = m_socket->m_fd;
   m_thread_requester->m_fd = m_socket->m_fd;
