@@ -58,6 +58,8 @@ protected:
     #include "wx/os2/spinctrl.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/spinctrl.h"
+#elif defined(__WXMAC__)
+    #include "wx/generic/spinctlg.h"
 #else // Win16 || !Win
     #include "wx/generic/spinctlg.h"
 #endif // platform
