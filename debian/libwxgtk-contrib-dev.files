@@ -5,6 +5,7 @@ usr/lib/libgizmos.so
 usr/lib/libmmedia.so
 usr/lib/libogl.so
 usr/lib/libstc.so
+usr/lib/libwx_dcsvg.so
 usr/lib/libwx_net.so
 usr/lib/libwx_plot.so
 usr/lib/libwxxrc.so
