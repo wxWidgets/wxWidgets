@@ -14,10 +14,14 @@
 # o 2.5 compatability update.
 # o There appears to be a prob with the wx.PySizer.GetSize() method.
 #
+# 12/23/2003 - Jeff Grimmett (grimmtooth@softhome.net)
+#
+# o wx.PySizer.GetSize() method working right now.
+#
 
 """
-A pure-Python wxSizer that lays out items in a grid similar to
-wxFlexGridSizer but item position is not implicit but explicitly
+A pure-Python Sizer that lays out items in a grid similar to
+wx.FlexGridSizer but item position is not implicit but explicitly
 specified by row and col, and row/col spanning is supported.
 
 Adapted from code by Niki Spahiev.
@@ -71,9 +75,11 @@ class RowColSizer(wx.PySizer):
 
     #--------------------------------------------------
     def Add(self, item, option=0, flag=0, border=0,
-            row=-1, col=-1,       # row, col and spanning can be specified individually...
+            # row, col and spanning can be specified individually...
+            row=-1, col=-1,       
             rowspan=1, colspan=1,
-            pos=None, size=None,  # or as tuples (row,col) and (rowspan,colspan)
+            # or as tuples (row,col) and (rowspan,colspan)
+            pos=None, size=None,  
             ):
 
         if pos is not None:
@@ -89,7 +95,7 @@ class RowColSizer(wx.PySizer):
         #    flag = flag | wx.EXPAND
 
         wx.PySizer.Add(self, item, option, flag, border,
-                      userData=(row, col, row+rowspan, col+colspan))
+                       userData=(row, col, row+rowspan, col+colspan))
 
     #AddWindow = Add
     #AddSizer  = Add
