@@ -65,6 +65,10 @@ bool wxScrollBar::Create(wxWindow *parent,
                          const wxValidator& validator,
                          const wxString &name)
 {
+    // the scrollbars always have the standard border so far
+    style &= ~wxBORDER_MASK;
+    style |= wxBORDER_SUNKEN;
+
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 

@@ -22,6 +22,12 @@ class WXDLLEXPORT wxInputHandler;
 // the actions supported by this control
 // ----------------------------------------------------------------------------
 
+// various parts of scrollbar may be highlighted
+#define wxACTION_SCROLL_HIGHLIGHT_ARROW_UP _T("focusarrowup")
+#define wxACTION_SCROLL_HIGHLIGHT_ARROW_DOWN _T("focusarrowdown")
+#define wxACTION_SCROLL_HIGHLIGHT_THUMB _T("focusthumb")
+#define wxACTION_SCROLL_HIGHLIGHT_BAR _T("focusbar")
+
 // scroll the bar
 #define wxACTION_SCROLL_START       _T("start")     // to the beginning
 #define wxACTION_SCROLL_END         _T("end")       // to the end
@@ -45,6 +51,15 @@ class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxScrollBar : public wxScrollBarBase
 {
 public:
+    enum
+    {
+        // which part of scrollbar is currently highlighted?
+        Highlight_Arrow1 = 0x0001,
+        Highlight_Arrow2 = 0x0002,
+        Highlight_Thumb  = 0x0004,
+        Highlight_Bar    = 0x0008
+    };
+
     wxScrollBar() { Init(); }
     wxScrollBar(wxWindow *parent,
                 wxWindowID id,
@@ -52,7 +67,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr)
+                const wxString& name = wxScrollBarNameStr)
     {
         Init();
 
@@ -65,7 +80,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr);
+                const wxString& name = wxScrollBarNameStr);
 
     virtual ~wxScrollBar();
 

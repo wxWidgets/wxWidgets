@@ -4,6 +4,7 @@ UNIVOBJS = \
            control.o \
            inphand.o \
            renderer.o \
+           scrolbar.o \
            statbox.o \
            stattext.o \
            theme.o \

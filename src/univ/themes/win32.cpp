@@ -29,6 +29,8 @@
     #include "wx/dc.h"
     #include "wx/window.h"
 
+    #include "wx/dcmemory.h"
+
     #include "wx/button.h"
     #include "wx/scrolbar.h"
 #endif // WX_PRECOMP
@@ -67,7 +69,6 @@ public:
 
     // implement the base class pure virtuals
     virtual void DrawBackground(wxDC& dc,
-                                const wxColour& col,
                                 const wxRect& rect,
                                 int flags = 0);
     virtual void DrawLabel(wxDC& dc,
@@ -105,6 +106,11 @@ public:
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
 
 protected:
+    // DrawButtonBorder() helper
+    void DoDrawBackground(wxDC& dc,
+                          const wxColour& col,
+                          const wxRect& rect);
+
     // DrawBorder() helpers: all of them shift and clip the DC after drawing
     // the border
 
@@ -135,12 +141,13 @@ protected:
                          wxArrowStyle arrowStyle);
 
 private:
+    const wxColourScheme *m_scheme;
+
     // the sizing parameters (TODO make them changeable)
     wxSize m_sizeScrollbarArrow;
 
     // GDI objects we use for drawing
     wxColour m_colDarkGrey,
-             m_colBg,
              m_colHighlight;
 
     wxPen m_penBlack,
@@ -314,6 +321,7 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col,
 wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
 {
     // init data
+    m_scheme = scheme;
     m_sizeScrollbarArrow = wxSize(16, 16);
 
     // init colours and pens
@@ -322,8 +330,7 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
     m_colDarkGrey = scheme->Get(wxColourScheme::SHADOW_OUT);
     m_penDarkGrey = wxPen(m_colDarkGrey, 0, wxSOLID);
 
-    m_colBg = scheme->Get(wxColourScheme::SHADOW_IN);
-    m_penLightGrey = wxPen(m_colBg, 0, wxSOLID);
+    m_penLightGrey = wxPen(scheme->Get(wxColourScheme::SHADOW_IN), 0, wxSOLID);
 
     m_colHighlight = scheme->Get(wxColourScheme::SHADOW_HIGHLIGHT);
     m_penHighlight = wxPen(m_colHighlight, 0, wxSOLID);
@@ -805,16 +812,22 @@ void wxWin32Renderer::DrawLabel(wxDC& dc,
 // background
 // ----------------------------------------------------------------------------
 
-void wxWin32Renderer::DrawBackground(wxDC& dc,
-                                     const wxColour& col,
-                                     const wxRect& rect,
-                                     int flags)
+void wxWin32Renderer::DoDrawBackground(wxDC& dc,
+                                       const wxColour& col,
+                                       const wxRect& rect)
 {
-    // just fill it with the current colour
     wxBrush brush(col, wxSOLID);
     dc.SetBrush(brush);
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.DrawRectangle(rect);
+}
+
+void wxWin32Renderer::DrawBackground(wxDC& dc,
+                                     const wxRect& rect,
+                                     int flags)
+{
+    // just fill it with the default bg colour
+    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::CONTROL, flags), rect);
 }
 
 // ----------------------------------------------------------------------------
@@ -922,7 +935,7 @@ void wxWin32Renderer::DrawScrollbar(wxDC& dc,
     else
         rectBar.Inflate(-m_sizeScrollbarArrow.x, 0);
 
-    DrawBackground(dc, m_colHighlight, rectBar);
+    DoDrawBackground(dc, m_colHighlight, rectBar);
 
     // and, finally, the thumb, if any
     if ( thumbPosStart < thumbPosEnd )
@@ -940,7 +953,7 @@ void wxWin32Renderer::DrawScrollbar(wxDC& dc,
         }
 
         DrawArrowBorder(dc, &rectThumb);
-        DrawBackground(dc, m_colBg, rectThumb);
+        DrawBackground(dc, rectThumb);
     }
 }
 

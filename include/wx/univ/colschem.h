@@ -31,6 +31,7 @@ public:
         // the background and text colour for the control
         CONTROL,
         CONTROL_TEXT,
+        SCROLLBAR,
 
         // the background and text colour for the highlighted item
         HIGHLIGHT,

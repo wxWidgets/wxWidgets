@@ -16,6 +16,8 @@
     #pragma interface "control.h"
 #endif
 
+#include "wx/bitmap.h"      // for m_bitmapBg
+
 class WXDLLEXPORT wxControlRenderer;
 class WXDLLEXPORT wxInputHandler;
 

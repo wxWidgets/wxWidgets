@@ -30,6 +30,7 @@
 #if wxUSE_CONTROLS
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/control.h"
     #include "wx/dcclient.h"
 #endif
@@ -48,14 +49,7 @@ BEGIN_EVENT_TABLE(wxControl, wxControlBase)
     EVT_KEY_DOWN(wxControl::OnKeyDown)
     EVT_KEY_UP(wxControl::OnKeyUp)
 
-    EVT_LEFT_DOWN(wxControl::OnMouse)
-    EVT_LEFT_UP(wxControl::OnMouse)
-    EVT_RIGHT_DOWN(wxControl::OnMouse)
-    EVT_RIGHT_UP(wxControl::OnMouse)
-    EVT_MIDDLE_DOWN(wxControl::OnMouse)
-    EVT_MIDDLE_UP(wxControl::OnMouse)
-    EVT_LEAVE_WINDOW(wxControl::OnMouse)
-    EVT_ENTER_WINDOW(wxControl::OnMouse)
+    EVT_MOUSE_EVENTS(wxControl::OnMouse)
 
     EVT_SET_FOCUS(wxControl::OnFocus)
     EVT_KILL_FOCUS(wxControl::OnFocus)

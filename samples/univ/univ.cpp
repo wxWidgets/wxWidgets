@@ -120,7 +120,11 @@ bool MyUnivApp::OnInit()
 MyUnivFrame::MyUnivFrame(const wxString& title)
            : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(600, 450))
 {
+#ifdef __WXMSW__
     SetBackgroundColour(*wxLIGHT_GREY);
+#else
+    SetBackgroundColour(0xd6d6d6);
+#endif
 
     wxStaticText *text;
 

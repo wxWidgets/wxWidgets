@@ -36,7 +36,7 @@ public:
                               bool refresh = TRUE) = 0;
 };
 
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
     #include "wx/univ/scrolbar.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/scrolbar.h"

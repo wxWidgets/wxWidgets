@@ -38,7 +38,6 @@ class WXDLLEXPORT wxRenderer
 public:
     // draw the controls background
     virtual void DrawBackground(wxDC& dc,
-                                const wxColour& col,
                                 const wxRect& rect,
                                 int flags) = 0;
 
@@ -86,7 +85,8 @@ public:
                                int thumbPosStart,
                                int thumbPosEnd,
                                const wxRect& rect,
-                               int flags = 0) = 0;
+                               int flags = 0,
+                               int extraFlags = 0) = 0;
 
     // TODO: having this is ugly but I don't see how to solve GetBestSize()
     //       problem without something like this
@@ -114,10 +114,9 @@ public:
     wxDelegateRenderer(wxRenderer *renderer) : m_renderer(renderer) { }
 
     virtual void DrawBackground(wxDC& dc,
-                                const wxColour& col,
                                 const wxRect& rect,
                                 int flags)
-        { m_renderer->DrawBackground(dc, col, rect, flags); }
+        { m_renderer->DrawBackground(dc, rect, flags); }
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
@@ -153,9 +152,10 @@ public:
                                int thumbPosStart,
                                int thumbPosEnd,
                                const wxRect& rect,
-                               int flags = 0)
+                               int flags = 0,
+                               int extraFlags = 0)
         { m_renderer->DrawScrollbar(dc, orient, thumbPosStart,
-                                    thumbPosEnd, rect, flags); }
+                                    thumbPosEnd, rect, flags, extraFlags); }
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }
@@ -181,7 +181,7 @@ public:
     void DrawButtonBorder();
     void DrawFrame();
     void DrawBackgroundBitmap();
-    void DrawScrollbar(int thumbStart, int thumbEnd);
+    void DrawScrollbar(int thumbStart, int thumbEnd, int extraFlags = 0);
 
     // accessors
     wxRenderer *GetRenderer() const { return m_renderer; }

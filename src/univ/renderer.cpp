@@ -74,8 +74,7 @@ void wxControlRenderer::DrawBorder()
                            m_rect, flags, &m_rect);
 
     // fill the inside (TODO: query the theme for bg bitmap)
-    m_renderer->DrawBackground(m_dc,
-                               m_ctrl->GetBackgroundColour(), m_rect, flags);
+    m_renderer->DrawBackground(m_dc, m_rect, flags);
 }
 
 void wxControlRenderer::DrawLabel()
@@ -111,8 +110,7 @@ void wxControlRenderer::DrawButtonBorder()
 
     m_renderer->DrawButtonBorder(m_dc, m_rect, flags, &m_rect);
 
-    m_renderer->DrawBackground(m_dc, m_ctrl->GetBackgroundColour(),
-                               m_rect, flags);
+    m_renderer->DrawBackground(m_dc, m_rect, flags);
 }
 
 void wxControlRenderer::DrawBackgroundBitmap()
