@@ -908,6 +908,11 @@
 #define wxUSE_HTML 0
 
 /*
+ * wxWebKitCtrl
+ */
+#define wxUSE_WEBKIT 0
+
+/*
  * (virtual) filesystems code
  */
 #define wxUSE_FILESYSTEM 0

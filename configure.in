@@ -476,6 +476,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_MENUS=no
   DEFAULT_wxUSE_MINIFRAME=no
   DEFAULT_wxUSE_HTML=no
+  DEFAULT_wxUSE_WEBKIT=no
   DEFAULT_wxUSE_FILESYSTEM=no
   DEFAULT_wxUSE_FS_INET=no
   DEFAULT_wxUSE_FS_ZIP=no
@@ -659,6 +660,7 @@ else
   DEFAULT_wxUSE_MENUS=yes
   DEFAULT_wxUSE_MINIFRAME=yes
   DEFAULT_wxUSE_HTML=yes
+  DEFAULT_wxUSE_WEBKIT=yes
   DEFAULT_wxUSE_FILESYSTEM=yes
   DEFAULT_wxUSE_FS_INET=yes
   DEFAULT_wxUSE_FS_ZIP=yes
@@ -915,6 +917,7 @@ WX_ARG_ENABLE(mdidoc,      [  --enable-mdidoc         use docview architecture w
 WX_ARG_ENABLE(loggui,      [  --enable-loggui         use standard GUI logger], wxUSE_LOGGUI)
 WX_ARG_ENABLE(logwin,      [  --enable-logwin         use wxLogWindow], wxUSE_LOGWINDOW)
 WX_ARG_ENABLE(logdialog,   [  --enable-logdialog      use wxLogDialog], wxUSE_LOGDIALOG)
+WX_ARG_ENABLE(webkit,      [  --enable-webkit         use wxWebKitCtrl (Mac)], wxUSE_WEBKIT)
 
 dnl ---------------------------------------------------------------------------
 dnl PostScript options
@@ -5628,6 +5631,10 @@ if test "$wxUSE_HTML" = "yes"; then
     if test "$wxUSE_MAC" = 1; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html/htmlctrl"
     fi
+fi
+
+if test "$wxUSE_WEBKIT" = "yes"; then
+    AC_DEFINE(wxUSE_WEBKIT)
 fi
 
 if test "$wxUSE_MENUS" = "yes"; then
