@@ -654,9 +654,9 @@ bool wxApp::Pending()
     return (::WinPeekMsg(vHabmain, (PQMSG)&svCurrentMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) != 0);
 } // end of wxApp::Pending
 
-void wxApp::Dispatch()
+bool wxApp::Dispatch()
 {
-    DoMessage();
+    return DoMessage();
 }
 
 //////////////////////////////////////////////////////////////////////////////
