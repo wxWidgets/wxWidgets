@@ -50,7 +50,7 @@
 // ----------------------------------------------------------------------------
 
 wxConfigBase *wxConfigBase::ms_pConfig     = NULL;
-bool          wxConfigBase::ms_bAutoCreate = TRUE;
+bool          wxConfigBase::ms_bAutoCreate = true;
 
 // ============================================================================
 // implementation
@@ -69,8 +69,8 @@ wxConfigBase::wxConfigBase(const wxString& appName,
                            long style)
             : m_appName(appName), m_vendorName(vendorName), m_style(style)
 {
-    m_bExpandEnvVars = TRUE;
-    m_bRecordDefaults = FALSE;
+    m_bExpandEnvVars = true;
+    m_bRecordDefaults = false;
 }
 
 wxConfigBase::~wxConfigBase()
@@ -106,21 +106,21 @@ wxConfigBase *wxConfigBase::Create()
 #define IMPLEMENT_READ_FOR_TYPE(name, type, deftype, extra)                 \
     bool wxConfigBase::Read(const wxString& key, type *val) const           \
     {                                                                       \
-        wxCHECK_MSG( val, FALSE, _T("wxConfig::Read(): NULL parameter") );  \
+        wxCHECK_MSG( val, false, _T("wxConfig::Read(): NULL parameter") );  \
                                                                             \
         if ( !DoRead##name(key, val) )                                      \
-            return FALSE;                                                   \
+            return false;                                                   \
                                                                             \
         *val = extra(*val);                                                 \
                                                                             \
-        return TRUE;                                                        \
+        return true;                                                        \
     }                                                                       \
                                                                             \
     bool wxConfigBase::Read(const wxString& key,                            \
                             type *val,                                      \
                             deftype defVal) const                           \
     {                                                                       \
-        wxCHECK_MSG( val, FALSE, _T("wxConfig::Read(): NULL parameter") );  \
+        wxCHECK_MSG( val, false, _T("wxConfig::Read(): NULL parameter") );  \
                                                                             \
         bool read = DoRead##name(key, val);                                 \
         if ( !read )                                                        \
@@ -151,32 +151,32 @@ IMPLEMENT_READ_FOR_TYPE(Bool, bool, bool, bool)
 // but can be overridden in the derived ones
 bool wxConfigBase::DoReadInt(const wxString& key, int *pi) const
 {
-    wxCHECK_MSG( pi, FALSE, _T("wxConfig::Read(): NULL parameter") );
+    wxCHECK_MSG( pi, false, _T("wxConfig::Read(): NULL parameter") );
 
     long l;
     if ( !DoReadLong(key, &l) )
-        return FALSE;
+        return false;
 
     wxASSERT_MSG( l < INT_MAX, _T("overflow in wxConfig::DoReadInt") );
 
     *pi = (int)l;
 
-    return TRUE;
+    return true;
 }
 
 bool wxConfigBase::DoReadBool(const wxString& key, bool* val) const
 {
-    wxCHECK_MSG( val, FALSE, _T("wxConfig::Read(): NULL parameter") );
+    wxCHECK_MSG( val, false, _T("wxConfig::Read(): NULL parameter") );
 
     long l;
     if ( !DoReadLong(key, &l) )
-        return FALSE;
+        return false;
 
     wxASSERT_MSG( l == 0 || l == 1, _T("bad bool value in wxConfig::DoReadInt") );
 
     *val = l != 0;
 
-    return TRUE;
+    return true;
 }
 
 bool wxConfigBase::DoReadDouble(const wxString& key, double* val) const
@@ -187,7 +187,7 @@ bool wxConfigBase::DoReadDouble(const wxString& key, double* val) const
         return str.ToDouble(val);
     }
 
-    return FALSE;
+    return false;
 }
 
 // string reading helper
@@ -241,17 +241,17 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
 
   if ( !strPath.IsEmpty() ) {
     // do change the path
-    m_bChanged = TRUE;
+    m_bChanged = true;
     m_strName = strEntry.AfterLast(wxCONFIG_PATH_SEPARATOR);
     m_strOldPath = m_pContainer->GetPath();
-    if ( m_strOldPath.Len() == 0 || 
+    if ( m_strOldPath.Len() == 0 ||
          m_strOldPath.Last() != wxCONFIG_PATH_SEPARATOR )
         m_strOldPath += wxCONFIG_PATH_SEPARATOR;
     m_pContainer->SetPath(strPath);
   }
   else {
     // it's a name only, without path - nothing to do
-    m_bChanged = FALSE;
+    m_bChanged = false;
     m_strName = strEntry;
   }
 }

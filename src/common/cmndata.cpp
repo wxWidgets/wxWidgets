@@ -137,9 +137,9 @@ wxFontData::wxFontData()
     // Intialize colour to black.
     m_fontColour = wxNullColour;
 
-    m_showHelp = FALSE;
-    m_allowSymbols = TRUE;
-    m_enableEffects = TRUE;
+    m_showHelp = false;
+    m_allowSymbols = true;
+    m_enableEffects = true;
     m_minSize = 0;
     m_maxSize = 0;
 
@@ -173,11 +173,11 @@ wxPrintData::wxPrintData()
 #endif
     m_printOrientation = wxPORTRAIT;
     m_printNoCopies = 1;
-    m_printCollate = FALSE;
+    m_printCollate = false;
 
     // New, 24/3/99
     m_printerName = wxT("");
-    m_colour = TRUE;
+    m_colour = true;
     m_duplexMode = wxDUPLEX_SIMPLEX;
     m_printQuality = wxPRINT_QUALITY_HIGH;
     m_paperId = wxPAPER_A4;
@@ -513,9 +513,9 @@ void wxPrintData::ConvertFromNative()
         if (devMode->dmFields & DM_COLLATE)
         {
             if (devMode->dmCollate == DMCOLLATE_TRUE)
-                m_printCollate = TRUE;
+                m_printCollate = true;
             else
-                m_printCollate = FALSE;
+                m_printCollate = false;
         }
 
         //// Number of copies
@@ -537,12 +537,12 @@ void wxPrintData::ConvertFromNative()
         if (devMode->dmFields & DM_COLOR)
         {
             if (devMode->dmColor == DMCOLOR_COLOR)
-                m_colour = TRUE;
+                m_colour = true;
             else
-                m_colour = FALSE;
+                m_colour = false;
         }
         else
-            m_colour = TRUE;
+            m_colour = true;
 
         //// Paper size
 
@@ -732,7 +732,7 @@ bool wxPrintData::Ok() const
     ((wxPrintData*)this)->ConvertToNative();
     return (m_devMode != NULL) ;
 #else
-    return TRUE;
+    return true;
 #endif
 }
 
@@ -750,15 +750,15 @@ wxPrintDialogData::wxPrintDialogData()
     m_printMinPage = 0;
     m_printMaxPage = 0;
     m_printNoCopies = 1;
-    m_printAllPages = FALSE;
-    m_printCollate = FALSE;
-    m_printToFile = FALSE;
-    m_printSelection = FALSE;
-    m_printEnableSelection = FALSE;
-    m_printEnablePageNumbers = TRUE;
-    m_printEnablePrintToFile = TRUE;
-    m_printEnableHelp = FALSE;
-    m_printSetupDialog = FALSE;
+    m_printAllPages = false;
+    m_printCollate = false;
+    m_printToFile = false;
+    m_printSelection = false;
+    m_printEnableSelection = false;
+    m_printEnablePageNumbers = true;
+    m_printEnablePrintToFile = true;
+    m_printEnableHelp = false;
+    m_printSetupDialog = false;
 }
 
 wxPrintDialogData::wxPrintDialogData(const wxPrintDialogData& dialogData)
@@ -780,15 +780,15 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
     m_printMinPage = 1;
     m_printMaxPage = 9999;
     m_printNoCopies = 1;
-    m_printAllPages = FALSE;
-    m_printCollate = FALSE;
-    m_printToFile = FALSE;
-    m_printSelection = FALSE;
-    m_printEnableSelection = FALSE;
-    m_printEnablePageNumbers = TRUE;
-    m_printEnablePrintToFile = TRUE;
-    m_printEnableHelp = FALSE;
-    m_printSetupDialog = FALSE;
+    m_printAllPages = false;
+    m_printCollate = false;
+    m_printToFile = false;
+    m_printSelection = false;
+    m_printEnableSelection = false;
+    m_printEnablePageNumbers = true;
+    m_printEnablePrintToFile = true;
+    m_printEnableHelp = false;
+    m_printSetupDialog = false;
 
     m_printData = printData;
 }
@@ -1044,13 +1044,13 @@ wxPageSetupDialogData::wxPageSetupDialogData()
     m_marginBottomRight = wxPoint(0, 0);
 
     // Flags
-    m_defaultMinMargins = FALSE;
-    m_enableMargins = TRUE;
-    m_enableOrientation = TRUE;
-    m_enablePaper = TRUE;
-    m_enablePrinter = TRUE;
-    m_enableHelp = FALSE;
-    m_getDefaultInfo = FALSE;
+    m_defaultMinMargins = false;
+    m_enableMargins = true;
+    m_enableOrientation = true;
+    m_enablePaper = true;
+    m_enablePrinter = true;
+    m_enableHelp = false;
+    m_getDefaultInfo = false;
 }
 
 wxPageSetupDialogData::wxPageSetupDialogData(const wxPageSetupDialogData& dialogData)
@@ -1074,13 +1074,13 @@ wxPageSetupDialogData::wxPageSetupDialogData(const wxPrintData& printData)
     m_marginBottomRight = wxPoint(0, 0);
 
     // Flags
-    m_defaultMinMargins = FALSE;
-    m_enableMargins = TRUE;
-    m_enableOrientation = TRUE;
-    m_enablePaper = TRUE;
-    m_enablePrinter = TRUE;
-    m_enableHelp = FALSE;
-    m_getDefaultInfo = FALSE;
+    m_defaultMinMargins = false;
+    m_enableMargins = true;
+    m_enableOrientation = true;
+    m_enablePaper = true;
+    m_enablePrinter = true;
+    m_enableHelp = false;
+    m_getDefaultInfo = false;
 
     m_printData = printData;
 

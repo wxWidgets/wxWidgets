@@ -94,7 +94,7 @@
 #else
     #define __WX_BO_STL ",wx containers"
 #endif
- 
+
 // This macro is passed as argument to wxConsoleApp::CheckBuildOptions()
 #define WX_BUILD_OPTIONS_SIGNATURE \
     __WX_BO_VERSION(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER) \

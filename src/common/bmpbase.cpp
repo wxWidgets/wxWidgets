@@ -52,10 +52,10 @@ bool wxBitmapBase::RemoveHandler(const wxString& name)
     if ( handler )
     {
         sm_handlers.DeleteObject(handler);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 wxBitmapHandler *wxBitmapBase::FindHandler(const wxString& name)
@@ -116,7 +116,7 @@ class wxBitmapBaseModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxBitmapBaseModule)
 public:
     wxBitmapBaseModule() {}
-    bool OnInit() { wxBitmap::InitStandardHandlers(); return TRUE; };
+    bool OnInit() { wxBitmap::InitStandardHandlers(); return true; };
     void OnExit() { wxBitmap::CleanUpHandlers(); };
 };
 

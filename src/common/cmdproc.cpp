@@ -91,23 +91,23 @@ bool wxCommandProcessor::UndoCommand(wxCommand& cmd)
 
 // Pass a command to the processor. The processor calls Do();
 // if successful, is appended to the command history unless
-// storeIt is FALSE.
+// storeIt is false.
 bool wxCommandProcessor::Submit(wxCommand *command, bool storeIt)
 {
-    wxCHECK_MSG( command, FALSE, _T("no command in wxCommandProcessor::Submit") );
+    wxCHECK_MSG( command, false, _T("no command in wxCommandProcessor::Submit") );
 
     if ( !DoCommand(*command) )
     {
         // the user code expects the command to be deleted anyhow
         delete command;
 
-        return FALSE;
+        return false;
     }
 
     if ( storeIt )
         Store(command);
 
-    return TRUE;
+    return true;
 }
 
 void wxCommandProcessor::Store(wxCommand *command)
@@ -152,11 +152,11 @@ bool wxCommandProcessor::Undo()
         {
             m_currentCommand = m_currentCommand->GetPrevious();
             SetMenuStrings();
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxCommandProcessor::Redo()
@@ -193,10 +193,10 @@ bool wxCommandProcessor::Redo()
         {
             m_currentCommand = redoNode;
             SetMenuStrings();
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 bool wxCommandProcessor::CanUndo() const
@@ -209,15 +209,15 @@ bool wxCommandProcessor::CanUndo() const
 bool wxCommandProcessor::CanRedo() const
 {
     if (m_currentCommand && !m_currentCommand->GetNext())
-        return FALSE;
+        return false;
 
     if (m_currentCommand && m_currentCommand->GetNext())
-        return TRUE;
+        return true;
 
     if (!m_currentCommand && (m_commands.GetCount() > 0))
-        return TRUE;
+        return true;
 
-    return FALSE;
+    return false;
 }
 
 void wxCommandProcessor::Initialize()
@@ -233,7 +233,7 @@ void wxCommandProcessor::SetMenuStrings()
     {
         wxString undoLabel = GetUndoMenuLabel();
         wxString redoLabel = GetRedoMenuLabel();
-        
+
         m_commandEditMenu->SetLabel(wxID_UNDO, undoLabel);
         m_commandEditMenu->Enable(wxID_UNDO, CanUndo());
 
@@ -262,7 +262,7 @@ wxString wxCommandProcessor::GetUndoMenuLabel() const
     {
         buf = _("&Undo") + m_undoAccelerator;
     }
-    
+
     return buf;
 }
 

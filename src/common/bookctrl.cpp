@@ -152,7 +152,7 @@ wxBookCtrl::InsertPage(size_t nPage,
 
     m_pages.Insert(page, nPage);
     InvalidateBestSize();
-    
+
     return true;
 }
 

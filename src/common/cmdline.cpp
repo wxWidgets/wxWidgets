@@ -86,7 +86,7 @@ struct wxCmdLineOption
                 GetLongOptionName(lng).Len() == lng.Len(),
                 wxT("Long option contains invalid characters")
             );
-            
+
 
         kind = k;
 

@@ -77,7 +77,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxContextHelp, wxObject)
 
 wxContextHelp::wxContextHelp(wxWindow* win, bool beginHelp)
 {
-    m_inHelp = FALSE;
+    m_inHelp = false;
 
     if (beginHelp)
         BeginContextHelp(win);
@@ -97,7 +97,7 @@ static void wxPushOrPopEventHandlers(wxContextHelp* help, wxWindow* win, bool pu
     if (push)
         win->PushEventHandler(new wxContextHelpEvtHandler(help));
     else
-        win->PopEventHandler(TRUE);
+        win->PopEventHandler(true);
 
     wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
     while (node)
@@ -116,7 +116,7 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
     if (!win)
         win = wxTheApp->GetTopWindow();
     if (!win)
-        return FALSE;
+        return false;
 
     wxCursor cursor(wxCURSOR_QUESTION_ARROW);
     wxCursor oldCursor = win->GetCursor();
@@ -126,10 +126,10 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
     //    wxSetCursor(cursor);
 #endif
 
-    m_status = FALSE;
+    m_status = false;
 
 #ifdef __WXMOTIF__
-    wxPushOrPopEventHandlers(this, win, TRUE);
+    wxPushOrPopEventHandlers(this, win, true);
 #else
     win->PushEventHandler(new wxContextHelpEvtHandler(this));
 #endif
@@ -141,9 +141,9 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
     win->ReleaseMouse();
 
 #ifdef __WXMOTIF__
-    wxPushOrPopEventHandlers(this, win, FALSE);
+    wxPushOrPopEventHandlers(this, win, false);
 #else
-    win->PopEventHandler(TRUE);
+    win->PopEventHandler(true);
 #endif
 
     win->SetCursor(oldCursor);
@@ -165,19 +165,19 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
             DispatchEvent(winAtPtr, pt);
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxContextHelp::EndContextHelp()
 {
-    m_inHelp = FALSE;
+    m_inHelp = false;
 
-    return TRUE;
+    return true;
 }
 
 bool wxContextHelp::EventLoop()
 {
-    m_inHelp = TRUE;
+    m_inHelp = true;
 
     while ( m_inHelp )
     {
@@ -191,16 +191,16 @@ bool wxContextHelp::EventLoop()
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
 {
     if (event.GetEventType() == wxEVT_LEFT_DOWN)
     {
-        m_contextHelp->SetStatus(TRUE);
+        m_contextHelp->SetStatus(true);
         m_contextHelp->EndContextHelp();
-        return TRUE;
+        return true;
     }
 
     if ((event.GetEventType() == wxEVT_CHAR) ||
@@ -208,27 +208,27 @@ bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
         (event.GetEventType() == wxEVT_ACTIVATE) ||
         (event.GetEventType() == wxEVT_MOUSE_CAPTURE_CHANGED))
     {
-        // May have already been set to TRUE by a left-click
-        //m_contextHelp->SetStatus(FALSE);
+        // May have already been set to true by a left-click
+        //m_contextHelp->SetStatus(false);
         m_contextHelp->EndContextHelp();
-        return TRUE;
+        return true;
     }
 
     if ((event.GetEventType() == wxEVT_PAINT) ||
         (event.GetEventType() == wxEVT_ERASE_BACKGROUND))
     {
         event.Skip();
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 // Dispatch the help event to the relevant window
 bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
 {
     wxWindow* subjectOfHelp = win;
-    bool eventProcessed = FALSE;
+    bool eventProcessed = false;
     while (subjectOfHelp && !eventProcessed)
     {
         wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(), pt) ;
@@ -381,11 +381,11 @@ bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
     {
         s_tipWindow = new wxTipWindow((wxWindow *)window, text, 100, & s_tipWindow);
 
-        return TRUE;
+        return true;
     }
 #endif // wxUSE_TIPWINDOW
 
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -410,7 +410,7 @@ bool wxHelpControllerHelpProvider::ShowHelp(wxWindowBase *window)
             // If the help controller is capable of popping up the text...
             else if (m_helpController->DisplayTextPopup(text, wxGetMousePosition()))
             {
-                return TRUE;
+                return true;
             }
             else
             // ...else use the default method.
@@ -421,7 +421,7 @@ bool wxHelpControllerHelpProvider::ShowHelp(wxWindowBase *window)
 
     }
 
-    return FALSE;
+    return false;
 }
 
 // Convenience function for turning context id into wxString
@@ -452,7 +452,7 @@ bool wxHelpProviderModule::OnInit()
     // since it could pull in extra code
     // wxHelpProvider::Set(new wxSimpleHelpProvider);
 
-    return TRUE;
+    return true;
 }
 
 void wxHelpProviderModule::OnExit()

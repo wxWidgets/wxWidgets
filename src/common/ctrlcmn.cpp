@@ -79,14 +79,14 @@ bool wxControlBase::CreateControl(wxWindowBase *parent,
     // even if it's possible to create controls without parents in some port,
     // it should surely be discouraged because it doesn't work at all under
     // Windows
-    wxCHECK_MSG( parent, FALSE, wxT("all controls must have parents") );
+    wxCHECK_MSG( parent, false, wxT("all controls must have parents") );
 
     if ( !CreateBase(parent, id, pos, size, style, validator, name) )
-        return FALSE;
+        return false;
 
     parent->AddChild(this);
 
-    return TRUE;
+    return true;
 }
 
 void wxControlBase::Command(wxCommandEvent& event)
@@ -120,7 +120,7 @@ void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
 void wxControlBase::SetLabel( const wxString &label )
 {
     InvalidateBestSize();
-    wxWindow::SetLabel(label);   
+    wxWindow::SetLabel(label);
 }
 
 bool wxControlBase::SetFont(const wxFont& font)

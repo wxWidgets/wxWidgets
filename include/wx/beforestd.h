@@ -26,16 +26,16 @@
     #if __VISUALC__ > 1100
         #pragma warning(push, 1)
     #else // VC 5
-        // 'expression' : signed/unsigned mismatch 
-        #pragma warning(disable:4018) 
+        // 'expression' : signed/unsigned mismatch
+        #pragma warning(disable:4018)
 
-        // 'conversion' : conversion from 'type1' to 'type2', 
-        // possible loss of data 
-        #pragma warning(disable:4244) 
+        // 'conversion' : conversion from 'type1' to 'type2',
+        // possible loss of data
+        #pragma warning(disable:4244)
 
-        // C++ language change: to explicitly specialize class template 
-        // 'identifier' use the following syntax 
-        #pragma warning(disable:4663) 
+        // C++ language change: to explicitly specialize class template
+        // 'identifier' use the following syntax
+        #pragma warning(disable:4663)
     #endif
 
     // these warning have to be disabled and not just temporarily disabled
