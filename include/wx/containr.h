@@ -92,6 +92,9 @@ protected:
     // a temporary override of m_winDefault, use the latter if NULL
     wxWindow *m_winTmpDefault;
 
+    // a guard against infinite recursion
+    bool m_inSetFocus;
+
     DECLARE_NO_COPY_CLASS(wxControlContainer)
 };
 

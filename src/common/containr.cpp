@@ -51,6 +51,7 @@ wxControlContainer::wxControlContainer(wxWindow *winParent)
     m_winLastFocused =
     m_winTmpDefault =
     m_winDefault = NULL;
+    m_inSetFocus = false;
 }
 
 bool wxControlContainer::AcceptsFocus() const
@@ -341,6 +342,11 @@ bool wxControlContainer::DoSetFocus()
     wxLogTrace(_T("focus"), _T("SetFocus on wxPanel 0x%08lx."),
                (unsigned long)m_winParent->GetHandle());
 
+    if (m_inSetFocus)
+        return true;
+
+    m_inSetFocus = true;
+    
     // when the panel gets the focus we move the focus to either the last
     // window that had the focus or the first one that can get it unless the
     // focus had been already set to some other child
@@ -364,7 +370,11 @@ bool wxControlContainer::DoSetFocus()
         win = win->GetParent();
     }
 
-    return SetFocusToChild();
+    bool ret = SetFocusToChild();
+
+    m_inSetFocus = false;
+
+    return ret;
 }
 
 void wxControlContainer::HandleOnFocus(wxFocusEvent& event)
