@@ -33,12 +33,11 @@
 // ----------------------------------------------------------------------------
 
 // gettext() style macros (notice that xgettext should be invoked with 
-// --keyword="_" --keyword="_N:1,2" --keyword="N_" options
+// --keyword="_" --keyword="ngettext:1,2" options
 // to extract the strings from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
-    #define _(s)            wxGetTranslation(_T(s))
-    #define _N(s1, s2, n)   wxGetTranslation(_T(s1), _T(s2), n)
-    #define N_(s)           _T(s)
+    #define _(s)                  wxGetTranslation(_T(s))
+    #define ngettext(s1, s2, n)   wxGetTranslation(_T(s1), _T(s2), n)
 #endif
 
 // another one which just marks the strings for extraction, but doesn't
@@ -557,10 +556,13 @@ inline const wxChar *wxGetTranslation(const wxChar *sz1, const wxChar *sz2,
 
 // the macros should still be defined - otherwise compilation would fail
 
-#if !defined(WXINTL_NO_GETTEXT_MACRO) && !defined(_)
-    #define _(s)            (_T(s))
-    #define _N(s1, s2, n)   ((n) == 1 ? _T(s1) : _T(s2))
-    #define N_(s)           _T(s)
+#if !defined(WXINTL_NO_GETTEXT_MACRO)
+    #if !defined(_)
+        #define _(s)                 (_T(s))
+    #endif
+    #if !defined(ngettext)
+        #define ngettext(s1, s2, n)  ((n) == 1 ? _T(s1) : _T(s2))
+    #endif
 #endif
 
 #define wxTRANSLATE(str) _T(str)
@@ -573,8 +575,13 @@ inline const wxChar *wxGetTranslation(const wxChar *sz1, const wxChar *sz2,
 
 // define this one just in case it occurs somewhere (instead of preferred
 // wxTRANSLATE) too
-#if !defined(WXINTL_NO_GETTEXT_MACRO) && !defined(gettext_noop)
-    #define gettext_noop(str) _T(str)
+#if !defined(WXINTL_NO_GETTEXT_MACRO)
+    #if !defined(gettext_noop)
+        #define gettext_noop(str) _T(str)
+    #endif
+    #if !defined(N_)
+        #define N_(s)             _T(s)
+    #endif
 #endif
 
 #endif // _WX_INTL_H_
