@@ -27,7 +27,14 @@ wx_*.rsrc
 wxbase*.dll
 wxbase*.exp
 wxbase*.ilk
+wxbase*.lib
 wxmsw*.dll
 wxmsw*.exp
 wxmsw*.ilk
+wxmsw*.lib
+jpeg*.lib
+png*.lib
+regex*.lib
+tiff*.lib
+zlib*.lib
 .DS_Store

@@ -25,10 +25,14 @@ Release
 Debug
 ReleaseDLL
 DebugDLL
+ReleaseUnicodeDLL
+DebugUnicodeDLL
 UnivRelease
 UnivDebug
 BaseRelease
 BaseDebug
+BaseReleaseDLL
+BaseDebugDLL
 robert
 stamp-h.in
 Makefile
