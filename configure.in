@@ -6310,7 +6310,7 @@ case "$TOOLKIT" in
         ;;
 esac
 
-AC_BAKEFILE
+AC_BAKEFILE([m4_include(autoconf_inc.m4)])
 
 if test "$wxUSE_SHARED" = "yes"; then
 
