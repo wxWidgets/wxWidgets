@@ -1303,18 +1303,19 @@ void wxTextCtrl::ShowPosition(long pos)
             return;
         }
 
+        wxRect rectText = GetRealTextArea();
+
+        // scroll the position vertically into view: if it is currently above
+        // it, make it the first one, otherwise the last one
         if ( m_scrollRangeY )
         {
-            // scroll the position vertically into view: if it is currently
-            // above it, make it the first one, otherwise the last one
             if ( row < yStart )
             {
                 Scroll(0, row);
             }
-            else
+            else // we are currently in or below the view area
             {
-                int yEnd = yStart +
-                            GetRealTextArea().height / GetCharHeight() - 1;
+                int yEnd = yStart + rectText.height / GetCharHeight() - 1;
                 if ( yEnd < row )
                 {
                     // scroll down: the current item should appear at the
@@ -1324,9 +1325,34 @@ void wxTextCtrl::ShowPosition(long pos)
             }
         }
 
+        // scroll the position horizontally into view
         if ( m_scrollRangeX )
         {
-            // TODO
+            // unlike for the rows, xStart doesn't correspond to the starting
+            // column as they all have different widths, so we need to
+            // translate everything to pixels
+
+            // we want the text between posLeft and posRight be entirely inside
+            // the view (i.e. the current character)
+            wxString line = GetLineText(row);
+            wxCoord posLeft = GetTextWidth(line.Left(col));
+
+            // make xStart the first visible pixel (and not position)
+            int wChar = GetCharWidth();
+            xStart *= GetCharWidth();
+
+            if ( posLeft < xStart )
+            {
+                Scroll(posLeft / wChar, row);
+            }
+            else // maybe we're beyond the right border of the view?
+            {
+                wxCoord posRight = posLeft + GetTextWidth(line[(size_t)col]);
+                if ( posRight > xStart + rectText.width )
+                {
+                    Scroll(posRight / wChar, row);
+                }
+            }
         }
     }
     //else: multiline but no scrollbars, hence nothing to do
@@ -2502,11 +2528,17 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
 
             if ( colEnd > m_colLastVisible )
                 colEnd = m_colLastVisible;
+
+            // we don't draw the last character because it may be shown only
+            // partially in single line mode (in multi line we can't avoid
+            // showing parts of characters anyhow)
+            if ( colEnd > colStart )
+                colEnd--;
         }
 
         // extract the part of line we need to redraw
         wxString textLine = GetLineText(line);
-        wxString text = textLine.Mid(colStart, colEnd - colStart);
+        wxString text = textLine.Mid(colStart, colEnd - colStart + 1);
 
         // now deal with the selection
         int selStart, selEnd;

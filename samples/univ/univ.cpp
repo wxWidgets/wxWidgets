@@ -389,8 +389,6 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #if 0
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                                       wxPoint(10, 40));
-    text->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT,
-                         wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     wxSize sizeText = text->GetBestSize();
     sizeText.x = 200;
     text->SetSize(sizeText);
@@ -408,6 +406,8 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     TestTextCtrlReplace(text, "first\nsecond\n\nthird line");
 #endif
 #endif
+    text->SetFont(wxFont(24, wxFONTFAMILY_DEFAULT,
+                         wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     text->SetFocus();
     //text->SetEditable(FALSE);
 #endif // !TEST_TEXT_ONLY/TEST_TEXT_ONLY

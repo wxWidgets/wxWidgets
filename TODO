@@ -1,4 +1,10 @@
 ----------------------------------------------------------------------------
+TEST
+----------------------------------------------------------------------------
+
+    how Paste/Cut work with undo/redo in wxTextCtrl?
+
+----------------------------------------------------------------------------
 TODO
 ----------------------------------------------------------------------------
 
@@ -8,11 +14,10 @@ samples:
 
 wxTextCtrl
 
-*   display corrupted when typing text in quickly (single line)
+*!  display corrupted when typing text in quickly (caret problem?)
+*   scrollbars don't disappear after deleting long line
 ?   text ctrl display pb when text is truncated
 *   too much is refreshed when double clicking (word select)
-
-!!  own ScrollWindow() for horz scrolling as we must always scroll by char!
 
 All
 
