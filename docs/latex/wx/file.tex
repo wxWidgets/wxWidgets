@@ -298,3 +298,7 @@ Writes the contents of the string to the file, returns true on success.
 The second argument is only meaningful in Unicode build of wxWindows when
 {\it conv} is used to convert {\it s} to multibyte representation.
 
+Note that this method only works with {\tt NUL}-terminated strings, if you want
+to write data with embedded {\tt NUL}s to the file you should use the other 
+\helpref{Write() overload}{wxfilewrite}.
+
