@@ -527,7 +527,6 @@ bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
     wxEvent *event_main;
     wxCriticalSectionLocker locker(*m_eventsLocker);
 
-
     // check that we are really in a child thread
     wxASSERT( !wxThread::IsMain() );
 
@@ -543,7 +542,7 @@ bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
     wxPendingEventsLocker->Leave();
 
 #ifdef __WXGTK__
-    if (g_isIdle) wxapp_install_idle_handler();
+//    if (g_isIdle) wxapp_install_idle_handler();
 #endif
 
     return TRUE;

@@ -137,7 +137,7 @@ MyFrame::MyFrame():
   wxSocketHandler::Master();
 
   sock = new MyClient();
-  sock->SetFlags(wxSocketBase::WAITALL);
+  sock->SetFlags((wxSocketBase::wxSockFlags) (wxSocketBase::WAITALL | wxSocketBase::SPEED));
   wxSocketHandler::Master().Register(sock);
   sock->frame = this;
   sock->SetNotify(wxSocketBase::REQ_LOST);
@@ -162,8 +162,11 @@ void MyFrame::OnExecOpenConnection(wxCommandEvent& WXUNUSED(evt))
   if (sock->IsConnected())
     sock->Close();
 
+/*
   wxString hname = wxGetTextFromUser("Enter the address of the wxSocket Sample Server", 
                                   "Connect ...", "localhost");
+*/
+  wxString hname = "localhost";
   addr.Hostname(hname);
   addr.Service(3000);
   sock->SetNotify(0);

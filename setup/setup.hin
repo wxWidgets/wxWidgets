@@ -440,6 +440,9 @@
 /* Define if you have all functions to set thread priority */
 #undef HAVE_THREAD_PRIORITY_FUNCTIONS
 
+/* Define if you can specify exit functions to a thread */
+#undef HAVE_THREAD_CLEANUP_FUNCTIONS
+
 /* Define if your system has its own `getloadavg' function.  */
 #undef HAVE_GETLOADAVG
 

@@ -117,12 +117,12 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
 
 bool
-wxProgressDialog::Update(int value, const char *newmsg)
+wxProgressDialog::Update(int value, const wxString& newmsg)
 {
    wxASSERT(value == -1 || m_gauge);
    if(m_gauge)
       m_gauge->SetValue(value);
-   if(newmsg)
+   if(!newmsg.IsNull())
       m_msg->SetLabel(newmsg);
    wxYield();
    return m_state != Canceled;

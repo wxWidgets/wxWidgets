@@ -132,7 +132,7 @@ void MyFrame::OnSockRequestServer(wxSocketEvent& evt)
   if (sock2 == NULL)
     return;
 
-  sock2->SetFlags(wxSocketBase::NONE);
+  sock2->SetFlags(wxSocketBase::SPEED);
   sock2->Notify(TRUE);
   sock2->SetEventHandler(*this, SKDEMO_SOCKET);
   server->SetNotify(wxSocketBase::REQ_ACCEPT);
@@ -154,6 +154,7 @@ MyFrame::MyFrame(wxFrame *frame):
   wxSocketHandler::Master().Register(sock);
   sock->SetNotify(wxSocketBase::REQ_ACCEPT);
   sock->SetEventHandler(*this, SKDEMO_SOCKET_SERV);
+  sock->SetFlags(wxSocketBase::SPEED);
   sock->Notify(TRUE);
   nb_clients = 0;
 

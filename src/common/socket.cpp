@@ -736,6 +736,8 @@ wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
     return;
   }
 
+  m_internal->SetFD(m_fd);
+
   Notify(TRUE);
 }
 
@@ -766,6 +768,8 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock)
   sock.m_type = SOCK_INTERNAL;
   sock.m_fd = fd2;
   sock.m_connected = TRUE;
+
+  sock.m_internal->SetFD(fd2);
 
   sock.m_internal->ResumeWaiter();
 
@@ -848,6 +852,8 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool WXUNUSED(wait) )
 
   if (connect(m_fd, remote, len) != 0)
     return FALSE;
+
+  m_internal->SetFD(m_fd);
 
   // Enables bg events.
   // ------------------

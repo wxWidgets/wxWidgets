@@ -179,7 +179,7 @@ wxWindowBase::~wxWindowBase()
     // we weren't a dialog class
     wxTopLevelWindows.DeleteObject(this);
 
-    wxASSERT_MSG( GetChildren().GetCount() == 0, "children not destroyed" );
+    wxASSERT_MSG( GetChildren().GetCount() == 0, _T("children not destroyed") );
 
     if ( m_windowValidator )
         delete m_windowValidator;
@@ -253,12 +253,12 @@ bool wxWindowBase::DestroyChildren()
 
         wxWindow *child = node->GetData();
 
-        wxASSERT_MSG( child, "children list contains empty nodes" );
+        wxASSERT_MSG( child, _T("children list contains empty nodes") );
 
         delete child;
 
         wxASSERT_MSG( !GetChildren().Find(child),
-                      "child didn't remove itself using RemoveChild()" );
+                      _T("child didn't remove itself using RemoveChild()") );
     }
 
     return TRUE;
@@ -575,7 +575,7 @@ wxWindow *wxWindowBase::FindWindow( const wxString& name )
 
 void wxWindowBase::MakeModal(bool WXUNUSED(modal))
 {
-    wxFAIL_MSG("TODO");
+    wxFAIL_MSG(_T("TODO"));
 }
 
 bool wxWindowBase::Validate()

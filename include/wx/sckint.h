@@ -118,6 +118,7 @@ class wxSocketInternal {
   void ReleaseFD();
 
   int GetFD() { return m_fd; }
+  void SetFD(int fd) { m_fd = fd; }
   
   void ResumeWaiter();
   void StopWaiter();
