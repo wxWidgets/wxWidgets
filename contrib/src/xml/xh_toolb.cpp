@@ -41,7 +41,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
     if (m_Node->GetName() == _T("tool"))
     {
         wxCHECK_MSG(m_Toolbar, NULL, _T("Incorrect syntax of XML resource: tool not within a toolbar!"));
-        m_Toolbar->AddTool(GetID(), 
+        m_Toolbar->AddTool(GetID(),
                            GetBitmap(_T("bitmap")),
                            GetBitmap(_T("bitmap2")),
                            GetBool(_T("toggle")),
@@ -62,12 +62,16 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
     
     else /*<toolbar>*/
     {
+        int style = GetStyle(_T("style"), wxNO_BORDER | wxTB_HORIZONTAL);
+#ifdef __WXMSW__
+        if (!(style & wxNO_BORDER)) style |= wxNO_BORDER;
+#endif
         wxToolBar *toolbar = new wxToolBar(m_ParentAsWindow,
-                                           GetID(),
-                                           GetPosition(),
-                                           GetSize(),
-                                           GetStyle(),
-                                           GetName());
+                                    GetID(),
+                                    GetPosition(),
+                                    GetSize(),
+                                    style,
+                                    GetName());
 
         wxSize bmpsize = GetSize(_T("bitmapsize"));
         if (!(bmpsize == wxDefaultSize))
@@ -81,7 +85,6 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         long separation = GetLong(_T("separation"), -1);
         if (separation != -1)
             toolbar->SetToolSeparation(separation);
-
 
         wxXmlNode *children_node = GetParamNode(_T("children"));
         if (children_node == NULL) return toolbar;
