@@ -24,7 +24,8 @@ OGL patch from Shane Holloway:
     that the child is in both self._children and self._divisions.
     Causes many problems when it's not.  ;)
 
-
+Fixed GetSaveData and SetSaveData in wx.lib.multisash to not depend on
+the default way that class objectss are converted to strings.
 
 
 

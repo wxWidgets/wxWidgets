@@ -55,17 +55,18 @@ class MultiSash(wx.Window):
 
     def GetSaveData(self):
         saveData = {}
-        saveData['_defChild'] = str(self._defChild)
+        saveData['_defChild_class'] = self._defChild.__name__
+        saveData['_defChild_mod']   = self._defChild.__module__
         saveData['child'] = self.child.GetSaveData()
         return saveData
 
     def SetSaveData(self,data):
-        dChild = data['_defChild']
-        mod = dChild.split('.')[0]
+        mod = data['_defChild_mod']
+        dChild = mod + '.' + data['_defChild_class']
         exec 'import %s' % mod
         self._defChild = eval(dChild)
         old = self.child
-        self.child = MultiSplit(self,self,wxPoint(0,0),self.GetSize())
+        self.child = MultiSplit(self,self,wx.Point(0,0),self.GetSize())
         self.child.SetSaveData(data['child'])
         old.Destroy()
         self.OnMultiSize(None)
@@ -307,7 +308,8 @@ class MultiViewLeaf(wx.Window):
 
     def GetSaveData(self):
         saveData = {}
-        saveData['detailClass'] = str(self.detail.child.__class__)
+        saveData['detailClass_class'] = self.detail.child.__class__.__name__
+        saveData['detailClass_mod'] = self.detail.child.__module__
         if hasattr(self.detail.child,'GetSaveData'):
             attr = getattr(self.detail.child,'GetSaveData')
             if callable(attr):
@@ -323,8 +325,8 @@ class MultiViewLeaf(wx.Window):
         return saveData
 
     def SetSaveData(self,data):
-        dChild = data['detailClass']
-        mod = dChild.split('.')[0]
+        mod = data['detailClass_mod']
+        dChild = mod + '.' + data['detailClass_class']
         exec 'import %s' % mod
         detClass = eval(dChild)
         self.SetDimensions(data['x'],data['y'],data['w'],data['h'])
