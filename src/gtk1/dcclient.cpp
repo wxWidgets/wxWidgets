@@ -1383,6 +1383,11 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
         return;
     }
 
+    wxCoord x,y,w,h;
+    region.GetBox( x, y, w, h );
+    
+    wxDC::DoSetClippingRegion( x, y, w, h );
+
     if (!m_window) return;
 
     gdk_gc_set_clip_region( m_penGC, region.GetRegion() );
