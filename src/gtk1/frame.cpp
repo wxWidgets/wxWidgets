@@ -104,7 +104,6 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
 
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
     EVT_SIZE(wxFrame::OnSize)
-    EVT_CLOSE(wxFrame::OnCloseWindow)
     EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
 END_EVENT_TABLE()
 
@@ -197,14 +196,14 @@ wxFrame::~wxFrame()
     if (m_frameToolBar) delete m_frameToolBar;
 
     wxTopLevelWindows.DeleteObject( this );
-    
+
     if (wxTheApp->GetTopWindow() == this)
     {
         wxTheApp->SetTopWindow( (wxWindow*) NULL );
     }
-    
+
     if (wxTopLevelWindows.Number() == 0)
-    {  
+    {
         wxTheApp->ExitMainLoop();
     }
 }
@@ -224,11 +223,6 @@ bool wxFrame::Show( bool show )
     }
 
     return wxWindow::Show( show );
-}
-
-void wxFrame::OnCloseWindow( wxCloseEvent &event )
-{
-    if (GetEventHandler()->OnClose() || event.GetForce()) this->Destroy();
 }
 
 bool wxFrame::Destroy()

@@ -1716,9 +1716,15 @@ bool wxWindow::Close( bool force )
 
     wxCloseEvent event(wxEVT_CLOSE_WINDOW, m_windowId);
     event.SetEventObject(this);
-    event.SetForce(force);
+    event.SetCanVeto(!force);
 
-    return GetEventHandler()->ProcessEvent(event);
+    (void)GetEventHandler()->ProcessEvent(event);
+
+    // when we're forced to close we do it anyhow, otherwise only if the
+    // application didn't forbid it (if the event wasn't processed, GetVeto()
+    // will return FALSE too)
+    if ( force || !event.GetVeto() )
+        Destroy();
 }
 
 bool wxWindow::Destroy()
@@ -2233,11 +2239,6 @@ wxWindow *wxWindow::FindFocus()
 bool wxWindow::AcceptsFocus() const
 {
     return IsEnabled() && IsShown() && m_acceptsFocus;
-}
-
-bool wxWindow::OnClose()
-{
-    return TRUE;
 }
 
 void wxWindow::AddChild( wxWindow *child )

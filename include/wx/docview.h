@@ -187,8 +187,11 @@ class WXDLLEXPORT wxView: public wxEvtHandler
 
   // Override to do cleanup/veto close
   virtual bool OnClose(bool deleteWindow);
+
+#ifdef WXWIN_COMPATIBILITY
   // Defeat compiler warning
-  inline bool OnClose(void) { return wxEvtHandler::OnClose(); }
+  bool OnClose(void) { return wxEvtHandler::OnClose(); }
+#endif
 
   // Extend event processing to search the document's event table
   virtual bool ProcessEvent(wxEvent& event);
@@ -197,7 +200,8 @@ class WXDLLEXPORT wxView: public wxEvtHandler
   // The function then notifies the document manager.
   virtual void Activate(bool activate);
 
-  inline wxDocManager *GetDocumentManager(void) const { return m_viewDocument->GetDocumentManager(); }
+  wxDocManager *GetDocumentManager(void) const
+    { return m_viewDocument->GetDocumentManager(); }
 
 #if wxUSE_PRINTING_ARCHITECTURE
   virtual wxPrintout *OnCreatePrintout(void);

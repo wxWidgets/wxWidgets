@@ -184,7 +184,6 @@ public:
   virtual void MakeModal( bool modal );
   virtual bool IsEnabled() const { return m_isEnabled; }
   inline bool Enabled() const { return IsEnabled(); }
-  virtual bool OnClose();
 
   virtual void SetFocus();
   static wxWindow *FindFocus();
@@ -195,6 +194,7 @@ public:
   virtual void RemoveChild( wxWindow *child );
   void SetReturnCode( int retCode );
   int GetReturnCode();
+
   wxWindow *GetParent() const
     { return m_parent; }
   wxWindow *GetGrandParent() const
@@ -260,10 +260,10 @@ public:
   virtual wxFont& GetFont() { return m_font; }
 
     // For backward compatibility
-  inline virtual void SetButtonFont(const wxFont& font) { SetFont(font); }
-  inline virtual void SetLabelFont(const wxFont& font) { SetFont(font); }
-  inline virtual wxFont& GetLabelFont() { return GetFont(); };
-  inline virtual wxFont& GetButtonFont() { return GetFont(); };
+  virtual void SetButtonFont(const wxFont& font) { SetFont(font); }
+  virtual void SetLabelFont(const wxFont& font) { SetFont(font); }
+  virtual wxFont& GetLabelFont() { return GetFont(); };
+  virtual wxFont& GetButtonFont() { return GetFont(); };
 
   virtual void SetWindowStyleFlag( long flag );
   virtual long GetWindowStyleFlag() const;
@@ -277,7 +277,7 @@ public:
   virtual wxString GetName() const;
   virtual wxString GetLabel() const;
 
-  void OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event) ) {};
+  void OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event) ) { }
   void OnKeyDown( wxKeyEvent &event );
 
   virtual bool IsShown() const;
@@ -289,8 +289,8 @@ public:
   virtual wxWindow *FindWindow( long id );
   virtual wxWindow *FindWindow( const wxString& name );
 
-  void AllowDoubleClick( bool WXUNUSED(allow) ) {};
-  void SetDoubleClick( bool WXUNUSED(allow) ) {};
+  void AllowDoubleClick( bool WXUNUSED(allow) ) { }
+  void SetDoubleClick( bool WXUNUSED(allow) ) { }
 
   virtual void ClientToScreen( int *x, int *y );
   virtual void ScreenToClient( int *x, int *y );

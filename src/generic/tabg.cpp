@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -55,18 +55,18 @@ wxTabControl::wxTabControl(wxTabView *v)
 wxTabControl::~wxTabControl(void)
 {
 }
-    
+
 void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
 {
     // Old, but in some ways better (drawing opaque tabs)
 #ifndef wxUSE_NEW_METHOD
   if (!m_view)
     return;
-    
+
   // Top-left of tab view area
   int viewX = m_view->GetViewRect().x;
   int viewY = m_view->GetViewRect().y;
-  
+
   // Top-left of tab control
   int tabX = GetX() + viewX;
   int tabY = GetY() + viewY;
@@ -76,7 +76,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
     tabHeightInc = (m_view->GetTabSelectionHeight() - m_view->GetTabHeight());
     tabY -= tabHeightInc;
   }
-  
+
   dc.SetPen(*wxTRANSPARENT_PEN);
 
   // Draw grey background
@@ -91,7 +91,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
     dc.DrawRectangle(tabX, tabY, (GetWidth()+1), (GetHeight() + 1 + tabHeightInc));
 #endif
   }
-  
+
   // Draw highlight and shadow
   dc.SetPen(*m_view->GetHighlightPen());
 
@@ -146,7 +146,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
     if (lastInRow)
     {
       // 25/5/97 UNLESS it's less than the max number of positions in this row
-      
+
       int topY = m_view->GetViewRect().y - m_view->GetTopMargin();
 
       int maxPositions = ((wxTabLayer *)m_view->GetLayers().Nth(0)->Data())->Number();
@@ -191,7 +191,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
          (tabY + GetHeight() + tabHeightInc - subtractThis));
     }
   }
-  
+
   // Draw centered text
   int textY = tabY + m_view->GetVerticalTabTextSpacing() + tabHeightInc;
 
@@ -229,258 +229,258 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
 #else
     // New HEL version with rounder tabs
 
-	if (!m_view) return;
+    if (!m_view) return;
 
-	int tabInc   = 0;
-	if (m_isSelected)
-	{
-		tabInc = m_view->GetTabSelectionHeight() - m_view->GetTabHeight();
-	}
-	int tabLeft  = GetX() + m_view->GetViewRect().x;
-	int tabTop   = GetY() + m_view->GetViewRect().y - tabInc;
-	int tabRight = tabLeft + m_view->GetTabWidth();
-	int left     = m_view->GetViewRect().x;
-	int top      = tabTop + m_view->GetTabHeight() + tabInc;
-	int right    = left + m_view->GetViewRect().width;
-	int bottom   = top + m_view->GetViewRect().height;
+    int tabInc   = 0;
+    if (m_isSelected)
+    {
+        tabInc = m_view->GetTabSelectionHeight() - m_view->GetTabHeight();
+    }
+    int tabLeft  = GetX() + m_view->GetViewRect().x;
+    int tabTop   = GetY() + m_view->GetViewRect().y - tabInc;
+    int tabRight = tabLeft + m_view->GetTabWidth();
+    int left     = m_view->GetViewRect().x;
+    int top      = tabTop + m_view->GetTabHeight() + tabInc;
+    int right    = left + m_view->GetViewRect().width;
+    int bottom   = top + m_view->GetViewRect().height;
 
-	if (m_isSelected)
-	{
-		// TAB is selected - draw TAB and the View's full outline
+    if (m_isSelected)
+    {
+        // TAB is selected - draw TAB and the View's full outline
 
-		dc.SetPen(*(m_view->GetHighlightPen()));
-		wxPoint pnts[10];
-		int n = 0;
-		pnts[n].x = left;			pnts[n++].y = bottom;
-		pnts[n].x = left;	 		pnts[n++].y = top;
-		pnts[n].x = tabLeft; 		pnts[n++].y = top;
-		pnts[n].x = tabLeft;			pnts[n++].y = tabTop + 2;
-		pnts[n].x = tabLeft + 2;		pnts[n++].y = tabTop;
-		pnts[n].x = tabRight - 1;	pnts[n++].y = tabTop;
-		dc.DrawLines(n, pnts);
-		if (!lastInRow)
-		{
-			dc.DrawLine(
-					(tabRight + 2),
-					top,
-					right,
-					top
-					);
-		}
+        dc.SetPen(*(m_view->GetHighlightPen()));
+        wxPoint pnts[10];
+        int n = 0;
+        pnts[n].x = left;            pnts[n++].y = bottom;
+        pnts[n].x = left;             pnts[n++].y = top;
+        pnts[n].x = tabLeft;         pnts[n++].y = top;
+        pnts[n].x = tabLeft;            pnts[n++].y = tabTop + 2;
+        pnts[n].x = tabLeft + 2;        pnts[n++].y = tabTop;
+        pnts[n].x = tabRight - 1;    pnts[n++].y = tabTop;
+        dc.DrawLines(n, pnts);
+        if (!lastInRow)
+        {
+            dc.DrawLine(
+                    (tabRight + 2),
+                    top,
+                    right,
+                    top
+                    );
+        }
 
-		dc.SetPen(*(m_view->GetShadowPen()));
-		dc.DrawLine(
-				tabRight,
-				tabTop + 2,
-				tabRight,
-				top
-				);
-		dc.DrawLine(
-				right,
-				top,
-				right,
-				bottom
-				);
-		dc.DrawLine(
-				right,
-				bottom,
-				left,
-				bottom
-				);
+        dc.SetPen(*(m_view->GetShadowPen()));
+        dc.DrawLine(
+                tabRight,
+                tabTop + 2,
+                tabRight,
+                top
+                );
+        dc.DrawLine(
+                right,
+                top,
+                right,
+                bottom
+                );
+        dc.DrawLine(
+                right,
+                bottom,
+                left,
+                bottom
+                );
 
-		dc.SetPen(*wxBLACK_PEN);
-		dc.DrawPoint(
-				tabRight,
-				tabTop + 1
-				);
-		dc.DrawPoint(
-				tabRight + 1,
-				tabTop + 2
-				);
-		if (lastInRow)
-		{
-			dc.DrawLine(
-				tabRight + 1,
-				bottom,
-				tabRight + 1,
-				tabTop + 1
-				);
-		}
-		else
-		{
-			dc.DrawLine(
-				tabRight + 1,
-				tabTop + 2,
-				tabRight + 1,
-				top
-				);
-			dc.DrawLine(
-				right + 1,
-				top,
-				right + 1,
-				bottom + 1
-				);
-		}
-		dc.DrawLine(
-				right + 1,
-				bottom + 1,
-				left + 1,
-				bottom + 1
-				);
-	}
-	else
-	{
-		// TAB is not selected - just draw TAB outline and RH edge
-		// if the TAB is the last in the row
+        dc.SetPen(*wxBLACK_PEN);
+        dc.DrawPoint(
+                tabRight,
+                tabTop + 1
+                );
+        dc.DrawPoint(
+                tabRight + 1,
+                tabTop + 2
+                );
+        if (lastInRow)
+        {
+            dc.DrawLine(
+                tabRight + 1,
+                bottom,
+                tabRight + 1,
+                tabTop + 1
+                );
+        }
+        else
+        {
+            dc.DrawLine(
+                tabRight + 1,
+                tabTop + 2,
+                tabRight + 1,
+                top
+                );
+            dc.DrawLine(
+                right + 1,
+                top,
+                right + 1,
+                bottom + 1
+                );
+        }
+        dc.DrawLine(
+                right + 1,
+                bottom + 1,
+                left + 1,
+                bottom + 1
+                );
+    }
+    else
+    {
+        // TAB is not selected - just draw TAB outline and RH edge
+        // if the TAB is the last in the row
 
-		int maxPositions = ((wxTabLayer*)m_view->GetLayers().Nth(0)->Data())->Number();
-		wxTabControl* tabBelow = 0;
-		wxTabControl* tabBelowRight = 0;
-		if (GetColPosition() > 0)
-		{
-			tabBelow = m_view->FindTabControlForPosition(
-						GetColPosition() - 1,
-						GetRowPosition()
-						);
-		}
-		if (!lastInRow && GetColPosition() > 0)
-		{
-			tabBelowRight = m_view->FindTabControlForPosition(
-						GetColPosition() - 1,
-						GetRowPosition() + 1
-						);
-		}
+        int maxPositions = ((wxTabLayer*)m_view->GetLayers().Nth(0)->Data())->Number();
+        wxTabControl* tabBelow = 0;
+        wxTabControl* tabBelowRight = 0;
+        if (GetColPosition() > 0)
+        {
+            tabBelow = m_view->FindTabControlForPosition(
+                        GetColPosition() - 1,
+                        GetRowPosition()
+                        );
+        }
+        if (!lastInRow && GetColPosition() > 0)
+        {
+            tabBelowRight = m_view->FindTabControlForPosition(
+                        GetColPosition() - 1,
+                        GetRowPosition() + 1
+                        );
+        }
 
-		float raisedTop = top - m_view->GetTabSelectionHeight() +
-							m_view->GetTabHeight();
+        float raisedTop = top - m_view->GetTabSelectionHeight() +
+                            m_view->GetTabHeight();
 
-		dc.SetPen(*(m_view->GetHighlightPen()));
-		wxPoint pnts[10];
-		int n = 0;
+        dc.SetPen(*(m_view->GetHighlightPen()));
+        wxPoint pnts[10];
+        int n = 0;
 
-		pnts[n].x = tabLeft;
+        pnts[n].x = tabLeft;
 
-		if (tabBelow && tabBelow->IsSelected())
-		{
-			pnts[n++].y = (long)raisedTop;
-		}
-		else
-		{
-			pnts[n++].y = top;
-		}
-		pnts[n].x = tabLeft;			pnts[n++].y = tabTop + 2;
-		pnts[n].x = tabLeft + 2;		pnts[n++].y = tabTop;
-		pnts[n].x = tabRight - 1;	pnts[n++].y = tabTop;
-		dc.DrawLines(n, pnts);
+        if (tabBelow && tabBelow->IsSelected())
+        {
+            pnts[n++].y = (long)raisedTop;
+        }
+        else
+        {
+            pnts[n++].y = top;
+        }
+        pnts[n].x = tabLeft;            pnts[n++].y = tabTop + 2;
+        pnts[n].x = tabLeft + 2;        pnts[n++].y = tabTop;
+        pnts[n].x = tabRight - 1;    pnts[n++].y = tabTop;
+        dc.DrawLines(n, pnts);
 
-		dc.SetPen(*(m_view->GetShadowPen()));
-		if (GetRowPosition() >= maxPositions - 1)
-		{
-			dc.DrawLine(
-					tabRight,
-					(tabTop + 2),
-					tabRight,
-					bottom
-					);
-			dc.DrawLine(
-					tabRight,
-					bottom,
-					(tabRight - m_view->GetHorizontalTabOffset()),
-					bottom
-					);
-		}
-		else
-		{
-			if (tabBelowRight && tabBelowRight->IsSelected())
-			{
-				dc.DrawLine(
-						tabRight,
-						(long)raisedTop,
-						tabRight,
-						tabTop + 1
-						);
-			}
-			else
-			{
-				dc.DrawLine(
-						tabRight,
-						top - 1,
-						tabRight,
-						tabTop + 1
-						);
-			}
-		}
+        dc.SetPen(*(m_view->GetShadowPen()));
+        if (GetRowPosition() >= maxPositions - 1)
+        {
+            dc.DrawLine(
+                    tabRight,
+                    (tabTop + 2),
+                    tabRight,
+                    bottom
+                    );
+            dc.DrawLine(
+                    tabRight,
+                    bottom,
+                    (tabRight - m_view->GetHorizontalTabOffset()),
+                    bottom
+                    );
+        }
+        else
+        {
+            if (tabBelowRight && tabBelowRight->IsSelected())
+            {
+                dc.DrawLine(
+                        tabRight,
+                        (long)raisedTop,
+                        tabRight,
+                        tabTop + 1
+                        );
+            }
+            else
+            {
+                dc.DrawLine(
+                        tabRight,
+                        top - 1,
+                        tabRight,
+                        tabTop + 1
+                        );
+            }
+        }
 
-		dc.SetPen(*wxBLACK_PEN);
-		dc.DrawPoint(
-				tabRight,
-				tabTop + 1
-				);
-		dc.DrawPoint(
-				tabRight + 1,
-				tabTop + 2
-				);
-		if (GetRowPosition() >= maxPositions - 1)
-		{
-			// draw right hand edge to bottom of view
-			dc.DrawLine(
-					tabRight + 1,
-					bottom + 1,
-					tabRight + 1,
-					tabTop + 2
-					);
-			dc.DrawLine(
-					tabRight + 1,
-					bottom + 1,
-					(tabRight - m_view->GetHorizontalTabOffset()),
-					bottom + 1
-					);
-		}
-		else
-		{
-			// draw right hand edge of TAB
-			if (tabBelowRight && tabBelowRight->IsSelected())
-			{
-				dc.DrawLine(
-						tabRight + 1,
-						(long)(raisedTop - 1),
-						tabRight + 1,
-						tabTop + 2
-						);
-			}
-			else
-			{
-				dc.DrawLine(
-						tabRight + 1,
-						top - 1,
-						tabRight + 1,
-						tabTop + 2
-						);
-			}
-		}
-	}
+        dc.SetPen(*wxBLACK_PEN);
+        dc.DrawPoint(
+                tabRight,
+                tabTop + 1
+                );
+        dc.DrawPoint(
+                tabRight + 1,
+                tabTop + 2
+                );
+        if (GetRowPosition() >= maxPositions - 1)
+        {
+            // draw right hand edge to bottom of view
+            dc.DrawLine(
+                    tabRight + 1,
+                    bottom + 1,
+                    tabRight + 1,
+                    tabTop + 2
+                    );
+            dc.DrawLine(
+                    tabRight + 1,
+                    bottom + 1,
+                    (tabRight - m_view->GetHorizontalTabOffset()),
+                    bottom + 1
+                    );
+        }
+        else
+        {
+            // draw right hand edge of TAB
+            if (tabBelowRight && tabBelowRight->IsSelected())
+            {
+                dc.DrawLine(
+                        tabRight + 1,
+                        (long)(raisedTop - 1),
+                        tabRight + 1,
+                        tabTop + 2
+                        );
+            }
+            else
+            {
+                dc.DrawLine(
+                        tabRight + 1,
+                        top - 1,
+                        tabRight + 1,
+                        tabTop + 2
+                        );
+            }
+        }
+    }
 
-	// Draw centered text
-	dc.SetPen(*wxBLACK_PEN);
-	if (m_isSelected)
-	{
-		dc.SetFont(*(m_view->GetSelectedTabFont()));
-	}
-	else
-	{
-		dc.SetFont(*(GetFont()));
-	}
+    // Draw centered text
+    dc.SetPen(*wxBLACK_PEN);
+    if (m_isSelected)
+    {
+        dc.SetFont(*(m_view->GetSelectedTabFont()));
+    }
+    else
+    {
+        dc.SetFont(*(GetFont()));
+    }
 
-	wxColour col(m_view->GetTextColour());
-	dc.SetTextForeground(col);
-	dc.SetBackgroundMode(wxTRANSPARENT);
-	long textWidth, textHeight;
-	dc.GetTextExtent(GetLabel(), &textWidth, &textHeight);
+    wxColour col(m_view->GetTextColour());
+    dc.SetTextForeground(col);
+    dc.SetBackgroundMode(wxTRANSPARENT);
+    long textWidth, textHeight;
+    dc.GetTextExtent(GetLabel(), &textWidth, &textHeight);
 
-	float textX = (tabLeft + tabRight - textWidth) / 2;
-	float textY = (tabInc + tabTop + m_view->GetVerticalTabTextSpacing());
-	
-	dc.DrawText(GetLabel(), (long)textX, (long)textY);
+    float textX = (tabLeft + tabRight - textWidth) / 2;
+    float textY = (tabInc + tabTop + m_view->GetVerticalTabTextSpacing());
+
+    dc.DrawText(GetLabel(), (long)textX, (long)textY);
 #endif
 }
 
@@ -493,7 +493,7 @@ bool wxTabControl::HitTest(int x, int y) const
   // Bottom-right
   int tabX2 = tabX1 + GetWidth();
   int tabY2 = tabY1 + GetHeight();
-  
+
   if (x >= tabX1 && y >= tabY1 && x <= tabX2 && y <= tabY2)
     return TRUE;
   else
@@ -535,7 +535,7 @@ wxTabView::~wxTabView()
 {
   ClearTabs(TRUE);
 }
-  
+
 // Automatically positions tabs
 // TODO: this should just add the tab to a list, and then
 // a layout function (e.g. Realize) should be called when all tabs have been added.
@@ -571,17 +571,17 @@ wxTabControl *wxTabView::AddTab(int id, const wxString& label, wxTabControl *exi
     }
   }
   int layer = m_layers.Number() - 1;
-  
+
   wxTabControl *tabControl = existingTab;
   if (!existingTab)
     tabControl = OnCreateTabControl();
   tabControl->SetRowPosition(tabLayer->Number());
   tabControl->SetColPosition(layer);
-  
+
   wxTabControl *lastTab = (wxTabControl *) NULL;
   if (lastTabNode)
     lastTab = (wxTabControl *)lastTabNode->Data();
-  
+
   // Top of new tab
   int verticalOffset = (- GetTopMargin()) - ((layer+1)*GetTabHeight());
   // Offset from view top-left
@@ -590,16 +590,16 @@ wxTabControl *wxTabView::AddTab(int id, const wxString& label, wxTabControl *exi
     horizontalOffset = layer*GetHorizontalTabOffset();
   else
     horizontalOffset = lastTab->GetX() + GetTabWidth() + GetHorizontalTabSpacing();
-  
+
   tabControl->SetPosition(horizontalOffset, verticalOffset);
   tabControl->SetSize(GetTabWidth(), GetTabHeight());
   tabControl->SetId(id);
   tabControl->SetLabel(label);
   tabControl->SetFont(* GetTabFont());
-  
+
   tabLayer->Append(tabControl);
   m_noTabs ++;
-  
+
   return tabControl;
 }
 
@@ -650,7 +650,7 @@ wxString wxTabView::GetTabText(int id) const
     else
       return control->GetLabel();
 }
-  
+
 // Returns the total height of the tabs component -- this may be several
 // times the height of a tab, if there are several tab layers (rows).
 int wxTabView::GetTotalTabHeight()
@@ -726,12 +726,12 @@ void wxTabView::Layout(void)
     delete layerNode;
     layerNode = nextLayerNode;
   }
-  
+
   wxTabControl *lastTab = (wxTabControl *) NULL;
-  
+
   wxTabLayer *currentLayer = new wxTabLayer;
   m_layers.Append(currentLayer);
-  
+
   wxNode *node = controls.First();
   while (node)
   {
@@ -752,12 +752,12 @@ void wxTabView::Layout(void)
        lastTab = (wxTabControl *) NULL;
      }
     }
-    
+
     int layer = m_layers.Number() - 1;
 
     tabControl->SetRowPosition(currentLayer->Number());
     tabControl->SetColPosition(layer);
-  
+
     // Top of new tab
     int verticalOffset = (- GetTopMargin()) - ((layer+1)*GetTabHeight());
     // Offset from view top-left
@@ -766,7 +766,7 @@ void wxTabView::Layout(void)
       horizontalOffset = layer*GetHorizontalTabOffset();
     else
       horizontalOffset = lastTab->GetX() + GetTabWidth() + GetHorizontalTabSpacing();
-  
+
     tabControl->SetPosition(horizontalOffset, verticalOffset);
     tabControl->SetSize(GetTabWidth(), GetTabHeight());
 
@@ -790,96 +790,96 @@ void wxTabView::Draw(wxDC& dc)
         if (GetNumberOfTabs() == 0)
           return;
 
-	// Draw top margin area (beneath tabs and above view area)
-	if (GetTabStyle() & wxTAB_STYLE_COLOUR_INTERIOR)
-	{
-		dc.SetPen(*wxTRANSPARENT_PEN);
-		dc.SetBrush(*GetBackgroundBrush());
+    // Draw top margin area (beneath tabs and above view area)
+    if (GetTabStyle() & wxTAB_STYLE_COLOUR_INTERIOR)
+    {
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(*GetBackgroundBrush());
 
-		// Add 1 because the pen is transparent. Under Motif, may be different.
-		dc.DrawRectangle(
-				m_tabViewRect.x,
-				(m_tabViewRect.y - m_topMargin),
-				(m_tabViewRect.width + 1),
-				(m_topMargin + 1)
-				);
-	}
+        // Add 1 because the pen is transparent. Under Motif, may be different.
+        dc.DrawRectangle(
+                m_tabViewRect.x,
+                (m_tabViewRect.y - m_topMargin),
+                (m_tabViewRect.width + 1),
+                (m_topMargin + 1)
+                );
+    }
 
-	// Draw layers in reverse order
-	wxNode *node = m_layers.Last();
-	while (node)
-	{
-		wxTabLayer *layer = (wxTabLayer *)node->Data();
-		wxNode *node2 = layer->First();
-		while (node2)
-		{
-			wxTabControl *control = (wxTabControl *)node2->Data();
-			control->OnDraw(dc, (node2->Next() == NULL));
-			node2 = node2->Next();
-		}
+    // Draw layers in reverse order
+    wxNode *node = m_layers.Last();
+    while (node)
+    {
+        wxTabLayer *layer = (wxTabLayer *)node->Data();
+        wxNode *node2 = layer->First();
+        while (node2)
+        {
+            wxTabControl *control = (wxTabControl *)node2->Data();
+            control->OnDraw(dc, (node2->Next() == NULL));
+            node2 = node2->Next();
+        }
 
-		node = node->Previous();
-	}
+        node = node->Previous();
+    }
 
 
 #ifndef wxUSE_NEW_METHOD
-	if (GetTabStyle() & wxTAB_STYLE_DRAW_BOX)
-	{
-		dc.SetPen(* GetShadowPen());
+    if (GetTabStyle() & wxTAB_STYLE_DRAW_BOX)
+    {
+        dc.SetPen(* GetShadowPen());
 
-		// Draw bottom line
-		dc.DrawLine(
-				(GetViewRect().x + 1),
-				(GetViewRect().y + GetViewRect().height),
-				(GetViewRect().x + GetViewRect().width + 1),
-				(GetViewRect().y + GetViewRect().height)
-				);
+        // Draw bottom line
+        dc.DrawLine(
+                (GetViewRect().x + 1),
+                (GetViewRect().y + GetViewRect().height),
+                (GetViewRect().x + GetViewRect().width + 1),
+                (GetViewRect().y + GetViewRect().height)
+                );
 
-		// Draw right line
-		dc.DrawLine(
-				(GetViewRect().x + GetViewRect().width),
-				(GetViewRect().y - GetTopMargin() + 1),
-				(GetViewRect().x + GetViewRect().width),
-				(GetViewRect().y + GetViewRect().height)
-				);
+        // Draw right line
+        dc.DrawLine(
+                (GetViewRect().x + GetViewRect().width),
+                (GetViewRect().y - GetTopMargin() + 1),
+                (GetViewRect().x + GetViewRect().width),
+                (GetViewRect().y + GetViewRect().height)
+                );
 
-		dc.SetPen(* wxBLACK_PEN);
+        dc.SetPen(* wxBLACK_PEN);
 
-		// Draw bottom line
-		dc.DrawLine(
-				(GetViewRect().x),
-				(GetViewRect().y + GetViewRect().height + 1),
+        // Draw bottom line
+        dc.DrawLine(
+                (GetViewRect().x),
+                (GetViewRect().y + GetViewRect().height + 1),
 #if defined(__WXMOTIF__)
-				(GetViewRect().x + GetViewRect().width + 1),
+                (GetViewRect().x + GetViewRect().width + 1),
 #else
-				(GetViewRect().x + GetViewRect().width + 2),
+                (GetViewRect().x + GetViewRect().width + 2),
 #endif
 
-				(GetViewRect().y + GetViewRect().height + 1)
-				);
+                (GetViewRect().y + GetViewRect().height + 1)
+                );
 
-		// Draw right line
-		dc.DrawLine(
-				(GetViewRect().x + GetViewRect().width + 1),
-				(GetViewRect().y - GetTopMargin()),
-				(GetViewRect().x + GetViewRect().width + 1),
-				(GetViewRect().y + GetViewRect().height + 1)
-				);
-	}
+        // Draw right line
+        dc.DrawLine(
+                (GetViewRect().x + GetViewRect().width + 1),
+                (GetViewRect().y - GetTopMargin()),
+                (GetViewRect().x + GetViewRect().width + 1),
+                (GetViewRect().y + GetViewRect().height + 1)
+                );
+    }
 #endif
 }
-  
+
 // Process mouse event, return FALSE if we didn't process it
 bool wxTabView::OnEvent(wxMouseEvent& event)
 {
   if (!event.LeftDown())
     return FALSE;
-    
-  float x, y;
+
+  long x, y;
   event.Position(&x, &y);
-  
+
   wxTabControl *hitControl = (wxTabControl *) NULL;
-  
+
   wxNode *node = m_layers.First();
   while (node)
   {
@@ -897,21 +897,21 @@ bool wxTabView::OnEvent(wxMouseEvent& event)
       else
         node2 = node2->Next();
     }
-  
+
     if (node)
       node = node->Next();
   }
-  
+
   if (!hitControl)
     return FALSE;
-    
+
   wxTabControl *currentTab = FindTabControlForId(m_tabSelection);
-    
+
   if (hitControl == currentTab)
     return FALSE;
-    
+
   ChangeTab(hitControl);
-  
+
   return TRUE;
 }
 
@@ -921,13 +921,13 @@ bool wxTabView::ChangeTab(wxTabControl *control)
   int oldTab = -1;
   if (currentTab)
     oldTab = currentTab->GetId();
-  
+
   if (control == currentTab)
     return TRUE;
-    
+
   if (m_layers.Number() == 0)
     return FALSE;
-    
+
   if (!OnTabPreActivate(control->GetId(), oldTab))
     return FALSE;
 
@@ -936,12 +936,12 @@ bool wxTabView::ChangeTab(wxTabControl *control)
 
   if (currentTab)
     currentTab->SetSelected(FALSE);
-    
+
   control->SetSelected(TRUE);
   m_tabSelection = control->GetId();
 
   OnTabActivate(control->GetId(), oldTab);
-  
+
   // Leave window refresh for the implementing window
 
   return TRUE;
@@ -953,9 +953,9 @@ bool wxTabView::MoveSelectionTab(wxTabControl *control)
 {
   if (m_layers.Number() == 0)
     return FALSE;
-    
+
   wxTabLayer *firstLayer = (wxTabLayer *)m_layers.First()->Data();
-    
+
   // Find what column this tab is at, so we can swap with the one at the bottom.
   // If we're on the bottom layer, then no need to swap.
   if (!firstLayer->Member(control))
@@ -968,29 +968,29 @@ bool wxTabView::MoveSelectionTab(wxTabControl *control)
     wxNode *otherNode = firstLayer->Nth(col);
     if (!otherNode)
       return FALSE;
-      
+
     // If this is already in the bottom layer, return now
     if (otherNode == thisNode)
       return TRUE;
-      
+
     wxTabControl *otherTab = (wxTabControl *)otherNode->Data();
-     
+
     // We now have pointers to the tab to be changed to,
     // and the tab on the first layer. Swap tab structures and
     // position details.
-     
+
     int thisX = control->GetX();
     int thisY = control->GetY();
     int thisColPos = control->GetColPosition();
     int otherX = otherTab->GetX();
     int otherY = otherTab->GetY();
     int otherColPos = otherTab->GetColPosition();
-     
+
     control->SetPosition(otherX, otherY);
     control->SetColPosition(otherColPos);
     otherTab->SetPosition(thisX, thisY);
     otherTab->SetColPosition(thisColPos);
-     
+
     // Swap the data for the nodes
     thisNode->SetData(otherTab);
     otherNode->SetData(control);
@@ -1002,7 +1002,7 @@ bool wxTabView::MoveSelectionTab(wxTabControl *control)
 void wxTabView::OnTabActivate(int /*activateId*/, int /*deactivateId*/)
 {
 }
-  
+
 void wxTabView::SetHighlightColour(const wxColour& col)
 {
   m_highlightColour = col;
@@ -1030,7 +1030,7 @@ void wxTabView::SetTabSelection(int sel, bool activateTool)
 
   if (!OnTabPreActivate(sel, oldSel))
     return;
-    
+
   if (control)
     control->SetSelected((sel != -1)); // TODO ??
   else if (sel != -1)
@@ -1041,12 +1041,12 @@ void wxTabView::SetTabSelection(int sel, bool activateTool)
 
   if (oldControl)
     oldControl->SetSelected(FALSE);
-    
+
   m_tabSelection = sel;
 
   if (control)
     MoveSelectionTab(control);
-  
+
   if (activateTool)
     OnTabActivate(sel, oldSel);
 }
@@ -1122,7 +1122,7 @@ int wxTabView::CalculateTabWidth(int noTabs, bool adjustView)
 /*
  * wxTabbedDialog
  */
- 
+
 IMPLEMENT_CLASS(wxTabbedDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxTabbedDialog, wxDialog)
@@ -1145,7 +1145,7 @@ wxTabbedDialog::~wxTabbedDialog(void)
   if (m_tabView)
     delete m_tabView;
 }
- 
+
 void wxTabbedDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event) )
 {
   Destroy();
@@ -1167,7 +1167,7 @@ void wxTabbedDialog::OnPaint(wxPaintEvent& WXUNUSED(event) )
 /*
  * wxTabbedPanel
  */
- 
+
 IMPLEMENT_CLASS(wxTabbedPanel, wxPanel)
 
 BEGIN_EVENT_TABLE(wxTabbedPanel, wxPanel)
@@ -1186,7 +1186,7 @@ wxTabbedPanel::~wxTabbedPanel(void)
 {
   delete m_tabView;
 }
- 
+
 void wxTabbedPanel::OnMouseEvent(wxMouseEvent& event)
 {
   if (m_tabView)
@@ -1203,9 +1203,9 @@ void wxTabbedPanel::OnPaint(wxPaintEvent& WXUNUSED(event) )
 /*
  * wxPanelTabView
  */
- 
+
 IMPLEMENT_CLASS(wxPanelTabView, wxTabView)
- 
+
 wxPanelTabView::wxPanelTabView(wxPanel *pan, long style): wxTabView(style), m_tabWindows(wxKEY_INTEGER)
 {
   m_panel = pan;
@@ -1229,7 +1229,7 @@ void wxPanelTabView::OnTabActivate(int activateId, int deactivateId)
 {
   if (!m_panel)
     return;
-    
+
   wxWindow *oldWindow = ((deactivateId == -1) ? 0 : GetTabWindow(deactivateId));
   wxWindow *newWindow = GetTabWindow(activateId);
 
@@ -1237,11 +1237,11 @@ void wxPanelTabView::OnTabActivate(int activateId, int deactivateId)
     oldWindow->Show(FALSE);
   if (newWindow)
     newWindow->Show(TRUE);
-    
+
   m_panel->Refresh();
 }
 
-   
+
 void wxPanelTabView::AddTabWindow(int id, wxWindow *window)
 {
   m_tabWindows.Append((long)id, window);
@@ -1253,7 +1253,7 @@ wxWindow *wxPanelTabView::GetTabWindow(int id) const
   wxNode *node = m_tabWindows.Find((long)id);
   if (!node)
     return (wxWindow *) NULL;
-  return (wxWindow *)node->Data();    
+  return (wxWindow *)node->Data();
 }
 
 void wxPanelTabView::ClearWindows(bool deleteWindows)

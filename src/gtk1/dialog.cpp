@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -28,14 +28,14 @@ extern wxList wxPendingDelete;
 //-----------------------------------------------------------------------------
 
 bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxDialog *win )
-{ 
+{
 /*
     printf( "OnDelete from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
         printf( win->GetClassInfo()->GetClassName() );
     printf( ".\n" );
 */
-  
+
     win->Close();
 
     return TRUE;
@@ -97,9 +97,9 @@ wxDialog::wxDialog()
     m_modalShowing = FALSE;
 }
 
-wxDialog::wxDialog( wxWindow *parent, 
+wxDialog::wxDialog( wxWindow *parent,
                     wxWindowID id, const wxString &title,
-                    const wxPoint &pos, const wxSize &size, 
+                    const wxPoint &pos, const wxSize &size,
                     long style, const wxString &name )
 {
     m_modalShowing = FALSE;
@@ -108,60 +108,60 @@ wxDialog::wxDialog( wxWindow *parent,
 
 bool wxDialog::Create( wxWindow *parent,
                        wxWindowID id, const wxString &title,
-                       const wxPoint &pos, const wxSize &size, 
+                       const wxPoint &pos, const wxSize &size,
                        long style, const wxString &name )
 {
     wxTopLevelWindows.Append( this );
-    
+
     m_needParent = FALSE;
-  
+
     PreCreation( parent, id, pos, size, style, name );
-  
+
     m_widget = gtk_window_new( GTK_WINDOW_TOPLEVEL );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
- 
+
     gtk_widget_set( m_widget, "GtkWindow::allow_shrink", TRUE, NULL);
-  
-    gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event", 
+
+    gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_dialog_delete_callback), (gpointer)this );
-    
+
     m_wxwindow = gtk_myfixed_new();
     gtk_widget_show( m_wxwindow );
     GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
-  
+
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
-  
+
     SetTitle( title );
-  
+
     if ((m_x != -1) || (m_y != -1))
         gtk_widget_set_uposition( m_widget, m_x, m_y );
-     
+
     gtk_widget_set_usize( m_widget, m_width, m_height );
-     
-    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate", 
+
+    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_dialog_size_callback), (gpointer)this );
-    
+
     gtk_signal_connect( GTK_OBJECT(m_widget), "configure_event",
         GTK_SIGNAL_FUNC(gtk_dialog_configure_callback), (gpointer)this );
 
     if (m_parent) m_parent->AddChild( this );
-  
+
     PostCreation();
-  
+
     return TRUE;
 }
 
 wxDialog::~wxDialog()
 {
     wxTopLevelWindows.DeleteObject( this );
-    
+
     if (wxTheApp->GetTopWindow() == this)
     {
         wxTheApp->SetTopWindow( (wxWindow*) NULL );
     }
-    
+
     if (wxTopLevelWindows.Number() == 0)
-    {  
+    {
         wxTheApp->ExitMainLoop();
     }
 }
@@ -200,7 +200,7 @@ void wxDialog::OnOK( wxCommandEvent &WXUNUSED(event) )
 {
     if ( Validate() && TransferDataFromWindow())
     {
-        if (IsModal()) 
+        if (IsModal())
         {
             EndModal(wxID_OK);
         }
@@ -214,23 +214,25 @@ void wxDialog::OnOK( wxCommandEvent &WXUNUSED(event) )
 
 void wxDialog::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
-  // yes
+    // yes
 }
 
-bool wxDialog::OnClose()
+void wxDialog::OnCloseWindow(wxCloseEvent& event)
 {
     static wxList closing;
 
-    if (closing.Member(this)) return FALSE;   // no loops
-  
+    if (closing.Member(this))
+        return;   // no loops
+
     closing.Append(this);
 
     wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     cancelEvent.SetEventObject( this );
     GetEventHandler()->ProcessEvent(cancelEvent);
     closing.DeleteObject(this);
-  
-    return FALSE;
+
+    if ( event.CanVeto() )
+        event.Veto();
 }
 
 bool wxDialog::Destroy()
@@ -238,14 +240,6 @@ bool wxDialog::Destroy()
     if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
 
     return TRUE;
-}
-
-void wxDialog::OnCloseWindow( wxCloseEvent& event )
-{
-    if (GetEventHandler()->OnClose() || event.GetForce())
-    {
-        this->Destroy();
-    }
 }
 
 void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
@@ -257,10 +251,10 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
     if ((m_height == height) && (m_width == width) &&
         (m_sizeSet)) return;
     if (!m_wxwindow) return;
-  
+
     m_width = width;
     m_height = height;
-  
+
     if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
     if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
@@ -269,7 +263,7 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
     gtk_widget_set_usize( m_widget, m_width, m_height );
 
     m_sizeSet = TRUE;
-    
+
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( event );
@@ -278,16 +272,16 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
 void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid dialog" );
-  
+
     if (GetAutoLayout())
     {
         Layout();
     }
-    else 
+    else
     {
         // no child: go out !
         if (!GetChildren().First()) return;
-      
+
         // do we have exactly one child?
         wxWindow *child = (wxWindow *) NULL;
         for(wxNode *node = GetChildren().First(); node; node = node->Next())
@@ -295,7 +289,7 @@ void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
             wxWindow *win = (wxWindow *)node->Data();
             if (!wxIS_KIND_OF(win,wxFrame) && !wxIS_KIND_OF(win,wxDialog))
             {
-	        // it's the second one: do nothing
+                // it's the second one: do nothing
                 if (child) return;
                 child = win;
             }
@@ -311,7 +305,7 @@ void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
 void wxDialog::SetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid window" );
-  
+
     // Don't do anything for children of wxMDIChildFrame
     if (!m_wxwindow) return;
 
@@ -322,7 +316,7 @@ void wxDialog::SetSize( int x, int y, int width, int height, int sizeFlags )
     int old_y = m_y;
     int old_width = m_width;
     int old_height = m_height;
-  
+
     if ((sizeFlags & wxSIZE_USE_EXISTING) == wxSIZE_USE_EXISTING)
     {
         if (x != -1) m_x = x;
@@ -347,7 +341,7 @@ void wxDialog::SetSize( int x, int y, int width, int height, int sizeFlags )
     {
        if (height == -1) m_height = 26;
     }
-  
+
     if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
     if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
@@ -355,15 +349,15 @@ void wxDialog::SetSize( int x, int y, int width, int height, int sizeFlags )
 
     if ((m_x != -1) || (m_y != -1))
     {
-        if ((m_x != old_x) || (m_y != old_y)) 
+        if ((m_x != old_x) || (m_y != old_y))
             gtk_widget_set_uposition( m_widget, m_x, m_y );
     }
-  
+
     if ((m_width != old_width) || (m_height != old_height))
     {
         gtk_widget_set_usize( m_widget, m_width, m_height );
     }
-  
+
     m_sizeSet = TRUE;
 
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
@@ -381,13 +375,13 @@ void wxDialog::SetSize( int width, int height )
 void wxDialog::Centre( int direction )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
-  
+
     int x = 0;
     int y = 0;
-    
+
     if (direction & wxHORIZONTAL == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
     if (direction & wxVERTICAL == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
-  
+
     Move( x, y );
 }
 
@@ -399,9 +393,9 @@ bool wxDialog::Show( bool show )
     }
 
     wxWindow::Show( show );
-  
+
     if (show) InitDialog();
-  
+
     return TRUE;
 }
 
@@ -430,30 +424,30 @@ int wxDialog::ShowModal()
     }
 
     Show( TRUE );
-  
+
     m_modalShowing = TRUE;
-  
+
     gtk_grab_add( m_widget );
     gtk_main();
     gtk_grab_remove( m_widget );
-  
+
     return GetReturnCode();
 }
 
 void wxDialog::EndModal( int retCode )
 {
     SetReturnCode( retCode );
-  
+
     if (!IsModal())
     {
         wxFAIL_MSG( "wxDialog:EndModal called twice" );
         return;
     }
-  
+
     m_modalShowing = FALSE;
-  
+
     gtk_main_quit();
-  
+
     Show( FALSE );
 }
 
@@ -466,10 +460,10 @@ void wxDialog::SetIcon( const wxIcon &icon )
 {
     m_icon = icon;
     if (!icon.Ok()) return;
-  
+
     wxMask *mask = icon.GetMask();
     GdkBitmap *bm = (GdkBitmap *) NULL;
     if (mask) bm = mask->GetBitmap();
-  
+
     gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
 }
