@@ -841,8 +841,12 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
     #define wxIsspace(c) ((((unsigned)c) < 128) && isspace(c))
 #endif /* VC++ */
 
+#if defined(__MWERKS__) && !defined(isascii)
+    #define isascii(c) ((unsigned)(c) < 0x7f)
+#endif
+
 /*
-   we had goofed and defined wxIctrl() instead of (correct) wxIscntrl() in the
+   we had goofed and defined wxIsctrl() instead of (correct) wxIscntrl() in the
    initial versions of this header -- now it is too late to remove it so
    although we fixed the function/macro name above, still provide the
    backwards-compatible synonym.
