@@ -86,10 +86,15 @@
 #endif // __SALFORDC__
 
 // Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
-// so definte it ourselves
+// so define it ourselves
 #ifdef __DECCXX
     #define __cplusplus
 #endif // __DECCXX
+
+// Resolves linking problems under HP-UX
+#if defined(__HPUX__) && !defined(__GNUG__)
+    #define va_list __gnuc_va_list
+#endif // HP-UX
 
 //////////////////////////////////////////////////////////////////////////////////
 // Currently Only MS-Windows/NT, XView and Motif are supported
