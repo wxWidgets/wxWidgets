@@ -5671,6 +5671,15 @@ class Window(EvtHandler):
         """
         return _core_.Window_MoveXY(*args, **kwargs)
 
+    def SetBestFittingSize(*args, **kwargs):
+        """
+        SetBestFittingSize(self, Size size=DefaultSize)
+
+        A 'Smart' SetSize that will fill in default size components with the
+        window's *best size* values.  Also set's the minsize for use with sizers.
+        """
+        return _core_.Window_SetBestFittingSize(*args, **kwargs)
+
     def Raise(*args, **kwargs):
         """
         Raise(self)
@@ -6772,16 +6781,17 @@ class Window(EvtHandler):
         Sets the background colour of the window.  Returns True if the colour
         was changed.  The background colour is usually painted by the default
         EVT_ERASE_BACKGROUND event handler function under Windows and
-        automatically under GTK.
+        automatically under GTK.  Using `wx.NullColour` will reset the window
+        to the default background colour.
 
         Note that setting the background colour may not cause an immediate
-        refresh, so you may wish to call ClearBackground or Refresh after
+        refresh, so you may wish to call `ClearBackground` or `Refresh` after
         calling this function.
 
-        Use this function with care under GTK+ as the new appearance of the
-        window might not look equally well when used with themes, i.e GTK+'s
-        ability to change its look as the user wishes with run-time loadable
-        modules.
+        Using this function will disable attempts to use themes for this
+        window, if the system supports them.  Use with care since usually the
+        themes represent the appearance chosen by the user to be used for all
+        applications on the system.
         """
         return _core_.Window_SetBackgroundColour(*args, **kwargs)
 
@@ -8239,6 +8249,25 @@ class Control(Window):
         Sets the item's text.
         """
         return _core_.Control_SetLabel(*args, **kwargs)
+
+    def GetAdjustMinSizeFlag(*args, **kwargs):
+        """
+        GetAdjustMinSizeFlag(self) -> bool
+
+        Returns whether the minsize should be adjusted for this control when
+        `SetLabel` or `SetFont` are called.
+        """
+        return _core_.Control_GetAdjustMinSizeFlag(*args, **kwargs)
+
+    def SetAdjustMinSizeFlag(*args, **kwargs):
+        """
+        SetAdjustMinSizeFlag(self, bool adjust)
+
+        By default controls will readjust their size and minsize when
+        `SetLabel` or `SetFont` are called.  This flag will allow you to
+        control this behavior.
+        """
+        return _core_.Control_SetAdjustMinSizeFlag(*args, **kwargs)
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes"""

@@ -1252,6 +1252,11 @@ public:
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)",row,col));
             if (ro) {
+                if (!PyString_Check(ro) && !PyUnicode_Check(ro)) {
+                    PyObject* old = ro;
+                    ro = PyObject_Str(ro);
+                    Py_DECREF(old);
+                }
                 rval = Py2wxString(ro);
                 Py_DECREF(ro);
             }
@@ -1381,7 +1386,7 @@ bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
 
 bool wxGridCellCoords_typecheck(PyObject* source) {
     void* ptr;
-    
+
     if (wxPySwigInstance_Check(source) &&
         wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxGridCellCoords")))
         return True;
@@ -1389,7 +1394,7 @@ bool wxGridCellCoords_typecheck(PyObject* source) {
     PyErr_Clear();
     if (PySequence_Check(source) && PySequence_Length(source) == 2)
         return True;
-    
+
     return False;
 }
 
