@@ -379,10 +379,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
         <mac_version>$(WXMACVERSION)</mac_version>
     </template>
 
-    <template id="wx_lib" template="wx_lib_b"/>
-    <template id="wx_base_lib" template="wx_lib_b"/>
-    <template id="wx_dll" template="wx_dll_b"
-                          template_append="wx_append_nomono">
+    <template id="wx_3rdparty_dependencies">
         <depends>wxtiff</depends>
         <depends>wxjpeg</depends>
         <depends>wxpng</depends>
@@ -391,16 +388,13 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
         <depends cond="FORMAT=='autoconf'">wxodbc</depends>
         <depends>wxregex</depends>
     </template>
-    <template id="wx_base_dll" template="wx_dll_b"
-                               template_append="wx_append_base_nomono">
-        <depends>wxtiff</depends>
-        <depends>wxjpeg</depends>
-        <depends>wxpng</depends>
-        <depends>wxexpat</depends>
-        <depends>wxzlib</depends>
-        <depends cond="FORMAT=='autoconf'">wxodbc</depends>
-        <depends>wxregex</depends>
-    </template>
+    
+    <template id="wx_lib" template="wx_lib_b,wx_3rdparty_dependencies"/>
+    <template id="wx_base_lib" template="wx_lib_b,wx_3rdparty_dependencies"/>
+    <template id="wx_dll" template="wx_dll_b,wx_3rdparty_dependencies"
+                          template_append="wx_append_nomono"/>
+    <template id="wx_base_dll" template="wx_dll_b,wx_3rdparty_dependencies"
+                               template_append="wx_append_base_nomono"/>
     
     <!-- =============================================================== -->
     <!--               Support for wxWindows samples and contrib:        -->
