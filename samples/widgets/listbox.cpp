@@ -493,10 +493,13 @@ void ListboxWidgetsPage::OnUpdateUIAddSeveral(wxUpdateUIEvent& event)
 
 void ListboxWidgetsPage::OnListbox(wxCommandEvent& event)
 {
-    long sel = event.GetInt();
+    long sel = event.GetSelection();
     m_textDelete->SetValue(wxString::Format(_T("%ld"), sel));
 
-    wxLogMessage(_T("Listbox item %ld selected"), sel);
+    if (event.IsSelection())
+        wxLogMessage(_T("Listbox item %ld selected"), sel);
+    else
+        wxLogMessage(_T("Listbox item %ld deselected"), sel);
 }
 
 void ListboxWidgetsPage::OnListboxDClick(wxCommandEvent& event)
