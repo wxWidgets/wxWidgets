@@ -263,7 +263,10 @@ WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
 #define FNSTRINGCAST WXSTRINGCAST
 #endif
 #else//!wxUSE_WCHAR_T
-class WXDLLEXPORT wxMBConv {};
+class WXDLLEXPORT wxMBConv {
+  const char* cMB2WX(const char *psz) const { return psz; }
+  const char* cWX2MB(const char *psz) const { return psz; }
+};
 WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc, wxConvFile;
 #define wxConv_libc wxConvLibc
 #define wxConv_file wxConvFile
