@@ -844,6 +844,25 @@ long wxExecute(const wxString& command,
 
 //----------------------------------------------------------------------
 
+
+// Which joystick? Same as Windows ids so no conversion necessary.
+enum
+{
+    wxJOYSTICK1,
+    wxJOYSTICK2
+};
+
+// Which button is down?
+enum
+{
+    wxJOY_BUTTON_ANY,
+    wxJOY_BUTTON1,
+    wxJOY_BUTTON2,
+    wxJOY_BUTTON3,
+    wxJOY_BUTTON4,
+};
+
+
 %{
 #if !wxUSE_JOYSTICK && !defined(__WXMSW__)
 // A C++ stub class for wxJoystick for platforms that don't have it.

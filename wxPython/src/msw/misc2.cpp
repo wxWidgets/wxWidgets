@@ -6465,7 +6465,7 @@ static void *SwigwxJoystickTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxJoystick(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxJoystick * _result;
-    int  _arg0 = (int ) wxJOYSTICK1;
+    int  _arg0 = (int ) (wxJOYSTICK1);
     char *_kwnames[] = { "joystick", NULL };
     char _ptemp[128];
 
@@ -10812,6 +10812,13 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxEXEC_SYNC", PyInt_FromLong((long) wxEXEC_SYNC));
 	 PyDict_SetItemString(d,"wxEXEC_NOHIDE", PyInt_FromLong((long) wxEXEC_NOHIDE));
 	 PyDict_SetItemString(d,"wxEXEC_MAKE_GROUP_LEADER", PyInt_FromLong((long) wxEXEC_MAKE_GROUP_LEADER));
+	 PyDict_SetItemString(d,"wxJOYSTICK1", PyInt_FromLong((long) wxJOYSTICK1));
+	 PyDict_SetItemString(d,"wxJOYSTICK2", PyInt_FromLong((long) wxJOYSTICK2));
+	 PyDict_SetItemString(d,"wxJOY_BUTTON_ANY", PyInt_FromLong((long) wxJOY_BUTTON_ANY));
+	 PyDict_SetItemString(d,"wxJOY_BUTTON1", PyInt_FromLong((long) wxJOY_BUTTON1));
+	 PyDict_SetItemString(d,"wxJOY_BUTTON2", PyInt_FromLong((long) wxJOY_BUTTON2));
+	 PyDict_SetItemString(d,"wxJOY_BUTTON3", PyInt_FromLong((long) wxJOY_BUTTON3));
+	 PyDict_SetItemString(d,"wxJOY_BUTTON4", PyInt_FromLong((long) wxJOY_BUTTON4));
 	 PyDict_SetItemString(d,"wxMAILCAP_STANDARD", PyInt_FromLong((long) wxMAILCAP_STANDARD));
 	 PyDict_SetItemString(d,"wxMAILCAP_NETSCAPE", PyInt_FromLong((long) wxMAILCAP_NETSCAPE));
 	 PyDict_SetItemString(d,"wxMAILCAP_KDE", PyInt_FromLong((long) wxMAILCAP_KDE));

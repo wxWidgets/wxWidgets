@@ -380,6 +380,9 @@ enum {
     wxPRINT_QUALITY_LOW,
     wxPRINT_QUALITY_DRAFT,
 
+    wxID_ANY,
+    wxID_SEPARATOR,
+
     wxID_OPEN,
     wxID_CLOSE,
     wxID_NEW,
@@ -517,6 +520,14 @@ enum {
 
     wxTIMER_CONTINUOUS,
     wxTIMER_ONE_SHOT,
+
+    // the symbolic names for the mouse buttons
+    wxMOUSE_BTN_ANY,
+    wxMOUSE_BTN_NONE,
+    wxMOUSE_BTN_LEFT,
+    wxMOUSE_BTN_MIDDLE,
+    wxMOUSE_BTN_RIGHT,
+
 };
 
 

@@ -134,8 +134,13 @@ Fixed a boatload of reference leaks.
 Added a demo of using a sizer in a wxScrolledWindow, in effect
 creating a ScrolledPanel.
 
-Added wxIEHtmlWin.
+Added a sample to the demo that shows how to use radio menu items, and
+other menu stuff.
 
+Added wxIEHtmlWin.  This is essentially the same as using IE with the
+ActiveXWrapper already in the library, but it is implemented all in
+C++ and therefore does not need any of the modules from win32 all and
+so it is less fragile in the face of changes.
 
 
 

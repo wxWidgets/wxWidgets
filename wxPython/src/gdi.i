@@ -110,7 +110,7 @@ public:
 %new wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1);
 %new wxBitmap* wxBitmapFromXPMData(PyObject* listOfStrings);
 %new wxBitmap* wxBitmapFromIcon(const wxIcon& icon);
-%new wxBitmap* wxBitmapFromBits(char* bits, int width, int height, int depth = 1 );
+%new wxBitmap* wxBitmapFromBits(PyObject* bits, int width, int height, int depth = 1 );
 
 //  #ifdef __WXMSW__
 //  %new wxBitmap* wxBitmapFromData(PyObject* data, long type,
@@ -162,8 +162,11 @@ public:
     }
 
 
-    wxBitmap* wxBitmapFromBits(char* bits, int width, int height, int depth = 1 ) {
-        return new wxBitmap(bits, width, height, depth);
+    wxBitmap* wxBitmapFromBits(PyObject* bits, int width, int height, int depth = 1 ) {
+        char* buf;
+        int   length;
+        PyString_AsStringAndSize(bits, &buf, &length);
+        return new wxBitmap(buf, width, height, depth);
     }
 
 
