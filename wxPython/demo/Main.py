@@ -261,6 +261,8 @@ try:
 
         # Some methods to make it compatible with how the wxTextCtrl is used
         def SetValue(self, value):
+            if wx.USE_UNICODE:
+                value = value.decode('iso8859_1')
             self.SetReadOnly(False)
             self.SetText(value)
             self.SetReadOnly(True)
@@ -736,6 +738,8 @@ class wxPythonDemo(wx.Frame):
         lead = text[:6]
         if lead != '<html>' and lead != '<HTML>':
             text = '<br>'.join(text.split('\n'))
+        if wx.USE_UNICODE:
+            text = text.decode('iso8859_1')  
         self.ovr.SetPage(text)
         self.nb.SetPageText(0, name)
 
