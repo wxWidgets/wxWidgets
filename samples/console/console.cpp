@@ -841,70 +841,6 @@ static void TestFileNameTemp()
     }
 }
 
-static void TestFileNameMakeRelative()
-{
-    wxPuts(_T("*** testing wxFileName::MakeRelativeTo() ***"));
-
-    for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
-    {
-        const FileNameInfo& fni = filenames[n];
-
-        wxFileName fn(fni.fullname, fni.format);
-
-        // choose the base dir of the same format
-        wxString base;
-        switch ( fni.format )
-        {
-            case wxPATH_UNIX:
-                base = _T("/usr/bin/");
-                break;
-
-            case wxPATH_DOS:
-                base = _T("c:\\");
-                break;
-
-            case wxPATH_MAC:
-            case wxPATH_VMS:
-                // TODO: I don't know how this is supposed to work there
-                continue;
-
-            case wxPATH_NATIVE: // make gcc happy
-            default:
-                wxFAIL_MSG( _T("unexpected path format") );
-        }
-
-        wxPrintf(_T("'%s' relative to '%s': "),
-               fn.GetFullPath(fni.format).c_str(), base.c_str());
-
-        if ( !fn.MakeRelativeTo(base, fni.format) )
-        {
-            wxPuts(_T("unchanged"));
-        }
-        else
-        {
-            wxPrintf(_T("'%s'\n"), fn.GetFullPath(fni.format).c_str());
-        }
-    }
-}
-
-static void TestFileNameMakeAbsolute()
-{
-    wxPuts(_T("*** testing wxFileName::MakeAbsolute() ***"));
-
-    for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
-    {
-        const FileNameInfo& fni = filenames[n];
-        wxFileName fn(fni.fullname, fni.format);
-
-        wxPrintf(_T("'%s' absolutized: "),
-               fn.GetFullPath(fni.format).c_str());
-        fn.MakeAbsolute();
-        wxPrintf(_T("'%s'\n"), fn.GetFullPath(fni.format).c_str());
-    }
-
-    wxPuts(wxEmptyString);
-}
-
 static void TestFileNameDirManip()
 {
     // TODO: test AppendDir(), RemoveDir(), ...
@@ -2648,11 +2584,11 @@ public:
     {
     }
 
-    virtual void Walk()
+    virtual void Walk(size_t skip = 1)
     {
         wxPuts(_T("Stack dump:"));
 
-        wxStackWalker::Walk();
+        wxStackWalker::Walk(skip);
     }
 
 protected:
@@ -2713,7 +2649,7 @@ static void TestStandardPaths()
 
     wxTheApp->SetAppName(_T("console"));
 
-    wxStandardPaths& stdp = wxStandardPaths::Get();
+    wxStandardPathsBase& stdp = wxStandardPaths::Get();
     wxPrintf(_T("Config dir (sys):\t%s\n"), stdp.GetConfigDir().c_str());
     wxPrintf(_T("Config dir (user):\t%s\n"), stdp.GetUserConfigDir().c_str());
     wxPrintf(_T("Data dir (sys):\t\t%s\n"), stdp.GetDataDir().c_str());
@@ -2798,7 +2734,7 @@ static void TestMemoryStream()
 
 #ifdef TEST_TIMER
 
-#include "wx/timer.h"
+#include "wx/stopwatch.h"
 #include "wx/utils.h"
 
 static void TestStopWatch()
@@ -4078,6 +4014,24 @@ static void TestSemaphore()
 
 int main(int argc, char **argv)
 {
+#if wxUSE_UNICODE
+    wxChar **wxArgv = new wxChar *[argc + 1];
+
+    {
+        int n;
+
+        for (n = 0; n < argc; n++ )
+        {
+            wxMB2WXbuf warg = wxConvertMB2WX(argv[n]);
+            wxArgv[n] = wxStrdup(warg);
+        }
+
+        wxArgv[n] = NULL;
+    }
+#else // !wxUSE_UNICODE
+    #define wxArgv argv
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
     wxApp::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE, "program");
 
     wxInitializer initializer;
@@ -4133,34 +4087,7 @@ int main(int argc, char **argv)
         { wxCMD_LINE_NONE }
     };
 
-#if wxUSE_UNICODE
-    wxChar **wargv = new wxChar *[argc + 1];
-
-    {
-        int n;
-
-        for (n = 0; n < argc; n++ )
-        {
-            wxMB2WXbuf warg = wxConvertMB2WX(argv[n]);
-            wargv[n] = wxStrdup(warg);
-        }
-
-        wargv[n] = NULL;
-    }
-
-    #define argv wargv
-#endif // wxUSE_UNICODE
-
-    wxCmdLineParser parser(cmdLineDesc, argc, argv);
-
-#if wxUSE_UNICODE
-    {
-        for ( int n = 0; n < argc; n++ )
-            free(wargv[n]);
-
-        delete [] wargv;
-    }
-#endif // wxUSE_UNICODE
+    wxCmdLineParser parser(cmdLineDesc, argc, wxArgv);
 
     parser.AddOption(_T("project_name"), _T(""), _T("full path to project file"),
                      wxCMD_LINE_VAL_STRING,
@@ -4244,10 +4171,6 @@ int main(int argc, char **argv)
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
-    TestFileNameConstruction();
-    TestFileNameMakeRelative();
-    TestFileNameMakeAbsolute();
-    TestFileNameSplit();
     TestFileNameTemp();
     TestFileNameCwd();
     TestFileNameDirManip();
@@ -4375,17 +4298,10 @@ int main(int argc, char **argv)
 
 #ifdef TEST_DATETIME
     #if TEST_ALL
-        TestTimeSet();
         TestTimeStatic();
         TestTimeRange();
         TestTimeZones();
-        TestTimeTicks();
-        TestTimeJDN();
         TestTimeDST();
-        TestTimeWDays();
-        TestTimeWNumber();
-        TestTimeParse();
-        TestTimeArithmetics();
         TestTimeHolidays();
         TestTimeSpanFormat();
         TestTimeMS();
@@ -4435,6 +4351,15 @@ int main(int argc, char **argv)
     TestZipStreamRead();
     TestZipFileSystem();
 #endif // TEST_ZIP
+
+#if wxUSE_UNICODE
+    {
+        for ( int n = 0; n < argc; n++ )
+            free(wxArgv[n]);
+
+        delete [] wxArgv;
+    }
+#endif // wxUSE_UNICODE
 
     wxUnusedVar(argc);
     wxUnusedVar(argv);
