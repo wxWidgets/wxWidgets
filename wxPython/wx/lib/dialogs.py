@@ -38,10 +38,11 @@ class ScrolledMessageDialog(wx.Dialog):
                            style=wx.TE_MULTILINE | wx.TE_READONLY)
 
         ok = wx.Button(self, wx.ID_OK, "OK")
+        ok.SetDefault()
         lc = layoutf.Layoutf('t=t5#1;b=t5#2;l=l5#1;r=r5#1', (self,ok)) 
         text.SetConstraints(lc)
 
-        lc = layoutf.Layoutf('b=b5#1;x%w50#1;w!80;h!25', (self,))
+        lc = layoutf.Layoutf('b=b5#1;x%w50#1;w!80;h*', (self,))
         ok.SetConstraints(lc)
         self.SetAutoLayout(1)
         self.Layout()
@@ -66,6 +67,7 @@ class MultipleChoiceDialog(wx.Dialog):
                                lst, wx.LB_MULTIPLE)
 
         ok = wx.Button(self, wx.ID_OK, "OK")
+        ok.SetDefault()
         cancel = wx.Button(self, wx.ID_CANCEL, "Cancel")
         lc = layoutf.Layoutf('t=t10#1;l=l5#1;r=r5#1;h!%d' % (height,), (self,)) 
         stat.SetConstraints(lc)
@@ -73,10 +75,10 @@ class MultipleChoiceDialog(wx.Dialog):
         lc = layoutf.Layoutf('t=b10#2;l=l5#1;r=r5#1;b=t5#3', (self, stat, ok)) 
         self.lbox.SetConstraints(lc)
 
-        lc = layoutf.Layoutf('b=b5#1;x%w25#1;w!80;h!25', (self,))
+        lc = layoutf.Layoutf('b=b5#1;x%w25#1;w!80;h*', (self,))
         ok.SetConstraints(lc)
 
-        lc = layoutf.Layoutf('b=b5#1;x%w75#1;w!80;h!25', (self,))
+        lc = layoutf.Layoutf('b=b5#1;x%w75#1;w!80;h*', (self,))
         cancel.SetConstraints(lc)
         
         self.SetAutoLayout(1)
