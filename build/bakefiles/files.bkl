@@ -296,7 +296,6 @@
     src/generic/grid.cpp
     src/generic/gridctrl.cpp
     src/generic/gridsel.cpp
-    src/generic/htmllbox.cpp
     src/generic/laywin.cpp
     src/generic/logg.cpp
     src/generic/numdlgg.cpp
@@ -857,7 +856,6 @@
     src/msw/dirdlg.cpp
     src/msw/display.cpp
     src/msw/enhmeta.cpp
-    src/msw/helpbest.cpp
     src/msw/evtloop.cpp
     src/msw/font.cpp
     src/msw/fontenum.cpp
@@ -981,7 +979,6 @@
     wx/msw/gdiimage.h
     wx/msw/gdiobj.h
     wx/msw/glcanvas.h
-    wx/msw/helpbest.h
     wx/msw/helpchm.h
     wx/msw/helpwin.h
     wx/msw/icon.h
@@ -1717,8 +1714,28 @@
     src/html/m_tables.cpp
     src/html/m_style.cpp
     src/html/htmprint.cpp
+    <!-- wxHTML users: -->
+    src/msw/helpbest.cpp
+    src/generic/htmllbox.cpp
 </set>
 <set var="HTML_HDR">
+    html/forcelnk.h
+    html/helpctrl.h
+    html/helpdata.h
+    html/helpfrm.h
+    html/htmlcell.h
+    html/htmldefs.h
+    html/htmlfilt.h
+    html/htmlpars.h
+    html/htmlproc.h
+    html/htmltag.h
+    html/htmlwin.h
+    html/htmprint.h
+    html/m_templ.h
+    html/winpars.h
+    <!-- wxHTML users: -->
+    wx/msw/helpbest.h
+    wx/htmllbox.h
 </set>
 
 
