@@ -41,6 +41,7 @@ contrib/docs/htmlhelp/yourclass/        ; Your MS HTML Help doc files go here
 contrib/docs/htb/yourclass/             ; Your wxHTML doc files go here
 contrib/docs/pdf/yourclass/             ; Your PDF doc files go here
 contrib/docs/winhelp/yourclass/         ; Your WinHelp doc files go here
+contrib/build/yourclass/                ; Your makefiles
 
 It is recommended that you produce a manual using Tex2RTF, as specified
 in Technical Note TN0003. This allows you to output all the above
@@ -53,8 +54,8 @@ but the main lib directory is recommended.
 
 Please include a readme.txt in your source directory, and conform
 as much as possible to the coding guidelines specified on the web
-site in the 'Backroom' section. Include as many makefiles as
-possible for different compilers.
+site in the 'Backroom' section. Include bakefile and generated makefiles
+(see Technote #16 for details).
 
 Your archive can be in .tgz or .zip format. For inclusion on
 the wxWindows ftp site and CD-ROM, please send your submission to
