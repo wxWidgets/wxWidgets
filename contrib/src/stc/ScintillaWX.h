@@ -151,6 +151,7 @@ public:
     void DoScrollToColumn(int column);
 
 private:
+    bool                capturedMouse;
     wxStyledTextCtrl*   stc;
 
 #if wxUSE_DRAG_AND_DROP

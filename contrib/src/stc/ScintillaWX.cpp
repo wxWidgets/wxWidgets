@@ -139,6 +139,7 @@ END_EVENT_TABLE()
 
 
 ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
+    capturedMouse = false;
     wMain = win;
     stc   = win;
     wheelRotation = 0;
@@ -220,15 +221,16 @@ void ScintillaWX::SetTicking(bool on) {
 
 
 void ScintillaWX::SetMouseCapture(bool on) {
-    if (on && !stc->HasCapture())
+    if (on && !capturedMouse)
         stc->CaptureMouse();
-    else if (!on && stc->HasCapture())
+    else if (!on && capturedMouse && stc->HasCapture())
         stc->ReleaseMouse();
+    capturedMouse = on;
 }
 
 
 bool ScintillaWX::HaveMouseCapture() {
-    return stc->HasCapture();
+    return capturedMouse;
 }
 
 
