@@ -518,13 +518,15 @@ void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
 }
 
 
-void wxStyledTextCtrl::OnLoseFocus(wxFocusEvent& WXUNUSED(evt)) {
+void wxStyledTextCtrl::OnLoseFocus(wxFocusEvent& evt) {
     m_swx->DoLoseFocus();
+    evt.Skip();
 }
 
 
-void wxStyledTextCtrl::OnGainFocus(wxFocusEvent& WXUNUSED(evt)) {
+void wxStyledTextCtrl::OnGainFocus(wxFocusEvent& evt) {
     m_swx->DoGainFocus();
+    evt.Skip();
 }
 
 
