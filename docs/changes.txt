@@ -190,6 +190,10 @@ All (GUI):
 - bug in wxWindow::RemoveEventHandler() fixed (Yingjun Zhang)
 - bug in wxColourDatabase::FindColour() which could led to crashes fixed
 
+Generic:
+
+- file dialog and directory dialog now support drive letters on OS/2
+
 Unix:
 
 - Unicode compilation fix in wxDateTime
@@ -199,6 +203,14 @@ wxMSW:
 - strip ampersands from strings returned by wxMenuBar::GetLabelTop()
 - fixed bug in wxIniConfig::DeleteEntry() (Parinya Thipchart)
 
+wxOS2:
+- fixed various problems in file handling
+- fixed bug in Refresh (was not taking reversed coordinate system into
+  account, so failed for most generic controls)
+- partly fixed wxMouseEvent (reversed coordinate system again, handling of
+  CTRL and SHIFT keys. ALT still doesn't work as expected by wxWindows, though)
+
+ 
 
 2.4.2
 -----
