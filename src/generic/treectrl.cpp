@@ -779,6 +779,7 @@ void wxTreeCtrl::Expand(const wxTreeItemId& itemId)
   }
 
   item->Expand();
+  CalculatePositions();
 
   RefreshSubtree(item);
 
@@ -890,7 +891,7 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
         m_anchor->GetSize( x, y );
         y += 2*m_lineHeight;
         int x_pos = GetScrollPos( wxHORIZONTAL );
-        SetScrollbars( 10, 10, x/10, y/10, x_pos, item_y/10 );
+	SetScrollbars( 10, 10, x/10, y/10, x_pos, item_y/10 );
         return;
     }
 
@@ -1381,8 +1382,10 @@ void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item,
   item->SetY( y-m_lineHeight/3-2 );
   item->SetHeight( m_lineHeight );
 
-  if ( item->IsExpanded() )
-    return;
+  //  if ( item->IsExpanded() )
+  //    return;
+  if ( !item->IsExpanded() ) // Surely this is correct? JACS
+     return;
 
   wxArrayTreeItems& children = item->GetChildren();
   size_t count = children.Count();

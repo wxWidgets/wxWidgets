@@ -89,3 +89,4 @@ More recently:
 - Fixed a bug in wxStaticBox.
 - Controls sample runs, though wxRadioBox doesn't appear and
   the notebook flickers for a while.
+- Cured wxTreeCtrl bug: now works pretty well!

@@ -6,6 +6,7 @@ config.guess
 config.sub
 wx-config.in
 mkinstalldirs
+wxinstall
 
 src/makeenvs/*.env
 

@@ -370,6 +370,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 					    xmScrolledWindowWidgetClass, m_borderWidget ? (Widget) m_borderWidget : parentWidget,
                                   XmNspacing, 0,
 				  XmNscrollingPolicy, XmAPPLICATION_DEFINED,
+ //                                  XmNscrollBarDisplayPolicy, XmAS_NEEDED,
 					    NULL);
 
   XtTranslations ptr;
@@ -1174,6 +1175,9 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
     if (thumbVisible == 0)
       thumbVisible = 1;
 
+    if (thumbVisible > range)
+      thumbVisible = range;
+
     XtVaSetValues(scrollBar,
          XmNvalue, pos,
          XmNminimum, 0,
@@ -1185,6 +1189,66 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
         m_scrollPosX = pos;
     else
         m_scrollPosY = pos;
+
+    // See notes below. If the scrollbars didn't leave a ghost presence,
+    // this would be OK.
+#if 0
+    if (range == thumbVisible)
+    {
+        XtUnmanageChild(scrollBar);
+        if (orient == wxHORIZONTAL)
+          XtVaSetValues((Widget) m_scrolledWindow,
+             XmNhorizontalScrollBar, (Widget) 0,
+             NULL);
+        else
+          XtVaSetValues((Widget) m_scrolledWindow,
+             XmNverticalScrollBar, (Widget) 0,
+             NULL);
+    }
+    else
+    {
+        XtManageChild(scrollBar);
+        if (orient == wxHORIZONTAL)
+          XtVaSetValues((Widget) m_scrolledWindow,
+             XmNhorizontalScrollBar, (Widget) m_hScrollBar,
+             NULL);
+        else
+          XtVaSetValues((Widget) m_scrolledWindow,
+             XmNverticalScrollBar, (Widget) m_vScrollBar,
+             NULL);
+    }
+#else
+    // Either both scrollbars are on, or they are off,
+    // otherwise you get a gap where one scrollbar
+    // isn't shown. TODO: try to eliminate this problem.
+    if ((GetScrollThumb(wxHORIZONTAL) >= GetScrollRange(wxHORIZONTAL)) && 
+        (GetScrollThumb(wxVERTICAL) >= GetScrollRange(wxVERTICAL)))
+    {
+        if (m_hScrollBar)
+            XtUnmanageChild((Widget) m_hScrollBar);
+        if (m_vScrollBar)
+            XtUnmanageChild((Widget) m_vScrollBar);
+        XtVaSetValues((Widget) m_scrolledWindow,
+           XmNhorizontalScrollBar, (Widget) 0,
+           XmNverticalScrollBar, (Widget) 0,
+           NULL);
+		      //        XmScrolledWindowSetAreas((Widget) m_scrolledWindow,
+		      //           (Widget) 0, (Widget) 0, (Widget) m_drawingArea);
+    }
+    else
+    {
+        if (m_hScrollBar)
+            XtManageChild((Widget) m_hScrollBar);
+        if (m_vScrollBar)
+            XtManageChild((Widget) m_vScrollBar);
+        XtVaSetValues((Widget) m_scrolledWindow,
+           XmNhorizontalScrollBar, (Widget) m_hScrollBar,
+           XmNverticalScrollBar, (Widget) m_vScrollBar,
+           NULL);
+	//        XmScrolledWindowSetAreas((Widget) m_scrolledWindow,
+	//           (Widget) m_hScrollBar, (Widget) m_vScrollBar, (Widget) m_drawingArea);
+    }
+#endif
 }
 
 // Does a physical scroll
