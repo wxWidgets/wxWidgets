@@ -67,6 +67,8 @@ protected:
 
 #if defined(__WXMSW__)
     #include "wx/msw/sound.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/sound.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/sound.h"
 #elif defined(__WXPM__)
