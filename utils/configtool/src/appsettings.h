@@ -19,7 +19,6 @@
 #include "wx/notebook.h"
 #include "wx/dialog.h"
 #include "wx/datetime.h"
-#include "wx/wave.h"
 
 #include "wxconfigtool.h"
 
