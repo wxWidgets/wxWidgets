@@ -41,13 +41,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-// This probably isn't right, what should it be Vadim?
-// Otherwise we end up with no wxVsprintf defined.
-#ifdef __WXMOTIF__
-#define HAVE_VPRINTF
-#endif
-
-#ifdef wxUSE_WCSRTOMBS
+#if wxUSE_WCSRTOMBS
   #include <wchar.h>    // for wcsrtombs(), see comments where it's used
 #endif // GNU
 
@@ -277,7 +271,7 @@ wxString::wxString(const wchar_t *pwz)
 
   // NB: GNU libc5 wcstombs() is completely broken, don't use it (it doesn't
   //     honor the 3rd parameter, thus it will happily crash here).
-#ifdef wxUSE_WCSRTOMBS
+#if wxUSE_WCSRTOMBS
   // don't know if it's really needed (or if we can pass NULL), but better safe
   // than quick
   mbstate_t mbstate;  
