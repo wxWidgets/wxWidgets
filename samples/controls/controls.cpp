@@ -27,8 +27,15 @@
 #include "wx/notebook.h"
 #include "wx/imaglist.h"
 #include "wx/spinbutt.h"
-#include "wx/clipbrd.h"
-#include "wx/tooltip.h"
+
+#if wxUSE_CLIPBOARD
+    #include "wx/dataobj.h"
+    #include "wx/clipbrd.h"
+#endif
+
+#if wxUSE_TOOLTIPS
+    #include "wx/tooltip.h"
+#endif
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
     #define USE_XPM
@@ -50,8 +57,8 @@
 
 class MyApp: public wxApp
 {
-  public:
-    bool OnInit(void);
+public:
+    bool OnInit();
 };
 
 // a text ctrl which allows to call different wxTextCtrl functions
@@ -71,11 +78,10 @@ private:
 
 class MyPanel: public wxPanel
 {
-  public:
-
+public:
     MyPanel(wxFrame *frame, int x, int y, int w, int h);
     virtual ~MyPanel();
-
+    
     void OnSize( wxSizeEvent& event );
     void OnListBox( wxCommandEvent &event );
     void OnListBoxDoubleClick( wxCommandEvent &event );
@@ -94,7 +100,7 @@ class MyPanel: public wxPanel
     void OnCopyToClipboard( wxCommandEvent &event );
     void OnMoveToEndOfText( wxCommandEvent &event );
     void OnMoveToEndOfEntry( wxCommandEvent &event );
-
+    
     wxListBox     *m_listbox;
     wxChoice      *m_choice;
     wxComboBox    *m_combo;
@@ -107,27 +113,26 @@ class MyPanel: public wxPanel
     MyTextCtrl    *m_multitext;
     MyTextCtrl    *m_textentry;
     wxCheckBox    *m_checkbox;
-
+    
     wxTextCtrl    *m_text;
     wxNotebook    *m_notebook;
 
-  DECLARE_EVENT_TABLE()
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 class MyFrame: public wxFrame
 {
-  public:
-
+public:
     MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
-
-  public:
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnIdle( wxIdleEvent& event );
     void OnSize( wxSizeEvent& event );
 
-  DECLARE_EVENT_TABLE()
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 //----------------------------------------------------------------------
@@ -144,7 +149,7 @@ const   int MINIMAL_QUIT   = 100;
 const   int MINIMAL_TEXT   = 101;
 const   int MINIMAL_ABOUT  = 102;
 
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
   // Create the main frame window
   MyFrame *frame = new MyFrame((wxFrame *) NULL,
@@ -394,7 +399,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
   panel = new wxPanel(m_notebook);
   m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 5, choices );
+#if wxUSE_TOOLTIPS
   m_listbox->SetToolTip( "This is a list box" );
+#endif
 
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
@@ -402,11 +409,15 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
+#if wxUSE_TOOLTIPS
   button->SetToolTip( "Press here to set italic font" );
+#endif
 
   m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_checkbox->SetValue(FALSE);
+#if wxUSE_TOOLTIPS
   m_checkbox->SetToolTip( "Click here to disable the listbox" );
+#endif
   m_notebook->AddPage(panel, "wxListBox", TRUE, Image_List);
 
   panel = new wxPanel(m_notebook);
@@ -504,82 +515,86 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
 void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
 {
-#ifdef __WXGTK__
-
+#if wxUSE_CLIPBOARD
   if (!wxTheClipboard->Open())
   {
-     *m_text << "Error opening the clipboard." << "\n";
+     *m_text << "Error opening the clipboard.\n";
 
      return;
   }
   else
   {
-     *m_text << "Successfully opened the clipboard." << "\n";
+     *m_text << "Successfully opened the clipboard.\n";
   }
 
   wxTextDataObject data;
 
-  if (wxTheClipboard->IsSupported( data ))
+  if (wxTheClipboard->IsSupported( data.GetFormat() ))
   {
-     *m_text << "Clipboard supports requested format." << "\n";
+     *m_text << "Clipboard supports requested format.\n";
      
-     if (wxTheClipboard->GetData( data ))
+     if (wxTheClipboard->GetData( &data ))
      {
-         *m_text << "Successfully retrieved data from the clipboard." << "\n";
+         *m_text << "Successfully retrieved data from the clipboard.\n";
          *m_multitext << data.GetText() << "\n";
      }
      else
      {
-        *m_text << "Error getting data from the clipboard." << "\n";
+        *m_text << "Error getting data from the clipboard.\n";
      }
   }
   else
   {
-     *m_text << "Clipboard doesn't support requested format." << "\n";
+     *m_text << "Clipboard doesn't support requested format.\n";
   }
 
   wxTheClipboard->Close();
 
-  *m_text << "Closed the clipboard." << "\n";
+  *m_text << "Closed the clipboard.\n";
 #else
-  wxLogError("Clipboard API is not yet implemented for this platform.");
+  wxLogError("Your version of wxWindows is compiled without clipboard support.");
 #endif
 }
 
 void MyPanel::OnCopyToClipboard( wxCommandEvent &WXUNUSED(event) )
 {
-#ifdef __WXGTK__
-
+#if wxUSE_CLIPBOARD
   wxString text( m_multitext->GetLineText(0) );
 
-  if (text.IsEmpty()) return;
+  if (text.IsEmpty())
+  {
+      *m_text << "No text to copy.\n";
+
+      return;
+  }
 
   if (!wxTheClipboard->Open())
   {
-     *m_text << "Error opening the clipboard." << "\n";
+     *m_text << "Error opening the clipboard.\n";
 
      return;
   }
   else
   {
-     *m_text << "Successfully opened the clipboard." << "\n";
+     *m_text << "Successfully opened the clipboard.\n";
   }
 
   wxTextDataObject *data = new wxTextDataObject( text );
 
   if (!wxTheClipboard->SetData( data ))
   {
-     *m_text << "Error while copying to the clipboard." << "\n";
+     *m_text << "Error while copying to the clipboard.\n";
   }
   else
   {
-     *m_text << "Successfully copied data to the clipboard." << "\n";
+     *m_text << "Successfully copied data to the clipboard.\n";
   }
 
   wxTheClipboard->Close();
 
-  *m_text << "Closed the clipboard." << "\n";
-
+  *m_text << "Closed the clipboard.\n";
+#else
+  wxLogError("Your version of wxWindows is compiled without clipboard support.");
 #endif
 }
 
@@ -632,10 +647,12 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
     {
       m_text->AppendText("Checkbox clicked.\n");
       wxCheckBox *cb = (wxCheckBox*)event.GetEventObject();
+#if wxUSE_TOOLTIPS
       if (event.GetInt())
         cb->SetToolTip( "Click to enable listbox" );
       else
         cb->SetToolTip( "Click to disable listbox" );
+#endif
       m_listbox->Enable( event.GetInt() == 0 );
       break;
     }
