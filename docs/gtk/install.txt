@@ -1,5 +1,5 @@
-wxWidgets 2.5 for GTK installation
-----------------------------------
+wxWidgets 2.5 for GTK+ installation
+-----------------------------------
 
 IMPORTANT NOTE:
 
@@ -11,7 +11,7 @@ IMPORTANT NOTE:
 
   When sending bug reports tell us what version of wxWidgets you are
   using (including the beta) and what compiler on what system. One
-  example: wxGTK 2.4.0, gcc 2.95.4, Redhat 6.2
+  example: wxGTK 2.6.0, gcc 2.95.4, Redhat 6.2
 
 * The simplest case
 -------------------
@@ -19,20 +19,26 @@ IMPORTANT NOTE:
 If you compile wxWidgets on Linux for the first time and don't like to read
 install instructions just do (in the base dir):
 
-> ./configure --with-gtk
+> mkdir buildgtk
+> cd buildgtk
+> ../configure --with-gtk
 > make
 > su <type root password>
 > make install
 > ldconfig
 > exit
 
-Afterwards you can continue with
+Afterwards you can continue with:
 
 > make
 > su <type root password>
 > make install
 > ldconfig
 > exit
+
+(If you don't do the 'make install' part, you can still
+use the libraries from the buildgtk directory, but they
+will not be available to other users.)
 
 If you want to remove wxWidgets on Unix you can do this:
 
@@ -41,16 +47,21 @@ If you want to remove wxWidgets on Unix you can do this:
 > ldconfig
 > exit
 
-* The GTK+ 2 case
------------------
+Note that by default, GTK+ 2 is used. GTK+ 1 can be specified
+with --disable-gtk2.
+
+* The Unicode case
+------------------
 
 wxGTK has support for the new version 2.0.X of GTK+ since version 2.4.0.
 This means that wxGTK apps can now make use Unicode as the underlying encoding
 for all text operations. This is a very fundamental change and will need time
-to stabilize, so be careful. Anyways, after installing a recent version of GTK+
+to stabilize, so be careful. After installing a recent version of GTK+
 2.0, do this
 
-> ./configure --with-gtk --enable-gtk2 --enable-unicode
+> mkdir buildgtk
+> cd buildgtk
+> ../configure --with-gtk --enable-gtk2 --enable-unicode
 > make
 > su <type root password>
 > make install
@@ -69,15 +80,15 @@ Expect problems.
 -----------------
 
 If you want to do some more serious cross-platform programming with wxWidgets,
-such as for GTK and Motif, you can now build two complete libraries and use
-them concurrently. For this end, you have to create a directory for each build
+such as for GTK+ and Motif, you can now build two complete libraries and use
+them concurrently. To do this, create a separate directory for each build
 of wxWidgets - you may also want to create different versions of wxWidgets
 and test them concurrently. Most typically, this would be a version configured
 with --enable-debug and one without. Note, that only one build can
-currently be installed, so you'd have to use local version of the library for
-that purpose.
+currently be installed with 'make install', so you'd have to use local version of
+the library for that purpose.
 
-For building three versions (one GTK, one Motif and a debug version of the GTK
+For building three versions (one GTK+, one Motif and a debug version of the GTK
 source) you'd do this:
 
 md buildmotif
@@ -104,9 +115,9 @@ cd ..
 For any configure errors: please look at config.log file which was generated
 during configure run, it usually contains some useful information.
 
-configure reports, that you don't have GTK 1.2 installed although you are
+configure reports, that you don't have GTK+ 1.2 installed although you are
 very sure you have. Well, you have installed it, but you also have another
-version of the GTK installed, which you may need to remove including other
+version of the GTK+ installed, which you may need to remove including other
 versions of glib (and its headers). Or maybe you installed it in non default
 location and configure can't find it there, so please check that your PATH
 variable includes the path to the correct gtk-config. Also check that your
@@ -158,11 +169,11 @@ but I tried...
 * GUI libraries
 ---------------
 
-wxWidgets/GTK requires the GTK+ library to be installed on your system. It has
+wxWidgets/GTK+ requires the GTK+ library to be installed on your system. It has
 to be a stable version, preferably version 1.2.10 (at least 1.2.3 is required,
 1.2.7 is strongly recommended).
 
-You can get the newest version of the GTK+ from the GTK homepage at:
+You can get the newest version of the GTK+ from the GTK+ homepage at:
 
   http://www.gtk.org
 
@@ -278,7 +289,7 @@ you download wxGTK, it will default to --with-gtk etc. But
 if you use all of our CVS repository you have to choose a
 toolkit. You must do this by running configure with either of:
 
-    --with-gtk              Use the GIMP ToolKit (GTK). Default.
+    --with-gtk              Use the GIMP ToolKit (GTK+). Default.
 
     --with-motif            Use either Motif or Lesstif
                             Configure will look for both.
@@ -299,6 +310,10 @@ The following options handle the kind of library you want to build.
                             and is required on some architectures
                             such as Sun with gcc 2.8.X which
                             would otherwise produce segvs.
+
+    --enable-unicode        Enable Unicode support.
+
+    --enable-gtk2           Compiling using GTK+ 2 (the default).
 
     --enable-profile        Add profiling info to the object
                             files. Currently broken, I think.
