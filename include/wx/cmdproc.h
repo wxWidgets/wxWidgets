@@ -16,6 +16,7 @@
     #pragma interface "cmdproc.h"
 #endif
 
+#include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/list.h"
 

@@ -366,6 +366,34 @@ typedef struct _paraformat2 {
 #endif // wxUSE_RICHEDIT
 
 // ----------------------------------------------------------------------------
+// ToolBar
+// ----------------------------------------------------------------------------
+
+#if wxUSE_TOOLBAR
+
+#if !defined(TBIF_SIZE)
+
+#define TBIF_SIZE 64
+#define TB_SETBUTTONINFO (WM_USER+66)
+
+typedef struct {
+    UINT cbSize;
+    DWORD dwMask;
+    int idCommand;
+    int iImage;
+    BYTE fsState;
+    BYTE fsStyle;
+    WORD cx;
+    DWORD lParam;
+    LPTSTR pszText;
+    int cchText;
+} TBBUTTONINFO, *LPTBBUTTONINFO;
+
+#endif // !defined(TBIF_SIZE)
+
+#endif // wxUSE_TOOLBAR
+
+// ----------------------------------------------------------------------------
 // Misc stuff
 // ----------------------------------------------------------------------------
 

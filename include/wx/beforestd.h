@@ -34,5 +34,19 @@
     // 'id': identifier was truncated to 'num' characters in the debug info
     #pragma warning(disable:4786)
 
-    #pragma warning(push, 1)
+    // MSVC 5 does not have this
+    #if _MSC_VER > 1100
+        #pragma warning(push, 1)
+    #else
+        // 'expression' : signed/unsigned mismatch
+        #pragma warning(disable:4018)
+
+        // 'conversion' : conversion from 'type1' to 'type2',
+        // possible loss of data
+        #pragma warning(disable:4244)
+
+        // C++ language change: to explicitly specialize class template
+        // 'identifier' use the following syntax
+        #pragma warning(disable:4663)
+    #endif
 #endif

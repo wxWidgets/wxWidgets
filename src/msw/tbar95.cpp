@@ -55,6 +55,8 @@
     #include "wx/msw/gnuwin32/extra.h"
 #endif
 
+#include "wx/msw/missing.h"
+
 #include "wx/app.h"         // for GetComCtl32Version
 
 #if defined(__MWERKS__) && defined(__WXMSW__)
