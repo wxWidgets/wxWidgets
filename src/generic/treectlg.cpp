@@ -2640,7 +2640,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                     if (!next)
                     {
                         wxTreeItemId current = m_key_current;
-                        while (current && !next)
+                        while (current.IsOk() && !next)
                         {
                             current = GetItemParent( current );
                             if (current) next = GetNextSibling( current );
