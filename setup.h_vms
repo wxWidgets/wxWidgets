@@ -183,6 +183,16 @@
 #define HAVE_STATIC_CAST 1
 
 /*
+ * Define if your compiler has C99 va_copy
+ */
+#undef HAVE_VA_COPY
+
+/*
+ * Define if va_list type is an array
+ */
+#undef VA_LIST_IS_ARRAY
+
+/*
  * Define if your compiler has std::wstring
  */
 /* #unfine HAVE_STD_WSTRING */

@@ -1713,6 +1713,65 @@ AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
 
 AC_DEFINE_UNQUOTED(SIZEOF_WCHAR_T, $wx_cv_sizeof_wchar_t)
 
+dnl checks needed to define wxVaCopy
+AC_CACHE_CHECK([for va_copy],
+    wx_cv_func_va_copy,
+    [
+        AC_COMPILE_IFELSE([
+            #include <stdarg.h>
+            void foo(char *f, ...)
+            {
+                va_list ap1, ap2;
+                va_start(ap1, f);
+                va_copy(ap2, ap1);
+                va_end(ap2);
+                va_end(ap1);
+            }],
+            wx_cv_func_va_copy=yes,
+            wx_cv_func_va_copy=no
+        )
+    ]
+)
+
+if test $wx_cv_func_va_copy = "yes"; then
+    AC_DEFINE(HAVE_VA_COPY)
+else
+    dnl try to understand how can we copy va_lists
+    AC_CACHE_CHECK([if va_list can be copied by value],
+        wx_cv_type_va_list_lvalue,
+        [
+            AC_RUN_IFELSE([
+                #include <stdarg.h>
+                int foo(char *f, ...)
+                {
+                    va_list ap1, ap2;
+                    va_start(ap1, f);
+                    ap2 = ap1;
+                    if ( va_arg(ap1, int) != 17 || va_arg(ap2, int) != 17 )
+                        return 1;
+                    va_end(ap2);
+                    va_end(ap1);
+                    return 0;
+                }
+                int main()
+                {
+                    return foo("hi", 17);
+                }],
+                wx_cv_type_va_list_lvalue=yes,
+                wx_cv_type_va_list_lvalue=no,
+                dnl assume most common case for cross-compiling...
+                wx_cv_type_va_list_lvalue=yes
+            )
+        ]
+    )
+
+    if test $wx_cv_type_va_list_lvalue != "yes"; then
+        dnl we suppose that the only thing which can't be copied like this
+        dnl are arrays... only experience will show whether this is really true
+        AC_DEFINE(VA_LIST_IS_ARRAY)
+    fi
+fi
+
 dnl check for large file support
 AC_SYS_LARGEFILE
 
