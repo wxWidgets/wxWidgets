@@ -150,7 +150,10 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - wxNotebookSizer and wxBookCtrlSizer are now deprecated -- the are no longer
   needed, you can treat wxNotebook as any other control and put it directly
   into the sizer that was wxNotebookSizer's parent sizer in old code.
-
+- wxFile methods now return wxFileOffset which may be a 64 bit integer type,
+  even on 32 bit platforms, instead of off_t and so the return value of
+  wxFile::Length(), for example, shouldn't be assigned to off_t variable any
+  more (the compiler might warn you about this).
 
 
 DEPRECATED METHODS SINCE 2.4.x
@@ -198,6 +201,7 @@ OTHER CHANGES
 
 All:
 
+- support for huge (>2 Gb) files (Tim Kosse)
 - number of fixes to wxPluginManager (Rick Brice, Hans Van Leemputten)
 - fixed memory leak in wxURL when using a proxy (Steven Van Ingelgem)
 - fixed bug in wxDateTime::Set(jdn) when DST was in effect

@@ -19,6 +19,10 @@ its destructor making it unnecessary to worry about forgetting to do it.
 wxFile is a wrapper around {\tt file descriptor.} - see also 
 \helpref{wxFFile}{wxffile} for a wrapper around {\tt FILE} structure.
 
+{\tt wxFileOffset} is used by the wxFile functions which require offsets as 
+parameter or return them. If the platform supports it, wxFileOffset if a typedef
+for a native 64 bit integer, else a 32 bit integer is used for wxFileOffset.
+
 \wxheading{Derived from}
 
 None.
@@ -70,7 +74,7 @@ Will fail if the file already exists, else create and open it atomically.  Usefu
 \end{twocollist}
 
 Other constants defined elsewhere but used by wxFile functions are wxInvalidOffset which represents an
-invalid value of type {\it off\_t} and is returned by functions returning {\it off\_t} on error and the seek
+invalid value of type {\it wxFileOffset} and is returned by functions returning {\it wxFileOffset} on error and the seek
 mode constants used with \helpref{Seek()}{wxfileseek}:
 
 \twocolwidtha{7cm}
@@ -204,7 +208,7 @@ Returns true if the file has been opened.
 
 \membersection{wxFile::Length}\label{wxfilelength}
 
-\constfunc{off\_t}{Length}{\void}
+\constfunc{wxFileOffset}{Length}{\void}
 
 Returns the length of the file.
 
@@ -222,7 +226,7 @@ Opens the file, returning true if successful.
 
 \membersection{wxFile::Read}\label{wxfileread}
 
-\func{off\_t}{Read}{\param{void*}{ buffer}, \param{off\_t}{ count}}
+\func{size\_t}{Read}{\param{void*}{ buffer}, \param{size\_t}{ count}}
 
 Reads the specified number of bytes into a buffer, returning the actual number read.
 
@@ -238,7 +242,7 @@ The number of bytes read, or the symbol {\bf wxInvalidOffset} (-1) if there was 
 
 \membersection{wxFile::Seek}\label{wxfileseek}
 
-\func{off\_t}{Seek}{\param{off\_t }{ofs}, \param{wxSeekMode }{mode = wxFromStart}}
+\func{wxFileOffset}{Seek}{\param{wxFileOffset }{ofs}, \param{wxSeekMode }{mode = wxFromStart}}
 
 Seeks to the specified position.
 
@@ -254,7 +258,7 @@ The actual offset position achieved, or wxInvalidOffset on failure.
 
 \membersection{wxFile::SeekEnd}\label{wxfileseekend}
 
-\func{off\_t}{SeekEnd}{\param{off\_t }{ofs = 0}}
+\func{wxFileOffset}{SeekEnd}{\param{wxFileOffset }{ofs = 0}}
 
 Moves the file pointer to the specified number of bytes before the end of the file.
 
@@ -268,14 +272,14 @@ The actual offset position achieved, or wxInvalidOffset on failure.
 
 \membersection{wxFile::Tell}\label{wxfiletell}
 
-\constfunc{off\_t}{Tell}{\void}
+\constfunc{wxFileOffset}{Tell}{\void}
 
 Returns the current position or wxInvalidOffset if file is not opened or if another
 error occurred.
 
 \membersection{wxFile::Write}\label{wxfilewrite}
 
-\func{size\_t}{Write}{\param{const void*}{ buffer}, \param{off\_t}{ count}}
+\func{size\_t}{Write}{\param{const void*}{ buffer}, \param{wxFileOffset}{ count}}
 
 Writes the specified number of bytes from a buffer.
 

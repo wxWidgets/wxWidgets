@@ -65,6 +65,7 @@ WXDLLIMPEXP_BASE int wxMSLU__waccess(const wxChar *name, int mode);
 WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wxChar *name);
 WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wxChar *name);
 WXDLLIMPEXP_BASE int wxMSLU__wstat(const wxChar *name, struct _stat *buffer);
+WXDLLIMPEXP_BASE int wxMSLU__wstati64(const wxChar *name, struct _stati64 *buffer);
 #endif
 
 #endif // wxUSE_UNICODE_MSLU

@@ -199,6 +199,14 @@ WXDLLIMPEXP_BASE int wxMSLU__wstat(const wxChar *name, struct _stat *buffer)
         return _wstat(name, buffer);
 }
 
+WXDLLIMPEXP_BASE int wxMSLU__wstati64(const wxChar *name, struct _stati64 *buffer)
+{
+    if ( wxUsingUnicowsDll() )
+        return _stati64((const char*)wxConvFile.cWX2MB(name), buffer);
+    else
+        return _wstati64(name, buffer);
+}
+
 #endif // compilers having wopen() &c
 
 #endif // wxUSE_BASE

@@ -10,11 +10,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-/*
-    TODO: remove all the WinCE ugliness from here, implement the wxOpen(),
-          wxSeek(), ... functions in a separate file for WinCE instead!!!
- */
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -34,7 +29,6 @@
 
 // standard
 #if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-  #include  <io.h>
 
 #ifndef __SALFORDC__
     #define   WIN32_LEAN_AND_MEAN
@@ -91,26 +85,12 @@
 #endif
     char* mktemp( char * path ) { return path ;}
     #include <stat.h>
-    #include  <unistd.h>
+    #include <unistd.h>
 #else
     #error  "Please specify the header with file functions declarations."
 #endif  //Win/UNIX
 
 #include  <stdio.h>       // SEEK_xxx constants
-
-#ifndef __WXWINCE__
-#include  <fcntl.h>       // O_RDONLY &c
-#endif
-
-#ifdef __WXWINCE__
-// Nothing
-#elif !defined(__MWERKS__)
-    #include  <sys/types.h>   // needed for stat
-    #include  <sys/stat.h>    // stat
-#elif defined(__MWERKS__) && ( defined(__WXMSW__) || defined(__MACH__) )
-    #include  <sys/types.h>   // needed for stat
-    #include  <sys/stat.h>    // stat
-#endif
 
 // Windows compilers don't have these constants
 #ifndef W_OK
@@ -200,12 +180,7 @@ bool wxFile::Access(const wxChar *name, OpenMode mode)
             break;
     }
 
-#ifdef __WXWINCE__
-    // FIXME: use CreateFile with 0 access to query the file
-    return true;
-#else
     return wxAccess(name, how) == 0;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -231,21 +206,10 @@ bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
     // int fd = open( szFileName , O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
     int fd = creat( szFileName , accessMode);
 #else
-#ifdef __WXWINCE__
-    HANDLE fileHandle = ::CreateFile(szFileName, GENERIC_WRITE, 0, NULL,
-        bOverwrite ? CREATE_ALWAYS : CREATE_NEW, FILE_ATTRIBUTE_NORMAL,
-        0);
-    int fd = 0;
-    if (fileHandle == INVALID_HANDLE_VALUE)
-        fd = (int) fileHandle;
-    else
-        fd = -1;
-#else
     int fd = wxOpen( szFileName,
                      O_BINARY | O_WRONLY | O_CREAT |
                      (bOverwrite ? O_TRUNC : O_EXCL)
                      ACCESS(accessMode) );
-#endif
 #endif
     if ( fd == -1 )
     {
@@ -262,57 +226,6 @@ bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
 // open the file
 bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
 {
-#ifdef __WXWINCE__
-    DWORD access = 0;
-    DWORD shareMode = 0;
-    DWORD disposition = 0;
-
-    switch ( mode )
-    {
-        case read:
-            access = GENERIC_READ;
-            shareMode = FILE_SHARE_READ|FILE_SHARE_WRITE;
-            disposition = OPEN_EXISTING;
-            break;
-
-        case write_append:
-            if ( wxFile::Exists(szFileName) )
-            {
-                access = GENERIC_READ|GENERIC_WRITE;
-                shareMode = FILE_SHARE_READ;
-                disposition = 0;
-                break;
-            }
-            //else: fall through as write_append is the same as write if the
-            //      file doesn't exist
-
-        case write:
-            access = GENERIC_WRITE;
-            shareMode = 0;
-            disposition = TRUNCATE_EXISTING;
-            break;
-
-        case write_excl:
-            access = GENERIC_WRITE;
-            shareMode = 0;
-            disposition = TRUNCATE_EXISTING;
-            break;
-
-        case read_write:
-            access = GENERIC_READ|GENERIC_WRITE;
-            shareMode = 0;
-            disposition = 0;
-            break;
-    }
-
-    int fd = 0;
-    HANDLE fileHandle = ::CreateFile(szFileName, access, shareMode, NULL,
-        disposition, FILE_ATTRIBUTE_NORMAL, 0);
-    if (fileHandle == INVALID_HANDLE_VALUE)
-        fd = -1;
-    else
-        fd = (int) fileHandle;
-#else
     int flags = O_BINARY;
 
     switch ( mode )
@@ -351,7 +264,7 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
 #endif // __WINDOWS__
 
     int fd = wxOpen( szFileName, flags ACCESS(accessMode));
-#endif
+
     if ( fd == -1 )
     {
         wxLogSysError(_("can't open file '%s'"), szFileName);
@@ -367,11 +280,7 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
 bool wxFile::Close()
 {
     if ( IsOpened() ) {
-#ifdef __WXWINCE__
-        if (!CloseHandle((HANDLE) m_fd))
-#else
-        if ( close(m_fd) == -1 )
-#endif
+        if (wxClose(m_fd) == -1)
         {
             wxLogSysError(_("can't close file descriptor %d"), m_fd);
             m_fd = fd_invalid;
@@ -389,25 +298,15 @@ bool wxFile::Close()
 // ----------------------------------------------------------------------------
 
 // read
-off_t wxFile::Read(void *pBuf, off_t nCount)
+size_t wxFile::Read(void *pBuf, size_t nCount)
 {
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
-#ifdef __WXWINCE__
-    DWORD bytesRead = 0;
-    int iRc = 0;
-    if (ReadFile((HANDLE) m_fd, pBuf, (DWORD) nCount, & bytesRead, NULL))
-        iRc = bytesRead;
-    else
-        iRc = -1;
-#elif defined(__MWERKS__)
-    int iRc = ::read(m_fd, (char*) pBuf, nCount);
-#else
-    int iRc = ::read(m_fd, pBuf, nCount);
-#endif
+    int iRc = wxRead(m_fd, pBuf, nCount);
+
     if ( iRc == -1 ) {
         wxLogSysError(_("can't read from file descriptor %d"), m_fd);
-        return wxInvalidOffset;
+        return (size_t)wxInvalidOffset;
     }
     else
         return (size_t)iRc;
@@ -418,22 +317,8 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 {
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
-#ifdef __WXWINCE__
-    DWORD bytesWritten = 0;
-    int iRc = 0;
-    if (WriteFile((HANDLE) m_fd, pBuf, (DWORD) nCount, & bytesWritten, NULL))
-        iRc = bytesWritten;
-    else
-        iRc = -1;
-#elif defined(__MWERKS__)
-#if __MSL__ >= 0x6000
-    int iRc = ::write(m_fd, (void*) pBuf, nCount);
-#else
-    int iRc = ::write(m_fd, (const char*) pBuf, nCount);
-#endif
-#else
-    int iRc = ::write(m_fd, pBuf, nCount);
-#endif
+    int iRc = wxWrite(m_fd, pBuf, nCount);
+
     if ( iRc == -1 ) {
         wxLogSysError(_("can't write to file descriptor %d"), m_fd);
         m_error = true;
@@ -447,9 +332,7 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 bool wxFile::Flush()
 {
     if ( IsOpened() ) {
-#ifdef __WXWINCE__
-        // Do nothing
-#elif defined(__VISUALC__) || wxHAVE_FSYNC
+#if defined(__VISUALC__) || wxHAVE_FSYNC
         if ( wxFsync(m_fd) == -1 )
         {
             wxLogSysError(_("can't flush file descriptor %d"), m_fd);
@@ -468,38 +351,10 @@ bool wxFile::Flush()
 // ----------------------------------------------------------------------------
 
 // seek
-off_t wxFile::Seek(off_t ofs, wxSeekMode mode)
+wxFileOffset wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
 {
     wxASSERT( IsOpened() );
 
-#ifdef __WXWINCE__
-    int origin;
-    switch ( mode ) {
-        default:
-            wxFAIL_MSG(_("unknown seek origin"));
-
-        case wxFromStart:
-            origin = FILE_BEGIN;
-            break;
-
-        case wxFromCurrent:
-            origin = FILE_CURRENT;
-            break;
-
-        case wxFromEnd:
-            origin = FILE_END;
-            break;
-    }
-
-    DWORD res = SetFilePointer((HANDLE) m_fd, ofs, 0, origin) ;
-    if (res == 0xFFFFFFFF && GetLastError() != NO_ERROR)
-    {
-        wxLogSysError(_("can't seek on file descriptor %d"), m_fd);
-        return wxInvalidOffset;
-    }
-    else
-        return (off_t)res;
-#else
     int origin;
     switch ( mode ) {
         default:
@@ -518,62 +373,43 @@ off_t wxFile::Seek(off_t ofs, wxSeekMode mode)
             break;
     }
 
-    int iRc = lseek(m_fd, ofs, origin);
+    if (ofs == wxInvalidOffset)
+    {
+        wxLogSysError(_("can't seek on file descriptor %d, large files support is not enabled."), m_fd);
+        return wxInvalidOffset;
+    }
+    wxFileOffset iRc = wxSeek(m_fd, ofs, origin);
     if ( iRc == -1 ) {
         wxLogSysError(_("can't seek on file descriptor %d"), m_fd);
         return wxInvalidOffset;
     }
     else
-        return (off_t)iRc;
-#endif
+        return iRc;
 }
 
-// get current off_t
-off_t wxFile::Tell() const
+// get current wxFileOffset
+wxFileOffset wxFile::Tell() const
 {
     wxASSERT( IsOpened() );
 
-#ifdef __WXWINCE__
-    DWORD res = SetFilePointer((HANDLE) m_fd, 0, 0, FILE_CURRENT) ;
-    if (res == 0xFFFFFFFF && GetLastError() != NO_ERROR)
-    {
-        wxLogSysError(_("can't get seek position on file descriptor %d"), m_fd);
-        return wxInvalidOffset;
-    }
-    else
-        return (off_t)res;
-#else
-    int iRc = wxTell(m_fd);
+    wxFileOffset iRc = wxTell(m_fd);
     if ( iRc == -1 ) {
         wxLogSysError(_("can't get seek position on file descriptor %d"), m_fd);
         return wxInvalidOffset;
     }
     else
-        return (off_t)iRc;
-#endif
+        return iRc;
 }
 
 // get current file length
-off_t wxFile::Length() const
+wxFileOffset wxFile::Length() const
 {
     wxASSERT( IsOpened() );
 
-#ifdef __WXWINCE__
-    DWORD off0 = SetFilePointer((HANDLE) m_fd, 0, 0, FILE_CURRENT);
-    DWORD off1 = SetFilePointer((HANDLE) m_fd, 0, 0, FILE_END);
-    off_t len = off1;
-
-    // Restore position
-    SetFilePointer((HANDLE) m_fd, off0, 0, FILE_BEGIN);
-    return len;
-#else
-#ifdef __VISUALC__
-    int iRc = _filelength(m_fd);
-#else // !VC++
-    int iRc = wxTell(m_fd);
+    wxFileOffset iRc = Tell();
     if ( iRc != -1 ) {
         // @ have to use const_cast :-(
-        int iLen = ((wxFile *)this)->SeekEnd();
+        wxFileOffset iLen = ((wxFile *)this)->SeekEnd();
         if ( iLen != -1 ) {
             // restore old position
             if ( ((wxFile *)this)->Seek(iRc) == -1 ) {
@@ -584,15 +420,13 @@ off_t wxFile::Length() const
 
         iRc = iLen;
     }
-#endif  // VC++
 
     if ( iRc == -1 ) {
         wxLogSysError(_("can't find length of file on file descriptor %d"), m_fd);
         return wxInvalidOffset;
     }
     else
-        return (off_t)iRc;
-#endif
+        return iRc;
 }
 
 // is end of file reached?
@@ -600,29 +434,18 @@ bool wxFile::Eof() const
 {
     wxASSERT( IsOpened() );
 
-#ifdef __WXWINCE__
-    DWORD off0 = SetFilePointer((HANDLE) m_fd, 0, 0, FILE_CURRENT);
-    DWORD off1 = SetFilePointer((HANDLE) m_fd, 0, 0, FILE_END);
-    if (off0 == off1)
-        return true;
-    else
-    {
-        SetFilePointer((HANDLE) m_fd, off0, 0, FILE_BEGIN);
-        return false;
-    }
-#else
     int iRc;
 
 #if defined(__DOS__) || defined(__UNIX__) || defined(__GNUWIN32__) || defined( __MWERKS__ ) || defined(__SALFORDC__)
     // @@ this doesn't work, of course, on unseekable file descriptors
-    off_t ofsCur = Tell(),
+    wxFileOffset ofsCur = Tell(),
     ofsMax = Length();
     if ( ofsCur == wxInvalidOffset || ofsMax == wxInvalidOffset )
         iRc = -1;
     else
         iRc = ofsCur == ofsMax;
 #else  // Windows and "native" compiler
-    iRc = eof(m_fd);
+    iRc = wxEof(m_fd);
 #endif // Windows/Unix
 
     switch ( iRc ) {
@@ -641,7 +464,6 @@ bool wxFile::Eof() const
     }
 
     return true;
-#endif
 }
 
 // ============================================================================

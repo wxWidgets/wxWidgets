@@ -95,7 +95,7 @@ public:
 
   // read/write (unbuffered)
     // returns number of bytes read or ofsInvalid on error
-  off_t Read(void *pBuf, off_t nCount);
+  size_t Read(void *pBuf, size_t nCount);
     // returns the number of bytes written
   size_t Write(const void *pBuf, size_t nCount);
     // returns true on success
@@ -110,13 +110,13 @@ public:
 
   // file pointer operations (return ofsInvalid on failure)
     // move ptr ofs bytes related to start/current off_t/end of file
-  off_t Seek(off_t ofs, wxSeekMode mode = wxFromStart);
+  wxFileOffset Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
     // move ptr to ofs bytes before the end
-  off_t SeekEnd(off_t ofs = 0) { return Seek(ofs, wxFromEnd); }
+  wxFileOffset SeekEnd(wxFileOffset ofs = 0) { return Seek(ofs, wxFromEnd); }
     // get current off_t
-  off_t Tell() const;
+  wxFileOffset Tell() const;
     // get current file length
-  off_t Length() const;
+  wxFileOffset Length() const;
 
   // simple accessors
     // is file opened?

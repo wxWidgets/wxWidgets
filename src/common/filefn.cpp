@@ -31,7 +31,7 @@
 
 #include "wx/utils.h"
 #include "wx/intl.h"
-#include "wx/file.h"
+#include "wx/file.h" // This does include filefn.h
 #include "wx/filename.h"
 #include "wx/dir.h"
 
@@ -54,76 +54,6 @@
     #include  "wx/mac/private.h"  // includes mac headers
 #endif
 
-#ifdef __WXWINCE__
-#include "wx/msw/wince/time.h"
-#include "wx/msw/private.h"
-#else
-#include <time.h>
-#endif
-
-#ifdef __WXWINCE__
-// Nothing
-#elif !defined(__MWERKS__)
-    #include <sys/types.h>
-    #include <sys/stat.h>
-#else
-#ifdef __MACH__
-#include <sys/types.h>
-#include <utime.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#else
-    #include <stat.h>
-    #include <unistd.h>
-    #include <unix.h>
-    #include <fcntl.h>
-#endif
-#endif
-
-#ifdef __OS2__
-// need to check for __OS2__ first since currently both
-// __OS2__ and __UNIX__ are defined.
-    #include <process.h>
-    #include "wx/os2/private.h"
-#ifdef __EMX__
-    #include <unistd.h>
-#endif
-#elif defined(__UNIX__)
-    #include <unistd.h>
-    #include <dirent.h>
-    #include <fcntl.h>
-#endif
-
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-#if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__) && !defined(__WXWINCE__)
-    #include <direct.h>
-    #include <dos.h>
-    #include <io.h>
-#endif // __WINDOWS__
-#endif // native Win compiler
-
-#if defined(__DOS__)
-    #ifdef __WATCOMC__
-        #include <direct.h>
-        #include <dos.h>
-        #include <io.h>
-    #endif
-    #ifdef __DJGPP__
-        #include <unistd.h>
-    #endif
-#endif
-
-#ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
-                    // this (3.1 I believe) and how to test for it.
-                    // If this works for Borland 4.0 as well, then no worries.
-    #include <dir.h>
-#endif
-
-#ifdef __SALFORDC__
-    #include <dir.h>
-    #include <unix.h>
-#endif
-
 #include "wx/log.h"
 
 // No, Cygwin doesn't appear to have fnmatch.h after all.
@@ -134,11 +64,6 @@
 #ifdef __WINDOWS__
     #include "wx/msw/wrapwin.h"
     #include "wx/msw/mslu.h"
-
-    // for _getcwd
-    #ifdef __MINGW32__
-        #include <io.h>
-    #endif
 
     // sys/cygwin.h is needed for cygwin_conv_to_full_win32_path()
     //
