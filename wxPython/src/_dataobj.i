@@ -71,7 +71,7 @@ The standard format IDs are:
                         Windows and non-unicode builds
     ================    =====================================
 
-Aside the standard formats, the application may also use custom
+Besies the standard formats, the application may also use custom
 formats which are identified by their names (strings) and not numeric
 identifiers. Although internally custom format must be created (or
 registered) first, you shouldn\'t care about it because it is done
@@ -717,13 +717,7 @@ file names. The program works with it just as if it were a list of
 absolute file names, but internally it uses the same format as
 Explorer and other compatible programs under Windows or GNOME/KDE
 filemanager under Unix which makes it possible to receive files from
-them using this class.
-
-:Warning: Under all non-Windows platforms this class is currently
-    \"input-only\", i.e. you can receive the files from another
-    application, but copying (or dragging) file(s) from a wxWidgets
-    application is not currently supported.
-", "");
+them using this class.", "");
 
 class wxFileDataObject : public wxDataObjectSimple
 {
@@ -754,8 +748,15 @@ data object.", "");
 
 class wxCustomDataObject : public wxDataObjectSimple {
 public:
-    wxCustomDataObject(const wxDataFormat& format = wxFormatInvalid);
-
+    %nokwargs wxCustomDataObject;
+    wxCustomDataObject(const wxDataFormat& format);
+    %extend {
+        wxCustomDataObject(const wxString& formatName) {
+            return new wxCustomDataObject(wxDataFormat(formatName));
+        }
+    }
+    wxCustomDataObject();
+    
     
     DocAStr(SetData,
             "SetData(self, String data) -> bool",
