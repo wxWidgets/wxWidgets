@@ -32,6 +32,12 @@
     #include "wx/unix/execute.h"
 #endif
 
+// SGI signal.h defines signal handler arguments differently depending on
+// whether _LANGUAGE_C_PLUS_PLUS is set or not - do set it
+#if defined(__SGI__) && !defined(_LANGUAGE_C_PLUS_PLUS)
+    #define _LANGUAGE_C_PLUS_PLUS 1
+#endif // SGI hack
+
 #include <stdarg.h>
 #include <dirent.h>
 #include <string.h>
