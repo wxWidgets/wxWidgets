@@ -391,10 +391,10 @@ void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     else
         state = GTK_STATE_NORMAL;
 
+    // erase background first
     gtk_paint_box
     (
         gs_button->style,
-        //GTK_PIZZA(wdc->m_window)->bin_window,
         wdc.m_window,
         state,
         GTK_SHADOW_NONE,
@@ -408,7 +408,6 @@ void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     gtk_paint_arrow
     (
         gs_button->style,
-        //GTK_PIZZA(wdc->m_window)->bin_window,
         wdc.m_window,
         state,
         flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
@@ -416,9 +415,8 @@ void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
         gs_button,
         "arrow",
         GTK_ARROW_DOWN,
-        TRUE,
+        FALSE,
         rect.x + 1, rect.y + 1, rect.width - 2, rect.height - 2
     );
-
 }
 
