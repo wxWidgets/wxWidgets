@@ -21,6 +21,7 @@ Currently only the MOTIF GUI vcan be build by typing
  
 It automatically makes the library in [.lib] and links the following samples
  [.samples.menu]menu.exe
+ [.samples.menu]minimal.exe
  
 
 
