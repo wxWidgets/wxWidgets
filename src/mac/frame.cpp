@@ -225,19 +225,6 @@ void wxFrameMac::PositionStatusBar()
    }
 }
 
-void wxFrameMac::SetMenuBar(wxMenuBar *menuBar)
-{
-    if (!menuBar)
-    {
-        return;
-    }
-  
-    m_frameMenuBar = menuBar;
-//    m_frameMenuBar->MacInstallMenuBar() ;
-    m_frameMenuBar->Attach((wxFrame *)this);
-}
-
-
 // Responds to colour changes, and passes event on to children.
 void wxFrameMac::OnSysColourChanged(wxSysColourChangedEvent& event)
 {

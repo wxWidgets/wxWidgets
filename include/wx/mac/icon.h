@@ -29,9 +29,9 @@ public:
   // Copy constructors
   inline wxIcon(const wxIcon& icon) { Ref(icon); }
 
-  wxIcon( const char **data );
-  wxIcon( char **data );
-  wxIcon(const char bits[], int width, int height);
+  wxIcon(const char **data);
+  wxIcon(char **data);
+  wxIcon(const char bits[], int width=-1, int height=-1);
   wxIcon(const wxString& name, long flags = wxBITMAP_TYPE_ICON_RESOURCE,
     int desiredWidth = -1, int desiredHeight = -1);
   ~wxIcon();
@@ -44,6 +44,11 @@ public:
   inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
   inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
   inline bool operator != (const wxIcon& icon) { return m_refData != icon.m_refData; }
+  
+  // create from bitmap (which should have a mask unless it's monochrome):
+  // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
+  // ctors, assignment operators...), but it's ok to have such function
+  void CopyFromBitmap(const wxBitmap& bmp);
 };
 
 /*

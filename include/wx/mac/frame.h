@@ -64,7 +64,6 @@ public:
     virtual void Iconize(bool iconize = TRUE);
     virtual bool IsIconized() const;
     virtual void Restore();
-    virtual void SetMenuBar(wxMenuBar *menubar);
     virtual void SetIcon(const wxIcon& icon);
 
     // implementation only from now on

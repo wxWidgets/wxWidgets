@@ -69,6 +69,12 @@ bool wxIcon::LoadFile(const wxString& filename, long type,
 	return FALSE;
 }
 
+void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
+{
+    wxIcon *icon = (wxIcon*)(&bmp);
+    *this = *icon;
+}
+
 IMPLEMENT_DYNAMIC_CLASS(wxICONResourceHandler, wxBitmapHandler)
 
 bool  wxICONResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
