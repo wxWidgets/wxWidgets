@@ -565,8 +565,11 @@ wxDialUpManagerImpl::CheckIfconfig(void)
 #if defined(__SOLARIS__) || defined (__SUNOS__)
       // need to add -a flag
       cmd << " -a";
-#elif defined(__LINUX__) || defined (__FREEBSD__) || defined(__SGI__)
+#elif defined(__LINUX__) || defined(__SGI__)
       // nothing to be added to ifconfig
+#elif defined(__FREEBSD__)
+      // add -l flag
+      cmd << " -l";
 #elif defined(__HPUX__)
       // VZ: a wild guess (but without it, ifconfig fails completely)
       cmd << _T(" ppp0");
@@ -646,7 +649,7 @@ wxDialUpManagerImpl::CheckPing(void)
    cmd << m_PingPath << ' ';
 #if defined(__SOLARIS__) || defined (__SUNOS__)
    // nothing to add to ping command
-#elif defined(__LINUX__)
+#elif defined(__LINUX__) || defined ( __FREEBSD__)
    cmd << "-c 1 "; // only ping once
 #elif defined(__HPUX__)
    cmd << "64 1 "; // only ping once (need also specify the packet size)
