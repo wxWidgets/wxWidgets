@@ -13,8 +13,7 @@
 #define _WX_UNIX_FONTUTIL_H_
 
 #ifdef __X__
-    struct XFontStruct;
-    typedef XFontStruct *wxNativeFont;
+    typedef WXFontStructPtr wxNativeFont;
 #elif defined(__WXGTK__)
     typedef GdkFont *wxNativeFont;
 #else

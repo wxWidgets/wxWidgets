@@ -360,7 +360,8 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     }
 
     // not found, create a new one
-    XFontStruct *font = wxLoadQueryNearestFont(pointSize,
+    XFontStruct *font = (XFontStruct *)
+                        wxLoadQueryNearestFont(pointSize,
                                                M_FONTDATA->m_family,
                                                M_FONTDATA->m_style,
                                                M_FONTDATA->m_weight,
