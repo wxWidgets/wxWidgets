@@ -433,7 +433,7 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
         }
         else 
         {
-            wxFAIL_MSG("Unsupported FL alignment type detected in wxNewBitmapButton::RenderLabelImage()");
+            wxFAIL_MSG(wxT("Unsupported FL alignment type detected in wxNewBitmapButton::RenderLabelImage()"));
         }
     }
     else
@@ -731,7 +731,7 @@ void wxNewBitmapButton::Reshape( )
         // in the case of loading button from stream, check if we
         // have non-empty image-file name, load if possible 
 
-        if ( mImageFileName != "" )
+        if ( mImageFileName != wxT("") )
         {
             mDepressedBmp.LoadFile( mImageFileName, mImageFileType );
 
@@ -796,6 +796,6 @@ void wxNewBitmapButton::OnKillFocus( wxFocusEvent& event )
 {
     // useless
 
-    wxMessageBox("kill-focus for button!");
+    wxMessageBox(wxT("kill-focus for button!"));
 }
 

@@ -239,7 +239,7 @@ public:
                          int alignment    = FL_ALIGN_TOP,
                          int rowNo        = 0,
                          int columnPos    = 0,
-                         const wxString& name="bar",
+                         const wxString& name = wxT("bar"),
                          bool spyEvents    = FALSE,
                          int state        = wxCBAR_DOCKED_HORIZONTALLY
                        );

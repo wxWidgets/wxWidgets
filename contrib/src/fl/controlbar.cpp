@@ -976,7 +976,7 @@ void wxFrameLayout::RemoveBar( cbBarInfo* pBarInfo )
             return;
         }
     }
-    wxFAIL_MSG("bar info should be present in the list of all bars of all panes");
+    wxFAIL_MSG(wxT("bar info should be present in the list of all bars of all panes"));
 }
 
 bool wxFrameLayout::LocateBar( cbBarInfo* pBarInfo, 
@@ -1483,7 +1483,7 @@ void wxFrameLayout::OnIdle( wxIdleEvent& event )
 
     if ( !focus && mCheckFocusWhenIdle )
     {
-        wxMessageBox( "Hi, no more focus in this app!" );
+        wxMessageBox(wxT("Hi, no more focus in this app!"));
 
         mCheckFocusWhenIdle = FALSE;
         //ShowFloatedWindows( FALSE );
@@ -3015,7 +3015,7 @@ int cbDockPane::GetRowIndex( cbRowInfo* pRow )
             return i;
     }
 
-    wxFAIL_MSG("Row must be present to call cbDockPane::GetRowIndex()");
+    wxFAIL_MSG(wxT("Row must be present to call cbDockPane::GetRowIndex()"));
 
     return 0;
 }
@@ -3063,7 +3063,7 @@ bool cbDockPane::MatchesMask( int paneMask )
         case FL_ALIGN_RIGHT  : thisMask = FL_ALIGN_RIGHT_PANE; break;
 
         default:
-            wxFAIL_MSG("Bad FL alignment type detected in cbDockPane::MatchesMask()");
+            wxFAIL_MSG(wxT("Bad FL alignment type detected in cbDockPane::MatchesMask()"));
     }
 
     return ( thisMask & paneMask ) != 0;
