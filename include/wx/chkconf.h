@@ -533,6 +533,7 @@
 #   endif
 #endif /* !defined(wxUSE_WXHTML_HELP) */
 
+#ifndef __WXPM__
 #ifndef wxUSE_UNICODE
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_UNICODE must be defined."
@@ -540,6 +541,7 @@
 #       define wxUSE_UNICODE 0
 #   endif
 #endif /* !defined(wxUSE_UNICODE) */
+#endif
 
 #if defined(__WXMSW__) && !defined(wxUSE_UNICODE_MSLU)
 #   ifdef wxABORT_ON_CONFIG_ERROR
