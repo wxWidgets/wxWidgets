@@ -86,10 +86,12 @@ wxWizardPage::wxWizardPage(wxWizard *parent,
 {
     if ( resource != NULL )
     {
+#if wxUSE_RESOURCES
         if ( !LoadFromResource(this, resource) )
         {
             wxFAIL_MSG(wxT("wxWizardPage LoadFromResource failed!!!!"));
         }
+#endif // wxUSE_RESOURCES
     }
 
     m_PageBitmap = bitmap;
