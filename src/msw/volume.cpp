@@ -89,7 +89,7 @@ WX_DEFINE_OBJARRAY(wxIconArray);
 //        - Other flags are 'best guess' from type of drive.  The system will
 //          not report the file attributes with any degree of accuracy.
 //=============================================================================
-unsigned GetBasicFlags(const char* filename)
+static unsigned GetBasicFlags(const wxChar* filename)
 {
     unsigned flags = wxFS_VOL_MOUNTED;
 
@@ -162,7 +162,8 @@ unsigned GetBasicFlags(const char* filename)
 // Purpose: Add a file to the list if it meets the filter requirement.
 // Notes: - See GetBasicFlags for remarks about the Mounted flag.
 //=============================================================================
-bool FilteredAdd(wxArrayString& list, const char* filename, unsigned flagsSet, unsigned flagsUnset)
+static bool FilteredAdd(wxArrayString& list, const wxChar* filename, 
+                        unsigned flagsSet, unsigned flagsUnset)
 {
     bool accept = TRUE;
     unsigned flags = GetBasicFlags(filename);
@@ -198,7 +199,8 @@ bool FilteredAdd(wxArrayString& list, const char* filename, unsigned flagsSet, u
 //          all items while determining which are connected and not.  So this
 //          function will find either all items or connected items.
 //=============================================================================
-void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc, unsigned flagsSet, unsigned flagsUnset)
+static void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc, 
+                            unsigned flagsSet, unsigned flagsUnset)
 {
     HANDLE hEnum;
     int rc;
@@ -272,7 +274,7 @@ void BuildListFromNN(wxArrayString& list, NETRESOURCE* pResSrc, unsigned flagsSe
 //=============================================================================
 static int CompareFcn(const wxString& first, const wxString& second)
 {
-    return stricmp(first.c_str(), second.c_str());
+    return wxStricmp(first.c_str(), second.c_str());
 } // CompareFcn
 
 //=============================================================================
@@ -283,7 +285,8 @@ static int CompareFcn(const wxString& first, const wxString& second)
 //          way manually.
 //        - The resulting list is sorted alphabetically.
 //=============================================================================
-bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc, unsigned flagsSet, unsigned flagsUnset)
+static bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc, 
+                            unsigned flagsSet, unsigned flagsUnset)
 {
     // NN query depends on dynamically loaded library.
     if (!s_pWNetOpenEnum || !s_pWNetEnumResource || !s_pWNetCloseEnum)
@@ -323,7 +326,9 @@ bool BuildRemoteList(wxArrayString& list, NETRESOURCE* pResSrc, unsigned flagsSe
             wxString all(list[iList]);
             wxString mount(mounted[iMounted]);
 
-            while (compare = stricmp(list[iList], mounted[iMounted]), compare > 0 && iList >= 0)
+            while (compare = 
+                     wxStricmp(list[iList].c_str(), mounted[iMounted].c_str()),
+                   compare > 0 && iList >= 0)
             {
                 iList--;
                 all = list[iList];
@@ -465,7 +470,7 @@ bool wxFSVolume::Create(const wxString& name)
     long rc = SHGetFileInfo(m_volName, 0, &fi, sizeof(fi), SHGFI_DISPLAYNAME);
     if (!rc)
     {
-        wxLogError(_("Cannot read typename from '%s'!"), m_volName);
+        wxLogError(_("Cannot read typename from '%s'!"), m_volName.c_str());
         return m_isOk;
     }
     m_dispName = fi.szDisplayName;
@@ -536,6 +541,8 @@ int wxFSVolume::GetFlags() const
 //=============================================================================
 wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
 {
+    wxCHECK_MSG(type < (int)m_icons.GetCount(), wxNullIcon, 
+                _T("Invalid request for icon type!"));
     wxCHECK_MSG( type >= 0 && (size_t)type < m_icons.GetCount(),
                  wxIcon(),                 
                  _T("invalid icon index") );
@@ -561,13 +568,17 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
         case wxFS_VOL_ICO_SEL_LARGE:
             flags = SHGFI_ICON | SHGFI_SHELLICONSIZE | SHGFI_OPENICON;
             break;
+            
+        case wxFS_VOL_ICO_MAX:
+            wxFAIL_MSG(_T("wxFS_VOL_ICO_MAX is not valid icon type"));
+            break;
         }
 
         SHFILEINFO fi;
         long rc = SHGetFileInfo(m_volName, 0, &fi, sizeof(fi), flags);
         m_icons[type].SetHICON((WXHICON)fi.hIcon);
         if (!rc || !fi.hIcon)
-            wxLogError(_("Cannot load icon from '%s'."), m_volName);
+            wxLogError(_("Cannot load icon from '%s'."), m_volName.c_str());
     }
 
     return m_icons[type];
