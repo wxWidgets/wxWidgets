@@ -394,6 +394,7 @@ done
 
 CVS: [VS] wxWindows/src/html htmlpars.cpp,1.29,1.30 htmltag.cpp,1.31,1.32
 CVS: [VS] wxWindows/src/html m_layout.cpp,1.17,1.18
+CVS: [VS] wxWindows/src/html htmltag.cpp,1.32,1.33
 
 
 32. Fix wxFileConfig behaviour in Unicode mode
