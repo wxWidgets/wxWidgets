@@ -22,7 +22,7 @@ port=GTK
 lcport=gtk
 unicode=0
 tarname=wxPythonSrc
-
+rpmflag=-ba
 
 #----------------------------------------------------------------------
 # Check parameters
@@ -42,6 +42,7 @@ function useage {
     echo "   gtk2           Build using wxGTK2 and Unicode"
     echo "   x11            Build using wxX11"
     echo "   speconly       Do nothing but write the RPM spec file"
+    echo "   srpm           Only make the SRPM"
 #    echo "   smp            Add SMP=2 to the envivonment to speed wxGTK build"
 }
 
@@ -92,6 +93,7 @@ for flag in $*; do
 	x11)       port=X11; lcport=x11                ;;
 	smp)       export SMP=2                        ;;
 	speconly)  makespec; exit 0                    ;;
+	srpm)      rpmflag=-bs;                        ;;
 
 	*)  echo "Unknown flag \"${flag}\""
 	    useage
@@ -199,7 +201,7 @@ fi
 if [ -z "${skiprpm}" ]; then
     echo "*** Building RPMs..."
     cp ${distdir}/${tarver}.tar.gz ${rpmtop}/SOURCES
-    rpmbuild -ba \
+    rpmbuild ${rpmflag} \
 	--define "_topdir ${rpmtop}" \
 	--define "_tmppath ${builddir}" \
 	${distdir}/wxPython${port}.spec
