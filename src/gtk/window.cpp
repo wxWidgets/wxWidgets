@@ -26,6 +26,7 @@
 #include "wx/menu.h"
 #include "wx/statusbr.h"
 #include "wx/intl.h"
+#include "wx/settings.h"
 #include "gdk/gdkprivate.h"
 #include "gdk/gdkkeysyms.h"
 
@@ -713,7 +714,9 @@ static void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
     float line_step = win->m_vAdjust->step_increment;
     float page_step = win->m_vAdjust->page_increment;
 
-    if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
+    if (fabs(win->m_vAdjust->value-win->m_vAdjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
+    else if (fabs(win->m_vAdjust->value-win->m_vAdjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
+    else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
     else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
     else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
     else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
@@ -750,8 +753,10 @@ static void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 
     float line_step = win->m_hAdjust->step_increment;
     float page_step = win->m_hAdjust->page_increment;
-
-    if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
+    
+    if (fabs(win->m_hAdjust->value-win->m_hAdjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
+    else if (fabs(win->m_hAdjust->value-win->m_hAdjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
+    else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
     else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
     else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
     else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
@@ -2002,47 +2007,54 @@ bool wxWindow::IsExposed( const wxRect& rect ) const
 
 void wxWindow::Clear()
 {
-  wxCHECK_RET( m_widget != NULL, "invalid window" );
+    wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  if (m_wxwindow && m_wxwindow->window) gdk_window_clear( m_wxwindow->window );
+    if (m_wxwindow && m_wxwindow->window) gdk_window_clear( m_wxwindow->window );
 }
 
 wxColour wxWindow::GetBackgroundColour() const
 {
-  return m_backgroundColour;
+    return m_backgroundColour;
 }
 
 void wxWindow::SetBackgroundColour( const wxColour &colour )
 {
-  wxCHECK_RET( m_widget != NULL, "invalid window" );
+    wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  m_backgroundColour = colour;
-  if (!m_backgroundColour.Ok()) return;
+    if (m_backgroundColour == colour) return;
+    
+    if (!m_backgroundColour.Ok())
+        if (wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE ) == colour) return;
   
-  if (m_wxwindow)
-  {
-    GdkWindow *window = m_wxwindow->window;
-    m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
-    gdk_window_set_background( window, m_backgroundColour.GetColor() );
-    gdk_window_clear( window );
-  }
+    m_backgroundColour = colour;
+    if (!m_backgroundColour.Ok()) return;
   
-  ApplyWidgetStyle();
+    if (m_wxwindow)
+    {
+        GdkWindow *window = m_wxwindow->window;
+        m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+        gdk_window_set_background( window, m_backgroundColour.GetColor() );
+        gdk_window_clear( window );
+    }
+  
+    ApplyWidgetStyle();
 }
 
 wxColour wxWindow::GetForegroundColour() const
 {
-  return m_foregroundColour;
+    return m_foregroundColour;
 }
 
 void wxWindow::SetForegroundColour( const wxColour &colour )
 {
-  wxCHECK_RET( m_widget != NULL, "invalid window" );
+    wxCHECK_RET( m_widget != NULL, "invalid window" );
 
-  m_foregroundColour = colour;
-  if (!m_foregroundColour.Ok()) return;
+    if (m_foregroundColour == colour) return;
   
-  ApplyWidgetStyle();
+    m_foregroundColour = colour;
+    if (!m_foregroundColour.Ok()) return;
+  
+    ApplyWidgetStyle();
 }
 
 GtkStyle *wxWindow::GetWidgetStyle()

@@ -868,6 +868,7 @@ void wxPaintDC::SetLogicalFunction( int function )
     m_logicalFunction = function;
     gdk_gc_set_function( m_penGC, mode );
     gdk_gc_set_function( m_brushGC, mode );
+    gdk_gc_set_function( m_textGC, mode );
 }
 
 void wxPaintDC::SetTextForeground( const wxColour &col )

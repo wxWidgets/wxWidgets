@@ -39,7 +39,9 @@ static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *wi
   float line_step = win->m_adjust->step_increment;
   float page_step = win->m_adjust->page_increment;
   
-  if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
+  if (fabs(win->m_adjust->value-win->m_adjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
+  else if (fabs(win->m_adjust->value-win->m_adjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
+  else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
   else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
   else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
   else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
