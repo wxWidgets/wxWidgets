@@ -44,7 +44,7 @@
 // BJO 20000503: introduce new GetColumns members which are more database independant and 
 //               return columns in the order they were created
 #define OLD_GETCOLUMNS 1
-#define EXPERIMENTAL_WXDB_FUNCTIONS 0
+#define EXPERIMENTAL_WXDB_FUNCTIONS 1
 
 // Use this line for wxWindows v1.x
 //#include "wx_ver.h"
@@ -61,19 +61,34 @@
 
 #if wxMAJOR_VERSION == 2
     extern "C" {
+#ifdef __VISUALC__
+// If you use the wxDbCreateDataSource() function with MSW/VC6,
+// you cannot use the iODBC headers, you must use the VC headers,
+// plus the odbcinst.h header - gt Nov 2 2000
+//
+//  Must add "odbccp32.lib" in \wx2\wxWindows\src\makevc.env to the WINLIBS= line
+//
+    #include "sql.h"
+    #include "sqlext.h"
+    #include "odbcinst.h"
+#else
     #include "wx/isql.h"
     #include "wx/isqlext.h"
-// If you use the wxCreateDataSource() function with MSW/VC6,
-// you cannot use the iODBC headers, you must use the VC headers,
-// plus the odbcinst.h header
-    //#include "sql.h"
-    //#include "sqlext.h"
-    //#include "odbcinst.h"
+#endif
     }
 #else  // version == 1
     extern "C" {
+#ifdef __VISUALC__
+// If you use the wxDbCreateDataSource() function with MSW/VC6,
+// you cannot use the iODBC headers, you must use the VC headers,
+// plus the odbcinst.h header - gt Nov 2 2000
+    #include "sql.h"
+    #include "sqlext.h"
+    #include "odbcinst.h"
+#else
     #include "iodbc.h"
     #include "isqlext.h"
+#endif
     }
 #endif
 
@@ -360,7 +375,8 @@ enum wxDBMS
     dbmsACCESS,
     dbmsDBASE,
     dbmsINFORMIX,
-    dbmsVIRTUOSO
+    dbmsVIRTUOSO,
+    dbmsDB2
 };
 
 
@@ -384,12 +400,14 @@ private:
     FILE            *fpSqlLog;        // Sql Log file pointer
     wxDbSqlLogState  sqlLogState;     // On or Off
     bool             fwdOnlyCursors;
+    wxDBMS           dbmsType;        // Type of datasource - i.e. Oracle, dBase, SQLServer, etc
 
     // Private member functions
     bool             getDbInfo(void);
     bool             getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo);
     bool             setConnectionOptions(void);
     void             logError(const char *errMsg, const char *SQLState);
+    void             initialize();
 #if !wxODBC_BACKWARD_COMPATABILITY
     // ODBC handles
     HENV  henv;        // ODBC Environment handle
@@ -442,9 +460,7 @@ public:
         char   databaseName[128];                        // Database filename
         char   outerJoins[2];                            // Indicates whether the data source supports outer joins
         char   procedureSupport[2];                      // Indicates whether the data source supports stored procedures
-#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
         char   accessibleTables[2];                      // Indicates whether the data source only reports accessible tables in SQLTables.
-#endif
         UWORD  maxConnections;                           // Maximum # of connections the data source supports
         UWORD  maxStmts;                                 // Maximum # of HSTMTs per HDBC
         UWORD  apiConfLvl;                               // ODBC API conformance level
@@ -491,6 +507,7 @@ public:
     // Public member functions
     wxDb(HENV &aHenv, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
     bool         Open(char *Dsn, char *Uid, char *AuthStr);  // Data Source Name, User ID, Password
+    bool         Open(wxDb *copyDb);  // pointer to a wxDb whose connection info should be copied rather than re-queried
     void         Close(void);
     bool         CommitTrans(void);
     bool         RollbackTrans(void);
@@ -512,24 +529,23 @@ public:
     wxDbColInf  *GetColumns(char *tableName, int *numCols, const char *userID=NULL); 
 
     int          GetColumnCount(char *tableName, const char *userID=NULL);
-    char        *GetDatabaseName(void) {return dbInf.dbmsName;}
-    char        *GetDataSource(void)   {return dsn;}
-    char        *GetUsername(void)     {return uid;}
-    char        *GetPassword(void)     {return authStr;}
-    bool         IsOpen(void)          {return dbIsOpen;}
-    HENV         GetHENV(void)         {return henv;}
-    HDBC         GetHDBC(void)         {return hdbc;}
-    HSTMT        GetHSTMT(void)        {return hstmt;}
-    int          GetTableCount()       {return nTables;};  // number of tables using this connection
-    wxDbSqlTypeInfo GetTypeInfVarchar(){return typeInfVarchar;}
-    wxDbSqlTypeInfo GetTypeInfInteger(){return typeInfInteger;}
-    wxDbSqlTypeInfo GetTypeInfFloat()  {return typeInfFloat;}
-    wxDbSqlTypeInfo GetTypeInfDate()   {return typeInfDate;}
+    const char  *GetDatabaseName(void)  {return dbInf.dbmsName;}
+    const char  *GetDataSource(void)    {return (const char *)dsn;}
+    const char  *GetDataSourceName(void){return (const char *)dsn;}
+    const char  *GetUsername(void)      {return (const char *)uid;}
+    const char  *GetPassword(void)      {return (const char *)authStr;}
+    bool         IsOpen(void)           {return dbIsOpen;}
+    HENV         GetHENV(void)          {return henv;}
+    HDBC         GetHDBC(void)          {return hdbc;}
+    HSTMT        GetHSTMT(void)         {return hstmt;}
+    int          GetTableCount()        {return nTables;};  // number of tables using this connection
+    wxDbSqlTypeInfo GetTypeInfVarchar() {return typeInfVarchar;}
+    wxDbSqlTypeInfo GetTypeInfInteger() {return typeInfInteger;}
+    wxDbSqlTypeInfo GetTypeInfFloat()   {return typeInfFloat;}
+    wxDbSqlTypeInfo GetTypeInfDate()    {return typeInfDate;}
 
     bool         TableExists(const char *tableName, const char *userID=NULL, const char *path=NULL);  // Table name can refer to a table, view, alias or synonym
-#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
-    bool         TablePrivileges(const char *tableName, const char* priv, const char *userID=NULL, const char *path=NULL);  // Table name can refer to a table, view, alias or synonym
-#endif
+    bool         TablePrivileges(const char *tableName, const char* priv, const char *userID=NULL, const char *path="");  // Table name can refer to a table, view, alias or synonym
     void         LogError(const char *errMsg, const char *SQLState = 0) {logError(errMsg, SQLState);}
     void         SetDebugErrorMessages(bool state) { silent = !state; }
     bool         SetSqlLogging(wxDbSqlLogState state, const wxChar *filename = SQL_LOG_FILENAME, bool append = FALSE);
@@ -553,6 +569,8 @@ struct wxDbList
 {
     wxDbList *PtrPrev;                      // Pointer to previous item in the list
     wxChar    Dsn[SQL_MAX_DSN_LENGTH+1];    // Data Source Name
+    wxChar    Uid[20+1];                    // User ID
+    wxChar    AuthStr[20+1];                // Authorization string (password)
     wxDb     *PtrDb;                        // Pointer to the wxDb object
     bool      Free;                         // Is item free or in use?
     wxDbList *PtrNext;                      // Pointer to next item in the list
