@@ -83,19 +83,21 @@ wxMetaFile::~wxMetaFile()
 
 bool wxMetaFile::SetClipboard(int width, int height)
 {
+#if wxUSE_DRAG_AND_DROP
+//TODO finishi this port , we need the data obj first
     if (!m_refData)
         return FALSE;
 
-    bool alreadyOpen=wxClipboardOpen();
+    bool alreadyOpen=wxTheClipboard->IsOpened() ;
     if (!alreadyOpen)
     {
-        wxOpenClipboard();
-        if (!wxEmptyClipboard()) return FALSE;
+        wxTheClipboard->Open();
+        if (!wxTheClipboard->Clear()) return FALSE;
     }
     bool success = wxSetClipboardData(wxDF_METAFILE, this, width,height);
     if (!alreadyOpen) wxCloseClipboard();
 	    return (bool) success;
-
+#endif
     return TRUE ;
 }
 
