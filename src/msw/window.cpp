@@ -576,9 +576,9 @@ bool wxWindowMSW::Show(bool show)
 
     if ( show && (IsTopLevel()
 #if wxUSE_POPUPWIN
-                  || IsKindOf(CLASSINFO(wxPopupWindow)))
+                  || IsKindOf(CLASSINFO(wxPopupWindow))
 #endif
-        )
+       ) )
     {
         wxBringWindowToTop(hWnd);
     }
