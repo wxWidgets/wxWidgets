@@ -298,7 +298,7 @@ static wxString GetFullSearchPath(const wxChar *lang)
 
     // then take the current directory
     // FIXME it should be the directory of the executable
-    searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang) << wxPATH_SEP;
+    searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang);
 
     // and finally add some standard ones
     searchPath
