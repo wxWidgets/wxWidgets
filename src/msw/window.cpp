@@ -462,9 +462,6 @@ bool wxWindowMSW::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
 
 void wxWindowMSW::Init()
 {
-    // generic
-    InitBase();
-
     // MSW specific
     m_isBeingDeleted = FALSE;
     m_oldWndProc = NULL;
