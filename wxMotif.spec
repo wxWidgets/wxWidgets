@@ -226,6 +226,11 @@ done
 # list of all core headers:
 find $RPM_BUILD_ROOT/usr/include/wx -type f | sed -e "s,$RPM_BUILD_ROOT,,g" >core-headers.files
 
+# remove wxBase files so that RPM doesn't complain about unpackaged files:
+rm -f $RPM_BUILD_ROOT%{_libdir}/libwx_base*
+rm -f $RPM_BUILD_ROOT%{_datadir}/aclocal/*
+rm -f $RPM_BUILD_ROOT%{_datadir}/locale/*/*/*
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT

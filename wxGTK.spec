@@ -296,6 +296,11 @@ find $RPM_BUILD_ROOT/usr/include/wx -type f | sed -e "s,$RPM_BUILD_ROOT,,g" >cor
 (cd obj-shared/contrib/src; make prefix=$RPM_BUILD_ROOT%{pref} install)
 (cd obj-shared/contrib/utils/wxrc; make prefix=$RPM_BUILD_ROOT%{pref} install)
 
+# remove wxBase files so that RPM doesn't complain about unpackaged files:
+rm -f $RPM_BUILD_ROOT%{_libdir}/libwx_base*
+rm -f $RPM_BUILD_ROOT%{_datadir}/aclocal/*
+rm -f $RPM_BUILD_ROOT%{_datadir}/locale/*/*/*
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
