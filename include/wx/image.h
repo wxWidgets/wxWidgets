@@ -70,7 +70,7 @@ protected:
     wxString  m_extension;
     wxString  m_mime;
     long      m_type;
-    
+
 private:
     DECLARE_CLASS(wxImageHandler)
 };
@@ -93,9 +93,12 @@ public:
     wxImage( int width, int height );
     wxImage( int width, int height, unsigned char* data, bool static_data = FALSE );
     wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY );
-    wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
     wxImage( const wxString& name, const wxString& mimetype );
+
+#if wxUSE_STREAMS
+    wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
     wxImage( wxInputStream& stream, const wxString& mimetype );
+#endif // wxUSE_STREAMS
 
     wxImage( const wxImage& image );
     wxImage( const wxImage* image );
@@ -116,13 +119,13 @@ public:
     // creates an identical copy of the image (the = operator
     // just raises the ref count)
     wxImage Copy() const;
-    
+
     // return the new image with size width*height
     wxImage GetSubImage( const wxRect& ) const;
-    
+
     // pastes image into this instance and takes care of
     // the mask colour and out of bounds problems
-    void Paste( const wxImage &image, int x, int y );    
+    void Paste( const wxImage &image, int x, int y );
 
     // return the new image with size width*height
     wxImage Scale( int width, int height ) const;
@@ -141,7 +144,7 @@ public:
     // replace one colour with another
     void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
                   unsigned char r2, unsigned char g2, unsigned char b2 );
-		  
+
     // convert to monochrome image (<r,g,b> will be replaced by white, everything else by black)
     wxImage ConvertToMono( unsigned char r, unsigned char g, unsigned char b ) const;
 
@@ -154,10 +157,10 @@ public:
     // find first colour that is not used in the image and has higher
     // RGB values than <startR,startG,startB>
     bool FindFirstUnusedColour( unsigned char *r, unsigned char *g, unsigned char *b,
-                                unsigned char startR = 1, unsigned char startG = 0, 
+                                unsigned char startR = 1, unsigned char startG = 0,
                                 unsigned char startB = 0 );
     // Set image's mask to the area of 'mask' that has <r,g,b> colour
-    bool SetMaskFromImage(const wxImage & mask, 
+    bool SetMaskFromImage(const wxImage & mask,
                           unsigned char mr, unsigned char mg, unsigned char mb);
 
     static bool CanRead( const wxString& name );
