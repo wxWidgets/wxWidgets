@@ -2008,6 +2008,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/wince/textctrlce.h \
 	wx/msw/wince/resources.h
 @COND_TOOLKIT_WINCE@GUI_HDR = $(COND_TOOLKIT_WINCE_GUI_HDR)
+@COND_TOOLKIT_COCOA@ADVANCED_PLATFORM_HDR = include/wx/cocoa/taskbar.h
 COND_TOOLKIT_GTK_ADVANCED_PLATFORM_HDR =  \
 	src/gtk/eggtrayicon.h \
 	wx/unix/joystick.h \
@@ -3268,6 +3269,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_tbarwce.o \
 	monodll_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS)
+@COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_COCOA@	monodll_taskbar.o monodll_taskbarcmn.o
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_joystick.o \
@@ -4209,6 +4212,8 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_tbarwce.o \
 	monolib_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1)
+@COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_COCOA@	monolib_taskbar.o monolib_taskbarcmn.o
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_taskbarcmn.o \
 	monolib_joystick.o \
@@ -6090,6 +6095,8 @@ COND_USE_SOSYMLINKS_1___advdll___so_symlinks_inst_cmd = rm -f \
 	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOSYMLINKS_1@__advdll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___advdll___so_symlinks_inst_cmd)
+@COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
+@COND_TOOLKIT_COCOA@	advdll_taskbar.o advdll_taskbarcmn.o
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
 	advdll_taskbarcmn.o \
 	advdll_joystick.o \
@@ -6128,6 +6135,8 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 @COND_GCC_PCH_1@__advlib_PCH_INC = -I.pch/wxprec_advlib
 @COND_GCC_PCH_1@___pch_wxprec_advlib_wx_wxprec_h_gch___depname \
 @COND_GCC_PCH_1@	= .pch/wxprec_advlib/wx/wxprec.h.gch
+@COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
+@COND_TOOLKIT_COCOA@	advlib_taskbar.o advlib_taskbarcmn.o
 COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 	advlib_taskbarcmn.o \
 	advlib_joystick.o \
@@ -11457,6 +11466,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_COCOA_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -11474,6 +11486,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1@monodll_taskbar.o: $(srcdir)/src/mac/carbon/taskbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1@monodll_taskbar.o: $(srcdir)/src/cocoa/taskbar.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_GTK_USE_GUI_1@monodll_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -14625,6 +14640,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_COCOA_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -14642,6 +14660,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MAC_USE_GUI_1@monolib_taskbar.o: $(srcdir)/src/mac/carbon/taskbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1@monolib_taskbar.o: $(srcdir)/src/cocoa/taskbar.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_GTK_USE_GUI_1@monolib_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -20487,6 +20508,9 @@ advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MAC@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
+@COND_TOOLKIT_COCOA@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_MOTIF@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
@@ -20525,6 +20549,9 @@ advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_MAC@advdll_taskbar.o: $(srcdir)/src/mac/carbon/taskbar.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA@advdll_taskbar.o: $(srcdir)/src/cocoa/taskbar.mm $(ADVDLL_ODEP)
+@COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_GTK@advdll_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
@@ -20604,6 +20631,9 @@ advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MAC@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
+@COND_TOOLKIT_COCOA@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
 @COND_TOOLKIT_MOTIF@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
@@ -20642,6 +20672,9 @@ advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_MAC@advlib_taskbar.o: $(srcdir)/src/mac/carbon/taskbar.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA@advlib_taskbar.o: $(srcdir)/src/cocoa/taskbar.mm $(ADVLIB_ODEP)
+@COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_GTK@advlib_taskbar.o: $(srcdir)/src/gtk/taskbar.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
