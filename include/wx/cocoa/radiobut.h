@@ -14,6 +14,10 @@
 
 #include "wx/cocoa/NSButton.h"
 
+class WXDLLEXPORT wxRadioButton;
+
+WX_DECLARE_LIST(wxRadioButton, wxRadioButtonList);
+
 // ========================================================================
 // wxRadioButton
 // ========================================================================
@@ -26,7 +30,7 @@ class WXDLLEXPORT wxRadioButton: public wxControl, protected wxCocoaNSButton
 // initialization
 // ------------------------------------------------------------------------
 public:
-    wxRadioButton() { }
+    wxRadioButton() { m_radioMaster = NULL; }
     wxRadioButton(wxWindow *parent, wxWindowID winid,
             const wxString& label,
             const wxPoint& pos = wxDefaultPosition,
@@ -58,6 +62,9 @@ protected:
 public:
     virtual void SetValue(bool);
     virtual bool GetValue() const;
+protected:
+    wxRadioButtonList m_radioSlaves;
+    wxRadioButton *m_radioMaster;
 };
 
 #endif // __WX_COCOA_RADIOBUT_H__
