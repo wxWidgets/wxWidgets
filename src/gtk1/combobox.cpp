@@ -223,7 +223,7 @@ void wxComboBox::SetFocus()
     gtk_widget_grab_focus( m_focusWidget );
 }
 
-void wxComboBox::AppendCommon( const wxString &item )
+int wxComboBox::AppendCommon( const wxString &item )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
@@ -246,43 +246,45 @@ void wxComboBox::AppendCommon( const wxString &item )
     gtk_widget_show( list_item );
 
     EnableEvents();
+
+    return GetCount() - 1;
 }
 
-void wxComboBox::Append( const wxString &item )
+int wxComboBox::Append( const wxString &item )
 {
     m_clientDataList.Append( (wxObject*) NULL );
     m_clientObjectList.Append( (wxObject*) NULL );
 
-    AppendCommon( item );
+    return AppendCommon( item );
 }
 
-void wxComboBox::Append( const wxString &item, void *clientData )
+int wxComboBox::Append( const wxString &item, void *clientData )
 {
     m_clientDataList.Append( (wxObject*) clientData );
     m_clientObjectList.Append( (wxObject*)NULL );
 
-    AppendCommon( item );
+    return AppendCommon( item );
 }
 
-void wxComboBox::Append( const wxString &item, wxClientData *clientData )
+int wxComboBox::Append( const wxString &item, wxClientData *clientData )
 {
     m_clientDataList.Append( (wxObject*) NULL );
     m_clientObjectList.Append( (wxObject*) clientData );
 
-    AppendCommon( item );
+    return AppendCommon( item );
 }
 
-void wxComboBox::InsertCommon( const wxString &item, int pos )
+int wxComboBox::InsertCommon( const wxString &item, int pos )
 {
-    wxCHECK_RET(!(GetWindowStyle() & wxCB_SORT), wxT("can't insert into sorted list"));
-    wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
+    wxCHECK_MSG( !(GetWindowStyle() & wxCB_SORT), -1,
+                    wxT("can't insert into sorted list"));
+
+    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid combobox") );
 
     int count = GetCount();
-    wxCHECK_RET((pos>=0) && (pos<=count), wxT("invalid index"));
     if (pos == count)
     {
-        AppendCommon(item);
-        return;
+        return AppendCommon(item);
     }
 
     DisableEvents();
@@ -300,63 +302,63 @@ void wxComboBox::InsertCommon( const wxString &item, int pos )
         gtk_widget_realize( list_item );
         gtk_widget_realize( GTK_BIN(list_item)->child );
 
-        if (m_widgetStyle) ApplyWidgetStyle();
+        if (m_widgetStyle)
+            ApplyWidgetStyle();
     }
 
     gtk_widget_show( list_item );
 
     EnableEvents();
+
+    return pos;
 }
 
-void wxComboBox::Insert( const wxString &item, int pos )
+int wxComboBox::Insert( const wxString &item, int pos )
 {
-    wxCHECK_RET(!(GetWindowStyle() & wxCB_SORT), wxT("can't insert into sorted list"));
-    int count = GetCount();
-    wxCHECK_RET((pos>=0) && (pos<=count), wxT("invalid index"));
+    const int count = GetCount();
+    wxCHECK_MSG( (pos >= 0) && (pos <= count), -1, wxT("invalid index") );
+
     if (pos == count)
     {
-        Append(item);
-        return;
+        return Append(item);
     }
 
     m_clientDataList.Insert( pos, (wxObject*) NULL );
     m_clientObjectList.Insert( pos, (wxObject*) NULL );
 
-    InsertCommon( item, pos );
+    return InsertCommon( item, pos );
 }
 
-void wxComboBox::Insert( const wxString &item, int pos, void *clientData )
+int wxComboBox::Insert( const wxString &item, int pos, void *clientData )
 {
-    wxCHECK_RET(!(GetWindowStyle() & wxCB_SORT), wxT("can't insert into sorted list"));
     int count = GetCount();
-    wxCHECK_RET((pos>=0) && (pos<=count), wxT("invalid index"));
+    wxCHECK_MSG( (pos >= 0) && (pos <= count), -1, wxT("invalid index") );
+
     if (pos == count)
     {
-        Append(item, clientData);
-        return;
+        return Append(item, clientData);
     }
 
     m_clientDataList.Insert( pos, (wxObject*) clientData );
     m_clientObjectList.Insert( pos, (wxObject*)NULL );
 
-    InsertCommon( item, pos );
+    return InsertCommon( item, pos );
 }
 
-void wxComboBox::Insert( const wxString &item, int pos, wxClientData *clientData )
+int wxComboBox::Insert( const wxString &item, int pos, wxClientData *clientData )
 {
-    wxCHECK_RET(!(GetWindowStyle() & wxCB_SORT), wxT("can't insert into sorted list"));
     int count = GetCount();
-    wxCHECK_RET((pos>=0) && (pos<=count), wxT("invalid index"));
+    wxCHECK_MSG( (pos >= 0) && (pos <= count), -1, wxT("invalid index") );
+
     if (pos == count)
     {
-        Append(item, clientData);
-        return;
+        return Append(item, clientData);
     }
 
     m_clientDataList.Insert( pos, (wxObject*) NULL );
     m_clientObjectList.Insert( pos, (wxObject*) clientData );
 
-    InsertCommon( item, pos );
+    return InsertCommon( item, pos );
 }
 
 void wxComboBox::SetClientData( int n, void* clientData )
