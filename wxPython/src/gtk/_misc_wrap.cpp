@@ -2252,6 +2252,8 @@ static PyObject *wxMimeTypesManager_EnumAllFileTypes(wxMimeTypesManager *self){
  static const wxString wxPyART_GO_TO_PARENT(wxART_GO_TO_PARENT); 
  static const wxString wxPyART_GO_HOME(wxART_GO_HOME); 
  static const wxString wxPyART_FILE_OPEN(wxART_FILE_OPEN); 
+ static const wxString wxPyART_FILE_SAVE(wxART_FILE_SAVE); 
+ static const wxString wxPyART_FILE_SAVE_AS(wxART_FILE_SAVE_AS); 
  static const wxString wxPyART_PRINT(wxART_PRINT); 
  static const wxString wxPyART_HELP(wxART_HELP); 
  static const wxString wxPyART_TIP(wxART_TIP); 
@@ -2274,6 +2276,15 @@ static PyObject *wxMimeTypesManager_EnumAllFileTypes(wxMimeTypesManager *self){
  static const wxString wxPyART_WARNING(wxART_WARNING); 
  static const wxString wxPyART_INFORMATION(wxART_INFORMATION); 
  static const wxString wxPyART_MISSING_IMAGE(wxART_MISSING_IMAGE); 
+ static const wxString wxPyART_COPY(wxART_COPY); 
+ static const wxString wxPyART_CUT(wxART_CUT); 
+ static const wxString wxPyART_PASTE(wxART_PASTE); 
+ static const wxString wxPyART_DELETE(wxART_DELETE); 
+ static const wxString wxPyART_UNDO(wxART_UNDO); 
+ static const wxString wxPyART_REDO(wxART_REDO); 
+ static const wxString wxPyART_QUIT(wxART_QUIT); 
+ static const wxString wxPyART_FIND(wxART_FIND); 
+ static const wxString wxPyART_FIND_AND_REPLACE(wxART_FIND_AND_REPLACE); 
   // Python aware wxArtProvider
 class wxPyArtProvider : public wxArtProvider  {
 public:
@@ -15655,6 +15666,46 @@ static PyObject *_wrap_ART_FILE_OPEN_get(void) {
 }
 
 
+static int _wrap_ART_FILE_SAVE_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_FILE_SAVE is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_FILE_SAVE_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_FILE_SAVE)->c_str(), (&wxPyART_FILE_SAVE)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_FILE_SAVE)->c_str(), (&wxPyART_FILE_SAVE)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_FILE_SAVE_AS_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_FILE_SAVE_AS is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_FILE_SAVE_AS_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_FILE_SAVE_AS)->c_str(), (&wxPyART_FILE_SAVE_AS)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_FILE_SAVE_AS)->c_str(), (&wxPyART_FILE_SAVE_AS)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static int _wrap_ART_PRINT_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable ART_PRINT is read-only.");
     return 1;
@@ -16089,6 +16140,186 @@ static PyObject *_wrap_ART_MISSING_IMAGE_get(void) {
         pyobj = PyUnicode_FromWideChar((&wxPyART_MISSING_IMAGE)->c_str(), (&wxPyART_MISSING_IMAGE)->Len());
 #else
         pyobj = PyString_FromStringAndSize((&wxPyART_MISSING_IMAGE)->c_str(), (&wxPyART_MISSING_IMAGE)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_COPY_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_COPY is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_COPY_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_COPY)->c_str(), (&wxPyART_COPY)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_COPY)->c_str(), (&wxPyART_COPY)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_CUT_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_CUT is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_CUT_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_CUT)->c_str(), (&wxPyART_CUT)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_CUT)->c_str(), (&wxPyART_CUT)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_PASTE_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_PASTE is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_PASTE_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_PASTE)->c_str(), (&wxPyART_PASTE)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_PASTE)->c_str(), (&wxPyART_PASTE)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_DELETE_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_DELETE is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_DELETE_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_DELETE)->c_str(), (&wxPyART_DELETE)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_DELETE)->c_str(), (&wxPyART_DELETE)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_UNDO_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_UNDO is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_UNDO_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_UNDO)->c_str(), (&wxPyART_UNDO)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_UNDO)->c_str(), (&wxPyART_UNDO)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_REDO_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_REDO is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_REDO_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_REDO)->c_str(), (&wxPyART_REDO)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_REDO)->c_str(), (&wxPyART_REDO)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_QUIT_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_QUIT is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_QUIT_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_QUIT)->c_str(), (&wxPyART_QUIT)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_QUIT)->c_str(), (&wxPyART_QUIT)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_FIND_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_FIND is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_FIND_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_FIND)->c_str(), (&wxPyART_FIND)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_FIND)->c_str(), (&wxPyART_FIND)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_FIND_AND_REPLACE_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_FIND_AND_REPLACE is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_FIND_AND_REPLACE_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_FIND_AND_REPLACE)->c_str(), (&wxPyART_FIND_AND_REPLACE)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_FIND_AND_REPLACE)->c_str(), (&wxPyART_FIND_AND_REPLACE)->Len());
 #endif
     }
     return pyobj;
@@ -33305,6 +33536,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"ART_GO_TO_PARENT",_wrap_ART_GO_TO_PARENT_get, _wrap_ART_GO_TO_PARENT_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_GO_HOME",_wrap_ART_GO_HOME_get, _wrap_ART_GO_HOME_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_FILE_OPEN",_wrap_ART_FILE_OPEN_get, _wrap_ART_FILE_OPEN_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_FILE_SAVE",_wrap_ART_FILE_SAVE_get, _wrap_ART_FILE_SAVE_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_FILE_SAVE_AS",_wrap_ART_FILE_SAVE_AS_get, _wrap_ART_FILE_SAVE_AS_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_PRINT",_wrap_ART_PRINT_get, _wrap_ART_PRINT_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_HELP",_wrap_ART_HELP_get, _wrap_ART_HELP_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_TIP",_wrap_ART_TIP_get, _wrap_ART_TIP_set);
@@ -33327,6 +33560,15 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"ART_WARNING",_wrap_ART_WARNING_get, _wrap_ART_WARNING_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_INFORMATION",_wrap_ART_INFORMATION_get, _wrap_ART_INFORMATION_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_MISSING_IMAGE",_wrap_ART_MISSING_IMAGE_get, _wrap_ART_MISSING_IMAGE_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_COPY",_wrap_ART_COPY_get, _wrap_ART_COPY_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_CUT",_wrap_ART_CUT_get, _wrap_ART_CUT_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_PASTE",_wrap_ART_PASTE_get, _wrap_ART_PASTE_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_DELETE",_wrap_ART_DELETE_get, _wrap_ART_DELETE_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_UNDO",_wrap_ART_UNDO_get, _wrap_ART_UNDO_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_REDO",_wrap_ART_REDO_get, _wrap_ART_REDO_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_QUIT",_wrap_ART_QUIT_get, _wrap_ART_QUIT_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_FIND",_wrap_ART_FIND_get, _wrap_ART_FIND_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_FIND_AND_REPLACE",_wrap_ART_FIND_AND_REPLACE_get, _wrap_ART_FIND_AND_REPLACE_set);
     
     wxPyPtrTypeMap_Add("wxArtProvider", "wxPyArtProvider");
     

@@ -2463,11 +2463,18 @@ static wxBitmap wxImage_ConvertToMonoBitmap(wxImage *self,unsigned char red,unsi
             wxBitmap bitmap( mono, 1 );
             return bitmap;
         }
+ static const wxString wxPyIMAGE_OPTION_FILENAME(wxIMAGE_OPTION_FILENAME); 
  static const wxString wxPyIMAGE_OPTION_BMP_FORMAT(wxIMAGE_OPTION_BMP_FORMAT); 
  static const wxString wxPyIMAGE_OPTION_CUR_HOTSPOT_X(wxIMAGE_OPTION_CUR_HOTSPOT_X); 
  static const wxString wxPyIMAGE_OPTION_CUR_HOTSPOT_Y(wxIMAGE_OPTION_CUR_HOTSPOT_Y); 
  static const wxString wxPyIMAGE_OPTION_RESOLUTION(wxIMAGE_OPTION_RESOLUTION); 
+ static const wxString wxPyIMAGE_OPTION_RESOLUTIONX(wxIMAGE_OPTION_RESOLUTIONX); 
+ static const wxString wxPyIMAGE_OPTION_RESOLUTIONY(wxIMAGE_OPTION_RESOLUTIONY); 
  static const wxString wxPyIMAGE_OPTION_RESOLUTIONUNIT(wxIMAGE_OPTION_RESOLUTIONUNIT); 
+ static const wxString wxPyIMAGE_OPTION_BITSPERSAMPLE(wxIMAGE_OPTION_BITSPERSAMPLE); 
+ static const wxString wxPyIMAGE_OPTION_SAMPLESPERPIXEL(wxIMAGE_OPTION_SAMPLESPERPIXEL); 
+ static const wxString wxPyIMAGE_OPTION_COMPRESSION(wxIMAGE_OPTION_COMPRESSION); 
+ static const wxString wxPyIMAGE_OPTION_IMAGEDESCRIPTOR(wxIMAGE_OPTION_IMAGEDESCRIPTOR); 
 
 #include <wx/quantize.h>
 
@@ -13352,6 +13359,26 @@ static PyObject *_wrap_NullImage_get(void) {
 }
 
 
+static int _wrap_IMAGE_OPTION_FILENAME_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_FILENAME is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_FILENAME_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_FILENAME)->c_str(), (&wxPyIMAGE_OPTION_FILENAME)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_FILENAME)->c_str(), (&wxPyIMAGE_OPTION_FILENAME)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static int _wrap_IMAGE_OPTION_BMP_FORMAT_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_BMP_FORMAT is read-only.");
     return 1;
@@ -13432,6 +13459,46 @@ static PyObject *_wrap_IMAGE_OPTION_RESOLUTION_get(void) {
 }
 
 
+static int _wrap_IMAGE_OPTION_RESOLUTIONX_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_RESOLUTIONX is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_RESOLUTIONX_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_RESOLUTIONX)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONX)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_RESOLUTIONX)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONX)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_RESOLUTIONY_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_RESOLUTIONY is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_RESOLUTIONY_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_RESOLUTIONY)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONY)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_RESOLUTIONY)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONY)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static int _wrap_IMAGE_OPTION_RESOLUTIONUNIT_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_RESOLUTIONUNIT is read-only.");
     return 1;
@@ -13446,6 +13513,86 @@ static PyObject *_wrap_IMAGE_OPTION_RESOLUTIONUNIT_get(void) {
         pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->Len());
 #else
         pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_BITSPERSAMPLE_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_BITSPERSAMPLE is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_BITSPERSAMPLE_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_BITSPERSAMPLE)->c_str(), (&wxPyIMAGE_OPTION_BITSPERSAMPLE)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_BITSPERSAMPLE)->c_str(), (&wxPyIMAGE_OPTION_BITSPERSAMPLE)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_SAMPLESPERPIXEL_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_SAMPLESPERPIXEL is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_SAMPLESPERPIXEL_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_SAMPLESPERPIXEL)->c_str(), (&wxPyIMAGE_OPTION_SAMPLESPERPIXEL)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_SAMPLESPERPIXEL)->c_str(), (&wxPyIMAGE_OPTION_SAMPLESPERPIXEL)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_COMPRESSION_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_COMPRESSION is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_COMPRESSION_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_COMPRESSION)->c_str(), (&wxPyIMAGE_OPTION_COMPRESSION)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_COMPRESSION)->c_str(), (&wxPyIMAGE_OPTION_COMPRESSION)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_IMAGEDESCRIPTOR_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_IMAGEDESCRIPTOR is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_IMAGEDESCRIPTOR_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->c_str(), (&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->c_str(), (&wxPyIMAGE_OPTION_IMAGEDESCRIPTOR)->Len());
 #endif
     }
     return pyobj;
@@ -48195,10 +48342,13 @@ SWIGEXPORT(void) SWIG_init(void) {
     wxPyPtrTypeMap_Add("wxFileSystemHandler", "wxPyFileSystemHandler");
     
     SWIG_addvarlink(SWIG_globals,(char*)"NullImage",_wrap_NullImage_get, _wrap_NullImage_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_FILENAME",_wrap_IMAGE_OPTION_FILENAME_get, _wrap_IMAGE_OPTION_FILENAME_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_BMP_FORMAT",_wrap_IMAGE_OPTION_BMP_FORMAT_get, _wrap_IMAGE_OPTION_BMP_FORMAT_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_CUR_HOTSPOT_X",_wrap_IMAGE_OPTION_CUR_HOTSPOT_X_get, _wrap_IMAGE_OPTION_CUR_HOTSPOT_X_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_CUR_HOTSPOT_Y",_wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_get, _wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTION",_wrap_IMAGE_OPTION_RESOLUTION_get, _wrap_IMAGE_OPTION_RESOLUTION_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTIONX",_wrap_IMAGE_OPTION_RESOLUTIONX_get, _wrap_IMAGE_OPTION_RESOLUTIONX_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTIONY",_wrap_IMAGE_OPTION_RESOLUTIONY_get, _wrap_IMAGE_OPTION_RESOLUTIONY_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTIONUNIT",_wrap_IMAGE_OPTION_RESOLUTIONUNIT_get, _wrap_IMAGE_OPTION_RESOLUTIONUNIT_set);
     {
         PyDict_SetItemString(d,"IMAGE_RESOLUTION_INCHES", SWIG_From_int((int)(wxIMAGE_RESOLUTION_INCHES))); 
@@ -48206,6 +48356,10 @@ SWIGEXPORT(void) SWIG_init(void) {
     {
         PyDict_SetItemString(d,"IMAGE_RESOLUTION_CM", SWIG_From_int((int)(wxIMAGE_RESOLUTION_CM))); 
     }
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_BITSPERSAMPLE",_wrap_IMAGE_OPTION_BITSPERSAMPLE_get, _wrap_IMAGE_OPTION_BITSPERSAMPLE_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_SAMPLESPERPIXEL",_wrap_IMAGE_OPTION_SAMPLESPERPIXEL_get, _wrap_IMAGE_OPTION_SAMPLESPERPIXEL_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_COMPRESSION",_wrap_IMAGE_OPTION_COMPRESSION_get, _wrap_IMAGE_OPTION_COMPRESSION_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_IMAGEDESCRIPTOR",_wrap_IMAGE_OPTION_IMAGEDESCRIPTOR_get, _wrap_IMAGE_OPTION_IMAGEDESCRIPTOR_set);
     {
         PyDict_SetItemString(d,"BMP_24BPP", SWIG_From_int((int)(wxBMP_24BPP))); 
     }
