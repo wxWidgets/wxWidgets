@@ -655,19 +655,25 @@ void wxFileCtrl::Update()
         f = wxFindNextFile();
     }
 
-    res = m_dirName + wxT("/") + m_wild;
-    f = wxFindFirstFile( res.GetData(), wxFILE );
-    while (!f.IsEmpty())
+    // Tokenize the wildcard string, so we can handle more than 1 
+    // search pattern in a wildcard.
+    wxStringTokenizer tokenWild( m_wild, ";" );
+    while ( tokenWild.HasMoreTokens() )
     {
-        res = wxFileNameFromPath( f );
-        fd = new wxFileData( res, f );
-        wxString s = fd->GetName();
-        if (m_showHidden || (s[0u] != wxT('.')))
+        res = m_dirName + wxT("/") + tokenWild.GetNextToken();
+        f = wxFindFirstFile( res.GetData(), wxFILE );
+        while (!f.IsEmpty())
         {
-            Add( fd, item );
-            item.m_itemId++;
+            res = wxFileNameFromPath( f );
+            fd = new wxFileData( res, f );
+            wxString s = fd->GetName();
+            if (m_showHidden || (s[0u] != wxT('.')))
+            {
+                Add( fd, item );
+                item.m_itemId++;
+            }
+            f = wxFindNextFile();
         }
-        f = wxFindNextFile();
     }
 
     SortItems( ListCompare, 0 );
