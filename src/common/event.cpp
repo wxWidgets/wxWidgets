@@ -50,8 +50,10 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxEvtHandler, wxObject)
-IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
+#if wxUSE_BASE
+    IMPLEMENT_DYNAMIC_CLASS(wxEvtHandler, wxObject)
+    IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
+#endif // wxUSE_BASE
 
 #if wxUSE_GUI
     IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
@@ -90,6 +92,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxContextMenuEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureChangedEvent, wxEvent)
 #endif // wxUSE_GUI
+
+#if wxUSE_BASE
 
 const wxEventTable *wxEvtHandler::GetEventTable() const
     { return &wxEvtHandler::sm_eventTable; }
@@ -321,6 +325,8 @@ wxEvent::wxEvent(const wxEvent &src)
     , m_isCommandEvent(src.m_isCommandEvent)
 {
 }
+
+#endif // wxUSE_BASE
 
 #if wxUSE_GUI
 
@@ -602,6 +608,8 @@ wxChildFocusEvent::wxChildFocusEvent(wxWindow *win)
 // wxEvtHandler
 // ----------------------------------------------------------------------------
 
+#if wxUSE_BASE
+
 /*
  * Event handler
  */
@@ -771,6 +779,8 @@ void wxEvtHandler::ProcessPendingEvents()
     wxLEAVE_CRIT_SECT( *m_eventsLocker);
 #endif
 }
+
+#endif // wxUSE_BASE
 
 /*
  * Event table stuff
