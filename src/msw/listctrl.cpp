@@ -1540,6 +1540,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     {
                         eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
                         event.m_itemIndex = lvhti.iItem;
+                        event.m_pointDrag.x = lvhti.pt.x;
+                        event.m_pointDrag.y = lvhti.pt.y;
                     }
                 }
             }

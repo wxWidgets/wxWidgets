@@ -14,6 +14,7 @@
 #include "wx/textctrl.h"
 #include "wx/utils.h"
 #include "wx/intl.h"
+#include "wx/log.h"
 #include "wx/settings.h"
 
 #include <sys/types.h>
@@ -645,6 +646,14 @@ void wxTextCtrl::DiscardEdits()
 void wxTextCtrl::SetSelection( long from, long to )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
+
+    if ( (m_windowStyle & wxTE_MULTILINE) &&
+         !GTK_TEXT(m_text)->line_start_cache )
+    {
+        // tell the programmer that it didn't work
+        wxLogDebug(_T("Can't call SetSelection() before realizing the control"));
+        return;
+    }
 
     gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 }

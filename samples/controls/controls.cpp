@@ -175,8 +175,11 @@ private:
     void UpdateStatusBar(const wxPoint& pos, const wxSize& size)
     {
         wxString msg;
-        msg.Printf(_("pos=(%d, %d), size=%dx%d"),
-                   pos.x, pos.y, size.x, size.y);
+        wxSize sizeCl = GetClientSize();
+        msg.Printf(_("pos=(%d, %d), size=%dx%d (client=%dx%d)"),
+                   pos.x, pos.y,
+                   size.x, size.y,
+                   sizeCl.x, sizeCl.y);
         SetStatusText(msg, 1);
     }
 

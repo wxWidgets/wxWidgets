@@ -52,6 +52,8 @@ public:
 
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
+    virtual void SetToolShortHelp(int id, const wxString& helpString);
+
     // implementation from now on
     // --------------------------
 

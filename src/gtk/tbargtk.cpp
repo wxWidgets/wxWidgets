@@ -506,6 +506,18 @@ void wxToolBar::SetToolSeparation( int separation )
     m_toolSeparation = separation;
 }
 
+void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
+{
+    wxToolBarTool *tool = (wxToolBarTool *)FindById(id);
+
+    if ( tool )
+    {
+        (void)tool->SetShortHelp(helpString);
+        gtk_tooltips_set_tip(m_toolbar->tooltips, tool->m_item,
+                             helpString.mbc_str(), "");
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxToolBar idle handling
 // ----------------------------------------------------------------------------
@@ -555,4 +567,4 @@ void wxToolBar::OnInternalIdle()
     UpdateWindowUI();
 }
 
-#endif
+#endif // wxUSE_TOOLBAR_NATIVE

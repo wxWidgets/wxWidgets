@@ -35,12 +35,12 @@
 
 // what to test (in alphabetic order)?
 
-#define TEST_ARRAYS
+//#define TEST_ARRAYS
 //#define TEST_CMDLINE
 //#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
-//#define TEST_EXECUTE
+#define TEST_EXECUTE
 //#define TEST_FILE
 //#define TEST_FILECONF
 //#define TEST_HASH
@@ -49,7 +49,7 @@
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
-#define TEST_REGISTRY
+//#define TEST_REGISTRY
 //#define TEST_SOCKETS
 //#define TEST_STREAMS
 //#define TEST_STRINGS
@@ -296,9 +296,9 @@ static void TestExecute()
     puts("*** testing wxExecute ***");
 
 #ifdef __UNIX__
-    #define COMMAND "echo hi"
+    #define COMMAND "cat -n ../../Makefile" // "echo hi"
     #define SHELL_COMMAND "echo hi from shell"
-    #define REDIRECT_COMMAND "date"
+    #define REDIRECT_COMMAND COMMAND // "date"
 #elif defined(__WXMSW__)
     #define COMMAND "command.com -c 'echo hi'"
     #define SHELL_COMMAND "echo hi"
