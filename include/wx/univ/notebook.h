@@ -155,7 +155,7 @@ protected:
     void PositionSpinBtn();
 
     // refresh the given tab only
-    void RefreshTab(int page);
+    void RefreshTab(int page, bool forceSelected = FALSE);
 
     // refresh all tabs
     void RefreshAllTabs();
