@@ -224,6 +224,10 @@ wxMotif:
 
 - fixed "make install"
 
+wxXRC:
+
+- added wxNO_FULL_REPAINT_ON_RESIZE to "unknown" class handler (John Anderson)
+
 
 2.4.1
 -----
