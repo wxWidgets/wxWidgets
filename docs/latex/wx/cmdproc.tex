@@ -20,13 +20,13 @@ if you want different behaviour.
 
 \membersection{wxCommandProcessor::wxCommandProcessor}
 
-\func{}{wxCommandProcessor}{\param{int}{ maxCommands = 100}}
+\func{}{wxCommandProcessor}{\param{int}{ maxCommands = $-1$}}
 
 Constructor.
 
-{\it maxCommands} defaults to a rather arbitrary 100, but can be set from 1 to any integer.
-If your wxCommand classes store a lot of data, you may wish the limit the number of
-commands stored to a smaller number.
+{\it maxCommands} may be set to a positive integer to limit the number of
+commands stored to it, otherwise (and by default) the list of commands can grow
+arbitrarily.
 
 \membersection{wxCommandProcessor::\destruct{wxCommandProcessor}}
 
