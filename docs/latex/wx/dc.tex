@@ -259,13 +259,33 @@ of the bitmap (all bits set to 1), and the current text background colour to dra
 
 Draws a check mark inside the given rectangle.
 
+\membersection{wxDC::DrawCircle}\label{wxdcdrawcircle}
+
+\func{void}{DrawCircle}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ radius}}
+
+\func{void}{DrawCircle}{\param{const wxPoint\&}{ pt}, \param{wxCoord}{ radius}}
+
+Draws a circle with the given centre and radius.
+
+\wxheading{See also}
+
+\helpref{DrawEllipse}{wxdcdrawellipse}
+
 \membersection{wxDC::DrawEllipse}\label{wxdcdrawellipse}
 
 \func{void}{DrawEllipse}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxCoord}{ width}, \param{wxCoord}{ height}}
 
-Draws an ellipse contained in the rectangle with the given top left corner, and with the
-given size.  The current pen is used for the outline and the current brush for
-filling the shape.
+\func{void}{DrawEllipse}{\param{const wxPoint\&}{ pt}, \param{const wxSize\&}{ size}}
+
+\func{void}{DrawEllipse}{\param{const wxRect\&}{ rect}}
+
+Draws an ellipse contained in the rectangle specified either with the given top
+left corner and the given size or directly. The current pen is used for the
+outline and the current brush for filling the shape.
+
+\wxheading{See also}
+
+\helpref{DrawCircle}{wxdcdrawcircle}
 
 \membersection{wxDC::DrawEllipticArc}\label{wxdcdrawellipticarc}
 

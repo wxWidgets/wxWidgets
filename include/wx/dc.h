@@ -226,6 +226,9 @@ public:
 
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius)
         { DoDrawEllipse(x - radius, y - radius, 2*radius, 2*radius); }
+    void DrawCircle(const wxPoint& pt, wxCoord radius)
+        { DoDrawEllipse(pt.x, pt.y, radius); }
+
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         { DoDrawEllipse(x, y, width, height); }
     void DrawEllipse(const wxPoint& pt, const wxSize& sz)
