@@ -444,10 +444,10 @@ bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
         {
             switch (error)
             {
-                case wxPCX_INVFORMAT: wxLogError(_("wxPCXHandler: image format unsupported")); break;
-                case wxPCX_MEMERR:    wxLogError(_("wxPCXHandler: couldn't allocate memory")); break;
-                case wxPCX_VERERR:    wxLogError(_("wxPCXHandler: version number too low")); break;
-                default:              wxLogError(_("wxPCXHandler: unknown error !!!"));
+                case wxPCX_INVFORMAT: wxLogError(_("PCX: image format unsupported")); break;
+                case wxPCX_MEMERR:    wxLogError(_("PCX: couldn't allocate memory")); break;
+                case wxPCX_VERERR:    wxLogError(_("PCX: version number too low")); break;
+                default:              wxLogError(_("PCX: unknown error !!!"));
             }
         }
         image->Destroy();
@@ -467,9 +467,9 @@ bool wxPCXHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         {
             switch (error)
             {
-                case wxPCX_INVFORMAT: wxLogError(_("wxPCXHandler: invalid image")); break;
-                case wxPCX_MEMERR:    wxLogError(_("wxPCXHandler: couldn't allocate memory")); break;
-                default:              wxLogError(_("wxPCXHandler: unknown error !!!"));
+                case wxPCX_INVFORMAT: wxLogError(_("PCX: invalid image")); break;
+                case wxPCX_MEMERR:    wxLogError(_("PCX: couldn't allocate memory")); break;
+                default:              wxLogError(_("PCX: unknown error !!!"));
             }
         }
     }

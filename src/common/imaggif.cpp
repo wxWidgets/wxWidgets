@@ -55,13 +55,13 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
             switch (error)
             {
                 case wxGIF_INVFORMAT:
-                    wxLogError(_("wxGIFHandler: error in GIF image format."));
+                    wxLogError(_("GIF: error in GIF image format."));
                     break;
                 case wxGIF_MEMERR:
-                    wxLogError(_("wxGIFHandler: not enough memory."));
+                    wxLogError(_("GIF: not enough memory."));
                     break;
                 default:
-                    wxLogError(_("wxGIFHandler: unknown error!!!"));
+                    wxLogError(_("GIF: unknown error!!!"));
                     break;
             }
         }
@@ -71,7 +71,7 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
 
     if ((error == wxGIF_TRUNCATED) && verbose)
     {
-        wxLogError(_("wxGIFHandler: data stream seems to be truncated."));
+        wxLogError(_("GIF: data stream seems to be truncated."));
         /* go on; image data is OK */
     }
 
@@ -85,7 +85,7 @@ bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
                              wxOutputStream& WXUNUSED(stream), bool verbose )
 {
     if (verbose)
-        wxLogDebug(wxT("wxGIFHandler is read-only!!"));
+        wxLogDebug(wxT("GIF: the handler is read-only!!"));
 
     return FALSE;
 }
