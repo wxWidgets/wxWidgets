@@ -226,7 +226,9 @@ dnl ------------------------------------------------------------------------
 dnl Set base directory
 dnl ------------------------------------------------------------------------
 
+cd ../..
 WXBASEDIR=`pwd`
+cd install/gtk
 AC_SUBST(WXBASEDIR)
 
 dnl ------------------------------------------------------------------------
@@ -1447,7 +1449,9 @@ dnl ------------------------------------------------------------------------
 
 dnl add OS to list of configured
 echo $OS >> system.list
+echo $OS >> ../../system.list
 
-AC_CONFIG_HEADER(include/wx/gtk/setup.h:src/gtk/setup/setup.hin)
-AC_OUTPUT(src/gtk/setup/substit,src/gtk/setup/general/createall)
+AC_CONFIG_HEADER(../../include/wx/gtk/setup.h:../../src/gtk/setup/setup.hin)
+dnl AC_OUTPUT(../../src/gtk/setup/substit,../../src/gtk/setup/general/createall)
+AC_OUTPUT(../../src/gtk/setup/substit,)
 AC_OVERRIDES_DONE

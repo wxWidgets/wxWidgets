@@ -40,8 +40,8 @@ CXXFLAGS =   -Wall $(OPTIMISE) $(PROFILE) $(DEBUG)
 CXXCPP = c++ -E
 
 # shared compile stuff
-PICFLAGS = -fPIC
-CREATE_SHARED = sharedLinux
+PICFLAGS = 
+CREATE_SHARED = 
 
 # other stuff
 RM = rm -f

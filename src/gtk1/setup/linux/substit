@@ -1,5 +1,5 @@
 s|@OS@|linux|g
-s|@WXBASEDIR@|/home/karl/cvs/wxGTK|g
+s|@WXBASEDIR@|/home/karl/cvs/wxWindows|g
 s|@PROFILE@||g
 s|@DEBUG@||g
 s|@OPTIMISE@|-O2 |g
@@ -9,8 +9,8 @@ s|@CPP@|gcc -E|g
 s|@CXX@|c++|g
 s|@CXXFLAGS@|  -Wall|g
 s|@CXXCPP@|c++ -E|g
-s|@PICFLAGS@|-fPIC|g
-s|@CREATE_SHARED@|sharedLinux|g
+s|@PICFLAGS@||g
+s|@CREATE_SHARED@||g
 s|@LEX@|flex|g
 s|@LEXLIB@|-lfl|g
 s|@YACC@|bison -y|g

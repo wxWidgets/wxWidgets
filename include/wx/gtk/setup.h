@@ -1,4 +1,4 @@
-/* include/wx/gtk/setup.h.  Generated automatically by configure.  */
+/* ../../include/wx/gtk/setup.h.  Generated automatically by configure.  */
 /* wx_setup.h
    This file is in the public domain.
 
