@@ -539,6 +539,12 @@ void wxEntryCleanup()
 
 int wxEntry(int argc, char *argv[])
 {
+#ifdef __DJGPP__
+    // VS: disable long filenames under DJGPP as the very first thing,
+    //     since SciTech MGL doesn't like them much...
+    wxSetEnv(wxT("LFN"), wxT("N"));
+#endif
+
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     // This seems to be necessary since there are 'rogue'
     // objects present at this point (perhaps global objects?)
