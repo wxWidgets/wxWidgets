@@ -355,10 +355,10 @@ void wxTextCtrl::AdoptAttributesFromHWND()
 void wxTextCtrl::SetupColours()
 {
     wxColour bkgndColour;
-    if (IsEditable() || (m_windowStyle & wxTE_MULTILINE))
+//    if (IsEditable() || (m_windowStyle & wxTE_MULTILINE))
         bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
-    else
-        bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+//    else
+//        bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
 
     SetBackgroundColour(bkgndColour);
     SetForegroundColour(GetParent()->GetForegroundColour());
@@ -530,12 +530,13 @@ void wxTextCtrl::SetEditable(bool editable)
 
     HWND hWnd = GetHwnd();
     SendMessage(hWnd, EM_SETREADONLY, (WPARAM)!editable, (LPARAM)0L);
-
+/*
     if (editable != isEditable)
     {
        SetupColours();
        Refresh();
     }
+*/
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
@@ -960,6 +961,38 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
     // processed
     return TRUE;
+}
+
+WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam)
+{
+#if wxUSE_CTL3D
+    if ( m_useCtl3D )
+    {
+        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
+        return (WXHBRUSH) hbrush;
+    }
+#endif // wxUSE_CTL3D
+
+    HDC hdc = (HDC)pDC;
+    if (GetParent()->GetTransparentBackground())
+        SetBkMode(hdc, TRANSPARENT);
+    else
+        SetBkMode(hdc, OPAQUE);
+
+    wxColour& colBack = GetBackgroundColour();
+
+    if (!IsEnabled() && (GetWindowStyle() & wxTE_MULTILINE) == 0)
+        colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+
+    ::SetBkColor(hdc, wxColourToRGB(colBack));
+    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+
+    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+
+    return (WXHBRUSH)brush->GetResourceHandle();
 }
 
 void wxTextCtrl::AdjustSpaceLimit()

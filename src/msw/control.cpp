@@ -239,7 +239,8 @@ WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
     else
         SetBkMode(hdc, OPAQUE);
 
-    const wxColour& colBack = GetBackgroundColour();
+    wxColour& colBack = GetBackgroundColour();
+
     ::SetBkColor(hdc, wxColourToRGB(colBack));
     ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
 

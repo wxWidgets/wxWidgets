@@ -773,6 +773,39 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
+WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam)
+{
+#if wxUSE_CTL3D
+    if ( m_useCtl3D )
+    {
+        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
+        return (WXHBRUSH) hbrush;
+    }
+#endif // wxUSE_CTL3D
+
+    HDC hdc = (HDC)pDC;
+    if (GetParent()->GetTransparentBackground())
+        SetBkMode(hdc, TRANSPARENT);
+    else
+        SetBkMode(hdc, OPAQUE);
+
+    wxColour& colBack = GetBackgroundColour();
+
+    if (!IsEnabled())
+        colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+
+    ::SetBkColor(hdc, wxColourToRGB(colBack));
+    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+
+    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+
+    return (WXHBRUSH)brush->GetResourceHandle();
+}
+
+
 // ---------------------------------------------------------------------------
 // window proc for radio buttons
 // ---------------------------------------------------------------------------

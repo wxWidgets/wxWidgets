@@ -140,6 +140,7 @@ public:
     void OnFileLoad(wxCommandEvent& event);
 
     void OnSetEditable(wxCommandEvent& event);
+    void OnSetEnabled(wxCommandEvent& event);
 
     void OnIdle( wxIdleEvent& event );
 
@@ -178,7 +179,8 @@ enum
     // text menu
     TEXT_MOVE_ENDTEXT = 400,
     TEXT_MOVE_ENDENTRY,
-    TEXT_SET_EDITABLE
+    TEXT_SET_EDITABLE,
+    TEXT_SET_ENABLED
 };
 
 bool MyApp::OnInit()
@@ -226,7 +228,9 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_MOVE_ENDTEXT, "Move cursor to the end of &text");
     menuText->Append(TEXT_MOVE_ENDENTRY, "Move cursor to the end of &entry");
     menuText->Append(TEXT_SET_EDITABLE, "Toggle &editable state", "", TRUE);
+    menuText->Append(TEXT_SET_ENABLED, "Toggle e&nabled state", "", TRUE);
     menuText->Check(TEXT_SET_EDITABLE, TRUE);
+    menuText->Check(TEXT_SET_ENABLED, TRUE);
     menu_bar->Append(menuText, "&Text");
 
     frame->SetMenuBar(menu_bar);
@@ -770,6 +774,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_MOVE_ENDENTRY,      MyFrame::OnMoveToEndOfEntry)
 
     EVT_MENU(TEXT_SET_EDITABLE,       MyFrame::OnSetEditable)
+    EVT_MENU(TEXT_SET_ENABLED,        MyFrame::OnSetEnabled)
 
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
@@ -850,6 +855,21 @@ void MyFrame::OnSetEditable(wxCommandEvent& WXUNUSED(event))
 
     s_editable = !s_editable;
     m_panel->m_text->SetEditable(s_editable);
+    m_panel->m_password->SetEditable(s_editable);
+    m_panel->m_multitext->SetEditable(s_editable);
+    m_panel->m_textrich->SetEditable(s_editable);
+}
+
+void MyFrame::OnSetEnabled(wxCommandEvent& WXUNUSED(event))
+{
+    bool enabled = m_panel->m_text->IsEnabled();
+    enabled = !enabled;
+
+    m_panel->m_text->Enable(enabled);
+    m_panel->m_password->Enable(enabled);
+    m_panel->m_multitext->Enable(enabled);
+    m_panel->m_readonly->Enable(enabled);
+    m_panel->m_textrich->Enable(enabled);
 }
 
 void MyFrame::OnFileSave(wxCommandEvent& event)
