@@ -1,3 +1,17 @@
+"""
+VTK is now including a package for using VTK with wxPython, so this
+module is now officially nothing but ancient history.  If for some
+strange reason you really need this code (I don't know why, it didn't
+work all that well anyway,) then just remove the triple quotes below.
+I'm told that the module from Kitware is excellent and so you should
+really use it.  See the URL below to get a copy from CVS.
+
+http://public.kitware.com/cgi-bin/cvsweb.cgi/VTK/Wrapping/Python/vtk/wx/
+"""
+
+print __doc__
+
+"""
 #----------------------------------------------------------------------
 # Name:        wxPython.lib.vtk
 # Purpose:     Provides a wrapper around the vtkRenderWindow from the
@@ -552,3 +566,4 @@ class wxVTKRenderWindow(wxVTKRenderWindowBase):
                 self._PickedAssembly.SetProperty(self._PickedProperty)
 
             self.Render()
+"""
