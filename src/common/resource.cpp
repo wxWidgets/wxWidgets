@@ -99,7 +99,7 @@ bool wxResourceParseIncludeFile(const wxString& f, wxResourceTable *table = (wxR
 
 wxResourceTable *wxDefaultResourceTable = (wxResourceTable *) NULL;
 
-wxChar *wxResourceBuffer = (wxChar *) NULL;
+char *wxResourceBuffer = (char *) NULL;
 long wxResourceBufferSize = 0;
 long wxResourceBufferCount = 0;
 int wxResourceStringPtr = 0;
@@ -1488,14 +1488,14 @@ bool wxReallocateResourceBuffer()
   if (!wxResourceBuffer)
   {
     wxResourceBufferSize = 1000;
-    wxResourceBuffer = new wxChar[wxResourceBufferSize];
+    wxResourceBuffer = new char[wxResourceBufferSize];
     return TRUE;
   }
   if (wxResourceBuffer)
   {
     long newSize = wxResourceBufferSize + 1000;
-    wxChar *tmp = new wxChar[(int)newSize];
-    wxStrncpy(tmp, wxResourceBuffer, (int)wxResourceBufferCount);
+    char *tmp = new char[(int)newSize];
+    strncpy(tmp, wxResourceBuffer, (int)wxResourceBufferCount);
     delete[] wxResourceBuffer;
     wxResourceBuffer = tmp;
     wxResourceBufferSize = newSize;
@@ -1882,12 +1882,12 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
   if (strcmp(wxResourceBuffer, "#define") == 0)
   {
     wxGetResourceToken(fd);
-    char *name = copystring(wxResourceBuffer);
+    wxChar *name = copystring(wxConvLibc.cMB2WX(wxResourceBuffer));
     wxGetResourceToken(fd);
-    char *value = copystring(wxResourceBuffer);
-    if (isalpha(value[0]))
+    wxChar *value = copystring(wxConvLibc.cMB2WX(wxResourceBuffer));
+    if (wxIsalpha(value[0]))
     {
-      int val = (int)atol(value);
+      int val = (int)wxAtol(value);
       wxResourceAddIdentifier(name, val, table);
     }
     else
@@ -1905,12 +1905,12 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
   else if (strcmp(wxResourceBuffer, "#include") == 0)
   {
     wxGetResourceToken(fd);
-    char *name = copystring(wxResourceBuffer);
-    char *actualName = name;
-    if (name[0] == '"')
+    wxChar *name = copystring(wxConvLibc.cMB2WX(wxResourceBuffer));
+    wxChar *actualName = name;
+    if (name[0] == wxT('"'))
       actualName = name + 1;
-    int len = strlen(name);
-    if ((len > 0) && (name[len-1] == '"'))
+    int len = wxStrlen(name);
+    if ((len > 0) && (name[len-1] == wxT('"')))
       name[len-1] = 0;
     if (!wxResourceParseIncludeFile(actualName, table))
     {
@@ -1923,7 +1923,7 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
   {
     wxChar buf[300];
     wxStrcpy(buf, _("Found "));
-    wxStrncat(buf, wxResourceBuffer, 30);
+    wxStrncat(buf, wxConvLibc.cMB2WX(wxResourceBuffer), 30);
     wxStrcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
     wxLogWarning(buf);
     return FALSE;
