@@ -1825,6 +1825,7 @@ typedef void*       WXPOINTPTR ;
 typedef void*       WXHWND ;
 typedef void*       WXEVENTREF ;
 typedef void*		WXEVENTHANDLERREF ;
+typedef void*       WXEVENTHANDLERCALLREF ; 
 typedef void*       WXAPPLEEVENTREF ;
 typedef void*       WXHDC ;
 typedef void*       WXHMENU ;
