@@ -64,7 +64,7 @@ wxSTD ostream& operator<< (wxSTD ostream& o, const wxLongLongNative& ll)
 {
     char result[65];
 
-    wxSTD memset(result, 'A', 64);
+    memset(result, 'A', 64);
 
     result[64] = '\0';
 
