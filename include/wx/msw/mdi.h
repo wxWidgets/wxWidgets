@@ -174,6 +174,7 @@ protected:
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoSetClientSize(int width, int height);
     virtual void InternalSetMenuBar();
+    virtual bool IsMDIChild() const { return TRUE; }
 
     // common part of all ctors
     void Init();
