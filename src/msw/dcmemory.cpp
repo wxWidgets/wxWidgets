@@ -139,3 +139,50 @@ void wxMemoryDC::DoGetSize(int *width, int *height) const
     }
 }
 
+// For some reason, drawing a rectangle on a memory DC has problems.
+// Use this substitute if we can.
+static void wxDrawRectangle(wxDC& dc, wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+{
+    wxBrush brush(dc.GetBrush());
+    wxPen pen(dc.GetPen());
+    if (brush.Ok() && brush.GetStyle() != wxTRANSPARENT)
+    {
+        HBRUSH hBrush = (HBRUSH) brush.GetResourceHandle() ;
+        if (hBrush)
+        {
+            RECT rect;
+            rect.left = x; rect.top = y;
+            rect.right = x + width - 1;
+            rect.bottom = y + height - 1;
+            ::FillRect((HDC) dc.GetHDC(), &rect, hBrush);
+        }
+    }
+    width --; height --;
+    if (pen.Ok() && pen.GetStyle() != wxTRANSPARENT)
+    {
+        dc.DrawLine(x, y, x + width, y);
+        dc.DrawLine(x, y, x, y + height);
+        dc.DrawLine(x, y+height, x+width, y + height);
+        dc.DrawLine(x+width, y+height, x+width, y);
+    }
+}
+
+void wxMemoryDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+{
+// Set this to 0 to demonstrate strange rectangle behaviour in the Drawing sample.
+#if 0
+    if (m_brush.Ok() && m_pen.Ok() &&
+        (m_brush.GetStyle() == wxSOLID || m_brush.GetStyle() == wxTRANSPARENT) &&
+        (m_pen.GetStyle() == wxSOLID || m_pen.GetStyle() == wxTRANSPARENT))
+    {
+        wxDrawRectangle(* this, x, y, width, height);
+    }
+    else
+    {
+        wxDC::DoDrawRectangle(x, y, width, height);
+    }
+#else
+    wxDC::DoDrawRectangle(x, y, width, height);
+#endif
+}
+

@@ -598,7 +598,9 @@ void MyCanvas::DrawDefault(wxDC& dc)
     //dc.SetBrush( *wxTRANSPARENT_BRUSH );
     #include "../image/smile.xpm"
     wxBitmap bmp(smile_xpm);
-    dc.DrawBitmap(bmp, x + rectSize - 20, rectSize - 10, TRUE);
+
+    if (bmp.Ok())
+        dc.DrawBitmap(bmp, x + rectSize - 20, rectSize - 10, TRUE);
 
     dc.SetBrush( *wxBLACK_BRUSH );
     dc.DrawRectangle( 0, 160, 1000, 300 );
@@ -717,12 +719,11 @@ void MyCanvas::DrawDefault(wxDC& dc)
     wxMemoryDC memdc2;
     memdc2.SelectObject(bitmap2);
 
-    memdc2.SetBackground(*wxWHITE_BRUSH);
+    wxBrush yellowBrush(wxColour(255, 255, 0), wxSOLID);
+    memdc2.SetBackground(yellowBrush);
+    memdc2.Clear();
 
-    // Draw a yellow rectangle filling the bitmap
-    memdc2.SetPen(wxPen(wxColour(255, 255, 0), 1, wxSOLID));
-    memdc2.SetBrush(wxBrush(wxColour(255, 255, 0), wxSOLID));
-    memdc2.DrawRectangle(0, 0, totalWidth+2, totalHeight+2); // Just to make sure!
+    wxPen yellowPen(wxColour(255, 255, 0), 1, wxSOLID);
 
     // Now draw a white rectangle with red outline. It should
     // entirely eclipse the yellow background.
@@ -736,6 +737,21 @@ void MyCanvas::DrawDefault(wxDC& dc)
     memdc2.SelectObject(wxNullBitmap);
 
     dc.DrawBitmap(bitmap2, 500, 270);
+
+    // Repeat, but draw directly on dc
+    // Draw a yellow rectangle filling the bitmap
+
+    x = 600; int y = 270;
+    dc.SetPen(yellowPen);
+    dc.SetBrush(yellowBrush);
+    dc.DrawRectangle(x, y, totalWidth, totalHeight);
+
+    // Now draw a white rectangle with red outline. It should
+    // entirely eclipse the yellow background.
+    dc.SetPen(*wxRED_PEN);
+    dc.SetBrush(*wxWHITE_BRUSH);
+
+    dc.DrawRectangle(x, y, totalWidth, totalHeight);
 }
 
 void MyCanvas::DrawText(wxDC& dc)

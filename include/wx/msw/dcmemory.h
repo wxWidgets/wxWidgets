@@ -26,6 +26,7 @@ public:
 
     ~wxMemoryDC();
 
+    virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     virtual void SelectObject(const wxBitmap& bitmap);
 
     virtual void DoGetSize(int* width, int* height) const;
