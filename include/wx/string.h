@@ -80,16 +80,8 @@ class WXDLLIMPEXP_BASE wxString;
 // constants
 // ----------------------------------------------------------------------------
 
-#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-// must define this static for VA or else you get multiply defined symbols everywhere
-extern const unsigned int wxSTRING_MAXLEN;
-
-#else
 // maximum possible length for a string means "take all string" everywhere
-//  (as sizeof(StringData) is unknown here, we subtract 100)
-const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
-
-#endif
+#define wxSTRING_MAXLEN wxStringBase::npos
 
 // ----------------------------------------------------------------------------
 // global data

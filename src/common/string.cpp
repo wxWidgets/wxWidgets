@@ -56,14 +56,9 @@
 // static class variables definition
 // ---------------------------------------------------------------------------
 
-#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-// must define this static for VA or else you get multiply defined symbols
-// everywhere
-const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
-#endif // Visual Age
-
 #if !wxUSE_STL
-  const size_t wxStringBase::npos = wxSTRING_MAXLEN;
+  //According to STL _must_ be a -1 size_t
+  const size_t wxStringBase::npos = (size_t) -1;
 #endif
 
 // ----------------------------------------------------------------------------

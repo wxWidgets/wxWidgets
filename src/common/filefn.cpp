@@ -361,17 +361,16 @@ void wxStripExtension(wxChar *buffer)
 
 void wxStripExtension(wxString& buffer)
 {
-  size_t len = buffer.Length();
-  size_t i = len-1;
-  while (i > 0)
-  {
-    if (buffer.GetChar(i) == wxT('.'))
+    //RN:  Be careful about the handling the case where 
+    //buffer.Length() == 0
+    for(size_t i = buffer.Length() - 1; i != wxString::npos; --i)
     {
-      buffer = buffer.Left(i);
-      break;
+        if (buffer.GetChar(i) == wxT('.'))
+        {
+          buffer = buffer.Left(i);
+          break;
+        }
     }
-    i --;
-  }
 }
 
 // Destructive removal of /./ and /../ stuff
