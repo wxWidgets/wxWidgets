@@ -2231,11 +2231,14 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
         static const wxEventTable        sm_eventTable; \
         virtual const wxEventTable*        GetEventTable() const;
 
+// N.B.: when building DLL with Borland C++ 5.5 compiler, you must initialize
+//       sm_eventTable before using it in GetEventTable() or the compiler gives
+//       E2233 (see http://groups.google.com/groups?selm=397dcc8a%241_2%40dnews)
 #define BEGIN_EVENT_TABLE(theClass, baseClass) \
-    const wxEventTable *theClass::GetEventTable() const \
-        { return &theClass::sm_eventTable; } \
     const wxEventTable theClass::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass::sm_eventTableEntries[0] }; \
+    const wxEventTable *theClass::GetEventTable() const \
+        { return &theClass::sm_eventTable; } \
     const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 
 #define END_EVENT_TABLE() DECLARE_EVENT_TABLE_ENTRY( wxEVT_NULL, 0, 0, 0, 0 ) };
