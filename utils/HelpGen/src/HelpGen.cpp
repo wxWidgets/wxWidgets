@@ -73,6 +73,16 @@
 // just a copy of argv
 static char **g_argv = NULL;
 
+class HelpGenApp: public wxApp
+{
+public:
+    HelpGenApp() {};
+
+    bool OnInit();
+};
+
+IMPLEMENT_APP(HelpGenApp);
+
 // -----------------------------------------------------------------------------
 // private functions
 // -----------------------------------------------------------------------------
@@ -456,7 +466,12 @@ static void usage()
     exit(1);
 }
 
+/*
 int main(int argc, char **argv)
+{
+*/
+
+bool HelpGenApp::OnInit()
 {
     enum
     {
@@ -634,7 +649,7 @@ int main(int argc, char **argv)
             wxLogError("Can't complete diff.");
 
             // failure
-            return 1;
+            return false;
         }
 
         DocManager docman(paramNames);
@@ -654,7 +669,7 @@ int main(int argc, char **argv)
         docman.DumpDifferences(ctxTop);
     }
 
-    return 0;
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -1914,6 +1929,10 @@ static const char *GetCurrentTime(const char *timeFormat)
 
 /*
    $Log$
+   Revision 1.8  1999/09/13 14:29:39  JS
+   Made HelpGen into a wxWin app (still uses command-line args); moved includes
+   into src for simplicity; added VC++ 5 project file
+
    Revision 1.7  1999/02/21 22:32:32  VZ
    1. more C++ parser fixes - now it almost parses wx/string.h
     a) #if/#ifdef/#else (very) limited support
