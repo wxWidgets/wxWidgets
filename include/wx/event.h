@@ -291,6 +291,9 @@ enum
     wxEVT_PLOT_END_TITLE_EDIT = wxEVT_FIRST + 1025,
     wxEVT_PLOT_AREA_CREATE = wxEVT_FIRST + 1026,
 
+    /* Help events */
+    wxEVT_HELP = wxEVT_FIRST + 1050,
+
     wxEVT_USER_FIRST = wxEVT_FIRST + 2000
 };
 
@@ -1400,6 +1403,26 @@ public:
     wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
 };
 
+/*
+ wxEVT_HELP
+ Sent when the user clicks on a window in context-help mode.
+ The cursor position is in screen coordinates.
+ */
+
+class WXDLLEXPORT wxHelpEvent : public wxCommandEvent
+{
+    DECLARE_DYNAMIC_CLASS(wxHelpEvent)
+
+public:
+  wxHelpEvent(wxEventType type = wxEVT_NULL, wxWindowID id = 0, const wxPoint& pt = wxPoint(0, 0))
+      { m_eventType = type; m_id = id; m_pos = pt; }
+
+  const wxPoint& GetPosition() const { return m_pos; }
+  void SetPosition(const wxPoint& pos) { m_pos = pos; }
+
+  wxPoint   m_pos;
+};
+
 #endif // wxUSE_GUI
 
 // Idle event
@@ -1603,6 +1626,7 @@ typedef void (wxEvtHandler::*wxWindowCreateEventFunction)(wxWindowCreateEvent&);
 typedef void (wxEvtHandler::*wxWindowDestroyEventFunction)(wxWindowDestroyEvent&);
 typedef void (wxEvtHandler::*wxSetCursorEventFunction)(wxSetCursorEvent&);
 typedef void (wxEvtHandler::*wxNotifyEventFunction)(wxNotifyEvent&);
+typedef void (wxEvtHandler::*wxHelpEventFunction)(wxHelpEvent&);
 #endif // wxUSE_GUI
 
 // N.B. In GNU-WIN32, you *have* to take the address of a member function
@@ -1817,6 +1841,13 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
  { wxEVT_UPDATE_UI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxUpdateUIEventFunction) & func, (wxObject *) NULL },
 #define EVT_UPDATE_UI_RANGE(id1, id2, func) \
  { wxEVT_UPDATE_UI, id1, id2, (wxObjectEventFunction)(wxEventFunction)(wxUpdateUIEventFunction)&func, (wxObject *) NULL },
+
+// Help events
+#define EVT_HELP(id, func) \
+ { wxEVT_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL },
+
+#define EVT_HELP_RANGE(id1, id2, func) \
+ { wxEVT_HELP, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxHelpEventFunction) & func, (wxObject *) NULL },
 
 // ----------------------------------------------------------------------------
 // Global data

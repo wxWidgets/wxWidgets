@@ -2170,6 +2170,36 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 rc.result = TRUE;
             }
             break;
+#ifdef __WIN32__
+        case WM_HELP:
+        {
+            HELPINFO* info = (HELPINFO*) lParam;
+            // Don't yet process menu help events, just windows
+            if (info->iContextType == HELPINFO_WINDOW)
+            {
+                wxWindow* subjectOfHelp = this;
+                bool eventProcessed = FALSE;
+                while (subjectOfHelp && !eventProcessed)
+                {
+                    wxHelpEvent helpEvent(wxEVT_HELP, subjectOfHelp->GetId(), wxPoint(info->MousePos.x, info->MousePos.y) ) ; // info->iCtrlId);
+                    helpEvent.SetEventObject(this);
+                    eventProcessed = GetEventHandler()->ProcessEvent(helpEvent);
+
+                    // Go up the window hierarchy until the event is handled (or not)
+                    subjectOfHelp = subjectOfHelp->GetParent();
+                }
+                processed = eventProcessed;
+            }
+            else if (info->iContextType == HELPINFO_MENUITEM)
+            {
+                wxHelpEvent helpEvent(wxEVT_HELP, info->iCtrlId) ;
+                helpEvent.SetEventObject(this);
+                processed = GetEventHandler()->ProcessEvent(helpEvent);
+            }
+            else processed = FALSE;
+            break;
+        }
+#endif
     }
 
     if ( !processed )
@@ -3173,7 +3203,7 @@ void wxWindow::InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags)
     event.m_leftDown = ((flags & MK_LBUTTON) != 0);
     event.m_middleDown = ((flags & MK_MBUTTON) != 0);
     event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-    event.m_altDown = ::GetKeyState(VK_MENU) & 0x80000000;
+    event.m_altDown = (::GetKeyState(VK_MENU) & 0x80000000) != 0;
     event.SetTimestamp(s_currentMsg.time);
     event.m_eventObject = this;
 

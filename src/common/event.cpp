@@ -82,6 +82,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxQueryNewPaletteEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxWindowCreateEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxWindowDestroyEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxHelpEvent, wxCommandEvent)
 #endif // wxUSE_GUI
 
 const wxEventTable *wxEvtHandler::GetEventTable() const

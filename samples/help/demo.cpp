@@ -113,6 +113,9 @@ public:
     void OnAdvancedHtmlHelp(wxCommandEvent& event);
     void OnMSHtmlHelp(wxCommandEvent& event);
 
+    void OnContextHelp(wxHelpEvent& event);
+    void OnShowContextHelp(wxCommandEvent& event);
+
     void ShowHelp(int commandId, wxHelpControllerBase& helpController);
 
 private:
@@ -147,6 +150,7 @@ enum
     HelpDemo_Help_Functions,
     HelpDemo_Help_Help,
     HelpDemo_Help_Search,
+    HelpDemo_Help_ContextHelp,
 
     HelpDemo_Html_Help_Index,
     HelpDemo_Html_Help_Classes,
@@ -187,6 +191,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HelpDemo_Help_Functions, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_Help, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_Search, MyFrame::OnHelp)
+    EVT_MENU(HelpDemo_Help_ContextHelp, MyFrame::OnShowContextHelp)
+
+    EVT_HELP(-1, MyFrame::OnContextHelp)
 
     EVT_MENU(HelpDemo_Html_Help_Index, MyFrame::OnHtmlHelp)
     EVT_MENU(HelpDemo_Html_Help_Classes, MyFrame::OnHtmlHelp)
@@ -310,6 +317,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_Help_Index, "&Help Index...");
     menuFile->Append(HelpDemo_Help_Classes, "&Help on Classes...");
     menuFile->Append(HelpDemo_Help_Functions, "&Help on Functions...");
+    menuFile->Append(HelpDemo_Help_ContextHelp, "&Context Help...");
     menuFile->Append(HelpDemo_Help_Help, "&About Help Demo...");
     menuFile->Append(HelpDemo_Help_Search, "&Search help...");
 #if USE_HTML_HELP
@@ -382,6 +390,21 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnHelp(wxCommandEvent& event)
 {
     ShowHelp(event.GetId(), m_help);
+}
+
+void MyFrame::OnShowContextHelp(wxCommandEvent& event)
+{
+    // This starts context help mode, then the user
+    // clicks on a window to send a help message
+    wxContextHelp contextHelp(this);
+}
+
+void MyFrame::OnContextHelp(wxHelpEvent& event)
+{
+    // In a real app, if we didn't recognise this ID, we should call event.Skip()
+    wxString msg;
+    msg.Printf(wxT("We should now display help for window %d"), event.GetId());
+    wxMessageBox(msg);
 }
 
 void MyFrame::OnHtmlHelp(wxCommandEvent& event)

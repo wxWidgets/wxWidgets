@@ -917,6 +917,10 @@ enum wxStretch
 // Add for normal Windows frame behaviour
 #define wxFRAME_FLOAT_ON_PARENT 0x0020
 
+// Context-sensitive help
+#define wxFRAME_EX_CONTEXTHELP  0x00000004
+#define wxDIALOG_EX_CONTEXTHELP 0x00000004
+
 /*
  * MDI parent frame style flags
  * Can overlap with some of the above.

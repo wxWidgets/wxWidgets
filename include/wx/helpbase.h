@@ -76,6 +76,35 @@ public:
     virtual void OnQuit(void) {};
 };
 
+/*
+ * wxContextHelp
+ * Invokes context-sensitive help. When the user
+ * clicks on a window, a wxEVT_HELP event will be sent to that
+ * window for the application to display help for.
+ */
+
+class WXDLLEXPORT wxContextHelp: public wxObject
+{
+    DECLARE_DYNAMIC_CLASS(wxContextHelp)
+public:
+    wxContextHelp(wxWindow* win = NULL, bool beginHelp = TRUE);
+    ~wxContextHelp();
+
+    bool BeginContextHelp(wxWindow* win);
+    bool EndContextHelp();
+
+    bool EventLoop(const wxCursor& cursor, wxWindow* win);
+    bool DispatchEvent(wxWindow* win, const wxPoint& pt);
+
+#ifdef __WXMSW__
+    bool ProcessHelpMessage(WXMSG* wxmsg, const wxCursor& cursor, wxWindow* win);
+#endif
+
+protected:
+
+    bool    m_inHelp;
+};
+
 #endif // wxUSE_HELP
 #endif
 // _WX_HELPBASEH__

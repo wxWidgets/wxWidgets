@@ -46,7 +46,14 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
 
     m_window = new wxSplashScreenWindow(bitmap, this, -1, pos, size, wxNO_BORDER);
 
-    SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
+    // For some reason, we need to make the client size a couple of pixels
+    // bigger for all of the bitmap to show.
+#ifdef __WXMSW__
+    int fudge = 2;
+#else
+    int fudge = 0;
+#endif
+    SetClientSize(bitmap.GetWidth()+fudge, bitmap.GetHeight()+fudge);
 
     if (m_splashStyle & wxSPLASH_CENTRE_ON_PARENT)
         CentreOnParent();
