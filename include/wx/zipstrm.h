@@ -28,25 +28,26 @@
 
 class WXDLLEXPORT wxZipInputStream : public wxInputStream
 {
-    private:
-        size_t m_Size;
-        off_t m_Pos;
-        void *m_Archive;
-                // this void* is handle of archive .
-                // I'm sorry it is void and not proper type but I don't want
-                // to make unzip.h header public.
+public:
+    wxZipInputStream(const wxString& archive, const wxString& file);
+            // archive is name of .zip archive, file is name of file to be extracted.
+            // Remember that archive must be local file accesible via fopen, fread functions!
+    ~wxZipInputStream();
 
-    public:
-        wxZipInputStream(const wxString& archive, const wxString& file);
-                // archive is name of .zip archive, file is name of file to be extracted.
-                // Remember that archive must be local file accesible via fopen, fread functions!
-        ~wxZipInputStream();
+    virtual size_t GetSize() const {return m_Size;}
 
-    protected:
-        virtual size_t GetSize() const {return m_Size;}
-        virtual size_t OnSysRead(void *buffer, size_t bufsize);
-        virtual off_t OnSysSeek(off_t seek, wxSeekMode mode);
-        virtual off_t OnSysTell() const {return m_Pos;}
+protected:
+    virtual size_t OnSysRead(void *buffer, size_t bufsize);
+    virtual off_t OnSysSeek(off_t seek, wxSeekMode mode);
+    virtual off_t OnSysTell() const {return m_Pos;}
+
+private:
+    size_t m_Size;
+    off_t m_Pos;
+
+    // this void* is handle of archive . I'm sorry it is void and not proper
+    // type but I don't want to make unzip.h header public.
+    void *m_Archive;
 };
 
 
@@ -55,20 +56,3 @@ class WXDLLEXPORT wxZipInputStream : public wxInputStream
 
 #endif 
    // __ZIPSTREAM_H__
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
