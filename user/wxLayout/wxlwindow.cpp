@@ -1,7 +1,7 @@
 /*-*- c++ -*-********************************************************
  * wxLwindow.h : a scrolled Window for displaying/entering rich text*
  *                                                                  *
- * (C) 1998, 1999 by Karsten Ballüder (Ballueder@usa.net)           * 
+ * (C) 1998, 1999 by Karsten Ballüder (Ballueder@usa.net)           *
  *                                                                  *
  * $Id$
  *******************************************************************/
@@ -11,12 +11,13 @@
 #endif
 
 #include "wx/wxprec.h"
+
 #ifdef __BORLANDC__
 #  pragma hdrstop
 #endif
 
-
 #include "Mpch.h"
+
 #ifdef M_BASEDIR
 #   ifndef USE_PCH
 #     include "Mcommon.h"
@@ -40,6 +41,10 @@
 #include <wx/clipbrd.h>
 #include <wx/textctrl.h>
 #include <wx/dataobj.h>
+
+#ifdef WXLAYOUT_USE_CARET
+#   include <wx/caret.h>
+#endif // WXLAYOUT_USE_CARET
 
 #include <ctype.h>
 
@@ -71,8 +76,9 @@ BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
 END_EVENT_TABLE()
 
 wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
-   : wxScrolledWindow(parent, -1, wxDefaultPosition, wxDefaultSize,
-                      wxHSCROLL | wxVSCROLL | wxBORDER)
+              : wxScrolledWindow(parent, -1,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxHSCROLL | wxVSCROLL | wxBORDER)
 
 {
    SetStatusBar(NULL); // don't use statusbar
@@ -85,6 +91,7 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    m_bitmap = new wxBitmap(4,4);
    m_bitmapSize = wxPoint(4,4);
    m_llist = new wxLayoutList();
+
    m_BGbitmap = NULL;
    m_ScrollToCursor = false;
    SetWrapMargin(0);
@@ -93,7 +100,16 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    EnableScrolling(true,true);
    m_maxx = max.x; m_maxy = max.y;
    m_Selecting = false;
-   SetCursorVisibility(-1); 
+
+#ifdef WXLAYOUT_USE_CARET
+   // FIXME cursor size shouldn't be hardcoded
+   wxCaret *caret = new wxCaret(this, 2, 20);
+   SetCaret(caret);
+   m_llist->SetCaret(caret);
+   caret->Show();
+#endif // WXLAYOUT_USE_CARET
+
+   SetCursorVisibility(-1);
    SetCursor(wxCURSOR_IBEAM);
    SetDirty();
 }
@@ -121,12 +137,8 @@ wxLayoutWindow::Clear(int family,
    ResizeScrollbars(true);
    SetDirty();
    SetModified(false);
-   wxRect r;
-   int w,h;
-   r.x = r.y = 0; GetSize(&w,&h);
-   r.width = w;
-   r.height = h;
-   DoPaint(&r);
+
+   DoPaint((wxRect *)NULL);
 }
 
 #ifdef __WXMSW__
@@ -142,7 +154,7 @@ void
 wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 {
    wxPaintDC dc( this );
-   PrepareDC( dc );     
+   PrepareDC( dc );
    SetFocus();
 
    wxPoint findPos;
@@ -173,7 +185,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
          if(!m_HandCursor)
             SetCursor(wxCURSOR_HAND);
          m_HandCursor = TRUE;
-         if(m_StatusBar && m_StatusFieldLabel != -1) 
+         if(m_StatusBar && m_StatusFieldLabel != -1)
          {
             const wxString &label = u->GetLabel();
             if(label.Length())
@@ -186,7 +198,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
          if(m_HandCursor)
             SetCursor(wxCURSOR_IBEAM);
          m_HandCursor = FALSE;
-         if(m_StatusBar && m_StatusFieldLabel != -1) 
+         if(m_StatusBar && m_StatusFieldLabel != -1)
             m_StatusBar->SetStatusText("", m_StatusFieldLabel);
       }
       if(event.LeftIsDown())
@@ -195,19 +207,19 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
          {
             m_llist->StartSelection();
             m_Selecting = true;
-            DoPaint(FALSE); 
+            DoPaint(FALSE);
          }
          else
          {
             m_llist->ContinueSelection(cursorPos);
-            DoPaint(FALSE); 
-         }      
+            DoPaint(FALSE);
+         }
       }
       if(m_Selecting && ! event.LeftIsDown())
       {
          m_llist->EndSelection(cursorPos);
          m_Selecting = false;
-         DoPaint(FALSE); 
+         DoPaint(FALSE);
       }
       if(u) u->DecRef();
       return;
@@ -257,7 +269,7 @@ void
 wxLayoutWindow::OnChar(wxKeyEvent& event)
 {
    int keyCode = event.KeyCode();
-   
+
 #ifdef WXLAYOUT_DEBUG
    if(keyCode == WXK_F1)
    {
@@ -289,7 +301,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    // If needed, make cursor visible:
    if(m_CursorVisibility == -1)
       m_CursorVisibility = 1;
-   
+
    /* These two nested switches work like this:
       The first one processes all non-editing keycodes, to move the
       cursor, etc. It's default will process all keycodes causing
@@ -323,7 +335,10 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       break;
    default:
       if(keyCode == 'c' && event.ControlDown())
+      {
+         // this should work even in read-only mode
          Copy();
+      }
       if( IsEditable() )
       {
          /* First, handle control keys */
@@ -352,9 +367,6 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                break;
             case 'v':
                Paste();
-               break;
-            case 'c':
-               Copy();
                break;
             case 'x':
                Cut();
@@ -420,7 +432,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
          }
          SetDirty();
          SetModified();
-      }// if(IsEditable()) 
+      }// if(IsEditable())
    }// first switch()
    if(m_Selecting)
    {
@@ -464,14 +476,14 @@ wxLayoutWindow::ScrollToCursor(void)
    x0 *= dx; y0 *= dy;
 
    WXLO_DEBUG(("ScrollToCursor: ViewStart is %d/%d", x0, y0));
-   
+
    // Get the size of the visible window:
    GetClientSize(&x1,&y1);
    wxASSERT(x1 > 0);
    wxASSERT(y1 > 0);
    // As we have the values anyway, use them to avoid unnecessary
    // scrollbar updates.
-   if(x1 > m_maxx) m_maxx = x1;  
+   if(x1 > m_maxx) m_maxx = x1;
    if(y1 > m_maxy) m_maxy = y1;
    /* Make sure that the scrollbars are at a position so that the
       cursor is visible if we are editing. */
@@ -513,6 +525,11 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    wxPaintDC dc( this );
    PrepareDC( dc );
 
+#ifdef WXLAYOUT_USE_CARET
+   // hide the caret before drawing anything
+   GetCaret()->Hide();
+#endif // WXLAYOUT_USE_CARET
+
    int x0,y0,x1,y1, dx, dy;
 
    // Calculate where the top of the visible area is:
@@ -526,7 +543,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    wxASSERT(y1 > 0);
    // As we have the values anyway, use them to avoid unnecessary
    // scrollbar updates.
-   if(x1 > m_maxx) m_maxx = x1;  
+   if(x1 > m_maxx) m_maxx = x1;
    if(y1 > m_maxy) m_maxy = y1;
 
 
@@ -542,13 +559,13 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
       m_llist->Layout(dc);
       ResizeScrollbars();
    }
-   /* Check whether the window has grown, if so, we need to reallocate 
+   /* Check whether the window has grown, if so, we need to reallocate
       the bitmap to be larger. */
    if(x1 > m_bitmapSize.x || y1 > m_bitmapSize.y)
    {
       wxASSERT(m_bitmapSize.x > 0);
       wxASSERT(m_bitmapSize.y > 0);
-      
+
       m_memDC->SelectObject(wxNullBitmap);
       delete m_bitmap;
       m_bitmapSize = wxPoint(x1,y1);
@@ -559,7 +576,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    m_memDC->SetDeviceOrigin(0,0);
    m_memDC->SetBrush(wxBrush(m_llist->GetDefaults()->GetBGColour(),wxSOLID));
    m_memDC->SetPen(wxPen(m_llist->GetDefaults()->GetBGColour(),
-                         0,wxTRANSPARENT));                               
+                         0,wxTRANSPARENT));
    m_memDC->SetLogicalFunction(wxCOPY);
 
    /* Either fill the background with the background bitmap, or clear
@@ -582,7 +599,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
       m_memDC->DrawRectangle(0,0,x1, y1);
    }
 
-   
+
    /* This is the important bit: we tell the list to draw itself: */
 #if WXLO_DEBUG_URECT
    if(updateRect)
@@ -590,10 +607,10 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
       WXLO_DEBUG(("Update rect: %ld,%ld / %ld,%ld",
                   updateRect->x, updateRect->y,
                   updateRect->x+updateRect->width,
-                  updateRect->y+updateRect->height)); 
+                  updateRect->y+updateRect->height));
    }
 #endif
-   
+
    // Device origins on the memDC are suspect, we translate manually
    // with the translate parameter of Draw().
    wxPoint offset(-x0+WXLO_XOFFSET,-y0+WXLO_YOFFSET);
@@ -603,8 +620,8 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    // cursor, so that the cursor coordinates get included in the next
    // update rectangle (although they are drawn on the memDC, this is
    // needed to erase it):
-   m_llist->InvalidateUpdateRect(); 
-   if(m_CursorVisibility == 1)
+   m_llist->InvalidateUpdateRect();
+   if(m_CursorVisibility != 0)
       m_llist->DrawCursor(*m_memDC,
                           m_HaveFocus && IsEditable(), // draw a thick
                           // cursor for    editable windows with focus
@@ -636,12 +653,19 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
       dc.Blit(x0,y0,x1,y1,m_memDC,0,0,wxCOPY,FALSE);
    }
 
+#ifdef WXLAYOUT_USE_CARET
+   // show the caret back after everything is redrawn
+   m_caret->Show();
+#endif // WXLAYOUT_USE_CARET
+
    ResetDirty();
    m_ScrollToCursor = false;
-   if(m_StatusBar && m_StatusFieldCursor != -1) 
+   if(m_StatusBar && m_StatusFieldCursor != -1)
    {
       wxString label;
-      label.Printf(_("L:%d C:%d"), m_llist->GetCursorPos().x+1, m_llist->GetCursorPos().y+1);
+      label.Printf(_("Ln:%d Col:%d"),
+                   m_llist->GetCursorPos().y+1,
+                   m_llist->GetCursorPos().x+1);
       m_StatusBar->SetStatusText(label, m_StatusFieldCursor);
    }
 }
@@ -652,16 +676,16 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
 {
    wxPoint max = m_llist->GetSize();
 
-   WXLO_DEBUG(("ResizeScrollbars: GetSize: %ld, %ld", (long int)max.x, 
+   WXLO_DEBUG(("ResizeScrollbars: GetSize: %ld, %ld", (long int)max.x,
                (long int) max.y));
    if(max.x > m_maxx || max.y > m_maxy
       || max.x > m_maxx-WXLO_ROFFSET || max.y > m_maxy-WXLO_BOFFSET
       || exact)
    {
-      if(! exact) 
+      if(! exact)
       {
          // add an extra bit to the sizes to avoid future updates
-         max.x = max.x+WXLO_ROFFSET;  
+         max.x = max.x+WXLO_ROFFSET;
          max.y = max.y+WXLO_BOFFSET;
       }
       ViewStart(&m_ViewStartX, &m_ViewStartY);
@@ -684,7 +708,7 @@ wxLayoutWindow::Paste(void)
          {
          }
          //FIXME: missing functionality m_llist->Insert(wxldo.GetList());
-      }  
+      }
       else
 #endif
       {
@@ -698,6 +722,7 @@ wxLayoutWindow::Paste(void)
       }
       wxTheClipboard->Close();
    }
+
 #if 0
    /* My attempt to get the primary selection, but it does not
       work. :-( */
@@ -746,7 +771,7 @@ wxLayoutWindow::Copy(bool invalidate)
       else if(len > 1 && text[len-1] == '\n')
          text = text.Mid(0,len-1);
    }
-   
+
 
    if (wxTheClipboard->Open())
    {
@@ -758,6 +783,7 @@ wxLayoutWindow::Copy(bool invalidate)
       wxTheClipboard->Close();
       return rc;
    }
+
    return FALSE;
 }
 
@@ -777,7 +803,7 @@ wxLayoutWindow::Find(const wxString &needle,
                      wxPoint * fromWhere)
 {
    wxPoint found;
-   
+
    if(fromWhere == NULL)
       found = m_llist->FindText(needle, m_llist->GetCursorPos());
    else

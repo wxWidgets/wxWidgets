@@ -10,7 +10,14 @@
 #   pragma implementation "wxlparser.h"
 #endif
 
+#include <wx/wxprec.h>
+
+#ifdef __BORLANDC__
+#  pragma hdrstop
+#endif
+
 #include "Mpch.h"
+
 #ifdef M_PREFIX
 #   include "gui/wxllist.h"
 #   include "gui/wxlparser.h"

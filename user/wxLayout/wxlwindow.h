@@ -23,7 +23,7 @@
 #endif
 
 
-#define wxUSE_PRIVATE_CLIPBOARD_FORMAT 0
+#define wxUSE_PRIVATE_CLIPBOARD_FORMAT 1
 
 enum
 {

@@ -1,6 +1,6 @@
 /*
  * Program: wxLayout
- * 
+ *
  * Author: Karsten Ballüder
  *
  * Copyright: (C) 1998, Karsten Ballüder <Ballueder@usa.net>
@@ -61,12 +61,12 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 MyFrame::MyFrame(void) :
    wxFrame( (wxFrame *) NULL, -1, (char *) "wxLayout", wxPoint(20,20), wxSize(600,360) )
 {
-   CreateStatusBar( 1 );
-  
+   CreateStatusBar( 2 );
+
    SetStatusText( "wxLayout by Karsten Ballüder." );
 
    wxMenuBar *menu_bar = new wxMenuBar();
-   
+
    wxMenu *file_menu = new wxMenu;
    file_menu->Append(ID_PRINT, "&Print...", "Print");
    file_menu->Append(ID_PRINT_SETUP, "Print &Setup...","Setup printer properties");
@@ -102,10 +102,11 @@ MyFrame::MyFrame(void) :
 #ifndef __WXMSW__
    menu_bar->Show( TRUE );
 #endif // MSW
-  
+
    SetMenuBar( menu_bar );
 
    m_lwin = new wxLayoutWindow(this);
+   m_lwin->SetStatusBar(GetStatusBar(), 0, 1);
    m_lwin->SetMouseTracking(true);
    m_lwin->SetEditable(true);
    m_lwin->SetWrapMargin(40);
@@ -122,11 +123,11 @@ MyFrame::AddSampleText(wxLayoutList *llist)
    llist->SetFont(-1,-1,-1,-1,-1,"black");
    llist->Insert("The quick brown fox jumps over the lazy dog.");
    llist->LineBreak();
-   
+
    llist->SetFont(wxROMAN,16,wxNORMAL,wxNORMAL, false);
    llist->Insert("--");
    llist->LineBreak();
-   
+
    llist->SetFont(wxROMAN);
    llist->Insert("The quick brown fox jumps over the lazy dog.");
    llist->LineBreak();
@@ -218,7 +219,7 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       wxPrinter printer;
       wxLayoutPrintout printout(m_lwin->GetLayoutList(),_("M: Printout"));
       if (! printer.Print(this, &printout, TRUE))
-         wxMessageBox(                           
+         wxMessageBox(
             _("There was a problem with printing the message:\n"
               "perhaps your current printer is not set up correctly?"),
             _("Printing"), wxOK);
@@ -314,7 +315,7 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
    if (! printer.Print(this, &printout, TRUE))
       wxMessageBox(
          "There was a problem printing.\nPerhaps your current printer is not set correctly?",
-         "Printing", wxOK);  
+         "Printing", wxOK);
 }
 
 void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
@@ -340,14 +341,14 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
    // Pass two printout objects: for preview, and possible printing.
    wxPrintPreview *preview = new wxPrintPreview(new
                                                 wxLayoutPrintout(
-                                                   m_lwin->GetLayoutList()), new wxLayoutPrintout( m_lwin->GetLayoutList()), & printData);  
+                                                   m_lwin->GetLayoutList()), new wxLayoutPrintout( m_lwin->GetLayoutList()), & printData);
    if (!preview->Ok())
    {
       delete preview;
       wxMessageBox("There was a problem previewing.\nPerhaps your current printer is not set correctly?", "Previewing", wxOK);
       return;
    }
-      
+
    wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
    frame->Centre(wxBOTH);
    frame->Initialize();
@@ -430,7 +431,7 @@ void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
 // MyApp
 //-----------------------------------------------------------------------------
 
-MyApp::MyApp(void) : 
+MyApp::MyApp(void) :
    wxApp( )
 {
 };
