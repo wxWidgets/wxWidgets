@@ -137,8 +137,9 @@ Centres the window.
 \wxheading{Parameters}
 
 \docparam{direction}{Specifies the direction for the centering. May be {\tt wxHORIZONTAL}, {\tt wxVERTICAL}\rtfsp
-or {\tt wxBOTH}. It may also include {\tt wxCENTRE\_ON\_SCREEN} flag if you
-want to center the window on the entire screen and not on its parent window. 
+or {\tt wxBOTH}. It may also include {\tt wxCENTRE\_ON\_SCREEN} flag
+if you want to center the window on the entire screen and not on its
+parent window.}
 
 The flag {\tt wxCENTRE\_FRAME} is obsolete and should not be used any longer.
 
@@ -1611,7 +1612,7 @@ functions so should not be required by the application programmer.
 \func{virtual bool}{Reparent}{\param{wxWindow* }{newParent}}
 
 Reparents the window, i.e the window will be removed from its
-current parent window (e.g. a non-standard toolbar in a wxFrame) 
+current parent window (e.g. a non-standard toolbar in a wxFrame)
 and then re-inserted into another (e.g. a wxMiniFrame for a
 floating toolbar). Available on Windows and GTK+.
 
