@@ -37,14 +37,6 @@
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
-//-------------------------------------------------------------------------
-// conditional compilation
-//-------------------------------------------------------------------------
-
-#if (GTK_MINOR_VERSION > 0)
-    #define NEW_GTK_SCROLL_CODE
-#endif
-
 //-----------------------------------------------------------------------------
 // private functions
 //-----------------------------------------------------------------------------
@@ -379,11 +371,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     gtk_list_set_selection_mode( GTK_LIST(m_list), mode );
 
-#ifdef NEW_GTK_SCROLL_CODE
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(m_widget), GTK_WIDGET(m_list) );
-#else
-    gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_list) );
-#endif
 
     /* make list scroll when moving the focus down using cursor keys */
     gtk_container_set_focus_vadjustment(
