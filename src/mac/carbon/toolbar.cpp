@@ -551,8 +551,41 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     if ( toolbarrect.top < 0 )
         toolbarrect.top = 0 ;
 */
-    UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+    if ( !MacGetTopLevelWindow()->MacGetMetalAppearance() )
+    {
+        UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+    }
+    else
+    {
+#if TARGET_API_MAC_OSX
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
+    if ( UMAGetSystemVersion() >= 0x1030 )
+    {
+        HIRect hiToolbarrect = CGRectMake( dc.YLOG2DEVMAC(0) , dc.XLOG2DEVMAC(0) , 
+        dc.YLOG2DEVREL(h) , dc.XLOG2DEVREL(w) );
+        CGContextRef cgContext ;
+        Rect bounds ;
+        GetPortBounds( (CGrafPtr) dc.m_macPort , &bounds ) ;
+        QDBeginCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
+        CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
+        CGContextScaleCTM( cgContext , 1 , -1 ) ;
 
+        {
+            HIThemeBackgroundDrawInfo drawInfo ;
+            drawInfo.version = 0 ;
+            drawInfo.state = kThemeStateActive ;
+            drawInfo.kind = kThemeBackgroundMetal ;
+            HIThemeApplyBackground( &hiToolbarrect, &drawInfo , cgContext,kHIThemeOrientationNormal) ;
+        }
+        QDEndCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
+    }
+    else
+#endif
+    {
+        UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+    }
+#endif
+    }
     event.Skip() ;
 }
 
