@@ -765,10 +765,14 @@ class wxApp(wxPyApp):
     error = 'wxApp.error'
     outputWindowClass = wxPyOnDemandOutputWindow
 
-    def __init__(self, redirect=_defRedirect, filename=None):
+    def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=true):
         wxPyApp.__init__(self)
         self.stdioWin = None
         self.saveStdio = (sys.stdout, sys.stderr)
+
+        # This has to be done before OnInit
+        self.SetUseBestVisual(useBestVisual)
+
         if redirect:
             self.RedirectStdio(filename)
         # this initializes wxWindows and then calls our OnInit

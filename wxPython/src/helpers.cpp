@@ -92,7 +92,6 @@ BOOL WINAPI DllMain(
 
 
 wxPyApp::wxPyApp() {
-    SetUseBestVisual(TRUE);
 }
 
 wxPyApp::~wxPyApp() {
