@@ -316,6 +316,34 @@ void wxWindowBase::Centre(int direction)
     Move(new_x, new_y);
 }
 
+// Center TopLevel windows over thier parent instead of the whole screen
+void wxWindowBase::CentreOnParent(int direction)
+{
+    wxPoint     ppos;
+    wxSize      psze;
+    wxSize      wsze;
+    wxWindow*   parent = GetParent();
+    int         x, y;
+
+    if (!parent || !IsTopLevel()) {
+        Centre(direction);
+        return;
+    }
+
+    psze = parent->GetSize();
+    ppos = parent->ClientToScreen(wxPoint(0,0));
+    wsze = GetSize();
+
+    x = y = -1;
+
+    if (direction == wxBOTH || direction == wxHORIZONTAL)
+        x = ppos.x + (psze.x  - wsze.x)/2;
+    if (direction == wxBOTH || direction == wxVERTICAL)
+        y = ppos.y + (psze.y - wsze.y)/2;
+
+    Move(x, y);
+}
+
 // fits the window around the children
 void wxWindowBase::Fit()
 {

@@ -122,9 +122,15 @@ release the capture.
 
 A synonym for \helpref{Centre}{wxwindowcentre}.
 
+\membersection{wxWindow::CenterOnParent}\label{wxwindowcenteronparent}
+
+\func{void}{CenterOnParent}{\param{int}{ direction}}
+
+A synonym for \helpref{CentreOnParent}{wxwindowcentreonparent}.
+
 \membersection{wxWindow::Centre}\label{wxwindowcentre}
 
-\func{virtual void}{Centre}{\param{int}{ direction = wxHORIZONTAL}}
+\func{void}{Centre}{\param{int}{ direction = wxHORIZONTAL}}
 
 Centres the window.
 
@@ -142,6 +148,28 @@ relative to the panel.
 \wxheading{See also}
 
 \helpref{wxWindow::Center}{wxwindowcenter}
+
+\membersection{wxWindow::CentreOnParent}\label{wxwindowcentreonparent}
+
+\func{void}{CentreOnParent}{\param{int}{ direction = wxHORIZONTAL}}
+
+Centres the window.
+
+\wxheading{Parameters}
+
+\docparam{direction}{Specifies the direction for the centering. May be {\tt wxHORIZONTAL}, {\tt wxVERTICAL}\rtfsp
+or {\tt wxBOTH}.}
+
+\wxheading{Remarks}
+
+This methods provides for a way to center top level windows over their
+parents instead of the entire screen.  If there is no parent or if the
+window is not a top level window, then behaviour is the same as
+\helpref{wxWindow::Centre}{wxwindowcentre}.
+
+\wxheading{See also}
+
+\helpref{wxWindow::CenterOnParent}{wxwindowcenteronparent}
 
 \membersection{wxWindow::Clear}\label{wxwindowclear}
 
@@ -717,7 +745,7 @@ Returns a pointer to the current validator for the window, or NULL if there is n
 
 \constfunc{long}{GetWindowStyleFlag}{\void}
 
-Gets the window style that was passed to the consructor or {\bf Create} member. 
+Gets the window style that was passed to the consructor or {\bf Create} member.
 {\bf GetWindowStyle} is synonymous.
 
 \membersection{wxWindow::InitDialog}\label{wxwindowinitdialog}
@@ -769,7 +797,7 @@ window).
 
 \func{void}{Layout}{\void}
 
-Invokes the constraint-based layout algorithm for this window. 
+Invokes the constraint-based layout algorithm for this window.
 
 See \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} on when
 this function gets called automatically using auto layout.
