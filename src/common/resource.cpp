@@ -823,8 +823,8 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
     // Check for bitmap resource name (in case loading old-style resource file)
     if (expr->Nth(count) && ((expr->Nth(count)->Type() == PrologString) || (expr->Nth(count)->Type() == PrologWord)))
     {
-        count ++;
         wxString str(expr->Nth(count)->StringValue());
+        count ++;
 
         if (str != "")
         {
