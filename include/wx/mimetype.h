@@ -305,7 +305,7 @@ public:
     //
     // use the extraDir parameter if you want to look for files in another
     // directory
-    void Initialize(int mailcapStyle = wxMAILCAP_STANDARD,
+    void Initialize(int mailcapStyle = wxMAILCAP_ALL,
                     const wxString& extraDir = wxEmptyString);
 
     // and this function clears all the data from the manager
