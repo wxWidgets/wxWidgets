@@ -234,6 +234,9 @@ void wxButton::SetLabel( const wxString &lbl )
     wxString label2 = PrepareLabelMnemonics(label);
     gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(label2));
     gtk_button_set_use_stock(GTK_BUTTON(m_widget), FALSE);
+    
+    ApplyWidgetStyle( false );
+    
 #else
     gtk_label_set(GTK_LABEL(BUTTON_CHILD(m_widget)), wxGTK_CONV(GetLabel()));
 #endif
