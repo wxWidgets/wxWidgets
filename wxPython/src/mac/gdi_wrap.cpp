@@ -2863,17 +2863,17 @@ static PyObject * Mask_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Icon(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
-    long arg2 ;
+    int arg2 ;
     int arg3 = (int) -1 ;
     int arg4 = (int) -1 ;
     wxIcon *result;
     bool temp1 = False ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "name",(char *) "flags",(char *) "desiredWidth",(char *) "desiredHeight", NULL 
+        (char *) "name",(char *) "type",(char *) "desiredWidth",(char *) "desiredHeight", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Ol|ii:new_Icon",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|ii:new_Icon",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
@@ -2881,7 +2881,7 @@ static PyObject *_wrap_new_Icon(PyObject *self, PyObject *args, PyObject *kwargs
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxIcon *)new wxIcon((wxString const &)*arg1,arg2,arg3,arg4);
+        result = (wxIcon *)new wxIcon((wxString const &)*arg1,(wxBitmapType )arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

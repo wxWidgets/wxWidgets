@@ -4366,7 +4366,7 @@ class DropSource(object):
         return "<%s.%s; proxy of C++ wxPyDropSource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window win=None, Cursor copy=wxNullCursor, Cursor move=wxNullCursor, 
+        __init__(Window win, Cursor copy=wxNullCursor, Cursor move=wxNullCursor, 
             Cursor none=wxNullCursor) -> DropSource
         """
         newobj = _misc.new_DropSource(*args, **kwargs)

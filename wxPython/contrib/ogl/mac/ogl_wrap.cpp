@@ -1256,7 +1256,7 @@ static PyObject *_wrap_ShapeRegion_GetColour(PyObject *self, PyObject *args, PyO
 static PyObject *_wrap_ShapeRegion_GetActualColourObject(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxShapeRegion *arg1 = (wxShapeRegion *) 0 ;
-    wxColour *result;
+    wxColour result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -1266,12 +1266,16 @@ static PyObject *_wrap_ShapeRegion_GetActualColourObject(PyObject *self, PyObjec
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxShapeRegion,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxColour *)(arg1)->GetActualColourObject();
+        result = (arg1)->GetActualColourObject();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxColour, 0);
+    {
+        wxColour * resultptr;
+        resultptr = new wxColour((wxColour &) result);
+        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxColour, 1);
+    }
     return resultobj;
     fail:
     return NULL;

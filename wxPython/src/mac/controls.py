@@ -1532,8 +1532,36 @@ def PreSpinCtrl(*args, **kwargs):
     val.thisown = 1
     return val
 
+class SpinEvent(core.NotifyEvent):
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxSpinEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(wxEventType commandType=wxEVT_NULL, int winid=0) -> SpinEvent"""
+        newobj = _controls.new_SpinEvent(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def GetPosition(*args, **kwargs):
+        """GetPosition() -> int"""
+        return _controls.SpinEvent_GetPosition(*args, **kwargs)
+
+    def SetPosition(*args, **kwargs):
+        """SetPosition(int pos)"""
+        return _controls.SpinEvent_SetPosition(*args, **kwargs)
+
+
+class SpinEventPtr(SpinEvent):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = SpinEvent
+_controls.SpinEvent_swigregister(SpinEventPtr)
+
 wxEVT_COMMAND_SPINCTRL_UPDATED = _controls.wxEVT_COMMAND_SPINCTRL_UPDATED
-EVT_SPINCTRL = wx.PyEventBinder( wxEVT_COMMAND_SPINCTRL_UPDATED, 1)
+EVT_SPIN_UP   = wx.PyEventBinder( wx.wxEVT_SCROLL_LINEUP, 1)
+EVT_SPIN_DOWN = wx.PyEventBinder( wx.wxEVT_SCROLL_LINEDOWN, 1)
+EVT_SPIN      = wx.PyEventBinder( wx.wxEVT_SCROLL_THUMBTRACK, 1)
+EVT_SPINCTRL  = wx.PyEventBinder( wxEVT_COMMAND_SPINCTRL_UPDATED, 1)
 
 #---------------------------------------------------------------------------
 

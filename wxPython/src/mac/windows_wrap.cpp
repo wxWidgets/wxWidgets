@@ -3655,34 +3655,6 @@ static PyObject *_wrap_Dialog_CreateButtonSizer(PyObject *self, PyObject *args, 
 }
 
 
-static PyObject *_wrap_Dialog_SetModal(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxDialog *arg1 = (wxDialog *) 0 ;
-    bool arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "flag", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Dialog_SetModal",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDialog,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    arg2 = PyInt_AsLong(obj1) ? true : false;
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetModal(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_Dialog_IsModal(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDialog *arg1 = (wxDialog *) 0 ;
@@ -20752,7 +20724,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Dialog_GetReturnCode", (PyCFunction) _wrap_Dialog_GetReturnCode, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Dialog_CreateTextSizer", (PyCFunction) _wrap_Dialog_CreateTextSizer, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Dialog_CreateButtonSizer", (PyCFunction) _wrap_Dialog_CreateButtonSizer, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Dialog_SetModal", (PyCFunction) _wrap_Dialog_SetModal, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Dialog_IsModal", (PyCFunction) _wrap_Dialog_IsModal, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Dialog_ShowModal", (PyCFunction) _wrap_Dialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Dialog_EndModal", (PyCFunction) _wrap_Dialog_EndModal, METH_VARARGS | METH_KEYWORDS },
