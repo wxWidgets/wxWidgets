@@ -382,6 +382,13 @@ public:
     bool        m_control;
     bool        m_shift;
     wxGridCell* m_cell;
+
+    int         GetRow() const { return m_row; }
+    int         GetCol() const { return m_col; }
+    wxPoint     GetPosition() const { return wxPoint( m_x, m_y ); }
+    wxGridCell* GetCell() const { return m_cell; }
+    bool        ControlDown() const { return m_control; }
+    bool        ShiftDown() const { return m_shift; }
 };
 
 const wxEventType wxEVT_GRID_SELECT_CELL      = wxEVT_FIRST + 1575;
