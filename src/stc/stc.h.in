@@ -24,11 +24,29 @@
 #include <wx/wx.h>
 #include <wx/dnd.h>
 
-#ifdef STCISDLL
-#define STCDLLEXPORT WXDLLEXPORT
+#ifndef SWIG
+/*
+ * If we're using wx in Dynamic Library format do we
+ * want wxStyledTextCtrl to be in DLL form as well?
+ */
+#if defined(WXUSINGDLL) && \
+    (defined(WXMAKING_STC_DLL) || defined(WXUSING_STC_DLL))
+
+#if defined(WXMAKING_STC_DLL)
+    // When building the DLL WXSTC_DECLSPEC exports classes
+#   define WXSTC_DECLSPEC            WXEXPORT
+#elif defined(WXUSING_STC_DLL)
+    // When using the DLL WXSTC_DECLSPEC imports classes
+#   define WXSTC_DECLSPEC            WXIMPORT
+#endif // defined(WXBUILD_STC_DLL)
+
 #else
-#define STCDLLEXPORT
-#endif
+// When building the static library nullify the effect of WXSTC_DECLSPEC
+#define WXSTC_DECLSPEC
+#endif // WXUSINGDLL && (WXMAKING_STC_DLL || WXUSING_STC_DLL)
+
+#endif // SWIG
+
 
 //----------------------------------------------------------------------
 
@@ -58,9 +76,9 @@ class  WordList;
 struct SCNotification;
 
 #ifndef SWIG
-extern STCDLLEXPORT const wxChar* wxSTCNameStr;
-class STCDLLEXPORT wxStyledTextCtrl;
-class STCDLLEXPORT wxStyledTextEvent;
+extern WXSTC_DECLSPEC const wxChar* wxSTCNameStr;
+class WXSTC_DECLSPEC wxStyledTextCtrl;
+class WXSTC_DECLSPEC wxStyledTextEvent;
 #endif
 
 //----------------------------------------------------------------------
