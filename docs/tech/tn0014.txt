@@ -21,6 +21,9 @@ is no DTD available since it is not possible to fully describe the format with
 the limited expressive power of DTDs.
 
 
+Note: see also http://ldaptool.sourceforge.net/XRCGuide/XRCGuideSingle/
+
+
 
 1. Terminology
 ==============
