@@ -40,7 +40,7 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
 
-#ifdef __GNUWIN32__
+#if defined(__GNUWIN32__) && ! wxCHECK_W32API_VERSION( 2, 4 )
 typedef struct tagNMDATETIMECHANGE
 {
     NMHDR       nmhdr;
