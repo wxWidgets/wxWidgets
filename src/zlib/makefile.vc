@@ -91,7 +91,7 @@ zutil.obj: zutil.c zutil.h zlib.h zconf.h
 LIBOBJECTS = $(OBJ1) $(OBJ2)
 
 $(LIBTARGET): $(LIBOBJECTS)
-        del $(LIBTARGET)
+        -del $(LIBTARGET)
         lib @<<
 -out:$(LIBTARGET)
 $(LIBOBJECTS)
