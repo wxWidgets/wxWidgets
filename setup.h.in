@@ -1150,6 +1150,9 @@
 /* Define if you have the <esd.h> header file.  */
 #undef HAVE_ESD_H
 
+/* Define if you have a CD-ROM interface known to mmedia.  */
+#undef HAVE_KNOWN_CDROM_INTERFACE
+
 /* Define if you have wcsrtombs() function */
 #undef HAVE_WCSRTOMBS
 

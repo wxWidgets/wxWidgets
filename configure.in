@@ -3757,6 +3757,19 @@ AC_CHECK_LIB(esd, esd_close, [
 ])
 AC_SUBST(EXTRALIBS_ESD)
 
+dnl check for known CD-ROM interface
+AC_MSG_CHECKING([for known CD-ROM interface])
+AC_TRY_COMPILE([#ifdef __linux__
+                #include <linux/cdrom.h>
+                #else
+                /* For Solaris */
+                #include <sys/cdio.h>
+                #endif
+                ],
+               [struct cdrom_tocentry entry, old_entry;],
+               [AC_MSG_RESULT([yes])
+                AC_DEFINE(HAVE_KNOWN_CDROM_INTERFACE)],
+               [AC_MSG_RESULT([no])])
 
 dnl ===========================================================================
 dnl Now we have all the info we need - use it!

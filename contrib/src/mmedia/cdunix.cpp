@@ -22,6 +22,8 @@
     #pragma hdrstop
 #endif
 
+#if HAVE_KNOWN_CDROM_INTERFACE
+
 // ---------------------------------------------------------------------------
 // MMedia headers
 // ---------------------------------------------------------------------------
@@ -216,3 +218,5 @@ wxCDAudio::CDtoc& wxCDAudioLinux::GetToc()
 {
   return *m_toc;
 }
+
+#endif
