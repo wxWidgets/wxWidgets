@@ -1875,8 +1875,6 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     if (!fontToUse) fontToUse = (wxFont*) &m_font;
 
     wxCHECK_RET( fontToUse, wxT("GetTextExtent: no font defined") );
-    wxCHECK_RET( x, wxT("GetTextExtent: x == NULL") );
-    wxCHECK_RET( y, wxT("GetTextExtent: y == NULL") );
 
     const wxWX2MBbuf strbuf = string.mb_str();
 
