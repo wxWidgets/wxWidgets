@@ -303,13 +303,11 @@
     #define  wxPuts      _putts
     #define  wxScanf     _tscanf
     #if defined(__DMC__)
-        /* Digital Mars adds count to _stprintf (C99) so it does not fit wxWindows needs */
-        /* and there is a bug in D Mars tchar.h prior to 8.39.4n, so define as sprintf */
-        /* for non-unicode builds CE */
-        /* Unicode broken 10 Feb 04 Fixme */
         #if wxUSE_UNICODE
-            #define wxSprintf swprintf
+            /* Digital Mars adds count to _stprintf (C99) so prototype conversion see wxchar.cpp */
+            int wxSprintf (wchar_t * __RESTRICT s, const wchar_t * __RESTRICT format, ... ) ;
         #else
+            /* and there is a bug in D Mars tchar.h prior to 8.39.4n, so define as sprintf */
             #define wxSprintf sprintf
         #endif
     #else

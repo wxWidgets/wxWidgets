@@ -540,6 +540,23 @@ int WXDLLEXPORT wxSnprintf_(wxChar *buf, size_t len, const wxChar *format, ...)
 }
 #endif // wxSnprintf_
 
+#if defined(__DMC__)
+    /* Digital Mars adds count to _stprintf (C99) so convert */
+    #if wxUSE_UNICODE
+        int wxSprintf (wchar_t * __RESTRICT s, const wchar_t * __RESTRICT format, ... )
+        {
+            va_list arglist;
+
+            va_start( arglist, format );
+            int iLen = swprintf ( s, -1, format, arglist );
+            va_end( arglist );
+            return iLen ;
+        }
+
+    #endif // wxUSE_UNICODE
+
+#endif //__DMC__
+
 // ----------------------------------------------------------------------------
 // implement the standard IO functions for wide char if libc doesn't have them
 // ----------------------------------------------------------------------------
