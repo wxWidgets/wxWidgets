@@ -270,14 +270,17 @@ public:
     static wxAppInitializerFunction GetInitializerFunction()
         { return ms_appInitFn; }
 
+    // accessors for ms_appInstance field (external code might wish to modify
+    // it, this is why we provide a setter here as well, but you should really
+    // know what you're doing if you call it), wxTheApp is usually used instead
+    // of GetInstance()
+    static wxAppConsole *GetInstance() { return ms_appInstance; }
+    static void SetInstance(wxAppConsole *app) { ms_appInstance = app; }
+
 
     // command line arguments (public for backwards compatibility)
     int      argc;
     wxChar **argv;
-
-    // the one and only global application object (must be public for backwards
-    // compatibility as assigning to wxTheApp should work)
-    static wxAppConsole *ms_appInstance;
 
 protected:
     // the function which creates the traits object when GetTraits() needs it
@@ -287,6 +290,9 @@ protected:
 
     // function used for dynamic wxApp creation
     static wxAppInitializerFunction ms_appInitFn;
+
+    // the one and only global application object
+    static wxAppConsole *ms_appInstance;
 
 
     // application info (must be set from the user code)
@@ -534,7 +540,7 @@ protected:
 //
 // the cast is safe as in GUI build we only use wxApp, not wxAppConsole, and in
 // console mode it does nothing at all
-#define wxTheApp ((wxApp *)wxApp::ms_appInstance)
+#define wxTheApp ((wxApp *)wxApp::GetInstance())
 
 // ----------------------------------------------------------------------------
 // global functions

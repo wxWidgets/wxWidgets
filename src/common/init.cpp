@@ -81,7 +81,7 @@ public:
         {
             // the pointer is going to be deleted in the base class dtor, don't
             // leave the dangling pointer!
-            wxTheApp = NULL;
+            wxApp::SetInstance(NULL);
         }
     }
 
@@ -89,7 +89,7 @@ public:
     {
         reset(ptr);
 
-        wxTheApp = ptr;
+        wxApp::SetInstance(ptr);
     }
 
     DECLARE_NO_COPY_CLASS(wxAppPtr)
@@ -356,7 +356,7 @@ void wxEntryCleanup()
         wxTheApp->CleanUp();
 
         delete wxTheApp;
-        wxTheApp = NULL;
+        wxApp::SetInstance(NULL);
     }
 
 
