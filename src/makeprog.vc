@@ -29,11 +29,11 @@ wxclean:
         nmake -f makefile.vc clean
 #        cd $(THISDIR)
 
-$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROGRAM).res
+$(PROGRAM).exe:      $(WXLIB) $(OBJECTS) $(PROGRAM).res
 	$(link) @<<
 -out:$(PROGRAM).exe
 $(LINKFLAGS)
-$(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res
+$(OBJECTS) $(DUMMYOBJ) $(PROGRAM).res
 $(LIBS)
 <<
 

@@ -59,7 +59,7 @@ OBJECTS = png.obj pngread.obj pngrtran.obj pngrutil.obj \
 all:    $(WINPNGLIB)
 
 $(WINPNGLIB):      $(OBJECTS)
-        -del $(WINPNGLIB)
+        -erase $(WINPNGLIB)
         lib @<<
 -out:$(WINPNGLIB)
 $(OBJECTS)
@@ -71,6 +71,6 @@ $(OBJECTS)
 clean:
         -erase *.obj
         -erase *.exe
-        -erase *.lib
+        -erase $(WINPNGLIB)
 
 cleanall:	clean

@@ -266,7 +266,7 @@ bool wxApp::Initialize()
 
     // This is to foil optimizations in Visual C++ that throw out dummy.obj.
     // PLEASE DO NOT ALTER THIS.
-#if defined(__VISUALC__) && !defined(WXMAKINGDLL)
+#if defined(__VISUALC__) && defined(__WIN16__) && !defined(WXMAKINGDLL)
     extern char wxDummyChar;
     if (wxDummyChar) wxDummyChar++;
 #endif

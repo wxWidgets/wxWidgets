@@ -576,14 +576,11 @@
                                 // support instead.
 #define wxUSE_BITMAP_MESSAGE         1
                                 // Define 1 to use bitmap messages.
-#define wxUSE_PORTABLE_FONTS_IN_MSW  0
-                                // Define 1 to use new portable font scheme in Windows
-                                // (used by default under X)
 #define wxFONT_SIZE_COMPATIBILITY    0
                                 // Define 1 for font size to be backward compatible
                                 // to 1.63 and earlier. 1.64 and later define point
                                 // sizes to be compatible with Windows.
-#define wxUSE_PENWINDOWS 0
+#define wxUSE_PENWINDOWS             0
                                 // Set to 1 to use PenWindows
 
 #define wxUSE_OWNER_DRAWN             1
@@ -618,10 +615,6 @@
 
 #undef  wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS          0
-
-#ifndef _MBCS
-// #define _MBCS
-#endif
 #endif // wxUSE_MFC
 
 #if (!defined(WIN32) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)

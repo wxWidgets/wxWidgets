@@ -1,5 +1,7 @@
 Mingw32-gcc295.patches
 
+lib/dummy
+lib/wx*.def
 lib/watcom/*.txt
 lib/watcom/*.lib
 lib/watcom/*.bat
@@ -84,8 +86,6 @@ include/wx/msw/ole/*.h
 include/wx/msw/*.cur
 include/wx/msw/*.ico
 include/wx/msw/*.bmp
-
-lib/dummy
 
 samples/ownerdrw/*.cpp
 samples/ownerdrw/*.h

@@ -112,8 +112,9 @@ Using makefiles:
   'nmake -f makefile.vc'
 
    to make the wxWindows core library with debug information
-   (wx\lib\wx_d.lib), or
+   (wx\lib\wxd.lib), then
 
+  'nmake -f makefile.vc cleanall FINAL=1'
   'nmake -f makefile.vc FINAL=1'
 
    to make the wxWindows core library without debug information
@@ -123,17 +124,22 @@ Using makefiles:
 
 Makefile notes:
 
-  Use the 'clean' target to clean all objects, libraries and
+  Use the 'cleanall' target to clean all objects, libraries and
   executables.
 
   To build the release version using makefiles, add FINAL=1 to your
   nmake invocation, both when building the library and for samples.
+  You MUST use the 'cleanall' target (with FINAL=1 or FINAL=0)
+  before making a different configuration, because otherwise
+  object files used to build the previous configuration may be
+  used accidentally for the current configuation. You might see
+  this manifested in unexpected link errors or warnings. This problem
+  doesn't occur when using project files to build wxWindows.
 
   Note that the wxWindows core library allows you to have debug
   and release libraries available simultaneously, by compiling the
   objects in different subdirectories, whereas samples must be
-  cleaned and re-made to build a different configuration. This
-  may be changed in later versions of wxWindows.
+  cleaned and re-made to build a different configuration.
 
 To build the DLL version using makefiles:
 
@@ -179,7 +185,10 @@ trying build a release version of the library. Or, type:
 nmake -f makefile.vc noopt FINAL=1
 
 and then resume compilation in the normal way. This will build
-troublesome files with no optimization.
+troublesome files with no optimization. However, there now seems to be
+an internal linker error using VC++ 4, in addition to internal
+compiler errors for most of the samples, so this version of the compiler
+cannot be recommended!
 
 Note (4): some crash problems can be due to inconsistent compiler
 options. If strange/weird/impossible things start to happen please
@@ -254,6 +263,10 @@ Note (6): If using C++Builder 4 and above (BC++ 5.4 and above), change LINK=tlin
 LINK=ilink32 in src\makeb32.env. You may also need to disable
 wxUSE_LIBJPEG because there is a conflict in the BC++ headers
 (actually this problem seems to have gone away with 5.5 and SP1).
+
+Note (7): If you wish debug messages to be sent to the console in
+debug mode, edit src\makeb32.env and change /aa to /Tpe in
+LINK_FLAGS.
 
 Compiling using the IDE files:
 

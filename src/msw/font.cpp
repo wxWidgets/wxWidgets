@@ -39,11 +39,7 @@
 
 #include "wx/msw/private.h"
 
-    IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
-
-    #if wxUSE_PORTABLE_FONTS_IN_MSW
-        IMPLEMENT_DYNAMIC_CLASS(wxFontNameDirectory, wxObject)
-    #endif
+IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
 // ----------------------------------------------------------------------------
 // wxFontRefData - the internal description of the font

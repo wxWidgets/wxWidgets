@@ -16,3 +16,9 @@ OBJECTS = $(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.vc
 
+# For broken VC++ 4
+noopt:
+	cl @<<
+$(CPPFLAGS2) /Od /c /Tp $(PROGRAM).cpp
+<<
+

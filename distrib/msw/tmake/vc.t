@@ -160,9 +160,6 @@ all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LI
 dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D
 
 
-test:   $(MSWDIR)\$D\wave.obj
-test2:  ..\common\Debug\config.obj
-
 $D:
     mkdir $D
 
@@ -221,7 +218,7 @@ $(WXDIR)\lib\$(WXLIBNAME).lib:      $D\dummy.obj $(OBJECTS) $(PERIPH_LIBS)
 	$(implib) @<<
 -out:$@
 -machine:$(CPU)
-$(OBJECTS) $(PERIPH_LIBS)
+$(OBJECTS) $D\dummy.obj $(PERIPH_LIBS)
 <<
 
 !else
@@ -263,7 +260,8 @@ $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
 <<
 
 # Compile certain files with no optimization (some files cause a
-# compiler crash for buggy versions of VC++, e.g. 4.0)
+# compiler crash for buggy versions of VC++, e.g. 4.0).
+# Don't forget to put FINAL=1 on the command line.
 noopt:
 	cl @<<
 $(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\datetime.obj /c /Tp $(COMMDIR)\datetime.cpp
@@ -431,7 +429,7 @@ clean: $(PERIPH_CLEAN_TARGET)
         -erase $(COMMDIR)\$D\*.obj
         -erase $(COMMDIR)\$D\*.pdb
         -erase $(COMMDIR)\$D\*.sbr
-        -erase $(COMMDIR)\\y_tab.c
+        -erase $(COMMDIR)\y_tab.c
         -erase $(COMMDIR)\lex_yy.c
         -erase $(MSWDIR)\$D\*.obj
         -erase $(MSWDIR)\$D\*.sbr
@@ -614,6 +612,17 @@ $(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
         -dvips32 -o referenc.ps referenc
         move referenc.ps $(WXDIR)\docs\ps\referenc.ps
         cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+htb:
+	cd $(WXDIR)\docs\html\wx
+    -erase /Y wx.zip wx.htb
+    zip32 wx.zip *.htm *.gif *.hhp *.hhc *.hhk
+    ren wx.zip wx.htb
+    cd $(THISDIR)
 
 # In order to force document reprocessing
 touchmanual:

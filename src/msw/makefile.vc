@@ -365,9 +365,6 @@ all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LI
 dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D $(HTMLDIR)\$D
 
 
-test:   $(MSWDIR)\$D\wave.obj
-test2:  ..\common\Debug\config.obj
-
 $D:
     mkdir $D
 
@@ -426,7 +423,7 @@ $(WXDIR)\lib\$(WXLIBNAME).lib:      $D\dummy.obj $(OBJECTS) $(PERIPH_LIBS)
 	$(implib) @<<
 -out:$@
 -machine:$(CPU)
-$(OBJECTS) $(PERIPH_LIBS)
+$(OBJECTS) $D\dummy.obj $(PERIPH_LIBS)
 <<
 
 !else
@@ -469,6 +466,7 @@ $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
 
 # Compile certain files with no optimization (some files cause a
 # compiler crash for buggy versions of VC++, e.g. 4.0)
+# Don't forget to put FINAL=1 on the command line.
 noopt:
 	cl @<<
 $(CPPFLAGS2) /Od /Fo$(COMMDIR)\$D\datetime.obj /c /Tp $(COMMDIR)\datetime.cpp
@@ -616,7 +614,7 @@ rcparser:
     nmake -f makefile.vc FINAL=$(FINAL)
     cd $(WXDIR)\src\msw
 
-cleanall: clean_png clean_zlib clean_xpm clean_jpeg clean_tiff
+cleanall: clean clean_png clean_zlib clean_xpm clean_jpeg clean_tiff
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).dll
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).lib
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).exp
@@ -636,7 +634,7 @@ clean: $(PERIPH_CLEAN_TARGET)
         -erase $(COMMDIR)\$D\*.obj
         -erase $(COMMDIR)\$D\*.pdb
         -erase $(COMMDIR)\$D\*.sbr
-        -erase $(COMMDIR)\\y_tab.c
+        -erase $(COMMDIR)\y_tab.c
         -erase $(COMMDIR)\lex_yy.c
         -erase $(MSWDIR)\$D\*.obj
         -erase $(MSWDIR)\$D\*.sbr
