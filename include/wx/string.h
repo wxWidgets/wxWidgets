@@ -280,7 +280,9 @@ private:
   //
   // try `s << i' or `s.Printf("%d", i)' instead
   wxString(int);
+  wxString(unsigned int);
   wxString(long);
+  wxString(unsigned long);
 
 public:
   // constructors and destructor
@@ -530,11 +532,23 @@ public:
 
   // stream-like functions
       // insert an int into string
-  wxString& operator<<(int i);
+  wxString& operator<<(int i)
+    { return (*this) << Format(_T("%d"), i); }
+      // insert an unsigned int into string
+  wxString& operator<<(unsigned int ui)
+    { return (*this) << Format(_T("%u"), ui); }
+      // insert a long into string
+  wxString& operator<<(long l)
+    { return (*this) << Format(_T("%ld"), l); }
+      // insert an unsigned long into string
+  wxString& operator<<(unsigned long ul)
+    { return (*this) << Format(_T("%lu"), ul); }
       // insert a float into string
-  wxString& operator<<(float f);
+  wxString& operator<<(float f)
+    { return (*this) << Format(_T("%f"), f); }
       // insert a double into string
-  wxString& operator<<(double d);
+  wxString& operator<<(double d)
+    { return (*this) << Format(_T("%g"), d); }
 
   // string comparison
     // case-sensitive comparison (returns a value < 0, = 0 or > 0)

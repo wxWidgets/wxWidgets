@@ -1077,33 +1077,6 @@ bool wxString::ToDouble(double *val) const
 }
 
 // ---------------------------------------------------------------------------
-// stream-like operators
-// ---------------------------------------------------------------------------
-wxString& wxString::operator<<(int i)
-{
-    wxString res;
-    res.Printf(wxT("%d"), i);
-
-    return (*this) << res;
-}
-
-wxString& wxString::operator<<(float f)
-{
-    wxString res;
-    res.Printf(wxT("%f"), f);
-
-    return (*this) << res;
-}
-
-wxString& wxString::operator<<(double d)
-{
-    wxString res;
-    res.Printf(wxT("%g"), d);
-
-    return (*this) << res;
-}
-
-// ---------------------------------------------------------------------------
 // formatted output
 // ---------------------------------------------------------------------------
 
