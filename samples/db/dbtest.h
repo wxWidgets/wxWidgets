@@ -129,7 +129,7 @@ class Ccontact : public wxDbTable, public CstructContact
 
         // Contains all the index definitions and calls to wxDbTable::CreateIndex()
         // required to create all the indexes we wish to define for this table.
-        bool                 CreateIndexes(void);
+        bool                 CreateIndexes(bool recreate);
 
         // Since we do not wish to have duplicate code blocks all over our program
         // for a common query/fetch that we will need to do in many places, we
@@ -252,7 +252,7 @@ class CeditorDlg : public wxPanel
         wxButton        *pCreateBtn,  *pEditBtn,      *pDeleteBtn,  *pCopyBtn,  *pSaveBtn,  *pCancelBtn;
         wxButton        *pPrevBtn,    *pNextBtn,      *pQueryBtn,   *pResetBtn, *pDoneBtn,  *pHelpBtn;
         wxButton        *pNameListBtn;
-        wxButton        *pDataTypesBtn, *pDbDiagsBtn;
+        wxButton        *pCatalogBtn, *pDataTypesBtn, *pDbDiagsBtn;
         wxTextCtrl      *pNameTxt,    *pAddress1Txt,  *pAddress2Txt,*pCityTxt,  *pStateTxt, *pCountryTxt,*pPostalCodeTxt;
         wxStaticText    *pNameMsg,    *pAddress1Msg,  *pAddress2Msg,*pCityMsg,  *pStateMsg, *pCountryMsg,*pPostalCodeMsg;
         wxTextCtrl      *pJoinDateTxt,*pContribTxt,   *pLinesTxt;
@@ -348,6 +348,7 @@ DECLARE_EVENT_TABLE()
 #define EDITOR_DIALOG_DEVELOPER         236
 #define EDITOR_DIALOG_JOIN_MSG          237
 #define EDITOR_DIALOG_JOIN_TEXT         238
+#define EDITOR_DIALOG_CATALOG           240
 #define EDITOR_DIALOG_DATATYPES         250
 #define EDITOR_DIALOG_DB_DIAGS          260
 
