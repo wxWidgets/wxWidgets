@@ -35,6 +35,7 @@
 
 #include "wx/progdlg.h"
 
+#define USE_EXECUTE
 #ifdef USE_EXECUTE
     #define EXEC(cmd) wxExecute((cmd), wxEXEC_SYNC)
 #else
