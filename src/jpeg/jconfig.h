@@ -13,15 +13,20 @@
 /* use wxWidgets' configure */
 #ifdef __MWERKS__
 #if (__MWERKS__ < 0x0900) || macintosh || defined ( __MACH__ )
-    #define __WXMAC__
-		#define USE_MAC_MEMMGR
-	#ifdef __MACH__
-   	  #include <ansi_prefix.mach.h>
-   	  #include <msl_c_version.h>
-   	  #include <stdint.h>
-   	  #undef WCHAR_MAX
-   	  #include <machine/ansi.h>
-	#endif
+#   ifndef __WXMAC__
+#       define __WWXMAC__
+#   endif
+
+#   define USE_MAC_MEMMGR
+
+#   ifdef __MACH__
+#       include <ansi_prefix.mach.h>
+#       include <msl_c_version.h>
+#       include <stdint.h>
+#       undef WCHAR_MAX
+#       include <machine/ansi.h>
+#   endif
+
 // automatically includes MacHeaders
 #elif (__MWERKS__ >= 0x0900) && __INTEL__
     #define __WXMSW__
