@@ -36,7 +36,7 @@
 #include "wx/metafile.h"
 #include "wx/print.h"
 #include "wx/printdlg.h"
-
+#include "wx/image.h"
 #include "wx/accel.h"
 
 #if wxTEST_POSTSCRIPT_IN_MSW
@@ -71,6 +71,8 @@ bool WritePageHeader(wxPrintout *printout, wxDC *dc, wxChar *text, float mmToLog
 
 bool MyApp::OnInit(void)
 {
+    wxInitAllImageHandlers();
+
     m_testFont.Create(10, wxSWISS, wxNORMAL, wxNORMAL);
 
     g_printData = new wxPrintData;
@@ -108,6 +110,9 @@ bool MyApp::OnInit(void)
     file_menu->Append(WXPRINT_PAGE_SETUP_PS, _T("Page Setup PostScript..."),              _T("Page setup (PostScript)"));
     file_menu->Append(WXPRINT_PREVIEW_PS, _T("Print Preview PostScript"),              _T("Preview (PostScript)"));
 #endif
+    file_menu->AppendSeparator();
+    file_menu->Append(WXPRINT_ANGLEUP, _T("Angle up\tAlt-U"),                _T("Raise rotated text angle"));
+    file_menu->Append(WXPRINT_ANGLEDOWN, _T("Angle down\tAlt-D"),            _T("Lower rotated text angle"));
     file_menu->AppendSeparator();
     file_menu->Append(WXPRINT_QUIT, _T("E&xit"),                _T("Exit program"));
 
@@ -159,6 +164,8 @@ EVT_MENU(WXPRINT_PRINT_PS, MyFrame::OnPrintPS)
 EVT_MENU(WXPRINT_PREVIEW_PS, MyFrame::OnPrintPreviewPS)
 EVT_MENU(WXPRINT_PAGE_SETUP_PS, MyFrame::OnPageSetupPS)
 #endif
+EVT_MENU(WXPRINT_ANGLEUP, MyFrame::OnAngleUp)
+EVT_MENU(WXPRINT_ANGLEDOWN, MyFrame::OnAngleDown)
 END_EVENT_TABLE()
 
 // Define my frame constructor
@@ -166,6 +173,16 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, cons
 wxFrame(frame, wxID_ANY, title, pos, size)
 {
     canvas = NULL;
+    m_angle = 30;
+#if 0
+    wxImage image( wxT("test.jpg") );
+    image.SetAlpha();
+    int i,j;
+    for (i = 0; i < image.GetWidth(); i++)
+       for (j = 0; j < image.GetHeight(); j++)
+          image.SetAlpha( i, j, 50 );
+    m_bitmap = image;
+#endif
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
@@ -212,7 +229,7 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 {
-    (*g_pageSetupData) = * g_printData;
+    (*g_pageSetupData) = *g_printData;
 
     wxPageSetupDialog pageSetupDialog(this, g_pageSetupData);
     pageSetupDialog.ShowModal();
@@ -261,6 +278,18 @@ void MyFrame::OnPrintAbout(wxCommandEvent& WXUNUSED(event))
         _T("About wxWidgets printing demo"), wxOK|wxCENTRE);
 }
 
+void MyFrame::OnAngleUp(wxCommandEvent& event)
+{
+    m_angle += 5;
+    canvas->Refresh();
+}
+
+void MyFrame::OnAngleDown(wxCommandEvent& event)
+{
+    m_angle -= 5;
+    canvas->Refresh();
+}
+
 void MyFrame::Draw(wxDC& dc)
 {
     dc.SetBackground(*wxWHITE_BRUSH);
@@ -269,22 +298,33 @@ void MyFrame::Draw(wxDC& dc)
 
     dc.SetBackgroundMode(wxTRANSPARENT);
 
-    dc.SetBrush(* wxCYAN_BRUSH);
-    dc.SetPen(* wxRED_PEN);
+    dc.SetBrush(*wxCYAN_BRUSH);
+    dc.SetPen(*wxRED_PEN);
 
     dc.DrawRectangle(0, 30, 200, 100);
 
     dc.DrawText( wxT("Rectangle 200 by 100"), 40, 40);
 
+    dc.SetPen( wxPen(*wxBLACK,0,wxDOT_DASH) );
     dc.DrawEllipse(50, 140, 100, 50);
+    dc.SetPen(*wxRED_PEN);
 
     dc.DrawText( wxT("Test message: this is in 10 point text"), 10, 180);
-
+    
 #if wxUSE_UNICODE
     char *test = "Hebrew    שלום -- Japanese (日本語)";
     wxString tmp = wxConvUTF8.cMB2WC( test );
     dc.DrawText( tmp, 10, 200 );
 #endif
+
+    wxString str;
+    int i = 0;
+    str.Printf( wxT("---- Text at angle %d ----"), i );
+    dc.DrawRotatedText( str, 100, 300, i );
+
+    i = m_angle;
+    str.Printf( wxT("---- Text at angle %d ----"), i );
+    dc.DrawRotatedText( str, 100, 300, i );
 
     dc.SetPen(* wxBLACK_PEN);
     dc.DrawLine(0, 0, 200, 200);
@@ -293,6 +333,9 @@ void MyFrame::Draw(wxDC& dc)
     wxIcon my_icon = wxICON(mondrian) ;
 
     dc.DrawIcon( my_icon, 100, 100);
+    
+    if (m_bitmap.Ok())
+        dc.DrawBitmap( m_bitmap, 10, 10 );
 }
 
 void MyFrame::OnSize(wxSizeEvent& event )

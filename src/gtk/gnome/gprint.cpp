@@ -386,7 +386,7 @@ int wxGnomePageSetupDialog::ShowModal()
         
         m_pageDialogData.SetPaperSize( wxSize( (int)(pw+0.5), (int)(ph+0.5) ) );
 
-#if 1
+#if 0
         wxPrintf( wxT("paper %d %d, top margin %d\n"), 
             m_pageDialogData.GetPaperSize().x,
             m_pageDialogData.GetPaperSize().y,
@@ -637,10 +637,10 @@ void wxGnomePrintDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     
     SetPen( m_pen );
 
-	gnome_print_moveto ( m_gpc, XLOG2DEV(x1), YLOG2DEV(y1) );
-	gnome_print_lineto ( m_gpc, XLOG2DEV(x2), YLOG2DEV(y2) );
-	gnome_print_stroke ( m_gpc);
-	
+    gnome_print_moveto ( m_gpc, XLOG2DEV(x1), YLOG2DEV(y1) );
+    gnome_print_lineto ( m_gpc, XLOG2DEV(x2), YLOG2DEV(y2) );
+    gnome_print_stroke ( m_gpc);
+
     CalcBoundingBox( x1, y1 );
     CalcBoundingBox( x2, y2 );
 }
@@ -663,6 +663,22 @@ void wxGnomePrintDC::DoDrawPoint(wxCoord x, wxCoord y)
 
 void wxGnomePrintDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
+    if (m_pen.GetStyle() == wxTRANSPARENT) return;
+
+    if (n <= 0) return;
+
+    SetPen (m_pen);
+
+    int i;
+    for ( i =0; i<n ; i++ )
+        CalcBoundingBox( XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset));
+
+    gnome_print_moveto ( m_gpc, XLOG2DEV(points[0].x+xoffset), YLOG2DEV(points[0].y+yoffset) );
+    
+    for (i = 1; i < n; i++)
+        gnome_print_lineto ( m_gpc, XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset) );
+
+    gnome_print_stroke ( m_gpc);
 }
 
 void wxGnomePrintDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
@@ -714,6 +730,57 @@ void wxGnomePrintDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width,
 
 void wxGnomePrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    if (m_brush.GetStyle () != wxTRANSPARENT)
+    {
+        SetBrush( m_brush );
+        
+        gnome_print_newpath( m_gpc );
+        gnome_print_moveto( m_gpc, 
+                            XLOG2DEV(x), YLOG2DEV(y+height/2) );
+                           
+        // start with top half
+        gnome_print_curveto( m_gpc, 
+                            XLOG2DEV(x), YLOG2DEV(y),
+                            XLOG2DEV(x+width), YLOG2DEV(y),
+                            XLOG2DEV(x+width), YLOG2DEV(y+height/2) );
+        // lower half        
+        gnome_print_curveto( m_gpc, 
+                            XLOG2DEV(x+width), YLOG2DEV(y+height),
+                            XLOG2DEV(x), YLOG2DEV(y+height),
+                            XLOG2DEV(x), YLOG2DEV(y+height/2) );
+                            
+        gnome_print_closepath( m_gpc );
+        gnome_print_fill( m_gpc );
+        
+        CalcBoundingBox( x, y );
+        CalcBoundingBox( x + width, y + height );
+    }
+
+    if (m_pen.GetStyle () != wxTRANSPARENT)
+    {
+        SetPen (m_pen);
+
+        gnome_print_newpath( m_gpc );
+        gnome_print_moveto( m_gpc, 
+                            XLOG2DEV(x), YLOG2DEV(y+height/2) );
+                           
+        // start with top half
+        gnome_print_curveto( m_gpc, 
+                            XLOG2DEV(x), YLOG2DEV(y),
+                            XLOG2DEV(x+width), YLOG2DEV(y),
+                            XLOG2DEV(x+width), YLOG2DEV(y+height/2) );
+        // lower half        
+        gnome_print_curveto( m_gpc, 
+                            XLOG2DEV(x+width), YLOG2DEV(y+height),
+                            XLOG2DEV(x), YLOG2DEV(y+height),
+                            XLOG2DEV(x), YLOG2DEV(y+height/2) );
+                            
+        gnome_print_closepath( m_gpc );
+        gnome_print_stroke( m_gpc );
+        
+        CalcBoundingBox( x, y );
+        CalcBoundingBox( x + width, y + height );
+    }
 }
 
 void wxGnomePrintDC::DoDrawSpline(wxList *points)
@@ -946,6 +1013,24 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
 
     gnome_print_setlinewidth( m_gpc, XLOG2DEVREL( 1000 * m_pen.GetWidth() ) / 1000.0f );
 
+
+    static const double dotted[] =  {2.0, 5.0};
+    static const double short_dashed[] = {4.0, 4.0};
+    static const double wxCoord_dashed[] = {4.0, 8.0};
+    static const double dotted_dashed[] = {6.0, 6.0, 2.0, 6.0};
+
+    switch (m_pen.GetStyle())
+    {
+        case wxDOT:           gnome_print_setdash( m_gpc, 2, dotted, 0 ); break;
+        case wxSHORT_DASH:    gnome_print_setdash( m_gpc, 2, short_dashed, 0 ); break;
+        case wxLONG_DASH:     gnome_print_setdash( m_gpc, 2, wxCoord_dashed, 0 ); break;
+        case wxDOT_DASH:      gnome_print_setdash( m_gpc, 4, dotted_dashed, 0 );  break;
+        case wxSOLID:
+        case wxTRANSPARENT:
+        default:              gnome_print_setdash( m_gpc, 0, NULL, 0 );   break;
+    }
+
+    
     unsigned char red = m_pen.GetColour().Red();
     unsigned char blue = m_pen.GetColour().Blue();
     unsigned char green = m_pen.GetColour().Green();
@@ -1028,6 +1113,7 @@ bool wxGnomePrintDC::StartDoc(const wxString& message)
 
 void wxGnomePrintDC::EndDoc()
 {
+    gnome_print_end_doc( m_gpc );
 }
 
 void wxGnomePrintDC::StartPage()

@@ -33,9 +33,13 @@ class MyFrame: public wxFrame
 {
   public:
     MyCanvas *canvas;
+    wxBitmap m_bitmap;
+    int      m_angle;
     MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size);
 
     void Draw(wxDC& dc);
+    void OnAngleUp(wxCommandEvent& event);
+    void OnAngleDown(wxCommandEvent& event);
 
     void OnSize(wxSizeEvent& event);
     void OnPrint(wxCommandEvent& event);
@@ -89,3 +93,5 @@ class MyPrintout: public wxPrintout
 
 #define WXPRINT_ABOUT           109
 
+#define WXPRINT_ANGLEUP         110
+#define WXPRINT_ANGLEDOWN       111
