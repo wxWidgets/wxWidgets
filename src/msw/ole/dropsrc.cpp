@@ -178,7 +178,7 @@ wxDropSource::~wxDropSource()
 // Notes   : you must call SetData() before if you had used def ctor
 wxDropSource::DragResult wxDropSource::DoDragDrop(bool bAllowMove)
 {
-  wxCHECK_RET( m_pData != NULL, None );
+  wxCHECK_MSG( m_pData != NULL, None, "No data in wxDropSource!" );
 
   DWORD dwEffect;
   HRESULT hr = ::DoDragDrop(m_pData->GetInterface(), 
