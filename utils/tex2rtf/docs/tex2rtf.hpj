@@ -1,5 +1,5 @@
 [OPTIONS]
-BMROOT=. ; Assume that bitmaps are where the source is
+BMROOT=d:\wx2dev\wxWind~1\utils\tex2rtf\docs ; Assume that bitmaps are where the source is
 TITLE=Tex2RTF Manual
 CONTENTS=Contents
 COMPRESS=HIGH

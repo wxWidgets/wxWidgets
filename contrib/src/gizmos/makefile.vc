@@ -126,8 +126,8 @@ $(DOCDIR)\htmlhelp\gizmos.chm: $(DOCDIR)\html\gizmos\gizmos.htm $(DOCDIR)\html\g
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
 $(DOCDIR)\htb\gizmos.htb: $(DOCDIR)\html\gizmos\gizmos.htm
 	cd $(DOCDIR)\html\gizmos
-    -erase /Y gizmos.zip gizmos.htb
-    zip32 gizmos.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -erase gizmos.zip gizmos.htb
+    zip gizmos.zip *.htm *.gif *.hhp *.hhc *.hhk
     -mkdir $(DOCDIR)\htb
     move gizmos.zip $(DOCDIR)\htb\gizmos.htb
     cd $(THISDIR)

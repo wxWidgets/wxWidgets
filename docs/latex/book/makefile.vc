@@ -90,8 +90,8 @@ $(WXDIR)\docs\ps\book.ps:	$(WXDIR)\docs\latex\book\book.dvi
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
 $(DOCDIR)\htb\book.htb: $(DOCDIR)\html\book\book.htm
 	cd $(WXDIR)\docs\html\book
-    -erase /Y book.zip book.htb
-    zip32 book.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -erase book.zip book.htb
+    zip book.zip *.htm *.gif *.hhp *.hhc *.hhk
     -mkdir $(DOCDIR)\htb
     move book.zip $(DOCDIR)\htb\book.htb
     cd $(THISDIR)

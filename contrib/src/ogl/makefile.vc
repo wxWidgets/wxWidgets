@@ -174,6 +174,7 @@ $(DOCDIR)\html\ogl\ogl.htm:         $(DOCSOURCES)
 $(DOCDIR)\htmlhelp\ogl.chm: $(DOCDIR)\html\ogl\ogl.htm $(DOCDIR)\html\ogl\ogl.hhp
 	cd $(DOCDIR)\html\ogl
 	-hhc ogl.hhp
+    -erase $(DOCDIR)\htmlhelp\ogl.chm
     move ogl.chm $(DOCDIR)\htmlhelp\ogl.chm
 	cd $(THISDIR)
 
@@ -183,9 +184,11 @@ $(DOCDIR)\htmlhelp\ogl.chm: $(DOCDIR)\html\ogl\ogl.htm $(DOCDIR)\html\ogl\ogl.hh
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
 $(DOCDIR)\htb\ogl.htb: $(DOCDIR)\html\ogl\ogl.htm
 	cd $(DOCDIR)\html\ogl
-    -erase /Y ogl.zip ogl.htb
-    zip32 ogl.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -erase ogl.zip ogl.htb
+    zip ogl.zip *.htm *.gif *.hhp *.hhc *.hhk
     -mkdir $(DOCDIR)\htb
+    -erase $(DOCDIR)\htb\ogl.htb
+    -erase $(DOCDIR)\htb\ogl.htb
     move ogl.zip $(DOCDIR)\htb\ogl.htb
     cd $(THISDIR)
 

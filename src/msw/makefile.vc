@@ -688,41 +688,10 @@ allhlp: wxhlp
         nmake -f makefile.vc hlp
         cd $(THISDIR)
 
-#        cd $(WXDIR)\utils\wxhelp\src
-#        nmake -f makefile.vc hlp
-#        cd $(WXDIR)\utils\tex2rtf\src
-#        nmake -f makefile.vc hlp
-#        cd $(WXDIR)\utils\wxgraph\src
-#        nmake -f makefile.vc hlp
-#        cd $(WXDIR)\utils\wxchart\src
-#        nmake -f makefile.vc hlp
-#        cd $(WXDIR)\utils\wxtree\src
-#        nmake -f makefile.vc hlp
-#        cd $(WXDIR)\utils\wxbuild\src
-#        nmake -f makefile.vc hlp
-#        cd $(WXDIR)\utils\wxgrid\src
-#        nmake -f makefile.vc hlp
-
 allhtml: wxhtml
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc html
         cd $(THISDIR)
-
-#        nmake -f makefile.vc html
-#        cd $(WXDIR)\utils\dialoged\src
-#        nmake -f makefile.vc html
-#        cd $(WXDIR)\utils\hytext\src
-#        nmake -f makefile.vc html
-#        cd $(WXDIR)\utils\wxhelp\src
-#        nmake -f makefile.vc html
-#        cd $(WXDIR)\utils\tex2rtf\src
-#        nmake -f makefile.vc html
-#        cd $(WXDIR)\utils\wxgraph\src
-#        nmake -f makefile.vc html
-#        cd $(WXDIR)\utils\wxchart\src
-#        nmake -f makefile.vc html
-#        cd $(WXDIR)\utils\wxtree\src
-#        nmake -f makefile.vc html
 
 allps: wxps referencps
         cd $(WXDIR)\utils\dialoged\src
@@ -733,18 +702,6 @@ allpdfrtf: pdfrtf
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc pdfrtf
         cd $(THISDIR)
-
-#        cd $(WXDIR)\utils\wxhelp\src
-#        nmake -f makefile.vc ps
-#        cd $(WXDIR)\utils\tex2rtf\src
-#        nmake -f makefile.vc ps
-#        cd $(WXDIR)\utils\wxgraph\src
-#        nmake -f makefile.vc ps
-#        cd $(WXDIR)\utils\wxchart\src
-#        nmake -f makefile.vc ps
-#        cd $(WXDIR)\utils\wxtree\src
-#        nmake -f makefile.vc ps
-#        cd $(THISDIR)
 
 $(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/wx.hpj
         cd $(DOCDIR)/latex/wx
@@ -845,8 +802,8 @@ $(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
 $(DOCDIR)\htb\wx.htb: $(DOCDIR)\html\wx\wx.htm
 	cd $(WXDIR)\docs\html\wx
-    -erase /Y wx.zip wx.htb
-    zip32 wx.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -erase wx.zip wx.htb
+    zip wx.zip *.htm *.gif *.hhp *.hhc *.hhk
     -mkdir $(DOCDIR)\htb
     move wx.zip $(DOCDIR)\htb\wx.htb
     cd $(THISDIR)
@@ -858,11 +815,14 @@ touchmanual:
 updatedocs: touchmanual alldocs
 
 cleandocs:
-    -erase /Y $(DOCDIR)\html\wx\wx.htm
-    -erase /Y $(DOCDIR)\pdf\wx.rtf
-    -erase /Y $(DOCDIR)\latex\wx\wx.rtf
-    -erase /Y $(DOCDIR)\htmlhelp\wx.chm
-    -erase /Y $(DOCDIR)\htb\wx.htb
+    -erase $(DOCDIR)\winhelp\wx.hlp
+    -erase $(DOCDIR)\winhelp\wx.cnt
+    -erase $(DOCDIR)\html\wx\*.htm
+    -erase $(DOCDIR)\pdf\wx.rtf
+    -erase $(DOCDIR)\latex\wx\wx.rtf
+    -erase $(DOCDIR)\latex\wx\WX.PH
+    -erase $(DOCDIR)\htmlhelp\wx.chm
+    -erase $(DOCDIR)\htb\wx.htb
 
 # Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
 # Office StartUp folder, and PDFMaker should be installed.

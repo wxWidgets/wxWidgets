@@ -11,6 +11,22 @@
 # - VC++ 6 or higher, to compile the binaries
 # - WinHelp compiler, HTML Help compiler, Tex2RTF on your path
 # - WISE Install 5
+# - Word 97 (not tested with higher versions)
+# - Adobe Acrobat & Distiller
+#
+# Before running this script, you will need to:
+#
+# - update the readmes, change log, manual version etc.
+# - update version.h
+# - update distrib/msw/wisetop.txt, wisebott.txt with the correct version
+#   number, plus any hard-wired wxWindows paths
+# - test on a variety of compilers
+#
+# TODO:
+#
+# - generation of PDF (only PDF RTF generated so far)
+# - perhaps prompt the user to read the important release docs,
+#   version.h, setup.h
 #
 # Julian Smart, October 2000
 
@@ -19,6 +35,14 @@ DEST=$SRC/deliver
 TMPDIR=`cygpath -u $TEMP`
 OK=1
 DOWISE=0
+DOPDF=0
+DOALL=1
+DOCSONLY=0
+WXWINONLY=0
+WISEONLY=0
+BINONLY=0
+PDFONLY=0
+
 # For some reason, if we pipe output to egrep, we see output, but not otherwise.
 WARNINGS=": decorated name|: see reference|: see declaration|C4786|VC98\\\\INCLUDE|template<>"
 
@@ -29,6 +53,8 @@ setup_vars() {
     TCLHOME=C:/PROGRA~1/Tcl export TCLHOME
     PATH="$PATH:$VCPATH" export PATH
     export INCLUDE LIB
+
+    WORDEXE="/c/Program Files/Microsoft Office/Office/WINWORD.EXE"
 }
 
 check_compile() {
@@ -60,7 +86,7 @@ check_files() {
     if [ ! -d "$SRC/bin" ]; then
         mkdir "$SRC/bin"
     fi
-    if [ ! -e "$SRC/bin/DBVIEW.EXE" ]; then
+    if [ ! -e "$SRC/bin/DBGVIEW.EXE" ]; then
         echo Please put DBGVIEW.EXE, DBGVIEW.CNT, DBGVIEW.HLP into $SRC/bin
         echo and run the script again.
         OK=0
@@ -83,8 +109,23 @@ build_docs() {
     nmake -f makefile.vc html htmlhelp htb hlp pdfrtf
 
     cd "$SRC/contrib/src/mmedia"
-    # NB: add htb target
-    nmake -f makefile.vc html htmlhelp hlp pdfrtf
+    nmake -f makefile.vc html htmlhelp htb hlp pdfrtf
+}
+
+# TODO: Make PDF via Word, if Word and Adobe Acrobat are present.
+# This has to be interactive at present.
+build_pdf() {
+    echo "---------------------------------"
+    echo "Building wxWindows PDF documents"
+    if [ -e "$WORDEXE" ]; then
+        "$WORDEXE" "$WXWIN\\docs\\pdf\\wx.rtf"
+        "$WORDEXE" "$WXWIN\\docs\\pdf\\dialoged.rtf"
+        "$WORDEXE" "$WXWIN\\docs\\pdf\\tex2rtf.rtf"
+        "$WORDEXE" "$WXWIN\\contrib\\docs\\pdf\\ogl.rtf"
+        "$WORDEXE" "$WXWIN\\contrib\\docs\\mmedia\\ogl.rtf"
+    else
+        echo MS Word not present. Not doing PDF build.
+    fi
 }
 
 # Build wxWindows
@@ -132,18 +173,41 @@ build_executables() {
 
 copy_files() {
     cp "$SRC/utils/dialoged/src/Release/dialoged.exe" "$SRC/bin"
-    cp "$SRC/docs/winhelp/dialoged.*" "$SRC/bin"
+    cp "$SRC/docs/winhelp/dialoged.hlp" "$SRC/docs/winhelp/dialoged.cnt" "$SRC/bin"
 
     cp "$SRC/utils/tex2rtf/src/Release/tex2rtf.exe" "$SRC/bin"
-    cp "$SRC/docs/winhelp/tex2rtf.*" "$SRC/bin"
+    cp "$SRC/docs/winhelp/tex2rtf.hlp" "$SRC/docs/winhelp/tex2rtf.cnt" "$SRC/bin"
 
-    cp "$SRC/demos/life/life.exe" "$SRC/demos/life/breeder.lif" "$SRC/bin"
+    cp "$SRC/demos/life/Release/life.exe" "$SRC/demos/life/breeder.lif" "$SRC/bin"
 }
 
 # Process command line options.
 for i in "$@"; do
     case "$i" in
 	--wise) DOWISE=1 ;;
+	--pdf) DOPDF=1 ;;
+	--wise-only)
+        WISEONLY=1
+        DOWISE=1
+        DOALL=0
+        ;;
+	--docs-only)
+        DOCSONLY=1
+        DOALL=0
+        ;;
+	--bin-only)
+        BINONLY=1
+        DOALL=0
+        ;;
+	--wxwin-only)
+        WXWINONLY=1
+        DOALL=0
+        ;;
+	--pdf-only)
+        PDFONLY=1
+        DOPDF=1
+        DOALL=0
+        ;;
 	*)
 	    echo Usage: $0 "[ options ]"
         echo Generates documentation and binaries for creating a distribution,
@@ -152,7 +216,13 @@ for i in "$@"; do
         echo
 	    echo Options:
 	    echo "    --help         Display this help message"
-	    echo "    --wise         Build zips and setup.exe after creating docs and binaries"
+	    echo "    --wise         Additonally, build zips and setup.exe"
+	    echo "    --pdf          Additionally, try to generate PDF"
+	    echo "    --wise-only    Only do zip/setup phase"
+	    echo "    --wxwin-only   Only do wxWin lib building phase"
+	    echo "    --docs-only    Only do docs building phase"
+	    echo "    --pdf-only     Only do PDF building phase"
+	    echo "    --bin-only     Only do .exe building phase"
 	    exit 1
 	    ;;
     esac
@@ -162,28 +232,48 @@ mkdir -p $SRC/docs/pdf
 mkdir -p $SRC/docs/html
 mkdir -p $SRC/docs/htmlhelp
 mkdir -p $SRC/docs/htb
+mkdir -p $SRC/docs/winhelp
+mkdir -p $SRC/contrib/docs/pdf
+mkdir -p $SRC/contrib/docs/html
+mkdir -p $SRC/contrib/docs/htmlhelp
+mkdir -p $SRC/contrib/docs/htb
+mkdir -p $SRC/contrib/docs/winhelp
 
 setup_vars
 check_files
 
-if [ "$OK" = "1" ]; then
-    build_docs
+if [ "$OK"  = "1" ]; then
+    if [ "$DOCSONLY" = "1" ] || [ "$DOALL" = "1" ]; then
+        build_docs
+    fi
+fi
+
+if [ "$OK" = "1" ] && [ "$DOPDF" = "1" ]; then
+    if [ "$PDFONLY" = "1" ] || [ "$DOALL" = "1" ]; then
+        build_pdf
+    fi
 fi
 
 if [ "$OK" = "1" ]; then
-    build_wxwin_vc
+    if [ "$WXWINONLY" = "1" ] || [ "$DOALL" = "1" ]; then
+        build_wxwin_vc
+    fi
 fi
 
 if [ "$OK" = "1" ]; then
-    build_executables
+    if [ "$BINONLY" = "1" ] || [ "$DOALL" = "1" ]; then
+        build_executables
+    fi
 fi
 
 if [ "$OK" = "1" ]; then
     copy_files
 fi
 
-if [ "$OK" = "1" && "$DOWISE" = "1" ]; then
-    $SRC/distrib/msw/zipdist.sh --wise
+if [ "$OK" = "1" ] && [ "$DOWISE" = "1" ]; then
+    if [ "$WISEONLY" = "1" ] || [ "$DOALL" = "1" ]; then
+        $SRC/distrib/msw/zipdist.sh --wise
+    fi
 fi
 
 if [ "$OK" = "1" ]; then

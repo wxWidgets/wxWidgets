@@ -130,8 +130,8 @@ $(DOCDIR)\htmlhelp\dialoged.chm : $(DOCDIR)\html\dialoged\dlged.htm $(DOCDIR)\ht
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
 $(DOCDIR)\htb\dialoged.htb: $(DOCDIR)\html\dialoged\dlged.htm
 	cd $(DOCDIR)\html\dialoged
-    -erase /Y dialoged.zip dialoged.htb
-    zip32 dialoged.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -erase dialoged.zip dialoged.htb
+    zip dialoged.zip *.htm *.gif *.hhp *.hhc *.hhk
     -mkdir $(DOCDIR)\htb
     move dialoged.zip $(DOCDIR)\htb\dialoged.htb
     cd $(THISDIR)

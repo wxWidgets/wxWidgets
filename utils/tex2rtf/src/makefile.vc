@@ -138,8 +138,8 @@ $(DOCDIR)\htmlhelp\tex2rtf.chm : $(DOCDIR)\html\tex2rtf\t2rtf.htm $(DOCDIR)\html
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
 $(DOCDIR)\htb\tex2rtf.htb: $(DOCDIR)\html\tex2rtf\t2rtf.htm
 	cd $(DOCDIR)\html\tex2rtf
-    -erase /Y tex2rtf.zip tex2rtf.htb
-    zip32 tex2rtf.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -erase tex2rtf.zip tex2rtf.htb
+    zip tex2rtf.zip *.htm *.gif *.hhp *.hhc *.hhk
     -mkdir $(DOCDIR)\htb
     move tex2rtf.zip $(DOCDIR)\htb\tex2rtf.htb
     cd $(THISDIR)

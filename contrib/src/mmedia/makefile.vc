@@ -162,6 +162,7 @@ DOCSOURCES=$(LOCALDOCDIR)\mmedia.tex \
 
 html: $(DOCDIR)\html\mmedia\mmedia.htm
 htmlhelp: $(DOCDIR)\html\mmedia\mmedia.chm
+htb:	$(DOCDIR)\htb\mmedia.htb
 hlp: $(DOCDIR)\winhelp\mmedia.hlp
 pdfrtf: $(DOCDIR)\pdf\mmedia.rtf
 ps: $(DOCDIR)\ps\mmedia.ps
@@ -199,12 +200,25 @@ $(DOCDIR)\html\mmedia\mmedia.htm:         $(DOCSOURCES)
         -erase $(DOCDIR)\html\mmedia\*.ref
         cd $(THISDIR)
 
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\mmedia.htb: $(DOCDIR)\html\mmedia\mmedia.htm
+	cd $(DOCDIR)\html\mmedia
+    -erase mmedia.zip mmedia.htb
+    zip mmedia.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    -erase $(DOCDIR)\htb\mmedia.htb
+    move mmedia.zip $(DOCDIR)\htb\mmedia.htb
+    cd $(THISDIR)
 
 $(DOCDIR)\html\mmedia\mmedia.chm: $(DOCDIR)\html\mmedia\mmedia.htm $(DOCDIR)\html\mmedia\mmedia.hhp
 	cd $(DOCDIR)\html\mmedia
 	-hhc mmedia.hhp
+    -erase $(DOCDIR)\htmlhelp\mmedia.chm
+    move mmedia.chm $(DOCDIR)\htmlhelp\mmedia.chm
 	cd $(THISDIR)
-
 
 $(LOCALDOCDIR)\mmedia.dvi:	$(DOCSOURCES)
 	cd $(LOCALDOCDIR)
@@ -221,5 +235,4 @@ $(WXDIR)\docs\ps\mmedia.ps:	$(LOCALDOCDIR)\mmedia.dvi
         -dvips32 -o mmedia.ps mmedia
         move mmedia.ps $(WXDIR)\docs\ps\mmedia.ps
         cd $(THISDIR)
-
 

@@ -101,8 +101,8 @@ $(DOCDIR)\htmlhelp\xml.chm: $(DOCDIR)\html\xml\xml.htm $(DOCDIR)\html\xml\xml.hh
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
 $(DOCDIR)\htb\xml.htb: $(DOCDIR)\html\xml\xml.htm
 	cd $(DOCDIR)\html\xml
-    -erase /Y xml.zip xml.htb
-    zip32 xml.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -erase xml.zip xml.htb
+    zip xml.zip *.htm *.gif *.hhp *.hhc *.hhk
     -mkdir $(DOCDIR)\htb
     move xml.zip $(DOCDIR)\htb\xml.htb
     cd $(THISDIR)
