@@ -169,6 +169,7 @@ void wxStopWatch::Start(long t)
 {
     m_t0 = wxGetLocalTimeMillis() - t;
     m_pause = 0;
+    m_pauseCount = 0;
 }
 
 long wxStopWatch::GetElapsedTime() const
