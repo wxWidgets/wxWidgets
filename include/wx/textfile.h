@@ -4,7 +4,7 @@
 //              (file is fully loaded in memory) and which understands CR/LF
 //              differences between platforms.
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     03.04.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -47,7 +47,7 @@ public:
   // ctors
     // def ctor, use Open(string)
   wxTextFile() { }
-    // 
+    //
   wxTextFile(const wxString& strFile);
 
   // file operations
@@ -80,7 +80,7 @@ public:
     // lines, i.e. you may write something like:
     //  for ( str = GetFirstLine(); !Eof(); str = GetNextLine() ) { ... }
 
-    // @@@ const is commented out because not all compilers understand
+    // NB: const is commented out because not all compilers understand
     //     'mutable' keyword yet (m_nCurLine should be mutable)
   wxString& GetFirstLine() /* const */ { return m_aLines[m_nCurLine = 0]; }
   wxString& GetNextLine()  /* const */ { return m_aLines[++m_nCurLine];   }
@@ -98,12 +98,12 @@ public:
 
   // add/remove lines
     // add a line to the end
-  void AddLine(const wxString& str, wxTextFileType type = typeDefault) 
+  void AddLine(const wxString& str, wxTextFileType type = typeDefault)
     { m_aLines.Add(str); m_aTypes.Add(type); }
     // insert a line before the line number n
   void InsertLine(const wxString& str,
                   size_t n,
-                  wxTextFileType type = typeDefault) 
+                  wxTextFileType type = typeDefault)
     { m_aLines.Insert(str, n); m_aTypes.Insert(type, n); }
     // delete one line
   void RemoveLine(size_t n) { m_aLines.Remove(n); m_aTypes.Remove(n); }

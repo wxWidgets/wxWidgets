@@ -71,6 +71,7 @@ wxTextFile::~wxTextFile()
 bool wxTextFile::Open(const wxString& strFile)
 {
   m_strFile = strFile;
+
   return Open();
 }
 
@@ -134,13 +135,11 @@ wxTextFileType wxTextFile::GuessType() const
   else {
     #define   GREATER_OF(t1, t2) n##t1 == n##t2 ? typeDefault               \
                                                 : n##t1 > n##t2             \
-                                                    ? wxTextFileType_##t1     \
+                                                    ? wxTextFileType_##t1   \
                                                     : wxTextFileType_##t2
 
-// Watcom C++ doesn't seem to be able to handle the macro
-#if defined(__WATCOMC__)
-    return typeDefault;
-#else
+    // Watcom C++ doesn't seem to be able to handle the macro
+#if !defined(__WATCOMC__)
     if ( nDos > nUnix )
       return GREATER_OF(Dos, Mac);
     else if ( nDos < nUnix )
@@ -149,7 +148,7 @@ wxTextFileType wxTextFile::GuessType() const
       // nDos == nUnix
       return nMac > nDos ? wxTextFileType_Mac : typeDefault;
     }
-#endif
+#endif // __WATCOMC__
 
     #undef    GREATER_OF
   }
@@ -219,6 +218,15 @@ bool wxTextFile::Read()
   }
 
   return TRUE;
+}
+
+bool wxTextFile::Close()
+{
+    m_aTypes.Clear();
+    m_aLines.Clear();
+    m_nCurLine = 0;
+
+    return TRUE;
 }
 
 bool wxTextFile::Write(wxTextFileType typeNew)
