@@ -114,7 +114,6 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
             }
             break;
 
-#if 0
         case WM_GETDLGCODE:
             {
                 wxCHECK_MSG( win, 0, _T("should have a parent") );
@@ -126,7 +125,6 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
                 }
             }
             break;
-#endif // 0
 
         // deal with tooltips here
 #if wxUSE_TOOLTIPS && defined(TTN_NEEDTEXT)
