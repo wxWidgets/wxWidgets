@@ -8,6 +8,14 @@ These standard functions are not documented in this manual so please see the STL
 The behaviour of all these functions is identical to the behaviour described
 there.
 
+You may notice that wxString sometimes has many functions which do the same
+thing like, for example, \helpref{Length()}{wxstringlength}, 
+\helpref{Len()}{wxstringlen} and {\tt length()} which all return the string
+length. In all cases of such duplication the {\tt std::string}-compatible
+method ({\tt length()} in this case, always the lowercase version) should be
+used as it will ensure smoother transition to {\tt std::string} when wxWindows
+starts using it instead of wxString.
+
 \wxheading{Derived from}
 
 None
@@ -577,15 +585,13 @@ Searches for the given string. Returns the starting index, or -1 if not found.
 
 \membersection{wxString::First}\label{wxstringfirst}
 
-\func{size\_t}{First}{\param{char}{ c}}
+\func{int}{First}{\param{char}{ c}}
 
-\constfunc{size\_t}{First}{\param{const char*}{ psz}}
+\constfunc{int}{First}{\param{const char*}{ psz}}
 
-\constfunc{size\_t}{First}{\param{const wxString\&}{ str}}
+\constfunc{int}{First}{\param{const wxString\&}{ str}}
 
-\constfunc{size\_t}{First}{\param{const char}{ ch}}
-
-Returns the first occurrence of the item.
+Same as \helpref{Find}{wxstringfind}.
 
 \membersection{wxString::Format}\label{wxstringformat}
 
@@ -645,8 +651,6 @@ to put the string back into a reasonable state.
 \membersection{wxString::Index}\label{wxstringindex}
 
 \constfunc{size\_t}{Index}{\param{char}{ ch}}
-
-Same as \helpref{wxString::Find}{wxstringfind}.
 
 \constfunc{size\_t}{Index}{\param{const char*}{ sz}}
 
