@@ -92,6 +92,15 @@ This can be used for programming event loops, e.g.
 \helpref{wxApp::Pending}{wxapppending}
 
 
+\membersection{wxApp::ExitMainLoop}\label{wxappexitmainloop}
+
+\func{virtual void}{ExitMainLoop}{\void}
+
+Call this to explicitly exit the main message (event) loop.
+You should normally exit the main loop (and the application) by deleting
+the top window.
+
+
 \membersection{wxApp::FilterEvent}\label{wxappfilterevent}
 
 \func{int}{FilterEvent}{\param{wxEvent\& }{event}}
@@ -102,15 +111,6 @@ is processed normally, otherwise either {\tt true} or {\tt false} should be
 returned and the event processing stops immediately considering that the event
 had been already processed (for the former return value) or that it is not
 going to be processed at all (for the latter one).
-
-
-\membersection{wxApp::ExitMainLoop}\label{wxappexitmainloop}
-
-\func{virtual void}{ExitMainLoop}{\void}
-
-Call this to explicitly exit the main message (event) loop.
-You should normally exit the main loop (and the application) by deleting
-the top window.
 
 
 \membersection{wxApp::GetAppName}\label{wxappgetappname}
@@ -148,6 +148,18 @@ otherwise.
 
 \helpref{wxApp::SetExitOnFrameDelete}{wxappsetexitonframedelete},\\
 \helpref{wxApp shutdown overview}{wxappshutdownoverview}
+
+
+\membersection{wxApp::GetInstance}\label{wxappgetinstance}
+
+\func{static wxAppConsole *}{GetInstance}{\void}
+
+Returns the one and only global application object.
+Usually \texttt{wxTheApp} is usead instead.
+
+\wxheading{See also}
+
+\helpref{wxApp::SetInstance}{wxappsetinstance}
 
 
 \membersection{wxApp::GetTopWindow}\label{wxappgettopwindow}
@@ -620,6 +632,22 @@ deleted. If false, the application will continue to run.}
 
 \helpref{wxApp::GetExitOnFrameDelete}{wxappgetexitonframedelete},\\
 \helpref{wxApp shutdown overview}{wxappshutdownoverview}
+
+
+\membersection{wxApp::SetInstance}\label{wxappsetinstance}
+
+\func{static void}{SetInstance}{\param{wxAppConsole* }{app}}
+
+Allows external code to modify global \texttt{wxTheApp}, but you should really
+know what you're doing if you call it.
+
+\wxheading{Parameters}
+
+\docparam{app}{Replacement for the global application object.}
+
+\wxheading{See also}
+
+\helpref{wxApp::GetInstance}{wxappgetinstance}
 
 
 \membersection{wxApp::SetTopWindow}\label{wxappsettopwindow}

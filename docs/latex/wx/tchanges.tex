@@ -129,15 +129,15 @@ sizer->Add(win);
 
 \subsubsection{Less drastic incompatable changes since 2.4.x}\label{24incompatiblelessdrastic}
 
-- no initialization/cleanup can be done in wxApp/~wxApp because they are
+- no initialization/cleanup can be done in \helpref{wxApp}{wxappctor}/\helpref{~wxApp}{wxappdtor} because they are
   now called much earlier/later than before; please move any exiting code
-  from there to wxApp::OnInit()/OnExit()
+  from there to \helpref{wxApp::OnInit()}{wxapponinit}/\helpref{OnExit()}{wxapponexit}
 
-- also, OnExit() is not called if OnInit() fails
+- also, \helpref{OnExit()}{wxapponexit} is not called if \helpref{OnInit()}{wxapponinit} fails
 
-- finally the program exit code is OnRun() return value, not OnExit() one
+- finally the program exit code is \helpref{OnRun()}{wxapponrun} return value, not \helpref{OnExit()}{wxapponexit} one
 
-- wxTheApp can't be assigned to any longer, use wxApp::SetInstance() instead
+- \texttt{wxTheApp} can't be assigned to any longer, use \helpref{wxApp::SetInstance()}{wxappsetinstance} instead
 
 - wxFileType::GetIcon() returns wxIconLocation, not wxIcon
 
@@ -152,7 +152,7 @@ sizer->Add(win);
 - (most) controls now inherit parents colours by default, override
   ShouldInheritColours() to return false if you don't want this to happen
 
-- wxApp::SendIdleEvent() now takes 2 arguments
+- \helpref{wxApp::SendIdleEvents()}{wxappsendidleevents} now takes 2 arguments
 
 - wxTabView::GetLayers() changed return type from wxList& to wxTabLayerList&
   (when WXWIN\_COMPATIBILITY\_2\_4 == 0)
