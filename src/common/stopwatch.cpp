@@ -110,14 +110,48 @@
 
 void wxStopWatch::Start(long t)
 {
+#ifdef 0
+__WXMSW__
+    LARGE_INTEGER frequency_li;
+    ::QueryPerformanceFrequency( &frequency_li );
+    m_frequency = frequency_li.QuadPart;
+    if (m_frequency == 0)
+    {
+        m_t0 = wxGetLocalTimeMillis() - t;
+    }
+    else
+    {
+        LARGE_INTEGER counter_li;
+        ::QueryPerformanceCounter( &counter_li );
+        wxLongLong counter = counter_li.QuadPart;
+        m_t0 = (counter * 10000 / m_frequency) - t*10;
+    }
+#else
     m_t0 = wxGetLocalTimeMillis() - t;
+#endif
     m_pause = 0;
     m_pauseCount = 0;
 }
 
 long wxStopWatch::GetElapsedTime() const
 {
+#ifdef 0
+__WXMSW__
+    if (m_frequency == 0)
+    {
+        return (wxGetLocalTimeMillis() - m_t0).GetLo();
+    }
+    else
+    {
+        LARGE_INTEGER counter_li;
+        ::QueryPerformanceCounter( &counter_li );
+        wxLongLong counter = counter_li.QuadPart;
+        wxLongLong res = (counter * 10000 / m_frequency) - m_t0;
+        return res.GetLo() / 10;
+    }
+#else
     return (wxGetLocalTimeMillis() - m_t0).GetLo();
+#endif
 }
 
 long wxStopWatch::Time() const
