@@ -494,10 +494,10 @@ WXDLLIMPEXP_DATA_BASE(extern HINSTANCE) wxhInstance;
 
 extern "C"
 {
-    WXDLLEXPORT HINSTANCE wxGetInstance();
+    WXDLLIMPEXP_BASE HINSTANCE wxGetInstance();
 }
 
-WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
+WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 
 #if wxUSE_GUI
 

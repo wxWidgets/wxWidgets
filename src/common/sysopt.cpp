@@ -46,7 +46,7 @@
 // singleton class so it can't be done in the dtor)
 class wxSystemOptionsModule : public wxModule
 {
-    friend class WXDLLEXPORT wxSystemOptions;
+    friend class WXDLLIMPEXP_BASE wxSystemOptions;
 public:
     virtual bool OnInit();
     virtual void OnExit();

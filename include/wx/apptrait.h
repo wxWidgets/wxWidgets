@@ -96,7 +96,7 @@ public:
 #else // no platform-specific methods to add to wxAppTraits
     typedef 
     // wxAppTraits must be a class because it was forward declared as class
-    class WXDLLEXPORT wxAppTraits : public wxAppTraitsBase
+    class WXDLLIMPEXP_BASE wxAppTraits : public wxAppTraitsBase
     {
     };
 #endif // platform

@@ -26,11 +26,11 @@
 //
 // note that the parameters may be modified, this is why we pass them by
 // reference!
-extern bool WXDLLEXPORT wxEntryStart(int& argc, wxChar **argv);
+extern bool WXDLLIMPEXP_BASE wxEntryStart(int& argc, wxChar **argv);
 
 // free the resources allocated by the library in wxEntryStart() and shut it
 // down (wxEntryStart() may be called again afterwards if necessary)
-extern void WXDLLEXPORT wxEntryCleanup();
+extern void WXDLLIMPEXP_BASE wxEntryCleanup();
 
 
 // ----------------------------------------------------------------------------
@@ -42,7 +42,7 @@ extern void WXDLLEXPORT wxEntryCleanup();
 // but this one always exists under all platforms
 //
 // returns the program exit code
-extern int WXDLLEXPORT wxEntry(int& argc, wxChar **argv);
+extern int WXDLLIMPEXP_BASE wxEntry(int& argc, wxChar **argv);
 
 
 // ----------------------------------------------------------------------------
@@ -53,15 +53,15 @@ extern int WXDLLEXPORT wxEntry(int& argc, wxChar **argv);
 
 // initialize the library (may be called as many times as needed, but each
 // call to wxInitialize() must be matched by wxUninitialize())
-extern bool WXDLLEXPORT wxInitialize(int argc = 0, wxChar **argv = NULL);
+extern bool WXDLLIMPEXP_BASE wxInitialize(int argc = 0, wxChar **argv = NULL);
 
 // clean up -- the library can't be used any more after the last call to
 // wxUninitialize()
-extern void WXDLLEXPORT wxUninitialize();
+extern void WXDLLIMPEXP_BASE wxUninitialize();
 
 // create an object of this class on stack to initialize/cleanup the library
 // automatically
-class WXDLLEXPORT wxInitializer
+class WXDLLIMPEXP_BASE wxInitializer
 {
 public:
     // initialize the library

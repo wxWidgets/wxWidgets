@@ -16,7 +16,7 @@
 // wxGUI/ConsoleAppTraits: must derive from wxAppTraits, not wxAppTraitsBase
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxConsoleAppTraits : public wxConsoleAppTraitsBase
+class WXDLLIMPEXP_BASE wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
     virtual void *BeforeChildWaitLoop();
@@ -28,7 +28,7 @@ public:
 
 #if wxUSE_GUI
 
-class WXDLLEXPORT wxGUIAppTraits : public wxGUIAppTraitsBase
+class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
     virtual void *BeforeChildWaitLoop();

@@ -16,7 +16,7 @@
 // wxAppTraits: the MSW version adds extra hooks needed by MSW-only code
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAppTraits : public wxAppTraitsBase
+class WXDLLIMPEXP_BASE wxAppTraits : public wxAppTraitsBase
 {
 public:
     // wxExecute() support methods

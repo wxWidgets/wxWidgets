@@ -1287,7 +1287,7 @@ private:
 
 #include "wx/dynarray.h"
 
-WX_DECLARE_EXPORTED_OBJARRAY(wxDateTime, wxDateTimeArray);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDateTime, wxDateTimeArray, WXDLLIMPEXP_BASE);
 
 // ----------------------------------------------------------------------------
 // wxDateTimeHolidayAuthority: an object of this class will decide whether a
@@ -1299,7 +1299,9 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxDateTime, wxDateTimeArray);
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxDateTimeHolidayAuthority;
-WX_DEFINE_EXPORTED_ARRAY(wxDateTimeHolidayAuthority *, wxHolidayAuthoritiesArray);
+WX_DEFINE_USER_EXPORTED_ARRAY(wxDateTimeHolidayAuthority *,
+                              wxHolidayAuthoritiesArray,
+                              WXDLLIMPEXP_BASE);
 
 class wxDateTimeHolidaysModule;
 class WXDLLIMPEXP_BASE wxDateTimeHolidayAuthority
