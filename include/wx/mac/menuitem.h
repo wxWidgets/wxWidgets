@@ -22,20 +22,10 @@
 
 #include "wx/setup.h"
 
-// an exception to the general rule that a normal header doesn't include other
-// headers - only because ownerdrw.h is not always included and I don't want
-// to write #ifdef's everywhere...
-#if wxUSE_OWNER_DRAWN
-#include  "wx/ownerdrw.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // wxMenuItem: an item in the menu, optionally implements owner-drawn behaviour
 // ----------------------------------------------------------------------------
 class WXDLLEXPORT wxMenuItem: public wxMenuItemBase
-#if wxUSE_OWNER_DRAWN
-                            , public wxOwnerDrawn
-#endif
 {
 public:
     // ctor & dtor
@@ -49,32 +39,39 @@ public:
 
     // override base class virtuals
     virtual void SetText(const wxString& strName);
-    virtual wxString GetLabel() const;
-    virtual void SetCheckable(bool checkable);
 
     virtual void Enable(bool bDoEnable = TRUE);
     virtual void Check(bool bDoCheck = TRUE);
-    virtual bool IsChecked() const;
 
-    virtual void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
+    virtual void SetBitmap(const wxBitmap& bitmap) ;
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
 
-#if wxUSE_ACCEL
-    virtual wxAcceleratorEntry *GetAccel() const;
-#endif // wxUSE_ACCEL
+	// update the os specific representation
+	void UpdateItemBitmap() ;
+	void UpdateItemText() ;
+	void UpdateItemStatus() ;
 
-    // unfortunately needed to resolve ambiguity between
-    // wxMenuItemBase::IsCheckable() and wxOwnerDrawn::IsCheckable()
-    bool IsCheckable() const { return wxMenuItemBase::IsCheckable(); }
-
-    // the id for a popup menu is really its menu handle (as required by
-    // ::AppendMenu() API), so this function will return either the id or the
-    // menu handle depending on what we're
-    int GetRealId() const;
-
-    static int MacBuildMenuString(unsigned char* outMacItemText, wxInt16 *outMacShortcutChar , wxUint8 *outMacModifiers , const char *inItemName , bool useShortcuts ) ;
+    // mark item as belonging to the given radio group
+    void SetAsRadioGroupStart();
+    void SetRadioGroupStart(int start);
+    void SetRadioGroupEnd(int end);
 
 private:
+    void UncheckRadio() ;
+    
+    // the positions of the first and last items of the radio group this item
+    // belongs to or -1: start is the radio group start and is valid for all
+    // but first radio group items (m_isRadioGroupStart == FALSE), end is valid
+    // only for the first one
+    union
+    {
+        int start;
+        int end;
+    } m_radioGroup;
+
+    // does this item start a radio group?
+    bool m_isRadioGroupStart;
+
     wxBitmap  m_bitmap; // Bitmap for menuitem, if any
     void* m_menu ; // the appropriate menu , may also be a system menu
 

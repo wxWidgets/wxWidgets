@@ -31,14 +31,18 @@ bool UMAGetProcessModeDoesActivateOnFGSwitch() ;
 
 // menu manager
 
-void 			UMASetMenuTitle( MenuRef menu , StringPtr title ) ;
+MenuRef 		UMANewMenu( SInt16 id , const wxString& title ) ;
+void 			UMASetMenuTitle( MenuRef menu , const wxString& title ) ;
 UInt32 			UMAMenuEvent( EventRecord *inEvent ) ;
-void 			UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex item ) ;	
-void 			UMADisableMenuItem( MenuRef inMenu , MenuItemIndex item ) ;	
-void			UMAAppendSubMenuItem( MenuRef menu , StringPtr label , SInt16 submenuid ) ;
-void			UMAInsertSubMenuItem( MenuRef menu , StringPtr label , MenuItemIndex item , SInt16 submenuid  ) ;
-void			UMAAppendMenuItem( MenuRef menu , StringPtr label , SInt16 key= 0, UInt8 modifiers = 0 ) ;
-void			UMAInsertMenuItem( MenuRef menu , StringPtr label , MenuItemIndex item , SInt16 key = 0 , UInt8 modifiers = 0 ) ;
+void 			UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex item , bool enable ) ;	
+
+void			UMAAppendSubMenuItem( MenuRef menu , const wxString& title , SInt16 submenuid ) ;
+void			UMAInsertSubMenuItem( MenuRef menu , const wxString& title , MenuItemIndex item , SInt16 submenuid  ) ;
+void			UMAAppendMenuItem( MenuRef menu , const wxString& title , wxAcceleratorEntry *entry = NULL  ) ;
+void			UMAInsertMenuItem( MenuRef menu , const wxString& title , MenuItemIndex item , wxAcceleratorEntry *entry = NULL ) ;
+void 			UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEntry *entry ) ;
+
+void			UMASetMenuItemText(  MenuRef menu,  MenuItemIndex item, const wxString& title ) ;
 
 // quickdraw
 

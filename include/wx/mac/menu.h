@@ -16,13 +16,6 @@
 #pragma interface "menu.h"
 #endif
 
-#if wxUSE_ACCEL
-    #include "wx/accel.h"
-    #include "wx/dynarray.h"
-
-    WX_DEFINE_EXPORTED_ARRAY(wxAcceleratorEntry *, wxAcceleratorArray);
-#endif // wxUSE_ACCEL
-
 class WXDLLEXPORT wxFrame;
 
 // ----------------------------------------------------------------------------
@@ -44,6 +37,7 @@ public:
     virtual bool DoAppend(wxMenuItem *item);
     virtual bool DoInsert(size_t pos, wxMenuItem *item);
     virtual wxMenuItem *DoRemove(wxMenuItem *item);
+    virtual void Attach(wxMenuBarBase *menubar) ;
 
     virtual void Break();
 
@@ -74,18 +68,6 @@ public:
     WXHMENU GetHMenu() const { return m_hMenu; }
 
 	short MacGetMenuId() { return m_macMenuId ; }
-#if wxUSE_ACCEL
-    // called by wxMenuBar to build its accel table from the accels of all menus
-    bool HasAccels() const { return !m_accels.IsEmpty(); }
-    size_t GetAccelCount() const { return m_accels.GetCount(); }
-    size_t CopyAccels(wxAcceleratorEntry *accels) const;
-
-    // called by wxMenuItem when its accels changes
-    void UpdateAccel(wxMenuItem *item);
-
-    // helper used by wxMenu itself (returns the index in m_accels)
-    int FindAccel(int id) const;
-#endif // wxUSE_ACCEL
 
 private:
     // common part of all ctors
@@ -94,8 +76,14 @@ private:
     // common part of Append/Insert (behaves as Append is pos == (size_t)-1)
     bool DoInsertOrAppend(wxMenuItem *item, size_t pos = (size_t)-1);
 
+    // terminate the current radio group, if any
+    void EndRadioGroup();
+
     // if TRUE, insert a breal before appending the next item
     bool m_doBreak;
+
+    // the position of the first item in the current radio group or -1
+    int m_startRadioGroup;
 
     // the menu handle of this menu
     WXHMENU m_hMenu;
@@ -103,10 +91,6 @@ private:
   	short				m_macMenuId;
 
   	static short		s_macNextMenuId ;
-#if wxUSE_ACCEL
-    // the accelerators for our menu items
-    wxAcceleratorArray m_accels;
-#endif // wxUSE_ACCEL
 
     DECLARE_DYNAMIC_CLASS(wxMenu)
 };
@@ -167,13 +151,6 @@ public:
 
 		// set the invoking window for all menus and submenus
 	void SetInvokingWindow( wxFrame* frame ) ;
-#if wxUSE_ACCEL
-    // get the accel table for all the menus
-    const wxAcceleratorTable& GetAccelTable() const { return m_accelTable; }
-
-    // update the accel table (must be called after adding/deletign a menu)
-    void RebuildAccelTable();
-#endif // wxUSE_ACCEL
 
     // if the menubar is modified, the display is not updated automatically,
     // call this function to update it (m_menuBarFrame should be !NULL)
@@ -185,17 +162,13 @@ public:
 protected:
     // common part of all ctors
     void Init();
+    wxWindow        *m_invokingWindow;
 
 #if WXWIN_COMPATIBILITY
     wxEvtHandler *m_eventHandler;
 #endif // WXWIN_COMPATIBILITY
 
     wxArrayString m_titles;
-
-#if wxUSE_ACCEL
-    // the accelerator table for all accelerators in all our menus
-    wxAcceleratorTable m_accelTable;
-#endif // wxUSE_ACCEL
 
 private:
   static wxMenuBar*			s_macInstalledMenuBar ;
