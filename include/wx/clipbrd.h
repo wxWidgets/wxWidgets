@@ -121,7 +121,7 @@ public:
         }
     }
 
-    bool IsOk() const { return m_clipboard->IsOpened(); }
+    bool operator!() const { return !m_clipboard->IsOpened(); }
 
     ~wxClipboardLocker()
     {
