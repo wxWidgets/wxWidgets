@@ -917,6 +917,8 @@ static MemoryCriticalSection memLocker;
 
 #endif
 
+#ifdef __WXDEBUG__
+#if wxUSE_GLOBAL_MEMORY_OPERATORS
 void * operator new (size_t size, wxChar * fileName, int lineNum)
 {
     return wxDebugAlloc(size, fileName, lineNum, false, false);
@@ -1058,6 +1060,9 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
 
     free((char *)st);
 }
+
+#endif // wxUSE_GLOBAL_MEMORY_OPERATORS
+#endif // __WXDEBUG__
 
 // Trace: send output to the current debugging stream
 void wxTrace(const wxChar * ...)
