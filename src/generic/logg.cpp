@@ -670,7 +670,9 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
                          const wxArrayLong& times,
                          const wxString& caption,
                          long style)
-           : wxDialog(parent, -1, caption)
+           : wxDialog(parent, -1, caption,
+                      wxDefaultPosition, wxDefaultSize,
+                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
     if ( ms_details.IsEmpty() )
     {
@@ -721,20 +723,21 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     // to close the log dialog with <Esc> which wouldn't work otherwise (as it
     // translates into click on cancel button)
     wxButton *btnOk = new wxButton(this, wxID_CANCEL, _("OK"));
-    sizerButtons->Add(btnOk, 0, wxCENTRE|wxBOTTOM, MARGIN/2);
+    sizerButtons->Add(btnOk, 0, wxCENTRE | wxBOTTOM, MARGIN/2);
     m_btnDetails = new wxButton(this, wxID_MORE, ms_details + _T(" >>"));
-    sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);
+    sizerButtons->Add(m_btnDetails, 0, wxCENTRE | wxTOP, MARGIN/2 - 1);
 
 #ifndef __WIN16__
     wxIcon icon = wxTheApp->GetStdIcon((int)(style & wxICON_MASK));
-    sizerAll->Add(new wxStaticBitmap(this, -1, icon), 0, wxCENTRE);
+    sizerAll->Add(new wxStaticBitmap(this, -1, icon), 0);
 #endif // !Win16
 
     const wxString& message = messages.Last();
-    sizerAll->Add(CreateTextSizer(message), 0, wxCENTRE|wxLEFT|wxRIGHT, MARGIN);
-    sizerAll->Add(sizerButtons, 0, wxALIGN_RIGHT|wxLEFT, MARGIN);
+    sizerAll->Add(CreateTextSizer(message), 1,
+                  wxALIGN_CENTRE_VERTICAL | wxLEFT | wxRIGHT, MARGIN);
+    sizerAll->Add(sizerButtons, 0, wxALIGN_RIGHT | wxLEFT, MARGIN);
 
-    sizerTop->Add(sizerAll, 0, wxCENTRE|wxALL, MARGIN);
+    sizerTop->Add(sizerAll, 0, wxALL | wxEXPAND, MARGIN);
 
     SetAutoLayout(TRUE);
     SetSizer(sizerTop);
