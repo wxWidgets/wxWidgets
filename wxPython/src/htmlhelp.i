@@ -42,11 +42,12 @@
 
 //---------------------------------------------------------------------------
 
-class wxHtmlBookRecord  {
+class wxHtmlBookRecord : public wxObject {
 public:
-    wxHtmlBookRecord(const wxString& basepath, const wxString& title,
-		     const wxString& start);
+    wxHtmlBookRecord(const wxString& bookfile, const wxString& basepath,
+                     const wxString& title, const wxString& start);
 
+    wxString GetBookFile();
     wxString GetTitle();
     wxString GetStart();
     wxString GetBasePath();
@@ -54,18 +55,24 @@ public:
     void SetContentsRange(int start, int end);
     int GetContentsStart();
     int GetContentsEnd();
+
+    void SetTitle(const wxString& title);
+    void SetBasePath(const wxString& path);
+    void SetStart(const wxString& start);
+
+    wxString GetFullPath(const wxString &page) const;
 };
 
 //---------------------------------------------------------------------------
 
-typedef struct
+struct wxHtmlContentsItem
 {
     short int m_Level;
     int m_ID;
     char* m_Name;
     char* m_Page;
     wxHtmlBookRecord *m_Book;
-} wxHtmlContentsItem;
+};
 
 //---------------------------------------------------------------------------
 
