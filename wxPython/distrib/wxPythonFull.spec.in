@@ -1,7 +1,6 @@
 %define pref 	%{_prefix}
 %define python 	@PYTHON@
 %define pyver 	@PYVER@
-%define debug 	@DEBUG@
 %define port  	@PORT@
 %define lcport 	@LCPORT@
 %define tarname @TARNAME@
@@ -9,21 +8,16 @@
 %define ver2    @VER2@
 %define release 1
 %define wxpref  %{pref}/lib/wxPython
+%define name    wxPython%{port}-py%{pyver}
 
 # Should --enable-debug_flag be used in release builds?
+# Using it defines __WXDEBUG__ and gives us runtime diagnostics
+# that are turned into Python exceptions starting with 2.3.4.
 %define debug_flag 1
 
 
-%if %{debug}
-    %define name      wxPython%{port}-py%{pyver}-dbg
-    %define othername wxPython%{port}-py%{pyver}
-%else
-    %define name      wxPython%{port}-py%{pyver}
-    %define othername wxPython%{port}-py%{pyver}-dbg
-%endif
 
-
-%if %{debug} || %{debug_flag}
+%if %{debug_flag}
     %define wxconfigname %{wxpref}/bin/wx%{lcport}d-%{ver2}-config
 %else
     %define wxconfigname %{wxpref}/bin/wx%{lcport}-%{ver2}-config
@@ -49,8 +43,6 @@ Provides: wx%{port} = %{version}
 Provides: wxPython  = %{version}
 
 
-# They conflict with each other, so let them replace each other
-Obsoletes: %{othername}
 # old wxPython packages
 Obsoletes: wxPython
 
@@ -99,13 +91,10 @@ $WXDIR/configure --with-%{lcport} \
 	--disable-soname \
 	--enable-rpath=%{wxpref}/lib \
 	--with-opengl \
-%if %{debug}
-	--enable-debug \
-%else
+	--enable-geometry \
 	--enable-optimise \
 %if %{debug_flag}
 	--enable-debug_flag \
-%endif
 %endif
 	--with-libjpeg=builtin \
 	--with-libpng=builtin \

@@ -10,8 +10,8 @@ Windows and Mac OS X binaries are built.
 
 If you are reading this file then you are probably interested in
 building your own copy of wxPython from the sources contained in this
-file.  If you wish to use the released wxGTK binary as has been done
-in the past then you can still follow the old build directions in
+archive.  If you wish to use the released wxGTK binary as has been
+done in the past then you can still follow the old build directions in
 wxPython/BUILD.unix.txt.  If you are building for Windows or Mac OS X
 then you should look at BUILD.win32.txt or BUILD.osx.txt respectivly.
 In all these cases you should use the IN_CVS_TREE=1 flag since this
