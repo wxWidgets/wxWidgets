@@ -45,7 +45,6 @@ public:
     virtual bool GetValue() const ;
 
     virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual void SetLabel(const wxString& label);
     virtual void Command(wxCommandEvent& event);
 
 protected:

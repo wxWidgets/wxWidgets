@@ -165,10 +165,6 @@ bool wxCheckBox::Create(wxWindow *parent,
     return MSWCreateControl(wxT("BUTTON"), msStyle, pos, size, label, 0);
 }
 
-void wxCheckBox::SetLabel(const wxString& label)
-{
-    SetWindowText(GetHwnd(), label);
-}
 
 wxSize wxCheckBox::DoGetBestSize() const
 {

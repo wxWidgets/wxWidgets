@@ -232,31 +232,11 @@ void wxStaticText::SetLabel(const wxString& st )
 {
     SetTitle( st ) ;
     m_label = st ;
-    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
-    {
-        // temporary fix until layout measurement and drawing are in synch again
-        Refresh() ;
-        SetSize( GetBestSize() ) ;
-    }
+
+    if (GetAdjustMinSizeFlag())
+        SetBestSize(wxDefaultSize);
+
     Refresh() ;
     Update() ;
 }
 
-bool wxStaticText::SetFont(const wxFont& font)
-{
-    bool ret = wxControl::SetFont(font);
-
-	if ( ret )
-	{
-	    // adjust the size of the window to fit to the label unless autoresizing is
-	    // disabled
-	    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
-	    {
-	        // temporary fix until layout measurement and drawing are in synch again
-            Refresh() ;
-	        SetSize( GetBestSize() );
-	    }
-	}
-
-    return ret;
-}

@@ -40,7 +40,6 @@ public:
 
   // accessors
   void SetLabel( const wxString &str ) ;
-  bool SetFont( const wxFont &font );
 
 protected :
 

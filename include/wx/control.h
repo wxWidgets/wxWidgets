@@ -32,10 +32,11 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxControlNameStr;
 // wxControl is the base class for all controls
 // ----------------------------------------------------------------------------
 
+
 class WXDLLEXPORT wxControlBase : public wxWindow
 {
 public:
-    wxControlBase() { }
+    wxControlBase() { Init(); }
 
     virtual ~wxControlBase();
 
@@ -63,7 +64,16 @@ public:
     // if the button was clicked)
     virtual void Command(wxCommandEvent &event);
 
+        
+    virtual void SetLabel(const wxString& label);
+    virtual bool SetFont(const wxFont& font);
+    virtual bool GetAdjustMinSizeFlag() const { return m_adjustMinSize; }
+    void SetAdjustMinSizeFlag(bool adjust) { m_adjustMinSize = adjust; }
+    
+    
 protected:
+    void Init();
+    
     // creates the control (calls wxWindowBase::CreateBase inside) and adds it
     // to the list of parents children
     bool CreateControl(wxWindowBase *parent,
@@ -88,6 +98,9 @@ protected:
         SetBestSize(size);
     }
 
+    // should minsize and size be adjusted when font or label change?
+    bool        m_adjustMinSize;  
+    
     DECLARE_NO_COPY_CLASS(wxControlBase)
 };
 

@@ -110,11 +110,6 @@ WXDWORD wxToggleButton::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-void wxToggleButton::SetLabel(const wxString& label)
-{
-    SetWindowText(GetHwnd(), label);
-}
-
 wxSize wxToggleButton::DoGetBestSize() const
 {
    wxString label = wxGetWindowText(GetHWND());

@@ -540,6 +540,8 @@ void wxRadioBox::SetLabel( const wxString& label )
     wxControl::SetLabel( label );
 
     gtk_frame_set_label( GTK_FRAME(m_widget), wxGTK_CONV( wxControl::GetLabel() ) );
+
+    PostSetLabel();
 }
 
 void wxRadioBox::SetString( int item, const wxString& label )

@@ -145,6 +145,8 @@ void wxRadioButton::SetLabel( const wxString& label )
 #else
     gtk_label_set( g_label, wxGTK_CONV( GetLabel() ) );
 #endif
+
+    PostSetLabel();
 }
 
 void wxRadioButton::SetValue( bool val )

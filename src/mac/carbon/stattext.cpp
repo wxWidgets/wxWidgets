@@ -92,27 +92,9 @@ void wxStaticText::SetLabel(const wxString& st )
     SetControlData( *m_peer, kControlEntireControl , kControlStaticTextCFStringTag, sizeof( CFStringRef ),
 		&ref );
 
-    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
-    {
-        SetSize( GetBestSize() ) ;
-        SetSizeHints(GetSize());
-    }
+    if (GetAdjustMinSizeFlag())
+        SetBestSize(wxDefaultSize);
 
     Update() ;
 }
 
-bool wxStaticText::SetFont(const wxFont& font)
-{
-    bool ret = wxControl::SetFont(font);
-
-	if ( ret )
-	{
-	    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
-            {
-	        SetSize( GetBestSize() );
-                SetSizeHints(GetSize());
-            }
-	}
-
-    return ret;
-}

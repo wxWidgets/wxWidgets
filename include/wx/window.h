@@ -230,6 +230,9 @@ public:
     void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING)
         { Move(pt.x, pt.y, flags); }
 
+    // A 'Smart' SetSize that will fill in default size values with 'best' size
+    void SetBestFittingSize(const wxSize& size=wxDefaultSize);
+
         // Z-order
     virtual void Raise() = 0;
     virtual void Lower() = 0;
@@ -1136,15 +1139,10 @@ protected:
     static int WidthDefault(int w) { return w == -1 ? 20 : w; }
     static int HeightDefault(int h) { return h == -1 ? 20 : h; }
 
-    // set the best size for the control if the default size was given:
-    // replaces the fields of size == -1 with the best values for them and
-    // calls SetSize() if needed
-    //
-    // This function is rather unfortunately named..  it's really just a
-    // smarter SetSize / convenience function for expanding wxDefaultSize.
-    // Note that it does not influence the value returned by GetBestSize
-    // at all.
-    void SetBestSize(const wxSize& size);
+    // keep the old name for compatibility, at least until all the internal
+    // usages of it are changed to SetBestFittingSize
+    void SetBestSize(const wxSize& size) { SetBestFittingSize(size); }
+        
 
     // set the initial window size if none is given (i.e. at least one of the
     // components of the size passed to ctor/Create() is -1)

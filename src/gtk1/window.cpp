@@ -4043,7 +4043,7 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
 #endif
     }
 
-    if ( m_hasFgCol )
+    if ( m_foregroundColour.Ok() )
     {
         GdkColor *fg = m_foregroundColour.GetColor();
         
@@ -4057,7 +4057,7 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
         style->color_flags[GTK_STATE_ACTIVE] = GTK_RC_FG;
     }
 
-    if ( m_hasBgCol )
+    if ( m_backgroundColour.Ok() )
     {
         GdkColor *bg = m_backgroundColour.GetColor();
 

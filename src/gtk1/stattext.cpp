@@ -146,27 +146,10 @@ void wxStaticText::SetLabel( const wxString &label )
 #else
     gtk_label_set( GTK_LABEL(m_widget), wxGTK_CONV( m_label ) );
 #endif
-
-    // adjust the label size to the new label unless disabled
-    if (!HasFlag(wxST_NO_AUTORESIZE))
-    {
-        SetSize( GetBestSize() );
-        SetSizeHints(GetSize());
-    }
+    
+    PostSetLabel();
 }
 
-bool wxStaticText::SetFont( const wxFont &font )
-{
-    bool ret = wxControl::SetFont(font);
-
-    // adjust the label size to the new label unless disabled
-    if (!HasFlag(wxST_NO_AUTORESIZE))
-    {
-        SetSize( GetBestSize() );
-        SetSizeHints(GetSize());
-    }
-    return ret;
-}
 
 wxSize wxStaticText::DoGetBestSize() const
 {

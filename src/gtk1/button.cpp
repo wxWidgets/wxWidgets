@@ -175,6 +175,8 @@ void wxButton::SetLabel( const wxString &label )
 #else
     gtk_label_set( GTK_LABEL( BUTTON_CHILD(m_widget) ), wxGTK_CONV( GetLabel() ) );
 #endif
+
+    PostSetLabel();
 }
 
 bool wxButton::Enable( bool enable )

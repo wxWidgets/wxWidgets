@@ -2390,6 +2390,20 @@ applications on the system.
 \helpref{wxWindow::Refresh}{wxwindowrefresh},\rtfsp
 \helpref{wxEraseEvent}{wxeraseevent}
 
+\membersection{wxWindow::SetBestFittingSize}\label{wxwindowsetbestfittingsize}
+
+\func{void}{SetBestFittingSize}{\param{const wxSize& }{size = wxDefaultSize}}
+
+A {\it smart} SetSize that will fill in default size components with the
+window's {\it best} size values.  Also set's the minsize for use with
+sizers.
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetSize}{wxwindowsetsize}
+\helpref{wxWindow::GetBestSize}{wxwindowgetbestsize}
+\helpref{wxWindow::SetSizeHints}{wxwindowsetsizehints}
+
 
 \membersection{wxWindow::SetCaret}\label{wxwindowsetcaret}
 

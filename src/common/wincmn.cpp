@@ -620,7 +620,7 @@ wxSize wxWindowBase::DoGetBestSize() const
     }
 }
 
-void wxWindowBase::SetBestSize(const wxSize& size)
+void wxWindowBase::SetBestFittingSize(const wxSize& size)
 {
     // If the given size is incomplete then merge with the best size.
     wxSize sizeBest;

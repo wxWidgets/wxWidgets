@@ -415,8 +415,13 @@ default values.", "",
         "Moves the window to the given position.", "",
         MoveXY);
     
+    DocDeclStr(
+        void , SetBestFittingSize(const wxSize& size=wxDefaultSize),
+        "A 'Smart' SetSize that will fill in default size components with the
+window's *best size* values.  Also set's the minsize for use with sizers.", "");
+    
 
-
+    
     DocDeclStr(
         virtual void , Raise(),
         "Raises the window to the top of the window hierarchy if it is a
@@ -1267,16 +1272,17 @@ this.", "");
         "Sets the background colour of the window.  Returns True if the colour
 was changed.  The background colour is usually painted by the default
 EVT_ERASE_BACKGROUND event handler function under Windows and
-automatically under GTK.
+automatically under GTK.  Using `wx.NullColour` will reset the window
+to the default background colour.
 
 Note that setting the background colour may not cause an immediate
-refresh, so you may wish to call ClearBackground or Refresh after
+refresh, so you may wish to call `ClearBackground` or `Refresh` after
 calling this function.
 
-Use this function with care under GTK+ as the new appearance of the
-window might not look equally well when used with themes, i.e GTK+'s
-ability to change its look as the user wishes with run-time loadable
-modules.", "");
+Using this function will disable attempts to use themes for this
+window, if the system supports them.  Use with care since usually the
+themes represent the appearance chosen by the user to be used for all
+applications on the system.", "");
 
     DocDeclStr(
         void , SetDefaultBackgroundColour(const wxColour& colour),
