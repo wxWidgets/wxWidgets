@@ -5,7 +5,6 @@ import _misc_
 
 import _core
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
 #---------------------------------------------------------------------------
 
 SYS_OEM_FIXED_FONT = _misc_.SYS_OEM_FIXED_FONT
@@ -104,32 +103,32 @@ class SystemSettings(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSystemSettings instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def GetColour(*args, **kwargs):
-        """SystemSettings.GetColour(int index) -> Colour"""
+        """GetColour(int index) -> Colour"""
         return _misc_.SystemSettings_GetColour(*args, **kwargs)
 
     GetColour = staticmethod(GetColour)
     def GetFont(*args, **kwargs):
-        """SystemSettings.GetFont(int index) -> Font"""
+        """GetFont(int index) -> Font"""
         return _misc_.SystemSettings_GetFont(*args, **kwargs)
 
     GetFont = staticmethod(GetFont)
     def GetMetric(*args, **kwargs):
-        """SystemSettings.GetMetric(int index) -> int"""
+        """GetMetric(int index) -> int"""
         return _misc_.SystemSettings_GetMetric(*args, **kwargs)
 
     GetMetric = staticmethod(GetMetric)
     def HasFeature(*args, **kwargs):
-        """SystemSettings.HasFeature(int index) -> bool"""
+        """HasFeature(int index) -> bool"""
         return _misc_.SystemSettings_HasFeature(*args, **kwargs)
 
     HasFeature = staticmethod(HasFeature)
     def GetScreenType(*args, **kwargs):
-        """SystemSettings.GetScreenType() -> int"""
+        """GetScreenType() -> int"""
         return _misc_.SystemSettings_GetScreenType(*args, **kwargs)
 
     GetScreenType = staticmethod(GetScreenType)
     def SetScreenType(*args, **kwargs):
-        """SystemSettings.SetScreenType(int screen)"""
+        """SetScreenType(int screen)"""
         return _misc_.SystemSettings_SetScreenType(*args, **kwargs)
 
     SetScreenType = staticmethod(SetScreenType)
@@ -175,27 +174,27 @@ class SystemOptions(_core.Object):
         self.thisown = 1
         del newobj.thisown
     def SetOption(*args, **kwargs):
-        """SystemOptions.SetOption(String name, String value)"""
+        """SetOption(String name, String value)"""
         return _misc_.SystemOptions_SetOption(*args, **kwargs)
 
     SetOption = staticmethod(SetOption)
     def SetOptionInt(*args, **kwargs):
-        """SystemOptions.SetOptionInt(String name, int value)"""
+        """SetOptionInt(String name, int value)"""
         return _misc_.SystemOptions_SetOptionInt(*args, **kwargs)
 
     SetOptionInt = staticmethod(SetOptionInt)
     def GetOption(*args, **kwargs):
-        """SystemOptions.GetOption(String name) -> String"""
+        """GetOption(String name) -> String"""
         return _misc_.SystemOptions_GetOption(*args, **kwargs)
 
     GetOption = staticmethod(GetOption)
     def GetOptionInt(*args, **kwargs):
-        """SystemOptions.GetOptionInt(String name) -> int"""
+        """GetOptionInt(String name) -> int"""
         return _misc_.SystemOptions_GetOptionInt(*args, **kwargs)
 
     GetOptionInt = staticmethod(GetOptionInt)
     def HasOption(*args, **kwargs):
-        """SystemOptions.HasOption(String name) -> bool"""
+        """HasOption(String name) -> bool"""
         return _misc_.SystemOptions_HasOption(*args, **kwargs)
 
     HasOption = staticmethod(HasOption)
@@ -554,12 +553,12 @@ class ToolTip(_core.Object):
         return _misc_.ToolTip_GetWindow(*args, **kwargs)
 
     def Enable(*args, **kwargs):
-        """ToolTip.Enable(bool flag)"""
+        """Enable(bool flag)"""
         return _misc_.ToolTip_Enable(*args, **kwargs)
 
     Enable = staticmethod(Enable)
     def SetDelay(*args, **kwargs):
-        """ToolTip.SetDelay(long milliseconds)"""
+        """SetDelay(long milliseconds)"""
         return _misc_.ToolTip_SetDelay(*args, **kwargs)
 
     SetDelay = staticmethod(SetDelay)
@@ -1095,17 +1094,17 @@ class Log(object):
         self.thisown = 1
         del newobj.thisown
     def IsEnabled(*args, **kwargs):
-        """Log.IsEnabled() -> bool"""
+        """IsEnabled() -> bool"""
         return _misc_.Log_IsEnabled(*args, **kwargs)
 
     IsEnabled = staticmethod(IsEnabled)
     def EnableLogging(*args, **kwargs):
-        """Log.EnableLogging(bool doIt=True) -> bool"""
+        """EnableLogging(bool doIt=True) -> bool"""
         return _misc_.Log_EnableLogging(*args, **kwargs)
 
     EnableLogging = staticmethod(EnableLogging)
     def OnLog(*args, **kwargs):
-        """Log.OnLog(wxLogLevel level, wxChar szString, time_t t)"""
+        """OnLog(wxLogLevel level, wxChar szString, time_t t)"""
         return _misc_.Log_OnLog(*args, **kwargs)
 
     OnLog = staticmethod(OnLog)
@@ -1114,102 +1113,102 @@ class Log(object):
         return _misc_.Log_Flush(*args, **kwargs)
 
     def FlushActive(*args, **kwargs):
-        """Log.FlushActive()"""
+        """FlushActive()"""
         return _misc_.Log_FlushActive(*args, **kwargs)
 
     FlushActive = staticmethod(FlushActive)
     def GetActiveTarget(*args, **kwargs):
-        """Log.GetActiveTarget() -> Log"""
+        """GetActiveTarget() -> Log"""
         return _misc_.Log_GetActiveTarget(*args, **kwargs)
 
     GetActiveTarget = staticmethod(GetActiveTarget)
     def SetActiveTarget(*args, **kwargs):
-        """Log.SetActiveTarget(Log pLogger) -> Log"""
+        """SetActiveTarget(Log pLogger) -> Log"""
         return _misc_.Log_SetActiveTarget(*args, **kwargs)
 
     SetActiveTarget = staticmethod(SetActiveTarget)
     def Suspend(*args, **kwargs):
-        """Log.Suspend()"""
+        """Suspend()"""
         return _misc_.Log_Suspend(*args, **kwargs)
 
     Suspend = staticmethod(Suspend)
     def Resume(*args, **kwargs):
-        """Log.Resume()"""
+        """Resume()"""
         return _misc_.Log_Resume(*args, **kwargs)
 
     Resume = staticmethod(Resume)
     def SetVerbose(*args, **kwargs):
-        """Log.SetVerbose(bool bVerbose=True)"""
+        """SetVerbose(bool bVerbose=True)"""
         return _misc_.Log_SetVerbose(*args, **kwargs)
 
     SetVerbose = staticmethod(SetVerbose)
     def SetLogLevel(*args, **kwargs):
-        """Log.SetLogLevel(wxLogLevel logLevel)"""
+        """SetLogLevel(wxLogLevel logLevel)"""
         return _misc_.Log_SetLogLevel(*args, **kwargs)
 
     SetLogLevel = staticmethod(SetLogLevel)
     def DontCreateOnDemand(*args, **kwargs):
-        """Log.DontCreateOnDemand()"""
+        """DontCreateOnDemand()"""
         return _misc_.Log_DontCreateOnDemand(*args, **kwargs)
 
     DontCreateOnDemand = staticmethod(DontCreateOnDemand)
     def SetTraceMask(*args, **kwargs):
-        """Log.SetTraceMask(wxTraceMask ulMask)"""
+        """SetTraceMask(wxTraceMask ulMask)"""
         return _misc_.Log_SetTraceMask(*args, **kwargs)
 
     SetTraceMask = staticmethod(SetTraceMask)
     def AddTraceMask(*args, **kwargs):
-        """Log.AddTraceMask(String str)"""
+        """AddTraceMask(String str)"""
         return _misc_.Log_AddTraceMask(*args, **kwargs)
 
     AddTraceMask = staticmethod(AddTraceMask)
     def RemoveTraceMask(*args, **kwargs):
-        """Log.RemoveTraceMask(String str)"""
+        """RemoveTraceMask(String str)"""
         return _misc_.Log_RemoveTraceMask(*args, **kwargs)
 
     RemoveTraceMask = staticmethod(RemoveTraceMask)
     def ClearTraceMasks(*args, **kwargs):
-        """Log.ClearTraceMasks()"""
+        """ClearTraceMasks()"""
         return _misc_.Log_ClearTraceMasks(*args, **kwargs)
 
     ClearTraceMasks = staticmethod(ClearTraceMasks)
     def GetTraceMasks(*args, **kwargs):
-        """Log.GetTraceMasks() -> wxArrayString"""
+        """GetTraceMasks() -> wxArrayString"""
         return _misc_.Log_GetTraceMasks(*args, **kwargs)
 
     GetTraceMasks = staticmethod(GetTraceMasks)
     def SetTimestamp(*args, **kwargs):
-        """Log.SetTimestamp(wxChar ts)"""
+        """SetTimestamp(wxChar ts)"""
         return _misc_.Log_SetTimestamp(*args, **kwargs)
 
     SetTimestamp = staticmethod(SetTimestamp)
     def GetVerbose(*args, **kwargs):
-        """Log.GetVerbose() -> bool"""
+        """GetVerbose() -> bool"""
         return _misc_.Log_GetVerbose(*args, **kwargs)
 
     GetVerbose = staticmethod(GetVerbose)
     def GetTraceMask(*args, **kwargs):
-        """Log.GetTraceMask() -> wxTraceMask"""
+        """GetTraceMask() -> wxTraceMask"""
         return _misc_.Log_GetTraceMask(*args, **kwargs)
 
     GetTraceMask = staticmethod(GetTraceMask)
     def IsAllowedTraceMask(*args, **kwargs):
-        """Log.IsAllowedTraceMask(wxChar mask) -> bool"""
+        """IsAllowedTraceMask(wxChar mask) -> bool"""
         return _misc_.Log_IsAllowedTraceMask(*args, **kwargs)
 
     IsAllowedTraceMask = staticmethod(IsAllowedTraceMask)
     def GetLogLevel(*args, **kwargs):
-        """Log.GetLogLevel() -> wxLogLevel"""
+        """GetLogLevel() -> wxLogLevel"""
         return _misc_.Log_GetLogLevel(*args, **kwargs)
 
     GetLogLevel = staticmethod(GetLogLevel)
     def GetTimestamp(*args, **kwargs):
-        """Log.GetTimestamp() -> wxChar"""
+        """GetTimestamp() -> wxChar"""
         return _misc_.Log_GetTimestamp(*args, **kwargs)
 
     GetTimestamp = staticmethod(GetTimestamp)
     def TimeStamp(*args, **kwargs):
-        """Log.TimeStamp() -> String"""
+        """TimeStamp() -> String"""
         return _misc_.Log_TimeStamp(*args, **kwargs)
 
     TimeStamp = staticmethod(TimeStamp)
@@ -1577,17 +1576,17 @@ class Process(_core.EvtHandler):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyProcess instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Kill(*args, **kwargs):
-        """Process.Kill(int pid, int sig=SIGTERM) -> int"""
+        """Kill(int pid, int sig=SIGTERM) -> int"""
         return _misc_.Process_Kill(*args, **kwargs)
 
     Kill = staticmethod(Kill)
     def Exists(*args, **kwargs):
-        """Process.Exists(int pid) -> bool"""
+        """Exists(int pid) -> bool"""
         return _misc_.Process_Exists(*args, **kwargs)
 
     Exists = staticmethod(Exists)
     def Open(*args, **kwargs):
-        """Process.Open(String cmd, int flags=EXEC_ASYNC) -> Process"""
+        """Open(String cmd, int flags=EXEC_ASYNC) -> Process"""
         return _misc_.Process_Open(*args, **kwargs)
 
     Open = staticmethod(Open)
@@ -2051,12 +2050,12 @@ class Sound(object):
         return _misc_.Sound_Play(*args)
 
     def PlaySound(*args):
-        """Sound.PlaySound(String filename, unsigned int flags=SOUND_ASYNC) -> bool"""
+        """PlaySound(String filename, unsigned int flags=SOUND_ASYNC) -> bool"""
         return _misc_.Sound_PlaySound(*args)
 
     PlaySound = staticmethod(PlaySound)
     def Stop(*args, **kwargs):
-        """Sound.Stop()"""
+        """Stop()"""
         return _misc_.Sound_Stop(*args, **kwargs)
 
     Stop = staticmethod(Stop)
@@ -2225,7 +2224,7 @@ class FileType(object):
         return _misc_.FileType_Unassociate(*args, **kwargs)
 
     def ExpandCommand(*args, **kwargs):
-        """FileType.ExpandCommand(String command, String filename, String mimetype=EmptyString) -> String"""
+        """ExpandCommand(String command, String filename, String mimetype=EmptyString) -> String"""
         return _misc_.FileType_ExpandCommand(*args, **kwargs)
 
     ExpandCommand = staticmethod(ExpandCommand)
@@ -2245,7 +2244,7 @@ class MimeTypesManager(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMimeTypesManager instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def IsOfType(*args, **kwargs):
-        """MimeTypesManager.IsOfType(String mimeType, String wildcard) -> bool"""
+        """IsOfType(String mimeType, String wildcard) -> bool"""
         return _misc_.MimeTypesManager_IsOfType(*args, **kwargs)
 
     IsOfType = staticmethod(IsOfType)
@@ -2317,10 +2316,173 @@ def MimeTypesManager_IsOfType(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ArtProvider(object):
+    """
+    The wx.ArtProvider class is used to customize the look of wxWidgets
+    application. When wxWidgets needs to display an icon or a bitmap (e.g.
+    in the standard file dialog), it does not use hard-coded resource but
+    asks wx.ArtProvider for it instead. This way the users can plug in
+    their own wx.ArtProvider class and easily replace standard art with
+    his/her own version. It is easy thing to do: all that is needed is
+    to derive a class from wx.ArtProvider, override it's CreateBitmap
+    method and register the provider with wx.ArtProvider.PushProvider::
+
+        class MyArtProvider(wx.ArtProvider):
+            def __init__(self):
+                wx.ArtProvider.__init__(self)
+
+            def CreateBitmap(self, artid, client, size):
+                ...
+                return bmp
+
+
+    Identifying art resources
+    -------------------------
+
+    Every bitmap is known to wx.ArtProvider under an unique ID that is
+    used when requesting a resource from it. The IDs can have one of these
+    predefined values:
+
+        * wx.ART_ADD_BOOKMARK
+        * wx.ART_DEL_BOOKMARK
+        * wx.ART_HELP_SIDE_PANEL
+        * wx.ART_HELP_SETTINGS
+        * wx.ART_HELP_BOOK
+        * wx.ART_HELP_FOLDER
+        * wx.ART_HELP_PAGE
+        * wx.ART_GO_BACK
+        * wx.ART_GO_FORWARD
+        * wx.ART_GO_UP
+        * wx.ART_GO_DOWN
+        * wx.ART_GO_TO_PARENT
+        * wx.ART_GO_HOME
+        * wx.ART_FILE_OPEN
+        * wx.ART_PRINT
+        * wx.ART_HELP
+        * wx.ART_TIP
+        * wx.ART_REPORT_VIEW
+        * wx.ART_LIST_VIEW
+        * wx.ART_NEW_DIR
+        * wx.ART_FOLDER
+        * wx.ART_GO_DIR_UP
+        * wx.ART_EXECUTABLE_FILE
+        * wx.ART_NORMAL_FILE
+        * wx.ART_TICK_MARK
+        * wx.ART_CROSS_MARK
+        * wx.ART_ERROR
+        * wx.ART_QUESTION
+        * wx.ART_WARNING
+        * wx.ART_INFORMATION
+        * wx.ART_MISSING_IMAGE 
+
+
+    Clients
+    -------
+
+    The Client is the entity that calls wx.ArtProvider's `GetBitmap` or
+    `GetIcon` function.  Client IDs server as a hint to wx.ArtProvider
+    that is supposed to help it to choose the best looking bitmap. For
+    example it is often desirable to use slightly different icons in menus
+    and toolbars even though they represent the same action (e.g.
+    wx.ART_FILE_OPEN). Remember that this is really only a hint for
+    wx.ArtProvider -- it is common that `wx.ArtProvider.GetBitmap` returns
+    identical bitmap for different client values!
+
+        * wx.ART_TOOLBAR
+        * wx.ART_MENU
+        * wx.ART_FRAME_ICON
+        * wx.ART_CMN_DIALOG
+        * wx.ART_HELP_BROWSER
+        * wx.ART_MESSAGE_BOX
+        * wx.ART_OTHER (used for all requests that don't fit into any
+          of the categories above)
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyArtProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self) -> ArtProvider"""
+        """
+        __init__(self) -> ArtProvider
+
+        The wx.ArtProvider class is used to customize the look of wxWidgets
+        application. When wxWidgets needs to display an icon or a bitmap (e.g.
+        in the standard file dialog), it does not use hard-coded resource but
+        asks wx.ArtProvider for it instead. This way the users can plug in
+        their own wx.ArtProvider class and easily replace standard art with
+        his/her own version. It is easy thing to do: all that is needed is
+        to derive a class from wx.ArtProvider, override it's CreateBitmap
+        method and register the provider with wx.ArtProvider.PushProvider::
+
+            class MyArtProvider(wx.ArtProvider):
+                def __init__(self):
+                    wx.ArtProvider.__init__(self)
+
+                def CreateBitmap(self, artid, client, size):
+                    ...
+                    return bmp
+
+
+        Identifying art resources
+        -------------------------
+
+        Every bitmap is known to wx.ArtProvider under an unique ID that is
+        used when requesting a resource from it. The IDs can have one of these
+        predefined values:
+
+            * wx.ART_ADD_BOOKMARK
+            * wx.ART_DEL_BOOKMARK
+            * wx.ART_HELP_SIDE_PANEL
+            * wx.ART_HELP_SETTINGS
+            * wx.ART_HELP_BOOK
+            * wx.ART_HELP_FOLDER
+            * wx.ART_HELP_PAGE
+            * wx.ART_GO_BACK
+            * wx.ART_GO_FORWARD
+            * wx.ART_GO_UP
+            * wx.ART_GO_DOWN
+            * wx.ART_GO_TO_PARENT
+            * wx.ART_GO_HOME
+            * wx.ART_FILE_OPEN
+            * wx.ART_PRINT
+            * wx.ART_HELP
+            * wx.ART_TIP
+            * wx.ART_REPORT_VIEW
+            * wx.ART_LIST_VIEW
+            * wx.ART_NEW_DIR
+            * wx.ART_FOLDER
+            * wx.ART_GO_DIR_UP
+            * wx.ART_EXECUTABLE_FILE
+            * wx.ART_NORMAL_FILE
+            * wx.ART_TICK_MARK
+            * wx.ART_CROSS_MARK
+            * wx.ART_ERROR
+            * wx.ART_QUESTION
+            * wx.ART_WARNING
+            * wx.ART_INFORMATION
+            * wx.ART_MISSING_IMAGE 
+
+
+        Clients
+        -------
+
+        The Client is the entity that calls wx.ArtProvider's `GetBitmap` or
+        `GetIcon` function.  Client IDs server as a hint to wx.ArtProvider
+        that is supposed to help it to choose the best looking bitmap. For
+        example it is often desirable to use slightly different icons in menus
+        and toolbars even though they represent the same action (e.g.
+        wx.ART_FILE_OPEN). Remember that this is really only a hint for
+        wx.ArtProvider -- it is common that `wx.ArtProvider.GetBitmap` returns
+        identical bitmap for different client values!
+
+            * wx.ART_TOOLBAR
+            * wx.ART_MENU
+            * wx.ART_FRAME_ICON
+            * wx.ART_CMN_DIALOG
+            * wx.ART_HELP_BROWSER
+            * wx.ART_MESSAGE_BOX
+            * wx.ART_OTHER (used for all requests that don't fit into any
+              of the categories above)
+
+        """
         newobj = _misc_.new_ArtProvider(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2333,7 +2495,7 @@ class ArtProvider(object):
 
     def PushProvider(*args, **kwargs):
         """
-        ArtProvider.PushProvider(ArtProvider provider)
+        PushProvider(ArtProvider provider)
 
         Add new provider to the top of providers stack.
         """
@@ -2342,7 +2504,7 @@ class ArtProvider(object):
     PushProvider = staticmethod(PushProvider)
     def PopProvider(*args, **kwargs):
         """
-        ArtProvider.PopProvider() -> bool
+        PopProvider() -> bool
 
         Remove latest added provider and delete it.
         """
@@ -2351,17 +2513,17 @@ class ArtProvider(object):
     PopProvider = staticmethod(PopProvider)
     def RemoveProvider(*args, **kwargs):
         """
-        ArtProvider.RemoveProvider(ArtProvider provider) -> bool
+        RemoveProvider(ArtProvider provider) -> bool
 
-        Remove provider. The provider must have been added previously!
-        The provider is _not_ deleted.
+        Remove provider. The provider must have been added previously!  The
+        provider is _not_ deleted.
         """
         return _misc_.ArtProvider_RemoveProvider(*args, **kwargs)
 
     RemoveProvider = staticmethod(RemoveProvider)
     def GetBitmap(*args, **kwargs):
         """
-        ArtProvider.GetBitmap(String id, String client=ART_OTHER, Size size=DefaultSize) -> Bitmap
+        GetBitmap(String id, String client=ART_OTHER, Size size=DefaultSize) -> Bitmap
 
         Query the providers for bitmap with given ID and return it. Return
         wx.NullBitmap if no provider provides it.
@@ -2371,9 +2533,9 @@ class ArtProvider(object):
     GetBitmap = staticmethod(GetBitmap)
     def GetIcon(*args, **kwargs):
         """
-        ArtProvider.GetIcon(String id, String client=ART_OTHER, Size size=DefaultSize) -> Icon
+        GetIcon(String id, String client=ART_OTHER, Size size=DefaultSize) -> Icon
 
-        Query the providers for icon with given ID and return it. Return
+        Query the providers for icon with given ID and return it.  Return
         wx.NullIcon if no provider provides it.
         """
         return _misc_.ArtProvider_GetIcon(*args, **kwargs)
@@ -2449,8 +2611,8 @@ def ArtProvider_RemoveProvider(*args, **kwargs):
     """
     ArtProvider_RemoveProvider(ArtProvider provider) -> bool
 
-    Remove provider. The provider must have been added previously!
-    The provider is _not_ deleted.
+    Remove provider. The provider must have been added previously!  The
+    provider is _not_ deleted.
     """
     return _misc_.ArtProvider_RemoveProvider(*args, **kwargs)
 
@@ -2467,7 +2629,7 @@ def ArtProvider_GetIcon(*args, **kwargs):
     """
     ArtProvider_GetIcon(String id, String client=ART_OTHER, Size size=DefaultSize) -> Icon
 
-    Query the providers for icon with given ID and return it. Return
+    Query the providers for icon with given ID and return it.  Return
     wx.NullIcon if no provider provides it.
     """
     return _misc_.ArtProvider_GetIcon(*args, **kwargs)
@@ -2516,7 +2678,7 @@ class ConfigBase(object):
     Type_Float = _misc_.ConfigBase_Type_Float
     def Set(*args, **kwargs):
         """
-        ConfigBase.Set(ConfigBase config) -> ConfigBase
+        Set(ConfigBase config) -> ConfigBase
 
         Sets the global config object (the one returned by Get) and
         returns a reference to the previous global config object.
@@ -2526,7 +2688,7 @@ class ConfigBase(object):
     Set = staticmethod(Set)
     def Get(*args, **kwargs):
         """
-        ConfigBase.Get(bool createOnDemand=True) -> ConfigBase
+        Get(bool createOnDemand=True) -> ConfigBase
 
         Returns the current global config object, creating one if neccessary.
         """
@@ -2535,7 +2697,7 @@ class ConfigBase(object):
     Get = staticmethod(Get)
     def Create(*args, **kwargs):
         """
-        ConfigBase.Create() -> ConfigBase
+        Create() -> ConfigBase
 
         Create and return a new global config object.  This function will
         create the "best" implementation of wx.Config available for the
@@ -2546,7 +2708,7 @@ class ConfigBase(object):
     Create = staticmethod(Create)
     def DontCreateOnDemand(*args, **kwargs):
         """
-        ConfigBase.DontCreateOnDemand()
+        DontCreateOnDemand()
 
         Should Get() try to create a new log object if there isn't a current one?
         """
@@ -2777,7 +2939,7 @@ class ConfigBase(object):
         DeleteAll(self) -> bool
 
         Delete the whole underlying object (disk file, registry key, ...)
-        primarly intended for use by desinstallation routine.
+        primarly intended for use by deinstallation routine.
         """
         return _misc_.ConfigBase_DeleteAll(*args, **kwargs)
 
@@ -3157,62 +3319,62 @@ class DateTime(object):
     Monday_First = _misc_.DateTime_Monday_First
     Sunday_First = _misc_.DateTime_Sunday_First
     def SetCountry(*args, **kwargs):
-        """DateTime.SetCountry(int country)"""
+        """SetCountry(int country)"""
         return _misc_.DateTime_SetCountry(*args, **kwargs)
 
     SetCountry = staticmethod(SetCountry)
     def GetCountry(*args, **kwargs):
-        """DateTime.GetCountry() -> int"""
+        """GetCountry() -> int"""
         return _misc_.DateTime_GetCountry(*args, **kwargs)
 
     GetCountry = staticmethod(GetCountry)
     def IsWestEuropeanCountry(*args, **kwargs):
-        """DateTime.IsWestEuropeanCountry(int country=Country_Default) -> bool"""
+        """IsWestEuropeanCountry(int country=Country_Default) -> bool"""
         return _misc_.DateTime_IsWestEuropeanCountry(*args, **kwargs)
 
     IsWestEuropeanCountry = staticmethod(IsWestEuropeanCountry)
     def GetCurrentYear(*args, **kwargs):
-        """DateTime.GetCurrentYear(int cal=Gregorian) -> int"""
+        """GetCurrentYear(int cal=Gregorian) -> int"""
         return _misc_.DateTime_GetCurrentYear(*args, **kwargs)
 
     GetCurrentYear = staticmethod(GetCurrentYear)
     def ConvertYearToBC(*args, **kwargs):
-        """DateTime.ConvertYearToBC(int year) -> int"""
+        """ConvertYearToBC(int year) -> int"""
         return _misc_.DateTime_ConvertYearToBC(*args, **kwargs)
 
     ConvertYearToBC = staticmethod(ConvertYearToBC)
     def GetCurrentMonth(*args, **kwargs):
-        """DateTime.GetCurrentMonth(int cal=Gregorian) -> int"""
+        """GetCurrentMonth(int cal=Gregorian) -> int"""
         return _misc_.DateTime_GetCurrentMonth(*args, **kwargs)
 
     GetCurrentMonth = staticmethod(GetCurrentMonth)
     def IsLeapYear(*args, **kwargs):
-        """DateTime.IsLeapYear(int year=Inv_Year, int cal=Gregorian) -> bool"""
+        """IsLeapYear(int year=Inv_Year, int cal=Gregorian) -> bool"""
         return _misc_.DateTime_IsLeapYear(*args, **kwargs)
 
     IsLeapYear = staticmethod(IsLeapYear)
     def GetCentury(*args, **kwargs):
-        """DateTime.GetCentury(int year=Inv_Year) -> int"""
+        """GetCentury(int year=Inv_Year) -> int"""
         return _misc_.DateTime_GetCentury(*args, **kwargs)
 
     GetCentury = staticmethod(GetCentury)
     def GetNumberOfDaysinYear(*args, **kwargs):
-        """DateTime.GetNumberOfDaysinYear(int year, int cal=Gregorian) -> int"""
+        """GetNumberOfDaysinYear(int year, int cal=Gregorian) -> int"""
         return _misc_.DateTime_GetNumberOfDaysinYear(*args, **kwargs)
 
     GetNumberOfDaysinYear = staticmethod(GetNumberOfDaysinYear)
     def GetNumberOfDaysInMonth(*args, **kwargs):
-        """DateTime.GetNumberOfDaysInMonth(int month, int year=Inv_Year, int cal=Gregorian) -> int"""
+        """GetNumberOfDaysInMonth(int month, int year=Inv_Year, int cal=Gregorian) -> int"""
         return _misc_.DateTime_GetNumberOfDaysInMonth(*args, **kwargs)
 
     GetNumberOfDaysInMonth = staticmethod(GetNumberOfDaysInMonth)
     def GetMonthName(*args, **kwargs):
-        """DateTime.GetMonthName(int month, int flags=Name_Full) -> String"""
+        """GetMonthName(int month, int flags=Name_Full) -> String"""
         return _misc_.DateTime_GetMonthName(*args, **kwargs)
 
     GetMonthName = staticmethod(GetMonthName)
     def GetWeekDayName(*args, **kwargs):
-        """DateTime.GetWeekDayName(int weekday, int flags=Name_Full) -> String"""
+        """GetWeekDayName(int weekday, int flags=Name_Full) -> String"""
         return _misc_.DateTime_GetWeekDayName(*args, **kwargs)
 
     GetWeekDayName = staticmethod(GetWeekDayName)
@@ -3226,32 +3388,32 @@ class DateTime(object):
 
     GetAmPmStrings = staticmethod(GetAmPmStrings)
     def IsDSTApplicable(*args, **kwargs):
-        """DateTime.IsDSTApplicable(int year=Inv_Year, int country=Country_Default) -> bool"""
+        """IsDSTApplicable(int year=Inv_Year, int country=Country_Default) -> bool"""
         return _misc_.DateTime_IsDSTApplicable(*args, **kwargs)
 
     IsDSTApplicable = staticmethod(IsDSTApplicable)
     def GetBeginDST(*args, **kwargs):
-        """DateTime.GetBeginDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
+        """GetBeginDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
         return _misc_.DateTime_GetBeginDST(*args, **kwargs)
 
     GetBeginDST = staticmethod(GetBeginDST)
     def GetEndDST(*args, **kwargs):
-        """DateTime.GetEndDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
+        """GetEndDST(int year=Inv_Year, int country=Country_Default) -> DateTime"""
         return _misc_.DateTime_GetEndDST(*args, **kwargs)
 
     GetEndDST = staticmethod(GetEndDST)
     def Now(*args, **kwargs):
-        """DateTime.Now() -> DateTime"""
+        """Now() -> DateTime"""
         return _misc_.DateTime_Now(*args, **kwargs)
 
     Now = staticmethod(Now)
     def UNow(*args, **kwargs):
-        """DateTime.UNow() -> DateTime"""
+        """UNow() -> DateTime"""
         return _misc_.DateTime_UNow(*args, **kwargs)
 
     UNow = staticmethod(UNow)
     def Today(*args, **kwargs):
-        """DateTime.Today() -> DateTime"""
+        """Today() -> DateTime"""
         return _misc_.DateTime_Today(*args, **kwargs)
 
     Today = staticmethod(Today)
@@ -3757,52 +3919,52 @@ class TimeSpan(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTimeSpan instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Seconds(*args, **kwargs):
-        """TimeSpan.Seconds(long sec) -> TimeSpan"""
+        """Seconds(long sec) -> TimeSpan"""
         return _misc_.TimeSpan_Seconds(*args, **kwargs)
 
     Seconds = staticmethod(Seconds)
     def Second(*args, **kwargs):
-        """TimeSpan.Second() -> TimeSpan"""
+        """Second() -> TimeSpan"""
         return _misc_.TimeSpan_Second(*args, **kwargs)
 
     Second = staticmethod(Second)
     def Minutes(*args, **kwargs):
-        """TimeSpan.Minutes(long min) -> TimeSpan"""
+        """Minutes(long min) -> TimeSpan"""
         return _misc_.TimeSpan_Minutes(*args, **kwargs)
 
     Minutes = staticmethod(Minutes)
     def Minute(*args, **kwargs):
-        """TimeSpan.Minute() -> TimeSpan"""
+        """Minute() -> TimeSpan"""
         return _misc_.TimeSpan_Minute(*args, **kwargs)
 
     Minute = staticmethod(Minute)
     def Hours(*args, **kwargs):
-        """TimeSpan.Hours(long hours) -> TimeSpan"""
+        """Hours(long hours) -> TimeSpan"""
         return _misc_.TimeSpan_Hours(*args, **kwargs)
 
     Hours = staticmethod(Hours)
     def Hour(*args, **kwargs):
-        """TimeSpan.Hour() -> TimeSpan"""
+        """Hour() -> TimeSpan"""
         return _misc_.TimeSpan_Hour(*args, **kwargs)
 
     Hour = staticmethod(Hour)
     def Days(*args, **kwargs):
-        """TimeSpan.Days(long days) -> TimeSpan"""
+        """Days(long days) -> TimeSpan"""
         return _misc_.TimeSpan_Days(*args, **kwargs)
 
     Days = staticmethod(Days)
     def Day(*args, **kwargs):
-        """TimeSpan.Day() -> TimeSpan"""
+        """Day() -> TimeSpan"""
         return _misc_.TimeSpan_Day(*args, **kwargs)
 
     Day = staticmethod(Day)
     def Weeks(*args, **kwargs):
-        """TimeSpan.Weeks(long days) -> TimeSpan"""
+        """Weeks(long days) -> TimeSpan"""
         return _misc_.TimeSpan_Weeks(*args, **kwargs)
 
     Weeks = staticmethod(Weeks)
     def Week(*args, **kwargs):
-        """TimeSpan.Week() -> TimeSpan"""
+        """Week() -> TimeSpan"""
         return _misc_.TimeSpan_Week(*args, **kwargs)
 
     Week = staticmethod(Week)
@@ -4015,42 +4177,42 @@ class DateSpan(object):
         except: pass
 
     def Days(*args, **kwargs):
-        """DateSpan.Days(int days) -> DateSpan"""
+        """Days(int days) -> DateSpan"""
         return _misc_.DateSpan_Days(*args, **kwargs)
 
     Days = staticmethod(Days)
     def Day(*args, **kwargs):
-        """DateSpan.Day() -> DateSpan"""
+        """Day() -> DateSpan"""
         return _misc_.DateSpan_Day(*args, **kwargs)
 
     Day = staticmethod(Day)
     def Weeks(*args, **kwargs):
-        """DateSpan.Weeks(int weeks) -> DateSpan"""
+        """Weeks(int weeks) -> DateSpan"""
         return _misc_.DateSpan_Weeks(*args, **kwargs)
 
     Weeks = staticmethod(Weeks)
     def Week(*args, **kwargs):
-        """DateSpan.Week() -> DateSpan"""
+        """Week() -> DateSpan"""
         return _misc_.DateSpan_Week(*args, **kwargs)
 
     Week = staticmethod(Week)
     def Months(*args, **kwargs):
-        """DateSpan.Months(int mon) -> DateSpan"""
+        """Months(int mon) -> DateSpan"""
         return _misc_.DateSpan_Months(*args, **kwargs)
 
     Months = staticmethod(Months)
     def Month(*args, **kwargs):
-        """DateSpan.Month() -> DateSpan"""
+        """Month() -> DateSpan"""
         return _misc_.DateSpan_Month(*args, **kwargs)
 
     Month = staticmethod(Month)
     def Years(*args, **kwargs):
-        """DateSpan.Years(int years) -> DateSpan"""
+        """Years(int years) -> DateSpan"""
         return _misc_.DateSpan_Years(*args, **kwargs)
 
     Years = staticmethod(Years)
     def Year(*args, **kwargs):
-        """DateSpan.Year() -> DateSpan"""
+        """Year() -> DateSpan"""
         return _misc_.DateSpan_Year(*args, **kwargs)
 
     Year = staticmethod(Year)
@@ -4861,15 +5023,19 @@ _misc_.FileDropTarget_swigregister(FileDropTargetPtr)
 
 class Clipboard(_core.Object):
     """
-    wx.Clipboard represents the system clipboard and provides methods to copy data
-    to or paste data from it.  Normally, you should only use wx.TheClipboard which
-    is a reference to a global wx.Clipboard instance.
+    wx.Clipboard represents the system clipboard and provides methods to
+    copy data to it or paste data from it.  Normally, you should only use
+    ``wx.TheClipboard`` which is a reference to a global wx.Clipboard
+    instance.
 
-    Call wx.TheClipboard.Open to get ownership of the clipboard. If this operation
-    returns True, you now own the clipboard. Call wx.TheClipboard.SetData to put
-    data on the clipboard, or wx.TheClipboard.GetData to retrieve data from the
-    clipboard.  Call wx.TheClipboard.Close to close the clipboard and relinquish
-    ownership. You should keep the clipboard open only momentarily.
+    Call ``wx.TheClipboard``'s `Open` method to get ownership of the
+    clipboard. If this operation returns True, you now own the
+    clipboard. Call `SetData` to put data on the clipboard, or `GetData`
+    to retrieve data from the clipboard.  Call `Close` to close the
+    clipboard and relinquish ownership. You should keep the clipboard open
+    only momentarily.
+
+    :see: `wx.DataObject`
 
     """
     def __repr__(self):
@@ -4890,10 +5056,10 @@ class Clipboard(_core.Object):
         """
         Open(self) -> bool
 
-        Call this function to open the clipboard before calling SetData
-        and GetData.  Call Close when you have finished with the clipboard.
-        You should keep the clipboard open for only a very short time.
-        Returns true on success. 
+        Call this function to open the clipboard before calling SetData and
+        GetData.  Call Close when you have finished with the clipboard.  You
+        should keep the clipboard open for only a very short time.  Returns
+        True on success.
         """
         return _misc_.Clipboard_Open(*args, **kwargs)
 
@@ -4917,10 +5083,12 @@ class Clipboard(_core.Object):
         """
         AddData(self, DataObject data) -> bool
 
-        Call this function to add the data object to the clipboard. You
-        may call this function repeatedly after having cleared the clipboard.
+        Call this function to add the data object to the clipboard. You may
+        call this function repeatedly after having cleared the clipboard.
         After this function has been called, the clipboard owns the data, so
         do not delete the data explicitly.
+
+        :see: `wx.DataObject`
         """
         return _misc_.Clipboard_AddData(*args, **kwargs)
 
@@ -4928,7 +5096,10 @@ class Clipboard(_core.Object):
         """
         SetData(self, DataObject data) -> bool
 
-        Set the clipboard data, this is the same as Clear followed by AddData.
+        Set the clipboard data, this is the same as `Clear` followed by
+        `AddData`.
+
+        :see: `wx.DataObject`
         """
         return _misc_.Clipboard_SetData(*args, **kwargs)
 
@@ -4945,8 +5116,8 @@ class Clipboard(_core.Object):
         """
         GetData(self, DataObject data) -> bool
 
-        Call this function to fill data with data on the clipboard, if available
-        in the required format. Returns true on success.
+        Call this function to fill data with data on the clipboard, if
+        available in the required format. Returns true on success.
         """
         return _misc_.Clipboard_GetData(*args, **kwargs)
 
@@ -4954,7 +5125,7 @@ class Clipboard(_core.Object):
         """
         Clear(self)
 
-        Clears data from the clipboard object and also  the system's clipboard
+        Clears data from the clipboard object and also the system's clipboard
         if possible.
         """
         return _misc_.Clipboard_Clear(*args, **kwargs)
@@ -4964,9 +5135,9 @@ class Clipboard(_core.Object):
         Flush(self) -> bool
 
         Flushes the clipboard: this means that the data which is currently on
-        clipboard will stay available even after the application exits (possibly
-        eating memory), otherwise the clipboard will be emptied on exit.
-        Returns False if the operation is unsuccesful for any reason.
+        clipboard will stay available even after the application exits,
+        possibly eating memory, otherwise the clipboard will be emptied on
+        exit.  Returns False if the operation is unsuccesful for any reason.
         """
         return _misc_.Clipboard_Flush(*args, **kwargs)
 
@@ -4974,9 +5145,9 @@ class Clipboard(_core.Object):
         """
         UsePrimarySelection(self, bool primary=True)
 
-        On platforms supporting it (the X11 based platforms), selects the so
-        called PRIMARY SELECTION as the clipboard as opposed to the normal
-        clipboard, if primary is True.
+        On platforms supporting it (the X11 based platforms), selects the
+        so called PRIMARY SELECTION as the clipboard as opposed to the
+        normal clipboard, if primary is True.
         """
         return _misc_.Clipboard_UsePrimarySelection(*args, **kwargs)
 
@@ -4990,8 +5161,8 @@ _misc_.Clipboard_swigregister(ClipboardPtr)
 
 class ClipboardLocker(object):
     """
-    A helpful class for opening the clipboard and automatically closing it when
-    the locker is destroyed.
+    A helpful class for opening the clipboard and automatically
+    closing it when the locker is destroyed.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxClipboardLocker instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -4999,8 +5170,8 @@ class ClipboardLocker(object):
         """
         __init__(self, Clipboard clipboard=None) -> ClipboardLocker
 
-        A helpful class for opening the clipboard and automatically closing it when
-        the locker is destroyed.
+        A helpful class for opening the clipboard and automatically
+        closing it when the locker is destroyed.
         """
         newobj = _misc_.new_ClipboardLocker(*args, **kwargs)
         self.this = newobj.this
@@ -5142,7 +5313,7 @@ class Display(object):
 
     def GetCount(*args, **kwargs):
         """
-        Display.GetCount() -> size_t
+        GetCount() -> size_t
 
         Return the number of available displays.
         """
@@ -5151,7 +5322,7 @@ class Display(object):
     GetCount = staticmethod(GetCount)
     def GetFromPoint(*args, **kwargs):
         """
-        Display.GetFromPoint(Point pt) -> int
+        GetFromPoint(Point pt) -> int
 
         Find the display where the given point lies, return wx.NOT_FOUND
         if it doesn't belong to any display
@@ -5161,7 +5332,7 @@ class Display(object):
     GetFromPoint = staticmethod(GetFromPoint)
     def GetFromWindow(*args, **kwargs):
         """
-        Display.GetFromWindow(Window window) -> int
+        GetFromWindow(Window window) -> int
 
         Find the display where the given window lies, return wx.NOT_FOUND
         if it is not shown at all.

@@ -283,15 +283,16 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxPanel swig_types[74] 
 #define  SWIGTYPE_p_wxPageSetupDialog swig_types[75] 
 #define  SWIGTYPE_p_wxPrintDialog swig_types[76] 
-#define  SWIGTYPE_p_wxBitmap swig_types[77] 
-#define  SWIGTYPE_p_wxCommandEvent swig_types[78] 
-#define  SWIGTYPE_p_wxPreviewControlBar swig_types[79] 
-#define  SWIGTYPE_p_wxPyPreviewControlBar swig_types[80] 
-#define  SWIGTYPE_p_wxColour swig_types[81] 
-#define  SWIGTYPE_p_wxToolBar swig_types[82] 
-#define  SWIGTYPE_p_wxPageSetupDialogData swig_types[83] 
-#define  SWIGTYPE_p_wxPrintDialogData swig_types[84] 
-static swig_type_info *swig_types[86];
+#define  SWIGTYPE_p_wxFileSystem swig_types[77] 
+#define  SWIGTYPE_p_wxBitmap swig_types[78] 
+#define  SWIGTYPE_p_wxCommandEvent swig_types[79] 
+#define  SWIGTYPE_p_wxPreviewControlBar swig_types[80] 
+#define  SWIGTYPE_p_wxPyPreviewControlBar swig_types[81] 
+#define  SWIGTYPE_p_wxColour swig_types[82] 
+#define  SWIGTYPE_p_wxToolBar swig_types[83] 
+#define  SWIGTYPE_p_wxPageSetupDialogData swig_types[84] 
+#define  SWIGTYPE_p_wxPrintDialogData swig_types[85] 
+static swig_type_info *swig_types[87];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -10564,6 +10565,35 @@ static PyObject *_wrap_HtmlListBox_SetItemCount(PyObject *self, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_HtmlListBox_GetFileSystem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyHtmlListBox *arg1 = (wxPyHtmlListBox *) 0 ;
+    wxFileSystem *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:HtmlListBox_GetFileSystem",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyHtmlListBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxFileSystem &_result_ref = (arg1)->GetFileSystem();
+            result = (wxFileSystem *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxFileSystem, 0);
     return resultobj;
     fail:
     return NULL;
@@ -24655,6 +24685,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlListBox_Create", (PyCFunction) _wrap_HtmlListBox_Create, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlListBox_RefreshAll", (PyCFunction) _wrap_HtmlListBox_RefreshAll, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlListBox_SetItemCount", (PyCFunction) _wrap_HtmlListBox_SetItemCount, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlListBox_GetFileSystem", (PyCFunction) _wrap_HtmlListBox_GetFileSystem, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlListBox_swigregister", HtmlListBox_swigregister, METH_VARARGS },
 	 { (char *)"new_TaskBarIcon", (PyCFunction) _wrap_new_TaskBarIcon, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_TaskBarIcon", (PyCFunction) _wrap_delete_TaskBarIcon, METH_VARARGS | METH_KEYWORDS },
@@ -26182,6 +26213,7 @@ static swig_type_info _swigt__p_wxDialog[] = {{"_p_wxDialog", 0, "wxDialog *", 0
 static swig_type_info _swigt__p_wxPanel[] = {{"_p_wxPanel", 0, "wxPanel *", 0, 0, 0, 0},{"_p_wxPanel", 0, 0, 0, 0, 0, 0},{"_p_wxScrolledWindow", _p_wxScrolledWindowTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyScrolledWindow", _p_wxPyScrolledWindowTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyVScrolledWindow", _p_wxPyVScrolledWindowTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyVListBox", _p_wxPyVListBoxTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyHtmlListBox", _p_wxPyHtmlListBoxTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyPanel", _p_wxPyPanelTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPreviewCanvas", _p_wxPreviewCanvasTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPreviewControlBar", _p_wxPreviewControlBarTo_p_wxPanel, 0, 0, 0, 0, 0},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxPanel, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPageSetupDialog[] = {{"_p_wxPageSetupDialog", 0, "wxPageSetupDialog *", 0, 0, 0, 0},{"_p_wxPageSetupDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPrintDialog[] = {{"_p_wxPrintDialog", 0, "wxPrintDialog *", 0, 0, 0, 0},{"_p_wxPrintDialog", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxFileSystem[] = {{"_p_wxFileSystem", 0, "wxFileSystem *", 0, 0, 0, 0},{"_p_wxFileSystem", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxBitmap[] = {{"_p_wxBitmap", 0, "wxBitmap *", 0, 0, 0, 0},{"_p_wxBitmap", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxFindDialogEvent", _p_wxFindDialogEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxSplitterEvent", _p_wxSplitterEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", 0, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxSashEvent", _p_wxSashEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPreviewControlBar[] = {{"_p_wxPreviewControlBar", 0, "wxPreviewControlBar *", 0, 0, 0, 0},{"_p_wxPreviewControlBar", 0, 0, 0, 0, 0, 0},{"_p_wxPyPreviewControlBar", _p_wxPyPreviewControlBarTo_p_wxPreviewControlBar, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -26269,6 +26301,7 @@ _swigt__p_wxDialog,
 _swigt__p_wxPanel, 
 _swigt__p_wxPageSetupDialog, 
 _swigt__p_wxPrintDialog, 
+_swigt__p_wxFileSystem, 
 _swigt__p_wxBitmap, 
 _swigt__p_wxCommandEvent, 
 _swigt__p_wxPreviewControlBar, 

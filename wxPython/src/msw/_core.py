@@ -12,6 +12,26 @@ _core_._wxPySetDictionary(vars())
 import sys as _sys
 wx = _sys.modules[__name__]
 
+
+#----------------------------------------------------------------------------
+
+def _deprecated(callable, msg=None):
+    """
+    Create a wrapper function that will raise a DeprecationWarning
+    before calling the callable.
+    """
+    if msg is None:
+        msg = "%s is deprecated" % callable
+    def deprecatedWrapper(*args, **kwargs):
+        import warnings
+        warnings.warn(msg, DeprecationWarning, stacklevel=2)
+        return callable(*args, **kwargs)
+    deprecatedWrapper.__doc__ = msg
+    return deprecatedWrapper
+    
+                   
+#----------------------------------------------------------------------------
+
 NOT_FOUND = _core_.NOT_FOUND
 VSCROLL = _core_.VSCROLL
 HSCROLL = _core_.HSCROLL
@@ -1706,17 +1726,17 @@ class FileSystem(Object):
         return _core_.FileSystem_FindNext(*args, **kwargs)
 
     def AddHandler(*args, **kwargs):
-        """FileSystem.AddHandler(CPPFileSystemHandler handler)"""
+        """AddHandler(CPPFileSystemHandler handler)"""
         return _core_.FileSystem_AddHandler(*args, **kwargs)
 
     AddHandler = staticmethod(AddHandler)
     def CleanUpHandlers(*args, **kwargs):
-        """FileSystem.CleanUpHandlers()"""
+        """CleanUpHandlers()"""
         return _core_.FileSystem_CleanUpHandlers(*args, **kwargs)
 
     CleanUpHandlers = staticmethod(CleanUpHandlers)
     def FileNameToURL(*args, **kwargs):
-        """FileSystem.FileNameToURL(String filename) -> String"""
+        """FileNameToURL(String filename) -> String"""
         return _core_.FileSystem_FileNameToURL(*args, **kwargs)
 
     FileNameToURL = staticmethod(FileNameToURL)
@@ -1833,7 +1853,7 @@ class MemoryFSHandler(CPPFileSystemHandler):
         self.thisown = 1
         del newobj.thisown
     def RemoveFile(*args, **kwargs):
-        """MemoryFSHandler.RemoveFile(String filename)"""
+        """RemoveFile(String filename)"""
         return _core_.MemoryFSHandler_RemoveFile(*args, **kwargs)
 
     RemoveFile = staticmethod(RemoveFile)
@@ -1927,7 +1947,7 @@ class ImageHistogram(object):
         del newobj.thisown
     def MakeKey(*args, **kwargs):
         """
-        ImageHistogram.MakeKey(unsigned char r, unsigned char g, unsigned char b) -> unsigned long
+        MakeKey(unsigned char r, unsigned char g, unsigned char b) -> unsigned long
 
         Get the key in the histogram for the given RGB values
         """
@@ -2042,12 +2062,12 @@ class Image(Object):
         return _core_.Image_SetMaskFromImage(*args, **kwargs)
 
     def CanRead(*args, **kwargs):
-        """Image.CanRead(String name) -> bool"""
+        """CanRead(String name) -> bool"""
         return _core_.Image_CanRead(*args, **kwargs)
 
     CanRead = staticmethod(CanRead)
     def GetImageCount(*args, **kwargs):
-        """Image.GetImageCount(String name, long type=BITMAP_TYPE_ANY) -> int"""
+        """GetImageCount(String name, long type=BITMAP_TYPE_ANY) -> int"""
         return _core_.Image_GetImageCount(*args, **kwargs)
 
     GetImageCount = staticmethod(GetImageCount)
@@ -2068,7 +2088,7 @@ class Image(Object):
         return _core_.Image_SaveMimeFile(*args, **kwargs)
 
     def CanReadStream(*args, **kwargs):
-        """Image.CanReadStream(InputStream stream) -> bool"""
+        """CanReadStream(InputStream stream) -> bool"""
         return _core_.Image_CanReadStream(*args, **kwargs)
 
     CanReadStream = staticmethod(CanReadStream)
@@ -2219,22 +2239,22 @@ class Image(Object):
         return _core_.Image_ComputeHistogram(*args, **kwargs)
 
     def AddHandler(*args, **kwargs):
-        """Image.AddHandler(ImageHandler handler)"""
+        """AddHandler(ImageHandler handler)"""
         return _core_.Image_AddHandler(*args, **kwargs)
 
     AddHandler = staticmethod(AddHandler)
     def InsertHandler(*args, **kwargs):
-        """Image.InsertHandler(ImageHandler handler)"""
+        """InsertHandler(ImageHandler handler)"""
         return _core_.Image_InsertHandler(*args, **kwargs)
 
     InsertHandler = staticmethod(InsertHandler)
     def RemoveHandler(*args, **kwargs):
-        """Image.RemoveHandler(String name) -> bool"""
+        """RemoveHandler(String name) -> bool"""
         return _core_.Image_RemoveHandler(*args, **kwargs)
 
     RemoveHandler = staticmethod(RemoveHandler)
     def GetImageExtWildcard(*args, **kwargs):
-        """Image.GetImageExtWildcard() -> String"""
+        """GetImageExtWildcard() -> String"""
         return _core_.Image_GetImageExtWildcard(*args, **kwargs)
 
     GetImageExtWildcard = staticmethod(GetImageExtWildcard)
@@ -2273,12 +2293,9 @@ def ImageFromStreamMime(*args, **kwargs):
     val.thisown = 1
     return val
 
-def EmptyImage(*args):
-    """
-    EmptyImage(int width=0, int height=0, bool clear=True) -> Image
-    EmptyImage(Size size, bool clear=True) -> Image
-    """
-    val = _core_.new_EmptyImage(*args)
+def EmptyImage(*args, **kwargs):
+    """EmptyImage(int width=0, int height=0, bool clear=True) -> Image"""
+    val = _core_.new_EmptyImage(*args, **kwargs)
     val.thisown = 1
     return val
 
@@ -2614,6 +2631,14 @@ class EvtHandler(Object):
             id  = source.GetId()
         event.Bind(self, id, id2, handler)              
 
+    def Unbind(self, event, source=None, id=wx.ID_ANY, id2=wx.ID_ANY):
+        """
+        Disconencts the event handler binding for event from self.
+        Returns True if successful.
+        """
+        if source is not None:
+            id  = source.GetId()
+        return event.Unbind(self, id, id2)              
 
 
 class EvtHandlerPtr(EvtHandler):
@@ -2645,6 +2670,14 @@ class PyEventBinder(object):
         """Bind this set of event types to target."""
         for et in self.evtType:
             target.Connect(id1, id2, et, function)
+
+
+    def Unbind(self, target, id1, id2):
+        """Remove an event binding."""
+        success = 0
+        for et in self.evtType:
+            success += target.Disconnect(id1, id2, et)
+        return success != 0
 
     
     def __call__(self, *args):
@@ -4033,32 +4066,32 @@ class UpdateUIEvent(CommandEvent):
         return _core_.UpdateUIEvent_SetText(*args, **kwargs)
 
     def SetUpdateInterval(*args, **kwargs):
-        """UpdateUIEvent.SetUpdateInterval(long updateInterval)"""
+        """SetUpdateInterval(long updateInterval)"""
         return _core_.UpdateUIEvent_SetUpdateInterval(*args, **kwargs)
 
     SetUpdateInterval = staticmethod(SetUpdateInterval)
     def GetUpdateInterval(*args, **kwargs):
-        """UpdateUIEvent.GetUpdateInterval() -> long"""
+        """GetUpdateInterval() -> long"""
         return _core_.UpdateUIEvent_GetUpdateInterval(*args, **kwargs)
 
     GetUpdateInterval = staticmethod(GetUpdateInterval)
     def CanUpdate(*args, **kwargs):
-        """UpdateUIEvent.CanUpdate(Window win) -> bool"""
+        """CanUpdate(Window win) -> bool"""
         return _core_.UpdateUIEvent_CanUpdate(*args, **kwargs)
 
     CanUpdate = staticmethod(CanUpdate)
     def ResetUpdateTime(*args, **kwargs):
-        """UpdateUIEvent.ResetUpdateTime()"""
+        """ResetUpdateTime()"""
         return _core_.UpdateUIEvent_ResetUpdateTime(*args, **kwargs)
 
     ResetUpdateTime = staticmethod(ResetUpdateTime)
     def SetMode(*args, **kwargs):
-        """UpdateUIEvent.SetMode(int mode)"""
+        """SetMode(int mode)"""
         return _core_.UpdateUIEvent_SetMode(*args, **kwargs)
 
     SetMode = staticmethod(SetMode)
     def GetMode(*args, **kwargs):
-        """UpdateUIEvent.GetMode() -> int"""
+        """GetMode() -> int"""
         return _core_.UpdateUIEvent_GetMode(*args, **kwargs)
 
     GetMode = staticmethod(GetMode)
@@ -4345,17 +4378,17 @@ class IdleEvent(Event):
         return _core_.IdleEvent_MoreRequested(*args, **kwargs)
 
     def SetMode(*args, **kwargs):
-        """IdleEvent.SetMode(int mode)"""
+        """SetMode(int mode)"""
         return _core_.IdleEvent_SetMode(*args, **kwargs)
 
     SetMode = staticmethod(SetMode)
     def GetMode(*args, **kwargs):
-        """IdleEvent.GetMode() -> int"""
+        """GetMode() -> int"""
         return _core_.IdleEvent_GetMode(*args, **kwargs)
 
     GetMode = staticmethod(GetMode)
     def CanSend(*args, **kwargs):
-        """IdleEvent.CanSend(Window win) -> bool"""
+        """CanSend(Window win) -> bool"""
         return _core_.IdleEvent_CanSend(*args, **kwargs)
 
     CanSend = staticmethod(CanSend)
@@ -4456,6 +4489,10 @@ PYAPP_ASSERT_LOG = _core_.PYAPP_ASSERT_LOG
 PRINT_WINDOWS = _core_.PRINT_WINDOWS
 PRINT_POSTSCRIPT = _core_.PRINT_POSTSCRIPT
 class PyApp(EvtHandler):
+    """
+    The ``wx.PyApp`` class is an *implementation detail*, please use the
+    `wx.App` class (or some other derived class) instead.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyApp instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4493,8 +4530,8 @@ class PyApp(EvtHandler):
         """
         SetAppName(self, String name)
 
-        Set the application name. This value may be used automatically
-        by wx.Config and such.
+        Set the application name. This value may be used automatically by
+        `wx.Config` and such.
         """
         return _core_.PyApp_SetAppName(*args, **kwargs)
 
@@ -4510,8 +4547,8 @@ class PyApp(EvtHandler):
         """
         SetClassName(self, String name)
 
-        Set the application's class name. This value may be used for X-resources if
-        applicable for the platform
+        Set the application's class name. This value may be used for
+        X-resources if applicable for the platform
         """
         return _core_.PyApp_SetClassName(*args, **kwargs)
 
@@ -4527,8 +4564,8 @@ class PyApp(EvtHandler):
         """
         SetVendorName(self, String name)
 
-        Set the application's vendor name. This value may be used automatically
-        by wx.Config and such.
+        Set the application's vendor name. This value may be used
+        automatically by `wx.Config` and such.
         """
         return _core_.PyApp_SetVendorName(*args, **kwargs)
 
@@ -4536,11 +4573,14 @@ class PyApp(EvtHandler):
         """
         GetTraits(self) -> wxAppTraits
 
-        Create the app traits object to which we delegate for everything which either
-        should be configurable by the user (then he can change the default behaviour
-        simply by overriding CreateTraits() and returning his own traits object) or
-        which is GUI/console dependent as then wx.AppTraits allows us to abstract the
-        differences behind the common facade
+        Return (and create if necessary) the app traits object to which we
+        delegate for everything which either should be configurable by the
+        user (then he can change the default behaviour simply by overriding
+        CreateTraits() and returning his own traits object) or which is
+        GUI/console dependent as then wx.AppTraits allows us to abstract the
+        differences behind the common facade.
+
+        :todo: Add support for overriding CreateAppTraits in wxPython.
         """
         return _core_.PyApp_GetTraits(*args, **kwargs)
 
@@ -4548,9 +4588,9 @@ class PyApp(EvtHandler):
         """
         ProcessPendingEvents(self)
 
-        Process all events in the Pending Events list -- it is necessary to call this
-        function to process posted events. This happens during each event loop
-        iteration.
+        Process all events in the Pending Events list -- it is necessary to
+        call this function to process posted events. This normally happens
+        during each event loop iteration.
         """
         return _core_.PyApp_ProcessPendingEvents(*args, **kwargs)
 
@@ -4558,15 +4598,16 @@ class PyApp(EvtHandler):
         """
         Yield(self, bool onlyIfNeeded=False) -> bool
 
-        Process all currently pending events right now, instead of waiting until
-        return to the event loop.  It is an error to call Yield() recursively unless
-        the value of onlyIfNeeded is True.
+        Process all currently pending events right now, instead of waiting
+        until return to the event loop.  It is an error to call ``Yield``
+        recursively unless the value of ``onlyIfNeeded`` is True.
 
-        WARNING: This function is dangerous as it can lead to unexpected
-                 reentrancies (i.e. when called from an event handler it
-                 may result in calling the same event handler again), use
-                 with _extreme_ care or, better, don't use at all!
+        :warning: This function is dangerous as it can lead to unexpected
+                  reentrancies (i.e. when called from an event handler it may
+                  result in calling the same event handler again), use with
+                  _extreme_ care or, better, don't use at all!
 
+        :see: `wx.Yield`, `wx.YieldIfNeeded`, `wx.SafeYield`
         """
         return _core_.PyApp_Yield(*args, **kwargs)
 
@@ -4574,7 +4615,8 @@ class PyApp(EvtHandler):
         """
         WakeUpIdle(self)
 
-        Make sure that idle events are sent again
+        Make sure that idle events are sent again.
+        :see: `wx.WakeUpIdle`
         """
         return _core_.PyApp_WakeUpIdle(*args, **kwargs)
 
@@ -4582,7 +4624,8 @@ class PyApp(EvtHandler):
         """
         MainLoop(self) -> int
 
-        Execute the main GUI loop, the function returns when the loop ends.
+        Execute the main GUI loop, the function doesn't normally return until
+        all top level windows have been closed and destroyed.
         """
         return _core_.PyApp_MainLoop(*args, **kwargs)
 
@@ -4591,6 +4634,7 @@ class PyApp(EvtHandler):
         Exit(self)
 
         Exit the main loop thus terminating the application.
+        :see: `wx.Exit`
         """
         return _core_.PyApp_Exit(*args, **kwargs)
 
@@ -4598,8 +4642,8 @@ class PyApp(EvtHandler):
         """
         ExitMainLoop(self)
 
-        Exit the main GUI loop during the next iteration (i.e. it does not
-        stop the program immediately!)
+        Exit the main GUI loop during the next iteration of the main
+        loop, (i.e. it does not stop the program immediately!)
         """
         return _core_.PyApp_ExitMainLoop(*args, **kwargs)
 
@@ -4624,9 +4668,9 @@ class PyApp(EvtHandler):
         """
         ProcessIdle(self) -> bool
 
-        Called from the MainLoop when the application becomes idle and sends an
-        IdleEvent to all interested parties.  Returns True is more idle events are
-        needed, False if not.
+        Called from the MainLoop when the application becomes idle (there are
+        no pending events) and sends a `wx.IdleEvent` to all interested
+        parties.  Returns True if more idle events are needed, False if not.
         """
         return _core_.PyApp_ProcessIdle(*args, **kwargs)
 
@@ -4634,8 +4678,8 @@ class PyApp(EvtHandler):
         """
         SendIdleEvents(self, Window win, IdleEvent event) -> bool
 
-        Send idle event to window and all subwindows.  Returns True if more idle time
-        is requested.
+        Send idle event to window and all subwindows.  Returns True if more
+        idle time is requested.
         """
         return _core_.PyApp_SendIdleEvents(*args, **kwargs)
 
@@ -4651,7 +4695,7 @@ class PyApp(EvtHandler):
         """
         SetTopWindow(self, Window win)
 
-        Set the "main" top level window
+        Set the *main* top level window
         """
         return _core_.PyApp_SetTopWindow(*args, **kwargs)
 
@@ -4659,9 +4703,9 @@ class PyApp(EvtHandler):
         """
         GetTopWindow(self) -> Window
 
-        Return the "main" top level window (if it hadn't been set previously with
-        SetTopWindow(), will return just some top level window and, if there not any,
-        will return None)
+        Return the *main* top level window (if it hadn't been set previously
+        with SetTopWindow(), will return just some top level window and, if
+        there not any, will return None)
         """
         return _core_.PyApp_GetTopWindow(*args, **kwargs)
 
@@ -4669,12 +4713,11 @@ class PyApp(EvtHandler):
         """
         SetExitOnFrameDelete(self, bool flag)
 
-        Control the exit behaviour: by default, the program will exit the main loop
-        (and so, usually, terminate) when the last top-level program window is
-        deleted.  Beware that if you disable this behaviour (with
-        SetExitOnFrameDelete(False)), you'll have to call ExitMainLoop() explicitly
-        from somewhere.
-
+        Control the exit behaviour: by default, the program will exit the main
+        loop (and so, usually, terminate) when the last top-level program
+        window is deleted.  Beware that if you disable this behaviour (with
+        SetExitOnFrameDelete(False)), you'll have to call ExitMainLoop()
+        explicitly from somewhere.
         """
         return _core_.PyApp_SetExitOnFrameDelete(*args, **kwargs)
 
@@ -4690,8 +4733,8 @@ class PyApp(EvtHandler):
         """
         SetUseBestVisual(self, bool flag)
 
-        Set whether the app should try to use the best available visual on systems
-        where more than one is available, (Sun, SGI, XFree86 4, etc.)
+        Set whether the app should try to use the best available visual on
+        systems where more than one is available, (Sun, SGI, XFree86 4, etc.)
         """
         return _core_.PyApp_SetUseBestVisual(*args, **kwargs)
 
@@ -4715,13 +4758,17 @@ class PyApp(EvtHandler):
         """
         SetAssertMode(self, int mode)
 
-        Set the OnAssert behaviour for debug and hybrid builds.  The following flags
-        may be or'd together:
+        Set the OnAssert behaviour for debug and hybrid builds.  The following
+        flags may be or'd together:
 
-         wx.PYAPP_ASSERT_SUPPRESS         Don't do anything
-         wx.PYAPP_ASSERT_EXCEPTION        Turn it into a Python exception if possible (default)
-         wx.PYAPP_ASSERT_DIALOG           Display a message dialog
-         wx.PYAPP_ASSERT_LOG              Write the assertion info to the wx.Log
+           =========================   =======================================
+           wx.PYAPP_ASSERT_SUPPRESS    Don't do anything
+           wx.PYAPP_ASSERT_EXCEPTION   Turn it into a Python exception if possible
+                                       (default)
+           wx.PYAPP_ASSERT_DIALOG      Display a message dialog
+           wx.PYAPP_ASSERT_LOG         Write the assertion info to the wx.Log
+           =========================   =======================================
+
 
         """
         return _core_.PyApp_SetAssertMode(*args, **kwargs)
@@ -4735,52 +4782,52 @@ class PyApp(EvtHandler):
         return _core_.PyApp_GetAssertMode(*args, **kwargs)
 
     def GetMacSupportPCMenuShortcuts(*args, **kwargs):
-        """PyApp.GetMacSupportPCMenuShortcuts() -> bool"""
+        """GetMacSupportPCMenuShortcuts() -> bool"""
         return _core_.PyApp_GetMacSupportPCMenuShortcuts(*args, **kwargs)
 
     GetMacSupportPCMenuShortcuts = staticmethod(GetMacSupportPCMenuShortcuts)
     def GetMacAboutMenuItemId(*args, **kwargs):
-        """PyApp.GetMacAboutMenuItemId() -> long"""
+        """GetMacAboutMenuItemId() -> long"""
         return _core_.PyApp_GetMacAboutMenuItemId(*args, **kwargs)
 
     GetMacAboutMenuItemId = staticmethod(GetMacAboutMenuItemId)
     def GetMacPreferencesMenuItemId(*args, **kwargs):
-        """PyApp.GetMacPreferencesMenuItemId() -> long"""
+        """GetMacPreferencesMenuItemId() -> long"""
         return _core_.PyApp_GetMacPreferencesMenuItemId(*args, **kwargs)
 
     GetMacPreferencesMenuItemId = staticmethod(GetMacPreferencesMenuItemId)
     def GetMacExitMenuItemId(*args, **kwargs):
-        """PyApp.GetMacExitMenuItemId() -> long"""
+        """GetMacExitMenuItemId() -> long"""
         return _core_.PyApp_GetMacExitMenuItemId(*args, **kwargs)
 
     GetMacExitMenuItemId = staticmethod(GetMacExitMenuItemId)
     def GetMacHelpMenuTitleName(*args, **kwargs):
-        """PyApp.GetMacHelpMenuTitleName() -> String"""
+        """GetMacHelpMenuTitleName() -> String"""
         return _core_.PyApp_GetMacHelpMenuTitleName(*args, **kwargs)
 
     GetMacHelpMenuTitleName = staticmethod(GetMacHelpMenuTitleName)
     def SetMacSupportPCMenuShortcuts(*args, **kwargs):
-        """PyApp.SetMacSupportPCMenuShortcuts(bool val)"""
+        """SetMacSupportPCMenuShortcuts(bool val)"""
         return _core_.PyApp_SetMacSupportPCMenuShortcuts(*args, **kwargs)
 
     SetMacSupportPCMenuShortcuts = staticmethod(SetMacSupportPCMenuShortcuts)
     def SetMacAboutMenuItemId(*args, **kwargs):
-        """PyApp.SetMacAboutMenuItemId(long val)"""
+        """SetMacAboutMenuItemId(long val)"""
         return _core_.PyApp_SetMacAboutMenuItemId(*args, **kwargs)
 
     SetMacAboutMenuItemId = staticmethod(SetMacAboutMenuItemId)
     def SetMacPreferencesMenuItemId(*args, **kwargs):
-        """PyApp.SetMacPreferencesMenuItemId(long val)"""
+        """SetMacPreferencesMenuItemId(long val)"""
         return _core_.PyApp_SetMacPreferencesMenuItemId(*args, **kwargs)
 
     SetMacPreferencesMenuItemId = staticmethod(SetMacPreferencesMenuItemId)
     def SetMacExitMenuItemId(*args, **kwargs):
-        """PyApp.SetMacExitMenuItemId(long val)"""
+        """SetMacExitMenuItemId(long val)"""
         return _core_.PyApp_SetMacExitMenuItemId(*args, **kwargs)
 
     SetMacExitMenuItemId = staticmethod(SetMacExitMenuItemId)
     def SetMacHelpMenuTitleName(*args, **kwargs):
-        """PyApp.SetMacHelpMenuTitleName(String val)"""
+        """SetMacHelpMenuTitleName(String val)"""
         return _core_.PyApp_SetMacHelpMenuTitleName(*args, **kwargs)
 
     SetMacHelpMenuTitleName = staticmethod(SetMacHelpMenuTitleName)
@@ -4794,11 +4841,10 @@ class PyApp(EvtHandler):
 
     def GetComCtl32Version(*args, **kwargs):
         """
-        PyApp.GetComCtl32Version() -> int
+        GetComCtl32Version() -> int
 
-        Returns 400, 470, 471, etc. for comctl32.dll 4.00, 4.70, 4.71 or
-        0 if it wasn't found at all.  Raises an exception on non-Windows
-        platforms.
+        Returns 400, 470, 471, etc. for comctl32.dll 4.00, 4.70, 4.71 or 0 if
+        it wasn't found at all.  Raises an exception on non-Windows platforms.
         """
         return _core_.PyApp_GetComCtl32Version(*args, **kwargs)
 
@@ -4855,9 +4901,8 @@ def PyApp_GetComCtl32Version(*args, **kwargs):
     """
     PyApp_GetComCtl32Version() -> int
 
-    Returns 400, 470, 471, etc. for comctl32.dll 4.00, 4.70, 4.71 or
-    0 if it wasn't found at all.  Raises an exception on non-Windows
-    platforms.
+    Returns 400, 470, 471, etc. for comctl32.dll 4.00, 4.70, 4.71 or 0 if
+    it wasn't found at all.  Raises an exception on non-Windows platforms.
     """
     return _core_.PyApp_GetComCtl32Version(*args, **kwargs)
 
@@ -4892,12 +4937,13 @@ def SafeYield(*args, **kwargs):
     """
     SafeYield(Window win=None, bool onlyIfNeeded=False) -> bool
 
-    This function is similar to wx.Yield, except that it disables the user input
-    to all program windows before calling wx.Yield and re-enables it again
-    afterwards. If win is not None, this window will remain enabled, allowing the
-    implementation of some limited user interaction.
+    This function is similar to `wx.Yield`, except that it disables the
+    user input to all program windows before calling `wx.Yield` and
+    re-enables it again afterwards. If ``win`` is not None, this window
+    will remain enabled, allowing the implementation of some limited user
+    interaction.
 
-    Returns the result of the call to wx.Yield.
+    :Returns: the result of the call to `wx.Yield`.
     """
     return _core_.SafeYield(*args, **kwargs)
 
@@ -4905,7 +4951,8 @@ def WakeUpIdle(*args, **kwargs):
     """
     WakeUpIdle()
 
-    Cause the message queue to become empty again, so idle events will be sent.
+    Cause the message queue to become empty again, so idle events will be
+    sent.
     """
     return _core_.WakeUpIdle(*args, **kwargs)
 
@@ -4913,7 +4960,8 @@ def PostEvent(*args, **kwargs):
     """
     PostEvent(EvtHandler dest, Event event)
 
-    Send an event to a window or other wx.EvtHandler to be processed later.
+    Send an event to a window or other wx.EvtHandler to be processed
+    later.
     """
     return _core_.PostEvent(*args, **kwargs)
 
@@ -4921,7 +4969,8 @@ def App_CleanUp(*args, **kwargs):
     """
     App_CleanUp()
 
-    For internal use only, it is used to cleanup after wxWindows when Python shuts down.
+    For internal use only, it is used to cleanup after wxWindows when
+    Python shuts down.
     """
     return _core_.App_CleanUp(*args, **kwargs)
 
@@ -5000,12 +5049,61 @@ _defRedirect = (wx.Platform == '__WXMSW__' or wx.Platform == '__WXMAC__')
 
 class App(wx.PyApp):
     """
-    The main application class.  Derive from this and implement an OnInit
-    method that creates a frame and then calls self.SetTopWindow(frame)
+    The ``wx.App`` class represents the application and is used to:
+
+      * bootstrap the wxPython system and initialize the underlying
+        gui toolkit
+      * set and get application-wide properties
+      * implement the windowing system main message or event loop,
+        and to dispatch events to window instances
+      * etc.
+
+    Every application must have a ``wx.App`` instance, and all
+    creation of UI objects should be delayed until after the
+    ``wx.App`` object has been created in order to ensure that the gui
+    platform and wxWidgets have been fully initialized.
+
+    Normally you would derive from this class and implement an
+    ``OnInit`` method that creates a frame and then calls
+    ``self.SetTopWindow(frame)``.
+
+    :see: `wx.PySimpleApp` for a simpler app class that can be used
+    directly.
     """
+    
     outputWindowClass = PyOnDemandOutputWindow
 
-    def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=False):
+    def __init__(self, redirect=_defRedirect, filename=None,
+                 useBestVisual=False, clearSigInt=True):
+        """
+        Construct a ``wx.App`` object.  
+
+        :param redirect: Should ``sys.stdout`` and ``sys.stderr`` be
+            redirected?  Defaults to True on Windows and Mac, False
+            otherwise.  If `filename` is None then output will be
+            redirected to a window that pops up as needed.  (You can
+            control what kind of window is created for the output by
+            resetting the class variable ``outputWindowClass`` to a
+            class of your choosing.)
+
+        :param filename: The name of a file to redirect output to, if
+            redirect is True.
+
+        :param useBestVisual: Should the app try to use the best
+            available visual provided by the system (only relevant on
+            systems that have more than one visual.)  This parameter
+            must be used instead of calling `SetUseBestVisual` later
+            on because it must be set before the underlying GUI
+            toolkit is initialized.
+
+        :param clearSigInt: Should SIGINT be cleared?  This allows the
+            app to terminate upon a Ctrl-C in the console like other
+            GUI apps will.
+
+        :note: You should override OnInit to do applicaition
+            initialization to ensure that the system, toolkit and
+            wxWidgets are fully initialized.
+        """
         wx.PyApp.__init__(self)
 
         if wx.Platform == "__WXMAC__":
@@ -5029,11 +5127,12 @@ your Mac."""
         # KeyboardInterrupt???)  but will later segfault on exit.  By
         # setting the default handler then the app will exit, as
         # expected (depending on platform.)
-        try:
-            import signal
-            signal.signal(signal.SIGINT, signal.SIG_DFL)
-        except:
-            pass
+        if clearSigInt:
+            try:
+                import signal
+                signal.signal(signal.SIGINT, signal.SIG_DFL)
+            except:
+                pass
 
         # Save and redirect the stdio to a window?
         self.stdioWin = None
@@ -5080,7 +5179,7 @@ your Mac."""
 
 
 
-# change from wxPyApp_ to wxApp_
+# change from wx.PyApp_XX to wx.App_XX
 App_GetMacSupportPCMenuShortcuts = _core_.PyApp_GetMacSupportPCMenuShortcuts
 App_GetMacAboutMenuItemId        = _core_.PyApp_GetMacAboutMenuItemId
 App_GetMacPreferencesMenuItemId  = _core_.PyApp_GetMacPreferencesMenuItemId
@@ -5099,14 +5198,27 @@ class PySimpleApp(wx.App):
     """
     A simple application class.  You can just create one of these and
     then then make your top level windows later, and not have to worry
-    about OnInit."""
+    about OnInit.  For example::
 
-    def __init__(self, redirect=False, filename=None, useBestVisual=False):
-        wx.App.__init__(self, redirect, filename, useBestVisual)
+        app = wx.PySimpleApp()
+        frame = wx.Frame(None, title='Hello World')
+        frame.Show()
+        app.MainLoop()
+
+    :see: `wx.App` 
+    """
+
+    def __init__(self, redirect=False, filename=None,
+                 useBestVisual=False, clearSigInt=True):
+        """
+        :see: `wx.App.__init__`
+        """
+        wx.App.__init__(self, redirect, filename, useBestVisual, clearSigInt)
         
     def OnInit(self):
         wx.InitAllImageHandlers()
         return True
+
 
 
 # Is anybody using this one?
@@ -5120,15 +5232,15 @@ class PyWidgetTester(wx.App):
         self.SetTopWindow(self.frame)
         return True
 
-    def SetWidget(self, widgetClass, *args):
-        w = widgetClass(self.frame, *args)
+    def SetWidget(self, widgetClass, *args, **kwargs):
+        w = widgetClass(self.frame, *args, **kwargs)
         self.frame.Show(True)
 
 #----------------------------------------------------------------------------
 # DO NOT hold any other references to this object.  This is how we
-# know when to cleanup system resources that wxWin is holding.  When
+# know when to cleanup system resources that wxWidgets is holding.  When
 # the sys module is unloaded, the refcount on sys.__wxPythonCleanup
-# goes to zero and it calls the wxApp_CleanUp function.
+# goes to zero and it calls the wx.App_CleanUp function.
 
 class __wxPyCleanup:
     def __init__(self):
@@ -5139,11 +5251,8 @@ class __wxPyCleanup:
 _sys.__wxPythonCleanup = __wxPyCleanup()
 
 ## # another possible solution, but it gets called too early...
-## if sys.version[0] == '2':
-##     import atexit
-##     atexit.register(_core_.wxApp_CleanUp)
-## else:
-##     sys.exitfunc = _core_.wxApp_CleanUp
+## import atexit
+## atexit.register(_core_.wxApp_CleanUp)
 
 
 #----------------------------------------------------------------------------
@@ -5151,10 +5260,30 @@ _sys.__wxPythonCleanup = __wxPyCleanup()
 #---------------------------------------------------------------------------
 
 class AcceleratorEntry(object):
+    """
+    A class used to define items in an `wx.AcceleratorTable`.  wxPython
+    programs can choose to use wx.AcceleratorEntry objects, but using a
+    list of 3-tuple of integers (flags, keyCode, cmdID) usually works just
+    as well.  See `__init__` for details of the tuple values.
+
+    :see: `wx.AcceleratorTable`
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxAcceleratorEntry instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, int flags=0, int keyCode=0, int cmd=0, MenuItem item=None) -> AcceleratorEntry"""
+        """
+        __init__(self, int flags=0, int keyCode=0, int cmdID=0) -> AcceleratorEntry
+
+        Construct a wx.AcceleratorEntry.
+
+          :param flags: A bitmask of wx.ACCEL_ALT, wx.ACCEL_SHIFT,
+                        wx.ACCEL_CTRL or wx.ACCEL_NORMAL used to specify
+                        which modifier keys are held down.
+          :param keyCode: The keycode to be detected
+          :param cmdID: The menu or control command ID to use for the
+                        accellerator event.
+
+        """
         newobj = _core_.new_AcceleratorEntry(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -5166,27 +5295,36 @@ class AcceleratorEntry(object):
         except: pass
 
     def Set(*args, **kwargs):
-        """Set(self, int flags, int keyCode, int cmd, MenuItem item=None)"""
+        """
+        Set(self, int flags, int keyCode, int cmd)
+
+        (Re)set the attributes of a wx.AcceleratorEntry.
+        :see `__init__`
+        """
         return _core_.AcceleratorEntry_Set(*args, **kwargs)
 
-    def SetMenuItem(*args, **kwargs):
-        """SetMenuItem(self, MenuItem item)"""
-        return _core_.AcceleratorEntry_SetMenuItem(*args, **kwargs)
-
-    def GetMenuItem(*args, **kwargs):
-        """GetMenuItem(self) -> MenuItem"""
-        return _core_.AcceleratorEntry_GetMenuItem(*args, **kwargs)
-
     def GetFlags(*args, **kwargs):
-        """GetFlags(self) -> int"""
+        """
+        GetFlags(self) -> int
+
+        Get the AcceleratorEntry's flags.
+        """
         return _core_.AcceleratorEntry_GetFlags(*args, **kwargs)
 
     def GetKeyCode(*args, **kwargs):
-        """GetKeyCode(self) -> int"""
+        """
+        GetKeyCode(self) -> int
+
+        Get the AcceleratorEntry's keycode.
+        """
         return _core_.AcceleratorEntry_GetKeyCode(*args, **kwargs)
 
     def GetCommand(*args, **kwargs):
-        """GetCommand(self) -> int"""
+        """
+        GetCommand(self) -> int
+
+        Get the AcceleratorEntry's command ID.
+        """
         return _core_.AcceleratorEntry_GetCommand(*args, **kwargs)
 
 
@@ -5198,14 +5336,43 @@ class AcceleratorEntryPtr(AcceleratorEntry):
 _core_.AcceleratorEntry_swigregister(AcceleratorEntryPtr)
 
 class AcceleratorTable(Object):
+    """
+    An accelerator table allows the application to specify a table of
+    keyboard shortcuts for menus or other commands. On Windows, menu or
+    button commands are supported; on GTK, only menu commands are
+    supported.
+
+    The object ``wx.NullAcceleratorTable`` is defined to be a table with
+    no data, and is the initial accelerator table for a window.
+
+    An accelerator takes precedence over normal processing and can be a
+    convenient way to program some event handling. For example, you can
+    use an accelerator table to make a hotkey generate an event no matter
+    which window within a frame has the focus.
+
+    Foe example::
+
+        aTable = wx.AcceleratorTable([(wx.ACCEL_ALT,  ord('X'), exitID),
+                                      (wx.ACCEL_CTRL, ord('H'), helpID),
+                                      (wx.ACCEL_CTRL, ord('F'), findID),
+                                      (wx.ACCEL_NORMAL, wx.WXK_F3, findnextID)
+                                      ])
+        self.SetAcceleratorTable(aTable)
+
+
+    :see: `wx.AcceleratorEntry`, `wx.Window.SetAcceleratorTable`
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxAcceleratorTable instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
         __init__(entries) -> AcceleratorTable
 
-        Construct an AcceleratorTable from a list of AcceleratorEntry items or
-        3-tuples (flags, keyCode, cmdID)
+        Construct an AcceleratorTable from a list of `wx.AcceleratorEntry`
+        items or or of 3-tuples (flags, keyCode, cmdID)
+
+        :see: `wx.AcceleratorEntry`
         """
         newobj = _core_.new_AcceleratorTable(*args, **kwargs)
         self.this = newobj.this
@@ -5466,7 +5633,7 @@ class Window(EvtHandler):
 
     def NewControlId(*args, **kwargs):
         """
-        Window.NewControlId() -> int
+        NewControlId() -> int
 
         Generate a control id for the controls which were not given one.
         """
@@ -5475,7 +5642,7 @@ class Window(EvtHandler):
     NewControlId = staticmethod(NewControlId)
     def NextControlId(*args, **kwargs):
         """
-        Window.NextControlId(int winid) -> int
+        NextControlId(int winid) -> int
 
         Get the id of the control following the one with the given
         (autogenerated) id
@@ -5485,7 +5652,7 @@ class Window(EvtHandler):
     NextControlId = staticmethod(NextControlId)
     def PrevControlId(*args, **kwargs):
         """
-        Window.PrevControlId(int winid) -> int
+        PrevControlId(int winid) -> int
 
         Get the id of the control preceding the one with the given
         (autogenerated) id
@@ -6041,7 +6208,7 @@ class Window(EvtHandler):
 
     def FindFocus(*args, **kwargs):
         """
-        Window.FindFocus() -> Window
+        FindFocus() -> Window
 
         Returns the window or control that currently has the keyboard focus,
         or None.
@@ -6437,7 +6604,7 @@ class Window(EvtHandler):
 
     def GetCapture(*args, **kwargs):
         """
-        Window.GetCapture() -> Window
+        GetCapture() -> Window
 
         Returns the window which currently captures the mouse or None
         """
@@ -6596,7 +6763,7 @@ class Window(EvtHandler):
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """
-        Window.GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
         Get the default attributes for this class.  This is useful if
         you want to use the same font or colour in your own control as
@@ -7439,12 +7606,12 @@ class Validator(EvtHandler):
         return _core_.Validator_SetWindow(*args, **kwargs)
 
     def IsSilent(*args, **kwargs):
-        """Validator.IsSilent() -> bool"""
+        """IsSilent() -> bool"""
         return _core_.Validator_IsSilent(*args, **kwargs)
 
     IsSilent = staticmethod(IsSilent)
     def SetBellOnError(*args, **kwargs):
-        """Validator.SetBellOnError(int doIt=True)"""
+        """SetBellOnError(int doIt=True)"""
         return _core_.Validator_SetBellOnError(*args, **kwargs)
 
     SetBellOnError = staticmethod(SetBellOnError)
@@ -7907,7 +8074,7 @@ class MenuItem(Object):
         return _core_.MenuItem_GetText(*args, **kwargs)
 
     def GetLabelFromText(*args, **kwargs):
-        """MenuItem.GetLabelFromText(String text) -> String"""
+        """GetLabelFromText(String text) -> String"""
         return _core_.MenuItem_GetLabelFromText(*args, **kwargs)
 
     GetLabelFromText = staticmethod(GetLabelFromText)
@@ -8020,7 +8187,7 @@ class MenuItem(Object):
         return _core_.MenuItem_GetMarginWidth(*args, **kwargs)
 
     def GetDefaultMarginWidth(*args, **kwargs):
-        """MenuItem.GetDefaultMarginWidth() -> int"""
+        """GetDefaultMarginWidth() -> int"""
         return _core_.MenuItem_GetDefaultMarginWidth(*args, **kwargs)
 
     GetDefaultMarginWidth = staticmethod(GetDefaultMarginWidth)
@@ -8123,7 +8290,7 @@ class Control(Window):
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """
-        Control.GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
         Get the default attributes for this class.  This is useful if
         you want to use the same font or colour in your own control as
@@ -8575,16 +8742,30 @@ class Sizer(Object):
         return _core_.Sizer_PrependItem(*args, **kwargs)
 
     def AddMany(self, widgets):
+        """
+        AddMany is a convenience method for adding several items
+        to a sizer at one time.  Simply pass it a list of tuples,
+        where each tuple consists of the parameters that you
+        would normally pass to the `Add` method.
+        """
         for childinfo in widgets:
             if type(childinfo) != type(()) or (len(childinfo) == 2 and type(childinfo[0]) == type(1)):
                 childinfo = (childinfo, )
             self.Add(*childinfo)
 
     # for backwards compatibility only, please do not use in new code
-    AddWindow = AddSizer = AddSpacer = Add
-    PrependWindow = PrependSizer = PrependSpacer = Prepend
-    InsertWindow = InsertSizer = InsertSpacer = Insert
-    RemoveWindow = RemoveSizer = RemovePos = Remove
+    AddWindow     = wx._deprecated(Add, "AddWindow is deprecated, use `Add` instead.")
+    AddSizer      = wx._deprecated(Add, "AddSizer is deprecated, use `Add` instead.")
+    AddSpacer     = wx._deprecated(Add, "AddSpacer is deprecated, use `Add` instead.")
+    PrependWindow = wx._deprecated(Prepend, "PrependWindow is deprecated, use `Prepend` instead.")
+    PrependSizer  = wx._deprecated(Prepend, "PrependSizer is deprecated, use `Prepend` instead.")
+    PrependSpacer = wx._deprecated(Prepend, "PrependSpacer is deprecated, use `Prepend` instead.")
+    InsertWindow  = wx._deprecated(Insert, "InsertWindow is deprecated, use `Insert` instead.")
+    InsertSizer   = wx._deprecated(Insert, "InsertSizer is deprecated, use `Insert` instead.")
+    InsertSpacer  = wx._deprecated(Insert, "InsertSpacer is deprecated, use `Insert` instead.")
+    RemoveWindow  = wx._deprecated(Remove, "RemoveWindow is deprecated, use `Remove` instead.")
+    RemoveSizer   = wx._deprecated(Remove, "RemoveSizer is deprecated, use `Remove` instead.")
+    RemovePos     = wx._deprecated(Remove, "RemovePos is deprecated, use `Remove` instead.")
 
 
     def SetItemMinSize(self, item, *args):
@@ -9741,14 +9922,22 @@ class FutureCall:
 # documented (or will be) as part of the classes/functions/methods
 # where they should be used.
 
-def __docfilter__(name):
-    import types
-    obj = globals().get(name, None)
-    if type(obj) not in [type, types.ClassType, types.FunctionType, types.BuiltinFunctionType]:
-        return False
-    if name.startswith('_') or name.endswith('Ptr') or name.startswith('EVT'):
-        return False
-    return True
+class __DocFilter:
+    """
+    A filter for epydoc that only allows non-Ptr classes and
+    fucntions, in order to reduce the clutter in the API docs.
+    """
+    def __init__(self, globals):
+        self._globals = globals
+        
+    def __call__(self, name):
+        import types
+        obj = self._globals.get(name, None)
+        if type(obj) not in [type, types.ClassType, types.FunctionType, types.BuiltinFunctionType]:
+            return False
+        if name.startswith('_') or name.endswith('Ptr') or name.startswith('EVT'):
+            return False
+        return True
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------

@@ -6,7 +6,7 @@ import _html
 import _windows
 import _core
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
+__docfilter__ = wx.__DocFilter(globals()) 
 #---------------------------------------------------------------------------
 
 HTML_ALIGN_LEFT = _html.HTML_ALIGN_LEFT
@@ -1057,7 +1057,7 @@ class HtmlWindow(_windows.ScrolledWindow):
         return _html.HtmlWindow_HasAnchor(*args, **kwargs)
 
     def AddFilter(*args, **kwargs):
-        """HtmlWindow.AddFilter(HtmlFilter filter)"""
+        """AddFilter(HtmlFilter filter)"""
         return _html.HtmlWindow_AddFilter(*args, **kwargs)
 
     AddFilter = staticmethod(AddFilter)
@@ -1199,12 +1199,12 @@ class HtmlPrintout(_windows.Printout):
         return _html.HtmlPrintout_SetMargins(*args, **kwargs)
 
     def AddFilter(*args, **kwargs):
-        """HtmlPrintout.AddFilter(wxHtmlFilter filter)"""
+        """AddFilter(wxHtmlFilter filter)"""
         return _html.HtmlPrintout_AddFilter(*args, **kwargs)
 
     AddFilter = staticmethod(AddFilter)
     def CleanUpStatics(*args, **kwargs):
-        """HtmlPrintout.CleanUpStatics()"""
+        """CleanUpStatics()"""
         return _html.HtmlPrintout_CleanUpStatics(*args, **kwargs)
 
     CleanUpStatics = staticmethod(CleanUpStatics)

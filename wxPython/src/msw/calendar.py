@@ -6,7 +6,7 @@ import _calendar
 import _misc
 import _core
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
+__docfilter__ = wx.__DocFilter(globals()) 
 CAL_SUNDAY_FIRST = _calendar.CAL_SUNDAY_FIRST
 CAL_MONDAY_FIRST = _calendar.CAL_MONDAY_FIRST
 CAL_SHOW_HOLIDAYS = _calendar.CAL_SHOW_HOLIDAYS
@@ -25,8 +25,8 @@ CAL_BORDER_SQUARE = _calendar.CAL_BORDER_SQUARE
 CAL_BORDER_ROUND = _calendar.CAL_BORDER_ROUND
 class CalendarDateAttr(object):
     """
-    A set of customization attributes for a calendar date, which can be used to
-    control the look of the Calendar object.
+    A set of customization attributes for a calendar date, which can be
+    used to control the look of the Calendar object.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarDateAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -165,7 +165,70 @@ EVT_CALENDAR_YEAR =            wx.PyEventBinder( wxEVT_CALENDAR_YEAR_CHANGED, 1)
 EVT_CALENDAR_WEEKDAY_CLICKED = wx.PyEventBinder( wxEVT_CALENDAR_WEEKDAY_CLICKED, 1)
 
 class CalendarCtrl(_core.Control):
-    """The calendar control allows the user to pick a date interactively."""
+    """
+    The calendar control allows the user to pick a date interactively.
+
+    The CalendarCtrl displays a window containing several parts: the
+    control to pick the month and the year at the top (either or both of
+    them may be disabled) and a month area below them which shows all the
+    days in the month. The user can move the current selection using the
+    keyboard and select the date (generating EVT_CALENDAR event) by
+    pressing <Return> or double clicking it.
+
+    It has advanced possibilities for the customization of its
+    display. All global settings (such as colours and fonts used) can, of
+    course, be changed. But also, the display style for each day in the
+    month can be set independently using CalendarDateAttr class.
+
+    An item without custom attributes is drawn with the default colours
+    and font and without border, but setting custom attributes with
+    SetAttr allows to modify its appearance. Just create a custom
+    attribute object and set it for the day you want to be displayed
+    specially A day may be marked as being a holiday, (even if it is not
+    recognized as one by wx.DateTime) by using the SetHoliday method.
+
+    As the attributes are specified for each day, they may change when the
+    month is changed, so you will often want to update them in an
+    EVT_CALENDAR_MONTH event handler.
+
+    Window Styles
+    -------------
+        ==============================   ============================
+        CAL_SUNDAY_FIRST                 Show Sunday as the first day
+                                         in the week
+        CAL_MONDAY_FIRST                 Show Monday as the first day
+                                         in the week
+        CAL_SHOW_HOLIDAYS                Highlight holidays in the
+                                         calendar
+        CAL_NO_YEAR_CHANGE               Disable the year changing
+        CAL_NO_MONTH_CHANGE              Disable the month (and,
+                                         implicitly, the year) changing
+        CAL_SHOW_SURROUNDING_WEEKS       Show the neighbouring weeks in
+                                         the previous and next months
+        CAL_SEQUENTIAL_MONTH_SELECTION   Use alternative, more compact,
+                                         style for the month and year
+                                         selection controls.
+
+    The default calendar style is CAL_SHOW_HOLIDAYS.
+
+    Events
+    -------
+        ===========================    ==============================
+        EVT_CALENDAR                   A day was double clicked in the
+                                       calendar.
+        EVT_CALENDAR_SEL_CHANGED       The selected date changed.
+        EVT_CALENDAR_DAY               The selected day changed.
+        EVT_CALENDAR_MONTH             The selected month changed.
+        EVT_CALENDAR_YEAR              The selected year changed.
+        EVT_CALENDAR_WEEKDAY_CLICKED   User clicked on the week day
+                                       header
+
+    Note that changing the selected date will result in one of
+    EVT_CALENDAR_DAY, MONTH or YEAR events and an EVT_CALENDAR_SEL_CHANGED
+    event.
+        
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -190,7 +253,8 @@ class CalendarCtrl(_core.Control):
             long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
             String name=CalendarNameStr) -> bool
 
-        Acutally create the GUI portion of the CalendarCtrl for 2-phase creation.
+        Acutally create the GUI portion of the CalendarCtrl for 2-phase
+        creation.
         """
         return _calendar.CalendarCtrl_Create(*args, **kwargs)
 
@@ -264,9 +328,10 @@ class CalendarCtrl(_core.Control):
         """
         EnableMonthChange(self, bool enable=True)
 
-        This function should be used instead of changing CAL_NO_MONTH_CHANGE style
-        bit. It allows or disallows the user to change the month interactively. Note
-        that if the month can not be changed, the year can not be changed either.
+        This function should be used instead of changing CAL_NO_MONTH_CHANGE
+        style bit. It allows or disallows the user to change the month
+        interactively. Note that if the month can not be changed, the year can
+        not be changed either.
         """
         return _calendar.CalendarCtrl_EnableMonthChange(*args, **kwargs)
 
@@ -274,8 +339,9 @@ class CalendarCtrl(_core.Control):
         """
         EnableHolidayDisplay(self, bool display=True)
 
-        This function should be used instead of changing CAL_SHOW_HOLIDAYS style
-        bit directly. It enables or disables the special highlighting of the holidays.
+        This function should be used instead of changing CAL_SHOW_HOLIDAYS
+        style bit directly. It enables or disables the special highlighting of
+        the holidays.
         """
         return _calendar.CalendarCtrl_EnableHolidayDisplay(*args, **kwargs)
 
@@ -283,7 +349,7 @@ class CalendarCtrl(_core.Control):
         """
         SetHeaderColours(self, Colour colFg, Colour colBg)
 
-        header colours are used for painting the weekdays at the top
+        Header colours are used for painting the weekdays at the top.
         """
         return _calendar.CalendarCtrl_SetHeaderColours(*args, **kwargs)
 
@@ -291,7 +357,7 @@ class CalendarCtrl(_core.Control):
         """
         GetHeaderColourFg(self) -> Colour
 
-        header colours are used for painting the weekdays at the top
+        Header colours are used for painting the weekdays at the top.
         """
         return _calendar.CalendarCtrl_GetHeaderColourFg(*args, **kwargs)
 
@@ -299,7 +365,7 @@ class CalendarCtrl(_core.Control):
         """
         GetHeaderColourBg(self) -> Colour
 
-        header colours are used for painting the weekdays at the top
+        Header colours are used for painting the weekdays at the top.
         """
         return _calendar.CalendarCtrl_GetHeaderColourBg(*args, **kwargs)
 
@@ -307,7 +373,7 @@ class CalendarCtrl(_core.Control):
         """
         SetHighlightColours(self, Colour colFg, Colour colBg)
 
-        highlight colour is used for the currently selected date
+        Highlight colour is used for the currently selected date.
         """
         return _calendar.CalendarCtrl_SetHighlightColours(*args, **kwargs)
 
@@ -315,7 +381,7 @@ class CalendarCtrl(_core.Control):
         """
         GetHighlightColourFg(self) -> Colour
 
-        highlight colour is used for the currently selected date
+        Highlight colour is used for the currently selected date.
         """
         return _calendar.CalendarCtrl_GetHighlightColourFg(*args, **kwargs)
 
@@ -323,7 +389,7 @@ class CalendarCtrl(_core.Control):
         """
         GetHighlightColourBg(self) -> Colour
 
-        highlight colour is used for the currently selected date
+        Highlight colour is used for the currently selected date.
         """
         return _calendar.CalendarCtrl_GetHighlightColourBg(*args, **kwargs)
 
@@ -331,7 +397,8 @@ class CalendarCtrl(_core.Control):
         """
         SetHolidayColours(self, Colour colFg, Colour colBg)
 
-        holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is used)
+        Holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is
+        used).
         """
         return _calendar.CalendarCtrl_SetHolidayColours(*args, **kwargs)
 
@@ -339,7 +406,8 @@ class CalendarCtrl(_core.Control):
         """
         GetHolidayColourFg(self) -> Colour
 
-        holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is used)
+        Holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is
+        used).
         """
         return _calendar.CalendarCtrl_GetHolidayColourFg(*args, **kwargs)
 
@@ -347,7 +415,8 @@ class CalendarCtrl(_core.Control):
         """
         GetHolidayColourBg(self) -> Colour
 
-        holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is used)
+        Holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is
+        used).
         """
         return _calendar.CalendarCtrl_GetHolidayColourBg(*args, **kwargs)
 
@@ -355,8 +424,8 @@ class CalendarCtrl(_core.Control):
         """
         GetAttr(self, size_t day) -> CalendarDateAttr
 
-        Returns the attribute for the given date (should be in the range 1...31).
-        The returned value may be None
+        Returns the attribute for the given date (should be in the range
+        1...31).  The returned value may be None
         """
         return _calendar.CalendarCtrl_GetAttr(*args, **kwargs)
 
@@ -364,8 +433,9 @@ class CalendarCtrl(_core.Control):
         """
         SetAttr(self, size_t day, CalendarDateAttr attr)
 
-        Associates the attribute with the specified date (in the range 1...31).
-        If the attribute passed is None, the items attribute is cleared.
+        Associates the attribute with the specified date (in the range
+        1...31).  If the attribute passed is None, the items attribute is
+        cleared.
         """
         return _calendar.CalendarCtrl_SetAttr(*args, **kwargs)
 
@@ -381,7 +451,8 @@ class CalendarCtrl(_core.Control):
         """
         ResetAttr(self, size_t day)
 
-        Clears any attributes associated with the given day (in the range 1...31).
+        Clears any attributes associated with the given day (in the range
+        1...31).
         """
         return _calendar.CalendarCtrl_ResetAttr(*args, **kwargs)
 
@@ -389,13 +460,16 @@ class CalendarCtrl(_core.Control):
         """
         HitTest(Point pos) -> (result, date, weekday)
 
-        Returns 3-tuple with information about the given position on the calendar
-        control.  The first value of the tuple is a result code and determines the
-        validity of the remaining two values.  The result codes are:
+        Returns 3-tuple with information about the given position on the
+        calendar control.  The first value of the tuple is a result code and
+        determines the validity of the remaining two values.  The result codes
+        are:
 
-            CAL_HITTEST_NOWHERE:    hit outside of anything
-            CAL_HITTEST_HEADER:     hit on the header, weekday is valid
-            CAL_HITTEST_DAY:        hit on a day in the calendar, date is set.
+            ===================    ============================================
+            CAL_HITTEST_NOWHERE    hit outside of anything
+            CAL_HITTEST_HEADER     hit on the header, weekday is valid
+            CAL_HITTEST_DAY        hit on a day in the calendar, date is set.
+            ===================    ============================================
 
         """
         return _calendar.CalendarCtrl_HitTest(*args, **kwargs)
@@ -404,7 +478,7 @@ class CalendarCtrl(_core.Control):
         """
         GetMonthControl(self) -> Control
 
-        get the currently shown control for month
+        Get the currently shown control for month.
         """
         return _calendar.CalendarCtrl_GetMonthControl(*args, **kwargs)
 
@@ -412,7 +486,7 @@ class CalendarCtrl(_core.Control):
         """
         GetYearControl(self) -> Control
 
-        get the currently shown control for year
+        Get the currently shown control for year.
         """
         return _calendar.CalendarCtrl_GetYearControl(*args, **kwargs)
 

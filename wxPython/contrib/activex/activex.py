@@ -5,7 +5,7 @@ import _activex
 
 import _core
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
+__docfilter__ = wx.__DocFilter(globals()) 
 #---------------------------------------------------------------------------
 
 class CLSID(object):
@@ -361,7 +361,7 @@ class ActiveXEvent(_core.CommandEvent):
     ActiveX events.  Any event parameters from the ActiveX cntrol are
     turned into attributes of the Python proxy for this event object.
     Additionally, there is a property called eventName that will
-    return (suprizingly <wink>) the name of the ActiveX event.
+    return (surprisingly <wink>) the name of the ActiveX event.
     """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
