@@ -110,8 +110,12 @@ wxBEGIN_HANDLERS_TABLE(wxComboBox)
 wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_5( wxComboBox , wxWindow* , Parent , wxWindowID , Id , wxString , Value , wxPoint , Position , wxSize , Size )
+
 #else
+
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
+
+#endif
 
 BEGIN_EVENT_TABLE(wxComboBox, wxControl)
     EVT_MENU(wxID_CUT, wxComboBox::OnCut)
@@ -130,8 +134,6 @@ BEGIN_EVENT_TABLE(wxComboBox, wxControl)
     EVT_UPDATE_UI(wxID_CLEAR, wxComboBox::OnUpdateDelete)
     EVT_UPDATE_UI(wxID_SELECTALL, wxComboBox::OnUpdateSelectAll)
 END_EVENT_TABLE()
-
-#endif
 
 // ----------------------------------------------------------------------------
 // function prototypes
@@ -686,8 +688,8 @@ void wxComboBox::GetSelection(long* from, long* to) const
 }
 
 int wxComboBox::GetSelection() const
-{   
-    return wxChoice::GetSelection();    
+{
+    return wxChoice::GetSelection();
 }
 
 // ----------------------------------------------------------------------------
