@@ -22,7 +22,7 @@
     #define wxWIDGET_ARRAY_DEFINED
 
     #include "wx/dynarray.h"
-    WX_DEFINE_ARRAY(WXWidget, wxWidgetArray);
+    WX_DEFINE_ARRAY_PTR(WXWidget, wxWidgetArray);
 #endif
 
 // Choice item

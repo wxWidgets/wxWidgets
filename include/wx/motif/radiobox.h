@@ -9,26 +9,24 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_RADIOBOX_H_
-#define _WX_RADIOBOX_H_
+#ifndef _WX_MOTIF_RADIOBOX_H_
+#define _WX_MOTIF_RADIOBOX_H_
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "radiobox.h"
+    #pragma interface "radiobox.h"
 #endif
 
 #ifndef wxWIDGET_ARRAY_DEFINED
     #define wxWIDGET_ARRAY_DEFINED
 
     #include "wx/dynarray.h"
-    WX_DEFINE_ARRAY(WXWidget, wxWidgetArray);
-#endif
+    WX_DEFINE_ARRAY_PTR(WXWidget, wxWidgetArray);
+#endif // wxWIDGET_ARRAY_DEFINED
 
 #include "wx/arrstr.h"
 
 class WXDLLEXPORT wxRadioBox : public wxControl, public wxRadioBoxBase
 {
-    DECLARE_DYNAMIC_CLASS(wxRadioBox)
-
 public:
     wxRadioBox() { Init(); }
 
@@ -108,10 +106,11 @@ public:
     void SetSel(int i) { m_selectedButton = i; }
     virtual WXWidget GetLabelWidget() const { return m_labelWidget; }
 
-private:
-    void Init();
-
 protected:
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+
     int               m_majorDim;
     int               m_noItems;
     int               m_noRowsOrCols;
@@ -121,10 +120,12 @@ protected:
     WXWidget          m_labelWidget;
     wxArrayString     m_radioButtonLabels;
 
-    virtual void DoSetSize(int x, int y,
-        int width, int height,
-        int sizeFlags = wxSIZE_AUTO);
+private:
+    void Init();
+
+
+    DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };
 
-#endif
-// _WX_RADIOBOX_H_
+#endif // _WX_MOTIF_RADIOBOX_H_
+
