@@ -2,9 +2,8 @@
 // Name:        radiobox.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -80,13 +79,12 @@ class wxRadioBox: public wxControl
     int GetNumberOfRowsOrCols(void) const;
     void SetNumberOfRowsOrCols( int n );
     
-    void SetFont( const wxFont &font );
-    void SetBackgroundColour( const wxColour &colour );
     void OnSize( wxSizeEvent &event );
     
   // implementation    
     
     bool IsOwnGtkWindow( GdkWindow *window );
+    void ApplyWidgetStyle();
     
     bool             m_alreadySent;
     wxList           m_boxes;

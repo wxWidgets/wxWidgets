@@ -68,3 +68,9 @@ int wxGauge::GetValue(void) const
   return m_gaugePos;
 }
 
+void wxGauge::ApplyWidgetStyle()
+{
+  SetWidgetStyle();
+  gtk_widget_set_style( m_widget, m_widgetStyle );
+}
+

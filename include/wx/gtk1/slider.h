@@ -2,8 +2,7 @@
 // Name:        slider.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -63,9 +62,6 @@ class wxSlider: public wxControl
            const wxString& name = wxSliderNameStr );
     virtual int GetValue(void) const;
     virtual void SetValue( int );
-    void GetSize( int *x, int *y ) const;
-    void SetSize( int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO );
-    void GetPosition( int *x, int *y ) const;
     void SetRange( int minValue, int maxValue );
     int GetMin(void) const;
     int GetMax(void) const;
@@ -87,6 +83,7 @@ class wxSlider: public wxControl
   // implementation    
     
     bool IsOwnGtkWindow( GdkWindow *window );
+    void ApplyWidgetStyle();
     
     GtkAdjustment  *m_adjust;
     float           m_oldPos;

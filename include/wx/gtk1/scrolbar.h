@@ -2,9 +2,8 @@
 // Name:        scrolbar.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -67,7 +66,8 @@ class wxScrollBar: public wxControl
     virtual void SetScrollbar( int position, int thumbSize, int range, int pageSize,
       bool refresh = TRUE );
 
-    // Backward compatibility
+  // Backward compatibility
+    
     int GetValue(void) const;
     void SetValue( int viewStart );
     void GetValues( int *viewStart, int *viewLength, int *objectLength, int *pageLength) const;
@@ -80,6 +80,7 @@ class wxScrollBar: public wxControl
   // implementation    
     
     bool IsOwnGtkWindow( GdkWindow *window );
+    void ApplyWidgetStyle();
   
     GtkAdjustment  *m_adjust;
     float           m_oldPos;

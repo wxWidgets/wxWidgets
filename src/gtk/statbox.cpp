@@ -44,6 +44,9 @@ bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label
 
   SetLabel(label);
   
+  SetBackgroundColour( parent->GetBackgroundColour() );
+  SetForegroundColour( parent->GetForegroundColour() );
+
   Show( TRUE );
 
   return TRUE;
@@ -55,3 +58,10 @@ void wxStaticBox::SetLabel( const wxString &label )
   GtkFrame *frame = GTK_FRAME( m_widget );
   gtk_frame_set_label( frame, GetLabel() );
 }
+
+void wxStaticBox::ApplyWidgetStyle()
+{
+  SetWidgetStyle();
+  gtk_widget_set_style( m_widget, m_widgetStyle );
+}
+

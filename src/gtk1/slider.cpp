@@ -90,6 +90,8 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
   else
     m_widget = gtk_vscale_new( (GtkAdjustment *) NULL );
     
+  gtk_scale_set_draw_value( GTK_SCALE( m_widget ), FALSE );
+  
   m_adjust = gtk_range_get_adjustment( GTK_RANGE(m_widget) );
   
   gtk_signal_connect (GTK_OBJECT (m_adjust), "value_changed",
@@ -100,6 +102,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
   PostCreation();
   
   SetBackgroundColour( parent->GetBackgroundColour() );
+  SetForegroundColour( parent->GetForegroundColour() );
 
   Show( TRUE );
     
@@ -187,23 +190,6 @@ int wxSlider::GetLineSize(void) const
   return 0;
 }
 
-// not supported in wxGTK (and GTK)
-
-void wxSlider::GetSize( int *x, int *y ) const
-{
-  wxWindow::GetSize( x, y );
-}
-
-void wxSlider::SetSize( int x, int y, int width, int height, int sizeFlags )
-{
-  wxWindow::SetSize( x, y, width, height, sizeFlags );
-}
-
-void wxSlider::GetPosition( int *x, int *y ) const
-{
-  wxWindow::GetPosition( x, y );
-}
-
 void wxSlider::SetTick( int WXUNUSED(tickPos) )
 {
 }
@@ -249,4 +235,8 @@ bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
 	   (window == range->step_back) );
 }
 
-
+void wxSlider::ApplyWidgetStyle()
+{
+  SetWidgetStyle();
+  gtk_widget_set_style( m_widget, m_widgetStyle );
+}

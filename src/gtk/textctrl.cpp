@@ -150,6 +150,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   Show( TRUE );
 
   SetBackgroundColour( parent->GetBackgroundColour() );
+  SetForegroundColour( parent->GetForegroundColour() );
 
   return TRUE;
 }
@@ -617,11 +618,16 @@ bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
     return (window == GTK_ENTRY(m_text)->text_area);
 }
 
-void wxTextCtrl::SetFont( const wxFont &font )
+void wxTextCtrl::SetFont( const wxFont &WXUNUSED(font) )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
   
-  wxControl::SetFont( font );
+  // doesn't work
+}
+
+void wxTextCtrl::SetForegroundColour( const wxColour &WXUNUSED(colour) )
+{
+  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
   
   // doesn't work
 }
@@ -641,8 +647,16 @@ void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
     gdk_window_set_background( window, m_backgroundColour.GetColor() );
     gdk_window_clear( window );
   }
+}
+
+void wxTextCtrl::ApplyWidgetStyle()
+{
+  if (m_windowStyle & wxTE_MULTILINE)
+  {
+  }
   else
   {
+    SetWidgetStyle();
     gtk_widget_set_style( m_text, m_widgetStyle );
   }
 }

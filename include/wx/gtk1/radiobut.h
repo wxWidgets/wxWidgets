@@ -60,9 +60,11 @@ class wxRadioButton: public wxControl
     virtual void SetLabel(const wxString& label);
     virtual void SetValue(bool val);
     virtual bool GetValue(void) const;
-    void SetFont( const wxFont &font );
     void Enable( bool enable );
-    void SetBackgroundColour( const wxColour &colour );
+    
+  // implementation
+    
+    void ApplyWidgetStyle();
 };
 
 #endif // __GTKRADIOBUTTONH__

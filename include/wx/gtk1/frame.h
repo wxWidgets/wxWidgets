@@ -2,9 +2,8 @@
 // Name:        frame.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling, Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -99,7 +98,10 @@ public:
   void OnCloseWindow( wxCloseEvent& event );
   void OnIdle(wxIdleEvent& event);
 
-  virtual void AddChild( wxWindow *child );
+  void AddChild( wxWindow *child );
+  
+  // implementation
+  
   virtual void GtkOnSize( int x, int y, int width, int height );
 
 private:

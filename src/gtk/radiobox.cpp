@@ -164,6 +164,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
   SetLabel( title );
   
   SetBackgroundColour( parent->GetBackgroundColour() );
+  SetForegroundColour( parent->GetForegroundColour() );
 
   Show( TRUE );
     
@@ -460,41 +461,20 @@ void wxRadioBox::SetNumberOfRowsOrCols( int WXUNUSED(n) )
   wxFAIL_MSG("wxRadioBox::SetNumberOfRowsOrCols not implemented.");
 }
 
-void wxRadioBox::SetFont( const wxFont &font )
+void wxRadioBox::ApplyWidgetStyle()
 {
-  wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+  SetWidgetStyle();
   
-  wxControl::SetFont( font );
-   
   gtk_widget_set_style( m_widget, m_widgetStyle );
   
   wxNode *node = m_boxes.First();
   while (node)
   {
+    GtkWidget *widget = GTK_WIDGET( node->Data() );
+    gtk_widget_set_style( widget, m_widgetStyle );
+    
     GtkButton *button = GTK_BUTTON( node->Data() );
-    
     gtk_widget_set_style( button->child, m_widgetStyle );
-    
-    node = node->Next();
-  }
-}
-
-void wxRadioBox::SetBackgroundColour( const wxColour &colour )
-{
-  wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
-  
-  wxControl::SetBackgroundColour( colour );
-  
-  if (!m_backgroundColour.Ok()) return;
-  
-  gtk_widget_set_style( m_widget, m_widgetStyle );
-  
-  wxNode *node = m_boxes.First();
-  while (node)
-  {
-    GtkWidget *button = GTK_WIDGET( node->Data() );
-    
-    gtk_widget_set_style( button, m_widgetStyle );
     
     node = node->Next();
   }

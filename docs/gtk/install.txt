@@ -35,38 +35,50 @@ for newest information.
 -----------------------
 
 wxWindows/GTK requires the GTK+ library to be installed on your system.
-It has to be a stable version, preferebly version 1.0.6.
+It has to be a stable version, preferebly version 1.0.6. When using
+a version previous to 1.0.6 you'll get crashes here and there. This
+is certain to happen with colors in native widgets.
 
 You can get the newest version of the GTK+ from the GTK homepage
 at
   http://www.gtk.org
   
+We also mirror GTK+ 1.0.6 at our ftp site. You'll find information
+about downloading at my homepage.
+  
 * Additional libraries
 -----------------------
 
-There will be a few more features of wxWindows, which will 
-require further libraries (on some platforms). These
-features will be optional. I hope to teach configure
-to check that out automatically.
+wxWindows/Gtk requires a thread library and X libraries
+known to work with threads. This is the case on all
+commercial Unix-Variants and all Linux-Versions that
+are based on glibc 2 except RedHat 5.0 which is broken
+in many aspects. As of writing this, these Linux 
+distributions have correct glibc 2 support:
 
-Thread support:
+ - RedHat 5.1
+ - Debian 2.0
+ - Stampede
+ 
+The next major version of SuSE will also support glibc 2,
+but version 5.X does not. Also Caldera and Slackware
+don't yet support glibc 2.
 
-  Requires pthreads under Linux with glibc 2. pthreads are
-  always present on such systems, so just compile, unless
-  you have RedHat 5.0, which has a broken combination of
-  glibc 2 and X. In this case, you have to run configure
-  with "--without-threads".
+On IRIX you can also use SGI threads if Posix-Threads
+are not present. The SGI threads will be detected by
+configure automatically.
+
+You can always disable thread support by running 
+
+./configure "--without-threads"
+make clean
+make
   
-  Requires PCthreads under Linux with libc 5. If you
-  haven't installed pcthreads, there will be no thread
-  support in wxWindows, but the library will compile.
-  
-  Requires Posix threads on commercial Unix system,
-  which are always present. Just compile.
-  
-  On SGI Irix we first look for sprocs, then pthreads and
-  use the last one found.
-  
+NB: I included thread support in wxWindows/Gtk, as this 
+problem will disappear in the near future when all major 
+Linux Variants have moved to glibc 2. Also, the Linux
+Base Standard will include glibc 2.
+
 * Create your configuration
 -----------------------------
 

@@ -93,20 +93,16 @@ class wxComboBox: public wxControl
   void SetSelection(long from, long to);
   void SetEditable(bool editable);
   
-  void SetFont( const wxFont &font );
   void OnSize( wxSizeEvent &event );
-  void SetBackgroundColour( const wxColour &colour );
   
   // implementation
-
-    bool     m_alreadySent;
     
-  private:
-  
+    bool     m_alreadySent;
     wxList   m_clientData;
 
-  GtkWidget* GetConnectWidget(void);
-  bool IsOwnGtkWindow( GdkWindow *window );
+    GtkWidget* GetConnectWidget(void);
+    bool IsOwnGtkWindow( GdkWindow *window );
+    void ApplyWidgetStyle();
   
   DECLARE_EVENT_TABLE()
 };

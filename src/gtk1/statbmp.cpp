@@ -21,14 +21,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap,wxControl)
 
 wxStaticBitmap::wxStaticBitmap(void)
 {
-};
+}
 
 wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap, 
       const wxPoint &pos, const wxSize &size, 
       long style, const wxString &name )
 {
   Create( parent, id, bitmap, pos, size, style, name );
-};
+}
 
 bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap, 
       const wxPoint &pos, const wxSize &size, 
@@ -62,7 +62,7 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
   Show( TRUE );
     
   return TRUE;
-};
+}
 
 void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap ) 
 {
@@ -74,5 +74,4 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
     if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
     gtk_pixmap_set( GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask );
   }
-};
-
+}

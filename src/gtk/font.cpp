@@ -361,8 +361,20 @@ GdkFont *wxFont::GetInternalFont(float scale) const
   } 
   else 
   {
-     font = wxLoadQueryNearestFont( point_scale, M_FONTDATA->m_fontId, M_FONTDATA->m_style,
-				    M_FONTDATA->m_weight, M_FONTDATA->m_underlined );
+     if ((int_scale == 100) &&
+         (M_FONTDATA->m_style == wxSWISS) &&
+         (M_FONTDATA->m_pointSize == 12) &&
+         (M_FONTDATA->m_weight == wxNORMAL) &&
+         (M_FONTDATA->m_underlined == FALSE) &&
+         (M_FONTDATA->m_style == wxNORMAL))
+     {
+       font = gdk_font_load( "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*" );
+     }
+     else
+     {
+       font = wxLoadQueryNearestFont( point_scale, M_FONTDATA->m_fontId, M_FONTDATA->m_style,
+				      M_FONTDATA->m_weight, M_FONTDATA->m_underlined );
+     }
      M_FONTDATA->m_scaled_xfonts.Append( int_scale, (wxObject*)font );
   }
   if (!font)

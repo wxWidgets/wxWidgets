@@ -1000,10 +1000,10 @@ GUI_TK_LINK=
 MAKEINCLUDE=
 
 if test "$wxUSE_GTK" = 1; then
-  AM_PATH_GTK(0.99.7, [
+  AM_PATH_GTK(1.0.6, [
        GUI_TK_INCLUDE="$GTK_CFLAGS"
        GUI_TK_LIBRARY="$GTK_LIBS"
-  ], AC_MSG_ERROR(Are gtk-config and the GTK in path and up-to-date?))
+  ], AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.0.6?))
   TOOLKIT=GTK
   TOOLKIT_DEF=__WXGTK__
   MAKEINCLUDE=../gtk.inc

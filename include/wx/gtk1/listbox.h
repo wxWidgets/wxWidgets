@@ -2,9 +2,8 @@
 // Name:        listbox.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -83,18 +82,15 @@ class wxListBox: public wxControl
     void SetString( int n, const wxString &string );
     void SetStringSelection( const wxString &string, bool select = TRUE );
     
-    void SetFont( const wxFont &font );
     void SetDropTarget( wxDropTarget *dropTarget );
-    virtual void SetBackgroundColour(const wxColour &colour);
 
   // implementation
     
     int GetIndex( GtkWidget *item ) const;
     GtkWidget *GetConnectWidget(void);
     bool IsOwnGtkWindow( GdkWindow *window );
+    void ApplyWidgetStyle();
     
-  private:
-  
     GtkList   *m_list;
     wxList     m_clientData;
     

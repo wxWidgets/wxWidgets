@@ -138,13 +138,12 @@ public:
   wxWindow *GetPage(int nPage) const;
 
   // implementation
-  // --------------
-    // base class virtuals
-  virtual void AddChild(wxWindow *child);
-  virtual void SetConstraintSizes(bool recurse);
-  virtual bool DoPhase(int phase);
-  virtual void SetFont( const wxFont &font );
-  virtual void SetBackgroundColour( const wxColour &colour );
+  
+  void AddChild(wxWindow *child);
+  void SetConstraintSizes(bool recurse);
+  bool DoPhase(int phase);
+  void ApplyWidgetStyle();
+  
 
 private:
   // common part of all ctors

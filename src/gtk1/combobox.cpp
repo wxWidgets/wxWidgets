@@ -104,6 +104,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
   gtk_widget_realize( GTK_COMBO(m_widget)->button );
   
   SetBackgroundColour( parent->GetBackgroundColour() );
+  SetForegroundColour( parent->GetForegroundColour() );
 
   Show( TRUE );
     
@@ -135,11 +136,7 @@ void wxComboBox::Append( const wxString &item, char *clientData )
   
   GtkWidget *list_item = gtk_list_item_new_with_label( item ); 
   
-  if (m_widgetStyle)
-  {
-    gtk_widget_set_style( list_item, m_widgetStyle );
-    gtk_widget_set_style( GTK_BIN( list_item )->child, m_widgetStyle );
-  }
+  if (m_widgetStyle) ApplyWidgetStyle();
   
   gtk_signal_connect( GTK_OBJECT(list_item), "select", 
     GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
@@ -438,21 +435,21 @@ void wxComboBox::OnSize( wxSizeEvent &event )
   gtk_widget_set_usize( GTK_COMBO(m_widget)->button, w, m_height );
 }
 
-void wxComboBox::SetFont( const wxFont &font )
+void wxComboBox::ApplyWidgetStyle()
 {
-  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  SetWidgetStyle();
   
-  wxWindow::SetFont( font );
-   
+  gtk_widget_set_style( GTK_COMBO(m_widget)->button, m_widgetStyle );
   gtk_widget_set_style( GTK_COMBO(m_widget)->entry, m_widgetStyle );
+  gtk_widget_set_style( GTK_COMBO(m_widget)->list, m_widgetStyle );
   
   GtkList *list = GTK_LIST( GTK_COMBO(m_widget)->list );
-  
   GList *child = list->children;
   while (child)
   {
-    GtkBin *bin = (GtkBin*) child->data;
-    
+    gtk_widget_set_style( GTK_WIDGET(child->data), m_widgetStyle );
+  
+    GtkBin *bin = GTK_BIN(child->data);
     gtk_widget_set_style( bin->child, m_widgetStyle );
         
     child = child->next;
@@ -469,27 +466,3 @@ bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
   return ( (window == GTK_ENTRY( GTK_COMBO(m_widget)->entry )->text_area) ||
            (window == GTK_COMBO(m_widget)->button->window ) );
 }
-
-void wxComboBox::SetBackgroundColour( const wxColour &colour )
-{
-  wxCHECK_RET( m_widget != NULL, "invalid combobox" );
-  
-  wxControl::SetBackgroundColour( colour );
-  
-  if (!m_backgroundColour.Ok()) return;
-  
-//  gtk_widget_set_style( m_widget, m_widgetStyle );
-
-  gtk_widget_set_style( GTK_COMBO(m_widget)->button, m_widgetStyle );
-  gtk_widget_set_style( GTK_COMBO(m_widget)->entry, m_widgetStyle );
-  gtk_widget_set_style( GTK_COMBO(m_widget)->list, m_widgetStyle );
-  
-  GList *child = GTK_LIST( GTK_COMBO(m_widget)->list )->children;
-  while (child)
-  {
-    gtk_widget_set_style( GTK_WIDGET(child->data), m_widgetStyle );
-    
-    child = child->next;
-  }
-}
-

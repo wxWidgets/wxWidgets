@@ -173,3 +173,4 @@ bool wxPanel::SetFocusToNextChild(wxNode *node, bool bForward)
 
   return TRUE;
 }
+

@@ -287,5 +287,3 @@ void wxDialog::SetIcon( const wxIcon &icon )
   
   gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
 }
-
-

@@ -456,23 +456,9 @@ bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
   return TRUE;
 }
 
-void wxNotebook::SetFont( const wxFont &font )
+void wxNotebook::ApplyWidgetStyle()
 {
-  wxCHECK_RET( m_widget != NULL, "invalid notebook" );
-
-  wxControl::SetFont( font );
-   
-  gtk_widget_set_style( m_widget, m_widgetStyle );
-}
-
-void wxNotebook::SetBackgroundColour( const wxColour &colour )
-{
-  wxCHECK_RET( m_widget != NULL, "invalid notebook" );
-
-  wxControl::SetBackgroundColour( colour );
-  
-  if (!m_backgroundColour.Ok()) return;
-  
+  SetWidgetStyle();
   gtk_widget_set_style( m_widget, m_widgetStyle );
 }
 

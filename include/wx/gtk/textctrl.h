@@ -101,12 +101,14 @@ class wxTextCtrl: public wxControl, public streambuf
     wxTextCtrl& operator<<(const char c);
 
     void SetFont( const wxFont &font );
-    virtual void SetBackgroundColour(const wxColour &colour);
+    void SetForegroundColour(const wxColour &colour);
+    void SetBackgroundColour(const wxColour &colour);
 
   // implementation    
     
     GtkWidget* GetConnectWidget(void);
     bool IsOwnGtkWindow( GdkWindow *window );
+    void ApplyWidgetStyle();
     
   private:
   

@@ -64,7 +64,7 @@ public:
   void OnSysColourChanged(wxSysColourChangedEvent& event);
     // Process a keyboard navigation message (Tab traversal)
   void OnNavigationKey(wxNavigationKeyEvent& event);
-
+  
 protected:
   bool SetFocusToNextChild(wxNode *nodeCurrent = (wxNode *) NULL, bool bForward = TRUE);
 

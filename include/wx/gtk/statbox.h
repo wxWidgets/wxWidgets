@@ -2,9 +2,8 @@
 // Name:        stabox.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -51,6 +50,10 @@ class wxStaticBox: public wxControl
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
       long style = 0, const wxString &name = wxStaticBoxNameStr  );
     void SetLabel( const wxString &label );
+
+  // implementation
+    
+    void ApplyWidgetStyle();
 };
 
 #endif // __GTKSTATICBOXH__

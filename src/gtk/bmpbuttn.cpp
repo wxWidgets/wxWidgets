@@ -130,3 +130,7 @@ void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
   gtk_pixmap_set( g_pixmap, m_bitmap.GetPixmap(), mask );
 }
 
+void wxBitmapButton::ApplyWidgetStyle()
+{
+}
+

@@ -1102,7 +1102,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
     m_cursor = new wxCursor( wxCURSOR_ARROW );
   m_font = *wxSWISS_FONT;
 //  m_backgroundColour = wxWHITE;
-  m_foregroundColour = wxBLACK;
+//  m_foregroundColour = wxBLACK;
   m_windowStyle = style;
   m_windowName = name;
   m_constraints = (wxLayoutConstraints *) NULL;
@@ -1965,19 +1965,8 @@ void wxWindow::SetBackgroundColour( const wxColour &colour )
     gdk_window_set_background( window, m_backgroundColour.GetColor() );
     gdk_window_clear( window );
   }
-  else
-  {
-    GtkStyle *style = GetWidgetStyle();
-    m_backgroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
-    style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-    style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-    style->bg[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
-    style->base[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
-    style->bg[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
-    style->base[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
-    style->bg[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
-    style->base[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
-  }
+  
+  ApplyWidgetStyle();
 }
 
 wxColour wxWindow::GetForegroundColour() const
@@ -1992,23 +1981,51 @@ void wxWindow::SetForegroundColour( const wxColour &colour )
   m_foregroundColour = colour;
   if (!m_foregroundColour.Ok()) return;
   
-  if (!m_wxwindow)
+  ApplyWidgetStyle();
+}
+
+GtkStyle *wxWindow::GetWidgetStyle()
+{
+  if (m_widgetStyle) gtk_style_unref( m_widgetStyle );
+  
+  m_widgetStyle = 
+    gtk_style_copy( 
+      gtk_widget_get_style( m_widget ) );
+      
+  return m_widgetStyle;
+}
+
+void wxWindow::SetWidgetStyle()
+{
+  GtkStyle *style = GetWidgetStyle();
+  
+  gdk_font_unref( style->font );
+  style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+  
+  if (m_foregroundColour.Ok())
   {
-    GtkStyle *style = GetWidgetStyle();
     m_foregroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
     style->fg[GTK_STATE_NORMAL] = *m_foregroundColour.GetColor();
     style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
     style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
   }
+  
+  if (m_backgroundColour.Ok())
+  {
+    m_backgroundColour.CalcPixel( gdk_window_get_colormap( m_widget->window ) );
+    style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+    style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+    style->bg[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
+    style->base[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
+    style->bg[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
+    style->base[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
+    style->bg[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
+    style->base[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
+  }
 }
 
-GtkStyle *wxWindow::GetWidgetStyle()
+void wxWindow::ApplyWidgetStyle()
 {
-  if (!m_widgetStyle) 
-    m_widgetStyle = 
-      gtk_style_copy( 
-        gtk_widget_get_style( m_widget ) );
-  return m_widgetStyle;
 }
 
 bool wxWindow::Validate()
@@ -2172,10 +2189,8 @@ void wxWindow::SetFont( const wxFont &font )
     m_font = font;
   else
     m_font = *wxSWISS_FONT;
-
-  GtkStyle *style = GetWidgetStyle();
-  gdk_font_unref( style->font );
-  style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+    
+  ApplyWidgetStyle();
 }
 
 wxFont *wxWindow::GetFont()

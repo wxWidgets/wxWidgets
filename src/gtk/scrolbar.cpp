@@ -261,3 +261,10 @@ bool wxScrollBar::IsOwnGtkWindow( GdkWindow *window )
 	   (window == range->step_forw) ||
 	   (window == range->step_back) );
 }
+
+void wxScrollBar::ApplyWidgetStyle()
+{
+  SetWidgetStyle();
+  gtk_widget_set_style( m_widget, m_widgetStyle );
+}
+

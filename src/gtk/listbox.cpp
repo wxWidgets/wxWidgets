@@ -126,6 +126,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
   gtk_widget_realize( GTK_WIDGET(m_list) );
 
   SetBackgroundColour( parent->GetBackgroundColour() );
+  SetForegroundColour( parent->GetForegroundColour() );
 
   Show( TRUE );
 
@@ -143,11 +144,7 @@ void wxListBox::Append( const wxString &item, char *clientData )
 
   GtkWidget *list_item = gtk_list_item_new_with_label( item );
 
-  if (m_widgetStyle)
-  {
-    gtk_widget_set_style( list_item, m_widgetStyle );
-    gtk_widget_set_style( GTK_BIN( list_item )->child, m_widgetStyle );
-  }
+  if (m_widgetStyle) ApplyWidgetStyle();
   
   gtk_signal_connect( GTK_OBJECT(list_item), "select",
     GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
@@ -466,27 +463,9 @@ bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
   return FALSE;
 }
 
-void wxListBox::SetFont( const wxFont &font )
+void wxListBox::ApplyWidgetStyle()
 {
-  wxCHECK_RET( m_list != NULL, "invalid listbox" );
-  
-  wxControl::SetFont( font );
-
-  GList *child = m_list->children;
-  while (child)
-  {
-    gtk_widget_set_style( GTK_BIN(child->data)->child, m_widgetStyle );
-    child = child->next;
-  }
-}
-
-void wxListBox::SetBackgroundColour( const wxColour &colour )
-{
-  wxCHECK_RET( m_list != NULL, "invalid listbox" );
-  
-  wxControl::SetBackgroundColour( colour );
-  
-  if (!m_backgroundColour.Ok()) return;
+  SetWidgetStyle();
   
   GdkWindow *window = GTK_WIDGET(m_list)->window;
   m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
@@ -496,8 +475,8 @@ void wxListBox::SetBackgroundColour( const wxColour &colour )
   GList *child = m_list->children;
   while (child)
   {
+    gtk_widget_set_style( GTK_BIN(child->data)->child, m_widgetStyle );
     gtk_widget_set_style( GTK_WIDGET(child->data), m_widgetStyle );
     child = child->next;
   }
 }
-

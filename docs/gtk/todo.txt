@@ -16,12 +16,6 @@ wxHelpController
 Fix printing of bitmaps
   -> No idea.
 
-Add support SetForegroundColour in GTK widgets
-  -> On the way.
-
-wxBitmapCheckBox
-  -> Interface same as checkbox?
-
 wxImage
   -> 24-bit support
   

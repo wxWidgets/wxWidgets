@@ -72,6 +72,7 @@ bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label
   SetLabel( label );
 
   SetBackgroundColour( parent->GetBackgroundColour() );
+  SetForegroundColour( parent->GetForegroundColour() );
 
   Show( TRUE );
     
@@ -113,23 +114,11 @@ void wxCheckBox::Enable( bool enable )
   gtk_widget_set_sensitive( GTK_BUTTON(m_widget)->child, enable );
 }
 
-void wxCheckBox::SetFont( const wxFont &font )
+void wxCheckBox::ApplyWidgetStyle()
 {
-  wxCHECK_RET( m_widget != NULL, "invalid checkbox" );
-
-  wxControl::SetFont( font );
-  
+  SetWidgetStyle();
+  gtk_widget_set_style( m_widget, m_widgetStyle );
   gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
 }
 
-void wxCheckBox::SetBackgroundColour( const wxColour &colour )
-{
-  wxCHECK_RET( m_widget != NULL, "invalid checkbox" );
-
-  wxControl::SetBackgroundColour( colour );
-  
-  if (!m_backgroundColour.Ok()) return;
-  
-  gtk_widget_set_style( m_widget, m_widgetStyle );
-}
 

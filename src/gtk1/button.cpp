@@ -74,6 +74,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
   PostCreation();
   
   SetBackgroundColour( parent->GetBackgroundColour() );
+  SetForegroundColour( parent->GetForegroundColour() );
 
   Show( TRUE );
 
@@ -106,34 +107,10 @@ void wxButton::Enable( bool enable )
   gtk_widget_set_sensitive( GTK_BUTTON(m_widget)->child, enable );
 }
 
-void wxButton::SetFont( const wxFont &font )
+void wxButton::ApplyWidgetStyle()
 {
-  wxCHECK_RET( m_widget != NULL, "invalid button" );
-  
-  wxControl::SetFont( font );
-  
-  gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
-}
-
-void wxButton::SetBackgroundColour( const wxColour &colour )
-{
-  wxCHECK_RET( m_widget != NULL, "invalid button" );
-
-  wxControl::SetBackgroundColour( colour );
-  
-  if (!m_backgroundColour.Ok()) return;
-  
+  SetWidgetStyle();
   gtk_widget_set_style( m_widget, m_widgetStyle );
-}
-
-void wxButton::SetForegroundColour( const wxColour &colour )
-{
-  wxCHECK_RET( m_widget != NULL, "invalid button" );
-
-  wxControl::SetForegroundColour( colour );
-  
-  if (!m_foregroundColour.Ok()) return;
-  
   gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
 }
 

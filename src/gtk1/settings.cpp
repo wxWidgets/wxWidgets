@@ -166,7 +166,7 @@ wxFont wxSystemSettings::GetSystemFont( int index )
     case wxSYS_DEFAULT_GUI_FONT:
     {
       if (!g_systemFont)
-        g_systemFont = new wxFont( "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*" );
+        g_systemFont = new wxFont( 10, wxSWISS, wxNORMAL, wxNORMAL );
       return *g_systemFont;
     }
   }

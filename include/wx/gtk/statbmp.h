@@ -2,9 +2,8 @@
 // Name:        statbmp.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -51,7 +50,7 @@ class wxStaticBitmap: public wxControl
       long style = 0, const wxString& name = wxStaticBitmapNameStr);
     virtual void SetBitmap( const wxBitmap& bitmap );
     wxBitmap& GetBitmap(void) const { return (wxBitmap&)m_bitmap; }
-
+    
  private:
  
    wxBitmap   m_bitmap;

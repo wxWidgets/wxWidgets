@@ -2,9 +2,8 @@
 // Name:        window.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -243,7 +242,9 @@ public:
   bool HasVMT();
   virtual void ImplementSetSize();
   virtual void ImplementSetPosition();
-  GtkStyle *GetWidgetStyle();
+  GtkStyle    *GetWidgetStyle();
+  void         SetWidgetStyle();
+  virtual void ApplyWidgetStyle();
 
   wxWindow            *m_parent;
   wxList               m_children;

@@ -2,9 +2,8 @@
 // Name:        gauge.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -72,9 +71,11 @@ class wxGauge: public wxControl
 
     // Are we a Win95/GTK progress bar, or a normal gauge?
     inline bool GetProgressBar(void) const { return m_useProgressBar; }
-
- protected:
- 
+    
+  // implementation
+    
+    void ApplyWidgetStyle();
+  
    int      m_rangeMax;
    int      m_gaugePos;
    bool     m_useProgressBar;

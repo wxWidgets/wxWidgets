@@ -62,6 +62,9 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
        
   PostCreation();
 
+  SetBackgroundColour( parent->GetBackgroundColour() );
+  SetForegroundColour( parent->GetForegroundColour() );
+  
   Show( TRUE );
 
   return TRUE;
@@ -100,23 +103,11 @@ void wxRadioButton::Enable( bool enable )
   gtk_widget_set_sensitive( GTK_BUTTON(m_widget)->child, enable );
 }
 
-void wxRadioButton::SetFont( const wxFont &font )
+void wxRadioButton::ApplyWidgetStyle()
 {
-  wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
-  
-  wxControl::SetFont( font );
-  
+  SetWidgetStyle();
+  gtk_widget_set_style( m_widget, m_widgetStyle );
   gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
 }
 
-void wxRadioButton::SetBackgroundColour( const wxColour &colour )
-{
-  wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
-
-  wxControl::SetBackgroundColour( colour );
-  
-  if (!m_backgroundColour.Ok()) return;
-  
-  gtk_widget_set_style( m_widget, m_widgetStyle );
-}
 

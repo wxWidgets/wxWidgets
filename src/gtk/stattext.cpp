@@ -91,6 +91,9 @@ bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &labe
   
   PostCreation();
   
+  SetBackgroundColour( parent->GetBackgroundColour() );
+  SetForegroundColour( parent->GetForegroundColour() );
+
   Show( TRUE );
     
   return TRUE;
@@ -110,3 +113,10 @@ void wxStaticText::SetLabel( const wxString &label )
 
   gtk_label_set( GTK_LABEL(m_widget), m_label );
 }
+
+void wxStaticText::ApplyWidgetStyle()
+{
+  SetWidgetStyle();
+  gtk_widget_set_style( m_widget, m_widgetStyle );
+}
+  

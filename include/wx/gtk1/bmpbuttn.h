@@ -63,6 +63,10 @@ class wxBitmapButton: public wxControl
     virtual void SetBitmapLabel( const wxBitmap& bitmap );
     wxBitmap& GetBitmapLabel(void) const { return (wxBitmap&) m_bitmap; }
     
+  // implementation
+  
+    void ApplyWidgetStyle();    
+    
   public:
   
     wxBitmap   m_bitmap;    

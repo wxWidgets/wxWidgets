@@ -2,9 +2,8 @@
 // Name:        stattext.h
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -52,6 +51,10 @@ class wxStaticText: public wxControl
       long style = 0, const wxString &name = wxStaticTextNameStr );
     wxString GetLabel(void) const;
     void SetLabel( const wxString &label );
+    
+  // implementation
+    
+    void ApplyWidgetStyle();
 };
 
 #endif // __GTKSTATICTEXTH__

@@ -70,20 +70,22 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
   for (int i = 0; i < n; i++)
   {
     GtkWidget *item = gtk_menu_item_new_with_label( choices[i] );
-    gtk_signal_connect( GTK_OBJECT( item ), "activate", 
-      GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
-    
     gtk_menu_append( GTK_MENU(menu), item );
     
-    gtk_widget_show( item );
     gtk_widget_realize( item );
     gtk_widget_realize( GTK_BIN(item)->child );
+    
+    gtk_widget_show( item );
+    
+    gtk_signal_connect( GTK_OBJECT( item ), "activate", 
+      GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
   }
   gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
   
   PostCreation();
   
   SetBackgroundColour( parent->GetBackgroundColour() );
+  SetForegroundColour( parent->GetForegroundColour() );
 
   Show( TRUE );
     
@@ -102,11 +104,7 @@ void wxChoice::Append( const wxString &item )
   gtk_widget_realize( menu_item );
   gtk_widget_realize( GTK_BIN(menu_item)->child );
   
-  if (m_widgetStyle)
-  {
-    gtk_widget_set_style( menu_item, m_widgetStyle );
-    gtk_widget_set_style( GTK_BIN(menu_item)->child, m_widgetStyle );
-  }
+  if (m_widgetStyle) ApplyWidgetStyle();
   
   gtk_signal_connect( GTK_OBJECT( menu_item ), "activate", 
     GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
@@ -259,34 +257,9 @@ void wxChoice::SetStringSelection( const wxString &string )
   if (n != -1) SetSelection( n );
 }
 
-void wxChoice::SetFont( const wxFont &font )
+void wxChoice::ApplyWidgetStyle()
 {
-  wxCHECK_RET( m_widget != NULL, "invalid choice" );
-
-  wxControl::SetFont( font );
-   
-  GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
-  GList *child = menu_shell->children;
-  while (child)
-  {
-    GtkBin *bin = GTK_BIN( child->data );
-    GtkWidget *label = (GtkWidget *) NULL;
-    if (bin->child) label = bin->child;
-    if (!label) label = GTK_BUTTON(m_widget)->child;
-    
-    gtk_widget_set_style( label, GetWidgetStyle() );
-	
-    child = child->next;
-  }
-}
-
-void wxChoice::SetBackgroundColour( const wxColour &colour )
-{
-  wxCHECK_RET( m_widget != NULL, "invalid choice" );
-
-  wxControl::SetBackgroundColour( colour );
-  
-  if (!m_backgroundColour.Ok()) return;
+  SetWidgetStyle();
   
   GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
   
@@ -297,9 +270,15 @@ void wxChoice::SetBackgroundColour( const wxColour &colour )
   while (child)
   {
     gtk_widget_set_style( GTK_WIDGET( child->data ), m_widgetStyle );
+    
+    GtkBin *bin = GTK_BIN( child->data );
+    GtkWidget *label = (GtkWidget *) NULL;
+    if (bin->child) label = bin->child;
+    if (!label) label = GTK_BUTTON(m_widget)->child;
+    
+    gtk_widget_set_style( label, m_widgetStyle );
+    
     child = child->next;
   }
 }
-
-
 
