@@ -654,7 +654,7 @@ void wxListBox::MacDelete( int n )
 
     UInt32 id = m_noItems+1 ;
     verify_noerr( m_peer->RemoveItems( kDataBrowserNoItem , 1 , (UInt32*) &id , kDataBrowserItemNoProperty ) ) ;
-    for ( int i = 0 ; i < selectionBefore.GetCount() ; ++i )
+    for ( size_t i = 0 ; i < selectionBefore.GetCount() ; ++i )
     {
         int current = selectionBefore[i] ;
         if ( current == n )
@@ -764,7 +764,7 @@ int wxListBox::MacGetSelections( wxArrayInt& aSelections ) const
     m_peer->GetSelectionAnchor( &first , &last ) ;
     if ( first != kDataBrowserNoItem )
     {
-        for ( int i = first ; i <= last ; ++i )
+        for ( size_t i = first ; i <= last ; ++i )
         {
             if ( m_peer->IsItemSelected( i ) )
             {
