@@ -873,7 +873,7 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
     wxArrayString wildDescriptions, wildFilters;
     if ( !ParseWildcard(m_wildCard, wildDescriptions, wildFilters) )
     {
-        wxFAIL_MSG( wxT("Wrong file type descripition") );
+        wxFAIL_MSG( wxT("Wrong file type description") );
     }
 
     // layout
