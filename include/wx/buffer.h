@@ -191,9 +191,6 @@ public:
     operator const char *() const { return (const char*)m_data; }
 
 protected:
-    // Don't allow copy or assignment
-    wxMemoryBuffer(const wxMemoryBuffer&) {}
-    wxMemoryBuffer& operator=(const wxCharBuffer& src) {}
 
     void ResizeIfNeeded(size_t newSize)
     {
@@ -204,6 +201,8 @@ protected:
             m_size = newSize + wxMemoryBuffer::BLOCK_SIZE;
         }
     }
+
+    DECLARE_NO_COPY_CLASS(wxMemoryBuffer)
 
 private:
     void*       m_data;
