@@ -11,7 +11,7 @@ def runTest(frame, nb, log):
                            frame,
                            wxPD_CAN_ABORT | wxPD_APP_MODAL)
 
-    keepGoing = true
+    keepGoing = True
     count = 0
     while keepGoing and count < max:
         count = count + 1

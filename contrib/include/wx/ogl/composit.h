@@ -77,7 +77,7 @@ public:
   // Calculates size and position of composite object based on children
   void CalculateSize();
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
   // In case the object has constraints it needs to read in in a different pass
@@ -152,7 +152,7 @@ class wxDivisionShape: public wxCompositeShape
   void MakeMandatoryControlPoints();
   void ResetMandatoryControlPoints();
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
 #endif

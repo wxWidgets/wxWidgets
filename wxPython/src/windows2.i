@@ -65,7 +65,7 @@ enum {
 class wxNotebookEvent : public wxNotifyEvent {
 public:
     wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
-                    int nSel = -1, int nOldSel = -1);
+                    int sel = -1, int oldSel = -1);
 
     int GetSelection();
     int GetOldSelection();
@@ -96,36 +96,36 @@ public:
     %pragma(python) addtomethod = "wxPreNotebook:val._setOORInfo(val)"
 
     int GetPageCount();
-    int SetSelection(int nPage);
-    void AdvanceSelection(bool bForward = TRUE);
+    int SetSelection(int page);
+    void AdvanceSelection(bool forward = TRUE);
     int GetSelection();
-    bool SetPageText(int nPage, const wxString& strText);
-    wxString GetPageText(int nPage) const;
+    bool SetPageText(int page, const wxString& text);
+    wxString GetPageText(int page) const;
 
     void SetImageList(wxImageList* imageList);
     void AssignImageList(wxImageList *imageList) ;
     %pragma(python) addtomethod = "AssignImageList:_args[0].thisown = 0"
 
     wxImageList* GetImageList();
-    int  GetPageImage(int nPage);
-    bool SetPageImage(int nPage, int nImage);
+    int  GetPageImage(int page);
+    bool SetPageImage(int page, int image);
     int GetRowCount();
 
     void SetPageSize(const wxSize& size);
     void SetPadding(const wxSize& padding);
-    bool DeletePage(int nPage);
-    bool RemovePage(int nPage);
+    bool DeletePage(int page);
+    bool RemovePage(int page);
     bool DeleteAllPages();
-    bool AddPage(/*wxNotebookPage*/ wxWindow *pPage,
-                 const wxString& strText,
-                 int bSelect = FALSE,
+    bool AddPage(/*wxNotebookPage*/ wxWindow *page,
+                 const wxString& text,
+                 int select = FALSE,
                  int imageId = -1);
-    bool InsertPage(int nPage,
-                    /*wxNotebookPage*/ wxWindow *pPage,
-                    const wxString& strText,
-                    bool bSelect = FALSE,
+    bool InsertPage(int page,
+                    /*wxNotebookPage*/ wxWindow *page,
+                    const wxString& text,
+                    bool select = FALSE,
                     int imageId = -1);
-    /*wxNotebookPage*/ wxWindow *GetPage(int nPage);
+    /*wxNotebookPage*/ wxWindow *GetPage(int page);
 
     %addmethods {
         void ResizeChildren() {

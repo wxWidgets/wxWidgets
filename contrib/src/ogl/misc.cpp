@@ -32,11 +32,6 @@
 #undef new
 #endif
 
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
-#endif
 #include <ctype.h>
 #include <math.h>
 #include <stdlib.h>
@@ -423,7 +418,7 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
   {
     wxString oldBuffer(buffer);
 
-    char *s = (char *)node->Data();
+    wxChar *s = (wxChar *)node->Data();
     if (!s)
     {
       // FORCE NEW LINE
@@ -435,7 +430,7 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
     else
     {
       if (buffer.Length() != 0)
-        buffer += " ";
+        buffer += wxT(" ");
 
       buffer += s;
       dc.GetTextExtent(buffer, &x, &y);
@@ -782,7 +777,7 @@ void UpdateListBox(wxListBox *item, wxList *list)
   wxNode *node = list->First();
   while (node)
   {
-    char *s = (char *)node->Data();
+    wxChar *s = (wxChar *)node->Data();
     item->Append(s);
     node = node->Next();
   }

@@ -129,7 +129,7 @@ bool MyApp::OnInit()
     wxImage::AddHandler(new wxGIFHandler);
 #endif
 
-    MyFrame *frame = new MyFrame("Printing test",
+    MyFrame *frame = new MyFrame(_("Printing test"),
                                  wxPoint(150, 50), wxSize(640, 480));
 
     // Show it and tell the application that it's our main window
@@ -155,20 +155,20 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 {
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(Minimal_Open, "Open...\tCtrl-O");
+    menuFile->Append(Minimal_Open, _("Open...\tCtrl-O"));
     menuFile->AppendSeparator();
-    menuFile->Append(Minimal_PageSetup, "Page Setup");
-    menuFile->Append(Minimal_PrintSetup, "Printer Setup");
-    menuFile->Append(Minimal_Print, "Print...");
-    menuFile->Append(Minimal_Preview, "Preview...");
+    menuFile->Append(Minimal_PageSetup, _("Page Setup"));
+    menuFile->Append(Minimal_PrintSetup, _("Printer Setup"));
+    menuFile->Append(Minimal_Print, _("Print..."));
+    menuFile->Append(Minimal_Preview, _("Preview..."));
     menuFile->AppendSeparator();
-    menuFile->Append(wxID_ABOUT, "&About");
+    menuFile->Append(wxID_ABOUT, _("&About"));
     menuFile->AppendSeparator();
-    menuFile->Append(Minimal_Quit, "&Exit");
+    menuFile->Append(Minimal_Quit, _("&Exit"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, "&File");
+    menuBar->Append(menuFile, _("&File"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -176,13 +176,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     CreateStatusBar(1);
 
     m_Html = new wxHtmlWindow(this);
-    m_Html -> SetRelatedFrame(this, "HTML : %s");
+    m_Html -> SetRelatedFrame(this, _("HTML : %s"));
     m_Html -> SetRelatedStatusBar(0);
-    m_Name = "test.htm";
+    m_Name = wxT("test.htm");
     m_Html -> LoadPage(m_Name);
     
-    m_Prn = new wxHtmlEasyPrinting("Easy Printing Demo", this);
-    m_Prn -> SetHeader(m_Name + "(@PAGENUM@/@PAGESCNT@)<hr>", wxPAGE_ALL);
+    m_Prn = new wxHtmlEasyPrinting(_("Easy Printing Demo"), this);
+    m_Prn -> SetHeader(m_Name + wxT("(@PAGENUM@/@PAGESCNT@)<hr>"), wxPAGE_ALL);
 }
 
 // frame destructor
@@ -204,7 +204,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("HTML printing sample\n\n(c) Vaclav Slavik, 1999");
+    wxMessageBox(_("HTML printing sample\n\n(c) Vaclav Slavik, 1999"));
 }
 
 
@@ -234,13 +234,13 @@ void MyFrame::OnPreview(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
-    wxFileDialog dialog(this, "Open HTML page", "", "", "*.htm", 0);
+    wxFileDialog dialog(this, _("Open HTML page"), wxT(""), wxT(""), wxT("*.htm"), 0);
 
     if (dialog.ShowModal() == wxID_OK)
     {
         m_Name = dialog.GetPath();
         m_Html -> LoadPage(m_Name);
-        m_Prn -> SetHeader(m_Name + "(@PAGENUM@/@PAGESCNT@)<hr>", wxPAGE_ALL);
+        m_Prn -> SetHeader(m_Name + wxT("(@PAGENUM@/@PAGESCNT@)<hr>"), wxPAGE_ALL);
     } 
 }
 

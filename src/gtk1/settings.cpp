@@ -16,6 +16,7 @@
 #include "wx/debug.h"
 #include "wx/module.h"
 #include "wx/cmndata.h"
+#include "wx/fontutil.h"
 
 #include <gdk/gdk.h>
 #include <gdk/gdkprivate.h>
@@ -326,8 +327,12 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
         {
             if (!g_systemFont)
             {
+#ifdef __WXGTK20__
+                const gchar *font_name = _gtk_rc_context_get_default_font_name (gtk_settings_get_default ());
+                g_systemFont = new wxFont( wxString::FromAscii( font_name ) );
+#else
                 g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
-
+#endif
             }
             return *g_systemFont;
         }

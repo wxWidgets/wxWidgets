@@ -7,9 +7,12 @@
 
 WXDIR = $(%WXWIN)
 
+EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
+THISDIR = $(WXDIR)\contrib\samples\ogl\ogledit
+
 PROGRAM = ogledit
-EXTRALIBS = $(WXDIR)\lib\ogl.lib
-OBJECTS = $(PROGRAM).obj doc.obj view.obj palette.obj
+EXTRALIBS = $(WXDIR)\lib\ogl_w.lib
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj $(OUTPUTDIR)\doc.obj $(OUTPUTDIR)\view.obj $(OUTPUTDIR)\palette.obj
 
 !include $(WXDIR)\src\makeprog.wat
 

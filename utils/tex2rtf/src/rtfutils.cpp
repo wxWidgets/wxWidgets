@@ -527,7 +527,7 @@ bool WriteHPJ(char *filename)
   StripExtension(hpjFilename);
   strcat(hpjFilename, ".hpj");
 
-  strcpy(helpFile, FileNameFromPath(filename));
+  strcpy(helpFile, wxFileNameFromPath(filename));
   StripExtension(helpFile);
   strcpy(rtfFile, helpFile);
   strcat(helpFile, ".hlp");
@@ -1195,7 +1195,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
             fprintf(Chapters, "!{\\footnote DisableButton(\"Up\")}\n");
           else
             fprintf(Chapters, "!{\\footnote EnableButton(\"Up\");ChangeButtonBinding(\"Up\", \"JumpId(`%s.hlp', `%s')\")}\n",
-               FileNameFromPath(FileRoot), "Contents");
+               wxFileNameFromPath(FileRoot), "Contents");
         }
       }
 
@@ -1350,12 +1350,12 @@ void RTFOnMacro(int macroId, int no_args, bool start)
           if (DocumentStyle == LATEX_ARTICLE)
           {
             fprintf(Sections, "!{\\footnote EnableButton(\"Up\");ChangeButtonBinding(\"Up\", \"JumpId(`%s.hlp', `%s')\")}\n",
-               FileNameFromPath(FileRoot), "Contents");
+               wxFileNameFromPath(FileRoot), "Contents");
           }
           else if (CurrentChapterName)
           {
             fprintf(Sections, "!{\\footnote EnableButton(\"Up\");ChangeButtonBinding(\"Up\", \"JumpId(`%s.hlp', `%s')\")}\n",
-               FileNameFromPath(FileRoot), CurrentChapterName);
+               wxFileNameFromPath(FileRoot), CurrentChapterName);
           }
         }
       }
@@ -1501,7 +1501,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         if (useUpButton && CurrentSectionName)
         {
           fprintf(Subsections, "!{\\footnote EnableButton(\"Up\");ChangeButtonBinding(\"Up\", \"JumpId(`%s.hlp', `%s')\")}\n",
-             FileNameFromPath(FileRoot), CurrentSectionName);
+             wxFileNameFromPath(FileRoot), CurrentSectionName);
         }
       }
       if (!winHelp && indexSubsections && useWord)
@@ -1647,7 +1647,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         if (useUpButton && CurrentSubsectionName)
         {
           fprintf(Subsubsections, "!{\\footnote EnableButton(\"Up\");ChangeButtonBinding(\"Up\", \"JumpId(`%s.hlp', `%s')\")}\n",
-             FileNameFromPath(FileRoot), CurrentSubsectionName);
+             wxFileNameFromPath(FileRoot), CurrentSubsectionName);
         }
       }
       if (!winHelp && indexSubsections && useWord)
@@ -4897,7 +4897,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
         if (useUpButton)
         {
           fprintf(Chapters, "!{\\footnote EnableButton(\"Up\");ChangeButtonBinding(\"Up\", \"JumpId(`%s.hlp', `%s')\")}\n",
-               FileNameFromPath(FileRoot), "Contents");
+               wxFileNameFromPath(FileRoot), "Contents");
         }
       }
       
@@ -5247,7 +5247,7 @@ bool RTFGo(void)
     {
       wxConcatFiles("header.rtf", "chapters.rtf", "tmp1.rtf");
       Tex2RTFYield(TRUE);
-      if (FileExists(OutputFile))
+      if (wxFileExists(OutputFile))
           wxRemoveFile(OutputFile);
 
       char *cwdStr;
@@ -5273,7 +5273,7 @@ bool RTFGo(void)
       wxRemoveFile("tmp1.rtf");
     }
     
-    if (FileExists(ContentsName)) wxRemoveFile(ContentsName);
+    if (wxFileExists(ContentsName)) wxRemoveFile(ContentsName);
 
     if (!wxRenameFile(TmpContentsName, ContentsName))
     {

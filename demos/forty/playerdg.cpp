@@ -44,7 +44,7 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 							wxWindow* parent,
 							ScoreFile* file
 							) :
-	wxDialog(parent, -1, "Player Selection",
+	wxDialog(parent, -1, _T("Player Selection"),
 			wxDefaultPosition, wxSize(320, 200),
 			wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE),
 	m_scoreFile(file)
@@ -52,7 +52,7 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 	// enable constraints
 	SetAutoLayout (TRUE);
 
-	wxStaticText* msg = new wxStaticText(this, -1, "Please select a name or type a new one:");
+	wxStaticText* msg = new wxStaticText(this, -1, _T("Please select a name or type a new one:"));
 
 	wxListBox* list = new wxListBox(
 						this, ID_LISTBOX,
@@ -68,10 +68,10 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 		list->Append(players[i]);
 	}
 
-	m_textField = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize, 0);
+	m_textField = new wxTextCtrl(this, -1, _T(""), wxDefaultPosition, wxDefaultSize, 0);
 
-	m_OK = new wxButton(this, wxID_OK, "OK");
-	m_cancel = new wxButton(this, wxID_CANCEL, "Cancel");
+	m_OK = new wxButton(this, wxID_OK, _T("OK"));
+	m_cancel = new wxButton(this, wxID_CANCEL, _T("Cancel"));
 
 	wxLayoutConstraints* layout;
 
@@ -149,7 +149,7 @@ const wxString& PlayerSelectionDialog::GetPlayersName()
 
 void PlayerSelectionDialog::OnCloseWindow(wxCloseEvent& event)
 {
-	m_player = "";
+	m_player = _T("");
     EndModal(wxID_CANCEL);
 }
 
@@ -169,9 +169,9 @@ void PlayerSelectionDialog::ButtonCallback(wxCommandEvent& event)
 		wxString name = m_textField->GetValue();
 		if (!name.IsNull() && name.Length() > 0)
 		{
-			if (name.Contains('@'))
+			if (name.Contains(_T('@')))
 			{
-				wxMessageBox("Names should not contain the '@' character", "Forty Thieves");
+				wxMessageBox(_T("Names should not contain the '@' character"), _T("Forty Thieves"));
 			}
 			else
 			{
@@ -181,12 +181,12 @@ void PlayerSelectionDialog::ButtonCallback(wxCommandEvent& event)
 		}
 		else
 		{
- 			wxMessageBox("Please enter your name", "Forty Thieves");
+ 			wxMessageBox(_T("Please enter your name"), _T("Forty Thieves"));
 		}
 	}
 	else
 	{
-		m_player = "";
+		m_player = _T("");
 		EndModal(wxID_CANCEL);
 	}
 }

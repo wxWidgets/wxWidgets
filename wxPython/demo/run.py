@@ -25,7 +25,9 @@ from wxPython.wx import *
 
 class Log:
     def WriteText(self, text):
-        sys.stdout.write(text)
+        if text[-1:] == '\n':
+            text = text[:-1]
+        wxLogMessage(text)
     write = WriteText
 
 
@@ -38,7 +40,9 @@ class RunDemoApp(wxApp):
 
     def OnInit(self):
         wxInitAllImageHandlers()
-        frame = wxFrame(None, -1, "RunDemo: " + self.name, size=(0,0),
+        wxLog_SetActiveTarget(wxLogStderr())
+
+        frame = wxFrame(None, -1, "RunDemo: " + self.name, pos=(50,50), size=(0,0),
                         style=wxNO_FULL_REPAINT_ON_RESIZE|wxDEFAULT_FRAME_STYLE)
         frame.CreateStatusBar()
         menuBar = wxMenuBar()
@@ -47,7 +51,9 @@ class RunDemoApp(wxApp):
         EVT_MENU(self, 101, self.OnButton)
         menuBar.Append(menu, "&File")
         frame.SetMenuBar(menuBar)
-        frame.Show(true)
+        frame.Show(True)
+        EVT_CLOSE(frame, self.OnCloseFrame)
+
         win = self.demoModule.runTest(frame, frame, Log())
 
         # a window will be returned if the demo does not create
@@ -56,6 +62,7 @@ class RunDemoApp(wxApp):
             # so set the frame to a good size for showing stuff
             frame.SetSize((640, 480))
             win.SetFocus()
+            self.window = win
 
         else:
             # otherwise the demo made its own frame, so just put a
@@ -68,17 +75,24 @@ class RunDemoApp(wxApp):
                 # It was probably a dialog or something that is already
                 # gone, so we're done.
                 frame.Destroy()
-                return true
+                return True
 
         self.SetTopWindow(frame)
         self.frame = frame
         #wxLog_SetActiveTarget(wxLogStderr())
         #wxLog_SetTraceMask(wxTraceMessages)
-        return true
+        return True
 
 
     def OnButton(self, evt):
-        self.frame.Close(true)
+        self.frame.Close(True)
+
+
+    def OnCloseFrame(self, evt):
+        if hasattr(self, "window") and hasattr(self.window, "ShutdownDemo"):
+            self.window.ShutdownDemo()
+        evt.Skip()
+
 
 #----------------------------------------------------------------------------
 

@@ -16,13 +16,13 @@ fi
 distdir=`pwd`/dist
 builddir=`pwd`/_build_rpm
 rpmtop=${builddir}/rpmtop
-cvsroot=:pserver:anoncvs@cvs.wxwindows.org:/home/wxcvs
+cvsroot=:pserver:anoncvs@cvs.wxwindows.org:/pack/cvsroots/wxwindows
 pythonbin=/usr/bin/python
 port=GTK
 lcport=gtk
+unicode=0
 tarname=wxPythonSrc
-debug=0
-
+rpmflag=-ba
 
 #----------------------------------------------------------------------
 # Check parameters
@@ -39,9 +39,11 @@ function useage {
     echo "   skiptar        Don't build the tarball"
     echo "   skiprpm        Don't build the RPM (but why?)"
     echo "   skipclean      Don't do the cleanup at the end"
+    echo "   gtk2           Build using wxGTK2 and Unicode"
+    echo "   x11            Build using wxX11"
     echo "   speconly       Do nothing but write the RPM spec file"
-    echo "   debug          Make a __WXDEBUG__ version"
-    echo "   smp            Add SMP=2 to the envivonment to speed wxGTK build"
+    echo "   srpm           Only make the SRPM"
+#    echo "   smp            Add SMP=2 to the envivonment to speed wxGTK build"
 }
 
 if [ $# -lt 3 ]; then
@@ -70,12 +72,12 @@ function makespec {
     cat ${spectemplate} \
 	| sed s:@PYTHON@:${python}:g \
 	| sed s:@PYVER@:${pyver}:g \
-	| sed s:@DEBUG@:${debug}:g \
 	| sed s:@PORT@:${port}:g \
 	| sed s:@LCPORT@:${lcport}:g \
 	| sed s:@TARNAME@:${tarname}:g \
 	| sed s:@VERSION@:${version}:g \
 	| sed s:@VER2@:${ver2}:g \
+	| sed s:@UNICODE@:${unicode}:g \
 	> ${distdir}/wxPython${port}.spec
 }
 
@@ -83,13 +85,15 @@ function makespec {
 
 for flag in $*; do
     case ${flag} in
-	skipcvs)   skipcvs=1        ;;
-	skipclean) skipclean=1      ;;
-	skiptar)   skiptar=1        ;;
-	skiprpm)   skiprpm=1        ;;
-	smp)       export SMP=2     ;;
-	debug)     debug=1          ;;
-	speconly)  makespec; exit 0 ;;
+	skipcvs)   skipcvs=1                           ;;
+	skipclean) skipclean=1                         ;;
+	skiptar)   skiptar=1                           ;;
+	skiprpm)   skiprpm=1                           ;;
+	gtk2)      unicode=1; port=GTK2; lcport=gtk2   ;;
+	x11)       port=X11; lcport=x11                ;;
+	smp)       export SMP=2                        ;;
+	speconly)  makespec; exit 0                    ;;
+	srpm)      rpmflag=-bs;                        ;;
 
 	*)  echo "Unknown flag \"${flag}\""
 	    useage
@@ -127,13 +131,14 @@ if [ -z "${skipcvs}" ]; then
     if [ -e ${tarver} ]; then
 	rm -rf ${tarver}
     fi
+    echo cvs -d ${cvsroot} export -r ${cvs_tag} -d ${tarver} wxWindows
     cvs -d ${cvsroot} export -r ${cvs_tag} -d ${tarver} wxWindows > /dev/null 2>&1
     if [ "$?" != "0" ]; then
 	echo "*** CVS failure, exiting."
 	exit 1
     fi
 
-    echo "*** Removing unneeded stuff from CVS tree"
+    echo "*** Removing uneeded stuff from CVS tree"
     pushd ${tarver} > /dev/null
     rm `find . -name .cvsignore`
     rm *.spec
@@ -171,9 +176,16 @@ cp ${distdir}/wxPython${port}.spec ${builddir}/${tarver}/wxPython${port}.spec
 # Build the tar file
 
 if [ -z "${skiptar}" ]; then
+    echo "*** Creating language catalogs..."
+    pushd ${builddir}/${tarver}/locale > /dev/null
+    make allmo
+    popd > /dev/null
+
     echo "*** Creating tarball..."
+    cp distrib/README.1st.txt ${builddir}/${tarver}
     pushd ${builddir} > /dev/null
     tar cvf ${distdir}/${tarver}.tar ${tarver} > /dev/null
+
     echo "*** Compressing..."
     if [ -e ${distdir}/${tarver}.tar.gz ]; then
 	rm ${distdir}/${tarver}.tar.gz
@@ -189,7 +201,7 @@ fi
 if [ -z "${skiprpm}" ]; then
     echo "*** Building RPMs..."
     cp ${distdir}/${tarver}.tar.gz ${rpmtop}/SOURCES
-    rpm -ba \
+    rpmbuild ${rpmflag} \
 	--define "_topdir ${rpmtop}" \
 	--define "_tmppath ${builddir}" \
 	${distdir}/wxPython${port}.spec

@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -498,8 +497,7 @@ static PyObject *_wrap_wxTopLevelWindow_SetIcon(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTopLevelWindow_SetIcon. Expected _wxIcon_p.");
         return NULL;
         }
@@ -535,8 +533,7 @@ static PyObject *_wrap_wxTopLevelWindow_SetIcons(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIconBundle_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIconBundle_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTopLevelWindow_SetIcons. Expected _wxIconBundle_p.");
         return NULL;
         }
@@ -677,7 +674,7 @@ static PyObject *_wrap_wxTopLevelWindow_GetTitle(PyObject *self, PyObject *args,
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -996,35 +993,6 @@ static PyObject *_wrap_wxFrame_GetMenuBar(PyObject *self, PyObject *args, PyObje
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
-    return _resultobj;
-}
-
-#define wxFrame_Command(_swigobj,_swigarg0)  (_swigobj->Command(_swigarg0))
-static PyObject *_wrap_wxFrame_Command(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxFrame * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","id", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFrame_Command",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_Command. Expected _wxFrame_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxFrame_Command(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -2314,8 +2282,7 @@ static PyObject *_wrap_new_wxSplashScreenWindow(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOl:new_wxSplashScreenWindow",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxSplashScreenWindow. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -2375,8 +2342,7 @@ static PyObject *_wrap_wxSplashScreenWindow_SetBitmap(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSplashScreenWindow_SetBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -2493,8 +2459,7 @@ static PyObject *_wrap_new_wxSplashScreen(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OliOi|OOl:new_wxSplashScreen",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_arg4,&_obj5,&_obj6,&_arg7)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxSplashScreen. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -2663,7 +2628,6 @@ static PyMethodDef framescMethods[] = {
 	 { "wxFrame_GetStatusBar", (PyCFunction) _wrap_wxFrame_GetStatusBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_CreateStatusBar", (PyCFunction) _wrap_wxFrame_CreateStatusBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_ProcessCommand", (PyCFunction) _wrap_wxFrame_ProcessCommand, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFrame_Command", (PyCFunction) _wrap_wxFrame_Command, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_GetMenuBar", (PyCFunction) _wrap_wxFrame_GetMenuBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_SetMenuBar", (PyCFunction) _wrap_wxFrame_SetMenuBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_GetClientAreaOrigin", (PyCFunction) _wrap_wxFrame_GetClientAreaOrigin, METH_VARARGS | METH_KEYWORDS },

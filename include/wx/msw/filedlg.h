@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        filedlg.h
+// Name:        wx/msw/filedlg.h
 // Purpose:     wxFileDialog class
 // Author:      Julian Smart
 // Modified by:
@@ -28,12 +28,16 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorDefaultWildcardStr;
 class WXDLLEXPORT wxFileDialog: public wxDialog
 {
 public:
-    wxFileDialog(wxWindow *parent, const wxString& message = wxFileSelectorPromptStr,
-        const wxString& defaultDir = wxEmptyString, const wxString& defaultFile = wxEmptyString, const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
-        long style = 0, const wxPoint& pos = wxDefaultPosition);
+    wxFileDialog(wxWindow *parent,
+                 const wxString& message = wxFileSelectorPromptStr,
+                 const wxString& defaultDir = wxEmptyString,
+                 const wxString& defaultFile = wxEmptyString,
+                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                 long style = 0,
+                 const wxPoint& pos = wxDefaultPosition);
 
     void SetMessage(const wxString& message) { m_message = message; }
-    void SetPath(const wxString& path) { m_path = path; }
+    void SetPath(const wxString& path);
     void SetDirectory(const wxString& dir) { m_dir = dir; }
     void SetFilename(const wxString& name) { m_fileName = name; }
     void SetWildcard(const wxString& wildCard) { m_wildCard = wildCard; }
@@ -50,7 +54,7 @@ public:
     long GetStyle() const { return m_dialogStyle; }
     int GetFilterIndex() const { return m_filterIndex ; }
 
-    int ShowModal();
+    virtual int ShowModal();
 
 protected:
     wxString      m_message;

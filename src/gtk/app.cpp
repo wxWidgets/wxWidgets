@@ -26,6 +26,7 @@
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
 #include "wx/file.h"
+#include "wx/filename.h"
 
 #if wxUSE_WX_RESOURCES
     #include "wx/resource.h"
@@ -44,13 +45,32 @@
 #endif
 
 #include <unistd.h>
-#if defined(__DARWIN__)
-# warning "FIXME: select must be used instead of poll (GD)"
-#elif defined(__VMS)
-# include <poll.h>
-#else
-# include <sys/poll.h>
-#endif
+
+#ifdef HAVE_POLL
+    #if defined(__VMS)
+        #include <poll.h>
+    #else
+        // bug in the OpenBSD headers: at least in 3.1 there is no extern "C"
+        // in neither poll.h nor sys/poll.h which results in link errors later
+        #ifdef __OPENBSD__
+            extern "C"
+            {
+        #endif
+
+        #include <sys/poll.h>
+
+        #ifdef __OPENBSD__
+            };
+        #endif
+    #endif // platform
+#else // !HAVE_POLL
+    // we implement poll() ourselves using select() which is supposed exist in
+    // all modern Unices
+    #include <sys/types.h>
+    #include <sys/time.h>
+    #include <unistd.h>
+#endif // HAVE_POLL/!HAVE_POLL
+
 #include "wx/gtk/win_gtk.h"
 
 #include <gtk/gtk.h>
@@ -250,22 +270,82 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 
 #if wxUSE_THREADS
 
+#ifdef HAVE_POLL
+    #define wxPoll poll
+    #define wxPollFd pollfd
+#else // !HAVE_POLL
+
+typedef GPollFD wxPollFd;
+
+int wxPoll(wxPollFd *ufds, unsigned int nfds, int timeout)
+{
+    // convert timeout from ms to struct timeval (s/us)
+    timeval tv_timeout;
+    tv_timeout.tv_sec = timeout/1000;
+    tv_timeout.tv_usec = (timeout%1000)*1000;
+
+    // remember the highest fd used here
+    int fdMax = -1;
+
+    // and fill the sets for select()
+    fd_set readfds;
+    fd_set writefds;
+    fd_set exceptfds;
+    FD_ZERO(&readfds);
+    FD_ZERO(&writefds);
+    FD_ZERO(&exceptfds);
+
+    unsigned int i;
+    for ( i = 0; i < nfds; i++ )
+    {
+        wxASSERT_MSG( ufds[i].fd < FD_SETSIZE, _T("fd out of range") );
+
+        if ( ufds[i].events & G_IO_IN )
+            FD_SET(ufds[i].fd, &readfds);
+
+        if ( ufds[i].events & G_IO_PRI )
+            FD_SET(ufds[i].fd, &exceptfds);
+
+        if ( ufds[i].events & G_IO_OUT )
+            FD_SET(ufds[i].fd, &writefds);
+
+        if ( ufds[i].fd > fdMax )
+            fdMax = ufds[i].fd;
+    }
+
+    fdMax++;
+    int res = select(fdMax, &readfds, &writefds, &exceptfds, &tv_timeout);
+
+    // translate the results back
+    for ( i = 0; i < nfds; i++ )
+    {
+        ufds[i].revents = 0;
+
+        if ( FD_ISSET(ufds[i].fd, &readfds ) )
+            ufds[i].revents |= G_IO_IN;
+
+        if ( FD_ISSET(ufds[i].fd, &exceptfds ) )
+            ufds[i].revents |= G_IO_PRI;
+
+        if ( FD_ISSET(ufds[i].fd, &writefds ) )
+            ufds[i].revents |= G_IO_OUT;
+    }
+
+    return res;
+}
+
+#endif // HAVE_POLL/!HAVE_POLL
+
 static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
 {
-    gint res;
     gdk_threads_enter();
 
     wxMutexGuiLeave();
     g_mainThreadLocked = TRUE;
 
-#ifdef __DARWIN__
-    // FIXME: poll is not available under Darwin/Mac OS X and this needs
-    //        to be implemented using select instead (GD)
-    //        what about other BSD derived systems?
-    res = -1;
-#else
-    res = poll( (struct pollfd*) ufds, nfds, timeout );
-#endif
+    // we rely on the fact that glib GPollFD struct is really just pollfd but
+    // I wonder how wise is this in the long term (VZ)
+    gint res = wxPoll( (wxPollFd *) ufds, nfds, timeout );
 
     wxMutexGuiEnter();
     g_mainThreadLocked = FALSE;
@@ -463,6 +543,16 @@ GdkVisual *wxApp::GetGdkVisual()
 
 bool wxApp::ProcessIdle()
 {
+    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
+    node = wxTopLevelWindows.GetFirst();
+    while (node)
+    {
+        wxWindow* win = node->GetData();
+        CallInternalIdle( win );
+
+        node = node->GetNext();
+    }
+
     wxIdleEvent event;
     event.SetEventObject( this );
     ProcessEvent( event );
@@ -510,14 +600,6 @@ bool wxApp::SendIdleEvents()
         node = node->GetNext();
     }
 
-    node = wxTopLevelWindows.GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        CallInternalIdle( win );
-
-        node = node->GetNext();
-    }
     return needMore;
 }
 
@@ -545,7 +627,7 @@ bool wxApp::SendIdleEvents( wxWindow* win )
     event.SetEventObject(win);
 
     win->GetEventHandler()->ProcessEvent(event);
-    
+
     if (event.MoreRequested())
         needMore = TRUE;
 
@@ -609,10 +691,6 @@ bool wxApp::Initialize()
 {
     wxClassInfo::InitializeClasses();
 
-#if wxUSE_INTL
-    wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
-#endif
-
     // GL: I'm annoyed ... I don't know where to put this and I don't want to
     // create a module for that as it's part of the core.
 #if wxUSE_THREADS
@@ -631,7 +709,12 @@ bool wxApp::Initialize()
 #endif
 
     wxModule::RegisterModules();
-    if (!wxModule::InitializeModules()) return FALSE;
+    if (!wxModule::InitializeModules())
+        return FALSE;
+
+#if wxUSE_INTL
+    wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
+#endif
 
     return TRUE;
 }
@@ -810,9 +893,11 @@ int wxEntry( int argc, char *argv[] )
     wxTheApp->argv = argv;
 #endif
 
-    wxString name(wxFileNameFromPath(argv[0]));
-    wxStripExtension( name );
-    wxTheApp->SetAppName( name );
+    if (wxTheApp->argc > 0)
+    {
+        wxFileName fname( wxTheApp->argv[0] );
+        wxTheApp->SetAppName( fname.GetName() );
+    }
 
     int retValue;
     retValue = wxEntryInitGui();

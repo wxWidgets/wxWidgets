@@ -236,7 +236,6 @@ ALL_SOURCES = \
 		html/m_layout.cpp \
 		html/m_links.cpp \
 		html/m_list.cpp \
-		html/m_meta.cpp \
 		html/m_pre.cpp \
 		html/m_style.cpp \
 		html/m_tables.cpp \
@@ -405,6 +404,7 @@ ALL_HEADERS = \
 		prop.h \
 		propform.h \
 		proplist.h \
+		quantize.h \
 		radiobox.h \
 		radiobut.h \
 		regex.h \
@@ -648,7 +648,6 @@ GUI_LOWLEVEL_OBJS = \
 		window.o
 
 COMMONOBJS = \
-		parser.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \
@@ -859,7 +858,6 @@ HTMLOBJS = \
 		m_layout.o \
 		m_links.o \
 		m_list.o \
-		m_meta.o \
 		m_pre.o \
 		m_style.o \
 		m_tables.o \

@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -338,8 +337,7 @@ static PyObject *_wrap_wxEvtHandler_ProcessEvent(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxEvtHandler_ProcessEvent. Expected _wxEvent_p.");
         return NULL;
         }
@@ -374,8 +372,7 @@ static PyObject *_wrap_wxEvtHandler_AddPendingEvent(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxEvtHandler_AddPendingEvent. Expected _wxEvent_p.");
         return NULL;
         }
@@ -1606,6 +1603,34 @@ static PyObject *_wrap_wxWindow_Enable(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
+#define wxWindow_Disable(_swigobj)  (_swigobj->Disable())
+static PyObject *_wrap_wxWindow_Disable(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_Disable",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_Disable. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxWindow_Disable(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxWindow_FindWindowById(_swigobj,_swigarg0)  (_swigobj->FindWindow(_swigarg0))
 static PyObject *_wrap_wxWindow_FindWindowById(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1694,6 +1719,34 @@ static PyObject *_wrap_wxWindow_Fit(PyObject *self, PyObject *args, PyObject *kw
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxWindow_Fit(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxWindow_FitInside(_swigobj)  (_swigobj->FitInside())
+static PyObject *_wrap_wxWindow_FitInside(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_FitInside",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_FitInside. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxWindow_FitInside(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2222,7 +2275,7 @@ static PyObject *_wrap_wxWindow_GetLabel(PyObject *self, PyObject *args, PyObjec
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2298,7 +2351,7 @@ static PyObject *_wrap_wxWindow_GetName(PyObject *self, PyObject *args, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2783,7 +2836,7 @@ static PyObject *_wrap_wxWindow_GetTitle(PyObject *self, PyObject *args, PyObjec
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3272,63 +3325,6 @@ static PyObject *_wrap_wxWindow_Layout(PyObject *self, PyObject *args, PyObject 
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxWindow_LoadFromResource(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->LoadFromResource(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxWindow_LoadFromResource(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxWindow * _arg0;
-    wxWindow * _arg1;
-    wxString * _arg2;
-    wxResourceTable * _arg3 = (wxResourceTable *) NULL;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    PyObject * _obj2 = 0;
-    PyObject * _argo3 = 0;
-    char *_kwnames[] = { "self","parent","resourceName","resourceTable", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|O:wxWindow_LoadFromResource",_kwnames,&_argo0,&_argo1,&_obj2,&_argo3)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_LoadFromResource. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_LoadFromResource. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    _arg2 = wxString_in_helper(_obj2);
-    if (_arg2 == NULL)
-        return NULL;
-}
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxResourceTable_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxWindow_LoadFromResource. Expected _wxResourceTable_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxWindow_LoadFromResource(_arg0,_arg1,*_arg2,_arg3);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj2)
-        delete _arg2;
-}
     return _resultobj;
 }
 
@@ -4265,8 +4261,7 @@ static PyObject *_wrap_wxWindow_SetFont(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -4811,6 +4806,36 @@ static PyObject *_wrap_wxWindow_GetVirtualSizeTuple(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+#define wxWindow_GetBestVirtualSize(_swigobj)  (_swigobj->GetBestVirtualSize())
+static PyObject *_wrap_wxWindow_GetBestVirtualSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetBestVirtualSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetBestVirtualSize. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxSize (wxWindow_GetBestVirtualSize(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define wxWindow_SetClientSizeWH(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetClientSize(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxWindow_SetClientSizeWH(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4898,8 +4923,7 @@ static PyObject *_wrap_wxWindow_SetCursor(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetCursor. Expected _wxCursor_p.");
         return NULL;
         }
@@ -5675,8 +5699,7 @@ static PyObject *_wrap_wxWindow_SetValidator(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetValidator. Expected _wxValidator_p.");
         return NULL;
         }
@@ -5816,6 +5839,36 @@ static PyObject *_wrap_wxWindow_GetMaxSize(PyObject *self, PyObject *args, PyObj
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = new wxSize (wxWindow_GetMaxSize(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxWindow_GetAdjustedBestSize(_swigobj)  (_swigobj->GetAdjustedBestSize())
+static PyObject *_wrap_wxWindow_GetAdjustedBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetAdjustedBestSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetAdjustedBestSize. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxSize (wxWindow_GetAdjustedBestSize(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -6006,7 +6059,7 @@ static PyObject *_wrap_wxWindow_GetHelpText(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6359,8 +6412,7 @@ static PyObject *_wrap_wxWindow_SetAcceleratorTable(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxAcceleratorTable_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxAcceleratorTable_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetAcceleratorTable. Expected _wxAcceleratorTable_p.");
         return NULL;
         }
@@ -6431,8 +6483,7 @@ static PyObject *_wrap_wxWindow_OnPaint(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPaintEvent_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPaintEvent_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_OnPaint. Expected _wxPaintEvent_p.");
         return NULL;
         }
@@ -7277,8 +7328,7 @@ static PyObject *_wrap_wxScrolledWindow_PrepareDC(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxScrolledWindow_PrepareDC. Expected _wxDC_p.");
         return NULL;
         }
@@ -8976,7 +9026,7 @@ static PyObject *_wrap_wxMenu_GetTitle(PyObject *self, PyObject *args, PyObject 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9053,7 +9103,7 @@ static PyObject *_wrap_wxMenu_GetLabel(PyObject *self, PyObject *args, PyObject 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9131,7 +9181,7 @@ static PyObject *_wrap_wxMenu_GetHelpString(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10072,6 +10122,35 @@ static PyObject *_wrap_wxMenuBar_EnableTop(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+#define wxMenuBar_IsEnabledTop(_swigobj,_swigarg0)  (_swigobj->IsEnabledTop(_swigarg0))
+static PyObject *_wrap_wxMenuBar_IsEnabledTop(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxMenuBar * _arg0;
+    size_t  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxMenuBar_IsEnabledTop",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuBar_IsEnabledTop. Expected _wxMenuBar_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxMenuBar_IsEnabledTop(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxMenuBar_SetLabelTop(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetLabelTop(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxMenuBar_SetLabelTop(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10139,7 +10218,7 @@ static PyObject *_wrap_wxMenuBar_GetLabelTop(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10457,7 +10536,7 @@ static PyObject *_wrap_wxMenuBar_GetLabel(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10535,7 +10614,7 @@ static PyObject *_wrap_wxMenuBar_GetHelpString(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10802,7 +10881,7 @@ static PyObject *_wrap_wxMenuItem_GetLabel(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10840,7 +10919,7 @@ static PyObject *_wrap_wxMenuItem_GetText(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -11240,7 +11319,7 @@ static PyObject *_wrap_wxMenuItem_GetHelp(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -11343,7 +11422,7 @@ static PyObject *_wrap_wxMenuItem_GetLabelFromText(PyObject *self, PyObject *arg
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -11378,8 +11457,7 @@ static PyObject *_wrap_wxMenuItem_SetFont(PyObject *self, PyObject *args, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenuItem_SetFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -11579,15 +11657,13 @@ static PyObject *_wrap_wxMenuItem_SetBitmaps(PyObject *self, PyObject *args, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenuItem_SetBitmaps. Expected _wxBitmap_p.");
         return NULL;
         }
     }
     if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxMenuItem_SetBitmaps. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -11754,8 +11830,7 @@ static PyObject *_wrap_wxMenuItem_SetBitmap(PyObject *self, PyObject *args, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenuItem_SetBitmap. Expected _wxBitmap_p.");
         return NULL;
         }
@@ -11859,6 +11934,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenuBar_FindMenu", (PyCFunction) _wrap_wxMenuBar_FindMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_GetLabelTop", (PyCFunction) _wrap_wxMenuBar_GetLabelTop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_SetLabelTop", (PyCFunction) _wrap_wxMenuBar_SetLabelTop, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuBar_IsEnabledTop", (PyCFunction) _wrap_wxMenuBar_IsEnabledTop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_EnableTop", (PyCFunction) _wrap_wxMenuBar_EnableTop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_Remove", (PyCFunction) _wrap_wxMenuBar_Remove, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_Replace", (PyCFunction) _wrap_wxMenuBar_Replace, METH_VARARGS | METH_KEYWORDS },
@@ -11974,6 +12050,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_Freeze", (PyCFunction) _wrap_wxWindow_Freeze, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetCaret", (PyCFunction) _wrap_wxWindow_GetCaret, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetCaret", (PyCFunction) _wrap_wxWindow_SetCaret, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetAdjustedBestSize", (PyCFunction) _wrap_wxWindow_GetAdjustedBestSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetMaxSize", (PyCFunction) _wrap_wxWindow_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetBestSize", (PyCFunction) _wrap_wxWindow_GetBestSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetDropTarget", (PyCFunction) _wrap_wxWindow_GetDropTarget, METH_VARARGS | METH_KEYWORDS },
@@ -12006,6 +12083,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_SetCursor", (PyCFunction) _wrap_wxWindow_SetCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetClientSize", (PyCFunction) _wrap_wxWindow_SetClientSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetClientSizeWH", (PyCFunction) _wrap_wxWindow_SetClientSizeWH, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetBestVirtualSize", (PyCFunction) _wrap_wxWindow_GetBestVirtualSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetVirtualSizeTuple", (PyCFunction) _wrap_wxWindow_GetVirtualSizeTuple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetVirtualSize", (PyCFunction) _wrap_wxWindow_GetVirtualSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetVirtualSizeWH", (PyCFunction) _wrap_wxWindow_SetVirtualSizeWH, METH_VARARGS | METH_KEYWORDS },
@@ -12048,7 +12126,6 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_MoveXY", (PyCFunction) _wrap_wxWindow_MoveXY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_MakeModal", (PyCFunction) _wrap_wxWindow_MakeModal, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Lower", (PyCFunction) _wrap_wxWindow_Lower, METH_VARARGS | METH_KEYWORDS },
-	 { "wxWindow_LoadFromResource", (PyCFunction) _wrap_wxWindow_LoadFromResource, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Layout", (PyCFunction) _wrap_wxWindow_Layout, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_IsTopLevel", (PyCFunction) _wrap_wxWindow_IsTopLevel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_IsShown", (PyCFunction) _wrap_wxWindow_IsShown, METH_VARARGS | METH_KEYWORDS },
@@ -12096,9 +12173,11 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_GetChildren", (PyCFunction) _wrap_wxWindow_GetChildren, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetBorder", (PyCFunction) _wrap_wxWindow_GetBorder, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetBackgroundColour", (PyCFunction) _wrap_wxWindow_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_FitInside", (PyCFunction) _wrap_wxWindow_FitInside, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Fit", (PyCFunction) _wrap_wxWindow_Fit, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_FindWindowByName", (PyCFunction) _wrap_wxWindow_FindWindowByName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_FindWindowById", (PyCFunction) _wrap_wxWindow_FindWindowById, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_Disable", (PyCFunction) _wrap_wxWindow_Disable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Enable", (PyCFunction) _wrap_wxWindow_Enable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_DragAcceptFiles", (PyCFunction) _wrap_wxWindow_DragAcceptFiles, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_IsBeingDeleted", (PyCFunction) _wrap_wxWindow_IsBeingDeleted, METH_VARARGS | METH_KEYWORDS },

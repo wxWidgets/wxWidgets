@@ -33,7 +33,7 @@ class TestPanel(wxPanel):
         sizer.Add(fgs, 0, wxALL, 25)
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
 
 

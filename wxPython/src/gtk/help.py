@@ -65,9 +65,12 @@ class wxContextHelpPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,helpc=helpc):
-        if self.thisown == 1 :
-            helpc.delete_wxContextHelp(self)
+    def __del__(self, delfunc=helpc.delete_wxContextHelp):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
     def BeginContextHelp(self, *_args, **_kwargs):
         val = apply(helpc.wxContextHelp_BeginContextHelp,(self,) + _args, _kwargs)
         return val
@@ -171,3 +174,4 @@ wxEVT_DETAILED_HELP = helpc.wxEVT_DETAILED_HELP
 # Stuff these names into the wx namespace so wxPyConstructObject can find them
 import wx
 wx.wxHelpEventPtr         = wxHelpEventPtr
+wx.wxContextHelpButtonPtr = wxContextHelpButtonPtr

@@ -164,7 +164,7 @@ private:
 class WXXMLDLLEXPORT wxXmlDocument : public wxObject
 {
 public:
-    wxXmlDocument() : wxObject(), m_version(wxT("1.0")), m_root(NULL)  {}
+    wxXmlDocument();
     wxXmlDocument(const wxString& filename,
                   const wxString& encoding = wxT("UTF-8"));
     wxXmlDocument(wxInputStream& stream,
@@ -180,7 +180,7 @@ public:
               const wxString& encoding = wxT("UTF-8"));
     bool Load(wxInputStream& stream,
               const wxString& encoding = wxT("UTF-8"));
-
+    
     // Saves document as .xml file.
     bool Save(const wxString& filename) const;
     bool Save(wxOutputStream& stream) const;
@@ -193,7 +193,7 @@ public:
     // Returns version of document (may be empty).
     wxString GetVersion() const { return m_version; }
     // Returns encoding of document (may be empty).
-    // Note: this is the encoding original fail was saved in, *not* the
+    // Note: this is the encoding original file was saved in, *not* the
     // encoding of in-memory representation!
     wxString GetFileEncoding() const { return m_fileEncoding; }
 
@@ -207,6 +207,7 @@ public:
     // (same as passed to Load or ctor, defaults to UTF-8).
     // NB: this is meaningless in Unicode build where data are stored as wchar_t*
     wxString GetEncoding() const { return m_encoding; }
+    void SetEncoding(const wxString& enc) { m_encoding = enc; }
 #endif
 
 private:

@@ -260,10 +260,15 @@ void PYTHON::cpp_destructor(char *name, char *newname) {
       else realname = name;
     }
 
-    *pyclass << tab4 << "def __del__(self," << module << "=" << module << "):\n";
+    char* dfname = name_destroy(realname);
+
+    *pyclass << tab4 << "def __del__(self, " << "delfunc=" << module<< "." << dfname << "):\n";
     emitAddPragmas(*pyclass,"__del__",tab8);
-    *pyclass << tab8 << "if self.thisown == 1 :\n"
-	     << tab8 << tab4 << module << "." << name_destroy(realname) << "(self)\n";
+    *pyclass << tab8 << "if self.thisown == 1:\n"
+             << tab8 << tab4 << "try:\n"
+	     << tab8 << tab8 << "delfunc(self)\n"
+             << tab8 << tab4 << "except:\n"
+	     << tab8 << tab8 << "pass\n";
 
     have_destructor = 1;
     if (doc_entry) {

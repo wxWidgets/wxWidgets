@@ -21,6 +21,12 @@ LOCAL(void) transencode_master_selection
 LOCAL(void) transencode_coef_controller
 	JPP((j_compress_ptr cinfo, jvirt_barray_ptr * coef_arrays));
 
+#if defined(__VISAGECPP__)
+/* Visual Age fixups for multiple declarations */
+#  define start_pass_coef   start_pass_coef2 /* already in jccoeft.c */
+#  define compress_output   compress_output2 /* already in jccoeft.c */
+#endif
+
 
 /*
  * Compression initialization for writing raw-coefficient data.
@@ -246,7 +252,6 @@ start_iMCU_row (j_compress_ptr cinfo)
   coef->MCU_vert_offset = 0;
 }
 
-
 /*
  * Initialize for a processing pass.
  */
@@ -386,3 +391,12 @@ transencode_coef_controller (j_compress_ptr cinfo,
     coef->dummy_buffer[i] = buffer + i;
   }
 }
+
+#if defined(__VISAGECPP__)
+#  ifdef start_pass_coef2
+#   undef start_pass_coef2
+#  endif
+#  ifdef compress_output2
+#    undef compress_output2
+#  endif
+#endif

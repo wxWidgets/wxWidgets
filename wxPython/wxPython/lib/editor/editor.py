@@ -24,7 +24,6 @@
 import os, time
 
 from wxPython.wx import *
-from string import *
 
 import selection
 import images
@@ -123,7 +122,7 @@ class wxEditor(wxScrolledWindow):
         if wxPlatform == "__WXMSW__":
             return wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
         else:
-            return wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, false)
+            return wxFont(12, wxMODERN, wxNORMAL, wxNORMAL, False)
 
     def UnixKeyHack(self, key):
         # this will be obsolete when we get the new wxWindows patch
@@ -163,7 +162,7 @@ class wxEditor(wxScrolledWindow):
         if dc.Ok():
             self.SetCharDimensions()
             self.KeepCursorOnScreen()
-            self.DrawSimpleCursor(0,0,dc, true)
+            self.DrawSimpleCursor(0,0,dc, True)
             self.Draw(dc)
 
     def OnPaint(self, event):
@@ -257,7 +256,7 @@ class wxEditor(wxScrolledWindow):
         self.DrawSimpleCursor(x, y, dc)
 
 
-    def DrawSimpleCursor(self, xp, yp, dc = None, old=false):
+    def DrawSimpleCursor(self, xp, yp, dc = None, old=False):
         if not dc:
             dc = wxClientDC(self)
 
@@ -354,13 +353,13 @@ class wxEditor(wxScrolledWindow):
         return len(self.lines)
 
     def UnTouchBuffer(self):
-        self.bufferTouched = FALSE
+        self.bufferTouched = False
 
     def BufferWasTouched(self):
         return self.bufferTouched
 
     def TouchBuffer(self):
-        self.bufferTouched = TRUE
+        self.bufferTouched = True
 
 
 ##-------------------------- Mouse scroll timing functions
@@ -368,7 +367,7 @@ class wxEditor(wxScrolledWindow):
     def InitScrolling(self):
         # we don't rely on the windows system to scroll for us; we just
         # redraw the screen manually every time
-        self.EnableScrolling(FALSE, FALSE)
+        self.EnableScrolling(False, False)
         self.nextScrollTime = 0
         self.SCROLLDELAY = 0.050 # seconds
         self.scrollTimer = wxTimer(self)
@@ -377,12 +376,12 @@ class wxEditor(wxScrolledWindow):
     def CanScroll(self):
        if time.time() >  self.nextScrollTime:
            self.nextScrollTime = time.time() + self.SCROLLDELAY
-           return true
+           return True
        else:
-           return false
+           return False
 
     def SetScrollTimer(self):
-        oneShot = true
+        oneShot = True
         self.scrollTimer.Start(1000*self.SCROLLDELAY/2, oneShot)
         EVT_TIMER(self, -1, self.OnTimer)
 
@@ -449,7 +448,7 @@ class wxEditor(wxScrolledWindow):
 
     def OnMotion(self, event):
         if event.LeftIsDown() and self.HasCapture():
-            self.Selecting = true
+            self.Selecting = True
             self.MouseToCursor(event)
             self.SelectUpdate()
 
@@ -467,8 +466,8 @@ class wxEditor(wxScrolledWindow):
         if self.SelectEnd is None:
             self.OnClick()
         else:
-            self.Selecting = false
-            self.SelectNotify(false, self.SelectBegin, self.SelectEnd)
+            self.Selecting = False
+            self.SelectNotify(False, self.SelectBegin, self.SelectEnd)
 
         self.ReleaseMouse()
         self.scrollTimer.Stop()
@@ -630,8 +629,8 @@ class wxEditor(wxScrolledWindow):
     def SelectOff(self):
         self.SelectBegin = None
         self.SelectEnd = None
-        self.Selecting = false
-        self.SelectNotify(false,None,None)
+        self.Selecting = False
+        self.SelectNotify(False,None,None)
 
     def CopySelection(self, event):
         selection = self.FindSelection()
@@ -650,7 +649,7 @@ class wxEditor(wxScrolledWindow):
 
     def CopyToClipboard(self, linesOfText):
         do = wxTextDataObject()
-        do.SetText(string.join(linesOfText, os.linesep))
+        do.SetText(os.linesep.join(linesOfText))
         wxTheClipboard.Open()
         wxTheClipboard.SetData(do)
         wxTheClipboard.Close()
@@ -837,29 +836,29 @@ class wxEditor(wxScrolledWindow):
         keySettingFunction(action)
 
         if not action.has_key(key):
-            return false
+            return False
 
         if event.ShiftDown():
             if not self.Selecting:
-                self.Selecting = true
+                self.Selecting = True
                 self.SelectBegin = (self.cy, self.cx)
             action[key](event)
             self.SelectEnd = (self.cy, self.cx)
         else:
             action[key](event)
             if self.Selecting:
-                self.Selecting = false
+                self.Selecting = False
 
         self.SelectNotify(self.Selecting, self.SelectBegin, self.SelectEnd)
         self.UpdateView()
-        return true
+        return True
 
     def MoveSpecialKey(self, event, key):
         return self.Move(self.SetMoveSpecialFuncs, key, event)
 
     def MoveSpecialControlKey(self, event, key):
         if not event.ControlDown():
-            return false
+            return False
         return self.Move(self.SetMoveSpecialControlFuncs, key, event)
 
     def Dispatch(self, keySettingFunction, key, event):
@@ -868,21 +867,21 @@ class wxEditor(wxScrolledWindow):
         if action.has_key(key):
             action[key](event)
             self.UpdateView()
-            return true
-        return false
+            return True
+        return False
 
     def ModifierKey(self, key, event, modifierKeyDown, MappingFunc):
         if not modifierKeyDown:
-            return false
+            return False
 
         key = self.UnixKeyHack(key)
         try:
             key = chr(key)
         except:
-            return false
+            return False
         if not self.Dispatch(MappingFunc, key, event):
             wxBell()
-        return true
+        return True
 
     def ControlKey(self, event, key):
         return self.ModifierKey(key, event, event.ControlDown(), self.SetControlFuncs)
@@ -892,14 +891,14 @@ class wxEditor(wxScrolledWindow):
 
     def SpecialControlKey(self, event, key):
         if not event.ControlDown():
-            return false
+            return False
         if not self.Dispatch(self.SetSpecialControlFuncs, key, event):
             wxBell()
-        return true
+        return True
 
     def ShiftKey(self, event, key):
         if not event.ShiftDown():
-            return false
+            return False
         return self.Dispatch(self.SetShiftFuncs, key, event)
 
     def NormalChar(self, event, key):

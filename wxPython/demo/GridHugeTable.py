@@ -23,7 +23,7 @@ class HugeTable(wxPyGridTableBase):
         return 10000
 
     def IsEmptyCell(self, row, col):
-        return false
+        return False
 
     def GetValue(self, row, col):
         return str( (row, col) )
@@ -45,7 +45,15 @@ class HugeTableGrid(wxGrid):
         # The second parameter means that the grid is to take ownership of the
         # table and will destroy it when done.  Otherwise you would need to keep
         # a reference to it and call it's Destroy method later.
-        self.SetTable(table, true)
+        self.SetTable(table, True)
+
+        EVT_GRID_CELL_RIGHT_CLICK(self, self.OnRightDown)  #added
+
+    def OnRightDown(self, event):                          #added
+        print "hello"
+        print self.GetSelectedRows()                       #added
+
+
 
 
 
@@ -56,7 +64,7 @@ class TestFrame(wxFrame):
         wxFrame.__init__(self, parent, -1, "Huge (virtual) Table Demo", size=(640,480))
         grid = HugeTableGrid(self, log)
 
-        grid.SetReadOnly(5,5, true)
+        grid.SetReadOnly(5,5, True)
 
 #---------------------------------------------------------------------------
 
@@ -64,7 +72,7 @@ if __name__ == '__main__':
     import sys
     app = wxPySimpleApp()
     frame = TestFrame(None, sys.stdout)
-    frame.Show(true)
+    frame.Show(True)
     app.MainLoop()
 
 

@@ -50,7 +50,7 @@ class TestPanel(wxPanel):
         sizer.AddSpacer(10,10, pos=(13,1))
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
 
 #----------------------------------------------------------------------

@@ -16,7 +16,6 @@
 """
 
 from wxPython.wx import *
-import string
 
 #----------------------------------------------------------------------
 
@@ -65,6 +64,8 @@ class wxGenStaticText(wxPyControl):
         style = self.GetWindowStyleFlag()
         if not style & wxST_NO_AUTORESIZE:
             self.SetSize(self.GetBestSize())
+        self.Refresh()
+
 
     def SetFont(self, font):
         """
@@ -75,6 +76,7 @@ class wxGenStaticText(wxPyControl):
         style = self.GetWindowStyleFlag()
         if not style & wxST_NO_AUTORESIZE:
             self.SetSize(self.GetBestSize())
+        self.Refresh()
 
 
     def DoGetBestSize(self):
@@ -94,13 +96,17 @@ class wxGenStaticText(wxPyControl):
 
     def AcceptsFocus(self):
         """Overridden base class virtual."""
-        return false
+        return False
 
 
     def OnPaint(self, event):
-        width, height = self.GetClientSize()
         dc = wxBufferedPaintDC(self)
+        #dc = wxPaintDC(self)
+        width, height = self.GetClientSize()
+        if not width or not height:
+            return
         dc.SetBackground(wxBrush(self.GetBackgroundColour(), wxSOLID))
+        dc.SetTextForeground(self.GetForegroundColour())
         dc.Clear()
         dc.SetFont(self.GetFont())
         label = self.GetLabel()

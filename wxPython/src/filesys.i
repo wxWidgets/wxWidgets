@@ -33,7 +33,6 @@
 %import streams.i
 
 %pragma(python) code = "import wx"
-%pragma(python) code = "import string"
 
 //---------------------------------------------------------------------------
 
@@ -141,6 +140,12 @@ public:
 
     static void AddHandler(wxFileSystemHandler *handler);
     static void CleanUpHandlers();
+
+//     // Returns the native path for a file URL
+//     static wxFileName URLToFileName(const wxString& url);
+
+//     // Returns the file URL for a native path
+//     static wxString FileNameToURL(const wxFileName& filename);
 };
 
 //---------------------------------------------------------------------------
@@ -209,9 +214,9 @@ void __wxMemoryFSHandler_AddFile_Data(const wxString& filename,
 %pragma(python) code = "
 import types
 def wxMemoryFSHandler_AddFile(filename, a, b=''):
-    if isinstance(a, wxImage):
+    if wx.wxPy_isinstance(a, (wxImage, wxImagePtr)):
         __wxMemoryFSHandler_AddFile_wxImage(filename, a, b)
-    elif isinstance(a, wxBitmap):
+    elif wx.wxPy_isinstance(a, (wxBitmap, wxBitmapPtr)):
         __wxMemoryFSHandler_AddFile_wxBitmap(filename, a, b)
     elif type(a) == types.StringType:
         #__wxMemoryFSHandler_AddFile_wxString(filename, a)

@@ -272,8 +272,8 @@ public:
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawItem"))) {
             PyObject* dcobj = wxPyMake_wxObject(&dc);
-            PyObject* idobj = wxPyConstructObject((void*)&id, "wxTreeItemId", FALSE);
-            PyObject* recobj= wxPyConstructObject((void*)&rect, "wxRect", FALSE);
+            PyObject* idobj = wxPyConstructObject((void*)&id, wxT("wxTreeItemId"), FALSE);
+            PyObject* recobj= wxPyConstructObject((void*)&rect, wxT("wxRect"), FALSE);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OOO)", dcobj, idobj, recobj));
             Py_DECREF(dcobj);
             Py_DECREF(idobj);

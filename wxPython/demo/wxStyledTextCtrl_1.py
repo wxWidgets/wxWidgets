@@ -74,7 +74,7 @@ class MySTC(wxStyledTextCtrl):
                        % (evt.GetDragAllowMove(), evt.GetDragText()))
 
         if debug and evt.GetPosition() < 250:
-            evt.SetDragAllowMove(false)     # you can prevent moving of text (only copy)
+            evt.SetDragAllowMove(False)     # you can prevent moving of text (only copy)
             evt.SetDragText("DRAGGED TEXT") # you can change what is dragged
             #evt.SetDragText("")             # or prevent the drag with empty text
 
@@ -159,13 +159,13 @@ def runTest(frame, nb, log):
         s = wxBoxSizer(wxHORIZONTAL)
         s.Add(ed, 1, wxEXPAND)
         p.SetSizer(s)
-        p.SetAutoLayout(true)
+        p.SetAutoLayout(True)
 
 
-    #ed.SetBufferedDraw(false)
+    #ed.SetBufferedDraw(False)
     #ed.StyleClearAll()
     #ed.SetScrollWidth(800)
-    #ed.SetWrapMode(true)
+    #ed.SetWrapMode(True)
 
     ed.SetText(demoText)
     if wxUSE_UNICODE:

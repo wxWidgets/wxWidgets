@@ -19,6 +19,8 @@
 /* Implementation : PYTHON */
 
 #define SWIGPYTHON
+#include "Python.h"
+
 #include <string.h>
 #include <stdlib.h>
 /* Definitions for Windows/Unix exporting */
@@ -36,12 +38,9 @@
 #   define SWIGEXPORT(a) a
 #endif
 
-#include "Python.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -346,7 +345,7 @@ static PyObject *_wrap_new_wxNotebookEvent(PyObject *self, PyObject *args, PyObj
     int  _arg1 = (int ) 0;
     int  _arg2 = (int ) -1;
     int  _arg3 = (int ) -1;
-    char *_kwnames[] = { "commandType","id","nSel","nOldSel", NULL };
+    char *_kwnames[] = { "commandType","id","sel","oldSel", NULL };
     char _ptemp[128];
 
     self = self;
@@ -711,7 +710,7 @@ static PyObject *_wrap_wxNotebook_SetSelection(PyObject *self, PyObject *args, P
     wxNotebook * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","nPage", NULL };
+    char *_kwnames[] = { "self","page", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxNotebook_SetSelection",_kwnames,&_argo0,&_arg1)) 
@@ -740,7 +739,7 @@ static PyObject *_wrap_wxNotebook_AdvanceSelection(PyObject *self, PyObject *arg
     bool  _arg1 = (bool ) TRUE;
     PyObject * _argo0 = 0;
     int tempbool1 = (int) TRUE;
-    char *_kwnames[] = { "self","bForward", NULL };
+    char *_kwnames[] = { "self","forward", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxNotebook_AdvanceSelection",_kwnames,&_argo0,&tempbool1)) 
@@ -801,7 +800,7 @@ static PyObject *_wrap_wxNotebook_SetPageText(PyObject *self, PyObject *args, Py
     wxString * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","nPage","strText", NULL };
+    char *_kwnames[] = { "self","page","text", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxNotebook_SetPageText",_kwnames,&_argo0,&_arg1,&_obj2)) 
@@ -839,7 +838,7 @@ static PyObject *_wrap_wxNotebook_GetPageText(PyObject *self, PyObject *args, Py
     wxNotebook * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","nPage", NULL };
+    char *_kwnames[] = { "self","page", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxNotebook_GetPageText",_kwnames,&_argo0,&_arg1)) 
@@ -859,7 +858,7 @@ static PyObject *_wrap_wxNotebook_GetPageText(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -979,7 +978,7 @@ static PyObject *_wrap_wxNotebook_GetPageImage(PyObject *self, PyObject *args, P
     wxNotebook * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","nPage", NULL };
+    char *_kwnames[] = { "self","page", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxNotebook_GetPageImage",_kwnames,&_argo0,&_arg1)) 
@@ -1009,7 +1008,7 @@ static PyObject *_wrap_wxNotebook_SetPageImage(PyObject *self, PyObject *args, P
     int  _arg1;
     int  _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","nPage","nImage", NULL };
+    char *_kwnames[] = { "self","page","image", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxNotebook_SetPageImage",_kwnames,&_argo0,&_arg1,&_arg2)) 
@@ -1138,7 +1137,7 @@ static PyObject *_wrap_wxNotebook_DeletePage(PyObject *self, PyObject *args, PyO
     wxNotebook * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","nPage", NULL };
+    char *_kwnames[] = { "self","page", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxNotebook_DeletePage",_kwnames,&_argo0,&_arg1)) 
@@ -1167,7 +1166,7 @@ static PyObject *_wrap_wxNotebook_RemovePage(PyObject *self, PyObject *args, PyO
     wxNotebook * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","nPage", NULL };
+    char *_kwnames[] = { "self","page", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxNotebook_RemovePage",_kwnames,&_argo0,&_arg1)) 
@@ -1229,7 +1228,7 @@ static PyObject *_wrap_wxNotebook_AddPage(PyObject *self, PyObject *args, PyObje
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
-    char *_kwnames[] = { "self","pPage","strText","bSelect","imageId", NULL };
+    char *_kwnames[] = { "self","page","text","select","imageId", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|ii:wxNotebook_AddPage",_kwnames,&_argo0,&_argo1,&_obj2,&_arg3,&_arg4)) 
@@ -1281,7 +1280,7 @@ static PyObject *_wrap_wxNotebook_InsertPage(PyObject *self, PyObject *args, PyO
     PyObject * _argo2 = 0;
     PyObject * _obj3 = 0;
     int tempbool4 = (int) FALSE;
-    char *_kwnames[] = { "self","nPage","pPage","strText","bSelect","imageId", NULL };
+    char *_kwnames[] = { "self","page","page","text","select","imageId", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOO|ii:wxNotebook_InsertPage",_kwnames,&_argo0,&_arg1,&_argo2,&_obj3,&tempbool4,&_arg5)) 
@@ -1327,7 +1326,7 @@ static PyObject *_wrap_wxNotebook_GetPage(PyObject *self, PyObject *args, PyObje
     wxNotebook * _arg0;
     int  _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","nPage", NULL };
+    char *_kwnames[] = { "self","page", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxNotebook_GetPage",_kwnames,&_argo0,&_arg1)) 
@@ -3254,8 +3253,7 @@ static PyObject *_wrap_new_wxPyControl(PyObject *self, PyObject *args, PyObject 
         return NULL;
 }
     if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxPyControl. Expected _wxValidator_p.");
         return NULL;
         }

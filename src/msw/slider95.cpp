@@ -109,13 +109,14 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
             );
 
         // Now create min static control
-        wxSprintf(wxBuffer, wxT("%d"), minValue);
+        wxString minLabel;
+        minLabel.Printf(wxT("%d"), minValue);
         wstyle = STATIC_FLAGS;
         if ( m_windowStyle & wxCLIP_SIBLINGS )
             msStyle |= WS_CLIPSIBLINGS;
         m_staticMin = (WXHWND) CreateWindowEx
             (
-                0, wxT("STATIC"), wxBuffer,
+                0, wxT("STATIC"), minLabel,
                 wstyle,
                 0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                 wxGetInstance(), NULL
@@ -153,7 +154,7 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 
     HWND scroll_bar = CreateWindowEx
         (
-            MakeExtendedStyle(m_windowStyle), TRACKBAR_CLASS, wxBuffer,
+            MakeExtendedStyle(m_windowStyle), TRACKBAR_CLASS, wxT(""),
             msStyle,
             0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
             wxGetInstance(), NULL
@@ -179,7 +180,8 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
     if ( m_windowStyle & wxSL_LABELS )
     {
         // Finally, create max value static item
-        wxSprintf(wxBuffer, wxT("%d"), maxValue);
+        wxString maxLabel;
+        maxLabel.Printf(wxT("%d"), maxValue);
         wstyle = STATIC_FLAGS;
 
         if ( m_windowStyle & wxCLIP_SIBLINGS )
@@ -187,7 +189,7 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 
         m_staticMax = (WXHWND) CreateWindowEx
             (
-                0, wxT("STATIC"), wxBuffer,
+                0, wxT("STATIC"), maxLabel,
                 wstyle,
                 0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                 wxGetInstance(), NULL
@@ -319,8 +321,9 @@ void wxSlider95::SetValue(int value)
 
     if (m_staticValue)
     {
-        wxSprintf(wxBuffer, wxT("%d"), value);
-        ::SetWindowText((HWND) m_staticValue, wxBuffer);
+        wxString str;
+        str.Printf(wxT("%d"), value);
+        ::SetWindowText((HWND) m_staticValue, str);
     }
 }
 
