@@ -17,9 +17,12 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/setup.h"
+
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
 #endif
 
-#error no longer needed - wxX11 utils.cpp used instead
+#include "../src/x11/utils.cpp"
+//#error no longer needed - wxX11 utils.cpp used instead
 
