@@ -183,6 +183,9 @@ All:
 
 - wxRegEx::Compile() now calculates the number of groups correctly
 
+Generic:
+
+- wxListCtrl: respect wxLC_NO_HEADER style when inserting first column
 
 
 2.4.1
