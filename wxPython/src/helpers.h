@@ -14,7 +14,7 @@
 #define __wxp_helpers__
 
 #include <wx/wx.h>
-
+#include <wx/geometry.h>
 
 //---------------------------------------------------------------------------
 
@@ -86,6 +86,9 @@ bool wxPoint_helper(PyObject* source, wxPoint** obj);
 bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj);
 bool wxRect_helper(PyObject* source, wxRect** obj);
 bool wxColour_helper(PyObject* source, wxColour** obj);
+
+bool wxPoint2DDouble_helper(PyObject* source, wxPoint2DDouble** obj);
+
 
 //----------------------------------------------------------------------
 // Other helpful stuff
@@ -256,6 +259,7 @@ struct wxPyCoreAPI {
     bool        (*p_wxRealPoint_helper)(PyObject* source, wxRealPoint** obj);
     bool        (*p_wxRect_helper)(PyObject* source, wxRect** obj);
     bool        (*p_wxColour_helper)(PyObject* source, wxColour** obj);
+    bool        (*p_wxPoint2DDouble_helper)(PyObject* source, wxPoint2DDouble** obj);
 
     void        (*p_wxPyCBH_setCallbackInfo)(wxPyCallbackHelper& cbh, PyObject* self, PyObject* klass, int incref);
     bool        (*p_wxPyCBH_findCallback)(const wxPyCallbackHelper& cbh, const char* name);

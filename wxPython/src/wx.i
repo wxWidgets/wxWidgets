@@ -207,6 +207,7 @@ static wxPyCoreAPI API = {
     wxRealPoint_helper,
     wxRect_helper,
     wxColour_helper,
+    wxPoint2DDouble_helper,
 
     wxPyCBH_setCallbackInfo,
     wxPyCBH_findCallback,

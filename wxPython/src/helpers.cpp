@@ -1976,6 +1976,7 @@ bool wxSize_helper(PyObject* source, wxSize** obj) {
     return FALSE;
 }
 
+
 bool wxPoint_helper(PyObject* source, wxPoint** obj) {
 
     // If source is an object instance then it may already be the right type
@@ -2112,10 +2113,41 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
 
  error:
     PyErr_SetString(PyExc_TypeError,
-                    "Expected a wxColour object or a string containing a colour "
-                    "name or '#RRGGBB'.");
+                    "Expected a wxColour object or a string containing a colour name or '#RRGGBB'.");
     return FALSE;
 }
+
+
+
+bool wxPoint2DDouble_helper(PyObject* source, wxPoint2DDouble** obj) {
+    // If source is an object instance then it may already be the right type
+    if (PyInstance_Check(source)) {
+        wxPoint2DDouble* ptr;
+        if (SWIG_GetPtrObj(source, (void **)&ptr, "_wxPoint2DDouble_p"))
+            goto error;
+        *obj = ptr;
+        return TRUE;
+    }
+    // otherwise a length-2 sequence of floats is expected
+    if (PySequence_Check(source) && PySequence_Length(source) == 2) {
+        PyObject* o1 = PySequence_GetItem(source, 0);
+        PyObject* o2 = PySequence_GetItem(source, 1);
+        // This should really check for integers, not numbers -- but that would break code.
+        if (!PyNumber_Check(o1) || !PyNumber_Check(o2)) {
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+            goto error;
+        }
+        **obj = wxPoint2DDouble(PyFloat_AsDouble(o1), PyFloat_AsDouble(o2));
+        Py_DECREF(o1);
+        Py_DECREF(o2);
+        return TRUE;
+    }
+ error:
+    PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of floats or a wxPoint2DDouble object.");
+    return FALSE;
+}
+
 
 
 //----------------------------------------------------------------------

@@ -587,7 +587,7 @@ wxColor      = wxColour
 wxNamedColor = wxNamedColour
 wxPen        = wxPyPen
 wxScrollbar  = wxScrollBar
-
+wxPoint2D    = wxPoint2DDouble
 
 # backwards compatibility
 wxNoRefBitmap       = wxBitmap
@@ -600,6 +600,7 @@ wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
 
 
 wxPyAssertionError = wxc.wxPyAssertionError
+
 
 #----------------------------------------------------------------------
 # wxGTK sets the locale when initialized.  Doing this at the Python
@@ -661,6 +662,18 @@ def wxPyTypeCast(obj, typeStr):
         theObj.thisown = obj.thisown
     return theObj
 
+#----------------------------------------------------------------------------
+# An isinstance for Pythons < 2.2 that can check a sequence of class objects
+# like the one in 2.2 can.
+
+def wxPy_isinstance(obj, klasses):
+    import types
+    if sys.version[:3] < "2.2" and type(klasses) in [types.TupleType, types.ListType]:
+        for klass in klasses:
+            if isinstance(obj, klass): return true
+        return false
+    else:
+        return isinstance(obj, klasses)
 
 #----------------------------------------------------------------------------
 _wxCallAfterId = None

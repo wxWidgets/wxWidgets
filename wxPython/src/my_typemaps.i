@@ -244,6 +244,12 @@ $function
         return NULL;
 }
 
+%typemap(python,in) wxPoint2DDouble& (wxPoint2DDouble temp) {
+    $target = &temp;
+    if (! wxPoint2DDouble_helper($source, &$target))
+        return NULL;
+}
+
 //---------------------------------------------------------------------------
 // Typemap to convert strings to wxColour.  Two string formats are accepted,
 // either a colour name, or a hex colour spec like "#RRGGBB"

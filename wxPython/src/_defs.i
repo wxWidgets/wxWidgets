@@ -533,6 +533,17 @@ enum {
     wxMOUSE_BTN_MIDDLE,
     wxMOUSE_BTN_RIGHT,
 
+    // It looks like wxTabCtrl may rise from the dead.  Uncomment these if
+    // it gets an implementation for all platforms...
+//     wxTC_RIGHTJUSTIFY,
+//     wxTC_FIXEDWIDTH,
+//     wxTC_TOP,
+//     wxTC_LEFT,
+//     wxTC_RIGHT,
+//     wxTC_BOTTOM,
+//     wxTC_MULTILINE,
+//     wxTC_OWNERDRAW,
+
 };
 
 
