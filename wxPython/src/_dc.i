@@ -168,12 +168,13 @@ public:
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE);
 
-    // TODO:  Figure out what the start parameter means and devise a
-    // good typemap for this    
-    //void DrawPolyPolygon(int n, int start[], wxPoint points[],
-    //                     wxCoord xoffset = 0, wxCoord yoffset = 0,
-    //                     int fillStyle = wxODDEVEN_RULE)
+    // TODO:  Figure out a good typemap for this...
+    //        Convert the first 3 args from a sequence of sequences?
+//     void DrawPolyPolygon(int n, int count[], wxPoint points[],
+//                           wxCoord xoffset = 0, wxCoord yoffset = 0,
+//                           int fillStyle = wxODDEVEN_RULE);
 
+    
     // this version puts both optional bitmap and the text into the given
     // rectangle and aligns is as specified by alignment parameter; it also
     // will emphasize the character with the given index if it is != -1 and
