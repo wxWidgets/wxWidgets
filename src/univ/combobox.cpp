@@ -136,6 +136,9 @@ protected:
     // filter mouse move events happening outside the list box
     void OnMouseMove(wxMouseEvent& event);
 
+    // set m_clicked value from here
+    void OnLeftUp(wxMouseEvent& event);
+
     // called whenever the user selects or activates a listbox item
     void OnSelect(wxCommandEvent& event);
 
@@ -145,6 +148,9 @@ protected:
                        const wxString& strArg);
 
 private:
+    // has the mouse been released on this control?
+    bool m_clicked;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -183,6 +189,7 @@ BEGIN_EVENT_TABLE(wxComboListBox, wxListBox)
     EVT_LISTBOX(-1, wxComboListBox::OnSelect)
     EVT_LISTBOX_DCLICK(-1, wxComboListBox::OnSelect)
     EVT_MOTION(wxComboListBox::OnMouseMove)
+    EVT_LEFT_UP(wxComboListBox::OnLeftUp)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxComboControl, wxControl)
@@ -341,7 +348,7 @@ bool wxComboControl::Show(bool show)
 
     if (m_btn)
         m_btn->Show(show);
-    
+
     if (m_text)
         m_text->Show(show);
 
@@ -382,6 +389,7 @@ void wxComboControl::ShowPopup()
     m_winPopup->PositionNearCombo();
 
     // show it
+    m_popup->OnShow();
     m_winPopup->Popup(m_text);
     m_text->SelectAll();
     m_popup->SetSelection(m_text->GetValue());
@@ -521,22 +529,28 @@ bool wxComboListBox::SetSelection(const wxString& value)
 
 void wxComboListBox::OnSelect(wxCommandEvent& event)
 {
-    // first update the combo and close the listbox
-    m_combo->OnSelect(event.GetString());
+    if ( m_clicked )
+    {
+        // first update the combo and close the listbox
+        m_combo->OnSelect(event.GetString());
 
-    // next let the user code have the event
+        // next let the user code have the event
 
-    // all fields are already filled by the listbox, just change the event
-    // type and send it to the combo
-    wxCommandEvent event2 = event;
-    event2.SetEventType(wxEVT_COMMAND_COMBOBOX_SELECTED);
-    event2.SetEventObject(m_combo);
-    event2.SetId(m_combo->GetId());
-    m_combo->ProcessEvent(event2);
+        // all fields are already filled by the listbox, just change the event
+        // type and send it to the combo
+        wxCommandEvent event2 = event;
+        event2.SetEventType(wxEVT_COMMAND_COMBOBOX_SELECTED);
+        event2.SetEventObject(m_combo);
+        event2.SetId(m_combo->GetId());
+        m_combo->ProcessEvent(event2);
+    }
+    //else: ignore the events resultign from just moving the mouse initially
 }
 
 void wxComboListBox::OnShow()
 {
+    // nobody clicked us yet
+    m_clicked = FALSE;
 }
 
 bool wxComboListBox::PerformAction(const wxControlAction& action,
@@ -553,6 +567,14 @@ bool wxComboListBox::PerformAction(const wxControlAction& action,
     }
 
     return wxListBox::PerformAction(action, numArg, strArg);
+}
+
+void wxComboListBox::OnLeftUp(wxMouseEvent& event)
+{
+    // we should dismiss the combo now
+    m_clicked = TRUE;
+
+    event.Skip();
 }
 
 void wxComboListBox::OnMouseMove(wxMouseEvent& event)

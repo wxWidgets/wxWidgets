@@ -805,11 +805,6 @@ wxSize wxListBox::DoGetBestClientSize() const
 
 bool wxListBox::SendEvent(wxEventType type, int item)
 {
-    // don't generate select events while the mouse is captured, we will only
-    // send them once it is released
-    if ( (type == wxEVT_COMMAND_LISTBOX_SELECTED) && (GetCapture() == this) )
-        return FALSE;
-
     wxCommandEvent event(type, m_windowId);
     event.SetEventObject(this);
 
@@ -1054,6 +1049,19 @@ void wxListBox::Activate(int item)
 // input handling
 // ----------------------------------------------------------------------------
 
+/*
+   The numArg here is the listbox item index while the strArg is used
+   differently for the different actions:
+
+   a) for wxACTION_LISTBOX_FIND it has the natural meaning: this is the string
+      to find
+
+   b) for wxACTION_LISTBOX_SELECT and wxACTION_LISTBOX_EXTENDSEL it is used
+      to decide if the listbox should send the notification event (it is empty)
+      or not (it is not): this allows us to reuse the same action for when the
+      user is dragging the mouse when it has been released although in the
+      first case no notification is sent while in the second it is sent.
+ */
 bool wxListBox::PerformAction(const wxControlAction& action,
                               long numArg,
                               const wxString& strArg)
@@ -1081,7 +1089,11 @@ bool wxListBox::PerformAction(const wxControlAction& action,
     else if ( action == wxACTION_LISTBOX_SELECT )
     {
         DeselectAll(item);
-        SelectAndNotify(item);
+
+        if ( strArg.empty() )
+            SelectAndNotify(item);
+        else
+            Select(TRUE, item);
     }
     else if ( action == wxACTION_LISTBOX_SELECTADD )
         Select(TRUE, item);
@@ -1257,14 +1269,33 @@ bool wxStdListboxInputHandler::HandleKey(wxInputConsumer *consumer,
         switch ( keycode )
         {
             // movement
-            case WXK_UP:    action = wxACTION_LISTBOX_MOVEUP; break;
-            case WXK_DOWN:  action = wxACTION_LISTBOX_MOVEDOWN; break;
+            case WXK_UP:
+                action = wxACTION_LISTBOX_MOVEUP;
+                break;
+
+            case WXK_DOWN:
+                action = wxACTION_LISTBOX_MOVEDOWN;
+                break;
+
             case WXK_PAGEUP:
-            case WXK_PRIOR: action = wxACTION_LISTBOX_PAGEUP; break;
+
+            case WXK_PRIOR:
+                action = wxACTION_LISTBOX_PAGEUP;
+                break;
+
             case WXK_PAGEDOWN:
-            case WXK_NEXT:  action = wxACTION_LISTBOX_PAGEDOWN; break;
-            case WXK_HOME:  action = wxACTION_LISTBOX_START; break;
-            case WXK_END:   action = wxACTION_LISTBOX_END; break;
+
+            case WXK_NEXT:
+                action = wxACTION_LISTBOX_PAGEDOWN;
+                break;
+
+            case WXK_HOME:
+                action = wxACTION_LISTBOX_START;
+                break;
+
+            case WXK_END:
+                action = wxACTION_LISTBOX_END;
+                break;
 
             // selection
             case WXK_SPACE:
@@ -1346,7 +1377,6 @@ bool wxStdListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
             winCapture->ReleaseMouse();
             m_btnCapture = 0;
 
-            // generate the last event to triiger sending the selection event
             action = m_actionMouse;
         }
         //else: the mouse wasn't presed over the listbox, only released here
@@ -1396,7 +1426,9 @@ bool wxStdListboxInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 
         if ( IsValidIndex(lbox, item) )
         {
-            lbox->PerformAction(m_actionMouse, item);
+            // pass something into strArg to tell the listbox that it shouldn't
+            // send the notification message: see PerformAction() above
+            lbox->PerformAction(m_actionMouse, item, _T("no"));
         }
         // else: don't pass invalid index to the listbox
     }
