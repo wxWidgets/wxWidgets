@@ -3375,7 +3375,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
                   else
                   {
                     TexOutput("??");
-                    sprintf(buf, "Warning: unresolved reference %s.", refName);
+                    sprintf(buf, "Warning: unresolved reference '%s'", refName);
                     OnInform(buf);
                   }
                 }

@@ -600,7 +600,8 @@ bool read_a_line(char *buf)
                    errBuf.Printf("An underscore ('_') was detected at line %lu inside file %s that may need a '\\' before it.",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
                    OnError((char *)errBuf.c_str());
                 }
-                else if ((buf[bufIndex-1] != '\\') && (buf[0] != '%'))  // If it is a comment line, then no warnings
+                else if ((buf[bufIndex-1] != '\\') && (buf[0] != '%') &&  // If it is a comment line, then no warnings
+                         (strncmp(buf, "\\input", 6))) // do not report filenames that have underscores in them
                 {
                    wxString errBuf;
                    errBuf.Printf("An underscore ('_') was detected at line %lu inside file %s that may need a '\\' before it.",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
@@ -3133,7 +3134,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         {
           char buf[300];
           TexOutput("??", TRUE);
-          sprintf(buf, "Warning: unresolved reference %s.", refName); 
+          sprintf(buf, "Warning: unresolved reference '%s'", refName); 
           OnInform(buf);
         }
       }
