@@ -1775,9 +1775,9 @@ protected:
     bool Redimension( wxGridTableMessage& );
 
 
-    bool SendEvent( const wxEventType, int row, int col, wxMouseEvent& );
-    bool SendEvent( const wxEventType, int row, int col );
-    bool SendEvent( const wxEventType type)
+    int SendEvent( const wxEventType, int row, int col, wxMouseEvent& );
+    int SendEvent( const wxEventType, int row, int col );
+    int SendEvent( const wxEventType type)
     {
         return SendEvent(type,
                          m_currentCellCoords.GetRow(),

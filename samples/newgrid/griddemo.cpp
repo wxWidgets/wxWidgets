@@ -249,6 +249,8 @@ GridFrame::GridFrame()
     grid->SetCellValue( 0, 2, "Blah" );
     grid->SetCellValue( 0, 3, "Read only" );
     grid->SetReadOnly( 0, 3 );
+    
+    grid->SetCellValue( 0, 4, "Can veto edit this cell" );
 
     grid->SetCellValue( 0, 5, "Press\nCtrl+arrow\nto skip over\ncells" );
 
@@ -808,6 +810,17 @@ void GridFrame::OnCellValueChanged( wxGridEvent& ev )
 
 void GridFrame::OnEditorShown( wxGridEvent& ev )
 {
+
+    if ( (ev.GetCol() == 4) &&
+         (ev.GetRow() == 0) &&
+	 (wxMessageBox(_T("Are you sure you wish to edit this cell"),
+	               _T("Checking"),wxYES_NO) == wxNO ) ) {
+
+	 ev.Veto();
+	 return;
+    }
+		      
+	
     wxLogMessage( wxT("Cell editor shown.") );
 
     ev.Skip();
@@ -815,6 +828,16 @@ void GridFrame::OnEditorShown( wxGridEvent& ev )
 
 void GridFrame::OnEditorHidden( wxGridEvent& ev )
 {
+   
+    if ( (ev.GetCol() == 4) &&
+         (ev.GetRow() == 0) &&
+	 (wxMessageBox(_T("Are you sure you wish to finish editing this cell"),
+	               _T("Checking"),wxYES_NO) == wxNO ) ) {
+
+	 ev.Veto();
+	 return;
+    }
+
     wxLogMessage( wxT("Cell editor hidden.") );
 
     ev.Skip();

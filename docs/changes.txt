@@ -48,6 +48,7 @@ All (GUI):
 - new wxCalendarCtrl styles added (Søren Erland Vestø)
 - wxWizard changes: loading from WXR support, help button (Robert Cavanaugh)
 - wxDirSelector() added (Paul A. Thiessen)
+- wxGrid cell editing veto support (Roger Gammans)
 
 wxHTML:
 

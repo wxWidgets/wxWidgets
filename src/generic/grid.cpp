@@ -5449,11 +5449,14 @@ bool wxGrid::DeleteCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
 // Generate a grid event based on a mouse event and
 // return the result of ProcessEvent()
 //
-bool wxGrid::SendEvent( const wxEventType type,
+int wxGrid::SendEvent( const wxEventType type,
                         int row, int col,
                         wxMouseEvent& mouseEv )
 {
-    if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
+   bool claimed;
+   bool vetoed= false;
+	
+   if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
     {
         int rowOrCol = (row == -1 ? col : row);
 
@@ -5467,9 +5470,12 @@ bool wxGrid::SendEvent( const wxEventType type,
                                  mouseEv.ShiftDown(),
                                  mouseEv.AltDown(),
                                  mouseEv.MetaDown() );
-        return GetEventHandler()->ProcessEvent(gridEvt);
+    
+        claimed = GetEventHandler()->ProcessEvent(gridEvt);
+	vetoed = !gridEvt.IsAllowed();
+
     }
-    else if ( type == wxEVT_GRID_RANGE_SELECT )
+   else if ( type == wxEVT_GRID_RANGE_SELECT )
     {
         // Right now, it should _never_ end up here!
         wxGridRangeSelectEvent gridEvt( GetId(),
@@ -5483,9 +5489,11 @@ bool wxGrid::SendEvent( const wxEventType type,
                                         mouseEv.AltDown(),
                                         mouseEv.MetaDown() );
 
-        return GetEventHandler()->ProcessEvent(gridEvt);
+        claimed = GetEventHandler()->ProcessEvent(gridEvt);
+  	vetoed = !gridEvt.IsAllowed();
+	
     }
-    else
+   else
     {
         wxGridEvent gridEvt( GetId(),
                              type,
@@ -5498,17 +5506,27 @@ bool wxGrid::SendEvent( const wxEventType type,
                              mouseEv.ShiftDown(),
                              mouseEv.AltDown(),
                              mouseEv.MetaDown() );
-        return GetEventHandler()->ProcessEvent(gridEvt);
+         claimed = GetEventHandler()->ProcessEvent(gridEvt);
+     	 vetoed = !gridEvt.IsAllowed();
     }
+ 
+  // A Veto'd event may not be `claimed' so test this first 
+  if (vetoed) return -1;
+  return claimed ? 1 : 0;
+
+    
 }
 
 
 // Generate a grid event of specified type and return the result
 // of ProcessEvent().
 //
-bool wxGrid::SendEvent( const wxEventType type,
+int wxGrid::SendEvent( const wxEventType type,
                         int row, int col )
 {
+   bool claimed;
+   bool vetoed= false;
+
     if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
     {
         int rowOrCol = (row == -1 ? col : row);
@@ -5518,7 +5536,8 @@ bool wxGrid::SendEvent( const wxEventType type,
                                  this,
                                  rowOrCol );
 
-        return GetEventHandler()->ProcessEvent(gridEvt);
+        claimed = GetEventHandler()->ProcessEvent(gridEvt);
+        vetoed  = !gridEvt.IsAllowed();
     }
     else
     {
@@ -5527,8 +5546,14 @@ bool wxGrid::SendEvent( const wxEventType type,
                              this,
                              row, col );
 
-        return GetEventHandler()->ProcessEvent(gridEvt);
-    }
+        claimed = GetEventHandler()->ProcessEvent(gridEvt);
+        vetoed  = !gridEvt.IsAllowed();
+     }
+
+	// A Veto'd event may not be `claimed' so test this first 
+	if (vetoed) return -1;
+	return claimed ? 1 : 0;
+
 }
 
 
@@ -6578,12 +6603,12 @@ void wxGrid::EnableCellEditControl( bool enable )
 
     if ( enable != m_cellEditCtrlEnabled )
     {
-        // TODO allow the app to Veto() this event?
-        SendEvent(enable ? wxEVT_GRID_EDITOR_SHOWN : wxEVT_GRID_EDITOR_HIDDEN);
-
         if ( enable )
         {
-            // this should be checked by the caller!
+ 	    if (SendEvent( wxEVT_GRID_EDITOR_SHOWN) <0) 
+		return; 
+
+	    // this should be checked by the caller!
             wxASSERT_MSG( CanEnableCellControl(),
                           _T("can't enable editing for this cell!") );
 
@@ -6594,7 +6619,10 @@ void wxGrid::EnableCellEditControl( bool enable )
         }
         else
         {
-            HideCellEditControl();
+	    //FIXME:add veto support
+	    SendEvent( wxEVT_GRID_EDITOR_HIDDEN);
+
+	    HideCellEditControl();
             SaveEditControlValue();
 
             // do it after HideCellEditControl()
@@ -6740,6 +6768,8 @@ void wxGrid::SaveEditControlValue()
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
 
+        wxString oldval = GetCellValue(row,col);
+
         wxGridCellAttr* attr = GetCellAttr(row, col);
         wxGridCellEditor* editor = attr->GetEditor(this, row, col);
         bool changed = editor->EndEdit(row, col, this);
@@ -6749,9 +6779,13 @@ void wxGrid::SaveEditControlValue()
 
         if (changed)
         {
-            SendEvent( wxEVT_GRID_CELL_CHANGE,
+            if ( SendEvent( wxEVT_GRID_CELL_CHANGE,
                        m_currentCellCoords.GetRow(),
-                       m_currentCellCoords.GetCol() );
+                       m_currentCellCoords.GetCol() ) < 0 ) {
+
+			      //Event has been veto set the data back.
+                              SetCellValue(row,col,oldval);
+	       }
         }
     }
 }
