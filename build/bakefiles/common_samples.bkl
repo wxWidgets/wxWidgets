@@ -1,8 +1,10 @@
 <?xml version="1.0" ?>
+<!-- $Id$ -->
+
 <makefile>
     
     <include file="common.bkl"/>
-
+    <set var="file_common_samples_included">1</set>
     
     <!-- =============================================================== -->
     <!--                    Template for wxWindows samples:              -->
@@ -48,11 +50,20 @@
             <dstdir>$(BUILDDIR)</dstdir>
             <srcdir>$(SRCDIR)</srcdir>
         </template>
+
+        <!--
+        VS - FIXME:
+        Don't clean the files because it would wipe out sources files if
+        BUILDDIR==SRCDIR. This is same behaviour as in the old build system,
+        but it would be better to delete the files during "make clean" if
+        BUILDDIR!=SRCDIR.
+        
         <define-tag name="files">
             <clean-files>
                 $(' '.join(['$(BUILDDIR)$(DIRSEP)%s'%x for x in value.split()]))
             </clean-files>
         </define-tag>
+        -->
     </define-rule>
 
 </makefile>
