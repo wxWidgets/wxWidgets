@@ -1,4 +1,4 @@
-
+import string
 from wxPython.wx import *
 
 #---------------------------------------------------------------------------
@@ -32,8 +32,10 @@ class TestComboBox(wxPanel):
 
         cb.Append("foo", "This is some client data for this item")
 
-        wxComboBox(self, 501, "default value", wxPoint(80, 80), wxSize(95, -1),
-                        sampleList, wxCB_SIMPLE)
+        cb = wxComboBox(self, 501, "default value", wxPoint(80, 80), wxSize(95, -1),
+                        [], wxCB_SIMPLE)
+        for item in sampleList:
+            cb.Append(item, string.upper(item))
         EVT_COMBOBOX(self, 501, self.EvtComboBox)
         EVT_TEXT(self, 501, self.EvtText)
 

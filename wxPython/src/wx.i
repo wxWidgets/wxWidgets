@@ -45,6 +45,8 @@
 %import streams.i
 %import filesys.i
 %import utils.i
+%import fonts.i
+
 
 %native(_wxStart)           __wxStart;
 %native(_wxSetDictionary)   __wxSetDictionary;
@@ -147,6 +149,7 @@ extern "C" SWIGEXPORT(void) initclip_dndc();
 extern "C" SWIGEXPORT(void) initstreamsc();
 extern "C" SWIGEXPORT(void) initfilesysc();
 extern "C" SWIGEXPORT(void) initutilsc();
+extern "C" SWIGEXPORT(void) initfontsc();
 
 
 
@@ -241,6 +244,7 @@ static wxPyCoreAPI API = {
     initstreamsc();
     initfilesysc();
     initutilsc();
+    initfontsc();
 
 
     PyDict_SetItemString(d,"wxMAJOR_VERSION", PyInt_FromLong((long)wxMAJOR_VERSION ));

@@ -5,6 +5,8 @@ from misc import *
 
 from gdi import *
 
+from fonts import *
+
 from streams import *
 class wxImageHandlerPtr(wxObjectPtr):
     def __init__(self,this):
@@ -218,6 +220,15 @@ class wxImagePtr(wxObjectPtr):
         return val
     def GetBlue(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_GetBlue,(self,) + _args, _kwargs)
+        return val
+    def FindFirstUnusedColour(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_FindFirstUnusedColour,(self,) + _args, _kwargs)
+        return val
+    def SetMaskFromImage(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_SetMaskFromImage,(self,) + _args, _kwargs)
+        return val
+    def DoFloodFill(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_DoFloodFill,(self,) + _args, _kwargs)
         return val
     def LoadFile(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_LoadFile,(self,) + _args, _kwargs)

@@ -20,7 +20,6 @@
 #include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/caret.h>
-#include <wx/fontenum.h>
 #include <wx/tipdlg.h>
 #include <wx/process.h>
 
@@ -362,52 +361,6 @@ public:
         wxCaret::SetBlinkTime(milliseconds);
     }
 %}
-
-//----------------------------------------------------------------------
-
-%{
-class wxPyFontEnumerator : public wxFontEnumerator {
-public:
-    wxPyFontEnumerator() {}
-    ~wxPyFontEnumerator() {}
-
-    DEC_PYCALLBACK_BOOL_STRING(OnFacename);
-    DEC_PYCALLBACK_BOOL_STRINGSTRING(OnFontEncoding);
-
-    PYPRIVATE;
-};
-
-IMP_PYCALLBACK_BOOL_STRING(wxPyFontEnumerator, wxFontEnumerator, OnFacename);
-IMP_PYCALLBACK_BOOL_STRINGSTRING(wxPyFontEnumerator, wxFontEnumerator, OnFontEncoding);
-
-%}
-
-%name(wxFontEnumerator) class wxPyFontEnumerator {
-public:
-    wxPyFontEnumerator();
-    ~wxPyFontEnumerator();
-    void _setCallbackInfo(PyObject* self, PyObject* _class, bool incref);
-    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxFontEnumerator, 0)"
-
-    bool EnumerateFacenames(
-        wxFontEncoding encoding = wxFONTENCODING_SYSTEM, // all
-        bool fixedWidthOnly = FALSE);
-    bool EnumerateEncodings(const wxString& facename = wxPyEmptyString);
-
-    //wxArrayString* GetEncodings();
-    //wxArrayString* GetFacenames();
-    %addmethods {
-        PyObject* GetEncodings() {
-            wxArrayString* arr = self->GetEncodings();
-            return wxArrayString2PyList_helper(*arr);
-        }
-
-        PyObject* GetFacenames() {
-            wxArrayString* arr = self->GetFacenames();
-            return wxArrayString2PyList_helper(*arr);
-        }
-    }
-};
 
 //----------------------------------------------------------------------
 
@@ -1388,7 +1341,7 @@ public:
     void Save(wxConfigBase& config);
 
     void AddFilesToMenu();
-    %name(AddFilesToSingleMenu)void AddFilesToMenu(wxMenu* menu);
+    %name(AddFilesToThisMenu)void AddFilesToMenu(wxMenu* menu);
 
     // Accessors
     wxString GetHistoryFile(int i) const;
@@ -1404,7 +1357,6 @@ public:
 
 
 %init %{
-    wxPyPtrTypeMap_Add("wxFontEnumerator", "wxPyFontEnumerator");
     wxPyPtrTypeMap_Add("wxDragImage", "wxGenericDragImage");
     wxPyPtrTypeMap_Add("wxProcess", "wxPyProcess");
 %}

@@ -22,11 +22,12 @@ Changed the img2py tool to use PNG instead of XPM for embedding image
 data in Python source code, and the generated code now uses streams to
 convert the image data to wxImage, wxBitmap, or wxIcon.
 
-Added wxPython.lib.rcsizer which contains RowColSizer.  This sizer is
-based on code from Niki Spahiev and lets you specify a row and column
-for each item, as well as optional column or row spanning.  Cells with
-no item assigned to it are just left blank.  Stretchable rows or
-columns are specified and work the same as in wxFlexGridSizer.
+Added the wxPython.lib.rcsizer module which contains RowColSizer.
+This sizer is based on code from Niki Spahiev and lets you specify a
+row and column for each item, as well as optional column or row
+spanning.  Cells with no item assigned to it are just left blank.
+Stretchable rows or columns are specified and work the same as in
+wxFlexGridSizer.
 
 Updated XRCed from Roman Rolinsky
 
@@ -71,6 +72,8 @@ UNICODE!
 Added wxListCtrlAutoWidthMixin from Erik Westra.
 
 Added wxIconBundle and wxTopLevelWindow.SetIcons.
+
+Added wxLocale and wxEncodingConverter.
 
 
 

@@ -136,6 +136,8 @@ class PythonSTC(wxStyledTextCtrl):
 
 
     def OnKeyPressed(self, event):
+        if self.CallTipActive():
+            self.CallTipCancel()
         key = event.KeyCode()
         if key == 32 and event.ControlDown():
             pos = self.GetCurrentPos()

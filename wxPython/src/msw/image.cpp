@@ -1584,6 +1584,156 @@ static PyObject *_wrap_wxImage_GetBlue(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
+#define wxImage_FindFirstUnusedColour(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->FindFirstUnusedColour(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_wxImage_FindFirstUnusedColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxImage * _arg0;
+    byte * _arg1;
+    int  temp;
+    byte * _arg2;
+    int  temp0;
+    byte * _arg3;
+    int  temp1;
+    byte  _arg4 = (byte ) 0;
+    byte  _arg5 = (byte ) 0;
+    byte  _arg6 = (byte ) 0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","startR","startG","startB", NULL };
+
+    self = self;
+{
+  _arg1 = (byte*)&temp;
+}
+{
+  _arg2 = (byte*)&temp0;
+}
+{
+  _arg3 = (byte*)&temp1;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|bbb:wxImage_FindFirstUnusedColour",_kwnames,&_argo0,&_arg4,&_arg5,&_arg6)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_FindFirstUnusedColour. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxImage_FindFirstUnusedColour(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+#define wxImage_SetMaskFromImage(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->SetMaskFromImage(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxImage_SetMaskFromImage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxImage * _arg0;
+    wxImage * _arg1;
+    byte  _arg2;
+    byte  _arg3;
+    byte  _arg4;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","mask","mr","mg","mb", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OObbb:wxImage_SetMaskFromImage",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_SetMaskFromImage. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxImage_SetMaskFromImage. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxImage_SetMaskFromImage(_arg0,*_arg1,_arg2,_arg3,_arg4);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxImage_DoFloodFill(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->DoFloodFill(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_wxImage_DoFloodFill(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxImage * _arg0;
+    wxCoord  _arg1;
+    wxCoord  _arg2;
+    wxBrush * _arg3;
+    wxColour * _arg4;
+    int  _arg5 = (int ) wxFLOOD_SURFACE;
+    int  _arg6 = (int ) wxCOPY;
+    PyObject * _argo0 = 0;
+    PyObject * _argo3 = 0;
+    wxColour  temp;
+    PyObject * _obj4 = 0;
+    char *_kwnames[] = { "self","x","y","fillBrush","testColour","style","LogicalFunction", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiOO|ii:wxImage_DoFloodFill",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_obj4,&_arg5,&_arg6)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_DoFloodFill. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBrush_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxImage_DoFloodFill. Expected _wxBrush_p.");
+        return NULL;
+        }
+    }
+{
+    _arg4 = &temp;
+    if (! wxColour_helper(_obj4, &_arg4))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxImage_DoFloodFill(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxImage_CanRead(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
@@ -3042,6 +3192,9 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImage_LoadFile", (PyCFunction) _wrap_wxImage_LoadFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetImageCount", (PyCFunction) _wrap_wxImage_GetImageCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_CanRead", (PyCFunction) _wrap_wxImage_CanRead, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_DoFloodFill", (PyCFunction) _wrap_wxImage_DoFloodFill, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_SetMaskFromImage", (PyCFunction) _wrap_wxImage_SetMaskFromImage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_FindFirstUnusedColour", (PyCFunction) _wrap_wxImage_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetBlue", (PyCFunction) _wrap_wxImage_GetBlue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetGreen", (PyCFunction) _wrap_wxImage_GetGreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetRed", (PyCFunction) _wrap_wxImage_GetRed, METH_VARARGS | METH_KEYWORDS },

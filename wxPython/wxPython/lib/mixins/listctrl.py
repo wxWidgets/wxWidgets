@@ -149,8 +149,12 @@ class wxListCtrlAutoWidthMixin:
     def __init__(self):
 	""" Standard initialiser.
 	"""
-	EVT_SIZE(self, self._onResize)
+	self._needResize      = false
 	self._lastColMinWidth = None
+
+	EVT_SIZE(self, self._onResize)
+	EVT_LIST_COL_END_DRAG(self, self.GetId(), self._onEndColDrag)
+	EVT_IDLE(self, self._onIdle)
 
 
     def resizeLastColumn(self, minWidth):
@@ -167,7 +171,7 @@ class wxListCtrlAutoWidthMixin:
 
 	    'minWidth' is the preferred minimum width for the last column.
 	"""
-	self.lastColMinWidth = minWidth
+	self._lastColMinWidth = minWidth
 	self._doResize()
 
     # =====================
@@ -180,6 +184,27 @@ class wxListCtrlAutoWidthMixin:
 	    We automatically resize the last column in the list.
 	"""
 	self._doResize()
+
+
+    def _onEndColDrag(self, event):
+	""" Respond to the user resizing one of our columns.
+
+	    We resize the last column in the list to match.  Note that, because
+	    of a quirk in the way columns are resized under MS Windows, we
+	    actually have to do the column resize in idle time.
+	"""
+	self._needResize = true
+
+
+    def _onIdle(self, event):
+	""" Respond to an idle event.
+
+	    We resize the last column, if we've been asked to do so.
+	"""
+	if self._needResize:
+	    self._doResize()
+	    self.Refresh() # Fixes redraw problem under MS Windows.
+	    self._needResize = false
 
 
     def _doResize(self):

@@ -357,7 +357,7 @@ if not GL_ONLY:
                    'misc.i', 'misc2.i', 'gdi.i', 'mdi.i', 'controls.i',
                    'controls2.i', 'cmndlgs.i', 'stattool.i', 'frames.i', 'image.i',
                    'printfw.i', 'sizers.i', 'clip_dnd.i',
-                   'filesys.i', 'streams.i', 'utils.i'
+                   'filesys.i', 'streams.i', 'utils.i', 'fonts.i'
                    ]
 
     swig_sources = run_swig(swig_files, 'src', GENDIR, PKGDIR,

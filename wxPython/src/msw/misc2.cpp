@@ -60,7 +60,6 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/caret.h>
-#include <wx/fontenum.h>
 #include <wx/tipdlg.h>
 #include <wx/process.h>
 
@@ -114,21 +113,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     void wxCaret_SetBlinkTime(int milliseconds) {
         wxCaret::SetBlinkTime(milliseconds);
     }
-
-class wxPyFontEnumerator : public wxFontEnumerator {
-public:
-    wxPyFontEnumerator() {}
-    ~wxPyFontEnumerator() {}
-
-    DEC_PYCALLBACK_BOOL_STRING(OnFacename);
-    DEC_PYCALLBACK_BOOL_STRINGSTRING(OnFontEncoding);
-
-    PYPRIVATE;
-};
-
-IMP_PYCALLBACK_BOOL_STRING(wxPyFontEnumerator, wxFontEnumerator, OnFacename);
-IMP_PYCALLBACK_BOOL_STRINGSTRING(wxPyFontEnumerator, wxFontEnumerator, OnFontEncoding);
-
 
     bool wxThread_IsMain() {
 #ifdef WXP_WITH_THREAD
@@ -3099,239 +3083,6 @@ static PyObject *_wrap_wxCaret_Hide(PyObject *self, PyObject *args, PyObject *kw
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define new_wxFontEnumerator() (new wxPyFontEnumerator())
-static PyObject *_wrap_new_wxFontEnumerator(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyFontEnumerator * _result;
-    char *_kwnames[] = {  NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxFontEnumerator",_kwnames)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPyFontEnumerator *)new_wxFontEnumerator();
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyFontEnumerator_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define delete_wxPyFontEnumerator(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxFontEnumerator(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyFontEnumerator * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxFontEnumerator",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyFontEnumerator_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxFontEnumerator. Expected _wxPyFontEnumerator_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    delete_wxPyFontEnumerator(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxFontEnumerator__setCallbackInfo(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxFontEnumerator__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyFontEnumerator * _arg0;
-    PyObject * _arg1;
-    PyObject * _arg2;
-    bool  _arg3;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    PyObject * _obj2 = 0;
-    int tempbool3;
-    char *_kwnames[] = { "self","self","_class","incref", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOi:wxFontEnumerator__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2,&tempbool3)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyFontEnumerator_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontEnumerator__setCallbackInfo. Expected _wxPyFontEnumerator_p.");
-        return NULL;
-        }
-    }
-{
-  _arg1 = _obj1;
-}
-{
-  _arg2 = _obj2;
-}
-    _arg3 = (bool ) tempbool3;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxFontEnumerator__setCallbackInfo(_arg0,_arg1,_arg2,_arg3);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxFontEnumerator_EnumerateFacenames(_swigobj,_swigarg0,_swigarg1)  (_swigobj->EnumerateFacenames(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxFontEnumerator_EnumerateFacenames(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPyFontEnumerator * _arg0;
-    wxFontEncoding  _arg1 = (wxFontEncoding ) wxFONTENCODING_SYSTEM;
-    bool  _arg2 = (bool ) FALSE;
-    PyObject * _argo0 = 0;
-    int tempbool2 = (int) FALSE;
-    char *_kwnames[] = { "self","encoding","fixedWidthOnly", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:wxFontEnumerator_EnumerateFacenames",_kwnames,&_argo0,&_arg1,&tempbool2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyFontEnumerator_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontEnumerator_EnumerateFacenames. Expected _wxPyFontEnumerator_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxFontEnumerator_EnumerateFacenames(_arg0,_arg1,_arg2);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxFontEnumerator_EnumerateEncodings(_swigobj,_swigarg0)  (_swigobj->EnumerateEncodings(_swigarg0))
-static PyObject *_wrap_wxFontEnumerator_EnumerateEncodings(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPyFontEnumerator * _arg0;
-    wxString * _arg1 = (wxString *) &wxPyEmptyString;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","facename", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxFontEnumerator_EnumerateEncodings",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyFontEnumerator_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontEnumerator_EnumerateEncodings. Expected _wxPyFontEnumerator_p.");
-        return NULL;
-        }
-    }
-    if (_obj1)
-{
-    _arg1 = wxString_in_helper(_obj1);
-    if (_arg1 == NULL)
-        return NULL;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxFontEnumerator_EnumerateEncodings(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
-static PyObject * wxPyFontEnumerator_GetEncodings(wxPyFontEnumerator *self) {
-            wxArrayString* arr = self->GetEncodings();
-            return wxArrayString2PyList_helper(*arr);
-        }
-static PyObject *_wrap_wxFontEnumerator_GetEncodings(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    PyObject * _result;
-    wxPyFontEnumerator * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFontEnumerator_GetEncodings",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyFontEnumerator_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontEnumerator_GetEncodings. Expected _wxPyFontEnumerator_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (PyObject *)wxPyFontEnumerator_GetEncodings(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{
-  _resultobj = _result;
-}
-    return _resultobj;
-}
-
-static PyObject * wxPyFontEnumerator_GetFacenames(wxPyFontEnumerator *self) {
-            wxArrayString* arr = self->GetFacenames();
-            return wxArrayString2PyList_helper(*arr);
-        }
-static PyObject *_wrap_wxFontEnumerator_GetFacenames(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    PyObject * _result;
-    wxPyFontEnumerator * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFontEnumerator_GetFacenames",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyFontEnumerator_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontEnumerator_GetFacenames. Expected _wxPyFontEnumerator_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (PyObject *)wxPyFontEnumerator_GetFacenames(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{
-  _resultobj = _result;
-}
     return _resultobj;
 }
 
@@ -9887,8 +9638,8 @@ static PyObject *_wrap_wxFileHistory_AddFilesToMenu(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
-#define wxFileHistory_AddFilesToSingleMenu(_swigobj,_swigarg0)  (_swigobj->AddFilesToMenu(_swigarg0))
-static PyObject *_wrap_wxFileHistory_AddFilesToSingleMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxFileHistory_AddFilesToThisMenu(_swigobj,_swigarg0)  (_swigobj->AddFilesToMenu(_swigarg0))
+static PyObject *_wrap_wxFileHistory_AddFilesToThisMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFileHistory * _arg0;
     wxMenu * _arg1;
@@ -9897,25 +9648,25 @@ static PyObject *_wrap_wxFileHistory_AddFilesToSingleMenu(PyObject *self, PyObje
     char *_kwnames[] = { "self","menu", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileHistory_AddFilesToSingleMenu",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileHistory_AddFilesToThisMenu",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_AddFilesToSingleMenu. Expected _wxFileHistory_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_AddFilesToThisMenu. Expected _wxFileHistory_p.");
         return NULL;
         }
     }
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
         else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMenu_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileHistory_AddFilesToSingleMenu. Expected _wxMenu_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileHistory_AddFilesToThisMenu. Expected _wxMenu_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxFileHistory_AddFilesToSingleMenu(_arg0,_arg1);
+    wxFileHistory_AddFilesToThisMenu(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10022,7 +9773,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxFileHistory_GetNoHistoryFiles", (PyCFunction) _wrap_wxFileHistory_GetNoHistoryFiles, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileHistory_GetCount", (PyCFunction) _wrap_wxFileHistory_GetCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileHistory_GetHistoryFile", (PyCFunction) _wrap_wxFileHistory_GetHistoryFile, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileHistory_AddFilesToSingleMenu", (PyCFunction) _wrap_wxFileHistory_AddFilesToSingleMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_AddFilesToThisMenu", (PyCFunction) _wrap_wxFileHistory_AddFilesToThisMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileHistory_AddFilesToMenu", (PyCFunction) _wrap_wxFileHistory_AddFilesToMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileHistory_Save", (PyCFunction) _wrap_wxFileHistory_Save, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileHistory_Load", (PyCFunction) _wrap_wxFileHistory_Load, METH_VARARGS | METH_KEYWORDS },
@@ -10223,13 +9974,6 @@ static PyMethodDef misc2cMethods[] = {
 	 { "new_wxWindowDisabler", (PyCFunction) _wrap_new_wxWindowDisabler, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxBusyCursor", (PyCFunction) _wrap_delete_wxBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBusyCursor", (PyCFunction) _wrap_new_wxBusyCursor, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFontEnumerator_GetFacenames", (PyCFunction) _wrap_wxFontEnumerator_GetFacenames, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFontEnumerator_GetEncodings", (PyCFunction) _wrap_wxFontEnumerator_GetEncodings, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFontEnumerator_EnumerateEncodings", (PyCFunction) _wrap_wxFontEnumerator_EnumerateEncodings, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFontEnumerator_EnumerateFacenames", (PyCFunction) _wrap_wxFontEnumerator_EnumerateFacenames, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFontEnumerator__setCallbackInfo", (PyCFunction) _wrap_wxFontEnumerator__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
-	 { "delete_wxFontEnumerator", (PyCFunction) _wrap_delete_wxFontEnumerator, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxFontEnumerator", (PyCFunction) _wrap_new_wxFontEnumerator, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_Hide", (PyCFunction) _wrap_wxCaret_Hide, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_Show", (PyCFunction) _wrap_wxCaret_Show, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_SetSize", (PyCFunction) _wrap_wxCaret_SetSize, METH_VARARGS | METH_KEYWORDS },
@@ -10560,7 +10304,6 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxTheMimeTypesManager",_wrap_wxTheMimeTypesManager_get, _wrap_wxTheMimeTypesManager_set);
 
-    wxPyPtrTypeMap_Add("wxFontEnumerator", "wxPyFontEnumerator");
     wxPyPtrTypeMap_Add("wxDragImage", "wxGenericDragImage");
     wxPyPtrTypeMap_Add("wxProcess", "wxPyProcess");
 {

@@ -9,6 +9,8 @@ from misc import *
 
 from gdi import *
 
+from fonts import *
+
 from streams import *
 import wx
 import string

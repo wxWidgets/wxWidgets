@@ -127,6 +127,21 @@ public:
     unsigned char GetGreen( int x, int y );
     unsigned char GetBlue( int x, int y );
 
+        // find first colour that is not used in the image and has higher
+    // RGB values than <startR,startG,startB>
+    bool FindFirstUnusedColour( byte *OUTPUT, byte *OUTPUT, byte *OUTPUT,
+                                byte startR = 0, byte startG = 0, byte startB = 0 ) const;
+
+    // Set image's mask to the area of 'mask' that has <mr,mg,mb> colour
+    bool SetMaskFromImage(const wxImage & mask,
+                          byte mr, byte mg, byte mb);
+
+    void DoFloodFill (wxCoord x, wxCoord y,
+        const wxBrush & fillBrush,
+        const wxColour& testColour,
+        int style = wxFLOOD_SURFACE,
+        int LogicalFunction = wxCOPY /* currently unused */ ) ;
+
     static bool CanRead( const wxString& name );
     static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
 
