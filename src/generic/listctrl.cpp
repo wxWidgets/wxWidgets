@@ -4049,7 +4049,8 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
         }
     }
 
-    wxASSERT_MSG( m_lineFrom <= m_lineTo && m_lineTo < GetItemCount(),
+    wxASSERT_MSG( IsEmpty() ||
+                  (m_lineFrom <= m_lineTo && m_lineTo < GetItemCount()),
                   _T("GetVisibleLinesRange() returns incorrect result") );
 
     if ( from )
