@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        uri.h
-// Purpose:     wxURI - Class for parsing/validating URIs 
+// Purpose:     wxURI - Class for parsing URIs 
 // Author:      Ryan Norton
 // Modified By: 
 // Created:     07/01/2004
@@ -63,22 +63,22 @@ public:
 
     void Create(const wxString& uri);
 
-    bool HasScheme() const;
-    bool HasUser() const;
-    bool HasServer() const;
-    bool HasPort() const;
-    bool HasPath() const;
-    bool HasQuery() const;
-    bool HasFragment() const;
+    bool HasScheme() const      {   return (m_fields & wxURI_SCHEME) == wxURI_SCHEME;       }
+    bool HasUser() const        {   return (m_fields & wxURI_USER) == wxURI_USER;           }
+    bool HasServer() const      {   return (m_fields & wxURI_SERVER) == wxURI_SERVER;       }
+    bool HasPort() const        {   return (m_fields & wxURI_PORT) == wxURI_PORT;           }
+    bool HasPath() const        {   return (m_fields & wxURI_PATH) == wxURI_PATH;           }
+    bool HasQuery() const       {   return (m_fields & wxURI_QUERY) == wxURI_QUERY;         }
+    bool HasFragment() const    {   return (m_fields & wxURI_FRAGMENT) == wxURI_FRAGMENT;   }
 
-    const wxString& GetScheme() const;
-    const wxString& GetPath() const;
-    const wxString& GetQuery() const;
-    const wxString& GetFragment() const;
-    const wxString& GetPort() const;
-    const wxString& GetUser() const;
-    const wxString& GetServer() const;
-    const wxURIHostType& GetHostType() const;
+    const wxString& GetScheme() const           {   return m_scheme;    }
+    const wxString& GetPath() const             {   return m_path;      }
+    const wxString& GetQuery() const            {   return m_query;     }
+    const wxString& GetFragment() const         {   return m_fragment;  }
+    const wxString& GetPort() const             {   return m_port;      }
+    const wxString& GetUser() const             {   return m_user;      }
+    const wxString& GetServer() const           {   return m_server;    }
+    const wxURIHostType& GetHostType() const    {   return m_hostType;  }
 
     wxString Get() const;
 
@@ -86,10 +86,11 @@ public:
     bool IsReference() const;
 
     wxURI& operator = (const wxURI& uri);
-    wxURI& operator = (const wxChar* string);
+    wxURI& operator = (const wxString& string);
     bool operator == (const wxURI& uri) const;
     
 protected:
+    wxURI& Assign(const wxURI& uri);
 
     void Clear();
 

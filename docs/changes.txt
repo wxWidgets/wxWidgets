@@ -207,6 +207,8 @@ All:
 - Norwegian (Bokmål) translation added (Hans F. Nordhaug)
 - wxDynamicLibrary::HasSymbol() added
 - added wxTextInputStream::operator>>(wchar_t) for compilers which support this
+- added wxURI
+- changed wxURL to inherit from wxURI and provide assignment and comparison
 
 All (GUI):
 

@@ -8,6 +8,11 @@
 // Licence:     wxWindows
 /////////////////////////////////////////////////////////////////////////////
 
+//
+//TODO:  RN:  I had some massive doxygen docs, I need to move these
+//in a presentable form in these sources
+//
+
 // ===========================================================================
 // declarations
 // ===========================================================================
@@ -64,7 +69,7 @@ wxURI::wxURI(const wxString& uri) : m_hostType(wxURI_REGNAME), m_fields(0)
 
 wxURI::wxURI(const wxURI& uri)  : m_hostType(wxURI_REGNAME), m_fields(0)
 {
-    *this = uri;
+    Assign(uri);
 }
 
 // ---------------------------------------------------------------------------
@@ -136,60 +141,11 @@ bool wxURI::IsEscape(const wxChar*& uri)
 }
 
 // ---------------------------------------------------------------------------
-// HasXXX
-// ---------------------------------------------------------------------------
-
-bool wxURI::HasScheme() const
-{   return (m_fields & wxURI_SCHEME) == wxURI_SCHEME;   }
-
-bool wxURI::HasUser() const
-{   return (m_fields & wxURI_USER) == wxURI_USER;   }
-
-bool wxURI::HasServer() const
-{   return (m_fields & wxURI_SERVER) == wxURI_SERVER;   }
-
-bool wxURI::HasPort() const
-{   return (m_fields & wxURI_PORT) == wxURI_PORT;   }
-
-bool wxURI::HasPath() const
-{   return (m_fields & wxURI_PATH) == wxURI_PATH;   }
-
-bool wxURI::HasQuery() const
-{   return (m_fields & wxURI_QUERY) == wxURI_QUERY;   }
-
-bool wxURI::HasFragment() const
-{   return (m_fields & wxURI_FRAGMENT) == wxURI_FRAGMENT;   }
-
-// ---------------------------------------------------------------------------
-// GetXXX
+// Get
 //
-// The normal Get() actually builds the entire URI into a useable 
+// Get() actually builds the entire URI into a useable 
 // representation, including proper identification characters such as slashes
 // ---------------------------------------------------------------------------
-
-const wxString& wxURI::GetScheme() const
-{   return m_scheme;               }
-
-const wxString& wxURI::GetPath() const
-{   return m_path;               }
-
-const wxString& wxURI::GetQuery() const
-{   return m_query;               }
-
-const wxString& wxURI::GetFragment() const
-{   return m_fragment;               }
-
-const wxString& wxURI::GetPort() const
-{   return m_port;               }
-
-const wxString& wxURI::GetUser() const
-{   return m_user;               }
-
-const wxString& wxURI::GetServer() const
-{   return m_server;               }
-
-const wxURIHostType& wxURI::GetHostType() const
-{   return m_hostType;             }
 
 wxString wxURI::Get() const
 {   
@@ -228,36 +184,28 @@ wxString wxURI::Get() const
 
 wxURI& wxURI::operator = (const wxURI& uri)
 {
-    if (HasScheme())
-        m_scheme = uri.m_scheme;
+    return Assign(uri);
+}
 
+wxURI& wxURI::Assign(const wxURI& uri)
+{
+    //assign fields
+    m_fields = uri.m_fields;
 
-    if (HasServer())
-    {
-        if (HasUser())
-            m_user = uri.m_user;
-
-        m_server = uri.m_server;
-        m_hostType = uri.m_hostType;
-
-        if (HasPort())
-            m_port = uri.m_port;
-    }
-
-
-    if (HasPath())
-        m_path = uri.m_path;
-
-    if (HasQuery())
-        m_query = uri.m_query;
-
-    if (HasFragment())
-        m_fragment = uri.m_fragment;
+    //ref over components
+    m_scheme = uri.m_scheme;
+    m_user = uri.m_user;
+    m_server = uri.m_server;
+    m_hostType = uri.m_hostType;
+    m_port = uri.m_port;
+    m_path = uri.m_path;
+    m_query = uri.m_query;
+    m_fragment = uri.m_fragment;
 
     return *this;
 }
 
-wxURI& wxURI::operator = (const wxChar* string)
+wxURI& wxURI::operator = (const wxString& string)
 {   
     Create(string);
     return *this;

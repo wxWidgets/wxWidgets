@@ -25,6 +25,9 @@
 
 #include "wx/cppunit.h"
 
+// Test wxURL & wxURI compat?
+#define TEST_URL 0
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -46,6 +49,9 @@ private:
         CPPUNIT_TEST( BackwardsResolving );
         CPPUNIT_TEST( Assignment );
         CPPUNIT_TEST( Comparison );
+#if TEST_URL
+        CPPUNIT_TEST( URLCompat );
+#endif
     CPPUNIT_TEST_SUITE_END();
 
     void IPv4();
@@ -58,6 +64,10 @@ private:
     void BackwardsResolving();
     void Assignment();
     void Comparison();
+
+#if 1
+    void URLCompat();
+#endif
 
     DECLARE_NO_COPY_CLASS(URITestCase)
 };
@@ -264,3 +274,37 @@ void URITestCase::Comparison()
 {
     CPPUNIT_ASSERT(wxURI(wxT("http://mysite.com")) == wxURI(wxT("http://mysite.com")));
 }
+
+#if TEST_URL
+
+#include "wx/url.h"
+
+void URITestCase::URLCompat()
+{
+    wxURL url(wxT("http://user:password@wxwidgets.org"));
+
+    CPPUNIT_ASSERT(url.GetError() == wxURL_NOERR);
+    
+    wxInputStream* pInput = url.GetInputStream();
+
+    CPPUNIT_ASSERT( pInput != NULL );
+
+    CPPUNIT_ASSERT( url == wxURL(wxT("http://user:password@wxwidgets.org")) );
+
+    wxURI uri(wxT("http://user:password@wxwidgets.org"));
+
+    CPPUNIT_ASSERT( url == uri );
+
+    wxURL urlcopy(uri);
+
+    CPPUNIT_ASSERT( urlcopy == url );
+    CPPUNIT_ASSERT( urlcopy == uri );
+
+    wxURI uricopy(url);
+
+    CPPUNIT_ASSERT( uricopy == url );
+    CPPUNIT_ASSERT( uricopy == urlcopy );
+    CPPUNIT_ASSERT( uricopy == uri );
+}
+
+#endif

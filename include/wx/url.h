@@ -2,7 +2,7 @@
 // Name:        url.h
 // Purpose:     URL parser
 // Author:      Guilhem Lavaux
-// Modified by:
+// Modified by: Ryan Norton
 // Created:     20/07/1997
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
@@ -20,7 +20,7 @@
 
 #if wxUSE_URL
 
-#include "wx/object.h"
+#include "wx/uri.h"
 #include "wx/protocol/protocol.h"
 
 #if wxUSE_PROTOCOL_HTTP
@@ -48,14 +48,18 @@ public:
 };
 #endif // wxUSE_URL_NATIVE
 
-class WXDLLIMPEXP_NET wxURL : public wxObject
+class WXDLLIMPEXP_NET wxURL : public wxURI
 {
 public:
-    wxURL(const wxString& url);
+    wxURL(const wxString& sUrl);
+    wxURL(const wxURI& url);
     virtual ~wxURL();
 
-    wxString GetProtocolName() const { return m_protoinfo->m_protoname; }
-    wxString GetHostName() const     { return m_hostname; }
+    wxURL& operator = (const wxString& url);
+    wxURL& operator = (const wxURI& url);
+
+    wxString GetProtocolName() const { return m_scheme; }
+    wxString GetHostName() const     { return m_server; }
     wxString GetURL() const          { return m_url; }
     wxProtocol& GetProtocol()        { return *m_protocol; }
     wxURLError GetError() const      { return m_error; }
@@ -95,13 +99,10 @@ protected:
     wxProtocol *m_protocol;
 
     wxURLError m_error;
-    wxString m_protoname, m_hostname, m_servname, m_path, m_url;
-    wxString m_user, m_password;
+    wxString m_url;
     bool m_useProxy;
 
-    bool PrepProto(wxString& url);
-    bool PrepHost(wxString& url);
-    bool PrepPath(wxString& url);
+    void Init(const wxString&);
     bool ParseURL();
     void CleanData();
     bool FetchProtocol();
@@ -110,10 +111,6 @@ protected:
     friend class wxURLModule;
 
 private:
-    // VZ: can't use default copy ctor for this class, should write a correct
-    //     one! (TODO)
-    DECLARE_NO_COPY_CLASS(wxURL)
-
     DECLARE_DYNAMIC_CLASS(wxURL)
 };
 

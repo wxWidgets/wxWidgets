@@ -32,7 +32,7 @@
 #include <ctype.h>
 
 IMPLEMENT_CLASS(wxProtoInfo, wxObject)
-IMPLEMENT_CLASS(wxURL, wxObject)
+IMPLEMENT_CLASS(wxURL, wxURI)
 
 // Protocols list
 wxProtoInfo *wxURL::ms_protocols = NULL;
@@ -49,14 +49,39 @@ USE_PROTOCOL(wxFTP)
 #endif
 
 // --------------------------------------------------------------
-// wxURL
+//
+//                          wxURL
+//
 // --------------------------------------------------------------
 
-// --------------------------------------------------------------
-// --------- wxURL CONSTRUCTOR DESTRUCTOR -----------------------
-// --------------------------------------------------------------
+wxURL::wxURL(const wxString& url) : wxURI(url)
+{
+    Init(url);
+    ParseURL();
+}
 
-wxURL::wxURL(const wxString& url)
+wxURL::wxURL(const wxURI& url) : wxURI(url)
+{
+    Init(url.Get());
+    ParseURL();
+}
+
+wxURL& wxURL::operator = (const wxURI& url)
+{
+    wxURI::operator = (url);
+    Init(url.Get());
+    ParseURL();
+    return *this;
+}
+wxURL& wxURL::operator = (const wxString& url)
+{
+    wxURI::operator = (url);
+    Init(url);
+    ParseURL();
+    return *this;
+}
+
+void wxURL::Init(const wxString& url)
 {
     m_protocol = NULL;
     m_error = wxURL_NOERR;
@@ -81,21 +106,23 @@ wxURL::wxURL(const wxString& url)
     m_proxy = ms_proxyDefault;
 #endif // wxUSE_SOCKETS
 
-    ParseURL();
 }
+// --------------------------------------------------------------
+// ParseURL
+//
+// Builds the URL and takes care of the old protocol stuff
+// --------------------------------------------------------------
 
 bool wxURL::ParseURL()
 {
-  wxString last_url = m_url;
-
   // If the URL was already parsed (m_protocol != NULL), pass this section.
   if (!m_protocol)
   {
     // Clean up
     CleanData();
 
-    // Extract protocol name
-    if (!PrepProto(last_url))
+    // Make sure we have a protocol/scheme
+    if (!HasScheme())
     {
       m_error = wxURL_SNTXERR;
       return false;
@@ -111,22 +138,14 @@ bool wxURL::ParseURL()
     // Do we need a host name ?
     if (m_protoinfo->m_needhost)
     {
-      // Extract it
-      if (!PrepHost(last_url))
+      //  Make sure we have one, then
+      if (!HasServer())
       {
         m_error = wxURL_SNTXERR;
         return false;
       }
     }
-
-    // Extract full path
-    if (!PrepPath(last_url))
-    {
-      m_error = wxURL_NOPATH;
-      return false;
-    }
   }
-  // URL parse finished.
 
 #if wxUSE_SOCKETS
   if (m_useProxy)
@@ -135,11 +154,9 @@ bool wxURL::ParseURL()
     delete m_protocol;
 
     // Third, we rebuild the URL.
-    m_url = m_protoname + wxT(":");
+    m_url = m_scheme + wxT(":");
     if (m_protoinfo->m_needhost)
-      m_url = m_url + wxT("//") + m_hostname;
-
-    m_url += m_path;
+      m_url = m_url + wxT("//") + m_server;
 
     // We initialize specific variables.
     m_protocol = m_proxy; // FIXME: we should clone the protocol
@@ -170,87 +187,6 @@ wxURL::~wxURL()
 #endif
 }
 
-// --------------------------------------------------------------
-// --------- wxURL urls decoders --------------------------------
-// --------------------------------------------------------------
-
-bool wxURL::PrepProto(wxString& url)
-{
-  int pos;
-
-  // Find end
-  pos = url.Find(wxT(':'));
-  if (pos == wxNOT_FOUND)
-    return false;
-
-  m_protoname = url(0, pos);
-
-  url = url(pos+1, url.Length());
-
-  return true;
-}
-
-bool wxURL::PrepHost(wxString& url)
-{
-  wxString temp_url;
-  int pos, pos2;
-
-  if ((url.GetChar(0) != wxT('/')) || (url.GetChar(1) != wxT('/')))
-    return false;
-
-  url = url(2, url.Length());
-
-  pos = url.Find(wxT('/'));
-  if (pos == wxNOT_FOUND)
-    pos = url.Length();
-
-  if (pos == 0)
-    return false;
-
-  temp_url = url(0, pos);
-  url = url(url.Find(wxT('/')), url.Length());
-
-  // Retrieve service number
-  pos2 = temp_url.Find(wxT(':'), true);
-  if (pos2 != wxNOT_FOUND && pos2 < pos)
-  {
-    m_servname = temp_url(pos2+1, pos);
-    if (!m_servname.IsNumber())
-      return false;
-    temp_url = temp_url(0, pos2);
-  }
-
-  // Retrieve user and password.
-  pos2 = temp_url.Find(wxT('@'));
-  // Even if pos2 equals wxNOT_FOUND, this code is right.
-  m_hostname = temp_url(pos2+1, temp_url.Length());
-
-  m_user = wxT("");
-  m_password = wxT("");
-
-  if (pos2 == wxNOT_FOUND)
-    return true;
-
-  temp_url = temp_url(0, pos2);
-  pos2 = temp_url.Find(wxT(':'));
-
-  if (pos2 == wxNOT_FOUND)
-    return false;
-
-  m_user = temp_url(0, pos2);
-  m_password = temp_url(pos2+1, url.Length());
-
-  return true;
-}
-
-bool wxURL::PrepPath(wxString& url)
-{
-  if (url.Length() != 0)
-    m_path = ConvertToValidURI(url);
-  else
-    m_path = wxT("/");
-  return true;
-}
 
 bool wxURL::FetchProtocol()
 {
@@ -258,14 +194,13 @@ bool wxURL::FetchProtocol()
 
   while (info)
   {
-    if (m_protoname == info->m_protoname)
+    if (m_scheme == info->m_protoname)
     {
-      if (m_servname.IsNull())
-        m_servname = info->m_servname;
-
-      m_protoinfo = info;
-      m_protocol = (wxProtocol *)m_protoinfo->m_cinfo->CreateObject();
-      return true;
+        if (m_port.IsNull())
+            m_port = info->m_servname;
+        m_protoinfo = info;
+        m_protocol = (wxProtocol *)m_protoinfo->m_cinfo->CreateObject();
+        return true;
     }
     info = info->next;
   }
@@ -285,10 +220,17 @@ wxInputStream *wxURL::GetInputStream()
   }
 
   m_error = wxURL_NOERR;
-  if (m_user != wxT(""))
+  if (HasUser())
   {
-    m_protocol->SetUser(m_user);
-    m_protocol->SetPassword(m_password);
+      size_t dwPasswordPos = m_user.find(':');
+
+      if (dwPasswordPos == wxString::npos)
+          m_protocol->SetUser(m_user);
+      else
+      {
+          m_protocol->SetUser(m_user(0, dwPasswordPos));
+          m_protocol->SetPassword(m_user(dwPasswordPos+1, m_user.length() + 1));
+      }
   }
 
 #if wxUSE_URL_NATIVE
@@ -310,13 +252,13 @@ wxInputStream *wxURL::GetInputStream()
   // m_protoinfo is NULL when we use a proxy
   if (!m_useProxy && m_protoinfo->m_needhost)
   {
-    if (!addr.Hostname(m_hostname))
+    if (!addr.Hostname(m_server))
     {
       m_error = wxURL_NOHOST;
       return NULL;
     }
 
-    addr.Service(m_servname);
+    addr.Service(m_port);
 
     if (!m_protocol->Connect(addr, true)) // Watcom needs the 2nd arg for some reason
     {
