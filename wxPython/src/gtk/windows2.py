@@ -101,7 +101,7 @@ class wxNotebook(wxNotebookPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windows2c.new_wxNotebook,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
 
 
 
@@ -201,7 +201,7 @@ class wxSplitterWindow(wxSplitterWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windows2c.new_wxSplitterWindow,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
 
 
 

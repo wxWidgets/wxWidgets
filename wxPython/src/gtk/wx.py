@@ -400,9 +400,11 @@ wxSAVE = wxc.wxSAVE
 wxHIDE_READONLY = wxc.wxHIDE_READONLY
 wxOVERWRITE_PROMPT = wxc.wxOVERWRITE_PROMPT
 wxFILE_MUST_EXIST = wxc.wxFILE_MUST_EXIST
+wxMULTIPLE = wxc.wxMULTIPLE
 wxACCEL_ALT = wxc.wxACCEL_ALT
 wxACCEL_CTRL = wxc.wxACCEL_CTRL
 wxACCEL_SHIFT = wxc.wxACCEL_SHIFT
+wxACCEL_NORMAL = wxc.wxACCEL_NORMAL
 wxPD_AUTO_HIDE = wxc.wxPD_AUTO_HIDE
 wxPD_APP_MODAL = wxc.wxPD_APP_MODAL
 wxPD_CAN_ABORT = wxc.wxPD_CAN_ABORT
@@ -815,6 +817,7 @@ wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = wxc.wxEVT_COMMAND_SPLITTER_SASH_POS_CH
 wxEVT_COMMAND_SPLITTER_UNSPLIT = wxc.wxEVT_COMMAND_SPLITTER_UNSPLIT
 wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxc.wxEVT_COMMAND_SPLITTER_DOUBLECLICKED
 wxEVT_NAVIGATION_KEY = wxc.wxEVT_NAVIGATION_KEY
+wxEVT_TIMER = wxc.wxEVT_TIMER
 __version__ = wxc.__version__
 cvar = wxc.cvar
 wxPyDefaultPosition = wxPointPtr(wxc.cvar.wxPyDefaultPosition)
@@ -849,41 +852,41 @@ _wxSetDictionary(vars())
 # Helper function to link python methods to wxWindows virtual
 # functions by name.
 
-def _checkForCallback(obj, name, event, theID=-1):
-    try:    cb = getattr(obj, name)
-    except: pass
-    else:   obj.Connect(theID, -1, event, cb)
+## def _checkForCallback(obj, name, event, theID=-1):
+##     try:    cb = getattr(obj, name)
+##     except: pass
+##     else:   obj.Connect(theID, -1, event, cb)
 
-def _StdWindowCallbacks(win):
-    _checkForCallback(win, "OnChar",               wxEVT_CHAR)
-    _checkForCallback(win, "OnSize",               wxEVT_SIZE)
-    _checkForCallback(win, "OnEraseBackground",    wxEVT_ERASE_BACKGROUND)
-    _checkForCallback(win, "OnSysColourChanged",   wxEVT_SYS_COLOUR_CHANGED)
-    _checkForCallback(win, "OnInitDialog",         wxEVT_INIT_DIALOG)
-    _checkForCallback(win, "OnPaint",              wxEVT_PAINT)
-    _checkForCallback(win, "OnIdle",               wxEVT_IDLE)
-
-
-def _StdFrameCallbacks(win):
-    _StdWindowCallbacks(win)
-    _checkForCallback(win, "OnActivate",           wxEVT_ACTIVATE)
-    _checkForCallback(win, "OnMenuHighlight",      wxEVT_MENU_HIGHLIGHT)
-    _checkForCallback(win, "OnCloseWindow",        wxEVT_CLOSE_WINDOW)
+## def _StdWindowCallbacks(win):
+##     _checkForCallback(win, "OnChar",               wxEVT_CHAR)
+##     _checkForCallback(win, "OnSize",               wxEVT_SIZE)
+##     _checkForCallback(win, "OnEraseBackground",    wxEVT_ERASE_BACKGROUND)
+##     _checkForCallback(win, "OnSysColourChanged",   wxEVT_SYS_COLOUR_CHANGED)
+##     _checkForCallback(win, "OnInitDialog",         wxEVT_INIT_DIALOG)
+##     _checkForCallback(win, "OnPaint",              wxEVT_PAINT)
+##     _checkForCallback(win, "OnIdle",               wxEVT_IDLE)
 
 
-def _StdDialogCallbacks(win):
-    _StdWindowCallbacks(win)
-    _checkForCallback(win, "OnOk",     wxEVT_COMMAND_BUTTON_CLICKED,   wxID_OK)
-    _checkForCallback(win, "OnApply",  wxEVT_COMMAND_BUTTON_CLICKED,   wxID_APPLY)
-    _checkForCallback(win, "OnCancel", wxEVT_COMMAND_BUTTON_CLICKED,   wxID_CANCEL)
-    _checkForCallback(win, "OnCloseWindow", wxEVT_CLOSE_WINDOW)
-    _checkForCallback(win, "OnCharHook",    wxEVT_CHAR_HOOK)
+## def _StdFrameCallbacks(win):
+##     _StdWindowCallbacks(win)
+##     _checkForCallback(win, "OnActivate",           wxEVT_ACTIVATE)
+##     _checkForCallback(win, "OnMenuHighlight",      wxEVT_MENU_HIGHLIGHT)
+##     _checkForCallback(win, "OnCloseWindow",        wxEVT_CLOSE_WINDOW)
 
 
-def _StdOnScrollCallbacks(win):
-    try:    cb = getattr(win, "OnScroll")
-    except: pass
-    else:   EVT_SCROLL(win, cb)
+## def _StdDialogCallbacks(win):
+##     _StdWindowCallbacks(win)
+##     _checkForCallback(win, "OnOk",     wxEVT_COMMAND_BUTTON_CLICKED,   wxID_OK)
+##     _checkForCallback(win, "OnApply",  wxEVT_COMMAND_BUTTON_CLICKED,   wxID_APPLY)
+##     _checkForCallback(win, "OnCancel", wxEVT_COMMAND_BUTTON_CLICKED,   wxID_CANCEL)
+##     _checkForCallback(win, "OnCloseWindow", wxEVT_CLOSE_WINDOW)
+##     _checkForCallback(win, "OnCharHook",    wxEVT_CHAR_HOOK)
+
+
+## def _StdOnScrollCallbacks(win):
+##     try:    cb = getattr(win, "OnScroll")
+##     except: pass
+##     else:   EVT_SCROLL(win, cb)
 
 
 
@@ -1351,15 +1354,9 @@ def EVT_SPIN_UP(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_LINEUP, func)
 
 def EVT_SPIN_DOWN(win, id, func):
-    win.Connect(id, -1,wxEVT_SCROLL_LINEDOWN, func)
+    win.Connect(id, -1, wxEVT_SCROLL_LINEDOWN, func)
 
 def EVT_SPIN(win, id, func):
-    win.Connect(id, -1, wxEVT_SCROLL_TOP,       func)
-    win.Connect(id, -1, wxEVT_SCROLL_BOTTOM,    func)
-    win.Connect(id, -1, wxEVT_SCROLL_LINEUP,    func)
-    win.Connect(id, -1, wxEVT_SCROLL_LINEDOWN,  func)
-    win.Connect(id, -1, wxEVT_SCROLL_PAGEUP,    func)
-    win.Connect(id, -1, wxEVT_SCROLL_PAGEDOWN,  func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
 
 
@@ -1494,6 +1491,12 @@ def EVT_SPLITTER_UNSPLIT(win, id, func):
 
 def EVT_SPLITTER_DOUBLECLICKED(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, func)
+
+
+# wxTimer
+def EVT_TIMER(win, id, func):
+    win.Connect(id, -1, wxEVT_TIMER, func)
+
 
 
 #----------------------------------------------------------------------

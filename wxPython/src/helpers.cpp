@@ -142,6 +142,7 @@ void __wxPreStart()
     argv[argc] = NULL;
 
     wxEntryStart(argc, argv);
+    delete [] argv;
 }
 
 

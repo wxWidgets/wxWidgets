@@ -470,7 +470,7 @@ class wxListCtrl(wxListCtrlPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxListCtrl,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
 
 
 
@@ -560,6 +560,9 @@ class wxTreeCtrlPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def _setSelf(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl__setSelf,(self,) + _args, _kwargs)
+        return val
     def GetCount(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_GetCount,(self,) + _args, _kwargs)
         return val
@@ -695,6 +698,10 @@ class wxTreeCtrlPtr(wxControlPtr):
         val = apply(controls2c.wxTreeCtrl_InsertItem,(self,) + _args, _kwargs)
         if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
         return val
+    def InsertItemBefore(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_InsertItemBefore,(self,) + _args, _kwargs)
+        if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
+        return val
     def AppendItem(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_AppendItem,(self,) + _args, _kwargs)
         if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
@@ -778,7 +785,8 @@ class wxTreeCtrl(wxTreeCtrlPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxTreeCtrl,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
+        #wx._StdWindowCallbacks(self)
+        self._setSelf(self, wxTreeCtrl)
 
 
 

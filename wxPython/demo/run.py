@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 #----------------------------------------------------------------------------
 # Name:         run.py
 # Purpose:      Simple framework for running individual demos

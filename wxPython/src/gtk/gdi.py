@@ -611,6 +611,12 @@ class wxDCPtr :
     def SetAxisOrientation(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_SetAxisOrientation,(self,) + _args, _kwargs)
         return val
+    def CalcBoundingBox(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_CalcBoundingBox,(self,) + _args, _kwargs)
+        return val
+    def ResetBoundingBox(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_ResetBoundingBox,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxDC instance at %s>" % (self.this,)
 class wxDC(wxDCPtr):
@@ -751,6 +757,12 @@ class wxImageListPtr :
             gdic.delete_wxImageList(self)
     def Add(self, *_args, **_kwargs):
         val = apply(gdic.wxImageList_Add,(self,) + _args, _kwargs)
+        return val
+    def AddWithColourMask(self, *_args, **_kwargs):
+        val = apply(gdic.wxImageList_AddWithColourMask,(self,) + _args, _kwargs)
+        return val
+    def AddIcon(self, *_args, **_kwargs):
+        val = apply(gdic.wxImageList_AddIcon,(self,) + _args, _kwargs)
         return val
     def Replace(self, *_args, **_kwargs):
         val = apply(gdic.wxImageList_Replace,(self,) + _args, _kwargs)

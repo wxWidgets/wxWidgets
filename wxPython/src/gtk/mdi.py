@@ -54,7 +54,7 @@ class wxMDIParentFrame(wxMDIParentFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(mdic.new_wxMDIParentFrame,_args,_kwargs)
         self.thisown = 1
-        wx._StdFrameCallbacks(self)
+        #wx._StdFrameCallbacks(self)
 
 
 
@@ -78,7 +78,7 @@ class wxMDIChildFrame(wxMDIChildFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(mdic.new_wxMDIChildFrame,_args,_kwargs)
         self.thisown = 1
-        wx._StdFrameCallbacks(self)
+        #wx._StdFrameCallbacks(self)
 
 
 
@@ -93,8 +93,8 @@ class wxMDIClientWindow(wxMDIClientWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(mdic.new_wxMDIClientWindow,_args,_kwargs)
         self.thisown = 1
-        wx._StdWindowCallbacks(self)
-        wx._StdOnScrollCallbacks(self)
+        #wx._StdWindowCallbacks(self)
+        #wx._StdOnScrollCallbacks(self)
 
 
 

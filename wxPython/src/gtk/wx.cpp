@@ -639,6 +639,7 @@ extern "C" SWIGEXPORT(void) initgridc();
 extern "C" SWIGEXPORT(void) initutilsc();
 extern "C" SWIGEXPORT(void) inithtmlc();
 extern "C" SWIGEXPORT(void) inithtmlhelpc();
+extern "C" SWIGEXPORT(void) initcalendarc();
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1672,9 +1673,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0},
     { "_wxCursor","_class_wxCursor",0},
     { "_wxNotifyEvent","_class_wxNotifyEvent",0},
+    { "_wxPyTreeCtrl","_class_wxPyTreeCtrl",0},
     { "_wxImageHandler","_class_wxImageHandler",0},
     { "_class_wxToolBarBase","_wxToolBarBase",0},
-    { "_class_wxTreeCtrl","_wxTreeCtrl",0},
     { "_wxMask","_class_wxMask",0},
     { "_wxToolTip","_class_wxToolTip",0},
     { "_wxPNGHandler","_class_wxPNGHandler",0},
@@ -1740,6 +1741,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPanel","_class_wxPanel",0},
     { "_wxInitDialogEvent","_class_wxInitDialogEvent",0},
     { "_wxCheckBox","_class_wxCheckBox",0},
+    { "_class_wxPyTreeCtrl","_wxPyTreeCtrl",0},
     { "_wxPyEvent","_class_wxPyEvent",0},
     { "_wxTextCtrl","_class_wxTextCtrl",0},
     { "_class_wxMask","_wxMask",0},
@@ -1774,6 +1776,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_unsigned_int",0},
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
+    { "_wxChar","_char",0},
     { "_wxPyValidator","_class_wxPyValidator",0},
     { "_class_wxEvent","_wxEvent",0},
     { "_wxCheckListBox","_class_wxCheckListBox",0},
@@ -1789,10 +1792,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxFontData","_wxFontData",0},
     { "_class_wxPNMHandler","_wxPNMHandler",0},
     { "_wxBoxSizer","_class_wxBoxSizer",0},
+    { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
     { "_wxPrintDialog","_class_wxPrintDialog",0},
-    { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
+    { "_wxTimerEvent","_class_wxTimerEvent",0},
+    { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxScrollBar","_class_wxScrollBar",0},
     { "_wxSpinButton","_class_wxSpinButton",0},
     { "_wxColourDialog","_class_wxColourDialog",0},
@@ -1835,6 +1840,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_wxDC",0},
     { "_wxScrollWinEvent","_class_wxScrollWinEvent",0},
+    { "_wxGenericDragImage","_class_wxGenericDragImage",0},
     { "_class_wxProgressDialog","_wxProgressDialog",0},
     { "_wxQueryNewPaletteEvent","_class_wxQueryNewPaletteEvent",0},
     { "_wxPyApp","_class_wxPyApp",0},
@@ -1842,9 +1848,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxMDIParentFrame","_class_wxMDIParentFrame",0},
     { "_class_wxTreeEvent","_wxTreeEvent",0},
     { "_class_wxDirDialog","_wxDirDialog",0},
-    { "_class_wxPyTimer","_wxPyTimer",0},
     { "_wxFocusEvent","_class_wxFocusEvent",0},
     { "_wxMaximizeEvent","_class_wxMaximizeEvent",0},
+    { "_class_wxTimerEvent","_wxTimerEvent",0},
+    { "_class_wxPyTimer","_wxPyTimer",0},
     { "_class_wxSpinButton","_wxSpinButton",0},
     { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
     { "_class_wxPanel","_wxPanel",0},
@@ -1893,6 +1900,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
+    { "_class_wxGenericDragImage","_wxGenericDragImage",0},
     { "_wxListCtrl","_class_wxListCtrl",0},
     { "_wxSingleChoiceDialog","_class_wxSingleChoiceDialog",0},
     { "_class_wxPoint","_wxPoint",0},
@@ -1995,7 +2003,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxValidator","_class_wxValidator",0},
     { "_wxToolBarBase","_class_wxToolBarBase",0},
     { "_class_wxTreeItemId","_wxTreeItemId",0},
-    { "_wxTreeCtrl","_class_wxTreeCtrl",0},
     { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
     { "_wxIconizeEvent","_class_wxIconizeEvent",0},
     { "_class_wxControl","_wxControl",0},
@@ -2339,9 +2346,11 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxHIDE_READONLY", PyInt_FromLong((long) wxHIDE_READONLY));
 	 PyDict_SetItemString(d,"wxOVERWRITE_PROMPT", PyInt_FromLong((long) wxOVERWRITE_PROMPT));
 	 PyDict_SetItemString(d,"wxFILE_MUST_EXIST", PyInt_FromLong((long) wxFILE_MUST_EXIST));
+	 PyDict_SetItemString(d,"wxMULTIPLE", PyInt_FromLong((long) wxMULTIPLE));
 	 PyDict_SetItemString(d,"wxACCEL_ALT", PyInt_FromLong((long) wxACCEL_ALT));
 	 PyDict_SetItemString(d,"wxACCEL_CTRL", PyInt_FromLong((long) wxACCEL_CTRL));
 	 PyDict_SetItemString(d,"wxACCEL_SHIFT", PyInt_FromLong((long) wxACCEL_SHIFT));
+	 PyDict_SetItemString(d,"wxACCEL_NORMAL", PyInt_FromLong((long) wxACCEL_NORMAL));
 	 PyDict_SetItemString(d,"wxPD_AUTO_HIDE", PyInt_FromLong((long) wxPD_AUTO_HIDE));
 	 PyDict_SetItemString(d,"wxPD_APP_MODAL", PyInt_FromLong((long) wxPD_APP_MODAL));
 	 PyDict_SetItemString(d,"wxPD_CAN_ABORT", PyInt_FromLong((long) wxPD_CAN_ABORT));
@@ -2754,6 +2763,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_UNSPLIT", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_UNSPLIT));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_DOUBLECLICKED", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_DOUBLECLICKED));
 	 PyDict_SetItemString(d,"wxEVT_NAVIGATION_KEY", PyInt_FromLong((long) wxEVT_NAVIGATION_KEY));
+	 PyDict_SetItemString(d,"wxEVT_TIMER", PyInt_FromLong((long) wxEVT_TIMER));
 	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.0.0"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
@@ -2788,7 +2798,7 @@ SWIGEXPORT(void) initwxc() {
     initutilsc();
     inithtmlc();
     inithtmlhelpc();
-
+    initcalendarc();
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

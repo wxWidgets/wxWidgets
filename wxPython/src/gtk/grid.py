@@ -819,15 +819,6 @@ class wxGridPtr(wxScrolledWindowPtr):
     def GetNumberCols(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetNumberCols,(self,) + _args, _kwargs)
         return val
-    def CalcRowLabelsExposed(self, *_args, **_kwargs):
-        val = apply(gridc.wxGrid_CalcRowLabelsExposed,(self,) + _args, _kwargs)
-        return val
-    def CalcColLabelsExposed(self, *_args, **_kwargs):
-        val = apply(gridc.wxGrid_CalcColLabelsExposed,(self,) + _args, _kwargs)
-        return val
-    def CalcCellsExposed(self, *_args, **_kwargs):
-        val = apply(gridc.wxGrid_CalcCellsExposed,(self,) + _args, _kwargs)
-        return val
     def ProcessTableMessage(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_ProcessTableMessage,(self,) + _args, _kwargs)
         return val
@@ -1268,10 +1259,6 @@ class wxGridPtr(wxScrolledWindowPtr):
         return val
     def BlockToDeviceRect(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_BlockToDeviceRect,(self,) + _args, _kwargs)
-        if val: val = wxRectPtr(val) ; val.thisown = 1
-        return val
-    def SelectionToDeviceRect(self, *_args, **_kwargs):
-        val = apply(gridc.wxGrid_SelectionToDeviceRect,(self,) + _args, _kwargs)
         if val: val = wxRectPtr(val) ; val.thisown = 1
         return val
     def GetSelectionBackground(self, *_args, **_kwargs):

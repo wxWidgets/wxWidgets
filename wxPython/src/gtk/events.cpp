@@ -4705,6 +4705,68 @@ static PyObject *_wrap_wxWindowDestroyEvent_GetWindow(PyObject *self, PyObject *
     return _resultobj;
 }
 
+static void *SwigwxTimerEventTowxEvent(void *ptr) {
+    wxTimerEvent *src;
+    wxEvent *dest;
+    src = (wxTimerEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+#define new_wxTimerEvent(_swigarg0,_swigarg1) (new wxTimerEvent(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxTimerEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTimerEvent * _result;
+    int  _arg0 = (int ) 0;
+    int  _arg1 = (int ) 0;
+    char *_kwnames[] = { "id","interval", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxTimerEvent",_kwnames,&_arg0,&_arg1)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxTimerEvent *)new_wxTimerEvent(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxTimerEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxTimerEvent_GetInterval(_swigobj)  (_swigobj->GetInterval())
+static PyObject *_wrap_wxTimerEvent_GetInterval(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxTimerEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTimerEvent_GetInterval",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTimerEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTimerEvent_GetInterval. Expected _wxTimerEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxTimerEvent_GetInterval(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxPyEventTowxEvent(void *ptr) {
     wxPyEvent *src;
     wxEvent *dest;
@@ -4967,6 +5029,8 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxPyEvent_SetSelf", (PyCFunction) _wrap_wxPyEvent_SetSelf, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPyEvent", (PyCFunction) _wrap_delete_wxPyEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyEvent", (PyCFunction) _wrap_new_wxPyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTimerEvent_GetInterval", (PyCFunction) _wrap_wxTimerEvent_GetInterval, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxTimerEvent", (PyCFunction) _wrap_new_wxTimerEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindowDestroyEvent_GetWindow", (PyCFunction) _wrap_wxWindowDestroyEvent_GetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxWindowDestroyEvent", (PyCFunction) _wrap_new_wxWindowDestroyEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindowCreateEvent_GetWindow", (PyCFunction) _wrap_wxWindowCreateEvent_GetWindow, METH_VARARGS | METH_KEYWORDS },
@@ -5131,6 +5195,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
     { "_wxEvent","_class_wxPyEvent",SwigwxPyEventTowxEvent},
     { "_wxEvent","_wxPyEvent",SwigwxPyEventTowxEvent},
+    { "_wxEvent","_class_wxTimerEvent",SwigwxTimerEventTowxEvent},
+    { "_wxEvent","_wxTimerEvent",SwigwxTimerEventTowxEvent},
     { "_wxEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxEvent},
     { "_wxEvent","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxEvent},
     { "_wxEvent","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxEvent},
@@ -5245,10 +5311,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_unsigned_int",0},
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
+    { "_wxChar","_char",0},
     { "_class_wxEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
     { "_class_wxEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
     { "_class_wxEvent","_class_wxPyEvent",SwigwxPyEventTowxEvent},
     { "_class_wxEvent","_wxPyEvent",SwigwxPyEventTowxEvent},
+    { "_class_wxEvent","_class_wxTimerEvent",SwigwxTimerEventTowxEvent},
+    { "_class_wxEvent","_wxTimerEvent",SwigwxTimerEventTowxEvent},
     { "_class_wxEvent","_class_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxEvent},
     { "_class_wxEvent","_wxWindowDestroyEvent",SwigwxWindowDestroyEventTowxEvent},
     { "_class_wxEvent","_class_wxWindowCreateEvent",SwigwxWindowCreateEventTowxEvent},
@@ -5324,9 +5393,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCommandEvent","_class_wxCommandEvent",0},
     { "_wxSizeEvent","_class_wxSizeEvent",0},
     { "_wxPoint","_class_wxPoint",0},
+    { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
-    { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
+    { "_wxTimerEvent","_class_wxTimerEvent",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_class_wxNotifyEvent","_wxNotifyEvent",0},
     { "_class_wxPyEvent","_wxPyEvent",0},
@@ -5350,9 +5420,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxScrollWinEvent","_class_wxScrollWinEvent",0},
     { "_wxQueryNewPaletteEvent","_class_wxQueryNewPaletteEvent",0},
     { "_class_wxWindowCreateEvent","_wxWindowCreateEvent",0},
-    { "_class_wxPyTimer","_wxPyTimer",0},
     { "_wxFocusEvent","_class_wxFocusEvent",0},
     { "_wxMaximizeEvent","_class_wxMaximizeEvent",0},
+    { "_class_wxTimerEvent","_wxTimerEvent",0},
     { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},

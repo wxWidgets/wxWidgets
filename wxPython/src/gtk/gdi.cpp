@@ -6222,6 +6222,62 @@ static PyObject *_wrap_wxDC_SetAxisOrientation(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxDC_CalcBoundingBox(_swigobj,_swigarg0,_swigarg1)  (_swigobj->CalcBoundingBox(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxDC_CalcBoundingBox(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxDC_CalcBoundingBox",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_CalcBoundingBox. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDC_CalcBoundingBox(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxDC_ResetBoundingBox(_swigobj)  (_swigobj->ResetBoundingBox())
+static PyObject *_wrap_wxDC_ResetBoundingBox(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDC_ResetBoundingBox",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_ResetBoundingBox. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDC_ResetBoundingBox(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxMemoryDCTowxDC(void *ptr) {
     wxMemoryDC *src;
     wxDC *dest;
@@ -6870,18 +6926,20 @@ static PyObject *_wrap_delete_wxImageList(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-#define wxImageList_Add(_swigobj,_swigarg0)  (_swigobj->Add(_swigarg0))
+#define wxImageList_Add(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Add(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxImageList_Add(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxImageList * _arg0;
     wxBitmap * _arg1;
+    wxBitmap * _arg2 = (wxBitmap *) &wxNullBitmap;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","bitmap", NULL };
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","bitmap","mask", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxImageList_Add",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:wxImageList_Add",_kwnames,&_argo0,&_argo1,&_argo2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6897,9 +6955,96 @@ static PyObject *_wrap_wxImageList_Add(PyObject *self, PyObject *args, PyObject 
         return NULL;
         }
     }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxImageList_Add. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxImageList_Add(_arg0,*_arg1);
+        _result = (int )wxImageList_Add(_arg0,*_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxImageList_AddWithColourMask(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Add(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxImageList_AddWithColourMask(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxImageList * _arg0;
+    wxBitmap * _arg1;
+    wxColour * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","bitmap","maskColour", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxImageList_AddWithColourMask",_kwnames,&_argo0,&_argo1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_AddWithColourMask. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxImageList_AddWithColourMask. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxImageList_AddWithColourMask(_arg0,*_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxImageList_AddIcon(_swigobj,_swigarg0)  (_swigobj->Add(_swigarg0))
+static PyObject *_wrap_wxImageList_AddIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxImageList * _arg0;
+    wxIcon * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","icon", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxImageList_AddIcon",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_AddIcon. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxImageList_AddIcon. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxImageList_AddIcon(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -7074,6 +7219,8 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxImageList_GetImageCount", (PyCFunction) _wrap_wxImageList_GetImageCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_Draw", (PyCFunction) _wrap_wxImageList_Draw, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_Replace", (PyCFunction) _wrap_wxImageList_Replace, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImageList_AddIcon", (PyCFunction) _wrap_wxImageList_AddIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImageList_AddWithColourMask", (PyCFunction) _wrap_wxImageList_AddWithColourMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_Add", (PyCFunction) _wrap_wxImageList_Add, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxImageList", (PyCFunction) _wrap_delete_wxImageList, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxImageList", (PyCFunction) _wrap_new_wxImageList, METH_VARARGS | METH_KEYWORDS },
@@ -7092,6 +7239,8 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxScreenDC", (PyCFunction) _wrap_new_wxScreenDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMemoryDC_SelectObject", (PyCFunction) _wrap_wxMemoryDC_SelectObject, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMemoryDC", (PyCFunction) _wrap_new_wxMemoryDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_ResetBoundingBox", (PyCFunction) _wrap_wxDC_ResetBoundingBox, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDC_CalcBoundingBox", (PyCFunction) _wrap_wxDC_CalcBoundingBox, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetAxisOrientation", (PyCFunction) _wrap_wxDC_SetAxisOrientation, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_GetDeviceOrigin", (PyCFunction) _wrap_wxDC_GetDeviceOrigin, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDC_SetLogicalOrigin", (PyCFunction) _wrap_wxDC_SetLogicalOrigin, METH_VARARGS | METH_KEYWORDS },
@@ -7318,10 +7467,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_unsigned_int",0},
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
+    { "_wxChar","_char",0},
     { "_wxRect","_class_wxRect",0},
     { "_wxPoint","_class_wxPoint",0},
+    { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
-    { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_EBool","_wxCoord",0},
@@ -7346,7 +7496,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxDC","_class_wxMemoryDC",SwigwxMemoryDCTowxDC},
     { "_class_wxDC","_wxMemoryDC",SwigwxMemoryDCTowxDC},
     { "_class_wxDC","_wxDC",0},
-    { "_class_wxPyTimer","_wxPyTimer",0},
     { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},

@@ -71,7 +71,7 @@ class wxColourDialog(wxColourDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(cmndlgsc.new_wxColourDialog,_args,_kwargs)
         self.thisown = 1
-        wx._StdDialogCallbacks(self)
+        #wx._StdDialogCallbacks(self)
 
 
 
@@ -104,7 +104,7 @@ class wxDirDialog(wxDirDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(cmndlgsc.new_wxDirDialog,_args,_kwargs)
         self.thisown = 1
-        wx._StdDialogCallbacks(self)
+        #wx._StdDialogCallbacks(self)
 
 
 
@@ -158,13 +158,19 @@ class wxFileDialogPtr(wxDialogPtr):
     def ShowModal(self, *_args, **_kwargs):
         val = apply(cmndlgsc.wxFileDialog_ShowModal,(self,) + _args, _kwargs)
         return val
+    def GetFilenames(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_GetFilenames,(self,) + _args, _kwargs)
+        return val
+    def GetPaths(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxFileDialog_GetPaths,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxFileDialog instance at %s>" % (self.this,)
 class wxFileDialog(wxFileDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(cmndlgsc.new_wxFileDialog,_args,_kwargs)
         self.thisown = 1
-        wx._StdDialogCallbacks(self)
+        #wx._StdDialogCallbacks(self)
 
 
 
@@ -191,7 +197,7 @@ class wxSingleChoiceDialog(wxSingleChoiceDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(cmndlgsc.new_wxSingleChoiceDialog,_args,_kwargs)
         self.thisown = 1
-        wx._StdDialogCallbacks(self)
+        #wx._StdDialogCallbacks(self)
 
 
 
@@ -215,7 +221,7 @@ class wxTextEntryDialog(wxTextEntryDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(cmndlgsc.new_wxTextEntryDialog,_args,_kwargs)
         self.thisown = 1
-        wx._StdDialogCallbacks(self)
+        #wx._StdDialogCallbacks(self)
 
 
 
@@ -296,7 +302,7 @@ class wxFontDialog(wxFontDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(cmndlgsc.new_wxFontDialog,_args,_kwargs)
         self.thisown = 1
-        wx._StdDialogCallbacks(self)
+        #wx._StdDialogCallbacks(self)
 
 
 
@@ -314,7 +320,7 @@ class wxMessageDialog(wxMessageDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(cmndlgsc.new_wxMessageDialog,_args,_kwargs)
         self.thisown = 1
-        wx._StdDialogCallbacks(self)
+        #wx._StdDialogCallbacks(self)
 
 
 

@@ -12,6 +12,7 @@ compile.py
 config.c
 glcanvas.h
 glcanvasc.exp
+libwxPyHelpers.2.1.so.16.0.0
 make.bat
 makefile.test
 sedscript

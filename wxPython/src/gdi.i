@@ -696,14 +696,14 @@ public:
     wxImageList(int width, int height, int mask=TRUE, int initialCount=1);
     ~wxImageList();
 
-#ifdef __WXMSW__
     int Add(const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
     %name(AddWithColourMask)int Add(const wxBitmap& bitmap, const wxColour& maskColour);
     %name(AddIcon)int Add(const wxIcon& icon);
+#ifdef __WXMSW__
     bool Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
-    %name(ReplaceIcon)bool Replace(int index, const wxIcon& icon);
 #else
-    int Add(const wxBitmap& bitmap);
+//      %name(ReplaceIcon)bool Replace(int index, const wxIcon& icon);
+//      int Add(const wxBitmap& bitmap);
     bool Replace(int index, const wxBitmap& bitmap);
 #endif
 
