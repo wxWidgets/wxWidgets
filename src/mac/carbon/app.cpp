@@ -633,7 +633,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #if TARGET_API_MAC_OSX
     // these might be the startup dirs, set them to the 'usual' dir containing the app bundle
     wxString startupCwd = wxGetCwd() ;
-    if ( startupCwd == "/" || startupCwd.Right(15) == "/Contents/MacOS" )
+    if ( startupCwd == wxT("/") || startupCwd.Right(15) == wxT("/Contents/MacOS") )
     {
         wxString cwd ;
         CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle() ) ;
