@@ -33,13 +33,10 @@
 #endif
 
 #include <unistd.h>
-
-#include <glib.h>
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
-#include <gdk/gdkx.h>
-
 #include "wx/gtk/win_gtk.h"
+
+#include <gtk/gtk.h>
+
 
 //-----------------------------------------------------------------------------
 // global data
