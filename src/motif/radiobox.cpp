@@ -486,7 +486,7 @@ void wxRadioBoxCallback (Widget w, XtPointer clientData,
   wxRadioBox *item = (wxRadioBox *) clientData;
   int sel = -1;
   int i;
-  for (i = 0; i < item->Number(); i++)
+  for (i = 0; i < item->GetCount(); i++)
     if (item->GetRadioButtons() && ((Widget) (item->GetRadioButtons()[i]) == w))
       sel = i;
   item->SetSel(sel);
