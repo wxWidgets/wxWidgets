@@ -24,11 +24,50 @@
 // wxItemContainer defines an interface which is implemented by all controls
 // which have string subitems each of which may be selected.
 //
+// It is decomposed in wxItemContainerImmutable which omits all methods
+// adding/removing items and is used by wxRadioBox and wxItemContainer itself.
+//
 // Examples: wxListBox, wxCheckListBox, wxChoice and wxComboBox (which
 // implements an extended interface deriving from this one)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxItemContainer
+class WXDLLEXPORT wxItemContainerImmutable
+{
+public:
+    wxItemContainerImmutable() { }
+    virtual ~wxItemContainerImmutable();
+
+    // accessing strings
+    // -----------------
+
+    virtual int GetCount() const = 0;
+    bool IsEmpty() const { return GetCount() == 0; }
+
+    virtual wxString GetString(int n) const = 0;
+    wxArrayString GetStrings() const;
+    virtual void SetString(int n, const wxString& s) = 0;
+    virtual int FindString(const wxString& s) const = 0;
+
+
+    // selection
+    // ---------
+
+    virtual void SetSelection(int n) = 0;
+    virtual int GetSelection() const = 0;
+
+    // set selection to the specified string, return false if not found
+    bool SetStringSelection(const wxString& s);
+
+    // return the selected string or empty string if none
+    wxString GetStringSelection() const;
+
+    // this is the same as SetSelection( for single-selection controls but
+    // reads better for multi-selection ones
+    void Select(int n) { SetSelection(n); }
+
+};
+
+class WXDLLEXPORT wxItemContainer : public wxItemContainerImmutable
 {
 public:
     wxItemContainer() { m_clientDataItemsType = wxClientData_None; }
@@ -61,33 +100,6 @@ public:
 
     virtual void Clear() = 0;
     virtual void Delete(int n) = 0;
-
-    // accessing strings
-    // -----------------
-
-    virtual int GetCount() const = 0;
-    bool IsEmpty() const { return GetCount() == 0; }
-
-    virtual wxString GetString(int n) const = 0;
-    wxArrayString GetStrings() const;
-    virtual void SetString(int n, const wxString& s) = 0;
-    virtual int FindString(const wxString& s) const = 0;
-
-    // selection
-    // ---------
-
-    virtual void SetSelection(int n) = 0;
-    virtual int GetSelection() const = 0;
-
-    // set selection to the specified string, return false if not found
-    bool SetStringSelection(const wxString& s);
-
-    // return the selected string or empty string if none
-    wxString GetStringSelection() const;
-
-    // this is the same as SetSelection( for single-selection controls but
-    // reads better for multi-selection ones
-    void Select(int n) { SetSelection(n); }
 
     // misc
     // ----

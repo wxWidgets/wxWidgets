@@ -18,7 +18,7 @@
 
 #if wxUSE_RADIOBOX
 
-#include "wx/control.h"
+#include "wx/ctrlsub.h"
 
 extern WXDLLEXPORT_DATA(const wxChar*) wxRadioBoxNameStr;
 
@@ -28,53 +28,9 @@ extern WXDLLEXPORT_DATA(const wxChar*) wxRadioBoxNameStr;
 // example, it is a wxStaticBox in wxUniv and wxMSW but not in other ports
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRadioBoxBase
+class WXDLLEXPORT wxRadioBoxBase : public wxItemContainerImmutable
 {
 public:
-    // selection
-    virtual void SetSelection(int n) = 0;
-    virtual int GetSelection() const = 0;
-
-    virtual wxString GetStringSelection() const
-    {
-        wxString s;
-        int sel = GetSelection();
-        if ( sel != wxNOT_FOUND )
-            s = GetString(sel);
-
-        return s;
-    }
-
-    virtual bool SetStringSelection(const wxString& s)
-    {
-        int sel = FindString(s);
-        if ( sel != wxNOT_FOUND )
-        {
-            SetSelection(sel);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    // string access
-    virtual int GetCount() const = 0;
-    virtual int FindString(const wxString& s) const
-    {
-        int count = GetCount();
-        for ( int n = 0; n < count; n++ )
-        {
-            if ( GetString(n) == s )
-                return n;
-        }
-
-        return wxNOT_FOUND;
-    }
-
-    virtual wxString GetString(int n) const = 0;
-    virtual void SetString(int n, const wxString& label) = 0;
-
     // change the individual radio button state
     virtual void Enable(int n, bool enable = true) = 0;
     virtual void Show(int n, bool show = true) = 0;
@@ -86,6 +42,9 @@ public:
     // return the item above/below/to the left/right of the given one
     int GetNextItem(int item, wxDirection dir, long style) const;
 
+
+    // implement some of wxItemContainerImmutable functions
+    virtual int FindString(const wxString& s) const;
 
     // deprecated functions
     // --------------------

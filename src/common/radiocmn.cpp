@@ -38,6 +38,18 @@
 // implementation
 // ============================================================================
 
+int wxRadioBoxBase::FindString(const wxString& s) const
+{
+    int count = GetCount();
+    for ( int n = 0; n < count; n++ )
+    {
+        if ( GetString(n) == s )
+            return n;
+    }
+
+    return wxNOT_FOUND;
+}
+
 int wxRadioBoxBase::GetNextItem(int item, wxDirection dir, long style) const
 {
     int count = GetCount(),
