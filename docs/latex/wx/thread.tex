@@ -8,6 +8,25 @@ much easier to share common data between several threads, it also makes much
 easier to shoot oneself in the foot, so careful use of synchronization objects
 such as \helpref{mutexes}{wxmutex} and/or \helpref{critical sections}{wxcriticalsection} is recommended.
 
+There are two types of threads in wxWindows: {\it detached} and {\it joinable}
+ones, just as in POSIX thread API (but unlike Win32 threads where all threads
+are joinable). The difference between the two is that only joinbale threads
+can return a return code - it is returned by Wait() function. The detached
+threads (default) can not be waited for.
+
+You shouldn't hurry to create all the threads joinable, however, because this
+has a disadvantage as well: you {\bf must} Wait() for a joinable thread of the
+system resources used by it will never be freed and you also must delete the
+corresponding wxThread object yourself, while detached threads are of the
+"fire-and-forget" kind: you only have to start a detached thread and it will
+terminate and destroy itself.
+
+This means, of course, that all detached threads {\bf must} be created on the
+heap because the thread will call {\tt delete this;} upon termination. The
+joinable threads may be created on stack (don't create global thread objects
+because they allocate memory in their constructor which is a badthing to do),
+although usually they will be created on the heap as well.
+
 \wxheading{Derived from}
 
 None.
@@ -83,6 +102,10 @@ created. Moreover, it must be called if \helpref{Create}{wxthreadcreate} or
 \helpref{Run}{wxthreadrun} failed for a detached thread to free the memory
 occupied by the thread object (it will be done in the destructor for joinable
 threads).
+
+Delete() may be called for thread in any state: running, paused or even not yet created. Moreover,
+it must be called if \helpref{Create}{wxthreadcreate} or \helpref{Run}{wxthreadrun} fail to free
+the memory occupied by the thread object.
 
 For detached threads Delete() will also delete the C++ thread object, but it
 will not do this for joinable ones.

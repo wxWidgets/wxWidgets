@@ -16,13 +16,6 @@
     #pragma interface "textctrl.h"
 #endif
 
-// can we use RICHEDIT class for wxTextCtrl implementation?
-#if defined(__WIN95__) && !defined(__TWIN32__) && !defined(__WXWINE__)
-    #define wxUSE_RICHEDIT 1
-#else
-    #define wxUSE_RICHEDIT 0
-#endif
-
 class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase
 {
 public:

@@ -40,21 +40,21 @@
 
 enum wxMutexError
 {
-  wxMUTEX_NO_ERROR = 0,
-  wxMUTEX_DEAD_LOCK,      // Mutex has been already locked by THE CALLING thread
-  wxMUTEX_BUSY,           // Mutex has been already locked by ONE thread
-  wxMUTEX_UNLOCKED,
-  wxMUTEX_MISC_ERROR
+    wxMUTEX_NO_ERROR = 0,
+    wxMUTEX_DEAD_LOCK,      // Mutex has been already locked by THE CALLING thread
+    wxMUTEX_BUSY,           // Mutex has been already locked by ONE thread
+    wxMUTEX_UNLOCKED,
+    wxMUTEX_MISC_ERROR
 };
 
 enum wxThreadError
 {
-  wxTHREAD_NO_ERROR = 0,      // No error
-  wxTHREAD_NO_RESOURCE,       // No resource left to create a new thread
-  wxTHREAD_RUNNING,           // The thread is already running
-  wxTHREAD_NOT_RUNNING,       // The thread isn't running
-  wxTHREAD_KILLED,            // Thread we waited for had to be killed
-  wxTHREAD_MISC_ERROR         // Some other error
+    wxTHREAD_NO_ERROR = 0,      // No error
+    wxTHREAD_NO_RESOURCE,       // No resource left to create a new thread
+    wxTHREAD_RUNNING,           // The thread is already running
+    wxTHREAD_NOT_RUNNING,       // The thread isn't running
+    wxTHREAD_KILLED,            // Thread we waited for had to be killed
+    wxTHREAD_MISC_ERROR         // Some other error
 };
 
 enum wxThreadKind
@@ -106,7 +106,7 @@ protected:
     wxMutex& operator=(const wxMutex&);
 
     int m_locked;
-    wxMutexInternal *p_internal;
+    wxMutexInternal *m_internal;
 };
 
 // a helper class which locks the mutex in the ctor and unlocks it in the dtor:
@@ -213,28 +213,32 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// Condition handler.
+// Condition variable: allows to block the thread execution until something
+// happens (== condition is signaled)
 // ----------------------------------------------------------------------------
 
 class wxConditionInternal;
 class WXDLLEXPORT wxCondition
 {
 public:
-  // constructor & destructor
-  wxCondition();
-  ~wxCondition();
+    // constructor & destructor
+    wxCondition();
+    ~wxCondition();
 
-  // Waits indefinitely.
-  void Wait(wxMutex& mutex);
-  // Waits until a signal is raised or the timeout is elapsed.
-  bool Wait(wxMutex& mutex, unsigned long sec, unsigned long nsec);
-  // Raises a signal: only one "Waiter" is released.
-  void Signal();
-  // Broadcasts to all "Waiters".
-  void Broadcast();
+    // wait until the condition is signaled
+        // waits indefinitely.
+    void Wait();
+        // waits until a signal is raised or the timeout elapses
+    bool Wait(unsigned long sec, unsigned long nsec);
+
+    // signal the condition
+        // wakes up one (and only one) of the waiting threads
+    void Signal();
+        // wakes up all threads waiting onthis condition
+    void Broadcast();
 
 private:
-  wxConditionInternal *p_internal;
+    wxConditionInternal *m_internal;
 };
 
 // ----------------------------------------------------------------------------
@@ -381,7 +385,7 @@ private:
     friend class wxThreadInternal;
 
     // the (platform-dependent) thread class implementation
-    wxThreadInternal *p_internal;
+    wxThreadInternal *m_internal;
 
     // protects access to any methods of wxThreadInternal object
     wxCriticalSection m_critsect;

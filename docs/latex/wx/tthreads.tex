@@ -8,7 +8,10 @@ wxWindows provides a complete set of classes encapsulating objects necessary in
 multithreaded (MT) programs: the \helpref{thread}{wxthread} class itself and different
 synchronization objects: \helpref{mutexes}{wxmutex} and 
 \helpref{critical sections}{wxcriticalsection} with 
-\helpref{conditions}{wxcondition}.
+\helpref{conditions}{wxcondition}. The thread API in wxWindows resembles to
+POSIX1.c threads API (a.k.a. pthreads), although several functions have
+different names and some features inspired by Win32 thread API are there as
+well.
 
 These classes will hopefully make writing MT programs easier and they also
 provide some extra error checking (compared to the native (be it Win32 or Posix)
@@ -21,7 +24,7 @@ new thread for each new client), but in others it might be a very poor choice
 (example: launching a separate thread when doing a long computation to show a
 progress dialog). Other implementation choices are available: for the progress
 dialog example it is far better to do the calculations in the 
-\helpref{idle handler}{wxidleevent} or call \helpref{wxYield()}{wxyield}
+\helpref{idle handler}{wxidleevent} or call \helpref{wxYield()}{wxyield} 
 periodically to update the screen.
 
 If you do decide to use threads in your application, it is strongly recommended

@@ -31,9 +31,10 @@
 
 //#define TEST_ARRAYS
 //#define TEST_LOG
-//#define TEST_THREADS
+//#define TEST_STRINGS
+#define TEST_THREADS
 //#define TEST_TIME
-#define TEST_LONGLONG
+//#define TEST_LONGLONG
 
 // ============================================================================
 // implementation
@@ -52,7 +53,7 @@ static void TestSpeed()
 {
     static const long max = 100000000;
     long n;
-    
+
     {
         wxStopWatch sw;
 
@@ -151,7 +152,7 @@ wxThread::ExitCode MyJoinableThread::Entry()
 class MyDetachedThread : public wxThread
 {
 public:
-    MyDetachedThread(char ch) { m_ch = ch; Create(); }
+    MyDetachedThread(size_t n, char ch) { m_n = n; m_ch = ch; Create(); }
 
     // thread execution starts here
     virtual ExitCode Entry();
@@ -160,7 +161,8 @@ public:
     virtual void OnExit();
 
 private:
-    char m_ch;
+    size_t m_n; // number of characters to write
+    char m_ch;  // character to write
 };
 
 wxThread::ExitCode MyDetachedThread::Entry()
@@ -173,8 +175,7 @@ wxThread::ExitCode MyDetachedThread::Entry()
             gs_counter++;
     }
 
-    static const size_t nIter = 10;
-    for ( size_t n = 0; n < nIter; n++ )
+    for ( size_t n = 0; n < m_n; n++ )
     {
         if ( TestDestroy() )
             break;
@@ -190,9 +191,84 @@ wxThread::ExitCode MyDetachedThread::Entry()
 
 void MyDetachedThread::OnExit()
 {
+    wxLogTrace("thread", "Thread %ld is in OnExit", GetId());
+
     wxCriticalSectionLocker lock(gs_critsect);
     if ( !--gs_counter )
         gs_cond.Signal();
+}
+
+void TestDetachedThreads()
+{
+    puts("*** Testing detached threads ***");
+
+    static const size_t nThreads = 3;
+    MyDetachedThread *threads[nThreads];
+    size_t n;
+    for ( n = 0; n < nThreads; n++ )
+    {
+        threads[n] = new MyDetachedThread(10, 'A' + n);
+    }
+
+    threads[0]->SetPriority(WXTHREAD_MIN_PRIORITY);
+    threads[1]->SetPriority(WXTHREAD_MAX_PRIORITY);
+
+    for ( n = 0; n < nThreads; n++ )
+    {
+        threads[n]->Run();
+    }
+
+    // wait until all threads terminate
+    gs_cond.Wait();
+
+    puts("");
+}
+
+void TestJoinableThreads()
+{
+    puts("*** Testing a joinable thread (a loooong calculation...) ***");
+
+    // calc 10! in the background
+    MyJoinableThread thread(10);
+    thread.Run();
+
+    printf("\nThread terminated with exit code %lu.\n",
+           (unsigned long)thread.Wait());
+}
+
+void TestThreadSuspend()
+{
+    MyDetachedThread *thread = new MyDetachedThread(30, 'X');
+
+    thread->Run();
+
+    // this is for this demo only, in a real life program we'd use another
+    // condition variable which would be signaled from wxThread::Entry() to
+    // tell us that the thread really started running - but here just wait a
+    // bit and hope that it will be enough (the problem is, of course, that
+    // the thread might still not run when we call Pause() which will result
+    // in an error)
+    wxThread::Sleep(300);
+
+    for ( size_t n = 0; n < 3; n++ )
+    {
+        thread->Pause();
+
+        puts("\nThread suspended");
+        if ( n > 0 )
+        {
+            // don't sleep but resume immediately the first time
+            wxThread::Sleep(300);
+        }
+        puts("Going to resume the thread");
+
+        thread->Resume();
+    }
+
+    // wait until the thread terminates
+    gs_cond.Wait();
+
+    puts("");
 }
 
 #endif // TEST_THREADS
@@ -217,6 +293,64 @@ void PrintArray(const char* name, const wxArrayString& array)
 #endif // TEST_ARRAYS
 
 // ----------------------------------------------------------------------------
+// strings
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_STRINGS
+
+#include "wx/timer.h"
+
+void TestString()
+{
+    wxStopWatch sw;
+
+    wxString a, b, c;
+
+    a.reserve (128);
+    b.reserve (128);
+    c.reserve (128);
+
+    for (int i = 0; i < 1000000; ++i)
+    {
+        a = "Hello";
+        b = " world";
+        c = "! How'ya doin'?";
+        a += b;
+        a += c;
+        c = "Hello world! What's up?";
+        if (c != a)
+            c = "Doh!";
+    }
+
+    printf ("TestString elapsed time: %ld\n", sw.Time());
+}
+
+void TestPChar()
+{
+    wxStopWatch sw;
+
+    char a [128];
+    char b [128];
+    char c [128];
+
+    for (int i = 0; i < 1000000; ++i)
+    {
+        strcpy (a, "Hello");
+        strcpy (b, " world");
+        strcpy (c, "! How'ya doin'?");
+        strcat (a, b);
+        strcat (a, c);
+        strcpy (c, "Hello world! What's up?");
+        if (strcmp (c, a) == 0)
+            strcpy (c, "Doh!");
+    }
+
+    printf ("TestPChar elapsed time: %ld\n", sw.Time());
+}
+
+#endif // TEST_STRINGS
+
+// ----------------------------------------------------------------------------
 // entry point
 // ----------------------------------------------------------------------------
 
@@ -226,6 +360,11 @@ int main(int argc, char **argv)
     {
         fprintf(stderr, "Failed to initialize the wxWindows library, aborting.");
     }
+
+#ifdef TEST_STRINGS
+    TestPChar();
+    TestString();
+#endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS
     wxArrayString a1;
@@ -279,38 +418,15 @@ int main(int argc, char **argv)
 #endif // TEST_LOG
 
 #ifdef TEST_THREADS
-    puts("Testing detached threads...");
+    if ( argc > 1 && argv[1][0] == 't' )
+        wxLog::AddTraceMask("thread");
 
-    static const size_t nThreads = 3;
-    MyDetachedThread *threads[nThreads];
-    size_t n;
-    for ( n = 0; n < nThreads; n++ )
+    TestThreadSuspend();
+    if ( 0 )
     {
-        threads[n] = new MyDetachedThread('A' + n);
+    TestDetachedThreads();
+    TestJoinableThreads();
     }
-
-    threads[0]->SetPriority(WXTHREAD_MIN_PRIORITY);
-    threads[1]->SetPriority(WXTHREAD_MAX_PRIORITY);
-
-    for ( n = 0; n < nThreads; n++ )
-    {
-        threads[n]->Run();
-    }
-
-    // wait until all threads terminate
-    wxMutex mutex;
-    mutex.Lock();
-    gs_cond.Wait(mutex);
-    mutex.Unlock();
-
-    puts("\n\nTesting a joinable thread used for a loooong calculation...");
-
-    // calc 10! in the background
-    MyJoinableThread thread(10);
-    thread.Run();
-
-    printf("\nThread terminated with exit code %lu.\n",
-           (unsigned long)thread.Wait());
 #endif // TEST_THREADS
 
 #ifdef TEST_LONGLONG

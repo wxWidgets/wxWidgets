@@ -104,9 +104,9 @@ public:
 
 wxMutex::wxMutex()
 {
-    p_internal = new wxMutexInternal;
-    p_internal->p_mutex = CreateMutex(NULL, FALSE, NULL);
-    if ( !p_internal->p_mutex )
+    m_internal = new wxMutexInternal;
+    m_internal->p_mutex = CreateMutex(NULL, FALSE, NULL);
+    if ( !m_internal->p_mutex )
     {
         wxLogSysError(_("Can not create mutex."));
     }
@@ -118,14 +118,14 @@ wxMutex::~wxMutex()
 {
     if (m_locked > 0)
         wxLogDebug(wxT("Warning: freeing a locked mutex (%d locks)."), m_locked);
-    CloseHandle(p_internal->p_mutex);
+    CloseHandle(m_internal->p_mutex);
 }
 
 wxMutexError wxMutex::Lock()
 {
     DWORD ret;
 
-    ret = WaitForSingleObject(p_internal->p_mutex, INFINITE);
+    ret = WaitForSingleObject(m_internal->p_mutex, INFINITE);
     switch ( ret )
     {
         case WAIT_ABANDONED:
@@ -152,7 +152,7 @@ wxMutexError wxMutex::TryLock()
 {
     DWORD ret;
 
-    ret = WaitForSingleObject(p_internal->p_mutex, 0);
+    ret = WaitForSingleObject(m_internal->p_mutex, 0);
     if (ret == WAIT_TIMEOUT || ret == WAIT_ABANDONED)
         return wxMUTEX_BUSY;
 
@@ -165,7 +165,7 @@ wxMutexError wxMutex::Unlock()
     if (m_locked > 0)
         m_locked--;
 
-    BOOL ret = ReleaseMutex(p_internal->p_mutex);
+    BOOL ret = ReleaseMutex(m_internal->p_mutex);
     if ( ret == 0 )
     {
         wxLogSysError(_("Couldn't release a mutex"));
@@ -197,16 +197,14 @@ public:
         waiters = 0;
     }
 
-    bool Wait(wxMutex& mutex, DWORD timeout)
+    bool Wait(DWORD timeout)
     {
-        mutex.Unlock();
         waiters++;
 
         // FIXME this should be MsgWaitForMultipleObjects() as well probably
         DWORD rc = ::WaitForSingleObject(event, timeout);
 
         waiters--;
-        mutex.Lock();
 
         return rc != WAIT_TIMEOUT;
     }
@@ -228,24 +226,23 @@ public:
 
 wxCondition::wxCondition()
 {
-    p_internal = new wxConditionInternal;
+    m_internal = new wxConditionInternal;
 }
 
 wxCondition::~wxCondition()
 {
-    delete p_internal;
+    delete m_internal;
 }
 
-void wxCondition::Wait(wxMutex& mutex)
+void wxCondition::Wait()
 {
-    (void)p_internal->Wait(mutex, INFINITE);
+    (void)m_internal->Wait(INFINITE);
 }
 
-bool wxCondition::Wait(wxMutex& mutex,
-                       unsigned long sec,
+bool wxCondition::Wait(unsigned long sec,
                        unsigned long nsec)
 {
-    return p_internal->Wait(mutex, sec*1000 + nsec/1000000);
+    return m_internal->Wait(sec*1000 + nsec/1000000);
 }
 
 void wxCondition::Signal()
@@ -255,7 +252,7 @@ void wxCondition::Signal()
     // someone waits on it. In any case, the system will return it to a non
     // signalled state afterwards. If multiple threads are waiting, only one
     // will be woken up.
-    if ( !::SetEvent(p_internal->event) )
+    if ( !::SetEvent(m_internal->event) )
     {
         wxLogLastError("SetEvent");
     }
@@ -266,7 +263,7 @@ void wxCondition::Broadcast()
     // this works because all these threads are already waiting and so each
     // SetEvent() inside Signal() is really a PulseEvent() because the event
     // state is immediately returned to non-signaled
-    for ( int i = 0; i < p_internal->waiters; i++ )
+    for ( int i = 0; i < m_internal->waiters; i++ )
     {
         Signal();
     }
@@ -378,8 +375,8 @@ DWORD wxThreadInternal::WinThreadStart(wxThread *thread)
 
     // enter m_critsect before changing the thread state
     thread->m_critsect.Enter();
-    bool wasCancelled = thread->p_internal->GetState() == STATE_CANCELED;
-    thread->p_internal->SetState(STATE_EXITED);
+    bool wasCancelled = thread->m_internal->GetState() == STATE_CANCELED;
+    thread->m_internal->SetState(STATE_EXITED);
     thread->m_critsect.Leave();
 
     thread->OnExit();
@@ -535,14 +532,14 @@ void wxThread::Sleep(unsigned long milliseconds)
 
 wxThread::wxThread(wxThreadKind kind)
 {
-    p_internal = new wxThreadInternal();
+    m_internal = new wxThreadInternal();
 
     m_isDetached = kind == wxTHREAD_DETACHED;
 }
 
 wxThread::~wxThread()
 {
-    delete p_internal;
+    delete m_internal;
 }
 
 // create/start thread
@@ -552,7 +549,7 @@ wxThreadError wxThread::Create()
 {
     wxCriticalSectionLocker lock(m_critsect);
 
-    if ( !p_internal->Create(this) )
+    if ( !m_internal->Create(this) )
         return wxTHREAD_NO_RESOURCE;
 
     return wxTHREAD_NO_ERROR;
@@ -562,7 +559,7 @@ wxThreadError wxThread::Run()
 {
     wxCriticalSectionLocker lock(m_critsect);
 
-    if ( p_internal->GetState() != STATE_NEW )
+    if ( m_internal->GetState() != STATE_NEW )
     {
         // actually, it may be almost any state at all, not only STATE_RUNNING
         return wxTHREAD_RUNNING;
@@ -579,14 +576,14 @@ wxThreadError wxThread::Pause()
 {
     wxCriticalSectionLocker lock(m_critsect);
 
-    return p_internal->Suspend() ? wxTHREAD_NO_ERROR : wxTHREAD_MISC_ERROR;
+    return m_internal->Suspend() ? wxTHREAD_NO_ERROR : wxTHREAD_MISC_ERROR;
 }
 
 wxThreadError wxThread::Resume()
 {
     wxCriticalSectionLocker lock(m_critsect);
 
-    return p_internal->Resume() ? wxTHREAD_NO_ERROR : wxTHREAD_MISC_ERROR;
+    return m_internal->Resume() ? wxTHREAD_NO_ERROR : wxTHREAD_MISC_ERROR;
 }
 
 // stopping thread
@@ -603,7 +600,7 @@ wxThread::ExitCode wxThread::Wait()
 
     (void)Delete(&rc);
 
-    p_internal->Free();
+    m_internal->Free();
 
     return rc;
 }
@@ -616,7 +613,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
     if ( IsPaused() )
         Resume();
 
-    HANDLE hThread = p_internal->GetHandle();
+    HANDLE hThread = m_internal->GetHandle();
 
     if ( IsRunning() )
     {
@@ -634,7 +631,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         {
             wxCriticalSectionLocker lock(m_critsect);
 
-            p_internal->Cancel();
+            m_internal->Cancel();
         }
 
 #if wxUSE_GUI
@@ -742,14 +739,14 @@ wxThreadError wxThread::Kill()
     if ( !IsRunning() )
         return wxTHREAD_NOT_RUNNING;
 
-    if ( !::TerminateThread(p_internal->GetHandle(), (DWORD)-1) )
+    if ( !::TerminateThread(m_internal->GetHandle(), (DWORD)-1) )
     {
         wxLogSysError(_("Couldn't terminate thread"));
 
         return wxTHREAD_MISC_ERROR;
     }
 
-    p_internal->Free();
+    m_internal->Free();
 
     if ( IsDetached() )
     {
@@ -761,7 +758,7 @@ wxThreadError wxThread::Kill()
 
 void wxThread::Exit(ExitCode status)
 {
-    p_internal->Free();
+    m_internal->Free();
 
     if ( IsDetached() )
     {
@@ -784,50 +781,50 @@ void wxThread::SetPriority(unsigned int prio)
 {
     wxCriticalSectionLocker lock(m_critsect);
 
-    p_internal->SetPriority(prio);
+    m_internal->SetPriority(prio);
 }
 
 unsigned int wxThread::GetPriority() const
 {
     wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
 
-    return p_internal->GetPriority();
+    return m_internal->GetPriority();
 }
 
 unsigned long wxThread::GetId() const
 {
     wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
 
-    return (unsigned long)p_internal->GetId();
+    return (unsigned long)m_internal->GetId();
 }
 
 bool wxThread::IsRunning() const
 {
     wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
 
-    return p_internal->GetState() == STATE_RUNNING;
+    return m_internal->GetState() == STATE_RUNNING;
 }
 
 bool wxThread::IsAlive() const
 {
     wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
 
-    return (p_internal->GetState() == STATE_RUNNING) ||
-           (p_internal->GetState() == STATE_PAUSED);
+    return (m_internal->GetState() == STATE_RUNNING) ||
+           (m_internal->GetState() == STATE_PAUSED);
 }
 
 bool wxThread::IsPaused() const
 {
     wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
 
-    return p_internal->GetState() == STATE_PAUSED;
+    return m_internal->GetState() == STATE_PAUSED;
 }
 
 bool wxThread::TestDestroy()
 {
     wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
 
-    return p_internal->GetState() == STATE_CANCELED;
+    return m_internal->GetState() == STATE_CANCELED;
 }
 
 // ----------------------------------------------------------------------------
