@@ -133,6 +133,44 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxFONTENCODING_SYSTEM;
 }
 
+
+void wxNativeFontInfo::SetPointSize(int WXUNUSED(pointsize))
+{
+    wxFAIL_MSG( _T("not implemented") );
+}
+
+void wxNativeFontInfo::SetStyle(wxFontStyle WXUNUSED(style))
+{
+    wxFAIL_MSG( _T("not implemented") );
+}
+
+void wxNativeFontInfo::SetWeight(wxFontWeight WXUNUSED(weight))
+{
+    wxFAIL_MSG( _T("not implemented") );
+}
+
+void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
+{
+    wxFAIL_MSG( _T("not implemented") );
+}
+
+void wxNativeFontInfo::SetFaceName(wxString WXUNUSED(facename))
+{
+    wxFAIL_MSG( _T("not implemented") );
+}
+
+void wxNativeFontInfo::SetFamily(wxFontFamily WXUNUSED(family))
+{
+    wxFAIL_MSG( _T("not implemented") );
+}
+
+void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))
+{
+    wxFAIL_MSG( _T("not implemented") );
+}
+
+
+
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
     if (description)
