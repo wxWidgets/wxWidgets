@@ -1601,7 +1601,7 @@ wxString wxResourceManager::FindBitmapFilenameForResource(wxItemResource *resour
     wxItemResource *child = (wxItemResource *)node->Data();
     return child->GetName();
     
-    node = node->Next();
+    //node = node->Next();
   }
   return wxEmptyString;
 }

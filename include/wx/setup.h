@@ -16,7 +16,7 @@
 #endif
 
 #ifdef __VMS
-#include "[--]setup.h"
+#include "wx_root:[wxwindows]setup.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/setup.h"
 #elif defined(__WXMAC__)

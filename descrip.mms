@@ -5,6 +5,13 @@
 # Date : 9 November 1999                                                     *
 #                                                                            *
 #*****************************************************************************
+.first
+	set def [-]
+	wx_curdir = f$environment("default")
+	wx_sub = f$element(0,"]",wx_curdir)
+	wx_fuldir = "''wx_sub'.]"
+	define/job/trans=(concealed) wx_root "''wx_fuldir'"
+	set def [.wxwindows]
 
 all : setup.h
 	set default [.src.generic]
@@ -32,6 +39,8 @@ all : setup.h
 	set default [-.menu]
 	$(MMS)$(MMSQUALIFIERS)
 	set default [-.minimal]
+	$(MMS)$(MMSQUALIFIERS)
+	set default [--.utils.dialoged.src]
 	$(MMS)$(MMSQUALIFIERS)
 
 setup.h : setup.h_vms
