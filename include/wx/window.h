@@ -1057,7 +1057,7 @@ protected:
     // specified) border for the window class
     virtual wxBorder GetDefaultBorder() const;
 
-    // Get the default size for the new window if no explicit size given If
+    // Get the default size for the new window if no explicit size given. If
     // there are better default sizes then these can be changed, just as long
     // as they are not too small for TLWs.
     static int WidthDefault(int w) { return w == -1 ? 400 : w; }
