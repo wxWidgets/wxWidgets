@@ -100,6 +100,8 @@ typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
 class GSocketGUIFunctionsTable
 {
 public:
+    // needed since this class declares virtual members
+    virtual ~GSocketGUIFunctionsTable() { }
     virtual bool OnInit() = 0;
     virtual void OnExit() = 0;
     virtual bool CanUseEventLoop() = 0;

@@ -54,6 +54,9 @@ class WXDLLIMPEXP_BASE wxStandardPathsBase;
 class WXDLLIMPEXP_BASE wxAppTraitsBase
 {
 public:
+    // needed since this class declares virtual members
+    virtual ~wxAppTraitsBase() { }
+
     // hooks for creating the global objects, may be overridden by the user
     // ------------------------------------------------------------------------
 

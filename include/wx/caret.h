@@ -61,6 +61,9 @@ public:
         (void)Create(window, size);
     }
 
+    // a virtual dtor has been provided since this class has virtual members
+    virtual ~wxCaretBase() { }
+
     // Create() functions - same as ctor but returns the success code
     // --------------------------------------------------------------
 
