@@ -141,6 +141,19 @@ class wxScrollEvent(wxScrollEventPtr):
 
 
 
+class wxSpinEventPtr(wxScrollEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxSpinEvent instance>"
+class wxSpinEvent(wxSpinEventPtr):
+    def __init__(self,this):
+        self.this = this
+
+
+
+
 class wxMouseEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this

@@ -111,15 +111,14 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 
+extern byte* byte_LIST_helper(PyObject* source);
 extern int* int_LIST_helper(PyObject* source);
 extern long* long_LIST_helper(PyObject* source);
 extern char** string_LIST_helper(PyObject* source);
 extern wxPoint* wxPoint_LIST_helper(PyObject* source);
 extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 extern wxString* wxString_LIST_helper(PyObject* source);
-#ifdef __WXMSW__
 extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-#endif
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";
@@ -4455,6 +4454,7 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_wxPoint","_class_wxPoint",0);
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
+	 SWIG_RegisterMapping("_wxWindowDC","_class_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
@@ -4499,6 +4499,7 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_signed_short","_short",0);
 	 SWIG_RegisterMapping("_wxMemoryDC","_class_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_wxPaintDC","_class_wxPaintDC",0);
+	 SWIG_RegisterMapping("_class_wxWindowDC","_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);
@@ -4534,6 +4535,7 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_class_wxIcon","_wxIcon",0);
 	 SWIG_RegisterMapping("_class_wxColour","_wxColour",0);
 	 SWIG_RegisterMapping("_class_wxScreenDC","_wxScreenDC",0);
+	 SWIG_RegisterMapping("_wxPalette","_class_wxPalette",0);
 	 SWIG_RegisterMapping("_class_wxClientDC","_wxClientDC",0);
 	 SWIG_RegisterMapping("_class_wxSize","_wxSize",0);
 	 SWIG_RegisterMapping("_class_wxBitmap","_wxBitmap",0);
@@ -4558,6 +4560,7 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_wxDash","_unsigned_long",0);
 	 SWIG_RegisterMapping("_wxDash","_long",0);
 	 SWIG_RegisterMapping("_class_wxScrolledWindow","_wxScrolledWindow",0);
+	 SWIG_RegisterMapping("_class_wxPalette","_wxPalette",0);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxScrolledWindow",SwigwxScrolledWindowTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxScrolledWindow",SwigwxScrolledWindowTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxDialog",SwigwxDialogTowxWindow);

@@ -16,9 +16,6 @@
 #include "helpers.h"
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
-#if 0
-#include <wx/tabctrl.h>
-#endif
 %}
 
 //----------------------------------------------------------------------
@@ -181,7 +178,6 @@ public:
 //----------------------------------------------------------------------
 
 
-//#ifdef __WXMSW__
 class wxTreeItemId {
 public:
     wxTreeItemId();
@@ -322,7 +318,6 @@ public:
 
 };
 
-//#endif
 
 //----------------------------------------------------------------------
 
@@ -384,6 +379,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.10  1998/11/25 08:45:23  RD
+// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
+// Added events for wxGrid
+// Other various fixes and additions
+//
 // Revision 1.9  1998/11/16 00:00:54  RD
 // Generic treectrl for wxPython/GTK compiles...
 //

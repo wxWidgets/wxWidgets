@@ -285,7 +285,7 @@ public:
     %pragma(python) addtomethod = "__init__:wxp._StdDialogCallbacks(self)"
 
     wxPrintData& GetPrintData();
-    wxDC* GetPrintDC();
+    %new wxDC* GetPrintDC();
     int ShowModal();
 };
 
@@ -310,6 +310,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1998/11/25 08:45:22  RD
+// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
+// Added events for wxGrid
+// Other various fixes and additions
+//
 // Revision 1.5  1998/11/15 23:03:43  RD
 // Removing some ifdef's for wxGTK
 //

@@ -539,6 +539,7 @@ class wxPrintDialogPtr(wxDialogPtr):
     def GetPrintDC(self):
         val = cmndlgsc.wxPrintDialog_GetPrintDC(self.this)
         val = wxDCPtr(val)
+        val.thisown = 1
         return val
     def ShowModal(self):
         val = cmndlgsc.wxPrintDialog_ShowModal(self.this)

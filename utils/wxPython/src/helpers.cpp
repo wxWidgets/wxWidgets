@@ -370,6 +370,29 @@ void wxPyTimer::Notify() {
 // imcluded in every file...
 
 
+byte* byte_LIST_helper(PyObject* source) {
+    if (!PyList_Check(source)) {
+        PyErr_SetString(PyExc_TypeError, "Expected a list object.");
+        return NULL;
+    }
+    int count = PyList_Size(source);
+    byte* temp = new byte[count];
+    if (! temp) {
+        PyErr_SetString(PyExc_MemoryError, "Unable to allocate temporary array");
+        return NULL;
+    }
+    for (int x=0; x<count; x++) {
+        PyObject* o = PyList_GetItem(source, x);
+        if (! PyInt_Check(o)) {
+            PyErr_SetString(PyExc_TypeError, "Expected a list of integers.");
+            return NULL;
+        }
+        temp[x] = (byte)PyInt_AsLong(o);
+    }
+    return temp;
+}
+
+
 int* int_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
@@ -579,6 +602,11 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.14  1998/11/25 08:45:25  RD
+// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
+// Added events for wxGrid
+// Other various fixes and additions
+//
 // Revision 1.13  1998/11/15 23:03:45  RD
 // Removing some ifdef's for wxGTK
 //

@@ -16,6 +16,7 @@
 
 %{
 
+extern byte* byte_LIST_helper(PyObject* source);
 extern int* int_LIST_helper(PyObject* source);
 extern long* long_LIST_helper(PyObject* source);
 extern char** string_LIST_helper(PyObject* source);
@@ -32,6 +33,17 @@ extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
     $target = PyList_Size(_in_LIST);
 }
 
+
+
+%typemap(python,in) byte* LIST  {
+    $target = byte_LIST_helper($source);
+    if ($target == NULL) {
+        return NULL;
+    }
+}
+%typemap(python,freearg) byte* LIST {
+    delete [] $source;
+}
 
 
 %typemap(python,in) int* LIST  {
@@ -186,6 +198,11 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/11/25 08:45:27  RD
+// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
+// Added events for wxGrid
+// Other various fixes and additions
+//
 // Revision 1.3  1998/11/15 23:03:47  RD
 // Removing some ifdef's for wxGTK
 //

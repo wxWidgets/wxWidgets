@@ -17,6 +17,9 @@
 #include <wx/grid.h>
 #include <wx/notebook.h>
 #include <wx/splitter.h>
+#ifdef __WXMSW__
+#include <wx/msw/taskbar.h>
+#endif
 %}
 
 //----------------------------------------------------------------------
@@ -36,31 +39,32 @@
 
 //---------------------------------------------------------------------------
 
+
 enum {
     wxGRID_TEXT_CTRL,
     wxGRID_HSCROLL,
-    wxGRID_VSCROLL,
+    wxGRID_VSCROLL
 };
-
-
 
 class wxGridCell {
 public:
-    wxString& GetTextValue();
-    void SetTextValue(const wxString& str);
-    wxFont *GetFont();
-    void SetFont(wxFont *f);
-    wxColour& GetTextColour();
-    void SetTextColour(const wxColour& colour);
-    wxColour& GetBackgroundColour();
-    void SetBackgroundColour(const wxColour& colour);
-    wxBrush *GetBackgroundBrush();
-    int GetAlignment();
-    void SetAlignment(int align);
-    wxBitmap *GetCellBitmap();
-    void SetCellBitmap(wxBitmap *bitmap);
-};
+    wxGridCell();
+    ~wxGridCell();
 
+    wxString& GetTextValue();
+    void      SetTextValue(const wxString& str);
+    wxFont*   GetFont();
+    void      SetFont(wxFont *f);
+    wxColour& GetTextColour();
+    void      SetTextColour(const wxColour& colour);
+    wxColour& GetBackgroundColour();
+    void      SetBackgroundColour(const wxColour& colour);
+    wxBrush*  GetBackgroundBrush();
+    int       GetAlignment();
+    void      SetAlignment(int align);
+    wxBitmap* GetCellBitmap();
+    void      SetCellBitmap(wxBitmap *bitmap);
+};
 
 
 
@@ -74,6 +78,16 @@ public:
            char* name="grid");
 
     %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnSelectCell',           wxEVT_GRID_SELECT_CELL)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnCreateCell',           wxEVT_GRID_CREATE_CELL)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnChangeLabels',         wxEVT_GRID_CHANGE_LABELS)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnChangeSelectionLabel', wxEVT_GRID_CHANGE_SEL_LABEL)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnCellChange',           wxEVT_GRID_CELL_CHANGE)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnCellLeftClick',        wxEVT_GRID_CELL_LCLICK)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnCellRightClick',       wxEVT_GRID_CELL_RCLICK)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnLabelLeftClick',       wxEVT_GRID_LABEL_LCLICK)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnLabelRightClick',      wxEVT_GRID_LABEL_RCLICK)"
+
 
     void AdjustScrollbars();
     bool AppendCols(int n=1, bool updateLabels=TRUE);
@@ -136,19 +150,7 @@ public:
     bool InsertCols(int pos=0, int n=1, bool updateLabels=TRUE);
     bool InsertRows(int pos=0, int n=1, bool updateLabels=TRUE);
 
-    // TODO:  How to handle callbacks that don't come from
-    //        event system???
-    //
-    //void OnActivate(bool active);
-    //void OnChangeLabels();
-    //void OnChangeSelectionLabel();
-    //wxGridCell* OnCreateCell();
-    //void OnLeftClick(int row, int col, int x, int y, bool control, bool shift);
-    //void OnRightClick(int row, int col, int x, int y, bool control, bool shift);
-    //void OnLabelLeftClick(int row, int col, int x, int y, bool control, bool shift);
-    //void OnLabelRightClick(int row, int col, int x, int y, bool control, bool shift);
-    //void OnSelectCell(int row, int col);
-    //void OnSelectCellImplementation(wxDC *dc, int row, int col);
+    void OnActivate(bool active);
 
     void SetCellAlignment(int alignment, int row, int col);
     %name(SetDefCellAlignment)void SetCellAlignment(int alignment);
@@ -174,6 +176,32 @@ public:
 
     void UpdateDimensions();
 };
+
+
+class wxGridEvent : public wxEvent {
+public:
+    int         m_row;
+    int         m_col;
+    int         m_x;
+    int         m_y;
+    bool        m_control;
+    bool        m_shift;
+    wxGridCell* m_cell;
+};
+
+
+enum {
+    wxEVT_GRID_SELECT_CELL,
+    wxEVT_GRID_CREATE_CELL,
+    wxEVT_GRID_CHANGE_LABELS,
+    wxEVT_GRID_CHANGE_SEL_LABEL,
+    wxEVT_GRID_CELL_CHANGE,
+    wxEVT_GRID_CELL_LCLICK,
+    wxEVT_GRID_CELL_RCLICK,
+    wxEVT_GRID_LABEL_LCLICK,
+    wxEVT_GRID_LABEL_RCLICK,
+};
+
 
 //---------------------------------------------------------------------------
 
@@ -234,13 +262,15 @@ public:
     wxSplitterWindow(wxWindow* parent, wxWindowID id,
                      const wxPoint& point = wxPyDefaultPosition,
                      const wxSize& size = wxPyDefaultSize,
-                     long style=wxSP_3D,
+                     long style=wxSP_3D|wxCLIP_CHILDREN,
                      char* name = "splitterWindow");
 
     %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
 
+    int GetBorderSize();
     int GetMinimumPaneSize();
     int GetSashPosition();
+    int GetSashSize();
     int GetSplitMode();
     wxWindow* GetWindow1();
     wxWindow* GetWindow2();
@@ -251,9 +281,12 @@ public:
     //        event system???
     //
     //void OnDoubleClickSash(int x, int y);
+    //bool OnSashPositionChange(int newSashPosition);
     //void OnUnsplit(wxWindow* removed);
 
+    void SetBorderSize(int width);
     void SetSashPosition(int position, int redraw = TRUE);
+    void SetSashSize(int width);
     void SetMinimumPaneSize(int paneSize);
     void SetSplitMode(int mode);
     bool SplitHorizontally(wxWindow* window1, wxWindow* window2, int sashPosition = 0);
@@ -263,12 +296,46 @@ public:
 
 //---------------------------------------------------------------------------
 
+#ifdef __WXMSW__
 
+enum {
+    wxEVT_TASKBAR_MOVE,
+    wxEVT_TASKBAR_LEFT_DOWN,
+    wxEVT_TASKBAR_LEFT_UP,
+    wxEVT_TASKBAR_RIGHT_DOWN,
+    wxEVT_TASKBAR_RIGHT_UP,
+    wxEVT_TASKBAR_LEFT_DCLICK,
+    wxEVT_TASKBAR_RIGHT_DCLICK
+};
+
+
+class wxTaskBarIcon : public wxEvtHandler {
+public:
+    wxTaskBarIcon();
+    ~wxTaskBarIcon();
+
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnMouseMove',    wxEVT_TASKBAR_MOVE)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnLButtonDown',  wxEVT_TASKBAR_LEFT_DOWN)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnLButtonUp',    wxEVT_TASKBAR_LEFT_UP)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnRButtonDown',  wxEVT_TASKBAR_RIGHT_DOWN)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnRButtonUp',    wxEVT_TASKBAR_RIGHT_UP)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnLButtonDClick',wxEVT_TASKBAR_LEFT_DCLICK)"
+    %pragma(python) addtomethod = "__init__:wxp._checkForCallback(self, 'OnRButtonDClick',wxEVT_TASKBAR_RIGHT_DCLICK)"
+
+    bool SetIcon(const wxIcon& icon, const char* tooltip = "");
+    bool RemoveIcon(void);
+};
+#endif
 
 //---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1998/11/25 08:45:28  RD
+// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
+// Added events for wxGrid
+// Other various fixes and additions
+//
 // Revision 1.5  1998/11/03 09:21:57  RD
 // fixed a typo
 //

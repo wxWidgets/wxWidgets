@@ -54,6 +54,7 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "eventsc"
 
 #include "helpers.h"
+#include <wx/spinbutt.h>
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -102,15 +103,14 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 
+extern byte* byte_LIST_helper(PyObject* source);
 extern int* int_LIST_helper(PyObject* source);
 extern long* long_LIST_helper(PyObject* source);
 extern char** string_LIST_helper(PyObject* source);
 extern wxPoint* wxPoint_LIST_helper(PyObject* source);
 extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 extern wxString* wxString_LIST_helper(PyObject* source);
-#ifdef __WXMSW__
 extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-#endif
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";
@@ -680,6 +680,30 @@ static PyObject *_wrap_wxScrollEvent_GetPosition(PyObject *self, PyObject *args)
     _result = (int )wxScrollEvent_GetPosition(_arg0);
     _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
+}
+
+static void *SwigwxSpinEventTowxScrollEvent(void *ptr) {
+    wxSpinEvent *src;
+    wxScrollEvent *dest;
+    src = (wxSpinEvent *) ptr;
+    dest = (wxScrollEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSpinEventTowxCommandEvent(void *ptr) {
+    wxSpinEvent *src;
+    wxCommandEvent *dest;
+    src = (wxSpinEvent *) ptr;
+    dest = (wxCommandEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSpinEventTowxEvent(void *ptr) {
+    wxSpinEvent *src;
+    wxEvent *dest;
+    src = (wxSpinEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
 }
 
 static void *SwigwxMouseEventTowxEvent(void *ptr) {
@@ -2669,6 +2693,8 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_wxEvent","_wxKeyEvent",SwigwxKeyEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxMouseEvent",SwigwxMouseEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_wxMouseEvent",SwigwxMouseEventTowxEvent);
+	 SWIG_RegisterMapping("_wxEvent","_class_wxSpinEvent",SwigwxSpinEventTowxEvent);
+	 SWIG_RegisterMapping("_wxEvent","_wxSpinEvent",SwigwxSpinEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxScrollEvent",SwigwxScrollEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_wxScrollEvent",SwigwxScrollEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxCommandEvent",SwigwxCommandEventTowxEvent);
@@ -2689,6 +2715,7 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_long","_signed_long",0);
 	 SWIG_RegisterMapping("_wxDropFilesEvent","_class_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
+	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_class_wxPaintEvent","_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxSysColourChangedEvent","_class_wxSysColourChangedEvent",0);
@@ -2734,6 +2761,8 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_class_wxEvent","_wxKeyEvent",SwigwxKeyEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_class_wxMouseEvent",SwigwxMouseEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxMouseEvent",SwigwxMouseEventTowxEvent);
+	 SWIG_RegisterMapping("_class_wxEvent","_class_wxSpinEvent",SwigwxSpinEventTowxEvent);
+	 SWIG_RegisterMapping("_class_wxEvent","_wxSpinEvent",SwigwxSpinEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_class_wxScrollEvent",SwigwxScrollEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxScrollEvent",SwigwxScrollEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_class_wxCommandEvent",SwigwxCommandEventTowxEvent);
@@ -2744,6 +2773,8 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_class_wxEvent","_wxSizeEvent",SwigwxSizeEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxEvent",0);
 	 SWIG_RegisterMapping("_wxRect","_class_wxRect",0);
+	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent);
+	 SWIG_RegisterMapping("_wxCommandEvent","_wxSpinEvent",SwigwxSpinEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxScrollEvent",SwigwxScrollEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_wxCommandEvent","_wxScrollEvent",SwigwxScrollEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxCommandEvent",0);
@@ -2752,6 +2783,8 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
+	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxSpinEvent",SwigwxSpinEventTowxScrollEvent);
+	 SWIG_RegisterMapping("_wxScrollEvent","_wxSpinEvent",SwigwxSpinEventTowxScrollEvent);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
@@ -2791,6 +2824,8 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_short","_unsigned_short",0);
 	 SWIG_RegisterMapping("_short","_signed_short",0);
+	 SWIG_RegisterMapping("_class_wxScrollEvent","_class_wxSpinEvent",SwigwxSpinEventTowxScrollEvent);
+	 SWIG_RegisterMapping("_class_wxScrollEvent","_wxSpinEvent",SwigwxSpinEventTowxScrollEvent);
 	 SWIG_RegisterMapping("_class_wxScrollEvent","_wxScrollEvent",0);
 	 SWIG_RegisterMapping("_wxJoystickEvent","_class_wxJoystickEvent",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
@@ -2804,6 +2839,7 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_int","_unsigned_int",0);
 	 SWIG_RegisterMapping("_int","_signed_int",0);
 	 SWIG_RegisterMapping("_class_wxMouseEvent","_wxMouseEvent",0);
+	 SWIG_RegisterMapping("_class_wxSpinEvent","_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxSize","_class_wxSize",0);
 	 SWIG_RegisterMapping("_class_wxSysColourChangedEvent","_wxSysColourChangedEvent",0);
 	 SWIG_RegisterMapping("_class_wxInitDialogEvent","_wxInitDialogEvent",0);
@@ -2814,6 +2850,8 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_class_wxJoystickEvent","_wxJoystickEvent",0);
 	 SWIG_RegisterMapping("_class_wxShowEvent","_wxShowEvent",0);
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
+	 SWIG_RegisterMapping("_class_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent);
+	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxSpinEvent",SwigwxSpinEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_class_wxScrollEvent",SwigwxScrollEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxScrollEvent",SwigwxScrollEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxCommandEvent",0);

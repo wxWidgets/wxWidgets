@@ -197,9 +197,10 @@ class TestLayoutConstraints(wxFrame):
 #---------------------------------------------------------------------------
 
 class TestGrid(wxFrame):
-    def __init__(self, parent):
+    def __init__(self, parent, log):
         wxFrame.__init__(self, parent, -1, 'Test Grid',
                          wxPyDefaultPosition, wxSize(500, 300))
+        self.log = log
 
         grid = wxGrid(self, -1)
 
@@ -215,10 +216,27 @@ class TestGrid(wxFrame):
         grid.UpdateDimensions()
         grid.AdjustScrollbars()
 
+        EVT_GRID_SELECT_CELL(grid, self.OnSelectCell)
+        EVT_GRID_CELL_CHANGE(grid, self.OnCellChange)
+        EVT_GRID_CELL_LCLICK(grid, self.OnCellClick)
+        EVT_GRID_LABEL_LCLICK(grid, self.OnLabelClick)
+
+
 
     def OnCloseWindow(self, event):
         self.Destroy()
 
+    def OnSelectCell(self, event):
+        self.log.WriteText("OnSelectCell: (%d, %d)\n" % (event.m_row, event.m_col))
+
+    def OnCellChange(self, event):
+        self.log.WriteText("OnCellChange: (%d, %d)\n" % (event.m_row, event.m_col))
+
+    def OnCellClick(self, event):
+        self.log.WriteText("OnCellClick: (%d, %d)\n" % (event.m_row, event.m_col))
+
+    def OnLabelClick(self, event):
+        self.log.WriteText("OnLabelClick: (%d, %d)\n" % (event.m_row, event.m_col))
 
 #---------------------------------------------------------------------------
 
@@ -633,7 +651,7 @@ class AppFrame(wxFrame):
         win.Show(true)
 
     def OnTestGrid(self, event):
-        win = TestGrid(self)
+        win = TestGrid(self, self)
         win.Show(true)
         win.SetSize(wxSize(505, 300))  # have to force a resize, or the grid doesn't
                                        # show up for some reason....
@@ -785,7 +803,13 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.8  1998/11/25 08:47:11  RD
+# Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
+# Added events for wxGrid
+# Other various fixes and additions
+#
 # Revision 1.7  1998/11/11 03:13:19  RD
+#
 # Additions for wxTreeCtrl
 #
 # Revision 1.6  1998/10/20 06:45:33  RD

@@ -54,6 +54,8 @@ extern "C" char *SWIG_GetPtr(char *, void **, char *);
 # pragma warning(disable:4800)
 #endif
 
+typedef unsigned char byte;
+
 
 // Non-const versions to keep SWIG happy.
 extern wxPoint  wxPyDefaultPosition;
@@ -102,7 +104,13 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1998/11/25 08:45:26  RD
+// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
+// Added events for wxGrid
+// Other various fixes and additions
+//
 // Revision 1.5  1998/10/02 06:40:40  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 // Revision 1.4  1998/08/27 21:59:09  RD

@@ -402,6 +402,15 @@ public:
 
 //---------------------------------------------------------------------------
 
+#ifdef __WXMSW__
+class wxWindowDC : public wxDC {
+public:
+      wxWindowDC(wxWindow* win);
+};
+#endif
+
+//---------------------------------------------------------------------------
+
 #ifndef __WXMSW__
 class wxPostScriptDC : public wxDC {
 public:
@@ -484,9 +493,29 @@ extern wxColour wxNullColour;
 
 //---------------------------------------------------------------------------
 
+class wxPalette {
+public:
+    wxPalette(int LCOUNT, byte* LIST, byte* LIST, byte* LIST);
+    ~wxPalette();
+
+    int GetPixel(byte red, byte green, byte blue);
+    bool GetRGB(int pixel, byte* OUTPUT, byte* OUTPUT, byte* OUTPUT);
+    bool Ok();
+};
+
+//---------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1998/11/25 08:45:24  RD
+// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
+// Added events for wxGrid
+// Other various fixes and additions
+//
 // Revision 1.5  1998/10/20 06:43:57  RD
 // New wxTreeCtrl wrappers (untested)
 // some changes in helpers

@@ -975,7 +975,7 @@ def EVT_NOTEBOOK_PAGE_CHANGING(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, func)
 
 
-#wxTreeCtrl events
+# wxTreeCtrl events
 def EVT_TREE_BEGIN_DRAG(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_DRAG, func)
 
@@ -1019,6 +1019,77 @@ def EVT_TREE_DELETE_ITEM(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_DELETE_ITEM, func)
 
 
+# wxSpinButton
+def EVT_SPIN_UP(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLL_LINEUP, func)
+
+def EVT_SPIN_DOWN(win, id, func):
+    win.Connect(id, -1,wxEVT_SCROLL_LINEDOWN, func)
+
+def EVT_SPIN(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLL_TOP,       func)
+    win.Connect(id, -1, wxEVT_SCROLL_BOTTOM,    func)
+    win.Connect(id, -1, wxEVT_SCROLL_LINEUP,    func)
+    win.Connect(id, -1, wxEVT_SCROLL_LINEDOWN,  func)
+    win.Connect(id, -1, wxEVT_SCROLL_PAGEUP,    func)
+    win.Connect(id, -1, wxEVT_SCROLL_PAGEDOWN,  func)
+    win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
+
+
+
+
+# wxTaskBarIcon
+def EVT_TASKBAR_MOVE(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_MOVE, func)
+
+def EVT_TASKBAR_LEFT_DOWN(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_LEFT_DOWN, func)
+
+def EVT_TASKBAR_LEFT_UP(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_LEFT_UP, func)
+
+def EVT_TASKBAR_RIGHT_DOWN(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_RIGHT_DOWN, func)
+
+def EVT_TASKBAR_RIGHT_UP(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_RIGHT_UP, func)
+
+def EVT_TASKBAR_LEFT_DCLICK(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_LEFT_DCLICK, func)
+
+def EVT_TASKBAR_RIGHT_DCLICK(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_RIGHT_DCLICK, func)
+
+
+# wxGrid
+def EVT_GRID_SELECT_CELL(win, fn):
+    win.Connect(-1, -1, wxEVT_GRID_SELECT_CELL, fn)
+
+def EVT_GRID_CREATE_CELL(win, fn):
+    win.Connect(-1, -1, wxEVT_GRID_CREATE_CELL, fn)
+
+def EVT_GRID_CHANGE_LABELS(win, fn):
+    win.Connect(-1, -1, wxEVT_GRID_CHANGE_LABELS, fn)
+
+def EVT_GRID_CHANGE_SEL_LABEL(win, fn):
+    win.Connect(-1, -1, wxEVT_GRID_CHANGE_SEL_LABEL, fn)
+
+def EVT_GRID_CELL_CHANGE(win, fn):
+    win.Connect(-1, -1, wxEVT_GRID_CELL_CHANGE, fn)
+
+def EVT_GRID_CELL_LCLICK(win, fn):
+    win.Connect(-1, -1, wxEVT_GRID_CELL_LCLICK, fn)
+
+def EVT_GRID_CELL_RCLICK(win, fn):
+    win.Connect(-1, -1, wxEVT_GRID_CELL_RCLICK, fn)
+
+def EVT_GRID_LABEL_LCLICK(win, fn):
+    win.Connect(-1, -1, wxEVT_GRID_LABEL_LCLICK, fn)
+
+def EVT_GRID_LABEL_RCLICK(win, fn):
+    win.Connect(-1, -1, wxEVT_GRID_LABEL_RCLICK, fn)
+
+
 
 
 #----------------------------------------------------------------------
@@ -1042,7 +1113,7 @@ NULL = NullObj()
 #----------------------------------------------------------------------
 # aliases
 
-wxColor = wxColour
+wxColor      = wxColour
 wxNamedColor = wxNamedColour
 
 wxPyDefaultPosition.Set(-1,-1)
@@ -1115,8 +1186,13 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.5  1998/11/11 03:12:55  RD
-# Additions for wxTreeCtrl
+# Revision 1.6  1998/11/25 08:46:48  RD
+# Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
+# Added events for wxGrid
+# Other various fixes and additions
+#
+# Revision 1.6  1998/11/16 00:00:52  RD
+# Generic treectrl for wxPython/GTK compiles...
 #
 # Revision 1.5  1998/10/20 07:38:02  RD
 # bug fix

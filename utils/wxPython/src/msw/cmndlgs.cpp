@@ -106,15 +106,14 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 
+extern byte* byte_LIST_helper(PyObject* source);
 extern int* int_LIST_helper(PyObject* source);
 extern long* long_LIST_helper(PyObject* source);
 extern char** string_LIST_helper(PyObject* source);
 extern wxPoint* wxPoint_LIST_helper(PyObject* source);
 extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 extern wxString* wxString_LIST_helper(PyObject* source);
-#ifdef __WXMSW__
 extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-#endif
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";
@@ -3546,6 +3545,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
 	 SWIG_RegisterMapping("_wxFontData","_class_wxFontData",0);
+	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxMenuBar","_wxMenuBar",0);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler);
@@ -3635,6 +3635,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPrintDialog","_class_wxPrintDialog",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
+	 SWIG_RegisterMapping("_wxWindowDC","_class_wxWindowDC",0);
 	 SWIG_RegisterMapping("_wxColourDialog","_class_wxColourDialog",0);
 	 SWIG_RegisterMapping("_wxPrintData","_class_wxPrintData",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
@@ -3643,6 +3644,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
+	 SWIG_RegisterMapping("_class_wxRegion","_wxRegion",0);
 	 SWIG_RegisterMapping("_wxFont","_class_wxFont",0);
 	 SWIG_RegisterMapping("_unsigned_long","_wxDash",0);
 	 SWIG_RegisterMapping("_unsigned_long","_long",0);
@@ -3714,6 +3716,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxMemoryDC","_class_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_class_wxPrintDialog","_wxPrintDialog",0);
 	 SWIG_RegisterMapping("_wxPaintDC","_class_wxPaintDC",0);
+	 SWIG_RegisterMapping("_class_wxWindowDC","_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);
@@ -3760,6 +3763,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_int","_unsigned_int",0);
 	 SWIG_RegisterMapping("_int","_signed_int",0);
 	 SWIG_RegisterMapping("_wxSize","_class_wxSize",0);
+	 SWIG_RegisterMapping("_wxRegionIterator","_class_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxPrinterDC","_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxPaintDC","_wxPaintDC",0);
 	 SWIG_RegisterMapping("_class_wxLayoutConstraints","_wxLayoutConstraints",0);
@@ -3767,7 +3771,9 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxColour","_wxColour",0);
 	 SWIG_RegisterMapping("_class_wxScreenDC","_wxScreenDC",0);
 	 SWIG_RegisterMapping("_class_wxPageSetupDialog","_wxPageSetupDialog",0);
+	 SWIG_RegisterMapping("_wxPalette","_class_wxPalette",0);
 	 SWIG_RegisterMapping("_wxFontDialog","_class_wxFontDialog",0);
+	 SWIG_RegisterMapping("_wxRegion","_class_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxClientDC","_wxClientDC",0);
 	 SWIG_RegisterMapping("_class_wxSize","_wxSize",0);
 	 SWIG_RegisterMapping("_class_wxBitmap","_wxBitmap",0);
@@ -3801,6 +3807,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxScrolledWindow","_wxScrolledWindow",0);
 	 SWIG_RegisterMapping("_class_wxTextEntryDialog","_wxTextEntryDialog",0);
 	 SWIG_RegisterMapping("_wxColourData","_class_wxColourData",0);
+	 SWIG_RegisterMapping("_class_wxPalette","_wxPalette",0);
 	 SWIG_RegisterMapping("_class_wxFontDialog","_wxFontDialog",0);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxMessageDialog",SwigwxMessageDialogTowxWindow);

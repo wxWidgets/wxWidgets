@@ -280,6 +280,58 @@ public:
 
 
 //---------------------------------------------------------------------------
+// Regions, etc.
+
+enum wxRegionContain {
+	wxOutRegion, wxPartRegion, wxInRegion
+};
+
+
+class wxRegion {
+public:
+    wxRegion();
+    ~wxRegion();
+
+    void Clear();
+    wxRegionContain Contains(long x, long y);
+    %name(ContainsPoint)wxRegionContain Contains(const wxPoint& pt);
+    %name(ContainsRect)wxRegionContain Contains(const wxRect& rect);
+
+    wxRect GetBox();
+    bool Intersect(const wxRect& rect);
+    bool IsEmpty();
+    bool Subtract(const wxRect& rect);
+    bool Union(const wxRect& rect);
+    bool Xor(const wxRect& rect);
+};
+
+
+
+class wxRegionIterator {
+public:
+    wxRegionIterator(const wxRegion& region);
+    ~wxRegionIterator();
+
+    long GetX();
+    long GetY();
+    long GetW();
+    long GetWidth();
+    long GetH();
+    long GetHeight();
+    wxRect GetRect();
+    bool HaveRects();
+    void Reset();
+
+    %addmethods {
+        void Next() {
+            (*self) ++;
+        }
+    };
+};
+
+
+
+//---------------------------------------------------------------------------
 // Accelerator Entry and Table
 
 class wxAcceleratorEntry {
@@ -306,6 +358,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1998/11/25 08:45:27  RD
+// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
+// Added events for wxGrid
+// Other various fixes and additions
+//
 // Revision 1.6  1998/11/15 23:03:46  RD
 // Removing some ifdef's for wxGTK
 //

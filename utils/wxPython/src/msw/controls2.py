@@ -328,9 +328,6 @@ class wxTreeItemIdPtr :
     def IsOk(self):
         val = controls2c.wxTreeItemId_IsOk(self.this)
         return val
-    def GetId(self):
-        val = controls2c.wxTreeItemId_GetId(self.this)
-        return val
     def __repr__(self):
         return "<C wxTreeItemId instance>"
 class wxTreeItemId(wxTreeItemIdPtr):
@@ -583,9 +580,6 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def EndEditLabel(self,arg0,*args):
         val = apply(controls2c.wxTreeCtrl_EndEditLabel,(self.this,arg0.this,)+args)
-        return val
-    def SortChildren(self,arg0):
-        val = controls2c.wxTreeCtrl_SortChildren(self.this,arg0.this)
         return val
     def __repr__(self):
         return "<C wxTreeCtrl instance>"

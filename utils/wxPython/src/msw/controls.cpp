@@ -55,9 +55,9 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include <wx/slider.h>
+#include <wx/spinbutt.h>
 
 #ifdef __WXMSW__
-#include <wx/spinbutt.h>
 #if wxUSE_OWNER_DRAWN
 #include <wx/checklst.h>
 #endif
@@ -110,15 +110,14 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 
+extern byte* byte_LIST_helper(PyObject* source);
 extern int* int_LIST_helper(PyObject* source);
 extern long* long_LIST_helper(PyObject* source);
 extern char** string_LIST_helper(PyObject* source);
 extern wxPoint* wxPoint_LIST_helper(PyObject* source);
 extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 extern wxString* wxString_LIST_helper(PyObject* source);
-#ifdef __WXMSW__
 extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-#endif
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";
@@ -5509,6 +5508,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
+	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_wxPrinterDC","_class_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
@@ -5541,6 +5541,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxRadioBox","_class_wxRadioBox",0);
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
+	 SWIG_RegisterMapping("_wxWindowDC","_class_wxWindowDC",0);
 	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
 	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
@@ -5635,6 +5636,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_signed_short","_short",0);
 	 SWIG_RegisterMapping("_wxMemoryDC","_class_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_wxPaintDC","_class_wxPaintDC",0);
+	 SWIG_RegisterMapping("_class_wxWindowDC","_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxFocusEvent","_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_class_wxMaximizeEvent","_wxMaximizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
@@ -5708,6 +5710,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_int","_unsigned_int",0);
 	 SWIG_RegisterMapping("_int","_signed_int",0);
 	 SWIG_RegisterMapping("_class_wxMouseEvent","_wxMouseEvent",0);
+	 SWIG_RegisterMapping("_class_wxSpinEvent","_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxButton","_class_wxBitmapButton",SwigwxBitmapButtonTowxButton);
 	 SWIG_RegisterMapping("_wxButton","_wxBitmapButton",SwigwxBitmapButtonTowxButton);
 	 SWIG_RegisterMapping("_wxButton","_class_wxButton",0);
@@ -5759,6 +5762,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxIcon","_wxIcon",0);
 	 SWIG_RegisterMapping("_class_wxColour","_wxColour",0);
 	 SWIG_RegisterMapping("_class_wxScreenDC","_wxScreenDC",0);
+	 SWIG_RegisterMapping("_wxPalette","_class_wxPalette",0);
 	 SWIG_RegisterMapping("_class_wxIdleEvent","_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_wxEraseEvent","_class_wxEraseEvent",0);
 	 SWIG_RegisterMapping("_class_wxJoystickEvent","_wxJoystickEvent",0);
@@ -5817,6 +5821,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxScrolledWindow","_wxScrolledWindow",0);
 	 SWIG_RegisterMapping("_wxKeyEvent","_class_wxKeyEvent",0);
 	 SWIG_RegisterMapping("_wxMoveEvent","_class_wxMoveEvent",0);
+	 SWIG_RegisterMapping("_class_wxPalette","_wxPalette",0);
 	 SWIG_RegisterMapping("_class_wxEraseEvent","_wxEraseEvent",0);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxSlider",SwigwxSliderTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxSlider",SwigwxSliderTowxWindow);
