@@ -176,7 +176,7 @@ class MimeTypesDemoPanel(wx.Panel):
         lrsizer.Add(t, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 4)
 
         self.mimelist = wx.ListBox(self, -1, choices=[], style = wx.LB_SINGLE | wx.LB_SORT)
-        lrsizer.Add(self.mimelist, 1, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER, 4)
+        lrsizer.Add(self.mimelist, 1, wx.ALL | wx.EXPAND | wx.ALIGN_CENTER | wx.FIXED_SIZE, 4)
         self.Bind(wx.EVT_LISTBOX, self.OnListbox, self.mimelist)
 
         #----------------------------------------------------------------------------
