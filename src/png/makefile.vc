@@ -57,8 +57,8 @@ $(OBJECTS)
   cl -DWIN32 $(OPT) $(CFLAGS) /c $*.c
 
 clean:
-        erase *.obj
-        erase *.exe
-        erase *.lib
+        -erase *.obj
+        -erase *.exe
+        -erase *.lib
 
 cleanall:	clean
