@@ -266,11 +266,11 @@ $GFL    $RPM_BUILD_ROOT %{wxpref}/bin/wx-config    >> DEVELLIST
 
 
 #----------------------------------------------------------------
-%post
-%{update_menus}
-
-%postun
-%{clean_menus}
+##%post
+##%{update_menus}
+##
+##%postun
+##%{clean_menus}
 
 #----------------------------------------------------------------
 %clean
