@@ -7,16 +7,19 @@
  * -------------------------------------------------------------------------
  */
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 /*
  * TODO: for WinCE we need to replace WSAAsyncSelect
  * (Windows message-based notification of network events for a socket)
  * with another mechanism.
  * We may need to have a separate thread that polls for socket events
  * using select() and sends a message to the main thread.
- */
-
-/*
- * PLEASE don't put C++ comments here - this is a C source file.
  */
 
 /* including rasasync.h (included from windows.h itself included from
