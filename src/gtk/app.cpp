@@ -111,7 +111,7 @@ void wxWakeUpIdle()
 {
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
-        gdk_threads_enter();
+        wxMutexGuiEnter();
 #endif
 
     if (g_isIdle) 
@@ -119,7 +119,7 @@ void wxWakeUpIdle()
     
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
-        gdk_threads_leave();
+        wxMutexGuiLeave();
 #endif
 }
 
@@ -178,7 +178,7 @@ void wxapp_install_thread_wakeup()
 {
     if (wxTheApp->m_wakeUpTimerTag) return;
 
-    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 50, wxapp_wakeup_timerout_callback, (gpointer) NULL );
+    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 500, wxapp_wakeup_timerout_callback, (gpointer) NULL );
 }
 
 void wxapp_uninstall_thread_wakeup()
@@ -194,7 +194,6 @@ gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
     // when getting called from GDK's time-out handler
     // we are no longer within GDK's grab on the GUI
     // thread so we must lock it here ourselves
-    
     gdk_threads_enter();
 
     wxapp_uninstall_thread_wakeup();

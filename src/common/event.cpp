@@ -644,12 +644,11 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
         wxPendingEvents = new wxList;
     wxPendingEvents->Append(this);
 
+    wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
+    
     // 3) Inform the system that new pending events are somwehere,
     //    and that these should be processed in idle time.
-
     wxWakeUpIdle();
-
-    wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
 }
 
 void wxEvtHandler::ProcessPendingEvents()
@@ -667,7 +666,7 @@ void wxEvtHandler::ProcessPendingEvents()
         delete node;
 
         // In ProcessEvent, new events might get added and
-	// we can safely leave the crtical section here.
+	    // we can safely leave the crtical section here.
 #if defined(__VISAGECPP__)
         wxLEAVE_CRIT_SECT( m_eventsLocker);
 #else

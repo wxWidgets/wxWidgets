@@ -79,6 +79,9 @@ public:
     void OnStopThread(wxCommandEvent& event);
     void OnPauseThread(wxCommandEvent& event);
     void OnResumeThread(wxCommandEvent& event);
+    
+    void OnStartWorker(wxCommandEvent& event);
+    void OnWorkerEvent(wxCommandEvent& event);
 
     void OnIdle(wxIdleEvent &event);
 
@@ -94,6 +97,26 @@ private:
 
     DECLARE_EVENT_TABLE()
 };
+
+// ID for the menu commands
+enum
+{
+    TEST_QUIT          = 1,
+    TEST_TEXT          = 101,
+    TEST_ABOUT,
+    TEST_CLEAR,
+    TEST_START_THREAD  = 201,
+    TEST_START_THREADS,
+    TEST_STOP_THREAD,
+    TEST_PAUSE_THREAD,
+    TEST_RESUME_THREAD,
+    TEST_START_WORKER,
+    WORKER_EVENT    // this one gets sent from the worker thread
+};
+
+//--------------------------------------------------
+// GUI thread
+//--------------------------------------------------
 
 class MyThread : public wxThread
 {
@@ -172,19 +195,60 @@ void *MyThread::Entry()
     return NULL;
 }
 
-// ID for the menu commands
-enum
+//--------------------------------------------------
+// worker thread
+//--------------------------------------------------
+
+class MyWorkerThread : public wxThread
 {
-    TEST_QUIT          = 1,
-    TEST_TEXT          = 101,
-    TEST_ABOUT,
-    TEST_CLEAR,
-    TEST_START_THREAD  = 201,
-    TEST_START_THREADS,
-    TEST_STOP_THREAD,
-    TEST_PAUSE_THREAD,
-    TEST_RESUME_THREAD
+public:
+    MyWorkerThread(MyFrame *frame);
+
+    // thread execution starts here
+    virtual void *Entry();
+
+    // called when the thread exits - whether it terminates normally or is
+    // stopped with Delete() (but not when it is Kill()ed!)
+    virtual void OnExit();
+
+public:
+    MyFrame *m_frame;
+    size_t   m_count;
 };
+
+MyWorkerThread::MyWorkerThread(MyFrame *frame)
+        : wxThread()
+{
+    m_frame = frame;
+    m_count = 0;
+}
+
+void MyWorkerThread::OnExit()
+{
+}
+
+void *MyWorkerThread::Entry()
+{
+    for ( m_count = 0; m_count < 10; m_count++ )
+    {
+        // check if we were asked to exit
+        if ( TestDestroy() )
+            break;
+        
+        wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, WORKER_EVENT );
+        event.SetInt( WORKER_EVENT );
+        wxPostEvent( m_frame, event );
+
+        // wxSleep() can't be called from non-GUI thread!
+        wxThread::Sleep(1000);
+    }
+
+    return NULL;
+}
+
+//--------------------------------------------------
+// main program
+//--------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEST_QUIT, MyFrame::OnQuit)
@@ -195,6 +259,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEST_STOP_THREAD, MyFrame::OnStopThread)
     EVT_MENU(TEST_PAUSE_THREAD, MyFrame::OnPauseThread)
     EVT_MENU(TEST_RESUME_THREAD, MyFrame::OnResumeThread)
+    
+    EVT_MENU(TEST_START_WORKER, MyFrame::OnStartWorker)
+    EVT_MENU(WORKER_EVENT, MyFrame::OnWorkerEvent)
 
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
@@ -224,6 +291,9 @@ bool MyApp::OnInit()
     thread_menu->AppendSeparator();
     thread_menu->Append(TEST_PAUSE_THREAD, "&Pause a running thread\tCtrl-P");
     thread_menu->Append(TEST_RESUME_THREAD, "&Resume suspended thread\tCtrl-R");
+    thread_menu->AppendSeparator();
+    thread_menu->Append(TEST_START_WORKER, "Start &worker thread\tCtrl-W");
+    
     menu_bar->Append(thread_menu, "&Thread");
     frame->SetMenuBar(menu_bar);
 
@@ -436,3 +506,21 @@ void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 {
     m_txtctrl->Clear();
 }
+
+void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
+{
+    MyWorkerThread *thread = new MyWorkerThread(this);
+
+    if ( thread->Create() != wxTHREAD_NO_ERROR )
+    {
+        wxLogError("Can't create thread!");
+    }
+    
+    thread->Run();
+}
+
+void MyFrame::OnWorkerEvent(wxCommandEvent& WXUNUSED(event))
+{
+    WriteText( "Got message from worker thread\n" );
+}
+
