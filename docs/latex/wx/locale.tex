@@ -485,8 +485,14 @@ a string is not found; use \helpref{wxLogNull}{wxlogoverview} to suppress it).
 
 The second form is used when retrieving translation of string that has
 different singular and plural form in English or different plural forms in some
-other language. \arg{szOrigString2} is plural form of the string in English and
-\arg{n} is used to determine the plural form.
+other language. It takes two extra arguments: \arg{szOrigString}
+parameter must contain the singular form of the string to be converted.
+It is also used as the key for the search in the catalog.
+The \arg{szOrigString2} parameter is the plural form (in English).
+The parameter \arg{n} is used to determine the plural form.  If no
+message catalog is found \arg{szOrigString} is returned if `n == 1',
+otherwise \arg{szOrigString2}.
+See \urlref{GNU gettext manual}{http://www.gnu.org/manual/gettext/html\_chapter/gettext\_10.html\#SEC150} for additional information on plural forms handling.
 
 \wxheading{Remarks}
 
