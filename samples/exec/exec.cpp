@@ -38,7 +38,10 @@
     #include "wx/menu.h"
     #include "wx/msgdlg.h"
     #include "wx/textdlg.h"
+    #include "wx/listbox.h"
 #endif
+
+#include "wx/txtstrm.h"
 
 #include "wx/process.h"
 
@@ -73,15 +76,23 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
 
+    void OnClear(wxCommandEvent& event);
+
     void OnSyncExec(wxCommandEvent& event);
     void OnAsyncExec(wxCommandEvent& event);
     void OnShell(wxCommandEvent& event);
+    void OnExecWithRedirect(wxCommandEvent& event);
     void OnDDEExec(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
 
+    // for MyPipedProcess
+    wxListBox *GetLogListBox() const { return m_lbox; }
+
 private:
     wxString m_cmdLast;
+
+    wxListBox *m_lbox;
 
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
@@ -91,7 +102,7 @@ private:
 class MyProcess : public wxProcess
 {
 public:
-    MyProcess(wxFrame *parent, const wxString& cmd)
+    MyProcess(MyFrame *parent, const wxString& cmd)
         : wxProcess(parent), m_cmd(cmd)
     {
         m_parent = parent;
@@ -102,9 +113,22 @@ public:
     // cases
     virtual void OnTerminate(int pid, int status);
 
-private:
-    wxFrame *m_parent;
+protected:
+    MyFrame *m_parent;
     wxString m_cmd;
+};
+
+// A specialization of MyProcess for redirecting the output
+class MyPipedProcess : public MyProcess
+{
+public:
+    MyPipedProcess(MyFrame *parent, const wxString& cmd)
+        : MyProcess(parent, cmd)
+        {
+            m_needPipe = TRUE;
+        }
+
+    virtual void OnTerminate(int pid, int status);
 };
 
 // ----------------------------------------------------------------------------
@@ -116,10 +140,12 @@ enum
 {
     // menu items
     Exec_Quit = 100,
+    Exec_ClearLog,
     Exec_SyncExec = 200,
     Exec_AsyncExec,
     Exec_Shell,
     Exec_DDEExec,
+    Exec_Redirect,
     Exec_About = 300
 };
 
@@ -134,10 +160,12 @@ static const wxChar *DIALOG_TITLE = _T("Exec sample");
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_Quit,  MyFrame::OnQuit)
+    EVT_MENU(Exec_ClearLog,  MyFrame::OnClear)
 
     EVT_MENU(Exec_SyncExec, MyFrame::OnSyncExec)
     EVT_MENU(Exec_AsyncExec, MyFrame::OnAsyncExec)
     EVT_MENU(Exec_Shell, MyFrame::OnShell)
+    EVT_MENU(Exec_Redirect, MyFrame::OnExecWithRedirect)
     EVT_MENU(Exec_DDEExec, MyFrame::OnDDEExec)
 
     EVT_MENU(Exec_About, MyFrame::OnAbout)
@@ -196,6 +224,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu(_T(""), wxMENU_TEAROFF);
+    menuFile->Append(Exec_ClearLog, _T("&Clear log\tCtrl-C"),
+                     _T("Clear the log window"));
+    menuFile->AppendSeparator();
     menuFile->Append(Exec_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     wxMenu *execMenu = new wxMenu;
@@ -205,6 +236,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                      _T("Launch a program and return immediately"));
     execMenu->Append(Exec_Shell, _T("Execute &shell command...\tCtrl-S"),
                      _T("Launch a shell and execute a command in it"));
+    execMenu->Append(Exec_Redirect, _T("Capture command &output...\tCtrl-O"),
+                     _T("Launch a program and capture its output"));
 
 #ifdef __WINDOWS__
     execMenu->AppendSeparator();
@@ -224,7 +257,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetMenuBar(menuBar);
 
     // create the listbox in which we will show misc messages as they come
-    m_listbox = new wxListBox(this, -1);
+    m_lbox = new wxListBox(this, -1);
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
@@ -240,6 +273,11 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     // TRUE is to force the frame to close
     Close(TRUE);
+}
+
+void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
+{
+    m_lbox->Clear();
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -300,6 +338,28 @@ void MyFrame::OnShell(wxCommandEvent& WXUNUSED(event))
     m_cmdLast = cmd;
 }
 
+void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
+{
+    wxString cmd = wxGetTextFromUser(_T("Enter the command: "),
+                                     DIALOG_TITLE,
+                                     m_cmdLast);
+
+    if ( !cmd )
+        return;
+
+    wxProcess *process = new MyPipedProcess(this, cmd);
+    if ( !wxExecute(cmd, FALSE /* async */, process) )
+    {
+        wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
+
+        delete process;
+    }
+    else
+    {
+        m_cmdLast = cmd;
+    }
+}
+
 void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))
 {
 #ifdef __WINDOWS__
@@ -353,4 +413,19 @@ void MyProcess::OnTerminate(int pid, int status)
 
     // we're not needed any more
     delete this;
+}
+
+void MyPipedProcess::OnTerminate(int pid, int status)
+{
+    // show the program output
+    wxListBox *lbox = m_parent->GetLogListBox();
+    lbox->Append(wxString::Format(_T("--- Output of '%s' ---"), m_cmd.c_str()));
+
+    wxTextInputStream tis(*m_in_stream);
+    while ( !m_in_stream->LastError() )
+    {
+        lbox->Append(tis.ReadLine());
+    }
+
+    MyProcess::OnTerminate(pid, status);
 }
