@@ -538,6 +538,9 @@ class wxSplitterWindowPtr(wxWindowPtr):
     def IsSplit(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterWindow_IsSplit,(self,) + _args, _kwargs)
         return val
+    def ReplaceWindow(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_ReplaceWindow,(self,) + _args, _kwargs)
+        return val
     def SetBorderSize(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterWindow_SetBorderSize,(self,) + _args, _kwargs)
         return val

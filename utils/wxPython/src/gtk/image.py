@@ -182,6 +182,10 @@ class wxImagePtr :
     def GetHeight(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_GetHeight,(self,) + _args, _kwargs)
         return val
+    def GetSubImage(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetSubImage,(self,) + _args, _kwargs)
+        if val: val = wxImagePtr(val) ; val.thisown = 1
+        return val
     def GetData(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_GetData,(self,) + _args, _kwargs)
         return val
