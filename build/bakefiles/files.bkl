@@ -1745,6 +1745,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/listbox.mm
     src/cocoa/main.cpp
     src/cocoa/mbarman.mm
+    src/cocoa/mdi.mm
     src/cocoa/menu.mm
     src/cocoa/menuitem.mm
     src/cocoa/pen.mm
@@ -1773,7 +1774,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontdlgg.cpp
     src/generic/imaglist.cpp
     src/generic/listctrl.cpp
-    src/generic/mdig.cpp
     src/generic/msgdlgg.cpp
     src/generic/notebook.cpp
     src/generic/paletteg.cpp
@@ -1821,6 +1821,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/icon.h
     wx/cocoa/listbox.h
     wx/cocoa/mbarman.h
+    wx/cocoa/mdi.h
     wx/cocoa/menu.h
     wx/cocoa/menuitem.h
     wx/cocoa/pen.h
@@ -1841,7 +1842,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/fontdlgg.h
     wx/generic/imaglist.h
     wx/generic/listctrl.h
-    wx/generic/mdig.h
     wx/generic/paletteg.h
     wx/generic/statusbr.h
     wx/generic/tabg.h

@@ -16,7 +16,7 @@
 #elif defined(__WXMAC__)
     #include "wx/mac/mdi.h"
 #elif defined(__WXCOCOA__)
-    #include "wx/generic/mdig.h"
+    #include "wx/cocoa/mdi.h"
 #elif defined(__WXPM__)
     #include "wx/generic/mdig.h"
 #endif
