@@ -369,7 +369,23 @@ the parameter is empty, the parameter will be set to a default. If the
 parameter is present but the style flag not, the relevant flag will be added
 to the style. For wxFileConfig you can also add wxCONFIG\_USE\_RELATIVE\_PATH 
 by logicaly or'ing it to either of the \_FILE options to tell wxFileConfig to 
-use relative instead of absolute paths.  }
+use relative instead of absolute paths.  For wxFileConfig, you can also 
+add wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS which will turn off character 
+escaping for the values of entries stored in the config file: for example 
+a {\it foo} key with some backslash characters will be stored as 
+\begin{verbatim}
+  foo=C:\mydir
+\end{verbatim}
+instead of the usual storage of 
+\begin{verbatim}
+  foo=C:\\mydir
+\end{verbatim}
+The wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS style can be helpful if your config 
+file must be read or written to by a non-wxWindows program (which might not 
+understand the escape characters). Note, however, that if 
+wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS style is used, it is is now 
+your application's responsibility to ensure that there is no newline or 
+other illegal characters in a value, before writing that value to the file.}
 
 \wxheading{Remarks}
 

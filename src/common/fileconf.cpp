@@ -340,11 +340,11 @@ wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
 #ifdef __VMS__ // On VMS I saw the problem that the home directory was appended
    // twice for the configuration file. Does that also happen for other
    // platforms?
-   wxString str = wxT( '.' ); 
+   wxString str = wxT( '.' );
 #else
    wxString str = GetLocalDir();
 #endif
-   
+
   #if defined( __UNIX__ ) && !defined( __VMS ) && !defined( __WXMAC__ )
     str << wxT('.');
   #endif
@@ -676,7 +676,11 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
         while ( wxIsspace(*pEnd) )
           pEnd++;
 
-        pEntry->SetValue(FilterInValue(pEnd), FALSE /* read from file */);
+        wxString value = pEnd;
+        if ( !(GetStyle() & wxCONFIG_USE_NO_ESCAPE_CHARACTERS) )
+            value = FilterInValue(value);
+
+        pEntry->SetValue(value, FALSE);
       }
     }
   }
@@ -930,7 +934,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   if ( ret )
   {
   	FSSpec spec ;
-  	
+
   	wxMacFilename2FSSpec( m_strLocalFile , &spec ) ;
   	FInfo finfo ;
   	if ( FSpGetFInfo( &spec , &finfo ) == noErr )
@@ -1577,9 +1581,16 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
   m_strValue = strValue;
 
   if ( bUser ) {
-    wxString strVal = FilterOutValue(strValue);
+    wxString strValFiltered;
+    if ( Group()->Config()->GetStyle() & wxCONFIG_USE_NO_ESCAPE_CHARACTERS ) {
+        strValFiltered = strValue;
+    }
+    else {
+        strValFiltered = FilterOutValue(strValue);
+    }
+
     wxString strLine;
-    strLine << FilterOutEntryName(m_strName) << wxT('=') << strVal;
+    strLine << FilterOutEntryName(m_strName) << wxT('=') << strValFiltered;
 
     if ( m_pLine != NULL ) {
       // entry was read from the local config file, just modify the line
