@@ -23,6 +23,8 @@ all : setup.h
 	$(MMS)$(MMSQUALIFIERS)
 	set default [-.config]
 	$(MMS)$(MMSQUALIFIERS)
+	set default [-.controls]
+	$(MMS)$(MMSQUALIFIERS)
 	set default [-.dialogs]
 	$(MMS)$(MMSQUALIFIERS)
 	set default [-.image]
