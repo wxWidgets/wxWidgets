@@ -60,10 +60,9 @@ The destructor.
 
 \func{void}{Add}{\param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
 
-Adds the {\it window} to the sizer. As wxSizer itself is an abstract class, the parameters
-have no meaning in the wxSizer class itself, but as there currently is only one class
-deriving directly from wxSizer and this class does not override these methods, the meaning
-of the parameters is described here:
+Appends a child to the sizer.  wxSizer itself is an abstract class, but the parameters are
+equivalent in the derived classes that you will instantiate to use it so they are described
+here:
 
 \docparam{window}{The window to be added to the sizer. Its initial size (either set explicitly by the
 user or calculated internally when using wxDefaultSize) is interpreted as the minimal and in many
@@ -123,6 +122,31 @@ complex than the {\it proportion} and {\it flag} will allow for.}
 This method is abstract and has to be overwritten by any derived class.
 Here, the sizer will do the actual calculation of its children minimal sizes.
 
+\membersection{wxSizer::Detach}\label{wxsizerdetach}
+
+\func{bool}{Detach}{\param{wxWindow* }{window}}
+
+\func{bool}{Detach}{\param{wxSizer* }{sizer}}
+
+\func{bool}{Detach}{\param{int }{nth}}
+
+Detach a child from the sizer without destroying it. {\it window} is the window to be
+detached, {\it sizer} is the equivalent sizer and {\it nth} is the position of
+the child in the sizer, typically 0 for the first item. This method does not
+cause any layout or resizing to take place, call \helpref{wxSizer::Layout}{wxsizerlayout}
+to update the layout "on screen" after detaching a child from the sizer.
+
+{\bf NB:} Detaching a wxWindow from a wxSizer is equivalent to Removing it.  There is
+currently no wxSizer method that will detach and destroy a window automatically.
+You must either act to destroy it yourself, or allow its parent to destroy it in the
+normal course of events.
+
+Returns TRUE if the child item was found and detached, FALSE otherwise.
+
+\wxheading{See also}
+
+\helpref{wxSizer::Remove}{wxsizerremove}
+
 \membersection{wxSizer::Fit}\label{wxsizerfit}
 
 \func{wxSize}{Fit}{\param{wxWindow* }{window}}
@@ -165,6 +189,20 @@ Returns the minimal size of the sizer. This is either the combined minimal
 size of all the children and their borders or the minimal size set by 
 \helpref{SetMinSize}{wxsizersetminsize}, depending on which is bigger.
 
+\membersection{wxSizer::Insert}\label{wxsizerinsert}
+
+\func{void}{Insert}{\param{int }{before}, \param{wxWindow* }{window}, \param{int }{proportion = 0},\param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+
+\func{void}{Insert}{\param{int }{before}, \param{wxSizer* }{sizer}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+
+\func{void}{Insert}{\param{int }{before}, \param{int }{width}, \param{int }{height}, \param{int }{proportion = 0}, \param{int }{flag = 0}, \param{int }{border = 0}, \param{wxObject* }{userData = NULL}}
+
+Insert a child into the sizer.
+
+\docparam{before}{The position this child should assume in the sizer.}
+
+See \helpref{wxSizer::Add}{wxsizeradd} for the meaning of the other parameters.
+
 \membersection{wxSizer::Layout}\label{wxsizerlayout}
 
 \func{void}{Layout}{\void}
@@ -202,9 +240,12 @@ and sizes.
 
 Removes a child from the sizer. {\it window} is the window to be removed, {\it sizer} is the
 equivalent sizer and {\it nth} is the position of the child in the sizer, typically 0 for
-the first item. This method does not cause any layout or resizing to take place and does
-not delete the window itself. Call \helpref{wxSizer::Layout}{wxsizerlayout} to update
-the layout "on screen" after removing a child from the sizer.
+the first item. This method does not cause any layout or resizing to take place, call
+\helpref{wxSizer::Layout}{wxsizerlayout} to update the layout "on screen" after removing a
+child from the sizer.
+
+{\bf NB:} wxWindows are not deleted by Remove, but wxSizers are.  To remove a sizer without
+deleting it, use \helpref{wxSizer::Detach}{wxsizerdetach} instead.
 
 Returns TRUE if the child item was found and removed, FALSE otherwise.
 

@@ -44,68 +44,60 @@ IMPLEMENT_ABSTRACT_CLASS(wxNotebookSizer, wxSizer)
 //---------------------------------------------------------------------------
 
 wxSizerItem::wxSizerItem( int width, int height, int option, int flag, int border, wxObject* userData )
+    : m_window( 0 )
+    , m_sizer( 0 )
+    , m_size( wxSize( width, height ) ) // size is set directly
+    , m_minSize( m_size )               // minimal size is the initial size
+    , m_option( option )
+    , m_border( border )
+    , m_flag( flag )
+    , m_show( TRUE )                    // Cannot be changed
+    , m_deleteItem( FALSE )             // unused for spacer
+    , m_userData( userData )
 {
-    m_window = (wxWindow *) NULL;
-    m_sizer = (wxSizer *) NULL;
-    m_option = option;
-    m_border = border;
-    m_flag = flag;
-    m_show = TRUE;                // Cannot be changed
-    m_userData = userData;
-
-    // minimal size is the initial size
-    m_minSize.x = width;
-    m_minSize.y = height;
-
-    SetRatio(width, height);
-
-    // size is set directly
-    m_size = m_minSize;
+    SetRatio( m_size );
 }
 
 wxSizerItem::wxSizerItem( wxWindow *window, int option, int flag, int border, wxObject* userData )
+    : m_window( window )
+    , m_sizer( 0 )
+    , m_minSize( window->GetSize() )    // minimal size is the initial size
+    , m_option( option )
+    , m_border( border )
+    , m_flag( flag )
+    , m_show( TRUE )
+    , m_deleteItem( FALSE )             // currently unused for window
+    , m_userData( userData )
 {
-    m_window = window;
-    m_sizer = (wxSizer *) NULL;
-    m_option = option;
-    m_border = border;
-    m_flag = flag;
-    m_show = TRUE;
-    m_userData = userData;
-
-    // minimal size is the initial size
-    m_minSize = window->GetSize();
-
     // aspect ratio calculated from initial size
-    SetRatio(m_minSize);
+    SetRatio( m_minSize );
 
-    // size is calculated later
-    // m_size = ...
+    // m_size is calculated later
 }
 
 wxSizerItem::wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxObject* userData )
+    : m_window( 0 )
+    , m_sizer( sizer )
+    , m_option( option )
+    , m_border( border )
+    , m_flag( flag )
+    , m_show( TRUE )
+    , m_ratio( 0 )
+    , m_deleteItem( TRUE )              // we delete sizer items by default.
+    , m_userData( userData )
 {
-    m_window = (wxWindow *) NULL;
-    m_sizer = sizer;
-    m_option = option;
-    m_border = border;
-    m_flag = flag;
-    m_show = TRUE;
-    m_userData = userData;
-
-    // minimal size is calculated later
-    // m_minSize = ...
-    m_ratio = 0;
-
-    // size is calculated later
-    // m_size = ...
+    // m_minSize is calculated later
+    // m_size is calculated later
 }
 
 wxSizerItem::~wxSizerItem()
 {
+    // User data is bound to the sizeritem, always delete it.
     if (m_userData)
         delete m_userData;
-    if (m_sizer)
+
+    // To be able to Detach a sizer, we must be able to veto its deletion here.
+    if (m_deleteItem && m_sizer)
         delete m_sizer;
 }
 
@@ -366,6 +358,39 @@ bool wxSizer::Remove( int pos )
     wxNode *node = m_children.Nth( pos );
     if (!node) return FALSE;
 
+    m_children.DeleteNode( node );
+
+    return TRUE;
+}
+
+bool wxSizer::Detach( wxSizer *sizer )
+{
+    wxASSERT( sizer );
+
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxSizerItem *item = (wxSizerItem*)node->Data();
+        if (item->GetSizer() == sizer)
+        {
+            item->SetDeleteItem( FALSE );
+            m_children.DeleteNode( node );
+            return TRUE;
+        }
+        node = node->Next();
+    }
+
+    return FALSE;
+}
+
+bool wxSizer::Detach( int pos )
+{
+    if ((size_t)pos >= m_children.GetCount())
+        return FALSE;
+    wxNode *node = m_children.Nth( pos );
+    if (!node) return FALSE;
+
+    ( (wxSizerItem*)node->Data() )->SetDeleteItem( FALSE );
     m_children.DeleteNode( node );
 
     return TRUE;

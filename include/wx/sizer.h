@@ -82,6 +82,8 @@ public:
         { m_border = border; }
     void Show ( bool show )
         { m_show = show; }
+    void SetDeleteItem( bool deleteItem = TRUE )
+        { m_deleteItem = deleteItem; }
 
     wxWindow *GetWindow() const
         { return m_window; }
@@ -122,6 +124,11 @@ protected:
     //      is shrinked.  it is safer to preserve initial value.
     float        m_ratio;
 
+    // If TRUE, and the item is a sizer, delete it when the
+    // sizeritem is destroyed.  Not used for any other type
+    // of item right now.
+    bool        m_deleteItem;
+
     wxObject    *m_userData;
 
 private:
@@ -151,10 +158,17 @@ public:
     virtual void Prepend( wxSizer *sizer, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
     virtual void Prepend( int width, int height, int option = 0, int flag = 0, int border = 0, wxObject* userData = NULL );
 
+    // Remove will delete a sizer, but not a window.
     virtual bool Remove( wxWindow *window );
     virtual bool Remove( wxSizer *sizer );
     virtual bool Remove( int pos );
-    
+
+    // Detach will never destroy a sizer or window.
+    virtual bool Detach( wxWindow *window )
+        { return Remove( window ); }
+    virtual bool Detach( wxSizer *sizer );
+    virtual bool Detach( int pos );
+
     virtual void Clear( bool delete_windows=FALSE );
     virtual void DeleteWindows();
 
