@@ -156,7 +156,7 @@ public:
     // set the currently selected page, return the index of the previously
     // selected one (or -1 on error)
     //
-    // NB: this function will _not_ generate PAGE_CHANGING/ED events
+    // NB: this function will generate PAGE_CHANGING/ED events
     virtual int SetSelection(size_t n) = 0;
 
 

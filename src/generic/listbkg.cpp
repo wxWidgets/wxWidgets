@@ -48,6 +48,13 @@ const wxCoord MARGIN = 5;
 // various wxWidgets macros
 // ----------------------------------------------------------------------------
 
+// check that the page index is valid
+#define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
+
+// ----------------------------------------------------------------------------
+// event table
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_DYNAMIC_CLASS(wxListbook, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxListbookEvent, wxNotifyEvent)
 
@@ -340,27 +347,37 @@ int wxListbook::GetSelection() const
 
 int wxListbook::SetSelection(size_t n)
 {
-    wxCHECK_MSG( n < GetPageCount(), wxNOT_FOUND,
-                 _T("invalid page index in wxListbook::SetSelection()") );
+    wxCHECK_MSG( IS_VALID_PAGE(n), wxNOT_FOUND,
+                 wxT("invalid page index in wxListbook::SetSelection()") );
 
-    const int selOld = m_selection;
+    const int oldSel = m_selection;
 
-    if ( (int)n != m_selection )
+    if ( int(n) != m_selection )
     {
-        if ( m_selection != wxNOT_FOUND )
-            m_pages[m_selection]->Hide();
-        wxWindow *page = m_pages[n];
-        page->SetSize(GetPageRect());
-        page->Show();
+        wxListbookEvent event(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, m_windowId);
+        event.SetSelection(n);
+        event.SetOldSelection(m_selection);
+        event.SetEventObject(this);
+        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+        {
+            if ( m_selection != wxNOT_FOUND )
+                m_pages[m_selection]->Hide();
 
-        // change m_selection only now to ignore the selection change event
-        m_selection = n;
+            wxWindow *page = m_pages[n];
+            page->SetSize(GetPageRect());
+            page->Show();
 
-        m_list->Select(n);
-        m_list->Focus(n);
+            m_selection = n;
+            m_list->Select(n);
+            m_list->Focus(n);
+
+            // program allows the page change
+            event.SetEventType(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED);
+            (void)GetEventHandler()->ProcessEvent(event);
+        }
     }
 
-    return selOld;
+    return oldSel;
 }
 
 // ----------------------------------------------------------------------------

@@ -233,6 +233,7 @@ All (GUI):
 - added wxChoicebook control
 - smoother time estimation updates in wxProgressDialog (Christian Sturmlechner)
 - the XRC contrib library was moved to the core
+- wx(Choice/List/Note)book controls send CHANG(ED/ING) events in SetSelection
 
 Unix:
 
