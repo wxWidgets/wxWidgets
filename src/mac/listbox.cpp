@@ -663,9 +663,12 @@ void wxListBox::MacClear()
 void wxListBox::MacSetSelection( int n , bool select )
 {
 	Cell cell = { 0 , 0 } ;
-	if ( LGetSelect( true , &cell , m_macList ) )
+	if ( ! (m_windowStyle & wxLB_MULTIPLE) )
 	{
-		LSetSelect( false , cell , m_macList ) ;
+  	if ( LGetSelect( true , &cell , m_macList ) )
+  	{
+  		LSetSelect( false , cell , m_macList ) ;
+  	}
 	}
 	
 	cell.v = n ;
