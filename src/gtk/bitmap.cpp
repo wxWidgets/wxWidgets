@@ -306,7 +306,7 @@ bool wxBitmap::Create( int width, int height, int depth )
     if (depth == -1)
         depth = visual->depth;
 
-    wxCHECK_MSG( (depth == visual->depth) || (depth == 1), FALSE,
+    wxCHECK_MSG( (depth == visual->depth) || (depth == 1) || (depth == 32), FALSE,
                     wxT("invalid bitmap depth") )
 
     m_refData = new wxBitmapRefData();
@@ -318,6 +318,14 @@ bool wxBitmap::Create( int width, int height, int depth )
         M_BMPDATA->m_bitmap = gdk_pixmap_new( wxGetRootWindow()->window, width, height, 1 );
         M_BMPDATA->m_bpp = 1;
     }
+#ifdef __WXGTK20__
+    else if (depth == 32)
+    {
+        M_BMPDATA->m_pixbuf = gdk_pixbuf_new( GDK_COLORSPACE_RGB, true,
+                                              8, width, height);
+        M_BMPDATA->m_bpp = 32;
+    }
+#endif
     else
     {
         M_BMPDATA->m_pixmap = gdk_pixmap_new( wxGetRootWindow()->window, width, height, depth );
@@ -1556,6 +1564,37 @@ void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
 }
 
 #endif // __WXGTK20__
+
+void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
+{
+#ifdef __WXGTK20__
+    if (bpp != 32)
+        return NULL;
+        
+    GdkPixbuf *pixbuf = GetPixbuf();
+    if (!pixbuf)
+        return NULL;
+
+#if 0    
+    if (gdk_pixbuf_get_has_alpha( pixbuf ))
+        wxPrintf( wxT("Has alpha\n") );
+    else
+        wxPrintf( wxT("No alpha.\n") );
+#endif
+
+	data.m_height = gdk_pixbuf_get_height( pixbuf );
+	data.m_width = gdk_pixbuf_get_width( pixbuf );
+	data.m_stride = gdk_pixbuf_get_rowstride( pixbuf );
+    
+    return gdk_pixbuf_get_pixels( pixbuf );
+#else
+    return NULL;
+#endif    
+}
+
+void wxBitmap::UngetRawData(wxPixelDataBase& data)
+{
+}
 
 //-----------------------------------------------------------------------------
 // wxBitmapHandler

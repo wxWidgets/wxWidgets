@@ -32,10 +32,15 @@
 #include "smile.xbm"
 #include "smile.xpm"
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
+#if defined(__WXMSW__)
     #ifdef wxHAVE_RAW_BITMAP
     #include "wx/rawbmp.h"
     #endif
+#endif
+
+#if defined(__WXMAC__) || defined(__WXGTK__)
+    #define wxHAVE_RAW_BITMAP
+    #include "wx/rawbmp.h"
 #endif
 
 // derived classes
@@ -271,7 +276,7 @@ public:
             return;
         }
 
-        data.UseAlpha();
+//        data.UseAlpha();
 
         Data::Iterator p(data);
 

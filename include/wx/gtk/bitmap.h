@@ -20,6 +20,7 @@
 #include "wx/string.h"
 #include "wx/palette.h"
 #include "wx/gdiobj.h"
+#include "wx/rawbmp.h"
 
 #ifdef __WXGTK20__
 typedef struct _GdkPixbuf GdkPixbuf;
@@ -130,6 +131,11 @@ public:
     
     // Basically, this corresponds to Win32 StretchBlt()
     wxBitmap Rescale( int clipx, int clipy, int clipwidth, int clipheight, int width, int height );
+    
+    // raw bitmap access support functions
+    void *GetRawData(wxPixelDataBase& data, int bpp);
+    void UngetRawData(wxPixelDataBase& data);
+
 protected:
     bool CreateFromXpm(const char **bits);
     bool CreateFromImage(const wxImage& image, int depth);

@@ -43,6 +43,13 @@ All:
   the client size and total size of the window.  Code that sets the 
   client size using the best size, or that added extra space to sizers
   to compensate for this bug may need to be changed.
+- Changed calculation of scrolling area to not clip away some bits
+  due to a rounding error.
+- Changed GetVirtualSize() to return client size by default until
+  SetVirtualSize() gets called. From then on it will only return
+  that.
+- Various changes to how wxListCtrl and wxTreeCtrl react to right
+  mouse clicks and left mouse click for starting a drag operation.
 
 
 All (GUI):
@@ -83,6 +90,9 @@ wxGTK:
   are only called with GTK+ 2.4.x installed and should yield linker
   errors otherwise.
 - wxTextCtrl text insertion efficiency fixed. (Mart Raudsepp)
+- Added wxRawBitmap support
+- Corrected Input method handler code (for Chinese etc.) and its
+  interaction with wxWidgets' events.
 
 wxMac:
 
@@ -101,6 +111,7 @@ wxMSW:
 wxWinCE:
 - Added support for MS Handheld PC 2000. This was done before 2.5.4,
   but not mentioned anywhere.
+- Added (preliminary) support for sockets
 
 wxUniv:
 
