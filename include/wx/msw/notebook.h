@@ -213,7 +213,7 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
 
 #define EVT_NOTEBOOK_PAGE_CHANGING(id, fn)                                  \
   {                                                                         \
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, \                                 \
+    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,                                   \
     id,                                                                     \
     -1,                                                                     \
     (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
