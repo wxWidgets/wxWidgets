@@ -21,6 +21,7 @@
 
 #include "wx/frame.h"
 #include "wx/string.h"
+#include "wx/log.h"
 
 #if wxUSE_STATUSBAR
 
