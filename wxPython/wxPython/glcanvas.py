@@ -5,7 +5,7 @@
 
 # This silly stuff here is so the wxPython.wx module doesn't conflict
 # with the wx package.  We need to import modules from the wx package
-# here, then we'll put the entry back in sys.modules.
+# here, then we'll put the wxPython.wx entry back in sys.modules.
 import sys
 _wx = None
 if sys.modules.has_key('wxPython.wx'):

@@ -5,7 +5,7 @@
 
 # This silly stuff here is so the wxPython.wx module doesn't conflict
 # with the wx package.  We need to import modules from the wx package
-# here, then we'll put the entry back in sys.modules.
+# here, then we'll put the wxPython.wx entry back in sys.modules.
 import sys
 _wx = None
 if sys.modules.has_key('wxPython.wx'):
@@ -147,68 +147,6 @@ wxFR_NOUPDOWN = wx.windows.FR_NOUPDOWN
 wxFR_NOMATCHCASE = wx.windows.FR_NOMATCHCASE
 wxFR_NOWHOLEWORD = wx.windows.FR_NOWHOLEWORD
 wxEVT_COMMAND_FIND = wx.windows.wxEVT_COMMAND_FIND
-wxEVT_COMMAND_FIND_NEXT = wx.windows.wxEVT_COMMAND_FIND_NEXT
-wxEVT_COMMAND_FIND_REPLACE = wx.windows.wxEVT_COMMAND_FIND_REPLACE
-wxEVT_COMMAND_FIND_REPLACE_ALL = wx.windows.wxEVT_COMMAND_FIND_REPLACE_ALL
-wxEVT_COMMAND_FIND_CLOSE = wx.windows.wxEVT_COMMAND_FIND_CLOSE
-wxFindDialogEvent = wx.windows.FindDialogEvent
-wxFindReplaceData = wx.windows.FindReplaceData
-wxPreFindReplaceDialog = wx.windows.PreFindReplaceDialog
-wxFindReplaceDialog = wx.windows.FindReplaceDialog
-IDM_WINDOWTILE = wx.windows.IDM_WINDOWTILE
-IDM_WINDOWTILEHOR = wx.windows.IDM_WINDOWTILEHOR
-IDM_WINDOWCASCADE = wx.windows.IDM_WINDOWCASCADE
-IDM_WINDOWICONS = wx.windows.IDM_WINDOWICONS
-IDM_WINDOWNEXT = wx.windows.IDM_WINDOWNEXT
-IDM_WINDOWTILEVERT = wx.windows.IDM_WINDOWTILEVERT
-wxFIRST_MDI_CHILD = wx.windows.FIRST_MDI_CHILD
-wxLAST_MDI_CHILD = wx.windows.LAST_MDI_CHILD
-wxPreMDIParentFrame = wx.windows.PreMDIParentFrame
-wxMDIParentFrame = wx.windows.MDIParentFrame
-wxPreMDIChildFrame = wx.windows.PreMDIChildFrame
-wxMDIChildFrame = wx.windows.MDIChildFrame
-wxPreMDIClientWindow = wx.windows.PreMDIClientWindow
-wxMDIClientWindow = wx.windows.MDIClientWindow
-wxPyWindow = wx.windows.PyWindow
-wxPyPanel = wx.windows.PyPanel
-wxPRINT_MODE_NONE = wx.windows.PRINT_MODE_NONE
-wxPRINT_MODE_PREVIEW = wx.windows.PRINT_MODE_PREVIEW
-wxPRINT_MODE_FILE = wx.windows.PRINT_MODE_FILE
-wxPRINT_MODE_PRINTER = wx.windows.PRINT_MODE_PRINTER
-wxPrintData = wx.windows.PrintData
-wxPageSetupDialogData = wx.windows.PageSetupDialogData
-wxPageSetupDialog = wx.windows.PageSetupDialog
-wxPrintDialogData = wx.windows.PrintDialogData
-wxPrintDialog = wx.windows.PrintDialog
-wxPRINTER_NO_ERROR = wx.windows.PRINTER_NO_ERROR
-wxPRINTER_CANCELLED = wx.windows.PRINTER_CANCELLED
-wxPRINTER_ERROR = wx.windows.PRINTER_ERROR
-wxPrinter_GetLastError = wx.windows.Printer_GetLastError
-wxPrinter = wx.windows.Printer
-wxPrintout = wx.windows.Printout
-wxPreviewCanvas = wx.windows.PreviewCanvas
-wxPreviewFrame = wx.windows.PreviewFrame
-wxPREVIEW_PRINT = wx.windows.PREVIEW_PRINT
-wxPREVIEW_PREVIOUS = wx.windows.PREVIEW_PREVIOUS
-wxPREVIEW_NEXT = wx.windows.PREVIEW_NEXT
-wxPREVIEW_ZOOM = wx.windows.PREVIEW_ZOOM
-wxPREVIEW_FIRST = wx.windows.PREVIEW_FIRST
-wxPREVIEW_LAST = wx.windows.PREVIEW_LAST
-wxPREVIEW_GOTO = wx.windows.PREVIEW_GOTO
-wxPREVIEW_DEFAULT = wx.windows.PREVIEW_DEFAULT
-wxID_PREVIEW_CLOSE = wx.windows.ID_PREVIEW_CLOSE
-wxID_PREVIEW_NEXT = wx.windows.ID_PREVIEW_NEXT
-wxID_PREVIEW_PREVIOUS = wx.windows.ID_PREVIEW_PREVIOUS
-wxID_PREVIEW_PRINT = wx.windows.ID_PREVIEW_PRINT
-wxID_PREVIEW_ZOOM = wx.windows.ID_PREVIEW_ZOOM
-wxID_PREVIEW_FIRST = wx.windows.ID_PREVIEW_FIRST
-wxID_PREVIEW_LAST = wx.windows.ID_PREVIEW_LAST
-wxID_PREVIEW_GOTO = wx.windows.ID_PREVIEW_GOTO
-wxPreviewControlBar = wx.windows.PreviewControlBar
-wxPrintPreview = wx.windows.PrintPreview
-wxPyPrintPreview = wx.windows.PyPrintPreview
-wxPyPreviewFrame = wx.windows.PyPreviewFrame
-wxPyPreviewControlBar = wx.windows.PyPreviewControlBar
 
 
 d = globals()
