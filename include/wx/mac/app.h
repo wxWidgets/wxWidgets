@@ -159,6 +159,8 @@ public:
     virtual void          MacHandleKeyUpEvent( WXEVENTREF ev ) ;
     virtual void          MacHandleHighLevelEvent( WXEVENTREF ev ) ;
     
+#else
+    virtual void          MacHandleMouseMovedEvent( wxInt32 x , wxInt32 y ,wxUint32 modifiers , long timestamp ) ;
 #endif
 
     void                  MacHandleMenuCommand( wxUint32 command ) ;    
