@@ -60,6 +60,8 @@ wxApp *wxTheApp = NULL;
 
 wxHashTable *wxWidgetHashTable = NULL;
 
+static Window wxGetParentWindow(Window window);
+
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
@@ -650,7 +652,7 @@ WXColormap wxApp::GetMainColormap(WXDisplay* display)
     return (WXColormap) c;
 }
 
-Window wxGetWindowParent(Window window)
+Window wxGetParentWindow(Window window)
 {
     Window parent, root = 0;
     unsigned int noChildren = 0;

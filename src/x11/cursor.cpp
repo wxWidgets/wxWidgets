@@ -22,13 +22,13 @@
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
-#include <X11/cursorfont.h>
-#include <X11/Xutil.h>
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif
 
 #include "wx/x11/private.h"
+#include <X11/cursorfont.h>
+#include <X11/Xutil.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
 IMPLEMENT_DYNAMIC_CLASS(wxXCursor, wxObject)

@@ -163,7 +163,9 @@ int wxEventLoop::Run()
         // anything else to do
         while ( ! Pending() )
         {
+#if wxUSE_TIMER
             wxTimer::NotifyTimers(); // TODO: is this the correct place for it?
+#endif
             if (!m_impl->SendIdleEvent())
             {
 #if 0 // wxUSE_THREADS
