@@ -266,7 +266,7 @@ bool wxRadioBox::Create(
 , const wxString&                   rsName
 )
 {
-    wxCArrayString(asChoices);
+    wxCArrayString chs(asChoices);
 
     return Create(pParent, vId, rsTitle, rPos, rSize, chs.GetCount(),
                   chs.GetStrings(), nMajorDim, lStyle, rVal, rsName);
