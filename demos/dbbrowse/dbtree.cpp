@@ -154,18 +154,20 @@ int  DBTree::OnPopulate()
        // Here is where we find out if the Column is a Primary / Foreign Key
        if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkCol != 0)  // Primary Key
        {
-        Docu = AppendItem(Folder,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName,TreeIc_KEY,TreeIc_KEY,new DBTreeData(Temp1));
+        Temp2.Printf("(%d) - %s",((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkCol,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName);
+        Docu = AppendItem(Folder,Temp2,TreeIc_KEY,TreeIc_KEY,new DBTreeData(Temp1));
         Temp2 = ((ct_BrowserDB->pTableInf+x)->pColInf+y)->PkTableName;
         if (Temp2 == "")
          Temp2 = _("None");
-        Temp2.Printf(_("This Key is used in the following Tables : %s"),Temp2);
+        Temp2.Printf(_("This Primary Key is used in the following Tables : %s"),Temp2);
         Funkt = AppendItem(Docu,Temp2,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData("KEY"));
        }
        else
        {
         if (((ct_BrowserDB->pTableInf+x)->pColInf+y)->FkCol != 0) // Foreign Key
         {
-         Docu = AppendItem(Folder,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName,TreeIc_KEYF,TreeIc_KEYF,new DBTreeData(Temp1));
+         Temp2.Printf("(%d) - %s",((ct_BrowserDB->pTableInf+x)->pColInf+y)->FkCol,((ct_BrowserDB->pTableInf+x)->pColInf+y)->colName);
+         Docu = AppendItem(Folder,Temp2,TreeIc_KEYF,TreeIc_KEYF,new DBTreeData(Temp1));
          Temp2.Printf(_("This Foreign Key comes from the following Table : %s"),((ct_BrowserDB->pTableInf+x)->pColInf+y)->FkTableName);
          Funkt = AppendItem(Docu,Temp2,TreeIc_DocClosed,TreeIc_DocOpen,new DBTreeData("KEYF"));
         }

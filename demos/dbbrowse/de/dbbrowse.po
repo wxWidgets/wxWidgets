@@ -843,12 +843,12 @@ msgstr  "Tablename(%s) mit (%d)Spalten ; Bemerkungen(%s)"
 #: ../DBTree.cpp:151 ../DBTree.cpp:152
 #, c-format
 msgid   "This Foreign Key comes from the following Table : %s"
-msgstr  "diese Fremd-Schlüssel stammt aus der folgende Tabelle : %s"
+msgstr  "Diese Fremd-Schlüssel stammt aus der folgende Tabelle : %s"
 
 #: ../DBTree.cpp:144 ../DBTree.cpp:145
 #, c-format
-msgid   "This Key is used in the following Tables : %s"
-msgstr  "Diese Schlüssel wird in folgende Tabellen Verwendet : %s"
+msgid   "This Primary Key is used in the following Tables : %s"
+msgstr  "Diese Primär-Schlüssel wird in folgende Tabellen Verwendet : %s"
 
 #: ../PgmCtrl.cpp:111 ../PgmCtrl.cpp:114
 #, c-format

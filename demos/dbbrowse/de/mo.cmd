@@ -1,2 +1,2 @@
-msgfmt -o PgmText.mo PgmText.po
-msgfmt -o Help.mo Help.po
+msgfmt -o dbbrowse.mo dbbrowse.po
+msgfmt -o help.mo help.po
