@@ -104,6 +104,9 @@ public:
     virtual bool SetFont(const wxFont& font);
     virtual bool ContainsHWND(WXHWND hWnd) const;
 
+    // we inherit a version returning false from wxStaticBox, override it again
+    virtual bool AcceptsFocus() const { return true; }
+
     void SetLabelFont(const wxFont& WXUNUSED(font)) {}
     void SetButtonFont(const wxFont& font) { SetFont(font); }
 
