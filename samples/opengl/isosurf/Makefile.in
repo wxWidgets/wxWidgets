@@ -37,8 +37,8 @@ ISOSURF_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include -I$(srcdir) $(__DLLFLAG_p) \
 	-I$(srcdir)/../../../samples $(CXXFLAGS)
 ISOSURF_OBJECTS =  \
-	isosurf_isosurf.o \
-	$(__isosurf___win32rc)
+	$(__isosurf___win32rc) \
+	isosurf_isosurf.o
 LIBDIRNAME = $(top_builddir)lib
 WX_VERSION = 2.5.0
 
@@ -92,7 +92,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__isosurf___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__isosurf___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C isosurf$(EXEEXT)
-@COND_PLATFORM_WIN32_1@__isosurf___win32rc = isosurf_cube_rc.o
+@COND_PLATFORM_WIN32_1@__isosurf___win32rc = isosurf_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__isosurf_bundle___depname = isosurf_bundle
 
 ### Targets: ###
@@ -149,11 +149,11 @@ isosurf.app/Contents/PkgInfo: isosurf$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 
 @COND_PLATFORM_MACOSX_1@isosurf_bundle: isosurf.app/Contents/PkgInfo
 
-isosurf_cube_rc.o: $(srcdir)/cube.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples
-
 isosurf_isosurf.o: $(srcdir)/isosurf.cpp
 	$(CXXC) -c -o $@ $(ISOSURF_CXXFLAGS) $<
+
+isosurf_sample_rc.o: $(srcdir)/../../../samples/sample.rc
+	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples
 
 uninstall: 
 
