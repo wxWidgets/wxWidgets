@@ -132,7 +132,7 @@ bool wxFrame::Create(wxWindow *parent,
                      const wxString& name)
 {
     if ( parent )
-        AddChild(this);
+        parent->AddChild(this);
     else
         wxTopLevelWindows.Append(this);
 
@@ -921,4 +921,3 @@ static void wxFrameEventHandler(Widget    wid,
     }
     *continueToDispatch = True;
 }
-
