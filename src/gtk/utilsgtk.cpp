@@ -43,14 +43,26 @@
   #include <sys/systeminfo.h>
 #endif
 
-#ifdef __SOLARIS__
-// somehow missing from sys/wait.h but in the system's docs
-extern "C"
-{
-   pid_t wait4(pid_t pid, int *statusp, int options, struct rusage
-               *rusage);
-}
-#endif
+// many versions of Unices have this function, but it is not defined in system
+// headers - please add your system here if it is the case for your OS.
+// SunOS (and Solaris) and DG-UX are like this.
+#if defined(__SOLARIS__) || defined(__osf__)
+    extern "C"
+    {
+        pid_t wait4(pid_t pid, int *statusp, int options,
+                    struct rusage *rusage);
+    }
+
+    #define wxWait4(pid, stat, flags, rusage) wait4(pid, stat, flags, rusage)
+#elif defined(__sgi) || defined(__HPUX__)
+    // no wait4() at all on these systems
+    // TODO verify whether wait3() really works in this situation
+    #define wxWait4(pid, stat, flags, rusage) wait3(stat, flags, rusage)
+#else
+    // other Unices: assume have wait4(), although it's not standard (but
+    // Linux and FreeBSD do have it)
+    #define wxWait4(pid, stat, flags, rusage) wait4(pid, stat, flags, rusage)
+#endif // wait4()
 
 //------------------------------------------------------------------------
 // misc.
@@ -270,18 +282,8 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
 
     pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
 
-    /* wait4 is not part of any standard, use at own risk
-     * not sure what wait4 does, but wait3 seems to be closest, whats a digit ;-)
-     * --- offer@sgi.com */
-    // VZ: wait4() will be woken up by a signal, not wait3 - so it's quite
-    //     different (also, wait3() waits for any child, wait4() only for this
-    //     one)
-    int status = -1;
-#if !defined(__sgi)
-    wait4(pid, &status, 0, (rusage *) NULL);
-#else
-    wait3(&status, 0, (rusage *) NULL);
-#endif
+    int status = 0;
+    wxWait4(pid, &status, 0, (rusage *) NULL);
 
     close(source);
     gdk_input_remove(proc_data->tag);

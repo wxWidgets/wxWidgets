@@ -72,9 +72,9 @@
 
 // suppress some Visual C++ warnings
 #ifdef __VISUALC__
-#   pragma warning(disable:4244)    // cobversion from double to float
+#   pragma warning(disable:4244)    // conversion from double to float
 #   pragma warning(disable:4100)    // unreferenced formal parameter
-#endif
+#endif // __VISUALC__
 
 // suppress some Salford C++ warnings
 #ifdef __SALFORDC__
@@ -83,7 +83,13 @@
 #   pragma suppress 61              // enum has no name (doesn't suppress!)
 #   pragma suppress 106             // unnamed, unused parameter
 #   pragma suppress 571             // Virtual function hiding
-#endif
+#endif // __SALFORDC__
+
+// Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
+// so definte it ourselves
+#ifdef __DECCXX
+    #define __cplusplus
+#endif // __DECCXX
 
 //////////////////////////////////////////////////////////////////////////////////
 // Currently Only MS-Windows/NT, XView and Motif are supported

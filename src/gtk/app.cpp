@@ -30,13 +30,17 @@
 #endif
 #include "unistd.h"
 
-// add more here if you run into problems
-#if defined(__SUN__) && !defined(__SunOs_5_6) && !defined(__SunOs_5_7) && !defined(__SUNPRO_CC)
-extern "C" 
-{
-void usleep(unsigned long usec); 
-};
-#endif
+// many versions of Unices have this function, but it is not defined in system
+// headers - please add your system here if it is the case for your OS.
+// SunOS < 5.6 (i.e. Solaris < 2.6) and DG-UX are like this.
+#if (defined(__SUN__) && !defined(__SunOs_5_6) && \
+                         !defined(__SunOs_5_7) && !defined(__SUNPRO_CC)) || \
+     defined(__osf__)
+    extern "C" 
+    {
+        void usleep(unsigned long usec); 
+    };
+#endif // Unices without usleep()
 
 #include "glib.h"
 #include "gdk/gdk.h"
