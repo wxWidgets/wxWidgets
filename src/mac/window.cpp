@@ -1189,6 +1189,9 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
 // Does a physical scroll
 void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
+    if( dx == 0 && dy ==0 )
+        return ;
+        
     wxClientDC dc(this) ;
     wxMacPortSetter helper(&dc) ;
 
@@ -1206,8 +1209,27 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
             SectRect( &scrollrect , &r , &scrollrect ) ;
         }
         ScrollRect( &scrollrect , dx , dy , updateRgn ) ;
-        InvalWindowRgn( (WindowRef) MacGetRootWindow() ,  updateRgn ) ;
+        // we also have to scroll the update rgn in this rectangle 
+        // in order not to loose updates
+        WindowRef rootWindow = (WindowRef) MacGetRootWindow() ;
+        RgnHandle formerUpdateRgn = NewRgn() ;
+        RgnHandle scrollRgn = NewRgn() ;
+        RectRgn( scrollRgn , &scrollrect ) ;
+        GetWindowUpdateRgn( rootWindow , formerUpdateRgn ) ;
+        Point pt = {0,0} ;
+        LocalToGlobal( &pt ) ;
+        OffsetRgn( updateRgn , -pt.h , -pt.v ) ;
+        SectRgn( formerUpdateRgn , scrollRgn , formerUpdateRgn ) ;
+        if ( !EmptyRgn( formerUpdateRgn ) )
+        {
+            MacOffsetRgn( formerUpdateRgn , dx , dy ) ;
+            SectRgn( formerUpdateRgn , scrollRgn , formerUpdateRgn ) ;
+            InvalWindowRgn(rootWindow  ,  formerUpdateRgn ) ;
+        }
+        InvalWindowRgn(rootWindow  ,  updateRgn ) ;
         DisposeRgn( updateRgn ) ;
+        DisposeRgn( formerUpdateRgn ) ;
+        DisposeRgn( scrollRgn ) ;
     }
 
     for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
@@ -1223,6 +1245,8 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         child->GetSize( &w, &h );
         child->SetSize( x+dx, y+dy, w, h );
     }
+    
+    Update() ;
 
 }
 
@@ -1523,17 +1547,35 @@ wxString wxWindowMac::MacGetToolTipString( wxPoint &pt )
 
 void wxWindowMac::Update()
 {
-    wxTopLevelWindowMac* win = MacGetTopLevelWindow(  ) ;
-    if ( win )
-    {
-      win->MacUpdate( 0 ) ;
+    wxRegion visRgn = MacGetVisibleRegion( false ) ;
+    int top = 0 , left = 0 ;
+    MacWindowToRootWindow( &left , &top ) ;
+    WindowRef rootWindow = (WindowRef) MacGetRootWindow() ;
+    RgnHandle updateRgn = NewRgn() ;    
+    // getting the update region in macos local coordinates
+    GetWindowUpdateRgn( rootWindow , updateRgn ) ;
+    GrafPtr     port ;
+    ::GetPort( &port ) ;
+    ::SetPort( UMAGetWindowPort( rootWindow ) ) ;
+    Point pt = {0,0} ;
+    LocalToGlobal( &pt ) ;
+    ::GlobalToLocal( &pt ) ;
+    ::SetPort( port ) ;
+    OffsetRgn( updateRgn , -pt.h , -pt.v ) ;
+    // translate to window local coordinates
+    OffsetRgn( updateRgn , -left , -top ) ;
+    SectRgn( updateRgn , (RgnHandle) visRgn.GetWXHRGN() , updateRgn ) ;
+    MacRedraw( updateRgn , 0 , true ) ;
+    // for flushing and validating we need macos-local coordinates again
+    OffsetRgn( updateRgn , left , top ) ;
 #if TARGET_API_MAC_CARBON
-        if ( QDIsPortBuffered( GetWindowPort( (WindowRef) win->MacGetWindowRef() ) ) )
-        {
-                QDFlushPortBuffer( GetWindowPort( (WindowRef) win->MacGetWindowRef() ) , NULL ) ;
-        }
+    if ( QDIsPortBuffered( GetWindowPort( rootWindow ) ) )
+    {
+        QDFlushPortBuffer( GetWindowPort( rootWindow ) , updateRgn ) ;
+    }
 #endif
-      }
+    ValidWindowRgn( rootWindow , updateRgn ) ;
+    DisposeRgn( updateRgn ) ;
 }
 
 wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const
