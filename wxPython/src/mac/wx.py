@@ -344,6 +344,8 @@ wxPRINT_QUALITY_HIGH = wxc.wxPRINT_QUALITY_HIGH
 wxPRINT_QUALITY_MEDIUM = wxc.wxPRINT_QUALITY_MEDIUM
 wxPRINT_QUALITY_LOW = wxc.wxPRINT_QUALITY_LOW
 wxPRINT_QUALITY_DRAFT = wxc.wxPRINT_QUALITY_DRAFT
+wxID_ANY = wxc.wxID_ANY
+wxID_SEPARATOR = wxc.wxID_SEPARATOR
 wxID_OPEN = wxc.wxID_OPEN
 wxID_CLOSE = wxc.wxID_CLOSE
 wxID_NEW = wxc.wxID_NEW
@@ -463,6 +465,11 @@ wxMM_POINTS = wxc.wxMM_POINTS
 wxMM_METRIC = wxc.wxMM_METRIC
 wxTIMER_CONTINUOUS = wxc.wxTIMER_CONTINUOUS
 wxTIMER_ONE_SHOT = wxc.wxTIMER_ONE_SHOT
+wxMOUSE_BTN_ANY = wxc.wxMOUSE_BTN_ANY
+wxMOUSE_BTN_NONE = wxc.wxMOUSE_BTN_NONE
+wxMOUSE_BTN_LEFT = wxc.wxMOUSE_BTN_LEFT
+wxMOUSE_BTN_MIDDLE = wxc.wxMOUSE_BTN_MIDDLE
+wxMOUSE_BTN_RIGHT = wxc.wxMOUSE_BTN_RIGHT
 wxBORDER_DEFAULT = wxc.wxBORDER_DEFAULT
 wxBORDER_NONE = wxc.wxBORDER_NONE
 wxBORDER_STATIC = wxc.wxBORDER_STATIC
@@ -1570,7 +1577,8 @@ _wxCallAfterId = None
 def wxCallAfter(callable, *args, **kw):
     """
     Call the specified function after the current and pending event
-    handlers have been completed.
+    handlers have been completed.  This is also good for making GUI
+    method calls from non-GUI threads.
     """
     app = wxGetApp()
     assert app, 'No wxApp created yet'

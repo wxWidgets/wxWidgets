@@ -1113,6 +1113,12 @@ wxLogStatusFrame = misc2c.wxLogStatusFrame
 
 wxLogSysError = misc2c.wxLogSysError
 
+wxLogTrace = misc2c.wxLogTrace
+
+wxLogTraceMask = misc2c.wxLogTraceMask
+
+wxLogGeneric = misc2c.wxLogGeneric
+
 wxSafeShowMessage = misc2c.wxSafeShowMessage
 
 wxExecute = misc2c.wxExecute
@@ -1312,11 +1318,26 @@ wxLOG_Debug = misc2c.wxLOG_Debug
 wxLOG_Trace = misc2c.wxLOG_Trace
 wxLOG_Progress = misc2c.wxLOG_Progress
 wxLOG_User = misc2c.wxLOG_User
+wxTRACE_MemAlloc = misc2c.wxTRACE_MemAlloc
+wxTRACE_Messages = misc2c.wxTRACE_Messages
+wxTRACE_ResAlloc = misc2c.wxTRACE_ResAlloc
+wxTRACE_RefCount = misc2c.wxTRACE_RefCount
+wxTraceMemAlloc = misc2c.wxTraceMemAlloc
+wxTraceMessages = misc2c.wxTraceMessages
+wxTraceResAlloc = misc2c.wxTraceResAlloc
+wxTraceRefCount = misc2c.wxTraceRefCount
 wxEVT_END_PROCESS = misc2c.wxEVT_END_PROCESS
 wxEXEC_ASYNC = misc2c.wxEXEC_ASYNC
 wxEXEC_SYNC = misc2c.wxEXEC_SYNC
 wxEXEC_NOHIDE = misc2c.wxEXEC_NOHIDE
 wxEXEC_MAKE_GROUP_LEADER = misc2c.wxEXEC_MAKE_GROUP_LEADER
+wxJOYSTICK1 = misc2c.wxJOYSTICK1
+wxJOYSTICK2 = misc2c.wxJOYSTICK2
+wxJOY_BUTTON_ANY = misc2c.wxJOY_BUTTON_ANY
+wxJOY_BUTTON1 = misc2c.wxJOY_BUTTON1
+wxJOY_BUTTON2 = misc2c.wxJOY_BUTTON2
+wxJOY_BUTTON3 = misc2c.wxJOY_BUTTON3
+wxJOY_BUTTON4 = misc2c.wxJOY_BUTTON4
 wxMAILCAP_STANDARD = misc2c.wxMAILCAP_STANDARD
 wxMAILCAP_NETSCAPE = misc2c.wxMAILCAP_NETSCAPE
 wxMAILCAP_KDE = misc2c.wxMAILCAP_KDE

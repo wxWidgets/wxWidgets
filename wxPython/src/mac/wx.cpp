@@ -2004,6 +2004,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxPRINT_QUALITY_MEDIUM", PyInt_FromLong((long) wxPRINT_QUALITY_MEDIUM));
 	 PyDict_SetItemString(d,"wxPRINT_QUALITY_LOW", PyInt_FromLong((long) wxPRINT_QUALITY_LOW));
 	 PyDict_SetItemString(d,"wxPRINT_QUALITY_DRAFT", PyInt_FromLong((long) wxPRINT_QUALITY_DRAFT));
+	 PyDict_SetItemString(d,"wxID_ANY", PyInt_FromLong((long) wxID_ANY));
+	 PyDict_SetItemString(d,"wxID_SEPARATOR", PyInt_FromLong((long) wxID_SEPARATOR));
 	 PyDict_SetItemString(d,"wxID_OPEN", PyInt_FromLong((long) wxID_OPEN));
 	 PyDict_SetItemString(d,"wxID_CLOSE", PyInt_FromLong((long) wxID_CLOSE));
 	 PyDict_SetItemString(d,"wxID_NEW", PyInt_FromLong((long) wxID_NEW));
@@ -2123,6 +2125,11 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxMM_METRIC", PyInt_FromLong((long) wxMM_METRIC));
 	 PyDict_SetItemString(d,"wxTIMER_CONTINUOUS", PyInt_FromLong((long) wxTIMER_CONTINUOUS));
 	 PyDict_SetItemString(d,"wxTIMER_ONE_SHOT", PyInt_FromLong((long) wxTIMER_ONE_SHOT));
+	 PyDict_SetItemString(d,"wxMOUSE_BTN_ANY", PyInt_FromLong((long) wxMOUSE_BTN_ANY));
+	 PyDict_SetItemString(d,"wxMOUSE_BTN_NONE", PyInt_FromLong((long) wxMOUSE_BTN_NONE));
+	 PyDict_SetItemString(d,"wxMOUSE_BTN_LEFT", PyInt_FromLong((long) wxMOUSE_BTN_LEFT));
+	 PyDict_SetItemString(d,"wxMOUSE_BTN_MIDDLE", PyInt_FromLong((long) wxMOUSE_BTN_MIDDLE));
+	 PyDict_SetItemString(d,"wxMOUSE_BTN_RIGHT", PyInt_FromLong((long) wxMOUSE_BTN_RIGHT));
 	 PyDict_SetItemString(d,"wxBORDER_DEFAULT", PyInt_FromLong((long) wxBORDER_DEFAULT));
 	 PyDict_SetItemString(d,"wxBORDER_NONE", PyInt_FromLong((long) wxBORDER_NONE));
 	 PyDict_SetItemString(d,"wxBORDER_STATIC", PyInt_FromLong((long) wxBORDER_STATIC));

@@ -136,8 +136,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
 
 
-    wxBitmap* wxBitmapFromBits(char* bits, int width, int height, int depth = 1 ) {
-        return new wxBitmap(bits, width, height, depth);
+    wxBitmap* wxBitmapFromBits(PyObject* bits, int width, int height, int depth = 1 ) {
+        char* buf;
+        int   length;
+        PyString_AsStringAndSize(bits, &buf, &length);
+        return new wxBitmap(buf, width, height, depth);
     }
 
 
@@ -368,16 +371,20 @@ static PyObject *_wrap_wxBitmapFromIcon(PyObject *self, PyObject *args, PyObject
 static PyObject *_wrap_wxBitmapFromBits(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxBitmap * _result;
-    char * _arg0;
+    PyObject * _arg0;
     int  _arg1;
     int  _arg2;
     int  _arg3 = (int ) 1;
+    PyObject * _obj0 = 0;
     char *_kwnames[] = { "bits","width","height","depth", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"sii|i:wxBitmapFromBits",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii|i:wxBitmapFromBits",_kwnames,&_obj0,&_arg1,&_arg2,&_arg3)) 
         return NULL;
+{
+  _arg0 = _obj0;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (wxBitmap *)wxBitmapFromBits(_arg0,_arg1,_arg2,_arg3);
