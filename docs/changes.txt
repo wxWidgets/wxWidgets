@@ -33,6 +33,7 @@ All GUI ports:
 - implemented alignment for wxGrid bool editor and renderer
 - support wxListCtrl columns alignment for all platforms and not just MSW
 - added wxToolBar Add/InsertTool(tool) (Janusz Piwowarski)
+- WXR resources can now be used in Unicode builds
 
 - Changed to type-safe wxSizerItemList for wxSizer child items.
 
@@ -82,6 +83,13 @@ wxMSW:
 - fixes for compilation with OpenWatcom compiler
 - fixed wxStaticText best size calculation (was wrong by '&' width)
 - fixed calling wxFrame::Maximize(FALSE) before the window is shown
+
+wxMotif
+
+- made wxFileDialog behaviour with complex wildcards more sensible (it still
+  does not support all the features other ports do); refer to wxFileDialog
+  documentation for a detailed explanation
+- implemented wxWakeUpIdle
 
 OLD CHANGES
 ===========
