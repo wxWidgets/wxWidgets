@@ -47,8 +47,7 @@
     #include "wx/button.h"
     #include "wx/msgdlg.h"
     #include "wx/settings.h"
-
-    #include <stdio.h>
+    #include "wx/statbox.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN
