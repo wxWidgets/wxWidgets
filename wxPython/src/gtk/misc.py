@@ -658,8 +658,6 @@ wxGetCurrentId = miscc.wxGetCurrentId
 
 wxBell = miscc.wxBell
 
-wxDisplaySize = miscc.wxDisplaySize
-
 wxEndBusyCursor = miscc.wxEndBusyCursor
 
 wxGetElapsedTime = miscc.wxGetElapsedTime
