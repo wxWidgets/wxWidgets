@@ -532,10 +532,13 @@ ALL_DIST: distclean
 # but is not used when building wxBase distribution
 ALL_GUI_DIST: ALL_DIST
 	cp $(WXDIR)/wx$(TOOLKIT).spec $(DISTDIR)
+	cp $(WXDIR)/wxBase.spec $(DISTDIR)
 	cp $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt
 	cp $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	cp $(DOCDIR)/$(TOOLKITDIR)/readme.txt $(DISTDIR)/README.txt
 	cp $(DOCDIR)/$(TOOLKITDIR)/todo.txt $(DISTDIR)/TODO.txt
+	cp $(DOCDIR)/base/todo.txt $(DISTDIR)/wxBASE.todo
+	cp $(DOCDIR)/base/install.txt $(DISTDIR)/wxBASE.install
 	mkdir $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx
 	mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)
@@ -619,7 +622,6 @@ BASE_DIST: ALL_DIST
 	done
 
 GTK_DIST: ALL_GUI_DIST
-	cp $(WXDIR)/wxGTK.spec $(DISTDIR)
 	cp $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
 	cp $(INCDIR)/wx/gtk/*.xpm $(DISTDIR)/include/wx/gtk
 	cp $(GTKDIR)/*.cpp $(DISTDIR)/src/gtk
