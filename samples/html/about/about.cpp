@@ -156,7 +156,11 @@
    void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
    {
         wxHtmlWindow *html;
+#if __WXMSW__
+        wxDialog dlg(this, -1, "About", wxDefaultPosition, wxSize(400, 250), wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE);
+#else
         wxDialog dlg(this, -1, "About", wxDefaultPosition, wxSize(400, 230), wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE);
+#endif
 
         html = new wxHtmlWindow(&dlg, -1, wxPoint(10, 10), wxSize(380, 160), "htmlWindow", FALSE);
         html -> SetBorders(0);
