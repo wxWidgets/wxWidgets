@@ -61,7 +61,7 @@ wxStatusBarBase::~wxStatusBarBase()
 {
     FreeWidths();
     FreeStacks();
-    InitStyles();
+    FreeStyles();
 
     // notify the frame that it doesn't have a status bar any longer to avoid
     // dangling pointers
@@ -285,12 +285,12 @@ void wxStatusBarBase::InitStacks()
 
 void wxStatusBarBase::FreeStacks()
 {
-    if(!m_statusTextStacks) return;
-    size_t i;
+    if ( !m_statusTextStacks )
+        return;
 
-    for(i = 0; i < (size_t)m_nFields; ++i)
+    for ( size_t i = 0; i < (size_t)m_nFields; ++i )
     {
-        if(m_statusTextStacks[i])
+        if ( m_statusTextStacks[i] )
         {
             wxListString& t = *m_statusTextStacks[i];
             WX_CLEAR_LIST(wxListString, t);
