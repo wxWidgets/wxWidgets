@@ -23,13 +23,22 @@
 
 #ifdef __VISUALC__
 
+#if _WIN32_WCE >= 400
+    #pragma comment(lib,"commdlg.lib")
+#endif
+
 #if defined(WCE_PLATFORM_STANDARDSDK)
     // DoDragDrop:
     #pragma comment(lib,"olece400.lib")
 #elif defined(WIN32_PLATFORM_PSPC)
+    // PocketPC build:
     // DoDragDrop:
     #pragma comment(lib,"ceshell.lib")
 
+    #pragma comment(lib,"aygshell.lib")
+#elif defined(WIN32_PLATFORM_WFSP)
+    // Smartphone build:
+    #pragma comment(lib,"ceshell.lib")
     #pragma comment(lib,"aygshell.lib")
 #else
     #error "Unknown SDK, please fill-in missing pieces"
