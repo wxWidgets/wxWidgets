@@ -594,10 +594,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxPanel *panel = new wxPanel(m_notebook);
     m_listbox = new wxListBox( panel, ID_LISTBOX,
                                wxPoint(10,10), wxSize(120,70),
-                               5, choices, wxLB_ALWAYS_SB );
+                               2, choices, wxLB_ALWAYS_SB | wxLB_EXTENDED );
     m_listboxSorted = new wxListBox( panel, ID_LISTBOX_SORTED,
                                      wxPoint(10,90), wxSize(120,70),
-                                     5, choices, wxLB_SORT );
+                                     5, choices, wxLB_SORT | wxLB_MULTIPLE);
 
     SetControlClientData("listbox", m_listbox);
     SetControlClientData("listbox", m_listboxSorted);
@@ -1031,7 +1031,7 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
             }
         case ID_LISTBOX_TOGGLE:
             {
-                m_checkbox->SetValue( TRUE );
+                m_checkbox->SetValue( !m_checkbox->GetValue() );
                 break;
             }
     }
