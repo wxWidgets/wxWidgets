@@ -1,0 +1,180 @@
+% -----------------------------------------------------------------------------
+% wxZlibInputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxZlibInputStream}}
+
+\wxheading{Derived from}
+
+\helpref{wxFilterInputStream}{wxfilterinputstream}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreamBuffer},\helpref{wxInputStream}{wxinputstream}
+
+\wxheading{Short description}
+This stream uncompresses all data read from it, it uses the ``filtered''
+stream to get new compressed data.
+
+% -----------------------------------------------------------------------------
+% wxZlibOutputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxZlibOutputStream}}
+
+\wxheading{Derived from}
+
+\helpref{wxFilterOutputStream}{wxfilteroutputstream}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreamBuffer},\helpref{wxOutputStream}{woutputstream}
+
+\wxheading{Short description}
+This stream compresses all data written to it and passed the compressed data
+to the ``filtered'' stream.
+
+% -----------------------------------------------------------------------------
+% wxFileInputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxFileInputStream}}\label{wxfileinputstream}
+
+\wxheading{Derived from}
+
+\helpref{wxInputStream}{wxinputstream}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreamBuffer}
+
+% ----------
+% Members
+% ----------
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileInputStream::wxFileInputStream}
+
+\func{}{wxFileInputStream}{\param{const wxString&}{ ifileName}}
+
+Opens the specified file using its \it{ifilename} name in read-only mode.
+
+\func{}{wxFileInputStream}{\param{wxFile&}{ file}}
+
+Initializes a file stream in read-only mode using the file I/O object \it{file}.
+
+\func{}{wxFileInputStream}{\param{int}{ fd}};
+
+Initializes a file stream in read-only mode using the specified file descriptor.
+
+\membersection{wxFileInputStream::\destruct{wxFileInputStream}}
+\func{}{\destruct{wxFileInputStream}{\void}
+
+Destructor.
+
+\membersection{wxFileInputStream::Ok}
+\constfunc{bool}{Ok}{\void}
+
+Returns TRUE if the stream is initialized and ready.
+
+% -----------------------------------------------------------------------------
+% wxFileOutputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxFileOutputStream}}\label{wxfileoutputstream}
+
+\wxheading{Derived from}
+
+\helpref{wxOutputStream}{wxoutputstream}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreamBuffer}
+
+% ----------
+% Members
+% ----------
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileOutputStream::wxFileOutputStream}
+
+\func{}{wxFileOutputStream}{\param{const wxString&}{ ofileName}}
+
+Creates a new file with \it{ofilename} name and initializes the stream in
+write-only mode. 
+
+\func{}{wxFileOutputStream}{\param{wxFile&}{ file}}
+Initializes a file stream in write-only mode using the file I/O object \it{file}.
+
+\func{}{wxFileOutputStream}{\param{int}{ fd}}
+Initializes a file stream in write-only mode using the file descriptor \it{fd}.
+
+\membersection{wxFileOutputStream::\destruct{wxFileOutputStream}}
+\func{}{\destruct{wxFileOutputStream}{\void}
+
+Destructor.
+
+\membersection{wxFileOutputStream::Ok}
+\constfunc{bool}{Ok}{\void}
+
+Returns TRUE if the stream is initialized and ready.
+
+% -----------------------------------------------------------------------------
+% wxFileStream
+% -----------------------------------------------------------------------------
+\section{\class{wxFileStream}}
+
+\wxheading{Derived from}
+
+\helpref{wxFileOutputStream}{wxFileOutputStream}, \helpref{wxFileInputStream}{wxfileinputstream}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreamBuffer}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileStream::wxFileStream}
+
+\func{}{wxFileStream}{\param{const wxString&}{ iofileName}}
+
+Initializes a new file stream in read-write mode using the specified
+\it{iofilename} name.
+
+% -----------------------------------------------------------------------------
+% wxSocketInputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxSocketInputStream}}
+
+\wxheading{Derived from}
+
+\helpref{wxInputStream}{wxinputStream}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxSocketBase}{wxsocketbase}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxSocketInputStream::wxSocketInputStream}
+\func{}{wxSocketInputStream}{\param{wxSocketBase&}{ s}}
+
+Initializes a new read-only socket stream using the specified initialized
+socket connection.
+
+% -----------------------------------------------------------------------------
+% wxSocketOutputStream
+% -----------------------------------------------------------------------------
+\section{\class{wxSocketInputStream}}
+
+\wxheading{Derived from}
+
+\helpref{wxOutputStream}{wxoutputStream}
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer}{wxstreamBuffer}, \helpref{wxSocketBase}{wxsocketbase}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxSocketOutputStream::wxSocketOutputStream}
+\func{}{wxSocketInputStream}{\param{wxSocketBase&}{ s}}
+
+Initializes a new write-only socket stream using the specified initialized
+socket connection.
