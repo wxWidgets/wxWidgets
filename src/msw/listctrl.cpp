@@ -465,7 +465,7 @@ wxTextCtrl* wxListCtrl::GetEditControl(void) const
 bool wxListCtrl::GetItem(wxListItem& info) const
 {
   LV_ITEM lvItem;
-#ifdef __MINGW32__
+#ifdef __GNUWIN32__
   memset(&lvItem, 0, sizeof(lvItem));
 #else
   ZeroMemory(&lvItem, sizeof(lvItem)); // must set all fields to 0

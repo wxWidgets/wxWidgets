@@ -47,7 +47,11 @@ public:
     wxToolInfo(wxWindow *win)
     {
         // initialize all members
+#ifdef __GNUWIN32__
+        memset(this, 0, sizeof(TOOLINFO));
+#else
         ::ZeroMemory(this, sizeof(TOOLINFO));
+#endif
 
         cbSize = sizeof(TOOLINFO);
         uFlags = TTF_IDISHWND;
