@@ -1555,7 +1555,7 @@ void WXDLLEXPORT wxSplitPath(const char *pszFileName,
   if ( nPosDot > nPosUnix ) {
     // the file name looks like "path/name.ext"
     if ( pstrName )
-      *pstrName = wxString(pszFileName + nPosUnix + 1, nPosDot - nPosUnix);
+      *pstrName = wxString(pszFileName + nPosUnix + 1, nPosDot - nPosUnix - 1);
     if ( pstrExt )
       *pstrExt = wxString(pszFileName + nPosDot + 1);
   }
