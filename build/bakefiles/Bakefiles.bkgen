@@ -23,7 +23,7 @@
                 to cbuilderx are addressed. In particular, the project must
                 be placed into build/msw(?) directory and store object files
                 in its subdirectory and it must copy setup.h as others do.
-    cbx_unix  - Doesn't intergrate well and won't be used by most Unix people.
+    cbx_unix  - Doesn't integrate well and won't be used by most Unix people.
     -->
     
     <disable-formats>dmars,dmars_smake,cbx_unix,cbuilderx,msevc4prj</disable-formats>
