@@ -666,20 +666,26 @@ void wxTopLevelWindowMac::MacUpdate( long timestamp)
 {
     wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) m_macWindow) ) ;
 
+    RgnHandle       visRgn = NewRgn() ;
+    GetPortVisibleRegion( GetWindowPort( (WindowRef)m_macWindow ), visRgn );
     BeginUpdate( (WindowRef)m_macWindow ) ;
 
     RgnHandle       updateRgn = NewRgn();
     RgnHandle       diffRgn = NewRgn() ;
+
     if ( updateRgn && diffRgn )
     {
 #if 1
         // macos internal control redraws clean up areas we'd like to redraw ourselves
         // therefore we pick the boundary rect and make sure we can redraw it
+        // this has to be intersected by the visRgn in order to avoid drawing over its own
+        // boundaries
         RgnHandle trueUpdateRgn = NewRgn() ;
         Rect trueUpdateRgnBoundary ;
         GetPortVisibleRegion( GetWindowPort( (WindowRef)m_macWindow ), trueUpdateRgn );
         GetRegionBounds( trueUpdateRgn , &trueUpdateRgnBoundary ) ;
-        RectRgn( (RgnHandle) updateRgn , &trueUpdateRgnBoundary ) ;
+        RectRgn( updateRgn , &trueUpdateRgnBoundary ) ;
+        SectRgn( updateRgn , visRgn , updateRgn ) ;
         if ( trueUpdateRgn )
             DisposeRgn( trueUpdateRgn ) ;
         SetPortVisibleRegion(  GetWindowPort( (WindowRef)m_macWindow ), updateRgn ) ;
@@ -696,6 +702,9 @@ void wxTopLevelWindowMac::MacUpdate( long timestamp)
         DisposeRgn( updateRgn );
     if ( diffRgn )
         DisposeRgn( diffRgn );
+    if ( visRgn )
+        DisposeRgn( visRgn ) ;
+        
     EndUpdate( (WindowRef)m_macWindow ) ;
     SetEmptyRgn( (RgnHandle) m_macNoEraseUpdateRgn ) ;
     m_macNeedsErasing = false ;
@@ -864,7 +873,7 @@ void wxTopLevelWindowMac::MacActivate( long timestamp , bool inIsActivating )
     // Early versions of MacOS X don't refresh backgrounds properly,
     // so refresh the whole window on activation and deactivation.
     long osVersion = UMAGetSystemVersion();
-    if (osVersion >= 0x1000 && osVersion < 0x1020)
+    if (osVersion >= 0x1000 && osVersion < 0x1020 )
     {
         Refresh(TRUE);
     }
@@ -897,9 +906,7 @@ bool wxTopLevelWindowMac::Show(bool show)
 
     if (show)
     {
-      // this is leading to incorrect window layering in some situations
-      // ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowShowTransitionAction,nil);
-      ::ShowWindow( (WindowRef)m_macWindow ) ;
+      ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowShowTransitionAction,nil);
       ::SelectWindow( (WindowRef)m_macWindow ) ;
       // no need to generate events here, they will get them triggered by macos
       // actually they should be , but apparently they are not
@@ -910,9 +917,7 @@ bool wxTopLevelWindowMac::Show(bool show)
     }
     else
     {
-      // this is leading to incorrect window layering in some situations
-      // ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowHideTransitionAction,nil);
-      ::HideWindow( (WindowRef)m_macWindow ) ;
+      ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowHideTransitionAction,nil);
     }
 
     if ( !show )
@@ -1108,14 +1113,13 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
 #endif
 }
 
-
-
 // ---------------------------------------------------------------------------
 // Support functions for shaped windows, based on Apple's CustomWindow sample at
 // http://developer.apple.com/samplecode/Sample_Code/Human_Interface_Toolbox/Mac_OS_High_Level_Toolbox/CustomWindow.htm
 // ---------------------------------------------------------------------------
 
 #if TARGET_CARBON
+
 static void wxShapedMacWindowGetPos(WindowRef window, Rect* inRect)
 {
     GetWindowPortBounds(window, inRect);
@@ -1240,5 +1244,7 @@ static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 
 
     return 0;
 }
+
 #endif
 // ---------------------------------------------------------------------------
+
