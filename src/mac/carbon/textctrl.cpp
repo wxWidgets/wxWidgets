@@ -360,8 +360,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( !wxTextCtrlBase::Create(parent, id, pos, size, style & ~(wxHSCROLL|wxVSCROLL), validator, name) )
         return FALSE;
 
-    wxSize mySize = size ;
-
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;    
 
     if ( m_windowStyle & wxTE_MULTILINE )
