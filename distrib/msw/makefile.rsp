@@ -16,6 +16,7 @@ samples/dragimag/Makefile.in
 samples/drawing/Makefile.in
 samples/dynamic/Makefile.in
 samples/exec/Makefile.in
+samples/event/Makefile.in
 samples/grid/Makefile.in
 samples/newgrid/Makefile.in
 samples/help/Makefile.in

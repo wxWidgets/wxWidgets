@@ -483,17 +483,17 @@ samples/validate/*.xpm
 samples/validate/*.ico
 samples/validate/*.bmp
 
-samples/events/*.cpp
-samples/events/*.h
-samples/events/*.def
-samples/events/*.rc
-samples/events/*.inf
-samples/events/*.txt
-samples/events/makefile*
-samples/events/*.xbm
-samples/events/*.xpm
-samples/events/*.ico
-samples/events/*.bmp
+samples/event/*.cpp
+samples/event/*.h
+samples/event/*.def
+samples/event/*.rc
+samples/event/*.inf
+samples/event/*.txt
+samples/event/makefile*
+samples/event/*.xbm
+samples/event/*.xpm
+samples/event/*.ico
+samples/event/*.bmp
 
 samples/treectrl/*.cpp
 samples/treectrl/*.h
