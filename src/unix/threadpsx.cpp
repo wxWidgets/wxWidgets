@@ -988,8 +988,8 @@ int wxThread::GetCPUCount()
         wxString s;
         if ( file.ReadAll(&s) )
         {
-            // (ab)use Replace() to find the number of "processor" strings
-            size_t count = s.Replace(_T("processor"), _T(""));
+            // (ab)use Replace() to find the number of "processor: num" strings
+            size_t count = s.Replace(_T("processor\t:"), _T(""));
             if ( count > 0 )
             {
                 return count;
