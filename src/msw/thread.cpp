@@ -354,8 +354,7 @@ void wxSemaphore::Post()
 class wxConditionInternal
 {
 public:
-    wxConditionInternal( wxMutex *mutex );
-    ~wxConditionInternal();
+    wxConditionInternal(wxMutex& mutex);
 
     void Wait();
 
@@ -369,20 +368,16 @@ private:
     int m_numWaiters;
     wxMutex m_mutexNumWaiters;
 
-    wxMutex *m_mutex;
+    wxMutex& m_mutex;
 
     wxSemaphore m_semaphore;
 };
 
-wxConditionInternal::wxConditionInternal( wxMutex *mutex )
+wxConditionInternal::wxConditionInternal(wxMutex& mutex)
+                   : m_mutex(mutex)
 {
-    m_mutex = mutex;
 
     m_numWaiters = 0;
-}
-
-wxConditionInternal::~wxConditionInternal()
-{
 }
 
 void wxConditionInternal::Wait()
@@ -392,7 +387,7 @@ void wxConditionInternal::Wait()
     m_numWaiters++;
     m_mutexNumWaiters.Unlock();
 
-    m_mutex->Unlock();
+    m_mutex.Unlock();
 
     // a potential race condition can occur here
     //
@@ -407,7 +402,7 @@ void wxConditionInternal::Wait()
     // wait ( if necessary ) and decrement semaphore
     m_semaphore.Wait();
 
-    m_mutex->Lock();
+    m_mutex.Lock();
 }
 
 bool wxConditionInternal::Wait( unsigned long timeout_millis )
@@ -416,7 +411,7 @@ bool wxConditionInternal::Wait( unsigned long timeout_millis )
     m_numWaiters++;
     m_mutexNumWaiters.Unlock();
 
-    m_mutex->Unlock();
+    m_mutex.Unlock();
 
     // a race condition can occur at this point in the code
     //
@@ -452,7 +447,7 @@ bool wxConditionInternal::Wait( unsigned long timeout_millis )
         m_mutexNumWaiters.Unlock();
     }
 
-    m_mutex->Lock();
+    m_mutex.Lock();
 
     return success;
 }
@@ -489,18 +484,9 @@ void wxConditionInternal::Broadcast()
 // wxCondition implementation
 // ----------------------------------------------------------------------------
 
-wxCondition::wxCondition( wxMutex *mutex )
+wxCondition::wxCondition(wxMutex& mutex)
 {
-    if ( !mutex )
-    {
-        wxFAIL_MSG( _T("NULL mutex in wxCondition ctor") );
-
-        m_internal = NULL;
-    }
-    else
-    {
-        m_internal = new wxConditionInternal( mutex );
-    }
+    m_internal = new wxConditionInternal( mutex );
 }
 
 wxCondition::~wxCondition()
@@ -510,25 +496,22 @@ wxCondition::~wxCondition()
 
 void wxCondition::Wait()
 {
-    if ( m_internal )
-        m_internal->Wait();
+    m_internal->Wait();
 }
 
 bool wxCondition::Wait( unsigned long timeout_millis )
 {
-    return m_internal ? m_internal->Wait(timeout_millis) : FALSE;
+    return m_internal->Wait(timeout_millis);
 }
 
 void wxCondition::Signal()
 {
-    if ( m_internal )
-        m_internal->Signal();
+    m_internal->Signal();
 }
 
 void wxCondition::Broadcast()
 {
-    if ( m_internal )
-        m_internal->Broadcast();
+    m_internal->Broadcast();
 }
 
 // ----------------------------------------------------------------------------

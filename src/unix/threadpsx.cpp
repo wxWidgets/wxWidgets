@@ -319,7 +319,7 @@ wxMutexError wxMutex::Unlock()
 class wxConditionInternal
 {
 public:
-    wxConditionInternal( wxMutex *mutex );
+    wxConditionInternal(wxMutex& mutex);
     ~wxConditionInternal();
 
     void Wait();
@@ -331,14 +331,16 @@ public:
     void Broadcast();
 
 private:
+    // get the POSIX mutex associated with us
+    pthread_mutex_t *GetMutex() const { return &m_mutex.m_internal->m_mutex; }
 
-    wxMutex *m_mutex;
+    wxMutex& m_mutex;
     pthread_cond_t m_cond;
 };
 
-wxConditionInternal::wxConditionInternal( wxMutex *mutex )
+wxConditionInternal::wxConditionInternal(wxMutex& mutex)
+                   : m_mutex(mutex)
 {
-    m_mutex = mutex;
     if ( pthread_cond_init( &m_cond, NULL ) != 0 )
     {
         wxLogDebug(_T("pthread_cond_init() failed"));
@@ -355,7 +357,7 @@ wxConditionInternal::~wxConditionInternal()
 
 void wxConditionInternal::Wait()
 {
-    if ( pthread_cond_wait( &m_cond, &(m_mutex->m_internal->m_mutex) ) != 0 )
+    if ( pthread_cond_wait( &m_cond, GetMutex() ) != 0 )
     {
         wxLogDebug(_T("pthread_cond_wait() failed"));
     }
@@ -363,13 +365,14 @@ void wxConditionInternal::Wait()
 
 bool wxConditionInternal::Wait( const timespec *ts )
 {
-    int result = pthread_cond_timedwait( &m_cond,
-                                         &(m_mutex->m_internal->m_mutex),
-                                         ts );
+    int result = pthread_cond_timedwait( &m_cond, GetMutex(), ts );
     if ( result == ETIMEDOUT )
         return FALSE;
 
-    wxASSERT_MSG( result == 0, _T("pthread_cond_timedwait() failed") );
+    if ( result != 0 )
+    {
+        wxLogDebug(_T("pthread_cond_timedwait() failed"));
+    }
 
     return TRUE;
 }
@@ -397,18 +400,9 @@ void wxConditionInternal::Broadcast()
 // wxCondition
 // ---------------------------------------------------------------------------
 
-wxCondition::wxCondition( wxMutex *mutex )
+wxCondition::wxCondition(wxMutex& mutex)
 {
-    if ( !mutex )
-    {
-        wxFAIL_MSG( _T("NULL mutex in wxCondition ctor") );
-
-        m_internal = NULL;
-    }
-    else
-    {
-        m_internal = new wxConditionInternal( mutex );
-    }
+    m_internal = new wxConditionInternal( mutex );
 }
 
 wxCondition::~wxCondition()
@@ -418,14 +412,11 @@ wxCondition::~wxCondition()
 
 void wxCondition::Wait()
 {
-    if ( m_internal )
-        m_internal->Wait();
+    m_internal->Wait();
 }
 
 bool wxCondition::Wait( unsigned long timeout_millis )
 {
-    wxCHECK_MSG( m_internal, FALSE, _T("can't wait on uninitalized condition") );
-
     wxLongLong curtime = wxGetLocalTimeMillis();
     curtime += timeout_millis;
     wxLongLong temp = curtime / 1000;
@@ -444,14 +435,12 @@ bool wxCondition::Wait( unsigned long timeout_millis )
 
 void wxCondition::Signal()
 {
-    if ( m_internal )
-        m_internal->Signal();
+    m_internal->Signal();
 }
 
 void wxCondition::Broadcast()
 {
-    if ( m_internal )
-        m_internal->Broadcast();
+    m_internal->Broadcast();
 }
 
 // ===========================================================================
@@ -483,7 +472,7 @@ private:
 };
 
 wxSemaphoreInternal::wxSemaphoreInternal( int initialcount, int maxcount )
-                   : m_cond(&m_mutex)
+                   : m_cond(m_mutex)
 {
 
     if ( (initialcount < 0) || ((maxcount > 0) && (initialcount > maxcount)) )
@@ -602,7 +591,7 @@ public:
         m_signaled = FALSE;
 
         m_mutex = new wxMutex();
-        m_cond = new wxCondition( m_mutex );
+        m_cond = new wxCondition( *m_mutex );
     }
 
     // increment the reference count
@@ -1711,7 +1700,7 @@ bool wxThreadModule::OnInit()
 #endif // wxUSE_GUI
 
     gs_mutexDeleteThread = new wxMutex();
-    gs_condAllDeleted = new wxCondition( gs_mutexDeleteThread );
+    gs_condAllDeleted = new wxCondition( *gs_mutexDeleteThread );
 
     return TRUE;
 }

@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_FILENAME
+    #define TEST_THREADS
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -4627,7 +4627,7 @@ static void TestTimeCompatibility()
 
 static size_t gs_counter = (size_t)-1;
 static wxCriticalSection gs_critsect;
-static wxCondition gs_cond;
+static wxSemaphore gs_cond;
 
 class MyJoinableThread : public wxThread
 {
@@ -4715,7 +4715,7 @@ void MyDetachedThread::OnExit()
 
     wxCriticalSectionLocker lock(gs_critsect);
     if ( !--gs_counter && !m_cancelled )
-        gs_cond.Signal();
+        gs_cond.Post();
 }
 
 static void TestDetachedThreads()
@@ -4854,8 +4854,9 @@ static void TestThreadDelete()
 class MyWaitingThread : public wxThread
 {
 public:
-    MyWaitingThread(wxCondition *condition)
+    MyWaitingThread( wxMutex *mutex, wxCondition *condition )
     {
+        m_mutex = mutex;
         m_condition = condition;
 
         Create();
@@ -4866,12 +4867,14 @@ public:
         printf("Thread %lu has started running.\n", GetId());
         fflush(stdout);
 
-        gs_cond.Signal();
+        gs_cond.Post();
 
         printf("Thread %lu starts to wait...\n", GetId());
         fflush(stdout);
 
+        m_mutex->Lock();
         m_condition->Wait();
+        m_mutex->Unlock();
 
         printf("Thread %lu finished to wait, exiting.\n", GetId());
         fflush(stdout);
@@ -4880,17 +4883,19 @@ public:
     }
 
 private:
+    wxMutex *m_mutex;
     wxCondition *m_condition;
 };
 
 static void TestThreadConditions()
 {
-    wxCondition condition;
+    wxMutex mutex;
+    wxCondition condition(mutex);
 
     // otherwise its difficult to understand which log messages pertain to
     // which condition
-    wxLogTrace("thread", "Local condition var is %08x, gs_cond = %08x",
-               condition.GetId(), gs_cond.GetId());
+    //wxLogTrace("thread", "Local condition var is %08x, gs_cond = %08x",
+    //           condition.GetId(), gs_cond.GetId());
 
     // create and launch threads
     MyWaitingThread *threads[10];
@@ -4898,7 +4903,7 @@ static void TestThreadConditions()
     size_t n;
     for ( n = 0; n < WXSIZEOF(threads); n++ )
     {
-        threads[n] = new MyWaitingThread(&condition);
+        threads[n] = new MyWaitingThread( &mutex, &condition );
     }
 
     for ( n = 0; n < WXSIZEOF(threads); n++ )
@@ -4942,6 +4947,102 @@ static void TestThreadConditions()
 
     // give them time to terminate (dirty!)
     wxThread::Sleep(500);
+}
+
+#include "wx/utils.h"
+
+class MyExecThread : public wxThread
+{
+public:
+    MyExecThread(const wxString& command) : wxThread(wxTHREAD_JOINABLE),
+                                            m_command(command)
+    {
+        Create();
+    }
+
+    virtual ExitCode Entry()
+    {
+        return (ExitCode)wxExecute(m_command, wxEXEC_SYNC);
+    }
+
+private:
+    wxString m_command;
+};
+
+static void TestThreadExec()
+{
+    wxPuts(_T("*** Testing wxExecute interaction with threads ***\n"));
+
+    MyExecThread thread(_T("true"));
+    thread.Run();
+
+    wxPrintf(_T("Main program exit code: %ld.\n"),
+             wxExecute(_T("false"), wxEXEC_SYNC));
+
+    wxPrintf(_T("Thread exit code: %ld.\n"), (long)thread.Wait());
+}
+
+// semaphore tests
+#include "wx/datetime.h"
+
+class MySemaphoreThread : public wxThread
+{
+public:
+    MySemaphoreThread(int i, wxSemaphore *sem)
+        : wxThread(wxTHREAD_JOINABLE),
+          m_sem(sem),
+          m_i(i)
+    {
+        Create();
+    }
+
+    virtual ExitCode Entry()
+    {
+        wxPrintf(_T("%s: Thread %d starting to wait for semaphore...\n"),
+                 wxDateTime::Now().FormatTime().c_str(), m_i);
+
+        m_sem->Wait();
+
+        wxPrintf(_T("%s: Thread %d acquired the semaphore.\n"),
+                 wxDateTime::Now().FormatTime().c_str(), m_i);
+
+        Sleep(1000);
+
+        wxPrintf(_T("%s: Thread %d releasing the semaphore.\n"),
+                 wxDateTime::Now().FormatTime().c_str(), m_i);
+
+        m_sem->Post();
+
+        return 0;
+    }
+
+private:
+    wxSemaphore *m_sem;
+    int m_i;
+};
+
+WX_DEFINE_ARRAY(wxThread *, ArrayThreads);
+
+static void TestSemaphore()
+{
+    wxPuts(_T("*** Testing wxSemaphore class. ***"));
+
+    static const int SEM_LIMIT = 3;
+
+    wxSemaphore sem(SEM_LIMIT, SEM_LIMIT);
+    ArrayThreads threads;
+
+    for ( int i = 0; i < 3*SEM_LIMIT; i++ )
+    {
+        threads.Add(new MySemaphoreThread(i, &sem));
+        threads.Last()->Run();
+    }
+
+    for ( size_t n = 0; n < threads.GetCount(); n++ )
+    {
+        threads[n]->Wait();
+        delete threads[n];
+    }
 }
 
 #endif // TEST_THREADS
@@ -5851,9 +5952,11 @@ int main(int argc, char **argv)
         TestJoinableThreads();
         TestThreadSuspend();
         TestThreadDelete();
+        TestThreadConditions();
+        TestThreadExec();
     }
 
-    TestThreadConditions();
+    TestSemaphore();
 #endif // TEST_THREADS
 
 #ifdef TEST_TIMER

@@ -225,7 +225,7 @@ public:
 
     // Each wxCondition object is associated with with a wxMutex object The
     // mutex object MUST be locked before calling Wait()
-    wxCondition( wxMutex *mutex );
+    wxCondition(wxMutex& mutex);
 
     // dtor is not virtual, don't use this class polymorphically
     ~wxCondition();
