@@ -1226,7 +1226,7 @@ void wxWindowBase::ClearBackground()
 // find child window by id or name
 // ----------------------------------------------------------------------------
 
-wxWindow *wxWindowBase::FindWindow( long id )
+wxWindow *wxWindowBase::FindWindow(long id) const
 {
     if ( id == m_windowId )
         return (wxWindow *)this;
@@ -1242,7 +1242,7 @@ wxWindow *wxWindowBase::FindWindow( long id )
     return (wxWindow *)res;
 }
 
-wxWindow *wxWindowBase::FindWindow( const wxString& name )
+wxWindow *wxWindowBase::FindWindow(const wxString& name) const
 {
     if ( name == m_windowName )
         return (wxWindow *)this;

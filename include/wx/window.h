@@ -570,8 +570,8 @@ public:
 
         // find window among the descendants of this one either by id or by
         // name (return NULL if not found)
-    wxWindow *FindWindow( long winid );
-    wxWindow *FindWindow( const wxString& name );
+    wxWindow *FindWindow(long winid) const;
+    wxWindow *FindWindow(const wxString& name) const;
 
         // Find a window among any window (all return NULL if not found)
     static wxWindow *FindWindowById( long winid, const wxWindow *parent = NULL );
