@@ -22,6 +22,7 @@
 #include "wx/file.h"
 #include "wx/mstream.h"
 #include "wx/wfstream.h"
+#include "wx/quantize.h"
 
 #include "smile.xbm"
 #include "smile.xpm"
@@ -51,7 +52,7 @@ public:
     wxBitmap  *my_horse_pnm;
     wxBitmap  *my_horse_tiff;
     wxBitmap  *my_horse_xpm;
-    
+
     wxBitmap  *my_smile_xbm;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
@@ -87,10 +88,10 @@ class MyImageFrame : public wxFrame
 {
 public:
     MyImageFrame(wxFrame *parent, const wxBitmap& bitmap)
-        : wxFrame(parent, -1, _T("Frame with image"),
+        : wxFrame(parent, -1, _T("Double click to save"),
                   wxDefaultPosition, wxDefaultSize,
                   wxCAPTION | wxSYSTEM_MENU),
-          m_bitmap(bitmap)
+                  m_bitmap(bitmap)
     {
         SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
     }
@@ -99,6 +100,97 @@ public:
     {
         wxPaintDC dc( this );
         dc.DrawBitmap( m_bitmap, 0, 0 );
+    }
+
+    void OnSave(wxCommandEvent& WXUNUSED(event))
+    {
+        wxImage image(m_bitmap);
+
+        static const wxString bppchoices[8] =
+        {
+            "1 bpp color",
+            "1 bpp B&W",
+            "4 bpp color",
+            "8 bpp color",
+            "8 bpp greyscale",
+            "8 bpp red",
+            "8 bpp own palette",
+            "24 bpp"
+        };
+
+        static const int bppvalues[WXSIZEOF(bppchoices)] =
+        {
+            wxBMP_1BPP,
+            wxBMP_1BPP_BW,
+            wxBMP_4BPP,
+            wxBMP_8BPP,
+            wxBMP_8BPP_GREY,
+            wxBMP_8BPP_RED,
+            wxBMP_8BPP_PALETTE,
+            wxBMP_24BPP
+        };
+
+        int bppselection = wxGetSingleChoiceIndex("Set BMP BPP",
+                                                  "Set BMP BPP",
+                                                  WXSIZEOF(bppchoices),
+                                                  bppchoices,
+                                                  this);
+        if ( bppselection == -1 )
+        {
+            // cancelled
+            return;
+        }
+
+        image.SetOption(wxBMP_FORMAT, bppvalues[bppselection]);
+
+        wxString deffilename = bppchoices[bppselection];
+        deffilename.Replace(" ", "_");
+        deffilename += ".bmp";
+        wxString savefilename = wxFileSelector( "Save Image",
+                                                "",
+                                                deffilename,
+                                                (const char *)NULL,
+                                                "BMP files (*.bmp)|*.bmp|"
+                                                "PNG files (*.png)|*.png|"
+                                                "JPEG files (*.jpg)|*.jpg|"
+                                                "GIF files (*.gif)|*.gif|"
+                                                "TIFF files (*.tif)|*.tif|"
+                                                "PCX files (*.pcx)|*.pcx",
+                                                wxSAVE);
+
+        if ( savefilename.empty() )
+            return;
+
+        if ( image.GetOptionInt(wxBMP_FORMAT) == wxBMP_8BPP_PALETTE )
+        {
+            unsigned char *cmap = new unsigned char [256];
+            for ( int i = 0; i < 256; i++ )
+                cmap[i] = i;
+            image.SetPalette(wxPalette(256, cmap, cmap, cmap));
+
+            delete cmap;
+        }
+
+        bool saved = FALSE;
+
+        wxString extension = savefilename.AfterLast('.').Lower();
+
+        if (extension == "bmp")
+            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_BMP);
+        else if (extension == "png")
+            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_PNG);
+        else if (extension == "pcx")
+            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_PCX);
+        else if ((extension == "tif") || (extension == "tiff"))
+            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_TIF);
+        else if (extension == "jpg")
+            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_JPEG);
+        else if (extension == "pnm")
+            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_PNM);
+        else
+            wxMessageBox("Unknown file type, see options in file selector.",
+                         "Unknown file type",
+                         wxOK|wxCENTRE, this);
     }
 
 private:
@@ -124,7 +216,8 @@ IMPLEMENT_APP(MyApp)
 IMPLEMENT_DYNAMIC_CLASS(MyCanvas, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
-    EVT_PAINT(MyImageFrame::OnPaint)
+  EVT_PAINT(MyImageFrame::OnPaint)
+  EVT_LEFT_DCLICK(MyImageFrame::OnSave)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)

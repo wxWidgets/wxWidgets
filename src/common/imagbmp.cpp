@@ -31,6 +31,7 @@
 #include "wx/wfstream.h"
 #include "wx/intl.h"
 #include "wx/module.h"
+#include "wx/quantize.h"
 
 // For memcpy
 #include <string.h>
@@ -67,10 +68,49 @@ bool wxBMPHandler::SaveFile(wxImage *image,
         return FALSE;
     }
 
+    // get the format of the BMP file to save, else use 24bpp
+    unsigned format = wxBMP_24BPP;
+    if (image->HasOption(wxBMP_FORMAT))
+        format = image->GetOptionInt(wxBMP_FORMAT);
+
+    unsigned bpp;     // # of bits per pixel
+    int palette_size; // # of color map entries, ie. 2^bpp colors
+
+    // set the bpp and appropriate palette_size, and do additional checks
+    if ((format == wxBMP_1BPP) || (format == wxBMP_1BPP_BW))
+    {
+        bpp = 1;
+        palette_size = 2;
+    }
+    else if (format == wxBMP_4BPP)
+    {
+        bpp = 4;
+        palette_size = 16;
+    }
+    else if ((format == wxBMP_8BPP) || (format == wxBMP_8BPP_GREY) ||
+             (format == wxBMP_8BPP_RED) || (format == wxBMP_8BPP_PALETTE))
+    {
+        // need to set a wxPalette to use this, HOW TO CHECK IF VALID, SIZE?
+        if ((format == wxBMP_8BPP_PALETTE) && !image->HasPalette())
+        {
+            if (verbose)
+                wxLogError(_("BMP: wImage doesn't have own wxPalette."));
+            return FALSE;
+        }
+        bpp = 8;
+        palette_size = 256;
+    }
+    else  // you get 24bpp
+    {
+        format = wxBMP_24BPP;
+        bpp = 24;
+        palette_size = 0;
+    }
+
     unsigned width = image->GetWidth();
-    unsigned row_width = width * 3 +
-                         (((width % 4) == 0) ? 0 : (4 - (width * 3) % 4));
-                         // each row must be aligned to dwords
+    unsigned row_padding = (4 - int(width*bpp/8.0) % 4) % 4; // # bytes to pad to dword
+    unsigned row_width = int(width * bpp/8.0) + row_padding; // # of bytes per row
+
     struct
     {
         // BitmapHeader:
@@ -90,26 +130,25 @@ bool wxBMPHandler::SaveFile(wxImage *image,
         wxUint32  num_clrs;       // number of colors used
         wxUint32  num_signif_clrs;// number of significant colors
     } hdr;
+
     wxUint32 hdr_size = 14/*BitmapHeader*/ + 40/*BitmapInfoHeader*/;
 
     hdr.magic = wxUINT16_SWAP_ON_BE(0x4D42/*'BM'*/);
-    hdr.filesize = wxUINT32_SWAP_ON_BE(
-                   hdr_size +
-                   row_width * image->GetHeight()
-                   );
+    hdr.filesize = wxUINT32_SWAP_ON_BE( hdr_size + palette_size*4 +
+                                        row_width * image->GetHeight() );
     hdr.reserved = 0;
-    hdr.data_offset = wxUINT32_SWAP_ON_BE(hdr_size);
+    hdr.data_offset = wxUINT32_SWAP_ON_BE(hdr_size + palette_size*4);
 
     hdr.bih_size = wxUINT32_SWAP_ON_BE(hdr_size - 14);
     hdr.width = wxUINT32_SWAP_ON_BE(image->GetWidth());
     hdr.height = wxUINT32_SWAP_ON_BE(image->GetHeight());
     hdr.planes = wxUINT16_SWAP_ON_BE(1); // always 1 plane
-    hdr.bpp = wxUINT16_SWAP_ON_BE(24); // always TrueColor
+    hdr.bpp = wxUINT16_SWAP_ON_BE(bpp);
     hdr.compression = 0; // RGB uncompressed
     hdr.size_of_bmp = wxUINT32_SWAP_ON_BE(row_width * image->GetHeight());
-    hdr.h_res = hdr.v_res = wxUINT32_SWAP_ON_BE(72); // 72dpi is standard
-    hdr.num_clrs = 0; // maximal possible = 2^24
-    hdr.num_signif_clrs = 0; // all colors are significant
+    hdr.h_res = hdr.v_res = wxUINT32_SWAP_ON_BE(72);  // 72dpi is standard
+    hdr.num_clrs = wxUINT32_SWAP_ON_BE(palette_size); // # colors in colormap
+    hdr.num_signif_clrs = 0;     // all colors are significant
 
     if (// VS: looks ugly but compilers tend to do ugly things with structs,
         //     like aligning hdr.filesize's ofset to dword :(
@@ -136,20 +175,171 @@ bool wxBMPHandler::SaveFile(wxImage *image,
         return FALSE;
     }
 
+    wxPalette *palette = NULL; // entries for quantized images
+    wxUint8 *rgbquad = NULL;   // for the RGBQUAD bytes for the colormap
+    wxImage *q_image = NULL;   // destination for quantized image
+
+    // if <24bpp use quantization to reduce colors for *some* of the formats
+    if ( (format == wxBMP_1BPP) || (format == wxBMP_4BPP) ||
+         (format == wxBMP_8BPP) || (format == wxBMP_8BPP_PALETTE))
+    {
+        // make a new palette and quantize the image
+        if (format != wxBMP_8BPP_PALETTE)
+        {
+            q_image = new wxImage();
+
+            // I get a delete error using Quantize when desired colors > 236
+            int quantize = ((palette_size > 236) ? 236 : palette_size);
+            // fill the destination too, it gives much nicer 4bpp images
+            wxQuantize::Quantize( *image, *q_image, &palette, quantize, 0,
+                                  wxQUANTIZE_FILL_DESTINATION_IMAGE );
+        }
+        else
+        {
+            palette = new wxPalette(image->GetPalette());
+        }
+
+        int i;
+        unsigned char r, g, b;
+        rgbquad = new wxUint8 [palette_size*4];
+
+        for (i=0; i<palette_size; i++)
+        {
+            if (!palette->GetRGB( i, &r, &g, &b )) r = g = b = 0;
+
+            rgbquad[i*4] = b;
+            rgbquad[i*4+1] = g;
+            rgbquad[i*4+2] = r;
+            rgbquad[i*4+3] = 0;
+        }
+    }
+    // make a 256 entry greyscale colormap or 2 entry black & white
+    else if ((format == wxBMP_8BPP_GREY) || (format == wxBMP_8BPP_RED) ||
+             (format == wxBMP_1BPP_BW))
+    {
+        int i;
+        rgbquad = new wxUint8 [palette_size*4];
+
+        for (i=0; i<palette_size; i++)
+        {
+            // if 1BPP_BW then just 0 and 255 then exit
+            if (( i > 0) && (format == wxBMP_1BPP_BW)) i = 255;
+            rgbquad[i*4] = i;
+            rgbquad[i*4+1] = i;
+            rgbquad[i*4+2] = i;
+            rgbquad[i*4+3] = 0;
+        }
+    }
+
+    // if the colormap was made, then it needs to be written
+    if (rgbquad)
+    {
+        if (!stream.Write(rgbquad, palette_size*4))
+        {
+            if (verbose) wxLogError(_("BMP: Couldn't write RGB color map."));
+            delete []rgbquad;
+            if (palette) delete palette;
+            if (q_image) delete q_image;
+            return FALSE;
+        }
+        delete []rgbquad;
+    }
+
+    // pointer to the image data, use quantized if available
     wxUint8 *data = (wxUint8*) image->GetData();
+    if (q_image) if (q_image->Ok()) data = (wxUint8*) q_image->GetData();
+
     wxUint8 *buffer = new wxUint8[row_width];
-    wxUint8 tmpvar;
     memset(buffer, 0, row_width);
     int y; unsigned x;
+    long int pixel;
 
     for (y = image->GetHeight() -1 ; y >= 0; y--)
     {
-        memcpy(buffer, data + y * 3 * width, 3 * width);
-        for (x = 0; x < width; x++)
+        if (format == wxBMP_24BPP)  // 3 bytes per pixel red,green,blue
         {
-            tmpvar = buffer[3 * x + 0];
-            buffer[3 * x + 0] = buffer[3 * x + 2];
-            buffer[3 * x + 2] = tmpvar;
+            for (x = 0; x < width; x++)
+            {
+                pixel = 3*(y*width + x);
+
+                buffer[3*x    ] = data[pixel+2];
+                buffer[3*x + 1] = data[pixel+1];
+                buffer[3*x + 2] = data[pixel];
+            }
+        }
+        else if ((format == wxBMP_8BPP) ||       // 1 byte per pixel in color
+                 (format == wxBMP_8BPP_PALETTE))
+        {
+            for (x = 0; x < width; x++)
+            {
+                pixel = 3*(y*width + x);
+                buffer[x] = palette->GetPixel( data[pixel],
+                                               data[pixel+1],
+                                               data[pixel+2] );
+            }
+        }
+        else if (format == wxBMP_8BPP_GREY) // 1 byte per pix, rgb ave to grey
+        {
+            for (x = 0; x < width; x++)
+            {
+                pixel = 3*(y*width + x);
+                buffer[x] = (wxUint8)(.299*data[pixel] +
+                                      .587*data[pixel+1] +
+                                      .114*data[pixel+2]);
+            }
+        }
+        else if (format == wxBMP_8BPP_RED) // 1 byte per pixel, red as greys
+        {
+            for (x = 0; x < width; x++)
+            {
+                buffer[x] = (wxUint8)data[3*(y*width + x)];
+            }
+        }
+        else if (format == wxBMP_4BPP) // 4 bpp in color
+        {
+            for (x = 0; x < width; x+=2)
+            {
+                pixel = 3*(y*width + x);
+
+                // fill buffer, ignore if > width
+                buffer[x/2] =
+                                           ((wxUint8)palette->GetPixel(data[pixel], data[pixel+1], data[pixel+2]) << 4) |
+                    (((x+1) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+3], data[pixel+4], data[pixel+5]) ));
+            }
+        }
+        else if (format == wxBMP_1BPP) // 1 bpp in "color"
+        {
+            for (x = 0; x < width; x+=8)
+            {
+                pixel = 3*(y*width + x);
+
+                buffer[x/8] =
+                                           ((wxUint8)palette->GetPixel(data[pixel], data[pixel+1], data[pixel+2]) << 7) |
+                    (((x+1) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+3], data[pixel+4], data[pixel+5]) << 6)) |
+                    (((x+2) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+6], data[pixel+7], data[pixel+8]) << 5)) |
+                    (((x+3) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+9], data[pixel+10], data[pixel+11]) << 4)) |
+                    (((x+4) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+12], data[pixel+13], data[pixel+14]) << 3)) |
+                    (((x+5) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+15], data[pixel+16], data[pixel+17]) << 2)) |
+                    (((x+6) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+18], data[pixel+19], data[pixel+20]) << 1)) |
+                    (((x+7) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+21], data[pixel+22], data[pixel+23])     ));
+            }
+        }
+        else if (format == wxBMP_1BPP_BW) // 1 bpp B&W colormap from red color ONLY
+        {
+            for (x = 0; x < width; x+=8)
+            {
+                pixel = 3*(y*width + x);
+
+                buffer[x/8] =
+                                            (((wxUint8)(data[pixel]   /128.)) << 7) |
+                    ( ((x+1) > width) ? 0 : (((wxUint8)(data[pixel+3] /128.)) << 6)) |
+                    ( ((x+2) > width) ? 0 : (((wxUint8)(data[pixel+6] /128.)) << 5)) |
+                    ( ((x+3) > width) ? 0 : (((wxUint8)(data[pixel+9] /128.)) << 4)) |
+                    ( ((x+4) > width) ? 0 : (((wxUint8)(data[pixel+12]/128.)) << 3)) |
+                    ( ((x+5) > width) ? 0 : (((wxUint8)(data[pixel+15]/128.)) << 2)) |
+                    ( ((x+6) > width) ? 0 : (((wxUint8)(data[pixel+18]/128.)) << 1)) |
+                    ( ((x+7) > width) ? 0 : (((wxUint8)(data[pixel+21]/128.))     ));
+            }
         }
 
         if (!stream.Write(buffer, row_width))
@@ -157,14 +347,17 @@ bool wxBMPHandler::SaveFile(wxImage *image,
             if (verbose)
                 wxLogError(_("BMP: Couldn't write data."));
             delete[] buffer;
+            if (palette) delete palette;
+            if (q_image) delete q_image;
             return FALSE;
         }
     }
     delete[] buffer;
+    if (palette) delete palette;
+    if (q_image) delete q_image;
 
     return TRUE;
 }
-
 
 
 
