@@ -39,9 +39,9 @@
 #endif
 
 
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // wxZipFSHandler
-//--------------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 
 
@@ -87,6 +87,14 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
         return NULL;
     }
 
+    if (right.Contains(wxT("./")))
+    {
+        if (right.GetChar(0) != wxT('/')) right = wxT('/') + right;
+        wxFileName rightPart(right, wxPATH_UNIX);
+        rightPart.Normalize(wxPATH_NORM_DOTS, wxT("/"), wxPATH_UNIX);
+        right = rightPart.GetFullPath(wxPATH_UNIX);
+    }
+    
     if (right.GetChar(0) == wxT('/')) right = right.Mid(1);
 
     wxFileName leftFilename = wxFileSystem::URLToFileName(left);
