@@ -1006,8 +1006,8 @@ if test "$wxUSE_MOTIF" = 1; then
      AC_MSG_ERROR(no)
   fi
   
-  GUI_TK_LINK="-lXm -lXmu -lXt -lXpm -lX11 -lm"
-  GUI_TK_LINK="$CHECK_LINK $GUI_TK_LINK"
+  GUI_TK_LINK="-lXm -lXpm -lXmu -lXt -lX11 -lm"
+  GUI_TK_LIBRARY="$CHECK_LIB $GUI_TK_LINK"
   TOOLKIT=MOTIF
   TOOLKIT_DEF="__WXMOTIF__ -D__LINUX__ -D__UNIX__"
   WX_LINK=-lwx_motif2
@@ -1033,6 +1033,8 @@ dnl ----------------------------------------------------------------
 dnl Register compile options for makefiles and setup.h
 dnl ----------------------------------------------------------------
 
+EXTRA_LINK=
+
 WXDEBUG=
 if test "$wxUSE_DEBUG_GDB" = 1 ; then
   wxUSE_DEBUG_INFO=1
@@ -1043,7 +1045,7 @@ else
     WXDEBUG="-g"
     wxUSE_OPTIMISE=0
   else
-    WX_LINK="-s $WX_LINK"
+    EXTRA_LINK="-s $EXTRA_LINK"
   fi
 fi
 AC_SUBST(WXDEBUG)
@@ -1062,7 +1064,6 @@ if test "$wxUSE_MEM_TRACING" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_GLOBAL_MEMORY_OPERATORS,$wxUSE_MEM_TRACING)
 fi
 
-EXTRA_LINK=
 if test "$wxUSE_DMALLOC" = 1 ; then
   EXTRA_LINK="$EXTRA_LINK -ldmalloc"
 fi

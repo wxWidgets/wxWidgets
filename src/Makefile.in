@@ -103,6 +103,7 @@ install::
 	@$(WXBASEDIR)/mkinstalldirs \
 	   $(includedir)/wx \
 	   $(includedir)/wx/gtk \
+	   $(includedir)/wx/motif \
 	   $(includedir)/wx/common \
 	   $(includedir)/wx/generic \
 	   $(includedir)/wx/protocol \
@@ -120,13 +121,24 @@ install::
 	  rm -f $(includedir)/wx/$$f ; \
 	  $(INSTALL_DATA) $$f $(includedir)/wx/$$f ; \
 	done
-	@echo "  Copying headers from /include/wx/gtk"
-	@cd $(WXBASEDIR)/include/wx/gtk ; \
-	$(INSTALL) -d $(includedir)/wx/gtk ; \
-	for f in *.h ; do \
-	  rm -f $(includedir)/wx/gtk/$$f ; \
-	  $(INSTALL_DATA) $$f $(includedir)/wx/gtk/$$f ; \
-	done
+	@if test "@TOOLKIT@" = "GTK" ; then \
+	  echo "  Copying headers from /include/wx/gtk" ; \
+	  cd $(WXBASEDIR)/include/wx/gtk ; \
+	  $(INSTALL) -d $(includedir)/wx/gtk ; \
+	  for f in *.h ; do \
+	    rm -f $(includedir)/wx/gtk/$$f ; \
+	    $(INSTALL_DATA) $$f $(includedir)/wx/gtk/$$f ; \
+	  done ; \
+	fi
+	@if test "@TOOLKIT@" = "MOTIF" ; then \
+	  echo "  Copying headers from /include/wx/motif" ; \
+	  cd $(WXBASEDIR)/include/wx/motif ; \
+	  $(INSTALL) -d $(includedir)/wx/motif ; \
+	  for f in *.h ; do \
+	    rm -f $(includedir)/wx/motif/$$f ; \
+	    $(INSTALL_DATA) $$f $(includedir)/wx/motif/$$f ; \
+	  done ; \
+	fi
 	@echo "  Copying headers from /include/wx/generic"
 	@cd $(WXBASEDIR)/include/wx/generic ; \
 	$(INSTALL) -d $(includedir)/wx/generic ; \
@@ -141,9 +153,17 @@ install::
 	  $(INSTALL_DATA) $$f $(includedir)/wx/protocol/$$f ; \
 	done
 	@echo "  Moving setup.h to library path"
-	@cd $(WXBASEDIR)/src ; \
-	$(INSTALL) -d $(libdir)/wx/include/wx/gtk ;\
-	mv $(includedir)/wx/gtk/setup.h $(libdir)/wx/include/wx/gtk/setup.h ;
+	@if test "@TOOLKIT@" = "GTK" ; then \
+	  cd $(WXBASEDIR)/src ; \
+	  $(INSTALL) -d $(libdir)/wx/include/wx/gtk ; \
+	  mv $(includedir)/wx/gtk/setup.h $(libdir)/wx/include/wx/gtk/setup.h ; \
+	fi
+	@echo "  Moving setup.h to library path"
+	@if test "@TOOLKIT@" = "MOTIF" ; then \
+	  cd $(WXBASEDIR)/src ; \
+	  $(INSTALL) -d $(libdir)/wx/include/wx/motif ; \
+	  mv $(includedir)/wx/motif/setup.h $(libdir)/wx/include/wx/motif/setup.h ; \
+	fi
 	@echo "  Copying wx-config"
 	@cd $(WXBASEDIR)/src ; \
 	  $(INSTALL) -d $(bindir) ; \
