@@ -3,6 +3,10 @@ rem Zip up an external, generic + Windows distribution of wxWindows 2.0
 set src=%wxwin
 set dest=%src\deliver
 set wise=0
+
+Rem Set this to the required version
+set version=2_1_11
+
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
 if "%1" == "-help" goto usage
@@ -18,7 +22,7 @@ pause
 
 rem goto dounzip
 
-erase %dest\wx200*.zip
+erase %dest\wx*.zip
 erase %dest\glcanvas.zip
 erase %dest\ogl3.zip
 erase %dest\tex2rtf2.zip
@@ -29,31 +33,31 @@ if direxist %dest\wx deltree /Y %dest\wx
 cd %src
 echo Zipping...
 
-zip32 -@ %dest\wx200gen.zip < %src\distrib\msw\generic.rsp
-zip32 -@ -u %dest\wx200gen.zip < %src\distrib\msw\makefile.rsp
-zip32 -@ %dest\wx200msw.zip < %src\distrib\msw\msw.rsp
-zip32 -@ -u %dest\wx200msw.zip < %src\distrib\msw\makefile.rsp
-zip32 -@ %dest\wx200gtk.zip < %src\distrib\msw\gtk.rsp
-zip32 -@ -u %dest\wx200gtk.zip < %src\distrib\msw\makefile.rsp
-zip32 -@ %dest\wx200stubs.zip < %src\distrib\msw\stubs.rsp
-zip32 -@ %dest\wx200mot.zip < %src\distrib\msw\motif.rsp
-zip32 -@ -u %dest\wx200mot.zip < %src\distrib\msw\makefile.rsp
-zip32 -@ %dest\wx200user.zip < %src\distrib\msw\user.rsp
+zip32 -@ %dest\wx%version%_gen.zip < %src\distrib\msw\generic.rsp
+zip32 -@ -u %dest\wx%version%_gen.zip < %src\distrib\msw\makefile.rsp
+zip32 -@ %dest\wx%version%_msw.zip < %src\distrib\msw\msw.rsp
+zip32 -@ -u %dest\wx%version%_msw.zip < %src\distrib\msw\makefile.rsp
+zip32 -@ %dest\wx%version%_gtk.zip < %src\distrib\msw\gtk.rsp
+zip32 -@ -u %dest\wx%version%_gtk.zip < %src\distrib\msw\makefile.rsp
+zip32 -@ %dest\wx%version%_stubs.zip < %src\distrib\msw\stubs.rsp
+zip32 -@ %dest\wx%version%_mot.zip < %src\distrib\msw\motif.rsp
+zip32 -@ -u %dest\wx%version%_mot.zip < %src\distrib\msw\makefile.rsp
+zip32 -@ %dest\wx%version%_user.zip < %src\distrib\msw\user.rsp
 
-zip32 -@ %dest\wx200doc.zip < %src\distrib\msw\docsrc.rsp
-zip32 -@ %dest\wx200hlp.zip < %src\distrib\msw\wx_hlp.rsp
-zip32 -@ %dest\wx200htm.zip < %src\distrib\msw\wx_html.rsp
-zip32 -@ %dest\wx200pdf.zip < %src\distrib\msw\wx_pdf.rsp
-zip32 -@ %dest\wx200wrd.zip < %src\distrib\msw\wx_word.rsp
+zip32 -@ %dest\wx%version%_doc.zip < %src\distrib\msw\docsrc.rsp
+zip32 -@ %dest\wx%version%_hlp.zip < %src\distrib\msw\wx_hlp.rsp
+zip32 -@ %dest\wx%version%_htm.zip < %src\distrib\msw\wx_html.rsp
+zip32 -@ %dest\wx%version%_pdf.zip < %src\distrib\msw\wx_pdf.rsp
+zip32 -@ %dest\wx%version%_wrd.zip < %src\distrib\msw\wx_word.rsp
 
 rem VC++ project files
-zip32 -@ %dest\wx200vc.zip < %src\distrib\msw\vc.rsp
+zip32 -@ %dest\wx%version%_vc.zip < %src\distrib\msw\vc.rsp
 
 rem BC++ project files
-zip32 -@ %dest\wx200bc.zip < %src\distrib\msw\bc.rsp
+zip32 -@ %dest\wx%version%_bc.zip < %src\distrib\msw\bc.rsp
 
 rem CodeWarrior project files
-zip32 -@ %dest\wx200cw.zip < %src\distrib\msw\cw.rsp
+zip32 -@ %dest\wx%version%_cw.zip < %src\distrib\msw\cw.rsp
 
 rem OGL 3
 zip32 -@ %dest\ogl3.zip < %src\distrib\msw\ogl.rsp
@@ -92,13 +96,13 @@ Rem After this change of directory, we're in the
 Rem temporary 'wx' directory and not acting on
 Rem the source wxWindows directory.
 cd %dest\wx
-unzip32 -o ..\wx200msw.zip
-unzip32 -o ..\wx200gen.zip
-unzip32 -o ..\wx200vc.zip
-unzip32 -o ..\wx200bc.zip
-unzip32 -o ..\wx200hlp.zip
+unzip32 -o ..\wx%version%_msw.zip
+unzip32 -o ..\wx%version%_gen.zip
+unzip32 -o ..\wx%version%_vc.zip
+unzip32 -o ..\wx%version%_bc.zip
+unzip32 -o ..\wx%version%_hlp.zip
 Rem Need Word file, for Remstar DB classes
-unzip32 -o ..\wx200wrd.zip
+unzip32 -o ..\wx%version%_wrd.zip
 unzip32 -o ..\glcanvas.zip
 unzip32 -o ..\treedraw.zip
 unzip32 -o ..\ogl3.zip
