@@ -18,11 +18,7 @@
 
 #ifdef __WXMSW__
 #include <wx/msw/private.h>
-#undef FindWindow
-#undef GetCharWidth
-#undef LoadAccelerators
-#undef GetClassInfo
-#undef GetClassName
+#include <wx/msw/winundef.h>
 #endif
 
 #ifdef __WXGTK__
@@ -404,7 +400,7 @@ PyObject* wxPyConstructObject(void* ptr,
     char    buff[64];               // should always be big enough...
     sprintf(buff, "%sPtr", className);
 
-	wxASSERT_MSG(wxPython_dict, "wxPython_dict is not set yet!!");
+        wxASSERT_MSG(wxPython_dict, "wxPython_dict is not set yet!!");
 
     PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
     if (! classobj) {
@@ -528,20 +524,100 @@ void wxPyCallbackHelper::setSelf(PyObject* self, PyObject* klass, int incref) {
 }
 
 
-// If the object (m_self) has an attibute of the given name, and if that
-// attribute is a method, and if that method's class is not from a base class,
-// then we'll save a pointer to the method so callCallback can call it.
+#if PYTHON_API_VERSION >= 1011
+
+// Prior to Python 2.2 PyMethod_GetClass returned the class object
+// in which the method was defined.  Starting with 2.2 it returns
+// "class that asked for the method" which seems totally bogus to me
+// but apprently if fixes some obscure problem waiting to happen in
+// Python.  Since the API was not documented Guido and the gang felt
+// safe in changing it.  Needless to say that totally screwed up the
+// logic below in wxPyCallbackHelper::findCallback, hence this icky
+// code to find the class where the method is actuallt defined...
+
+static
+PyObject* PyFindClassWithAttr(PyObject *klass, PyObject *name)
+{
+    int i, n;
+
+    if (PyType_Check(klass)) {      // new style classes
+        // This code is borrowed/adapted from _PyType_Lookup in typeobject.c
+        PyTypeObject* type = (PyTypeObject*)klass;
+        PyObject *mro, *res, *base, *dict;
+        /* Look in tp_dict of types in MRO */
+        mro = type->tp_mro;
+        assert(PyTuple_Check(mro));
+        n = PyTuple_GET_SIZE(mro);
+        for (i = 0; i < n; i++) {
+            base = PyTuple_GET_ITEM(mro, i);
+            if (PyClass_Check(base))
+                dict = ((PyClassObject *)base)->cl_dict;
+            else {
+                assert(PyType_Check(base));
+                dict = ((PyTypeObject *)base)->tp_dict;
+            }
+            assert(dict && PyDict_Check(dict));
+            res = PyDict_GetItem(dict, name);
+            if (res != NULL)
+                return res;
+        }
+        return NULL;
+    }
+
+    else if (PyClass_Check(klass)) { // old style classes
+        // This code is borrowed/adapted from class_lookup in classobject.c
+        PyClassObject* cp = (PyClassObject*)klass;
+        PyObject *value = PyDict_GetItem(cp->cl_dict, name);
+        if (value != NULL) {
+            return (PyObject*)cp;
+        }
+        n = PyTuple_Size(cp->cl_bases);
+        for (i = 0; i < n; i++) {
+            PyObject* base = PyTuple_GetItem(cp->cl_bases, i);
+            PyObject *v = PyFindClassWithAttr(base, name);
+            if (v != NULL)
+                return v;
+        }
+        return NULL;
+    }
+}
+#endif
+
+
+static
+PyObject* PyMethod_GetDefiningClass(PyObject* method, const char* name)
+{
+    PyObject* mgc = PyMethod_GET_CLASS(method);
+
+#if PYTHON_API_VERSION <= 1010    // prior to Python 2.2, the easy way
+    return mgc;
+#else                             // 2.2 and after, the hard way...
+
+    PyObject* nameo = PyString_FromString(name);
+    PyObject* klass = PyFindClassWithAttr(mgc, nameo);
+    Py_DECREF(nameo);
+    return klass;
+#endif
+}
+
+
+
 bool wxPyCallbackHelper::findCallback(const char* name) const {
     wxPyCallbackHelper* self = (wxPyCallbackHelper*)this; // cast away const
     self->m_lastFound = NULL;
+
+    // If the object (m_self) has an attibute of the given name...
     if (m_self && PyObject_HasAttrString(m_self, (char*)name)) {
-        PyObject* method;
+        PyObject *method, *klass;
         method = PyObject_GetAttrString(m_self, (char*)name);
 
+        // ...and if that attribute is a method, and if that method's class is
+        // not from a base class...
         if (PyMethod_Check(method) &&
-            ((PyMethod_GET_CLASS(method) == m_class) ||
-             PyClass_IsSubclass(PyMethod_GET_CLASS(method), m_class))) {
+            (klass = PyMethod_GetDefiningClass(method, (char*)name)) != NULL &&
+            ((klass == m_class) || PyClass_IsSubclass(klass, m_class))) {
 
+            // ...then we'll save a pointer to the method so callCallback can call it.
             self->m_lastFound = method;
         }
         else {
@@ -1212,15 +1288,15 @@ bool wxPoint_helper(PyObject* source, wxPoint** obj) {
     if (PySequence_Check(source) && PySequence_Length(source) == 2) {
         PyObject* o1 = PySequence_GetItem(source, 0);
         PyObject* o2 = PySequence_GetItem(source, 1);
-		// This should really check for integers, not numbers -- but that would break code.
-		if (!PyNumber_Check(o1) || !PyNumber_Check(o2)) {
-			Py_DECREF(o1);
-		    Py_DECREF(o2);
-			goto error;
-		}
-		**obj = wxPoint(PyInt_AsLong(o1), PyInt_AsLong(o2));
-		Py_DECREF(o1);
-		Py_DECREF(o2);
+                // This should really check for integers, not numbers -- but that would break code.
+                if (!PyNumber_Check(o1) || !PyNumber_Check(o2)) {
+                        Py_DECREF(o1);
+                    Py_DECREF(o2);
+                        goto error;
+                }
+                **obj = wxPoint(PyInt_AsLong(o1), PyInt_AsLong(o2));
+                Py_DECREF(o1);
+                Py_DECREF(o2);
         return TRUE;
     }
  error:
