@@ -892,16 +892,18 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 #endif // Win16/32
 }
 
-long wxExecute(char **argv, int flags, wxProcess *handler)
+long wxExecute(wxChar **argv, int flags, wxProcess *handler)
 {
     wxString command;
 
-    while ( *argv != NULL )
+    for ( ;; )
     {
-        command << *argv++ << ' ';
-    }
+        command += *argv++;
+        if ( !*argv )
+            break;
 
-    command.RemoveLast();
+        command += _T(' ');
+    }
 
     return wxExecute(command, flags, handler);
 }
