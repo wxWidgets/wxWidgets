@@ -69,6 +69,8 @@ public:
     wxSizerFlags& Expand() { return Align(wxEXPAND); }
     wxSizerFlags& Centre() { return Align(wxCENTRE); }
     wxSizerFlags& Center() { return Centre(); }
+    wxSizerFlags& Left() { return Align(wxALIGN_LEFT); }
+    wxSizerFlags& Right() { return Align(wxALIGN_RIGHT); }
 
 
     wxSizerFlags& Border(int direction, int borderInPixels)
