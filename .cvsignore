@@ -39,8 +39,10 @@ libtool
 aclocal.m4
 base
 gtk
+gtk2
 motif
 win32
+x11
 univ
 univ-debug
 univ-release
