@@ -749,7 +749,7 @@ void wxThreadInternal::Wait()
             //       we're cancelled inside pthread_join(), things will almost
             //       certainly break - but if we disable the cancellation, we
             //       might deadlock
-            if ( pthread_join((pthread *)id, &m_exitcode) != 0 )
+            if ( pthread_join((pthread_t)id, &m_exitcode) != 0 )
             {
                 wxLogError(_("Failed to join a thread, potential memory leak "
                              "detected - please restart the program"));
