@@ -355,6 +355,8 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
   
   while (table.entries[i].m_fn != NULL)
   {
+    wxEventType eventType = (wxEventType) table.entries[i].m_eventType;
+
     if ((event.GetEventType() == table.entries[i].m_eventType) &&
         (table.entries[i].m_id == -1 || // Match, if event spec says any id will do (id == -1)
           (table.entries[i].m_lastId == -1 && commandId == table.entries[i].m_id) ||
@@ -399,11 +401,13 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
   if (!m_dynamicEvents) return FALSE;
   
   int commandId = event.GetId();
-  
+
   wxNode *node = m_dynamicEvents->First();
   while (node)
   {
     wxEventTableEntry *entry = (wxEventTableEntry*)node->Data();
+    wxEventType eventType = (wxEventType) entry->m_eventType;
+  
     if (entry->m_fn)
     {
     if ((event.GetEventType() == entry->m_eventType) &&
