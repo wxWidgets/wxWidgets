@@ -239,14 +239,14 @@ class wxWave : public wxObject
 {
 public:
     wxWave(const wxString& fileName, bool isResource = FALSE) {
-        bool doSave = wxPyRestoreThread();
+        wxPyTState* state = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
-        wxPySaveThread(doSave);
+        wxPyEndBlockThreads(state);
     }
     wxWave(int size, const wxByte* data) {
-        bool doSave = wxPyRestoreThread();
+        wxPyTState* state = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
-        wxPySaveThread(doSave);
+        wxPyEndBlockThreads(state);
     }
 
     ~wxWave() {}
