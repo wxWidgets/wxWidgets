@@ -1784,12 +1784,20 @@ class VScrolledWindow(Panel):
         """RefreshLines(self, size_t from, size_t to)"""
         return _windows_.VScrolledWindow_RefreshLines(*args, **kwargs)
 
-    def HitTestXT(*args, **kwargs):
-        """HitTestXT(self, int x, int y) -> int"""
-        return _windows_.VScrolledWindow_HitTestXT(*args, **kwargs)
+    def HitTestXY(*args, **kwargs):
+        """
+        HitTestXY(self, int x, int y) -> int
+
+        Test where the given (in client coords) point lies
+        """
+        return _windows_.VScrolledWindow_HitTestXY(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(self, Point pt) -> int"""
+        """
+        HitTest(self, Point pt) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _windows_.VScrolledWindow_HitTest(*args, **kwargs)
 
     def RefreshAll(*args, **kwargs):
