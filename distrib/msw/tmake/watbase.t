@@ -58,7 +58,7 @@ wxUSE_GUI=0
 
 !include ..\makewat.env
 
-LIBTARGET   = $(WXDIR)\lib\$(LIBNAME).lib
+LIBTARGET   = $(WXDIR)\lib\wx$(TOOLKIT)$(DEBUGSUFFIX)_w.lib
 
 EXTRATARGETS = zlib regex
 EXTRATARGETSCLEAN = clean_zlib clean_regex
@@ -67,10 +67,10 @@ MSWDIR=$(WXDIR)\src\msw
 OLEDIR=$(MSWDIR)\ole
 
 COMMONOBJS = &
-	#$ ExpandGlue("WXCOMMONOBJS", "\$(OUTPUTDIR)", " &\n\t\$(OUTPUTDIR)")
+	#$ ExpandGlue("WXCOMMONOBJS", "\$(OUTPUTDIR)\\", " &\n\t\$(OUTPUTDIR)\\")
 
 MSWOBJS = &
-	#$ ExpandGlue("WXMSWOBJS", "\$(OUTPUTDIR)", " &\n\t\$(OUTPUTDIR)")
+	#$ ExpandGlue("WXMSWOBJS", "\$(OUTPUTDIR)\\", " &\n\t\$(OUTPUTDIR)\\")
 
 OBJECTS = $(COMMONOBJS) $(MSWOBJS)
 
@@ -88,7 +88,7 @@ $(OUTPUTDIR):
 $(SETUP_H): $(WXDIR)\include\wx\msw\setup.h $(ARCHINCDIR)\wx
 	copy $(WXDIR)\include\wx\msw\setup.h $@
 
-LBCFILE=$(OUTPUTDIR)wx$(TOOLKIT).lbc
+LBCFILE=$(OUTPUTDIR)\wx$(TOOLKIT).lbc
 $(LIBTARGET) : $(OBJECTS)
     %create $(LBCFILE)
     @for %i in ( $(OBJECTS) ) do @%append $(LBCFILE) +%i
@@ -109,7 +109,7 @@ cleanall:   clean
     $_ = $project{"WXMSWOBJS"};
     my @objs = split;
     foreach (@objs) {
-        $text .= "\$(OUTPUTDIR)" . $_ . ':     $(';
+        $text .= "\$(OUTPUTDIR)\\" . $_ . ':     $(';
         s/\.obj$//;
         $text .= 'MSWDIR)\\';
 
@@ -136,7 +136,7 @@ cleanall:   clean
     $_ = $project{"WXCOMMONOBJS"};
     my @objs = split;
     foreach (@objs) {
-        $text .= "\$(OUTPUTDIR)" . $_;
+        $text .= "\$(OUTPUTDIR)\\" . $_;
         s/\.obj$//;
         $text .= ':     $(COMMDIR)\\';
         my $suffix, $cc;
@@ -178,5 +178,5 @@ clean_regex:   .SYMBOLIC
 MFTYPE=watbase
 self : .SYMBOLIC $(WXDIR)\distrib\msw\tmake\filelist.txt $(WXDIR)\distrib\msw\tmake\$(MFTYPE).t
 	cd $(WXDIR)\distrib\msw\tmake
-	tmake -t $(MFTYPE) wxwin.pro -o makebase.wat
+	perl -S tmake -t $(MFTYPE) wxwin.pro -o makebase.wat
 	copy makebase.wat $(WXDIR)\src\msw
