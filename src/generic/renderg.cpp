@@ -241,16 +241,17 @@ wxRendererGeneric::GetSplitterParams(const wxWindow *win)
     wxCoord sashWidth,
             border;
 
-    if ( win->HasFlag(wxSP_3D) )
-    {
+    if ( win->HasFlag(wxSP_3DSASH) )
         sashWidth = 7;
-        border = 2;
-    }
+    else if ( win->HasFlag(wxSP_NOSASH) )
+        sashWidth = 0;
     else // no 3D effect
-    {
         sashWidth = 3;
+
+    if ( win->HasFlag(wxSP_3DBORDER) )
+        border = 2;
+    else // no 3D effect
         border = 0;
-    }
 
     return wxSplitterRenderParams(sashWidth, border, false);
 }
@@ -261,7 +262,7 @@ wxRendererGeneric::DrawSplitterBorder(wxWindow *win,
                                       const wxRect& rectOrig,
                                       int WXUNUSED(falgs))
 {
-    if ( win->HasFlag(wxSP_3D) )
+    if ( win->HasFlag(wxSP_3DBORDER) )
     {
         wxRect rect = rectOrig;
         DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
@@ -304,34 +305,36 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
     const wxCoord h = size.y;
     wxCoord offset = 0;
     
-    // If we're not drawing the border, droppings will
-    // be left unless we make the sash shorter
-    if ( !win->HasFlag(wxSP_3DBORDER) )
+    // If we're drawing the border, draw the sash 3d lines shorter
+    if ( win->HasFlag(wxSP_3DBORDER) )
     {
-        offset = 3;
-    }
-
-    // from left to right
-    if ( win->HasFlag(wxSP_3D) )
-    {
-        dc.SetPen(m_penLightGrey);
-        dc.DrawLine(position, 1 + offset, position, h - 1 - offset);
-
-        dc.SetPen(m_penHighlight);
-        dc.DrawLine(position + 1, offset, position + 1, h - offset);
+        offset = 1;
     }
 
     dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));
-    dc.DrawRectangle(position + 2, offset, 3, h - 2*offset);
-
-    if ( win->HasFlag(wxSP_3D) )
+    dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE)));    
+    
+    if ( win->HasFlag(wxSP_3DSASH) )
     {
+        // Draw the 3D sash
+        dc.DrawRectangle(position + 2, 0, 3, h);
+
+        dc.SetPen(m_penLightGrey);
+        dc.DrawLine(position, offset, position, h - offset);
+
+        dc.SetPen(m_penHighlight);
+        dc.DrawLine(position + 1, 0, position + 1, h);
+
         dc.SetPen(m_penDarkGrey);
-        dc.DrawLine(position + 5, offset, position + 5, h - offset);
+        dc.DrawLine(position + 5, 0, position + 5, h);
 
         dc.SetPen(m_penBlack);
-        dc.DrawLine(position + 6, offset, position + 6, h - 1 - offset);
+        dc.DrawLine(position + 6, offset, position + 6, h - offset);
+    }
+    else
+    {
+        // Draw a flat sash
+        dc.DrawRectangle(position, 0, 3, h);
     }
 }
 
