@@ -2190,7 +2190,7 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
                          wxRect& rect,
                          bool textOnly) const
 {
-    wxCHECK2_MSG( item.IsOk(), FALSE, _T("invalid item in wxGenericTreeCtrl::GetBoundingRect") );
+    wxCHECK_MSG( item.IsOk(), FALSE, _T("invalid item in wxGenericTreeCtrl::GetBoundingRect") );
 
     wxGenericTreeItem *i = (wxGenericTreeItem*) item.m_pItem;
 
