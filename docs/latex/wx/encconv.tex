@@ -37,11 +37,13 @@ if you rely on {\tt wxCONVERT\_SUBSTITUTE} mode of operation (see
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxEncodingConverter::wxEncodingConverter}\label{wxencodingconverterwxencodingconverter}
 
 \func{}{wxEncodingConverter}{\void}
 
 Constructor.
+
 
 \membersection{wxEncodingConverter::Init}\label{wxencodingconverterinit}
 
@@ -77,6 +79,19 @@ false if given conversion is impossible, true otherwise
 to Unicode with non-Unicode build of wxWindows or if input
 or output encoding is not supported.)
 
+
+\membersection{wxEncodingConverter::CanConvert}\label{wxencodingconvertercanconvert}
+
+\func{static bool}{CanConvert}{\param{wxFontEncoding}{encIn}, \param{wxFontEncoding }{encOut}}
+
+Return true if (any text in) multibyte encoding \arg{encIn} can be converted to
+another one (\it{encOut}) losslessly.
+
+Do not call this method with \texttt{wxFONTENCODING\_UNICODE} as either
+parameter, it doesn't make sense (always works in one sense and always depends
+on the text to convert in the other).
+
+
 \membersection{wxEncodingConverter::Convert}\label{wxencodingconverterconvert}
 
 \constfunc{void}{Convert}{\param{const char* }{input}, \param{char* }{output}}
@@ -108,6 +123,7 @@ You must call \helpref{Init}{wxencodingconverterinit} before using this method!
 
 {\tt wchar\_t} versions of the method are not available if wxWindows was compiled
 with {\tt wxUSE\_WCHAR\_T} set to 0.
+
 
 \membersection{wxEncodingConverter::GetPlatformEquivalents}\label{wxencodingconvertergetplatformequivalents}
 
@@ -161,6 +177,7 @@ encodings.
 item of it.
 \item Please note that the returned array may contain no items at all.
 \end{itemize}
+
 
 \membersection{wxEncodingConverter::GetAllEquivalents}\label{wxencodingconvertergetallequivalents}
 

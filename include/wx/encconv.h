@@ -138,6 +138,17 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
             // equivalent encodings, regardless the platform, including itself.
             static wxFontEncodingArray GetAllEquivalents(wxFontEncoding enc);
 
+            // Return true if [any text in] one multibyte encoding can be
+            // converted to another one losslessly.
+            //
+            // Do not call this with wxFONTENCODING_UNICODE, it doesn't make
+            // sense (always works in one sense and always depends on the text
+            // to convert in the other)
+            static bool CanConvert(wxFontEncoding encIn, wxFontEncoding encOut)
+            {
+                return GetAllEquivalents(encIn).Find(encOut) != wxNOT_FOUND;
+            }
+
     private:
 
 #if wxUSE_WCHAR_T
