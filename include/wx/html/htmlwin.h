@@ -32,7 +32,7 @@ class wxHtmlProcessor;
 class wxHtmlWinModule;
 class wxHtmlHistoryArray;
 class wxHtmlProcessorList;
-class WXDLLEXPORT wxHtmlWinAutoScrollTimer;
+class WXDLLIMPEXP_HTML wxHtmlWinAutoScrollTimer;
 
 
 // wxHtmlWindow flags:
@@ -62,7 +62,7 @@ enum wxHtmlOpeningStatus
 //                  SetPage(text) or LoadPage(filename).
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
+class WXDLLIMPEXP_HTML wxHtmlWindow : public wxScrolledWindow
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlWindow)
     friend class wxHtmlWinModule;

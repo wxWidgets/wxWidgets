@@ -26,13 +26,13 @@
 #include "wx/dynarray.h"
 #include "wx/font.h"
 
-class WXDLLEXPORT wxHtmlHelpData;
+class WXDLLIMPEXP_HTML wxHtmlHelpData;
 
 //--------------------------------------------------------------------------------
 // helper classes & structs
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHtmlBookRecord
+class WXDLLIMPEXP_HTML wxHtmlBookRecord
 {
 public:
     wxHtmlBookRecord(const wxString& bookfile, const wxString& basepath, 
@@ -98,7 +98,7 @@ struct wxHtmlContentsItem
 //                  of keyword(s)
 //------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHtmlSearchEngine : public wxObject
+class WXDLLIMPEXP_HTML wxHtmlSearchEngine : public wxObject
 {
 public:
     wxHtmlSearchEngine() : wxObject() {m_Keyword = NULL; }
@@ -124,7 +124,7 @@ private:
 // class inside wxHtmlHelpData, but that's against coding standards :-(
 // Never construct this class yourself, obtain a copy from
 // wxHtmlHelpData::PrepareKeywordSearch(const wxString& key)
-class WXDLLEXPORT wxHtmlSearchStatus
+class WXDLLIMPEXP_HTML wxHtmlSearchStatus
 {
 public:
     // constructor; supply wxHtmlHelpData ptr, the keyword and (optionally) the
@@ -153,7 +153,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxHtmlSearchStatus)
 };
 
-class WXDLLEXPORT wxHtmlHelpData : public wxObject
+class WXDLLIMPEXP_HTML wxHtmlHelpData : public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlHelpData)
     friend class wxHtmlSearchStatus;

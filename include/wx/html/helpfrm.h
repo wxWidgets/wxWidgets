@@ -34,8 +34,8 @@
 #include "wx/html/htmlwin.h"
 #include "wx/html/htmprint.h"
 
-class WXDLLEXPORT wxButton;
-class WXDLLEXPORT wxTextCtrl;
+class WXDLLIMPEXP_CORE wxButton;
+class WXDLLIMPEXP_CORE wxTextCtrl;
 
 
 // style flags for the Help Frame
@@ -68,9 +68,9 @@ struct wxHtmlHelpFrameCfg
 };
 
 
-class WXDLLEXPORT wxHelpControllerBase;
+class WXDLLIMPEXP_CORE wxHelpControllerBase;
 
-class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
+class WXDLLIMPEXP_HTML wxHtmlHelpFrame : public wxFrame
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlHelpFrame)
 

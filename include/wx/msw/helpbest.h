@@ -20,7 +20,7 @@
 
 #include "wx/helpbase.h"
 
-class WXDLLEXPORT wxBestHelpController: public wxHelpControllerBase
+class WXDLLIMPEXP_HTML wxBestHelpController: public wxHelpControllerBase
 {
 public:
     wxBestHelpController()

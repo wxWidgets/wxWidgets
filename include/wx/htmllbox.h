@@ -14,16 +14,16 @@
 
 #include "wx/vlbox.h"               // base class
 
-class WXDLLEXPORT wxHtmlCell;
-class WXDLLEXPORT wxHtmlWinParser;
-class WXDLLEXPORT wxHtmlListBoxCache;
-class WXDLLEXPORT wxHtmlListBoxStyle;
+class WXDLLIMPEXP_HTML wxHtmlCell;
+class WXDLLIMPEXP_HTML wxHtmlWinParser;
+class WXDLLIMPEXP_HTML wxHtmlListBoxCache;
+class WXDLLIMPEXP_HTML wxHtmlListBoxStyle;
 
 // ----------------------------------------------------------------------------
 // wxHtmlListBox
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHtmlListBox : public wxVListBox
+class WXDLLIMPEXP_HTML wxHtmlListBox : public wxVListBox
 {
 public:
     // constructors and such

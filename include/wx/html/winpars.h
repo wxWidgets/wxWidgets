@@ -24,10 +24,10 @@
 #include "wx/html/htmlcell.h"
 #include "wx/encconv.h"
 
-class WXDLLEXPORT wxHtmlWindow;
-class WXDLLEXPORT wxHtmlWinParser;
-class WXDLLEXPORT wxHtmlWinTagHandler;
-class WXDLLEXPORT wxHtmlTagsModule;
+class WXDLLIMPEXP_HTML wxHtmlWindow;
+class WXDLLIMPEXP_HTML wxHtmlWinParser;
+class WXDLLIMPEXP_HTML wxHtmlWinTagHandler;
+class WXDLLIMPEXP_HTML wxHtmlTagsModule;
 
 //--------------------------------------------------------------------------------
 // wxHtmlWinParser
@@ -36,7 +36,7 @@ class WXDLLEXPORT wxHtmlTagsModule;
 //                  wxHtmlWindow. It uses special wxHtmlWinTagHandler.
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
+class WXDLLIMPEXP_HTML wxHtmlWinParser : public wxHtmlParser
 {
     friend class wxHtmlWindow;
 
@@ -197,7 +197,7 @@ private:
 //                  the wxHtmlWinParser object
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHtmlWinTagHandler : public wxHtmlTagHandler
+class WXDLLIMPEXP_HTML wxHtmlWinTagHandler : public wxHtmlTagHandler
 {
     DECLARE_ABSTRACT_CLASS(wxHtmlWinTagHandler)
 
@@ -225,7 +225,7 @@ protected:
 //                  (See documentation for details)
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHtmlTagsModule : public wxModule
+class WXDLLIMPEXP_HTML wxHtmlTagsModule : public wxModule
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlTagsModule)
 

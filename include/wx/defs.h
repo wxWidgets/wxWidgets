@@ -381,6 +381,7 @@ typedef int wxWindowID;
 #ifdef WXUSINGDLL
     #define WXUSINGDLL_BASE
     #define WXUSINGDLL_CORE
+    #define WXUSINGDLL_HTML
 #endif // WXUSINGDLL
 
 
@@ -406,6 +407,17 @@ typedef int wxWindowID;
 #else // not making nor using DLL
     #define WXDLLIMPEXP_CORE
     #define WXDLLIMPEXP_DATA_CORE(type) type
+#endif
+
+#ifdef WXMAKINGDLL_HTML
+    #define WXDLLIMPEXP_HTML WXEXPORT
+    #define WXDLLIMPEXP_DATA_HTML(type) WXEXPORT type
+#elif defined(WXUSINGDLL_HTML)
+    #define WXDLLIMPEXP_HTML WXIMPORT
+    #define WXDLLIMPEXP_DATA_HTML(type) WXIMPORT type
+#else // not making nor using DLL
+    #define WXDLLIMPEXP_HTML
+    #define WXDLLIMPEXP_DATA_HTML(type) type
 #endif
 
 // for backwards compatibility, define suffix-less versions too

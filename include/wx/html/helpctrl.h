@@ -25,7 +25,7 @@
 
 #define wxID_HTML_HELPFRAME   (wxID_HIGHEST + 1)
 
-class WXDLLEXPORT wxHtmlHelpController : public wxHelpControllerBase // wxEvtHandler
+class WXDLLIMPEXP_HTML wxHtmlHelpController : public wxHelpControllerBase // wxEvtHandler
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlHelpController)
 

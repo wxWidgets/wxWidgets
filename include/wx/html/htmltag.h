@@ -21,8 +21,8 @@
 
 #include "wx/object.h"
 
-class WXDLLEXPORT wxColour;
-class WXDLLEXPORT wxHtmlEntitiesParser;
+class WXDLLIMPEXP_CORE wxColour;
+class WXDLLIMPEXP_HTML wxHtmlEntitiesParser;
 
 //-----------------------------------------------------------------------------
 // wxHtmlTagsCache
@@ -31,7 +31,7 @@ class WXDLLEXPORT wxHtmlEntitiesParser;
 
 struct wxHtmlCacheItem;
 
-class WXDLLEXPORT wxHtmlTagsCache : public wxObject
+class WXDLLIMPEXP_HTML wxHtmlTagsCache : public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlTagsCache)
 
@@ -58,7 +58,7 @@ public:
 //                  by wxHtmlParser.
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHtmlTag : public wxObject
+class WXDLLIMPEXP_HTML wxHtmlTag : public wxObject
 {
     DECLARE_CLASS(wxHtmlTag)
 
