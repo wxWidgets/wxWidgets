@@ -551,6 +551,7 @@ samples/html/test/*.ico
 samples/html/test/*.htm
 samples/html/test/*.html
 samples/html/test/*.pro
+samples/html/test/*.gif
 
 samples/html/virtual/*.cpp
 samples/html/virtual/*.h
