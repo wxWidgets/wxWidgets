@@ -1901,7 +1901,7 @@ void wxTreeCtrl::OnRenameAccept()
 
 void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 {
-    if ( !(event.LeftUp() || event.LeftDClick() || event.Dragging()) ) return;
+    if ( !(event.LeftUp() || event.RightDown() || event.LeftDClick() || event.Dragging()) ) return;
 
     if ( !m_anchor ) return;
 
@@ -1938,6 +1938,15 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
     }
 
     if (item == NULL) return;  /* we hit the blank area */
+
+    if (event.RightDown()) { 
+	wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,GetId());
+	nevent.m_item=item;
+	nevent.m_code=0;
+	nevent.SetEventObject(this);
+	GetEventHandler()->ProcessEvent(nevent);
+	return;
+    }
 
     if (event.LeftUp() && (item == m_current) &&
         (flags & wxTREE_HITTEST_ONITEMLABEL) &&
