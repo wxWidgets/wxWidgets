@@ -90,6 +90,9 @@ static void wxPyCoreAPI_IMPORT() {
 #define wxPyUserData_dtor(a)                (wxPyCoreAPIPtr->p_wxPyUserData_dtor(a))
 #define wxPyOORClientData_dtor(a)           (wxPyCoreAPIPtr->p_wxPyOORClientData_dtor(a))
 
+#define wxPyCBInputStream_create(a, b)      (wxPyCoreAPIPtr->p_wxPyCBInputStream_create(a, b))
+
+
 // This one is special.  It's the first function called in SWIG generated
 // modules, so we'll use it to also import the API.
 #define SWIG_newvarlink()     (wxPyCoreAPI_IMPORT(), wxPyCoreAPIPtr->p_SWIG_newvarlink())

@@ -326,8 +326,15 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 #define wxPlatform "__WXMAC__"
 #endif
 
+#ifdef __WXDEBUG__
+    int wxdebug = 1;
+#else
+    int wxdebug = 0;
+#endif
+
     PyDict_SetItemString(wxPython_dict, "wxPlatform", PyString_FromString(wxPlatform));
     PyDict_SetItemString(wxPython_dict, "wxUSE_UNICODE", PyInt_FromLong(wxUSE_UNICODE));
+    PyDict_SetItemString(wxPython_dict, "__WXDEBUG__", PyInt_FromLong(wxdebug));
 
     Py_INCREF(Py_None);
     return Py_None;
@@ -824,6 +831,11 @@ wxPyCBInputStream* wxPyCBInputStream::create(PyObject *py, bool block) {
 
     if (block) wxPyEndBlockThreads();
     return new wxPyCBInputStream(read, seek, tell, block);
+}
+
+
+wxPyCBInputStream* wxPyCBInputStream_create(PyObject *py, bool block) {
+    return wxPyCBInputStream::create(py, block);
 }
 
 PyObject* wxPyCBInputStream::getMethod(PyObject* py, char* name) {

@@ -39,7 +39,7 @@
         $target = temp->m_wxis;
         created = FALSE;
     } else {
-        $target = wxPyCBInputStream::create($source, FALSE);
+        $target = wxPyCBInputStream_create($source, FALSE);
         if ($target == NULL) {
             PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
             return NULL;

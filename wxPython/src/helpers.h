@@ -210,10 +210,12 @@ public:
 class wxPyClientData;
 class wxPyUserData;
 class wxPyOORClientData;
+class wxPyCBInputStream;
 
 void wxPyClientData_dtor(wxPyClientData* self);
 void wxPyUserData_dtor(wxPyUserData* self);
 void wxPyOORClientData_dtor(wxPyOORClientData* self);
+wxPyCBInputStream* wxPyCBInputStream_create(PyObject *py, bool block);
 
 
 //---------------------------------------------------------------------------
@@ -285,6 +287,9 @@ struct wxPyCoreAPI {
     void        (*p_wxPyClientData_dtor)(wxPyClientData*);
     void        (*p_wxPyUserData_dtor)(wxPyUserData*);
     void        (*p_wxPyOORClientData_dtor)(wxPyOORClientData*);
+
+    wxPyCBInputStream* (*p_wxPyCBInputStream_create)(PyObject *py, bool block);
+
 };
 
 #ifdef wxPyUSE_EXPORT
