@@ -824,7 +824,7 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
 {
 #if !defined(__WXMICROWIN__)
     // get system (a.k.a. window) menu
-    HMENU hmenu = ::GetSystemMenu(GetHwnd(), FALSE /* get it */);
+    HMENU hmenu = GetSystemMenu(GetHwnd(), FALSE /* get it */);
     if ( !hmenu )
     {
         // no system menu at all -- ok if we want to remove the close button
@@ -941,8 +941,9 @@ void wxTopLevelWindowMSW::RequestUserAttention(int flags)
 #endif // FLASHW_STOP
     {
         wxUnusedVar(flags);
-
+#ifndef __WXWINCE__
         ::FlashWindow(GetHwnd(), TRUE);
+#endif // __WXWINCE__
     }
 }
 
