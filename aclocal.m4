@@ -18,6 +18,7 @@ dnl Vadim Zeitlin and Ron Lee
 dnl
 dnl This script is under the wxWindows licence.
 dnl
+dnl Version: $Id$
 dnl ---------------------------------------------------------------------------
 
 dnl ===========================================================================
@@ -1267,7 +1268,7 @@ dnl
 dnl Detects GNU make
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE_GNUMAKE,
+AC_DEFUN([AC_BAKEFILE_GNUMAKE],
 [
     dnl does make support "-include" (only GNU make does AFAIK)?
     AC_CACHE_CHECK([if make is GNU make], bakefile_cv_prog_makeisgnu,
@@ -1294,7 +1295,7 @@ dnl
 dnl Detects platform and sets PLATFORM_XXX variables accordingly
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE_PLATFORM,
+AC_DEFUN([AC_BAKEFILE_PLATFORM],
 [
     PLATFORM_UNIX=0
     PLATFORM_WIN32=0
@@ -1361,9 +1362,10 @@ dnl
 dnl Sets misc platform-specific settings
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE_PLATFORM_SPECIFICS,
+AC_DEFUN([AC_BAKEFILE_PLATFORM_SPECIFICS],
 [
-    AC_ARG_ENABLE([omf], [  --enable-omf            use OMF object format (OS/2)],
+    AC_ARG_ENABLE([omf], AS_HELP_STRING([--enable-omf],
+                                        [use OMF object format (OS/2)]),
                   [bk_os2_use_omf="$enableval"])
     
     case "${BAKEFILE_HOST}" in
@@ -1396,7 +1398,7 @@ dnl Detects shared various suffixes for shared libraries, libraries, programs,
 dnl plugins etc.
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE_SUFFIXES,
+AC_DEFUN([AC_BAKEFILE_SUFFIXES],
 [
     SO_SUFFIX="so"
     SO_SUFFIX_MODULE="so"
@@ -1469,7 +1471,7 @@ dnl Detects command for making shared libraries, substitutes SHARED_LD_CC
 dnl and SHARED_LD_CXX.
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE_SHARED_LD,
+AC_DEFUN([AC_BAKEFILE_SHARED_LD],
 [
     dnl Defaults for GCC and ELF .so shared libs:
     SHARED_LD_CC="\$(CC) -shared -o"
@@ -1623,6 +1625,10 @@ AC_DEFUN(AC_BAKEFILE_SHARED_LD,
         AC_MSG_ERROR(unknown system type $BAKEFILE_HOST.)
     esac
 
+    if test "x$PIC_FLAG" != "x" ; then
+        PIC_FLAG="$PIC_FLAG -DPIC"
+    fi
+
     if test "x$SHARED_LD_MODULE_CC" = "x" ; then
         SHARED_LD_MODULE_CC="$SHARED_LD_CC"
     fi
@@ -1644,7 +1650,7 @@ dnl
 dnl Detects linker options for attaching versions (sonames) to shared  libs.
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE_SHARED_VERSIONS,
+AC_DEFUN([AC_BAKEFILE_SHARED_VERSIONS],
 [
     USE_SOVERSION=0
     USE_SOVERLINUX=0
@@ -1690,7 +1696,7 @@ dnl
 dnl Detects available C/C++ dependency tracking options
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE_DEPS,
+AC_DEFUN([AC_BAKEFILE_DEPS],
 [
     AC_MSG_CHECKING([for dependency tracking method])
     DEPS_TRACKING=0
@@ -1728,7 +1734,7 @@ dnl Checks for presence of basic programs, such as C and C++ compiler, "ranlib"
 dnl or "install"
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE_CHECK_BASIC_STUFF,
+AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
 [
     AC_PROG_RANLIB
     AC_PROG_INSTALL
@@ -1743,7 +1749,7 @@ AC_DEFUN(AC_BAKEFILE_CHECK_BASIC_STUFF,
 
     case ${BAKEFILE_HOST} in
         *-hp-hpux* )
-            INSTALL_DIR="mkdir"
+            INSTALL_DIR="mkdir -p"
             ;;
         *)  INSTALL_DIR="$INSTALL -d"
             ;;
@@ -1765,7 +1771,7 @@ dnl
 dnl Checks for presence of resource compilers for win32 or mac
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE_RES_COMPILERS,
+AC_DEFUN([AC_BAKEFILE_RES_COMPILERS],
 [
     RESCOMP=
     SETFILE=
@@ -1796,11 +1802,12 @@ dnl
 dnl Check for precompiled headers support (GCC >= 3.4)
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE_PRECOMP_HEADERS,
+AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
 [
 
     AC_ARG_ENABLE([precomp-headers],
-                  [  --disable-precomp-headers  don't use precompiled headers even if compiler can],
+                  AS_HELP_STRING([--disable-precomp-headers],
+                                 [don't use precompiled headers even if compiler can]),
                   [bk_use_pch="$enableval"])
 
     GCC_PCH=0
@@ -1825,9 +1832,6 @@ AC_DEFUN(AC_BAKEFILE_PRECOMP_HEADERS,
                 ],
                 [
                     AC_MSG_RESULT([yes])
-                    dnl FIXME - this is temporary, till .gch dependencies 
-                    dnl         are fixed in generated Makefiles
-                    CPPFLAGS="-fpch-deps $CPPFLAGS"
                     GCC_PCH=1
                 ],
                 [
@@ -1900,7 +1904,7 @@ dnl                             to ${host}
 dnl    BAKEFILE_FORCE_PLATFORM  set to override platform detection
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE,
+AC_DEFUN([AC_BAKEFILE],
 [
     if test "x$BAKEFILE_HOST" = "x"; then
         BAKEFILE_HOST="${host}"
@@ -1918,7 +1922,13 @@ AC_DEFUN(AC_BAKEFILE,
     AC_BAKEFILE_DEPS
     AC_BAKEFILE_RES_COMPILERS
 
+    BAKEFILE_BAKEFILE_M4_VERSION="0.1.4"
+    
     builtin(include, autoconf_inc.m4)
+    
+    if test "$BAKEFILE_BAKEFILE_M4_VERSION" != "$BAKEFILE_AUTOCONF_INC_M4_VERSION" ; then
+        AC_MSG_ERROR([Versions of Bakefile used to generate makefiles ($BAKEFILE_AUTOCONF_INC_M4_VERSION) and configure ($BAKEFILE_BAKEFILE_M4_VERSION) do not match.])
+    fi
 ])
         
 
@@ -1926,7 +1936,7 @@ dnl ---------------------------------------------------------------------------
 dnl              Embedded copies of helper scripts follow:
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(AC_BAKEFILE_CREATE_FILE_DLLAR_SH,
+AC_DEFUN([AC_BAKEFILE_CREATE_FILE_DLLAR_SH],
 [
 dnl ===================== dllar.sh begins here =====================
 D='$'
@@ -2018,18 +2028,18 @@ CleanUp() {
 
     # Kill result in case of failure as there is just to many stupid make/nmake
     # things out there which doesn't do this.
-    if [ ${D}# -eq 0 ]; then
+    if [[] ${D}# -eq 0 []]; then
         rm -f ${D}arcFile ${D}arcFile2 ${D}defFile ${D}dllFile
     fi
 }
 
 # Print usage and exit script with rc=1.
 PrintHelp() {
- echo 'Usage: dllar [-o[utput] output_file] [-i[mport] importlib_name]'
- echo '       [-d[escription] "dll descrption"] [-cc "CC"] [-f[lags] "CFLAGS"]'
- echo '       [-ord[inals]] -ex[clude] "symbol(s)"'
- echo '       [-libf[lags] "{INIT|TERM}{GLOBAL|INSTANCE}"] [-nocrt[dll]] [-nolxl[ite]]'
- echo '       [*.o] [*.a]'
+ echo 'Usage: dllar [[]-o[[]utput[]] output_file[]] [[]-i[[]mport[]] importlib_name[]]'
+ echo '       [[]-d[[]escription[]] "dll descrption"[]] [[]-cc "CC"[]] [[]-f[[]lags[]] "CFLAGS"[]]'
+ echo '       [[]-ord[[]inals[]][]] -ex[[]clude[]] "symbol(s)"'
+ echo '       [[]-libf[[]lags[]] "{INIT|TERM}{GLOBAL|INSTANCE}"[]] [[]-nocrt[[]dll[]][]] [[]-nolxl[[]ite[]][]]'
+ echo '       [[]*.o[]] [[]*.a[]]'
  echo '*> "output_file" should have no extension.'
  echo '   If it has the .o, .a or .dll extension, it is automatically removed.'
  echo '   The import library name is derived from this and is set to "name".a,'
@@ -2042,16 +2052,16 @@ PrintHelp() {
  echo '*> "cc" is used to use another GCC executable.   (default: gcc.exe)'
  echo '*> "flags" should be any set of valid GCC flags. (default: -s -Zcrtdll)'
  echo '   These flags will be put at the start of GCC command line.'
- echo '*> -ord[inals] tells dllar to export entries by ordinals. Be careful.'
- echo '*> -ex[clude] defines symbols which will not be exported. You can define'
+ echo '*> -ord[[]inals[]] tells dllar to export entries by ordinals. Be careful.'
+ echo '*> -ex[[]clude[]] defines symbols which will not be exported. You can define'
  echo '   multiple symbols, for example -ex "myfunc yourfunc _GLOBAL*".'
  echo '   If the last character of a symbol is "*", all symbols beginning'
  echo '   with the prefix before "*" will be exclude, (see _GLOBAL* above).'
- echo '*> -libf[lags] can be used to add INITGLOBAL/INITINSTANCE and/or'
+ echo '*> -libf[[]lags[]] can be used to add INITGLOBAL/INITINSTANCE and/or'
  echo '   TERMGLOBAL/TERMINSTANCE flags to the dynamically-linked library.'
- echo '*> -nocrt[dll] switch will disable linking the library against emx''s'
+ echo '*> -nocrt[[]dll[]] switch will disable linking the library against emx''s'
  echo '   C runtime DLLs.'
- echo '*> -nolxl[ite] switch will disable running lxlite on the resulting DLL.'
+ echo '*> -nolxl[[]ite[]] switch will disable running lxlite on the resulting DLL.'
  echo '*> All other switches (for example -L./ or -lmylib) will be passed'
  echo '   unchanged to GCC at the end of command line.'
  echo '*> If you create a DLL from a library and you do not specify -o,'
@@ -2075,7 +2085,7 @@ doCommand() {
     eval ${D}*
     rcCmd=${D}?
 
-    if [ ${D}rcCmd -ne 0 ]; then
+    if [[] ${D}rcCmd -ne 0 []]; then
         echo "command failed, exit code="${D}rcCmd
         CleanUp
         exit ${D}rcCmd
@@ -2106,7 +2116,7 @@ case ${D}curDirS in
 esac
 # Parse commandline
 libsToLink=0
-while [ ${D}1 ]; do
+while [[] ${D}1 []]; do
     case ${D}1 in
     -ord*)
         EXPORT_BY_ORDINALS=1;
@@ -2160,16 +2170,16 @@ while [ ${D}1 ]; do
         ;;
     *)
         found=0;
-        if [ ${D}libsToLink -ne 0 ]; then
+        if [[] ${D}libsToLink -ne 0 []]; then
             EXTRA_CFLAGS=${D}{EXTRA_CFLAGS}" "${D}1
         else
             for file in ${D}1 ; do
-                if [ -f ${D}file ]; then
+                if [[] -f ${D}file []]; then
                     inputFiles="${D}{inputFiles} ${D}file"
                     found=1
                 fi
             done
-            if [ ${D}found -eq 0 ]; then
+            if [[] ${D}found -eq 0 []]; then
                 echo "ERROR: No file(s) found: "${D}1
                 exit 8
             fi
@@ -2180,7 +2190,7 @@ while [ ${D}1 ]; do
 done # iterate cmdline words
 
 #
-if [ -z "${D}inputFiles" ]; then
+if [[] -z "${D}inputFiles" []]; then
     echo "dllar: no input files"
     PrintHelp
 fi
@@ -2205,7 +2215,7 @@ for file in ${D}inputFiles ; do
         esac
         dirname=\`basnam ${D}file ${D}suffix\`"_%"
         mkdir ${D}dirname
-        if [ ${D}? -ne 0 ]; then
+        if [[] ${D}? -ne 0 []]; then
             echo "Failed to create subdirectory ./${D}dirname"
             CleanUp
             exit 8;
@@ -2216,15 +2226,15 @@ for file in ${D}inputFiles ; do
         cd ${D}curDir
         found=0;
         for subfile in ${D}dirname/*.o* ; do
-            if [ -f ${D}subfile ]; then
+            if [[] -f ${D}subfile []]; then
                 found=1
-                if [ -s ${D}subfile ]; then
+                if [[] -s ${D}subfile []]; then
 	            # FIXME: This should be: is file size > 32 byte, _not_ > 0!
                     newInputFiles="${D}newInputFiles ${D}subfile"
                 fi
             fi
         done
-        if [ ${D}found -eq 0 ]; then
+        if [[] ${D}found -eq 0 []]; then
             echo "WARNING: there are no files in archive \'${D}file\'"
         fi
         ;;
@@ -2237,7 +2247,7 @@ inputFiles="${D}newInputFiles"
 
 # Output filename(s).
 do_backup=0;
-if [ -z ${D}outFile ]; then
+if [[] -z ${D}outFile []]; then
     do_backup=1;
     set outFile ${D}inputFiles; outFile=${D}2
 fi
@@ -2282,7 +2292,7 @@ case ${D}outimpFile in
 *)
     ;;
 esac
-if [ -z ${D}outimpFile ]; then
+if [[] -z ${D}outimpFile []]; then
     outimpFile=${D}outFile
 fi
 defFile="${D}{outFile}.def"
@@ -2292,11 +2302,11 @@ dllFile="${D}outFile"
 # Add suffix to dllFile later, first we need a version to use as
 # name in .def file.
 
-if [ ${D}do_backup -ne 0 ] ; then
-    if [ -f ${D}arcFile ] ; then
+if [[] ${D}do_backup -ne 0 []] ; then
+    if [[] -f ${D}arcFile []] ; then
         doCommand "mv ${D}arcFile ${D}{outFile}_s.a"
     fi
-    if [ -f ${D}arcFile2 ] ; then
+    if [[] -f ${D}arcFile2 []] ; then
         doCommand "mv ${D}arcFile2 ${D}{outFile}_s.lib"
     fi
 fi
@@ -2318,7 +2328,7 @@ done
 rm -f ${D}defFile
 echo "LIBRARY \`basnam ${D}dllFile\` ${D}library_flags" >> ${D}defFile
 dllFile="${D}dllFile.dll"
-if [ -n ${D}description ]; then
+if [[] -n ${D}description []]; then
     echo "DESCRIPTION  \"${D}{description}\"" >> ${D}defFile
 fi
 echo "EXPORTS" >> ${D}defFile
@@ -2333,12 +2343,12 @@ for word in ${D}exclude_symbols; do
 done
 
 
-if [ ${D}EXPORT_BY_ORDINALS -ne 0 ]; then
+if [[] ${D}EXPORT_BY_ORDINALS -ne 0 []]; then
     sed "=" < ${D}tmpdefFile | \
     sed '
       N
       : loop
-      s/^\([0-9]\+\)\([^;]*\)\(;.*\)\?/\2 @\1 NONAME/
+      s/^\([[]0-9[]]\+\)\([[]^;[]]*\)\(;.*\)\?/\2 @\1 NONAME/
       t loop
     ' > ${D}{tmpdefFile}%
     grep -v "^ *${D}" < ${D}{tmpdefFile}% > ${D}tmpdefFile
@@ -2363,9 +2373,9 @@ doCommand "${D}CC ${D}CFLAGS -Zdll -o ${D}dllFile ${D}defFile ${D}gccCmdl ${D}EX
 touch "${D}{outFile}.dll"
 
 doCommand "emximp -o ${D}arcFile ${D}defFile"
-if [ ${D}flag_USE_LXLITE -ne 0 ]; then
+if [[] ${D}flag_USE_LXLITE -ne 0 []]; then
     add_flags="";
-    if [ ${D}EXPORT_BY_ORDINALS -ne 0 ]; then
+    if [[] ${D}EXPORT_BY_ORDINALS -ne 0 []]; then
         add_flags="-ynd"
     fi
     doCommand "lxlite -cs -t: -mrn -mln ${D}add_flags ${D}dllFile"
@@ -2379,7 +2389,7 @@ EOF
 dnl ===================== dllar.sh ends here =====================
 ])
 
-AC_DEFUN(AC_BAKEFILE_CREATE_FILE_BK_DEPS,
+AC_DEFUN([AC_BAKEFILE_CREATE_FILE_BK_DEPS],
 [
 dnl ===================== bk-deps begins here =====================
 D='$'
@@ -2439,7 +2449,7 @@ EOF
 dnl ===================== bk-deps ends here =====================
 ])
 
-AC_DEFUN(AC_BAKEFILE_CREATE_FILE_SHARED_LD_SH,
+AC_DEFUN([AC_BAKEFILE_CREATE_FILE_SHARED_LD_SH],
 [
 dnl ===================== shared-ld-sh begins here =====================
 D='$'
@@ -2534,7 +2544,7 @@ dnl ===================== shared-ld-sh ends here =====================
 ])
 
 dnl
-dnl AM_PATH_CPPUNIT([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
+dnl AM_PATH_CPPUNIT(MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 dnl
 AC_DEFUN(AM_PATH_CPPUNIT,
 [
@@ -2564,7 +2574,6 @@ AC_ARG_WITH(cppunit-exec-prefix,[  --with-cppunit-exec-prefix=PFX  Exec prefix w
   no_cppunit=""
   if test "$CPPUNIT_CONFIG" = "no" ; then
     no_cppunit=yes
-    AC_MSG_RESULT(no)
   else
     CPPUNIT_CFLAGS=`$CPPUNIT_CONFIG --cflags`
     CPPUNIT_LIBS=`$CPPUNIT_CONFIG --libs`
