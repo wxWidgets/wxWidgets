@@ -465,7 +465,11 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
     if ( navigSizer )
     {
-        navigSizer->SetSizeHints(m_NavigPan);
+        // We don't really want to set the nav panel min size to
+        // the current overall window size (which may be large).
+        // But leaving this code commented in case there's
+        // some variation that makes sense.
+//        navigSizer->SetSizeHints(m_NavigPan);
         m_NavigPan->Layout();
     }
 
