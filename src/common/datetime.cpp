@@ -97,7 +97,7 @@
     #undef HAVE_STRPTIME
 #endif // broken strptime()
 
-#ifndef WX_TIMEZONE
+#if !defined(WX_TIMEZONE) && !defined(WX_GMTOFF_IN_TM)
     #if defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
         #define WX_TIMEZONE _timezone
     #elif defined(__MWERKS__)
@@ -118,10 +118,12 @@
             return timezone;
         }
         #define WX_TIMEZONE wxGetTimeZone()
+    #elif defined(__DARWIN__)
+        #define WX_GMTOFF_IN_TM
     #else // unknown platform - try timezone
         #define WX_TIMEZONE timezone
     #endif
-#endif // !WX_TIMEZONE
+#endif // !WX_TIMEZONE && !WX_GMTOFF_IN_TM
 
 // ----------------------------------------------------------------------------
 // macros
@@ -261,20 +263,31 @@ static int GetTimeZone()
 {
     // set to TRUE when the timezone is set
     static bool s_timezoneSet = FALSE;
-
+#ifdef WX_GMTOFF_IN_TM
+    static long gmtoffset = LONG_MAX; // invalid timezone
+#endif
+    
     wxCRIT_SECT_LOCKER(lock, gs_critsectTimezone);
 
     if ( !s_timezoneSet )
     {
         // just call localtime() instead of figuring out whether this system
         // supports tzset(), _tzset() or something else
-        time_t                 t = 0;
+        time_t     t = 0;
+        struct tm *tm;
 
-        (void)localtime(&t);
+        tm = localtime(&t);
         s_timezoneSet = TRUE;
+#ifdef WX_GMTOFF_IN_TM
+        gmtoffset = tm->tm_gmtoff;
+#endif
     }
 
+#ifdef WX_GMTOFF_IN_TM
+    return (int)gmtoffset;
+#else
     return (int)WX_TIMEZONE;
+#endif
 }
 
 // return the integral part of the JDN for the midnight of the given date (to
