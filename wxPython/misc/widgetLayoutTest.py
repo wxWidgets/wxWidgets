@@ -256,13 +256,15 @@ class LayoutTestFrame(wx.Frame):
         expr = "w = %s.%s( testPanel, %s )" % (moduleName, className, parameters)
         self.expression.SetValue(expr)
 
-        docstring = ""
+        docstring = None
         try:
             docstring = eval("%s.%s.__init__.__doc__" % (moduleName, className))
         except:
             pass
-        self.docstring.SetValue(docstring)
-
+        if docstring is not None:
+            self.docstring.SetValue(docstring)
+        else:
+            self.docstring.SetValue("")
 
     def OnEnableDestroy(self, evt):
         evt.Enable(self.testWidget is not None)
