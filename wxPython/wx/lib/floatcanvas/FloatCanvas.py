@@ -1646,7 +1646,6 @@ class FloatCanvas(wx.Panel):
                               ViewPortBB,
                               self._ForegroundHTdc)
         ScreenDC.Blit(0, 0, self.PanelSize[0],self.PanelSize[1], dc, 0, 0)
-##        wx.GetApp().Yield(True)
         # If the canvas is in the middle of a zoom or move, the Rubber Band box needs to be re-drawn
         # This seeems out of place, but it works.
         if self.PrevRBBox:

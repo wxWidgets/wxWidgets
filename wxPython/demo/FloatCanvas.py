@@ -267,7 +267,6 @@ else:
             self.Destroy()
             
         def DrawTest(self,event=None):
-            wx.GetApp().Yield(True)
 #            import random
 #            import RandomArray
             Range = (-10,10)
@@ -381,7 +380,6 @@ else:
 
             """
             print "Running TestAnimation"
-            wx.GetApp().Yield(True)
             Range = (-10,10)
             self.Range = Range
 
@@ -480,7 +478,6 @@ else:
                 Object.Text.Move( (self.dx,self.dy))
                 self.Canvas.Draw()
                 self.TimeStep += 1
-                wx.GetApp().Yield(True)
             else:
                 self.Timer.Stop()
             
@@ -498,7 +495,6 @@ else:
             #print "Did %i frames in %f seconds"%(N, (time.time() - start) )
                 
         def TestHitTest(self,event=None):
-            wx.GetApp().Yield(True)
 
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
@@ -709,7 +705,6 @@ else:
 
         def TestHitTestForeground(self,event=None):
             print "Running: TestHitTestForeground"
-            wx.GetApp().Yield(True)
 
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
@@ -814,7 +809,6 @@ else:
 
 
         def TestText(self, event= None):
-            wx.GetApp().Yield(True)
 
             self.BindAllMouseEvents()
             Canvas = self.Canvas
@@ -874,7 +868,6 @@ else:
             self.Canvas.ZoomToBB()
 
         def TestScaledText(self, event= None):
-            wx.GetApp().Yield(True)
 
             self.BindAllMouseEvents()
             Canvas = self.Canvas
@@ -925,7 +918,6 @@ else:
             self.Canvas.ZoomToBB()
             
         def DrawMap(self,event = None):
-            wx.GetApp().Yield(True)
             import os, time
             self.BindAllMouseEvents()
             
@@ -945,7 +937,6 @@ else:
     
  
         def LineTest(self,event = None):
-            wx.GetApp().Yield(True)
             import os, time
 #            import random
             colors = self.colors
@@ -974,7 +965,6 @@ else:
             #print "It took %f seconds to draw %i lines"%(time.clock() - start,len(linepoints) )
 
         def SpeedTest(self,event=None):
-            wx.GetApp().Yield(True)
 #            import random
 #            import RandomArray
             BigRange = (-1000,1000)
@@ -1107,7 +1097,6 @@ else:
 
         def TempTest(self, event= None):
             "Running the Temporary test"
-            wx.GetApp().Yield(True)
 
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
