@@ -567,7 +567,7 @@ int wxSplitterWindow::AdjustSashPosition(int sashPos) const
         if ( minSize == -1 || m_minimumPaneSize > minSize )
             minSize = m_minimumPaneSize;
 
-        int maxSize = window_size - minSize - GetBorderSize();
+        int maxSize = window_size - minSize - GetBorderSize() - GetSashSize();
         if ( sashPos > maxSize )
             sashPos = maxSize;
     }
