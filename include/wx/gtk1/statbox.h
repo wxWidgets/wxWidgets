@@ -50,6 +50,7 @@ class wxStaticBox: public wxControl
     bool Create( wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
       long style = 0, const wxString &name = wxStaticBoxNameStr  );
+    void SetLabel( const wxString &label );
 };
 
 #endif // __GTKSTATICBOXH__

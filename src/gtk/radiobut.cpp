@@ -86,6 +86,14 @@ bool wxRadioButton::GetValue(void) const
   return GTK_TOGGLE_BUTTON(m_widget)->active;
 }
 
+void wxRadioButton::Enable( bool enable )
+{
+  wxControl::Enable( enable );
+  GtkButton *bin = GTK_BUTTON( m_widget );
+  GtkWidget *label = bin->child;
+  gtk_widget_set_sensitive( label, enable );
+}
+
 void wxRadioButton::SetFont( const wxFont &font )
 {
   if (((wxFont*)&font)->Ok())

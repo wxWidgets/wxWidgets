@@ -48,3 +48,10 @@ bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label
 
   return TRUE;
 }
+
+void wxStaticBox::SetLabel( const wxString &label )
+{
+  wxControl::SetLabel( label );
+  GtkFrame *frame = GTK_FRAME( m_widget );
+  gtk_frame_set_label( frame, GetLabel() );
+}

@@ -89,6 +89,14 @@ bool wxCheckBox::GetValue(void) const
   return tb->active;
 }
 
+void wxCheckBox::Enable( bool enable )
+{
+  wxControl::Enable( enable );
+  GtkButton *bin = GTK_BUTTON( m_widget );
+  GtkWidget *label = bin->child;
+  gtk_widget_set_sensitive( label, enable );
+}
+
 void wxCheckBox::SetFont( const wxFont &font )
 {
   if (((wxFont*)&font)->Ok())

@@ -65,7 +65,6 @@ class wxRadioBox: public wxControl
     void SetSelection( int n );
     int GetSelection(void) const;
     wxString GetString( int n ) const;
-    wxString GetLabel(void) const;
     void SetLabel( const wxString& label );
     void SetLabel( int item, const wxString& label );
     void SetLabel( int item, wxBitmap *bitmap );
@@ -79,8 +78,8 @@ class wxRadioBox: public wxControl
     virtual int Number(void) const;
     int GetNumberOfRowsOrCols(void) const;
     void SetNumberOfRowsOrCols( int n );
+    
     void SetFont( const wxFont &font );
-
     void OnSize( wxSizeEvent &event );
     
   // implementation    

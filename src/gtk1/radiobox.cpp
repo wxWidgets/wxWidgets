@@ -177,7 +177,12 @@ void wxRadioBox::SetSelection( int n )
 {
   GSList *item = gtk_radio_button_group( m_radio );
   item = g_slist_nth( item, g_slist_length(item)-n-1 );
-  if (!item) return;
+  
+  if (!item)
+  {
+    wxFAIL_MSG( "wxRadioBox wrong index" );
+    return;
+  }
   
   GtkToggleButton *button = GTK_TOGGLE_BUTTON( item->data );
   
@@ -205,28 +210,46 @@ wxString wxRadioBox::GetString( int n ) const
   GSList *item = gtk_radio_button_group( m_radio );
   
   item = g_slist_nth( item, g_slist_length(item)-n-1 );
-  if (!item) return "";
   
-  GtkToggleButton *button = GTK_TOGGLE_BUTTON( item->data );
+  if (!item)
+  {
+    wxFAIL_MSG( "wxRadioBox wrong index" );
+    return "";
+  }
   
-  GtkLabel *label = GTK_LABEL( GTK_BUTTON(button)->child );
+  GtkButton *button = GTK_BUTTON( item->data );
+  GtkLabel *label = GTK_LABEL( button->child );
   
   return wxString( label->label );
 }
 
-wxString wxRadioBox::GetLabel(void) const
+wxString wxRadioBox::GetLabel( int item ) const
 {
-  return wxControl::GetLabel();
+  return GetString( item );
 }
 
-void wxRadioBox::SetLabel( const wxString& WXUNUSED(label) )
+void wxRadioBox::SetLabel( const wxString& label )
 {
-  wxFAIL_MSG("wxRadioBox::SetLabel not implemented.");
+  wxControl::SetLabel( label );
+  GtkFrame *frame = GTK_FRAME( m_widget );
+  gtk_frame_set_label( frame, wxControl::GetLabel() );
 }
 
-void wxRadioBox::SetLabel( int WXUNUSED(item), const wxString& WXUNUSED(label) )
+void wxRadioBox::SetLabel( int item, const wxString& label )
 {
-  wxFAIL_MSG("wxRadioBox::SetLabel not implemented.");
+  GSList *list = gtk_radio_button_group( m_radio );
+  list = g_slist_nth( list, g_slist_length(list)-item-1 );
+  
+  if (!list)
+  {
+    wxFAIL_MSG( "wxRadioBox wrong index" );
+    return;
+  }
+  
+  GtkButton *button = GTK_BUTTON( list->data );
+  GtkLabel *g_label = GTK_LABEL( button->child );
+  
+  gtk_label_set( g_label, label );
 }
 
 void wxRadioBox::SetLabel( int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap) )
@@ -234,25 +257,56 @@ void wxRadioBox::SetLabel( int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap) )
   wxFAIL_MSG("wxRadioBox::SetLabel not implemented.");
 }
 
-wxString wxRadioBox::GetLabel( int WXUNUSED(item) ) const
+void wxRadioBox::Enable( bool enable )
 {
-  wxFAIL_MSG("wxRadioBox::GetLabel not implemented.");
-  return "";
+  wxControl::Enable( enable );
+  
+  GSList *item = gtk_radio_button_group( m_radio );
+  while (item)
+  {
+    GtkButton *button = GTK_BUTTON( item->data );
+    GtkWidget *label = button->child;
+    gtk_widget_set_sensitive( GTK_WIDGET(button), enable );
+    gtk_widget_set_sensitive( label, enable );
+    item = item->next;
+  }
 }
 
-void wxRadioBox::Enable( bool WXUNUSED(enable) )
+void wxRadioBox::Enable( int item, bool enable )
 {
-  wxFAIL_MSG("wxRadioBox::Enable not implemented.");
+  GSList *list = gtk_radio_button_group( m_radio );
+  list = g_slist_nth( list, g_slist_length(list)-item-1 );
+  
+  if (!list)
+  {
+    wxFAIL_MSG( "wxRadioBox wrong index" );
+    return;
+  }
+  
+  GtkButton *button = GTK_BUTTON( list->data );
+  
+  GtkWidget *label = button->child;
+  gtk_widget_set_sensitive( GTK_WIDGET(button), enable );
+  gtk_widget_set_sensitive( label, enable );
 }
 
-void wxRadioBox::Enable( int WXUNUSED(item), bool WXUNUSED(enable) )
+void wxRadioBox::Show( int item, bool show )
 {
-  wxFAIL_MSG("wxRadioBox::Enable not implemented.");
-}
+  GSList *list = gtk_radio_button_group( m_radio );
+  list = g_slist_nth( list, g_slist_length(list)-item-1 );
+  
+  if (!list)
+  {
+    wxFAIL_MSG( "wxRadioBox wrong index" );
+    return;
+  }
+  
+  GtkWidget *button = GTK_WIDGET( list->data );
 
-void wxRadioBox::Show( int WXUNUSED(item), bool WXUNUSED(show) )
-{
-  wxFAIL_MSG("wxRadioBox::Show not implemented.");
+  if (show)
+    gtk_widget_show( button );
+  else
+    gtk_widget_hide( button );
 }
 
 wxString wxRadioBox::GetStringSelection(void) const

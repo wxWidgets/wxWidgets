@@ -60,6 +60,7 @@ class wxCheckBox: public wxControl
     void SetValue( bool state );
     bool GetValue(void) const;
     void SetFont( const wxFont &font );
+    void Enable( bool enable );
 };
 
 #endif // __GTKCHECKBOXH__
