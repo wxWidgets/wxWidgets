@@ -14,11 +14,7 @@ class TestPanel(wx.Panel):
                           style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
 
         # Create some controls
-        self.mc = wx.media.MediaCtrl(self, -1, opj("data/testmovie.mpg"),
-                                     style=wx.SIMPLE_BORDER)
-        self.mc.SetBackgroundColour("black")
-        #self.mc.SetMinSize((320,200))
-        self.mc.Stop()
+        self.mc = wx.media.MediaCtrl(self, style=wx.SIMPLE_BORDER)
 
         btn1 = wx.Button(self, -1, "Load File")
         self.Bind(wx.EVT_BUTTON, self.OnLoadFile, btn1)
@@ -34,8 +30,16 @@ class TestPanel(wx.Panel):
 
         btn5 = wx.ToggleButton(self, -1, "Loop")
         self.Bind(wx.EVT_TOGGLEBUTTON, self.OnLoopToggle, btn5)
-        
 
+        slider = wx.Slider(self, -1, 0, 0, 0)
+        self.slider = slider
+        self.Bind(wx.EVT_SLIDER, self.OnSeek, slider)
+
+        self.st_size = wx.StaticText(self, -1, size=(100,-1))
+        self.st_len  = wx.StaticText(self, -1, size=(100,-1))
+        self.st_pos  = wx.StaticText(self, -1, size=(100,-1))
+        
+        
         # setup the layout
         sizer = wx.GridBagSizer(5,5)
         sizer.Add(self.mc, (1,1), span=(5,1))#, flag=wx.EXPAND)
@@ -44,7 +48,19 @@ class TestPanel(wx.Panel):
         sizer.Add(btn3, (3,3))
         sizer.Add(btn4, (4,3))
         sizer.Add(btn5, (5,3))
+        sizer.Add(slider, (6,1), flag=wx.EXPAND)
+        sizer.Add(self.st_size, (1, 5))
+        sizer.Add(self.st_len,  (2, 5))
+        sizer.Add(self.st_pos,  (3, 5))
         self.SetSizer(sizer)
+
+        self.DoLoadFile(opj("data/testmovie.mpg"))
+        self.mc.Stop()
+
+        self.timer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self.OnTimer)
+        self.timer.Start(100)
+        
         
 
     def OnLoadFile(self, evt):
@@ -53,14 +69,20 @@ class TestPanel(wx.Panel):
                             style=wx.OPEN | wx.CHANGE_DIR )
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            if not self.mc.Load(path):
-                wx.MessageBox("Unable to load %s: Unsupported format?" % path,
-                              "ERROR",
-                              wx.ICON_ERROR | wx.OK)
-            else:
-                self.mc.SetBestFittingSize()
-                self.GetSizer().Layout()
+            self.DoLoadFile(path)
         dlg.Destroy()
+
+
+    def DoLoadFile(self, path):
+        if not self.mc.Load(path):
+            wx.MessageBox("Unable to load %s: Unsupported format?" % path,
+                          "ERROR",
+                          wx.ICON_ERROR | wx.OK)
+        else:
+            self.mc.SetBestFittingSize()
+            self.GetSizer().Layout()
+            self.slider.SetRange(0, self.mc.Length())
+            self.mc.Play()
         
     
     def OnLoopToggle(self, evt):
@@ -78,6 +100,16 @@ class TestPanel(wx.Panel):
         self.mc.Stop()
     
 
+    def OnSeek(self, evt):
+        offset = self.slider.GetValue()
+        self.mc.Seek(offset)
+
+    def OnTimer(self, evt):
+        offset = self.mc.Tell()
+        self.slider.SetValue(offset)
+        self.st_size.SetLabel('size: %s' % self.mc.GetBestSize())
+        self.st_len.SetLabel('length: %d seconds' % (self.mc.Length()/1000))
+        self.st_pos.SetLabel('position: %d' % offset)
 
 
 #----------------------------------------------------------------------
@@ -100,8 +132,11 @@ def runTest(frame, nb, log):
 overview = """<html><body>
 <h2><center>wx.MediaCtrl</center></h2>
 
-wx.MediaCtrl is a class that allows a way to convieniently display types of 
-media, such as videos, audio files, natively through native codecs.
+wx.MediaCtrl is a class that allows a way to convieniently display
+various types of media, such as videos, audio files, natively through
+native codecs.  Several different formats of audio and video files are
+supported, but some formats may not be playable on all platforms or
+may require specific codecs to be installed.
 
 <p>
 wx.MediaCtrl uses native backends to render media, for example on Windows
