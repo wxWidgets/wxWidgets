@@ -1,0 +1,107 @@
+\documentstyle[a4,11pt,makeidx,verbatim,texhelp,fancyheadings,palatino]{report}
+% JACS: doesn't make it through Tex2RTF, sorry. I will put it into texhelp.sty
+% since Tex2RTF doesn't parse it.
+% BTW, style MUST be report for it to work for Tex2RTF.
+%KB:
+%\addtolength{\textwidth}{1in}
+%\addtolength{\oddsidemargin}{-0.5in}
+%\addtolength{\topmargin}{-0.5in}
+%\addtolength{\textheight}{1in}
+%\sloppy
+%end of my changes
+\newcommand{\indexit}[1]{#1\index{#1}}%
+\newcommand{\pipe}[0]{$\|$\ }%
+\definecolour{black}{0}{0}{0}%
+\definecolour{cyan}{0}{255}{255}%
+\definecolour{green}{0}{255}{0}%
+\definecolour{magenta}{255}{0}{255}%
+\definecolour{red}{255}{0}{0}%
+\definecolour{blue}{0}{0}{200}%
+\definecolour{yellow}{255}{255}{0}%
+\definecolour{white}{255}{255}{255}%
+%
+\input psbox.tex
+% Remove this for processing with dvi2ps instead of dvips
+%\special{!/@scaleunit 1 def}
+\parskip=10pt
+\parindent=0pt
+\title{Multiplatform application development with wxWindows}
+\winhelponly{\author{by Julian Smart et al
+%\winhelponly{\\$$\image{1cm;0cm}{wxwin.wmf}$$}
+}}
+\winhelpignore{\author{Julian Smart, Robert Roebling, Vadim Zeitlin,
+Robin Dunn, et al}
+\date{August 13th 2000}
+}
+\makeindex
+\begin{document}
+\maketitle
+\pagestyle{fancyplain}
+\bibliographystyle{plain}
+\setheader{{\it CONTENTS}}{}{}{}{}{{\it CONTENTS}}
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+\pagenumbering{roman}
+\tableofcontents
+
+\input chap\_intro.tex              % Chapter 01: Introduction, advocacy, etc.
+\input chap\_install.tex            % Chapter 02: Installing wxWindows (and what tools to use) 
+\input chap\_cpp.tex                % Chapter 03: C++ and wxWindows. Summarises the sorts of constructs used/not used, plus wxString class, some conventions. Vadim suggests putting it in 1st chapter but I think it deserves a chapter of its own. 
+\input chap\_getstart.tex           % Chapter 04: Getting started: Hello World. Introduces app class, frames, menus, status bar, message box 
+\input chap\_basic\_events.tex      % Chapter 05: Basic event handling 
+\input chap\_frames.tex             % Chapter 06: Frames and menubars. The components of a frame, menubars. 
+\input chap\_toolbars.tex           % Chapter 07: Toolbars and status bars 
+\input chap\_basic\_controls.tex    % Chapter 08: Basic controls 
+\input chap\_common\_dialogs.tex    % Chapter 09: Common dialogs 
+\input chap\_custom\_dialogs.tex    % Chapter 10: Custom dialogs and resources (XML + WXR) 
+\input chap\_drawing.tex            % Chapter 11: Drawing on device contexts 
+\input chap\_input.tex              % Chapter 12: Handling input (mouse, keyboard, joystick) 
+\input chap\_sizers.tex             % Chapter 14: Sizers 
+\input chap\_images.tex             % Chapter 15: Images and bitmaps 
+\input chap\_clipboard\_dnd.tex     % Chapter 16: Clipboard and drag and drop 
+\input chap\_advanced\_controls.tex % Chapter 17: Advanced controls (list,tree,notebook,splitter,wxWizard,wxCalCtrl...) 
+\input chap\_docview.tex            % Chapter 18: Document/view classes 
+\input chap\_scrolling.tex          % Chapter 19: Scrolling 
+\input chap\_mdi.tex                % Chapter 20: MDI 
+\input chap\_printing.tex           % Chapter 21: Printing 
+\input chap\_help.tex               % Chapter 22: Providing help in your applications 
+\input chap\_strings.tex            % Chapter 23: Strings and internationalization 
+\input chap\_data\_classes.tex      % Chapter 24: Collection and container classes 
+\input chap\_memory.tex             % Chapter 25: Memory management and debugging (including wxLog) 
+\input chap\_runtime.tex            % Chapter 26: Run-time class information 
+\input chap\_advanced\_events.tex   % Chapter 27: Advanced event handling (user-defined events, ...) 
+\input chap\_comms.tex              % Chapter 28: Communication classes, including wxSocket 
+\input chap\_database.tex           % Chapter 29: Database classes 
+\input chap\_file\_stream.tex       % Chapter 30: File and stream classes 
+\input chap\_config.tex             % Chapter 31: Configuration classes 
+\input chap\_time.tex               % Chapter 32: Time, timers and idle processing 
+\input chap\_multithreading.tex     % Chapter 33: Writing multithreading applications 
+\input chap\_perfecting.tex         % Chapter 34: Perfecting your UI (Adapting to system settings, accelerators, ...) 
+\input chap\_platform.tex           % Chapter 35: Platform-specific programming (metafiles, OLE automation, taskbar, ...) 
+\input chap\_wxhtml.tex             % Chapter 36: Using wxHTML 
+\input chap\_wxpython.tex           % Chapter 37: Using wxPython 
+\input chap\_wxbase.tex             % Chapter 38: wxBase? 
+\input chap\_comparison.tex         % Appendix: Comparison with other toolkits: MFC, Qt etc. 
+
+\bibliography{refs}
+\addcontentsline{toc}{chapter}{Bibliography}
+\setheader{{\it REFERENCES}}{}{}{}{}{{\it REFERENCES}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}%
+
+\newpage
+% Note: In RTF, the \printindex must come before the
+% change of header/footer, since the \printindex inserts
+% the RTF \sect command which divides one chapter from
+% the next.
+\rtfonly{\printindex
+\addcontentsline{toc}{chapter}{Index}
+\setheader{{\it INDEX}}{}{}{}{}{{\it INDEX}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}
+}
+% In Latex, it must be this way around (I think)
+\latexonly{\addcontentsline{toc}{chapter}{Index}
+\setheader{{\it INDEX}}{}{}{}{}{{\it INDEX}}%
+\setfooter{\thepage}{}{}{}{}{\thepage}
+\printindex
+}
+
+\end{document}

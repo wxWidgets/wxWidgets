@@ -1,0 +1,301 @@
+% LaTeX style file
+% Name:   texhelp.sty
+% Author: Julian Smart
+%
+% Purpose
+% -------
+% Style file to enable the simultaneous preparation of printed LaTeX and on-line
+% hypertext manuals.
+% Use in conjunction with Tex2RTF (see Tex2RTF documentation).
+%
+% Note that if a non-ASCII character starts a newline and there should be a space
+% between the last word on the previous line and the first word on this line,
+% you need to use \rtfsp to generate a space in Windows Help. \rtfsp is ignored
+% in all other formats.
+%
+% Julian Smart
+% Artificial Intelligence Applications Institute
+%
+%
+% ============== C++/CLIPS Documentation Facilities ==============
+%
+% Each class definition should be typeset with e.g.
+%
+% \section{\class{Name}: Parent}
+%
+% followed by a description of the class.
+% Each member should follow:
+%
+% \membersection{wxName::Member}
+%
+% with a description of what this member does.
+% Then, one (or more if overloaded) member (function) in detail:
+%
+% \func{return type}{name}{args}
+% or
+% \member{type}{name}
+%
+% where args is a list of \param{type}{name}, ...
+
+% Function, e.g.
+% e.g. to typeset
+%
+% void DoIt(char *string);
+%
+% write:
+%
+% \func{void}{DoIt}{\param{char *}{string}}
+%
+
+\newcommand{\func}[3]{\hangafter=1\noindent\hangindent=10mm
+{{\it #1} {\bf #2}\index{#2}}(#3)}
+
+% For function/type definition where the name is a pointer,
+% e.g. to typeset
+%
+% typedef void (*wxFunction)(wxObject&)
+%
+% write:
+%
+% \pfunc{typedef void}{wxFunction}{param{wxObject&}}
+
+\newcommand{\pfunc}[3]{\hangafter=1\noindent\hangindent=10mm
+{{\it #1} ({\bf *#2})\index{#2}}(#3)}
+
+% Use an ordinary \section command for class name definitions.
+
+% This is used for a member, such as wxBitmap: GetDepth
+\newcommand{\membersection}[1]{\subsection*{#1}\index{#1}}
+
+% CLIPS function
+\newcommand{\clipsfunc}[3]{\hangafter=1\noindent\hangindent=10mm
+{{\bf #1} ({\bf #2}\index{#2}}#3)}
+
+\newcommand{\clipssection}[1]{\chapter{#1}}
+
+% This is used for a CLIPS function name
+\newcommand{\functionsection}[1]{\subsection*{#1}}
+
+% Member: a type and a name
+\newcommand{\member}[2]{{\bf #1 \it #2}}
+
+% C++ Parameter: a type and a name (no intervening space)
+\newcommand{\param}[2]{{\it #1}{\bf #2}}
+
+% CLIPS Parameter: a type and a name (one intervening space)
+\newcommand{\cparam}[2]{{\bf #1} {\it #2}}
+
+% Class: puts in index
+\newcommand{\class}[1]{#1\index{#1}}
+
+%\newcommand{\docparam}[2]{\parskip=0pt {\it #1}\par\parskip=10pt\begin{indented}{1cm}{#2}\end{indented}}
+
+% Void type
+\newcommand{\void}{{\it void}}
+
+% Typeset destructor
+\newcommand{\destruct}[1]{{$\sim$}#1}
+
+% Typeset insert/extract operators
+\newcommand{\cinsert}{$<<$}
+\newcommand{\cextract}{$>>$}
+
+% pythonnote: A note about the wxpython interface.
+%\newcommand{\pythonnote}[1]{{\bf wxPython note: }#1}
+\newcommand{\pythonnote}[1]{{}}
+
+% =================== Hypertext facilities ===================
+%
+% To insert hyperlinks (or references, in Latex), \label the sections
+% or membersections \label{ref-label} immediately after the section, on the same line,
+% and use \helpref{text-to-show}{ref-label} to make a reference.
+%
+
+% Type text with section reference
+\newcommand{\helpref}[2]{{\it #1} (p.\ \pageref{#2}) }
+
+% Type text with URL in verbatim mode
+\newcommand{\urlref}[2]{#1 (\verb$#2$)}
+
+% Don't typeset section number in LaTeX
+\newcommand{\helprefn}[2]{{\it #1}}
+
+% Like helpref, but popup text in WinHelp instead of hyperlinked
+\newcommand{\popref}[2]{{\it #1}}
+
+% Like footnote, but popup text.
+\newcommand{\footnotepopup}[2]{{\it #1}\footnote{#2}}
+
+% =================== On-line help specific macros ===================
+%
+
+% Global document font size/family, help only.
+\newcommand{\helpfontsize}[1]{}
+\newcommand{\helpfontfamily}[1]{}
+
+% Ignore in all on-line help
+\newcommand{\helpignore}[1]{#1}
+% Only print in all on-line help
+\newcommand{\helponly}[1]{}
+
+% Ignore in LaTeX
+\newcommand{\latexignore}[1]{}
+% Only print in LaTeX
+\newcommand{\latexonly}[1]{#1}
+
+% Ignore in linear RTF
+\newcommand{\rtfignore}[1]{#1}
+% Only print in linear RTF
+\newcommand{\rtfonly}[1]{}
+
+% Ignore in WinHelp RTF
+\newcommand{\winhelpignore}[1]{#1}
+% Only print in WinHelp RTF
+\newcommand{\winhelponly}[1]{}
+
+% Ignore in wxHelp
+\newcommand{\xlpignore}[1]{#1}
+% Only print in wxHelp
+\newcommand{\xlponly}[1]{}
+
+% Ignore in HTML
+\newcommand{\htmlignore}[1]{#1}
+% Only print in HTML
+\newcommand{\htmlonly}[1]{}
+
+% Input a file only for help system (binder thickness is not a limitation
+% in help systems!)
+\newcommand{\helpinput}[1]{}
+
+\newcommand{\rtfsp}{ } % Force a space in RTF, ignore in Latex
+
+% =================== Miscellaneous macros ===================
+%
+% Headings consistent with generated ones
+\newcommand{\myheading}[1]{\vspace*{25pt}
+\begin{flushleft}
+{\LARGE \bf #1}
+\end{flushleft}
+\vskip 20pt
+}
+
+% Heading with entry in contents page.
+\newcommand{\chapterheading}[1]{\myheading{#1}
+\addcontentsline{toc}{chapter}{#1}}
+
+\newcommand{\sectionheading}[1]{\myheading{#1}
+\addcontentsline{toc}{section}{#1}}
+
+% Glossary environment
+\newenvironment{helpglossary}{\newpage\chapterheading{Glossary}\begin{description}}{\end{description}}
+
+% Glossary entry
+\newcommand{\gloss}[1]{\item[#1]\index{#1}}
+
+% Image: EPS in Latex, BMP or MF (whatever's available) in RTF. Requires psbox.
+\newcommand{\image}[2]{\psboxto(#1){#2}}
+
+% Image, left aligned (HTML)
+\newcommand{\imager}[2]{\psboxto(#1){#2}}
+
+% Image, right aligned (HTML)
+\newcommand{\imagel}[2]{\psboxto(#1){#2}}
+
+% Imagemap: principally for HTML only. In Latex,
+% acts like \image.
+\newcommand{\imagemap}[3]{\psboxto(#1){#2}}
+
+% Headers and footers
+% \setheader{EvenPageLeft}{EvenPageCentre}{EvenPageRight}
+% {OddPageLeft}{OddPageCentre}{OddPageRight}
+\newcommand{\setheader}[6]{
+\lhead[\fancyplain{}{#1}]{\fancyplain{}{#4}}
+\chead[\fancyplain{}{#2}]{\fancyplain{}{#5}}
+\rhead[\fancyplain{}{#3}]{\fancyplain{}{#6}}
+}
+
+% \setfooter{EvenPageLeft}{EvenPageCentre}{EvenPageRight}
+% {OddPageLeft}{OddPageCentre}{OddPageRight}
+\newcommand{\setfooter}[6]{
+\lfoot[\fancyplain{#1}{#1}]{\fancyplain{#4}{#4}}
+\cfoot[\fancyplain{#2}{#2}]{\fancyplain{#5}{#5}}
+\rfoot[\fancyplain{#3}{#3}]{\fancyplain{#6}{#6}}
+}
+
+% Needed for telling RTF where margin paragraph should go
+% in mirrored margins mode.
+\newcommand{\marginpareven}[1]{\hspace*{0pt}\marginpar{#1}}
+\newcommand{\marginparodd}[1]{\hspace*{0pt}\marginpar{#1}}
+
+% Environment for two-column table popular in WinHelp and manuals.
+\newcommand{\twocolwidtha}[1]{\def\twocolwidthaval{#1}}
+\newcommand{\twocolwidthb}[1]{\def\twocolwidthbval{#1}}
+\newcommand{\twocolspacing}[1]{\def\twocolspacingval{#1}}
+
+\twocolwidtha{3cm}
+\twocolwidthb{8.5cm}
+\twocolspacing{2}
+
+\newcommand{\twocolitem}[2]{#1 & #2\\}
+\newcommand{\twocolitemruled}[2]{#1 & #2\\\hline}
+
+\newenvironment{twocollist}{\renewcommand{\arraystretch}{\twocolspacingval}\begin{tabular}{lp{\twocolwidthbval}}}%
+{\end{tabular}\renewcommand{\arraystretch}{1}}
+
+% Specifying table rows for RTF compatibility
+\newcommand{\row}[1]{#1\\}
+
+% Use for the last ruled row for correct RTF generation.
+\newcommand{\ruledrow}[1]{#1\\\hline}
+
+% Indentation environment. Arg1 is left margin size
+\newenvironment{indented}[1]{\begin{list}{}{\leftmargin=#1}\item[]}%
+{\end{list}}
+
+% Framed box of text, normal formatting.
+\newcommand{\normalbox}[1]{\fbox{\vbox{#1}}}
+% Double-framed box of text.
+\newcommand{\normalboxd}[1]{\fbox{\fbox{\vbox{#1}}}}
+
+% WITHDRAWN -- can't do in RTF, easily.
+% Framed box of text, horizontally centred. Ragged right within box.
+% \newcommand{\centeredbox}[2]{\begin{center}\fbox{\parbox{#1}{\raggedright#2}}\end{center}}
+% Double-framed box of text, horizontally centred. Ragged right within box.
+% \newcommand{\centeredboxd}[2]{\begin{center}\fbox{\fbox{\parbox{#1}{\raggedright#2}}}\end{center}}
+
+% toocomplex environment: simply prints the argument in LaTeX,
+% comes out verbatim in all generated formats.
+\newenvironment{toocomplex}{}{}
+
+% Colour: dummy commands since LaTeX doesn't support colour.
+% \definecolour{name}{red}{blue}{green}
+% \fcol{name}{text} ; Foreground
+% \bcol{name}{text} ; Background
+\newcommand{\definecolour}[4]{}
+\newcommand{\definecolor}[4]{}
+\newcommand{\fcol}[2]{#2}
+\newcommand{\bcol}[2]{#2}
+\newcommand{\sethotspotcolour}[1]{}
+\newcommand{\sethotspotunderline}[1]{}
+\newcommand{\settransparency}[1]{}
+\newcommand{\backslashraw}[0]{}
+\newcommand{\lbraceraw}[0]{}
+\newcommand{\rbraceraw}[0]{}
+\newcommand{\registered}[0]{(r)}
+\newcommand{\background}[1]{}
+\newcommand{\textcolour}[1]{}
+\newcommand{\overview}[2]{See \helpref{#1}{#2}.}
+\newcommand{\docparam}[2]{{\it #1}\begin{list}{}{\leftmargin=1cm}\item[]
+#2%
+\end{list}}
+\newcommand{\wxheading}[1]{{\bf #1}}
+\newcommand{\const}[0]{{\bf const}}
+\newcommand{\constfunc}[3]{{\bf #1} {\bf #2}(#3) {\bf const}\index{#2}}
+\newcommand{\windowstyle}[1]{{\bf #1}\index{#1}}
+
+\addtolength{\textwidth}{1in}
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\topmargin}{-0.5in}
+\addtolength{\textheight}{1in}
+\sloppy
+
