@@ -14,14 +14,14 @@
 
 // Bump-up with each new version
 #define wxMAJOR_VERSION    2
-#define wxMINOR_VERSION    3
-#define wxRELEASE_NUMBER   4
-#define wxVERSION_STRING   _T("wxWindows 2.3.4")
+#define wxMINOR_VERSION    5
+#define wxRELEASE_NUMBER   0
+#define wxVERSION_STRING   _T("wxWindows 2.5.0")
 
 // These are used by src/msw/version.rc and should always be ASCII, not Unicode
 // and must be updated manually as well each time the version above changes
-#define wxVERSION_NUM_DOT_STRING   "2.3.4"
-#define wxVERSION_NUM_STRING       "234"
+#define wxVERSION_NUM_DOT_STRING   "2.5.0"
+#define wxVERSION_NUM_STRING       "250"
 
 // nothing should be updated below this line when updating the version
 

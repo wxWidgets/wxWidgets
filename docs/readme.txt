@@ -1,9 +1,9 @@
-wxWindows 2.3.4
+wxWindows 2.5.0
 ---------------
 
 *** Please note that this is an UNSTABLE DEVELOPMENT SNAPSHOT.
 *** Unless you need the new features and bug fixes, you may wish to
-*** use the official 2.2.x stable series.
+*** use the official 2.4.x stable series.
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where
