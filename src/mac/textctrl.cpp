@@ -889,6 +889,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
         {
             OSStatus status = TXNSetTypeAttributes ((TXNObject)m_macTXN, attrCounter , typeAttr,
                 start,end);
+            wxASSERT_MSG( status == noErr , "Couldn't set text attributes" ) ;
         }
         SetEditable(formerEditable) ;
     }
@@ -995,7 +996,6 @@ bool wxTextCtrl::CanPaste() const
     if (!IsEditable())
         return FALSE;
 
-    long offset ;
 #if TARGET_CARBON
     OSStatus err = noErr;
     ScrapRef scrapRef;
@@ -1017,6 +1017,7 @@ bool wxTextCtrl::CanPaste() const
     return FALSE;
     
 #else
+    long offset ;
     if ( GetScrap( NULL , 'TEXT' , &offset ) > 0 )
     {
         return TRUE ;
@@ -1040,7 +1041,7 @@ void wxTextCtrl::SetEditable(bool editable)
         else
         {
             TXNControlTag tag[] = { kTXNIOPrivilegesTag } ;
-            TXNControlData data[] = { editable ? kTXNReadWrite : kTXNReadOnly } ;
+            TXNControlData data[] = { { editable ? kTXNReadWrite : kTXNReadOnly } } ;
             TXNSetTXNObjectControls( (TXNObject) m_macTXN , false , sizeof(tag) / sizeof (TXNControlTag) , tag , data ) ;
         }
     }
@@ -1312,7 +1313,7 @@ int wxTextCtrl::GetNumberOfLines() const
   wxString content = GetValue() ;
     
     int count = 1;
-    for (int i = 0; i < content.Length() ; i++)
+    for (size_t i = 0; i < content.Length() ; i++)
     {
         if (content[i] == '\r') count++;
     }
@@ -1343,13 +1344,13 @@ int wxTextCtrl::GetLineLength(long lineNo) const
     
     // Find line first
     int count = 0;
-    for (int i = 0; i < content.Length() ; i++)
+    for (size_t i = 0; i < content.Length() ; i++)
     {
         if (count == lineNo)
         {
             // Count chars in line then
             count = 0;
-            for (int j = i; j < content.Length(); j++)
+            for (size_t j = i; j < content.Length(); j++)
             {
                 count++;
                 if (content[j] == '\r') return count;
@@ -1369,14 +1370,14 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 
     // Find line first
     int count = 0;
-    for (int i = 0; i < content.Length() ; i++)
+    for (size_t i = 0; i < content.Length() ; i++)
     {
         if (count == lineNo)
         {
             // Add chars in line then
             wxString tmp("");
             
-            for (int j = i; j < content.Length(); j++)
+            for (size_t j = i; j < content.Length(); j++)
             {
                 if (content[j] == '\r')
                     return tmp;
