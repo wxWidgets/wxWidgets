@@ -132,9 +132,11 @@ public:
         long , GetHandle(),
         "Get the MS Windows handle for the cursor");
     
-    DocDeclStr(
-        void , SetHandle(long handle),
-        "Set the MS WIndows handle for the cursor");
+    %extend {
+    DocStr(SetHandle,
+        "Set the MS Windows handle to use for the cursor");
+        void SetHandle(long handle) { self->SetHandle((WXHANDLE)handle); }
+    }
     
 #endif
     

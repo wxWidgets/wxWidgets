@@ -1691,8 +1691,8 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
     wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
 #ifdef __WXMSW__
         wxWindow* win = new wxWindow;
-        win->SetHWND(hWnd);
-        win->SubclassWin(hWnd);
+        win->SetHWND((WXHWND)hWnd);
+        win->SubclassWin((WXHWND)hWnd);
         return win;
 #else
         wxPyRaiseNotImplemented();

@@ -57,7 +57,9 @@ public:
     // wxGDIImage methods
 #ifdef __WXMSW__
     long GetHandle();
-    void SetHandle(long handle);
+    %extend {
+        void SetHandle(long handle) { self->SetHandle((WXHANDLE)handle); }
+    }
 #endif
     bool Ok();
     int GetWidth();
