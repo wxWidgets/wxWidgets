@@ -1239,9 +1239,13 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         int xEnd = x + wCol;
 
+        // VZ: no, draw it normally - this is better now as we allow resizing
+        //     of the last column as well
+#if 0
         // let the last column occupy all available space
         if ( i == numColumns - 1 )
             cw = w-x-1;
+#endif // 0
 
         dc.SetPen( *wxWHITE_PEN );
 
@@ -1303,6 +1307,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
         {
             ReleaseMouse();
             m_isDragging = FALSE;
+            m_dirty = TRUE;
             m_owner->SetColumnWidth( m_column, m_currentX-m_minX );
         }
         else
