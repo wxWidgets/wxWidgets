@@ -58,6 +58,7 @@ public:
     // same as ctor above
     void SetOwner(wxEvtHandler *owner, int timerid = -1)
         { m_owner = owner; m_idTimer = timerid; }
+    wxEvtHandler* GetOwner() const { return m_owner; }
 
     virtual ~wxTimerBase();
 

@@ -57,6 +57,7 @@ void wxTimerBase::Notify()
     wxCHECK_RET( m_owner, _T("wxTimer::Notify() should be overridden.") );
 
     wxTimerEvent event(m_idTimer, m_milli);
+    event.SetEventObject(this);
     (void)m_owner->ProcessEvent(event);
 }
 

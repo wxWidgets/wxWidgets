@@ -34,6 +34,8 @@ enum {
 %{
 //IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
 
+IMPLEMENT_ABSTRACT_CLASS(wxPyTimer, wxTimer);
+    
 void wxPyTimer::Notify() {
     bool found;
     bool blocked = wxPyBeginBlockThreads();
@@ -54,7 +56,7 @@ void wxPyTimer::base_Notify() {
 %name(Timer) class wxPyTimer : public wxEvtHandler
 {
 public:
-    %pythonAppend wxPyTimer         "self._setCallbackInfo(self, Timer, 0)"
+    %pythonAppend wxPyTimer         "self._setCallbackInfo(self, Timer, 0); self._setOORInfo(self)"
 
 
     // if you don't call SetOwner() or provide an owner in the contstructor
@@ -69,7 +71,7 @@ public:
     // Set the owner instance that will receive the EVT_TIMER events using the
     // given id.
     void SetOwner(wxEvtHandler *owner, int id = -1);
-
+    wxEvtHandler* GetOwner();
 
     // start the timer: if milliseconds == -1, use the same value as for the
     // last Start()
@@ -140,4 +142,8 @@ public:
 };
 
 
+//---------------------------------------------------------------------------
+%init %{
+    wxPyPtrTypeMap_Add("wxTimer", "wxPyTimer");
+%}
 //---------------------------------------------------------------------------

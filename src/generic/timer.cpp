@@ -175,7 +175,7 @@ void wxTimerScheduler::NotifyTimers()
 // wxTimer
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxTimer,wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
 
 wxTimerScheduler *gs_scheduler = NULL;
 

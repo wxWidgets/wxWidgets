@@ -62,7 +62,7 @@ void WINAPI wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 // macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
 
 // ============================================================================
 // implementation

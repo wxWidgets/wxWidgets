@@ -87,6 +87,7 @@ public:
 
     DEC_PYCALLBACK__(Notify);
     PYPRIVATE;
+    DECLARE_ABSTRACT_CLASS(wxPyTimer)
 };
 
 

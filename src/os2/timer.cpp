@@ -46,7 +46,7 @@ ULONG wxTimerProc(HWND hwnd, ULONG, int nIdTimer, ULONG);
 // macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
 
 void wxTimer::Init()
 {
