@@ -80,8 +80,13 @@ WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
 // Sound the bell
 WXDLLIMPEXP_BASE void wxBell();
 
-#if defined(__WXGTK__) || defined(__WXMSW__) || defined(__WXMAC__) || defined(__X__) 
+#if defined(__WXMSW__) || defined(__WXMAC__)
 	// Get the state of a key (true if pressed, false if not)
+	// This is generally most useful getting the state of
+	// Caps Lock, Num Lock and Scroll Lock...
+
+	// Note - There is a X11/GTK version which will be here
+	// soon
 	WXDLLIMPEXP_BASE bool wxGetKeyState(wxKeyCode key);
 #endif
 

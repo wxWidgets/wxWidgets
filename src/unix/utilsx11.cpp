@@ -15,12 +15,10 @@
 #include "wx/wxprec.h"
 
 #include "wx/unix/utilsx11.h"
-#include "wx/x11/privx.h"
 #include "wx/iconbndl.h"
 #include "wx/image.h"
 #include "wx/icon.h"
 #include "wx/log.h"
-#include "wx/utils.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint
@@ -506,28 +504,6 @@ void wxSetFullScreenStateX11(WXDisplay* display, WXWindow rootWindow,
                                show ? WIN_LAYER_ABOVE_DOCK : WIN_LAYER_NORMAL);
             break;
     }
-}
-
-bool wxGetKeyState(wxKeyCode key)
-{
-  Display *pDisplay = (Display*) wxGetDisplay();
-  int iKey = wxCharCodeWXToX(key);
-  int          iKeyMask = 0;
-  Window       wDummy1, wDummy2;
-  int          iDummy3, iDummy4, iDummy5, iDummy6;
-  unsigned int iMask;
-  XModifierKeymap* map = XGetModifierMapping(pDisplay);
-  KeyCode keyCode = XKeysymToKeycode(pDisplay,iKey);
-  if(keyCode == NoSymbol) return false;
-  for(int i = 0; i < 8; ++i) {
-    if( map->modifiermap[map->max_keypermod * i] == keyCode) {
-      iKeyMask = 1 << i;
-    }
-  }
-  XQueryPointer(pDisplay, DefaultRootWindow(pDisplay), &wDummy1, &wDummy2,
-                &iDummy3, &iDummy4, &iDummy5, &iDummy6, &iMask );
-  XFreeModifiermap(map);
-  return (iMask & iKeyMask) != 0;
 }
 
 #endif
