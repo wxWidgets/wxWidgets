@@ -1139,6 +1139,11 @@ public:
     bool IsWindowChange() const;
     void SetWindowChange(bool ischange);
 
+    // Set to true under MSW if the event was generated using the tab key.
+    // This is required for proper navogation over radio buttons
+    bool IsFromTab() const;
+    void SetFromTab(bool bIs);
+
     void SetFlags(long flags);
     
     // the child which has the focus currently (may be NULL - use
@@ -1149,7 +1154,8 @@ public:
     enum {
         IsBackward,
         IsForward,
-        WinChange
+        WinChange,
+        FromTab
     };
 };
 
