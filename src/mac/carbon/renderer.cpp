@@ -32,6 +32,8 @@
 #endif //WX_PRECOMP
 
 #include "wx/renderer.h"
+#include "wx/toplevel.h"
+#include "wx/dcclient.h"
 #include "wx/mac/uma.h"
 
 // ----------------------------------------------------------------------------
