@@ -559,7 +559,7 @@ BUILD=debug
   information compiled into object files and the executable.
 
 SHARED=0
-  Build static libraries instead of DLLs. By default, DLLs are build
+  Build static libraries instead of DLLs. By default, DLLs are built
   (SHARED=1).
 
 UNICODE=1
@@ -644,7 +644,7 @@ VENDOR=<your company name>
   wxmsw250_core_bcc_mycorp.dll.
 
 CFG=<configuration name>
-  Sets configuration name so that you can have multiple wxWindows build with
+  Sets configuration name so that you can have multiple wxWindows builds with
   different setup.h settings coexisting in same tree. See "Object and library
   directories" below for more information.
 
@@ -722,11 +722,11 @@ and libraries in
   lib\bcc_dllMyBuild
   etc.
 
-By now it is clear for CFG is for: builds with different CFG settings don't
+By now it is clear what CFG is for: builds with different CFG settings don't
 share any files and they use different setup.h files. This allows you to e.g. 
 have two static debug builds, one with wxUSE_SOCKETS=0 and one with sockets
 enabled (without CFG, both of them would be put into same directory and there
-would be conflict between the files).
+would be conflicts between the files).
 
 General Notes
 =============
