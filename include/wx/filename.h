@@ -273,8 +273,7 @@ public:
     static bool IsCaseSensitive( wxPathFormat format = wxPATH_NATIVE );
 
         // is this filename absolute?
-    bool IsAbsolute() const
-        { return !m_relative; }
+    bool IsAbsolute( wxPathFormat format = wxPATH_NATIVE ) const;
 
         // is this filename relative?
     bool IsRelative() const
