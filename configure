@@ -8266,7 +8266,7 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-pc-os2_emx )
       ;;
       *-*-beos* )
-        SHARED_LD="${CC} -shared -o"
+                        SHARED_LD="${LD} -shared -o"
         PIC_FLAG="-fPIC"
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
@@ -12894,10 +12894,9 @@ if test "$wxUSE_GUI" = "yes"; then
             SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS bombs controls dialogs drawing dynamic \
                      font forty fractal image minimal richedit wxpoem"
 
-        EXTRADEFS="-DwxINSTALL_PREFIX=\"$prefix\""
+        CPPFLAGS="$CPPFLAGS \$(EXTRADEFS)"
 else
     SAMPLES_SUBDIRS=""
-    EXTRADEFS=
 fi
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '`"
@@ -12959,7 +12958,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:12963: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:12962: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

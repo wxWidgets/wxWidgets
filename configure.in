@@ -3124,10 +3124,9 @@ if test "$wxUSE_GUI" = "yes"; then
                      font forty fractal image minimal richedit wxpoem"
 
     dnl this is needed to be able to find AFM files
-    EXTRADEFS="-DwxINSTALL_PREFIX=\"$prefix\""
+    CPPFLAGS="$CPPFLAGS \$(EXTRADEFS)"
 else
     SAMPLES_SUBDIRS=""
-    EXTRADEFS=
 fi
 
 dnl for convenience, sort the samples in alphabetical order
