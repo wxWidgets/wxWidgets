@@ -985,6 +985,7 @@ public:
     wxTreeItemId GetItem();
     wxTreeItemId GetOldItem();
     wxPoint GetPoint();
+    const wxKeyEvent& GetKeyEvent();
     int GetCode();
     const wxString& GetLabel();
 };

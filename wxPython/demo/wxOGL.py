@@ -196,6 +196,13 @@ class TestWindow(wxShapeCanvas):
         self.diagram.Destroy()
 
 
+    def OnBeginDragLeft(self, x, y, keys):
+        self.log.write("OnBeginDragLeft: %s, %s, %s\n" % (x, y, keys))
+
+    def OnEndDragLeft(self, x, y, keys):
+        self.log.write("OnEndDragLeft: %s, %s, %s\n" % (x, y, keys))
+
+
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):

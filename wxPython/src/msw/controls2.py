@@ -838,6 +838,10 @@ class wxTreeEventPtr(wxNotifyEventPtr):
         val = apply(controls2c.wxTreeEvent_GetPoint,(self,) + _args, _kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
+    def GetKeyEvent(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeEvent_GetKeyEvent,(self,) + _args, _kwargs)
+        if val: val = wxKeyEventPtr(val) 
+        return val
     def GetCode(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeEvent_GetCode,(self,) + _args, _kwargs)
         return val

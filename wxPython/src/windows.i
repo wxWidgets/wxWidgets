@@ -256,7 +256,7 @@ public:
     void Layout();
     bool LoadFromResource(wxWindow* parent, const wxString& resourceName, const wxResourceTable* resourceTable = NULL);
     void Lower();
-    void MakeModal(bool flag);
+    void MakeModal(bool flag=TRUE);
     %name(MoveXY)void Move(int x, int y);
     void Move(const wxPoint& point);
 
@@ -377,6 +377,8 @@ public:
     static int NextControlId(int id);
     static int PrevControlId(int id);
 
+    void SetAcceleratorTable(const wxAcceleratorTable& accel);
+    wxAcceleratorTable *GetAcceleratorTable();
 };
 
 
@@ -431,46 +433,6 @@ public:
     void InitDialog();
     wxButton* GetDefaultItem();
     void SetDefaultItem(wxButton *btn);
-
-};
-
-//---------------------------------------------------------------------------
-
-class wxDialog : public wxPanel {
-public:
-    wxDialog(wxWindow* parent,
-             const wxWindowID id,
-             const wxString& title,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = wxDEFAULT_DIALOG_STYLE,
-             const char* name = "dialogBox");
-    %name(wxPreDialog)wxDialog();
-
-    bool Create(wxWindow* parent,
-                const wxWindowID id,
-                const wxString& title,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_DIALOG_STYLE,
-                const char* name = "dialogBox");
-
-    void Centre(int direction = wxBOTH);
-    void EndModal(int retCode);
-    wxString GetTitle();
-    void Iconize(bool iconize);
-    bool IsIconized();
-    void SetModal(bool flag);
-    bool IsModal();
-    void SetTitle(const wxString& title);
-    bool Show(bool show);
-    int ShowModal();
-
-    int  GetReturnCode();
-    void SetReturnCode(int retCode);
-
-    wxSizer* CreateTextSizer( const wxString &message );
-    wxSizer* CreateButtonSizer( long flags );
 
 };
 

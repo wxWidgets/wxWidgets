@@ -2169,6 +2169,16 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxJOY_BUTTON4", PyInt_FromLong((long) wxJOY_BUTTON4));
 	 PyDict_SetItemString(d,"wxJOY_BUTTON_ANY", PyInt_FromLong((long) wxJOY_BUTTON_ANY));
 	 PyDict_SetItemString(d,"wxWS_EX_VALIDATE_RECURSIVELY", PyInt_FromLong((long) wxWS_EX_VALIDATE_RECURSIVELY));
+	 PyDict_SetItemString(d,"wxMM_TEXT", PyInt_FromLong((long) wxMM_TEXT));
+	 PyDict_SetItemString(d,"wxMM_LOMETRIC", PyInt_FromLong((long) wxMM_LOMETRIC));
+	 PyDict_SetItemString(d,"wxMM_HIMETRIC", PyInt_FromLong((long) wxMM_HIMETRIC));
+	 PyDict_SetItemString(d,"wxMM_LOENGLISH", PyInt_FromLong((long) wxMM_LOENGLISH));
+	 PyDict_SetItemString(d,"wxMM_HIENGLISH", PyInt_FromLong((long) wxMM_HIENGLISH));
+	 PyDict_SetItemString(d,"wxMM_TWIPS", PyInt_FromLong((long) wxMM_TWIPS));
+	 PyDict_SetItemString(d,"wxMM_ISOTROPIC", PyInt_FromLong((long) wxMM_ISOTROPIC));
+	 PyDict_SetItemString(d,"wxMM_ANISOTROPIC", PyInt_FromLong((long) wxMM_ANISOTROPIC));
+	 PyDict_SetItemString(d,"wxMM_POINTS", PyInt_FromLong((long) wxMM_POINTS));
+	 PyDict_SetItemString(d,"wxMM_METRIC", PyInt_FromLong((long) wxMM_METRIC));
 	 PyDict_SetItemString(d,"wxDEFAULT", PyInt_FromLong((long) wxDEFAULT));
 	 PyDict_SetItemString(d,"wxDECORATIVE", PyInt_FromLong((long) wxDECORATIVE));
 	 PyDict_SetItemString(d,"wxROMAN", PyInt_FromLong((long) wxROMAN));

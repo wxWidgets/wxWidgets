@@ -516,10 +516,10 @@ public:
                       int n = 1,
                       Month month = Inv_Month,
                       int year = Inv_Year);
-    wxDateTime GetWeekDay(WeekDay weekday,
-                          int n = 1,
-                          Month month = Inv_Month,
-                          int year = Inv_Year);
+//      wxDateTime GetWeekDay(WeekDay weekday,
+//                            int n = 1,
+//                            Month month = Inv_Month,
+//                            int year = Inv_Year);
 
         // sets to the last weekday in the given month, year
     bool SetToLastWeekDay(WeekDay weekday,

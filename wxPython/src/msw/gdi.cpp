@@ -186,6 +186,27 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     wxColour* wxNamedColour(const wxString& colorName) {
         return new wxColour(colorName);
     }
+
+class wxPyPen : public wxPen {
+public:
+    wxPyPen(wxColour& colour, int width=1, int style=wxSOLID)
+        : wxPen(colour, width, style)
+        { m_dash = NULL; }
+    ~wxPyPen() {
+        if (m_dash)
+            delete m_dash;
+    }
+
+    void SetDashes(int nb_dashes, const wxDash *dash) {
+        m_dash = new wxDash[nb_dashes];
+        for (int i=0; i<nb_dashes; i++)
+            m_dash[i] = dash[i];
+        wxPen::SetDashes(nb_dashes, m_dash);
+    }
+
+private:
+    wxDash* m_dash;
+};
                                       // Alternate 'constructor'
     wxMemoryDC* wxMemoryDCFromDC(wxDC* oldDC) {
         return new wxMemoryDC(oldDC);
@@ -5464,43 +5485,6 @@ static PyObject *_wrap_wxPen_SetWidth(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-#define wxPen_GetDashes(_swigobj,_swigarg0)  (_swigobj->GetDashes(_swigarg0))
-static PyObject *_wrap_wxPen_GetDashes(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPen * _arg0;
-    wxDash ** _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","dashes", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPen_GetDashes",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPen_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPen_GetDashes. Expected _wxPen_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDash_pp")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPen_GetDashes. Expected _wxDash_pp.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxPen_GetDashes(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 #define wxPen_SetDashes(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetDashes(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPen_SetDashes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5619,6 +5603,143 @@ static PyObject *_wrap_wxPen_SetStipple(PyObject *self, PyObject *args, PyObject
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void *SwigwxPyPenTowxPen(void *ptr) {
+    wxPyPen *src;
+    wxPen *dest;
+    src = (wxPyPen *) ptr;
+    dest = (wxPen *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPenTowxGDIObject(void *ptr) {
+    wxPyPen *src;
+    wxGDIObject *dest;
+    src = (wxPyPen *) ptr;
+    dest = (wxGDIObject *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPenTowxObject(void *ptr) {
+    wxPyPen *src;
+    wxObject *dest;
+    src = (wxPyPen *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxPyPen(_swigarg0,_swigarg1,_swigarg2) (new wxPyPen(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_new_wxPyPen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPen * _result;
+    wxColour * _arg0;
+    int  _arg1 = (int ) 1;
+    int  _arg2 = (int ) wxSOLID;
+    wxColour  temp;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "colour","width","style", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|ii:new_wxPyPen",_kwnames,&_obj0,&_arg1,&_arg2)) 
+        return NULL;
+{
+    _arg0 = &temp;
+    if (! wxColour_helper(_obj0, &_arg0))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxPyPen *)new_wxPyPen(*_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyPen_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxPyPen(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxPyPen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPen * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxPyPen",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxPyPen. Expected _wxPyPen_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxPyPen(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPen_SetDashes(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetDashes(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPen_SetDashes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPen * _arg0;
+    int  _arg1;
+    wxDash * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","choices", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyPen_SetDashes",_kwnames,&_argo0,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPen_SetDashes. Expected _wxPyPen_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = (wxDash*)byte_LIST_helper(_obj2);
+    if (_arg2 == NULL) {
+        return NULL;
+    }
+}
+{
+    if (_obj2) {
+        _arg1 = PyList_Size(_obj2);
+    }
+    else {
+        _arg1 = 0;
+    }
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPyPen_SetDashes(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    delete [] _arg2;
+}
     return _resultobj;
 }
 
@@ -11614,10 +11735,12 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxPenList_RemovePen", (PyCFunction) _wrap_wxPenList_RemovePen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPenList_FindOrCreatePen", (PyCFunction) _wrap_wxPenList_FindOrCreatePen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPenList_AddPen", (PyCFunction) _wrap_wxPenList_AddPen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPen_SetDashes", (PyCFunction) _wrap_wxPyPen_SetDashes, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxPyPen", (PyCFunction) _wrap_delete_wxPyPen, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPyPen", (PyCFunction) _wrap_new_wxPyPen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPen_SetStipple", (PyCFunction) _wrap_wxPen_SetStipple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPen_GetStipple", (PyCFunction) _wrap_wxPen_GetStipple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPen_SetDashes", (PyCFunction) _wrap_wxPen_SetDashes, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPen_GetDashes", (PyCFunction) _wrap_wxPen_GetDashes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPen_SetWidth", (PyCFunction) _wrap_wxPen_SetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPen_SetStyle", (PyCFunction) _wrap_wxPen_SetStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPen_SetJoin", (PyCFunction) _wrap_wxPen_SetJoin, METH_VARARGS | METH_KEYWORDS },
@@ -11770,12 +11893,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
+    { "_wxPen","_wxPyPen",SwigwxPyPenTowxPen},
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_wxGDIObject","_wxRegion",SwigwxRegionTowxGDIObject},
     { "_wxGDIObject","_wxPalette",SwigwxPaletteTowxGDIObject},
     { "_wxGDIObject","_wxBrush",SwigwxBrushTowxGDIObject},
+    { "_wxGDIObject","_wxPyPen",SwigwxPyPenTowxGDIObject},
     { "_wxGDIObject","_wxPen",SwigwxPenTowxGDIObject},
     { "_wxGDIObject","_wxFont",SwigwxFontTowxGDIObject},
     { "_wxGDIObject","_wxCursor",SwigwxCursorTowxGDIObject},
@@ -11835,6 +11960,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxBrushList",SwigwxBrushListTowxObject},
     { "_wxObject","_wxBrush",SwigwxBrushTowxObject},
     { "_wxObject","_wxPenList",SwigwxPenListTowxObject},
+    { "_wxObject","_wxPyPen",SwigwxPyPenTowxObject},
     { "_wxObject","_wxPen",SwigwxPenTowxObject},
     { "_wxObject","_wxColourDatabase",SwigwxColourDatabaseTowxObject},
     { "_wxObject","_wxColour",SwigwxColourTowxObject},

@@ -15,61 +15,84 @@ from controls import *
 
 from events import *
 import wx
-class wxFramePtr(wxWindowPtr):
+class wxTopLevelWindowPtr(wxWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_Create,(self,) + _args, _kwargs)
+        return val
+    def Maximize(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_Maximize,(self,) + _args, _kwargs)
+        return val
+    def Restore(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_Restore,(self,) + _args, _kwargs)
+        return val
+    def Iconize(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_Iconize,(self,) + _args, _kwargs)
+        return val
+    def IsMaximized(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_IsMaximized,(self,) + _args, _kwargs)
+        return val
+    def IsIconized(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_IsIconized,(self,) + _args, _kwargs)
+        return val
+    def GetIcon(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_GetIcon,(self,) + _args, _kwargs)
+        if val: val = wxIconPtr(val) 
+        return val
+    def SetIcon(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_SetIcon,(self,) + _args, _kwargs)
+        return val
+    def SetTitle(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_SetTitle,(self,) + _args, _kwargs)
+        return val
+    def GetTitle(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_GetTitle,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxTopLevelWindow instance at %s>" % (self.this,)
+class wxTopLevelWindow(wxTopLevelWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(framesc.new_wxTopLevelWindow,_args,_kwargs)
+        self.thisown = 1
+
+
+
+def wxPreTopLevelWindow(*_args,**_kwargs):
+    val = wxTopLevelWindowPtr(apply(framesc.new_wxPreTopLevelWindow,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+
+class wxFramePtr(wxTopLevelWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def Create(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_Create,(self,) + _args, _kwargs)
         return val
-    def Centre(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_Centre,(self,) + _args, _kwargs)
+    def GetClientAreaOrigin(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_GetClientAreaOrigin,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
-    def CreateStatusBar(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_CreateStatusBar,(self,) + _args, _kwargs)
-        return val
-    def CreateToolBar(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_CreateToolBar,(self,) + _args, _kwargs)
-        return val
-    def GetIcon(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_GetIcon,(self,) + _args, _kwargs)
-        if val: val = wxIconPtr(val) 
+    def SetMenuBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_SetMenuBar,(self,) + _args, _kwargs)
         return val
     def GetMenuBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_GetMenuBar,(self,) + _args, _kwargs)
         return val
+    def Command(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_Command,(self,) + _args, _kwargs)
+        return val
+    def ProcessCommand(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_ProcessCommand,(self,) + _args, _kwargs)
+        return val
+    def CreateStatusBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_CreateStatusBar,(self,) + _args, _kwargs)
+        return val
     def GetStatusBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_GetStatusBar,(self,) + _args, _kwargs)
-        return val
-    def GetTitle(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_GetTitle,(self,) + _args, _kwargs)
-        return val
-    def GetToolBar(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_GetToolBar,(self,) + _args, _kwargs)
-        return val
-    def Iconize(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_Iconize,(self,) + _args, _kwargs)
-        return val
-    def IsIconized(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_IsIconized,(self,) + _args, _kwargs)
-        return val
-    def Maximize(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_Maximize,(self,) + _args, _kwargs)
-        return val
-    def IsMaximized(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_IsMaximized,(self,) + _args, _kwargs)
-        return val
-    def Restore(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_Restore,(self,) + _args, _kwargs)
-        return val
-    def SetAcceleratorTable(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_SetAcceleratorTable,(self,) + _args, _kwargs)
-        return val
-    def SetIcon(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_SetIcon,(self,) + _args, _kwargs)
-        return val
-    def SetMenuBar(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_SetMenuBar,(self,) + _args, _kwargs)
         return val
     def SetStatusBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_SetStatusBar,(self,) + _args, _kwargs)
@@ -80,30 +103,29 @@ class wxFramePtr(wxWindowPtr):
     def SetStatusWidths(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_SetStatusWidths,(self,) + _args, _kwargs)
         return val
-    def SetTitle(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_SetTitle,(self,) + _args, _kwargs)
+    def CreateToolBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_CreateToolBar,(self,) + _args, _kwargs)
+        return val
+    def GetToolBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_GetToolBar,(self,) + _args, _kwargs)
         return val
     def SetToolBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_SetToolBar,(self,) + _args, _kwargs)
-        return val
-    def MakeModal(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_MakeModal,(self,) + _args, _kwargs)
-        return val
-    def GetClientAreaOrigin(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_GetClientAreaOrigin,(self,) + _args, _kwargs)
-        if val: val = wxPointPtr(val) ; val.thisown = 1
-        return val
-    def Command(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_Command,(self,) + _args, _kwargs)
-        return val
-    def ProcessCommand(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_ProcessCommand,(self,) + _args, _kwargs)
         return val
     def ShowFullScreen(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_ShowFullScreen,(self,) + _args, _kwargs)
         return val
     def IsFullScreen(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_IsFullScreen,(self,) + _args, _kwargs)
+        return val
+    def Raise(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_Raise,(self,) + _args, _kwargs)
+        return val
+    def SetAcceleratorTable(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_SetAcceleratorTable,(self,) + _args, _kwargs)
+        return val
+    def MakeModal(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_MakeModal,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxFrame instance at %s>" % (self.this,)
@@ -116,6 +138,55 @@ class wxFrame(wxFramePtr):
 
 def wxPreFrame(*_args,**_kwargs):
     val = wxFramePtr(apply(framesc.new_wxPreFrame,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+
+class wxDialogPtr(wxTopLevelWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(framesc.wxDialog_Create,(self,) + _args, _kwargs)
+        return val
+    def Centre(self, *_args, **_kwargs):
+        val = apply(framesc.wxDialog_Centre,(self,) + _args, _kwargs)
+        return val
+    def EndModal(self, *_args, **_kwargs):
+        val = apply(framesc.wxDialog_EndModal,(self,) + _args, _kwargs)
+        return val
+    def SetModal(self, *_args, **_kwargs):
+        val = apply(framesc.wxDialog_SetModal,(self,) + _args, _kwargs)
+        return val
+    def IsModal(self, *_args, **_kwargs):
+        val = apply(framesc.wxDialog_IsModal,(self,) + _args, _kwargs)
+        return val
+    def ShowModal(self, *_args, **_kwargs):
+        val = apply(framesc.wxDialog_ShowModal,(self,) + _args, _kwargs)
+        return val
+    def GetReturnCode(self, *_args, **_kwargs):
+        val = apply(framesc.wxDialog_GetReturnCode,(self,) + _args, _kwargs)
+        return val
+    def SetReturnCode(self, *_args, **_kwargs):
+        val = apply(framesc.wxDialog_SetReturnCode,(self,) + _args, _kwargs)
+        return val
+    def CreateTextSizer(self, *_args, **_kwargs):
+        val = apply(framesc.wxDialog_CreateTextSizer,(self,) + _args, _kwargs)
+        return val
+    def CreateButtonSizer(self, *_args, **_kwargs):
+        val = apply(framesc.wxDialog_CreateButtonSizer,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxDialog instance at %s>" % (self.this,)
+class wxDialog(wxDialogPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(framesc.new_wxDialog,_args,_kwargs)
+        self.thisown = 1
+
+
+
+def wxPreDialog(*_args,**_kwargs):
+    val = wxDialogPtr(apply(framesc.new_wxPreDialog,_args,_kwargs))
     val.thisown = 1
     return val
 
@@ -170,3 +241,4 @@ wxFULLSCREEN_NOSTATUSBAR = framesc.wxFULLSCREEN_NOSTATUSBAR
 wxFULLSCREEN_NOBORDER = framesc.wxFULLSCREEN_NOBORDER
 wxFULLSCREEN_NOCAPTION = framesc.wxFULLSCREEN_NOCAPTION
 wxFULLSCREEN_ALL = framesc.wxFULLSCREEN_ALL
+wxTOPLEVEL_EX_DIALOG = framesc.wxTOPLEVEL_EX_DIALOG

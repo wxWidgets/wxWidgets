@@ -87,8 +87,8 @@ public:
 #endif
 
     wxBitmap GetSubBitmap( const wxRect& rect );
-#ifdef __WXMSW__
     bool CopyFromIcon(const wxIcon& icon);
+#ifdef __WXMSW__
     bool CopyFromCursor(const wxCursor& cursor);
     int GetQuality();
     void SetQuality(int q);
@@ -598,7 +598,6 @@ public:
 
 //----------------------------------------------------------------------
 
-
 class wxPen : public wxGDIObject {
 public:
     wxPen(wxColour& colour, int width=1, int style=wxSOLID);
@@ -618,7 +617,7 @@ public:
     void SetWidth(int width);
 
             // **** This one needs to return a list of ints (wxDash)
-    int GetDashes(wxDash **dashes);
+    //int GetDashes(wxDash **dashes);
     void SetDashes(int LCOUNT, wxDash* choices);
 
 #ifdef __WXMSW__
@@ -626,6 +625,42 @@ public:
     void SetStipple(wxBitmap& stipple);
 #endif
 };
+
+
+
+%{
+class wxPyPen : public wxPen {
+public:
+    wxPyPen(wxColour& colour, int width=1, int style=wxSOLID)
+        : wxPen(colour, width, style)
+        { m_dash = NULL; }
+    ~wxPyPen() {
+        if (m_dash)
+            delete m_dash;
+    }
+
+    void SetDashes(int nb_dashes, const wxDash *dash) {
+        m_dash = new wxDash[nb_dashes];
+        for (int i=0; i<nb_dashes; i++)
+            m_dash[i] = dash[i];
+        wxPen::SetDashes(nb_dashes, m_dash);
+    }
+
+private:
+    wxDash* m_dash;
+};
+%}
+
+
+
+class wxPyPen : public wxPen {
+public:
+    wxPyPen(wxColour& colour, int width=1, int style=wxSOLID);
+    ~wxPyPen();
+
+    void SetDashes(int LCOUNT, wxDash* choices);
+};
+
 
 
 class wxPenList : public wxObject {

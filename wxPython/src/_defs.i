@@ -468,6 +468,19 @@ enum {
 
     wxWS_EX_VALIDATE_RECURSIVELY,
 
+
+    // Mapping modes (as per Windows)
+    wxMM_TEXT,
+    wxMM_LOMETRIC,
+    wxMM_HIMETRIC,
+    wxMM_LOENGLISH,
+    wxMM_HIENGLISH,
+    wxMM_TWIPS,
+    wxMM_ISOTROPIC,
+    wxMM_ANISOTROPIC,
+    wxMM_POINTS,
+    wxMM_METRIC,
+
 };
 
 

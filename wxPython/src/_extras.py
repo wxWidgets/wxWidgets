@@ -579,7 +579,7 @@ NULL = None  # For backwards compatibility only.  You should really be
 
 wxColor      = wxColour
 wxNamedColor = wxNamedColour
-
+wxPen        = wxPyPen
 
 # backwards compatibility
 wxNoRefBitmap       = wxBitmap

@@ -1011,11 +1011,24 @@ wxString* wxString_LIST_helper(PyObject* source) {
     }
     for (int x=0; x<count; x++) {
         PyObject* o = PyList_GetItem(source, x);
+#if PYTHON_API_VERSION >= 1009
+        if (! PyString_Check(o) && ! PyUnicode_Check(o)) {
+            PyErr_SetString(PyExc_TypeError, "Expected a list of string or unicode objects.");
+            return NULL;
+        }
+
+        char* buff;
+        int   length;
+        if (PyString_AsStringAndSize(o, &buff, &length) == -1)
+            return NULL;
+        temp[x] = wxString(buff, length);
+#else
         if (! PyString_Check(o)) {
             PyErr_SetString(PyExc_TypeError, "Expected a list of strings.");
             return NULL;
         }
         temp[x] = PyString_AsString(o);
+#endif
     }
     return temp;
 }

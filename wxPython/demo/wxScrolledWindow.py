@@ -89,6 +89,8 @@ class MyCanvas(wxScrolledWindow):
             pen = wxPen("DARK ORCHID", 1, style)
             if style == wxUSER_DASH:
                 pen.SetDashes([0, 1, 2, 3, 4, 5, 6, 7, 8])
+                pen.SetColour("RED")
+
             dc.SetPen(pen)
             dc.DrawLine(300, y, 400, y)
             y = y + 10

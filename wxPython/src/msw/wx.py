@@ -434,6 +434,16 @@ wxJOY_BUTTON3 = wxc.wxJOY_BUTTON3
 wxJOY_BUTTON4 = wxc.wxJOY_BUTTON4
 wxJOY_BUTTON_ANY = wxc.wxJOY_BUTTON_ANY
 wxWS_EX_VALIDATE_RECURSIVELY = wxc.wxWS_EX_VALIDATE_RECURSIVELY
+wxMM_TEXT = wxc.wxMM_TEXT
+wxMM_LOMETRIC = wxc.wxMM_LOMETRIC
+wxMM_HIMETRIC = wxc.wxMM_HIMETRIC
+wxMM_LOENGLISH = wxc.wxMM_LOENGLISH
+wxMM_HIENGLISH = wxc.wxMM_HIENGLISH
+wxMM_TWIPS = wxc.wxMM_TWIPS
+wxMM_ISOTROPIC = wxc.wxMM_ISOTROPIC
+wxMM_ANISOTROPIC = wxc.wxMM_ANISOTROPIC
+wxMM_POINTS = wxc.wxMM_POINTS
+wxMM_METRIC = wxc.wxMM_METRIC
 wxDEFAULT = wxc.wxDEFAULT
 wxDECORATIVE = wxc.wxDECORATIVE
 wxROMAN = wxc.wxROMAN
@@ -1399,7 +1409,7 @@ NULL = None  # For backwards compatibility only.  You should really be
 
 wxColor      = wxColour
 wxNamedColor = wxNamedColour
-
+wxPen        = wxPyPen
 
 # backwards compatibility
 wxNoRefBitmap       = wxBitmap

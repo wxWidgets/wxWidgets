@@ -512,9 +512,6 @@ class wxPenPtr(wxGDIObjectPtr):
     def SetWidth(self, *_args, **_kwargs):
         val = apply(gdic.wxPen_SetWidth,(self,) + _args, _kwargs)
         return val
-    def GetDashes(self, *_args, **_kwargs):
-        val = apply(gdic.wxPen_GetDashes,(self,) + _args, _kwargs)
-        return val
     def SetDashes(self, *_args, **_kwargs):
         val = apply(gdic.wxPen_SetDashes,(self,) + _args, _kwargs)
         return val
@@ -530,6 +527,26 @@ class wxPenPtr(wxGDIObjectPtr):
 class wxPen(wxPenPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxPen,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxPyPenPtr(wxPenPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,gdic=gdic):
+        if self.thisown == 1 :
+            gdic.delete_wxPyPen(self)
+    def SetDashes(self, *_args, **_kwargs):
+        val = apply(gdic.wxPyPen_SetDashes,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxPyPen instance at %s>" % (self.this,)
+class wxPyPen(wxPyPenPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gdic.new_wxPyPen,_args,_kwargs)
         self.thisown = 1
 
 

@@ -34,16 +34,16 @@ class TestTreeCtrlPanel(wxPanel):
                                , self.log)
 
 
-        #import images
-        #il = wxImageList(16, 16)
-        #idx1 = il.Add(images.getSmilesBitmap())
-        #idx2 = il.Add(images.getOpenBitmap())
-        #idx3 = il.Add(images.getNewBitmap())
-        #idx4 = il.Add(images.getCopyBitmap())
-        #idx5 = il.Add(images.getPasteBitmap())
+        ##import images
+        ##il = wxImageList(16, 16)
+        ##idx1 = il.Add(images.getSmilesBitmap())
+        ##idx2 = il.Add(images.getOpenBitmap())
+        ##idx3 = il.Add(images.getNewBitmap())
+        ##idx4 = il.Add(images.getCopyBitmap())
+        ##idx5 = il.Add(images.getPasteBitmap())
 
-        #self.tree.SetImageList(il)
-        #self.il = il
+        ##self.tree.SetImageList(il)
+        ##self.il = il
 
         # NOTE:  For some reason tree items have to have a data object in
         #        order to be sorted.  Since our compare just uses the labels
@@ -51,18 +51,18 @@ class TestTreeCtrlPanel(wxPanel):
 
         self.root = self.tree.AddRoot("The Root Item")
         self.tree.SetPyData(self.root, None)
-        #self.tree.SetItemImage(self.root, idx1)
+        ##self.tree.SetItemImage(self.root, idx1)
 
         for x in range(15):
             child = self.tree.AppendItem(self.root, "Item %d" % x)
             self.tree.SetPyData(child, None)
-            #self.tree.SetItemImage(child, idx2)
-            #self.tree.SetItemSelectedImage(child, idx3)
+            ##self.tree.SetItemImage(child, idx2, wxTreeItemIcon_Expanded)
+            ##self.tree.SetItemSelectedImage(child, idx3)
             for y in range(5):
                 last = self.tree.AppendItem(child, "item %d-%s" % (x, chr(ord("a")+y)))
                 self.tree.SetPyData(last, None)
-                #self.tree.SetItemImage(last, idx4)
-                #self.tree.SetItemSelectedImage(last, idx5)
+                ##self.tree.SetItemImage(last, idx4)
+                ##self.tree.SetItemSelectedImage(last, idx5)
                 for z in range(5):
                     item = self.tree.AppendItem(last,  "item %d-%s-%d" % (x, chr(ord("a")+y), z))
                     self.tree.SetPyData(item, None)

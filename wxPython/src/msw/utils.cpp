@@ -3552,40 +3552,6 @@ static PyObject *_wrap_wxDateTime_SetToWeekDay(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxDateTime_GetWeekDay(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->GetWeekDay(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxDateTime_GetWeekDay(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxDateTime * _result;
-    wxDateTime * _arg0;
-    wxDateTime::WeekDay  _arg1;
-    int  _arg2 = (int ) 1;
-    wxDateTime::Month  _arg3 = (wxDateTime::Month ) wxDateTime::Inv_Month;
-    int  _arg4 = (int ) wxDateTime::Inv_Year;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","weekday","n","month","year", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|iii:wxDateTime_GetWeekDay",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDateTime_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDateTime_GetWeekDay. Expected _wxDateTime_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxDateTime (wxDateTime_GetWeekDay(_arg0,_arg1,_arg2,_arg3,_arg4));
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxDateTime_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
 #define wxDateTime_SetToLastWeekDay(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetToLastWeekDay(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxDateTime_SetToLastWeekDay(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4340,6 +4306,43 @@ static PyObject *_wrap_wxDateTime_GetDay(PyObject *self, PyObject *args, PyObjec
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("h",_result);
+{
+    if (_arg1) delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxDateTime_GetWeekDay(_swigobj,_swigarg0)  (_swigobj->GetWeekDay(_swigarg0))
+static PyObject *_wrap_wxDateTime_GetWeekDay(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDateTime::WeekDay  _result;
+    wxDateTime * _arg0;
+    wxDateTime::TimeZone * _arg1 = (wxDateTime::TimeZone *) &LOCAL;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","tz", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxDateTime_GetWeekDay",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDateTime_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDateTime_GetWeekDay. Expected _wxDateTime_p.");
+        return NULL;
+        }
+    }
+    if (_obj1)
+{
+    _arg1 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(_obj1));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxDateTime::WeekDay )wxDateTime_GetWeekDay(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_arg1) delete _arg1;
 }
@@ -7775,6 +7778,7 @@ static PyMethodDef utilscMethods[] = {
 	 { "wxDateTime_GetSecond", (PyCFunction) _wrap_wxDateTime_GetSecond, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_GetMinute", (PyCFunction) _wrap_wxDateTime_GetMinute, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_GetHour", (PyCFunction) _wrap_wxDateTime_GetHour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDateTime_GetWeekDay", (PyCFunction) _wrap_wxDateTime_GetWeekDay, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_GetDay", (PyCFunction) _wrap_wxDateTime_GetDay, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_GetMonth", (PyCFunction) _wrap_wxDateTime_GetMonth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_GetYear", (PyCFunction) _wrap_wxDateTime_GetYear, METH_VARARGS | METH_KEYWORDS },
@@ -7798,7 +7802,6 @@ static PyMethodDef utilscMethods[] = {
 	 { "wxDateTime_SetToTheWeek", (PyCFunction) _wrap_wxDateTime_SetToTheWeek, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_GetLastWeekDay", (PyCFunction) _wrap_wxDateTime_GetLastWeekDay, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_SetToLastWeekDay", (PyCFunction) _wrap_wxDateTime_SetToLastWeekDay, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDateTime_GetWeekDay", (PyCFunction) _wrap_wxDateTime_GetWeekDay, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_SetToWeekDay", (PyCFunction) _wrap_wxDateTime_SetToWeekDay, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_GetPrevWeekDay", (PyCFunction) _wrap_wxDateTime_GetPrevWeekDay, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDateTime_SetToPrevWeekDay", (PyCFunction) _wrap_wxDateTime_SetToPrevWeekDay, METH_VARARGS | METH_KEYWORDS },
