@@ -45,7 +45,8 @@ private:
 #define SWIG_TypeName        SWIG_Python_TypeName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
-
+#define SWIG_PackData        SWIG_Python_PackData
+#define SWIG_UnpackData      SWIG_Python_UnpackData
 
 /***********************************************************************
  * common.swg for wxPython
@@ -59,35 +60,34 @@ private:
 
 #include <string.h>
 
-#if defined(_WIN32) || defined(__WIN32__)
-#       if defined(_MSC_VER)
-#               if defined(STATIC_LINKED)
-#                       define SWIGEXPORT(a) a
-#                       define SWIGIMPORT(a) extern a
-#               else
-#                       define SWIGEXPORT(a) __declspec(dllexport) a
-#                       define SWIGIMPORT(a) extern a
-#               endif
-#       else
-#               if defined(__BORLANDC__)
-#                       define SWIGEXPORT(a) a _export
-#                       define SWIGIMPORT(a) a _export
-#               else
-#                       define SWIGEXPORT(a) a
-#                       define SWIGIMPORT(a) a
-#               endif
-#       endif
+#if defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
+#  if defined(_MSC_VER) || defined(__GNUC__)
+#    if defined(STATIC_LINKED)
+#      define SWIGEXPORT(a) a
+#      define SWIGIMPORT(a) extern a
+#    else
+#      define SWIGEXPORT(a) __declspec(dllexport) a
+#      define SWIGIMPORT(a) extern a
+#    endif
+#  else
+#    if defined(__BORLANDC__)
+#      define SWIGEXPORT(a) a _export
+#      define SWIGIMPORT(a) a _export
+#    else
+#      define SWIGEXPORT(a) a
+#      define SWIGIMPORT(a) a
+#    endif
+#  endif
 #else
-#       define SWIGEXPORT(a) a
-#       define SWIGIMPORT(a) a
+#  define SWIGEXPORT(a) a
+#  define SWIGIMPORT(a) a
 #endif
 
 #ifdef SWIG_GLOBAL
-#define SWIGRUNTIME(a) SWIGEXPORT(a)
+#  define SWIGRUNTIME(a) SWIGEXPORT(a)
 #else
-#define SWIGRUNTIME(a) static a
+#  define SWIGRUNTIME(a) static a
 #endif
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -97,10 +97,10 @@ typedef void *(*swig_converter_func)(void *);
 typedef struct swig_type_info *(*swig_dycast_func)(void **);
 
 typedef struct swig_type_info {
-  const char             *name;                 
+  const char             *name;
   swig_converter_func     converter;
   const char             *str;
-  void                   *clientdata;	
+  void                   *clientdata;
   swig_dycast_func        dcast;
   struct swig_type_info  *next;
   struct swig_type_info  *prev;
@@ -114,12 +114,15 @@ SWIGIMPORT(swig_type_info *) SWIG_TypeDynamicCast(swig_type_info *, void **);
 SWIGIMPORT(const char *)     SWIG_TypeName(const swig_type_info *);
 SWIGIMPORT(swig_type_info *) SWIG_TypeQuery(const char *);
 SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
+SWIGIMPORT(char *)           SWIG_PackData(char *, void *, int);
+SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 
 
 #ifdef __cplusplus
 }
 
 #endif
+
 
 /***********************************************************************
  * pyrun.swg for wxPython
@@ -130,7 +133,6 @@ SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
  * anyway.
  *
  ************************************************************************/
-
 
 #include "Python.h"
 
@@ -162,8 +164,6 @@ typedef struct swig_const_info {
     swig_type_info **ptype;
 } swig_const_info;
 
-
-
 /* Common SWIG API */
 #define SWIG_ConvertPtr(obj, pp, type, flags) \
   SWIG_Python_ConvertPtr(obj, pp, type, flags)
@@ -179,33 +179,26 @@ typedef struct swig_const_info {
   SWIG_Python_addvarlink(p, name, get_attr, set_attr)
 #define SWIG_ConvertPacked(obj, ptr, sz, ty, flags) \
   SWIG_Python_ConvertPacked(obj, ptr, sz, ty, flags)
-#define SWIG_PackData(c, ptr, sz) \
-  SWIG_Python_PackData(c, ptr, sz)
-#define SWIG_UnpackData(c, ptr, sz) \
-  SWIG_Python_UnpackData(c, ptr, sz)
 #define SWIG_NewPackedObj(ptr, sz, type) \
   SWIG_Python_NewPackedObj(ptr, sz, type)
 #define SWIG_InstallConstants(d, constants) \
   SWIG_Python_InstallConstants(d, constants)
 
 
-SWIGEXPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
-SWIGEXPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
-SWIGEXPORT(void *)	      SWIG_Python_MustGetPtr(PyObject *, swig_type_info *, int, int);
+SWIGIMPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
+SWIGIMPORT(void *)            SWIG_Python_MustGetPtr(PyObject *, swig_type_info *, int, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_newvarlink(void);
+SWIGIMPORT(void)              SWIG_Python_addvarlink(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
+SWIGIMPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int sz, swig_type_info *, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
+SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
-SWIGEXPORT(PyObject *)        SWIG_Python_newvarlink(void);
-SWIGEXPORT(void)              SWIG_Python_addvarlink(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
-SWIGEXPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int sz, swig_type_info *, int);
-SWIGEXPORT(char *)            SWIG_Python_PackData(char *c, void *, int);
-SWIGEXPORT(char *)            SWIG_Python_UnpackData(char *c, void *, int);
-SWIGEXPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
-SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
 
 /* Contract support */
 
 #define SWIG_contract_assert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, (char *) msg ); goto fail; } else
-
 
 #ifdef __cplusplus
 }
@@ -5285,7 +5278,13 @@ static PyObject *_wrap_FSFile_GetMimeType(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -5313,7 +5312,13 @@ static PyObject *_wrap_FSFile_GetLocation(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -5341,7 +5346,13 @@ static PyObject *_wrap_FSFile_GetAnchor(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -17403,7 +17414,13 @@ static PyObject *_wrap_PyApp_GetVendorName(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -24849,7 +24866,7 @@ static PyObject *_wrap_Menu_Append(PyObject *self, PyObject *args, PyObject *kwa
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help",(char *) "kind", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help",(char *) "kind", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|Oi:Menu_Append",kwnames,&obj0,&arg2,&obj2,&obj3,&arg5)) goto fail;
@@ -24933,7 +24950,7 @@ static PyObject *_wrap_Menu_AppendCheckItem(PyObject *self, PyObject *args, PyOb
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|O:Menu_AppendCheckItem",kwnames,&obj0,&arg2,&obj2,&obj3)) goto fail;
@@ -24993,7 +25010,7 @@ static PyObject *_wrap_Menu_AppendRadioItem(PyObject *self, PyObject *args, PyOb
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|O:Menu_AppendRadioItem",kwnames,&obj0,&arg2,&obj2,&obj3)) goto fail;
@@ -25055,7 +25072,7 @@ static PyObject *_wrap_Menu_AppendMenu(PyObject *self, PyObject *args, PyObject 
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "submenu",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "submenu",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiOO|O:Menu_AppendMenu",kwnames,&obj0,&arg2,&obj2,&obj3,&obj4)) goto fail;
@@ -25202,7 +25219,7 @@ static PyObject *_wrap_Menu_Insert(PyObject *self, PyObject *args, PyObject *kwa
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pos",(char *) "itemid",(char *) "text",(char *) "help",(char *) "kind", NULL 
+        (char *) "self",(char *) "pos",(char *) "id",(char *) "text",(char *) "help",(char *) "kind", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOiO|Oi:Menu_Insert",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4,&arg6)) goto fail;
@@ -25294,7 +25311,7 @@ static PyObject *_wrap_Menu_InsertCheckItem(PyObject *self, PyObject *args, PyOb
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pos",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "pos",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOiO|O:Menu_InsertCheckItem",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4)) goto fail;
@@ -25358,7 +25375,7 @@ static PyObject *_wrap_Menu_InsertRadioItem(PyObject *self, PyObject *args, PyOb
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pos",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "pos",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOiO|O:Menu_InsertRadioItem",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4)) goto fail;
@@ -25424,7 +25441,7 @@ static PyObject *_wrap_Menu_InsertMenu(PyObject *self, PyObject *args, PyObject 
     PyObject * obj4 = 0 ;
     PyObject * obj5 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pos",(char *) "itemid",(char *) "text",(char *) "submenu",(char *) "help", NULL 
+        (char *) "self",(char *) "pos",(char *) "id",(char *) "text",(char *) "submenu",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOiOO|O:Menu_InsertMenu",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4,&obj5)) goto fail;
@@ -25515,7 +25532,7 @@ static PyObject *_wrap_Menu_Prepend(PyObject *self, PyObject *args, PyObject *kw
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help",(char *) "kind", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help",(char *) "kind", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|Oi:Menu_Prepend",kwnames,&obj0,&arg2,&obj2,&obj3,&arg5)) goto fail;
@@ -25599,7 +25616,7 @@ static PyObject *_wrap_Menu_PrependCheckItem(PyObject *self, PyObject *args, PyO
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|O:Menu_PrependCheckItem",kwnames,&obj0,&arg2,&obj2,&obj3)) goto fail;
@@ -25659,7 +25676,7 @@ static PyObject *_wrap_Menu_PrependRadioItem(PyObject *self, PyObject *args, PyO
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|O:Menu_PrependRadioItem",kwnames,&obj0,&arg2,&obj2,&obj3)) goto fail;
@@ -25721,7 +25738,7 @@ static PyObject *_wrap_Menu_PrependMenu(PyObject *self, PyObject *args, PyObject
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "submenu",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "submenu",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiOO|O:Menu_PrependMenu",kwnames,&obj0,&arg2,&obj2,&obj3,&obj4)) goto fail;
@@ -25776,7 +25793,7 @@ static PyObject *_wrap_Menu_Remove(PyObject *self, PyObject *args, PyObject *kwa
     wxMenuItem *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_Remove",kwnames,&obj0,&arg2)) goto fail;
@@ -25834,7 +25851,7 @@ static PyObject *_wrap_Menu_Delete(PyObject *self, PyObject *args, PyObject *kwa
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_Delete",kwnames,&obj0,&arg2)) goto fail;
@@ -25912,7 +25929,7 @@ static PyObject *_wrap_Menu_DestroyId(PyObject *self, PyObject *args, PyObject *
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_DestroyId",kwnames,&obj0,&arg2)) goto fail;
@@ -26057,7 +26074,7 @@ static PyObject *_wrap_Menu_FindItemById(PyObject *self, PyObject *args, PyObjec
     wxMenuItem *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_FindItemById",kwnames,&obj0,&arg2)) goto fail;
@@ -26117,7 +26134,7 @@ static PyObject *_wrap_Menu_Enable(PyObject *self, PyObject *args, PyObject *kwa
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "enable", NULL 
+        (char *) "self",(char *) "id",(char *) "enable", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:Menu_Enable",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -26145,7 +26162,7 @@ static PyObject *_wrap_Menu_IsEnabled(PyObject *self, PyObject *args, PyObject *
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_IsEnabled",kwnames,&obj0,&arg2)) goto fail;
@@ -26172,7 +26189,7 @@ static PyObject *_wrap_Menu_Check(PyObject *self, PyObject *args, PyObject *kwar
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "check", NULL 
+        (char *) "self",(char *) "id",(char *) "check", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:Menu_Check",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -26200,7 +26217,7 @@ static PyObject *_wrap_Menu_IsChecked(PyObject *self, PyObject *args, PyObject *
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_IsChecked",kwnames,&obj0,&arg2)) goto fail;
@@ -26228,7 +26245,7 @@ static PyObject *_wrap_Menu_SetLabel(PyObject *self, PyObject *args, PyObject *k
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "label", NULL 
+        (char *) "self",(char *) "id",(char *) "label", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:Menu_SetLabel",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -26267,7 +26284,7 @@ static PyObject *_wrap_Menu_GetLabel(PyObject *self, PyObject *args, PyObject *k
     wxString result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_GetLabel",kwnames,&obj0,&arg2)) goto fail;
@@ -26301,7 +26318,7 @@ static PyObject *_wrap_Menu_SetHelpString(PyObject *self, PyObject *args, PyObje
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "helpString", NULL 
+        (char *) "self",(char *) "id",(char *) "helpString", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:Menu_SetHelpString",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -26340,7 +26357,7 @@ static PyObject *_wrap_Menu_GetHelpString(PyObject *self, PyObject *args, PyObje
     wxString result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_GetHelpString",kwnames,&obj0,&arg2)) goto fail;
@@ -27220,7 +27237,7 @@ static PyObject *_wrap_MenuBar_FindItemById(PyObject *self, PyObject *args, PyOb
     wxMenuItem *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuBar_FindItemById",kwnames,&obj0,&arg2)) goto fail;
@@ -27290,7 +27307,7 @@ static PyObject *_wrap_MenuBar_Enable(PyObject *self, PyObject *args, PyObject *
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "enable", NULL 
+        (char *) "self",(char *) "id",(char *) "enable", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:MenuBar_Enable",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -27319,7 +27336,7 @@ static PyObject *_wrap_MenuBar_Check(PyObject *self, PyObject *args, PyObject *k
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "check", NULL 
+        (char *) "self",(char *) "id",(char *) "check", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:MenuBar_Check",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -27347,7 +27364,7 @@ static PyObject *_wrap_MenuBar_IsChecked(PyObject *self, PyObject *args, PyObjec
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuBar_IsChecked",kwnames,&obj0,&arg2)) goto fail;
@@ -27373,7 +27390,7 @@ static PyObject *_wrap_MenuBar_IsEnabled(PyObject *self, PyObject *args, PyObjec
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuBar_IsEnabled",kwnames,&obj0,&arg2)) goto fail;
@@ -27401,7 +27418,7 @@ static PyObject *_wrap_MenuBar_SetLabel(PyObject *self, PyObject *args, PyObject
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "label", NULL 
+        (char *) "self",(char *) "id",(char *) "label", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:MenuBar_SetLabel",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -27440,7 +27457,7 @@ static PyObject *_wrap_MenuBar_GetLabel(PyObject *self, PyObject *args, PyObject
     wxString result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuBar_GetLabel",kwnames,&obj0,&arg2)) goto fail;
@@ -27474,7 +27491,7 @@ static PyObject *_wrap_MenuBar_SetHelpString(PyObject *self, PyObject *args, PyO
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "helpString", NULL 
+        (char *) "self",(char *) "id",(char *) "helpString", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:MenuBar_SetHelpString",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -27513,7 +27530,7 @@ static PyObject *_wrap_MenuBar_GetHelpString(PyObject *self, PyObject *args, PyO
     wxString result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuBar_GetHelpString",kwnames,&obj0,&arg2)) goto fail;
@@ -27782,7 +27799,7 @@ static PyObject *_wrap_MenuItem_SetId(PyObject *self, PyObject *args, PyObject *
     int arg2 ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuItem_SetId",kwnames,&obj0,&arg2)) goto fail;
@@ -27943,7 +27960,13 @@ static PyObject *_wrap_MenuItem_GetText(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -28346,7 +28369,13 @@ static PyObject *_wrap_MenuItem_GetHelp(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxString, 0);
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar(result->c_str(), result->Len());
+#else
+        resultobj = PyString_FromStringAndSize(result->c_str(), result->Len());
+#endif
+    }
     return resultobj;
     fail:
     return NULL;
@@ -37473,6 +37502,7 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_INT,     (char *)"MENU_TEAROFF", (long) wxMENU_TEAROFF, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"MB_DOCKABLE", (long) wxMB_DOCKABLE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"NO_FULL_REPAINT_ON_RESIZE", (long) wxNO_FULL_REPAINT_ON_RESIZE, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"FULL_REPAINT_ON_RESIZE", (long) wxFULL_REPAINT_ON_RESIZE, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"LI_HORIZONTAL", (long) wxLI_HORIZONTAL, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"LI_VERTICAL", (long) wxLI_VERTICAL, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"WS_EX_VALIDATE_RECURSIVELY", (long) wxWS_EX_VALIDATE_RECURSIVELY, 0, 0, 0},

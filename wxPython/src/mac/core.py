@@ -233,6 +233,7 @@ DD_DEFAULT_STYLE = _core.DD_DEFAULT_STYLE
 MENU_TEAROFF = _core.MENU_TEAROFF
 MB_DOCKABLE = _core.MB_DOCKABLE
 NO_FULL_REPAINT_ON_RESIZE = _core.NO_FULL_REPAINT_ON_RESIZE
+FULL_REPAINT_ON_RESIZE = _core.FULL_REPAINT_ON_RESIZE
 LI_HORIZONTAL = _core.LI_HORIZONTAL
 LI_VERTICAL = _core.LI_VERTICAL
 WS_EX_VALIDATE_RECURSIVELY = _core.WS_EX_VALIDATE_RECURSIVELY
@@ -664,6 +665,7 @@ class Size(object):
         return "<%s.%s; proxy of C++ wxSize instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     width = property(_core.Size_width_get, _core.Size_width_set)
     height = property(_core.Size_height_get, _core.Size_height_set)
+    x = width; y = height 
     def __init__(self, *args, **kwargs):
         """
         __init__(int w=0, int h=0) -> Size
@@ -3135,6 +3137,7 @@ class CommandEvent(Event):
         """IsChecked() -> bool"""
         return _core.CommandEvent_IsChecked(*args, **kwargs)
 
+    Checked = IsChecked 
     def IsSelection(*args, **kwargs):
         """IsSelection() -> bool"""
         return _core.CommandEvent_IsSelection(*args, **kwargs)
@@ -6233,7 +6236,7 @@ class Menu(EvtHandler):
 
     def Append(*args, **kwargs):
         """
-        Append(int itemid, wxString text, wxString help=wxPyEmptyString, 
+        Append(int id, wxString text, wxString help=wxPyEmptyString, 
             wxItemKind kind=ITEM_NORMAL)
         """
         return _core.Menu_Append(*args, **kwargs)
@@ -6243,15 +6246,15 @@ class Menu(EvtHandler):
         return _core.Menu_AppendSeparator(*args, **kwargs)
 
     def AppendCheckItem(*args, **kwargs):
-        """AppendCheckItem(int itemid, wxString text, wxString help=wxPyEmptyString)"""
+        """AppendCheckItem(int id, wxString text, wxString help=wxPyEmptyString)"""
         return _core.Menu_AppendCheckItem(*args, **kwargs)
 
     def AppendRadioItem(*args, **kwargs):
-        """AppendRadioItem(int itemid, wxString text, wxString help=wxPyEmptyString)"""
+        """AppendRadioItem(int id, wxString text, wxString help=wxPyEmptyString)"""
         return _core.Menu_AppendRadioItem(*args, **kwargs)
 
     def AppendMenu(*args, **kwargs):
-        """AppendMenu(int itemid, wxString text, Menu submenu, wxString help=wxPyEmptyString)"""
+        """AppendMenu(int id, wxString text, Menu submenu, wxString help=wxPyEmptyString)"""
         return _core.Menu_AppendMenu(*args, **kwargs)
 
     def AppendItem(*args, **kwargs):
@@ -6268,7 +6271,7 @@ class Menu(EvtHandler):
 
     def Insert(*args, **kwargs):
         """
-        Insert(size_t pos, int itemid, wxString text, wxString help=wxPyEmptyString, 
+        Insert(size_t pos, int id, wxString text, wxString help=wxPyEmptyString, 
             wxItemKind kind=ITEM_NORMAL)
         """
         return _core.Menu_Insert(*args, **kwargs)
@@ -6278,18 +6281,15 @@ class Menu(EvtHandler):
         return _core.Menu_InsertSeparator(*args, **kwargs)
 
     def InsertCheckItem(*args, **kwargs):
-        """InsertCheckItem(size_t pos, int itemid, wxString text, wxString help=wxPyEmptyString)"""
+        """InsertCheckItem(size_t pos, int id, wxString text, wxString help=wxPyEmptyString)"""
         return _core.Menu_InsertCheckItem(*args, **kwargs)
 
     def InsertRadioItem(*args, **kwargs):
-        """InsertRadioItem(size_t pos, int itemid, wxString text, wxString help=wxPyEmptyString)"""
+        """InsertRadioItem(size_t pos, int id, wxString text, wxString help=wxPyEmptyString)"""
         return _core.Menu_InsertRadioItem(*args, **kwargs)
 
     def InsertMenu(*args, **kwargs):
-        """
-        InsertMenu(size_t pos, int itemid, wxString text, Menu submenu, 
-            wxString help=wxPyEmptyString)
-        """
+        """InsertMenu(size_t pos, int id, wxString text, Menu submenu, wxString help=wxPyEmptyString)"""
         return _core.Menu_InsertMenu(*args, **kwargs)
 
     def PrependItem(*args, **kwargs):
@@ -6298,7 +6298,7 @@ class Menu(EvtHandler):
 
     def Prepend(*args, **kwargs):
         """
-        Prepend(int itemid, wxString text, wxString help=wxPyEmptyString, 
+        Prepend(int id, wxString text, wxString help=wxPyEmptyString, 
             wxItemKind kind=ITEM_NORMAL)
         """
         return _core.Menu_Prepend(*args, **kwargs)
@@ -6308,19 +6308,19 @@ class Menu(EvtHandler):
         return _core.Menu_PrependSeparator(*args, **kwargs)
 
     def PrependCheckItem(*args, **kwargs):
-        """PrependCheckItem(int itemid, wxString text, wxString help=wxPyEmptyString)"""
+        """PrependCheckItem(int id, wxString text, wxString help=wxPyEmptyString)"""
         return _core.Menu_PrependCheckItem(*args, **kwargs)
 
     def PrependRadioItem(*args, **kwargs):
-        """PrependRadioItem(int itemid, wxString text, wxString help=wxPyEmptyString)"""
+        """PrependRadioItem(int id, wxString text, wxString help=wxPyEmptyString)"""
         return _core.Menu_PrependRadioItem(*args, **kwargs)
 
     def PrependMenu(*args, **kwargs):
-        """PrependMenu(int itemid, wxString text, Menu submenu, wxString help=wxPyEmptyString)"""
+        """PrependMenu(int id, wxString text, Menu submenu, wxString help=wxPyEmptyString)"""
         return _core.Menu_PrependMenu(*args, **kwargs)
 
     def Remove(*args, **kwargs):
-        """Remove(int itemid) -> MenuItem"""
+        """Remove(int id) -> MenuItem"""
         return _core.Menu_Remove(*args, **kwargs)
 
     def RemoveItem(*args, **kwargs):
@@ -6328,7 +6328,7 @@ class Menu(EvtHandler):
         return _core.Menu_RemoveItem(*args, **kwargs)
 
     def Delete(*args, **kwargs):
-        """Delete(int itemid) -> bool"""
+        """Delete(int id) -> bool"""
         return _core.Menu_Delete(*args, **kwargs)
 
     def DeleteItem(*args, **kwargs):
@@ -6345,7 +6345,7 @@ class Menu(EvtHandler):
 
     def DestroyId(*args, **kwargs):
         """
-        DestroyId(int itemid) -> bool
+        DestroyId(int id) -> bool
 
         Deletes the C++ object this Python object is a proxy for.
         """
@@ -6372,7 +6372,7 @@ class Menu(EvtHandler):
         return _core.Menu_FindItem(*args, **kwargs)
 
     def FindItemById(*args, **kwargs):
-        """FindItemById(int itemid) -> MenuItem"""
+        """FindItemById(int id) -> MenuItem"""
         return _core.Menu_FindItemById(*args, **kwargs)
 
     def FindItemByPosition(*args, **kwargs):
@@ -6380,35 +6380,35 @@ class Menu(EvtHandler):
         return _core.Menu_FindItemByPosition(*args, **kwargs)
 
     def Enable(*args, **kwargs):
-        """Enable(int itemid, bool enable)"""
+        """Enable(int id, bool enable)"""
         return _core.Menu_Enable(*args, **kwargs)
 
     def IsEnabled(*args, **kwargs):
-        """IsEnabled(int itemid) -> bool"""
+        """IsEnabled(int id) -> bool"""
         return _core.Menu_IsEnabled(*args, **kwargs)
 
     def Check(*args, **kwargs):
-        """Check(int itemid, bool check)"""
+        """Check(int id, bool check)"""
         return _core.Menu_Check(*args, **kwargs)
 
     def IsChecked(*args, **kwargs):
-        """IsChecked(int itemid) -> bool"""
+        """IsChecked(int id) -> bool"""
         return _core.Menu_IsChecked(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(int itemid, wxString label)"""
+        """SetLabel(int id, wxString label)"""
         return _core.Menu_SetLabel(*args, **kwargs)
 
     def GetLabel(*args, **kwargs):
-        """GetLabel(int itemid) -> wxString"""
+        """GetLabel(int id) -> wxString"""
         return _core.Menu_GetLabel(*args, **kwargs)
 
     def SetHelpString(*args, **kwargs):
-        """SetHelpString(int itemid, wxString helpString)"""
+        """SetHelpString(int id, wxString helpString)"""
         return _core.Menu_SetHelpString(*args, **kwargs)
 
     def GetHelpString(*args, **kwargs):
-        """GetHelpString(int itemid) -> wxString"""
+        """GetHelpString(int id) -> wxString"""
         return _core.Menu_GetHelpString(*args, **kwargs)
 
     def SetTitle(*args, **kwargs):
@@ -6534,7 +6534,7 @@ class MenuBar(Window):
         return _core.MenuBar_FindMenuItem(*args, **kwargs)
 
     def FindItemById(*args, **kwargs):
-        """FindItemById(int itemid) -> MenuItem"""
+        """FindItemById(int id) -> MenuItem"""
         return _core.MenuBar_FindItemById(*args, **kwargs)
 
     def FindMenu(*args, **kwargs):
@@ -6542,35 +6542,35 @@ class MenuBar(Window):
         return _core.MenuBar_FindMenu(*args, **kwargs)
 
     def Enable(*args, **kwargs):
-        """Enable(int itemid, bool enable)"""
+        """Enable(int id, bool enable)"""
         return _core.MenuBar_Enable(*args, **kwargs)
 
     def Check(*args, **kwargs):
-        """Check(int itemid, bool check)"""
+        """Check(int id, bool check)"""
         return _core.MenuBar_Check(*args, **kwargs)
 
     def IsChecked(*args, **kwargs):
-        """IsChecked(int itemid) -> bool"""
+        """IsChecked(int id) -> bool"""
         return _core.MenuBar_IsChecked(*args, **kwargs)
 
     def IsEnabled(*args, **kwargs):
-        """IsEnabled(int itemid) -> bool"""
+        """IsEnabled(int id) -> bool"""
         return _core.MenuBar_IsEnabled(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(int itemid, wxString label)"""
+        """SetLabel(int id, wxString label)"""
         return _core.MenuBar_SetLabel(*args, **kwargs)
 
     def GetLabel(*args, **kwargs):
-        """GetLabel(int itemid) -> wxString"""
+        """GetLabel(int id) -> wxString"""
         return _core.MenuBar_GetLabel(*args, **kwargs)
 
     def SetHelpString(*args, **kwargs):
-        """SetHelpString(int itemid, wxString helpString)"""
+        """SetHelpString(int id, wxString helpString)"""
         return _core.MenuBar_SetHelpString(*args, **kwargs)
 
     def GetHelpString(*args, **kwargs):
-        """GetHelpString(int itemid) -> wxString"""
+        """GetHelpString(int id) -> wxString"""
         return _core.MenuBar_GetHelpString(*args, **kwargs)
 
     def GetFrame(*args, **kwargs):
@@ -6621,7 +6621,7 @@ class MenuItem(Object):
         return _core.MenuItem_SetMenu(*args, **kwargs)
 
     def SetId(*args, **kwargs):
-        """SetId(int itemid)"""
+        """SetId(int id)"""
         return _core.MenuItem_SetId(*args, **kwargs)
 
     def GetId(*args, **kwargs):
