@@ -1963,12 +1963,16 @@ wxSize wxTextCtrl::DoGetBestSize() const
 
     int wText = DEFAULT_ITEM_WIDTH;
 
-    int hText = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
+    int hText = cy;
     if ( m_windowStyle & wxTE_MULTILINE )
     {
         hText *= wxMax(GetNumberOfLines(), 5);
     }
     //else: for single line control everything is ok
+
+    // we have to add the adjustments for the control height only once, not
+    // once per line, so do it after multiplication above
+    hText += EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy) - cy;
 
     return wxSize(wText, hText);
 }
