@@ -420,14 +420,19 @@ wxWindow::~wxWindow()
         if (m_hScrollBar)
         {
             wxDeleteWindowFromTable((Widget) m_hScrollBar);
+	    XtUnmanageChild((Widget) m_hScrollBar);
         }
         if (m_vScrollBar)
         {
             wxDeleteWindowFromTable((Widget) m_vScrollBar);
+	    XtUnmanageChild((Widget) m_vScrollBar);
         }
 
-        UnmanageAndDestroy(m_hScrollBar);
-        UnmanageAndDestroy(m_vScrollBar);
+        if (m_hScrollBar)
+	    XtDestroyWidget((Widget) m_hScrollBar);
+        if (m_vScrollBar)
+	    XtDestroyWidget((Widget) m_vScrollBar);
+
         UnmanageAndDestroy(m_scrolledWindow);
 
         if (m_borderWidget)
