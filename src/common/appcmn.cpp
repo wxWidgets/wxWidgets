@@ -509,7 +509,7 @@ void wxGUIAppTraitsBase::RemoveFromPendingDelete(wxObject *object)
 
 GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
 {
-#ifdef __MAC__
+#ifdef __WXMAC__
     // NB: wxMac does not have any GUI-specific functions in gsocket.c and
     //     so it doesn't need this table at all
     return NULL;
