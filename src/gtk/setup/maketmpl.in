@@ -114,11 +114,12 @@ LINK_LIBS= \
   $(WX_LIBS) \
   $(GUI_TK_LIBS) \
   $(X_EXTRA_LIBS) \
-  $(X_PRE_LIBS)
+  $(X_PRE_LIBS) \
+  $(THREADS_LINK)
   
 #  $(X_LIBS) -lX11 -lXext -lm      gtk-config does this for me
 
-# Don't include $(OPENGL_LIBS) or $(THREADS_LINK) in LINK_LIBS; they
+# Don't include $(OPENGL_LIBS) in LINK_LIBS; they
 # can be conveniently added to BIN_LINK in Makefile.in.
 
 #### End of system configuration section. ####
