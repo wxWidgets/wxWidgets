@@ -1,6 +1,8 @@
 
 !if "$(FINAL)" == "1"
 LIBTARGET=..\..\lib\tiff.lib
+!else if "$(FINAL)" == "hybrid"
+LIBTARGET=..\..\lib\tiffh.lib
 !else
 LIBTARGET=..\..\lib\tiffd.lib
 !endif

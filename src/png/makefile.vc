@@ -17,6 +17,8 @@ WINPNGINC = $(WINPNGDIR)
 
 !if "$(FINAL)" == "1"
 WINPNGLIB=..\..\lib\png.lib
+!else if "$(FINAL)" == "hybrid"
+WINPNGLIB=..\..\lib\pngh.lib
 !else
 WINPNGLIB=..\..\lib\pngd.lib
 !endif
@@ -38,13 +40,19 @@ CPPFLAGS= /W4 /Zi $(CRTFLAG) /GX $(ZOPTION) $(OPT) /D__WXMSW__ $(INC)
 CFLAGS= /W4 /Zi $(CRTFLAG) /GX /Od /D__WXMSW__ $(INC)
 LINKFLAGS=/NOD /CO /ONERROR:NOEXE
 _CRTFLAG=/MDd
+!else if "$(FINAL)" == "hybrid"
+OPT = /Od
+CPPFLAGS= /W4 /Zi $(CRTFLAG) /GX $(ZOPTION) $(OPT) /D__WXMSW__ $(INC)
+CFLAGS= /W4 /Zi $(CRTFLAG) /GX /Od /D__WXMSW__ $(INC)
+LINKFLAGS=/NOD /CO /ONERROR:NOEXE
+_CRTFLAG=/MD
 !else
 # /Ox for real FINAL version
 OPT = /O2
 CPPFLAGS= /W4 $(CRTFLAG) /GX /D__WXMSW__ $(INC)
 CFLAGS= /W4 $(CRTFLAG) /GX /D__WXMSW__ $(INC)
 LINKFLAGS=/NOD /ONERROR:NOEXE
-_CRTFLAG=/MDd
+_CRTFLAG=/MD
 !endif
 
 !if "$(CRTFLAG)" == ""
