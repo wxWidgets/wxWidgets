@@ -158,7 +158,15 @@
 #elif defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
     typedef unsigned int bool;
 #elif defined(__WATCOMC__)
-    typedef unsigned int bool;
+//    typedef unsigned int bool;
+
+ #if __WATCOMC__<1100
+ typedef enum _tagbool {
+     false,
+     true
+ } bool ;
+ #endif
+
 #elif defined(__SUNCC__)
     #ifdef __SUNPRO_CC
         // starting from version 5.0 Sun CC understands 'bool'

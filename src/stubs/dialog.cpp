@@ -262,10 +262,12 @@ bool wxDialog::OnClose()
 void wxDialog::OnCloseWindow(wxCloseEvent& event)
 {
     // Compatibility
-    if ( GetEventHandler()->OnClose() || event.GetForce())
+    if ( GetEventHandler()->OnClose() || !event.CanVeto())
     {
         this->Destroy();
     }
+    else
+        event.Veto(TRUE);
 }
 
 // Destroy the window (delayed, if a managed window)

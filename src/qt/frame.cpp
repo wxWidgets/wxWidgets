@@ -373,10 +373,12 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 void wxFrame::OnCloseWindow(wxCloseEvent& event)
 {
     // Compatibility
-    if ( GetEventHandler()->OnClose() || event.GetForce())
+    if ( GetEventHandler()->OnClose() || !event.CanVeto())
     {
         this->Destroy();
     }
+    else
+        event.Veto(TRUE);
 }
 
 bool wxFrame::OnClose()

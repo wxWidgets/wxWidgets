@@ -807,7 +807,7 @@ otherwise it returns FALSE (it is being deactivated).
 
 \func{void}{OnChar}{\param{wxKeyEvent\&}{ event}}
 
-Called when the user has pressed a key, which has been translated into an ASCII value.
+Called when the user has pressed a key that is not a modifier (SHIFT, CONTROL or ALT).
 
 \wxheading{Parameters}
 
@@ -823,8 +823,8 @@ default function to achieve default keypress functionality.
 Note that the ASCII values do not have explicit key codes: they are passed as ASCII
 values.
 
-Note that not all keypresses can be intercepted this way. If you wish to intercept special
-keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
+Note that not all keypresses can be intercepted this way. If you wish to intercept modifier
+keypresses, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
 \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
 
 Most, but not all, windows allow keypresses to be intercepted.

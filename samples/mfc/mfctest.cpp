@@ -44,6 +44,10 @@
 
 #include "wx/wx.h"
 
+#ifdef _WINDOWS_
+#error Sorry, you need to edit include/wx/wxprec.h, comment out the windows.h inclusion, and recompile.
+#endif
+
 #ifdef new
 #undef new
 #endif

@@ -539,7 +539,7 @@ static PyObject *_wrap_wxCloseEvent_SetLoggingOff(PyObject *self, PyObject *args
     return _resultobj;
 }
 
-#define wxCloseEvent_GetForce(_swigobj)  (_swigobj->GetForce())
+#define wxCloseEvent_GetForce(_swigobj)  (!_swigobj->CanVeto())
 static PyObject *_wrap_wxCloseEvent_GetForce(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     bool  _result;
