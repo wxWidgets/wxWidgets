@@ -86,7 +86,7 @@ public:
     void OnViewSource(wxCommandEvent& myEvent);
     void OnSetSource(wxCommandEvent& myEvent);
     void OnStateChanged(wxWebKitStateChangedEvent& myEvent);
-    wxWebKitControl* mySafari;
+    wxWebKitCtrl* mySafari;
     wxTextCtrl* urlText;
 private:
     // any class wishing to process wxWindows events must use this macro
@@ -186,7 +186,7 @@ MyFrame::MyFrame(const wxString& title)
     myToolbar->AddSeparator();
     myToolbar->Realize();
 
-    mySafari = new wxWebKitControl(this, ID_WEBKIT, _T("http://www.wxwidgets.org"), wxDefaultPosition, wxSize(200, 200));
+    mySafari = new wxWebKitCtrl(this, ID_WEBKIT, _T("http://www.wxwidgets.org"), wxDefaultPosition, wxSize(200, 200));
 
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
@@ -241,7 +241,7 @@ void MyFrame::OnViewSource(wxCommandEvent& myEvent){
 
 void MyFrame::OnSetSource(wxCommandEvent& myEvent){
     if (mySafari){
-        wxString myText = wxString("<HTML><HEAD></HEAD><BODY><P>Hello world!</P></BODY></HTML>");
+        wxString myText = wxT("<HTML><HEAD></HEAD><BODY><P>Hello world!</P></BODY></HTML>");
         mySafari->SetPageSource(myText);
     }
 }
