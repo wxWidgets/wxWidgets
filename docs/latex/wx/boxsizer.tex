@@ -16,8 +16,8 @@ the buttons shall be centred as the width of the dialog changes.
 It is the unique feature of a box sizer, that it can grow in both directions (height and
 width) but can distribute its growth in the main direction (horizontal for a row) {\it unevenly}
 among its children. In our example case, the vertical sizer is supposed to propagate all its
-height changes to only the text area, not to the button area. This is determined by the
-{\it option} parameter when adding a window (or another sizer) to a sizer. It is interpreted
+height changes to only the text area, not to the button area. This is determined by the {\it option} parameter
+when adding a window (or another sizer) to a sizer. It is interpreted
 as a weight factor, i.e. it can be zero, indicating that the window may not be resized
 at all, or above zero. If several windows have a value above zero, the value is interpreted
 relative to the sum of all weight factors of the sizer, so when adding two windows with
@@ -77,10 +77,8 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title ) :
 
   topsizer->Fit( this );            // set size to minimum size as calculated by the sizer
   topsizer->SetSizeHints( this );   // set size hints to honour mininum size
-  
 }
 \end{verbatim}
-
 
 \wxheading{Derived from}
 

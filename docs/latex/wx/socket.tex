@@ -8,7 +8,7 @@
 
 <wx/socket.h>
 
-\wxheading{wxSocket errors}{wxsocketerrs}
+\wxheading{wxSocket errors}%\label{wxsocketerrs} % Labels don't work on a non-section!
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
@@ -23,7 +23,7 @@
 \twocolitem{{\bf wxSOCKET\_MEMERR}}{Memory exhausted.}
 \end{twocollist}%
 
-\wxheading{wxSocket events}{wxsocketevents}
+\wxheading{wxSocket events}
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
@@ -120,12 +120,13 @@ For example:
 In this example, the user will be notified about incoming socket datas and
 a broken connection.
 
-For more information on socket events see \helpref{wxSocket events}{wxsocketevents}.
+For more information on socket events see \helpref{wxSocket events}{wxsocketbase}.
 
 %
 % SetTimeout
 %
 \membersection{wxSocketBase::SetTimeout}{wxsocketbasesettimeout}
+
 \func{void}{SetTimeout}{\param{int }{seconds}}
 
 This function sets the socket timeout in seconds.
@@ -191,7 +192,7 @@ Returns the number of bytes read or written by the last IO call.
 
 \constfunc{wxSocketError}{LastError}{\void}
 
-Returns the last occured wxSocket error. See \helpref{wxSocket errors}{wxsocketerrs}.
+Returns the last occured wxSocket error. See \helpref{wxSocket errors}{wxsocketbase}.
 
 % ---------------------------------------------------------------------------
 % IO calls
@@ -501,7 +502,8 @@ Returns TRUE if a "lost" event occured, FALSE if the timeout was reached.
 
 \func{void}{RestoreState}{\void}
 
-This function restores a previously saved state.
+This function restores the previous state of the socket (include flags,
+notify flags, notify state, C callback function and data).
 
 \wxheading{See also}
 
@@ -522,26 +524,13 @@ actually it saves all flags and the state of the asynchronous callbacks.
 
 \wxheading{See also}
 
-%
-% SaveState
-%
-
 \helpref{wxSocketBase::RestoreState}{wxsocketbaserestorestate}
-\membersection{wxSocketBase::RestoreState}\label{wxsocketbaserestorestate}
-
-\func{void}{RestoreState}{\void}
-
-This function restores the previous state of the socket (include flags,
-notify flags, notify state, C callback function and data).
-
-\wxheading{See also}
-
-\helpref{wxSocketBase::SaveState}{wxsocketbasesavestate}
 
 %
 % GetLocal
 %
 \membersection{wxSocketBase::GetLocal}{wxsocketbasegetlocal}
+
 \constfunc{bool}{GetLocal}{\param{wxSockAddress\& }{addr_man}}
 
 This function returns the local address field of the socket. The local
@@ -556,6 +545,7 @@ It returns TRUE if no errors happened, FALSE otherwise.
 % GetPeer
 %
 \membersection{wxSocketBase::GetPeer}{wxsocketbasegetlocal}
+
 \constfunc{bool}{GetPeer}{\param{wxSockAddress\& }{addr_man}}
 
 This function returns the peer address field of the socket. The peer 
@@ -599,7 +589,7 @@ void SocketCallback(wxSocketBase& sock,wxSocketNotify evt,char *cdata);
 \end{verbatim}
 
 The first parameter reminds you of the caller socket. The second parameter
-informs you about the current event (See \helpref{wxSocket events}{wxsocketevents}).
+informs you about the current event (See \helpref{wxSocket events}{wxsocketbase}).
 The third parameters is the client data you specified using \helpref{CallbackData}{wxsocketcallbackdata}.
 
 \wxheading{Return value}
@@ -615,7 +605,7 @@ It returns the previous callback.
 
 \func{char *}{CallbackData}{\param{char *}{cdata}}
 
-This function sets the the client data which will be passed to a \helpref{C callback}{wxsocketcallback}.
+This function sets the the client data which will be passed to a \helpref{C callback}{wxsocketbasecallback}.
 
 \wxheading{Return value}
 

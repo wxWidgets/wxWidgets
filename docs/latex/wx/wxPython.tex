@@ -13,9 +13,9 @@ wxPython is a blending of the wxWindows GUI classes and the
 
 \wxheading{Python}
 
-So what is Python?  Go to
-\urlref{http://www.python.org}{http://www.python.org}
-to learn more, but in a nutshell Python is an interpreted,
+So what is Python?  Go to 
+\urlref{http://www.python.org}{http://www.python.org} to learn more,
+but in a nutshell Python is an interpreted,
 interactive, object-oriented programming language. It is often
 compared to Tcl, Perl, Scheme or Java.
 
@@ -33,38 +33,37 @@ commercial use.
 
 wxPython is a Python package that can be imported at runtime that
 includes a collection of Python modules and an extension module
-(native code).  It provides a series of Python classes that mirror (or
-shadow) many of the wxWindows GUI classes.  This extension module
+(native code). It provides a series of Python classes that mirror (or
+shadow) many of the wxWindows GUI classes. This extension module
 attempts to mirror the class heiarchy of wxWindows as closely as
 possble. This means that there is a wxFrame class in wxPython that
 looks, smells, tastes and acts almost the same as the wxFrame class in
 the C++ version.
 
-wxPython is very versitile.  It can be used to create standalone GUI
+wxPython is very versitile. It can be used to create standalone GUI
 applications, or in situations where Python is embedded in a C++
 application as an internal scripting or macro language.
 
 Currently wxPython is available for Win32 platforms and the GTK
-toolkit (wxGTK) on most Unix/X-windows platforms.  The effort to
-enable wxPython for wxMotif will begin shortly.  See \helpref{Building Python}{wxpbuild} for
+toolkit (wxGTK) on most Unix/X-windows platforms. The effort to
+enable wxPython for wxMotif will begin shortly. See \helpref{Building Python}{wxpbuild} for
 details about getting wxPython working for you.
-
 
 %----------------------------------------------------------------------
 \section{Why use wxPython?}\label{wxpwhy}
 
 So why would you want to use wxPython over just C++ and wxWindows?
 Personally I prefer using Python for everything. I only use C++ when
-I absolutely have to eek more performance out of an algorithm, and even
+I absolutely have to eke more performance out of an algorithm, and even
 then I ususally code it as an extension module and leave the majority
 of the program in Python.
 
 Another good thing to use wxPython for is quick prototyping of your
-wxWindows apps.  With C++ you have to continuously go though the
-edit-compile-link-run cycle, which can be quite time comsuming.  With
-Python it is only an edit-run cycle.  You can easily build an
+wxWindows apps. With C++ you have to continuously go though the
+edit-compile-link-run cycle, which can be quite time consuming. With
+Python it is only an edit-run cycle. You can easily build an
 application in a few hours with Python that would normally take a few
-days or longer with C++.  Converting a wxPython app to a C++/wxWindows app
+days or longer with C++. Converting a wxPython app to a C++/wxWindows app
 should be a straight forward task.
 
 %----------------------------------------------------------------------
@@ -74,48 +73,47 @@ There are other GUI solutions out there for Python.
 
 \wxheading{Tkinter}
 
-Tkinter is the defacto standard GUI for Python.  It is available
-on nearly every platform that Python and Tcl/TK are.  Why Tcl/Tk?
+Tkinter is the defacto standard GUI for Python. It is available
+on nearly every platform that Python and Tcl/TK are. Why Tcl/Tk?
 Well because Tkinter is just a wrapper around Tcl's GUI toolkit, Tk.
 This has its upsides and its downsides...
 
-The upside is that Tk is a pretty veristile toolkit.  It can be made
-to do a lot of things in a lot of different environments.  It is fairly
+The upside is that Tk is a pretty versatile toolkit. It can be made
+to do a lot of things in a lot of different environments. It is fairly
 easy to create new widgets and use them interchangably in your
 programs.
 
-The downside is Tcl.  When using Tkinter you actually have two
+The downside is Tcl. When using Tkinter you actually have two
 separate language interpreters running, the Python interpreter and the
-Tcl interpreter for the GUI.  Since the guts of Tcl is mostly about
-string processing, it is fairly slow as well.  (Not too bad on a fast
+Tcl interpreter for the GUI. Since the guts of Tcl is mostly about
+string processing, it is fairly slow as well. (Not too bad on a fast
 Pentium II, but you really notice the difference on slower machines.)
 
 It wasn't until the lastest version of Tcl/Tk that native Look and
-Feel's were possible on non-Motif platforms.  This is because Tk
-usually implements it's own widgets (controls) even when there are
+Feel was possible on non-Motif platforms. This is because Tk
+usually implements its own widgets (controls) even when there are
 native controls available.
 
-Tkinter is a pretty low-level toolkit.  You have to do a lot of work
+Tkinter is a pretty low-level toolkit. You have to do a lot of work
 (verbose program code) to do things that would be much simpler with a higher
 level of abstraction.
 
 \wxheading{PythonWin}
 
-PythonWin is an add-on package for Python for the Win32 platform.  It
-includes wrappers for MFC as well as much of the win32 API.  Because
+PythonWin is an add-on package for Python for the Win32 platform. It
+includes wrappers for MFC as well as much of the Win32 API. Because
 of its foundation, it is very familiar for programmers who have
-experience with MFC and the Win32 API.  It is obviously not compatible
-with other platforms and toolkits.  PythonWin is organized as separate
+experience with MFC and the Win32 API. It is obviously not compatible
+with other platforms and toolkits. PythonWin is organized as separate
 packages and modules so you can use the pieces you need without having
 to use the GUI portions.
 
 \wxheading{Others}
 
 There are quite a few other GUI modules available for Python, some in
-active use, some that havn't been updated for ages.  Most are simple
+active use, some that havn't been updated for ages. Most are simple
 wrappers around some C or C++ toolkit or another, and most are not
-cross-platform compatible.  See \urlref{this
-link}{http://www.python.org/download/Contributed.html\#Graphics}
+cross-platform compatible. See \urlref{this link}{http://www.python.org/download/Contributed.html\#Graphics} 
 for a listing of a few of them.
 
 %----------------------------------------------------------------------
@@ -123,27 +121,27 @@ for a listing of a few of them.
 
 I used SWIG (\urlref{http://www.swig.org}{http://www.swig.org}) to
 to create the source code for the
-extension module.  This enabled me to only have to deal with a small
+extension module. This enabled me to only have to deal with a small
 amount of code and only have to bother with the exceptional issues.
 SWIG takes care of the rest and generates all the repetative code for
-me.  You don't need SWIG to build the extension module as all the
+me. You don't need SWIG to build the extension module as all the
 generated C++ code is included under the src directory.
 
 I added a few minor features to SWIG to control some of the code
-generation.  If you want to play around with this you will need to get
-a recent version of SWIG from their CVS or from a daily build.  See
+generation. If you want to play around with this you will need to get
+a recent version of SWIG from their CVS or from a daily build. See 
 \urlref{http://www.swig.org/}{http://www.swig.org/} for details.
 
-wxPython is organized as a Python package.  This means that the
+wxPython is organized as a Python package. This means that the
 directory containing the results of the build process should be a
-subdirectory of a directory on the \tt{PYTHONPATH}.  (And preferably should
-be named wxPython.)  You can control where the build process will dump
-wxPython by setting the \tt{TARGETDIR} variable for the build utility, (see
-below.)
+subdirectory of a directory on the \tt{PYTHONPATH}. (And preferably should
+be named wxPython.) You can control where the build process will dump
+wxPython by setting the \tt{TARGETDIR} variable for the build utility (see
+below).
 
 \begin{enumerate}\itemsep=0pt
-\item Build wxWindows as described in its BuildCVS.txt file.  For *nix
-   systems I run configure with these flags:
+\item Build wxWindows as described in its BuildCVS.txt file. For Unix
+systems I run configure with these flags:
 
 \begin{verbatim}
                 --with-gtk
@@ -157,63 +155,52 @@ below.)
                 --disable-std_iostreams
 \end{verbatim}
 
-   You can use whatever flags you want, but I know these work.
+You can use whatever flags you want, but I know these work.
 
-   For Win32 systems I use Visual C++ 6.0, but 5.0 should work also.  The
-   build utility currently does not support any other win32 compilers.
-
+For Win32 systems I use Visual C++ 6.0, but 5.0 should work also. The
+build utility currently does not support any other Win32 compilers.
 \item At this point you may want to make an alias or symlink, script,
-   batch file, whatever on the PATH that invokes
-   \tt{\$(WXWIN)/utils/wxPython/distrib/build.py} to help simplify matters
-   somewhat.  For example, on my win32 system I have a file named
-   \tt{build}.bat in a directory on the PATH that contains:
+batch file, whatever on the PATH that invokes \tt{\$(WXWIN)/utils/wxPython/distrib/build.py} to
+help simplify matters somewhat. For example, on my Win32 system I have a file named
+ \tt{build}.bat in a directory on the PATH that contains:
 
-   \tt{python \%WXWIN/utils/wxPython/distrib/build.py \%1 \%2 \%3 \%4 \%5 \%6}
-
+\tt{python \%WXWIN/utils/wxPython/distrib/build.py \%1 \%2 \%3 \%4 \%5 \%6}
 
 \item Change into the \tt{\$(WXWIN)/utils/wxPython/src} directory.
-
 \item Type "\tt{build -b}" to build wxPython and "\tt{build -i}" to
-install it, or \"\tt{build -bi}\" to do both steps at once.
+install it, or "\tt{build -bi}" to do both steps at once.
 
-   The build.py script actually generates a Makefile based on what it
-   finds on your system and information found in the build.cfg file.
-   If you have troubles building or you want it built or installed in
-   a different way, take a look at the docstring in build.py.  You are
-   able to to override many configuration options in a file named
-   build.local.
-
+The build.py script actually generates a Makefile based on what it
+finds on your system and information found in the build.cfg file.
+If you have troubles building or you want it built or installed in
+a different way, take a look at the docstring in build.py. You are
+able to to override many configuration options in a file named
+build.local.
 \item To build and install the add-on modules, change to the appropriate
-   directory under \tt{\$(WXWIN)/utils/wxPython/modules} and run the build
-   utility again.
-
+directory under \tt{\$(WXWIN)/utils/wxPython/modules} and run the build
+utility again.
 \item Change to the \tt{\$(WXWIN)/utils/wxPython/demo} directory.
+\item Try executing the demo program. For example:
 
-\item Try executing the demo program.  For example:
+\tt{python demo.py}
 
-    \tt{python demo.py}
-
-To run it without requiring a console on win32, you can use the
+To run it without requiring a console on Win32, you can use the
 \tt{pythonw.exe} version of Python either from the command line or from a
 shortcut.
-
-
-
 \end{enumerate}
-
 
 %----------------------------------------------------------------------
 \section{Using wxPython}\label{wxpusing}
 
 \wxheading{First things first...}
 
-I'm not going to try and teach the Python language here.  You can do
+I'm not going to try and teach the Python language here. You can do
 that at the \urlref{Python Tutorial}{http://www.python.org/doc/tut/tut.html}.
 I'm also going to assume that you know a bit about wxWindows already,
 enough to notice the similarities in the classes used.
 
-Take a look at the following wxPython program.  You can find a similar
-program in the \tt{wxPython/demo} directory, named \tt{DialogUnits.py}.  If your
+Take a look at the following wxPython program. You can find a similar
+program in the \tt{wxPython/demo} directory, named \tt{DialogUnits.py}. If your
 Python and wxPython are properly installed, you should be able to run
 it by issuing this command:
 
@@ -305,38 +292,38 @@ it by issuing this command:
 
 \begin{enumerate}\itemsep=0pt
 \item At line 2 the wxPython classes, constants, and etc. are imported
-into the current module's namespace.  If you prefer to reduce
+into the current module's namespace. If you prefer to reduce
 namespace pollution you can use "\tt{from wxPython import wx}" and
 then access all the wxPython identifiers through the wx module, for
 example, "\tt{wx.wxFrame}".
 \item At line 13 the frame's sizing and moving events are connected to
-methods of the class.  These helper functions are intended to be like
-the event table macros that wxWindows employs.  But since static event
+methods of the class. These helper functions are intended to be like
+the event table macros that wxWindows employs. But since static event
 tables are impossible with wxPython, we use helpers that are named the
-same to dynamically build the table.  The only real difference is
+same to dynamically build the table. The only real difference is
 that the first arguemnt to the event helpers is always the window that
 the event table entry should be added to.
 \item Notice the use of \tt{wxDLG\_PNT} and \tt{wxDLG\_SZE} in lines 19
-- 29 to convert from dialog units to pixels.  These helpers are unique
+- 29 to convert from dialog units to pixels. These helpers are unique
 to wxPython since Python can't do method overloading like C++.
 \item There is an \tt{OnCloseWindow} method at line 34 but no call to
-EVT\_CLOSE to attach the event to the method.  Does it really get
-called?  The answer is, yes it does.  This is because many of the
+EVT\_CLOSE to attach the event to the method. Does it really get
+called?  The answer is, yes it does. This is because many of the
 \em{standard} events are attached to windows that have the associated
-\em{standard} method names.  I have tried to follow the lead of the
+\em{standard} method names. I have tried to follow the lead of the
 C++ classes in this area to determine what is \em{standard} but since
 that changes from time to time I can make no guarentees, nor will it
-be fully documented.  When in doubt, use an EVT\_*** function.
+be fully documented. When in doubt, use an EVT\_*** function.
 \item At lines 17 to 21 notice that there are no saved references to
-the panel or the static text items that are created.  Those of you
+the panel or the static text items that are created. Those of you
 who know Python might be wondering what happens when Python deletes
-these objects when they go out of scope.  Do they disappear from the GUI?  They
-don't.  Remember that in wxPython the Python objects are just shadows of the
-coresponding C++ objects.  Once the C++ windows and controls are
+these objects when they go out of scope. Do they disappear from the GUI?  They
+don't. Remember that in wxPython the Python objects are just shadows of the
+coresponding C++ objects. Once the C++ windows and controls are
 attached to their parents, the parents manage them and delete them
-when necessary.  For this reason, most wxPython objects do not need to
+when necessary. For this reason, most wxPython objects do not need to
 have a \_\_del\_\_ method that explicitly causes the C++ object to be
-deleted.  If you ever have the need to forcibly delete a window, use
+deleted. If you ever have the need to forcibly delete a window, use
 the Destroy() method as shown on line 36.
 \item Just like wxWindows in C++, wxPython apps need to create a class
 derived from \tt{wxApp} (line 56) that implements a method named
@@ -344,9 +331,9 @@ derived from \tt{wxApp} (line 56) that implements a method named
 main window (line 62) and use \tt{wxApp.SetTopWindow()} (line 66) to
 inform wxWindows about it.
 \item And finally, at line 72 an instance of the application class is
-created.  At this point wxPython finishes initializing itself, and calls
-the \tt{OnInit} method to get things started.  (The zero parameter here is
-a flag for functionality that isn't quite implemented yet.  Just
+created. At this point wxPython finishes initializing itself, and calls
+the \tt{OnInit} method to get things started. (The zero parameter here is
+a flag for functionality that isn't quite implemented yet. Just
 ignore it for now.)  The call to \tt{MainLoop} at line 73 starts the event
 loop which continues until the application terminates or all the top
 level windows are closed.
@@ -355,9 +342,9 @@ level windows are closed.
 %----------------------------------------------------------------------
 \section{wxWindows classes implemented in wxPython}\label{wxpclasses}
 
-The following classes are supported in wxPython.  Most provide nearly
+The following classes are supported in wxPython. Most provide nearly
 full implementations of the public interfaces specified in the C++
-documentation, others are less so.  They will all be brought as close
+documentation, others are less so. They will all be brought as close
 as possible to the C++ spec over time.
 
 \begin{itemize}\itemsep=0pt
@@ -496,8 +483,6 @@ as possible to the C++ spec over time.
 \item \helpref{wxUpdateUIEvent}{wxupdateuievent}
 \item \helpref{wxWindowDC}{wxwindowdc}
 \item \helpref{wxWindow}{wxwindow}
-
-
 \end{itemize}
 
 %----------------------------------------------------------------------
@@ -507,7 +492,7 @@ Since wxPython is a blending of multiple technologies, help comes from
 multiple sources. See
 \urlref{http://alldunn.com/wxPython}{http://alldunn.com/wxPython} for details on
 various sources of help, but probably the best source is the
-wxPython-users mail list.  You can view the archive or subscribe by
+wxPython-users mail list. You can view the archive or subscribe by
 going to
 
 \urlref{http://starship.python.net/mailman/listinfo/wxpython-users}{http://starship.python.net/mailman/listinfo/wxpython-users}
