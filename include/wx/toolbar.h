@@ -11,8 +11,8 @@
 #   define classwxToolBar classwxToolBarMSW
 #elif defined(__WXGTK__)
 #   include "wx/gtk/tbargtk.h"
-#   define wxToolBar wxToolBarGTK
-#   define classwxToolBar classwxToolBarGTK
+#   define wxToolBarGTK wxToolBar
+#   define classwxToolBarGTK classwxToolBar
 #endif
 
 #endif
