@@ -83,7 +83,6 @@ logg.cpp	G
 msgdlgg.cpp	G	G
 notebook.cpp	G	16,R,P
 panelg.cpp	G
-plot.cpp	G
 printps.cpp	G	PS
 prntdlgg.cpp	G	PS,U
 progdlgg.cpp	G
@@ -677,7 +676,6 @@ palette.h	W
 panel.h	W
 paper.h	W
 pen.h	W
-plot.h	W
 print.h	W
 printdlg.h	W
 prntbase.h	W
@@ -1114,7 +1112,6 @@ listctrl.h	N	16
 msgdlgg.h	N
 notebook.h	N
 panelg.h	N
-plot.h	N
 printps.h	N
 prntdlgg.h	N
 progdlgg.h	N
