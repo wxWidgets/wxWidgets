@@ -44,9 +44,42 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_EXTENDED_RTTI
+WX_DEFINE_FLAGS( wxPanelStyle )
+
+WX_BEGIN_FLAGS( wxPanelStyle )
+    // new style border flags, we put them first to
+    // use them for streaming out
+    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
+    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
+    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
+    WX_FLAGS_MEMBER(wxBORDER_RAISED)
+    WX_FLAGS_MEMBER(wxBORDER_STATIC)
+    WX_FLAGS_MEMBER(wxBORDER_NONE)
+    
+    // old style border flags
+    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
+    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
+    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
+    WX_FLAGS_MEMBER(wxRAISED_BORDER)
+    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
+    WX_FLAGS_MEMBER(wxNO_BORDER)
+
+    // standard window styles
+    WX_FLAGS_MEMBER(wxTAB_TRAVERSAL)
+    WX_FLAGS_MEMBER(wxCLIP_CHILDREN)
+    WX_FLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+    WX_FLAGS_MEMBER(wxWANTS_CHARS)
+    WX_FLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
+    WX_FLAGS_MEMBER(wxALWAYS_SHOW_SB )
+    WX_FLAGS_MEMBER(wxVSCROLL)
+    WX_FLAGS_MEMBER(wxHSCROLL)
+
+WX_END_FLAGS( wxPanelStyle )
+
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxPanel, wxWindow,"wx/panel.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxPanel)
+    WX_PROPERTY_FLAGS( WindowStyle , wxPanelStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 // style wxTAB_TRAVERSAL
 WX_END_PROPERTIES_TABLE()
 

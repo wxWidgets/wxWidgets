@@ -105,11 +105,52 @@ BEGIN_EVENT_TABLE(wxYearSpinCtrl, wxSpinCtrl)
 END_EVENT_TABLE()
 
 #if wxUSE_EXTENDED_RTTI
+WX_DEFINE_FLAGS( wxCalendarCtrlStyle )
+
+WX_BEGIN_FLAGS( wxCalendarCtrlStyle )
+    // new style border flags, we put them first to
+    // use them for streaming out
+    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
+    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
+    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
+    WX_FLAGS_MEMBER(wxBORDER_RAISED)
+    WX_FLAGS_MEMBER(wxBORDER_STATIC)
+    WX_FLAGS_MEMBER(wxBORDER_NONE)
+    
+    // old style border flags
+    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
+    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
+    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
+    WX_FLAGS_MEMBER(wxRAISED_BORDER)
+    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
+    WX_FLAGS_MEMBER(wxNO_BORDER)
+
+    // standard window styles
+    WX_FLAGS_MEMBER(wxTAB_TRAVERSAL)
+    WX_FLAGS_MEMBER(wxCLIP_CHILDREN)
+    WX_FLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+    WX_FLAGS_MEMBER(wxWANTS_CHARS)
+    WX_FLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
+    WX_FLAGS_MEMBER(wxALWAYS_SHOW_SB )
+    WX_FLAGS_MEMBER(wxVSCROLL)
+    WX_FLAGS_MEMBER(wxHSCROLL)
+
+    WX_FLAGS_MEMBER(wxCAL_SUNDAY_FIRST)
+    WX_FLAGS_MEMBER(wxCAL_MONDAY_FIRST)
+    WX_FLAGS_MEMBER(wxCAL_SHOW_HOLIDAYS)
+    WX_FLAGS_MEMBER(wxCAL_NO_YEAR_CHANGE)
+    WX_FLAGS_MEMBER(wxCAL_NO_MONTH_CHANGE)
+    WX_FLAGS_MEMBER(wxCAL_SEQUENTIAL_MONTH_SELECTION)
+    WX_FLAGS_MEMBER(wxCAL_SHOW_SURROUNDING_WEEKS)
+
+WX_END_FLAGS( wxCalendarCtrlStyle )
+
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxCalendarCtrl, wxControl,"wx/calctrl.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxCalendarCtrl)
     WX_HIDE_PROPERTY( Children )
 	WX_PROPERTY( Date,wxDateTime, SetDate , GetDate, , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    WX_PROPERTY_FLAGS( WindowStyle , wxCalendarCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxCalendarCtrl)
