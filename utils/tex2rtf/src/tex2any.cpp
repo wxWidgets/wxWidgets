@@ -145,6 +145,7 @@ char            *followedLinkColourString = NULL;
 bool            combineSubSections = FALSE;
 bool            htmlWorkshopFiles = FALSE;
 bool            ignoreBadRefs = FALSE;
+char			*htmlFaceName = copystring("Times New Roman");
 
 extern int passNumber;
 

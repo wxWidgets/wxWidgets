@@ -1185,6 +1185,11 @@ char *RegisterSetting(char *settingName, char *settingValue, bool interactive)
     upperCaseNames = StringTobool(settingValue);
   else if (StringMatch(settingName, "ignoreBadRefs", FALSE, TRUE))
     ignoreBadRefs = StringTobool(settingValue);
+  else if (StringMatch(settingName, "htmlFaceName", FALSE, TRUE))
+  {
+    delete[] htmlFaceName;
+    htmlFaceName = copystring(settingValue);
+  }
   else if (StringMatch(settingName, "winHelpTitle", FALSE, TRUE))
   {
     if (winHelpTitle)

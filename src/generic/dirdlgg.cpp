@@ -29,12 +29,12 @@
     #include "wx/textctrl.h"
     #include "wx/button.h"
     #include "wx/sizer.h"
-    #include "wx/statline.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/msgdlg.h"
 #endif
 
+#include "wx/statline.h"
 #include "wx/generic/dirctrlg.h"
 #include "wx/generic/dirdlgg.h"
 

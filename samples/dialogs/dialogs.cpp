@@ -42,9 +42,10 @@
 #include <wx/generic/fontdlgg.h>
 #endif
 
+#define wxUSE_DIRDLGG 1
+
 #if !defined(__WXMSW__) || defined(wxUSE_DIRDLGG) && wxUSE_DIRDLGG
-// New wxGenericDirCtrl
-#include "wx/dirctrl.h"
+#include "wx/generic/dirdlgg.h"
 #endif
 
 #include "dialogs.h"

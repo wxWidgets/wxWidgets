@@ -181,7 +181,7 @@ void ReopenFile(FILE **fd, char **fileName)
 {
   if (*fd)
   {
-    fprintf(*fd, "\n</BODY></HTML>\n");
+    fprintf(*fd, "\n</FONT></BODY></HTML>\n");
     fclose(*fd);
   }
   fileId ++;
@@ -583,6 +583,17 @@ char *ParseColourString(char *bkStr, bool *isPicture)
   else return NULL;
 }
 
+void OutputFont(void)
+{
+  // Output <FONT FACE=...>
+  TexOutput("<FONT FACE=\"");
+  if (htmlFaceName)
+	TexOutput(htmlFaceName);
+  else
+	TexOutput("Times New Roman");
+  TexOutput("\">\n");
+}
+
 // Output start of <BODY> block
 void OutputBodyStart(void)
 {
@@ -637,6 +648,8 @@ void OutputBodyStart(void)
     }
   }
   TexOutput(">\n");
+
+  OutputFont();
 }
 
 // Called on start/end of macro examination
@@ -1027,7 +1040,8 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       if (inTabular)
       {
         // End cell, start cell
-        TexOutput("</TD>");
+
+        TexOutput("</FONT></TD>");
 
         // Start new row and cell, setting alignment for the first cell.
         if (currentColumn < noColumns)
@@ -1051,6 +1065,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         else
           sprintf(buf, "\n<TD ALIGN=LEFT>");
         TexOutput(buf);
+		OutputFont();
       }
       else
         TexOutput("&amp;");
@@ -1099,12 +1114,13 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
       else
         sprintf(buf, "<TR>\n<TD ALIGN=LEFT>");
       TexOutput(buf);
+	  OutputFont();
     }
     else
     {
       // End cell and row
       // Start new row and cell
-      TexOutput("</TD>\n</TR>\n");
+      TexOutput("</FONT></TD>\n</TR>\n");
     }
     break;
   }
@@ -2114,8 +2130,9 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           TexOutput(buf);
         } else
           TexOutput("\n<TR><TD VALIGN=TOP>\n");
+		OutputFont();
       }  else
-            TexOutput("\n</TD>\n");
+            TexOutput("\n</FONT></TD>\n");
     }
     if (arg_no == 2)
     {
@@ -2127,8 +2144,9 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           TexOutput(buf);
         } else 
            TexOutput("\n<TD VALIGN=TOP>\n");
+		OutputFont();
       }  else
-           TexOutput("\n</TD></TR>\n");
+           TexOutput("\n</FONT></TD></TR>\n");
     }
     return TRUE;
     break;
@@ -2630,6 +2648,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         if (compatibilityMode)
         {
           TexOutput("<TR>\n<TD>");
+		  OutputFont();
 /*
           for (int i = 0; i < noColumns; i++)
           {
@@ -2909,25 +2928,25 @@ bool HTMLGo(void)
 
     if (Chapters)
     {
-      fprintf(Chapters, "\n</BODY></HTML>\n");
+      fprintf(Chapters, "\n</FONT></BODY></HTML>\n");
       fclose(Chapters);
       Chapters = NULL;
     }
     if (Sections)
     {
-      fprintf(Sections, "\n</BODY></HTML>\n");
+      fprintf(Sections, "\n</FONT></BODY></HTML>\n");
       fclose(Sections);
       Sections = NULL;
     }
     if (Subsections && !combineSubSections)
     {
-      fprintf(Subsections, "\n</BODY></HTML>\n");
+      fprintf(Subsections, "\n</FONT></BODY></HTML>\n");
       fclose(Subsections);
       Subsections = NULL;
     }
     if (Subsubsections && !combineSubSections)
     {
-      fprintf(Subsubsections, "\n</BODY></HTML>\n");
+      fprintf(Subsubsections, "\n</FONT></BODY></HTML>\n");
       fclose(Subsubsections);
       Subsubsections = NULL;
     }
@@ -2995,7 +3014,7 @@ bool HTMLGo(void)
         fclose(fd);
       }
 
-      fprintf(tmpTitle, "\n</BODY>\n");
+      fprintf(tmpTitle, "\n</FONT></BODY>\n");
 
       if (htmlFrameContents)
       {

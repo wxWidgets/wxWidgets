@@ -1602,7 +1602,9 @@ Most, but not all, windows respond to this event.
 
 \func{void}{OnSize}{\param{wxSizeEvent\& }{event}}
 
-Called when the window has been resized.
+Called when the window has been resized. This is not a virtual function; you should
+provide your own non-virtual OnSize function and direct size events to it using EVT\_SIZE
+in an event table definition.
 
 \wxheading{Parameters}
 
