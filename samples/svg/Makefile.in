@@ -1,4 +1,4 @@
-# Makefile for plot sample.
+# Makefile for svg sample.
 # $Id$
 
 top_srcdir = @top_srcdir@/..

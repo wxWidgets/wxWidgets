@@ -816,6 +816,7 @@ trap 'rm -fr `echo "
             src/ogl/Makefile
             src/mmedia/Makefile
             src/stc/Makefile
+            src/svg/Makefile	    
             src/xrc/Makefile
             src/canvas/Makefile
             src/gizmos/Makefile
@@ -829,6 +830,7 @@ trap 'rm -fr `echo "
             samples/ogl/ogledit/Makefile
             samples/ogl/studio/Makefile
             samples/stc/Makefile
+            samples/svg/Makefile	    
             samples/canvas/Makefile
             samples/canvas/test/Makefile
             samples/canvas/simple/Makefile
@@ -933,6 +935,7 @@ CONFIG_FILES=\${CONFIG_FILES-"src/Makefile
             src/ogl/Makefile
             src/mmedia/Makefile
             src/stc/Makefile
+            src/svg/Makefile	    
             src/xrc/Makefile
             src/canvas/Makefile
             src/gizmos/Makefile
@@ -946,6 +949,7 @@ CONFIG_FILES=\${CONFIG_FILES-"src/Makefile
             samples/ogl/ogledit/Makefile
             samples/ogl/studio/Makefile
             samples/stc/Makefile
+            samples/svg/Makefile	    
             samples/canvas/Makefile
             samples/canvas/test/Makefile
             samples/canvas/simple/Makefile

@@ -39,6 +39,9 @@ USERC("svg.rc");
 #include <wx/toolbar.h>
 #include <wx/svg/dcsvg.h>
 
+#ifndef __WXMSW__
+#include "mondrian.xpm"									     
+#endif									    
 #include "bitmaps/new.xpm"
 #include "bitmaps/save.xpm"
 #include "bitmaps/help.xpm"
