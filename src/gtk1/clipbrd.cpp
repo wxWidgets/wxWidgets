@@ -231,8 +231,7 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
     if ((!wxTheClipboard->m_ownsPrimarySelection) &&
         (!wxTheClipboard->m_ownsClipboard))
     {
-        /* the clipboard is no longer in our hands. we can the  clipboard data. */
-      
+        /* the clipboard is no longer in our hands. we can the delete clipboard data. */
         if (wxTheClipboard->m_dataBroker)
 	{
 	    delete wxTheClipboard->m_dataBroker;
@@ -445,26 +444,21 @@ bool wxClipboard::AddData( wxDataObject *data )
     wxCHECK_MSG( data, FALSE, _T("data is invalid") );
     
     /* if clipboard has been cleared before, create new data broker */
-  
     if (!m_dataBroker) m_dataBroker = new wxDataBroker();
   
     /* add new data to list of offered data objects */
-  
     m_dataBroker->Add( data );
     
     /* get native format id of new data object */
-    
     GdkAtom format = data->GetFormat().GetAtom();
 	
     wxCHECK_MSG( format, FALSE, _T("data has invalid format") );
     
     /* This should happen automatically, but to be on the safe side */
-      
     m_ownsClipboard = FALSE;
     m_ownsPrimarySelection = FALSE;
     
     /* Add handlers if someone requests data */
-  
 
 #if (GTK_MINOR_VERSION > 0)
 
@@ -497,9 +491,9 @@ bool wxClipboard::AddData( wxDataObject *data )
 			       selection_handler,
 			       (gpointer) NULL );
 #endif
-			       
+
+//    printf( "vorher.\n" );			       
     /* Tell the world we offer clipboard data */
-  
     if (!gtk_selection_owner_set( m_clipboardWidget, 
                                   g_clipboardAtom,
 				  GDK_CURRENT_TIME ))
@@ -507,6 +501,10 @@ bool wxClipboard::AddData( wxDataObject *data )
         return FALSE;
     }
     m_ownsClipboard = TRUE;
+    
+//    printf( "nachher.\n" );			       
+    
+    return TRUE;
     
     if (!gtk_selection_owner_set( m_clipboardWidget, 
                                   GDK_SELECTION_PRIMARY,

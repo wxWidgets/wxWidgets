@@ -250,7 +250,7 @@ static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
     GDK_THREADS_LEAVE ();
 #endif
     
-    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 10, wxapp_wakeup_timerout_callback, (gpointer) NULL );
+    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 20, wxapp_wakeup_timerout_callback, (gpointer) NULL );
     
     return TRUE;
 }
@@ -276,7 +276,7 @@ wxApp::wxApp()
     m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
     
 #if wxUSE_THREADS
-    m_wakeUpTimerTag = gtk_timeout_add( 10, wxapp_wakeup_timerout_callback, (gpointer) NULL );
+    m_wakeUpTimerTag = gtk_timeout_add( 20, wxapp_wakeup_timerout_callback, (gpointer) NULL );
 #endif
 
     m_colorCube = (unsigned char*) NULL;
