@@ -122,11 +122,12 @@
 #endif // VC++ 1.5
 
 // Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
-// so define it ourselves
+// so define it ourselves (newer versions do it for all files, though, and
+// don't allow it to be redefined)
 #ifdef __DECCXX
-#ifndef __VMS
-# define __cplusplus
-#endif
+    #if !defined(__VMS) && !defined(__cplusplus)
+        #define __cplusplus
+    #endif
 #endif // __DECCXX
 
 // Resolves linking problems under HP-UX
