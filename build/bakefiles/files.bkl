@@ -2375,8 +2375,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <!--
             workaround until Bakefiles do not support more than one platform
             for Open Watcom (DOS(MGL)/MSW) - do not include WIN32 base for DOS application
-        -->
+
+            workaround until Bakefile supports !=
         <if cond="PLATFORM_WIN32=='1' and TOOLKIT!='MGL'">$(BASE_WIN32_SRC) $(BASE_WINCE_SRC)</if>
+        -->
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_SRC)</if>
     </set>
