@@ -580,7 +580,7 @@
         #define  wxStrxfrm   strxfrm
 
         // stdio.h functions
-        #if defined(__WXMAC__) && !defined(__DARWIN__)  && !defined(wxUSE_UNICODE)
+        #if defined(__WXMAC__) && !defined(__DARWIN__)  && !wxUSE_UNICODE
         #include <stdio.h>
         WXDLLIMPEXP_BASE FILE *   wxFopen(const wxChar *path, const wxChar *mode);
         WXDLLIMPEXP_BASE FILE *   wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream);

@@ -158,7 +158,7 @@ WXDLLIMPEXP_BASE int wxStat( const wxChar *file_name, wxStructStat *buf );
 WXDLLIMPEXP_BASE int wxAccess( const wxChar *pathname, int mode );
 WXDLLIMPEXP_BASE int wxOpen( const wxChar *pathname, int flags, mode_t mode );
 #else
-#if defined(__WXMAC__) && !defined(__DARWIN__)  && !defined(wxUSE_UNICODE)
+#if defined(__WXMAC__) && !defined(__DARWIN__)  && !wxUSE_UNICODE
 #include <sys/stat.h>
 WXDLLIMPEXP_BASE int wxStat( const wxChar *file_name, wxStructStat *buf );
 WXDLLIMPEXP_BASE int wxAccess( const wxChar *pathname, int mode );
