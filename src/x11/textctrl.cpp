@@ -12,6 +12,7 @@
 #endif
 
 #include "wx/textctrl.h"
+
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/log.h"
@@ -1963,6 +1964,8 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
 
 void wxTextCtrl::OnInternalIdle()
 {
+    wxControl::OnInternalIdle();
+    
     m_ignoreInput = FALSE;
     
     if (m_lang != wxSOURCE_LANG_NONE)

@@ -11,6 +11,14 @@
 #ifndef __X11TEXTCTRLH__
 #define __X11TEXTCTRLH__
 
+// Set to 1 to use wxUniv's implementation, 0
+// to use wxX11's.
+#define wxUSE_UNIV_TEXTCTRL 1
+
+#if wxUSE_UNIV_TEXTCTRL
+#include "wx/univ/textctrl.h"
+#else
+
 #if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "textctrl.h"
 #endif
@@ -385,5 +393,8 @@ protected:
     wxTextCtrl *m_winCapture;
 };
 
-#endif // __GTKTEXTCTRLH__
+#endif
+// wxUSE_UNIV_TEXTCTRL
+
+#endif // __X11TEXTCTRLH__
 

@@ -2443,7 +2443,7 @@ void wxTextCtrl::UpdateLastVisible()
     SData().m_colLastVisible += SData().m_colStart;
 
     wxLogTrace(_T("text"), _T("Last visible column/position is %d/%ld"),
-               SData().m_colLastVisible, SData().m_posLastVisible);
+               (int) SData().m_colLastVisible, (long) SData().m_posLastVisible);
 }
 
 void wxTextCtrl::OnSize(wxSizeEvent& event)
@@ -3577,6 +3577,7 @@ void wxTextCtrl::OnInternalIdle()
     {
         UpdateScrollbars();
     }
+    wxControl::OnInternalIdle();
 }
 
 bool wxTextCtrl::SendAutoScrollEvents(wxScrollWinEvent& event) const
