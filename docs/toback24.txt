@@ -70,3 +70,31 @@ Checking in src/msw/treectrl.cpp;
 new revision: 1.136; previous revision: 1.135
 done
 
+
+
+6 Improved X11 ShowFullScreen (later, maybe 2.4.2?)
+
+RCS file: /pack/cvsroots/wxwindows/wxWindows/src/gtk/toplevel.cpp,v
+retrieving revision 1.34
+retrieving revision 1.35
+RCS file: /pack/cvsroots/wxwindows/wxWindows/src/unix/utilsx11.cpp,v
+retrieving revision 1.5
+retrieving revision 1.6
+RCS file: /pack/cvsroots/wxwindows/wxWindows/include/wx/unix/utilsx11.h,v
+retrieving revision 1.1
+retrieving revision 1.2
+
+
+
+7 Fixes to wxrc compiler
+
+wxWindows/contrib/utils/wxrc/wxrc.cpp revision 1.23
+Log: 1) fixed compilation of wxBitmap, wxIcon toplevel nodes
+     2) fixed wxrc when using -o dirname/filename
+
+
+
+8 wxFrame support in wxrcedit
+
+http://sourceforge.net/tracker/index.php?func=detail&aid=648659&group_id=9863&atid=309863
+
