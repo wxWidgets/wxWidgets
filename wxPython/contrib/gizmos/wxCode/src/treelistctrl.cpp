@@ -4629,10 +4629,10 @@ void wxTreeListCtrl::CalculateAndSetHeaderHeight()
         h += d + 2 * HEADER_OFFSET_Y + EXTRA_HEIGHT;
 
         // only update if changed
-        if ( h != m_headerHeight )
+        if ( h != (int)m_headerHeight )
         {
-            m_headerHeight = h;
-            //m_header_win->SetSize(m_header_win->GetSize().x, m_headerHeight);
+            m_headerHeight = (size_t)h;
+            m_header_win->SetSize(m_header_win->GetSize().x, m_headerHeight);
         }
     }
 }
@@ -4642,7 +4642,6 @@ void wxTreeListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     int w, h;
     GetClientSize(&w, &h);
-    printf("%d  (%d, %d)\n", m_headerHeight, w, h);
     if (m_header_win)
         m_header_win->SetSize(0, 0, w, m_headerHeight);
     if (m_main_win)
