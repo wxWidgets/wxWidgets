@@ -15,6 +15,8 @@
     #include "wx/dcmemory.h"
 #endif //WX_PRECOMP
 
+#include "wx/cocoa/autorelease.h"
+
 #import <AppKit/NSImage.h>
 #import <AppKit/NSAffineTransform.h>
 #import <AppKit/NSGraphicsContext.h>
@@ -67,6 +69,7 @@ bool wxMemoryDC::CocoaUnlockFocus()
 // instead copy the data to an offscreen window, then copy it back
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
+    wxAutoNSAutoreleasePool pool;
     if(m_selectedBitmap.Ok())
     {
         CocoaTakeFocus();

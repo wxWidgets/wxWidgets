@@ -18,6 +18,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/string.h"
+#include "wx/cocoa/autorelease.h"
 
 #import <AppKit/NSPopUpButton.h>
 #import <AppKit/NSMenu.h>
@@ -56,6 +57,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID winid,
             const wxValidator& validator,
             const wxString& name)
 {
+    wxAutoNSAutoreleasePool pool;
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
 
@@ -158,6 +160,7 @@ int wxChoice::GetCount() const
 
 wxString wxChoice::GetString(int n) const
 {
+    wxAutoNSAutoreleasePool pool;
     return wxStringWithNSString([(NSPopUpButton*)m_cocoaNSView itemTitleAtIndex:n]);
 }
 
@@ -232,6 +235,7 @@ wxClientData* wxChoice::DoGetItemClientObject(int n) const
 
 void wxChoice::SetSelection(int n)
 {
+    wxAutoNSAutoreleasePool pool;
     [(NSPopUpButton*)m_cocoaNSView selectItemAtIndex:n];
 }
 
