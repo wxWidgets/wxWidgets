@@ -214,8 +214,10 @@ wxRegKey::wxRegKey(const wxRegKey& keyParent, const wxString& strKey)
         : m_strKey(keyParent.m_strKey)
 {
   // combine our name with parent's to get the full name
-  if ( !m_strKey.IsEmpty() && strKey[0] != REG_SEPARATOR )
-      m_strKey  += REG_SEPARATOR;
+  if ( !m_strKey.IsEmpty() && 
+       (strKey.IsEmpty() || strKey[0] != REG_SEPARATOR) ) {
+      m_strKey += REG_SEPARATOR;
+  }
 
   m_strKey += strKey;
   RemoveTrailingSeparator(m_strKey);
@@ -495,6 +497,9 @@ bool wxRegKey::DeleteValue(const char *szValue)
 // return TRUE if value exists
 bool wxRegKey::HasValue(const char *szValue) const
 {
+  // this function should be silent, so suppress possible messages from Open()
+  wxLogNull nolog;
+  
   #ifdef  __WIN32__
     if ( CONST_CAST Open() ) {
       return RegQueryValueEx(m_hKey, szValue, RESERVED, 
