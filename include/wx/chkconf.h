@@ -891,7 +891,7 @@
 #    endif
 #endif /* controls */
 
-#if defined(wxUSE_NOTEBOOK)
+#if wxUSE_NOTEBOOK
 #   if defined(wxUSE_BOOKCTRL) && !wxUSE_BOOKCTRL
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxUSE_BOOKCTRL must be set."
