@@ -494,7 +494,7 @@ SWIG_PyObj_AsLong(PyObject * obj)
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_UTF8String_set(PyObject *) {
+static int _wrap_UTF8String_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable UTF8String is read-only.");
     return 1;
 }
@@ -514,7 +514,7 @@ static PyObject *_wrap_UTF8String_get() {
 }
 
 
-static int _wrap_StyleString_set(PyObject *) {
+static int _wrap_StyleString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable StyleString is read-only.");
     return 1;
 }
@@ -534,7 +534,7 @@ static PyObject *_wrap_StyleString_get() {
 }
 
 
-static int _wrap_SizeString_set(PyObject *) {
+static int _wrap_SizeString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable SizeString is read-only.");
     return 1;
 }
@@ -554,7 +554,7 @@ static PyObject *_wrap_SizeString_get() {
 }
 
 
-static int _wrap_PosString_set(PyObject *) {
+static int _wrap_PosString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable PosString is read-only.");
     return 1;
 }
@@ -574,7 +574,7 @@ static PyObject *_wrap_PosString_get() {
 }
 
 
-static int _wrap_BitmapString_set(PyObject *) {
+static int _wrap_BitmapString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable BitmapString is read-only.");
     return 1;
 }
@@ -594,7 +594,7 @@ static PyObject *_wrap_BitmapString_get() {
 }
 
 
-static int _wrap_IconString_set(PyObject *) {
+static int _wrap_IconString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable IconString is read-only.");
     return 1;
 }
@@ -614,7 +614,7 @@ static PyObject *_wrap_IconString_get() {
 }
 
 
-static int _wrap_FontString_set(PyObject *) {
+static int _wrap_FontString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable FontString is read-only.");
     return 1;
 }

@@ -11679,6 +11679,7 @@ static PyObject *_wrap_new_FileTypeInfoSequence(PyObject *self, PyObject *args, 
     PyObject *resultobj;
     wxArrayString *arg1 = 0 ;
     wxFileTypeInfo *result;
+    bool temp1 = False ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "sArray", NULL 
@@ -11691,6 +11692,7 @@ static PyObject *_wrap_new_FileTypeInfoSequence(PyObject *self, PyObject *args, 
             SWIG_fail;
         }
         arg1 = new wxArrayString;
+        temp1 = True;
         int i, len=PySequence_Length(obj0);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj0, i);
@@ -11713,12 +11715,12 @@ static PyObject *_wrap_new_FileTypeInfoSequence(PyObject *self, PyObject *args, 
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxFileTypeInfo, 1);
     {
-        if (arg1) delete arg1;
+        if (temp1) delete arg1;
     }
     return resultobj;
     fail:
     {
-        if (arg1) delete arg1;
+        if (temp1) delete arg1;
     }
     return NULL;
 }

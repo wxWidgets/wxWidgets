@@ -8586,6 +8586,7 @@ static PyObject *_wrap_Grid_GetTextBoxSize(PyObject *self, PyObject *args, PyObj
     wxArrayString *arg3 = 0 ;
     long *arg4 = (long *) 0 ;
     long *arg5 = (long *) 0 ;
+    bool temp3 = False ;
     long temp4 ;
     long temp5 ;
     PyObject * obj0 = 0 ;
@@ -8609,6 +8610,7 @@ static PyObject *_wrap_Grid_GetTextBoxSize(PyObject *self, PyObject *args, PyObj
             SWIG_fail;
         }
         arg3 = new wxArrayString;
+        temp3 = True;
         int i, len=PySequence_Length(obj2);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj2, i);
@@ -8639,12 +8641,12 @@ static PyObject *_wrap_Grid_GetTextBoxSize(PyObject *self, PyObject *args, PyObj
         resultobj = t_output_helper(resultobj,o);
     }
     {
-        if (arg3) delete arg3;
+        if (temp3) delete arg3;
     }
     return resultobj;
     fail:
     {
-        if (arg3) delete arg3;
+        if (temp3) delete arg3;
     }
     return NULL;
 }

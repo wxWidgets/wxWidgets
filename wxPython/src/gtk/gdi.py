@@ -235,6 +235,10 @@ class Pen(GDIObject):
         """GetDashes() -> PyObject"""
         return _gdi.Pen_GetDashes(*args, **kwargs)
 
+    def __eq__(*args, **kwargs):
+        """__eq__(Pen pen) -> bool"""
+        return _gdi.Pen___eq__(*args, **kwargs)
+
     def GetDashCount(*args, **kwargs):
         """GetDashCount() -> int"""
         return _gdi.Pen_GetDashCount(*args, **kwargs)
@@ -2090,8 +2094,8 @@ _gdi.EncodingConverter_swigregister(EncodingConverterPtr)
 
 def GetTranslation(*args):
     """
-    GetTranslation(String sz) -> String
-    GetTranslation(String sz1, String sz2, size_t n) -> String
+    GetTranslation(String str) -> String
+    GetTranslation(String str, String strPlural, size_t n) -> String
     """
     return _gdi.GetTranslation(*args)
 
@@ -2815,16 +2819,22 @@ def MemoryDCFromDC(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
+BUFFER_DC_OVERWRITE_BG = _gdi.BUFFER_DC_OVERWRITE_BG
+BUFFER_DC_PRESERVE_BG = _gdi.BUFFER_DC_PRESERVE_BG
+BUFFER_DC_DEFAULT = _gdi.BUFFER_DC_DEFAULT
 class BufferedDC(MemoryDC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBufferedDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(DC dc, Bitmap buffer) -> BufferedDC"""
-        newobj = _gdi.new_BufferedDC(*args, **kwargs)
+    def __init__(self, *args):
+        """
+        __init__(DC dc, Bitmap buffer) -> BufferedDC
+        __init__(DC dc, Size area, int flags=BUFFER_DC_DEFAULT) -> BufferedDC
+        """
+        newobj = _gdi.new_BufferedDC(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._dc = args[0] # save a ref so the other dc will not be deleted before self
+        val._dc = args[0] # save a ref so the other dc will not be deleted before self
 
     def UnMask(*args, **kwargs):
         """UnMask()"""
@@ -2838,9 +2848,9 @@ class BufferedDCPtr(BufferedDC):
         self.__class__ = BufferedDC
 _gdi.BufferedDC_swigregister(BufferedDCPtr)
 
-def BufferedDCInternalBuffer(*args, **kwargs):
-    """BufferedDCInternalBuffer(DC dc, Size area) -> BufferedDC"""
-    val = _gdi.new_BufferedDCInternalBuffer(*args, **kwargs)
+def BufferedDCInternalBuffer(*args):
+    """BufferedDCInternalBuffer(DC dc, Size area, int flags=BUFFER_DC_DEFAULT) -> BufferedDC"""
+    val = _gdi.new_BufferedDCInternalBuffer(*args)
     val.thisown = 1
     val._dc = args[0] # save a ref so the other dc will not be deleted before self
     return val
@@ -2848,9 +2858,12 @@ def BufferedDCInternalBuffer(*args, **kwargs):
 class BufferedPaintDC(BufferedDC):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBufferedPaintDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(Window window, Bitmap buffer=NullBitmap) -> BufferedPaintDC"""
-        newobj = _gdi.new_BufferedPaintDC(*args, **kwargs)
+    def __init__(self, *args):
+        """
+        __init__(Window window, Bitmap buffer) -> BufferedPaintDC
+        __init__(Window window, int flags=BUFFER_DC_DEFAULT) -> BufferedPaintDC
+        """
+        newobj = _gdi.new_BufferedPaintDC(*args)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown

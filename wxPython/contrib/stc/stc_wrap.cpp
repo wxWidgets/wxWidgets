@@ -601,6 +601,7 @@ static PyObject *_wrap_StyledTextCtrl_AddStyledText(PyObject *self, PyObject *ar
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     wxMemoryBuffer *arg2 = 0 ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -609,9 +610,16 @@ static PyObject *_wrap_StyledTextCtrl_AddStyledText(PyObject *self, PyObject *ar
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_AddStyledText",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxMemoryBuffer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    {
+        if (!PyString_Check(obj1)) {
+            PyErr_SetString(PyExc_TypeError, "String buffer expected");
+            SWIG_fail;
+        }
+        char* str = PyString_AS_STRING(obj1);
+        int   len = PyString_GET_SIZE(obj1);
+        arg2 = new wxMemoryBuffer(len);
+        temp2 = True;
+        memcpy(arg2->GetData(), str, len);
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -621,8 +629,14 @@ static PyObject *_wrap_StyledTextCtrl_AddStyledText(PyObject *self, PyObject *ar
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2) delete arg2;
+    }
     return resultobj;
     fail:
+    {
+        if (temp2) delete arg2;
+    }
     return NULL;
 }
 
@@ -991,9 +1005,7 @@ static PyObject *_wrap_StyledTextCtrl_GetStyledText(PyObject *self, PyObject *ar
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        wxMemoryBuffer * resultptr;
-        resultptr = new wxMemoryBuffer((wxMemoryBuffer &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxMemoryBuffer, 1);
+        resultobj = PyString_FromStringAndSize((char*)(&result)->GetData(), (&result)->GetDataLen());
     }
     return resultobj;
     fail:

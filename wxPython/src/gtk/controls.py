@@ -908,11 +908,11 @@ TEXT_ATTR_ALIGNMENT = _controls.TEXT_ATTR_ALIGNMENT
 TEXT_ATTR_LEFT_INDENT = _controls.TEXT_ATTR_LEFT_INDENT
 TEXT_ATTR_RIGHT_INDENT = _controls.TEXT_ATTR_RIGHT_INDENT
 TEXT_ATTR_TABS = _controls.TEXT_ATTR_TABS
-wxTE_HT_UNKNOWN = _controls.wxTE_HT_UNKNOWN
-wxTE_HT_BEFORE = _controls.wxTE_HT_BEFORE
-wxTE_HT_ON_TEXT = _controls.wxTE_HT_ON_TEXT
-wxTE_HT_BELOW = _controls.wxTE_HT_BELOW
-wxTE_HT_BEYOND = _controls.wxTE_HT_BEYOND
+TE_HT_UNKNOWN = _controls.TE_HT_UNKNOWN
+TE_HT_BEFORE = _controls.TE_HT_BEFORE
+TE_HT_ON_TEXT = _controls.TE_HT_ON_TEXT
+TE_HT_BELOW = _controls.TE_HT_BELOW
+TE_HT_BEYOND = _controls.TE_HT_BEYOND
 class TextAttr(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -4182,13 +4182,21 @@ class TreeCtrl(core.Control):
         """Unselect()"""
         return _controls.TreeCtrl_Unselect(*args, **kwargs)
 
+    def UnselectItem(*args, **kwargs):
+        """UnselectItem(TreeItemId item)"""
+        return _controls.TreeCtrl_UnselectItem(*args, **kwargs)
+
     def UnselectAll(*args, **kwargs):
         """UnselectAll()"""
         return _controls.TreeCtrl_UnselectAll(*args, **kwargs)
 
     def SelectItem(*args, **kwargs):
-        """SelectItem(TreeItemId item)"""
+        """SelectItem(TreeItemId item, bool select=True)"""
         return _controls.TreeCtrl_SelectItem(*args, **kwargs)
+
+    def ToggleItemSelection(*args, **kwargs):
+        """ToggleItemSelection(TreeItemId item)"""
+        return _controls.TreeCtrl_ToggleItemSelection(*args, **kwargs)
 
     def EnsureVisible(*args, **kwargs):
         """EnsureVisible(TreeItemId item)"""

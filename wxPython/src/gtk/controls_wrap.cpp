@@ -2208,6 +2208,7 @@ static PyObject *_wrap_new_Choice(PyObject *self, PyObject *args, PyObject *kwar
     wxChoice *result;
     wxPoint temp3 ;
     wxSize temp4 ;
+    bool temp5 = False ;
     bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -2246,6 +2247,7 @@ static PyObject *_wrap_new_Choice(PyObject *self, PyObject *args, PyObject *kwar
                 SWIG_fail;
             }
             arg5 = new wxArrayString;
+            temp5 = True;
             int i, len=PySequence_Length(obj4);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj4, i);
@@ -2288,7 +2290,7 @@ static PyObject *_wrap_new_Choice(PyObject *self, PyObject *args, PyObject *kwar
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxChoice, 1);
     {
-        if (arg5) delete arg5;
+        if (temp5) delete arg5;
     }
     {
         if (temp8)
@@ -2297,7 +2299,7 @@ static PyObject *_wrap_new_Choice(PyObject *self, PyObject *args, PyObject *kwar
     return resultobj;
     fail:
     {
-        if (arg5) delete arg5;
+        if (temp5) delete arg5;
     }
     {
         if (temp8)
@@ -2348,6 +2350,7 @@ static PyObject *_wrap_Choice_Create(PyObject *self, PyObject *args, PyObject *k
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
+    bool temp6 = False ;
     bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -2388,6 +2391,7 @@ static PyObject *_wrap_Choice_Create(PyObject *self, PyObject *args, PyObject *k
                 SWIG_fail;
             }
             arg6 = new wxArrayString;
+            temp6 = True;
             int i, len=PySequence_Length(obj5);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj5, i);
@@ -2430,7 +2434,7 @@ static PyObject *_wrap_Choice_Create(PyObject *self, PyObject *args, PyObject *k
     }
     resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
-        if (arg6) delete arg6;
+        if (temp6) delete arg6;
     }
     {
         if (temp9)
@@ -2439,7 +2443,7 @@ static PyObject *_wrap_Choice_Create(PyObject *self, PyObject *args, PyObject *k
     return resultobj;
     fail:
     {
-        if (arg6) delete arg6;
+        if (temp6) delete arg6;
     }
     {
         if (temp9)
@@ -2670,6 +2674,7 @@ static PyObject *_wrap_new_ComboBox(PyObject *self, PyObject *args, PyObject *kw
     bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
+    bool temp6 = False ;
     bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -2716,6 +2721,7 @@ static PyObject *_wrap_new_ComboBox(PyObject *self, PyObject *args, PyObject *kw
                 SWIG_fail;
             }
             arg6 = new wxArrayString;
+            temp6 = True;
             int i, len=PySequence_Length(obj5);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj5, i);
@@ -2762,7 +2768,7 @@ static PyObject *_wrap_new_ComboBox(PyObject *self, PyObject *args, PyObject *kw
         delete arg3;
     }
     {
-        if (arg6) delete arg6;
+        if (temp6) delete arg6;
     }
     {
         if (temp9)
@@ -2775,7 +2781,7 @@ static PyObject *_wrap_new_ComboBox(PyObject *self, PyObject *args, PyObject *kw
         delete arg3;
     }
     {
-        if (arg6) delete arg6;
+        if (temp6) delete arg6;
     }
     {
         if (temp9)
@@ -2829,6 +2835,7 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
     bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
+    bool temp7 = False ;
     bool temp10 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -2877,6 +2884,7 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
                 SWIG_fail;
             }
             arg7 = new wxArrayString;
+            temp7 = True;
             int i, len=PySequence_Length(obj6);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj6, i);
@@ -2923,7 +2931,7 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
         delete arg4;
     }
     {
-        if (arg7) delete arg7;
+        if (temp7) delete arg7;
     }
     {
         if (temp10)
@@ -2936,7 +2944,7 @@ static PyObject *_wrap_ComboBox_Create(PyObject *self, PyObject *args, PyObject 
         delete arg4;
     }
     {
-        if (arg7) delete arg7;
+        if (temp7) delete arg7;
     }
     {
         if (temp10)
@@ -4933,6 +4941,7 @@ static PyObject *_wrap_new_ListBox(PyObject *self, PyObject *args, PyObject *kwa
     wxListBox *result;
     wxPoint temp3 ;
     wxSize temp4 ;
+    bool temp5 = False ;
     bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -4971,6 +4980,7 @@ static PyObject *_wrap_new_ListBox(PyObject *self, PyObject *args, PyObject *kwa
                 SWIG_fail;
             }
             arg5 = new wxArrayString;
+            temp5 = True;
             int i, len=PySequence_Length(obj4);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj4, i);
@@ -5013,7 +5023,7 @@ static PyObject *_wrap_new_ListBox(PyObject *self, PyObject *args, PyObject *kwa
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxListBox, 1);
     {
-        if (arg5) delete arg5;
+        if (temp5) delete arg5;
     }
     {
         if (temp8)
@@ -5022,7 +5032,7 @@ static PyObject *_wrap_new_ListBox(PyObject *self, PyObject *args, PyObject *kwa
     return resultobj;
     fail:
     {
-        if (arg5) delete arg5;
+        if (temp5) delete arg5;
     }
     {
         if (temp8)
@@ -5073,6 +5083,7 @@ static PyObject *_wrap_ListBox_Create(PyObject *self, PyObject *args, PyObject *
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
+    bool temp6 = False ;
     bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -5113,6 +5124,7 @@ static PyObject *_wrap_ListBox_Create(PyObject *self, PyObject *args, PyObject *
                 SWIG_fail;
             }
             arg6 = new wxArrayString;
+            temp6 = True;
             int i, len=PySequence_Length(obj5);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj5, i);
@@ -5155,7 +5167,7 @@ static PyObject *_wrap_ListBox_Create(PyObject *self, PyObject *args, PyObject *
     }
     resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
-        if (arg6) delete arg6;
+        if (temp6) delete arg6;
     }
     {
         if (temp9)
@@ -5164,7 +5176,7 @@ static PyObject *_wrap_ListBox_Create(PyObject *self, PyObject *args, PyObject *
     return resultobj;
     fail:
     {
-        if (arg6) delete arg6;
+        if (temp6) delete arg6;
     }
     {
         if (temp9)
@@ -5230,6 +5242,7 @@ static PyObject *_wrap_ListBox_InsertItems(PyObject *self, PyObject *args, PyObj
     wxListBox *arg1 = (wxListBox *) 0 ;
     wxArrayString *arg2 = 0 ;
     int arg3 ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5245,6 +5258,7 @@ static PyObject *_wrap_ListBox_InsertItems(PyObject *self, PyObject *args, PyObj
             SWIG_fail;
         }
         arg2 = new wxArrayString;
+        temp2 = True;
         int i, len=PySequence_Length(obj1);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj1, i);
@@ -5271,12 +5285,12 @@ static PyObject *_wrap_ListBox_InsertItems(PyObject *self, PyObject *args, PyObj
     }
     Py_INCREF(Py_None); resultobj = Py_None;
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -5286,6 +5300,7 @@ static PyObject *_wrap_ListBox_Set(PyObject *self, PyObject *args, PyObject *kwa
     PyObject *resultobj;
     wxListBox *arg1 = (wxListBox *) 0 ;
     wxArrayString *arg2 = 0 ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -5300,6 +5315,7 @@ static PyObject *_wrap_ListBox_Set(PyObject *self, PyObject *args, PyObject *kwa
             SWIG_fail;
         }
         arg2 = new wxArrayString;
+        temp2 = True;
         int i, len=PySequence_Length(obj1);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj1, i);
@@ -5322,12 +5338,12 @@ static PyObject *_wrap_ListBox_Set(PyObject *self, PyObject *args, PyObject *kwa
     }
     Py_INCREF(Py_None); resultobj = Py_None;
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -5758,6 +5774,7 @@ static PyObject *_wrap_new_CheckListBox(PyObject *self, PyObject *args, PyObject
     wxCheckListBox *result;
     wxPoint temp3 ;
     wxSize temp4 ;
+    bool temp5 = False ;
     bool temp8 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -5796,6 +5813,7 @@ static PyObject *_wrap_new_CheckListBox(PyObject *self, PyObject *args, PyObject
                 SWIG_fail;
             }
             arg5 = new wxArrayString;
+            temp5 = True;
             int i, len=PySequence_Length(obj4);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj4, i);
@@ -5838,7 +5856,7 @@ static PyObject *_wrap_new_CheckListBox(PyObject *self, PyObject *args, PyObject
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxCheckListBox, 1);
     {
-        if (arg5) delete arg5;
+        if (temp5) delete arg5;
     }
     {
         if (temp8)
@@ -5847,7 +5865,7 @@ static PyObject *_wrap_new_CheckListBox(PyObject *self, PyObject *args, PyObject
     return resultobj;
     fail:
     {
-        if (arg5) delete arg5;
+        if (temp5) delete arg5;
     }
     {
         if (temp8)
@@ -5898,6 +5916,7 @@ static PyObject *_wrap_CheckListBox_Create(PyObject *self, PyObject *args, PyObj
     bool result;
     wxPoint temp4 ;
     wxSize temp5 ;
+    bool temp6 = False ;
     bool temp9 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -5938,6 +5957,7 @@ static PyObject *_wrap_CheckListBox_Create(PyObject *self, PyObject *args, PyObj
                 SWIG_fail;
             }
             arg6 = new wxArrayString;
+            temp6 = True;
             int i, len=PySequence_Length(obj5);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj5, i);
@@ -5980,7 +6000,7 @@ static PyObject *_wrap_CheckListBox_Create(PyObject *self, PyObject *args, PyObj
     }
     resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     {
-        if (arg6) delete arg6;
+        if (temp6) delete arg6;
     }
     {
         if (temp9)
@@ -5989,7 +6009,7 @@ static PyObject *_wrap_CheckListBox_Create(PyObject *self, PyObject *args, PyObj
     return resultobj;
     fail:
     {
-        if (arg6) delete arg6;
+        if (temp6) delete arg6;
     }
     {
         if (temp9)
@@ -6506,6 +6526,7 @@ static PyObject *_wrap_TextAttr_SetTabs(PyObject *self, PyObject *args, PyObject
     PyObject *resultobj;
     wxTextAttr *arg1 = (wxTextAttr *) 0 ;
     wxArrayInt *arg2 = 0 ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6520,6 +6541,7 @@ static PyObject *_wrap_TextAttr_SetTabs(PyObject *self, PyObject *args, PyObject
             SWIG_fail;
         }
         arg2 = new wxArrayInt;
+        temp2 = True;
         int i, len=PySequence_Length(obj1);
         for (i=0; i<len; i++) {
             PyObject* item = PySequence_GetItem(obj1, i);
@@ -6538,12 +6560,12 @@ static PyObject *_wrap_TextAttr_SetTabs(PyObject *self, PyObject *args, PyObject
     }
     Py_INCREF(Py_None); resultobj = Py_None;
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -10652,6 +10674,7 @@ static PyObject *_wrap_new_RadioBox(PyObject *self, PyObject *args, PyObject *kw
     bool temp3 = False ;
     wxPoint temp4 ;
     wxSize temp5 ;
+    bool temp6 = False ;
     bool temp10 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -10697,6 +10720,7 @@ static PyObject *_wrap_new_RadioBox(PyObject *self, PyObject *args, PyObject *kw
                 SWIG_fail;
             }
             arg6 = new wxArrayString;
+            temp6 = True;
             int i, len=PySequence_Length(obj5);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj5, i);
@@ -10749,7 +10773,7 @@ static PyObject *_wrap_new_RadioBox(PyObject *self, PyObject *args, PyObject *kw
         delete arg3;
     }
     {
-        if (arg6) delete arg6;
+        if (temp6) delete arg6;
     }
     {
         if (temp10)
@@ -10762,7 +10786,7 @@ static PyObject *_wrap_new_RadioBox(PyObject *self, PyObject *args, PyObject *kw
         delete arg3;
     }
     {
-        if (arg6) delete arg6;
+        if (temp6) delete arg6;
     }
     {
         if (temp10)
@@ -10816,6 +10840,7 @@ static PyObject *_wrap_RadioBox_Create(PyObject *self, PyObject *args, PyObject 
     bool temp4 = False ;
     wxPoint temp5 ;
     wxSize temp6 ;
+    bool temp7 = False ;
     bool temp11 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -10863,6 +10888,7 @@ static PyObject *_wrap_RadioBox_Create(PyObject *self, PyObject *args, PyObject 
                 SWIG_fail;
             }
             arg7 = new wxArrayString;
+            temp7 = True;
             int i, len=PySequence_Length(obj6);
             for (i=0; i<len; i++) {
                 PyObject* item = PySequence_GetItem(obj6, i);
@@ -10915,7 +10941,7 @@ static PyObject *_wrap_RadioBox_Create(PyObject *self, PyObject *args, PyObject 
         delete arg4;
     }
     {
-        if (arg7) delete arg7;
+        if (temp7) delete arg7;
     }
     {
         if (temp11)
@@ -10928,7 +10954,7 @@ static PyObject *_wrap_RadioBox_Create(PyObject *self, PyObject *args, PyObject 
         delete arg4;
     }
     {
-        if (arg7) delete arg7;
+        if (temp7) delete arg7;
     }
     {
         if (temp11)
@@ -25751,6 +25777,36 @@ static PyObject *_wrap_TreeCtrl_Unselect(PyObject *self, PyObject *args, PyObjec
 }
 
 
+static PyObject *_wrap_TreeCtrl_UnselectItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
+    wxTreeItemId *arg2 = 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeCtrl_UnselectItem",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTreeCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTreeItemId,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->UnselectItem((wxTreeItemId const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_TreeCtrl_UnselectAll(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
@@ -25779,13 +25835,51 @@ static PyObject *_wrap_TreeCtrl_SelectItem(PyObject *self, PyObject *args, PyObj
     PyObject *resultobj;
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
     wxTreeItemId *arg2 = 0 ;
+    bool arg3 = (bool) True ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item",(char *) "select", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:TreeCtrl_SelectItem",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTreeCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTreeItemId,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    if (obj2) {
+        {
+            arg3 = (bool) SWIG_PyObj_AsBool(obj2);  
+            if (PyErr_Occurred()) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SelectItem((wxTreeItemId const &)*arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_TreeCtrl_ToggleItemSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
+    wxTreeItemId *arg2 = 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "item", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeCtrl_SelectItem",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeCtrl_ToggleItemSelection",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTreeCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTreeItemId,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (arg2 == NULL) {
@@ -25793,7 +25887,7 @@ static PyObject *_wrap_TreeCtrl_SelectItem(PyObject *self, PyObject *args, PyObj
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SelectItem((wxTreeItemId const &)*arg2);
+        (arg1)->ToggleItemSelection((wxTreeItemId const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -29858,8 +29952,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeCtrl_CollapseAndReset", (PyCFunction) _wrap_TreeCtrl_CollapseAndReset, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeCtrl_Toggle", (PyCFunction) _wrap_TreeCtrl_Toggle, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeCtrl_Unselect", (PyCFunction) _wrap_TreeCtrl_Unselect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"TreeCtrl_UnselectItem", (PyCFunction) _wrap_TreeCtrl_UnselectItem, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeCtrl_UnselectAll", (PyCFunction) _wrap_TreeCtrl_UnselectAll, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeCtrl_SelectItem", (PyCFunction) _wrap_TreeCtrl_SelectItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"TreeCtrl_ToggleItemSelection", (PyCFunction) _wrap_TreeCtrl_ToggleItemSelection, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeCtrl_EnsureVisible", (PyCFunction) _wrap_TreeCtrl_EnsureVisible, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeCtrl_ScrollTo", (PyCFunction) _wrap_TreeCtrl_ScrollTo, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeCtrl_EditLabel", (PyCFunction) _wrap_TreeCtrl_EditLabel, METH_VARARGS | METH_KEYWORDS },
@@ -31200,11 +31296,11 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"TEXT_ATTR_LEFT_INDENT", SWIG_PyObj_FromInt((int)wxTEXT_ATTR_LEFT_INDENT));
     PyDict_SetItemString(d,"TEXT_ATTR_RIGHT_INDENT", SWIG_PyObj_FromInt((int)wxTEXT_ATTR_RIGHT_INDENT));
     PyDict_SetItemString(d,"TEXT_ATTR_TABS", SWIG_PyObj_FromInt((int)wxTEXT_ATTR_TABS));
-    PyDict_SetItemString(d,"wxTE_HT_UNKNOWN", SWIG_PyObj_FromInt((int)wxTE_HT_UNKNOWN));
-    PyDict_SetItemString(d,"wxTE_HT_BEFORE", SWIG_PyObj_FromInt((int)wxTE_HT_BEFORE));
-    PyDict_SetItemString(d,"wxTE_HT_ON_TEXT", SWIG_PyObj_FromInt((int)wxTE_HT_ON_TEXT));
-    PyDict_SetItemString(d,"wxTE_HT_BELOW", SWIG_PyObj_FromInt((int)wxTE_HT_BELOW));
-    PyDict_SetItemString(d,"wxTE_HT_BEYOND", SWIG_PyObj_FromInt((int)wxTE_HT_BEYOND));
+    PyDict_SetItemString(d,"TE_HT_UNKNOWN", SWIG_PyObj_FromInt((int)wxTE_HT_UNKNOWN));
+    PyDict_SetItemString(d,"TE_HT_BEFORE", SWIG_PyObj_FromInt((int)wxTE_HT_BEFORE));
+    PyDict_SetItemString(d,"TE_HT_ON_TEXT", SWIG_PyObj_FromInt((int)wxTE_HT_ON_TEXT));
+    PyDict_SetItemString(d,"TE_HT_BELOW", SWIG_PyObj_FromInt((int)wxTE_HT_BELOW));
+    PyDict_SetItemString(d,"TE_HT_BEYOND", SWIG_PyObj_FromInt((int)wxTE_HT_BEYOND));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_UPDATED", PyInt_FromLong(wxEVT_COMMAND_TEXT_UPDATED));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_ENTER", PyInt_FromLong(wxEVT_COMMAND_TEXT_ENTER));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_URL", PyInt_FromLong(wxEVT_COMMAND_TEXT_URL));
