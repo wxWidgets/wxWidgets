@@ -16,6 +16,7 @@ class TestPanel(wx.Panel):
                                    #| wx.TR_ROW_LINES
                                    #| wx.TR_NO_LINES 
                                    #| wx.TR_TWIST_BUTTONS
+                                   #| wx.TR_FULL_ROW_HIGHLIGHT     
                                    )
         isz = (16,16)
         il = wx.ImageList(isz[0], isz[1])
