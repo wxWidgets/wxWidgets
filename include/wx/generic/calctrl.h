@@ -261,7 +261,6 @@ private:
 
     // the week day names
     wxString m_weekdays[7];
-    unsigned long m_weekdaysLen;   // mj10777 : length of name to be drawn
 
     DECLARE_DYNAMIC_CLASS(wxCalendarCtrl)
     DECLARE_EVENT_TABLE()
