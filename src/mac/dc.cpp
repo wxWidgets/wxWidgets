@@ -85,7 +85,7 @@ wxDC::wxDC()
     m_brush = *wxWHITE_BRUSH;
 };
 
-wxMacPortSetter::wxMacPortSetter( wxDC* dc ) :
+wxMacPortSetter::wxMacPortSetter( const wxDC* dc ) :
 	m_ph( dc->m_macPort ) 
 {
 	wxASSERT( dc->Ok() ) ;

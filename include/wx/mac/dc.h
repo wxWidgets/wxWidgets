@@ -51,7 +51,7 @@ extern int wxPageNumber;
 class WXDLLEXPORT wxMacPortSetter
 {
 public :
-	wxMacPortSetter( wxDC* dc ) ;
+	wxMacPortSetter( const wxDC* dc ) ;
 	~wxMacPortSetter() ;
 private :
 	AGAPortHelper m_ph ;
