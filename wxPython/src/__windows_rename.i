@@ -189,7 +189,5 @@
 %rename(PyPrintPreview)                     wxPyPrintPreview;
 %rename(PyPreviewFrame)                     wxPyPreviewFrame;
 %rename(PyPreviewControlBar)                wxPyPreviewControlBar;
-%rename(PrintFactory)                       wxPrintFactory;
-%rename(PrintNativeDataBase)                wxPrintNativeDataBase;
 
 #endif

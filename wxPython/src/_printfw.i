@@ -245,12 +245,16 @@ public:
 };
 
 
+
 MustHaveApp(wxPrintDialog);
 
-class wxPrintDialog : public wxDialog {
-public:
-    %pythonAppend wxPrintDialog         "self._setOORInfo(self)"
 
+// NOTE: Contrary to it's name, this class doesn't derive from wxDialog.  It
+// is a facade in front of a platform-specific (native dialog) provided by the
+// wxPrintFactory.
+
+class wxPrintDialog : public wxObject {
+public:
     wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);
 
     // TODO?: wxPrintDialog(wxWindow *parent, wxPrintData* data);
@@ -285,11 +289,11 @@ public:
     wxPrinter(wxPrintDialogData* data = NULL);
     ~wxPrinter();
 
-    virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
-    virtual void ReportError(wxWindow *parent, wxPrintout *printout, const wxString& message);
+    virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPyPrintout *printout);
+    virtual void ReportError(wxWindow *parent, wxPyPrintout *printout, const wxString& message);
 
     virtual bool Setup(wxWindow *parent);
-    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true);
+    virtual bool Print(wxWindow *parent, wxPyPrintout *printout, bool prompt = true);
     virtual wxDC* PrintDialog(wxWindow *parent);
     
     virtual wxPrintDialogData& GetPrintDialogData() const;
@@ -300,9 +304,12 @@ public:
 
 
 //---------------------------------------------------------------------------
-// Custom wxPrintout class that knows how to call python
+// Custom wxPrintout class that knows how to call python, See implementation in
+// include/sx/wxPython/printfw.h
+
 %{
 
+IMPLEMENT_ABSTRACT_CLASS(wxPyPrintout, wxPrintout);
 
 // Since this one would be tough and ugly to do with the Macros...
 void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
@@ -779,101 +786,6 @@ public:
     void base_CreateButtons();
     void base_SetZoomControl(int zoom);
 };
-
-//---------------------------------------------------------------------------
-// wxPrintFactory
-//---------------------------------------------------------------------------
-
-class wxPrintFactory
-{
-public:
-    // wxPrintFactory() {}            *** It's an ABC
-    // virtual ~wxPrintFactory();
-    
-    virtual wxPrinterBase *CreatePrinter( wxPrintDialogData* data );
-
-    %nokwargs CreatePrintPreview;
-    virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
-                                                    wxPrintout *printout = NULL, 
-                                                    wxPrintDialogData *data = NULL );
-    virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
-                                                    wxPrintout *printout, 
-                                                    wxPrintData *data );
-
-    %nokwargs CreatePrintDialog;
-    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
-                                                  wxPrintDialogData *data = NULL );
-    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
-                                                  wxPrintData *data );
-                                                  
-    // What to do and what to show in the wxPrintDialog
-    // a) Use the generic print setup dialog or a native one?
-    virtual bool HasPrintSetupDialog();
-    virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );
-    
-    // b) Provide the "print to file" option ourselves or via print setup?
-    virtual bool HasOwnPrintToFile();
-    
-    // c) Show current printer
-    virtual bool HasPrinterLine();
-    virtual wxString CreatePrinterLine();
-    
-    // d) Show Status line for current printer?
-    virtual bool HasStatusLine();
-    virtual wxString CreateStatusLine();
-
-                                                  
-    virtual wxPrintNativeDataBase *CreatePrintNativeData();
-    
-    static void SetPrintFactory( wxPrintFactory *factory );
-    static wxPrintFactory *GetFactory();
-    //static wxPrintFactory *m_factory;
-};
-
-// class wxNativePrintFactory: public wxPrintFactory
-// {
-// public:
-//     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData *data );
-    
-//     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
-//                                                     wxPrintout *printout = NULL, 
-//                                                     wxPrintDialogData *data = NULL );
-//     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
-//                                                     wxPrintout *printout,
-//                                                     wxPrintData *data );
-                                                    
-//     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
-//                                                   wxPrintDialogData *data = NULL );
-//     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
-//                                                   wxPrintData *data );
-                                                  
-//     virtual bool HasPrintSetupDialog();
-//     virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );
-//     virtual bool HasOwnPrintToFile();
-//     virtual bool HasPrinterLine();
-//     virtual wxString CreatePrinterLine();
-//     virtual bool HasStatusLine();
-//     virtual wxString CreateStatusLine();
-    
-//     virtual wxPrintNativeDataBase *CreatePrintNativeData();
-// };
-
-
-class wxPrintNativeDataBase: public wxObject
-{
-public:
-    wxPrintNativeDataBase();
-    virtual ~wxPrintNativeDataBase() {}
-    
-    virtual bool TransferTo( wxPrintData &data ) = 0;
-    virtual bool TransferFrom( const wxPrintData &data ) = 0; 
-    
-    virtual bool Ok() const = 0;
-    
-    int  m_ref;
-};
-
-
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

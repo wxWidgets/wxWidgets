@@ -5,10 +5,9 @@ Recent Changes for wxPython
 2.5.3.2
 -------
 
-New factory based printing framework.  (TODO: Say more about this!)
-
 wx.Sizer Add, Insert, and Prepend funcitons now return a reference to the
-wx.SizerItem that was added to the sizer.
+wx.SizerItem that was added to the sizer, and the wx.SizerItem has a
+GetRect accessor to give the position of the item on the parent window.
 
 Added wx.Sizer.GetItem method which returns the wx.SizerItem for the given
 wx.Window, wx.Sizer or position index.

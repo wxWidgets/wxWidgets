@@ -341,12 +341,6 @@ wxPyPreviewFrame = wx._windows.PyPreviewFrame
 wxPyPreviewFramePtr = wx._windows.PyPreviewFramePtr
 wxPyPreviewControlBar = wx._windows.PyPreviewControlBar
 wxPyPreviewControlBarPtr = wx._windows.PyPreviewControlBarPtr
-wxPrintFactory = wx._windows.PrintFactory
-wxPrintFactoryPtr = wx._windows.PrintFactoryPtr
-wxPrintFactory_SetPrintFactory = wx._windows.PrintFactory_SetPrintFactory
-wxPrintFactory_GetFactory = wx._windows.PrintFactory_GetFactory
-wxPrintNativeDataBase = wx._windows.PrintNativeDataBase
-wxPrintNativeDataBasePtr = wx._windows.PrintNativeDataBasePtr
 
 
 d = globals()
