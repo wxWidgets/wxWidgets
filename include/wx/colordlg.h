@@ -16,6 +16,8 @@
 
 #if defined(__WXMSW__)
     #include "wx/msw/colordlg.h"
+#elif defined(__WXMAC__)
+    #include "wx/mac/colordlg.h"
 #else
     #include "wx/generic/colrdlgg.h"
 
