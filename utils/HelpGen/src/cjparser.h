@@ -15,7 +15,7 @@
 
 #include "srcparser.h"
 
-#include <ioswrap.h>
+#include "wx/ioswrap.h"
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
