@@ -1684,6 +1684,21 @@ void wxStdDialogButtonSizer::AddButton(wxButton *mybutton)
     }
 }
 
+void wxStdDialogButtonSizer::SetAffirmativeButton( wxButton *button )
+{
+    m_buttonAffirmative = button;
+}
+
+void wxStdDialogButtonSizer::SetNegativeButton( wxButton *button )
+{
+    m_buttonNegative = button;
+}
+
+void wxStdDialogButtonSizer::SetCancelButton( wxButton *button )
+{
+    m_buttonCancel = button;
+}
+
 void wxStdDialogButtonSizer::Finalise()
 {
 #ifdef __WXMAC__

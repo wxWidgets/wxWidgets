@@ -645,19 +645,20 @@ private:
 class WXDLLEXPORT wxStdDialogButtonSizer: public wxBoxSizer
 {
 public:
-    wxStdDialogButtonSizer();
     // Constructor just creates a new wxBoxSizer, not much else.
     // Box sizer orientation is automatically determined here:
     // vertical for PDAs, horizontal for everything else?
+    wxStdDialogButtonSizer();
 
-    void AddButton(wxButton *button);
     // Checks button ID against system IDs and sets one of the pointers below
-    // to this button.
-    // Does not do any sizer-related things here.
+    // to this button. Does not do any sizer-related things here.
+    void AddButton(wxButton *button);
 
-    // Question: what to do for non-supported button IDs? assert?
+    // Use these if no standard ID can/should be used
+    void SetAffirmativeButton( wxButton *button );
+    void SetNegativeButton( wxButton *button );
+    void SetCancelButton( wxButton *button );
 
-    void Finalise();
     // All platform-specific code here, checks which buttons exist and add
     // them to the sizer accordingly.
     // Note - one potential hack on Mac we could use here,
@@ -665,6 +666,7 @@ public:
     // is set to _("Save") and m_buttonNegative is set to _("Don't Save")
     // I wouldn't add any other hacks like that into here,
     // but this one I can see being useful.
+    void Finalise();
     
     wxButton *GetAffirmativeButton() const { return m_buttonAffirmative; }
     wxButton *GetApplyButton() const { return m_buttonApply; }
@@ -673,16 +675,15 @@ public:
     wxButton *GetHelpButton() const { return m_buttonHelp; }
 
 protected:
-    wxButton *m_buttonAffirmative;
-    // wxID_OK, wxID_YES, wxID_SAVE go here
+    wxButton *m_buttonAffirmative;  // wxID_OK, wxID_YES, wxID_SAVE go here
     wxButton *m_buttonApply;
-    wxButton *m_buttonNegative; // wxID_NO
+    wxButton *m_buttonNegative;     // wxID_NO
     wxButton *m_buttonCancel;
     wxButton *m_buttonHelp;
     
 private:
     DECLARE_CLASS(wxStdDialogButtonSizer)
-    //DECLARE_NO_COPY_CLASS(wxStdDialogButtonSizer)
+    DECLARE_NO_COPY_CLASS(wxStdDialogButtonSizer)
 };
 
 #if WXWIN_COMPATIBILITY_2_4
