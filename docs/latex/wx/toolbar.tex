@@ -566,29 +566,6 @@ change to take place, it will happen immediately.
 
 \helpref{DeleteTool}{wxtoolbardeletetool}
 
-\membersection{wxToolBar::SetToolBitmapSize}\label{wxtoolbarsettoolbitmapsize}
-
-\func{void}{SetToolBitmapSize}{\param{const wxSize\&}{ size}}
-
-Sets the default size of each tool bitmap. The default bitmap size is 16 by 15 pixels.
-
-\wxheading{Parameters}
-
-\docparam{size}{The size of the bitmaps in the toolbar.}
-
-\wxheading{Remarks}
-
-This should be called to tell the toolbar what the tool bitmap size is. Call
-it before you add tools.
-
-Note that this is the size of the bitmap you pass to \helpref{wxToolBar::AddTool}{wxtoolbaraddtool},
-and not the eventual size of the tool button.
-
-\wxheading{See also}
-
-\helpref{wxToolBar::GetToolBitmapSize}{wxtoolbargettoolbitmapsize},\rtfsp
-\helpref{wxToolBar::GetToolSize}{wxtoolbargettoolsize}
-
 \membersection{wxToolBar::SetMargins}\label{wxtoolbarsetmargins}
 
 \func{void}{SetMargins}{\param{const wxSize\&}{ size}}
@@ -613,6 +590,35 @@ default (zero-size) margins are to be overridden.
 \wxheading{See also}
 
 \helpref{wxToolBar::GetMargins}{wxtoolbargetmargins}, \helpref{wxSize}{wxsize}
+
+\membersection{wxToolBar::SetToolBitmapSize}\label{wxtoolbarsettoolbitmapsize}
+
+\func{void}{SetToolBitmapSize}{\param{const wxSize\&}{ size}}
+
+Sets the default size of each tool bitmap. The default bitmap size is 16 by 15 pixels.
+
+\wxheading{Parameters}
+
+\docparam{size}{The size of the bitmaps in the toolbar.}
+
+\wxheading{Remarks}
+
+This should be called to tell the toolbar what the tool bitmap size is. Call
+it before you add tools.
+
+Note that this is the size of the bitmap you pass to \helpref{wxToolBar::AddTool}{wxtoolbaraddtool},
+and not the eventual size of the tool button.
+
+\wxheading{See also}
+
+\helpref{wxToolBar::GetToolBitmapSize}{wxtoolbargettoolbitmapsize},\rtfsp
+\helpref{wxToolBar::GetToolSize}{wxtoolbargettoolsize}
+
+\membersection{wxToolBar::SetToolClientData}\label{wxtoolbarsettoolclientdata}
+
+\func{void}{GetToolClientData}{\param{wxObject* }{clientData}}
+
+Sets the client data associated with the tool.
 
 \membersection{wxToolBar::SetToolLongHelp}\label{wxtoolbarsettoollonghelp}
 

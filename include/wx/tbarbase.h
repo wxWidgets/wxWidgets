@@ -140,10 +140,14 @@ public:
 
     wxObject *GetClientData() const
     {
-        wxASSERT_MSG( m_toolStyle != wxTOOL_STYLE_CONTROL,
-                      _T("this toolbar tool doesn't have client data") );
-
-        return m_clientData;
+        if ( m_toolStyle == wxTOOL_STYLE_CONTROL )
+        {
+            return m_control->GetClientData();
+        }
+        else
+        {
+            return m_clientData;
+        }
     }
 
     // modifiers: return TRUE if the state really changed
@@ -157,6 +161,18 @@ public:
 
     void SetBitmap1(const wxBitmap& bmp) { m_bitmap1 = bmp; }
     void SetBitmap2(const wxBitmap& bmp) { m_bitmap2 = bmp; }
+
+    void SetClientData(wxObject *clientData)
+    {
+        if ( m_toolStyle == wxTOOL_STYLE_CONTROL )
+        {
+            m_control->SetClientData(clientData);
+        }
+        else
+        {
+            m_clientData = clientData;
+        }
+    }
 
     // add tool to/remove it from a toolbar
     virtual void Detach() { m_tbar = (wxToolBarBase *)NULL; }
@@ -284,7 +300,9 @@ public:
     // Set this to be togglable (or not)
     virtual void SetToggle(int id, bool toggle);
 
-    virtual wxObject *GetToolClientData(int index) const;
+    // set/get tools client data (not for controls)
+    virtual wxObject *GetToolClientData(int id) const;
+    virtual void SetToolClientData(int id, wxObject *clientData);
 
     // return TRUE if the tool is toggled
     virtual bool GetToolState(int id) const;

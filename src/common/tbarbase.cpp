@@ -403,6 +403,15 @@ wxObject *wxToolBarBase::GetToolClientData(int id) const
     return tool ? tool->GetClientData() : (wxObject *)NULL;
 }
 
+void wxToolBarBase::SetToolClientData(int id, wxObject *clientData)
+{
+    wxToolBarToolBase *tool = FindById(id);
+
+    wxCHECK_RET( tool, _T("no such tool in wxToolBar::SetToolClientData") );
+
+    tool->SetClientData(clientData);
+}
+
 bool wxToolBarBase::GetToolState(int id) const
 {
     wxToolBarToolBase *tool = FindById(id);
