@@ -35,7 +35,11 @@
 #endif
 
 #ifdef DBDEBUG_CONSOLE
-    #include "iostream.h"
+#if wxUSE_IOSTREAMH
+    #include <iostream.h>
+#else
+    #include <iostream>
+#endif
     #include "wx/ioswrap.h"
 #endif
 

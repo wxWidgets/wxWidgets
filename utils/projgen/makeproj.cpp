@@ -23,8 +23,13 @@
 #include "wx/wx.h"
 #include "wx/resource.h"
 
-#include "iostream.h"
-#include "fstream.h"
+#if wxUSE_IOSTREAMH
+#include <iostream.h>
+#include <fstream.h>
+#else
+#include <iostream>
+#include <fstream>
+#endif
 
 #include "makeproj.h"
 #include "projgenrc.h"

@@ -22,7 +22,11 @@
 
 #include "docripper.h"
 
-#include <iostream.h>
+#if wxUSE_IOSTREAMH
+    #include <iostream.h>
+#else
+    #include <iostream>
+#endif
 
 // script templates
 
@@ -178,12 +182,14 @@ void RipperDocGen::AppendComments( spContext& fromContext, string& str )
 			if ( lst[i]->StartsParagraph() )
 			{
 				str += mTags[TAG_PARAGRAPH].start;
+
 			}
 	
 		str += lst[i]->mText;
 	}
 
 	// remove new lines, and insert paragraph breaks
+
 	// if empty lines found
 
 	size_t len = str.length();
@@ -192,21 +198,37 @@ void RipperDocGen::AppendComments( spContext& fromContext, string& str )
 	
 		if ( str[n] == 10 || 
 		     str[n] == 13  ) 
+
 		{
+
 			if ( n + 2 < len )
+
 			{
+
 				if ( ( str[n] == 13 && str[n+1] == 10 &&  // FIXME:: quick-hack
+
 					   str[n+2] == 13 ) ||
+
 					 ( str[n] == 10 && str[n+1] == 10 )
+
 			    )
+
 				{
+
 					str.insert( n + 1, "<p>" ); // FIXME:: quick-hack
+
 					len += 3;
+
 				}
+
 			}
 
+
+
 			str[n] = ' ';
+
 		}
+
 
 	str += mTags[TAG_PARAGRAPH].end;
 }
@@ -423,8 +445,11 @@ void RipperDocGen::VisitTypeDef( spTypeDef& td )
 void RipperDocGen::VisitPreprocessorLine( spPreprocessorLine& pd )
 {
 	if ( pd.mDefType != SP_PREP_DEF_REDEFINE_SYMBOL )
+
 	
+
 		return;
+
 
 	if ( CheckIfUncommented( pd, *mpMacroIdx ) )
 		return;
