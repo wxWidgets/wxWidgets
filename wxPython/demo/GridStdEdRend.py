@@ -13,18 +13,18 @@ class MyCustomRenderer(wxPyGridCellRenderer):
         dc.SetBackgroundMode(wxSOLID)
         dc.SetBrush(wxBrush(wxBLACK, wxSOLID))
         dc.SetPen(wxTRANSPARENT_PEN)
-        dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height)
+        dc.DrawRectangleRect(rect)
 
         dc.SetBackgroundMode(wxTRANSPARENT)
         dc.SetFont(attr.GetFont())
 
         text = grid.GetCellValue(row, col)
-        colors = [wxRED, wxWHITE, wxCYAN]
+        colors = ["RED", "WHITE", "SKY BLUE"]
         x = rect.x + 1
         y = rect.y + 1
         for ch in text:
             dc.SetTextForeground(random.choice(colors))
-            dc.DrawText(ch, x, y)
+            dc.DrawText(ch, (x, y))
             w, h = dc.GetTextExtent(ch)
             x = x + w
             if x > rect.right - 5:
@@ -107,7 +107,7 @@ Renderers used together.
 
         row = 2
         for label, value, renderClass, args in rendererDemoData:
-            renderer = apply(renderClass, args)
+            renderer = renderClass(*args)
             self.SetCellValue(row, renCol, label)
             self.SetCellValue(row, renCol+1, value)
             self.SetCellRenderer(row, renCol+1, renderer)
@@ -116,7 +116,7 @@ Renderers used together.
 
         row = 2
         for label, value, editorClass, args in editorDemoData:
-            editor = apply(editorClass, args)
+            editor = editorClass(*args)
             self.SetCellValue(row, edCol, label)
             self.SetCellValue(row, edCol+1, value)
             self.SetCellEditor(row, edCol+1, editor)
@@ -127,8 +127,8 @@ Renderers used together.
         for label, value, renClass, edClass in comboDemoData:
             self.SetCellValue(row, renCol, label)
             self.SetCellValue(row, renCol+1, value)
-            editor = apply(edClass, ()) #args)
-            renderer = apply(renClass, ()) #args)
+            editor = edClass()
+            renderer = renClass()
             self.SetCellEditor(row, renCol+1, editor)
             self.SetCellRenderer(row, renCol+1, renderer)
             row = row + 2

@@ -7,7 +7,22 @@ import wxListCtrl
 import wxScrolledWindow
 import images
 
-import sys
+colourList = [ "Aquamarine", "Black", "Blue", "Blue Violet", "Brown", "Cadet Blue",
+               "Coral", "Cornflower Blue", "Cyan", "Dark Grey", "Dark Green",
+               "Dark Olive Green", "Dark Orchid", "Dark Slate Blue",
+               "Dark Slate Grey", "Dark Turquoise", "Dim Grey", "Firebrick",
+               "Forest Green", "Gold", "Goldenrod", "Grey", "Green", "Green Yellow",
+               "Indian Red", "Khaki", "Light Blue", "Light Grey", "Light Steel Blue",
+               "Lime Green", "Magenta", "Maroon", "Medium Aquamarine", "Medium Blue",
+               "Medium Forest Green", "Medium Goldenrod", "Medium Orchid",
+               "Medium Sea Green", "Medium Slate Blue", "Medium Spring Green",
+               "Medium Turquoise", "Medium Violet Red", "Midnight Blue", "Navy",
+               "Orange", "Orange Red", "Orchid", "Pale Green", "Pink", "Plum",
+               "Purple", "Red", "Salmon", "Sea Green", "Sienna", "Sky Blue",
+               "Slate Blue", "Spring Green", "Steel Blue", "Tan", "Thistle",
+               "Turquoise", "Violet", "Violet Red", "Wheat", "White", "Yellow",
+               "Yellow Green"
+               ]
 
 #----------------------------------------------------------------------------
 
@@ -22,55 +37,34 @@ class TestLB(wxListbook):
                             )
         self.log = log
 
-        win = self.makeColorPanel(wxBLUE)
-        self.AddPage(win, "Blue")
-        st = wxStaticText(win.win, -1,
-                          "You can put nearly any type of window here,\n"
-                          "and if the platform supports it then the\n"
-                          "tabs can be on any side of the notebook.",
-                          wxPoint(10, 10))
-        st.SetForegroundColour(wxWHITE)
-        st.SetBackgroundColour(wxBLUE)
 
-        # Show how to put an image on one of the notebook tabs,
-        # first make the image list:
-        il = wxImageList(16, 16)
-        idx1 = il.Add(images.getSmilesBitmap())
+        # make an image list using the BlomXX images
+        il = wxImageList(32, 32)
+        for x in range(1, 15):
+            f = getattr(images, 'getBlom%02dBitmap' % x)
+            bmp = f()
+            il.Add(bmp)
         self.AssignImageList(il)
+        
 
-        # now put an image on the first tab we just created:
-        self.SetPageImage(0, idx1)
-
-
-        win = self.makeColorPanel(wxRED)
-        self.AddPage(win, "Red")
-
-        win = wxScrolledWindow.MyCanvas(self)
-        self.AddPage(win, 'ScrolledWindow')
-
-        win = self.makeColorPanel(wxGREEN)
-        self.AddPage(win, "Green")
-
-        win = GridSimple.SimpleGrid(self, log)
-        self.AddPage(win, "Grid")
-
-        win = wxListCtrl.TestListCtrlPanel(self, log)
-        self.AddPage(win, 'List')
-
-        win = self.makeColorPanel(wxCYAN)
-        self.AddPage(win, "Cyan")
-
-##         win = self.makeColorPanel(wxWHITE)
-##         self.AddPage(win, "White")
-
-##         win = self.makeColorPanel(wxBLACK)
-##         self.AddPage(win, "Black")
-
-        win = self.makeColorPanel(wxNamedColour('MIDNIGHT BLUE'))
-        self.AddPage(win, "MIDNIGHT BLUE")
-
-        win = self.makeColorPanel(wxNamedColour('INDIAN RED'))
-        self.AddPage(win, "INDIAN RED")
+        # Now make a bunch of panels for the list book
+        first = True
+        imID = 0
+        for colour in colourList:
+            win = self.makeColorPanel(colour)
+            self.AddPage(win, colour, imageId=imID)
+            imID += 1
+            if imID == il.GetImageCount(): imID = 0
+            if first:
+                st = wxStaticText(win.win, -1,
+                          "You can put nearly any type of window here,\n"
+                          "and the list can be on any side of the Listbook",
+                          wxPoint(10, 10))
+                #st.SetForegroundColour(wxWHITE)
+                #st.SetBackgroundColour(wxBLUE)
+                first = False
+            
+                
 
         EVT_LISTBOOK_PAGE_CHANGED(self, self.GetId(), self.OnPageChanged)
         EVT_LISTBOOK_PAGE_CHANGING(self, self.GetId(), self.OnPageChanging)

@@ -23,13 +23,6 @@ import images
 ##print os.getpid(); raw_input("Press a key...")
 
 
-# Use Python's bool constants if available, make aliases if not
-try:
-    True
-except NameError:
-    __builtins__.True = 1==1
-    __builtins__.False = 1==0
-
 #---------------------------------------------------------------------------
 
 

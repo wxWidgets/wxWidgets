@@ -63,26 +63,26 @@ class TestValidatorPanel(wxPanel):
 
         fgs = wxFlexGridSizer(0, 2)
 
-        fgs.Add(1,1);
+        fgs.Add((1,1))
         fgs.Add(wxStaticText(self, -1, "These controls have validators that limit\n"
                              "the type of characters that can be entered."))
 
-        fgs.Add(1,VSPACE); fgs.Add(1,VSPACE)
+        fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
 
         label = wxStaticText(self, -1, "Alpha Only: ")
         fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
 
         fgs.Add(wxTextCtrl(self, -1, "", validator = MyValidator(ALPHA_ONLY)))
 
-        fgs.Add(1,VSPACE); fgs.Add(1,VSPACE)
+        fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
 
         label = wxStaticText(self, -1, "Digits Only: ")
         fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
         fgs.Add(wxTextCtrl(self, -1, "", validator = MyValidator(DIGIT_ONLY)))
 
-        fgs.Add(1,VSPACE); fgs.Add(1,VSPACE)
-        fgs.Add(1,VSPACE); fgs.Add(1,VSPACE)
-        fgs.Add(0,0)
+        fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
+        fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
+        fgs.Add((0,0))
         b = wxButton(self, -1, "Test Dialog Validation")
         EVT_BUTTON(self, b.GetId(), self.OnDoDialog)
         fgs.Add(b)
@@ -166,20 +166,20 @@ class TestValidateDialog(wxDialog):
 
         fgs = wxFlexGridSizer(0, 2)
 
-        fgs.Add(1,1);
+        fgs.Add((1,1));
         fgs.Add(wxStaticText(self, -1,
                              "These controls must have text entered into them.  Each\n"
                              "one has a validator that is checked when the Okay\n"
                              "button is clicked."))
 
-        fgs.Add(1,VSPACE); fgs.Add(1,VSPACE)
+        fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
 
         label = wxStaticText(self, -1, "First: ")
         fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)
 
         fgs.Add(wxTextCtrl(self, -1, "", validator = TextObjectValidator()))
 
-        fgs.Add(1,VSPACE); fgs.Add(1,VSPACE)
+        fgs.Add((1,VSPACE)); fgs.Add((1,VSPACE))
 
         label = wxStaticText(self, -1, "Second: ")
         fgs.Add(label, 0, wxALIGN_RIGHT|wxCENTER)

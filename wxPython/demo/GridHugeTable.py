@@ -21,7 +21,7 @@ class HugeTable(wxPyGridTableBase):
         self.even=wxGridCellAttr()
         self.even.SetBackgroundColour("sea green")
 
-     def GetAttr(self, row, col, kind):
+    def GetAttr(self, row, col, kind):
         attr = [self.even, self.odd][row % 2]
         attr.IncRef()
         return attr

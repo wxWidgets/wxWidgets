@@ -199,7 +199,7 @@ class MegaImageRenderer(wxPyGridCellRenderer):
         else:
             dc.SetBrush(wxBrush(wxWHITE, wxSOLID))
             dc.SetPen(wxPen(wxWHITE, 1, wxSOLID))
-        dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height)
+        dc.DrawRectangleRect(rect)
 
         # copy the image but only to the size of the grid cell
         width, height = bmp.GetWidth(), bmp.GetHeight()
@@ -209,9 +209,9 @@ class MegaImageRenderer(wxPyGridCellRenderer):
         if height > rect.height-2:
             height = rect.height-2
 
-        dc.Blit(rect.x+1, rect.y+1, width, height,
+        dc.Blit((rect.x+1, rect.y+1), (width, height),
                 image,
-                0, 0, wxCOPY, True)
+                (0, 0), wxCOPY, True)
 
 
 class MegaFontRenderer(wxPyGridCellRenderer):
@@ -243,7 +243,7 @@ class MegaFontRenderer(wxPyGridCellRenderer):
         else:
             dc.SetBrush(wxBrush(wxWHITE, wxSOLID))
             dc.SetPen(wxPen(wxWHITE, 1, wxSOLID))
-        dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height)
+        dc.DrawRectangleRect(rect)
 
         text = self.table.GetValue(row, col)
         dc.SetBackgroundMode(wxSOLID)
@@ -259,7 +259,7 @@ class MegaFontRenderer(wxPyGridCellRenderer):
 
         dc.SetTextForeground(self.color)
         dc.SetFont(self.font)
-        dc.DrawText(text, rect.x+1, rect.y+1)
+        dc.DrawText(text, (rect.x+1, rect.y+1))
 
         # Okay, now for the advanced class :)
         # Let's add three dots "..."
@@ -270,8 +270,8 @@ class MegaFontRenderer(wxPyGridCellRenderer):
         if width > rect.width-2:
             width, height = dc.GetTextExtent("...")
             x = rect.x+1 + rect.width-2 - width
-            dc.DrawRectangle(x, rect.y+1, width+1, height)
-            dc.DrawText("...", x, rect.y+1)
+            dc.DrawRectangle((x, rect.y+1), (width+1, height))
+            dc.DrawText("...", (x, rect.y+1))
 
         dc.DestroyClippingRegion()
 

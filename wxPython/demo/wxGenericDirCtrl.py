@@ -18,9 +18,9 @@ class TestPanel(wxPanel):
                                 filter="All files (*.*)|*.*|Python files (*.py)|*.py")
 
         sz = wxFlexGridSizer(cols=3, hgap=5, vgap=5)
-        sz.Add(35, 35)  # some space above
-        sz.Add(35, 35)
-        sz.Add(35, 35)
+        sz.Add((35, 35))  # some space above
+        sz.Add((35, 35))
+        sz.Add((35, 35))
 
         sz.Add(txt1)
         sz.Add(txt2)
@@ -30,7 +30,7 @@ class TestPanel(wxPanel):
         sz.Add(dir2, 0, wxEXPAND)
         sz.Add(dir3, 0, wxEXPAND)
 
-        sz.Add(35,35)  # some space below
+        sz.Add((35,35))  # some space below
 
         sz.AddGrowableRow(2)
         sz.AddGrowableCol(0)

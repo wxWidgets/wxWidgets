@@ -21,7 +21,7 @@ class ButtonPanel(wxPanel):
         self.log = log
 
         box = wxBoxSizer(wxVERTICAL)
-        box.Add(20, 30)
+        box.Add((20, 20))
         keys = buttonDefs.keys()
         keys.sort()
         for k in keys:

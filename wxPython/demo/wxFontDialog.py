@@ -25,7 +25,7 @@ class TestPanel(wxPanel):
         fgs.Add(btn)
         fgs.Add(self.sampleText, 0, wxADJUST_MINSIZE|wxGROW)
 
-        fgs.Add(15,15); fgs.Add(15,15)   # an empty row
+        fgs.Add((15,15)); fgs.Add((15,15))   # an empty row
 
         fgs.Add(wxStaticText(self, -1, "PointSize:"))
         self.ps = wxStaticText(self, -1, "")
@@ -54,7 +54,7 @@ class TestPanel(wxPanel):
         self.face.SetFont(font)
         fgs.Add(self.face, 0, wxADJUST_MINSIZE)
 
-        fgs.Add(15,15); fgs.Add(15,15)   # an empty row
+        fgs.Add((15,15)); fgs.Add((15,15))   # an empty row
 
         fgs.Add(wxStaticText(self, -1, "wxNativeFontInfo:"))
         self.nfi = wxStaticText(self, -1, "")

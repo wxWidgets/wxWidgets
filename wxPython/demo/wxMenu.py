@@ -208,17 +208,26 @@ check the source for this sample to see how to implement them.
 
 
     def TestInsert(self, evt):
+        theID = 508
         # get the menu
         mb = self.GetMenuBar()
-        menuItem = mb.FindItemById(507)
+        menuItem = mb.FindItemById(theID)
         menu = menuItem.GetMenu()
 
+        # figure out the position to insert at
+        pos = 0
+        for i in menu.GetMenuItems():
+            if i.GetId() == theID:
+                break
+            pos += 1
+
+        # now insert the new item
         ID = wxNewId()
-        ##menu.Insert(9, ID, "NewItem " + str(ID))
+        ##menu.Insert(pos, ID, "NewItem " + str(ID))
         item = wxMenuItem(menu)
         item.SetId(ID)
         item.SetText("NewItem " + str(ID))
-        menu.InsertItem(9, item)
+        menu.InsertItem(pos, item)
 
 
 

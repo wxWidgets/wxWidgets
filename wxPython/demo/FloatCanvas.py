@@ -25,17 +25,6 @@ You can get it at:
     overview = ""
 
 else:
-    def runTest(frame, nb, log):
-        """
-        This method is used by the wxPython Demo Framework for integrating
-        this demo with the rest.
-        """
-        win = DrawFrame(NULL, -1, "FloatCanvas Drawing Window",wxDefaultPosition,wxSize(500,500))
-        frame.otherWin = win
-        win.Show(True)
-
-
-
     from wxPython.lib import floatcanvas
     import wxPython.lib.colourdb
     
@@ -48,10 +37,10 @@ else:
     ID_DRAWMAP2_MENU = wxNewId()
     ID_CLEAR_MENU = wxNewId()
 
-    wxPython.lib.colourdb.updateColourDB()
-    colors = wxPython.lib.colourdb.getColourList()
-
+    colors = []
     LineStyles = floatcanvas.draw_object.LineStyleList.keys()
+
+
     
     class DrawFrame(wxFrame):
     
@@ -372,7 +361,11 @@ else:
         """
         
         def OnInit(self):
-            frame = DrawFrame(NULL, -1, "FloatCanvas Demo App",wxDefaultPosition,wxSize(700,700))
+            global colors
+            wxPython.lib.colourdb.updateColourDB()
+            colors = wxPython.lib.colourdb.getColourList()
+            
+            frame = DrawFrame(None, -1, "FloatCanvas Demo App",wxDefaultPosition,wxSize(700,700))
     
             self.SetTopWindow(frame)
     
@@ -427,9 +420,30 @@ else:
             return Lines
         else:
             return Shorelines
+
+
+    #----------------------------------------------------------------------
+    
+    def runTest(frame, nb, log):
+        """
+        This method is used by the wxPython Demo Framework for integrating
+        this demo with the rest.
+        """
+        global colors
+        wxPython.lib.colourdb.updateColourDB()
+        colors = wxPython.lib.colourdb.getColourList()
+
+        win = DrawFrame(None, -1, "FloatCanvas Drawing Window",wxDefaultPosition,wxSize(500,500))
+        frame.otherWin = win
+        win.Show(True)
+
+
+
     
     ## for the wxPython demo:
     overview = floatcanvas.FloatCanvas.__doc__
+
+
       
 if __name__ == "__main__":
     if not haveNumeric:

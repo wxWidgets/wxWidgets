@@ -20,7 +20,7 @@ class TestPanel(wxPanel):
         b = wxButton(self, -1, "non-default")
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         sizer.Add(b)
-        sizer.Add(10,10)
+        sizer.Add((10,10))
 
         b = wxGenButton(self, -1, 'Hello')
         EVT_BUTTON(self, b.GetId(), self.OnButton)
