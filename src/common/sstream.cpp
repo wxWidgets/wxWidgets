@@ -38,6 +38,8 @@
 
 off_t wxStringInputStream::OnSysSeek(off_t ofs, wxSeekMode mode)
 {
+    const size_t ofsMax = m_str.length()*sizeof(wxChar);
+
     switch ( mode )
     {
         case wxFromStart:
@@ -45,7 +47,7 @@ off_t wxStringInputStream::OnSysSeek(off_t ofs, wxSeekMode mode)
             break;
 
         case wxFromEnd:
-            ofs += m_str.length()*sizeof(wxChar);
+            ofs += ofsMax;
             break;
 
         case wxFromCurrent:
@@ -56,6 +58,9 @@ off_t wxStringInputStream::OnSysSeek(off_t ofs, wxSeekMode mode)
             wxFAIL_MSG( _T("invalid seek mode") );
             return wxInvalidOffset;
     }
+
+    if ( ofs < 0 || wx_static_cast(size_t, ofs) >= ofsMax )
+        return wxInvalidOffset;
 
     m_pos = wx_static_cast(size_t, ofs);
 
