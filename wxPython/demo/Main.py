@@ -25,14 +25,7 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions', [
-        'wxScrolledPanel',
-        'ShapedWindow',
-        'NewNamespace',
-        'PopupMenu',
-        'AnalogClockWindow',
-        'MaskedEditControls',
-        'wxTreeListCtrl',
-        'wxGrid_MegaExample',
+        'wxMaskedNumCtrl',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -132,6 +125,7 @@ _treeList = [
         'wxIntCtrl',
         'wxLEDNumberCtrl',
         'wxMimeTypesManager',
+        'wxMaskedNumCtrl',
         'wxMultiSash',
         'wxPopupControl',
         'wxStyledTextCtrl_1',

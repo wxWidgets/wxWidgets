@@ -11,7 +11,13 @@ Updated to Scintilla 1.54.
 
 Lots of bug fixes and such from the wxWindows folks.
 
-Added wxPython.lib.newevent from Miki Tebeka
+Added wxPython.lib.newevent from Miki Tebeka.  Its usage is
+demonstrated in the Threads sample in the demo.
+
+Updates to wxMaskedEditCtrl.
+
+Added wxMaskedNumCtrl.
+
 
 
 
