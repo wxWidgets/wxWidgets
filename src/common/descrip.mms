@@ -128,6 +128,7 @@ OBJECTS1=framecmn.obj,\
 		textfile.obj,\
 		timercmn.obj,\
 		tokenzr.obj,\
+		toplvcmn.obj,\
 		treebase.obj,\
 		txtstrm.obj,\
 		unzip.obj,\
@@ -140,8 +141,9 @@ OBJECTS1=framecmn.obj,\
 		wfstream.obj,\
 		wincmn.obj,\
 		wxchar.obj,\
-		wxexpr.obj,\
-		xpmdecod.obj,\
+		wxexpr.obj
+
+OBJECTS2=xpmdecod.obj,\
 		zipstrm.obj,\
 		zstream.obj
 
@@ -235,6 +237,7 @@ SOURCES = \
 		textfile.cpp,\
 		timercmn.cpp,\
 		tokenzr.cpp,\
+		toplvcmn.cpp,\
 		treebase.cpp,\
 		txtstrm.cpp,\
 		unzip.c,\
@@ -255,13 +258,16 @@ SOURCES = \
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS1)
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS2)
 .ifdef __WXMOTIF__
 	library [--.lib]libwx_motif.olb $(OBJECTS)
 	library [--.lib]libwx_motif.olb $(OBJECTS1)
+	library [--.lib]libwx_motif.olb $(OBJECTS2)
 .else
 .ifdef __WXGTK__
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
 	library [--.lib]libwx_gtk.olb $(OBJECTS1)
+	library [--.lib]libwx_gtk.olb $(OBJECTS2)
 .endif
 .endif
 
@@ -372,6 +378,7 @@ textcmn.obj : textcmn.cpp
 textfile.obj : textfile.cpp
 timercmn.obj : timercmn.cpp
 tokenzr.obj : tokenzr.cpp
+toplvcmn.obj : toplvcmn.cpp
 treebase.obj : treebase.cpp
 txtstrm.obj : txtstrm.cpp
 unzip.obj : unzip.c

@@ -74,6 +74,7 @@ OBJECTS = \
 	tglbtn.obj,\
 	timer.obj,\
 	tooltip.obj,\
+	toplevel.obj,\
 	utilsgtk.obj,\
 	utilsres.obj,\
         win_gtk.obj,\
@@ -134,6 +135,7 @@ SOURCES =\
 	tglbtn.cpp,\
 	timer.cpp,\
 	tooltip.cpp,\
+	toplevel.cpp,\
 	utilsgtk.cpp,\
 	utilsres.cpp,\
         win_gtk.c,\
@@ -197,6 +199,7 @@ textctrl.obj : textctrl.cpp
 tglbtn.obj : tglbtn.cpp
 timer.obj : timer.cpp
 tooltip.obj : tooltip.cpp
+toplevel.obj : toplevel.cpp
 utilsgtk.obj : utilsgtk.cpp
 utilsres.obj : utilsres.cpp
 win_gtk.obj : win_gtk.c
