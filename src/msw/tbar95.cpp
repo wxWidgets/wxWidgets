@@ -116,13 +116,6 @@
 #define DEFAULTBARHEIGHT 27
 
 // ----------------------------------------------------------------------------
-// private function prototypes
-// ----------------------------------------------------------------------------
-
-// adjust toolbar bitmap colours
-// static void wxMapBitmap(HBITMAP hBitmap, int width, int height);
-
-// ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
 
@@ -490,7 +483,8 @@ bool wxToolBar::Realize()
 #endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
     // Map to system colours
-    MapBitmap((WXHBITMAP) hBitmap, totalBitmapWidth, totalBitmapHeight);
+    hBitmap = (HBITMAP)MapBitmap((WXHBITMAP) hBitmap,
+                                 totalBitmapWidth, totalBitmapHeight);
 
     int bitmapId = 0;
 
@@ -1108,122 +1102,174 @@ long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 // private functions
 // ----------------------------------------------------------------------------
 
-bool wxToolBar::sm_coloursInit = FALSE;
-long wxToolBar::sm_stdColours[6];
-
-void wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
+WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
 {
-    if (!sm_coloursInit)
+    // number of the colours we map: if you change this, update
+    // wxBITMAP_STD_COLOURS in the resources as well: it must have the same number
+    // of pixels
+    static const size_t NUM_OF_MAPPED_COLOURS = 4;
+
+    static bool s_coloursInit = FALSE;
+    long s_stdColours[NUM_OF_MAPPED_COLOURS];
+
+    if (!s_coloursInit)
     {
-        // When a bitmap is loaded, the RGB values can change. So we need to have a
+        // When a bitmap is loaded, the RGB values can change (apparently
+        // because Windows adjusts them to care for the old programs always
+        // using 0xc0c0c0 while the transparent colour for the new Windows
+        // versions is different). But we do this adjustment ourselves so we
+        // want to avoid Windows' "help" and for this we need to have a
         // reference bitmap which can tell us what the RGB values change to.
-        wxBitmap stdColourBitmap("wxBITMAP_STD_COLOURS", wxBITMAP_TYPE_RESOURCE);
+        wxBitmap stdColourBitmap(_T("wxBITMAP_STD_COLOURS"));
         if (stdColourBitmap.Ok())
         {
             wxMemoryDC memDC;
             memDC.SelectObject(stdColourBitmap);
 
-            int i = 0;
             wxColour colour;
-            for (i = 0; i < 6; i++)
+            for ( size_t i = 0; i < WXSIZEOF(s_stdColours); i++ )
             {
-                memDC.GetPixel(i, 0, & colour);
-                sm_stdColours[i] = RGB(colour.Red(), colour.Green(), colour.Blue());
+                memDC.GetPixel(i, 0, &colour);
+                s_stdColours[i] = wxColourToRGB(colour);
             }
-            sm_coloursInit = TRUE;
-            memDC.SelectObject(wxNullBitmap);
         }
         else
         {
-            sm_stdColours[0] = RGB(000,000,000) ;
-            sm_stdColours[1] = RGB(128,128,128) ;
-            sm_stdColours[2] = RGB(192,192,192) ;
-            sm_stdColours[3] = RGB(255,255,255) ;
-            sm_stdColours[4] = RGB(000,000,255) ;
-            sm_stdColours[5] = RGB(255,000,255) ;
-            sm_coloursInit = TRUE;
+            s_stdColours[0] = RGB(000,000,000) ;
+            s_stdColours[1] = RGB(128,128,128) ;
+            s_stdColours[2] = RGB(192,192,192) ;
+            s_stdColours[3] = RGB(255,255,255) ;
+            //s_stdColours[4] = RGB(000,000,255) ;
+            //s_stdColours[5] = RGB(255,000,255) ;
         }
+
+        s_coloursInit = TRUE;
     }
 
-    HBITMAP hBitmap = (HBITMAP) bitmap;
+    COLORMAP ColorMap[NUM_OF_MAPPED_COLOURS];
 
-    COLORMAP ColorMap[5];
+    // black        (0, 0 0)
+    ColorMap[0].from = s_stdColours[0];
+    ColorMap[0].to = COLOR_BTNTEXT;
+    // dark grey    (128, 128, 128)
+    ColorMap[1].from = s_stdColours[1];
+    ColorMap[1].to = COLOR_BTNSHADOW;
+    // bright grey  (192, 192, 192)
+    ColorMap[2].from = s_stdColours[2];
+    ColorMap[2].to = COLOR_BTNFACE;
+    // white        (255, 255, 255)
+    ColorMap[3].from = s_stdColours[3];
+    ColorMap[3].to = COLOR_BTNHIGHLIGHT;
+    // blue         (0, 0, 255)
+    //  ColorMap[4].from = s_stdColours[4];
+    //  ColorMap[4].to = COLOR_HIGHLIGHT;
+    // magenta      (255, 0, 255)
+    //  ColorMap[4].from = s_stdColours[5];
+    //  ColorMap[4].to = COLOR_WINDOW;
 
-    ColorMap[0].from = sm_stdColours[0]; ColorMap[0].to = COLOR_BTNTEXT;      // black        (0, 0 0)
-    ColorMap[1].from = sm_stdColours[1]; ColorMap[1].to = COLOR_BTNSHADOW;    // dark grey    (128, 128, 128)
-    ColorMap[2].from = sm_stdColours[2]; ColorMap[2].to = COLOR_BTNFACE;      // bright grey  (192, 192, 192)
-    ColorMap[3].from = sm_stdColours[3]; ColorMap[3].to = COLOR_BTNHIGHLIGHT; // white        (255, 255, 255)
-    //  ColorMap[4].from = sm_stdColours[4]; ColorMap[4].to = COLOR_HIGHLIGHT;  // blue         (0, 0, 255)
-    ColorMap[4].from = sm_stdColours[5]; ColorMap[4].to = COLOR_WINDOW;       // magenta      (255, 0, 255)
-
-    for ( size_t n = 0; n < WXSIZEOF(ColorMap); n++)
+    for ( size_t n = 0; n < WXSIZEOF(ColorMap); n++ )
     {
         ColorMap[n].to = ::GetSysColor(ColorMap[n].to);
     }
 
-    HBITMAP hbmOld;
-    HDC hdcMem = CreateCompatibleDC(NULL);
+    MemoryHDC hdcMem;
 
-    if (hdcMem)
+    if ( !hdcMem )
     {
-        hbmOld = (HBITMAP) SelectObject(hdcMem, hBitmap);
+        wxLogLastError(_T("CreateCompatibleDC"));
 
-        for ( int i = 0; i < width; i++ )
+        return bitmap;
+    }
+
+    SelectInHDC bmpInHDC(hdcMem, (HBITMAP)bitmap);
+
+    if ( !bmpInHDC )
+    {
+        wxLogLastError(_T("SelectObject"));
+
+        return bitmap;
+    }
+
+    // VZ: I leave here my attempts to map the bitmap to the system colours
+    //     faster by using BitBlt() even though it's broken currently - but
+    //     maybe someone else can finish it? It should be faster than iterating
+    //     over all pixels...
+#if 1
+    for ( int i = 0; i < width; i++ )
+    {
+        for ( int j = 0; j < height; j++ )
         {
-            for ( int j = 0; j < height; j++ )
-            {
-                COLORREF pixel = ::GetPixel(hdcMem, i, j);
+            COLORREF pixel = ::GetPixel(hdcMem, i, j);
 
-                for ( size_t k = 0; k < WXSIZEOF(ColorMap); k++ )
+            for ( size_t k = 0; k < WXSIZEOF(ColorMap); k++ )
+            {
+                if ( pixel == ColorMap[k].from )
                 {
-                    int distance = abs( GetRValue( pixel ) - GetRValue( ColorMap[k].from )) ;
-                    distance = max( distance , abs(GetGValue(pixel ) - GetGValue( ColorMap[k].from ))) ;
-                    distance = max( distance , abs(GetBValue(pixel ) - GetBValue( ColorMap[k].from ))) ;
-                    if ( distance < 0x10 )
-                    {
-                        ::SetPixel(hdcMem, i, j, ColorMap[k].to);
-                        break;
-                    }
+                    ::SetPixel(hdcMem, i, j, ColorMap[k].to);
+                    break;
                 }
             }
         }
-
-
-        SelectObject(hdcMem, hbmOld);
-        DeleteObject(hdcMem);
     }
+
+    return bitmap;
+#else // 1
+    MemoryHDC hdcMask, hdcDst;
+    if ( !hdcMask || !hdcDst )
+    {
+        wxLogLastError(_T("CreateCompatibleDC"));
+
+        return bitmap;
+    }
+
+    // create the target bitmap
+    HBITMAP hbmpDst = ::CreateCompatibleBitmap(hdcDst, width, height);
+    if ( !hbmpDst )
+    {
+        wxLogLastError(_T("CreateCompatibleBitmap"));
+
+        return bitmap;
+    }
+
+    // create the monochrome mask bitmap
+    HBITMAP hbmpMask = ::CreateBitmap(width, height, 1, 1, 0);
+    if ( !hbmpMask )
+    {
+        wxLogLastError(_T("CreateBitmap(mono)"));
+
+        ::DeleteObject(hbmpDst);
+
+        return bitmap;
+    }
+
+    SelectInHDC bmpInDst(hdcDst, hbmpDst),
+                bmpInMask(hdcMask, hbmpMask);
+
+    // for each colour:
+    for ( n = 0; n < NUM_OF_MAPPED_COLOURS; n++ )
+    {
+        // create the mask for this colour
+        ::SetBkColor(hdcMem, ColorMap[n].from);
+        ::BitBlt(hdcMask, 0, 0, width, height, hdcMem, 0, 0, SRCCOPY);
+
+        // replace this colour with the target one in the dst bitmap
+        HBRUSH hbr = ::CreateSolidBrush(ColorMap[n].to);
+        HGDIOBJ hbrOld = ::SelectObject(hdcDst, hbr);
+
+        ::MaskBlt(hdcDst, 0, 0, width, height,
+                  hdcMem, 0, 0,
+                  hbmpMask, 0, 0,
+                  MAKEROP4(PATCOPY, SRCCOPY));
+
+        (void)::SelectObject(hdcDst, hbrOld);
+        ::DeleteObject(hbr);
+    }
+
+    ::DeleteObject((HBITMAP)bitmap);
+
+    return (WXHBITMAP)hbmpDst;
+#endif // 0/1
 }
-
-// Some experiments...
-#if 0
-// What we want to do is create another bitmap which has a depth of 4,
-// and set the bits. So probably we want to convert this HBITMAP into a
-// DIB, then call SetDIBits.
-// AAAGH. The stupid thing is that if newBitmap has a depth of 4 (less than that of
-// the screen), then SetDIBits fails.
-HBITMAP newBitmap = ::CreateBitmap(totalBitmapWidth, totalBitmapHeight, 1, 4, NULL);
-HANDLE newDIB = ::BitmapToDIB((HBITMAP) m_hBitmap, NULL);
-LPBITMAPINFOHEADER lpbmi = (LPBITMAPINFOHEADER) GlobalLock(newDIB);
-
-dc = ::GetDC(NULL);
-//  LPBITMAPINFOHEADER lpbmi = (LPBITMAPINFOHEADER) newDIB;
-
-int result = ::SetDIBits(dc, newBitmap, 0, lpbmi->biHeight, FindDIBBits((LPSTR)lpbmi), (LPBITMAPINFO)lpbmi,
-                         DIB_PAL_COLORS);
-DWORD err = GetLastError();
-
-::ReleaseDC(NULL, dc);
-
-// Delete the DIB
-GlobalUnlock (newDIB);
-GlobalFree (newDIB);
-
-//  WXHBITMAP hBitmap2 = wxCreateMappedBitmap((WXHINSTANCE) wxGetInstance(), (WXHBITMAP) m_hBitmap);
-// Substitute our new bitmap for the old one
-::DeleteObject((HBITMAP) m_hBitmap);
-m_hBitmap = (WXHBITMAP) newBitmap;
-#endif
-
 
 #endif // wxUSE_TOOLBAR && Win95
 
