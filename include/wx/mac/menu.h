@@ -60,6 +60,12 @@ public:
       int    MacGetIndexFromId( int id ) ; 
       int    MacGetIndexFromItem( wxMenuItem *pItem ) ;
       void MacEnableMenu( bool bDoEnable ) ;
+      // MacOS needs to know about submenus somewhere within this menu
+      // before it can be displayed , also hide special menu items like preferences
+      // that are handled by the OS
+      void  MacBeforeDisplay( bool isSubMenu ) ;
+      // undo all changes from the MacBeforeDisplay call
+      void  MacAfterDisplay( bool isSubMenu ) ;
 
     // semi-private accessors
         // get the window which contains this menu
