@@ -372,6 +372,8 @@ void wxMDIClientWindow::AddChild( wxWindow *child )
   mdi_child->m_page = (GtkNotebookPage*) (g_list_last(GTK_NOTEBOOK(m_widget)->children)->data);
     
   gtk_notebook_set_page( GTK_NOTEBOOK(m_widget), m_children.Number()-1 );
+  
+  gtk_page_change_callback( NULL, mdi_child->m_page, 0, this );
 };
 
 

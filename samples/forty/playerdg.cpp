@@ -59,6 +59,9 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 						0, 0,
 						wxLB_SINGLE
 						);
+/*
+    Robert Roebling
+    
 	int numPlayers = 0;
 	wxString* players = 0;
 	m_scoreFile->GetPlayerList(&players, numPlayers);
@@ -67,6 +70,7 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 		list->Append(players[i]);
 	}
 	delete players;
+*/
 
 	m_textField = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize, 0);
 
@@ -136,8 +140,10 @@ void PlayerSelectionDialog::OnSize(wxSizeEvent& event)
 
 const wxString& PlayerSelectionDialog::GetPlayersName()
 {
+/*
 	m_player = "";
 	Show(TRUE);
+*/
 	return m_player;
 }
 

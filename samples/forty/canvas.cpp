@@ -99,6 +99,7 @@ void FortyCanvas::OnDraw(wxDC& dc)
 	if (m_player.Length() == 0 && !m_playerDialog)
 	{
 		m_playerDialog = new PlayerSelectionDialog(this, m_scoreFile);
+		m_playerDialog->ShowModal();
 		m_player = m_playerDialog->GetPlayersName();
 		if (m_player.Length() > 0)
 		{
