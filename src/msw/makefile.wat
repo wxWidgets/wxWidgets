@@ -366,7 +366,7 @@ LBCFILE=wx$(TOOLKIT).lbc
 $(LIBTARGET) : $(OBJECTS)
     %create $(LBCFILE)
     @for %i in ( $(OBJECTS) ) do @%append $(LBCFILE) +%i
-    wlib /b /c /n /p=512 $^@ @$(LBCFILE)
+    wlib /b /c /n $(LIBPAGESIZE) $^@ @$(LBCFILE)
 
 
 clean:   .SYMBOLIC $(EXTRATARGETSCLEAN)
