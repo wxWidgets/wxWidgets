@@ -215,7 +215,9 @@ Returns the pointer to the active log target (may be NULL).
 \func{static wxLog *}{SetActiveTarget}{\param{wxLog * }{ logtarget}}
 
 Sets the specified log target as the active one. Returns the pointer to the
-previous active log target (may be NULL).
+previous active log target (may be NULL).  To supress logging use a new
+instance of wxLogNull not NULL.  If the active log target is set to NULL a
+new default log target will be created when logging occurs.
 
 \membersection{wxLog::Suspend}\label{wxlogsuspend}
 
