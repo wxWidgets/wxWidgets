@@ -91,9 +91,11 @@ clean:
 	rm -f ../../samples/internat/Makefile.in
 
 
+../../autoconf_inc.m4: ../../Makefile.in
 ../../configure: ../../autoconf_inc.m4
 	(cd ../.. ; aclocal && autoconf)
 
+../../samples/autoconf_inc.m4: ../../samples/Makefile.in
 ../../samples/configure: ../../samples/autoconf_inc.m4
 	(cd ../../samples ; aclocal && autoconf)
 

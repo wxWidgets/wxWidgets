@@ -108,9 +108,11 @@ clean:
 \trm -f ../../samples/autoconf_inc.m4
 %s
 
+../../autoconf_inc.m4: ../../Makefile.in
 ../../configure: ../../autoconf_inc.m4
 \t(cd ../.. ; aclocal && autoconf)
 
+../../samples/autoconf_inc.m4: ../../samples/Makefile.in
 ../../samples/configure: ../../samples/autoconf_inc.m4
 \t(cd ../../samples ; aclocal && autoconf)
 
