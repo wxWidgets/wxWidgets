@@ -43,7 +43,7 @@ class WXDLLEXPORT wxDropSource;
 // the icon 'name' from an XPM file under GTK, but will expand to something
 // else under MSW. If you don't use it, you will have to use #ifdef in the
 // application code.
-#define wxDROP_ICON(name)   wxICON(name)
+#define wxDROP_ICON(X)   wxCursor( (const char**) X##_xpm )
 
 //-------------------------------------------------------------------------
 // wxDropTarget
@@ -74,29 +74,34 @@ class WXDLLEXPORT wxDropTarget: public wxDropTargetBase
 class WXDLLEXPORT wxDropSource: public wxDropSourceBase
 {
 public:
-    /* constructor. set data later with SetData() */
+    // ctors: if you use default ctor you must call SetData() later!
+    //
+    // NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
+    //     compatibility, as well as both icon parameters
     wxDropSource( wxWindow *win = (wxWindow *)NULL,
-                  const wxIcon &copy = wxNullIcon,
-                  const wxIcon &move = wxNullIcon,
-                  const wxIcon &none = wxNullIcon);
+                 const wxCursor &cursorCopy = wxNullCursor,
+                 const wxCursor &cursorMove = wxNullCursor,
+                 const wxCursor &cursorStop = wxNullCursor);
 
     /* constructor for setting one data object */
     wxDropSource( wxDataObject& data,
                   wxWindow *win,
-                  const wxIcon &copy = wxNullIcon,
-                  const wxIcon &move = wxNullIcon,
-                  const wxIcon &none = wxNullIcon);
-
+                 const wxCursor &cursorCopy = wxNullCursor,
+                 const wxCursor &cursorMove = wxNullCursor,
+                 const wxCursor &cursorStop = wxNullCursor);
 
     ~wxDropSource();
 
-    /* start drag action */
+    // do it (call this in response to a mouse button press, for example)
+    // params: if bAllowMove is false, data can be only copied
     virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
-    
+
     wxWindow*     GetWindow() { return m_window ; }
     void SetCurrentDrag( void* drag ) { m_currentDrag = drag ; }
     void* GetCurrentDrag() { return m_currentDrag ; }
+	bool			MacInstallDefaultCursor(wxDragResult effect) ;
   protected :
+  	
     wxWindow        *m_window;
     void* m_currentDrag ;
 };
