@@ -174,6 +174,7 @@ makearchsetuph:
 $(ARCHINCDIR)\wx:
     -mkdir $(ARCHINCDIR)
     -mkdir $(ARCHINCDIR)\wx
+    -erase $(CFG)
 
 !if "$(DLL)" == "0"
 
