@@ -226,7 +226,7 @@ enum wxShutdownFlags
     wxSHUTDOWN_REBOOT       // shutdown and reboot
 };
 
-// Shutdown or reboot the PC 
+// Shutdown or reboot the PC
 WXDLLEXPORT bool wxShutdown(wxShutdownFlags wFlags);
 
 // send the given signal to the process (only NONE and KILL are supported under
@@ -250,6 +250,9 @@ WXDLLEXPORT void wxSleep(int nSecs);
 
 // Sleep for a given amount of milliseconds
 WXDLLEXPORT void wxUsleep(unsigned long milliseconds);
+
+// Get the process id of the current process
+WXDLLEXPORT unsigned long wxGetProcessId();
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 WXDLLEXPORT long wxGetFreeMemory();
@@ -356,6 +359,8 @@ WXDLLEXPORT wxWindow* wxFindWindowByName(const wxString& name, wxWindow *parent 
 // Message/event queue helpers
 // ----------------------------------------------------------------------------
 
+// NB: these functions are obsolete, please use wxApp methods instead!
+
 // Yield to other apps/messages
 WXDLLEXPORT bool wxYield();
 
@@ -379,14 +384,14 @@ WXDLLEXPORT void wxFlushEvents();
 // ctor and enables them back in its dtor
 class WXDLLEXPORT wxWindowDisabler
 {
-    DECLARE_NO_COPY_CLASS(wxWindowDisabler)
-        
 public:
     wxWindowDisabler(wxWindow *winToSkip = (wxWindow *)NULL);
     ~wxWindowDisabler();
 
 private:
     wxWindowList *m_winDisabled;
+
+    DECLARE_NO_COPY_CLASS(wxWindowDisabler)
 };
 
 // ----------------------------------------------------------------------------

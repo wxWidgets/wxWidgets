@@ -40,6 +40,12 @@
 
 #include "wx/msw/private.h"     // includes <windows.h>
 
+#ifdef __GNUWIN32_OLD__
+    // apparently we need to include winsock.h to get WSADATA and other stuff
+    // used in wxGetFullHostName() with the old mingw32 versions
+    #include <winsock.h>
+#endif
+
 #include "wx/timer.h"
 
 #if !defined(__GNUWIN32__) && !defined(__WXWINE__) && !defined(__SALFORDC__) && !defined(__WXMICROWIN__)
@@ -938,6 +944,15 @@ long wxGetFreeMemory()
     return memStatus.dwAvailPhys;
 #else
     return (long)GetFreeSpace(0);
+#endif
+}
+
+unsigned long wxGetProcessId()
+{
+#ifdef __WIN32__
+    return ::GetCurrentProcessId();
+#else
+    return 0;
 #endif
 }
 

@@ -114,6 +114,7 @@ the corresponding topic.
 \helpref{wxGetPrinterPreviewCommand}{wxgetprinterpreviewcommand}\\
 \helpref{wxGetPrinterScaling}{wxgetprinterscaling}\\
 \helpref{wxGetPrinterTranslation}{wxgetprintertranslation}\\
+\helpref{wxGetProcessId}{wxgetprocessid}\\
 \helpref{wxGetResource}{wxgetresource}\\
 \helpref{wxGetSingleChoiceData}{wxgetsinglechoicedata}\\
 \helpref{wxGetSingleChoiceIndex}{wxgetsinglechoiceindex}\\
@@ -579,6 +580,18 @@ enum wxKillError
 \helpref{wxProcess::Kill}{wxprocesskill},\rtfsp
 \helpref{wxProcess::Exists}{wxprocessexists},\rtfsp
 \helpref{Exec sample}{sampleexec}
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+\membersection{::wxGetProcessId}\label{wxgetprocessid}
+
+\func{unsigned long}{wxGetProcessId}{\void}
+
+Returns the number uniquely identifying the current process in the system.
+
+If an error occurs, $0$ is returned.
 
 \wxheading{Include files}
 

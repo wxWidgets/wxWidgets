@@ -1018,6 +1018,11 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 
 #endif // !wxUSE_GUI
 
+unsigned long wxGetProcessId()
+{
+    return (unsigned long)getpid();
+}
+
 long wxGetFreeMemory()
 {
 #if defined(__LINUX__)
