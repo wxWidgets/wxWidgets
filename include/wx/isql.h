@@ -35,6 +35,11 @@
 
 #elif defined(WIN32)
 #define SQL_API				__stdcall
+
+#ifndef FAR  
+#define FAR 
+#endif
+
 #else
 #define FAR
 #define EXPORT
