@@ -23,13 +23,25 @@ CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized MSL and
 CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized Runtimes 
 (consult the file CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbon & MacOSX README)
 
+setup.h
+-------
+
+in order to build wxMac with CodeWarrior, you must copy or alias the file include/wx/mac/setup0.h
+to include/wx/setup.h.
+
+this step is not needed when using the Apple Developer Tools under Mac OS X since the setup.h
+file is automatically generated during the configuration of wxMac.
+
 OpenGL
 ------
 
-in order to build opengl support you must install the opengl libraries and headers from 
-http://developer.apple.com/opengl/index.html
+in order to build opengl support with CodeWarrior, you must install the opengl libraries and headers
+from http://developer.apple.com/opengl/index.html
 
-if you don't want OpenGL support, set the wxUSE_OPENGL in mac/setup.h to 0
+if you want OpenGL support with CodeWarrior, set wxUSE_OPENGL in include/wx/setup.h to 1
+
+if you want OpenGL support with the Apple Developer Tools under Mac OS X, add --with-opengl to the
+arguments of configure when configuring wxMac.
 
 Project Files
 -------------
