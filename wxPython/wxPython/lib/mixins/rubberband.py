@@ -8,7 +8,7 @@ $Id$
 """
 
 from wxPython.wx import *
-import Image
+
 
 #
 # Some miscellaneous mathematical and geometrical functions
