@@ -10,6 +10,13 @@
 #endif
 
 #include <wx/wxprec.h>
+
+#ifndef WX_PRECOMP
+#include "wx/defs.h"
+#include "wx/string.h"
+#include "wx/log.h"
+#endif
+
 #include "wx/mmedia/sndbase.h"
 
 
@@ -27,12 +34,14 @@ wxSoundFormatBase::~wxSoundFormatBase()
 
 wxSoundFormatBase *wxSoundFormatBase::Clone() const
 {
-  return NULL;
+    wxLogFatalError(wxT("In wxSoundFormatBase::Clone() but I should"
+                        " not be there"));
+    return NULL;
 }
 
 bool wxSoundFormatBase::operator!=(const wxSoundFormatBase& frmt2) const
 {
-  return (GetType() != frmt2.GetType());
+    return (GetType() != frmt2.GetType());
 }
 
 // ---------------------------------------------------------------------------
@@ -41,21 +50,21 @@ bool wxSoundFormatBase::operator!=(const wxSoundFormatBase& frmt2) const
 
 wxSoundStream::wxSoundStream()
 {
-  int i;
-
-  // Reset all variables to their neutral value.
-  m_sndformat = NULL;
-  m_handler = NULL;
-  m_snderror = wxSOUND_NOERROR;
-  m_lastcount = 0;
-  for (i=0;i<2;i++)
-    m_callback[i] = NULL;
+    int i;
+    
+    // Reset all variables to their neutral value.
+    m_sndformat = NULL;
+    m_handler = NULL;
+    m_snderror = wxSOUND_NOERROR;
+    m_lastcount = 0;
+    for (i=0;i<2;i++)
+        m_callback[i] = NULL;
 }
 
 wxSoundStream::~wxSoundStream()
 {
   if (m_sndformat)
-    delete m_sndformat;
+      delete m_sndformat;
 }
 
 // --------------------------------------------------------------------------
@@ -69,13 +78,13 @@ wxSoundStream::~wxSoundStream()
 // --------------------------------------------------------------------------
 bool wxSoundStream::SetSoundFormat(const wxSoundFormatBase& format)
 {
-  // delete the previous prepared format
-  if (m_sndformat)
-    delete m_sndformat;
-
-  // create a new one by cloning the format passed in parameter
-  m_sndformat = format.Clone();
-  return TRUE;
+    // delete the previous prepared format
+    if (m_sndformat)
+      delete m_sndformat;
+    
+    // create a new one by cloning the format passed in parameter
+    m_sndformat = format.Clone();
+    return TRUE;
 }
 
 

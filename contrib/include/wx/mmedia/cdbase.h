@@ -27,7 +27,7 @@ class WXDLLEXPORT wxCDAudio : public wxObject {
 public:
   typedef enum { PLAYING, PAUSED, STOPPED } CDstatus;
   // Table of contents manager
-  class CDtoc {
+  class WXDLLEXPORT CDtoc {
   protected:
     wxCDtime *tracks_time, *tracks_pos;
     wxCDtime total_time;

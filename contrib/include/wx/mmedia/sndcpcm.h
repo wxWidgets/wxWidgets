@@ -20,7 +20,7 @@
 // PCM converter class
 //
 
-class wxSoundStreamPcm: public wxSoundStreamCodec {
+class WXDLLEXPORT wxSoundStreamPcm: public wxSoundStreamCodec {
 public:
     typedef void (*ConverterType)(const void *buf_in, void *buf_out,
                                   wxUint32 len);

@@ -214,15 +214,30 @@ been set. In all other cases, you must return FALSE.
 \membersection{wxSoundFileStream::RepositionStream}\label{wxsoundfilestreamrepositionstream}
 \func{bool}{RepositionStream}{\param{wxUint32 }{position}}
 
+This is called by wxSoundFileStream::SetPosition to seek the input stream
+to the right position. This must be overidden by the file codec class.
+The position is relative to the beginning of the samples.
+If it is impossible (as for a piped input stream), you must return FALSE.
 
 \membersection{wxSoundFileStream::FinishPreparation}\label{wxsoundfilestreamfinishpreparation}
 \func{void}{FinishPreparation}{\param{wxUint32 }{len}}
 
+This is an internal function but it must called by the file codec class when
+the "playing" preparation is finished and you know the size of the stream.
+If it is an {\it infinite} stream, you should set this to wxSOUND\_INFINITE\_TIME.
 
 \membersection{wxSoundFileStream::GetData}\label{wxsoundfilestreamgetdata}
 \func{wxUint32}{GetData}{\param{void* }{buffer}, \param{wxUint32 }{len}}
 
+This is called by wxSoundFileStream when it needs to get new sound data to
+send to the device driver (or to a conversion codec). This must be eventually
+overidden by the file codec class. The default behaviour is simply to read from
+the input stream.
 
 \membersection{wxSoundFileStream::PutData}\label{wxsoundfilestreamputdata}
 \func{wxUint32}{PutData}{\param{const void* }{buffer}, \param{wxUint32 }{len}}
 
+This is called by wxSoundFileStream when it needs to put new sound data received
+from the device driver (or from a conversion codec). This must be eventually
+overidden by the file codec class. The default behaviour is simply to write to
+the input stream.

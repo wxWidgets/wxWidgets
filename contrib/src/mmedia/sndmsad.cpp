@@ -6,10 +6,17 @@
 // CVSID: $Id$
 // --------------------------------------------------------------------------
 #ifdef __GNUG__
-#pragma implementation "sndulaw.cpp"
+#pragma implementation "sndmsad.cpp"
 #endif
 
 #include <wx/wxprec.h>
+
+#ifndef WX_PRECOMP
+  #include "wx/defs.h"
+  #include "wx/memory.h"
+  #include "wx/log.h"
+#endif
+
 #include "wx/mmedia/sndbase.h"
 #include "wx/mmedia/sndfile.h"
 #include "wx/mmedia/sndpcm.h"
@@ -22,12 +29,21 @@
 wxSoundFormatMSAdpcm::wxSoundFormatMSAdpcm()
         : m_srate(22050)
 {
-    m_coefs = new wxMSAdpcmCoefs();
+    m_ncoefs    = 0;
+    m_coefs_len = 0;
+    m_coefs     = NULL;
 }
 
 wxSoundFormatMSAdpcm::~wxSoundFormatMSAdpcm()
 {
-    delete m_coefs;
+    if (m_ncoefs) {
+        wxUint16 i;
+
+        for (i=0;i<m_ncoefs;i++)
+            delete[] m_coefs[i];
+        delete[] m_coefs;
+    }
+    
 }
 
 void wxSoundFormatMSAdpcm::SetSampleRate(wxUint32 srate)
@@ -40,34 +56,83 @@ wxUint32 wxSoundFormatMSAdpcm::GetSampleRate() const
     return m_srate;
 }
 
+void wxSoundFormatMSAdpcm::SetChannels(wxUint16 nchannels)
+{
+    m_nchannels = nchannels;
+}
+
+wxUint16 wxSoundFormatMSAdpcm::GetChannels() const
+{
+    return m_nchannels; 
+}
+
+void wxSoundFormatMSAdpcm::SetCoefs(wxInt16 **coefs, wxUint16 ncoefs,
+                                    wxUint16 coefs_len)
+{
+    wxUint16 i;
+
+    if (m_ncoefs) {
+        for (i=0;i<m_ncoefs;i++)
+           delete[] (m_coefs[i]);
+        delete[] m_coefs;
+    }
+    // TODO: Add some memory checking here
+    m_coefs = new (wxInt16 *)[ncoefs];
+
+    for (i=0;i<ncoefs;i++)
+       m_coefs[i] = new wxInt16[coefs_len];
+
+    m_ncoefs = ncoefs;
+    m_coefs_len = coefs_len;
+}
+
+void wxSoundFormatMSAdpcm::GetCoefs(wxInt16 **& coefs, wxUint16& ncoefs,
+                                    wxUint16& coefs_len) const
+{
+    coefs     = m_coefs;
+    ncoefs    = m_ncoefs;
+    coefs_len = m_coefs_len;
+}
+
+void wxSoundFormatMSAdpcm::SetBlockSize(wxUint16 block_size)
+{
+    m_block_size = block_size;
+}
+
+wxUint16 wxSoundFormatMSAdpcm::GetBlockSize() const
+{
+    return m_block_size;
+}
+
 wxSoundFormatBase *wxSoundFormatMSAdpcm::Clone() const
 {
     wxSoundFormatMSAdpcm *adpcm = new wxSoundFormatMSAdpcm();
     
-    adpcm->m_srate = m_srate;
-    adpcm->m_coefs = new wxMSAdpcmCoefs();
-    *(adpcm->m_coefs) = *m_coefs;
+    adpcm->m_srate       = m_srate;
+    adpcm->SetCoefs(m_coefs, m_ncoefs, m_coefs_len);
+    adpcm->m_nchannels   = m_nchannels;
+    adpcm->m_block_size  = m_block_size;
     return adpcm;
 }
 
 wxUint32 wxSoundFormatMSAdpcm::GetTimeFromBytes(wxUint32 bytes) const
 {
-    return 0;
+    return 2 * bytes / (m_nchannels * m_srate);
 }
 
 wxUint32 wxSoundFormatMSAdpcm::GetBytesFromTime(wxUint32 time) const
 {
-    return 0;
+    return time * m_nchannels * m_srate / 2;
 }
 
 bool wxSoundFormatMSAdpcm::operator !=(const wxSoundFormatBase& frmt2) const
 {
-    wxSoundFormatUlaw *adpcm = (wxSoundFormatMSAdpcm *)&frmt2;
+    const wxSoundFormatMSAdpcm *adpcm = (const wxSoundFormatMSAdpcm *)&frmt2;
     
     if (frmt2.GetType() != wxSOUND_MSADPCM)
         return TRUE;
     
-    return (adpcm->m_srate != m_srate) && 0;
+    return (adpcm->m_srate != m_srate) && (adpcm->m_nchannels != m_nchannels);
 }
 
 // --------------------------------------------------------------------------
@@ -79,6 +144,7 @@ wxSoundStreamMSAdpcm::wxSoundStreamMSAdpcm(wxSoundStream& sndio)
     // PCM converter
     m_router     = new wxSoundRouterStream(sndio);
     m_got_header = FALSE;
+    m_stereo = FALSE;
 }
 
 wxSoundStreamMSAdpcm::~wxSoundStreamMSAdpcm()
@@ -94,45 +160,188 @@ wxSoundStream& wxSoundStreamMSAdpcm::Read(void *buffer, wxUint32 len)
 }
 
 static wxInt16 gl_ADPCMcoeff_delta[] = {
-    230, 230, 230, 230, 307, 409, 512, 614, 768, 614, 512, 409, 307, 230, 230, 230
+    230, 230, 230, 230, 307, 409, 512, 614, 768, 614, 512, 409, 307,
+    230, 230, 230
 };
 
-static wxInt16 gl_ADPCMcoeff_1[] = {
-    256, 512, 0, 192, 240, 460, 392
-};
+wxUint32 wxSoundStreamMSAdpcm::DecodeMonoADPCM(const void *in_buffer,
+                                               void *out_buffer,
+                                               wxUint32 in_len)
+{
+    wxUint8  *ADPCMdata;
+    wxInt16  *PCMdata;
+    AdpcmState *state;
+    wxUint32 out_len;
+    
+    ADPCMdata = (wxUint8 *)in_buffer;
+    PCMdata   = (wxInt16 *)out_buffer;
+    state     = &m_state[0];
+    
+#define GET_DATA_16(i) i = *ADPCMdata++, i |= ((wxUint32)(*ADPCMdata++) << 8)
+#define GET_DATA_8(i) i = (*ADPCMdata++)
 
-static wxInt16 gl_ADPCMcoeff_2[] = {
-    0, -256, 0, 64, 0, -208, -232
-};
+    out_len = 0;
+    while (in_len != 0) {
+        if (m_next_block == 0) {
+            GET_DATA_8(state->predictor);
+            GET_DATA_16(state->iDelta);
+            
+            GET_DATA_16(state->samp1);
+            GET_DATA_16(state->samp2);
+            
+            state->coeff[0] = state->coeff[1] = m_coefs[0][ state->predictor ];
+            
+            *PCMdata++ = state->samp2;
+            *PCMdata++ = state->samp1;
+            in_len     -= 7;
+            out_len    += 4;
+            m_next_block = m_block_size;
+            continue;
+        }
+    
+        while (in_len != 0 && m_next_block != 0) {
+            wxUint8 nib[2];
+            
+            GET_DATA_8(nib[0]);
+            nib[1] = (nib[0] >> 4) & 0x0f;
+            nib[0] &= 0x0f;
+        
+            Nibble(nib[0], state, &PCMdata);
+            Nibble(nib[1], state, &PCMdata);
+        
+            in_len       -= 4;
+            out_len      += 4;
+            m_next_block -= 4;
+        }
+    }
+
+    return out_len;
+
+#undef GET_DATA_16
+#undef GET_DATA_8
+}
+
+wxUint32 wxSoundStreamMSAdpcm::DecodeStereoADPCM(const void *in_buffer,
+                                                 void *out_buffer,
+                                                 wxUint32 in_len)
+{            
+    wxUint8  *ADPCMdata;
+    wxInt16  *PCMdata;
+    AdpcmState *state0, *state1;
+    wxUint32 out_len;
+    
+    ADPCMdata = (wxUint8 *)in_buffer;
+    PCMdata   = (wxInt16 *)out_buffer;
+    
+    state0 = &m_state[0];
+    state1 = &m_state[1];
+    
+#define GET_DATA_16(i) i = *ADPCMdata++, i |= ((wxUint32)(*ADPCMdata++) << 8)
+#define GET_DATA_8(i) i = (*ADPCMdata++)
+
+    out_len = 0;
+    while (in_len != 0) {
+        if (!m_next_block) {
+            GET_DATA_8(state0->predictor);
+            GET_DATA_8(state1->predictor);
+            
+            GET_DATA_16(state0->iDelta);
+            GET_DATA_16(state1->iDelta);
+        
+            GET_DATA_16(state0->samp1);
+            GET_DATA_16(state1->samp1);
+            GET_DATA_16(state0->samp2);
+            GET_DATA_16(state1->samp2);
+        
+            *PCMdata++ = state0->samp2;
+            *PCMdata++ = state1->samp2;
+            *PCMdata++ = state0->samp1;
+            *PCMdata++ = state1->samp1;
+
+            in_len     -= 14;
+            out_len    += 8;
+            m_next_block = m_block_size;
+            continue;
+        }
+    
+        while (in_len != 0 && m_next_block > 0) {
+            wxUint8 nib[2];
+            
+            GET_DATA_8(nib[0]);
+            nib[1] = (nib[0] >> 4) & 0x0f;
+            nib[0] &= 0x0f;
+            
+            Nibble(nib[0], state0, &PCMdata);
+            Nibble(nib[1], state1, &PCMdata);
+            
+            in_len       -= 4;
+            out_len      += 4;
+            m_next_block -= 4;
+        }
+    }
+
+    return out_len;
+
+#undef GET_DATA_16
+#undef GET_DATA_8
+}
+
+void wxSoundStreamMSAdpcm::Nibble(wxInt8 nyb,
+                                  AdpcmState *state,
+                                  wxInt16 **out_buffer)
+{
+    wxUint32 new_delta;
+    wxInt32  new_sample;
+
+    // First: compute the next delta value
+    new_delta  = (state->iDelta * gl_ADPCMcoeff_delta[nyb]) >> 8;
+    // If null, minor it by 16
+    if (!new_delta)
+        new_delta = 16;
+
+    // Barycentre
+    new_sample = (state->samp1 * state->coeff[0] +
+                  state->samp2 * state->coeff[1]) / 256;
+
+    // Regenerate the sign
+    if (nyb & 0x08)
+        nyb -= 0x10;
+    
+    new_sample += state->iDelta * nyb;
+
+    // Samples must be in [-32767, 32768]
+    if (new_sample < -32768)
+        new_sample = -32768;
+    else if (new_sample > 32767)
+        new_sample = 32767;
+    
+    state->iDelta = new_delta;
+    state->samp2  = state->samp1;
+    state->samp1  = new_sample;
+
+    *(*out_buffer)++ = new_sample;
+}
 
 wxSoundStream& wxSoundStreamMSAdpcm::Write(const void *buffer, wxUint32 len)
 {
-    wxInt16 delta;
-    wxUint8 ADPCMdata;
-    wxUint16 *PCMdata;
-    wxInt16 coeff1, coeff2;
+    wxUint8 *out_buf;
+    wxUint32 new_len;
     
-#define GET_DATA_16 (*ADPCMdata++ | ((wxUint32)(*ADPCMdata++) << 8);
-#define GET_DATA_8 (*ADPCMdata++)
-                     
-    if (!m_got_header) {
-        i_predict = GET_DATA_8;
-        delta     = GET_DATA_16;
-        samp1     = GET_DATA_16;
-        PCMdata   = GET_DATA_16;
-        len -= 3*2 + 1;
-        m_got_header = TRUE;
+    // TODO: prealloc the output buffer
+    out_buf = new wxUint8[len*2];
 
-        coeff1 = gl_ADPCMcoeff_1[i_predict];
-        coeff2 = gl_ADPCMcoeff_2[i_predict];
-    }
+    if (!m_stereo)
+        new_len = DecodeMonoADPCM(buffer, out_buf, len);
+    else
+        new_len = DecodeStereoADPCM(buffer, out_buf, len);
     
-    while (len > 0) {
-        nyb1 = GET_DATA_8;
-        nyb0 = (nyb1 & 0xf0) >> 4;
-        nyb1 &= 0x0f;
-        
-        
+    m_router->Write(out_buf, new_len);
+
+    m_lastcount = len;
+    m_snderror  = wxSOUND_NOERROR;
+    
+    delete[] out_buf;
+    
     return *this;
 }
 
@@ -143,23 +352,36 @@ wxUint32 wxSoundStreamMSAdpcm::GetBestSize() const
 
 bool wxSoundStreamMSAdpcm::SetSoundFormat(const wxSoundFormatBase& format)
 {
-    if (format.GetType() != wxSOUND_ULAW) {
+    if (format.GetType() != wxSOUND_MSADPCM) {
         m_snderror = wxSOUND_INVFRMT;
         return FALSE;
     }
     
     wxSoundFormatPcm pcm;
-    wxSoundFormatUlaw *ulaw;
+    wxSoundFormatMSAdpcm *adpcm;
+    wxUint16 ncoefs, coefs_len;
     
     wxSoundStreamCodec::SetSoundFormat(format);
     
-    ulaw = (wxSoundFormatMSAdpcm *)m_sndformat;
+    adpcm = (wxSoundFormatMSAdpcm *)m_sndformat;
+
+    adpcm->GetCoefs(m_coefs, ncoefs, coefs_len);
+
+    if (!ncoefs) {
+        wxLogError(__FILE__ ":%d: Number of ADPCM coefficients"
+                   " must be non null", __LINE__);
+        return FALSE;
+    }
     
     pcm.SetSampleRate(adpcm->GetSampleRate());
     pcm.SetBPS(16);
     pcm.SetChannels(adpcm->GetChannels());
     pcm.Signed(TRUE);
     pcm.SetOrder(wxBYTE_ORDER);
+
+    m_stereo = (adpcm->GetChannels() == 2);
+    m_block_size = adpcm->GetBlockSize();
+    m_next_block = 0;
     
     m_router->SetSoundFormat(pcm);
     

@@ -379,11 +379,15 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
     // We try to minimize the need of dynamic memory allocation by preallocating a buffer. But
     // to be sure it will be efficient we minimize the best size.
     if (m_multiplier_in < m_multiplier_out) {
-        m_prebuffer_size = (wxUint32)(m_sndio->GetBestSize() * m_multiplier_out);
-        m_best_size = (wxUint32)(m_sndio->GetBestSize() * m_multiplier_in);
+        m_prebuffer_size = (wxUint32)(m_sndio->GetBestSize() *
+                                      m_multiplier_out);
+        m_best_size = (wxUint32)(m_sndio->GetBestSize() *
+                                 m_multiplier_in);
     } else {
-        m_prebuffer_size = (wxUint32)(m_sndio->GetBestSize() * m_multiplier_in);
-        m_best_size = (wxUint32)(m_sndio->GetBestSize() * m_multiplier_out);
+        m_prebuffer_size = (wxUint32)(m_sndio->GetBestSize() *
+                                      m_multiplier_in);
+        m_best_size = (wxUint32)(m_sndio->GetBestSize() *
+                                 m_multiplier_out);
     }
     
     m_prebuffer = new char[m_prebuffer_size];

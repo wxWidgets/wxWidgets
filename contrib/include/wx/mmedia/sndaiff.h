@@ -22,7 +22,7 @@
 // AIFF codec
 //
 
-class wxSoundAiff: public wxSoundFileStream {
+class WXDLLEXPORT wxSoundAiff: public wxSoundFileStream {
 public:
     wxSoundAiff(wxInputStream& stream, wxSoundStream& io_sound);
     wxSoundAiff(wxOutputStream& stream, wxSoundStream& io_sound);

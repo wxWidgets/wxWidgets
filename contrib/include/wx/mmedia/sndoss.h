@@ -21,7 +21,7 @@
 // OSS output class
 //
 
-class wxSoundStreamOSS : public wxSoundStream {
+class WXDLLEXPORT wxSoundStreamOSS : public wxSoundStream {
  public:
   wxSoundStreamOSS(const wxString& dev_name = wxT("/dev/dsp"));
   ~wxSoundStreamOSS();

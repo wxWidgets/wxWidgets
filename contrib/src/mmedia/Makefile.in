@@ -19,7 +19,7 @@ OBJECTS=cdbase.o cdwin.o g711.o g721.o g723_24.o \
 # any VPATH assignment not containing ':'
 VPATH = :$(top_srcdir)/src/mmedia # ':' for autoconf
 
-APPEXTRADEFS=-I$(top_srcdir)/include
+APPEXTRADEFS=-I$(top_srcdir)/include -I$(top_srcdir)/../include
 
 include $(top_builddir)/src/makelib.env
 

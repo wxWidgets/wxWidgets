@@ -41,6 +41,7 @@
 #include "wx/mmedia/sndaiff.h"
 #include "wx/mmedia/sndpcm.h"
 #include "wx/mmedia/sndulaw.h"
+#include "wx/mmedia/sndmsad.h"
 
 #ifdef __UNIX__
 #include "wx/mmedia/sndoss.h"
@@ -309,6 +310,16 @@ wxString MMBoardSoundFile::GetStringInformation()
 				 pcm_format->GetChannels());
 	
 	break;
+    }
+    case wxSOUND_MSADPCM: {
+        wxSoundFormatMSAdpcm *adpcm_format = (wxSoundFormatMSAdpcm *)format;
+
+        info += wxString::Format(wxT("Microsoft ADPCM\n"));
+        info += wxString::Format(wxT("Sampling Rate: %d\n")
+                                 wxT("Number of channels: %d\n"),
+                                 adpcm_format->GetSampleRate(),
+                                 adpcm_format->GetChannels());
+        break;
     }
     case wxSOUND_ULAW: {
         wxSoundFormatUlaw *ulaw_format = (wxSoundFormatUlaw *)format;

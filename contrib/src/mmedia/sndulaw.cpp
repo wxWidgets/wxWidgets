@@ -163,8 +163,9 @@ bool wxSoundStreamUlaw::SetSoundFormat(const wxSoundFormatBase& format)
         return FALSE;
     }
     
-    // As the codec only support 16 bits, Mono we must use a wxSoundRouter to filter the data and
-    // to translate them to a format supported by the sound card.
+    // As the codec only support 16 bits, Mono we must use a wxSoundRouter
+    // to filter the data and to translate them to a format supported
+    // by the sound card.
     
     wxSoundFormatPcm pcm;
     wxSoundFormatUlaw *ulaw;

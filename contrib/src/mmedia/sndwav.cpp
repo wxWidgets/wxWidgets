@@ -29,6 +29,7 @@
 #include "wx/mmedia/sndfile.h"
 #include "wx/mmedia/sndpcm.h"
 #include "wx/mmedia/sndg72x.h"
+#include "wx/mmedia/sndmsad.h"
 #include "wx/mmedia/sndwav.h"
 
 #define BUILD_SIGNATURE(a,b,c,d) (((wxUint32)a) | (((wxUint32)b) << 8) | (((wxUint32)c) << 16)  | (((wxUint32)d) << 24)) 
@@ -97,7 +98,8 @@ bool wxSoundWave::CanRead()
     return TRUE;
 }
 
-bool wxSoundWave::HandleOutputPCM(wxDataInputStream& data, wxUint16 channels, 
+bool wxSoundWave::HandleOutputPCM(wxDataInputStream& data, wxUint32 len,
+                                  wxUint16 channels, 
                                   wxUint32 sample_fq, wxUint32 byte_p_sec,
                                   wxUint16 byte_p_spl, wxUint16 bits_p_spl)
 {
@@ -112,10 +114,53 @@ bool wxSoundWave::HandleOutputPCM(wxDataInputStream& data, wxUint16 channels,
     if (!SetSoundFormat(sndformat))
         return FALSE;
     
+    m_input->SeekI(len, wxFromCurrent);
+
     return TRUE;
 }
 
-bool wxSoundWave::HandleOutputG721(wxDataInputStream& data, wxUint16 channels,
+bool wxSoundWave::HandleOutputMSADPCM(wxDataInputStream& data, wxUint32 len,
+                                      wxUint16 channels, 
+                                      wxUint32 sample_fq, wxUint32 byte_p_sec,
+                                      wxUint16 byte_p_spl, wxUint16 bits_p_spl)
+{
+    wxSoundFormatMSAdpcm sndformat;
+    wxInt16 *coefs[2];
+    wxUint16 coefs_len, i;
+    wxUint16 block_size;
+    
+    sndformat.SetSampleRate(sample_fq);
+    sndformat.SetChannels(channels);
+    
+    block_size = data.Read16();
+    coefs_len = data.Read16();
+
+    coefs[0] = new wxInt16[coefs_len];
+    coefs[1] = new wxInt16[coefs_len];
+    
+    for (i=0;i<coefs_len;i++) {
+        coefs[0][i] = data.Read16();
+        coefs[1][i] = data.Read16();
+    }
+
+    sndformat.SetCoefs(coefs, 2, coefs_len);
+    sndformat.SetBlockSize(block_size);
+
+    delete[] coefs[0];
+    delete[] coefs[1];
+    
+    if (!SetSoundFormat(sndformat))
+        return FALSE;
+
+    len -= coefs_len*4 + 4;
+    
+    m_input->SeekI(len, wxFromCurrent);
+    
+    return TRUE;
+}
+
+bool wxSoundWave::HandleOutputG721(wxDataInputStream& data, wxUint32 len,
+                                   wxUint16 channels,
                                    wxUint32 sample_fq, wxUint32 byte_p_sec,
                                    wxUint16 byte_p_spl, wxUint16 bits_p_spl)
 {
@@ -127,6 +172,8 @@ bool wxSoundWave::HandleOutputG721(wxDataInputStream& data, wxUint16 channels,
     if (!SetSoundFormat(sndformat))
         return FALSE;
     
+    m_input->SeekI(len, wxFromCurrent);
+
     return TRUE;
 }
 
@@ -173,16 +220,27 @@ bool wxSoundWave::PrepareToPlay()
                 // Get the common parameters
                 data >> format >> channels >> sample_fq 
                      >> byte_p_sec >> byte_p_spl >> bits_p_spl;
+                len -= 16;
                 
                 switch (format) {
                     case 0x01: // PCM
-                        if (!HandleOutputPCM(data, channels, sample_fq,
-                                             byte_p_sec, byte_p_spl, bits_p_spl))
+                        if (!HandleOutputPCM(data, len, channels, sample_fq,
+                                             byte_p_sec, byte_p_spl,
+                                             bits_p_spl))
+                            return FALSE;
+                        break;
+                    case 0x02: // MS ADPCM
+                        if (!HandleOutputMSADPCM(data, len,
+                                                 channels, sample_fq,
+                                                 byte_p_sec, byte_p_spl,
+                                                 bits_p_spl))
                             return FALSE;
                         break;
                     case 0x40: // G721
-                        if (!HandleOutputG721(data, channels, sample_fq,
-                                              byte_p_sec, byte_p_spl, bits_p_spl))
+                        if (!HandleOutputG721(data, len,
+                                              channels, sample_fq,
+                                              byte_p_sec, byte_p_spl,
+                                              bits_p_spl))
                             return FALSE;
                         break;
                     default: 
