@@ -267,6 +267,10 @@ protected:
     wxNodeBase *Append(void *object);
         // insert a new item at the beginning of the list
     wxNodeBase *Insert(void *object) { return Insert( (wxNodeBase*)NULL, object); }
+        // insert a new item at the given position
+    wxNodeBase *Insert(size_t pos, void *object)
+        { return pos == GetCount() ? Append(object)
+                                   : Insert(Item(pos), object); }
         // insert before given node or at front of list if prev == NULL
     wxNodeBase *Insert(wxNodeBase *prev, void *object);
 
@@ -402,6 +406,8 @@ private:
             { return (nodetype *)wxListBase::Append(object); }              \
         nodetype *Insert(Tbase *object)                                     \
             { return (nodetype *)Insert((nodetype*)NULL, object); }         \
+        nodetype *Insert(size_t pos, Tbase *object)                         \
+            { return (nodetype *)wxListBase::Insert(pos, object); }         \
         nodetype *Insert(nodetype *prev, Tbase *object)                     \
             { return (nodetype *)wxListBase::Insert(prev, object); }        \
                                                                             \

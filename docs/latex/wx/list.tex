@@ -68,6 +68,10 @@ For compatibility with previous versions wxList and wxStringList classes are
 still defined, but their usage is deprecated and they will disappear in the
 future versions completely.
 
+In the documentation of the list classes below, you should replace wxNode with
+wxListName::Node and wxObject with the list element type (i.e. the first
+parameter of WX\_DECLARE\_LIST) for the template lists.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
@@ -94,9 +98,9 @@ It is very common to iterate on a list as follows:
   wxNode *node = SomeList.GetFirst();
   while (node)
   {
-    wxWindow *win = (wxWindow *)node->Data();
+    wxWindow *win = node->GetData();
     ...
-    node = node->Next();
+    node = node->GetNext();
   }
 \end{verbatim}
 
@@ -104,7 +108,7 @@ To delete nodes in a list as the list is being traversed, replace
 
 \begin{verbatim}
     ...
-    node = node->Next();
+    node = node->GetNext();
     ...
 \end{verbatim}
 
@@ -120,10 +124,6 @@ with
 
 See \helpref{wxNode}{wxnode} for members that retrieve the data associated with a node, and
 members for getting to the next or previous node.
-
-Note that a cast is required when retrieving the data from a node.  Although a
-node is defined to store objects of type {\bf wxObject} and derived types, other
-types (such as char*) may be used with appropriate casting.
 
 \wxheading{See also}
 
@@ -205,11 +205,23 @@ TRUE if successful. The application must delete the actual object separately.
 
 Returns the node whose stored key matches {\it key}. Use on a keyed list only.
 
+\membersection{wxList::GetCount}\label{wxlistgetcount}
+
+\constfunc{size\_t}{GetCount}{\void}
+
+Returns the number of elements in the list.
+
 \membersection{wxList::GetFirst}
 
 \func{wxNode *}{GetFirst}{\void}
 
 Returns the first node in the list (NULL if the list is empty).
+
+\membersection{wxList::GetLast}
+
+\func{wxNode *}{GetLast}{\void}
+
+Returns the last node in the list (NULL if the list is empty).
 
 \membersection{wxList::IndexOf}
 
@@ -224,20 +236,28 @@ is not found in the list.
 
 Insert object at front of list.
 
-\func{wxNode *}{Insert}{\param{wxNode *}{position}, \param{wxObject *}{object}}
+\func{wxNode *}{Insert}{\param{size\_t }{position}, \param{wxObject *}{object}}
 
-Insert object before {\it position}.
+Insert object before {\it position}, i.e. the index of the new item in the
+list will be equal to {\it position}. {\it position} should be less than or
+equal to \helpref{GetCount}{wxlistgetcount}; if it is equal to it, this is the
+same as calling \helpref{Append}{wxlistappend}.
 
+\func{wxNode *}{Insert}{\param{wxNode *}{node}, \param{wxObject *}{object}}
 
-\membersection{wxList::GetLast}
+Inserts the object before the given {\it node}.
 
-\func{wxNode *}{GetLast}{\void}
+\membersection{wxList::Item}\label{wxlistitem}
 
-Returns the last node in the list (NULL if the list is empty).
+\constfunc{wxNode *}{Item}{\param{size\_t }{index}}
+
+Returns the node at given position in the list.
 
 \membersection{wxList::Member}
 
 \func{wxNode *}{Member}{\param{wxObject *}{object}}
+
+{\bf NB:} This function is deprecated, use \helpref{Find}{wxlistfind} instead.
 
 Returns the node associated with {\it object} if it is in the list, NULL otherwise.
 
@@ -245,12 +265,16 @@ Returns the node associated with {\it object} if it is in the list, NULL otherwi
 
 \func{wxNode *}{Nth}{\param{int}{ n}}
 
+{\bf NB:} This function is deprecated, use \helpref{Item}{wxlistitem} instead.
+
 Returns the {\it nth} node in the list, indexing from zero (NULL if the list is empty
 or the nth node could not be found).
 
 \membersection{wxList::Number}
 
 \func{int}{Number}{\void}
+
+{\bf NB:} This function is deprecated, use \helpref{GetCount}{wxlistgetcount} instead.
 
 Returns the number of elements in the list.
 
