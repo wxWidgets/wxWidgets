@@ -52,7 +52,6 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 }
 
 - (void)doIdle: (id)data;
-- (void)finishLaunching;
 - (void)sendEvent: (NSEvent*)anEvent;
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
 @end // wxPoserNSApplication
@@ -79,16 +78,6 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
     wxLogDebug("Idle processing complete, requesting next idle event");
     // Add ourself back into the run loop (on next event) if necessary
     wxTheApp->CocoaRequestIdle();
-}
-
-- (void)finishLaunching
-{
-    wxLogDebug("finishLaunching");
-    bool initsuccess = wxTheApp->OnInit();
-    if(!initsuccess)
-        [super stop: NULL];
-
-    [super finishLaunching];
 }
 
 - (void)sendEvent: (NSEvent*)anEvent
