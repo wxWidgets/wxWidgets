@@ -43,6 +43,7 @@
 #define wxGRID_DRAG_UP_DOWN    2
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericGrid, wxPanel)
+IMPLEMENT_DYNAMIC_CLASS(wxGridEvent, wxEvent)
 
 BEGIN_EVENT_TABLE(wxGenericGrid, wxPanel)
     EVT_SIZE(wxGenericGrid::OnSize)
@@ -52,7 +53,22 @@ BEGIN_EVENT_TABLE(wxGenericGrid, wxPanel)
     EVT_TEXT(wxGRID_TEXT_CTRL, wxGenericGrid::OnText)
     EVT_COMMAND_SCROLL(wxGRID_HSCROLL, wxGenericGrid::OnGridScroll)
     EVT_COMMAND_SCROLL(wxGRID_VSCROLL, wxGenericGrid::OnGridScroll)
+
+    // default wxGridEvent handlers
+    EVT_GRID_SELECT_CELL(wxGenericGrid::_OnSelectCell)
+    EVT_GRID_CREATE_CELL(wxGenericGrid::_OnCreateCell)
+    EVT_GRID_CHANGE_LABELS(wxGenericGrid::_OnChangeLabels)
+    EVT_GRID_CHANGE_SEL_LABEL(wxGenericGrid::_OnChangeSelectionLabel)
+    EVT_GRID_CELL_CHANGE(wxGenericGrid::_OnCellChange)
+    EVT_GRID_CELL_LCLICK(wxGenericGrid::_OnCellLeftClick)
+    EVT_GRID_CELL_RCLICK(wxGenericGrid::_OnCellRightClick)
+    EVT_GRID_LABEL_LCLICK(wxGenericGrid::_OnLabelLeftClick)
+    EVT_GRID_LABEL_RCLICK(wxGenericGrid::_OnLabelRightClick)
+
 END_EVENT_TABLE()
+
+
+
 
 wxGenericGrid::wxGenericGrid(void)
 {
@@ -147,7 +163,7 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
     m_horizontalSashCursor = new wxCursor(wxCURSOR_SIZEWE);
     m_verticalSashCursor = new wxCursor(wxCURSOR_SIZENS);
   }
-    
+
   SetLabelBackgroundColour(m_labelBackgroundColour);
 
   m_leftOfSheet = wxGRID_DEFAULT_SHEET_LEFT;
@@ -195,7 +211,7 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
   m_textItem->Show(TRUE);
   m_textItem->SetFocus();
   int controlW, controlH;
-  
+
   m_textItem->GetSize(&controlW, &controlH);
   m_editControlPosition.height = controlH;
 
@@ -283,7 +299,10 @@ bool wxGenericGrid::CreateGrid(int nRows, int nCols, wxString **cellValues, shor
     for (j = 0; j < nCols; j++)
       if (cellValues)
       {
-        m_gridCells[i][j] = OnCreateCell();
+        //m_gridCells[i][j] = OnCreateCell();
+        wxGridEvent g_evt(GetId(), wxEVT_GRID_CREATE_CELL, this, i, j);
+        GetEventHandler()->ProcessEvent(g_evt);
+        m_gridCells[i][j] = g_evt.m_cell;
         m_gridCells[i][j]->SetTextValue(cellValues[i][j]);
       }
       else
@@ -328,9 +347,14 @@ bool wxGenericGrid::CreateGrid(int nRows, int nCols, wxString **cellValues, shor
 
   AdjustScrollbars();
 
-  OnChangeLabels();
-  OnChangeSelectionLabel();
-  
+  //OnChangeLabels();
+  wxGridEvent g_evt(GetId(), wxEVT_GRID_CHANGE_LABELS, this);
+  GetEventHandler()->ProcessEvent(g_evt);
+
+  //OnChangeSelectionLabel();
+  wxGridEvent g_evt2(GetId(), wxEVT_GRID_CHANGE_SEL_LABEL, this);
+  GetEventHandler()->ProcessEvent(g_evt2);
+
   return TRUE;
 }
 
@@ -339,7 +363,7 @@ void wxGenericGrid::UpdateDimensions(void)
 {
   int canvasWidth, canvasHeight;
   GetSize(&canvasWidth, &canvasHeight);
-  
+
   if (m_editCreated && m_editable)
   {
     int controlW, controlH;
@@ -365,7 +389,7 @@ void wxGenericGrid::UpdateDimensions(void)
     else
       m_bottomOfSheet += m_rowHeights[i];
   }
-    
+
   m_totalGridWidth = m_leftOfSheet + m_verticalLabelWidth;
   for (i = 0; i < m_totalCols; i++)
   {
@@ -385,11 +409,14 @@ wxGridCell *wxGenericGrid::GetCell(int row, int col)
 
   if ((row >= m_totalRows) || (col >= m_totalCols))
     return (wxGridCell *) NULL;
-    
+
   wxGridCell *cell = m_gridCells[row][col];
   if (!cell)
   {
-    m_gridCells[row][col] = OnCreateCell();
+    // m_gridCells[row][col] = OnCreateCell();
+    wxGridEvent g_evt(GetId(), wxEVT_GRID_CREATE_CELL, this, row, col);
+    GetEventHandler()->ProcessEvent(g_evt);
+    m_gridCells[row][col] = g_evt.m_cell;
     return m_gridCells[row][col];
   }
   else
@@ -553,7 +580,7 @@ void wxGenericGrid::DrawGridLines(wxDC *dc)
 {
   int cw, ch;
   GetClientSize(&cw, &ch);
-  
+
   int i;
 
   if (m_divisionPen)
@@ -715,7 +742,7 @@ void wxGenericGrid::DrawColumnLabels(wxDC *dc)
 
   if (m_horizontalLabelHeight == 0)
     return;
-    
+
   int i;
   wxRectangle rect;
 
@@ -726,7 +753,7 @@ void wxGenericGrid::DrawColumnLabels(wxDC *dc)
   dc->SetTextBackground(m_labelBackgroundColour);
   dc->SetBackgroundMode(wxTRANSPARENT);
 //  dc->SetTextForeground(m_labelTextColour);
-  
+
   int widthCount = m_leftOfSheet + m_verticalLabelWidth;
   for (i = m_scrollPosX; i < m_totalCols; i++)
   {
@@ -771,7 +798,7 @@ void wxGenericGrid::DrawRowLabels(wxDC *dc)
 
   int i;
   wxRectangle rect;
-  
+
   // Draw numbers for rows
   rect.x = m_leftOfSheet;
   rect.width = m_verticalLabelWidth;
@@ -790,7 +817,7 @@ void wxGenericGrid::DrawRowLabels(wxDC *dc)
        rect.y = 1 + heightCount;
        rect.height = m_rowHeights[i];
        DrawRowLabel(dc, &rect, i);
-     
+
        heightCount += m_rowHeights[i];
      }
   }
@@ -820,7 +847,7 @@ void wxGenericGrid::DrawCells(wxDC *dc)
   GetClientSize(&cw, &ch);
 
   int i,j;
-  
+
   // Draw value corresponding to each cell
   for (i = m_scrollPosY; i < m_totalRows; i++)
   {
@@ -849,7 +876,7 @@ void wxGenericGrid::DrawCellBackground(wxDC *dc, wxRectangle *rect, int row, int
   {
     dc->SetBrush(*cell->GetBackgroundBrush());
     dc->SetPen(*wxTRANSPARENT_PEN);
-    
+
 #if 0    // In wxWin 2.0 the dc code is exact. RR.
 #ifdef __WXMOTIF__
     dc->DrawRectangle(rect->x+1, rect->y+1, rect->width-1, rect->height-1);
@@ -897,7 +924,7 @@ void wxGenericGrid::AdjustScrollbars(void)
 {
   int cw, ch;
   GetClientSize(&cw, &ch);
-  
+
   // We find the view size by seeing how many rows/cols fit on
   // the current view.
   // BUT... this means that the scrollbar should be adjusted every time
@@ -914,10 +941,10 @@ void wxGenericGrid::AdjustScrollbars(void)
     vertScrollBarWidth = 0;
   if (m_hScrollBar && !m_hScrollBar->IsShown())
     horizScrollBarHeight = 0;
-  
+
   int noHorizSteps = 0;
   int noVertSteps = 0;
-  
+
   if (m_totalGridWidth + vertScrollBarWidth <= cw)
     noHorizSteps = 0;
   else
@@ -938,7 +965,7 @@ void wxGenericGrid::AdjustScrollbars(void)
    	    nx ++;
 
     }
-    
+
     noHorizSteps += nx;
   }
   if (m_totalGridHeight + horizScrollBarHeight <= ch)
@@ -960,10 +987,10 @@ void wxGenericGrid::AdjustScrollbars(void)
 	  else
 	    ny ++;
     }
-    
+
     noVertSteps += ny;
   }
-  
+
   if (m_totalGridWidth + vertScrollBarWidth <= cw)
   {
 	if ( m_hScrollBar )
@@ -1005,7 +1032,7 @@ void wxGenericGrid::AdjustScrollbars(void)
     m_hScrollBar->SetSize(m_leftOfSheet, ch - m_scrollWidth -2,
       cw - vertScrollBarWidth - m_leftOfSheet, m_scrollWidth);
   }
-       
+
   if (m_vScrollBar)
   {
     int nRows = GetRows();
@@ -1022,7 +1049,7 @@ void wxGenericGrid::OnSize(wxSizeEvent& WXUNUSED(event) )
 	  return;
 
   AdjustScrollbars();
-  
+
   int cw, ch;
   GetClientSize(&cw, &ch);
 
@@ -1045,7 +1072,7 @@ bool wxGenericGrid::CellHitTest(int x, int y, int *row, int *col)
          y -= (m_topOfSheet + m_horizontalLabelHeight);
 
          int i;
-         
+
          // Now we need to do a hit test for which row we're on
          int currentHeight = 0;
          for (i = m_scrollPosY; i < m_totalRows; i++)
@@ -1057,7 +1084,7 @@ bool wxGenericGrid::CellHitTest(int x, int y, int *row, int *col)
             }
             currentHeight += m_rowHeights[i];
          }
-         
+
          // Now we need to do a hit test for which column we're on
          int currentWidth = 0;
          for (i = m_scrollPosX; i < m_totalCols; i++)
@@ -1078,7 +1105,7 @@ bool wxGenericGrid::LabelSashHitTest(int x, int y, int *orientation, int *rowOrC
 {
   int i;
   int tolerance = 3;
-  
+
   if (x >= (m_leftOfSheet + m_verticalLabelWidth) && y >= m_topOfSheet &&
       x <= m_rightOfSheet && y <= (m_topOfSheet + m_horizontalLabelHeight))
   {
@@ -1176,16 +1203,27 @@ void wxGenericGrid::OnMouseEvent(wxMouseEvent& ev)
   {
     wxClientDC dc(this);
     dc.BeginDrawing();
-    
+
     int row, col;
     if (CellHitTest((int)ev.GetX(), (int)ev.GetY(), &row, &col))
     {
       OnSelectCellImplementation(& dc, row, col);
-      OnCellLeftClick(row, col, (int)ev.GetX(), (int)ev.GetY(), ev.ControlDown(), ev.ShiftDown());
+
+      //OnCellLeftClick(row, col, (int)ev.GetX(), (int)ev.GetY(), ev.ControlDown(), ev.ShiftDown());
+      wxGridEvent g_evt(GetId(), wxEVT_GRID_CELL_LCLICK, this,
+                        row, col, (int)ev.GetX(), (int)ev.GetY(),
+                        ev.ControlDown(), ev.ShiftDown());
+      GetEventHandler()->ProcessEvent(g_evt);
+
     }
     if (LabelHitTest((int)ev.GetX(), (int)ev.GetY(), &row, &col))
     {
-      OnLabelLeftClick(row, col, (int)ev.GetX(), (int)ev.GetY(), ev.ControlDown(), ev.ShiftDown());
+      //OnLabelLeftClick(row, col, (int)ev.GetX(), (int)ev.GetY(), ev.ControlDown(), ev.ShiftDown());
+      wxGridEvent g_evt(GetId(), wxEVT_GRID_LABEL_LCLICK, this,
+                        row, col, (int)ev.GetX(), (int)ev.GetY(),
+                        ev.ControlDown(), ev.ShiftDown());
+      GetEventHandler()->ProcessEvent(g_evt);
+
     }
     dc.EndDrawing();
   }
@@ -1218,7 +1256,7 @@ void wxGenericGrid::OnMouseEvent(wxMouseEvent& ev)
           else
             dc.DrawLine(m_leftOfSheet, (int)ev.GetY(), m_rightOfSheet, (int)ev.GetY());
           dc.EndDrawing();
-          
+
           CaptureMouse();
         }
         break;
@@ -1322,11 +1360,20 @@ void wxGenericGrid::OnMouseEvent(wxMouseEvent& ev)
     int row, col;
     if (CellHitTest((int)ev.GetX(), (int)ev.GetY(), &row, &col))
     {
-      OnCellRightClick(row, col, (int)ev.GetX(), (int)ev.GetY(), ev.ControlDown(), ev.ShiftDown());
+      //OnCellRightClick(row, col, (int)ev.GetX(), (int)ev.GetY(), ev.ControlDown(), ev.ShiftDown());
+      wxGridEvent g_evt(GetId(), wxEVT_GRID_CELL_RCLICK, this,
+                        row, col, (int)ev.GetX(), (int)ev.GetY(),
+                        ev.ControlDown(), ev.ShiftDown());
+      GetEventHandler()->ProcessEvent(g_evt);
+
     }
     if (LabelHitTest((int)ev.GetX(), (int)ev.GetY(), &row, &col))
     {
-      OnLabelRightClick(row, col, (int)ev.GetX(), (int)ev.GetY(), ev.ControlDown(), ev.ShiftDown());
+      //OnLabelRightClick(row, col, (int)ev.GetX(), (int)ev.GetY(), ev.ControlDown(), ev.ShiftDown());
+      wxGridEvent g_evt(GetId(), wxEVT_GRID_LABEL_RCLICK, this,
+                        row, col, (int)ev.GetX(), (int)ev.GetY(),
+                        ev.ControlDown(), ev.ShiftDown());
+      GetEventHandler()->ProcessEvent(g_evt);
     }
   }
 }
@@ -1336,7 +1383,9 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
   m_wCursorColumn = col;
   m_wCursorRow = row;
 
-  OnChangeSelectionLabel();
+  //OnChangeSelectionLabel();
+  wxGridEvent g_evt(GetId(), wxEVT_GRID_CHANGE_SEL_LABEL, this);
+  GetEventHandler()->ProcessEvent(g_evt);
 
   SetGridClippingRegion(dc);
 
@@ -1361,11 +1410,13 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
   // Probably because of the SetValue??
   // Arrrrrgh. This isn't needed anywhere, of course. RR.
 #ifndef __WXMSW__
-//  HighlightCell(dc); 
+//  HighlightCell(dc);
 #endif
   dc->DestroyClippingRegion();
-  
-  OnSelectCell(row, col);
+
+  //OnSelectCell(row, col);
+  wxGridEvent g_evt2(GetId(), wxEVT_GRID_SELECT_CELL, this, row, col);
+  GetEventHandler()->ProcessEvent(g_evt2);
 }
 
 wxGridCell *wxGenericGrid::OnCreateCell(void)
@@ -1403,10 +1454,10 @@ void wxGenericGrid::OnChangeSelectionLabel(void)
 {
   if (!GetEditable())
     return;
-    
+
   wxString rowLabel(GetLabelValue(wxVERTICAL, GetCursorRow()));
   wxString colLabel(GetLabelValue(wxHORIZONTAL, GetCursorColumn()));
-  
+
   wxString newLabel = colLabel + rowLabel;
   if ((newLabel.Length() > 0) && (newLabel.Length() <= 8) && GetTextItem())
   {
@@ -1417,26 +1468,26 @@ void wxGenericGrid::OnChangeSelectionLabel(void)
 void wxGenericGrid::HighlightCell(wxDC *dc)
 {
   dc->SetLogicalFunction(wxINVERT);
-  
+
   // Top
-  dc->DrawLine( m_currentRect.x + 1, 
-                m_currentRect.y + 1, 
-                m_currentRect.x + m_currentRect.width - 1, 
+  dc->DrawLine( m_currentRect.x + 1,
+                m_currentRect.y + 1,
+                m_currentRect.x + m_currentRect.width - 1,
 		m_currentRect.y + 1);
   // Right
-  dc->DrawLine( m_currentRect.x + m_currentRect.width - 1, 
+  dc->DrawLine( m_currentRect.x + m_currentRect.width - 1,
                 m_currentRect.y + 1,
-                m_currentRect.x + m_currentRect.width - 1, 
+                m_currentRect.x + m_currentRect.width - 1,
 		m_currentRect.y +m_currentRect.height - 1 );
   // Bottom
-  dc->DrawLine( m_currentRect.x + m_currentRect.width - 1, 
+  dc->DrawLine( m_currentRect.x + m_currentRect.width - 1,
                 m_currentRect.y + m_currentRect.height - 1,
-                m_currentRect.x + 1, 
+                m_currentRect.x + 1,
 		m_currentRect.y + m_currentRect.height - 1);
   // Left
-  dc->DrawLine( m_currentRect.x + 1, 
-                m_currentRect.y + m_currentRect.height - 1, 
-		m_currentRect.x + 1, 
+  dc->DrawLine( m_currentRect.x + 1,
+                m_currentRect.y + m_currentRect.height - 1,
+		m_currentRect.x + 1,
 		m_currentRect.y + 1);
 
   dc->SetLogicalFunction(wxCOPY);
@@ -1446,11 +1497,11 @@ void wxGenericGrid::DrawCellText(void)
 {
   if (!m_currentRectVisible)
     return;
-  
+
   wxGridCell *cell = GetCell(GetCursorRow(), GetCursorColumn());
   if (!cell)
     return;
-    
+
   static char szEdit[300];
 
   wxClientDC dc(this);
@@ -1472,9 +1523,9 @@ void wxGenericGrid::DrawCellText(void)
 
   DrawTextRect(& dc, "                                    ", &rect, wxLEFT);
   DrawTextRect(& dc, szEdit, &rect, cell->GetAlignment());
-  
+
   dc.DestroyClippingRegion();
-  
+
   dc.SetBackgroundMode(wxSOLID);
 
   dc.EndDrawing();
@@ -1510,9 +1561,9 @@ static bool wxRectIntersection(wxRectangle *rect1, wxRectangle *rect2, wxRectang
 
   int x2_2 = rect2->x + rect2->width;
   int y2_2 = rect2->y + rect2->height;
-  
+
   int x2_3, y2_3;
-  
+
   // Check for intersection
   if ((rect1->x > x2_2) || (rect2->x > x2_1) ||
       (rect1->y > y2_2) || (rect2->y > y2_1))
@@ -1530,7 +1581,7 @@ static bool wxRectIntersection(wxRectangle *rect1, wxRectangle *rect2, wxRectang
     rect3->y = rect1->y;
   else
     rect3->y = rect2->y;
-  
+
   if (x2_1 > x2_2)
     x2_3 = x2_2;
   else
@@ -1539,7 +1590,7 @@ static bool wxRectIntersection(wxRectangle *rect1, wxRectangle *rect2, wxRectang
     y2_3 = y2_2;
   else
     y2_3 = y2_1;
-    
+
   rect3->width = (int)(x2_3 - rect3->x);
   rect3->height = (int)(y2_3 - rect3->y);
   return TRUE;
@@ -1548,22 +1599,22 @@ static bool wxRectIntersection(wxRectangle *rect1, wxRectangle *rect2, wxRectang
 void wxGenericGrid::DrawTextRect(wxDC *dc, const wxString& text, wxRectangle *rect, int flag)
 {
   dc->BeginDrawing();
-  
+
   // Ultimately, this functionality should be built into wxWindows,
   // and optimized for each platform. E.g. on Windows, use DrawText
   // passing a clipping rectangle, so that the wxWindows clipping region
   // does not have to be used to implement this.
-  
+
   // If we're already clipping, we need to find the intersection
   // between current clipping area and text clipping area.
-  
+
   wxRectangle clipRect;
   wxRectangle clipRect2;
   long clipX, clipY, clipW, clipH;
   dc->GetClippingBox(&clipX, &clipY, &clipW, &clipH);
   clipRect.x = (int)clipX; clipRect.y = (int)clipY;
   clipRect.width = (int)clipW; clipRect.height = (int)clipH;
-  
+
   bool alreadyClipping = TRUE;
 
   if (clipRect.x == 0 && clipRect.y == 0 && clipRect.width == 0 && clipRect.height == 0)
@@ -1581,12 +1632,12 @@ void wxGenericGrid::DrawTextRect(wxDC *dc, const wxString& text, wxRectangle *re
 
   if (alreadyClipping)
     dc->DestroyClippingRegion();
-  
+
   dc->SetClippingRegion(clipRect2.x, clipRect2.y, clipRect2.width, clipRect2.height);
   long textWidth, textHeight;
-  
+
   dc->GetTextExtent(text, &textWidth, &textHeight);
-  
+
   // Do alignment
   float x,y;
   switch (flag)
@@ -1612,7 +1663,7 @@ void wxGenericGrid::DrawTextRect(wxDC *dc, const wxString& text, wxRectangle *re
     }
   }
   dc->DrawText(text, (long)x, (long)y );
-  
+
   dc->DestroyClippingRegion();
 
   // Restore old clipping
@@ -1625,22 +1676,22 @@ void wxGenericGrid::DrawTextRect(wxDC *dc, const wxString& text, wxRectangle *re
 void wxGenericGrid::DrawBitmapRect(wxDC *dc, wxBitmap *bitmap, wxRectangle *rect, int flag)
 {
   dc->BeginDrawing();
-  
+
   // Ultimately, this functionality should be built into wxWindows,
   // and optimized for each platform. E.g. on Windows, use DrawText
   // passing a clipping rectangle, so that the wxWindows clipping region
   // does not have to be used to implement this.
-  
+
   // If we're already clipping, we need to find the intersection
   // between current clipping area and text clipping area.
-  
+
   wxRectangle clipRect;
   wxRectangle clipRect2;
   long clipX, clipY, clipW, clipH;
   dc->GetClippingBox(&clipX, &clipY, &clipW, &clipH);
   clipRect.x = (int)clipX; clipRect.y = (int)clipY;
   clipRect.width = (int)clipW; clipRect.height = (int)clipH;
-  
+
   bool alreadyClipping = TRUE;
 
   if (clipRect.x == 0 && clipRect.y == 0 && clipRect.width == 0 && clipRect.height == 0)
@@ -1658,13 +1709,13 @@ void wxGenericGrid::DrawBitmapRect(wxDC *dc, wxBitmap *bitmap, wxRectangle *rect
 
   if (alreadyClipping)
     dc->DestroyClippingRegion();
-  
+
   dc->SetClippingRegion(clipRect2.x, clipRect2.y, clipRect2.width, clipRect2.height);
   float bitmapWidth, bitmapHeight;
-  
+
   bitmapWidth = bitmap->GetWidth();
   bitmapHeight = bitmap->GetHeight();
-  
+
   // Do alignment
   long x,y;
   switch (flag)
@@ -1691,10 +1742,10 @@ void wxGenericGrid::DrawBitmapRect(wxDC *dc, wxBitmap *bitmap, wxRectangle *rect
   }
   wxMemoryDC dcTemp;
   dcTemp.SelectObject(*bitmap);
-  
+
   dc->Blit( (long)x, (long)y, (long)bitmapWidth, (long)bitmapHeight, &dcTemp, 0, 0);
   dcTemp.SelectObject(wxNullBitmap);
-  
+
   dc->DestroyClippingRegion();
 
   // Restore old clipping
@@ -1735,7 +1786,7 @@ void wxGenericGrid::RefreshCell(int row, int col, bool setText)
     // Don't refresh within a pair of batch brackets
     if (GetBatchCount() > 0)
         return;
-      
+
     int cw, ch;
     GetClientSize(&cw, &ch);
 
@@ -1767,7 +1818,7 @@ void wxGenericGrid::RefreshCell(int row, int col, bool setText)
 wxString& wxGenericGrid::GetCellValue(int row, int col)
 {
   static wxString emptyString("");
- 
+
   wxGridCell *cell = GetCell(row, col);
   if (cell)
     return cell->GetTextValue();
@@ -1923,7 +1974,7 @@ void wxGenericGrid::SetEditable(bool edit)
   int cw, ch;
   int m_scrollWidth = 16;
   GetClientSize(&cw, &ch);
-  
+
   if (m_vScrollBar)
     m_vScrollBar->SetSize(cw - m_scrollWidth, m_topOfSheet,
        m_scrollWidth, ch - m_topOfSheet - m_scrollWidth);
@@ -2073,7 +2124,7 @@ bool wxGenericGrid::InsertCols(int pos, int n, bool updateLabels)
 {
   if (pos > m_totalCols)
     return FALSE;
-    
+
   if (!m_gridCells)
     return CreateGrid(1, n);
   else
@@ -2090,7 +2141,7 @@ bool wxGenericGrid::InsertCols(int pos, int n, bool updateLabels)
         newCols[j] = new wxGridCell(this);
       for (j = pos + n; j < m_totalCols + n; j++)
         newCols[j] = cols[j - n];
-        
+
       delete[] cols;
       m_gridCells[i] = newCols;
     }
@@ -2120,8 +2171,12 @@ bool wxGenericGrid::InsertCols(int pos, int n, bool updateLabels)
 
     m_totalCols += n;
 
-    if (updateLabels)
-      OnChangeLabels();
+    if (updateLabels) {
+        //OnChangeLabels();
+        wxGridEvent g_evt(GetId(), wxEVT_GRID_CHANGE_LABELS, this);
+        GetEventHandler()->ProcessEvent(g_evt);
+    }
+
     UpdateDimensions();
     AdjustScrollbars();
     return TRUE;
@@ -2132,13 +2187,13 @@ bool wxGenericGrid::InsertRows(int pos, int n, bool updateLabels)
 {
   if (pos > m_totalRows)
     return FALSE;
-    
+
   if (!m_gridCells)
     return CreateGrid(n, 1);
   else
   {
     int i, j;
-    
+
     wxGridCell ***rows = new wxGridCell **[m_totalRows + n];
 
     // Cells
@@ -2151,7 +2206,7 @@ bool wxGenericGrid::InsertRows(int pos, int n, bool updateLabels)
       for (j = 0; j < m_totalCols; j++)
         rows[i][j] = new wxGridCell(this);
     }
-    
+
     for (i = pos + n; i < m_totalRows + n; i++)
       rows[i] = m_gridCells[i - n];
 
@@ -2183,8 +2238,12 @@ bool wxGenericGrid::InsertRows(int pos, int n, bool updateLabels)
 
     m_totalRows += n;
 
-    if (updateLabels)
-      OnChangeLabels();
+    if (updateLabels) {
+        //OnChangeLabels();
+          wxGridEvent g_evt(GetId(), wxEVT_GRID_CHANGE_LABELS, this);
+          GetEventHandler()->ProcessEvent(g_evt);
+    }
+
     UpdateDimensions();
     AdjustScrollbars();
     return TRUE;
@@ -2209,7 +2268,7 @@ bool wxGenericGrid::DeleteRows(int pos, int n, bool updateLabels)
     return FALSE;
 
   int i;
-    
+
   wxGridCell ***rows = new wxGridCell **[m_totalRows - n];
 
   // Cells
@@ -2243,8 +2302,11 @@ bool wxGenericGrid::DeleteRows(int pos, int n, bool updateLabels)
 
   m_totalRows -= n;
 
-  if (updateLabels)
-    OnChangeLabels();
+  if (updateLabels){
+        //OnChangeLabels();
+        wxGridEvent g_evt(GetId(), wxEVT_GRID_CHANGE_LABELS, this);
+        GetEventHandler()->ProcessEvent(g_evt);
+    }
   UpdateDimensions();
   AdjustScrollbars();
   return TRUE;
@@ -2270,7 +2332,7 @@ bool wxGenericGrid::DeleteCols(int pos, int n, bool updateLabels)
         delete cols[j];
       for (j = pos + n; j < m_totalCols; j++)
         newCols[j-n] = cols[j];
-        
+
       delete[] cols;
       m_gridCells[i] = newCols;
   }
@@ -2296,8 +2358,11 @@ bool wxGenericGrid::DeleteCols(int pos, int n, bool updateLabels)
 
   m_totalCols -= n;
 
-  if (updateLabels)
-    OnChangeLabels();
+  if (updateLabels) {
+        //OnChangeLabels();
+        wxGridEvent g_evt(GetId(), wxEVT_GRID_CHANGE_LABELS, this);
+        GetEventHandler()->ProcessEvent(g_evt);
+    }
   UpdateDimensions();
   AdjustScrollbars();
   return TRUE;
@@ -2307,18 +2372,18 @@ void wxGenericGrid::SetGridCursor(int row, int col)
 {
   if (row >= m_totalRows || col >= m_totalCols)
     return;
-    
+
   if (row == GetCursorRow() && col == GetCursorColumn())
     return;
-    
+
   wxClientDC dc(this);
   dc.BeginDrawing();
-  
+
   SetGridClippingRegion(& dc);
 
   if (m_currentRectVisible)
     HighlightCell(& dc);
-  
+
   m_wCursorRow = row;
   m_wCursorColumn = col;
 
@@ -2337,7 +2402,7 @@ void wxGenericGrid::SetGridCursor(int row, int col)
 /*
  * Grid cell
  */
- 
+
 wxGridCell::wxGridCell(wxGenericGrid *window)
 {
   cellBitmap = (wxBitmap *) NULL;
@@ -2351,14 +2416,14 @@ wxGridCell::wxGridCell(wxGenericGrid *window)
     backgroundColour = window->GetCellBackgroundColour();
   else
     backgroundColour.Set(255,255,255);
-    
+
   if (window)
     font = window->GetCellTextFont();
   else
     font = wxTheFontList->FindOrCreateFont(12, wxSWISS, wxNORMAL, wxNORMAL);
-    
+
   SetBackgroundColour(backgroundColour);
-  
+
   if (window)
     alignment = window->GetCellAlignment();
   else
@@ -2391,9 +2456,12 @@ void wxGenericGrid::OnText(wxCommandEvent& WXUNUSED(ev) )
     grid->HighlightCell(& dc);
     dc.DestroyClippingRegion();
     dc.EndDrawing();
-      
-    grid->OnCellChange(grid->GetCursorRow(), grid->GetCursorColumn());
-      
+
+    //grid->OnCellChange(grid->GetCursorRow(), grid->GetCursorColumn());
+    wxGridEvent g_evt(GetId(), wxEVT_GRID_CELL_CHANGE, grid,
+                      grid->GetCursorRow(), grid->GetCursorColumn());
+    GetEventHandler()->ProcessEvent(g_evt);
+
 //    grid->DrawCellText();
   }
 }
@@ -2409,7 +2477,7 @@ void wxGenericGrid::OnGridScroll(wxScrollEvent& ev)
   wxGenericGrid *win = this;
 
   bool change = FALSE;
-  
+
   if (ev.GetEventObject() == win->GetHorizScrollBar())
   {
     change = (ev.GetPosition() != m_scrollPosX);
@@ -2432,5 +2500,57 @@ void wxGenericGrid::OnGridScroll(wxScrollEvent& ev)
 
   if (change) win->Refresh(FALSE);
   inScroll = FALSE;
-  
+
 }
+
+
+//----------------------------------------------------------------------
+// Default wxGridEvent handlers
+//      (just redirect to the pre-existing virtual methods)
+
+void wxGenericGrid::_OnSelectCell(wxGridEvent& ev)
+{
+    OnSelectCell(ev.m_row, ev.m_col);
+}
+
+void wxGenericGrid::_OnCreateCell(wxGridEvent& ev)
+{
+    ev.m_cell = OnCreateCell();
+}
+
+void wxGenericGrid::_OnChangeLabels(wxGridEvent& ev)
+{
+    OnChangeLabels();
+}
+
+void wxGenericGrid::_OnChangeSelectionLabel(wxGridEvent& ev)
+{
+    OnChangeSelectionLabel();
+}
+
+void wxGenericGrid::_OnCellChange(wxGridEvent& ev)
+{
+    OnCellChange(ev.m_row, ev.m_col);
+}
+
+void wxGenericGrid::_OnCellLeftClick(wxGridEvent& ev)
+{
+    OnCellLeftClick(ev.m_row, ev.m_col, ev.m_x, ev.m_y, ev.m_control, ev.m_shift);
+}
+
+void wxGenericGrid::_OnCellRightClick(wxGridEvent& ev)
+{
+    OnCellRightClick(ev.m_row, ev.m_col, ev.m_x, ev.m_y, ev.m_control, ev.m_shift);
+}
+
+void wxGenericGrid::_OnLabelLeftClick(wxGridEvent& ev)
+{
+    OnLabelLeftClick(ev.m_row, ev.m_col, ev.m_x, ev.m_y, ev.m_control, ev.m_shift);
+}
+
+void wxGenericGrid::_OnLabelRightClick(wxGridEvent& ev)
+{
+    OnLabelRightClick(ev.m_row, ev.m_col, ev.m_x, ev.m_y, ev.m_control, ev.m_shift);
+}
+
+

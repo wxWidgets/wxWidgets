@@ -20,6 +20,7 @@
 #include "wx/panel.h"
 #include "wx/string.h"
 #include "wx/scrolbar.h"
+#include "wx/event.h"
 
 #define wxGRID_DEFAULT_EDIT_WIDTH 300
 #define wxGRID_DEFAULT_EDIT_HEIGHT 27
@@ -40,8 +41,9 @@
 #define wxRIGHT 0x0800
 #endif
 
-#define WXGENERIC_GRID_VERSION  0.4
+#define WXGENERIC_GRID_VERSION  0.5
 
+class WXDLLEXPORT wxGridEvent;
 class WXDLLEXPORT wxGridCell;
 class WXDLLEXPORT wxGenericGrid: public wxPanel
 {
@@ -100,13 +102,13 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   void SetCellTextFont(wxFont *fnt, int row, int col);
   wxBitmap *GetCellBitmap(int row, int col);
   void SetCellBitmap(wxBitmap *bitmap, int row, int col);
-  
+
   // Size accessors
   void SetColumnWidth(int col, int width);
   int GetColumnWidth(int col);
   void SetRowHeight(int row, int height);
   int GetRowHeight(int row);
-  
+
   // Label accessors
   void SetLabelSize(int orientation, int sz);
   int GetLabelSize(int orientation);
@@ -148,24 +150,35 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   virtual void OnSelectCellImplementation(wxDC *dc, int row, int col);
 
   virtual void OnSelectCell(int WXUNUSED(row), int WXUNUSED(col)) {};
+  virtual void _OnSelectCell(wxGridEvent& event);
 
   // Override to create your own class of grid cell
   virtual wxGridCell *OnCreateCell(void);
-  
+  virtual void _OnCreateCell(wxGridEvent& event);
+
   // Override to change labels e.g. creation of grid, inserting/deleting a row/col.
   // By default, auto-labels the grid.
   virtual void OnChangeLabels(void);
+  virtual void _OnChangeLabels(wxGridEvent& event);
 
   // Override to change the label of the edit field when selecting a cell
   // By default, sets it to e.g. A12
   virtual void OnChangeSelectionLabel(void);
-  
+  virtual void _OnChangeSelectionLabel(wxGridEvent& event);
+
   // Override for event processing
   virtual void OnCellChange(int WXUNUSED(row), int WXUNUSED(col)) {};
   virtual void OnCellLeftClick(int WXUNUSED(row), int WXUNUSED(col), int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(control), bool WXUNUSED(shift)) {};
   virtual void OnCellRightClick(int WXUNUSED(row), int WXUNUSED(col), int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(control), bool WXUNUSED(shift)) {};
   virtual void OnLabelLeftClick(int WXUNUSED(row), int WXUNUSED(col), int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(control), bool WXUNUSED(shift)) {};
   virtual void OnLabelRightClick(int WXUNUSED(row), int WXUNUSED(col), int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(control), bool WXUNUSED(shift)) {};
+
+  virtual void _OnCellChange(wxGridEvent& event);
+  virtual void _OnCellLeftClick(wxGridEvent& event);
+  virtual void _OnCellRightClick(wxGridEvent& event);
+  virtual void _OnLabelLeftClick(wxGridEvent& event);
+  virtual void _OnLabelRightClick(wxGridEvent& event);
+
 
   // Activation: call from wxFrame::OnActivate
   void OnActivate(bool active);
@@ -225,7 +238,7 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
 
   int                       m_totalRows;
   int                       m_totalCols;
-  
+
   // Row and column we're currently looking at
   int                       m_scrollPosX;
   int                       m_scrollPosY;
@@ -246,7 +259,7 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   short*                    m_colWidths;   // Dynamically allocated
   short*                    m_rowHeights;  // Dynamically allocated
   int                       m_scrollWidth;    // Vert. scroll width, horiz. scroll height
-  
+
   // Colours
   wxColour                  m_cellTextColour;
   wxColour                  m_cellBackgroundColour;
@@ -260,7 +273,7 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
 
   // Position of Edit control
   wxRectangle               m_editControlPosition;
-  
+
   // Drag status
   int                       m_dragStatus;
   int                       m_dragRowOrCol;
@@ -292,7 +305,7 @@ class WXDLLEXPORT wxGridCell: public wxObject
 
   wxGridCell(wxGenericGrid *window = (wxGenericGrid *) NULL);
   ~wxGridCell(void);
-  
+
   virtual wxString& GetTextValue(void) { return textValue; }
   virtual void SetTextValue(const wxString& str) { textValue = str; }
   inline wxFont *GetFont(void) { return font; }
@@ -319,6 +332,59 @@ class WXDLLEXPORT wxGrid: public wxGenericGrid
     {
     }
 };
+
+
+
+
+class WXDLLEXPORT wxGridEvent : public wxCommandEvent {
+    DECLARE_DYNAMIC_CLASS(wxGridEvent)
+public:
+    wxGridEvent()
+        : wxCommandEvent(), m_row(-1), m_col(-1), m_x(-1), m_y(-1),
+          m_control(0), m_shift(0), m_cell(0)
+        {}
+
+    wxGridEvent(int id, wxEventType type, wxObject* obj,
+                int row=-1, int col=-1, int x=-1, int y=-1,
+                bool control=FALSE, bool shift=FALSE)
+        : wxCommandEvent(type, id), m_row(row), m_col(col), m_x(x), m_y(y),
+          m_control(control), m_shift(shift), m_cell(0)
+        {
+            SetEventObject(obj);
+        }
+
+
+    int         m_row;
+    int         m_col;
+    int         m_x;
+    int         m_y;
+    bool        m_control;
+    bool        m_shift;
+    wxGridCell* m_cell;
+};
+
+const wxEventType wxEVT_GRID_SELECT_CELL      = wxEVT_FIRST + 1575;
+const wxEventType wxEVT_GRID_CREATE_CELL      = wxEVT_FIRST + 1576;
+const wxEventType wxEVT_GRID_CHANGE_LABELS    = wxEVT_FIRST + 1577;
+const wxEventType wxEVT_GRID_CHANGE_SEL_LABEL = wxEVT_FIRST + 1578;
+const wxEventType wxEVT_GRID_CELL_CHANGE      = wxEVT_FIRST + 1579;
+const wxEventType wxEVT_GRID_CELL_LCLICK      = wxEVT_FIRST + 1580;
+const wxEventType wxEVT_GRID_CELL_RCLICK      = wxEVT_FIRST + 1581;
+const wxEventType wxEVT_GRID_LABEL_LCLICK     = wxEVT_FIRST + 1582;
+const wxEventType wxEVT_GRID_LABEL_RCLICK     = wxEVT_FIRST + 1583;
+
+
+typedef void (wxEvtHandler::*wxGridEventFunction)(wxGridEvent&);
+
+#define EVT_GRID_SELECT_CELL(fn)      { wxEVT_GRID_SELECT_CELL,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CREATE_CELL(fn)      { wxEVT_GRID_CREATE_CELL,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CHANGE_LABELS(fn)    { wxEVT_GRID_CHANGE_LABELS,    -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CHANGE_SEL_LABEL(fn) { wxEVT_GRID_CHANGE_SEL_LABEL, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CELL_CHANGE(fn)      { wxEVT_GRID_CELL_CHANGE,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CELL_LCLICK(fn)      { wxEVT_GRID_CELL_LCLICK,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_CELL_RCLICK(fn)      { wxEVT_GRID_CELL_RCLICK,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_LABEL_LCLICK(fn)     { wxEVT_GRID_LABEL_LCLICK,     -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
+#define EVT_GRID_LABEL_RCLICK(fn)     { wxEVT_GRID_LABEL_RCLICK,     -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
 
 #endif
 
