@@ -160,7 +160,7 @@ public:
     // avoid horrible flicker/scrolling back and forth
     virtual void Freeze();
     virtual void Thaw();
-
+    
     // textctrl specific scrolling
     virtual bool ScrollLines(int lines);
     virtual bool ScrollPages(int pages);
@@ -198,6 +198,11 @@ protected:
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }
 
+#ifdef __WXGTK20__
+    // has the control been frozen by Freeze()?
+    bool IsFrozen() const { return m_frozenness > 0; }
+#endif
+ 
 private:
     // change the font for everything in this control
     void ChangeFontGlobally();
@@ -211,6 +216,15 @@ private:
     bool        m_updateFont:1;
 #endif // !__WXGTK20__
     bool        m_ignoreNextUpdate:1;
+
+#ifdef __WXGTK20__
+    // Our text buffer. Convenient, and holds the buffer while using
+    // a dummy one when m_frozenness > 0
+    GtkTextBuffer *m_buffer;
+
+    // number of calls to Freeze() minus number of calls to Thaw()
+    unsigned int m_frozenness;
+#endif  
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl);

@@ -207,6 +207,18 @@ gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
 }
 
 //-----------------------------------------------------------------------------
+// "expose_event" from scrolled window and textview
+//-----------------------------------------------------------------------------
+
+#ifdef __WXGTK20__
+static gboolean
+gtk_text_exposed_callback( GtkWidget *widget, GdkEventExpose *event, wxTextCtrl *win )
+{
+    return TRUE;
+}
+#endif
+
+//-----------------------------------------------------------------------------
 // "changed" from vertical scrollbar
 //-----------------------------------------------------------------------------
 
@@ -285,6 +297,9 @@ void wxTextCtrl::Init()
     SetUpdateFont(FALSE);
     m_text =
     m_vScrollbar = (GtkWidget *)NULL;
+#ifdef __WXGTK20__
+    m_frozenness = 0;
+#endif 
 }
 
 wxTextCtrl::wxTextCtrl( wxWindow *parent,
@@ -325,17 +340,13 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     bool multi_line = (style & wxTE_MULTILINE) != 0;
 
-#ifdef __WXGTK20__
-    GtkTextBuffer *buffer = NULL;
-#endif
-
     if (multi_line)
     {
 #ifdef __WXGTK20__
         // Create view
         m_text = gtk_text_view_new();
 
-        buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
+        m_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
 
         // create scrolled window
         m_widget = gtk_scrolled_window_new( NULL, NULL );
@@ -492,7 +503,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
 #ifdef __WXGTK20__
     if (multi_line)
     {
-        g_signal_connect( G_OBJECT(buffer), "changed",
+        g_signal_connect( G_OBJECT(m_buffer), "changed",
             GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
     }
     else
@@ -546,13 +557,11 @@ wxString wxTextCtrl::GetValue() const
     if (m_windowStyle & wxTE_MULTILINE)
     {
 #ifdef __WXGTK20__
-        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
-
         GtkTextIter start;
-        gtk_text_buffer_get_start_iter( text_buffer, &start );
+        gtk_text_buffer_get_start_iter( m_buffer, &start );
         GtkTextIter end;
-        gtk_text_buffer_get_end_iter( text_buffer, &end );
-        gchar *text = gtk_text_buffer_get_text( text_buffer, &start, &end, TRUE );
+        gtk_text_buffer_get_end_iter( m_buffer, &end );
+        gchar *text = gtk_text_buffer_get_text( m_buffer, &start, &end, TRUE );
 
 #if wxUSE_UNICODE
         wxWCharBuffer buffer( wxConvUTF8.cMB2WX( text ) );
@@ -595,7 +604,7 @@ void wxTextCtrl::SetValue( const wxString &value )
         if (gtk_text_buffer_get_char_count(text_buffer) != 0)
             IgnoreNextTextUpdate();
 
-        gtk_text_buffer_set_text( text_buffer, buffer, strlen(buffer) );
+        gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
 
 #else
         gint len = gtk_text_get_length( GTK_TEXT(m_text) );
@@ -644,17 +653,15 @@ void wxTextCtrl::WriteText( const wxString &text )
             return;
         }
 
-        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
-
         // TODO: Call whatever is needed to delete the selection.
-        wxGtkTextInsert( m_text, text_buffer, m_defaultStyle, buffer );
+        wxGtkTextInsert( m_text, m_buffer, m_defaultStyle, buffer );
 
         GtkAdjustment *adj = gtk_scrolled_window_get_vadjustment( GTK_SCROLLED_WINDOW(m_widget) );
         // Scroll to cursor, but only if scrollbar thumb is at the very bottom
         if ( adj->value == adj->upper - adj->page_size )
         {
             gtk_text_view_scroll_to_mark( GTK_TEXT_VIEW(m_text),
-                    gtk_text_buffer_get_insert( text_buffer ), 0.0, FALSE, 0.0, 1.0 );
+                    gtk_text_buffer_get_insert( m_buffer ), 0.0, FALSE, 0.0, 1.0 );
         }
 #else // GTK 1.x
         // After cursor movements, gtk_text_get_point() is wrong by one.
@@ -740,13 +747,11 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
             return wxEmptyString;
         }
 #else
-        GtkTextBuffer *text_buffer;
-        text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_text));
         GtkTextIter line;
-        gtk_text_buffer_get_iter_at_line(text_buffer,&line,lineNo);
+        gtk_text_buffer_get_iter_at_line(m_buffer,&line,lineNo);
         GtkTextIter end;
-        gtk_text_buffer_get_end_iter(text_buffer,&end );
-        gchar *text = gtk_text_buffer_get_text(text_buffer,&line,&end,TRUE);
+        gtk_text_buffer_get_end_iter(m_buffer,&end );
+        gchar *text = gtk_text_buffer_get_text(m_buffer,&line,&end,TRUE);
         wxString result(wxGTK_CONV_BACK(text));
         g_free(text);
         return result.BeforeFirst(wxT('\n'));
@@ -830,9 +835,7 @@ int wxTextCtrl::GetNumberOfLines() const
     if (m_windowStyle & wxTE_MULTILINE)
     {
 #ifdef __WXGTK20__
-        GtkTextBuffer *buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
-
-        return gtk_text_buffer_get_line_count( buffer );
+        return gtk_text_buffer_get_line_count( m_buffer );
 #else
         gint len = gtk_text_get_length( GTK_TEXT(m_text) );
         char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
@@ -869,14 +872,13 @@ void wxTextCtrl::SetInsertionPoint( long pos )
     if ( IsMultiLine() )
     {
 #ifdef __WXGTK20__
-        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
         GtkTextIter iter;
-        gtk_text_buffer_get_iter_at_offset( text_buffer, &iter, pos );
-        gtk_text_buffer_place_cursor( text_buffer, &iter );
+        gtk_text_buffer_get_iter_at_offset( m_buffer, &iter, pos );
+        gtk_text_buffer_place_cursor( m_buffer, &iter );
         gtk_text_view_scroll_mark_onscreen
         (
             GTK_TEXT_VIEW(m_text),
-            gtk_text_buffer_get_insert( text_buffer )
+            gtk_text_buffer_get_insert( m_buffer )
         );
 #else // GTK+ 1.x
         gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
@@ -913,10 +915,9 @@ void wxTextCtrl::SetInsertionPointEnd()
     if (m_windowStyle & wxTE_MULTILINE)
     {
 #ifdef __WXGTK20__
-        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
         GtkTextIter end;
-        gtk_text_buffer_get_end_iter( text_buffer, &end );
-        gtk_text_buffer_place_cursor( text_buffer, &end );
+        gtk_text_buffer_get_end_iter( m_buffer, &end );
+        gtk_text_buffer_place_cursor( m_buffer, &end );
 #else
         SetInsertionPoint(gtk_text_get_length(GTK_TEXT(m_text)));
 #endif
@@ -1078,14 +1079,12 @@ void wxTextCtrl::SetSelection( long from, long to )
     if (m_windowStyle & wxTE_MULTILINE)
     {
 #ifdef __WXGTK20__
-        GtkTextBuffer *buf = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
-
         GtkTextIter fromi, toi;
-        gtk_text_buffer_get_iter_at_offset( buf, &fromi, from );
-        gtk_text_buffer_get_iter_at_offset( buf, &toi, to );
+        gtk_text_buffer_get_iter_at_offset( m_buffer, &fromi, from );
+        gtk_text_buffer_get_iter_at_offset( m_buffer, &toi, to );
 
-        gtk_text_buffer_place_cursor( buf, &toi );
-        gtk_text_buffer_move_mark_by_name( buf, "selection_bound", &fromi );
+        gtk_text_buffer_place_cursor( m_buffer, &toi );
+        gtk_text_buffer_move_mark_by_name( m_buffer, "selection_bound", &fromi );
 #else
         gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 #endif
@@ -1101,11 +1100,10 @@ void wxTextCtrl::ShowPosition( long pos )
     if (m_windowStyle & wxTE_MULTILINE)
     {
 #ifdef __WXGTK20__
-        GtkTextBuffer *buf = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
         GtkTextIter iter;
-        gtk_text_buffer_get_start_iter( buf, &iter );
+        gtk_text_buffer_get_start_iter( m_buffer, &iter );
         gtk_text_iter_set_offset( &iter, pos );
-        GtkTextMark *mark = gtk_text_buffer_create_mark( buf, NULL, &iter, TRUE );
+        GtkTextMark *mark = gtk_text_buffer_create_mark( m_buffer, NULL, &iter, TRUE );
         gtk_text_view_scroll_to_mark( GTK_TEXT_VIEW(m_text), mark, 0.0, FALSE, 0.0, 0.0 );
 #else // GTK 1.x
         GtkAdjustment *vp = GTK_TEXT(m_text)->vadj;
@@ -1157,15 +1155,13 @@ long wxTextCtrl::GetInsertionPoint() const
 #ifdef __WXGTK20__
     if (m_windowStyle & wxTE_MULTILINE)
     {
-        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
-
         // There is no direct accessor for the cursor, but
         // internally, the cursor is the "mark" called
         // "insert" in the text view's btree structure.
 
-        GtkTextMark *mark = gtk_text_buffer_get_insert( text_buffer );
+        GtkTextMark *mark = gtk_text_buffer_get_insert( m_buffer );
         GtkTextIter cursor;
-        gtk_text_buffer_get_iter_at_mark( text_buffer, &cursor, mark );
+        gtk_text_buffer_get_iter_at_mark( m_buffer, &cursor, mark );
 
         return gtk_text_iter_get_offset( &cursor );
     }
@@ -1185,9 +1181,8 @@ long wxTextCtrl::GetLastPosition() const
     if (m_windowStyle & wxTE_MULTILINE)
     {
 #ifdef __WXGTK20__
-        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
         GtkTextIter end;
-        gtk_text_buffer_get_end_iter( text_buffer, &end );
+        gtk_text_buffer_get_end_iter( m_buffer, &end );
 
         pos = gtk_text_iter_get_offset( &end );
 #else
@@ -1209,14 +1204,11 @@ void wxTextCtrl::Remove( long from, long to )
 #ifdef __WXGTK20__
     if (m_windowStyle & wxTE_MULTILINE)
     {
-        GtkTextBuffer *
-            text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
-
         GtkTextIter fromi, toi;
-        gtk_text_buffer_get_iter_at_offset( text_buffer, &fromi, from );
-        gtk_text_buffer_get_iter_at_offset( text_buffer, &toi, to );
+        gtk_text_buffer_get_iter_at_offset( m_buffer, &fromi, from );
+        gtk_text_buffer_get_iter_at_offset( m_buffer, &toi, to );
 
-        gtk_text_buffer_delete( text_buffer, &fromi, &toi );
+        gtk_text_buffer_delete( m_buffer, &fromi, &toi );
     }
     else // single line
 #endif
@@ -1322,9 +1314,8 @@ void wxTextCtrl::GetSelection(long* fromOut, long* toOut) const
 #ifdef __WXGTK20__
      if (m_windowStyle & wxTE_MULTILINE)
      {
-         GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (m_text));
          GtkTextIter ifrom, ito;
-         if ( gtk_text_buffer_get_selection_bounds(buffer, &ifrom, &ito) )
+         if ( gtk_text_buffer_get_selection_bounds(m_buffer, &ifrom, &ito) )
          {
              haveSelection = TRUE;
              from = gtk_text_iter_get_offset(&ifrom);
@@ -1563,22 +1554,21 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
             return TRUE;
         }
 #ifdef __WXGTK20__
-        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
-        gint l = gtk_text_buffer_get_char_count( text_buffer );
+        gint l = gtk_text_buffer_get_char_count( m_buffer );
 
         wxCHECK_MSG( start >= 0 && end <= l, FALSE,
                      _T("invalid range in wxTextCtrl::SetStyle") );
 
         GtkTextIter starti, endi;
-        gtk_text_buffer_get_iter_at_offset( text_buffer, &starti, start );
-        gtk_text_buffer_get_iter_at_offset( text_buffer, &endi, end );
+        gtk_text_buffer_get_iter_at_offset( m_buffer, &starti, start );
+        gtk_text_buffer_get_iter_at_offset( m_buffer, &endi, end );
 
         // use the attributes from style which are set in it and fall back
         // first to the default style and then to the text control default
         // colours for the others
         wxTextAttr attr = wxTextAttr::Combine(style, m_defaultStyle, this);
 
-        wxGtkTextApplyTagsFromAttr( text_buffer, attr, &starti, &endi );
+        wxGtkTextApplyTagsFromAttr( m_buffer, attr, &starti, &endi );
 
          return TRUE;
 #else
@@ -1737,24 +1727,48 @@ wxSize wxTextCtrl::DoGetBestSize() const
 
 void wxTextCtrl::Freeze()
 {
-#ifndef __WXGTK20__
     if ( HasFlag(wxTE_MULTILINE) )
     {
-        gtk_text_freeze(GTK_TEXT(m_text));
+#ifdef __WXGTK20__
+        if ( !m_frozenness++ )
+        {
+            // freeze textview updates and remove buffer
+            g_signal_connect( G_OBJECT(m_text), "expose_event",
+                GTK_SIGNAL_FUNC(gtk_text_exposed_callback), (gpointer)this);
+            g_signal_connect( G_OBJECT(m_widget), "expose_event",
+                GTK_SIGNAL_FUNC(gtk_text_exposed_callback), (gpointer)this);
+            gtk_widget_set_sensitive(m_widget, false);
+            g_object_ref(m_buffer);
+            gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), gtk_text_buffer_new(NULL));
     }
+#else
+        gtk_text_freeze(GTK_TEXT(m_text));
 #endif
+    }
 }
 
 void wxTextCtrl::Thaw()
 {
-#ifndef __WXGTK20__
     if ( HasFlag(wxTE_MULTILINE) )
     {
+#ifdef __WXGTK20__
+        wxASSERT_MSG( m_frozenness > 0, _T("Thaw() without matching Freeze()") );
+
+        if ( !--m_frozenness )
+        {
+            // Reattach buffer and thaw textview updates
+            gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), m_buffer);
+            g_object_unref(m_buffer);
+            gtk_widget_set_sensitive(m_widget, true);
+            g_signal_handlers_disconnect_by_func(m_widget, (gpointer)gtk_text_exposed_callback, this);
+            g_signal_handlers_disconnect_by_func(m_text, (gpointer)gtk_text_exposed_callback, this);
+        }
+#else
         GTK_TEXT(m_text)->vadj->value = 0.0;
 
         gtk_text_thaw(GTK_TEXT(m_text));
-    }
 #endif
+    }
 }
 
 // ----------------------------------------------------------------------------
