@@ -38,15 +38,6 @@
 #endif
 
 
-//---------------------------------------------------------------------------
-
-//wxHashTable*  wxPyWindows = NULL;
-
-
-wxPoint     wxPyDefaultPosition;        //wxDefaultPosition);
-wxSize      wxPyDefaultSize;            //wxDefaultSize);
-wxString    wxPyEmptyStr("");
-
 
 
 #ifdef __WXMSW__             // If building for win32...
@@ -105,6 +96,11 @@ int  wxPyApp::MainLoop(void) {
 //---------------------------------------------------------------------
 //----------------------------------------------------------------------
 
+#ifdef __WXMSW__
+#include "wx/msw/msvcrt.h"
+#endif
+
+
 int  WXDLLEXPORT wxEntryStart( int argc, char** argv );
 int  WXDLLEXPORT wxEntryInitGui();
 void WXDLLEXPORT wxEntryCleanup();
@@ -113,7 +109,6 @@ void WXDLLEXPORT wxEntryCleanup();
 #ifdef WXP_WITH_THREAD
 PyThreadState*  wxPyEventThreadState = NULL;
 #endif
-static char* __nullArgv[1] = { 0 };
 
 
 // This is where we pick up the first part of the wxEntry functionality...
@@ -121,6 +116,11 @@ static char* __nullArgv[1] = { 0 };
 // wxcmodule is imported.  (Before there is a wxApp object.)
 void __wxPreStart()
 {
+
+#ifdef __WXMSW__
+//    wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+#endif
+
 #ifdef WXP_WITH_THREAD
     PyEval_InitThreads();
     wxPyEventThreadState = PyThreadState_Get();
@@ -158,11 +158,12 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     if (!PyArg_ParseTuple(args, "O", &onInitFunc))
         return NULL;
 
+#if 0  // Try it out without this check, soo how it does...
     if (wxTopLevelWindows.Number() > 0) {
         PyErr_SetString(PyExc_TypeError, "Only 1 wxApp per process!");
         return NULL;
     }
-
+#endif
 
     // This is the next part of the wxEntry functionality...
     PyObject* sysargv = PySys_GetObject("argv");
@@ -248,6 +249,14 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 PyObject* wxPyConstructObject(void* ptr,
                               const char* className,
                               int setThisOwn) {
+    PyObject* obj;
+    PyObject* arg;
+
+    if (!ptr) {
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
     char    buff[64];               // should always be big enough...
     char    swigptr[64];
 
@@ -257,24 +266,30 @@ PyObject* wxPyConstructObject(void* ptr,
     sprintf(buff, "%sPtr", className);
     PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
     if (! classobj) {
-        Py_INCREF(Py_None);
-        return Py_None;
+        //Py_INCREF(Py_None);
+        //return Py_None;
+        char temp[128];
+        sprintf(temp,
+                "*** Unknown class name %s, tell Robin about it please ***",
+                buff);
+        obj = PyString_FromString(temp);
+        return obj;
     }
 
-    PyObject* arg = Py_BuildValue("(s)", swigptr);
-    PyObject* obj = PyInstance_New(classobj, arg, NULL);
+    arg = Py_BuildValue("(s)", swigptr);
+    obj = PyInstance_New(classobj, arg, NULL);
     Py_DECREF(arg);
 
     if (setThisOwn) {
-        PyObject_SetAttrString(obj, "thisown", PyInt_FromLong(1));
+        PyObject* one = PyInt_FromLong(1);
+        PyObject_SetAttrString(obj, "thisown", one);
+        Py_DECREF(one);
     }
 
     return obj;
 }
 
 //---------------------------------------------------------------------------
-
-static unsigned int _wxPyNestCount = 0;
 
 static PyThreadState* myPyThreadState_Get() {
     PyThreadState* current;
@@ -284,7 +299,7 @@ static PyThreadState* myPyThreadState_Get() {
 }
 
 
-HELPEREXPORT bool wxPyRestoreThread() {
+bool wxPyRestoreThread() {
     // NOTE: The Python API docs state that if a thread already has the
     // interpreter lock and calls PyEval_RestoreThread again a deadlock
     // occurs, so I put in this code as a guard condition since there are
@@ -293,7 +308,6 @@ HELPEREXPORT bool wxPyRestoreThread() {
     // already have the lock.  (I hope!)
     //
 #ifdef WXP_WITH_THREAD
-    _wxPyNestCount += 1;
     if (wxPyEventThreadState != myPyThreadState_Get()) {
         PyEval_RestoreThread(wxPyEventThreadState);
         return TRUE;
@@ -304,12 +318,11 @@ HELPEREXPORT bool wxPyRestoreThread() {
 }
 
 
-HELPEREXPORT void wxPySaveThread(bool doSave) {
+void wxPySaveThread(bool doSave) {
 #ifdef WXP_WITH_THREAD
     if (doSave) {
         wxPyEventThreadState = PyEval_SaveThread();
     }
-    _wxPyNestCount -= 1;
 #endif
 }
 
@@ -371,23 +384,6 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 
 //----------------------------------------------------------------------
 
-wxPyCallbackHelper::wxPyCallbackHelper() {
-    m_class = NULL;
-    m_self = NULL;
-    m_lastFound = NULL;
-    m_incRef = FALSE;
-}
-
-
-wxPyCallbackHelper::~wxPyCallbackHelper() {
-    bool doSave = wxPyRestoreThread();
-    if (m_incRef) {
-        Py_XDECREF(m_self);
-        Py_XDECREF(m_class);
-    }
-    wxPySaveThread(doSave);
-}
-
 wxPyCallbackHelper::wxPyCallbackHelper(const wxPyCallbackHelper& other) {
       m_lastFound = NULL;
       m_self = other.m_self;
@@ -399,9 +395,9 @@ wxPyCallbackHelper::wxPyCallbackHelper(const wxPyCallbackHelper& other) {
 }
 
 
-void wxPyCallbackHelper::setSelf(PyObject* self, PyObject* _class, int incref) {
+void wxPyCallbackHelper::setSelf(PyObject* self, PyObject* klass, int incref) {
     m_self = self;
-    m_class = _class;
+    m_class = klass;
     m_incRef = incref;
     if (incref) {
         Py_INCREF(m_self);
@@ -413,18 +409,21 @@ void wxPyCallbackHelper::setSelf(PyObject* self, PyObject* _class, int incref) {
 // If the object (m_self) has an attibute of the given name, and if that
 // attribute is a method, and if that method's class is not from a base class,
 // then we'll save a pointer to the method so callCallback can call it.
-bool wxPyCallbackHelper::findCallback(const wxString& name) const {
+bool wxPyCallbackHelper::findCallback(const char* name) const {
     wxPyCallbackHelper* self = (wxPyCallbackHelper*)this; // cast away const
     self->m_lastFound = NULL;
-    if (m_self && PyObject_HasAttrString(m_self, (char*)name.c_str())) {
+    if (m_self && PyObject_HasAttrString(m_self, (char*)name)) {
         PyObject* method;
-        method = PyObject_GetAttrString(m_self, (char*)name.c_str());
+        method = PyObject_GetAttrString(m_self, (char*)name);
 
         if (PyMethod_Check(method) &&
             ((PyMethod_GET_CLASS(method) == m_class) ||
              PyClass_IsSubclass(PyMethod_GET_CLASS(method), m_class))) {
 
             self->m_lastFound = method;
+        }
+        else {
+            Py_DECREF(method);
         }
     }
     return m_lastFound != NULL;
@@ -447,10 +446,16 @@ int wxPyCallbackHelper::callCallback(PyObject* argTuple) const {
 // Invoke the Python callable object, returning the raw PyObject return
 // value.  Caller should DECREF the return value and also call PyEval_SaveThread.
 PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) const {
-    PyObject*   result;
+    PyObject* result;
 
-    result = PyEval_CallObject(m_lastFound, argTuple);
+    // Save a copy of the pointer in case the callback generates another
+    // callback.  In that case m_lastFound will have a different value when
+    // it gets back here...
+    PyObject* method = m_lastFound;
+
+    result = PyEval_CallObject(method, argTuple);
     Py_DECREF(argTuple);
+    Py_DECREF(method);
     if (!result) {
         PyErr_Print();
     }
@@ -458,6 +463,31 @@ PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) const {
 }
 
 
+void wxPyCBH_setSelf(wxPyCallbackHelper& cbh, PyObject* self, PyObject* klass, int incref) {
+    cbh.setSelf(self, klass, incref);
+}
+
+bool wxPyCBH_findCallback(const wxPyCallbackHelper& cbh, const char* name) {
+    return cbh.findCallback(name);
+}
+
+int  wxPyCBH_callCallback(const wxPyCallbackHelper& cbh, PyObject* argTuple) {
+    return cbh.callCallback(argTuple);
+}
+
+PyObject* wxPyCBH_callCallbackObj(const wxPyCallbackHelper& cbh, PyObject* argTuple) {
+    return cbh.callCallbackObj(argTuple);
+}
+
+
+void wxPyCBH_delete(wxPyCallbackHelper* cbh) {
+    bool doSave = wxPyRestoreThread();
+    if (cbh->m_incRef) {
+        Py_XDECREF(cbh->m_self);
+        Py_XDECREF(cbh->m_class);
+    }
+    wxPySaveThread(doSave);
+}
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -547,20 +577,26 @@ wxPyTimer::~wxPyTimer() {
 }
 
 void wxPyTimer::Notify() {
-    bool doSave = wxPyRestoreThread();
-
-    PyObject*   result;
-    PyObject*   args = Py_BuildValue("()");
-
-    result = PyEval_CallObject(func, args);
-    Py_DECREF(args);
-    if (result) {
-        Py_DECREF(result);
-        PyErr_Clear();
-    } else {
-        PyErr_Print();
+    if (!func || func == Py_None) {
+        wxTimer::Notify();
     }
-    wxPySaveThread(doSave);
+    else {
+        bool doSave = wxPyRestoreThread();
+
+        PyObject*   result;
+        PyObject*   args = Py_BuildValue("()");
+
+        result = PyEval_CallObject(func, args);
+        Py_DECREF(args);
+        if (result) {
+            Py_DECREF(result);
+            PyErr_Clear();
+        } else {
+            PyErr_Print();
+        }
+
+        wxPySaveThread(doSave);
+    }
 }
 
 
@@ -967,7 +1003,7 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
     }
 
  error:
-    PyErr_SetString(PyExc_TypeError, "Expected a wxColour object or a string containing a colour name or #RRGGBB.");
+    PyErr_SetString(PyExc_TypeError, "Expected a wxColour object or a string containing a colour name or '#RRGGBB'.");
     return FALSE;
 }
 
@@ -975,6 +1011,7 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
+
 
 
 

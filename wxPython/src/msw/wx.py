@@ -307,6 +307,9 @@ wxSP_ARROW_KEYS = wxc.wxSP_ARROW_KEYS
 wxSP_WRAP = wxc.wxSP_WRAP
 wxSP_NOBORDER = wxc.wxSP_NOBORDER
 wxSP_3D = wxc.wxSP_3D
+wxSP_3DSASH = wxc.wxSP_3DSASH
+wxSP_3DBORDER = wxc.wxSP_3DBORDER
+wxSP_FULLSASH = wxc.wxSP_FULLSASH
 wxSP_BORDER = wxc.wxSP_BORDER
 wxSP_LIVE_UPDATE = wxc.wxSP_LIVE_UPDATE
 wxSP_PERMIT_UNSPLIT = wxc.wxSP_PERMIT_UNSPLIT
@@ -454,6 +457,13 @@ wxLI_HORIZONTAL = wxc.wxLI_HORIZONTAL
 wxLI_VERTICAL = wxc.wxLI_VERTICAL
 wxHW_SCROLLBAR_NEVER = wxc.wxHW_SCROLLBAR_NEVER
 wxHW_SCROLLBAR_AUTO = wxc.wxHW_SCROLLBAR_AUTO
+wxJOYSTICK1 = wxc.wxJOYSTICK1
+wxJOYSTICK2 = wxc.wxJOYSTICK2
+wxJOY_BUTTON1 = wxc.wxJOY_BUTTON1
+wxJOY_BUTTON2 = wxc.wxJOY_BUTTON2
+wxJOY_BUTTON3 = wxc.wxJOY_BUTTON3
+wxJOY_BUTTON4 = wxc.wxJOY_BUTTON4
+wxJOY_BUTTON_ANY = wxc.wxJOY_BUTTON_ANY
 wxDEFAULT = wxc.wxDEFAULT
 wxDECORATIVE = wxc.wxDECORATIVE
 wxROMAN = wxc.wxROMAN
@@ -838,8 +848,8 @@ wxEVT_TIMER = wxc.wxEVT_TIMER
 wxEVT_END_PROCESS = wxc.wxEVT_END_PROCESS
 __version__ = wxc.__version__
 cvar = wxc.cvar
-wxPyDefaultPosition = wxPointPtr(wxc.cvar.wxPyDefaultPosition)
-wxPyDefaultSize = wxSizePtr(wxc.cvar.wxPyDefaultSize)
+wxDefaultPosition = wxPointPtr(wxc.cvar.wxDefaultPosition)
+wxDefaultSize = wxSizePtr(wxc.cvar.wxDefaultSize)
 
 
 #-------------- USER INCLUDE -----------------------
@@ -1520,22 +1530,49 @@ def EVT_TIMER(win, id, func):
 def EVT_END_PROCESS(eh, id, func):
     eh.Connect(id, -1, wxEVT_END_PROCESS, func)
 
+
+# wxJoyStick
+def EVT_JOY_DOWN(win, func):
+    win.Connect(-1, -1, wxEVT_JOY_DOWN, func)
+
+def EVT_JOY_UP(win, func):
+    win.Connect(-1, -1, wxEVT_JOY_UP, func)
+
+def EVT_JOY_MOVE(win, func):
+    win.Connect(-1, -1, wxEVT_JOY_MOVE, func)
+
+def EVT_JOY_ZMOVE(win, func):
+    win.Connect(-1, -1, wxEVT_JOY_ZMOVE, func)
+
+def EVT_JOYSTICK_EVENTS(win, func):
+    win.Connect(-1, -1, wxEVT_JOY_DOWN, func)
+    win.Connect(-1, -1, wxEVT_JOY_UP, func)
+    win.Connect(-1, -1, wxEVT_JOY_MOVE, func)
+    win.Connect(-1, -1, wxEVT_JOY_ZMOVE, func)
+
 #----------------------------------------------------------------------
 
 class wxTimer(wxPyTimer):
-    def __init__(self):
-        wxPyTimer.__init__(self, self.Notify)   # derived class must provide
-                                                # Notify(self) method.
+    def __init__(self, evtHandler = None, id = -1):
+        if evtHandler is None:
+            wxPyTimer.__init__(self, self.Notify)   # derived class must provide
+                                                    # Notify(self) method.
+        else:
+            wxPyTimer.__init__(self, None)
+            self.SetOwner(evtHandler, id)
 
 #----------------------------------------------------------------------
 # Some wxWin methods can take "NULL" as parameters, but the shadow classes
 # expect an object with the SWIG pointer as a 'this' member.  This class
 # and instance fools the shadow into passing the NULL pointer.
 
-class NullObj:
+## NOTE:  This is not needed anymore as None can be passed instead and
+#         will be interpreted as NULL.
+
+class _NullObj:
     this = 'NULL'       # SWIG converts this to (void*)0
 
-NULL = NullObj()
+NULL = _NullObj()
 
 
 #----------------------------------------------------------------------
@@ -1544,15 +1581,15 @@ NULL = NullObj()
 wxColor      = wxColour
 wxNamedColor = wxNamedColour
 
-wxPyDefaultPosition.Set(-1,-1)
-wxPyDefaultSize.Set(-1,-1)
-
 # aliases so that C++ documentation applies:
-wxDefaultPosition  = wxPyDefaultPosition
-wxDefaultSize      = wxPyDefaultSize
+#wxDefaultPosition  = wxPyDefaultPosition
+#wxDefaultSize      = wxPyDefaultSize
+
 
 # backwards compatibility
-wxNoRefBitmap      = wxBitmap
+wxNoRefBitmap       = wxBitmap
+wxPyDefaultPosition = wxDefaultPosition
+wxPyDefaultSize     = wxDefaultSize
 
 #----------------------------------------------------------------------
 # This helper function will take a wxPython object and convert it to

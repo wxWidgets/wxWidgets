@@ -20,7 +20,7 @@ from   wxPython.html import wxHtmlWindow
 
 
 _treeList = [
-    ('New since last release', ['wxProcess',
+    ('New since last release', ['LayoutAnchors', "FancyText",
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -43,14 +43,14 @@ _treeList = [
                   'wxCalendarCtrl',
                   ]),
 
-    ('Window Layout', ['wxLayoutConstraints', 'Sizers', ]),
+    ('Window Layout', ['wxLayoutConstraints', 'LayoutAnchors', 'Sizers', ]),
 
     ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'FontEnumerator',
                         'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
                         'wxImage', 'wxMask', 'PrintFramework', 'wxOGL',
                         'PythonEvents', 'Threads',
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
-                        'wxDragImage',
+                        'wxDragImage', "FancyText",
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
@@ -257,8 +257,7 @@ class wxPythonDemo(wxFrame):
         item, flags = self.tree.HitTest(pt)
         if item == self.tree.GetSelection():
             self.SetOverview(self.tree.GetItemText(item), self.curOverview)
-        else:
-            event.Skip()
+        event.Skip()
 
     #---------------------------------------------
     def OnSelChanged(self, event):

@@ -47,8 +47,8 @@ enum {
 class wxFrame : public wxWindow {
 public:
     wxFrame(wxWindow* parent, const wxWindowID id, const wxString& title,
-            const wxPoint& pos = wxPyDefaultPosition,
-            const wxSize& size = wxPyDefaultSize,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE,
             char* name = "frame");
 
@@ -95,8 +95,8 @@ public:
 class wxMiniFrame : public wxFrame {
 public:
     wxMiniFrame(wxWindow* parent, const wxWindowID id, const wxString& title,
-                const wxPoint& pos = wxPyDefaultPosition,
-                const wxSize& size = wxPyDefaultSize,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
                 char* name = "frame");
 

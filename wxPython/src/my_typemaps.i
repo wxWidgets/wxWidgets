@@ -162,13 +162,55 @@
 static char* wxStringErrorMsg = "string type is required for parameter";
 %}
 
+// TODO:  Which works best???
+
+// Implementation #1
+//  %typemap(python, in) wxString& (PyObject* temp, int tmpDoDecRef) {
+//      temp = $source;
+//      tmpDoDecRef = 0;
+//  #if PYTHON_API_VERSION >= 1009
+//      if (PyUnicode_Check(temp) {
+//          temp = PyUnicode_AsUTF8String(temp);
+//          if (! temp) {
+//              PyErr_SetString(PyExc_TypeError, "Unicode encoding to UTF8 failed.");
+//              return NULL;
+//          }
+//          tmpDoDecRef = 1;
+//  #endif
+//      if (!PyString_Check(temp)) {
+//          PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+//          return NULL;
+//      }
+//      $target = new wxString(PyString_AsString(temp), PyString_Size(temp));
+//  #if PYTHON_API_VERESION >= 1009
+//      if (tmpDoDecRef) Py_DECREF(temp);
+//  #endif
+//  }
+
+
+// Implementation #2
 %typemap(python, in) wxString& {
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check($source) && !PyUnicode_Check($source)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize($source, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    $target = new wxString(tmpPtr, tmpSize);
+#else
     if (!PyString_Check($source)) {
         PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
-    $target = new wxString(PyString_AsString($source), PyString_Size($source));
+    $target = new wxString(PyString_AS_STRING($source), PyString_GET_SIZE($source));
+#endif
 }
+
+
+
+
 %typemap(python, freearg) wxString& {
     if ($target)
         delete $source;
@@ -222,7 +264,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 
 //---------------------------------------------------------------------------
 // Typemap to convert strings to wxColour.  Two string formats are accepted,
-// either a colour name, for a hex colour spec like "#RRGGBB"
+// either a colour name, or a hex colour spec like "#RRGGBB"
 
 %typemap(python,in) wxColour& (wxColour temp) {
     $target = &temp;

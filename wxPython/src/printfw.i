@@ -98,6 +98,20 @@ public:
 
 //----------------------------------------------------------------------
 
+#ifdef __WXMSW__
+class  wxPrinterDC : public wxDC {
+public:
+    wxPrinterDC(const wxPrintData& printData);
+    %name(wxPrinterDC2) wxPrinterDC(const wxString& driver,
+                                    const wxString& device,
+                                    const wxString& output,
+                                    bool interactive = TRUE,
+                                    int orientation = wxPORTRAIT);
+};
+#endif
+
+//---------------------------------------------------------------------------
+
 class wxPageSetupDialogData {
 public:
     wxPageSetupDialogData();
@@ -334,8 +348,8 @@ public:
 class wxPreviewFrame : public wxFrame {
 public:
     wxPreviewFrame(wxPrintPreview* preview, wxFrame* parent, const wxString& title,
-                   const wxPoint& pos = wxPyDefaultPosition,
-                   const wxSize&  size = wxPyDefaultSize,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize&  size = wxDefaultSize,
                    long style = wxDEFAULT_FRAME_STYLE,
                    char* name = "frame");
 

@@ -66,14 +66,15 @@ class TestListCtrlPanel(wxPanel):
         tID = wxNewId()
 
         self.il = wxImageList(16, 16)
-        idx1 = self.il.Add(wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))
+        bmp = wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP)
+        idx1 = self.il.AddWithColourMask(bmp, wxWHITE)
 
         self.list = wxListCtrl(self, tID,
                                style=wxLC_REPORT|wxSUNKEN_BORDER)
         self.list.SetImageList(self.il, wxIMAGE_LIST_SMALL)
 
+        #  Why doesn't this show up on MSW???
         self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
-        wxToolTip_Enable(true)
 
         self.list.InsertColumn(0, "Artist")
         self.list.InsertColumn(1, "Title", wxLIST_FORMAT_RIGHT)
@@ -122,9 +123,19 @@ class TestListCtrlPanel(wxPanel):
         self.log.WriteText("x, y = %s\n" % str((self.x, self.y)))
         event.Skip()
 
+
+    def getColumnText(self, index, col):
+        item = self.list.GetItem(index, col)
+        return item.GetText()
+
+
     def OnItemSelected(self, event):
         self.currentItem = event.m_itemIndex
-        self.log.WriteText("OnItemSelected: %s\n" % self.list.GetItemText(self.currentItem))
+        self.log.WriteText("OnItemSelected: %s, %s, %s\n" %
+                           (self.list.GetItemText(self.currentItem),
+                            self.getColumnText(self.currentItem, 1),
+                            self.getColumnText(self.currentItem, 2)))
+
 
     def OnItemActivated(self, event):
         self.currentItem = event.m_itemIndex
@@ -148,7 +159,7 @@ class TestListCtrlPanel(wxPanel):
 
     def OnDoubleClick(self, event):
         self.log.WriteText("OnDoubleClick item %s\n" % self.list.GetItemText(self.currentItem))
-
+        event.Skip()
 
     def OnRightClick(self, event):
         self.log.WriteText("OnRightClick %s\n" % self.list.GetItemText(self.currentItem))
@@ -170,6 +181,7 @@ class TestListCtrlPanel(wxPanel):
         EVT_MENU(self, tPopupID5, self.OnPopupFive)
         self.PopupMenu(menu, wxPoint(self.x, self.y))
         menu.Destroy()
+        event.Skip()
 
     def OnPopupOne(self, event):
         self.log.WriteText("Popup one\n")

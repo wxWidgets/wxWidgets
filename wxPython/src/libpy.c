@@ -5,10 +5,14 @@
  * Contains variable linking and pointer type-checking code.
  ************************************************************************/
 
+#include <string.h>
+#include <stdlib.h>
+
+#include "Python.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "Python.h"
 
 /* Definitions for Windows/Unix exporting */
 #if defined(_WIN32) || defined(__WIN32__)
@@ -401,13 +405,32 @@ SWIG_GetPtrObj(PyObject *obj, void **ptr, char *type) {
   if (!PyString_Check(obj)) {
       if (!PyInstance_Check(obj) || !(sobj = PyObject_GetAttrString(obj,"this")))
           return "";
+      // PyObject_GetAttrString increases sobj refcout !
+      Py_DECREF(sobj);
   }
   str = PyString_AsString(sobj);
   return SWIG_GetPtr(str,ptr,type);
 }
 
+
 #ifdef __cplusplus
 }
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -55,10 +55,6 @@ B. You'll usually want to use wxWindows sources that have the same
    version number as the wxPython sources you are using.  (Another
    advantage of using CVS is that you'll get both at the same time.)
 
-   NOTE:  There probably isn't going to be an official 2.2.2 release
-   for wxMSW so I have taken a snapshot of my workspace and made it
-   available at http://alldunn.com/wxPython/dist/others/
-
 C. Once you get the sources be sure to put them in a path without a
    space in it (i.e., NOT c:\Program Files\wx) and set an environment
    variable named WXWIN to this directory.  For example:
@@ -93,7 +89,6 @@ D. Change to the wx2\include\wx\msw directory and copy setup0.h to
 	 wxUSE_DIALUP_MANAGER		    0
 	 wxUSE_DYNLIB_CLASS		    0
 	 wxUSE_DOC_VIEW_ARCHITECTURE	    0
-	 wxUSE_MDI_ARCHITECTURE		    0
 	 wxUSE_PLOT			    0
 	 wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
 

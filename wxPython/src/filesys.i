@@ -75,7 +75,9 @@
 //              Py_DECREF(arg);
 
 //              // set ThisOwn
-//              PyObject_SetAttrString($target, "thisown", PyInt_FromLong(1));
+//              PyObject* one = PyInt_FromLong(1);
+//              PyObject_SetAttrString($target, "thisown", one);
+//              Py_DECREF(one);
 //          }
 //      } else {
 //          Py_INCREF(Py_None);

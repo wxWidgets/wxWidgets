@@ -674,22 +674,49 @@ def EVT_TIMER(win, id, func):
 def EVT_END_PROCESS(eh, id, func):
     eh.Connect(id, -1, wxEVT_END_PROCESS, func)
 
+
+# wxJoyStick
+def EVT_JOY_DOWN(win, func):
+    win.Connect(-1, -1, wxEVT_JOY_DOWN, func)
+
+def EVT_JOY_UP(win, func):
+    win.Connect(-1, -1, wxEVT_JOY_UP, func)
+
+def EVT_JOY_MOVE(win, func):
+    win.Connect(-1, -1, wxEVT_JOY_MOVE, func)
+
+def EVT_JOY_ZMOVE(win, func):
+    win.Connect(-1, -1, wxEVT_JOY_ZMOVE, func)
+
+def EVT_JOYSTICK_EVENTS(win, func):
+    win.Connect(-1, -1, wxEVT_JOY_DOWN, func)
+    win.Connect(-1, -1, wxEVT_JOY_UP, func)
+    win.Connect(-1, -1, wxEVT_JOY_MOVE, func)
+    win.Connect(-1, -1, wxEVT_JOY_ZMOVE, func)
+
 #----------------------------------------------------------------------
 
 class wxTimer(wxPyTimer):
-    def __init__(self):
-        wxPyTimer.__init__(self, self.Notify)   # derived class must provide
-                                                # Notify(self) method.
+    def __init__(self, evtHandler = None, id = -1):
+        if evtHandler is None:
+            wxPyTimer.__init__(self, self.Notify)   # derived class must provide
+                                                    # Notify(self) method.
+        else:
+            wxPyTimer.__init__(self, None)
+            self.SetOwner(evtHandler, id)
 
 #----------------------------------------------------------------------
 # Some wxWin methods can take "NULL" as parameters, but the shadow classes
 # expect an object with the SWIG pointer as a 'this' member.  This class
 # and instance fools the shadow into passing the NULL pointer.
 
-class NullObj:
+## NOTE:  This is not needed anymore as None can be passed instead and
+#         will be interpreted as NULL.
+
+class _NullObj:
     this = 'NULL'       # SWIG converts this to (void*)0
 
-NULL = NullObj()
+NULL = _NullObj()
 
 
 #----------------------------------------------------------------------
@@ -698,15 +725,15 @@ NULL = NullObj()
 wxColor      = wxColour
 wxNamedColor = wxNamedColour
 
-wxPyDefaultPosition.Set(-1,-1)
-wxPyDefaultSize.Set(-1,-1)
-
 # aliases so that C++ documentation applies:
-wxDefaultPosition  = wxPyDefaultPosition
-wxDefaultSize      = wxPyDefaultSize
+#wxDefaultPosition  = wxPyDefaultPosition
+#wxDefaultSize      = wxPyDefaultSize
+
 
 # backwards compatibility
-wxNoRefBitmap      = wxBitmap
+wxNoRefBitmap       = wxBitmap
+wxPyDefaultPosition = wxDefaultPosition
+wxPyDefaultSize     = wxDefaultSize
 
 #----------------------------------------------------------------------
 # This helper function will take a wxPython object and convert it to

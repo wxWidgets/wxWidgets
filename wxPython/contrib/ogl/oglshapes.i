@@ -14,7 +14,7 @@
 %module oglshapes
 
 %{
-#include "helpers.h"
+#include "export.h"
 #include "oglhelpers.h"
 %}
 

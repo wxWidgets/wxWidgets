@@ -13,6 +13,8 @@ from clip_dnd import *
 
 from events import *
 
+from streams import *
+
 from mdi import *
 
 from frames import *
@@ -34,6 +36,10 @@ from image import *
 from printfw import *
 
 from sizers import *
+
+from filesys import *
+
+from utils import *
 import wx
 class wxGLContextPtr :
     def __init__(self,this):

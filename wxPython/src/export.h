@@ -21,9 +21,11 @@
 #include "helpers.h"
 
 
-#define wxPyCoreAPI_IMPORT()     \
-    wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("wxPython.wxc", "wxPyCoreAPI")
-
+static void wxPyCoreAPI_IMPORT() {
+    wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("wxPython.wxc", "wxPyCoreAPI");
+    if (! wxPyCoreAPIPtr)
+        wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("wxc", "wxPyCoreAPI");
+}
 
 #define SWIG_MakePtr(a, b, c)           (wxPyCoreAPIPtr->p_SWIG_MakePtr(a, b, c))
 #define SWIG_GetPtr(a, b, c)            (wxPyCoreAPIPtr->p_SWIG_GetPtr(a, b, c))

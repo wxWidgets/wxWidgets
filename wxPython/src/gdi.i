@@ -31,6 +31,11 @@
 %import _defs.i
 %import misc.i
 
+
+%{
+    static wxString wxPyEmptyStr("");
+%}
+
 //---------------------------------------------------------------------------
 
 //  class wxGDIImage {
@@ -339,6 +344,7 @@ public:
 };
 
 %new wxColour* wxNamedColour(const wxString& colorName);
+
 %{                                      // Alternate 'constructor'
     wxColour* wxNamedColour(const wxString& colorName) {
         return new wxColour(colorName);
@@ -588,15 +594,6 @@ public:
 
 //---------------------------------------------------------------------------
 
-#ifdef __WXMSW__
-class  wxPrinterDC : public wxDC {
-public:
-    wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output,
-                bool interactive = TRUE, int orientation = wxPORTRAIT);
-};
-#endif
-
-//---------------------------------------------------------------------------
 
 #ifdef __WXMSW__
 class wxMetaFileDC : public wxDC {

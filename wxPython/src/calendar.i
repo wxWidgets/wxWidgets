@@ -14,7 +14,7 @@
 
 
 %{
-#include "helpers.h"
+#include "export.h"
 #include <wx/calctrl.h>
 %}
 
@@ -223,6 +223,12 @@ public:
 
 
 //---------------------------------------------------------------------------
+
+%init %{
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
+%}
+
 //---------------------------------------------------------------------------
 
 %pragma(python) include="_calextras.py";

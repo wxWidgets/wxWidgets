@@ -471,6 +471,147 @@ class wxProcess(wxProcessPtr):
 
 
 
+class wxJoystickPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetPosition(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetPosition,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def GetZPosition(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetZPosition,(self,) + _args, _kwargs)
+        return val
+    def GetButtonState(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetButtonState,(self,) + _args, _kwargs)
+        return val
+    def GetPOVPosition(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetPOVPosition,(self,) + _args, _kwargs)
+        return val
+    def GetPOVCTSPosition(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetPOVCTSPosition,(self,) + _args, _kwargs)
+        return val
+    def GetRudderPosition(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetRudderPosition,(self,) + _args, _kwargs)
+        return val
+    def GetUPosition(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetUPosition,(self,) + _args, _kwargs)
+        return val
+    def GetVPosition(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetVPosition,(self,) + _args, _kwargs)
+        return val
+    def GetMovementThreshold(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetMovementThreshold,(self,) + _args, _kwargs)
+        return val
+    def SetMovementThreshold(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_SetMovementThreshold,(self,) + _args, _kwargs)
+        return val
+    def IsOk(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_IsOk,(self,) + _args, _kwargs)
+        return val
+    def GetNumberJoysticks(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetNumberJoysticks,(self,) + _args, _kwargs)
+        return val
+    def GetManufacturerId(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetManufacturerId,(self,) + _args, _kwargs)
+        return val
+    def GetProductId(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetProductId,(self,) + _args, _kwargs)
+        return val
+    def GetProductName(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetProductName,(self,) + _args, _kwargs)
+        return val
+    def GetXMin(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetXMin,(self,) + _args, _kwargs)
+        return val
+    def GetYMin(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetYMin,(self,) + _args, _kwargs)
+        return val
+    def GetZMin(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetZMin,(self,) + _args, _kwargs)
+        return val
+    def GetXMax(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetXMax,(self,) + _args, _kwargs)
+        return val
+    def GetYMax(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetYMax,(self,) + _args, _kwargs)
+        return val
+    def GetZMax(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetZMax,(self,) + _args, _kwargs)
+        return val
+    def GetNumberButtons(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetNumberButtons,(self,) + _args, _kwargs)
+        return val
+    def GetNumberAxes(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetNumberAxes,(self,) + _args, _kwargs)
+        return val
+    def GetMaxButtons(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetMaxButtons,(self,) + _args, _kwargs)
+        return val
+    def GetMaxAxes(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetMaxAxes,(self,) + _args, _kwargs)
+        return val
+    def GetPollingMin(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetPollingMin,(self,) + _args, _kwargs)
+        return val
+    def GetPollingMax(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetPollingMax,(self,) + _args, _kwargs)
+        return val
+    def GetRudderMin(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetRudderMin,(self,) + _args, _kwargs)
+        return val
+    def GetRudderMax(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetRudderMax,(self,) + _args, _kwargs)
+        return val
+    def GetUMin(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetUMin,(self,) + _args, _kwargs)
+        return val
+    def GetUMax(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetUMax,(self,) + _args, _kwargs)
+        return val
+    def GetVMin(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetVMin,(self,) + _args, _kwargs)
+        return val
+    def GetVMax(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_GetVMax,(self,) + _args, _kwargs)
+        return val
+    def HasRudder(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_HasRudder,(self,) + _args, _kwargs)
+        return val
+    def HasZ(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_HasZ,(self,) + _args, _kwargs)
+        return val
+    def HasU(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_HasU,(self,) + _args, _kwargs)
+        return val
+    def HasV(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_HasV,(self,) + _args, _kwargs)
+        return val
+    def HasPOV(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_HasPOV,(self,) + _args, _kwargs)
+        return val
+    def HasPOV4Dir(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_HasPOV4Dir,(self,) + _args, _kwargs)
+        return val
+    def HasPOVCTS(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_HasPOVCTS,(self,) + _args, _kwargs)
+        return val
+    def SetCapture(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_SetCapture,(self,) + _args, _kwargs)
+        return val
+    def ReleaseCapture(self, *_args, **_kwargs):
+        val = apply(misc2c.wxJoystick_ReleaseCapture,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxJoystick instance at %s>" % (self.this,)
+class wxJoystick(wxJoystickPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxJoystick,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -478,6 +619,8 @@ class wxProcess(wxProcessPtr):
 wxFileSelector = misc2c.wxFileSelector
 
 wxGetTextFromUser = misc2c.wxGetTextFromUser
+
+wxGetPasswordFromUser = misc2c.wxGetPasswordFromUser
 
 wxGetSingleChoice = misc2c.wxGetSingleChoice
 
@@ -490,6 +633,15 @@ wxGetNumberFromUser = misc2c.wxGetNumberFromUser
 wxColourDisplay = misc2c.wxColourDisplay
 
 wxDisplayDepth = misc2c.wxDisplayDepth
+
+wxGetDisplayDepth = misc2c.wxGetDisplayDepth
+
+wxDisplaySize = misc2c.wxDisplaySize
+
+def wxGetDisplaySize(*_args, **_kwargs):
+    val = apply(misc2c.wxGetDisplaySize,_args,_kwargs)
+    if val: val = wxSizePtr(val); val.thisown = 1
+    return val
 
 wxSetCursor = misc2c.wxSetCursor
 

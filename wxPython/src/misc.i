@@ -28,6 +28,10 @@
 %import _defs.i
 
 
+%{
+    static wxString wxPyEmptyStr("");
+%}
+
 //---------------------------------------------------------------------------
 
 
@@ -255,7 +259,9 @@ public:
             bool doSave = wxPyRestoreThread();
             wxRect* newRect = new wxRect(dest);
             obj = wxPyConstructObject((void*)newRect, "wxRect");
-            PyObject_SetAttrString(obj, "thisown", PyInt_FromLong(1));
+            PyObject* one = PyInt_FromLong(1);
+            PyObject_SetAttrString(obj, "thisown", one);
+            Py_DECREF(one);
             wxPySaveThread(doSave);
             return obj;
         }

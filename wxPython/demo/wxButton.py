@@ -14,8 +14,10 @@ class TestPanel(wxPanel):
         b.SetForegroundColour(wxWHITE)
         b.SetDefault()
 
-        wxButton(self, 20, "HELLO AGAIN!", wxPoint(20, 60), wxSize(90, 45))
+        b = wxButton(self, 20, "HELLO AGAIN!", wxPoint(20, 60), wxSize(90, 45))
         EVT_BUTTON(self, 20, self.OnClick)
+
+        b.SetToolTipString("This is a Hello button...")
 
         bmp = wxBitmap('bitmaps/test2.bmp', wxBITMAP_TYPE_BMP)
 

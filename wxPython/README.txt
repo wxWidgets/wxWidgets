@@ -73,9 +73,12 @@ Please also see the following files in this directory:
        licence/*       Text of the wxWindows license.
 
 
+
 -----------------
 Robin Dunn
 robin@alldunn.com
+
+
 
 
 

@@ -52,10 +52,12 @@
 //---------------------------------------------------------------------------
 
 
-#define __version__ "0.0.0"   // The real value is now in build.py...
+#define __version__ "0.0.0"   // The real value is now in setup.py...
 
-wxPoint     wxPyDefaultPosition;
-wxSize      wxPyDefaultSize;
+%readonly
+wxPoint     wxDefaultPosition;
+wxSize      wxDefaultSize;
+%readwrite
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -124,6 +126,8 @@ public:
 //----------------------------------------------------------------------
 
 %{
+
+
 extern "C" SWIGEXPORT(void) initwindowsc();
 extern "C" SWIGEXPORT(void) initwindows2c();
 extern "C" SWIGEXPORT(void) initeventsc();
@@ -141,22 +145,60 @@ extern "C" SWIGEXPORT(void) initimagec();
 extern "C" SWIGEXPORT(void) initprintfwc();
 extern "C" SWIGEXPORT(void) initsizersc();
 extern "C" SWIGEXPORT(void) initclip_dndc();
-extern "C" SWIGEXPORT(void) initgridc();
-extern "C" SWIGEXPORT(void) initutilsc();
-extern "C" SWIGEXPORT(void) inithtmlc();
-extern "C" SWIGEXPORT(void) inithtmlhelpc();
-extern "C" SWIGEXPORT(void) initcalendarc();
 extern "C" SWIGEXPORT(void) initstreamsc();
 extern "C" SWIGEXPORT(void) initfilesysc();
 
-extern "C" SWIGEXPORT(void) initglcanvasc();
-extern "C" SWIGEXPORT(void) initoglc();
-extern "C" SWIGEXPORT(void) initstc_c();
+
+
+// Export a C API in a struct.  Other modules will be able to load this from
+// the wxc module and will then have safe access to these functions, even if
+// in another shared library.
+static wxPyCoreAPI API = {
+    SWIG_MakePtr,
+    SWIG_GetPtr,
+    SWIG_GetPtrObj,
+    SWIG_RegisterMapping,
+    SWIG_addvarlink,
+    SWIG_newvarlink,
+
+    wxPySaveThread,
+    wxPyRestoreThread,
+    wxPyConstructObject,
+    wxPy_ConvertList,
+
+    byte_LIST_helper,
+    int_LIST_helper,
+    long_LIST_helper,
+    string_LIST_helper,
+    wxPoint_LIST_helper,
+    wxBitmap_LIST_helper,
+    wxString_LIST_helper,
+    wxAcceleratorEntry_LIST_helper,
+
+    wxSize_helper,
+    wxPoint_helper,
+    wxRealPoint_helper,
+    wxRect_helper,
+    wxColour_helper,
+
+    wxPyCBH_setSelf,
+    wxPyCBH_findCallback,
+    wxPyCBH_callCallback,
+    wxPyCBH_callCallbackObj,
+    wxPyCBH_delete,
+};
+
 %}
 
 
 
 %init %{
+    // Make our API structure a CObject so other modules can import it
+    // from this module.
+    PyObject* v = PyCObject_FromVoidPtr(&API, NULL);
+    PyDict_SetItemString(d,"wxPyCoreAPI", v);
+    Py_XDECREF(v);
+
 
     __wxPreStart();     // initialize the GUI toolkit, if needed.
 
@@ -184,15 +226,6 @@ extern "C" SWIGEXPORT(void) initstc_c();
     initstreamsc();
     initfilesysc();
 
-    initgridc();
-    initutilsc();
-    inithtmlc();
-    inithtmlhelpc();
-    initcalendarc();
-
-    initglcanvasc();
-    initoglc();
-    initstc_c();
 %}
 
 //----------------------------------------------------------------------

@@ -22,6 +22,7 @@
 #include <wx/fontenum.h>
 #include <wx/tipdlg.h>
 #include <wx/process.h>
+#include <wx/joystick.h>
 %}
 
 //----------------------------------------------------------------------
@@ -36,6 +37,10 @@
 %import gdi.i
 %import events.i
 %import streams.i
+
+%{
+    static wxString wxPyEmptyStr("");
+%}
 
 //---------------------------------------------------------------------------
 // Dialog Functions
@@ -55,6 +60,11 @@ wxString wxGetTextFromUser(const wxString& message,
                            wxWindow *parent = NULL,
                            int x = -1, int y = -1,
                            bool centre = TRUE);
+
+wxString wxGetPasswordFromUser(const wxString& message,
+                               const wxString& caption = wxPyEmptyStr,
+                               const wxString& default_value = wxPyEmptyStr,
+                               wxWindow *parent = NULL);
 
 
 // TODO: Need to custom wrap this one...
@@ -92,13 +102,24 @@ long wxGetNumberFromUser(const wxString& message,
                          long value,
                          long min = 0, long max = 100,
                          wxWindow *parent = NULL,
-                         const wxPoint& pos = wxPyDefaultPosition);
+                         const wxPoint& pos = wxDefaultPosition);
 
 //---------------------------------------------------------------------------
 // GDI Functions
 
 bool wxColourDisplay();
+
 int wxDisplayDepth();
+int wxGetDisplayDepth();
+
+void wxDisplaySize(int* OUTPUT, int* OUTPUT);
+wxSize wxGetDisplaySize();
+
+#ifdef FOR_2_3
+void wxDisplaySizeMM(int* OUTPUT, int* OUTPUT);
+wxSize wxGetDisplaySizeMM();
+#endif
+
 void wxSetCursor(wxCursor& cursor);
 
 //----------------------------------------------------------------------
@@ -666,6 +687,60 @@ public:
 long wxExecute(const wxString& command,
                int sync = FALSE,
                wxPyProcess *process = NULL);
+
+//----------------------------------------------------------------------
+
+#ifdef __WXMSW__
+class wxJoystick {
+public:
+    wxJoystick(int joystick = wxJOYSTICK1);
+    wxPoint GetPosition();
+    int GetZPosition();
+    int GetButtonState();
+    int GetPOVPosition();
+    int GetPOVCTSPosition();
+    int GetRudderPosition();
+    int GetUPosition();
+    int GetVPosition();
+    int GetMovementThreshold();
+    void SetMovementThreshold(int threshold) ;
+
+    bool IsOk(void);
+    int GetNumberJoysticks();
+    int GetManufacturerId();
+    int GetProductId();
+    wxString GetProductName();
+    int GetXMin();
+    int GetYMin();
+    int GetZMin();
+    int GetXMax();
+    int GetYMax();
+    int GetZMax();
+    int GetNumberButtons();
+    int GetNumberAxes();
+    int GetMaxButtons();
+    int GetMaxAxes();
+    int GetPollingMin();
+    int GetPollingMax();
+    int GetRudderMin();
+    int GetRudderMax();
+    int GetUMin();
+    int GetUMax();
+    int GetVMin();
+    int GetVMax();
+
+    bool HasRudder();
+    bool HasZ();
+    bool HasU();
+    bool HasV();
+    bool HasPOV();
+    bool HasPOV4Dir();
+    bool HasPOVCTS();
+
+    bool SetCapture(wxWindow* win, int pollingFreq = 0);
+    bool ReleaseCapture();
+};
+#endif
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

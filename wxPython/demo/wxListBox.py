@@ -1,6 +1,51 @@
 
 from wxPython.wx import *
 
+import string
+
+#---------------------------------------------------------------------------
+
+class wxFindPrefixListBox(wxListBox):
+    def __init__(self, parent, id, pos=wxDefaultPosition, size=wxDefaultSize,
+                 choices=[], style=0, validator=wxDefaultValidator):
+        wxListBox.__init__(self, parent, id, pos, size, choices, style, validator)
+        self.typedText = ''
+        EVT_KEY_UP(self, self.OnKey)
+
+
+    def FindPrefix(self, prefix):
+        if prefix:
+            prefix = string.lower(prefix)
+            length = len(prefix)
+            for x in range(self.Number()):
+                text = self.GetString(x)
+                text = string.lower(text)
+                if text[:length] == prefix:
+                    return x
+        return -1
+
+
+    def OnKey(self, evt):
+        key = evt.GetKeyCode()
+        if key >= 32 and key <= 127:
+            self.typedText = self.typedText + chr(key)
+            item = self.FindPrefix(self.typedText)
+            if item != -1:
+                self.SetSelection(item)
+
+        elif key == WXK_BACK:   # backspace removes one character and backs up
+            self.typedText = self.typedText[:-1]
+            if not self.typedText:
+                self.SetSelection(0)
+            else:
+                item = self.FindPrefix(self.typedText)
+                if item != -1:
+                    self.SetSelection(item)
+
+        else:
+            evt.Skip()
+
+
 #---------------------------------------------------------------------------
 
 class TestListBox(wxPanel):
@@ -30,6 +75,16 @@ class TestListBox(wxPanel):
         EVT_LISTBOX(self, 70, self.EvtMultiListBox)
         EVT_LISTBOX_DCLICK(self, 70, self.EvtListBoxDClick)
         self.lb2.SetSelection(0)
+
+
+        sampleList = sampleList + ['test a', 'test aa', 'test aab',
+                                   'test ab', 'test abc', 'test abcc',
+                                   'test abcd' ]
+        sampleList.sort()
+        wxStaticText(self, -1, "Find Prefix:", wxPoint(15, 250))
+        fp = wxFindPrefixListBox(self, -1, wxPoint(80, 250), wxSize(80, 120),
+                                 sampleList, wxLB_SINGLE)
+        fp.SetSelection(0)
 
 
     def EvtListBox(self, event):
