@@ -809,8 +809,7 @@ void wxImage::SetAlpha( unsigned char *alpha )
 
     if ( !alpha )
     {
-        alpha = (unsigned char *)
-                    malloc(M_IMGDATA->m_width*M_IMGDATA->m_height*3);
+        alpha = (unsigned char *)malloc(M_IMGDATA->m_width*M_IMGDATA->m_height);
     }
 
     delete [] M_IMGDATA->m_alpha;
