@@ -1097,6 +1097,17 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     if (g_blockEventsOnDrag)
         return FALSE;
 
+#ifdef __WXGTK20__
+    if (win->m_imContext)
+    {
+        // In GTK 2.0, we need to hand over the key event to an input method
+        // and the IM will emit a "commit" event containing the actual utf8
+        // character.  In that case the EVT_CHAR events will be sent from
+        // there.
+        if ( gtk_im_context_filter_keypress(win->m_imContext, gdk_event) )
+            return TRUE;
+    }
+#endif
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
     if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
@@ -1134,56 +1145,41 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     {
         long key_code;
         KeySym keysym = gdk_event->keyval;
-#ifdef __WXGTK20__
-        // In GTK 2.0, we need to hand over the key event to an input method
-        // and the IM will emit a "commit" event containing the actual utf8
-        // character.  In that case the EVT_CHAR events will be sent from
-        // there.  But only do it this way for non-KeySym keys.
-        key_code = wxTranslateKeySymToWXKey(gdk_event->keyval, FALSE /* isChar */);
-        if ( !key_code && win->m_imContext )
+        // Find key code for EVT_CHAR and EVT_CHAR_HOOK events
+        key_code = wxTranslateKeySymToWXKey(keysym, TRUE /* isChar */);
+        if ( !key_code )
         {
-            gtk_im_context_filter_keypress(win->m_imContext, gdk_event );
-            ret = TRUE;
-        }
-        else
-#endif
-        {
-            // Find key code for EVT_CHAR and EVT_CHAR_HOOK events
-            key_code = wxTranslateKeySymToWXKey(keysym, TRUE /* isChar */);
-            if ( !key_code )
+            if ( gdk_event->length == 1 )
             {
-                if ( gdk_event->length == 1 )
-                {
-                    key_code = (unsigned char)gdk_event->string[0];
-                }
-                else if ( wxIsAsciiKeysym(keysym) )
-                {
-                    // ASCII key
-                    key_code = (unsigned char)keysym;
-                }
+                key_code = (unsigned char)gdk_event->string[0];
+            }
+            else if ( wxIsAsciiKeysym(keysym) )
+            {
+                // ASCII key
+                key_code = (unsigned char)keysym;
+            }
+        }
+
+        if ( key_code )
+        {
+            wxLogTrace(TRACE_KEYS, _T("Char event: %ld"), key_code);
+
+            event.m_keyCode = key_code;
+
+            // Implement OnCharHook by checking ancesteror top level windows
+            wxWindow *parent = win;
+            while (parent && !parent->IsTopLevel())
+                parent = parent->GetParent();
+            if (parent)
+            {
+                event.SetEventType( wxEVT_CHAR_HOOK );
+                ret = parent->GetEventHandler()->ProcessEvent( event );
             }
 
-            if ( key_code )
+            if (!ret)
             {
-                wxLogTrace(TRACE_KEYS, _T("Char event: %ld"), key_code);
-
-                event.m_keyCode = key_code;
-
-                // Implement OnCharHook by checking ancesteror top level windows
-                wxWindow *parent = win;
-                while (parent && !parent->IsTopLevel())
-                    parent = parent->GetParent();
-                if (parent)
-                {
-                    event.SetEventType( wxEVT_CHAR_HOOK );
-                    ret = parent->GetEventHandler()->ProcessEvent( event );
-                }
-
-                if (!ret)
-                {
-                    event.SetEventType(wxEVT_CHAR);
-                    ret = win->GetEventHandler()->ProcessEvent( event );
-                }
+                event.SetEventType(wxEVT_CHAR);
+                ret = win->GetEventHandler()->ProcessEvent( event );
             }
         }
     }
