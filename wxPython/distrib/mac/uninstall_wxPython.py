@@ -42,25 +42,39 @@ COMMON_FILES = [ '/usr/local/bin/*',
 class AccessError(Exception):
     pass
 
+class ReceiptError(Exception):
+    pass
+
 
 class InstalledReceipt(object):
     def __init__(self, rcptPath):
         self.rcptPath = rcptPath
         self.rsrcPath = os.path.join(rcptPath, RSRCDIR)
-        self.bomFile = glob.glob(os.path.join(self.rsrcPath, "*.bom"))[0]
+        bf = glob.glob(os.path.join(self.rsrcPath, "*.bom"))
+        if bf:
+            self.bomFile = bf[0]
+        else:
+            print "WARNING: Unable to find %s/*.bom" % self.rsrcPath
+            raise ReceiptError
         self.findMetaData()
 
 
     def findMetaData(self):
         # TODO: Make this be able to also look at Info.plist files
-        infoFile = glob.glob(os.path.join(self.rsrcPath, "*.info"))[0]
-        self.mdata = {}
-        for line in open(infoFile, "r").readlines():
-            line = line.strip()
-            if line and line[0] != '#':
-                ls = line.split()
-                self.mdata[ls[0]] = line[len(ls[0])+1:]
-
+        infoFiles = glob.glob(os.path.join(self.rsrcPath, "*.info"))
+        if infoFiles:
+            # there should be only one
+            infoFile = infoFiles[0]
+            self.mdata = {}
+            for line in open(infoFile, "r").readlines():
+                line = line.strip()
+                if line and line[0] != '#':
+                    ls = line.split()
+                    self.mdata[ls[0]] = line[len(ls[0])+1:]
+        else:
+            print "WARNING: Unable to find %s/*.info" % self.rsrcPath
+            raise ReceiptError
+            
 
     def getFileList(self):
         p = os.popen("lsbom -s %s" % self.bomFile, "r")
@@ -155,8 +169,11 @@ class InstalledReceipt(object):
 def findInstalled():
     installed = []
     for name in glob.glob(os.path.join(RCPTDIR, "wxPython*")):
-        ir = InstalledReceipt(name)
-        installed.append(ir)
+        try:
+            ir = InstalledReceipt(name)
+            installed.append(ir)
+        except ReceiptError:
+            pass  # just skip it...
 
     return installed
 
