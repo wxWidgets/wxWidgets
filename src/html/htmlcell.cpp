@@ -263,9 +263,6 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
     
                 ESCSEQ("yuml", ""),
 
-                ESCSEQ("#60", "<"),
-                ESCSEQ("#62", ">"),
-
                 /* this one should ALWAYS stay the last one!!! */
                 ESCSEQ("amp", "&"),
                 ESCSEQ("#38", "&"),

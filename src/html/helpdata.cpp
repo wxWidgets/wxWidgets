@@ -300,9 +300,6 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
     
                 ESCSEQ("yuml", ""),
 
-                ESCSEQ("#60", "<"),
-                ESCSEQ("#62", ">"),
-
                 /* this one should ALWAYS stay the last one!!! */
                 ESCSEQ("amp", "&"),
                 ESCSEQ("#38", "&"),
