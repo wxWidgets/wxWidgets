@@ -196,6 +196,7 @@ public:
     wxScrollBar *FindScrollBar(const wxWindow *child, int vert) const;
 
     void OnSize(wxSizeEvent &event);
+    void OnViewSize(wxSizeEvent &event);
     void OnPaint(wxPaintEvent &event);
     void OnScroll(wxScrollEvent &event);
     void OnFocus(wxFocusEvent &event);
@@ -1001,7 +1002,9 @@ wxDynamicSashWindowLeaf::wxDynamicSashWindowLeaf(wxDynamicSashWindowImpl *impl)
 {
     m_impl = impl;
 
-    m_hscroll = m_vscroll = NULL;
+    m_hscroll =
+    m_vscroll = NULL;
+
     m_child = NULL;
 }
 
@@ -1009,7 +1012,6 @@ wxDynamicSashWindowLeaf::~wxDynamicSashWindowLeaf()
 {
     m_hscroll->SetEventHandler(m_hscroll);
     m_vscroll->SetEventHandler(m_vscroll);
-    m_viewport->SetEventHandler(m_viewport);
 
     m_hscroll->Destroy();
     m_vscroll->Destroy();
@@ -1018,24 +1020,25 @@ wxDynamicSashWindowLeaf::~wxDynamicSashWindowLeaf()
 
 bool wxDynamicSashWindowLeaf::Create()
 {
-    bool success;
-
     m_hscroll = new wxScrollBar();
     m_vscroll = new wxScrollBar();
     m_viewport = new wxWindow();
 
-    if (!m_hscroll || !m_vscroll || !m_viewport)
-    {
-        return false;
-    }
-
     wxDynamicSashWindowImpl *add_child_target = m_impl->m_add_child_target;
     m_impl->m_add_child_target = NULL;
-    success = m_hscroll->Create(m_impl->m_container, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                wxSB_HORIZONTAL);
-    success = success && m_vscroll->Create(m_impl->m_container, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                            wxSB_VERTICAL);
-    success = success && m_viewport->Create(m_impl->m_container, wxID_ANY);
+
+    bool success = m_hscroll->Create(m_impl->m_container, wxID_ANY,
+                                     wxDefaultPosition, wxDefaultSize,
+                                     wxSB_HORIZONTAL);
+    if ( success )
+        success = m_vscroll->Create(m_impl->m_container, wxID_ANY,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    wxSB_VERTICAL);
+    if ( success )
+        success = m_viewport->Create(m_impl->m_container, wxID_ANY);
+    if ( !success )
+        return false;
+
     m_impl->m_add_child_target = add_child_target;
 
     wxCursor cursor(wxCURSOR_ARROW);
@@ -1043,7 +1046,13 @@ bool wxDynamicSashWindowLeaf::Create()
     m_vscroll->SetCursor(cursor);
     m_viewport->SetCursor(cursor);
 
-    m_viewport->SetEventHandler(this);
+    // the viewport must resize its child when it is itself resized, but it's
+    // more convenient to do it in our own method instead of deriving a new
+    // class just for this: this is why we pass this as last Connect() argument
+    m_viewport->Connect(wxEVT_SIZE,
+                        wxSizeEventHandler(wxDynamicSashWindowLeaf::OnViewSize),
+                        NULL, this);
+
     Connect(wxEVT_DYNAMIC_SASH_REPARENT,
             wxEventHandler(wxDynamicSashWindowLeaf::OnReparent));
 
@@ -1107,7 +1116,7 @@ bool wxDynamicSashWindowLeaf::Create()
 
     m_impl->m_container->Layout();
 
-    return success;
+    return true;
 }
 
 void wxDynamicSashWindowLeaf::AddChild(wxWindow *window)
@@ -1208,7 +1217,12 @@ wxDynamicSashWindowLeaf::FindScrollBar(const wxWindow *child, int vert) const
 void wxDynamicSashWindowLeaf::OnSize(wxSizeEvent &WXUNUSED(event))
 {
     m_impl->m_container->Refresh();
-    ResizeChild(m_viewport->GetSize());
+}
+
+void wxDynamicSashWindowLeaf::OnViewSize(wxSizeEvent &WXUNUSED(event))
+{
+    if ( m_viewport )
+        ResizeChild(m_viewport->GetSize());
 }
 
 void wxDynamicSashWindowLeaf::OnPaint(wxPaintEvent &WXUNUSED(event))
