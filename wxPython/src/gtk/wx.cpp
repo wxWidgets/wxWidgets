@@ -1449,9 +1449,9 @@ static PyObject *_wrap_wxPyApp_Yield(PyObject *self, PyObject *args, PyObject *k
     PyObject * _resultobj;
     bool  _result;
     wxPyApp * _arg0;
-    bool  _arg1 = (bool ) (0);
+    bool  _arg1 = (bool ) FALSE;
     PyObject * _argo0 = 0;
-    int tempbool1 = (int) (0);
+    int tempbool1 = (int) FALSE;
     char *_kwnames[] = { "self","onlyIfNeeded", NULL };
 
     self = self;
@@ -2575,10 +2575,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxHT_WINDOW_HORZ_SCROLLBAR", PyInt_FromLong((long) wxHT_WINDOW_HORZ_SCROLLBAR));
 	 PyDict_SetItemString(d,"wxHT_WINDOW_CORNER", PyInt_FromLong((long) wxHT_WINDOW_CORNER));
 	 PyDict_SetItemString(d,"wxHT_MAX", PyInt_FromLong((long) wxHT_MAX));
-	 PyDict_SetItemString(d,"FALSE", PyInt_FromLong((long) 0));
-	 PyDict_SetItemString(d,"false", PyInt_FromLong((long) 0));
-	 PyDict_SetItemString(d,"TRUE", PyInt_FromLong((long) 1));
-	 PyDict_SetItemString(d,"true", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"wxEVT_NULL", PyInt_FromLong((long) wxEVT_NULL));
 	 PyDict_SetItemString(d,"wxEVT_FIRST", PyInt_FromLong((long) wxEVT_FIRST));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_BUTTON_CLICKED", PyInt_FromLong((long) wxEVT_COMMAND_BUTTON_CLICKED));
