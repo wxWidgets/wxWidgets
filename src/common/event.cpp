@@ -77,6 +77,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxDropFilesEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxActivateEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxInitDialogEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxSetCursorEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxSysColourChangedEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxUpdateUIEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxNavigationKeyEvent, wxCommandEvent)
@@ -293,9 +294,9 @@ int wxNewEventType()
  *
  */
 
-wxEvent::wxEvent(int theId)
+wxEvent::wxEvent(int theId, wxEventType commandType )
 {
-    m_eventType = wxEVT_NULL;
+    m_eventType = commandType;
     m_eventObject = (wxObject *) NULL;
     m_timeStamp = 0;
     m_id = theId;
@@ -304,18 +305,15 @@ wxEvent::wxEvent(int theId)
     m_isCommandEvent = FALSE;
 }
 
-void wxEvent::CopyObject(wxObject& object_dest) const
+wxEvent::wxEvent(const wxEvent &src)
 {
-    wxEvent *obj = (wxEvent *)&object_dest;
-    wxObject::CopyObject(object_dest);
-
-    obj->m_eventType = m_eventType;
-    obj->m_eventObject = m_eventObject;
-    obj->m_timeStamp = m_timeStamp;
-    obj->m_id = m_id;
-    obj->m_skipped = m_skipped;
-    obj->m_callbackUserData = m_callbackUserData;
-    obj->m_isCommandEvent = m_isCommandEvent;
+    m_eventType = src.m_eventType;
+    m_eventObject = src.m_eventObject;
+    m_timeStamp = src.m_timeStamp;
+    m_id = src.m_id;
+    m_skipped = src.m_skipped;
+    m_callbackUserData = src.m_callbackUserData;
+    m_isCommandEvent = src.m_isCommandEvent;
 }
 
 #if wxUSE_GUI
@@ -326,41 +324,14 @@ void wxEvent::CopyObject(wxObject& object_dest) const
  */
 
 wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
+  : wxEvent( theId, commandType )
 {
-    m_eventType = commandType;
     m_clientData = (char *) NULL;
     m_clientObject = (wxClientData *) NULL;
     m_extraLong = 0;
     m_commandInt = 0;
-    m_id = theId;
     m_commandString = wxEmptyString;
     m_isCommandEvent = TRUE;
-}
-
-void wxCommandEvent::CopyObject(wxObject& obj_d) const
-{
-    wxCommandEvent *obj = (wxCommandEvent *)&obj_d;
-
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_clientData    = m_clientData;
-    obj->m_clientObject  = m_clientObject;
-    obj->m_extraLong     = m_extraLong;
-    obj->m_commandInt    = m_commandInt;
-    obj->m_commandString = m_commandString;
-}
-
-/*
- * Notify events
- */
-
-void wxNotifyEvent::CopyObject(wxObject& obj_d) const
-{
-    wxNotifyEvent *obj = (wxNotifyEvent *)&obj_d;
-
-    wxEvent::CopyObject(obj_d);
-
-    if (!m_bAllow) obj->Veto();
 }
 
 /*
@@ -390,16 +361,6 @@ wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
     m_commandInt = pos;
 }
 
-void wxScrollWinEvent::CopyObject(wxObject& obj_d) const
-{
-    wxScrollWinEvent *obj = (wxScrollWinEvent*)&obj_d;
-
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_extraLong    = m_extraLong;
-    obj->m_commandInt   = m_commandInt;
-}
-
 /*
  * Mouse events
  *
@@ -420,23 +381,6 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
     m_wheelRotation = 0;
     m_wheelDelta = 0;
     m_linesPerAction = 0;
-}
-
-void wxMouseEvent::CopyObject(wxObject& obj_d) const
-{
-    wxMouseEvent *obj = (wxMouseEvent *)&obj_d;
-
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_metaDown = m_metaDown;
-    obj->m_altDown = m_altDown;
-    obj->m_controlDown = m_controlDown;
-    obj->m_shiftDown = m_shiftDown;
-    obj->m_leftDown = m_leftDown;
-    obj->m_rightDown = m_rightDown;
-    obj->m_middleDown = m_middleDown;
-    obj->m_x = m_x;
-    obj->m_y = m_y;
 }
 
 // True if was a button dclick event (1 = left, 2 = middle, 3 = right)
@@ -563,7 +507,7 @@ wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
 
 
 /*
- * Keyboard events
+ * Keyboard event
  *
  */
 
@@ -578,139 +522,6 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
     m_scanCode = 0;
 }
 
-void wxKeyEvent::CopyObject(wxObject& obj_d) const
-{
-    wxKeyEvent *obj = (wxKeyEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_x = m_x;
-    obj->m_y = m_y;
-    obj->m_keyCode = m_keyCode;
-
-    obj->m_shiftDown   = m_shiftDown;
-    obj->m_controlDown = m_controlDown;
-    obj->m_metaDown    = m_metaDown;
-    obj->m_altDown     = m_altDown;
-    obj->m_keyCode     = m_keyCode;
-}
-
-
-/*
- * Misc events
- */
-
-void wxSizeEvent::CopyObject(wxObject& obj_d) const
-{
-    wxSizeEvent *obj = (wxSizeEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_size = m_size;
-}
-
-void wxMoveEvent::CopyObject(wxObject& obj_d) const
-{
-    wxMoveEvent *obj = (wxMoveEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_pos = m_pos;
-}
-
-void wxEraseEvent::CopyObject(wxObject& obj_d) const
-{
-    wxEraseEvent *obj = (wxEraseEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_dc = m_dc;
-}
-
-void wxActivateEvent::CopyObject(wxObject& obj_d) const
-{
-    wxActivateEvent *obj = (wxActivateEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_active = m_active;
-}
-
-void wxMenuEvent::CopyObject(wxObject& obj_d) const
-{
-    wxMenuEvent *obj = (wxMenuEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_menuId = m_menuId;
-}
-
-void wxCloseEvent::CopyObject(wxObject& obj_d) const
-{
-    wxCloseEvent *obj = (wxCloseEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_loggingOff = m_loggingOff;
-    obj->m_veto = m_veto;
-#if WXWIN_COMPATIBILITY
-    obj->m_force = m_force;
-#endif
-    obj->m_canVeto = m_canVeto;
-}
-
-void wxShowEvent::CopyObject(wxObject& obj_d) const
-{
-    wxShowEvent *obj = (wxShowEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_show = m_show;
-}
-
-void wxJoystickEvent::CopyObject(wxObject& obj_d) const
-{
-    wxJoystickEvent *obj = (wxJoystickEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_pos = m_pos;
-    obj->m_zPosition = m_zPosition;
-    obj->m_buttonChange = m_buttonChange;
-    obj->m_buttonState = m_buttonState;
-    obj->m_joyStick = m_joyStick;
-}
-
-void wxDropFilesEvent::CopyObject(wxObject& obj_d) const
-{
-    wxDropFilesEvent *obj = (wxDropFilesEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_noFiles = m_noFiles;
-    obj->m_pos = m_pos;
-    // TODO: Problem with obj->m_files. It should be deallocated by the
-    // destructor of the event.
-}
-
-void wxUpdateUIEvent::CopyObject(wxObject &obj_d) const
-{
-    wxUpdateUIEvent *obj = (wxUpdateUIEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_checked = m_checked;
-    obj->m_enabled = m_enabled;
-    obj->m_text = m_text;
-    obj->m_setText = m_setText;
-    obj->m_setChecked = m_setChecked;
-    obj->m_setEnabled = m_setEnabled;
-}
-
-void wxPaletteChangedEvent::CopyObject(wxObject &obj_d) const
-{
-    wxPaletteChangedEvent *obj = (wxPaletteChangedEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_changedWindow = m_changedWindow;
-}
-
-void wxQueryNewPaletteEvent::CopyObject(wxObject& obj_d) const
-{
-    wxQueryNewPaletteEvent *obj = (wxQueryNewPaletteEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_paletteRealized = m_paletteRealized;
-}
 
 wxWindowCreateEvent::wxWindowCreateEvent(wxWindow *win)
 {
@@ -722,14 +533,6 @@ wxWindowDestroyEvent::wxWindowDestroyEvent(wxWindow *win)
 {
     SetEventType(wxEVT_DESTROY);
     SetEventObject(win);
-}
-
-void wxIdleEvent::CopyObject(wxObject& obj_d) const
-{
-    wxIdleEvent *obj = (wxIdleEvent *)&obj_d;
-    wxEvent::CopyObject(obj_d);
-
-    obj->m_requestMore = m_requestMore;
 }
 
 wxChildFocusEvent::wxChildFocusEvent(wxWindow *win)

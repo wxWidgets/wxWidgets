@@ -36,9 +36,7 @@ each other.
 
 \func{virtual void}{AddPendingEvent}{\param{wxEvent\& }{event}}
 
-Adds an event to be processed later. The function will return immediately and the
-event will get processed in idle time using the \helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent} 
-method.
+This function posts an event to be processed later.
 
 \wxheading{Parameters}
 
@@ -46,26 +44,27 @@ method.
 
 \wxheading{Remarks}
 
-Note that this requires that the event implements 
-\helpref{CopyObject}{wxobjectcopyobject} 
-method so that the event can be duplicated and stored until it gets processed later.
-Not all events in wxWindows currently fully implement this method,
-so you may have to look at the source to verify this.
+The difference between sending an event (using the
+\helpref{ProcessEvent}{wxevthandlerprocessevent} method) and posting it is
+that in the first case the event is processed before the function returns,
+while in the second case, the function returns immediately and the event will
+be processed sometime later (usually during the next event loop iteration).
 
-This methods automatically wakes up idle handling even if the underlying window 
-system is currently idle anyway and thus would not send any idle events. (Waking
-up the idle handling is done calling \helpref{::wxWakeUpIdle}{wxwakeupidle}.)
+A copy of {\it event} is made by the function, so the original can be deleted
+as soon as function returns (it is common that the original is created on the
+stack).  This requires that the \helpref{wxEvent::Clone}{wxeventclone} method
+be implemented by {\it event} so that it can be duplicated and stored until
+it gets processed.
 
-This is also the method to call for inter-thread communication. In
-a multi-threaded program, you will often have to inform the main GUI thread
-about the status of other working threads and this has to be done using this
-method - which also means that this method is thread safe by means of using
-crtical sections where needed.
+This is also the method to call for inter-thread communication---it will
+post events safely between different threads which means that this method is
+thread-safe by using critical sections where needed.  In a multi-threaded
+program, you often need to inform the main GUI thread about the status of
+other working threads and such notification should be done using this method.
 
-% VZ: bad idea IMHO - we're going to have a lot of problems with this
-Furthermore, it may be noted that some ports of wxWindows will probably move
-to using this method more and more in preference over calling ProcessEvent()
-directly so as to avoid problems with reentrant code.
+This method automatically wakes up idle handling if the underlying window 
+system is currently idle and thus would not send any idle events. (Waking
+up idle handling is done calling \helpref{::wxWakeUpIdle}{wxwakeupidle}.)
 
 \membersection{wxEvtHandler::Connect}\label{wxevthandlerconnect}
 
