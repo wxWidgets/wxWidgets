@@ -12,6 +12,10 @@
 #ifdef __GNUG__
 #pragma implementation "ftp.h"
 #endif
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include <memory.h>
 #include <stdlib.h>
 #include "wx/string.h"
