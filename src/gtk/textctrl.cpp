@@ -1102,7 +1102,8 @@ bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
 {
     wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
 
-    wxControl::SetBackgroundColour( colour );
+    if ( !wxControl::SetBackgroundColour( colour ) )
+        return FALSE;
 
     if (!m_widget->window)
         return FALSE;
