@@ -3972,7 +3972,20 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
 
         for (int tries = 0; tries < 2; tries++)
         {
-            entireWidth = 0;
+            // We start with 4 for the border around all items
+            entireWidth = 4;
+                
+            if (tries == 1)
+            {
+                // Now we have decided that the items do not fit into the
+                // client area. Unfortunately, wxWindows sometimes thinks
+                // that it does fit and therefore NO horizontal scrollbar
+                // is inserted. This looks ugly, so we fudge here and make
+                // the calculated width bigger than was actually has been
+                // calculated. This ensures that wxScrolledWindows puts
+                // a scrollbar at the bottom of its client area.
+                entireWidth += SCROLL_UNIT_X;
+            }
             
             // Start at 2,2 so the text does not touch the border
             int x = 2;
@@ -3987,7 +4000,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                 currentlyVisibleLines++;
                 wxListLineData *line = GetLine(i);
                 line->CalculateSize( &dc, iconSpacing );
-                line->SetPosition( x, y, clientWidth, iconSpacing );  // why clientWidth (FIXME)
+                line->SetPosition( x, y, clientWidth, iconSpacing );  // Why clientWidth? (FIXME)
 
                 wxSize sizeLine = GetLineSize(i);
 
@@ -3998,7 +4011,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                 if (currentlyVisibleLines > m_linesPerPage)
                     m_linesPerPage = currentlyVisibleLines;
 
-                // assume that the size of the next one is the same... (FIXME)
+                // Assume that the size of the next one is the same... (FIXME)
                 if ( y + sizeLine.y >= clientHeight )
                 {
                     currentlyVisibleLines = 0;
@@ -4007,17 +4020,21 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                     entireWidth += maxWidth+6;
                     maxWidth = 0;
                 }
+                
+                // We have reached the last item.
                 if ( i == count - 1 )
                     entireWidth += maxWidth;
-                if ((tries == 0) && (entireWidth > clientWidth))
+                    
+                if ( (tries == 0) && (entireWidth+SCROLL_UNIT_X > clientWidth) )
                 {
-                    clientHeight -= 15; // guessed scrollbar height (FIXME)
+                    clientHeight -= 15; // We guess the scrollbar height. (FIXME)
                     m_linesPerPage = 0;
                     currentlyVisibleLines = 0;
                     break;
                 }
+                
                 if ( i == count - 1 )
-                    tries = 1;  // everything fits, no second try required
+                    tries = 1;  // Everything fits, no second try required.
             }
         }
 
