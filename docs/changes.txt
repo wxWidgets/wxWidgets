@@ -28,6 +28,7 @@ wxBase:
 
 - small change to wxStopWatch::Pause() semantics, please see the documentation
 
+
 All (GUI):
 
 - the event type constants are not constants any more but are dynamically
@@ -66,6 +67,11 @@ All (GUI):
 - WXK_NUMLOCK and WXK_SCROLL keys no longer result in EVT_CHAR() events,
   they only generate EVT_KEY_DOWN/UP() ones
 
+- the dialogs use wxApp::GetTopWindow() as the parent implicitly if the
+  parent specified is NULL, use wxDIALOG_NO_PARENT style to prevent this
+  from happening
+
+
 wxMSW:
 
 - build system changed: setup.h is not a static file in include/wx any more
@@ -89,6 +95,7 @@ wxMSW:
   
 - wxHTML apps don't need to include wx/html/msw/wxhtml.rc in resources file
   anymore. The file was removed from wxMSW
+
 
 Unix ports:
 
