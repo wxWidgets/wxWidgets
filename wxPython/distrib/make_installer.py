@@ -168,12 +168,6 @@ Source: "samples\doodle\superdoodle.iss";   DestDir: "{app}\wxPython\samples\doo
 Source: "samples\wxProject\*.txt";          DestDir: "{app}\wxPython\samples\wxProject"; Components: samples
 Source: "samples\wxProject\*.py";           DestDir: "{app}\wxPython\samples\wxProject"; Components: samples
 
-Source: "samples\stxview\*.py";                  DestDir: "{app}\wxPython\samples\stxview"; Components: samples
-Source: "samples\stxview\*.stx";                 DestDir: "{app}\wxPython\samples\stxview"; Components: samples
-Source: "samples\stxview\*.txt";                 DestDir: "{app}\wxPython\samples\stxview"; Components: samples
-Source: "samples\stxview\StructuredText\*.py";   DestDir: "{app}\wxPython\samples\stxview\StructuredText"; Components: samples
-Source: "samples\stxview\StructuredText\*.txt";   DestDir: "{app}\wxPython\samples\stxview\StructuredText"; Components: samples
-
 Source: "samples\StyleEditor\*.txt";           DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
 Source: "samples\StyleEditor\*.py";            DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
 Source: "samples\StyleEditor\*.cfg";           DestDir: "{app}\wxPython\samples\StyleEditor"; Components: samples
@@ -245,10 +239,6 @@ Type: files; Name: "{app}\wxPython\samples\wxProject\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\wxProject\*.pyo";
 Type: files; Name: "{app}\wxPython\samples\StyleEditor\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\StyleEditor\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\stxview\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\stxview\*.pyo";
-Type: files; Name: "{app}\wxPython\samples\stxview\StructuredText\*.pyc";
-Type: files; Name: "{app}\wxPython\samples\stxview\StructuredText\*.pyo";
 Type: files; Name: "{app}\wxPython\samples\frogedit\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\frogedit\*.pyo";
 Type: files; Name: "{app}\wxPython\demo\data\*.pyc";
