@@ -21,11 +21,15 @@
 #include "gsocket.h"
 #endif
 
+#ifndef OTUNIXERRORS
+
 #include <MacHeaders.c>
 #define OTUNIXERRORS 1
 #include <OpenTransport.h>
 #include <OpenTransportProviders.h>
 #include <OpenTptInternet.h>
+
+#endif
 
 /* Definition of GSocket */
 class GSocket
