@@ -383,12 +383,6 @@ public:
             it lit = i->m_iter;
             return citer( i->m_hash, ++lit );
         }
-        citer GetPrevious() const
-        {
-            citer* i = (citer*)this;
-            it lit = i->m_iter;
-            return citer( i->m_hash, ++lit );
-        }
         void SetData( wxObject* e )
         {
             citer* i = (citer*)this;
