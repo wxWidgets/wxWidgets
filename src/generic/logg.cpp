@@ -870,7 +870,7 @@ void wxLogDialog::CreateDetailsControls()
     m_listctrl->SetColumnWidth(1, wxLIST_AUTOSIZE);
 
     // calculate an approximately nice height for the listctrl
-    int height = GetCharHeight()*(count + 2);
+    int height = GetCharHeight()*(count + 4);
 
     // but check that the dialog won't fall fown from the screen
     //
