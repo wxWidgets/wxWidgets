@@ -908,15 +908,6 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
         cset = NULL;
     }
 
-#if wxUSE_FONTMAP
-    cset = new EC_CharSet(name);
-    if ( cset->usable() )
-        return cset;
-
-    delete cset;
-    cset = NULL;
-#endif // wxUSE_FONTMAP
-
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     cset = new CP_CharSet(name);
     if ( cset->usable() )
@@ -925,6 +916,15 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
     delete cset;
     cset = NULL;
 #endif // __WIN32__
+
+#if wxUSE_FONTMAP
+    cset = new EC_CharSet(name);
+    if ( cset->usable() )
+        return cset;
+
+    delete cset;
+    cset = NULL;
+#endif // wxUSE_FONTMAP
 
     wxLogError(_("Cannot convert from encoding '%s'!"), name);
 
