@@ -20,6 +20,7 @@
 class WXDLLEXPORT wxFocusEvent;
 class WXDLLEXPORT wxNavigationKeyEvent;
 class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxWindowBase;
 
 /*
    Implementation note: wxControlContainer is not a real mix-in but rather
