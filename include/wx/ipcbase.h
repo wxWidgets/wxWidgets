@@ -42,8 +42,8 @@ enum wxIPCFormat
   wxIPC_PRIVATE =          20
 };
 
-class WXDLLEXPORT wxDDEServerBase;
-class WXDLLEXPORT wxDDEClientBase;
+class WXDLLEXPORT wxServerBase;
+class WXDLLEXPORT wxClientBase;
 
 class WXDLLEXPORT wxConnectionBase: public wxObject
 {

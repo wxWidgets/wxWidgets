@@ -23,10 +23,11 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_SOCKETS
-
 #ifndef WX_PRECOMP
+#include "wx/defs.h"
 #endif
+
+#if wxUSE_SOCKETS 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -41,7 +42,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxTCPServer, wxServerBase)
 IMPLEMENT_DYNAMIC_CLASS(wxTCPClient, wxClientBase)
-IMPLEMENT_DYNAMIC_CLASS(wxTCPConnection, wxConnectionBase)
+IMPLEMENT_CLASS(wxTCPConnection, wxConnectionBase)
 
 // It seems to be already defined somewhere in the Xt includes.
 #ifndef __XT__
@@ -62,11 +63,11 @@ enum {
 #endif
 
 void Server_OnRequest(wxSocketServer& server,
-		      wxSocketNotify evt,
-		      char *cdata);
+                      wxSocketNotify evt,
+                      char *cdata);
 void Client_OnRequest(wxSocketBase& sock,
-		      wxSocketNotify evt,
-		      char *cdata);
+                      wxSocketNotify evt,
+                      char *cdata);
 
 // ---------------------------------------------------------------------------
 // wxTCPClient

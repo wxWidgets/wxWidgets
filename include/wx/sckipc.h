@@ -11,11 +11,12 @@
 //              (c) 2000 Guillermo Rodriguez <guille@iies.es>
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_SCKIPC_H
 #define _WX_SCKIPC_H
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "sckipc.h"
 #endif
 
 #include "wx/defs.h"
@@ -49,27 +50,13 @@
  *
  */
 
-class wxTCPServer;
-class wxTCPClient;
-class wxTCPConnection: public wxConnectionBase
+class WXDLLEXPORT wxTCPServer;
+class WXDLLEXPORT wxTCPClient;
+
+class WXDLLEXPORT wxTCPConnection: public wxConnectionBase
 {
   DECLARE_DYNAMIC_CLASS(wxTCPConnection)
-
-protected:
-  wxSocketBase *m_sock;
-  wxSocketStream *m_sockstrm;
-  wxDataInputStream *m_codeci;
-  wxDataOutputStream *m_codeco;
-  wxString m_topic;
-
-  friend class wxTCPServer;
-  friend class wxTCPClient;
-  friend void Client_OnRequest(wxSocketBase&,
-                               wxSocketNotify, char *);
-  friend void Server_OnRequest(wxSocketServer&,
-                               wxSocketNotify, char *);
 public:
-
   wxTCPConnection(char *buffer, int size);
   wxTCPConnection();
   virtual ~wxTCPConnection();
@@ -89,14 +76,20 @@ public:
   virtual bool Disconnect(void);
 
   // Callbacks to SERVER - override at will
-  virtual bool OnExecute(const wxString& topic, char *data, int size, wxIPCFormat format) { return FALSE; };
-  virtual char *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format) { return NULL; };
-  virtual bool OnPoke(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format) { return FALSE; };
-  virtual bool OnStartAdvise(const wxString& topic, const wxString& item) { return FALSE; };
-  virtual bool OnStopAdvise(const wxString& topic, const wxString& item) { return FALSE; };
+  virtual bool OnExecute(const wxString& topic, char *data, int size, wxIPCFormat format)
+    { return wxConnectionBase::OnExecute(topic, data, size, format); };
+  virtual char *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format)
+    { return wxConnectionBase::OnRequest(topic, item, size, format); };
+  virtual bool OnPoke(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format)
+    { return wxConnectionBase::OnPoke(topic, item, data, size, format); };
+  virtual bool OnStartAdvise(const wxString& topic, const wxString& item)
+    { return wxConnectionBase::OnStartAdvise(topic, item); };
+  virtual bool OnStopAdvise(const wxString& topic, const wxString& item)
+    { return wxConnectionBase::OnStopAdvise(topic, item); };
 
   // Callbacks to CLIENT - override at will
-  virtual bool OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format) { return FALSE; };
+  virtual bool OnAdvise(const wxString& topic, const wxString& item, char *data, int size, wxIPCFormat format)
+    { return wxConnectionBase::OnAdvise(topic, item, data, size, format); };
 
   // Callbacks to BOTH
 
@@ -105,6 +98,20 @@ public:
 
   // To enable the compressor
   void Compress(bool on);
+
+protected:
+  wxSocketBase *m_sock;
+  wxSocketStream *m_sockstrm;
+  wxDataInputStream *m_codeci;
+  wxDataOutputStream *m_codeco;
+  wxString m_topic;
+
+  friend class wxTCPServer;
+  friend class wxTCPClient;
+  friend void Client_OnRequest(wxSocketBase&,
+                               wxSocketNotify, char *);
+  friend void Server_OnRequest(wxSocketServer&,
+                               wxSocketNotify, char *);
 
 private:
 };
