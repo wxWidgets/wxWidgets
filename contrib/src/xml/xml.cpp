@@ -406,6 +406,7 @@ void wxXmlDocument::CleanUpHandlers()
 void wxXmlDocument::InitStandardHandlers()
 {
     AddHandler(new wxXmlIOHandlerBin);
+    AddHandler(new wxXmlIOHandlerBinZ);
     AddHandler(new wxXmlIOHandlerLibxml);
 }
 
