@@ -39,9 +39,8 @@ USERC("svg.rc");
 #include <wx/toolbar.h>
 #include <wx/svg/dcsvg.h>
 
-#ifndef __WXMSW__
 #include "mondrian.xpm"									     
-#endif									    
+
 #include "bitmaps/new.xpm"
 #include "bitmaps/save.xpm"
 #include "bitmaps/help.xpm"
@@ -253,9 +252,9 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    (void)wxMessageBox(wxT("wxWindows 2.0 SVG 1.0 Test\n"
-        "Author: Chris Elliott (c) 2002\n"
-        "Usage: svg.exe \nClick File | New to show tests\n\n"), wxT("About SVG Test"));
+    (void)wxMessageBox(wxT("wxWindows 2.0 SVG 1.0 Test\n")
+        wxT("Author: Chris Elliott (c) 2002\n")
+        wxT("Usage: svg.exe \nClick File | New to show tests\n\n"), wxT("About SVG Test"));
 }
 
 
@@ -301,12 +300,13 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 }
 
 
-void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
+void MyFrame::OnSize(wxSizeEvent& event)
 {
     int w, h;
     GetClientSize(&w, &h);
 
     GetClientWindow()->SetSize(0, 0, w, h);
+    event.Skip();
 }
 
 
@@ -536,8 +536,8 @@ void MyCanvas::OnDraw(wxDC& dc)
             break ;
 
         case 6:
-            dc.DrawIcon( wxICON(mondrian), 10, 10 );
-            dc.DrawBitmap ( wxBITMAP (svgbitmap), 50,15);
+            dc.DrawIcon( wxIcon(mondrian_xpm), 10, 10 );
+            dc.DrawBitmap ( wxBitmap(svgbitmap_xpm), 50,15);
             s = wxT("Icon and Bitmap ");
             break ;
 
