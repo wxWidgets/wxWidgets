@@ -596,6 +596,10 @@ void WXDLLEXPORT wxMutexGuiLeave();
 #define wxCRIT_SECT_DECLARE(cs) static wxCriticalSection cs
 #define wxCRIT_SECT_LOCKER(name, cs)  wxCriticalSectionLocker name(cs)
 
+// function for checking if we're in the main thread which may be used whether
+// wxUSE_THREADS is 0 or 1
+inline bool wxIsMainThread() { return wxThread::IsMain(); }
+
 #else // !wxUSE_THREADS
 
 // no thread support
@@ -608,6 +612,9 @@ inline void WXDLLEXPORT wxMutexGuiLeave() { }
 #define wxLEAVE_CRIT_SECT(cs)
 #define wxCRIT_SECT_DECLARE(cs)
 #define wxCRIT_SECT_LOCKER(name, cs)
+
+// if there is only one thread, it is always the main one
+inline bool wxIsMainThread() { return true; }
 
 #endif // wxUSE_THREADS/!wxUSE_THREADS
 
