@@ -2,7 +2,7 @@
 wxWindows 2.0 for Windows Change Log
 ------------------------------------
 
-Alpha 11, May ??th 1998
+Alpha 11, June ??th 1998
 -----------------------
 
 - Added thread.h, thread.cpp.
@@ -13,6 +13,8 @@ Alpha 11, May ??th 1998
   wxMenuItem accessors.
 - Added two overloads to wxRegion::Contains. Added
   wxRegion::IsEmpty for a more consistent naming convention.
+- Added Vadim's wxDataObject and wxDropSource.
+- ENTER/LEAVE events now work.
 
 Alpha 10, May 7th 1998
 ----------------------
