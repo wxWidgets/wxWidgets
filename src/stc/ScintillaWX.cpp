@@ -19,6 +19,7 @@
 #include "ExternalLexer.h"
 #include "wx/stc/stc.h"
 #include "PlatWX.h"
+#include <wx/textbuf.h>
 
 //----------------------------------------------------------------------
 // Helper classes
@@ -384,7 +385,7 @@ void ScintillaWX::Paste() {
 void ScintillaWX::CopyToClipboard(const SelectionText& st) {
     if (wxTheClipboard->Open()) {
         wxTheClipboard->UsePrimarySelection(FALSE);
-        wxString text = stc2wx(st.s, st.len);
+        wxString text = wxTextBuffer::Translate(stc2wx(st.s, st.len));
         wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
     }
