@@ -47,14 +47,26 @@
 // wxRadioButton creation
 // ----------------------------------------------------------------------------
 
+
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxRadioButton, wxControl,"wx/radiobut.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxRadioButton)
+	WX_DELEGATE( OnClick , wxEVT_COMMAND_RADIOBUTTON_SELECTED , wxCommandEvent )
+	WX_PROPERTY_SET_AND_GET_BY_REF_RET_BOOL( Font , wxFont , SetFont , GetFont  , )
+	WX_PROPERTY_SET_BY_REF( Label,wxString, SetLabel, GetLabel, wxT("") )
+	WX_PROPERTY( Value ,bool, SetValue, GetValue, )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxRadioButton)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_6( wxRadioButton , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
+#endif
 
-/*
-	TODO PROPERTIES
-
-		label
-		value (bool , 0 )
-*/
 
 void wxRadioButton::Init()
 {

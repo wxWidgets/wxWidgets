@@ -68,16 +68,6 @@
 #include "wx/panel.h"
 #endif
 
-/*
-	notebookpage
-		object
-		object_ref
-		label
-		selected
-		style
-		usenotebooksizer
-*/
-
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -109,6 +99,10 @@
 // event table
 // ----------------------------------------------------------------------------
 
+#include <wx/listimpl.cpp>
+
+WX_DEFINE_LIST( wxNotebookPageInfoList ) ;
+
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
 
@@ -123,9 +117,27 @@ BEGIN_EVENT_TABLE(wxNotebook, wxControl)
 END_EVENT_TABLE()
 
 #if wxUSE_EXTENDED_RTTI
+
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebook, wxControl,"wx/notebook.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebookPageInfo, wxObject , "wx/notebook.h" )
+
+template<> const wxTypeInfo* wxGetTypeInfo( wxNotebookPageInfoList * )
+{
+    static wxCollectionTypeInfo s_typeInfo( (wxTypeInfo*) wxGetTypeInfo( (wxNotebookPageInfo **) NULL) ) ;
+    return &s_typeInfo ;
+}
 
 WX_BEGIN_PROPERTIES_TABLE(wxNotebook)
+    WX_PROPERTY_COLLECTION( PageInfos , wxNotebookPageInfoList , wxNotebookPageInfo* , AddPageInfo , GetPageInfos )
+/*
+	notebookpage
+		object
+		object_ref
+		label
+		selected
+		style
+		usenotebooksizer
+*/
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxNotebook)
@@ -133,8 +145,22 @@ WX_END_HANDLERS_TABLE()
 
 WX_CONSTRUCTOR_4( wxNotebook , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
 
+
+WX_BEGIN_PROPERTIES_TABLE(wxNotebookPageInfo)
+    WX_READONLY_PROPERTY( Page , wxNotebookPage* , GetPage , )
+    WX_READONLY_PROPERTY( Text , wxString , GetText , wxEmptyString )
+    WX_READONLY_PROPERTY( Selected , bool , GetSelected , false )
+    WX_READONLY_PROPERTY( ImageId , int , GetImageId , -1 )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxNotebookPageInfo)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_4( wxNotebookPageInfo , wxNotebookPage* , Page , wxString , Text , bool , Selected , int , ImageId ) 
+
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxNotebookPageInfo, wxObject )
 #endif
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 
@@ -145,6 +171,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 // ----------------------------------------------------------------------------
 // wxNotebook construction
 // ----------------------------------------------------------------------------
+
+const wxNotebookPageInfoList& wxNotebook::GetPageInfos() const
+{
+    wxNotebookPageInfoList* list = const_cast< wxNotebookPageInfoList* >( &m_pageInfos ) ;
+    WX_CLEAR_LIST( wxNotebookPageInfoList , *list ) ;
+    for( int i = 0 ; i < GetPageCount() ; ++i )
+    {
+        wxNotebookPageInfo *info = new wxNotebookPageInfo() ;
+        info->Create( const_cast<wxNotebook*>(this)->GetPage(i) , GetPageText(i) , GetSelection() == i , GetPageImage(i) ) ;
+        list->Append( info ) ;
+    }
+    return m_pageInfos ;
+}
 
 // common part of all ctors
 void wxNotebook::Init()

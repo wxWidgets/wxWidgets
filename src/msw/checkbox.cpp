@@ -47,13 +47,25 @@
 // implementation
 // ============================================================================
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckBox, wxControl,"wx/checkbox.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxCheckBox)
+	WX_DELEGATE( OnClick , wxEVT_COMMAND_CHECKBOX_CLICKED , wxCommandEvent )
+
+	WX_PROPERTY_SET_AND_GET_BY_REF_RET_BOOL( Font , wxFont , SetFont , GetFont  , )
+	WX_PROPERTY_SET_BY_REF( Label,wxString, SetLabel, GetLabel, wxT("") )
+	WX_PROPERTY( Value ,bool, SetValue, GetValue, )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxCheckBox)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_6( wxCheckBox , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
+#endif
 
-/*
-TODO PROPERTIES :
-
-bool "checked" , 0
-*/
 
 // ----------------------------------------------------------------------------
 // wxCheckBox

@@ -32,11 +32,20 @@
 #include "wx/msw/private.h"
 #include <stdio.h>
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticText, wxControl,"wx/stattext.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxStaticText)
+	WX_PROPERTY_SET_BY_REF( Label,wxString, SetLabel, GetLabel, wxT("") )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxStaticText)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_6( wxStaticText , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
-/*
-	TODO PROPERTIES :
-		label
-*/
+#endif
 
 bool wxStaticText::Create(wxWindow *parent,
                           wxWindowID id,

@@ -51,13 +51,15 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxButton, wxControl,"wx/button.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxButton)
 	WX_DELEGATE( OnClick , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent )
-	// default
+
+	WX_PROPERTY_SET_AND_GET_BY_REF_RET_BOOL( Font , wxFont , SetFont , GetFont  , )
+	WX_PROPERTY_SET_BY_REF( Label,wxString, SetLabel, GetLabel, wxT("") )
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxButton)
 WX_END_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_5( wxButton , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size ) 
+WX_CONSTRUCTOR_6( wxButton , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle  ) 
 
 
 #else

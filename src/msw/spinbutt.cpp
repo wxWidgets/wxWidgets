@@ -55,17 +55,29 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinButton, wxControl,"wx/spinbut.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxSpinButton)
+	WX_PROPERTY( Value , int , SetValue, GetValue, 0 )
+	WX_PROPERTY( Min , int , SetMin, GetMin, 0 )
+	WX_PROPERTY( Max , int , SetMax, GetMax, 0 )
 /*
 	TODO PROPERTIES
-
 		style wxSP_VERTICAL | wxSP_ARROW_KEYS
-		value wxSP_DEFAULT_VALUE
-		min wxSP_DEFAULT_MIN
-		max wxSP_DEFAULT_MAX
-
 */
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxSpinButton)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_5( wxSpinButton , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+#else
+IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
+#endif
+
+
 
 // ----------------------------------------------------------------------------
 // wxSpinButton

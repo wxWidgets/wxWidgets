@@ -116,11 +116,22 @@ IMPLEMENT_DYNAMIC_CLASS(wxRichEditModule, wxModule)
 // event tables and other macros
 // ----------------------------------------------------------------------------
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl,"wx/textctrl.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxTextCtrl)
+	WX_PROPERTY_SET_AND_GET_BY_REF_RET_BOOL( Font , wxFont , SetFont , GetFont  , )
+	WX_PROPERTY( Value , wxString , SetValue, GetValue, wxEmptyString )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxTextCtrl)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_6( wxTextCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , Value , wxPoint , Position , wxSize , Size , long , WindowStyle) 
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
-/*
-	TODO PROPERTIES :
-		value
-*/
+#endif
+
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_CHAR(wxTextCtrl::OnChar)

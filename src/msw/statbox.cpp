@@ -43,11 +43,24 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticBox, wxControl,"wx/statbox.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxStaticBox)
+	WX_PROPERTY_SET_BY_REF( Label,wxString, SetLabel, GetLabel, wxT("") )
 /*
 	TODO PROPERTIES :
 		label
 */
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxStaticBox)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_6( wxStaticBox , wxWindow* , Parent , wxWindowID , Id , wxString , Label , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+#else
+IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
+#endif
 
 // ============================================================================
 // implementation

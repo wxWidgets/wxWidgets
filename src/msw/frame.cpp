@@ -83,6 +83,7 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow,"wx/frame.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxFrame)
+	WX_PROPERTY_SET_BY_REF( Title,wxString, SetTitle, GetTitle, wxT("") )
 /*
 	TODO PROPERTIES
 
@@ -94,7 +95,7 @@ WX_END_PROPERTIES_TABLE()
 WX_BEGIN_HANDLERS_TABLE(wxFrame)
 WX_END_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_5( wxFrame , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size ) 
+WX_CONSTRUCTOR_6( wxFrame , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle) 
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
