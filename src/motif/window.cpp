@@ -1282,6 +1282,16 @@ void wxWindow::DoGetPosition(int *x, int *y) const
         CanvasGetPosition(x, y);
         return;
     }
+    // hack for binary compatibility
+    if (IsTopLevel())
+    {
+        wxDialog* dlg = wxDynamicCast(this, wxDialog);
+        if (dlg)
+        {
+            dlg->DoGetPosition_(x, y);
+            return;
+        }
+    }
     Widget widget = (Widget) GetTopWidget();
     Position xx, yy;
     XtVaGetValues(widget, XmNx, &xx, XmNy, &yy, NULL);

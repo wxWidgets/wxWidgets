@@ -395,6 +395,28 @@ void wxDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     XtVaSetValues((Widget) m_mainWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
 }
 
+void wxDialog::DoGetPosition_(int *x, int *y) const
+{
+    Window parent_window = XtWindow((Widget) m_mainWidget),
+        next_parent   = XtWindow((Widget) m_mainWidget),
+        root          = RootWindowOfScreen(XtScreen((Widget) m_mainWidget));
+
+    // search for the parent that is child of ROOT, because the WM may
+    // reparent twice and notify only the next parent (like FVWM)
+    while (next_parent != root) {
+        Window *theChildren; unsigned int n;
+        parent_window = next_parent;
+        XQueryTree(XtDisplay((Widget) m_mainWidget), parent_window, &root,
+            &next_parent, &theChildren, &n);
+        XFree(theChildren); // not needed
+    }
+    int xx, yy; unsigned int dummy;
+    XGetGeometry(XtDisplay((Widget) m_mainWidget), parent_window, &root,
+        &xx, &yy, &dummy, &dummy, &dummy, &dummy);
+    if (x) *x = xx;
+    if (y) *y = yy;
+}
+
 void wxDialog::DoSetClientSize(int width, int height)
 {
     wxWindow::SetSize(-1, -1, width, height);

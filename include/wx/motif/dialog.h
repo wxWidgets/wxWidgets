@@ -114,7 +114,11 @@ protected:
         int sizeFlags = wxSIZE_AUTO);
     
     virtual void DoSetClientSize(int width, int height);
-    
+public:
+    // hack for binary compatibility
+    void DoGetPosition_(int* x, int* y) const;
+private:
+
 private:
     DECLARE_EVENT_TABLE()
 };
