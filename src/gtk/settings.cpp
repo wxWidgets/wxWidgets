@@ -117,7 +117,7 @@ enum wxGtkColourType
     wxGTK_BASE
 };
 
-// wxSystemSettings::GetSystemColour() helper: get the colours from a GTK+
+// wxSystemSettings::GetColour() helper: get the colours from a GTK+
 // widget style, return true if we did get them, false to use defaults
 static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
                                    wxGtkWidgetType type = wxGTK_BUTTON,
@@ -223,7 +223,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         //case wxSYS_COLOUR_3DSHADOW:
             if (!g_systemBtnShadowColour)
             {
-                wxColour faceColour(GetSystemColour(wxSYS_COLOUR_3DFACE));
+                wxColour faceColour(GetColour(wxSYS_COLOUR_3DFACE));
                 g_systemBtnShadowColour =
                    new wxColour((unsigned char) (faceColour.Red() * 0.666),
                                 (unsigned char) (faceColour.Green() * 0.666),
@@ -315,7 +315,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_HIGHLIGHTTEXT:
             if (!g_systemHighlightTextColour)
             {
-                wxColour hclr = GetSystemColour(wxSYS_COLOUR_HIGHLIGHT);
+                wxColour hclr = GetColour(wxSYS_COLOUR_HIGHLIGHT);
                 if (hclr.Red() > 200 && hclr.Green() > 200 && hclr.Blue() > 200)
                     g_systemHighlightTextColour = new wxColour(*wxBLACK);
                 else
