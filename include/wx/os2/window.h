@@ -441,6 +441,8 @@ public:
                         ,WXUINT        uFlags
                        );
 
+    void MoveChildren(int nDiff);
+
 protected:
     // PM can't create some MSW styles natively but can perform these after
     // creation by sending messages
@@ -523,6 +525,8 @@ protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip(wxToolTip* pTip);
 #endif // wxUSE_TOOLTIPS
+
+    int  GetOS2ParentHeight(wxWindowOS2* pParent);
 
 private:
     // common part of all ctors

@@ -113,6 +113,13 @@ public:
     inline         WXHWND   GetStaticMax(void) const { return m_hStaticMax; }
     inline         WXHWND   GetEditValue(void) const { return m_hStaticValue; }
            virtual bool     ContainsHWND(WXHWND hWnd) const;
+                   void     AdjustSubControls( int  nX
+                                              ,int  nY
+                                              ,int  nWidth
+                                              ,int  nHeight
+                                              ,int  nSizeFlags
+                                             );
+    inline         int      GetSizeFlags(void) { return m_nSizeFlags; }
                    void     Command(wxCommandEvent& rEvent);
            virtual WXHBRUSH OnCtlColor( WXHDC    hDC
                                        ,WXHWND   hWnd
@@ -138,6 +145,7 @@ protected:
     int                             m_nTickFreq;
     double                          m_dPixelToRange;
     int                             m_nThumbLength;
+    int                             m_nSizeFlags;
 
     virtual void DoSetSize( int  nX
                            ,int  nY

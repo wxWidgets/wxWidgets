@@ -115,12 +115,12 @@ public:
                    void     GetSize( int* pnX
                                     ,int* pnY
                                    ) const;
-                   void     GetSizeFlags(void) const;
+    inline         int      GetSizeFlags(void) const { return m_nSizeFlags; }
                    void     AdjustButtons( int nX
                                           ,int nY
                                           ,int nWidth
                                           ,int nHeight
-                                          ,int lSizeFlags
+                                          ,int nSizeFlags
                                          );
                    wxString GetString(int nIndex) const;
            virtual wxString GetStringSelection(void) const;
@@ -146,12 +146,6 @@ public:
 
 
 protected:
-            void   AdjustButtons( int  nX
-                               ,int  nY
-                               ,int  nWidth
-                               ,int  nHeight
-                               ,long lSizeFlags
-                              );
     virtual wxSize DoGetBestSize(void) const;
     virtual void   DoSetSize( int nX
                              ,int nY
