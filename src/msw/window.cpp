@@ -1256,7 +1256,7 @@ void wxWindowMSW::OnInternalIdle()
             // changed by the time the OnInternalIdle function is called, so 'state'
             // may be meaningless.
             int state = 0;
-			if ( wxIsShiftDown() )
+            if ( wxIsShiftDown() )
                 state |= MK_SHIFT;
             if ( wxIsCtrlDown() )
                 state |= MK_CONTROL;
@@ -1876,8 +1876,21 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                 case VK_ESCAPE:
                     {
 #if wxUSE_BUTTON
-                        wxButton *btn = wxDynamicCast(FindWindow(wxID_CANCEL),
-                                                      wxButton);
+                        wxButton *btn = wxDynamicCast(FindWindow(wxID_CANCEL),wxButton);
+
+                        // our own wxLogDialog should react to Esc
+                        // without Cancel button but this is a private class
+                        // so let's try recognize it by content
+    #if wxUSE_LOG_DIALOG
+                        if ( !btn &&
+                             wxDynamicCast(this,wxDialog) &&
+                             FindWindow(wxID_MORE) &&
+                             FindWindow(wxID_OK) &&
+                             !FindWindow(wxID_CANCEL) &&
+                             GetTitle().MakeLower().StartsWith(wxTheApp->GetAppName().c_str())
+                             )
+                            btn = wxDynamicCast(FindWindow(wxID_OK),wxButton);
+    #endif // wxUSE_LOG_DIALOG
                         if ( btn && btn->IsEnabled() )
                         {
                             // if we do have a cancel button, do press it
@@ -1918,7 +1931,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             bProcess = false;
                         }
                         // FIXME: this should be handled by
-                        //        wxNavigationKeyEvent handler and not here!!
+                        //        wxNavigationKeyEvent handler and not here!
                         else
                         {
 #if wxUSE_BUTTON

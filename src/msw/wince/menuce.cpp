@@ -48,6 +48,8 @@
 
 #include "wx/msw/wince/resources.h"
 
+#include "wx/stockitem.h"
+
 wxTopLevelWindowMSW::ButtonMenu::ButtonMenu()
 {
     m_id = wxID_ANY;
@@ -81,7 +83,10 @@ void wxTopLevelWindowMSW::ButtonMenu::SetButton(int id, const wxString& label, w
 {
     m_assigned = true;
     m_id = id;
-    m_label = label;
+    if(label.empty() && wxIsStockID(id))
+        m_label = wxGetStockLabel(id);
+    else
+        m_label = label;
     m_menu = subMenu;
 }
 

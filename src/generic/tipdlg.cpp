@@ -211,6 +211,7 @@ wxString wxFileTipProvider::GetTip()
 
 BEGIN_EVENT_TABLE(wxTipDialog, wxDialog)
     EVT_BUTTON(wxID_NEXT_TIP, wxTipDialog::OnNextTip)
+    EVT_BUTTON(wxID_CLOSE, wxTipDialog::OnCancel)
 END_EVENT_TABLE()
 
 wxTipDialog::wxTipDialog(wxWindow *parent,
@@ -226,8 +227,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     // smart phones does not support or do not waste space for wxButtons
 #ifndef __SMARTPHONE__
-    // FIXME: use stock wxID_CLOSE button here!
-    wxButton *btnClose = new wxButton(this, wxID_CANCEL, _("Close"));
+    wxButton *btnClose = new wxButton(this, wxID_CLOSE);
 #endif
 
     m_checkbox = new wxCheckBox(this, wxID_ANY, _("&Show tips at startup"));
@@ -293,7 +293,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     // smart phones does not support or do not waste space for wxButtons
 #ifdef __SMARTPHONE__
     SetRightMenu(wxID_NEXT_TIP, _("Next"));
-    SetLeftMenu(wxID_CANCEL, _("Close"));
+    SetLeftMenu(wxID_CLOSE);
 #else
     bottom->Add( 10,10,1 );
     bottom->Add( btnNext, 0, wxCENTER | wxLEFT, wxLARGESMALL(10,0) );

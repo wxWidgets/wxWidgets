@@ -151,7 +151,7 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
-    EVT_BUTTON(wxID_CANCEL, wxLogDialog::OnOk)
+    EVT_BUTTON(wxID_OK, wxLogDialog::OnOk)
     EVT_BUTTON(wxID_MORE,   wxLogDialog::OnDetails)
 #if wxUSE_FILE
     EVT_BUTTON(wxID_SAVE,   wxLogDialog::OnSave)
@@ -741,12 +741,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     wxBoxSizer *sizerButtons = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizerAll = new wxBoxSizer(wxHORIZONTAL);
 
-    // this "Ok" button has wxID_CANCEL id - not very logical, but this allows
-    // to close the log dialog with <Esc> which wouldn't work otherwise (as it
-    // translates into click on cancel button)
-
-    // FIXME: use stock button here!
-    wxButton *btnOk = new wxButton(this, wxID_CANCEL, _("OK"));
+    wxButton *btnOk = new wxButton(this, wxID_OK);
     sizerButtons->Add(btnOk, 0, wxCENTRE | wxBOTTOM, MARGIN/2);
     m_btnDetails = new wxButton(this, wxID_MORE, ms_details + EXPAND_SUFFIX);
     sizerButtons->Add(m_btnDetails, 0, wxCENTRE | wxTOP, MARGIN/2 - 1);
@@ -805,16 +800,6 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     SetSizeHints(size.x, size.y, m_maxWidth, m_maxHeight);
 
     btnOk->SetFocus();
-
-    // this can't happen any more as we don't use this dialog in this case
-#if 0
-    if ( count == 1 )
-    {
-        // no details... it's easier to disable a button than to change the
-        // dialog layout depending on whether we have details or not
-        m_btnDetails->Disable();
-    }
-#endif // 0
 
     Centre();
 }

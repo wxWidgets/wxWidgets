@@ -128,6 +128,7 @@ bool wxButton::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
+    // remember about stock IDs
     return false;
 }
 
