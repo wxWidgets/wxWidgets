@@ -723,7 +723,7 @@ int wxImage::GetHeight() const
 
 bool wxImage::FindFirstUnusedColour(
             unsigned char *r, unsigned char *g, unsigned char *b,
-            unsigned char startR, unsigned char startG, unsigned char startB)
+            unsigned char startR, unsigned char startG, unsigned char startB) const
 {
     wxImageHistogram histogram;
     unsigned long key;
@@ -930,7 +930,7 @@ bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype, int 
 #endif // wxUSE_STREAMS
 }
 
-bool wxImage::SaveFile( const wxString& filename, int type )
+bool wxImage::SaveFile( const wxString& filename, int type ) const
 {
 #if wxUSE_STREAMS
     wxFileOutputStream stream(filename);
@@ -945,7 +945,7 @@ bool wxImage::SaveFile( const wxString& filename, int type )
     return FALSE;
 }
 
-bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype )
+bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype ) const
 {
 #if wxUSE_STREAMS
     wxFileOutputStream stream(filename);
@@ -1089,7 +1089,7 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
     return handler->LoadFile( this, stream, TRUE/*verbose*/, index );
 }
 
-bool wxImage::SaveFile( wxOutputStream& stream, int type )
+bool wxImage::SaveFile( wxOutputStream& stream, int type ) const
 {
     wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
 
@@ -1102,10 +1102,10 @@ bool wxImage::SaveFile( wxOutputStream& stream, int type )
         return FALSE;
     }
 
-    return handler->SaveFile( this, stream );
+    return handler->SaveFile( (wxImage*)this, stream );
 }
 
-bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype )
+bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
 {
     wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
 
@@ -1118,7 +1118,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype )
         return FALSE;
     }
 
-    return handler->SaveFile( this, stream );
+    return handler->SaveFile( (wxImage*)this, stream );
 }
 #endif // wxUSE_STREAMS
 
@@ -1322,7 +1322,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxImageModule, wxModule)
 // less, in this case it would be invoked as CountColours(256)). Default
 // value for stopafter is -1 (don't care).
 //
-unsigned long wxImage::CountColours( unsigned long stopafter )
+unsigned long wxImage::CountColours( unsigned long stopafter ) const
 {
     wxHashTable h;
     wxObject dummy;
@@ -1352,7 +1352,7 @@ unsigned long wxImage::CountColours( unsigned long stopafter )
 }
 
 
-unsigned long wxImage::ComputeHistogram( wxImageHistogram &h )
+unsigned long wxImage::ComputeHistogram( wxImageHistogram &h ) const
 {
     unsigned char r, g, b;
     unsigned char *p;

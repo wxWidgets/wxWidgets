@@ -168,7 +168,7 @@ public:
     // RGB values than <startR,startG,startB>
     bool FindFirstUnusedColour( unsigned char *r, unsigned char *g, unsigned char *b,
                                 unsigned char startR = 1, unsigned char startG = 0,
-                                unsigned char startB = 0 );
+                                unsigned char startB = 0 ) const;
     // Set image's mask to the area of 'mask' that has <r,g,b> colour
     bool SetMaskFromImage(const wxImage & mask,
                           unsigned char mr, unsigned char mg, unsigned char mb);
@@ -185,12 +185,12 @@ public:
     virtual bool LoadFile( wxInputStream& stream, const wxString& mimetype, int index = -1 );
 #endif
 
-    virtual bool SaveFile( const wxString& name, int type );
-    virtual bool SaveFile( const wxString& name, const wxString& mimetype );
+    virtual bool SaveFile( const wxString& name, int type ) const;
+    virtual bool SaveFile( const wxString& name, const wxString& mimetype ) const;
 
 #if wxUSE_STREAMS
-    virtual bool SaveFile( wxOutputStream& stream, int type );
-    virtual bool SaveFile( wxOutputStream& stream, const wxString& mimetype );
+    virtual bool SaveFile( wxOutputStream& stream, int type ) const;
+    virtual bool SaveFile( wxOutputStream& stream, const wxString& mimetype ) const;
 #endif
 
     bool Ok() const;
@@ -223,7 +223,7 @@ public:
     int GetOptionInt(const wxString& name) const;
     bool HasOption(const wxString& name) const;
 
-    unsigned long CountColours( unsigned long stopafter = (unsigned long) -1 );
+    unsigned long CountColours( unsigned long stopafter = (unsigned long) -1 ) const;
 
     // Computes the histogram of the image and fills a hash table, indexed
     // with integer keys built as 0xRRGGBB, containing wxImageHistogramEntry
@@ -231,7 +231,7 @@ public:
     // with the image colours) and a 'value', which is the number of pixels 
     // in the image with that colour.
     // Returned value: # of entries in the histogram
-    unsigned long ComputeHistogram( wxImageHistogram &h );
+    unsigned long ComputeHistogram( wxImageHistogram &h ) const;
 
     wxImage& operator = (const wxImage& image)
     {
