@@ -51,7 +51,7 @@ when the button is clicked.}
 Default constructor.
 
 \func{}{wxButton}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id}, \param{const wxString\& }{label = wxEmptyString},\rtfsp
-\param{const wxPoint\& }{pos}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
 \param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``button"}}
 
 Constructor, creating and showing a button.
@@ -65,13 +65,13 @@ that, the button will be decorated with stock icons under GTK+ 2.
 
 \docparam{parent}{Parent window. Must not be NULL.}
 
-\docparam{id}{Button identifier. A value of -1 indicates a default value.}
+\docparam{id}{Button identifier. A value of \texttt{wxID\_ANY} indicates a default value.}
 
 \docparam{label}{Text to be displayed on the button.}
 
 \docparam{pos}{Button position.}
 
-\docparam{size}{Button size. If the default size (-1, -1) is specified then the button is sized
+\docparam{size}{Button size. If the default size is specified then the button is sized
 appropriately for the text.}
 
 \docparam{style}{Window style. See \helpref{wxButton}{wxbutton}.}
@@ -93,7 +93,7 @@ Destructor, destroying the button.
 \membersection{wxButton::Create}\label{wxbuttoncreate}
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id}, \param{const wxString\& }{label = wxEmptyString},\rtfsp
-\param{const wxPoint\& }{pos}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
 \param{long}{ style = 0}, \param{const wxValidator\& }{validator}, \param{const wxString\& }{name = ``button"}}
 
 Button creation function for two-step creation. For more details, see
