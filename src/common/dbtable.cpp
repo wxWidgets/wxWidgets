@@ -315,6 +315,7 @@ wxDbTable::~wxDbTable()
 
         if (hstmtDelete)
             if (SQLFreeStmt(hstmtDelete, SQL_DROP) != SQL_SUCCESS)
+                pDb->DispAllErrors(henv, hdbc);
 
         if (hstmtUpdate)
             if (SQLFreeStmt(hstmtUpdate, SQL_DROP) != SQL_SUCCESS)
