@@ -100,6 +100,7 @@ OTHER CHANGES
 Unix:
 
 - wxTaskBarIcon now supports freedesktop.org System Tray protocol
+- security fixes to wxSingleInstanceChecker
 
 
 2.5.2
