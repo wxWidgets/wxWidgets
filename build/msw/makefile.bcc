@@ -44,7 +44,8 @@ WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_regerror.obj \
 	$(OBJS)\wxregex_regfree.obj
 WXZLIB_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -w-8004 -w-8012 -w-8057 $(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) -tWM -w-8004 -w-8008 -w-8012 -w-8057 -w-8066 $(CPPFLAGS) \
+	$(CFLAGS)
 WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_adler32.obj \
 	$(OBJS)\wxzlib_compress.obj \

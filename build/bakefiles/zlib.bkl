@@ -17,7 +17,9 @@
     <lib id="wxzlib" template="3rdparty_lib"
          cond="wxUSE_ZLIB=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
-        <cflags-borland>-w-8004 -w-8012 -w-8057</cflags-borland> 
+        <cflags-borland>
+            -w-8004 -w-8008 -w-8012 -w-8057 -w-8066
+        </cflags-borland> 
         <if cond="FORMAT=='msevc4prj'">
             <define>NO_ERRNO_H</define>
         </if>
