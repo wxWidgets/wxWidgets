@@ -383,7 +383,7 @@ void wxListCtrl::FreeAllInternalData()
         m_ignoreChangeMessages = TRUE;
         for (i = 0; i < n; i++)
             wxDeleteInternalData(this, i);
-        m_ignoreChangeMessages = TRUE;
+        m_ignoreChangeMessages = FALSE;
 
         m_AnyInternalData = FALSE;
     }
