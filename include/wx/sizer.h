@@ -313,7 +313,7 @@ public:
     bool IsShown( size_t index ) const;
 
     // Recursively call wxWindow::Show () on all sizer items.
-    void ShowItems (bool show);
+    virtual void ShowItems (bool show);
 
 protected:
     wxSize              m_size;
@@ -504,6 +504,9 @@ public:
 
     wxStaticBox *GetStaticBox() const
         { return m_staticBox; }
+
+    // override to hide/show the static box as well
+    virtual void ShowItems (bool show);
 
 protected:
     wxStaticBox   *m_staticBox;

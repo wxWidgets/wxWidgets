@@ -1624,6 +1624,12 @@ wxSize wxStaticBoxSizer::CalcMin()
     return ret;
 }
 
+void wxStaticBoxSizer::ShowItems( bool show )
+{
+    m_staticBox->Show( show );
+    wxBoxSizer::ShowItems( show );
+}
+
 #endif // wxUSE_STATBOX
 
 // ----------------------------------------------------------------------------
