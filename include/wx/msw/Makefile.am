@@ -97,4 +97,27 @@ treectrl.h \
 wave.h \
 window.h \
 winundef.h \
-xpmhand.h 
+xpmhand.h \
+blank.cur \
+bullseye.cur \
+child.ico \
+clock.cur \
+error.ico \
+hand.cur \
+heart.cur \
+info.ico \
+magnif1.cur \
+mdi.ico \
+noentry.cur \
+pbrush.cur \
+pencil.cur \
+pntleft.cur \
+pntright.cur \
+query.cur \
+question.ico \
+roller.cur \
+size.cur \
+std.ico \
+tip.ico \
+warning.ico \
+watch1.cur 
