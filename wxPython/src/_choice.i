@@ -17,7 +17,6 @@
 
 MAKE_CONST_WXSTRING(ChoiceNameStr);
 
-
 //---------------------------------------------------------------------------
 %newgroup;
 
@@ -30,19 +29,21 @@ public:
     wxChoice(wxWindow *parent, wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
-             int choices=0, wxString* choices_array=NULL,
+             //int choices=0, wxString* choices_array=NULL,
+             const wxArrayString& choices = wxPyEmptyStringArray,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxPyChoiceNameStr);
     %name(PreChoice)wxChoice();
 
     bool Create(wxWindow *parent, wxWindowID id,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             int choices=0, wxString* choices_array=NULL,
-             long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxPyChoiceNameStr);
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                //int choices=0, wxString* choices_array=NULL,
+                const wxArrayString& choices = wxPyEmptyStringArray,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPyChoiceNameStr);
 
 #ifndef __WXX11__
     int GetColumns();

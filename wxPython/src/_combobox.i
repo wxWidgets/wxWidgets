@@ -35,20 +35,22 @@ public:
                const wxString& value = wxPyEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               int choices=0, wxString* choices_array=NULL,
+               //int choices=0, wxString* choices_array=NULL,
+               const wxArrayString& choices = wxPyEmptyStringArray,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxPyComboBoxNameStr);
     %name(PreComboBox)wxComboBox();
 
     bool Create(wxWindow* parent, wxWindowID id,
-               const wxString& value = wxPyEmptyString,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               int choices=0, wxString* choices_array=NULL,
-               long style = 0,
-               const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxPyComboBoxNameStr);
+                const wxString& value = wxPyEmptyString,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                //int choices=0, wxString* choices_array=NULL,
+                const wxArrayString& choices = wxPyEmptyStringArray,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPyComboBoxNameStr);
 
 
     virtual wxString GetValue() const;

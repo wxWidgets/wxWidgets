@@ -30,6 +30,10 @@ MAKE_CONST_WXSTRING_NOSWIG(PanelNameStr);
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 MAKE_CONST_WXSTRING_NOSWIG(ControlNameStr);
 
+%{
+    const wxArrayString wxPyEmptyStringArray;
+%}
+
 
 // Include all the files that make up this module
 

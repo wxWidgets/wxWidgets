@@ -33,7 +33,8 @@ public:
                const wxString& label,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               int choices = 0, wxString* choices_array = NULL,
+               //int choices = 0, wxString* choices_array = NULL,
+               const wxArrayString& choices = wxPyEmptyStringArray,
                int majorDimension = 0,
                long style = wxRA_HORIZONTAL,
                const wxValidator& validator = wxDefaultValidator,
@@ -41,14 +42,15 @@ public:
     %name(PreRadioBox)wxRadioBox();
 
     bool Create(wxWindow* parent, wxWindowID id,
-               const wxString& label,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               int choices = 0, wxString* choices_array = NULL,
-               int majorDimension = 0,
-               long style = wxRA_HORIZONTAL,
-               const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxPyRadioBoxNameStr);
+                const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                //int choices = 0, wxString* choices_array = NULL,
+                const wxArrayString& choices = wxPyEmptyStringArray,
+                int majorDimension = 0,
+                long style = wxRA_HORIZONTAL,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPyRadioBoxNameStr);
 
     virtual void SetSelection(int n);
     virtual int GetSelection() const;

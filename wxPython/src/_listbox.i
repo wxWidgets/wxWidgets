@@ -35,19 +35,21 @@ public:
     wxListBox(wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
-              int choices=0, wxString* choices_array = NULL,
+              //int choices=0, wxString* choices_array = NULL,
+              const wxArrayString& choices = wxPyEmptyStringArray,              
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = wxPyListBoxNameStr);
     %name(PreListBox)wxListBox();
 
     bool Create(wxWindow* parent, wxWindowID id,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              int choices=0, wxString* choices_array = NULL,
-              long style = 0,
-              const wxValidator& validator = wxDefaultValidator,
-              const wxString& name = wxPyListBoxNameStr);
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                //int choices=0, wxString* choices_array = NULL,
+                const wxArrayString& choices = wxPyEmptyStringArray,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPyListBoxNameStr);
 
     // all generic methods are in wxControlWithItems...
 
@@ -120,19 +122,21 @@ public:
     wxCheckListBox(wxWindow *parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   int choices = 0, wxString* choices_array = NULL,
+                   //int choices = 0, wxString* choices_array = NULL,
+                   const wxArrayString& choices = wxPyEmptyStringArray,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxPyListBoxNameStr);
     %name(PreCheckListBox)wxCheckListBox();
 
     bool Create(wxWindow *parent, wxWindowID id,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   int choices = 0, wxString* choices_array = NULL,
-                   long style = 0,
-                   const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxPyListBoxNameStr);
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                //int choices = 0, wxString* choices_array = NULL,
+                const wxArrayString& choices = wxPyEmptyStringArray,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPyListBoxNameStr);
 
     bool  IsChecked(int index);
     void  Check(int index, int check = True);

@@ -155,7 +155,7 @@ public:
     wxMultiChoiceDialog(wxWindow *parent,
                         const wxString& message,
                         const wxString& caption,
-                        int LCOUNT, wxString *choices,
+                        int choices=0, wxString* choices_array,
                         long style = wxCHOICEDLG_STYLE,
                         const wxPoint& pos = wxDefaultPosition);
 
