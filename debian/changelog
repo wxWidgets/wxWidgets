@@ -1,3 +1,28 @@
+wxwindows2.4 (2.4.1.2) unstable; urgency=low
+
+  * New stable release.  Closes: #198622
+  * Ack python NMU changes, Thanks Josselin!
+  * Hurd support added to configure.  Closes: #191581
+  * Fixes ctrl-tab problem with pyslsk.  Closes: #187923
+  * Fixed configure for autoconf 2.57-3.  Closes: #190755
+  * Added conflict/replace for -doc.  Closes: #202242
+
+ -- Ron Lee <ron@debian.org>  Fri, 22 Aug 2003 15:59:12 +0930
+
+wxwindows2.4 (2.4.0.8-0.1) unstable; urgency=low
+
+  * NMU for python transition.
+  * Build-depend and depend on python 2.3 (closes: #204737).
+
+ -- Josselin Mouette <joss@debian.org>  Wed, 13 Aug 2003 22:21:48 +0200
+
+wxwindows2.4 (2.4.0.9) unstable; urgency=low
+
+  * Updated package sections to suit the new taxonomy.
+  * No public release of this version.
+
+ -- Ron Lee <ron@debian.org>  Sat, 19 Apr 2003 20:13:39 -0700
+
 wxwindows2.4 (2.4.0.8) unstable; urgency=low
 
   * The "I wish people would read the existing discussion about new releases
