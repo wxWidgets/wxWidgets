@@ -7,8 +7,8 @@ wxWidgets 2.5 Change Log - For more verbose changes, see the manual
 
 All:
 
-- wxEvent and its derivatives have their variable members nonpublic now.
-  Use the Get/Set accessors (Mart Raudsepp)
+- wxEvent and derived classes don't have public members any more, you must
+  use accessors methods now (Mart Raudsepp)
 - new classes for reading and writing ZIP files (M.J.Wetherell)
 - large files support for wxFFile (M.J.Wetherell)
 - classes in the manual are now cross-referenced (Zbigniew Zagórski)
@@ -57,6 +57,7 @@ All (GUI):
 
 - added wxMediaCtrl
 - added wxDatePickerCtrl
+- wxHtmlWindow now supports background images given in <body> tag
 - wxSplitterWindow now supports gravity parameter (Zbigniew Zagórski)
 - recursive wxSizer::GetItem returns item of given window, sizer or nth index
 - wxLayoutConstraints now use best size, not current size, for AsIs() condition

@@ -139,6 +139,10 @@ public:
     // Sets space between text and window borders.
     void SetBorders(int b) {m_Borders = b;}
 
+    // Sets the bitmap to use for background (currnetly it will be tiled,
+    // when/if we have CSS support we could add other possibilities...)
+    void SetBackgroundImage(const wxBitmap& bmpBg) { m_bmpBg = bmpBg; }
+
     // Saves custom settings into cfg config. it will use the path 'path'
     // if given, otherwise it will save info into currently selected path.
     // saved values : things set by SetFonts, SetBorders.
@@ -169,6 +173,7 @@ public:
     void AddProcessor(wxHtmlProcessor *processor);
     // Adds HTML processor to wxHtmlWindow class as whole:
     static void AddGlobalProcessor(wxHtmlProcessor *processor);
+
 
     // -- Callbacks --
 
@@ -210,10 +215,7 @@ public:
 
     // Converts current page to text:
     wxString ToText();
-#endif
-
-    virtual void ApplyParentThemeBackground(const wxColour& WXUNUSED(bg))
-        { /* do nothing */ }
+#endif // wxUSE_CLIPBOARD
 
 protected:
     void Init();
@@ -322,6 +324,9 @@ protected:
 private:
     // window content for double buffered rendering:
     wxBitmap *m_backBuffer;
+
+    // background image, may be invalid
+    wxBitmap m_bmpBg;
 
     // variables used when user is selecting text
     wxPoint     m_tmpSelFromPos;

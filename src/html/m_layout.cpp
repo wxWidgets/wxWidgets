@@ -12,16 +12,18 @@
 
 #include "wx/wxprec.h"
 
-
 #include "wx/defs.h"
+
 #if wxUSE_HTML && wxUSE_STREAMS
+
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WXPRECOMP
 #endif
 
+#include "wx/image.h"
 
 #include "wx/html/forcelnk.h"
 #include "wx/html/m_templ.h"
@@ -330,6 +332,25 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         if (tag.GetParamAsColour(wxT("LINK"), &clr))
             m_WParser->SetLinkColor(clr);
 
+        if (tag.HasParam(wxT("BACKGROUND")))
+        {
+            wxFSFile *fileBgImage = m_WParser->OpenURL
+                                               (
+                                                wxHTML_URL_IMAGE,
+                                                tag.GetParam(wxT("BACKGROUND"))
+                                               );
+            if ( fileBgImage )
+            {
+                wxInputStream *is = fileBgImage->GetStream();
+                if ( is )
+                {
+                    wxImage image(*is);
+                    if ( image.Ok() )
+                        m_WParser->GetWindow()->SetBackgroundImage(image);
+                }
+            }
+        }
+
         if (tag.GetParamAsColour(wxT("BGCOLOR"), &clr))
         {
             m_WParser->GetContainer()->InsertCell(
@@ -337,6 +358,7 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
             if (m_WParser->GetWindow() != NULL)
                 m_WParser->GetWindow()->SetBackgroundColour(clr);
         }
+
         return false;
     }
 

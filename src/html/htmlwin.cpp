@@ -307,6 +307,7 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     wxClientDC *dc = new wxClientDC(this);
     dc->SetMapMode(wxMM_TEXT);
     SetBackgroundColour(wxColour(0xFF, 0xFF, 0xFF));
+    SetBackgroundImage(wxNullBitmap);
     m_OpenedPage = m_OpenedAnchor = m_OpenedPageTitle = wxEmptyString;
     m_Parser->SetDC(dc);
     if (m_Cell)
@@ -850,11 +851,36 @@ void wxHtmlWindow::OnCellMouseHover(wxHtmlCell * WXUNUSED(cell),
 
 void wxHtmlWindow::OnEraseBackground(wxEraseEvent& event)
 {
-    // we do have to erase background now that we reuse it (instead of
-    // overwriting it) in OnPaint() below, but maybe we should set some flag if
-    // we get here as this would mean that user code doesn't paint background
-    // itself and then we wouldn't have to copy old bits to dcm below...
-    event.Skip();
+    if ( !m_bmpBg.Ok() )
+    {
+        // we used to do nothing at all here but we do have to erase background
+        // now that we reuse it (instead of overwriting it) in OnPaint() below
+        event.Skip();
+
+        return;
+    }
+
+    wxDC& dc = *event.GetDC();
+
+    // if the image is not fully opaque, we have to erase the background before
+    // drawing it, however avoid doing it for opaque images as this would just
+    // result in extra flicker without any other effect as background is
+    // completely covered anyhow
+    if ( m_bmpBg.GetMask() )
+    {
+        dc.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
+        dc.Clear();
+    }
+
+    const wxSize sizeWin(GetClientSize());
+    const wxSize sizeBmp(m_bmpBg.GetWidth(), m_bmpBg.GetHeight());
+    for ( wxCoord x = 0; x < sizeWin.x; x += sizeBmp.x )
+    {
+        for ( wxCoord y = 0; y < sizeWin.y; y += sizeBmp.y )
+        {
+            dc.DrawBitmap(m_bmpBg, x, y, true /* use mask */);
+        }
+    }
 }
 
 void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
