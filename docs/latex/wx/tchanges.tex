@@ -208,7 +208,7 @@ sizer->Add(win);
 - wxSizer::Add/Insert returns pointer to wxSizerItem just added so conditions
   writeen with if(Add(..)==true) will not work. Use if(Add(..)) instead.
 
-- New wxBrush::IsHatch() checking for brush type replaces IS_HATCH macro.
+- New \helpref{wxBrush::IsHatch()}{wxbrushishatch} checking for brush type replaces IS_HATCH macro.
 
 
 
@@ -217,7 +217,7 @@ sizer->Add(win);
 - wxURL::GetInputStream() and similar functionality has been depreciated in
   favor of other ways of connecting, such as though sockets or wxFileSystem.
 
-- wxDocManager::GetNoHistoryFiles() renamed to GetHistoryFilesCount()
+- wxDocManager::GetNoHistoryFiles() renamed to \helpref{GetHistoryFilesCount()}{wxdocmanagergethistoryfilescount}
 
 - wxSizer::Remove(wxWindow *), use Detach() instead [it is more clear]
 
@@ -231,7 +231,7 @@ sizer->Add(win);
 
 - wxListBase::operator wxList&(): use typesafe lists instead
 
-- wxTheFontMapper: use wxFontMapper::Get() instead
+- wxTheFontMapper: use \helpref{wxFontMapper::Get()}{wxfontmapperget} instead
 
 - wxStringHashTable: use wxHashMap instead
 
@@ -253,7 +253,7 @@ sizer->Add(win);
 
 - \helpref{wxList}{wxlist} keyed interface: use \helpref{wxHashMap}{wxhashmap} instead
 
-- wxColourDatabase::FindColour(): use Find() instead (NB: different ret type)
+- wxColourDatabase::FindColour(): use \helpref{Find()}{wxcolourdatabasefind} instead (NB: different ret type)
 
 - wxHashTable::Next: use wxHashTable::Node* or
                      wxHashTable::compatibility\_iterator to store the return
