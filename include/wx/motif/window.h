@@ -194,7 +194,14 @@ protected:
     
     bool CanAddEventHandler() const { return m_canAddEventHandler; }
     void SetCanAddEventHandler(bool flag) { m_canAddEventHandler = flag; }
-    
+
+    // See src/motif/window.cpp, near the top, for an explanation
+    // why this is necessary
+    void CanvasSetSizeIntr(int x, int y, int width, int height,
+                           int sizeFlags, bool fromCtor);
+    void DoSetSizeIntr(int x, int y,
+                       int width, int height,
+                       int sizeFlags, bool fromCtor);
 public:
     WXPixmap GetBackingPixmap() const { return m_backingPixmap; }
     void SetBackingPixmap(WXPixmap pixmap) { m_backingPixmap = pixmap; }

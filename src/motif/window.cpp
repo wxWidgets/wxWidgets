@@ -50,6 +50,25 @@
     #include "wx/dnd.h"
 #endif
 
+// DoSetSizeIntr and CanvasSetSizeIntr
+// PROBLEM:
+// under Motif composite controls (such as wxCalendarCtrl or generic wxSpinCtrl
+// don't work and/or segfault because
+// 1) wxWindow::Create calls SetSize,
+//    which results in a call to DoSetSize much earlier than in the other ports
+// 2) if wxWindow::Create is called (wxControl::Create calls it)
+//    then DoSetSize is never called, causing layout problems in composite
+//    controls
+//
+// SOLUTION:
+// 1) don't call SetSize, DoSetSize, DoMoveWindow, DoGetPosition,
+//    DoSetPosition directly or indirectly from wxWindow::Create
+// 2) call DoMoveWindow from DoSetSize, allowing controls to override it,
+//    but make wxWindow::DoMoveWindow a no-op if it is called from
+//    an overridden DoMoveWindow (i.e. wxFoo::DoMoveWindow calls
+//    wxWindow::DoMoveWindow; this is to preserve the behaviour
+//    before this change
+
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
@@ -377,8 +396,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     // sample).
     SetCursor(*wxSTANDARD_CURSOR);
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-    SetSize(pos.x, pos.y, size.x, size.y);
-
+    DoSetSizeIntr(pos.x, pos.y, size.x,size.y, wxSIZE_AUTO, TRUE);
     return TRUE;
 }
 
@@ -1305,10 +1323,19 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
 
 void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
+    DoSetSizeIntr(x, y, width, height, sizeFlags, FALSE);
+}
+
+void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
+                             int sizeFlags, bool fromCtor)
+{
     // A bit of optimization to help sort out the flickers.
-    int oldX, oldY, oldW, oldH;
-    GetSize(& oldW, & oldH);
-    GetPosition(& oldX, & oldY);
+    int oldX = 0, oldY = 0, oldW = 0, oldH = 0;
+    if( !fromCtor )
+    {
+        GetSize(& oldW, & oldH);
+        GetPosition(& oldX, & oldY);
+    }
 
     if ( !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
     {
@@ -1335,7 +1362,8 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     {
         if (m_drawingArea)
         {
-            CanvasSetSize(x, y, width, height, sizeFlags);
+            CanvasSetSizeIntr(x, y, width, height, sizeFlags, fromCtor);
+            if( !fromCtor ) DoMoveWindow(x, y, width, height);
             return;
         }
 
@@ -1427,6 +1455,10 @@ void wxWindow::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW, in
 
 void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 {
+    // see the top of the file, near DoSetSizeIntr
+    if (m_drawingArea)
+        return;
+
     XtVaSetValues((Widget)GetTopWidget(),
                   XmNx, x,
                   XmNy, y,
@@ -1479,7 +1511,7 @@ void wxWindow::GetTextExtent(const wxString& string,
 
     wxCHECK_RET( fontToUse->Ok(), "valid window font needed" );
     
-    WXFontStructPtr pFontStruct = theFont->GetFontStruct(1.0, GetXDisplay());
+    WXFontStructPtr pFontStruct = fontToUse->GetFontStruct(1.0, GetXDisplay());
 
     int direction, ascent, descent2;
     XCharStruct overall;
@@ -2400,13 +2432,23 @@ void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event,
 // CanvaseXXXSize() functions
 // ----------------------------------------------------------------------------
 
+void wxWindow::CanvasSetSize(int x, int y, int w, int h, int sizeFlags)
+{
+    CanvasSetSizeIntr(x, y, w, h, sizeFlags, FALSE);
+}
+
 // SetSize, but as per old wxCanvas (with drawing widget etc.)
-void wxWindow::CanvasSetSize (int x, int y, int w, int h, int sizeFlags)
+void wxWindow::CanvasSetSizeIntr(int x, int y, int w, int h, int sizeFlags,
+                                 bool fromCtor)
 {
     // A bit of optimization to help sort out the flickers.
-    int oldX, oldY, oldW, oldH;
-    GetSize(& oldW, & oldH);
-    GetPosition(& oldX, & oldY);
+    int oldX = 0, oldY = 0, oldW = 0, oldH = 0;
+    // see the top of the file, near DoSetSizeIntr
+    if( !fromCtor )
+    {
+        GetSize(& oldW, & oldH);
+        GetPosition(& oldX, & oldY);
+    }
 
     bool useOldPos = FALSE;
     bool useOldSize = FALSE;
