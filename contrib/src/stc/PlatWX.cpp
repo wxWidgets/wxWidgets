@@ -681,7 +681,7 @@ class wxSTCListBox : public wxListBox {
 public:
     wxSTCListBox(wxWindow* parent, wxWindowID id)
         : wxListBox(parent, id, wxDefaultPosition, wxDefaultSize,
-                    0, NULL, wxLB_SINGLE | wxSIMPLE_BORDER)
+                    0, NULL, wxLB_SINGLE | wxSIMPLE_BORDER | wxWANTS_CHARS)
         {}
 
     void OnKeyDown(wxKeyEvent& event) {
