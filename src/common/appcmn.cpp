@@ -128,9 +128,19 @@ wxAppBase::~wxAppBase()
 
 void wxAppBase::CleanUp()
 {
-    // one last chance for pending objects to be cleaned up
+    // clean up all the pending objects
     DeletePendingObjects();
 
+    // and any remaining TLWs (they remove themselves from wxTopLevelWindows
+    // when destroyed, so iterate until none are left)
+    while ( !wxTopLevelWindows.empty() )
+    {
+        // do not use Destroy() here as it only puts the TLW in pending list
+        // but we want to delete them now
+        delete wxTopLevelWindows.GetFirst()->GetData();
+    }
+
+    // undo everything we did in Initialize() above
     wxBitmap::CleanUpHandlers();
 
     wxDeleteStockObjects();
