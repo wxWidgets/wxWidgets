@@ -134,9 +134,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         gtk_widget_show( list_item );
     }
 
-    m_parent->AddChild( this );
-
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->DoAddChild( this );
 
     PostCreation();
 
@@ -582,7 +580,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
 
 void wxComboBox::OnSize( wxSizeEvent &event )
 {
-    wxControl::OnSize( event );
+    event.Skip();
     
     return;
 

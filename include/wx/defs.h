@@ -1106,7 +1106,8 @@ typedef int (__stdcall *WXFARPROC)();
 typedef int (*WXFARPROC)();
 #endif
 
-#endif
+typedef WXHWND WXWidget;
+#endif // MSW
 
 #ifdef __WXMOTIF__
 /* Stand-ins for X/Xt/Motif types */
@@ -1125,7 +1126,7 @@ typedef void*           WXFont;
 typedef void*           WXImage;
 typedef void*           WXCursor;
 typedef void*           WXFontList;
-#endif
+#endif // Motif
 
 #ifdef __WXGTK__
 /* Stand-ins for GLIB types */
@@ -1160,7 +1161,8 @@ typedef struct _GtkAccelGroup     GtkAccelGroup;
 typedef	struct _GtkItemFactory    GtkItemFactory;
 typedef	struct _GtkSelectionData  GtkSelectionData;
 
-#endif
+typedef GtkWidget *WXWidget;
+#endif // GTK
 
 // This is required because of clashing macros in windows.h, which may be
 // included before or after wxWindows classes, and therefore must be

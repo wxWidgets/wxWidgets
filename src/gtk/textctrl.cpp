@@ -46,11 +46,11 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT) return;
+    if (!win->HasVMT()) return;
 
     win->SetModified();
 
-    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->m_windowId );
+    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
     event.SetString( win->GetValue() );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
@@ -66,8 +66,8 @@ gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
     if (g_isIdle) wxapp_install_idle_handler();
 
     win->CalculateScrollbar();
-
-    if (!win->m_hasVMT) return;
+    
+    if (!win->HasVMT()) return;
 }
 
 //-----------------------------------------------------------------------------
@@ -152,7 +152,6 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
         /* ... and put into the upper left hand corner of the table */
         m_widget = gtk_table_new(bHasHScrollbar ? 2 : 1, 2, FALSE);
         GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
-
         gtk_table_attach( GTK_TABLE(m_widget), m_text, 0, 1, 0, 1,
                       (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
                       (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
@@ -160,13 +159,11 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 
         /* always wrap words */
         gtk_text_set_word_wrap( GTK_TEXT(m_text), TRUE );
-
         /* put the horizontal scrollbar in the lower left hand corner */
         if (bHasHScrollbar)
         {
             GtkWidget *hscrollbar = gtk_hscrollbar_new(GTK_TEXT(m_text)->hadj);
             GTK_WIDGET_UNSET_FLAGS( hscrollbar, GTK_CAN_FOCUS );
-
             gtk_table_attach(GTK_TABLE(m_widget), hscrollbar, 0, 1, 1, 2,
                        (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
                        GTK_FILL,
@@ -178,11 +175,9 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
             gtk_text_set_line_wrap( GTK_TEXT(m_text), FALSE );
 #endif
         }
-
         /* finally, put the vertical scrollbar in the upper right corner */
         m_vScrollbar = gtk_vscrollbar_new( GTK_TEXT(m_text)->vadj );
         GTK_WIDGET_UNSET_FLAGS( m_vScrollbar, GTK_CAN_FOCUS );
-
         gtk_table_attach(GTK_TABLE(m_widget), m_vScrollbar, 1, 2, 0, 1,
                      GTK_FILL,
                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL | GTK_SHRINK),
@@ -200,9 +195,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     if (newSize.y == -1) newSize.y = 26;
     SetSize( newSize.x, newSize.y );
 
-    m_parent->AddChild( this );
-
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->DoAddChild( this );
 
     PostCreation();
 
@@ -948,46 +941,53 @@ bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
         return (window == GTK_ENTRY(m_text)->text_area);
 }
 
-void wxTextCtrl::SetFont( const wxFont &WXUNUSED(font) )
+bool wxTextCtrl::SetFont( const wxFont &WXUNUSED(font) )
 {
-    wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, FALSE, _T("invalid text ctrl") );
 
     // doesn't work
+    return FALSE;
 }
 
-void wxTextCtrl::SetForegroundColour( const wxColour &WXUNUSED(colour) )
+bool wxTextCtrl::SetForegroundColour( const wxColour &WXUNUSED(colour) )
 {
-    wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, FALSE, _T("invalid text ctrl") );
 
     // doesn't work
+    return FALSE;
 }
 
-void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
+bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
 {
-    wxCHECK_RET( m_text != NULL, _T("invalid text ctrl") );
+    wxCHECK_MSG( m_text != NULL, FALSE, _T("invalid text ctrl") );
 
     wxControl::SetBackgroundColour( colour );
 
-    if (!m_widget->window) return;
+    if (!m_widget->window)
+        return FALSE;
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
     if (sysbg.Red() == colour.Red() &&
         sysbg.Green() == colour.Green() &&
         sysbg.Blue() == colour.Blue())
     {
-        return;
+        return FALSE; // FIXME or TRUE?
     }
 
-    if (!m_backgroundColour.Ok()) return;
+    if (!m_backgroundColour.Ok())
+        return FALSE;
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
         GdkWindow *window = GTK_TEXT(m_text)->text_area;
-        if (!window) return;
+        if (!window)
+            return FALSE;
         m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
         gdk_window_set_background( window, m_backgroundColour.GetColor() );
         gdk_window_clear( window );
     }
+
+    return TRUE;
 }
 
 void wxTextCtrl::ApplyWidgetStyle()

@@ -623,7 +623,7 @@ bool wxTabView::RemoveTab(int id)
         m_noTabs --;
 
         // The layout has changed
-        Layout();
+        LayoutTabs();
         return TRUE;
       }
       tabNode = tabNode->Next();
@@ -703,7 +703,7 @@ void wxTabView::ClearTabs(bool deleteTabs)
 
 
 // Layout tabs (optional, e.g. if resizing window)
-void wxTabView::Layout(void)
+void wxTabView::LayoutTabs(void)
 {
   // Make a list of the tab controls, deleting the wxTabLayers.
   wxList controls;

@@ -159,12 +159,12 @@ wxFont& wxFont::operator = ( const wxFont& font )
     return *this;
 }
 
-bool wxFont::operator == ( const wxFont& font )
+bool wxFont::operator == ( const wxFont& font ) const
 {
     return m_refData == font.m_refData;
 }
 
-bool wxFont::operator != ( const wxFont& font )
+bool wxFont::operator != ( const wxFont& font ) const
 {
     return m_refData != font.m_refData;
 }

@@ -364,7 +364,7 @@ void wxToolBarSimple::SpringUpButton(int index)
   }
 }
 
-void wxToolBarSimple::Layout(void)
+void wxToolBarSimple::LayoutTools(void)
 {
   m_currentRowsOrColumns = 0;
   m_lastX = m_xMargin;

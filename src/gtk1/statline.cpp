@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -46,9 +46,7 @@ bool wxStaticLine::Create( wxWindow *parent, wxWindowID id,
     else
         m_widget = gtk_hseparator_new();
   
-    m_parent->AddChild( this );
-
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->DoAddChild( this );
   
     PostCreation();
   

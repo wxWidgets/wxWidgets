@@ -68,7 +68,7 @@ BEGIN_EVENT_TABLE(wxRadioBox, wxControl)
     EVT_SIZE(wxRadioBox::OnSize)
 END_EVENT_TABLE()
 
-wxRadioBox::wxRadioBox(void)
+wxRadioBox::wxRadioBox()
 {
 }
 
@@ -108,9 +108,9 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
         gtk_signal_connect( GTK_OBJECT(m_radio), "clicked",
            GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
 
-        gtk_myfixed_put( GTK_MYFIXED(m_parent->m_wxwindow), 
-	                 GTK_WIDGET(m_radio), 
-			 m_x+10, m_y+10+(i*24), 10, 10 );
+        gtk_myfixed_put( GTK_MYFIXED(m_parent->GetWxWindow()), 
+                         GTK_WIDGET(m_radio), 
+                         m_x+10, m_y+10+(i*24), 10, 10 );
     }
 
     wxSize ls = LayoutItems();
@@ -120,9 +120,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     if (newSize.y == -1) newSize.y = ls.y;
     SetSize( newSize.x, newSize.y );
 
-    m_parent->AddChild( this );
-
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->DoAddChild( this );
 
     PostCreation();
 
@@ -137,7 +135,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     return TRUE;
 }
 
-wxRadioBox::~wxRadioBox(void)
+wxRadioBox::~wxRadioBox()
 {
     wxNode *node = m_boxes.First();
     while (node)
@@ -150,9 +148,9 @@ wxRadioBox::~wxRadioBox(void)
 
 void wxRadioBox::OnSize( wxSizeEvent &event )
 {
-    wxControl::OnSize( event );
-
     LayoutItems();
+
+    event.Skip();
 }
 
 wxSize wxRadioBox::LayoutItems()
@@ -181,7 +179,7 @@ wxSize wxRadioBox::LayoutItems()
                 int len = 22+gdk_string_measure( font, label->label );
                 if (len > max_len) max_len = len;
 
-                gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, m_x+x, m_y+y );
+                gtk_myfixed_move( GTK_MYFIXED(m_parent->GetWxWindow()), button, m_x+x, m_y+y );
                 y += 20;
 
                 node = node->Next();
@@ -195,7 +193,7 @@ wxSize wxRadioBox::LayoutItems()
             {
                 GtkWidget *button = GTK_WIDGET( node->Data() );
 
-                gtk_myfixed_resize( GTK_MYFIXED(m_parent->m_wxwindow), button, max_len, 20 );
+                gtk_myfixed_resize( GTK_MYFIXED(m_parent->GetWxWindow()), button, max_len, 20 );
 
                 node = node->Next();
                 if (!node) break;
@@ -231,7 +229,7 @@ wxSize wxRadioBox::LayoutItems()
         {
             GtkWidget *button = GTK_WIDGET( node->Data() );
 
-            gtk_myfixed_set_size( GTK_MYFIXED(m_parent->m_wxwindow), button, m_x+x, m_y+y, max, 20 );
+            gtk_myfixed_set_size( GTK_MYFIXED(m_parent->GetWxWindow()), button, m_x+x, m_y+y, max, 20 );
             x += max;
 
             node = node->Next();
@@ -389,9 +387,10 @@ void wxRadioBox::SetLabel( int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap) )
     wxFAIL_MSG(_T("wxRadioBox::SetLabel not implemented."));
 }
 
-void wxRadioBox::Enable( bool enable )
+bool wxRadioBox::Enable( bool enable )
 {
-    wxControl::Enable( enable );
+    if ( !wxControl::Enable( enable ) )
+        return FALSE;
 
     wxNode *node = m_boxes.First();
     while (node)
@@ -402,6 +401,8 @@ void wxRadioBox::Enable( bool enable )
         gtk_widget_set_sensitive( label, enable );
         node = node->Next();
     }
+
+    return TRUE;
 }
 
 void wxRadioBox::Enable( int item, bool enable )

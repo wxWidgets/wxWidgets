@@ -2330,7 +2330,7 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
 
     m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, s );
 
-    if (GetWindowStyleFlag() & wxLC_REPORT)
+    if (HasFlag(wxLC_REPORT))
         m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(size.x,23), wxTAB_TRAVERSAL );
     else
         m_headerWin = (wxListHeaderWindow *) NULL;
@@ -2349,7 +2349,7 @@ void wxListCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 
 void wxListCtrl::SetSingleStyle( long style, bool add )
 {
-    long flag = GetWindowStyleFlag();
+    long flag = GetWindowStyle();
 
     if (add)
     {
@@ -2382,7 +2382,7 @@ void wxListCtrl::SetWindowStyleFlag( long flag )
 
     if (flag & wxLC_REPORT)
     {
-        if (!(GetWindowStyleFlag() & wxLC_REPORT))
+        if (!HasFlag(wxLC_REPORT))
         {
 //          m_mainWin->SetSize( 0, 24, width, height-24 );
             if (!m_headerWin)
@@ -2398,7 +2398,7 @@ void wxListCtrl::SetWindowStyleFlag( long flag )
     }
     else
     {
-        if (GetWindowStyleFlag() & wxLC_REPORT)
+        if (HasFlag(wxLC_REPORT))
         {
 //          m_mainWin->SetSize( 0, 0, width, height );
             m_headerWin->Show( FALSE );
@@ -2769,7 +2769,7 @@ void wxListCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
     int w = 0;
     int h = 0;
 
-    if (GetWindowStyleFlag() & wxLC_REPORT)
+    if (HasFlag(wxLC_REPORT))
     {
         m_headerWin->GetPosition( &x, &y );
         m_headerWin->GetSize( &w, &h );
@@ -2795,9 +2795,10 @@ void wxListCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
     m_mainWin->Refresh();
 }
 
-void wxListCtrl::SetBackgroundColour( const wxColour &colour )
+bool wxListCtrl::SetBackgroundColour( const wxColour &colour )
 {
-    wxWindow::SetBackgroundColour( colour );
+    if ( !wxWindow::SetBackgroundColour( colour ) )
+        return FALSE;
 
     if (m_mainWin)
     {
@@ -2809,11 +2810,14 @@ void wxListCtrl::SetBackgroundColour( const wxColour &colour )
     {
         m_headerWin->SetBackgroundColour( colour );
     }
+
+    return TRUE;
 }
 
-void wxListCtrl::SetForegroundColour( const wxColour &colour )
+bool wxListCtrl::SetForegroundColour( const wxColour &colour )
 {
-    wxWindow::SetForegroundColour( colour );
+    if ( !wxWindow::SetForegroundColour( colour ) )
+        return FALSE;
     
     if (m_mainWin)
     {
@@ -2825,11 +2829,14 @@ void wxListCtrl::SetForegroundColour( const wxColour &colour )
     {
         m_headerWin->SetForegroundColour( colour );
     }
+
+    return TRUE;
 }
 
-void wxListCtrl::SetFont( const wxFont &font )
+bool wxListCtrl::SetFont( const wxFont &font )
 {
-    wxWindow::SetFont( font );
+    if ( !wxWindow::SetFont( font ) )
+        return FALSE;
     
     if (m_mainWin)
     {
@@ -2841,5 +2848,7 @@ void wxListCtrl::SetFont( const wxFont &font )
     {
         m_headerWin->SetFont( font );
     }
+
+    return TRUE;
 }
 

@@ -76,9 +76,7 @@ bool wxStaticText::Create(wxWindow *parent,
 
     SetSize( newSize.x, newSize.y );
 
-    m_parent->AddChild( this );
-
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->DoAddChild( this );
 
     PostCreation();
 

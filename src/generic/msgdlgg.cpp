@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Markus Holzem, Robert Roebling
-// Licence:   	wxWindows license
+// Licence:           wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -51,29 +51,29 @@ wxSize wxSplitMessage2( const wxString &message, wxWindow *parent )
     for (uint pos = 0; pos < message.Len(); pos++)
     {
         if (message[pos] == _T('\n'))
-	{
-	    if (!line.IsEmpty())
-	    {
-	        wxStaticText *s1 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
-	        wxSize size1( s1->GetSize() );
-	        if (size1.x > w) w = size1.x;
-	        line = _T("");
-	    }
-	    y += 18;
-	}
-	else
-	{
-	    line += message[pos];
-	}
+        {
+            if (!line.IsEmpty())
+            {
+                wxStaticText *s1 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
+                wxSize size1( s1->GetSize() );
+                if (size1.x > w) w = size1.x;
+                line = _T("");
+            }
+            y += 18;
+        }
+        else
+        {
+            line += message[pos];
+        }
     }
     
     if (!line.IsEmpty())
     {
-	wxStaticText *s2 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
-	wxSize size2( s2->GetSize() );
-	if (size2.x > w) w = size2.x;
+        wxStaticText *s2 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
+        wxSize size2( s2->GetSize() );
+        if (size2.x > w) w = size2.x;
     }
-	
+        
     y += 18;
     
     return wxSize(w+30,y);
@@ -81,9 +81,9 @@ wxSize wxSplitMessage2( const wxString &message, wxWindow *parent )
 
 #if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxGenericMessageDialog, wxDialog)
-	EVT_BUTTON(wxID_YES, wxGenericMessageDialog::OnYes)
-	EVT_BUTTON(wxID_NO, wxGenericMessageDialog::OnNo)
-	EVT_BUTTON(wxID_CANCEL, wxGenericMessageDialog::OnCancel)
+        EVT_BUTTON(wxID_YES, wxGenericMessageDialog::OnYes)
+        EVT_BUTTON(wxID_NO, wxGenericMessageDialog::OnNo)
+        EVT_BUTTON(wxID_CANCEL, wxGenericMessageDialog::OnCancel)
 END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog)
@@ -107,21 +107,21 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString
     if (style & wxYES_NO) 
     {
         yes = new wxButton( this, wxID_YES, _("Yes"), wxPoint(-1,y), wxSize(80,-1) );
-	m_buttons.Append( yes );
+        m_buttons.Append( yes );
         no = new wxButton( this, wxID_NO, _("No"), wxPoint(-1,y), wxSize(80,-1) );
-	m_buttons.Append( no );
+        m_buttons.Append( no );
     }
 
     if (style & wxOK) 
     {
         ok = new wxButton( this, wxID_OK, _("OK"), wxPoint(-1,y), wxSize(80,-1) );
-	m_buttons.Append( ok );
+        m_buttons.Append( ok );
     }
 
     if (style & wxCANCEL) 
     {
         cancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxPoint(-1,y), wxSize(80,-1) );
-	m_buttons.Append( cancel );
+        m_buttons.Append( cancel );
     }
 
     if (ok)
@@ -144,10 +144,10 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString
     while (node)
     {
         wxWindow *win = (wxWindow*)node->Data();
-	int x = (n*2+1)*space - 40 + 15;
-	win->Move( x, -1 );
+        int x = (n*2+1)*space - 40 + 15;
+        win->Move( x, -1 );
         node = node->Next();
-	n++;
+        n++;
     }
     
 #ifdef __WXGTK__

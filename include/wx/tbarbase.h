@@ -158,7 +158,7 @@ class WXDLLEXPORT wxToolBarBase : public wxControl
 #endif
 
   // Lay the tools out
-  virtual void Layout(void);
+  virtual void LayoutTools();
   
   // Add all the buttons: required for Win95.
   virtual bool CreateTools(void) { return TRUE; }

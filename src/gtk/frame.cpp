@@ -73,11 +73,9 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
     printf( ".\n" );
 */
 
-   if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
+   if ((win->GetWidth() != alloc->width) || (win->GetHeight() != alloc->height))
    {
-       win->m_sizeSet = FALSE;
-       win->m_width = alloc->width;
-       win->m_height = alloc->height;
+       win->InternalSetSize( alloc->width, alloc->height );
    }
 }
 
@@ -112,7 +110,7 @@ static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
     if (!win->HasVMT()) return;
     
     win->m_menuBarDetached = FALSE;
-    win->m_sizeSet = FALSE;
+    win->UpdateSize();
 }
 
 //-----------------------------------------------------------------------------
@@ -126,7 +124,7 @@ static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
     if (!win->HasVMT()) return;
     
     win->m_menuBarDetached = TRUE;
-    win->m_sizeSet = FALSE;
+    win->UpdateSize();
 }
 
 //-----------------------------------------------------------------------------
@@ -140,7 +138,7 @@ static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
     if (!win->HasVMT()) return;
     
     win->m_toolBarDetached = FALSE;
-    win->m_sizeSet = FALSE;
+    win->UpdateSize();
 }
 
 //-----------------------------------------------------------------------------
@@ -154,7 +152,7 @@ static void gtk_toolbar_detached_callback( GtkWidget *widget, GtkWidget *WXUNUSE
     if (!win->HasVMT()) return;
     
     win->m_toolBarDetached = TRUE;
-    win->m_sizeSet = FALSE;
+    win->UpdateSize();
 }
 
 //-----------------------------------------------------------------------------
@@ -167,10 +165,9 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
 
     if (!win->HasVMT()) return FALSE;
 
-    win->m_x = event->x;
-    win->m_y = event->y;
+    win->InternalSetPosition(event->x, event->y);
 
-    wxMoveEvent mevent( wxPoint(win->m_x,win->m_y), win->GetId() );
+    wxMoveEvent mevent( wxPoint(win->GetX(),win->GetY()), win->GetId() );
     mevent.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( mevent );
 
@@ -194,60 +191,60 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
     long decor = (long) GDK_DECOR_BORDER;
     long func = (long) GDK_FUNC_MOVE;
     
-    if ((win->m_windowStyle & wxCAPTION) != 0)
-	decor |= GDK_DECOR_TITLE;
-    if ((win->m_windowStyle & wxSYSTEM_MENU) != 0)
+    if ((win->GetWindowStyle() & wxCAPTION) != 0)
+        decor |= GDK_DECOR_TITLE;
+    if ((win->GetWindowStyle() & wxSYSTEM_MENU) != 0)
     {
        decor |= GDK_DECOR_MENU;
        func |= GDK_FUNC_CLOSE;
     }
-    if ((win->m_windowStyle & wxMINIMIZE_BOX) != 0)
+    if ((win->GetWindowStyle() & wxMINIMIZE_BOX) != 0)
     {
-	func |= GDK_FUNC_MINIMIZE;
-	decor |= GDK_DECOR_MINIMIZE;
+        func |= GDK_FUNC_MINIMIZE;
+        decor |= GDK_DECOR_MINIMIZE;
     }
-    if ((win->m_windowStyle & wxMAXIMIZE_BOX) != 0)
+    if ((win->GetWindowStyle() & wxMAXIMIZE_BOX) != 0)
     {
-	func |= GDK_FUNC_MAXIMIZE;
-	decor |= GDK_DECOR_MAXIMIZE;
+        func |= GDK_FUNC_MAXIMIZE;
+        decor |= GDK_DECOR_MAXIMIZE;
     }
-    if ((win->m_windowStyle & wxRESIZE_BORDER) != 0)
+    if ((win->GetWindowStyle() & wxRESIZE_BORDER) != 0)
     {
        func |= GDK_FUNC_RESIZE;
        decor |= GDK_DECOR_RESIZEH;
     }
 
     
-    gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
-    gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
+    gdk_window_set_decorations( win->GetHandle()->window, (GdkWMDecoration)decor);
+    gdk_window_set_functions( win->GetHandle()->window, (GdkWMFunction)func);
       
     /* GTK's shrinking/growing policy */
-    if ((win->m_windowStyle & wxRESIZE_BORDER) == 0)
-        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
+    if ((win->GetWindowStyle() & wxRESIZE_BORDER) == 0)
+        gtk_window_set_policy(GTK_WINDOW(win->GetHandle()), 0, 0, 1);
     else
-        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
+        gtk_window_set_policy(GTK_WINDOW(win->GetHandle()), 1, 1, 1);
     
     /* reset the icon */
     if (win->m_icon != wxNullIcon)
     {
         wxIcon icon( win->m_icon );
         win->m_icon = wxNullIcon;
-	win->SetIcon( icon );
+        win->SetIcon( icon );
     }
     
     /* we set the focus to the child that accepts the focus. this
        doesn't really have to be done in "realize" but why not? */
-    wxNode *node = win->m_children.First();
+    wxWindowList::Node *node = win->GetChildren().GetFirst();
     while (node)
     {
-        wxWindow *child = (wxWindow*) node->Data();
-	if (child->AcceptsFocus())
-	{
-	    child->SetFocus();
-	    break;
-	}
-	
-        node = node->Next();
+        wxWindow *child = node->GetData();
+        if (child->AcceptsFocus())
+        {
+            child->SetFocus();
+            break;
+        }
+        
+        node = node->GetNext();
     }
     
     return FALSE;
@@ -267,45 +264,45 @@ static void wxInsertChildInFrame( wxWindow* parent, wxWindow* child )
     if (wxIS_KIND_OF(child,wxToolBar) || wxIS_KIND_OF(child,wxMenuBar))
     {
         /* actually, menubars are never inserted here, but this
-	   may change one day */
+           may change one day */
     
         /* these are outside the client area */
-	wxFrame* frame = (wxFrame*) parent;
+        wxFrame* frame = (wxFrame*) parent;
         gtk_myfixed_put( GTK_MYFIXED(frame->m_mainWidget),
-                         GTK_WIDGET(child->m_widget),
-                         child->m_x,
-                         child->m_y,
-			 child->m_width,
-			 child->m_height );
-			 
-	/* we connect to these events for recalculating the client area
-	   space when the toolbar is floating */
-	if (wxIS_KIND_OF(child,wxToolBar))
-	{
-	    wxToolBar *toolBar = (wxToolBar*) child;
-	    if (toolBar->m_windowStyle & wxTB_DOCKABLE)
-	    {
-                gtk_signal_connect( GTK_OBJECT(toolBar->m_widget), "child_attached",
+                         GTK_WIDGET(child->GetHandle()),
+                         child->GetX(),
+                         child->GetY(),
+                         child->GetWidth(),
+                         child->GetHeight() );
+                         
+        /* we connect to these events for recalculating the client area
+           space when the toolbar is floating */
+        if (wxIS_KIND_OF(child,wxToolBar))
+        {
+            wxToolBar *toolBar = (wxToolBar*) child;
+            if (toolBar->GetWindowStyle() & wxTB_DOCKABLE)
+            {
+                gtk_signal_connect( GTK_OBJECT(toolBar->GetHandle()), "child_attached",
                     GTK_SIGNAL_FUNC(gtk_toolbar_attached_callback), (gpointer)parent );
-		    
-                gtk_signal_connect( GTK_OBJECT(toolBar->m_widget), "child_detached",
+                    
+                gtk_signal_connect( GTK_OBJECT(toolBar->GetHandle()), "child_detached",
                     GTK_SIGNAL_FUNC(gtk_toolbar_detached_callback), (gpointer)parent );
-	    }
-	}
+            }
+        }
     }
     else
     {
         /* these are inside the client area */
-        gtk_myfixed_put( GTK_MYFIXED(parent->m_wxwindow),
-                         GTK_WIDGET(child->m_widget),
-                         child->m_x,
-                         child->m_y,
-			 child->m_width,
-			 child->m_height );
+        gtk_myfixed_put( GTK_MYFIXED(parent->GetWxWindow()),
+                         GTK_WIDGET(child->GetHandle()),
+                         child->GetX(),
+                         child->GetY(),
+                         child->GetWidth(),
+                         child->GetHeight() );
     }
 
     /* resize on OnInternalIdle */
-    parent->m_sizeSet = FALSE;
+    parent->UpdateSize();
 }
 
 //-----------------------------------------------------------------------------
@@ -413,7 +410,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     /*  we cannot set MWM hints and icons before the widget has
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
-			GTK_SIGNAL_FUNC(gtk_frame_realized_callback), (gpointer) this );
+                        GTK_SIGNAL_FUNC(gtk_frame_realized_callback), (gpointer) this );
     
     /* the user resized the frame by dragging etc. */
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
@@ -523,15 +520,15 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
         if ((m_x != old_x) || (m_y != old_y))
         {
             /* we set the size here and in gtk_frame_map_callback */
-	    gtk_widget_set_uposition( m_widget, m_x, m_y );
+            gtk_widget_set_uposition( m_widget, m_x, m_y );
         }
     }
 
     if ((m_width != old_width) || (m_height != old_height))
     {
         /* we set the size in GtkOnSize, i.e. mostly the actual resizing is
-	   done either directly before the frame is shown or in idle time
-	   so that different calls to SetSize() don't lead to flicker. */
+           done either directly before the frame is shown or in idle time
+           so that different calls to SetSize() don't lead to flicker. */
         m_sizeSet = FALSE;
     }
 
@@ -560,30 +557,30 @@ void wxFrame::GetClientSize( int *width, int *height ) const
     {
         /* menu bar */
         if (m_frameMenuBar)
-	{
-	    if (!m_menuBarDetached) 
-	        (*height) -= wxMENU_HEIGHT;
-	    else
-	        (*height) -= wxPLACE_HOLDER;
-	}
-	
-	/* status bar */
+        {
+            if (!m_menuBarDetached) 
+                (*height) -= wxMENU_HEIGHT;
+            else
+                (*height) -= wxPLACE_HOLDER;
+        }
+        
+        /* status bar */
         if (m_frameStatusBar) (*height) -= wxSTATUS_HEIGHT;
-	
-	/* tool bar */
+        
+        /* tool bar */
         if (m_frameToolBar)
         {
-	    if (!m_toolBarDetached)
-	    {
+            if (!m_toolBarDetached)
+            {
                 int y = 0;
                 m_frameToolBar->GetSize( (int *) NULL, &y );
                 (*height) -= y;
-	    }
-	    else
+            }
+            else
                 (*height) -= wxPLACE_HOLDER;
         }
-	
-	/* mini edge */
+        
+        /* mini edge */
         (*height) -= m_miniEdge*2 + m_miniTitle;
     }
     if (width)
@@ -598,29 +595,29 @@ void wxFrame::DoSetClientSize( int width, int height )
 
         /* menu bar */
         if (m_frameMenuBar)
-	{
-	    if (!m_menuBarDetached) 
-	        height += wxMENU_HEIGHT;
-	    else
-	        height += wxPLACE_HOLDER;
-	}
-	
-	/* status bar */
+        {
+            if (!m_menuBarDetached) 
+                height += wxMENU_HEIGHT;
+            else
+                height += wxPLACE_HOLDER;
+        }
+        
+        /* status bar */
         if (m_frameStatusBar) height += wxSTATUS_HEIGHT;
-	
-	/* tool bar */
+        
+        /* tool bar */
         if (m_frameToolBar)
         {
-	    if (!m_toolBarDetached)
-	    {
+            if (!m_toolBarDetached)
+            {
                 int y = 0;
                 m_frameToolBar->GetSize( (int *) NULL, &y );
                 height += y;
-	    }
-	    else
+            }
+            else
                 height += wxPLACE_HOLDER;
         }
-	
+        
     wxWindow::DoSetClientSize( width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle );
 }
 
@@ -670,15 +667,13 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             int yy = m_miniEdge + m_miniTitle;
             int ww = m_width  - 2*m_miniEdge;
             int hh = wxMENU_HEIGHT;
-	    if (m_menuBarDetached) hh = wxPLACE_HOLDER;
-            m_frameMenuBar->m_x = xx;
-            m_frameMenuBar->m_y = yy;
-            m_frameMenuBar->m_width = ww;
-            m_frameMenuBar->m_height = hh;
+            if (m_menuBarDetached) hh = wxPLACE_HOLDER;
+            m_frameMenuBar->InternalSetPosition(xx, yy);
+            m_frameMenuBar->InternalSetSize(ww, hh);
             gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
-	                          m_frameMenuBar->m_widget, 
-				  xx, yy, ww, hh );
-	    client_area_y_offset += hh;
+                                  m_frameMenuBar->GetHandle(), 
+                                  xx, yy, ww, hh );
+            client_area_y_offset += hh;
         }
     
         if (m_frameToolBar)
@@ -686,37 +681,40 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
             if (m_frameMenuBar)
-	    {
-	        if (!m_menuBarDetached) 
-	            yy += wxMENU_HEIGHT; 
-	        else 
-		    yy += wxPLACE_HOLDER;
-	    }
+            {
+                if (!m_menuBarDetached) 
+                    yy += wxMENU_HEIGHT; 
+                else 
+                    yy += wxPLACE_HOLDER;
+            }
             int ww = m_width - 2*m_miniEdge;
-            int hh = m_frameToolBar->m_height;
-	    if (m_toolBarDetached) hh = wxPLACE_HOLDER; 
-            m_frameToolBar->m_x = xx;
-            m_frameToolBar->m_y = yy;
-            /* m_frameToolBar->m_height = hh;   don't change the toolbar's height */
-            m_frameToolBar->m_width = ww;
+            int hh = m_frameToolBar->GetHeight();
+            // VZ: according to earlier comments in this file, the tbar height
+            //     shouldn't be changed, so I comment out the next line
+            //     (09.05.99)
+            //if (m_toolBarDetached) hh = wxPLACE_HOLDER; 
+
+            m_frameToolBar->InternalSetPosition(xx, yy);
+            m_frameToolBar->InternalSetSize(ww, hh);
+
             gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
-	                          m_frameToolBar->m_widget, 
-			          xx, yy, ww, hh );
-	    client_area_y_offset += hh;
+                                  m_frameToolBar->GetHandle(), 
+                                  xx, yy, ww, hh );
+            client_area_y_offset += hh;
         }
     
         int client_x = m_miniEdge;
-	int client_y = client_area_y_offset + m_miniEdge + m_miniTitle;
+        int client_y = client_area_y_offset + m_miniEdge + m_miniTitle;
         int client_w = m_width - 2*m_miniEdge;
-	int client_h = m_height - client_area_y_offset- 2*m_miniEdge - m_miniTitle;
+        int client_h = m_height - client_area_y_offset- 2*m_miniEdge - m_miniTitle;
         gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
-	                      m_wxwindow, 
-			      client_x, client_y, client_w, client_h );
+                              m_wxwindow, 
+                              client_x, client_y, client_w, client_h );
     }
     else
     {
         /* if there is no m_mainWidget between m_widget and m_wxwindow there
-	   is no need to set the size or position of m_wxwindow. */
+           is no need to set the size or position of m_wxwindow. */
     }
     
     if (m_frameStatusBar)
@@ -725,13 +723,11 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge - client_area_y_offset;
         int ww = m_width - 2*m_miniEdge;
         int hh = wxSTATUS_HEIGHT;
-        m_frameStatusBar->m_x = xx;
-        m_frameStatusBar->m_y = yy;
-        m_frameStatusBar->m_width = ww;
-        m_frameStatusBar->m_height = hh;
+        m_frameStatusBar->InternalSetPosition(xx, yy);
+        m_frameStatusBar->InternalSetSize(ww, hh);
         gtk_myfixed_set_size( GTK_MYFIXED(m_wxwindow), 
-	                      m_frameStatusBar->m_widget, 
-			      xx, yy, ww, hh );
+                              m_frameStatusBar->GetHandle(), 
+                              xx, yy, ww, hh );
     }
 
     /* we actually set the size of a frame here and no-where else */
@@ -747,7 +743,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     /* send size event to status bar */
     if (m_frameStatusBar)
     {
-        wxSizeEvent event2( wxSize(m_frameStatusBar->m_width,m_frameStatusBar->m_height), m_frameStatusBar->GetId() );
+        wxSizeEvent event2( wxSize(m_frameStatusBar->GetWidth(),m_frameStatusBar->GetHeight()), m_frameStatusBar->GetId() );
         event2.SetEventObject( m_frameStatusBar );
         m_frameStatusBar->GetEventHandler()->ProcessEvent( event2 );
     }
@@ -812,7 +808,7 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
     
 #if (GTK_MINOR_VERSION > 0)
     /* support for native hot keys  */
-    gtk_accel_group_attach( menu->m_accel, GTK_OBJECT(win->m_widget));
+    gtk_accel_group_attach( menu->m_accel, GTK_OBJECT(win->GetHandle()));
 #endif
 
     wxNode *node = menu->GetItems().First();
@@ -847,24 +843,24 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
             node = node->Next();
         }
 
-        if (m_frameMenuBar->m_parent != this)
+        if (m_frameMenuBar->GetParent() != this)
         {
-            m_frameMenuBar->m_parent = this;
+            m_frameMenuBar->SetParent(this);
             gtk_myfixed_put( GTK_MYFIXED(m_mainWidget),
-                m_frameMenuBar->m_widget, 
-		m_frameMenuBar->m_x, 
-		m_frameMenuBar->m_y,
-		m_frameMenuBar->m_width,
-		m_frameMenuBar->m_height );
-	
-	    if (menuBar->m_windowStyle & wxMB_DOCKABLE)
-	    {
-                gtk_signal_connect( GTK_OBJECT(menuBar->m_widget), "child_attached",
+                m_frameMenuBar->GetHandle(), 
+                m_frameMenuBar->GetX(), 
+                m_frameMenuBar->GetY(),
+                m_frameMenuBar->GetWidth(),
+                m_frameMenuBar->GetHeight() );
+        
+            if (menuBar->GetWindowStyle() & wxMB_DOCKABLE)
+            {
+                gtk_signal_connect( GTK_OBJECT(menuBar->GetHandle()), "child_attached",
                     GTK_SIGNAL_FUNC(gtk_menu_attached_callback), (gpointer)this );
-		    
-                gtk_signal_connect( GTK_OBJECT(menuBar->m_widget), "child_detached",
+                    
+                gtk_signal_connect( GTK_OBJECT(menuBar->GetHandle()), "child_detached",
                     GTK_SIGNAL_FUNC(gtk_menu_detached_callback), (gpointer)this );
-	    }
+            }
         }
     }
 

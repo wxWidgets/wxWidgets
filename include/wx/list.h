@@ -142,7 +142,7 @@ public:
 
     virtual ~wxNodeBase();
 
-    // @@ no check is done that the list is really keyed on strings
+    // FIXME no check is done that the list is really keyed on strings
     const wxChar *GetKeyString() const { return m_key.string; }
     long GetKeyInteger() const { return m_key.integer; }
 
@@ -339,8 +339,16 @@ private:
 //  2. We redefine all non-type-safe wxList functions with type-safe versions
 //     which don't take any space (everything is inline), but bring compile
 //     time error checking.
+//
+//  3. The macro which is usually used (WX_DECLARE_LIST) is defined in terms of
+//     a more generic WX_DECLARE_LIST_2 macro which, in turn, uses the most
+//     generic WX_DECLARE_LIST_3 one. The last macro adds a sometimes
+//     interesting capability to store polymorphic objects in the list and is
+//     particularly useful with, for example, "wxWindow *" list where the
+//     wxWindowBase pointers are put into the list, but wxWindow pointers are
+//     retrieved from it.
 
-#define WX_DECLARE_LIST_2(T, name, nodetype)                                \
+#define WX_DECLARE_LIST_3(T, Tbase, name, nodetype)                         \
     typedef int (*wxSortFuncFor_##name)(const T *, const T *);              \
                                                                             \
     class WXDLLEXPORT nodetype : public wxNodeBase                          \
@@ -390,11 +398,11 @@ private:
             return node ? (T*)(node->GetData()) : (T*)NULL;                 \
         }                                                                   \
                                                                             \
-        nodetype *Append(T *object)                                         \
+        nodetype *Append(Tbase *object)                                     \
             { return (nodetype *)wxListBase::Append(object); }              \
-        nodetype *Insert(T *object)                                         \
+        nodetype *Insert(Tbase *object)                                     \
             { return (nodetype *)Insert((nodetype*)NULL, object); }         \
-        nodetype *Insert(nodetype *prev, T *object)                         \
+        nodetype *Insert(nodetype *prev, Tbase *object)                     \
             { return (nodetype *)wxListBase::Insert(prev, object); }        \
                                                                             \
         nodetype *Append(long key, void *object)                            \
@@ -406,16 +414,16 @@ private:
             { return (nodetype *)wxListBase::DetachNode(node); }            \
         bool DeleteNode(nodetype *node)                                     \
             { return wxListBase::DeleteNode(node); }                        \
-        bool DeleteObject(T *object)                                        \
+        bool DeleteObject(Tbase *object)                                    \
             { return wxListBase::DeleteObject(object); }                    \
                                                                             \
-        nodetype *Find(T *object) const                                     \
+        nodetype *Find(Tbase *object) const                                 \
             { return (nodetype *)wxListBase::Find(object); }                \
                                                                             \
         virtual nodetype *Find(const wxListKey& key) const                  \
             { return (nodetype *)wxListBase::Find(key); }                   \
                                                                             \
-        int IndexOf( T *object ) const                                      \
+        int IndexOf(Tbase *object) const                                    \
             { return wxListBase::IndexOf(object); }                         \
                                                                             \
         void Sort(wxSortFuncFor_##name func)                                \
@@ -432,6 +440,9 @@ private:
             }                                                               \
     }
 
+#define WX_DECLARE_LIST_2(elementtype, listname, nodename)                  \
+    WX_DECLARE_LIST_3(elementtype, elementtype, listname, nodename)
+
 #define WX_DECLARE_LIST(elementtype, listname)                              \
     typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
     WX_DECLARE_LIST_2(elementtype, listname, wx##listname##Node)
@@ -445,11 +456,8 @@ private:
 // =============================================================================
 
 // ----------------------------------------------------------------------------
-// commonly used string classes
+// commonly used list classes
 // ----------------------------------------------------------------------------
-
-class wxWindow;
-WX_DECLARE_LIST(wxWindow, wxWindowList);
 
 #ifdef wxLIST_COMPATIBILITY
 

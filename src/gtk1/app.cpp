@@ -45,7 +45,6 @@
 wxApp *wxTheApp = (wxApp *)  NULL;
 wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
 
-extern wxList wxPendingDelete;
 #if wxUSE_THREADS
 extern wxList *wxPendingEvents;
 extern wxCriticalSection *wxPendingEventsLocker;
@@ -277,8 +276,8 @@ bool wxApp::OnInitGui()
 
     m_colorCube = (unsigned char*)malloc(32 * 32 * 32);
 
-     for (int r = 0; r < 32; r++)
-     {
+    for (int r = 0; r < 32; r++)
+    {
         for (int g = 0; g < 32; g++)
         {
             for (int b = 0; b < 32; b++)
@@ -287,21 +286,26 @@ bool wxApp::OnInitGui()
                 int gg = (g << 3) | (g >> 2);
                 int bb = (b << 3) | (b >> 2);
 
-                GdkColor *colors = cmap->colors;
-		if(colors)
-		{
-	                int max = 3 * 65536;
-                	int index = -1;
+                int index = -1;
 
-                	for (int i = 0; i < cmap->size; i++)
-               	 {
-                    int rdiff = ((rr << 8) - colors[i].red);
-                    int gdiff = ((gg << 8) - colors[i].green);
-                    int bdiff = ((bb << 8) - colors[i].blue);
-                    int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
-                    if (sum < max) { index = i; max = sum; }
+                GdkColor *colors = cmap->colors;
+                if(colors)
+                {
+                    int max = 3 * 65536;
+
+                    for (int i = 0; i < cmap->size; i++)
+                    {
+                        int rdiff = ((rr << 8) - colors[i].red);
+                        int gdiff = ((gg << 8) - colors[i].green);
+                        int bdiff = ((bb << 8) - colors[i].blue);
+                        int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
+                        if (sum < max)
+                        { 
+                            index = i; max = sum;
+                        }
+                    }
                 }
-		}
+
                 m_colorCube[ (r*1024) + (g*32) + b ] = index;
             }
         }
@@ -448,8 +452,8 @@ void wxApp::DeletePendingObjects()
 
         delete obj;
 
-        if (wxPendingDelete.Member(obj))
-        delete node;
+        if (wxPendingDelete.Find(obj))
+            delete node;
 
         node = wxPendingDelete.First();
     }

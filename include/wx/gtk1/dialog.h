@@ -87,6 +87,9 @@ public:
     virtual void Maximize() { }
     virtual void Restore() { }
 
+    void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
+    int GetReturnCode() const { return m_returnCode; }
+
     // implementation
 
     virtual void GtkOnSize( int x, int y, int width, int height );
@@ -105,6 +108,8 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
 
 private:
+    int m_returnCode;
+
     DECLARE_EVENT_TABLE()
 };
 

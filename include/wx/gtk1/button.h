@@ -59,7 +59,7 @@ class wxButton: public wxControl
            const wxString& name = wxButtonNameStr);
     void SetDefault();
     void SetLabel( const wxString &label );
-    void Enable( bool enable );
+    bool Enable( bool enable );
     
   // implementation        
   

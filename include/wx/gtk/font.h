@@ -58,8 +58,8 @@ public:
   wxFont( const wxFont& font );
   ~wxFont();
   wxFont& operator = ( const wxFont& font );
-  bool operator == ( const wxFont& font );
-  bool operator != ( const wxFont& font );
+  bool operator == ( const wxFont& font ) const;
+  bool operator != ( const wxFont& font ) const;
   bool Ok() const;
 
   int GetPointSize() const;

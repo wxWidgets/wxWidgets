@@ -143,9 +143,9 @@ class wxTextCtrl: public wxControl
     wxTextCtrl& operator<<(const char c);
 #endif
 
-    void SetFont( const wxFont &font );
-    void SetForegroundColour(const wxColour &colour);
-    void SetBackgroundColour(const wxColour &colour);
+    bool SetFont( const wxFont &font );
+    bool SetForegroundColour(const wxColour &colour);
+    bool SetBackgroundColour(const wxColour &colour);
 
   // implementation    
     

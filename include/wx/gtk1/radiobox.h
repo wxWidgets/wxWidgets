@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -50,7 +50,7 @@ class wxRadioBox: public wxControl
              int n = 0, const wxString choices[] = (const wxString *) NULL,
              int majorDim = 1, long style = wxRA_HORIZONTAL,
              const wxValidator& val = wxDefaultValidator, 
-	     const wxString& name = wxRadioBoxNameStr )
+             const wxString& name = wxRadioBoxNameStr )
     {
       Create( parent, id, title, pos, size, n, choices, majorDim, style, val, name );
     }
@@ -60,7 +60,7 @@ class wxRadioBox: public wxControl
              int n = 0, const wxString choices[] = (const wxString *) NULL,
              int majorDim = 0, long style = wxRA_HORIZONTAL,
              const wxValidator& val = wxDefaultValidator, 
-	     const wxString& name = wxRadioBoxNameStr );
+             const wxString& name = wxRadioBoxNameStr );
     int FindString( const wxString& s) const;
     void SetSelection( int n );
     int GetSelection(void) const;
@@ -70,7 +70,7 @@ class wxRadioBox: public wxControl
     void SetLabel( int item, wxBitmap *bitmap );
     wxString GetLabel( int item ) const;
     bool Show( bool show );
-    void Enable( bool enable );
+    bool Enable( bool enable );
     void Enable( int item, bool enable );
     void Show( int item, bool show );
     virtual wxString GetStringSelection(void) const;

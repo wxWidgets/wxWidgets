@@ -166,7 +166,7 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
  
     m_parent->AddChild( this );
 
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->InsertChild( this );
   
     PostCreation();
   
@@ -278,11 +278,14 @@ void wxBitmapButton::SetBitmapSelected( const wxBitmap& bitmap )
     SetBitmap();
 }
 
-void wxBitmapButton::Enable( const bool enable )
+bool wxBitmapButton::Enable( bool enable )
 {
-    wxWindow::Enable(enable);
+    if ( !wxWindow::Enable(enable) )
+        return FALSE;
 
-    SetBitmap();  
+    SetBitmap();
+
+    return TRUE;
 }
 
 void wxBitmapButton::HasFocus()

@@ -124,9 +124,7 @@ bool wxCheckBox::Create(wxWindow *parent,
                         GTK_SIGNAL_FUNC(gtk_checkbox_clicked_callback),
                         (gpointer *)this );
 
-    m_parent->AddChild( this );
-
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->DoAddChild( this );
 
     PostCreation();
 
@@ -169,13 +167,14 @@ void wxCheckBox::SetLabel( const wxString& label )
     gtk_label_set( GTK_LABEL(m_widgetLabel), GetLabel().mbc_str() );
 }
 
-void wxCheckBox::Enable( bool enable )
+bool wxCheckBox::Enable( bool enable )
 {
-    wxCHECK_RET( m_widgetLabel != NULL, _T("invalid checkbox") );
-
-    wxControl::Enable( enable );
+    if ( !wxControl::Enable( enable ) )
+        return FALSE;
 
     gtk_widget_set_sensitive( m_widgetLabel, enable );
+
+    return TRUE;
 }
 
 void wxCheckBox::ApplyWidgetStyle()

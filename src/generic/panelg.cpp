@@ -109,24 +109,24 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
         return;
     }
 
-    wxNode *start_node = GetChildren().Find( winFocus );
+    wxWindowList::Node *start_node = GetChildren().Find( winFocus );
     if (!start_node)
-        start_node = GetChildren().First();
+        start_node = GetChildren().GetFirst();
 
-    wxNode *node = event.GetDirection() ? start_node->Next()
-                                        : start_node->Previous();
+    wxWindowList::Node *node = event.GetDirection() ? start_node->GetNext()
+                                                    : start_node->GetPrevious();
 
     while (node != start_node)
     {
         if (!node)
         {
-            node = event.GetDirection() ? GetChildren().First()
-                                        : GetChildren().Last();
+            node = event.GetDirection() ? GetChildren().GetFirst()
+                                        : GetChildren().GetLast();
 
             continue;
         }
 
-        wxWindow *child = (wxWindow *)node->Data();
+        wxWindow *child = node->GetData();
 
         if (child->AcceptsFocus())
         {
@@ -135,7 +135,7 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
             return;
         }
 
-        node = event.GetDirection() ? node->Next() : node->Previous();
+        node = event.GetDirection() ? node->GetNext() : node->GetPrevious();
     }
 
     // we cycled through all of our children and none of them wanted to accept

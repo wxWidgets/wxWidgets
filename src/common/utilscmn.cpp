@@ -459,7 +459,7 @@ wxFindWindowByLabel1 (const wxString& title, wxWindow * parent)
 
     if (parent)
     {
-        for ( wxNode * node = parent->GetChildren().GetFirst();
+        for ( wxWindowList::Node * node = parent->GetChildren().GetFirst();
               node;
               node = node->GetNext() )
         {

@@ -611,9 +611,9 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     
     // We have to hand down a few functions
     
-    void SetBackgroundColour( const wxColour &colour );
-    void SetForegroundColour( const wxColour &colour );
-    void SetFont( const wxFont &font );
+    bool SetBackgroundColour( const wxColour &colour );
+    bool SetForegroundColour( const wxColour &colour );
+    bool SetFont( const wxFont &font );
     
 #if wxUSE_DRAG_AND_DROP
     void SetDropTarget( wxDropTarget *dropTarget )
@@ -622,14 +622,12 @@ class WXDLLEXPORT wxListCtrl: public wxControl
       { return m_mainWin->GetDropTarget(); }
 #endif
 
-    void SetCursor( const wxCursor &cursor )
-      { if (m_mainWin) m_mainWin->wxWindow::SetCursor( cursor); }
+    bool SetCursor( const wxCursor &cursor )
+      { return m_mainWin ? m_mainWin->wxWindow::SetCursor(cursor) : FALSE; }
     wxColour GetBackgroundColour() const
-      { if (m_mainWin) return m_mainWin->GetBackgroundColour();
-        else return wxColour(); }
+      { return m_mainWin ? m_mainWin->GetBackgroundColour() : wxColour(); }
     wxColour GetForegroundColour() const
-      { if (m_mainWin) return m_mainWin->GetForegroundColour();
-        else return wxColour(); }
+      { return m_mainWin ? m_mainWin->GetForegroundColour() : wxColour(); }
     bool PopupMenu( wxMenu *menu, int x, int y )
       { return m_mainWin->PopupMenu( menu, x, y ); }
     void SetFocus()

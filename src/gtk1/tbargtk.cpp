@@ -65,29 +65,29 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
     if (tool->m_enabled)
     {
         if (tb->m_fg->red != 0)
-	{
+        {
             tb->m_fg->red = 0;
             tb->m_fg->green = 0;
             tb->m_fg->blue = 0;
             gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(tb->m_toolbar) ), tb->m_fg );
-	    
+            
 #if (GTK_MINOR_VERSION > 0)
             GtkStyle *g_style = 
               gtk_style_copy(
                 gtk_widget_get_style( 
                    GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window ) );
-	    
+            
             g_style->fg[GTK_STATE_NORMAL] = *tb->m_fg;
             gtk_widget_set_style( GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window, g_style );
 #else
             gtk_tooltips_set_colors( GTK_TOOLBAR(tb->m_toolbar)->tooltips, tb->m_bg, tb->m_fg );
 #endif
-	}
+        }
     }
     else
     {
         if (tb->m_fg->red == 0)
-	{
+        {
             tb->m_fg->red = 33000;
             tb->m_fg->green = 33000;
             tb->m_fg->blue = 33000;
@@ -97,13 +97,13 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
               gtk_style_copy(
                 gtk_widget_get_style( 
                    GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window ) );
-	    
+            
             g_style->fg[GTK_STATE_NORMAL] = *tb->m_fg;
             gtk_widget_set_style( GTK_TOOLBAR(tb->m_toolbar)->tooltips->tip_window, g_style );
 #else
             gtk_tooltips_set_colors( GTK_TOOLBAR(tb->m_toolbar)->tooltips, tb->m_bg, tb->m_fg );
 #endif
-	}
+        }
     }
     
     /* emit the event */
@@ -160,11 +160,11 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
     if (style & wxTB_DOCKABLE)
     {
         m_widget = gtk_handle_box_new();
-	gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
-	gtk_widget_show( GTK_WIDGET(m_toolbar) );
-	
+        gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
+        gtk_widget_show( GTK_WIDGET(m_toolbar) );
+        
 #if (GTK_MINOR_VERSION > 0)
-	if (style & wxTB_FLAT)
+        if (style & wxTB_FLAT)
             gtk_handle_box_set_shadow_type( GTK_HANDLE_BOX(m_widget), GTK_SHADOW_NONE );
 #endif
     }
@@ -172,7 +172,7 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
     {     
         m_widget = GTK_WIDGET(m_toolbar);
     }
-					    
+                                            
     gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
     
 #if (GTK_MINOR_VERSION > 0)
@@ -199,7 +199,7 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
       gtk_style_copy(
          gtk_widget_get_style( 
             GTK_TOOLBAR(m_toolbar)->tooltips->tip_window ) );
-	    
+            
     g_style->bg[GTK_STATE_NORMAL] = *m_bg;
     gtk_widget_set_style( GTK_TOOLBAR(m_toolbar)->tooltips->tip_window, g_style );
 #else
@@ -209,9 +209,7 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
     m_xMargin = 0;
     m_yMargin = 0;
     
-    m_parent->AddChild( this );
-
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->DoAddChild( this );
   
     PostCreation();
 
@@ -281,7 +279,7 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
     wxToolBarTool *tool = new wxToolBarTool( this, toolIndex, bitmap, pushedBitmap,
                                              toggle, clientData,
                                              helpString1, helpString2,
-					     tool_pixmap );
+                                             tool_pixmap );
 
     GtkToolbarChildType ctype = toggle ? GTK_TOOLBAR_CHILD_TOGGLEBUTTON
                                        : GTK_TOOLBAR_CHILD_BUTTON;
@@ -355,14 +353,14 @@ void wxToolBar::EnableTool(int toolIndex, bool enable)
         if (tool->m_index == toolIndex)
         {
             tool->m_enabled = enable;
-	    
+            
 /*   we don't disable the tools for now as the bitmaps don't get
      greyed anyway and this also disables tooltips
 
-	    if (tool->m_item)
-	        gtk_widget_set_sensitive( tool->m_item, enable );
+            if (tool->m_item)
+                gtk_widget_set_sensitive( tool->m_item, enable );
 */
-		
+                
             return;
         }
         node = node->Next();
@@ -511,7 +509,7 @@ void wxToolBar::SetToolLongHelp(int toolIndex, const wxString& helpString)
         if (tool->m_index == toolIndex)
         { 
             tool->m_longHelpString = helpString;
-	    return;
+            return;
         }
         node = node->Next();
     }
@@ -530,7 +528,7 @@ void wxToolBar::SetToolShortHelp(int toolIndex, const wxString& helpString)
         if (tool->m_index == toolIndex)
         { 
             tool->m_shortHelpString = helpString;
-	    return;
+            return;
         }
         node = node->Next();
     }

@@ -69,11 +69,9 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
     printf( ".\n" );
 */
 
-   if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
+   if ((win->GetWidth() != alloc->width) || (win->GetHeight() != alloc->height))
    {
-       win->m_sizeSet = FALSE;
-       win->m_width = alloc->width;
-       win->m_height = alloc->height;
+       win->InternalSetSize( alloc->width, alloc->height );
    }
 }
 
@@ -87,10 +85,9 @@ static gint gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEvent
 
     if (!win->HasVMT()) return FALSE;
 
-    win->m_x = event->x;
-    win->m_y = event->y;
+    win->InternalSetPosition(event->x, event->y);
 
-    wxMoveEvent mevent( wxPoint(win->m_x,win->m_y), win->GetId() );
+    wxMoveEvent mevent( wxPoint(win->GetX(),win->GetY()), win->GetId() );
     mevent.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( mevent );
 
@@ -114,7 +111,7 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
     {
         wxIcon icon( win->m_icon );
         win->m_icon = wxNullIcon;
-	win->SetIcon( icon );
+        win->SetIcon( icon );
     }
     
     return FALSE;
@@ -129,43 +126,43 @@ gtk_dialog_map_callback( GtkWidget *widget, wxDialog *win )
 {
     /* I haven''t been able to set the position of
        the dialog before it is shown, so I do it here */
-    gtk_widget_set_uposition( widget, win->m_x, win->m_y );
+    gtk_widget_set_uposition( widget, win->GetX(), win->GetY() );
     
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
     long decor = (long) GDK_DECOR_BORDER;
     long func = (long) GDK_FUNC_MOVE ;
     
-    if ((win->m_windowStyle & wxCAPTION) != 0)
-	decor |= GDK_DECOR_TITLE;
-    if ((win->m_windowStyle & wxSYSTEM_MENU) != 0)
+    if ((win->GetWindowStyle() & wxCAPTION) != 0)
+        decor |= GDK_DECOR_TITLE;
+    if ((win->GetWindowStyle() & wxSYSTEM_MENU) != 0)
     {
        decor |= GDK_DECOR_MENU;
        func |= GDK_FUNC_CLOSE;
     }
-    if ((win->m_windowStyle & wxMINIMIZE_BOX) != 0)
+    if ((win->GetWindowStyle() & wxMINIMIZE_BOX) != 0)
     {
-	func |= GDK_FUNC_MINIMIZE;
-	decor |= GDK_DECOR_MINIMIZE;
+        func |= GDK_FUNC_MINIMIZE;
+        decor |= GDK_DECOR_MINIMIZE;
     }
-    if ((win->m_windowStyle & wxMAXIMIZE_BOX) != 0)
+    if ((win->GetWindowStyle() & wxMAXIMIZE_BOX) != 0)
     {
-	decor |= GDK_DECOR_MAXIMIZE;
-	func |= GDK_FUNC_MAXIMIZE;           
+        decor |= GDK_DECOR_MAXIMIZE;
+        func |= GDK_FUNC_MAXIMIZE;           
     }
-    if ((win->m_windowStyle & wxRESIZE_BORDER) != 0)
+    if ((win->GetWindowStyle() & wxRESIZE_BORDER) != 0)
     {
        func |= GDK_FUNC_RESIZE;
        decor |= GDK_DECOR_RESIZEH;
     }
-    gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
-    gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
+    gdk_window_set_decorations( win->GetHandle()->window, (GdkWMDecoration)decor);
+    gdk_window_set_functions( win->GetHandle()->window, (GdkWMFunction)func);
       
     /* GTK's shrinking/growing policy */
-    if ((win->m_windowStyle & wxRESIZE_BORDER) == 0)
-        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
+    if ((win->GetWindowStyle() & wxRESIZE_BORDER) == 0)
+        gtk_window_set_policy(GTK_WINDOW(win->GetHandle()), 0, 0, 1);
     else
-        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
+        gtk_window_set_policy(GTK_WINDOW(win->GetHandle()), 1, 1, 1);
     
     return FALSE;
 }
@@ -186,6 +183,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxPanel)
 
 void wxDialog::Init()
 {
+    m_returnCode = 0;
     m_sizeSet = FALSE;
     m_modalShowing = FALSE;
 }
@@ -236,12 +234,12 @@ bool wxDialog::Create( wxWindow *parent,
     /*  we cannot set MWM hints  before the widget has
         been realized, so we do this directly after realization */
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
-			GTK_SIGNAL_FUNC(gtk_dialog_realized_callback), (gpointer) this );
+                        GTK_SIGNAL_FUNC(gtk_dialog_realized_callback), (gpointer) this );
 
     /* we set the position of the window after the map event. setting it
        before has no effect (with KWM) */
     gtk_signal_connect( GTK_OBJECT(m_widget), "map",
-			GTK_SIGNAL_FUNC(gtk_dialog_map_callback), (gpointer) this );
+                        GTK_SIGNAL_FUNC(gtk_dialog_map_callback), (gpointer) this );
 
     /* the user resized the frame by dragging etc. */
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
@@ -434,17 +432,17 @@ void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     if ((m_x != -1) || (m_y != -1))
     {
         if ((m_x != old_x) || (m_y != old_y))
-	{
-	    /* we set the position here and when showing the dialog
-	       for the first time in idle time */
+        {
+            /* we set the position here and when showing the dialog
+               for the first time in idle time */
             gtk_widget_set_uposition( m_widget, m_x, m_y );
-	}
+        }
     }
 
     if ((m_width != old_width) || (m_height != old_height))
     {
         /* actual resizing is deferred to GtkOnSize in idle time and
-	   when showing the dialog */
+           when showing the dialog */
         m_sizeSet = FALSE;
     }
 
@@ -517,12 +515,12 @@ bool wxDialog::Show( bool show )
     if (show != m_isShown)
     {
         if (show)
-	{
-	    gtk_widget_show( m_widget );
-	}
+        {
+            gtk_widget_show( m_widget );
+        }
         else
             gtk_widget_hide( m_widget );
-	    
+            
         m_isShown = show;
     }
 

@@ -282,9 +282,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         gtk_widget_show( list_item );
     }
 
-    m_parent->AddChild( this );
-
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->DoAddChild( this );
 
     PostCreation();
 
@@ -419,7 +417,7 @@ void wxListBox::AppendCommon( const wxString &item )
     gtk_signal_connect( GTK_OBJECT(list_item), "select",
       GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
-    if (GetWindowStyleFlag() & wxLB_MULTIPLE)
+    if (HasFlag(wxLB_MULTIPLE))
         gtk_signal_connect( GTK_OBJECT(list_item), "deselect",
           GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
@@ -454,7 +452,7 @@ void wxListBox::AppendCommon( const wxString &item )
 #endif
 
 #if wxUSE_TOOLTIPS
-        if (m_toolTip) m_toolTip->Apply( this );
+        if (m_tooltip) m_tooltip->Apply( this );
 #endif
     }
 }
@@ -858,9 +856,12 @@ void wxListBox::ApplyWidgetStyle()
     if (m_backgroundColour.Ok())
     {
         GdkWindow *window = GTK_WIDGET(m_list)->window;
-        m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
-        gdk_window_set_background( window, m_backgroundColour.GetColor() );
-        gdk_window_clear( window );
+        if ( window )
+        {
+            m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+            gdk_window_set_background( window, m_backgroundColour.GetColor() );
+            gdk_window_clear( window );
+        }
     }
 
     GList *child = m_list->children;

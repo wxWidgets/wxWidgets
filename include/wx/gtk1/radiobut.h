@@ -60,7 +60,7 @@ class wxRadioButton: public wxControl
     virtual void SetLabel(const wxString& label);
     virtual void SetValue(bool val);
     virtual bool GetValue(void) const;
-    void Enable( bool enable );
+    bool Enable( bool enable );
     
   // implementation
     

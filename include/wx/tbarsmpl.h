@@ -62,10 +62,10 @@ class WXDLLEXPORT wxToolBarSimple : public wxToolBarBase
 
   virtual void SpringUpButton(int index);
 
-  void Layout(void);
+  virtual void LayoutTools();
 
   // The post-tool-addition call
-  bool Realize() { Layout(); return TRUE; };
+  virtual bool Realize() { LayoutTools(); return TRUE; };
 
 protected:
   int                   m_currentRowsOrColumns;

@@ -120,7 +120,7 @@ public:
   wxString GetTabText(int id) const;
 
   // Layout tabs (optional, e.g. if resizing window)
-  void Layout(void);
+  void LayoutTabs();
 
   // Draw all tabs
   virtual void Draw(wxDC& dc);

@@ -63,7 +63,7 @@ public:
     bool GetValue() const;
 
     void SetLabel( const wxString& label );
-    void Enable( bool enable );
+    bool Enable( bool enable );
 
     // implementation
     void ApplyWidgetStyle();

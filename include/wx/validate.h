@@ -18,7 +18,7 @@
 
 #include "wx/event.h"
 
-class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxWindowBase;
 
 /*
  A validator has up to three purposes:
@@ -36,7 +36,7 @@ class WXDLLEXPORT wxValidator : public wxEvtHandler
 {
 public:
     wxValidator();
-    ~wxValidator();
+    virtual ~wxValidator();
 
     // Make a clone of this validator (or return NULL) - currently necessary
     // if you're passing a reference to a validator.
@@ -49,7 +49,7 @@ public:
 
     // Called when the value in the window must be validated.
     // This function can pop up an error message.
-    virtual bool Validate(wxWindow *WXUNUSED(parent)) { return FALSE; };
+    virtual bool Validate(wxWindowBase *WXUNUSED(parent)) { return FALSE; };
 
     // Called to transfer data to the window
     virtual bool TransferToWindow() { return FALSE; }
@@ -58,8 +58,8 @@ public:
     virtual bool TransferFromWindow() { return FALSE; };
 
     // accessors
-    wxWindow *GetWindow() const { return m_validatorWindow; }
-    void SetWindow(wxWindow *win) { m_validatorWindow = win; }
+    wxWindowBase *GetWindow() const { return m_validatorWindow; }
+    void SetWindow(wxWindowBase *win) { m_validatorWindow = win; }
 
     // validators beep by default if invalid key is pressed, these functions
     // allow to change it
@@ -67,7 +67,7 @@ public:
     static void SetBellOnError(bool doIt = TRUE) { ms_isSilent = doIt; }
 
 protected:
-    wxWindow *m_validatorWindow;
+    wxWindowBase *m_validatorWindow;
 
 private:
     static bool ms_isSilent;

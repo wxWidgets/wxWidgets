@@ -72,7 +72,7 @@ public:
   void SetBitmapLabel( const wxBitmap& bitmap );
   void SetBitmapSelected( const wxBitmap& bitmap );
     
-  virtual void Enable(const bool);
+  virtual bool Enable(const bool);
   
 // implementation
 

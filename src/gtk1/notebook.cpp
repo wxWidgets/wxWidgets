@@ -125,10 +125,10 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 {
     if (g_isIdle) wxapp_install_idle_handler();
     
-    if ((win->m_x == alloc->x) &&
-        (win->m_y == alloc->y) &&
-        (win->m_width == alloc->width) &&
-        (win->m_height == alloc->height))
+    if ((win->GetX() == alloc->x) &&
+        (win->GetY() == alloc->y) &&
+        (win->GetWidth() == alloc->width) &&
+        (win->GetHeight() == alloc->height))
     {
         return;
     }
@@ -188,16 +188,16 @@ static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
     page->m_box = gtk_hbox_new (FALSE, 0);
     gtk_container_border_width(GTK_CONTAINER(page->m_box), 2);
 
-    GtkNotebook *notebook = GTK_NOTEBOOK(parent->m_widget);
+    GtkNotebook *notebook = GTK_NOTEBOOK(parent->GetWidget());
 
     page->m_client = child;
-    gtk_notebook_append_page( notebook, child->m_widget, page->m_box );
+    gtk_notebook_append_page( notebook, child->GetWidget(), page->m_box );
 
     page->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
 
     page->m_parent = notebook;
 
-    gtk_signal_connect( GTK_OBJECT(child->m_widget), "size_allocate",
+    gtk_signal_connect( GTK_OBJECT(child->GetWidget()), "size_allocate",
       GTK_SIGNAL_FUNC(gtk_page_size_callback), (gpointer)child );
 
     wxASSERT_MSG( page->m_page, _T("Notebook page creation error") );
@@ -267,9 +267,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
                   GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback),
                   (gpointer)this );
 
-    m_parent->AddChild( this );
-
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->DoAddChild( this );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "key_press_event",
       GTK_SIGNAL_FUNC(gtk_notebook_key_press_callback), (gpointer)this );

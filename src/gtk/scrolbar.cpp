@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -53,7 +53,7 @@ static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *wi
     float line_step = win->m_adjust->step_increment;
     float page_step = win->m_adjust->page_increment;
   
-    if (win->m_isScrolling)
+    if (win->IsScrolling())
     {
         command = wxEVT_SCROLL_THUMBTRACK;
     }
@@ -70,8 +70,7 @@ static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *wi
 
     int value = (int)(win->m_adjust->value+0.5);
       
-    int orient = wxHORIZONTAL;
-    if (win->GetWindowStyleFlag() & wxSB_VERTICAL == wxSB_VERTICAL) orient = wxVERTICAL;
+    int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
   
     wxScrollEvent event( command, win->GetId(), value, orient );
     event.SetEventObject( win );
@@ -90,11 +89,11 @@ static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *wi
 
 static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget), 
                                                  GdkEventButton *WXUNUSED(gdk_event), 
-						 wxScrollBar *win )
+                                                 wxScrollBar *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    win->m_isScrolling = TRUE;
+    win->SetScrolling(TRUE);
 //  g_blockEventsOnScroll = TRUE;  doesn't work in DialogEd
   
     return FALSE;
@@ -106,11 +105,11 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
 
 static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget), 
                                                    GdkEventButton *WXUNUSED(gdk_event), 
-						   wxScrollBar *win )
+                                                   wxScrollBar *win )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    win->m_isScrolling = FALSE;
+    win->SetScrolling(FALSE);
 //  g_blockEventsOnScroll = FALSE;
   
     gtk_signal_emit_by_name( GTK_OBJECT(win->m_adjust), "value_changed" );
@@ -150,22 +149,20 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
   
     gtk_signal_connect( GTK_OBJECT(m_adjust), 
                         "value_changed",
-		        (GtkSignalFunc) gtk_scrollbar_callback, 
-			(gpointer) this );
+                        (GtkSignalFunc) gtk_scrollbar_callback, 
+                        (gpointer) this );
   
     gtk_signal_connect( GTK_OBJECT(m_widget), 
                         "button_press_event",
                         (GtkSignalFunc)gtk_scrollbar_button_press_callback, 
-			(gpointer) this );
+                        (gpointer) this );
 
     gtk_signal_connect( GTK_OBJECT(m_widget), 
                         "button_release_event",
                         (GtkSignalFunc)gtk_scrollbar_button_release_callback, 
-		        (gpointer) this );
+                        (gpointer) this );
 
-    m_parent->AddChild( this );
-
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->DoAddChild( this );
   
     PostCreation();
   
@@ -299,9 +296,9 @@ bool wxScrollBar::IsOwnGtkWindow( GdkWindow *window )
     GtkRange *range = GTK_RANGE(m_widget);
     return ( (window == GTK_WIDGET(range)->window) ||
              (window == range->trough) ||
-	     (window == range->slider) ||
-	     (window == range->step_forw) ||
-	     (window == range->step_back) );
+             (window == range->slider) ||
+             (window == range->step_forw) ||
+             (window == range->step_back) );
 }
 
 void wxScrollBar::ApplyWidgetStyle()

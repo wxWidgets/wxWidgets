@@ -1,6 +1,9 @@
 #ifndef _WX_CONTROL_H_BASE_
 #define _WX_CONTROL_H_BASE_
 
+// all classes derived from wxControl need the validators
+#include "wx/validate.h"
+
 #if defined(__WXMSW__)
 #include "wx/msw/control.h"
 #elif defined(__WXMOTIF__)

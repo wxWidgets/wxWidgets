@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -109,27 +109,27 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     if (style & wxSL_LABELS)
     {
         gtk_scale_set_draw_value( GTK_SCALE( m_widget ), TRUE );
-	
-	/* labels need more space and too small window will
-	   cause junk to appear on the dialog */
+        
+        /* labels need more space and too small window will
+           cause junk to appear on the dialog */
         if (style & wxSL_VERTICAL)
-	{
-	    wxSize sz( size );
-	    if (sz.x < 35)
-	    {
-	        sz.x = 35;
-		SetSize( sz );
-	    }
-	}
+        {
+            wxSize sz( size );
+            if (sz.x < 35)
+            {
+                sz.x = 35;
+                SetSize( sz );
+            }
+        }
         else
-	{
-	    wxSize sz( size );
-	    if (sz.y < 35)
-	    {
-	        sz.y = 35;
-		SetSize( sz );
-	    }
-	}
+        {
+            wxSize sz( size );
+            if (sz.y < 35)
+            {
+                sz.y = 35;
+                SetSize( sz );
+            }
+        }
     }
     else
         gtk_scale_set_draw_value( GTK_SCALE( m_widget ), FALSE );
@@ -138,15 +138,13 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
   
     gtk_signal_connect( GTK_OBJECT(m_adjust), 
                         "value_changed",
-		        (GtkSignalFunc) gtk_slider_callback, 
-			(gpointer) this );
-	
+                        (GtkSignalFunc) gtk_slider_callback, 
+                        (gpointer) this );
+        
     SetRange( minValue, maxValue );
     SetValue( value );
   
-    m_parent->AddChild( this );
-
-    (m_parent->m_insertCallback)( m_parent, this );
+    m_parent->DoAddChild( this );
   
     PostCreation();
   
@@ -281,9 +279,9 @@ bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
     GtkRange *range = GTK_RANGE(m_widget);
     return ( (window == GTK_WIDGET(range)->window) ||
              (window == range->trough) ||
-	     (window == range->slider) ||
-	     (window == range->step_forw) ||
-	     (window == range->step_back) );
+             (window == range->slider) ||
+             (window == range->step_forw) ||
+             (window == range->step_back) );
 }
 
 void wxSlider::ApplyWidgetStyle()

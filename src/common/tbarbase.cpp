@@ -398,7 +398,7 @@ void wxToolBarBase::Command(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void wxToolBarBase::Layout()
+void wxToolBarBase::LayoutTools()
 {
 }
 

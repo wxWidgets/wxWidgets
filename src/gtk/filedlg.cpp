@@ -57,7 +57,7 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFileDialog *dial
 
     int style = dialog->GetStyle();
 
-    GtkFileSelection *filedlg = GTK_FILE_SELECTION(dialog->m_widget);
+    GtkFileSelection *filedlg = GTK_FILE_SELECTION(dialog->GetHandle());
     char *filename = gtk_file_selection_get_filename(filedlg);
 
     if ( (style & wxSAVE) && ( style & wxOVERWRITE_PROMPT ) )

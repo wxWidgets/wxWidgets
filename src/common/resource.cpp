@@ -2846,7 +2846,7 @@ bool wxResourceParseString(char *s, wxResourceTable *table)
  * resource loading facility
  */
 
-bool wxWindow::LoadFromResource(wxWindow *parent, const wxString& resourceName, const wxResourceTable *table)
+bool wxWindowBase::LoadFromResource(wxWindow *parent, const wxString& resourceName, const wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
@@ -2885,7 +2885,7 @@ bool wxWindow::LoadFromResource(wxWindow *parent, const wxString& resourceName, 
   }
   else
   {
-    if (!this->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
+    if (!((wxWindow *)this)->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
       return FALSE;
   }
 
@@ -2932,7 +2932,7 @@ bool wxWindow::LoadFromResource(wxWindow *parent, const wxString& resourceName, 
   return TRUE;
 }
 
-wxControl *wxWindow::CreateItem(const wxItemResource *resource, const wxItemResource* parentResource, const wxResourceTable *table)
+wxControl *wxWindowBase::CreateItem(const wxItemResource *resource, const wxItemResource* parentResource, const wxResourceTable *table)
 {
   if (!table)
     table = wxDefaultResourceTable;
