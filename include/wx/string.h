@@ -771,11 +771,11 @@ public:
 #ifndef wxSIZE_T_IS_UINT
     // operator version of GetChar
     wxChar operator[](unsigned int n) const
-      { return operator[](n); }
+      { return wxStringBase::operator[](n); }
 
     // operator version of GetWriteableChar
     wxChar& operator[](unsigned int n)
-      { return operator[](n); }
+      { return wxStringBase::operator[](n); }
 #endif // size_t != unsigned int
 
     // implicit conversion to C string
