@@ -12,6 +12,8 @@
 #ifndef _WX_CURSOR_H_
 #define _WX_CURSOR_H_
 
+#include <wx/image.h>
+
 #ifdef __GNUG__
     #pragma interface "cursor.h"
 #endif
@@ -55,7 +57,7 @@ public:
 
     // Copy constructors
     wxCursor(const wxCursor& cursor) { Ref(cursor); }
-
+    wxCursor(const wxImage & image) ;
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,
              const char maskBits[] = NULL);

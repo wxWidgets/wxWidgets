@@ -120,6 +120,79 @@ wxCursor::wxCursor()
 {
 }
 
+wxCursor::wxCursor( const wxImage & image )
+{
+    //image has to be 32x32
+    wxImage image32 = image.Scale(32,32);
+    unsigned char * rgbBits = image32.GetData();
+    int w = image32.GetWidth()  ;
+    int h = image32.GetHeight() ;
+    bool bHasMask = image32.HasMask() ;
+    int imagebitcount = (w*h)/8;
+
+    unsigned char r, g, b ;
+    unsigned char * bits = new unsigned char [imagebitcount];
+    unsigned char * maskBits = new unsigned char [imagebitcount];
+
+    int i,j, i8; unsigned char c, cMask;
+    for (i=0; i<imagebitcount; i++)
+        {
+        bits[i] = 0;
+        i8 = i * 8;
+//unlike gtk, the pixels go in the opposite order in the bytes
+        cMask = 128;
+        for (j=0; j<8; j++)
+           {
+           // possible overflow if we do the summation first ?
+           c = rgbBits[(i8+j)*3]/3 + rgbBits[(i8+j)*3+1]/3 + rgbBits[(i8+j)*3+2]/3 ;
+           //if average value is > mid grey
+           if (c>127)
+              bits[i] = bits[i] | cMask ;
+           cMask = cMask / 2 ;
+           }
+        }
+    if (bHasMask)
+        {
+        r = image32.GetMaskRed() ;
+        g = image32.GetMaskGreen() ;
+        b = image32.GetMaskBlue() ;
+
+        for (i=0; i<imagebitcount; i++)
+        {
+        maskBits[i] = 0x0;
+        i8 = i * 8;
+
+        cMask = 128;
+        for (j=0; j<8; j++)
+           {
+           if (rgbBits[(i8+j)*3] == r && rgbBits[(i8+j)*3+1] == g && rgbBits[(i8+j)*3+2] == b)
+              maskBits[i] = maskBits[i] | cMask ;
+           cMask = cMask / 2 ;
+           }
+        }
+        }
+      else
+        {
+        for (i=0; i<imagebitcount; i++)
+            maskBits[i]= 0x0 ;
+        }
+
+    int hotSpotX = image32.GetOptionInt(wxCUR_HOTSPOT_X);
+    int hotSpotY = image32.GetOptionInt(wxCUR_HOTSPOT_Y);
+    if (hotSpotX < 0 || hotSpotX >= w)
+            hotSpotX = 0;
+    if (hotSpotY < 0 || hotSpotY >= h)
+            hotSpotY = 0;
+
+    wxCursorRefData *refData = new wxCursorRefData;
+    m_refData = refData;
+    refData->m_hCursor = (WXHCURSOR) CreateCursor ( wxGetInstance(), hotSpotX, hotSpotY, w, h, /*AND*/ maskBits, /*XOR*/ bits   );
+  
+    delete [] bits ;
+    delete [] maskBits;
+
+}
+
 wxCursor::wxCursor(const char WXUNUSED(bits)[],
                    int WXUNUSED(width),
                    int WXUNUSED(height),

@@ -67,6 +67,15 @@ icon file, to specify the cursor hotspot relative to the top left of the image.
 
 Constructs a cursor using a cursor identifier.
 
+\func{}{wxCursor}{\param{const wxImage\&}{ image}}
+
+Constructs a cursor from a wxImage. The cursor is monochome, colors with the RGB elements all greater
+than 127 will be foreground, colors less than this background. The mask (if any) will be used as transparent.
+
+In MSW the foreground will be white and the background black. The cursor is resized to 32x32
+In GTK, the two most frequent colors will be used for foreground and background. The cursor will be displayed
+at the size of the image.
+
 \func{}{wxCursor}{\param{const wxCursor\&}{ cursor}}
 
 Copy constructor. This uses reference counting so is a cheap operation.
