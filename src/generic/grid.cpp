@@ -31,8 +31,7 @@
     #include "wx/dcclient.h"
     #include "wx/settings.h"
     #include "wx/log.h"
-    #include "wx/sizer.h"
-    #include "wx/layout.h"
+    #include "wx/textfile.h"
 #endif
 
 #include "wx/generic/grid.h"
@@ -3225,13 +3224,14 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
 //
 void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
 {
-    // TODO: this won't work for WXMAC ? (lines end with '\r')
-    //       => use wxTextFile functions then (VZ)
     int startPos = 0;
     int pos;
-    while ( startPos < (int)value.Length() )
+    wxString eol = wxTextFile::GetEOL( wxTextFileType_Unix );
+    wxString tVal = wxTextFile::Translate( value, wxTextFileType_Unix );
+    
+    while ( startPos < (int)tVal.Length() )
     {
-        pos = value.Mid(startPos).Find( '\n' );
+        pos = tVal.Mid(startPos).Find( eol );
         if ( pos < 0 )
         {
             break;
@@ -3242,14 +3242,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
         }
         else
         {
-            if ( value[startPos+pos-1] == '\r' )
-            {
-                lines.Add( value.Mid(startPos, pos-1) );
-            }
-            else
-            {
-                lines.Add( value.Mid(startPos, pos) );
-            }
+            lines.Add( value.Mid(startPos, pos) );
         }
         startPos += pos+1;
     }
@@ -4370,7 +4363,7 @@ int wxGrid::GetColSize( int col )
 
 wxColour wxGrid::GetDefaultCellBackgroundColour()
 {
-    return GetBackgroundColour();
+    return m_gridWin->GetBackgroundColour();
 }
 
 // TODO VZ: this must be optimized to allow only retrieveing attr once!
@@ -4392,7 +4385,7 @@ wxColour wxGrid::GetCellBackgroundColour(int row, int col)
 
 wxColour wxGrid::GetDefaultCellTextColour()
 {
-    return GetForegroundColour();
+    return m_gridWin->GetForegroundColour();
 }
 
 wxColour wxGrid::GetCellTextColour( int row, int col )
@@ -4535,12 +4528,12 @@ void wxGrid::SetColSize( int col, int width )
 
 void wxGrid::SetDefaultCellBackgroundColour( const wxColour& col )
 {
-    SetBackgroundColour(col);
+    m_gridWin->SetBackgroundColour(col);
 }
 
 void wxGrid::SetDefaultCellTextColour( const wxColour& col )
 {
-    SetForegroundColour(col);
+    m_gridWin->SetForegroundColour(col);
 }
 
 void wxGrid::SetDefaultCellAlignment( int horiz, int vert )
