@@ -1201,9 +1201,9 @@ clean:  $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_tiff
         rd      ..\common\$D
         rd      ..\html\$D
         rd      ..\os2\$D
-        del     ..\lib\wx.lib
+        erase /N $(WXDIR)\lib\wx.lib
 !if "$(WXMAKINGDLL)" == "1"
-        del ..\lib\wx24.lib
+        erase /N $(WXDIR)\lib\wx24.lib
 !endif
         erase /N $(COMMDIR)\y_tab.c
         erase /N $(COMMDIR)\lex_yy.c
