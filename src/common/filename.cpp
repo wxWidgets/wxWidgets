@@ -57,6 +57,12 @@
     #include <unistd.h>
 #endif
 
+#ifdef __MWERKS__
+    #include <stat.h>
+    #include <unistd.h>
+    #include <unix.h>
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -1017,7 +1023,20 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
                           wxDateTime *dtMod,
                           wxDateTime *dtChange) const
 {
-#if defined(__UNIX_LIKE__)
+#if defined(__UNIX_LIKE__) 
+    wxStructStat stBuf;
+    if ( wxStat(GetFullPath(), &stBuf) == 0 )
+    {
+        if ( dtAccess )
+            dtAccess->Set(stBuf.st_atime);
+        if ( dtMod )
+            dtMod->Set(stBuf.st_mtime);
+        if ( dtChange )
+            dtChange->Set(stBuf.st_ctime);
+
+        return TRUE;
+    }
+#elif defined(__WXMAC__)
     wxStructStat stBuf;
     if ( wxStat(GetFullPath(), &stBuf) == 0 )
     {
