@@ -2887,7 +2887,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 
                 // we could have got an event from our child, reflect it back
                 // to it if this is the case
-                wxWindow *win = NULL;
+                wxWindowMSW *win = NULL;
                 if ( wParam != m_hWnd )
                 {
                     win = FindItemByHWND((WXHWND)wParam);
