@@ -460,170 +460,49 @@ void wxWindowX11::WarpPointer (int x, int y)
 // Does a physical scroll
 void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
-#if 0
-    int x, y, w, h;
-    if (rect)
+    Window xwindow = (Window) GetMainWindow();
+
+    wxCHECK_RET( xwindow, wxT("invalid window") );
+
+    Display *xdisplay = wxGlobalDisplay();
+
+    GC xgc = XCreateGC( xdisplay, xwindow, 0, NULL );
+    XSetGraphicsExposures( xdisplay, xgc, True );
+
+    int cw = 0;
+    int ch = 0;
+    GetClientSize( &cw, &ch );
+    int w = cw - abs(dx);
+    int h = ch - abs(dy);
+
+    if ((h < 0) || (w < 0))
     {
-        // Use specified rectangle
-        x = rect->x; y = rect->y; w = rect->width; h = rect->height;
+        Refresh();
     }
     else
     {
-        // Use whole client area
-        x = 0; y = 0;
-        GetClientSize(& w, & h);
+        int s_x = 0;
+        int s_y = 0;
+        if (dx < 0) s_x = -dx;
+        if (dy < 0) s_y = -dy;
+        int d_x = 0;
+        int d_y = 0;
+        if (dx > 0) d_x = dx;
+        if (dy > 0) d_y = dy;
+
+        XCopyArea( xdisplay, xwindow, xwindow, xgc, s_x, s_y, w, h, d_x, d_y );
+
+        wxRect rect;
+        if (dx < 0) rect.x = cw+dx; else rect.x = 0;
+        if (dy < 0) rect.y = ch+dy; else rect.y = 0;
+        if (dy != 0) rect.width = cw; else rect.width = abs(dx);
+        if (dx != 0) rect.height = ch; else rect.height = abs(dy);
+
+        m_updateRegion.Union( rect );
+        m_clearRegion.Union( rect );
     }
     
-    wxNode *cnode = m_children.First();
-    while (cnode)
-    {
-        wxWindow *child = (wxWindow*) cnode->Data();
-        int sx = 0;
-        int sy = 0;
-        child->GetSize( &sx, &sy );
-        wxPoint pos( child->GetPosition() );
-        child->SetSize( pos.x + dx, pos.y + dy, sx, sy, wxSIZE_ALLOW_MINUS_ONE );
-        cnode = cnode->Next();
-    }
-    
-    int x1 = (dx >= 0) ? x : x - dx;
-    int y1 = (dy >= 0) ? y : y - dy;
-    int w1 = w - abs(dx);
-    int h1 = h - abs(dy);
-    int x2 = (dx >= 0) ? x + dx : x;
-    int y2 = (dy >= 0) ? y + dy : y;
-    
-    wxClientDC dc((wxWindow*) this);
-    
-    dc.SetLogicalFunction (wxCOPY);
-    
-    Window window = (Window) GetMainWindow();
-    Display* display = wxGlobalDisplay();
-    
-    XCopyArea(display, window, window, (GC) dc.GetGC(),
-        x1, y1, w1, h1, x2, y2);
-    
-    dc.SetAutoSetting(TRUE);
-    wxBrush brush(GetBackgroundColour(), wxSOLID);
-    dc.SetBrush(brush); // FIXME: needed?
-    
-    // We'll add rectangles to the list of update rectangles according to which
-    // bits we've exposed.
-    wxList updateRects;
-    
-    if (dx > 0)
-    {
-        wxRect *rect = new wxRect;
-        rect->x = x;
-        rect->y = y;
-        rect->width = dx;
-        rect->height = h;
-        
-        XFillRectangle(display, window,
-            (GC) dc.GetGC(), rect->x, rect->y, rect->width, rect->height);
-        
-        rect->x = rect->x;
-        rect->y = rect->y;
-        rect->width = rect->width;
-        rect->height = rect->height;
-        
-        updateRects.Append((wxObject*) rect);
-    }
-    else if (dx < 0)
-    {
-        wxRect *rect = new wxRect;
-        
-        rect->x = x + w + dx;
-        rect->y = y;
-        rect->width = -dx;
-        rect->height = h;
-        
-        XFillRectangle(display, window,
-            (GC) dc.GetGC(), rect->x, rect->y, rect->width,
-            rect->height);
-        
-        rect->x = rect->x;
-        rect->y = rect->y;
-        rect->width = rect->width;
-        rect->height = rect->height;
-        
-        updateRects.Append((wxObject*) rect);
-    }
-    if (dy > 0)
-    {
-        wxRect *rect = new wxRect;
-        
-        rect->x = x;
-        rect->y = y;
-        rect->width = w;
-        rect->height = dy;
-        
-        XFillRectangle(display, window,
-            (GC) dc.GetGC(), rect->x, rect->y, rect->width, rect->height);
-        
-        rect->x = rect->x;
-        rect->y = rect->y;
-        rect->width = rect->width;
-        rect->height = rect->height;
-        
-        updateRects.Append((wxObject*) rect);
-    }
-    else if (dy < 0)
-    {
-        wxRect *rect = new wxRect;
-        
-        rect->x = x;
-        rect->y = y + h + dy;
-        rect->width = w;
-        rect->height = -dy;
-        
-        XFillRectangle(display, window,
-            (GC) dc.GetGC(), rect->x, rect->y, rect->width, rect->height);
-        
-        rect->x = rect->x;
-        rect->y = rect->y;
-        rect->width = rect->width;
-        rect->height = rect->height;
-        
-        updateRects.Append((wxObject*) rect);
-    }
-    dc.SetBrush(wxNullBrush);
-    
-    // Now send expose events
-    
-    wxNode* node = updateRects.First();
-    while (node)
-    {
-        wxRect* rect = (wxRect*) node->Data();
-        XExposeEvent event;
-        
-        event.type = Expose;
-        event.display = display;
-        event.send_event = True;
-        event.window = window;
-        
-        event.x = rect->x;
-        event.y = rect->y;
-        event.width = rect->width;
-        event.height = rect->height;
-        
-        event.count = 0;
-        
-        XSendEvent(display, window, False, ExposureMask, (XEvent *)&event);
-        
-        node = node->Next();
-        
-    }
-    
-    // Delete the update rects
-    node = updateRects.First();
-    while (node)
-    {
-        wxRect* rect = (wxRect*) node->Data();
-        delete rect;
-        node = node->Next();
-    }
-#endif
+    XFreeGC( xdisplay, xgc );
 }
 
 // ---------------------------------------------------------------------------
