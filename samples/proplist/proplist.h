@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma interface "proplist.h"
+#pragma interface "proplist_sample.h"
 #endif
 
 #ifndef _PROPTEST_H_
