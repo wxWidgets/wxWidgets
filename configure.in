@@ -1526,10 +1526,7 @@ fi
 if test "$wxUSE_GTK" = 1; then
     dnl avoid calling AM_PATH_GTK twice, so check first for the newer version and
     dnl only then, if it wasn't found, for an older one
-    AM_PATH_GTK(1.2.0, WXGTK12=1)
-    if test "$WXGTK12" != 1; then
-       AM_PATH_GTK(1.0.0, , AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.X or 1.0.X?))
-    fi
+    AM_PATH_GTK(1.2.1, WXGTK12=1, AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.1 or above?))
 
     TOOLKIT_INCLUDE="$GTK_CFLAGS"
     GUI_TK_LIBRARY="$GTK_LIBS"
@@ -2940,7 +2937,8 @@ AC_OUTPUT([
             samples/docvwmdi/Makefile
             samples/dnd/Makefile
             samples/drawing/Makefile
-            samples/dynamic/Makefile
+            samples/forty/Makefile
+            samples/fractal/Makefile
             samples/image/Makefile
             samples/internat/Makefile
             samples/layout/Makefile
@@ -2951,6 +2949,7 @@ AC_OUTPUT([
             samples/nettest/Makefile
             samples/newgrid/Makefile
             samples/notebook/Makefile
+            samples/png/Makefile
             samples/printing/Makefile
 	    samples/proplist/Makefile
             samples/richedit/Makefile

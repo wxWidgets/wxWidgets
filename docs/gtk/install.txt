@@ -65,7 +65,7 @@ cd ..
 * The most simple errors
 ------------------------
 
-configure reports, that you don't have GTK 1.X installed although you are 
+configure reports, that you don't have GTK 1.2 installed although you are 
 very sure you have. Well, you have installed it, but you also have another 
 version of the GTK installed, which you may need to remove including other 
 versions of glib (and its headers). Also, look for the PATH variable and check 
@@ -111,15 +111,13 @@ YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect, but I tried...
 -----------------------
 
 wxWindows/GTK requires the GTK+ library to be installed on your system. It has to 
-be a stable version, preferebly version 1.2.3. You can use GTK 1.0 in connection 
-with wxWindows, albeit without Drag'n'Drop. wxWindows does work with the 1.1.X 
-versions of the GTK+ library.
+be a stable version, preferebly version 1.2.3.
 
 You can get the newest version of the GTK+ from the GTK homepage at:
 
   http://www.gtk.org
   
-We also mirror GTK+ 1.0.6 at my ftp site. You'll find information about downloading 
+We also mirror GTK+ 1.2.3 at my ftp site. You'll find information about downloading 
 at my homepage.
   
 * Additional libraries
@@ -402,20 +400,9 @@ to sitch to tmake.
 
 2) The other way creates a project within the source code 
 directories of wxWindows. For this endeavour, you'll need
-the usual number of GNU tools, at least
-
-GNU automake version 1.4
-GNU autoheader version 2.14
-GNU autoconf version 2.14
-GNU libtool version 1.3
-
-and quite possibly 
-
-GNU make
-GNU C++
-
-and if you have all this then you probably know enough to
-go ahead yourself :-)
+GNU autoconf version 2.14 and add an entry to your Makefile.in
+to the bottom of the configure.in script and run autoconf
+and configure before you can type make.
 
 ----------------------
 

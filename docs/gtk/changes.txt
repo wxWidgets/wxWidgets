@@ -2,7 +2,7 @@
 25th October '99: My birthday, wxWindows 2.1.10 released
 
 Enlightment has struck the majority of the developers and
-they have chosen ti use the Linux kernel numbering scheme
+they have chosen to use the Linux kernel numbering scheme
 for wxWindows from now on. This means that the next stable
 release will be called wxWindows 2.2.X, development snapshots
 will be called 2.1.X.
@@ -35,7 +35,7 @@ can now use wxODBC from wxMSW and wxGTK.
 
 Several printing things fixed.
 
-HTML widget and its wxWindows' help system based upon
+HTML widget and the wxWindows' help system based upon
 it have been reorganized and improved for easier use
 from Python and C++.
 

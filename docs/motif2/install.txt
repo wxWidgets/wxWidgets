@@ -366,20 +366,10 @@ to sitch to tmake.
 
 2) The other way creates a project within the source code 
 directories of wxWindows. For this endeavour, you'll need
-the usual number of GNU tools, at least
+GNU autoconf version 2.14 and add an entry to your Makefile.in
+to the bottom of the configure.in script and run autoconf
+and configure before you can type make.
 
-GNU automake version 1.4
-GNU autoheader version 2.14
-GNU autoconf version 2.14
-GNU libtool version 1.2 (1.3 seems broken)
-
-and quite possibly 
-
-GNU make
-GNU C++
-
-and if you have all this then you probably know enough to
-go ahead yourself :-)
 
 ----------------------
 

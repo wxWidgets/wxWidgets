@@ -21,8 +21,10 @@
 #endif
 
 #ifdef __WXMSW__
-#include <wx/pnghand.h>
-// #include <wx/xpmhand.h>
+#include "wx/pnghand.h"
+#endif
+#ifdef __WXGTK__
+#include "wx/image.h"
 #endif
 
 #include "pngdemo.h"
@@ -40,8 +42,9 @@ bool MyApp::OnInit(void)
 {
 #ifdef __WXMSW__
   wxBitmap::AddHandler(new wxPNGFileHandler);
-//  wxBitmap::AddHandler(new wxXPMFileHandler);
-//  wxBitmap::AddHandler(new wxXPMDataHandler);
+#endif
+#ifdef __WXGTK__
+  wxImage::AddHandler(new wxPNGHandler);
 #endif
 
   // Create the main frame window
