@@ -511,9 +511,22 @@ void wxRuntimeDepersister::SetConnect(int eventSourceObjectID,
 
     if ( ehsource && ehsink )
     {
-        ehsource->Connect( -1 , delegateInfo->GetEventType() ,
-            handlerInfo->GetEventFunction() , NULL /*user data*/ ,
-            ehsink ) ;
+        if( delegateInfo->GetLastEventType() == -1 )
+        {
+            ehsource->Connect( -1 , delegateInfo->GetEventType() ,
+                handlerInfo->GetEventFunction() , NULL /*user data*/ ,
+                ehsink ) ;
+        }
+        else
+        {
+            for ( wxEventType iter = delegateInfo->GetEventType() ; iter <= delegateInfo->GetLastEventType() ; ++iter )
+            {
+                ehsource->Connect( -1 , iter ,
+                    handlerInfo->GetEventFunction() , NULL /*user data*/ ,
+                    ehsink ) ;
+            }
+        }
+        
     }
 }
 
