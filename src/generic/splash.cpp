@@ -98,7 +98,9 @@ void wxSplashScreen::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
  */
 
 BEGIN_EVENT_TABLE(wxSplashScreenWindow, wxWindow)
-    //EVT_PAINT(wxSplashScreenWindow::OnPaint)
+#ifdef __WXGTK__
+    EVT_PAINT(wxSplashScreenWindow::OnPaint)
+#endif
     EVT_ERASE_BACKGROUND(wxSplashScreenWindow::OnEraseBackground)
     EVT_CHAR(wxSplashScreenWindow::OnChar)
     EVT_MOUSE_EVENTS(wxSplashScreenWindow::OnMouseEvent)
@@ -118,13 +120,6 @@ wxSplashScreenWindow::wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* par
     }
 #endif
 
-}
-
-void wxSplashScreenWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
-{
-    wxPaintDC dc(this);
-    if (m_bitmap.Ok())
-        dc.DrawBitmap(m_bitmap, 0, 0);
 }
 
 // VZ: why don't we do it under wxGTK?
@@ -155,6 +150,13 @@ static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int WXUNUSED(x)
         dcMem.SetPalette(wxNullPalette);
     }
 #endif // USE_PALETTE_IN_SPLASH
+}
+
+void wxSplashScreenWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
+{
+    wxPaintDC dc(this);
+    if (m_bitmap.Ok())
+        wxDrawSplashBitmap(dc, m_bitmap, 0, 0);
 }
 
 void wxSplashScreenWindow::OnEraseBackground(wxEraseEvent& event)
