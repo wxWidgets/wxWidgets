@@ -1916,23 +1916,20 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             }
         }
 
-        wxPen *pen = wxTRANSPARENT_PEN;
-        wxColour colText;
-
+        wxPen *pen;
+#ifndef __WXMAC__
+        // don't draw rect outline if we already have the background color
+        // under Max
         if ( item->IsSelected() )
-        {
             pen = wxBLACK_PEN;
-
-            if ( m_hasFocus )
-            {
-                colText = wxSystemSettings::
-                            GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
-            }
-
-#ifdef __WXMAC__
-            // no rect outline, we already have the background color
+        else
+#endif // !__WXMAC__
             pen = wxTRANSPARENT_PEN;
-#endif
+
+        wxColour colText;
+        if ( item->IsSelected() && m_hasFocus )
+        {
+            colText = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
         }
         else
         {
