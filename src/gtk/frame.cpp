@@ -252,7 +252,7 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxFrame *win )
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if ((win->m_miniEdge > 0) || (win->HasFlag(wxSIMPLE_BORDER)))
+    if ((win->m_miniEdge > 0) || (win->HasFlag(wxSIMPLE_BORDER)) || (win->HasFlag(wxNO_BORDER)))
     {
         /* This is a mini-frame or a borderless frame. */
         gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)0 );
