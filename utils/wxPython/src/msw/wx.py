@@ -668,6 +668,7 @@ wxEVT_COMMAND_CHOICE_SELECTED = wxc.wxEVT_COMMAND_CHOICE_SELECTED
 wxEVT_COMMAND_LISTBOX_SELECTED = wxc.wxEVT_COMMAND_LISTBOX_SELECTED
 wxEVT_COMMAND_LISTBOX_DOUBLECLICKED = wxc.wxEVT_COMMAND_LISTBOX_DOUBLECLICKED
 wxEVT_COMMAND_CHECKLISTBOX_TOGGLED = wxc.wxEVT_COMMAND_CHECKLISTBOX_TOGGLED
+wxEVT_COMMAND_SPINCTRL_UPDATED = wxc.wxEVT_COMMAND_SPINCTRL_UPDATED
 wxEVT_COMMAND_TEXT_UPDATED = wxc.wxEVT_COMMAND_TEXT_UPDATED
 wxEVT_COMMAND_TEXT_ENTER = wxc.wxEVT_COMMAND_TEXT_ENTER
 wxEVT_COMMAND_MENU_SELECTED = wxc.wxEVT_COMMAND_MENU_SELECTED
@@ -967,6 +968,20 @@ def EVT_ICONIZE(win, func):
 def EVT_NAVIGATION_KEY(win, func):
     win.Connect(-1, -1, wxEVT_NAVIGATION_KEY, func)
 
+def EVT_PALETTE_CHANGED(win, func):
+    win.Connect(-1, -1, wxEVT_PALETTE_CHANGED, func)
+
+def EVT_QUERY_NEW_PALETTE(win, func):
+    win.Connect(-1, -1, wxEVT_QUERY_NEW_PALETTE, func)
+
+def EVT_WINDOW_CREATE(win, func):
+    win.Connect(-1, -1, wxEVT_WINDOW_CREATE, func)
+
+def EVT_WINDOW_DESTROY(win, func):
+    win.Connect(-1, -1, wxEVT_WINDOW_DESTROY, func)
+
+
+
 def EVT_IDLE(win, func):
     win.Connect(-1, -1, wxEVT_IDLE, func)
 
@@ -1211,14 +1226,24 @@ def EVT_COMBOBOX(win, id, func):
 def EVT_TOOL(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TOOL_CLICKED, func)
 
+def EVT_TOOL_RANGE(win, id, id2, func):
+    win.Connect(id, id2, wxEVT_COMMAND_TOOL_CLICKED, func)
+
 def EVT_TOOL_RCLICKED(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TOOL_RCLICKED, func)
+
+def EVT_TOOL_RCLICKED_RANGE(win, id, id2, func):
+    win.Connect(id, id2, wxEVT_COMMAND_TOOL_RCLICKED, func)
 
 def EVT_TOOL_ENTER(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TOOL_ENTER, func)
 
 def EVT_CHECKLISTBOX(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, func)
+
+def EVT_SPINCTRL(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_SPINCTRL_UPDATED, func)
+
 
 
 # Generic command events

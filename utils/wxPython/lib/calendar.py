@@ -392,7 +392,7 @@ class wxCalendar(wxWindow):
         for key in self.rg.keys():
             val = self.rg[key]
             rt = wxRegion()
-            rt.Union(val)
+            rt.UnionRect(val)
             if rt.Contains(mx, my) != 0:
                 result = self.TestDay(key)
                 return result

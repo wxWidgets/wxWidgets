@@ -112,7 +112,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 
 // Since this one would be tough and ugly to do with the Macros...
 void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
-    bool hadErr = false;
+    bool hadErr = FALSE;
 
     bool doSave = wxPyRestoreThread();
     if (m_myInst.findCallback("GetPageInfo")) {
@@ -122,22 +122,22 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
 
             val = PyTuple_GetItem(result, 0);
             if (PyInt_Check(val))    *minPage = PyInt_AsLong(val);
-            else hadErr = true;
+            else hadErr = TRUE;
 
             val = PyTuple_GetItem(result, 1);
             if (PyInt_Check(val))    *maxPage = PyInt_AsLong(val);
-            else hadErr = true;
+            else hadErr = TRUE;
 
             val = PyTuple_GetItem(result, 2);
             if (PyInt_Check(val))    *pageFrom = PyInt_AsLong(val);
-            else hadErr = true;
+            else hadErr = TRUE;
 
             val = PyTuple_GetItem(result, 3);
             if (PyInt_Check(val))    *pageTo = PyInt_AsLong(val);
-            else hadErr = true;
+            else hadErr = TRUE;
         }
         else
-            hadErr = true;
+            hadErr = TRUE;
 
         if (hadErr) {
             PyErr_SetString(PyExc_TypeError, "GetPageInfo should return a tuple of 4 integers.");

@@ -394,7 +394,8 @@ class CalendFrame(wxFrame):
 
 def SetToolPath(self, tb, id, bmp, title):
     global dir_path
-    tb.AddTool(id, wxBitmap(os.path.join(dir_path, bmp), wxBITMAP_TYPE_BMP), wxNullBitmap, false, -1, -1, title, title)
+    tb.AddSimpleTool(id, wxBitmap(os.path.join(dir_path, bmp), wxBITMAP_TYPE_BMP),
+                     title, title)
 
 
 class MyApp(wxApp):

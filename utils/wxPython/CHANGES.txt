@@ -70,6 +70,7 @@ Removed all non wx stuff from the glcanvas module since DA's PyOpenGL
 is better and compatible with the wxGLCanvas.  You can get it at
 http://starship.python.net:9673/crew/da/Code/PyOpenGL.
 
+Added some missing EVT_ functions.
 
 
 

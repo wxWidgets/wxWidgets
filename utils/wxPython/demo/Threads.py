@@ -131,6 +131,8 @@ class GraphWindow(wxWindow):
         wdc.Blit(0,0, size.width, size.height, dc, 0,0)
         wdc.EndDrawing()
 
+        dc.SelectObject(wxNullBitmap)
+
 
     def OnEraseBackground(self, evt):
         pass
