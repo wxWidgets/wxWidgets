@@ -41,25 +41,16 @@
         || ( __GNUC__ == (major) && __GNUC_MINOR__ >= (minor) ) ) )
 #endif
 
-#ifdef wxUSE_NEW_REGEX
-
-    #if !wxUSE_UNICODE
-    #	define wx_wchar char
-    #else // Unicode
-        #if (defined(__GNUC__) && !wxCHECK_GCC_VERSION(2, 96))
-        #		define wx_wchar __WCHAR_TYPE__ 
-        #else // __WCHAR_TYPE__ and gcc < 2.96
-            // standard case
-            #		define wx_wchar wchar_t         
-        #endif // __WCHAR_TYPE__
-    #endif // ASCII/Unicode
-
-#else
-
-    #define wx_wchar char
-
-#endif
-
+#if !wxUSE_UNICODE
+#	define wx_wchar char
+#else // Unicode
+    #if (defined(__GNUC__) && !wxCHECK_GCC_VERSION(2, 96))
+    #		define wx_wchar __WCHAR_TYPE__ 
+    #else // __WCHAR_TYPE__ and gcc < 2.96
+        // standard case
+        #		define wx_wchar wchar_t         
+    #endif // __WCHAR_TYPE__
+#endif // ASCII/Unicode
 
 /* overrides for regguts.h definitions, if any */
 #define FUNCPTR(name, args) (*name) args
