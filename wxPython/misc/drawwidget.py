@@ -15,6 +15,7 @@ testItems = [
     "GenericDirCtrl",
     "ListBox",
     "ListCtrl",
+    "ListCtrl With GridLines",
     "RadioBox",
     "RadioButton",
     "ScrollBar",
@@ -103,9 +104,9 @@ class Frame(wx.Frame):
         widget.Update()
         self.Update()
         
-        self.GetBMP(1)
+        ##self.GetBMP(1)
         self.GetBMP(2)
-        self.GetBMP(4)
+        ##self.GetBMP(4)
 
         # make it visible again for the user to compare
         widget.SetPosition(visiblePos)
@@ -125,8 +126,9 @@ class Frame(wx.Frame):
             wdc = wx.WindowDC(w)
             dc.Blit(0,0, sz.width, sz.height, wdc, 0, 0)
         else:            
-            wx.DrawWindowOnDC(w, dc, method)
-
+            ##wx.DrawWindowOnDC(w, dc, method)
+            wx.DrawWindowOnDC(w, dc)
+            
         dc.SelectObject(wx.NullBitmap)
         bmp.SetMaskColour(maskClr)
         self.right.SetBMP(bmp, method)
@@ -181,8 +183,11 @@ class Frame(wx.Frame):
         w.SetSelection(2)        
         self.DoWidget(w)
     
-    def TestListCtrl(self, p):
-        w = wx.ListCtrl(p, -1, size=(250, 100), style=wx.LC_REPORT)
+    def TestListCtrl(self, p, useGridLines=False):
+        style=wx.LC_REPORT
+        if useGridLines:
+            style = style | wx.LC_HRULES | wx.LC_VRULES
+        w = wx.ListCtrl(p, -1, size=(250, 100), style=style)
         w.InsertColumn(0, "Col 1")
         w.InsertColumn(1, "Col 2")
         w.InsertColumn(2, "Col 3")
@@ -191,7 +196,10 @@ class Frame(wx.Frame):
             w.SetStringItem(x, 1, str(x))
             w.SetStringItem(x, 2, str(x))
         self.DoWidget(w)
-    
+
+    def TestListCtrl_With_GridLines(self, p):
+        self.TestListCtrl(p, True)
+            
     def TestRadioBox(self, p):
         w = wx.RadioBox(p, -1, "RadioBox",
                         choices=testChoices2, majorDimension=3)

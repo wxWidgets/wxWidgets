@@ -209,8 +209,6 @@ public:
 //---------------------------------------------------------------------------
 // Experimental...
 
-#if 0
-
 %{
 #ifdef __WXMSW__
 #include <wx/msw/private.h>
@@ -221,10 +219,14 @@ public:
 
 %inline %{
 
-void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc, int method)
+bool wxDrawWindowOnDC(wxWindow* window, const wxDC& dc
+#if 0
+                      , int method
+#endif
+    )
 {
 #ifdef __WXMSW__
-
+#if 0
     switch (method)
     {
         case 1:
@@ -236,11 +238,14 @@ void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc, int method)
             break;
 
         case 2:
-            // This one works much better, except for on XP.  On Win2k nearly
-            // all widgets and their children are captured correctly[**].  On
-            // XP with Themes activated most native widgets draw only
-            // partially, if at all.  Without themes it works just like on
-            // Win2k.
+#endif
+            // This one works much better, nearly all widgets and their
+            // children are captured correctly[**].  Prior to the big
+            // background erase changes that Vadim did in 2004-2005 this
+            // method failed badly on XP with Themes activated, most native
+            // widgets draw only partially, if at all.  Without themes it
+            // worked just like on Win2k.  After those changes this method
+            // works very well.
             //
             // ** For example the radio buttons in a wxRadioBox are not its
             // children by default, but you can capture it via the panel
@@ -248,6 +253,8 @@ void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc, int method)
             ::SendMessage(GetHwndOf(window), WM_PRINT, (long)GetHdcOf(dc),
                           PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN |
                           PRF_ERASEBKGND | PRF_OWNED );
+            return true;
+#if 0
             break;
 
         case 3:
@@ -292,12 +299,14 @@ void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc, int method)
                               PRF_ERASEBKGND | PRF_OWNED );
             }
     }
-#endif
+#endif  // 0
+#else
+    return false;
+#endif  // __WXMSW__    
 }
 
 %}
 
-#endif
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
