@@ -171,10 +171,10 @@ wxSize wxGauge95::DoGetBestSize() const
 {
     // VZ: no idea where does 28 come from, it was there before my changes and
     //     as nobody ever complained I guess we can leave it...
-    if (HasFlag(wxGA_HORIZONTAL))
-        return wxSize(100, 28);
+    if (HasFlag(wxGA_VERTICAL))
+        return wxSize(28, 100);
     else
-        return wxSize(28,100);
+        return wxSize(100, 28);
 }
 
 // ----------------------------------------------------------------------------
