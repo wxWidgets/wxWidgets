@@ -2676,8 +2676,9 @@ wxListCtrl::~wxListCtrl()
 
 bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
+      long style, 
 #if wxUSE_VALIDATORS
-      long style, const wxValidator &validator,
+      const wxValidator &validator,
 #endif
       const wxString &name )
 {
@@ -2704,7 +2705,15 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
 #pragma message enable codcauunr
 #endif
 
-    bool ret = wxControl::Create( parent, id, pos, size, s, name );
+    bool ret = wxControl::Create( parent,
+                                  id, 
+                                  pos, 
+                                  size, 
+                                  s, 
+#if wxUSE_VALIDATORS
+                                  validator,
+#endif
+                                  name );
 
 #if wxUSE_VALIDATORS
     SetValidator( validator );
