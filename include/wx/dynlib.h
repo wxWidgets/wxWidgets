@@ -13,7 +13,7 @@
 #define _WX_DYNLIB_H__
 
 #ifdef __GNUG__
-    #pragma interface
+#   pragma interface
 #endif
 
 #include <wx/setup.h>
@@ -26,35 +26,64 @@
 
 // this is normally done by configure, but I leave it here for now...
 #if defined(__UNIX__) && !(defined(HAVE_DLOPEN) || defined(HAVE_SHL_LOAD))
-    #if defined(__LINUX__) || defined(__SOLARIS__) || defined(__SUNOS__) || defined(__FREEBSD__)
-        #define HAVE_DLOPEN
-    #elif defined(__HPUX__)
-        #define HAVE_SHL_LOAD
-    #endif // Unix flavour
+#   if defined(__LINUX__) || defined(__SOLARIS__) || defined(__SUNOS__) || defined(__FREEBSD__)
+#      define HAVE_DLOPEN
+#   elif defined(__HPUX__)
+#      define HAVE_SHL_LOAD
+#   endif // Unix flavour
 #endif // !Unix or already have some HAVE_xxx defined
 
 #if defined(HAVE_DLOPEN)
-    #include <dlfcn.h>
-
+#   include <dlfcn.h>
     typedef void *wxDllType;
 #elif defined(HAVE_SHL_LOAD)
-    #include <dl.h>
-
+#   include <dl.h>
     typedef shl_t wxDllType;
 #elif defined(__WINDOWS__)
-    #include <windows.h>
-
+#   include <windows.h>
     typedef HMODULE wxDllType;
 #elif defined(__WXMAC__)
     typedef CFragConnectionID wxDllType;
 #else
-    #error "wxLibrary can't be compiled on this platform, sorry."
+#   error "wxLibrary can't be compiled on this platform, sorry."
 #endif // OS
 
 // defined in windows.h
 #ifdef LoadLibrary
-    #undef LoadLibrary
+#   undef LoadLibrary
 #endif
+
+// ----------------------------------------------------------------------------
+// wxDllLoader
+// ----------------------------------------------------------------------------
+/** wxDllLoader is a class providing an interface similar to unix's
+    dlopen(). It is used by the wxLibrary framework and manages the
+    actual loading of DLLs and the resolving of symbols in them.
+    There are no instances of this class, it simply serves as a
+    namespace for its static member functions.
+*/
+class wxDllLoader
+{
+ public:
+   /** This function loads a shared library into memory, with libname
+       being the basename of the library, without the filename
+       extension. No initialisation of the library will be done.
+       @param libname Name of the shared object to load.
+       @param success Must point to a bool variable which will be set to TRUE or FALSE.
+       @return A handle to the loaded DLL. Use success parameter to test if it is valid.
+   */
+   static wxDllType LoadDll(const wxString & libname, bool *success);
+   /** This function resolves a symbol in a loaded DLL, such as a
+       variable or function name.
+       @param dllHandle Handle of the DLL, as returned by LoadDll().
+       @param name Name of the symbol.
+       @return A pointer to the symbol.
+   */
+   static void * GetSymbol(wxDllType dllHandle, const wxString &name);
+ private:
+   /// forbid construction of objects
+   wxDllLoader() 
+};
 
 // ----------------------------------------------------------------------------
 // wxLibrary
@@ -80,6 +109,8 @@ protected:
 
     wxDllType m_handle;
 };
+
+
 
 // ----------------------------------------------------------------------------
 // wxLibraries
