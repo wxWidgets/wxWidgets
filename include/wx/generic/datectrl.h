@@ -19,13 +19,15 @@ class WXDLLIMPEXP_ADV wxCalendarEvent;
 class WXDLLIMPEXP_ADV wxDatePickerCtrl : public wxDatePickerCtrlBase
 {
 public:
+    // creating the control
     wxDatePickerCtrl() { Init(); }
     wxDatePickerCtrl(wxWindow *parent,
                    wxWindowID id,
                    const wxDateTime& date = wxDefaultDateTime,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS, const wxString& name=wxDatePickerCtrlNameStr);
+                   long style = 0,
+                   const wxString& name = wxDatePickerCtrlNameStr);
 
     bool Create(wxWindow *parent,
                             wxWindowID id,
@@ -35,30 +37,31 @@ public:
                             long style,
                             const wxString& name=wxDatePickerCtrlNameStr);
 
+    // wxDatePickerCtrl methods
     void SetValue(const wxDateTime& date);
     wxDateTime GetValue() const;
+
     bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const;
     void SetRange(const wxDateTime &dt1, const wxDateTime &dt2);
 
-    bool Destroy();
+    bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
+                      const wxDateTime& upperdate = wxDefaultDateTime);
 
-    bool SetLowerDateLimit(const wxDateTime& date = wxDefaultDateTime) { return m_cal->SetLowerDateLimit(date); }
-    const wxDateTime& GetLowerDateLimit() const { return m_cal->GetLowerDateLimit(); }
-    bool SetUpperDateLimit(const wxDateTime& date = wxDefaultDateTime) { return m_cal->SetUpperDateLimit(date); }
-    const wxDateTime& GetUpperDateLimit() const { return m_cal->GetUpperDateLimit(); }
-
-    bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime, const wxDateTime& upperdate = wxDefaultDateTime)
-    { return m_cal->SetDateRange(lowerdate, upperdate); }
-
-    wxCalendarDateAttr *GetAttr(size_t day) const { return m_cal->GetAttr(day); }
-    void SetAttr(size_t day, wxCalendarDateAttr *attr) { m_cal->SetAttr(day, attr); }
-    void SetHoliday(size_t day) { m_cal->SetHoliday(day); }
-    void ResetAttr(size_t day) { m_cal->ResetAttr(day); }
+    // extra methods available only in this (generic) implementation
     bool SetFormat(const wxChar *fmt);
+    wxCalendarCtrl *GetCalendar() const { return m_cal; }
+
+
+    // implementation only from now on
+    // -------------------------------
+
+    // overridden base class methods
+    virtual bool Destroy();
 
     virtual bool Enable(bool enable = TRUE);
     virtual bool Show(bool show = TRUE);
 
+protected:
     virtual wxSize DoGetBestSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
 

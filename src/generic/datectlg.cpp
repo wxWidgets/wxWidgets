@@ -24,6 +24,7 @@
 #endif
 
 #include "wx/datectrl.h"
+#include "wx/calctrl.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -32,8 +33,8 @@
 enum
 {
     CTRLID_TXT = 101,
-    CTRLID_CAL
-    CTRLID_BTN
+    CTRLID_CAL,
+    CTRLID_BTN,
     CTRLID_PAN
 };
 
@@ -110,27 +111,50 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
     }
 
     m_txt=new wxTextCtrl(this, CTRLID_TXT, txt);
-    m_txt->Connect(wxID_ANY, wxID_ANY, wxEVT_KEY_DOWN, (wxObjectEventFunction)&wxDatePickerCtrl::OnEditKey, 0, this);
-    m_txt->Connect(wxID_ANY, wxID_ANY, wxEVT_KILL_FOCUS, (wxObjectEventFunction)&wxDatePickerCtrl::OnKillFocus, 0, this);
+    m_txt->Connect(wxID_ANY, wxID_ANY, wxEVT_KEY_DOWN,
+                   (wxObjectEventFunction)&wxDatePickerCtrl::OnEditKey,
+                   0, this);
+    m_txt->Connect(wxID_ANY, wxID_ANY, wxEVT_KILL_FOCUS,
+                   (wxObjectEventFunction)&wxDatePickerCtrl::OnKillFocus,
+                   0, this);
     SetFormat(wxT("%x"));
 
     m_btn = new wxBitmapButton(this, CTRLID_BTN, bmp);
 
-    m_dlg = new wxDialog(this, CTRLID_CAL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER);
+    m_dlg = new wxDialog(this, CTRLID_CAL, wxEmptyString,
+                         wxDefaultPosition, wxDefaultSize,
+                         wxSIMPLE_BORDER);
     m_dlg->SetFont(GetFont());
 
-    wxPanel *panel=new wxPanel(m_dlg, CTRLID_PAN, wxPoint(0, 0), wxDefaultSize, wxSUNKEN_BORDER|wxCLIP_CHILDREN);
-    m_cal = new wxCalendarCtrl(panel, CTRLID_CAL, wxDefaultDateTime, wxPoint(0,0), wxDefaultSize, wxSUNKEN_BORDER);
-    m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_SEL_CHANGED, (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange, 0, this);
-    m_cal->Connect(wxID_ANY, wxID_ANY, wxEVT_KEY_DOWN, (wxObjectEventFunction)&wxDatePickerCtrl::OnCalKey, 0, this);
-    m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_DOUBLECLICKED, (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange, 0, this);
-    m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_DAY_CHANGED, (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange, 0, this);
-    m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_MONTH_CHANGED, (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange, 0, this);
-    m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_YEAR_CHANGED, (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange, 0, this);
+    wxPanel *panel=new wxPanel(m_dlg, CTRLID_PAN,
+                               wxPoint(0, 0), wxDefaultSize,
+                               wxSUNKEN_BORDER);
+    m_cal = new wxCalendarCtrl(panel, CTRLID_CAL, wxDefaultDateTime,
+                               wxPoint(0,0), wxDefaultSize,
+                               wxCAL_SHOW_HOLIDAYS | wxSUNKEN_BORDER);
+    m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_SEL_CHANGED,
+                   (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange,
+                   0, this);
+    m_cal->Connect(wxID_ANY, wxID_ANY, wxEVT_KEY_DOWN,
+                   (wxObjectEventFunction)&wxDatePickerCtrl::OnCalKey,
+                   0, this);
+    m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_DOUBLECLICKED,
+                   (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange,
+                   0, this);
+    m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_DAY_CHANGED,
+                   (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange,
+                   0, this);
+    m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_MONTH_CHANGED,
+                   (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange,
+                   0, this);
+    m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_YEAR_CHANGED,
+                   (wxObjectEventFunction)&wxDatePickerCtrl::OnSelChange,
+                   0, this);
 
     wxWindow *yearControl = m_cal->GetYearControl();
 
-    Connect(wxID_ANY, wxID_ANY, wxEVT_SET_FOCUS, (wxObjectEventFunction)&wxDatePickerCtrl::OnSetFocus);
+    Connect(wxID_ANY, wxID_ANY, wxEVT_SET_FOCUS,
+            (wxObjectEventFunction)&wxDatePickerCtrl::OnSetFocus);
 
     wxClientDC dc(yearControl);
     dc.SetFont(m_font);
@@ -161,7 +185,8 @@ bool wxDatePickerCtrl::Create(wxWindow *parent,
         width += 2;
     }
     m_cal->SetSize(calPos, 0, calSize.x, calSize.y);
-    yearControl->SetSize(width-yearSize.x-CALBORDER/2, yearPosition.y, yearSize.x, yearSize.y);
+    yearControl->SetSize(width-yearSize.x-CALBORDER/2, yearPosition.y,
+                         yearSize.x, yearSize.y);
     m_cal->GetMonthControl()->Move(0, 0);
 
 
@@ -270,6 +295,13 @@ bool wxDatePickerCtrl::Enable(bool enable)
 // wxDatePickerCtrl API
 // ----------------------------------------------------------------------------
 
+bool
+wxDatePickerCtrl::SetDateRange(const wxDateTime& lowerdate,
+                               const wxDateTime& upperdate)
+{
+    return m_cal->SetDateRange(lowerdate, upperdate);
+}
+
 bool wxDatePickerCtrl::SetFormat(const wxChar *fmt)
 {
     wxDateTime dt;
@@ -351,17 +383,16 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& date)
 bool wxDatePickerCtrl::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
 {
     if (dt1)
-        *dt1 = GetLowerDateLimit();
+        *dt1 = m_cal->GetLowerDateLimit();
     if (dt1)
-        *dt2 = GetUpperDateLimit();
+        *dt2 = m_cal->GetUpperDateLimit();
     return true;
 }
 
 
 void wxDatePickerCtrl::SetRange(const wxDateTime &dt1, const wxDateTime &dt2)
 {
-    SetLowerDateLimit(dt1);
-    SetUpperDateLimit(dt2);
+    m_cal->SetDateRange(dt1, dt2);
 }
 
 // ----------------------------------------------------------------------------
