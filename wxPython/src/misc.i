@@ -397,14 +397,16 @@ bool wxYield();
 bool wxYieldIfNeeded();
 void wxEnableTopLevelWindows(bool enable);
 
-%inline %{
+#ifdef wxUSE_RESOURCES
+inline %{
     wxString wxGetResource(const wxString& section, const wxString& entry,
                            const wxString& file = wxPyEmptyString) {
-        wxChar * retval;
+        wxChar* retval;
         wxGetResource(section, entry, &retval, file);
         return retval;
     }
 %}
+#endif
 
 wxString wxStripMenuCodes(const wxString& in);
 
