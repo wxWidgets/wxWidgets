@@ -54,18 +54,18 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
 
     int curSelection = combo->GetSelection();
 
-    if (combo->m_prevSelection != curSelection)
-    {
-        GtkWidget *list = GTK_COMBO(combo->m_widget)->list;
-        gtk_list_unselect_item( GTK_LIST(list), combo->m_prevSelection );
-    }
+    if (combo->m_prevSelection == curSelection) return;
+
+    GtkWidget *list = GTK_COMBO(combo->m_widget)->list;
+    gtk_list_unselect_item( GTK_LIST(list), combo->m_prevSelection );
+    
     combo->m_prevSelection = curSelection;
 
     wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
     event.SetInt( curSelection );
     event.SetString( combo->GetStringSelection() );
     event.SetEventObject( combo );
-
+    
     combo->GetEventHandler()->ProcessEvent( event );
 }
 

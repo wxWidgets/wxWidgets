@@ -185,32 +185,60 @@ gtk_notebook_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
 // "key_press_event"
 //-----------------------------------------------------------------------------
 
-static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxNotebook *win )
+static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxNotebook *notebook )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT) return FALSE;
+    if (!notebook->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
+    
+    /* win is a control: tab can be propagated up */
+    if ((gdk_event->keyval == GDK_Left) || (gdk_event->keyval == GDK_Right))
+    {
+        int page;
+        int nMax = notebook->GetPageCount();
+        if ( nMax-- ) // decrement it to get the last valid index
+        {
+            int nSel = notebook->GetSelection();
+
+            // change selection wrapping if it becomes invalid
+            page = (gdk_event->keyval != GDK_Left) ? nSel == nMax ? 0
+                                       : nSel + 1
+                        : nSel == 0 ? nMax
+                                    : nSel - 1;
+        }
+        else // notebook is empty, no next page
+        {
+            return FALSE;
+        }
+    
+        // m_selection = page;
+        gtk_notebook_set_page( GTK_NOTEBOOK(widget), page );
+        
+        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+        return TRUE;
+    }
 
     /* win is a control: tab can be propagated up */
     if ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab))
     {
-        int sel = win->GetSelection();
+        int sel = notebook->GetSelection();
         if (sel == -1)
             return TRUE;
-        wxGtkNotebookPage *nb_page = win->GetNotebookPage(sel);
+        wxGtkNotebookPage *nb_page = notebook->GetNotebookPage(sel);
         wxCHECK_MSG( nb_page, FALSE, _T("invalid selection in wxNotebook") );
 
         wxNavigationKeyEvent event;
-        event.SetEventObject( win );
+        event.SetEventObject( notebook );
         /* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
         event.SetDirection( (gdk_event->keyval == GDK_Tab) );
         /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
-        event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
-        event.SetCurrentFocus( win );
+        event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) || 
+                               (gdk_event->keyval == GDK_Left) || (gdk_event->keyval == GDK_Right) );
+        event.SetCurrentFocus( notebook );
 
-        wxNotebookPage *client = win->GetPage(sel);
+        wxNotebookPage *client = notebook->GetPage(sel);
         if ( !client->GetEventHandler()->ProcessEvent( event ) )
         {
              client->SetFocus();
