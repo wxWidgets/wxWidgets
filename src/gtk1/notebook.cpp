@@ -226,7 +226,9 @@ static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
 {
     // Hack alert! We manually set the child window
     // parent field so that GTK can query the 
-    // notebook's style and font. 
+    // notebook's style and font. Without that, GetBestSize could return
+    // incorrect size, see bug #901694 for details
+    // (http://sourceforge.net/tracker/?func=detail&aid=901694&group_id=9863&atid=109863)
     child->m_widget->parent = parent->m_widget;
 }
 
