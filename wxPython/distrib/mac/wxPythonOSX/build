@@ -10,6 +10,13 @@ if [ ! -d wxPython -o ! -e ${spectemplate} ]; then
     exit 1
 fi
 
+if [ ! "$UID" = "0" ]; then
+    echo "-------------------------------------------------------"
+    echo " WARNING:  will be unable to change ownership of files"
+    echo " unless this script is run as root or via sudo"
+    echo "-------------------------------------------------------"
+fi
+
 #----------------------------------------------------------------------
 # Check Parameters
 
@@ -22,7 +29,6 @@ function usage {
     echo ""
     echo "optional command flags:"
     echo "   skiptar        Don't unpack the tarball"
-    echo "   use_cvs        Use the CVS workspace instead of a tarfile"
     echo "   skipconfig     Don't run configure"
     echo "   skipbuild      Don't build wxWidgets or wxPython"
     echo "   skipinstall    Don't do the installation step"
@@ -50,7 +56,6 @@ shift
 for flag in $*; do
     case ${flag} in
 	skiptar)     skiptar=1                   ;;
-	use_cvs)     skiptar=1; use_cvs=1        ;;
 	skipconfig)  skipconfig=1; skiptar=1     ;;
 	skipbuild)   skipbuild=1; skipconfig=1; skiptar=1 ;;
 	skipinstall) skipinstall=1               ;;
@@ -70,11 +75,17 @@ PYPREFIX=`$PYTHON -c "import sys; print sys.exec_prefix"`
 PYLIB=$PYPREFIX/lib/python$PYVER
 SITEPACKAGES=$PYLIB/site-packages
 
-TARBALLDIR=/stuff/Development/wxPython/dist/$VERSION
+if [ -z "$TARBALLDIR" ]; then
+    
+    # this is a spot on my fileserver where the tarballs go, adjust 
+    # as needed for where you put the wxPython tarball...
+    TARBALLDIR=/stuff/Development/wxPython/dist/$VERSION
+fi
+
 TARBALL=$TARBALLDIR/wxPythonSrc-$VERSION.tar.gz
 
-PREFIX=/usr/lib/wxPython-$VERSION
-BINPREFIX=/usr/bin
+PREFIX=/usr/local/lib/wxPython-$VERSION
+BINPREFIX=/usr/local/bin
 
 WXROOT=`dirname $PWD`
 PROGDIR="`dirname \"$0\"`"
@@ -111,37 +122,6 @@ if [ -z "$skiptar" ]; then
     echo Unarchiving tarball...
     tar xzf $TARBALL
 fi
-
-if [ "$use_cvs" = 1 ]; then
-    # copy the cvs workspace, except for build dirs
-
-    mkdir -p wxPythonSrc-$VERSION
-
-    echo Finding updated files...
-    if [ -e .last_copy ]; then
-	FEXPR="-cnewer .last_copy"
-    fi
-    MEASURE=$WXROOT//
-    find $WXROOT $FEXPR -print \
-	| grep -v $WXROOT/bld \
-	| grep -v wxPython/build \
-	| grep -v wxPython/_build \
-	| grep -v CVS \
-	| grep -v .pyc \
-	| cut -b ${#MEASURE}- > filelist
-
-    for x in `cat filelist`; do
-	if [ -d "$WXROOT/$x" ]; then
-	    mkdir -p "wxPythonSrc-$VERSION/$x"
-	else
-	    echo $x
-	    cp -p "$WXROOT/$x" "wxPythonSrc-$VERSION/$x"
-	fi
-    done
-
-    touch .last_copy
-fi
-
 
 cd wxPythonSrc-$VERSION
 WXDIR=`pwd`
@@ -182,18 +162,18 @@ if [ -z "$skipbuild" ]; then
     make -C contrib/src/stc
     make -C contrib/src/xrc
 
-    if [ ! -e $WXDIR/include/wx/gizmos ]; then
-	# Make some links so the wxPython build can find all the headers it needs
-	pushd $WXDIR/include/wx
-	ln -s ../../contrib/include/wx/* .
-	popd
-    fi
+#     if [ ! -e $WXDIR/include/wx/gizmos ]; then
+# 	# Make some links so the wxPython build can find all the headers it needs
+# 	pushd $WXDIR/include/wx
+# 	ln -s ../../contrib/include/wx/* .
+# 	popd
+#     fi
 
     # Build wxPython
     cd $WXDIR/wxPython
     $PYTHON setup.py \
 	NO_SCRIPTS=1 \
-	WX_CONFIG="$WXDIR/bld/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/bld" \
+	WX_CONFIG="$WXDIR/bld/wx-config --inplace" \
 	build
 
 
@@ -246,16 +226,11 @@ if [ -z "$skipinstall" ]; then
     cp $WXDIR/bld/contrib/utils/wxrc/wxrc $INSTALLROOT$BINPREFIX
 
 
-#     # install the wxPython headers
-#     cd $WXDIR/wxPython
-#     cp -R include $INSTALLROOT$PREFIX
-#     mkdir -p      $INSTALLROOT$PREFIX/include/wx/wxPython/i_files
-#     cp src/*.i    $INSTALLROOT$PREFIX/include/wx/wxPython/i_files
-
-
     # Set premissions for files in $INSTALLROOT 
-    chown -R root:admin $INSTALLROOT
-    chmod -R g+w        $INSTALLROOT
+    if [ "$UID" = "0" ]; then
+	chown -R root:admin $INSTALLROOT
+	chmod -R g+w        $INSTALLROOT
+    fi
 fi
 
 popd
