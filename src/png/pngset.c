@@ -15,7 +15,7 @@
  */
 
 #define PNG_INTERNAL
-#include "png.h"
+#include "../png/png.h"
 
 #if defined(PNG_READ_bKGD_SUPPORTED) || defined(PNG_WRITE_bKGD_SUPPORTED)
 void

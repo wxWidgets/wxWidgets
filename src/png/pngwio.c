@@ -17,7 +17,7 @@
  */
 
 #define PNG_INTERNAL
-#include "png.h"
+#include "../png/png.h"
 
 /* Write the data to whatever output you are using.  The default routine
    writes to a file pointer.  Note that this routine sometimes gets called

@@ -13,7 +13,7 @@
  */
 
 #define PNG_INTERNAL
-#include "png.h"
+#include "../png/png.h"
 
 #ifndef PNG_READ_BIG_ENDIAN_SUPPORTED
 /* Grab an unsigned 32-bit integer from a buffer in big endian format. */

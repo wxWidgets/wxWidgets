@@ -35,7 +35,7 @@
 #define PNG_DEBUG 0
 #endif
 
-#include "png.h"
+#include "../png/png.h"
 
 int test_one_file PNGARG((PNG_CONST char *inname, PNG_CONST char *outname));
 

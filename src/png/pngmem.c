@@ -14,7 +14,7 @@
  */
 
 #define PNG_INTERNAL
-#include "png.h"
+#include "../png/png.h"
 
 /* The following "hides" PNG_MALLOC and PNG_FREE thus allowing the pngtest
    application to put a wrapper on top of them. */

@@ -17,7 +17,7 @@
  */
 
 #define PNG_INTERNAL
-#include "png.h"
+#include "../png/png.h"
 
 /* Read the data from whatever input you are using.  The default routine
    reads from a file pointer.  Note that this routine sometimes gets called

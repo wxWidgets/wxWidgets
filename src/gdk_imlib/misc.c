@@ -1,6 +1,6 @@
 #define _GNU_SOURCE
-#include "gdk_imlib.h"
-#include "gdk_imlib_private.h"
+#include "../gdk_imlib/gdk_imlib.h"
+#include "../gdk_imlib/gdk_imlib_private.h"
 
 gint
 gdk_imlib_get_render_type()

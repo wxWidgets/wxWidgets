@@ -13,7 +13,7 @@
  */
 
 #define PNG_INTERNAL
-#include "png.h"
+#include "../png/png.h"
 
 /* Create a PNG structure for reading, and allocate any memory needed. */
 png_structp

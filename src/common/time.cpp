@@ -99,7 +99,7 @@ wxTime::wxTime()
 	 wxTimeInitialized = TRUE;
   }
   sec = wxGetCurrentTime();
-  sec += 2177452800L;     /* seconds from 1/1/01 to 1/1/70 */
+  sec += 2177452800UL;     /* seconds from 1/1/01 to 1/1/70 */
 }
 
 wxTime::wxTime(hourTy h, minuteTy m, secondTy s, bool dst)

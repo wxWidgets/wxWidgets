@@ -1,6 +1,6 @@
 #define _GNU_SOURCE
-#include "gdk_imlib.h"
-#include "gdk_imlib_private.h"
+#include "../gdk_imlib/gdk_imlib.h"
+#include "../gdk_imlib/gdk_imlib_private.h"
 
 GdkPixmap          *
 gdk_imlib_pixmap_foreign_new(gint width, gint height,

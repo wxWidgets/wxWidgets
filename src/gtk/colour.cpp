@@ -16,7 +16,7 @@
 #include "wx/gdicmn.h"
 
 #ifdef USE_GDK_IMLIB
-#include "gdk_imlib.h"
+#include "../gdk_imlib/gdk_imlib.h"
 #endif
 
 //-----------------------------------------------------------------------------

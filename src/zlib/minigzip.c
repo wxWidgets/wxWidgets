@@ -16,7 +16,7 @@
 /* @(#) $Id$ */
 
 #include <stdio.h>
-#include "zlib.h"
+#include "../zlib/zlib.h"
 
 #ifdef STDC
 #  include <string.h>

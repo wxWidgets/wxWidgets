@@ -1,8 +1,8 @@
 #define _GNU_SOURCE
-#include <config.h>
+#include "../gdk_imlib/config.h"
 
-#include "gdk_imlib.h"
-#include "gdk_imlib_private.h"
+#include "../gdk_imlib/gdk_imlib.h"
+#include "../gdk_imlib/gdk_imlib_private.h"
 
 gint
 gdk_imlib_save_image(GdkImlibImage * im, char *file, GdkImlibSaveInfo * info)

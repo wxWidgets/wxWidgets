@@ -13,7 +13,7 @@
  * working PNG reader/writer, see pngtest.c, included in this distribution.
  */
 
-#include "png.h"
+#include "../png/png.h"
 
 /* Check to see if a file is a PNG file using png_sig_cmp().  Returns
  * non-zero if the image is a PNG, and 0 if it isn't a PNG.

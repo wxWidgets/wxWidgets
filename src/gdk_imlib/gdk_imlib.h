@@ -2,7 +2,9 @@
 #ifndef __GDK_IMLIB_H__
 #define __GDK_IMLIB_H__
 
-#include <gdk_imlib_types.h>
+// we need this funny include path, because the working directory when
+// including this might actually be ../gdk/ instead of .
+#include "../gdk_imlib/gdk_imlib_types.h"
 
 #ifdef __cplusplus
 extern              "C"

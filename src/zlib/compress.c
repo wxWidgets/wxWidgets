@@ -5,7 +5,7 @@
 
 /* @(#) $Id$ */
 
-#include "zlib.h"
+#include "../zlib/zlib.h"
 
 /* ===========================================================================
      Compresses the source buffer into the destination buffer. The level

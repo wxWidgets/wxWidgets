@@ -10,7 +10,7 @@
  */
 
 #define PNG_INTERNAL
-#include "png.h"
+#include "../png/png.h"
 
 png_uint_32
 png_get_valid(png_structp png_ptr, png_infop info_ptr, png_uint_32 flag)

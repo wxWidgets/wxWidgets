@@ -10,7 +10,7 @@
  */
 
 #define PNG_INTERNAL
-#include "png.h"
+#include "../png/png.h"
 
 /* Transform the data according to the users wishes.  The order of
  * transformations is significant.

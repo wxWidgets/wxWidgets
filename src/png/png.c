@@ -11,7 +11,7 @@
 
 #define PNG_INTERNAL
 #define PNG_NO_EXTERN
-#include "png.h"
+#include "../png/png.h"
 
 /* Version information for C files.  This had better match the version
  * string defined in png.h.
