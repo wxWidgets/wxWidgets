@@ -836,11 +836,6 @@ void wxScrollHelper::CalcUnscrolledPosition(int x, int y, int *xx, int *yy) cons
 // Default OnSize resets scrollbars, if any
 void wxScrollHelper::HandleOnSize(wxSizeEvent& WXUNUSED(event))
 {
-#if wxUSE_CONSTRAINTS
-    if ( m_win->GetAutoLayout() )
-        m_win->Layout();
-#endif
-
     AdjustScrollbars();
 }
 
@@ -1107,6 +1102,21 @@ bool wxGenericScrolledWindow::Create(wxWindow *parent,
 
 wxGenericScrolledWindow::~wxGenericScrolledWindow()
 {
+}
+
+bool wxGenericScrolledWindow::Layout()
+{
+    if (GetSizer())
+    {
+        // Take into account the virtual size and scrolled position of the window
+        int x, y, w, h;
+        CalcScrolledPosition(0,0, &x,&y);
+        GetVirtualSize(&w, &h);
+        GetSizer()->SetDimension(x, y, w, h);
+        return TRUE;
+    }
+    else
+        return wxPanel::Layout();  // fall back to default for LayoutConstraints
 }
 
 void wxGenericScrolledWindow::OnPaint(wxPaintEvent& event)

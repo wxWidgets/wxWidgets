@@ -108,6 +108,9 @@ public:
     // automatically change the origin according to the scroll position.
     virtual void PrepareDC(wxDC& dc);
 
+    // lay out the window and its children
+    virtual bool Layout();
+
     // Adjust the scrollbars
     virtual void AdjustScrollbars();
 

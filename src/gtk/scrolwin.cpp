@@ -33,6 +33,7 @@
 
 #include "wx/scrolwin.h"
 #include "wx/panel.h"
+#include "wx/sizer.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
@@ -308,7 +309,7 @@ bool wxScrolledWindow::Create(wxWindow *parent,
 
     if (m_parent)
         m_parent->DoAddChild( this );
-        
+
     m_focusWidget = m_wxwindow;
 
     PostCreation();
@@ -332,7 +333,7 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
 {
     int old_x = m_xScrollPixelsPerLine * m_xScrollPosition;
     int old_y = m_yScrollPixelsPerLine * m_yScrollPosition;
-    
+
     m_xScrollPixelsPerLine = pixelsPerUnitX;
     m_yScrollPixelsPerLine = pixelsPerUnitY;
     m_xScrollLines = noUnitsX;
@@ -351,14 +352,14 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
     m_vAdjust->value = yPos;
     m_vAdjust->step_increment = 1.0;
     m_vAdjust->page_increment = 2.0;
-    
+
     AdjustScrollbars();
-    
+
     if (!noRefresh)
     {
         int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;
         int new_y = m_yScrollPixelsPerLine * m_yScrollPosition;
-        
+
         m_targetWindow->ScrollWindow( old_x-new_x, old_y-new_y );
     }
 }
@@ -758,6 +759,22 @@ void wxScrolledWindow::GtkVDisconnectEvent()
 {
     gtk_signal_disconnect_by_func( GTK_OBJECT(m_vAdjust),
         (GtkSignalFunc) gtk_scrolled_window_vscroll_callback, (gpointer) this );
+}
+
+
+bool wxScrolledWindow::Layout()
+{
+    if (GetSizer())
+    {
+        // Take into account the virtual size and scrolled position of the window
+        int x, y, w, h;
+        CalcScrolledPosition(0,0, &x,&y);
+        GetVirtualSize(&w, &h);
+        GetSizer()->SetDimension(x, y, w, h);
+        return TRUE;
+    }
+    else
+        return wxPanel::Layout();  // fall back to default for LayoutConstraints
 }
 
 // ----------------------------------------------------------------------------

@@ -66,6 +66,9 @@ public:
 
     virtual void PrepareDC(wxDC& dc) { DoPrepareDC(dc); }
 
+        // lay out the window and its children
+    virtual bool Layout();
+
 protected:
     // this is needed for wxEVT_PAINT processing hack described in
     // wxScrollHelperEvtHandler::ProcessEvent()
