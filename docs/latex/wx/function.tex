@@ -247,6 +247,7 @@ the corresponding topic.
 \helpref{wxWriteResource}{wxwriteresource}\\
 \helpref{wxYield}{wxyield}\\
 \helpref{wx\_const\_cast}{wxconstcastraw}\\
+\helpref{wx\_dynamic\_cast}{wxdynamiccastraw}\\
 \helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw}\\
 \helpref{wx\_static\_cast}{wxstaticcastraw}\\
 \helpref{\_}{underscore}\\
@@ -3500,7 +3501,8 @@ Example:
 \helpref{RTTI overview}{runtimeclassoverview}\\
 \helpref{wxDynamicCastThis}{wxdynamiccastthis}\\
 \helpref{wxConstCast}{wxconstcast}\\
-\helpref{wxStatiicCast}{wxstaticcast}
+\helpref{wxStaticCast}{wxstaticcast}\\
+\helpref{wx\_dynamic\_cast}{wxdynamiccastraw}
 
 
 \membersection{wxDynamicCastThis}\label{wxdynamiccastthis}
@@ -3543,6 +3545,23 @@ arguments is the same as for the standard cast.
 
 \wxheading{See also}
 
+\helpref{wx\_dynamic\_cast}{wxdynamiccastraw},\\
+\helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw},\\
+\helpref{wx\_static\_cast}{wxstaticcastraw}
+
+
+\membersection{wx\_dynamic\_cast}\label{wxdynamiccastraw}
+
+\func{T}{wx\_dynamic\_cast}{T, x}
+
+Same as \texttt{dynamic\_cast<T>(x)} if the compiler supports dynamic cast or
+\texttt{(T)x} for old compilers. Unlike \helpref{wxDynamicCast}{wxdynamiccast},
+the cast it to the type \arg{T} and not to \texttt{T *} and also the order of
+arguments is the same as for the standard cast.
+
+\wxheading{See also}
+
+\helpref{wx\_const\_cast}{wxconstcastraw},\\
 \helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw},\\
 \helpref{wx\_static\_cast}{wxstaticcastraw}
 
@@ -3557,6 +3576,7 @@ Same as \texttt{reinterpret\_cast<T>(x)} if the compiler supports reinterpret ca
 \wxheading{See also}
 
 \helpref{wx\_const\_cast}{wxconstcastraw},\\
+\helpref{wx\_dynamic\_cast}{wxdynamiccastraw},\\
 \helpref{wx\_static\_cast}{wxstaticcastraw}
 
 
@@ -3573,6 +3593,7 @@ star is not appended to it.
 \wxheading{See also}
 
 \helpref{wx\_const\_cast}{wxconstcastraw},\\
+\helpref{wx\_dynamic\_cast}{wxdynamiccastraw},\\
 \helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw}
 
 

@@ -7,16 +7,18 @@ wxWidgets 2.5 Change Log - For more verbose changes, see the manual
 
 All:
 
-- wxURI::GetUser and wxURI::HasUser have been renamed to wxURI::GetUserInfo and wxURI::HasUserInfo respectively so that wxURI::GetUser returns the old username that were in the HTTP specification along with wxURI::GetPassword (Note that if you used wxURI::GetUser from 2.5.3 you should rename all instances of it to wxURI::GetUserInfo).
-- Added 
+- wxURI::GetUser() only returns the user name now, use GetUserInfo() to get
+  user and password as in 2.5.4; wxURI::GetPassword() added
+- added wx_dynamic_cast() macro
 
 All (GUI):
 
 - Added GetIcon, GetBitmap to wxImageList. wxGenericImageList's original
   GetBitmap is renamed GetBitmapPtr.
 - Added XPM data constructor to wxImage.
-- Added style parameter to wxBufferedDC to allow buffering just
-  the client, or the whole virtual area.
+- Added style parameter to wxBufferedDC to allow buffering just the client, or
+  the whole virtual area.
+
 
 wxPalmOS:
 

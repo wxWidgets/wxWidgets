@@ -269,12 +269,21 @@ typedef int wxWindowID;
     #ifndef HAVE_STATIC_CAST
         #define HAVE_STATIC_CAST
     #endif
+    #ifndef HAVE_DYNAMIC_CAST
+        #define HAVE_DYNAMIC_CAST
+    #endif
 #endif /*  HAVE_CXX_CASTS */
 
 #ifdef HAVE_STATIC_CAST
     #define wx_static_cast(t, x) static_cast<t>(x)
 #else
     #define wx_static_cast(t, x) ((t)(x))
+#endif
+
+#ifdef HAVE_DYNAMIC_CAST
+    #define wx_dynamic_cast(t, x) dynamic_cast<t>(x)
+#else
+    #define wx_dynamic_cast(t, x) ((t)(x))
 #endif
 
 #ifdef HAVE_CONST_CAST
