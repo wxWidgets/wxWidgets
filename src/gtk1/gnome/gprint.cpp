@@ -1412,9 +1412,9 @@ void wxGnomePrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxC
     pango_layout_get_pixel_size( m_layout, &w, &h );
     
     if (width)
-        *width = (wxCoord) w; 
+        *width = (wxCoord)(w / m_scaleX); 
     if (height)
-        *height = (wxCoord) h;
+        *height = (wxCoord)(h / m_scaleY);
     if (descent)
     {
         PangoLayoutIter *iter = pango_layout_get_iter(m_layout);
