@@ -33,8 +33,8 @@ BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_XRC = 1      # XML based resource system
 BUILD_GIZMOS = 1   # Build a module for the gizmos contrib library
-BUILD_DLLWIDGET = 1# Build a module for that enables unknown wx widgets
-                   # to be loaded from a DLL to be used from Python.
+BUILD_DLLWIDGET = 1# Build a module that enables unknown wx widgets
+                   # to be loaded from a DLL and to be used from Python.
 
 BUILD_IEWIN = 0    # Internet Explorer wrapper (experimental)
 
