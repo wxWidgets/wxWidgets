@@ -133,7 +133,7 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
         m_WParser -> SetFontBold(FALSE);
         m_WParser -> SetFontItalic(FALSE);
         m_WParser -> SetFontFixed(TRUE);
-        m_WParser -> SetFontSize(0);
+        m_WParser -> SetFontSize(3);
         c -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
 
         {
