@@ -279,7 +279,7 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
         wxChar buf[50];
         wxSprintf(buf, _T("This is item %d"), i);
         long tmp = m_listCtrl->InsertItem(i, buf, 0);
-        //m_listCtrl->SetItemData(tmp, i);
+        m_listCtrl->SetItemData(tmp, i);
 
         wxSprintf(buf, _T("Col 1, item %d"), i);
         tmp = m_listCtrl->SetItem(i, 1, buf);
@@ -295,11 +295,16 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
     m_listCtrl->SetItem( item );
 
     item.m_itemId = 2;
-    item.SetTextColour(*wxLIGHT_GREY);
+    item.SetTextColour(*wxGREEN);
     m_listCtrl->SetItem( item );
-    item.m_itemId = 3;
+    item.m_itemId = 4;
     item.SetTextColour(*wxLIGHT_GREY);
+    item.SetFont(*wxITALIC_FONT);
+    item.SetBackgroundColour(*wxRED);
     m_listCtrl->SetItem( item );
+
+    m_listCtrl->SetTextColour(*wxBLUE);
+    m_listCtrl->SetBackgroundColour(*wxLIGHT_GREY);
 
     m_listCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
     m_listCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );

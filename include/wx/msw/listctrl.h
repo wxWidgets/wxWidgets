@@ -19,6 +19,7 @@
 #include "wx/control.h"
 #include "wx/event.h"
 #include "wx/imaglist.h"
+#include "wx/hash.h"
 
 /*
     The wxListCtrl can show lists of items in four different modes:
@@ -340,7 +341,10 @@ protected:
     int               m_colCount;   // Windows doesn't have GetColumnCount so must
                                     // keep track of inserted/deleted columns
 
-    // TRUE fi we have any items with custom attributes
+    // the hash table we use for storing pointers to the items attributes
+    wxHashTable m_attrs;
+
+    // TRUE if we have any items with custom attributes
     bool m_hasAnyAttr;
 
 private:

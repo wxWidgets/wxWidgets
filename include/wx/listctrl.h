@@ -124,6 +124,10 @@ public:
     void SetFont(const wxFont& font) { m_font = font; }
 
     // accessors
+    bool HasTextColour() const { return m_colText.Ok(); }
+    bool HasBackgroundColour() const { return m_colBack.Ok(); }
+    bool HasFont() const { return m_font.Ok(); }
+
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
     const wxFont& GetFont() const { return m_font; }
@@ -142,6 +146,7 @@ class WXDLLEXPORT wxListItem : public wxObject
 {
 public:
     wxListItem();
+    ~wxListItem() { delete m_attr; }
 
     // setters
     void SetMask(long mask) { m_mask = mask; }

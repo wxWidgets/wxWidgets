@@ -204,7 +204,15 @@ void wxListCtrl::UpdateStyle()
 
 wxListCtrl::~wxListCtrl()
 {
-    if (m_textCtrl)
+    if ( m_hasAnyAttr )
+    {
+        for ( wxNode *node = m_attrs.Next(); node; node = m_attrs.Next() )
+        {
+            delete (wxListItemAttr *)node->Data();
+        }
+    }
+
+    if ( m_textCtrl )
     {
         m_textCtrl->UnsubclassWin();
         m_textCtrl->SetHWND(0);
@@ -549,19 +557,9 @@ bool wxListCtrl::SetItem(wxListItem& info)
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
-        // FIXME it should be...
-        wxASSERT_MSG( !info.GetData(),
-                      _T("can't have custom attributes and client data") );
-
-        item.mask |= LVIF_PARAM;
-        item.lParam = (long)info.GetAttributes();
+        m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
 
         m_hasAnyAttr = TRUE;
-    }
-    else if ( m_hasAnyAttr )
-    {
-        item.mask |= LVIF_PARAM;
-        item.lParam = 0;
     }
 
     item.cchTextMax = 0;
@@ -1048,19 +1046,9 @@ long wxListCtrl::InsertItem(wxListItem& info)
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
-        // FIXME it should be...
-        wxASSERT_MSG( !info.GetData(),
-                      _T("can't have custom attributes and client data") );
-
-        item.mask |= LVIF_PARAM;
-        item.lParam = (long)info.GetAttributes();
+        m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
 
         m_hasAnyAttr = TRUE;
-    }
-    else if ( m_hasAnyAttr )
-    {
-        item.mask |= LVIF_PARAM;
-        item.lParam = 0;
     }
 
     return (long) ListView_InsertItem(GetHwnd(), & item);
@@ -1279,16 +1267,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             // return TRUE to suppress all additional LVN_DELETEITEM
             // notifications - this makes deleting all items from a list ctrl
-            // much faster (but we can't do it if we have any custom drawn
-            // items because we need to delete their attributes in
-            // LVN_DELETEITEM below)
-            if ( !m_hasAnyAttr )
-            {
-                *result = TRUE;
+            // much faster
+            *result = TRUE;
 
-                return TRUE;
-            }
-            break;
+            return TRUE;
 
         case LVN_DELETEITEM:
             {
@@ -1298,8 +1280,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 if ( m_hasAnyAttr )
                 {
-                    wxListItemAttr *attr = (wxListItemAttr *)hdr->lParam;
-                    delete attr;
+                    delete m_attrs.Delete(hdr->iItem);
                 }
             }
             break;
@@ -1464,7 +1445,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 NMCUSTOMDRAW& nmcd = lplvcd->nmcd;
                 switch( nmcd.dwDrawStage )
                 {
-                    case CDDS_PREPAINT :
+                    case CDDS_PREPAINT:
                         // if we've got any items with non standard attributes,
                         // notify us before painting each item
                         *result = m_hasAnyAttr ? CDRF_NOTIFYITEMDRAW
@@ -1473,30 +1454,68 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                     case CDDS_ITEMPREPAINT:
                         {
-                            if ( !nmcd.lItemlParam )
+                            wxListItemAttr *attr =
+                                (wxListItemAttr *)m_attrs.Get(nmcd.dwItemSpec);
+
+                            if ( !attr )
                             {
                                 // nothing to do for this item
                                 return CDRF_DODEFAULT;
                             }
 
-                            wxListItemAttr *attr =
-                                (wxListItemAttr *)nmcd.lItemlParam;
+                            HFONT hFont;
+                            wxColour colText, colBack;
+                            if ( attr->HasFont() )
+                            {
+                                wxFont font = attr->GetFont();
+                                hFont = (HFONT)font.GetResourceHandle();
+                            }
+                            else
+                            {
+                                hFont = 0;
+                            }
 
-                            ::SelectObject(nmcd.hdc,
-                                (HFONT)((wxFont &)attr->GetFont()).
-                                    GetResourceHandle());
-                            lplvcd->clrText =
-                                wxColourToRGB(attr->GetTextColour());
-                            lplvcd->clrTextBk =
-                                wxColourToRGB(attr->GetBackgroundColour());
+                            if ( attr->HasTextColour() )
+                            {
+                                colText = attr->GetTextColour();
+                            }
+                            else
+                            {
+                                colText = GetTextColour();
+                            }
 
-                            // if we wanted to set colours for individual
-                            // columns (subitems), we would have returned
-                            // CDRF_NOTIFYSUBITEMREDRAW from here
-                            *result = CDRF_NEWFONT;
+                            if ( attr->HasBackgroundColour() )
+                            {
+                                colBack = attr->GetBackgroundColour();
+                            }
+                            else
+                            {
+                                colBack = GetBackgroundColour();
+                            }
+
+                            // note that if we wanted to set colours for
+                            // individual columns (subitems), we would have
+                            // returned CDRF_NOTIFYSUBITEMREDRAW from here
+                            if ( hFont )
+                            {
+                                ::SelectObject(nmcd.hdc, hFont);
+
+                                *result = CDRF_NEWFONT;
+                            }
+                            else
+                            {
+                                *result = CDRF_DODEFAULT;
+                            }
+
+                            lplvcd->clrText = wxColourToRGB(colText);
+                            lplvcd->clrTextBk = wxColourToRGB(colBack);
 
                             return TRUE;
                         }
+
+                    default:
+                        *result = CDRF_DODEFAULT;
+                        return TRUE;
                 }
             }
             break;
