@@ -1672,6 +1672,8 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
 
     int i_angle = (int) angle;
     i_angle = i_angle % 360;
+    if (i_angle < 0)
+        i_angle += 360;
     int xoffset = 0;
     if ((i_angle >= 90.0) && (i_angle < 270.0))
         xoffset = image.GetWidth();
