@@ -21,6 +21,7 @@
 #include "wx/glcanvas.h"
 #include "wx/utils.h"
 #include "wx/app.h"
+#include "wx/log.h"
 
 #ifdef __VMS
 # pragma message disable nosimpint
