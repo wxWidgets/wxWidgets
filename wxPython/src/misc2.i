@@ -1108,10 +1108,10 @@ class wxFileTypeInfo
 public:
     // ctors
         // a normal item
-    wxFileTypeInfo(const char* mimeType,
-                   const char* openCmd,
-                   const char* printCmd,
-                   const char* desc);
+    wxFileTypeInfo(const wxString& mimeType,
+                   const wxString& openCmd,
+                   const wxString& printCmd,
+                   const wxString& desc);
 
 
         // the array elements correspond to the parameters of the ctor above in
