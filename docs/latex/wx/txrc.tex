@@ -128,46 +128,10 @@ For example:
 This is the C++ source file (xrcdemo.cpp) for the XRC sample.
 
 \begin{verbatim}
-/////////////////////////////////////////////////////////////////////////////
-// Name:        xmldemo.cpp
-// Purpose:     XML resources sample
-// Author:      Vaclav Slavik
-// RCS-ID:      $Id$
-// Copyright:   (c) Vaclav Slavik
-// Licence:     wxWindows licence
-/////////////////////////////////////////////////////////////////////////////
-
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-#ifdef __GNUG__
-    #pragma implementation "xrcdemo.cpp"
-    #pragma interface "xrcdemo.cpp"
-#endif
-
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers)
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif
-
+#include "wx/wx.h"
 #include "wx/image.h"
 #include "wx/xrc/xmlres.h"
 
-// ----------------------------------------------------------------------------
-// resources
-// ----------------------------------------------------------------------------
 // the application icon
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #include "rc/appicon.xpm"
@@ -212,9 +176,6 @@ private:
 // event tables and other macros for wxWindows
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
-// handlers) which process them. It can be also done at run-time, but for the
-// simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("menu_quit"),  MyFrame::OnQuit)
     EVT_MENU(XRCID("menu_about"), MyFrame::OnAbout)
@@ -222,16 +183,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("menu_dlg2"), MyFrame::OnDlg2)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
-// the application object during program execution (it's better than using a
-// static object for many reasons) and also declares the accessor function
-// wxGetApp() which will return the reference of the right type (i.e. MyApp and
-// not wxApp)
 IMPLEMENT_APP(MyApp)
-
-// ============================================================================
-// implementation
-// ============================================================================
 
 // ----------------------------------------------------------------------------
 // the application class
@@ -264,9 +216,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetToolBar(wxXmlResource::Get()->LoadToolBar(this, "toolbar"));
 }
 
-
 // event handlers
-
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     // TRUE is to force the frame to close
@@ -288,7 +238,6 @@ void MyFrame::OnDlg1(wxCommandEvent& WXUNUSED(event))
     wxXmlResource::Get()->LoadDialog(&dlg, this, "dlg1");
     dlg.ShowModal();
 }
-
 
 void MyFrame::OnDlg2(wxCommandEvent& WXUNUSED(event))
 {
