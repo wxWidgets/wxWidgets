@@ -201,6 +201,7 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
 {
     wxBitmap bmp = wxDefaultArtProvider_CreateBitmap(id);
 
+#if wxUSE_IMAGE
     if (bmp.Ok())
     {
         // fit into transparent image with desired size hint from the client
@@ -219,9 +220,11 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
                     wxImage img = bmp.ConvertToImage();
                     img.Resize(bestSize, offset);
                     bmp = wxBitmap(img);
-                }        
+                }
             }
-        }      
+        }
     }
+#endif // wxUSE_IMAGE
+
     return bmp;
 }
