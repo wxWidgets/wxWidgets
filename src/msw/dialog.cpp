@@ -70,6 +70,8 @@ wxWindowList wxModelessWindows;
 // all modal dialogs currently shown
 static wxWindowList wxModalDialogs;
 
+static wxWindow *m_oldFocus;
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -110,6 +112,8 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
                       long style,
                       const wxString& name)
 {
+    m_oldFocus = FindFocus();
+
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
     SetName(name);
 
@@ -206,25 +210,9 @@ wxDialog::~wxDialog()
 
     wxTopLevelWindows.DeleteObject(this);
 
+    // this will call BringWindowToTop() if necessary to bring back our parent
+    // window to top
     Show(FALSE);
-
-    // VZ: this is bogus and breaks focus handling - it won't be returned to
-    //     the window which had it previosuly if we do this
-#if 0
-    if (m_modalShowing)
-    {
-        // For some reason, wxWindows can activate another task altogether
-        // when a frame is destroyed after a modal dialog has been invoked.
-        // Try to bring the parent to the top.
-        // dfgg: I moved this following line from end of function -
-        //       must not call if another window is on top!!
-        //       This can often happen with Close() and delayed deleting
-        if (GetParent() && GetParent()->GetHWND())
-            ::BringWindowToTop((HWND) GetParent()->GetHWND());
-    }
-
-    m_modalShowing = FALSE;
-#endif // 0
 
     if ( !IsModal() )
         wxModelessWindows.DeleteObject(this);
@@ -327,194 +315,6 @@ bool wxDialog::IsModal() const
     return (GetWindowStyleFlag() & wxDIALOG_MODAL) != 0;
 }
 
-// VZ: this is the old version unchanged (reindented only), it will be removed
-//     as soon as we're sure the new one works correctly
-#if 0
-
-bool wxDialog::Show(bool show)
-{
-    m_isShown = show;
-
-    if (show)
-        InitDialog();
-
-    bool modal = IsModal();
-
-    if (modal)
-    {
-        if (show)
-        {
-            // find the top level window which had focus before - we will restore
-            // focus to it later
-            m_hwndOldFocus = 0;
-            for ( HWND hwnd = ::GetFocus(); hwnd; hwnd = ::GetParent(hwnd) )
-            {
-                m_hwndOldFocus = (WXHWND)hwnd;
-            }
-
-            if (m_modalShowing)
-            {
-                BringWindowToTop((HWND) GetHWND());
-                return TRUE;
-            }
-
-            m_modalShowing = TRUE;
-            wxNode *node = wxModalDialogs.First();
-            while (node)
-            {
-                wxDialog *box = (wxDialog *)node->Data();
-                if (box != this)
-                    ::EnableWindow((HWND) box->GetHWND(), FALSE);
-                node = node->Next();
-            }
-
-            // if we don't do it, some window might be deleted while we have pointers
-            // to them in our disabledWindows list and the program will crash when it
-            // will try to reenable them after the modal dialog end
-            wxTheApp->DeletePendingObjects();
-            wxList disabledWindows;
-
-            node = wxModelessWindows.First();
-            while (node)
-            {
-                wxWindow *win = (wxWindow *)node->Data();
-                if (::IsWindowEnabled((HWND) win->GetHWND()))
-                {
-                    ::EnableWindow((HWND) win->GetHWND(), FALSE);
-                    disabledWindows.Append(win);
-                }
-                node = node->Next();
-            }
-
-            ShowWindow((HWND) GetHWND(), SW_SHOW);
-            EnableWindow((HWND) GetHWND(), TRUE);
-            BringWindowToTop((HWND) GetHWND());
-
-            if ( !wxModalDialogs.Find(this) )
-                wxModalDialogs.Append(this);
-
-            MSG msg;
-            // Must test whether this dialog still exists: we may not process
-            // a message before the deletion.
-            while (wxModalDialogs.Find(this) && m_modalShowing && GetMessage(&msg, NULL, 0, 0))
-            {
-                if ( m_acceleratorTable.Ok() &&
-                        ::TranslateAccelerator((HWND)GetHWND(),
-                            (HACCEL)m_acceleratorTable.GetHACCEL(),
-                            &msg) )
-                {
-                    // Have processed the message
-                }
-                else if ( !wxTheApp->ProcessMessage((WXMSG *)&msg) )
-                {
-                    TranslateMessage(&msg);
-                    DispatchMessage(&msg);
-                }
-
-                // If we get crashes (as per George Tasker's message) with nested modal dialogs,
-                // we should try removing the m_modalShowing test
-
-                if (m_modalShowing && !::PeekMessage(&msg, 0, 0, 0, PM_NOREMOVE))
-                    // dfgg: NB MUST test m_modalShowing again as the message loop could have triggered
-                    //       a Show(FALSE) in the mean time!!!
-                    // Without the test, we might delete the dialog before the end of modal showing.
-                {
-                    while (wxTheApp->ProcessIdle() && m_modalShowing)
-                    {
-                        // Keep going until we decide we've done enough
-                    }
-                }
-            }
-            // dfgg: now must specifically re-enable all other app windows that we disabled earlier
-            node=disabledWindows.First();
-            while(node) {
-                wxWindow* win = (wxWindow*) node->Data();
-                if (wxModalDialogs.Find(win) || wxModelessWindows.Find(win))
-                {
-                    HWND hWnd = (HWND) win->GetHWND();
-                    if (::IsWindow(hWnd))
-                        ::EnableWindow(hWnd,TRUE);
-                }
-                node=node->Next();
-            }
-        }
-        else // !show
-        {
-            ::SetFocus((HWND)m_hwndOldFocus);
-
-            wxModalDialogs.DeleteObject(this);
-
-            wxNode *last = wxModalDialogs.Last();
-
-            // If there's still a modal dialog active, we
-            // enable it, else we enable all modeless windows
-            if (last)
-            {
-                // VZ: I don't understand what this is supposed to do, so I'll leave
-                //     it out for now and look for horrible consequences
-                wxDialog *box = (wxDialog *)last->Data();
-                HWND hwnd = (HWND) box->GetHWND();
-#if 0
-                if (box->IsUserEnabled())
-#endif // 0
-                    EnableWindow(hwnd, TRUE);
-                BringWindowToTop(hwnd);
-            }
-            else
-            {
-                wxNode *node = wxModelessWindows.First();
-                while (node)
-                {
-                    wxWindow *win = (wxWindow *)node->Data();
-                    HWND hwnd = (HWND) win->GetHWND();
-                    // Only enable again if not user-disabled.
-#if 0
-                    if (win->IsUserEnabled())
-#endif // 0
-                        EnableWindow(hwnd, TRUE);
-                    node = node->Next();
-                }
-            }
-            // Try to highlight the correct window (the parent)
-            HWND hWndParent = 0;
-            if (GetParent())
-            {
-                hWndParent = (HWND) GetParent()->GetHWND();
-                if (hWndParent)
-                    ::BringWindowToTop(hWndParent);
-            }
-            ShowWindow((HWND) GetHWND(), SW_HIDE);
-            m_modalShowing = FALSE;
-        }
-    }
-    else // !modal
-    {
-        if (show)
-        {
-            ShowWindow((HWND) GetHWND(), SW_SHOW);
-            BringWindowToTop((HWND) GetHWND());
-        }
-        else
-        {
-            // Try to highlight the correct window (the parent)
-            HWND hWndParent = 0;
-            if (GetParent())
-            {
-                hWndParent = (HWND) GetParent()->GetHWND();
-                if (hWndParent)
-                    ::BringWindowToTop(hWndParent);
-            }
-
-            if ( m_hWnd )
-                ShowWindow((HWND) GetHWND(), SW_HIDE);
-        }
-    }
-
-    return TRUE;
-}
-
-#else // 1
-
 bool wxDialog::IsModalShowing() const
 {
     return wxModalDialogs.Find((wxDialog *)this) != NULL; // const_cast
@@ -529,14 +329,13 @@ void wxDialog::DoShowModal()
     wxWindow *parent = GetParent();
 
     // remember where the focus was
-    wxWindow *winFocus = FindFocus();
-    if ( !winFocus )
+    if ( !m_oldFocus )
     {
-        winFocus = parent;
+        m_oldFocus = parent;
     }
-    if ( !winFocus )
+    if ( !m_oldFocus )
     {
-        winFocus = wxTheApp->GetTopWindow();
+        m_oldFocus = wxTheApp->GetTopWindow();
     }
 
     // disable the parent window first
@@ -567,27 +366,29 @@ void wxDialog::DoShowModal()
     }
 
     // and restore focus
-    if ( winFocus && (winFocus != this) )
+    if ( m_oldFocus && (m_oldFocus != this) )
     {
-        winFocus->SetFocus();
+        m_oldFocus->SetFocus();
     }
 }
 
 bool wxDialog::Show(bool show)
 {
-    // The following is required when the parent has been disabled,
-    // (modal dialogs, or modeless dialogs with disabling such as wxProgressDialog).
-    // Otherwise the parent disappears behind other windows when the dialog is hidden.
-    if (!show)
+    // The following is required when the parent has been disabled, (modal
+    // dialogs, or modeless dialogs with disabling such as wxProgressDialog).
+    // Otherwise the parent disappears behind other windows when the dialog is
+    // hidden.
+    if ( !show )
     {
-        HWND hwndParent = GetParent() ? (HWND) GetParent()->GetHWND() : (HWND)NULL;
-        if ( hwndParent )
+        wxWindow *parent = GetParent();
+        if ( parent )
         {
-            ::BringWindowToTop(hwndParent);
+            ::BringWindowToTop(GetHwndOf(parent));
         }
     }
 
-    if ( !wxDialogBase::Show(show) )
+    // ShowModal() may be called for already shown dialog
+    if ( !wxDialogBase::Show(show) && !(show && IsModal()) )
     {
         // nothing to do
         return FALSE;
@@ -615,8 +416,6 @@ bool wxDialog::Show(bool show)
 
     return TRUE;
 }
-
-#endif // 0/1
 
 // Replacement for Show(TRUE) for modal dialogs - returns return code
 int wxDialog::ShowModal()
@@ -728,6 +527,17 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             // message - otherwise it would close us
             processed = !Close();
             break;
+
+        case WM_SETCURSOR:
+            // we want to override the busy cursor for modal dialogs:
+            // typically, wxBeginBusyCursor() is called and then a modal dialog
+            // is shown, but the modal dialog shouldn't have this cursor
+            if ( wxIsBusy() )
+            {
+                rc = TRUE;
+
+                processed = TRUE;
+            }
     }
 
     if ( !processed )

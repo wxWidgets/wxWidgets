@@ -88,10 +88,13 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 {
     bool hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
     m_state = hasAbortButton ? Continue : Uncancelable;
-    m_disableParentOnly = (style & wxPD_APP_MODAL) == 0;
-    m_AutoHide = (style & wxPD_AUTO_HIDE) != 0;
-    m_parent = parent;
     m_maximum = maximum;
+
+    m_parentTop = parent;
+    while ( m_parentTop && m_parentTop->GetParent() )
+    {
+        m_parentTop = m_parentTop->GetParent();
+    }
 
     wxLayoutConstraints *c;
 
@@ -209,10 +212,10 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     Centre(wxCENTER_FRAME | wxBOTH);
 
-    if ( m_disableParentOnly )
+    if ( !(style & wxPD_APP_MODAL) )
     {
-        if ( m_parent )
-            m_parent->Enable(FALSE);
+        if ( m_parentTop )
+            m_parentTop->Enable(FALSE);
     }
     else
     {
@@ -266,60 +269,69 @@ wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
 bool
 wxProgressDialog::Update(int value, const wxString& newmsg)
 {
-   wxASSERT_MSG( value == -1 || m_gauge, wxT("cannot update non existent dialog") );
-   wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
+    wxASSERT_MSG( value == -1 || m_gauge, wxT("cannot update non existent dialog") );
+    wxASSERT_MSG( value <= m_maximum, wxT("invalid progress value") );
 
+    if ( m_gauge )
+        m_gauge->SetValue(value + 1);
 
-   if( m_gauge )
-      m_gauge->SetValue(value + 1);
+    if ( !newmsg.IsEmpty() )
+    {
+#ifdef __WXMSW__
+        // this seems to be necessary or garbage is left when the new label is
+        // longer than the old one
+        m_msg->SetLabel(wxEmptyString);
+#endif // MSW
 
-   if( !newmsg.IsEmpty() )
-      m_msg->SetLabel(newmsg);
+        m_msg->SetLabel(newmsg);
 
-   if ( (m_elapsed || m_remaining || m_estimated) && (value != 0) )
-   {
-      unsigned long elapsed = wxGetCurrentTime() - m_timeStart;
-      unsigned long estimated = elapsed * m_maximum / value;
-      unsigned long remaining = estimated - elapsed;
+        wxYield();
+    }
 
-      SetTimeLabel(elapsed, m_elapsed);
-      SetTimeLabel(estimated, m_estimated);
-      SetTimeLabel(remaining, m_remaining);
-   }
+    if ( (m_elapsed || m_remaining || m_estimated) && (value != 0) )
+    {
+        unsigned long elapsed = wxGetCurrentTime() - m_timeStart;
+        unsigned long estimated = elapsed * m_maximum / value;
+        unsigned long remaining = estimated - elapsed;
 
-   if ( (value == m_maximum ) && !m_AutoHide )
-   {
-       if ( m_btnAbort )
-       {
-           // tell the user what he should do...
-           m_btnAbort->SetLabel(_("Close"));
-       }
+        SetTimeLabel(elapsed, m_elapsed);
+        SetTimeLabel(estimated, m_estimated);
+        SetTimeLabel(remaining, m_remaining);
+    }
 
-       if ( !newmsg )
-       {
-           // also provide the finishing message if the application didn't
-           m_msg->SetLabel(_("Done."));
-       }
+    if ( (value == m_maximum ) && !(GetWindowStyle() & wxPD_AUTO_HIDE) )
+    {
+        if ( m_btnAbort )
+        {
+            // tell the user what he should do...
+            m_btnAbort->SetLabel(_("Close"));
+        }
 
-       // so that we return TRUE below and that out [Cancel] handler knew what
-       // to do
-       m_state = Finished;
+        if ( !newmsg )
+        {
+            // also provide the finishing message if the application didn't
+            m_msg->SetLabel(_("Done."));
+        }
 
-       wxYield();
+        // so that we return TRUE below and that out [Cancel] handler knew what
+        // to do
+        m_state = Finished;
 
-       (void)ShowModal();
-   }
-   else
-   {
-       // update the display
-       wxYield();
-   }
+        wxYield();
+
+        (void)ShowModal();
+    }
+    else
+    {
+        // update the display
+        wxYield();
+    }
 
 #ifdef __WXMAC__
     MacUpdateImmediately();
 #endif
 
-   return m_state != Canceled;
+    return m_state != Canceled;
 }
 
 // ----------------------------------------------------------------------------
@@ -349,9 +361,20 @@ void wxProgressDialog::OnCancel(wxCommandEvent& event)
 void wxProgressDialog::OnClose(wxCloseEvent& event)
 {
     if ( m_state == Uncancelable )
+    {
+        // can't close this dialog
         event.Veto(TRUE);
+    }
+    else if ( m_state == Finished )
+    {
+        // let the default handler close the window as we already terminated
+        event.Skip();
+    }
     else
+    {
+        // next Update() will notice it
         m_state = Canceled;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -360,10 +383,10 @@ void wxProgressDialog::OnClose(wxCloseEvent& event)
 
 wxProgressDialog::~wxProgressDialog()
 {
-    if ( m_disableParentOnly )
+    if ( !(GetWindowStyle() & wxPD_APP_MODAL) )
     {
-        if ( m_parent )
-            m_parent->Enable(TRUE);
+        if ( m_parentTop )
+            m_parentTop->Enable(TRUE);
     }
     else
     {

@@ -84,7 +84,7 @@ public:
 // Empty implementation for now to keep the linker happy
 wxString wxRegTipProvider::GetTip()
 {
-    return "";
+    return wxEmptyString;
 }
 
 #endif // __WIN32__
@@ -166,12 +166,12 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     m_tipProvider = tipProvider;
 
     // 1) create all controls in tab order
-    
+
     wxButton *btnClose = new wxButton(this, wxID_CANCEL, _("&Close"));
-    
+
     m_checkbox = new wxCheckBox(this, -1, _("&Show tips at startup"));
     m_checkbox->SetValue(showAtStartup);
-    
+
     wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next Tip"));
 
     wxStaticText *text = new wxStaticText(this, -1, _("Did you know..."), wxDefaultPosition, wxSize(-1,30) );
@@ -185,7 +185,10 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     m_text = new wxTextCtrl(this, -1, wxT(""),
                             wxDefaultPosition, wxSize(200, 160),
-                            wxTE_MULTILINE | wxTE_READONLY | wxSUNKEN_BORDER);
+                            wxTE_MULTILINE |
+                            wxTE_READONLY |
+                            wxTE_RICH | // a hack to get rid of vert scrollbar
+                            wxSUNKEN_BORDER);
 #if defined(__WXMSW__)
     m_text->SetFont(wxFont(12, wxROMAN, wxNORMAL, wxNORMAL));
 #else
@@ -203,12 +206,12 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     // 2) put them in boxes
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-    
+
     wxBoxSizer *icon_text = new wxBoxSizer( wxHORIZONTAL );
     icon_text->Add( bmp, 0, wxCENTER );
     icon_text->Add( text, 1, wxCENTER | wxLEFT, 20 );
     topsizer->Add( icon_text, 0, wxEXPAND | wxALL, 10 );
-    
+
     topsizer->Add( m_text, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
     wxBoxSizer *bottom = new wxBoxSizer( wxHORIZONTAL );
@@ -219,10 +222,10 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     topsizer->Add( bottom, 0, wxEXPAND | wxALL, 10 );
 
     SetTipText();
-    
+
     SetAutoLayout(TRUE);
     SetSizer( topsizer );
-    
+
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 

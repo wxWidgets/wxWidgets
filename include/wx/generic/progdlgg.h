@@ -23,6 +23,7 @@
 #include "wx/dialog.h"
 
 class WXDLLEXPORT wxButton;
+class WXDLLEXPORT wxGauge;
 class WXDLLEXPORT wxStaticText;
 
 /* Progress dialog which shows a moving progress bar.
@@ -75,21 +76,19 @@ private:
    wxStaticText *CreateLabel(const wxString& text, wxWindow **lastWindow);
 
    // the status bar
-   class wxGauge *m_gauge;
+   wxGauge *m_gauge;
    // the message displayed
-   class wxStaticText *m_msg;
-   // disable all or parent window only
-   bool m_disableParentOnly;
-   // auto-hide?
-   bool m_AutoHide;
+   wxStaticText *m_msg;
    // displayed elapsed, estimated, remaining time
    class wxStaticText *m_elapsed,
                       *m_estimated,
                       *m_remaining;
    // time when the dialog was created
    unsigned long m_timeStart;
-   // parent window
-   wxWindow *m_parent;
+
+   // parent top level window (may be NULL)
+   wxWindow *m_parentTop;
+
    // continue processing or not (return value for Update())
    enum
    {

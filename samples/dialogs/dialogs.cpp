@@ -31,6 +31,7 @@
 #include "wx/fontdlg.h"
 #include "wx/choicdlg.h"
 #include "wx/tipdlg.h"
+#include "wx/progdlg.h"
 
 #define wxTEST_GENERIC_DIALOGS_IN_MSW 0
 
@@ -66,10 +67,18 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,         MyFrame::ChooseColourGeneric)
     EVT_MENU(DIALOGS_CHOOSE_FONT_GENERIC,           MyFrame::ChooseFontGeneric)
 #endif
+#if wxUSE_PROGRESSDLG
+    EVT_MENU(DIALOGS_PROGRESS,                      MyFrame::ShowProgress)
+#endif
     EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
 
     EVT_BUTTON(DIALOGS_MODELESS_BTN,                MyFrame::OnButton)
 END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyModelessDialog, wxDialog)
+    EVT_CLOSE(MyModelessDialog::OnClose)
+END_EVENT_TABLE()
+
 MyCanvas *myCanvas = (MyCanvas *) NULL;
 
 // `Main program' equivalent, creating windows and returning main app frame
@@ -116,6 +125,9 @@ bool MyApp::OnInit()
   file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file\tCtrl-S");
   file_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
   file_menu->AppendSeparator();
+#if wxUSE_PROGRESSDLG
+  file_menu->Append(DIALOGS_PROGRESS, "Pro&gress dialog\tCtrl-G");
+#endif // wxUSE_PROGRESSDLG
   file_menu->Append(DIALOGS_MODELESS, "Modeless &dialog\tCtrl-Z", "", TRUE);
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, "E&xit\tAlt-X");
@@ -453,6 +465,56 @@ void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
     Close(TRUE);
 }
 
+#if wxUSE_PROGRESSDLG
+
+void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
+{
+    static const int max = 10;
+
+    wxProgressDialog dialog("Progress dialog example",
+                            "An informative message",
+                            max,    // range
+                            this,   // parent
+                            wxPD_CAN_ABORT |
+                            wxPD_APP_MODAL |
+                            wxPD_ELAPSED_TIME |
+                            wxPD_ESTIMATED_TIME |
+                            wxPD_REMAINING_TIME);
+
+    bool cont = TRUE;
+    for ( int i = 0; i <= max && cont; i++ )
+    {
+        wxSleep(1);
+        if ( i == max )
+        {
+            cont = dialog.Update(i, "That's all, folks!");
+        }
+        else if ( i == max / 2 )
+        {
+            cont = dialog.Update(i, "Only a half left (very long message)!");
+        }
+        else
+        {
+            cont = dialog.Update(i);
+        }
+    }
+
+    if ( !cont )
+    {
+        wxLogStatus("Progress dialog aborted!");
+    }
+    else
+    {
+        wxLogStatus("Countdown from %d finished", max);
+    }
+}
+
+#endif // wxUSE_PROGRESSDLG
+
+// ----------------------------------------------------------------------------
+// MyCanvas
+// ----------------------------------------------------------------------------
+
 void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
@@ -473,3 +535,16 @@ MyModelessDialog::MyModelessDialog(wxWindow *parent)
     Fit();
     Centre();
 }
+
+void MyModelessDialog::OnClose(wxCloseEvent& event)
+{
+    if ( event.CanVeto() )
+    {
+        wxMessageBox("Use the menu item to close this dialog",
+                     "Modeless dialog",
+                     wxOK | wxICON_INFORMATION, this);
+
+        event.Veto();
+    }
+}
+

@@ -27,6 +27,11 @@ class MyModelessDialog : public wxDialog
 {
 public:
     MyModelessDialog(wxWindow *parent);
+
+    void OnClose(wxCloseEvent& event);
+
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 // Define a new frame type
@@ -50,6 +55,7 @@ public:
     void DirChoose(wxCommandEvent& event);
     void ShowTip(wxCommandEvent& event);
     void ModelessDlg(wxCommandEvent& event);
+    void ShowProgress(wxCommandEvent& event);
 
 #if !defined(__WXMSW__) || wxTEST_GENERIC_DIALOGS_IN_MSW
     void ChooseColourGeneric(wxCommandEvent& event);
@@ -96,7 +102,8 @@ enum
     DIALOGS_NUM_ENTRY,
     DIALOGS_LOG_DIALOG,
     DIALOGS_MODELESS,
-    DIALOGS_MODELESS_BTN
+    DIALOGS_MODELESS_BTN,
+    DIALOGS_PROGRESS
 };
 
 #endif

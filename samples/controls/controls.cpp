@@ -395,7 +395,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                             wxPoint(0, 250), wxSize(100, 50), wxTE_MULTILINE);
     m_text->SetBackgroundColour("wheat");
 
-    // wxLog::AddTraceMask(_T("focus"));
+    if ( 0 )
+        wxLog::AddTraceMask(_T("focus"));
     m_logTargetOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
 
     m_notebook = new wxNotebook(this, ID_NOTEBOOK);
@@ -1146,16 +1147,16 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
 
 
     bool cont = TRUE;
-    for ( int i = 0; i < max && cont; i++ )
+    for ( int i = 0; i <= max && cont; i++ )
     {
         wxSleep(1);
-        if ( i == max - 1 )
+        if ( i == max )
         {
             cont = dialog.Update(i, "That's all, folks!");
         }
         else if ( i == max / 2 )
         {
-            cont = dialog.Update(i, "Only a half left!");
+            cont = dialog.Update(i, "Only a half left (very long message)!");
         }
         else
         {
@@ -1219,12 +1220,15 @@ void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
-    wxBeginBusyCursor();
+    wxBusyCursor bc;
+
+#if 0 // VZ: my temp test code, will remove
+    wxGetTextFromUser("msg", "caption", "val", this);
+    return;
+#endif // 0
 
     wxMessageDialog dialog(this, "This is a control sample", "About Controls", wxOK );
     dialog.ShowModal();
-
-    wxEndBusyCursor();
 }
 
 void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
