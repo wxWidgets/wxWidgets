@@ -14,8 +14,7 @@
     
     <wx-data id="data">
         <files>
-	    9000g.wav  911ch.wav  chord.wav  cuckoo.wav  
-	    ding.wav  doggrowl.wav  notify.wav
+           9000g.wav  cuckoo.wav  doggrowl.wav  tinkalink.wav
 	</files>
     </wx-data>
 

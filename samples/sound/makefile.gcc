@@ -172,7 +172,7 @@ $(OBJS)\sound.exe: $(SOUND_OBJECTS) $(OBJS)\sound_sample_rc.o
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (9000g.wav 911ch.wav chord.wav cuckoo.wav ding.wav doggrowl.wav notify.wav) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+	for %%f in (9000g.wav cuckoo.wav doggrowl.wav tinkalink.wav) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 $(OBJS)\sound_sample_rc.o: ./../../samples/sample.rc
 	windres --use-temp-file -i$< -o$@  --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
