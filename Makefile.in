@@ -86,7 +86,7 @@ ADVLIB_OBJECTS =  \
 	advlib_tipdlg.o \
 	advlib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_3)
-ALL_HEADERS =  \
+ALL_BASE_HEADERS =  \
 	wx/app.h \
 	wx/apptrait.h \
 	wx/arrimpl.cpp \
@@ -125,6 +125,7 @@ ALL_HEADERS =  \
 	wx/fs_zip.h \
 	wx/hash.h \
 	wx/hashmap.h \
+	wx/hashset.h \
 	wx/iconloc.h \
 	wx/init.h \
 	wx/intl.h \
@@ -150,7 +151,9 @@ ALL_HEADERS =  \
 	wx/object.h \
 	wx/platform.h \
 	wx/process.h \
+	wx/ptr_scpd.h \
 	wx/regex.h \
+	wx/scopeguard.h \
 	wx/snglinst.h \
 	wx/stopwatch.h \
 	wx/strconv.h \
@@ -161,6 +164,7 @@ ALL_HEADERS =  \
 	wx/textfile.h \
 	wx/thread.h \
 	wx/thrimpl.cpp \
+	wx/timer.h \
 	wx/tokenzr.h \
 	wx/txtstrm.h \
 	wx/types.h \
@@ -188,50 +192,113 @@ ALL_HEADERS =  \
 	wx/socket.h \
 	wx/url.h \
 	$(NET_PLATFORM_HDR) \
-	$(ALL_GUI_HEADERS) \
-	wx/calctrl.h \
-	wx/dcbuffer.h \
-	wx/generic/calctrl.h \
-	wx/generic/grid.h \
-	wx/generic/gridctrl.h \
-	wx/generic/gridsel.h \
-	wx/generic/helpext.h \
-	wx/generic/laywin.h \
-	wx/generic/sashwin.h \
-	wx/generic/splash.h \
-	wx/generic/wizard.h \
-	wx/grid.h \
-	wx/joystick.h \
-	wx/laywin.h \
-	wx/sashwin.h \
-	wx/splash.h \
-	wx/taskbar.h \
-	wx/tipdlg.h \
-	wx/wave.h \
-	wx/wizard.h \
-	$(ADVANCED_PLATFORM_HDR) \
-	wx/html/forcelnk.h \
-	wx/html/helpctrl.h \
-	wx/html/helpdata.h \
-	wx/html/helpfrm.h \
-	wx/html/htmlcell.h \
-	wx/html/htmldefs.h \
-	wx/html/htmlfilt.h \
-	wx/html/htmlpars.h \
-	wx/html/htmlproc.h \
-	wx/html/htmltag.h \
-	wx/html/htmlwin.h \
-	wx/html/htmprint.h \
-	wx/html/m_templ.h \
-	wx/html/winpars.h \
-	wx/wxhtml.h \
-	wx/htmllbox.h \
-	wx/xml/xml.h \
-	$(OPENGL_HDR) \
-	wx/db.h \
-	wx/dbkeyg.h \
-	wx/dbtable.h \
-	wx/dbgrid.h
+	wx/xml/xml.h
+ALL_BASE_SOURCES =  \
+	src/common/appbase.cpp \
+	src/common/clntdata.cpp \
+	src/common/cmdline.cpp \
+	src/common/config.cpp \
+	src/common/datetime.cpp \
+	src/common/datstrm.cpp \
+	src/common/dircmn.cpp \
+	src/common/dynarray.cpp \
+	src/common/dynlib.cpp \
+	src/common/dynload.cpp \
+	src/common/encconv.cpp \
+	src/common/extended.c \
+	src/common/ffile.cpp \
+	src/common/file.cpp \
+	src/common/fileconf.cpp \
+	src/common/filefn.cpp \
+	src/common/filename.cpp \
+	src/common/filesys.cpp \
+	src/common/fmapbase.cpp \
+	src/common/fs_zip.cpp \
+	src/common/hash.cpp \
+	src/common/hashmap.cpp \
+	src/common/init.cpp \
+	src/common/intl.cpp \
+	src/common/ipcbase.cpp \
+	src/common/list.cpp \
+	src/common/log.cpp \
+	src/common/longlong.cpp \
+	src/common/memory.cpp \
+	src/common/mimecmn.cpp \
+	src/common/module.cpp \
+	src/common/mstream.cpp \
+	src/common/object.cpp \
+	src/common/process.cpp \
+	src/common/regex.cpp \
+	src/common/stopwatch.cpp \
+	src/common/strconv.cpp \
+	src/common/stream.cpp \
+	src/common/string.cpp \
+	src/common/sysopt.cpp \
+	src/common/textbuf.cpp \
+	src/common/textfile.cpp \
+	src/common/tokenzr.cpp \
+	src/common/txtstrm.cpp \
+	src/common/unzip.c \
+	src/common/variant.cpp \
+	src/common/wfstream.cpp \
+	src/common/wxchar.cpp \
+	src/common/zipstrm.cpp \
+	src/common/zstream.cpp \
+	src/unix/baseunix.cpp \
+	src/unix/dir.cpp \
+	src/unix/mimetype.cpp \
+	src/unix/snglinst.cpp \
+	src/unix/threadpsx.cpp \
+	src/msw/basemsw.cpp \
+	src/msw/crashrpt.cpp \
+	src/msw/dde.cpp \
+	src/msw/dir.cpp \
+	src/msw/mimetype.cpp \
+	src/msw/regconf.cpp \
+	src/msw/registry.cpp \
+	src/msw/snglinst.cpp \
+	src/msw/thread.cpp \
+	src/msw/utils.cpp \
+	src/msw/utilsexc.cpp \
+	src/mac/dirmac.cpp \
+	src/mac/mimetmac.cpp \
+	src/unix/baseunix.cpp \
+	src/mac/utilsexc.cpp \
+	src/unix/baseunix.cpp \
+	src/unix/dir.cpp \
+	src/unix/mimetype.cpp \
+	src/unix/snglinst.cpp \
+	src/unix/threadpsx.cpp \
+	src/os2/dir.cpp \
+	src/os2/utils.cpp \
+	src/os2/utilsexc.cpp \
+	src/common/event.cpp \
+	src/common/fs_mem.cpp \
+	src/common/msgout.cpp \
+	src/common/utilscmn.cpp \
+	src/unix/utilsunx.cpp \
+	src/mac/utils.cpp \
+	src/unix/utilsunx.cpp \
+	src/msw/main.cpp \
+	src/msw/mslu.cpp \
+	src/msw/volume.cpp \
+	src/common/fs_inet.cpp \
+	src/common/ftp.cpp \
+	src/common/http.cpp \
+	src/common/protocol.cpp \
+	src/common/sckaddr.cpp \
+	src/common/sckfile.cpp \
+	src/common/sckipc.cpp \
+	src/common/sckstrm.cpp \
+	src/common/socket.cpp \
+	src/common/url.cpp \
+	src/unix/gsocket.c \
+	src/msw/gsocket.c \
+	src/mac/gsocket.c \
+	src/xml/xml.cpp
+ALL_HEADERS =  \
+	$(ALL_BASE_HEADERS) \
+	$(ALL_GUI_HEADERS)
 BASEDLL_CFLAGS = $(__basedll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
@@ -482,6 +549,7 @@ HTMLLIB_OBJECTS =  \
 	htmllib_winpars.o \
 	htmllib_htmllbox.o
 LIBDIRNAME = $(top_builddir)lib
+LOCALE_LINGUAS = ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk zh zh_CN zh_TW
 MONODLL_CFLAGS = $(__monodll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
@@ -845,6 +913,7 @@ WXZLIB_OBJECTS =  \
 	wxzlib_infcodes.o \
 	wxzlib_infutil.o \
 	wxzlib_inffast.o
+WX_VERSION = 2.5.0
 XMLDLL_CXXFLAGS = $(__xmldll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
@@ -873,7 +942,7 @@ XMLLIB_OBJECTS =  \
 @COND_TOOLKIT_OS2@	wx/os2/joystick.h wx/os2/wave.h
 @COND_TOOLKIT_X11@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_X11@	wx/unix/joystick.h wx/unix/taskbarx11.h wx/unix/wave.h
-COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS =  \
+COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/bmpbuttn.h \
 	wx/brush.h \
 	wx/button.h \
@@ -945,7 +1014,6 @@ COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS =  \
 	wx/statusbr.h \
 	wx/textctrl.h \
 	wx/textdlg.h \
-	wx/timer.h \
 	wx/toolbar.h \
 	wx/validate.h \
 	wx/valtext.h \
@@ -1039,174 +1107,79 @@ COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS =  \
 	wx/xpmdecod.h \
 	wx/xpmhand.h \
 	$(LOWLEVEL_HDR) \
-	$(GUI_HDR)
-@COND_USE_GUI_1_WXUNIV_0@ALL_GUI_HEADERS = $(COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS)
-COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
-	wx/bmpbuttn.h \
-	wx/brush.h \
-	wx/button.h \
-	wx/checkbox.h \
-	wx/checklst.h \
-	wx/choicdlg.h \
-	wx/choice.h \
-	wx/cmndata.h \
-	wx/combobox.h \
-	wx/control.h \
-	wx/ctrlsub.h \
-	wx/cursor.h \
-	wx/dc.h \
-	wx/dcclient.h \
-	wx/dcmemory.h \
-	wx/dcprint.h \
-	wx/dcscreen.h \
-	wx/dialog.h \
-	wx/dirdlg.h \
-	wx/dragimag.h \
-	wx/filedlg.h \
-	wx/frame.h \
-	wx/gauge.h \
-	wx/gdicmn.h \
-	wx/generic/accel.h \
-	wx/generic/choicdgg.h \
-	wx/generic/colrdlgg.h \
-	wx/generic/dcpsg.h \
-	wx/generic/dirctrlg.h \
-	wx/generic/dragimgg.h \
-	wx/generic/filedlgg.h \
-	wx/generic/fontdlgg.h \
-	wx/generic/imaglist.h \
-	wx/generic/logg.h \
-	wx/generic/msgdlgg.h \
-	wx/generic/notebook.h \
-	wx/generic/panelg.h \
-	wx/generic/prntdlgg.h \
-	wx/generic/progdlgg.h \
-	wx/generic/scrolwin.h \
-	wx/generic/spinctlg.h \
-	wx/generic/splitter.h \
-	wx/generic/textdlgg.h \
-	wx/generic/timer.h \
-	wx/generic/treectlg.h \
-	wx/helphtml.h \
-	wx/icon.h \
-	wx/layout.h \
-	wx/listbox.h \
-	wx/mdi.h \
-	wx/menu.h \
-	wx/msgdlg.h \
-	wx/palette.h \
-	wx/panel.h \
-	wx/pen.h \
-	wx/radiobox.h \
-	wx/radiobut.h \
-	wx/renderer.h \
-	wx/scrolbar.h \
-	wx/scrolbar.h \
-	wx/scrolwin.h \
-	wx/selstore.h \
-	wx/settings.h \
-	wx/sizer.h \
-	wx/slider.h \
-	wx/statbmp.h \
-	wx/statbox.h \
-	wx/stattext.h \
-	wx/statusbr.h \
-	wx/textctrl.h \
-	wx/textdlg.h \
-	wx/timer.h \
-	wx/toolbar.h \
-	wx/validate.h \
-	wx/valtext.h \
-	wx/window.h \
-	wx/accel.h \
-	wx/access.h \
-	wx/afterstd.h \
-	wx/artprov.h \
-	wx/bitmap.h \
-	wx/busyinfo.h \
-	wx/caret.h \
-	wx/clipbrd.h \
-	wx/cmdproc.h \
-	wx/colordlg.h \
-	wx/colour.h \
-	wx/cshelp.h \
-	wx/dataobj.h \
-	wx/dcmirror.h \
-	wx/dcps.h \
-	wx/dialup.h \
-	wx/dirctrl.h \
-	wx/display.h \
-	wx/dnd.h \
-	wx/docmdi.h \
-	wx/docview.h \
-	wx/effects.h \
-	wx/evtloop.h \
-	wx/fdrepdlg.h \
-	wx/fmappriv.h \
-	wx/font.h \
-	wx/fontdlg.h \
-	wx/fontenum.h \
-	wx/fontutil.h \
-	wx/gdiobj.h \
-	wx/geometry.h \
-	wx/gifdecod.h \
-	wx/glcanvas.h \
-	wx/help.h \
-	wx/helpbase.h \
-	wx/helpwin.h \
-	wx/iconbndl.h \
-	wx/imagbmp.h \
-	wx/image.h \
-	wx/imaggif.h \
-	wx/imagiff.h \
-	wx/imagjpeg.h \
-	wx/imaglist.h \
-	wx/imagpcx.h \
-	wx/imagpng.h \
-	wx/imagpnm.h \
-	wx/imagtiff.h \
-	wx/imagxpm.h \
-	wx/listbase.h \
-	wx/listctrl.h \
-	wx/matrix.h \
-	wx/menuitem.h \
-	wx/metafile.h \
-	wx/minifram.h \
-	wx/notebook.h \
-	wx/ownerdrw.h \
-	wx/paper.h \
-	wx/popupwin.h \
-	wx/print.h \
-	wx/printdlg.h \
-	wx/prntbase.h \
-	wx/progdlg.h \
-	wx/ptr_scpd.h \
-	wx/quantize.h \
-	wx/rawbmp.h \
-	wx/region.h \
-	wx/scopeguard.h \
-	wx/spinbutt.h \
-	wx/spinctrl.h \
-	wx/splitter.h \
-	wx/stack.h \
-	wx/statline.h \
-	wx/tab.h \
-	wx/tabctrl.h \
-	wx/tbarbase.h \
-	wx/tbarsmpl.h \
-	wx/tglbtn.h \
-	wx/tipwin.h \
-	wx/tooltip.h \
-	wx/toplevel.h \
-	wx/treebase.h \
-	wx/treectrl.h \
-	wx/valgen.h \
-	wx/vlbox.h \
-	wx/vms_x_fix.h \
-	wx/vscroll.h \
-	wx/xpmdecod.h \
-	wx/xpmhand.h \
-	$(LOWLEVEL_HDR) \
+	$(GUI_CORE_HEADERS) \
+	wx/calctrl.h \
+	wx/dcbuffer.h \
+	wx/generic/calctrl.h \
+	wx/generic/grid.h \
+	wx/generic/gridctrl.h \
+	wx/generic/gridsel.h \
+	wx/generic/helpext.h \
+	wx/generic/laywin.h \
+	wx/generic/sashwin.h \
+	wx/generic/splash.h \
+	wx/generic/wizard.h \
+	wx/grid.h \
+	wx/joystick.h \
+	wx/laywin.h \
+	wx/sashwin.h \
+	wx/splash.h \
+	wx/taskbar.h \
+	wx/tipdlg.h \
+	wx/wave.h \
+	wx/wizard.h \
+	$(ADVANCED_PLATFORM_HDR) \
+	wx/html/forcelnk.h \
+	wx/html/helpctrl.h \
+	wx/html/helpdata.h \
+	wx/html/helpfrm.h \
+	wx/html/htmlcell.h \
+	wx/html/htmldefs.h \
+	wx/html/htmlfilt.h \
+	wx/html/htmlpars.h \
+	wx/html/htmlproc.h \
+	wx/html/htmltag.h \
+	wx/html/htmlwin.h \
+	wx/html/htmprint.h \
+	wx/html/m_templ.h \
+	wx/html/winpars.h \
+	wx/wxhtml.h \
+	wx/htmllbox.h \
+	$(OPENGL_HDR) \
+	wx/db.h \
+	wx/dbkeyg.h \
+	wx/dbtable.h \
+	wx/dbgrid.h
+@COND_USE_GUI_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_ALL_GUI_HEADERS)
+COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
+	wx/unix/apptbase.h \
+	wx/unix/apptrait.h \
+	wx/unix/execute.h \
+	wx/unix/mimetype.h \
+	wx/unix/pipe.h
+@COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR)
+COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
+	wx/msw/apptrait.h \
+	wx/msw/apptbase.h \
+	wx/msw/chkconf.h \
+	wx/msw/crashrpt.h \
+	wx/msw/dde.h \
+	wx/msw/gccpriv.h \
+	wx/msw/mimetype.h \
+	wx/msw/winundef.h \
+	wx/msw/wrapcctl.h \
+	wx/msw/wrapwin.h
+@COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR)
+@COND_TOOLKIT_COCOA@BASE_PLATFORM_HDR = 
+@COND_TOOLKIT_MAC@BASE_PLATFORM_HDR = 
+@COND_DEPS_TRACKING_0@CCC = $(CC)
+@COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
+@COND_DEPS_TRACKING_0@CXXC = $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_PLATFORM_WIN32_0@DLLIMPEXT = .$(SO_SUFFIX)
+@COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
+@COND_USE_GUI_1_WXUNIV_0@GUI_CORE_HEADERS = $(GUI_HDR)
+COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
 	wx/generic/accel.h \
 	wx/generic/dirdlgg.h \
 	wx/generic/fdrepdlg.h \
@@ -1252,26 +1225,7 @@ COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
 	wx/univ/toolbar.h \
 	wx/univ/toplevel.h \
 	wx/univ/window.h
-@COND_USE_GUI_1_WXUNIV_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS)
-@COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = wx/unix/mimetype.h
-COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
-	wx/msw/chkconf.h \
-	wx/msw/crashrpt.h \
-	wx/msw/dde.h \
-	wx/msw/gccpriv.h \
-	wx/msw/mimetype.h \
-	wx/msw/winundef.h \
-	wx/msw/wrapcctl.h \
-	wx/msw/wrapwin.h
-@COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR)
-@COND_TOOLKIT_COCOA@BASE_PLATFORM_HDR = 
-@COND_TOOLKIT_MAC@BASE_PLATFORM_HDR = 
-@COND_DEPS_TRACKING_0@CCC = $(CC)
-@COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
-@COND_DEPS_TRACKING_0@CXXC = $(CXX)
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
-@COND_PLATFORM_WIN32_0@DLLIMPEXT = .$(SO_SUFFIX)
-@COND_PLATFORM_WIN32_1@DLLIMPEXT = .a
+@COND_USE_GUI_1_WXUNIV_1@GUI_CORE_HEADERS = $(COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS)
 COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/NSBox.h \
 	wx/cocoa/NSButton.h \
@@ -3387,7 +3341,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_notebook.o \
 	monodll_access.o \
 	monodll_ownerdrw.o \
-	monodll_penwin.o \
 	monodll_printdlg.o \
 	monodll_printwin.o \
 	monodll_radiobox.o \
@@ -3776,7 +3729,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_notebook.o \
 	monolib_access.o \
 	monolib_ownerdrw.o \
-	monolib_penwin.o \
 	monolib_printdlg.o \
 	monolib_printwin.o \
 	monolib_radiobox.o \
@@ -4165,7 +4117,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_notebook.o \
 	coredll_access.o \
 	coredll_ownerdrw.o \
-	coredll_penwin.o \
 	coredll_printdlg.o \
 	coredll_printwin.o \
 	coredll_radiobox.o \
@@ -4554,7 +4505,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_notebook.o \
 	corelib_access.o \
 	corelib_ownerdrw.o \
-	corelib_penwin.o \
 	corelib_printdlg.o \
 	corelib_printwin.o \
 	corelib_radiobox.o \
@@ -5577,6 +5527,8 @@ COND_USE_SOVERSOLARIS_1___basedll___soname_flags = \
 COND_MONOLITHIC_0_SHARED_0___baselib___depname = \
 	$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a
 @COND_MONOLITHIC_0_SHARED_0@__baselib___depname = $(COND_MONOLITHIC_0_SHARED_0___baselib___depname)
+@COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).0.r
+@COND_TOOLKIT_COCOA@__cocoa_res_install___depname = cocoa-res-install
 @COND_GCC_PCH_1@__coredll_PCH_DEP = .pch/wxprec_coredll/wx/wxprec.h.gch
 @COND_GCC_PCH_1@__coredll_PCH_INC = -I.pch/wxprec_coredll
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1___coredll___depname = \
@@ -5981,7 +5933,8 @@ COND_MONOLITHIC_0_SHARED_0___xmllib___depname = \
 	$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml-2.5$(HOST_SUFFIX).a
 @COND_MONOLITHIC_0_SHARED_0@__xmllib___depname = $(COND_MONOLITHIC_0_SHARED_0___xmllib___depname)
 @COND_PLATFORM_MACOSX_1@dll___macver = \
-@COND_PLATFORM_MACOSX_1@	-compatibility_version 2.5 -current_version 2.5.0
+@COND_PLATFORM_MACOSX_1@	-compatibility_version $(WX_VERSION) \
+@COND_PLATFORM_MACOSX_1@	-current_version $(WX_VERSION)
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).0
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf2 = .$(SO_SUFFIX)
@@ -5993,7 +5946,7 @@ COND_MONOLITHIC_0_SHARED_0___xmllib___depname = \
 
 ### Targets: ###
 
-all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__wxexpat___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname) $(__macos_res___depname)
+all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__wxexpat___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname) $(__macos_res___depname) $(__cocoa_res___depname)
 
 @COND_GCC_PCH_1@.pch/wxprec_advdll/wx/wxprec.h.gch: 
 @COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_advdll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(ADVDLL_CXXFLAGS)
@@ -6152,7 +6105,7 @@ advdll_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp
 advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX).a: $(__advlib_PCH_DEP)  $(ADVLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX).a: $(__advlib_PCH_DEP)  $(ADVLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(AR) rcu $@ $(ADVLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(RANLIB) $@
@@ -6524,7 +6477,7 @@ basedll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 basedll_zstream.o: $(srcdir)/src/common/zstream.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a: $(__baselib_PCH_DEP)  $(BASELIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
+@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a: $(__baselib_PCH_DEP)  $(BASELIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0@	$(AR) rcu $@ $(BASELIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0@	$(RANLIB) $@
@@ -6851,6 +6804,15 @@ clean:
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a
 	(cd samples && $(MAKE) clean)
 	rm -f lib/libwx_$(TOOLCHAIN_NAME).0.rsrc lib/libwx_$(TOOLCHAIN_NAME).0.r
+	rm -f lib/libwx_$(TOOLCHAIN_NAME).0.rsrc lib/libwx_$(TOOLCHAIN_NAME).0.r
+
+@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).0.r: 
+@COND_TOOLKIT_COCOA@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).0.rsrc
+@COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).0.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).0.r
+
+@COND_TOOLKIT_COCOA@cocoa-res-install: $(__macos_res___depname)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).0.r $(libdir)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).0.rsrc $(libdir)
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__coredll_PCH_DEP)  $(COREDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__basedll___depname)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(SHARED_LD_CXX) $@ $(COREDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__coredll___macinstnamecmd) $(__coredll___importlib) $(__coredll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
@@ -8242,9 +8204,6 @@ coredll_notebmac.o: $(srcdir)/src/mac/notebmac.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_pen.o: $(srcdir)/src/cocoa/pen.mm
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-coredll_penwin.o: $(srcdir)/src/msw/penwin.cpp
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 coredll_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -8914,7 +8873,7 @@ coredll_winuniv.o: $(srcdir)/src/univ/winuniv.cpp
 @COND_USE_GUI_1@coredll_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX).a: $(__corelib_PCH_DEP)  $(CORELIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX).a: $(__corelib_PCH_DEP)  $(CORELIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(AR) rcu $@ $(CORELIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(RANLIB) $@
@@ -10305,9 +10264,6 @@ corelib_notebmac.o: $(srcdir)/src/mac/notebmac.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_pen.o: $(srcdir)/src/cocoa/pen.mm
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-corelib_penwin.o: $(srcdir)/src/msw/penwin.cpp
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
 corelib_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -10984,7 +10940,7 @@ corelib_winuniv.o: $(srcdir)/src/univ/winuniv.cpp
 dbgriddll_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp
 	$(CXXC) -c -o $@ $(DBGRIDDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX).a: $(__dbgridlib_PCH_DEP)  $(DBGRIDLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX).a: $(__dbgridlib_PCH_DEP)  $(DBGRIDLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(AR) rcu $@ $(DBGRIDLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(RANLIB) $@
@@ -11014,7 +10970,7 @@ distclean: clean
 @COND_TOOLKIT_MSW@gldll_glcanvas.o: $(srcdir)/src/msw/glcanvas.cpp
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
 
-@COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a: $(__gllib_PCH_DEP)  $(GLLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
+@COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a: $(__gllib_PCH_DEP)  $(GLLIB_OBJECTS)
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	rm -f $@
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(AR) rcu $@ $(GLLIB_OBJECTS)
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(RANLIB) $@
@@ -11104,7 +11060,7 @@ htmldll_m_tables.o: $(srcdir)/src/html/m_tables.cpp
 htmldll_winpars.o: $(srcdir)/src/html/winpars.cpp
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX).a: $(__htmllib_PCH_DEP)  $(HTMLLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX).a: $(__htmllib_PCH_DEP)  $(HTMLLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(AR) rcu $@ $(HTMLLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(RANLIB) $@
@@ -11175,7 +11131,7 @@ htmllib_m_tables.o: $(srcdir)/src/html/m_tables.cpp
 htmllib_winpars.o: $(srcdir)/src/html/winpars.cpp
 	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $<
 
-install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_odbcdll___depname) $(__install_odbclib___depname) $(__install_dbgriddll___depname) $(__install_dbgridlib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig $(__macos_res_install___depname)
+install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_odbcdll___depname) $(__install_odbclib___depname) $(__install_dbgriddll___depname) $(__install_dbgridlib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig locale_install $(__macos_res_install___depname) $(__cocoa_res_install___depname)
 	$(INSTALL_DIR) $(datadir)/aclocal
 	(cd $(srcdir) ; $(INSTALL_DATA)  wxwin.m4 $(datadir)/aclocal)
 	$(INSTALL_DIR) $(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx
@@ -11351,6 +11307,16 @@ install-wxconfig:
 @COND_MONOLITHIC_0_SHARED_0@install_xmllib: 
 @COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DIR) $(libdir)
 @COND_MONOLITHIC_0_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml-2.5$(HOST_SUFFIX).a $(libdir)
+
+locale_install: 
+	$(INSTALL_DIR) $(datadir)/locale
+	for l in $(LOCALE_LINGUAS) ; do \
+	$(INSTALL_DIR) $(datadir)/locale/$$l ; \
+	$(INSTALL_DIR) $(datadir)/locale/$$l/LC_MESSAGES ; \
+	if test -f $(srcdir)/locale/$$l.mo ; then \
+	$(INSTALL_DATA) $(srcdir)/locale/$$l.mo $(datadir)/locale/$$l/LC_MESSAGES/wxstd.mo ; \
+	fi ; \
+	done
 
 @COND_TOOLKIT_MAC@lib/libwx_$(TOOLCHAIN_NAME).0.r: 
 @COND_TOOLKIT_MAC@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/apprsrc.r $(top_srcdir)/src/mac/carbrsrc.r $(top_srcdir)/src/mac/corersrc.r -o lib/libwx_$(TOOLCHAIN_NAME).0.rsrc
@@ -13035,9 +13001,6 @@ monodll_object.o: $(srcdir)/src/common/object.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_pen.o: $(srcdir)/src/cocoa/pen.mm
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-monodll_penwin.o: $(srcdir)/src/msw/penwin.cpp
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 monodll_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -13878,7 +13841,7 @@ monodll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 monodll_zstream.o: $(srcdir)/src/common/zstream.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_1_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a: $(__monolib_PCH_DEP)  $(MONOLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
+@COND_MONOLITHIC_1_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a: $(__monolib_PCH_DEP)  $(MONOLIB_OBJECTS)
 @COND_MONOLITHIC_1_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_1_SHARED_0@	$(AR) rcu $@ $(MONOLIB_OBJECTS)
 @COND_MONOLITHIC_1_SHARED_0@	$(RANLIB) $@
@@ -15554,9 +15517,6 @@ monolib_object.o: $(srcdir)/src/common/object.cpp
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_pen.o: $(srcdir)/src/cocoa/pen.mm
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-monolib_penwin.o: $(srcdir)/src/msw/penwin.cpp
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
 monolib_pnghand.o: $(srcdir)/src/mac/pnghand.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -16446,7 +16406,7 @@ netdll_socket.o: $(srcdir)/src/common/socket.cpp
 netdll_url.o: $(srcdir)/src/common/url.cpp
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX).a: $(__netlib_PCH_DEP)  $(NETLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
+@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX).a: $(__netlib_PCH_DEP)  $(NETLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0@	$(AR) rcu $@ $(NETLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0@	$(RANLIB) $@
@@ -16506,7 +16466,7 @@ odbcdll_db.o: $(srcdir)/src/common/db.cpp
 odbcdll_dbtable.o: $(srcdir)/src/common/dbtable.cpp
 	$(CXXC) -c -o $@ $(ODBCDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a: $(__odbclib_PCH_DEP)  $(ODBCLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a: $(__odbclib_PCH_DEP)  $(ODBCLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(AR) rcu $@ $(ODBCLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(RANLIB) $@
@@ -16966,13 +16926,1151 @@ wxzlib_zutil.o: $(srcdir)/src/zlib/zutil.c
 xmldll_xml.o: $(srcdir)/src/xml/xml.cpp
 	$(CXXC) -c -o $@ $(XMLDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml-2.5$(HOST_SUFFIX).a: $(__xmllib_PCH_DEP)  $(XMLLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
+@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml-2.5$(HOST_SUFFIX).a: $(__xmllib_PCH_DEP)  $(XMLLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0@	$(AR) rcu $@ $(XMLLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0@	$(RANLIB) $@
 
 xmllib_xml.o: $(srcdir)/src/xml/xml.cpp
 	$(CXXC) -c -o $@ $(XMLLIB_CXXFLAGS) $<
+
+
+#
+# "make dist" target implementation:
+# $Id$
+#
+
+
+############################# Dirs #################################
+
+WXDIR = $(top_srcdir)
+
+# Subordinate library possibilities
+
+SRCDIR   = $(WXDIR)/src
+GENDIR   = $(WXDIR)/src/generic
+COMMDIR  = $(WXDIR)/src/common
+HTMLDIR  = $(WXDIR)/src/html
+UNIXDIR  = $(WXDIR)/src/unix
+PNGDIR   = $(WXDIR)/src/png
+JPEGDIR  = $(WXDIR)/src/jpeg
+TIFFDIR  = $(WXDIR)/src/tiff
+ZLIBDIR  = $(WXDIR)/src/zlib
+REGEXDIR = $(WXDIR)/src/regex
+GTKDIR   = $(WXDIR)/src/gtk
+X11DIR   = $(WXDIR)/src/x11
+X11INC   = $(WXDIR)/include/wx/x11
+MGLDIR   = $(WXDIR)/src/mgl
+MOTIFDIR = $(WXDIR)/src/motif
+MSWDIR   = $(WXDIR)/src/msw
+PMDIR    = $(WXDIR)/src/os2
+MACDIR   = $(WXDIR)/src/mac
+COCOADIR = $(WXDIR)/src/cocoa
+ODBCDIR  = $(WXDIR)/src/iodbc
+FTDIR    = $(WXDIR)/src/freetype
+INCDIR   = $(WXDIR)/include
+SAMPDIR  = $(WXDIR)/samples
+DEMODIR  = $(WXDIR)/demos
+UTILSDIR = $(WXDIR)/utils
+MISCDIR  = $(WXDIR)/misc
+
+DOCDIR   = $(WXDIR)/docs
+INTLDIR  = $(WXDIR)/locale
+
+TOOLKITDIR = $(TOOLKIT_LOWERCASE)
+
+########################## Archive name ###############################
+
+# append a version suffix x.y.z to all file names
+WXARCHIVE=@DISTDIR@-$(WX_VERSION).tar.gz
+WXGLARCHIVE=@DISTDIR@-gl-$(WX_VERSION).tar.gz
+WXSAMPLES=wx$(TOOLKIT)-samples-$(WX_VERSION).tar.gz
+WXDEMOS=wx$(TOOLKIT)-demos-$(WX_VERSION).tar.gz
+WXARCHIVE_ZIP=wxMSW-$(WX_VERSION).zip
+
+WXARCHIVE_BZIP=@DISTDIR@-$(WX_VERSION).tar.bz2
+WXGLARCHIVE_BZIP=@DISTDIR@-gl-$(WX_VERSION).tar.bz2
+WXSAMPLES_BZIP=wx$(TOOLKIT)-samples-$(WX_VERSION).tar.bz2
+WXDEMOS_BZIP=wx$(TOOLKIT)-demos-$(WX_VERSION).tar.bz2
+
+DISTDIRNAME=@DISTDIR@-$(WX_VERSION)
+DISTDIR=./_dist_dir/$(DISTDIRNAME)
+
+
+########################## make dist rules ###############################
+
+# this target should copy only the files common to really all ports (including
+# wxBase) to the dist dir
+ALL_DIST: distrib_clean
+	mkdir _dist_dir
+	mkdir $(DISTDIR)
+	cp $(WXDIR)/wxwin.m4 $(DISTDIR)
+	cp $(WXDIR)/aclocal.m4 $(DISTDIR)
+	cp $(WXDIR)/config.sub $(DISTDIR)
+	cp $(WXDIR)/config.guess $(DISTDIR)
+	cp $(WXDIR)/install-sh $(DISTDIR)
+	cp $(WXDIR)/mkinstalldirs $(DISTDIR)
+	cp $(WXDIR)/wx-config.in $(DISTDIR)
+	cp $(WXDIR)/version-script.in $(DISTDIR)
+	cp $(WXDIR)/setup.h.in $(DISTDIR)
+	cp $(WXDIR)/setup.h_vms $(DISTDIR)
+	cp $(WXDIR)/descrip.mms $(DISTDIR)
+	cp $(WXDIR)/Makefile.in $(DISTDIR)
+	cp $(WXDIR)/wxBase.spec $(DISTDIR)
+	cp $(DOCDIR)/lgpl.txt $(DISTDIR)/COPYING.LIB
+	cp $(DOCDIR)/licence.txt $(DISTDIR)/LICENCE.txt
+	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
+	mkdir $(DISTDIR)/lib
+	cp $(WXDIR)/lib/vms.opt $(DISTDIR)/lib
+	cp $(WXDIR)/lib/vms_gtk.opt $(DISTDIR)/lib
+	mkdir $(DISTDIR)/src
+	# temp hack for common/execcmn.cpp: it's not supported by tmake
+	# yet (it's a header-like file but in src/common directory and it
+	# shouldn't be distributed...)
+	mkdir $(DISTDIR)/src/common
+	cp $(SRCDIR)/common/execcmn.cpp $(DISTDIR)/src/common
+	mkdir $(DISTDIR)/src/xml
+	cp $(SRCDIR)/xml/*.cpp $(DISTDIR)/src/xml
+	mkdir $(DISTDIR)/src/zlib
+	cp $(ZLIBDIR)/*.h $(DISTDIR)/src/zlib
+	cp $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
+	cp $(ZLIBDIR)/README $(DISTDIR)/src/zlib
+	cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
+	mkdir $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/*.h $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/*.ih $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/*.c $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/Makefile $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/makefile.* $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/COPYRIGHT $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/README $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/WHATSNEW $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/mkh $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/tests $(DISTDIR)/src/regex
+	# copy some files from include/ that are not installed:
+	mkdir $(DISTDIR)/include
+	mkdir $(DISTDIR)/include/wx
+	cp $(INCDIR)/wx/fmappriv.h $(DISTDIR)/include/wx
+
+# this target is the common part of distribution script for all GUI toolkits,
+# but is not used when building wxBase distribution
+ALL_GUI_DIST: ALL_DIST
+	cp $(WXDIR)/configure.in $(DISTDIR)
+	cp $(WXDIR)/configure $(DISTDIR)
+	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
+	cp $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt
+	if test -f $(DOCDIR)/$(TOOLKITDIR)/changes.txt ; then \
+	  cp $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES-$(TOOLKIT).txt ; fi
+	cp $(DOCDIR)/$(TOOLKITDIR)/readme.txt $(DISTDIR)/README-$(TOOLKIT).txt
+	if test -f $(DOCDIR)/$(TOOLKITDIR)/todo.txt ; then \
+	  cp $(DOCDIR)/$(TOOLKITDIR)/todo.txt $(DISTDIR)/TODO.txt ; fi
+	mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)
+	mkdir $(DISTDIR)/include/wx/generic
+	mkdir $(DISTDIR)/include/wx/html
+	mkdir $(DISTDIR)/include/wx/protocol
+	mkdir $(DISTDIR)/include/wx/unix
+	mkdir $(DISTDIR)/include/wx/xml
+	cp $(INCDIR)/wx/*.h $(DISTDIR)/include/wx
+	cp $(INCDIR)/wx/*.inl $(DISTDIR)/include/wx
+	cp $(INCDIR)/wx/*.cpp $(DISTDIR)/include/wx
+	cp $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
+	cp $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
+	cp $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
+	cp $(INCDIR)/wx/xml/*.h $(DISTDIR)/include/wx/xml
+	cp $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
+	mkdir $(DISTDIR)/art
+	mkdir $(DISTDIR)/art/gtk
+	mkdir $(DISTDIR)/art/motif
+	cp $(WXDIR)/art/*.xpm $(DISTDIR)/art
+	cp $(WXDIR)/art/gtk/*.xpm $(DISTDIR)/art/gtk
+	cp $(WXDIR)/art/motif/*.xpm $(DISTDIR)/art/motif
+	mkdir $(DISTDIR)/src/generic
+	mkdir $(DISTDIR)/src/html
+	mkdir $(DISTDIR)/src/$(TOOLKITDIR)
+	mkdir $(DISTDIR)/src/png
+	mkdir $(DISTDIR)/src/jpeg
+	mkdir $(DISTDIR)/src/tiff
+	mkdir $(DISTDIR)/src/unix
+	cp $(COMMDIR)/*.cpp $(DISTDIR)/src/common
+	cp $(COMMDIR)/*.c $(DISTDIR)/src/common
+	cp $(COMMDIR)/*.inc $(DISTDIR)/src/common
+	cp $(COMMDIR)/*.h $(DISTDIR)/src/common
+	cp $(COMMDIR)/*.mms $(DISTDIR)/src/common
+	cp $(UNIXDIR)/*.c $(DISTDIR)/src/unix
+	cp $(UNIXDIR)/*.cpp $(DISTDIR)/src/unix
+	cp $(UNIXDIR)/*.mms $(DISTDIR)/src/unix
+	cp $(GENDIR)/*.cpp $(DISTDIR)/src/generic
+	cp $(GENDIR)/*.mms $(DISTDIR)/src/generic
+	cp $(HTMLDIR)/*.cpp $(DISTDIR)/src/html
+	cp $(PNGDIR)/*.h $(DISTDIR)/src/png
+	cp $(PNGDIR)/*.c $(DISTDIR)/src/png
+	cp $(PNGDIR)/README $(DISTDIR)/src/png
+	cp $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg
+	cp $(JPEGDIR)/*.c $(DISTDIR)/src/jpeg
+	cp $(JPEGDIR)/README $(DISTDIR)/src/jpeg
+	cp $(TIFFDIR)/*.h $(DISTDIR)/src/tiff
+	cp $(TIFFDIR)/*.c $(DISTDIR)/src/tiff
+	cp $(TIFFDIR)/README $(DISTDIR)/src/tiff
+	mkdir $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/*.h $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/*.c $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/*.ci $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/*.exp $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/README $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/NEWS $(DISTDIR)/src/iodbc
+	cp $(ODBCDIR)/Changes.log $(DISTDIR)/src/iodbc
+
+BASE_DIST: ALL_DIST
+	# make --disable-gui the default
+	sed 's/DEFAULT_wxUSE_GUI=yes/DEFAULT_wxUSE_GUI=no/' \
+		$(WXDIR)/configure.in > $(DISTDIR)/configure.in
+	sed 's/DEFAULT_wxUSE_GUI=yes/DEFAULT_wxUSE_GUI=no/' \
+		$(WXDIR)/configure > $(DISTDIR)/configure
+	chmod +x $(DISTDIR)/configure
+	mkdir $(DISTDIR)/include/wx/protocol
+	mkdir $(DISTDIR)/include/wx/unix
+	mkdir $(DISTDIR)/include/wx/xml
+	mkdir $(DISTDIR)/include/wx/msw
+	mkdir $(DISTDIR)/src/unix
+	mkdir $(DISTDIR)/src/msw
+	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
+	cp $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
+	cp $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
+	cp $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
+	cp $(WXDIR)/src/common/unzip.h $(DISTDIR)/src/common
+	list='$(ALL_BASE_HEADERS)'; for p in $$list; do \
+	  cp $(WXDIR)/include/$$p $(DISTDIR)/include/$$p; \
+	done
+	list='$(ALL_BASE_SOURCES)'; for p in $$list; do \
+	  cp $(WXDIR)/$$p $(DISTDIR)/$$p; \
+	done
+
+	mkdir $(DISTDIR)/samples
+	cp $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
+
+	mkdir $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/Makefile.in $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/makefile.unx $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/console.cpp $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/console.dsp $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
+
+GTK_DIST: ALL_GUI_DIST
+	cp $(WXDIR)/wxGTK.spec $(DISTDIR)
+	cp $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
+	cp $(GTKDIR)/*.cpp $(DISTDIR)/src/gtk
+	cp $(GTKDIR)/*.c $(DISTDIR)/src/gtk
+	cp $(GTKDIR)/*.xbm $(DISTDIR)/src/gtk
+	cp $(GTKDIR)/*.mms $(DISTDIR)/src/gtk
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
+
+X11_DIST: ALL_GUI_DIST UNIV_DIST
+	cp $(WXDIR)/wxX11.spec $(DISTDIR)
+	cp $(INCDIR)/wx/x11/*.h $(DISTDIR)/include/wx/x11
+	cp $(X11DIR)/*.cpp $(DISTDIR)/src/x11
+	cp $(X11DIR)/*.c $(DISTDIR)/src/x11
+	cp $(X11DIR)/*.xbm $(DISTDIR)/src/x11
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
+
+MOTIF_DIST: ALL_GUI_DIST
+	cp $(WXDIR)/wxMotif.spec $(DISTDIR)
+	cp $(INCDIR)/wx/motif/*.h $(DISTDIR)/include/wx/motif
+	cp $(MOTIFDIR)/*.cpp $(DISTDIR)/src/motif
+	cp $(MOTIFDIR)/*.c $(DISTDIR)/src/motif
+	cp $(MOTIFDIR)/*.xbm $(DISTDIR)/src/motif
+	mkdir $(DISTDIR)/src/motif/xmcombo
+	cp $(MOTIFDIR)/xmcombo/*.c $(DISTDIR)/src/motif/xmcombo
+	cp $(MOTIFDIR)/xmcombo/*.h $(DISTDIR)/src/motif/xmcombo
+	cp $(MOTIFDIR)/xmcombo/copying.txt $(DISTDIR)/src/motif/xmcombo
+	mkdir $(DISTDIR)/src/x11
+	mkdir $(DISTDIR)/include/wx/x11
+	cp $(X11DIR)/pen.cpp $(X11DIR)/brush.cpp $(X11DIR)/utilsx.cpp \
+		$(X11DIR)/bitmap.cpp $(X11DIR)/region.cpp \
+		$(DISTDIR)/src/x11
+	cp $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
+		$(X11INC)/bitmap.h $(X11INC)/private.h $(X11INC)/region.h \
+		$(DISTDIR)/include/wx/x11
+
+MACX_DIST: ALL_GUI_DIST
+	cp $(INCDIR)/*.* $(DISTDIR)/include
+	cp $(INCDIR)/wx/mac/*.h $(DISTDIR)/include/wx/mac
+	cp $(MACDIR)/*.cpp $(DISTDIR)/src/mac
+	cp $(MACDIR)/*.c $(DISTDIR)/src/mac
+	cp $(MACDIR)/*.h $(DISTDIR)/src/mac
+	cp $(MACDIR)/*.r $(DISTDIR)/src/mac
+	mkdir $(DISTDIR)/src/mac/morefile
+	cp $(MACDIR)/morefile/*.h $(DISTDIR)/src/mac/morefile
+	cp $(MACDIR)/morefile/*.c $(DISTDIR)/src/mac/morefile
+	mkdir $(DISTDIR)/src/mac/macsock
+	cp $(MACDIR)/macsock/*.lib $(DISTDIR)/src/mac/macsock
+
+# TODO: Distribute some files
+COCOA_DIST: ALL_GUI_DIST
+	cp $(COCOADIR)/*.mm $(DISTDIR)/src/cocoa
+
+MSW_DIST: ALL_GUI_DIST
+	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
+	mkdir $(DISTDIR)/include/wx/msw/ctl3d
+	mkdir $(DISTDIR)/include/wx/msw/gnuwin32
+	mkdir $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	mkdir $(DISTDIR)/include/wx/msw/ole
+	mkdir $(DISTDIR)/include/wx/msw/wince
+	cp $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.cur $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.ico $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.bmp $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/ctl3d/*.h $(DISTDIR)/include/wx/msw/ctl3d
+	cp $(INCDIR)/wx/msw/gnuwin32/*.h $(DISTDIR)/include/wx/msw/gnuwin32
+	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.h $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.def $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	cp $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
+	cp $(INCDIR)/wx/msw/wince/*.h $(DISTDIR)/include/wx/msw/wince
+	mkdir $(DISTDIR)/src/msw/ole
+	mkdir $(DISTDIR)/src/msw/wince
+	cp $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
+	cp $(MSWDIR)/*.c $(DISTDIR)/src/msw
+	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
+	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
+	cp $(MSWDIR)/wince/*.* $(DISTDIR)/src/msw/wince
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
+
+MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
+	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
+	mkdir $(DISTDIR)/include/wx/msw
+	mkdir $(DISTDIR)/include/wx/msw/ctl3d
+	mkdir $(DISTDIR)/include/wx/msw/gnuwin32
+	mkdir $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	mkdir $(DISTDIR)/include/wx/msw/ole
+	mkdir $(DISTDIR)/include/wx/msw/wince
+	cp $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/ctl3d/*.h $(DISTDIR)/include/wx/msw/ctl3d
+	cp $(INCDIR)/wx/msw/gnuwin32/*.h $(DISTDIR)/include/wx/msw/gnuwin32
+	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.h $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	cp $(INCDIR)/wx/msw/gnuwin32/gl/*.def $(DISTDIR)/include/wx/msw/gnuwin32/gl
+	cp $(INCDIR)/wx/msw/ole/*.h $(DISTDIR)/include/wx/msw/ole
+	cp $(INCDIR)/wx/msw/wince/*.h $(DISTDIR)/include/wx/msw/wince
+	mkdir $(DISTDIR)/src/msw
+	mkdir $(DISTDIR)/src/msw/ole
+	mkdir $(DISTDIR)/src/msw/wince
+	cp $(MSWDIR)/*.cpp $(DISTDIR)/src/msw
+	cp $(MSWDIR)/*.c $(DISTDIR)/src/msw
+	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
+	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
+	cp $(MSWDIR)/wince/*.* $(DISTDIR)/src/msw/wince
+	cp $(SRCDIR)/*.??? $(DISTDIR)/src
+	cp $(SRCDIR)/*.?? $(DISTDIR)/src
+	cp $(MSWDIR)/?ake*.* $(DISTDIR)/src/msw
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
+
+UNIV_DIST: ALL_GUI_DIST
+	mkdir $(DISTDIR)/include/wx/univ
+	mkdir $(DISTDIR)/src/univ
+	mkdir $(DISTDIR)/src/univ/themes
+	cp $(INCDIR)/wx/univ/*.h $(DISTDIR)/include/wx/univ
+	cp $(INCDIR)/wx/univ/setup0.h $(DISTDIR)/include/wx/univ/setup.h
+	cp $(SRCDIR)/univ/*.cpp $(DISTDIR)/src/univ
+	cp $(SRCDIR)/univ/themes/*.cpp $(DISTDIR)/src/univ/themes
+
+MGL_DIST: UNIV_DIST
+	cp $(WXDIR)/wxMGL.spec $(DISTDIR)
+	cp $(INCDIR)/wx/mgl/*.h $(DISTDIR)/include/wx/mgl
+	cp $(SRCDIR)/mgl/make* $(DISTDIR)/src/mgl
+	cp $(SRCDIR)/mgl/*.cpp $(DISTDIR)/src/mgl
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
+
+DEMOS_DIST: ALL_GUI_DIST
+	mkdir $(DISTDIR)/demos
+	cp $(DEMODIR)/Makefile.in $(DISTDIR)/demos
+
+	mkdir $(DISTDIR)/demos/bombs
+	cp $(DEMODIR)/bombs/Makefile.in $(DISTDIR)/demos/bombs
+	cp $(DEMODIR)/bombs/makefile.unx $(DISTDIR)/demos/bombs
+	cp $(DEMODIR)/bombs/*.cpp $(DISTDIR)/demos/bombs
+	cp $(DEMODIR)/bombs/*.h $(DISTDIR)/demos/bombs
+	cp $(DEMODIR)/bombs/*.xpm $(DISTDIR)/demos/bombs
+	cp $(DEMODIR)/bombs/readme.txt $(DISTDIR)/demos/bombs
+
+	cp -R $(DEMODIR)/dbbrowse $(DISTDIR)/demos/dbbrowse
+
+	mkdir $(DISTDIR)/demos/forty
+	cp $(DEMODIR)/forty/Makefile.in $(DISTDIR)/demos/forty
+	cp $(DEMODIR)/forty/makefile.unx $(DISTDIR)/demos/forty
+	cp $(DEMODIR)/forty/*.h $(DISTDIR)/demos/forty
+	cp $(DEMODIR)/forty/*.cpp $(DISTDIR)/demos/forty
+	cp $(DEMODIR)/forty/*.xpm $(DISTDIR)/demos/forty
+	cp $(DEMODIR)/forty/*.xbm $(DISTDIR)/demos/forty
+
+	mkdir $(DISTDIR)/demos/life
+	mkdir $(DISTDIR)/demos/life/bitmaps
+	cp $(DEMODIR)/life/Makefile.in $(DISTDIR)/demos/life
+	cp $(DEMODIR)/life/makefile.unx $(DISTDIR)/demos/life
+	cp $(DEMODIR)/life/*.cpp $(DISTDIR)/demos/life
+	cp $(DEMODIR)/life/*.h $(DISTDIR)/demos/life
+	cp $(DEMODIR)/life/*.xpm $(DISTDIR)/demos/life
+	cp $(DEMODIR)/life/*.inc $(DISTDIR)/demos/life
+	cp $(DEMODIR)/life/*.lif $(DISTDIR)/demos/life
+	cp $(DEMODIR)/life/bitmaps/*.xpm $(DISTDIR)/demos/life/bitmaps
+
+	mkdir $(DISTDIR)/demos/poem
+	cp $(DEMODIR)/poem/Makefile.in $(DISTDIR)/demos/poem
+	cp $(DEMODIR)/poem/makefile.unx $(DISTDIR)/demos/poem
+	cp $(DEMODIR)/poem/*.h $(DISTDIR)/demos/poem
+	cp $(DEMODIR)/poem/*.cpp $(DISTDIR)/demos/poem
+	cp $(DEMODIR)/poem/*.xpm $(DISTDIR)/demos/poem
+	cp $(DEMODIR)/poem/*.dat $(DISTDIR)/demos/poem
+	cp $(DEMODIR)/poem/*.txt $(DISTDIR)/demos/poem
+
+	mkdir $(DISTDIR)/demos/fractal
+	cp $(DEMODIR)/fractal/Makefile.in $(DISTDIR)/demos/fractal
+	cp $(DEMODIR)/fractal/makefile.unx $(DISTDIR)/demos/fractal
+	cp $(DEMODIR)/fractal/*.cpp $(DISTDIR)/demos/fractal
+
+SAMPLES_DIST: ALL_GUI_DIST
+	mkdir $(DISTDIR)/samples
+	cp $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
+	cp $(SAMPDIR)/sample.* $(DISTDIR)/samples
+
+	mkdir $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/Makefile.in $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/makefile.unx $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/*.cpp $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/*.h $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/*.xpm $(DISTDIR)/samples/artprov
+
+	mkdir $(DISTDIR)/samples/calendar
+	cp $(SAMPDIR)/calendar/Makefile.in $(DISTDIR)/samples/calendar
+	cp $(SAMPDIR)/calendar/makefile.unx $(DISTDIR)/samples/calendar
+	cp $(SAMPDIR)/calendar/*.cpp $(DISTDIR)/samples/calendar
+
+	mkdir $(DISTDIR)/samples/caret
+	cp $(SAMPDIR)/caret/Makefile.in $(DISTDIR)/samples/caret
+	cp $(SAMPDIR)/caret/makefile.unx $(DISTDIR)/samples/caret
+	cp $(SAMPDIR)/caret/*.cpp $(DISTDIR)/samples/caret
+	cp $(SAMPDIR)/caret/*.xpm $(DISTDIR)/samples/caret
+
+	mkdir $(DISTDIR)/samples/checklst
+	cp $(SAMPDIR)/checklst/Makefile.in $(DISTDIR)/samples/checklst
+	cp $(SAMPDIR)/checklst/makefile.unx $(DISTDIR)/samples/checklst
+	cp $(SAMPDIR)/checklst/*.cpp $(DISTDIR)/samples/checklst
+	cp $(SAMPDIR)/checklst/*.xpm $(DISTDIR)/samples/checklst
+	cp $(SAMPDIR)/checklst/*.mms $(DISTDIR)/samples/checklst
+
+	mkdir $(DISTDIR)/samples/config
+	cp $(SAMPDIR)/config/Makefile.in $(DISTDIR)/samples/config
+	cp $(SAMPDIR)/config/makefile.unx $(DISTDIR)/samples/config
+	cp $(SAMPDIR)/config/*.cpp $(DISTDIR)/samples/config
+
+	mkdir $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/Makefile.in $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/makefile.unx $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/*.cpp $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
+
+	mkdir $(DISTDIR)/samples/controls
+	mkdir $(DISTDIR)/samples/controls/icons
+	cp $(SAMPDIR)/controls/Makefile.in $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/makefile.unx $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/*.cpp $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/*.xpm $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/*.mms $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/icons/*.??? $(DISTDIR)/samples/controls/icons
+
+	mkdir $(DISTDIR)/samples/db
+	cp $(SAMPDIR)/db/Makefile.in $(DISTDIR)/samples/db
+	cp $(SAMPDIR)/db/makefile.unx $(DISTDIR)/samples/db
+	cp $(SAMPDIR)/db/*.cpp $(DISTDIR)/samples/db
+	cp $(SAMPDIR)/db/*.h $(DISTDIR)/samples/db
+	cp $(SAMPDIR)/db/*.xpm $(DISTDIR)/samples/db
+
+	mkdir $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/Makefile.in $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/makefile.unx $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/*.cpp $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/*.h $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/*.txt $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/*.mms $(DISTDIR)/samples/dialogs
+
+	mkdir $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/Makefile.in $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/makefile.unx $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/*.wxr $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/*.cpp $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/*.xpm $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/*.txt $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/*.png $(DISTDIR)/samples/dnd
+
+	mkdir $(DISTDIR)/samples/docview
+	cp $(SAMPDIR)/docview/Makefile.in $(DISTDIR)/samples/docview
+	cp $(SAMPDIR)/docview/makefile.unx $(DISTDIR)/samples/docview
+	cp $(SAMPDIR)/docview/*.cpp $(DISTDIR)/samples/docview
+	cp $(SAMPDIR)/docview/*.h $(DISTDIR)/samples/docview
+	cp $(SAMPDIR)/docview/*.xpm $(DISTDIR)/samples/docview
+
+	mkdir $(DISTDIR)/samples/docvwmdi
+	cp $(SAMPDIR)/docvwmdi/Makefile.in $(DISTDIR)/samples/docvwmdi
+	cp $(SAMPDIR)/docvwmdi/makefile.unx $(DISTDIR)/samples/docvwmdi
+	cp $(SAMPDIR)/docvwmdi/*.cpp $(DISTDIR)/samples/docvwmdi
+	cp $(SAMPDIR)/docvwmdi/*.h $(DISTDIR)/samples/docvwmdi
+
+	mkdir $(DISTDIR)/samples/dragimag
+	cp $(SAMPDIR)/dragimag/Makefile.in $(DISTDIR)/samples/dragimag
+	cp $(SAMPDIR)/dragimag/makefile.unx $(DISTDIR)/samples/dragimag
+	cp $(SAMPDIR)/dragimag/*.cpp $(DISTDIR)/samples/dragimag
+	cp $(SAMPDIR)/dragimag/*.h $(DISTDIR)/samples/dragimag
+	cp $(SAMPDIR)/dragimag/*.xpm $(DISTDIR)/samples/dragimag
+	cp $(SAMPDIR)/dragimag/*.png $(DISTDIR)/samples/dragimag
+
+	mkdir $(DISTDIR)/samples/drawing
+	cp $(SAMPDIR)/drawing/Makefile.in $(DISTDIR)/samples/drawing
+	cp $(SAMPDIR)/drawing/makefile.unx $(DISTDIR)/samples/drawing
+	cp $(SAMPDIR)/drawing/*.cpp $(DISTDIR)/samples/drawing
+	cp $(SAMPDIR)/drawing/*.xpm $(DISTDIR)/samples/drawing
+	cp $(SAMPDIR)/drawing/*.bmp $(DISTDIR)/samples/drawing
+
+	mkdir $(DISTDIR)/samples/dynamic
+	cp $(SAMPDIR)/dynamic/Makefile.in $(DISTDIR)/samples/dynamic
+	cp $(SAMPDIR)/dynamic/makefile.unx $(DISTDIR)/samples/dynamic
+	cp $(SAMPDIR)/dynamic/*.cpp $(DISTDIR)/samples/dynamic
+	cp $(SAMPDIR)/dynamic/*.xpm $(DISTDIR)/samples/dynamic
+
+	mkdir $(DISTDIR)/samples/erase
+	cp $(SAMPDIR)/erase/Makefile.in $(DISTDIR)/samples/erase
+	cp $(SAMPDIR)/erase/makefile.unx $(DISTDIR)/samples/erase
+	cp $(SAMPDIR)/erase/*.cpp $(DISTDIR)/samples/erase
+	cp $(SAMPDIR)/erase/*.xml $(DISTDIR)/samples/erase
+
+	mkdir $(DISTDIR)/samples/event
+	cp $(SAMPDIR)/event/Makefile.in $(DISTDIR)/samples/event
+	cp $(SAMPDIR)/event/makefile.unx $(DISTDIR)/samples/event
+	cp $(SAMPDIR)/event/*.cpp $(DISTDIR)/samples/event
+
+	mkdir $(DISTDIR)/samples/exec
+	cp $(SAMPDIR)/exec/Makefile.in $(DISTDIR)/samples/exec
+	cp $(SAMPDIR)/exec/makefile.unx $(DISTDIR)/samples/exec
+	cp $(SAMPDIR)/exec/*.cpp $(DISTDIR)/samples/exec
+
+	mkdir $(DISTDIR)/samples/font
+	cp $(SAMPDIR)/font/Makefile.in $(DISTDIR)/samples/font
+	cp $(SAMPDIR)/font/makefile.unx $(DISTDIR)/samples/font
+	cp $(SAMPDIR)/font/*.cpp $(DISTDIR)/samples/font
+
+	mkdir $(DISTDIR)/samples/grid
+	cp $(SAMPDIR)/grid/Makefile.in $(DISTDIR)/samples/grid
+	cp $(SAMPDIR)/grid/makefile.unx $(DISTDIR)/samples/grid
+	cp $(SAMPDIR)/grid/*.cpp $(SAMPDIR)/grid/*.h $(DISTDIR)/samples/grid
+
+	mkdir $(DISTDIR)/samples/help
+	mkdir $(DISTDIR)/samples/help/doc
+	cp $(SAMPDIR)/help/Makefile.in $(DISTDIR)/samples/help
+	cp $(SAMPDIR)/help/makefile.unx $(DISTDIR)/samples/help
+	cp $(SAMPDIR)/help/*.cpp $(DISTDIR)/samples/help
+	cp $(SAMPDIR)/help/*.xpm $(DISTDIR)/samples/help
+	cp $(SAMPDIR)/help/doc/*.* $(DISTDIR)/samples/help/doc
+
+	mkdir $(DISTDIR)/samples/html
+	cp $(SAMPDIR)/html/Makefile.in $(DISTDIR)/samples/html
+	mkdir $(DISTDIR)/samples/html/about
+	cp $(SAMPDIR)/html/about/Makefile.in $(DISTDIR)/samples/html/about
+	cp $(SAMPDIR)/html/about/*.cpp $(DISTDIR)/samples/html/about
+	mkdir $(DISTDIR)/samples/html/about/data
+	cp $(SAMPDIR)/html/about/data/*.htm $(DISTDIR)/samples/html/about/data
+	cp $(SAMPDIR)/html/about/data/*.png $(DISTDIR)/samples/html/about/data
+	mkdir $(DISTDIR)/samples/html/help
+	cp $(SAMPDIR)/html/help/Makefile.in $(DISTDIR)/samples/html/help
+	cp $(SAMPDIR)/html/help/*.cpp $(DISTDIR)/samples/html/help
+	mkdir $(DISTDIR)/samples/html/help/helpfiles
+	cp $(SAMPDIR)/html/help/helpfiles/*.??? $(DISTDIR)/samples/html/help/helpfiles
+	mkdir $(DISTDIR)/samples/html/helpview
+	cp $(SAMPDIR)/html/helpview/Makefile.in $(DISTDIR)/samples/html/helpview
+	cp $(SAMPDIR)/html/helpview/*.cpp $(DISTDIR)/samples/html/helpview
+	cp $(SAMPDIR)/html/helpview/*.zip $(DISTDIR)/samples/html/helpview
+	mkdir $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/Makefile.in $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/*.cpp $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/*.htm $(DISTDIR)/samples/html/printing
+	mkdir $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/Makefile.in $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.cpp $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.bmp $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.png $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.gif $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.htm $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.html $(DISTDIR)/samples/html/test
+	mkdir $(DISTDIR)/samples/html/virtual
+	cp $(SAMPDIR)/html/virtual/Makefile.in $(DISTDIR)/samples/html/virtual
+	cp $(SAMPDIR)/html/virtual/*.cpp $(DISTDIR)/samples/html/virtual
+	cp $(SAMPDIR)/html/virtual/*.htm $(DISTDIR)/samples/html/virtual
+	mkdir $(DISTDIR)/samples/html/widget
+	cp $(SAMPDIR)/html/widget/Makefile.in $(DISTDIR)/samples/html/widget
+	cp $(SAMPDIR)/html/widget/*.cpp $(DISTDIR)/samples/html/widget
+	cp $(SAMPDIR)/html/widget/*.htm $(DISTDIR)/samples/html/widget
+	mkdir $(DISTDIR)/samples/html/zip
+	cp $(SAMPDIR)/html/zip/Makefile.in $(DISTDIR)/samples/html/zip
+	cp $(SAMPDIR)/html/zip/*.cpp $(DISTDIR)/samples/html/zip
+	cp $(SAMPDIR)/html/zip/*.htm $(DISTDIR)/samples/html/zip
+	cp $(SAMPDIR)/html/zip/*.zip $(DISTDIR)/samples/html/zip
+
+	mkdir $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/Makefile.in $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/makefile.unx $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/*.cpp $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/*.mms $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/horse.* $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/smile.xbm $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/smile.xpm $(DISTDIR)/samples/image
+
+	mkdir $(DISTDIR)/samples/internat
+	mkdir $(DISTDIR)/samples/internat/de
+	mkdir $(DISTDIR)/samples/internat/fr
+	mkdir $(DISTDIR)/samples/internat/ju
+	mkdir $(DISTDIR)/samples/internat/ru
+	cp $(SAMPDIR)/internat/Makefile.in $(DISTDIR)/samples/internat
+	cp $(SAMPDIR)/internat/makefile.unx $(DISTDIR)/samples/internat
+	cp $(SAMPDIR)/internat/*.cpp $(DISTDIR)/samples/internat
+	cp $(SAMPDIR)/internat/*.xpm $(DISTDIR)/samples/internat
+	cp $(SAMPDIR)/internat/*.txt $(DISTDIR)/samples/internat
+	cp $(SAMPDIR)/internat/fr/*.mo $(DISTDIR)/samples/internat/fr
+	cp $(SAMPDIR)/internat/de/*.mo $(DISTDIR)/samples/internat/de
+	cp $(SAMPDIR)/internat/ja/*.mo $(DISTDIR)/samples/internat/ja
+	cp $(SAMPDIR)/internat/ru/*.mo $(DISTDIR)/samples/internat/ru
+	cp $(SAMPDIR)/internat/fr/*.po $(DISTDIR)/samples/internat/fr
+	cp $(SAMPDIR)/internat/de/*.po $(DISTDIR)/samples/internat/de
+	cp $(SAMPDIR)/internat/ja/*.po $(DISTDIR)/samples/internat/ja
+	cp $(SAMPDIR)/internat/ru/*.po $(DISTDIR)/samples/internat/ru
+
+	mkdir $(DISTDIR)/samples/ipc
+	cp $(SAMPDIR)/ipc/Makefile.in $(DISTDIR)/samples/ipc
+	cp $(SAMPDIR)/ipc/makefile.unx $(DISTDIR)/samples/ipc
+	cp $(SAMPDIR)/ipc/*.cpp $(DISTDIR)/samples/ipc
+	cp $(SAMPDIR)/ipc/*.h $(DISTDIR)/samples/ipc
+	cp $(SAMPDIR)/ipc/*.xpm $(DISTDIR)/samples/ipc
+
+	mkdir $(DISTDIR)/samples/joytest
+	cp $(SAMPDIR)/joytest/Makefile.in $(DISTDIR)/samples/joytest
+	cp $(SAMPDIR)/joytest/makefile.unx $(DISTDIR)/samples/joytest
+	cp $(SAMPDIR)/joytest/*.cpp $(DISTDIR)/samples/joytest
+	cp $(SAMPDIR)/joytest/*.h $(DISTDIR)/samples/joytest
+	cp $(SAMPDIR)/joytest/*.wav $(DISTDIR)/samples/joytest
+
+	mkdir $(DISTDIR)/samples/keyboard
+	cp $(SAMPDIR)/keyboard/Makefile.in $(DISTDIR)/samples/keyboard
+	cp $(SAMPDIR)/keyboard/*.cpp $(DISTDIR)/samples/keyboard
+
+	mkdir $(DISTDIR)/samples/layout
+	cp $(SAMPDIR)/layout/Makefile.in $(DISTDIR)/samples/layout
+	cp $(SAMPDIR)/layout/makefile.unx $(DISTDIR)/samples/layout
+	cp $(SAMPDIR)/layout/*.cpp $(DISTDIR)/samples/layout
+	cp $(SAMPDIR)/layout/*.h $(DISTDIR)/samples/layout
+
+	mkdir $(DISTDIR)/samples/listctrl
+	mkdir $(DISTDIR)/samples/listctrl/bitmaps
+	cp $(SAMPDIR)/listctrl/Makefile.in $(DISTDIR)/samples/listctrl
+	cp $(SAMPDIR)/listctrl/makefile.unx $(DISTDIR)/samples/listctrl
+	cp $(SAMPDIR)/listctrl/*.cpp $(DISTDIR)/samples/listctrl
+	cp $(SAMPDIR)/listctrl/*.h $(DISTDIR)/samples/listctrl
+	cp $(SAMPDIR)/listctrl/*.xpm $(DISTDIR)/samples/listctrl
+	cp $(SAMPDIR)/listctrl/bitmaps/*.xpm $(DISTDIR)/samples/listctrl/bitmaps
+
+	mkdir $(DISTDIR)/samples/mdi
+	mkdir $(DISTDIR)/samples/mdi/bitmaps
+	cp $(SAMPDIR)/mdi/Makefile.in $(DISTDIR)/samples/mdi
+	cp $(SAMPDIR)/mdi/makefile.unx $(DISTDIR)/samples/mdi
+	cp $(SAMPDIR)/mdi/*.cpp $(DISTDIR)/samples/mdi
+	cp $(SAMPDIR)/mdi/*.h $(DISTDIR)/samples/mdi
+	cp $(SAMPDIR)/mdi/*.xpm $(DISTDIR)/samples/mdi
+	cp $(SAMPDIR)/mdi/bitmaps/*.xpm $(DISTDIR)/samples/mdi/bitmaps
+
+	mkdir $(DISTDIR)/samples/memcheck
+	cp $(SAMPDIR)/memcheck/Makefile.in $(DISTDIR)/samples/memcheck
+	cp $(SAMPDIR)/memcheck/makefile.unx $(DISTDIR)/samples/memcheck
+	cp $(SAMPDIR)/memcheck/*.cpp $(DISTDIR)/samples/memcheck
+	cp $(SAMPDIR)/memcheck/*.xpm $(DISTDIR)/samples/memcheck
+
+	mkdir $(DISTDIR)/samples/menu
+	cp $(SAMPDIR)/menu/Makefile.in $(DISTDIR)/samples/menu
+	cp $(SAMPDIR)/menu/makefile.unx $(DISTDIR)/samples/menu
+	cp $(SAMPDIR)/menu/*.cpp $(DISTDIR)/samples/menu
+	cp $(SAMPDIR)/menu/*.xpm $(DISTDIR)/samples/menu
+
+	mkdir $(DISTDIR)/samples/minifram
+	mkdir $(DISTDIR)/samples/minifram/bitmaps
+	cp $(SAMPDIR)/minifram/Makefile.in $(DISTDIR)/samples/minifram
+	cp $(SAMPDIR)/minifram/makefile.unx $(DISTDIR)/samples/minifram
+	cp $(SAMPDIR)/minifram/*.cpp $(DISTDIR)/samples/minifram
+	cp $(SAMPDIR)/minifram/*.h $(DISTDIR)/samples/minifram
+	cp $(SAMPDIR)/minifram/*.xpm $(DISTDIR)/samples/minifram
+	cp $(SAMPDIR)/minifram/bitmaps/*.xpm $(DISTDIR)/samples/minifram/bitmaps
+
+	mkdir $(DISTDIR)/samples/minimal
+	cp $(SAMPDIR)/minimal/Makefile.in $(DISTDIR)/samples/minimal
+	cp $(SAMPDIR)/minimal/makefile.unx $(DISTDIR)/samples/minimal
+	cp $(SAMPDIR)/minimal/*.cpp $(DISTDIR)/samples/minimal
+	cp $(SAMPDIR)/minimal/*.xpm $(DISTDIR)/samples/minimal
+	cp $(SAMPDIR)/minimal/*.mms $(DISTDIR)/samples/minimal
+
+	mkdir $(DISTDIR)/samples/mobile
+	cp $(SAMPDIR)/mobile/Makefile.in $(DISTDIR)/samples/mobile
+	mkdir $(DISTDIR)/samples/mobile/wxedit
+	cp $(SAMPDIR)/mobile/wxedit/Makefile.in $(DISTDIR)/samples/mobile/wxedit
+	cp $(SAMPDIR)/mobile/wxedit/*.cpp $(DISTDIR)/samples/mobile/wxedit
+	cp $(SAMPDIR)/mobile/wxedit/*.h $(DISTDIR)/samples/mobile/wxedit
+	mkdir $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/Makefile.in $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/*.cpp $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/*.h $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/*.jpg $(DISTDIR)/samples/mobile/styles
+    
+	mkdir $(DISTDIR)/samples/dialup
+	cp $(SAMPDIR)/dialup/Makefile.in $(DISTDIR)/samples/dialup
+	cp $(SAMPDIR)/dialup/makefile.unx $(DISTDIR)/samples/dialup
+	cp $(SAMPDIR)/dialup/*.cpp $(DISTDIR)/samples/dialup
+
+	mkdir $(DISTDIR)/samples/notebook
+	cp $(SAMPDIR)/notebook/Makefile.in $(DISTDIR)/samples/notebook
+	cp $(SAMPDIR)/notebook/makefile.unx $(DISTDIR)/samples/notebook
+	cp $(SAMPDIR)/notebook/*.cpp $(DISTDIR)/samples/notebook
+	cp $(SAMPDIR)/notebook/*.h $(DISTDIR)/samples/notebook
+
+	mkdir $(DISTDIR)/samples/opengl
+	cp $(SAMPDIR)/opengl/Makefile.in $(DISTDIR)/samples/opengl
+	mkdir $(DISTDIR)/samples/opengl/penguin
+	cp $(SAMPDIR)/opengl/penguin/Makefile.in $(DISTDIR)/samples/opengl/penguin
+	cp $(SAMPDIR)/opengl/penguin/makefile.unx $(DISTDIR)/samples/opengl/penguin
+	cp $(SAMPDIR)/opengl/penguin/*.cpp $(DISTDIR)/samples/opengl/penguin
+	cp $(SAMPDIR)/opengl/penguin/*.c $(DISTDIR)/samples/opengl/penguin
+	cp $(SAMPDIR)/opengl/penguin/*.h $(DISTDIR)/samples/opengl/penguin
+	cp $(SAMPDIR)/opengl/penguin/*.lwo $(DISTDIR)/samples/opengl/penguin
+	mkdir $(DISTDIR)/samples/opengl/cube
+	cp $(SAMPDIR)/opengl/cube/Makefile.in $(DISTDIR)/samples/opengl/cube
+	cp $(SAMPDIR)/opengl/cube/makefile.unx $(DISTDIR)/samples/opengl/cube
+	cp $(SAMPDIR)/opengl/cube/*.cpp $(DISTDIR)/samples/opengl/cube
+	cp $(SAMPDIR)/opengl/cube/*.h $(DISTDIR)/samples/opengl/cube
+	mkdir $(DISTDIR)/samples/opengl/isosurf
+	cp $(SAMPDIR)/opengl/isosurf/Makefile.in $(DISTDIR)/samples/opengl/isosurf
+	cp $(SAMPDIR)/opengl/isosurf/makefile.unx $(DISTDIR)/samples/opengl/isosurf
+	cp $(SAMPDIR)/opengl/isosurf/*.cpp $(DISTDIR)/samples/opengl/isosurf
+	cp $(SAMPDIR)/opengl/isosurf/*.h $(DISTDIR)/samples/opengl/isosurf
+	cp $(SAMPDIR)/opengl/isosurf/*.gz $(DISTDIR)/samples/opengl/isosurf
+
+	mkdir $(DISTDIR)/samples/png
+	cp $(SAMPDIR)/png/Makefile.in $(DISTDIR)/samples/png
+	cp $(SAMPDIR)/png/makefile.unx $(DISTDIR)/samples/png
+	cp $(SAMPDIR)/png/*.cpp $(DISTDIR)/samples/png
+	cp $(SAMPDIR)/png/*.h $(DISTDIR)/samples/png
+	cp $(SAMPDIR)/png/*.png $(DISTDIR)/samples/png
+
+	mkdir $(DISTDIR)/samples/printing
+	cp $(SAMPDIR)/printing/Makefile.in $(DISTDIR)/samples/printing
+	cp $(SAMPDIR)/printing/makefile.unx $(DISTDIR)/samples/printing
+	cp $(SAMPDIR)/printing/*.cpp $(DISTDIR)/samples/printing
+	cp $(SAMPDIR)/printing/*.h $(DISTDIR)/samples/printing
+	cp $(SAMPDIR)/printing/*.xpm $(DISTDIR)/samples/printing
+	cp $(SAMPDIR)/printing/*.xbm $(DISTDIR)/samples/printing
+
+#	mkdir $(DISTDIR)/samples/resource
+#	cp $(SAMPDIR)/resource/Makefile.in $(DISTDIR)/samples/resource
+#	cp $(SAMPDIR)/resource/makefile.unx $(DISTDIR)/samples/resource
+#	cp $(SAMPDIR)/resource/*.cpp $(DISTDIR)/samples/resource
+#	cp $(SAMPDIR)/resource/*.h $(DISTDIR)/samples/resource
+#	cp $(SAMPDIR)/resource/*.wxr $(DISTDIR)/samples/resource
+
+	mkdir $(DISTDIR)/samples/rotate
+	cp $(SAMPDIR)/rotate/Makefile.in $(DISTDIR)/samples/rotate
+	cp $(SAMPDIR)/rotate/makefile.unx $(DISTDIR)/samples/rotate
+	cp $(SAMPDIR)/rotate/*.cpp $(DISTDIR)/samples/rotate
+	cp $(SAMPDIR)/rotate/*.bmp $(DISTDIR)/samples/rotate
+
+	mkdir $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/Makefile.in $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/makefile.unx $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/*.cpp $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/*.h $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/*.xpm $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/README $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/TODO $(DISTDIR)/samples/richedit
+
+#	mkdir $(DISTDIR)/samples/proplist
+#	cp $(SAMPDIR)/proplist/Makefile.in $(DISTDIR)/samples/proplist
+#	cp $(SAMPDIR)/proplist/makefile.unx $(DISTDIR)/samples/proplist
+#	cp $(SAMPDIR)/proplist/*.cpp $(DISTDIR)/samples/proplist
+#	cp $(SAMPDIR)/proplist/*.h $(DISTDIR)/samples/proplist
+
+	mkdir $(DISTDIR)/samples/propsize
+	cp $(SAMPDIR)/propsize/Makefile.in $(DISTDIR)/samples/propsize
+	cp $(SAMPDIR)/propsize/makefile.unx $(DISTDIR)/samples/propsize
+	cp $(SAMPDIR)/propsize/*.cpp $(DISTDIR)/samples/propsize
+	cp $(SAMPDIR)/propsize/*.xpm $(DISTDIR)/samples/propsize
+
+	mkdir $(DISTDIR)/samples/sashtest
+	cp $(SAMPDIR)/sashtest/Makefile.in $(DISTDIR)/samples/sashtest
+	cp $(SAMPDIR)/sashtest/makefile.unx $(DISTDIR)/samples/sashtest
+	cp $(SAMPDIR)/sashtest/*.cpp $(DISTDIR)/samples/sashtest
+	cp $(SAMPDIR)/sashtest/*.h $(DISTDIR)/samples/sashtest
+
+	mkdir $(DISTDIR)/samples/scroll
+	cp $(SAMPDIR)/scroll/Makefile.in $(DISTDIR)/samples/scroll
+	cp $(SAMPDIR)/scroll/makefile.unx $(DISTDIR)/samples/scroll
+	cp $(SAMPDIR)/scroll/*.cpp $(DISTDIR)/samples/scroll
+
+	mkdir $(DISTDIR)/samples/scrollsub
+	cp $(SAMPDIR)/scrollsub/Makefile.in $(DISTDIR)/samples/scrollsub
+	cp $(SAMPDIR)/scrollsub/makefile.unx $(DISTDIR)/samples/scrollsub
+	cp $(SAMPDIR)/scrollsub/*.cpp $(DISTDIR)/samples/scrollsub
+
+	mkdir $(DISTDIR)/samples/shaped
+	cp $(SAMPDIR)/shaped/Makefile.in $(DISTDIR)/samples/shaped
+	cp $(SAMPDIR)/shaped/makefile.unx $(DISTDIR)/samples/shaped
+	cp $(SAMPDIR)/shaped/*.cpp $(DISTDIR)/samples/shaped
+	cp $(SAMPDIR)/shaped/*.png $(DISTDIR)/samples/shaped
+
+	mkdir $(DISTDIR)/samples/sockets
+	cp $(SAMPDIR)/sockets/Makefile.in $(DISTDIR)/samples/sockets
+	cp $(SAMPDIR)/sockets/makefile.unx $(DISTDIR)/samples/sockets
+	cp $(SAMPDIR)/sockets/*.cpp $(DISTDIR)/samples/sockets
+	cp $(SAMPDIR)/sockets/*.xpm $(DISTDIR)/samples/sockets
+
+	mkdir $(DISTDIR)/samples/splitter
+	cp $(SAMPDIR)/splitter/Makefile.in $(DISTDIR)/samples/splitter
+	cp $(SAMPDIR)/splitter/makefile.unx $(DISTDIR)/samples/splitter
+	cp $(SAMPDIR)/splitter/*.cpp $(DISTDIR)/samples/splitter
+
+	mkdir $(DISTDIR)/samples/statbar
+	cp $(SAMPDIR)/statbar/Makefile.in $(DISTDIR)/samples/statbar
+	cp $(SAMPDIR)/statbar/makefile.unx $(DISTDIR)/samples/statbar
+	cp $(SAMPDIR)/statbar/*.cpp $(DISTDIR)/samples/statbar
+	cp $(SAMPDIR)/statbar/*.xpm $(DISTDIR)/samples/statbar
+
+	mkdir $(DISTDIR)/samples/text
+	cp $(SAMPDIR)/text/Makefile.in $(DISTDIR)/samples/text
+	cp $(SAMPDIR)/text/makefile.unx $(DISTDIR)/samples/text
+	cp $(SAMPDIR)/text/*.cpp $(DISTDIR)/samples/text
+	cp $(SAMPDIR)/text/*.xpm $(DISTDIR)/samples/text
+
+	mkdir $(DISTDIR)/samples/thread
+	cp $(SAMPDIR)/thread/Makefile.in $(DISTDIR)/samples/thread
+	cp $(SAMPDIR)/thread/makefile.unx $(DISTDIR)/samples/thread
+	cp $(SAMPDIR)/thread/*.cpp $(DISTDIR)/samples/thread
+
+	mkdir $(DISTDIR)/samples/toolbar
+	cp $(SAMPDIR)/toolbar/Makefile.in $(DISTDIR)/samples/toolbar
+	cp $(SAMPDIR)/toolbar/makefile.unx $(DISTDIR)/samples/toolbar
+	cp $(SAMPDIR)/toolbar/*.cpp $(DISTDIR)/samples/toolbar
+	cp $(SAMPDIR)/toolbar/*.xpm $(DISTDIR)/samples/toolbar
+	mkdir $(DISTDIR)/samples/toolbar/bitmaps
+	cp $(SAMPDIR)/toolbar/bitmaps/*.xpm $(DISTDIR)/samples/toolbar/bitmaps
+
+	mkdir $(DISTDIR)/samples/treectrl
+	cp $(SAMPDIR)/treectrl/Makefile.in $(DISTDIR)/samples/treectrl
+	cp $(SAMPDIR)/treectrl/makefile.unx $(DISTDIR)/samples/treectrl
+	cp $(SAMPDIR)/treectrl/*.cpp $(DISTDIR)/samples/treectrl
+	cp $(SAMPDIR)/treectrl/*.h $(DISTDIR)/samples/treectrl
+	cp $(SAMPDIR)/treectrl/*.xpm $(DISTDIR)/samples/treectrl
+
+#	mkdir $(DISTDIR)/samples/treelay
+#	cp $(SAMPDIR)/treelay/Makefile.in $(DISTDIR)/samples/treelay
+#	cp $(SAMPDIR)/treelay/makefile.unx $(DISTDIR)/samples/treelay
+#	cp $(SAMPDIR)/treelay/*.cpp $(DISTDIR)/samples/treelay
+#	cp $(SAMPDIR)/treelay/*.h $(DISTDIR)/samples/treelay
+
+	mkdir $(DISTDIR)/samples/typetest
+	cp $(SAMPDIR)/typetest/Makefile.in $(DISTDIR)/samples/typetest
+	cp $(SAMPDIR)/typetest/makefile.unx $(DISTDIR)/samples/typetest
+	cp $(SAMPDIR)/typetest/*.cpp $(DISTDIR)/samples/typetest
+	cp $(SAMPDIR)/typetest/*.h $(DISTDIR)/samples/typetest
+	cp $(SAMPDIR)/typetest/*.xpm $(DISTDIR)/samples/typetest
+
+	mkdir $(DISTDIR)/samples/validate
+	cp $(SAMPDIR)/validate/Makefile.in $(DISTDIR)/samples/validate
+	cp $(SAMPDIR)/validate/makefile.unx $(DISTDIR)/samples/validate
+	cp $(SAMPDIR)/validate/*.cpp $(DISTDIR)/samples/validate
+	cp $(SAMPDIR)/validate/*.h $(DISTDIR)/samples/validate
+	cp $(SAMPDIR)/validate/*.xpm $(DISTDIR)/samples/validate
+
+	mkdir $(DISTDIR)/samples/wizard
+	cp $(SAMPDIR)/wizard/Makefile.in $(DISTDIR)/samples/wizard
+	cp $(SAMPDIR)/wizard/makefile.unx $(DISTDIR)/samples/wizard
+	cp $(SAMPDIR)/wizard/*.cpp $(DISTDIR)/samples/wizard
+	cp $(SAMPDIR)/wizard/*.xpm $(DISTDIR)/samples/wizard
+
+	mkdir $(DISTDIR)/samples/widgets
+	mkdir $(DISTDIR)/samples/widgets/icons
+	cp $(SAMPDIR)/widgets/Makefile.in $(DISTDIR)/samples/widgets
+	cp $(SAMPDIR)/widgets/*.cpp $(DISTDIR)/samples/widgets
+	cp $(SAMPDIR)/widgets/*.h $(DISTDIR)/samples/widgets
+	cp $(SAMPDIR)/widgets/*.rc $(DISTDIR)/samples/widgets
+	cp $(SAMPDIR)/widgets/icons/*.xpm $(DISTDIR)/samples/widgets/icons
+
+UTILS_DIST: ALL_GUI_DIST
+	mkdir $(DISTDIR)/utils
+	cp $(UTILSDIR)/Makefile.in $(DISTDIR)/utils
+
+	mkdir $(DISTDIR)/utils/tex2rtf
+	mkdir $(DISTDIR)/utils/tex2rtf/src
+	cp $(UTILSDIR)/tex2rtf/*.in $(DISTDIR)/utils/tex2rtf
+	cp $(UTILSDIR)/tex2rtf/src/*.h $(DISTDIR)/utils/tex2rtf/src
+	cp $(UTILSDIR)/tex2rtf/src/*.in $(DISTDIR)/utils/tex2rtf/src
+	cp $(UTILSDIR)/tex2rtf/src/*.cpp $(DISTDIR)/utils/tex2rtf/src
+	cp $(UTILSDIR)/tex2rtf/src/tex2rtf.* $(DISTDIR)/utils/tex2rtf/src
+
+	mkdir $(DISTDIR)/utils/emulator
+	mkdir $(DISTDIR)/utils/emulator/src
+	mkdir $(DISTDIR)/utils/emulator/docs
+	cp $(UTILSDIR)/emulator/*.in $(DISTDIR)/utils/emulator
+	cp $(UTILSDIR)/emulator/src/*.h $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.in $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.cpp $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.jpg $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.wxe $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/docs/*.txt $(DISTDIR)/utils/emulator/docs
+	cp $(UTILSDIR)/emulator/docs/*.jpg $(DISTDIR)/utils/emulator/docs
+
+	mkdir $(DISTDIR)/utils/makegen
+	mkdir $(DISTDIR)/utils/makegen/templates
+	cp $(UTILSDIR)/makegen/Makefile.in $(DISTDIR)/utils/makegen
+	cp $(UTILSDIR)/makegen/*.cpp $(DISTDIR)/utils/makegen
+	cp $(UTILSDIR)/makegen/templates/*.* $(DISTDIR)/utils/makegen/templates
+
+	mkdir $(DISTDIR)/utils/hhp2cached
+	cp $(UTILSDIR)/hhp2cached/*.* $(DISTDIR)/utils/hhp2cached
+
+	mkdir $(DISTDIR)/utils/HelpGen
+	mkdir $(DISTDIR)/utils/HelpGen/src
+	cp $(UTILSDIR)/HelpGen/Makefile.in $(DISTDIR)/utils/HelpGen
+	cp $(UTILSDIR)/HelpGen/src/*.* $(DISTDIR)/utils/HelpGen/src
+
+	mkdir $(DISTDIR)/utils/dialoged
+	mkdir $(DISTDIR)/utils/dialoged/src
+	mkdir $(DISTDIR)/utils/dialoged/src/bitmaps
+	mkdir $(DISTDIR)/utils/dialoged/docs
+	cp $(UTILSDIR)/dialoged/Makefile.in $(DISTDIR)/utils/dialoged
+	cp $(UTILSDIR)/dialoged/src/*.h $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/*.cpp $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/Makefile.in $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/makefile.unx $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/bitmaps/*.xpm $(DISTDIR)/utils/dialoged/src/bitmaps
+	cp $(UTILSDIR)/dialoged/docs/*.tex $(DISTDIR)/utils/dialoged/docs
+	cp $(UTILSDIR)/dialoged/docs/*.ini $(DISTDIR)/utils/dialoged/docs
+	cp $(UTILSDIR)/dialoged/docs/*.gif $(DISTDIR)/utils/dialoged/docs
+
+	mkdir $(DISTDIR)/utils/helpview
+	mkdir $(DISTDIR)/utils/helpview/src
+	mkdir $(DISTDIR)/utils/helpview/src/bitmaps
+	cp $(UTILSDIR)/helpview/Makefile.in $(DISTDIR)/utils/helpview
+	cp $(UTILSDIR)/helpview/src/*.h $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/*.cpp $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/Makefile.in $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/test.zip $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/bitmaps/*.xpm $(DISTDIR)/utils/helpview/src/bitmaps
+
+MISC_DIST: ALL_GUI_DIST
+	mkdir $(DISTDIR)/misc
+	mkdir $(DISTDIR)/misc/afm
+	cp $(MISCDIR)/afm/*.afm  $(DISTDIR)/misc/afm
+	mkdir $(DISTDIR)/misc/gs_afm
+	cp $(MISCDIR)/gs_afm/*.afm  $(DISTDIR)/misc/gs_afm
+
+INTL_DIST:
+	mkdir $(DISTDIR)/locale
+	cp $(INTLDIR)/Makefile $(DISTDIR)/locale
+	cp $(INTLDIR)/*.po $(DISTDIR)/locale
+	-cp $(INTLDIR)/*.mo $(DISTDIR)/locale
+
+MANUAL_DIST:
+	mkdir $(DISTDIR)/docs
+	mkdir $(DISTDIR)/docs/latex
+	mkdir $(DISTDIR)/docs/latex/wx
+	cp $(DOCDIR)/latex/wx/*.tex $(DISTDIR)/docs/latex/wx
+	cp $(DOCDIR)/latex/wx/*.inc $(DISTDIR)/docs/latex/wx
+	cp $(DOCDIR)/latex/wx/*.gif $(DISTDIR)/docs/latex/wx
+	cp $(DOCDIR)/latex/wx/*.ini $(DISTDIR)/docs/latex/wx
+	cp $(DOCDIR)/latex/wx/*.bib $(DISTDIR)/docs/latex/wx
+	cp $(DOCDIR)/latex/wx/*.sty $(DISTDIR)/docs/latex/wx
+
+# this target does not generate a complete wxPython dist, it only includes
+# those files needed for the Debian source package.
+# see utils/wxPython/distrib for scripts to make a proper wxPython dist.
+PYTHON_DIST:
+	mkdir $(DISTDIR)/wxPython
+	mkdir $(DISTDIR)/wxPython/contrib
+	mkdir $(DISTDIR)/wxPython/contrib/dllwidget
+	mkdir $(DISTDIR)/wxPython/contrib/gizmos
+	mkdir $(DISTDIR)/wxPython/contrib/glcanvas
+	mkdir $(DISTDIR)/wxPython/contrib/glcanvas/gtk
+	mkdir $(DISTDIR)/wxPython/contrib/ogl
+	mkdir $(DISTDIR)/wxPython/contrib/stc
+	mkdir $(DISTDIR)/wxPython/contrib/stc/gtk
+	mkdir $(DISTDIR)/wxPython/contrib/xrc
+	mkdir $(DISTDIR)/wxPython/demo
+	mkdir $(DISTDIR)/wxPython/demo/bitmaps
+	mkdir $(DISTDIR)/wxPython/demo/bmp_source
+	mkdir $(DISTDIR)/wxPython/demo/data
+	mkdir $(DISTDIR)/wxPython/demo/dllwidget
+	mkdir $(DISTDIR)/wxPython/src
+	mkdir $(DISTDIR)/wxPython/src/gtk
+	mkdir $(DISTDIR)/wxPython/scripts
+	mkdir $(DISTDIR)/wxPython/wxPython
+	mkdir $(DISTDIR)/wxPython/wxPython/lib
+	mkdir $(DISTDIR)/wxPython/wxPython/lib/PyCrust
+	mkdir $(DISTDIR)/wxPython/wxPython/lib/editor
+	mkdir $(DISTDIR)/wxPython/wxPython/lib/mixins
+	mkdir $(DISTDIR)/wxPython/wxPython/tools
+	mkdir $(DISTDIR)/wxPython/wxPython/tools/XRCed
+
+	cp $(WXDIR)/wxPython/*.txt $(DISTDIR)/wxPython
+	cp $(WXDIR)/wxPython/*.py $(DISTDIR)/wxPython
+	cp $(WXDIR)/wxPython/setup.cfg $(DISTDIR)/wxPython
+	cp $(WXDIR)/wxPython/MANIFEST.in $(DISTDIR)/wxPython
+	cp $(WXDIR)/wxPython/contrib/dllwidget/*.{py,cpp,h,i} $(DISTDIR)/wxPython/contrib/dllwidget
+	cp $(WXDIR)/wxPython/contrib/gizmos/*.{py,cpp,i} $(DISTDIR)/wxPython/contrib/gizmos
+	-cp $(WXDIR)/wxPython/contrib/glcanvas/* $(DISTDIR)/wxPython/contrib/glcanvas
+	cp $(WXDIR)/wxPython/contrib/glcanvas/gtk/glcanvas.* $(DISTDIR)/wxPython/contrib/glcanvas/gtk
+	-cp $(WXDIR)/wxPython/contrib/ogl/* $(DISTDIR)/wxPython/contrib/ogl
+	-cp $(WXDIR)/wxPython/contrib/stc/* $(DISTDIR)/wxPython/contrib/stc
+	-cp $(WXDIR)/wxPython/contrib/stc/gtk/* $(DISTDIR)/wxPython/contrib/stc/gtk
+	-cp $(WXDIR)/wxPython/contrib/xrc/xrc.* $(DISTDIR)/wxPython/contrib/xrc
+	-cp $(WXDIR)/wxPython/demo/* $(DISTDIR)/wxPython/demo
+	-cp $(WXDIR)/wxPython/demo/bitmaps/* $(DISTDIR)/wxPython/demo/bitmaps
+	-cp $(WXDIR)/wxPython/demo/bmp_source/* $(DISTDIR)/wxPython/demo/bmp_source
+	-cp $(WXDIR)/wxPython/demo/data/* $(DISTDIR)/wxPython/demo/data
+	-cp $(WXDIR)/wxPython/demo/dllwidget/Makefile $(DISTDIR)/wxPython/demo/dllwidget
+	-cp $(WXDIR)/wxPython/demo/dllwidget/test_* $(DISTDIR)/wxPython/demo/dllwidget
+	-cp $(WXDIR)/wxPython/scripts/* $(DISTDIR)/wxPython/scripts
+	-cp $(WXDIR)/wxPython/src/* $(DISTDIR)/wxPython/src
+	cp $(WXDIR)/wxPython/src/gtk/*.py $(DISTDIR)/wxPython/src/gtk
+	cp $(WXDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/wxPython/src/gtk
+	cp $(WXDIR)/wxPython/wxPython/lib/*.py $(DISTDIR)/wxPython/wxPython/lib
+	cp $(WXDIR)/wxPython/wxPython/lib/PyCrust/*.py $(DISTDIR)/wxPython/wxPython/lib/PyCrust
+	cp $(WXDIR)/wxPython/wxPython/lib/editor/*.py $(DISTDIR)/wxPython/wxPython/lib/editor
+	cp $(WXDIR)/wxPython/wxPython/lib/mixins/*.py $(DISTDIR)/wxPython/wxPython/lib/mixins
+	cp $(WXDIR)/wxPython/wxPython/tools/*.py $(DISTDIR)/wxPython/wxPython/tools
+	cp $(WXDIR)/wxPython/wxPython/tools/XRCed/*.{py,ico,sh,xrc} $(DISTDIR)/wxPython/wxPython/tools/XRCed
+
+distrib_clean:
+	$(RM) -r _dist_dir
+
+# VZ: the -only targets allow to do "make dist bzip-dist-only" without copying
+#     the files twice
+dist-only:
+	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);
+	@if test "$(USE_GUI)" = 1; then \
+	cd $(DISTDIR); \
+	mv samples wxSamples-$(WX_VERSION); \
+	echo "*** Creating wxSamples archive..."; \
+	tar ch wxSamples-$(WX_VERSION) | gzip -f9 > ../../$(WXSAMPLES); \
+	mv wxSamples-$(WX_VERSION) samples; \
+	mv demos wxDemos-$(WX_VERSION); \
+	echo "*** Creating wxDemos archive..."; \
+	tar ch wxDemos-$(WX_VERSION) | gzip -f9 > ../../$(WXDEMOS); \
+	mv wxDemos-$(WX_VERSION) demos; \
+	fi
+
+dist: @GUIDIST@
+	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@# now prune away a lot of the crap included by using cp -R
+	@# in other dist targets.
+	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
+			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
+			-print0 | xargs -0 rm -rf
+	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);
+	@if test "$(USE_GUI)" = 1; then \
+	cd $(DISTDIR); \
+	mv samples wxSamples-$(WX_VERSION); \
+	echo "*** Creating wxSamples archive..."; \
+	tar ch wxSamples-$(WX_VERSION) | gzip -f9 > ../../$(WXSAMPLES); \
+	mv wxSamples-$(WX_VERSION) samples; \
+	mv demos wxDemos-$(WX_VERSION); \
+	echo "*** Creating wxDemos archive..."; \
+	tar ch wxDemos-$(WX_VERSION) | gzip -f9 > ../../$(WXDEMOS); \
+	mv wxDemos-$(WX_VERSION) demos; \
+	fi
+
+bzip-dist-only:
+	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@cd _dist_dir && tar ch $(DISTDIRNAME) | bzip2 -f9 > ../$(WXARCHIVE_BZIP);
+	@if test "$(USE_GUI)" = 1; then \
+	cd $(DISTDIR); \
+	mv samples wxSamples-${WX_VERSION}; \
+	echo "*** Creating wxSamples archive..."; \
+	tar ch wxSamples-${WX_VERSION} | bzip2 -f9 > ../../$(WXSAMPLES_BZIP); \
+	mv wxSamples-${WX_VERSION} samples; \
+	mv demos wxDemos-${WX_VERSION}; \
+	echo "*** Creating wxDemos archive..."; \
+	tar ch wxDemos-${WX_VERSION} | bzip2 -f9 > ../../$(WXDEMOS_BZIP); \
+	mv wxDemos-${WX_VERSION} demos; \
+	fi
+
+bzip-dist: @GUIDIST@
+	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@cd _dist_dir && tar ch $(DISTDIRNAME) | bzip2 -f9 > ../$(WXARCHIVE_BZIP)
+	@if test "$(USE_GUI)" = 1; then \
+	cd $(DISTDIR); \
+	mv samples wxSamples; \
+	tar ch wxSamples | bzip2 -f9 > ../../$(WXSAMPLES_BZIP); \
+	mv wxSamples samples; \
+	mv demos wxDemos; \
+	tar ch wxDemos | bzip2 -f9 > ../../$(WXDEMOS_BZIP); \
+	mv wxDemos demos; \
+	fi
+
+# RR: Copy text and binary data separatly
+win-dist: MSW_ZIP_TEXT_DIST
+	@echo "*** Creating wxWindows ZIP distribution in $(DISTDIR)..."
+	@cd _dist_dir && mv $(DISTDIRNAME) wxMSW
+	@cd _dist_dir && zip -r -l  ../$(WXARCHIVE_ZIP) *
+	cp $(INCDIR)/wx/msw/*.cur _dist_dir/wxMSW/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.ico _dist_dir/wxMSW/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.bmp _dist_dir/wxMSW/include/wx/msw
+	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.cur
+	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.ico
+	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.bmp
+
+debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
+	mkdir $(DISTDIR)/debian
+	-cp $(WXDIR)/debian/* $(DISTDIR)/debian
+	cp $(DOCDIR)/licence.txt $(DISTDIR)/docs
+	cp $(DOCDIR)/licendoc.txt $(DISTDIR)/docs
+	cp $(DOCDIR)/preamble.txt $(DISTDIR)/docs
+	rm -f $(DISTDIR)/*.spec
+
+	@# now prune away a lot of the crap included by using cp -R
+	@# in other dist targets.  Ugly and hardly portable but it
+	@# will run on any Debian box and that's enough for now.
+
+	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
+			\( -name "makefile.*" -a ! -name "makefile.unx" \) \) \
+			-print0 | xargs -0 rm -rf
+
+	rm -rf $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
+	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
+
+debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
+
+debian-msw-dirs:
+	mkdir $(DISTDIR)/include/wx/msw
+	mkdir $(DISTDIR)/src/msw
+
+
+RPMTOP=_dist_dir/_rpm_top
+
+rpm: bzip-dist
+	@echo "*** Building RPMs ***"
+	-mkdir $(RPMTOP)
+	-mkdir $(RPMTOP)/SOURCES
+	-mkdir $(RPMTOP)/SPECS
+	-mkdir $(RPMTOP)/BUILD
+	-mkdir $(RPMTOP)/RPMS
+	-mkdir $(RPMTOP)/SRPMS
+	cp -f $(WXARCHIVE_BZIP) $(RPMTOP)/SOURCES
+	rpm -ba --define "_topdir `pwd`/$(RPMTOP)" $(WXDIR)/wx$(TOOLKIT).spec
+	mv -f `find $(RPMTOP) -name "wx$(TOOLKIT)*.rpm"` .
 
 
 # Include dependency info, if present:

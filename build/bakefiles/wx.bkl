@@ -71,6 +71,17 @@
             <files>$(ALL_HEADERS)</files>
         </headers>
 
+        <!-- Locales: -->
+        <using module="gettext"/>
+        <gettext-catalogs id="locale">
+            <srcdir>$(SRCDIR)/locale</srcdir>
+            <catalog-name>wxstd</catalog-name>
+            <linguas>
+                ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk
+                zh zh_CN zh_TW
+            </linguas>
+            <install-to>$(LOCALEDIR)</install-to>
+        </gettext-catalogs>
 
         <!-- Mac OS X resources: -->
         <set var="MACOS_R">lib/libwx_$(TOOLCHAIN_NAME).$(WXSOVERSION[0]).r</set>
@@ -142,8 +153,9 @@
     </if>
 
 
-    <!-- Show this banner after installation: -->
     <if cond="FORMAT=='autoconf'">
+
+        <!-- Show this banner after installation: -->
         <modify-target target="install">
             <command>
 @echo " "
@@ -159,14 +171,13 @@
 @echo " "
             </command>
         </modify-target>
-    </if>
 
-    <!-- add "make dist" target to autoconf: -->
-    <if cond="FORMAT=='autoconf'">
+        <!-- add "make dist" target to autoconf: -->
         <set var="VARS_DONT_ELIMINATE" append="1">
             ALL_BASE_SOURCES WX_VERSION
         </set>
         <fragment format="autoconf" file="make_dist.mk"/>
+
     </if>
 
 </makefile>
