@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        common/bookctrl.cpp
-// Purpose:     wxBookCtrl implementation
+// Purpose:     wxBookCtrlBase implementation
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     19.08.03
@@ -42,14 +42,14 @@
 // constructors and destructors
 // ----------------------------------------------------------------------------
 
-void wxBookCtrl::Init()
+void wxBookCtrlBase::Init()
 {
     m_imageList = NULL;
     m_ownsImageList = false;
 }
 
 bool
-wxBookCtrl::Create(wxWindow *parent,
+wxBookCtrlBase::Create(wxWindow *parent,
                        wxWindowID id,
                        const wxPoint& pos,
                        const wxSize& size,
@@ -68,7 +68,7 @@ wxBookCtrl::Create(wxWindow *parent,
                      );
 }
 
-wxBookCtrl::~wxBookCtrl()
+wxBookCtrlBase::~wxBookCtrlBase()
 {
     if ( m_ownsImageList )
     {
@@ -81,7 +81,7 @@ wxBookCtrl::~wxBookCtrl()
 // image list
 // ----------------------------------------------------------------------------
 
-void wxBookCtrl::SetImageList(wxImageList *imageList)
+void wxBookCtrlBase::SetImageList(wxImageList *imageList)
 {
     if ( m_ownsImageList )
     {
@@ -94,7 +94,7 @@ void wxBookCtrl::SetImageList(wxImageList *imageList)
     m_imageList = imageList;
 }
 
-void wxBookCtrl::AssignImageList(wxImageList* imageList)
+void wxBookCtrlBase::AssignImageList(wxImageList* imageList)
 {
     SetImageList(imageList);
 
@@ -105,12 +105,12 @@ void wxBookCtrl::AssignImageList(wxImageList* imageList)
 // geometry
 // ----------------------------------------------------------------------------
 
-void wxBookCtrl::SetPageSize(const wxSize& size)
+void wxBookCtrlBase::SetPageSize(const wxSize& size)
 {
     SetClientSize(CalcSizeFromPage(size));
 }
 
-wxSize wxBookCtrl::DoGetBestSize() const
+wxSize wxBookCtrlBase::DoGetBestSize() const
 {
     wxSize bestSize;
 
@@ -140,15 +140,15 @@ wxSize wxBookCtrl::DoGetBestSize() const
 // ----------------------------------------------------------------------------
 
 bool
-wxBookCtrl::InsertPage(size_t nPage,
-                       wxWindow *page,
-                       const wxString& WXUNUSED(text),
-                       bool WXUNUSED(bSelect),
-                       int WXUNUSED(imageId))
+wxBookCtrlBase::InsertPage(size_t nPage,
+                           wxWindow *page,
+                           const wxString& WXUNUSED(text),
+                           bool WXUNUSED(bSelect),
+                           int WXUNUSED(imageId))
 {
-    wxCHECK_MSG( page, false, _T("NULL page in wxBookCtrl::InsertPage()") );
+    wxCHECK_MSG( page, false, _T("NULL page in wxBookCtrlBase::InsertPage()") );
     wxCHECK_MSG( nPage <= m_pages.size(), false,
-                 _T("invalid page index in wxBookCtrl::InsertPage()") );
+                 _T("invalid page index in wxBookCtrlBase::InsertPage()") );
 
     m_pages.Insert(page, nPage);
     InvalidateBestSize();
@@ -156,7 +156,7 @@ wxBookCtrl::InsertPage(size_t nPage,
     return true;
 }
 
-bool wxBookCtrl::DeletePage(size_t nPage)
+bool wxBookCtrlBase::DeletePage(size_t nPage)
 {
     wxWindow *page = DoRemovePage(nPage);
     if ( !page )
@@ -167,10 +167,10 @@ bool wxBookCtrl::DeletePage(size_t nPage)
     return true;
 }
 
-wxWindow *wxBookCtrl::DoRemovePage(size_t nPage)
+wxWindow *wxBookCtrlBase::DoRemovePage(size_t nPage)
 {
     wxCHECK_MSG( nPage < m_pages.size(), NULL,
-                 _T("invalid page index in wxBookCtrl::DoRemovePage()") );
+                 _T("invalid page index in wxBookCtrlBase::DoRemovePage()") );
 
     wxWindow *pageRemoved = m_pages[nPage];
     m_pages.RemoveAt(nPage);
@@ -179,7 +179,7 @@ wxWindow *wxBookCtrl::DoRemovePage(size_t nPage)
     return pageRemoved;
 }
 
-int wxBookCtrl::GetNextPage(bool forward) const
+int wxBookCtrlBase::GetNextPage(bool forward) const
 {
     int nPage;
 

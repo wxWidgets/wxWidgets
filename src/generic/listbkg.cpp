@@ -62,7 +62,7 @@ const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED = wxNewEventType();
 const int wxID_LISTBOOKLISTVIEW = wxNewId();
 
-BEGIN_EVENT_TABLE(wxListbook, wxBookCtrl)
+BEGIN_EVENT_TABLE(wxListbook, wxBookCtrlBase)
     EVT_SIZE(wxListbook::OnSize)
     EVT_LIST_ITEM_SELECTED(wxID_LISTBOOKLISTVIEW, wxListbook::OnListSelected)
 END_EVENT_TABLE()
@@ -334,7 +334,7 @@ void wxListbook::SetImageList(wxImageList *imageList)
 {
     m_list->SetImageList(imageList, wxIMAGE_LIST_NORMAL);
 
-    wxBookCtrl::SetImageList(imageList);
+    wxBookCtrlBase::SetImageList(imageList);
 }
 
 // ----------------------------------------------------------------------------
@@ -393,7 +393,7 @@ wxListbook::InsertPage(size_t n,
                        bool bSelect,
                        int imageId)
 {
-    if ( !wxBookCtrl::InsertPage(n, page, text, bSelect, imageId) )
+    if ( !wxBookCtrlBase::InsertPage(n, page, text, bSelect, imageId) )
         return false;
 
     m_list->InsertItem(n, text, imageId);
@@ -429,7 +429,7 @@ wxListbook::InsertPage(size_t n,
 wxWindow *wxListbook::DoRemovePage(size_t page)
 {
     const int page_count = GetPageCount();
-    wxWindow *win = wxBookCtrl::DoRemovePage(page);
+    wxWindow *win = wxBookCtrlBase::DoRemovePage(page);
 
     if ( win )
     {
@@ -459,7 +459,7 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
 bool wxListbook::DeleteAllPages()
 {
     m_list->DeleteAllItems();
-    return wxBookCtrl::DeleteAllPages();
+    return wxBookCtrlBase::DeleteAllPages();
 }
 
 // ----------------------------------------------------------------------------

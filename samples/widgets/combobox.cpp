@@ -84,7 +84,7 @@ enum
 class ComboboxWidgetsPage : public WidgetsPage
 {
 public:
-    ComboboxWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
+    ComboboxWidgetsPage(wxBookCtrl *book, wxImageList *imaglist);
 
     virtual wxControl *GetWidget() const { return m_combobox; }
 
@@ -190,9 +190,9 @@ END_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(ComboboxWidgetsPage, _T("Combobox"));
 
-ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
-                                       wxImageList *imaglist)
-                  : WidgetsPage(notebook)
+ComboboxWidgetsPage::ComboboxWidgetsPage(wxBookCtrl *book,
+                                         wxImageList *imaglist)
+                  : WidgetsPage(book)
 {
     // init everything
     m_chkSort =

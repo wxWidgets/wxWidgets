@@ -60,7 +60,7 @@ public:
 
     void OnIdle(wxIdleEvent& event);
 
-    wxBookCtrl *GetCurrentBook();
+    wxBookCtrlBase *GetCurrentBook();
 
 private:
     wxLog *m_logTargetOld;

@@ -101,8 +101,8 @@ wxURL has undergone some radical changes.
     * Many accessors of wxURL - GetHostName, GetProtocolName, and GetPath,
       have been replaced by its parent's (wxURI) counterparts - GetServer,
       GetScheme, and GetPath, respectively.
-  
-    * ConvertToValidURI has been replaced by wxURI.  Do not use 
+
+    * ConvertToValidURI has been replaced by wxURI.  Do not use
       ConvertToValidURI for future applications.
 
     * ConvertFromURI has been replaced by wxURI::Unescape.
@@ -190,7 +190,7 @@ wxURL has undergone some radical changes.
 
 \subsection{Depreciated changes since 2.4.x}
 
-- wxURL::GetInputStream() and similar functionality has been depreciated in 
+- wxURL::GetInputStream() and similar functionality has been depreciated in
   favor of other ways of connecting, such as though sockets or wxFileSystem.
 
 - wxDocManager::GetNoHistoryFiles() renamed to GetHistoryFilesCount()

@@ -39,7 +39,7 @@
     #include "wx/textctrl.h"
 #endif
 
-#include "wx/notebook.h"
+#include "wx/bookctrl.h"
 #include "wx/sizer.h"
 #include "wx/colordlg.h"
 
@@ -94,8 +94,8 @@ protected:
     void OnSetBgCol(wxCommandEvent& event);
 #endif // wxUSE_MENUS
 
-    // initialize the notebook: add all pages to it
-    void InitNotebook();
+    // initialize the book: add all pages to it
+    void InitBook();
 
 private:
     // the panel containing everything
@@ -109,8 +109,8 @@ private:
     wxLog *m_logTarget;
 #endif // wxUSE_LOG
 
-    // the notebook containing the test pages
-    wxNotebook *m_notebook;
+    // the book containing the test pages
+    wxBookCtrl *m_book;
 
     // and the image list for it
     wxImageList *m_imaglist;
@@ -267,7 +267,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     m_lboxLog = (wxListBox *)NULL;
     m_logTarget = (wxLog *)NULL;
 #endif // wxUSE_LOG
-    m_notebook = (wxNotebook *)NULL;
+    m_book = (wxBookCtrl *)NULL;
     m_imaglist = (wxImageList *)NULL;
 
 #if wxUSE_MENUS
@@ -288,12 +288,12 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
 
-    // we have 2 panes: notebook which pages demonstrating the controls in the
+    // we have 2 panes: book which pages demonstrating the controls in the
     // upper one and the log window with some buttons in the lower
 
-    m_notebook = new wxNotebook(m_panel, wxID_ANY, wxDefaultPosition,
-        wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
-    InitNotebook();
+    m_book = new wxBookCtrl(m_panel, wxID_ANY, wxDefaultPosition,
+        wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxBC_DEFAULT);
+    InitBook();
 
     // the lower one only has the log listbox and a button to clear it
 #if wxUSE_LOG
@@ -320,7 +320,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     sizerDown->Add(sizerBtns, 0, wxALL | wxALIGN_RIGHT, 5);
 
     // put everything together
-    sizerTop->Add(m_notebook, 1, wxGROW | (wxALL & ~(wxTOP | wxBOTTOM)), 10);
+    sizerTop->Add(m_book, 1, wxGROW | (wxALL & ~(wxTOP | wxBOTTOM)), 10);
     sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
     sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
 
@@ -338,19 +338,19 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 #endif
 }
 
-void WidgetsFrame::InitNotebook()
+void WidgetsFrame::InitBook()
 {
     m_imaglist = new wxImageList(32, 32);
 
     ArrayWidgetsPage pages;
     wxArrayString labels;
 
-    // we need to first create all pages and only then add them to the notebook
+    // we need to first create all pages and only then add them to the book
     // as we need the image list first
     WidgetsPageInfo *info = WidgetsPage::ms_widgetPages;
     while ( info )
     {
-        WidgetsPage *page = (*info->GetCtor())(m_notebook, m_imaglist);
+        WidgetsPage *page = (*info->GetCtor())(m_book, m_imaglist);
         pages.Add(page);
 
         labels.Add(info->GetLabel());
@@ -358,18 +358,18 @@ void WidgetsFrame::InitNotebook()
         info = info->GetNext();
     }
 
-    m_notebook->SetImageList(m_imaglist);
+    m_book->SetImageList(m_imaglist);
 
     // now do add them
     size_t count = pages.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        m_notebook->AddPage(
-                            pages[n],
-                            labels[n],
-                            false, // don't select
-                            n // image id
-                           );
+        m_book->AddPage(
+                        pages[n],
+                        labels[n],
+                        false, // don't select
+                        n // image id
+                       );
     }
 }
 
@@ -407,7 +407,7 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
 
     m_colFg = col;
 
-    WidgetsPage *page = wxStaticCast(m_notebook->GetCurrentPage(), WidgetsPage);
+    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
     page->GetWidget()->SetForegroundColour(m_colFg);
     page->GetWidget()->Refresh();
 }
@@ -420,7 +420,7 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 
     m_colBg = col;
 
-    WidgetsPage *page = wxStaticCast(m_notebook->GetCurrentPage(), WidgetsPage);
+    WidgetsPage *page = wxStaticCast(m_book->GetCurrentPage(), WidgetsPage);
     page->GetWidget()->SetBackgroundColour(m_colBg);
     page->GetWidget()->Refresh();
 }
@@ -492,8 +492,8 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
 // WidgetsPage
 // ----------------------------------------------------------------------------
 
-WidgetsPage::WidgetsPage(wxNotebook *notebook)
-           : wxPanel(notebook, wxID_ANY,
+WidgetsPage::WidgetsPage(wxBookCtrl *book)
+           : wxPanel(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
                      wxNO_FULL_REPAINT_ON_RESIZE |
                      wxCLIP_CHILDREN |

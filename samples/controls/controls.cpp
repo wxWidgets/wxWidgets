@@ -23,7 +23,7 @@
 #include "wx/spinbutt.h"
 #endif
 #include "wx/tglbtn.h"
-#include "wx/notebook.h"
+#include "wx/bookctrl.h"
 #include "wx/imaglist.h"
 #include "wx/artprov.h"
 
@@ -88,8 +88,8 @@ public:
     void OnRadioButton1( wxCommandEvent &event );
     void OnRadioButton2( wxCommandEvent &event );
     void OnSetFont( wxCommandEvent &event );
-    void OnPageChanged( wxNotebookEvent &event );
-    void OnPageChanging( wxNotebookEvent &event );
+    void OnPageChanged( wxBookCtrlEvent &event );
+    void OnPageChanging( wxBookCtrlEvent &event );
     void OnSliderUpdate( wxCommandEvent &event );
     void OnUpdateLabel( wxCommandEvent &event );
 #if wxUSE_SPINBTN
@@ -142,7 +142,7 @@ public:
     wxCheckBox    *m_checkbox;
 
     wxTextCtrl    *m_text;
-    wxNotebook    *m_notebook;
+    wxBookCtrl    *m_book;
 
     wxStaticText  *m_label;
 
@@ -355,7 +355,7 @@ bool MyApp::OnInit()
 // MyPanel
 //----------------------------------------------------------------------
 
-const int  ID_NOTEBOOK          = 1000;
+const int  ID_BOOK              = 1000;
 
 const int  ID_LISTBOX           = 130;
 const int  ID_LISTBOX_SEL_NUM   = 131;
@@ -420,8 +420,8 @@ const int  ID_SIZER_CHECKBIG    = 206;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_SIZE      (                         MyPanel::OnSize)
-EVT_NOTEBOOK_PAGE_CHANGING(ID_NOTEBOOK, MyPanel::OnPageChanging)
-EVT_NOTEBOOK_PAGE_CHANGED(ID_NOTEBOOK,  MyPanel::OnPageChanged)
+EVT_BOOKCTRL_PAGE_CHANGING(ID_BOOK,     MyPanel::OnPageChanging)
+EVT_BOOKCTRL_PAGE_CHANGED(ID_BOOK,      MyPanel::OnPageChanged)
 EVT_LISTBOX   (ID_LISTBOX,              MyPanel::OnListBox)
 EVT_LISTBOX   (ID_LISTBOX_SORTED,       MyPanel::OnListBox)
 EVT_LISTBOX_DCLICK(ID_LISTBOX,          MyPanel::OnListBoxDoubleClick)
@@ -542,7 +542,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_spintext = NULL;
     m_checkbox = NULL;
     m_text = NULL;
-    m_notebook = NULL;
+    m_book = NULL;
     m_label = NULL;
 
     m_text = new wxTextCtrl(this, wxID_ANY, _T("This is the log window.\n"),
@@ -551,7 +551,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_logTargetOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
 
-    m_notebook = new wxNotebook(this, ID_NOTEBOOK);
+    m_book = new wxBookCtrl(this, ID_BOOK);
 
     wxString choices[] =
     {
@@ -580,7 +580,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     imagelist-> Add( wxBitmap( text_xpm ));
     imagelist-> Add( wxBitmap( radio_xpm ));
     imagelist-> Add( wxBitmap( gauge_xpm ));
-    m_notebook->SetImageList(imagelist);
+    m_book->SetImageList(imagelist);
 #elif defined(__WXMSW__)
     // load images from resources
     enum
@@ -600,12 +600,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
         wxBitmap bmp(s_iconNames[n]);
         if ( !bmp.Ok() || (imagelist->Add(bmp) == -1) )
         {
-            wxLogWarning(wxT("Couldn't load the image '%s' for the notebook page %d."),
+            wxLogWarning(wxT("Couldn't load the image '%s' for the book control page %d."),
                     s_iconNames[n], n);
         }
     }
 
-    m_notebook->SetImageList(imagelist);
+    m_book->SetImageList(imagelist);
 #else
 
     // No images for now
@@ -619,7 +619,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
 #endif
 
-    wxPanel *panel = new wxPanel(m_notebook);
+    wxPanel *panel = new wxPanel(m_book);
     m_listbox = new wxListBox( panel, ID_LISTBOX,
                                wxPoint(10,10), wxSize(120,70),
                                5, choices, wxLB_ALWAYS_SB );
@@ -658,10 +658,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxCheckBox( panel, ID_CHANGE_COLOUR, _T("&Toggle colour"),
                           wxPoint(110,170) );
     panel->SetCursor(wxCursor(wxCURSOR_HAND));
-    m_notebook->AddPage(panel, _T("wxListBox"), true, Image_List);
+    m_book->AddPage(panel, _T("wxListBox"), true, Image_List);
 
 #if wxUSE_CHOICE
-    panel = new wxPanel(m_notebook);
+    panel = new wxPanel(m_book);
     m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,wxDefaultCoord), 5, choices );
     m_choiceSorted = new wxChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,wxDefaultCoord),
                                    5, choices, wxCB_SORT );
@@ -679,10 +679,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_CHOICE_FONT, _T("Set &Italic font"), wxPoint(340,130), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_CHOICE_ENABLE, _T("&Disable"), wxPoint(20,130), wxSize(140,30) );
 
-    m_notebook->AddPage(panel, _T("wxChoice"), false, Image_Choice);
+    m_book->AddPage(panel, _T("wxChoice"), false, Image_Choice);
 #endif // wxUSE_CHOICE
 
-    panel = new wxPanel(m_notebook);
+    panel = new wxPanel(m_book);
     (void)new wxStaticBox( panel, wxID_ANY, _T("&Box around combobox"),
                            wxPoint(5, 5), wxSize(150, 100));
     m_combo = new MyComboBox( panel, ID_COMBO, _T("This"),
@@ -698,7 +698,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_COMBO_DELETE, _T("D&elete selected item"), wxPoint(180,130), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_FONT, _T("Set &Italic font"), wxPoint(340,130), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_COMBO_ENABLE, _T("&Disable"), wxPoint(20,130), wxSize(140,30) );
-    m_notebook->AddPage(panel, _T("wxComboBox"), false, Image_Combo);
+    m_book->AddPage(panel, _T("wxComboBox"), false, Image_Combo);
 
     wxString choices2[] =
     {
@@ -708,7 +708,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
         "Seventh", "Eighth", "Nineth", "Tenth" */
     };
 
-    panel = new wxPanel(m_notebook);
+    panel = new wxPanel(m_book);
     (void)new MyRadioBox( panel, ID_RADIOBOX, _T("&That"), wxPoint(10,160), wxDefaultSize, WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
     m_radio = new wxRadioBox( panel, ID_RADIOBOX, _T("T&his"), wxPoint(10,10), wxDefaultSize, WXSIZEOF(choices), choices, 1, wxRA_SPECIFY_COLS );
     m_radio->SetForegroundColour(*wxRED);
@@ -726,9 +726,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxRadioButton *rb = new wxRadioButton( panel, ID_RADIOBUTTON_1, _T("Radiobutton1"), wxPoint(210,170), wxDefaultSize, wxRB_GROUP );
     rb->SetValue( false );
     (void)new wxRadioButton( panel, ID_RADIOBUTTON_2, _T("&Radiobutton2"), wxPoint(340,170), wxDefaultSize );
-    m_notebook->AddPage(panel, _T("wxRadioBox"), false, Image_Radio);
+    m_book->AddPage(panel, _T("wxRadioBox"), false, Image_Radio);
 
-    panel = new wxPanel(m_notebook);
+    panel = new wxPanel(m_book);
     (void)new wxStaticBox( panel, wxID_ANY, _T("&wxGauge and wxSlider"), wxPoint(10,10), wxSize(222,130) );
     m_gauge = new wxGauge( panel, wxID_ANY, 200, wxPoint(18,50), wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
     m_gauge->SetBackgroundColour(*wxGREEN);
@@ -785,9 +785,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_spinctrl->SetValue(15);
 #endif // wxUSE_SPINCTRL
 
-    m_notebook->AddPage(panel, _T("wxGauge"), false, Image_Gauge);
+    m_book->AddPage(panel, _T("wxGauge"), false, Image_Gauge);
 
-    panel = new wxPanel(m_notebook);
+    panel = new wxPanel(m_book);
 
 #if !defined(__WXMOTIF__) // wxStaticBitmap not working under Motif yet.
     wxIcon icon = wxArtProvider::GetIcon(wxART_INFORMATION);
@@ -846,18 +846,18 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                wxALIGN_RIGHT /*| wxST_NO_AUTORESIZE*/);
     m_label->SetForegroundColour( *wxBLUE );
 
-    m_notebook->AddPage(panel, _T("wxBitmapXXX"));
+    m_book->AddPage(panel, _T("wxBitmapXXX"));
 
     // sizer
 
-    panel = new wxPanel(m_notebook);
+    panel = new wxPanel(m_book);
     panel->SetAutoLayout( true );
 
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
 
     wxStaticBoxSizer *csizer =
       new wxStaticBoxSizer (new wxStaticBox (panel, wxID_ANY, _T("Show Buttons")), wxHORIZONTAL );
-    
+
     wxCheckBox *check1, *check2, *check3, *check4, *check14, *checkBig;
     check1 = new wxCheckBox (panel, ID_SIZER_CHECK1, _T("1"));
     check1->SetValue (true);
@@ -877,13 +877,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     checkBig = new wxCheckBox (panel, ID_SIZER_CHECKBIG, _T("Big"));
     checkBig->SetValue (true);
     csizer->Add (checkBig);
-    
+
     sizer->Add (csizer);
 
     m_hsizer = new wxBoxSizer( wxHORIZONTAL );
 
     m_buttonSizer = new wxBoxSizer (wxVERTICAL);
-    
+
     m_sizerBtn1 = new wxButton(panel, wxID_ANY, _T("Test Button &1 (tab order 1)") );
     m_buttonSizer->Add( m_sizerBtn1, 0, wxALL, 10 );
     m_sizerBtn2 = new wxButton(panel, wxID_ANY, _T("Test Button &2 (tab order 3)") );
@@ -904,7 +904,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     panel->SetSizer( sizer );
 
-    m_notebook->AddPage(panel, _T("wxSizer"));
+    m_book->AddPage(panel, _T("wxSizer"));
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
@@ -913,11 +913,11 @@ void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
     int y = 0;
     GetClientSize( &x, &y );
 
-    if (m_notebook) m_notebook->SetSize( 2, 2, x-4, y*2/3-4 );
+    if (m_book) m_book->SetSize( 2, 2, x-4, y*2/3-4 );
     if (m_text) m_text->SetSize( 2, y*2/3+2, x-4, y/3-4 );
 }
 
-void MyPanel::OnPageChanging( wxNotebookEvent &event )
+void MyPanel::OnPageChanging( wxBookCtrlEvent &event )
 {
     int selOld = event.GetOldSelection();
     if ( selOld == 2 )
@@ -934,16 +934,16 @@ void MyPanel::OnPageChanging( wxNotebookEvent &event )
         }
     }
 
-    *m_text << _T("Notebook selection is being changed from ") << selOld
+    *m_text << _T("Book selection is being changed from ") << selOld
             << _T(" to ") << event.GetSelection()
-            << _T(" (current page from notebook is ")
-            << m_notebook->GetSelection() << _T(")\n");
+            << _T(" (current page from book is ")
+            << m_book->GetSelection() << _T(")\n");
 }
 
-void MyPanel::OnPageChanged( wxNotebookEvent &event )
+void MyPanel::OnPageChanged( wxBookCtrlEvent &event )
 {
-    *m_text << _T("Notebook selection is now ") << event.GetSelection()
-            << _T(" (from notebook: ") << m_notebook->GetSelection()
+    *m_text << _T("Book selection is now ") << event.GetSelection()
+            << _T(" (from book: ") << m_book->GetSelection()
             << _T(")\n");
 }
 
@@ -1418,13 +1418,13 @@ void MyPanel::OnUpdateShowProgress( wxUpdateUIEvent& event )
 void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
 {
     int max = m_spinbutton->GetValue();
-    
+
     if ( max <= 0 )
     {
         wxLogError(_T("You must set positive range!"));
         return;
     }
-    
+
     wxProgressDialog dialog(_T("Progress dialog example"),
                             _T("An informative message"),
                             max,    // range
@@ -1503,7 +1503,7 @@ MyPanel::~MyPanel()
     //wxLog::RemoveTraceMask(_T("focus"));
     delete wxLog::SetActiveTarget(m_logTargetOld);
 
-    delete m_notebook->GetImageList();
+    delete m_book->GetImageList();
 }
 
 //----------------------------------------------------------------------

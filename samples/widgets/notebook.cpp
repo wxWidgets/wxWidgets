@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_NOTEBOOK
+
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -44,7 +46,6 @@
 #include "wx/artprov.h"
 
 #include "widgets.h"
-#if 1
 #include "icons/notebook.xpm"
 
 // ----------------------------------------------------------------------------
@@ -77,11 +78,6 @@ enum Orient
     Orient_Right,
     Orient_Max
 };
-
-// old versions of wxWidgets don't define this style
-#ifndef wxNB_TOP
-    #define wxNB_TOP (0)
-#endif
 
 // ----------------------------------------------------------------------------
 // NotebookWidgetsPage
@@ -395,7 +391,7 @@ void NotebookWidgetsPage::CreateNotebook()
             m_notebook->AddPage(CreateNewPage(),
                                 old_note->GetPageText(n),
                                 false,
-																m_chkImages->GetValue() ?
+                                m_chkImages->GetValue() ?
                                 GetIconIndex() : -1);
         }
 
@@ -548,4 +544,4 @@ void NotebookWidgetsPage::OnPageChanged(wxNotebookEvent& event)
     event.Skip();
 }
 
-#endif
+#endif // wxUSE_NOTEBOOK

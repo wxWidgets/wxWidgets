@@ -43,7 +43,7 @@ class WXDLLEXPORT wxStaticLine;
 // wxListbook
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListbook : public wxBookCtrl
+class WXDLLEXPORT wxListbook : public wxBookCtrlBase
 {
 public:
     wxListbook()
@@ -129,12 +129,12 @@ private:
 // listbook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListbookEvent : public wxBookCtrlEvent
+class WXDLLEXPORT wxListbookEvent : public wxBookCtrlBaseEvent
 {
 public:
     wxListbookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                     int nSel = wxNOT_FOUND, int nOldSel = wxNOT_FOUND)
-        : wxBookCtrlEvent(commandType, id, nSel, nOldSel)
+        : wxBookCtrlBaseEvent(commandType, id, nSel, nOldSel)
     {
     }
 

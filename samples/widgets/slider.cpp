@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_SLIDER
+
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -44,7 +46,7 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
-#if wxUSE_SLIDER
+
 #include "icons/slider.xpm"
 
 // ----------------------------------------------------------------------------
@@ -87,7 +89,7 @@ enum
 class SliderWidgetsPage : public WidgetsPage
 {
 public:
-    SliderWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
+    SliderWidgetsPage(wxBookCtrl *book, wxImageList *imaglist);
     virtual ~SliderWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_slider; }
@@ -197,9 +199,9 @@ END_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(SliderWidgetsPage, _T("Slider"));
 
-SliderWidgetsPage::SliderWidgetsPage(wxNotebook *notebook,
-                                       wxImageList *imaglist)
-                  : WidgetsPage(notebook)
+SliderWidgetsPage::SliderWidgetsPage(wxBookCtrl *book,
+                                     wxImageList *imaglist)
+                  : WidgetsPage(book)
 {
     imaglist->Add(wxBitmap(slider_xpm));
 
@@ -600,5 +602,4 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
                  event.GetPosition());
 }
 
-#endif
-    // wxUSE_SLIDER
+#endif // wxUSE_SLIDER

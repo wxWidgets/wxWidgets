@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_RADIOBOX
+
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -39,7 +41,7 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
-#if 1
+
 #include "icons/radiobox.xpm"
 
 // ----------------------------------------------------------------------------
@@ -76,7 +78,7 @@ static const unsigned int DEFAULT_MAJOR_DIM = 3;
 class RadioWidgetsPage : public WidgetsPage
 {
 public:
-    RadioWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
+    RadioWidgetsPage(wxBookCtrl *book, wxImageList *imaglist);
     virtual ~RadioWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_radio; }
@@ -154,9 +156,9 @@ END_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(RadioWidgetsPage, _T("Radio"));
 
-RadioWidgetsPage::RadioWidgetsPage(wxNotebook *notebook,
-                                       wxImageList *imaglist)
-                  : WidgetsPage(notebook)
+RadioWidgetsPage::RadioWidgetsPage(wxBookCtrl *book,
+                                   wxImageList *imaglist)
+                  : WidgetsPage(book)
 {
     imaglist->Add(wxBitmap(radio_xpm));
 
@@ -455,4 +457,4 @@ void RadioWidgetsPage::OnUpdateUIReset(wxUpdateUIEvent& event)
     event.Enable(enable);
 }
 
-#endif
+#endif // wxUSE_RADIOBOX

@@ -76,7 +76,7 @@ enum
 class ListboxWidgetsPage : public WidgetsPage
 {
 public:
-    ListboxWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
+    ListboxWidgetsPage(wxBookCtrl *book, wxImageList *imaglist);
 
     virtual wxControl *GetWidget() const { return m_lbox; }
 
@@ -193,9 +193,9 @@ END_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, _T("Listbox"));
 
-ListboxWidgetsPage::ListboxWidgetsPage(wxNotebook *notebook,
+ListboxWidgetsPage::ListboxWidgetsPage(wxBookCtrl *book,
                                        wxImageList *imaglist)
-                  : WidgetsPage(notebook)
+                  : WidgetsPage(book)
 {
     imaglist->Add(wxBitmap(listbox_xpm));
 

@@ -77,7 +77,7 @@ enum
 class ButtonWidgetsPage : public WidgetsPage
 {
 public:
-    ButtonWidgetsPage(wxNotebook *notebook, wxImageList *imaglist);
+    ButtonWidgetsPage(wxBookCtrl *book, wxImageList *imaglist);
     virtual ~ButtonWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_button; }
@@ -139,9 +139,9 @@ END_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(ButtonWidgetsPage, _T("Button"));
 
-ButtonWidgetsPage::ButtonWidgetsPage(wxNotebook *notebook,
-                                       wxImageList *imaglist)
-                  : WidgetsPage(notebook)
+ButtonWidgetsPage::ButtonWidgetsPage(wxBookCtrl *book,
+                                     wxImageList *imaglist)
+                  : WidgetsPage(book)
 {
     imaglist->Add(wxBitmap(button_xpm));
 

@@ -1655,7 +1655,7 @@ IMPLEMENT_CLASS(wxNotebookSizer, wxBookCtrlSizer)
 
 #if wxUSE_BOOKCTRL
 
-wxBookCtrlSizer::wxBookCtrlSizer(wxBookCtrl *bookctrl)
+wxBookCtrlSizer::wxBookCtrlSizer(wxBookCtrlBase *bookctrl)
                : m_bookctrl(bookctrl)
 {
     wxASSERT_MSG( bookctrl, wxT("wxBookCtrlSizer needs a control") );

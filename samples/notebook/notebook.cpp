@@ -44,7 +44,7 @@ bool MyApp::OnInit()
     return true;
 }
 
-wxPanel *CreateUserCreatedPage(wxBookCtrl *parent)
+wxPanel *CreateUserCreatedPage(wxBookCtrlBase *parent)
 {
     wxPanel *panel = new wxPanel(parent);
 
@@ -54,7 +54,7 @@ wxPanel *CreateUserCreatedPage(wxBookCtrl *parent)
     return panel;
 }
 
-wxPanel *CreateRadioButtonsPage(wxBookCtrl *parent)
+wxPanel *CreateRadioButtonsPage(wxBookCtrlBase *parent)
 {
     wxPanel *panel = new wxPanel(parent);
 
@@ -79,7 +79,7 @@ wxPanel *CreateRadioButtonsPage(wxBookCtrl *parent)
     return panel;
 }
 
-wxPanel *CreateVetoPage(wxBookCtrl *parent)
+wxPanel *CreateVetoPage(wxBookCtrlBase *parent)
 {
     wxPanel *panel = new wxPanel(parent);
 
@@ -89,7 +89,7 @@ wxPanel *CreateVetoPage(wxBookCtrl *parent)
     return panel;
 }
 
-wxPanel *CreateBigButtonPage(wxBookCtrl *parent)
+wxPanel *CreateBigButtonPage(wxBookCtrlBase *parent)
 {
     wxPanel *panel = new wxPanel(parent);
 
@@ -103,7 +103,7 @@ wxPanel *CreateBigButtonPage(wxBookCtrl *parent)
 }
 
 
-wxPanel *CreateInsertPage(wxBookCtrl *parent)
+wxPanel *CreateInsertPage(wxBookCtrlBase *parent)
 {
     wxPanel *panel = new wxPanel(parent);
 
@@ -114,7 +114,7 @@ wxPanel *CreateInsertPage(wxBookCtrl *parent)
     return panel;
 }
 
-int GetIconIndex(wxBookCtrl* bookCtrl)
+int GetIconIndex(wxBookCtrlBase* bookCtrl)
 {
     if (bookCtrl && bookCtrl->GetImageList())
     {
@@ -128,7 +128,7 @@ int GetIconIndex(wxBookCtrl* bookCtrl)
     return -1;
 }
 
-void CreateInitialPages(wxBookCtrl *parent)
+void CreateInitialPages(wxBookCtrlBase *parent)
 {
     // Create and add some panels to the notebook
 
@@ -147,7 +147,7 @@ void CreateInitialPages(wxBookCtrl *parent)
     parent->SetSelection(1);
 }
 
-wxPanel *CreatePage(wxBookCtrl *parent, const wxString&pageName)
+wxPanel *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
 {
     if
     (
@@ -413,7 +413,7 @@ void MyFrame::RecreateBooks()
     ShowCurrentBook();
 }
 
-wxBookCtrl *MyFrame::GetCurrentBook()
+wxBookCtrlBase *MyFrame::GetCurrentBook()
 {
     switch (m_type)
     {
@@ -483,7 +483,7 @@ END_EVENT_TABLE()
 
 void MyFrame::OnType(wxCommandEvent& event)
 {
-    wxBookCtrl *currBook = GetCurrentBook();
+    wxBookCtrlBase *currBook = GetCurrentBook();
 
     m_type = event.GetId();
 
@@ -524,7 +524,7 @@ void MyFrame::OnAddPage(wxCommandEvent& WXUNUSED(event))
 {
     static unsigned s_pageAdded = 0;
 
-    wxBookCtrl *currBook = GetCurrentBook();
+    wxBookCtrlBase *currBook = GetCurrentBook();
 
     if ( currBook )
     {
@@ -543,7 +543,7 @@ void MyFrame::OnInsertPage(wxCommandEvent& WXUNUSED(event))
 {
     static unsigned s_pageIns = 0;
 
-    wxBookCtrl *currBook = GetCurrentBook();
+    wxBookCtrlBase *currBook = GetCurrentBook();
 
     if ( currBook )
     {
@@ -559,7 +559,7 @@ void MyFrame::OnInsertPage(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDeleteCurPage(wxCommandEvent& WXUNUSED(event))
 {
-    wxBookCtrl *currBook = GetCurrentBook();
+    wxBookCtrlBase *currBook = GetCurrentBook();
 
     if ( currBook )
     {
@@ -574,7 +574,7 @@ void MyFrame::OnDeleteCurPage(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDeleteLastPage(wxCommandEvent& WXUNUSED(event))
 {
-    wxBookCtrl *currBook = GetCurrentBook();
+    wxBookCtrlBase *currBook = GetCurrentBook();
 
     if ( currBook )
     {
@@ -589,7 +589,7 @@ void MyFrame::OnDeleteLastPage(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnNextPage(wxCommandEvent& WXUNUSED(event))
 {
-    wxBookCtrl *currBook = GetCurrentBook();
+    wxBookCtrlBase *currBook = GetCurrentBook();
 
     if ( currBook )
     {
@@ -601,9 +601,9 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
 {
     static int s_nPages = wxNOT_FOUND;
     static int s_nSel = wxNOT_FOUND;
-    static wxBookCtrl *s_currBook = NULL;
+    static wxBookCtrlBase *s_currBook = NULL;
 
-    wxBookCtrl *currBook = GetCurrentBook();
+    wxBookCtrlBase *currBook = GetCurrentBook();
 
     int nPages = currBook ? currBook->GetPageCount() : 0;
     int nSel = currBook ? currBook->GetSelection() : wxNOT_FOUND;
@@ -643,7 +643,7 @@ void MyFrame::OnBook(wxBookEvent& event)                                        
     else if (eventType == wxEVT_PAGE_CHANGING)                                             \
     {                                                                                      \
         int idx = event.GetOldSelection();                                                 \
-        wxBookCtrl *book = (wxBookCtrl *)event.GetEventObject();                           \
+        wxBookCtrlBase *book = (wxBookCtrlBase *)event.GetEventObject();                   \
         if ( idx != wxNOT_FOUND && book && book->GetPageText(idx) == VETO_PAGE_NAME )      \
         {                                                                                  \
             if                                                                             \

@@ -28,7 +28,7 @@ class WXDLLEXPORT wxChoice;
 // wxChoicebook
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxChoicebook : public wxBookCtrl
+class WXDLLEXPORT wxChoicebook : public wxBookCtrlBase
 {
 public:
     wxChoicebook()
@@ -107,12 +107,12 @@ private:
 // choicebook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxChoicebookEvent : public wxBookCtrlEvent
+class WXDLLEXPORT wxChoicebookEvent : public wxBookCtrlBaseEvent
 {
 public:
     wxChoicebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                       int nSel = -1, int nOldSel = -1)
-        : wxBookCtrlEvent(commandType, id, nSel, nOldSel)
+        : wxBookCtrlBaseEvent(commandType, id, nSel, nOldSel)
     {
     }
 

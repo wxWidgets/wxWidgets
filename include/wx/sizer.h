@@ -644,7 +644,7 @@ private:
 
 #if WXWIN_COMPATIBILITY_2_4
 // NB: wxBookCtrlSizer and wxNotebookSizer are deprecated, they
-//     don't do anything. wxBookCtrl::DoGetBestSize does the job now.
+//     don't do anything. wxBookCtrlBase::DoGetBestSize does the job now.
 
 // ----------------------------------------------------------------------------
 // wxBookCtrlSizer
@@ -654,14 +654,14 @@ private:
 
 // this sizer works with wxNotebook/wxListbook/... and sizes the control to
 // fit its pages
-class WXDLLEXPORT wxBookCtrl;
+class WXDLLEXPORT wxBookCtrlBase;
 
 class WXDLLEXPORT wxBookCtrlSizer : public wxSizer
 {
 public:
-    wxDEPRECATED( wxBookCtrlSizer(wxBookCtrl *bookctrl) );
+    wxDEPRECATED( wxBookCtrlSizer(wxBookCtrlBase *bookctrl) );
 
-    wxBookCtrl *GetControl() const { return m_bookctrl; }
+    wxBookCtrlBase *GetControl() const { return m_bookctrl; }
 
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
@@ -671,7 +671,7 @@ protected:
     // and still have warning-free build of the library itself:
     wxBookCtrlSizer() {}
 
-    wxBookCtrl *m_bookctrl;
+    wxBookCtrlBase *m_bookctrl;
 
 private:
     DECLARE_CLASS(wxBookCtrlSizer)
@@ -681,7 +681,7 @@ private:
 
 #if wxUSE_NOTEBOOK
 
-// before wxBookCtrl we only had wxNotebookSizer, keep it for backwards
+// before wxBookCtrlBase we only had wxNotebookSizer, keep it for backwards
 // compatibility
 class WXDLLEXPORT wxNotebook;
 

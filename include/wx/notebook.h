@@ -47,7 +47,7 @@ typedef wxWindow wxNotebookPage;  // so far, any window can be a page
 // wxNotebookBase: define wxNotebook interface
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNotebookBase : public wxBookCtrl
+class WXDLLEXPORT wxNotebookBase : public wxBookCtrlBase
 {
 public:
     // ctors
@@ -62,8 +62,8 @@ public:
                    long style = 0,
                    const wxString& name = wxNOTEBOOK_NAME) ;
 
-    // wxNotebook-specific additions to wxBookCtrl interface
-    // -----------------------------------------------------
+    // wxNotebook-specific additions to wxBookCtrlBase interface
+    // ---------------------------------------------------------
 
     // get the number of rows for a control with wxNB_MULTILINE style (not all
     // versions support it - they will always return 1 then)
@@ -95,12 +95,12 @@ protected:
 // notebook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNotebookEvent : public wxBookCtrlEvent
+class WXDLLEXPORT wxNotebookEvent : public wxBookCtrlBaseEvent
 {
 public:
     wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int winid = 0,
                     int nSel = -1, int nOldSel = -1)
-        : wxBookCtrlEvent(commandType, winid, nSel, nOldSel)
+        : wxBookCtrlBaseEvent(commandType, winid, nSel, nOldSel)
     {
     }
 
