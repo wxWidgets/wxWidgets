@@ -210,7 +210,8 @@ public :
 	virtual bool						MacCanFocus() const { return true ; }
 
 	virtual bool						MacDispatchMouseEvent(wxMouseEvent& event ) ;
-
+	// this should not be overriden in classes above wxWindowMac because it is called from its destructor via DeleteChildren
+  virtual void            RemoveChild( wxWindowBase *child );
 	virtual void 						MacPaintBorders( int left , int top ) ;
 	WXWindow						    MacGetRootWindow() const  ;
 	wxTopLevelWindowMac*                MacGetTopLevelWindow() const ;
