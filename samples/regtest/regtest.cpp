@@ -492,7 +492,7 @@ void RegTreeCtrl::OnMenuTest()
   long lId = GetSelection();
   TreeNode *pNode = (TreeNode *)GetItemData(lId);
 
-  wxCHECK( pNode != NULL );
+  wxCHECK_RET( pNode != NULL, "tree item without data?" );
 
   if ( pNode->IsRoot() ) {
     wxLogError("Can't create a subkey under the root key.");
@@ -736,7 +736,7 @@ void RegTreeCtrl::DeleteSelected()
   TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent),
            *pParent  = (TreeNode *)GetItemData(lParent);
 
-  wxCHECK ( pCurrent && pParent );
+  wxCHECK_RET( pCurrent && pParent, "either node or parent without data?" );
 
   if ( pParent->IsRoot() ) {
     wxLogError("Can't delete standard key.");
@@ -773,7 +773,7 @@ void RegTreeCtrl::CreateNewKey(const wxString& strName)
   long lCurrent = GetSelection();
   TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
-  wxCHECK( pCurrent != NULL );
+  wxCHECK_RET( pCurrent != NULL, "node without data?" );
   
   wxASSERT( pCurrent->IsKey() );  // check must have been done before
 
@@ -792,7 +792,7 @@ void RegTreeCtrl::CreateNewTextValue(const wxString& strName)
   long lCurrent = GetSelection();
   TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
-  wxCHECK( pCurrent != NULL );
+  wxCHECK_RET( pCurrent != NULL, "node without data?" );
   
   wxASSERT( pCurrent->IsKey() );  // check must have been done before
 
@@ -810,7 +810,7 @@ void RegTreeCtrl::CreateNewBinaryValue(const wxString& strName)
   long lCurrent = GetSelection();
   TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
-  wxCHECK( pCurrent != NULL );
+  wxCHECK_RET( pCurrent != NULL, "node without data?" );
   
   wxASSERT( pCurrent->IsKey() );  // check must have been done before
 
@@ -828,7 +828,7 @@ bool RegTreeCtrl::IsKeySelected() const
   long lCurrent = GetSelection();
   TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
-  wxCHECK_RET( pCurrent != NULL, false );
+  wxCHECK( pCurrent != NULL, false );
 
   return pCurrent->IsKey();
 }
