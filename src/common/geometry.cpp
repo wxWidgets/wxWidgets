@@ -10,9 +10,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma interface "geometry.h"
+    #pragma implementation "geometry.cpp"
 #endif
-
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
