@@ -50,60 +50,60 @@
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxListBoxStyle )
 
-WX_BEGIN_FLAGS( wxListBoxStyle )
+wxBEGIN_FLAGS( wxListBoxStyle )
     // new style border flags, we put them first to
     // use them for streaming out
-    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
-    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
-    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
-    WX_FLAGS_MEMBER(wxBORDER_RAISED)
-    WX_FLAGS_MEMBER(wxBORDER_STATIC)
-    WX_FLAGS_MEMBER(wxBORDER_NONE)
+    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+    wxFLAGS_MEMBER(wxBORDER_RAISED)
+    wxFLAGS_MEMBER(wxBORDER_STATIC)
+    wxFLAGS_MEMBER(wxBORDER_NONE)
     
     // old style border flags
-    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
-    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
-    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
-    WX_FLAGS_MEMBER(wxRAISED_BORDER)
-    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
-    WX_FLAGS_MEMBER(wxNO_BORDER)
+    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+    wxFLAGS_MEMBER(wxRAISED_BORDER)
+    wxFLAGS_MEMBER(wxSTATIC_BORDER)
+    wxFLAGS_MEMBER(wxNO_BORDER)
 
     // standard window styles
-    WX_FLAGS_MEMBER(wxTAB_TRAVERSAL)
-    WX_FLAGS_MEMBER(wxCLIP_CHILDREN)
-    WX_FLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    WX_FLAGS_MEMBER(wxWANTS_CHARS)
-    WX_FLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
-    WX_FLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    WX_FLAGS_MEMBER(wxVSCROLL)
-    WX_FLAGS_MEMBER(wxHSCROLL)
+    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+    wxFLAGS_MEMBER(wxWANTS_CHARS)
+    wxFLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
+    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+    wxFLAGS_MEMBER(wxVSCROLL)
+    wxFLAGS_MEMBER(wxHSCROLL)
 
-    WX_FLAGS_MEMBER(wxLB_SINGLE)
-    WX_FLAGS_MEMBER(wxLB_MULTIPLE)
-    WX_FLAGS_MEMBER(wxLB_EXTENDED)
-    WX_FLAGS_MEMBER(wxLB_HSCROLL)
-    WX_FLAGS_MEMBER(wxLB_ALWAYS_SB)
-    WX_FLAGS_MEMBER(wxLB_NEEDED_SB)
-    WX_FLAGS_MEMBER(wxLB_SORT)
+    wxFLAGS_MEMBER(wxLB_SINGLE)
+    wxFLAGS_MEMBER(wxLB_MULTIPLE)
+    wxFLAGS_MEMBER(wxLB_EXTENDED)
+    wxFLAGS_MEMBER(wxLB_HSCROLL)
+    wxFLAGS_MEMBER(wxLB_ALWAYS_SB)
+    wxFLAGS_MEMBER(wxLB_NEEDED_SB)
+    wxFLAGS_MEMBER(wxLB_SORT)
 
-WX_END_FLAGS( wxListBoxStyle )
+wxEND_FLAGS( wxListBoxStyle )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxListBox, wxControl,"wx/listbox.h")
 
-WX_BEGIN_PROPERTIES_TABLE(wxListBox)
-	WX_EVENT_PROPERTY( Select , wxEVT_COMMAND_LISTBOX_SELECTED , wxCommandEvent )
-	WX_EVENT_PROPERTY( DoubleClick , wxEVT_COMMAND_LISTBOX_DOUBLECLICKED , wxCommandEvent )
+wxBEGIN_PROPERTIES_TABLE(wxListBox)
+	wxEVENT_PROPERTY( Select , wxEVT_COMMAND_LISTBOX_SELECTED , wxCommandEvent )
+	wxEVENT_PROPERTY( DoubleClick , wxEVT_COMMAND_LISTBOX_DOUBLECLICKED , wxCommandEvent )
 
-    WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	WX_PROPERTY( Selection ,int, SetSelection, GetSelection,, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    WX_PROPERTY_FLAGS( WindowStyle , wxListBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-WX_END_PROPERTIES_TABLE()
+    wxPROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	wxPROPERTY( Selection ,int, SetSelection, GetSelection,, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY_FLAGS( WindowStyle , wxListBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+wxEND_PROPERTIES_TABLE()
 
-WX_BEGIN_HANDLERS_TABLE(wxListBox)
-WX_END_HANDLERS_TABLE()
+wxBEGIN_HANDLERS_TABLE(wxListBox)
+wxEND_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_4( wxListBox , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
+wxCONSTRUCTOR_4( wxListBox , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 #endif

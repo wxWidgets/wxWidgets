@@ -43,51 +43,51 @@
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxChoiceStyle )
 
-WX_BEGIN_FLAGS( wxChoiceStyle )
+wxBEGIN_FLAGS( wxChoiceStyle )
     // new style border flags, we put them first to
     // use them for streaming out
-    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
-    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
-    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
-    WX_FLAGS_MEMBER(wxBORDER_RAISED)
-    WX_FLAGS_MEMBER(wxBORDER_STATIC)
-    WX_FLAGS_MEMBER(wxBORDER_NONE)
+    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+    wxFLAGS_MEMBER(wxBORDER_RAISED)
+    wxFLAGS_MEMBER(wxBORDER_STATIC)
+    wxFLAGS_MEMBER(wxBORDER_NONE)
     
     // old style border flags
-    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
-    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
-    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
-    WX_FLAGS_MEMBER(wxRAISED_BORDER)
-    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
-    WX_FLAGS_MEMBER(wxNO_BORDER)
+    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+    wxFLAGS_MEMBER(wxRAISED_BORDER)
+    wxFLAGS_MEMBER(wxSTATIC_BORDER)
+    wxFLAGS_MEMBER(wxNO_BORDER)
 
     // standard window styles
-    WX_FLAGS_MEMBER(wxTAB_TRAVERSAL)
-    WX_FLAGS_MEMBER(wxCLIP_CHILDREN)
-    WX_FLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    WX_FLAGS_MEMBER(wxWANTS_CHARS)
-    WX_FLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
-    WX_FLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    WX_FLAGS_MEMBER(wxVSCROLL)
-    WX_FLAGS_MEMBER(wxHSCROLL)
+    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+    wxFLAGS_MEMBER(wxWANTS_CHARS)
+    wxFLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
+    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+    wxFLAGS_MEMBER(wxVSCROLL)
+    wxFLAGS_MEMBER(wxHSCROLL)
 
-WX_END_FLAGS( wxChoiceStyle )
+wxEND_FLAGS( wxChoiceStyle )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxChoice, wxControl,"wx/choice.h")
 
-WX_BEGIN_PROPERTIES_TABLE(wxChoice)
-	WX_EVENT_PROPERTY( Select , wxEVT_COMMAND_CHOICE_SELECTED , wxCommandEvent )
+wxBEGIN_PROPERTIES_TABLE(wxChoice)
+	wxEVENT_PROPERTY( Select , wxEVT_COMMAND_CHOICE_SELECTED , wxCommandEvent )
 
-    WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	WX_PROPERTY( Selection ,int, SetSelection, GetSelection, , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    WX_PROPERTY_FLAGS( WindowStyle , wxChoiceStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-WX_END_PROPERTIES_TABLE()
+    wxPROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	wxPROPERTY( Selection ,int, SetSelection, GetSelection, , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY_FLAGS( WindowStyle , wxChoiceStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+wxEND_PROPERTIES_TABLE()
 
-WX_BEGIN_HANDLERS_TABLE(wxChoice)
-WX_END_HANDLERS_TABLE()
+wxBEGIN_HANDLERS_TABLE(wxChoice)
+wxEND_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_4( wxChoice , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
+wxCONSTRUCTOR_4( wxChoice , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 #endif

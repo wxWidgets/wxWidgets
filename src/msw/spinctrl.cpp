@@ -53,64 +53,64 @@
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxSpinCtrlStyle )
 
-WX_BEGIN_FLAGS( wxSpinCtrlStyle )
+wxBEGIN_FLAGS( wxSpinCtrlStyle )
     // new style border flags, we put them first to
     // use them for streaming out
-    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
-    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
-    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
-    WX_FLAGS_MEMBER(wxBORDER_RAISED)
-    WX_FLAGS_MEMBER(wxBORDER_STATIC)
-    WX_FLAGS_MEMBER(wxBORDER_NONE)
+    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+    wxFLAGS_MEMBER(wxBORDER_RAISED)
+    wxFLAGS_MEMBER(wxBORDER_STATIC)
+    wxFLAGS_MEMBER(wxBORDER_NONE)
     
     // old style border flags
-    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
-    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
-    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
-    WX_FLAGS_MEMBER(wxRAISED_BORDER)
-    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
-    WX_FLAGS_MEMBER(wxNO_BORDER)
+    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+    wxFLAGS_MEMBER(wxRAISED_BORDER)
+    wxFLAGS_MEMBER(wxSTATIC_BORDER)
+    wxFLAGS_MEMBER(wxNO_BORDER)
 
     // standard window styles
-    WX_FLAGS_MEMBER(wxTAB_TRAVERSAL)
-    WX_FLAGS_MEMBER(wxCLIP_CHILDREN)
-    WX_FLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    WX_FLAGS_MEMBER(wxWANTS_CHARS)
-    WX_FLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
-    WX_FLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    WX_FLAGS_MEMBER(wxVSCROLL)
-    WX_FLAGS_MEMBER(wxHSCROLL)
+    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+    wxFLAGS_MEMBER(wxWANTS_CHARS)
+    wxFLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
+    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+    wxFLAGS_MEMBER(wxVSCROLL)
+    wxFLAGS_MEMBER(wxHSCROLL)
 
-    WX_FLAGS_MEMBER(wxSP_HORIZONTAL)
-    WX_FLAGS_MEMBER(wxSP_VERTICAL)
-    WX_FLAGS_MEMBER(wxSP_ARROW_KEYS)
-    WX_FLAGS_MEMBER(wxSP_WRAP)
+    wxFLAGS_MEMBER(wxSP_HORIZONTAL)
+    wxFLAGS_MEMBER(wxSP_VERTICAL)
+    wxFLAGS_MEMBER(wxSP_ARROW_KEYS)
+    wxFLAGS_MEMBER(wxSP_WRAP)
 
-WX_END_FLAGS( wxSpinCtrlStyle )
+wxEND_FLAGS( wxSpinCtrlStyle )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl,"wx/spinbut.h")
 
-WX_BEGIN_PROPERTIES_TABLE(wxSpinCtrl)
-    WX_EVENT_RANGE_PROPERTY( Spin , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxSpinEvent )
-    WX_EVENT_PROPERTY( Updated , wxEVT_COMMAND_SPINCTRL_UPDATED , wxCommandEvent )
-    WX_EVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent ) 
-    WX_EVENT_PROPERTY( TextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
+wxBEGIN_PROPERTIES_TABLE(wxSpinCtrl)
+    wxEVENT_RANGE_PROPERTY( Spin , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxSpinEvent )
+    wxEVENT_PROPERTY( Updated , wxEVT_COMMAND_SPINCTRL_UPDATED , wxCommandEvent )
+    wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent ) 
+    wxEVENT_PROPERTY( TextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
 
-    WX_PROPERTY( ValueString , wxString , SetValue , GetValue , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) ;
-	WX_PROPERTY( Value , int , SetValue, GetValue, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	WX_PROPERTY( Min , int , SetMin, GetMin, 0, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	WX_PROPERTY( Max , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    WX_PROPERTY_FLAGS( WindowStyle , wxSpinCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( ValueString , wxString , SetValue , GetValue , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) ;
+	wxPROPERTY( Value , int , SetValue, GetValue, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	wxPROPERTY( Min , int , SetMin, GetMin, 0, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	wxPROPERTY( Max , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY_FLAGS( WindowStyle , wxSpinCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 /*
 	TODO PROPERTIES
 		style wxSP_ARROW_KEYS
 */
-WX_END_PROPERTIES_TABLE()
+wxEND_PROPERTIES_TABLE()
 
-WX_BEGIN_HANDLERS_TABLE(wxSpinCtrl)
-WX_END_HANDLERS_TABLE()
+wxBEGIN_HANDLERS_TABLE(wxSpinCtrl)
+wxEND_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_6( wxSpinCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , ValueString , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
+wxCONSTRUCTOR_6( wxSpinCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , ValueString , wxPoint , Position , wxSize , Size , long , WindowStyle ) 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
 #endif

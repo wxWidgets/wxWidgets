@@ -82,66 +82,66 @@ END_EVENT_TABLE()
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxFrameStyle )
 
-WX_BEGIN_FLAGS( wxFrameStyle )
+wxBEGIN_FLAGS( wxFrameStyle )
     // new style border flags, we put them first to
     // use them for streaming out
-    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
-    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
-    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
-    WX_FLAGS_MEMBER(wxBORDER_RAISED)
-    WX_FLAGS_MEMBER(wxBORDER_STATIC)
-    WX_FLAGS_MEMBER(wxBORDER_NONE)
+    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+    wxFLAGS_MEMBER(wxBORDER_RAISED)
+    wxFLAGS_MEMBER(wxBORDER_STATIC)
+    wxFLAGS_MEMBER(wxBORDER_NONE)
     
     // old style border flags
-    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
-    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
-    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
-    WX_FLAGS_MEMBER(wxRAISED_BORDER)
-    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
-    WX_FLAGS_MEMBER(wxNO_BORDER)
+    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+    wxFLAGS_MEMBER(wxRAISED_BORDER)
+    wxFLAGS_MEMBER(wxSTATIC_BORDER)
+    wxFLAGS_MEMBER(wxNO_BORDER)
 
     // standard window styles
-    WX_FLAGS_MEMBER(wxTAB_TRAVERSAL)
-    WX_FLAGS_MEMBER(wxCLIP_CHILDREN)
-    WX_FLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    WX_FLAGS_MEMBER(wxWANTS_CHARS)
-    WX_FLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
-    WX_FLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    WX_FLAGS_MEMBER(wxVSCROLL)
-    WX_FLAGS_MEMBER(wxHSCROLL)
+    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+    wxFLAGS_MEMBER(wxWANTS_CHARS)
+    wxFLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
+    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+    wxFLAGS_MEMBER(wxVSCROLL)
+    wxFLAGS_MEMBER(wxHSCROLL)
 
     // frame styles
-    WX_FLAGS_MEMBER(wxSTAY_ON_TOP)
-    WX_FLAGS_MEMBER(wxCAPTION)
-    WX_FLAGS_MEMBER(wxTHICK_FRAME)
-    WX_FLAGS_MEMBER(wxSYSTEM_MENU)
-    WX_FLAGS_MEMBER(wxRESIZE_BORDER)
-    WX_FLAGS_MEMBER(wxRESIZE_BOX)
-    WX_FLAGS_MEMBER(wxCLOSE_BOX)
-    WX_FLAGS_MEMBER(wxMAXIMIZE_BOX)
-    WX_FLAGS_MEMBER(wxMINIMIZE_BOX)
+    wxFLAGS_MEMBER(wxSTAY_ON_TOP)
+    wxFLAGS_MEMBER(wxCAPTION)
+    wxFLAGS_MEMBER(wxTHICK_FRAME)
+    wxFLAGS_MEMBER(wxSYSTEM_MENU)
+    wxFLAGS_MEMBER(wxRESIZE_BORDER)
+    wxFLAGS_MEMBER(wxRESIZE_BOX)
+    wxFLAGS_MEMBER(wxCLOSE_BOX)
+    wxFLAGS_MEMBER(wxMAXIMIZE_BOX)
+    wxFLAGS_MEMBER(wxMINIMIZE_BOX)
 
-    WX_FLAGS_MEMBER(wxFRAME_TOOL_WINDOW)
-    WX_FLAGS_MEMBER(wxFRAME_FLOAT_ON_PARENT)
+    wxFLAGS_MEMBER(wxFRAME_TOOL_WINDOW)
+    wxFLAGS_MEMBER(wxFRAME_FLOAT_ON_PARENT)
 
-    WX_FLAGS_MEMBER(wxFRAME_SHAPED)
+    wxFLAGS_MEMBER(wxFRAME_SHAPED)
 
-WX_END_FLAGS( wxFrameStyle )
+wxEND_FLAGS( wxFrameStyle )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow,"wx/frame.h")
 
-WX_BEGIN_PROPERTIES_TABLE(wxFrame)
-	WX_EVENT_PROPERTY( Menu , wxEVT_COMMAND_MENU_SELECTED , wxCommandEvent)
+wxBEGIN_PROPERTIES_TABLE(wxFrame)
+	wxEVENT_PROPERTY( Menu , wxEVT_COMMAND_MENU_SELECTED , wxCommandEvent)
 
-    WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    WX_PROPERTY_FLAGS( WindowStyle , wxFrameStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-    WX_PROPERTY( MenuBar , wxMenuBar * , SetMenuBar , GetMenuBar , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-WX_END_PROPERTIES_TABLE()
+    wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY_FLAGS( WindowStyle , wxFrameStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxPROPERTY( MenuBar , wxMenuBar * , SetMenuBar , GetMenuBar , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+wxEND_PROPERTIES_TABLE()
 
-WX_BEGIN_HANDLERS_TABLE(wxFrame)
-WX_END_HANDLERS_TABLE()
+wxBEGIN_HANDLERS_TABLE(wxFrame)
+wxEND_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_6( wxFrame , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle) 
+wxCONSTRUCTOR_6( wxFrame , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle) 
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)

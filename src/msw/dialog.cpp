@@ -71,55 +71,55 @@ static wxWindowList wxModalDialogs;
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxDialogStyle )
 
-WX_BEGIN_FLAGS( wxDialogStyle )
+wxBEGIN_FLAGS( wxDialogStyle )
     // new style border flags, we put them first to
     // use them for streaming out
-    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
-    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
-    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
-    WX_FLAGS_MEMBER(wxBORDER_RAISED)
-    WX_FLAGS_MEMBER(wxBORDER_STATIC)
-    WX_FLAGS_MEMBER(wxBORDER_NONE)
+    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+    wxFLAGS_MEMBER(wxBORDER_RAISED)
+    wxFLAGS_MEMBER(wxBORDER_STATIC)
+    wxFLAGS_MEMBER(wxBORDER_NONE)
     
     // old style border flags
-    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
-    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
-    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
-    WX_FLAGS_MEMBER(wxRAISED_BORDER)
-    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
-    WX_FLAGS_MEMBER(wxNO_BORDER)
+    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+    wxFLAGS_MEMBER(wxRAISED_BORDER)
+    wxFLAGS_MEMBER(wxSTATIC_BORDER)
+    wxFLAGS_MEMBER(wxNO_BORDER)
 
     // standard window styles
-    WX_FLAGS_MEMBER(wxTAB_TRAVERSAL)
-    WX_FLAGS_MEMBER(wxCLIP_CHILDREN)
+    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
 
     // dialog styles
-    WX_FLAGS_MEMBER(wxDIALOG_MODAL)
-    WX_FLAGS_MEMBER(wxDIALOG_MODELESS)
-    WX_FLAGS_MEMBER(wxNO_3D)
-    WX_FLAGS_MEMBER(wxWS_EX_VALIDATE_RECURSIVELY)
-    WX_FLAGS_MEMBER(wxSTAY_ON_TOP)
-    WX_FLAGS_MEMBER(wxCAPTION)
-    WX_FLAGS_MEMBER(wxTHICK_FRAME)
-    WX_FLAGS_MEMBER(wxSYSTEM_MENU)
-    WX_FLAGS_MEMBER(wxRESIZE_BORDER)
-    WX_FLAGS_MEMBER(wxRESIZE_BOX)
-    WX_FLAGS_MEMBER(wxCLOSE_BOX)
-    WX_FLAGS_MEMBER(wxMAXIMIZE_BOX)
-    WX_FLAGS_MEMBER(wxMINIMIZE_BOX)
-WX_END_FLAGS( wxDialogStyle )
+    wxFLAGS_MEMBER(wxDIALOG_MODAL)
+    wxFLAGS_MEMBER(wxDIALOG_MODELESS)
+    wxFLAGS_MEMBER(wxNO_3D)
+    wxFLAGS_MEMBER(wxWS_EX_VALIDATE_RECURSIVELY)
+    wxFLAGS_MEMBER(wxSTAY_ON_TOP)
+    wxFLAGS_MEMBER(wxCAPTION)
+    wxFLAGS_MEMBER(wxTHICK_FRAME)
+    wxFLAGS_MEMBER(wxSYSTEM_MENU)
+    wxFLAGS_MEMBER(wxRESIZE_BORDER)
+    wxFLAGS_MEMBER(wxRESIZE_BOX)
+    wxFLAGS_MEMBER(wxCLOSE_BOX)
+    wxFLAGS_MEMBER(wxMAXIMIZE_BOX)
+    wxFLAGS_MEMBER(wxMINIMIZE_BOX)
+wxEND_FLAGS( wxDialogStyle )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxDialog, wxTopLevelWindow,"wx/dialog.h")
 
-WX_BEGIN_PROPERTIES_TABLE(wxDialog)
-    WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-    WX_PROPERTY_FLAGS( WindowStyle , wxDialogStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
-WX_END_PROPERTIES_TABLE()
+wxBEGIN_PROPERTIES_TABLE(wxDialog)
+    wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxString() , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY_FLAGS( WindowStyle , wxDialogStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+wxEND_PROPERTIES_TABLE()
 
-WX_BEGIN_HANDLERS_TABLE(wxDialog)
-WX_END_HANDLERS_TABLE()
+wxBEGIN_HANDLERS_TABLE(wxDialog)
+wxEND_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_6( wxDialog , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle) 
+wxCONSTRUCTOR_6( wxDialog , wxWindow* , Parent , wxWindowID , Id , wxString , Title , wxPoint , Position , wxSize , Size , long , WindowStyle) 
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)

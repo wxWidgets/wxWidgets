@@ -91,31 +91,31 @@ bool wxMenuItemStreamingCallback( const wxObject *object, wxWriter * , wxPersist
     return true ;
 }
 
-WX_BEGIN_ENUM( wxItemKind )
-    WX_ENUM_MEMBER( wxITEM_SEPARATOR ) 
-    WX_ENUM_MEMBER( wxITEM_NORMAL ) 
-    WX_ENUM_MEMBER( wxITEM_CHECK ) 
-    WX_ENUM_MEMBER( wxITEM_RADIO ) 
-WX_END_ENUM( wxItemKind )
+wxBEGIN_ENUM( wxItemKind )
+    wxENUM_MEMBER( wxITEM_SEPARATOR ) 
+    wxENUM_MEMBER( wxITEM_NORMAL ) 
+    wxENUM_MEMBER( wxITEM_CHECK ) 
+    wxENUM_MEMBER( wxITEM_RADIO ) 
+wxEND_ENUM( wxItemKind )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuItem, wxObject,"wx/menuitem.h",wxMenuItemStreamingCallback)
 
-WX_BEGIN_PROPERTIES_TABLE(wxMenuItem)
-	WX_PROPERTY( Parent,wxMenu*, SetMenu, GetMenu, , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	WX_PROPERTY( Id,int, SetId, GetId, , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    WX_PROPERTY( Text, wxString , SetText, GetText, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    WX_PROPERTY( Help, wxString , SetHelp, GetHelp, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-    WX_READONLY_PROPERTY( Kind, wxItemKind , GetKind , , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	WX_PROPERTY( SubMenu,wxMenu*, SetSubMenu, GetSubMenu, , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	WX_PROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	WX_PROPERTY( Checked , bool , Check , IsChecked , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	WX_PROPERTY( Checkable , bool , SetCheckable , IsCheckable , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-WX_END_PROPERTIES_TABLE()
+wxBEGIN_PROPERTIES_TABLE(wxMenuItem)
+	wxPROPERTY( Parent,wxMenu*, SetMenu, GetMenu, , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	wxPROPERTY( Id,int, SetId, GetId, , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY( Text, wxString , SetText, GetText, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY( Help, wxString , SetHelp, GetHelp, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxREADONLY_PROPERTY( Kind, wxItemKind , GetKind , , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	wxPROPERTY( SubMenu,wxMenu*, SetSubMenu, GetSubMenu, , 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	wxPROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	wxPROPERTY( Checked , bool , Check , IsChecked , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	wxPROPERTY( Checkable , bool , SetCheckable , IsCheckable , wxxVariant((bool)false) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+wxEND_PROPERTIES_TABLE()
 
-WX_BEGIN_HANDLERS_TABLE(wxMenuItem)
-WX_END_HANDLERS_TABLE()
+wxBEGIN_HANDLERS_TABLE(wxMenuItem)
+wxEND_HANDLERS_TABLE()
 
-WX_DIRECT_CONSTRUCTOR_6( wxMenuItem , wxMenu* , Parent , int , Id , wxString , Text , wxString , Help , wxItemKind , Kind , wxMenu* , SubMenu  )
+wxDIRECT_CONSTRUCTOR_6( wxMenuItem , wxMenu* , Parent , int , Id , wxString , Text , wxString , Help , wxItemKind , Kind , wxMenu* , SubMenu  )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 #endif
