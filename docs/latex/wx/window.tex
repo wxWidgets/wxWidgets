@@ -1,15 +1,26 @@
 \section{\class{wxWindow}}\label{wxwindow}
 
-wxWindow is the base class for all windows. Any children of the window will be deleted
-automatically by the destructor before the window itself is deleted.
+wxWindow is the base class for all windows and represents any visible objecto n
+screen. All controls, top level windows and so on are windows. Sizers and
+device contexts are not, however, as they don't appear on screen themselves.
 
-%Please note that we documented a number of handler functions (OnChar(), OnMouse() etc.) in this
-%help text. These must not be called by a user program and are documented only for illustration.
-%On several platforms, only a few of these handlers are actually written (they are not always
-%needed) and if you are uncertain on how to add a certain behaviour to a window class, intercept
-%the respective event as usual and call \helpref{wxEvent::Skip}{wxeventskip} so that the native
-%platform can implement its native behaviour or just ignore the event if nothing needs to be
-%done.
+Please note that all children of the window will be deleted automatically by
+the destructor before the window itself is deleted which means that you don't
+have to worry about deleting them manually. Please see the \helpref{window
+deletion overview}{windowdeletionoverview} for more information.
+
+Also note that in this, and many others, wxWindows classes some 
+\texttt{GetXXX()} methods may be overloaded (as, for example, 
+\helpref{GetSize}{wxwindowgetsize} or 
+\helpref{GetClientSize}{wxwindowgetclientsize}). In this case, the overloads
+are non-virtual because having multiple virtual functions with the same name
+results in a virtual function name hiding at the derived class level (in
+English, this means that the derived class has to override all overloaded
+variants if it overrides any of them). To allow overriding them in the derived
+class, wxWindows uses a unique protected virtual \texttt{DoGetXXX()} method
+and all \texttt{GetXXX()} ones are forwarded to it, so overriding the former
+changes the behaviour of the latter.
+
 
 \wxheading{Derived from}
 
@@ -682,7 +693,7 @@ Returns the background colour of the window.
 
 \membersection{wxWindow::GetBestSize}\label{wxwindowgetbestsize}
 
-\constfunc{virtual wxSize}{GetBestSize}{\void}
+\constfunc{wxSize}{GetBestSize}{\void}
 
 This functions returns the best acceptable minimal size for the window. For
 example, for a static control, it will be the minimal size such that the
@@ -736,12 +747,12 @@ Returns a reference to the list of the window's children.
 
 \membersection{wxWindow::GetClientSize}\label{wxwindowgetclientsize}
 
-\constfunc{virtual void}{GetClientSize}{\param{int* }{width}, \param{int* }{height}}
+\constfunc{void}{GetClientSize}{\param{int* }{width}, \param{int* }{height}}
 
 \perlnote{In wxPerl this method takes no parameter and returns
 a 2-element list {\tt ( width, height )}.}
 
-\constfunc{virtual wxSize}{GetClientSize}{\void}
+\constfunc{wxSize}{GetClientSize}{\void}
 
 This gets the size of the window `client area' in pixels.
 The client area is the area which may be drawn on by the programmer,
@@ -1012,9 +1023,9 @@ Returns the built-in scrollbar range.
 
 \membersection{wxWindow::GetSize}\label{wxwindowgetsize}
 
-\constfunc{virtual void}{GetSize}{\param{int* }{width}, \param{int* }{height}}
+\constfunc{void}{GetSize}{\param{int* }{width}, \param{int* }{height}}
 
-\constfunc{virtual wxSize}{GetSize}{\void}
+\constfunc{wxSize}{GetSize}{\void}
 
 This gets the size of the entire window in pixels,
 including title bar, border, scrollbars, etc.
