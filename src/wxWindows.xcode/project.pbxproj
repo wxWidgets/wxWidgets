@@ -213,7 +213,7 @@
 				GCC_PFE_FILE_C_DIALECTS = "c++";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ../include/wx_xcode.h;
-				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXDEBUG__ __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES";
+				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXDEBUG__ __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1";
 				HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex tiff - $(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OTHER_CFLAGS = "";
@@ -247,7 +247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4086C745063AB2FF00D4CD53,
-				4086D2E3063C207900D4CD53,
+				40B6E74D063D4ABA00442FB3,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3000,7 +3000,7 @@
 				GCC_PFE_FILE_C_DIALECTS = "c++";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ../include/wx_xcode.h;
-				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES";
+				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1";
 				HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex tiff - $(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OTHER_CFLAGS = "";
@@ -3034,6 +3034,7 @@
 		4086C8CE063AB30000D4CD53 = {
 			buildActionMask = 2147483647;
 			files = (
+				40B6E74C063D4ABA00442FB3,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5775,12 +5776,15 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_INPUT_FILETYPE = automatic;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PFE_FILE_C_DIALECTS = "c++";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ../include/wx_xcode.h;
-				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXDEBUG__ WXMAKINGDLL __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES";
+				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA __WXDEBUG__ WXMAKINGDLL __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1";
 				HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex common jpeg png regex tiff - $(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon /usr/include";
+				INSTALL_PATH = "";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/3.1;
 				LIBRARY_STYLE = DYNAMIC;
 				OTHER_CFLAGS = "";
@@ -5814,6 +5818,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4086CA58063AB30000D4CD53,
+				40B6E74A063D4ABA00442FB3,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8588,7 +8593,7 @@
 				GCC_PFE_FILE_C_DIALECTS = "c++";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ../include/wx_xcode.h;
-				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA WXMAKINGDLL __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES";
+				GCC_PREPROCESSOR_DEFINITIONS = "NO_GCC_PRAGMA WXMAKINGDLL __WXMAC__ wxUSE_BASE=1 _FILE_OFFSET_BITS=64 _LARGE_FILES __WXMAC_XCODE__=1";
 				HEADER_SEARCH_PATHS = "${SYMROOT}/include ../include mac/carbon/morefilex jpeg common png regex tiff - $(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon /usr/include";
 				LIBRARY_STYLE = DYNAMIC;
 				OTHER_CFLAGS = "";
@@ -8622,6 +8627,7 @@
 		4086CBE4063AB30000D4CD53 = {
 			buildActionMask = 2147483647;
 			files = (
+				40B6E74B063D4ABA00442FB3,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11441,17 +11447,34 @@
 			target = 4086CBE2063AB30000D4CD53;
 			targetProxy = 4086D208063BC05E00D4CD53;
 		};
-		4086D2E2063C207900D4CD53 = {
+		40B6E749063D4ABA00442FB3 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			name = wx_xcode.h;
-			path = /Users/cs/.Trash/wx_xcode.h;
-			refType = 0;
-			sourceTree = "<absolute>";
+			path = wx_xcode.h;
+			refType = 4;
+			sourceTree = "<group>";
 		};
-		4086D2E3063C207900D4CD53 = {
-			fileRef = 4086D2E2063C207900D4CD53;
+		40B6E74A063D4ABA00442FB3 = {
+			fileRef = 40B6E749063D4ABA00442FB3;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		40B6E74B063D4ABA00442FB3 = {
+			fileRef = 40B6E749063D4ABA00442FB3;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		40B6E74C063D4ABA00442FB3 = {
+			fileRef = 40B6E749063D4ABA00442FB3;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		40B6E74D063D4ABA00442FB3 = {
+			fileRef = 40B6E749063D4ABA00442FB3;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -11732,7 +11755,7 @@
 		};
 		F5A85C1A01FA022A0175ACA7 = {
 			children = (
-				4086D2E2063C207900D4CD53,
+				40B6E749063D4ABA00442FB3,
 				F5A85C1C01FA022A0175ACA7,
 				F5FD822102CCECE601000133,
 			);
