@@ -36,10 +36,16 @@ class xxxParam(xxxNode):
         # Use convertion from unicode to current encoding
         self.textNode = text
     # Value returns string
-    def value(self):
-        return self.textNode.data.encode(currentEncoding)
-    def update(self, value):
-        self.textNode.data = unicode(value, currentEncoding)
+    if wxUSE_UNICODE:   # no conversion is needed
+        def value(self):
+            return self.textNode.data
+        def update(self, value):
+            self.textNode.data = value
+    else:
+        def value(self):
+            return self.textNode.data.encode(currentEncoding)
+        def update(self, value):
+            self.textNode.data = unicode(value, currentEncoding)
 
 # Integer parameter
 class xxxParamInt(xxxParam):
