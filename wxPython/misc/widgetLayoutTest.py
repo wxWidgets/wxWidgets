@@ -468,10 +468,10 @@ class ColourInfoPanel(wx.Panel):
         sb = wx.StaticBox(self, -1, label)
         self._fgtxt = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
         self._fgclr = wx.Panel(self, style=wx.SIMPLE_BORDER)
-        self._fgclr.SetSizeHints((20,20))
+        self._fgclr.SetMinSize((20,20))
         self._bgtxt = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
         self._bgclr = wx.Panel(self, style=wx.SIMPLE_BORDER)
-        self._bgclr.SetSizeHints((20,20))
+        self._bgclr.SetMinSize((20,20))
 
         # setup the layout
         fgs = wx.FlexGridSizer(2, 3, 5, 5)
