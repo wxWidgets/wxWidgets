@@ -114,6 +114,10 @@ wxMotif:
 
 - removed wxMenuItem::DeleteSubMenu()
 
+wxUniv/X11:
+
+- implemented DrawRoundedRectangle() (clawghoul)
+
 wxHTML:
 
 - improved tables and lists layout algorithms (Tim Kosse)

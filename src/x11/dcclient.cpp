@@ -790,7 +790,125 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
 void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius )
 {
-   // later
+    wxCHECK_RET( Ok(), wxT("invalid window dc") );
+                                                                                                                  
+    if (radius < 0.0) radius = - radius * ((width < height) ? width : height);
+                                                                                                                  
+    wxCoord xx = XLOG2DEV(x);
+    wxCoord yy = YLOG2DEV(y);
+    wxCoord ww = m_signX * XLOG2DEVREL(width);
+    wxCoord hh = m_signY * YLOG2DEVREL(height);
+    wxCoord rr = XLOG2DEVREL((wxCoord)radius);
+                                                                                                                  
+    // CMB: handle -ve width and/or height
+    if (ww < 0) { ww = -ww; xx = xx - ww; }
+    if (hh < 0) { hh = -hh; yy = yy - hh; }
+                                                                                                                  
+    // CMB: if radius is zero use DrawRectangle() instead to avoid
+    // X drawing errors with small radii
+    if (rr == 0)
+    {
+            XDrawRectangle( (Display*) m_display, (Window) m_window,
+                (GC) m_penGC, x, y, width, height);
+        return;
+    }
+                                                                                                                  
+    // CMB: draw nothing if transformed w or h is 0
+    if (ww == 0 || hh == 0) return;
+                                                                                                                  
+    // CMB: adjust size if outline is drawn otherwise the result is
+    // 1 pixel too wide and high
+    if (m_pen.GetStyle() != wxTRANSPARENT)
+    {
+        ww--;
+        hh--;
+    }
+    
+    if (m_window)
+    {
+        // CMB: ensure dd is not larger than rectangle otherwise we
+        // get an hour glass shape
+        wxCoord dd = 2 * rr;
+        if (dd > ww) dd = ww;
+        if (dd > hh) dd = hh;
+        rr = dd / 2;
+                                                                                                                  
+        if (m_brush.GetStyle() != wxTRANSPARENT)
+        {
+            if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
+            {
+                XSetTSOrigin( (Display*) m_display, (GC) m_textGC, 
+                              m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                              m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
+                XFillRectangle( (Display*) m_display, (Window) m_window, (GC) m_textGC, xx+rr, yy, ww-dd+1, hh );
+                XFillRectangle( (Display*) m_display, (Window) m_window, (GC) m_textGC, xx, yy+rr, ww, hh-dd+1 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_textGC, xx, yy, dd, dd, 90*64, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_textGC, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_textGC, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_textGC, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+                XSetTSOrigin( (Display*) m_display, (GC) m_textGC, 0, 0);
+            } else
+            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
+            {
+                XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
+                XFillRectangle( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+rr, yy, ww-dd+1, hh );
+                XFillRectangle( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy+rr, ww, hh-dd+1 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy, dd, dd, 90*64, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+                XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0);
+            } else
+            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
+            {
+                XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
+                XFillRectangle( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+rr, yy, ww-dd+1, hh );
+                XFillRectangle( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy+rr, ww, hh-dd+1 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy, dd, dd, 90*64, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+                XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0);
+            } else
+            if (m_brush.GetStyle() == wxSTIPPLE)
+            {
+                XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 
+                              m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
+                              m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
+                XFillRectangle( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+rr, yy, ww-dd+1, hh );
+                XFillRectangle( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy+rr, ww, hh-dd+1 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy, dd, dd, 90*64, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+                XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+                XSetTSOrigin( (Display*) m_display, (GC) m_brushGC, 0, 0);
+            }
+            else
+            {
+               XFillRectangle( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+rr, yy, ww-dd+1, hh );
+               XFillRectangle( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy+rr, ww, hh-dd+1 );
+               XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy, dd, dd, 90*64, 90*64 );
+               XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+               XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+               XFillArc( (Display*) m_display, (Window) m_window, (GC) m_brushGC, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+            }
+        }
+     if (m_pen.GetStyle() != wxTRANSPARENT)
+        {
+            XDrawLine( (Display*) m_display, (Window) m_window, (GC) m_penGC, xx+rr+1, yy, xx+ww-rr, yy );
+            XDrawLine( (Display*) m_display, (Window) m_window, (GC) m_penGC, xx+rr+1, yy+hh, xx+ww-rr, yy+hh );
+            XDrawLine( (Display*) m_display, (Window) m_window, (GC) m_penGC, xx, yy+rr+1, xx, yy+hh-rr );
+            XDrawLine( (Display*) m_display, (Window) m_window, (GC) m_penGC, xx+ww, yy+rr+1, xx+ww, yy+hh-rr );
+            XDrawArc( (Display*) m_display, (Window) m_window, (GC) m_penGC, xx, yy, dd, dd, 90*64, 90*64 );
+            XDrawArc( (Display*) m_display, (Window) m_window, (GC) m_penGC, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+            XDrawArc( (Display*) m_display, (Window) m_window, (GC) m_penGC, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+            XDrawArc( (Display*) m_display, (Window) m_window, (GC) m_penGC, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+        }
+    }
+                                                                                                                  
+    // this ignores the radius
+    CalcBoundingBox( x, y );
+    CalcBoundingBox( x + width, y + height );
 }
 
 void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
