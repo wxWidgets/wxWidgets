@@ -33,6 +33,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_strings.o \
 	$(OBJS)\test_stdstrings.o \
 	$(OBJS)\test_unicode.o \
+	$(OBJS)\test_crt.o \
 	$(OBJS)\test_bstream.o \
 	$(OBJS)\test_ffilestream.o \
 	$(OBJS)\test_filestream.o \
@@ -198,6 +199,9 @@ $(OBJS)\test_stdstrings.o: ./strings/stdstrings.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_unicode.o: ./strings/unicode.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_crt.o: ./strings/crt.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_bstream.o: ./streams/bstream.cpp

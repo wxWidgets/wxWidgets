@@ -443,6 +443,10 @@ SOURCE=.\streams\bstream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\strings\crt.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\ffilestream.cpp
 # End Source File
 # Begin Source File

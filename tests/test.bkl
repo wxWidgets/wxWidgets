@@ -20,6 +20,7 @@
             strings/strings.cpp
             strings/stdstrings.cpp
             strings/unicode.cpp
+            strings/crt.cpp
             streams/bstream.cpp
             streams/ffilestream.cpp
             streams/filestream.cpp

@@ -48,6 +48,7 @@ TEST_OBJECTS =  \
 	test_strings.o \
 	test_stdstrings.o \
 	test_unicode.o \
+	test_crt.o \
 	test_bstream.o \
 	test_ffilestream.o \
 	test_filestream.o \
@@ -118,9 +119,13 @@ test$(EXEEXT): $(TEST_OBJECTS)
 data: 
 	@mkdir -p .
 	@for f in testdata.fc; do \
-	if test \( ! -s ./$$f \) -o \( $(srcdir)/$$f -nt ./$$f  \) ; then \
-	cp -pRf $(srcdir)/$$f . ; \
+	if test ! -e ./$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
 	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/$$f . ;; \
+	esac; \
 	done
 
 test_test.o: $(srcdir)/test.cpp
@@ -157,6 +162,9 @@ test_stdstrings.o: $(srcdir)/strings/stdstrings.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_unicode.o: $(srcdir)/strings/unicode.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_crt.o: $(srcdir)/strings/crt.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_bstream.o: $(srcdir)/streams/bstream.cpp

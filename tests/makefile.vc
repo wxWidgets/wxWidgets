@@ -35,6 +35,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_strings.obj \
 	$(OBJS)\test_stdstrings.obj \
 	$(OBJS)\test_unicode.obj \
+	$(OBJS)\test_crt.obj \
 	$(OBJS)\test_bstream.obj \
 	$(OBJS)\test_ffilestream.obj \
 	$(OBJS)\test_filestream.obj \
@@ -260,6 +261,9 @@ $(OBJS)\test_stdstrings.obj: .\strings\stdstrings.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_unicode.obj: .\strings\unicode.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_crt.obj: .\strings\crt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_bstream.obj: .\streams\bstream.cpp
