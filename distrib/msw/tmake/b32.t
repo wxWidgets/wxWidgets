@@ -97,7 +97,7 @@ WXBUILDDLL=1
 # Please set these according to the settings in wx_setup.h, so we can include
 # the appropriate libraries in wx.lib
 USE_CTL3D=0
-USE_XPM_IN_MSW=0
+USE_XPM_IN_MSW=1
 
 PERIPH_LIBS=
 PERIPH_TARGET=
@@ -118,8 +118,8 @@ PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 
 #PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\jpeg.lib $(PERIPH_LIBS)
 PERIPH_LIBS=
-PERIPH_TARGET=zlib png jpeg $(PERIPH_TARGET)
-PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg $(PERIPH_CLEAN_TARGET)
+PERIPH_TARGET=zlib png jpeg tiff $(PERIPH_TARGET)
+PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg clean_tiff $(PERIPH_CLEAN_TARGET)
 
 !if "$(DLL)" == "0"
 DUMMY=dummy
@@ -317,6 +317,26 @@ jpeg:    $(CFG)
 
 clean_jpeg:
         cd $(WXDIR)\src\jpeg
+        make -f makefile.b32 clean
+        cd $(WXDIR)\src\msw
+
+xpm:    $(CFG)
+        cd $(WXDIR)\src\xpm
+        make -f makefile.b32 lib
+        cd $(WXDIR)\src\msw
+
+clean_xpm:
+        cd $(WXDIR)\src\xpm
+        make -f makefile.b32 clean
+        cd $(WXDIR)\src\msw
+
+tiff:   $(CFG)
+        cd $(WXDIR)\src\tiff
+        make -f makefile.b32 lib
+        cd $(WXDIR)\src\msw
+
+clean_tiff:
+        cd $(WXDIR)\src\tiff
         make -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 

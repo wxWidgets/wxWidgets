@@ -789,7 +789,6 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
             {
                 long lDlgCode = ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd,
                                                  message, wParam, lParam);
-		//CallWindowProc(CASTWNDPROC gs_wndprocToolTip, hwndTT, msg, wParam, lParam);
 
                 return lDlgCode | DLGC_WANTARROWS;
             }
@@ -875,8 +874,6 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
     }
 
     return ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd, message, wParam, lParam);
-    
-
 }
 
 #endif // __WIN32__
