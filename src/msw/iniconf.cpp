@@ -380,12 +380,10 @@ bool wxIniConfig::Flush(bool /* bCurrentOnly */)
 bool wxIniConfig::DeleteEntry(const wxString& szKey, bool bGroupIfEmptyAlso)
 {
   // passing NULL as value to WritePrivateProfileString deletes the key
-//  if ( !Write(szKey, (const char *)NULL) )
-//    return FALSE;
   wxConfigPathChanger path(this, szKey);
   wxString strKey = GetPrivateKeyName(path.Name());
 
-  if (WritePrivateProfileString(m_strGroup, szKey,
+  if (WritePrivateProfileString(m_strGroup, strKey,
                                          (const char*) NULL, m_strLocalFilename) == 0)
     return FALSE;
 
