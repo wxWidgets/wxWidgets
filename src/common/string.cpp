@@ -2153,14 +2153,10 @@ void wxArrayString::Sort(CompareFunction2 compareFunction)
   qsort(m_pItems, m_nCount, sizeof(wxChar *), (wxStringCompareFn)compareFunction);
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-
 void wxArrayString::Sort(bool reverseOrder)
 {
   Sort(reverseOrder ? wxStringSortDescending : wxStringSortAscending);
 }
-
-#endif // WXWIN_COMPATIBILITY_2_4
 
 void wxArrayString::DoSort()
 {
