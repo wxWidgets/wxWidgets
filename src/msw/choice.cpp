@@ -191,14 +191,11 @@ int wxChoice::FindString(const wxString& s) const
 #endif // Watcom/!Watcom
 }
 
-void wxChoice::SetString(int WXUNUSED(n), const wxString& WXUNUSED(s))
+void wxChoice::SetString(int n, const wxString& s)
 {
-    wxFAIL_MSG(wxT("not implemented"));
-
-#if 0 // should do this, but no Insert() so far
-    Delete(n);
-    Insert(n + 1, s);
-#endif
+    wxCHECK_RET( (n>=0)&&(n<GetCount()), wxT("invalid item index in wxChoice::SetString") );
+    SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
+    SendMessage(GetHwnd(), CB_INSERTSTRING, n, (LONG)s.c_str() );
 }
 
 wxString wxChoice::GetString(int n) const
