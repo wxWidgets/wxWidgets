@@ -44,7 +44,8 @@
 // this include needs to be outside precomp for BCC
 #include "wx/textfile.h"
 
-#include "wx/generic/grid.h"
+#include "wx/grid.h"
+
 
 // ----------------------------------------------------------------------------
 // array classes
@@ -560,6 +561,18 @@ wxGridCellRenderer* wxGridCellAttr::GetRenderer() const
         return m_renderer;
     else if (m_defGridAttr != this)
         return m_defGridAttr->GetRenderer();
+    else {
+        wxFAIL_MSG(wxT("Missing default cell attribute"));
+        return NULL;
+    }
+}
+
+wxGridCellEditor* wxGridCellAttr::GetEditor() const
+{
+    if (HasEditor())
+        return m_editor;
+    else if (m_defGridAttr != this)
+        return m_defGridAttr->GetEditor();
     else {
         wxFAIL_MSG(wxT("Missing default cell attribute"));
         return NULL;
@@ -1658,22 +1671,11 @@ void wxGridWindow::OnEraseBackground(wxEraseEvent&)
 { }
 
 
-//-----------------------------------------------------------------------------
-// wxGridEditTimer (internal)
-//-----------------------------------------------------------------------------
-
-wxGridEditTimer::wxGridEditTimer( wxGrid *owner )
-{
-    m_owner = owner;
-}
-
-void wxGridEditTimer::Notify()
-{
-    m_owner->EnableCellEditControl( TRUE );
-}
 
 
 //////////////////////////////////////////////////////////////////////
+
+#define ID_EDIT_TIMER 1001
 
 IMPLEMENT_DYNAMIC_CLASS( wxGrid, wxScrolledWindow )
 
@@ -1682,6 +1684,7 @@ BEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
     EVT_SIZE( wxGrid::OnSize )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
     EVT_ERASE_BACKGROUND( wxGrid::OnEraseBackground )
+    EVT_TIMER( ID_EDIT_TIMER, wxGrid::OnEditTimer )
 END_EVENT_TABLE()
 
 wxGrid::wxGrid( wxWindow *parent,
@@ -1879,9 +1882,11 @@ void wxGrid::Init()
         m_colRights.Add( colRight );
     }
 
+    // Set default cell attributes
     m_defaultCellAttr->SetFont(GetFont());
     m_defaultCellAttr->SetAlignment(wxLEFT, wxTOP);
     m_defaultCellAttr->SetRenderer(new wxGridCellStringRenderer);
+    m_defaultCellAttr->SetEditor(new wxGridCellTextEditor);
     m_defaultCellAttr->SetTextColour(
         wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT));
     m_defaultCellAttr->SetBackgroundColour(
@@ -1896,8 +1901,10 @@ void wxGrid::Init()
     m_dragLastPos  = -1;
     m_dragRowOrCol = -1;
     m_isDragging = FALSE;
+    m_startDragPos = wxDefaultPosition;
 
-    m_editTimer = new wxGridEditTimer ( this );
+    m_editTimer = new wxTimer( this, ID_EDIT_TIMER );
+    m_waitForSlowClick = FALSE;
 
     m_rowResizeCursor = wxCursor( wxCURSOR_SIZENS );
     m_colResizeCursor = wxCursor( wxCURSOR_SIZEWE );
@@ -2756,6 +2763,19 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
     if ( event.Dragging() )
     {
+        //wxLogDebug("pos(%d, %d) coords(%d, %d)", pos.x, pos.y, coords.GetRow(), coords.GetCol());
+
+        // Don't start doing anything until the mouse has been drug at
+        // least 3 pixels in any direction...
+        if (! m_isDragging) {
+            if (m_startDragPos == wxDefaultPosition) {
+                m_startDragPos = pos;
+                return;
+            }
+            if (abs(m_startDragPos.x - pos.x) < 4 && abs(m_startDragPos.y - pos.y) < 4)
+                return;
+        }
+
         m_isDragging = TRUE;
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
@@ -2763,6 +2783,13 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             // won't interfer with drag-shrinking.
             if ( IsCellEditControlEnabled() )
                 HideCellEditControl();
+
+            // Have we captured the mouse yet?
+            if (! m_winCapture) {
+                m_winCapture = m_gridWin;
+                m_winCapture->CaptureMouse();
+            }
+
             if ( coords != wxGridNoCellCoords )
             {
                 if ( !IsSelection() )
@@ -2772,6 +2799,12 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 else
                 {
                     SelectBlock( m_currentCellCoords, coords );
+                }
+
+                if (! IsVisible(coords)) {
+                    MakeCellVisible(coords);
+                    // TODO: need to introduce a delay or something here.  The
+                    // scrolling is way to fast, at least on MSW.
                 }
             }
         }
@@ -2819,6 +2852,8 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
     }
 
     m_isDragging = FALSE;
+    m_startDragPos = wxDefaultPosition;
+
 
     if ( coords != wxGridNoCellCoords )
     {
@@ -2852,7 +2887,18 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                                  event ) )
                 {
                     MakeCellVisible( coords );
-                    SetCurrentCell( coords );
+
+                    // if this is the second click on this cell then start
+                    // the edit control
+                    if (m_waitForSlowClick && coords == m_currentCellCoords) {
+                        EnableCellEditControl(TRUE);
+                        ShowCellEditControl();
+                    }
+                    else {
+                        SetCurrentCell( coords );
+                        m_editTimer->Start( 1500, TRUE );
+                        m_waitForSlowClick = TRUE;
+                    }
                 }
             }
         }
@@ -2863,7 +2909,6 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
         else if ( event.LeftDClick() )
         {
             EnableCellEditControl( FALSE );
-	    m_editTimer->Stop();
             if ( XToEdgeOfCol(x) < 0  &&  YToEdgeOfRow(y) < 0 )
             {
                 SendEvent( EVT_GRID_CELL_LEFT_DCLICK,
@@ -2882,6 +2927,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             {
                 if ( IsSelection() )
                 {
+                    if (m_winCapture) {
+                        m_winCapture->ReleaseMouse();
+                        m_winCapture = NULL;
+                    }
                     SendEvent( EVT_GRID_RANGE_SELECT, -1, -1, event );
                 }
 
@@ -2889,8 +2938,6 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 // been hidden for drag-shrinking.
                 if ( IsCellEditControlEnabled() )
                     ShowCellEditControl();
-		if( IsEditable() && coords == m_currentCellCoords )
-		m_editTimer->Start( 100, TRUE );
             }
             else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
             {
@@ -3463,7 +3510,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
     {
         // shouldn't be here - we are going round in circles...
         //
-        wxFAIL_MSG( wxT("wxGrid::OnKeyDown called while alread active") );
+        wxFAIL_MSG( wxT("wxGrid::OnKeyDown called while already active") );
     }
 
     m_inOnKeyDown = TRUE;
@@ -3524,17 +3571,6 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 }
                 break;
 
-            case WXK_SPACE:
-                if ( !IsEditable() )
-                {
-                    MoveCursorRight();
-                }
-                else
-                {
-                    event.Skip();
-                }
-                break;
-
             case WXK_RETURN:
                 if ( event.ControlDown() )
                 {
@@ -3578,16 +3614,29 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 MovePageDown();
                 break;
 
+            // We don't want these keys to trigger the edit control, any others?
+            case WXK_SHIFT:
+            case WXK_ALT:
+            case WXK_CONTROL:
+                event.Skip();
+                break;
+
+            case WXK_SPACE:
+                if ( !IsEditable() )
+                {
+                    MoveCursorRight();
+                    break;
+                }
+                // Otherwise fall through to default
+
             default:
                 // now try the cell edit control
                 //
                 if ( !IsCellEditControlEnabled() )
                     EnableCellEditControl( TRUE );
-                if ( IsCellEditControlEnabled() )
-                {
-                    event.SetEventObject( m_cellEditCtrl );
-                    m_cellEditCtrl->GetEventHandler()->ProcessEvent( event );
-                }
+                wxKeyEvent evt(event);
+                evt.SetEventObject( m_cellEditCtrl );
+                m_cellEditCtrl->GetEventHandler()->ProcessEvent( evt );
                 break;
         }
     }
@@ -3595,8 +3644,17 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
     m_inOnKeyDown = FALSE;
 }
 
+
 void wxGrid::OnEraseBackground(wxEraseEvent&)
 { }
+
+
+void wxGrid::OnEditTimer(wxTimerEvent&)
+{
+    m_waitForSlowClick = FALSE;
+}
+
+
 
 void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 {
@@ -3611,15 +3669,26 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     {
         HideCellEditControl();
         SaveEditControlValue();
+
+        // Clear the old current cell highlight
+        wxRect r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
+        r.x--; r.y--; r.width++; r.height++;
+        m_gridWin->Refresh( FALSE, &r );
     }
 
     m_currentCellCoords = coords;
 
     SetEditControlValue();
-#if 0
+
     if ( m_displayed )
     {
+#if 0
         ShowCellEditControl();
+#else
+        wxClientDC dc(m_gridWin);
+        PrepareDC(dc);
+        DrawCellHighlight(dc);
+#endif
 
         if ( IsSelection() )
         {
@@ -3628,9 +3697,6 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
             if ( !GetBatchCount() ) m_gridWin->Refresh( FALSE, &r );
         }
     }
-#else
-    SelectBlock ( coords, coords );
-#endif
 }
 
 
@@ -3711,12 +3777,37 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
     wxRect rect;
     rect.x = m_colRights[col] - m_colWidths[col];
     rect.y = m_rowBottoms[row] - m_rowHeights[row];
-    rect.width = m_colWidths[col] - 1;
-    rect.height = m_rowHeights[row] - 1;
+    rect.width = m_colWidths[col];
+    rect.height = m_rowHeights[row];
 
     wxGridCellAttr* attr = GetCellAttr(row, col);
     attr->GetRenderer()->Draw(*this, *attr, dc, rect, row, col, IsInSelection(coords));
     attr->DecRef();
+
+    if (m_currentCellCoords == coords)
+        DrawCellHighlight(dc);
+}
+
+
+void wxGrid::DrawCellHighlight( wxDC& dc )
+{
+    int row = m_currentCellCoords.GetRow();
+    int col = m_currentCellCoords.GetCol();
+
+    if ( m_colWidths[col] <= 0 || m_rowHeights[row] <= 0 )
+        return;
+
+    wxRect rect;
+    rect.x = m_colRights[col] - m_colWidths[col];
+    rect.y = m_rowBottoms[row] - m_rowHeights[row];
+    rect.width = m_colWidths[col] - 1;
+    rect.height = m_rowHeights[row] - 1;
+
+    dc.SetPen(wxPen(m_gridLineColour, 3, wxSOLID));
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+    //dc.SetLogicalFunction(wxINVERT);
+
+    dc.DrawRectangle(rect);
 }
 
 void wxGrid::DrawCellBorder( wxDC& dc, const wxGridCellCoords& coords )
@@ -4298,7 +4389,7 @@ int wxGrid::YToRow( int y )
         if ( y < m_rowBottoms[i] ) return i;
     }
 
-    return -1;
+    return m_numRows; //-1;
 }
 
 
@@ -4311,7 +4402,7 @@ int wxGrid::XToCol( int x )
         if ( x < m_colRights[i] ) return i;
     }
 
-    return -1;
+    return m_numCols; //-1;
 }
 
 

@@ -234,6 +234,8 @@ public:
     // takes ownership of the pointer
     void SetRenderer(wxGridCellRenderer *renderer)
         { delete m_renderer; m_renderer = renderer; }
+    void SetEditor(wxGridCellEditor* editor)
+        { delete m_editor; m_editor = editor; }
 
     // accessors
     bool HasTextColour() const { return m_colText.Ok(); }
@@ -241,21 +243,27 @@ public:
     bool HasFont() const { return m_font.Ok(); }
     bool HasAlignment() const { return m_hAlign || m_vAlign; }
     bool HasRenderer() const { return m_renderer != NULL; }
+    bool HasEditor() const { return m_editor != NULL; }
 
     const wxColour& GetTextColour() const;
     const wxColour& GetBackgroundColour() const;
     const wxFont& GetFont() const;
     void GetAlignment(int *hAlign, int *vAlign) const;
     wxGridCellRenderer *GetRenderer() const;
+    wxGridCellEditor *GetEditor() const;
 
     void SetDefAttr(wxGridCellAttr* defAttr) { m_defGridAttr = defAttr; }
 
 private:
     // the common part of all ctors
-    void Init() { m_nRef = 1; m_renderer = (wxGridCellRenderer *)NULL; }
+    void Init() {
+        m_nRef = 1;
+        m_renderer = NULL;
+        m_editor = NULL;
+    }
 
     // the dtor is private because only DecRef() can delete us
-    ~wxGridCellAttr() { delete m_renderer; }
+    ~wxGridCellAttr() { delete m_renderer; delete m_editor; }
 
     // the ref count - when it goes to 0, we die
     size_t   m_nRef;
@@ -266,8 +274,9 @@ private:
     int      m_hAlign,
              m_vAlign;
 
-    wxGridCellRenderer *m_renderer;
-    wxGridCellAttr* m_defGridAttr;
+    wxGridCellRenderer* m_renderer;
+    wxGridCellEditor*   m_editor;
+    wxGridCellAttr*     m_defGridAttr;
 
     // suppress the stupid gcc warning about the class having private dtor and
     // no friends
@@ -571,19 +580,6 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-//-----------------------------------------------------------------------------
-// wxGridEditTimer (internal)
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxGridEditTimer: public wxTimer
-{
- private:
-   wxGrid  *m_owner;
-
- public:
-   wxGridEditTimer( wxGrid *owner );
-   void Notify();
-};
 
 // ----------------------------------------------------------------------------
 // wxGrid
@@ -654,6 +650,7 @@ public:
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
     void DrawAllGridLines( wxDC& dc, const wxRegion & reg );
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
+    void DrawCellHighlight( wxDC& dc );
 
     void DrawRowLabels( wxDC& dc );
     void DrawRowLabel( wxDC& dc, int row );
@@ -1109,7 +1106,6 @@ protected:
     int        m_defaultColWidth;
     wxArrayInt m_colWidths;
     wxArrayInt m_colRights;
-
     int m_rowLabelWidth;
     int m_colLabelHeight;
 
@@ -1194,11 +1190,13 @@ protected:
     wxWindow *m_winCapture;     // the window which captured the mouse
     CursorMode m_cursorMode;
 
-    int  m_dragLastPos;
-    int  m_dragRowOrCol;
-    bool m_isDragging;
+    int     m_dragLastPos;
+    int     m_dragRowOrCol;
+    bool    m_isDragging;
+    wxPoint m_startDragPos;
 
-    wxTimer	    *m_editTimer;
+    wxTimer*    m_editTimer;
+    bool        m_waitForSlowClick;
 
     wxGridCellCoords m_selectionStart;
 
@@ -1230,6 +1228,7 @@ protected:
     void OnSize( wxSizeEvent& );
     void OnKeyDown( wxKeyEvent& );
     void OnEraseBackground( wxEraseEvent& );
+    void OnEditTimer( wxTimerEvent& );
 
 
     void SetCurrentCell( const wxGridCellCoords& coords );

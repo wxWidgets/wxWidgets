@@ -105,7 +105,7 @@ GridFrame::GridFrame()
                    wxDefaultSize )
 {
     int gridW = 600, gridH = 300;
-    int logW = gridW, logH = 80;
+    int logW = gridW, logH = 100;
 
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append( ID_VTABLE, "&Virtual table test");
