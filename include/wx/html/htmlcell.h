@@ -79,8 +79,9 @@ enum wxHtmlSelectionState
 class WXDLLEXPORT wxHtmlRenderingState
 {
 public:
-    wxHtmlRenderingState(wxHtmlSelection *s)
+    wxHtmlRenderingState(wxHtmlSelection *s = NULL)
         : m_selection(s), m_selState(wxHTML_SEL_OUT) {}
+    void SetSelection(wxHtmlSelection *s) { m_selection = s; }
     wxHtmlSelection *GetSelection() const { return m_selection; }
 
     void SetSelectionState(wxHtmlSelectionState s) { m_selState = s; }  
