@@ -111,6 +111,12 @@ protected:
 
     // some compilers need a default constructor here, do not remove
     wxMenuItemBase() { }
+
+private:
+    // and, if we have one ctor, compiler won't generate a default copy one, so
+    // declare them ourselves - but don't implement as they shouldn't be used
+    wxMenuItemBase(const wxMenuItemBase& item);
+    wxMenuItemBase& operator=(const wxMenuItemBase& item);
 };
 
 // ----------------------------------------------------------------------------
