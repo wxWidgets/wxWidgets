@@ -1137,11 +1137,11 @@ void wxTraceLevel(int, const wxChar * ...)
 }
 
 //----------------------------------------------------------------------------
-// Final cleanup after all global objects in all files have been destructed
+// Final cleanup after all global objects in all files have been destroyed
 //----------------------------------------------------------------------------
 
 // Don't set it to 0 by dynamic initialization
-// Some compilers will realy do the asignment later
+// Some compilers will really do the assignment later
 // All global variables are initialized to 0 at the very beginning, and this is just fine.
 int wxDebugContextDumpDelayCounter::sm_count;
 
@@ -1156,7 +1156,7 @@ void wxDebugContextDumpDelayCounter::DoDump()
 }
 
 // Even if there is nothing else, make sure that there is at
-// least one clenup counter object
+// least one cleanup counter object
 static wxDebugContextDumpDelayCounter wxDebugContextDumpDelayCounter_One;
 
 #endif // (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
