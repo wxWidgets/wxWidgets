@@ -864,6 +864,56 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
     return TRUE;
 }
 
+static void wxMenubarUnsetInvokingWindow( wxMenu *menu )
+{
+    menu->SetInvokingWindow( (wxWindow*) NULL );
+
+    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    while (node)
+    {
+        wxMenuItem *menuitem = node->GetData();
+        if (menuitem->IsSubMenu())
+            wxMenubarUnsetInvokingWindow( menuitem->GetSubMenu() );
+        node = node->GetNext();
+    }
+}
+
+static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
+{
+    menu->SetInvokingWindow( win );
+
+    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
+    while (node)
+    {
+        wxMenuItem *menuitem = node->GetData();
+        if (menuitem->IsSubMenu())
+            wxMenubarSetInvokingWindow( menuitem->GetSubMenu() , win );
+        node = node->GetNext();
+    }
+}
+
+void wxMenuBar::UnsetInvokingWindow()
+{
+    wxMenuList::Node *node = m_menus.GetFirst();
+    while (node)
+    {
+        wxMenu *menu = node->GetData();
+        wxMenubarUnsetInvokingWindow( menu );
+        node = node->GetNext();
+    }
+}
+
+void wxMenuBar::SetInvokingWindow(wxFrame *frame)
+{
+    wxMenuList::Node *node = m_menus.GetFirst();
+    while (node)
+    {
+        wxMenu *menu = node->GetData();
+        wxMenubarSetInvokingWindow( menu, frame );
+        node = node->GetNext();
+    }
+}
+
 void wxMenuBar::Detach()
 {
     wxMenuBarBase::Detach() ;
@@ -872,7 +922,6 @@ void wxMenuBar::Detach()
 void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach( frame ) ;
-
 #if wxUSE_ACCEL
     RebuildAccelTable();
 #endif // wxUSE_ACCEL

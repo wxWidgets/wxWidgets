@@ -162,6 +162,11 @@ public:
         // attach to a frame
     void Attach(wxFrame *frame);
 
+		// clear the invoking window for all menus and submenus
+	void UnsetInvokingWindow() ;
+
+		// set the invoking window for all menus and submenus
+	void SetInvokingWindow( wxFrame* frame ) ;
 #if wxUSE_ACCEL
     // get the accel table for all the menus
     const wxAcceleratorTable& GetAccelTable() const { return m_accelTable; }

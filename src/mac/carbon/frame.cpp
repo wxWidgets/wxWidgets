@@ -240,6 +240,26 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 	}
 }
 
+void wxFrame::DetachMenuBar()
+{
+    if ( m_frameMenuBar )
+    {
+        m_frameMenuBar->UnsetInvokingWindow();
+    }
+
+    wxFrameBase::DetachMenuBar();
+}
+
+void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
+{
+    wxFrameBase::AttachMenuBar(menuBar);
+
+    if (m_frameMenuBar)
+    {
+        m_frameMenuBar->SetInvokingWindow( this );
+    }
+}
+
 void wxFrame::DoGetClientSize(int *x, int *y) const
 {
 	wxWindow::DoGetClientSize( x , y ) ;
