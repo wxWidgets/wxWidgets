@@ -465,6 +465,14 @@ void wxStyledTextCtrl::OnMouseMiddleUp(wxMouseEvent& evt) {
 void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
     wxPoint pt = evt.GetPosition();
     ScreenToClient(&pt.x, &pt.y);
+    /*
+      Show context menu at event point if it's within the window,
+      or at caret location if not
+    */
+    wxHitTest ht = this->HitTest(pt);
+    if (ht != wxHT_WINDOW_INSIDE) {
+        pt = this->PointFromPosition(this->GetCurrentPos());
+    }
     m_swx->DoContextMenu(Point(pt.x, pt.y));
 }
 
@@ -492,7 +500,7 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
 //     printf("OnChar key:%%d  consumed:%%d  ctrl:%%d  alt:%%d  skip:%%d\n",
 //            key, m_lastKeyDownConsumed, ctrl, alt, skip);
 
-    if ( (key <= WXK_START || key > WXK_NUMPAD_DIVIDE) &&
+    if ( (key <= WXK_START || key > WXK_COMMAND) &&
          !m_lastKeyDownConsumed && !skip) {
         m_swx->DoAddChar(key);
         return;
