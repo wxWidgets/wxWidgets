@@ -3,6 +3,8 @@
 // Purpose:     Common timer implementation
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin on 12.11.99 to get rid of all ifdefs
+//              Sylvain Bougnoux on ?? to add wxStopWatch class
+//              Guillermo Rodriguez <guille@iies.es>, 12/99 complete rewrite. 
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
@@ -34,33 +36,22 @@
 #endif
 
 #include "wx/timer.h"
+#include "wx/longlong.h"
 
-// I'm told VMS is POSIX, so should have localtime()
-#if defined(__WXMSW__) || defined(__VMS__) || defined(__WXPM__) || defined(__WXMAC__)
-    // configure might have found it already for us
-    #ifndef HAVE_LOCALTIME
-        #define HAVE_LOCALTIME
-    #endif
+#if defined(__WIN32__)
+    #include <windows.h>
 #endif
 
-// TODO: #define WX_GMTOFF_IN_TM for Windows compilers which have it here
-
-#if defined(__WIN32__) && !defined(WX_GMTOFF_IN_TM)
-    #include <windows.h>
+#include <time.h>
+#ifndef __WXMAC__
+    #include <sys/types.h>      // for time_t
 #endif
 
 #if defined(HAVE_GETTIMEOFDAY)
     #include <sys/time.h>
     #include <unistd.h>
-#elif defined(HAVE_LOCALTIME)
-    #include <time.h>
-    #ifndef __WXMAC__
-        #include <sys/types.h>      // for time_t
-    #endif
 #elif defined(HAVE_FTIME)
     #include <sys/timeb.h>
-#else
-    #error "no function to find the current time on this system"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -82,166 +73,163 @@
 // implementation
 // ============================================================================
 
+wxLongLong wxGetLocalTimeMillis();
+
 // ----------------------------------------------------------------------------
 // wxStopWatch
 // ----------------------------------------------------------------------------
 
 void wxStopWatch::Start(long t)
 {
-    m_t0 = wxGetCurrentMTime() - t;
+    m_t0 = wxGetLocalTimeMillis() - t;
 
     m_pause = 0;
 }
 
 long wxStopWatch::Time() const
 {
-    return m_pause ? m_pause : GetElapsedTime();
+    return (m_pause ? m_pause : GetElapsedTime());
+}
+
+long wxStopWatch::GetElapsedTime() const
+{
+    return (wxGetLocalTimeMillis() - m_t0).GetLo();
 }
 
 // ----------------------------------------------------------------------------
 // old timer functions superceded by wxStopWatch
 // ----------------------------------------------------------------------------
 
-static long wxStartTime = 0;
+static wxLongLong wxStartTime = 0;
 
 // starts the global timer
 void wxStartTimer()
 {
-    wxStartTime = wxGetCurrentMTime();
+    wxStartTime = wxGetLocalTimeMillis();
 }
 
 // Returns elapsed time in milliseconds
 long wxGetElapsedTime(bool resetTimer)
 {
-    long oldTime = wxStartTime;
-    long newTime = wxGetCurrentMTime();
+    wxLongLong oldTime = wxStartTime;
+    wxLongLong newTime = wxGetLocalTimeMillis();
 
     if ( resetTimer )
         wxStartTime = newTime;
 
-    return newTime - oldTime;
+    return (newTime - oldTime).GetLo();
 }
 
-
-// Get number of seconds since 00:00:00 GMT, Jan 1st 1970.
-long wxGetCurrentTime()
-{
-    return wxGetCurrentMTime() / 1000;
-}
 
 // ----------------------------------------------------------------------------
 // the functions to get the current time and timezone info
 // ----------------------------------------------------------------------------
 
-// return GMT time in millisecond
-long wxGetCurrentMTime()
+// Get local time as seconds since 00:00:00, Jan 1st 1970
+long wxGetLocalTime()
 {
+    struct tm tm;
+    time_t t0, t1;
+
+    // This cannot be made static because mktime can overwrite it.
+    //
+    memset(&tm, 0, sizeof(tm));
+    tm.tm_year  = 70;
+    tm.tm_mon   = 0;
+    tm.tm_mday  = 5;        // not Jan 1st 1970 due to mktime 'feature'
+    tm.tm_hour  = 0;
+    tm.tm_min   = 0;
+    tm.tm_sec   = 0;
+    tm.tm_isdst = -1;       // let mktime guess
+
+    // Note that mktime assumes that the struct tm contains local time.
+    //
+    t1 = time(&t1);         // now
+    t0 = mktime(&tm);       // origin
+
+    // Return the difference in seconds.
+    //
+    if (( t0 != (time_t)-1 ) && ( t1 != (time_t)-1 ))
+        return (long)difftime(t1, t0) + (60 * 60 * 24 * 4);
+
+    wxLogSysError(_("Failed to get the local system time"));
+    return -1;
+}
+
+// Get UTC time as seconds since 00:00:00, Jan 1st 1970
+long wxGetUTCTime()
+{
+    struct tm tm, *ptm;
+    time_t t0, t1;
+
+    // This cannot be made static because mktime can overwrite it
+    //
+    memset(&tm, 0, sizeof(tm));
+    tm.tm_year  = 70;
+    tm.tm_mon   = 0;
+    tm.tm_mday  = 5;        // not Jan 1st 1970 due to mktime 'feature'
+    tm.tm_hour  = 0;
+    tm.tm_min   = 0;
+    tm.tm_sec   = 0;
+    tm.tm_isdst = -1;       // let mktime guess
+
+    // Note that mktime assumes that the struct tm contains local time.
+    //
+    t1 = time(&t1);         // now
+    t0 = mktime(&tm);       // origin in localtime
+
+    if (( t0 != (time_t)-1 ) && ( t1 != (time_t)-1 ))
+    {
+        // To get t0 as GMT we convert to a struct tm with gmtime,
+        // and then back again.
+        //
+        ptm = gmtime(&t0);
+
+        if (ptm)
+        {
+            memcpy(&tm, ptm, sizeof(tm));
+            t0 = mktime(&tm);
+
+            if (t0 != (time_t)-1 )
+                return (long)difftime(t1, t0) + (60 * 60 * 24 * 4);
+            wxLogSysError(_("Failed 2nd mktime"));
+        }
+        wxLogSysError(_("Failed gmtime"));
+    }
+    wxLogSysError(_("Failed to get the UTC system time"));
+    return -1;
+}
+
+
+// Get local time as milliseconds since 00:00:00, Jan 1st 1970
+wxLongLong wxGetLocalTimeMillis()
+{
+    // We use wxGetLocalTime() to get the seconds since
+    // 00:00:00 Jan 1st 1970 and then whatever is available
+    // to get millisecond resolution.
+    //
+    wxLongLong val = 1000 * wxGetLocalTime();
+
+    // If we got here, do not fail even if we can't get
+    // millisecond resolution.
+    //
 #if defined(__WIN32__)
     SYSTEMTIME st;
     ::GetLocalTime(&st);
-
-    return 1000*(60*(60*st.wHour+st.wMinute)+st.wSecond)+st.wMilliseconds;
-#else
-#if defined(HAVE_LOCALTIME)
-    time_t t0 = time(&t0);
-    if ( t0 != (time_t)-1 )
-    {
-        struct tm *tp = localtime(&t0);
-
-        if ( tp )
-        {
-            return 1000*(60*(60*tp->tm_hour+tp->tm_min)+tp->tm_sec);
-        }
-    }
+    return (val + st.wMilliseconds);
 #elif defined(HAVE_GETTIMEOFDAY)
     struct timeval tp;
     if ( wxGetTimeOfDay(&tp, (struct timezone *)NULL) != -1 )
     {
-        return (1000*tp.tv_sec + tp.tv_usec / 1000);
+        return (val + (tp.tv_usec / 1000));
     }
 #elif defined(HAVE_FTIME)
     struct timeb tp;
     if ( ftime(&tp) == 0 )
     {
-        return (1000*tp.time + tp.millitm);
+        return (val + tp.millitm);
     }
-#else
-    #error "no function to find the current time on this system"
 #endif
 
-    wxLogSysError(_("Failed to get the system time"));
-
-    return -1;
-#endif // __WIN32__/!__WIN32__
-}
-
-bool wxGetLocalTime(long *timeZone, int *dstObserved)
-{
-#if defined(HAVE_LOCALTIME) && defined(WX_GMTOFF_IN_TM)
-    time_t t0 = time(&t0);
-    if ( t0 != (time_t)-1 )
-    {
-        struct tm *tm = localtime(&t0);
-
-        if ( tm )
-        {
-            *timeZone = tm->tm_gmtoff;
-            *dstObserved = tm->tm_isdst;
-
-            return TRUE;
-        }
-    }
-#elif defined(HAVE_GETTIMEOFDAY) && !defined(WX_GETTIMEOFDAY_NO_TZ)
-    struct timeval tp;
-    struct timezone tz;
-    if ( gettimeofday(&tp, &tz) != -1 )
-    {
-        *timeZone = 60*tz.tz_minuteswest;
-        *dstObserved = tz.tz_dsttime;
-
-        return TRUE;
-    }
-#elif defined(HAVE_FTIME)
-    struct timeb tb;
-    if ( ftime(&tb) == 0 )
-    {
-        *timeZone = 60*tb.timezone;
-        *dstObserved = tb.dstflag;
-    }
-#else // no standard function return tz info
-    // special hacks for known compilers
-    #if defined(__BORLANDC__) || defined(__VISUALC__)
-        *timeZone = _timezone;
-        *dstObserved = _daylight;
-    #elif defined(__SALFORDC__)
-        *timeZone = _timezone;
-        *dstObserved = daylight;
-    #elif defined(__VISAGECPP__)
-        *timeZone = _timezone;
-        *dstObserved = daylight;
-    #elif defined(__WIN32__)
-        TIME_ZONE_INFORMATION tzInfo;
-        switch ( GetTimeZoneInformation(&tzInfo) )
-        {
-            default:
-                wxFAIL_MSG(_T("unknown GetTimeZoneInformation return code"));
-                // fall through
-
-            case TIME_ZONE_ID_UNKNOWN:
-            case TIME_ZONE_ID_STANDARD:
-                *dstObserved = FALSE;
-                break;
-
-            case TIME_ZONE_ID_DAYLIGHT:
-                *dstObserved = TRUE;
-                break;
-        }
-
-        *timeZone = 60*tzInfo.Bias;
-    #else
-        wxFAIL_MSG(_T("wxGetLocalTime() not implemented"));
-    #endif // compiler
-#endif // all ways in the known Universe to get tz info
-
-    return FALSE;
+    return val;
 }
