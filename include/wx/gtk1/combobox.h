@@ -64,7 +64,6 @@ class wxComboBox: public wxControl
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxComboBoxNameStr);
 
-  // List functions
   void Clear(void);
   void Append( const wxString &item );
   void Append( const wxString &item, char* clientData );
@@ -79,11 +78,9 @@ class wxComboBox: public wxControl
   void SetSelection( int n );
   void SetStringSelection( const wxString &string );
 
-  // Text field functions
   wxString GetValue(void) const ;
   void SetValue(const wxString& value);
 
-  // Clipboard operations
   void Copy(void);
   void Cut(void);
   void Paste(void);
@@ -95,14 +92,17 @@ class wxComboBox: public wxControl
   void Remove(long from, long to);
   void SetSelection(long from, long to);
   void SetEditable(bool editable);
+  
+  void SetFont( const wxFont &font );
+  
+  // implementation
 
+    bool     m_alreadySent;
+    
   private:
   
     wxList   m_clientData;
   
-  public:
-  
-    bool     m_alreadySent;
 };
 
 #endif // __GTKCOMBOBOXH__

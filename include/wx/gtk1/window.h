@@ -271,6 +271,7 @@ public:         // cannot get private going yet
   float                m_oldVerticalPos;
   bool                 m_needParent;
   bool                 m_hasScrolling;
+  bool                 m_hasOwnStyle;
   bool                 m_hasVMT;
   bool                 m_sizeSet;
   bool                 m_resizing;

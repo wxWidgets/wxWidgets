@@ -101,6 +101,10 @@ class wxTextCtrl: public wxControl, public streambuf
     wxTextCtrl& operator<<(double d);
     wxTextCtrl& operator<<(const char c);
 
+    void SetFont( const wxFont &font );
+    
+  // implementation    
+    
     virtual GtkWidget* GetConnectWidget(void);
     virtual bool IsOwnGtkWindow( GdkWindow *window );
     

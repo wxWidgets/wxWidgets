@@ -136,8 +136,15 @@ void wxComboBox::Append( const wxString &item, char *clientData )
 {
   GtkWidget *list = GTK_COMBO(m_widget)->list;
   
-  GtkWidget *list_item;
-  list_item = gtk_list_item_new_with_label( item ); 
+  GtkWidget *list_item = gtk_list_item_new_with_label( item ); 
+  
+  if (m_hasOwnStyle)
+  {
+    GtkBin *bin = GTK_BIN( list_item );
+    gtk_widget_set_style( bin->child, 
+      gtk_style_ref(
+        gtk_widget_get_style( m_widget ) ) ); 
+  }
   
   gtk_signal_connect( GTK_OBJECT(list_item), "select", 
     GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
@@ -374,4 +381,27 @@ void wxComboBox::SetEditable( bool WXUNUSED(editable) )
 {
 }
 
+void wxComboBox::SetFont( const wxFont &font )
+{
+  wxWindow::SetFont( font );
+   
+  GtkWidget *entry = GTK_COMBO(m_widget)->entry;
+  
+  gtk_widget_set_style( entry,
+    gtk_style_ref(
+      gtk_widget_get_style( m_widget ) ) ); 
+  
+  GtkWidget *list = GTK_COMBO(m_widget)->list;
+  
+  GList *child = GTK_LIST(list)->children;
+  while (child)
+  {
+    GtkBin *bin = (GtkBin*) child->data;
+    gtk_widget_set_style( bin->child, 
+      gtk_style_ref(
+        gtk_widget_get_style( m_widget ) ) ); 
+        
+    child = child->next;
+  }
+}
       

@@ -35,6 +35,80 @@
 #include "gdk/gdkprivate.h"
 
 //-----------------------------------------------------------------------------
+// documentation on internals
+//-----------------------------------------------------------------------------
+
+/*
+   I have been asked several times about writing some documentation about
+   the GTK port of wxWindows, especially its internal structures. Obviously,
+   you cannot understand wxGTK without knowing a little about the GTK, but
+   some more information about what the wxWindow, which is the base class 
+   for all other window classes, does seems required as well.
+   
+   What does wxWindow do? It contains the common interface for the following
+   jobs of its descentants:
+   
+   1) Define the rudimentary behaviour common to all window classes, such as
+   resizing, intercepting user input so as to make it possible to use these
+   events for special purposes in a derived class, window names etc.
+
+   2) Provide the possibility to contain and manage children, if the derived
+   class is allowed to contain children, which holds true for those window
+   classes, which do not display a native GTK widget. To name them, these
+   classes are wxPanel, wxScrolledWindow, wxDialog, wxFrame. The MDI frame-
+   work classes are a special case and are handled a bit differently from 
+   the rest.
+   
+   3) Provide the possibility to draw into a client area of a window. This,
+   too, only holds true for classes that do not display a native GTK widget
+   as above.
+   
+   4) Provide the entire mechanism for scrolling widgets. This actaul inter-
+   face for this is usually in wxScrolledWidget, but the GTK implementation
+   is in this class.
+   
+   5) A multitude of helper or extra methods for special purposes, such as
+   Drag'n'Drop, managing validators etc.
+   
+   Normally one might expect, that one wxWindows class would always contain
+   one GTK widget. Under GTK, there is no such allround widget that has all
+   the functionality. Moreover, the GTK defines a client area as a different
+   widget from the actual widget you are handling. Last but not least some
+   special classes (e.g. wxFrame) handle different categories of widgets and
+   still have the possibility to draw something in the client area.
+   It was therefore required to write a special purpose GTK widget, that would
+   represent a client area in the sense of wxWindows capable to do the jobs
+   2), 3) and 4). I have written this class and it resides in win_gtk.c of
+   this directory.
+   
+   All windows must have a widget, with which they interact with other under-
+   lying GTK widget. It is this widget, e.g. that has to be resized etc and
+   thw wxWindow class has a member variable called m_widget which holds a
+   pointer to this widget. When the window class displays a GTK native widget,
+   this is the only GTK widget the class manages. When the class has a client
+   area for drawing into and for containing children it must have at least
+   one more GTK widget to handle (of the type GtkMyFixed, defined in win_gtk.c),
+   but there can be any number of widgets, handled by a class (e.g. the frame
+   class handles three). The common rule for all windows is only, that the
+   widget that interacts with the rest of GTK must be referenced in m_widget
+   and all other widgets must be children of this widget on the GTK level.
+   The top-most widget, which also represents the client area, must be in
+   the m_wxwindow field and must be of the type GtkMyFixed.
+   
+   As I said, the window classes that display a GTK native widget only have
+   one widget, so in the case of e.g. the wxButton class m_widget holds a
+   pointer to a GtkButton widget. But windows with client areas (for drawing
+   and children) have a m_widget field that is a pointer to a GtkScrolled-
+   Window and a m_wxwindow field that is pointer to a GtkMyFixed and this
+   one is (in the GTK sense) a child of the GtkScrolledWindow.
+   
+   If the m_wxwindow field is set, then all input to this widget is inter-
+   cepted and sent to the wxWindows class. If not, all input to the widget
+   that gets pointed to by m_widget gets intercepted and sent to the class.
+
+*/
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -753,6 +827,7 @@ wxWindow::wxWindow()
   m_isEnabled = TRUE;
   m_pDropTarget = (wxDropTarget *) NULL;
   m_resizing = FALSE;
+  m_hasOwnStyle = FALSE;
 }
 
 bool wxWindow::Create( wxWindow *parent, wxWindowID id,
@@ -937,6 +1012,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_pDropTarget = (wxDropTarget *) NULL;
   m_resizing = FALSE;
   m_windowValidator = (wxValidator *) NULL;
+  m_hasOwnStyle = FALSE;
 }
 
 void wxWindow::PostCreation(void)
@@ -1851,15 +1927,21 @@ bool wxWindow::IsOwnGtkWindow( GdkWindow *window )
 void wxWindow::SetFont( const wxFont &font )
 {
   m_font = font;
-/*
-  create new style
-  copy old style values to new one
-  set font in new style
-  -> takes to many resources
+  GtkStyle *style = (GtkStyle*) NULL;
+  if (!m_hasOwnStyle)
+  {
+    m_hasOwnStyle = TRUE;
+    style = gtk_style_copy( gtk_widget_get_style( m_widget ) );
+  }
+  else
+  {
+    style = gtk_widget_get_style( m_widget );
+  }
   
-  GtkStyle *style = gtk_style_new();
-  ...
-*/
+  gdk_font_unref( style->font );
+  style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+  
+  gtk_widget_set_style( m_widget, style );
 }
 
 wxFont *wxWindow::GetFont(void)

@@ -57,11 +57,13 @@ class MyPanel: public wxPanel
     void OnComboButtons( wxCommandEvent &event );
     void OnRadio( wxCommandEvent &event );
     void OnRadioButtons( wxCommandEvent &event );
+    void OnSetFont( wxCommandEvent &event );
     
     wxListBox   *m_listbox;
     wxChoice    *m_choice;
     wxComboBox  *m_combo;
     wxRadioBox  *m_radio;
+    wxButton    *m_fontButton;
     
     wxTextCtrl  *m_text;
     wxNotebook  *m_notebook;    
@@ -137,6 +139,7 @@ const  ID_LISTBOX_SEL_STR   = 132;
 const  ID_LISTBOX_CLEAR     = 133;
 const  ID_LISTBOX_APPEND    = 134;
 const  ID_LISTBOX_DELETE    = 135;
+const  ID_LISTBOX_FONT      = 136;
 
 const  ID_CHOICE            = 120;
 const  ID_CHOICE_SEL_NUM    = 121;
@@ -144,6 +147,7 @@ const  ID_CHOICE_SEL_STR    = 122;
 const  ID_CHOICE_CLEAR      = 123;
 const  ID_CHOICE_APPEND     = 124;
 const  ID_CHOICE_DELETE     = 125;
+const  ID_CHOICE_FONT       = 126;
 
 const  ID_COMBO             = 140;
 const  ID_COMBO_SEL_NUM     = 141;
@@ -151,12 +155,16 @@ const  ID_COMBO_SEL_STR     = 142;
 const  ID_COMBO_CLEAR       = 143;
 const  ID_COMBO_APPEND      = 144;
 const  ID_COMBO_DELETE      = 145;
+const  ID_COMBO_FONT        = 146;
 
 const  ID_TEXT              = 150;
 
 const  ID_RADIOBOX          = 160;
 const  ID_RADIOBOX_SEL_NUM  = 161;
 const  ID_RADIOBOX_SEL_STR  = 162;
+const  ID_RADIOBOX_FONT     = 163;
+
+const  ID_SET_FONT          = 170;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_SIZE      (                       MyPanel::OnSize)
@@ -166,21 +174,26 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_BUTTON    (ID_LISTBOX_CLEAR,      MyPanel::OnListBoxButtons)
   EVT_BUTTON    (ID_LISTBOX_APPEND,     MyPanel::OnListBoxButtons)
   EVT_BUTTON    (ID_LISTBOX_DELETE,     MyPanel::OnListBoxButtons)
+  EVT_BUTTON    (ID_LISTBOX_FONT,       MyPanel::OnListBoxButtons)
   EVT_CHOICE    (ID_CHOICE,             MyPanel::OnChoice)
   EVT_BUTTON    (ID_CHOICE_SEL_NUM,     MyPanel::OnChoiceButtons)
   EVT_BUTTON    (ID_CHOICE_SEL_STR,     MyPanel::OnChoiceButtons)
   EVT_BUTTON    (ID_CHOICE_CLEAR,       MyPanel::OnChoiceButtons)
   EVT_BUTTON    (ID_CHOICE_APPEND,      MyPanel::OnChoiceButtons)
   EVT_BUTTON    (ID_CHOICE_DELETE,      MyPanel::OnChoiceButtons)
+  EVT_BUTTON    (ID_CHOICE_FONT,        MyPanel::OnChoiceButtons)
   EVT_CHOICE    (ID_COMBO,              MyPanel::OnCombo)
   EVT_BUTTON    (ID_COMBO_SEL_NUM,      MyPanel::OnComboButtons)
   EVT_BUTTON    (ID_COMBO_SEL_STR,      MyPanel::OnComboButtons)
   EVT_BUTTON    (ID_COMBO_CLEAR,        MyPanel::OnComboButtons)
   EVT_BUTTON    (ID_COMBO_APPEND,       MyPanel::OnComboButtons)
   EVT_BUTTON    (ID_COMBO_DELETE,       MyPanel::OnComboButtons)
+  EVT_BUTTON    (ID_COMBO_FONT,         MyPanel::OnComboButtons)
   EVT_RADIOBOX  (ID_RADIOBOX,           MyPanel::OnRadio)
   EVT_BUTTON    (ID_RADIOBOX_SEL_NUM,   MyPanel::OnRadioButtons)
   EVT_BUTTON    (ID_RADIOBOX_SEL_STR,   MyPanel::OnRadioButtons)
+  EVT_BUTTON    (ID_RADIOBOX_FONT,      MyPanel::OnRadioButtons)
+  EVT_BUTTON    (ID_SET_FONT,           MyPanel::OnSetFont)
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
@@ -212,9 +225,15 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   wxASSERT( WXSIZEOF(aIconNames) == Image_Max ); // keep in sync
 
   // fill the image list
+#ifdef __WXMSW__
   wxString strIconDir = "icons/";
+#else
+  wxString strIconDir = "../icons/";
+#endif
+
   wxImageList *imagelist = new wxImageList(32, 32);
-  for ( size_t n = 0; n < Image_Max; n++ ) {
+  for ( size_t n = 0; n < Image_Max; n++ ) 
+  {
     imagelist->Add(wxBitmap(strIconDir + aIconNames[n]));
   }
 
@@ -227,6 +246,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
+  (void)new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(180,180), wxSize(140,30) );
   m_notebook->AddPage(panel, "wxList", FALSE, Image_List);
   
   panel = new wxPanel(m_notebook);
@@ -236,6 +256,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_CHOICE_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_CHOICE_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_CHOICE_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
+  (void)new wxButton( panel, ID_CHOICE_FONT, "Set Italic font", wxPoint(180,180), wxSize(140,30) );
   m_notebook->AddPage(panel, "wxChoice", FALSE, Image_Choice);
   
   panel = new wxPanel(m_notebook);
@@ -245,6 +266,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_COMBO_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_COMBO_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_COMBO_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
+  (void)new wxButton( panel, ID_COMBO_FONT, "Set Italic font", wxPoint(180,180), wxSize(140,30) );
   m_notebook->AddPage(panel, "wxComboBox", FALSE, Image_Combo);
   
   wxTextCtrl *text = new wxTextCtrl( m_notebook, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(120,100), wxTE_MULTILINE );
@@ -254,6 +276,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 4, choices );
   (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(200,30), wxSize(100,30) );
   (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "Select 'This'", wxPoint(200,80), wxSize(100,30) );
+  (void)new wxButton( panel, ID_RADIOBOX_FONT, "Set Italic font", wxPoint(200,130), wxSize(160,30) );
+  m_fontButton = new wxButton( panel, ID_SET_FONT, "Set more Italic font", wxPoint(200,180), wxSize(160,30) );
   m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);
 }
 
@@ -304,6 +328,11 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
       m_listbox->Delete( idx );
       break;
     }
+    case ID_LISTBOX_FONT:
+    {
+      m_listbox->SetFont( *wxITALIC_FONT );
+      break;
+    }
   }
 }
 
@@ -342,6 +371,11 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
     {
       int idx = m_choice->GetSelection();
       m_choice->Delete( idx );
+      break;
+    }
+    case ID_CHOICE_FONT:
+    {
+      m_choice->SetFont( *wxITALIC_FONT );
       break;
     }
   }
@@ -384,6 +418,11 @@ void MyPanel::OnComboButtons( wxCommandEvent &event )
       m_combo->Delete( idx );
       break;
     }
+    case ID_COMBO_FONT:
+    {
+      m_combo->SetFont( *wxITALIC_FONT );
+      break;
+    }
   }
 }
 
@@ -408,7 +447,18 @@ void MyPanel::OnRadioButtons( wxCommandEvent &event )
       m_radio->SetStringSelection( "This" );
       break;
     }
+    case ID_RADIOBOX_FONT:
+    {
+      m_radio->SetFont( *wxITALIC_FONT );
+      break;
+    }
   }
+}
+
+void MyPanel::OnSetFont( wxCommandEvent &WXUNUSED(event) )
+{
+  m_fontButton->SetFont( *wxITALIC_FONT );
+  m_text->SetFont( *wxITALIC_FONT );
 }
 
 MyPanel::~MyPanel()

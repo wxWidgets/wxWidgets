@@ -130,8 +130,15 @@ void wxListBox::Append( const wxString &item )
 
 void wxListBox::Append( const wxString &item, char *clientData )
 {
-  GtkWidget *list_item;
-  list_item = gtk_list_item_new_with_label( item ); 
+  GtkWidget *list_item = gtk_list_item_new_with_label( item ); 
+  
+  if (m_hasOwnStyle)
+  {
+    GtkBin *bin = GTK_BIN( list_item );
+    gtk_widget_set_style( bin->child, 
+      gtk_style_ref(
+        gtk_widget_get_style( m_widget ) ) ); 
+  }
   
   gtk_signal_connect( GTK_OBJECT(list_item), "select", 
     GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
@@ -230,7 +237,8 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
   // get the number of selected items first
   GList *child = m_list->children;
   int count = 0;
-  for ( child = m_list->children; child != NULL; child = child->next ) {
+  for ( child = m_list->children; child != NULL; child = child->next ) 
+  {
     if ( GTK_WIDGET(child->data)->state == GTK_STATE_SELECTED ) 
       count++;
   }
@@ -241,7 +249,8 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
     // now fill the list
     aSelections.Alloc(count); // optimization attempt
     int i = 0;
-    for ( child = m_list->children; child != NULL; child = child->next, i++ ) {
+    for ( child = m_list->children; child != NULL; child = child->next, i++ ) 
+    {
       if ( GTK_WIDGET(child->data)->state == GTK_STATE_SELECTED ) 
         aSelections.Add(i);
     }
@@ -377,5 +386,19 @@ GtkWidget *wxListBox::GetConnectWidget(void)
   return GTK_WIDGET(m_list);
 }
 
+void wxListBox::SetFont( const wxFont &font )
+{
+  wxWindow::SetFont( font );
+   
+  GList *child = m_list->children;
+  while (child)
+  {
+    GtkBin *bin = (GtkBin*) child->data;
+    gtk_widget_set_style( bin->child, 
+      gtk_style_ref(
+        gtk_widget_get_style( m_widget ) ) ); 
+    child = child->next;
+  }
+}
 
 

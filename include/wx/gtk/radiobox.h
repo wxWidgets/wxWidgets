@@ -79,14 +79,16 @@ class wxRadioBox: public wxControl
     virtual int Number(void) const;
     int GetNumberOfRowsOrCols(void) const;
     void SetNumberOfRowsOrCols( int n );
+    void SetFont( const wxFont &font );
 
+  // implementation    
+    
+    bool            m_alreadySent;
+    
   private:
   
     GtkRadioButton *m_radio;
     
-  public:
-  
-    bool            m_alreadySent;
 };
 
 #endif // __GTKRADIOBOXH__

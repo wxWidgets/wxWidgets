@@ -279,3 +279,19 @@ void wxRadioBox::SetNumberOfRowsOrCols( int WXUNUSED(n) )
   wxFAIL_MSG("wxRadioBox::SetNumberOfRowsOrCols not implemented.");
 }
 
+void wxRadioBox::SetFont( const wxFont &font )
+{
+  wxWindow::SetFont( font );
+   
+  GSList *item = gtk_radio_button_group( m_radio );
+  while (item)
+  {
+    GtkButton *button = GTK_BUTTON( item->data );
+    
+    gtk_widget_set_style( button->child, 
+      gtk_style_ref(
+        gtk_widget_get_style( m_widget ) ) ); 
+    
+    item = item->next;
+  }
+}

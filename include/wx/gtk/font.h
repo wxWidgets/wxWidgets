@@ -74,12 +74,8 @@ class wxFont: public wxGDIObject
     bool GetUnderlined(void) const;
 
     wxFont( char *xFontName );
-    
-  private:
-  
-    friend wxDC;
-    friend wxPaintDC;
-    friend wxWindow;
+
+  // implementation        
     
     GdkFont* GetInternalFont(float scale = 1.0) const;
 

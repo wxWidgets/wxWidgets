@@ -429,5 +429,25 @@ bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
     return (window == GTK_ENTRY(m_text)->text_area);
 }
 
+void wxTextCtrl::SetFont( const wxFont &font )
+{
+  m_font = font;
+  
+  GtkStyle *style = (GtkStyle*) NULL;
+  if (!m_hasOwnStyle)
+  {
+    m_hasOwnStyle = TRUE;
+    style = gtk_style_copy( gtk_widget_get_style( m_text ) );
+  }
+  else
+  {
+    style = gtk_widget_get_style( m_text );
+  }
+  
+  gdk_font_unref( style->font );
+  style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+  
+  gtk_widget_set_style( m_text, style );
+}
 
 

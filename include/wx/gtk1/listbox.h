@@ -82,6 +82,7 @@ class wxListBox: public wxControl
     void SetSelection( int n, bool select = TRUE );
     void SetString( int n, const wxString &string );
     void SetStringSelection( const wxString &string, bool select = TRUE );
+    void SetFont( const wxFont &font );
 
     virtual GtkWidget *GetConnectWidget(void);
   

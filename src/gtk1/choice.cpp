@@ -92,8 +92,18 @@ void wxChoice::Append( const wxString &item )
   GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
   GtkWidget *menu_item;
   menu_item = gtk_menu_item_new_with_label( item );
+  
+  if (m_hasOwnStyle)
+  {
+    GtkBin *bin = GTK_BIN( menu_item );
+    gtk_widget_set_style( bin->child, 
+      gtk_style_ref(
+        gtk_widget_get_style( m_widget ) ) ); 
+  }
+  
   gtk_signal_connect( GTK_OBJECT( menu_item ), "activate", 
     GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
+    
   gtk_menu_append( GTK_MENU(menu), menu_item );
   gtk_widget_show( menu_item );
 }
@@ -123,10 +133,10 @@ int wxChoice::FindString( const wxString &string ) const
     GtkBin *bin = GTK_BIN( child->data );
     GtkLabel *label = (GtkLabel *) NULL;
     if (bin->child) label = GTK_LABEL(bin->child);
+    if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
     
     wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
     
-    if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
     if (string == label->label) return count;
     child = child->next;
     count++;
@@ -172,10 +182,10 @@ wxString wxChoice::GetString( int n ) const
     {
       GtkLabel *label = (GtkLabel *) NULL;
       if (bin->child) label = GTK_LABEL(bin->child);
+      if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
       
       wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
       
-      if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
       return label->label;
     }
     child = child->next;
@@ -227,3 +237,23 @@ void wxChoice::SetStringSelection( const wxString &string )
   if (n != -1) SetSelection( n );
 }
 
+void wxChoice::SetFont( const wxFont &font )
+{
+  wxWindow::SetFont( font );
+   
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
+  GList *child = menu_shell->children;
+  while (child)
+  {
+    GtkBin *bin = GTK_BIN( child->data );
+    GtkWidget *label = (GtkWidget *) NULL;
+    if (bin->child) label = bin->child;
+    if (!label) label = GTK_BUTTON(m_widget)->child;
+    
+    gtk_widget_set_style( label,
+      gtk_style_ref(
+        gtk_widget_get_style( m_widget ) ) ); 
+	
+    child = child->next;
+  }
+}

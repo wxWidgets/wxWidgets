@@ -103,3 +103,26 @@ void wxButton::Enable( bool enable )
   gtk_widget_set_sensitive( label, enable );
 }
 
+void wxButton::SetFont( const wxFont &font )
+{
+  m_font = font;
+  
+  GtkButton *bin = GTK_BUTTON( m_widget );
+  GtkWidget *label = bin->child;
+  
+  GtkStyle *style = (GtkStyle*) NULL;
+  if (!m_hasOwnStyle)
+  {
+    m_hasOwnStyle = TRUE;
+    style = gtk_style_copy( gtk_widget_get_style( label ) );
+  }
+  else
+  {
+    style = gtk_widget_get_style( label );
+  }
+  
+  gdk_font_unref( style->font );
+  style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+  
+  gtk_widget_set_style( label, style );
+}
