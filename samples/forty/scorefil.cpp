@@ -175,9 +175,9 @@ void ScoreFile::WritePlayersScore(const char* player, int wins, int games, int s
 
 		m_config->SetPath("/Players");
 		m_config->SetPath(player);
-		m_config->Write("Score", score);
-		m_config->Write("Games", games);
-		m_config->Write("Wins", wins);
+		m_config->Write("Score", (long)score);
+		m_config->Write("Games", (long)games);
+		m_config->Write("Wins", (long)wins);
 		m_config->Write("Check", CalcCheck(player, games, wins, score));
 	}
 }
