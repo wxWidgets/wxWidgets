@@ -303,27 +303,24 @@ struct wxTreeViewItem : public TV_ITEM
 
 // wxVirutalNode is used in place of a single root when 'hidden' root is
 // specified.
-class wxVirtualNode
+class wxVirtualNode : public wxTreeViewItem
 {
 public:
     wxVirtualNode(wxTreeItemData *data)
+        : wxTreeViewItem(TVI_ROOT, 0)
     {
         m_data = data;
-
-        m_tvItem = new wxTreeViewItem(TVI_ROOT, 0);
     }
 
     ~wxVirtualNode()
     {
         delete m_data;
-        delete m_tvItem;
     }
 
     wxTreeItemData *GetData() const { return m_data; }
     void SetData(wxTreeItemData *data) { delete m_data; m_data = data; }
 
 private:
-    wxTreeViewItem *m_tvItem;
     wxTreeItemData *m_data;
 };
 
