@@ -103,7 +103,7 @@
 #define wxLIST_HITTEST_TOLEFT           0x0400  // To the left of the client area.
 #define wxLIST_HITTEST_TORIGHT          0x0800  // To the right of the client area.
 
-#define wxLIST_HITTEST_ONITEM (wxLIST_HITTEST_ONITEMICON | wxLIST_HITTEST_ONITEMLABEL wxLIST_HITTEST_ONITEMSTATEICON)
+#define wxLIST_HITTEST_ONITEM (wxLIST_HITTEST_ONITEMICON | wxLIST_HITTEST_ONITEMLABEL | wxLIST_HITTEST_ONITEMSTATEICON)
 
 // Flags for GetNextItem
 enum {
