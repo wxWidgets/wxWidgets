@@ -519,11 +519,6 @@
 #define wxUSE_DRAG_AND_DROP 1
                                 // 0 for no drag and drop
 
-#define wxUSE_XPM_IN_MSW   1
-                                // 0 for no XPM support in wxBitmap.
-                                // Default is 1, as XPM is now fully
-                                // supported this makes easier the issue
-                                // of portable icons and bitmaps.
 #define wxUSE_IMAGE_LOADING_IN_MSW        1
                                 // Use dynamic DIB loading/saving code in utils/dib under MSW.
 #define wxUSE_RESOURCE_LOADING_IN_MSW     1
@@ -736,9 +731,6 @@
 #undef  wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS          0
 
-#undef wxUSE_MS_HTML_HELP
-#define wxUSE_MS_HTML_HELP 0
-
 // Cygwin betas don't have wcslen
 #if defined(__CYGWIN__) || defined(__CYGWIN32__)
 #  if ! ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
@@ -829,12 +821,6 @@
 #define wxUSE_LIBJPEG 0
 #endif
 
-#if defined(__BORLANDC__)
-// Need a BC++-specific htmlhelp.lib before we can enable this
-#undef wxUSE_MS_HTML_HELP
-#define wxUSE_MS_HTML_HELP 0
-#endif
-
 // wxUSE_DEBUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode
 #if defined(__BORLANDC__) && (defined(WXMAKINGDLL) || defined(WXUSINGDLL))
 #undef wxUSE_DEBUG_NEW_ALWAYS
@@ -846,9 +832,6 @@
 #undef  wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 0
 */
-
-#undef wxUSE_MS_HTML_HELP
-#define wxUSE_MS_HTML_HELP 0
 
 #undef wxUSE_WCHAR_T
 #define wxUSE_WCHAR_T 0
