@@ -300,7 +300,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                 {
                     int x, y;
                     int w, h;
-                    win->GetSize(&w, &h);
+                    win->GetBestSize(&w, &h);
                     win->GetPosition(&x, &y);
                     value = x + w;
                     done = true;
@@ -453,7 +453,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                 {
                     int x, y;
                     int w, h;
-                    win->GetSize(&w, &h);
+                    win->GetBestSize(&w, &h);
                     win->GetPosition(&x, &y);
                     value = h + y;
                     done = true;
@@ -621,7 +621,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (win)
                     {
                         int h;
-                        win->GetSize(&value, &h);
+                        win->GetBestSize(&value, &h);
                         done = true;
                         return true;
                     }
@@ -679,7 +679,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     if (win)
                     {
                         int w;
-                        win->GetSize(&w, &value);
+                        win->GetBestSize(&w, &value);
                         done = true;
                         return true;
                     }

@@ -211,6 +211,7 @@ All:
 All (GUI):
 
 - recursive wxSizer::GetItem returns item of given window, sizer or nth index
+- wxLayoutConstraints now use best size, not current size, for AsIs() condition
 
 Unix:
 
