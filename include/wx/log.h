@@ -331,7 +331,7 @@ const char* WXDLLEXPORT wxSysErrorMsg(unsigned long nErrCode = 0);
   #define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
 #else   //!debug
   inline void wxLogApiError(const char *, long) { }
-  inline void wxLogLastErrror(const char *) { }
+  inline void wxLogLastError(const char *) { }
 #endif  //debug/!debug
 
 #endif  //__LOGH__
