@@ -60,7 +60,7 @@ class wxListBox: public wxControl
     int FindString( const wxString &item ) const;
     char *GetClientData( const int n ) const;
     int GetSelection(void) const;
-    int GetSelections( int **selections ) const;
+    int GetSelections( class wxArrayInt &) const;
     wxString GetString( int n ) const;
     wxString GetStringSelection(void) const;
     int Number(void);
