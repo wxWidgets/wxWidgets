@@ -33,7 +33,13 @@
 #   endif // Unix flavour
 #endif // !Unix or already have some HAVE_xxx defined
 
-#if defined(HAVE_DLOPEN)
+// Note: WXPM/EMX has to be tested first, since we want to use
+// native version, even if configure detected presence of DLOPEN.
+#if defined(__WXPM__) || defined(__EMX__)
+#   define INCL_DOS
+#   include <os2.h>
+    typedef HMODULE wxDllType;
+#elif defined(HAVE_DLOPEN)
 #   include <dlfcn.h>
     typedef void *wxDllType;
 #elif defined(HAVE_SHL_LOAD)
@@ -41,10 +47,6 @@
     typedef shl_t wxDllType;
 #elif defined(__WINDOWS__)
 #   include <windows.h>         // needed to get HMODULE
-    typedef HMODULE wxDllType;
-#elif defined(__OS2__)
-#   define INCL_DOS
-#   include <os2.h>
     typedef HMODULE wxDllType;
 #elif defined(__WXMAC__)
     typedef CFragConnectionID wxDllType;

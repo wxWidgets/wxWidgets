@@ -41,7 +41,13 @@
 // conditional compilation
 // ----------------------------------------------------------------------------
 
-#if defined(HAVE_DLOPEN)
+#if defined(__WXPM__) || defined(__EMX__)
+#  define INCL_DOS
+#  include <os2.h>
+#  define wxDllOpen(error, lib, handle)     DosLoadModule(error, sizeof(error), lib, &handle)
+#  define wxDllGetSymbol(handle, modaddr)   DosQueryProcAddr(handle, 1L, NULL, (PFN*)modaddr)
+#  define wxDllClose(handle)                DosFreeModule(handle)
+#elif defined(HAVE_DLOPEN)
 #   define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_NOW/*RTLD_LAZY*/)
 #   define wxDllGetSymbol(handle, name)  dlsym(handle, name.mb_str())
 #   define wxDllClose                    dlclose
@@ -66,14 +72,6 @@
 #   endif  // Win32/16
 #   define wxDllGetSymbol(handle, name)    ::GetProcAddress(handle, name)
 #   define wxDllClose                      ::FreeLibrary
-
-#elif defined(__OS2__)
-
-#  define INCL_DOS
-#  include <os2.h>
-#  define wxDllOpen(error, lib, handle)     DosLoadModule(error, sizeof(error), lib, &handle)
-#  define wxDllGetSymbol(handle, modaddr)   DosQueryProcAddr(handle, 1L, NULL, (PFN*)modaddr)
-#  define wxDllClose(handle)                DosFreeModule(handle)
 #else
 #   error "Don't know how to load shared libraries on this platform."
 #endif // OS
@@ -94,14 +92,14 @@ static wxString ConstructLibraryName(const wxString& basename)
 {
     wxString fullname(basename);
 
-#if defined(__UNIX__)
+#if defined(__WINDOWS__) || defined(__WXPM__) || defined(__EMX__)
+    fullname << ".dll";
+#elif defined(__UNIX__)
 #   if defined(__HPUX__)
         fullname << ".sl";
 #   else	//__HPUX__
         fullname << ".so";
 #   endif	//__HPUX__
-#elif defined(__WINDOWS__) || defined(__OS2__)
-    fullname << ".dll";
 #endif
 
     return fullname;
@@ -184,7 +182,7 @@ void *wxLibrary::GetSymbol(const wxString& symbname)
 wxDllType
 wxDllLoader::GetProgramHandle(void)
 {
-#if defined( HAVE_DLOPEN )
+#if defined( HAVE_DLOPEN ) && !defined(__EMX__)
    // optain handle for main program
    return dlopen(NULL, RTLD_NOW/*RTLD_LAZY*/); 
 #elif defined (HAVE_SHL_LOAD)
@@ -215,7 +213,7 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
         wxASSERT_MSG( 1 , (char*)myErrName ) ;
         return NULL ;
     }
-#elif defined(__OS2__)
+#elif defined(__WXPM__) || defined(__EMX__)
     char                            zError[256] = "";
     wxDllOpen(zError, libname, handle);
 #else // !Mac
@@ -259,7 +257,7 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
 
     if ( FindSymbol( dllHandle , symName , &symAddress , &symClass ) == noErr )
         symbol = (void *)symAddress ;
-#elif defined( __OS2__ )
+#elif defined( __WXPM__ ) || defined(__EMX__)
     wxDllGetSymbol(dllHandle, symbol);
 #else
     symbol = wxDllGetSymbol(dllHandle, name);
