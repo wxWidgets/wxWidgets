@@ -242,7 +242,7 @@ void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
         wxColourData retData = dialog.GetColourData();
         col = retData.GetColour();
         myCanvas->SetBackgroundColour(col);
-        myCanvas->Clear();
+        myCanvas->ClearBackground();
         myCanvas->Refresh();
     }
 }
@@ -288,7 +288,7 @@ void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
         wxColour col = retData.GetColour();
 //        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(&col, wxSOLID);
         myCanvas->SetBackgroundColour(col);
-        myCanvas->Clear();
+        myCanvas->ClearBackground();
         myCanvas->Refresh();
       }
       dialog->Destroy();

@@ -127,7 +127,7 @@ bool DrawingView::OnClose(bool deleteWindow)
     
     // Clear the canvas in  case we're in single-window mode,
     // and the canvas stays.
-    canvas->Clear();
+    canvas->ClearBackground();
     canvas->view = (wxView *) NULL;
     canvas = (MyCanvas *) NULL;
     
