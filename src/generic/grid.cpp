@@ -3748,10 +3748,10 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
                            bool clipToMinMax);
 
 #define internalXToCol(x) CoordToRowOrCol(x, m_defaultColWidth, \
-                                          WXGRID_MIN_COL_WIDTH, \
+                                          m_minAcceptableColWidth, \
                                           m_colRights, m_numCols, TRUE)
 #define internalYToRow(y) CoordToRowOrCol(y, m_defaultRowHeight, \
-                                          WXGRID_MIN_ROW_HEIGHT, \
+                                          m_minAcceptableRowHeight, \
                                           m_rowBottoms, m_numRows, TRUE)
 /////////////////////////////////////////////////////////////////////
 
@@ -3977,6 +3977,9 @@ void wxGrid::Init()
 
     m_defaultColWidth  = WXGRID_DEFAULT_COL_WIDTH;
     m_defaultRowHeight = m_gridWin->GetCharHeight();
+
+    m_minAcceptableColWidth  = WXGRID_MIN_COL_WIDTH;
+    m_minAcceptableRowHeight = WXGRID_MIN_ROW_HEIGHT;
 
 #if defined(__WXMOTIF__) || defined(__WXGTK__)  // see also text ctrl sizing in ShowCellEditControl()
     m_defaultRowHeight += 8;
@@ -5604,7 +5607,7 @@ void wxGrid::DoEndDragResizeRow()
 
         int rowTop = GetRowTop(m_dragRowOrCol);
         SetRowSize( m_dragRowOrCol,
-                    wxMax( m_dragLastPos - rowTop, WXGRID_MIN_ROW_HEIGHT ) );
+                    wxMax( m_dragLastPos - rowTop, m_minAcceptableRowHeight ) );
 
         if ( !GetBatchCount() )
         {
@@ -7661,14 +7664,14 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
 int wxGrid::YToRow( int y )
 {
     return CoordToRowOrCol(y, m_defaultRowHeight,
-                           WXGRID_MIN_ROW_HEIGHT, m_rowBottoms, m_numRows, FALSE);
+                           m_minAcceptableRowHeight, m_rowBottoms, m_numRows, FALSE);
 }
 
 
 int wxGrid::XToCol( int x )
 {
     return CoordToRowOrCol(x, m_defaultColWidth,
-                           WXGRID_MIN_COL_WIDTH, m_colRights, m_numCols, FALSE);
+                           m_minAcceptableColWidth, m_colRights, m_numCols, FALSE);
 }
 
 
@@ -9247,7 +9250,7 @@ void wxGrid::EnableDragGridSize( bool enable )
 
 void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
 {
-    m_defaultRowHeight = wxMax( height, WXGRID_MIN_ROW_HEIGHT );
+    m_defaultRowHeight = wxMax( height, m_minAcceptableRowHeight );
 
     if ( resizeExistingRows )
     {
@@ -9265,6 +9268,7 @@ void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
 void wxGrid::SetRowSize( int row, int height )
 {
     wxCHECK_RET( row >= 0 && row < m_numRows, _T("invalid row index") );
+
 
     if ( m_rowHeights.IsEmpty() )
     {
@@ -9287,7 +9291,7 @@ void wxGrid::SetRowSize( int row, int height )
 
 void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
 {
-    m_defaultColWidth = wxMax( width, WXGRID_MIN_COL_WIDTH );
+    m_defaultColWidth = wxMax( width, m_minAcceptableColWidth );
 
     if ( resizeExistingCols )
     {
@@ -9341,24 +9345,52 @@ void wxGrid::SetColSize( int col, int width )
 
 void wxGrid::SetColMinimalWidth( int col, int width )
 {
-    m_colMinWidths.Put(col, width);
+    if (width > GetColMinimalAcceptableWidth()) {
+        m_colMinWidths.Put(col, width);
+    }
 }
 
 void wxGrid::SetRowMinimalHeight( int row, int width )
 {
-    m_rowMinHeights.Put(row, width);
+    if (width > GetRowMinimalAcceptableHeight()) {
+       m_rowMinHeights.Put(row, width);
+    }
 }
 
 int wxGrid::GetColMinimalWidth(int col) const
 {
     long value = m_colMinWidths.Get(col);
-    return value != wxNOT_FOUND ? (int)value : WXGRID_MIN_COL_WIDTH;
+    return value != wxNOT_FOUND ? (int)value : m_minAcceptableColWidth;
 }
 
 int wxGrid::GetRowMinimalHeight(int row) const
 {
     long value = m_rowMinHeights.Get(row);
-    return value != wxNOT_FOUND ? (int)value : WXGRID_MIN_ROW_HEIGHT;
+    return value != wxNOT_FOUND ? (int)value : m_minAcceptableRowHeight;
+}
+
+void wxGrid::SetColMinimalAcceptableWidth( int width )
+{
+    if ( width<1 )
+        return;
+    m_minAcceptableColWidth = width;
+}
+
+void wxGrid::SetRowMinimalAcceptableHeight( int height )
+{
+    if ( height<1 )
+        return;
+    m_minAcceptableRowHeight = height;
+};
+
+int  wxGrid::GetColMinimalAcceptableWidth() const
+{
+    return m_minAcceptableColWidth;
+}
+
+int  wxGrid::GetRowMinimalAcceptableHeight() const
+{
+    return m_minAcceptableRowHeight;
 }
 
 // ----------------------------------------------------------------------------
@@ -9957,8 +9989,6 @@ wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords &topLeft,
 
     return rect;
 }
-
-
 
 //
 // ------ Grid event classes

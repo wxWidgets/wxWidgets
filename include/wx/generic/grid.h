@@ -1351,6 +1351,18 @@ public:
     void     SetColMinimalWidth( int col, int width );
     void     SetRowMinimalHeight( int row, int width );
 
+    /*  These members can be used to query and modify the minimal
+     *  acceptable size of grid rows and columns. Call this function in
+     *  your code which creates the grid if you want to display cells
+     *  with a size smaller than the default acceptable minimum size.
+     *  Like the members SetColMinimalWidth and SetRowMinimalWidth,
+     *  the existing rows or columns will not be checked/resized.
+     */
+    void     SetColMinimalAcceptableWidth( int width );
+    void     SetRowMinimalAcceptableHeight( int width );
+    int      GetColMinimalAcceptableWidth() const;
+    int      GetRowMinimalAcceptableHeight() const;
+
     void     SetDefaultCellBackgroundColour( const wxColour& );
     void     SetCellBackgroundColour( int row, int col, const wxColour& );
     void     SetDefaultCellTextColour( const wxColour& );
@@ -1686,6 +1698,7 @@ protected:
     void InitRowHeights();
 
     int        m_defaultRowHeight;
+    int        m_minAcceptableRowHeight;
     wxArrayInt m_rowHeights;
     wxArrayInt m_rowBottoms;
 
@@ -1693,6 +1706,7 @@ protected:
     void InitColWidths();
 
     int        m_defaultColWidth;
+    int        m_minAcceptableColWidth;
     wxArrayInt m_colWidths;
     wxArrayInt m_colRights;
 
@@ -1880,6 +1894,7 @@ protected:
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxGrid)
 };
+
 
 // ----------------------------------------------------------------------------
 // Grid event class and event types
