@@ -71,6 +71,14 @@ public:
 
     virtual void DoSetVirtualSize(int x, int y);
 
+    // wxWindow's GetBestVirtualSize returns the actual window size,
+    // whereas we want to return the virtual size
+    virtual wxSize GetBestVirtualSize() const;
+
+    // Return the size best suited for the current window
+    // (this isn't a virtual size, this is a sensible size for the window)
+    virtual wxSize DoGetBestSize() const;
+
 #ifdef __WXMAC__
     virtual bool MacClipChildren() const { return true ; }
 #endif

@@ -138,7 +138,7 @@ public:
     bool IsSplit() const { return (m_windowTwo != NULL); }
 
     // Sets the sash size
-    void SetSashSize(int WXUNUSED(width)) { }
+    void SetSashSize(int width) { m_sashSize = width; }
 
     // Sets the border size
     void SetBorderSize(int WXUNUSED(width)) { }
@@ -283,6 +283,7 @@ protected:
     int         m_oldY;
     int         m_sashPosition; // Number of pixels from left or top
     double      m_sashGravity;
+    int         m_sashSize;
     wxSize      m_lastSize;
     int         m_requestedSashPosition;
     int         m_sashPositionCurrent; // while dragging

@@ -329,6 +329,60 @@ void wxScrolledWindow::DoSetVirtualSize( int x, int y )
         Layout();
 }
 
+// wxWindow's GetBestVirtualSize returns the actual window size,
+// whereas we want to return the virtual size
+wxSize wxScrolledWindow::GetBestVirtualSize() const
+{
+    wxSize  clientSize( GetClientSize() );
+    if (GetSizer())
+    {
+        wxSize minSize( GetSizer()->CalcMin() );
+
+        return wxSize( wxMax( clientSize.x, minSize.x ), wxMax( clientSize.y, minSize.y ) );
+    }
+    else
+        return clientSize;
+}
+
+// return the size best suited for the current window
+// (this isn't a virtual size, this is a sensible size for the window)
+wxSize wxScrolledWindow::DoGetBestSize() const
+{
+    wxSize best;
+
+    if ( GetSizer() )
+    {
+        wxSize b = GetSizer()->GetMinSize();
+
+        // Only use the content to set the window size in the direction
+        // where there's no scrolling; otherwise we're going to get a huge
+        // window in the direction in which scrolling is enabled
+        int ppuX, ppuY;
+        GetScrollPixelsPerUnit(& ppuX, & ppuY);
+
+        wxSize minSize;
+        if ( GetMinSize().IsFullySpecified() )
+            minSize = GetMinSize();
+        else
+            minSize = GetSize();
+
+        if (ppuX > 0)
+            b.x = minSize.x;
+        if (ppuY > 0)
+            b.y = minSize.y;
+        best = b;
+    }
+    else
+        return wxWindow::DoGetBestSize();
+
+    // Add any difference between size and client size
+    wxSize diff = GetSize() - GetClientSize();
+    best.x += wxMax(0, diff.x);
+    best.y += wxMax(0, diff.y);
+
+    return best;
+}
+
 /*
  * pixelsPerUnitX/pixelsPerUnitY: number of pixels per unit (e.g. pixels per text line)
  * noUnitsX/noUnitsY:        : no. units per scrollbar
