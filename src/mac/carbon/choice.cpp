@@ -234,7 +234,7 @@ void wxChoice::MacHandleControlClick( WXWidget control , wxInt16 controlpart )
 
 wxSize wxChoice::DoGetBestSize() const
 {
-    int lbWidth = 100;  // some defaults
+    int lbWidth = GetCount() > 0 ? 20 : 100;  // some defaults
     int lbHeight = 20;
     int wLine;
 #if TARGET_CARBON
