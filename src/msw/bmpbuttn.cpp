@@ -429,12 +429,9 @@ void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right, 
 {
     HBRUSH  old = (HBRUSH) SelectObject( (HDC) dc, wxDisableButtonBrush );
 
-    // VZ: what's this?? there is no such ROP AFAIK
-#ifdef __SALFORDC__
-    DWORD dwRop = 0xFA0089L;
-#else
-    DWORD dwRop = 0xFA0089UL;
-#endif
+    // ROP for "dest |= pattern" operation -- as it doesn't have a standard
+    // name, give it our own
+    static const DWORD PATPAINT = 0xFA0089UL;
 
     if ( with_marg )
     {
@@ -444,7 +441,7 @@ void wxBitmapButton::DrawButtonDisable( WXHDC dc, int left, int top, int right, 
         bottom -= 2 * m_marginY;
     }
 
-    ::PatBlt( (HDC) dc, left, top, right, bottom, dwRop);
+    ::PatBlt( (HDC) dc, left, top, right, bottom, PATPAINT);
 
     ::SelectObject( (HDC) dc, old );
 }
