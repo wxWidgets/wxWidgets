@@ -184,6 +184,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 // local functions
 // ----------------------------------------------------------------------------
 
+#ifndef __WXWINCE__
 // apparently DrawThemeBackground() modifies the rect passed to it and if we
 // don't call this function there are some drawing artifacts which are only
 // visible with some non default themes; so modify the rect here so that it
@@ -196,6 +197,7 @@ static void AdjustRectForThemeBg(RECT& rc)
     rc.right  += 4;
     rc.bottom += 5;
 }
+#endif
 
 // ============================================================================
 // implementation
