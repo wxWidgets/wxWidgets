@@ -3369,6 +3369,7 @@ AC_OUTPUT([
             utils/HelpGen/src/Makefile
             utils/tex2rtf/Makefile
             utils/tex2rtf/src/Makefile
+            utils/hhp2cached/Makefile
             utils/dialoged/Makefile
             utils/dialoged/src/Makefile
           ],

@@ -4,6 +4,7 @@
 
 all:
 	cd tex2rtf; make
+	cd hhp2cached; make
 	cd makegen; make
 	cd HelpGen; make
 	cd dialoged; make
@@ -13,6 +14,7 @@ all:
 
 clean:
 	cd tex2rtf; make clean
+	cd hhp2cached; make clean
 	cd makegen; make clean
 	cd HelpGen; make clean
 	cd dialoged; make clean
