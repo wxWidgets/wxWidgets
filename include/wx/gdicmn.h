@@ -126,6 +126,10 @@ enum wxStockCursor
     wxCURSOR_MAX
 };
 
+#ifndef __WXGTK__
+    #define wxCURSOR_DEFAULT wxCURSOR_ARROW
+#endif
+
 // ---------------------------------------------------------------------------
 // macros
 // ---------------------------------------------------------------------------

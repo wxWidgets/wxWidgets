@@ -403,6 +403,8 @@ protected:
     wxPoint              m_dragStart;
     bool                 m_isDragging; // true between BEGIN/END drag events
     wxGenericTreeItem   *m_dropTarget;
+    wxCursor             m_oldCursor;  // cursor is changed while dragging
+    wxGenericTreeItem   *m_oldSelection;
 
     wxTimer             *m_renameTimer;
     bool                 m_renameAccept;
