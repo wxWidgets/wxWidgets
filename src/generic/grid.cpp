@@ -1461,6 +1461,7 @@ void wxGrid::CalcCellsExposed( wxRegion& reg )
         CalcUnscrolledPosition( r.GetLeft(), r.GetTop(), &left, &top );
         CalcUnscrolledPosition( r.GetRight(), r.GetBottom(), &right, &bottom );
 
+	left++; top++; 
         // find the cells within these bounds
         //
         int row, col;
