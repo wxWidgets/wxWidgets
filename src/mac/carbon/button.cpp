@@ -77,31 +77,44 @@ void wxButton::SetDefault()
 
 wxSize wxButton::DoGetBestSize() const
 {
-  wxSize sz = GetDefaultSize() ;
+    wxSize sz = GetDefaultSize() ;
+
+    int charspace = 8 ;
+    if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL || GetWindowVariant() == wxWINDOW_VARIANT_LARGE )
+    {
+        sz.y = 20 ;
+        charspace = 10 ;
+    }
+    else if ( GetWindowVariant() == wxWINDOW_VARIANT_SMALL )
+    {
+        sz.y = 17 ;
+        charspace = 8 ;
+    }
+    else if ( GetWindowVariant() == wxWINDOW_VARIANT_MINI )
+    {
+        sz.y = 15 ;
+        charspace = 8 ;
+    }
   
-  int charspace = 8 ;
-  if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL || GetWindowVariant() == wxWINDOW_VARIANT_LARGE )
-  {
-    sz.y = 20 ;
-    charspace = 10 ;
-  }
-  else if ( GetWindowVariant() == wxWINDOW_VARIANT_SMALL )
-  {
-    sz.y = 17 ;
-    charspace = 8 ;
-  }
-  else if ( GetWindowVariant() == wxWINDOW_VARIANT_MINI )
-  {
-    sz.y = 15 ;
-    charspace = 8 ;
-  }
+    Rect    bestsize = { 0 , 0 , 0 , 0 } ;
+    short   baselineoffset ;
+    ::GetBestControlRect( *m_peer , &bestsize , &baselineoffset ) ;
   
-  int wBtn = m_label.Length() * charspace + 12 ;
- 
-  if (wBtn > sz.x || ( GetWindowStyle() & wxBU_EXACTFIT) ) 
-    sz.x = wBtn;
-  
-  return sz ;
+    int wBtn = 0 ;
+    if ( EmptyRect( &bestsize ) )
+    {
+        int wBtn = m_label.Length() * charspace + 12 ;
+    }
+    else
+    {
+        sz.x = bestsize.right - bestsize.left ;
+        sz.y = bestsize.bottom - bestsize.top ;
+    }
+    
+    if (wBtn > sz.x || ( GetWindowStyle() & wxBU_EXACTFIT) ) 
+        sz.x = wBtn;
+
+    return sz ;
 }
 
 wxSize wxButton::GetDefaultSize()
