@@ -521,7 +521,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
         // wxFatalError doesn't return
     }
 
-    wxString configEntry = GetEncodingName(encoding);
+    wxString configEntry = facename + _T("_") + GetEncodingName(encoding);
 
     // do we have a font spec for this encoding?
     wxString pathOld;
@@ -585,6 +585,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                 wxFont font = retData.GetChosenFont();
 
                 *info = retData.EncodingInfo();
+                info -> encoding = retData.GetEncoding();
 
                 // remember this in the config
                 if ( ChangePath(FONTMAPPER_FONT_FROM_ENCODING_PATH, &pathOld) )
@@ -604,7 +605,6 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 
 
     // now try the default mappings:
-    
     wxFontEncodingArray equiv = wxEncodingConverter::GetAllEquivalents(encoding);
     for ( unsigned i = (equiv[0] == encoding) ? 1 : 0; i < equiv.GetCount(); i++ )
         if ( TestAltEncoding(configEntry, equiv[i], info) )
@@ -632,8 +632,12 @@ bool wxFontMapper::IsEncodingAvailable(wxFontEncoding encoding,
                                        const wxString& facename)
 {
     wxNativeEncodingInfo info;
-    
-    wxGetNativeFontEncoding(encoding, &info);
-    info.facename = facename;
-    return wxTestFontEncoding(info);
+
+    if (wxGetNativeFontEncoding(encoding, &info))
+    {
+        info.facename = facename;
+        return wxTestFontEncoding(info);
+    }
+    else
+        return FALSE;
 }
