@@ -1377,12 +1377,13 @@ const wxMB2WXbuf wxLocale::GetString(const wxChar *szOrigString,
 
     return (wxMB2WXbuf)(szOrigString);
   }
-  else
-  {
-    return wxConvertMB2WX(pszTrans); // or preferably wxCSConv(charset).cMB2WX(pszTrans) or something,
-                                     // a macro similar to wxConvertMB2WX could be written for that
-  }
 
+  // or preferably wxCSConv(charset).cMB2WX(pszTrans) or something, a macro
+  // similar to wxConvertMB2WX could be written for that
+
+  return wxConvertMB2WX(pszTrans);
+
+  // undo the hack from the beginning of this function
   #undef szOrgString
 }
 
