@@ -16,7 +16,7 @@
 //---------------------------------------------------------------------------
 
 %{
-#include "wx/display.h"
+#include <wx/display.h>
 %}
 
 
@@ -84,10 +84,55 @@ const wxVideoMode     wxDefaultVideoMode;
 
 //---------------------------------------------------------------------------
 
+
+%{
+// dummy version of wxDisplay for when it is not enabled in the wxWidgets build
+#if !wxUSE_DISPLAY
+#include <wx/dynarray.h>
+#include <wx/vidmode.h>
+
+WX_DECLARE_OBJARRAY(wxVideoMode, wxArrayVideoModes);
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(wxArrayVideoModes);
+const wxVideoMode wxDefaultVideoMode;
+
+class wxDisplay 
+{
+public:
+    wxDisplay(size_t index = 0) { wxPyRaiseNotImplemented(); }
+    ~wxDisplay() {}
+
+    static size_t  GetCount()
+        { wxPyRaiseNotImplemented(); return 0; }
+    
+    static int GetFromPoint(const wxPoint& pt)
+        { wxPyRaiseNotImplemented(); return wxNOT_FOUND; }
+    static int GetFromWindow(wxWindow *window) 
+        { wxPyRaiseNotImplemented(); return wxNOT_FOUND; }
+        
+    virtual bool IsOk() const { return false; }
+    virtual wxRect GetGeometry() const { wxRect r; return r; }
+    virtual wxString GetName() const { return wxEmptyString; }
+    bool IsPrimary() const { return false; }
+    
+    wxArrayVideoModes GetModes(const wxVideoMode& mode = wxDefaultVideoMode)
+        { wxArrayVideoModes a; return a; }
+
+    virtual wxVideoMode GetCurrentMode() const
+        { return wxDefaultVideoMode; }
+    
+    virtual bool ChangeMode(const wxVideoMode& mode = wxDefaultVideoMode)
+       { return false; }
+    
+    void  ResetMode() {}
+};
+#endif
+%}
+
+
+
 DocStr(wxDisplay,
        "Represents a display/monitor attached to the system", "");
-
-
 class wxDisplay
 {
 public:
