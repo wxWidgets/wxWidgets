@@ -1,6 +1,6 @@
 \section{\class{wxKeyEvent}}\label{wxkeyevent}
 
-This event class contains information about keypress (character) events. See \helpref{wxWindow::OnChar}{wxwindowonchar}.
+This event class contains information about keypress (character) events.
 
 \wxheading{Derived from}
 
@@ -13,9 +13,19 @@ functions that take a wxKeyEvent argument.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_CHAR(func)}}{Process a wxEVT\_CHAR event (an ASCII key has been pressed).}
+\twocolitem{{\bf EVT\_KEY\_DOWN(func)}}{Process a wxEVT\_KEY\_DOWN event (any key has been pressed).}
+\twocolitem{{\bf EVT\_KEY\_UP(func)}}{Process a wxEVT\_KEY\_UP event (any key has been released).}
 \twocolitem{{\bf EVT\_CHAR(func)}}{Process a wxEVT\_CHAR event.}
 \twocolitem{{\bf EVT\_CHAR\_HOOK(func)}}{Process a wxEVT\_CHAR\_HOOK event.}
 \end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{wxWindow::OnChar}{wxwindowonchar}, 
+\helpref{wxWindow::OnCharHook}{wxwindowoncharhook}, 
+\helpref{wxWindow::OnKeyDown}{wxwindowonkeydown}, 
+\helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 

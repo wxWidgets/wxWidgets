@@ -807,7 +807,7 @@ otherwise it returns FALSE (it is being deactivated).
 
 \func{void}{OnChar}{\param{wxKeyEvent\&}{ event}}
 
-Called when the user has pressed a key.
+Called when the user has pressed a key, which has been translated into an ASCII value.
 
 \wxheading{Parameters}
 
@@ -823,10 +823,15 @@ default function to achieve default keypress functionality.
 Note that the ASCII values do not have explicit key codes: they are passed as ASCII
 values.
 
+Note that not all keypresses can be intercepted this way. If you wish to intercept special
+keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
+\helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
+
 Most, but not all, windows allow keypresses to be intercepted.
 
 \wxheading{See also}
 
+\helpref{wxWindow::OnKeyDown}{wxwindowonkeydown}, \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup},\rtfsp
 \helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
 \helpref{Event handling overview}{eventhandlingoverview}
 
@@ -998,6 +1003,65 @@ To intercept this event, use the EVT\_ERASE\_BACKGROUND macro in an event table 
 \wxheading{See also}
 
 \helpref{wxEraseEvent}{wxeraseevent}, \helpref{Event handling overview}{eventhandlingoverview}
+
+\membersection{wxWindow::OnKeyDown}\label{wxwindowonkeydown}
+
+\func{void}{OnKeyDown}{\param{wxKeyEvent\&}{ event}}
+
+Called when the user has pressed a key, before it is translated into an ASCII value using other
+modifier keys that might be pressed at the same time.
+
+\wxheading{Parameters}
+
+\docparam{event}{Object containing keypress information. See \helpref{wxKeyEvent}{wxkeyevent} for
+details about this class.}
+
+\wxheading{Remarks}
+
+This member function is called in response to a key down event. To intercept this event,
+use the EVT\_KEY\_DOWN macro in an event table definition. Your {\bf OnKeyDown} handler may call this
+default function to achieve default keypress functionality.
+
+Note that not all keypresses can be intercepted this way. If you wish to intercept special
+keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
+\helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
+
+Most, but not all, windows allow keypresses to be intercepted.
+
+\wxheading{See also}
+
+\helpref{wxWindow::OnChar}{wxwindowonchar}, \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup},\rtfsp
+\helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
+\helpref{Event handling overview}{eventhandlingoverview}
+
+\membersection{wxWindow::OnKeyUp}\label{wxwindowonkeyup}
+
+\func{void}{OnKeyUp}{\param{wxKeyEvent\&}{ event}}
+
+Called when the user has released a key.
+
+\wxheading{Parameters}
+
+\docparam{event}{Object containing keypress information. See \helpref{wxKeyEvent}{wxkeyevent} for
+details about this class.}
+
+\wxheading{Remarks}
+
+This member function is called in response to a key up event. To intercept this event,
+use the EVT\_KEY\_UP macro in an event table definition. Your {\bf OnKeyUp} handler may call this
+default function to achieve default keypress functionality.
+
+Note that not all keypresses can be intercepted this way. If you wish to intercept special
+keys, such as shift, control, and function keys, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown} or 
+\helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
+
+Most, but not all, windows allow key up events to be intercepted.
+
+\wxheading{See also}
+
+\helpref{wxWindow::OnChar}{wxwindowonchar}, \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown},\rtfsp
+\helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnCharHook}{wxwindowoncharhook},\rtfsp
+\helpref{Event handling overview}{eventhandlingoverview}
 
 \membersection{wxWindow::OnKillFocus}\label{wxwindowonkillfocus}
 

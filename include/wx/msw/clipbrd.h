@@ -22,6 +22,7 @@
 #if wxUSE_CLIPBOARD
 
 #include "wx/list.h"
+#include "wx/module.h"
 
 // These functions superceded by wxClipboard, but retained in order to implement
 // wxClipboard, and for compatibility.
@@ -72,10 +73,25 @@ public:
  // implementation 
  
   bool              m_open;
+  wxList            m_data;
 };
 
 /* The clipboard */
-// WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
+WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
+
+//-----------------------------------------------------------------------------
+// wxClipboardModule
+//-----------------------------------------------------------------------------
+
+class wxClipboardModule: public wxModule
+{
+  DECLARE_DYNAMIC_CLASS(wxClipboardModule)
+  
+public:
+    wxClipboardModule() {}
+    bool OnInit();
+    void OnExit();
+};
 
 #endif // wxUSE_CLIPBOARD
 #endif

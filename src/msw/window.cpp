@@ -100,6 +100,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
     EVT_CHAR(wxWindow::OnChar)
+    EVT_KEY_DOWN(wxWindow::OnKeyDown)
+    EVT_KEY_UP(wxWindow::OnKeyUp)
     EVT_ERASE_BACKGROUND(wxWindow::OnEraseBackground)
     EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindow::OnInitDialog)
@@ -1161,6 +1163,9 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         }
 
     case WM_KEYDOWN:
+    {
+        MSWOnKeyDown((WORD) wParam, lParam);
+#if 0
         // we consider these message "not interesting"
         if ( wParam == VK_SHIFT || wParam == VK_CONTROL )
             return Default();
@@ -1178,8 +1183,15 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             MSWOnChar((WORD)wParam, lParam);
         else
             return Default();
+#endif
         break;
+    }
 
+    case WM_KEYUP:
+    {
+        MSWOnKeyUp((WORD) wParam, lParam);
+        break;
+    }
     case WM_CHAR: // Always an ASCII character
         {
             MSWOnChar((WORD)wParam, lParam, TRUE);
@@ -2392,6 +2404,74 @@ void wxWindow::MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
     }
 }
 
+void wxWindow::MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam, bool isASCII)
+{
+    int id;
+
+    if ((id = wxCharCodeMSWToWX(wParam)) == 0) {
+        id = wParam;
+    }
+
+    if (id != -1)
+    {
+        wxKeyEvent event(wxEVT_KEY_DOWN);
+        event.m_shiftDown = (::GetKeyState(VK_SHIFT)&0x100?TRUE:FALSE);
+        event.m_controlDown = (::GetKeyState(VK_CONTROL)&0x100?TRUE:FALSE);
+        if ((HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN)
+            event.m_altDown = TRUE;
+
+        event.m_eventObject = this;
+        event.m_keyCode = id;
+        event.SetTimestamp(wxApp::sm_lastMessageTime);
+
+        POINT pt ;
+        GetCursorPos(&pt) ;
+        RECT rect ;
+        GetWindowRect((HWND) GetHWND(),&rect) ;
+        pt.x -= rect.left ;
+        pt.y -= rect.top ;
+
+        event.m_x = pt.x; event.m_y = pt.y;
+
+        if (!GetEventHandler()->ProcessEvent(event))
+            Default();
+    }
+}
+
+void wxWindow::MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam, bool isASCII)
+{
+    int id;
+
+    if ((id = wxCharCodeMSWToWX(wParam)) == 0) {
+        id = wParam;
+    }
+
+    if (id != -1)
+    {
+        wxKeyEvent event(wxEVT_KEY_UP);
+        event.m_shiftDown = (::GetKeyState(VK_SHIFT)&0x100?TRUE:FALSE);
+        event.m_controlDown = (::GetKeyState(VK_CONTROL)&0x100?TRUE:FALSE);
+        if ((HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN)
+            event.m_altDown = TRUE;
+
+        event.m_eventObject = this;
+        event.m_keyCode = id;
+        event.SetTimestamp(wxApp::sm_lastMessageTime);
+
+        POINT pt ;
+        GetCursorPos(&pt) ;
+        RECT rect ;
+        GetWindowRect((HWND) GetHWND(),&rect) ;
+        pt.x -= rect.left ;
+        pt.y -= rect.top ;
+
+        event.m_x = pt.x; event.m_y = pt.y;
+
+        if (!GetEventHandler()->ProcessEvent(event))
+            Default();
+    }
+}
+
 void wxWindow::MSWOnJoyDown(int joystick, int x, int y, WXUINT flags)
 {
     int buttons = 0;
@@ -3464,6 +3544,8 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
 
 void wxWindow::OnChar(wxKeyEvent& event)
 {
+/* I'm commenting this out because otherwise, we lose tabs in e.g. a text window (see MDI sample)
+ * (JACS, 14/01/99)
     if ( event.KeyCode() == WXK_TAB ) {
         // propagate the TABs to the parent - it's up to it to decide what
         // to do with it
@@ -3472,6 +3554,7 @@ void wxWindow::OnChar(wxKeyEvent& event)
                 return;
         }
     }
+*/
 
     bool isVirtual;
     int id = wxCharCodeWXToMSW((int)event.KeyCode(), &isVirtual);
@@ -3481,6 +3564,16 @@ void wxWindow::OnChar(wxKeyEvent& event)
 
     if ( !event.ControlDown() )
         (void) MSWDefWindowProc(m_lastMsg, (WPARAM) id, m_lastLParam);
+}
+
+void wxWindow::OnKeyDown(wxKeyEvent& event)
+{
+    Default();
+}
+
+void wxWindow::OnKeyUp(wxKeyEvent& event)
+{
+    Default();
 }
 
 void wxWindow::OnPaint(wxPaintEvent& event)

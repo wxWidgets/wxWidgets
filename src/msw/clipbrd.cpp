@@ -333,6 +333,8 @@ bool wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatName, int max
 
 IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 
+wxClipboard* wxTheClipboard = (wxClipboard*) NULL;
+
 wxClipboard::wxClipboard()
 {
     m_open = FALSE;
@@ -345,6 +347,14 @@ wxClipboard::~wxClipboard()
 
 void wxClipboard::Clear()
 {
+    wxNode* node = m_data.First();
+    while (node)
+    {
+        wxDataObject* data = (wxDataObject*) node->Data();
+        delete data;
+        node = node->Next();
+    }
+    m_data.Clear();
 }
 
 bool wxClipboard::Open()
@@ -479,4 +489,24 @@ bool wxClipboard::GetData( wxDataObject *data )
 #endif
 }
 
+//-----------------------------------------------------------------------------
+// wxClipboardModule
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxClipboardModule,wxModule)
+
+bool wxClipboardModule::OnInit()
+{
+    wxTheClipboard = new wxClipboard();
+  
+    return TRUE;
+}
+
+void wxClipboardModule::OnExit()
+{
+    if (wxTheClipboard) delete wxTheClipboard;
+    wxTheClipboard = (wxClipboard*) NULL;
+}
+
 #endif // wxUSE_CLIPBOARD
+

@@ -85,7 +85,10 @@ const wxEventType wxEVT_NC_RIGHT_DCLICK =                   wxEVT_FIRST + 211;
 
 /* Character input event type  */
 const wxEventType wxEVT_CHAR =                              wxEVT_FIRST + 212;
-const wxEventType wxEVT_NAVIGATION_KEY =                    wxEVT_FIRST + 213;
+const wxEventType wxEVT_CHAR_HOOK =                         wxEVT_FIRST + 213;
+const wxEventType wxEVT_NAVIGATION_KEY =                    wxEVT_FIRST + 214;
+const wxEventType wxEVT_KEY_DOWN =                          wxEVT_FIRST + 215;
+const wxEventType wxEVT_KEY_UP =                            wxEVT_FIRST + 216;
 
  /*
   * Scrollbar event identifiers
@@ -105,8 +108,6 @@ const wxEventType wxEVT_END_SESSION =                       wxEVT_FIRST + 403;
 const wxEventType wxEVT_QUERY_END_SESSION =                 wxEVT_FIRST + 404;
 const wxEventType wxEVT_ACTIVATE_APP =                      wxEVT_FIRST + 405;
 const wxEventType wxEVT_POWER =                             wxEVT_FIRST + 406;
-const wxEventType wxEVT_CHAR_HOOK =                         wxEVT_FIRST + 407;
-const wxEventType wxEVT_KEY_UP =                            wxEVT_FIRST + 408;
 const wxEventType wxEVT_ACTIVATE =                          wxEVT_FIRST + 409;
 const wxEventType wxEVT_CREATE =                            wxEVT_FIRST + 410;
 const wxEventType wxEVT_DESTROY =                           wxEVT_FIRST + 411;
@@ -537,6 +538,7 @@ public:
 /*
  wxEVT_CHAR
  wxEVT_CHAR_HOOK
+ wxEVT_KEY_DOWN
  wxEVT_KEY_UP
  */
 
@@ -1172,6 +1174,8 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_PAINT(func)  { wxEVT_PAINT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaintEventFunction) & func, (wxObject *) NULL },
 #define EVT_ERASE_BACKGROUND(func)  { wxEVT_ERASE_BACKGROUND, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxEraseEventFunction) & func, (wxObject *) NULL },
 #define EVT_CHAR(func)  { wxEVT_CHAR, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL },
+#define EVT_KEY_DOWN(func)  { wxEVT_KEY_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL },
+#define EVT_KEY_UP(func)  { wxEVT_KEY_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL },
 #define EVT_CHAR_HOOK(func)  { wxEVT_CHAR_HOOK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, NULL },
 #define EVT_MENU_HIGHLIGHT(id, func)  { wxEVT_MENU_HIGHLIGHT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL },
 #define EVT_MENU_HIGHLIGHT_ALL(func)  { wxEVT_MENU_HIGHLIGHT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL },

@@ -3,8 +3,9 @@
 A class for manipulating the clipboard. Note that this is not compatible with the
 clipboard class from wxWindows 1.xx, which has the same name but a different implementation.
 
-To use the clipboard, construct a wxClipboard object on the stack and 
-call \helpref{wxClipboard::Open}{wxclipboardopen}. If this operation returns TRUE, you
+To use the clipboard, you call member functions of the global {\bf wxTheClipboard} object.
+
+Call \helpref{wxClipboard::Open}{wxclipboardopen} to get ownership of the clipboard. If this operation returns TRUE, you
 now own the clipboard. Call \helpref{wxClipboard::SetData}{wxclipboardsetdata} to put data
 on the clipboard (one or more times), or \helpref{wxClipboard::GetData}{wxclipboardgetdata} to
 retrieve data from the clipboard. Call \helpref{wxClipboard::Close}{wxclipboardclose} to close
@@ -13,22 +14,21 @@ the clipboard and relinquish ownership. You should keep the clipboard open only 
 For example:
 
 \begin{verbatim}
-  wxClipboard clipboard;
-
   // Write some text to the clipboard
-  if (clipboard.Open())
+  if (wxTheClipboard->Open())
   {
-    wxTextDataObject object("Some text");
-    clipboard.SetData(& object);
-    clipboard.Close();
+    // This object is held by the clipboard, so do not delete it in the app.
+    wxTextDataObject* object = new wxTextDataObject("Some text");
+    wxTheClipboard->SetData(& object);
+    wxTheClipboard->Close();
   }
 
   // Read some text
-  if (clipboard.Open() && clipboard.IsSupportedFormat(wxDF_TEXT))
+  if (wxTheClipboard->Open() && wxTheClipboard->IsSupportedFormat(wxDF_TEXT))
   {
     wxTextDataObject object;
-    clipboard.GetData(& object);
-    clipboard.Close();
+    wxTheClipboard->GetData(& object);
+    wxTheClipboard->Close();
 
     wxMessageBox(object.GetText());
   }

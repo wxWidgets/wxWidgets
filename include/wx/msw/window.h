@@ -454,6 +454,8 @@ public:
 
   void OnEraseBackground(wxEraseEvent& event);
   void OnChar(wxKeyEvent& event);
+  void OnKeyDown(wxKeyEvent& event);
+  void OnKeyUp(wxKeyEvent& event);
   void OnPaint(wxPaintEvent& event);
   void OnIdle(wxIdleEvent& event);
 
@@ -612,6 +614,8 @@ public:
   virtual void MSWOnMouseLeave(int x, int y, WXUINT flags);
 
   virtual void MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
+  virtual void MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
+  virtual void MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
 
   virtual bool MSWOnActivate(int flag, bool minimized, WXHWND activate);
   virtual long MSWOnMDIActivate(long flag, WXHWND activate, WXHWND deactivate);

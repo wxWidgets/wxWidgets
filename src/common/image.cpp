@@ -1700,8 +1700,6 @@ wxImage::wxImage( const wxBitmap &bitmap )
 
 #endif
 
-// TODO
-
 #ifdef __WXMOTIF__
 
 #include <Xm/Xm.h>

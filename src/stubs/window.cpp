@@ -44,6 +44,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
   EVT_CHAR(wxWindow::OnChar)
+  EVT_KEY_DOWN(wxWindow::OnKeyDown)
+  EVT_KEY_UP(wxWindow::OnKeyUp)
   EVT_ERASE_BACKGROUND(wxWindow::OnEraseBackground)
   EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
   EVT_INIT_DIALOG(wxWindow::OnInitDialog)
@@ -551,6 +553,7 @@ void wxWindow::SetFont(const wxFont& font)
 
 void wxWindow::OnChar(wxKeyEvent& event)
 {
+/* ??
     if ( event.KeyCode() == WXK_TAB ) {
         // propagate the TABs to the parent - it's up to it to decide what
         // to do with it
@@ -559,6 +562,18 @@ void wxWindow::OnChar(wxKeyEvent& event)
                 return;
         }
     }
+*/
+    Default();
+}
+
+void wxWindow::OnKeyDown(wxKeyEvent& event)
+{
+    Default();
+}
+
+void wxWindow::OnKeyUp(wxKeyEvent& event)
+{
+    Default();
 }
 
 void wxWindow::OnPaint(wxPaintEvent& event)
