@@ -84,6 +84,7 @@ public:
 //
 // Other than GetNext/Prev() functions, wxWizardPage is just a panel and may be
 // used as such (i.e. controls may be placed directly on it &c).
+MustHaveApp(wxWizardPage);
 class wxWizardPage : public wxPanel
 {
 public:
@@ -198,6 +199,8 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWizardPage, wxWizardPage, RemoveChild);
 
 
 
+MustHaveApp(wxPyWizardPage);
+
 class wxPyWizardPage : public wxWizardPage {
 public:
 
@@ -275,6 +278,7 @@ public:
 // OTOH, it is also possible to dynamicly decide which page to return (i.e.
 // depending on the user's choices) as the wizard sample shows - in order to do
 // this, you must derive from wxWizardPage directly.
+MustHaveApp(wxWizardPageSimple);
 class wxWizardPageSimple : public wxWizardPage
 {
 public:
@@ -306,6 +310,8 @@ public:
 
 
 //----------------------------------------------------------------------
+
+MustHaveApp(wxWizard);
 
 class  wxWizard : public wxDialog
 {

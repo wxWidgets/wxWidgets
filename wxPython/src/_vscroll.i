@@ -125,6 +125,8 @@ IMP_PYCALLBACK_COORD_const          (wxPyVScrolledWindow, wxVScrolledWindow, Est
    of the window and not its entire client area.
  */
 
+MustHaveApp(wxPyVScrolledWindow);
+
 %name(VScrolledWindow) class wxPyVScrolledWindow : public wxPanel
 {
 public:
@@ -282,6 +284,8 @@ IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyVListBox, wxVListBox, OnDrawBackground
     It emits the same events as wxListBox and the same event macros may be used
     with it.
  */
+MustHaveApp(wxPyVListBox);
+
 %name(VListBox) class wxPyVListBox : public wxPyVScrolledWindow
 {
 public:
@@ -478,6 +482,7 @@ IMP_PYCALLBACK_STRING_SIZET     (wxPyHtmlListBox, wxHtmlListBox, OnGetItemMarkup
 
 
 // wxHtmlListBox is a listbox whose items are wxHtmlCells
+MustHaveApp(wxPyHtmlListBox);
 %name(HtmlListBox) class wxPyHtmlListBox : public wxPyVListBox
 {
 public:

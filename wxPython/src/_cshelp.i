@@ -133,6 +133,8 @@ There are a couple of ways to invoke this behaviour implicitly:
 :see: `wx.ContextHelpButton`
 ", "");       
 
+MustHaveApp(wxContextHelp);
+
 class wxContextHelp : public wxObject {
 public:
     DocCtorStr(
@@ -177,6 +179,8 @@ similar buttons.
 
 :see: `wx.ContextHelp`, `wx.ContextHelpButton`
 ", "");
+
+MustHaveApp(wxContextHelpButton);
 
 class wxContextHelpButton : public wxBitmapButton {
 public:

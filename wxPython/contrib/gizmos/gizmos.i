@@ -139,6 +139,8 @@ public:
 
 */
 
+MustHaveApp(wxDynamicSashWindow);
+
 class wxDynamicSashWindow : public wxWindow {
 public:
     %pythonAppend wxDynamicSashWindow         "self._setOORInfo(self)"
@@ -177,6 +179,7 @@ enum {
 
 // This class provides a composite control that lets the
 // user easily enter list of strings
+MustHaveApp(wxEditableListBox);
 class wxEditableListBox : public wxPanel
 {
 public:
@@ -226,6 +229,8 @@ public:
 %{
     typedef wxTreeCtrl wxPyTreeCtrl;
 %}
+
+MustHaveApp(wxRemotelyScrolledTreeCtrl);
 
 class wxRemotelyScrolledTreeCtrl: public wxPyTreeCtrl
 {
@@ -298,6 +303,8 @@ public:
 %}
 
 
+MustHaveApp(wxPyTreeCompanionWindow);
+
 %name(TreeCompanionWindow) class wxPyTreeCompanionWindow: public wxWindow
 {
 public:
@@ -323,6 +330,8 @@ public:
  * than the usual one.
  */
 
+MustHaveApp(wxThinSplitterWindow);
+
 class wxThinSplitterWindow: public wxSplitterWindow
 {
 public:
@@ -345,6 +354,8 @@ public:
  * (after some processing) to both splitter children for them
  * scroll appropriately.
  */
+
+MustHaveApp(wxSplitterScrolledWindow);
 
 class wxSplitterScrolledWindow: public wxScrolledWindow
 {
@@ -374,6 +385,8 @@ enum wxLEDValueAlign
     wxLED_DRAW_FADED,
 };
 
+
+MustHaveApp(wxLEDNumberCtrl);
 
 class wxLEDNumberCtrl :	public wxControl
 {
@@ -500,6 +513,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyTreeListCtrl, wxTreeListCtrl)
 
 
 
+
+MustHaveApp(wxPyTreeListCtrl);
 
 %name(TreeListCtrl) class wxPyTreeListCtrl : public wxControl
 {

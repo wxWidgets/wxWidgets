@@ -20,6 +20,8 @@
 //---------------------------------------------------------------------------
 
 
+MustHaveApp(wxIcon);
+
 class wxIcon : public wxGDIObject
 {
 public:

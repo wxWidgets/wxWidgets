@@ -56,6 +56,8 @@ Events
 
 
 
+MustHaveApp(wxComboBox);
+
 #ifdef __WXMSW__
 class wxComboBox : public wxChoice
 #else

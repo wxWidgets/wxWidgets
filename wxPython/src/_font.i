@@ -430,6 +430,10 @@ public:
 %newgroup
 
 
+MustHaveApp(wxFont);
+MustHaveApp(wxFont::GetDefaultEncoding);
+MustHaveApp(wxFont::SetDefaultEncoding);
+
 class wxFont : public wxGDIObject {
 public:
     %pythonPrepend wxFont   "if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']"
@@ -532,6 +536,8 @@ IMP_PYCALLBACK_BOOL_STRING(wxPyFontEnumerator, wxFontEnumerator, OnFacename);
 IMP_PYCALLBACK_BOOL_STRINGSTRING(wxPyFontEnumerator, wxFontEnumerator, OnFontEncoding);
 
 %}
+
+MustHaveApp(wxPyFontEnumerator);
 
 %name(FontEnumerator) class wxPyFontEnumerator {
 public:

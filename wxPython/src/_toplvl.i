@@ -145,6 +145,8 @@ public:
 // is accounted for in client size calculations - all others should be taken
 // care of manually.
 
+MustHaveApp(wxFrame);
+
 class wxFrame : public wxTopLevelWindow {
 public:
     %pythonAppend wxFrame         "self._setOORInfo(self)"
@@ -255,6 +257,8 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxDialog);
+
 class wxDialog : public wxTopLevelWindow {
 public:
     %pythonAppend wxDialog   "self._setOORInfo(self)"
@@ -311,6 +315,8 @@ public:
 %newgroup
 
 
+MustHaveApp(wxMiniFrame);
+
 class wxMiniFrame : public wxFrame {
 public:
     %pythonAppend wxMiniFrame         "self._setOORInfo(self)"
@@ -345,6 +351,8 @@ enum {
 };
 
 
+MustHaveApp(wxSplashScreenWindow);
+
 class wxSplashScreenWindow: public wxWindow
 {
 public:
@@ -360,6 +368,8 @@ public:
     wxBitmap& GetBitmap();
 };
 
+
+MustHaveApp(wxSplashScreen);
 
 class wxSplashScreen : public wxFrame {
 public:

@@ -129,6 +129,7 @@ IMP_PYCALLBACK_VIZATTR_(wxPyWindow, wxWindow, GetDefaultAttributes);
 %}
 
 // And now the one for SWIG to see
+MustHaveApp(wxPyWindow);
 class wxPyWindow : public wxWindow
 {
 public:
@@ -273,6 +274,7 @@ IMP_PYCALLBACK_VIZATTR_(wxPyPanel, wxPanel, GetDefaultAttributes);
  %}
 
 // And now the one for SWIG to see
+MustHaveApp(wxPyPanel);
 class wxPyPanel : public wxPanel
 {
 public:
@@ -409,6 +411,7 @@ IMP_PYCALLBACK_VIZATTR_(wxPyScrolledWindow, wxScrolledWindow, GetDefaultAttribut
 %}
 
 // And now the one for SWIG to see
+MustHaveApp(wxPyScrolledWindow);
 class wxPyScrolledWindow : public wxScrolledWindow
 {
 public:

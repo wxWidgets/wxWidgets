@@ -148,6 +148,12 @@ enum wxSystemScreenType
 
 //---------------------------------------------------------------------------
 
+MustHaveApp(wxSystemSettings::GetColour);
+MustHaveApp(wxSystemSettings::GetFont);
+MustHaveApp(wxSystemSettings::GetMetric);
+MustHaveApp(wxSystemSettings::HasFeature);
+MustHaveApp(wxSystemSettings::GetScreenType);
+MustHaveApp(wxSystemSettings::SetScreenType);
 
 class wxSystemSettings
 {

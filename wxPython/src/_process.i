@@ -159,6 +159,8 @@ enum
 };
 
 
+MustHaveApp(wxExecute);
+
 long wxExecute(const wxString& command,
                int flags = wxEXEC_ASYNC,
                wxPyProcess *process = NULL);

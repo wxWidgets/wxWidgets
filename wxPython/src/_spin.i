@@ -38,6 +38,7 @@ enum {
 //  wxSP_VERTICAL:     vertical spin button (the default)
 //  wxSP_ARROW_KEYS:   arrow keys increment/decrement value
 //  wxSP_WRAP:         value wraps at either end
+MustHaveApp(wxSpinButton);
 class wxSpinButton : public wxControl
 {
 public:
@@ -79,6 +80,8 @@ public:
 
 // a spin ctrl is a text control with a spin button which is usually used to
 // prompt the user for a numeric input
+
+MustHaveApp(wxSpinCtrl);
 
 class wxSpinCtrl : public wxControl
 {

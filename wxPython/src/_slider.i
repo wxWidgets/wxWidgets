@@ -25,6 +25,8 @@ MAKE_CONST_WXSTRING(SliderNameStr);
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxSlider);
+
 class wxSlider : public wxControl {
 public:
     %pythonPrepend wxSlider         "if kwargs.has_key('point'): kwargs['pos'] = kwargs['point'];del kwargs['point']"

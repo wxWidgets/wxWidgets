@@ -785,6 +785,8 @@ wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
 
 
 
+MustHaveApp(wxPyHtmlWindow);
+
 %name(HtmlWindow) class wxPyHtmlWindow : public wxScrolledWindow {
 public:
     %pythonAppend wxPyHtmlWindow      "self._setCallbackInfo(self, HtmlWindow); self._setOORInfo(self)"
@@ -919,6 +921,8 @@ public:
 %newgroup
 
 
+MustHaveApp(wxHtmlDCRenderer);
+
 class wxHtmlDCRenderer : public wxObject {
 public:
     wxHtmlDCRenderer();
@@ -956,6 +960,8 @@ enum {
 };
 
 
+MustHaveApp(wxHtmlPrintout);
+
 class wxHtmlPrintout : public wxPyPrintout {
 public:
     wxHtmlPrintout(const wxString& title = wxPyHtmlPrintoutTitleStr);
@@ -990,6 +996,8 @@ public:
 };
 
 
+
+MustHaveApp(wxHtmlEasyPrinting);
 
 class wxHtmlEasyPrinting : public wxObject {
 public:
@@ -1104,6 +1112,8 @@ public:
 
 //---------------------------------------------------------------------------
 
+MustHaveApp(wxHtmlHelpFrame);
+
 class wxHtmlHelpFrame : public wxFrame {
 public:
     %pythonAppend wxHtmlHelpFrame    "self._setOORInfo(self)"
@@ -1140,6 +1150,8 @@ enum {
     wxHF_DEFAULTSTYLE,
 };
 
+
+MustHaveApp(wxHtmlHelpController);
 
 class wxHtmlHelpController : public wxEvtHandler {
 public:

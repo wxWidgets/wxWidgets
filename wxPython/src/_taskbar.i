@@ -56,6 +56,8 @@ enum {
 
 
 
+MustHaveApp(wxTaskBarIcon);
+
 class wxTaskBarIcon : public wxEvtHandler
 {
 public:

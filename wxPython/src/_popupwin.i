@@ -23,9 +23,12 @@
 #ifndef __WXMAC__
 %newgroup;
 
+MustHaveApp(wxPopupWindow);
 
 // wxPopupWindow: a special kind of top level window used for popup menus,
 // combobox popups and such.
+MustHaveApp(wxPopupWindow);
+
 class wxPopupWindow : public wxWindow {
 public:
     %pythonAppend wxPopupWindow         "self._setOORInfo(self)"
@@ -73,9 +76,11 @@ IMP_PYCALLBACK_BOOL_(wxPyPopupTransientWindow, wxPopupTransientWindow, CanDismis
 %}
 
 
+MustHaveApp(wxPyPopupTransientWindow);
 
 // wxPopupTransientWindow: a wxPopupWindow which disappears automatically
 // when the user clicks mouse outside it or if it loses focus in any other way
+
 %name(PopupTransientWindow) class wxPyPopupTransientWindow : public wxPopupWindow
 {
 public:

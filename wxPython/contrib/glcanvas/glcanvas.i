@@ -43,6 +43,8 @@ class wxPalette;
 
 //---------------------------------------------------------------------------
 
+MustHaveApp(wxGLContext);
+
 class wxGLContext : public wxObject {
 public:
 #ifndef __WXMAC__  
@@ -117,6 +119,8 @@ enum {
 }
 
 
+
+MustHaveApp(wxGLCanvas);
 
 class wxGLCanvas : public wxWindow {
 public:

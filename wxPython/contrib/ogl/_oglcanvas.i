@@ -99,6 +99,8 @@ public:
 %}
 
 
+MustHaveApp(wxPyShapeCanvas);
+
 class wxPyShapeCanvas : public wxScrolledWindow {
 public:
     %pythonAppend wxPyShapeCanvas "self._setOORandCallbackInfo(PyShapeCanvas)"

@@ -133,6 +133,8 @@ inline wxPyCoreAPI* wxPyGetCoreAPIPtr()
 #define wxPyInstance_Check(a)                   (wxPyGetCoreAPIPtr()->p_wxPyInstance_Check(a))
 #define wxPySwigInstance_Check(a)               (wxPyGetCoreAPIPtr()->p_wxPySwigInstance_Check(a))
 
+#define wxPyCheckForApp()                       (wxPyGetCoreAPIPtr()->p_wxPyCheckForApp())
+
 
 //----------------------------------------------------------------------
 #endif

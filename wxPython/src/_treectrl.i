@@ -309,6 +309,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyTreeCtrl, wxTreeCtrl);
 
 
  
+MustHaveApp(wxPyTreeCtrl);
+
 %name(TreeCtrl)class wxPyTreeCtrl : public wxControl {
 public:
     %pythonAppend wxPyTreeCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, TreeCtrl)"

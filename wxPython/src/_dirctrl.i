@@ -54,6 +54,8 @@ public:
 
 
 
+MustHaveApp(wxGenericDirCtrl);
+
 class wxGenericDirCtrl: public wxControl
 {
 public:
@@ -135,6 +137,8 @@ leaf), done is set to True.
 
 
 
+
+MustHaveApp(wxDirFilterListCtrl);
 
 class wxDirFilterListCtrl: public wxChoice
 {

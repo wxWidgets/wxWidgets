@@ -187,6 +187,10 @@ Extra Styles
 ");
 
 
+MustHaveApp(wxWindow);
+MustHaveApp(wxWindow::FindFocus);
+MustHaveApp(wxWindow::GetCapture);
+MustHaveApp(wxWindow::GetClassDefaultAttributes);
 
 class wxWindow : public wxEvtHandler
 {
@@ -1849,6 +1853,10 @@ search will start from all top-level frames and dialog boxes; if
 non-None, the search will be limited to the given window
 hierarchy. The search is recursive in both cases.", "");
 
+
+MustHaveApp(wxFindWindowById);
+MustHaveApp(wxFindWindowByName);
+MustHaveApp(wxFindWindowByLabel);
 
 %inline %{
 wxWindow* wxFindWindowById( long id, const wxWindow *parent = NULL ) {

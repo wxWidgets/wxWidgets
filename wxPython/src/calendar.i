@@ -211,6 +211,8 @@ event.
 ");       
 
        
+MustHaveApp(wxCalendarCtrl);
+
 class wxCalendarCtrl : public wxControl
 {
 public:

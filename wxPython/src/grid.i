@@ -1546,6 +1546,8 @@ typedef wxGrid::wxGridSelectionModes WXGRIDSELECTIONMODES;
 
 
 
+MustHaveApp(wxGrid);
+
 class wxGrid : public wxScrolledWindow
 {
 public:

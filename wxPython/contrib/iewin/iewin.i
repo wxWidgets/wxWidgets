@@ -78,6 +78,8 @@ enum wxIEHtmlRefreshLevel {
 };
 
 
+MustHaveApp(wxIEHtmlWin);
+
 class wxIEHtmlWin : public wxWindow /* wxActiveX */ 
 {
 public:

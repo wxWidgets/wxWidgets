@@ -206,7 +206,9 @@ static wxPyCoreAPI API = {
     wxPyCBInputStream_create,
 
     wxPyInstance_Check,
-    wxPySwigInstance_Check
+    wxPySwigInstance_Check,
+
+    wxPyCheckForApp
 
 };
 

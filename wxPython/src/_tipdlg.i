@@ -81,11 +81,13 @@ public:
 // not, the dialog on startup depending on its value, not this class).
 //
 // The function returns True if this checkbox is checked, False otherwise.
+MustHaveApp(wxShowTip);
 bool wxShowTip(wxWindow *parent, wxTipProvider *tipProvider, bool showAtStartup = True);
 
 // a function which returns an implementation of wxTipProvider using the
 // specified text file as the source of tips (each line is a tip).
 %newobject wxCreateFileTipProvider;
+MustHaveApp(wxCreateFileTipProvider);
 wxTipProvider* wxCreateFileTipProvider(const wxString& filename, size_t currentTip);
 
 

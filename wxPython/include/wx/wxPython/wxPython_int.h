@@ -187,7 +187,9 @@ bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj);
 bool wxPySimple_typecheck(PyObject* source, const wxChar* classname, int seqLen);
 bool wxColour_typecheck(PyObject* source);
 
+bool wxPyCheckForApp();
 
+    
 template<class T>
 bool wxPyTwoIntItem_helper(PyObject* source, T** obj, const wxChar* name)
 {
@@ -428,7 +430,9 @@ struct wxPyCoreAPI {
 
     bool                (*p_wxPyInstance_Check)(PyObject* obj);
     bool                (*p_wxPySwigInstance_Check)(PyObject* obj);
-    
+
+    bool                (*p_wxPyCheckForApp)();
+
 };
 
 #ifdef wxPyUSE_EXPORTED_API

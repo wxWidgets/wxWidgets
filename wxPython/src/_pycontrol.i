@@ -99,6 +99,7 @@ IMP_PYCALLBACK_VIZATTR_(wxPyControl, wxControl, GetDefaultAttributes);
 %}
 
 // And now the one for SWIG to see
+MustHaveApp(wxPyControl);
 class wxPyControl : public wxControl
 {
 public:

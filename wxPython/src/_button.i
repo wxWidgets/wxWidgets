@@ -58,6 +58,8 @@ Events
 :see: `wx.BitmapButton`
 ");
 
+MustHaveApp(wxButton);
+
 class wxButton : public wxControl
 {
 public:
@@ -142,6 +144,8 @@ Events
 
 :see: `wx.Button`, `wx.Bitmap`
 ");
+
+MustHaveApp(wxBitmapButton);
 
 class wxBitmapButton : public wxButton
 {

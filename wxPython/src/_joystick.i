@@ -103,6 +103,8 @@ public:
 %}
 
 
+MustHaveApp(wxJoystick);
+
 class wxJoystick /* : public wxObject */
 {
 public:

@@ -27,11 +27,15 @@ long wxNewId();
 void wxRegisterId(long id);
 long wxGetCurrentId();
 
+MustHaveApp(wxBell);
 void wxBell();
+
+MustHaveApp(wxEndBusyCursor);
 void wxEndBusyCursor();
 
 long wxGetElapsedTime(bool resetTimer = True);
 
+MustHaveApp(wxGetMousePosition);
 DocDeclA(
     void, wxGetMousePosition(int* OUTPUT, int* OUTPUT),
     "GetMousePosition() -> (x,y)");
@@ -63,6 +67,7 @@ enum wxShutdownFlags
 };
 
 // Shutdown or reboot the PC
+MustHaveApp(wxShutdown);
 bool wxShutdown(wxShutdownFlags wFlags);
 
 
@@ -88,6 +93,7 @@ void wxTrap();
 
 // Dialog Functions
 
+MustHaveApp(wxFileSelector);
 wxString wxFileSelector(const wxString& message = wxPyFileSelectorPromptStr,
                         const wxString& default_path = wxPyEmptyString,
                         const wxString& default_filename = wxPyEmptyString,
@@ -101,24 +107,28 @@ wxString wxFileSelector(const wxString& message = wxPyFileSelectorPromptStr,
 
 
 // Ask for filename to load
+MustHaveApp(wxLoadFileSelector);
 wxString wxLoadFileSelector(const wxString& what,
                             const wxString& extension,
                             const wxString& default_name = wxPyEmptyString,
                             wxWindow *parent = NULL);
 
 // Ask for filename to save
+MustHaveApp(wxSaveFileSelector);
 wxString wxSaveFileSelector(const wxString& what,
                             const wxString& extension,
                             const wxString& default_name = wxPyEmptyString,
                             wxWindow *parent = NULL);
 
 
+MustHaveApp(wxDirSelector);
 wxString wxDirSelector(const wxString& message = wxPyDirSelectorPromptStr,
                        const wxString& defaultPath = wxPyEmptyString,
                        long style = wxDD_DEFAULT_STYLE,
                        const wxPoint& pos = wxDefaultPosition,
                        wxWindow *parent = NULL);
 
+MustHaveApp(wxGetTextFromUser);
 wxString wxGetTextFromUser(const wxString& message,
                            const wxString& caption = wxPyEmptyString,
                            const wxString& default_value = wxPyEmptyString,
@@ -126,6 +136,7 @@ wxString wxGetTextFromUser(const wxString& message,
                            int x = -1, int y = -1,
                            bool centre = True);
 
+MustHaveApp(wxGetPasswordFromUser);
 wxString wxGetPasswordFromUser(const wxString& message,
                                const wxString& caption = wxPyEmptyString,
                                const wxString& default_value = wxPyEmptyString,
@@ -140,6 +151,7 @@ wxString wxGetPasswordFromUser(const wxString& message,
 //                         bool centre = True, int width=150, int height=200);
 
 
+MustHaveApp(wxGetSingleChoice);
 wxString wxGetSingleChoice(const wxString& message, const wxString& caption,
                            int choices, wxString* choices_array,
                            wxWindow *parent = NULL,
@@ -147,6 +159,7 @@ wxString wxGetSingleChoice(const wxString& message, const wxString& caption,
                            bool centre = True,
                            int width=150, int height=200);
 
+MustHaveApp(wxGetSingleChoiceIndex);
 int wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
                            int choices, wxString* choices_array,
                            wxWindow *parent = NULL,
@@ -155,12 +168,14 @@ int wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
                            int width=150, int height=200);
 
 
+MustHaveApp(wxMessageBox);
 int wxMessageBox(const wxString& message,
                  const wxString& caption = wxPyEmptyString,
                  int style = wxOK | wxCENTRE,
                  wxWindow *parent = NULL,
                  int x = -1, int y = -1);
 
+MustHaveApp(wxGetNumberFromUser);
 long wxGetNumberFromUser(const wxString& message,
                          const wxString& prompt,
                          const wxString& caption,
@@ -171,38 +186,60 @@ long wxGetNumberFromUser(const wxString& message,
 
 // GDI Functions
 
+MustHaveApp(wxColourDisplay);
 bool wxColourDisplay();
 
+MustHaveApp(wxDisplayDepth);
 int wxDisplayDepth();
+
+MustHaveApp(wxGetDisplayDepth);
 int wxGetDisplayDepth();
 
+MustHaveApp(wxDisplaySize);
 DocDeclA(
     void, wxDisplaySize(int* OUTPUT, int* OUTPUT),
     "DisplaySize() -> (width, height)");
+
+MustHaveApp(wxGetDisplaySize);
 wxSize wxGetDisplaySize();
 
+MustHaveApp(wxDisplaySizeMM);
 DocDeclA(
     void, wxDisplaySizeMM(int* OUTPUT, int* OUTPUT),
     "DisplaySizeMM() -> (width, height)");
+
+MustHaveApp(wxGetDisplaySizeMM);
 wxSize wxGetDisplaySizeMM();
 
+MustHaveApp(wxClientDisplayRect);
 DocDeclA(
     void, wxClientDisplayRect(int *OUTPUT, int *OUTPUT, int *OUTPUT, int *OUTPUT),
     "ClientDisplayRect() -> (x, y, width, height)");
+
+MustHaveApp(wxGetClientDisplayRect);
 wxRect wxGetClientDisplayRect();
 
+
+MustHaveApp(wxSetCursor);
 void wxSetCursor(wxCursor& cursor);
 
 
 
 // Miscellaneous functions
 
+MustHaveApp(wxBeginBusyCursor);
 void wxBeginBusyCursor(wxCursor *cursor = wxHOURGLASS_CURSOR);
+
+MustHaveApp(wxGetActiveWindow);
 wxWindow * wxGetActiveWindow();
 
+MustHaveApp(wxGenericFindWindowAtPoint);
 wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt);
+
+MustHaveApp(wxFindWindowAtPoint);
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
 
+MustHaveApp(wxGetTopLevelParent);
 wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 //bool wxSpawnBrowser(wxWindow *parent, wxString href);
@@ -210,6 +247,7 @@ wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 
 
+MustHaveApp(wxGetKeyState);
 DocDeclStr(
     bool , wxGetKeyState(wxKeyCode key),
     "Get the state of a key (true if pressed or toggled on, false if not.)
@@ -221,6 +259,8 @@ toggle keys.  On some platforms those may be the only keys that work.
 
 //---------------------------------------------------------------------------
 
+MustHaveApp(wxWakeUpMainThread);
+
 #if defined(__WXMSW__) || defined(__WXMAC__)
 void wxWakeUpMainThread();
 #else
@@ -229,10 +269,15 @@ void wxWakeUpMainThread();
 %}
 #endif
 
+
+MustHaveApp(wxMutexGuiEnter);
 void wxMutexGuiEnter();
+
+MustHaveApp(wxMutexGuiLeave);
 void wxMutexGuiLeave();
 
 
+MustHaveApp(wxMutexGuiLocker);
 class wxMutexGuiLocker  {
 public:
     wxMutexGuiLocker();
@@ -240,6 +285,7 @@ public:
 };
 
 
+MustHaveApp(wxThread);
 %inline %{
     bool wxThread_IsMain() {
 #ifdef WXP_WITH_THREAD

@@ -99,6 +99,8 @@ public:
 
 //---------------------------------------------------------------------------
 
+MustHaveApp(wxColourDatabase);
+
 class wxColourDatabase : public wxObject {
 public:
     wxColourDatabase();

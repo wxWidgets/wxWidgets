@@ -15,6 +15,8 @@
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxGDIObject);
+
 class wxGDIObject : public wxObject {
 public:
     wxGDIObject();

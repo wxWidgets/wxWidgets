@@ -48,6 +48,8 @@ enum wxSashEdgePosition {
 // wxSashWindow allows any of its edges to have a sash which can be dragged
 // to resize the window. The actual content window will be created as a child
 // of wxSashWindow.
+MustHaveApp(wxSashWindow);
+
 class wxSashWindow: public wxWindow
 {
 public:
@@ -234,6 +236,8 @@ public:
 // This is window that can remember alignment/orientation, does its own layout,
 // and can provide sashes too. Useful for implementing docked windows with sashes in
 // an IDE-style interface.
+MustHaveApp(wxSashLayoutWindow);
+
 class wxSashLayoutWindow: public wxSashWindow
 {
 public:

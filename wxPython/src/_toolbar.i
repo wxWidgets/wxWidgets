@@ -384,6 +384,8 @@ public:
 
 
 
+MustHaveApp(wxToolBar);
+
 class wxToolBar : public wxToolBarBase {
 public:
     %pythonAppend wxToolBar         "self._setOORInfo(self)"

@@ -78,6 +78,8 @@ Events
 
 
         
+MustHaveApp(wxCheckBox);
+
 class wxCheckBox : public wxControl
 {
 public:

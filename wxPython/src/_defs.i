@@ -11,17 +11,40 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+//---------------------------------------------------------------------------
 // Globally turn on the autodoc feature
+
 %feature("autodoc", "1");  // 0 == no param types, 1 == show param types
 
 
 //---------------------------------------------------------------------------
+// Tell SWIG to wrap all the wrappers with our thread protection by default
+
+%exception {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    $action
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+}
+
+
+// This one can be used to add a check for an existing wxApp before the real
+// work is done.  An exception is raised if there isn't one.
+%define MustHaveApp(name)
+    %exception name {
+        if (!wxPyCheckForApp()) SWIG_fail;
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        $action
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;    
+    }
+%enddef
+
+    
+
+//---------------------------------------------------------------------------
 // some type definitions to simplify things for SWIG
 
-// typedef int             wxWindowID;
-// typedef int             wxCoord;
-// typedef int             wxInt32;
-// typedef unsigned int    wxUint32;
 typedef int             wxEventType;
 typedef unsigned int    size_t;
 typedef unsigned int    time_t;
@@ -31,10 +54,6 @@ typedef unsigned char   byte;
 #define wxCoord         int
 #define wxInt32         int
 #define wxUint32        unsigned int
-//#define wxEventType     int
-//#define size_t          unsigned int
-//#define time_t          unsigned int
-//#define byte            unsigned char
 
 
 //----------------------------------------------------------------------

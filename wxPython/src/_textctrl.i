@@ -161,6 +161,7 @@ public:
 
 // wxTextCtrl: a single or multiple line text zone where user can enter and
 // edit text
+MustHaveApp(wxTextCtrl);
 class wxTextCtrl : public wxControl
 {
 public:

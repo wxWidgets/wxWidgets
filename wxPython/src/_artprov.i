@@ -186,6 +186,10 @@ identical bitmap for different client values!
       of the categories above)
 ");
 
+MustHaveApp(wxPyArtProvider);
+MustHaveApp(wxPyArtProvider::GetBitmap);
+MustHaveApp(wxPyArtProvider::GetIcon);
+
 %name(ArtProvider) class wxPyArtProvider /*: public wxObject*/
 {
 public:

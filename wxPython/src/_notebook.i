@@ -22,6 +22,8 @@ MAKE_CONST_WXSTRING(NOTEBOOK_NAME);
 
 // TODO:  Virtualize this class so other book controls can be derived in Python
 
+MustHaveApp(wxBookCtrl);
+
 //  Common base class for wxList/Tree/Notebook
 class wxBookCtrl : public wxControl
 {
@@ -160,6 +162,8 @@ enum {
 
 
 
+MustHaveApp(wxNotebook);
+
 class wxNotebook : public wxBookCtrl {
 public:
     %pythonAppend wxNotebook         "self._setOORInfo(self)"
@@ -285,6 +289,8 @@ enum
 };
 
 
+
+MustHaveApp(wxListbook);
 
 //  wxListCtrl and wxNotebook combination
 class wxListbook : public wxBookCtrl

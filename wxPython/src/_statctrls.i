@@ -23,6 +23,8 @@ MAKE_CONST_WXSTRING(StaticTextNameStr);
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxStaticBox);
+
 class wxStaticBox : public wxControl {
 public:
     %pythonAppend wxStaticBox         "self._setOORInfo(self)"
@@ -49,6 +51,8 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
+
+MustHaveApp(wxStaticLine);
 
 class wxStaticLine : public wxControl {
 public:
@@ -82,6 +86,8 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxStaticText);
+
 class wxStaticText : public wxControl {
 public:
     %pythonAppend wxStaticText         "self._setOORInfo(self)"
@@ -106,6 +112,8 @@ public:
 
 //---------------------------------------------------------------------------
 %newgroup
+
+MustHaveApp(wxStaticBitmap);
 
 class wxStaticBitmap : public wxControl {
 public:

@@ -41,6 +41,8 @@ enum wxRegionContain
 
 
 
+MustHaveApp(wxRegion);
+
 class wxRegion : public wxGDIObject {
 public:
     wxRegion(wxCoord x=0, wxCoord y=0, wxCoord width=0, wxCoord height=0);
@@ -107,6 +109,8 @@ public:
 };
 
 
+
+MustHaveApp(wxRegionIterator);
 
 class wxRegionIterator : public wxObject {
 public:

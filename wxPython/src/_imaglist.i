@@ -33,6 +33,8 @@ enum {
 };
 
 
+MustHaveApp(wxImageList);
+
 
 //  wxImageList is used for wxListCtrl, wxTreeCtrl. These controls refer to
 //  images for their items by an index into an image list.

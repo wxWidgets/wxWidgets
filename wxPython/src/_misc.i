@@ -19,6 +19,9 @@
 
 
 #ifndef __WXX11__
+
+MustHaveApp(wxToolTip);
+
 class wxToolTip : public wxObject {
 public:
     wxToolTip(const wxString &tip);
@@ -34,6 +37,8 @@ public:
 #endif
 
 //---------------------------------------------------------------------------
+
+MustHaveApp(wxCaret);
 
 class wxCaret {
 public:
@@ -79,6 +84,8 @@ public:
 
 //---------------------------------------------------------------------------
 
+MustHaveApp(wxBusyCursor);
+
 class  wxBusyCursor {
 public:
     wxBusyCursor(wxCursor* cursor = wxHOURGLASS_CURSOR);
@@ -87,6 +94,8 @@ public:
 
 //---------------------------------------------------------------------------
 
+MustHaveApp(wxWindowDisabler);
+
 class wxWindowDisabler {
 public:
     wxWindowDisabler(wxWindow *winToSkip = NULL);
@@ -94,6 +103,8 @@ public:
 };
 
 //---------------------------------------------------------------------------
+
+MustHaveApp(wxBusyInfo);
 
 class wxBusyInfo : public wxObject {
 public:

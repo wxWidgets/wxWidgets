@@ -576,6 +576,8 @@ bottom, otherwise it is moved to the left or top respectively.", "",
 };
 
 
+MustHaveApp(wxIntersectRect);
+
 DocAStr(wxIntersectRect,
        "IntersectRect(Rect r1, Rect r2) -> Rect",
        "Calculate and return the intersection of r1 and r2.", "");

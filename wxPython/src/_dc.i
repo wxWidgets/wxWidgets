@@ -626,6 +626,8 @@ static void wxDC_GetBoundingBox(wxDC* dc, int* x1, int* y1, int* x2, int* y2) {
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxMemoryDC);
+
 class wxMemoryDC : public wxDC {
 public:
     wxMemoryDC();
@@ -642,6 +644,8 @@ public:
 #include <wx/dcbuffer.h>
 %}
 
+
+MustHaveApp(wxBufferedDC);
 
 class wxBufferedDC : public wxMemoryDC
 {
@@ -680,6 +684,7 @@ public:
 
 
 
+MustHaveApp(wxBufferedPaintDC);
 
 // Creates a double buffered wxPaintDC, optionally allowing the
 // user to specify their own buffer to use.
@@ -696,6 +701,8 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxScreenDC);
+
 class wxScreenDC : public wxDC {
 public:
     wxScreenDC();
@@ -708,6 +715,8 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxClientDC);
+
 class wxClientDC : public wxDC {
 public:
       wxClientDC(wxWindow* win);
@@ -715,6 +724,8 @@ public:
 
 //---------------------------------------------------------------------------
 %newgroup
+
+MustHaveApp(wxPaintDC);
 
 class wxPaintDC : public wxDC {
 public:
@@ -724,6 +735,8 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxWindowDC);
+
 class wxWindowDC : public wxDC {
 public:
       wxWindowDC(wxWindow* win);
@@ -731,6 +744,8 @@ public:
 
 //---------------------------------------------------------------------------
 %newgroup
+
+MustHaveApp(wxMirrorDC);
 
 class wxMirrorDC : public wxDC
 {
@@ -751,6 +766,8 @@ public:
 #include <wx/dcps.h>
 %}
 
+MustHaveApp(wxPostScriptDC);
+
 class wxPostScriptDC : public wxDC {
 public:
     wxPostScriptDC(const wxPrintData& printData);
@@ -767,6 +784,10 @@ public:
 
 //---------------------------------------------------------------------------
 %newgroup
+
+
+MustHaveApp(wxMetaFile);
+MustHaveApp(wxMetaFileDC);
 
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
@@ -842,6 +863,8 @@ public:
 
 
 //---------------------------------------------------------------------------
+
+MustHaveApp(wxPrinterDC);
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
 

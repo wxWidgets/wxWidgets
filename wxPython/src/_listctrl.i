@@ -17,8 +17,8 @@
 
 %{
 #include <wx/listctrl.h>
-
 %}
+
 MAKE_CONST_WXSTRING2(ListCtrlNameStr, _T("wxListCtrl"));
 
 //---------------------------------------------------------------------------
@@ -397,6 +397,8 @@ IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
 
 
 
+
+MustHaveApp(wxPyListCtrl);
 
 %name(ListCtrl)class wxPyListCtrl : public wxControl {
 public:
@@ -777,6 +779,8 @@ details in the second return value (see wxLIST_HITTEST_... flags.)", "");
 //---------------------------------------------------------------------------
 %newgroup
 
+
+MustHaveApp(wxListView);
 
 // wxListView: a class which provides a little better API for list control
 class wxListView : public wxPyListCtrl

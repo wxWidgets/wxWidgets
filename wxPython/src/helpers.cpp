@@ -79,6 +79,7 @@ wxMutex*              wxPyTMutex = NULL;
 
 static PyObject* wxPython_dict = NULL;
 static PyObject* wxPyAssertionError = NULL;
+static PyObject* wxPyNoAppError = NULL;
 
 PyObject* wxPyPtrTypeMap = NULL;
 
@@ -567,7 +568,8 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
         return NULL;
 
     if (!PyDict_Check(wxPython_dict)) {
-        PyErr_SetString(PyExc_TypeError, "_wxPySetDictionary must have dictionary object!");
+        PyErr_SetString(PyExc_TypeError,
+                        "_wxPySetDictionary must have dictionary object!");
         return NULL;
     }
 
@@ -579,6 +581,12 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
     wxPyAssertionError = PyErr_NewException("wx._core.PyAssertionError",
                                             PyExc_AssertionError, NULL);
     PyDict_SetItemString(wxPython_dict, "PyAssertionError", wxPyAssertionError);
+
+    // Create an exception object to use when the app object hasn't been created yet
+    wxPyNoAppError = PyErr_NewException("wx._core.PyNoAppError",
+                                        PyExc_RuntimeError, NULL);
+    PyDict_SetItemString(wxPython_dict, "PyNoAppError", wxPyNoAppError);
+    
 
 
 #ifdef __WXMOTIF__
@@ -636,7 +644,12 @@ PyObject* __wxPySetDictionary(PyObject* /* self */, PyObject* args)
     _AddInfoString("gtk1");
 #endif
 #endif
-
+#ifdef __WXDEBUG__
+    _AddInfoString("wx-assertions-on");
+#else
+    _AddInfoString("wx-assertions-off");
+#endif
+    
 #undef _AddInfoString
 
     PyObject* PlatInfoTuple = PyList_AsTuple(PlatInfo);
@@ -822,6 +835,22 @@ void wxPy_ReinitStockObjects(int pass)
 }
 
 //---------------------------------------------------------------------------
+
+// Check for existence of a wxApp, setting an exception if there isn't one.
+// This doesn't need to aquire the GIL because it should only be called from
+// an %exception before the lock is released.
+
+bool wxPyCheckForApp() {
+    if (wxTheApp != NULL)
+        return true;
+    else {
+        PyErr_SetString(wxPyNoAppError, "The wx.App object must be created first!");
+        return false;
+    }
+}
+
+//---------------------------------------------------------------------------
+
 
 void wxPyClientData_dtor(wxPyClientData* self) {
     if (! wxPyDoingCleanup) {           // Don't do it during cleanup as Python

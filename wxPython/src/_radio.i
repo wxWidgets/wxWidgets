@@ -21,6 +21,8 @@ MAKE_CONST_WXSTRING(RadioButtonNameStr);
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxRadioBox);
+
 class wxRadioBox : public wxControl
 {
 public:
@@ -93,6 +95,8 @@ public:
 
 //---------------------------------------------------------------------------
 %newgroup
+
+MustHaveApp(wxRadioButton);
 
 class wxRadioButton : public wxControl
 {

@@ -33,6 +33,8 @@
 
 
 
+MustHaveApp(wxMDIParentFrame);
+
 class wxMDIParentFrame : public wxFrame {
 public:
     %pythonAppend wxMDIParentFrame         "self._setOORInfo(self)"
@@ -78,6 +80,8 @@ public:
 
 //---------------------------------------------------------------------------
 
+MustHaveApp(wxMDIChildFrame);
+
 class wxMDIChildFrame : public wxFrame {
 public:
     %pythonAppend wxMDIChildFrame         "self._setOORInfo(self)"
@@ -108,6 +112,8 @@ public:
 
 
 //---------------------------------------------------------------------------
+
+MustHaveApp(wxMDIClientWindow);
 
 class wxMDIClientWindow : public wxWindow {
 public:

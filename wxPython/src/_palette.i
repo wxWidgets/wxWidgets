@@ -19,6 +19,8 @@
 
 //---------------------------------------------------------------------------
 
+MustHaveApp(wxPalette);
+
 class wxPalette : public wxGDIObject {
 public:
     wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);

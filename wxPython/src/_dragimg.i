@@ -24,6 +24,8 @@
 
 
 
+MustHaveApp(wxGenericDragImage);
+
 %name (DragImage) class wxGenericDragImage : public wxObject
 {
 public:

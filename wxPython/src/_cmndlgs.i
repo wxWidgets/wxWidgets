@@ -80,6 +80,8 @@ integer between 0 and 15. The default custom colours are all white.", "");
 DocStr(wxColourDialog,
        "This class represents the colour chooser dialog.", "");
 
+MustHaveApp(wxColourDialog);
+
 class wxColourDialog : public wxDialog {
 public:
     %pythonAppend wxColourDialog   "self._setOORInfo(self)"
@@ -112,6 +114,8 @@ Window  Styles
                           with recent versions of the common dialogs.
     ====================  ==========================================
 ");
+
+MustHaveApp(wxDirDialog);
 
 class wxDirDialog : public wxDialog {
 public:
@@ -197,6 +201,8 @@ Window  Styles
 ");
 
 
+
+MustHaveApp(wxFileDialog);
 
 class wxFileDialog : public wxDialog {
 public:
@@ -334,6 +340,8 @@ enum { wxCHOICEDLG_STYLE };
 DocStr(wxMultiChoiceDialog,
        "A simple dialog with a multi selection listbox.", "");
 
+MustHaveApp(wxMultiChoiceDialog);
+
 class wxMultiChoiceDialog : public wxDialog
 {
 public:
@@ -373,6 +381,8 @@ integers.", "");
 
 DocStr(wxSingleChoiceDialog,
        "A simple dialog with a single selection listbox.", "");
+
+MustHaveApp(wxSingleChoiceDialog);
 
 class wxSingleChoiceDialog : public wxDialog {
 public:
@@ -417,6 +427,8 @@ public:
 
 DocStr(wxTextEntryDialog,
        "A dialog with text control, [ok] and [cancel] buttons", "");
+
+MustHaveApp(wxTextEntryDialog);
 
 class wxTextEntryDialog : public wxDialog {
 public:
@@ -528,6 +540,8 @@ DocStr(wxFontDialog,
 :see: `wx.FontData`
 ", "");
 
+MustHaveApp(wxFontDialog);
+
 class wxFontDialog : public wxDialog {
 public:
     %pythonAppend wxFontDialog   "self._setOORInfo(self)"
@@ -574,6 +588,8 @@ Window Styles
     ===================    =============================================
 ");
 
+
+MustHaveApp(wxMessageDialog);
 
 class wxMessageDialog : public wxDialog {
 public:
@@ -624,6 +640,8 @@ Window Styles
     ====================     =============================================
 ");
 
+
+MustHaveApp(wxProgressDialog);
 
 class wxProgressDialog : public wxFrame {
 public:
@@ -840,6 +858,8 @@ Window Styles
     wx.FR_NOWHOLEWORD      don't allow whole word searching
     =====================  =========================================
 ");
+
+MustHaveApp(wxFindReplaceDialog);
 
 class wxFindReplaceDialog : public wxDialog {
 public:

@@ -149,6 +149,8 @@ public:
 
 
 
+MustHaveApp(wxPageSetupDialog);
+
 class wxPageSetupDialog : public wxDialog {
 public:
     %pythonAppend wxPageSetupDialog         "self._setOORInfo(self)"
@@ -217,6 +219,8 @@ public:
 };
 
 
+MustHaveApp(wxPrintDialog);
+
 class wxPrintDialog : public wxDialog {
 public:
     %pythonAppend wxPrintDialog         "self._setOORInfo(self)"
@@ -242,6 +246,8 @@ enum wxPrinterError
     wxPRINTER_ERROR
 };
 
+
+MustHaveApp(wxPrinter);
 
 class wxPrinter : public wxObject {
 public:
@@ -323,6 +329,8 @@ IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
 %}
 
 
+MustHaveApp(wxPyPrintout);
+
 // Now define the custom class for SWIGging
 %name(Printout) class wxPyPrintout  : public wxObject {
 public:
@@ -377,6 +385,8 @@ public:
 
 
 
+MustHaveApp(wxPreviewCanvas);
+
 class wxPreviewCanvas: public wxScrolledWindow
 {
 public:
@@ -390,6 +400,8 @@ public:
                     const wxString& name = wxPyPreviewCanvasNameStr);
 };
 
+
+MustHaveApp(wxPreviewFrame);
 
 class wxPreviewFrame : public wxFrame {
 public:
@@ -430,6 +442,8 @@ enum {
     wxID_PREVIEW_GOTO
 };
 
+MustHaveApp(wxPreviewControlBar);
+
 class wxPreviewControlBar: public wxPanel
 {
 public:
@@ -457,6 +471,8 @@ public:
 
 
 //---------------------------------------------------------------------------
+
+MustHaveApp(wxPrintPreview);
 
 class wxPrintPreview : public wxObject {
 public:
@@ -592,6 +608,8 @@ IMP_PYCALLBACK_VOID_        (wxPyPrintPreview, wxPrintPreview, DetermineScaling)
 %}
 
 
+MustHaveApp(wxPyPrintPreview);
+
 class wxPyPrintPreview : public wxPrintPreview
 {
 public:
@@ -650,6 +668,8 @@ IMP_PYCALLBACK_VOID_(wxPyPreviewFrame, wxPreviewFrame, CreateControlBar);
 %}
 
 
+MustHaveApp(wxPyPreviewFrame);
+
 class wxPyPreviewFrame : public wxPreviewFrame
 {
 public:
@@ -703,6 +723,8 @@ IMP_PYCALLBACK_VOID_(wxPyPreviewControlBar, wxPreviewControlBar, CreateButtons);
 IMP_PYCALLBACK_VOID_INT(wxPyPreviewControlBar, wxPreviewControlBar, SetZoomControl);
 %}
 
+
+MustHaveApp(wxPyPreviewControlBar);
 
 class wxPyPreviewControlBar : public wxPreviewControlBar
 {

@@ -27,6 +27,8 @@ DocStr(wxControl,
 A control is generally a small window which processes user input
 and/or displays one or more item of data.", "");
 
+MustHaveApp(wxControl);
+
 class wxControl : public wxWindow
 {
 public:

@@ -71,6 +71,10 @@ public:
 
 
 
+MustHaveApp(wxSound);
+MustHaveApp(wxSound::Play);
+MustHaveApp(wxSound::Stop);
+
 class wxSound /*: public wxObject*/
 {
 public:

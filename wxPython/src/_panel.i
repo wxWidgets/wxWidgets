@@ -22,6 +22,8 @@
 %newgroup
 
 
+MustHaveApp(wxPanel);
+
 class wxPanel : public wxWindow
 {
 public:
@@ -56,6 +58,8 @@ public:
 // TODO: Add wrappers for the wxScrollHelper class, make wxScrolledWindow
 //       derive from it and wxPanel.  But what to do about wxGTK where this
 //       is not True?
+
+MustHaveApp(wxScrolledWindow);
 
 class wxScrolledWindow : public wxPanel
 {

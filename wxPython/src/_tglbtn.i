@@ -50,6 +50,8 @@ public:
 }
 
 
+MustHaveApp(wxToggleButton);
+
 class wxToggleButton : public wxControl
 {
 public:

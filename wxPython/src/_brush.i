@@ -33,6 +33,8 @@ a `wx.DC`.  It has a colour and a style.", "
 :see: `wx.BrushList`, `wx.DC`, `wx.DC.SetBrush`
 ");
 
+MustHaveApp(wxBrush);
+
 class wxBrush : public wxGDIObject {
 public:
     DocCtorStr(

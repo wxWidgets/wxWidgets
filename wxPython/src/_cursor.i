@@ -61,6 +61,8 @@ Stock Cursor IDs
 
 ");
 
+MustHaveApp(wxCursor);
+
 class wxCursor : public wxGDIObject
 {
 public:

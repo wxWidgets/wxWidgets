@@ -34,6 +34,8 @@ Events
 ");
        
 
+MustHaveApp(wxChoice);
+
 class wxChoice : public wxControlWithItems
 {
 public:

@@ -29,6 +29,8 @@ enum {
 //---------------------------------------------------------------------------
 
 
+MustHaveApp(wxGauge);
+
 class wxGauge : public wxControl {
 public:
     %pythonAppend wxGauge         "self._setOORInfo(self)"

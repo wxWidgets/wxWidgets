@@ -29,6 +29,8 @@
 %newgroup
 
 
+MustHaveApp(wxPen);
+
 class wxPen : public wxGDIObject {
 public:
     wxPen(wxColour& colour, int width=1, int style=wxSOLID);

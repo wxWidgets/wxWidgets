@@ -53,6 +53,8 @@ void wxPyTimer::base_Notify() {
 
 
 
+MustHaveApp(wxPyTimer);
+
 %name(Timer) class wxPyTimer : public wxEvtHandler
 {
 public:
@@ -130,6 +132,7 @@ public:
 
 
 // wxTimerRunner: starts the timer in its ctor, stops in the dtor
+MustHaveApp(wxTimerRunner);
 class wxTimerRunner
 {
 public:

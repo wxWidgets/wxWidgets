@@ -20,6 +20,8 @@ MAKE_CONST_WXSTRING(ScrollBarNameStr);
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxScrollBar);
+
 class wxScrollBar : public wxControl {
 public:
     %pythonAppend wxScrollBar         "self._setOORInfo(self)"

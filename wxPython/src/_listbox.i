@@ -26,6 +26,8 @@ MAKE_CONST_WXSTRING(ListBoxNameStr);
 //---------------------------------------------------------------------------
 %newgroup
 
+MustHaveApp(wxListBox);
+
 class wxListBox : public wxControlWithItems
 {
 public:
@@ -136,6 +138,8 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
+
+MustHaveApp(wxCheckListBox);
 
 // wxCheckListBox: a listbox whose items may be checked
 class wxCheckListBox : public wxListBox

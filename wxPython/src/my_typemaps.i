@@ -11,17 +11,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-//---------------------------------------------------------------------------
-// Tell SWIG to wrap all the wrappers with our thread protection
-
-%exception {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    $action
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-}
-
-
 //----------------------------------------------------------------------
 // Typemaps to convert a list of items to an int (size) and an array
 

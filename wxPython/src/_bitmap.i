@@ -65,6 +65,8 @@ converted to a wx.Bitmap, so any image file format supported by
 ");
 
 
+MustHaveApp(wxBitmap);
+
 class wxBitmap : public wxGDIObject
 {
 public:
@@ -305,6 +307,8 @@ A mask may be associated with a `wx.Bitmap`. It is used in
 `wx.DC.DrawBitmap` or `wx.DC.Blit` when the source device context is a
 `wx.MemoryDC` with a `wx.Bitmap` selected into it that contains a
 mask.", "");
+
+MustHaveApp(wxMask);
 
 class wxMask : public wxObject {
 public:

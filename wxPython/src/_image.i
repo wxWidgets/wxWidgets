@@ -90,7 +90,8 @@ public:
             else
                 return new wxImage;
         }   
-           
+
+        MustHaveApp(wxImage(const wxBitmap &bitmap));
         %name(ImageFromBitmap) wxImage(const wxBitmap &bitmap) {
             return new wxImage(bitmap.ConvertToImage());
         }
@@ -312,6 +313,9 @@ success flag and rgb values.", "");
     static wxString GetImageExtWildcard();
 
 
+MustHaveApp(ConvertToBitmap);
+MustHaveApp(ConvertToMonoBitmap);
+    
     %extend {
         wxBitmap ConvertToBitmap() {
             wxBitmap bitmap(*self);

@@ -515,6 +515,8 @@ specified by the TypeInfo.
 ", "");
 
 
+MustHaveApp(wxActiveXWindow);
+
 class wxActiveXWindow : public wxWindow
 {
 public:
@@ -1052,6 +1054,8 @@ public:
 %feature("noautodoc") wxIEHtmlWindowBase::GetStringSelection;
 %feature("noautodoc") wxIEHtmlWindowBase::GetText;
 
+
+MustHaveApp(wxIEHtmlWindowBase);
 
 class wxIEHtmlWindowBase : public wxActiveXWindow {
 public:

@@ -17,6 +17,8 @@
 %newgroup
 
 
+MustHaveApp(wxMenu);
+
 class wxMenu : public wxEvtHandler
 {
 public:
@@ -202,6 +204,8 @@ public:
 
 //---------------------------------------------------------------------------
 %newgroup
+
+MustHaveApp(wxMenuBar);
 
 class wxMenuBar : public wxWindow
 {

@@ -23,6 +23,8 @@
 %newgroup;
 
 
+MustHaveApp(wxTipWindow);
+
 class wxTipWindow :
 #ifndef __WXMAC__
     public wxPyPopupTransientWindow

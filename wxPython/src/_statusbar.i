@@ -24,6 +24,7 @@
 
 
 // wxStatusBar: a window near the bottom of the frame used for status info
+MustHaveApp(wxStatusBar);
 class wxStatusBar : public wxWindow
 {
 public:

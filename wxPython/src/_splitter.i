@@ -104,6 +104,8 @@ Events
 
 
 
+MustHaveApp(wxSplitterWindow);
+
 class wxSplitterWindow: public wxWindow
 {
 public:
