@@ -1183,6 +1183,13 @@ THREADS_LINK=""
 THREADS_OBJ=""
 
 if test "$wxUSE_THREADS" = "yes"; then
+  if test "$wxUSE_WINE" = 1; then
+    AC_MSG_WARN([Threads are not supported under WINE])
+    wxUSE_THREADS="no"
+   fi
+fi
+
+if test "$wxUSE_THREADS" = "yes"; then
     dnl find if POSIX threads are available
 
     dnl standard lib name is pthread
@@ -1503,7 +1510,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wxsocket"
         INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS protocol"
     else
-        AC_MSG_WARN(socket classes require --with-threads and won't be compiled without it)
+        AC_MSG_WARN(Socket classes require --with-threads and won't be compiled without it)
         wxUSE_SOCKETS=0
     fi
 fi
@@ -1685,15 +1692,12 @@ if test "$wxUSE_CLIPBOARD" = "yes"; then
   AC_DEFINE(wxUSE_CLIPBOARD)
 fi
 
-if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
+if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
   if test "$WXGTK12" = 1 ; then
     AC_DEFINE(wxUSE_DRAG_AND_DROP)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
-  else
-    AC_MSG_WARN(drag and drop is only supported under GTK 1.2)
-  fi
-  if test "$WXWINE" = 1 ; then
-    AC_MSG_WARN(drag and drop is only supported under WINE)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"  
+   else
+    AC_MSG_WARN([Drag and drop is only supported under wxGTK 2.1])
   fi
 fi
 
@@ -1819,11 +1823,15 @@ if test "$wxUSE_TOOLBAR" = "yes"; then
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS toolbar"
 fi
 
-if test "$wxUSE_TOOLTIPS" = "yes" ; then
+if test "$wxUSE_TOOLTIPS" = "yes"; then
     if test "$wxUSE_MOTIF" = 1; then
-      AC_MSG_WARN(tooltips are not supported yet under Motif)
+      AC_MSG_WARN(Tooltips are not supported yet under Motif)
     else
-      AC_DEFINE(wxUSE_TOOLTIPS)
+      if test "$wxUSE_WINE" = 1; then
+        AC_MSG_WARN(Tooltips are not supported yet under WINE)
+      else
+        AC_DEFINE(wxUSE_TOOLTIPS)
+      fi
     fi
 fi
 
