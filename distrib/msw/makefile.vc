@@ -200,7 +200,7 @@ cleandocs:
 # Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
 # Office StartUp folder, and PDFMaker should be installed.
 updatepdf:  # touchmanual pdfrtf
-    start $(WAITFLAG) "winword d:\wx2\wxWidgets\docs\latex\pdf\wx.rtf /mGeneratePDF"
+    start $(WAITFLAG) "winword d:\wx2\wxWidgets\docs\pdf\wx.rtf /mGeneratePDF"
 
 
 MFTYPE=vc
