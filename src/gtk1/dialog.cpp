@@ -263,8 +263,8 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
   
     if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
     if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
-    if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
-    if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
+    if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
+    if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
     gtk_widget_set_usize( m_widget, m_width, m_height );
 
@@ -350,8 +350,8 @@ void wxDialog::SetSize( int x, int y, int width, int height, int sizeFlags )
   
     if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
     if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
-    if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
-    if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
+    if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
+    if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
     if ((m_x != -1) || (m_y != -1))
     {

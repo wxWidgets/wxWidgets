@@ -51,6 +51,20 @@ static void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox 
 }
 
 //-----------------------------------------------------------------------------
+//  "changed"
+//-----------------------------------------------------------------------------
+
+static void 
+gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
+{
+    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->m_windowId );
+    event.SetString( copystring(combo->GetValue()) );
+    event.SetEventObject( combo );
+    combo->GetEventHandler()->ProcessEvent( event );
+    delete[] event.GetString();
+}
+
+//-----------------------------------------------------------------------------
 // wxComboBox
 //-----------------------------------------------------------------------------
 
@@ -115,6 +129,9 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     gtk_widget_realize( GTK_COMBO(m_widget)->entry );
     gtk_widget_realize( GTK_COMBO(m_widget)->button );
   
+    gtk_signal_connect( GTK_OBJECT(GTK_COMBO(m_widget)->entry), "changed",
+      GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
+      
     SetBackgroundColour( parent->GetBackgroundColour() );
     SetForegroundColour( parent->GetForegroundColour() );
 

@@ -631,6 +631,10 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
             node = node->Next();
         }
     }
+    
+    wxPoint pt(win->GetClientAreaOrigin());
+    event.m_x -= pt.x;
+    event.m_y -= pt.y;
 
     event.SetEventObject( win );
 
@@ -736,6 +740,10 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
         }
     }
 
+    wxPoint pt(win->GetClientAreaOrigin());
+    event.m_x -= pt.x;
+    event.m_y -= pt.y;
+
     event.SetEventObject( win );
 
     if (win->GetEventHandler()->ProcessEvent( event ))
@@ -840,6 +848,10 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
             node = node->Next();
         }
     }
+
+    wxPoint pt(win->GetClientAreaOrigin());
+    event.m_x -= pt.x;
+    event.m_y -= pt.y;
 
     event.SetEventObject( win );
 
@@ -966,6 +978,10 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     event.m_x = (long)x;
     event.m_y = (long)y;
     
+    wxPoint pt(win->GetClientAreaOrigin());
+    event.m_x -= pt.x;
+    event.m_y -= pt.y;
+
     if (win->GetEventHandler()->ProcessEvent( event ))
        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "enter_notify_event" );
 
@@ -1014,6 +1030,10 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     event.m_x = (long)x;
     event.m_y = (long)y;
     
+    wxPoint pt(win->GetClientAreaOrigin());
+    event.m_x -= pt.x;
+    event.m_y -= pt.y;
+
     if (win->GetEventHandler()->ProcessEvent( event ))
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "leave_notify_event" );
 
@@ -2635,21 +2655,35 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
     }
 }
 
-bool wxWindow::PopupMenu( wxMenu *menu, int WXUNUSED(x), int WXUNUSED(y) )
+static gint gs_pop_x = 0;
+static gint gs_pop_y = 0;
+
+static void pop_pos_callback( GtkMenu *menu, gint *x, gint *y, wxWindow *win )
+{
+    win->ClientToScreen( &gs_pop_x, &gs_pop_y );
+    *x = gs_pop_x;
+    *y = gs_pop_y;
+}
+
+bool wxWindow::PopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
 
     wxCHECK_MSG( menu != NULL, FALSE, "invalid popup-menu" );
 
     SetInvokingWindow( menu, this );
+    
+    gs_pop_x = x;
+    gs_pop_y = y;
+    
     gtk_menu_popup(
                   GTK_MENU(menu->m_menu),
-                  (GtkWidget *)NULL,          // parent menu shell
-                  (GtkWidget *)NULL,          // parent menu item
-                  (GtkMenuPositionFunc)NULL,
-                  NULL,                       // client data
-                  0,                          // button used to activate it
-                  0//gs_timeLastClick            // the time of activation
+                  (GtkWidget *) NULL,          // parent menu shell
+                  (GtkWidget *) NULL,          // parent menu item
+                  (GtkMenuPositionFunc) pop_pos_callback,
+                  (gpointer) this,             // client data
+                  0,                           // button used to activate it
+                  0 //gs_timeLastClick         // the time of activation
                 );
     return TRUE;
 }

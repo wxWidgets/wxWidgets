@@ -42,10 +42,10 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
     win->CalculateScrollbar();
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->m_windowId );
-    wxString val( win->GetValue() );
-    if (!val.IsNull()) event.m_commandString = WXSTRINGCAST val;
+    event.SetString( copystring(win->GetValue()) );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
+    delete[] event.GetString();
 }
 
 //-----------------------------------------------------------------------------
