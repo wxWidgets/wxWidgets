@@ -33,11 +33,11 @@
 // ---------------------------------------------------------------------------
 
 extern wxWindow* wxWndHook;
-extern MRESULT wxDlgProc( HWND   hWnd
-                         ,UINT   message
-                         ,MPARAM wParam
-                         ,MPARAM lParam
-                        );
+extern MRESULT EXPENTRY wxDlgProc( HWND   hWnd
+                                  ,UINT   message
+                                  ,MPARAM wParam
+                                  ,MPARAM lParam
+                                 );
 
 // ===========================================================================
 // implementation
