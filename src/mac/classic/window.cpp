@@ -73,8 +73,6 @@ wxWindowMac* gFocusWindow = NULL ;
 BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
   EVT_NC_PAINT(wxWindowMac::OnNcPaint)
   EVT_ERASE_BACKGROUND(wxWindowMac::OnEraseBackground)
-  EVT_SYS_COLOUR_CHANGED(wxWindowMac::OnSysColourChanged)
-  EVT_INIT_DIALOG(wxWindowMac::OnInitDialog)
   EVT_SET_FOCUS(wxWindowMac::OnSetFocus)
   EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
 END_EVENT_TABLE()

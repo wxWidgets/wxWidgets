@@ -180,7 +180,6 @@ static wxWindow*                    gpWinBeingCreated = NULL;
 BEGIN_EVENT_TABLE(wxWindowOS2, wxWindowBase)
     EVT_ERASE_BACKGROUND(wxWindowOS2::OnEraseBackground)
     EVT_SYS_COLOUR_CHANGED(wxWindowOS2::OnSysColourChanged)
-    EVT_INIT_DIALOG(wxWindowOS2::OnInitDialog)
     EVT_IDLE(wxWindowOS2::OnIdle)
     EVT_SET_FOCUS(wxWindowOS2::OnSetFocus)
 END_EVENT_TABLE()
