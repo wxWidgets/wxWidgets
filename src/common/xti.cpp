@@ -88,7 +88,7 @@ const wxChar *wxEnumData::GetEnumMemberName(int value) const
         if (value == m_members[i].m_value)
             return m_members[i].m_name;
 
-    return wxT("") ;
+    return wxEmptyString ;
 }
 
 int wxEnumData::GetEnumMemberValueByIndex( int idx ) const
@@ -318,13 +318,13 @@ void wxTypeInfo::Register()
     if ( ms_typeTable == NULL )
         ms_typeTable = new wxTypeInfoMap() ;
 
-    if( !m_name.IsEmpty() )
+    if( !m_name.empty() )
         (*ms_typeTable)[m_name] = this ;
 }
 
 void wxTypeInfo::Unregister()
 {
-    if( !m_name.IsEmpty() )
+    if( !m_name.empty() )
         ms_typeTable->erase(m_name);
 }
 

@@ -56,7 +56,7 @@ const wxClassInfo* wxObject::ms_classParents[] = { NULL } ;
 { return &data.wxTEMPLATED_MEMBER_CALL(Get , wxObject) ; }
  wxxVariant wxObjectToVariantConverterwxObject ( wxObject *data )
  { return wxxVariant( dynamic_cast<wxObject*> (data)  ) ; }
- wxClassInfo wxObject::ms_classInfo(ms_classParents , wxT("") , wxT("wxObject"),
+ wxClassInfo wxObject::ms_classInfo(ms_classParents , wxEmptyString , wxT("wxObject"),
             (int) sizeof(wxObject),                              \
             (wxObjectConstructorFn) 0   ,
             (wxPropertyInfo*) NULL,(wxHandlerInfo*) NULL,0 , 0 ,

@@ -141,7 +141,7 @@ wxIPV4address::~wxIPV4address()
 bool wxIPV4address::Hostname(const wxString& name)
 {
   // Some people are sometimes fool.
-  if (name == wxT(""))
+  if (name.empty())
   {
     wxLogWarning( _("Trying to solve a NULL hostname: giving up") );
     return false;
@@ -245,7 +245,7 @@ wxIPV6address::~wxIPV6address()
 
 bool wxIPV6address::Hostname(const wxString& name)
 {
-  if (name == wxT(""))
+  if (name.empty())
   {
     wxLogWarning( _("Trying to solve a NULL hostname: giving up") );
     return false;

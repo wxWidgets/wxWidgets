@@ -803,7 +803,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetNumberOfDays(wxDateTime::Month month,
 wxString wxDateTime::GetMonthName(wxDateTime::Month month,
                                   wxDateTime::NameFlags flags)
 {
-    wxCHECK_MSG( month != Inv_Month, _T(""), _T("invalid month") );
+    wxCHECK_MSG( month != Inv_Month, wxEmptyString, _T("invalid month") );
 
     // notice that we must set all the fields to avoid confusing libc (GNU one
     // gets confused to a crash if we don't do this)
@@ -818,7 +818,7 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
 wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
                                     wxDateTime::NameFlags flags)
 {
-    wxCHECK_MSG( wday != Inv_WeekDay, _T(""), _T("invalid weekday") );
+    wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, _T("invalid weekday") );
 
     // take some arbitrary Sunday (but notice that the day should be such that
     // after adding wday to it below we still have a valid date, e.g. don't
@@ -2068,7 +2068,7 @@ wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz, bool noDST)
 
 wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 {
-    wxCHECK_MSG( format, _T(""), _T("NULL format in wxDateTime::Format") );
+    wxCHECK_MSG( format, wxEmptyString, _T("NULL format in wxDateTime::Format") );
 
     // we have to use our own implementation if the date is out of range of
     // strftime() or if we use non standard specificators
@@ -3849,7 +3849,7 @@ enum TimeSpanPart
 //  %l          milliseconds (000 - 999)
 wxString wxTimeSpan::Format(const wxChar *format) const
 {
-    wxCHECK_MSG( format, _T(""), _T("NULL format in wxTimeSpan::Format") );
+    wxCHECK_MSG( format, wxEmptyString, _T("NULL format in wxTimeSpan::Format") );
 
     wxString str;
     str.Alloc(wxStrlen(format));

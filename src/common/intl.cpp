@@ -1226,7 +1226,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 {
 #if wxUSE_WCHAR_T
     wxCSConv *csConv = NULL;
-    if ( !m_charset.IsEmpty() )
+    if ( !m_charset.empty() )
         csConv = new wxCSConv(m_charset);
 
     wxMBConv& inputConv = csConv ? *((wxMBConv*)csConv) : *wxConvCurrent;
@@ -1462,7 +1462,7 @@ bool wxLocale::Init(const wxChar *szName,
 
   // the short name will be used to look for catalog files as well,
   // so we need something here
-  if ( m_strShort.IsEmpty() ) {
+  if ( m_strShort.empty() ) {
     // FIXME I don't know how these 2 letter abbreviations are formed,
     //       this wild guess is surely wrong
     if ( szLocale && szLocale[0] )
@@ -1637,7 +1637,7 @@ bool wxLocale::Init(int language, int flags)
                 if (codepage != 0)
                     locale << wxT(".") << buffer;
             }
-            if (locale.IsEmpty())
+            if (locale.empty())
             {
                 wxLogLastError(wxT("SetThreadLocale"));
                 wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
@@ -2545,14 +2545,14 @@ wxString wxLocale::GetHeaderValue( const wxChar* szHeader,
         if ( pMsgCat == NULL )
             return wxEmptyString;
 
-        pszTrans = pMsgCat->GetString(wxT(""), (size_t)-1);
+        pszTrans = pMsgCat->GetString(wxEmptyString, (size_t)-1);
     }
     else
     {
         // search in all domains
         for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
         {
-            pszTrans = pMsgCat->GetString(wxT(""), (size_t)-1);
+            pszTrans = pMsgCat->GetString(wxEmptyString, (size_t)-1);
             if ( pszTrans != NULL )   // take the first found
                 break;
         }

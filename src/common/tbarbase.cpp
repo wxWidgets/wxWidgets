@@ -563,7 +563,7 @@ bool wxToolBarBase::GetToolEnabled(int id) const
 wxString wxToolBarBase::GetToolShortHelp(int id) const
 {
     wxToolBarToolBase *tool = FindById(id);
-    wxCHECK_MSG( tool, _T(""), _T("no such tool") );
+    wxCHECK_MSG( tool, wxEmptyString, _T("no such tool") );
 
     return tool->GetShortHelp();
 }
@@ -571,7 +571,7 @@ wxString wxToolBarBase::GetToolShortHelp(int id) const
 wxString wxToolBarBase::GetToolLongHelp(int id) const
 {
     wxToolBarToolBase *tool = FindById(id);
-    wxCHECK_MSG( tool, _T(""), _T("no such tool") );
+    wxCHECK_MSG( tool, wxEmptyString, _T("no such tool") );
 
     return tool->GetLongHelp();
 }

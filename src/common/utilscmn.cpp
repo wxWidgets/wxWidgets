@@ -119,7 +119,7 @@
 wxChar *
 copystring (const wxChar *s)
 {
-  if (s == NULL) s = wxT("");
+  if (s == NULL) s = wxEmptyString;
   size_t len = wxStrlen (s) + 1;
 
   wxChar *news = new wxChar[len];
@@ -281,7 +281,7 @@ const wxChar *wxGetInstallPrefix()
 #ifdef wxINSTALL_PREFIX
     return wxT(wxINSTALL_PREFIX);
 #else
-    return wxT("");
+    return wxEmptyString;
 #endif
 }
 

@@ -86,7 +86,7 @@ enum
 
 // get the address object for the given server name, the caller must delete it
 static wxSockAddress *
-GetAddressFromName(const wxString& serverName, const wxString& host = _T(""))
+GetAddressFromName(const wxString& serverName, const wxString& host = wxEmptyString)
 {
     // we always use INET sockets under non-Unix systems
 #if defined(__UNIX__) && !defined(__WXMAC__) && !defined(__WINE__)

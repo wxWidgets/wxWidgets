@@ -79,7 +79,7 @@ wxURI::~wxURI()
 void wxURI::Clear()
 {
     m_scheme = m_user = m_server = m_port = m_path =
-    m_query = m_fragment = wxT("");
+    m_query = m_fragment = wxEmptyString;
 
     m_hostType = wxURI_REGNAME;
 
@@ -401,7 +401,7 @@ const wxChar* wxURI::ParseScheme(const wxChar* uri)
         }
         else
             //relative uri with relative path reference
-            m_scheme = wxT("");
+            m_scheme = wxEmptyString;
     }
 //    else
         //relative uri with _possible_ relative path reference
@@ -450,7 +450,7 @@ const wxChar* wxURI::ParseUser(const wxChar* uri)
         uricopy = ++uri;
     }
     else
-        m_user = wxT("");
+        m_user = wxEmptyString;
 
     return uricopy;
 }

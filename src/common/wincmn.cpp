@@ -1376,7 +1376,7 @@ wxWindowBase::FindWindowByName(const wxString& title, const wxWindow *parent)
 wxWindow *
 wxWindowBase::FindWindowById( long id, const wxWindow* parent )
 {
-    return wxFindWindowHelper(parent, _T(""), id, wxFindWindowCmpIds);
+    return wxFindWindowHelper(parent, wxEmptyString, id, wxFindWindowCmpIds);
 }
 
 // ----------------------------------------------------------------------------
@@ -2232,7 +2232,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 #ifdef __WXDEBUG__
                                       _T(" Debug build"),
 #else
-                                      _T(""),
+                                      wxEmptyString,
 #endif
                                       __TDATE__,
                                       __TTIME__

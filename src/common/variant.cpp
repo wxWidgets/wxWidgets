@@ -164,7 +164,7 @@ bool wxVariantDataList::Write(wxSTD ostream& str) const
 
 bool wxVariantDataList::Write(wxString& str) const
 {
-    str = wxT("");
+    str = wxEmptyString;
     wxList::compatibility_iterator node = m_value.GetFirst();
     while (node)
     {
@@ -1769,7 +1769,7 @@ wxString wxVariant::MakeString() const
         if (GetData()->Write(str))
             return str;
     }
-    return wxString(wxT(""));
+    return wxEmptyString;
 }
 
 // Accessors

@@ -63,7 +63,7 @@ const wxChar *wxTextBuffer::GetEOL(wxTextFileType type)
             wxFAIL_MSG(wxT("bad buffer type in wxTextBuffer::GetEOL."));
             // fall through nevertheless - we must return something...
 
-        case wxTextFileType_None: return wxT("");
+        case wxTextFileType_None: return wxEmptyString;
         case wxTextFileType_Unix: return wxT("\n");
         case wxTextFileType_Dos:  return wxT("\r\n");
         case wxTextFileType_Mac:  return wxT("\r");

@@ -59,7 +59,7 @@ wxPrintPaperType::wxPrintPaperType()
 {
     m_paperId = wxPAPER_NONE;
     m_platformId = 0;
-    m_paperName = wxT("");
+    m_paperName = wxEmptyString;
     m_width = 0;
     m_height = 0;
 }

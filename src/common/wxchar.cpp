@@ -501,7 +501,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             }
                             else
                             {
-                                val = wxT("");
+                                val = wxEmptyString;
                                 len = 0;
                             }
 
@@ -658,12 +658,12 @@ int vswscanf(const wxChar *ws, const wxChar *format, va_list argptr)
     // convert the strings into MB representation and run ANSI version
     // of the function. This doesn't work with %c and %s because of difference
     // in size of char and wchar_t, though.
-    
+
     wxCHECK_MSG( wxStrstr(format, _T("%s")) == NULL, -1,
                  _T("incomplete vswscanf implementation doesn't allow %s") );
     wxCHECK_MSG( wxStrstr(format, _T("%c")) == NULL, -1,
                  _T("incomplete vswscanf implementation doesn't allow %c") );
-    
+
     va_list argcopy;
     wxVaCopy(argcopy, argptr);
     return vsscanf(wxConvLibc.cWX2MB(ws), wxConvLibc.cWX2MB(format), argcopy);
@@ -1070,7 +1070,7 @@ WXDLLEXPORT int wxTolower(wxChar ch) { return (wxChar)CharLower((LPTSTR)(ch)); }
 WXDLLEXPORT int wxToupper(wxChar ch) { return (wxChar)CharUpper((LPTSTR)(ch)); }
 #endif
 
-#if defined(__DARWIN__) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 ) 
+#if defined(__DARWIN__) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
 
 WXDLLEXPORT size_t wxInternalMbstowcs (wchar_t * out, const char * in, size_t outlen)
 {
@@ -1081,16 +1081,16 @@ WXDLLEXPORT size_t wxInternalMbstowcs (wchar_t * out, const char * in, size_t ou
             outsize++;
         return outsize;
     }
-    
+
     const char* origin = in;
-    
+
     while (outlen-- && *in)
     {
         *out++ = (wchar_t) *in++;
     }
-    
+
     *out = '\0';
-    
+
     return in - origin;
 }
 
@@ -1103,19 +1103,19 @@ WXDLLEXPORT size_t	wxInternalWcstombs (char * out, const wchar_t * in, size_t ou
             outsize++;
         return outsize;
     }
-    
+
     const wchar_t* origin = in;
-    
+
     while (outlen-- && *in)
     {
         *out++ = (char) *in++;
     }
-    
+
     *out = '\0';
-    
+
     return in - origin;
 }
-        
+
 #if defined(wxNEED_WX_CTYPE_H)
 
 #include <CoreFoundation/CoreFoundation.h>
@@ -1267,7 +1267,7 @@ WXDLLEXPORT size_t wxStrlen_(const wxChar *s)
     size_t n = 0;
     while ( *s++ )
         n++;
-            
+
     return n;
 }
 

@@ -196,7 +196,7 @@ wxString wxFileType::ExpandCommand(const wxString& command,
     // know of the correct solution, try to guess what we have to do.
 
     // test now carried out on reading file so test should never get here
-    if ( !hasFilename && !str.IsEmpty()
+    if ( !hasFilename && !str.empty()
 #ifdef __UNIX__
                       && !str.StartsWith(_T("test "))
 #endif // Unix
@@ -428,7 +428,7 @@ bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
     // VZ: should we do this?
     // chris elliott : only makes sense in MS windows
     if ( sTmp.empty() )
-        GetOpenCommand(&sTmp, wxFileType::MessageParameters(wxT(""), wxT("")));
+        GetOpenCommand(&sTmp, wxFileType::MessageParameters(wxEmptyString, wxEmptyString));
 #endif
     wxCHECK_MSG( !sTmp.empty(), false, _T("need the icon file") );
 
