@@ -887,7 +887,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
                 int ch = getc(fd);
                 while (ch != EOF)
                 {
-                    putc(ch, Sections);
+                    wxPutc(ch, Sections);
                     ch = getc(fd);
                 }
                 fclose(fd);
@@ -1662,7 +1662,7 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
         int ch = getc(fd);
         while (ch != EOF)
         {
-          putc(ch, Titlepage);
+          wxPutc(ch, Titlepage);
           ch = getc(fd);
         }
         fclose(fd);
@@ -3075,7 +3075,7 @@ bool HTMLGo(void)
         int ch = getc(fd);
         while (ch != EOF)
         {
-          putc(ch, tmpTitle);
+          wxPutc(ch, tmpTitle);
           ch = getc(fd);
         }
         fclose(fd);

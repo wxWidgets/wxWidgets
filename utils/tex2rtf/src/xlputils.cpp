@@ -434,7 +434,7 @@ void XLPOnMacro(int macroId, int no_args, bool start)
         int ch = getc(fd);
         while (ch != EOF)
         {
-          putc(ch, Chapters);
+          wxPutc(ch, Chapters);
           ch = getc(fd);
         }
         fclose(fd);
