@@ -142,13 +142,8 @@ bool wxHTTP::ParseHeaders()
     if (line.Length() == 0)
       break;
 
-    tokenzr.SetString(line, " :\t\n\r");
-    if (!tokenzr.HasMoreTokens())
-      return FALSE;
-
-    wxString left_str = tokenzr.GetNextToken();
-    wxString *str = new wxString(tokenzr.GetNextToken());
-
+	wxString left_str = line.BeforeFirst(':');
+	wxString *str = new wxString(line.AfterFirst(':').Strip(wxString::both));
     left_str.MakeUpper();
 
     m_headers.Append(left_str, (wxObject *) str);
