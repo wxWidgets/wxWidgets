@@ -155,7 +155,7 @@ void *dlopen(const char *path, int WXUNUSED(mode) /* mode is ignored */)
 
 int dlclose(void *handle)
 {
-    NSUnLinkModule( handle, NSUNLINKMODULE_OPTION_NONE);
+    NSUnLinkModule((NSModule)handle, NSUNLINKMODULE_OPTION_NONE);
     return 0;
 }
 
@@ -169,7 +169,7 @@ void *dlsym(void *handle, const char *symbol)
     p[0] = '_';
     strcpy(p + 1, symbol);
 
-    NSSymbol nsSymbol = NSLookupSymbolInModule( handle, p );
+    NSSymbol nsSymbol = NSLookupSymbolInModule((NSModule)handle, p );
     return nsSymbol ? NSAddressOfSymbol(nsSymbol) : NULL;
 }
 
