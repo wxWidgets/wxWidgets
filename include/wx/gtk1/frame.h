@@ -64,13 +64,13 @@ public:
 
   virtual void GetClientSize( int *width, int *height ) const;
   wxSize GetClientSize() const { int w, h; GetClientSize(& w, & h); return wxSize(w, h); }
-  
+
   virtual void SetClientSize( int const width, int const height );
 
   virtual void SetSize( int x, int y, int width, int height,
     int sizeFlags = wxSIZE_AUTO );
   virtual void SetSize( int width, int height );
-    
+
   virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
     const wxString& name = "statusBar");
   virtual wxStatusBar *OnCreateStatusBar( int number, long style, wxWindowID id,
@@ -99,14 +99,14 @@ public:
   virtual void Maximize(bool WXUNUSED(maximize)) {}
   virtual void Restore() {}
 
+  void OnCloseWindow( wxCloseEvent& event );
   void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
   void OnSize( wxSizeEvent &event );
-  void OnCloseWindow( wxCloseEvent& event );
-  
+
   void OnMenuHighlight( wxMenuEvent& event );
 
   // implementation
-  
+
   virtual void GtkOnSize( int x, int y, int width, int height );
   virtual wxPoint GetClientAreaOrigin() const;
   void DoMenuUpdates();

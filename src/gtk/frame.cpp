@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "frame.h"
+    #pragma implementation "frame.h"
 #endif
 
 #include "wx/frame.h"
@@ -104,6 +104,7 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
 
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
     EVT_SIZE(wxFrame::OnSize)
+    EVT_CLOSE(wxFrame::OnCloseWindow)
     EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
 END_EVENT_TABLE()
 
@@ -472,6 +473,13 @@ void wxFrame::OnInternalIdle()
         GtkOnSize( m_x, m_y, m_width, m_height );
 
     DoMenuUpdates();
+}
+
+void wxFrame::OnCloseWindow( wxCloseEvent& event )
+{
+    // close the window if it wasn't vetoed by the application
+    if ( !event.GetVeto() )
+        Destroy();
 }
 
 void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )

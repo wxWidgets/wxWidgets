@@ -224,15 +224,15 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
     if (closing.Member(this))
         return;   // no loops
 
+    if ( event.GetVeto() )
+        return;
+
     closing.Append(this);
 
     wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     cancelEvent.SetEventObject( this );
     GetEventHandler()->ProcessEvent(cancelEvent);
     closing.DeleteObject(this);
-
-    if ( event.CanVeto() )
-        event.Veto();
 }
 
 bool wxDialog::Destroy()

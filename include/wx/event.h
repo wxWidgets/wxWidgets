@@ -762,10 +762,17 @@ public:
     void SetLoggingOff(bool logOff) { m_loggingOff = logOff; }
     bool GetLoggingOff() const { return m_loggingOff; }
 
-    void Veto(bool veto = TRUE) { wxASSERT( m_canVeto ); m_veto = veto; }
+    void Veto(bool veto = TRUE)
+    {
+        // GetVeto() will return FALSE anyhow...
+        wxCHECK_RET( m_canVeto,
+                     "call to Veto() ignored (can't veto this event)" );
+
+        m_veto = veto;
+    }
     void SetCanVeto(bool canVeto) { m_canVeto = canVeto; }
     bool CanVeto() const { return m_canVeto; }
-    bool GetVeto() const { wxASSERT( m_canVeto ); return m_veto; }
+    bool GetVeto() const { return m_canVeto && m_veto; }
 
 #if WXWIN_COMPATIBILITY
     // This is probably obsolete now, since we use CanVeto instead, in

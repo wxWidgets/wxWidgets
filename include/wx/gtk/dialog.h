@@ -63,12 +63,12 @@ public:
   void OnOK( wxCommandEvent &event );
   void OnPaint( wxPaintEvent& event );
   void OnSize( wxSizeEvent &event );
+  void OnCloseWindow( wxCloseEvent& event );
 /*
   void OnCharHook( wxKeyEvent& event );
 */
 
   bool Destroy();
-  void OnCloseWindow( wxCloseEvent& event );
 
   virtual void SetSize( int x, int y, int width, int height,
       int sizeFlags = wxSIZE_AUTO );

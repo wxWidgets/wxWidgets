@@ -1718,13 +1718,9 @@ bool wxWindow::Close( bool force )
     event.SetEventObject(this);
     event.SetCanVeto(!force);
 
-    (void)GetEventHandler()->ProcessEvent(event);
-
-    // when we're forced to close we do it anyhow, otherwise only if the
-    // application didn't forbid it (if the event wasn't processed, GetVeto()
-    // will return FALSE too)
-    if ( force || !event.GetVeto() )
-        Destroy();
+    // return FALSE if window wasn't closed because the application vetoed the
+    // close event
+    return GetEventHandler()->ProcessEvent(event) && !event.GetVeto();
 }
 
 bool wxWindow::Destroy()
