@@ -206,7 +206,7 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
 }
 
 
-#define REPLACEMENT_CHAR  (tchar('?'))
+#define REPLACEMENT_CHAR  ((tchar)'?')
 
 inline tchar GetTableValue(const tchar *table, tchar value, bool& repl)
 {
