@@ -191,7 +191,7 @@ typedef int wxWindowID;
 // ----------------------------------------------------------------------------
 
     // Every ride down a slippery slope begins with a single step..
-    // 
+    //
     // Yes, using nested classes is indeed against our coding standards in
     // general, but there are places where you can use them to advantage
     // without totally breaking ports that cannot use them.  If you do, then
@@ -915,7 +915,7 @@ enum wxBorder
    wxMINIMIZE_BOX | wxMAXIMIZE_BOX | \
    wxCAPTION | wxCLIP_CHILDREN)
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXPM__)
 #   define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU | wxCAPTION)
 #else
 //  Under Unix, the dialogs don't have a system menu. Specifying wxSYSTEM_MENU
@@ -1646,7 +1646,7 @@ typedef enum {
 #endif
 
 // macro to specify "All Files" on different platforms
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) || defined(__WXPM__)
 #   define wxALL_FILES_PATTERN   "*.*"
 #   define wxALL_FILES           gettext_noop("All files (*.*)|*.*")
 #else
