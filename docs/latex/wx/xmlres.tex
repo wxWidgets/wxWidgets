@@ -88,24 +88,6 @@ Removes all handlers.
 Compares the XRC version to the argument. Returns -1 if the XRC version
 is less than the argument, +1 if greater, and 0 if they equal.
 
-\membersection{wxXmlResource::CreateResFromNode}\label{wxxmlresourcecreateresfromnode}
-
-\func{wxObject*}{CreateResFromNode}{\param{wxXmlNode* }{node}, \param{wxObject* }{parent}, \param{wxObject* }{instance = NULL}}
-
-Creates a resource from information in the given node.
-
-\membersection{wxXmlResource::DoFindResource}\label{wxxmlresourcedofindresource}
-
-\func{wxXmlNode*}{DoFindResource}{\param{wxXmlNode* }{parent}, \param{const wxString\& }{name}, \param{const wxString\& }{classname}, \param{bool }{recursive}}
-
-Helper function: finds a resource (calls UpdateResources) and returns a node containing it.
-
-\membersection{wxXmlResource::FindResource}\label{wxxmlresourcefindresource}
-
-\func{wxXmlNode*}{FindResource}{\param{const wxString\& }{name}, \param{const wxString\& }{classname}, \param{bool }{recursive = false}}
-
-Finds a resource (calls UpdateResources) and returns a node containing it.
-
 \membersection{wxXmlResource::Get}\label{wxxmlresourceget}
 
 \func{wxXmlResource*}{Get}{\void}
@@ -227,14 +209,7 @@ Sets the global resources object and returns a pointer to the previous one (may 
 
 \membersection{wxXmlResource::SetFlags}\label{wxxmlresourcesetflags}
 
-\func{int}{SetFlags}{\void}
+\func{void}{SetFlags}{\param{int }{flags}}
 
 Sets flags (bitlist of wxXRC\_USE\_LOCALE and wxXRC\_NO\_SUBCLASSING).
-
-\membersection{wxXmlResource::UpdateResources}\label{wxxmlresourceupdateresources}
-
-\func{void}{UpdateResources}{\void}
-
-Scans the resources list for unloaded files and loads them. Also reloads
-files that have been modified since the last load.
 

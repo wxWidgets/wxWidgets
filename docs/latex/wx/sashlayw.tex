@@ -46,7 +46,7 @@ about the layout events.
 
 Default constructor.
 
-\func{}{wxSashLayoutWindow}{\param{wxSashLayoutWindow*}{ parent}, \param{wxSashLayoutWindowID }{id},
+\func{}{wxSashLayoutWindow}{\param{wxSashLayoutWindow*}{ parent}, \param{wxWindowID }{id},
  \param{const wxPoint\& }{pos = wxDefaultPosition},
  \param{const wxSize\& }{size = wxDefaultSize},
  \param{long }{style = wxCLIP\_CHILDREN \pipe wxSW\_3D},
@@ -71,11 +71,34 @@ should generate a default size for the window.}
 
 \docparam{name}{Window name.}
 
-\membersection{wxSashLayoutWindow::\destruct{wxSashLayoutWindow}}\label{wxsashlayoutwindowdtor}
 
-\func{}{\destruct{wxSashLayoutWindow}}{\void}
+\membersection{wxSashLayoutWindow::Create}\label{wxsashlayoutwindowcreate}
 
-Destructor.
+\func{bool}{Create}{\param{wxSashLayoutWindow*}{ parent}, \param{wxWindowID }{id},
+ \param{const wxPoint\& }{pos = wxDefaultPosition},
+ \param{const wxSize\& }{size = wxDefaultSize},
+ \param{long }{style = wxCLIP\_CHILDREN \pipe wxSW\_3D},
+ \param{const wxString\& }{name = "layoutWindow"}}
+
+Initializes a sash layout window, which can be a child of a frame, dialog or any other non-control window.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Pointer to a parent window.}
+
+\docparam{id}{Window identifier. If -1, will automatically create an identifier.}
+
+\docparam{pos}{Window position. wxDefaultPosition is (-1, -1) which indicates that wxSashLayoutWindows
+should generate a default position for the window. If using the wxSashLayoutWindow class directly, supply
+an actual position.}
+
+\docparam{size}{Window size. wxDefaultSize is (-1, -1) which indicates that wxSashLayoutWindows
+should generate a default size for the window.}
+
+\docparam{style}{Window style. For window styles, please see \helpref{wxSashLayoutWindow}{wxsashlayoutwindow}.}
+
+\docparam{name}{Window name.}
+
 
 \membersection{wxSashLayoutWindow::GetAlignment}\label{wxsashlayoutwindowgetalignment}
 

@@ -413,15 +413,6 @@ is transferred to the application, so it must then be deleted
 explicitly.
 
 
-\membersection{wxPrintDialog::Ok}\label{wxprintdialogok}
-
-\constfunc{bool}{Ok}{\void}
-
-Returns true if the print data associated with the dialog is valid.
-This can return false on Windows if the current printer is not set, for example.
-On all other platforms, it returns true.
-
-
 \membersection{wxPrintDialog::ShowModal}\label{wxprintdialogshowmodal}
 
 \func{int}{ShowModal}{\void}
@@ -702,19 +693,6 @@ dialog data, which will be copied to the printer object's local data.
 \helpref{wxPrintData}{wxprintdata}
 
 
-\membersection{wxPrinter::\destruct{wxPrinter}}\label{wxprinterdtor}
-
-\func{}{\destruct{wxPrinter}}{\void}
-
-Destructor.
-
-
-\membersection{wxPrinter::Abort}\label{wxprinterabort}
-
-\func{bool}{Abort}{\void}
-
-Returns true if the user has aborted the print job.
-
 
 \membersection{wxPrinter::CreateAbortWindow}\label{wxprintercreateabortwindow}
 
@@ -722,6 +700,12 @@ Returns true if the user has aborted the print job.
 
 Creates the default printing abort window, with a cancel button.
 
+
+\membersection{wxPrinter::GetAbort}\label{wxprintergetabort}
+
+\func{bool}{GetAbort}{\void}
+
+Returns true if the user has aborted the print job.
 
 
 \membersection{wxPrinter::GetLastError}\label{wxprintergetlasterror}
@@ -1099,14 +1083,6 @@ Destructor. Deletes both print preview objects, so do not destroy these objects
 in your application.
 
 
-\membersection{wxPrintPreview::DrawBlankPage}\label{wxprintpreviewdrawblankpage}
-
-\func{bool}{DrawBlankPage}{\param{wxWindow* }{window}}
-
-Draws a representation of the blank page into the preview window. Used
-internally.
-
-
 \membersection{wxPrintPreview::GetCanvas}\label{wxprintpreviewgetcanvas}
 
 \func{wxPreviewCanvas* }{GetCanvas}{\void}
@@ -1141,13 +1117,6 @@ Returns the maximum page number.
 \func{int}{GetMinPage}{\void}
 
 Returns the minimum page number.
-
-
-\membersection{wxPrintPreview::GetPrintData}\label{wxprintpreviewgetprintdata}
-
-\func{wxPrintData\&}{GetPrintData}{\void}
-
-Returns a reference to the internal print data.
 
 
 \membersection{wxPrintPreview::GetPrintout}\label{wxprintpreviewgetprintout}
@@ -1207,7 +1176,7 @@ Renders a page into a wxMemoryDC. Used internally by wxPrintPreview.
 
 \membersection{wxPrintPreview::SetCanvas}\label{wxprintpreviewsetcanvas}
 
-\func{void}{SetCanvas}{\param{wxPreviewCanvas** }{window}}
+\func{void}{SetCanvas}{\param{wxPreviewCanvas* }{window}}
 
 Sets the window to be used for displaying the print preview image.
 

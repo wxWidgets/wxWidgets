@@ -186,13 +186,13 @@ Adds a separator for spacing groups of tools.
 
 \membersection{wxToolBar::AddTool}\label{wxtoolbaraddtool}
 
-\func{wxToolBarTool*}{AddTool}{\param{int}{ toolId},\rtfsp
+\func{wxToolBarToolBase*}{AddTool}{\param{int}{ toolId},\rtfsp
 \param{const wxString\&}{ label},\rtfsp
 \param{const wxBitmap\&}{ bitmap1},\rtfsp
 \param{const wxString\& }{shortHelpString = ""},\rtfsp
 \param{wxItemKind}{ kind = wxITEM\_NORMAL}}
 
-\func{wxToolBarTool*}{AddTool}{\param{int}{ toolId},\rtfsp
+\func{wxToolBarToolBase*}{AddTool}{\param{int}{ toolId},\rtfsp
 \param{const wxString\&}{ label},\rtfsp
 \param{const wxBitmap\&}{ bitmap1},\rtfsp
 \param{const wxBitmap\&}{ bitmap2 = wxNullBitmap},\rtfsp
@@ -201,7 +201,7 @@ Adds a separator for spacing groups of tools.
 \param{const wxString\& }{longHelpString = ""},\rtfsp
 \param{wxObject* }{clientData = NULL}}
 
-\func{wxToolBarTool*}{AddTool}{\param{wxToolBarTool* }{tool}}
+\func{wxToolBarToolBase*}{AddTool}{\param{wxToolBarToolBase* }{tool}}
 
 Adds a tool to the toolbar. The first (short and most commonly used) version
 has fewer parameters than the full version at the price of not being able to
@@ -253,7 +253,7 @@ order to have the tools appear.
 
 \membersection{wxToolBar::AddCheckTool}\label{wxtoolbaraddchecktool}
 
-\func{wxToolBarTool*}{AddCheckTool}{\param{int}{ toolId},\rtfsp
+\func{wxToolBarToolBase*}{AddCheckTool}{\param{int}{ toolId},\rtfsp
 \param{const wxString\&}{ label},\rtfsp
 \param{const wxBitmap\&}{ bitmap1},\rtfsp
 \param{const wxBitmap\&}{ bitmap2},\rtfsp
@@ -270,7 +270,7 @@ as in \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.
 
 \membersection{wxToolBar::AddRadioTool}\label{wxtoolbaraddradiotool}
 
-\func{wxToolBarTool*}{AddRadioTool}{\param{int}{ toolId},\rtfsp
+\func{wxToolBarToolBase*}{AddRadioTool}{\param{int}{ toolId},\rtfsp
 \param{const wxString\&}{ label},\rtfsp
 \param{const wxBitmap\&}{ bitmap1},\rtfsp
 \param{const wxBitmap\&}{ bitmap2},\rtfsp
@@ -342,7 +342,7 @@ will change the visible state of the tool to indicate that it is disabled.
 
 \membersection{wxToolBar::FindById}\label{wxtoolbarfindbyid}
 
-\func{wxToolBarTool*}{FindById}{\param{int }{id}}
+\func{wxToolBarToolBase*}{FindById}{\param{int }{id}}
 
 Returns a pointer to the tool identified by {\it id} or
 NULL if no corresponding tool is found.
@@ -356,7 +356,7 @@ NULL if no corresponding control is found.
 
 \membersection{wxToolBar::FindToolForPosition}\label{wxtoolbarfindtoolforposition}
 
-\constfunc{wxToolBarTool*}{FindToolForPosition}{\param{const float}{ x}, \param{const float}{ y}}
+\constfunc{wxToolBarToolBase*}{FindToolForPosition}{\param{const float}{ x}, \param{const float}{ y}}
 
 Finds a tool for the given mouse position.
 
@@ -520,7 +520,7 @@ true if the tool is toggled on, false otherwise.
 
 \membersection{wxToolBar::InsertControl}\label{wxtoolbarinsertcontrol}
 
-\func{wxToolBarTool *}{InsertControl}{\param{size\_t }{pos}, \param{wxControl *}{control}}
+\func{wxToolBarToolBase *}{InsertControl}{\param{size\_t }{pos}, \param{wxControl *}{control}}
 
 Inserts the control into the toolbar at the given position.
 
@@ -533,7 +533,7 @@ You must call \helpref{Realize}{wxtoolbarrealize} for the change to take place.
 
 \membersection{wxToolBar::InsertSeparator}\label{wxtoolbarinsertseparator}
 
-\func{wxToolBarTool *}{InsertSeparator}{\param{size\_t }{pos}}
+\func{wxToolBarToolBase *}{InsertSeparator}{\param{size\_t }{pos}}
 
 Inserts the separator into the toolbar at the given position.
 
@@ -546,13 +546,13 @@ You must call \helpref{Realize}{wxtoolbarrealize} for the change to take place.
 
 \membersection{wxToolBar::InsertTool}\label{wxtoolbarinserttool}
 
-\func{wxToolBarTool *}{InsertTool}{\param{size\_t }{pos},\rtfsp
+\func{wxToolBarToolBase *}{InsertTool}{\param{size\_t }{pos},\rtfsp
 \param{int}{ toolId}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
 \param{const wxBitmap\&}{ bitmap2 = wxNullBitmap}, \param{bool}{ isToggle = false},\rtfsp
 \param{wxObject* }{clientData = NULL}, \param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
 
-\func{wxToolBarTool *}{InsertTool}{\param{size\_t }{pos},\rtfsp
-\param{wxToolBarTool* }{tool}}
+\func{wxToolBarToolBase *}{InsertTool}{\param{size\_t }{pos},\rtfsp
+\param{wxToolBarToolBase* }{tool}}
 
 Inserts the tool with the specified attributes into the toolbar at the given
 position.
@@ -648,7 +648,7 @@ This function should be called after you have added tools.
 
 \membersection{wxToolBar::RemoveTool}\label{wxtoolbarremovetool}
 
-\func{wxToolBarTool *}{RemoveTool}{\param{int }{id}}
+\func{wxToolBarToolBase *}{RemoveTool}{\param{int }{id}}
 
 Removes the given tool from the toolbar but doesn't delete it. This allows to
 insert/add this tool back to this (or another) toolbar later.

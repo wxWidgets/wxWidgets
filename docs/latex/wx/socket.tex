@@ -173,14 +173,6 @@ Functions that allow applications to receive socket events.
 \helpref{SetClientData}{wxsocketbasesetclientdata}\\
 \helpref{SetEventHandler}{wxsocketbaseseteventhandler}
 
-Callback functions are also available, but they are provided for backwards
-compatibility only. Their use is strongly discouraged in favour of events,
-and should be considered deprecated. Callbacks may be unsupported in future
-releases of wxWidgets.
-
-\helpref{Callback}{wxsocketbasecallback}\\
-\helpref{CallbackData}{wxsocketbasecallbackdata}
-
 
 % ---------------------------------------------------------------------------
 % Members here
@@ -208,67 +200,6 @@ Destructor. Do not destroy a socket using the delete operator directly;
 use \helpref{Destroy}{wxsocketbasedestroy} instead. Also, do not create
 socket objects in the stack.
 
-%
-% Callback
-%
-\membersection{wxSocketBase::Callback}\label{wxsocketbasecallback}
-
-\func{wxSocketBase::wxSockCbk}{Callback}{\param{wxSocketBase::wxSockCbk}{ callback}}
-
-You can setup a callback function to be called when an event occurs.
-The function will be called only for those events for which notification
-has been enabled with \helpref{Notify}{wxsocketbasenotify} and 
-\helpref{SetNotify}{wxsocketbasesetnotify}. The prototype of the
-callback must be as follows:
-
-\begin{verbatim}
-void SocketCallback(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
-\end{verbatim}
-
-The first parameter is a reference to the socket object in which the
-event occurred. The second parameter tells you which event occurred.
-(See \helpref{wxSocket events}{wxsocketbase}). The third parameter
-is the user data you specified using \helpref{CallbackData}{wxsocketbasecallbackdata}.
-
-\wxheading{Return value}
-
-A pointer to the previous callback.
-
-\wxheading{Remark/Warning}
-
-Note that callbacks are now deprecated and unsupported, and they remain
-for backwards compatibility only. Use events instead.
-
-\wxheading{See also}
-
-\helpref{wxSocketBase::CallbackData}{wxsocketbasecallbackdata}, 
-\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
-\helpref{wxSocketBase::Notify}{wxsocketbasenotify}
-
-%
-% CallbackData
-%
-\membersection{wxSocketBase::CallbackData}\label{wxsocketbasecallbackdata}
-
-\func{char *}{CallbackData}{\param{char *}{cdata}}
-
-This function sets the the user data which will be passed to a
-callback function set via \helpref{Callback}{wxsocketbasecallback}.
-
-\wxheading{Return value}
-
-A pointer to the previous user data.
-
-\wxheading{Remark/Warning}
-
-Note that callbacks are now deprecated and unsupported, and they remain
-for backwards compatibility only. Use events instead.
-
-\wxheading{See also}
-
-\helpref{wxSocketBase::Callback}{wxsocketbasecallback}, 
-\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
-\helpref{wxSocketBase::Notify}{wxsocketbasenotify}
 
 %
 % Close
@@ -530,9 +461,7 @@ This function saves the current state of the socket in a stack. Socket
 state includes flags, as set with \helpref{SetFlags}{wxsocketbasesetflags},
 event mask, as set with \helpref{SetNotify}{wxsocketbasesetnotify} and 
 \helpref{Notify}{wxsocketbasenotify}, user data, as set with 
-\helpref{SetClientData}{wxsocketbasesetclientdata}, and asynchronous
-callback settings, as set with \helpref{Callback}{wxsocketbasecallback} 
-and \helpref{CallbackData}{wxsocketbasecallbackdata}.
+\helpref{SetClientData}{wxsocketbasesetclientdata}.
 
 Calls to SaveState and RestoreState can be nested.
 
