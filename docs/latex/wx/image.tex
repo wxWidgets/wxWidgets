@@ -46,6 +46,10 @@ Creates an image with the given width and height.
 
 Loads an image from a file.
 
+\func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{long}{ type = wxIMAGE\_TYPE\_PNG}}
+
+Loads an image from an input stream.
+
 \wxheading{Parameters}
 
 \docparam{width}{Specifies the width of the image.}
@@ -53,6 +57,8 @@ Loads an image from a file.
 \docparam{height}{Specifies the height of the image.}
 
 \docparam{name}{This refers to an image filename. Its meaning is determined by the {\it type} parameter.}
+
+\docparam{stream}{This refers to an input stream. Its meaning is determined by the {\it type} parameter. It is equal to loading from file except that you provide opened stream (file, HTTP or any other custom class).}
 
 \docparam{type}{May be one of the following:
 
@@ -269,10 +275,17 @@ of a given handler class in an application session.}
 
 Loads an image from a file.
 
+\func{bool}{LoadFile}{\param{wxInputStream\&}{ stream}, \param{long}{ type}}
+
+Loads an image from an input stream.
+
 \wxheading{Parameters}
 
 \docparam{name}{A filename.
 The meaning of {\it name} is determined by the {\it type} parameter.}
+
+\docparam{stream}{An input stream.
+The meaning of {\it stream} data is determined by the {\it type} parameter.}
 
 \docparam{type}{One of the following values:
 
@@ -321,9 +334,15 @@ TRUE if the handler was found and removed, FALSE otherwise.
 
 Saves a image in the named file.
 
+\func{bool}{SaveFile}{\param{wxOutputStream\& }{stream}, \param{int}{ type}}
+
+Saves a image in the given stream.
+
 \wxheading{Parameters}
 
 \docparam{name}{A filename. The meaning of {\it name} is determined by the {\it type} parameter.}
+
+\docparam{stream}{An output stream. The meaning of {\it stream} is determined by the {\it type} parameter.}
 
 \docparam{type}{Currently only one type can be used:
 
@@ -484,16 +503,16 @@ Gets the image type associated with this handler.
 
 \membersection{wxImageHandler::LoadFile}\label{wximagehandlerloadfile}
 
-\func{bool}{LoadFile}{\param{wxImage* }{image}, \param{const wxString\&}{ name}}
+\func{bool}{LoadFile}{\param{wxImage* }{image}, \param{wxInputStream\&}{ stream}}
 
-Loads a image from a file or resource, putting the resulting data into {\it image}.
+Loads a image from a stream, putting the resulting data into {\it image}.
 
 \wxheading{Parameters}
 
 \docparam{image}{The image object which is to be affected by this operation.}
 
-\docparam{name}{Either a filename or a Windows resource name.
-The meaning of {\it name} is determined by the {\it type} parameter.}
+\docparam{stream}{Opened input stream.
+The meaning of {\it stream} is determined by the {\it type} parameter.}
 
 \wxheading{Return value}
 
@@ -507,15 +526,15 @@ TRUE if the operation succeeded, FALSE otherwise.
 
 \membersection{wxImageHandler::SaveFile}\label{wximagehandlersavefile}
 
-\func{bool}{SaveFile}{\param{wxImage* }{image}, \param{const wxString\& }{name}}
+\func{bool}{SaveFile}{\param{wxImage* }{image}, \param{wxOutputStream\& }{stream}}
 
-Saves a image in the named file.
+Saves a image in the output stream.
 
 \wxheading{Parameters}
 
 \docparam{image}{The image object which is to be affected by this operation.}
 
-\docparam{name}{A filename. The meaning of {\it name} is determined by the {\it type} parameter.}
+\docparam{stream}{A stream. The meaning of {\it stream} is determined by the {\it type} parameter.}
 
 \wxheading{Return value}
 

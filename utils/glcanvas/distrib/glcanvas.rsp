@@ -19,4 +19,15 @@ samples/isosurf/*.xbm
 samples/isosurf/*.dat
 samples/isosurf/*.dat.gz
 samples/isosurf/make*.*
+samples/penguin/*.cpp
+samples/penguin/*.c
+samples/penguin/*.h
+samples/penguin/*.rc
+samples/penguin/*.ico
+samples/penguin/*.xbm
+samples/penguin/*.xpm
+samples/penguin/make*.*
+samples/penguin/penguin.lwo
+
+
 

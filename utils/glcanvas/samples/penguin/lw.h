@@ -49,6 +49,9 @@ typedef struct {
 
 } lwObject;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 int       lw_is_lwobject(const char     *lw_file);
 lwObject *lw_object_read(const char     *lw_file);
@@ -57,6 +60,10 @@ void      lw_object_show(const lwObject *lw_object);
 
 GLfloat   lw_object_radius(const lwObject *lw_object);
 void      lw_object_scale (lwObject *lw_object, GLfloat scale);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* LW_H */
 

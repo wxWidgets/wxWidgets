@@ -183,15 +183,16 @@ void TestGLCanvas::LoadLWO(const wxString &filename)
 
 void TestGLCanvas::OnMouse( wxMouseEvent& event )
 {
+    wxSize sz(GetClientSize());
     if (event.Dragging())
     {
         /* drag in progress, simulate trackball */
         float spin_quat[4];
         trackball(spin_quat,
-	      (2.0*info.beginx -       m_width) / m_width,
-	      (     m_height - 2.0*info.beginy) / m_height,
-	      (     2.0*event.GetX() - m_width) / m_width,
-	      (    m_height - 2.0*event.GetY()) / m_height);
+	      (2.0*info.beginx -       sz.x) / sz.x,
+	      (     sz.y - 2.0*info.beginy) / sz.y,
+	      (     2.0*event.GetX() - sz.x) / sz.x,
+	      (    sz.y - 2.0*event.GetY()) / sz.y);
 	      
         add_quats( spin_quat, info.quat, info.quat );
 	

@@ -16,6 +16,13 @@ Please see also:
 
 - Documentation: mention include files with each class.
 
+- Get Karsten to remove trashed CVS files:
+
+  utils/glcanvas/isosurf/isosurf.dat.gz
+  src/msw/ctl3d/*
+
+  and re-add them.
+
 - Complete this ToDo list :-)
 
 

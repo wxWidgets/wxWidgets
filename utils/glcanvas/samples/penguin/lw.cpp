@@ -16,8 +16,9 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-
-
+#ifdef __WXMSW__
+#include <windows.h>
+#endif
 
 #include "lw.h"
 #include <stdlib.h>
@@ -100,7 +101,7 @@ static void read_srfs(FILE *f, int nbytes, lwObject *lwo)
     /* allocate more memory for materials if needed */
     if (guess_cnt <= lwo->material_cnt) {
       guess_cnt += guess_cnt/2 + 4;
-      lwo->material = realloc(lwo->material, sizeof(lwMaterial)*guess_cnt);
+      lwo->material = (lwMaterial*) realloc(lwo->material, sizeof(lwMaterial)*guess_cnt);
     }
     material = lwo->material + lwo->material_cnt++;
 
@@ -112,7 +113,7 @@ static void read_srfs(FILE *f, int nbytes, lwObject *lwo)
     material->g = 0.7;
     material->b = 0.7;
   }
-  lwo->material = realloc(lwo->material, sizeof(lwMaterial)*lwo->material_cnt);
+  lwo->material = (lwMaterial*) realloc(lwo->material, sizeof(lwMaterial)*lwo->material_cnt);
 }
 
 
@@ -164,7 +165,7 @@ static void read_pols(FILE *f, int nbytes, lwObject *lwo)
     /* allocate more memory for polygons if necessary */
     if (guess_cnt <= lwo->face_cnt) {
       guess_cnt += guess_cnt + 4;
-      lwo->face = realloc(lwo->face, sizeof(lwFace)*guess_cnt);
+      lwo->face = (lwFace*) realloc((void*) lwo->face, sizeof(lwFace)*guess_cnt);
     }
     face = lwo->face + lwo->face_cnt++;
 
@@ -173,7 +174,7 @@ static void read_pols(FILE *f, int nbytes, lwObject *lwo)
     nbytes -= 2;
 
     /* allocate space for points */
-    face->index = calloc(sizeof(int)*face->index_cnt,1);
+    face->index = (int*) calloc(sizeof(int)*face->index_cnt,1);
     
     /* read points in */
     for (i=0; i<face->index_cnt; i++) {
@@ -200,7 +201,7 @@ static void read_pols(FILE *f, int nbytes, lwObject *lwo)
     face->material -= 1;
   }
   /* readjust to true size */
-  lwo->face = realloc(lwo->face, sizeof(lwFace)*lwo->face_cnt);
+  lwo->face = (lwFace*) realloc(lwo->face, sizeof(lwFace)*lwo->face_cnt);
 }
 
 
@@ -209,7 +210,7 @@ static void read_pnts(FILE *f, int nbytes, lwObject *lwo)
 {
   int i;
   lwo->vertex_cnt = nbytes / 12;
-  lwo->vertex = calloc(sizeof(GLfloat)*lwo->vertex_cnt*3, 1);
+  lwo->vertex = (float*) calloc(sizeof(GLfloat)*lwo->vertex_cnt*3, 1);
   for (i=0; i<lwo->vertex_cnt; i++) {
     lwo->vertex[i*3+0] = read_float(f);
     lwo->vertex[i*3+1] = read_float(f);
@@ -265,7 +266,7 @@ lwObject *lw_object_read(const char *lw_file)
   }
 
   /* create new lwObject */
-  lw_object = calloc(sizeof(lwObject),1);
+  lw_object = (lwObject*) calloc(sizeof(lwObject),1);
 
   /* read chunks */
   while (read_bytes < form_bytes) {

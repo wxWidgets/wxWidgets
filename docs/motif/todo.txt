@@ -42,8 +42,12 @@ High Priority
 
 - Miscellaneous events.
 
+- Get wxGLCanvas from 1.68 working.
+
 Low Priority
 ------------
+
+- Visuals: how to select an appropriate one?
 
 - Work out why XFreeFont in font.cpp produces a segv. This is
   currently commented out, which presumably causes a memory leak.

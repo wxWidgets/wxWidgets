@@ -28,7 +28,8 @@ extern "C" {
 /* information needed to display lightwave mesh */
 typedef struct 
 {
-  gint do_init;         /* true if initgl not yet called */
+//  gint do_init;         /* true if initgl not yet called */
+  int do_init;
   lwObject *lwobject;   /* lightwave object mesh */
   float beginx,beginy;  /* position of mouse */
   float quat[4];        /* orientation of object */

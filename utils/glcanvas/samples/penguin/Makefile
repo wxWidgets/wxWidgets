@@ -10,8 +10,8 @@ Penguin: penguin.o trackball.o lw.o glcanvas.o
 penguin.o: penguin.cpp
 	$(CPP) `wx-config --cflags` -I../../src -c penguin.cpp
 
-lw.o: lw.c
-	$(CC) `wx-config --cflags` -I../../src -c lw.c
+lw.o: lw.cpp
+	$(CPP) `wx-config --cflags` -I../../src -c lw.cpp
 
 trackball.o: trackball.c
 	$(CC) `wx-config --cflags` -I../../src -c trackball.c
