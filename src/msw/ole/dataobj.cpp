@@ -506,6 +506,10 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                             size_t *p = (size_t *)pBuf;
                             size = *p++;
                             pBuf = p;
+                            if (! format.IsStandard() ) {
+                                // see GetData for coresponding increment
+                                size -= sizeof(size_t);
+                            }
                         }
                 }
 
