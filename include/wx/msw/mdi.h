@@ -90,9 +90,9 @@ public:
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
 
     // override window proc for MDI-specific message processing
-    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
-    virtual long MSWDefWindowProc(WXUINT, WXWPARAM, WXLPARAM);
+    virtual WXLRESULT MSWDefWindowProc(WXUINT, WXWPARAM, WXLPARAM);
     virtual bool MSWTranslateMessage(WXMSG* msg);
 
 protected:
@@ -164,8 +164,8 @@ public:
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
     bool HandleGetMinMaxInfo(void *mmInfo);
 
-    virtual long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-    virtual long MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXLRESULT MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWTranslateMessage(WXMSG *msg);
 
     virtual void MSWDestroyWindow();

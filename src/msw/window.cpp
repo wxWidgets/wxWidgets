@@ -1763,7 +1763,7 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 // pre/post message processing
 // ===========================================================================
 
-long wxWindowMSW::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxWindowMSW::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     if ( m_oldWndProc )
         return ::CallWindowProc(CASTWNDPROC m_oldWndProc, GetHwnd(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
@@ -2184,7 +2184,7 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
     return rc;
 }
 
-long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     // did we process the message?
     bool processed = false;
@@ -2193,7 +2193,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
     union
     {
         bool        allow;
-        long        result;
+        WXLRESULT   result;
         WXHICON     hIcon;
         WXHBRUSH    hBrush;
     } rc;
@@ -2888,7 +2888,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 // we could have got an event from our child, reflect it back
                 // to it if this is the case
                 wxWindowMSW *win = NULL;
-                if ( wParam != m_hWnd )
+                if ( (WXHWND)wParam != m_hWnd )
                 {
                     win = FindItemByHWND((WXHWND)wParam);
                 }

@@ -2138,10 +2138,10 @@ bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 // only do it during dragging, minimize wxWin overhead (this is important for
 // WM_MOUSEMOVE as they're a lot of them) by catching Windows messages directly
 // instead of passing by wxWin events
-long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     bool processed = false;
-    long rc = 0;
+    WXLRESULT rc = 0;
     bool isMultiple = (GetWindowStyle() & wxTR_MULTIPLE) != 0;
 
     if ( (nMsg >= WM_MOUSEFIRST) && (nMsg <= WM_MOUSELAST) )

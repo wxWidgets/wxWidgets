@@ -382,11 +382,11 @@ void wxMDIParentFrame::ActivatePrevious()
 // the MDI parent frame window proc
 // ---------------------------------------------------------------------------
 
-long wxMDIParentFrame::MSWWindowProc(WXUINT message,
+WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
                                      WXWPARAM wParam,
                                      WXLPARAM lParam)
 {
-    long rc = 0;
+    WXLRESULT rc = 0;
     bool processed = false;
 
     switch ( message )
@@ -596,7 +596,7 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
     return false;
 }
 
-long wxMDIParentFrame::MSWDefWindowProc(WXUINT message,
+WXLRESULT wxMDIParentFrame::MSWDefWindowProc(WXUINT message,
                                         WXWPARAM wParam,
                                         WXLPARAM lParam)
 {
@@ -859,11 +859,11 @@ void wxMDIChildFrame::Activate()
 // MDI window proc and message handlers
 // ---------------------------------------------------------------------------
 
-long wxMDIChildFrame::MSWWindowProc(WXUINT message,
+WXLRESULT wxMDIChildFrame::MSWWindowProc(WXUINT message,
                                     WXWPARAM wParam,
                                     WXLPARAM lParam)
 {
-    long rc = 0;
+    WXLRESULT rc = 0;
     bool processed = false;
 
     switch ( message )
@@ -1078,7 +1078,7 @@ bool wxMDIChildFrame::HandleGetMinMaxInfo(void *mmInfo)
 // MDI specific message translation/preprocessing
 // ---------------------------------------------------------------------------
 
-long wxMDIChildFrame::MSWDefWindowProc(WXUINT message, WXUINT wParam, WXLPARAM lParam)
+WXLRESULT wxMDIChildFrame::MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     return DefMDIChildProc(GetHwnd(),
                            (UINT)message, (WPARAM)wParam, (LPARAM)lParam);

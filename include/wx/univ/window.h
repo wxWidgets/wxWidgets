@@ -261,7 +261,7 @@ protected:
 
 #ifdef __WXMSW__
     // override MSWWindowProc() to process WM_NCHITTEST
-    long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 #endif // __WXMSW__
 
 private:

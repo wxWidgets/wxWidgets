@@ -101,7 +101,7 @@ protected:
     virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
     // override WndProc mainly to process WM_SIZE
-    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     // return the appropriate size and flags for the toolbar control
     virtual wxSize DoGetBestSize() const;

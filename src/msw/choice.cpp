@@ -233,7 +233,7 @@ wxChoice::~wxChoice()
 
 int wxChoice::DoAppend(const wxString& item)
 {
-    int n = (int)SendMessage(GetHwnd(), CB_ADDSTRING, 0, (LONG)item.c_str());
+    int n = (int)SendMessage(GetHwnd(), CB_ADDSTRING, 0, (LPARAM)item.c_str());
     if ( n == CB_ERR )
     {
         wxLogLastError(wxT("SendMessage(CB_ADDSTRING)"));
@@ -253,7 +253,7 @@ int wxChoice::DoInsert(const wxString& item, int pos)
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
     wxCHECK_MSG((pos>=0) && (pos<=GetCount()), -1, wxT("invalid index"));
 
-    int n = (int)SendMessage(GetHwnd(), CB_INSERTSTRING, pos, (LONG)item.c_str());
+    int n = (int)SendMessage(GetHwnd(), CB_INSERTSTRING, pos, (LPARAM)item.c_str());
     if ( n == CB_ERR )
     {
         wxLogLastError(wxT("SendMessage(CB_INSERTSTRING)"));
@@ -536,7 +536,7 @@ wxSize wxChoice::DoGetBestSize() const
     return wxSize(wChoice, GetCharHeight() + 5);
 }
 
-long wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     if ( nMsg == WM_LBUTTONUP )
     {

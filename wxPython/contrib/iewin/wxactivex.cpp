@@ -1082,7 +1082,7 @@ void wxActiveX::OnMouse(wxMouseEvent& event)
 //	wxLogTrace(wxT("msg sent"));
 }
 
-long wxActiveX::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxActiveX::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
 	if (m_oleObjectHWND == NULL)
         return wxWindow::MSWWindowProc(nMsg, wParam, lParam);

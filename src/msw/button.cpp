@@ -435,7 +435,7 @@ bool wxButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     return processed;
 }
 
-long wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     // when we receive focus, we want to temporary become the default button in
     // our parent panel so that pressing "Enter" would activate us -- and when

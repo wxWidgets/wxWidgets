@@ -352,7 +352,7 @@ protected:
     FuncXArray      m_events;
     MemberIdList    m_eventsIdx;
 
-    long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 };
 
 // events

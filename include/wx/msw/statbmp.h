@@ -77,7 +77,7 @@ public:
 #ifdef __WIN16__
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
 #endif // __WIN16__
-    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
     virtual wxBorder GetDefaultBorder() const;

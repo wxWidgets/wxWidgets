@@ -97,7 +97,7 @@ public:
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // Windows callbacks
-    long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 #if wxUSE_CTL3D
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,

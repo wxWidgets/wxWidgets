@@ -1708,15 +1708,15 @@ one in to the function.
 
 \wxheading{Parameters}
 
-\docparam{henv}{Environment handle used for this connection.  See
+\docparam{henv}{Environment handle used for this connection.  See\rtfsp
 \helpref{wxDConnectInf::AllocHenv}{wxdbconnectinfallochenv} for how to create
 an SQL environment handle.  NOTE: Passing in a NULL for this parameter will
 inform the constructor that it should create its own SQL environment handle.
-If NULL is passed for this parameter, the constructor will call
+If NULL is passed for this parameter, the constructor will call\rtfsp
 \helpref{wxDConnectInf::AllocHenv}{wxdbconnectinfallochenv} internally.  A
 flag is set internally also to indicate that the HENV was created by the
 constructor so that when the default class destructor is called, the
-destructor will call \helpref{wxDConnectInf::FreeHenv}{wxdbconnectinffreehenv}
+destructor will call \helpref{wxDConnectInf::FreeHenv}{wxdbconnectinffreehenv}\rtfsp
 to free the environment handle automatically.}
 \docparam{dsn}{Name of the datasource to be used in creating wxDb instances
 for creating connection(s) to a datasource.}
@@ -1760,7 +1760,7 @@ automatically, and manage the destruction of the handle.
 
 Handles the default destruction of the instance of the class.  If the long form
 of the \helpref{wxDConnectInf}{wxdbconnectinf} was used, then this destructor
-also takes care of calling
+also takes care of calling\rtfsp
 \helpref{wxDConnectInf::FreeHenv}{wxdbconnectinffreehenv} to free the
 SQL environment handle.
 
@@ -1784,10 +1784,10 @@ Frees the SQL environment handle being managed by the instance of this class.
 
 \wxheading{Remarks}
 
-If the SQL environment handle was created using the long form of the
+If the SQL environment handle was created using the long form of the\rtfsp
 \helpref{wxDbConnectInf}{wxdbconnectinf} constructor, then the flag indicating
 that the HENV should be destroyed when the classes destructor is called
-is reset to be false, so that any future handles created using the
+is reset to be false, so that any future handles created using the\rtfsp
 \helpref{wxDbConnectInf::AllocHenv}{wxdbconnectinfallochenv} function
 must be manually released with a call to this function.
 

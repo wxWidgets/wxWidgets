@@ -823,7 +823,7 @@ bool wxRadioBox::SetFont(const wxFont& font)
 // our window proc
 // ----------------------------------------------------------------------------
 
-long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     switch ( nMsg )
     {
@@ -839,7 +839,7 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
                 wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
 
-                return (WXHBRUSH)brush->GetResourceHandle();
+                return (WXLRESULT)brush->GetResourceHandle();
             }
 #endif // Win32
 

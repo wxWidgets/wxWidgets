@@ -112,7 +112,7 @@ public:
 
     virtual bool SetFont(const wxFont& font);
 
-    long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                                 WXUINT message,
                                 WXWPARAM wParam, WXLPARAM lParam);

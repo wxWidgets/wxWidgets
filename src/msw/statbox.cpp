@@ -154,7 +154,7 @@ wxSize wxStaticBox::DoGetBestSize() const
     return wxSize(wBox, hBox);
 }
 
-long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     switch ( nMsg )
     {

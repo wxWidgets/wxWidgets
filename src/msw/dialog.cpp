@@ -440,9 +440,9 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 // dialog window proc
 // ---------------------------------------------------------------------------
 
-long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-    long rc = 0;
+    WXLRESULT rc = 0;
     bool processed = FALSE;
 
     switch ( message )

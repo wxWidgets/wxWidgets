@@ -42,7 +42,7 @@ public:
     // implementation from now on
     // --------------------------
 
-    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return FALSE; }

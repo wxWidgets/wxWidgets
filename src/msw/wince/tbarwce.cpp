@@ -1175,7 +1175,7 @@ void wxToolBar::HandleMouseMove(WXWPARAM wParam, WXLPARAM lParam)
     }
 }
 
-long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if 0
     switch ( nMsg )

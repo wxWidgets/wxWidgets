@@ -158,7 +158,7 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
         case WM_SETFOCUS:
             // if the focus comes from the spin control itself, don't set it
             // back to it -- we don't want to go into an infinite loop
-            if ( wParam == spin->GetHWND() )
+            if ( (WXHWND)wParam == spin->GetHWND() )
                 break;
             //else: fall through
 

@@ -1339,7 +1339,7 @@ void wxWindow::OnKeyUp(wxKeyEvent& event)
 
 #include "wx/msw/private.h"
 
-long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     if ( message == WM_NCHITTEST )
     {

@@ -997,7 +997,7 @@ void wxNotebook::ApplyThemeBackground(wxWindow*, const wxColour&)
 }
 
 #if wxUSE_UXTHEME
-long wxNotebook::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxNotebook::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     static bool g_TestedForTheme = false;
     static bool g_supportsThemes = false;

@@ -1257,12 +1257,12 @@ void wxGenericScrolledWindow::OnPaint(wxPaintEvent& event)
 }
 
 #ifdef __WXMSW__
-long
+WXLRESULT
 wxGenericScrolledWindow::MSWWindowProc(WXUINT nMsg,
                                        WXWPARAM wParam,
                                        WXLPARAM lParam)
 {
-    long rc = wxPanel::MSWWindowProc(nMsg, wParam, lParam);
+    WXLRESULT rc = wxPanel::MSWWindowProc(nMsg, wParam, lParam);
 
 #ifndef __WXWINCE__
     // we need to process arrows ourselves for scrolling

@@ -864,9 +864,9 @@ bool wxFrame::HandleMenuLoop(const wxEventType& evtType, WXWORD isPopup)
 // the window proc for wxFrame
 // ---------------------------------------------------------------------------
 
-long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
-    long rc = 0;
+    WXLRESULT rc = 0;
     bool processed = FALSE;
 
     switch ( message )

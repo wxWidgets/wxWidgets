@@ -1728,9 +1728,9 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     event.Skip();
 }
 
-long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    long lRc = wxTextCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
+    WXLRESULT lRc = wxTextCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 
     if ( nMsg == WM_GETDLGCODE )
     {

@@ -126,7 +126,7 @@ protected:
     bool MSWTranslateMessage(WXMSG* pMsg);
 
     // window proc for the frames
-    long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
     // handle WM_INITMENUPOPUP message
     bool HandleInitMenuPopup(WXHMENU hMenu);

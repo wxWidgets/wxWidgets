@@ -238,7 +238,7 @@ WXHBRUSH wxComboBox::OnCtlColor(WXHDC pDC,
 // wxComboBox callbacks
 // ----------------------------------------------------------------------------
 
-long wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     // handle WM_CTLCOLOR messages from our EDIT control to be able to set its
     // colour correctly (to be the same as our own one)
@@ -253,7 +253,7 @@ long wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             WXHWND hwnd;
             UnpackCtlColor(wParam, lParam, &nCtlColor, &hdc, &hwnd);
 
-            return OnCtlColor(hdc, hwnd, nCtlColor, nMsg, wParam, lParam);
+            return (WXLRESULT)OnCtlColor(hdc, hwnd, nCtlColor, nMsg, wParam, lParam);
     }
 
     return wxChoice::MSWWindowProc(nMsg, wParam, lParam);

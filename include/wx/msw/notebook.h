@@ -177,7 +177,7 @@ protected:
 
     // override WndProc.
 #if wxUSE_UXTHEME
-    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 #endif
 
   // the current selection (-1 if none)

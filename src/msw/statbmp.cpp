@@ -316,7 +316,7 @@ bool wxStaticBitmap::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 #endif // Win16
 
 // We need this or the control can never be moved e.g. in Dialog Editor.
-long wxStaticBitmap::MSWWindowProc(WXUINT nMsg,
+WXLRESULT wxStaticBitmap::MSWWindowProc(WXUINT nMsg,
                                    WXWPARAM wParam,
                                    WXLPARAM lParam)
 {

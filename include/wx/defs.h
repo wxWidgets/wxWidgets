@@ -2166,22 +2166,22 @@ typedef WX_NSView WXWidget; /*  wxWindows BASE definition */
 #endif /*  Win16/32 */
 
 /*  Stand-ins for Windows types or OS/2, to avoid #including all of windows.h or os2.h */
-typedef unsigned long   WXHWND;
-typedef unsigned long   WXHANDLE;
-typedef unsigned long   WXHICON;
-typedef unsigned long   WXHFONT;
-typedef unsigned long   WXHMENU;
-typedef unsigned long   WXHPEN;
-typedef unsigned long   WXHBRUSH;
-typedef unsigned long   WXHPALETTE;
-typedef unsigned long   WXHCURSOR;
-typedef unsigned long   WXHRGN;
-typedef unsigned long   WXHACCEL;
+typedef void *          WXHWND;
+typedef void *          WXHANDLE;
+typedef void *          WXHICON;
+typedef void *          WXHFONT;
+typedef void *          WXHMENU;
+typedef void *          WXHPEN;
+typedef void *          WXHBRUSH;
+typedef void *          WXHPALETTE;
+typedef void *          WXHCURSOR;
+typedef void *          WXHRGN;
+typedef void *          WXHACCEL;
 typedef void WXFAR  *   WXHINSTANCE;
-typedef unsigned long   WXHBITMAP;
-typedef unsigned long   WXHIMAGELIST;
-typedef unsigned long   WXHGLOBAL;
-typedef unsigned long   WXHDC;
+typedef void *          WXHBITMAP;
+typedef void *          WXHIMAGELIST;
+typedef void *          WXHGLOBAL;
+typedef void *          WXHDC;
 typedef unsigned int    WXUINT;
 typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
@@ -2189,9 +2189,9 @@ typedef unsigned short  WXWORD;
 typedef unsigned long   WXCOLORREF;
 typedef void *          WXRGNDATA;
 typedef void *          WXMSG;
-typedef unsigned long   WXHCONV;
-typedef unsigned long   WXHKEY;
-typedef unsigned long   WXHTREEITEM;
+typedef void *          WXHCONV;
+typedef void *          WXHKEY;
+typedef void *          WXHTREEITEM;
 
 typedef void *          WXDRAWITEMSTRUCT;
 typedef void *          WXMEASUREITEMSTRUCT;
@@ -2203,8 +2203,16 @@ typedef WXHWND          WXWidget;
 
 
 #ifdef __WXMSW__
+
+#ifdef __WIN64__
+typedef unsigned __int64    WXWPARAM;
+typedef __int64            WXLPARAM;
+typedef __int64            WXLRESULT;
+#else
 typedef unsigned int    WXWPARAM;
 typedef long            WXLPARAM;
+typedef long            WXLRESULT;
+#endif
 
 #if !defined(__WIN32__) || defined(__GNUWIN32__) || defined(__WXMICROWIN__)
 typedef int             (*WXFARPROC)();

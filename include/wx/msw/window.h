@@ -347,10 +347,10 @@ public:
     bool HandleSetCursor(WXHWND hWnd, short nHitTest, int mouseMsg);
 
     // Window procedure
-    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     // Calls an appropriate default window procedure
-    virtual long MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXLRESULT MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     // message processing helpers
 
