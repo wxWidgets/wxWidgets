@@ -1665,6 +1665,7 @@ if test "$wxUSE_GUI" = "yes"; then
             2.0)    WXGTK20=1
                     ;;
             1.2.7)  WXGTK127=1
+                    WXGTK12=1
                     ;;
             1.2.3)  WXGTK12=1
                     ;;
