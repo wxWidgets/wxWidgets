@@ -71,12 +71,13 @@ class TestDialog(wx.Dialog):
         
         btn = wx.Button(self, wx.ID_OK)
         btn.SetHelpText("The OK button completes the dialog")
+        btn.SetDefault()
         btnsizer.AddButton(btn)
 
         btn = wx.Button(self, wx.ID_CANCEL)
         btn.SetHelpText("The Cancel button cnacels the dialog. (Cool, huh?)")
         btnsizer.AddButton(btn)
-        btnsizer.Finalise()
+        btnsizer.Realize()
 
         sizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 

@@ -1273,4 +1273,22 @@ public:
 //---------------------------------------------------------------------------
 
 
+class wxDateEvent : public wxCommandEvent
+{
+public:
+    wxDateEvent(wxWindow *win, const wxDateTime& dt, wxEventType type);
 
+    const wxDateTime& GetDate() const;
+    void SetDate(const wxDateTime &date);
+
+};
+
+
+%constant wxEventType wxEVT_DATE_CHANGED;
+
+%pythoncode {
+    EVT_DATE_CHANGED = wx.PyEventBinder( wxEVT_DATE_CHANGED, 1 )
+}
+
+
+//---------------------------------------------------------------------------

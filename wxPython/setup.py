@@ -264,6 +264,7 @@ swig_sources = run_swig(['controls.i'], 'src', GENDIR, PKGDIR,
                           'src/_pycontrol.i',
                           'src/_cshelp.i',
                           'src/_dragimg.i',
+                          'src/_datectrl.i',
                           ],
                         True)
 ext = Extension('_controls_', swig_sources,

@@ -109,13 +109,11 @@ public:
 
 class wxCalendarCtrl;
 
-class wxCalendarEvent : public wxCommandEvent
+class wxCalendarEvent : public wxDateEvent
 {
 public:
     wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type);
 
-    const wxDateTime GetDate() const;
-    void SetDate(const wxDateTime &date);
     void SetWeekDay(const wxDateTime::WeekDay wd);
     wxDateTime::WeekDay GetWeekDay() const;
 
@@ -174,7 +172,7 @@ and font and without border, but setting custom attributes with
 SetAttr allows to modify its appearance. Just create a custom
 attribute object and set it for the day you want to be displayed
 specially A day may be marked as being a holiday, (even if it is not
-recognized as one by wx.DateTime) by using the SetHoliday method.
+recognized as one by `wx.DateTime`) by using the SetHoliday method.
 
 As the attributes are specified for each day, they may change when the
 month is changed, so you will often want to update them in an

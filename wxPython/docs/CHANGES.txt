@@ -17,7 +17,7 @@ consecutive (there may be intervening controls). Without this fix, an
 out-of-sync assert is generated when clicking on a radio button and
 then calling GetValue().
 
-XRC: 
+Some XRC changes: 
     - Added 'icon' property to wxFrame and wxDialog
     - No longer ignores menu bitmaps on non-MSW platforms
     - Notebook page bitmaps are now supported
@@ -33,7 +33,7 @@ wx.GetPasswordFromUser dialog function.
 OGL patch from Shane Holloway:
 
     Two simple problems found in the new python ogl code.  First is
-    the patch for _canvas.py.  Essentially:
+    the patch for _canvas.py.  Essentially::
 
         dx = abs(dc.LogicalToDeviceX(x - self._firstDragX))
         dy = abs(dc.LogicalToDeviceY(y - self._firstDragY))
@@ -112,7 +112,7 @@ original patch were changed/removed, so we are still not free of
 patches.  A new patch for SWIG is located in the wxPython/SWIG
 directory of the wxPython source tree.  SWIG 1.3.24 plus this patch
 should be used by anyone who is making custom modifications to
-wxPython's *.i files, or building their own extension modules or
+wxPython's .i files, or building their own extension modules or
 etc. that need to interact with the wxPython swigged types.  For the
 morbidly curious, here are a few more details:
 
@@ -170,7 +170,7 @@ and GTK+'s context menu code.
 wxGTK: Applied patch #1100327 for correct feedback from DND actions
 (not all actions are allowed).
 
-Fixed memory leak in wxGRID::UpdateAttr[Rows][Or][Cols] (patch 1104355)
+Fixed memory leak in wxGrid::UpdateAttr[Rows][Or][Cols] (patch 1104355)
 
 For efficiency reasons, text controls no longer set the string for
 each text updated event, but rather query for the string value only
@@ -182,9 +182,6 @@ and max ends of the slider.
 Several patches applied, such as #1111174, #1110252 and others, that
 make the generic wx.TreeCtrl (used on wxGTK and wxMac) be more
 conistent with the wxMSW native wx.TreeCtrl.
-
-wxMac:  wx.DC implemented using CoreGraphics  
-        ??? NEED MORE DETAILS HERE ???
 
 XRCed:
     * Edit->Locate command (Ctrl-L) for quick selection of items.
@@ -198,17 +195,31 @@ wxMac: Fixed a long-standing issue where wxSlider controls with a
 hardcoded size would misplace their labels behind the slider control.
 
 wx.HtmlListBox fixed so calling RefreshLine(s) will cause the data for
-that line to be refetched from the derived class.
+that line to be refetched from the overridden methods in the derived
+class.
 
 The default DoGetBestSize now includes the difference (if any) between
-the client size and total size of the window.  Code that sets the
-client size using the best size, or that added extra space to sizers
-to compensate for this bug may need to be changed.
+the client size and total size of the window, (such as the size of
+borders.)  Code that sets the client size using the best size, or that
+added extra space to sizers to compensate for this bug may need to be
+changed.
 
-Can suppress themed notebook page with wxNB_NOPAGETHEME or
-setting system option msw.notebook.themed-background to 0
+Can suppress themed notebook pages with the wxNB_NOPAGETHEME style or
+setting system option msw.notebook.themed-background to 0.
 
+wxSyledTextCtrl updated to use Scintilla 1.62.
 
+Can now set the msw.window.no-clip-children system option to 1 to
+eliminate weird refresh behaviour (delays between a window being
+erased and repainted, giving a ghostly gradual-redraw effect). May be
+a temporary 'fix' until properly fixed before 2.6.
+
+wxMac: CoreGraphics  [[WRITE MORE HERE]]
+
+wxMac:  Toolbar is now more native looking with borderless toolbar
+buttons.  
+
+Added wx.DatePickerCtrl.
 
 
 
