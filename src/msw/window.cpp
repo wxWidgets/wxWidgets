@@ -302,7 +302,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     if ( style & wxTHICK_FRAME )
         msflags |= WS_THICKFRAME;
 
-    msflags |= WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE;
+    //msflags |= WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE;
+    msflags |= WS_CHILD | WS_VISIBLE;
     if ( style & wxCLIP_CHILDREN )
         msflags |= WS_CLIPCHILDREN;
 
@@ -2357,7 +2358,7 @@ bool wxWindow::MSWCreate(int id,
           {
             controlId = id;
             // all child windows should clip their siblings
-            style |= WS_CLIPSIBLINGS;
+            // style |= WS_CLIPSIBLINGS;
           }
 
         wxString className(wclass);
