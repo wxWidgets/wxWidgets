@@ -64,6 +64,7 @@
 #  NotUniv	Not required for the wxUniversal
 #  LowLevel	Low level GUI toolkit file, used by wxUniversal as well
 #  Theme	implements a wxUniv theme
+#  Motif	used by Motif, even if in another port's directory
 ###############################################################################
 
 # File name 	Type	Flags
@@ -235,7 +236,6 @@ textbuf.cpp	Common	Base
 textcmn.cpp	Common
 textfile.cpp	Common	Base
 timercmn.cpp	Common	Base
-toplvcmn.cpp	Common
 tokenzr.cpp	Common	Base
 treebase.cpp	Common
 txtstrm.cpp	Common	Base
@@ -567,7 +567,7 @@ accel.cpp	Motif
 app.cpp	Motif
 bitmap.cpp	Motif
 bmpbuttn.cpp	Motif
-brush.cpp	Motif
+# brush.cpp	Motif
 button.cpp	Motif
 checkbox.cpp	Motif
 checklst.cpp	Motif
@@ -602,7 +602,7 @@ menuitem.cpp	Motif
 minifram.cpp	Motif
 msgdlg.cpp	Motif
 palette.cpp	Motif
-pen.cpp	Motif
+# pen.cpp	Motif
 radiobox.cpp	Motif
 radiobut.cpp	Motif
 region.cpp	Motif
@@ -624,7 +624,7 @@ gsockx11.c	X11	Socket
 nanox.c	X11
 app.cpp	X11
 bitmap.cpp	X11
-brush.cpp	X11
+brush.cpp	X11	Motif
 clipbrd.cpp	X11
 colour.cpp	X11
 cursor.cpp	X11
@@ -644,7 +644,7 @@ joystick.cpp	X11
 main.cpp	X11
 minifram.cpp	X11
 palette.cpp	X11
-pen.cpp	X11
+pen.cpp	X11	Motif
 popupwin.cpp	X11
 region.cpp	X11
 reparent.cpp	X11
@@ -861,7 +861,6 @@ iconbndl.h	WXH
 image.h	WXH
 imaggif.h	WXH
 imagiff.h	WXH
-imagxpm.h	WXH
 imagbmp.h	WXH
 imagpng.h	WXH
 imagpcx.h	WXH
@@ -1148,7 +1147,7 @@ accel.h	MotifH
 app.h	MotifH
 bitmap.h	MotifH
 bmpbuttn.h	MotifH
-brush.h	MotifH
+# brush.h	MotifH
 button.h	MotifH
 checkbox.h	MotifH
 checklst.h	MotifH
@@ -1185,7 +1184,7 @@ metafile.h	MotifH
 minifram.h	MotifH
 msgdlg.h	MotifH
 palette.h	MotifH
-pen.h	MotifH
+# pen.h	MotifH
 print.h	MotifH
 printdlg.h	MotifH
 private.h	MotifH
@@ -1208,7 +1207,7 @@ window.h	MotifH
 
 app.h	X11H
 bitmap.h	X11H
-brush.h	X11H
+brush.h	X11H	Motif
 clipbrd.h	X11H
 colour.h	X11H
 cursor.h	X11H
@@ -1228,7 +1227,7 @@ icon.h	X11H
 joystick.h	X11H
 minifram.h	X11H
 palette.h	X11H
-pen.h	X11H
+pen.h	X11H	Motif
 print.h	X11H
 private.h	X11H
 region.h	X11H

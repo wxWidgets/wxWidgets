@@ -135,7 +135,7 @@ wxWindowDC::wxWindowDC()
     m_currentPenWidth = 1;
     m_currentPenJoin = -1;
     m_currentPenDashCount = -1;
-    m_currentPenDash = (wxMOTIFDash*) NULL;
+    m_currentPenDash = (wxX11Dash*) NULL;
     m_currentStyle = -1;
     m_currentFill = -1;
     //    m_currentBkMode = wxTRANSPARENT;
@@ -160,7 +160,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     m_currentPenWidth = 1;
     m_currentPenJoin = -1;
     m_currentPenDashCount = -1;
-    m_currentPenDash = (wxMOTIFDash*) NULL;
+    m_currentPenDash = (wxX11Dash*) NULL;
     m_currentStyle = -1;
     m_currentFill = -1;
     //    m_currentBkMode = wxTRANSPARENT;
@@ -1636,7 +1636,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
     int old_pen_join = m_currentPenJoin;
     int old_pen_cap = m_currentPenCap;
     int old_pen_nb_dash = m_currentPenDashCount;
-    wxMOTIFDash *old_pen_dash = m_currentPenDash;
+    wxX11Dash *old_pen_dash = m_currentPenDash;
 
     wxColour oldPenColour = m_currentColour;
     m_currentColour = m_pen.GetColour ();
@@ -1646,7 +1646,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
     m_currentPenJoin = m_pen.GetJoin ();
     m_currentPenCap = m_pen.GetCap ();
     m_currentPenDashCount = m_pen.GetDashCount();
-    m_currentPenDash = (wxMOTIFDash*)m_pen.GetDash();
+    m_currentPenDash = (wxX11Dash*)m_pen.GetDash();
 
     if (m_currentStyle == wxSTIPPLE)
         m_currentStipple = * m_pen.GetStipple ();
@@ -1674,15 +1674,15 @@ void wxWindowDC::SetPen( const wxPen &pen )
         int style;
         int join;
         int cap;
-        static const wxMOTIFDash dotted[] = {2, 5};
-        static const wxMOTIFDash short_dashed[] = {4, 4};
-        static const wxMOTIFDash long_dashed[] = {4, 8};
-        static const wxMOTIFDash dotted_dashed[] = {6, 6, 2, 6};
+        static const wxX11Dash dotted[] = {2, 5};
+        static const wxX11Dash short_dashed[] = {4, 4};
+        static const wxX11Dash long_dashed[] = {4, 8};
+        static const wxX11Dash dotted_dashed[] = {6, 6, 2, 6};
 
         // We express dash pattern in pen width unit, so we are
         // independent of zoom factor and so on...
         int req_nb_dash;
-        const wxMOTIFDash *req_dash;
+        const wxX11Dash *req_dash;
 
         switch (m_pen.GetStyle ())
         {
@@ -1716,13 +1716,13 @@ void wxWindowDC::SetPen( const wxPen &pen )
         case wxTRANSPARENT:
         default:
             style = LineSolid;
-            req_dash = (wxMOTIFDash*)NULL;
+            req_dash = (wxX11Dash*)NULL;
             req_nb_dash = 0;
         }
 
         if (req_dash && req_nb_dash)
         {
-            wxMOTIFDash *real_req_dash = new wxMOTIFDash[req_nb_dash];
+            wxX11Dash *real_req_dash = new wxX11Dash[req_nb_dash];
             if (real_req_dash)
             {
                 int factor = scaled_width == 0 ? 1 : scaled_width;

@@ -29,7 +29,6 @@ OBJECTS = \
 		app.obj,\
 		bitmap.obj,\
 		bmpbuttn.obj,\
-		brush.obj,\
 		button.obj,\
 		checkbox.obj,\
 		checklst.obj,\
@@ -63,7 +62,6 @@ OBJECTS = \
 		minifram.obj,\
 		msgdlg.obj,\
 		palette.obj,\
-		pen.obj,\
 		radiobox.obj,\
 		radiobut.obj,\
 		region.obj,\
@@ -86,7 +84,6 @@ SOURCES = \
 		app.cpp,\
 		bitmap.cpp,\
 		bmpbuttn.cpp,\
-		brush.cpp,\
 		button.cpp,\
 		checkbox.cpp,\
 		checklst.cpp,\
@@ -120,7 +117,6 @@ SOURCES = \
 		minifram.cpp,\
 		msgdlg.cpp,\
 		palette.cpp,\
-		pen.cpp,\
 		radiobox.cpp,\
 		radiobut.cpp,\
 		region.cpp,\
@@ -152,7 +148,6 @@ accel.obj : accel.cpp
 app.obj : app.cpp
 bitmap.obj : bitmap.cpp
 bmpbuttn.obj : bmpbuttn.cpp
-brush.obj : brush.cpp
 button.obj : button.cpp
 checkbox.obj : checkbox.cpp
 checklst.obj : checklst.cpp
@@ -186,7 +181,6 @@ menuitem.obj : menuitem.cpp
 minifram.obj : minifram.cpp
 msgdlg.obj : msgdlg.cpp
 palette.obj : palette.cpp
-pen.obj : pen.cpp
 radiobox.obj : radiobox.cpp
 radiobut.obj : radiobut.cpp
 region.obj : region.cpp

@@ -182,7 +182,6 @@ ALL_SOURCES = \
 		motif/app.cpp \
 		motif/bitmap.cpp \
 		motif/bmpbuttn.cpp \
-		motif/brush.cpp \
 		motif/button.cpp \
 		motif/checkbox.cpp \
 		motif/checklst.cpp \
@@ -218,7 +217,6 @@ ALL_SOURCES = \
 		motif/minifram.cpp \
 		motif/msgdlg.cpp \
 		motif/palette.cpp \
-		motif/pen.cpp \
 		motif/radiobox.cpp \
 		motif/radiobut.cpp \
 		motif/region.cpp \
@@ -235,6 +233,8 @@ ALL_SOURCES = \
 		motif/toplevel.cpp \
 		motif/utils.cpp \
 		motif/window.cpp \
+		x11/brush.cpp \
+		x11/pen.cpp \
 		unix/dialup.cpp \
 		unix/dir.cpp \
 		unix/fontenum.cpp \
@@ -513,7 +513,6 @@ ALL_HEADERS = \
 		motif/app.h \
 		motif/bitmap.h \
 		motif/bmpbuttn.h \
-		motif/brush.h \
 		motif/button.h \
 		motif/checkbox.h \
 		motif/checklst.h \
@@ -550,7 +549,6 @@ ALL_HEADERS = \
 		motif/minifram.h \
 		motif/msgdlg.h \
 		motif/palette.h \
-		motif/pen.h \
 		motif/print.h \
 		motif/printdlg.h \
 		motif/private.h \
@@ -631,7 +629,9 @@ ALL_HEADERS = \
 		protocol/file.h \
 		protocol/ftp.h \
 		protocol/http.h \
-		protocol/protocol.h
+		protocol/protocol.h \
+		x11/brush.h \
+		x11/pen.h
 
 COMMONOBJS = \
 		appcmn.o \
@@ -820,7 +820,6 @@ GUIOBJS = \
 		app.o \
 		bitmap.o \
 		bmpbuttn.o \
-		brush.o \
 		button.o \
 		checkbox.o \
 		checklst.o \
@@ -856,7 +855,6 @@ GUIOBJS = \
 		minifram.o \
 		msgdlg.o \
 		palette.o \
-		pen.o \
 		radiobox.o \
 		radiobut.o \
 		region.o \
@@ -872,7 +870,9 @@ GUIOBJS = \
 		toolbar.o \
 		toplevel.o \
 		utils.o \
-		window.o
+		window.o \
+		brush.o \
+		pen.o
 
 UNIXOBJS = \
 		dialup.o \

@@ -4,7 +4,7 @@
 #if defined(__WXMSW__)
 #include "wx/msw/pen.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/pen.h"
+#include "wx/x11/pen.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/pen.h"
 #elif defined(__WXX11__)

@@ -16,15 +16,15 @@
 #pragma interface "brush.h"
 #endif
 
-#include "wx/gdicmn.h"
 #include "wx/gdiobj.h"
-#include "wx/bitmap.h"
 
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
 
 class wxBrush;
+class wxColour;
+class wxBitmap;
 
 //-----------------------------------------------------------------------------
 // wxBrush
