@@ -38,8 +38,6 @@
   #include "wx/thread.h"
 #endif
 
-#include "wx/regex.h"   // for wxString::Matches()
-
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
@@ -1458,7 +1456,11 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 // of them)
 bool wxString::Matches(const wxChar *pszMask) const
 {
-#if wxUSE_REGEX
+    // I disable this code as it doesn't seem to be faster (in fact, it seems
+    // to be much slower) than the old, hand-written code below and using it
+    // here requires always linking with libregex even if the user code doesn't
+    // use it
+#if 0 // wxUSE_REGEX
     // first translate the shell-like mask into a regex
     wxString pattern;
     pattern.reserve(wxStrlen(pszMask));
