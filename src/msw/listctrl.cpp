@@ -104,10 +104,19 @@ public:
 private:
     wxMB2WXbuf *m_buf;
 
-#else
+#else // !wxUSE_UNICODE
     wxLV_ITEM(LV_ITEMW &item)
     {
         m_item = new LV_ITEM((LV_ITEM&)item);
+
+        // the code below doesn't compile without wxUSE_WCHAR_T and as I don't
+        // know if it's useful to have it at all (do we ever get Unicode
+        // notifications in ANSI mode? I don't think so...) I'm not going to
+        // write alternative implementation right now
+        //
+        // but if it is indeed used, we should simply directly use
+        // ::WideCharToMultiByte() here
+#if wxUSE_WCHAR_T
         if ( (item.mask & LVIF_TEXT) && item.pszText )
         {
 #ifdef __WXWINE__
@@ -119,12 +128,13 @@ private:
             m_item->pszText = (wxChar*)m_buf->data();
         }
         else
+#endif // wxUSE_WCHAR_T
             m_buf = NULL;
     }
     wxLV_ITEM(LV_ITEMA &item) : m_buf(NULL), m_item(&item) {}
 private:
     wxWC2WXbuf *m_buf;
-#endif
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     LV_ITEM *m_item;
 };
