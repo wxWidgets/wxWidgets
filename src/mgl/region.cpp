@@ -324,7 +324,7 @@ wxRegionIterator::wxRegionIterator(const wxRegion& region)
 
 static wxRegionRectList *gs_rectList;
 
-static void wxMGL_region_callback(const rect_t *r)
+static void MGLAPI wxMGL_region_callback(const rect_t *r)
 {
     gs_rectList->Append(new wxRect(r->left, r->top, 
                                    r->right - r->left, r->bottom - r->top));

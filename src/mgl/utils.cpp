@@ -7,6 +7,13 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #include "wx/utils.h"
 #include "wx/string.h"
 
@@ -81,17 +88,21 @@ int wxDisplayDepth()
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-  if ( majorVsn )
-      *majorVsn = MGL_RELEASE_MAJOR;
-  if ( minorVsn )
-      *minorVsn = MGL_RELEASE_MINOR;
+    if ( majorVsn )
+        *majorVsn = MGL_RELEASE_MAJOR;
+    if ( minorVsn )
+        *minorVsn = MGL_RELEASE_MINOR;
 
 #if defined(__UNIX__)
-  return wxMGL_UNIX;
+    return wxMGL_UNIX;
 #elif defined(__OS2__)
-  return wxMGL_OS2;
+    return wxMGL_OS2;
 #elif defined(__WIN32__)
-  return wxMGL_WIN32;
+    return wxMGL_WIN32;
+#elif defined(__DOS__)
+    return wxMGL_DOS;
+#else
+    #error Platform not supported by wxMGL!
 #endif
 }
 

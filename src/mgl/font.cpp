@@ -18,6 +18,13 @@
     #pragma implementation "font.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #include "wx/font.h"
 #include "wx/fontutil.h"
 #include "wx/cmndata.h"
@@ -26,8 +33,6 @@
 #include "wx/gdicmn.h"
 #include "wx/tokenzr.h"
 #include "wx/settings.h"
-
-#include <strings.h>
 
 // ----------------------------------------------------------------------------
 // wxFontRefData
