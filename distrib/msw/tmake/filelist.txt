@@ -186,6 +186,7 @@ process.cpp	Common	Win32Only,Base
 protocol.cpp	Common	Socket,Base
 quantize.cpp	Common
 radiocmn.cpp	Common
+regex.cpp	Common	Base
 resource.cpp	Common
 sckaddr.cpp	Common	Socket,Base
 sckfile.cpp	Common	Socket,Base
@@ -738,6 +739,7 @@ propform.h	WXH
 proplist.h	WXH
 radiobox.h	WXH
 radiobut.h	WXH
+regex.h	WXH	Base
 region.h	WXH
 resource.h	WXH
 sashwin.h	WXH

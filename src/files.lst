@@ -193,6 +193,7 @@ BASE_OBJS = \
 		objstrm.o \
 		process.o \
 		protocol.o \
+		regex.o \
 		sckaddr.o \
 		sckfile.o \
 		sckipc.o \
