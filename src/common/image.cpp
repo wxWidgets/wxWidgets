@@ -219,6 +219,11 @@ wxImage wxImage::Copy() const
 
     memcpy( data, GetData(), M_IMGDATA->m_width*M_IMGDATA->m_height*3 );
 
+    // also copy the image options
+    wxImageRefData *imgData = (wxImageRefData *)image.m_refData;
+    imgData->m_optionNames = M_IMGDATA->m_optionNames;
+    imgData->m_optionValues = M_IMGDATA->m_optionValues;
+
     return image;
 }
 
