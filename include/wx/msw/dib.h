@@ -151,30 +151,10 @@ public:
 
 private:
     // common part of all ctors
-    void Init()
-    {
-        m_handle = 0;
-
-        m_data = NULL;
-
-        m_width =
-        m_height =
-        m_depth = 0;
-    }
+    void Init();
 
     // free resources
-    void Free()
-    {
-        if ( m_handle )
-        {
-            if ( !::DeleteObject(m_handle) )
-            {
-                wxLogLastError(wxT("DeleteObject(hDIB)"));
-            }
-
-            Init();
-        }
-    }
+    void Free();
 
     // the DIB section handle, 0 if invalid
     HBITMAP m_handle;
@@ -198,6 +178,11 @@ private:
         m_height,
         m_depth;
 
+    // in some cases we could be using a handle which we didn't create and in
+    // this case we shouldn't free it neither -- this flag tell us if this is
+    // the case
+    bool m_ownsHandle;
+
 
     // DIBs can't be copied
     wxDIB(const wxDIB&);
@@ -207,6 +192,33 @@ private:
 // ----------------------------------------------------------------------------
 // inline functions implementation
 // ----------------------------------------------------------------------------
+
+inline
+void wxDIB::Init()
+{
+    m_handle = 0;
+    m_ownsHandle = true;
+
+    m_data = NULL;
+
+    m_width =
+    m_height =
+    m_depth = 0;
+}
+
+inline
+void wxDIB::Free()
+{
+    if ( m_handle && m_ownsHandle )
+    {
+        if ( !::DeleteObject(m_handle) )
+        {
+            wxLogLastError(wxT("DeleteObject(hDIB)"));
+        }
+
+        Init();
+    }
+}
 
 inline wxDIB::~wxDIB()
 {

@@ -132,26 +132,48 @@ bool wxDIB::Create(const wxBitmap& bmp)
 {
     wxCHECK_MSG( bmp.Ok(), false, _T("wxDIB::Create(): invalid bitmap") );
 
-    const int w = bmp.GetWidth();
-    const int h = bmp.GetHeight();
-    int d = bmp.GetDepth();
-    if ( d == -1 )
-        d = wxDisplayDepth();
+    // this bitmap could already be a DIB section in which case we don't need
+    // to convert it to DIB
+    HBITMAP hbmp = GetHbitmapOf(bmp);
 
-    if ( !Create(w, h, d) )
-        return false;
-
-    // we could have used GetDIBits() too but GetBitmapBits() is simpler
-    if ( !::GetBitmapBits
-            (
-                GetHbitmapOf(bmp),      // the source DDB
-                GetLineSize(w, d)*h,    // the number of bytes to copy
-                m_data                  // the pixels will be copied here
-            ) )
+    DIBSECTION ds;
+    if ( ::GetObject(hbmp, sizeof(ds), &ds) == sizeof(ds) )
     {
-        wxLogLastError(wxT("GetDIBits()"));
+        m_handle = hbmp;
 
-        return 0;
+        // wxBitmap will free it, not we
+        m_ownsHandle = false;
+
+        // copy all the bitmap parameters too as we have them now anyhow
+        m_width = ds.dsBm.bmWidth;
+        m_height = ds.dsBm.bmHeight;
+        m_depth = ds.dsBm.bmBitsPixel;
+
+        m_data = ds.dsBm.bmBits;
+    }
+    else // no, it's a DDB -- convert it to DIB
+    {
+        const int w = bmp.GetWidth();
+        const int h = bmp.GetHeight();
+        int d = bmp.GetDepth();
+        if ( d == -1 )
+            d = wxDisplayDepth();
+
+        if ( !Create(w, h, d) )
+            return false;
+
+        // we could have used GetDIBits() too but GetBitmapBits() is simpler
+        if ( !::GetBitmapBits
+                (
+                    GetHbitmapOf(bmp),      // the source DDB
+                    GetLineSize(w, d)*h,    // the number of bytes to copy
+                    m_data                  // the pixels will be copied here
+                ) )
+        {
+            wxLogLastError(wxT("GetDIBits()"));
+
+            return 0;
+        }
     }
 
     return true;
