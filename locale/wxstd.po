@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 1999-05-10 18:29+0200\n"
+"POT-Creation-Date: 1999-05-16 16:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,12 +99,14 @@ msgstr ""
 msgid "&Log"
 msgstr ""
 
-#: ../src/common/docview.cpp:1725 ../src/common/docview.cpp:1736
+#: ../src/common/docview.cpp:1725 ../src/common/docview.cpp:1729
+#: ../src/common/docview.cpp:1736 ../src/common/docview.cpp:1740
 #: src/common/docview.cpp:1687 src/common/docview.cpp:1698
 msgid "&Redo"
 msgstr ""
 
-#: ../src/common/docview.cpp:1719 ../src/common/docview.cpp:1746
+#: ../src/common/docview.cpp:1719 ../src/common/docview.cpp:1723
+#: ../src/common/docview.cpp:1746 ../src/common/docview.cpp:1750
 #: src/common/docview.cpp:1681 src/common/docview.cpp:1708
 msgid "&Redo "
 msgstr ""
@@ -113,11 +115,13 @@ msgstr ""
 msgid "&Save..."
 msgstr ""
 
-#: ../src/common/docview.cpp:1731 src/common/docview.cpp:1693
+#: ../src/common/docview.cpp:1731 ../src/common/docview.cpp:1735
+#: src/common/docview.cpp:1693
 msgid "&Undo"
 msgstr ""
 
-#: ../src/common/docview.cpp:1706 src/common/docview.cpp:1668
+#: ../src/common/docview.cpp:1706 ../src/common/docview.cpp:1710
+#: src/common/docview.cpp:1668
 msgid "&Undo "
 msgstr ""
 
@@ -250,7 +254,8 @@ msgstr ""
 msgid "Can not wait for thread termination"
 msgstr ""
 
-#: ../src/common/docview.cpp:1708 src/common/docview.cpp:1670
+#: ../src/common/docview.cpp:1708 ../src/common/docview.cpp:1712
+#: src/common/docview.cpp:1670
 msgid "Can't &Undo "
 msgstr ""
 
@@ -292,18 +297,18 @@ msgid "Can't set thread priority"
 msgstr ""
 
 #: ../src/common/prntbase.cpp:114 ../src/generic/choicdgg.cpp:306
-#: ../src/generic/colrdlgg.cpp:235 ../src/generic/dcpsg.cpp:1918
-#: ../src/generic/dirdlgg.cpp:341 ../src/generic/fontdlgg.cpp:261
-#: ../src/generic/msgdlgg.cpp:123 ../src/generic/prntdlgg.cpp:172
-#: ../src/generic/prntdlgg.cpp:430 ../src/generic/prntdlgg.cpp:580
-#: ../src/generic/progdlgg.cpp:94 ../src/generic/textdlgg.cpp:141
-#: ../src/gtk/filedlg.cpp:154 src/common/prntbase.cpp:113
-#: src/generic/choicdgg.cpp:306 src/generic/colrdlgg.cpp:235
-#: src/generic/dcpsg.cpp:1875 src/generic/dirdlgg.cpp:341
-#: src/generic/fontdlgg.cpp:261 src/generic/msgdlgg.cpp:143
-#: src/generic/prntdlgg.cpp:111 src/generic/prntdlgg.cpp:317
-#: src/generic/prntdlgg.cpp:473 src/generic/textdlgg.cpp:141
-#: src/gtk/filedlg.cpp:131
+#: ../src/generic/colrdlgg.cpp:235 ../src/generic/dcpsg.cpp:1917
+#: ../src/generic/dcpsg.cpp:1918 ../src/generic/dirdlgg.cpp:341
+#: ../src/generic/fontdlgg.cpp:261 ../src/generic/msgdlgg.cpp:123
+#: ../src/generic/prntdlgg.cpp:172 ../src/generic/prntdlgg.cpp:430
+#: ../src/generic/prntdlgg.cpp:580 ../src/generic/progdlgg.cpp:94
+#: ../src/generic/textdlgg.cpp:141 ../src/gtk/filedlg.cpp:154
+#: src/common/prntbase.cpp:113 src/generic/choicdgg.cpp:306
+#: src/generic/colrdlgg.cpp:235 src/generic/dcpsg.cpp:1875
+#: src/generic/dirdlgg.cpp:341 src/generic/fontdlgg.cpp:261
+#: src/generic/msgdlgg.cpp:143 src/generic/prntdlgg.cpp:111
+#: src/generic/prntdlgg.cpp:317 src/generic/prntdlgg.cpp:473
+#: src/generic/textdlgg.cpp:141 src/gtk/filedlg.cpp:131
 msgid "Cancel"
 msgstr ""
 
@@ -373,13 +378,13 @@ msgstr ""
 msgid "Could not start document preview."
 msgstr ""
 
-#: ../src/generic/printps.cpp:189 ../src/msw/printwin.cpp:228
-#: src/generic/printps.cpp:165
+#: ../src/generic/printps.cpp:189 ../src/generic/printps.cpp:193
+#: ../src/msw/printwin.cpp:228 src/generic/printps.cpp:165
 msgid "Could not start printing."
 msgstr ""
 
-#: ../src/common/wincmn.cpp:598 src/gtk/window.cpp:2716
-#: src/msw/window.cpp:3756
+#: ../src/common/wincmn.cpp:598 ../src/common/wincmn.cpp:609
+#: src/gtk/window.cpp:2716 src/msw/window.cpp:3756
 msgid "Could not transfer data to window"
 msgstr ""
 
@@ -569,12 +574,14 @@ msgstr ""
 msgid "Failed to set clipboard data."
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:551 src/gtk/threadpsx.cpp:508
+#: ../src/unix/threadpsx.cpp:551 ../src/unix/threadpsx.cpp:592
+#: src/gtk/threadpsx.cpp:508
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:662 src/gtk/threadpsx.cpp:611
+#: ../src/unix/threadpsx.cpp:662 ../src/unix/threadpsx.cpp:703
+#: src/gtk/threadpsx.cpp:611
 msgid "Failed to terminate a thread."
 msgstr ""
 
@@ -645,9 +652,10 @@ msgstr ""
 msgid "Italic"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1909 ../src/generic/prntdlgg.cpp:403
-#: ../src/generic/prntdlgg.cpp:606 src/generic/dcpsg.cpp:1866
-#: src/generic/prntdlgg.cpp:289 src/generic/prntdlgg.cpp:499
+#: ../src/generic/dcpsg.cpp:1908 ../src/generic/dcpsg.cpp:1909
+#: ../src/generic/prntdlgg.cpp:403 ../src/generic/prntdlgg.cpp:606
+#: src/generic/dcpsg.cpp:1866 src/generic/prntdlgg.cpp:289
+#: src/generic/prntdlgg.cpp:499
 msgid "Landscape"
 msgstr ""
 
@@ -667,8 +675,8 @@ msgstr ""
 msgid "Light"
 msgstr ""
 
-#: ../src/gtk/filedlg.cpp:212 ../src/msw/filedlg.cpp:359
-#: src/gtk/filedlg.cpp:177 src/msw/filedlg.cpp:352
+#: ../src/gtk/filedlg.cpp:212 ../src/gtk/filedlg.cpp:227
+#: ../src/msw/filedlg.cpp:359 src/gtk/filedlg.cpp:177 src/msw/filedlg.cpp:352
 #, c-format
 msgid "Load %s file"
 msgstr ""
@@ -745,16 +753,17 @@ msgid "Normal"
 msgstr ""
 
 #: ../src/generic/choicdgg.cpp:301 ../src/generic/colrdlgg.cpp:231
-#: ../src/generic/dcpsg.cpp:1917 ../src/generic/dirdlgg.cpp:340
-#: ../src/generic/fontdlgg.cpp:260 ../src/generic/msgdlgg.cpp:117
-#: ../src/generic/prntdlgg.cpp:171 ../src/generic/prntdlgg.cpp:429
-#: ../src/generic/prntdlgg.cpp:579 ../src/generic/textdlgg.cpp:136
-#: ../src/gtk/filedlg.cpp:148 src/generic/choicdgg.cpp:301
-#: src/generic/colrdlgg.cpp:231 src/generic/dcpsg.cpp:1874
-#: src/generic/dirdlgg.cpp:340 src/generic/fontdlgg.cpp:260
-#: src/generic/msgdlgg.cpp:138 src/generic/prntdlgg.cpp:110
-#: src/generic/prntdlgg.cpp:316 src/generic/prntdlgg.cpp:472
-#: src/generic/textdlgg.cpp:136 src/gtk/filedlg.cpp:125
+#: ../src/generic/dcpsg.cpp:1916 ../src/generic/dcpsg.cpp:1917
+#: ../src/generic/dirdlgg.cpp:340 ../src/generic/fontdlgg.cpp:260
+#: ../src/generic/msgdlgg.cpp:117 ../src/generic/prntdlgg.cpp:171
+#: ../src/generic/prntdlgg.cpp:429 ../src/generic/prntdlgg.cpp:579
+#: ../src/generic/textdlgg.cpp:136 ../src/gtk/filedlg.cpp:148
+#: src/generic/choicdgg.cpp:301 src/generic/colrdlgg.cpp:231
+#: src/generic/dcpsg.cpp:1874 src/generic/dirdlgg.cpp:340
+#: src/generic/fontdlgg.cpp:260 src/generic/msgdlgg.cpp:138
+#: src/generic/prntdlgg.cpp:110 src/generic/prntdlgg.cpp:316
+#: src/generic/prntdlgg.cpp:472 src/generic/textdlgg.cpp:136
+#: src/gtk/filedlg.cpp:125
 msgid "OK"
 msgstr ""
 
@@ -798,9 +807,10 @@ msgstr ""
 msgid "Please wait..."
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1908 ../src/generic/prntdlgg.cpp:402
-#: ../src/generic/prntdlgg.cpp:605 src/generic/dcpsg.cpp:1865
-#: src/generic/prntdlgg.cpp:288 src/generic/prntdlgg.cpp:498
+#: ../src/generic/dcpsg.cpp:1907 ../src/generic/dcpsg.cpp:1908
+#: ../src/generic/prntdlgg.cpp:402 ../src/generic/prntdlgg.cpp:605
+#: src/generic/dcpsg.cpp:1865 src/generic/prntdlgg.cpp:288
+#: src/generic/prntdlgg.cpp:498
 msgid "Portrait"
 msgstr ""
 
@@ -812,11 +822,13 @@ msgstr ""
 msgid "PostScript file"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1950 src/generic/dcpsg.cpp:1907
+#: ../src/generic/dcpsg.cpp:1949 ../src/generic/dcpsg.cpp:1950
+#: src/generic/dcpsg.cpp:1907
 msgid "PostScript:"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1913 src/generic/dcpsg.cpp:1870
+#: ../src/generic/dcpsg.cpp:1912 ../src/generic/dcpsg.cpp:1913
+#: src/generic/dcpsg.cpp:1870
 msgid "Preview Only"
 msgstr ""
 
@@ -825,7 +837,8 @@ msgstr ""
 msgid "Print"
 msgstr ""
 
-#: ../src/generic/printps.cpp:189 src/generic/printps.cpp:165
+#: ../src/generic/printps.cpp:189 ../src/generic/printps.cpp:193
+#: src/generic/printps.cpp:165
 msgid "Print Error"
 msgstr ""
 
@@ -856,8 +869,9 @@ msgstr ""
 msgid "Print spooling"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1912 ../src/generic/prntdlgg.cpp:135
-#: src/generic/dcpsg.cpp:1869 src/generic/prntdlgg.cpp:78
+#: ../src/generic/dcpsg.cpp:1911 ../src/generic/dcpsg.cpp:1912
+#: ../src/generic/prntdlgg.cpp:135 src/generic/dcpsg.cpp:1869
+#: src/generic/prntdlgg.cpp:78
 msgid "Print to File"
 msgstr ""
 
@@ -865,11 +879,13 @@ msgstr ""
 msgid "Print..."
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1923 src/generic/dcpsg.cpp:1880
+#: ../src/generic/dcpsg.cpp:1922 ../src/generic/dcpsg.cpp:1923
+#: src/generic/dcpsg.cpp:1880
 msgid "Printer Command: "
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1928 src/generic/dcpsg.cpp:1885
+#: ../src/generic/dcpsg.cpp:1927 ../src/generic/dcpsg.cpp:1928
+#: src/generic/dcpsg.cpp:1885
 msgid "Printer Options: "
 msgstr ""
 
@@ -935,8 +951,8 @@ msgstr ""
 msgid "Roman"
 msgstr ""
 
-#: ../src/gtk/filedlg.cpp:228 ../src/msw/filedlg.cpp:359
-#: src/gtk/filedlg.cpp:193 src/msw/filedlg.cpp:352
+#: ../src/gtk/filedlg.cpp:228 ../src/gtk/filedlg.cpp:243
+#: ../src/msw/filedlg.cpp:359 src/gtk/filedlg.cpp:193 src/msw/filedlg.cpp:352
 #, c-format
 msgid "Save %s file"
 msgstr ""
@@ -953,20 +969,24 @@ msgstr ""
 msgid "Script"
 msgstr ""
 
-#: ../src/common/docview.cpp:1268 src/common/docview.cpp:1243
+#: ../src/common/docview.cpp:1268 ../src/common/docview.cpp:1272
+#: src/common/docview.cpp:1243
 msgid "Select a document template"
 msgstr ""
 
-#: ../src/common/docview.cpp:1291 src/common/docview.cpp:1266
+#: ../src/common/docview.cpp:1291 ../src/common/docview.cpp:1295
+#: src/common/docview.cpp:1266
 msgid "Select a document view"
 msgstr ""
 
-#: ../src/common/docview.cpp:1185 ../src/common/docview.cpp:1223
+#: ../src/common/docview.cpp:1185 ../src/common/docview.cpp:1189
+#: ../src/common/docview.cpp:1223 ../src/common/docview.cpp:1227
 #: src/common/docview.cpp:1168 src/common/docview.cpp:1198
 msgid "Select a file"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1911 src/generic/dcpsg.cpp:1868
+#: ../src/generic/dcpsg.cpp:1910 ../src/generic/dcpsg.cpp:1911
+#: src/generic/dcpsg.cpp:1868
 msgid "Send to Printer"
 msgstr ""
 
@@ -1011,7 +1031,8 @@ msgstr ""
 msgid "Teletype"
 msgstr ""
 
-#: ../src/common/docview.cpp:1268 src/common/docview.cpp:1243
+#: ../src/common/docview.cpp:1268 ../src/common/docview.cpp:1272
+#: src/common/docview.cpp:1243
 msgid "Templates"
 msgstr ""
 
@@ -1084,9 +1105,11 @@ msgstr ""
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr ""
 
-#: ../src/common/docview.cpp:1703 ../src/common/docview.cpp:1718
-#: ../src/common/docview.cpp:1745 src/common/docview.cpp:1665
-#: src/common/docview.cpp:1680 src/common/docview.cpp:1707
+#: ../src/common/docview.cpp:1703 ../src/common/docview.cpp:1707
+#: ../src/common/docview.cpp:1718 ../src/common/docview.cpp:1722
+#: ../src/common/docview.cpp:1745 ../src/common/docview.cpp:1749
+#: src/common/docview.cpp:1665 src/common/docview.cpp:1680
+#: src/common/docview.cpp:1707
 msgid "Unnamed command"
 msgstr ""
 
@@ -1120,7 +1143,8 @@ msgstr ""
 msgid "Variables"
 msgstr ""
 
-#: ../src/common/docview.cpp:1291 src/common/docview.cpp:1266
+#: ../src/common/docview.cpp:1291 ../src/common/docview.cpp:1295
+#: src/common/docview.cpp:1266
 msgid "Views"
 msgstr ""
 
@@ -1134,19 +1158,23 @@ msgstr ""
 msgid "Warning: "
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1968 src/generic/dcpsg.cpp:1925
+#: ../src/generic/dcpsg.cpp:1967 ../src/generic/dcpsg.cpp:1968
+#: src/generic/dcpsg.cpp:1925
 msgid "X Scaling"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1977 src/generic/dcpsg.cpp:1934
+#: ../src/generic/dcpsg.cpp:1976 ../src/generic/dcpsg.cpp:1977
+#: src/generic/dcpsg.cpp:1934
 msgid "X Translation"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1972 src/generic/dcpsg.cpp:1929
+#: ../src/generic/dcpsg.cpp:1971 ../src/generic/dcpsg.cpp:1972
+#: src/generic/dcpsg.cpp:1929
 msgid "Y Scaling"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:1981 src/generic/dcpsg.cpp:1938
+#: ../src/generic/dcpsg.cpp:1980 ../src/generic/dcpsg.cpp:1981
+#: src/generic/dcpsg.cpp:1938
 msgid "Y Translation"
 msgstr ""
 
@@ -1154,7 +1182,8 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: ../src/common/docview.cpp:1814 src/common/docview.cpp:1777
+#: ../src/common/docview.cpp:1814 ../src/common/docview.cpp:1818
+#: src/common/docview.cpp:1777
 msgid "[EMPTY]"
 msgstr ""
 
@@ -1485,16 +1514,16 @@ msgstr ""
 msgid "Please choose an existing file."
 msgstr ""
 
-#: ../src/generic/printps.cpp:173
+#: ../src/generic/printps.cpp:173 ../src/generic/printps.cpp:177
 msgid "Printing..."
 msgstr ""
 
-#: ../src/generic/printps.cpp:207
+#: ../src/generic/printps.cpp:207 ../src/generic/printps.cpp:211
 #, c-format
 msgid "Printing page %d..."
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:2189
+#: ../src/generic/dcpsg.cpp:2188 ../src/generic/dcpsg.cpp:2189
 msgid "A4 sheet, 210 x 297 mm"
 msgstr ""
 
@@ -1583,24 +1612,24 @@ msgstr ""
 msgid "Fatal error: exiting"
 msgstr ""
 
-#: ../src/msw/dialog.cpp:145
+#: ../src/msw/dialog.cpp:140 ../src/msw/dialog.cpp:145
 msgid "Failed to create dialog."
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:296
+#: ../src/unix/threadpsx.cpp:296 ../src/unix/threadpsx.cpp:302
 msgid "Cannot start thread: error writing TLS"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:477
+#: ../src/unix/threadpsx.cpp:477 ../src/unix/threadpsx.cpp:518
 msgid "Cannot retrieve thread scheduling policy."
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:485
+#: ../src/unix/threadpsx.cpp:485 ../src/unix/threadpsx.cpp:526
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:768
+#: ../src/unix/threadpsx.cpp:768 ../src/unix/threadpsx.cpp:813
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
 
@@ -1618,4 +1647,21 @@ msgstr ""
 
 #: ../src/unix/utilsunx.cpp:547 ../src/unix/utilsunx.cpp:555
 msgid "Error "
+msgstr ""
+
+#: ../src/msw/mdi.cpp:355
+msgid "Failed to create MDI parent frame."
+msgstr ""
+
+#: ../src/msw/window.cpp:1342
+msgid ""
+"Can't find dummy dialog template!\n"
+"Check resource include path for finding wx.rc."
+msgstr ""
+
+#: ../src/msw/window.cpp:1368
+#, c-format
+msgid ""
+"Can't create window of class %s!\n"
+"Possible Windows 3.x compatibility problem?"
 msgstr ""
