@@ -5702,7 +5702,9 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
         if (IsCellEditControlEnabled())
             DisableCellEditControl();
 
-        return m_table->InsertRows( pos, numRows );
+        bool done = m_table->InsertRows( pos, numRows );
+        m_numRows = m_table->GetNumberRows();
+        return done;
 
         // the table will have sent the results of the insert row
         // operation to this view object as a grid table message
@@ -5721,9 +5723,15 @@ bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
         return FALSE;
     }
 
-    return ( m_table && m_table->AppendRows( numRows ) );
-    // the table will have sent the results of the append row
-    // operation to this view object as a grid table message
+    if ( m_table )
+    {
+        bool done = m_table && m_table->AppendRows( numRows );
+        m_numRows = m_table->GetNumberRows();
+        return done;
+        // the table will have sent the results of the append row
+        // operation to this view object as a grid table message
+    }
+    return FALSE;
 }
 
 
@@ -5742,7 +5750,9 @@ bool wxGrid::DeleteRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
         if (IsCellEditControlEnabled())
             DisableCellEditControl();
 
-        return (m_table->DeleteRows( pos, numRows ));
+        bool done = m_table->DeleteRows( pos, numRows );
+        m_numRows = m_table->GetNumberRows();
+        return done;
         // the table will have sent the results of the delete row
         // operation to this view object as a grid table message
     }
@@ -5765,7 +5775,9 @@ bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
         if (IsCellEditControlEnabled())
             DisableCellEditControl();
 
-        return m_table->InsertCols( pos, numCols );
+        bool done = m_table->InsertCols( pos, numCols );
+        m_numCols = m_table->GetNumberCols();
+        return done;
         // the table will have sent the results of the insert col
         // operation to this view object as a grid table message
     }
@@ -5783,9 +5795,15 @@ bool wxGrid::AppendCols( int numCols, bool WXUNUSED(updateLabels) )
         return FALSE;
     }
 
-    return ( m_table && m_table->AppendCols( numCols ) );
-    // the table will have sent the results of the append col
-    // operation to this view object as a grid table message
+    if ( m_table )
+    {
+        bool done = m_table->AppendCols( numCols );
+        m_numCols = m_table->GetNumberCols();
+        return done;
+        // the table will have sent the results of the append col
+        // operation to this view object as a grid table message
+    }
+    return FALSE;
 }
 
 
@@ -5804,7 +5822,9 @@ bool wxGrid::DeleteCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
         if (IsCellEditControlEnabled())
             DisableCellEditControl();
 
-        return ( m_table->DeleteCols( pos, numCols ) );
+        bool done = m_table->DeleteCols( pos, numCols );
+        m_numCols = m_table->GetNumberCols();
+        return done;
         // the table will have sent the results of the delete col
         // operation to this view object as a grid table message
     }
