@@ -877,7 +877,8 @@ public :
     wxGenericPropertyAccessor( const wxString &propName ) ;
     ~wxGenericPropertyAccessor() ;
 
-    void RenameProperty( const wxString &oldName , const wxString &newName )
+    void RenameProperty( const wxString& WXUNUSED_UNLESS_DEBUG(oldName),
+        const wxString& newName )
     {
         wxASSERT( oldName == m_propertyName ) ; m_propertyName = newName ;
     }
