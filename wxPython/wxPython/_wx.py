@@ -40,8 +40,6 @@ wxPy_isinstance = isinstance
 # compatible with 2.4, so assign the new classes to wx*DC_new and make
 # the _old classes be the defaults with the normal names.
 
-# Too bad it doesn't currently work...
-
 wxDC_new = wxDC; wxDC = wxDC_old                 
 wxMemoryDC_new = wxMemoryDC; wxMemoryDC = wxMemoryDC_old           
 wxBufferedDC_new = wxBufferedDC; wxBufferedDC = wxBufferedDC_old         
