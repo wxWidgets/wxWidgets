@@ -55,6 +55,12 @@
    3. which passes them to the popup window if it is popped up
  */
 
+// constants
+// ----------------------------------------------------------------------------
+
+// the margin between the text control and the combo button
+static const wxCoord g_comboMargin = 2;
+
 // ----------------------------------------------------------------------------
 // wxComboButton is just a normal button except that it sends commands to the
 // combobox and not its parent
@@ -294,7 +300,7 @@ wxSize wxComboControl::DoGetBestClientSize() const
     wxSize sizeBtn = m_btn->GetBestSize(),
            sizeText = m_text->GetBestSize();
 
-    return wxSize(sizeBtn.x + sizeText.x, wxMax(sizeBtn.y, sizeText.y));
+    return wxSize(sizeText.x + g_comboMargin + sizeBtn.x, wxMax(sizeBtn.y, sizeText.y));
 }
 
 void wxComboControl::DoMoveWindow(int x, int y, int width, int height)
