@@ -138,7 +138,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : MyFrame(NULL, -1, title, pos, size)
+       : wxFrame(NULL, -1, title, pos, size)
 {
     // set the frame icon
     SetIcon(wxICON(mondrian));
