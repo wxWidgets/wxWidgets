@@ -486,15 +486,28 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     
             // wxLogDebug( "OnKey from %s", win->GetName().c_str() );
         
-            // We didn't process wxEVT_KEY_DOWN, so send
-            // wxEVT_CHAR
-            if (!win->GetEventHandler()->ProcessEvent( keyEvent ))
+            // We didn't process wxEVT_KEY_DOWN, so send wxEVT_CHAR
+            if (win->GetEventHandler()->ProcessEvent( keyEvent ))
+                return TRUE;
+                
+            keyEvent.SetEventType(wxEVT_CHAR);
+            if (win->GetEventHandler()->ProcessEvent( keyEvent ))
+                return TRUE;
+            
+            if ( (keyEvent.m_keyCode == WXK_TAB) &&
+                 win->GetParent() && (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
             {
-                keyEvent.SetEventType(wxEVT_CHAR);
-                if (!win->GetEventHandler()->ProcessEvent( keyEvent ))
-                    return FALSE;
+                wxNavigationKeyEvent new_event;
+                new_event.SetEventObject( win->GetParent() );
+                /* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
+                new_event.SetDirection( (keyEvent.m_keyCode == WXK_TAB) );
+                /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+                new_event.SetWindowChange( keyEvent.ControlDown() );
+                new_event.SetCurrentFocus( win );
+                return win->GetParent()->GetEventHandler()->ProcessEvent( new_event );
             }
-            return TRUE;
+
+            return FALSE;
         }
         case KeyRelease:
         {
