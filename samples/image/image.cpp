@@ -44,9 +44,11 @@ public:
     wxBitmap  *my_horse_bmp;
     wxBitmap  *my_horse_pcx;
     wxBitmap  *my_horse_pnm;
+    wxBitmap  *my_horse_tiff;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
 
+private:
     DECLARE_DYNAMIC_CLASS(MyCanvas)
     DECLARE_EVENT_TABLE()
 };
@@ -63,6 +65,7 @@ public:
 
     MyCanvas         *m_canvas;
 
+private:
     DECLARE_DYNAMIC_CLASS(MyFrame)
     DECLARE_EVENT_TABLE()
 };
@@ -91,92 +94,101 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
         : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER )
 {
-  my_horse_png = (wxBitmap*) NULL;
-  my_horse_jpeg = (wxBitmap*) NULL;
-  my_horse_gif = (wxBitmap*) NULL;
-  my_horse_bmp = (wxBitmap*) NULL;
-  my_horse_pcx = (wxBitmap*) NULL;
-  my_horse_pnm = (wxBitmap*) NULL;
-  my_square = (wxBitmap*) NULL;
-  my_anti = (wxBitmap*) NULL;
+    my_horse_png = (wxBitmap*) NULL;
+    my_horse_jpeg = (wxBitmap*) NULL;
+    my_horse_gif = (wxBitmap*) NULL;
+    my_horse_bmp = (wxBitmap*) NULL;
+    my_horse_pcx = (wxBitmap*) NULL;
+    my_horse_pnm = (wxBitmap*) NULL;
+    my_horse_tiff = (wxBitmap*) NULL;
+    my_square = (wxBitmap*) NULL;
+    my_anti = (wxBitmap*) NULL;
 
-  SetBackgroundColour(* wxWHITE);
+    SetBackgroundColour(* wxWHITE);
 
-  wxBitmap bitmap( 100, 100 );
+    wxBitmap bitmap( 100, 100 );
 
-  wxMemoryDC dc;
-  dc.SelectObject( bitmap );
-  dc.SetBrush( wxBrush( "orange", wxSOLID ) );
-  dc.SetPen( *wxWHITE_PEN );
-  dc.DrawRectangle( 0, 0, 100, 100 );
-  dc.SelectObject( wxNullBitmap );
+    wxMemoryDC dc;
+    dc.SelectObject( bitmap );
+    dc.SetBrush( wxBrush( "orange", wxSOLID ) );
+    dc.SetPen( *wxWHITE_PEN );
+    dc.DrawRectangle( 0, 0, 100, 100 );
+    dc.SelectObject( wxNullBitmap );
 
-  // try to find the directory with our images
-  wxString dir;
-  if ( wxFile::Exists("./horse.png") )
-      dir = "./";
-  else if ( wxFile::Exists("../horse.png") )
-      dir = "../";
-  else
-      wxLogWarning("Can't find image files in either '.' or '..'!");
+    // try to find the directory with our images
+    wxString dir;
+    if ( wxFile::Exists("./horse.png") )
+        dir = "./";
+    else if ( wxFile::Exists("../horse.png") )
+        dir = "../";
+    else
+        wxLogWarning("Can't find image files in either '.' or '..'!");
 
-  wxImage image( bitmap );
+    wxImage image( bitmap );
 
-  if ( !image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG ) )
-      wxLogError("Can't save file");
+    if ( !image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG ) )
+        wxLogError("Can't save file");
 
-  if ( !image.LoadFile( dir + wxString("horse.png"), wxBITMAP_TYPE_PNG ) )
-      wxLogError("Can't load PNG image");
-  else
-    my_horse_png = new wxBitmap( image.ConvertToBitmap() );
+    if ( !image.LoadFile( dir + wxString("horse.png"), wxBITMAP_TYPE_PNG ) )
+        wxLogError("Can't load PNG image");
+    else
+        my_horse_png = new wxBitmap( image.ConvertToBitmap() );
 
-  if ( !image.LoadFile( dir + wxString("horse.jpg") ) )
-      wxLogError("Can't load JPG image");
-  else
-      my_horse_jpeg = new wxBitmap( image.ConvertToBitmap() );
+    if ( !image.LoadFile( dir + wxString("horse.jpg") ) )
+        wxLogError("Can't load JPG image");
+    else
+        my_horse_jpeg = new wxBitmap( image.ConvertToBitmap() );
 
 #if wxUSE_GIF
-  if ( !image.LoadFile( dir + wxString("horse.gif") ) )
-      wxLogError("Can't load GIF image");
-  else
-    my_horse_gif = new wxBitmap( image.ConvertToBitmap() );
+    if ( !image.LoadFile( dir + wxString("horse.gif") ) )
+        wxLogError("Can't load GIF image");
+    else
+        my_horse_gif = new wxBitmap( image.ConvertToBitmap() );
 #endif
 
 #if wxUSE_PCX
-  if ( !image.LoadFile( dir + wxString("horse.pcx"), wxBITMAP_TYPE_PCX ) )
-      wxLogError("Can't load PCX image");
-  else
-    my_horse_pcx = new wxBitmap( image.ConvertToBitmap() );
+    if ( !image.LoadFile( dir + wxString("horse.pcx"), wxBITMAP_TYPE_PCX ) )
+        wxLogError("Can't load PCX image");
+    else
+        my_horse_pcx = new wxBitmap( image.ConvertToBitmap() );
 #endif
 
-  if ( !image.LoadFile( dir + wxString("horse.bmp"), wxBITMAP_TYPE_BMP ) )
-      wxLogError("Can't load BMP image");
-  else
-    my_horse_bmp = new wxBitmap( image.ConvertToBitmap() );
+    if ( !image.LoadFile( dir + wxString("horse.bmp"), wxBITMAP_TYPE_BMP ) )
+        wxLogError("Can't load BMP image");
+    else
+        my_horse_bmp = new wxBitmap( image.ConvertToBitmap() );
 
 #if wxUSE_PNM
-  if ( !image.LoadFile( dir + wxString("horse.pnm"), wxBITMAP_TYPE_PNM ) )
-      wxLogError("Can't load PNM image");
-  else
-    my_horse_pnm = new wxBitmap( image.ConvertToBitmap() );
+    if ( !image.LoadFile( dir + wxString("horse.pnm"), wxBITMAP_TYPE_PNM ) )
+        wxLogError("Can't load PNM image");
+    else
+        my_horse_pnm = new wxBitmap( image.ConvertToBitmap() );
 #endif
 
-  image.LoadFile( dir + wxString("test.png") );
-  my_square = new wxBitmap( image.ConvertToBitmap() );
+#if wxUSE_LIBTIFF
+    if ( !image.LoadFile( dir + wxString("horse.tif"), wxBITMAP_TYPE_TIF ) )
+        wxLogError("Can't load TIFF image");
+    else
+        my_horse_tiff = new wxBitmap( image.ConvertToBitmap() );
+#endif
 
-  CreateAntiAliasedBitmap();
+    image.LoadFile( dir + wxString("test.png") );
+    my_square = new wxBitmap( image.ConvertToBitmap() );
+
+    CreateAntiAliasedBitmap();
 }
 
 MyCanvas::~MyCanvas()
 {
-  delete my_horse_pnm;
-  delete my_horse_png;
-  delete my_horse_jpeg;
-  delete my_horse_gif;
-  delete my_horse_bmp;
-  delete my_horse_pcx;
-  delete my_square;
-  delete my_anti;
+    delete my_horse_pnm;
+    delete my_horse_png;
+    delete my_horse_jpeg;
+    delete my_horse_gif;
+    delete my_horse_bmp;
+    delete my_horse_pcx;
+    delete my_horse_tiff;
+    delete my_square;
+    delete my_anti;
 }
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -211,6 +223,9 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
   dc.DrawText( "PNM handler", 30, 1285 );
   if (my_horse_pnm && my_horse_pnm->Ok()) dc.DrawBitmap( *my_horse_pnm, 30, 1300 );
+  
+  dc.DrawText( "TIFF handler", 30, 1415 );
+  if (my_horse_tiff && my_horse_tiff->Ok()) dc.DrawBitmap( *my_horse_pnm, 30, 1430 );
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
@@ -294,7 +309,7 @@ MyFrame::MyFrame()
   m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
 
   // 500 width * 1300 height
-  m_canvas->SetScrollbars( 10, 10, 50, 152 );
+  m_canvas->SetScrollbars( 10, 10, 50, 180 );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
@@ -322,6 +337,10 @@ bool MyApp::OnInit()
 
 #if wxUSE_LIBJPEG
   wxImage::AddHandler( new wxJPEGHandler );
+#endif
+
+#if wxUSE_LIBTIFF
+  wxImage::AddHandler( new wxTIFFHandler );
 #endif
 
 #if wxUSE_GIF
