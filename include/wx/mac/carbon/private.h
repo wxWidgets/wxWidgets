@@ -38,6 +38,10 @@
     #define MAC_OS_X_VERSION_10_3 1030
 #endif
 
+#ifdef __WXMAC_CARBON__
+#include "wx/mac/corefoundation/cfstring.h"
+#endif
+
 #if wxUSE_GUI
 
 #include "wx/window.h"
@@ -478,79 +482,6 @@ void wxMacCleanupConverters() ;
 
 void wxMacStringToPascal( const wxString&from , StringPtr to ) ;
 wxString wxMacMakeStringFromPascal( ConstStringPtr from ) ;
-
-void wxMacConvertNewlines13To10( char * data ) ;
-void wxMacConvertNewlines10To13( char * data ) ;
-void wxMacConvertNewlines13To10( wxString *data ) ;
-void wxMacConvertNewlines10To13( wxString *data ) ;
-
-#if wxUSE_UNICODE
-void wxMacConvertNewlines13To10( wxChar * data ) ;
-void wxMacConvertNewlines10To13( wxChar * data ) ;
-#endif
-
-#if TARGET_CARBON
-
-class wxMacCFStringHolder                                                             
-{                                                                           
-public:      
-	wxMacCFStringHolder()
-	{
-    	m_cfs = NULL ;
-    	m_release = false ;                                                                 
-	}
-	                                                               
-    wxMacCFStringHolder(const wxString &str , wxFontEncoding encoding )                                          
-    {      
-    	m_cfs = NULL ;
-    	m_release = false ;  
-    	Assign( str , encoding ) ;
-    }                                                                       
-                                                                            
-    wxMacCFStringHolder(CFStringRef ref , bool release = true )                                                   
-    {                                                                       
-        m_cfs = ref ;
-        m_release = release ;                                           
-    }                                                                       
-                                                                            
-    ~wxMacCFStringHolder() 
-    { 
-    	Release() ;
-    }                                           
-
-    CFStringRef Detach()
-    {
-    	CFStringRef retval = m_cfs ;
-    	m_release = false ;
-    	m_cfs = NULL ;
-    	return retval ;
-    }         
-                                                                   
-    void Release()
-    {
-    	if ( m_release && m_cfs)
-    		CFRelease( m_cfs ) ;
-    	m_cfs = NULL ;
-    }         
-
-	void Assign( const wxString &str , wxFontEncoding encoding ) ;
-
-    operator CFStringRef () { return m_cfs; }   
-    wxString AsString( wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
-             
-private:             
-    	                                                       
-    CFStringRef m_cfs;
-    bool m_release ;                                                        
-} ;
-
-#endif
-
-// utils.cpp
-
-wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding) ;
-wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding) ;
-void wxMacWakeUp() ;
 
 // toplevel.cpp
 
