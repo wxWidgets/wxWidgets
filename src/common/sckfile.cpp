@@ -47,3 +47,4 @@ wxInputStream *wxFileProto::GetInputStream(const wxString& path)
 }
 
 #endif
+
