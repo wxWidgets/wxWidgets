@@ -29,16 +29,16 @@
 
 // what to test?
 
-//#define TEST_ARRAYS
-//#define TEST_CMDLINE
-//#define TEST_DIR
-//#define TEST_EXECUTE
-//#define TEST_LOG
-//#define TEST_LONGLONG
-//#define TEST_MIME
+#define TEST_ARRAYS
+#define TEST_CMDLINE
+#define TEST_DIR
+#define TEST_EXECUTE
+#define TEST_LOG
+#define TEST_LONGLONG
+#define TEST_MIME
 #define TEST_STRINGS
-//#define TEST_THREADS
-//#define TEST_TIME
+#define TEST_THREADS
+#define TEST_TIME
 
 // ============================================================================
 // implementation
@@ -254,12 +254,12 @@ static void TestMimeEnum()
 // get a random 64 bit number
 #define RAND_LL()   MAKE_LL(rand(), rand(), rand(), rand())
 
-#if wxUSE_LONGLONG_NATIVE
+#if wxUSE_LONGLONG_WX
 inline bool operator==(const wxLongLongWx& a, const wxLongLongNative& b)
     { return a.GetHi() == b.GetHi() && a.GetLo() == b.GetLo(); }
 inline bool operator==(const wxLongLongNative& a, const wxLongLongWx& b)
     { return a.GetHi() == b.GetHi() && a.GetLo() == b.GetLo(); }
-#endif // wxUSE_LONGLONG_NATIVE
+#endif // wxUSE_LONGLONG_WX
 
 static void TestSpeed()
 {
