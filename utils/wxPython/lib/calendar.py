@@ -5,7 +5,7 @@
 # Author:       Lorne White (email: lwhite1@planet.eon.net)
 #
 # Created:
-# Version       0.5 1999/11/03
+# Version       0.6 2000/03/30
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -17,24 +17,75 @@ import string, time
 
 CalDays = [6, 0, 1, 2, 3, 4, 5]
 AbrWeekday = {6:"Sun", 0:"Mon", 1:"Tue", 2:"Wed", 3:"Thu", 4:"Fri", 5:"Sat"}
-_MIDSIZE = 100
+_MIDSIZE = 160
 
 
 # calendar drawing routing
 
 class CalDraw:
-    def __init__(self):
-        self.rg = {}
-        self.y_st = 15      # start of vertical draw default
+    def __init__(self, parent):
+        self.pwidth = 1
+        self.pheight = 1
+        try:
+            self.scale = parent.scale
+        except:
+            self.scale = 1
+
+        self.DefParms()
+
+    def DefParms(self):
+        self.grid_color = 'BLACK'
+        self.back_color = 'WHITE'
+        self.sel_color = 'RED'
+        self.high_color = 'LIGHT BLUE'
+        self.border_color = 'BLACK'
+        self.week_color = 'LIGHT GREY'
+
+        self.font = wxSWISS
+        self.bold = wxNORMAL
+
+        self.hide_title = FALSE
+        self.hide_grid = FALSE
+        self.outer_border = TRUE
+
+        self.title_offset = 0
 
     def SetSize(self, size):
-        self.sizew = size.width
-        self.sizeh = size.height
+        self.set_sizew = size.width
+        self.set_sizeh = size.height
 
-# draw the various elements of the calendar
+    def InitValues(self):       # default dimensions of various elements of the calendar
+        self.rg = {}
+        self.set_cy_st = 0      # start position
+        self.set_cx_st = 0
+
+        self.set_y_mrg = 15      # start of vertical draw default
+        self.set_x_mrg = 10
+        self.set_y_end = 10
+
+    def SetPos(self, xpos, ypos):
+        self.set_cx_st = xpos
+        self.set_cy_st = ypos
+
+    def SetMarg(self, xmarg, ymarg):
+        self.set_x_st = xmarg
+        self.set_y_st = ymarg
+        self.set_y_end = ymarg
+
+    def InitScale(self):        # scale position values
+        self.sizew = self.set_sizew * self.pwidth
+        self.sizeh = self.set_sizeh * self.pheight
+
+        self.cx_st = self.set_cx_st * self.pwidth       # draw start position
+        self.cy_st = self.set_cy_st * self.pheight
+
+        self.x_mrg = self.set_x_mrg * self.pwidth         # calendar draw margins
+        self.y_mrg = self.set_y_mrg * self.pheight
+        self.y_end = self.set_y_end * self.pheight
 
     def DrawCal(self, DC, sel_lst):
         self.DC = DC
+        self.InitScale()
 
         self.DrawBorder()
 
@@ -50,11 +101,14 @@ class CalDraw:
         self.DrawWeek()
         self.DrawNum()
 
-# draw border around the outside of the main display rectangle
+    def DrawBorder(self):   # draw border around the outside of the main display rectangle
+        brush = wxBrush(wxNamedColour(self.back_color), wxSOLID)
+        self.DC.SetBrush(brush)
+        self.DC.SetPen(wxPen(wxNamedColour(self.border_color), 1))
 
-    def DrawBorder(self):
-        rect = wxRect(0, 0, self.sizew, self.sizeh)  # full display window area
-        self.DC.DrawRectangle(rect.x, rect.y, rect.width, rect.height)
+        if self.outer_border is TRUE:
+            rect = wxRect(self.cx_st, self.cy_st, self.sizew, self.sizeh)  # full display window area
+            self.DC.DrawRectangle(rect.x, rect.y, rect.width, rect.height)
 
     def DrawNumVal(self):
         self.DrawNum()
@@ -62,6 +116,8 @@ class CalDraw:
 # calculate the calendar days and offset position
 
     def SetCal(self, year, month):
+        self.InitValues()       # reset initial values
+
         self.year = year
         self.month = month
 
@@ -81,9 +137,7 @@ class CalDraw:
             i = i + 1
         return start_pos
 
-# get the display rectange list of the day grid
-
-    def GetRect(self):
+    def GetRect(self):      # get the display rectange list of the day grid
         cnt = 0
         for y in self.gridy[1:-1]:
             for x in self.gridx[:-1]:
@@ -98,12 +152,10 @@ class CalDraw:
     def GetOffset(self):
         return self.st_pos
 
-# month and year title
-
-    def DrawMonth(self):
+    def DrawMonth(self):        # month and year title
         month = Month[self.month]
 
-        sizef = 12
+        sizef = 11
         if self.sizeh < _MIDSIZE:
             sizef = 10
 
@@ -111,25 +163,23 @@ class CalDraw:
         self.DC.SetFont(f)
 
         tw,th = self.DC.GetTextExtent(month)
-        adjust = (self.sizew-tw)/2
-        self.DC.DrawText(month, adjust, 10)
+        adjust = self.cx_st + (self.sizew-tw)/2
+        self.DC.DrawText(month, adjust, self.cy_st + th)
 
         year = str(self.year)
         tw,th = self.DC.GetTextExtent(year)
-        adjust = self.sizew-tw-20
+        adjust = self.cx_st + self.sizew-tw-20
 
-        self.y_st = th * 3
+        self.title_offset = th * 2
 
         f = wxFont(sizef, self.font, wxNORMAL, self.bold)
         self.DC.SetFont(f)
-        self.DC.DrawText(year, adjust, 10)
+        self.DC.DrawText(year, adjust, self.cy_st + th)
 
-# draw the week days
-
-    def DrawWeek(self):
-        sizef = 10
+    def DrawWeek(self):     # draw the week days
+        sizef = 8
         if self.sizeh < _MIDSIZE:
-            sizef = 8
+            sizef = 7
 
         f = wxFont(sizef, self.font, wxNORMAL, self.bold)
         self.DC.SetFont(f)
@@ -138,6 +188,12 @@ class CalDraw:
         cnt_y = 0
         width = self.gridx[1]-self.gridx[0]
         height = self.gridy[1] - self.gridy[0]
+
+        rect_w = self.gridx[7]-self.gridx[0]
+
+        brush = wxBrush(wxNamedColour(self.week_color), wxSOLID)
+        self.DC.SetBrush(brush)
+#        self.DC.DrawRectangle(self.gridx[0], self.gridy[0], rect_w+1, height)
 
         for val in CalDays:
             day = AbrWeekday[val]
@@ -149,12 +205,12 @@ class CalDraw:
 
             x = self.gridx[cnt_x]
             y = self.gridy[cnt_y]
+            self.DC.DrawRectangle(self.gridx[cnt_x], self.gridy[0], width+1, height)
             self.DC.DrawText(day, x+diffx, y+diffy)
             cnt_x = cnt_x + 1
 
-# draw the day numbers
 
-    def DrawNum(self):
+    def DrawNum(self):      # draw the day numbers
         sizef = 10
         if self.sizeh < _MIDSIZE:
             sizef = 8
@@ -173,24 +229,18 @@ class CalDraw:
                 cnt_x = 0
                 cnt_y = cnt_y + 1
 
-# calculate the dimensions in the center of the drawing area
+    def Center(self):       # calculate the dimensions in the center of the drawing area
+        bdw = self.x_mrg * 2
+        bdh = self.y_mrg + self.y_end + self.title_offset
 
-    def Center(self):
-        self.x_st = 10
-        self.y_end = 10
+        self.dl_w = int((self.sizew-bdw)/7)
+        self.dl_h = int((self.sizeh-bdh)/7)
 
-        bdw = self.x_st * 2
-        bdh = self.y_st + self.y_end
-
-        self.dl_w = (self.sizew-bdw)/7
-        self.dl_h = (self.sizeh-bdh)/7
-
+        self.dl_th = int(2*self.dl_h/3)     # week title adjustment
         self.cwidth = self.dl_w * 7
-        self.cheight = self.dl_h * 6 + self.dl_h/2
+        self.cheight = self.dl_h * 6 + self.dl_th
 
-# highlighted selectioned days
-
-    def DrawSel(self, sel_lst):
+    def DrawSel(self, sel_lst):         # highlighted selected days
         for key in sel_lst:
             brush = wxBrush(wxNamedColour(self.high_color), wxSOLID)
             self.DC.SetBrush(brush)
@@ -202,18 +252,19 @@ class CalDraw:
             rect = self.rg[nkey]
             self.DC.DrawRectangle(rect.x, rect.y, rect.width+1, rect.height+1)
 
-# calculate and draw the grid lines
-
-    def DrawGrid(self):
+    def DrawGrid(self):         # calculate and draw the grid lines
         self.DC.SetPen(wxPen(wxNamedColour(self.grid_color), 0))
 
         self.gridx = []
         self.gridy = []
 
+        self.x_st = self.cx_st + self.x_mrg
+        self.y_st = self.cy_st + self.y_mrg + self.title_offset     # start postion of draw
+
         x1 = self.x_st
         y1 = self.y_st
-        y1 = self.y_st
-        y2 = self.y_st + self.cheight
+
+        y2 = y1 + self.cheight
         for i in range(8):
             if self.hide_grid is FALSE:
                 self.DC.DrawLine(x1, y1, x1, y2)
@@ -222,16 +273,34 @@ class CalDraw:
 
         x1 = self.x_st
         y1 = self.y_st
-        x2 = self.x_st + self.cwidth
+
+        x2 = x1 + self.cwidth
         for i in range(8):
             if self.hide_grid is FALSE:
                 self.DC.DrawLine(x1, y1, x2, y1)
             self.gridy.append(y1)
             if i == 0:
-                y1 = y1 + self.dl_h/2
+                y1 = y1 + self.dl_th
             else:
                 y1 = y1 + self.dl_h
 
+
+class PrtCalDraw(CalDraw):
+    def InitValues(self):
+        self.rg = {}
+        self.set_cx_st = 1.0        # start draw border location
+        self.set_cy_st = 1.0
+
+        self.set_y_mrg = 0.2      # draw offset position
+        self.set_x_mrg = 0.2
+        self.set_y_end = 0.2
+
+    def SetPSize(self, pwidth, pheight):    # calculate the dimensions in the center of the drawing area
+        self.pwidth = int(pwidth)/self.scale
+        self.pheight = int(pheight)/self.scale
+
+    def SetPreview(self, preview):
+        self.preview = preview
 
 class wxCalendar(wxWindow):
     def __init__(self, parent, id, pos=wxDefaultPosition, size=wxDefaultSize):
@@ -241,10 +310,9 @@ class wxCalendar(wxWindow):
 
         self.grid_color = 'BLACK'
         self.back_color = 'WHITE'
+        self.hide_grid = FALSE
         self.sel_color = 'RED'
-        self.high_color = 'LIGHT BLUE'
-        self.font = wxSWISS
-        self.bold = wxNORMAL
+        self.hide_title = FALSE
 
         self.SetBackgroundColour(wxNamedColor(self.back_color))
         self.Connect(-1, -1, wxEVT_LEFT_DOWN, self.OnLeftEvent)
@@ -258,8 +326,6 @@ class wxCalendar(wxWindow):
         self.SetNow()       # default calendar for current month
 
         self.size = None
-        self.hide_title = FALSE
-        self.hide_grid = FALSE
         self.set_day = None
 
 # control some of the main calendar attributes
@@ -390,9 +456,8 @@ class wxCalendar(wxWindow):
     def GetDayHit(self, mx, my):
         for key in self.rg.keys():
             val = self.rg[key]
-            rt = wxRegion()
-            rt.UnionRect(val)
-            if rt.Contains(mx, my) != 0:
+            ms_rect = wxRect(mx, my, 1, 1)
+            if wxIntersectRect(ms_rect, val) != None:
                 result = self.TestDay(key)
                 return result
         return None
@@ -407,7 +472,8 @@ class wxCalendar(wxWindow):
         DC = wxPaintDC(self)
         DC.BeginDrawing()
 
-        self.cal = cal = CalDraw()
+        self.cal = cal = CalDraw(self)
+
         if self.size is None:
             size = self.GetClientSize()
         else:
@@ -415,14 +481,11 @@ class wxCalendar(wxWindow):
 
 # drawing attributes
 
-        cal.hide_title = self.hide_title
-        cal.hide_grid = self.hide_grid
-
-        cal.grid_color = self.grid_color
-        cal.high_color = self.high_color
+        cal.grid_color = 'BLUE'
         cal.back_color = self.back_color
-        cal.font = self.font
-        cal.bold = self.bold
+        cal.hide_grid = self.hide_grid
+        cal.grid_color = self.grid_color
+        cal.hide_title = self.hide_title
 
         cal.SetSize(size)
         cal.SetCal(self.year, self.month)

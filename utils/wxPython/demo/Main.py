@@ -21,7 +21,9 @@ _useSplitter       = true
 _useNestedSplitter = true
 
 _treeList = [
-    ('New since last release', ['wxGrid']),
+    ('New since last release', ['wxGrid', 'wxStyledTextCtrl',
+                                'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
+                                'FileBrowseButton', 'wxCalendar']),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
 

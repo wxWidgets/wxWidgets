@@ -72,7 +72,7 @@ class CustomDataTable(wxPyGridTableBase):
 
 
     #--------------------------------------------------
-    # optional methods
+    # Some optional methods
 
     # Called when the grid needs to display labels
     def GetColLabelValue(self, col):
@@ -96,8 +96,6 @@ class CustomDataTable(wxPyGridTableBase):
 
     def CanSetValueAs(self, row, col, typeName):
         return self.CanGetValueAs(row, col, typeName)
-
-
 
 
 
