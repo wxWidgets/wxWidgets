@@ -79,7 +79,7 @@ public:
     virtual wxGenericMDIClientWindow *OnCreateClient();
 
     virtual void Cascade() { /* Has no effect */ }
-    virtual void Tile() { /* Has no effect */ }
+    virtual void Tile(wxOrientation WXUNUSED(orient) = wxHORIZONTAL) { }
     virtual void ArrangeIcons() { /* Has no effect */ }
     virtual void ActivateNext();
     virtual void ActivatePrevious();

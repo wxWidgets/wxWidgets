@@ -75,7 +75,7 @@ public:
 
   // MDI operations
   virtual void Cascade();
-  virtual void Tile();
+  virtual void Tile(wxOrientation WXUNUSED(orient) = wxHORIZONTAL);
   virtual void ArrangeIcons();
   virtual void ActivateNext();
   virtual void ActivatePrevious();

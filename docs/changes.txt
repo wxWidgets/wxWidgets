@@ -30,6 +30,10 @@ Unix:
 
 - Fixed build on Linux/AMD64
 
+wxMSW:
+
+- Added "orient" parameter to wxMDIParentFrame::Tile()
+
 wxGTK:
 
 - Improved wxSystemSettings::GetMetric() to work better with X11. (Mart Raudsepp)

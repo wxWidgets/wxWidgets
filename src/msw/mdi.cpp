@@ -384,10 +384,14 @@ void wxMDIParentFrame::Cascade()
     ::SendMessage(GetWinHwnd(GetClientWindow()), WM_MDICASCADE, 0, 0);
 }
 
-// TODO: add a direction argument (hor/vert)
-void wxMDIParentFrame::Tile()
+void wxMDIParentFrame::Tile(wxOrientation orient)
 {
-    ::SendMessage(GetWinHwnd(GetClientWindow()), WM_MDITILE, MDITILE_HORIZONTAL, 0);
+    wxASSERT_MSG( orient == wxHORIZONTAL || orient == wxVERTICAL,
+                  _T("invalid orientation value") );
+
+    ::SendMessage(GetWinHwnd(GetClientWindow()), WM_MDITILE,
+                  orient == wxHORIZONTAL ? MDITILE_HORIZONTAL
+                                         : MDITILE_VERTICAL, 0);
 }
 
 void wxMDIParentFrame::ArrangeIcons()

@@ -213,7 +213,7 @@ void wxMDIParentFrame::Cascade()
     // TODO
 }
 
-void wxMDIParentFrame::Tile()
+void wxMDIParentFrame::Tile(wxOrientation WXUNUSED(orient))
 {
     // TODO
 }
