@@ -361,13 +361,13 @@ void MyFrame::OnListDrag( wxListEvent &event )
 void MyFrame::OnTreeSelected( wxTreeEvent &event )
 {
   wxDirInfo *info = (wxDirInfo*) event.m_item.m_data;
-  SetStatusText( info->GetPath() );
+  if (info) SetStatusText( info->GetPath() );
 };
 
 void MyFrame::OnTreeKeyDown( wxTreeEvent &event )
 {
   wxDirInfo *info = (wxDirInfo*) event.m_item.m_data;
-  m_rightFile->GoToDir( info->GetPath() );
+  if (info) m_rightFile->GoToDir( info->GetPath() );
 };
 
 //-----------------------------------------------------------------------------

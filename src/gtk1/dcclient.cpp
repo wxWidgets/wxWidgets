@@ -241,7 +241,7 @@ void wxPaintDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
     long x2 = XLOG2DEV(points[i+1].x + xoffset);
     long y1 = YLOG2DEV(points[i].y + yoffset);     // oh, what a waste
     long y2 = YLOG2DEV(points[i+1].y + yoffset);
-    gdk_draw_line( m_window, m_brushGC, x1, y1, x2, y2 );
+    gdk_draw_line( m_window, m_penGC, x1, y1, x2, y2 );
   };
 };
 
@@ -260,7 +260,7 @@ void wxPaintDC::DrawLines( wxList *points, long xoffset, long yoffset )
     long x2 = XLOG2DEV(npoint->x + xoffset);
     long y1 = YLOG2DEV(point->y + yoffset);    // and again...
     long y2 = YLOG2DEV(npoint->y + yoffset);
-    gdk_draw_line( m_window, m_brushGC, x1, y1, x2, y2 );
+    gdk_draw_line( m_window, m_penGC, x1, y1, x2, y2 );
     node = node->Next();
   };
 };

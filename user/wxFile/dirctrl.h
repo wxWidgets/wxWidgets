@@ -56,15 +56,16 @@ class wxDirCtrl: public wxTreeCtrl
 
     bool   m_showHidden;
     int    m_dragX,m_dragY;
+    long   m_rootId;
   
     wxDirCtrl(void);
     wxDirCtrl(wxWindow *parent, const wxWindowID id = -1, const wxString &dir = "/",
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             const long style = wxTR_HAS_BUTTONS,
-            const wxString& name = "wxTreeCtrl" )
-;
+            const wxString& name = "wxTreeCtrl" );
     void OnExpandItem( const wxTreeEvent &event );
+    void OnCollapseItem( const wxTreeEvent &event );
     void OnDeleteItem( const wxTreeEvent &event );
     void OnMouse( wxMouseEvent &event );
 

@@ -73,6 +73,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDirCtrl,wxTreeCtrl)
 
 BEGIN_EVENT_TABLE(wxDirCtrl,wxTreeCtrl)
   EVT_TREE_ITEM_EXPANDED      (-1, wxDirCtrl::OnExpandItem)
+  EVT_TREE_ITEM_COLLAPSED     (-1, wxDirCtrl::OnCollapseItem)
   EVT_TREE_DELETE_ITEM        (-1, wxDirCtrl::OnDeleteItem)
   EVT_MOUSE_EVENTS            (wxDirCtrl::OnMouse)
 END_EVENT_TABLE()
@@ -82,7 +83,7 @@ wxDirCtrl::wxDirCtrl(void)
   m_showHidden = FALSE;
 };
 
-wxDirCtrl::wxDirCtrl(wxWindow *parent, const wxWindowID id, const wxString &dir,
+wxDirCtrl::wxDirCtrl(wxWindow *parent, const wxWindowID id, const wxString &WXUNUSED(dir),
             const wxPoint& pos, const wxSize& size,
             const long style, const wxString& name )
  :
@@ -92,56 +93,67 @@ wxDirCtrl::wxDirCtrl(wxWindow *parent, const wxWindowID id, const wxString &dir,
 
   wxTreeItem item;
   item.m_mask = wxTREE_MASK_TEXT | wxTREE_MASK_CHILDREN | wxTREE_MASK_DATA;
-  item.m_text = "root.";
+  item.m_text = "Sections";
   item.m_children = 1;
+/*
   wxDirInfo *info = new wxDirInfo( dir );
   item.m_data = (long)info;
-  
-  long root_id = InsertItem( 0, item );
-  
-  info = new wxDirInfo( "/" );
-  item.m_text = info->GetName();
-  item.m_data = (long)info;
-  InsertItem( root_id, item );
-  
-  info = new wxDirInfo( "/home" );
-  item.m_text = info->GetName();
-  item.m_data = (long)info;
-  InsertItem( root_id, item );
-  
-  info = new wxDirInfo( "/mnt" );
-  item.m_text = info->GetName();
-  item.m_data = (long)info;
-  InsertItem( root_id, item );
-  
-  info = new wxDirInfo( "/usr" );
-  item.m_text = info->GetName();
-  item.m_data = (long)info;
-  InsertItem( root_id, item );
-  
-  info = new wxDirInfo( "/usr/X11R6" );
-  item.m_text = info->GetName();
-  item.m_data = (long)info;
-  InsertItem( root_id, item );
-  
-  info = new wxDirInfo( "/usr/local" );
-  item.m_text = info->GetName();
-  item.m_data = (long)info;
-  InsertItem( root_id, item );
-  
-  info = new wxDirInfo( "/var" );
-  item.m_text = info->GetName();
-  item.m_data = (long)info;
-  InsertItem( root_id, item );
-  
-  info = new wxDirInfo( "/proc" );
-  item.m_text = info->GetName();
-  item.m_data = (long)info;
-  InsertItem( root_id, item );
+*/  
+  m_rootId = InsertItem( 0, item );
 };
 
 void wxDirCtrl::OnExpandItem( const wxTreeEvent &event )
 {
+  if (event.m_item.m_itemId == m_rootId)
+  {
+    
+    wxTreeItem item;
+    item.m_mask = wxTREE_MASK_TEXT | wxTREE_MASK_CHILDREN | wxTREE_MASK_DATA;
+    item.m_children = 1;
+    
+    wxDirInfo *info = new wxDirInfo( "/" );
+    item.m_text = info->GetName();
+    item.m_data = (long)info;
+    InsertItem( m_rootId, item );
+  
+    info = new wxDirInfo( "/home" );
+    item.m_text = info->GetName();
+    item.m_data = (long)info;
+    InsertItem( m_rootId, item );
+  
+    info = new wxDirInfo( "/mnt" );
+    item.m_text = info->GetName();
+    item.m_data = (long)info;
+    InsertItem( m_rootId, item );
+  
+    info = new wxDirInfo( "/usr" );
+    item.m_text = info->GetName();
+    item.m_data = (long)info;
+    InsertItem( m_rootId, item );
+  
+    info = new wxDirInfo( "/usr/X11R6" );
+    item.m_text = info->GetName();
+    item.m_data = (long)info;
+    InsertItem( m_rootId, item );
+  
+    info = new wxDirInfo( "/usr/local" );
+    item.m_text = info->GetName();
+    item.m_data = (long)info;
+    InsertItem( m_rootId, item );
+  
+    info = new wxDirInfo( "/var" );
+    item.m_text = info->GetName();
+    item.m_data = (long)info;
+    InsertItem( m_rootId, item );
+  
+    info = new wxDirInfo( "/proc" );
+    item.m_text = info->GetName();
+    item.m_data = (long)info;
+    InsertItem( m_rootId, item );
+    
+    return;
+  };
+
   wxDirInfo *info = (wxDirInfo *)event.m_item.m_data;
   if (!info) return;
   
@@ -173,7 +185,7 @@ void wxDirCtrl::OnExpandItem( const wxTreeEvent &event )
     path = wxFindNextFile();
   };
 
-  for (int i = 0; i < slist.Count(); i++)
+  for (uint i = 0; i < slist.Count(); i++)
   {
     search = slist[i];
     search += "/*";
@@ -188,6 +200,11 @@ void wxDirCtrl::OnExpandItem( const wxTreeEvent &event )
     item.m_data = (long)child;
     InsertItem( event.m_item.m_itemId, item );
   };
+};
+
+void wxDirCtrl::OnCollapseItem( const wxTreeEvent &event )
+{
+  DeleteChildren( event.m_item.m_itemId );
 };
 
 void wxDirCtrl::OnDeleteItem( const wxTreeEvent &event )
