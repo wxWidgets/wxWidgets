@@ -28,6 +28,14 @@
 // wxTimer
 // ----------------------------------------------------------------------------
 
+// more readable flags for Start():
+
+// generate notifications periodically until the timer is stopped (default)
+#define wxTIMER_CONTINUOUS FALSE
+
+// only send the notification once and then stop the timer
+#define wxTIMER_ONE_SHOT TRUE
+
 // the interface of wxTimer class
 class WXDLLEXPORT wxTimerBase : public wxObject
 {
