@@ -46,10 +46,11 @@ public:
     {
         SetRange(min, max);
 
-        bool val = wxTextCtrl::Create(parent, id, value, pos, size, style,
-                                  wxDefaultValidator, name);
+        bool ok = wxTextCtrl::Create(parent, id, value, pos, size, style,
+                                     wxDefaultValidator, name);
         SetValue(initial);
-        return value;
+
+        return ok;
     }
 
     // accessors
