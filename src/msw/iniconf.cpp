@@ -300,13 +300,11 @@ bool wxIniConfig::DoReadString(const wxString& szKey, wxString *pstr) const
     GetProfileString(m_strGroup, strKey, "", szBuf, WXSIZEOF(szBuf));
   }
 
-  if ( ::IsEmpty(szBuf) ) {
+  if ( ::IsEmpty(szBuf) )
     return FALSE;
-  }
-  else {
-    *pstr = szBuf ;
-    return TRUE;
-  }
+
+  *pstr = szBuf;
+  return TRUE;
 }
 
 bool wxIniConfig::DoReadLong(const wxString& szKey, long *pl) const

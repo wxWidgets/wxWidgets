@@ -195,12 +195,17 @@ bool wxICOHandler::SaveFile(wxImage *image,
             return FALSE;
         }
         wxUint32 m_Size = cStream.GetSize();
+
+        // wxCountingOutputStream::Ok() always returns TRUE for now and this
+        // "if" provokes VC++ warnings in optimized build
+#if 0
         if (!cStream.Ok())
         {
             if (verbose)
                 wxLogError( _("ICO: Error calculating size of DIB .") );
             return FALSE;
         }
+#endif // 0
 
         m_offset = m_offset + sizeof(ICONDIRENTRY) ;
 
