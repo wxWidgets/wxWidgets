@@ -192,21 +192,21 @@ can send new commands without reconnecting.
 
 \begin{verbatim}
   wxFTP ftp;
-  wxInputStream *in\_stream;
+  wxInputStream *in_stream;
   char *data;
 
   ftp.Connect("a.host.domain");
-  ftp.ChDir("a\_directory");
-  in\_stream = ftp.GetInputStream("a\_file\_to\_get");
+  ftp.ChDir("a_directory");
+  in_stream = ftp.GetInputStream("a_file_to_get");
 
-  data = new char[in\_stream->StreamSize()];
+  data = new char[in_stream->StreamSize()];
 
-  in\_stream->Read(data, in\_stream->StreamSize());
-  if (in\_stream->LastError() != wxStream\_NOERROR) {
+  in_stream->Read(data, in_stream->StreamSize());
+  if (in_stream->LastError() != wxStream_NOERROR) {
     // Do something.
   }
 
-  delete in\_stream; /* Close the DATA connection */
+  delete in_stream; /* Close the DATA connection */
 
   ftp.Close(); /* Close the COMMAND connection */
 \end{verbatim}
