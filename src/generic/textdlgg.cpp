@@ -52,6 +52,20 @@
 
 static const int wxID_TEXT = 3000;
 
+// ---------------------------------------------------------------------------
+// macros
+// ---------------------------------------------------------------------------
+
+/* Macro for avoiding #ifdefs when value have to be different depending on size of
+   device we display on
+ */
+
+#if defined(__SMARTPHONE__)
+    #define wxLARGESMALL(large,small) small
+#else
+    #define wxLARGESMALL(large,small) large
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -84,19 +98,25 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
     // 1) text message
-    topsizer->Add( CreateTextSizer( message ), 0, wxALL, 10 );
+    topsizer->Add( CreateTextSizer( message ), 0, wxALL, wxLARGESMALL(10,0) );
 
     // 2) text ctrl
     m_textctrl = new wxTextCtrl(this, wxID_TEXT, value,
                                 wxDefaultPosition, wxSize(300, wxDefaultCoord),
                                 style & ~wxTextEntryDialogStyle);
-    topsizer->Add( m_textctrl, 1, wxEXPAND | wxLEFT|wxRIGHT, 15 );
+    topsizer->Add( m_textctrl, 1, wxEXPAND | wxLEFT|wxRIGHT, wxLARGESMALL(15,0) );
 
 #if wxUSE_VALIDATORS
     wxTextValidator validator( wxFILTER_NONE, &m_value );
     m_textctrl->SetValidator( validator );
 #endif
   // wxUSE_VALIDATORS
+
+#ifdef __SMARTPHONE__
+
+    SetRightMenu(wxID_CANCEL, _("Cancel"));
+
+#else // __SMARTPHONE__/!__SMARTPHONE__
 
 #if wxUSE_STATLINE
     // 3) static line
@@ -105,6 +125,8 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 
     // 4) buttons
     topsizer->Add( CreateButtonSizer( style ), 0, wxCENTRE | wxALL, 10 );
+
+#endif // !__SMARTPHONE__
 
     SetAutoLayout( true );
     SetSizer( topsizer );
