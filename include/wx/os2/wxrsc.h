@@ -27,22 +27,25 @@
 #define wxICON_SMALL_CDROM           119
 #define wxICON_SMALL_FLOPPY          120
 #define wxICON_SMALL_REMOVEABLE      121
+#define wxICON_SMALL_ERROR           122
+#define wxICON_SMALL_INFO            123
+#define wxICON_SMALL_WARNING         124
 
 /*
 // Bitmap Ids
 */
-#define wxDISABLE_BUTTON_BITMAP      122
-#define wxTICK_BITMAP                123
-#define wxCROSS_BITMAP               124
-#define wxCSQUERY_BITMAP             125
-#define wxBITMAP_STD_COLOURS         126
+#define wxDISABLE_BUTTON_BITMAP      125
+#define wxTICK_BITMAP                126
+#define wxCROSS_BITMAP               127
+#define wxCSQUERY_BITMAP             128
+#define wxBITMAP_STD_COLOURS         129
 
 /*
 // Dialog Ids -- must match enums in Toplevel.cpp
 */
-#define ID_RESIZEABLEDIALOG          127
-#define ID_CAPTIONDIALOG             128
-#define ID_NOCAPTIONDIALOG           129
+#define ID_RESIZEABLEDIALOG          130
+#define ID_CAPTIONDIALOG             131
+#define ID_NOCAPTIONDIALOG           132
 
-#define ID_WINDOW_MENU               130
+#define ID_WINDOW_MENU               133
 

@@ -74,7 +74,7 @@ public:
 
     // Copy constructors
     inline wxBitmap(const wxBitmap& rBitmap)
-      { Init(); Ref(rBitmap); }
+      { Init(); Ref(rBitmap); SetHandle(rBitmap.GetHandle()); }
 
     // Initialize with raw data
     wxBitmap( const char bits[]
@@ -223,13 +223,8 @@ public:
 
     inline bool IsMono(void) const { return m_bIsMono; }
 
-
     // An OS/2 version that probably doesn't do anything like the msw version
     wxBitmap GetBitmapForDC(wxDC& rDc) const;
-
-//    inline LONG GetId() const
-//      { return (GetBitmapData() ? GetBitmapData()->m_lId : 0L); }
-
 
 protected:
     // common part of all ctors

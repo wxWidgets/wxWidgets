@@ -56,6 +56,9 @@ ICON       wxICON_SMALL_DRIVE            PRELOAD "\\dev\\wx2\\wxwindows\\include
 ICON       wxICON_SMALL_CDROM            PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\cdrom.ico"
 ICON       wxICON_SMALL_FLOPPY           PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\floppy.ico"
 ICON       wxICON_SMALL_REMOVEABLE       PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\removble.ico"
+ICON       wxICON_SMALL_ERROR            PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\error.ico"
+ICON       wxICON_SMALL_INFO             PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\info.ico"
+ICON       wxICON_SMALL_WARNING          PRELOAD "\\dev\\wx2\\wxwindows\\include\\wx\\os2\\warning.ico"
 
 /*
 //////////////////////////////////////////////////////////////////////////////

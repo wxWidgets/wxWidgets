@@ -16,7 +16,7 @@
     #pragma interface "toplevel.h"
 #endif
 
-enum ETemplateID { kResizeableDialog = 127
+enum ETemplateID { kResizeableDialog = 130
                   ,kCaptionDialog
                   ,kNoCaptionDialog
                  };
