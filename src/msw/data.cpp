@@ -135,7 +135,7 @@ const wxChar *wxGetTextFromUserPromptStr = wxT("Input Text");
 const wxChar *wxMessageBoxCaptionStr = wxT("Message");
 const wxChar *wxFileSelectorPromptStr = wxT("Select a file");
 const wxChar *wxFileSelectorDefaultWildcardStr = wxT("*.*");
-const wxChar *wxTreeCtrlNameStr = wxT("treeCtrl");
+const wxChar WXDLLEXPORT *wxTreeCtrlNameStr = wxT("treeCtrl");
 const wxChar *wxDirDialogNameStr = wxT("wxDirCtrl");
 const wxChar *wxDirDialogDefaultFolderStr = wxT("/");
 
