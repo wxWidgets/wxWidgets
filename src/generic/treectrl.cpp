@@ -2193,8 +2193,6 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
     int flags = 0;
     wxGenericTreeItem *item = m_anchor->HitTest( wxPoint(x,y), this, flags);
 
-    bool onButton = flags & wxTREE_HITTEST_ONITEMBUTTON;
-
     if ( event.Dragging() && !m_isDragging )
     {
         if (m_dragCount == 0)
@@ -2330,7 +2328,7 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
                                 event.ControlDown(),
                                 is_multiple, extended_select, unselect_others);
 
-            if ( onButton )
+            if ( (flags & wxTREE_HITTEST_ONITEMBUTTON) && event.LeftDown() )
             {
                 Toggle( item );
                 if ( is_multiple )
