@@ -724,7 +724,7 @@ bool wxDbGridTableBase::Writeback() const
     return result;
 }
 
-#include <wx/arrimpl.cpp>
+#include "wx/arrimpl.cpp"
 
 WX_DEFINE_OBJARRAY(keyarray);
 
