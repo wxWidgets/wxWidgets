@@ -36,8 +36,8 @@ find difficult-to-detect memory leaks (objects are not
 deallocated), overwrites (writing past the end of your object) and
 underwrites (writing to memory in front of the object).
 
-If debugging mode is on and the symbol wxUSE\_GLOBAL\_MEMORY\_OPERATORS is set
-to 1 in setup.h, 'new' is defined to be:
+If debugging mode is on and the symbols wxUSE\_GLOBAL\_MEMORY\_OPERATORS and
+wxUSE\_DEBUG\_NEW\_ALWAYS are set to 1 in setup.h, 'new' is defined to be:
 
 {\small
 \begin{verbatim}
