@@ -153,7 +153,7 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 __renddll___depname =
 !ifeq SHARED 1
 __renddll___depname = &
-	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)250.dll
+	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)250_wat.dll
 !endif
 
 ### Variables: ###
@@ -175,7 +175,7 @@ RENDER_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_2) $(__OPTIMIZEFLAG) -bm &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
-	$(__DLLFLAG_p) -i=..\..\samples $(CXXFLAGS)
+	$(__DLLFLAG_p) -i=.\..\..\samples $(CXXFLAGS)
 RENDER_OBJECTS =  &
 	$(OBJS)\render_render.obj
 
@@ -195,7 +195,7 @@ $(OBJS)\render_render.obj :  .AUTODEPEND .\render.cpp
 	$(CXX) -zq -fo=$^@ $(RENDER_CXXFLAGS) $<
 
 $(OBJS)\render_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=..\..\samples $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) -i=.\..\..\samples $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -203,10 +203,10 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\render.exe del $(OBJS)\render.exe
-	-if exist $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)250.dll del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)250.dll
+	-if exist $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)250_wat.dll del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)250_wat.dll
 
 !ifeq SHARED 1
-$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)250.dll :  $(RENDDLL_OBJECTS)
+$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)250_wat.dll :  $(RENDDLL_OBJECTS)
 	@%create $(OBJS)\renddll.lbc
 	@%append $(OBJS)\renddll.lbc option quiet
 	@%append $(OBJS)\renddll.lbc name $^@

@@ -441,7 +441,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
     <define-rule name="wx-base-plugin" extends="module">
         <template>
             <dllname>
-                $(id)$(addPrefixIfNotEmpty('_',WXNAMESUFFIX))$(PLUGIN_VERSION)
+                $(id)$(addPrefixIfNotEmpty('_',WXNAMESUFFIX))$(PLUGIN_VERSION)$(WXCOMPILER)
             </dllname>
             <define>WXUSINGDLL</define>
             <define>wxUSE_GUI=0</define>
@@ -451,7 +451,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
     <define-rule name="wx-gui-plugin" extends="module">
         <template template="wx">
             <dllname>
-                $(id)_$(PORTNAME)$(WXUNIVNAME)$(WXNAMESUFFIX)$(PLUGIN_VERSION)
+                $(id)_$(PORTNAME)$(WXUNIVNAME)$(WXNAMESUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
             </dllname>
             <define>WXUSINGDLL</define>
         </template>

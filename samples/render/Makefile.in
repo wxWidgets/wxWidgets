@@ -51,6 +51,7 @@ RENDER_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 RENDER_OBJECTS =  \
 	$(__render___win32rc) \
 	render_render.o
+WX_VERSION = 2.5.0
 
 ### Conditionally set variables: ###
 
@@ -61,6 +62,7 @@ RENDER_OBJECTS =  \
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
+@COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
 @COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT@WXDEBUGFLAG = d
 @COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
 @COND_UNICODE_1@WXUNICODEFLAG = u
@@ -132,7 +134,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = -d __WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
 COND_SHARED_1___renddll___depname = \
-	$(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(PLUGIN_VERSION).$(SO_SUFFIX_MODULE)
+	$(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(PLUGIN_VERSION)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 @COND_SHARED_1@__renddll___depname = $(COND_SHARED_1___renddll___depname)
 @COND_PLATFORM_MAC_1@__render___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__render___mac_setfilecmd = \
@@ -149,7 +151,7 @@ clean:
 	rm -f ./*.o
 	rm -f render$(EXEEXT)
 	rm -rf render.app
-	rm -f $(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(PLUGIN_VERSION).$(SO_SUFFIX_MODULE)
+	rm -f $(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(PLUGIN_VERSION)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -158,7 +160,7 @@ install: all
 
 install-strip: install
 
-@COND_SHARED_1@$(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(PLUGIN_VERSION).$(SO_SUFFIX_MODULE): $(RENDDLL_OBJECTS)
+@COND_SHARED_1@$(DLLPREFIX_MODULE)renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(PLUGIN_VERSION)$(WXCOMPILER).$(SO_SUFFIX_MODULE): $(RENDDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_MODULE_CXX) $@ $(RENDDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 
 renddll_renddll.o: $(srcdir)/renddll.cpp
@@ -178,7 +180,7 @@ render.app/Contents: render$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDI
 	
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
 	-e "s/EXECUTABLE/render/" \
-	-e "s/VERSION/2.5.0/" \
+	-e "s/VERSION/$(WX_VERSION)/" \
 	$(top_srcdir)/src/mac/Info.plist.in >render.app/Contents/Info.plist
 	
 	

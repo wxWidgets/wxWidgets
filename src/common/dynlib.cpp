@@ -466,6 +466,19 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
 #undef wxDLLVER
 #undef WXSTRINGIZE
 
+#ifdef __WINDOWS__
+    // Add compiler identification:
+    #if defined(__GNUG__)
+        suffix << _T("_gcc");
+    #elif defined(__VISUALC__)
+        suffix << _T("_vc");
+    #elif defined(__WATCOMC__)
+        suffix << _T("_wat");
+    #elif defined(__BORLANDC__)
+        suffix << _T("_bcc");
+    #endif
+#endif
+
     return CanonicalizeName(name + suffix, wxDL_MODULE);
 }
     
