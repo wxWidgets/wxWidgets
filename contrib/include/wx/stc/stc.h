@@ -1232,6 +1232,14 @@ public:
     // Retrieve the point in the window where a position is displayed.
     wxPoint PointFromPosition(int pos);
 
+
+    // Scroll enough to make the given line visible
+    void ScrollToLine(int line);
+
+
+    // Scroll enough to make the given column visible
+    void ScrollToColumn(int column);
+
 //----------------------------------------------------------------------
 
 
@@ -1377,6 +1385,7 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_MACRORECORD(id, fn) { wxEVT_STC_MACRORECORD, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
 #define EVT_STC_MARGINCLICK(id, fn) { wxEVT_STC_MARGINCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
 #define EVT_STC_NEEDSHOWN(id, fn) { wxEVT_STC_NEEDSHOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
+#define EVT_STC_POSCHANGED(id, fn) { wxEVT_STC_POSCHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL },
 
 #endif
 

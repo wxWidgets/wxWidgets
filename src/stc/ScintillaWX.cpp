@@ -315,6 +315,11 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
         FullPaint();
     }
     paintState = notPainting;
+#ifdef __WXGTK__
+    // On wxGTK the editor window paints can overwrite the listbox...
+    if (ac.Active())
+        ((wxWindow*)ac.lb.GetID())->Refresh(TRUE);
+#endif
 }
 
 
