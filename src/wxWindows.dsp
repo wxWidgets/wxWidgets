@@ -1659,6 +1659,10 @@ SOURCE=.\xrc\xh_combo.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xrc\xh_datectrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xrc\xh_dlg.cpp
 # End Source File
 # Begin Source File

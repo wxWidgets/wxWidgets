@@ -3,7 +3,7 @@
 
 <makefile>
 
-    <requires version="0.1.5"/>
+    <requires version="0.1.6"/>
 
     <!-- bakefile modules we need: -->
     <using module="datafiles"/>
@@ -483,13 +483,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
                     $(WXTOPDIR)src/msw/dummy.cpp
                 </precomp-headers-gen>
             </if>
-            
-            <!-- FIXME: temporary fix for bkl-0.1.5 bug, remove <if> when
-                        bkl-0.1.6 is released -->
-            <if cond="FORMAT in ['dmars','dmars_smake']">
-                <precomp-headers-location>$(WXTOPDIR)include</precomp-headers-location>
-            </if>
-            
+            <precomp-headers-location>$(WXTOPDIR)include</precomp-headers-location>
             <precomp-headers-header>wx/wxprec.h</precomp-headers-header>
             <precomp-headers>on</precomp-headers>
             <precomp-headers-file>wxprec_$(id)</precomp-headers-file>
