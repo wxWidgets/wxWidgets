@@ -25,6 +25,8 @@
     #include "../sample.xpm"
 #endif
 
+#include "smile.xpm"
+
 #include "wx/taskbar.h"
 #include "tbtest.h"
 
@@ -91,7 +93,6 @@ void MyDialog::Init(void)
   (new wxButton(this, wxID_OK, _T("Hide me"), wxPoint(100, 230), wxSize(80, 25)))->SetDefault();
   Centre(wxBOTH);
    
-  
   m_taskBarIcon = new MyTaskBarIcon();
   if (!m_taskBarIcon->SetIcon(wxICON(sample), wxT("wxTaskBarIcon Sample")))
         wxMessageBox(wxT("Could not set icon."));
@@ -130,12 +131,10 @@ void MyTaskBarIcon::OnMenuExit(wxCommandEvent& )
 
 void MyTaskBarIcon::OnMenuSetNewIcon(wxCommandEvent&)
 {
-#ifdef __WXMSW__
-    wxIcon icon(wxT("wxDEFAULT_FRAME"));
+    wxIcon icon(smile_xpm);
 
-    if (!SetIcon(icon, wxT("wxTaskBarIcon Sample")))
+    if (!SetIcon(icon, wxT("wxTaskBarIcon Sample - a different icon")))
         wxMessageBox(wxT("Could not set new icon."));
-#endif
 }
 
 // Overridables
@@ -144,9 +143,7 @@ void MyTaskBarIcon::OnRButtonUp(wxEvent&)
     wxMenu      menu;
 
     menu.Append(PU_RESTORE, _T("&Restore TBTest"));
-#ifdef __WXMSW__
     menu.Append(PU_NEW_ICON,_T("&Set New Icon"));
-#endif
     menu.Append(PU_EXIT,    _T("E&xit"));
 
     PopupMenu(&menu);
@@ -156,7 +153,3 @@ void MyTaskBarIcon::OnLButtonDClick(wxEvent&)
 {
     dialog->Show(true);
 }
-
-
-
-
