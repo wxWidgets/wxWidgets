@@ -106,6 +106,7 @@ class TestListCtrlPanel(wx.Panel, listmix.ColumnSorterMixin):
                                  #| wx.LC_NO_HEADER
                                  #| wx.LC_VRULES
                                  #| wx.LC_HRULES
+                                 #| wx.LC_SINGLE_SEL
                                  )
         
         self.list.SetImageList(self.il, wx.IMAGE_LIST_SMALL)
