@@ -317,7 +317,7 @@ static const char * icon8_xpm[] = {
 
 #if defined(__DOS__)
 
-static bool wxIsDriveAvailable(const wxString dirName)
+bool wxIsDriveAvailable(const wxString& dirName)
 {
     if ( dirName.Len() == 3 && dirName[1u] == wxT(':') )
     {
@@ -363,7 +363,7 @@ int setdrive(int drive)
 #endif // !GNUWIN32
 }
 
-static bool wxIsDriveAvailable(const wxString dirName)
+bool wxIsDriveAvailable(const wxString& dirName)
 {
 #ifdef __WIN32__
     UINT errorMode = SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);

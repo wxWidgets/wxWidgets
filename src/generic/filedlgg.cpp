@@ -86,20 +86,6 @@
 
 class wxFileData : public wxObject
 {
-private:
-    wxString m_name;
-    wxString m_fileName;
-    long     m_size;
-    int      m_hour;
-    int      m_minute;
-    int      m_year;
-    int      m_month;
-    int      m_day;
-    wxString m_permissions;
-    bool     m_isDir;
-    bool     m_isLink;
-    bool     m_isExe;
-
 public:
     wxFileData() { }
     wxFileData( const wxString &name, const wxString &fname );
@@ -115,6 +101,19 @@ public:
     void SetNewName( const wxString &name, const wxString &fname );
 
 private:
+    wxString m_name;
+    wxString m_fileName;
+    long     m_size;
+    int      m_hour;
+    int      m_minute;
+    int      m_year;
+    int      m_month;
+    int      m_day;
+    wxString m_permissions;
+    bool     m_isDir;
+    bool     m_isLink;
+    bool     m_isExe;
+
     DECLARE_DYNAMIC_CLASS(wxFileData);
 };
 
@@ -124,11 +123,6 @@ private:
 
 class wxFileCtrl : public wxListCtrl
 {
-private:
-    wxString      m_dirName;
-    bool          m_showHidden;
-    wxString      m_wild;
-
 public:
     wxFileCtrl();
     wxFileCtrl( wxWindow *win,
@@ -156,8 +150,21 @@ public:
     void OnListDeleteItem( wxListEvent &event );
     void OnListDeleteAllItems( wxListEvent &event );
     void OnListEndLabelEdit( wxListEvent &event );
+    
+    // Associate commonly used UI controls with wxFileCtrl so that they can be
+    // disabled when they cannot be used (e.g. can't go to parent directory
+    // if wxFileCtrl already is in the root dir):
+    void SetGoToParentControl(wxWindow *ctrl) { m_goToParentControl = ctrl; }
+    void SetNewDirControl(wxWindow *ctrl) { m_newDirControl = ctrl; }
 
 private:
+    wxString      m_dirName;
+    bool          m_showHidden;
+    wxString      m_wild;
+    
+    wxWindow     *m_goToParentControl;
+    wxWindow     *m_newDirControl;
+
     DECLARE_DYNAMIC_CLASS(wxFileCtrl);
     DECLARE_EVENT_TABLE()
 };
@@ -383,6 +390,10 @@ int ListCompare( long data1, long data2, long WXUNUSED(data) )
 #define IsTopMostDir(dir)   (dir.IsEmpty())
 #endif
 
+#if defined(__DOS__) || defined(__WINDOWS__)
+extern bool wxIsDriveAvailable(const wxString& dirName);
+#endif
+
 //-----------------------------------------------------------------------------
 //  wxFileData
 //-----------------------------------------------------------------------------
@@ -393,9 +404,21 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
 {
     m_name = name;
     m_fileName = fname;
+    
+#if defined(__DOS__) || defined(__WINDOWS__)
+    // VS: In case the file is root directory of a volume (e.g. "C:"),
+    //     we don't want it stat()ed, since the drive may not be in:
+    if (name.length() == 2 && name[1u] == wxT(':'))
+    {
+        m_isDir = TRUE;
+        m_isExe = m_isLink = FALSE;
+        m_size = 0;
+        return;
+    }
+#endif
 
     struct stat buff;
-    stat( m_fileName.fn_str(), &buff );
+    wxStat( m_fileName.fn_str(), &buff );
 
 #if defined(__UNIX__) && (!defined( __EMX__ ) && !defined(__VMS))
     struct stat lbuff;
@@ -548,7 +571,7 @@ void wxFileData::MakeItem( wxListItem &item )
     else if (IsExe())
         item.m_image = FI_EXECUTABLE;
     else if (m_name.Find(wxT('.')) != wxNOT_FOUND)
-        item.m_image = g_IconsTable -> GetIconID(m_name.AfterLast(wxT('.')));
+        item.m_image = g_IconsTable->GetIconID(m_name.AfterLast(wxT('.')));
     else
         item.m_image = FI_UNKNOWN;
 
@@ -592,9 +615,11 @@ wxFileCtrl::wxFileCtrl(wxWindow *win, wxWindowID id,
 {
     if (! g_IconsTable) 
         g_IconsTable = new wxFileIconsTable;
-    wxImageList *imageList = g_IconsTable -> GetImageList();
+    wxImageList *imageList = g_IconsTable->GetImageList();
 
     SetImageList( imageList, wxIMAGE_LIST_SMALL );
+
+    m_goToParentControl = m_newDirControl = NULL;
 
     m_dirName = dirName;
     m_wild = wild;
@@ -652,6 +677,8 @@ long wxFileCtrl::Add( wxFileData *fd, wxListItem &item )
 
 void wxFileCtrl::Update()
 {
+    wxBusyCursor bcur; // this may take a while...
+    
     long my_style = GetWindowStyleFlag();
     int name_col_width = 0;
     if (my_style & wxLC_REPORT)
@@ -678,15 +705,21 @@ void wxFileCtrl::Update()
     item.m_col = 0;
 
 #if defined(__DOS__) || defined(__WINDOWS__)
-    if ( m_dirName.IsEmpty() )
+    if ( IsTopMostDir(m_dirName) )
     {   
         // Pseudo-directory with all available drives listed...
-        fd = new wxFileData( wxT("C:"), "C:" );
-        Add( fd, item );
-        item.m_itemId++;
-        fd = new wxFileData( wxT("D:"), "D:" );
-        Add( fd, item );
-        item.m_itemId++;
+        for (int drive = 1; drive <= 26; drive++)
+        {
+            wxString path;
+            path.Printf(wxT("%c:\\"), (char)(drive + 'A' - 1));
+            if ( wxIsDriveAvailable(path) )
+            {
+                path.RemoveLast();
+                fd = new wxFileData(path, path);
+                Add(fd, item);
+                item.m_itemId++;
+            }
+        }
     }
     else
 #endif
@@ -754,6 +787,14 @@ void wxFileCtrl::Update()
        SetColumnWidth(2, wxLIST_AUTOSIZE);
        SetColumnWidth(3, wxLIST_AUTOSIZE);
     }
+    
+    // Finally, enable/disable context-dependent controls:
+    if ( m_goToParentControl )
+        m_goToParentControl->Enable(!IsTopMostDir(m_dirName));
+#if defined(__DOS__) || defined(__WINDOWS__)
+    if ( m_newDirControl )
+        m_newDirControl->Enable(!IsTopMostDir(m_dirName));
+#endif
 }
 
 void wxFileCtrl::SetWild( const wxString &wild )
@@ -959,7 +1000,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
                  const wxPoint& pos ) :
   wxDialog( parent, -1, message, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
-    wxBeginBusyCursor();
+    wxBusyCursor bcur;
 
     if (wxConfig::Get(FALSE))
     {
@@ -1039,13 +1080,14 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
     buttonsizer->Add( 30, 5, 1 );
 
-    but = new wxBitmapButton( this, ID_UP_DIR, wxBitmap( dir_up_xpm ) );
+    wxWindow *butDirUp = 
+        new wxBitmapButton( this, ID_UP_DIR, wxBitmap( dir_up_xpm ) );
 #if wxUSE_TOOLTIPS
-    but->SetToolTip( _("Go to parent directory") );
+    butDirUp->SetToolTip( _("Go to parent directory") );
 #endif
-    buttonsizer->Add( but, 0, wxALL, 5 );
+    buttonsizer->Add( butDirUp, 0, wxALL, 5 );
 
-#ifndef __DOS__ // VS: Home directory is senseless in MS-DOS...
+#ifndef __DOS__ // VS: Home directory is meaningless in MS-DOS...
     but = new wxBitmapButton( this, ID_PARENT_DIR, wxBitmap(home_xpm) );
 #if wxUSE_TOOLTIPS
     but->SetToolTip( _("Go to home directory") );
@@ -1055,11 +1097,12 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     buttonsizer->Add( 20, 20 );
 #endif //!__DOS__
 
-    but = new wxBitmapButton( this, ID_NEW_DIR, wxBitmap(new_dir_xpm) );
+    wxWindow *butNewDir = 
+        new wxBitmapButton( this, ID_NEW_DIR, wxBitmap(new_dir_xpm) );
 #if wxUSE_TOOLTIPS
-    but->SetToolTip( _("Create new directory") );
+    butNewDir->SetToolTip( _("Create new directory") );
 #endif
-    buttonsizer->Add( but, 0, wxALL, 5 );
+    buttonsizer->Add( butNewDir, 0, wxALL, 5 );
 
     mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
 
@@ -1075,7 +1118,10 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     else
         m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, firstWild, wxDefaultPosition,
                                  wxSize(540,200), s_lastViewStyle | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
-    m_list -> ShowHidden(s_lastShowHidden);
+    m_list->ShowHidden(s_lastShowHidden);
+    m_list->SetNewDirControl(butNewDir);
+    m_list->SetGoToParentControl(butDirUp);
+    
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
 
     wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
@@ -1116,8 +1162,6 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     else
 */
         m_text->SetFocus();
-
-    wxEndBusyCursor();
 }
 
 wxFileDialog::~wxFileDialog()
