@@ -204,7 +204,7 @@ OTHER CHANGES
 
 All:
 
-- Norvegian (Bokmål) translation added (Hans F. Nordhaug)
+- Norwegian (Bokmål) translation added (Hans F. Nordhaug)
 - wxDynamicLibrary::HasSymbol() added
 
 All (GUI):
