@@ -249,6 +249,10 @@ class Palette(GDIObject):
         """GetRGB(self, int pixel) -> (R,G,B)"""
         return _gdi_.Palette_GetRGB(*args, **kwargs)
 
+    def GetColoursCount(*args, **kwargs):
+        """GetColoursCount(self) -> int"""
+        return _gdi_.Palette_GetColoursCount(*args, **kwargs)
+
     def Ok(*args, **kwargs):
         """Ok(self) -> bool"""
         return _gdi_.Palette_Ok(*args, **kwargs)
@@ -3639,31 +3643,13 @@ class DC(_core.Object):
         """
         return _gdi_.DC_SetLogicalFunction(*args, **kwargs)
 
-    def SetOptimization(*args, **kwargs):
-        """
-        SetOptimization(self, bool optimize)
+    def SetOptimization(self, optimize):
+        pass
+    def GetOptimization(self):
+        return False
 
-        If *optimize* is true this function sets optimization mode on. This
-        currently means that under X, the device context will not try to set a
-        pen or brush property if it is known to be set already. This approach
-        can fall down if non-wxWidgets code is using the same device context
-        or window, for example when the window is a panel on which the
-        windowing system draws panel items. The wxWidgets device context
-        'memory' will now be out of step with reality.
-
-        Setting optimization off, drawing, then setting it back on again, is a
-        trick that must occasionally be employed.
-        """
-        return _gdi_.DC_SetOptimization(*args, **kwargs)
-
-    def GetOptimization(*args, **kwargs):
-        """
-        GetOptimization(self) -> bool
-
-        Returns true if device context optimization is on. See
-        `SetOptimization` for .
-        """
-        return _gdi_.DC_GetOptimization(*args, **kwargs)
+    SetOptimization = wx._deprecated(SetOptimization)
+    GetOptimization = wx._deprecated(GetOptimization)
 
     def CalcBoundingBox(*args, **kwargs):
         """

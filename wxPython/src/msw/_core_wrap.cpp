@@ -4581,7 +4581,7 @@ static PyObject *_wrap_Rect_Intersect(PyObject *, PyObject *args, PyObject *kwar
     PyObject *resultobj;
     wxRect *arg1 = (wxRect *) 0 ;
     wxRect *arg2 = 0 ;
-    wxRect *result;
+    wxRect result;
     wxRect temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -4598,15 +4598,53 @@ static PyObject *_wrap_Rect_Intersect(PyObject *, PyObject *args, PyObject *kwar
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxRect &_result_ref = (arg1)->Intersect((wxRect const &)*arg2);
-            result = (wxRect *) &_result_ref;
-        }
+        result = (arg1)->Intersect((wxRect const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxRect, 0);
+    {
+        wxRect * resultptr;
+        resultptr = new wxRect((wxRect &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxRect, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Rect_Union(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRect *arg1 = (wxRect *) 0 ;
+    wxRect *arg2 = 0 ;
+    wxRect result;
+    wxRect temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "rect", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Rect_Union",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxRect,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (arg1)->Union((wxRect const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxRect * resultptr;
+        resultptr = new wxRect((wxRect &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxRect, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -41485,6 +41523,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Rect_OffsetXY", (PyCFunction) _wrap_Rect_OffsetXY, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect_Offset", (PyCFunction) _wrap_Rect_Offset, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect_Intersect", (PyCFunction) _wrap_Rect_Intersect, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Rect_Union", (PyCFunction) _wrap_Rect_Union, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect___add__", (PyCFunction) _wrap_Rect___add__, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect___iadd__", (PyCFunction) _wrap_Rect___iadd__, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Rect___eq__", (PyCFunction) _wrap_Rect___eq__, METH_VARARGS | METH_KEYWORDS, NULL },

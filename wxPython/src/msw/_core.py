@@ -1160,7 +1160,7 @@ class Rect(object):
         Inflate(self, int dx, int dy) -> Rect
 
         Increase the rectangle size by dx in x direction and dy in y
-        direction. Both or one of) parameters may be negative to decrease the
+        direction. Both (or one of) parameters may be negative to decrease the
         rectangle size.
         """
         return _core_.Rect_Inflate(*args, **kwargs)
@@ -1170,7 +1170,7 @@ class Rect(object):
         Deflate(self, int dx, int dy) -> Rect
 
         Decrease the rectangle size by dx in x direction and dy in y
-        direction. Both or one of) parameters may be negative to increase the
+        direction. Both (or one of) parameters may be negative to increase the
         rectngle size. This method is the opposite of Inflate.
         """
         return _core_.Rect_Deflate(*args, **kwargs)
@@ -1197,9 +1197,17 @@ class Rect(object):
         """
         Intersect(self, Rect rect) -> Rect
 
-        Return the intersectsion of this rectangle and rect.
+        Returns the intersectsion of this rectangle and rect.
         """
         return _core_.Rect_Intersect(*args, **kwargs)
+
+    def Union(*args, **kwargs):
+        """
+        Union(self, Rect rect) -> Rect
+
+        Returns the union of this rectangle and rect.
+        """
+        return _core_.Rect_Union(*args, **kwargs)
 
     def __add__(*args, **kwargs):
         """

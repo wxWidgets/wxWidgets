@@ -1663,6 +1663,56 @@ static PyObject *_wrap_Panel_InitDialog(PyObject *, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_Panel_SetFocus(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPanel *arg1 = (wxPanel *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Panel_SetFocus",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPanel,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetFocus();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Panel_SetFocusIgnoringChildren(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPanel *arg1 = (wxPanel *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Panel_SetFocusIgnoringChildren",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPanel,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetFocusIgnoringChildren();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Panel_GetClassDefaultAttributes(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
@@ -6661,6 +6711,61 @@ static PyObject *_wrap_SplitterWindow_GetSashPosition(PyObject *, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_From_int((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_SplitterWindow_SetSashGravity(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSplitterWindow *arg1 = (wxSplitterWindow *) 0 ;
+    double arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "gravity", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:SplitterWindow_SetSashGravity",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSplitterWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (double)SWIG_As_double(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetSashGravity(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_SplitterWindow_GetSashGravity(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSplitterWindow *arg1 = (wxSplitterWindow *) 0 ;
+    double result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:SplitterWindow_GetSashGravity",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSplitterWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (double)((wxSplitterWindow const *)arg1)->GetSashGravity();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_From_double((double)result);
     return resultobj;
     fail:
     return NULL;
@@ -15824,18 +15929,20 @@ static PyObject *_wrap_MDIChildFrame_Activate(PyObject *, PyObject *args, PyObje
 static PyObject *_wrap_MDIChildFrame_Maximize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMDIChildFrame *arg1 = (wxMDIChildFrame *) 0 ;
-    bool arg2 ;
+    bool arg2 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
         (char *) "self",(char *) "maximize", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MDIChildFrame_Maximize",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:MDIChildFrame_Maximize",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMDIChildFrame,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool)SWIG_As_bool(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (bool)SWIG_As_bool(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Maximize(arg2);
@@ -25555,6 +25662,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PrePanel", (PyCFunction) _wrap_new_PrePanel, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Panel_Create", (PyCFunction) _wrap_Panel_Create, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Panel_InitDialog", (PyCFunction) _wrap_Panel_InitDialog, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Panel_SetFocus", (PyCFunction) _wrap_Panel_SetFocus, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Panel_SetFocusIgnoringChildren", (PyCFunction) _wrap_Panel_SetFocusIgnoringChildren, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Panel_GetClassDefaultAttributes", (PyCFunction) _wrap_Panel_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Panel_swigregister", Panel_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_ScrolledWindow", (PyCFunction) _wrap_new_ScrolledWindow, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -25686,6 +25795,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SplitterWindow_GetBorderSize", (PyCFunction) _wrap_SplitterWindow_GetBorderSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SplitterWindow_SetSashPosition", (PyCFunction) _wrap_SplitterWindow_SetSashPosition, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SplitterWindow_GetSashPosition", (PyCFunction) _wrap_SplitterWindow_GetSashPosition, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"SplitterWindow_SetSashGravity", (PyCFunction) _wrap_SplitterWindow_SetSashGravity, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"SplitterWindow_GetSashGravity", (PyCFunction) _wrap_SplitterWindow_GetSashGravity, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SplitterWindow_SetMinimumPaneSize", (PyCFunction) _wrap_SplitterWindow_SetMinimumPaneSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SplitterWindow_GetMinimumPaneSize", (PyCFunction) _wrap_SplitterWindow_GetMinimumPaneSize, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SplitterWindow_SashHitTest", (PyCFunction) _wrap_SplitterWindow_SashHitTest, METH_VARARGS | METH_KEYWORDS, NULL },
