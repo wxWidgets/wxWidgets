@@ -509,6 +509,10 @@ extern wxSize WXDLLEXPORT wxGetDisplaySize();
 extern void WXDLLEXPORT wxDisplaySizeMM(int *width, int *height);
 extern wxSize WXDLLEXPORT wxGetDisplaySizeMM();
 
+// Get position and size of the display workarea
+extern void WXDLLEXPORT wxClientDisplayRect(int *x, int *y, int *width, int *height);
+extern wxRect WXDLLEXPORT wxGetClientDisplayRect();
+
 // set global cursor
 extern void WXDLLEXPORT wxSetCursor(const wxCursor& cursor);
 

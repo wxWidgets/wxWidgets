@@ -36,9 +36,9 @@
      * field named "explicit" - which is, of course, an error for a C++
      * compiler. To be on the safe side, just redefine it everywhere. */
     #define explicit __wx_explicit
-  
+
     #include "X11/XKBlib.h"
-  
+
     #undef explicit
 #endif // HAVE_X11_XKBLIB_H
 
@@ -94,6 +94,17 @@ void wxDisplaySizeMM( int *width, int *height )
     if (height) *height = gdk_screen_height_mm();
 }
 
+void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+{
+    // This is supposed to return desktop dimensions minus any window
+    // manager panels, menus, taskbars, etc.  If there is a way to do that
+    // for this platform please fix this function, otherwise it defaults
+    // to the entire desktop.
+    if (x) *x = 0;
+    if (y) *y = 0;
+    wxDisplaySize(width, height);
+}
+
 void wxGetMousePosition( int* x, int* y )
 {
     gdk_window_get_pointer( (GdkWindow*) NULL, x, y, (GdkModifierType*) NULL );
@@ -136,7 +147,7 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
 
    // This has to come after gdk_input_remove() or we will
    // occasionally receive multiple callbacks with corrupt data
-   // pointers. (KB) 
+   // pointers. (KB)
    wxHandleProcessTermination(proc_data);
 }
 

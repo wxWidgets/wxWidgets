@@ -208,7 +208,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
   if (succ)
   {
     *value = (int)strtol(s, NULL, 10);
-    delete[] s; 
+    delete[] s;
     return TRUE;
   }
   else return FALSE;
@@ -239,7 +239,7 @@ void wxEndBusyCursor()
 {
   if (wxBusyCursorCount == 0)
     return;
-    
+
   wxBusyCursorCount --;
   if (wxBusyCursorCount == 0)
   {
@@ -258,7 +258,7 @@ void wxEndBusyCursor()
 bool wxIsBusy()
 {
   return (wxBusyCursorCount > 0);
-}    
+}
 
 #ifndef __UNIX__
 wxString wxMacFindFolder( short 					vol,
@@ -268,7 +268,7 @@ wxString wxMacFindFolder( short 					vol,
 	short 		vRefNum  ;
 	long 		dirID ;
 	wxString strDir ;
-		
+
 	if ( FindFolder( vol, folderType, createFolder, &vRefNum, &dirID) == noErr)
 	{
 		FSSpec file ;
@@ -300,7 +300,7 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 void wxGetMousePosition( int* x, int* y )
 {
     Point pt ;
-    
+
     GetMouse( &pt ) ;
     LocalToGlobal( &pt ) ;
     *x = pt.h ;
@@ -316,7 +316,7 @@ bool wxColourDisplay()
 // Returns depth of screen
 int wxDisplayDepth()
 {
-	Rect globRect ; 
+	Rect globRect ;
 	SetRect(&globRect, -32760, -32760, 32760, 32760);
 	GDHandle	theMaxDevice;
 
@@ -324,7 +324,7 @@ int wxDisplayDepth()
 	theMaxDevice = GetMaxDevice(&globRect);
 	if (theMaxDevice != nil)
 		theDepth = (**(**theMaxDevice).gdPMap).pixelSize;
-		
+
 	return theDepth ;
 }
 
@@ -335,7 +335,7 @@ void wxDisplaySize(int *width, int *height)
 	GetQDGlobalsScreenBits( &screenBits );
 
     *width = screenBits.bounds.right - screenBits.bounds.left  ;
-    *height = screenBits.bounds.bottom - screenBits.bounds.top ; 
+    *height = screenBits.bounds.bottom - screenBits.bounds.top ;
 #if TARGET_CARBON
  	SInt16 mheight ;
  	GetThemeMenuBarHeight( &mheight ) ;
@@ -348,6 +348,17 @@ void wxDisplaySize(int *width, int *height)
 void wxDisplaySizeMM(int *width, int *height)
 {
    wxDisplaySize(width, height);
+}
+
+void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+{
+    // This is supposed to return desktop dimensions minus any window
+    // manager panels, menus, taskbars, etc.  If there is a way to do that
+    // for this platform please fix this function, otherwise it defaults
+    // to the entire desktop.
+    if (x) *x = 0;
+    if (y) *y = 0;
+    wxDisplaySize(width, height);
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)

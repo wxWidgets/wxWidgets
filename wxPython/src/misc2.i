@@ -114,11 +114,14 @@ bool wxColourDisplay();
 int wxDisplayDepth();
 int wxGetDisplayDepth();
 
-void wxDisplaySize(int* OUTPUT, int* OUTPUT);
+void   wxDisplaySize(int* OUTPUT, int* OUTPUT);
 wxSize wxGetDisplaySize();
 
-void wxDisplaySizeMM(int* OUTPUT, int* OUTPUT);
+void   wxDisplaySizeMM(int* OUTPUT, int* OUTPUT);
 wxSize wxGetDisplaySizeMM();
+
+void   wxClientDisplayRect(int *OUTPUT, int *OUTPUT, int *OUTPUT, int *OUTPUT);
+wxRect wxGetClientDisplayRect();
 
 void wxSetCursor(wxCursor& cursor);
 

@@ -723,6 +723,13 @@ wxSize wxGetDisplaySize()
     return wxSize(x, y);
 }
 
+wxRect wxGetClientDisplayRect()
+{
+    int x, y, width, height;
+    wxClientDisplayRect(&x, &y, &width, &height);  // call plat-specific version
+    return wxRect(x, y, width, height);
+}
+
 wxSize wxGetDisplaySizeMM()
 {
     int x, y;

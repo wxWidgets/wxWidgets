@@ -38,7 +38,7 @@
 
 // In some mingws there is a missing extern "C" int the winsock header,
 // so we put it here just to be safe. Note that this must appear _before_
-// #include "wx/msw/private.h" which itself includes <windows.h>, as this 
+// #include "wx/msw/private.h" which itself includes <windows.h>, as this
 // one in turn includes <winsock.h> unless we define WIN32_LEAN_AND_MEAN.
 //
 #if defined(__WIN32__) && !defined(__TWIN32__) && ! (defined(__GNUWIN32__) && !defined(__MINGW32__))
@@ -617,7 +617,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
             *majorVsn = info.dwMajorVersion;
         if (minorVsn)
             *minorVsn = info.dwMinorVersion;
-        
+
         switch ( info.dwPlatformId )
         {
             case VER_PLATFORM_WIN32s:
@@ -1030,6 +1030,18 @@ void wxDisplaySizeMM(int *width, int *height)
 
     if ( width ) *width = GetDeviceCaps(dc, HORZSIZE);
     if ( height ) *height = GetDeviceCaps(dc, VERTSIZE);
+}
+
+void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+{
+    // Determine the desktop dimensions minus the taskbar and any other
+    // special decorations...
+    RECT r;
+    SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
+    if (x)      *x = r.left;
+    if (y)      *y = r.top;
+    if (width)  *width = r.right - r.left;
+    if (height) *height = r.bottom - r.top;
 }
 
 
