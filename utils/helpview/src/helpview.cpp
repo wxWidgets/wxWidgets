@@ -43,13 +43,15 @@ protected:
                                   const wxSize& size);
 };
 
-// ----------------------------------------------------------------------------
-// private classes
-// ----------------------------------------------------------------------------
-
 
 IMPLEMENT_APP(hvApp)
 
+hvApp::hvApp()
+{
+#if hvUSE_IPC
+    m_server = NULL;
+#endif
+}
 
 bool hvApp::OnInit()
 {
@@ -66,24 +68,40 @@ bool hvApp::OnInit()
     SetAppName("wxHTMLHelp"); 
     wxConfig::Get(); // create an instance
 
-    help = new wxHtmlHelpController(
+    m_helpController = new wxHtmlHelpController(
         wxHF_DEFAULT_STYLE|wxHF_FLAT_TOOLBAR|wxHF_OPEN_FILES
         );
     
-    help->SetTitleFormat(wxT("%s"));
+    m_helpController->SetTitleFormat(wxT("%s"));
     if (argc < 2) {
-        if (!OpenBook(help))
+        if (!OpenBook(m_helpController))
             return FALSE;
     }
 
+    bool useAsServer = FALSE;
+
+    // If started with --server, use as help server.
     for (int i = 1; i < argc; i++)
-        help -> AddBook(argv[i]);
+    {
+        if (wxString(wxT("--server")) == argv[i])
+            useAsServer = TRUE;
+        else
+            m_helpController -> AddBook(argv[i]);
+    }
 
 #ifdef __WXMOTIF__
     delete wxLog::SetActiveTarget(new wxLogGui);
 #endif
 
-    help -> DisplayContents();
+    m_helpController -> DisplayContents();
+
+#if hvUSE_IPC
+    if (useAsServer)
+    {
+        m_server = new hvServer;
+        m_server->Create(wxT("4242"));
+    }
+#endif
 
     return TRUE;
 }
@@ -91,7 +109,26 @@ bool hvApp::OnInit()
 
 int hvApp::OnExit()
 {
-    delete help;
+#if hvUSE_IPC
+    wxNode* node = m_connections.First();
+    while (node)
+    {
+        wxNode* next = node->Next();
+        hvConnection* connection = (hvConnection*) node->Data();
+        connection->Disconnect();
+        delete connection;
+        node = next;
+    }
+    m_connections.Clear();
+
+    if (m_server)
+    {
+        delete m_server;
+        m_server = NULL;
+    }
+#endif
+
+    delete m_helpController;
     delete wxConfig::Set(NULL);
 
     return 0;
@@ -228,3 +265,67 @@ wxBitmap AlternateArtProvider::CreateBitmap(const wxArtID& id,
     // will be provided by the default art provider.
     return wxNullBitmap;
 }
+
+#if hvUSE_IPC
+
+wxConnectionBase *hvServer::OnAcceptConnection(const wxString& topic)
+{
+    if (topic == "HELP")
+        return new hvConnection();
+    else
+        return NULL;
+}
+
+// ----------------------------------------------------------------------------
+// hvConnection
+// ----------------------------------------------------------------------------
+
+hvConnection::hvConnection()
+            : wxConnection()
+{
+    wxGetApp().GetConnections().Append(this);
+}
+
+hvConnection::~hvConnection()
+{
+    wxGetApp().GetConnections().DeleteObject(this);
+}
+
+bool hvConnection::OnExecute(const wxString& WXUNUSED(topic),
+                             wxChar *data,
+                             int WXUNUSED(size),
+                             wxIPCFormat WXUNUSED(format))
+{
+//    wxLogStatus("Execute command: %s", data);
+    
+    wxGetApp().GetHelpController()->Display(data);
+    
+    return TRUE;
+}
+
+bool hvConnection::OnPoke(const wxString& WXUNUSED(topic),
+                          const wxString& item,
+                          wxChar *data,
+                          int WXUNUSED(size),
+                          wxIPCFormat WXUNUSED(format))
+{
+//    wxLogStatus("Poke command: %s = %s", item.c_str(), data);
+    return TRUE;
+}
+
+wxChar *hvConnection::OnRequest(const wxString& WXUNUSED(topic),
+                              const wxString& WXUNUSED(item),
+                              int * WXUNUSED(size),
+                              wxIPCFormat WXUNUSED(format))
+{
+    return NULL;
+}
+
+bool hvConnection::OnStartAdvise(const wxString& WXUNUSED(topic),
+                                 const wxString& WXUNUSED(item))
+{
+    return TRUE;
+}
+
+#endif
+    // hvUSE_IPC
