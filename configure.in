@@ -2703,7 +2703,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         libs_found=0
         for libp in "" " -lXp"; do
             if test "$libs_found" = "0"; then
-                for libsm_ice in " -lSM -lICE"; do
+                for libsm_ice in "" " -lSM -lICE"; do
                     if test "$libs_found" = "0"; then
                         save_LIBS="$LIBS"
                         LIBS="$GUI_TK_LIBRARY -lXm${xpm_link} ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
