@@ -1,0 +1,118 @@
+\section{\class{wxQueryLayoutInfoEvent}}\label{wxquerylayoutinfoevent}
+
+This event is sent when \helpref{wxLayoutAlgorithm}{wxlayoutalgorithm} wishes to get
+the size, orientation and alignment of a window. More precisely, the event is sent
+by the OnCalculateLayout handler which is itself invoked by wxLayoutAlgorithm.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Event table macros}
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_QUERY\_LAYOUT\_INFO(func)}}{Process a wxEVT\_QUERY\_LAYOUT\_INFO event,
+to get size, orientation and alignment from a window.}
+\end{twocollist}
+
+\wxheading{Data structures}
+
+{\small
+\begin{verbatim}
+enum wxLayoutOrientation {
+    wxLAYOUT_HORIZONTAL,
+    wxLAYOUT_VERTICAL
+};
+
+enum wxLayoutAlignment {
+    wxLAYOUT_NONE,
+    wxLAYOUT_TOP,
+    wxLAYOUT_LEFT,
+    wxLAYOUT_RIGHT,
+    wxLAYOUT_BOTTOM,
+};
+\end{verbatim}
+}
+
+\wxheading{See also}
+
+\helpref{wxCalculateLayoutEvent}{wxcalculatelayoutevent},\rtfsp
+\helpref{wxSashLayoutWindow}{wxsashlayoutwindow},\rtfsp
+\helpref{wxLayoutAlgorithm}{wxlayoutalgorithm}.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxQueryLayoutInfoEvent::wxQueryLayoutInfoEvent}
+
+\func{}{wxQueryLayoutInfoEvent}{\param{wxWindowID }{id = 0}}
+
+Constructor.
+
+\membersection{wxQueryLayoutInfoEvent::GetAlignment}\label{wxquerylayoutinfoeventgetalignment}
+
+\constfunc{void}{GetAlignment}{\void}
+
+Specifies the alignment of the window (which side of the remaining parent client area
+the window sticks to). One of wxLAYOUT\_TOP, wxLAYOUT\_LEFT, wxLAYOUT\_RIGHT, wxLAYOUT\_BOTTOM.
+
+\membersection{wxQueryLayoutInfoEvent::GetFlags}\label{wxquerylayoutinfoeventgetflags}
+
+\constfunc{int}{GetFlags}{\void}
+
+Returns the flags associated with this event. Not currently used.
+
+\membersection{wxQueryLayoutInfoEvent::GetOrientation}\label{wxquerylayoutinfoeventgetorientation}
+
+\constfunc{wxLayoutOrientation}{GetOrientation}{\void}
+
+Returns the orientation that the event handler specified to the event object. May be one of wxLAYOUT\_HORIZONTAL,
+wxLAYOUT\_VERTICAL.
+
+\membersection{wxQueryLayoutInfoEvent::GetRequestedLength}\label{wxquerylayoutinfoeventgetrequestedlength}
+
+\constfunc{int}{GetRequestedLength}{\void}
+
+Returns the requested length of the window in the direction of the window orientation. This information
+is not yet used.
+
+\membersection{wxQueryLayoutInfoEvent::GetSize}\label{wxquerylayoutinfoeventgetsize}
+
+\constfunc{wxSize}{GetSize}{\void}
+
+Returns the size that the event handler specified to the event object as being the requested size of the window.
+
+\membersection{wxQueryLayoutInfoEvent::SetAlignment}\label{wxquerylayoutinfoeventsetalignment}
+
+\func{void}{SetAlignment}{\param{wxLayoutAlignment }{alignment}}
+
+Call this to specify the alignment of the window (which side of the remaining parent client area
+the window sticks to). May be one of wxLAYOUT\_TOP, wxLAYOUT\_LEFT, wxLAYOUT\_RIGHT, wxLAYOUT\_BOTTOM.
+
+\membersection{wxQueryLayoutInfoEvent::SetFlags}\label{wxquerylayoutinfoeventsetflags}
+
+\func{void}{SetFlags}{\param{int }{flags}}
+
+Sets the flags associated with this event. Not currently used.
+
+\membersection{wxQueryLayoutInfoEvent::SetOrientation}\label{wxquerylayoutinfoeventsetorientation}
+
+\func{void}{SetOrientation}{\param{wxLayoutOrientation }{orientation}}
+
+Call this to specify the orientation of the window. May be one of wxLAYOUT\_HORIZONTAL,
+wxLAYOUT\_VERTICAL.
+
+\membersection{wxQueryLayoutInfoEvent::SetRequestedLength}\label{wxquerylayoutinfoeventsetrequestedlength}
+
+\func{void}{SetRequestedLength}{\param{int}{ length}}
+
+Sets the requested length of the window in the direction of the window orientation. This information
+is not yet used.
+
+\membersection{wxQueryLayoutInfoEvent::SetSize}\label{wxquerylayoutinfoeventsetsize}
+
+\func{void}{SetSize}{\param{const wxSize\& }{size}}
+
+Call this to let the calling code know what the size of the window is.
+

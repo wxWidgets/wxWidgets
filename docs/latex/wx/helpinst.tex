@@ -1,10 +1,7 @@
-\section{\class{wxHelpControllerBase}}\label{wxhelpcontrollerbase}
+\section{\class{wxHelpController}}\label{wxhelpcontroller}
 
-This class defines the interface by which
+This is a family of classes by which
 applications may invoke a help viewer to provide on-line help.
-
-Other classes derive from this class to provide actual implementations
-of help controllers.
 
 A help controller allows an application to display help, at the contents
 or at a particular topic, and shut the help program down on termination.
@@ -16,36 +13,41 @@ when it starts, and immediately call {\bf Initialize}\rtfsp
 to associate a filename with it. The help viewer will only get run, however,
 just before the first call to display something.
 
+Although all classes actually derive from wxHelpControllerBase, the
+appropriate class is aliased to wxHelpController for each platform.
+
+There are currently the following help controller classes defined:
+
+\begin{itemize}\itemsep=0
+\item wxWinHelpController, for controlling Windows Help.
+\item wxExtHelpController, for controlling external browsers under Unix.
+The default browser is Netscape Navigator.
+\end{itemize}
+
 \wxheading{Derivation}
 
+wxHelpControllerBase\\
 \helpref{wxObject}{wxobject}
-
-\wxheading{See also}
-
-\helpref{wxWinHelpController}{wxwinhelpcontroller}
 
 \wxheading{Include file}
 
-{\tt <wx/helpbase.h>} (for just wxHelpControllerBase)
-
-{\tt <wx/help.h>} (to include the platform-specific controller, e.g. wxWinHelpController)
-
+{\tt <wx/help.h>}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxHelpControllerBase::wxHelpControllerBase}
+\membersection{wxHelpController::wxHelpController}
 
-\func{}{wxHelpControllerBase}{\void}
+\func{}{wxHelpController}{\void}
 
 Constructs a help instance object, but does not invoke the help viewer.
 
-\membersection{wxHelpControllerBase::\destruct{wxHelpControllerBase}}
+\membersection{wxHelpController::\destruct{wxHelpController}}
 
-\func{}{\destruct{wxHelpControllerBase}}{\void}
+\func{}{\destruct{wxHelpController}}{\void}
 
 Destroys the help instance, closing down the viewer if it is running.
 
-\membersection{wxHelpControllerBase::Initialize}\label{wxhelpcontrollerbaseinitialize}
+\membersection{wxHelpController::Initialize}\label{wxhelpcontrollerinitialize}
 
 \func{virtual void}{Initialize}{\param{const wxString\& }{file}}
 
@@ -58,7 +60,7 @@ any attempts to communicate with the viewer.
 
 You may omit the file extension and a suitable one will be chosen.
 
-\membersection{wxHelpControllerBase::DisplayBlock}\label{wxhelpcontrollerbasedisplayblock}
+\membersection{wxHelpController::DisplayBlock}\label{wxhelpcontrollerdisplayblock}
 
 \func{virtual bool}{DisplayBlock}{\param{long}{ blockNo}}
 
@@ -66,14 +68,14 @@ If the help viewer is not running, runs it and displays the file at the given bl
 The interpretation of {\it blockNo} differs between help viewers. If using Windows Help, this
 refers to the context number. If wxHelp, this is the wxHelp block number.
 
-\membersection{wxHelpControllerBase::DisplayContents}\label{wxhelpcontrollerbasedisplaycontents}
+\membersection{wxHelpController::DisplayContents}\label{wxhelpcontrollerdisplaycontents}
 
 \func{virtual bool}{DisplayContents}{\void}
 
 If the help viewer is not running, runs it and displays the
 contents.
 
-\membersection{wxHelpControllerBase::DisplaySection}\label{wxhelpcontrollerbasedisplaysection}
+\membersection{wxHelpController::DisplaySection}\label{wxhelpcontrollerdisplaysection}
 
 \func{virtual bool}{DisplaySection}{\param{int}{ sectionNo}}
 
@@ -84,7 +86,7 @@ For wxHelp, section numbers may be viewed by running wxHelp in edit mode.
 
 DisplaySection does not apply to WinHelp.
 
-\membersection{wxHelpControllerBase::KeywordSearch}\label{wxhelpcontrollerbasekeywordsearch}
+\membersection{wxHelpController::KeywordSearch}\label{wxhelpcontrollerkeywordsearch}
 
 \func{virtual bool}{KeywordSearch}{\param{const wxString\& }{keyWord}}
 
@@ -93,7 +95,7 @@ match is found, the file is displayed at this section. If more than one
 match is found, the Search dialog is displayed with the matches (wxHelp)
 or the first topic is displayed (Windows Help).
 
-\membersection{wxHelpControllerBase::LoadFile}\label{wxhelpcontrollerbaseloadfile}
+\membersection{wxHelpController::LoadFile}\label{wxhelpcontrollerloadfile}
 
 \func{virtual bool}{LoadFile}{\param{const wxString\& }{file = NULL}}
 
@@ -104,15 +106,15 @@ already displaying the specified file, it will not be reloaded. This
 member function may be used before each display call in case the user
 has opened another file.
 
-\membersection{wxHelpControllerBase::OnQuit}\label{wxhelpcontrollerbaseonquit}
+\membersection{wxHelpController::OnQuit}\label{wxhelpcontrolleronquit}
 
 \func{virtual bool}{OnQuit}{\void}
 
 Overridable member called when this application's viewer is quit by the user.
 
-This only works for wxXLPHelpController.
+This does not work for all help controllers.
 
-\membersection{wxHelpControllerBase::Quit}\label{wxhelpcontrollerbasequit}
+\membersection{wxHelpController::Quit}\label{wxhelpcontrollerquit}
 
 \func{virtual bool}{Quit}{\void}
 

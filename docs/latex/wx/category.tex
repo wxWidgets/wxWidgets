@@ -29,6 +29,8 @@ The following are a variety of windows that are derived from wxWindow.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxGrid}{wxgrid}}{A grid (table) window}
 \twocolitem{\helpref{wxPanel}{wxpanel}}{A window whose colour changes according to current user settings}
+\twocolitem{\helpref{wxSashWindow}{wxsashwindow}}{Window with four optional sashes that can be dragged}
+\twocolitem{\helpref{wxSashLayoutWindow}{wxsashlayoutwindow}}{Window that can be involved in an IDE-like layout arrangement}
 \twocolitem{\helpref{wxScrolledWindow}{wxscrolledwindow}}{Window with automatically managed scrollbars}
 \twocolitem{\helpref{wxSplitterWindow}{wxsplitterwindow}}{Window which can be split vertically or horizontally}
 \twocolitem{\helpref{wxStatusBar}{wxstatusbar}}{Implements the status bar on a frame}
@@ -158,6 +160,7 @@ An event object contains information about a specific event. Event handlers
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxActivateEvent}{wxactivateevent}}{A window or application activation event}
+\twocolitem{\helpref{wxCalculateLayoutEvent}{wxcalculatelayoutevent}}{Used to calculate window layout}
 \twocolitem{\helpref{wxCloseEvent}{wxcloseevent}}{A close window or end session event}
 \twocolitem{\helpref{wxCommandEvent}{wxcommandevent}}{An event from a variety of standard controls}
 \twocolitem{\helpref{wxDropFilesEvent}{wxdropfilesevent}}{A drop files event}
@@ -175,7 +178,7 @@ An event object contains information about a specific event. Event handlers
 \twocolitem{\helpref{wxNotebookEvent}{wxnotebookevent}}{A notebook control event}
 \twocolitem{\helpref{wxPaintEvent}{wxpaintevent}}{A paint event}
 \twocolitem{\helpref{wxProcessEvent}{wxprocessevent}}{A process ending event}
-%\twocolitem{\helpref{wxSessionEvent}{wxsessionevent}}{A session ending event}
+\twocolitem{\helpref{wxQueryLayoutInfoEvent}{wxquerylayoutinfoevent}}{Used to query layout information}
 \twocolitem{\helpref{wxSizeEvent}{wxsizeevent}}{A size event}
 \twocolitem{\helpref{wxSocketEvent}{wxsocketevent}}{A socket event}
 \twocolitem{\helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent}}{A system colour change event}
@@ -239,14 +242,14 @@ classes, functions and macros.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxDebugContext}{wxdebugcontext}}{Provides various debugging facilities}
-\twocolitem{\helpref{wxDebugStreamBuf}{wxdebugstreambuf}}{A stream buffer writing to the debug stream}
+%\twocolitem{\helpref{wxDebugStreamBuf}{wxdebugstreambuf}}{A stream buffer writing to the debug stream}
 \twocolitem{\helpref{wxLog}{wxlog}}{Logging facility}
-\twocolitem{\helpref{wxObject}{wxobject}}{Provides optional debugging versions of {\bf new} and {\bf delete}}
-\twocolitem{\helpref{wxTrace}{wxtrace}}{Tracing facility}
-\twocolitem{\helpref{wxTraceLevel}{wxtracelevel}}{Tracing facility with levels}
+\twocolitem{\helpref{Log functions}{logfunctions}}{Error and warning logging functions}
+%\twocolitem{\helpref{wxTrace}{wxtrace}}{Tracing facility}
+%\twocolitem{\helpref{wxTraceLevel}{wxtracelevel}}{Tracing facility with levels}
 \twocolitem{\helpref{WXDEBUG\_NEW}{debugnew}}{Use this macro to give further debugging information}
-\twocolitem{\helpref{WXTRACE}{trace}}{Trace macro}
-\twocolitem{\helpref{WXTRACELEVEL}{tracelevel}}{Trace macro with levels}
+%\twocolitem{\helpref{WXTRACE}{trace}}{Trace macro}
+%\twocolitem{\helpref{WXTRACELEVEL}{tracelevel}}{Trace macro with levels}
 \end{twocollist}
 
 {\large {\bf Interprocess communication}}
@@ -272,9 +275,6 @@ based on DDE.
 wxWindows supports a document/view framework which provides
 housekeeping for a document-centric application.
 
-TODO: MDI frame classes for documents; make it unnecessary to convert
-between streams and files (overridable method that uses filenames instead of streams).
-
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxDocument}{wxdocument}}{Represents a document}
 \twocolitem{\helpref{wxView}{wxview}}{Represents a view}
@@ -282,6 +282,8 @@ between streams and files (overridable method that uses filenames instead of str
 \twocolitem{\helpref{wxDocManager}{wxdocmanager}}{Manages the documents and views in an application}
 \twocolitem{\helpref{wxDocChildFrame}{wxdocchildframe}}{A child frame for showing a document view}
 \twocolitem{\helpref{wxDocParentFrame}{wxdocparentframe}}{A parent frame to contain views}
+%\twocolitem{\helpref{wxMDIDocChildFrame}{wxmdidocchildframe}}{An MDI child frame for showing a document view}
+%\twocolitem{\helpref{wxMDIDocParentFrame}{wxmdidocparentframe}}{An MDI parent frame to contain views}
 \end{twocollist}
 
 {\large {\bf Printing framework}}
@@ -324,11 +326,11 @@ product.
 \twocolitem{\helpref{wxAcceleratorTable}{wxacceleratortable}}{Accelerator table}
 \twocolitem{\helpref{wxApp}{wxapp}}{Application class}
 \twocolitem{\helpref{wxConfig}{wxconfigbase}}{Classes for configuration reading/writing}
-\twocolitem{\helpref{wxHelpControllerBase}{wxhelpcontrollerbase}}{Base class for help controllers}
+\twocolitem{\helpref{wxHelpController}{wxhelpcontroller}}{Family of classes for controlling help windows}
+\twocolitem{\helpref{wxLayoutAlgorithm}{wxlayoutalgorithm}}{An alternative window layout facility}
 \twocolitem{\helpref{wxProcess}{wxprocess}}{Process class}
 \twocolitem{\helpref{wxTimer}{wxtimer}}{Timer class}
 \twocolitem{\helpref{wxSystemSettings}{wxsystemsettings}}{System settings class}
-\twocolitem{\helpref{wxWinHelpController}{wxwinhelpcontroller}}{Controls WinHelp instances}
 \end{twocollist}
 
 

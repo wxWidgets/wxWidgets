@@ -1,9 +1,10 @@
 \section{Log classes overview}\label{wxlogoverview}
 
-Classes: \helpref{wxLog}{wxlog}, \helpref{wxLogStderr}{wxlogstderr},
- \helpref{wxLogOstream}{wxlogostream}, \helpref{wxLogTextCtrl}{wxlogtextctrl},
- \helpref{wxLogWindow}{wxlogwindow}, \helpref{wxLogGui}{wxloggui},
- \helpref{wxLogNull}{wxlognull}
+Classes: \helpref{wxLog}{wxlog}
+%\helpref{wxLogStderr}{wxlogstderr},%
+%\helpref{wxLogOstream}{wxlogostream}, \helpref{wxLogTextCtrl}{wxlogtextctrl},%
+%\helpref{wxLogWindow}{wxlogwindow}, \helpref{wxLogGui}{wxloggui},%
+%\helpref{wxLogNull}{wxlognull}%
 
 This is a general overview of logging classes provided by wxWindows. The word
 logging here has a broad sense, including all of the program output, not only
@@ -39,8 +40,8 @@ wxLogInfo}).
 bar of the active or specified (as the first argument) \helpref{wxFrame}{wxframe} if it has one.
 \item{\bf wxLogSysError} is mostly used by wxWindows itself, but might be
 handy for logging errors after system call (API function) failure. It logs the
-specified message text as well as the last system error code ({\it errno} or
-{\it ::GetLastError()} depending on the platform) and the corresponding error
+specified message text as well as the last system error
+code ({\it errno} or {\it ::GetLastError()} depending on the platform) and the corresponding error
 message. The second form of this function takes the error code explitly as the
 first argument.
 \item{\bf wxLogDebug} is {\bf the} right function for debug output. It only
@@ -54,7 +55,6 @@ version of this function takes a trace mask as the first argument which allows
 to further restrict the amount of messages generated.
 \end{itemize}
 
-% VZ: Julian, am I pushing too much here?
 The usage of these functions should be fairly straightforward, however it may
 be asked why not use the other logging facilities, such as C standard stdio
 functions or C++ streams. The short answer is that they're all very good

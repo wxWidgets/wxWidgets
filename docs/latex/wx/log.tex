@@ -40,7 +40,7 @@ of messages.
 \membersection{Message buffering}
 
 Some of wxLog implementations, most notably the standard
-\helpref{wxLogGui}{wxloggui} class, buffer the messages (for example, to avoid
+wxLogGui class, buffer the messages (for example, to avoid
 showing the user a zillion of modal message boxes one after another - which
 would be really annoying). {\it Flush()} shows them all and clears the buffer
 contents. Although this function doesn't do anything if the buffer is already

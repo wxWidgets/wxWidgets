@@ -750,6 +750,8 @@ each wxDebugMsg call. wxDebugMsg seems to be broken under WIN32s
 (at least for Watcom C++): preformat your messages and use OutputDebugString
 instead.
 
+This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
+
 \membersection{::wxDisplaySize}
 
 \func{void}{wxDisplaySize}{\param{int *}{width}, \param{int *}{height}}
@@ -1121,6 +1123,8 @@ Converts the character to upper case. This is implemented as a macro for efficie
 Takes printf-style variable argument syntax. Output
 is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugcontextoverview}).
 
+This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
+
 \membersection{::wxTraceLevel}\label{wxtracelevel}
 
 \func{void}{wxTraceLevel}{\param{int}{ level}, \param{const wxString\& }{fmt}, \param{...}{}}
@@ -1130,6 +1134,8 @@ is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugco
 The first argument should be the level at which this information is appropriate.
 It will only be output if the level returned by wxDebugContext::GetLevel is equal to or greater than
 this value.
+
+This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
 
 \membersection{::wxWriteResource}\label{wxwriteresource}
 
@@ -1355,6 +1361,8 @@ base classes.
 Calls wxTrace with printf-style variable argument syntax. Output
 is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugcontextoverview}).
 
+This macro is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
+
 \membersection{WXTRACELEVEL}\label{tracelevel}
 
 \func{}{WXTRACELEVEL}{level, formatString, ...}
@@ -1364,6 +1372,8 @@ is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugco
 The first argument should be the level at which this information is appropriate.
 It will only be output if the level returned by wxDebugContext::GetLevel is equal to or greater than
 this value.
+
+This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
 
 \section{wxWindows resource functions}\label{resourcefuncs}
 
@@ -1559,4 +1569,149 @@ is no connection between names used in resources, and the global bitmap data.
 \membersection{::wxResourceRegisterIconData}
 
 Another name for \helpref{wxResourceRegisterBitmapData}{registerbitmapdata}.
+
+\section{Log functions}\label{logfunctions}
+
+These functions provide a variety of logging functions: see \helpref{Log classes overview}{wxlogoverview} for
+further information.
+
+\membersection{::wxLogError}\label{wxlogerror}
+
+\func{void}{wxLogError}{\param{const char*}{ formatString}, \param{...}{}}
+
+The function to use for error messages, i.e. the
+messages that must be shown to the user. The default processing is to pop up a
+message box to inform the user about it.
+
+\membersection{::wxLogFatalError}\label{wxlogfatalerror}
+
+\func{void}{wxLogFatalError}{\param{const char*}{ formatString}, \param{...}{}}
+
+Like \helpref{wxLogError}{wxlogerror}, but also
+terminates the program with the exit code 3. Using {\it abort()} standard
+function also terminates the program with this exit code.
+
+\membersection{::wxLogWarning}\label{wxlogwarning}
+
+\func{void}{wxLogWarning}{\param{const char*}{ formatString}, \param{...}{}}
+
+For warnings - they are also normally shown to the
+user, but don't interrupt the program work.
+
+\membersection{::wxLogMessage}\label{wxlogmessage}
+
+\func{void}{wxLogMessage}{\param{const char*}{ formatString}, \param{...}{}}
+
+for all normal, informational messages. They also
+appear in a message box by default (but it can be changed). Notice
+that the standard behaviour is to not show informational messages if there are
+any errors later - the logic being that the later error messages make the
+informational messages preceding them meaningless.
+
+\membersection{::wxLogVerbose}\label{wxlogverbose}
+
+\func{void}{wxLogVerbose}{\param{const char*}{ formatString}, \param{...}{}}
+
+For verbose output. Normally, it's suppressed, but
+might be activated if the user wishes to know more details about the program
+progress (another, but possibly confusing name for the same function is {\bf wxLogInfo}).
+
+\membersection{::wxLogStatus}\label{wxlogstatus}
+
+\func{void}{wxLogStatus}{\param{const char*}{ formatString}, \param{...}{}}
+
+For status messages - they will go into the status
+bar of the active or specified (as the first argument) \helpref{wxFrame}{wxframe} if it has one.
+
+\membersection{::wxLogSysError}\label{wxlogsyserror}
+
+\func{void}{wxLogSysError}{\param{const char*}{ formatString}, \param{...}{}}
+
+Mostly used by wxWindows itself, but might be
+handy for logging errors after system call (API function) failure. It logs the
+specified message text as well as the last system error code ({\it errno} or {\it ::GetLastError()} depending
+on the platform) and the corresponding error
+message. The second form of this function takes the error code explitly as the
+first argument.
+
+\membersection{::wxLogDebug}\label{wxlogdebug}
+
+\func{void}{wxLogDebug}{\param{const char*}{ formatString}, \param{...}{}}
+
+The right function for debug output. It only
+does anything at all in the debug mode (when the preprocessor symbol \_\_WXDEBUG\_\_ is defined)
+and expands to nothing in release mode (otherwise).
+
+\membersection{::wxLogTrace}\label{wxlogtrace}
+
+\func{void}{wxLogTrace}{\param{const char*}{ formatString}, \param{...}{}}
+
+\func{void}{wxLogTrace}{\param{wxTraceMask}{ mask}, \param{const char*}{ formatString}, \param{...}{}}
+
+As {\bf wxLogDebug}, only does something in debug
+build. The reason for making it a separate function from it is that usually
+there are a lot of trace messages, so it might make sense to separate them
+from other debug messages which would be flooded in them. Moreover, the second
+version of this function takes a trace mask as the first argument which allows
+to further restrict the amount of messages generated. The value of {\it mask} can be:
+
+\begin{itemize}\itemsep=0pt
+\item wxTraceMemAlloc: trace memory allocation (new/delete)
+\item wxTraceMessages: trace window messages/X callbacks
+\item wxTraceResAlloc: trace GDI resource allocation
+\item wxTraceRefCount: trace various ref counting operations
+\end{itemize}
+
+\section{Debugging macros and functions}\label{debugmacros}
+
+Useful macros and functins for error checking and defensive programming. ASSERTs are only
+compiled if \_\_WXDEBUG\_\_ is defined, whereas CHECK macros stay in release
+builds.
+
+\membersection{::wxOnAssert}\label{wxonassert}
+
+\func{void}{wxOnAssert}{\param{const char*}{ fileName}, \param{int}{ lineNumber}, \param{const char*}{ msg = NULL}}
+
+This function may be redefined to do something non trivial and is called
+whenever one of debugging macros fails (i.e. condition is false in an
+assertion). TODO: this should probably be an overridable in wxApp.
+
+\membersection{wxASSERT}\label{wxassert}
+
+\func{}{wxASSERT}{\param{}{condition}}
+
+Assert macro. An error message will be generated if the condition is FALSE.
+
+\membersection{wxASSERT\_MSG}\label{wxassertmsg}
+
+\func{}{wxASSERT\_MSG}{\param{}{condition}, \param{}{msg}}
+
+Assert macro with message. An error message will be generated if the condition is FALSE.
+
+\membersection{wxFAIL}\label{wxfail}
+
+\func{}{wxFAIL}{\param{}{condition}}
+
+Will always generate an assert error if this code is reached (in debug mode).
+
+\membersection{wxFAIL\_MSG}\label{wxfailmsg}
+
+\func{}{wxFAIL\_MSG}{\param{}{condition}, \param{}{msg}}
+
+Will always generate an assert error with specified message if this code is reached (in debug mode).
+
+\membersection{wxCHECK}\label{wxcheck}
+
+\func{}{wxCHECK}{\param{}{condition}, \param{}{retValue}}
+
+Checks that the condition is true, returns with the given return value if not (FAILs in debug mode).
+This check is done even in release mode.
+
+\membersection{wxCHECK\_MSG}\label{wxcheckmsg}
+
+\func{}{wxCHECK\_MSG}{\param{}{condition}, \param{}{retValue}, \param{}{msg}}
+
+Checks that the condition is true, returns with the given return value if not (FAILs in debug mode).
+This check is done even in release mode.
+
 
