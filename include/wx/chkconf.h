@@ -626,6 +626,14 @@
 #   endif
 #endif /* !defined(wxUSE_SOUND) */
 
+#ifndef wxUSE_MEDIACTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MEDIACTRL must be defined."
+#   else
+#       define wxUSE_MEDIACTRL 0
+#   endif
+#endif /* !defined(wxUSE_MEDIACTRL) */
+
 #ifndef wxUSE_SPINBTN
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SPINBTN must be defined."
