@@ -1695,7 +1695,6 @@ void wxGridWindow::OnEraseBackground(wxEraseEvent&)
 
 //////////////////////////////////////////////////////////////////////
 
-#define ID_EDIT_TIMER 1001
 
 IMPLEMENT_DYNAMIC_CLASS( wxGrid, wxScrolledWindow )
 
@@ -1704,7 +1703,6 @@ BEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
     EVT_SIZE( wxGrid::OnSize )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
     EVT_ERASE_BACKGROUND( wxGrid::OnEraseBackground )
-    EVT_TIMER( ID_EDIT_TIMER, wxGrid::OnEditTimer )
 END_EVENT_TABLE()
 
 wxGrid::wxGrid( wxWindow *parent,
@@ -1734,7 +1732,6 @@ wxGrid::~wxGrid()
 
     if (m_ownTable)
         delete m_table;
-    delete m_editTimer;
 }
 
 
@@ -1745,7 +1742,7 @@ wxGrid::~wxGrid()
 void wxGrid::Create()
 {
     m_created = FALSE;    // set to TRUE by CreateGrid
-    m_displayed = FALSE;  // set to TRUE by OnPaint
+    m_displayed = TRUE; // FALSE;  // set to TRUE by OnPaint
 
     m_table        = (wxGridTableBase *) NULL;
     m_ownTable     = FALSE;
@@ -1924,7 +1921,6 @@ void wxGrid::Init()
     m_isDragging = FALSE;
     m_startDragPos = wxDefaultPosition;
 
-    m_editTimer = new wxTimer( this, ID_EDIT_TIMER );
     m_waitForSlowClick = FALSE;
 
     m_rowResizeCursor = wxCursor( wxCURSOR_SIZENS );
@@ -2897,10 +2893,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                     if (m_waitForSlowClick && coords == m_currentCellCoords) {
                         EnableCellEditControl(TRUE);
                         ShowCellEditControl();
+                        m_waitForSlowClick = FALSE;
                     }
                     else {
                         SetCurrentCell( coords );
-                        m_editTimer->Start( 1500, TRUE );
                         m_waitForSlowClick = TRUE;
                     }
                 }
@@ -3662,11 +3658,6 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
 void wxGrid::OnEraseBackground(wxEraseEvent&)
 { }
 
-
-void wxGrid::OnEditTimer(wxTimerEvent&)
-{
-    m_waitForSlowClick = FALSE;
-}
 
 
 

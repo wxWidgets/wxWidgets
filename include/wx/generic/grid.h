@@ -1194,8 +1194,7 @@ protected:
     bool    m_isDragging;
     wxPoint m_startDragPos;
 
-    wxTimer*    m_editTimer;
-    bool        m_waitForSlowClick;
+    bool    m_waitForSlowClick;
 
     wxGridCellCoords m_selectionStart;
 
@@ -1225,7 +1224,6 @@ protected:
     void OnSize( wxSizeEvent& );
     void OnKeyDown( wxKeyEvent& );
     void OnEraseBackground( wxEraseEvent& );
-    void OnEditTimer( wxTimerEvent& );
 
 
     void SetCurrentCell( const wxGridCellCoords& coords );
