@@ -253,6 +253,7 @@ bool wxToolBar::Cocoa_mouseDragged(WX_NSEvent theEvent)
         NSButtonCell *buttonCell = m_mouseDownTool->GetNSButtonCell();
         if(buttonCell)
         {
+            [buttonCell retain];
             [buttonCell setHighlighted: YES];
             if([buttonCell trackMouse: theEvent
                 inRect:AddToolPadding(m_mouseDownTool->GetFrameRect()) ofView:m_cocoaNSView
@@ -263,6 +264,7 @@ bool wxToolBar::Cocoa_mouseDragged(WX_NSEvent theEvent)
                 wxLogTrace(wxTRACE_COCOA,wxT("Button was clicked after drag!"));
             }
             [buttonCell setHighlighted: NO];
+            [buttonCell release];
         }
     }
     return wxToolBarBase::Cocoa_mouseDragged(theEvent);
@@ -276,6 +278,7 @@ bool wxToolBar::Cocoa_mouseDown(WX_NSEvent theEvent)
         NSButtonCell *buttonCell = tool->GetNSButtonCell();
         if(buttonCell)
         {
+            [buttonCell retain];
             m_mouseDownTool = tool;
             [buttonCell setHighlighted: YES];
             if([buttonCell trackMouse: theEvent
@@ -287,6 +290,7 @@ bool wxToolBar::Cocoa_mouseDown(WX_NSEvent theEvent)
                 wxLogTrace(wxTRACE_COCOA,wxT("Button was clicked!"));
             }
             [buttonCell setHighlighted: NO];
+            [buttonCell release];
         }
     }
     return wxToolBarBase::Cocoa_mouseDown(theEvent);
