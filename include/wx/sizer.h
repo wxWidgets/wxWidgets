@@ -152,7 +152,7 @@ protected:
     wxObject    *m_userData;
 
 private:
-    DECLARE_CLASS(wxSizerItem);
+    DECLARE_CLASS(wxSizerItem)
     DECLARE_NO_COPY_CLASS(wxSizerItem)
 };
 
@@ -325,7 +325,7 @@ protected:
     virtual bool DoSetItemMinSize( size_t index, int width, int height );
 
 private:
-    DECLARE_CLASS(wxSizer);
+    DECLARE_CLASS(wxSizer)
 };
 
 //---------------------------------------------------------------------------
@@ -362,7 +362,7 @@ protected:
     void SetItemBounds( wxSizerItem *item, int x, int y, int w, int h );
 
 private:
-    DECLARE_CLASS(wxGridSizer);
+    DECLARE_CLASS(wxGridSizer)
 };
 
 //---------------------------------------------------------------------------
@@ -436,7 +436,7 @@ protected:
     wxFlexSizerGrowMode m_growMode;
 
 private:
-    DECLARE_CLASS(wxFlexGridSizer);
+    DECLARE_CLASS(wxFlexGridSizer)
     DECLARE_NO_COPY_CLASS(wxFlexGridSizer)
 };
 
@@ -467,7 +467,7 @@ protected:
     int m_fixedHeight;
 
 private:
-    DECLARE_CLASS(wxBoxSizer);
+    DECLARE_CLASS(wxBoxSizer)
 };
 
 //---------------------------------------------------------------------------
@@ -493,7 +493,7 @@ protected:
     wxStaticBox   *m_staticBox;
 
 private:
-    DECLARE_CLASS(wxStaticBoxSizer);
+    DECLARE_CLASS(wxStaticBoxSizer)
     DECLARE_NO_COPY_CLASS(wxStaticBoxSizer)
 };
 
@@ -522,7 +522,7 @@ protected:
     wxNotebook   *m_notebook;
 
 private:
-    DECLARE_CLASS(wxNotebookSizer);
+    DECLARE_CLASS(wxNotebookSizer)
     DECLARE_NO_COPY_CLASS(wxNotebookSizer)
 };
 

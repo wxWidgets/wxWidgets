@@ -2,7 +2,7 @@
 // Name:        wx/xti.h
 // Purpose:     runtime metadata information (extended class info)
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     27/07/03
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997 Julian Smart
@@ -19,14 +19,14 @@
 
 // We want to support properties, event sources and events sinks through
 // explicit declarations, using templates and specialization to make the
-// effort as painless as possible. 
+// effort as painless as possible.
 //
 // This means we have the following domains :
 //
 // - Type Information for categorizing built in types as well as custom types
 // this includes information about enums, their values and names
 // - Type safe value storage : a kind of wxVariant, called right now wxxVariant
-// which will be merged with wxVariant 
+// which will be merged with wxVariant
 // - Property Information and Property Accessors providing access to a class'
 // values and exposed event delegates
 // - Information about event handlers
@@ -52,7 +52,7 @@ typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 // ----------------------------------------------------------------------------
 // Enum Support
 //
-// In the header files there would no change from pure c++ code, in the 
+// In the header files there would no change from pure c++ code, in the
 // implementation, an enum would have
 // to be enumerated eg :
 //
@@ -78,21 +78,21 @@ public :
 	// pointed to accordingly (if ptr != null )
 	// if not found returns false, value left unchanged
 	bool HasEnumMemberValue( const wxChar *name , int *value = NULL ) ;
-	
+
 	// returns the value of the member, if not found in debug mode an
 	// assert is issued, in release 0 is returned
 	int GetEnumMemberValue(const wxChar *name );
-	
+
 	// returns the name of the enum member having the passed in value
 	// returns an emtpy string if not found
     const wxChar *GetEnumMemberName(int value);
-	
+
 	// returns the number of members in this enum
 	int GetEnumCount() { return m_count ; }
-	
+
 	// returns the value of the nth member
 	int GetEnumMemberValueByIndex( int n ) ;
-	
+
 	// returns the value of the nth member
 	const wxChar *GetEnumMemberNameByIndex( int n ) ;
 private :
@@ -120,29 +120,29 @@ private :
 
 // ----------------------------------------------------------------------------
 // Set Support
-// 
+//
 // in the header :
-// 
+//
 // enum wxFlavor
-// {  
+// {
 // 	Vanilla,
 // 	Chocolate,
 // 	Strawberry,
 // };
-// 
+//
 // typedef wxSet<wxFlavor> wxCoupe ;
-// 
+//
 // in the implementation file :
-// 
+//
 // WX_BEGIN_ENUM( wxFlavor )
 // 	WX_ENUM_MEMBER( Vanilla )
 // 	WX_ENUM_MEMBER( Chocolate )
 // 	WX_ENUM_MEMBER( Strawberry )
 // WX_END_ENUM( wxFlavor )
-// 
-// WX_IMPLEMENT_SET_STREAMING( wxCoupe , wxFlavor ) 
 //
-// implementation note : no partial specialization for streaming, but a delegation to a 
+// WX_IMPLEMENT_SET_STREAMING( wxCoupe , wxFlavor )
+//
+// implementation note : no partial specialization for streaming, but a delegation to a
 // different class
 //
 // ----------------------------------------------------------------------------
@@ -151,7 +151,7 @@ private :
 void wxSetStringToArray( const wxString &s , wxArrayString &array ) ;
 
 template<typename e>
-void wxSetFromString(const wxString &s , wxSet<e> &data )  
+void wxSetFromString(const wxString &s , wxSet<e> &data )
 {
 	wxEnumData* edata = wxGetEnumData((e) 0) ;
 	data.Clear() ;
@@ -191,7 +191,7 @@ void wxSetToString( wxString &s , const wxSet<e> &data )
 }
 
 //  if the wxSet specialization above does not work for all compilers, add this to the WX_IMPLEMENT_SET_STREAMING macro
-//	template<> const wxTypeInfo* wxGetTypeInfo( SetName * ){ static wxEnumTypeInfo s_typeInfo(wxT_SET , &s_enumData##e) ; return &s_typeInfo ; }\
+//	template<> const wxTypeInfo* wxGetTypeInfo( SetName * ){ static wxEnumTypeInfo s_typeInfo(wxT_SET , &s_enumData##e) ; return &s_typeInfo ; }
 
 #define WX_IMPLEMENT_SET_STREAMING(SetName,e) \
 	template<> void wxStringReadValue(const wxString &s , wxSet<e> &data ) \
@@ -248,7 +248,7 @@ public :
 class WXDLLIMPEXP_BASE wxCustomTypeInfo : public wxTypeInfo
 {
 public :
-	wxCustomTypeInfo( const wxChar *typeName ) 
+	wxCustomTypeInfo( const wxChar *typeName )
 	{ m_kind = wxT_CUSTOM ; m_typeName = typeName ;}
 	const wxChar *GetTypeName() const { assert( m_kind == wxT_CUSTOM ) ; return m_typeName ; }
 private :
@@ -258,7 +258,7 @@ private :
 class WXDLLIMPEXP_BASE wxEnumTypeInfo : public wxTypeInfo
 {
 public :
-	wxEnumTypeInfo( wxTypeKind kind , wxEnumData* enumInfo ) 
+	wxEnumTypeInfo( wxTypeKind kind , wxEnumData* enumInfo )
 	{ assert( kind == wxT_ENUM || kind == wxT_SET ) ; m_kind = kind ; m_enumInfo = enumInfo ;}
 	const wxEnumData* GetEnumData() const { assert( m_kind == wxT_ENUM || m_kind == wxT_SET ) ; return m_enumInfo ; }
 private :
@@ -268,19 +268,19 @@ private :
 class WXDLLIMPEXP_BASE wxClassTypeInfo : public wxTypeInfo
 {
 public :
-	wxClassTypeInfo( wxClassInfo* classInfo ) 
+	wxClassTypeInfo( wxClassInfo* classInfo )
 	{ m_kind = wxT_OBJECT ; m_classInfo = classInfo ;}
 	const wxClassInfo *GetClassInfo() const { assert( m_kind == wxT_OBJECT ) ; return m_classInfo ; }
 private :
 	wxClassInfo *m_classInfo; // Kind == wxT_OBJECT - could be NULL
 } ;
 
-// a delegate is an exposed event source 
+// a delegate is an exposed event source
 
 class WXDLLIMPEXP_BASE wxDelegateTypeInfo : public wxTypeInfo
 {
 public :
-	wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass ) 
+	wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass )
 	{ m_kind = wxT_DELEGATE ; m_eventClass = eventClass ; m_eventType = eventType ;}
 	const wxClassInfo *GetEventClass() const { assert( m_kind == wxT_DELEGATE ) ; return m_eventClass ; }
 	int GetEventType() const { assert( m_kind == wxT_DELEGATE ) ; return m_eventType ; }
@@ -291,9 +291,9 @@ private :
 
 template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) ;
 
-template<typename T> const wxTypeInfo* wxGetTypeInfo( wxSet<T> * ) 
+template<typename T> const wxTypeInfo* wxGetTypeInfo( wxSet<T> * )
 {
-	static wxEnumTypeInfo s_typeInfo(wxT_SET , wxGetEnumData((T) 0) ) ; return &s_typeInfo ; 
+	static wxEnumTypeInfo s_typeInfo(wxT_SET , wxGetEnumData((T) 0) ) ; return &s_typeInfo ;
 }
 
 // this macro is for usage with custom, non-object derived classes and structs, wxPoint is such a custom type
@@ -302,7 +302,7 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( wxSet<T> * )
 	template<> const wxTypeInfo* wxGetTypeInfo( e * ){ static wxCustomTypeInfo s_typeInfo(#e) ; return &s_typeInfo ; } \
 
 // ----------------------------------------------------------------------------
-// value streaming 
+// value streaming
 //
 // streaming is defined for xml constructs right now, the aim is to make this
 // pluggable in the future
@@ -323,16 +323,16 @@ template<typename T>
 void wxStringWriteValue( wxString &s , const T &data) ;
 
 // for simple types this default implementation is ok, composited structures will have to
-// loop through their properties 
+// loop through their properties
 
 template<typename T>
-void wxXmlReadValue( wxXmlNode *node , T &data ) 
+void wxXmlReadValue( wxXmlNode *node , T &data )
 {
 	wxStringReadValue<T>( wxXmlGetContentFromNode( node ) , data ) ;
 }
 
 template<typename T>
-void wxXmlWriteValue( wxXmlNode *node , const T &data) 
+void wxXmlWriteValue( wxXmlNode *node , const T &data)
 {
 	wxString s ;
 	wxStringWriteValue<T>( s, data ) ;
@@ -408,7 +408,7 @@ public :
 	wxxVariant( wxxVariantData* data , const wxString& name = wxT("") ) : m_data(data) , m_name(name) {}
 	wxxVariant( const wxxVariant &d ) { if ( d.m_data ) m_data = d.m_data->Clone() ; else m_data = NULL ; m_name = d.m_name ; }
 
-	template<typename T> wxxVariant( T data , const wxString& name = wxT("") ) : 
+	template<typename T> wxxVariant( T data , const wxString& name = wxT("") ) :
 		m_data(new wxxVariantDataT<T>(data) ), m_name(name) {}
 	~wxxVariant() { delete m_data ; }
 
@@ -419,9 +419,9 @@ public :
 		assert( dataptr ) ;
 		return dataptr->Get() ;
 	}
-	
+
 	// stores the data
-	template<typename T> Set(T data) const
+	template<typename T> void Set(T data) const
 	{
 		delete m_data ;
 		m_data = new wxxVariantDataT<T>(data) ;
@@ -429,11 +429,11 @@ public :
 
 	wxxVariant& operator=(const wxxVariant &d)
 	{
-		m_data = d.m_data->Clone() ; 
+		m_data = d.m_data->Clone() ;
 		m_name = d.m_name ;
 		return *this ;
 	}
-	
+
 	// gets the stored data casted to a wxObject* , returning NULL if cast is not possible
 	wxObject* GetAsObject() const ;
 
@@ -477,6 +477,9 @@ private :
 class WXDLLIMPEXP_BASE wxPropertyAccessor
 {
 public :
+    class SetByRef ;
+    class SetAndGetByRef ;
+    class GetByRef ;
     virtual void SetProperty(wxObject *object, const wxxVariant &value) const = 0 ;
     virtual wxxVariant GetProperty(wxObject *object) const = 0 ;
     virtual bool HasSetter() const = 0 ;
@@ -502,6 +505,7 @@ template<class Klass, typename T>
 class WXDLLIMPEXP_BASE wxPropertyAccessorT : public wxPropertyAccessor
 {
 public:
+
     typedef void (Klass::*setter_t)(T value);
     typedef void (Klass::*setter_ref_t)(const T& value);
     typedef T (Klass::*getter_t)() const;
@@ -509,16 +513,30 @@ public:
 
     wxPropertyAccessorT(setter_t setter, getter_t getter, const wxChar *g, const wxChar *s)
         : m_setter(setter), m_setter_ref(NULL), m_getter(getter) ,m_getter_ref(NULL) {m_setterName = s;m_getterName=g ;}
-    wxPropertyAccessorT(int WXUNUSED(zero), getter_t getter, const wxChar *g, const wxChar *s)
-        : m_setter(NULL), m_setter_ref(NULL), m_getter(getter) ,m_getter_ref(NULL) {m_setterName = s;m_getterName=g ;}
-    wxPropertyAccessorT(setter_ref_t setter, getter_t getter, const wxChar *g, const wxChar *s)
-        : m_setter(NULL), m_setter_ref(setter), m_getter(getter) , m_getter_ref(NULL){m_setterName = s;m_getterName=g ;}
-    wxPropertyAccessorT(setter_ref_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
-        : m_setter(NULL), m_setter_ref(setter), m_getter(NULL) , m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
-    wxPropertyAccessorT(setter_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
-        : m_setter(NULL), m_setter(setter), m_getter(NULL) ,  m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
-    wxPropertyAccessorT(int WXUNUSED(zero), getter_ref_t getter, const wxChar *g, const wxChar *s)
-        : m_setter(NULL), m_setter(NULL), m_getter(NULL) ,  m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
+
+    wxPropertyAccessorT( getter_t getter, const wxChar *g)
+        : m_setter(NULL), m_setter_ref(NULL), m_getter(getter) ,m_getter_ref(NULL) {m_setterName = "";m_getterName=g ;}
+
+    wxPropertyAccessorT(SetByRef*, setter_ref_t setter, getter_t getter, const wxChar *g, const wxChar *s)
+    	: m_setter(NULL), m_setter_ref(setter), m_getter(getter) , m_getter_ref(NULL){m_setterName = s;m_getterName=g ;}
+
+ //   wxPropertyAccessorT(setter_ref_t setter, getter_t getter, const wxChar *g, const wxChar *s)
+ //       : m_setter(NULL), m_setter_ref(setter), m_getter(getter) , m_getter_ref(NULL){m_setterName = s;m_getterName=g ;}
+
+    wxPropertyAccessorT(SetAndGetByRef*, setter_ref_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
+    	: m_setter(NULL), m_setter_ref(setter), m_getter(NULL) , m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
+
+ //   wxPropertyAccessorT(setter_ref_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
+ //       : m_setter(NULL), m_setter_ref(setter), m_getter(NULL) , m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
+
+ //   wxPropertyAccessorT(setter_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
+ //       : m_setter(NULL), m_setter(setter), m_getter(NULL) ,  m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
+
+    wxPropertyAccessorT(GetByRef*, setter_t setter, getter_ref_t getter, const wxChar *g, const wxChar *s)
+    	: m_setter(NULL), m_setter(setter), m_getter(NULL) ,  m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
+
+ //   wxPropertyAccessorT( getter_ref_t getter, const wxChar *g)
+ //       : m_setter(NULL), m_setter(NULL), m_getter(NULL) ,  m_getter_ref(getter){m_setterName = "";m_getterName=g ;}
 
 	// returns true if this accessor has a setter
 	bool HasSetter() const { return m_setter != NULL || m_setter_ref != NULL ; }
@@ -626,12 +644,12 @@ public :
 
 	// returns the default value of this property, its kind may be wxT_VOID if it is not valid
 	wxxVariant			GetDefaultValue() const { return m_defaultValue ; }
-private : 
+private :
 	const wxChar *		m_name;
 	const wxChar *		m_typeName ;
 	const wxTypeInfo*	m_typeInfo ;
 	wxPropertyAccessor* m_accessor ;
-    wxxVariant m_defaultValue; 
+    wxxVariant m_defaultValue;
 	// string representation of the default value
 	//  to be assigned by the designer to the property
 	//  when the component is dropped on the container.
@@ -645,10 +663,18 @@ private :
 		static wxPropertyInfo* first = NULL ;
 
 #define WX_END_PROPERTIES_TABLE() \
-		return first ; } 
+		return first ; }
 
 #define WX_PROPERTY( name , type , setter , getter ,defaultValue ) \
-	static wxPropertyAccessorT<class_t , type> _accessor##name( setter , getter , #setter , #getter ) ; \
+	static wxPropertyAccessorT<class_t , type> _accessor##name( &setter , &getter , #setter , #getter ) ; \
+	static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+
+#define WX_PROPERTY_SET_BY_REF( name , type , setter , getter ,defaultValue ) \
+        static wxPropertyAccessorT<class_t , type> _accessor##name( (wxPropertyAccessor::SetByRef*)NULL, &setter , &getter , #setter , #getter ) ; \
+        static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
+
+#define WX_READONLY_PROPERTY( name , type , getter ,defaultValue ) \
+	static wxPropertyAccessorT<class_t , type> _accessor##name( &getter , #getter ) ; \
 	static wxPropertyInfo _propertyInfo##name( first , #name , #type , wxGetTypeInfo( (type*) NULL ) ,&_accessor##name , wxxVariant(defaultValue) ) ;
 
 #define WX_DELEGATE( name , eventType , eventClass ) \
@@ -665,7 +691,7 @@ class wxHandlerInfo
 {
 public :
 	wxHandlerInfo( wxHandlerInfo* &iter , const wxChar *name , wxObjectEventFunction address , const wxClassInfo* eventClassInfo ) :
-	   m_name( name ) , m_eventClassInfo( eventClassInfo ) , m_eventFunction( address )  
+	   m_name( name ) , m_eventClassInfo( eventClassInfo ) , m_eventFunction( address )
 	{
 		m_next = NULL ;
 		if ( iter == NULL )
@@ -691,7 +717,7 @@ public :
 
 	// returns NULL if this is the last handler of this class
 	wxHandlerInfo*     GetNext() const { return m_next ; }
-private : 
+private :
 	wxObjectEventFunction m_eventFunction ;
 	const wxChar *		m_name;
 	const wxClassInfo*	m_eventClassInfo ;
@@ -708,7 +734,7 @@ private :
 		static wxHandlerInfo* first = NULL ;
 
 #define WX_END_HANDLERS_TABLE() \
-		return first ; } 
+		return first ; }
 
 // ----------------------------------------------------------------------------
 // Constructor Bridges
@@ -786,7 +812,7 @@ struct wxConstructorBridge_2 : public wxConstructorBridge
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
                     args[0].Get<T0>() ,
-                    args[1].Get<T1>() 
+                    args[1].Get<T1>()
                    );
     }
 };
@@ -809,7 +835,7 @@ struct wxConstructorBridge_3 : public wxConstructorBridge
         obj->Create(
                     args[0].Get<T0>() ,
                     args[1].Get<T1>() ,
-                    args[2].Get<T2>() 
+                    args[2].Get<T2>()
                    );
     }
 };
@@ -833,7 +859,7 @@ struct wxConstructorBridge_4 : public wxConstructorBridge
                     args[0].Get<T0>() ,
                     args[1].Get<T1>() ,
                     args[2].Get<T2>() ,
-                    args[3].Get<T3>() 
+                    args[3].Get<T3>()
                    );
     }
 };
@@ -858,7 +884,7 @@ struct wxConstructorBridge_5 : public wxConstructorBridge
                     args[1].Get<T1>() ,
                     args[2].Get<T2>() ,
                     args[3].Get<T3>() ,
-                    args[4].Get<T4>() 
+                    args[4].Get<T4>()
                    );
     }
 };
@@ -888,16 +914,16 @@ public:
 			const wxPropertyInfo *_Props ,
 			const wxHandlerInfo *_Handlers ,
 			wxConstructorBridge* _Constructor ,
-			const wxChar ** _ConstructorProperties , 
+			const wxChar ** _ConstructorProperties ,
 			const int _ConstructorPropertiesCount ,
 			wxVariantToObjectConverter _Converter1 ,
-			wxObjectToVariantConverter _Converter2 
+			wxObjectToVariantConverter _Converter2
 			) : m_parents(_Parents) , m_unitName(_UnitName) ,m_className(_ClassName),
 			m_objectSize(size), m_objectConstructor(ctor) , m_firstProperty(_Props ) , m_firstHandler(_Handlers ) , m_constructor( _Constructor ) ,
 			m_constructorProperties(_ConstructorProperties) , m_constructorPropertiesCount(_ConstructorPropertiesCount),
 			m_variantToObjectConverter( _Converter1 ) , m_objectToVariantConverter( _Converter2 ) , m_next(sm_first)
 	{
-		sm_first = this; 
+		sm_first = this;
 		Register( m_className , this ) ;
 	}
 
@@ -944,13 +970,13 @@ public:
     static void     CleanUpClasses();
 
 	// returns the first property
-	const wxPropertyInfo* GetFirstProperty() const { return m_firstProperty ; } 
+	const wxPropertyInfo* GetFirstProperty() const { return m_firstProperty ; }
 
-	// returns the first handler 
-	const wxHandlerInfo* GetFirstHandler() const { return m_firstHandler ; } 
+	// returns the first handler
+	const wxHandlerInfo* GetFirstHandler() const { return m_firstHandler ; }
 
     // Call the Create method for a class
-    virtual void Create (wxObject *object, int ParamCount, wxxVariant *Params) 
+    virtual void Create (wxObject *object, int ParamCount, wxxVariant *Params)
 	{
 		wxASSERT( ParamCount == m_constructorPropertiesCount ) ;
 		m_constructor->Create( object , Params ) ;
@@ -969,7 +995,7 @@ public:
 	// we must be able to cast variants to wxObject pointers, templates seem not to be suitable
 	wxObject* VariantToInstance( const wxxVariant &data ) const { return m_variantToObjectConverter( data ) ; }
 	wxxVariant InstanceToVariant( wxObject *object ) const { return m_objectToVariantConverter( object ) ; }
-    
+
 	// find property by name
     virtual const wxPropertyInfo *FindPropertyInfo (const wxChar *PropertyName) const ;
 
@@ -998,16 +1024,16 @@ private:
     const wxChar*			m_unitName;
 
 	wxConstructorBridge*	m_constructor ;
-	const wxChar **			m_constructorProperties ; 
+	const wxChar **			m_constructorProperties ;
 	const int				m_constructorPropertiesCount ;
-	wxVariantToObjectConverter m_variantToObjectConverter ; 
+	wxVariantToObjectConverter m_variantToObjectConverter ;
 	wxObjectToVariantConverter m_objectToVariantConverter ;
 
     const wxPropertyAccessor *FindAccessor (const wxChar *propertyName);
 
 	// registers the class
 	static void Register(const wxChar *name, wxClassInfo *info);
-	
+
 	static void Unregister(const wxChar *name);
 
 	// InitializeClasses() helper
@@ -1078,7 +1104,7 @@ WX_CONSTRUCTOR_DUMMY( name )
 #define IMPLEMENT_DYNAMIC_CLASS_XTI( name , basename , unit ) \
 _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit )
 
-// this is for classes that do not derive from wxobject, there are no creators for these 
+// this is for classes that do not derive from wxobject, there are no creators for these
 
 #define IMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_NO_BASE_XTI( name , unit ) \
  const wxClassInfo* name::sm_classParents##name[] = { NULL } ; \
@@ -1128,7 +1154,7 @@ const wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; 
 WX_CONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS2_XTI( name , basename , basename2, unit) \
-	_IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , unit) 
+	_IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , unit)
 
 // -----------------------------------
 // for abstract classes
@@ -1152,7 +1178,7 @@ WX_CONSTRUCTOR_DUMMY( name )
 #define IMPLEMENT_ABSTRACT_CLASS( name , basename ) \
 _IMPLEMENT_ABSTRACT_CLASS( name , basename ) \
 const wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
-const wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } 
+const wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; }
 
     // Multiple inheritance with two base classes
 

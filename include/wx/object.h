@@ -28,14 +28,12 @@ class WXDLLIMPEXP_BASE wxObject;
 
 #if wxUSE_DYNAMIC_CLASSES
 
-#ifndef wxUSE_EXTENDED_RTTI 
+#ifndef wxUSE_EXTENDED_RTTI
 #define wxUSE_EXTENDED_RTTI 0
 #endif
 
 #if wxUSE_EXTENDED_RTTI
-
 #include "wx/xti.h"
-
 #else
 
 // ----------------------------------------------------------------------------
@@ -418,16 +416,16 @@ class WXDLLIMPEXP_BASE wxObject
 
 private:
     void InitFrom(const wxObject& other);
-    
+
 public:
     wxObject() { m_refData = NULL; }
     virtual ~wxObject() { UnRef(); }
-    
+
     wxObject(const wxObject& other)
         {
             InitFrom(other);
         }
-    
+
     wxObject& operator=(const wxObject& other)
     {
         if ( this != &other )
