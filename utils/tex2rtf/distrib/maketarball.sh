@@ -35,8 +35,8 @@ dotar()
     # Make the source archive
     cd $TEX2RTFDIR
     ls `cat $TEX2RTFDIR/distrib/src.rsp` > /tmp/tex2rtf.txt
-    tar cvf $DEST/tex2rtf-$VERSION/tex2rtf-source-$VERSION.tar -T /tmp/tex2rtf.txt
-    gzip $DEST/tex2rtf-$VERSION/tex2rtf-source-$VERSION.tar
+    tar cvf $DEST/tex2rtf-$VERSION/tex2rtf-$VERSION-source.tar -T /tmp/tex2rtf.txt
+    gzip $DEST/tex2rtf-$VERSION/tex2rtf-$VERSION-source.tar
     rm /tmp/tex2rtf.txt
 
     cd $DEST/tex2rtf-$VERSION
