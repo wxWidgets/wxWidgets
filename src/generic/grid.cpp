@@ -9187,8 +9187,17 @@ wxSize wxGrid::DoGetBestSize() const
     // don't set sizes, only calculate them
     wxGrid *self = (wxGrid *)this;  // const_cast
 
-    return wxSize(self->SetOrCalcColumnSizes(TRUE),
-                  self->SetOrCalcRowSizes(TRUE));
+    int width, height;
+    width = self->SetOrCalcColumnSizes(TRUE);
+    height = self->SetOrCalcRowSizes(TRUE);
+
+    int maxwidth, maxheight;
+    wxDisplaySize( & maxwidth, & maxheight );
+
+    if ( width > maxwidth ) width = maxwidth;
+    if ( height > maxheight ) height = maxheight;
+
+    return wxSize( width, height );
 }
 
 void wxGrid::Fit()
@@ -9339,7 +9348,7 @@ bool wxGrid::IsSelection()
                m_selectingBottomRight != wxGridNoCellCoords) ) );
 }
 
-bool wxGrid::IsInSelection( int row, int col )
+bool wxGrid::IsInSelection( int row, int col ) const
 {
     return ( m_selection && (m_selection->IsInSelection( row, col ) ||
              ( row >= m_selectingTopLeft.GetRow() &&

@@ -1131,7 +1131,7 @@ public:
 
     // ------ edit control functions
     //
-    bool IsEditable() { return m_editable; }
+    bool IsEditable() const { return m_editable; }
     void EnableEditing( bool edit );
 
     void EnableCellEditControl( bool enable = TRUE );
@@ -1382,9 +1382,9 @@ public:
 
     void ClearSelection();
 
-    bool IsInSelection( int row, int col );
+    bool IsInSelection( int row, int col ) const;
 
-    bool IsInSelection( const wxGridCellCoords& coords )
+    bool IsInSelection( const wxGridCellCoords& coords ) const
         { return IsInSelection( coords.GetRow(), coords.GetCol() ); }
 
 
