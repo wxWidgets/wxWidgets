@@ -62,6 +62,8 @@ END_EVENT_TABLE()
 void wxControl::Init()
 {
     m_indexAccel = -1;
+
+    m_handler = (wxInputHandler *)NULL;
 }
 
 bool wxControl::Create(wxWindow *parent,
@@ -75,9 +77,10 @@ bool wxControl::Create(wxWindow *parent,
     if ( !wxControlBase::Create(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    SetBackgroundColour(parent->GetBackgroundColour());
-
+    m_renderer = wxTheme::Get()->GetRenderer();
     m_handler = CreateInputHandler();
+
+    SetBackgroundColour(parent->GetBackgroundColour());
 
     return TRUE;
 }
@@ -135,8 +138,8 @@ wxString wxControl::GetLabel() const
 
 void wxControl::OnFocus(wxFocusEvent& event)
 {
-    if ( m_handler->OnFocus(this, event) )
-        Refresh();
+    if ( !m_handler || !m_handler->HandleFocus(this, event) )
+        event.Skip();
 }
 
 // ----------------------------------------------------------------------------
@@ -150,56 +153,53 @@ wxInputHandler *wxControl::CreateInputHandler() const
 
 void wxControl::OnKeyDown(wxKeyEvent& event)
 {
-    PerformActions(m_handler->Map(this, event, TRUE), event);
+    if ( !m_handler || !m_handler->HandleKey(this, event, TRUE) )
+        event.Skip();
 }
 
 void wxControl::OnKeyUp(wxKeyEvent& event)
 {
-    PerformActions(m_handler->Map(this, event, FALSE), event);
+    if ( !m_handler || !m_handler->HandleKey(this, event, FALSE) )
+        event.Skip();
 }
 
 void wxControl::OnMouse(wxMouseEvent& event)
 {
-    if ( event.Moving() || event.Entering() || event.Leaving() )
+    if ( m_handler )
     {
-        // don't process it at all for static controls which are not supposed
-        // to react to the mouse in any way at all
-        if ( AcceptsFocus() && m_handler->OnMouseMove(this, event) )
-            Refresh();
+        if ( event.Moving() || event.Entering() || event.Leaving() )
+        {
+            if ( m_handler->HandleMouseMove(this, event) )
+                return;
+        }
+        else // a click action
+        {
+            if ( m_handler->HandleMouse(this, event) )
+                return;
+        }
     }
-    else // a click action
-    {
-        PerformActions(m_handler->Map(this, event), event);
-    }
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
 // the actions
 // ----------------------------------------------------------------------------
 
-void wxControl::PerformActions(const wxControlActions& actions,
-                               const wxEvent& event)
-{
-    bool needsRefresh = FALSE;
-    size_t count = actions.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        const wxControlAction& action = actions[n];
-        if ( !action )
-            continue;
-
-        if ( PerformAction(action, event) )
-            needsRefresh = TRUE;
-    }
-
-    if ( needsRefresh )
-        Refresh();
-}
-
 bool wxControl::PerformAction(const wxControlAction& action,
-                              const wxEvent& event)
+                              long numArg,
+                              const wxString& strArg)
 {
     return FALSE;
+}
+
+// ----------------------------------------------------------------------------
+// border
+// ----------------------------------------------------------------------------
+
+wxBorder wxControl::GetDefaultBorder() const
+{
+    return AcceptsFocus() ? wxBORDER_SUNKEN : wxBORDER_NONE;
 }
 
 #endif // wxUSE_CONTROLS

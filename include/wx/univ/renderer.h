@@ -29,11 +29,13 @@
 #define _WX_UNIV_RENDERER_H_
 
 class WXDLLEXPORT wxDC;
+class WXDLLEXPORT wxListBox;
 class WXDLLEXPORT wxScrollBar;
 class WXDLLEXPORT wxWindow;
 
 #include "wx/string.h"
 #include "wx/gdicmn.h"
+#include "wx/scrolbar.h"            // for wxScrollBar::Element
 
 // ----------------------------------------------------------------------------
 // constants
@@ -70,6 +72,7 @@ public:
 
     // draw the controls background
     virtual void DrawBackground(wxDC& dc,
+                                const wxColour& col,
                                 const wxRect& rect,
                                 int flags) = 0;
 
@@ -120,18 +123,24 @@ public:
                            const wxRect& rect,
                            int flags = 0) = 0;
 
-    // draw a scrollbar: thumb positions are in percent of the full scrollbar
-    // length and the flags array contains the flags corresponding to each of
-    // wxScrollBar::Elements
-    virtual void DrawScrollbar(wxDC& dc,
-                               wxOrientation orient,
-                               int thumbPosStart,
-                               int thumbPosEnd,
-                               const wxRect& rect,
-                               const int *flags = NULL) = 0;
+    // draw the scrollbar thumb
+    virtual void DrawScrollbarThumb(wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0) = 0;
 
-    // TODO: having this is ugly but I don't see how to solve GetBestSize()
-    //       problem without something like this
+    // draw a (part of) scrollbar shaft
+    virtual void DrawScrollbarShaft(wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0) = 0;
+
+    // draw an item of a wxControlWithItems
+    virtual void DrawItem(wxDC& dc,
+                          const wxString& label,
+                          const wxRect& rect,
+                          int flags = 0) = 0;
+
+    // geometry functions
+    // ------------------
 
     // adjust the size of the control of the given class: for most controls,
     // this just takes into account the border, but for some (buttons, for
@@ -142,13 +151,20 @@ public:
     // hit testing functions
     // ---------------------
 
+    // gets the bounding box for a scrollbar element for the given (by default
+    // - current) thumb position
+    virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
+                                    wxScrollBar::Element elem,
+                                    int thumbPos = -1) const = 0;
+
     // returns one of wxHT_SCROLLBAR_XXX constants
     virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
                                        const wxPoint& pt) const = 0;
 
     // translate the scrollbar position (in logical units) into physical
     // coordinate (in pixels) and the other way round
-    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar) = 0;
+    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
+                                     int thumbPos = -1) = 0;
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar,
                                  wxCoord coord) = 0;
 
@@ -165,10 +181,15 @@ protected:
     // standard scrollbar hit testing: this assumes that it only has 2 arrows
     // and a thumb, so the themes which have more complicated scrollbars (e.g.
     // BeOS) can't use this method
+    static wxRect StandardGetScrollbarRect(const wxScrollBar *scrollbar,
+                                           wxScrollBar::Element elem,
+                                           int thumbPos,
+                                           const wxSize& sizeArrow);
     static wxHitTest StandardHitTestScrollbar(const wxScrollBar *scrollbar,
                                               const wxPoint& pt,
                                               const wxSize& sizeArrow);
     static wxCoord StandardScrollbarToPixel(const wxScrollBar *scrollbar,
+                                            int thumbPos,
                                             const wxSize& sizeArrow);
     static int StandardPixelToScrollbar(const wxScrollBar *scrollbar,
                                         wxCoord coord,
@@ -190,9 +211,10 @@ public:
     wxDelegateRenderer(wxRenderer *renderer) : m_renderer(renderer) { }
 
     virtual void DrawBackground(wxDC& dc,
+                                const wxColour& col,
                                 const wxRect& rect,
                                 int flags)
-        { m_renderer->DrawBackground(dc, rect, flags); }
+        { m_renderer->DrawBackground(dc, col, rect, flags); }
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
                            const wxBitmap& image,
@@ -232,23 +254,33 @@ public:
                            const wxRect& rect,
                            int flags = 0)
         { m_renderer->DrawArrow(dc, dir, rect, flags); }
-    virtual void DrawScrollbar(wxDC& dc,
-                               wxOrientation orient,
-                               int thumbPosStart,
-                               int thumbPosEnd,
-                               const wxRect& rect,
-                               const int *flags = NULL)
-        { m_renderer->DrawScrollbar(dc, orient, thumbPosStart,
-                                    thumbPosEnd, rect, flags); }
+    virtual void DrawScrollbarThumb(wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0)
+        { m_renderer->DrawScrollbarThumb(dc, rect, flags); }
+    virtual void DrawScrollbarShaft(wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0)
+        { m_renderer->DrawScrollbarShaft(dc, rect, flags); }
+    virtual void DrawItem(wxDC& dc,
+                          const wxString& label,
+                          const wxRect& rect,
+                          int flags = 0)
+        { m_renderer->DrawItem(dc, label, rect, flags); }
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }
 
+    virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
+                                    wxScrollBar::Element elem,
+                                    int thumbPos = -1) const
+        { return m_renderer->GetScrollbarRect(scrollbar, elem, thumbPos); }
     virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
                                        const wxPoint& pt) const
         { return m_renderer->HitTestScrollbar(scrollbar, pt); }
-    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar)
-        { return m_renderer->ScrollbarToPixel(scrollbar); }
+    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
+                                     int thumbPos = -1)
+        { return m_renderer->ScrollbarToPixel(scrollbar, thumbPos); }
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar,
                                  wxCoord coord)
         { return m_renderer->PixelToScrollbar(scrollbar, coord); }
@@ -271,6 +303,8 @@ public:
     // operations
     void DrawLabel(const wxBitmap& bitmap = wxNullBitmap,
                    wxCoord marginX = 0, wxCoord marginY = 0);
+    void DrawItems(const wxListBox *listbox,
+                   size_t itemFirst, size_t itemLast);
     void DrawBorder();
     void DrawButtonBorder();
     // the line must be either horizontal or vertical
@@ -282,7 +316,7 @@ public:
                     int alignment = wxALIGN_CENTRE | wxALIGN_CENTRE_VERTICAL,
                     wxStretch stretch = wxSTRETCH_NOT);
     void DrawBackgroundBitmap();
-    void DrawScrollbar(const wxScrollBar *scrollbar);
+    void DrawScrollbar(const wxScrollBar *scrollbar, int thumbPosOld);
 
     // accessors
     wxWindow *GetWindow() const { return m_window; }

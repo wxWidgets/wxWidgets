@@ -53,6 +53,7 @@ public:
 
     // implement the base class pure virtuals
     virtual void DrawBackground(wxDC& dc,
+                                const wxColour& col,
                                 const wxRect& rect,
                                 int flags = 0);
     virtual void DrawLabel(wxDC& dc,
@@ -86,21 +87,29 @@ public:
                            wxDirection dir,
                            const wxRect& rect,
                            int flags = 0);
-    virtual void DrawScrollbar(wxDC& dc,
-                               wxOrientation orient,
-                               int thumbPosStart,
-                               int thumbPosEnd,
-                               const wxRect& rect,
-                               const int *flags = NULL);
+    virtual void DrawScrollbarThumb(wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
+    virtual void DrawScrollbarShaft(wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags = 0);
+    virtual void DrawItem(wxDC& dc,
+                          const wxString& label,
+                          const wxRect& rect,
+                          int flags = 0);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
 
     // hit testing for the input handlers
+    virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
+                                    wxScrollBar::Element elem,
+                                    int thumbPos = -1) const;
     virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
                                        const wxPoint& pt) const;
-    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar);
+    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
+                                     int thumbPos = -1);
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
-    
+
 protected:
     // DrawBackground() helpers
 
@@ -159,12 +168,12 @@ class wxGTKInputHandler : public wxInputHandler
 public:
     wxGTKInputHandler(wxGTKRenderer *renderer);
 
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxKeyEvent& event,
-                                 bool pressed);
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxMouseEvent& event);
-    virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event);
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
 
 protected:
     wxGTKRenderer *m_renderer;
@@ -281,7 +290,7 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col,
         case SHADOW_IN:         return wxColour(0xd6d6d6);
         case SHADOW_OUT:        return wxColour(0x969696);
 
-        case CONTROL:           
+        case CONTROL:
                                 if ( flags & wxCONTROL_PRESSED )
                                 {
                                     return wxColour(0xc3c3c3);
@@ -592,6 +601,32 @@ void wxGTKRenderer::DrawLabel(wxDC& dc,
     dc.DrawLabel(label, image, rect, alignment, indexAccel, rectBounds);
 }
 
+void wxGTKRenderer::DrawItem(wxDC& dc,
+                             const wxString& label,
+                             const wxRect& rect,
+                             int flags)
+{
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        dc.SetTextBackground(m_scheme->Get(wxColourScheme::HIGHLIGHT));
+        dc.SetTextForeground(m_scheme->Get(wxColourScheme::HIGHLIGHT_TEXT));
+        dc.SetBackgroundMode(wxSOLID);
+    }
+
+    dc.DrawLabel(label, wxNullBitmap, rect);
+
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        dc.SetBackgroundMode(wxTRANSPARENT);
+    }
+
+    if ( flags & wxCONTROL_FOCUSED )
+    {
+        wxRect rectFocus = rect;
+        DrawRect(dc, &rectFocus, m_penBlack);
+    }
+}
+
 // ----------------------------------------------------------------------------
 // background
 // ----------------------------------------------------------------------------
@@ -607,10 +642,14 @@ void wxGTKRenderer::DoDrawBackground(wxDC& dc,
 }
 
 void wxGTKRenderer::DrawBackground(wxDC& dc,
+                                   const wxColour& col,
                                    const wxRect& rect,
                                    int flags)
 {
-    DoDrawBackground(dc, GetBackgroundColour(flags), rect);
+    DoDrawBackground(dc,
+                     col.Ok() ? col
+                               : GetBackgroundColour(flags),
+                     rect);
 }
 
 // ----------------------------------------------------------------------------
@@ -786,89 +825,35 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
     }
 }
 
-void wxGTKRenderer::DrawScrollbar(wxDC& dc,
-                                  wxOrientation orient,
-                                  int thumbPosStart,
-                                  int thumbPosEnd,
-                                  const wxRect& rect,
-                                  const int *flags)
+void wxGTKRenderer::DrawScrollbarThumb(wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags)
 {
-#ifdef DEBUG_MOUSE
-    wxLogDebug("Drawing the scrollbar (orientation = %s):\n"
-               "\tarrow 1: 0x%04x\n"
-               "\tarrow 2: 0x%04x\n"
-               "\tthumb:   0x%04x\n"
-               "\tthumb from %d to %d",
-               orient == wxVERTICAL ? "vertical" : "horizontal",
-               flags[wxScrollBar::Element_Arrow_Line_1],
-               flags[wxScrollBar::Element_Arrow_Line_2],
-               flags[wxScrollBar::Element_Thumb],
-               thumbPosStart, thumbPosEnd);
-#endif // DEBUG_MOUSE
+    // the thumb is never pressed never has focus border under GTK and the
+    // scrollbar background never changes at all
+    int flagsThumb = flags & ~(wxCONTROL_PRESSED | wxCONTROL_FOCUSED);
 
-    // first draw the scrollbar area background
+    wxRect rectThumb = rect;
+    DrawButtonBorder(dc, rectThumb, flagsThumb, &rectThumb);
+    DrawBackground(dc, wxNullColour, rectThumb, flagsThumb);
+}
+
+void wxGTKRenderer::DrawScrollbarShaft(wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags)
+{
     wxRect rectBar = rect;
     DrawAntiShadedRect(dc, &rectBar, m_penDarkGrey, m_penHighlight);
     DrawAntiShadedRect(dc, &rectBar, m_penBlack, m_penGrey);
     DoDrawBackground(dc, m_scheme->Get(wxColourScheme::SCROLLBAR), rectBar);
+}
 
-    // next draw the arrows at the ends
-    wxRect rectArrow[2];
-    wxDirection arrowDir[2];
-
-    rectArrow[0] =
-    rectArrow[1] = rectBar;
-    if ( orient == wxVERTICAL )
-    {
-        rectArrow[0].height =
-        rectArrow[1].height = m_sizeScrollbarArrow.y - 1;
-        rectArrow[1].y = rectBar.GetBottom() - rectArrow[1].height + 1;
-
-        arrowDir[0] = wxUP;
-        arrowDir[1] = wxDOWN;
-    }
-    else // horizontal
-    {
-        rectArrow[0].width =
-        rectArrow[1].width = m_sizeScrollbarArrow.x - 1;
-        rectArrow[1].x = rectBar.GetRight() - rectArrow[1].width + 1;
-
-        arrowDir[0] = wxLEFT;
-        arrowDir[1] = wxRIGHT;
-    }
-
-    for ( size_t nArrow = 0; nArrow < 2; nArrow++ )
-    {
-        DrawArrow(dc, arrowDir[nArrow], rectArrow[nArrow],
-                  flags[wxScrollBar::Element_Arrow_Line_1 + nArrow]);
-    }
-
-    // and, finally, the thumb, if any
-    if ( thumbPosStart < thumbPosEnd )
-    {
-        wxRect rectThumb;
-        if ( orient == wxVERTICAL )
-        {
-            rectBar.Inflate(0, -m_sizeScrollbarArrow.y);
-            rectThumb = rectBar;
-            rectThumb.y += (rectBar.height*thumbPosStart)/100;
-            rectThumb.height = (rectBar.height*(thumbPosEnd - thumbPosStart))/100;
-        }
-        else // horizontal
-        {
-            rectBar.Inflate(-m_sizeScrollbarArrow.x, 0);
-            rectThumb = rectBar;
-            rectThumb.x += (rectBar.width*thumbPosStart)/100;
-            rectThumb.width = (rectBar.width*(thumbPosEnd - thumbPosStart))/100;
-        }
-
-        // the thumb is never pressed never has focus border under GTK and the
-        // scrollbar background never changes at all
-        int flagsThumb = flags[wxScrollBar::Element_Thumb] &
-                            ~(wxCONTROL_PRESSED | wxCONTROL_FOCUSED);
-        DrawButtonBorder(dc, rectThumb, flagsThumb, &rectThumb);
-        DrawBackground(dc, rectThumb, flagsThumb);
-    }
+wxRect wxGTKRenderer::GetScrollbarRect(const wxScrollBar *scrollbar,
+                                       wxScrollBar::Element elem,
+                                       int thumbPos) const
+{
+    return StandardGetScrollbarRect(scrollbar, elem,
+                                    thumbPos, m_sizeScrollbarArrow);
 }
 
 wxHitTest wxGTKRenderer::HitTestScrollbar(const wxScrollBar *scrollbar,
@@ -877,9 +862,10 @@ wxHitTest wxGTKRenderer::HitTestScrollbar(const wxScrollBar *scrollbar,
     return StandardHitTestScrollbar(scrollbar, pt, m_sizeScrollbarArrow);
 }
 
-wxCoord wxGTKRenderer::ScrollbarToPixel(const wxScrollBar *scrollbar)
+wxCoord wxGTKRenderer::ScrollbarToPixel(const wxScrollBar *scrollbar,
+                                        int thumbPos)
 {
-    return StandardScrollbarToPixel(scrollbar, m_sizeScrollbarArrow);
+    return StandardScrollbarToPixel(scrollbar, thumbPos, m_sizeScrollbarArrow);
 }
 
 int wxGTKRenderer::PixelToScrollbar(const wxScrollBar *scrollbar,
@@ -962,27 +948,29 @@ wxGTKInputHandler::wxGTKInputHandler(wxGTKRenderer *renderer)
     m_renderer = renderer;
 }
 
-wxControlActions wxGTKInputHandler::Map(wxControl *control,
-                                        const wxKeyEvent& event,
-                                        bool pressed)
+bool wxGTKInputHandler::HandleKey(wxControl *control,
+                                  const wxKeyEvent& event,
+                                  bool pressed)
 {
-    return wxACTION_NONE;
+    return FALSE;
 }
 
-wxControlActions wxGTKInputHandler::Map(wxControl *control,
-                                        const wxMouseEvent& event)
+bool wxGTKInputHandler::HandleMouse(wxControl *control,
+                                    const wxMouseEvent& event)
 {
     // clicking on the control gives it focus
     if ( event.ButtonDown() )
     {
         control->SetFocus();
+
+        return TRUE;
     }
 
-    return wxACTION_NONE;
+    return FALSE;
 }
 
-bool wxGTKInputHandler::OnMouseMove(wxControl *control,
-                                    const wxMouseEvent& event)
+bool wxGTKInputHandler::HandleMouseMove(wxControl *control,
+                                        const wxMouseEvent& event)
 {
     if ( event.Entering() )
     {
@@ -997,7 +985,6 @@ bool wxGTKInputHandler::OnMouseMove(wxControl *control,
         return FALSE;
     }
 
-    // highlighting changed
     return TRUE;
 }
 

@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        window.h
+// Name:        wx/msw/window.h
 // Purpose:     wxWindow class
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Vadim Zeitlin on 13.05.99: complete refont of message handling,
+//              elimination of Default(), ...
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
@@ -20,20 +21,12 @@
     #pragma interface "window.h"
 #endif
 
-// #include "wx/msw/winundef.h"
-
 // VZ: apparently some version of Windows send extra mouse move messages after
 //     a mouse click. My tests under NT 4.0 and 95 didn't show it so I'm
 //     tempted to think that it was just an effect of a poor mouse and so the
 //     code to work around this is currently disabled - just define this as 1
 //     to reenable it
 #define wxUSE_MOUSEEVENT_HACK 0
-
-// ---------------------------------------------------------------------------
-// forward declarations
-// ---------------------------------------------------------------------------
-
-class WXDLLEXPORT wxButton;
 
 // ---------------------------------------------------------------------------
 // constants
@@ -50,23 +43,23 @@ enum
 // wxWindow declaration for MSW
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindow : public wxWindowBase
+class WXDLLEXPORT wxWindowMSW : public wxWindowBase
 {
 public:
-    wxWindow() { Init(); }
+    wxWindowMSW() { Init(); }
 
-    wxWindow(wxWindow *parent,
-             wxWindowID id,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxString& name = wxPanelNameStr)
+    wxWindowMSW(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxPanelNameStr)
     {
         Init();
         Create(parent, id, pos, size, style, name);
     }
 
-    virtual ~wxWindow();
+    virtual ~wxWindowMSW();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -87,7 +80,7 @@ public:
 
     virtual void SetFocus();
 
-    virtual bool Reparent( wxWindow *newParent );
+    virtual bool Reparent(wxWindowBase *newParent);
 
     virtual void WarpPointer(int x, int y);
     virtual void CaptureMouse();
@@ -437,8 +430,8 @@ private:
     // the helper functions used by HandleChar/KeyXXX methods
     wxKeyEvent CreateKeyEvent(wxEventType evType, int id, WXLPARAM lp) const;
 
-    DECLARE_DYNAMIC_CLASS(wxWindow);
-    DECLARE_NO_COPY_CLASS(wxWindow);
+    DECLARE_DYNAMIC_CLASS(wxWindowMSW);
+    DECLARE_NO_COPY_CLASS(wxWindowMSW);
     DECLARE_EVENT_TABLE()
 };
 

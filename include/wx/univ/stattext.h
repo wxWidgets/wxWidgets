@@ -55,7 +55,7 @@ public:
 
 protected:
     // calculate the optimal size for the label
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestClientSize() const;
 
     // draw the control
     virtual void DoDraw(wxControlRenderer *renderer);

@@ -36,6 +36,7 @@
 
     #include "wx/bmpbuttn.h"
     #include "wx/button.h"
+    #include "wx/listbox.h"
     #include "wx/scrolbar.h"
     #include "wx/scrolwin.h"
     #include "wx/statbox.h"
@@ -46,6 +47,8 @@
 #include "wx/statline.h"
 
 #include "wx/univ/theme.h"
+
+//#define DEBUG_SCROLL
 
 // ----------------------------------------------------------------------------
 // resources
@@ -184,7 +187,10 @@ bool MyUnivApp::OnInit()
     wxFrame *frame = new MyUnivFrame(_T("wxUniversal demo"));
     frame->Show();
 
+#ifdef DEBUG_SCROLL
     wxLog::AddTraceMask(_T("scroll"));
+#endif
+    wxLog::AddTraceMask(_T("listbox"));
 
     return TRUE;
 }
@@ -194,7 +200,7 @@ bool MyUnivApp::OnInit()
 // ----------------------------------------------------------------------------
 
 MyUnivFrame::MyUnivFrame(const wxString& title)
-           : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(600, 600))
+           : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(700, 600))
 {
     SetBackgroundColour(wxGetApp().GetBgColour());
 
@@ -295,6 +301,17 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                                  );
     bmpBtn->SetBitmapSelected(bmp2);
     bmpBtn->SetBitmapFocus(bmp3);
+
+    static const wxString choices[] =
+    {
+        _T("This"),
+        _T("is one of my"),
+        _T("really"),
+        _T("wonderful"),
+        _T("examples."),
+    };
+    new wxListBox(this, -1, wxPoint(550, 10), wxDefaultSize,
+                  WXSIZEOF(choices), choices);
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)
@@ -331,10 +348,14 @@ void MyUnivCanvas::OnPaint(wxPaintEvent& event)
     s_oddRepaint = !s_oddRepaint;
     wxCoord x, y;
     GetViewStart(&x, &y);
+#ifdef DEBUG_SCROLL
     wxLogDebug("Repainting with %s pen (at %dx%d)",
                s_oddRepaint ? "red" : "green",
                x, y);
+#endif // DEBUG_SCROLL
     dc.SetPen(s_oddRepaint ? *wxRED_PEN: *wxGREEN_PEN);
+    dc.SetTextForeground(s_oddRepaint ? *wxRED : *wxGREEN);
+
     dc.DrawLine(0, 0, 1000, 1000);
     dc.DrawText(_T("This is the top of the canvas"), 10, 10);
     dc.DrawLabel(_T("This is the bottom of the canvas"),

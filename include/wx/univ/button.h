@@ -106,8 +106,9 @@ public:
 
 protected:
     virtual bool PerformAction(const wxControlAction& action,
-                               const wxEvent& event);
-    virtual wxSize DoGetBestSize() const;
+                               long numArg = 0,
+                               const wxString& strArg = wxEmptyString);
+    virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
 
     // common part of all ctors

@@ -1008,6 +1008,7 @@ public:
   void Remove(const wxChar *sz);
     // remove item by index
   void Remove(size_t nIndex);
+  void RemoveAt(size_t nIndex) { Remove(nIndex); }
 
   // sorting
     // sort array elements in alphabetical order (or reversed alphabetical

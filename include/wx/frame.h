@@ -27,7 +27,7 @@
 WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxStatusLineNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
-WXDLLEXPORT_DATA(extern wxWindow*) wxWndHook;
+WXDLLEXPORT_DATA(extern wxWindowMSW*) wxWndHook;
 
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;

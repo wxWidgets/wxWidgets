@@ -22,32 +22,10 @@ class WXDLLEXPORT wxRenderer;
 
 // ----------------------------------------------------------------------------
 // wxControlAction: the action is currently just a string which identifies it,
-// later it might become an atom (i.e. an opaque handler to string). As one
-// input event may result in several control actions (e.g. a macro expansion
-// in the text control) we define an array of actions as well.
+// later it might become an atom (i.e. an opaque handler to string).
 // ----------------------------------------------------------------------------
 
 typedef wxString wxControlAction;
-class WXDLLEXPORT wxControlActions : public wxArrayString
-{
-public:
-    wxControlActions() { }
-    wxControlActions(const wxControlAction& action)
-        { wxArrayString::Add(action); }
-    wxControlActions(const wxChar *action)
-        { wxArrayString::Add(action); }
-
-    wxControlActions& Add(const wxControlActions& other)
-    {
-        size_t count = other.GetCount();
-        for ( size_t n = 0; n < count; n++ )
-        {
-            wxArrayString::Add(other[n]);
-        }
-
-        return *this;
-    }
-};
 
 // the list of actions which apply to all controls (other actions are defined
 // in the controls headers)
@@ -87,7 +65,7 @@ public:
     virtual void SetLabel(const wxString &label);
     virtual wxString GetLabel() const;
 
-    // implementation only from now on
+    // wxUniversal-specific methods
 
     // return the index of the accel char in the label or -1 if none
     int GetAccelIndex() const { return m_indexAccel; }
@@ -98,13 +76,24 @@ public:
         return m_indexAccel == -1 ? _T('\0') : m_label[m_indexAccel];
     }
 
-    // perform the action which resulted from the translation of the event
-    // (the exact event type depends on the action), return TRUE if the
-    // control must be updated
+    // perform a control-dependent action: an action may have an optional
+    // numeric and another (also optional) string argument whose interpretation
+    // depends on the action
+    //
+    // NB: we might use ellipsis in PerformAction() declaration but this
+    //     wouldn't be more efficient than always passing 2 unused parameters
+    //     but would be more difficult. Another solution would be to have
+    //     several overloaded versions but this will expose the problem of
+    //     virtual function hiding we don't have here.
     virtual bool PerformAction(const wxControlAction& action,
-                               const wxEvent& event);
+                               long numArg = 0l,
+                               const wxString& strArg = wxEmptyString);
 
 protected:
+    // by default static controls don't have the border and all the others do
+    // have it
+    virtual wxBorder GetDefaultBorder() const;
+
     // create the event translator object for this control: the base class
     // action creates the default one which doesn't do anything
     virtual wxInputHandler *CreateInputHandler() const;
@@ -118,9 +107,6 @@ protected:
 private:
     // common part of all ctors
     void Init();
-
-    // common part of OnMouse/OnKeyDown/Up
-    void PerformActions(const wxControlActions& actions, const wxEvent& event);
 
     // input processor
     wxInputHandler *m_handler;

@@ -58,13 +58,7 @@ bool wxStaticText::Create(wxWindow *parent,
         return FALSE;
 
     SetLabel(label);
-
-    if ( size.x == -1 || size.y == -1 )
-    {
-        wxSize sizeBest = DoGetBestSize();
-        SetSize(size.x == -1 ? sizeBest.x : size.x,
-                size.y == -1 ? sizeBest.y : size.y);
-    }
+    SetBestSize(size);
 
     return TRUE;
 }
@@ -78,13 +72,13 @@ void wxStaticText::SetLabel(const wxString& label)
     wxControl::SetLabel(label);
 }
 
-wxSize wxStaticText::DoGetBestSize() const
+wxSize wxStaticText::DoGetBestClientSize() const
 {
     wxClientDC dc(wxConstCast(this, wxStaticText));
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 
-    return AdjustSize(wxSize(width, height));
+    return wxSize(width, height);
 }
 
 // ----------------------------------------------------------------------------

@@ -64,7 +64,7 @@ public:
     wxIcon GetIcon() const;
 
 private:
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
 
     // the bitmap which we show

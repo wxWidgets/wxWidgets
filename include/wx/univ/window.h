@@ -36,8 +36,14 @@ enum
     wxCONTROL_PRESSED    = 0x00000004,  // (button) is pressed
     wxCONTROL_ISDEFAULT  = 0x00000008,  // only applies to the buttons
     wxCONTROL_CURRENT    = 0x00000010,  // mouse is currently over the control
+    wxCONTROL_SELECTED   = 0x00000020,  // selected item in e.g. listbox
+    wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
 
-    wxCONTROL_FLAGS_MASK = 0x0000001f
+    wxCONTROL_FLAGS_MASK = 0x0000007f,
+
+    // this is a pseudo flag not used directly by wxRenderer but rather by some
+    // controls internally
+    wxCONTROL_DIRTY      = 0x80000000
 };
 
 // ----------------------------------------------------------------------------
@@ -119,13 +125,19 @@ protected:
 
     // returns the (low level) renderer to use for drawing the control by
     // querying the current theme
-    wxRenderer *GetRenderer() const;
+    wxRenderer *GetRenderer() const { return m_renderer; }
 
     // draw the control background, return TRUE if done
     virtual bool DoDrawBackground(wxControlRenderer *renderer);
 
     // draw the controls contents
     virtual void DoDraw(wxControlRenderer *renderer);
+
+    // calculate the best size for the client area of the window: default
+    // implementation of DoGetBestSize() uses this method and adds the border
+    // width to the result
+    virtual wxSize DoGetBestClientSize() const;
+    virtual wxSize DoGetBestSize() const;
 
     // adjust the size of the window to take into account its borders
     wxSize AdjustSize(const wxSize& size) const;
@@ -138,6 +150,9 @@ protected:
 
     // put the scrollbars along the edges of the window
     void PositionScrollbars();
+
+    // the renderer we use
+    wxRenderer *m_renderer;
 
     // background bitmap info
     wxBitmap  m_bitmapBg;

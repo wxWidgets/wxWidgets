@@ -115,9 +115,6 @@ public:
     virtual void SetupColours();
 
 protected:
-    // do we have multiple selections?
-    bool HasMultipleSelection() const;
-
     // free memory (common part of Clear() and dtor)
     void Free();
 

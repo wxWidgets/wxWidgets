@@ -16,8 +16,6 @@
     #pragma interface "univscrolbar.h"
 #endif
 
-#include "wx/univ/renderer.h"   // for wxHitTest
-
 class WXDLLEXPORT wxInputHandler;
 
 // ----------------------------------------------------------------------------
@@ -100,15 +98,19 @@ public:
     void ScrollPages(int nPages);
 
     virtual bool PerformAction(const wxControlAction& action,
-                               const wxEvent& event);
+                               long numArg = 0,
+                               const wxString& strArg = wxEmptyString);
 
     // wxScrollBar sub elements state (combination of wxCONTROL_XXX)
-    void SetState(Element which, int flags) { m_elementsState[which] = flags; }
+    void SetState(Element which, int flags);
     int GetState(Element which) const { return m_elementsState[which]; }
 
 protected:
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
+
+    // event handler
+    void OnIdle(wxIdleEvent& event);
 
     // SetThumbPosition() helper
     void DoSetThumb(int thumbPos);
@@ -117,17 +119,15 @@ protected:
     void Init();
 
 private:
-    // get the mouse coordinates in the scrollbar direction from a
-    // wxMouseEvent (the event *must* really be of this type!)
-    wxCoord GetMouseCoord(const wxEvent& event) const;
-
     // total range of the scrollbar in logical units
     int m_range;
 
-    // the size of the thumb in logical units (from 0 to m_range) and its
-    // position (from 0 to m_range - m_thumbSize)
+    // the current and previous (after last refresh - this is used for
+    // repainting optimisation) size of the thumb in logical units (from 0 to
+    // m_range) and its position (from 0 to m_range - m_thumbSize)
     int m_thumbSize,
-        m_thumbPos;
+        m_thumbPos,
+        m_thumbPosOld;
 
     // the page size, i.e. the number of lines by which to scroll when page
     // up/down action is performed
@@ -136,10 +136,10 @@ private:
     // the state of the sub elements
     int m_elementsState[Element_Max];
 
-    // the offset of the top/left of the scrollbar relative to the mouse to
-    // keep during the thumb drag
-    int m_ofsMouse;
+    // the dirty flag: if set, scrollbar must be updated
+    bool m_dirty;
 
+    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
 };
 

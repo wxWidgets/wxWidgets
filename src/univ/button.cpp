@@ -6,7 +6,7 @@
 // Created:     14.08.00
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vadim Zeitlin
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -97,7 +97,7 @@ wxButton::~wxButton()
 // size management
 // ----------------------------------------------------------------------------
 
-wxSize wxButton::DoGetBestSize() const
+wxSize wxButton::DoGetBestClientSize() const
 {
     wxClientDC dc(wxConstCast(this, wxButton));
     wxCoord width, height;
@@ -113,7 +113,7 @@ wxSize wxButton::DoGetBestSize() const
         width += m_bitmap.GetWidth() + 2*m_marginBmpX;
     }
 
-    return AdjustSize(wxSize(width, height));
+    return wxSize(width, height);
 }
 
 // ----------------------------------------------------------------------------
@@ -132,12 +132,22 @@ void wxButton::DoDraw(wxControlRenderer *renderer)
 
 void wxButton::Press()
 {
-    m_isPressed = TRUE;
+    if ( !m_isPressed )
+    {
+        m_isPressed = TRUE;
+
+        Refresh();
+    }
 }
 
 void wxButton::Release()
 {
-    m_isPressed = FALSE;
+    if ( m_isPressed )
+    {
+        m_isPressed = FALSE;
+
+        Refresh();
+    }
 }
 
 void wxButton::Toggle()
@@ -162,10 +172,9 @@ void wxButton::Click()
 }
 
 bool wxButton::PerformAction(const wxControlAction& action,
-                             const wxEvent& event)
+                             long numArg,
+                             const wxString& strArg)
 {
-    bool wasPressed = IsPressed();
-
     if ( action == wxACTION_BUTTON_TOGGLE )
         Toggle();
     else if ( action == wxACTION_BUTTON_CLICK )
@@ -175,9 +184,9 @@ bool wxButton::PerformAction(const wxControlAction& action,
     else if ( action == wxACTION_BUTTON_RELEASE )
         Release();
     else
-        return wxControl::PerformAction(action, event);
+        return wxControl::PerformAction(action, numArg, strArg);
 
-    return wasPressed != IsPressed();
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -200,6 +209,122 @@ void wxButton::SetImageMargins(wxCoord x, wxCoord y)
 void wxButton::SetDefault()
 {
     m_isDefault = TRUE;
+}
+
+// ============================================================================
+// wxStdButtonInputHandler
+// ============================================================================
+
+wxStdButtonInputHandler::wxStdButtonInputHandler(wxInputHandler *handler)
+                       : wxStdInputHandler(handler)
+{
+    m_winCapture = NULL;
+}
+
+bool wxStdButtonInputHandler::HandleKey(wxControl *control,
+                                        const wxKeyEvent& event,
+                                        bool pressed)
+{
+    int keycode = event.GetKeyCode();
+    if ( keycode == WXK_SPACE || keycode == WXK_RETURN )
+    {
+        control->PerformAction(wxACTION_BUTTON_TOGGLE);
+
+        return TRUE;
+    }
+
+    return wxStdInputHandler::HandleKey(control, event, pressed);
+}
+
+bool wxStdButtonInputHandler::HandleMouse(wxControl *control,
+                                          const wxMouseEvent& event)
+{
+    // the button has 2 states: pressed and normal with the following
+    // transitions between them:
+    //
+    //      normal -> left down -> capture mouse and go to pressed state
+    //      pressed -> left up inside -> generate click -> go to normal
+    //                         outside ------------------>
+    //
+    // the other mouse buttons are ignored
+    if ( event.Button(1) )
+    {
+        if ( event.ButtonDown(1) )
+        {
+            m_winCapture = control;
+            m_winCapture->CaptureMouse();
+            m_winHasMouse = TRUE;
+
+            control->PerformAction(wxACTION_BUTTON_PRESS);
+
+            return TRUE;
+        }
+        else // up
+        {
+            if ( m_winCapture )
+            {
+                m_winCapture->ReleaseMouse();
+                m_winCapture = NULL;
+            }
+
+            if ( m_winHasMouse )
+            {
+                // this will generate a click event
+                control->PerformAction(wxACTION_BUTTON_TOGGLE);
+
+                return TRUE;
+            }
+            //else: the mouse was released outside the window, this doesn't
+            //      count as a click
+        }
+    }
+
+    return wxStdInputHandler::HandleMouse(control, event);
+}
+
+bool wxStdButtonInputHandler::HandleMouseMove(wxControl *control,
+                                              const wxMouseEvent& event)
+{
+    // we only have to do something when the mouse leaves/enters the pressed
+    // button and don't care about the other ones
+    if ( event.GetEventObject() == m_winCapture )
+    {
+        // leaving the button should remove its pressed state
+        if ( event.Leaving() )
+        {
+            // remember that the mouse is now outside
+            m_winHasMouse = FALSE;
+
+            // we do have a pressed button, so release it
+            control->PerformAction(wxACTION_BUTTON_RELEASE);
+
+            return TRUE;
+        }
+        // and entering it back should make it pressed again if it had been
+        // pressed
+        else if ( event.Entering() )
+        {
+            // the mouse is (back) inside the button
+            m_winHasMouse = TRUE;
+
+            // we did have a pressed button which we released when leaving the
+            // window, press it again
+            control->PerformAction(wxACTION_BUTTON_PRESS);
+
+            return TRUE;
+        }
+    }
+
+    return wxStdInputHandler::HandleMouseMove(control, event);
+}
+
+bool wxStdButtonInputHandler::HandleFocus(wxControl *control,
+                                          const wxFocusEvent& event)
+{
+    // buttons change appearance when they get/lose focus
+    control->Refresh();
+
+    return TRUE;
 }
 
 #endif // wxUSE_BUTTON

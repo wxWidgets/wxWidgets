@@ -17,7 +17,9 @@
     #pragma interface "inphand.h"
 #endif
 
-#include "wx/control.h" // for wxControlAction(s)
+#include "wx/control.h"         // for wxControlAction(s)
+
+#include "wx/univ/renderer.h"   // for wxHitTest
 
 class WXDLLEXPORT wxRenderer;
 class WXDLLEXPORT wxScrollBar;
@@ -30,31 +32,27 @@ class WXDLLEXPORT wxInputHandler
 {
 public:
     // map a keyboard event to one or more actions (pressed == TRUE if the key
-    // was pressed, FALSE if released)
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxKeyEvent& event,
-                                 bool pressed) = 0;
+    // was pressed, FALSE if released), returns TRUE if something was done
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed) = 0;
 
     // map a mouse (click) event to one or more actions
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxMouseEvent& event) = 0;
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event) = 0;
 
-    // do something with mouse move/enter/leave: unlike the Map() functions,
-    // this doesn't translate the event into an action but, normally, uses the
-    // renderer directly to change the controls appearance as needed
-    //
-    // this is faster than using Map() which is important for mouse move
-    // events as they occur often and in a quick succession
-    //
-    // return TRUE to refresh the control, FALSE otherwise
-    virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event);
+    // handle mouse movement (or enter/leave) event: it is separated from
+    // HandleMouse() for convenience as many controls don't care about mouse
+    // movements at all
+    virtual bool HandleMouseMove(wxControl *control,
+                                 const wxMouseEvent& event);
 
     // do something with focus set/kill event: this is different from
-    // OnMouseMove() as the mouse maybe over the control without it having
+    // HandleMouseMove() as the mouse maybe over the control without it having
     // focus
     //
     // return TRUE to refresh the control, FALSE otherwise
-    virtual bool OnFocus(wxControl *control, const wxFocusEvent& event);
+    virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
 
     // virtual dtor for any base class
     virtual ~wxInputHandler();
@@ -76,17 +74,17 @@ class WXDLLEXPORT wxStdInputHandler : public wxInputHandler
 public:
     wxStdInputHandler(wxInputHandler *handler) : m_handler(handler) { }
 
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxKeyEvent& event,
-                                 bool pressed)
-        { return m_handler->Map(control, event, pressed); }
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxMouseEvent& event)
-        { return m_handler->Map(control, event); }
-    virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event)
-        { return m_handler->OnMouseMove(control, event); }
-    virtual bool OnFocus(wxControl *control, const wxFocusEvent& event)
-        { return m_handler->OnFocus(control, event); }
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed)
+        { return m_handler->HandleKey(control, event, pressed); }
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event)
+        { return m_handler->HandleMouse(control, event); }
+    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event)
+        { return m_handler->HandleMouseMove(control, event); }
+    virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event)
+        { return m_handler->HandleFocus(control, event); }
 
 private:
     wxInputHandler *m_handler;
@@ -102,13 +100,13 @@ class WXDLLEXPORT wxStdButtonInputHandler : public wxStdInputHandler
 public:
     wxStdButtonInputHandler(wxInputHandler *inphand);
 
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxKeyEvent& event,
-                                 bool pressed);
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxMouseEvent& event);
-    virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event);
-    virtual bool OnFocus(wxControl *control, const wxFocusEvent& event);
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
+    virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
 
 private:
     // the window (button) which has capture or NULL and the flag telling if
@@ -130,12 +128,12 @@ public:
     wxStdScrollBarInputHandler(wxRenderer *renderer,
                                wxInputHandler *inphand);
 
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxKeyEvent& event,
-                                 bool pressed);
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxMouseEvent& event);
-    virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event);
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
 
     virtual ~wxStdScrollBarInputHandler();
 
@@ -143,8 +141,7 @@ public:
     //
     // return TRUE to continue scrolling, FALSE to stop the timer
     virtual bool OnScrollTimer(wxScrollBar *scrollbar,
-                               const wxControlAction& action,
-                               const wxMouseEvent& event);
+                               const wxControlAction& action);
 
 protected:
     // the methods which must be overridden in the derived class
@@ -169,6 +166,13 @@ protected:
     // stop scrolling because we reached the end point
     void StopScrolling(wxScrollBar *scrollbar);
 
+    // get the mouse coordinates in the scrollbar direction from the event
+    wxCoord GetMouseCoord(const wxScrollBar *scrollbar,
+                          const wxMouseEvent& event) const;
+
+    // generate a "thumb move" action for this mouse event
+    void HandleThumbMove(wxScrollBar *scrollbar, const wxMouseEvent& event);
+
     // the window (scrollbar) which has capture or NULL and the flag telling if
     // the mouse is inside the element which captured it or not
     wxWindow *m_winCapture;
@@ -184,9 +188,32 @@ protected:
     // the renderer (we use it only for hit testing)
     wxRenderer *m_renderer;
 
+    // the offset of the top/left of the scrollbar relative to the mouse to
+    // keep during the thumb drag
+    int m_ofsMouse;
+
     // the timer for generating scroll events when the mouse stays pressed on
     // a scrollbar
     class wxTimer *m_timerScroll;
+};
+
+// ----------------------------------------------------------------------------
+// wxStdListboxInputHandler: handles mouse and kbd in a single or multi
+// selection listbox
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdListboxInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdListboxInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control,
+                                 const wxMouseEvent& event);
 };
 
 #endif // _WX_UNIV_INPHAND_H_

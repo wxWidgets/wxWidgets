@@ -48,9 +48,14 @@
 // event tables
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
+// we can't use wxWindowNative here as it won't be expanded inside the macro
+#if defined(__WXMSW__)
+    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowMSW)
+#elif defined(__WXGTK__)
+    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowGTK)
+#endif
 
-BEGIN_EVENT_TABLE(wxWindow, wxWindowBase)
+BEGIN_EVENT_TABLE(wxWindow, wxWindowNative)
     EVT_SIZE(wxWindow::OnSize)
 
     EVT_PAINT(wxWindow::OnPaint)
@@ -67,6 +72,8 @@ void wxWindow::Init()
     m_scrollbarHorz = (wxScrollBar *)NULL;
 
     m_isCurrent = FALSE;
+
+    m_renderer = (wxRenderer *)NULL;
 }
 
 // ----------------------------------------------------------------------------
@@ -100,11 +107,6 @@ const wxBitmap& wxWindow::GetBackgroundBitmap(int *alignment,
 // painting
 // ----------------------------------------------------------------------------
 
-wxRenderer *wxWindow::GetRenderer() const
-{
-    return wxTheme::Get()->GetRenderer();
-}
-
 // the event handler executed when the window background must be painted
 void wxWindow::OnErase(wxEraseEvent& event)
 {
@@ -121,12 +123,20 @@ void wxWindow::OnErase(wxEraseEvent& event)
 // the event handler executed when the window must be repainted
 void wxWindow::OnPaint(wxPaintEvent& event)
 {
-    // get the DC to use and create renderer on it
-    wxPaintDC dc(this);
-    wxControlRenderer renderer(this, dc, GetRenderer());
+    if ( !m_renderer )
+    {
+        // it is a native control which paints itself
+        event.Skip();
+    }
+    else
+    {
+        // get the DC to use and create renderer on it
+        wxPaintDC dc(this);
+        wxControlRenderer renderer(this, dc, m_renderer);
 
-    // do draw the control!
-    DoDraw(&renderer);
+        // do draw the control!
+        DoDraw(&renderer);
+    }
 }
 
 bool wxWindow::DoDrawBackground(wxControlRenderer *renderer)
@@ -211,10 +221,21 @@ void wxWindow::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
+wxSize wxWindow::DoGetBestSize() const
+{
+    return AdjustSize(DoGetBestClientSize());
+}
+
+wxSize wxWindow::DoGetBestClientSize() const
+{
+    return wxWindowNative::DoGetBestSize();
+}
+
 wxSize wxWindow::AdjustSize(const wxSize& size) const
 {
     wxSize sz = size;
-    wxTheme::Get()->GetRenderer()->AdjustSize(&sz, this);
+    if ( m_renderer )
+        m_renderer->AdjustSize(&sz, this);
     return sz;
 }
 
@@ -344,27 +365,33 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     }
     else // move the part which doesn't change to the new location
     {
-        // positive values mean to scroll to the left/up
-        if ( dx > 0 )
+        // note that when we scroll the canvas in some direction we move the
+        // block which doesn't need to be refreshed in the opposite direction
+
+        if ( dx < 0 )
         {
-            ptSource.x = dx;
+            // scroll to the right, move to the left
+            ptSource.x = -dx;
             ptDest.x = 0;
         }
         else
         {
+            // scroll to the left, move to the right
             ptSource.x = 0;
-            ptDest.x = -dx;
+            ptDest.x = dx;
         }
 
-        if ( dy > 0 )
+        if ( dy < 0 )
         {
-            ptSource.y = dy;
+            // scroll down, move up
+            ptSource.y = -dy;
             ptDest.y = 0;
         }
         else
         {
+            // scroll up, move down
             ptSource.y = 0;
-            ptDest.y = -dy;
+            ptDest.y = dy;
         }
 
         // do move
@@ -387,12 +414,23 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         //        it bad?
 
         wxRect rect;
-        rect.x = ptSource.x;
-        rect.y = ptSource.y;
 
         if ( dx )
         {
-            rect.width = abs(dx);
+            if ( dx < 0 )
+            {
+                // refresh the area along the right border
+                rect.x = size.x;
+                rect.width = -dx;
+            }
+            else
+            {
+                // refresh the area along the left border
+                rect.x = 0;
+                rect.width = dx;
+            }
+
+            rect.y = 0;
             rect.height = sizeTotal.y;
 
             wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
@@ -403,8 +441,21 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
         if ( dy )
         {
+            if ( dy < 0 )
+            {
+                // refresh the area along the bottom border
+                rect.y = size.y;
+                rect.height = -dy;
+            }
+            else
+            {
+                // refresh the area along the top border
+                rect.y = 0;
+                rect.height = dy;
+            }
+
+            rect.x = 0;
             rect.width = sizeTotal.x;
-            rect.height = abs(dy);
 
             wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
                        rect.x, rect.y, rect.GetRight(), rect.GetBottom());

@@ -78,6 +78,16 @@ public:
     void SetFirstItem(int n) { DoSetFirstItem(n); }
     void SetFirstItem(const wxString& s);
 
+    // return TRUE if the listbox allows multiple selection
+    bool HasMultipleSelection() const
+    {
+        return (m_windowStyle & wxLB_MULTIPLE) ||
+               (m_windowStyle & wxLB_EXTENDED);
+    }
+
+    // return TRUE if this listbox is sorted
+    bool IsSorted() const { return (m_windowStyle & wxLB_SORT) != 0; }
+
     // emulate selecting or deselecting the item event.GetInt() (depending on
     // event.GetExtraLong())
     void Command(wxCommandEvent& event);
@@ -103,7 +113,9 @@ protected:
 // include the platform-specific class declaration
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/listbox.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/listbox.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/listbox.h"

@@ -71,6 +71,106 @@ void wxRenderer::StandardDrawFrame(wxDC& dc,
 // ----------------------------------------------------------------------------
 
 /* static */
+wxRect wxRenderer::StandardGetScrollbarRect(const wxScrollBar *scrollbar,
+                                            wxScrollBar::Element elem,
+                                            int thumbPos,
+                                            const wxSize& sizeArrow)
+{
+    if ( thumbPos == -1 )
+    {
+        thumbPos = scrollbar->GetThumbPosition();
+    }
+
+    wxSize sizeTotal = scrollbar->GetClientSize();
+    wxCoord *start, *width, length, arrow;
+    wxRect rect;
+    if ( scrollbar->IsVertical() )
+    {
+        rect.x = 0;
+        rect.width = sizeTotal.x;
+        length = sizeTotal.y;
+        start = &rect.y;
+        width = &rect.height;
+        arrow = sizeArrow.y;
+    }
+    else // horizontal
+    {
+        rect.y = 0;
+        rect.height = sizeTotal.y;
+        length = sizeTotal.x;
+        start = &rect.x;
+        width = &rect.width;
+        arrow = sizeArrow.x;
+    }
+
+    switch ( elem )
+    {
+        case wxScrollBar::Element_Arrow_Line_1:
+            *start = 0;
+            *width = arrow;
+            break;
+
+        case wxScrollBar::Element_Arrow_Line_2:
+            *start = length - arrow;
+            *width = arrow;
+            break;
+
+        case wxScrollBar::Element_Arrow_Page_1:
+        case wxScrollBar::Element_Arrow_Page_2:
+            // we don't have them at all
+            break;
+
+        case wxScrollBar::Element_Thumb:
+        case wxScrollBar::Element_Bar_1:
+        case wxScrollBar::Element_Bar_2:
+            // we need to calculate the thumb position - do it
+            {
+                length -= 2*arrow;
+                wxCoord thumbStart, thumbEnd;
+                int range = scrollbar->GetRange();
+                if ( !range )
+                {
+                    thumbStart =
+                    thumbEnd = 0;
+                }
+                else
+                {
+                    int thumbSize = scrollbar->GetThumbSize();
+
+                    thumbStart = (length*thumbPos) / range;
+                    thumbEnd = (length*(thumbPos + thumbSize)) / range;
+                }
+
+                if ( elem == wxScrollBar::Element_Thumb )
+                {
+                    *start = thumbStart;
+                    *width = thumbEnd - thumbStart;
+                }
+                else if ( elem == wxScrollBar::Element_Bar_1 )
+                {
+                    *start = 0;
+                    *width = thumbStart;
+                }
+                else // elem == wxScrollBar::Element_Bar_2
+                {
+                    *start = thumbEnd;
+                    *width = length - thumbEnd;
+                }
+
+                // everything is relative to the start of the shaft so far
+                *start += arrow;
+            }
+            break;
+
+        case wxScrollBar::Element_Max:
+        default:
+            wxFAIL_MSG( _T("unknown scrollbar element") );
+    }
+
+    return rect;
+}
+
+/* static */
 wxCoord wxRenderer::StandardScrollBarSize(const wxScrollBar *scrollbar,
                                           const wxSize& sizeArrowSB)
 {
@@ -91,6 +191,7 @@ wxCoord wxRenderer::StandardScrollBarSize(const wxScrollBar *scrollbar,
 
 /* static */
 wxCoord wxRenderer::StandardScrollbarToPixel(const wxScrollBar *scrollbar,
+                                             int thumbPos,
                                              const wxSize& sizeArrow)
 {
     int range = scrollbar->GetRange();
@@ -100,8 +201,13 @@ wxCoord wxRenderer::StandardScrollbarToPixel(const wxScrollBar *scrollbar,
         return 0;
     }
 
-    return ( scrollbar->GetThumbPosition() *
-                StandardScrollBarSize(scrollbar, sizeArrow) ) / range
+    if ( thumbPos == -1 )
+    {
+        // by default use the current thumb position
+        thumbPos = scrollbar->GetThumbPosition();
+    }
+
+    return ( thumbPos*StandardScrollBarSize(scrollbar, sizeArrow) ) / range
              + (scrollbar->IsVertical() ? sizeArrow.y : sizeArrow.x);
 }
 
@@ -219,8 +325,13 @@ void wxControlRenderer::DrawBorder()
     m_renderer->DrawBorder(m_dc, m_window->GetBorder(),
                            m_rect, flags, &m_rect);
 
-    // fill the inside (TODO: query the theme for bg bitmap)
-    m_renderer->DrawBackground(m_dc, m_rect, flags);
+    // fill the inside unless we have the background bitmap as we don't want to
+    // overwrite it
+    if ( !m_window->GetBackgroundBitmap().Ok() )
+    {
+        m_renderer->DrawBackground(m_dc, m_window->GetBackgroundColour(),
+                                   m_rect, flags);
+    }
 }
 
 void wxControlRenderer::DrawLabel(const wxBitmap& bitmap,
@@ -272,7 +383,8 @@ void wxControlRenderer::DrawButtonBorder()
 
     m_renderer->DrawButtonBorder(m_dc, m_rect, flags, &m_rect);
 
-    m_renderer->DrawBackground(m_dc, m_rect, flags);
+    m_renderer->DrawBackground(m_dc, m_window->GetBackgroundColour(),
+                               m_rect, flags);
 }
 
 void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap)
@@ -357,36 +469,85 @@ void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap,
     m_dc.DrawBitmap(bmp, x, y, TRUE /* use mask */);
 }
 
-void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar)
+void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
+                                      int thumbPosOld)
 {
-    int thumbStart, thumbEnd;
-    int range = scrollbar->GetRange();
-    if ( range )
-    {
-        int thumbPos = scrollbar->GetThumbPosition(),
-            thumbSize = scrollbar->GetThumbSize();
+    // we will only redraw the parts which must be redrawn and not everything
+    wxRegion rgnUpdate = scrollbar->GetUpdateRegion();
 
-        thumbStart = (100*thumbPos) / range;
-        thumbEnd = (100*(thumbPos + thumbSize)) / range;
-    }
-    else // no range
+    // arrows
+    static const wxDirection arrowDirs[2][2] =
     {
-        thumbStart =
-        thumbEnd = 0;
+        { wxLEFT, wxRIGHT },
+        { wxUP,   wxDOWN  }
+    };
+
+    for ( int nArrow = 0; nArrow < 2; nArrow++ )
+    {
+        wxScrollBar::Element elem =
+            (wxScrollBar::Element)(wxScrollBar::Element_Arrow_Line_1 + nArrow);
+
+        wxRect rectArrow = m_renderer->GetScrollbarRect(scrollbar, elem);
+        if ( rgnUpdate.Contains(rectArrow) )
+        {
+            m_renderer->DrawArrow(m_dc,
+                                  arrowDirs[scrollbar->IsVertical()][nArrow],
+                                  rectArrow,
+                                  scrollbar->GetState(elem));
+        }
     }
 
-    int flags[wxScrollBar::Element_Max];
-    for ( size_t n = 0; n < WXSIZEOF(flags); n++ )
+    // TODO: support for page arrows
+
+    // the shaft
+    for ( int nBar = 0; nBar < 2; nBar++ )
     {
-        flags[n] = scrollbar->GetState((wxScrollBar::Element)n);
+        wxScrollBar::Element elem =
+            (wxScrollBar::Element)(wxScrollBar::Element_Bar_1 + nBar);
+
+        wxRect rectBar = m_renderer->GetScrollbarRect(scrollbar, elem);
+
+        if ( rgnUpdate.Contains(rectBar) )
+        {
+#if 0
+            // we try to avoid redrawing the entire shaft (which might be quite
+            // long) if possible by only redrawing the area between the old and
+            // current positions of the thumb
+            if ( thumbPosOld != -1 )
+            {
+                wxRect rectBarOld = m_renderer->GetScrollbarRect(scrollbar,
+                                                                 elem,
+                                                                 thumbPosOld);
+                if ( scrollbar->IsVertical() )
+                {
+                    if ( nBar )
+                        rectBar.SetBottom(rectBar.GetTop());
+                    else
+                        rectBar.SetTop(rectBarOld.GetBottom());
+                }
+                else // horizontal
+                {
+                    if ( nBar )
+                        rectBar.SetRight(rectBar.GetLeft());
+                    else
+                        rectBar.SetLeft(rectBarOld.GetRight());
+                }
+            }
+#endif // 0
+
+            m_renderer->DrawScrollbarShaft(m_dc, rectBar,
+                                           scrollbar->GetState(elem));
+        }
     }
 
-    m_renderer->DrawScrollbar(m_dc,
-                              m_window->GetWindowStyle() & wxVERTICAL
-                                ? wxVERTICAL
-                                : wxHORIZONTAL,
-                              thumbStart, thumbEnd, m_rect,
-                              flags);
+    // and the thumb
+    wxScrollBar::Element elem = wxScrollBar::Element_Thumb;
+    wxRect rectThumb = m_renderer->GetScrollbarRect(scrollbar, elem);
+    if ( rgnUpdate.Contains(rectThumb) )
+    {
+        m_renderer->DrawScrollbarThumb(m_dc, rectThumb,
+                                       scrollbar->GetState(elem));
+    }
 }
 
 void wxControlRenderer::DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
@@ -398,4 +559,25 @@ void wxControlRenderer::DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
         m_renderer->DrawVerticalLine(m_dc, x1, y1, y2);
     else // horizontal
         m_renderer->DrawHorizontalLine(m_dc, y1, x1, x2);
+}
+
+void wxControlRenderer::DrawItems(const wxListBox *lbox,
+                                  size_t itemFirst, size_t itemLast)
+{
+    wxCoord lineHeight = lbox->GetLineHeight();
+    wxRect rect = m_rect;
+    rect.y += itemFirst*lineHeight;
+    rect.height = lineHeight;
+    for ( size_t n = itemFirst; n < itemLast; n++ )
+    {
+        int flags = 0;
+        if ( (int)n == lbox->GetCurrentItem() )
+            flags |= wxCONTROL_FOCUSED;
+        if ( lbox->IsSelected(n) )
+            flags |= wxCONTROL_SELECTED;
+
+        m_renderer->DrawItem(m_dc, lbox->GetString(n), rect, flags);
+
+        rect.y += lineHeight;
+    }
 }
