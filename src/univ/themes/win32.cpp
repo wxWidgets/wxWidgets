@@ -475,6 +475,14 @@ private:
 
     wxFont m_titlebarFont;
 
+    // the checked and unchecked bitmaps for DrawCheckItem()
+    wxBitmap m_bmpCheckBitmaps[IndicatorStatus_Max];
+
+    // the bitmaps returned by GetIndicator()
+    wxBitmap m_bmpIndicators[IndicatorType_Max]
+                            [IndicatorState_Max]
+                            [IndicatorStatus_Max];
+
     // titlebar icons:
     wxBitmap m_bmpFrameButtons[FrameButton_Max];
 
@@ -1068,7 +1076,7 @@ static const char *pressed_unchecked_radio_xpm[] = {
 };
 
 static const char **
-    bmpIndicators[IndicatorType_Max][IndicatorState_Max][IndicatorStatus_Max] =
+    xpmIndicators[IndicatorType_Max][IndicatorState_Max][IndicatorStatus_Max] =
 {
     // checkboxes first
     {
@@ -1108,6 +1116,12 @@ static const char **
         // disabled selected state
         { selected_disabled_checked_menu_xpm, NULL },
     }
+};
+
+static const char **xpmChecked[IndicatorStatus_Max] =
+{
+    checked_item_xpm,
+    unchecked_item_xpm
 };
 
 // ============================================================================
@@ -2171,8 +2185,16 @@ void wxWin32Renderer::DrawCheckItem(wxDC& dc,
     }
     else // use default bitmap
     {
-        bmp = wxBitmap(flags & wxCONTROL_CHECKED ? checked_item_xpm
-                                                 : unchecked_item_xpm);
+        IndicatorStatus i = flags & wxCONTROL_CHECKED
+                                ? IndicatorStatus_Checked
+                                : IndicatorStatus_Unchecked;
+
+        if ( !m_bmpCheckBitmaps[i].Ok() )
+        {
+            m_bmpCheckBitmaps[i] = wxBitmap(xpmChecked[i]);
+        }
+
+        bmp = m_bmpCheckBitmaps[i];
     }
 
     dc.DrawBitmap(bmp, rect.x, rect.y + (rect.height - bmp.GetHeight()) / 2 - 1,
@@ -2207,14 +2229,19 @@ wxBitmap wxWin32Renderer::GetIndicator(IndicatorType indType, int flags)
                                     ? IndicatorStatus_Checked
                                     : IndicatorStatus_Unchecked;
 
-    const char **xpm = bmpIndicators[indType][indState][indStatus];
-    if (xpm)
+    wxBitmap bmp = m_bmpIndicators[indType][indState][indStatus];
+    if ( !bmp.Ok() )
     {
-        wxBitmap bmp(xpm);
-        return bmp;
+        const char **xpm = xpmIndicators[indType][indState][indStatus];
+        if ( xpm )
+        {
+            // create and cache it
+            bmp = wxBitmap(xpm);
+            m_bmpIndicators[indType][indState][indStatus] = bmp;
+        }
     }
-    else
-        return wxNullBitmap;
+
+    return bmp;
 }
 
 void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,
