@@ -112,7 +112,8 @@ wxString wxFileConfig::GetLocalDir()
       strDir = ".";
     }
     else
-      strDir = szHome;
+       strDir = szHome;
+    strDir << '/'; // a double slash is no problem, a missin one yes
   #else   // Windows
     #ifdef  __WIN32__
       const char *szHome = getenv("HOMEDRIVE");
