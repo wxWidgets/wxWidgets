@@ -799,7 +799,7 @@ WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file for
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITH(sdl,           [  --with-sdl              use SDL for audio on Unix], wxUSE_LIBSDL)
-WX_ARG_WITH(gnomeprint,    [  --with-gnomeprint       use GNOME print for audio printing under Unix], wxUSE_LIBGNOMEPRINT)
+WX_ARG_WITH(gnomeprint,    [  --with-gnomeprint       use GNOME print for printing under Unix], wxUSE_LIBGNOMEPRINT)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
