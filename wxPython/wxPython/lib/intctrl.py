@@ -720,7 +720,10 @@ class wxIntCtrl(wxTextCtrl):
         Conversion function used in getting the value of the control.
         """
         if value == '':
-            return None
+            if not self.IsNoneAllowed():
+                return 0
+            else:
+                return None
         else:
             try:
                 return int( value )
