@@ -190,7 +190,8 @@ All:
 All (GUI):
 
 - rare crash in wxFontMapper fixed (Robert Vazan)
-- Added wxMenu::FindItemByPosition.
+- added wxMenu::FindItemByPosition.
+- copy wxImage options when copying the images
 
 Generic:
 
