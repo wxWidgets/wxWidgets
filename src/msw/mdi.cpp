@@ -233,11 +233,11 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
 
 wxMDIParentFrame::~wxMDIParentFrame()
 {
-    DestroyChildren();
-
-    // already delete by DestroyChildren()
+    // see comment in ~wxMDIChildFrame
     m_frameToolBar = NULL;
     m_frameStatusBar = NULL;
+
+    DestroyChildren();
 
     if (m_windowMenu)
     {
@@ -730,11 +730,12 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
 wxMDIChildFrame::~wxMDIChildFrame()
 {
-    DestroyChildren();
-
-    // already deleted by DestroyChildren()
+    // will be destroyed by DestroyChildren() but reset them before calling it
+    // to avoid using dangling pointers if a callback comes in the meanwhile
     m_frameToolBar = NULL;
     m_frameStatusBar = NULL;
+
+    DestroyChildren();
 
     RemoveWindowMenu(NULL, m_hMenu);
 
