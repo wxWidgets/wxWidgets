@@ -327,6 +327,7 @@ if BUILD_GLCANVAS or GL_ONLY:
     print 'Preparing GLCANVAS...'
     location = 'contrib/glcanvas'
     swig_files = ['glcanvas.i']
+    other_sources = []
 
     swig_sources = run_swig(swig_files, location, GENDIR, PKGDIR,
                             USE_SWIG, swig_force, swig_args)
@@ -337,9 +338,13 @@ if BUILD_GLCANVAS or GL_ONLY:
             gl_libs = ['wx_gtkd_gl', 'GL', 'GLU']
         else:
             gl_libs = ['wx_gtk_gl', 'GL', 'GLU']
+    else:
+        other_sources = [location + '/msw/myglcanvas.cpp']
+        gl_libs = ['opengl32', 'glu32']
+
 
     ext = Extension('glcanvasc',
-                    swig_sources,
+                    swig_sources + other_sources,
 
                     include_dirs = includes,
                     define_macros = defines,

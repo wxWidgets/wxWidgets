@@ -76,7 +76,6 @@ D. Change to the wx2\include\wx\msw directory and copy setup0.h to
 	 wxUSE_NEW_GRID			    1
 	 wxUSE_GLOBAL_MEMORY_OPERATORS	    0
 	 wxUSE_LIBTIFF			    1
-	 wxUSE_GLCANVAS			    1
 	 wxDIALOG_UNIT_COMPATIBILITY	    0
 
     I also turn off the following as they are not currently used in
@@ -92,6 +91,12 @@ D. Change to the wx2\include\wx\msw directory and copy setup0.h to
 	 wxUSE_PLOT			    0
 	 wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
 
+
+    ** NEW **
+    Be sure that wxUSE_GLCANVAS is defined to be 0 as wxPython now
+    keeps its own copy of the glcanvas sources and expects that it is
+    not in the main library.  This is reduce the number of dependant
+    DLLs on the core library and therefore help reduce startup time.
 
 
 

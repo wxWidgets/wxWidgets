@@ -2,11 +2,30 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+?????
+-----
+Removed initial startup dependency on the OpenGL DLLs so only the
+glcanvasc.pyd depends on them.
+
+Changed wxFont, wxPen, wxBrush to not implicitly use the
+wxThe[Font|Pen|Brush]List behind the scenes, but to use normal ctor
+and dtors.
+
+Exposed the wxThe[Font|Pen|Brush]List to wxPython.
+
+Also wxTheColourDatabase and added a library module (in the
+wxPython.lib.colourdb module) to load LOTS more colour names into the
+colour database.
+
+
+
+
 2.2.6
 -----
 
 No changes happened in the Python wrappers for this release, only
 changes and fixes in the wxWindows library.
+
 
 
 2.2.5

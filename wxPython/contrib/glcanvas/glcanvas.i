@@ -15,7 +15,7 @@
 
 %{
 #include "export.h"
-#include <wx/glcanvas.h>
+#include "myglcanvas.h"
 %}
 
 //---------------------------------------------------------------------------
