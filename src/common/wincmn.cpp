@@ -2291,7 +2291,7 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
             else
             {
                 if (fromId <= (int) GetWindow()->GetChildren().GetCount())
-                    node = GetWindow()->GetChildren().Nth(fromId-1);
+                    node = GetWindow()->GetChildren().Item(fromId-1);
             }
 
             if (node && node->GetNext())
@@ -2320,7 +2320,7 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
             else
             {
                 if (fromId <= (int) GetWindow()->GetChildren().GetCount())
-                    node = GetWindow()->GetChildren().Nth(fromId-1);
+                    node = GetWindow()->GetChildren().Item(fromId-1);
             }
 
             if (node && node->GetPrevious())
