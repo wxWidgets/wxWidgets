@@ -1,3 +1,9 @@
+## Purpose: The automake makefile for wxWindows.
+## Author:  Phil Blecker, Vadim Zeitlin
+## Version: $Id$
+##
+## Process this file with automake to produce Makefile.in
+
 SUFFIXES = .cpp
 
 DEFS = $(TOOLKIT_DEF) $(WXDEBUG_DEFINE)
@@ -209,49 +215,3 @@ EXTRA_libwx__WX_LIBRARY__la_SOURCES = \
 libwx__WX_LIBRARY__la_LDFLAGS = -release @WX_MINOR_VERSION_NUMBER@.@WX_RELEASE_NUMBER@
 libwx__WX_LIBRARY__la_LIBADD = $(LTLIBOBJS)
 libwx__WX_LIBRARY__la_DEPENDENCIES = $(libwx__WX_LIBRARY__la_LIBADD) lexer.l
-
-libwx_@WX_LIBRARY@.la: $(libwx__WX_LIBRARY__la_OBJECTS) $(libwx__WX_LIBRARY__la_DEPENDENCIES)
-	$(CXXLINK) -rpath $(libdir) $(libwx__WX_LIBRARY__la_LDFLAGS) $(libwx__WX_LIBRARY__la_OBJECTS) $(libwx__WX_LIBRARY__la_LIBADD) $(LIBS)
-
-# the files which we install manually (the rest is done by automake)
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(includedir)/wx
-	$(mkinstalldirs) $(DESTDIR)$(includedir)/wx/generic
-	$(mkinstalldirs) $(DESTDIR)$(includedir)/wx/@TOOLKIT_DIR@
-	$(mkinstalldirs) $(DESTDIR)$(includedir)/wx/protocol
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/include/wx
-	@for p in $(top_srcdir)/include/wx/*.h $(top_srcdir)/include/wx/*.cpp; do \
-	  h=`basename $$p`; (set -x; \
-	  $(INSTALL_DATA) $$p $(DESTDIR)$(includedir)/wx/$$h ); \
-	done
-	@for p in $(top_srcdir)/include/wx/generic/*.h ; do \
-	  h=`basename $$p`; (set -x; \
-	  $(INSTALL_DATA) $$p $(DESTDIR)$(includedir)/wx/generic/$$h ); \
-	done
-	@for p in $(top_srcdir)/include/wx/@TOOLKIT_DIR@/*.h ; do \
-	  h=`basename $$p`; (set -x; \
-	  $(INSTALL_DATA) $$p $(DESTDIR)$(includedir)/wx/@TOOLKIT_DIR@/$$h ); \
-	done
-	@if [ @TOOLKIT_DIR@ = msw ]; then \
-	  for p in $(top_srcdir)/include/wx/@TOOLKIT_DIR@/*.cur \
-	           $(top_srcdir)/include/wx/@TOOLKIT_DIR@/*.ico \
-	           $(top_srcdir)/include/wx/@TOOLKIT_DIR@/*.bmp \
-	           $(top_srcdir)/include/wx/@TOOLKIT_DIR@/*.rc ; do \
-	    h=`basename $$p`; (set -x; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(includedir)/wx/@TOOLKIT_DIR@/$$h ); \
-	  done; \
-	  for p in $(top_srcdir)/include/wx/@TOOLKIT_DIR@/ctl3d/*.h ; do \
-	    h=`basename $$p`; (set -x; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(includedir)/wx/@TOOLKIT_DIR@/ctl3d/$$h ); \
-	  done; \
-	  for p in $(top_srcdir)/include/wx/@TOOLKIT_DIR@/gnuwin32/*.h ; do \
-	    h=`basename $$p`; (set -x; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(includedir)/wx/@TOOLKIT_DIR@/gnuwin32/$$h ); \
-	  done; \
-	fi
-	@for p in $(top_srcdir)/include/wx/protocol/*.h ; do \
-	  h=`basename $$p`; (set -x; \
-	  $(INSTALL_DATA) $$p $(DESTDIR)$(includedir)/wx/protocol/$$h ); \
-	done
-	$(INSTALL_DATA) ../include/wx/@TOOLKIT_DIR@/setup.h $(DESTDIR)$(pkgdatadir)/include/wx/setup.h
