@@ -46,7 +46,7 @@
         if (ret) {
             PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(flag));
 #if wxUSE_UNICODE
-	    PyTuple_SET_ITEM(ret, 1, PyUnicode_FromUnicode(str.c_str(), str.Len()));
+	    PyTuple_SET_ITEM(ret, 1, PyUnicode_FromWideChar(str.c_str(), str.Len()));
 #else
             PyTuple_SET_ITEM(ret, 1, PyString_FromStringAndSize(str.c_str(), str.Len()));
 #endif

@@ -302,12 +302,7 @@ void __wxPreStart(PyObject* moduleDict)
         int x;
         for(x=0; x<argc; x++) {
 	    PyObject *item = PyList_GetItem(sysargv, x);
-#if wxUSE_UNICODE
-	    if (PyUnicode_Check(item))
-	        argv[x] = wxPyCopyCString(PyUnicode_AS_UNICODE(item));
-            else
-#endif
-                argv[x] = wxPyCopyCString(PyString_AsString(item));
+            argv[x] = wxPyCopyCString(Py2wxString(item));
 	}
         argv[argc] = NULL;
     }
@@ -338,12 +333,7 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
         int x;
         for(x=0; x<argc; x++) {
             PyObject *pyArg = PyList_GetItem(sysargv, x);
-#if wxUSE_UNICODE
-            if (PyUnicode_Check(pyArg))
-                argv[x] = wxPyCopyWString(PyUnicode_AS_UNICODE(pyArg));
-            else
-#endif
-                argv[x] = wxPyCopyWString(PyString_AsString(pyArg));
+            argv[x] = wxPyCopyWString(Py2wxString(pyArg));
         }
         argv[argc] = NULL;
     }
@@ -522,7 +512,7 @@ PyObject* wxPyClassExists(const wxString& className) {
 
     char    buff[64];               // should always be big enough...
 
-    sprintf(buff, "%sPtr", className.mbc_str());
+    sprintf(buff, "%sPtr", (const char*)className.mbc_str());
     PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
 
     return classobj;  // returns NULL if not found
@@ -1474,7 +1464,10 @@ wxString* wxString_in_helper(PyObject* source) {
     }
 #if wxUSE_UNICODE
     if (PyUnicode_Check(source)) {
-        target = new wxString(PyUnicode_AS_UNICODE(source));
+        target = new wxString();
+        size_t len = PyUnicode_GET_SIZE(source);
+        PyUnicode_AsWideChar((PyUnicodeObject*)source, target->GetWriteBuf(len), len);
+        target->UngetWriteBuf();
     } else {
         // It is a string, get pointers to it and transform to unicode
         char* tmpPtr; int tmpSize;
@@ -1516,7 +1509,9 @@ wxString Py2wxString(PyObject* source)
 
 #if wxUSE_UNICODE
     if (PyUnicode_Check(source)) {
-        target = PyUnicode_AS_UNICODE(source);
+        size_t len = PyUnicode_GET_SIZE(source);
+        PyUnicode_AsWideChar((PyUnicodeObject*)source, target.GetWriteBuf(len), len);
+        target.UngetWriteBuf();
     } else {
         // It is a string, get pointers to it and transform to unicode
         char* tmpPtr; int tmpSize;
@@ -1549,7 +1544,7 @@ PyObject* wx2PyString(const wxString& src)
 {
     PyObject* str;
 #if wxUSE_UNICODE
-    str = PyUnicode_FromUnicode(src.c_str(), src.Len());
+    str = PyUnicode_FromWideChar(src.c_str(), src.Len());
 #else
     str = PyString_FromStringAndSize(src.c_str(), src.Len());
 #endif
@@ -2170,7 +2165,7 @@ PyObject* wxArrayString2PyList_helper(const wxArrayString& arr) {
     PyObject* list = PyList_New(0);
     for (size_t i=0; i < arr.GetCount(); i++) {
 #if wxUSE_UNICODE
-        PyObject* str = PyUnicode_FromUnicode(arr[i].c_str(), arr[i].Len());
+        PyObject* str = PyUnicode_FromWideChar(arr[i].c_str(), arr[i].Len());
 #else
 	PyObject* str = PyString_FromStringAndSize(arr[i].c_str(), arr[i].Len());
 #endif

@@ -277,7 +277,7 @@ static wxPyCoreAPI API = {
     PyDict_SetItemString(d,"wxVERSION_NUMBER", PyInt_FromLong((long)wxVERSION_NUMBER ));
 #if wxUSE_UNICODE
     wxString tempStr(wxVERSION_STRING);
-    PyDict_SetItemString(d,"wxVERSION_STRING", PyUnicode_FromUnicode(tempStr.c_str(), tempStr.Len()));
+    PyDict_SetItemString(d,"wxVERSION_STRING", PyUnicode_FromWideChar(tempStr.c_str(), tempStr.Len()));
 #else
     PyDict_SetItemString(d,"wxVERSION_STRING", PyString_FromString(wxVERSION_STRING));
 #endif

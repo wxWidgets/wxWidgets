@@ -168,7 +168,7 @@ $function
 
 %typemap(python, out) wxString {
 #if wxUSE_UNICODE
-    $target = PyUnicode_FromUnicode($source->c_str(), $source->Len());
+    $target = PyUnicode_FromWideChar($source->c_str(), $source->Len());
 #else
     $target = PyString_FromStringAndSize($source->c_str(), $source->Len());
 #endif
@@ -180,7 +180,7 @@ $function
 
 %typemap(python, out) wxString* {
 #if wxUSE_UNICODE
-    $target = PyUnicode_FromUnicode($source->c_str(), $source->Len());
+    $target = PyUnicode_FromWideChar($source->c_str(), $source->Len());
 #else
     $target = PyString_FromStringAndSize($source->c_str(), $source->Len());
 #endif
@@ -274,11 +274,10 @@ $function
         PyObject* item = PySequence_GetItem($source, i);
 #if wxUSE_UNICODE
         PyObject* str  = PyObject_Unicode(item);
-        $target->Add(PyUnicode_AsUnicode(str));
 #else
         PyObject* str  = PyObject_Str(item);
-        $target->Add(PyString_AsString(str));
 #endif
+        $target->Add(Py2wxString(str));
         Py_DECREF(item);
         Py_DECREF(str);
     }

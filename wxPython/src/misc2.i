@@ -1212,7 +1212,7 @@ public:
             wxString str;
             if (self->GetMimeType(&str)) {
 #if wxUSE_UNICODE
-	      return PyUnicode_FromUnicode(str.c_str(), str.Len());
+	      return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
 	      return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -1264,7 +1264,7 @@ public:
                 PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(icon),
                                                               wxT("wxIcon"), TRUE));
 #if wxUSE_UNICODE
-                PyTuple_SetItem(tuple, 1, PyUnicode_FromUnicode(iconFile.c_str(), iconFile.Len()));
+                PyTuple_SetItem(tuple, 1, PyUnicode_FromWideChar(iconFile.c_str(), iconFile.Len()));
 #else
                 PyTuple_SetItem(tuple, 1, PyString_FromStringAndSize(iconFile.c_str(), iconFile.Len()));
 #endif
@@ -1283,7 +1283,7 @@ public:
             wxString str;
             if (self->GetDescription(&str)) {
 #if  wxUSE_UNICODE
-	      return PyUnicode_FromUnicode(str.c_str(), str.Len());
+	      return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
 	      return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -1300,7 +1300,7 @@ public:
             wxString str;
             if (self->GetOpenCommand(&str, wxFileType::MessageParameters(filename, mimetype))) {
 #if  wxUSE_UNICODE
-                return PyUnicode_FromUnicode(str.c_str(), str.Len());
+                return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
                 return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -1317,7 +1317,7 @@ public:
             wxString str;
             if (self->GetPrintCommand(&str, wxFileType::MessageParameters(filename, mimetype))) {
 #if wxUSE_UNICODE
-                return PyUnicode_FromUnicode(str.c_str(), str.Len());
+                return PyUnicode_FromWideChar(str.c_str(), str.Len());
 #else
                 return PyString_FromStringAndSize(str.c_str(), str.Len());
 #endif
@@ -1696,7 +1696,7 @@ public:
 // #define ADD_STRING(dict, str) \
 //     wxString tmp##str(str); \
 //     PyDict_SetItemString(dict, #str, \
-//                          PyUnicode_FromUnicode(tmp##str.c_str(), tmp##str.Len()))
+//                          PyUnicode_FromWideChar(tmp##str.c_str(), tmp##str.Len()))
 // #else
 // #define ADD_STRING(dict, str) \
 //     PyDict_SetItemString(d, #str, PyString_FromString(str))

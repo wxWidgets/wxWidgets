@@ -361,6 +361,9 @@ public:
     wxString GetStyleString() const;
     wxString GetWeightString() const;
 
+    void SetNoAntiAliasing( bool no = TRUE );
+    bool GetNoAntiAliasing();
+
     static wxFontEncoding GetDefaultEncoding();
     static void SetDefaultEncoding(wxFontEncoding encoding);
 
