@@ -207,20 +207,28 @@ void wxFontRefData::MacFindFont()
                 case wxDEFAULT :
                     m_macFontNum = ::GetAppFont() ;
                     break ;
-                case wxDECORATIVE :
-                    ::GetFNum( "\pTimes" , &m_macFontNum) ;
-                    break ;
-                case wxROMAN :
-                    ::GetFNum( "\pTimes" , &m_macFontNum) ;
-                    break ;
                 case wxSCRIPT :
+                case wxROMAN :
+                case wxDECORATIVE :
+#ifdef __WXMAC_OSX__
+                    ::GetFNum( "\pTimes New Roman" , &m_macFontNum) ;
+#else
                     ::GetFNum( "\pTimes" , &m_macFontNum) ;
+#endif
                     break ;
                 case wxSWISS :
+#ifdef __WXMAC_OSX__
+                    ::GetFNum( "\pLucida Grande" , &m_macFontNum) ;
+#else
                     ::GetFNum( "\pGeneva" , &m_macFontNum) ;
+#endif
                     break ;
                 case wxMODERN :
+#ifdef __WXMAC_OSX__
                     ::GetFNum( "\pMonaco" , &m_macFontNum) ;
+#else
+                    ::GetFNum( "\pMonaco" , &m_macFontNum) ;
+#endif
                     break ;
             }
             Str255 name ;
