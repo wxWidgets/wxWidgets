@@ -1854,6 +1854,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     const UINT stOld = nmLV->uOldState;
                     const UINT stNew = nmLV->uNewState;
 
+                    event.m_item.SetId(nmLV->iItem);
+                    event.m_item.SetMask(wxLIST_MASK_TEXT|wxLIST_MASK_IMAGE|
+                                         wxLIST_MASK_DATA);
+                    GetItem(event.m_item);
+
                     // has the focus changed?
                     if ( !(stOld & LVIS_FOCUSED) && (stNew & LVIS_FOCUSED) )
                     {
