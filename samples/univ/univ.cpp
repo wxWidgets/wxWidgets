@@ -420,6 +420,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #endif // TEST_COMBO
 
 #ifdef TEST_TEXT
+#ifndef TEST_TEXT_ONLY
     new wxTextCtrl(this, -1, _T("Hello, Universe!"),
                    wxPoint(550, 150), wxDefaultSize);
 #else // TEST_TEXT_ONLY
@@ -464,6 +465,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     text->SetSize(sizeText);
 #endif
 
+#endif
 #endif // TEST_TEXT
 }
 

@@ -32,8 +32,11 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
 
+    #include "wx/button.h"
     #include "wx/combobox.h"
     #include "wx/listbox.h"
+    #include "wx/textctrl.h"
+
     #include "wx/validate.h"
 #endif
 
@@ -42,11 +45,37 @@
 #include "wx/univ/theme.h"
 
 // ----------------------------------------------------------------------------
+// wxComboButton is just a normal button except that it sends commands to the
+// combobox and not its parent
+// ----------------------------------------------------------------------------
+
+class wxComboButton : public wxButton
+{
+public:
+    wxComboButton(wxComboControl *combo)
+        : wxButton(combo->GetParent(), -1, "\\/")
+    {
+        m_combo = combo;
+    }
+
+protected:
+    void OnButton(wxCommandEvent& event) { m_combo->ShowPopup(); }
+
+private:
+    wxComboControl *m_combo;
+
+    DECLARE_EVENT_TABLE()
+};
+
+// ----------------------------------------------------------------------------
 // event tables and such
 // ----------------------------------------------------------------------------
 
+BEGIN_EVENT_TABLE(wxComboButton, wxButton)
+    EVT_BUTTON(-1, wxComboButton::OnButton)
+END_EVENT_TABLE()
+
 BEGIN_EVENT_TABLE(wxComboControl, wxControl)
-    EVT_BUTTON(-1, wxComboControl::OnButton)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl);
@@ -80,11 +109,20 @@ bool wxComboControl::Create(wxWindow *parent,
 
     // create the text control and the button as our siblings (*not* children),
     // don't care about size/position here - they will be set in DoMoveWindow()
-    m_btn = new wxButton(parent, -1, "\\/"); //wxBitmapButton(parent, -1, bmp);
+    m_btn = new wxComboButton(this);
     m_text = new wxTextCtrl(parent, -1, value,
                             wxDefaultPosition, wxDefaultSize,
                             style & wxCB_READONLY ? wxTE_READONLY : 0,
                             validator);
+
+
+    DoSetSize(pos.x, pos.y, size.x, size.y);
+
+    // have to disable this window to avoid interfering it with message
+    // processing to the text and the button... but pretend it is enabled to
+    // make IsEnabled() return TRUE
+    wxControl::Enable(FALSE); // don't use non virtual Disable() here!
+    m_isEnabled = TRUE;
 
     return TRUE;
 }
@@ -121,18 +159,6 @@ void wxComboControl::DoMoveWindow(int x, int y, int width, int height)
 // ----------------------------------------------------------------------------
 // event handling
 // ----------------------------------------------------------------------------
-
-void wxComboControl::OnButton(wxCommandEvent& event)
-{
-    if ( event.GetEventObject() == m_btn )
-    {
-        ShowPopup();
-    }
-    else // not ours event
-    {
-        event.Skip();
-    }
-}
 
 // ----------------------------------------------------------------------------
 // operations
@@ -172,6 +198,13 @@ void wxComboControl::SetPopupControl(wxControl *control)
 
 void wxComboControl::ShowPopup()
 {
+    // position the control below the combo
+    wxPoint ptCombo = GetPosition();
+    wxSize sizeCombo = GetSize();
+    m_ctrlPopup->SetSize(ptCombo.x, ptCombo.y + sizeCombo.y,
+                         sizeCombo.x, 200 /* FIXME height */);
+
+    // show it
     m_ctrlPopup->Show();
     m_ctrlPopup->SetFocus();
     m_ctrlPopup->CaptureMouse();
@@ -209,7 +242,10 @@ bool wxComboBox::Create(wxWindow *parent,
         return FALSE;
     }
 
-    m_lbox = new wxListBox(parent, -1);
+    m_lbox = new wxListBox(parent, -1,
+                           wxDefaultPosition, wxDefaultSize,
+                           0, NULL,
+                           wxPOPUP_WINDOW);
     m_lbox->Set(n, choices);
 
     SetPopupControl(m_lbox);

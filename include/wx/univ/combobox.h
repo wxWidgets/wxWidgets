@@ -33,6 +33,8 @@ class WXDLLEXPORT wxListBox;
 #define wxACTION_COMBOBOX_SELECT_PREV _T("prev")
 #define wxACTION_COMBOBOX_SELECT      _T("select")
 
+// TODO define wxComboPopup class defining the popup control interface
+
 // ----------------------------------------------------------------------------
 // wxComboControl: a combination of a (single line) text control with a button
 // opening a popup window which contains the control from which the user can
