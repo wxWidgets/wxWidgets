@@ -57,7 +57,6 @@ public:
     static bool Initialize();
     static void CleanUp();
 
-    virtual bool ProcessIdle();
     void DeletePendingObjects();
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
