@@ -249,10 +249,7 @@ void MyFrame::OnOpen( wxCommandEvent &event )
 
 void MyFrame::OnSave( wxCommandEvent &event )
 {
-    if (m_filename.empty())
-        OnSaveAs( event );
-    else
-        m_text->SaveFile( m_filename );
+    Save();
 }
 
 void MyFrame::OnSaveAs( wxCommandEvent &event )
@@ -284,7 +281,12 @@ void MyFrame::OnQuit( wxCommandEvent &event )
 
 bool MyFrame::Save()
 {
-   m_text->SaveFile();
+    wxCommandEvent event;
+    
+    if (m_filename.empty())
+        OnSaveAs( event );
+    else
+        m_text->SaveFile( m_filename );
    
    return TRUE;
 }
