@@ -98,6 +98,50 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
 }
 
 //-----------------------------------------------------------------------------
+// InsertChild for wxFrame
+//-----------------------------------------------------------------------------
+
+/* Callback for wxFrame. This very strange beast has to be used because
+ * C++ has no virtual methods in a constructor. We have to emulate a
+ * virtual function here as wxWindows requires different ways to insert
+ * a child in container classes. */
+
+static void wxInsertChildInFrame( wxWindow* parent, wxWindow* child )
+{
+    if (wxIS_KIND_OF(child,wxToolBar) || wxIS_KIND_OF(child,wxMenuBar))
+    {
+        /* these are outside the client area */
+	wxFrame* frame = (wxFrame*) parent;
+        gtk_myfixed_put( GTK_MYFIXED(frame->m_mainWidget),
+                         GTK_WIDGET(child->m_widget),
+                         child->m_x,
+                         child->m_y );
+    }
+    else
+    {
+        /* these are inside the client area */
+        gtk_myfixed_put( GTK_MYFIXED(parent->m_wxwindow),
+                         GTK_WIDGET(child->m_widget),
+                         child->m_x,
+                         child->m_y );
+    }
+
+    gtk_widget_set_usize( GTK_WIDGET(child->m_widget),
+                          child->m_width,
+                          child->m_height );
+
+    /* resize on OnInternalIdle */
+    parent->m_sizeSet = FALSE;
+
+    if (parent->m_windowStyle & wxTAB_TRAVERSAL)
+    {
+        /* we now allow a window to get the focus as long as it
+           doesn't have any children. */
+        GTK_WIDGET_UNSET_FLAGS( parent->m_wxwindow, GTK_CAN_FOCUS );
+    }
+}
+
+//-----------------------------------------------------------------------------
 // wxFrame
 //-----------------------------------------------------------------------------
 
@@ -145,6 +189,8 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     PreCreation( parent, id, pos, size, style, name );
 
     m_title = title;
+    
+    m_insertCallback = wxInsertChildInFrame;
 
     GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
     if (style & wxSIMPLE_BORDER) win_type = GTK_WINDOW_POPUP;
@@ -159,11 +205,18 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_frame_delete_callback), (gpointer)this );
 
+    /* m_mainWidget holds the toolbar, the menubar and the client area */
+    m_mainWidget = gtk_myfixed_new();
+    gtk_widget_show( m_mainWidget );
+    GTK_WIDGET_UNSET_FLAGS( m_mainWidget, GTK_CAN_FOCUS );
+    gtk_container_add( GTK_CONTAINER(m_widget), m_mainWidget );
+    gtk_widget_realize( m_mainWidget );
+    
+    /* m_wxwindow only represents the client area without toolbar and menubar */
     m_wxwindow = gtk_myfixed_new();
     gtk_widget_show( m_wxwindow );
     GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
-
-    gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
+    gtk_container_add( GTK_CONTAINER(m_mainWidget), m_wxwindow );
 
     if (m_parent) m_parent->AddChild( this );
 
@@ -233,7 +286,7 @@ bool wxFrame::Show( bool show )
     {
         /* by calling GtkOnSize here, we don't have to call
            either after showing the frame, which would entail
-           much ugly flicker nor from within the size_allocate
+           much ugly flicker or from within the size_allocate
            handler, because GTK 1.1.X forbids that. */
 
         GtkOnSize( m_x, m_y, m_width, m_height );
@@ -249,24 +302,6 @@ bool wxFrame::Destroy()
     if (!wxPendingDelete.Member(this)) wxPendingDelete.Append(this);
 
     return TRUE;
-}
-
-wxPoint wxFrame::GetClientAreaOrigin() const
-{
-    wxPoint pt( m_miniEdge, m_miniEdge + m_miniTitle );
-    if (m_frameMenuBar)
-    {
-        int h = 0;
-        m_frameMenuBar->GetSize( (int*)NULL, &h );
-        pt.y += h;
-    }
-    if (m_frameToolBar)
-    {
-        int h = 0;
-        m_frameToolBar->GetSize( (int*)NULL, &h );
-        pt.y += h;
-    }
-    return pt;
 }
 
 void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
@@ -404,10 +439,13 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
-    /* this emulates the new wxMSW behaviour of placing all
-     * frame-subwindows (menu, toolbar..) on one native window
+    /* I revert back to wxGTK's original behaviour. m_mainWidget holds the
+     * menubar, the toolbar and the client area, which is represented by
+     * m_wxwindow.
      * this hurts in the eye, but I don't want to call SetSize()
      * because I don't want to call any non-native functions here. */
+     
+    int client_area_y_offset = 0; 
 
     if (m_frameMenuBar)
     {
@@ -420,8 +458,10 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         m_frameMenuBar->m_width = ww;
         m_frameMenuBar->m_height = hh;
 
-        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameMenuBar->m_widget, xx, yy );
+        gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_frameMenuBar->m_widget, xx, yy );
         gtk_widget_set_usize( m_frameMenuBar->m_widget, ww, hh );
+	
+	client_area_y_offset += hh;
     }
     
     if (m_frameToolBar)
@@ -437,14 +477,19 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         m_frameToolBar->m_height = hh;
         m_frameToolBar->m_width = ww;
 
-        gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_frameToolBar->m_widget, xx, yy );
+        gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_frameToolBar->m_widget, xx, yy );
         gtk_widget_set_usize( m_frameToolBar->m_widget, ww, hh );
+	
+	client_area_y_offset += hh;
     }
+    
+    gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_wxwindow, 0, client_area_y_offset );
+    gtk_widget_set_usize( m_wxwindow, m_width, m_height-client_area_y_offset );
 
     if (m_frameStatusBar)
     {
         int xx = 0 + m_miniEdge;
-        int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge;
+        int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge - client_area_y_offset;
         int ww = m_width - 2*m_miniEdge;
         int hh = wxSTATUS_HEIGHT;
 
@@ -564,7 +609,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
         if (m_frameMenuBar->m_parent != this)
         {
             m_frameMenuBar->m_parent = this;
-            gtk_myfixed_put( GTK_MYFIXED(m_wxwindow),
+            gtk_myfixed_put( GTK_MYFIXED(m_mainWidget),
                 m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
 
             /* an mdi child menu bar might be underneath */

@@ -403,14 +403,12 @@ public:
 
     // implementation
 
-    virtual wxPoint GetClientAreaOrigin() const;
-    virtual void AdjustForParentClientOrigin( int& x, int& y, int sizeFlags );
-
     bool HasVMT();
 
+    /* I don't want users to override what's done in OnIdle */
     virtual void OnInternalIdle();
 
-    // For compatibility across platforms (not in event table)
+    /* For compatibility across platforms (not in event table) */
     void OnIdle(wxIdleEvent& WXUNUSED(event)) {};
 
     /* used by all classes in the widget creation process */

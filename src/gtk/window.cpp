@@ -184,13 +184,6 @@ static void draw_frame( GtkWidget *widget, wxWindow *win )
         dx += widget->allocation.x;
         dy += widget->allocation.y;
     }
-    else
-    if (win->m_parent)
-    {
-        wxPoint pt(win->m_parent->GetClientAreaOrigin());
-        dx += pt.x;
-        dy += pt.y;
-    }
     
     if (win->m_windowStyle & wxRAISED_BORDER)
     {
@@ -706,10 +699,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
         }
     }
 
-    wxPoint pt(win->GetClientAreaOrigin());
-    event.m_x -= pt.x;
-    event.m_y -= pt.y;
-
     event.SetEventObject( win );
 
     gs_timeLastClick = gdk_event->time;
@@ -815,10 +804,6 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
             node = node->Next();
         }
     }
-
-    wxPoint pt(win->GetClientAreaOrigin());
-    event.m_x -= pt.x;
-    event.m_y -= pt.y;
 
     event.SetEventObject( win );
 
@@ -926,10 +911,6 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
             node = node->Next();
         }
     }
-
-    wxPoint pt(win->GetClientAreaOrigin());
-    event.m_x -= pt.x;
-    event.m_y -= pt.y;
 
     event.SetEventObject( win );
 
@@ -1064,10 +1045,6 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     event.m_x = (long)x;
     event.m_y = (long)y;
 
-    wxPoint pt(win->GetClientAreaOrigin());
-    event.m_x -= pt.x;
-    event.m_y -= pt.y;
-
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "enter_notify_event" );
@@ -1117,10 +1094,6 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     event.m_x = (long)x;
     event.m_y = (long)y;
-
-    wxPoint pt(win->GetClientAreaOrigin());
-    event.m_x -= pt.x;
-    event.m_y -= pt.y;
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
@@ -1344,11 +1317,6 @@ static void wxInsertChildInWindow( wxWindow* parent, wxWindow* child )
     gtk_widget_set_usize( GTK_WIDGET(child->m_widget),
                           child->m_width,
                           child->m_height );
-
-    if (wxIS_KIND_OF(parent,wxFrame))
-    {
-        parent->m_sizeSet = FALSE;
-    }
 
     if (parent->m_windowStyle & wxTAB_TRAVERSAL)
     {
@@ -1869,21 +1837,6 @@ void wxWindow::PrepareDC( wxDC &WXUNUSED(dc) )
     // are we to set fonts here ?
 }
 
-wxPoint wxWindow::GetClientAreaOrigin() const
-{
-    return wxPoint(0,0);
-}
-
-void wxWindow::AdjustForParentClientOrigin( int& x, int& y, int sizeFlags )
-{
-    if (((sizeFlags & wxSIZE_NO_ADJUSTMENTS) == 0) && GetParent())
-    {
-        wxPoint pt(GetParent()->GetClientAreaOrigin());
-        x += pt.x;
-        y += pt.y;
-    }
-}
-
 void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid window" );
@@ -1940,15 +1893,13 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 	    /* the default button has a border around it */
 	    int border = 5;
 	
-            wxPoint pt( m_parent->GetClientAreaOrigin() );
-            gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x+pt.x-border, m_y+pt.y-border );
+            gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x-border, m_y-border );
 
             gtk_widget_set_usize( m_widget, m_width+2*border, m_height+2*border );
 	}
 	else
 	{
-            wxPoint pt( m_parent->GetClientAreaOrigin() );
-            gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x+pt.x, m_y+pt.y );
+            gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x, m_y );
 
             if ((old_width != m_width) || (old_height != m_height))
               gtk_widget_set_usize( m_widget, m_width, m_height );
@@ -2139,10 +2090,6 @@ void wxWindow::ClientToScreen( int *x, int *y )
         }
     }
 
-    wxPoint pt(GetClientAreaOrigin());
-    org_x += pt.x;
-    org_y += pt.y;
-
     if (x) *x += org_x;
     if (y) *y += org_y;
 }
@@ -2169,10 +2116,6 @@ void wxWindow::ScreenToClient( int *x, int *y )
             org_y += m_widget->allocation.y;
         }
     }
-
-    wxPoint pt(GetClientAreaOrigin());
-    org_x -= pt.x;
-    org_y -= pt.y;
 
     if (x) *x -= org_x;
     if (y) *y -= org_y;

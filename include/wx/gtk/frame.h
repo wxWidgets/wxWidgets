@@ -103,7 +103,6 @@ public:
     // implementation
 
     virtual void GtkOnSize( int x, int y, int width, int height );
-    virtual wxPoint GetClientAreaOrigin() const;
     void DoMenuUpdates();
     void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
     virtual void OnInternalIdle();
@@ -115,6 +114,7 @@ public:
     wxString      m_title;
     wxIcon        m_icon;
     int           m_miniEdge,m_miniTitle;
+    GtkWidget    *m_mainWidget;
 
 protected:
     virtual void DoSetSize(int x, int y,

@@ -150,7 +150,7 @@ class wxMDIChildFrame: public wxFrame
   wxString GetTitle() const { return m_title; }
   
     // no maximize etc
-  virtual void Maximize(void) {}
+  virtual void Maximize(bool WXUNUSED(maximize)) {}
   virtual void Restore(void) {}
     
   void OnActivate( wxActivateEvent &event );
