@@ -439,6 +439,7 @@ struct wxPyCoreAPI {
 // Notice that this is static, not extern.  This is by design, each module
 // needs one, but doesn't have to use it.
 static wxPyCoreAPI* wxPyCoreAPIPtr = NULL;
+inline wxPyCoreAPI* wxPyGetCoreAPIPtr();
 #endif // wxPyUSE_EXPORTED_API
 
 //---------------------------------------------------------------------------
@@ -453,7 +454,7 @@ public:
 
     ~wxPyUserData() {
 #ifdef wxPyUSE_EXPORTED_API
-        wxPyCoreAPIPtr->p_wxPyUserData_dtor(this);
+        wxPyGetCoreAPIPtr()->p_wxPyUserData_dtor(this);
 #else
         wxPyUserData_dtor(this);
 #endif
@@ -472,7 +473,7 @@ public:
 
     ~wxPyClientData() {
 #ifdef wxPyUSE_EXPORTED_API
-        wxPyCoreAPIPtr->p_wxPyClientData_dtor(this);
+        wxPyGetCoreAPIPtr()->p_wxPyClientData_dtor(this);
 #else
         wxPyClientData_dtor(this);
 #endif
@@ -490,7 +491,7 @@ public:
 
     ~wxPyOORClientData() {
 #ifdef wxPyUSE_EXPORTED_API
-        wxPyCoreAPIPtr->p_wxPyOORClientData_dtor(this);
+        wxPyGetCoreAPIPtr()->p_wxPyOORClientData_dtor(this);
 #else
         wxPyOORClientData_dtor(this);
 #endif
@@ -519,7 +520,7 @@ public:
 
     ~wxPyCallbackHelper() {
 #ifdef wxPyUSE_EXPORTED_API
-        wxPyCoreAPIPtr->p_wxPyCBH_delete(this);
+        wxPyGetCoreAPIPtr()->p_wxPyCBH_delete(this);
 #else
         wxPyCBH_delete(this);
 #endif
