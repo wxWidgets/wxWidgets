@@ -41,7 +41,7 @@ public:
   inline wxIcon(const wxIcon& icon) { Ref(icon); }
   inline wxIcon(const wxIcon* icon) { if (icon) Ref(*icon); }
 
-  wxIcon( char **bits, const int WXUNUSED(width), const int WXUNUSED(height) ) :
+  wxIcon( char **bits, const int width = -1, const int height = -1 ) :
     wxBitmap( bits ) {};
     
   inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
