@@ -590,6 +590,9 @@ const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormali
         if (bNormalize)
         {
             wxStringBufferLength theBuffer(m_path, m_path.length() + 1);
+#if wxUSE_STL
+            wxMemcpy(theBuffer, m_path.c_str(), m_path.length()+1);
+#endif
             Normalize(theBuffer, true);
             theBuffer.SetLength(wxStrlen(theBuffer));
         }
@@ -627,6 +630,9 @@ const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormali
             if (bNormalize)
             {
                 wxStringBufferLength theBuffer(m_path, m_path.length() + 1);
+#if wxUSE_STL
+                wxMemcpy(theBuffer, m_path.c_str(), m_path.length()+1);
+#endif
                 Normalize(theBuffer);
                 theBuffer.SetLength(wxStrlen(theBuffer));
             }
