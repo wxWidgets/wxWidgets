@@ -1,7 +1,9 @@
 #ifndef _WX_BRUSH_H_BASE_
 #define _WX_BRUSH_H_BASE_
 
-#if defined(__WXMSW__)
+#if defined(__PALMOS__)
+    #include "wx/palmos/brush.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/brush.h"
 #elif defined(__WXMOTIF__) || defined(__WXX11__)
     #include "wx/x11/brush.h"

@@ -123,6 +123,8 @@ enum
     #else // wxUSE_TOOLBAR_NATIVE
         #if defined(__WXUNIVERSAL__)
            #include "wx/univ/toolbar.h"
+        #elif defined(__PALMOS__)
+           #include "wx/palmos/toolbar.h"
         #elif defined(__WXMSW__) && (!defined(_WIN32_WCE) || (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__)))
            #include "wx/msw/tbar95.h"
         #elif defined(__WXWINCE__)

@@ -68,6 +68,8 @@ private:
 
 #if defined(__WXUNIVERSAL__) && (!defined(__WXMSW__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 #include "wx/generic/prntdlgg.h"
+#elif defined(__PALMOS__)
+#include "wx/palmos/printdlg.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/printdlg.h"
 #elif defined(__WXMOTIF__)

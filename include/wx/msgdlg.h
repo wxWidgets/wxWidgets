@@ -7,6 +7,8 @@
 
 #if defined(__WXUNIVERSAL__) || defined(__WXGPE__)
 #include "wx/generic/msgdlgg.h"
+#elif defined(__PALMOS__)
+#include "wx/palmos/msgdlg.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/msgdlg.h"
 #elif defined(__WXMOTIF__)

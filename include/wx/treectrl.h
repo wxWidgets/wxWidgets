@@ -9,6 +9,8 @@
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/generic/treectlg.h"
+#elif defined(__PALMOS__)
+        #include "wx/palmos/treectrl.h"
 #elif defined(__WXMSW__)
         #include "wx/msw/treectrl.h"
 #elif defined(__WXMOTIF__)

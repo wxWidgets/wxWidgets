@@ -35,6 +35,7 @@
 struct WXDLLEXPORT wxNativeEncodingInfo
 {
     wxString facename;          // may be empty meaning "any"
+#ifndef __PALMOS__
     wxFontEncoding encoding;    // so that we know what this struct represents
 
 #if defined(__WXMSW__) || \
@@ -60,7 +61,7 @@ struct WXDLLEXPORT wxNativeEncodingInfo
 #else
     #error "Unsupported toolkit"
 #endif
-
+#endif
     // this struct is saved in config by wxFontMapper, so it should know to
     // serialise itself (implemented in platform-specific code)
     bool FromString(const wxString& s);

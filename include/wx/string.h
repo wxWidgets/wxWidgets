@@ -51,6 +51,10 @@
     #include <strings.h>    // for strcasecmp()
 #endif // HAVE_STRCASECMP_IN_STRINGS_H
 
+#ifdef __PALMOS__
+    #include <StringMgr.h>
+#endif
+
 #include "wx/wxchar.h"      // for wxChar
 #include "wx/buffer.h"      // for wxCharBuffer
 #include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes

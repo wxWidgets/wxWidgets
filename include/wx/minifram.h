@@ -1,7 +1,9 @@
 #ifndef _WX_MINIFRAM_H_BASE_
 #define _WX_MINIFRAMH_BASE_
 
-#if defined(__WXMSW__)
+#if defined(__PALMOS__)
+#include "wx/palmos/minifram.h"
+#elif defined(__WXMSW__)
 #include "wx/msw/minifram.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/minifram.h"

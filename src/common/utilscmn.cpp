@@ -95,7 +95,7 @@
     #include <sys/stat.h>
 #endif
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__PALMOS__)
     #include "wx/msw/private.h"
 #endif
 

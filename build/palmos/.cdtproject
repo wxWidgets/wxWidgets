@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdtproject id="org.eclipse.cdt.make.core.make">
+    <extension id="org.eclipse.cdt.make.core.MakeScannerProvider" point="org.eclipse.cdt.core.ScannerInfoProvider"/>
+    <extension id="org.eclipse.cdt.core.Elf" point="org.eclipse.cdt.core.BinaryParser"/>
+    <data>
+        <item id="org.eclipse.cdt.make.core.makeScannerInfo">
+            <includePath path="$(SDK6_LOCATION)headers"/>
+            <includePath path="$(SDK6_LOCATION)headers\EntryNums"/>
+            <includePath path="$(SDK6_LOCATION)headers\posix"/>
+            <includePath path="$(SDK6_LOCATION)headers\posix\arm"/>
+            <includePath path="$(SDK6_LOCATION)headers\posix\arpa"/>
+            <includePath path="$(SDK6_LOCATION)headers\posix\machine"/>
+            <includePath path="$(SDK6_LOCATION)headers\posix\machine\arm"/>
+            <includePath path="$(SDK6_LOCATION)headers\posix\machine\x86"/>
+            <includePath path="$(SDK6_LOCATION)headers\posix\net"/>
+            <includePath path="$(SDK6_LOCATION)headers\posix\netinet"/>
+            <includePath path="$(SDK6_LOCATION)headers\posix\sys"/>
+            <includePath path="$(SDK6_LOCATION)headers\streams"/>
+            <definedSymbol symbol="__arm__"/>
+        </item>
+    </data>
+</cdtproject>

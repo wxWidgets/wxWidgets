@@ -1,7 +1,9 @@
 #ifndef _WX_DCCLIENT_H_BASE_
 #define _WX_DCCLIENT_H_BASE_
 
-#if defined(__WXMSW__)
+#if defined(__PALMOS__)
+#include "wx/palmos/dcclient.h"
+#elif defined(__WXMSW__)
 #include "wx/msw/dcclient.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/dcclient.h"

@@ -21,7 +21,11 @@
 
 #if defined(__WXMSW__)
     #if wxUSE_ENH_METAFILE
+        #if defined(__PALMOS__)
+            #include "wx/palmos/enhmeta.h"
+        #else
         #include "wx/msw/enhmeta.h"
+        #endif
 
         // map all metafile classes to enh metafile
         #if !wxUSE_WIN_METAFILES_ALWAYS
@@ -34,7 +38,11 @@
             #define wxMETAFILE_IS_ENH
         #endif // wxUSE_WIN_METAFILES_ALWAYS
     #else // !wxUSE_ENH_METAFILE
+        #if defined(__PALMOS__)
+            #include "wx/palmos/metafile.h"
+        #else
         #include "wx/msw/metafile.h"
+    #endif
     #endif
 #elif defined(__WXPM__)
     #include "wx/os2/metafile.h"

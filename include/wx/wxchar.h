@@ -118,7 +118,7 @@
     #define wxHAVE_TCHAR_SUPPORT
 #elif defined(__DMC__)
     #define wxHAVE_TCHAR_SUPPORT
-#elif defined(__MINGW32__) && wxCHECK_W32API_VERSION( 1, 0 )
+#elif defined(__MINGW32__) && wxCHECK_W32API_VERSION( 1, 0 ) && !defined(__PALMOS__)
     #define wxHAVE_TCHAR_SUPPORT
     #include <stddef.h>
     #include <string.h>
@@ -693,6 +693,12 @@
             defined(__EMX__) || defined(__DJGPP__)
         #define wxStricmp stricmp
         #define wxStrnicmp strnicmp
+    #elif defined(__PALMOS__)
+        /* FIXME: There is no equivalent to strnicmp in the Palm OS API.  This 
+         * quick hack should do until one can be written. 
+         */
+        #define wxStricmp StrCaselessCompare
+        #define wxStrnicmp strnicmp       
     #elif defined(__SYMANTEC__) || defined(__VISUALC__) || \
             (defined(__MWERKS__) && defined(__INTEL__))
         #define wxStricmp _stricmp
@@ -1072,7 +1078,8 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
         #define wxWX2WC wxMB2WC
     #endif
 #else /* !wxUSE_UNICODE */
-#error ha
+/* Why is this here?
+#error ha */
     /* No wxUSE_WCHAR_T: we have to do something (JACS) */
     #define wxMB2WC wxStrncpy
     #define wxWC2MB wxStrncpy

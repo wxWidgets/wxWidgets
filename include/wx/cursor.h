@@ -1,7 +1,9 @@
 #ifndef _WX_CURSOR_H_BASE_
 #define _WX_CURSOR_H_BASE_
 
-#if defined(__WXMSW__)
+#if defined(__PALMOS__)
+#include "wx/palmos/cursor.h"
+#elif defined(__WXMSW__)
 #include "wx/msw/cursor.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/cursor.h"

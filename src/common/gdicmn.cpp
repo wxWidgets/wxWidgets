@@ -42,7 +42,7 @@
 #include "wx/log.h"
 #include <string.h>
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__PALMOS__)
 #include "wx/msw/wrapwin.h"
 #endif
 

@@ -465,7 +465,9 @@
    This macro can be used to check that the version of mingw32 compiler is
    at least maj.min
  */
-#if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
+#if defined(__PALMOS__)
+#    include "wx/palmos/gccpriv.h"
+#elif ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
     defined( __CYGWIN__ ) || \
       (defined(__WATCOMC__) && __WATCOMC__ >= 1200) ) && \
     !defined(__DOS__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)

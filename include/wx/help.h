@@ -9,6 +9,10 @@
     #include "wx/msw/wince/helpwce.h"
 
     #define wxHelpController wxWinceHelpController
+#elif defined(__PALMOS__)
+    #include "wx/palmos/help.h"
+
+    #define wxHelpController wxPalmHelpController
 #elif defined(__WXMSW__)
     #include "wx/msw/helpwin.h"
 
