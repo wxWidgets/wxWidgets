@@ -547,6 +547,11 @@ void MyPanel::DoPasteFromClipboard()
 
 void MyPanel::DoCopyToClipboard()
 {
+    // On X11, we want to get the data from the primary selection instead
+    // of the normal clipboard (which isn't normal under X11 at all). This
+    // call has no effect under MSW.
+    wxTheClipboard->UsePrimarySelection();
+
     wxString text( m_multitext->GetLineText(0) );
 
     if (text.IsEmpty())

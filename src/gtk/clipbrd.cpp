@@ -79,31 +79,17 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
     if ( wxTheClipboard && selection_data->length > 0 )
     {
         /* make sure we got the data in the correct form */
-
-        // VZ: I don't know what does this mean (and GTK+ authors apparently
-        //     don't know either, Owen Taylor writes that "Motif seems to ask
-        //     for TARGETS atom sometimes" (??)), but it seems that xterm
-        //     (which is not a Motif app AFAIK) does this too, so it's
-        //     absolutely essential to support this, otherwise we can't paste
-        //     text from xterm!
         GdkAtom type = selection_data->type;
         if ( type != GDK_SELECTION_TYPE_ATOM )
         {
-            if ( strcmp(gdk_atom_name(type), "TARGETS") != 0 )
-            {
-                // don't know what this is
-                clipboard->m_waiting = FALSE;
-                return;
-            }
-            //else: don't know what this is, but it seems to work in the same
-            //      way as GDK_SELECTION_TYPE_ATOM does
+            clipboard->m_waiting = FALSE;
+            return;
         }
-        //else: the data is the list of formats supported by the selection
 
-        /*
+/*
         wxDataFormat clip( selection_data->selection );
         wxLogDebug( wxT("selection received for targets, clipboard %s"), clip.GetId().c_str() );
-        */
+*/
 
         // the atoms we received, holding a list of targets (= formats)
         GdkAtom *atoms = (GdkAtom *)selection_data->data;
@@ -112,9 +98,9 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
         {
             wxDataFormat format( atoms[i] );
 
-            /*
+/*
             wxLogDebug( wxT("selection received for targets, format %s"), format.GetId().c_str() );
-            */
+*/
 
             if (format == clipboard->m_targetRequested)
             {
@@ -484,10 +470,12 @@ bool wxClipboard::IsOpened() const
 bool wxClipboard::IsSupported( const wxDataFormat& format )
 {
     /* reentrance problems */
-    if (m_open) return TRUE;
+    if (m_waiting) return FALSE;
 
     /* store requested format to be asked for by callbacks */
     m_targetRequested = format;
+
+    wxLogDebug( wxT("wxClipboard:IsSupported: requested format: %s"), format.GetId().c_str() );
 
     wxCHECK_MSG( m_targetRequested, FALSE, wxT("invalid clipboard format") );
 

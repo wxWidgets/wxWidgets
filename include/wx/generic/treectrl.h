@@ -479,6 +479,9 @@ protected:
     friend class wxTreeRenameTimer;
     friend class wxTreeTextCtrl;
 
+    wxFont               m_normalFont;
+    wxFont               m_boldFont;
+
     wxGenericTreeItem   *m_anchor;
     wxGenericTreeItem   *m_current, *m_key_current, *m_currentEdit;
     bool                 m_hasFocus;
