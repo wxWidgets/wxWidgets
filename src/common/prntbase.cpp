@@ -65,19 +65,19 @@ IMPLEMENT_CLASS(wxPrintPreviewBase, wxObject)
 //----------------------------------------------------------------------------
 
 wxPrintFactory *wxPrintFactory::m_factory = NULL;
-    
+
 void wxPrintFactory::SetPrintFactory( wxPrintFactory *factory )
-{ 
-    if (wxPrintFactory::m_factory) 
+{
+    if (wxPrintFactory::m_factory)
         delete wxPrintFactory::m_factory;
-        
-    wxPrintFactory::m_factory = factory; 
+
+    wxPrintFactory::m_factory = factory;
 }
 
 wxPrintFactory *wxPrintFactory::GetFactory()
 {
     if (!wxPrintFactory::m_factory)
-      wxPrintFactory::m_factory = new wxNativePrintFactory;
+        wxPrintFactory::m_factory = new wxNativePrintFactory;
 
     return wxPrintFactory::m_factory;
 }
@@ -87,8 +87,8 @@ wxPrintFactory *wxPrintFactory::GetFactory()
 //----------------------------------------------------------------------------
 
 wxPrinterBase *wxNativePrintFactory::CreatePrinter( wxPrintDialogData *data )
-{ 
-#if defined(__WXMSW__)
+{
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     return new wxWindowsPrinter( data );
 #elif defined(__WXMAC__)
     return new wxMacPrinter( data );
@@ -97,10 +97,10 @@ wxPrinterBase *wxNativePrintFactory::CreatePrinter( wxPrintDialogData *data )
 #endif
 };
 
-wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *preview, 
+wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *preview,
     wxPrintout *printout, wxPrintDialogData *data )
 {
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     return new wxWindowsPrintPreview( preview, printout, data );
 #elif defined(__WXMAC__)
     return new wxMacPrintPreview( preview, printout, data );
@@ -109,10 +109,10 @@ wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *previe
 #endif
 }
 
-wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *preview, 
+wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *preview,
     wxPrintout *printout, wxPrintData *data )
 {
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     return new wxWindowsPrintPreview( preview, printout, data );
 #elif defined(__WXMAC__)
     return new wxMacPrintPreview( preview, printout, data );
@@ -814,21 +814,21 @@ bool wxPrintPreviewBase::SetCurrentPage(int pageNum)
     return true;
 }
 
-int wxPrintPreviewBase::GetCurrentPage() const 
+int wxPrintPreviewBase::GetCurrentPage() const
     { return m_currentPage; };
-void wxPrintPreviewBase::SetPrintout(wxPrintout *printout) 
+void wxPrintPreviewBase::SetPrintout(wxPrintout *printout)
     { m_previewPrintout = printout; };
-wxPrintout *wxPrintPreviewBase::GetPrintout() const 
+wxPrintout *wxPrintPreviewBase::GetPrintout() const
     { return m_previewPrintout; };
-wxPrintout *wxPrintPreviewBase::GetPrintoutForPrinting() const 
+wxPrintout *wxPrintPreviewBase::GetPrintoutForPrinting() const
     { return m_printPrintout; };
-void wxPrintPreviewBase::SetFrame(wxFrame *frame) 
+void wxPrintPreviewBase::SetFrame(wxFrame *frame)
     { m_previewFrame = frame; };
-void wxPrintPreviewBase::SetCanvas(wxPreviewCanvas *canvas) 
+void wxPrintPreviewBase::SetCanvas(wxPreviewCanvas *canvas)
     { m_previewCanvas = canvas; };
-wxFrame *wxPrintPreviewBase::GetFrame() const 
+wxFrame *wxPrintPreviewBase::GetFrame() const
     { return m_previewFrame; }
-wxPreviewCanvas *wxPrintPreviewBase::GetCanvas() const 
+wxPreviewCanvas *wxPrintPreviewBase::GetCanvas() const
     { return m_previewCanvas; }
 
 bool wxPrintPreviewBase::PaintPage(wxPreviewCanvas *canvas, wxDC& dc)
@@ -1038,20 +1038,20 @@ void wxPrintPreviewBase::SetZoom(int percent)
     }
 }
 
-wxPrintDialogData& wxPrintPreviewBase::GetPrintDialogData() 
-{ 
+wxPrintDialogData& wxPrintPreviewBase::GetPrintDialogData()
+{
     return m_printDialogData;
 }
 
-int wxPrintPreviewBase::GetZoom() const 
+int wxPrintPreviewBase::GetZoom() const
 { return m_currentZoom; }
-int wxPrintPreviewBase::GetMaxPage() const 
+int wxPrintPreviewBase::GetMaxPage() const
 { return m_maxPage; }
-int wxPrintPreviewBase::GetMinPage() const 
+int wxPrintPreviewBase::GetMinPage() const
 { return m_minPage; }
-bool wxPrintPreviewBase::Ok() const 
+bool wxPrintPreviewBase::Ok() const
 { return m_isOk; }
-void wxPrintPreviewBase::SetOk(bool ok) 
+void wxPrintPreviewBase::SetOk(bool ok)
 { m_isOk = ok; }
 //----------------------------------------------------------------------------
 // wxPrintPreview
@@ -1080,7 +1080,7 @@ wxPrintPreview::wxPrintPreview(wxPrintout *printout,
 wxPrintPreview::~wxPrintPreview()
 {
     delete m_pimpl;
-    
+
     // don't delete twice
     m_printPrintout = NULL;
     m_previewPrintout = NULL;
@@ -1092,43 +1092,43 @@ bool wxPrintPreview::SetCurrentPage(int pageNum)
     return m_pimpl->SetCurrentPage( pageNum );
 }
 
-int wxPrintPreview::GetCurrentPage() const 
-{ 
+int wxPrintPreview::GetCurrentPage() const
+{
     return m_pimpl->GetCurrentPage();
 }
 
-void wxPrintPreview::SetPrintout(wxPrintout *printout) 
-{ 
+void wxPrintPreview::SetPrintout(wxPrintout *printout)
+{
     m_pimpl->SetPrintout( printout );
 }
 
-wxPrintout *wxPrintPreview::GetPrintout() const 
-{ 
+wxPrintout *wxPrintPreview::GetPrintout() const
+{
     return m_pimpl->GetPrintout();
 }
 
-wxPrintout *wxPrintPreview::GetPrintoutForPrinting() const 
-{ 
+wxPrintout *wxPrintPreview::GetPrintoutForPrinting() const
+{
     return m_pimpl->GetPrintoutForPrinting();
 }
 
-void wxPrintPreview::SetFrame(wxFrame *frame) 
-{ 
+void wxPrintPreview::SetFrame(wxFrame *frame)
+{
     m_pimpl->SetFrame( frame );
 }
 
-void wxPrintPreview::SetCanvas(wxPreviewCanvas *canvas) 
-{ 
+void wxPrintPreview::SetCanvas(wxPreviewCanvas *canvas)
+{
     m_pimpl->SetCanvas( canvas );
 }
 
-wxFrame *wxPrintPreview::GetFrame() const 
+wxFrame *wxPrintPreview::GetFrame() const
 {
     return m_pimpl->GetFrame();
 }
 
-wxPreviewCanvas *wxPrintPreview::GetCanvas() const 
-{ 
+wxPreviewCanvas *wxPrintPreview::GetCanvas() const
+{
     return m_pimpl->GetCanvas();
 }
 
