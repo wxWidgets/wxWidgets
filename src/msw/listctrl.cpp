@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        listctrl.cpp
+// Name:        src/msw/listctrl.cpp
 // Purpose:     wxListCtrl
 // Author:      Julian Smart
 // Modified by:
@@ -1486,6 +1486,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // -----------------
 
     wxListEvent event(wxEVT_NULL, m_windowId);
+    event.SetEventObject(this);
+
     wxEventType eventType = wxEVT_NULL;
 
     NMHDR *nmhdr = (NMHDR *)lParam;
@@ -1655,22 +1657,52 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
             case LVN_ITEMCHANGED:
-                // This needs to be sent to wxListCtrl as a rather more concrete
-                // event. For now, just detect a selection or deselection.
-                if ( (nmLV->uNewState & LVIS_SELECTED) && !(nmLV->uOldState & LVIS_SELECTED) )
+                // we translate this catch all message into more interesting
+                // (and more easy to process) wxWindows events
+
+                // first of all, we deal with the state change events only
+                if ( nmLV->uChanged & LVIF_STATE )
                 {
-                    eventType = wxEVT_COMMAND_LIST_ITEM_SELECTED;
-                    event.m_itemIndex = nmLV->iItem;
+                    // temp vars for readability
+                    const UINT stOld = nmLV->uOldState;
+                    const UINT stNew = nmLV->uNewState;
+
+                    // has the focus changed?
+                    if ( !(stOld & LVIS_FOCUSED) && (stNew & LVIS_FOCUSED) )
+                    {
+                        eventType = wxEVT_COMMAND_LIST_ITEM_FOCUSED;
+                        event.m_itemIndex = nmLV->iItem;
+                    }
+
+                    if ( (stNew & LVIS_SELECTED) != (stOld & LVIS_SELECTED) )
+                    {
+                        if ( eventType != wxEVT_NULL )
+                        {
+                            // focus and selection have both changed: send the
+                            // focus event from here and the selection one
+                            // below
+                            event.SetEventType(eventType);
+                            (void)GetEventHandler()->ProcessEvent(event);
+                        }
+                        else // no focus event to send
+                        {
+                            // then need to set m_itemIndex as it wasn't done
+                            // above
+                            event.m_itemIndex = nmLV->iItem;
+                        }
+
+                        eventType = stNew & LVIS_SELECTED
+                                        ? wxEVT_COMMAND_LIST_ITEM_SELECTED
+                                        : wxEVT_COMMAND_LIST_ITEM_DESELECTED;
+                    }
                 }
-                else if ( !(nmLV->uNewState & LVIS_SELECTED) && (nmLV->uOldState & LVIS_SELECTED) )
+
+                if ( eventType == wxEVT_NULL )
                 {
-                    eventType = wxEVT_COMMAND_LIST_ITEM_DESELECTED;
-                    event.m_itemIndex = nmLV->iItem;
-                }
-                else
-                {
+                    // not an interesting event for us
                     return FALSE;
                 }
+
                 break;
 
             case LVN_KEYDOWN:
@@ -1838,7 +1870,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // process the event
     // -----------------
 
-    event.SetEventObject( this );
     event.SetEventType(eventType);
 
     if ( !GetEventHandler()->ProcessEvent(event) )
