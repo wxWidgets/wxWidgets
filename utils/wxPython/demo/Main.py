@@ -17,6 +17,8 @@ from   wxPython.wx import *
 
 #---------------------------------------------------------------------------
 
+_useSplitter       = true
+_useNestedSplitter = true
 
 _treeList = [
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -64,8 +66,24 @@ class wxPythonDemo(wxFrame):
 
         self.Centre(wxBOTH)
         self.CreateStatusBar(1, wxST_SIZEGRIP)
-        splitter = wxSplitterWindow(self, -1)
-        splitter2 = wxSplitterWindow(splitter, -1)
+
+        if _useSplitter:
+            splitter = wxSplitterWindow(self, -1)
+            if _useNestedSplitter:
+                splitter2 = wxSplitterWindow(splitter, -1)
+                logParent = nbParent = splitter2
+            else:
+                nbParent = splitter
+                logParent = wxFrame(self, -1, "wxPython Demo: log window",
+                                (0,0), (500, 150))
+                logParent.Show(true)
+        else:
+            nbParent = self
+            logParent = wxFrame(self, -1, "wxPython Demo: log window",
+                                (0,0), (500, 150))
+            logParent.Show(true)
+
+
 
         # Prevent TreeCtrl from displaying all items after destruction
         self.dying = false
@@ -105,23 +123,24 @@ class wxPythonDemo(wxFrame):
 
 
         # Create a TreeCtrl
-        tID = wxNewId()
-        self.treeMap = {}
-        self.tree = wxTreeCtrl(splitter, tID)
-        root = self.tree.AddRoot("Overview")
-        for item in _treeList:
-            child = self.tree.AppendItem(root, item[0])
-            for childItem in item[1]:
-                theDemo = self.tree.AppendItem(child, childItem)
-                self.treeMap[childItem] = theDemo
+        if _useSplitter:
+            tID = wxNewId()
+            self.treeMap = {}
+            self.tree = wxTreeCtrl(splitter, tID)
+            root = self.tree.AddRoot("Overview")
+            for item in _treeList:
+                child = self.tree.AppendItem(root, item[0])
+                for childItem in item[1]:
+                    theDemo = self.tree.AppendItem(child, childItem)
+                    self.treeMap[childItem] = theDemo
 
-        self.tree.Expand(root)
-        EVT_TREE_ITEM_EXPANDED   (self.tree, tID, self.OnItemExpanded)
-        EVT_TREE_ITEM_COLLAPSED  (self.tree, tID, self.OnItemCollapsed)
-        EVT_TREE_SEL_CHANGED     (self.tree, tID, self.OnSelChanged)
+            self.tree.Expand(root)
+            EVT_TREE_ITEM_EXPANDED   (self.tree, tID, self.OnItemExpanded)
+            EVT_TREE_ITEM_COLLAPSED  (self.tree, tID, self.OnItemCollapsed)
+            EVT_TREE_SEL_CHANGED     (self.tree, tID, self.OnSelChanged)
 
         # Create a Notebook
-        self.nb = wxNotebook(splitter2, -1)
+        self.nb = wxNotebook(nbParent, -1)
 
         # Set up a TextCtrl on the Overview Notebook page
         self.ovr = wxTextCtrl(self.nb, -1, style = wxTE_MULTILINE|wxTE_READONLY)
@@ -136,34 +155,41 @@ class wxPythonDemo(wxFrame):
 
 
         # Set up a log on the View Log Notebook page
-        self.log = wxTextCtrl(splitter2, -1,
+        self.log = wxTextCtrl(logParent, -1,
                               style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
         (w, self.charHeight) = self.log.GetTextExtent('X')
         self.WriteText('wxPython Demo Log:\n')
 
 
         # add the windows to the splitter and split it.
-        splitter.SplitVertically(self.tree, splitter2)
-        splitter.SetSashPosition(180, true)
-        splitter.SetMinimumPaneSize(20)
+        if _useSplitter:
+            if _useNestedSplitter:
+                splitter2.SplitHorizontally(self.nb, self.log)
+                splitter2.SetSashPosition(360, true)
+                splitter2.SetMinimumPaneSize(20)
 
-        splitter2.SplitHorizontally(self.nb, self.log)
-        splitter2.SetSashPosition(360, true)
-        splitter2.SetMinimumPaneSize(20)
+                splitter.SplitVertically(self.tree, splitter2)
+            else:
+                splitter.SplitVertically(self.tree, self.nb)
+
+            splitter.SetSashPosition(180, true)
+            splitter.SetMinimumPaneSize(20)
+
 
         # make our log window be stdout
         #sys.stdout = self
 
         # select initial items
         self.nb.SetSelection(0)
-        self.tree.SelectItem(root)
+        if _useSplitter:
+            self.tree.SelectItem(root)
 
         if len(sys.argv) == 2:
             try:
                 selectedDemo = self.treeMap[sys.argv[1]]
             except:
                 selectedDemo = None
-            if selectedDemo:
+            if selectedDemo and _useSplitter:
                 self.tree.SelectItem(selectedDemo)
                 self.tree.EnsureVisible(selectedDemo)
 
@@ -197,13 +223,17 @@ class wxPythonDemo(wxFrame):
         if self.dying:
             return
 
+        item = event.GetItem()
+        itemText = self.tree.GetItemText(item)
+        self.RunDemo(itemText)
+
+
+    #---------------------------------------------
+    def RunDemo(self, itemText):
         if self.nb.GetPageCount() == 3:
             if self.nb.GetSelection() == 2:
                 self.nb.SetSelection(0)
             self.nb.DeletePage(2)
-
-        item = event.GetItem()
-        itemText = self.tree.GetItemText(item)
 
         if itemText == 'Overview':
             self.GetDemoFile('Main.py')
@@ -224,8 +254,11 @@ class wxPythonDemo(wxFrame):
                 self.window = module.runTest(self, self.nb, self)
                 if self.window:
                     self.nb.AddPage(self.window, 'Demo')
-                    self.nb.ResizeChildren()
+                    #self.nb.ResizeChildren()
                     self.nb.SetSelection(2)
+                    self.nb.ResizeChildren()
+                    #if self.window.GetAutoLayout():
+                    #    self.window.Layout()
 
             else:
                 self.ovr.Clear()
@@ -293,14 +326,16 @@ class wxPythonDemo(wxFrame):
 
     #---------------------------------------------
     def OnDemoMenu(self, event):
-        try:
-            selectedDemo = self.treeMap[self.mainmenu.GetLabel(event.GetId())]
-        except:
-            selectedDemo = None
-        if selectedDemo:
-            self.tree.SelectItem(selectedDemo)
-            self.tree.EnsureVisible(selectedDemo)
-
+        if _useSplitter:
+            try:
+                selectedDemo = self.treeMap[self.mainmenu.GetLabel(event.GetId())]
+            except:
+                selectedDemo = None
+            if selectedDemo:
+                self.tree.SelectItem(selectedDemo)
+                self.tree.EnsureVisible(selectedDemo)
+        else:
+            self.RunDemo(self.mainmenu.GetLabel(event.GetId()))
 
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
