@@ -53,7 +53,13 @@ wxStreamBuffer::wxStreamBuffer(BufMode mode)
     m_buffer_size(0), m_fixed(TRUE), m_flushable(FALSE), m_stream(NULL),
     m_mode(mode), m_destroybuf(FALSE), m_destroystream(TRUE)
 {
-  m_stream = new wxStreamBase();
+  wxASSERT_MSG(mode != read_write, wxT("you have to use the other ctor for read_write mode") );
+  if ( mode == read )
+      m_stream = new wxInputStream;
+  else if ( mode == write)
+      m_stream = new wxOutputStream;
+  else
+      m_stream = NULL;
 }
 
 wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
