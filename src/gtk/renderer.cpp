@@ -285,7 +285,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
 {
     if ( !win->m_wxwindow->window )
     {
-        // VZ: this happens on startup -- why?
+        // window not realized yet
         return;
     }
 
@@ -296,12 +296,12 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     GdkRectangle erase_rect;
     if ( isVert )
     {
-    int h = win->GetClientSize().GetHeight();
+        int h = win->GetClientSize().GetHeight();
     
         rect.x = position;
-        rect.y = h/2 - 14/2;
+        rect.y = 0;
         rect.width = SASH_FULL_SIZE;
-        rect.height = 14;
+        rect.height = h;
     
         erase_rect.x = position;
         erase_rect.y = 0;
@@ -310,12 +310,12 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     }
     else // horz
     {
-    int w = win->GetClientSize().GetWidth();
+        int w = win->GetClientSize().GetWidth();
     
-        rect.x = w/2 - 14/2;
+        rect.x = 0;
         rect.y = position;
         rect.height = SASH_FULL_SIZE;
-        rect.width = 14;
+        rect.width = w;
     
         erase_rect.y = position;
         erase_rect.x = 0;
@@ -356,7 +356,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         rect.y,
         rect.width,
         rect.height,
-        !isVert ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL
+        isVert ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL
     );
 #else // GTK+ 1.x
 
