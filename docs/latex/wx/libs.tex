@@ -2,11 +2,11 @@
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
-Starting from version 2.5.0 wxWindows can be built either as a single large
+Starting from version 2.5.0 wxWidgets can be built either as a single large
 library (this is called the {\it monolithic build}) or as several smaller
 libraries ({\it multilib build}). Multilib build is the default.
 
-wxWindows library is divided into libraries briefly described below. This
+wxWidgets library is divided into libraries briefly described below. This
 diagram show dependencies between them:
 
 \begin{center}
@@ -15,8 +15,8 @@ diagram show dependencies between them:
 
 {\large {\bf wxBase}}
 
-Every wxWindows application must link against this library. It contains
-mandatory classes that any wxWindows code depends on (e.g.
+Every wxWidgets application must link against this library. It contains
+mandatory classes that any wxWidgets code depends on (e.g.
  \helpref{wxString}{wxstring}) and portability classes that abstract
 differences between platforms. wxBase can be used to develop console mode
 applications, it does not require any GUI libraries or running X Window System
@@ -45,13 +45,13 @@ This library contains simple classes for parsing XML documents. Note that
 their API {\em will} change in the future and backward
 compatibility will not be preserved. Use of this library in your applications
 is not recommended, it is only meant for use by XML resources system. Future
-versions of wxWindows will contain new XML handling classes with DOM-like API.
+versions of wxWidgets will contain new XML handling classes with DOM-like API.
 Requires wxBase.
 
 {\large {\bf wxCore}}
 
 Basic GUI classes such as GDI classes or controls are in this library. All
-wxWindows GUI applications must link against this library, only console mode
+wxWidgets GUI applications must link against this library, only console mode
 applications don't.
 
 {\large {\bf wxAdvanced}}
@@ -79,7 +79,7 @@ Requires wxCore and wxBase.
 {\large {\bf wxGL}}
 
 This library contains \helpref{wxGLCanvas}{wxglcanvas} class for integrating
-OpenGL library with wxWindows. Unlike all others, this library is {\em not}
+OpenGL library with wxWidgets. Unlike all others, this library is {\em not}
  part of the monolithic library, it is always built as separate library.
 Requires wxCore and wxBase.
 

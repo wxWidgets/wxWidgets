@@ -1,13 +1,13 @@
-\section{Preprocesser symbols defined by wxWindows}\label{cppconst}
+\section{Preprocesser symbols defined by wxWidgets}\label{cppconst}
 
-Here is the list of preprocessor symbols used in the wxWindows source grouped
+Here is the list of preprocessor symbols used in the wxWidgets source grouped
 by category (and sorted by alphabetical order inside each category).
 
 \subsection{GUI system}
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\_\_WINDOWS\_\_}{any Windows, yom may also use \_\_WXMSW\_\_}
-\twocolitem{\_\_WIN16\_\_}{Win16 API (not supported since wxWindows 2.6)}
+\twocolitem{\_\_WIN16\_\_}{Win16 API (not supported since wxWidgets 2.6)}
 \twocolitem{\_\_WIN32\_\_}{Win32 API}
 \twocolitem{\_\_WIN95\_\_}{Windows 95 or NT 4.0 and above system (not NT 3.5x)}
 \twocolitem{\_\_WXBASE\_\_}{Only wxBase, no GUI features}
@@ -26,7 +26,7 @@ defined)}
 \twocolitem{\_\_WXPM\_\_}{OS/2 native Presentation Manager}
 \twocolitem{\_\_WXSTUBS\_\_}{Stubbed version ('template' wxWin implementation)}
 \twocolitem{\_\_WXXT\_\_}{Xt; mutually exclusive with WX\_MOTIF, not
-implemented in wxWindows 2.x}
+implemented in wxWidgets 2.x}
 \twocolitem{\_\_WXX11\_\_}{wxX11 (\_\_WXUNIVERSAL\_\_ will be also defined)}
 \twocolitem{\_\_WXWINE\_\_}{WINE (i.e. WIN32 on Unix)}
 \twocolitem{\_\_WXUNIVERSAL\_\_}{wxUniversal port, always defined in addition
@@ -105,7 +105,7 @@ the compiler version, $1100$ is $11.0$ and $1200$ is OpenWatcom.}
 \subsection{Miscellaneous}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\_\_WXWINDOWS\_\_}{always defined in wxWindows applications, see
+\twocolitem{\_\_WXWINDOWS\_\_}{always defined in wxWidgets applications, see
 also \helpref{wxCHECK\_VERSION}{wxcheckversion}}
 \twocolitem{\_\_WXDEBUG\_\_}{defined in debug mode, undefined in release mode}
 \twocolitem{wxUSE\_XXX}{if defined as $1$, feature XXX is active
@@ -114,8 +114,8 @@ also \helpref{wxCHECK\_VERSION}{wxcheckversion}}
 \twocolitem{wxUSE\_GUI}{this particular feature test macro is defined to $1$
 when compiling or using the library with the GUI features activated, if it is
 defined as $0$, only wxBase is available.}
-\twocolitem{wxUSE\_BASE}{only used by wxWindows internally (defined as $1$ when
+\twocolitem{wxUSE\_BASE}{only used by wxWidgets internally (defined as $1$ when
 building wxBase code, either as a standalone library or as part of the
-monolithic wxWindows library, defined as $0$ when building GUI library only)}
+monolithic wxWidgets library, defined as $0$ when building GUI library only)}
 \end{twocollist}
 

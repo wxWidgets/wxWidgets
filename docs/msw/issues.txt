@@ -18,7 +18,7 @@ resourc2.cpp). Unfortunately we still get the error:
 
 The solution is probably to load wxResourceBitListTable
 dynamically using LoadString to load the names, and initialize the table
-at wxWindows start-up.
+at wxWidgets start-up.
 
 Meanwhile the work-around is to switch wxUSE_WX_RESOURCES to 0
 (done in setup.h if BC++/16-bit mode is detected).

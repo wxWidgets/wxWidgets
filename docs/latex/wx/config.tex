@@ -9,7 +9,7 @@ you're working with but you would just use the wxConfigBase methods. This
 allows you to write the same code regardless of whether you're working with
 the registry under Win32 or text-based config files under Unix (or even
 Windows 3.1 .INI files if you're really unlucky). To make writing the portable
-code even easier, wxWindows provides a typedef wxConfig
+code even easier, wxWidgets provides a typedef wxConfig
 which is mapped onto the native wxConfigBase implementation on the given
 platform: i.e. wxRegConfig under Win32 (optionally wxIniConfig) and
 wxFileConfig otherwise.
@@ -26,7 +26,7 @@ No base class
 
 \wxheading{Include files}
 
-<wx/config.h> (to let wxWindows choose a wxConfig class for your platform)\\
+<wx/config.h> (to let wxWidgets choose a wxConfig class for your platform)\\
 <wx/confbase.h> (base config class)\\
 <wx/fileconf.h> (wxFileConfig class)\\
 <wx/msw/regconf.h> (wxRegConfig class)\\
@@ -88,14 +88,14 @@ consuming operation). In this case, you may create this global config object
 in the very start of the program and {\it Set()} it as the default. Then, from
 anywhere in your program, you may access it using the {\it Get()} function.
 Note that you must delete this object (usually in \helpref{wxApp::OnExit}{wxapponexit}) 
-in order to avoid memory leaks, wxWindows won't do it automatically.
+in order to avoid memory leaks, wxWidgets won't do it automatically.
 
 As it happens, you may even further simplify the procedure described above:
 you may forget about calling {\it Set()}. When {\it Get()} is called and there
 is no current object, it will create one using {\it Create()} function. To
 disable this behaviour {\it DontCreateOnDemand()} is provided.
 
-{\bf Note:} You should use either {\it Set()} or {\it Get()} because wxWindows
+{\bf Note:} You should use either {\it Set()} or {\it Get()} because wxWidgets
 library itself would take advantage of it and could save various information
 in it. For example \helpref{wxFontMapper}{wxfontmapper} or Unix version
 of \helpref{wxFileDialog}{wxfiledialog} have ability to use wxConfig class.
@@ -376,7 +376,7 @@ a {\it foo} key with some backslash characters will be stored as {\tt foo=C:$\ba
 of the usual storage of {\tt foo=C:$\backslash\backslash$mydir}.
 
 The wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS style can be helpful if your config 
-file must be read or written to by a non-wxWindows program (which might not 
+file must be read or written to by a non-wxWidgets program (which might not 
 understand the escape characters). Note, however, that if 
 wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS style is used, it is is now 
 your application's responsibility to ensure that there is no newline or 

@@ -57,13 +57,13 @@ This object contains a constraint for each of the window edges, two for the cent
 and two for the window size. By setting some or all of these constraints appropriately,
 the user can achieve quite complex layout by defining relationships between windows.
 
-In wxWindows, each window can be constrained relative to either its {\it
+In wxWidgets, each window can be constrained relative to either its {\it
 siblings} on the same window, or the {\it parent}. The layout algorithm
 therefore operates in a top-down manner, finding the correct layout for
 the children of a window, then the layout for the grandchildren, and so
 on. Note that this differs markedly from native Motif layout, where
 constraints can ripple upwards and can eventually change the frame
-window or dialog box size. We assume in wxWindows that the {\it user} is
+window or dialog box size. We assume in wxWidgets that the {\it user} is
 always `boss' and specifies the size of the outer window, to which
 subwindows must conform. Obviously, this might be a limitation in some
 circumstances, but it suffices for most situations, and the

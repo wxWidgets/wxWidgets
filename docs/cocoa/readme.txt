@@ -2,7 +2,7 @@ Welcome to wxCocoa
 
 wxCocoa is still very much a work in progress.  At this point quite a bit
 of functionality is working, but quite a bit is left to do.  wxCocoa is not
-yet suitable for a direct port of most wxWindows applications. Fortunately,
+yet suitable for a direct port of most wxWidgets applications. Fortunately,
 wxMac is available for those looking to move to Mac today.
 
 If you're still reading then I assume you're interested in helping with

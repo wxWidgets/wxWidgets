@@ -1,14 +1,14 @@
-                 How to add a new font encoding to wxWindows
+                 How to add a new font encoding to wxWidgets
                  ===========================================
 
 I. Introduction
 ---------------
 
- wxWindows has built in support for a certain number of font encodings (which
+ wxWidgets has built in support for a certain number of font encodings (which
 is synonymous with code sets and character sets for us here even though it is
 not exactly the same thing), look at include/wx/fontenc.h for the full list.
 This list is far from being exhaustive though and if you have enough knowledge
-about an encoding to add support for it to wxWindows, this tech note is for
+about an encoding to add support for it to wxWidgets, this tech note is for
 you!
 
  A word of warning though: this is written out of my head and is surely
@@ -22,7 +22,7 @@ non European languages in the GUI (i.e. BiDi and text orientation support).
 II. The receipt
 ---------------
 
-Suppose you want to add support for Klingon to wxWindows. This is what you'd
+Suppose you want to add support for Klingon to wxWidgets. This is what you'd
 have to do:
 
 1. include/wx/fontenc.h: add a new wxFONTENCODING_KLINGON enum element, if

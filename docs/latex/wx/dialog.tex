@@ -77,7 +77,7 @@ with a {\tt NULL} parent window will be given the
 \helpref{application's top level window}{wxappgettopwindow} as parent. Use this
 style to prevent this from happening and create an orphan dialog. This is not recommended for modal dialogs.}
 \twocolitem{\windowstyle{wxDIALOG\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
-caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
+caption. When pressed, Windows will go into a context-sensitive help mode and wxWidgets will send
 a wxEVT\_HELP event if the user clicked on an application window. {\it Note}\ that this is an extended
 style and must be set by calling \helpref{SetExtraStyle}{wxwindowsetextrastyle} before Create is called (two-step construction).}
 \end{twocollist}
@@ -119,10 +119,10 @@ Constructor.
 \docparam{title}{The title of the dialog.}
 
 \docparam{pos}{The dialog position. A value of (-1, -1) indicates a default position, chosen by
-either the windowing system or wxWindows, depending on platform.}
+either the windowing system or wxWidgets, depending on platform.}
 
 \docparam{size}{The dialog size. A value of (-1, -1) indicates a default size, chosen by
-either the windowing system or wxWindows, depending on platform.}
+either the windowing system or wxWidgets, depending on platform.}
 
 \docparam{style}{The window style. See \helpref{wxDialog}{wxdialog}.}
 

@@ -12,7 +12,7 @@ objects in the application.
 \end{itemize}
 
 You should use the macro IMPLEMENT\_APP(appClass) in your application implementation
-file to tell wxWindows how to create an instance of your application class.
+file to tell wxWidgets how to create an instance of your application class.
 
 Use DECLARE\_APP(appClass) in a header file if you want the wxGetApp function (which returns
 a reference to your application object) to be visible to other files.
@@ -112,7 +112,7 @@ Returns the application name.
 
 \wxheading{Remarks}
 
-wxWindows sets this to a reasonable default before
+wxWidgets sets this to a reasonable default before
 calling \helpref{wxApp::OnInit}{wxapponinit}, but the application can reset it at will.
 
 
@@ -200,7 +200,7 @@ the top window.
 
 \func{int}{MainLoop}{\void}
 
-Called by wxWindows on creation of the application. Override this if you wish
+Called by wxWidgets on creation of the application. Override this if you wish
 to provide your own (environment-dependent) main loop.
 
 \wxheading{Return value}
@@ -346,7 +346,7 @@ Finally note that if the exception is rethrown from here, it can be caught in
 Override this member function for any processing which needs to be
 done as the application is about to exit. OnExit is called after
 destroying all application windows and controls, but before
-wxWindows cleanup. Note that it is not called at all if 
+wxWidgets cleanup. Note that it is not called at all if 
 \helpref{OnInit}{wxapponinit} failed.
 
 The return value of this function is currently ignored, return the same value
@@ -381,11 +381,11 @@ work and, in fact, probably won't.
 %%since this forwards OnIdle events to windows and also performs garbage collection for
 %%windows whose destruction has been delayed.
 %%
-%%wxWindows' strategy for OnIdle processing is as follows. After pending user interface events for an
-%%application have all been processed, wxWindows sends an OnIdle event to the application object. wxApp::OnIdle itself
+%%wxWidgets' strategy for OnIdle processing is as follows. After pending user interface events for an
+%%application have all been processed, wxWidgets sends an OnIdle event to the application object. wxApp::OnIdle itself
 %%sends an OnIdle event to each application window, allowing windows to do idle processing such as updating
 %%their appearance. If either wxApp::OnIdle or a window OnIdle function requested more time, by
-%%calling \helpref{wxIdleEvent::RequestMore}{wxidleeventrequestmore}, wxWindows will send another OnIdle
+%%calling \helpref{wxIdleEvent::RequestMore}{wxidleeventrequestmore}, wxWidgets will send another OnIdle
 %%event to the application object. This will occur in a loop until either a user event is found to be
 %%pending, or OnIdle requests no more time. Then all pending user events are processed until the system
 %%goes idle again, when OnIdle is called, and so on.
@@ -433,7 +433,7 @@ application's main window, optionally calling
 that the function returns \true.
 
 Notice that if you want to to use the command line processing provided by
-wxWindows you have to call the base class version in the derived class
+wxWidgets you have to call the base class version in the derived class
 OnInit().
 
 Return \true to continue processing, \false to exit the application
@@ -488,7 +488,7 @@ Under Windows, OnQueryEndSession is called in response to the WM\_QUERYENDSESSIO
 
 \func{virtual int}{OnRun}{\void}
 
-This virtual function is where the execution of a program written in wxWindows
+This virtual function is where the execution of a program written in wxWidgets
 starts. The default implementation just enters the main loop and starts
 handling the events until it terminates, either because 
 \helpref{ExitMainLoop}{wxappexitmainloop} has been explicitly called or because
@@ -519,14 +519,14 @@ try/catch clause around the call to the base class version there.
 Windows-only function for processing a message. This function
 is called from the main message loop, checking for windows that
 may wish to process it. The function returns true if the message
-was processed, false otherwise. If you use wxWindows with another class
+was processed, false otherwise. If you use wxWidgets with another class
 library with its own message loop, you should make sure that this
-function is called to allow wxWindows to receive messages. For example,
+function is called to allow wxWidgets to receive messages. For example,
 to allow co-existence with the Microsoft Foundation Classes, override
 the PreTranslateMessage function:
 
 \begin{verbatim}
-// Provide wxWindows message loop compatibility
+// Provide wxWidgets message loop compatibility
 BOOL CTheApp::PreTranslateMessage(MSG *msg)
 {
   if (wxTheApp && wxTheApp->ProcessMessage((WXMSW *)msg))
@@ -554,7 +554,7 @@ Returns true if unprocessed events are in the window system event queue.
 
 Sends idle events to a window and its children.
 
-Please note that this function is internal to wxWindows and shouldn't be used
+Please note that this function is internal to wxWidgets and shouldn't be used
 by user code.
 
 \wxheading{Remarks}
@@ -573,7 +573,7 @@ If true is returned, more OnIdle processing is requested by one or more window.
 
 Sets the name of the application. The name may be used in dialogs
 (for example by the document/view framework). A default name is set by
-wxWindows.
+wxWidgets.
 
 \wxheading{See also}
 
@@ -635,10 +635,10 @@ deleted. If false, the application will continue to run.}
 \func{void}{SetTopWindow}{\param{wxWindow* }{window}}
 
 Sets the `top' window. You can call this from within \helpref{wxApp::OnInit}{wxapponinit} to
-let wxWindows know which is the main window. You don't have to set the top window;
+let wxWidgets know which is the main window. You don't have to set the top window;
 it is only a convenience so that (for example) certain dialogs without parents can use a
 specific window as the top window. If no top window is specified by the application,
-wxWindows just uses the first frame or dialog in its top-level window list, when it
+wxWidgets just uses the first frame or dialog in its top-level window list, when it
 needs to use the top window.
 
 \wxheading{Parameters}
@@ -657,7 +657,7 @@ needs to use the top window.
 
 Sets the name of application's vendor. The name will be used
 in registry access. A default name is set by
-wxWindows.
+wxWidgets.
 
 \wxheading{See also}
 

@@ -1,4 +1,4 @@
-wxWindows 2.5 for GTK installation
+wxWidgets 2.5 for GTK installation
 ----------------------------------
 
 IMPORTANT NOTE:
@@ -9,14 +9,14 @@ IMPORTANT NOTE:
   mailing wxwin-users or the author. Preferably, try to fix the
   problem first and then send a patch to the author.
 
-  When sending bug reports tell us what version of wxWindows you are
+  When sending bug reports tell us what version of wxWidgets you are
   using (including the beta) and what compiler on what system. One
   example: wxGTK 2.4.0, gcc 2.95.4, Redhat 6.2
 
 * The simplest case
 -------------------
 
-If you compile wxWindows on Linux for the first time and don't like to read
+If you compile wxWidgets on Linux for the first time and don't like to read
 install instructions just do (in the base dir):
 
 > ./configure --with-gtk
@@ -34,7 +34,7 @@ Afterwards you can continue with
 > ldconfig
 > exit
 
-If you want to remove wxWindows on Unix you can do this:
+If you want to remove wxWidgets on Unix you can do this:
 
 > su <type root password>
 > make uninstall
@@ -68,10 +68,10 @@ Expect problems.
 * The expert case
 -----------------
 
-If you want to do some more serious cross-platform programming with wxWindows,
+If you want to do some more serious cross-platform programming with wxWidgets,
 such as for GTK and Motif, you can now build two complete libraries and use
 them concurrently. For this end, you have to create a directory for each build
-of wxWindows - you may also want to create different versions of wxWindows
+of wxWidgets - you may also want to create different versions of wxWidgets
 and test them concurrently. Most typically, this would be a version configured
 with --enable-debug and one without. Note, that only one build can
 currently be installed, so you'd have to use local version of the library for
@@ -114,7 +114,7 @@ LD_LIBRARY_PATH or equivalent variable contains the path to GTK+ libraries if
 they were installed in a non default location.
 
 You get errors from make: please use GNU make instead of the native make
-program. Currently wxWindows can be built only with GNU make, BSD make and
+program. Currently wxWidgets can be built only with GNU make, BSD make and
 Solaris make. Other versions might work or not (any which don't have VPATH
 support definitely won't).
 
@@ -142,7 +142,7 @@ g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 * General
 ---------
 
-The Unix variants of wxWindows use GNU configure. If you have problems with
+The Unix variants of wxWidgets use GNU configure. If you have problems with
 your make use GNU make instead.
 
 If you have general problems with installation, read my homepage at
@@ -158,7 +158,7 @@ but I tried...
 * GUI libraries
 ---------------
 
-wxWindows/GTK requires the GTK+ library to be installed on your system. It has
+wxWidgets/GTK requires the GTK+ library to be installed on your system. It has
 to be a stable version, preferably version 1.2.10 (at least 1.2.3 is required,
 1.2.7 is strongly recommended).
 
@@ -172,7 +172,7 @@ at my homepage.
 * Additional libraries
 ----------------------
 
-wxWindows/Gtk requires a thread library and X libraries known to work with
+wxWidgets/Gtk requires a thread library and X libraries known to work with
 threads.  This is the case on all commercial Unix-Variants and all
 Linux-Versions that are based on glibc 2 except RedHat 5.0 which is broken in
 many aspects. As of writing this, virtually all Linux distributions have
@@ -192,7 +192,7 @@ exit
 
 Please send comments and question about the OS/2 installation
 to Stefan Neis <Stefan.Neis@t-online.de> and patches to
-the wxWindows mailing list.
+the wxWidgets mailing list.
 
 In the following list, the version numbers indicate the configuration that
 was actually used by myself, newer version should cause no problems and
@@ -260,8 +260,8 @@ to see all the options please use:
 
     ./configure --help
 
-It is recommended to build wxWindows in another directory (maybe a
-subdirectory of your wxWindows installation) as this allows you to
+It is recommended to build wxWidgets in another directory (maybe a
+subdirectory of your wxWidgets installation) as this allows you to
 have multiple configurations (for example, debug and release or GTK
 and Motif) simultaneously.
 
@@ -290,9 +290,9 @@ The following options handle the kind of library you want to build.
     --disable-shared        Do not create shared libraries, but
                             build static libraries instead.
 
-    --enable-monolithic     Build wxWindows as single library instead
+    --enable-monolithic     Build wxWidgets as single library instead
                             of as several smaller libraries (which is
-                            the default since wxWindows 2.5.0).
+                            the default since wxWidgets 2.5.0).
 
     --disable-optimise      Do not optimise the code. Can
                             sometimes be useful for debugging
@@ -332,7 +332,7 @@ The following options handle the kind of library you want to build.
                             such as gdb (or its many frontends).
 
     --enable-debug_flag     Define __DEBUG__ and __WXDEBUG__ when
-                            compiling. This enable wxWindows' very
+                            compiling. This enable wxWidgets' very
                             useful internal debugging tricks (such
                             as automatically reporting illegal calls)
                             to work. Note that program and library
@@ -350,14 +350,14 @@ The following options handle the kind of library you want to build.
 
 When producing an executable that is linked statically with wxGTK
 you'll be surprised at its immense size. This can sometimes be
-drastically reduced by removing features from wxWindows that
+drastically reduced by removing features from wxWidgets that
 are not used in your program. The most relevant such features
 are
 
     --with-odbc             Enables ODBC code. This is disabled
                             by default because iODBC is under the
                             L-GPL license which is less liberal than
-                            wxWindows license.
+                            wxWidgets license.
 
     --without-libpng        Disables PNG image format code.
 
@@ -432,7 +432,7 @@ password) and type
 
         make install
 
-You can remove any traces of wxWindows by typing
+You can remove any traces of wxWidgets by typing
 
         make uninstall
 
@@ -468,14 +468,14 @@ clean:
 This is certain to become the standard way unless we decide
 to stick to tmake.
 
-If your application uses only some of wxWindows libraries, you can
+If your application uses only some of wxWidgets libraries, you can
 specify required libraries when running wx-config. For example,
 `wx-config --libs=html,core` will only output link command to link
 with libraries required by core GUI classes and wxHTML classes. See
 the manual for more information on the libraries.
 
 2) The other way creates a project within the source code
-directories of wxWindows. For this endeavour, you'll need
+directories of wxWidgets. For this endeavour, you'll need
 GNU autoconf version 2.14 and add an entry to your Makefile.in
 to the bottom of the configure.in script and run autoconf
 and configure before you can type make.

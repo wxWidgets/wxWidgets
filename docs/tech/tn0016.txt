@@ -1,11 +1,11 @@
-         How to add new files and libraries to wxWindows build system
+         How to add new files and libraries to wxWidgets build system
          ============================================================
 
 
 1. Regenerating makefiles
 -------------------------
 
-wxWindows now uses Bakefile (http://bakefile.sourceforge.net) to generate
+wxWidgets now uses Bakefile (http://bakefile.sourceforge.net) to generate
 native makefiles. You must have bakefile installed if you want to regenerate
 the makefiles. Bakefile currently runs on Unix and Windows systems. You will
 need Python >= 2.2 installed on Unix and either use Bakefile installer or have
@@ -18,7 +18,7 @@ details.
 
 Note that it generates makefiles for samples and contrib libraries, too.
 
-IMPORTANT NOTE: Don't forget to run autoconf in wxWindows root directory
+IMPORTANT NOTE: Don't forget to run autoconf in wxWidgets root directory
                 (after running Bakefile) if you changed any conditional
                 variable or target condition in .bkl files! You will know that
                 this happened if $(wx)/autoconf_inc.m4 content changed.

@@ -2,7 +2,7 @@
 
 Classes: \helpref{wxWindow}{wxwindow}, \helpref{wxScrolledWindow}{wxscrolledwindow}, \helpref{wxIcon}{wxicon}, \helpref{wxScrollBar}{wxscrollbar}.
 
-Scrollbars come in various guises in wxWindows. All windows have the potential
+Scrollbars come in various guises in wxWidgets. All windows have the potential
 to show a vertical scrollbar and/or a horizontal scrollbar: it is a basic capability of a window.
 However, in practice, not all windows do make use of scrollbars, such as a single-line wxTextCtrl.
 
@@ -81,10 +81,10 @@ scrollbar calculations and SetScrollbar
 call into a function named AdjustScrollbars, which can be called initially and also
 from your \helpref{wxSizeEvent}{wxsizeevent} handler function.
 
-%\normalbox{{\bf For Windows programmers:} note that scrollbar range in wxWindows has a different meaning
+%\normalbox{{\bf For Windows programmers:} note that scrollbar range in wxWidgets has a different meaning
 %from that in Windows. In native Windows scrollbar calls, range is the number of positions that the scrollbar
 %can physically scroll through - in our example above, it would be 34. But it is easier
 %to think in terms of the number of units that the whole scrollbar represents - the virtual
-%window size - which is why wxWindows does it differently.}
+%window size - which is why wxWidgets does it differently.}
 
 

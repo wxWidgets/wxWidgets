@@ -41,7 +41,7 @@ It also provides performance \helpref{statistics gathering code}{wxstringtuning}
 which may be enabled to fine tune the memory allocation strategy for your
 particular application - and the gain might be quite big.
 \item {\bf Compatibility} This class tries to combine almost full compatibility
-with the old wxWindows 1.xx wxString class, some reminiscence to MFC CString
+with the old wxWidgets 1.xx wxString class, some reminiscence to MFC CString
 class and 90\% of the functionality of std::string class.
 \item {\bf Rich set of functions} Some of the functions present in wxString are
 very useful but don't exist in most of other string classes: for example, 
@@ -53,10 +53,10 @@ operations are supported as well.
 to and from ANSI and Unicode strings in any build mode (see the 
 \helpref{Unicode overview}{unicode} for more details) and maps to either
 {\tt string} or {\tt wstring} transparently depending on the current mode.
-\item {\bf Used by wxWindows} And, of course, this class is used everywhere
-inside wxWindows so there is no performance loss which would result from
+\item {\bf Used by wxWidgets} And, of course, this class is used everywhere
+inside wxWidgets so there is no performance loss which would result from
 conversions of objects of any other string class (including std::string) to
-wxString internally by wxWindows.
+wxString internally by wxWidgets.
 \end{enumerate}
 
 However, there are several problems as well. The most important one is probably
@@ -65,18 +65,18 @@ example, to get the length of the string either one of
 length(), \helpref{Len()}{wxstringlen} or 
 \helpref{Length()}{wxstringlength} may be used. The first function, as almost
 all the other functions in lowercase, is std::string compatible. The second one
-is "native" wxString version and the last one is wxWindows 1.xx way. So the
+is "native" wxString version and the last one is wxWidgets 1.xx way. So the
 question is: which one is better to use? And the answer is that:
 
 {\bf The usage of std::string compatible functions is strongly advised!} It will
 both make your code more familiar to other C++ programmers (who are supposed to
 have knowledge of std::string but not of wxString), let you reuse the same code
-in both wxWindows and other programs (by just typedefing wxString as std::string
-when used outside wxWindows) and by staying compatible with future versions of
-wxWindows which will probably start using std::string sooner or later too.
+in both wxWidgets and other programs (by just typedefing wxString as std::string
+when used outside wxWidgets) and by staying compatible with future versions of
+wxWidgets which will probably start using std::string sooner or later too.
 
 In the situations where there is no corresponding std::string function, please
-try to use the new wxString methods and not the old wxWindows 1.xx variants
+try to use the new wxString methods and not the old wxWidgets 1.xx variants
 which are deprecated and may disappear in future versions.
 
 \subsection{Some advice about using wxString}\label{wxstringadvices}

@@ -1,7 +1,7 @@
-                    How to write unit tests for wxWindows
+                    How to write unit tests for wxWidgets
                     =====================================
 
- Unit tests for wxWindows are written using small cppunit framework. To compile
+ Unit tests for wxWidgets are written using small cppunit framework. To compile
 (but not to run) them you need to have it installed. Hence the first part of
 this note explains how to do it while the second one explains how to write the
 test.

@@ -3,7 +3,7 @@
 wxLocale class encapsulates all language-dependent settings and is a
 generalization of the C locale concept.
 
-In wxWindows this class manages message catalogs which contain the translations
+In wxWidgets this class manages message catalogs which contain the translations
 of the strings used to the current language.
 
 \perlnote{In wxPerl you can't use the '\_' function name, so
@@ -561,7 +561,7 @@ language (see \helpref{GetSystemLanguage}{wxlocalegetsystemlanguage}).}
 \docparam{flags}{Combination of the following:
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxLOCALE\_LOAD\_DEFAULT}}{Load the message catalog
-for the given locale containing the translations of standard wxWindows messages
+for the given locale containing the translations of standard wxWidgets messages
 automatically.}
 \twocolitem{\windowstyle{wxLOCALE\_CONV\_ENCODING}}{Automatically convert message
 catalogs to platform's default encoding. Note that it will do only basic 
@@ -580,7 +580,7 @@ directory prefix when looking for the message catalog files.}
 platform-specific.}
 
 \docparam{bLoadDefault}{May be set to false to prevent loading of the message catalog
-for the given locale containing the translations of standard wxWindows messages.
+for the given locale containing the translations of standard wxWidgets messages.
 This parameter would be rarely used in normal circumstances.}
 
 \docparam{bConvertEncoding}{May be set to true to do automatic conversion of message

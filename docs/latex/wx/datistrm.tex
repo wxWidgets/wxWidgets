@@ -46,7 +46,7 @@ None
 \func{}{wxDataInputStream}{\param{wxInputStream\&}{ stream}, \param{wxMBConv\&}{ conv = wxMBConvUTF8}}
 
 Constructs a datastream object from an input stream. Only read methods will
-be available. The second form is only available in Unicode build of wxWindows.
+be available. The second form is only available in Unicode build of wxWidgets.
 
 \wxheading{Parameters}
 
@@ -135,7 +135,7 @@ Reads a string from a stream. Actually, this function first reads a long
 integer specifying the length of the string (without the last null character) 
 and then reads the string.
 
-In Unicode build of wxWindows, the fuction first reads multibyte (char*)
+In Unicode build of wxWidgets, the fuction first reads multibyte (char*)
 string from the stream and then converts it to Unicode using the {\it conv}
 object passed to constructor and returns the result as wxString. You are
 responsible for using the same convertor as when writing the stream.

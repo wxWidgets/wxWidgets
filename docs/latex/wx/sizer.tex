@@ -7,7 +7,7 @@ classes derived from it. Currently there are \helpref{wxBoxSizer}{wxboxsizer},
 \helpref{wxNotebookSizer}{wxnotebooksizer}, \helpref{wxGridSizer}{wxgridsizer} 
 \helpref{wxFlexGridSizer}{wxflexgridsizer} and \helpref{wxGridBagSizer}{wxgridbagsizer}.
 
-The layout algorithm used by sizers in wxWindows is closely related to layout
+The layout algorithm used by sizers in wxWidgets is closely related to layout
 in other GUI toolkits, such as Java's AWT, the GTK toolkit or the Qt toolkit. It is
 based upon the idea of the individual subwindows reporting their minimal required
 size and their ability to get stretched if the size of the parent window has changed.
@@ -19,7 +19,7 @@ a hierarchy of sizers can be constructed. Note that wxSizer does not derive from
 and thus do not interfere with tab ordering and requires very little resources compared
 to a real window on screen.
 
-What makes sizers so well fitted for use in wxWindows is the fact that every control
+What makes sizers so well fitted for use in wxWidgets is the fact that every control
 reports its own minimal size and the algorithm can handle differences in font sizes
 or different window (dialog item) sizes on different platforms without problems. If e.g.
 the standard font as well as the overall design of Motif widgets requires more space than

@@ -10,7 +10,7 @@ buttons or toggles. A toolbar gives faster access to an application's facilities
 menus, which have to be popped up and selected rather laboriously.
 
 Instead of supplying one toolbar class with a number
-of different implementations depending on platform, wxWindows separates
+of different implementations depending on platform, wxWidgets separates
 out the classes. This is because there are a number of different toolbar
 styles that you may wish to use simultaneously, and also, future
 toolbar implementations will emerge which
@@ -24,7 +24,7 @@ The following is a summary of the toolbar classes and their differences.
 \begin{itemize}\itemsep=0pt
 \item {\bf wxToolBarBase.} This is a base class with pure virtual functions,
 and should not be used directly.
-\item {\bf wxToolBarSimple.} A simple toolbar class written entirely with generic wxWindows
+\item {\bf wxToolBarSimple.} A simple toolbar class written entirely with generic wxWidgets
 functionality. A simple 3D effect for buttons is possible, but it is not consistent
 with the Windows look and feel. This toolbar can scroll, and you can have arbitrary
 numbers of rows and columns.
@@ -86,7 +86,7 @@ overriding OnLeftClick.
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// License:   	wxWindows license
+// License:   	wxWidgets license
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -161,7 +161,7 @@ bool MyApp::OnInit(void)
   frame->OnSize(event);
   frame->Show(true);
 
-  frame->SetStatusText("Hello, wxWindows");
+  frame->SetStatusText("Hello, wxWidgets");
   
   SetTopWindow(frame);
 
@@ -254,7 +254,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    (void)wxMessageBox("wxWindows toolbar sample", "About wxToolBar");
+    (void)wxMessageBox("wxWidgets toolbar sample", "About wxToolBar");
 }
 
 // Define the behaviour for the frame closing

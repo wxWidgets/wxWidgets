@@ -1,19 +1,19 @@
 \section{Standard event identifiers}\label{stdevtid}
 
-wxWindows defines a special identifier value {\tt wxID\_ANY} which is used in
+wxWidgets defines a special identifier value {\tt wxID\_ANY} which is used in
 the following two situations:
 
 \begin{itemize}
 \item when creating a new window you may specify {\tt wxID\_ANY} to let
-wxWindows assign an unused identifier to it automatically
+wxWidgets assign an unused identifier to it automatically
 \item when installing an event handler using either the event table
 macros or \helpref{wxEvtHandler::Connect}{wxevthandlerconnect},
 you may use it to indicate that you want to handle the events
 coming from any control, regardless of its identifier
 \end{itemize}
 
-wxWindows also defines a few standard command identifiers which may be used by
-the user code and also are sometimes used by wxWindows itself. These reserved
+wxWidgets also defines a few standard command identifiers which may be used by
+the user code and also are sometimes used by wxWidgets itself. These reserved
 identifiers are all in the range between {\tt wxID\_LOWEST} and 
 {\tt wxID\_HIGHEST} and, accordingly, the user code should avoid defining its
 own constants in this range.

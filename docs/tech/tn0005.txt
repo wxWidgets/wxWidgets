@@ -1,4 +1,4 @@
-                     Adding a wxWindows contribution
+                     Adding a wxWidgets contribution
                      ===============================
 
 Here are some different kinds of contribution:
@@ -6,13 +6,13 @@ Here are some different kinds of contribution:
 1. Bug fixes. You can send these to the wx-devel list.
 2. New classes. New classes normally go in the contrib hierarchy:
    please see below for more details. They may be promoted to
-   the main wxWindows hierarchy if they are deemed to be 'core'.
+   the main wxWidgets hierarchy if they are deemed to be 'core'.
 3. A utility application, such as a new dialog editor or
    file format conversion utility. If adding to the CVS
    archive, you may put it under the utils hierarchy,
    preferably with further src and docs directories.
 
-You may or may not wish to add your code to the main wxWindows CVS
+You may or may not wish to add your code to the main wxWidgets CVS
 archive. Whether your code is appropriate for this archive
 should first be ascertained by discussing it on wx-devel@wxwindows.org.
 
@@ -23,7 +23,7 @@ When contributing a new class or set of classes, please
 organise your files in the following hierarchy, so that
 when a user unarchives your contribution, it
 slots neatly into the existing source hierarchy.
-It also simplifies compilation for users, since wxWindows
+It also simplifies compilation for users, since wxWidgets
 makefiles and project files are set up to search in
 contrib/include/wx and contrib/lib. For example, to
 include yourclass.h, the following directive is used:
@@ -58,7 +58,7 @@ site in the 'Backroom' section. Include bakefile and generated makefiles
 (see Technote #16 for details).
 
 Your archive can be in .tgz or .zip format. For inclusion on
-the wxWindows ftp site and CD-ROM, please send your submission to
+the wxWidgets ftp site and CD-ROM, please send your submission to
 Julian Smart <julian@wxwindows.org> as a binary attachment.
 An entry will be added to the Contributions web page.
 

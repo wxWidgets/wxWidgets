@@ -203,7 +203,7 @@ system, since wxFont uses a reference counting system for efficiency.
 
 Although all remaining fonts are deleted when the application exits,
 the application should try to clean up all fonts itself. This is because
-wxWindows cannot know if a pointer to the font object is stored in an
+wxWidgets cannot know if a pointer to the font object is stored in an
 application data structure, and there is a risk of double deletion.
 
 \membersection{wxFont::IsFixedWidth}\label{wxfontisfixedwidth}
@@ -330,7 +330,7 @@ Sets the facename for the font.
 
 To avoid portability problems, don't rely on a specific face, but specify the font family
 instead or as well. A suitable font will be found on the end-user's system. If both the
-family and the facename are specified, wxWindows will first search for the specific face,
+family and the facename are specified, wxWidgets will first search for the specific face,
 and then for a font belonging to the same family.
 
 \wxheading{See also}

@@ -1,15 +1,15 @@
 
-  Welcome to wxWindows/MGL 2.3
+  Welcome to wxWidgets/MGL 2.3
 
 You have downloaded version 2.3 of the MGL port of
-the wxWindows GUI library. This runs on top of SciTech MGL library
+the wxWidgets GUI library. This runs on top of SciTech MGL library
 (http://www.scitechsoft.com) that is available for variety of 
 operating systems and comes with support for embedded devices.
 
-More information about the wxWindows project as a whole
+More information about the wxWidgets project as a whole
 can be found at:
 
-  http://www.wxwindows.org
+  http://www.wxwidgets.org
   
 Information on how to install can be found in the file 
 install.txt
@@ -17,5 +17,5 @@ install.txt
 
   Regards,
 
-  The wxWindows team
+  The wxWidgets team
 

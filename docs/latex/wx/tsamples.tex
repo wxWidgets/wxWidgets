@@ -5,29 +5,29 @@
 %% Modified by:
 %% Created:     02.11.99
 %% RCS-ID:      $Id$
-%% Copyright:   (c) wxWindows team
-%% License:     wxWindows license
+%% Copyright:   (c) wxWidgets team
+%% License:     wxWidgets license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % NB: please keep the subsections in alphabetic order!
 
-\section{wxWindows samples}\label{samples}
+\section{wxWidgets samples}\label{samples}
 
-Probably the best way to learn wxWindows is by reading the source of some 50+
-samples provided with it. Many aspects of wxWindows programming can be learnt
+Probably the best way to learn wxWidgets is by reading the source of some 50+
+samples provided with it. Many aspects of wxWidgets programming can be learnt
 from them, but sometimes it is not simple to just choose the right sample to
 look at. This overview aims at describing what each sample does/demonstrates to
 make it easier to find the relevant one if a simple grep through all sources
 didn't help. They also provide some notes about using the samples and what
-features of wxWindows are they supposed to test.
+features of wxWidgets are they supposed to test.
 
-There are currently more than 50 different samples as part of wxWindows and
-this list is not complete. You should start your tour of wxWindows with the 
-\helpref{minimal sample}{sampleminimal} which is the wxWindows version of
-"Hello, world!". It shows the basic structure of wxWindows program and is the
+There are currently more than 50 different samples as part of wxWidgets and
+this list is not complete. You should start your tour of wxWidgets with the 
+\helpref{minimal sample}{sampleminimal} which is the wxWidgets version of
+"Hello, world!". It shows the basic structure of wxWidgets program and is the
 most commented sample of all - looking at its source code is recommended.
 
 The next most useful sample is probably the \helpref{controls}{samplecontrols} 
-one which shows many of wxWindows standard controls, such as buttons,
+one which shows many of wxWidgets standard controls, such as buttons,
 listboxes, checkboxes, comboboxes etc.
 
 Other, more complicated controls, have their own samples. In this category you
@@ -42,7 +42,7 @@ may find the following samples showing the corresponding controls:
 
 Finally, it might be helpful to do a search in the entire sample directory if
 you can't find the sample you showing the control you are interested in by
-name. Most of wxWindows classes, occur in at least one of the samples.
+name. Most of wxWidgets classes, occur in at least one of the samples.
 
 
 \subsection{Minimal sample}\label{sampleminimal}
@@ -50,13 +50,13 @@ name. Most of wxWindows classes, occur in at least one of the samples.
 The minimal sample is what most people will know under the term Hello World,
 i.e. a minimal program that doesn't demonstrate anything apart from what is
 needed to write a program that will display a "hello" dialog. This is usually
-a good starting point for learning how to use wxWindows.
+a good starting point for learning how to use wxWidgets.
 
 
 \subsection{Art provider sample}\label{sampleartprovider}
 
 The {\tt artprov} sample shows how you can customize the look of standard
-wxWindows dialogs by replacing default bitmaps/icons with your own versions.
+wxWidgets dialogs by replacing default bitmaps/icons with your own versions.
 It also shows how you can use wxArtProvider to
 get stock bitmaps for use in your application.
 
@@ -92,7 +92,7 @@ features of this class.
 \subsection{Controls sample}\label{samplecontrols}
 
 The controls sample is the main test program for most simple controls used in
-wxWindows. The sample tests their basic functionality, events, placement,
+wxWidgets. The sample tests their basic functionality, events, placement,
 modification in terms of colour and font as well as the possibility to change
 the controls programmatically, such as adding item to a list box etc. Apart
 from that, the sample uses a \helpref{wxNotebook}{wxnotebook} and tests most
@@ -131,7 +131,7 @@ database with ODBC support to be correctly installed on your system.
 
 \subsection{Dialogs sample}\label{sampledialogs}
 
-This sample shows how to use the common dialogs available from wxWindows. These
+This sample shows how to use the common dialogs available from wxWidgets. These
 dialogs are described in details in the \helpref{Common dialogs overview}{commondialogsoverview}.
 
 
@@ -172,7 +172,7 @@ clipboard (or, in the case of Windows version, also a metafile) - it will be
 shown in a new frame.
 
 So far, everything we mentioned was implemented with minimal amount of code
-using standard wxWindows classes. The more advanced features are demonstrated
+using standard wxWidgets classes. The more advanced features are demonstrated
 if you create a shape frame from the main frame menu. A shape is a geometric
 object which has a position, size and color. It models some
 application-specific data in this sample. A shape object supports its own
@@ -195,7 +195,7 @@ This sample is a very small sample that demonstrates the use of the
 should be used whenever it is not known at compile time, which control
 will receive which event or which controls are actually going to be in
 a dialog or frame. This is most typically the case for any scripting
-language that would work as a wrapper for wxWindows or programs where
+language that would work as a wrapper for wxWidgets or programs where
 forms or similar datagrams can be created by the uses.
 
 See also the \helpref{event sample}{sampleevent}
@@ -203,7 +203,7 @@ See also the \helpref{event sample}{sampleevent}
 
 \subsection{Event sample}\label{sampleevent}
 
-The event sample demonstrates various features of the wxWindows events. It
+The event sample demonstrates various features of the wxWidgets events. It
 shows using dynamic events and connecting/disconnecting the event handlers
 during the run time and also using 
 \helpref{PushEventHandler()}{wxwindowpusheventhandler} and
@@ -214,7 +214,7 @@ It replaces the old dynamic sample.
 
 \subsection{Except(ions) sample}\label{sampleexcept}
 
-This very simple sample shows how to use C++ exceptions in wxWindows programs,
+This very simple sample shows how to use C++ exceptions in wxWidgets programs,
 i.e. where to catch the exception which may be thrown by the program code. It
 doesn't do anything very exciting by itself, you need to study its code to
 understand what goes on.
@@ -242,7 +242,7 @@ synchronous and asynchronous cases and how to kill the processes with
 The font sample demonstrates \helpref{wxFont}{wxfont}, 
 \helpref{wxFontEnumerator}{wxfontenumerator} and 
 \helpref{wxFontMapper}{wxfontmapper} classes. It allows you to see the fonts
-available (to wxWindows) on the computer and shows all characters of the
+available (to wxWidgets) on the computer and shows all characters of the
 chosen font as well.
 
 
@@ -266,7 +266,7 @@ the library to work with unsupported tags.
 {\bf About} may give you an idea how to write good-looking about boxes.
 
 {\bf Zip} demonstrates use of virtual file systems in wxHTML. The zip archives
-handler (ships with wxWindows) allows you to access HTML pages stored 
+handler (ships with wxWidgets) allows you to access HTML pages stored 
 in compressed archive as if they were ordinary files.
 
 {\bf Virtual} is yet another virtual file systems demo. This one generates pages at run-time.
@@ -304,7 +304,7 @@ replaced with red using \helpref{wxImage::Replace}{wximagereplace}.
 
 \subsection{Internat(ionalization) sample}\label{sampleinternat}
 
-The not very clearly named internat sample demonstrates the wxWindows
+The not very clearly named internat sample demonstrates the wxWidgets
 internatationalization (i18n for short from now on) features. To be more
 precise, it only shows localization support, i.e. support for translating the
 program messages in another language while true i18n would also involve
@@ -317,7 +317,7 @@ its directory. Please see also \helpref{i18n overview}{internationalization}.
 \subsection{Layout sample}\label{samplelayout}
 
 The layout sample demonstrates the two different layout systems offered
-by wxWindows. When starting the program, you will see a frame with some
+by wxWidgets. When starting the program, you will see a frame with some
 controls and some graphics. The controls will change their size whenever
 you resize the entire frame and the exact behaviour of the size changes
 is determined using the \helpref{wxLayoutConstraints}{wxlayoutconstraints} 
@@ -355,7 +355,7 @@ file \texttt{notebook.h} and rebuild the sample.
 
 \subsection{Render sample}\label{samplerender}
 
-This sample shows how to replace the default wxWindows 
+This sample shows how to replace the default wxWidgets 
 \helpref{renderer}{wxrenderernative} and also how to write a shared library
 (DLL) implementing a renderer and load and unload it during the run-time.
 
@@ -377,7 +377,7 @@ class including placing subwindows into it and drawing simple graphics. It uses 
 \helpref{SetTargetWindow}{wxscrolledwindowsettargetwindow} method and thus the effect
 of scrolling does not show in the scrolled window itself, but in one of its subwindows.
 
-Additionally, this samples demonstrates how to optimize drawing operations in wxWindows,
+Additionally, this samples demonstrates how to optimize drawing operations in wxWidgets,
 in particular using the \helpref{wxWindow::IsExposed}{wxwindowisexposed} method with 
 the aim to prevent unnecessary drawing in the window and thus reducing or removing 
 flicker on screen.
@@ -484,12 +484,12 @@ is not multi-threading safe, i.e. that it might crash if two threads try to
 access the GUI class simultaneously. One way to prevent that is have a normal
 GUI program in the main thread and some worker threads which work in the 
 background. In order to make communication between the main thread and the
-worker threads possible, wxWindows offers the \helpref{wxPostEvent}{wxpostevent} 
+worker threads possible, wxWidgets offers the \helpref{wxPostEvent}{wxpostevent} 
 function and this sample makes use of this function.
 
 The other way to use a so called Mutex (such as those offered in the \helpref{wxMutex}{wxmutex} 
 class) that prevent threads from accessing the GUI classes as long as any other
-thread accesses them. For this, wxWindows has the \helpref{wxMutexGuiEnter}{wxmutexguienter} 
+thread accesses them. For this, wxWidgets has the \helpref{wxMutexGuiEnter}{wxmutexguienter} 
 and \helpref{wxMutexGuiLeave}{wxmutexguileave} functions, both of which are
 used and tested in the sample as well.
 

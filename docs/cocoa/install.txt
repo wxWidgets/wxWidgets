@@ -6,19 +6,19 @@ a GCC release with Objective-C++) will be much appreciated.
 
 For the time being, the standard configure/make method works.  You will
 want to build static because there are a number of unimplemented functions
-that a shared library will need (becuase of wxWindows code internally using
+that a shared library will need (becuase of wxWidgets code internally using
 them) but that a static library will not (because most of the samples
 don't need it).
 
 On my system I have the following:
 
 Checked out CVS source is in:
-/Users/dfe/devel/wxHEADcommit/wxWindows
+/Users/dfe/devel/wxHEADcommit/wxWidgets
 Debug build directory is:
 /Users/dfe/devel/wxHEADcommit/BUILD_COCOAd
 
 From the debug build directory:
-$ ../wxWindows/configure --with-cocoa --enable-debug --disable-shared
+$ ../wxWidgets/configure --with-cocoa --enable-debug --disable-shared
 $ make
 $ cd samples/minimal
 $ make

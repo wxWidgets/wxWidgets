@@ -1,14 +1,14 @@
-                      wxWindows naming conventions
+                      wxWidgets naming conventions
                       ============================
 
 Being a cross platform development library, it is naturally desirable
-(at least to me ;) for wxWindows to be exploited in a fully cross
+(at least to me ;) for wxWidgets to be exploited in a fully cross
 platform development environment -- a single invocation of make should
 be sufficient to build target executables for a variety of host platforms
 when desired.
 
 Since this is now in fact possible for at least the most commonly used
-platforms, wxWindows has been structured to allow multiple, simultaneous
+platforms, wxWidgets has been structured to allow multiple, simultaneous
 installations of the library.  Common files are shared, platform and port
 specific files and libraries are arranged so as to be unambiguous when
 installed together.
@@ -18,7 +18,7 @@ labelling convention for file and install path names -- this document (at
 least at its time of writing) describes the system we have adopted.
 
 It is not fine grained enough to include every possible build configuration
-for wxWindows, but is encompassing enough to maintain a relatively complete
+for wxWidgets, but is encompassing enough to maintain a relatively complete
 set of cross platform build tools on a single machine and to provide an
 obvious slot for new ports to slip into.
 
@@ -61,7 +61,7 @@ or empty if the widget set is the same as the toolkit.
 $version is a string encoding the full version (major, minor, release)
 for MSW, or just the major and minor number for UNIX.
 
-eg. for wxWindows 2.3.2, $version = 232 for MSW or 2.3 for UNIX.
+eg. for wxWidgets 2.3.2, $version = 232 for MSW or 2.3 for UNIX.
 
 The rationale for this is that under UNIX-like systems it is desirable
 that differently 'minor numbered' releases can be installed together,

@@ -60,7 +60,7 @@ class, to provide multi-page document facilities.
 \end{itemize}
 
 Note that to activate framework functionality, you need to use some or all of
-the wxWindows \helpref{predefined command identifiers}{predefinedids} in your menus.
+the wxWidgets \helpref{predefined command identifiers}{predefinedids} in your menus.
 
 \perlnote{The document/view framework is available in wxPerl. To use it,
 you will need the following statements in your application code:\par
@@ -78,7 +78,7 @@ use Wx ':docview';   # import constants (optional)
 Class: \helpref{wxDocument}{wxdocument}
 
 The wxDocument class can be used to model an application's file-based
-data. It is part of the document/view framework supported by wxWindows,
+data. It is part of the document/view framework supported by wxWidgets,
 and cooperates with the \helpref{wxView}{wxview}, \helpref{wxDocTemplate}{wxdoctemplate}\rtfsp
 and \helpref{wxDocManager}{wxdocmanager} classes.
 
@@ -107,7 +107,7 @@ a \helpref{wxDocTemplate}{wxdoctemplate} object on application initialization, y
 should pass CLASSINFO(YourDocumentClass) to the wxDocTemplate constructor
 so that it knows how to create an instance of this class.
 
-If you do not wish to use the wxWindows method of creating document
+If you do not wish to use the wxWidgets method of creating document
 objects dynamically, you must override wxDocTemplate::CreateDocument
 to return an instance of the appropriate class.
 
@@ -118,7 +118,7 @@ to return an instance of the appropriate class.
 Class: \helpref{wxView}{wxview}
 
 The wxView class can be used to model the viewing and editing component of
-an application's file-based data. It is part of the document/view framework supported by wxWindows,
+an application's file-based data. It is part of the document/view framework supported by wxWidgets,
 and cooperates with the \helpref{wxDocument}{wxdocument}, \helpref{wxDocTemplate}{wxdoctemplate}
 and \helpref{wxDocManager}{wxdocmanager} classes.
 
@@ -135,7 +135,7 @@ a \helpref{wxDocTemplate}{wxdoctemplate} object on application initialization, y
 should pass CLASSINFO(YourViewClass) to the wxDocTemplate constructor
 so that it knows how to create an instance of this class.
 
-If you do not wish to use the wxWindows method of creating view
+If you do not wish to use the wxWidgets method of creating view
 objects dynamically, you must override wxDocTemplate::CreateView
 to return an instance of the appropriate class.
 
@@ -172,7 +172,7 @@ For the case where an application has one document type and one view type,
 a single document template is constructed, and dialogs will be appropriately
 simplified.
 
-wxDocTemplate is part of the document/view framework supported by wxWindows,
+wxDocTemplate is part of the document/view framework supported by wxWidgets,
 and cooperates with the \helpref{wxView}{wxview}, \helpref{wxDocument}{wxdocument} 
 and \helpref{wxDocManager}{wxdocmanager} classes.
 
@@ -181,12 +181,12 @@ See the example application in {\tt samples/docview}.
 To use the wxDocTemplate class, you do not need to derive a new class.
 Just pass relevant information to the constructor including CLASSINFO(YourDocumentClass) and
 CLASSINFO(YourViewClass) to allow dynamic instance creation.
-If you do not wish to use the wxWindows method of creating document
+If you do not wish to use the wxWidgets method of creating document
 objects dynamically, you must override wxDocTemplate::CreateDocument
 and wxDocTemplate::CreateView to return instances of the appropriate class.
 
 {\it NOTE}: the document template has nothing to do with the C++ template construct. C++
-templates are not used anywhere in wxWindows.
+templates are not used anywhere in wxWidgets.
 
 \subsection{wxDocManager overview}\label{wxdocmanageroverview}
 
@@ -194,7 +194,7 @@ templates are not used anywhere in wxWindows.
 
 Class: \helpref{wxDocManager}{wxdocmanager}
 
-The wxDocManager class is part of the document/view framework supported by wxWindows,
+The wxDocManager class is part of the document/view framework supported by wxWidgets,
 and cooperates with the \helpref{wxView}{wxview}, \helpref{wxDocument}{wxdocument}\rtfsp
 and \helpref{wxDocTemplate}{wxdoctemplate} classes.
 
@@ -228,7 +228,7 @@ When a user interface event occurs, the application {\it submits} a command
 to a \helpref{wxCommandProcessor}{wxcommandprocessoroverview} object to execute and
 store.
 
-The wxWindows document/view framework handles Undo and Redo by use of
+The wxWidgets document/view framework handles Undo and Redo by use of
 wxCommand and wxCommandProcessor objects. You might find further uses
 for wxCommand, such as implementing a macro facility that stores, loads
 and replays commands.
@@ -287,7 +287,7 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 \end{verbatim}
 }
 
-\subsection{wxWindows predefined command identifiers}\label{predefinedids}
+\subsection{wxWidgets predefined command identifiers}\label{predefinedids}
 
 To allow communication between the application's menus and the
 document/view framework, several command identifiers are predefined for you

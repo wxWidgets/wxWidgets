@@ -1,16 +1,16 @@
 
   =================================================
-  Welcome to wxWindows/CE 2.5.1
+  Welcome to wxWidgets/CE 2.5.1
   =================================================
 
 You have downloaded version 2.5.1 of the Windows CE port of
-the wxWindows GUI library. This runs on PocketPC 2002,
+the wxWidgets GUI library. This runs on PocketPC 2002,
 SmartPhone 2002, and Windows CE .NET 4.x.
 
-More information about the wxWindows project as a whole
+More information about the wxWidgets project as a whole
 can be found at:
 
-  http://www.wxwindows.org
+  http://www.wxwidgets.org
 
 Information about the Windows CE port in particular
 can be found here:
@@ -43,9 +43,9 @@ Install selecting only the two target platforms used:
 
 You can install other targets but you will need
 to create new configurations for them in the
-wxWindows project files.
+wxWidgets project files.
 
-wxWindows/CE Configuration
+wxWidgets/CE Configuration
 ================================
 
 You may wish to customize the following file
@@ -73,10 +73,10 @@ wxUSE_SMARTPHONE
   Set this to 1 if you wish to compile for the SmartPhone
   platform (with eVC++ 3).
 
-wxWindows/CE Compilation
+wxWidgets/CE Compilation
 ================================
 
-Open src/msw/wince/wxWindowsCE.vcp, select an
+Open src/msw/wince/wxWidgetsCE.vcp, select an
 ARM or x86 target (or emulator target for eVC++ 4),
 and compile.
 
@@ -90,7 +90,7 @@ to wait a long time for loading and saving the workspace.
 
 To compile using the emulator on eVC++3:
 
-- Open src/msw/wince/wxWindowsCE.vcp, select the
+- Open src/msw/wince/wxWidgetsCE.vcp, select the
   WIN32 (WCE x86) Debug Unicode configuration, close the dialog,
   then select Pocket PC 2002 and Pocket PC 2002 Emulation on the toolbar,
   and compile.
@@ -101,7 +101,7 @@ To compile using the emulator on eVC++3:
 
 To compile using the emulator on eVC++4:
 
-- Open src/msw/wince/wxWindowsCE.vcp, select the
+- Open src/msw/wince/wxWidgetsCE.vcp, select the
   WIN32 (WCE Emulator) Debug Unicode configuration, and compile.
 
 - Open samples/minimal/minimalCE.vcp with eCV 4.0, select the

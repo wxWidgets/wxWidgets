@@ -6,9 +6,9 @@ http://sourceforge.net/tracker/index.php?func=detail&aid=648659&group_id=9863&at
 
 2. "Remove" wxFont::GetInternalFont from wxGTK w/ GTK2
 
-CVS: [RR] wxWindows/src/gtk dcclient.cpp,1.162,1.163 font.cpp,1.69,1.70 window.cpp,1.411,1.412
-CVS: [RR] wxWindows/src/gtk choice.cpp,1.55,1.56 combobox.cpp,1.87,1.88
-CVS: [RR] wxWindows/src/gtk minifram.cpp,1.29,1.30
+CVS: [RR] wxWidgets/src/gtk dcclient.cpp,1.162,1.163 font.cpp,1.69,1.70 window.cpp,1.411,1.412
+CVS: [RR] wxWidgets/src/gtk choice.cpp,1.55,1.56 combobox.cpp,1.87,1.88
+CVS: [RR] wxWidgets/src/gtk minifram.cpp,1.29,1.30
    (not sure about minifram.cpp: must be checked for binary compatibility - VS)
 
 When applying, be careful to not pick later revision of font.cpp -- 2.5 doesn't
@@ -17,14 +17,14 @@ compatibility!
 
 3. Add Windows XP manifests to wx.rc
 
-RCS file: /pack/cvsroots/wxwindows/wxWindows/include/wx/msw/wx.manifest,v
+RCS file: /pack/cvsroots/wxwindows/wxWidgets/include/wx/msw/wx.manifest,v
 done
 Checking in wx.manifest;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/wx.manifest,v  <--  wx.manifest
+/pack/cvsroots/wxwindows/wxWidgets/include/wx/msw/wx.manifest,v  <--  wx.manifest
 initial revision: 1.1
 done
 Checking in wx.rc;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/wx.rc,v  <--  wx.rc
+/pack/cvsroots/wxwindows/wxWidgets/include/wx/msw/wx.rc,v  <--  wx.rc
 new revision: 1.29; previous revision: 1.28
 done
 
@@ -33,10 +33,10 @@ done
 http://sf.net/tracker/index.php?func=detail&aid=718913&group_id=9863&atid=309863
 
 Checking in include/wx/containr.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/containr.h,v  <--  containr.h
+/pack/cvsroots/wxwindows/wxWidgets/include/wx/containr.h,v  <--  containr.h
 new revision: 1.10; previous revision: 1.9
 Checking in src/common/containr.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/containr.cpp,v  <--  containr.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/common/containr.cpp,v  <--  containr.cpp
 new revision: 1.17; previous revision: 1.16
 
 6. fixes for user dash wxPens handling
@@ -44,19 +44,19 @@ new revision: 1.17; previous revision: 1.16
 http://sf.net/tracker/index.php?func=detail&aid=717736&group_id=9863&atid=309863
 
 Checking in include/wx/msw/pen.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/pen.h,v  <--  pen.h
+/pack/cvsroots/wxwindows/wxWidgets/include/wx/msw/pen.h,v  <--  pen.h
 new revision: 1.16; previous revision: 1.15
 Checking in src/msw/pen.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/pen.cpp,v  <--  pen.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/pen.cpp,v  <--  pen.cpp
 new revision: 1.20; previous revision: 1.19
 Checking in src/gtk/pen.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/gtk/pen.cpp,v  <--  pen.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/gtk/pen.cpp,v  <--  pen.cpp
 new revision: 1.23; previous revision: 1.22
 Checking in samples/drawing/drawing.cpp;
-/pack/cvsroots/wxwindows/wxWindows/samples/drawing/drawing.cpp,v  <--  drawing.cpp
+/pack/cvsroots/wxwindows/wxWidgets/samples/drawing/drawing.cpp,v  <--  drawing.cpp
 new revision: 1.67; previous revision: 1.66
 Checking in docs/changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+/pack/cvsroots/wxwindows/wxWidgets/docs/changes.txt,v  <--  changes.txt
 new revision: 1.266; previous revision: 1.265
 
 8. UnixWare compilation fixes:
@@ -64,22 +64,22 @@ new revision: 1.266; previous revision: 1.265
 Don't forget to rerun autoconf to regenerate configure!
 
 Checking in configure.in;
-/pack/cvsroots/wxwindows/wxWindows/configure.in,v  <--  configure.in
+/pack/cvsroots/wxwindows/wxWidgets/configure.in,v  <--  configure.in
 new revision: 1.664; previous revision: 1.663
 Checking in setup.h.in;
-/pack/cvsroots/wxwindows/wxWindows/setup.h.in,v  <--  setup.h.in
+/pack/cvsroots/wxwindows/wxWidgets/setup.h.in,v  <--  setup.h.in
 new revision: 1.111; previous revision: 1.110
 Checking in src/unix/gsocket.c;
-/pack/cvsroots/wxwindows/wxWindows/src/unix/gsocket.c,v  <--  gsocket.c
+/pack/cvsroots/wxwindows/wxWidgets/src/unix/gsocket.c,v  <--  gsocket.c
 new revision: 1.72; previous revision: 1.71
 
 9. wxSemaphore methods returned incorrect values:
 
 Checking in src/msw/thread.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/thread.cpp,v  <--  thread.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/thread.cpp,v  <--  thread.cpp
 new revision: 1.62; previous revision: 1.61
 Checking in src/unix/threadpsx.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/unix/threadpsx.cpp,v  <--  threadpsx.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/unix/threadpsx.cpp,v  <--  threadpsx.cpp
 new revision: 1.62; previous revision: 1.61
 
 10. Unix/OpenGL build fix:
@@ -87,7 +87,7 @@ new revision: 1.62; previous revision: 1.61
 Don't forget to rerun autoconf to regenerate configure!
 
 Checking in configure.in;
-/pack/cvsroots/wxwindows/wxWindows/configure.in,v  <--  configure.in
+/pack/cvsroots/wxwindows/wxWidgets/configure.in,v  <--  configure.in
 new revision: 1.666; previous revision: 1.665
 
 11. Ukrainian translation (locale/uk.po)
@@ -99,7 +99,7 @@ new revision: 1.666; previous revision: 1.665
 http://sf.net/tracker/index.php?func=detail&aid=720542&group_id=9863&atid=309863
 
 Checking in src/msw/fdrepdlg.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/fdrepdlg.cpp,v  <--  fdrepdlg.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/fdrepdlg.cpp,v  <--  fdrepdlg.cpp
 new revision: 1.10; previous revision: 1.9
 
 
@@ -108,11 +108,11 @@ new revision: 1.10; previous revision: 1.9
 http://sf.net/tracker/index.php?func=detail&aid=728768&group_id=9863&atid=309863
 
 Checking in include/wx/gtk/dcmemory.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/gtk/dcmemory.h,v  <--  dcmemory.h
+/pack/cvsroots/wxwindows/wxWidgets/include/wx/gtk/dcmemory.h,v  <--  dcmemory.h
 new revision: 1.13; previous revision: 1.12
 done
 Checking in src/gtk/dcmemory.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/gtk/dcmemory.cpp,v  <--  dcmemory.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/gtk/dcmemory.cpp,v  <--  dcmemory.cpp
 new revision: 1.21; previous revision: 1.20
 done
 
@@ -122,7 +122,7 @@ done
 http://sf.net/tracker/index.php?func=detail&aid=626048&group_id=9863&atid=309863
 
 Checking in src/gtk/menu.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/gtk/menu.cpp,v  <--  menu.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/gtk/menu.cpp,v  <--  menu.cpp
 new revision: 1.136; previous revision: 1.135
 
 
@@ -131,7 +131,7 @@ new revision: 1.136; previous revision: 1.135
 http://sf.net/tracker/index.php?func=detail&aid=736208&group_id=9863&atid=109863
 
 Checking in include/wx/textbuf.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/textbuf.h,v  <--  textbuf.h
+/pack/cvsroots/wxwindows/wxWidgets/include/wx/textbuf.h,v  <--  textbuf.h
 new revision: 1.8; previous revision: 1.7
 
 
@@ -140,22 +140,22 @@ new revision: 1.8; previous revision: 1.7
 http://sf.net/tracker/?func=detail&aid=215436&group_id=9863&atid=109863
 
 Checking in src/common/containr.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/containr.cpp,v  <--  containr.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/common/containr.cpp,v  <--  containr.cpp
 new revision: 1.18; previous revision: 1.17
 
 
 21. Fix wxGTK w/ GTK+2 to respect wxDC::SetBackgroundMode and SetTextBackground
 
 Checking in dcclient.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/gtk/dcclient.cpp,v  <--  dcclient.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/gtk/dcclient.cpp,v  <--  dcclient.cpp
 new revision: 1.170; previous revision: 1.169
 done
 
 
 22. patch [ 619705 ] Fixes wxApp::GetComCtl32Version
 
-Checking in wxWindows/src/msw/app.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/app.cpp,v  <--  app.cpp
+Checking in wxWidgets/src/msw/app.cpp;
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/app.cpp,v  <--  app.cpp
 new revision: 1.186; previous revision: 1.185
 done
 
@@ -169,29 +169,29 @@ wxBringWindowToTop.
 See: Bug [ 744199 ] wxBringWindowToTop, child window z-order
 
 Checking in include/wx/msw/dialog.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/dialog.h,v  <--  dialog.h
+/pack/cvsroots/wxwindows/wxWidgets/include/wx/msw/dialog.h,v  <--  dialog.h
 new revision: 1.34; previous revision: 1.33
 done
 Checking in src/msw/dialog.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/dialog.cpp,v  <--  dialog.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/dialog.cpp,v  <--  dialog.cpp
 new revision: 1.84; previous revision: 1.83
 done
 Checking in src/msw/window.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/window.cpp,v  <--  window.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/window.cpp,v  <--  window.cpp
 new revision: 1.381; previous revision: 1.380
 done
 
 25. wxGenericListCtrl::Refresh() (didn't work at all before)
 
 Checking in include//wx/generic/listctrl.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/generic/listctrl.h,v  <--  listctrl.h
+/pack/cvsroots/wxwindows/wxWidgets/include/wx/generic/listctrl.h,v  <--  listctrl.h
 new revision: 1.77; previous revision: 1.76
 Checking in src/generic/listctrl.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/generic/listctrl.cpp,v  <--  listctrl.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/generic/listctrl.cpp,v  <--  listctrl.cpp
 new revision: 1.284; previous revision: 1.283
-cvs diff: [13:19:09] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/include/wx/generic
+cvs diff: [13:19:09] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWidgets/include/wx/generic
 Checking in docs/changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+/pack/cvsroots/wxwindows/wxWidgets/docs/changes.txt,v  <--  changes.txt
 new revision: 1.299; previous revision: 1.298
 
 
@@ -200,42 +200,42 @@ used to be allocated to the first item which is wrong, it should be divided
 evenly among all of them.
 
 Checking in sizer.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/sizer.cpp,v  <--  sizer.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/common/sizer.cpp,v  <--  sizer.cpp
 new revision: 1.71; previous revision: 1.70
 
 28. patch [ 771772 ] Crashes when setting icon tooltip longer than 63 characters
 
 Checking in window.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/window.cpp,v  <--  window.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/window.cpp,v  <--  window.cpp
 new revision: 1.431; previous revision: 1.430
 
 29. Fix infinite loop in IsDialoMessage when a panel is reparented after
     creation (as happens with XRC)
 Checking in src/msw/window.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/window.cpp,v  <--  window.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/window.cpp,v  <--  window.cpp
 new revision: 1.432; previous revision: 1.431
 
 30. Fix enumerating groups/entries in wxRegConfig under '/':
 
 Checking in src/msw/regconf.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/regconf.cpp,v  <--  regconf.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/regconf.cpp,v  <--  regconf.cpp
 new revision: 1.48; previous revision: 1.47
 
 31. Cleanup of ZIP charset conversion in Unicode build
 
 Checking in fs_zip.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/fs_zip.cpp,v  <--  fs_zip.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/common/fs_zip.cpp,v  <--  fs_zip.cpp
 new revision: 1.27; previous revision: 1.26
 done
 Checking in zipstrm.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/zipstrm.cpp,v  <--  zipstrm.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/common/zipstrm.cpp,v  <--  zipstrm.cpp
 new revision: 1.10; previous revision: 1.9
 done
 
 32. Apply patch [ 866387 ] wxGenericDirCtrl does not accept multiple wildcards
 
 Checking in src/generic/dirctrlg.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/generic/dirctrlg.cpp,v  <--  dirctrlg.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/generic/dirctrlg.cpp,v  <--  dirctrlg.cpp
 new revision: 1.81; previous revision: 1.80
 
 33. Apply patch [ 873021 ] Bug fix for MSW wxComboBox
@@ -245,36 +245,36 @@ should now pass the correct value even if the handler for
 wxEVT_COMMAND_COMBOBOX_SELECTED changed the selection.
 
 Checking in src/msw/combobox.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/combobox.cpp,v  <--  combobox.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/combobox.cpp,v  <--  combobox.cpp
 new revision: 1.72; previous revision: 1.71
 done
 
 34. Apply patch [ 851052 ] [msw] Clipboard: Allow automatic format conversionsChecking in clipbrd.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/clipbrd.cpp,v  <--  clipbrd.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/clipbrd.cpp,v  <--  clipbrd.cpp
 new revision: 1.54; previous revision: 1.53
 done
 
 35. [ 882201 ] wxXPMDecoder doesn't always patch magenta
 
 Checking in xpmdecod.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/xpmdecod.cpp,v  <--  xpmdecod.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/common/xpmdecod.cpp,v  <--  xpmdecod.cpp
 new revision: 1.32; previous revision: 1.31
 done
 
 36. [ 892580, 892582 ] Fix of variable declaration in wxApp::Yield().
 
 Checking in src/motif/app.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/motif/app.cpp,v  <--  app.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/motif/app.cpp,v  <--  app.cpp
 new revision: 1.82; previous revision: 1.81
 done
 Checking in src/x11/app.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/x11/app.cpp,v  <--  app.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/x11/app.cpp,v  <--  app.cpp
 new revision: 1.94; previous revision: 1.93
 done
 
 37. no-remap system option, and tool centring
 Checking in src/msw/tbar95.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/tbar95.cpp,v  <--  tbar95.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/msw/tbar95.cpp,v  <--  tbar95.cpp
 new revision: 1.121; previous revision: 1.120
 done
 
@@ -309,7 +309,7 @@ done
 39. Fix for files opened by another app in wxFileName::GetModificationTime():
 
 Checking in src/common/filename.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/filename.cpp,v  <--  filename.cpp
+/pack/cvsroots/wxwindows/wxWidgets/src/common/filename.cpp,v  <--  filename.cpp
 new revision: 1.131; previous revision: 1.130
 
 =======

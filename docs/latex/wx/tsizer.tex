@@ -7,23 +7,23 @@ Classes: \helpref{wxSizer}{wxsizer}, \helpref{wxGridSizer}{wxgridsizer},
 \helpref{CreateButtonSizer}{createbuttonsizer}
 
 Sizers, as represented by the wxSizer class and its descendants in
-the wxWindows class hierarchy, have become the method of choice to
-define the layout of controls in dialogs in wxWindows because of
+the wxWidgets class hierarchy, have become the method of choice to
+define the layout of controls in dialogs in wxWidgets because of
 their ability to create visually appealing dialogs independent of the
 platform, taking into account the differences in size and style of
-the individual controls. Unlike the original wxWindows Dialog Editor,
+the individual controls. Unlike the original wxWidgets Dialog Editor,
 editors such as wxDesigner, DialogBlocks, wxrcedit, XRCed and wxWorkshop create dialogs based exclusively on sizers,
 practically forcing the user to create platform independent layouts without compromises.
 
 The next section describes and shows what can be done with sizers.
 The following sections briefly describe how to program with individual sizer classes.
 
-For information about the new wxWindows resource system, which can describe
+For information about the new wxWidgets resource system, which can describe
 sizer-based dialogs, see the \helpref{XML-based resource system overview}{xrcoverview}.
 
 \subsection{The idea behind sizers}\label{ideabehindsizers}
 
-The layout algorithm used by sizers in wxWindows is closely related to layout
+The layout algorithm used by sizers in wxWidgets is closely related to layout
 systems in other GUI toolkits, such as Java's AWT, the GTK toolkit or the Qt toolkit. It is
 based upon the idea of individual subwindows reporting their minimal required
 size and their ability to get stretched if the size of the parent window has changed.
@@ -35,13 +35,13 @@ a hierarchy of sizers can be constructed. Note that wxSizer does not derive from
 and thus does not interfere with tab ordering and requires very few resources compared
 to a real window on screen.
 
-What makes sizers so well fitted for use in wxWindows is the fact that every control
+What makes sizers so well fitted for use in wxWidgets is the fact that every control
 reports its own minimal size and the algorithm can handle differences in font sizes
 or different window (dialog item) sizes on different platforms without problems. For example, if
 the standard font as well as the overall design of Linux/GTK widgets requires more space than
 on Windows, the initial dialog size will automatically be bigger on Linux/GTK than on Windows.
 
-There are currently five different kinds of sizers available in wxWindows. Each represents
+There are currently five different kinds of sizers available in wxWidgets. Each represents
 either a certain way to lay out dialog items in a dialog or it fulfils a special task
 such as wrapping a static box around a dialog item (or another sizer). These sizers will
 be discussed one by one in the text below. For more detailed information on how to use sizers
@@ -56,7 +56,7 @@ have certain features in common:
 
 {\bf A minimal size:} This minimal size is usually identical to
 the initial size of the controls and may either be set explicitly in the wxSize field
-of the control constructor or may be calculated by wxWindows, typically by setting
+of the control constructor or may be calculated by wxWidgets, typically by setting
 the height and/or the width of the item to -1. Note that only some controls can
 calculate their size (such as a checkbox) whereas others (such as a listbox)
 don't have any natural width or height and thus require an explicit size. Some controls

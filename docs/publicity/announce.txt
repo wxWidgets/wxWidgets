@@ -21,7 +21,7 @@ on most of these platforms.
 
 To get wxWidgets, go to the Download page at:
 
-  http://www.wxwindows.org
+  http://www.wxwidgets.org
 
 This is a development snapshot, sometimes known as
 an 'unstable' release. Improvements include:
@@ -72,9 +72,9 @@ including Python, Perl, Basic, Lua, JavaScript and Eiffel.
 
 If you're considering wxWidgets, do check out some of these links:
 
-    http://www.wxwindows.org/feedback.htm ; Comments from users
-    http://www.wxwindows.org/screensh.htm ; Screenshots
-    http://www.wxwindows.org/users.htm    ; A list of some of our
+    http://www.wxwidgets.org/feedback.htm ; Comments from users
+    http://www.wxwidgets.org/screensh.htm ; Screenshots
+    http://www.wxwidgets.org/users.htm    ; A list of some of our
                                           ; users
 
 Have fun!

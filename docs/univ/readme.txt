@@ -10,10 +10,10 @@ Tom Ryan!
 0. Introduction
 ---------------
 
-wxUniversal is a port of wxWindows which implements the various GUI controls
-by drawing them itself (using low level wxWindows classes). Please see
+wxUniversal is a port of wxWidgets which implements the various GUI controls
+by drawing them itself (using low level wxWidgets classes). Please see
 
-                     http://www.wxwindows.org/wxuniv.htm
+                     http://www.wxwidgets.org/wxuniv.htm
 
 for more details about it.
 
@@ -23,17 +23,17 @@ native controls) and the theme support: the same program may be changed to
 look completely differently without changing a single line of its code but
 just changing the theme.
 
-Another advantage is that it makes writing ports of wxWindows for other
+Another advantage is that it makes writing ports of wxWidgets for other
 platforms (such as OS/2, BeOS or QNX) much simpler, so it is of special
-interest to people interested in porting wxWindows to another platform.
+interest to people interested in porting wxWidgets to another platform.
 
 However, wxUniversal doesn't have a 100% native look and feel unlike the
-other wxWindows ports - this is the price to pay for the extra flexibility.
+other wxWidgets ports - this is the price to pay for the extra flexibility.
 
 1. Requirements and supported platforms
 ---------------------------------------
 
-wxUniversal is used together with another wxWindows port which provides the
+wxUniversal is used together with another wxWidgets port which provides the
 "low level classes" mentioned above. Currently it can be built with wxMSW,
 wxGTK or wxX11. In any case, you should download the sources for the
 appropriate toolkit in addition to wxUniversal - in fact, you should download
@@ -57,7 +57,7 @@ b) Cygwin
 
    Please refer to the Unix section below
 
-** the instructions may be out of date as for wxWindows 2.5.1+ **
+** the instructions may be out of date as for wxWidgets 2.5.1+ **
 
 c) Other compilers
    Borland: 
@@ -112,22 +112,22 @@ at once by setting the environment variable WXTHEME to the theme name.
 5. Documentation and support
 ----------------------------
 
-Please note that wxUniversal is not as mature as the other wxWindows ports
+Please note that wxUniversal is not as mature as the other wxWidgets ports
 and is currently officially in alpha stage. In particular, it is not really
 intended for the end users but rather for developers at the current stage and
 this is why we don't provide any binaries for it.
 
-There is no separate documentation for wxUniversal, please refer to wxWindows
+There is no separate documentation for wxUniversal, please refer to wxWidgets
 documentation instead.
 
-Support for wxUniversal is available from the same places as for wxWindows
+Support for wxUniversal is available from the same places as for wxWidgets
 itself, namely:
 
 * Usenet newsgroup comp.soft-sys.wxwindows
 
 * Mailing lists: see http://lists.wxwindows.org/ for more information
 
-* WWW page: http://www.wxwindows.org/
+* WWW page: http://www.wxwidgets.org/
 
 
  Hope you find wxUniversal useful!

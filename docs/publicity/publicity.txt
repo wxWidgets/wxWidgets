@@ -89,11 +89,11 @@ b) wx-announce mailing list: mailto:wx-announce@lists.wxwindows.org
 
    [where is the announcement text? TODO]
 
-c) update www.wxwindows.org
+c) update www.wxwidgets.org
 
 d) GNOME (very effective, stays on front page for days):
     - http://www.gnome.org/applist
-    - Search for wxWindows
+    - Search for wxWidgets
     - Update the version number
     - Ignore the error message
 

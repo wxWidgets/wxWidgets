@@ -2,7 +2,7 @@
 * The most simple case
 -----------------------
 
-If you compile wxWindows on Linux for the first time and don't like to read 
+If you compile wxWidgets on Linux for the first time and don't like to read 
 install instructions just do (in the base dir):
 
 > ./configure --with-wine
@@ -37,7 +37,7 @@ Afterwards you can continue with
 > ldconfig
 > exit
 
-If you want to remove wxWindows on Unix you can do this:
+If you want to remove wxWidgets on Unix you can do this:
 
 > su <type root password>
 > make uninstall
@@ -47,10 +47,10 @@ If you want to remove wxWindows on Unix you can do this:
 * The expert case
 -----------------
 
-If you want to do some more serious cross-platform programming with wxWindows, 
+If you want to do some more serious cross-platform programming with wxWidgets, 
 such as for GTK and Motif, you can now build two complete libraries and use 
 them concurrently. For this end, you have to create a directory for each build 
-of wxWindows - you may also want to create different versions of wxWindows
+of wxWidgets - you may also want to create different versions of wxWidgets
 and test them concurrently. Most typically, this would be a version configured 
 with --enable-debug_flag and one without. Note, that only one build can currently 
 be installed, so you'd have to use local version of the library for that purpose.
@@ -102,7 +102,7 @@ g++ myfoo.cpp `wx-config --libs --cflags` -o myfoo
 * General
 -----------------------
 
-The Unix variants of wxWindows use GNU configure. If you have problems with your 
+The Unix variants of wxWidgets use GNU configure. If you have problems with your 
 make use GNU make instead.
 
 If you have general problems with installation, read my homepage at 
@@ -117,7 +117,7 @@ YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect, but I tried...
 * GUI libraries
 -----------------------
 
-wxWindows/WINE requires the WINE library to be installed on your system. 
+wxWidgets/WINE requires the WINE library to be installed on your system. 
 
 You can get the newest version of the WINE from the WINE homepage at:
 
@@ -162,7 +162,7 @@ i.e. if it says "--disable-threads" it means that threads
 are enabled by default.
 
 Many of the configure options have been thoroughly tested
-in wxWindows snapshot 6, but not yet all (ODBC not).
+in wxWidgets snapshot 6, but not yet all (ODBC not).
 
 You must do this by running configure with either of:
 
@@ -206,7 +206,7 @@ The following options handle the kind of library you want to build.
                             such as gdb (or its many frontends).
 
     --enable-debug_flag     Define __DEBUG__ and __WXDEBUG__ when
-                            compiling. This enable wxWindows' very
+                            compiling. This enable wxWidgets' very
                             useful internal debugging tricks (such
                             as automatically reporting illegal calls)
                             to work. Note that program and library
@@ -217,11 +217,11 @@ The following options handle the kind of library you want to build.
 -------------------
 
 Many of the configure options have been thoroughly tested
-in wxWindows snapshot 6, but not yet all (ODBC not).
+in wxWidgets snapshot 6, but not yet all (ODBC not).
 
 When producing an executable that is linked statically with wxGTK
 you'll be surprised at its immense size. This can sometimes be
-drastically reduced by removing features from wxWindows that 
+drastically reduced by removing features from wxWidgets that 
 are not used in your program. The most relevant such features
 are
 
@@ -286,7 +286,7 @@ password) and type
 
         make install    
 
-You can remove any traces of wxWindows by typing
+You can remove any traces of wxWidgets by typing
 
         make uninstall
     
@@ -323,7 +323,7 @@ This is certain to become the standard way unless we decide
 to stick to tmake.
 
 2) The other way creates a project within the source code 
-directories of wxWindows. For this endeavour, you'll need
+directories of wxWidgets. For this endeavour, you'll need
 the usual number of GNU tools, at least
 
 GNU automake version 1.4

@@ -1,5 +1,5 @@
 ----------------------------
-wxWindows 2.5/2.6 Change Log
+wxWidgets 2.5/2.6 Change Log
 ----------------------------
 
 INCOMPATIBLE CHANGES SINCE 2.4.x
@@ -57,7 +57,7 @@ wxTaskBarIcon must be explicitly destroyed now, otherwise the application
 DEPRECATED METHODS SINCE 2.4.x
 ==============================
 
-Deprecated methods may still be used but will disappear in future wxWindows
+Deprecated methods may still be used but will disappear in future wxWidgets
 versions, please update your code to not use them.
 
 - wxDocManager::GetNoHistoryFiles() renamed to GetHistoryFilesCount()
@@ -70,7 +70,7 @@ versions, please update your code to not use them.
 - wxTheFontMapper: use wxFontMapper::Get() instead
 - wxStringHashTable: use wxHashMap instead
 - wxHashTableLong: use wxHashMap instead
-- wxArrayString::GetStringArray: use wxCArrayString or alternative wxWindows
+- wxArrayString::GetStringArray: use wxCArrayString or alternative wxWidgets
                                  methods taking wxArrayString
 - wxArrayString::Remove(index, count): use RemoveAt instead
 - wxTreeItemId conversion to long is deprecated and shouldn't be used
@@ -214,7 +214,7 @@ All (GUI):
 
 wxMSW:
 
-- wxWindows now builds under Win64
+- wxWidgets now builds under Win64
 - fixed DDE memory leaks
 - fixed wxTE_*WRAP styles handling
 - wxTextCtrl::GetValue() works with text in non default encoding
@@ -286,7 +286,7 @@ Unix:
 All:
 
 - It is now possible to build several smaller libraries instead of single
-  huge wxWindows library; wxBase is now dependency of GUI ports rather then
+  huge wxWidgets library; wxBase is now dependency of GUI ports rather then
   separately compiled library
 - added wxDateSpan::operator==() and !=() (Lukasz Michalski)
 - added wxFileName::GetForbiddenChars() (Dimitri Schoolwerth)
@@ -450,7 +450,7 @@ wxMSW:
 - improved border handling under Windows XP
 - partial fix for wxNotebook pages looking bad under XP: wxUSE_UXTHEME
   enables XP theme engine code, and wxUSE_UXTHEME_AUTO tells
-  wxWindows to use the theme tab colour for control backgrounds.
+  wxWidgets to use the theme tab colour for control backgrounds.
 - disable wxNB_RIGHT, wxNB_LEFT, wxNB_BOTTOM notebook styles under Windows XP
 - fixed release mode build with VC 7.x (Martin Ecker)
 - added support for wxALWAYS_SHOW_SB style
@@ -501,7 +501,7 @@ INCOMPATIBLE CHANGES SINCE 2.2.x
     2.6 release.
 
     NB: if you want to build your program with different major versions
-        of wxWindows you will probably find the wxCHECK_VERSION() macro
+        of wxWidgets you will probably find the wxCHECK_VERSION() macro
         (see the documentation) useful.
 
 
@@ -718,10 +718,10 @@ wxBase:
 
 Unix (Base/GUI):
 
-- wxWindows may be built using BSD and Solaris (and possibly other) make
+- wxWidgets may be built using BSD and Solaris (and possibly other) make
   programs and not only GNU make
 - wxTCP-based IPC classes now support communicating over Unix domain sockets
-- wxWindows may be built as a dynamic shared library under Darwin / Mac OS X
+- wxWidgets may be built as a dynamic shared library under Darwin / Mac OS X
   lazy linking issues have been solved by linking a single module (.o) into
   the shared library (two step link using distrib/mac/shared-ld-sh)
 - fixed thread priority setting under Linux
@@ -733,7 +733,7 @@ All (GUI):
 - implemented radio menu items and radio toolbar buttons
 - added possibility to show text in the toolbar buttons
 - added wxArtProvider class that can be used to customize the look of standard
-  wxWindows dialogs
+  wxWidgets dialogs
 - significantly improved native font support
 - wxImage::ComputeHistogram() now uses wxImageHistogram instead of type-unsafe
   wxHashTable
@@ -774,11 +774,11 @@ wxMSW:
 - fixed multiple bugs in wxExecute() with IO redirection
 - refresh the buttons properly when the window is resized (Hans Van Leemputten)
 - huge (40*) speed up in wxMask::Create()
-- changing wxWindows styles also changes the underlying Windows window style
+- changing wxWidgets styles also changes the underlying Windows window style
 - wxTreeCtrl supports wxTR_HIDE_ROOT style (George Policello)
 - fixed flicker in wxTreeCtrl::SetItemXXX()
 - fixed redraw problems in dynamically resized wxStaticText
-- improvements to wxWindows applications behaviour when the system colours
+- improvements to wxWidgets applications behaviour when the system colours
   are changed
 - choose implicit parent for the dialog boxes better
 - fixed wxProgressDialog for ranges > 65535
@@ -967,7 +967,7 @@ wxMSW:
 - Fixed wxFrame::SetClientSize() with toolbar bug
 - Added mousewheel processing
 - Added wxSystemSettings::Get/SetOption so we can configure
-  wxWindows at run time; used this to implement no-maskblt option
+  wxWidgets at run time; used this to implement no-maskblt option
   in wxDC
 - Fixed bug when using MDIS_ALLCHILDSTYLES style: so now MDI
   child frame styles are honoured
@@ -1237,7 +1237,7 @@ wxHTML:
   fixed handling of relative and absolute font sizes in <font size>
 
 
-NOTE: for changes after wxWindows 2.1.0 b4, please see the CVS
+NOTE: for changes after wxWidgets 2.1.0 b4, please see the CVS
 change log.
 
 2.1.0, b4, May 9th 1999
@@ -1335,7 +1335,7 @@ wxMSW:
 
 - Makefiles for more compilers and samples; Cygwin makefiles
   rationalised.
-- Added VC++ project file for compiling wxWindows as DLL.
+- Added VC++ project file for compiling wxWidgets as DLL.
 
 wxMotif:
 
@@ -1663,7 +1663,7 @@ wxMSW:
 - Added wxJoystick class and event handling, and simple demo.
 - Added simple wxWave class. Needs Stop() function.
 - Added wxModule (module.h/module.cpp) to allow definition
-  of modules to be initialized and cleaned up on wxWindows
+  of modules to be initialized and cleaned up on wxWidgets
   startup/exit.
 - Start of Mingw32 compatibility (see minimal and dialogs samples
   makefile.m95 files, and install.txt).
@@ -1705,7 +1705,7 @@ wxMSW:
 - Added wxTaskBarIcon (taskbar.cpp/h, plus samples/taskbar)
   to allow maintenance of an icon in the Windows 95 taskbar
   tray area.
-- Got MFC sample working (MFC and wxWindows in the same
+- Got MFC sample working (MFC and wxWidgets in the same
   application), partly by tweaking ntwxwin.mak settings.
 - Got DLL compilation working again (VC++).
 - Changed wxProp/Dialog Editor filenames.

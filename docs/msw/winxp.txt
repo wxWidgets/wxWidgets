@@ -1,15 +1,15 @@
-Microsoft Windows XP Support from wxWindows
+Microsoft Windows XP Support from wxWidgets
 -------------------------------------------
 
 Windows XP introduces the themes (called "visual styles" in the Microsoft
-documentation) in Windows world. As wxWindows uses the standard Windows
+documentation) in Windows world. As wxWidgets uses the standard Windows
 controls for most of its classes, it can take advantage of it without
 (almost) any effort from your part. The only thing you need to do if you
 want your program to honour the visual style setting of Windows XP is to
 add the manifest file to your program (this is not at all specific to
-wxWindows programs but is required for all Windows applications).
+wxWidgets programs but is required for all Windows applications).
 
-wxWindows now includes manifest resources in wx.rc, so it should be enough to
+wxWidgets now includes manifest resources in wx.rc, so it should be enough to
 include "wx/msw/wx.rc" in your application's resource file and you get
 XP look automatically. If it doesn't work, follow the instructions below:
 
@@ -34,7 +34,7 @@ file to test theme support using the controls sample:
     name="Controls"
     type="win32"
 />
-<description>Controls: wxWindows sample application</description>
+<description>Controls: wxWidgets sample application</description>
 <dependency>
     <dependentAssembly>
         <assemblyIdentity
@@ -51,7 +51,7 @@ file to test theme support using the controls sample:
 --- cut here ---
 
 
-There are a few minor problems with theme support in wxWindows currently
+There are a few minor problems with theme support in wxWidgets currently
 which will be fixed in the next releases:
 
 - the buttons with non-default colours are owner-drawn and thus don't

@@ -1,19 +1,19 @@
 \section{\class{wxList}}\label{wxlist}
 
-wxList classes provide linked list functionality for wxWindows, and for an
+wxList classes provide linked list functionality for wxWidgets, and for an
 application if it wishes.  Depending on the form of constructor used, a list
 can be keyed on integer or string keys to provide a primitive look-up ability,
 but please note that this feature is {\bf deprecated}.
 See \helpref{wxHashMap}{wxhashmap}\rtfsp for a faster method of storage
 when random access is required.
 
-While wxList class in the previous versions of wxWindows only could contain
+While wxList class in the previous versions of wxWidgets only could contain
 elements of type wxObject and had essentially untyped interface (thus allowing
 you to put apples in the list and read back oranges from it), the new wxList
 classes family may contain elements of any type and has much more strict type
 checking. Unfortunately, it also requires an additional line to be inserted in
 your program for each list class you use (which is the only solution short of
-using templates which is not done in wxWindows because of portability issues).
+using templates which is not done in wxWidgets because of portability issues).
 
 The general idea is to have the base class wxListBase working with {\it void *}
 data but make all of its dangerous (because untyped) functions protected, so

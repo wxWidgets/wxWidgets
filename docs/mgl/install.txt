@@ -1,4 +1,4 @@
-wxWindows 2.5 for MGL installation
+wxWidgets 2.5 for MGL installation
 ------------------------------------
 
 IMPORTANT NOTE:
@@ -9,7 +9,7 @@ IMPORTANT NOTE:
   mailing wxwin-users or the author. Preferably, try to fix the
   problem first and then send a patch to the author.
   
-  When sending bug reports tell us what version of wxWindows you are 
+  When sending bug reports tell us what version of wxWidgets you are 
   using (including the beta) and what compiler on what system. One 
   example: wxMGL 2.5.1, gcc 2.95.3, Redhat 7.0
 
@@ -32,7 +32,7 @@ First steps
 
 - Download wxMGL-x.y.z.tgz, where x.y.z is the version number.
   Download documentation in a preferred format, such as
-  wxWindows-HTML.zip or wxWindows-PDF.zip.
+  wxWidgets-HTML.zip or wxWidgets-PDF.zip.
 
 - Make a directory such as ~/wx and unarchive the files into this
   directory.
@@ -40,7 +40,7 @@ First steps
 - It is recommended that you install bison and flex; using yacc
   and lex may require tweaking of the makefiles.
 
-- You can now use configure or makefiles to build wxWindows and the samples.
+- You can now use configure or makefiles to build wxWidgets and the samples.
   In case of problems, please use GNU make.
 
 
@@ -58,7 +58,7 @@ Following systems are supported by wxMGL so far:
 These instructions apply to installation on a Unix system (such as Linux). Please
 see bellow for information on using configure on non-Unix platforms.
 
-If you compile wxWindows on Linux for the first time and don't like to read 
+If you compile wxWidgets on Linux for the first time and don't like to read 
 install instructions just do (in the base dir):
 
 > ./configure --with-mgl
@@ -76,7 +76,7 @@ Afterwards you can continue with
 > ldconfig
 > exit
 
-If you want to remove wxWindows on Unix you can do this:
+If you want to remove wxWidgets on Unix you can do this:
 
 > su <type root password>
 > make uninstall
@@ -96,7 +96,7 @@ and you will get a list of supported options.
 'make install' will install wx-config script that can (and should) be used
 to get compiler flags that are needed to build your program. wx-config --cxxflags
 will output necessary C++ compiler flags and wx-config --libs will list all
-needed libraries. See an example of wxWindows application makefile:
+needed libraries. See an example of wxWidgets application makefile:
 
 minimal: minimal.o
 	$(CC) -o minimal minimal.o `wx-config --libs`
@@ -129,7 +129,7 @@ you have Cygwin utilities and DJGPP compiler in your PATH, run bash.exe and type
 > ./configure --with-mgl
 > make
 
-in wxWindows top directory. You can build wxMGL in MS-DOS with configure, sorry.
+in wxWidgets top directory. You can build wxMGL in MS-DOS with configure, sorry.
 
 
 * Building wxMGL for MS-DOS using Watcom C/C++

@@ -1,6 +1,6 @@
 \section{Database classes overview}\label{odbcoverview}
 
-Following is a detailed overview of how to use the wxWindows ODBC classes - \helpref{wxDb}{wxdb} 
+Following is a detailed overview of how to use the wxWidgets ODBC classes - \helpref{wxDb}{wxdb} 
 and \helpref{wxDbTable}{wxdbtable} and their associated functions. These are 
 the ODBC classes donated by Remstar International, and are collectively 
 referred to herein as the wxODBC classes.
@@ -152,7 +152,7 @@ returned.
 For each result set, a cursor is maintained (typically by the database) 
 which keeps track of where in the result set the user currently is. 
 Depending on the database, ODBC driver, and how you configured the 
-wxWindows ODBC settings in setup.h (see \helpref{wxODBC - Compiling}{wxodbccompiling}), cursors can be 
+wxWidgets ODBC settings in setup.h (see \helpref{wxODBC - Compiling}{wxodbccompiling}), cursors can be 
 either forward or backward scrolling. At a minimum, cursors must scroll 
 forward. For example, if a query resulted in a result set with 100 rows, 
 as the data is read by the client application, it will read row 1, then 2, 
@@ -238,7 +238,7 @@ the datasource will only be available to the user who configured the DSN.
 
 Under Unix, iODBC is used for implementation of the ODBC API. To compile the 
 wxODBC classes, you must first obtain iODBC from \urlref{http://www.iodbc.org}{www.iodbc.org} and install it. 
-(Note: wxWindows currently includes a version of iODBC.) Then you must create the file "~/.odbc.ini" (or optionally create 
+(Note: wxWidgets currently includes a version of iODBC.) Then you must create the file "~/.odbc.ini" (or optionally create 
 "/etc/odbc.ini" for access for all users on the system). This file contains 
 the settings for your system/datasource. Below is an example section of a 
 odbc.ini file for use with the "samples/db" sample program using MySQL:
@@ -257,7 +257,7 @@ odbc.ini file for use with the "samples/db" sample program using MySQL:
 
 \subsection{wxODBC - Compiling}\label{wxodbccompiling}
 
-The wxWindows setup.h file has several settings in it pertaining to compiling 
+The wxWidgets setup.h file has several settings in it pertaining to compiling 
 the wxODBC classes.
 
 \begin{twocollist}\itemsep=0pt
@@ -273,7 +273,7 @@ either the \helpref{wxDbGetConnection}{wxdbfunctions} or
 \helpref{wxDb constructor}{wxdbconstr}. The default is 1.}
 \twocolitem{wxODBC\_BACKWARD\_COMPATABILITY}{Between v2.0 and 2.2, massive 
 renaming efforts were done to the ODBC classes to get naming conventions 
-similar to those used throughout wxWindows, as well as to preface all wxODBC 
+similar to those used throughout wxWidgets, as well as to preface all wxODBC 
 classes names and functions with a wxDb preface. Because this renaming would 
 affect applications written using the v2.0 names, this compile-time directive 
 was added to allow those programs written for v2.0 to still compile using the 
@@ -288,7 +288,7 @@ is 0.}
 
 You are required to include the "odbc32.lib" provided by your compiler vendor 
 in the list of external libraries to be linked in. If using the makefiles 
-supplied with wxWindows, this library should already be included for use with 
+supplied with wxWidgets, this library should already be included for use with 
 makefile.b32, makefile.vc, and makefile.g95. 
 
 \normalbox{MORE TO COME}
@@ -329,7 +329,7 @@ Authorization string (password). A fourth piece of information, a default
 directory indicating where the data file is stored, is required for Text and 
 dBase drivers for ODBC.
 
-The wxWindows data class wxDbConnectInf exists for holding all of these 
+The wxWidgets data class wxDbConnectInf exists for holding all of these 
 values, plus some others that may be desired.
 
 The 'Henv' member is the environment handle used to access memory for use by the 
@@ -496,7 +496,7 @@ One final note on creating a connection. When a connection is created, it
 will default to only allowing cursor scrolling to be either forward only, 
 or both backward and forward scrolling. The default behavior is 
 determined by the setting {\tt wxODBC\_FWD\_ONLY\_CURSORS} in setup.h when you 
-compile the wxWindows library. The library default is to only support 
+compile the wxWidgets library. The library default is to only support 
 forward scrolling cursors only, though this can be overridden by parameters 
 for wxDb() constructor or the \helpref{wxDbGetConnection}{wxdbfunctions} 
 function. All datasources and ODBC drivers must support forward scrolling 
@@ -826,7 +826,7 @@ connections still using the handle.}
 
 \subsection{wxODBC - Known Issues}\label{wxodbcknownissues}
 
-As with creating wxWindows, writing the wxODBC classes was not the simple 
+As with creating wxWidgets, writing the wxODBC classes was not the simple 
 task of writing an application to run on a single type of computer system. 
 The classes need to be cross-platform for different operating systems, and 
 they also needed to take in to account different database manufacturers and 
@@ -895,7 +895,7 @@ functionality as the driver can emulate.
 \begin{itemize}\itemsep=0pt
 \item If a column is part of the Primary Key, the column cannot be NULL.
 \item Cannot support selecting for update [\helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate}]. Always returns false.
-\item Columns that are part of primary or secondary keys must be defined as being NOT NULL when they are created. Some code is added in \helpref{wxDbTable::CreateIndex}{wxdbtablecreateindex} to try to adjust the column definition if it is not defined correctly, but it is experimental (as of wxWindows v2.2.1)
+\item Columns that are part of primary or secondary keys must be defined as being NOT NULL when they are created. Some code is added in \helpref{wxDbTable::CreateIndex}{wxdbtablecreateindex} to try to adjust the column definition if it is not defined correctly, but it is experimental (as of wxWidgets v2.2.1)
 \item Does not support sub-queries in SQL statements
 \end{itemize}
 

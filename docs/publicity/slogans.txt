@@ -1,4 +1,4 @@
-wxWindows slogan ideas
+wxWidgets slogan ideas
 
 CafePress products:
 
@@ -13,7 +13,7 @@ super-gui-OS-agnostic-XP-Linux-MacOS
 
 (perhaps highlighted in different colours)
 
-wxWindows: "Practically Perfect in Every Way"
+wxWidgets: "Practically Perfect in Every Way"
 
 -----------
 
@@ -28,7 +28,7 @@ On sweatshirt:
 Build an app for Windows, Mac and Linux in a week?
 No sweat.
 
-<wxWindows logo>
+<wxWidgets logo>
 wxwindows.org
 
 -----------
@@ -41,7 +41,7 @@ Tool up for it at wxwindows.org.
 
 On hat:
 
-wxWindows
+wxWidgets
 Brim-full of cool GUI tools
 
 -----------
@@ -54,7 +54,7 @@ just the logo
 
 Suggested slogans from wx-users:
 
-wxWindows: The API for programmers who aren't sheep.
+wxWidgets: The API for programmers who aren't sheep.
 (Robin Dunn)
 
 Better printed on a shirt:
@@ -81,7 +81,7 @@ accurate but sounds less 'catchy' imho.
 
 .. and templates.
 
-Hmm. I might buy a mug that had, say, a wxLogo and "wxWindows" (and 
+Hmm. I might buy a mug that had, say, a wxLogo and "wxWidgets" (and 
 maybe the website URL underneath in smaller type) on one side and 
 "Specialization is for insects ... and templates" on the other.
 
@@ -113,7 +113,7 @@ words at the bottom.
 
 ============================
 
-wxWindows: Write it once and for all.
+wxWidgets: Write it once and for all.
 
 Matt Gregory <msgregory@earthlink.net>
 
@@ -123,7 +123,7 @@ Matt Gregory <msgregory@earthlink.net>
 At front:
 
     Need an API?
-      <wxWindows>
+      <wxWidgets>
    and get THE API
 
        C++, Python, Basic, Lua ...
@@ -131,7 +131,7 @@ At front:
 At back
 
     <windows> OR <linux> OR <mac> ?
-                <wxWindows>  is
+                <wxWidgets>  is
     <windows> AND <linux> AND <mac>
 
 where <xxxxx> is the respective logo
@@ -147,10 +147,10 @@ How about this for a t-shirt slogan?
 One API to rule them all, one API to hide them
 One API to bridge them all and in the compiler bind them.
 
-wxWindows
+wxWidgets
 
 How about "and in the linker bind them"? That's where the local libraries 
-get bound to the wxWindows code anyway.
+get bound to the wxWidgets code anyway.
 
 ============================
 

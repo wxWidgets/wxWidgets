@@ -2,7 +2,7 @@
                                 =============
 
 NB: this file applies to wxBase library only. If you are using a GUI version
-    of wxWindows, please refer to the documentation in the appropriate
+    of wxWidgets, please refer to the documentation in the appropriate
     subdirectory (msw, gtk, motif &c).
 
 
@@ -11,7 +11,7 @@ NB: this file applies to wxBase library only. If you are using a GUI version
 0. Introduction
 ---------------
 
- wxBase is the library providing most of the non-GUI classes of the wxWindows
+ wxBase is the library providing most of the non-GUI classes of the wxWidgets
 cross-platform C++ framework. wxBase has some generic classes such as yet
 another C++ string class, typesafe dynamic arrays, hashes and lists and, more
 excitingly, wxDateTime -- a very flexible and powerful class for manipulating
@@ -87,7 +87,7 @@ compiler you use.
 3. Installing under Unix/BeOS
 -----------------------------
 
-NB: If you're building wxBase from the wxWindows distribution and not from a
+NB: If you're building wxBase from the wxWidgets distribution and not from a
     separate wxBase one you will need to add "--disable-gui" to configure
     arguments below!
 
@@ -96,7 +96,7 @@ you get any errors from the native Unix make.
 
 The recommended way to build wxBase is:
 
-        % cd ..../wxWindows
+        % cd ..../wxWidgets
         % mkdir base-release # or any other directory of your liking
         % cd base-release
         % ../configure
@@ -121,17 +121,17 @@ To build the sample then cd to samples/console and make there.
 wxBase classes. It doesn't do anything useful per itself but you may want to
 look at its code to see examples of usage of the class you are interested in.
 
- There is no separate documentation for wxBase, please refer to wxWindows
+ There is no separate documentation for wxBase, please refer to wxWidgets
 documentation instead.
 
- Support for wxBase is available from the same places as for wxWindows itself,
+ Support for wxBase is available from the same places as for wxWidgets itself,
 namely:
 
 * Usenet newsgroup comp.soft-sys.wxwindows
 
 * Mailing lists: see http://lists.wxwindows.org/ for more information
 
-* WWW page: http://www.wxwindows.org/
+* WWW page: http://www.wxwidgets.org/
 
 
  Hope you will find wxBase useful!

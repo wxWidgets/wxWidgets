@@ -1,10 +1,10 @@
-wxWindows 2.5 for Mac installation
+wxWidgets 2.5 for Mac installation
 ----------------------------------
 
 On MacOS X, you can download Apple's free developer tools (gcc
 and associated headers and libraries, such as the Carbon API).
 You can then use configure in a similar way to compiling
-wxWindows on Linux (or on Windows using MinGW or Cygwin). See
+wxWidgets on Linux (or on Windows using MinGW or Cygwin). See
 'Apple Developer Tools' below for more details on using
 configure.
 
@@ -145,10 +145,10 @@ account marked as a "Computer Administrator".  Then
 7) type <YOUR OWN PASSWORD>
 
 Note that while using this method is okay for development, it is not
-recommended that you require endusers to install wxWindows into their
+recommended that you require endusers to install wxWidgets into their
 system directories in order to use your program.  One way to avoid this
-is to configure wxWindows with --disable-shared.  Another way to avoid
-it is to make a framework for wxWindows.  Making frameworks is beyond
+is to configure wxWidgets with --disable-shared.  Another way to avoid
+it is to make a framework for wxWidgets.  Making frameworks is beyond
 the scope of this document.
 
 Note:

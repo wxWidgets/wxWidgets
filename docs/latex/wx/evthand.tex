@@ -226,14 +226,14 @@ call \helpref{wxEvent::Skip}{wxeventskip}.
 
 \wxheading{Remarks}
 
-Normally, your application would not call this function: it is called in the wxWindows
+Normally, your application would not call this function: it is called in the wxWidgets
 implementation to dispatch incoming user interface events to the framework (and application).
 
 However, you might need to call it if implementing new functionality (such as a new control) where
 you define new event types, as opposed to allowing the user to override virtual functions.
 
 An instance where you might actually override the {\bf ProcessEvent} function is where you want
-to direct event processing to event handlers not normally noticed by wxWindows. For example,
+to direct event processing to event handlers not normally noticed by wxWidgets. For example,
 in the document/view architecture, documents and views are potential event handlers.
 When an event reaches a frame, {\bf ProcessEvent} will need to be called on the associated
 document and view in case event handler functions are associated with these objects.

@@ -126,8 +126,8 @@ Its meaning is determined by the {\it flags} parameter.}
 %\twocolitem{\indexit{wxBITMAP\_TYPE\_RESOURCE}}{Load a Windows resource name.}
 \end{twocollist}
 
-The validity of these flags depends on the platform and wxWindows configuration.
-If all possible wxWindows settings are used, the Windows platform supports ICO file, ICO resource,
+The validity of these flags depends on the platform and wxWidgets configuration.
+If all possible wxWidgets settings are used, the Windows platform supports ICO file, ICO resource,
 XPM data, and XPM file. Under wxGTK, the available formats are BMP file, XPM data, XPM file, and PNG file.
 Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.}
 
@@ -148,7 +148,7 @@ X and Windows.
 
 The sixth form constructs a new icon.
 
-The seventh form constructs an icon from pixmap (XPM) data, if wxWindows has been configured
+The seventh form constructs an icon from pixmap (XPM) data, if wxWidgets has been configured
 to incorporate this feature.
 
 To use this constructor, you must first include an XPM file. For
@@ -218,7 +218,7 @@ destroyed at this point - only when the reference count is zero will the
 data be deleted.
 
 If the application omits to delete the icon explicitly, the icon will be
-destroyed automatically by wxWindows when the application exits.
+destroyed automatically by wxWidgets when the application exits.
 
 Do not delete an icon that is selected into a memory device context.
 
@@ -267,7 +267,7 @@ The meaning of {\it name} is determined by the {\it type} parameter.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Load an XPM bitmap file.}
 \end{twocollist}
 
-The validity of these flags depends on the platform and wxWindows configuration.}
+The validity of these flags depends on the platform and wxWidgets configuration.}
 
 \wxheading{Return value}
 
@@ -304,7 +304,7 @@ Saves an icon in the named file.
 \twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Save an XPM bitmap file.}
 \end{twocollist}
 
-The validity of these flags depends on the platform and wxWindows configuration.}
+The validity of these flags depends on the platform and wxWidgets configuration.}
 
 \docparam{palette}{An optional palette used for saving the icon.}
 
@@ -314,7 +314,7 @@ true if the operation succeeded, false otherwise.
 
 \wxheading{Remarks}
 
-Depending on how wxWindows has been configured, not all formats may be available.
+Depending on how wxWidgets has been configured, not all formats may be available.
 
 \wxheading{See also}
 

@@ -1,4 +1,4 @@
-                    How to add a new sample to wxWindows.
+                    How to add a new sample to wxWidgets.
                     =====================================
 
 To add a new sample "foo" under directory "samples/foo" you need to do
@@ -42,7 +42,7 @@ samples/ with demos/ where needed).
    by running "autoconf" on a Unix system in the corresponding directory.
 
 5. Add a short description of what the sample does and how does it work
-   to the "samples overview" section in the wxWindows manual. That section
+   to the "samples overview" section in the wxWidgets manual. That section
    lives in docs/latex/wx/tsamples.tex; look at the descriptions for other
    samples, if you are not familiar with LaTeX.
 

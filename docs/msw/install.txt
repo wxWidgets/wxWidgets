@@ -1,7 +1,7 @@
-Installing wxWindows 2.5.1
+Installing wxWidgets 2.5.1
 --------------------------
 
-This is wxWindows 2.5.1 for Microsoft Windows 9x/ME, Windows NT, Windows 2000
+This is wxWidgets 2.5.1 for Microsoft Windows 9x/ME, Windows NT, Windows 2000
 and Windows XP. This is an unstable development release. Note that unstable in
 this context doesn't mean that it crashes a lot, just that the library API may
 change in backwards incompatible way during the 2.5 branch lifetime.
@@ -27,7 +27,7 @@ path that contains spaces.
 
 The setup program contains the following:
 
-- All common, generic and MSW-specific wxWindows source;
+- All common, generic and MSW-specific wxWidgets source;
 - samples and demos;
 - documentation in MS HTML Help format;
 - makefiles for most Windows compilers, plus CodeWarrior,
@@ -47,12 +47,12 @@ General installation notes
 
 If installing from the CVS server, copy include/wx/msw/setup0.h to
 include/wx/msw/setup.h and edit the resulting file to choose
-the features you would like to compile wxWindows with[out].
+the features you would like to compile wxWidgets with[out].
 
 Compilation
 ===========
 
-The following sections explain how to compile wxWindows with each supported
+The following sections explain how to compile wxWidgets with each supported
 compiler. Search for one of Microsoft/Borland/Watcom/Symantec/Metrowerks/
 Cygwin/Mingw32 to quickly locate the instructions for your compiler.
 
@@ -70,10 +70,10 @@ A couple of examples:
   lib\bcc_lib                   Static libraries for Borland C++
   lib\wat_dll                   Watcom C++ DLLs
 
-Names of compiled wxWindows libraries follow this scheme: libraries that don't
+Names of compiled wxWidgets libraries follow this scheme: libraries that don't
 depend on GUI components begin with "wxbase" followed by version number and
 letters indicating if the library is compiled as Unicode ('u') and/or debug
-build ('d'). Last component of them name is name of wxWindows component
+build ('d'). Last component of them name is name of wxWidgets component
 (unless you built the library as single monolithic library; look for
 "Configuring the build" below). This is a typical set of release ANSI build
 libraries (release versions on left, debug on right side):
@@ -120,7 +120,7 @@ the .dsp file header from 6.0 to 5.0).
 
 Using project files (VC++ 6 and later):
 
-1. Unarchive wxWindows-x.y.z-vc.zip, the VC++ 6 project
+1. Unarchive wxWidgets-x.y.z-vc.zip, the VC++ 6 project
    makefiles (already included in wxMSW-x.y.z.zip and the setup version).
 2. Open build\msw\wx.dsw, which has configurations for static
    compilation or DLL compilation, and each of these available in
@@ -149,7 +149,7 @@ Using makefiles:
 
   'nmake -f makefile.vc'
 
-   to make the wxWindows core library as release DLL.
+   to make the wxWidgets core library as release DLL.
    See "Configuring the build" for instruction how to build debug or static
    libraries.
 
@@ -167,7 +167,7 @@ Without this, the redefinition of 'new' will cause problems in
 the headers. Alternatively, #undef new before including template headers.
 You will also need to set wxUSE_IOSTREAMH to 0 if you will be
 using templates, to avoid the non-template stream files being included
-within wxWindows.
+within wxWidgets.
 
 Note (2): libraries and applications generated with makefiles and
 project files are now (hopefully) compatible where static libraries
@@ -182,7 +182,7 @@ symbols, struct packing, etc. are exactly the same for all items in
 the project. After this, delete everything (including PCH) and recompile.
 
 Note (4): to create your own IDE files, copy .dsp and .dsw
-files from an existing wxWindows sample and adapt them, or
+files from an existing wxWidgets sample and adapt them, or
 visit http://wiki.wxwindows.org/wiki.pl?MSVC.
 
 Borland C++ 5.0/5.5 compilation
@@ -191,14 +191,14 @@ Borland C++ 5.0/5.5 compilation
 Compiling using the makefiles (updated 24 Sept 02):
 
 1. Change directory to build\msw. Type 'make -f makefile.bcc' to
-   make the wxWindows core library. Ignore the compiler warnings.
+   make the wxWidgets core library. Ignore the compiler warnings.
    This produces a couple of libraries in the lib\bcc_lib directory.
 
 2. Change directory to a sample or demo such as samples\minimal, and type
   'make -f makefile.bcc'. This produces a windows exe file - by default 
    in the bcc_mswd subdirectory.
 
-Note (1): the wxWindows makefiles assume dword structure alignment. Please
+Note (1): the wxWidgets makefiles assume dword structure alignment. Please
 make sure that your own project or makefile settings use the
 same alignment, or you could experience mysterious crashes. To
 change the alignment, change CPPFLAGS in build\msw\config.bcc.
@@ -206,7 +206,7 @@ change the alignment, change CPPFLAGS in build\msw\config.bcc.
 Note (2): if you get undefined _SQL... symbols at link time,
 either install odbc32.lib from the BC++ CD-ROM into your BC++ lib
 directory, or set wxUSE_ODBC to 0 in include\wx\msw\setup.h and
-recompile wxWindows. The same applies if compiling using the IDE.
+recompile wxWidgets. The same applies if compiling using the IDE.
 
 Note (3): If you wish debug messages to be sent to the console in
 debug mode, edit makefile.bcc and change /aa to /Tpe in link commands.
@@ -219,7 +219,7 @@ use version 2.4.1 (using the make utility in commandline mode works fine_
 
 ** REMEMBER **
 
-In all of your wxWindows applications, your source code should include
+In all of your wxWidgets applications, your source code should include
 the following preprocessor directive:
 
 #ifdef __BORLANDC__
@@ -232,14 +232,14 @@ more details)
 Borland 16 Bit compilation for Windows 3.1
 ------------------------------------------
 
-The last version of wxWindows to support 16-bit compilation with Borland was
+The last version of wxWidgets to support 16-bit compilation with Borland was
 2.2.7 - Please download and read the instructions in that release
 
 Watcom C++ 10.6/11 and OpenWatcom compilation
 ---------------------------------------------
 
 1. Change directory to build\msw. Type 'wmake -f makefile.wat' to
-   make the wxWindows core library.
+   make the wxWidgets core library.
 
 2. Change directory to samples\minimal and type 'wmake -f makefile.wat'
    to make this sample. Repeat for other samples of interest.
@@ -274,7 +274,7 @@ Metrowerks CodeWarrior compilation
          will be rather confusing due to interactions with the MSL ANSI
          and runtime libs.
 
-3. The project file to build the Win32 wxWindows libraries relies on the
+3. The project file to build the Win32 wxWidgets libraries relies on the
    Batch File Runner plug-in.  This plug-in is not installed as part of
    a normal CW7 installation.  However, you can find this plug-in on the
    CodeWarrior Reference CD, in the Thrill Seekers folder; it's call the
@@ -289,7 +289,7 @@ Metrowerks CodeWarrior compilation
           include\wx\msw\setup.h (or include\wx\msw\setup0.h if you are
           working from the CVS version) to lib\cw7mswd\include\wx\setup.h
 
-5. Import src\wxWindowsW7.xml to create the project file wxWindowsW7.mcp.
+5. Import src\wxWidgetsW7.xml to create the project file wxWidgetsW7.mcp.
    Store this project file in directory src.  You may get warnings about
    not being able to find certain project paths; ignore these warnings, the
    appropriate paths will be created during the build by the Batch File Runner.
@@ -326,7 +326,7 @@ Metrowerks CodeWarrior compilation
 Cygwin/MinGW compilation
 ------------------------
 
-wxWindows 2 supports Cygwin (formerly GnuWin32) betas and
+wxWidgets 2 supports Cygwin (formerly GnuWin32) betas and
 releases, and MinGW. Cygwin can be downloaded from:
 
     http://sources.redhat.com/cygwin/
@@ -338,19 +338,19 @@ and MinGW from:
 Both Cygwin and MinGW can be used with configure (assuming you have MSYS
 installed in case of MinGW). You will need new enough MinGW version, preferably
 MinGW 2.0 (ships with gcc3) or at least 1.0 (gcc-2.95.3). GCC versions older
-than 2.95.3 don't work; you can use wxWindows 2.4 with them.
+than 2.95.3 don't work; you can use wxWidgets 2.4 with them.
 
 NOTE: some notes specific to old Cygwin (< 1.1.x) are at the end of this
       section (see OLD VERSIONS)
 
-There are two methods of compiling wxWindows, by using the
+There are two methods of compiling wxWidgets, by using the
 makefiles provided or by using 'configure'.
 
 Retrieve and install the latest version of Cygwin, or MinGW, as per
 the instructions with either of these packages.
 
 If using MinGW, you can download the add-on MSYS package to
-provide Unix-like tools that you'll need to build wxWindows using configure.
+provide Unix-like tools that you'll need to build wxWidgets using configure.
 
 Using makefiles directly
 ------------------------
@@ -368,8 +368,8 @@ Here are the steps required using the provided makefiles:
 - If you are compiling with GCC 3.x using makefiles and with wxUSE_STL == 1
   you need to manually add -DNO_GCC_PRAGMA to CXXFLAGS in config.gcc.
 
-- Use the makefile.gcc files for compiling wxWindows and samples,
-  e.g. to compile a debugging version of wxWindows:
+- Use the makefile.gcc files for compiling wxWidgets and samples,
+  e.g. to compile a debugging version of wxWidgets:
   > cd c:\wx\build\msw
   > make -f makefile.gcc BUILD=debug
   > cd c:\wx\samples\minimal
@@ -391,7 +391,7 @@ Instead of using the makefiles, you can use the configure
 system to generate appropriate makefiles, as used on Unix
 and Mac OS X systems.
 
-Change directory to the root of the wxWindows distribution,
+Change directory to the root of the wxWidgets distribution,
 make a build directory, and run configure and make in this directory.
 
 For example:
@@ -409,7 +409,7 @@ For example:
 Notes:
 
 1. See also the Cygwin/MinGW on the web site or CD-ROM for
-   further information about using wxWindows with these compilers.
+   further information about using wxWidgets with these compilers.
 
 2. libwx.a is 100 MB or more - but much less if compiled with no
    debug info (-g0) and level 4 optimization (-O4).
@@ -452,7 +452,7 @@ Notes:
    as follows:
 
    /usr/local/lib - wxmswXYZd.dll.a and wxmswXYZd.dll
-   /usr/local/include/wx - wxWindows header files
+   /usr/local/include/wx - wxWidgets header files
    /usr/local/bin - wx-config
 
    You may need to do this if using wx-config with the
@@ -471,7 +471,7 @@ OLD VERSIONS:
 
 - For Cygwin, make sure there's a \tmp directory on your
   Windows drive or bison will crash (actually you don't need
-  bison for ordinary wxWindows compilation: a pre-generated .c file is
+  bison for ordinary wxWidgets compilation: a pre-generated .c file is
   supplied).
 
 - If using GnuWin32 b18, you will need to copy windres.exe
@@ -490,7 +490,7 @@ and can be downloaded from http://www.digitalmars.com/
    from http://www.digitalmars.com/download/freecompiler.html
 
 2. Change directory to build\msw and type 'make -f makefile.dmc' to
-   make the wxWindows core library.
+   make the wxWidgets core library.
 
 3. Change directory to samples\minimal and type 'make -f makefile.dmc'
    to make this sample. Most of the other samples also work.
@@ -509,7 +509,7 @@ using bakefile tool according to the instructions in build\bakefiles\README:
 Configuring the build
 =====================
 
-So far the instructions only explained how to build release DLLs of wxWindows
+So far the instructions only explained how to build release DLLs of wxWidgets
 and did not cover any configuration. It is possible to change many aspects of
 the build, including debug/release and ANSI/Unicode settings. All makefiles in
 build\msw directory use same options (with a few exceptions documented below)
@@ -524,7 +524,7 @@ arguments when invoking make or by editing build\msw\config.$(compiler) file
 where $(compiler) is same extension as the makefile you use has (see below).
 The latter is good for setting options that never change in your development
 process (e.g. GCC_VERSION or VENDOR). If you want to build several versions of
-wxWindows and use them side by side, the former method is better. Settings in
+wxWidgets and use them side by side, the former method is better. Settings in
 config.* files are shared by all makefiles (samples, contrib, main library),
 but if you pass the options as arguments, you must use same arguments you used
 for the library when building samples or contrib libraries!
@@ -576,13 +576,13 @@ UNICODE=1
 
 WXUNIV=1
   Build wxUniversal instead of native wxMSW (see
-  http://www.wxwindows.org/wxuniv.htm for more information).
+  http://www.wxwidgets.org/wxuniv.htm for more information).
 
 Advanced options
 ----------------
 
 MONOLITHIC=1
-  Starting with version 2.5.1, wxWindows has the ability to be built as 
+  Starting with version 2.5.1, wxWidgets has the ability to be built as 
   several smaller libraries instead of single big one as used to be the case
   in 2.4 and older versions. This is called "multilib build" and is the
   default behaviour of makefiles. You can still build single library
@@ -640,15 +640,15 @@ DEBUG_INFO=1
 
 VENDOR=<your company name>
   Set this to a short string identifying your company if you are planning to
-  distribute wxWindows DLLs with your application. Default value is 'custom'.
-  This string is included as part of DLL name. wxWindows DLLs contain compiler
+  distribute wxWidgets DLLs with your application. Default value is 'custom'.
+  This string is included as part of DLL name. wxWidgets DLLs contain compiler
   name, version information and vendor name in them. For example
   wxmsw250_core_bcc_custom.dll is one of DLLs build using Borland C++ with
   default settings. If you set VENDOR=mycorp, the name will change to
   wxmsw250_core_bcc_mycorp.dll.
 
 CFG=<configuration name>
-  Sets configuration name so that you can have multiple wxWindows builds with
+  Sets configuration name so that you can have multiple wxWidgets builds with
   different setup.h settings coexisting in same tree. See "Object and library
   directories" below for more information.
 

@@ -1,27 +1,27 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Name:        texcept.tex
-%% Purpose:     C++ exceptions and wxWindows overview
+%% Purpose:     C++ exceptions and wxWidgets overview
 %% Author:      Vadim Zeitlin
 %% Modified by:
 %% Created:     17.09.03
 %% RCS-ID:      $Id$
 %% Copyright:   (c) 2003 Vadim Zeitlin
-%% License:     wxWindows license
+%% License:     wxWidgets license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{C++ exceptions overview}\label{exceptionsoverview}
 
 \subsection{Introduction}
 
-wxWindows had been started long before the exceptions were introduced in C++ so
+wxWidgets had been started long before the exceptions were introduced in C++ so
 it is not very surprizing that it is not built around using them as some more
 modern C++ libraries are. For instance, the library doesn't throw exceptions to
 signal about the errors. Moreover, up to (and including) the version 2.4 of
-wxWindows, even using the exceptions in the user code was dangerous because the
+wxWidgets, even using the exceptions in the user code was dangerous because the
 library code wasn't exception-safe and so an exception propagating through it
 could result in memory and/or resource leaks, and also not very convenient.
 
-Starting from the version 2.5.1 wxWindows becomes more exception-friendly. It
+Starting from the version 2.5.1 wxWidgets becomes more exception-friendly. It
 still doesn't use the exceptions by itself but it should be now safe to use the
 exceptions in the user code and the library tries to help you with this. Please
 note that making the library exception-safe is still work in progress.
@@ -29,7 +29,7 @@ note that making the library exception-safe is still work in progress.
 
 \subsection{Strategies for exceptions handling}
 
-There are several choice for using the exceptions in wxWindows programs. First
+There are several choice for using the exceptions in wxWidgets programs. First
 of all, you may not use them at all. As stated above, the library doesn't throw
 any exceptions by itself and so you don't have to worry about exceptions at all
 unless your own code throws them. This is, of course, the simplest solution but

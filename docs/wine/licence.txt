@@ -1,6 +1,6 @@
 
 
-wxWindows Library License, Version 3
+wxWidgets Library License, Version 3
 ====================================
      
   Copyright (C) 1998 Julian Smart, Robert Roebling et al. 
@@ -30,7 +30,7 @@ wxWindows Library License, Version 3
  
   1. As a special exception, the copyright holders of this library give 
   permission for additional uses of the text contained in this release of 
-  the library as licensed under the wxWindows Library License, applying 
+  the library as licensed under the wxWidgets Library License, applying 
   either version 3 of the License, or (at your option) any later version of 
   the License as published by the copyright holders of version 3 of the 
   License document. 

@@ -20,7 +20,7 @@ appropriate class is aliased to the name wxHelpController for each platform, as 
 \begin{itemize}\itemsep=0pt
 \item On Windows, wxWinHelpController is used.
 \item On all other platforms, wxHtmlHelpController is used if wxHTML is
-compiled into wxWindows; otherwise wxExtHelpController is used (for invoking an external
+compiled into wxWidgets; otherwise wxExtHelpController is used (for invoking an external
 browser).
 \end{itemize}
 
@@ -33,7 +33,7 @@ There are currently the following help controller classes defined:
 \item wxWinHelpController, for controlling Windows Help.
 \item wxCHMHelpController, for controlling MS HTML Help. To use this, you need to set wxUSE\_MS\_HTML\_HELP
 to 1 in setup.h and have htmlhelp.h header from Microsoft's HTML Help kit (you don't need
-VC++ specific htmlhelp.lib because wxWindows loads necessary DLL at runtime and so it
+VC++ specific htmlhelp.lib because wxWidgets loads necessary DLL at runtime and so it
 works with all compilers).
 \item wxBestHelpController, for controlling MS HTML Help or, if Microsoft's runtime is
 not available, \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}. You need to provide
@@ -56,7 +56,7 @@ wxHelpControllerBase\\
 
 \wxheading{Include files}
 
-<wx/help.h> (wxWindows chooses the appropriate help controller class)\\
+<wx/help.h> (wxWidgets chooses the appropriate help controller class)\\
 <wx/helpbase.h> (wxHelpControllerBase class)\\
 <wx/helpwin.h> (Windows Help controller)\\
 <wx/msw/helpchm.h> (MS HTML Help controller)\\

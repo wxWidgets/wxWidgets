@@ -2,7 +2,7 @@
 
 This event class contains information about keypress (character) events.
 
-Notice that there are three different kinds of keyboard events in wxWindows:
+Notice that there are three different kinds of keyboard events in wxWidgets:
 key down and up events and char events. The difference between the first two
 is clear - the first corresponds to a key press and the second to a key
 release - otherwise they are identical. Just note that if the key is
@@ -37,7 +37,7 @@ same key code {\tt 'a'} as usual but the char event will have key code of
 $1$, the ASCII value of this key combination.
 
 You may discover how the other keys on your system behave interactively by
-running the \helpref{text}{sampletext} wxWindows sample and pressing some keys
+running the \helpref{text}{sampletext} wxWidgets sample and pressing some keys
 in any of the text controls shown in it.
 
 {\bf Note:} If a key down ({\tt EVT\_KEY\_DOWN}) event is caught and
@@ -46,10 +46,10 @@ char event ({\tt EVT\_CHAR}) will not happen.  This is by design and
 enables the programs that handle both types of events to be a bit
 simpler.
 
-{\bf Note for Windows programmers:} The key and char events in wxWindows are
+{\bf Note for Windows programmers:} The key and char events in wxWidgets are
 similar to but slightly different from Windows {\tt WM\_KEYDOWN} and
 {\tt WM\_CHAR} events. In particular, Alt-x combination will generate a char
-event in wxWindows (unless it is used as an accelerator).
+event in wxWidgets (unless it is used as an accelerator).
 
 {\bf Tip:} be sure to call {\tt event.Skip()} for events that you don't process in
 key event function, otherwise menu shortcuts may cease to work under Windows.

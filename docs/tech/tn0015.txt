@@ -1,4 +1,4 @@
-                How to add new bitmaps to wxWindows UI elements
+                How to add new bitmaps to wxWidgets UI elements
                 ===============================================
 
 0. Introduction
@@ -10,7 +10,7 @@ code. This was previously done either by including the bitmap in win32
 resource file (include/wx/msw/wx.rc) or by including XPM files in the code.
 
 wxArtProvider should be used instead, to allow users to customize the look of
-their wxWindows app. This technote is a detailed description of steps needed
+their wxWidgets app. This technote is a detailed description of steps needed
 when adding new bitmap/icon.
 
 1. Adding new resource
@@ -77,7 +77,7 @@ client is wxART_OTHER you may write only
 -------------------
 
 It is highly desirable to let the users know what stock bitmaps are available
-in wxWindows. The "artprov" sample serves this purpose: it contains a browser
+in wxWidgets. The "artprov" sample serves this purpose: it contains a browser
 dialog that displays all available art resources.
 
 It has to be updated to accomodate for new bitmaps. Fortunately, this is

@@ -9,7 +9,7 @@ the destructor before the window itself is deleted which means that you don't
 have to worry about deleting them manually. Please see the \helpref{window
 deletion overview}{windowdeletionoverview} for more information.
 
-Also note that in this, and many others, wxWindows classes some 
+Also note that in this, and many others, wxWidgets classes some 
 \texttt{GetXXX()} methods may be overloaded (as, for example, 
 \helpref{GetSize}{wxwindowgetsize} or 
 \helpref{GetClientSize}{wxwindowgetclientsize}). In this case, the overloads
@@ -17,7 +17,7 @@ are non-virtual because having multiple virtual functions with the same name
 results in a virtual function name hiding at the derived class level (in
 English, this means that the derived class has to override all overloaded
 variants if it overrides any of them). To allow overriding them in the derived
-class, wxWindows uses a unique protected virtual \texttt{DoGetXXX()} method
+class, wxWidgets uses a unique protected virtual \texttt{DoGetXXX()} method
 and all \texttt{GetXXX()} ones are forwarded to it, so overriding the former
 changes the behaviour of the latter.
 
@@ -128,11 +128,11 @@ Constructs a window, which can be a child of a frame, dialog or any other non-co
 
 \docparam{id}{Window identifier. If -1, will automatically create an identifier.}
 
-\docparam{pos}{Window position. wxDefaultPosition is (-1, -1) which indicates that wxWindows
+\docparam{pos}{Window position. wxDefaultPosition is (-1, -1) which indicates that wxWidgets
 should generate a default position for the window. If using the wxWindow class directly, supply
 an actual position.}
 
-\docparam{size}{Window size. wxDefaultSize is (-1, -1) which indicates that wxWindows
+\docparam{size}{Window size. wxDefaultSize is (-1, -1) which indicates that wxWidgets
 should generate a default size for the window. If no suitable size can  be found, the
 window will be sized to 20x20 pixels so that the window is visible but obviously not
 correctly sized. }
@@ -148,7 +148,7 @@ correctly sized. }
 
 Destructor. Deletes all subwindows, then deletes itself. Instead of using
 the {\bf delete} operator explicitly, you should normally
-use \helpref{wxWindow::Destroy}{wxwindowdestroy} so that wxWindows
+use \helpref{wxWindow::Destroy}{wxwindowdestroy} so that wxWidgets
 can delete a window only when it is safe to do so, in idle time.
 
 \wxheading{See also}
@@ -165,7 +165,7 @@ can delete a window only when it is safe to do so, in idle time.
 Adds a child window.  This is called automatically by window creation
 functions so should not be required by the application programmer.
 
-Notice that this function is mostly internal to wxWindows and shouldn't be
+Notice that this function is mostly internal to wxWidgets and shouldn't be
 called by the user code.
 
 \wxheading{Parameters}
@@ -180,7 +180,7 @@ called by the user code.
 Directs all mouse input to this window. Call \helpref{wxWindow::ReleaseMouse}{wxwindowreleasemouse} to
 release the capture.
 
-Note that wxWindows maintains the stack of windows having captured the mouse
+Note that wxWidgets maintains the stack of windows having captured the mouse
 and when the mouse is released the capture returns to the window which had had
 captured it previously and it is only really released if there were no previous
 window. In particular, this means that you must release the mouse as many times
@@ -477,7 +477,7 @@ already disabled before the call to this function.
 Does the window-specific updating after processing the update event.
 This function is called by \helpref{wxWindow::UpdateWindowUI}{wxwindowupdatewindowui} 
 in order to check return values in the \helpref{wxUpdateUIEvent}{wxupdateuievent} and
-act appropriately. For example, to allow frame and dialog title updating, wxWindows
+act appropriately. For example, to allow frame and dialog title updating, wxWidgets
 implements this function as follows:
 
 \begin{verbatim}
@@ -657,7 +657,7 @@ nested.
 This method is useful for visual appearance optimization (for example, it
 is a good idea to use it before inserting large amount of text into a
 wxTextCtrl under wxGTK) but is not implemented on all platforms nor for all
-controls so it is mostly just a hint to wxWindows and not a mandatory
+controls so it is mostly just a hint to wxWidgets and not a mandatory
 directive.
 
 
@@ -1715,7 +1715,7 @@ implements the following methods:\par
 %% The default implementation for \helpref{wxFrame::OnMenuHighlight}{wxframeonmenuhighlight} displays help
 %% text in the first field of the status bar.
 %%
-%% This function was known as {\bf OnMenuSelect} in earlier versions of wxWindows, but this was confusing
+%% This function was known as {\bf OnMenuSelect} in earlier versions of wxWidgets, but this was confusing
 %% since a selection is normally a left-click action.
 %%
 %% \wxheading{See also}
@@ -2151,7 +2151,7 @@ Releases mouse input captured with \helpref{wxWindow::CaptureMouse}{wxwindowcapt
 Removes a child window.  This is called automatically by window deletion
 functions so should not be required by the application programmer.
 
-Notice that this function is mostly internal to wxWindows and shouldn't be
+Notice that this function is mostly internal to wxWidgets and shouldn't be
 called by the user code.
 
 \wxheading{Parameters}
@@ -2560,7 +2560,7 @@ window from being used as an implicit parent for the dialogs which were
 created without a parent. It is useful for the windows which can disappear at
 any moment as creating children of such windows results in fatal problems.}
 \twocolitem{\windowstyle{wxFRAME\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
-caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
+caption. When pressed, Windows will go into a context-sensitive help mode and wxWidgets will send
 a wxEVT\_HELP event if the user clicked on an application window.
 This style cannot be used together with wxMAXIMIZE\_BOX or wxMINIMIZE\_BOX, so
 you should use the style of
@@ -2589,7 +2589,7 @@ This sets the window to receive keyboard input.
 
 \func{virtual void}{SetFocusFromKbd}{\void}
 
-This function is called by wxWindows keyboard navigation code when the user
+This function is called by wxWidgets keyboard navigation code when the user
 gives the focus to this window from keyboard (e.g. using {\tt TAB} key).
 By default this method simply calls \helpref{SetFocus}{wxwindowsetfocus} but
 can be overridden to do something in addition to this in the derived classes.
@@ -2891,11 +2891,11 @@ value should be used.}
 \docparam{sizeFlags}{Indicates the interpretation of other parameters. It is a bit list of the following:
 
 {\bf wxSIZE\_AUTO\_WIDTH}: a -1 width value is taken to indicate
-a wxWindows-supplied default width.\\
+a wxWidgets-supplied default width.\\
 {\bf wxSIZE\_AUTO\_HEIGHT}: a -1 height value is taken to indicate
-a wxWindows-supplied default width.\\
+a wxWidgets-supplied default width.\\
 {\bf wxSIZE\_AUTO}: -1 size values are taken to indicate
-a wxWindows-supplied default size.\\
+a wxWidgets-supplied default size.\\
 {\bf wxSIZE\_USE\_EXISTING}: existing dimensions should be used
 if -1 values are supplied.\\
 {\bf wxSIZE\_ALLOW\_MINUS\_ONE}: allow dimensions of -1 and less to be interpreted
@@ -2909,7 +2909,7 @@ x and y parameters, and must be used with non-default width and height values.
 
 The first form sets the position and optionally size, of the window.
 Parameters may be -1 to indicate either that a default should be supplied
-by wxWindows, or that the current value of the dimension should be used.
+by wxWidgets, or that the current value of the dimension should be used.
 
 \wxheading{See also}
 
@@ -2988,7 +2988,7 @@ Pass false if you wish to handle deleting the old sizer yourself.}
 
 \wxheading{Remarks}
 
-SetSizer now enables and disables Layout automatically, but prior to wxWindows 2.3.3
+SetSizer now enables and disables Layout automatically, but prior to wxWidgets 2.3.3
 the following applied:
 
 You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a window to use
@@ -3267,7 +3267,7 @@ UI is up-to-date at this point (as far as your wxUpdateUIEvent handlers
 are concerned). This may be necessary if you have called 
 \helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode} or 
 \helpref{wxUpdateUIEvent::SetUpdateInterval}{wxupdateuieventsetupdateinterval} to
-limit the overhead that wxWindows incurs by sending update UI events in idle time.
+limit the overhead that wxWidgets incurs by sending update UI events in idle time.
 
 {\it flags} should be a bitlist of one or more of the following values.
 

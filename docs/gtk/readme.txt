@@ -1,20 +1,20 @@
 
-   Welcome to wxWindows/Gtk 2.5
+   Welcome to wxWidgets/Gtk 2.5
 
 You have downloaded version 2.5 of the GTK port of the 
-wxWindows GUI library.
+wxWidgets GUI library.
 
-wxWindows no longer supports GTK 1.0 (as did some early
+wxWidgets no longer supports GTK 1.0 (as did some early
 snapshots) so that you will need GTK 1.2 when using it.
 GTK 1.2.6 or above is recommended although some programs 
 will work with GTK 1.2.3 onwards. There is now support
 for GTK 2.0.
 
-More info about the wxWindows project (including the
+More info about the wxWidgets project (including the
 Windows, X11/Motif and other ports) can be found at the main
-wxWindows homepage at:
+wxWidgets homepage at:
 
-                  http://www.wxwindows.org
+                  http://www.wxwidgets.org
   
 Information on how to install can be found in the file 
 INSTALL.txt, but if you cannot wait, this should work on
@@ -56,16 +56,16 @@ libwx_gtk.a (static, only buil if --disable-shared configure
 switch was used or if shared libraries are not supported at all
 on your platform which is quite unlikely) and
 libwx_gtk-2.2.so.0.0.0 (shared) so that once a binary
-incompatible version of wxWindows/Gtk comes out we'll augment
+incompatible version of wxWidgets/Gtk comes out we'll augment
 the library version number to avoid linking problems.
 
 Please send problems concerning installation, feature requests, 
-bug reports or comments to the wxWindows users list. Information 
+bug reports or comments to the wxWidgets users list. Information 
 on how to subscribe is available from my homepage.
 
 Do NOT send any comments directly to me.
 
-wxWindows/Gtk doesn't come with any guarantee whatsoever. It 
+wxWidgets/Gtk doesn't come with any guarantee whatsoever. It 
 might crash your harddisk or destroy your monitor. It doesn't 
 claim to be suitable for any special or general purpose.
 
