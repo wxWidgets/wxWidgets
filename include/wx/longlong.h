@@ -19,6 +19,12 @@
     #pragma interface "longlong.h"
 #endif
 
+#include "wx/defs.h"
+#include "wx/wxchar.h"
+#include "wx/debug.h"
+
+#include <limits.h>     // for LONG_MAX
+
 // ----------------------------------------------------------------------------
 // decide upon which class we will use
 // ----------------------------------------------------------------------------
@@ -123,6 +129,15 @@ public:
 
         // convert to native long long
     wxLongLong_t GetValue() const { return m_ll; }
+
+        // convert to long with range checking in the debug mode (only!)
+    long ToLong() const
+    {
+        wxASSERT_MSG( (m_ll >= LONG_MIN) && (m_ll <= LONG_MAX),
+                      _T("wxLongLong to long conversion loss of precision") );
+
+        return (long)m_ll;
+    }
 
     // don't provide implicit conversion to wxLongLong_t or we will have an
     // ambiguity for all arithmetic operations

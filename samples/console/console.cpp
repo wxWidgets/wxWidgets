@@ -32,8 +32,8 @@
 //#define TEST_ARRAYS
 //#define TEST_LOG
 //#define TEST_STRINGS
-#define TEST_THREADS
-//#define TEST_TIME
+//#define TEST_THREADS
+#define TEST_TIME
 //#define TEST_LONGLONG
 
 // ============================================================================
@@ -187,7 +187,7 @@ static void TestTimeZones()
     wxDateTime now = wxDateTime::Now();
 
     printf("Current GMT time:\t%s\n", now.ToGMT().Format().c_str());
-    //TODO printf("Unix epoch (GMT):\t%s\n", wxDateTime((time_t)0).MakeGMT().Format().c_str());
+    printf("Unix epoch (GMT):\t%s\n", wxDateTime((time_t)0).MakeGMT().Format().c_str());
     printf("Current time in Paris:\t%s\n", now.ToTimezone(wxDateTime::CET).Format().c_str());
     printf("               Moscow:\t%s\n", now.ToTimezone(wxDateTime::MSK).Format().c_str());
     printf("             New York:\t%s\n", now.ToTimezone(wxDateTime::EST).Format().c_str());
@@ -198,6 +198,10 @@ static void TestTimeRange()
 {
     puts("\n*** wxDateTime out-of-standard-range dates test ***");
 
+    printf("Unix epoch:\t%s\n",
+           wxDateTime(2440587.5).Format().c_str());
+    printf("Feb 29, 0: \t%s\n",
+            wxDateTime(29, wxDateTime::Feb, 0).Format().c_str());
     printf("JDN 0:     \t%s\n",
             wxDateTime(0.0).Format().c_str());
     printf("Jan 1, 1AD:\t%s\n",
@@ -207,17 +211,57 @@ static void TestTimeRange()
 }
 
 // test conversions to JDN &c
-static void TestTimeJulian()
+static void TestTimeJDN()
 {
     puts("\n*** wxDateTime to JDN test ***");
 
-    printf("JDN of current time:\t%f\n", wxDateTime::Now().GetJulianDayNumber());
-    printf("JDN of Jan 1, 1900: \t%f\n",
-            wxDateTime(1, wxDateTime::Jan, 1900).GetJulianDayNumber());
-    printf("JDN of Jan 1, 1BC:  \t%f\n",
-            wxDateTime(1, wxDateTime::Jan, 0).GetJulianDayNumber());
-    printf("JDN 0:              \t%f\n",
-            wxDateTime(24, wxDateTime::Nov, -4713, 12, 0, 0).GetJulianDayNumber());
+    struct Date
+    {
+        wxDateTime::wxDateTime_t day;
+        wxDateTime::Month month;
+        int year;
+        double jdn;
+    };
+
+    static const Date testDates[] =
+    {
+        { 21, wxDateTime::Jan,  2222, 2532648.5 },
+        { 29, wxDateTime::May,  1976, 2442927.5 },
+        { 1,  wxDateTime::Jan,  1970, 2440587.5 },
+        { 1,  wxDateTime::Jan,  1900, 2415020.5 },
+        { 15, wxDateTime::Oct,  1582, 2299160.5 },
+        { 4,  wxDateTime::Oct,  1582, 2299149.5 },
+        { 1,  wxDateTime::Mar,     1, 1721484.5 },
+        { 1,  wxDateTime::Jan,     1, 1721425.5 },
+        { 31, wxDateTime::Dec,     0, 1721424.5 },
+        { 1,  wxDateTime::Jan,     0, 1721059.5 },
+        { 12, wxDateTime::Aug, -1234, 1270573.5 },
+        { 12, wxDateTime::Aug, -4000,  260313.5 },
+        { 24, wxDateTime::Nov, -4713,      -0.5 },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(testDates); n++ )
+    {
+        const Date& d = testDates[n];
+        wxDateTime dt(d.day, d.month, d.year);
+        double jdn = dt.GetJulianDayNumber();
+
+        printf("JDN of %s %02d, %4d%s is:\t%f",
+               wxDateTime::GetMonthName(d.month).c_str(),
+               d.day,
+               wxDateTime::ConvertYearToBC(d.year),
+               d.year > 0 ? "AD" : "BC",
+               jdn);
+        if ( jdn == d.jdn )
+        {
+            puts(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %f, delta = %f)\n",
+                   d.jdn, jdn - d.jdn);
+        }
+    }
 }
 
 #endif // TEST_TIME
@@ -629,7 +673,7 @@ int main(int argc, char **argv)
     TestTimeSet();
     TestTimeZones();
     TestTimeRange();
-    TestTimeJulian();
+    TestTimeJDN();
 #endif // TEST_TIME
 
     wxUninitialize();

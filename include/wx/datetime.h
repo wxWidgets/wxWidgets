@@ -780,7 +780,7 @@ public:
     static struct tm *GetTmNow()
     {
         time_t t = GetTimeNow();
-        return localtime(&t);
+        return gmtime(&t);
     }
 
 private:

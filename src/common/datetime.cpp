@@ -1,13 +1,39 @@
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/datetime.h
 // Purpose:     implementation of time/date related classes
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     11.05.99
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+// Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+//              parts of code taken from sndcal library by Scott E. Lee:
+//
+//               Copyright 1993-1995, Scott E. Lee, all rights reserved.
+//               Permission granted to use, copy, modify, distribute and sell
+//               so long as the above copyright and this permission statement
+//               are retained in all copies.
+//
 // Licence:     wxWindows license
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+/*
+ * Implementation notes:
+ *
+ * 1. the time is stored as a 64bit integer containing the signed number of
+ *    milliseconds since Jan 1. 1970 (the Unix Epoch)
+ *
+ * 2. the range is thus something about 580 million years, but due to current
+ *    algorithms limitations, only dates from Nov 24, 4714BC are handled
+ *
+ * 3. standard ANSI C functions are used to do time calculations whenever
+ *    possible, i.e. when the date is in the range Jan 1, 1970 to 2038
+ *
+ * 4. otherwise, the calculations are done by converting the date to/from JDN
+ *    first (the range limitation mentioned above comes from here: the
+ *    algorithm used by Scott E. Lee's code only works for positive JDNs, more
+ *    or less)
+ *
+ */
 
 // ============================================================================
 // declarations
@@ -57,6 +83,18 @@ static const long MILLISECONDS_PER_DAY = 86400000l;
 // (i.e. JDN(Jan 1, 1970) = 2440587.5)
 static const int EPOCH_JDN = 2440587;
 
+// the date of JDN -0.5 (as we don't work with fractional parts, this is the
+// reference date for us) is Nov 24, 4714BC
+static const int JDN_0_YEAR = -4713;
+static const int JDN_0_MONTH = wxDateTime::Nov;
+static const int JDN_0_DAY = 24;
+
+// the constants used for JDN calculations
+static const int JDN_OFFSET         = 32046;
+static const int DAYS_PER_5_MONTHS  = 153;
+static const int DAYS_PER_4_YEARS   = 1461;
+static const int DAYS_PER_400_YEARS = 146097;
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -96,7 +134,7 @@ static int GetTimeZone()
 
     if ( !s_timezoneSet )
     {
-        // just call localtime() instead of figurin out whether this system
+        // just call localtime() instead of figuring out whether this system
         // supports tzset(), _tzset() or something else
         time_t t;
         (void)localtime(&t);
@@ -108,43 +146,43 @@ static int GetTimeZone()
 }
 
 // return the integral part of the JDN for the midnight of the given date (to
-// get the real JDN you need to add 0.5, this is, in fact, JDN of the noon of
-// the previous day)
+// get the real JDN you need to add 0.5, this is, in fact, JDN of the
+// noon of the previous day)
 static long GetTruncatedJDN(wxDateTime::wxDateTime_t day,
                             wxDateTime::Month mon,
                             int year)
 {
-    // CREDIT: the algorithm was taken from Peter Baum's home page
+    // CREDIT: code below is by Scott E. Lee (but bugs are mine)
 
-    // the algorithm assumes Jan == 1
-    int month = mon + 1;
+    // check the date validity
+    wxASSERT_MSG(
+      (year > JDN_0_YEAR) ||
+      ((year == JDN_0_YEAR) && (mon > JDN_0_MONTH)) ||
+      ((year == JDN_0_YEAR) && (mon == JDN_0_MONTH) && (day >= JDN_0_DAY)),
+      _T("date out of range - can't convert to JDN")
+                );
 
-    // we want the leap day (Feb 29) be at the end of the year, so we count
-    // March as the first month
-    if ( month < wxDateTime::Mar + 1 )
+    // make the year positive to avoid problems with negative numbers division
+    year += 4800;
+
+    // months are counted from March here
+    int month;
+    if ( mon >= wxDateTime::Mar )
     {
-        month += MONTHS_IN_YEAR;
+        month = mon - 2;
+    }
+    else
+    {
+        month = mon + 10;
         year--;
     }
 
-    // this table contains the number of the days before the 1st of the each
-    // month (in a non leap year) with the third value corresponding to March
-    // (and the last one to February)
-    static const int monthOffsets[14] =
-    {
-        0, 31, 61, 92, 122, 153, 184, 214, 245, 275, 306
-    };
-
-    // and now add contributions of all terms together to get the result (you'd
-    // better see the Web page for the description if you want to understand
-    // why it works (if it does :-))
-    return day +
-           // linear approximation for months
-           monthOffsets[month - (wxDateTime::Mar + 1)] +
-           // the year contribution
-           365*year + year/4 - year/100 + year/400 +
-           // 1721119.5 is the JDN of the midnight of Mar 1, year 0
-           1721118;
+    // now we can simply add all the contributions together
+    return ((year / 100) * DAYS_PER_400_YEARS) / 4
+            + ((year % 100) * DAYS_PER_4_YEARS) / 4
+            + (month * DAYS_PER_5_MONTHS + 2) / 5
+            + day
+            - JDN_OFFSET;
 }
 
 // this function is a wrapper around strftime(3)
@@ -485,7 +523,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday, bool abbr)
     // take some arbitrary Sunday
     tm tm = { 0, 0, 0, 28, Nov, 99 };
 
-    // and offset it by the number of days needed to get 
+    // and offset it by the number of days needed to get the correct wday
     tm.tm_mday += wday;
 
     return CallStrftime(abbr ? _T("%a") : _T("%A"), &tm);
@@ -500,7 +538,25 @@ wxDateTime& wxDateTime::Set(const struct tm& tm1)
     wxASSERT_MSG( IsValid(), _T("invalid wxDateTime") );
 
     tm tm2(tm1);
+
+    // we want the time in GMT, mktime() takes the local time, so use timegm()
+    // if it's available
+#ifdef HAVE_TIMEGM
+    time_t timet = timegm(&tm2);
+#else // !HAVE_TIMEGM
+    // FIXME this almost surely doesn't work
+    tm2.tm_sec -= GetTimeZone();
+
     time_t timet = mktime(&tm2);
+
+    if ( tm2.tm_isdst )
+    {
+        tm2.tm_hour += 1;
+
+        timet = mktime(&tm2);
+    }
+#endif // HAVE_TIMEGM/!HAVE_TIMEGM
+
     if ( timet == (time_t)(-1) )
     {
         wxFAIL_MSG(_T("Invalid time"));
@@ -528,7 +584,7 @@ wxDateTime& wxDateTime::Set(wxDateTime_t hour,
 
     // get the current date from system
     time_t timet = GetTimeNow();
-    struct tm *tm = localtime(&timet);
+    struct tm *tm = gmtime(&timet);
 
     // adjust the time
     tm->tm_hour = hour;
@@ -557,7 +613,8 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
 
     ReplaceDefaultYearMonthWithCurrent(&year, &month);
 
-    wxCHECK_MSG( day <= GetNumberOfDays(month, year), ms_InvDateTime,
+    wxCHECK_MSG( (0 < day) && (day <= GetNumberOfDays(month, year)),
+                 ms_InvDateTime,
                  _T("Invalid date in wxDateTime::Set()") );
 
     // the range of time_t type (inclusive)
@@ -577,6 +634,7 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
         tm.tm_hour = hour;
         tm.tm_min = minute;
         tm.tm_sec = second;
+        tm.tm_isdst = -1;       // mktime() will guess it (wrongly, probably)
 
         (void)Set(tm);
 
@@ -601,7 +659,12 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
 
 wxDateTime& wxDateTime::Set(double jdn)
 {
-    m_time = (jdn - 0.5 - EPOCH_JDN) * TIME_T_FACTOR;
+    // so that m_time will be 0 for the midnight of Jan 1, 1970 which is jdn
+    // EPOCH_JDN + 0.5
+    jdn -= EPOCH_JDN + 0.5;
+
+    m_time = jdn;
+    m_time *= MILLISECONDS_PER_DAY;
 
     return *this;
 }
@@ -618,45 +681,77 @@ wxDateTime::Tm wxDateTime::GetTm() const
     if ( time != (time_t)-1 )
     {
         // use C RTL functions
-        tm *tm = localtime(&time);
+        tm *tm = gmtime(&time);
 
         // should never happen
-        wxCHECK_MSG( tm, Tm(), _T("localtime() failed") );
+        wxCHECK_MSG( tm, Tm(), _T("gmtime() failed") );
 
         return Tm(*tm);
     }
     else
     {
-        // CREDIT: the algorithm was taken from Peter Baum's home page
+        // remember the time and do the calculations with the date only - this
+        // eliminates rounding errors of the floating point arithmetics
 
-        // calculate the Gregorian date from JDN for the midnight of our date
         wxLongLong timeMidnight = m_time;
-        long timeOnly = (m_time % MILLISECONDS_PER_DAY).GetLo();
-        timeMidnight -= timeOnly;
 
-        // TODO this probably could be optimised somehow...
-
-        double jdn = (timeMidnight / MILLISECONDS_PER_DAY).GetLo();
-        jdn += EPOCH_JDN + 0.5;
-        long z = jdn - 1721118.5;
-        double r = jdn - 1721118.5 - z;
-        double g = z - 0.25;
-        long a = g/36524.25;    // number of days per year
-        long b = a - a / 4;
-        int year = (b + g) / 365.25;
-        long c = b + z - 365.25*year;
-        int month = (5*c + 456)/153;
-        int day = c - (153*month - 457)/5 + (r < 0.5 ? 0 : 1);
-        if ( month > 12 )
+        long timeOnly = (m_time % MILLISECONDS_PER_DAY).ToLong();
+        if ( timeOnly < 0 )
         {
-            year++;
-            month -= 12;
+            timeOnly = MILLISECONDS_PER_DAY - timeOnly;
         }
 
+        timeMidnight -= timeOnly;
+
+        // calculate the Gregorian date from JDN for the midnight of our date:
+        // this will yield day, month (in 1..12 range) and year
+
+        // actually, this is the JDN for the noon of the previous day
+        long jdn = (timeMidnight / MILLISECONDS_PER_DAY).ToLong() + EPOCH_JDN;
+
+        // CREDIT: code below is by Scott E. Lee (but bugs are mine)
+
+        wxASSERT_MSG( jdn > -2, _T("JDN out of range") );
+
+        // calculate the century
+        int temp = (jdn + JDN_OFFSET) * 4 - 1;
+        int century = temp / DAYS_PER_400_YEARS;
+
+        // then the year and day of year (1 <= dayOfYear <= 366)
+        temp = ((temp % DAYS_PER_400_YEARS) / 4) * 4 + 3;
+        int year = (century * 100) + (temp / DAYS_PER_4_YEARS);
+        int dayOfYear = (temp % DAYS_PER_4_YEARS) / 4 + 1;
+
+        // and finally the month and day of the month
+        temp = dayOfYear * 5 - 3;
+        int month = temp / DAYS_PER_5_MONTHS;
+        int day = (temp % DAYS_PER_5_MONTHS) / 5 + 1;
+
+        // month is counted from March - convert to normal
+        if ( month < 10 )
+        {
+            month += 3;
+        }
+        else
+        {
+            year += 1;
+            month -= 9;
+        }
+
+        // year is offset by 4800
+        year -= 4800;
+
+        // check that the algorithm gave us something reasonable
+        wxASSERT_MSG( (0 < month) && (month <= 12), _T("invalid month") );
+        wxASSERT_MSG( (1 <= day) && (day < 32), _T("invalid day") );
+        wxASSERT_MSG( (INT_MIN <= year) && (year <= INT_MAX),
+                      _T("year range overflow") );
+
+        // construct Tm from these values
         Tm tm;
-        tm.year = year;
+        tm.year = (int)year;
         tm.mon = (Month)(month - 1); // algorithm yields 1 for January, not 0
-        tm.mday = day;
+        tm.mday = (wxDateTime_t)day;
         tm.msec = timeOnly % 1000;
         timeOnly -= tm.msec;
         timeOnly /= 1000;               // now we have time in seconds
@@ -905,10 +1000,10 @@ wxString wxDateTime::Format(const wxChar *format) const
     if ( time != (time_t)-1 )
     {
         // use strftime()
-        tm *tm = localtime(&time);
+        tm *tm = gmtime(&time);
 
         // should never happen
-        wxCHECK_MSG( tm, _T(""), _T("localtime() failed") );
+        wxCHECK_MSG( tm, _T(""), _T("gmtime() failed") );
 
         return CallStrftime(format, tm);
     }
