@@ -33,10 +33,7 @@
 #ifdef __WXGTK20__
     #include <gdk/gdkimage.h>
 #else // GTK+ 1.2
-    // VZ: is this still needed? seems to compile fine without it...
-    #if (GTK_MINOR_VERSION > 0)
-        #include <gdk/gdkrgb.h>
-    #endif
+    #include <gdk/gdkrgb.h>
 #endif // GTK+ 2.0/1.2
 
 extern void gdk_wx_draw_bitmap     (GdkDrawable  *drawable,
@@ -360,7 +357,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         SetBitmap( gdk_pixmap_new( wxGetRootWindow()->window, width, height, 1 ) );
 
         SetDepth( 1 );
-
+        
         GdkVisual *visual = wxTheApp->GetGdkVisual();
 
         // Create picture image
@@ -460,7 +457,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         int bpp = visual->depth;
 
         SetDepth( bpp );
-
+        
         if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
         if (bpp < 8) bpp = 8;
 
@@ -705,7 +702,7 @@ wxImage wxBitmap::ConvertToImage() const
 
     image.Create( GetWidth(), GetHeight() );
     char unsigned *data = image.GetData();
-
+    
     if (!data)
     {
         gdk_image_destroy( gdk_image );

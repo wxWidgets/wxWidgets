@@ -1010,6 +1010,10 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     {
         use_bitmap = bitmap;
     }
+    
+#ifdef __WXGTK20__
+    useMask = FALSE;
+#endif
 
     /* apply mask if any */
     GdkBitmap *mask = (GdkBitmap *) NULL;
