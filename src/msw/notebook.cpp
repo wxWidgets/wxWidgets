@@ -727,6 +727,23 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
       {
         wxNotebookPage *pPage = m_pages[sel];
         pPage->Show(true);
+        pPage->SetFocus();
+
+        // If the newly focused window is not a child of the new page,
+        // SetFocus was not successful and the notebook itself should be
+        // focused
+        wxWindow *currentFocus = FindFocus();
+        wxWindow *startFocus = currentFocus;
+        while ( currentFocus && currentFocus != pPage && currentFocus != this )
+            currentFocus = currentFocus->GetParent();
+
+        if ( startFocus == pPage || currentFocus != pPage )
+            SetFocus();
+
+      }
+      else // no pages in the notebook, give the focus to itself
+      {
+          SetFocus();
       }
 
       m_nSelection = sel;
@@ -740,12 +757,14 @@ bool wxNotebook::MSWTranslateMessage(WXMSG *wxmsg)
 {
     const MSG * const msg = (MSG *)wxmsg;
 
-    // we want to process (simple, i.e. without Shift or Ctrl) TAB to pass it
-    // to our page for keyboard navigation
+    // intercept TAB, CTRL+TAB and CTRL+SHIFT+TAB for processing by wxNotebook.
+    // TAB will be passed to the currently selected page, CTRL+TAB and
+    // CTRL+SHIFT+TAB will be processed by the notebook itself. do not
+    // intercept SHIFT+TAB. This goes to the parent of the notebook which will
+    // process it.
     if ( msg->message == WM_KEYDOWN && msg->wParam == VK_TAB &&
             msg->hwnd == m_hwnd &&
-                !wxIsCtrlDown() && !wxIsShiftDown() &&
-                    m_nSelection != -1 )
+                (wxIsCtrlDown() || !wxIsShiftDown()) )
     {
         return MSWProcessMessage(wxmsg);
     }
