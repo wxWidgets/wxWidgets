@@ -19,6 +19,9 @@
         <dirname>$(LIBDIRNAME)</dirname>
         <include cond="FORMAT!='autoconf'">$(LIBDIRNAME)</include>
         <include cond="FORMAT=='autoconf'">$(BUILDDIR)/src/expat</include>
+        <define cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
+            COMPILED_FROM_DSP
+        </define>
         <sources>
             src/expat/lib/xmlparse.c
             src/expat/lib/xmlrole.c
