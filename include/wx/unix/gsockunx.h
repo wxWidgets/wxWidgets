@@ -52,6 +52,7 @@ struct _GAddress {
 
 void _GSocket_Enable(GSocket *socket, GSocketEvent event);
 void _GSocket_Disable(GSocket *socket, GSocketEvent event);
+void _GSocket_Configure_Callbacks(GSocket *socket);
 int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size);
 int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size);
 int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size);
