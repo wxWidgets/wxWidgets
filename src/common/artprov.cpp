@@ -57,8 +57,8 @@ public:
 
     void Clear();
     
-    static wxString ConstructHashID(const wxArtDomain& domain, 
-                                    const wxArtID& id,
+    static wxString ConstructHashID(const wxArtID& id,
+                                    const wxArtClient& client,
                                     const wxSize& size);
 
 private:
@@ -85,11 +85,11 @@ void wxArtProviderCache::Clear()
 }
 
 /*static*/ wxString wxArtProviderCache::ConstructHashID(
-                                    const wxArtDomain& domain, 
-                                    const wxArtID& id, const wxSize& size)
+                                const wxArtID& id, const wxArtClient& client,
+                                const wxSize& size)
 {
     wxString str;
-    str.Printf(wxT("%s-%s-%i-%i"), domain.c_str(), id.c_str(), size.x, size.y);
+    str.Printf(wxT("%s-%s-%i-%i"), id.c_str(), client.c_str(), size.x, size.y);
     return str;
 }
 
@@ -144,13 +144,16 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
     wxDELETE(sm_cache);
 }
 
-/*static*/ wxBitmap wxArtProvider::GetBitmap(const wxArtDomain& domain,
-                                             const wxArtID& id,
+/*static*/ wxBitmap wxArtProvider::GetBitmap(const wxArtID& id,
+                                             const wxArtClient& client,
                                              const wxSize& size)
 {
+    // safety-check against writing client,id,size instead of id,client,size:
+    wxASSERT_MSG( client.Last() == _T('C'), _T("invalid 'client' parameter") );
+
     wxCHECK_MSG( sm_providers, wxNullBitmap, _T("no wxArtProvider exists") );
 
-    wxString hashId = wxArtProviderCache::ConstructHashID(domain, id, size);
+    wxString hashId = wxArtProviderCache::ConstructHashID(id, client, size);
 
     wxBitmap bmp;
     if ( !sm_cache->GetBitmap(hashId, &bmp) )
@@ -158,7 +161,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
         for (wxArtProvidersList::Node *node = sm_providers->GetFirst();
              node; node = node->GetNext())
         {
-            bmp = node->GetData()->CreateBitmap(domain, id, size);
+            bmp = node->GetData()->CreateBitmap(id, client, size);
             if ( bmp.Ok() )
                 break;
         }
@@ -168,13 +171,13 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
     return bmp;
 }
 
-/*static*/ wxIcon wxArtProvider::GetIcon(const wxArtDomain& domain, 
-                                         const wxArtID& id,
+/*static*/ wxIcon wxArtProvider::GetIcon(const wxArtID& id,
+                                         const wxArtClient& client,
                                          const wxSize& size)
 {
     wxCHECK_MSG( sm_providers, wxNullIcon, _T("no wxArtProvider exists") );
 
-    wxBitmap bmp = GetBitmap(domain, id, size);
+    wxBitmap bmp = GetBitmap(id, client, size);
     if ( bmp.Ok() )
     {
         wxIcon icon;
