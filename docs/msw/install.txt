@@ -1,8 +1,8 @@
 
-Installing wxWindows 2.4.0
+Installing wxWindows 2.4.1
 --------------------------
 
-This is wxWindows 2.4.0 for Microsoft Windows 9x/ME, Windows NT,
+This is wxWindows 2.4.1 for Microsoft Windows 9x/ME, Windows NT,
 Windows 2000 and Windows XP. This is an official release.
 
 Please note that the library naming conventions for VC++
@@ -243,8 +243,7 @@ Compiling using the makefiles (updated 24 Sept 02):
 1. Make sure your WXWIN variable is set [e.g add
    set WXWIN=c:\wxwindows
    to your autoexec.bat file], The WXWIN variable should contain neither spaces nor -
-   You may like to use the short form as shown by a dos directory listing ; 
-   eg instead of c:\wxwindows-2.4.0 use c:\wxwind~1.4
+   You may like to use the short form as shown by a DOS directory listing. 
    Reboot if needed for the changes to autoexec.bat to take effect.   
 2. Change directory to src\msw. Type 'make -f makefile.b32' to
    make the wxWindows core library. Ignore the compiler warnings.
@@ -441,7 +440,7 @@ Metrowerks CodeWarrior compilation
 ----------------------------------
 
 1. CodeWarrior Pro7 project files in XML format are already 
-   included in wxMSW-2.4.0.zip and the setup version.
+   included in wxMSW-2.4.1.zip and the setup version.
 2. Review the file include\wx\msw\setup.h (or include\wx\msw\setup0.h if 
    you are working from the CVS version) to make sure the settings reflect 
    what you want.  If you aren't sure, leave it alone and go with the 

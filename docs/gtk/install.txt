@@ -44,7 +44,7 @@ If you want to remove wxWindows on Unix you can do this:
 * The GTK+ 2 case
 -----------------
 
-wxGTK 2.4.0 has support for the new version 2.0.X of GTK+. This means
+wxGTK 2.4.1 has support for the new version 2.0.X of GTK+. This means
 that wxGTK apps can now make use Unicode as the underlying encoding
 for all text operations. This is a very fundamental change and will
 need time to stabilize, so be careful. Anyways, after installing a

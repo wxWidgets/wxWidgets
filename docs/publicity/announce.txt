@@ -1,8 +1,8 @@
-Announcing wxWindows 2.4.0: a cross-platform GUI toolkit
+Announcing wxWindows 2.4.1: a cross-platform GUI toolkit
 ----------------------------------------------------------------
 
-January 7th, 2003 -- the wxWindows team is pleased to announce
-an official 2.4.0 release of the mature cross-platform C++
+April ??th, 2003 -- the wxWindows team is pleased to announce
+an official 2.4.1 release of the mature cross-platform C++
 application framework.
 
 The following platforms are supported:

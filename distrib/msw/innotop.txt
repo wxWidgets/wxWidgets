@@ -4,13 +4,13 @@
 
 [Setup]
     MinVersion=4.0,4.0
-    AppName=wxWindows 2.4.0
+    AppName=wxWindows 2.4.1
     AppId=wxWindows
     CreateUninstallRegKey=1
     UsePreviousAppDir=0
     UsePreviousGroup=0
-    AppVersion=2.4.0
-    AppVerName=wxWindows 2.4.0
+    AppVersion=2.4.1
+    AppVerName=wxWindows 2.4.1
     AppCopyright=Copyright © The wxWindows Team
     BackColor=$FF0000
     BackColor2=$000000
@@ -19,7 +19,7 @@
     WindowStartMaximized=1
     WindowVisible=1
     WindowResizable=1
-    UninstallDisplayName=wxWindows 2.4.0
+    UninstallDisplayName=wxWindows 2.4.1
     UninstallLogMode=Append
     DirExistsWarning=auto
     UninstallFilesDir={app}
@@ -28,10 +28,10 @@
     CreateAppDir=1
     DisableProgramGroupPage=0
     AlwaysCreateUninstallIcon=1
-    UninstallIconName=Uninstall wxWindows 2.4.0
+    UninstallIconName=Uninstall wxWindows 2.4.1
     Uninstallable=1
-    DefaultDirName=c:\wxWindows_2.4.0
-    DefaultGroupName=wxWindows 2.4.0
+    DefaultDirName=c:\wxWindows_2.4.1
+    DefaultGroupName=wxWindows 2.4.1
     LicenseFile=C:\wx24\wxWindows\docs\licence.txt
     InfoBeforeFile=C:\wx24\wxWindows\docs\readme.txt
     InfoAfterFile=C:\wx24\wxWindows\docs\msw\install.txt
@@ -41,6 +41,6 @@
     DiskClusterSize=512
     ReserveBytes=0
     UseSetupLdr=1
-    SourceDir=c:\wx24\wxWindows\deliver\wxWindows-2.4.0
+    SourceDir=c:\wx24\wxWindows\deliver\wxWindows-2.4.1
     OutputDir=c:\wx24\wxWindows\deliver
 

@@ -136,10 +136,6 @@ all:
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\splitter
         nmake -f makefile.vc $(MAKEFLAGS)
-!if "$(COMPIL)"==""
-        cd $(WXDIR)\samples\tab
-        nmake -f makefile.vc $(MAKEFLAGS)
-!endif
         cd $(WXDIR)\samples\taskbar
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\text
@@ -251,8 +247,6 @@ clean:
         cd $(WXDIR)\samples\scrollsub
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\splitter
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\tab
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\taskbar
         nmake -f makefile.vc clean

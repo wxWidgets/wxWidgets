@@ -1,7 +1,7 @@
-wxWindows 2.4.0
+wxWindows 2.4.1
 ---------------
 
-Welcome to wxWindows 2, a sophisticated cross-platform C++
+Welcome to wxWindows, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where
 possible) the native controls.
 
@@ -200,5 +200,5 @@ web site.
 
 Have fun!
 
-The wxWindows Team, January 2003
+The wxWindows Team, April 2003
 

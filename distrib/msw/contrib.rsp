@@ -143,6 +143,7 @@ contrib/samples/animate/*.txt
 contrib/samples/animate/*.ico
 contrib/samples/animate/*.bmp
 contrib/samples/animate/*.rc
+contrib/samples/animate/*.gif
 contrib/samples/animate/AniTestVC.dsp
 contrib/samples/animate/AniTestVC.dsw
 
