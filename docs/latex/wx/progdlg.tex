@@ -68,6 +68,13 @@ reached.}
 
 Destructor. Deletes the dialog and enables all top level windows.
 
+\membersection{wxProgressDialog::Resume}\label{wxprogressdialogresume}
+
+\func{void}{Resume}{\void}
+
+Can be used to continue with the dialog, after the user had chosen
+ABORT.
+
 \membersection{wxProgressDialog::Update}\label{wxprogressdialogupdate}
 
 \func{bool}{Update}{
@@ -89,13 +96,4 @@ than the maximum value given to the constructor (i.e., as usual in C, the
 index runs from $0$ to $maximum-1$).}
 \docparam{newmsg}{The new messages for the progress dialog text, if it is
 empty (which is the default) the message is not changed.}
-
-\wxheading{Parameters}
-
-\membersection{wxProgressDialog::Resume}\label{wxprogressdialogresume}
-
-\func{void}{Resume}{\void}
-
-Can be used to continue with the dialog, after the user had chosen
-ABORT.
 
