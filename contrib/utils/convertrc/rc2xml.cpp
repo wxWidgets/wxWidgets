@@ -621,25 +621,22 @@ void rc2xml::ParsePopupMenu()
 
 wxString rc2xml::PeekToken()
 {
-    wxString token;
-    int p;
-    p=m_rc.Tell();
-    token=GetToken();
+    wxFileOffset p = m_rc.Tell();
+    wxString token=GetToken();
 
     m_rc.Seek(p);
     return token;
 }
+
 //MS Windows pain in the butt CONTROL
 void rc2xml::ParseControlMS()
 {
-    wxString label,varname,kindctrl,token;
-    token=PeekToken();
+    wxString token = PeekToken();
 
     if (token.Contains(_T("\"")))
         ParseNormalMSControl();
     else
         ParseWeirdMSControl();
-
 }
 
 /*    CONTROL         "Slider1",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH |
@@ -706,15 +703,14 @@ bool rc2xml::ReadOrs(wxString & orstring)
 void rc2xml::ParseCtrlButton(wxString label, wxString varname)
 {
     wxString token;
-    int p;
-    p=m_rc.Tell();
+    wxFileOffset p = m_rc.Tell();
     ReadOrs(token);
     m_rc.Seek(p);
 
     if (token.Find(_T("BS_AUTOCHECKBOX"))!=wxNOT_FOUND)
         ParseCheckBox(label, varname);
     else if ((token.Find(_T("BS_AUTORADIOBUTTON"))!=wxNOT_FOUND)||
-                  (token.Find(_T("BS_RADIOBUTTON"))!=wxNOT_FOUND))
+             (token.Find(_T("BS_RADIOBUTTON"))!=wxNOT_FOUND))
         ParseRadioButton(label, varname);
     else if (token.Find(_T("BS_GROUPBOX"))!=wxNOT_FOUND)
         ParseGroupBox(label, varname);
@@ -1185,70 +1181,63 @@ void rc2xml::ParseStaticBitmap(wxString bitmapname, wxString varname)
 
 void rc2xml::ParseNormalMSControl()
 {
-wxString label,varname,kindctrl;
-
-label=GetQuoteField();
-varname=GetToken();
-kindctrl=GetQuoteField();
-kindctrl.MakeUpper();
+    wxString label=GetQuoteField();
+    wxString varname=GetToken();
+    wxString kindctrl=GetQuoteField();
+    kindctrl.MakeUpper();
 
     if (kindctrl==_T("MSCTLS_UPDOWN32"))
         ParseSpinCtrl(label,varname);
-    if (kindctrl==_T("MSCTLS_TRACKBAR32"))
+    else if (kindctrl==_T("MSCTLS_TRACKBAR32"))
         ParseSlider(label,varname);
-    if (kindctrl==_T("MSCTLS_PROGRESS32"))
+    else if (kindctrl==_T("MSCTLS_PROGRESS32"))
         ParseProgressBar(label,varname);
-    if (kindctrl==_T("SYSTREEVIEW32"))
+    else if (kindctrl==_T("SYSTREEVIEW32"))
         ParseTreeCtrl(label,varname);
-    if (kindctrl==_T("SYSMONTHCAL32"))
+    else if (kindctrl==_T("SYSMONTHCAL32"))
         ParseCalendar(label,varname);
-    if (kindctrl==_T("SYSLISTVIEW32"))
+    else if (kindctrl==_T("SYSLISTVIEW32"))
         ParseListCtrl(label,varname);
-    if (kindctrl==_T("BUTTON"))
+    else if (kindctrl==_T("BUTTON"))
         ParseCtrlButton(label,varname);
-    if (kindctrl==_T("RICHEDIT"))
+    else if (kindctrl==_T("RICHEDIT"))
         ParseRichEdit(label,varname);
-    if (kindctrl==_T("STATIC"))
-        {
+    else if (kindctrl==_T("STATIC"))
+    {
         wxString token;
-        int p=m_rc.Tell();
+        wxFileOffset p = m_rc.Tell();
         ReadOrs(token);
         m_rc.Seek(p);
         if (token.Find(_T("SS_BITMAP"))!=wxNOT_FOUND)
             ParseStaticBitmap(label,varname);
         else
             ParseStaticText(label,varname);
-        }
-    if (kindctrl==_T("EDIT"))
+    }
+    else if (kindctrl==_T("EDIT"))
         ParseTextCtrl(varname);
-    if (kindctrl==_T("LISTBOX"))
+    else if (kindctrl==_T("LISTBOX"))
         ParseListBox(varname);
-    if (kindctrl==_T("COMBOBOX"))
+    else if (kindctrl==_T("COMBOBOX"))
         ParseComboBox(varname);
-
 }
 
 void rc2xml::ParseWeirdMSControl()
 {
-    wxString kindctrl;
-    wxString varname;
-    wxString id;
-    id=GetToken();
-    varname=GetToken();
-    kindctrl=GetQuoteField();
+    wxString id = GetToken();
+    wxString varname = GetToken();
+    wxString kindctrl = GetQuoteField();
     kindctrl.MakeUpper();
 //    CONTROL         IDB_FACE,IDC_STATIC,"Static",SS_BITMAP,26,62,32,30
     if (kindctrl==_T("STATIC"))
-        {
+    {
         if (PeekToken()==_T("SS_BITMAP"))
             ParseStaticBitmap(id,varname);
         else
             wxLogError(_T("Unknown MS Control Static token"));
-        }
-
+    }
 }
-//SCROLLBAR       IDC_SCROLLBAR1,219,56,10,40,SBS_VERT
 
+//SCROLLBAR       IDC_SCROLLBAR1,219,56,10,40,SBS_VERT
 void rc2xml::ParseScrollBar()
 {
     wxString token;
