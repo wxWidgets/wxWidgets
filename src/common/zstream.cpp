@@ -163,6 +163,9 @@ wxZlibOutputStream::~wxZlibOutputStream()
   }
 
   deflateEnd(m_deflate);
+
+  m_parent_o_stream->Write(m_z_buffer, m_z_size-m_deflate->avail_out);
+
   delete m_deflate;
 
   delete[] m_z_buffer;
