@@ -25,7 +25,15 @@
 
 #include <limits.h>     // for LONG_MAX
 
-// #define wxUSE_LONGLONG_WX 1 // for testing (VZ)
+// define this to compile wxLongLongWx in "test" mode: the results of all
+// calculations will be compared with the real results taken from
+// wxLongLongNative
+#define wxLONGLONG_TEST_MODE
+
+#ifdef wxLONGLONG_TEST_MODE
+    #define wxUSE_LONGLONG_WX 1
+    #define wxUSE_LONGLONG_NATIVE 1
+#endif // wxLONGLONG_TEST_MODE
 
 // ----------------------------------------------------------------------------
 // decide upon which class we will use
@@ -73,8 +81,12 @@
 // to disable automatic testing (useful for the test program which defines
 // both classes) but by default we only use one class
 #if (defined(wxUSE_LONGLONG_WX) && wxUSE_LONGLONG_WX) || !defined(wxLongLong_t)
-    #undef wxUSE_LONGLONG_NATIVE
-    #define wxUSE_LONGLONG_NATIVE 0
+    // don't use both classes unless wxUSE_LONGLONG_NATIVE was explicitly set:
+    // this is useful in test programs nad only there
+    #ifndef wxUSE_LONGLONG_NATIVE
+        #define wxUSE_LONGLONG_NATIVE 0
+    #endif
+
     class WXDLLEXPORT wxLongLongWx;
     typedef wxLongLongWx wxLongLong;
 #else
@@ -307,13 +319,32 @@ class WXDLLEXPORT wxLongLongWx
 public:
     // ctors
         // default ctor initializes to 0
-    wxLongLongWx() { m_lo = m_hi = 0; }
+    wxLongLongWx()
+    {
+        m_lo = m_hi = 0;
+
+#ifdef wxLONGLONG_TEST_MODE
+        m_ll = 0;
+
+        Check();
+#endif // wxLONGLONG_TEST_MODE
+    }
         // from long
-    wxLongLongWx(long l)
-        { m_lo = l; m_hi = (l < 0 ? -1l : 0l); }
+    wxLongLongWx(long l) { *this = l; }
         // from 2 longs
     wxLongLongWx(long hi, unsigned long lo)
-        { m_hi = hi; m_lo = lo; }
+    {
+        m_hi = hi;
+        m_lo = lo;
+
+#ifdef wxLONGLONG_TEST_MODE
+        m_ll = hi;
+        m_ll <<= 32;
+        m_ll |= lo;
+
+        Check();
+#endif // wxLONGLONG_TEST_MODE
+    }
 
     // default copy ctor is ok in both cases
 
@@ -322,7 +353,18 @@ public:
     // assignment operators
         // from long
     wxLongLongWx& operator=(long l)
-        { m_lo = l; m_hi = (l < 0 ? -1l : 0l); return *this; }
+    {
+        m_lo = l;
+        m_hi = (l < 0 ? -1l : 0l);
+
+#ifdef wxLONGLONG_TEST_MODE
+        m_ll = l;
+
+        Check();
+#endif // wxLONGLONG_TEST_MODE
+
+        return *this;
+    }
         // from double
     wxLongLongWx& Assign(double d);
         // can't have assignment operator from 2 longs
@@ -335,12 +377,25 @@ public:
 
         // get absolute value
     wxLongLongWx Abs() const { return wxLongLongWx(*this).Abs(); }
-    wxLongLongWx& Abs() { if ( m_hi < 0 ) m_hi = -m_hi; return *this; }
+    wxLongLongWx& Abs()
+    {
+        if ( m_hi < 0 )
+            m_hi = -m_hi;
+
+#ifdef wxLONGLONG_TEST_MODE
+        if ( m_ll < 0 )
+            m_ll = -m_ll;
+
+        Check();
+#endif // wxLONGLONG_TEST_MODE
+
+        return *this;
+    }
 
         // convert to long with range checking in the debug mode (only!)
     long ToLong() const
     {
-        wxASSERT_MSG( m_hi == 0l,
+        wxASSERT_MSG( (m_hi == 0l) || (m_hi == -1l),
                       _T("wxLongLong to long conversion loss of precision") );
 
         return (long)m_lo;
@@ -357,10 +412,11 @@ public:
     wxLongLongWx& operator++();
 
         // post increment operator
-    wxLongLongWx& operator++(int);
+    wxLongLongWx& operator++(int) { return ++(*this); }
 
         // negation operator
     wxLongLongWx operator-() const;
+    wxLongLongWx& Negate();
 
         // subraction
     wxLongLongWx operator-(const wxLongLongWx& ll) const;
@@ -370,7 +426,7 @@ public:
     wxLongLongWx& operator--();
 
         // post decrement operator
-    wxLongLongWx& operator--(int);
+    wxLongLongWx& operator--(int) { return --(*this); }
 
     // shifts
         // left shift
@@ -421,13 +477,22 @@ public:
     friend ostream& operator<<(ostream&, const wxLongLongWx&);
 #endif // wxUSE_STD_IOSTREAM
 
-    void *asArray(void) const;
+    void *asArray() const;
 
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs
 
     long m_hi;                // signed bit is in the high part
     unsigned long m_lo;
+
+#ifdef wxLONGLONG_TEST_MODE
+    void Check()
+    {
+        wxASSERT( (m_ll >> 32) == m_hi && (unsigned long)m_ll == m_lo );
+    }
+
+    wxLongLong_t m_ll;
+#endif // wxLONGLONG_TEST_MODE
 };
 
 #endif // wxUSE_LONGLONG_WX

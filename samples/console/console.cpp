@@ -30,14 +30,14 @@
 // what to test?
 
 //#define TEST_ARRAYS
-#define TEST_CMDLINE
+//#define TEST_CMDLINE
 //#define TEST_DIR
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_STRINGS
 //#define TEST_THREADS
-//#define TEST_TIME
+#define TEST_TIME
 
 // ============================================================================
 // implementation
@@ -219,6 +219,19 @@ static void TestMimeEnum()
 #include <wx/longlong.h>
 #include <wx/timer.h>
 
+// make a 64 bit number from 4 16 bit ones
+#define MAKE_LL(x1, x2, x3, x4) wxLongLong((x1 << 16) | x2, (x3 << 16) | x3)
+
+// get a random 64 bit number
+#define RAND_LL()   MAKE_LL(rand(), rand(), rand(), rand())
+
+#if wxUSE_LONGLONG_NATIVE
+inline bool operator==(const wxLongLongWx& a, const wxLongLongNative& b)
+    { return a.GetHi() == b.GetHi() && a.GetLo() == b.GetLo(); }
+inline bool operator==(const wxLongLongNative& a, const wxLongLongWx& b)
+    { return a.GetHi() == b.GetHi() && a.GetLo() == b.GetLo(); }
+#endif // wxUSE_LONGLONG_NATIVE
+
 static void TestSpeed()
 {
     static const long max = 100000000;
@@ -263,14 +276,75 @@ static void TestSpeed()
     }
 }
 
+static void TestLongLongConversion()
+{
+    puts("*** Testing wxLongLong conversions ***\n");
+
+    wxLongLong a;
+    size_t nTested = 0;
+    for ( size_t n = 0; n < 100000; n++ )
+    {
+        a = RAND_LL();
+
+#if wxUSE_LONGLONG_NATIVE
+        wxLongLongNative b(a.GetHi(), a.GetLo());
+
+        wxASSERT_MSG( a == b, "conversions failure" );
+#else
+        puts("Can't do it without native long long type, test skipped.");
+
+        return;
+#endif // wxUSE_LONGLONG_NATIVE
+
+        if ( !(nTested % 1000) )
+        {
+            putchar('.');
+            fflush(stdout);
+        }
+
+        nTested++;
+    }
+
+    puts(" done!");
+}
+
+static void TestMultiplication()
+{
+    puts("*** Testing wxLongLong multiplication ***\n");
+
+    wxLongLong a, b;
+    size_t nTested = 0;
+    for ( size_t n = 0; n < 100000; n++ )
+    {
+        a = RAND_LL();
+        b = RAND_LL();
+
+#if wxUSE_LONGLONG_NATIVE
+        wxLongLongNative aa(a.GetHi(), a.GetLo());
+        wxLongLongNative bb(b.GetHi(), b.GetLo());
+
+        wxASSERT_MSG( a*b == aa*bb, "multiplication failure" );
+#else // !wxUSE_LONGLONG_NATIVE
+        puts("Can't do it without native long long type, test skipped.");
+
+        return;
+#endif // wxUSE_LONGLONG_NATIVE
+
+        if ( !(nTested % 1000) )
+        {
+            putchar('.');
+            fflush(stdout);
+        }
+
+        nTested++;
+    }
+
+    puts(" done!");
+}
+
 static void TestDivision()
 {
     puts("*** Testing wxLongLong division ***\n");
-
-    #define MAKE_LL(x1, x2, x3, x4) wxLongLong((x1 << 16) | x2, (x3 << 16) | x3)
-
-    // seed pseudo random generator
-    srand((unsigned)time(NULL));
 
     wxLongLong q, r;
     size_t nTested = 0;
@@ -285,8 +359,15 @@ static void TestDivision()
         q = ll / l;
         r = ll % l;
 
+#if wxUSE_LONGLONG_NATIVE
+        wxLongLongNative m(ll.GetHi(), ll.GetLo());
+
+        wxLongLongNative p = m / l, s = m % l;
+        wxASSERT_MSG( q == p && r == s, "division failure" );
+#else // !wxUSE_LONGLONG_NATIVE
         // verify the result
         wxASSERT_MSG( ll == q*l + r, "division failure" );
+#endif // wxUSE_LONGLONG_NATIVE
 
         if ( !(nTested % 1000) )
         {
@@ -298,9 +379,86 @@ static void TestDivision()
     }
 
     puts(" done!");
-
-    #undef MAKE_LL
 }
+
+static void TestAddition()
+{
+    puts("*** Testing wxLongLong addition ***\n");
+
+    wxLongLong a, b, c;
+    size_t nTested = 0;
+    for ( size_t n = 0; n < 100000; n++ )
+    {
+        a = RAND_LL();
+        b = RAND_LL();
+        c = a + b;
+
+#if wxUSE_LONGLONG_NATIVE
+        wxASSERT_MSG( c == wxLongLongNative(a.GetHi(), a.GetLo()) +
+                           wxLongLongNative(b.GetHi(), b.GetLo()),
+                      "addition failure" ); 
+#else // !wxUSE_LONGLONG_NATIVE
+        wxASSERT_MSG( c - b == a, "addition failure" );
+#endif // wxUSE_LONGLONG_NATIVE
+
+        if ( !(nTested % 1000) )
+        {
+            putchar('.');
+            fflush(stdout);
+        }
+
+        nTested++;
+    }
+
+    puts(" done!");
+}
+
+static void TestBitOperations()
+{
+    puts("*** Testing wxLongLong bit operation ***\n");
+
+    wxLongLong a, c;
+    size_t nTested = 0;
+    for ( size_t n = 0; n < 100000; n++ )
+    {
+        a = RAND_LL();
+
+#if wxUSE_LONGLONG_NATIVE
+        for ( size_t n = 0; n < 33; n++ )
+        {
+            wxLongLongNative b(a.GetHi(), a.GetLo());
+
+            b >>= n;
+            c = a >> n;
+
+            wxASSERT_MSG( b == c, "bit shift failure" );
+
+            b = wxLongLongNative(a.GetHi(), a.GetLo()) << n;
+            c = a << n;
+
+            wxASSERT_MSG( b == c, "bit shift failure" );
+        }
+
+#else // !wxUSE_LONGLONG_NATIVE
+        puts("Can't do it without native long long type, test skipped.");
+
+        return;
+#endif // wxUSE_LONGLONG_NATIVE
+
+        if ( !(nTested % 1000) )
+        {
+            putchar('.');
+            fflush(stdout);
+        }
+
+        nTested++;
+    }
+
+    puts(" done!");
+}
+
+#undef MAKE_LL
+#undef RAND_LL
 
 #endif // TEST_LONGLONG
 
@@ -1703,10 +1861,21 @@ int main(int argc, char **argv)
 #endif // TEST_THREADS
 
 #ifdef TEST_LONGLONG
+    // seed pseudo random generator
+    srand((unsigned)time(NULL));
+
     if ( 0 )
+    {
         TestSpeed();
-    if ( 1 )
+    }
+    TestMultiplication();
+    if ( 0 )
+    {
         TestDivision();
+        TestAddition();
+        TestLongLongConversion();
+        TestBitOperations();
+    }
 #endif // TEST_LONGLONG
 
 #ifdef TEST_MIME
@@ -1714,7 +1883,7 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_TIME
-    if ( 0 )
+    if ( 1 )
     {
         TestTimeSet();
         TestTimeStatic();
