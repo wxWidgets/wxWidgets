@@ -109,7 +109,7 @@ wxExpr::wxExpr(long the_integer)
   next = NULL;
 }
 
-wxExpr::wxExpr(float the_real)
+wxExpr::wxExpr(double the_real)
 {
   type = wxExprReal;
   value.real = the_real;
@@ -428,7 +428,7 @@ void wxExpr::AddAttributeValue(const wxString& attribute, long val)
   Append(listExpr);
 }
 
-void wxExpr::AddAttributeValue(const wxString& attribute, float val)
+void wxExpr::AddAttributeValue(const wxString& attribute, double val)
 {
   if (type != wxExprList)
   {
@@ -588,6 +588,18 @@ bool wxExpr::GetAttributeValue(const wxString& att, float& var) const
   wxExpr *expr = AttributeValue(att);
   if (expr && (expr->Type() == wxExprInteger || expr->Type() == wxExprReal))
   {
+    var = (float) expr->RealValue();
+    return TRUE;
+  }
+  else
+    return FALSE;
+}
+
+bool wxExpr::GetAttributeValue(const wxString& att, double& var) const
+{
+  wxExpr *expr = AttributeValue(att);
+  if (expr && (expr->Type() == wxExprInteger || expr->Type() == wxExprReal))
+  {
     var = expr->RealValue();
     return TRUE;
   }
@@ -702,7 +714,7 @@ void wxExpr::WriteExpr(ostream& stream)    // Write as any other subexpression
     }
     case wxExprReal:
     {
-      float f = value.real;
+      double f = value.real;
 /* Now the parser can cope with this.
       // Prevent printing in 'e' notation. Any better way?
       if (fabs(f) < 0.00001)
@@ -924,7 +936,7 @@ wxExpr *wxExprDatabase::FindClause(const wxString& word, long val)
   return found;
 }
 
-wxExpr *wxExprDatabase::FindClause(const wxString& word, float val)
+wxExpr *wxExprDatabase::FindClause(const wxString& word, double val)
 {
   wxExpr *found = NULL;
   while (position && !found)
@@ -1124,7 +1136,7 @@ char *make_real(char *str1, char *str2)
   char buf[50];
 
   sprintf(buf, "%s.%s", str1, str2);
-  float f = (float)atof(buf);
+  double f = (double)atof(buf);
   wxExpr *x = new wxExpr(f);
 
   return (char *)x;
@@ -1139,7 +1151,7 @@ char *make_exp(char *str1, char *str2)
 
   double d = mantissa * pow(10.0, exponent);
 
-  wxExpr *x = new wxExpr((float)d);
+  wxExpr *x = new wxExpr(d);
 
   return (char *)x;
 }
@@ -1154,7 +1166,7 @@ char *make_exp2(char *str1, char *str2, char *str3)
 
   double d = mantissa * pow(10.0, exponent);
 
-  wxExpr *x = new wxExpr((float)d);
+  wxExpr *x = new wxExpr(d);
 
   return (char *)x;
 }
