@@ -31,7 +31,6 @@ Provides: wxwin
 Provides: wxMotif
 
 Requires:      %{wxbasename} = %{ver}
-BuildRequires: %{wxbasename}-devel = %{ver}
 
 %description
 wxWindows is a free C++ library for cross-platform GUI development.
@@ -90,12 +89,136 @@ rm -rf $RPM_BUILD_ROOT
 (cd obj-shared; make prefix=$RPM_BUILD_ROOT%{pref} install)
 
 # Remove headers that are part of wx-base-devel:
-(
-cd $RPM_BUILD_ROOT
-for f in  `rpm -ql %{wxbasename}-devel | sed -e 's,\(.*\),.\1,g'` ; do
-  if test -f $f ; then rm -f $f ; fi
+
+# --- wxBase headers list begins here ---
+cat <<EOF >wxbase-headers-list
+wx/afterstd.h
+wx/app.h
+wx/apptrait.h
+wx/arrimpl.cpp
+wx/arrstr.h
+wx/beforestd.h
+wx/buffer.h
+wx/build.h
+wx/chkconf.h
+wx/clntdata.h
+wx/cmdline.h
+wx/confbase.h
+wx/config.h
+wx/containr.h
+wx/datetime.h
+wx/datetime.inl
+wx/datstrm.h
+wx/dde.h
+wx/debug.h
+wx/defs.h
+wx/dir.h
+wx/dynarray.h
+wx/dynlib.h
+wx/dynload.h
+wx/encconv.h
+wx/event.h
+wx/features.h
+wx/ffile.h
+wx/file.h
+wx/fileconf.h
+wx/filefn.h
+wx/filename.h
+wx/filesys.h
+wx/fontenc.h
+wx/fontmap.h
+wx/fs_mem.h
+wx/fs_zip.h
+wx/hash.h
+wx/hashmap.h
+wx/hashset.h
+wx/iconloc.h
+wx/init.h
+wx/intl.h
+wx/iosfwrap.h
+wx/ioswrap.h
+wx/ipc.h
+wx/ipcbase.h
+wx/isql.h
+wx/isqlext.h
+wx/list.h
+wx/listimpl.cpp
+wx/log.h
+wx/longlong.h
+wx/math.h
+wx/memconf.h
+wx/memory.h
+wx/memtext.h
+wx/mimetype.h
+wx/module.h
+wx/msgout.h
+wx/msgout.h
+wx/mstream.h
+wx/object.h
+wx/platform.h
+wx/process.h
+wx/ptr_scpd.h
+wx/regex.h
+wx/scopeguard.h
+wx/snglinst.h
+wx/stopwatch.h
+wx/strconv.h
+wx/stream.h
+wx/string.h
+wx/sysopt.h
+wx/textbuf.h
+wx/textfile.h
+wx/thread.h
+wx/thrimpl.cpp
+wx/timer.h
+wx/tokenzr.h
+wx/txtstrm.h
+wx/types.h
+wx/utils.h
+wx/variant.h
+wx/vector.h
+wx/version.h
+wx/volume.h
+wx/wfstream.h
+wx/wx.h
+wx/wxchar.h
+wx/wxprec.h
+wx/xti.h
+wx/xtistrm.h
+wx/zipstrm.h
+wx/zstream.h
+wx/msw/apptrait.h
+wx/msw/apptbase.h
+wx/msw/chkconf.h
+wx/msw/crashrpt.h
+wx/msw/dde.h
+wx/msw/gccpriv.h
+wx/msw/mimetype.h
+wx/msw/winundef.h
+wx/msw/wrapcctl.h
+wx/msw/wrapwin.h
+wx/fs_inet.h
+wx/gsocket.h
+wx/protocol/file.h
+wx/protocol/ftp.h
+wx/protocol/http.h
+wx/protocol/protocol.h
+wx/sckaddr.h
+wx/sckipc.h
+wx/sckstrm.h
+wx/socket.h
+wx/url.h
+wx/msw/gsockmsw.h
+wx/xml/xml.h
+wx/xtixml.h
+wx/db.h
+wx/dbkeyg.h
+wx/dbtable.h
+EOF
+# --- wxBase headers list ends here ---
+for f in `cat wxbase-headers-list` ; do
+  rm -f $RPM_BUILD_ROOT%{_includedir}/$f
 done
-)
 
 # list of all core headers:
 find $RPM_BUILD_ROOT/usr/include/wx -type f | sed -e "s,$RPM_BUILD_ROOT,,g" >core-headers.files

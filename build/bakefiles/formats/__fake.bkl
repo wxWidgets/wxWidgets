@@ -9,6 +9,8 @@ makefiles, e.g. wx24dsp or rpmspec ones.
 
 <makefile>
 
+    <include file="win32.bkl"/>
+
     <define-rule name="__fake">
         <define-tag name="sources"/>
         <define-tag name="libname"/>

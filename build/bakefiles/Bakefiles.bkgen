@@ -74,6 +74,8 @@
     <add-flags formats="wx24dsp">
         -DUSE_GUI=1 -DWXUNIV=0 -o../../src/wxWindows.dsp
     </add-flags>
+    
+    <add-formats files="wx.bkl">rpmspec</add-formats>
 
 
     <!-- Makefile specific settings: -->
