@@ -293,7 +293,7 @@ STDMETHODIMP wxIDataObject::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 
     // for the bitmaps and metafiles we use the handles instead of global memory
     // to pass the data
-    wxDataFormat format = (wxDataFormatId)pformatetcIn->cfFormat;
+    wxDataFormat format = (wxDataFormat::NativeFormat)pformatetcIn->cfFormat;
 
     switch ( format )
     {
