@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  G:\DEV\WX2\WXWINDOWS\lib\wx.lib
+;From library:  ..\\..\\LIB\WX.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -728,13 +728,24 @@ EXPORTS
       DoDrawCheckMark__8wxDCBaseFiN31
       ;wxDCBase::DrawSpline(int,wxPoint*)
       DrawSpline__8wxDCBaseFiP7wxPoint
+      wx_spline_point_list
       __vft8wxDCBase8wxObject
+      ;wxDCBase::DoDrawSpline(wxList*)
+      DoDrawSpline__8wxDCBaseFP6wxList
       ;wxDCBase::DrawLines(const wxList*,int,int)
       DrawLines__8wxDCBaseFPC6wxListiT2
+      ;wx_quadratic_spline(double,double,double,double,double,double,double,double)
+      wx_quadratic_spline__FdN71
       ;wxDCBase::DrawPolygon(const wxList*,int,int,int)
       DrawPolygon__8wxDCBaseFPC6wxListiN22
+      ;wx_clear_stack()
+      wx_clear_stack__Fv
       ;wxDCBase::DrawSpline(int,int,int,int,int,int)
       DrawSpline__8wxDCBaseFiN51
+      ;wx_spline_push(double,double,double,double,double,double,double,double)
+      wx_spline_push__FdN71
+      ;wx_spline_pop(double*,double*,double*,double*,double*,double*,double*,double*)
+      wx_spline_pop__FPdN71
   ;From object file:  ..\common\dndcmn.cpp
   ;From object file:  ..\common\dlgcmn.cpp
     ;PUBDEFs (Symbols available from object file):
@@ -1639,7 +1650,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  G:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2874,10 +2885,12 @@ EXPORTS
       __as__19wxLanguageInfoArrayFRC19wxLanguageInfoArray
       ;wxLanguageInfoArray::DoCopy(const wxLanguageInfoArray&)
       DoCopy__19wxLanguageInfoArrayFRC19wxLanguageInfoArray
-      ;wxLocale::AddCatalogLookupPathPrefix(const wxString&)
-      AddCatalogLookupPathPrefix__8wxLocaleFRC8wxString
+      ;wxMsgCatalog::GetHash(const char*)
+      GetHash__12wxMsgCatalogFPCc
       ;wxLocale::IsLoaded(const char*) const
       IsLoaded__8wxLocaleCFPCc
+      ;wxLocale::AddCatalogLookupPathPrefix(const wxString&)
+      AddCatalogLookupPathPrefix__8wxLocaleFRC8wxString
   ;From object file:  ..\common\ipcbase.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxConnectionBase::sm_classwxConnectionBase
@@ -5184,7 +5197,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  G:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -9403,6 +9416,8 @@ EXPORTS
       sm_classwxWizardPage__12wxWizardPage
   ;From object file:  ..\html\helpctrl.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxHtmlHelpController::DisplayTextPopup(const wxString&,const wxPoint&)
+      DisplayTextPopup__20wxHtmlHelpControllerFRC8wxStringRC7wxPoint
       ;wxHtmlHelpController::GetFrameParameters(wxSize*,wxPoint*,unsigned long*)
       GetFrameParameters__20wxHtmlHelpControllerFP6wxSizeP7wxPointPUl
       ;wxHtmlHelpController::CreateHelpFrame(wxHtmlHelpData*)
@@ -10886,17 +10901,12 @@ EXPORTS
       sm_classwxDC__4wxDC
       ;wxDC::DoDrawRoundedRectangle(int,int,int,int,double)
       DoDrawRoundedRectangle__4wxDCFiN31d
-      wx_spline_point_list
-      ;wxSpline::wxSpline(wxList*)
-      __ct__8wxSplineFP6wxList
       ;wxDC::SetBrush(const wxBrush&)
       SetBrush__4wxDCFRC7wxBrush
       ;wxDC::DoDrawBitmap(const wxBitmap&,int,int,unsigned long)
       DoDrawBitmap__4wxDCFRC8wxBitmapiT2Ul
       ;wxDC::DoCrossHair(int,int)
       DoCrossHair__4wxDCFiT1
-      ;wx_draw_open_spline(wxDC*,wxSpline*)
-      wx_draw_open_spline__FP4wxDCP8wxSpline
       ;wxDC::SetUserScale(double,double)
       SetUserScale__4wxDCFdT1
       ;wxDC::SetMapMode(int)
@@ -10923,8 +10933,6 @@ EXPORTS
       DoDrawText__4wxDCFRC8wxStringiT2
       ;wxDC::DestroyClippingRegion()
       DestroyClippingRegion__4wxDCFv
-      ;wxSpline::DeletePoints()
-      DeletePoints__8wxSplineFv
       ;wxDC::CanDrawBitmap() const
       CanDrawBitmap__4wxDCCFv
       ;wxDC::DoGetTextExtent(const wxString&,int*,int*,int*,int*,wxFont*) const
@@ -10934,18 +10942,12 @@ EXPORTS
       DoBlit__4wxDCFiN31P4wxDCN31Ul
       ;wxDC::DoFloodFill(int,int,const wxColour&,int)
       DoFloodFill__4wxDCFiT1RC8wxColourT1
-      ;wx_quadratic_spline(double,double,double,double,double,double,double,double)
-      wx_quadratic_spline__FdN71
       ;wxDC::SetLogicalFunction(int)
       SetLogicalFunction__4wxDCFi
       ;wxDCBase::LogicalToDeviceXRel(int) const
       LogicalToDeviceXRel__8wxDCBaseCFi
       ;wxDC::wxDC()
       __ct__4wxDCFv
-      ;wx_clear_stack()
-      wx_clear_stack__Fv
-      ;wxSpline::~wxSpline()
-      __dt__8wxSplineFv
       ;wxDC::GetPPI() const
       GetPPI__4wxDCCFv
       ;wxDC::GetDepth() const
@@ -10960,11 +10962,8 @@ EXPORTS
       CanGetTextExtent__4wxDCCFv
       ;QueryTextBkColor(unsigned long)
       QueryTextBkColor__FUl
-      __vft8wxSpline8wxObject
       ;wxDC::SelectOldObjects(unsigned long)
       SelectOldObjects__4wxDCFUl
-      ;wxDC::DoDrawSpline(wxList*)
-      DoDrawSpline__4wxDCFP6wxList
       ;SetBkMode(unsigned long,int)
       SetBkMode__FUli
       ;wxDC::DoSetClippingRegion(int,int,int,int)
@@ -10995,10 +10994,6 @@ EXPORTS
       SetBackground__4wxDCFRC7wxBrush
       ;SetTextBkColor(unsigned long,int)
       SetTextBkColor__FUli
-      ;wx_spline_push(double,double,double,double,double,double,double,double)
-      wx_spline_push__FdN71
-      ;wx_spline_pop(double*,double*,double*,double*,double*,double*,double*,double*)
-      wx_spline_pop__FPdN71
       ;wxDC::SetLogicalScale(double,double)
       SetLogicalScale__4wxDCFdT1
       ;wxDC::SetDeviceOrigin(int,int)
