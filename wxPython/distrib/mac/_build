@@ -158,7 +158,12 @@ cd $curDir
 msg installing wxWindows
 msgdo mkdir -p -m 755 "$dstPath/$temp/$wxWindowsInst"
 msgdo cd "$buildDir"
+
+# install once to the package directory, and once to the
+# local machine so the wxPython build will get the right wxMac
 msgdo make install "prefix=`quotemeta \"$dstPath/$temp/$wxWindowsInst\"`"
+msgdo make install
+
 msgdo chown -R root:wheel "$dstPath/$temp/$pkgRoot/usr"
 cd $curDir
 
