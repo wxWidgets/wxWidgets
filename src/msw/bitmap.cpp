@@ -843,9 +843,42 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
     // finally also set the mask if we have one
     if ( image.HasMask() )
     {
-        SetMask(new wxMask(*this, wxColour(image.GetMaskRed(),
-                                           image.GetMaskGreen(),
-                                           image.GetMaskBlue())));
+        const size_t len  = 2*((w+15)/16);
+        BYTE *src  = image.GetData();
+        BYTE *data = new BYTE[h*len];
+        memset(data, 0, h*len);
+        BYTE r = image.GetMaskRed(),
+             g = image.GetMaskGreen(),
+             b = image.GetMaskBlue();
+        BYTE *dst = data;
+        for ( int y = 0; y < h; y++, dst += len )
+        {
+            BYTE *dstLine = dst;
+            BYTE mask = 0x80;
+            for ( int x = 0; x < w; x++, src += 3 )
+            {
+                if (src[0] != r || src[1] != g || src[2] != b)
+                    *dstLine |= mask;
+
+                if ( (mask >>= 1) == 0 )
+                {
+                    dstLine++;
+                    mask = 0x80;
+                }
+            }
+        }
+
+        hbitmap = ::CreateBitmap(w, h, 1, 1, data);
+        if ( !hbitmap )
+        {
+            wxLogLastError(_T("CreateBitmap(mask)"));
+        }
+        else
+        {
+            SetMask(new wxMask((WXHBITMAP)hbitmap));
+        }
+
+        delete data;
     }
 
     return true;
