@@ -470,12 +470,12 @@ void wxHtmlWindow::OnKeyDown(wxKeyEvent& event)
 
     switch (event.KeyCode()) {
         case WXK_PAGEUP :
-    case WXK_PRIOR :
-                Scroll(-1, sty - cliy);
+        case WXK_PRIOR :
+                Scroll(-1, sty - (2 * cliy / 3));
                 break;
         case WXK_PAGEDOWN :
-    case WXK_NEXT :
-                Scroll(-1, sty + cliy);
+        case WXK_NEXT :
+                Scroll(-1, sty + (2 * cliy / 3));
                 break;
         case WXK_HOME :
                 Scroll(-1, 0);
