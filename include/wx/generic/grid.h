@@ -449,6 +449,8 @@ private:
 class WXDLLEXPORT wxGridCellFloatEditor : public wxGridCellTextEditor
 {
 public:
+    wxGridCellFloatEditor(int width = -1, int precision = -1);
+
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
                         wxEvtHandler* evtHandler);
@@ -462,12 +464,16 @@ public:
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellFloatEditor; }
 
+    // parameters string format is "width,precision"
+    virtual void SetParameters(const wxString& params);
+
 protected:
     // string representation of m_valueOld
-    wxString GetString() const
-        { return wxString::Format(_T("%g"), m_valueOld); }
+    wxString GetString() const;
 
 private:
+    int m_width,
+        m_precision;
     double m_valueOld;
 };
 

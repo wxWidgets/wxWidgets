@@ -813,6 +813,12 @@ void wxGridCellNumberEditor::SetParameters(const wxString& params)
 // wxGridCellFloatEditor
 // ----------------------------------------------------------------------------
 
+wxGridCellFloatEditor::wxGridCellFloatEditor(int width, int precision)
+{
+    m_width = width;
+    m_precision = precision;
+}
+
 void wxGridCellFloatEditor::Create(wxWindow* parent,
                                    wxWindowID id,
                                    wxEvtHandler* evtHandler)
@@ -882,6 +888,55 @@ void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
     }
 
     event.Skip();
+}
+
+void wxGridCellFloatEditor::SetParameters(const wxString& params)
+{
+    if ( !params )
+    {
+        // reset to default
+        m_width =
+        m_precision = -1;
+    }
+    else
+    {
+        long tmp;
+        if ( params.BeforeFirst(_T(',')).ToLong(&tmp) )
+        {
+            m_width = (int)tmp;
+
+            if ( params.AfterFirst(_T(',')).ToLong(&tmp) )
+            {
+                m_precision = (int)tmp;
+
+                // skip the error message below
+                return;
+            }
+        }
+
+        wxLogDebug(_T("Invalid wxGridCellFloatEditor parameter string '%s' ignored"), params.c_str());
+    }
+}
+
+wxString wxGridCellFloatEditor::GetString() const
+{
+    wxString fmt;
+    if ( m_width == -1 )
+    {
+        // default width/precision
+        fmt = _T("%g");
+    }
+    else if ( m_precision == -1 )
+    {
+        // default precision
+        fmt.Printf(_T("%%%d.g"), m_width);
+    }
+    else
+    {
+        fmt.Printf(_T("%%%d.%dg"), m_width, m_precision);
+    }
+
+    return wxString::Format(fmt, m_valueOld);
 }
 
 // ----------------------------------------------------------------------------
