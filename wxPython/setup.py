@@ -586,9 +586,9 @@ if BUILD_GIZMOS:
                             USE_SWIG, swig_force, swig_args, swig_deps)
 
     ext = Extension('_gizmos',
-                    [ '%s/treelistctrl.cpp' % location ] + swig_sources,
+                    [ '%s/treelistctrl.cpp' % opj(location, 'wxCode/src') ] + swig_sources,
 
-                    include_dirs =  includes + [ location ] + CONTRIBS_INC,
+                    include_dirs =  includes + [ location, opj(location, 'wxCode/include') ] + CONTRIBS_INC,
                     define_macros = defines,
 
                     library_dirs = libdirs,

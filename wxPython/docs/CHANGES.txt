@@ -1,7 +1,7 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.5.1.6
+2.5.2.0
 -------
 
 wx.ADJUST_MINSIZE is now the default behaviour for window items in
@@ -63,6 +63,11 @@ The LC_NUMERIC locale is now reset back to "C" (compatibility) when
 running on wxGTK to work around the fact that GTK requires the locale
 to be set to the system settings but Python depends on LC_NUMERIC
 remaining compatible with "C".
+
+Switched gizmos.TreeListCtrl to the newer version of the code from the
+wxCode project.
+
+
 
 
 

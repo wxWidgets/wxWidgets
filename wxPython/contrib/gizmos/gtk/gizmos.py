@@ -353,18 +353,27 @@ TL_ALIGN_LEFT = _gizmos.TL_ALIGN_LEFT
 TL_ALIGN_RIGHT = _gizmos.TL_ALIGN_RIGHT
 TL_ALIGN_CENTER = _gizmos.TL_ALIGN_CENTER
 TREE_HITTEST_ONITEMCOLUMN = _gizmos.TREE_HITTEST_ONITEMCOLUMN
+TL_SEARCH_VISIBLE = _gizmos.TL_SEARCH_VISIBLE
+TL_SEARCH_LEVEL = _gizmos.TL_SEARCH_LEVEL
+TL_SEARCH_FULL = _gizmos.TL_SEARCH_FULL
+TL_SEARCH_PARTIAL = _gizmos.TL_SEARCH_PARTIAL
+TL_SEARCH_NOCASE = _gizmos.TL_SEARCH_NOCASE
 class TreeListColumnInfo(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTreeListColumnInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
         __init__(self, String text=EmptyString, int image=-1, size_t width=100, 
-            int alignment=TL_ALIGN_LEFT) -> TreeListColumnInfo
+            bool shown=True, int alignment=TL_ALIGN_LEFT) -> TreeListColumnInfo
         """
         newobj = _gizmos.new_TreeListColumnInfo(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+    def GetShown(*args, **kwargs):
+        """GetShown(self) -> bool"""
+        return _gizmos.TreeListColumnInfo_GetShown(*args, **kwargs)
+
     def GetAlignment(*args, **kwargs):
         """GetAlignment(self) -> int"""
         return _gizmos.TreeListColumnInfo_GetAlignment(*args, **kwargs)
@@ -384,6 +393,10 @@ class TreeListColumnInfo(_core.Object):
     def GetWidth(*args, **kwargs):
         """GetWidth(self) -> size_t"""
         return _gizmos.TreeListColumnInfo_GetWidth(*args, **kwargs)
+
+    def SetShown(*args, **kwargs):
+        """SetShown(self, bool shown)"""
+        return _gizmos.TreeListColumnInfo_SetShown(*args, **kwargs)
 
     def SetAlignment(*args, **kwargs):
         """SetAlignment(self, int alignment)"""
@@ -455,14 +468,6 @@ class TreeListCtrl(_core.Control):
     def SetIndent(*args, **kwargs):
         """SetIndent(self, unsigned int indent)"""
         return _gizmos.TreeListCtrl_SetIndent(*args, **kwargs)
-
-    def GetSpacing(*args, **kwargs):
-        """GetSpacing(self) -> unsigned int"""
-        return _gizmos.TreeListCtrl_GetSpacing(*args, **kwargs)
-
-    def SetSpacing(*args, **kwargs):
-        """SetSpacing(self, unsigned int spacing)"""
-        return _gizmos.TreeListCtrl_SetSpacing(*args, **kwargs)
 
     def GetLineSpacing(*args, **kwargs):
         """GetLineSpacing(self) -> unsigned int"""
@@ -580,6 +585,14 @@ class TreeListCtrl(_core.Control):
         """GetColumnImage(self, size_t column) -> int"""
         return _gizmos.TreeListCtrl_GetColumnImage(*args, **kwargs)
 
+    def ShowColumn(*args, **kwargs):
+        """ShowColumn(self, size_t column, bool shown)"""
+        return _gizmos.TreeListCtrl_ShowColumn(*args, **kwargs)
+
+    def IsColumnShown(*args, **kwargs):
+        """IsColumnShown(self, size_t column) -> bool"""
+        return _gizmos.TreeListCtrl_IsColumnShown(*args, **kwargs)
+
     def GetItemText(*args, **kwargs):
         """GetItemText(self, TreeItemId item, int column=-1) -> String"""
         return _gizmos.TreeListCtrl_GetItemText(*args, **kwargs)
@@ -623,11 +636,11 @@ class TreeListCtrl(_core.Control):
         return _gizmos.TreeListCtrl_SetItemBold(*args, **kwargs)
 
     def SetItemTextColour(*args, **kwargs):
-        """SetItemTextColour(self, TreeItemId item, Colour col)"""
+        """SetItemTextColour(self, TreeItemId item, Colour colour)"""
         return _gizmos.TreeListCtrl_SetItemTextColour(*args, **kwargs)
 
     def SetItemBackgroundColour(*args, **kwargs):
-        """SetItemBackgroundColour(self, TreeItemId item, Colour col)"""
+        """SetItemBackgroundColour(self, TreeItemId item, Colour colour)"""
         return _gizmos.TreeListCtrl_SetItemBackgroundColour(*args, **kwargs)
 
     def SetItemFont(*args, **kwargs):
@@ -695,7 +708,7 @@ class TreeListCtrl(_core.Control):
         return _gizmos.TreeListCtrl_GetFirstChild(*args, **kwargs)
 
     def GetNextChild(*args, **kwargs):
-        """GetNextChild(self, TreeItemId item, long cookie) -> PyObject"""
+        """GetNextChild(self, TreeItemId item, void cookie) -> PyObject"""
         return _gizmos.TreeListCtrl_GetNextChild(*args, **kwargs)
 
     def GetLastChild(*args, **kwargs):
@@ -802,6 +815,10 @@ class TreeListCtrl(_core.Control):
         """SelectItem(self, TreeItemId item, bool unselect_others=True, bool extended_select=False)"""
         return _gizmos.TreeListCtrl_SelectItem(*args, **kwargs)
 
+    def SelectAll(*args, **kwargs):
+        """SelectAll(self, bool extended_select=False)"""
+        return _gizmos.TreeListCtrl_SelectAll(*args, **kwargs)
+
     def EnsureVisible(*args, **kwargs):
         """EnsureVisible(self, TreeItemId item)"""
         return _gizmos.TreeListCtrl_EnsureVisible(*args, **kwargs)
@@ -830,13 +847,9 @@ class TreeListCtrl(_core.Control):
         """SortChildren(self, TreeItemId item)"""
         return _gizmos.TreeListCtrl_SortChildren(*args, **kwargs)
 
-    def GetItemSelectedImage(*args, **kwargs):
-        """GetItemSelectedImage(self, TreeItemId item) -> int"""
-        return _gizmos.TreeListCtrl_GetItemSelectedImage(*args, **kwargs)
-
-    def SetItemSelectedImage(*args, **kwargs):
-        """SetItemSelectedImage(self, TreeItemId item, int image)"""
-        return _gizmos.TreeListCtrl_SetItemSelectedImage(*args, **kwargs)
+    def FindItem(*args, **kwargs):
+        """FindItem(self, TreeItemId item, String str, int flags=0) -> TreeItemId"""
+        return _gizmos.TreeListCtrl_FindItem(*args, **kwargs)
 
     def GetHeaderWindow(*args, **kwargs):
         """GetHeaderWindow(self) -> Window"""

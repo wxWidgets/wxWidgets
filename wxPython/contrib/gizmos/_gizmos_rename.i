@@ -25,6 +25,11 @@
 %rename(TL_ALIGN_RIGHT)                     wxTL_ALIGN_RIGHT;
 %rename(TL_ALIGN_CENTER)                    wxTL_ALIGN_CENTER;
 %rename(TREE_HITTEST_ONITEMCOLUMN)          wxTREE_HITTEST_ONITEMCOLUMN;
+%rename(TL_SEARCH_VISIBLE)                  wxTL_SEARCH_VISIBLE;
+%rename(TL_SEARCH_LEVEL)                    wxTL_SEARCH_LEVEL;
+%rename(TL_SEARCH_FULL)                     wxTL_SEARCH_FULL;
+%rename(TL_SEARCH_PARTIAL)                  wxTL_SEARCH_PARTIAL;
+%rename(TL_SEARCH_NOCASE)                   wxTL_SEARCH_NOCASE;
 %rename(TreeListColumnInfo)                 wxTreeListColumnInfo;
 
 #endif
