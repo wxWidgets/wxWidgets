@@ -80,8 +80,8 @@
 
 #if wxUSE_THREADS
 /* To put pending event handlers */
-extern wxList wxPendingEvents;
-extern wxCriticalSection wxPendingEventsLocker;
+extern wxList *wxPendingEvents;
+extern wxCriticalSection *wxPendingEventsLocker;
 #endif
 
 /*
@@ -342,9 +342,9 @@ bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
 
     m_pendingEvents->Append(event_main);
 
-    wxPendingEventsLocker.Enter();
-    wxPendingEvents.Append(this);
-    wxPendingEventsLocker.Leave();
+    wxPendingEventsLocker->Enter();
+    wxPendingEvents->Append(this);
+    wxPendingEventsLocker->Leave();
 
     return TRUE;
 }

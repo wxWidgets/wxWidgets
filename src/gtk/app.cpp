@@ -47,8 +47,8 @@ wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 extern wxList wxPendingDelete;
 #if wxUSE_THREADS
-extern wxList wxPendingEvents;
-extern wxCriticalSection wxPendingEventsLocker;
+extern wxList *wxPendingEvents;
+extern wxCriticalSection *wxPendingEventsLocker;
 #endif
 extern wxResourceCache *wxTheResourceCache;
 
@@ -380,8 +380,8 @@ void wxApp::Dispatch()
 #if wxUSE_THREADS
 void wxApp::ProcessPendingEvents()
 {
-    wxNode *node = wxPendingEvents.First();
-    wxCriticalSectionLocker locker(wxPendingEventsLocker);
+    wxNode *node = wxPendingEvents->First();
+    wxCriticalSectionLocker locker(*wxPendingEventsLocker);
 
     while (node)
     {
@@ -391,7 +391,7 @@ void wxApp::ProcessPendingEvents()
 
         delete node;
 
-        node = wxPendingEvents.First();
+        node = wxPendingEvents->First();
     }
 }
 #endif
@@ -434,6 +434,13 @@ bool wxApp::Initialize()
     wxClassInfo::InitializeClasses();
 
     wxSystemSettings::Init();
+
+    // GL: I'm annoyed ... I don't know where to put this and I don't want to
+    // create a module for that as it's part of the core.
+#if wxUSE_THREADS
+    wxPendingEvents = new wxList();
+    wxPendingEventsLocker = new wxCriticalSection();
+#endif
 
 /*
     wxTheFontNameDirectory =  new wxFontNameDirectory;
@@ -494,6 +501,13 @@ void wxApp::CleanUp()
 
     delete wxTheApp;
     wxTheApp = (wxApp*) NULL;
+
+    // GL: I'm annoyed ... I don't know where to put this and I don't want to
+    // create a module for that as it's part of the core.
+#if wxUSE_THREADS
+    delete wxPendingEvents;
+    delete wxPendingEventsLocker;
+#endif
 
     wxSystemSettings::Done();
 

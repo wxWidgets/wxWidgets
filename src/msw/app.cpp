@@ -93,8 +93,8 @@ extern char *wxOsVersion;
 extern wxList *wxWinHandleList;
 extern wxList WXDLLEXPORT wxPendingDelete;
 #if wxUSE_THREADS
-extern wxList wxPendingEvents;
-extern wxCriticalSection wxPendingEventsLocker;
+extern wxList *wxPendingEvents;
+extern wxCriticalSection *wxPendingEventsLocker;
 #endif
 extern void wxSetKeyboardHook(bool doIt);
 extern wxCursor *g_globalCursor;
@@ -167,6 +167,12 @@ bool wxApp::Initialize()
 
 #if wxUSE_RESOURCES
     wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
+#endif
+
+    // I'm annoyed ... I don't know where to put this and I don't want to create    // a module for that as it's part of the core.
+#if wxUSE_THREADS
+    wxPendingEvents = new wxList();
+    wxPendingEventsLocker = new wxCriticalSection();
 #endif
 
     wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
@@ -551,6 +557,13 @@ void wxApp::CleanUp()
     if (wxWinHandleList)
         delete wxWinHandleList ;
 
+    // GL: I'm annoyed ... I don't know where to put this and I don't want to 
+    // create a module for that as it's part of the core.
+#if wxUSE_THREADS
+    delete wxPendingEvents;
+    delete wxPendingEventsLocker;
+#endif
+
     wxClassInfo::CleanUpClasses();
 
     delete wxTheApp;
@@ -922,8 +935,8 @@ bool wxApp::ProcessIdle()
 #if wxUSE_THREADS
 void wxApp::ProcessPendingEvents()
 {
-    wxNode *node = wxPendingEvents.First();
-    wxCriticalSectionLocker locker(wxPendingEventsLocker);
+    wxNode *node = wxPendingEvents->First();
+    wxCriticalSectionLocker locker(*wxPendingEventsLocker);
 
     while (node)
     {
@@ -932,7 +945,7 @@ void wxApp::ProcessPendingEvents()
         handler->ProcessPendingEvents();
 
         delete node;
-        node = wxPendingEvents.First();
+        node = wxPendingEvents->First();
     }
 }
 #endif

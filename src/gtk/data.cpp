@@ -40,8 +40,8 @@ wxList wxPendingDelete;
 
 #if wxUSE_THREADS
 /* List of events pending processing */
-wxList wxPendingEvents;
-wxCriticalSection wxPendingEventsLocker;
+wxList *wxPendingEvents = NULL;
+wxCriticalSection *wxPendingEventsLocker = NULL;
 #endif
 
 /* Current cursor, in order to hang on to

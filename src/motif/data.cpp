@@ -29,8 +29,8 @@ wxList wxPendingDelete;
 
 #if wxUSE_THREADS
 // List of events pending propagation
-wxList wxPendingEvents;
-wxCriticalSection wxPendingEventsLocker;
+wxList *wxPendingEvents = NULL;
+wxCriticalSection *wxPendingEventsLocker = NULL;
 #endif
 
 int wxPageNumber;
