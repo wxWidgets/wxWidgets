@@ -1006,11 +1006,10 @@ lib_flags_for()
                 # will let the more heinous bugs in configure shake out.
                 # We should maybe filter *.a here too, but not unless
                 # we have to.
-                if echo "$f" | grep ^-l > /dev/null 2>&1 ; then
-                    _all_libs="$(remove_field $f $_all_libs) $f"
-                else
-                    _all_libs="$_all_libs $f"
-                fi
+                case "$f" in
+                  -l*)  _all_libs="$(remove_field $f $_all_libs) $f"    ;;
+                    *)  _all_libs="$_all_libs $f"                       ;;
+                esac
 
             done
         else
