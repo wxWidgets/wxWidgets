@@ -492,6 +492,7 @@ FALSE = wxc.FALSE
 false = wxc.false
 TRUE = wxc.TRUE
 true = wxc.true
+wxVERSION_STRING = wxc.wxVERSION_STRING
 wxEVT_NULL = wxc.wxEVT_NULL
 wxEVT_FIRST = wxc.wxEVT_FIRST
 wxEVT_COMMAND_BUTTON_CLICKED = wxc.wxEVT_COMMAND_BUTTON_CLICKED
@@ -1182,6 +1183,15 @@ wxPyDefaultSize.Set(-1,-1)
 wxDefaultPosition = wxPyDefaultPosition
 wxDefaultSize     = wxPyDefaultSize
 
+
+# This is to cover up a bug in SWIG.  We are redefining
+# the shadow class that is generated for wxAcceleratorTable
+# because SWIG incorrectly uses "arg0.this"
+class wxAcceleratorTable(wxAcceleratorTablePtr):
+    def __init__(self,arg0) :
+        self.this = miscc.new_wxAcceleratorTable(arg0)
+        self.thisown = 1
+
 #----------------------------------------------------------------------
 
 ## class wxPyStdOutWindow(wxFrame):
@@ -1249,7 +1259,20 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.5  1999/02/01 00:11:12  RD
+# Revision 1.6  1999/02/20 09:11:32  RD
+# Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+# window handle.  If you can get the window handle into the python code,
+# it should just work...  More news on this later.
+#
+# Added wxImageList, wxToolTip.
+#
+# Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+# wxRegConfig class.
+#
+# As usual, some bug fixes, tweaks, etc.
+#
+# Revision 1.10  1999/02/01 00:10:39  RD
+#
 # Added the missing EVT_LIST_ITEM_SELECTED and friends.
 #
 # Revision 1.9  1999/01/30 07:30:09  RD
