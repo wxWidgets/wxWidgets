@@ -509,3 +509,11 @@ Checking in src/mac/utilsexc.cpp;
 new revision: 1.11; previous revision: 1.10
 done
 
+44. Fix for deleting entries at root level in wxFileConfig
+
+Checking in src/common/fileconf.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/fileconf.cpp,v  <--  fileconf.cpp
+new revision: 1.97; previous revision: 1.96
+Checking in docs/changes.txt;
+/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+new revision: 1.261; previous revision: 1.260
