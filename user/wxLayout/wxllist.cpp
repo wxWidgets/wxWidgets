@@ -601,7 +601,7 @@ wxLayoutLine::RecalculatePositions(int recurse, wxLayoutList *llist)
    //FIXME: is this really needed? We run Layout() anyway.
    // Recursing here, drives computation time up exponentially, as
    // each line will cause all following lines to be recalculated.
-   return;
+   // Yes, or linenumbers go wrong.
    
    wxASSERT(recurse >= 0);
    wxPoint pos = m_Position;
