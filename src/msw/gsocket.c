@@ -6,7 +6,7 @@
  * -------------------------------------------------------------------------
  */
 
-#ifdef __WXMSW__
+#ifndef __GSOCKET_STANDALONE__
 
 #include "wx/setup.h"
 #include "wx/msw/gsockmsw.h"
@@ -25,10 +25,10 @@
  */
 #define INSTANCE hInst    
 
-#endif /* __WXMSW__ */
+#endif /* __GSOCKET_STANDALONE__ */
 
 
-#if !defined(__WXMSW__) || (defined(__WXMSW__) && wxUSE_SOCKETS)
+#if defined(__GSOCKET_STANDALONE__) || defined(wxUSE_SOCKETS)
 
 #include <assert.h>
 #include <string.h>
@@ -1376,7 +1376,8 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
 }
 
 
-#endif  /* !defined(__WXMSW__) || (defined(__WXMSW__) && wxUSE_SOCKETS) */
+#endif  /* defined(__GSOCKET_STANDALONE__) || defined(wxUSE_SOCKETS) */
+
 
 
 

@@ -262,13 +262,13 @@ GAddress *GSocket_GetPeer(GSocket *socket)
 
 /* Server specific parts */
 
-/*
-  GSocket_SetServer() setup the socket as a server. It uses the "Local" field
-  of GSocket. "Local" must be set by GSocket_SetLocal() before
-  GSocket_SetServer() is called. GSOCK_INVSOCK if socket has been initialized.
-  In case, you haven't yet defined the local address, it returns GSOCK_INVADDR.
-  In the other cases it returns GSOCK_IOERR.
-*/
+/* GSocket_SetServer:
+ *  Sets up the socket as a server. It uses the "Local" field of GSocket.
+ *  "Local" must be set by GSocket_SetLocal() before GSocket_SetServer()
+ *  is called. Possible error codes are: GSOCK_INVSOCK if socket has not
+ *  been initialized, GSOCK_INVADDR if the local address has not been
+ *  defined and GSOCK_IOERR for other internal errors.
+ */
 GSocketError GSocket_SetServer(GSocket *sck)
 {
   int type;
@@ -313,15 +313,16 @@ GSocketError GSocket_SetServer(GSocket *sck)
     return GSOCK_IOERR;
   }
 
+  _GSocket_Configure_Callbacks(sck);
   GSocket_SetNonBlocking(sck, sck->m_non_blocking);
   GSocket_SetTimeout(sck, sck->m_timeout);
 
   return GSOCK_NOERROR;
 }
 
-/*
-  GSocket_WaitConnection() waits for an incoming client connection.
-*/
+/* GSocket_WaitConnection:
+ *  Waits for an incoming client connection.
+ */
 GSocket *GSocket_WaitConnection(GSocket *socket)
 {
   GSocket *connection;
@@ -370,6 +371,10 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
   connection->m_server   = FALSE;
   connection->m_oriented = TRUE;
 
+  _GSocket_Configure_Callbacks(connection);
+  GSocket_SetNonBlocking(connection, connection->m_non_blocking);
+  GSocket_SetTimeout(connection, connection->m_timeout);
+
   return connection;
 }
 
@@ -409,6 +414,7 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
     return GSOCK_IOERR;
   }
 
+  _GSocket_Configure_Callbacks(sck);
   GSocket_SetNonBlocking(sck, sck->m_non_blocking);
   GSocket_SetTimeout(sck, sck->m_timeout);
 
@@ -417,11 +423,15 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
 
 /* Client specific parts */
 
-/*
-  GSocket_Connect() establishes a client connection to a server using the "Peer"
-  field of GSocket. "Peer" must be set by GSocket_SetPeer() before
-  GSocket_Connect() is called. In the other case, it returns GSOCK_INVADDR.
-*/
+/* GSocket_Connect:
+ *  Establishes a client connection to a server using the "Peer"
+ *  field of GSocket. "Peer" must be set by GSocket_SetPeer() before
+ *  GSocket_Connect() is called. Possible error codes are GSOCK_INVSOCK,
+ *  GSOCK_INVADDR, GSOCK_TIMEDOUT, GSOCK_WOULDBLOCK and GSOCK_IOERR.
+ *  If a socket is nonblocking and Connect() returns GSOCK_WOULDBLOCK,
+ *  the connection request can be completed later. Use GSocket_Select()
+ *  to check or wait for a GSOCK_CONNECTION event.
+ */
 GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 {
   int type, err;
@@ -455,6 +465,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     return GSOCK_IOERR;
   }
 
+  _GSocket_Configure_Callbacks(sck);
   GSocket_SetNonBlocking(sck, sck->m_non_blocking);
   GSocket_SetTimeout(sck, sck->m_timeout);
 
@@ -593,10 +604,10 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 
 /* Flags */
 
-/*
-  GSocket_SetNonBlocking() puts the socket in non-blocking mode. This is useful
-  if we don't want to wait.
-*/
+/* GSocket_SetNonBlocking:
+ *  Sets the socket to non-blocking mode. This is useful if
+ *  we don't want to wait.
+ */
 void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
 {
   assert(socket != NULL);
@@ -607,10 +618,10 @@ void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
     ioctl(socket->m_fd, FIONBIO, &non_block);
 }
 
-/*
- * GSocket_SetTimeout()
+/* GSocket_SetTimeout:
+ *  Sets the timeout for blocking calls. Time is
+ *  expressed in milliseconds.
  */
-
 void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
 {
   assert(socket != NULL);
@@ -618,10 +629,9 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
   socket->m_timeout = millisec;
 }
 
-/*
-  GSocket_GetError() returns the last error occured on the socket stream.
-*/
-
+/* GSocket_GetError:
+ *  Returns the last error occured for this socket.
+ */
 GSocketError GSocket_GetError(GSocket *socket)
 {
   assert(socket != NULL);
@@ -631,25 +641,30 @@ GSocketError GSocket_GetError(GSocket *socket)
 
 /* Callbacks */
 
-/* 
-   Only one callback is possible for each event (INPUT, OUTPUT, CONNECTION)
-   INPUT: The function is called when there is at least a byte in the 
-          input buffer
-   OUTPUT: The function is called when the system is sure the next write call
-           will not block
-   CONNECTION: Two cases is possible:
-             Client socket -> the connection is established
-	     Server socket -> a client request a connection
-   LOST: the connection is lost
+/* Only one callback is possible for each event (INPUT, OUTPUT, CONNECTION
+ * and LOST). The callbacks are called in the following situations:
+ *
+ * INPUT: There is at least one byte in the input buffer
+ * OUTPUT: The system is sure that the next write call will not block
+ * CONNECTION: Two cases are possible:
+ *           Client socket -> the connection is established
+ *           Server socket -> a client requests a connection
+ * LOST: The connection is lost
+ *
+ * An event is generated only once and its state is reseted when the
+ * relative IO call is requested.
+ * For example: INPUT -> GSocket_Read()
+ *              CONNECTION -> GSocket_Accept()
+ */
 
-   SetCallback accepts a combination of these flags so a same callback can
-   receive different events.
-
-   An event is generated only once and its state is reseted when the relative
-   IO call is requested.
-   For example: INPUT -> GSocket_Read()
-                CONNECTION -> GSocket_Accept()
-*/
+/* GSocket_SetCallback:
+ *  Enables the callbacks specified by 'flags'. Note that 'flags'
+ *  may be a combination of flags OR'ed toghether, so the same
+ *  callback function can be made to accept different events.
+ *  The callback function must have the following prototype:
+ *
+ *  void function(GSocket *socket, GSocketEvent event, char *cdata)
+ */
 void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
 			 GSocketCallback callback, char *cdata)
 {
@@ -663,35 +678,33 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
     if ((flags & (1 << count)) != 0) {
       socket->m_cbacks[count] = callback;
       socket->m_data[count] = cdata;
-      _GSocket_Enable(socket, count);
     }
   }
+  _GSocket_Configure_Callbacks(socket);
 }
 
-/*
-  UnsetCallback will disables all callbacks specified by "flags".
-  NOTE: "flags" may be a combination of flags
-*/
+/* GSocket_UnsetCallback:
+ *  Disables all callbacks specified by 'flags', which may be a
+ *  combination of flags OR'ed toghether.
+ */
 void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
 {
-  int count = 0;
+  int count;
 
   assert(socket != NULL);
 
   for (count=0;count<GSOCK_MAX_EVENT;count++) {
     if ((flags & (1 << count)) != 0) {
-      _GSocket_Disable(socket, count);
       socket->m_cbacks[count] = NULL;
     }
   }
+  _GSocket_Configure_Callbacks(socket);
 }
 
-#define CALL_CALLBACK(socket, event) \
-if (socket->m_iocalls[event] && \
-    socket->m_cbacks[event]) {\
-  _GSocket_Disable(socket, event); \
-  socket->m_cbacks[event](socket, event, \
-                   socket->m_data[event]); \
+#define CALL_CALLBACK(socket, event)                                \
+if (socket->m_iocalls[event] && socket->m_cbacks[event]) {          \
+  _GSocket_Disable(socket, event);                                  \
+  socket->m_cbacks[event](socket, event, socket->m_data[event]);    \
 }
 
 void _GSocket_Enable(GSocket *socket, GSocketEvent event)
@@ -706,6 +719,18 @@ void _GSocket_Disable(GSocket *socket, GSocketEvent event)
   socket->m_iocalls[event] = FALSE;
   if (socket->m_cbacks[event])
     _GSocket_Uninstall_Callback(socket, event);
+}
+
+void _GSocket_Configure_Callbacks(GSocket *socket)
+{
+  int count;
+  for (count=0;count<GSOCK_MAX_EVENT;count++) {
+    if ((socket->m_cbacks[count]) != NULL) {
+      GSocket_Enable(socket, count);
+    } else {
+      GSocket_Disable(socket, count);
+    }
+  }
 }
 
 int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
