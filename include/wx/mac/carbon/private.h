@@ -39,6 +39,10 @@
     #define MAC_OS_X_VERSION_10_3 1030
 #endif
 
+#ifndef MAC_OS_X_VERSION_10_4
+    #define MAC_OS_X_VERSION_10_4 1040
+#endif
+
 #ifdef __WXMAC_CARBON__
 #include "wx/mac/corefoundation/cfstring.h"
 #endif
@@ -145,6 +149,26 @@ private:
     ThemeDrawingState m_themeDrawingState ;
 } ;
 
+#if wxMAC_USE_CORE_GRAPHICS
+class WXDLLEXPORT wxMacCGContextStateSaver 
+{
+    DECLARE_NO_COPY_CLASS(wxMacCGContextStateSaver)
+        
+public:
+    wxMacCGContextStateSaver( CGContextRef cg ) 
+    {
+        m_cg = cg ;
+        CGContextSaveGState( cg ) ;
+    }
+    ~wxMacCGContextStateSaver() 
+    {
+        CGContextRestoreGState( m_cg ) ;
+    }
+private:
+    CGContextRef m_cg ;
+} ;
+
+#endif
 /*
 class wxMacDrawingHelper
 {
@@ -665,8 +689,6 @@ private :
     int            m_maskBytesPerRow ;
 };
 
-#define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
-
 class WXDLLEXPORT wxIconRefData : public wxGDIRefData
 {
 public:
@@ -676,9 +698,18 @@ public:
 
     void Init() ;
     virtual void Free();
+
+    void SetWidth( int width ) { m_width = width ; }
+    void SetHeight( int height ) { m_height = height ; }
+
+    int GetWidth() const { return m_width ; }
+    int GetHeight() const { return m_height ; }
+
     WXHICON GetHICON() const { return (WXHICON) m_iconRef ; }
 private :
     IconRef m_iconRef ;
+    int m_width ;
+    int m_height ;
 };
 
 #endif // wxUSE_GUI

@@ -309,14 +309,14 @@ protected:
     void                    MacInstallBrush() const ;
 #endif
 
-    wxPoint                    m_macLocalOrigin ;
+    wxPoint                         m_macLocalOrigin ;
     mutable void*                   m_macATSUIStyle ;
 
+    WXHDC                           m_macPort ;
 #if wxMAC_USE_CORE_GRAPHICS
     // CoreGraphics
     wxGraphicContext                * m_graphicContext ;
 #else
-    WXHDC                           m_macPort ;
     mutable bool    m_macFontInstalled ;
     mutable bool    m_macPenInstalled ;
     mutable bool    m_macBrushInstalled ;
