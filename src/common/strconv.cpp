@@ -403,7 +403,6 @@ static const unsigned char utf7unb64[] =
 
 size_t wxMBConvUTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
-
     size_t len = 0;
 
     while (*psz && ((!buf) || (len < n)))
@@ -493,8 +492,7 @@ static const unsigned char utf7encode[128] =
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 3
 };
 
-size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t 
-*psz, size_t n) const
+size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
 
 
@@ -1477,10 +1475,20 @@ public:
         // and break the library itself, e.g. wxTextInputStream::NextChar()
         // wouldn't work if reading an incomplete MB char didn't result in an
         // error
+        //
+        // note however that using MB_ERR_INVALID_CHARS with CP_UTF7 results in
+        // an error (tested under Windows Server 2003) and apparently it is
+        // done on purpose, i.e. the function accepts any input in this case
+        // and although I'd prefer to return error on ill-formed output, our
+        // own wxMBConvUTF7 doesn't detect errors (e.g. lone "+" which is
+        // explicitly ill-formed according to RFC 2152) neither so we don't
+        // even have any fallback here...
+        int flags = m_CodePage == CP_UTF7 ? 0 : MB_ERR_INVALID_CHARS;
+
         const size_t len = ::MultiByteToWideChar
                              (
                                 m_CodePage,     // code page
-                                MB_ERR_INVALID_CHARS, // flags: fall on error
+                                flags,          // flags: fall on error
                                 psz,            // input string
                                 -1,             // its length (NUL-terminated)
                                 buf,            // output string
