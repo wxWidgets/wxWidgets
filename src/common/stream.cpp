@@ -373,11 +373,7 @@ off_t wxStreamBuffer::Seek(off_t pos, wxSeekMode mode)
     if ( (diff > last_access) || (diff < 0) ) {
       // We must take into account the fact that we have read something
       // previously.
-      if (diff < 0)
-        ret_off = m_stream->OnSysSeek(-(last_access-diff), wxFromCurrent);
-           // lastaccess + abs(diff) = lastaccess - diff here
-      else
-        ret_off = m_stream->OnSysSeek(diff-last_access, wxFromCurrent);
+      ret_off = m_stream->OnSysSeek(diff-last_access, wxFromCurrent);
       ResetBuffer();
       return ret_off;
     } else {
