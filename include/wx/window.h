@@ -804,9 +804,7 @@ public:
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
 
 #if wxUSE_MENUS
-    bool PopupMenu(wxMenu *menu)
-        { return DoPopupMenu(menu, -1, -1); }
-    bool PopupMenu(wxMenu *menu, const wxPoint& pos)
+    bool PopupMenu(wxMenu *menu, const wxPoint& pos = wxDefaultPosition)
         { return DoPopupMenu(menu, pos.x, pos.y); }
     bool PopupMenu(wxMenu *menu, int x, int y)
         { return DoPopupMenu(menu, x, y); }
