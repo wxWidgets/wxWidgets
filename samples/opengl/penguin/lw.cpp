@@ -236,7 +236,7 @@ static void read_pnts(FILE *f, int nbytes, lwObject *lwo)
 
 
 
-int lw_is_lwobject(const char *lw_file)
+bool lw_is_lwobject(const char *lw_file)
 {
   FILE *f = fopen(lw_file, "rb");
   if (f) {
@@ -245,9 +245,9 @@ int lw_is_lwobject(const char *lw_file)
     wxInt32 lwob = read_long(f);
     fclose(f);
     if (form == ID_FORM && nlen != 0 && lwob == ID_LWOB)
-      return TRUE;
+      return true;
   }
-  return FALSE;
+  return false;
 }
 
 

@@ -62,7 +62,7 @@ extern "C" {
 #endif
 
 #if wxUSE_GLCANVAS
-int       lw_is_lwobject(const char     *lw_file);
+bool       lw_is_lwobject(const char     *lw_file);
 lwObject *lw_object_read(const char     *lw_file);
 void      lw_object_free(      lwObject *lw_object);
 void      lw_object_show(const lwObject *lw_object);
