@@ -151,17 +151,17 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     m_imageListSmall = new wxImageList(16, 16, TRUE);
 
 #ifdef __WXMSW__
-    m_imageListNormal->Add( wxIcon("icon1", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon2", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon3", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon4", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon5", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon6", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon7", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon8", wxBITMAP_TYPE_ICO_RESOURCE) );
-    m_imageListNormal->Add( wxIcon("icon9", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imageListNormal->Add( wxIcon(_T("icon1"), wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imageListNormal->Add( wxIcon(_T("icon2"), wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imageListNormal->Add( wxIcon(_T("icon3"), wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imageListNormal->Add( wxIcon(_T("icon4"), wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imageListNormal->Add( wxIcon(_T("icon5"), wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imageListNormal->Add( wxIcon(_T("icon6"), wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imageListNormal->Add( wxIcon(_T("icon7"), wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imageListNormal->Add( wxIcon(_T("icon8"), wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imageListNormal->Add( wxIcon(_T("icon9"), wxBITMAP_TYPE_ICO_RESOURCE) );
 
-    m_imageListSmall->Add( wxIcon("iconsmall", wxBITMAP_TYPE_ICO_RESOURCE) );
+    m_imageListSmall->Add( wxIcon(_T("iconsmall"), wxBITMAP_TYPE_ICO_RESOURCE) );
 
 #else
     m_imageListNormal->Add( wxIcon( toolbrai_xpm ) );

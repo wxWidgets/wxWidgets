@@ -280,7 +280,7 @@ bool MyApp::OnInit()
     frame->Show(TRUE);
 
 #if wxUSE_STATUSBAR
-    frame->SetStatusText("Welcome to wxWindows menu sample");
+    frame->SetStatusText(_T("Welcome to wxWindows menu sample"));
 #endif // wxUSE_STATUSBAR
 
     SetTopWindow(frame);
@@ -294,7 +294,7 @@ bool MyApp::OnInit()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxFrame((wxFrame *)NULL, -1, "wxWindows menu sample",
+       : wxFrame((wxFrame *)NULL, -1, _T("wxWindows menu sample"),
                  wxDefaultPosition, wxSize(400, 250))
 {
     m_textctrl = NULL;
@@ -310,78 +310,73 @@ MyFrame::MyFrame()
     wxMenu *fileMenu = new wxMenu;
 
     wxMenuItem *item = new wxMenuItem(fileMenu, Menu_File_ClearLog,
-                                      "Clear &log\tCtrl-L");
+                                      _T("Clear &log\tCtrl-L"));
     item->SetBitmap(copy_xpm);
     fileMenu->Append(item);
     fileMenu->AppendSeparator();
-    fileMenu->Append(Menu_File_Quit, "E&xit\tAlt-X", "Quit menu sample");
+    fileMenu->Append(Menu_File_Quit, _T("E&xit\tAlt-X"), _T("Quit menu sample"));
 
     wxMenu *menubarMenu = new wxMenu;
-    menubarMenu->Append(Menu_MenuBar_Append, "&Append menu\tCtrl-A",
-                        "Append a menu to the menubar");
-    menubarMenu->Append(Menu_MenuBar_Insert, "&Insert menu\tCtrl-I",
-                        "Insert a menu into the menubar");
-    menubarMenu->Append(Menu_MenuBar_Delete, "&Delete menu\tCtrl-D",
-                        "Delete the last menu from the menubar");
-    menubarMenu->Append(Menu_MenuBar_Toggle, "&Toggle menu\tCtrl-T",
-                        "Toggle the first menu in the menubar", TRUE);
+    menubarMenu->Append(Menu_MenuBar_Append, _T("&Append menu\tCtrl-A"),
+                        _T("Append a menu to the menubar"));
+    menubarMenu->Append(Menu_MenuBar_Insert, _T("&Insert menu\tCtrl-I"),
+                        _T("Insert a menu into the menubar"));
+    menubarMenu->Append(Menu_MenuBar_Delete, _T("&Delete menu\tCtrl-D"),
+                        _T("Delete the last menu from the menubar"));
+    menubarMenu->Append(Menu_MenuBar_Toggle, _T("&Toggle menu\tCtrl-T"),
+                        _T("Toggle the first menu in the menubar"), TRUE);
     menubarMenu->AppendSeparator();
-    menubarMenu->Append(Menu_MenuBar_Enable, "&Enable menu\tCtrl-E",
-                        "Enable or disable the last menu", TRUE);
+    menubarMenu->Append(Menu_MenuBar_Enable, _T("&Enable menu\tCtrl-E"),
+                        _T("Enable or disable the last menu"), TRUE);
     menubarMenu->AppendSeparator();
-    menubarMenu->Append(Menu_MenuBar_GetLabel, "&Get menu label\tCtrl-G",
-                        "Get the label of the last menu");
-    menubarMenu->Append(Menu_MenuBar_SetLabel, "&Set menu label\tCtrl-S",
-                        "Change the label of the last menu");
+    menubarMenu->Append(Menu_MenuBar_GetLabel, _T("&Get menu label\tCtrl-G"),
+                        _T("Get the label of the last menu"));
+    menubarMenu->Append(Menu_MenuBar_SetLabel, _T("&Set menu label\tCtrl-S"),
+                        _T("Change the label of the last menu"));
     menubarMenu->AppendSeparator();
-    menubarMenu->Append(Menu_MenuBar_FindMenu, "&Find menu from label\tCtrl-F",
-                        "Find a menu by searching for its label");
+    menubarMenu->Append(Menu_MenuBar_FindMenu, _T("&Find menu from label\tCtrl-F"),
+                        _T("Find a menu by searching for its label"));
 
     wxMenu *menuMenu = new wxMenu;
-    menuMenu->Append(Menu_Menu_Append, "&Append menu item\tAlt-A",
-                     "Append a menu item to the last menu");
-    menuMenu->Append(Menu_Menu_AppendSub, "&Append sub menu\tAlt-S",
-                     "Append a sub menu to the last menu");
-    menuMenu->Append(Menu_Menu_Insert, "&Insert menu item\tAlt-I",
-                     "Insert a menu item in head of the last menu");
-    menuMenu->Append(Menu_Menu_Delete, "&Delete menu item\tAlt-D",
-                     "Delete the last menu item from the last menu");
+    menuMenu->Append(Menu_Menu_Append, _T("&Append menu item\tAlt-A"),
+                     _T("Append a menu item to the last menu"));
+    menuMenu->Append(Menu_Menu_AppendSub, _T("&Append sub menu\tAlt-S"),
+                     _T("Append a sub menu to the last menu"));
+    menuMenu->Append(Menu_Menu_Insert, _T("&Insert menu item\tAlt-I"),
+                     _T("Insert a menu item in head of the last menu"));
+    menuMenu->Append(Menu_Menu_Delete, _T("&Delete menu item\tAlt-D"),
+                     _T("Delete the last menu item from the last menu"));
     menuMenu->AppendSeparator();
-    menuMenu->Append(Menu_Menu_Enable, "&Enable menu item\tAlt-E",
-                     "Enable or disable the last menu item", TRUE);
-    menuMenu->Append(Menu_Menu_Check, "&Check menu item\tAlt-C",
-                     "Check or uncheck the last menu item", TRUE);
+    menuMenu->Append(Menu_Menu_Enable, _T("&Enable menu item\tAlt-E"),
+                     _T("Enable or disable the last menu item"), TRUE);
+    menuMenu->Append(Menu_Menu_Check, _T("&Check menu item\tAlt-C"),
+                     _T("Check or uncheck the last menu item"), TRUE);
     menuMenu->AppendSeparator();
-    menuMenu->Append(Menu_Menu_GetLabel, "&Get menu item label\tAlt-G",
-                     "Get the label of the last menu item");
-    menuMenu->Append(Menu_Menu_SetLabel, "&Set menu item label\tAlt-S",
-                     "Change the label of the last menu item");
+    menuMenu->Append(Menu_Menu_GetInfo, _T("Get menu item in&fo\tAlt-F"),
+                     _T("Show the state of the last menu item"));
     menuMenu->AppendSeparator();
-    menuMenu->Append(Menu_Menu_GetInfo, "Get menu item in&fo\tAlt-F",
-                     "Show the state of the last menu item");
-    menuMenu->AppendSeparator();
-    menuMenu->Append(Menu_Menu_FindItem, "Find menu item from label",
-                     "Find a menu item by searching for its label");
+    menuMenu->Append(Menu_Menu_FindItem, _T("Find menu item from label"),
+                     _T("Find a menu item by searching for its label"));
 
     wxMenu *testMenu = new wxMenu;
-    testMenu->Append(Menu_Test_Normal, "&Normal item");
+    testMenu->Append(Menu_Test_Normal, _T("&Normal item"));
     testMenu->AppendSeparator();
-    testMenu->AppendCheckItem(Menu_Test_Check, "&Check item");
+    testMenu->AppendCheckItem(Menu_Test_Check, _T("&Check item"));
     testMenu->AppendSeparator();
-    testMenu->AppendRadioItem(Menu_Test_Radio1, "Radio item &1");
-    testMenu->AppendRadioItem(Menu_Test_Radio2, "Radio item &2");
-    testMenu->AppendRadioItem(Menu_Test_Radio3, "Radio item &3");
+    testMenu->AppendRadioItem(Menu_Test_Radio1, _T("Radio item &1"));
+    testMenu->AppendRadioItem(Menu_Test_Radio2, _T("Radio item &2"));
+    testMenu->AppendRadioItem(Menu_Test_Radio3, _T("Radio item &3"));
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Menu_Help_About, "&About\tF1", "About menu sample");
+    helpMenu->Append(Menu_Help_About, _T("&About\tF1"), _T("About menu sample"));
 
     wxMenuBar* menuBar = new wxMenuBar( wxMB_DOCKABLE );
 
-    menuBar->Append(fileMenu, "&File");
-    menuBar->Append(menubarMenu, "Menu&bar");
-    menuBar->Append(menuMenu, "&Menu");
-    menuBar->Append(testMenu, "&Test");
-    menuBar->Append(helpMenu, "&Help");
+    menuBar->Append(fileMenu, _T("&File"));
+    menuBar->Append(menubarMenu, _T("Menu&bar"));
+    menuBar->Append(menuMenu, _T("&Menu"));
+    menuBar->Append(testMenu, _T("&Test"));
+    menuBar->Append(helpMenu, _T("&Help"));
 
     // these items should be initially checked
     menuBar->Check(Menu_MenuBar_Toggle, TRUE);
@@ -425,9 +420,9 @@ MyFrame::~MyFrame()
 wxMenu *MyFrame::CreateDummyMenu(wxString *title)
 {
     wxMenu *menu = new wxMenu;
-    menu->Append(Menu_Dummy_First, "&First item\tCtrl-F1");
+    menu->Append(Menu_Dummy_First, _T("&First item\tCtrl-F1"));
     menu->AppendSeparator();
-    menu->Append(Menu_Dummy_Second, "&Second item\tCtrl-F2", "", TRUE);
+    menu->Append(Menu_Dummy_Second, _T("&Second item\tCtrl-F2"), _T(""), TRUE);
 
     if ( title )
     {
@@ -487,8 +482,8 @@ void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    (void)wxMessageBox("wxWindows menu sample\n© 1999-2001 Vadim Zeitlin",
-                       "About wxWindows menu sample",
+    (void)wxMessageBox(_T("wxWindows menu sample\n© 1999-2001 Vadim Zeitlin"),
+                       _T("About wxWindows menu sample"),
                        wxICON_INFORMATION);
 }
 
@@ -533,7 +528,7 @@ void MyFrame::OnToggleMenu(wxCommandEvent& WXUNUSED(event))
     else
     {
         // restore it
-        mbar->Insert(0, m_menu, "&File");
+        mbar->Insert(0, m_menu, _T("&File"));
         m_menu = NULL;
     }
 }
@@ -619,8 +614,8 @@ void MyFrame::OnAppendMenuItem(wxCommandEvent& WXUNUSED(event))
     wxMenu *menu = menubar->GetMenu(menubar->GetMenuCount() - 1);
 
     menu->AppendSeparator();
-    menu->Append(Menu_Dummy_Third, "&Third dummy item\tCtrl-F3",
-                 "Checkable item", TRUE);
+    menu->Append(Menu_Dummy_Third, _T("&Third dummy item\tCtrl-F3"),
+                 _T("Checkable item"), TRUE);
 }
 
 void MyFrame::OnAppendSubMenu(wxCommandEvent& WXUNUSED(event))
@@ -629,8 +624,8 @@ void MyFrame::OnAppendSubMenu(wxCommandEvent& WXUNUSED(event))
 
     wxMenu *menu = menubar->GetMenu(menubar->GetMenuCount() - 1);
 
-    menu->Append(Menu_Dummy_Last, "&Dummy sub menu",
-                 CreateDummyMenu(NULL), "Dummy sub menu help");
+    menu->Append(Menu_Dummy_Last, _T("&Dummy sub menu"),
+                 CreateDummyMenu(NULL), _T("Dummy sub menu help"));
 }
 
 void MyFrame::OnDeleteMenuItem(wxCommandEvent& WXUNUSED(event))
@@ -655,8 +650,8 @@ void MyFrame::OnInsertMenuItem(wxCommandEvent& WXUNUSED(event))
     wxMenu *menu = menubar->GetMenu(menubar->GetMenuCount() - 1);
 
     menu->Insert(0, wxMenuItem::New(menu, Menu_Dummy_Fourth,
-                                    "Fourth dummy item\tCtrl-F4"));
-    menu->Insert(1, wxMenuItem::New(menu, wxID_SEPARATOR, ""));
+                                    _T("Fourth dummy item\tCtrl-F4")));
+    menu->Insert(1, wxMenuItem::New(menu, wxID_SEPARATOR, _T("")));
 }
 
 void MyFrame::OnEnableMenuItem(wxCommandEvent& WXUNUSED(event))
@@ -724,21 +719,21 @@ void MyFrame::OnGetMenuItemInfo(wxCommandEvent& WXUNUSED(event))
     if ( item )
     {
         wxString msg;
-        msg << "The item is " << (item->IsEnabled() ? "enabled"
-                                                    : "disabled")
+        msg << _T("The item is ") << (item->IsEnabled() ? _T("enabled")
+                                                    : _T("disabled"))
             << '\n';
 
         if ( item->IsCheckable() )
         {
-            msg << "It is checkable and " << (item->IsChecked() ? "" : "un")
-                << "checked\n";
+            msg << _T("It is checkable and ") << (item->IsChecked() ? _T("") : _T("un"))
+                << _T("checked\n");
         }
 
 #if wxUSE_ACCEL
         wxAcceleratorEntry *accel = item->GetAccel();
         if ( accel )
         {
-            msg << "Its accelerator is ";
+            msg << _T("Its accelerator is ");
 
             int flags = accel->GetFlags();
             if ( flags & wxACCEL_ALT )
@@ -784,7 +779,7 @@ void MyFrame::OnGetMenuItemInfo(wxCommandEvent& WXUNUSED(event))
         }
         else
         {
-            msg << "It doesn't have an accelerator";
+            msg << _T("It doesn't have an accelerator");
         }
 #endif // wxUSE_ACCEL
 
@@ -830,15 +825,15 @@ void MyFrame::OnFindMenuItem(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::ShowContextMenu(const wxPoint& pos)
 {
-    wxMenu menu("Test popup");
+    wxMenu menu(_T("Test popup"));
 
-    menu.Append(Menu_Help_About, "&About");
-    menu.Append(Menu_Popup_Submenu, "&Submenu", CreateDummyMenu(NULL));
-    menu.Append(Menu_Popup_ToBeDeleted, "To be &deleted");
-    menu.Append(Menu_Popup_ToBeChecked, "To be &checked", "", TRUE);
-    menu.Append(Menu_Popup_ToBeGreyed, "To be &greyed");
+    menu.Append(Menu_Help_About, _T("&About"));
+    menu.Append(Menu_Popup_Submenu, _T("&Submenu"), CreateDummyMenu(NULL));
+    menu.Append(Menu_Popup_ToBeDeleted, _T("To be &deleted"));
+    menu.Append(Menu_Popup_ToBeChecked, _T("To be &checked"), _T(""), TRUE);
+    menu.Append(Menu_Popup_ToBeGreyed, _T("To be &greyed"));
     menu.AppendSeparator();
-    menu.Append(Menu_File_Quit, "E&xit");
+    menu.Append(Menu_File_Quit, _T("E&xit"));
 
     menu.Delete(Menu_Popup_ToBeDeleted);
     menu.Check(Menu_Popup_ToBeChecked, TRUE);
