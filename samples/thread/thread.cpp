@@ -14,11 +14,6 @@
           messages - it will be more visual
  */
 
-#ifdef __GNUG__
-    #pragma implementation "thread.cpp"
-    #pragma interface "thread.cpp"
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
