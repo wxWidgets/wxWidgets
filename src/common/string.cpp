@@ -38,6 +38,8 @@
   #include "wx/thread.h"
 #endif
 
+#include "wx/regex.h"   // for wxString::Matches()
+
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
@@ -1456,6 +1458,49 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 // of them)
 bool wxString::Matches(const wxChar *pszMask) const
 {
+#if wxUSE_REGEX
+    // first translate the shell-like mask into a regex
+    wxString pattern;
+    pattern.reserve(wxStrlen(pszMask));
+
+    pattern += _T('^');
+    while ( *pszMask )
+    {
+        switch ( *pszMask )
+        {
+            case _T('?'):
+                pattern += _T('.');
+                break;
+
+            case _T('*'):
+                pattern += _T(".*");
+                break;
+
+            case _T('^'):
+            case _T('.'):
+            case _T('$'):
+            case _T('('):
+            case _T(')'):
+            case _T('|'):
+            case _T('+'):
+            case _T('\\'):
+                // these characters are special in a RE, quote them
+                // (however note that we don't quote '[' and ']' to allow
+                // using them for Unix shell like matching)
+                pattern += _T('\\');
+                // fall through
+
+            default:
+                pattern += *pszMask;
+        }
+
+        pszMask++;
+    }
+    pattern += _T('$');
+
+    // and now use it
+    return wxRegEx(pattern, wxRE_NOSUB | wxRE_EXTENDED).Matches(c_str());
+#else // !wxUSE_REGEX
   // TODO: this is, of course, awfully inefficient...
 
   // the char currently being checked
@@ -1539,6 +1584,7 @@ match:
   }
 
   return FALSE;
+#endif // wxUSE_REGEX/!wxUSE_REGEX
 }
 
 // Count the number of chars
