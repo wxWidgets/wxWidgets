@@ -49,6 +49,11 @@
 #include  <ctype.h>
 
 // ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+#define CONST_CAST ((wxFileConfig *)this)->
+
+// ----------------------------------------------------------------------------
 // global functions declarations
 // ----------------------------------------------------------------------------
 
@@ -143,8 +148,6 @@ void wxFileConfig::Init()
   m_linesHead =
   m_linesTail = NULL;
 
-  m_bExpandEnvVars = TRUE;
-
   m_strPath.Empty();
 }
 
@@ -204,14 +207,18 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
 {
   const char *pStart;
   const char *pEnd;
+  wxString strLine;
 
-  for ( uint n = 0; n < file.GetLineCount(); n++ ) {
+  uint nLineCount = file.GetLineCount();
+  for ( uint n = 0; n < nLineCount; n++ ) {
+    strLine = file[n];
+
     // add the line to linked list
     if ( bLocal )
-      LineListAppend(file[n]);
+      LineListAppend(strLine);
 
     // skip leading spaces
-    for ( pStart = file[n]; isspace(*pStart); pStart++ )
+    for ( pStart = strLine; isspace(*pStart); pStart++ )
       ;
 
     // skip blank/comment lines
@@ -317,12 +324,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
         while ( isspace(*pEnd) )
           pEnd++;
 
-        wxString strValue;
-        if (m_bExpandEnvVars)
-            strValue = ExpandEnvVars(FilterIn(pEnd));
-        else
-            strValue = FilterIn(pEnd);
-        pEntry->SetValue(strValue, FALSE);
+        pEntry->SetValue(FilterIn(pEnd), FALSE /* read from file */);
       }
     }
   }
@@ -349,13 +351,13 @@ void wxFileConfig::SetPath(const wxString& strPath)
 
   if ( strPath[0] == APPCONF_PATH_SEPARATOR ) {
     // absolute path
-    SplitPath(aParts, strPath);
+    wxSplitPath(aParts, strPath);
   }
   else {
     // relative path, combine with current one
     wxString strFullPath = m_strPath;
     strFullPath << APPCONF_PATH_SEPARATOR << strPath;
-    SplitPath(aParts, strFullPath);
+    wxSplitPath(aParts, strFullPath);
   }
 
   // change current group
@@ -411,6 +413,38 @@ bool wxFileConfig::GetNextEntry (wxString& str, long& lIndex)
     return FALSE;
 }
 
+uint wxFileConfig::GetNumberOfEntries(bool bRecursive) const
+{
+  uint n = m_pCurrentGroup->Entries().Count();
+  if ( bRecursive ) {
+    ConfigGroup *pOldCurrentGroup = m_pCurrentGroup;
+    uint nSubgroups = m_pCurrentGroup->Groups().Count();
+    for ( uint nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
+      CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
+      n += GetNumberOfEntries(TRUE);
+      CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
+    }
+  }
+
+  return n;
+}
+
+uint wxFileConfig::GetNumberOfGroups(bool bRecursive) const
+{
+  uint n = m_pCurrentGroup->Groups().Count();
+  if ( bRecursive ) {
+    ConfigGroup *pOldCurrentGroup = m_pCurrentGroup;
+    uint nSubgroups = m_pCurrentGroup->Groups().Count();
+    for ( uint nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
+      CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
+      n += GetNumberOfGroups(TRUE);
+      CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
+    }
+  }
+
+  return n;
+}
+
 // ----------------------------------------------------------------------------
 // tests for existence
 // ----------------------------------------------------------------------------
@@ -435,15 +469,6 @@ bool wxFileConfig::HasEntry(const wxString& strName) const
 // read/write values
 // ----------------------------------------------------------------------------
 
-const char *wxFileConfig::Read(const char *szKey,
-                               const char *szDefault) const
-{
-  PathChanger path(this, szKey);
-
-  ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
-  return pEntry == NULL ? szDefault : pEntry->Value().c_str();
-}
-
 bool wxFileConfig::Read(wxString   *pstr,
                         const char *szKey,
                         const char *szDefault) const
@@ -452,13 +477,22 @@ bool wxFileConfig::Read(wxString   *pstr,
 
   ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
   if (pEntry == NULL) {
-    *pstr = szDefault;
+    *pstr = ExpandEnvVars(szDefault);
     return FALSE;
   }
   else {
-    *pstr = pEntry->Value();
+    *pstr = ExpandEnvVars(pEntry->Value());
     return TRUE;
   }
+}
+
+const char *wxFileConfig::Read(const char *szKey,
+                               const char *szDefault) const
+{
+  static wxString s_str;
+  Read(&s_str, szKey, szDefault);
+
+  return s_str.c_str();
 }
 
 bool wxFileConfig::Read(long *pl, const char *szKey, long lDefault) const
@@ -773,9 +807,9 @@ wxFileConfig::ConfigGroup::FindEntry(const char *szName) const
       res = Stricmp(pEntry->Name(), szName);
     #endif
 
-    if ( res < 0 )
+    if ( res > 0 )
       hi = i;
-    else if ( res > 0 )
+    else if ( res < 0 )
       lo = i + 1;
     else
       return pEntry;
@@ -803,9 +837,9 @@ wxFileConfig::ConfigGroup::FindSubgroup(const char *szName) const
       res = Stricmp(pGroup->Name(), szName);
     #endif
 
-    if ( res < 0 )
+    if ( res > 0 )
       hi = i;
-    else if ( res > 0 )
+    else if ( res < 0 )
       lo = i + 1;
     else
       return pGroup;
@@ -848,54 +882,44 @@ wxFileConfig::ConfigGroup::AddSubgroup(const wxString& strName)
 
 bool wxFileConfig::ConfigGroup::DeleteSubgroup(const char *szName)
 {
-  uint n, nCount = m_aSubgroups.Count();
-  for ( n = 0; n < nCount; n++ ) {
-    if ( m_aSubgroups[n]->Name().IsSameAs(szName, APPCONF_CASE_SENSITIVE) )
-      break;
-  }
+  ConfigGroup *pGroup = FindSubgroup(szName);
+  wxCHECK( pGroup != NULL, FALSE ); // deleting non existing group?
 
-  if ( n == nCount )
-    return FALSE;
-
-  nCount = m_aEntries.Count();
-  for ( n = 0; n < nCount; n++ ) {
-    LineList *pLine = m_aEntries[n]->GetLine();
+  // delete all entries
+  uint nCount = pGroup->m_aEntries.Count();
+  for ( uint nEntry = 0; nEntry < nCount; nEntry++ ) {
+    LineList *pLine = pGroup->m_aEntries[nEntry]->GetLine();
     if ( pLine != NULL )
       m_pConfig->LineListRemove(pLine);
   }
 
-  ConfigGroup *pGroup = m_aSubgroups[n];
   LineList *pLine = pGroup->m_pLine;
   if ( pLine != NULL )
     m_pConfig->LineListRemove(pLine);
-  delete pGroup;
 
   SetDirty();
 
-  m_aSubgroups.Remove(n);
+  m_aSubgroups.Remove(pGroup);
+  delete pGroup;
+
   return TRUE;
 }
 
 bool wxFileConfig::ConfigGroup::DeleteEntry(const char *szName)
 {
-  uint n, nCount = m_aEntries.Count();
-  for ( n = 0; n < nCount; n++ ) {
-    if ( m_aEntries[n]->Name().IsSameAs(szName, APPCONF_CASE_SENSITIVE) )
-      break;
-  }
-
-  if ( n == nCount )
+  ConfigEntry *pEntry = FindEntry(szName);
+  if ( pEntry == NULL )
     return FALSE;
 
-  ConfigEntry *pEntry = m_aEntries[n];
   LineList *pLine = pEntry->GetLine();
   if ( pLine != NULL )
     m_pConfig->LineListRemove(pLine);
-  delete pEntry;
 
   SetDirty();
 
-  m_aEntries.Remove(n);
+  m_aEntries.Remove(pEntry);
+  delete pEntry;
+
   return TRUE;
 }
 

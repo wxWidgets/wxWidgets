@@ -282,13 +282,22 @@ void wxString::Alloc(uint nLen)
 {
   wxStringData *pData = GetStringData();
   if ( pData->nAllocLength <= nLen ) {
-    if ( pData->IsEmpty() )
-      AllocBuffer(nLen);
+    if ( pData->IsEmpty() ) {
+      nLen += EXTRA_ALLOC;
+
+      wxStringData* pData = (wxStringData*)
+        malloc(sizeof(wxStringData) + (nLen + 1)*sizeof(char));
+      pData->nRefs = 1;
+      pData->nDataLength = 0;
+      pData->nAllocLength = nLen;
+      m_pchData = pData->data();  // data starts after wxStringData
+      m_pchData[0u] = '\0';
+    }
     else if ( pData->IsShared() ) {
       pData->Unlock();                // memory not freed because shared
-      uint nLen = pData->nDataLength;
+      uint nOldLen = pData->nDataLength;
       AllocBuffer(nLen);
-      memcpy(m_pchData, pData->data(), nLen*sizeof(char));
+      memcpy(m_pchData, pData->data(), nOldLen*sizeof(char));
     }
     else {
       nLen += EXTRA_ALLOC;
