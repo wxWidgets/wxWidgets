@@ -27,8 +27,6 @@ extern GdkFont *GtkGetDefaultGuiFont();
 //-----------------------------------------------------------------------------
 
 static GtkTooltips *ss_tooltips = (GtkTooltips*) NULL;
-static GdkColor     ss_bg;
-static GdkColor     ss_fg;
 
 //-----------------------------------------------------------------------------
 // wxToolTip
@@ -55,31 +53,6 @@ void wxToolTip::Apply( wxWindow *win )
     if (!ss_tooltips)
     {
         ss_tooltips = gtk_tooltips_new();
-
-        ss_fg.red = 0;
-        ss_fg.green = 0;
-        ss_fg.blue = 0;
-        gdk_color_alloc( gtk_widget_get_default_colormap(), &ss_fg );
-
-        ss_bg.red = 65535;
-        ss_bg.green = 65535;
-        ss_bg.blue = 50000;
-        gdk_color_alloc( gtk_widget_get_default_colormap(), &ss_bg );
-
-#if GTK_CHECK_VERSION(1, 2, 0)
-        gtk_tooltips_force_window( ss_tooltips );
-
-        GtkStyle *g_style =
-          gtk_style_copy(
-            gtk_widget_get_style( ss_tooltips->tip_window ) );
-
-        g_style->fg[GTK_STATE_NORMAL] = ss_fg;
-        g_style->bg[GTK_STATE_NORMAL] = ss_bg;
-
-        gtk_widget_set_style( ss_tooltips->tip_window, g_style );
-#else // GTK+ 1.0
-        gtk_tooltips_set_colors( ss_tooltips, &ss_bg, &ss_fg );
-#endif
     }
 
     m_window = win;
