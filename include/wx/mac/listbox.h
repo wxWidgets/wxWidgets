@@ -113,6 +113,7 @@ public:
   	ListHandle		m_macList ;
 	wxArrayString 	m_stringArray ;
 	wxListDataArray m_dataArray ;
+	wxArrayInt m_selectionPreImage ;
 	void 			MacSetRedraw( bool doDraw ) ;
 protected:
 	void			MacDestroy() ;			

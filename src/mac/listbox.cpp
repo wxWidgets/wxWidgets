@@ -440,7 +440,8 @@ void wxListBox::SetSelection(int N, bool select)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
                  "invalid index in wxListBox::SetSelection" );
-	MacSetSelection( N , select ) ;
+	  MacSetSelection( N , select ) ;
+	  GetSelections( m_selectionPreImage ) ;
 }
 
 bool wxListBox::IsSelected(int N) const
@@ -448,7 +449,7 @@ bool wxListBox::IsSelected(int N) const
     wxCHECK_MSG( N >= 0 && N < m_noItems, FALSE,
                  "invalid index in wxListBox::Selected" );
 
-	return MacIsSelected( N ) ;
+	  return MacIsSelected( N ) ;
 }
 
 void *wxListBox::DoGetItemClientData(int N) const
@@ -498,23 +499,6 @@ void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
 int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
 	return MacGetSelections( aSelections ) ;
-
-/* TODO
-    if ((m_windowStyle & wxLB_MULTIMacE) || (m_windowStyle & wxLB_EXTENDED))
-    {
-        int no_sel = ??
-        for ( int n = 0; n < no_sel; n++ )
-            aSelections.Add(??);
-
-        return no_sel;
-    }
-    else  // single-selection listbox
-    {
-        aSelections.Add(??);
-
-        return 1;
-    }
-*/
 }
 
 // Get single selection, for single choice list items
@@ -768,11 +752,27 @@ void wxListBox::MacSetRedraw( bool doDraw )
 
 void wxListBox::MacDoClick()
 {
-	wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
-    event.SetEventObject( this );
-
 	wxArrayInt aSelections;
 	int n, count = GetSelections(aSelections);
+	
+	if ( count == m_selectionPreImage.GetCount() )
+	{
+	  bool hasChanged = false ;
+	  for ( int i = 0 ; i < count ; ++i )
+	  {
+	    if ( aSelections[i] != m_selectionPreImage[i] )
+	    {
+	      hasChanged = true ;
+	      break ;
+	    }
+	  }
+	  if ( !hasChanged )
+	    return ;
+	}
+	
+	wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
+  event.SetEventObject( this );
+
 	if ( count > 0 )
 	{
            n = aSelections[0];
