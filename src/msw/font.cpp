@@ -143,7 +143,7 @@ wxFontRefData::~wxFontRefData()
     {
         if ( !::DeleteObject((HFONT) m_hFont) )
         {
-            wxLogLastError("DeleteObject(font)");
+            wxLogLastError(wxT("DeleteObject(font)"));
         }
     }
 }
@@ -203,7 +203,7 @@ bool wxFont::RealizeResource()
     M_FONTDATA->m_faceName = lf.lfFaceName;
     if ( !M_FONTDATA->m_hFont )
     {
-        wxLogLastError("CreateFont");
+        wxLogLastError(wxT("CreateFont"));
 
         return FALSE;
     }
@@ -217,7 +217,7 @@ bool wxFont::FreeResource(bool force)
     {
         if ( !::DeleteObject((HFONT) M_FONTDATA->m_hFont) )
         {
-            wxLogLastError("DeleteObject(font)");
+            wxLogLastError(wxT("DeleteObject(font)"));
         }
 
         M_FONTDATA->m_hFont = 0;

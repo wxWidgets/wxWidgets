@@ -305,8 +305,7 @@ wxString wxFontMapper::GetEncodingDescription(wxFontEncoding encoding)
     size_t count = WXSIZEOF(gs_encodingDescs);
 
     wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                  wxT("inconsitency detected - forgot to update one of "
-                     "the arrays?") );
+                  wxT("inconsitency detected - forgot to update one of the arrays?") );
 
     for ( size_t i = 0; i < count; i++ )
     {
@@ -328,8 +327,7 @@ wxString wxFontMapper::GetEncodingName(wxFontEncoding encoding)
     size_t count = WXSIZEOF(gs_encodingNames);
 
     wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                  wxT("inconsitency detected - forgot to update one of "
-                     "the arrays?") );
+                  wxT("inconsistency detected - forgot to update one of the arrays?") );
 
     for ( size_t i = 0; i < count; i++ )
     {
@@ -370,8 +368,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
             }
             else
             {
-                wxLogDebug(wxT("corrupted config data: invalid encoding %ld "
-                               "for charset '%s' ignored"),
+                wxLogDebug(wxT("corrupted config data: invalid encoding %ld for charset '%s' ignored"),
                            value, charset.c_str());
             }
         }
@@ -455,16 +452,13 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         // the message
         wxString msg;
-        msg.Printf(_("The charset '%s' is unknown. You may select\n"
-                     "another charset to replace it with or choose\n"
-                     "[Cancel] if it cannot be replaced"), charset.c_str());
+        msg.Printf(_("The charset '%s' is unknown. You may select\nanother charset to replace it with or choose\n[Cancel] if it cannot be replaced"), charset.c_str());
 
         // the list of choices
         size_t count = WXSIZEOF(gs_encodingDescs);
 
         wxASSERT_MSG( count == WXSIZEOF(gs_encodings),
-                      wxT("inconsitency detected - forgot to update one of "
-                          "the arrays?") );
+                      wxT("inconsitency detected - forgot to update one of the arrays?") );
 
         wxString *encodingNamesTranslated = new wxString[count];
 
@@ -499,8 +493,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
                 // remember the alt encoding for this charset
                 if ( !config->Write(charset, (long)encoding) )
                 {
-                    wxLogError(_("Failed to remember the encoding "
-                                 "for the charset '%s'."), charset.c_str());
+                    wxLogError(_("Failed to remember the encoding for the charset '%s'."), charset.c_str());
                 }
 
                 RestorePath(pathOld);
@@ -604,8 +597,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
             }
             else
             {
-                wxLogDebug(wxT("corrupted config data: string '%s' is not "
-                              "a valid font encoding info"), fontinfo.c_str());
+                wxLogDebug(wxT("corrupted config data: string '%s' is not a valid font encoding info"), fontinfo.c_str());
             }
         }
         //else: there is no information in config about this encoding
@@ -621,11 +613,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 
         // the message
         wxString msg;
-        msg.Printf(_("The encoding '%s' is unknown.\n"
-                     "Would you like to select a font to be used for this "
-                     "encoding\n"
-                     "(otherwise the text in this encoding will not be "
-                     "shown correctly)?"),
+        msg.Printf(_("The encoding '%s' is unknown.\nWould you like to select a font to be used for this encoding\n(otherwise the text in this encoding will not be shown correctly)?"),
                      GetEncodingDescription(encoding).c_str());
 
         wxWindow *parent = m_windowParent;

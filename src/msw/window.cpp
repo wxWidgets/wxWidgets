@@ -274,7 +274,7 @@ wxWindow::~wxWindow()
         //if (::IsWindow(GetHwnd()))
         {
             if ( !::DestroyWindow(GetHwnd()) )
-                wxLogLastError("DestroyWindow");
+                wxLogLastError(wxT("DestroyWindow"));
         }
 
         // remove hWnd <-> wxWindow association
@@ -1185,7 +1185,7 @@ void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 {
     if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
     {
-        wxLogLastError("MoveWindow");
+        wxLogLastError(wxT("MoveWindow"));
     }
 }
 
@@ -2328,8 +2328,7 @@ bool wxWindow::MSWCreate(int id,
 
         if ( m_hWnd == 0 )
         {
-            wxLogError(_("Can't find dummy dialog template!\n"
-                         "Check resource include path for finding wx.rc."));
+            wxLogError(_("Can't find dummy dialog template!\nCheck resource include path for finding wx.rc."));
 
             return FALSE;
         }
@@ -2379,8 +2378,7 @@ bool wxWindow::MSWCreate(int id,
 
         if ( !m_hWnd )
         {
-            wxLogError(_("Can't create window of class %s!\n"
-                         "Possible Windows 3.x compatibility problem?"),
+            wxLogError(_("Can't create window of class %s!\nPossible Windows 3.x compatibility problem?"),
                        wclass);
 
             return FALSE;
@@ -2692,7 +2690,7 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
 #ifdef __WIN32__
     if ( !::GetCursorPos(&pt) )
     {
-        wxLogLastError("GetCursorPos");
+        wxLogLastError(wxT("GetCursorPos"));
     }
 #else
     // In WIN16 it doesn't return a value.
@@ -2913,9 +2911,9 @@ bool wxWindow::HandlePaint()
 #ifdef __WIN32__
     HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
     if ( !hRegion )
-        wxLogLastError("CreateRectRgn");
+        wxLogLastError(wxT("CreateRectRgn"));
     if ( ::GetUpdateRgn(GetHwnd(), hRegion, FALSE) == ERROR )
-        wxLogLastError("GetUpdateRgn");
+        wxLogLastError(wxT("GetUpdateRgn"));
 
     m_updateRegion = wxRegion((WXHRGN) hRegion);
 #else
@@ -2966,7 +2964,7 @@ void wxWindow::OnEraseBackground(wxEraseEvent& event)
                               m_backgroundColour.Blue());
     HBRUSH hBrush = ::CreateSolidBrush(ref);
     if ( !hBrush )
-        wxLogLastError("CreateSolidBrush");
+        wxLogLastError(wxT("CreateSolidBrush"));
 
     HDC hdc = (HDC)event.GetDC()->GetHDC();
 

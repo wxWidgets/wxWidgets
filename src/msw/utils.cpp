@@ -163,7 +163,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
     DWORD nSize = maxSize;
     if ( !::GetComputerName(buf, &nSize) )
     {
-        wxLogLastError("GetComputerName");
+        wxLogLastError(wxT("GetComputerName"));
 
         return FALSE;
     }
@@ -450,7 +450,7 @@ bool wxDirExists(const wxString& dir)
 
     if ( h == INVALID_HANDLE_VALUE )
     {
-        wxLogLastError("FindFirstFile");
+        wxLogLastError(wxT("FindFirstFile"));
 
         return FALSE;
     }

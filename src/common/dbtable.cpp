@@ -275,8 +275,8 @@ wxTable::~wxTable()
         if (!found)
         {
             wxString msg;
-            msg.sprintf("Unable to find the tableID in the linked\nlist of tables in use.\n\n%s",s.GetData());
-            wxLogDebug (msg.GetData(),"NOTICE...");
+            msg.sprintf(wxT("Unable to find the tableID in the linked\nlist of tables in use.\n\n%s"),s.GetData());
+            wxLogDebug (msg.GetData(),wxT("NOTICE..."));
         }
     }
 #endif
@@ -590,13 +590,13 @@ bool wxTable::Open(void)
     {
         wxString s;
         if (wxStrcmp(tablePath,""))
-            s.sprintf("Error opening '%s/%s'.\n",tablePath,tableName);
+            s.sprintf(wxT("Error opening '%s/%s'.\n"),tablePath,tableName);
         else
-            s.sprintf("Error opening '%s'.\n", tableName);
+            s.sprintf(wxT("Error opening '%s'.\n"), tableName);
         if (!pDb->TableExists(tableName,NULL,tablePath))
-            s += "Table/view does not exist in the database.\n";
+            s += wxT("Table/view does not exist in the database.\n");
         else
-            s += "Current logged in user does not have sufficient privileges to access this table.\n";
+            s += wxT("Current logged in user does not have sufficient privileges to access this table.\n");
         pDb->LogError(s.GetData());
         return(FALSE);
     }

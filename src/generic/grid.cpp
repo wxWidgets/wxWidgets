@@ -648,8 +648,7 @@ void wxGridCellTextEditor::SetParameters(const wxString& params)
         long tmp;
         if ( !params.ToLong(&tmp) )
         {
-            wxLogDebug(_T("Invalid wxGridCellTextEditor parameter string "
-                          "'%s' ignored"), params.c_str());
+            wxLogDebug(_T("Invalid wxGridCellTextEditor parameter string '%s' ignored"), params.c_str());
         }
         else
         {
@@ -742,7 +741,7 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
         if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_NUMBER))
             grid->GetTable()->SetValueAsLong(row, col, value);
         else
-            grid->GetTable()->SetValue(row, col, wxString::Format("%ld", value));
+            grid->GetTable()->SetValue(row, col, wxString::Format(wxT("%ld"), value));
     }
 
     return changed;
@@ -801,8 +800,7 @@ void wxGridCellNumberEditor::SetParameters(const wxString& params)
             }
         }
 
-        wxLogDebug(_T("Invalid wxGridCellNumberEditor parameter string "
-                      "'%s' ignored"), params.c_str());
+        wxLogDebug(_T("Invalid wxGridCellNumberEditor parameter string '%s' ignored"), params.c_str());
     }
 }
 
@@ -851,7 +849,7 @@ bool wxGridCellFloatEditor::EndEdit(int row, int col,
         if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_FLOAT))
             grid->GetTable()->SetValueAsDouble(row, col, value);
         else
-            grid->GetTable()->SetValue(row, col, wxString::Format("%f", value));
+            grid->GetTable()->SetValue(row, col, wxString::Format(wxT("%f"), value));
 
         return TRUE;
     }
@@ -1460,8 +1458,7 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
 
         if ( !ok )
         {
-            wxLogDebug(_T("Invalid wxGridCellFloatRenderer parameter string "
-                          "'%s ignored"), params.c_str());
+            wxLogDebug(_T("Invalid wxGridCellFloatRenderer parameter string '%s ignored"), params.c_str());
         }
     }
 }
@@ -2266,16 +2263,14 @@ void wxGridTableBase::UpdateAttrCols( size_t pos, int numCols )
 bool wxGridTableBase::InsertRows( size_t WXUNUSED(pos),
                                   size_t WXUNUSED(numRows) )
 {
-    wxFAIL_MSG( wxT("Called grid table class function InsertRows\n"
-                    "but your derived table class does not override this function") );
+    wxFAIL_MSG( wxT("Called grid table class function InsertRows\nbut your derived table class does not override this function") );
 
     return FALSE;
 }
 
 bool wxGridTableBase::AppendRows( size_t WXUNUSED(numRows) )
 {
-    wxFAIL_MSG( wxT("Called grid table class function AppendRows\n"
-                    "but your derived table class does not override this function"));
+    wxFAIL_MSG( wxT("Called grid table class function AppendRows\nbut your derived table class does not override this function"));
 
     return FALSE;
 }
@@ -2283,8 +2278,7 @@ bool wxGridTableBase::AppendRows( size_t WXUNUSED(numRows) )
 bool wxGridTableBase::DeleteRows( size_t WXUNUSED(pos),
                                   size_t WXUNUSED(numRows) )
 {
-    wxFAIL_MSG( wxT("Called grid table class function DeleteRows\n"
-                    "but your derived table class does not override this function"));
+    wxFAIL_MSG( wxT("Called grid table class function DeleteRows\nbut your derived table class does not override this function"));
 
     return FALSE;
 }
@@ -2292,16 +2286,14 @@ bool wxGridTableBase::DeleteRows( size_t WXUNUSED(pos),
 bool wxGridTableBase::InsertCols( size_t WXUNUSED(pos),
                                   size_t WXUNUSED(numCols) )
 {
-    wxFAIL_MSG( wxT("Called grid table class function InsertCols\n"
-                  "but your derived table class does not override this function"));
+    wxFAIL_MSG( wxT("Called grid table class function InsertCols\nbut your derived table class does not override this function"));
 
     return FALSE;
 }
 
 bool wxGridTableBase::AppendCols( size_t WXUNUSED(numCols) )
 {
-    wxFAIL_MSG(wxT("Called grid table class function AppendCols\n"
-                   "but your derived table class does not override this function"));
+    wxFAIL_MSG(wxT("Called grid table class function AppendCols\nbut your derived table class does not override this function"));
 
     return FALSE;
 }
@@ -2309,8 +2301,7 @@ bool wxGridTableBase::AppendCols( size_t WXUNUSED(numCols) )
 bool wxGridTableBase::DeleteCols( size_t WXUNUSED(pos),
                                   size_t WXUNUSED(numCols) )
 {
-    wxFAIL_MSG( wxT("Called grid table class function DeleteCols\n"
-                    "but your derived table class does not override this function"));
+    wxFAIL_MSG( wxT("Called grid table class function DeleteCols\nbut your derived table class does not override this function"));
 
     return FALSE;
 }
@@ -2612,10 +2603,9 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
     if ( pos >= curNumRows )
     {
         wxString errmsg;
-        errmsg.Printf("Called wxGridStringTable::DeleteRows(pos=%d, N=%d)\n"
-                      "Pos value is invalid for present table with %d rows",
+        errmsg.Printf(wxT("Called wxGridStringTable::DeleteRows(pos=%d, N=%d)\nPos value is invalid for present table with %d rows"),
                       pos, numRows, curNumRows );
-        wxFAIL_MSG( wxT(errmsg) );
+        wxFAIL_MSG( errmsg );
         return FALSE;
     }
 
@@ -2691,8 +2681,7 @@ bool wxGridStringTable::AppendCols( size_t numCols )
     {
         // TODO: something better than this ?
         //
-        wxFAIL_MSG( wxT("Unable to append cols to a grid table with no rows.\n"
-                        "Call AppendRows() first") );
+        wxFAIL_MSG( wxT("Unable to append cols to a grid table with no rows.\nCall AppendRows() first") );
         return FALSE;
     }
 
@@ -2726,10 +2715,9 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
     if ( pos >= curNumCols )
     {
         wxString errmsg;
-        errmsg.Printf( "Called wxGridStringTable::DeleteCols(pos=%d, N=%d)...\n"
-                        "Pos value is invalid for present table with %d cols",
+        errmsg.Printf( wxT("Called wxGridStringTable::DeleteCols(pos=%d, N=%d)...\nPos value is invalid for present table with %d cols"),
                         pos, numCols, curNumCols );
-        wxFAIL_MSG( wxT( errmsg ) );
+        wxFAIL_MSG( errmsg );
         return FALSE;
     }
 
@@ -7147,8 +7135,7 @@ wxGridCellAttr *wxGrid::GetOrCreateCellAttr(int row, int col) const
     if ( !LookupAttr(row, col, &attr) || !attr )
     {
         wxASSERT_MSG( m_table,
-                      _T("we may only be called if CanHaveAttributes() "
-                         "returned TRUE and then m_table should be !NULL") );
+                      _T("we may only be called if CanHaveAttributes() returned TRUE and then m_table should be !NULL") );
 
         attr = m_table->GetAttr(row, col);
         if ( !attr )

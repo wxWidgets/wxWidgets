@@ -319,7 +319,7 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
     RECT r;
     if ( !::SendMessage(GetHwnd(), SB_GETRECT, i, (LPARAM)&r) )
     {
-        wxLogLastError("SendMessage(SB_GETRECT)");
+        wxLogLastError(wxT("SendMessage(SB_GETRECT)"));
     }
 
     wxCopyRECTToRect(r, rect);

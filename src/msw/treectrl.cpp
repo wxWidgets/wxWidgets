@@ -112,7 +112,7 @@ static bool IsItemSelected(HWND hwndTV, HTREEITEM hItem)
 
     if ( !TreeView_GetItem(hwndTV, &tvi) )
     {
-        wxLogLastError("TreeView_GetItem");
+        wxLogLastError(wxT("TreeView_GetItem"));
     }
 
     return (tvi.state & TVIS_SELECTED) != 0;
@@ -128,7 +128,7 @@ static void SelectItem(HWND hwndTV, HTREEITEM hItem, bool select = TRUE)
 
     if ( TreeView_SetItem(hwndTV, &tvi) == -1 )
     {
-        wxLogLastError("TreeView_SetItem");
+        wxLogLastError(wxT("TreeView_SetItem"));
     }
 }
 
@@ -643,7 +643,7 @@ bool wxTreeCtrl::DoGetItem(wxTreeViewItem* tvItem) const
 {
     if ( !TreeView_GetItem(GetHwnd(), tvItem) )
     {
-        wxLogLastError("TreeView_GetItem");
+        wxLogLastError(wxT("TreeView_GetItem"));
 
         return FALSE;
     }
@@ -655,7 +655,7 @@ void wxTreeCtrl::DoSetItem(wxTreeViewItem* tvItem)
 {
     if ( TreeView_SetItem(GetHwnd(), tvItem) == -1 )
     {
-        wxLogLastError("TreeView_SetItem");
+        wxLogLastError(wxT("TreeView_SetItem"));
     }
 }
 
@@ -1151,16 +1151,14 @@ wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
 
 wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
 {
-    wxASSERT_MSG( IsVisible(item), wxT("The item you call GetNextVisible() "
-                                      "for must be visible itself!"));
+    wxASSERT_MSG( IsVisible(item), wxT("The item you call GetNextVisible() for must be visible itself!"));
 
     return wxTreeItemId((WXHTREEITEM) TreeView_GetNextVisible(GetHwnd(), HITEM(item)));
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
 {
-    wxASSERT_MSG( IsVisible(item), wxT("The item you call GetPrevVisible() "
-                                      "for must be visible itself!"));
+    wxASSERT_MSG( IsVisible(item), wxT("The item you call GetPrevVisible() for must be visible itself!"));
 
     return wxTreeItemId((WXHTREEITEM) TreeView_GetPrevVisible(GetHwnd(), HITEM(item)));
 }
@@ -1258,7 +1256,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
     HTREEITEM id = (HTREEITEM) TreeView_InsertItem(GetHwnd(), &tvIns);
     if ( id == 0 )
     {
-        wxLogLastError("TreeView_InsertItem");
+        wxLogLastError(wxT("TreeView_InsertItem"));
     }
 
     if ( data != NULL )
@@ -1343,7 +1341,7 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
 {
     if ( !TreeView_DeleteItem(GetHwnd(), HITEM(item)) )
     {
-        wxLogLastError("TreeView_DeleteItem");
+        wxLogLastError(wxT("TreeView_DeleteItem"));
     }
 }
 
@@ -1366,7 +1364,7 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
     {
         if ( !TreeView_DeleteItem(GetHwnd(), (HTREEITEM)children[n]) )
         {
-            wxLogLastError("TreeView_DeleteItem");
+            wxLogLastError(wxT("TreeView_DeleteItem"));
         }
     }
 }
@@ -1375,7 +1373,7 @@ void wxTreeCtrl::DeleteAllItems()
 {
     if ( !TreeView_DeleteAllItems(GetHwnd()) )
     {
-        wxLogLastError("TreeView_DeleteAllItems");
+        wxLogLastError(wxT("TreeView_DeleteAllItems"));
     }
 }
 
@@ -1500,7 +1498,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item)
         {
             if ( !TreeView_SelectItem(GetHwnd(), HITEM(item)) )
             {
-                wxLogLastError("TreeView_SelectItem");
+                wxLogLastError(wxT("TreeView_SelectItem"));
             }
             else
             {
@@ -1522,7 +1520,7 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
 {
     if ( !TreeView_SelectSetFirstVisible(GetHwnd(), HITEM(item)) )
     {
-        wxLogLastError("TreeView_SelectSetFirstVisible");
+        wxLogLastError(wxT("TreeView_SelectSetFirstVisible"));
     }
 }
 
@@ -2038,8 +2036,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         break;
 
                     default:
-                        wxLogDebug(wxT("unexpected code %d in TVN_ITEMEXPAND "
-                                      "message"), tv->action);
+                        wxLogDebug(wxT("unexpected code %d in TVN_ITEMEXPAND message"), tv->action);
                 }
 
                 bool ing = ((int)hdr->code == TVN_ITEMEXPANDING);

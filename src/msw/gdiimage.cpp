@@ -330,7 +330,7 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap,
         BITMAP bm;
         if ( !::GetObject(GetHbitmapOf(*bitmap), sizeof(BITMAP), (LPSTR) &bm) )
         {
-            wxLogLastError("GetObject(HBITMAP)");
+            wxLogLastError(wxT("GetObject(HBITMAP)"));
         }
 
         data->m_width = bm.bmWidth;
@@ -419,9 +419,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     if ( (desiredWidth != -1 && desiredWidth != size.x) ||
          (desiredHeight != -1 && desiredHeight != size.y) )
     {
-        wxLogDebug(_T("Returning FALSE from wxICOFileHandler::Load because "
-                      "of the size mismatch: actual (%d, %d), "
-                      "requested (%d, %d)"),
+        wxLogDebug(_T("Returning FALSE from wxICOFileHandler::Load because of the size mismatch: actual (%d, %d), requested (%d, %d)"),
                       size.x, size.y,
                       desiredWidth, desiredHeight);
 
@@ -488,7 +486,7 @@ static wxSize GetHiconSize(HICON hicon)
         ICONINFO info;
         if ( !::GetIconInfo(hicon, &info) )
         {
-            wxLogLastError("GetIconInfo");
+            wxLogLastError(wxT("GetIconInfo"));
         }
         else
         {

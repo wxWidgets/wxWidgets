@@ -1025,7 +1025,7 @@ wxWindowDisabler::~wxWindowDisabler()
     {
         if ( !::SetForegroundWindow(GetHwndOf(m_winTop)) )
         {
-            wxLogLastError("SetForegroundWindow");
+            wxLogLastError(wxT("SetForegroundWindow"));
         }
     }
 #else

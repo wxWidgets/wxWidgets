@@ -308,7 +308,7 @@ bool wxGenericDragImage::EndDrag()
 // is non-NULL, or in screen coordinates if NULL.
 bool wxGenericDragImage::Move(const wxPoint& pt)
 {
-    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), "No window DC in wxGenericDragImage::Move()" );
+    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), wxT("No window DC in wxGenericDragImage::Move()") );
 
     // Erase at old position, then show at the current position
     wxPoint oldPos = m_position;
@@ -328,7 +328,7 @@ bool wxGenericDragImage::Move(const wxPoint& pt)
 
 bool wxGenericDragImage::Show()
 {
-    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), "No window DC in wxGenericDragImage::Show()" );
+    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), wxT("No window DC in wxGenericDragImage::Show()") );
     
     // Show at the current position
 
@@ -353,7 +353,7 @@ bool wxGenericDragImage::Show()
 
 bool wxGenericDragImage::Hide()
 {
-    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), "No window DC in wxGenericDragImage::Hide()" );
+    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), wxT("No window DC in wxGenericDragImage::Hide()") );
 
     // Repair the old position
 

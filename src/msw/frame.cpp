@@ -472,7 +472,7 @@ void wxFrame::InternalSetMenuBar()
 {
     if ( !::SetMenu(GetHwnd(), (HMENU)m_hMenu) )
     {
-        wxLogLastError("SetMenu");
+        wxLogLastError(wxT("SetMenu"));
     }
 }
 

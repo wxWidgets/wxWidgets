@@ -291,7 +291,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     {
         if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, pos, 0) )
         {
-            wxLogLastError("TB_DELETEBUTTON");
+            wxLogLastError(wxT("TB_DELETEBUTTON"));
 
             return FALSE;
         }
@@ -377,7 +377,7 @@ bool wxToolBar::Realize()
                 if ( !BitBlt(memoryDC, x, 0,  m_defaultWidth, m_defaultHeight,
                              memoryDC2, 0, 0, SRCCOPY) )
                 {
-                    wxLogLastError("BitBlt");
+                    wxLogLastError(wxT("BitBlt"));
                 }
 
                 ::SelectObject(memoryDC2, oldBitmap2);
@@ -446,7 +446,7 @@ bool wxToolBar::Realize()
         {
             if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, 0, 0) )
             {
-                wxLogLastError("TB_DELETEBUTTON");
+                wxLogLastError(wxT("TB_DELETEBUTTON"));
             }
         }
 
@@ -518,7 +518,7 @@ bool wxToolBar::Realize()
     if ( !::SendMessage(GetHwnd(), TB_ADDBUTTONS,
                         (WPARAM)i, (LPARAM)buttons) )
     {
-        wxLogLastError("TB_ADDBUTTONS");
+        wxLogLastError(wxT("TB_ADDBUTTONS"));
     }
 
     delete [] buttons;
@@ -547,7 +547,7 @@ bool wxToolBar::Realize()
         if ( !SendMessage(GetHwnd(), TB_GETITEMRECT,
                           index, (LPARAM)(LPRECT)&r) )
         {
-            wxLogLastError("TB_GETITEMRECT");
+            wxLogLastError(wxT("TB_GETITEMRECT"));
         }
 
         // TB_SETBUTTONINFO message is only supported by comctl32.dll 4.71+
@@ -566,7 +566,7 @@ bool wxToolBar::Realize()
                                   tool->GetId(), (LPARAM)&tbbi) )
                 {
                     // the id is probably invalid?
-                    wxLogLastError("TB_SETBUTTONINFO");
+                    wxLogLastError(wxT("TB_SETBUTTONINFO"));
                 }
             }
             else
@@ -589,7 +589,7 @@ bool wxToolBar::Realize()
                     if ( !SendMessage(GetHwnd(), TB_INSERTBUTTON,
                                       index, (LPARAM)&tbb) )
                     {
-                        wxLogLastError("TB_INSERTBUTTON");
+                        wxLogLastError(wxT("TB_INSERTBUTTON"));
                     }
 
                     index++;

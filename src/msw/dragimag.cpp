@@ -324,7 +324,7 @@ bool wxDragImage::EndDrag()
 
     if ( !::ReleaseCapture() )
     {
-        wxLogLastError("ReleaseCapture");
+        wxLogLastError(wxT("ReleaseCapture"));
     }
 
     ::ShowCursor(TRUE);

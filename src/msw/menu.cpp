@@ -82,7 +82,7 @@ void wxMenu::Init()
     m_hMenu = (WXHMENU)CreatePopupMenu();
     if ( !m_hMenu )
     {
-        wxLogLastError("CreatePopupMenu");
+        wxLogLastError(wxT("CreatePopupMenu"));
     }
 
     // if we have a title, insert it in the beginning of the menu
@@ -103,7 +103,7 @@ wxMenu::~wxMenu()
     {
         if ( !::DestroyMenu(GetHmenu()) )
         {
-            wxLogLastError("DestroyMenu");
+            wxLogLastError(wxT("DestroyMenu"));
         }
     }
 
@@ -234,7 +234,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
     if ( !ok )
     {
-        wxLogLastError("Insert or AppendMenu");
+        wxLogLastError(wxT("Insert or AppendMenu"));
 
         return FALSE;
     }
@@ -308,7 +308,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     // remove the item from the menu
     if ( !::RemoveMenu(GetHmenu(), (UINT)pos, MF_BYPOSITION) )
     {
-        wxLogLastError("RemoveMenu");
+        wxLogLastError(wxT("RemoveMenu"));
     }
 
     if ( IsAttached() )
@@ -361,7 +361,7 @@ void wxMenu::SetTitle(const wxString& label)
                                (unsigned)idMenuTitle, m_title) ||
                  !::InsertMenu(hMenu, 1u, MF_BYPOSITION, (unsigned)-1, NULL) )
             {
-                wxLogLastError("InsertMenu");
+                wxLogLastError(wxT("InsertMenu"));
             }
         }
     }
@@ -373,7 +373,7 @@ void wxMenu::SetTitle(const wxString& label)
             if ( !RemoveMenu(hMenu, 0, MF_BYPOSITION) ||
                  !RemoveMenu(hMenu, 0, MF_BYPOSITION) )
             {
-                wxLogLastError("RemoveMenu");
+                wxLogLastError(wxT("RemoveMenu"));
             }
         }
         else
@@ -383,7 +383,7 @@ void wxMenu::SetTitle(const wxString& label)
                              MF_BYPOSITION | MF_STRING,
                              (unsigned)idMenuTitle, m_title) )
             {
-                wxLogLastError("ModifyMenu");
+                wxLogLastError(wxT("ModifyMenu"));
             }
         }
     }
@@ -399,7 +399,7 @@ void wxMenu::SetTitle(const wxString& label)
 
         if ( !SetMenuItemInfo(hMenu, (unsigned)idMenuTitle, FALSE, &mii) )
         {
-            wxLogLastError("SetMenuItemInfo");
+            wxLogLastError(wxT("SetMenuItemInfo"));
         }
     }
 #endif // Win32
@@ -546,7 +546,7 @@ WXHMENU wxMenuBar::Create()
 
     if ( !m_hMenu )
     {
-        wxLogLastError("CreateMenu");
+        wxLogLastError(wxT("CreateMenu"));
     }
     else
     {
@@ -557,7 +557,7 @@ WXHMENU wxMenuBar::Create()
                                (UINT)m_menus[i]->GetHMenu(),
                                m_titles[i]) )
             {
-                wxLogLastError("AppendMenu");
+                wxLogLastError(wxT("AppendMenu"));
             }
         }
     }
@@ -618,7 +618,7 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     if ( ::ModifyMenu(GetHmenu(), pos, MF_BYPOSITION | MF_STRING | flagsOld,
                       id, label) == (int)0xFFFFFFFF )
     {
-        wxLogLastError("ModifyMenu");
+        wxLogLastError(wxT("ModifyMenu"));
     }
 
     Refresh();
@@ -648,14 +648,14 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
         // can't use ModifyMenu() because it deletes the submenu it replaces
         if ( !::RemoveMenu(GetHmenu(), (UINT)pos, MF_BYPOSITION) )
         {
-            wxLogLastError("RemoveMenu");
+            wxLogLastError(wxT("RemoveMenu"));
         }
 
         if ( !::InsertMenu(GetHmenu(), (UINT)pos,
                            MF_BYPOSITION | MF_POPUP | MF_STRING,
                            (UINT)GetHmenuOf(menu), title) )
         {
-            wxLogLastError("InsertMenu");
+            wxLogLastError(wxT("InsertMenu"));
         }
 
 #if wxUSE_ACCEL
@@ -687,7 +687,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
                            MF_BYPOSITION | MF_POPUP | MF_STRING,
                            (UINT)GetHmenuOf(menu), title) )
         {
-            wxLogLastError("InsertMenu");
+            wxLogLastError(wxT("InsertMenu"));
         }
 
 #if wxUSE_ACCEL
@@ -748,7 +748,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     {
         if ( !::RemoveMenu(GetHmenu(), (UINT)pos, MF_BYPOSITION) )
         {
-            wxLogLastError("RemoveMenu");
+            wxLogLastError(wxT("RemoveMenu"));
         }
 
         menu->Detach();

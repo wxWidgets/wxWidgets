@@ -171,19 +171,19 @@ const char *GetIidName(REFIID riid)
   return s_uuid;
 }
 
-void wxLogQueryInterface(const char *szInterface, REFIID riid)
+void wxLogQueryInterface(const wxChar *szInterface, REFIID riid)
 {
-  wxLogTrace("%s::QueryInterface (iid = %s)", szInterface, GetIidName(riid));
+  wxLogTrace(wxT("%s::QueryInterface (iid = %s)"), szInterface, GetIidName(riid));
 }
 
-void wxLogAddRef(const char *szInterface, ULONG cRef)
+void wxLogAddRef(const wxChar *szInterface, ULONG cRef)
 {
-  wxLogTrace("After %s::AddRef: m_cRef = %d", szInterface, cRef + 1);
+  wxLogTrace(wxT("After %s::AddRef: m_cRef = %d"), szInterface, cRef + 1);
 }
 
-void wxLogRelease(const char *szInterface, ULONG cRef)
+void wxLogRelease(const wxChar *szInterface, ULONG cRef)
 {
-  wxLogTrace("After %s::Release: m_cRef = %d", szInterface, cRef - 1);
+  wxLogTrace(wxT("After %s::Release: m_cRef = %d"), szInterface, cRef - 1);
 }
 
 #elif defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ <= 1000)

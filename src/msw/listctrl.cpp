@@ -209,8 +209,7 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
 
     if ( !m_hWnd )
     {
-        wxLogError(_("Can't create list control window, check "
-                     "that comctl32.dll is installed."));
+        wxLogError(_("Can't create list control window, check that comctl32.dll is installed."));
 
         return FALSE;
     }
@@ -952,7 +951,7 @@ bool wxListCtrl::DeleteAllColumns()
     {
         if ( ListView_DeleteColumn(GetHwnd(), 0) == 0 )
         {
-            wxLogLastError("ListView_DeleteColumn");
+            wxLogLastError(wxT("ListView_DeleteColumn"));
 
             return FALSE;
         }

@@ -347,9 +347,7 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
         ms_dllRas = wxDllLoader::LoadLibrary("RASAPI32");
         if ( !ms_dllRas )
         {
-            wxLogError(_("Dial up functions are unavailable because the "
-                         "remote access service (RAS) is not installed "
-                         "on this machine. Please install it."));
+            wxLogError(_("Dial up functions are unavailable because the remote access service (RAS) is not installed on this machine. Please install it."));
         }
         else
         {
@@ -1047,7 +1045,7 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
                 dwSuspendCount = ResumeThread(m_hThread);
                 if ( dwSuspendCount == (DWORD)-1 )
                 {
-                    wxLogLastError("ResumeThread(RasThread)");
+                    wxLogLastError(wxT("ResumeThread(RasThread)"));
 
                     ok = FALSE;
                 }
@@ -1075,7 +1073,7 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
                            );
         if ( !m_data.hEventRas )
         {
-            wxLogLastError("CreateEvent(RasStatus)");
+            wxLogLastError(wxT("CreateEvent(RasStatus)"));
 
             ok = FALSE;
         }
@@ -1087,7 +1085,7 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
         m_data.hEventQuit = CreateEvent(NULL, FALSE, FALSE, NULL);
         if ( !m_data.hEventQuit )
         {
-            wxLogLastError("CreateEvent(RasThreadQuit)");
+            wxLogLastError(wxT("CreateEvent(RasThreadQuit)"));
 
             CleanUpThreadData();
 
@@ -1106,7 +1104,7 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
                                     (HMENU)NULL, wxGetInstance(), 0);
         if ( !ms_hwndRas )
         {
-            wxLogLastError("CreateWindow(RasHiddenWindow)");
+            wxLogLastError(wxT("CreateWindow(RasHiddenWindow)"));
 
             CleanUpThreadData();
 
@@ -1143,7 +1141,7 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
 
         if ( !m_hThread )
         {
-            wxLogLastError("CreateThread(RasStatusThread)");
+            wxLogLastError(wxT("CreateThread(RasStatusThread)"));
 
             CleanUpThreadData();
         }
@@ -1194,7 +1192,7 @@ void wxDialUpManagerMSW::DisableAutoCheckOnlineStatus()
         // we have running secondary thread, it's just enough to suspend it
         if ( SuspendThread(m_hThread) == (DWORD)-1 )
         {
-            wxLogLastError("SuspendThread(RasThread)");
+            wxLogLastError(wxT("SuspendThread(RasThread)"));
         }
     }
     else
@@ -1252,7 +1250,7 @@ static DWORD wxRasMonitorThread(wxRasThreadData *data)
                 break;
 
             case WAIT_FAILED:
-                wxLogLastError("WaitForMultipleObjects(RasMonitor)");
+                wxLogLastError(wxT("WaitForMultipleObjects(RasMonitor)"));
                 break;
         }
     }

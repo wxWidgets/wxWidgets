@@ -1146,7 +1146,10 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
 // Trace: send output to the current debugging stream
 void wxTrace(const wxChar *fmt ...)
 {
-  va_list ap;
+#if 1
+    wxFAIL_MSG(wxT("wxTrace is now obsolete. Please use wxDebugXXX instead."));
+#else
+    va_list ap;
   static wxChar buffer[512];
 
   va_start(ap, fmt);
@@ -1174,11 +1177,15 @@ void wxTrace(const wxChar *fmt ...)
 #else
     fprintf(stderr, buffer);
 #endif
+#endif
 }
 
 // Trace with level
 void wxTraceLevel(int level, const wxChar *fmt ...)
 {
+#if 1
+    wxFAIL_MSG(wxT("wxTrace is now obsolete. Please use wxDebugXXX instead."));
+#else
   if (wxDebugContext::GetLevel() < level)
     return;
 
@@ -1188,7 +1195,7 @@ void wxTraceLevel(int level, const wxChar *fmt ...)
   va_start(ap, fmt);
 
 #ifdef __WXMSW__
-  wvsprintf(buffer,fmt,ap) ;
+  wxWvsprintf(buffer,fmt,ap) ;
 #else
   vsprintf(buffer,fmt,ap) ;
 #endif
@@ -1209,6 +1216,7 @@ void wxTraceLevel(int level, const wxChar *fmt ...)
 #endif
 #else
     fprintf(stderr, buffer);
+#endif
 #endif
 }
 

@@ -382,7 +382,7 @@ bool wxIniConfig::Write(const wxString& szKey, const wxString& szValue)
                                        szValue, m_strLocalFilename) != 0;
 
   if ( !bOk )
-    wxLogLastError("WritePrivateProfileString");
+    wxLogLastError(wxT("WritePrivateProfileString"));
 
   return bOk;
 }
@@ -426,7 +426,7 @@ bool wxIniConfig::DeleteEntry(const wxString& szKey, bool bGroupIfEmptyAlso)
                                        NULL, m_strLocalFilename) != 0;
 
   if ( !bOk )
-    wxLogLastError("WritePrivateProfileString");
+    wxLogLastError(wxT("WritePrivateProfileString"));
 
   return bOk;
 }
@@ -441,7 +441,7 @@ bool wxIniConfig::DeleteGroup(const wxString& szKey)
                                        NULL, m_strLocalFilename) != 0;
 
   if ( !bOk )
-    wxLogLastError("WritePrivateProfileString");
+    wxLogLastError(wxT("WritePrivateProfileString"));
 
   return bOk;
 }
@@ -460,11 +460,11 @@ bool wxIniConfig::DeleteAll()
   size_t nRc = GetWindowsDirectory(szBuf, WXSIZEOF(szBuf));
   if ( nRc == 0 )
   {
-    wxLogLastError("GetWindowsDirectory");
+    wxLogLastError(wxT("GetWindowsDirectory"));
   }
   else if ( nRc > WXSIZEOF(szBuf) )
   {
-    wxFAIL_MSG("buffer is too small for Windows directory.");
+    wxFAIL_MSG(wxT("buffer is too small for Windows directory."));
   }
 
   wxString strFile = szBuf;

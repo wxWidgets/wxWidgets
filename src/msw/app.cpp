@@ -319,7 +319,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(frame)");
+        wxLogLastError(wxT("RegisterClass(frame)"));
 
         return FALSE;
     }
@@ -330,7 +330,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(no redraw frame)");
+        wxLogLastError(wxT("RegisterClass(no redraw frame)"));
 
         return FALSE;
     }
@@ -342,7 +342,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(MDI parent)");
+        wxLogLastError(wxT("RegisterClass(MDI parent)"));
 
         return FALSE;
     }
@@ -353,7 +353,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(no redraw MDI parent frame)");
+        wxLogLastError(wxT("RegisterClass(no redraw MDI parent frame)"));
 
         return FALSE;
     }
@@ -365,7 +365,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(MDI child)");
+        wxLogLastError(wxT("RegisterClass(MDI child)"));
 
         return FALSE;
     }
@@ -376,7 +376,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(no redraw MDI child)");
+        wxLogLastError(wxT("RegisterClass(no redraw MDI child)"));
 
         return FALSE;
     }
@@ -388,7 +388,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(panel)");
+        wxLogLastError(wxT("RegisterClass(panel)"));
 
         return FALSE;
     }
@@ -399,7 +399,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(no redraw panel)");
+        wxLogLastError(wxT("RegisterClass(no redraw panel)"));
 
         return FALSE;
     }
@@ -410,7 +410,7 @@ bool wxApp::RegisterWindowClasses()
 
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(canvas)");
+        wxLogLastError(wxT("RegisterClass(canvas)"));
 
         return FALSE;
     }
@@ -419,7 +419,7 @@ bool wxApp::RegisterWindowClasses()
     wndclass.style         = styleNoRedraw;
     if ( !RegisterClass(&wndclass) )
     {
-        wxLogLastError("RegisterClass(no redraw canvas)");
+        wxLogLastError(wxT("RegisterClass(no redraw canvas)"));
 
         return FALSE;
     }
@@ -750,8 +750,7 @@ int wxEntry(WXHINSTANCE hInstance,
 
         // using wxLog would be unsafe here
         ::MessageBox(NULL,
-                     _("Unrecoverable program error detected: "
-                     " the application will terminate."),
+                     _("Unrecoverable program error detected: the application will terminate."),
                      _("Fatal Error"),
                      MB_APPLMODAL | MB_ICONSTOP | MB_OK);
 
@@ -866,7 +865,7 @@ bool wxApp::DoMessage()
     else if ( rc == -1 )
     {
         // should never happen, but let's test for it nevertheless
-        wxLogLastError("GetMessage");
+        wxLogLastError(wxT("GetMessage"));
     }
     else
     {
@@ -1315,7 +1314,7 @@ void wxWakeUpIdle()
         if ( !::PostMessage(GetHwndOf(topWindow), WM_NULL, 0, 0) )
         {
             // should never happen
-            wxLogLastError("PostMessage(WM_NULL)");
+            wxLogLastError(wxT("PostMessage(WM_NULL)"));
         }
     }
 }

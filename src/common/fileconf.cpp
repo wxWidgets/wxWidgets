@@ -460,8 +460,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
             break;
 
           default:
-            wxLogWarning(_("file '%s', line %d: '%s' "
-                           "ignored after group header."),
+            wxLogWarning(_("file '%s', line %d: '%s' ignored after group header."),
                          file.GetName(), n + 1, pEnd);
             bCont = FALSE;
         }
@@ -506,8 +505,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
         else {
           if ( bLocal && pEntry->IsImmutable() ) {
             // immutable keys can't be changed by user
-            wxLogWarning(_("file '%s', line %d: value for "
-                           "immutable key '%s' ignored."),
+            wxLogWarning(_("file '%s', line %d: value for immutable key '%s' ignored."),
                          file.GetName(), n + 1, strKey.c_str());
             continue;
           }
@@ -517,8 +515,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
           //  (c) key from global file now found in local one
           // which is exactly what we want.
           else if ( !bLocal || pEntry->IsLocal() ) {
-            wxLogWarning(_("file '%s', line %d: key '%s' was first "
-                           "found at line %d."),
+            wxLogWarning(_("file '%s', line %d: key '%s' was first found at line %d."),
                          file.GetName(), n + 1, strKey.c_str(), pEntry->Line());
 
             if ( bLocal )

@@ -398,8 +398,7 @@ wxConnectionBase *wxDDEClient::MakeConnection(const wxString& WXUNUSED(host),
                              (PCONVCONTEXT)NULL);
     if ( !hConv )
     {
-        DDELogError(wxString::Format(_("Failed to create connection to "
-                                       "server '%s' on topic '%s'"),
+        DDELogError(wxString::Format(_("Failed to create connection to server '%s' on topic '%s'"),
                                      server.c_str(), topic.c_str()));
     }
     else

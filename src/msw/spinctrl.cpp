@@ -133,7 +133,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     if ( !m_hwndBuddy )
     {
-        wxLogLastError("CreateWindow(buddy text window)");
+        wxLogLastError(wxT("CreateWindow(buddy text window)"));
 
         return FALSE;
     }
@@ -175,7 +175,7 @@ void wxSpinCtrl::SetValue(const wxString& text)
 {
     if ( !::SetWindowText((HWND)m_hwndBuddy, text.c_str()) )
     {
-        wxLogLastError("SetWindowText(buddy)");
+        wxLogLastError(wxT("SetWindowText(buddy)"));
     }
 }
 
@@ -288,13 +288,13 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 
     if ( !::MoveWindow((HWND)m_hwndBuddy, x, y, widthText, height, TRUE) )
     {
-        wxLogLastError("MoveWindow(buddy)");
+        wxLogLastError(wxT("MoveWindow(buddy)"));
     }
 
     x += widthText + MARGIN_BETWEEN;
     if ( !::MoveWindow(GetHwnd(), x, y, widthBtn, height, TRUE) )
     {
-        wxLogLastError("MoveWindow");
+        wxLogLastError(wxT("MoveWindow"));
     }
 }
 

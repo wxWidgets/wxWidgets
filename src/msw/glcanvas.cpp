@@ -49,7 +49,7 @@ wxGLContext::wxGLContext(bool isRGB, wxGLCanvas *win, const wxPalette& palette)
   m_hDC = win->GetHDC();
 
   m_glContext = wglCreateContext((HDC) m_hDC);
-  wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
+  wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGl context") );
 
   wglMakeCurrent((HDC) m_hDC, m_glContext);
 }
@@ -65,7 +65,7 @@ wxGLContext::wxGLContext(
     m_hDC = win->GetHDC();
 
     m_glContext = wglCreateContext((HDC) m_hDC);
-    wxCHECK_RET( m_glContext, "Couldn't create OpenGl context" );
+    wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGl context") );
 
     if( other != 0 )
       wglShareLists( other->m_glContext, m_glContext );
@@ -262,7 +262,7 @@ bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
 
         if ( !RegisterClass(&wndclass) )
         {
-            wxLogLastError("RegisterClass(wxGLCanvasClass)");
+            wxLogLastError(wxT("RegisterClass(wxGLCanvasClass)"));
 
             return FALSE;
         }
@@ -340,13 +340,13 @@ void wxGLCanvas::SetupPixelFormat() // (HDC hDC)
 
     pixelFormat = ChoosePixelFormat((HDC) m_hDC, &pfd);
     if (pixelFormat == 0) {
-	MessageBox(WindowFromDC((HDC) m_hDC), "ChoosePixelFormat failed.", "Error",
+	MessageBox(WindowFromDC((HDC) m_hDC), wxT("ChoosePixelFormat failed."), wxT("Error"),
 		MB_ICONERROR | MB_OK);
 	exit(1);
     }
 
     if (SetPixelFormat((HDC) m_hDC, pixelFormat, &pfd) != TRUE) {
-	MessageBox(WindowFromDC((HDC) m_hDC), "SetPixelFormat failed.", "Error",
+	MessageBox(WindowFromDC((HDC) m_hDC), wxT("SetPixelFormat failed."), wxT("Error"),
 		MB_ICONERROR | MB_OK);
 	exit(1);
     }

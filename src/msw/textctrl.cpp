@@ -160,8 +160,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( m_windowStyle & wxTE_MULTILINE )
     {
         wxASSERT_MSG( !(m_windowStyle & wxTE_PROCESS_ENTER),
-                      wxT("wxTE_PROCESS_ENTER style is ignored for multiline "
-                          "text controls (they always process it)") );
+                      wxT("wxTE_PROCESS_ENTER style is ignored for multiline text controls (they always process it)") );
 
         msStyle |= ES_MULTILINE | ES_WANTRETURN;
         if ((m_windowStyle & wxTE_NO_VSCROLL) == 0)
@@ -214,9 +213,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
             // done)
             if ( !wxRichEditModule::Load() )
             {
-                wxLogError(_("Impossible to create a rich edit control, "
-                             "using simple text control instead. Please "
-                             "reinstall riched32.dll"));
+                wxLogError(_("Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"));
 
                 s_errorGiven = TRUE;
             }

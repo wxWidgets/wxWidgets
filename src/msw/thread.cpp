@@ -242,7 +242,7 @@ public:
         {
             if ( !::CloseHandle(event) )
             {
-                wxLogLastError("CloseHandle(event)");
+                wxLogLastError(wxT("CloseHandle(event)"));
             }
         }
     }
@@ -281,7 +281,7 @@ void wxCondition::Signal()
     // will be woken up.
     if ( !::SetEvent(m_internal->event) )
     {
-        wxLogLastError("SetEvent");
+        wxLogLastError(wxT("SetEvent"));
     }
 }
 
@@ -351,7 +351,7 @@ public:
         {
             if ( !::CloseHandle(m_hThread) )
             {
-                wxLogLastError("CloseHandle(thread)");
+                wxLogLastError(wxT("CloseHandle(thread)"));
             }
 
             m_hThread = 0;
@@ -655,8 +655,7 @@ bool wxThread::SetConcurrency(size_t level)
 
         // we've discovered a MT version of Win9x!
         wxASSERT_MSG( pfnSetProcessAffinityMask,
-                      _T("this system has several CPUs but no "
-                         "SetProcessAffinityMask function?") );
+                      _T("this system has several CPUs but no SetProcessAffinityMask function?") );
     }
 
     if ( !pfnSetProcessAffinityMask )
@@ -877,7 +876,7 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
     if ( !::GetExitCodeThread(hThread, (LPDWORD)&rc) )
     {
-        wxLogLastError("GetExitCodeThread");
+        wxLogLastError(wxT("GetExitCodeThread"));
 
         rc = (ExitCode)-1;
     }
@@ -1020,9 +1019,7 @@ bool wxThreadModule::OnInit()
         // in normal circumstances it will only happen if all other
         // TLS_MINIMUM_AVAILABLE (>= 64) indices are already taken - in other
         // words, this should never happen
-        wxLogSysError(_("Thread module initialization failed: "
-                        "impossible to allocate index in thread "
-                        "local storage"));
+        wxLogSysError(_("Thread module initialization failed: impossible to allocate index in thread local storage"));
 
         return FALSE;
     }
@@ -1034,8 +1031,7 @@ bool wxThreadModule::OnInit()
         ::TlsFree(gs_tlsThisThread);
         gs_tlsThisThread = 0xFFFFFFFF;
 
-        wxLogSysError(_("Thread module initialization failed: "
-                        "can not store value in thread local storage"));
+        wxLogSysError(_("Thread module initialization failed: can not store value in thread local storage"));
 
         return FALSE;
     }
@@ -1055,7 +1051,7 @@ void wxThreadModule::OnExit()
 {
     if ( !::TlsFree(gs_tlsThisThread) )
     {
-        wxLogLastError("TlsFree failed.");
+        wxLogLastError(wxT("TlsFree failed."));
     }
 
     if ( gs_critsectGui )
@@ -1160,7 +1156,7 @@ void WXDLLEXPORT wxWakeUpMainThread()
     if ( !::PostThreadMessage(gs_idMainThread, WM_NULL, 0, 0) )
     {
         // should never happen
-        wxLogLastError("PostThreadMessage(WM_NULL)");
+        wxLogLastError(wxT("PostThreadMessage(WM_NULL)"));
     }
 }
 

@@ -251,7 +251,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 
         if ( !hwndBtn )
         {
-            wxLogLastError("CreateWindow(radio btn)");
+            wxLogLastError(wxT("CreateWindow(radio btn)"));
 
             return FALSE;
         }

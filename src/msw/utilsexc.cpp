@@ -108,7 +108,7 @@ public:
 #ifndef __WIN16__
         if ( !::CloseHandle(hProcess) )
         {
-            wxLogLastError("CloseHandle(hProcess)");
+            wxLogLastError(wxT("CloseHandle(hProcess)"));
         }
 #endif
     }
@@ -221,7 +221,7 @@ static DWORD wxExecuteThread(wxExecuteData *data)
     // get the exit code
     if ( !GetExitCodeProcess(data->hProcess, &data->dwExitCode) )
     {
-        wxLogLastError("GetExitCodeProcess");
+        wxLogLastError(wxT("GetExitCodeProcess"));
     }
 
     wxASSERT_MSG( data->dwExitCode != STILL_ACTIVE,
@@ -521,7 +521,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 
         if ( !::RegisterClass(&wndclass) )
         {
-            wxLogLastError("RegisterClass(hidden window)");
+            wxLogLastError(wxT("RegisterClass(hidden window)"));
         }
     }
 
@@ -564,16 +564,16 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     if ( ::ResumeThread(pi.hThread) == (DWORD)-1 )
     {
         // ignore it - what can we do?
-        wxLogLastError("ResumeThread in wxExecute");
+        wxLogLastError(wxT("ResumeThread in wxExecute"));
     }
 
     // close unneeded handle
     if ( !::CloseHandle(pi.hThread) )
-        wxLogLastError("CloseHandle(hThread)");
+        wxLogLastError(wxT("CloseHandle(hThread)"));
 
     if ( !hThread )
     {
-        wxLogLastError("CreateThread in wxExecute");
+        wxLogLastError(wxT("CreateThread in wxExecute"));
 
         DestroyWindow(hwnd);
         delete data;

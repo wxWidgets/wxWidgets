@@ -158,8 +158,7 @@ wxString wxFileType::ExpandCommand(const wxString& command,
                         const wxChar *pEnd = wxStrchr(pc, wxT('}'));
                         if ( pEnd == NULL ) {
                             wxString mimetype;
-                            wxLogWarning(_("Unmatched '{' in an entry for "
-                                           "mime type %s."),
+                            wxLogWarning(_("Unmatched '{' in an entry for mime type %s."),
                                          params.GetMimeType().c_str());
                             str << wxT("%{");
                         }

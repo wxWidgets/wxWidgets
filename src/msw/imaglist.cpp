@@ -100,7 +100,7 @@ bool wxImageList::Create(int width, int height, bool mask, int initial)
                                                    initial, 1);
     if ( !m_hImageList )
     {
-        wxLogLastError("ImageList_Create()");
+        wxLogLastError(wxT("ImageList_Create()"));
     }
 
     return m_hImageList != 0;
@@ -200,7 +200,7 @@ bool wxImageList::Replace(int index,
                                 GetHbitmapOf(bitmap), hbmpMask) != 0;
     if ( !ok )
     {
-        wxLogLastError("ImageList_Add()");
+        wxLogLastError(wxT("ImageList_Add()"));
     }
 
     ::DeleteObject(hbmpMask);
@@ -215,7 +215,7 @@ bool wxImageList::Replace(int i, const wxIcon& icon)
     bool ok = ImageList_ReplaceIcon(GetHImageList(), i, GetHiconOf(icon)) != 0;
     if ( !ok )
     {
-        wxLogLastError("ImageList_ReplaceIcon()");
+        wxLogLastError(wxT("ImageList_ReplaceIcon()"));
     }
 
     return ok;
@@ -231,7 +231,7 @@ bool wxImageList::Remove(int index)
     bool ok = ImageList_Remove(GetHImageList(), index) != 0;
     if ( !ok )
     {
-        wxLogLastError("ImageList_Remove()");
+        wxLogLastError(wxT("ImageList_Remove()"));
     }
 
     return ok;
@@ -295,7 +295,7 @@ bool wxImageList::Draw(int index,
     bool ok = ImageList_Draw(GetHImageList(), index, hDC, x, y, style) != 0;
     if ( !ok )
     {
-        wxLogLastError("ImageList_Draw()");
+        wxLogLastError(wxT("ImageList_Draw()"));
     }
 
     return ok;

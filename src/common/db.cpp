@@ -1035,183 +1035,183 @@ void wxDB::logError(const char *errMsg, const char *SQLState)
 /**********wxDB::TranslateSqlState()  **********/
 int wxDB::TranslateSqlState(const char *SQLState)
 {
-    if (!wxStrcmp(SQLState, "01000"))
+    if (!wxStrcmp(SQLState, wxT("01000")))
         return(DB_ERR_GENERAL_WARNING);
-    if (!wxStrcmp(SQLState, "01002"))
+    if (!wxStrcmp(SQLState, wxT("01002")))
         return(DB_ERR_DISCONNECT_ERROR);
-    if (!wxStrcmp(SQLState, "01004"))
+    if (!wxStrcmp(SQLState, wxT("01004")))
         return(DB_ERR_DATA_TRUNCATED);
-    if (!wxStrcmp(SQLState, "01006"))
+    if (!wxStrcmp(SQLState, wxT("01006")))
         return(DB_ERR_PRIV_NOT_REVOKED);
-    if (!wxStrcmp(SQLState, "01S00"))
+    if (!wxStrcmp(SQLState, wxT("01S00")))
         return(DB_ERR_INVALID_CONN_STR_ATTR);
-    if (!wxStrcmp(SQLState, "01S01"))
+    if (!wxStrcmp(SQLState, wxT("01S01")))
         return(DB_ERR_ERROR_IN_ROW);
-    if (!wxStrcmp(SQLState, "01S02"))
+    if (!wxStrcmp(SQLState, wxT("01S02")))
         return(DB_ERR_OPTION_VALUE_CHANGED);
-    if (!wxStrcmp(SQLState, "01S03"))
+    if (!wxStrcmp(SQLState, wxT("01S03")))
         return(DB_ERR_NO_ROWS_UPD_OR_DEL);
-    if (!wxStrcmp(SQLState, "01S04"))
+    if (!wxStrcmp(SQLState, wxT("01S04")))
         return(DB_ERR_MULTI_ROWS_UPD_OR_DEL);
-    if (!wxStrcmp(SQLState, "07001"))
+    if (!wxStrcmp(SQLState, wxT("07001")))
         return(DB_ERR_WRONG_NO_OF_PARAMS);
-    if (!wxStrcmp(SQLState, "07006"))
+    if (!wxStrcmp(SQLState, wxT("07006")))
         return(DB_ERR_DATA_TYPE_ATTR_VIOL);
-    if (!wxStrcmp(SQLState, "08001"))
+    if (!wxStrcmp(SQLState, wxT("08001")))
         return(DB_ERR_UNABLE_TO_CONNECT);
-    if (!wxStrcmp(SQLState, "08002"))
+    if (!wxStrcmp(SQLState, wxT("08002")))
         return(DB_ERR_CONNECTION_IN_USE);
-    if (!wxStrcmp(SQLState, "08003"))
+    if (!wxStrcmp(SQLState, wxT("08003")))
         return(DB_ERR_CONNECTION_NOT_OPEN);
-    if (!wxStrcmp(SQLState, "08004"))
+    if (!wxStrcmp(SQLState, wxT("08004")))
         return(DB_ERR_REJECTED_CONNECTION);
-    if (!wxStrcmp(SQLState, "08007"))
+    if (!wxStrcmp(SQLState, wxT("08007")))
         return(DB_ERR_CONN_FAIL_IN_TRANS);
-    if (!wxStrcmp(SQLState, "08S01"))
+    if (!wxStrcmp(SQLState, wxT("08S01")))
         return(DB_ERR_COMM_LINK_FAILURE);
-    if (!wxStrcmp(SQLState, "21S01"))
+    if (!wxStrcmp(SQLState, wxT("21S01")))
         return(DB_ERR_INSERT_VALUE_LIST_MISMATCH);
-    if (!wxStrcmp(SQLState, "21S02"))
+    if (!wxStrcmp(SQLState, wxT("21S02")))
         return(DB_ERR_DERIVED_TABLE_MISMATCH);
-    if (!wxStrcmp(SQLState, "22001"))
+    if (!wxStrcmp(SQLState, wxT("22001")))
         return(DB_ERR_STRING_RIGHT_TRUNC);
-    if (!wxStrcmp(SQLState, "22003"))
+    if (!wxStrcmp(SQLState, wxT("22003")))
         return(DB_ERR_NUMERIC_VALUE_OUT_OF_RNG);
-    if (!wxStrcmp(SQLState, "22005"))
+    if (!wxStrcmp(SQLState, wxT("22005")))
         return(DB_ERR_ERROR_IN_ASSIGNMENT);
-    if (!wxStrcmp(SQLState, "22008"))
+    if (!wxStrcmp(SQLState, wxT("22008")))
         return(DB_ERR_DATETIME_FLD_OVERFLOW);
-    if (!wxStrcmp(SQLState, "22012"))
+    if (!wxStrcmp(SQLState, wxT("22012")))
         return(DB_ERR_DIVIDE_BY_ZERO);
-    if (!wxStrcmp(SQLState, "22026"))
+    if (!wxStrcmp(SQLState, wxT("22026")))
         return(DB_ERR_STR_DATA_LENGTH_MISMATCH);
-    if (!wxStrcmp(SQLState, "23000"))
+    if (!wxStrcmp(SQLState, wxT("23000")))
         return(DB_ERR_INTEGRITY_CONSTRAINT_VIOL);
-    if (!wxStrcmp(SQLState, "24000"))
+    if (!wxStrcmp(SQLState, wxT("24000")))
         return(DB_ERR_INVALID_CURSOR_STATE);
-    if (!wxStrcmp(SQLState, "25000"))
+    if (!wxStrcmp(SQLState, wxT("25000")))
         return(DB_ERR_INVALID_TRANS_STATE);
-    if (!wxStrcmp(SQLState, "28000"))
+    if (!wxStrcmp(SQLState, wxT("28000")))
         return(DB_ERR_INVALID_AUTH_SPEC);
-    if (!wxStrcmp(SQLState, "34000"))
+    if (!wxStrcmp(SQLState, wxT("34000")))
         return(DB_ERR_INVALID_CURSOR_NAME);
-    if (!wxStrcmp(SQLState, "37000"))
+    if (!wxStrcmp(SQLState, wxT("37000")))
         return(DB_ERR_SYNTAX_ERROR_OR_ACCESS_VIOL);
-    if (!wxStrcmp(SQLState, "3C000"))
+    if (!wxStrcmp(SQLState, wxT("3C000")))
         return(DB_ERR_DUPLICATE_CURSOR_NAME);
-    if (!wxStrcmp(SQLState, "40001"))
+    if (!wxStrcmp(SQLState, wxT("40001")))
         return(DB_ERR_SERIALIZATION_FAILURE);
-    if (!wxStrcmp(SQLState, "42000"))
+    if (!wxStrcmp(SQLState, wxT("42000")))
         return(DB_ERR_SYNTAX_ERROR_OR_ACCESS_VIOL2);
-    if (!wxStrcmp(SQLState, "70100"))
+    if (!wxStrcmp(SQLState, wxT("70100")))
         return(DB_ERR_OPERATION_ABORTED);
-    if (!wxStrcmp(SQLState, "IM001"))
+    if (!wxStrcmp(SQLState, wxT("IM001")))
         return(DB_ERR_UNSUPPORTED_FUNCTION);
-    if (!wxStrcmp(SQLState, "IM002"))
+    if (!wxStrcmp(SQLState, wxT("IM002")))
         return(DB_ERR_NO_DATA_SOURCE);
-    if (!wxStrcmp(SQLState, "IM003"))
+    if (!wxStrcmp(SQLState, wxT("IM003")))
         return(DB_ERR_DRIVER_LOAD_ERROR);
-    if (!wxStrcmp(SQLState, "IM004"))
+    if (!wxStrcmp(SQLState, wxT("IM004")))
         return(DB_ERR_SQLALLOCENV_FAILED);
-    if (!wxStrcmp(SQLState, "IM005"))
+    if (!wxStrcmp(SQLState, wxT("IM005")))
         return(DB_ERR_SQLALLOCCONNECT_FAILED);
-    if (!wxStrcmp(SQLState, "IM006"))
+    if (!wxStrcmp(SQLState, wxT("IM006")))
         return(DB_ERR_SQLSETCONNECTOPTION_FAILED);
-    if (!wxStrcmp(SQLState, "IM007"))
+    if (!wxStrcmp(SQLState, wxT("IM007")))
         return(DB_ERR_NO_DATA_SOURCE_DLG_PROHIB);
-    if (!wxStrcmp(SQLState, "IM008"))
+    if (!wxStrcmp(SQLState, wxT("IM008")))
         return(DB_ERR_DIALOG_FAILED);
-    if (!wxStrcmp(SQLState, "IM009"))
+    if (!wxStrcmp(SQLState, wxT("IM009")))
         return(DB_ERR_UNABLE_TO_LOAD_TRANSLATION_DLL);
-    if (!wxStrcmp(SQLState, "IM010"))
+    if (!wxStrcmp(SQLState, wxT("IM010")))
         return(DB_ERR_DATA_SOURCE_NAME_TOO_LONG);
-    if (!wxStrcmp(SQLState, "IM011"))
+    if (!wxStrcmp(SQLState, wxT("IM011")))
         return(DB_ERR_DRIVER_NAME_TOO_LONG);
-    if (!wxStrcmp(SQLState, "IM012"))
+    if (!wxStrcmp(SQLState, wxT("IM012")))
         return(DB_ERR_DRIVER_KEYWORD_SYNTAX_ERROR);
-    if (!wxStrcmp(SQLState, "IM013"))
+    if (!wxStrcmp(SQLState, wxT("IM013")))
         return(DB_ERR_TRACE_FILE_ERROR);
-    if (!wxStrcmp(SQLState, "S0001"))
+    if (!wxStrcmp(SQLState, wxT("S0001")))
         return(DB_ERR_TABLE_OR_VIEW_ALREADY_EXISTS);
-    if (!wxStrcmp(SQLState, "S0002"))
+    if (!wxStrcmp(SQLState, wxT("S0002")))
         return(DB_ERR_TABLE_NOT_FOUND);
-    if (!wxStrcmp(SQLState, "S0011"))
+    if (!wxStrcmp(SQLState, wxT("S0011")))
         return(DB_ERR_INDEX_ALREADY_EXISTS);
-    if (!wxStrcmp(SQLState, "S0012"))
+    if (!wxStrcmp(SQLState, wxT("S0012")))
         return(DB_ERR_INDEX_NOT_FOUND);
-    if (!wxStrcmp(SQLState, "S0021"))
+    if (!wxStrcmp(SQLState, wxT("S0021")))
         return(DB_ERR_COLUMN_ALREADY_EXISTS);
-    if (!wxStrcmp(SQLState, "S0022"))
+    if (!wxStrcmp(SQLState, wxT("S0022")))
         return(DB_ERR_COLUMN_NOT_FOUND);
-    if (!wxStrcmp(SQLState, "S0023"))
+    if (!wxStrcmp(SQLState, wxT("S0023")))
         return(DB_ERR_NO_DEFAULT_FOR_COLUMN);
-    if (!wxStrcmp(SQLState, "S1000"))
+    if (!wxStrcmp(SQLState, wxT("S1000")))
         return(DB_ERR_GENERAL_ERROR);
-    if (!wxStrcmp(SQLState, "S1001"))
+    if (!wxStrcmp(SQLState, wxT("S1001")))
         return(DB_ERR_MEMORY_ALLOCATION_FAILURE);
-    if (!wxStrcmp(SQLState, "S1002"))
+    if (!wxStrcmp(SQLState, wxT("S1002")))
         return(DB_ERR_INVALID_COLUMN_NUMBER);
-    if (!wxStrcmp(SQLState, "S1003"))
+    if (!wxStrcmp(SQLState, wxT("S1003")))
         return(DB_ERR_PROGRAM_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1004"))
+    if (!wxStrcmp(SQLState, wxT("S1004")))
         return(DB_ERR_SQL_DATA_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1008"))
+    if (!wxStrcmp(SQLState, wxT("S1008")))
         return(DB_ERR_OPERATION_CANCELLED);
-    if (!wxStrcmp(SQLState, "S1009"))
+    if (!wxStrcmp(SQLState, wxT("S1009")))
         return(DB_ERR_INVALID_ARGUMENT_VALUE);
-    if (!wxStrcmp(SQLState, "S1010"))
+    if (!wxStrcmp(SQLState, wxT("S1010")))
         return(DB_ERR_FUNCTION_SEQUENCE_ERROR);
-    if (!wxStrcmp(SQLState, "S1011"))
+    if (!wxStrcmp(SQLState, wxT("S1011")))
         return(DB_ERR_OPERATION_INVALID_AT_THIS_TIME);
-    if (!wxStrcmp(SQLState, "S1012"))
+    if (!wxStrcmp(SQLState, wxT("S1012")))
         return(DB_ERR_INVALID_TRANS_OPERATION_CODE);
-    if (!wxStrcmp(SQLState, "S1015"))
+    if (!wxStrcmp(SQLState, wxT("S1015")))
         return(DB_ERR_NO_CURSOR_NAME_AVAIL);
-    if (!wxStrcmp(SQLState, "S1090"))
+    if (!wxStrcmp(SQLState, wxT("S1090")))
         return(DB_ERR_INVALID_STR_OR_BUF_LEN);
-    if (!wxStrcmp(SQLState, "S1091"))
+    if (!wxStrcmp(SQLState, wxT("S1091")))
         return(DB_ERR_DESCRIPTOR_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1092"))
+    if (!wxStrcmp(SQLState, wxT("S1092")))
         return(DB_ERR_OPTION_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1093"))
+    if (!wxStrcmp(SQLState, wxT("S1093")))
         return(DB_ERR_INVALID_PARAM_NO);
-    if (!wxStrcmp(SQLState, "S1094"))
+    if (!wxStrcmp(SQLState, wxT("S1094")))
         return(DB_ERR_INVALID_SCALE_VALUE);
-    if (!wxStrcmp(SQLState, "S1095"))
+    if (!wxStrcmp(SQLState, wxT("S1095")))
         return(DB_ERR_FUNCTION_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1096"))
+    if (!wxStrcmp(SQLState, wxT("S1096")))
         return(DB_ERR_INF_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1097"))
+    if (!wxStrcmp(SQLState, wxT("S1097")))
         return(DB_ERR_COLUMN_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1098"))
+    if (!wxStrcmp(SQLState, wxT("S1098")))
         return(DB_ERR_SCOPE_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1099"))
+    if (!wxStrcmp(SQLState, wxT("S1099")))
         return(DB_ERR_NULLABLE_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1100"))
+    if (!wxStrcmp(SQLState, wxT("S1100")))
         return(DB_ERR_UNIQUENESS_OPTION_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1101"))
+    if (!wxStrcmp(SQLState, wxT("S1101")))
         return(DB_ERR_ACCURACY_OPTION_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1103"))
+    if (!wxStrcmp(SQLState, wxT("S1103")))
         return(DB_ERR_DIRECTION_OPTION_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1104"))
+    if (!wxStrcmp(SQLState, wxT("S1104")))
         return(DB_ERR_INVALID_PRECISION_VALUE);
-    if (!wxStrcmp(SQLState, "S1105"))
+    if (!wxStrcmp(SQLState, wxT("S1105")))
         return(DB_ERR_INVALID_PARAM_TYPE);
-    if (!wxStrcmp(SQLState, "S1106"))
+    if (!wxStrcmp(SQLState, wxT("S1106")))
         return(DB_ERR_FETCH_TYPE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1107"))
+    if (!wxStrcmp(SQLState, wxT("S1107")))
         return(DB_ERR_ROW_VALUE_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1108"))
+    if (!wxStrcmp(SQLState, wxT("S1108")))
         return(DB_ERR_CONCURRENCY_OPTION_OUT_OF_RANGE);
-    if (!wxStrcmp(SQLState, "S1109"))
+    if (!wxStrcmp(SQLState, wxT("S1109")))
         return(DB_ERR_INVALID_CURSOR_POSITION);
-    if (!wxStrcmp(SQLState, "S1110"))
+    if (!wxStrcmp(SQLState, wxT("S1110")))
         return(DB_ERR_INVALID_DRIVER_COMPLETION);
-    if (!wxStrcmp(SQLState, "S1111"))
+    if (!wxStrcmp(SQLState, wxT("S1111")))
         return(DB_ERR_INVALID_BOOKMARK_VALUE);
-    if (!wxStrcmp(SQLState, "S1C00"))
+    if (!wxStrcmp(SQLState, wxT("S1C00")))
         return(DB_ERR_DRIVER_NOT_CAPABLE);
-    if (!wxStrcmp(SQLState, "S1T00"))
+    if (!wxStrcmp(SQLState, wxT("S1T00")))
         return(DB_ERR_TIMEOUT_EXPIRED);
 
     // No match
@@ -1333,10 +1333,10 @@ bool wxDB::DropView(const char *viewName)
     {
         // Check for "Base table not found" error and ignore
         GetNextError(henv, hdbc, hstmt);
-        if (wxStrcmp(sqlState,"S0002"))  // "Base table not found"
+        if (wxStrcmp(sqlState,wxT("S0002")))  // "Base table not found"
         {
             // Check for product specific error codes
-            if (!((Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(sqlState,"42000"))))  // 5.x (and lower?)
+            if (!((Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(sqlState,wxT("42000")))))  // 5.x (and lower?)
             {
                 DispNextError();
                 DispAllErrors(henv, hdbc, hstmt);
@@ -1481,11 +1481,11 @@ int wxDB::GetKeyFields(char *tableName, wxColInf* colInf,int noCols)
             GetData( 5, SQL_C_SSHORT, &iKeySeq,    0,                        &cb);
             GetData( 7, SQL_C_CHAR,   szFkTable,   DB_MAX_TABLE_NAME_LEN+1,  &cb);
             GetData( 8, SQL_C_CHAR,   szFkCol,     DB_MAX_COLUMN_NAME_LEN+1, &cb);
-            Temp0.Printf("%s[%s] ",Temp0.c_str(),szFkTable);  // [ ] in case there is a blank in the Table name
+            Temp0.Printf(wxT("%s[%s] "),Temp0.c_str(),szFkTable);  // [ ] in case there is a blank in the Table name
         }  // if (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO)
     }   // while ((retcode == SQL_SUCCESS) || (retcode == SQL_SUCCESS_WITH_INFO))
     Temp0.Trim();     // Get rid of any unneeded blanks
-    if (Temp0 != "")
+    if (Temp0 != wxT(""))
     {
         for (i=0;i<noCols;i++)                          // Find the Column name
             if (!wxStrcmp(colInf[i].colName,szPkCol))   // We have found the Column, store the Information
@@ -1609,8 +1609,8 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
             if (!colInf)
                 break;
             // Mark the end of the array
-            wxStrcpy(colInf[noCols].tableName, "");
-            wxStrcpy(colInf[noCols].colName, "");
+            wxStrcpy(colInf[noCols].tableName, wxT(""));
+            wxStrcpy(colInf[noCols].colName, wxT(""));
             colInf[noCols].sqlDataType = 0;
         }
         // Loop through each table name
@@ -1627,7 +1627,7 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
 
             // MySQL and Access cannot accept a user name when looking up column names, so we
             // use the call below that leaves out the user name
-            if (wxStrcmp(UserID.GetData(),"") &&
+            if (wxStrcmp(UserID.GetData(),wxT("")) &&
                  Dbms() != dbmsMY_SQL &&
                  Dbms() != dbmsACCESS)
             {
@@ -1777,8 +1777,8 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
             if (!colInf)
                 break;
             // Mark the end of the array
-            wxStrcpy(colInf[noCols].tableName, "");
-            wxStrcpy(colInf[noCols].colName, "");
+            wxStrcpy(colInf[noCols].tableName, wxT(""));
+            wxStrcpy(colInf[noCols].colName, wxT(""));
             colInf[noCols].sqlDataType = 0;
         }
 
@@ -1792,7 +1792,7 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
 
         // MySQL and Access cannot accept a user name when looking up column names, so we
         // use the call below that leaves out the user name
-        if (wxStrcmp(UserID.GetData(),"") &&
+        if (wxStrcmp(UserID.GetData(),wxT("")) &&
              Dbms() != dbmsMY_SQL &&
              Dbms() != dbmsACCESS)
         {
@@ -1928,11 +1928,11 @@ int wxDB::GetColumnCount(char *tableName, const char *userID)
             UserID = userID;
     }
     else
-        UserID = "";
+        UserID = wxT("");
 
     // dBase does not use user names, and some drivers fail if you try to pass one
     if (Dbms() == dbmsDBASE)
-        UserID = "";
+        UserID = wxT("");
 
     // Oracle user names may only be in uppercase, so force
     // the name to uppercase
@@ -1952,7 +1952,7 @@ int wxDB::GetColumnCount(char *tableName, const char *userID)
 
             // MySQL and Access cannot accept a user name when looking up column names, so we
             // use the call below that leaves out the user name
-            if (wxStrcmp(UserID.GetData(),"") &&
+            if (wxStrcmp(UserID.GetData(),wxT("")) &&
                  Dbms() != dbmsMY_SQL &&
                  Dbms() != dbmsACCESS)
             {
@@ -2038,11 +2038,11 @@ wxDbInf *wxDB::GetCatalog(char *userID)
             UserID = userID;
     }
     else
-        UserID = "";
+        UserID = wxT("");
 
     // dBase does not use user names, and some drivers fail if you try to pass one
     if (Dbms() == dbmsDBASE)
-        UserID = "";
+        UserID = wxT("");
 
     // Oracle user names may only be in uppercase, so force
     // the name to uppercase
@@ -2064,9 +2064,9 @@ wxDbInf *wxDB::GetCatalog(char *userID)
     for (pass = 1; pass <= 2; pass++)
     {
         SQLFreeStmt(hstmt, SQL_CLOSE);   // Close if Open
-        tblNameSave = "";
+        tblNameSave = wxT("");
 
-        if (wxStrcmp(UserID.GetData(),"") &&
+        if (wxStrcmp(UserID.GetData(),wxT("")) &&
              Dbms() != dbmsMY_SQL &&
              Dbms() != dbmsACCESS)
         {
@@ -2180,18 +2180,18 @@ bool wxDB::Catalog(const char *userID, const char *fileName)
             UserID = userID;
     }
     else
-        UserID = "";
+        UserID = wxT("");
 
     // dBase does not use user names, and some drivers fail if you try to pass one
     if (Dbms() == dbmsDBASE)
-        UserID = "";
+        UserID = wxT("");
 
     // Oracle user names may only be in uppercase, so force
     // the name to uppercase
     if (Dbms() == dbmsORACLE)
         UserID = UserID.Upper();
 
-    if (wxStrcmp(UserID.GetData(),"") &&
+    if (wxStrcmp(UserID.GetData(),wxT("")) &&
          Dbms() != dbmsMY_SQL &&
          Dbms() != dbmsACCESS)
     {
@@ -2217,7 +2217,7 @@ bool wxDB::Catalog(const char *userID, const char *fileName)
     }
 
     wxString outStr;
-    tblNameSave = "";
+    tblNameSave = wxT("");
     int cnt = 0;
 
     while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)
@@ -2231,8 +2231,8 @@ bool wxDB::Catalog(const char *userID, const char *fileName)
             fputs("===================== ", fp);
             fputs("========= ", fp);
             fputs("=========\n", fp);
-            outStr.sprintf("%-32s %-32s %-21s %9s %9s\n",
-                "TABLE NAME", "COLUMN NAME", "DATA TYPE", "PRECISION", "LENGTH");
+            outStr.sprintf(wxT("%-32s %-32s %-21s %9s %9s\n"),
+                wxT("TABLE NAME"), wxT("COLUMN NAME"), wxT("DATA TYPE"), wxT("PRECISION"), wxT("LENGTH"));
             fputs(outStr.GetData(), fp);
             fputs("================================ ", fp);
             fputs("================================ ", fp);

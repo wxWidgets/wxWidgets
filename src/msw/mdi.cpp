@@ -559,8 +559,7 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
     {
         // this shouldn't happen because it means that our messages are being
         // lost (they're not sent to the parent frame nor to the children)
-        wxFAIL_MSG(wxT("MDI parent frame is not active, "
-                      "yet there is no active MDI child?"));
+        wxFAIL_MSG(wxT("MDI parent frame is not active, yet there is no active MDI child?"));
     }
 
     return FALSE;
@@ -1136,7 +1135,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
                         (LPSTR)(LPCLIENTCREATESTRUCT)&ccs);
     if ( !m_hWnd )
     {
-        wxLogLastError("CreateWindowEx(MDI client)");
+        wxLogLastError(wxT("CreateWindowEx(MDI client)"));
 
         return FALSE;
     }

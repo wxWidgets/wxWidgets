@@ -132,7 +132,7 @@ bool wxSpinButton::Create(wxWindow *parent,
 
     if ( !m_hWnd )
     {
-        wxLogLastError("CreateUpDownControl");
+        wxLogLastError(wxT("CreateUpDownControl"));
 
         return FALSE;
     }

@@ -657,9 +657,7 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
     if (!m_previewCanvas)
     {
-        wxFAIL_MSG(_T("wxPrintPreviewBase::RenderPage: must use "
-                      "wxPrintPreviewBase::SetCanvas to let me "
-                      "know about the canvas!"));
+        wxFAIL_MSG(_T("wxPrintPreviewBase::RenderPage: must use wxPrintPreviewBase::SetCanvas to let me know about the canvas!"));
 
         return FALSE;
     }

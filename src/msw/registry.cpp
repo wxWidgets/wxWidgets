@@ -596,8 +596,7 @@ bool wxRegKey::Copy(wxRegKey& keyDst)
     }
 
     if ( !ok ) {
-        wxLogError(_("Failed to copy the contents of registry key '%s' to "
-                     "'%s'."), GetFullName(this), GetFullName(&keyDst));
+        wxLogError(_("Failed to copy the contents of registry key '%s' to '%s'."), GetFullName(this), GetFullName(&keyDst));
     }
 
     return ok;
@@ -621,9 +620,7 @@ bool wxRegKey::DeleteSelf()
   // key except HKCR (HKCR has some "deleteable" subkeys)
   if ( m_strKey.IsEmpty() || (m_hRootKey != HKCR &&
        m_strKey.Find(REG_SEPARATOR) == wxNOT_FOUND) ) {
-      wxLogError(_("Registry key '%s' is needed for normal system operation,\n"
-                   "deleting it will leave your system in unusable state:\n"
-                   "operation aborted."), GetFullName(this));
+      wxLogError(_("Registry key '%s' is needed for normal system operation,\ndeleting it will leave your system in unusable state:\noperation aborted."), GetFullName(this));
 
       return FALSE;
   }

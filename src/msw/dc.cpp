@@ -303,7 +303,7 @@ void wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
         //      * The point is outside the clipping region that is, it is not
         //        visible on the device.
         //
-        wxLogLastError("ExtFloodFill");
+        wxLogLastError(wxT("ExtFloodFill"));
     }
 
     CalcBoundingBox(x, y);
@@ -958,7 +958,7 @@ void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
     if ( ::TextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
                    text.c_str(), text.length()) == 0 )
     {
-        wxLogLastError("TextOut");
+        wxLogLastError(wxT("TextOut"));
     }
 
     // restore the old parameters (text foreground colour may be left because
@@ -991,7 +991,7 @@ void wxDC::DoDrawRotatedText(const wxString& text,
         LOGFONT lf;
         if ( ::GetObject(hfont, sizeof(lf), &lf) == 0 )
         {
-            wxLogLastError("GetObject(hfont)");
+            wxLogLastError(wxT("GetObject(hfont)"));
         }
 
         // GDI wants the angle in tenth of degree
@@ -1002,7 +1002,7 @@ void wxDC::DoDrawRotatedText(const wxString& text,
         hfont = ::CreateFontIndirect(&lf);
         if ( !hfont )
         {
-            wxLogLastError("CreateFont");
+            wxLogLastError(wxT("CreateFont"));
         }
         else
         {
@@ -1578,14 +1578,14 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
                            GetHdc(), xdest, ydest, SRCCOPY) )
             {
-                wxLogLastError("BitBlt");
+                wxLogLastError(wxT("BitBlt"));
             }
 
             // copy src to buffer using selected raster op
             if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
                            GetHdcOf(*source), xsrc, ysrc, dwRop) )
             {
-                wxLogLastError("BitBlt");
+                wxLogLastError(wxT("BitBlt"));
             }
 
             // set masked area in buffer to BLACK (pixel value 0)
@@ -1594,7 +1594,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
                            dc_mask, xsrc, ysrc, SRCAND) )
             {
-                wxLogLastError("BitBlt");
+                wxLogLastError(wxT("BitBlt"));
             }
 
             // set unmasked area in dest to BLACK
@@ -1603,7 +1603,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             if ( !::BitBlt(GetHdc(), xdest, ydest, (int)width, (int)height,
                            dc_mask, xsrc, ysrc, SRCAND) )
             {
-                wxLogLastError("BitBlt");
+                wxLogLastError(wxT("BitBlt"));
             }
             ::SetBkColor(GetHdc(), prevBkCol);   // restore colours to original values
             ::SetTextColor(GetHdc(), prevCol);
@@ -1614,7 +1614,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                                dc_buffer, 0, 0, SRCPAINT) != 0;
             if ( !success )
             {
-                wxLogLastError("BitBlt");
+                wxLogLastError(wxT("BitBlt"));
             }
 
             // tidy up temporary DCs and bitmap
@@ -1632,7 +1632,7 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                            GetHdcOf(*source), xsrc, ysrc, dwRop) != 0;
         if ( !success )
         {
-            wxLogLastError("BitBlt");
+            wxLogLastError(wxT("BitBlt"));
         }
     }
     ::SetTextColor(GetHdc(), old_textground);

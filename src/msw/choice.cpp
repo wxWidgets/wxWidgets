@@ -102,7 +102,7 @@ int wxChoice::DoAppend(const wxString& item)
     int n = (int)SendMessage(GetHwnd(), CB_ADDSTRING, 0, (LONG)item.c_str());
     if ( n == CB_ERR )
     {
-        wxLogLastError("SendMessage(CB_ADDSTRING)");
+        wxLogLastError(wxT("SendMessage(CB_ADDSTRING)"));
     }
 
     return n;
@@ -201,7 +201,7 @@ wxString wxChoice::GetString(int n) const
     if (len) {
         if ( ::SendMessage(GetHwnd(), CB_GETLBTEXT, n,
                            (LPARAM)str.GetWriteBuf(len)) == CB_ERR ) {
-            wxLogLastError("SendMessage(CB_GETLBTEXT)");
+            wxLogLastError(wxT("SendMessage(CB_GETLBTEXT)"));
         }
         str.UngetWriteBuf();
     }

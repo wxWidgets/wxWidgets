@@ -564,7 +564,7 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                                     SWP_NOSIZE
                                 ) )
                         {
-                            wxLogLastError("SetWindowPos(SWP_NOACTIVATE)");
+                            wxLogLastError(wxT("SetWindowPos(SWP_NOACTIVATE)"));
                         }
                     }
                     // fall through to process it normally as well

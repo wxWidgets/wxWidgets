@@ -132,12 +132,6 @@
     #include <unix.h>
 #endif
 
-// wxWindows
-#include  "wx/string.h"
-#include  "wx/intl.h"
-#include  "wx/file.h"
-#include  "wx/log.h"
-
 #ifndef MAX_PATH
     #define MAX_PATH 512
 #endif
@@ -149,6 +143,12 @@
 #else // normal compiler
     #define ACCESS(access)  , (access)
 #endif // Salford C
+
+// wxWindows
+#include  "wx/string.h"
+#include  "wx/intl.h"
+#include  "wx/file.h"
+#include  "wx/log.h"
 
 // ============================================================================
 // implementation of wxFile
@@ -175,7 +175,7 @@ bool wxFile::Exists(const wxChar *name)
   return !access(wxUnix2MacFilename( name ) , 0) && !stat(wxUnix2MacFilename( name ), &st) && (st.st_mode & S_IFREG);
 #else
     return !access(name, 0) &&
-           !stat((wxChar*) name, &st) &&
+           !stat(name, &st) &&
            (st.st_mode & S_IFREG);
 #endif
 #endif

@@ -303,25 +303,25 @@ void wxToolTip::Add(WXHWND hWnd)
                     hfont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
                     if ( !hfont )
                     {
-                        wxLogLastError("GetStockObject(DEFAULT_GUI_FONT)");
+                        wxLogLastError(wxT("GetStockObject(DEFAULT_GUI_FONT)"));
                     }
                 }
 
                 HDC hdc = CreateCompatibleDC(NULL);
                 if ( !hdc )
                 {
-                    wxLogLastError("CreateCompatibleDC(NULL)");
+                    wxLogLastError(wxT("CreateCompatibleDC(NULL)"));
                 }
 
                 if ( !SelectObject(hdc, hfont) )
                 {
-                    wxLogLastError("SelectObject(hfont)");
+                    wxLogLastError(wxT("SelectObject(hfont)"));
                 }
 
                 SIZE sz;
                 if ( !GetTextExtentPoint(hdc, m_text, index, &sz) )
                 {
-                    wxLogLastError("GetTextExtentPoint");
+                    wxLogLastError(wxT("GetTextExtentPoint"));
                 }
 
                 DeleteDC(hdc);

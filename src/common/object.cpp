@@ -129,7 +129,7 @@ void wxObject::operator delete (void * buf)
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-void wxObject::operator delete(void* pData, char* /* fileName */, int /* lineNum */)
+void wxObject::operator delete(void* pData, wxChar* /* fileName */, int /* lineNum */)
 {
     ::operator delete(pData);
 }
@@ -243,9 +243,7 @@ void wxClassInfo::InitializeClasses()
         if (info->m_className)
         {
             wxASSERT_MSG( ++nClass < nMaxClasses,
-                          _T("an infinite loop detected - have you used "
-                            "IMPLEMENT_DYNAMIC_CLASS() twice (may be by "
-                            "linking some object module(s) twice)?") );
+                          _T("an infinite loop detected - have you used IMPLEMENT_DYNAMIC_CLASS() twice (may be by linking some object module(s) twice)?") );
 
             sm_classTable->Put(info->m_className, (wxObject *)info);
         }

@@ -99,7 +99,7 @@ bool wxResourceParseIncludeFile(const wxString& f, wxResourceTable *table = (wxR
 
 wxResourceTable *wxDefaultResourceTable = (wxResourceTable *) NULL;
 
-char *wxResourceBuffer = (char *) NULL;
+wxChar *wxResourceBuffer = (wxChar *) NULL;
 long wxResourceBufferSize = 0;
 long wxResourceBufferCount = 0;
 int wxResourceStringPtr = 0;
@@ -786,9 +786,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
         id = wxResourceGetIdentifier(str, &table);
         if (id == 0)
         {
-          wxLogWarning(_("Could not resolve control class or id '%s'. "
-                         "Use (non-zero) integer instead\n or provide #define "
-                         "(see manual for caveats)"),
+          wxLogWarning(_("Could not resolve control class or id '%s'. Use (non-zero) integer instead\n or provide #define (see manual for caveats)"),
                          (const wxChar*) expr1->StringValue());
         delete controlItem;
         return (wxItemResource *) NULL;
@@ -1231,9 +1229,7 @@ wxItemResource *wxResourceInterpretMenuItem(wxResourceTable& table, wxExpr *expr
         id = wxResourceGetIdentifier(str, &table);
         if (id == 0)
         {
-          wxLogWarning(_("Could not resolve menu id '%s'. "
-                         "Use (non-zero) integer instead\n"
-                         "or provide #define (see manual for caveats)"),
+          wxLogWarning(_("Could not resolve menu id '%s'. Use (non-zero) integer instead\nor provide #define (see manual for caveats)"),
                          (const wxChar*) idExpr->StringValue());
         }
       }
@@ -1492,14 +1488,14 @@ bool wxReallocateResourceBuffer()
   if (!wxResourceBuffer)
   {
     wxResourceBufferSize = 1000;
-    wxResourceBuffer = new char[wxResourceBufferSize];
+    wxResourceBuffer = new wxChar[wxResourceBufferSize];
     return TRUE;
   }
   if (wxResourceBuffer)
   {
     long newSize = wxResourceBufferSize + 1000;
-    char *tmp = new char[(int)newSize];
-    strncpy(tmp, wxResourceBuffer, (int)wxResourceBufferCount);
+    wxChar *tmp = new wxChar[(int)newSize];
+    wxStrncpy(tmp, wxResourceBuffer, (int)wxResourceBufferCount);
     delete[] wxResourceBuffer;
     wxResourceBuffer = tmp;
     wxResourceBufferSize = newSize;
@@ -1925,10 +1921,10 @@ bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof,
   }
   else if (strcmp(wxResourceBuffer, "static") != 0)
   {
-    char buf[300];
-    strcpy(buf, _("Found "));
-    strncat(buf, wxResourceBuffer, 30);
-    strcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
+    wxChar buf[300];
+    wxStrcpy(buf, _("Found "));
+    wxStrncat(buf, wxResourceBuffer, 30);
+    wxStrcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
     wxLogWarning(buf);
     return FALSE;
   }
@@ -2462,8 +2458,7 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
         wxItemResource *item = table->FindResource(name);
         if (!item)
         {
-          wxLogWarning(_("Failed to find XPM resource %s.\n"
-                         "Forgot to use wxResourceLoadBitmapData?"), (const wxChar*) name);
+          wxLogWarning(_("Failed to find XPM resource %s.\nForgot to use wxResourceLoadBitmapData?"), (const wxChar*) name);
           return wxNullBitmap;
         }
         return wxBitmap((char **)item->GetValue1());

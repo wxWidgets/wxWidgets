@@ -478,8 +478,7 @@ int wxListBox::GetSelection() const
 {
     wxCHECK_MSG( !HasMultipleSelection(),
                  -1,
-                 wxT("GetSelection() can't be used with multiple-selection "
-                    "listboxes, use GetSelections() instead.") );
+                 wxT("GetSelection() can't be used with multiple-selection listboxes, use GetSelections() instead.") );
 
     return ListBox_GetCurSel(GetHwnd());
 }
