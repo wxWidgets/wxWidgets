@@ -1646,6 +1646,8 @@ void wxWindowBase::ReleaseMouse()
 {
     wxLogTrace(_T("mousecapture"), _T("ReleaseMouse(0x%08x)"), this);
 
+    wxASSERT_MSG( GetCapture() == this, wxT("attempt to release mouse, but this window hasn't captured it") )
+
     DoReleaseMouse();
 
     if ( ms_winCaptureNext )
