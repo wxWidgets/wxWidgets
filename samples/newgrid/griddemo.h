@@ -108,6 +108,8 @@ public:
         ID_TESTFUNC
     };
 
+    wxLog *m_logOld;
+
     DECLARE_EVENT_TABLE()
 };
 

@@ -184,7 +184,7 @@ GridFrame::GridFrame()
                              wxTE_MULTILINE );
 
     logger = new wxLogTextCtrl( logWin );
-    logger->SetActiveTarget( logger );
+    m_logOld = logger->SetActiveTarget( logger );
     logger->SetTimestamp( NULL );
 
     // this will create a grid and, by default, an associated grid
@@ -253,6 +253,7 @@ GridFrame::GridFrame()
 
 GridFrame::~GridFrame()
 {
+    delete wxLog::SetActiveTarget(m_logOld);
 }
 
 
