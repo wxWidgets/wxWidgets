@@ -2058,6 +2058,12 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                                     // eat the Enter events sometimes
                                     return FALSE;
                                 }
+                                else if (!IsTopLevel())
+                                {
+                                    // if not a top level window, let parent
+                                    // handle it
+                                    return FALSE;
+                                }
                                 //else: treat Enter as TAB: pass to the next
                                 //      control as this is the best thing to do
                                 //      if the text doesn't handle Enter itself
