@@ -1469,11 +1469,12 @@ wxSize wxBoxSizer::CalcMin()
     {
         wxSizerItem *item = node->GetData();
 
-        if (item->IsShown())
+        if ( item->IsShown() )
+        {
             item->CalcMin();  // result is stored in the item
 
-        if (item->IsShown() && item->GetProportion() != 0)
             m_stretchable += item->GetProportion();
+        }
 
         node = node->GetNext();
     }
