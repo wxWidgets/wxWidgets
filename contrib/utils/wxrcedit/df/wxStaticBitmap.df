@@ -1,3 +1,3 @@
 node wxStaticBitmap
-var bitmap of text
+var bitmap of imagefile
 derived from control

@@ -1,8 +1,8 @@
 node wxBitmapButton
 var style of flags wxBU_AUTODRAW,wxBU_LEFT,wxBU_RIGHT,wxBU_TOP,wxBU_BOTTOM
 var default of bool
-var bitmap of text
-var selected of text
-var focus of text
-var disabled of text
+var bitmap of imagefile
+var selected of imagefile
+var focus of imagefile
+var disabled of imagefile
 derived from control

@@ -1,8 +1,8 @@
 node tool
 type normal
 icon 0
-var bitmap of text
-var bitmap2 of text
+var bitmap of imagefile
+var bitmap2 of imagefile
 var toggle of bool
 var pos of coord
 var tooltip of text
