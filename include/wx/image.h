@@ -356,13 +356,14 @@ public:
 
   static void CleanUpHandlers();
   static void InitStandardHandlers();
-  static void InitAllHandlers();
-
+ 
 protected:
 
   static wxList sm_handlers;
 
 };
+
+extern void wxInitAllImageHandlers();
 
 #endif
   // _WX_IMAGE_H_

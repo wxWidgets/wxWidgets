@@ -21,6 +21,7 @@ wxDC::DrawBitmap.
 \wxheading{See also}
 
 \helpref{wxBitmap}{wxbitmap}
+\helpref{wxInitAllImageHandlers}{wxinitallimagehandlers}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -274,19 +275,6 @@ Gets the width of the image in pixels.
 
 Returns TRUE if there is a mask active, FALSE otherwise.
 
-\membersection{wxImage::InitAllHandlers}\label{wximageinitallhandlers}
-
-\func{static void}{InitAllHandlers}{\void}
-
-Adds some common image format handlers, which, depending on wxWindows
-configuration, can be handlers for BMP (loading) (always installed), GIF
-(loading and saving), PCX (loading and saving), PNM (loading and saving as raw
-rgb), PNG (loading and saving), JPEG (loading and saving), file formats.
-
-\wxheading{See also}
-
-\helpref{wxImageHandler}{wximagehandler}
-
 \membersection{wxImage::InitStandardHandlers}
 
 \func{static void}{InitStandardHandlers}{\void}
@@ -300,7 +288,7 @@ the user.
 \wxheading{See also}
 
 \helpref{wxImageHandler}{wximagehandler}
-\helpref{wxImage::InitAllHandlers}{wximageinitallhandlers}
+\helpref{wxInitAllImageHandlers}{wxinitallimagehandlers}
 
 \membersection{wxImage::InsertHandler}
 
@@ -606,6 +594,7 @@ created by IJG.)
 \wxheading{See also}
 
 \helpref{wxImage}{wximage}
+\helpref{wxInitAllImageHandlers}{wxinitallimagehandlers}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
