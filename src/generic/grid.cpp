@@ -2943,6 +2943,8 @@ void wxGrid::Init()
 
     m_inOnKeyDown = FALSE;
     m_batchCount = 0;
+
+    CalcDimensions();
 }
 
 // ----------------------------------------------------------------------------
