@@ -92,6 +92,33 @@ private:
 };
 
 //----------------------------------------------------------------------------
+// wxCanvasText
+//----------------------------------------------------------------------------
+
+class wxCanvasText: public wxCanvasObject
+{
+public:
+    wxCanvasText( const wxString &text, int x, int y );
+    ~wxCanvasText();
+    
+    virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
+    virtual void WriteSVG( wxTextOutputStream &stream );
+    
+    void CreateBuffer();
+    void SetRGB( unsigned char red, unsigned char green, unsigned char blue );
+    void SetFlag( int flag );
+    
+private:
+    wxString        m_text;
+    unsigned char  *m_alpha;
+    void           *m_faceData;
+    int             m_flag;
+    int             m_red;
+    int             m_green;
+    int             m_blue;
+};
+
+//----------------------------------------------------------------------------
 // wxCanvas
 //----------------------------------------------------------------------------
 

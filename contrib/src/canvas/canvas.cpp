@@ -25,7 +25,19 @@
     #include "wx/gtk/win_gtk.h"
 #endif
 
-// WDR: class implementations
+#define USE_FREETYPE 0
+
+#if USE_FREETYPE
+#include <freetype/freetype.h>
+#endif
+
+//----------------------------------------------------------------------------
+// globals
+//----------------------------------------------------------------------------
+
+#if USE_FREETYPE
+FT_Library g_freetypeLibrary;
+#endif
 
 //----------------------------------------------------------------------------
 // wxCanvasObject
@@ -81,7 +93,27 @@ wxCanvasImage::wxCanvasImage( const wxImage &image, int x, int y )
 
 void wxCanvasImage::Render( int clip_x, int clip_y, int clip_width, int clip_height )
 {
-    m_owner->GetBuffer()->Paste( m_image, m_area.x, m_area.y );
+    int start_x = wxMax( 0, clip_x-m_area.x );
+    int end_x = wxMin( m_area.width, clip_width+clip_x-m_area.x );
+    int start_y = wxMax( 0, clip_y-m_area.y );
+    int end_y = wxMin( m_area.height, clip_height+clip_y-m_area.y );
+    
+    if (end_x < start_x) return;
+    if (end_y < start_y) return;
+    
+    if ((start_x == 0) && 
+        (start_y == 0) && 
+        (end_x == m_area.width) &&
+        (end_y == m_area.height))
+    {
+        m_owner->GetBuffer()->Paste( m_image, m_area.x, m_area.y );
+    }
+    else
+    {
+        wxRect rect( start_x, start_y, end_x-start_x, end_y-start_y );
+        wxImage sub_image( m_image.GetSubImage( rect ) );
+        m_owner->GetBuffer()->Paste( sub_image, m_area.x+start_x, m_area.y+start_y );
+    }
 }
 
 void wxCanvasImage::WriteSVG( wxTextOutputStream &stream )
@@ -114,6 +146,147 @@ void wxCanvasControl::UpdateSize()
 {
     m_control->GetSize( &m_area.width, &m_area.height );
     m_control->GetPosition( &m_area.x, &m_area.y );
+}
+
+//----------------------------------------------------------------------------
+// wxCanvasText
+//----------------------------------------------------------------------------
+
+class wxFaceData
+{
+public:
+#if USE_FREETYPE
+     FT_Face   m_face;
+#else
+     void     *m_dummy;
+#endif    
+};
+
+wxCanvasText::wxCanvasText( const wxString &text, int x, int y )
+   : wxCanvasObject( x, y, -1, -1 )
+{
+    m_text = text;
+    m_alpha = NULL;
+    
+    m_red = 255;
+    m_green = 0;
+    m_blue = 0;
+    
+    // test
+    m_area.width = 128;
+    m_area.height = 128;
+    m_alpha = new unsigned char[128*128];
+    for (int y = 0; y < m_area.height; y++)
+        for (int x = 0; x < m_area.width; x++)
+            m_alpha[y*m_area.width + x] = x;
+    
+#if USE_FREETYPE    
+    CreateBuffer();
+    wxFaceData *data = new wxFaceData;
+    m_faceData = data;
+    
+    int error = FT_New_Face( g_freetypeLibrary,
+                             "~/TrueType/times.ttf",
+                             0,
+                             &(data->m_face) );
+                             
+    error = FT_Set_Char_Size( data->m_face,
+                              0,
+                              16*64,
+                              96,
+                              96 );
+#endif
+}
+
+wxCanvasText::~wxCanvasText()
+{
+#if USE_FREETYPE    
+    wxFaceData *data = (wxFaceData*) m_faceData;
+    delete data;
+#endif
+
+    if (m_alpha) delete [] m_alpha;
+}
+
+void wxCanvasText::SetRGB( unsigned char red, unsigned char green, unsigned char blue )
+{
+    m_red = red;
+    m_green = green;
+    m_blue = blue;
+}
+
+void wxCanvasText::SetFlag( int flag )
+{
+    m_flag = flag;
+}
+
+void wxCanvasText::Render( int clip_x, int clip_y, int clip_width, int clip_height )
+{
+    if (!m_alpha) return;
+    
+    wxImage *image = m_owner->GetBuffer();
+
+    int start_x = wxMax( 0, clip_x-m_area.x );
+    int end_x = wxMin( m_area.width, clip_width+clip_x-m_area.x );
+    int start_y = wxMax( 0, clip_y-m_area.y );
+    int end_y = wxMin( m_area.height, clip_height+clip_y-m_area.y );
+    
+    for (int y = start_y; y < end_y; y++)
+        for (int x = start_x; x < end_x; x++)
+        {
+            int alpha = m_alpha[y*m_area.width + x];
+            if (alpha)
+            {
+                int image_x = m_area.x+x;
+                int image_y = m_area.y+y;
+                if (alpha == 128)
+                {
+                    image->SetRGB( image_x, image_y, m_red, m_green, m_blue );
+                    continue;
+                }
+                int red1 = (m_red * alpha) / 128;
+                int green1 = (m_green * alpha) / 128;
+                int blue1 = (m_blue * alpha) / 128;
+                
+                alpha = 128-alpha;
+                int red2 = image->GetRed( image_x, image_y );
+                int green2 = image->GetGreen( image_x, image_y );
+                int blue2 = image->GetBlue( image_x, image_y );
+                red2 = (red2 * alpha) / 128;
+                green2 = (green2 * alpha) / 128;
+                blue2 = (blue2 * alpha) / 128;
+                
+                image->SetRGB( image_x, image_y, red1+red2, green1+green2, blue1+blue2 );
+            }
+        }
+}
+
+void wxCanvasText::WriteSVG( wxTextOutputStream &stream )
+{
+}
+
+void wxCanvasText::CreateBuffer()
+{
+#if USE_FREETYPE    
+    FT_Face face = ((wxFaceData*)m_faceData)->m_face;
+    FT_GlyphSlot slot = face->glyph;
+    int pen_x = 0;
+    int pen_y = 0;
+    
+    for (int n = 0; n < m_text.Len(); n++)
+    {
+        FT_UInt index = FT_Get_Char_Index( face, m_text[n] );
+        
+        int error = FT_Load_Glyph( face, index, FT_LOAD_DEFAULT );
+        if (error) continue;
+        
+        error = FT_Render_Glyph( face->glyph, ft_render_antialias );
+        if (error) continue;
+        
+        pen_x += slot->advance.x >> 6;
+        pen_y += slot->advance.y >> 6;
+    }    
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -165,7 +338,7 @@ void wxCanvas::Update( int x, int y, int width, int height )
     m_updateRects.Append(
         (wxObject*) new wxRect( x,y,width,height ) );
     
-    // speed up with direct access
+    // speed up with direct access, maybe add wxImage::Clear(x,y,w,h)
     int xx,yy,ww,hh;
     for (yy = y; yy < y+height; yy++)
         for (xx = x; xx < x+width; xx++)
@@ -180,7 +353,7 @@ void wxCanvas::Update( int x, int y, int width, int height )
         ww = obj->GetWidth();
         hh = obj->GetHeight();
             
-        if (!obj->IsControl())
+        if (!obj->IsControl())  // calc intersection !
         {
             obj->Render( x, y, width, height );
         }
@@ -356,4 +529,35 @@ void wxCanvas::OnChar(wxKeyEvent &event)
     event.Skip();
 }
 
+//--------------------------------------------------------------------
+// wxCanvasModule
+//--------------------------------------------------------------------
 
+class wxCanvasModule : public wxModule
+{
+public:
+    virtual bool OnInit();
+    virtual void OnExit();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxCanvasModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxCanvasModule, wxModule)
+
+bool wxCanvasModule::OnInit()
+{
+#if USE_FREETYPE
+    int error = FT_Init_FreeType( &g_freetypeLibrary );
+    if (error) return FALSE;
+#endif
+
+    return TRUE;
+}
+
+void wxCanvasModule::OnExit()
+{
+#if USE_FREETYPE
+   // Close FreeType
+#endif
+}

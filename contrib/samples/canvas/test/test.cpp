@@ -108,9 +108,11 @@ MyFrame::MyFrame()
   
   wxButton *button = new wxButton( m_canvas, -1, "Hello", wxPoint(130,50) );
   m_canvas->Append( new wxCanvasControl( button ) );
+
+  m_canvas->Append( new wxCanvasText( "Hello", 180, 50 ) );
   
   m_timer = new wxTimer( this );
-  m_timer->Start( 150, FALSE );
+  m_timer->Start( 100, FALSE );
 }
 
 MyFrame::~MyFrame()
