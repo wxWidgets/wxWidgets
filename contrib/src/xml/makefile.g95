@@ -9,7 +9,7 @@
 
 WXDIR = ../../..
 
-EXTRACPPFLAGS=/Id:/libxml/libxml2-2.1.1
+EXTRACPPFLAGS=-Ic:/progra~1/libxml/libxml2-2.3.3/include
 LIBTARGET=$(WXDIR)/lib/libwxxml.a
 
 OBJECTS=xml.o xmlbin.o xmlbinz.o xmlpars.o xmlres.o xmlrsall.o \

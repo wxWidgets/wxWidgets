@@ -19,6 +19,7 @@
     #pragma hdrstop
 #endif
 
+#include "wx/textctrl.h"
 #include "wx/xml/xh_listc.h"
 #include "wx/listctrl.h"
 

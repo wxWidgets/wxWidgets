@@ -275,6 +275,8 @@ bool wxXmlNode::DeleteProperty(const wxString& name)
 
 
 
+wxList *wxXmlDocument::sm_Handlers = NULL;
+
 
 
 wxXmlDocument::wxXmlDocument(const wxString& filename, wxXmlIOType io_type)
@@ -382,8 +384,6 @@ bool wxXmlDocument::Save(wxOutputStream& stream, wxXmlIOType io_type) const
 
 
 
-
-wxList *wxXmlDocument::sm_Handlers = NULL;
 
 void wxXmlDocument::AddHandler(wxXmlIOHandler *handler)
 {

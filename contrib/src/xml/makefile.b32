@@ -14,8 +14,8 @@ WXDIR = $(WXWIN)
 # this -I line, as the #includes use
 # <libxml/xxxx.h>.  If your libxml is installed
 # in "d:\libxml\libxml2-2.1.1\libxml" you would use:
-# wxLIBXMLDIR=/Id:\libxml\libxml2-2.1.1
-wxLIBXMLDIR=
+# wxLIBXMLDIR=/Id:\libxml\libxml2-2.1.1\include
+wxLIBXMLDIR=/Ic:\progra~1\libxml\libxml2-2.3.3\include
 
 !if "$(wxLIBXMLDIR)" == ""
 !message
