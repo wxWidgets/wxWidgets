@@ -205,9 +205,12 @@ public:
     virtual void        MacSetBackgroundBrush( const wxBrush &brush ) ;
     const wxBrush&      MacGetBackgroundBrush() const { return m_macBackgroundBrush ; }
     
+    // return the rectangle that would be visible of this control, regardless whether controls are hidden
+    // only taking into account clipping by parent windows
+    const wxRect&       MacGetClippedRect() const ;
+    const wxRect&       MacGetClippedRectWithOuterStructure() const ;
     // returns the visible region of this control in window ie non-client coordinates
-    
-    wxRegion            MacGetVisibleRegion( bool includeOuterStructures = false ) ;
+    const wxRegion&     MacGetVisibleRegion( bool includeOuterStructures = false ) ;
     // returns true if children have to clipped to the content area (eg scrolled window)
     bool		        MacClipChildren() const { return m_clipChildren ; }
     void                MacSetClipChildren( bool clip ) { m_clipChildren = clip ; }
@@ -264,6 +267,13 @@ protected:
 #if wxMAC_USE_CORE_GRAPHICS
     void *              m_cgContextRef ;
 #endif
+    // cache the clipped rectangles within the window hierarchy
+    void                MacUpdateClippedRects() const ;
+    mutable bool        m_cachedClippedRectValid ;
+    mutable wxRect      m_cachedClippedRectWithOuterStructure ;
+    mutable wxRect      m_cachedClippedRect ;
+    mutable wxRegion    m_cachedClippedRegionWithOuterStructure ;
+    mutable wxRegion    m_cachedClippedRegion ;
     // true if is is not a native control but a wxWindow control
 	bool				m_macIsUserPane ;
     wxBrush             m_macBackgroundBrush ;
