@@ -26,9 +26,6 @@ Package=<5>
 Package=<4>
 {{{
 Begin Project Dependency
-Project_Dep_Name html
-End Project Dependency
-Begin Project Dependency
 Project_Dep_Name core
 End Project Dependency
 Begin Project Dependency
@@ -39,18 +36,6 @@ End Project Dependency
 ###############################################################################
 
 Project: "base"=..\..\..\build\msw\wx_base.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "html"=..\..\..\build\msw\wx_html.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -94,10 +94,6 @@ ifeq ($(SHARED),1)
 __DLLFLAG_p_3 = --define WXUSINGDLL
 endif
 ifeq ($(MONOLITHIC),0)
-__WXLIB_HTML_p = \
-	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html
-endif
-ifeq ($(MONOLITHIC),0)
 __WXLIB_CORE_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core
 endif
@@ -197,7 +193,7 @@ $(OBJS)\tex2rtf.exe: $(TEX2RTF_OBJECTS)
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\tex2rtf_gui.exe: $(TEX2RTF_GUI_OBJECTS) $(OBJS)\tex2rtf_gui_sample_rc.o
-	$(CXX) -o $@ $(TEX2RTF_GUI_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+	$(CXX) -o $@ $(TEX2RTF_GUI_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 endif
 
 $(OBJS)\tex2rtf_tex2rtf.o: ./tex2rtf.cpp
