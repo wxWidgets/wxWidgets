@@ -1459,6 +1459,11 @@ void wxWindow::DoMoveWindow(int x, int y, int width, int height)
     if (m_drawingArea)
         return;
 
+    if (width == 0)
+        width = 1;
+    if (height == 0)
+        height = 1;
+
     XtVaSetValues((Widget)GetTopWidget(),
                   XmNx, x,
                   XmNy, y,
