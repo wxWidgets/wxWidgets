@@ -215,52 +215,31 @@ wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
     }
 }
 
-// Set pointers to base class(es) to speed up IsKindOf
-void wxClassInfo::InitializeClasses()
+void wxClassInfo::CleanUp()
 {
+    if ( sm_classTable )
+    {
+        delete sm_classTable;
+        sm_classTable = NULL;
+    }
+}
+
+void wxClassInfo::Register()
+{
+    if ( !sm_classTable )
+    {
+        sm_classTable = new wxHashTable(wxKEY_STRING);
+    }
+
     // using IMPLEMENT_DYNAMIC_CLASS() macro twice (which may happen if you
     // link any object module twice mistakenly) will break this function
     // because it will enter an infinite loop and eventually die with "out of
     // memory" - as this is quite hard to detect if you're unaware of this,
     // try to do some checks here
-
-#ifdef __WXDEBUG__
-    static const size_t nMaxClasses = 10000;    // more than we'll ever have
-    size_t nClass = 0;
-#endif
-
-    // Do this initialization only once, because classes are added
-    // automatically if
-    if ( sm_classTable == NULL )
-    {
-        sm_classTable = new wxHashTable(wxKEY_STRING);
-
-        // Index all class infos by their class name:
-        wxClassInfo *info;
-        for(info = sm_first; info; info = info->m_next)
-        {
-            if (info->m_className)
-            {
-                wxASSERT_MSG( ++nClass < nMaxClasses,
-                              _T("an infinite loop detected - have you used IMPLEMENT_DYNAMIC_CLASS() twice (may be by linking some object module(s) twice)?") );
-                sm_classTable->Put(info->m_className, (wxObject *)info);
-            }
-        }
-    }
-}
-
-void wxClassInfo::CleanUpClasses()
-{
-    delete wxClassInfo::sm_classTable;
-    wxClassInfo::sm_classTable = NULL;
-}
-
-void wxClassInfo::Register()
-{
-    if ( sm_classTable )
-    {
-        sm_classTable->Put(m_className, (wxObject *)this);
-    }
+    wxASSERT_MSG( sm_classTable->Get(m_className) == NULL,
+                  _T("class already in RTTI table - have you used IMPLEMENT_DYNAMIC_CLASS() twice (may be by linking some object module(s) twice)?") );
+    
+    sm_classTable->Put(m_className, (wxObject *)this);
 }
 
 void wxClassInfo::Unregister()
@@ -268,6 +247,11 @@ void wxClassInfo::Unregister()
     if ( sm_classTable )
     {
         sm_classTable->Delete(m_className);
+        if ( sm_classTable->GetCount() == 0 )
+        {
+            delete sm_classTable;
+            sm_classTable = NULL;
+        }
     }
 }
 

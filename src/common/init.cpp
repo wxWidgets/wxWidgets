@@ -206,8 +206,6 @@ static void FreeConvertedArgs()
 // initialization which is always done (not customizable) before wxApp creation
 static bool DoCommonPreInit()
 {
-    wxClassInfo::InitializeClasses();
-
     return true;
 }
 
@@ -331,7 +329,7 @@ static void DoCommonPreCleanup()
 // cleanup done after destroying wxTheApp
 static void DoCommonPostCleanup()
 {
-    wxClassInfo::CleanUpClasses();
+    wxClassInfo::CleanUp();
 
     // we can't do this in wxApp itself because it doesn't know if argv had
     // been allocated
