@@ -50,7 +50,11 @@ public:
     // will want to return the main widget for m_statbox
     //
     WXWidget GetMainWidget() const;
-        
+
+    // override wxWindow methods to make things work
+    virtual void DoSetSize(int x, int y, int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+    virtual void DoMoveWindow(int x, int y, int width, int height);
 protected:
     // we implement the static line using a static box
     wxStaticBox *m_statbox;

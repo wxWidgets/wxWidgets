@@ -65,3 +65,14 @@ WXWidget wxStaticLine::GetMainWidget() const
 {
     return m_statbox->GetMainWidget();
 }
+
+void wxStaticLine::DoSetSize(int x, int y, int width, int height,
+                             int sizeFlags = wxSIZE_AUTO)
+{
+    m_statbox->SetSize(x, y, width, height, sizeFlags);
+}
+
+void wxStaticLine::DoMoveWindow(int x, int y, int width, int height)
+{
+    m_statbox->SetSize(x, y, width, height);
+}
