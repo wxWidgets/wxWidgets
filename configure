@@ -9281,7 +9281,7 @@ else
 int main() {
 
 /* Ultrix mips cc rejects this.  */
-typedef int charset[2]; const charset x;
+typedef int charset[2]; const charset x = {0,0};
 /* SunOS 4.1.1 cc rejects this.  */
 char const *const *ccp;
 char **p;
@@ -9356,7 +9356,7 @@ for ac_kw in inline __inline__ __inline; do
 #include "confdefs.h"
 
 int main() {
-} $ac_kw foo() {
+} int $ac_kw foo() {
 ; return 0; }
 EOF
 if { (eval echo configure:9363: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
@@ -12975,7 +12975,7 @@ fi
 
 if test "$TOOLKIT" != "MSW"; then
 
-if test "$wxUSE_JOYSTICK" = 1; then
+if test "$wxUSE_JOYSTICK" = "yes"; then
     for ac_hdr in linux/joystick.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
@@ -13017,14 +13017,14 @@ fi
 done
 
   if test "$ac_cv_header_linux_joystick_h" != "yes"; then
-    wxUSE_JOYSTICK=0
+    wxUSE_JOYSTICK=no
     echo "configure: warning: Joystick not supported yb this system" 1>&2
   fi
 fi
 
 fi
 
-if test "$wxUSE_JOYSTICK" = 1; then
+if test "$wxUSE_JOYSTICK" = "yes"; then
     cat >> confdefs.h <<\EOF
 #define wxUSE_JOYSTICK 1
 EOF

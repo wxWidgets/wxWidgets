@@ -37,6 +37,7 @@ AC_OUTPUT([
             image/Makefile
             internat/Makefile
             ipc/Makefile
+            joytest/Makefile
             layout/Makefile
             listctrl/Makefile
             mdi/Makefile

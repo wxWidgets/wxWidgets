@@ -870,6 +870,13 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/ipc/*.h $(DISTDIR)/samples/ipc
 	cp $(SAMPDIR)/ipc/*.xpm $(DISTDIR)/samples/ipc
 
+	mkdir $(DISTDIR)/samples/joytest
+	cp $(SAMPDIR)/joytest/Makefile.in $(DISTDIR)/samples/joytest
+	cp $(SAMPDIR)/joytest/makefile.unx $(DISTDIR)/samples/joytest
+	cp $(SAMPDIR)/joytest/*.cpp $(DISTDIR)/samples/joytest
+	cp $(SAMPDIR)/joytest/*.h $(DISTDIR)/samples/joytest
+	cp $(SAMPDIR)/joytest/*.wav $(DISTDIR)/samples/joytest
+
 	mkdir $(DISTDIR)/samples/layout
 	cp $(SAMPDIR)/layout/Makefile.in $(DISTDIR)/samples/layout
 	cp $(SAMPDIR)/layout/makefile.unx $(DISTDIR)/samples/layout
