@@ -957,7 +957,7 @@ For example::
 
 When `Layout` is called it first calls `CalcMin` followed by
 `RecalcSizes` so you can optimize a bit by saving the results of
-`CalcMin` and resuing them in `RecalcSizes`.
+`CalcMin` and reusing them in `RecalcSizes`.
 
 :see: `wx.SizerItem`, `wx.Sizer.GetChildren`
 
@@ -1261,5 +1261,41 @@ rows in the sizer.", "");
 columns in the sizer.", "");
     
 };
+
+//---------------------------------------------------------------------------
+
+DocStr(wxStdDialogButtonSizer,
+"A special sizer that knows how to order and position standard buttons
+in order to conform to the current platform's standards.  You simply
+need to add each `wx.Button` to the sizer, and be sure to create the
+buttons using the standard ID's.  Then call `Finalize` and the sizer
+will take care of the rest.
+", "");
+
+class wxStdDialogButtonSizer: public wxBoxSizer
+{
+public:
+    DocCtorStr(
+        wxStdDialogButtonSizer(),
+        "", "");
+
+    DocDeclStr(
+        void , AddButton(wxButton *button),
+        "Use this to add the buttons to this sizer.  Do not use the `Add`
+method in the base class.", "");
+    
+    DocDeclStr(
+        void , Finalise(),
+        "This funciton needs to be called after all the buttons have been added
+to the sizer.  It will reorder them and position them in a platform
+specifc manner.", "");
+    
+    wxButton* GetAffirmativeButton() const;
+    wxButton* GetApplyButton() const;
+    wxButton* GetNegativeButton() const;
+    wxButton* GetCancelButton() const;
+    wxButton* GetHelpButton() const;
+};
+
 
 //---------------------------------------------------------------------------

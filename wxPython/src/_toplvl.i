@@ -308,11 +308,11 @@ public:
 
     // splits text up at newlines and places the
     // lines into a vertical wxBoxSizer
-    wxSizer *CreateTextSizer( const wxString &message );
+    wxSizer* CreateTextSizer( const wxString &message );
 
     // places buttons into a horizontal wxBoxSizer
-    wxSizer *CreateButtonSizer( long flags );
-
+    wxSizer* CreateButtonSizer( long flags );
+    wxStdDialogButtonSizer* CreateStdDialogButtonSizer( long flags );
 
     //void SetModal(bool flag);
 

@@ -143,7 +143,14 @@ SetDefaultPyEncoding will now allow you to control which encoding will
 be used to do those conversions.  The default encoding is set to the
 value of `locale.getdefaultlocale()[1]` when wxPython is first
 imported.  Please see http://www.alanwood.net/demos/charsetdiffs.html
-for subtle differences between the common latin/roman encodings.
+for information on the differences between the common latin/roman
+encodings.
+
+Added wxStdDialogButtonSizer, which is a a special sizer that knows
+how to order and position standard buttons in order to conform to the
+current platform's standards.  You simply need to add each `wx.Button`
+to the sizer, and be sure to create the buttons using the standard
+ID's.  Then call `Finalize` and the sizer will take care of the rest.
 
 
 
