@@ -2556,70 +2556,56 @@ void AGAApplyThemeBackground(ThemeBackgroundKind 	inKind,
 
 #endif // !TARGET_CARBON
 
+// this helper class stores and restores the current grafport
+// status in a theme savvy manner, pen mode, patterns and fonts
+// attributes
+
 AGAPortHelper::AGAPortHelper( GrafPtr newport) 
 {
-	GetPort( &port ) ;
-	SetPort( newport ) ;
-//	wxASSERT( newport->portRect.left == 0 && newport->portRect.top == 0 ) ; 
-	GetPenState( &oldPenState ) ;
-	GetBackColor( &oldBackColor ) ;
-	GetForeColor( &oldForeColor ) ;
-
-	clip = NewRgn() ;
-	GetClip( clip );
-	font = GetPortTextFont( newport);
-	size = GetPortTextSize( newport);
-	style = GetPortTextFace( newport);
-	mode = GetPortTextMode( newport);	
-	nport = newport ;
-
+  m_clip = NULL ;
+  Setup( newport ) ;
 }
 AGAPortHelper::AGAPortHelper()
 {
-	clip = NULL ;
+	m_clip = NULL ;
 }
+
 void AGAPortHelper::Setup( GrafPtr newport )
 {
-	GetPort( &port ) ;
+	GetPort( &m_oldPort ) ;
 	SetPort( newport ) ;
-//	wxASSERT( newport->portRect.left == 0 && newport->portRect.top == 0 ) ; 
-	GetPenState( &oldPenState ) ;
-	GetBackColor( &oldBackColor ) ;
-	GetForeColor( &oldForeColor ) ;
-	wxASSERT( clip == NULL ) ;
-	clip = NewRgn() ;
-	GetClip( clip );
-	font = GetPortTextFont( newport);
-	size = GetPortTextSize( newport);
-	style = GetPortTextFace( newport);
-	mode = GetPortTextMode( newport);	
-	nport = newport ;
+	wxASSERT_MSG( m_clip == NULL , "Cannot call setup twice" ) ;
+	m_clip = NewRgn() ;
+	GetClip( m_clip );
+	m_textFont = GetPortTextFont( newport);
+	m_textSize = GetPortTextSize( newport);
+	m_textStyle = GetPortTextFace( newport);
+	m_textMode = GetPortTextMode( newport);	
+	GetThemeDrawingState( &m_drawingState ) ;
+	m_currentPort = newport ;
 }
 void AGAPortHelper::Clear()
 {
-	if ( clip )
+	if ( m_clip )
 	{
-		DisposeRgn( clip ) ;
-		clip = NULL ;
+		DisposeRgn( m_clip ) ;
+		DisposeThemeDrawingState( m_drawingState ) ;
+		m_clip = NULL ;
 	}
 }
 AGAPortHelper::~AGAPortHelper()
 {
-	if ( clip )
+	if ( m_clip )
 	{
-		SetPort( nport ) ;
-		PenNormal() ;
-		SetClip( clip ) ;
-		DisposeRgn( clip ) ;
-		RGBForeColor(&oldForeColor);
-		RGBBackColor(&oldBackColor);
-		SetPenState(&oldPenState);				
-
-		TextFont( font );
-		TextSize( size );
-		TextFace( style );
-		TextMode( mode );
-		SetPort( port ) ;
+		SetPort( m_currentPort ) ;
+		SetClip( m_clip ) ;
+		DisposeRgn( m_clip ) ;
+		TextFont( m_textFont );
+		TextSize( m_textSize );
+		TextFace( m_textStyle );
+		TextMode( m_textMode );
+		SetThemeDrawingState( m_drawingState , true ) ;
+		SetPort( m_oldPort ) ;
 	}
 }
 
