@@ -376,9 +376,9 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 void wxComboBox::SetValue(const wxString& value)
 {
   // If newlines are denoted by just 10, must stick 13 in front.
-  int singletons = 0;
-  int len = value.Length();
-  int i;
+  size_t singletons = 0;
+  size_t len = value.Length();
+  size_t i;
   for (i = 0; i < len; i ++)
   {
     if ((i > 0) && (value[i] == 10) && (value[i-1] != 13))
@@ -386,8 +386,9 @@ void wxComboBox::SetValue(const wxString& value)
   }
   if (singletons > 0)
   {
-    wxChar *tmp = new wxChar[len + singletons + 1];
-    int j = 0;
+    wxString tmp;
+    tmp.Alloc(len + singletons);
+    size_t j = 0;
     for (i = 0; i < len; i ++)
     {
       if ((i > 0) && (value[i] == 10) && (value[i-1] != 13))
@@ -398,12 +399,16 @@ void wxComboBox::SetValue(const wxString& value)
       tmp[j] = value[i];
       j ++;
     }
-    tmp[j] = 0;
-    SetWindowText(GetHwnd(), tmp);
-    delete[] tmp;
+    if (GetWindowStyle() & wxCB_READONLY)
+        SetStringSelection(tmp);
+    else
+        SetWindowText(GetHwnd(), tmp.c_str());
   }
   else
-    SetWindowText(GetHwnd(), value);
+    if (GetWindowStyle() & wxCB_READONLY)
+      SetStringSelection(value);
+    else
+      SetWindowText(GetHwnd(), value.c_str());
 }
 
 // Clipboard operations
