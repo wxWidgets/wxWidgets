@@ -108,34 +108,34 @@ wxFont::wxFont( GdkFont *font, char *xFontName )
 
 //  M_FONTDATA->m_byXFontName = TRUE;
     M_FONTDATA->m_font = font;
-    
+
     wxString tmp;
-    
+
     wxString fontname( xFontName );
     wxStringTokenizer tn( fontname, _T("-") );
-    
+
     tn.GetNextToken();                           // foundry
-    
+
     M_FONTDATA->m_faceName = tn.GetNextToken();  // courier
 
     tmp = tn.GetNextToken().MakeUpper();
     if (tmp == _T("BOLD")) M_FONTDATA->m_weight = wxBOLD;
-    
+
     tmp = tn.GetNextToken().MakeUpper();
     if (tmp == _T("I")) M_FONTDATA->m_style = wxITALIC;
     if (tmp == _T("O")) M_FONTDATA->m_style = wxITALIC;
-    
+
     tn.GetNextToken();                           // set width
     tn.GetNextToken();                           // ?
     tn.GetNextToken();                           // pixel size
-    
+
     tmp = tn.GetNextToken();                     // pointsize
     int num =  wxStrtol (tmp.c_str(), (wxChar **) NULL, 10);
     M_FONTDATA->m_pointSize = num / 10;
-    
+
     tn.GetNextToken();                           // x-res
     tn.GetNextToken();                           // y-res
-    
+
     tmp = tn.GetNextToken().MakeUpper();
     if (tmp == _T("M")) M_FONTDATA->m_family = wxMODERN;
     else if (M_FONTDATA->m_faceName == _T("TIMES")) M_FONTDATA->m_family = wxROMAN;
@@ -149,32 +149,32 @@ wxFont::wxFont( int pointSize, int family, int style, int weight, bool underline
 {
     m_refData = new wxFontRefData();
 
-    if (family == wxDEFAULT) 
+    if (family == wxDEFAULT)
         M_FONTDATA->m_family = wxSWISS;
     else
         M_FONTDATA->m_family = family;
-    
+
     if (!face.IsEmpty()) M_FONTDATA->m_faceName = face;
 
-    if (style == wxDEFAULT) 
+    if (style == wxDEFAULT)
         M_FONTDATA->m_style = wxNORMAL;
     else
         M_FONTDATA->m_style = style;
-    
-    if (weight == wxDEFAULT) 
+
+    if (weight == wxDEFAULT)
         M_FONTDATA->m_weight = wxNORMAL;
     else
         M_FONTDATA->m_weight = weight;
-    
-    if (pointSize == wxDEFAULT) 
+
+    if (pointSize == wxDEFAULT)
         M_FONTDATA->m_pointSize = 12;
     else
         M_FONTDATA->m_pointSize = pointSize;
-    
+
     M_FONTDATA->m_underlined = underlined;
 
     if (wxTheFontList) wxTheFontList->Append( this );
-  
+
 }
 
 wxFont::wxFont( const wxFont& font )
@@ -305,13 +305,13 @@ void wxFont::Unshare()
 {
     if (!m_refData)
     {
-	m_refData = new wxFontRefData();
+        m_refData = new wxFontRefData();
     }
     else
     {
-	wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
-	UnRef();
-	m_refData = ref;
+        wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
+        UnRef();
+        m_refData = ref;
     }
 }
 
@@ -361,7 +361,7 @@ void wxFont::SetUnderlined(bool underlined)
 // get internal representation of font
 //-----------------------------------------------------------------------------
 
-static GdkFont *wxLoadQueryNearestFont( int point_size, int family, int style, int weight, 
+static GdkFont *wxLoadQueryNearestFont( int point_size, int family, int style, int weight,
                                         bool underlined, const wxString &facename );
 
 GdkFont *wxFont::GetInternalFont( float scale ) const
@@ -404,12 +404,12 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
         }
         M_FONTDATA->m_scaled_xfonts.Append( int_scale, (wxObject*)font );
     }
-    
+
     if (!font)
     {
         wxLogError(_T("could not load any font"));
     }
-	
+
     return font;
 }
 
@@ -417,35 +417,35 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
 // local utilities to find a X font
 //-----------------------------------------------------------------------------
 
-static GdkFont*wxLoadQueryFont( int pointSize, int family, int style, int weight, 
-                                bool underlined, const wxString &facename )
+static GdkFont*wxLoadQueryFont( int pointSize, int family, int style, int weight,
+                                bool WXUNUSED(underlined), const wxString &facename )
 {
     wxChar *xfamily = (wxChar*) NULL;
     wxChar *xstyle = (wxChar*) NULL;
     wxChar *xweight = (wxChar*) NULL;
-    
+
     switch (family)
     {
         case wxDECORATIVE: xfamily = _T("lucida"); break;
         case wxROMAN:      xfamily = _T("times");  break;
         case wxMODERN:     xfamily = _T("courier"); break;
         case wxSWISS:      xfamily = _T("helvetica"); break;
-	case wxTELETYPE:   xfamily = _T("lucidatypewriter"); break;
-	case wxSCRIPT:     xfamily = _T("utopia"); break;
+        case wxTELETYPE:   xfamily = _T("lucidatypewriter"); break;
+        case wxSCRIPT:     xfamily = _T("utopia"); break;
         default:           xfamily = _T("*");
     }
-    
+
     if (!facename.IsEmpty())
     {
         wxSprintf( wxBuffer, _T("-*-%s-*-*-normal-*-*-*-*-*-*-*-*-*"), facename.c_str() );
         GdkFont *test = gdk_font_load( wxConvCurrent->cWX2MB(wxBuffer) );
         if (test)
-	{
-	    gdk_font_unref( test );
-	    xfamily = WXSTRINGCAST facename;
-	}
+        {
+            gdk_font_unref( test );
+            xfamily = WXSTRINGCAST facename;
+        }
     }
-    
+
     switch (style)
     {
         case wxITALIC:     xstyle = _T("i"); break;
@@ -460,19 +460,19 @@ static GdkFont*wxLoadQueryFont( int pointSize, int family, int style, int weight
         case wxNORMAL:     xweight = _T("medium"); break;
         default:           xweight = _T("*"); break;
     }
-    
+
     wxSprintf( wxBuffer, _T("-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-*-*"),
         xfamily, xweight, xstyle, pointSize);
-    
+
     return gdk_font_load( wxConvCurrent->cWX2MB(wxBuffer) );
 }
 
-static GdkFont *wxLoadQueryNearestFont( int point_size, int family, int style, int weight, 
-	                                bool underlined, const wxString &facename )
+static GdkFont *wxLoadQueryNearestFont( int point_size, int family, int style, int weight,
+                                        bool underlined, const wxString &facename )
 {
     GdkFont *font = wxLoadQueryFont( point_size, family, style, weight, underlined, facename );
 
-    if (!font) 
+    if (!font)
     {
         /* search up and down by stepsize 10 */
         int max_size = point_size + 20 * (1 + (point_size/180));
@@ -496,7 +496,7 @@ static GdkFont *wxLoadQueryNearestFont( int point_size, int family, int style, i
         if (!font)
             font = wxLoadQueryFont(120, wxDEFAULT, wxNORMAL, wxNORMAL, underlined, facename );
     }
-    
+
     return font;
 }
 
@@ -583,7 +583,7 @@ static char *font_defaults[] = {
     "ScreenSlant", "o",
 
     "ScreenDefaultBase", "*-times",
-    
+
     "ScreenRomanBase", "*-times",
     "ScreenDecorativeBase", "*-helvetica",
     "ScreenModernBase", "*-courier",
@@ -616,7 +616,7 @@ enum {wxSTYLE_NORMAL,  wxSTYLE_ITALIC, wxSTYLE_SLANT,  wxNUM_STYLES};
 
 static int WCoordinate(int w)
 {
-    switch (w) 
+    switch (w)
     {
         case wxBOLD:   return wxWEIGHT_BOLD;
         case wxLIGHT:  return wxWEIGHT_LIGHT;
@@ -627,7 +627,7 @@ static int WCoordinate(int w)
 
 static int SCoordinate(int s)
 {
-    switch (s) 
+    switch (s)
     {
         case wxITALIC: return wxSTYLE_ITALIC;
         case wxSLANT:  return wxSTYLE_SLANT;
@@ -640,7 +640,7 @@ static int SCoordinate(int s)
 // wxSuffixMap
 //-----------------------------------------------------------------------------
 
-class wxSuffixMap 
+class wxSuffixMap
 {
 public:
     ~wxSuffixMap();
@@ -664,32 +664,32 @@ static void SearchResource(const char *prefix, const char **names, int count, ch
     *v = (char *) NULL;
     internal = (char *) NULL;
 
-    for (i = 0; i < k; i++) 
+    for (i = 0; i < k; i++)
     {
         strcpy(resource, prefix);
-        for (j = 0; j < count; j++) 
-	{
-	    // upon failure to find a matching fontname 
-	    //   in the default fonts above, we substitute more
-	    //   and more values by _ so that at last ScreenMyFontBoldNormal
-	    //   would turn into Screen___ and this will then get
-	    //   converted to -${ScreenDefaultBase}${ScreenStdSuffix}
-	
+        for (j = 0; j < count; j++)
+        {
+            // upon failure to find a matching fontname
+            //   in the default fonts above, we substitute more
+            //   and more values by _ so that at last ScreenMyFontBoldNormal
+            //   would turn into Screen___ and this will then get
+            //   converted to -${ScreenDefaultBase}${ScreenStdSuffix}
+
             if (!(i & (1 << j)))
                 strcat(resource, names[j]);
             else
                 strcat(resource, "_");
         }
-	
-        // we previously search the Xt-resources here 
 
-        if (!internal) 
-	{
+        // we previously search the Xt-resources here
+
+        if (!internal)
+        {
             defaults = font_defaults;
-            while (*defaults) 
-	    {
-                if (!strcmp(*defaults, resource)) 
-		{
+            while (*defaults)
+            {
+                if (!strcmp(*defaults, resource))
+                {
                     internal = defaults[1];
                     break;
                 }
@@ -697,26 +697,26 @@ static void SearchResource(const char *prefix, const char **names, int count, ch
             }
         }
     }
-    
+
     if (internal)
     {
         if ((strcmp(internal,"-${ScreenDefaultBase}${ScreenStdSuffix}") == 0) &&
-	    (strcmp(names[0], "Default") != 0))
-	{
-	    // we did not find any font name in the standard list.
-	    //   this can (hopefully does) mean that someone supplied
-	    //   the facename in the wxFont constructor so we insert
-	    //   it here 
-	
-	    strcpy( resource,"-*-" );                  // any producer               
-	    strcat( resource, names[0] );              // facename                   
-	    strcat( resource, "${ScreenStdSuffix}" );  // add size params later on   
-	    *v = copystring(resource);
-	}
-	else
-	{
+            (strcmp(names[0], "Default") != 0))
+        {
+            // we did not find any font name in the standard list.
+            //   this can (hopefully does) mean that someone supplied
+            //   the facename in the wxFont constructor so we insert
+            //   it here
+
+            strcpy( resource,"-*-" );                  // any producer
+            strcat( resource, names[0] );              // facename
+            strcat( resource, "${ScreenStdSuffix}" );  // add size params later on
+            *v = copystring(resource);
+        }
+        else
+        {
             *v = copystring(internal);
-	}
+        }
     }
 }
 
@@ -726,8 +726,8 @@ wxSuffixMap::~wxSuffixMap()
 
     for (k = 0; k < wxNUM_WEIGHTS; ++k)
         for (j = 0; j < wxNUM_STYLES; ++j)
-            if (map[k][j]) 
-	    {
+            if (map[k][j])
+            {
                 delete[] map[k][j];
                 map[k][j] = (char *) NULL;
             }
@@ -740,19 +740,19 @@ void wxSuffixMap::Initialize(const char *resname, const char *devresname)
     int i, j, k;
     const char *names[3];
 
-    for (k = 0; k < wxNUM_WEIGHTS; k++) 
+    for (k = 0; k < wxNUM_WEIGHTS; k++)
     {
-        switch (k) 
-	{
+        switch (k)
+        {
             case wxWEIGHT_NORMAL: weight = "Medium"; break;
             case wxWEIGHT_LIGHT:  weight = "Light"; break;
             case wxWEIGHT_BOLD:
             default:              weight = "Bold";
         }
-        for (j = 0; j < wxNUM_STYLES; j++) 
-	{
-            switch (j) 
-	    {
+        for (j = 0; j < wxNUM_STYLES; j++)
+        {
+            switch (j)
+            {
                 case wxSTYLE_NORMAL: style = "Straight"; break;
                 case wxSTYLE_ITALIC: style = "Italic"; break;
                 case wxSTYLE_SLANT:
@@ -763,22 +763,22 @@ void wxSuffixMap::Initialize(const char *resname, const char *devresname)
             names[2] = style;
 
             SearchResource(devresname, names, 3, &v);
-	    
-            // Expand macros in the found string: 
+
+            // Expand macros in the found string:
 found:
             int len, closer = 0, startpos = 0;
 
             len = (v ? strlen(v) : 0);
-            for (i = 0; i < len; i++) 
-	    {
-                if (v[i] == '$' && ((v[i+1] == '[') || (v[i+1] == '{'))) 
-		{
+            for (i = 0; i < len; i++)
+            {
+                if (v[i] == '$' && ((v[i+1] == '[') || (v[i+1] == '{')))
+                {
                     startpos = i;
                     closer   = (v[i+1] == '[') ? ']' : '}';
                     ++i;
-                } 
-		else if (v[i] == closer) 
-		{
+                }
+                else if (v[i] == closer)
+                {
                     int newstrlen;
                     const char *r = (char *) NULL; bool delete_r = FALSE;
                     char *name;
@@ -786,8 +786,8 @@ found:
                     name = v + startpos + 2;
                     v[i] = 0;
 
-                    if (closer == '}') 
-		    {
+                    if (closer == '}')
+                    {
                         int i, count, len;
                         char **names;
 
@@ -800,8 +800,8 @@ found:
                         names = new char*[count];
                         names[0] = name;
                         for (i = 0, count = 1; i < len; i++)
-                            if (name[i] == ',') 
-			    {
+                            if (name[i] == ',')
+                            {
                                 names[count++] = name + i + 1;
                                 name[i] = 0;
                             }
@@ -810,8 +810,8 @@ found:
                         delete_r = (r != 0);
                         delete[] names;
 
-                        if (!r) 
-			{
+                        if (!r)
+                        {
                             for (i = 0; i < len; i++)
                                 if (!name[i])
                                     name[i] = ',';
@@ -843,7 +843,7 @@ found:
                     goto found;
                 }
             }
-            // We have a final value: 
+            // We have a final value:
             map[k][j] = v;
         }
     }
@@ -853,7 +853,7 @@ found:
 // wxFontNameItem
 //-----------------------------------------------------------------------------
 
-class wxFontNameItem : public wxObject 
+class wxFontNameItem : public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxFontNameItem)
 public:
@@ -922,7 +922,7 @@ wxFontNameDirectory::~wxFontNameDirectory()
     // Cleanup wxFontNameItems allocated
     table->BeginFind();
     wxNode *node = table->Next();
-    while (node) 
+    while (node)
     {
         wxFontNameItem *item = (wxFontNameItem*)node->Data();
         delete item;
@@ -953,8 +953,8 @@ void wxFontNameDirectory::Initialize(int fontid, int family, const char *resname
 
     sprintf(resource, "Family%s", resname);
     SearchResource((const char *)resource, (const char **) NULL, 0, (char **)&fam);
-    
-    if (fam) 
+
+    if (fam)
     {
         if      (!strcmp(fam, "Default"))    family = wxDEFAULT;
         else if (!strcmp(fam, "Roman"))        family = wxROMAN;
@@ -971,10 +971,10 @@ void wxFontNameDirectory::Initialize(int fontid, int family, const char *resname
 int wxFontNameDirectory::FindOrCreateFontId(const char *name, int family)
 {
     int id;
-    
+
     // font exists -> return id
     if ( (id = GetFontId(name)) ) return id;
-    
+
     // create new font
     Initialize(id=GetNewFontId(), family, name);
     return id;
@@ -985,7 +985,7 @@ char *wxFontNameDirectory::GetScreenName(int fontid, int weight, int style)
     wxFontNameItem *item = (wxFontNameItem*)table->Get(fontid); // find font
     if (item)
         return item->GetScreenName(weight, style);
-	
+
     // font does not exist
     return (char *) NULL;
 }
@@ -995,7 +995,7 @@ char *wxFontNameDirectory::GetPostScriptName(int fontid, int weight, int style)
     wxFontNameItem *item = (wxFontNameItem*)table->Get(fontid); // find font
     if (item)
         return item->GetPostScriptName(weight, style);
-	
+
     // font does not exist
     return (char *) NULL;
 }
@@ -1014,7 +1014,7 @@ char *wxFontNameDirectory::GetFontName(int fontid)
     wxFontNameItem *item = (wxFontNameItem *)table->Get(fontid); // find font
     if (item)
         return item->GetName();
-	
+
     // font does not exist
     return (char *) NULL;
 }
@@ -1025,13 +1025,13 @@ int wxFontNameDirectory::GetFontId(const char *name)
 
     table->BeginFind();
 
-    while ( (node = table->Next()) ) 
+    while ( (node = table->Next()) )
     {
         wxFontNameItem *item = (wxFontNameItem*)node->Data();
         if (!strcmp(name, item->name))
             return item->id;
     }
-    
+
     // font does not exist
     return 0;
 }
@@ -1042,7 +1042,7 @@ int wxFontNameDirectory::GetFamily(int fontid)
 
     if (item)
         return item->family;
-	
+
     // font does not exist
     return wxDEFAULT;
 }

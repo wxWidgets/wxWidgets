@@ -51,54 +51,56 @@ wxMask::~wxMask()
     if (m_bitmap) gdk_bitmap_unref( m_bitmap );
 }
 
-bool wxMask::Create( const wxBitmap& bitmap, const wxColour& colour )
+bool wxMask::Create( const wxBitmap& WXUNUSED(bitmap),
+                     const wxColour& WXUNUSED(colour) )
 {
     if (m_bitmap)
-    { 
+    {
         gdk_bitmap_unref( m_bitmap );
-	m_bitmap = (GdkBitmap*) NULL;
+        m_bitmap = (GdkBitmap*) NULL;
     }
-    
+
     wxFAIL_MSG( _T("TODO") );
-    
+
     return FALSE;
 }
 
-bool wxMask::Create( const wxBitmap& WXUNUSED(bitmap), int WXUNUSED(paletteIndex) )
+bool wxMask::Create( const wxBitmap& WXUNUSED(bitmap),
+                     int WXUNUSED(paletteIndex) )
 {
     if (m_bitmap)
-    { 
+    {
         gdk_bitmap_unref( m_bitmap );
-	m_bitmap = (GdkBitmap*) NULL;
+        m_bitmap = (GdkBitmap*) NULL;
     }
-    
+
     wxFAIL_MSG( _T("not implemented") );
-    
+
     return FALSE;
 }
 
 bool wxMask::Create( const wxBitmap& bitmap )
 {
     if (m_bitmap)
-    { 
+    {
         gdk_bitmap_unref( m_bitmap );
-	m_bitmap = (GdkBitmap*) NULL;
+        m_bitmap = (GdkBitmap*) NULL;
     }
-    
+
     if (!bitmap.Ok()) return FALSE;
-    
+
     wxCHECK_MSG( bitmap.GetBitmap(), FALSE, _T("Cannot create mask from colour bitmap") );
-    
+
     m_bitmap = gdk_pixmap_new( (GdkWindow*) &gdk_root_parent, bitmap.GetWidth(), bitmap.GetHeight(), 1 );
-    
+
     if (!m_bitmap) return FALSE;
-    
+
     GdkGC *gc = gdk_gc_new( m_bitmap );
-    
+
     gdk_draw_bitmap( m_bitmap, gc, bitmap.GetBitmap(), 0, 0, 0, 0, bitmap.GetWidth(), bitmap.GetHeight() );
-    
+
     gdk_gc_unref( gc );
-    
+
     return TRUE;
 }
 
@@ -159,10 +161,10 @@ wxBitmap::wxBitmap()
 wxBitmap::wxBitmap( int width, int height, int depth )
 {
     wxCHECK_RET( (width > 0) && (height > 0), _T("invalid bitmap size") )
-    
+
     GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
     if (depth == -1) depth = gdk_window_get_visual( parent )->depth;
-    
+
     wxCHECK_RET( (depth ==  gdk_window_get_visual( parent )->depth) ||
                  (depth == 1), _T("invalid bitmap depth") )
 
@@ -333,7 +335,7 @@ bool wxBitmap::SaveFile( const wxString &name, int type, wxPalette *WXUNUSED(pal
     if (type == wxBITMAP_TYPE_PNG)
     {
         wxImage image( *this );
-	if (image.Ok()) return image.SaveFile( name, type );
+        if (image.Ok()) return image.SaveFile( name, type );
     }
 
     return FALSE;
