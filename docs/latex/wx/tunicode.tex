@@ -47,6 +47,7 @@ be compiled either in ANSI (traditional) mode or in the Unicode one.
 
 This can be achieved quite simply by using the means provided by wxWindows.
 Basicly, there are only a few things to watch out for:
+
 \begin{itemize}
 \item Character type ({\tt char} or {\tt wchar\_t})
 \item Literal strings (i.e. {\tt "Hello, world!"} or {\tt '*'})
@@ -95,11 +96,11 @@ section.
 
 \subsection{Unicode support in wxWindows}
 
-In wxWindows, the code fragment from above should be written instead:
+In wxWindows, the code fragment froim above should be written instead:
 
 \begin{verbatim}
-    wxChar ch = wxT('*');
-    wxString s = wxT("Hello, world!");
+    wxChar ch = T('*');
+    wxString s = T("Hello, world!");
     int len = s.Len();
 \end{verbatim}
 
@@ -114,22 +115,23 @@ a separate type for strings though, because the standard
 \helpref{wxString}{wxstring} supports Unicode, i.e. it stores iether ANSI or
 Unicode strings depending on the mode.
 
-Finally, there is a special {\tt wxT()} macro which should enclose all literal
+Finally, there is a special {\tt T()} macro which should enclose all literal
 strings in the program. As it's easy to see comparing the last fragment with
 the one above, this macro expands to nothing in the (usual) ANSI mode and
 prefixes {\tt 'L'} to its argument in the Unicode mode.
 
 The important conclusion is that if you use {\tt wxChar} instead of 
 {\tt char}, avoid using C style strings and use {\tt wxString} instead and
-don't forget to enclose all string literals inside {\tt wxT()} macro, your
+don't forget to enclose all string literals inside {\tt T()} macro, your
 program automatically becomes (almost) Unicode compliant!
 
 Just let us state once again the rules:
+
 \begin{itemize}
 \item Always use {\tt wxChar} instead of {\tt char}
-\item Always enclose literal string constants in {\tt wxT()} macro unless
+\item Always enclose literal string constants in {\tt T()} macro unless
 they're already converted to the right representation (another standard
-wxWindows macro {\tt \_()} does it, so there is no need for {\tt wxT()} in this
+wxWindows macro {\tt \_()} does it, so there is no need for {\tt T()} in this
 case) or you intend to pass the constant directly to an external function
 which doesn't accept wide-character strings.
 \item Use {\tt wxString} instead of C style strings.
@@ -154,3 +156,5 @@ useful, is \helpref{wc\_str()}{wxstringwcstr} function which always returns
 the Unicode string.
 
 % TODO describe fn_str(), wx_str(), wxCharBuf classes, ...
+% Please remember to put a blank line at the end of each file! (Tex2RTF 'issue')
+
