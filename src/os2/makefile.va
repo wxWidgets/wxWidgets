@@ -130,7 +130,7 @@ GENERICOBJS= \
   ..\generic\$D\tbarsmpl.obj \
   ..\generic\$D\textdlgg.obj \
   ..\generic\$D\tipdlg.obj \
-  ..\generic\$D\treectrl.obj \
+  ..\generic\$D\treectlg.obj \
   ..\generic\$D\treelay.obj \
   ..\generic\$D\wizard.obj
 
@@ -173,7 +173,7 @@ GENLIBOBJS= \
   tbarsmpl.obj \
   textdlgg.obj \
   tipdlg.obj \
-  treectrl.obj \
+  treectlg.obj \
   treelay.obj \
   wizard.obj
 
@@ -769,7 +769,7 @@ $(GENLIBOBJS):
   copy ..\generic\$D\tbarsmpl.obj
   copy ..\generic\$D\textdlgg.obj
   copy ..\generic\$D\tipdlg.obj
-  copy ..\generic\$D\treectrl.obj
+  copy ..\generic\$D\treectlg.obj
   copy ..\generic\$D\treelay.obj
   copy ..\generic\$D\wizard.obj
 

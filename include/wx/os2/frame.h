@@ -197,6 +197,8 @@ protected:
     int                             m_nFsToolBarHeight;
     bool                            m_bFsIsMaximized;
     bool                            m_bFsIsShowing;
+    bool                            m_bIsShown;
+    wxWindow*                       m_pWinLastFocused;
 
 private:
 #if wxUSE_TOOLTIPS
