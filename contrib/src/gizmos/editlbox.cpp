@@ -105,8 +105,9 @@ END_EVENT_TABLE()
 
 wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
                           const wxString& label,
-                          const wxPoint& pos, const wxSize& size)
-   : wxPanel(parent, id, pos, size), m_edittingNew(FALSE)
+                          const wxPoint& pos, const wxSize& size,
+                          const wxString& name)
+   : wxPanel(parent, id, pos, size, wxTAB_TRAVERSAL, name), m_edittingNew(FALSE)
 {
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
     
@@ -186,10 +187,7 @@ void wxEditableListBox::OnEndLabelEdit(wxListEvent& event)
     {
         m_edittingNew = FALSE;
         if (!event.GetText().IsEmpty())
-        {
-            printf("X-\n");
             m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), _T(""));
-        }
     }
 }
 
