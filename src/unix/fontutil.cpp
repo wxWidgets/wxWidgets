@@ -106,10 +106,17 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
 // ----------------------------------------------------------------------------
 
 // convert to/from the string representation: format is
-//      registry-encoding[-facename]
+//      encodingid;registry;encoding[;facename]
 bool wxNativeEncodingInfo::FromString(const wxString& s)
 {
-    wxStringTokenizer tokenizer(s, _T("-"));
+    wxStringTokenizer tokenizer(s, _T(";"));
+            // cannot use "-" because it may be part of encoding name
+
+    wxString encid = tokenizer.GetNextToken();
+    long enc;
+    if ( !encid.ToLong(&enc) )
+        return FALSE;
+    encoding = (wxFontEncoding)enc;
 
     xregistry = tokenizer.GetNextToken();
     if ( !xregistry )
@@ -128,10 +135,10 @@ bool wxNativeEncodingInfo::FromString(const wxString& s)
 wxString wxNativeEncodingInfo::ToString() const
 {
     wxString s;
-    s << xregistry << _T('-') << xencoding;
+    s << (long)encoding << _T(';') << xregistry << _T(';') << xencoding;
     if ( !!facename )
     {
-        s << _T('-') << facename;
+        s << _T(';') << facename;
     }
 
     return s;

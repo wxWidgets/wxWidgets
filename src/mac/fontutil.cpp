@@ -48,11 +48,17 @@
 // ----------------------------------------------------------------------------
 
 // convert to/from the string representation: format is
-//      facename[;charset]
+//      encodingid;facename[;charset]
 
 bool wxNativeEncodingInfo::FromString(const wxString& s)
 {
     wxStringTokenizer tokenizer(s, _T(";"));
+
+    wxString encid = tokenizer.GetNextToken();
+    long enc;
+    if ( !encid.ToLong(&enc) )
+        return FALSE;
+    encoding = (wxFontEncoding)enc;
 
     facename = tokenizer.GetNextToken();
     if ( !facename )
@@ -79,7 +85,10 @@ bool wxNativeEncodingInfo::FromString(const wxString& s)
 
 wxString wxNativeEncodingInfo::ToString() const
 {
-    wxString s(facename);
+    wxString s;
+    
+    s << (long)encoding << _T(';') << facename;
+
     if ( charset != 0 )
     {
         s << _T(';') << charset;
