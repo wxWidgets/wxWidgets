@@ -101,16 +101,16 @@ this:
 \begin{verbatim}
 void wxDialog::OnOK(wxCommandEvent& event)
 {
-	if ( Validate() && TransferDataFromWindow() )
-	{
+    if ( Validate() && TransferDataFromWindow() )
+    {
         if ( IsModal() )
             EndModal(wxID_OK);
         else
         {
-		    SetReturnCode(wxID_OK);
-		    this->Show(false);
+            SetReturnCode(wxID_OK);
+            this->Show(false);
         }
-	}
+    }
 }
 \end{verbatim}
 

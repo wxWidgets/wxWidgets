@@ -62,10 +62,7 @@ The default value is black.
 
 \func{wxFont}{GetChosenFont}{\void}
 
-Gets the font chosen by the user. If the user pressed OK (wxFontDialog::Show returned true), this returns
-a new font which is now `owned' by the application, and should be deleted
-if not required. If the user pressed Cancel (wxFontDialog::Show returned false) or
-the colour dialog has not been invoked yet, this will return NULL.
+Gets the font chosen by the user if the user pressed OK (wxFontDialog::ShowModal returned wxID\_OK).
 
 \membersection{wxFontData::GetEnableEffects}
 
