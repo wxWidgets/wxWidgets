@@ -31,7 +31,7 @@ typedef struct tagClassicCursor
 {
     wxUint16 bits[16];
     wxUint16 mask[16];
-    wxUint16 hotspot[2];
+    wxInt16 hotspot[2];
 }ClassicCursor;
 
 const short kwxCursorBullseye = 0 ;
@@ -216,8 +216,8 @@ NSCursor* wxGetStockCursor( short sIndex )
         //do the rest of those bits and alphas :)
         for (int shift = 0; shift < 32; ++shift)
         {
-            data[i] |= (!!(pCursor->bits[i] & (1 << (shift >> 1) ))) << shift;
-            data[i] |= (!(pCursor->mask[i] & (1 << (shift >> 1) ))) << ++shift;
+            data[i] |= ( !!( (pCursor->mask[i] & (1 << (shift >> 1) )) ) ) << shift;
+            data[i] |= ( !( (pCursor->bits[i] & (1 << (shift >> 1) )) ) ) << ++shift;
         }
     }
 
@@ -226,7 +226,7 @@ NSCursor* wxGetStockCursor( short sIndex )
     
     //create the new cursor
     NSCursor* theCursor =  [[NSCursor alloc] 	initWithImage:theImage 
-                                    hotSpot:NSMakePoint(pCursor->hotspot[0], pCursor->hotspot[1])
+                                    hotSpot:NSMakePoint(pCursor->hotspot[1], pCursor->hotspot[0])
                             ];
     
     //do the usual cleanups
