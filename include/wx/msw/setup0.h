@@ -1100,6 +1100,27 @@
 #define wxUSE_UXTHEME_AUTO      1
 
 // ----------------------------------------------------------------------------
+// Crash debugging helpers
+// ----------------------------------------------------------------------------
+
+// Set this to 1 to be able to use wxCrashReport::Generate() to create mini
+// dumps of your program when it crashes (or at any other moment)
+//
+// Default is 1.
+//
+// Recommended setting: 1, set to 0 if your programs never crash
+#define wxUSE_CRASHREPORT 1
+
+// Set this to 1 to be able to generate a human-readable (unlike
+// machine-readable minidumop created by wxCrashReport::Generate()) stack back
+// trace when your program crashes using wxStackWalker
+//
+// Default is 1.
+//
+// Recommended setting: 1, set to 0 if your programs never crash
+#define wxUSE_STACKWALKER 1
+
+// ----------------------------------------------------------------------------
 // obsolete settings
 // ----------------------------------------------------------------------------
 
@@ -1111,10 +1132,6 @@
 
 // Define 1 to use bitmap messages.
 #define wxUSE_BITMAP_MESSAGE         1
-
-// If 1, enables provision of run-time type information.
-// NOW MANDATORY: don't change.
-#define wxUSE_DYNAMIC_CLASSES     1
 
 #endif // _WX_SETUP_H_
 
