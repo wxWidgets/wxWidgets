@@ -49,7 +49,7 @@ wxBrush*        g_oglWhiteBackgroundBrush;
 wxPen*          g_oglBlackForegroundPen;
 wxCursor*       g_oglBullseyeCursor = NULL;
 
-char*           oglBuffer = NULL;
+wxChar*           oglBuffer = NULL;
 
 wxList          oglObjectCopyMapping(wxKEY_INTEGER);
 
@@ -71,7 +71,7 @@ void wxOGLInitialize()
   OGLInitializeConstraintTypes();
 
   // Initialize big buffer used when writing images
-  oglBuffer = new char[3000];
+  oglBuffer = new wxChar[3000];
 
 }
 
