@@ -24,6 +24,10 @@
 
 #if wxUSE_FSVOLUME
 
+#if wxUSE_GUI
+    #include "wx/iconbndl.h" // for wxIconArray
+#endif // wxUSE_GUI
+
 // the volume flags
 enum
 {
@@ -64,9 +68,6 @@ enum wxFSIconType
     wxFS_VOL_ICO_SEL_LARGE,
     wxFS_VOL_ICO_MAX
 };
-
-// already in wx/iconbndl.h
-// WX_DECLARE_EXPORTED_OBJARRAY(wxIcon, wxIconArray);
 
 #endif // wxUSE_GUI
 
