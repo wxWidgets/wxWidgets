@@ -32,6 +32,10 @@
 #include "wx/sizer.h"
 #include "wx/bmpbuttn.h"
 
+#if wxUSE_TOOLTIPS
+    #include "wx/tooltip.h"
+#endif
+
 #include "sys/types.h"
 #include "sys/stat.h"
 #include "dirent.h"
@@ -42,6 +46,8 @@
 #include "wx/generic/home.xpm"
 #include "wx/generic/listview.xpm"
 #include "wx/generic/repview.xpm"
+#include "wx/generic/new_dir.xpm"
+#include "wx/generic/dir_up.xpm"
 
 /* XPM */
 static char * folder_xpm[] = {
@@ -318,7 +324,7 @@ void wxFileCtrl::Update()
     long my_style = GetWindowStyleFlag();
     if (my_style & wxLC_REPORT)
     {
-        InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, 110 );
+        InsertColumn( 0, _("Name"), wxLIST_FORMAT_LEFT, 130 );
         InsertColumn( 1, _("Size"), wxLIST_FORMAT_LEFT, 60 );
         InsertColumn( 2, _("Date"), wxLIST_FORMAT_LEFT, 55 );
         InsertColumn( 3, _("Time"), wxLIST_FORMAT_LEFT, 50 );
@@ -429,12 +435,16 @@ void wxFileCtrl::GoToHomeDir()
     wxString s = wxGetUserHome( wxString() );
     m_dirName = s;
     Update();
+    SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+    EnsureVisible( 0 );
 }
 
 void wxFileCtrl::GoToDir( const wxString &dir )
 {
     m_dirName = dir;
     Update();
+    SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+    EnsureVisible( 0 );
 }
 
 void wxFileCtrl::GetDir( wxString &dir )
@@ -522,7 +532,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
                  const wxString& wildCard,
                  long style,
                  const wxPoint& pos ) :
-  wxDialog( parent, -1, message )
+  wxDialog( parent, -1, message, pos, wxDefaultSize, style | wxRESIZE_BORDER )
 {
     wxBeginBusyCursor();
     
@@ -541,15 +551,45 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     
     wxBoxSizer *buttonsizer = new wxBoxSizer( wxHORIZONTAL );
     
-    buttonsizer->Add( new wxBitmapButton( this, ID_LIST_MODE, wxBitmap( listview_xpm ) ), 0, wxALL, 5 );
-    buttonsizer->Add( new wxBitmapButton( this, ID_REPORT_MODE, wxBitmap( repview_xpm ) ), 0, wxALL, 5 );
+    wxBitmapButton *but;
+    
+    but = new wxBitmapButton( this, ID_LIST_MODE, wxBitmap( listview_xpm ) );
+#if wxUSE_TOOLTIPS
+    but->SetToolTip( _("View files as a list view") );
+#endif
+    buttonsizer->Add( but, 0, wxALL, 5 );
+    
+    but = new wxBitmapButton( this, ID_REPORT_MODE, wxBitmap( repview_xpm ) );
+#if wxUSE_TOOLTIPS
+    but->SetToolTip( _("View files as a detailed view") );
+#endif
+    buttonsizer->Add( but, 0, wxALL, 5 );
+    
     buttonsizer->Add( 30, 5, 1 );
-    buttonsizer->Add( new wxButton( this, ID_UP_DIR, "Up" ), 0, wxALL, 5 );
-    buttonsizer->Add( new wxBitmapButton( this, ID_PARENT_DIR, wxBitmap(home_xpm) ), 0, wxALL, 5 );
-    buttonsizer->Add( new wxButton( this, ID_NEW_DIR, "New..." ), 0, wxALL, 5 );
+
+    but = new wxBitmapButton( this, ID_UP_DIR, wxBitmap( dir_up_xpm ) );
+#if wxUSE_TOOLTIPS
+    but->SetToolTip( _("Go to parent directory") );
+#endif
+    buttonsizer->Add( but, 0, wxALL, 5 );
+    
+    but = new wxBitmapButton( this, ID_PARENT_DIR, wxBitmap(home_xpm) );
+#if wxUSE_TOOLTIPS
+    but->SetToolTip( _("Go to home directory") );
+#endif
+    buttonsizer->Add( but, 0, wxALL, 5);
+    
+    buttonsizer->Add( 20, 20 );
+    
+    but = new wxBitmapButton( this, ID_NEW_DIR, wxBitmap(new_dir_xpm) );
+#if wxUSE_TOOLTIPS
+    but->SetToolTip( _("Create new directory") );
+#endif
+    buttonsizer->Add( but, 0, wxALL, 5 );
+    
     mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
     
-    m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, "*", wxDefaultPosition, wxSize(450,180), 
+    m_list = new wxFileCtrl( this, ID_LIST_CTRL, m_dir, "*", wxDefaultPosition, wxSize(440,180), 
       wxLC_LIST | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
     mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 10 );
     

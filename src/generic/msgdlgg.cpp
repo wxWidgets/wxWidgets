@@ -98,9 +98,9 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
     wxSize size( GetSize() );
-    if (size.x < size.y*2)
+    if (size.x < size.y*3/2)
     {
-        size.x = size.y*2;
+        size.x = size.y*3/2;
 	SetSize( size );
     }
 

@@ -64,21 +64,21 @@
         #ifdef __SUN__
             int usleep(unsigned int usec);
         #else // !Sun
-            void usleep(unsigned long usec);
-        #endif // Sun/!Sun
+	#ifdef __EMX
+            /* I copied this from the XFree86 diffs. AV. */
+            #define INCL_DOSPROCESS
+            #include <os2.h>
+            void usleep(unsigned long delay)
+            {
+                DosSleep(delay ? (delay/1000l) : 1l);
+            }
+	#else
+	    void usleep(unsigned long usec);
+	#endif
+        #endif // Sun/EMX/Something else
     };
+#define HAVE_USLEEP 1
 #endif // Unices without usleep()
-
-#ifdef __EMX__
-  /* I copied this from the XFree86 diffs. AV. */
-//extern void DosSleep(unsigned long);
-#define INCL_DOSPROCESS
-#include <os2.h>
-void usleep(unsigned long delay)
-{
-    DosSleep(delay ? (delay/1000l) : 1l);
-}
-#endif
 
 // ============================================================================
 // implementation
