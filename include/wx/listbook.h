@@ -116,10 +116,6 @@ public:
 protected:
     virtual wxWindow *DoRemovePage(size_t page);
 
-private:
-    // common part of all constructors
-    void Init();
-
     // get the size which the list control should have
     wxSize GetListSize() const;
 
@@ -129,7 +125,6 @@ private:
     // event handlers
     void OnSize(wxSizeEvent& event);
     void OnListSelected(wxListEvent& event);
-
 
     // the list control we use for showing the pages index
     wxListView *m_list;
@@ -142,6 +137,9 @@ private:
     // the currently selected page or wxNOT_FOUND if none
     int m_selection;
 
+private:
+    // common part of all constructors
+    void Init();
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxListbook)

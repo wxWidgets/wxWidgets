@@ -262,23 +262,13 @@ void wxListbook::OnSize(wxSizeEvent& event)
     }
 #endif // wxUSE_LINE_IN_LISTBOOK
 
-    // we should always have some selection if possible
-    if ( m_selection == wxNOT_FOUND && GetPageCount() )
-    {
-        SetSelection(0);
-    }
-
-    if ( m_selection != wxNOT_FOUND )
+    // resize the currently shown page
+    if (m_selection != wxNOT_FOUND )
     {
         wxWindow *page = m_pages[m_selection];
         wxCHECK_RET( page, _T("NULL page in wxListbook?") );
-
         page->SetSize(GetPageRect());
-        if ( !page->IsShown() )
-        {
-            page->Show();
         }
-    }
 }
 
 wxSize wxListbook::CalcSizeFromPage(const wxSize& sizePage) const
@@ -353,21 +343,25 @@ int wxListbook::SetSelection(size_t n)
     wxCHECK_MSG( n < GetPageCount(), wxNOT_FOUND,
                  _T("invalid page index in wxListbook::SetSelection()") );
 
-    int selOld = m_selection;
+    const int selOld = m_selection;
 
     if ( (int)n != m_selection )
     {
-        m_list->Select(n);
-        m_list->Focus(n);
+        if ( m_selection != wxNOT_FOUND )
+            m_pages[m_selection]->Hide();
+        wxWindow *page = m_pages[n];
+        page->SetSize(GetPageRect());
+        page->Show();
 
-        // change m_selection only now, otherwise OnListSelected() would ignore
-        // the selection change event
+        // change m_selection only now to ignore the selection change event
         m_selection = n;
+        
+        m_list->Select(n);
+        m_list->Focus(n);        
     }
 
     return selOld;
 }
-
 
 // ----------------------------------------------------------------------------
 // adding/removing the pages
@@ -385,10 +379,10 @@ wxListbook::InsertPage(size_t n,
 
     m_list->InsertItem(n, text, imageId);
 
-    if ( bSelect )
+    // we should always have some selection if possible
+    if ( bSelect || (m_selection == wxNOT_FOUND) )
     {
-        m_list->Select(n);
-        m_list->Focus(n);
+        SetSelection(n);
     }
     else // don't select this page
     {
@@ -402,10 +396,28 @@ wxListbook::InsertPage(size_t n,
 
 wxWindow *wxListbook::DoRemovePage(size_t page)
 {
+    const int page_count = GetPageCount();
     wxWindow *win = wxBookCtrl::DoRemovePage(page);
+    
     if ( win )
     {
         m_list->DeleteItem(page);
+
+        if (m_selection >= (int)page)
+        {
+            // force new sel valid if possible
+            int sel = m_selection - 1;
+            if (page_count == 1)
+                sel = -1;
+            else if ((page_count == 2) || (sel == -1))
+                sel = 0;
+            
+            // force sel invalid if deleting current page - don't try to hide it
+            m_selection = (m_selection == (int)page) ? -1 : m_selection - 1;
+            
+            if ((sel != -1) && (sel != m_selection))
+                SetSelection(sel);
+        }
     }
 
     return win;
@@ -425,6 +437,7 @@ bool wxListbook::DeleteAllPages()
 void wxListbook::OnListSelected(wxListEvent& eventList)
 {
     const int selNew = eventList.GetIndex();
+    const int selOld = m_selection;
 
     if ( selNew == m_selection )
     {
@@ -439,7 +452,7 @@ void wxListbook::OnListSelected(wxListEvent& eventList)
 
     eventIng.SetEventObject(this);
     eventIng.SetSelection(selNew);
-    eventIng.SetOldSelection(m_selection);
+    eventIng.SetOldSelection(selOld);
     if ( GetEventHandler()->ProcessEvent(eventIng) && !eventIng.IsAllowed() )
     {
         m_list->Select(m_selection);
@@ -447,17 +460,13 @@ void wxListbook::OnListSelected(wxListEvent& eventList)
     }
 
     // change allowed: do change the page and notify the user about it
-    if ( m_selection != wxNOT_FOUND )
-        m_pages[m_selection]->Hide();
-    wxWindow *page = m_pages[m_selection = selNew];
-    page->SetSize(GetPageRect());
-    page->Show();
+    SetSelection(selNew);
 
     wxListbookEvent eventEd(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED, GetId());
 
     eventEd.SetEventObject(this);
     eventEd.SetSelection(selNew);
-    eventEd.SetOldSelection(m_selection);
+    eventEd.SetOldSelection(selOld);
 
     (void)GetEventHandler()->ProcessEvent(eventEd);
 }

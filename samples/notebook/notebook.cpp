@@ -506,7 +506,7 @@ void MyFrame::OnNotebook(wxNotebookEvent& event)
 
     if (eventType == wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
     {
-        str = wxT("Notebook changed");
+        str = wxT("Changed");
     }
     else if (eventType == wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
     {
@@ -528,13 +528,14 @@ void MyFrame::OnNotebook(wxNotebookEvent& event)
 
         }
 
-        str = wxT("Notebook changing");
+        str = wxT("Changing");
     }
 
     static int s_numNotebookEvents = 0;
 
-    wxLogMessage(wxT("Notebook event #%d: %s (%d)"),
-        s_numNotebookEvents++, str.c_str(), eventType);
+    wxLogMessage(wxT("Notebook event #%d: %s (%d) Sel %d, OldSel %d"),
+        s_numNotebookEvents++, str.c_str(), eventType, 
+        event.GetSelection(), event.GetOldSelection());
 
 #if wxUSE_LOG
     m_text->SetInsertionPointEnd();
