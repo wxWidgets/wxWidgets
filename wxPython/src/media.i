@@ -22,6 +22,7 @@
 #include "wx/wxPython/pyclasses.h"
 
 #include <wx/mediactrl.h>
+#include <wx/uri.h>
 %}
 
 //----------------------------------------------------------------------
@@ -62,7 +63,7 @@ enum wxMediaTimeFormat
 class WXDLLIMPEXP_MEDIA wxMediaEvent : public wxNotifyEvent
 {
 public:
-    wxMediaEvent(wxEventTypL, int )    { wxPyRaiseNotImplemented(); }
+    wxMediaEvent(wxEventType, int )    { wxPyRaiseNotImplemented(); }
 };
 
 class wxMediaCtrl : public wxControl
@@ -83,7 +84,7 @@ public:
                 wxWindowID ,
                 const wxURI& ,
                 const wxPoint&,
-                const wxSize& .
+                const wxSize& ,
                 long style,
                 const wxString& ,
                 const wxValidator& ,
@@ -102,7 +103,7 @@ public:
                 wxWindowID ,
                 const wxURI& ,
                 const wxPoint&,
-                const wxSize& .
+                const wxSize& ,
                 long style,
                 const wxString& ,
                 const wxValidator& ,
@@ -127,6 +128,10 @@ public:
     wxLongLong GetPosition() { return 0; }
     wxLongLong GetDuration() { return 0; }
 };
+
+const wxEventType wxEVT_MEDIA_FINISHED = 0;
+const wxEventType wxEVT_MEDIA_STOP = 0;
+
 #endif
 %}
 
@@ -147,9 +152,9 @@ enum wxMediaTimeFormat
 };
 
 
-MAKE_CONST_WXSTRING(MEDIABACKEND_DIRECTSHOW);
-MAKE_CONST_WXSTRING(MEDIABACKEND_MCI       );
-MAKE_CONST_WXSTRING(MEDIABACKEND_QUICKTIME );
+// MAKE_CONST_WXSTRING(MEDIABACKEND_DIRECTSHOW);
+// MAKE_CONST_WXSTRING(MEDIABACKEND_MCI       );
+// MAKE_CONST_WXSTRING(MEDIABACKEND_QUICKTIME );
 
 //---------------------------------------------------------------------------
 
@@ -163,7 +168,7 @@ public:
 //---------------------------------------------------------------------------
 
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
-MAKE_CONST_WXSTRING2(MediaCtrlNameStr, "mediaCtrl");
+MAKE_CONST_WXSTRING2(MediaCtrlNameStr, wxT("mediaCtrl"));
 MustHaveApp(wxMediaCtrl);
 
 
