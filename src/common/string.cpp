@@ -564,20 +564,32 @@ void wxString::AllocCopy(wxString& dest, int nCopyLen, int nCopyIndex) const
 }
 
 // extract string of length nCount starting at nFirst
-// default value of nCount is 0 and means "till the end"
 wxString wxString::Mid(size_t nFirst, size_t nCount) const
 {
-  // out-of-bounds requests return sensible things
-  if ( nCount == 0 )
-    nCount = GetStringData()->nDataLength - nFirst;
+  wxStringData *pData = GetStringData();
+  size_t nLen = pData->nDataLength;
 
-  if ( nFirst + nCount > (size_t)GetStringData()->nDataLength )
-    nCount = GetStringData()->nDataLength - nFirst;
-  if ( nFirst > (size_t)GetStringData()->nDataLength )
+  // default value of nCount is STRING_MAXLEN and means "till the end"
+  if ( nCount == STRING_MAXLEN )
+  {
+    nCount = nLen - nFirst;
+  }
+
+  // out-of-bounds requests return sensible things
+  if ( nFirst + nCount > nLen )
+  {
+    nCount = nLen - nFirst;
+  }
+
+  if ( nFirst > nLen )
+  {
+    // AllocCopy() will return empty string
     nCount = 0;
+  }
 
   wxString dest;
   AllocCopy(dest, nCount, nFirst);
+
   return dest;
 }
 
