@@ -535,5 +535,17 @@ wxTheBrushList = wx.gdi.TheBrushList
 wxTheColourDatabase = wx.gdi.TheColourDatabase
 wxEffects = wx.gdi.Effects
 wxEffectsPtr = wx.gdi.EffectsPtr
+wxDC_old = wx.gdi.DC_old
+wxMemoryDC_old = wx.gdi.MemoryDC_old
+wxBufferedDC_old = wx.gdi.BufferedDC_old
+wxBufferedPaintDC_old = wx.gdi.BufferedPaintDC_old
+wxScreenDC_old = wx.gdi.ScreenDC_old
+wxClientDC_old = wx.gdi.ClientDC_old
+wxPaintDC_old = wx.gdi.PaintDC_old
+wxWindowDC_old = wx.gdi.WindowDC_old
+wxMirrorDC_old = wx.gdi.MirrorDC_old
+wxPostScriptDC_old = wx.gdi.PostScriptDC_old
+wxMetaFileDC_old = wx.gdi.MetaFileDC_old
+wxPrinterDC_old = wx.gdi.PrinterDC_old
 
 

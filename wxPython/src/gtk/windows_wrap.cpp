@@ -356,9 +356,9 @@ wxRect wxStatusBar_GetFieldRect(wxStatusBar *self,int i){
             self->GetFieldRect(i, r);
             return r;
         }
- static const wxString wxPySplitterNameStr(wxT(wxT("splitter"))); 
- static const wxString wxPySashNameStr(wxT(wxT("sashWindow"))); 
- static const wxString wxPySashLayoutNameStr(wxT(wxT("layoutWindow"))); 
+ static const wxString wxPySplitterNameStr(wxT("splitter")); 
+ static const wxString wxPySashNameStr(wxT("sashWindow")); 
+ static const wxString wxPySashLayoutNameStr(wxT("layoutWindow")); 
 
 #include <wx/popupwin.h>
 
@@ -782,8 +782,8 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, RemoveChild);
 #include "wx/wxPython/printfw.h"
 
 
- static const wxString wxPyPrintoutTitleStr(wxT(wxT("Printout"))); 
- static const wxString wxPyPreviewCanvasNameStr(wxT(wxT("previewcanvas"))); 
+ static const wxString wxPyPrintoutTitleStr(wxT("Printout")); 
+ static const wxString wxPyPreviewCanvasNameStr(wxT("previewcanvas")); 
 
 
 

@@ -590,7 +590,7 @@ class  wxPrinterDC : public wxClientDC {
 public:
     wxPrinterDC(const wxPrintData&)
         { wxPyRaiseNotImplemented(); }
-    
+
 //     wxPrinterDC(const wxString&, const wxString&, const wxString&, bool, int)
 //         { wxPyRaiseNotImplemented(); }
 };

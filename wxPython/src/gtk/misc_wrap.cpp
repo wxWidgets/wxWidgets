@@ -850,8 +850,8 @@ bool wxConfigBase_ReadBool(wxConfigBase *self,wxString const &key,bool defaultVa
 #include <wx/datetime.h>
 
 
- static const wxString wxPyDateFormatStr(wxT(wxT("%c"))); 
- static const wxString wxPyTimeSpanFormatStr(wxT(wxT("%H:%M:%S"))); 
+ static const wxString wxPyDateFormatStr(wxT("%c")); 
+ static const wxString wxPyTimeSpanFormatStr(wxT("%H:%M:%S")); 
 
 #define LOCAL_TZ wxDateTime::Local
 
