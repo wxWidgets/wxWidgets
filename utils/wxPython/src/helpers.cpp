@@ -282,37 +282,31 @@ PyObject* wxPyConstructObject(void* ptr, char* className) {
 
 //---------------------------------------------------------------------------
 
-//static bool _wxPyInEvent = false;
-//static unsigned int _wxPyNestCount = 0;
+static unsigned int _wxPyNestCount = 0;
+
+static PyThreadState* myPyThreadState_Get() {
+    PyThreadState* current;
+    current = PyThreadState_Swap(NULL);
+    PyThreadState_Swap(current);
+    return current;
+}
+
 
 HELPEREXPORT bool wxPyRestoreThread() {
-//  #ifdef WXP_WITH_THREAD
-//      //if (wxPyEventThreadState != PyThreadState_Get()) {
-//      if (! _wxPyInEvent) {
-//          PyEval_RestoreThread(wxPyEventThreadState);
-//          _wxPyInEvent = true;
-//          return TRUE;
-//      } else
-//  #endif
-//          return FALSE;
-
     // NOTE: The Python API docs state that if a thread already has the
     // interpreter lock and calls PyEval_RestoreThread again a deadlock
-    // occurs, so I put in the above code as a guard condition since there are
-    // many possibilites for nested events and callbacks in wxPython.
+    // occurs, so I put in this code as a guard condition since there are
+    // many possibilites for nested events and callbacks in wxPython.  If
+    // The current thread is our thread, then we can assume that we
+    // already have the lock.
     //
-    // Unfortunately, it seems like somebody was lying (or I'm not
-    // understanding...) because each of the nested calls to this function
-    // MUST call PyEval_RestoreThread or Python pukes with a thread error (at
-    // least on Win32.)
-    //
-    // until I know better, this is how I am doing it instead:
 #ifdef WXP_WITH_THREAD
-    PyEval_RestoreThread(wxPyEventThreadState);
-//    _wxPyNestCount += 1;
-//    if (_wxPyNestCount == 1)
-//        return TRUE;
-//    else
+    _wxPyNestCount += 1;
+    if (wxPyEventThreadState != myPyThreadState_Get()) {
+        PyEval_RestoreThread(wxPyEventThreadState);
+        return TRUE;
+    }
+    else
 #endif
         return FALSE;
 }
@@ -320,11 +314,10 @@ HELPEREXPORT bool wxPyRestoreThread() {
 
 HELPEREXPORT void wxPySaveThread(bool doSave) {
 #ifdef WXP_WITH_THREAD
-//    if (doSave) {
+    if (doSave) {
         wxPyEventThreadState = PyEval_SaveThread();
-//        _wxPyInEvent = false;
-//    }
-//    _wxPyNestCount -= 1;
+    }
+    _wxPyNestCount -= 1;
 #endif
 }
 
@@ -348,7 +341,6 @@ wxPyCallback::~wxPyCallback() {
     Py_DECREF(m_func);
     wxPySaveThread(doSave);
 }
-
 
 
 

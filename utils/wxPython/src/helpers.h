@@ -415,13 +415,15 @@ private:
 #define IMP_PYCALLBACK_BOOL_DC4DBLBOOL(CLASS, PCLASS, CBNAME)                           \
     bool CLASS::CBNAME(wxDC& a, double b, double c, double d, double e, bool f) {       \
         bool doSave = wxPyRestoreThread();                                              \
+        bool rval;                                                                      \
         if (m_myInst.findCallback(#CBNAME))                                             \
-            return m_myInst.callCallback(Py_BuildValue("(Oddddi)",                      \
+            rval = m_myInst.callCallback(Py_BuildValue("(Oddddi)",                      \
                                    wxPyConstructObject(&a, "wxDC"),                     \
                                               b, c, d, e, (int)f));                     \
         else                                                                            \
-            return PCLASS::CBNAME(a, b, c, d, e, f);                                    \
+            rval = PCLASS::CBNAME(a, b, c, d, e, f);                                    \
         wxPySaveThread(doSave);                                                         \
+        return rval;                                                                    \
     }                                                                                   \
     bool CLASS::base_##CBNAME(wxDC& a, double b, double c, double d, double e, bool f) {\
         return PCLASS::CBNAME(a, b, c, d, e, f);                                        \
