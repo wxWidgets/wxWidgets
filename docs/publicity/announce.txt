@@ -1,0 +1,67 @@
+Announcing wxWindows 2.3.3, September 8th, 2002
+----------------------------------------------------------------
+
+Announcing the release of a development snapshot of the mature
+cross-platform C++ application framework, wxWindows.
+
+The following versions are provided:
+
+- Windows 95/98/ME, Windows NT, Windows 2000, Windows XP
+- Most Unix variants with GTK+
+- Most Unix variants with X11
+- Most Unix variants with Motif/Lesstif
+- MacOS 9.x and 10.x
+- OS/2 (alpha)
+
+To get wxWindows, go to the Download page at:
+
+  http://www.wxwindows.org
+
+This is likely to be the last development snapshot in the
+2.3.x series, before the release of the stable 2.4.x series.
+
+*** About wxWindows
+
+wxWindows is probably the most powerful and comprehensive
+open-source, multi-platform C++ GUI framework available, which
+can be used to build commercial and free software. It's used by many
+organisations all over the world, including the company that
+invented the GUI.
+
+For most ports, wxWindows adopts the native look and feel of
+each platform since it uses the native widget sets. There is also
+a generic widget set, used for the wxX11 port -- no other widget set
+is required, giving the potential for embedded use.
+
+An extraordinary range of classes is provided - but don't be put
+off by this because most people find wxWindows easier to learn
+and use than MFC and other frameworks.
+
+As well as comprehensive support for the usual widgets, advanced
+features include: HTML viewing/printing, wxImage class providing
+handlers for eading and writing many image types, resizeable panels
+and dialogs on all platforms, document/view, OpenGL support,
+HTML-based and context-sensitive help, wizards, drag and drop,
+a grid class, ODBC support, threads, sockets, container classes,
+and much more. An 1800-page reference manual is provided in HTML,
+MS HTML Help, WinHelp, wxWindows Help and PDF, and there are over
+70 samples and demos.
+
+If you're an MFC user, you'll find many wxWindows concepts
+reassuringly familiar, while often clearer and more consistent.
+If you're not, you should still find it intuitive from the start.
+
+wxWindows bindings for several other languages are available,
+including Python, Perl, Basic, Lua, JavaScript and Eiffel.
+
+If you're considering wxWindows, do check out some of these links:
+
+    http://www.wxwindows.org/feedback.htm ; Comments from users
+    http://www.wxwindows.org/screensh.htm ; Screenshots
+    http://www.wxwindows.org/users.htm    ; A list of some of our
+                                          ; users
+
+Have fun!
+
+Julian Smart and the wxWindows team
+

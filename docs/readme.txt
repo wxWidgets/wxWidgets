@@ -35,10 +35,9 @@ wxWindows currently supports the following platforms:
 
 - Windows 95/98/ME, Windows NT, Windows 2000, Windows XP
 - Most Unix variants with GTK+
-- Most Unix variants with X11 (restricted feature set)
-- Most Unix variants with Motif/Lesstif (restricted feature set)
+- Most Unix variants with X11
+- Most Unix variants with Motif/Lesstif
 - MacOS 9.x and 10.x
-- DOS with MGL (beta)
 - OS/2 (alpha)
 
 Most popular C++ compilers are supported; see the install.txt
