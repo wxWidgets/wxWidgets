@@ -20,6 +20,7 @@
 #include <wx/tooltip.h>
 #include <wx/caret.h>
 #include <wx/fontenum.h>
+#include <wx/tipdlg.h>
 %}
 
 //----------------------------------------------------------------------
@@ -356,6 +357,49 @@ void wxPostEvent(wxEvtHandler *dest, wxEvent& event);
 void wxWakeUpIdle();
 
 //----------------------------------------------------------------------
+
+
+class wxTipProvider
+{
+public:
+    // wxTipProvider(size_t currentTip);  **** Abstract base class
+    ~wxTipProvider();
+
+    virtual wxString GetTip() = 0;
+    size_t GetCurrentTip();
+
+};
+
+
+// The C++ version of wxPyTipProvider
+%{
+class wxPyTipProvider : public wxTipProvider {
+public:
+    wxPyTipProvider(size_t currentTip)
+        : wxTipProvider(currentTip) {}
+
+    DEC_PYCALLBACK_STRING__pure(GetTip);
+
+    PYPRIVATE;
+};
+
+IMP_PYCALLBACK_STRING__pure( wxPyTipProvider, wxTipProvider, GetTip);
+
+%}
+
+
+// Now let SWIG know about it
+class wxPyTipProvider : public wxTipProvider {
+public:
+    wxPyTipProvider(size_t currentTip);
+};
+
+
+
+bool wxShowTip(wxWindow *parent, wxTipProvider *tipProvider, bool showAtStartup = TRUE);
+%new wxTipProvider * wxCreateFileTipProvider(const wxString& filename, size_t currentTip);
+
+
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 

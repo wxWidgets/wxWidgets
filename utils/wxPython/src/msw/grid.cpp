@@ -8511,6 +8511,35 @@ static PyObject *_wrap_wxGrid_GetGridLineColour(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxGrid_GetCellHighlightColour(_swigobj)  (_swigobj->GetCellHighlightColour())
+static PyObject *_wrap_wxGrid_GetCellHighlightColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxGrid * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_GetCellHighlightColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCellHighlightColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxColour (wxGrid_GetCellHighlightColour(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define wxGrid_SetRowLabelSize(_swigobj,_swigarg0)  (_swigobj->SetRowLabelSize(_swigarg0))
 static PyObject *_wrap_wxGrid_SetRowLabelSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -8841,6 +8870,41 @@ static PyObject *_wrap_wxGrid_SetGridLineColour(PyObject *self, PyObject *args, 
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_SetGridLineColour(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_SetCellHighlightColour(_swigobj,_swigarg0)  (_swigobj->SetCellHighlightColour(_swigarg0))
+static PyObject *_wrap_wxGrid_SetCellHighlightColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","arg2", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_SetCellHighlightColour",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetCellHighlightColour. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetCellHighlightColour(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -12464,6 +12528,7 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_CanDragRowSize", (PyCFunction) _wrap_wxGrid_CanDragRowSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_DisableDragRowSize", (PyCFunction) _wrap_wxGrid_DisableDragRowSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_EnableDragRowSize", (PyCFunction) _wrap_wxGrid_EnableDragRowSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_SetCellHighlightColour", (PyCFunction) _wrap_wxGrid_SetCellHighlightColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_SetGridLineColour", (PyCFunction) _wrap_wxGrid_SetGridLineColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_SetColLabelValue", (PyCFunction) _wrap_wxGrid_SetColLabelValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_SetRowLabelValue", (PyCFunction) _wrap_wxGrid_SetRowLabelValue, METH_VARARGS | METH_KEYWORDS },
@@ -12474,6 +12539,7 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_SetLabelBackgroundColour", (PyCFunction) _wrap_wxGrid_SetLabelBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_SetColLabelSize", (PyCFunction) _wrap_wxGrid_SetColLabelSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_SetRowLabelSize", (PyCFunction) _wrap_wxGrid_SetRowLabelSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGrid_GetCellHighlightColour", (PyCFunction) _wrap_wxGrid_GetCellHighlightColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetGridLineColour", (PyCFunction) _wrap_wxGrid_GetGridLineColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetColLabelValue", (PyCFunction) _wrap_wxGrid_GetColLabelValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetRowLabelValue", (PyCFunction) _wrap_wxGrid_GetRowLabelValue, METH_VARARGS | METH_KEYWORDS },

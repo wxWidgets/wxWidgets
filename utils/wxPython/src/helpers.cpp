@@ -110,6 +110,12 @@ int  WXDLLEXPORT wxEntryInitGui();
 void WXDLLEXPORT wxEntryCleanup();
 
 
+#ifdef WXP_WITH_THREAD
+PyThreadState*  wxPyEventThreadState = NULL;
+#endif
+static char* __nullArgv[1] = { 0 };
+
+
 // This is where we pick up the first part of the wxEntry functionality...
 // The rest is in __wxStart and  __wxCleanup.  This function is called when
 // wxcmodule is imported.  (Before there is a wxApp object.)
@@ -117,6 +123,7 @@ void __wxPreStart()
 {
 #ifdef WXP_WITH_THREAD
     PyEval_InitThreads();
+    wxPyEventThreadState = PyThreadState_Get();
 #endif
 
     // Bail out if there is already windows created.  This means that the
@@ -139,13 +146,6 @@ void __wxPreStart()
 
 
 
-#ifdef WXP_WITH_THREAD
-PyThreadState*  wxPyEventThreadState = NULL;
-#endif
-static char* __nullArgv[1] = { 0 };
-
-
-
 // Start the user application, user App's OnInit method is a parameter here
 PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 {
@@ -153,10 +153,6 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     PyObject*   arglist;
     PyObject*   result;
     long        bResult;
-
-#ifdef WXP_WITH_THREAD
-    wxPyEventThreadState = PyThreadState_Get();
-#endif
 
     if (!PyArg_ParseTuple(args, "O", &onInitFunc))
         return NULL;

@@ -392,12 +392,27 @@ class MyApp(wxApp):
         wxYield()
         return true
 
+
     def AfterSplash(self):
         self.splash.Close(true)
         frame = wxPythonDemo(None, -1, "wxPython: (A Demonstration)")
         frame.Show(true)
         self.SetTopWindow(frame)
-        return true
+        self.ShowTip(frame)
+
+
+    def ShowTip(self, frame):
+        try:
+            showTipText = open("data/showTips").read()
+            showTip, index = eval(showTipText)
+        except IOError:
+            showTip, index = (1, 0)
+        if showTip:
+            tp = wxCreateFileTipProvider("data/tips.txt", index)
+            showTip = wxShowTip(frame, tp)
+            index = tp.GetCurrentTip()
+            open("data/showTips", "w").write(str( (showTip, index) ))
+
 
 #---------------------------------------------------------------------------
 
@@ -418,31 +433,74 @@ def main():
 overview = """<html><body>
  <h2>Python</h2>
 
- Python is an interpreted, interactive, object-oriented programming language often compared to Tcl, Perl, Scheme, or Java.
- <p>
- Python combines remarkable power with very clear syntax. It has modules, classes, exceptions, very high level dynamic data types, and dynamic typing. There are interfaces to many system calls and libraries, and new built-in modules are easily written in C or C++. Python is also usable as an extension language for applications that need a programmable interface.
- <p>
+ Python is an interpreted, interactive, object-oriented programming
+ language often compared to Tcl, Perl, Scheme, or Java.
+
+ <p> Python combines remarkable power with very clear syntax. It has
+ modules, classes, exceptions, very high level dynamic data types, and
+ dynamic typing.  There are interfaces to many system calls and
+ libraries, and new built-in modules are easily written in C or
+ C++. Python is also usable as an extension language for applications
+ that need a programmable interface.  <p>
+
  <h2>wxWindows</h2>
 
- wxWindows is a free C++ framework designed to make cross-platform programming child's play. Well, almost. wxWindows 2 supports Windows 3.1/95/98/NT, Unix with GTK/Motif/Lesstif, with a Mac version underway. Other ports are under consideration.
- <p>
- wxWindows is a set of libraries that allows C++ applications to compile and run on several different types of computers, with minimal source code changes. There is one library per supported GUI (such as Motif, or Windows). As well as providing a common API (Application Programming Interface) for GUI functionality, it provides functionality for accessing some commonly-used operating system facilities, such as copying or deleting files. wxWindows is a 'framework' in the sense that it provides a lot of built-in functionality, which the application can use or replace as required, thus saving a great deal of coding effort. Basic data structures such as strings, linked lists and hash tables are also supported.
+ wxWindows is a free C++ framework designed to make cross-platform
+ programming child's play. Well, almost. wxWindows 2 supports Windows
+ 3.1/95/98/NT, Unix with GTK/Motif/Lesstif, with a Mac version
+ underway. Other ports are under consideration.  <p>
+
+ wxWindows is a set of libraries that allows C++ applications to
+ compile and run on several different types of computers, with minimal
+ source code changes.  There is one library per supported GUI (such as
+ Motif, or Windows). As well as providing a common API (Application
+ Programming Interface) for GUI functionality, it provides
+ functionality for accessing some commonly-used operating system
+ facilities, such as copying or deleting files. wxWindows is a
+ 'framework' in the sense that it provides a lot of built-in
+ functionality, which the application can use or replace as required,
+ thus saving a great deal of coding effort. Basic data structures such
+ as strings, linked lists and hash tables are also supported.
+
  <p>
  <h2>wxPython</h2>
 
- wxPython is a Python extension module that encapsulates the wxWindows GUI classes. Currently it is only available for the Win32 and GTK ports of wxWindows, but as soon as the other ports are brought up to the same level as Win32 and GTK, it should be fairly trivial to enable wxPython to be used with the new GUI.
+ wxPython is a Python extension module that encapsulates the wxWindows
+ GUI classes. Currently it is only available for the Win32 and GTK
+ ports of wxWindows, but as soon as the other ports are brought up to
+ the same level as Win32 and GTK, it should be fairly trivial to
+ enable wxPython to be used with the new GUI.
+
  <p>
- The wxPython extension module attempts to mirror the class heiarchy of wxWindows as closely as possible. This means that there is a wxFrame class in wxPython that looks, smells, tastes and acts almost the same as the wxFrame class in the C++ version. Unfortunately, because of differences in the languages, wxPython doesn't match wxWindows exactly, but the differences should be easy to absorb because they are natural to Python. For example, some methods that return multiple values via argument pointers in C++ will return a tuple of values in Python.
+
+ The wxPython extension module attempts to mirror the class heiarchy
+ of wxWindows as closely as possible. This means that there is a
+ wxFrame class in wxPython that looks, smells, tastes and acts almost
+ the same as the wxFrame class in the C++ version. Unfortunately,
+ because of differences in the languages, wxPython doesn't match
+ wxWindows exactly, but the differences should be easy to absorb
+ because they are natural to Python. For example, some methods that
+ return multiple values via argument pointers in C++ will return a
+ tuple of values in Python.
+
  <p>
- There is still much to be done for wxPython, many classes still need to be mirrored. Also, wxWindows is still somewhat of a moving target so it is a bit of an effort just keeping wxPython up to date. On the other hand, there are enough of the core classes completed that useful applications can be written.
+
+ There is still much to be done for wxPython, many classes still need
+ to be mirrored. Also, wxWindows is still somewhat of a moving target
+ so it is a bit of an effort just keeping wxPython up to date. On the
+ other hand, there are enough of the core classes completed that
+ useful applications can be written.
+
  <p>
- wxPython is close enough to the C++ version that the majority of the wxPython documentation is actually just notes attached to the C++ documents that describe the places where wxPython is different. There is also a series of sample programs included, and a series of documentation pages that assist the programmer in getting started with wxPython.
+
+ wxPython is close enough to the C++ version that the majority of
+ the wxPython documentation is actually just notes attached to the C++
+ documents that describe the places where wxPython is different. There
+ is also a series of sample programs included, and a series of
+ documentation pages that assist the programmer in getting started
+ with wxPython.
+
  """
-
-
-
-
-
 
 
 #----------------------------------------------------------------------------

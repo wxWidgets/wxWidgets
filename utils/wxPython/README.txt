@@ -36,8 +36,7 @@ Windows 95 users may also need the WinSock 2.0 and OpenGL libraries.
 These can be found at these sites:
 
 
-http://www.microsoft.com/windows95/downloads/contents/wuadmintools/s_wunetwo
-rkingtools/w95sockets2/default.asp
+http://www.microsoft.com/windows95/downloads/contents/wuadmintools/s_wunetworkingtools/w95sockets2/default.asp
 
 http://www.opengl.org/Downloads/Downloads.html
 

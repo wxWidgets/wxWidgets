@@ -1435,6 +1435,7 @@ public:
     wxString GetRowLabelValue( int row );
     wxString GetColLabelValue( int col );
     wxColour GetGridLineColour();
+    wxColour GetCellHighlightColour();
 
     void     SetRowLabelSize( int width );
     void     SetColLabelSize( int height );
@@ -1446,6 +1447,7 @@ public:
     void     SetRowLabelValue( int row, const wxString& );
     void     SetColLabelValue( int col, const wxString& );
     void     SetGridLineColour( const wxColour& );
+    void     SetCellHighlightColour( const wxColour& );
 
     void     EnableDragRowSize( bool enable = TRUE );
     void     DisableDragRowSize();

@@ -2,6 +2,20 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+New in 2.1.??
+-------------
+
+Added an attribute named labelDelta to the generic buttons that
+specifies how far to offset the label when the button is in the
+depressed state.
+
+Added wxTipProvider and friends.  See the demo for an example.
+
+wxGrid can now change the cell highlight colour.
+
+
+
+
 New in 2.1.15
 -------------
 

@@ -53,6 +53,8 @@ class wxGenButtonEvent(wxPyCommandEvent):
 #----------------------------------------------------------------------
 
 class wxGenButton(wxControl):
+    labelDelta = 1
+
     def __init__(self, parent, ID, label,
                  pos = wxDefaultPosition, size = wxDefaultSize,
                  style = 0, validator = wxDefaultValidator,
@@ -202,7 +204,7 @@ class wxGenButton(wxControl):
         label = self.GetLabel()
         tw, th = dc.GetTextExtent(label)
         if not self.up:
-            dw = dy = 1
+            dw = dy = self.labelDelta
         dc.DrawText(label, (width-tw)/2+dw, (height-th)/2+dy)
 
 
@@ -362,7 +364,7 @@ class wxGenBitmapButton(wxGenButton):
             bmp = self.bmpSelected
         bw,bh = bmp.GetWidth(), bmp.GetHeight()
         if not self.up:
-            dw = dy = 1
+            dw = dy = self.labelDelta
         hasMask = bmp.GetMask() != None
         dc.DrawBitmap(bmp, (width-bw)/2+dw, (height-bh)/2+dy, hasMask)
 
