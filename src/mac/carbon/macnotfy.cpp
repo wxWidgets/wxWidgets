@@ -26,9 +26,9 @@ struct wxMacNotificationEvents
 } ;
 
 typedef struct wxMacNotificationEvents wxMacNotificationEvents ;
-wxMacNotificationEvents gMacNotificationEvents ;
+static wxMacNotificationEvents gMacNotificationEvents ;
 
-ProcessSerialNumber gAppProcess ;
+static ProcessSerialNumber gAppProcess ;
 
 void wxMacWakeUp()
 {
