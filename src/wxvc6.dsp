@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "../include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O1 /Ob2 /I "../include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /Z7 /Od /I "../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MT /W3 /GX /Z7 /Od /I "../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
 BSC32=bscmake.exe
@@ -562,11 +562,11 @@ SOURCE=.\html\htmlcell.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\htmlfilter.cpp
+SOURCE=.\html\htmlfilt.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\htmlparser.cpp
+SOURCE=.\html\htmlpars.cpp
 # End Source File
 # Begin Source File
 
@@ -578,43 +578,43 @@ SOURCE=.\html\htmlwin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\htmlwinparser.cpp
+SOURCE=.\html\m_fonts.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_fonts.cpp
+SOURCE=.\html\m_hline.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_hline.cpp
+SOURCE=.\html\m_image.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_image.cpp
+SOURCE=.\html\m_layout.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_layout.cpp
+SOURCE=.\html\m_links.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_links.cpp
+SOURCE=.\html\m_list.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_list.cpp
+SOURCE=.\html\m_pre.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_pre.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\html\mod_tables.cpp
+SOURCE=.\html\m_tables.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\html\search.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\html\winpars.cpp
 # End Source File
 # End Group
 # Begin Group "MSW Files"

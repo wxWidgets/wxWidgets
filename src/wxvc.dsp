@@ -547,11 +547,11 @@ SOURCE=.\html\htmlcell.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\htmlfilter.cpp
+SOURCE=.\html\htmlfilt.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\htmlparser.cpp
+SOURCE=.\html\htmlpars.cpp
 # End Source File
 # Begin Source File
 
@@ -563,39 +563,39 @@ SOURCE=.\html\htmlwin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\htmlwinparser.cpp
+SOURCE=.\html\winpars.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_fonts.cpp
+SOURCE=.\html\m_fonts.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_hline.cpp
+SOURCE=.\html\m_hline.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_image.cpp
+SOURCE=.\html\m_image.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_layout.cpp
+SOURCE=.\html\m_layout.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_links.cpp
+SOURCE=.\html\m_links.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_list.cpp
+SOURCE=.\html\m_list.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_pre.cpp
+SOURCE=.\html\m_pre.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\mod_tables.cpp
+SOURCE=.\html\m_tables.cpp
 # End Source File
 # Begin Source File
 

@@ -30,6 +30,11 @@
         my $tag = $wxMSW{$file} =~ /\bO\b/ ? "WXOLESRCS" : "WXMSWSRCS";
         $project{$tag} .= $file . " "
     }
+
+    foreach $file (sort keys %wxHTML) {
+        next if $wxHTML{$file} =~ /\b16\b/;
+        $project{"WXHTMLSRCS"} .= $file . " "
+    }
 #$}
 # Microsoft Developer Studio Project File - Name="wxWindows" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
@@ -125,6 +130,7 @@ SOURCE=.\src\msw\dummy.cpp
 #$ ExpandGlue("WXGENERICSRCS", "# Begin Source File\n\nSOURCE=.\\src\\generic\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\generic\\", "\n# End Source File\n");
 #$ ExpandGlue("WXCOMMONSRCS", "# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# End Source File\n");
 #$ ExpandGlue("WXCSRCS", "# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
+#$ ExpandGlue("WXHTMLSRCS", "# Begin Source File\n\nSOURCE=.\\src\\html\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\html\\", "\n# End Source File\n");
 
 # Begin Source File
 
