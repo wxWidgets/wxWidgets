@@ -18,6 +18,8 @@ Please see also:
 
 - Document/update wxTime.
 
+- Document wxSpinCtrl & wxFontMapper.
+
 - Fix TCP/IP mode in dde sample (how to use; why does it crash).
 
 - wxDB ODBC classes: it seems that there are too many
