@@ -332,18 +332,12 @@
                                 // VC++ 4.2 and above allows <iostream> and <iostream.h>
                                 // but you can't mix them. Set to 1 for <iostream.h>,
                                 // 0 for <iostream>
-
 #define wxUSE_STREAMS       1
                                 // If enabled (1), compiles wxWindows streams classes
 
 #define wxUSE_STD_IOSTREAM  0
                                 // Use standard C++ streams if 1. If 0, use wxWin
                                 // streams implementation.
-
-#define wxUSE_WXCONFIG      1
-                                // if enabled, compiles built-in OS independent wxConfig
-                                // class and it's file (any platform) and registry (Win)
-                                // based implementations
 #define wxUSE_THREADS       1
                                 // support for multithreaded applications: if
                                 // 1, compile in thread classes (thread.h)
