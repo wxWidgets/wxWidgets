@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/filename.h"
+
 // Include private headers
 #include "wxedit.h"
 
@@ -74,7 +76,39 @@ void MyFrame::OnOpen( wxCommandEvent &event )
         "Text file (*.txt)|*.txt|"
         "Any file (*)|*",
         wxOPEN|wxFILE_MUST_EXIST );
-    dialog.ShowModal();
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        m_text->Clear();
+
+#ifdef __WXX11__
+        wxFileName fname( dialog.GetPath() );
+        if ((fname.GetExt() == "cpp") ||
+            (fname.GetExt() == "c") ||
+            (fname.GetExt() == "h") ||
+            (fname.GetExt() == "cxx") ||
+            (fname.GetExt() == "hxx"))
+        {
+            m_text->SetLanguage( wxSOURCE_LANG_CPP );
+        }
+        else
+        if (fname.GetExt() == "py")
+        {
+            m_text->SetLanguage( wxSOURCE_LANG_PYTHON );
+        }
+        else
+        if ((fname.GetExt() == "pl") ||
+            (fname.GetExt() == "pm"))
+        {
+            m_text->SetLanguage( wxSOURCE_LANG_PYTHON );
+        }
+        else
+        {
+            m_text->SetLanguage( wxSOURCE_LANG_NONE );
+        }
+#endif
+
+        m_text->LoadFile( dialog.GetPath() );
+    }
 }
 
 void MyFrame::OnSave( wxCommandEvent &event )

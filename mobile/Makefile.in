@@ -5,7 +5,7 @@
 MOBILE_SUBDIRS=@MOBILE_SUBDIRS@
 
 all:
-	@for d in $(SAMPLES_SUBDIRS); do (cd $$d && $(MAKE)); done
+	@for d in $(MOBILE_SUBDIRS); do (cd $$d && $(MAKE)); done
 
 clean:
-	@for d in $(SAMPLES_SUBDIRS); do (cd $$d && $(MAKE) clean); done
+	@for d in $(MOBILE_SUBDIRS); do (cd $$d && $(MAKE) clean); done

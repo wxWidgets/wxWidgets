@@ -221,6 +221,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
     
     SetCursor( wxCursor( wxCURSOR_IBEAM ) );
     
+    m_editable = ((m_windowStyle & wxTE_READONLY) == 0);
+    
     if (HasFlag(wxTE_PASSWORD))
         m_sourceFont = wxFont( 12, wxMODERN, wxNORMAL, wxNORMAL );
     else
@@ -983,7 +985,20 @@ bool wxTextCtrl::Enable( bool enable )
 
 bool wxTextCtrl::SetFont(const wxFont& font)
 {
-    return FALSE;
+    wxTextCtrlBase::SetFont( font );
+    
+    m_sourceFont = font;
+    
+    wxClientDC dc(this);
+    dc.SetFont( m_sourceFont );
+    m_lineHeight = dc.GetCharHeight();
+    m_charWidth = dc.GetCharWidth();
+    
+    // TODO: recalc longest lines
+    
+    MyAdjustScrollbars();
+    
+    return TRUE;
 }
 
 bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
@@ -1816,13 +1831,18 @@ void wxTextCtrl::OnPaint( wxPaintEvent &event )
     int scroll_y = 0;
     GetViewStart( NULL, &scroll_y );
     
+    // We have a inner border of two pixels
+    // around the text, so scroll units do
+    // not correspond to lines.
+    if (scroll_y > 0) scroll_y--;
+    
     int size_x = 0;
     int size_y = 0;
     GetClientSize( &size_x, &size_y );
     
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.SetBrush( wxBrush( wxTHEME_COLOUR(HIGHLIGHT), wxSOLID ) );
-    int upper = wxMin( (int)m_lines.GetCount(), scroll_y+(size_y/m_lineHeight)+1 );
+    int upper = wxMin( (int)m_lines.GetCount(), scroll_y+(size_y/m_lineHeight)+2 );
     for (int i = scroll_y; i < upper; i++)
     {
         int x = 0+2;
@@ -1834,10 +1854,13 @@ void wxTextCtrl::OnPaint( wxPaintEvent &event )
             DrawLine( dc, 0+2, i*m_lineHeight+2, m_lines[i].m_text, i );
     }
     
-    dc.SetBrush( *wxRED_BRUSH );
-    // int xx = m_cursorX*m_charWidth;
-    int xx = PosToPixel( m_cursorY, m_cursorX );
-    dc.DrawRectangle( xx+2, m_cursorY*m_lineHeight+2, 2, m_lineHeight );
+    if (m_editable)
+    {
+        dc.SetBrush( *wxRED_BRUSH );
+        // int xx = m_cursorX*m_charWidth;
+        int xx = PosToPixel( m_cursorY, m_cursorX );
+        dc.DrawRectangle( xx+2, m_cursorY*m_lineHeight+2, 2, m_lineHeight );
+    }
 }
 
 void wxTextCtrl::OnMouse( wxMouseEvent &event )
@@ -1891,6 +1914,8 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
 {
     if (m_lines.GetCount() == 0) return;
 
+    if (!m_editable) return;
+    
     int size_x = 0;
     int size_y = 0;
     GetClientSize( &size_x, &size_y );
@@ -2183,7 +2208,9 @@ void wxTextCtrl::RefreshDown( int n )
 
 void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
 {
-    // if (IsSingleLine())
+    if (!m_editable) return;
+
+    // if (IsSingleLine() || (m_lang == wxSOURCE_LANG_NONE))
     {
         if (new_x > m_lines[new_y].m_text.Len())
             new_x = m_lines[new_y].m_text.Len();
