@@ -65,7 +65,7 @@ WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray);
 #endif
 
 // for MSW/Unix it is defined in platform-specific file
-#if !(defined(__WXMSW__) && (!defined(__UNIX__) || defined(__EMX__)))
+#if !(defined(__WXMSW__) || defined(__UNIX__)) || defined(__EMX__)
 
 wxDllType wxDynamicLibrary::GetProgramHandle()
 {
