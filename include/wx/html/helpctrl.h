@@ -54,13 +54,8 @@ class WXDLLEXPORT wxHtmlHelpController : public wxEvtHandler
             CreateHelpWindow(); return m_helpFrame->KeywordSearch(keyword);
         }
         wxHtmlHelpFrame* GetFrame() { return m_helpFrame; }
-        void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString)
-        {
-            m_Config = config;
-            m_ConfigRoot = rootpath;
-            if (m_helpFrame) m_helpFrame -> UseConfig(config, rootpath);
-            ReadCustomization(config, rootpath);
-        }
+        void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
+	
         // Assigns config object to the Ctrl. This config is then
         // used in subsequent calls to Read/WriteCustomization of both help
         // Ctrl and it's wxHtmlWindow

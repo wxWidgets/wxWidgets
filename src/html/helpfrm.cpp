@@ -349,7 +349,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         m_IndexCountInfo -> SetConstraints(b5);
 
         wxLayoutConstraints *b3 = new wxLayoutConstraints;
-        m_IndexList = new wxListBox(dummy, wxID_HTML_INDEXLIST, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE | wxLB_ALWAYS_SB);
+        m_IndexList = new wxListBox(dummy, wxID_HTML_INDEXLIST, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE);
         b3 -> top.Below (m_IndexCountInfo, 5);
         b3 -> left.SameAs (dummy, wxLeft, 0);
         b3 -> right.SameAs (dummy, wxRight, 0);
@@ -417,7 +417,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         m_SearchButton -> SetConstraints(b2);
 
         wxLayoutConstraints *b3 = new wxLayoutConstraints;
-        m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE | wxLB_ALWAYS_SB);
+        m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE);
         b3 -> top.Below (m_SearchButton, 10);
         b3 -> left.SameAs (dummy, wxLeft, 0);
         b3 -> right.SameAs (dummy, wxRight, 0);
@@ -431,7 +431,6 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
     }
     m_HtmlWin -> Show(TRUE);
     
-
     RefreshLists();
 
     // showtime
@@ -512,6 +511,13 @@ void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
                        _("Display options dialog"));
 }
 
+
+void wxHtmlHelpFrame::SetTitleFormat(const wxString& format)
+{
+    if (m_HtmlWin)
+        m_HtmlWin->SetRelatedFrame(this, format);
+    m_TitleFormat = format;
+}
 
 
 bool wxHtmlHelpFrame::Display(const wxString& x)
@@ -1062,15 +1068,19 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
             if (m_PagesHash) 
             {
                 wxString an = m_HtmlWin -> GetOpenedAnchor();
+                wxString adr;
                 wxHtmlHelpHashData *ha;
-                if (an.IsEmpty())
-                    ha = (wxHtmlHelpHashData*) m_PagesHash -> Get(m_HtmlWin -> GetOpenedPage());
-                else
-                    ha = (wxHtmlHelpHashData*) m_PagesHash -> Get(m_HtmlWin -> GetOpenedPage() + wxT("#") + an);
+                
+                if (an.IsEmpty()) adr = m_HtmlWin -> GetOpenedPage();
+                else adr = m_HtmlWin -> GetOpenedPage() + wxT("#") + an;
+
+                ha = (wxHtmlHelpHashData*) m_PagesHash -> Get(adr);
 
                 if (ha && ha -> m_Index < m_Data -> GetContentsCnt() - 1)
                 {
                     wxHtmlContentsItem *it = m_Data -> GetContents() + (ha -> m_Index + 1);
+                    
+                    while (it -> m_Book -> GetBasePath() + it -> m_Page == adr) it++;
                     m_HtmlWin -> LoadPage(it -> m_Book -> GetBasePath() + it -> m_Page);
                     NotifyPageChanged();
                 }

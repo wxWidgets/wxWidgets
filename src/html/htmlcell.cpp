@@ -92,6 +92,35 @@ void wxHtmlCell::SetLink(const wxHtmlLinkInfo& link)
 
 
 
+void wxHtmlCell::Layout(int w) 
+{
+    SetPos(0, 0); 
+    if (m_Next) m_Next -> Layout(w);
+}
+
+
+void wxHtmlCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2) 
+{
+    if (m_Next) m_Next -> Draw(dc, x, y, view_y1, view_y2);
+}
+
+
+
+void wxHtmlCell::DrawInvisible(wxDC& dc, int x, int y) 
+{
+    if (m_Next) m_Next -> DrawInvisible(dc, x, y);
+}
+
+
+
+const wxHtmlCell* wxHtmlCell::Find(int condition, const void* param) const 
+{
+    if (m_Next) return m_Next -> Find(condition, param); 
+    else return NULL;
+}
+
+
+
 //-----------------------------------------------------------------------------
 // wxHtmlWordCell
 //-----------------------------------------------------------------------------
@@ -246,6 +275,11 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
     m_MinHeight = 0;
     m_MinHeightAlign = wxHTML_ALIGN_TOP;
     m_LastLayout = -1;
+}
+
+wxHtmlContainerCell::~wxHtmlContainerCell() 
+{
+    if (m_Cells) delete m_Cells;
 }
 
 

@@ -104,12 +104,7 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
 
         wxHtmlHelpData* GetData() { return m_Data; }
 
-        void SetTitleFormat(const wxString& format)
-        {
-            if (m_HtmlWin)
-                m_HtmlWin->SetRelatedFrame(this, format);
-            m_TitleFormat = format;
-        }
+        void SetTitleFormat(const wxString& format);
         // Sets format of title of the frame. Must contain exactly one "%s"
         // (for title of displayed HTML page)
 

@@ -141,4 +141,13 @@ void wxHtmlHelpController::WriteCustomization(wxConfigBase* cfg, const wxString&
         m_helpFrame->WriteCustomization(cfg, path);
 }
 
+void wxHtmlHelpController::UseConfig(wxConfigBase *config, const wxString& rootpath)
+{
+    m_Config = config;
+    m_ConfigRoot = rootpath;
+    if (m_helpFrame) m_helpFrame -> UseConfig(config, rootpath);
+    ReadCustomization(config, rootpath);
+}
+
+
 #endif
