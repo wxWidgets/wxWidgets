@@ -205,6 +205,8 @@ class SystemOptionsPtr(SystemOptions):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = SystemOptions
 _misc_.SystemOptions_swigregister(SystemOptionsPtr)
+cvar = _misc_.cvar
+WINDOW_DEFAULT_VARIANT = cvar.WINDOW_DEFAULT_VARIANT
 
 def SystemOptions_SetOption(*args, **kwargs):
     """SystemOptions_SetOption(String name, String value)"""
@@ -544,7 +546,6 @@ class MutexGuiLockerPtr(MutexGuiLocker):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = MutexGuiLocker
 _misc_.MutexGuiLocker_swigregister(MutexGuiLockerPtr)
-cvar = _misc_.cvar
 FileSelectorPromptStr = cvar.FileSelectorPromptStr
 FileSelectorDefaultWildcardStr = cvar.FileSelectorDefaultWildcardStr
 DirSelectorPromptStr = cvar.DirSelectorPromptStr
@@ -3440,6 +3441,14 @@ class DateTime(object):
         """GetWeek(self, int numWeek, int weekday=Mon, int flags=Monday_First) -> DateTime"""
         return _misc_.DateTime_GetWeek(*args, **kwargs)
 
+    SetToTheWeek = wx._deprecated(SetToTheWeek, "SetToTheWeek is deprecated, use (static) SetToWeekOfYear instead")
+    GetWeek = wx._deprecated(GetWeek, "GetWeek is deprecated, use GetWeekOfYear instead")
+
+    def SetToWeekOfYear(*args, **kwargs):
+        """SetToWeekOfYear(int year, int numWeek, int weekday=Mon) -> DateTime"""
+        return _misc_.DateTime_SetToWeekOfYear(*args, **kwargs)
+
+    SetToWeekOfYear = staticmethod(SetToWeekOfYear)
     def SetToLastMonthDay(*args, **kwargs):
         """SetToLastMonthDay(self, int month=Inv_Month, int year=Inv_Year) -> DateTime"""
         return _misc_.DateTime_SetToLastMonthDay(*args, **kwargs)
@@ -3826,6 +3835,10 @@ def DateTimeFromDMY(*args, **kwargs):
     val = _misc_.new_DateTimeFromDMY(*args, **kwargs)
     val.thisown = 1
     return val
+
+def DateTime_SetToWeekOfYear(*args, **kwargs):
+    """DateTime_SetToWeekOfYear(int year, int numWeek, int weekday=Mon) -> DateTime"""
+    return _misc_.DateTime_SetToWeekOfYear(*args, **kwargs)
 
 class TimeSpan(object):
     def __repr__(self):

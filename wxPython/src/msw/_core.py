@@ -7260,6 +7260,22 @@ class Window(EvtHandler):
         """
         return _core_.Window_GetHandle(*args, **kwargs)
 
+    def AssociateHandle(*args, **kwargs):
+        """
+        AssociateHandle(self, long handle)
+
+        Associate the window with a new native handle
+        """
+        return _core_.Window_AssociateHandle(*args, **kwargs)
+
+    def DissociateHandle(*args, **kwargs):
+        """
+        DissociateHandle(self)
+
+        Dissociate the current native handle from the window
+        """
+        return _core_.Window_DissociateHandle(*args, **kwargs)
+
     def OnPaint(*args, **kwargs):
         """OnPaint(self, PaintEvent event)"""
         return _core_.Window_OnPaint(*args, **kwargs)
@@ -9377,12 +9393,13 @@ class Sizer(Object):
 
     def Show(*args, **kwargs):
         """
-        Show(self, item, bool show=True)
+        Show(self, item, bool show=True, bool recursive=False) -> bool
 
         Shows or hides an item managed by the sizer.  To make a sizer item
         disappear or reappear, use Show followed by `Layout`.  The *item*
         parameter can be either a window, a sizer, or the zero-based index of
-        the item.
+        the item.  Use the recursive parameter to show or hide an item in a
+        subsizer.  Returns True if the item was found.
         """
         return _core_.Sizer_Show(*args, **kwargs)
 
@@ -9397,11 +9414,11 @@ class Sizer(Object):
         """
         return _core_.Sizer_IsShown(*args, **kwargs)
 
-    def Hide(self, item):
+    def Hide(self, item, recursive=False):
         """
-        A convenience method for Show(item, False).
+        A convenience method for Show(item, False, recursive).
         """
-        self.Show(item, False)
+        return self.Show(item, False, recursive)
 
     def ShowItems(*args, **kwargs):
         """

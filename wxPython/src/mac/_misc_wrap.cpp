@@ -470,6 +470,7 @@ SWIG_Check_int(PyObject* obj)
   return SWIG_AsVal_int(obj, (int*)0);
 }
 
+ static const wxString wxPyWINDOW_DEFAULT_VARIANT(wxWINDOW_DEFAULT_VARIANT); 
 
 #include <wx/stockitem.h>
 
@@ -556,11 +557,12 @@ SWIG_Check_bool(PyObject* obj)
     } else if (target == Py_None) {  
         Py_DECREF(Py_None);
         target = o;
-    } else {                         
-        o2 = target;
-        target = PyTuple_New(1);
-        PyTuple_SetItem(target, 0, o2);
-
+    } else {
+        if (!PyTuple_Check(target)) {
+            o2 = target;
+            target = PyTuple_New(1);
+            PyTuple_SetItem(target, 0, o2);
+        }            
         o3 = PyTuple_New(1);            
         PyTuple_SetItem(o3, 0, o);      
 
@@ -570,7 +572,7 @@ SWIG_Check_bool(PyObject* obj)
         Py_DECREF(o3);
     }
     return target;
-}
+  }
 
 
 
@@ -1934,6 +1936,26 @@ static PyObject * SystemSettings_swigregister(PyObject *, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_WINDOW_DEFAULT_VARIANT_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable WINDOW_DEFAULT_VARIANT is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_WINDOW_DEFAULT_VARIANT_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyWINDOW_DEFAULT_VARIANT)->c_str(), (&wxPyWINDOW_DEFAULT_VARIANT)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyWINDOW_DEFAULT_VARIANT)->c_str(), (&wxPyWINDOW_DEFAULT_VARIANT)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_SystemOptions(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSystemOptions *result;
@@ -18802,6 +18824,46 @@ static PyObject *_wrap_DateTime_GetWeek(PyObject *, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_DateTime_SetToWeekOfYear(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 ;
+    int arg2 ;
+    int arg3 = (int) wxDateTime::Mon ;
+    wxDateTime result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "year",(char *) "numWeek",(char *) "weekday", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:DateTime_SetToWeekOfYear",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    arg1 = (int)SWIG_As_int(obj0); 
+    if (PyErr_Occurred()) SWIG_fail;
+    arg2 = (int)SWIG_As_int(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int)SWIG_As_int(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxDateTime::SetToWeekOfYear(arg1,arg2,(wxDateTime::WeekDay )arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxDateTime * resultptr;
+        resultptr = new wxDateTime((wxDateTime &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxDateTime, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_DateTime_SetToLastMonthDay(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
@@ -29029,6 +29091,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DateTime_GetLastWeekDay", (PyCFunction) _wrap_DateTime_GetLastWeekDay, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DateTime_SetToTheWeek", (PyCFunction) _wrap_DateTime_SetToTheWeek, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DateTime_GetWeek", (PyCFunction) _wrap_DateTime_GetWeek, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"DateTime_SetToWeekOfYear", (PyCFunction) _wrap_DateTime_SetToWeekOfYear, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DateTime_SetToLastMonthDay", (PyCFunction) _wrap_DateTime_SetToLastMonthDay, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DateTime_GetLastMonthDay", (PyCFunction) _wrap_DateTime_GetLastMonthDay, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"DateTime_SetToYearDay", (PyCFunction) _wrap_DateTime_SetToYearDay, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -30136,6 +30199,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"SYS_SCREEN_SMALL", SWIG_From_int((int)wxSYS_SCREEN_SMALL));
     PyDict_SetItemString(d,"SYS_SCREEN_DESKTOP", SWIG_From_int((int)wxSYS_SCREEN_DESKTOP));
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"WINDOW_DEFAULT_VARIANT",_wrap_WINDOW_DEFAULT_VARIANT_get, _wrap_WINDOW_DEFAULT_VARIANT_set);
     SWIG_addvarlink(SWIG_globals,(char*)"FileSelectorPromptStr",_wrap_FileSelectorPromptStr_get, _wrap_FileSelectorPromptStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"FileSelectorDefaultWildcardStr",_wrap_FileSelectorDefaultWildcardStr_get, _wrap_FileSelectorDefaultWildcardStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"DirSelectorPromptStr",_wrap_DirSelectorPromptStr_get, _wrap_DirSelectorPromptStr_set);
