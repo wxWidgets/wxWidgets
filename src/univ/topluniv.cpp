@@ -328,13 +328,46 @@ void wxTopLevelWindow::SetIcon(const wxIcon& icon)
 // interactive manipulation
 // ----------------------------------------------------------------------------
 
+
+static bool wxGetResizingCursor(long hitTestResult, wxCursor& cursor)
+{
+    if ( hitTestResult & wxHT_TOPLEVEL_ANY_BORDER )
+    {
+        switch (hitTestResult)
+        {
+            case wxHT_TOPLEVEL_BORDER_N:
+            case wxHT_TOPLEVEL_BORDER_S:
+                cursor = wxCursor(wxCURSOR_SIZENS);
+                break;
+            case wxHT_TOPLEVEL_BORDER_W:
+            case wxHT_TOPLEVEL_BORDER_E:
+                cursor = wxCursor(wxCURSOR_SIZEWE);
+                break;
+            case wxHT_TOPLEVEL_BORDER_NE:
+            case wxHT_TOPLEVEL_BORDER_SW:
+                cursor = wxCursor(wxCURSOR_SIZENESW);
+                break;
+            case wxHT_TOPLEVEL_BORDER_NW:
+            case wxHT_TOPLEVEL_BORDER_SE:
+                cursor = wxCursor(wxCURSOR_SIZENWSE);
+                break;
+            default:
+                return FALSE;
+                break;
+        }
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
 #define wxINTERACTIVE_RESIZE_DIR \
           (wxINTERACTIVE_RESIZE_W | wxINTERACTIVE_RESIZE_E | \
            wxINTERACTIVE_RESIZE_S | wxINTERACTIVE_RESIZE_N)
 
 struct wxInteractiveMoveData
 {
-    wxTopLevelWindowBase *m_window;
+    wxTopLevelWindow     *m_window;
     wxEventLoop          *m_evtLoop;
     int                   m_flags;
     wxRect                m_rect;
@@ -483,6 +516,7 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
         }
 
         wxPoint warp;
+        bool changeCur = FALSE;
         
         if ( m_data.m_flags & wxINTERACTIVE_MOVE )
         {
@@ -499,12 +533,14 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
                 {
                     m_data.m_flags |= wxINTERACTIVE_RESIZE_N;
                     m_data.m_pos.y = m_data.m_window->GetPosition().y;
+                    changeCur = TRUE;
                 }
                 else if ( diff.y > 0 )
                 {
                     m_data.m_flags |= wxINTERACTIVE_RESIZE_S;
                     m_data.m_pos.y = m_data.m_window->GetPosition().y +
                                      m_data.m_window->GetSize().y;
+                    changeCur = TRUE;
                 }
             }
             if ( !(m_data.m_flags & 
@@ -514,15 +550,17 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
                 {
                     m_data.m_flags |= wxINTERACTIVE_RESIZE_W;
                     m_data.m_pos.x = m_data.m_window->GetPosition().x;
+                    changeCur = TRUE;
                 }
                 else if ( diff.x > 0 )
                 {
                     m_data.m_flags |= wxINTERACTIVE_RESIZE_E;
                     m_data.m_pos.x = m_data.m_window->GetPosition().x +
                                      m_data.m_window->GetSize().x;
+                    changeCur = TRUE;
                 }
             }
-            
+
             wxApplyResize(m_data, diff);
             m_data.m_window->SetSize(m_data.m_rect);
 
@@ -543,6 +581,19 @@ void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
 
         warp -= m_data.m_window->GetClientAreaOrigin();
         m_data.m_window->WarpPointer(warp.x, warp.y);
+
+        if ( changeCur )
+        {
+            long hit = m_data.m_window->HitTest(warp);
+            wxCursor cur;
+            if ( wxGetResizingCursor(hit, cur) )
+            {
+                if ( m_data.m_sizingCursor )
+                    wxEndBusyCursor();
+                wxBeginBusyCursor(&cur);
+                m_data.m_sizingCursor = TRUE;
+            }
+        }
     }
 }
 
@@ -848,31 +899,9 @@ bool wxStdFrameInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 
             if ( hit & wxHT_TOPLEVEL_ANY_BORDER )
             {
-                m_borderCursorOn = TRUE;
                 wxCursor cur;
 
-                switch (hit)
-                {
-                    case wxHT_TOPLEVEL_BORDER_N:
-                    case wxHT_TOPLEVEL_BORDER_S:
-                        cur = wxCursor(wxCURSOR_SIZENS);
-                        break;
-                    case wxHT_TOPLEVEL_BORDER_W:
-                    case wxHT_TOPLEVEL_BORDER_E:
-                        cur = wxCursor(wxCURSOR_SIZEWE);
-                        break;
-                    case wxHT_TOPLEVEL_BORDER_NE:
-                    case wxHT_TOPLEVEL_BORDER_SW:
-                        cur = wxCursor(wxCURSOR_SIZENESW);
-                        break;
-                    case wxHT_TOPLEVEL_BORDER_NW:
-                    case wxHT_TOPLEVEL_BORDER_SE:
-                        cur = wxCursor(wxCURSOR_SIZENWSE);
-                        break;
-                    default:
-                        m_borderCursorOn = FALSE;
-                        break;
-                }
+                m_borderCursorOn = wxGetResizingCursor(hit, cur);
                 if ( m_borderCursorOn )
                 {
                     m_origCursor = win->GetCursor();
