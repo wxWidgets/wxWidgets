@@ -138,14 +138,14 @@ public:
 
    inline long  GetLeft()   const { return x; }
    inline long  GetTop()    const { return y; }
-   inline long  GetBottom() const { return y + height; }
-   inline long  GetRight()  const { return x + width; }
+   inline long  GetBottom() const { return y + height - 1; }
+   inline long  GetRight()  const { return x + width - 1; }
 
    // MFC-like functions
    inline void SetLeft(long left) { x = left; }
-   inline void SetRight(long right) { width = right - x; }
+   inline void SetRight(long right) { width = right - x + 1; }
    inline void SetTop(long top) { y = top; }
-   inline void SetBottom(long bottom) { height = bottom - y; }
+   inline void SetBottom(long bottom) { height = bottom - y + 1; }
 
    wxRect& operator = (const wxRect& rect);
    bool operator == (const wxRect& rect);
