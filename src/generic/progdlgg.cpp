@@ -317,7 +317,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
     // is going to close and the gauge shouldn't be partly empty in this case
     if ( m_gauge && value <= m_maximum )
     {
-        m_gauge->SetValue(value == maximum ? value : value + 1);
+        m_gauge->SetValue(value == m_maximum ? value : value + 1);
     }
 
     if ( !newmsg.IsEmpty() )
