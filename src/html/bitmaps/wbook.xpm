@@ -1,5 +1,5 @@
 /* XPM */
-static char * book_xpm[] = {
+static char * wbook_xpm[] = {
 "16 16 21 1",
 " 	c None",
 ".	c #007F7F",

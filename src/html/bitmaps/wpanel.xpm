@@ -1,5 +1,5 @@
 /* XPM */
-static char * panel_xpm[] = {
+static char * wpanel_xpm[] = {
 "16 15 104 2",
 "  	c None",
 ". 	c #7F7C7C",

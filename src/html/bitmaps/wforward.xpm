@@ -1,5 +1,5 @@
 /* XPM */
-static char * forward_xpm[] = {
+static char * wforward_xpm[] = {
 "16 16 5 1",
 " 	c None",
 ".	c #000000",

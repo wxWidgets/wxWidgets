@@ -1,5 +1,5 @@
 /* XPM */
-static char *help_xpm[] = {
+static char *whelp_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 6 1",
 "  c Gray0",

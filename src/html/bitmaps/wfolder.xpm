@@ -1,5 +1,5 @@
 /* XPM */
-static char * folder_xpm[] = {
+static char * wfolder_xpm[] = {
 "16 16 31 1",
 " 	c None",
 ".	c #000000",
