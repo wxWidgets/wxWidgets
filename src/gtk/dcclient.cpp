@@ -1614,22 +1614,6 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
 
     if (!m_window) return;
 
-#if GTK_CHECK_VERSION(2,4,0)
-
-    // This code only rotates each individual glyph. Someone
-    // will have to look up the right way to do this... RR
-
-    PangoMatrix matrix = PANGO_MATRIX_INIT;
-    pango_matrix_rotate( &matrix, angle );
-    
-    pango_context_set_matrix( m_context, &matrix );
-    
-    DoDrawText( text, x, y );
-    
-    pango_context_set_matrix( m_context, NULL );
-
-#else
-
     wxCoord w;
     wxCoord h;
 
@@ -1736,7 +1720,6 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
     // update the bounding box
     CalcBoundingBox(x + minX, y + minY);
     CalcBoundingBox(x + maxX, y + maxY);
-#endif // GTK24
 }
 
 void wxWindowDC::DoGetTextExtent(const wxString &string,
