@@ -9,11 +9,15 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WXSIZERS_H__
-#define __WXSIZERS_H__
-
 #ifdef __GNUG__
 #pragma implementation "sizer.h"
+#endif
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
 #endif
 
 #include "wx/sizer.h"
@@ -143,10 +147,11 @@ void wxNewSizer::SetSizeHints( wxWindow *window )
 
 wxSize wxNewSizer::GetMinWindowSize( wxWindow *window )
 {
-    wxSize min( GetMinSize() );
+    wxSize minSize( GetMinSize() );
     wxSize size( window->GetSize() );
     wxSize client_size( window->GetClientSize() );
-    return wxSize( min.x+size.x-client_size.x, min.y+size.y-client_size.y ); 
+    return wxSize( minSize.x+size.x-client_size.x,
+                   minSize.y+size.y-client_size.y ); 
 }
 
 void wxNewSizer::SetDimension( int x, int y, int width, int height )
@@ -380,6 +385,3 @@ wxSize wxBoxNewSizer::CalcMin()
 	
     return wxSize( m_minWidth, m_minHeight );
 }
-
-#endif
-  // __SIZERS_H__
