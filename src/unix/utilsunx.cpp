@@ -20,6 +20,7 @@
 
 #include "wx/intl.h"
 #include "wx/log.h"
+#include "wx/app.h"
 
 #include "wx/utils.h"
 #include "wx/process.h"
@@ -784,6 +785,79 @@ wxString wxGetOsDescription()
     return WXWIN_OS_DESCRIPTION;
 #endif
 }
+
+// ----------------------------------------------------------------------------
+// signal handling
+// ----------------------------------------------------------------------------
+
+#if wxUSE_ON_FATAL_EXCEPTION
+
+#include <signal.h>
+
+static void wxFatalSignalHandler(int signal)
+{
+    if ( wxTheApp )
+    {
+        // give the user a chance to do something special about this
+        wxTheApp->OnFatalException();
+    }
+
+    abort();
+}
+
+bool wxHandleFatalExceptions(bool doit)
+{
+    // old sig handlers
+    static bool s_savedHandlers = FALSE;
+    static struct sigaction s_handlerFPE,
+                            s_handlerILL,
+                            s_handlerBUS,
+                            s_handlerSEGV;
+
+    bool ok = TRUE;
+    if ( doit && !s_savedHandlers )
+    {
+        // install the signal handler
+        struct sigaction act;
+
+        // some systems extend it with non std fields, so zero everything
+        memset(&act, 0, sizeof(act));
+
+        act.sa_handler = wxFatalSignalHandler;
+        sigemptyset(&act.sa_mask);
+        act.sa_flags = 0;
+
+        ok &= sigaction(SIGFPE, &act, &s_handlerFPE) == 0;
+        ok &= sigaction(SIGILL, &act, &s_handlerILL) == 0;
+        ok &= sigaction(SIGBUS, &act, &s_handlerBUS) == 0;
+        ok &= sigaction(SIGSEGV, &act, &s_handlerSEGV) == 0;
+        if ( !ok )
+        {
+            wxLogDebug(_T("Failed to install our signal handler."));
+        }
+
+        s_savedHandlers = TRUE;
+    }
+    else if ( s_savedHandlers )
+    {
+        // uninstall the signal handler
+        ok &= sigaction(SIGFPE, &s_handlerFPE, NULL) == 0;
+        ok &= sigaction(SIGILL, &s_handlerILL, NULL) == 0;
+        ok &= sigaction(SIGBUS, &s_handlerBUS, NULL) == 0;
+        ok &= sigaction(SIGSEGV, &s_handlerSEGV, NULL) == 0;
+        if ( !ok )
+        {
+            wxLogDebug(_T("Failed to uninstall our signal handler."));
+        }
+
+        s_savedHandlers = FALSE;
+    }
+    //else: nothing to do
+
+    return ok;
+}
+
+#endif // wxUSE_ON_FATAL_EXCEPTION
 
 // ----------------------------------------------------------------------------
 // error and debug output routines (deprecated, use wxLog)

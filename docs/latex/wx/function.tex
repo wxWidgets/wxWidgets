@@ -1057,6 +1057,14 @@ The clipboard must have previously been opened for this call to succeed.
 
 \section{Miscellaneous functions}\label{miscellany}
 
+\membersection{wxHandleFatalExcetions}\label{wxhandlefatalexcetions}
+
+\func{bool}{wxHandleFatalExcetions}{\param{bool }{doIt = TRUE}}
+
+Enables or disables handling of fatal program exceptions. If {\it doIt} is
+TRUE, \helpref{wxApp::OnFatalException}{wxapponfatalexception} will be called
+before the program crashes. Otherwise, the default behaviour will be restored.
+
 \membersection{::wxNewId}
 
 \func{long}{wxNewId}{\void}

@@ -233,6 +233,23 @@ If you use this member, you can selectively consume keypress events by calling\r
 \helpref{wxKeyEvent}{wxkeyevent}, \helpref{wxWindow::OnChar}{wxwindowonchar},\rtfsp
 \helpref{wxWindow::OnCharHook}{wxwindowoncharhook}, \helpref{wxDialog::OnCharHook}{wxdialogoncharhook}
 
+\membersection{wxApp::OnFatalException}\label{wxapponfatalexception}
+
+\func{void}{OnFatalException}{\void}
+
+This function may be called if something fatal happens: an unhandled
+exception under Win32 or a a fatal signal under Unix, for example. However,
+this will not happen by default: you have to explicitly call 
+\helpref{wxHandleFatalExcetions}{wxhandlefatalexcetions} to enable this.
+
+Generally speaking, this function should only show a message to the user and
+return. You may attempt to save unsaved data but this is not guaranteed to
+work and, in fact, probably won't.
+
+\wxheading{See also}
+
+\helpref{wxHandleFatalExcetions}{wxhandlefatalexcetions}
+
 \membersection{wxApp::OnIdle}\label{wxapponidle}
 
 \func{void}{OnIdle}{\param{wxIdleEvent\& }{event}}

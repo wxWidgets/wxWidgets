@@ -29,7 +29,7 @@
 #include "wx/image.h"
 
 #if wxUSE_THREADS
-#include "wx/thread.h"
+    #include "wx/thread.h"
 #endif
 
 #include <unistd.h>
@@ -651,9 +651,7 @@ void wxEntryCleanup()
 
 int wxEntry( int argc, char *argv[] )
 {
-    int err;
-
-    err = wxEntryStart(argc, argv);
+    int err = wxEntryStart(argc, argv);
     if (err)
         return err;
 

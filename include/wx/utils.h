@@ -193,6 +193,9 @@ WXDLLEXPORT void wxUsleep(unsigned long milliseconds);
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 WXDLLEXPORT long wxGetFreeMemory();
 
+// should wxApp::OnFatalException() be called?
+WXDLLEXPORT bool wxHandleFatalExceptions(bool doit = TRUE);
+
 // ----------------------------------------------------------------------------
 // Network and username functions.
 // ----------------------------------------------------------------------------
