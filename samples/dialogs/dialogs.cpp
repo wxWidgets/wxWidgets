@@ -126,7 +126,7 @@ bool MyApp::OnInit()
   m_canvasFont = *wxNORMAL_FONT;
 
   // Create the main frame window
-  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) _T("wxWindows dialogs example"), wxPoint(20, 20), wxSize(400, 300));
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, _T("wxWindows dialogs example"), wxPoint(20, 20), wxSize(400, 300));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -373,7 +373,7 @@ void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::PasswordEntry(wxCommandEvent& WXUNUSED(event))
 {
-    wxString pwd = wxGetPasswordFromUser("Enter password:",
+    wxString pwd = wxGetPasswordFromUser(_T("Enter password:"),
                                          _T("Password entry dialog"),
                                          "",
                                          this);
@@ -482,7 +482,7 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
     static wxString s_extDef;
     wxString path = wxFileSelector(
                                     _T("Select the file to load"),
-                                    _T("_T("), _T(")"),
+                                    _T(""), _T(""),
                                     s_extDef,
                                     _T("Waveform (*.wav)|*.wav|Plain text (*.txt)|*.txt|All files (*.*)|*.*"),
                                     wxCHANGE_DIR,
@@ -529,9 +529,12 @@ void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
 {
-    wxFileDialog dialog(this, _T("Testing save file dialog"), "_T(", ")myletter.txt",
-        _T("Text files (*.txt)|*.txt|Document files (*.doc)|*.doc"),
-        wxSAVE|wxOVERWRITE_PROMPT);
+    wxFileDialog dialog(this,
+                        _T("Testing save file dialog"),
+                        _T(""),
+                        _T("myletter.txt"),
+                        _T("Text files (*.txt)|*.txt|Document files (*.doc)|*.doc"),
+                        wxSAVE|wxOVERWRITE_PROMPT);
 
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -620,13 +623,13 @@ void MyFrame::ShowTip(wxCommandEvent& event)
         s_index = rand() % 5;
     }
 
-    wxTipProvider *tipProvider = wxCreateFileTipProvider("tips.txt", s_index);
+    wxTipProvider *tipProvider = wxCreateFileTipProvider(_T("tips.txt"), s_index);
 
     bool showAtStartup = wxShowTip(this, tipProvider);
 
     if ( showAtStartup )
     {
-        wxMessageBox("Will show tips on startup_T(", ")Tips dialog",
+        wxMessageBox(_T("Will show tips on startup"), _T("Tips dialog"),
                      wxOK | wxICON_INFORMATION, this);
     }
 
@@ -646,7 +649,7 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 {
     static const int max = 10;
 
-    wxProgressDialog dialog("Progress dialog example",
+    wxProgressDialog dialog(_T("Progress dialog example"),
                             _T("An informative message"),
                             max,    // range
                             this,   // parent
@@ -762,8 +765,8 @@ static wxString DecodeFindDialogEventFlags(int flags)
 {
     wxString str;
     str << (flags & wxFR_DOWN ? _T("down") : _T("up")) << _T(", ")
-        << (flags & wxFR_WHOLEWORD ? _T("whole words only, ") : "")
-        << (flags & wxFR_MATCHCASE ? "_T(" : ")not ")
+        << (flags & wxFR_WHOLEWORD ? _T("whole words only, ") : _T(""))
+        << (flags & wxFR_MATCHCASE ? _T("") : _T("not "))
         << _T("case sensitive");
 
     return str;
@@ -808,7 +811,7 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
         {
             txt = _T("Unknown");
 
-            wxFAIL_MSG( _T("unexecpted event") );
+            wxFAIL_MSG( _T("unexpected event") );
         }
 
         wxLogMessage(wxT("%s dialog is being closed."), txt),
@@ -861,7 +864,7 @@ MyModelessDialog::MyModelessDialog(wxWindow *parent)
 
 void MyModelessDialog::OnButton(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("Button pressed in modeless dialog_T(", ")Info",
+    wxMessageBox(_T("Button pressed in modeless dialog"), _T("Info"),
                  wxOK | wxICON_INFORMATION, this);
 }
 
@@ -869,7 +872,7 @@ void MyModelessDialog::OnClose(wxCloseEvent& event)
 {
     if ( event.CanVeto() )
     {
-        wxMessageBox("Use the menu item to close this dialog",
+        wxMessageBox(_T("Use the menu item to close this dialog"),
                      _T("Modeless dialog"),
                      wxOK | wxICON_INFORMATION, this);
 
@@ -882,7 +885,7 @@ void MyModelessDialog::OnClose(wxCloseEvent& event)
 // ----------------------------------------------------------------------------
 
 MyModalDialog::MyModalDialog(wxWindow *parent)
-             : wxDialog(parent, -1, wxString("Modal dialog"))
+             : wxDialog(parent, -1, _T("Modal dialog"))
 {
     wxBoxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
