@@ -160,9 +160,9 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 	    pos2.x = 0;
     if (pos2.y == -1)
 	    pos2.y = 0;
-    
+        
 #if wxUSE_TWO_WINDOWS
-    bool need_two_windows = 
+    bool need_two_windows =
         ((( wxSUNKEN_BORDER | wxRAISED_BORDER | wxSIMPLE_BORDER | wxHSCROLL | wxVSCROLL ) & m_windowStyle) != 0);
 #else
     bool need_two_windows = FALSE;
@@ -307,7 +307,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
             xattributes_mask |= CWBitGravity;
             xattributes.bit_gravity = NorthWestGravity;
         }
-
+        
         Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
             0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
 #endif
