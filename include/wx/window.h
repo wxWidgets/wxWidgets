@@ -400,6 +400,9 @@ public:
     virtual wxWindow *SetDefaultItem(wxWindow * WXUNUSED(child))
         { return NULL; }
 
+        // set this child as temporary default
+    virtual void SetTmpDefaultItem(wxWindow * WXUNUSED(win)) { }
+
     // parent/children relations
     // -------------------------
 

@@ -1995,14 +1995,9 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 
                                 return TRUE;
                             }
-                            else // no default button
+                            //else: no default button
 #endif // wxUSE_BUTTON
-                            {
-                                // no special function for enter and don't even
-                                // let IsDialogMessage() have it: it seems to
-                                // do something really strange with it
-                                return FALSE;
-                            }
+                            // treat Enter as TAB: pass to the next control
                         }
                     }
                     break;

@@ -37,17 +37,28 @@ class WXDLLEXPORT wxWindowBase;
 
 class WXDLLEXPORT wxControlContainer
 {
-    DECLARE_NO_COPY_CLASS(wxControlContainer)
-        
 public:
     // ctors and such
     wxControlContainer(wxWindow *winParent = NULL);
     void SetContainerWindow(wxWindow *winParent) { m_winParent = winParent; }
 
-    // default item access
-    wxWindow *GetDefaultItem() const { return m_winDefault; }
+    // default item access: we have a permanent default item which is the one
+    // set by the user code but we may also have a temporary default item which
+    // would be chosen if the user pressed "Enter" now but the default action
+    // reverts to the "permanent" default as soon as this temporary default
+    // item lsoes focus
+
+    // get the default item, temporary or permanent
+    wxWindow *GetDefaultItem() const
+        { return m_winTmpDefault ? m_winTmpDefault : m_winDefault; }
+
+    // set the permanent default item, return its old value
     wxWindow *SetDefaultItem(wxWindow *win)
         { wxWindow *winOld = m_winDefault; m_winDefault = win; return winOld; }
+
+    // set a temporary default item, SetTmpDefaultItem(NULL) should be called
+    // soon after a call to SetTmpDefaultItem(window)
+    void SetTmpDefaultItem(wxWindow *win) { m_winTmpDefault = win; }
 
     // the methods to be called from the window event handlers
     void HandleOnNavigationKey(wxNavigationKeyEvent& event);
@@ -72,8 +83,13 @@ protected:
     // the child which had the focus last time this panel was activated
     wxWindow *m_winLastFocused;
 
-    // a default window (e.g. a button) or NULL
+    // a default window (usually a button) or NULL
     wxWindow *m_winDefault;
+
+    // a temporary override of m_winDefault, use the latter if NULL
+    wxWindow *m_winTmpDefault;
+
+    DECLARE_NO_COPY_CLASS(wxControlContainer)
 };
 
 // this function is for wxWindows internal use only
@@ -94,6 +110,7 @@ public: \
     virtual void RemoveChild(wxWindowBase *child); \
     virtual wxWindow *GetDefaultItem() const; \
     virtual wxWindow *SetDefaultItem(wxWindow *child); \
+    virtual void SetTmpDefaultItem(wxWindow *win); \
 \
 protected: \
     wxControlContainer m_container
@@ -109,6 +126,11 @@ protected: \
 wxWindow *classname::SetDefaultItem(wxWindow *child) \
 { \
     return m_container.SetDefaultItem(child); \
+} \
+ \
+void classname::SetTmpDefaultItem(wxWindow *child) \
+{ \
+    m_container.SetTmpDefaultItem(child); \
 } \
  \
 wxWindow *classname::GetDefaultItem() const \

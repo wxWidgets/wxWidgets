@@ -45,6 +45,7 @@ wxControlContainer::wxControlContainer(wxWindow *winParent)
     m_winParent = winParent;
 
     m_winLastFocused =
+    m_winTmpDefault =
     m_winDefault = NULL;
 }
 
@@ -263,6 +264,9 @@ void wxControlContainer::HandleOnWindowDestroy(wxWindowBase *child)
 
     if ( child == m_winDefault )
         m_winDefault = NULL;
+
+    if ( child == m_winTmpDefault )
+        m_winTmpDefault = NULL;
 }
 
 // ----------------------------------------------------------------------------

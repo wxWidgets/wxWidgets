@@ -69,6 +69,13 @@ protected:
     // send a notification event, return TRUE if processed
     bool SendClickEvent();
 
+    // default button handling
+    void SetTmpDefault();
+    void UnsetTmpDefault();
+
+    static void UpdateDefaultStyle(wxWindow *winDefault,
+                                   wxWindow *winOldDefault);
+
     // usually overridden base class virtuals
     virtual wxSize DoGetBestSize() const;
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
