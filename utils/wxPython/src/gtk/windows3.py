@@ -23,28 +23,27 @@ class wxSashEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def SetEdge(self,arg0):
-        val = windows3c.wxSashEvent_SetEdge(self.this,arg0)
+    def SetEdge(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashEvent_SetEdge,(self,) + _args, _kwargs)
         return val
-    def GetEdge(self):
-        val = windows3c.wxSashEvent_GetEdge(self.this)
+    def GetEdge(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashEvent_GetEdge,(self,) + _args, _kwargs)
         return val
-    def SetDragRect(self,arg0):
-        val = windows3c.wxSashEvent_SetDragRect(self.this,arg0.this)
+    def SetDragRect(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashEvent_SetDragRect,(self,) + _args, _kwargs)
         return val
-    def GetDragRect(self):
-        val = windows3c.wxSashEvent_GetDragRect(self.this)
-        val = wxRectPtr(val)
-        val.thisown = 1
+    def GetDragRect(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashEvent_GetDragRect,(self,) + _args, _kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
         return val
-    def SetDragStatus(self,arg0):
-        val = windows3c.wxSashEvent_SetDragStatus(self.this,arg0)
+    def SetDragStatus(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashEvent_SetDragStatus,(self,) + _args, _kwargs)
         return val
-    def GetDragStatus(self):
-        val = windows3c.wxSashEvent_GetDragStatus(self.this)
+    def GetDragStatus(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashEvent_GetDragStatus,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxSashEvent instance>"
+        return "<C wxSashEvent instance at %s>" % (self.this,)
 class wxSashEvent(wxSashEventPtr):
     def __init__(self,this):
         self.this = this
@@ -56,68 +55,62 @@ class wxSashWindowPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetSashVisible(self,arg0):
-        val = windows3c.wxSashWindow_GetSashVisible(self.this,arg0)
+    def GetSashVisible(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_GetSashVisible,(self,) + _args, _kwargs)
         return val
-    def GetDefaultBorderSize(self):
-        val = windows3c.wxSashWindow_GetDefaultBorderSize(self.this)
+    def GetDefaultBorderSize(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_GetDefaultBorderSize,(self,) + _args, _kwargs)
         return val
-    def GetEdgeMargin(self,arg0):
-        val = windows3c.wxSashWindow_GetEdgeMargin(self.this,arg0)
+    def GetEdgeMargin(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_GetEdgeMargin,(self,) + _args, _kwargs)
         return val
-    def GetExtraBorderSize(self):
-        val = windows3c.wxSashWindow_GetExtraBorderSize(self.this)
+    def GetExtraBorderSize(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_GetExtraBorderSize,(self,) + _args, _kwargs)
         return val
-    def GetMaximumSizeX(self):
-        val = windows3c.wxSashWindow_GetMaximumSizeX(self.this)
+    def GetMaximumSizeX(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_GetMaximumSizeX,(self,) + _args, _kwargs)
         return val
-    def GetMaximumSizeY(self):
-        val = windows3c.wxSashWindow_GetMaximumSizeY(self.this)
+    def GetMaximumSizeY(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_GetMaximumSizeY,(self,) + _args, _kwargs)
         return val
-    def GetMinimumSizeX(self):
-        val = windows3c.wxSashWindow_GetMinimumSizeX(self.this)
+    def GetMinimumSizeX(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_GetMinimumSizeX,(self,) + _args, _kwargs)
         return val
-    def GetMinimumSizeY(self):
-        val = windows3c.wxSashWindow_GetMinimumSizeY(self.this)
+    def GetMinimumSizeY(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_GetMinimumSizeY,(self,) + _args, _kwargs)
         return val
-    def HasBorder(self,arg0):
-        val = windows3c.wxSashWindow_HasBorder(self.this,arg0)
+    def HasBorder(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_HasBorder,(self,) + _args, _kwargs)
         return val
-    def SetDefaultBorderSize(self,arg0):
-        val = windows3c.wxSashWindow_SetDefaultBorderSize(self.this,arg0)
+    def SetDefaultBorderSize(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_SetDefaultBorderSize,(self,) + _args, _kwargs)
         return val
-    def SetExtraBorderSize(self,arg0):
-        val = windows3c.wxSashWindow_SetExtraBorderSize(self.this,arg0)
+    def SetExtraBorderSize(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_SetExtraBorderSize,(self,) + _args, _kwargs)
         return val
-    def SetMaximumSizeX(self,arg0):
-        val = windows3c.wxSashWindow_SetMaximumSizeX(self.this,arg0)
+    def SetMaximumSizeX(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_SetMaximumSizeX,(self,) + _args, _kwargs)
         return val
-    def SetMaximumSizeY(self,arg0):
-        val = windows3c.wxSashWindow_SetMaximumSizeY(self.this,arg0)
+    def SetMaximumSizeY(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_SetMaximumSizeY,(self,) + _args, _kwargs)
         return val
-    def SetMinimumSizeX(self,arg0):
-        val = windows3c.wxSashWindow_SetMinimumSizeX(self.this,arg0)
+    def SetMinimumSizeX(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_SetMinimumSizeX,(self,) + _args, _kwargs)
         return val
-    def SetMinimumSizeY(self,arg0):
-        val = windows3c.wxSashWindow_SetMinimumSizeY(self.this,arg0)
+    def SetMinimumSizeY(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_SetMinimumSizeY,(self,) + _args, _kwargs)
         return val
-    def SetSashVisible(self,arg0,arg1):
-        val = windows3c.wxSashWindow_SetSashVisible(self.this,arg0,arg1)
+    def SetSashVisible(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_SetSashVisible,(self,) + _args, _kwargs)
         return val
-    def SetSashBorder(self,arg0,arg1):
-        val = windows3c.wxSashWindow_SetSashBorder(self.this,arg0,arg1)
+    def SetSashBorder(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashWindow_SetSashBorder,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxSashWindow instance>"
+        return "<C wxSashWindow instance at %s>" % (self.this,)
 class wxSashWindow(wxSashWindowPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(windows3c.new_wxSashWindow,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows3c.new_wxSashWindow,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -128,40 +121,39 @@ class wxQueryLayoutInfoEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def SetRequestedLength(self,arg0):
-        val = windows3c.wxQueryLayoutInfoEvent_SetRequestedLength(self.this,arg0)
+    def SetRequestedLength(self, *_args, **_kwargs):
+        val = apply(windows3c.wxQueryLayoutInfoEvent_SetRequestedLength,(self,) + _args, _kwargs)
         return val
-    def GetRequestedLength(self):
-        val = windows3c.wxQueryLayoutInfoEvent_GetRequestedLength(self.this)
+    def GetRequestedLength(self, *_args, **_kwargs):
+        val = apply(windows3c.wxQueryLayoutInfoEvent_GetRequestedLength,(self,) + _args, _kwargs)
         return val
-    def SetFlags(self,arg0):
-        val = windows3c.wxQueryLayoutInfoEvent_SetFlags(self.this,arg0)
+    def SetFlags(self, *_args, **_kwargs):
+        val = apply(windows3c.wxQueryLayoutInfoEvent_SetFlags,(self,) + _args, _kwargs)
         return val
-    def GetFlags(self):
-        val = windows3c.wxQueryLayoutInfoEvent_GetFlags(self.this)
+    def GetFlags(self, *_args, **_kwargs):
+        val = apply(windows3c.wxQueryLayoutInfoEvent_GetFlags,(self,) + _args, _kwargs)
         return val
-    def SetSize(self,arg0):
-        val = windows3c.wxQueryLayoutInfoEvent_SetSize(self.this,arg0.this)
+    def SetSize(self, *_args, **_kwargs):
+        val = apply(windows3c.wxQueryLayoutInfoEvent_SetSize,(self,) + _args, _kwargs)
         return val
-    def GetSize(self):
-        val = windows3c.wxQueryLayoutInfoEvent_GetSize(self.this)
-        val = wxSizePtr(val)
-        val.thisown = 1
+    def GetSize(self, *_args, **_kwargs):
+        val = apply(windows3c.wxQueryLayoutInfoEvent_GetSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
-    def SetOrientation(self,arg0):
-        val = windows3c.wxQueryLayoutInfoEvent_SetOrientation(self.this,arg0)
+    def SetOrientation(self, *_args, **_kwargs):
+        val = apply(windows3c.wxQueryLayoutInfoEvent_SetOrientation,(self,) + _args, _kwargs)
         return val
-    def GetOrientation(self):
-        val = windows3c.wxQueryLayoutInfoEvent_GetOrientation(self.this)
+    def GetOrientation(self, *_args, **_kwargs):
+        val = apply(windows3c.wxQueryLayoutInfoEvent_GetOrientation,(self,) + _args, _kwargs)
         return val
-    def SetAlignment(self,arg0):
-        val = windows3c.wxQueryLayoutInfoEvent_SetAlignment(self.this,arg0)
+    def SetAlignment(self, *_args, **_kwargs):
+        val = apply(windows3c.wxQueryLayoutInfoEvent_SetAlignment,(self,) + _args, _kwargs)
         return val
-    def GetAlignment(self):
-        val = windows3c.wxQueryLayoutInfoEvent_GetAlignment(self.this)
+    def GetAlignment(self, *_args, **_kwargs):
+        val = apply(windows3c.wxQueryLayoutInfoEvent_GetAlignment,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxQueryLayoutInfoEvent instance>"
+        return "<C wxQueryLayoutInfoEvent instance at %s>" % (self.this,)
 class wxQueryLayoutInfoEvent(wxQueryLayoutInfoEventPtr):
     def __init__(self,this):
         self.this = this
@@ -173,22 +165,21 @@ class wxCalculateLayoutEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def SetFlags(self,arg0):
-        val = windows3c.wxCalculateLayoutEvent_SetFlags(self.this,arg0)
+    def SetFlags(self, *_args, **_kwargs):
+        val = apply(windows3c.wxCalculateLayoutEvent_SetFlags,(self,) + _args, _kwargs)
         return val
-    def GetFlags(self):
-        val = windows3c.wxCalculateLayoutEvent_GetFlags(self.this)
+    def GetFlags(self, *_args, **_kwargs):
+        val = apply(windows3c.wxCalculateLayoutEvent_GetFlags,(self,) + _args, _kwargs)
         return val
-    def SetRect(self,arg0):
-        val = windows3c.wxCalculateLayoutEvent_SetRect(self.this,arg0.this)
+    def SetRect(self, *_args, **_kwargs):
+        val = apply(windows3c.wxCalculateLayoutEvent_SetRect,(self,) + _args, _kwargs)
         return val
-    def GetRect(self):
-        val = windows3c.wxCalculateLayoutEvent_GetRect(self.this)
-        val = wxRectPtr(val)
-        val.thisown = 1
+    def GetRect(self, *_args, **_kwargs):
+        val = apply(windows3c.wxCalculateLayoutEvent_GetRect,(self,) + _args, _kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
         return val
     def __repr__(self):
-        return "<C wxCalculateLayoutEvent instance>"
+        return "<C wxCalculateLayoutEvent instance at %s>" % (self.this,)
 class wxCalculateLayoutEvent(wxCalculateLayoutEventPtr):
     def __init__(self,this):
         self.this = this
@@ -200,32 +191,26 @@ class wxSashLayoutWindowPtr(wxSashWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetAlignment(self):
-        val = windows3c.wxSashLayoutWindow_GetAlignment(self.this)
+    def GetAlignment(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashLayoutWindow_GetAlignment,(self,) + _args, _kwargs)
         return val
-    def GetOrientation(self):
-        val = windows3c.wxSashLayoutWindow_GetOrientation(self.this)
+    def GetOrientation(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashLayoutWindow_GetOrientation,(self,) + _args, _kwargs)
         return val
-    def SetAlignment(self,arg0):
-        val = windows3c.wxSashLayoutWindow_SetAlignment(self.this,arg0)
+    def SetAlignment(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashLayoutWindow_SetAlignment,(self,) + _args, _kwargs)
         return val
-    def SetDefaultSize(self,arg0):
-        val = windows3c.wxSashLayoutWindow_SetDefaultSize(self.this,arg0.this)
+    def SetDefaultSize(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashLayoutWindow_SetDefaultSize,(self,) + _args, _kwargs)
         return val
-    def SetOrientation(self,arg0):
-        val = windows3c.wxSashLayoutWindow_SetOrientation(self.this,arg0)
+    def SetOrientation(self, *_args, **_kwargs):
+        val = apply(windows3c.wxSashLayoutWindow_SetOrientation,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxSashLayoutWindow instance>"
+        return "<C wxSashLayoutWindow instance at %s>" % (self.this,)
 class wxSashLayoutWindow(wxSashLayoutWindowPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(windows3c.new_wxSashLayoutWindow,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows3c.new_wxSashLayoutWindow,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
         wx._checkForCallback(self, 'OnCalculateLayout',    wxEVT_CALCULATE_LAYOUT)
@@ -238,35 +223,23 @@ class wxLayoutAlgorithmPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self, windows3c=windows3c):
+    def __del__(self,windows3c=windows3c):
         if self.thisown == 1 :
-            windows3c.delete_wxLayoutAlgorithm(self.this)
-    def LayoutMDIFrame(self,arg0,*args):
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        args = tuple(argl)
-        val = apply(windows3c.wxLayoutAlgorithm_LayoutMDIFrame,(self.this,arg0.this,)+args)
+            windows3c.delete_wxLayoutAlgorithm(self)
+    def LayoutMDIFrame(self, *_args, **_kwargs):
+        val = apply(windows3c.wxLayoutAlgorithm_LayoutMDIFrame,(self,) + _args, _kwargs)
         return val
-    def LayoutFrame(self,arg0,*args):
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        args = tuple(argl)
-        val = apply(windows3c.wxLayoutAlgorithm_LayoutFrame,(self.this,arg0.this,)+args)
+    def LayoutFrame(self, *_args, **_kwargs):
+        val = apply(windows3c.wxLayoutAlgorithm_LayoutFrame,(self,) + _args, _kwargs)
         return val
-    def LayoutWindow(self,arg0,*args):
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        args = tuple(argl)
-        val = apply(windows3c.wxLayoutAlgorithm_LayoutWindow,(self.this,arg0.this,)+args)
+    def LayoutWindow(self, *_args, **_kwargs):
+        val = apply(windows3c.wxLayoutAlgorithm_LayoutWindow,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxLayoutAlgorithm instance>"
+        return "<C wxLayoutAlgorithm instance at %s>" % (self.this,)
 class wxLayoutAlgorithm(wxLayoutAlgorithmPtr):
-    def __init__(self) :
-        self.this = windows3c.new_wxLayoutAlgorithm()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows3c.new_wxLayoutAlgorithm,_args,_kwargs)
         self.thisown = 1
 
 

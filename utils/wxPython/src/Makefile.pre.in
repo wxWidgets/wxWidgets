@@ -381,9 +381,6 @@ $(GENCODEDIR)/helpers.cpp:
 $(GENCODEDIR)/libpy.c:
 	ln -s `pwd`/libpy.c $@
 
-$(GENCODEDIR)/libptr.c:
-	ln -s `pwd`/libptr.c $@
-
 $(GENCODEDIR)/_glcanvas.cpp:
 	-cp $(WXWIN)/utils/glcanvas/$(GENCODEDIR)/glcanvas.cpp $@
 	-cp $(WXWIN)/utils/glcanvas/$(GENCODEDIR)/glcanvas.h ./glcanvas.h
@@ -431,10 +428,9 @@ endif
 ifdef HELPERLIB
 helpers.o: $(srcdir)/helpers.cpp; $(CCC) $(CCSHARED)  $(C_DEFINES) $(C_FLAGS) $(CFLAGS) -c $(srcdir)/helpers.cpp
 libpy.o: $(srcdir)/libpy.c; $(CC) $(CCSHARED)  $(C_DEFINES) $(C_FLAGS) $(CFLAGS) -c $(srcdir)/libpy.c
-libptr.o: $(srcdir)/libptr.c; $(CC) $(CCSHARED)  $(C_DEFINES) $(C_FLAGS) $(CFLAGS) -c $(srcdir)/libptr.c
 
-$(HELPERLIB) : helpers.o libpy.o libptr.o
-	$(LDSHARED) helpers.o libpy.o libptr.o  $(C_DEFINES) $(C_FLAGS) -Xlinker $(WX_CONFIG_LIBS) -o $@
+$(HELPERLIB) : helpers.o libpy.o
+	$(LDSHARED) helpers.o libpy.o  $(C_DEFINES) $(C_FLAGS) -Xlinker $(WX_CONFIG_LIBS) -o $@
 endif
 
 

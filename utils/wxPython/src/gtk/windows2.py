@@ -15,58 +15,58 @@ class wxGridCellPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self, windows2c=windows2c):
+    def __del__(self,windows2c=windows2c):
         if self.thisown == 1 :
-            windows2c.delete_wxGridCell(self.this)
-    def GetTextValue(self):
-        val = windows2c.wxGridCell_GetTextValue(self.this)
+            windows2c.delete_wxGridCell(self)
+    def GetTextValue(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_GetTextValue,(self,) + _args, _kwargs)
         return val
-    def SetTextValue(self,arg0):
-        val = windows2c.wxGridCell_SetTextValue(self.this,arg0)
+    def SetTextValue(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_SetTextValue,(self,) + _args, _kwargs)
         return val
-    def GetFont(self):
-        val = windows2c.wxGridCell_GetFont(self.this)
-        val = wxFontPtr(val)
+    def GetFont(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_GetFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) 
         return val
-    def SetFont(self,arg0):
-        val = windows2c.wxGridCell_SetFont(self.this,arg0.this)
+    def SetFont(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_SetFont,(self,) + _args, _kwargs)
         return val
-    def GetTextColour(self):
-        val = windows2c.wxGridCell_GetTextColour(self.this)
-        val = wxColourPtr(val)
+    def GetTextColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_GetTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
         return val
-    def SetTextColour(self,arg0):
-        val = windows2c.wxGridCell_SetTextColour(self.this,arg0.this)
+    def SetTextColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_SetTextColour,(self,) + _args, _kwargs)
         return val
-    def GetBackgroundColour(self):
-        val = windows2c.wxGridCell_GetBackgroundColour(self.this)
-        val = wxColourPtr(val)
+    def GetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_GetBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
         return val
-    def SetBackgroundColour(self,arg0):
-        val = windows2c.wxGridCell_SetBackgroundColour(self.this,arg0.this)
+    def SetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_SetBackgroundColour,(self,) + _args, _kwargs)
         return val
-    def GetBackgroundBrush(self):
-        val = windows2c.wxGridCell_GetBackgroundBrush(self.this)
-        val = wxBrushPtr(val)
+    def GetBackgroundBrush(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_GetBackgroundBrush,(self,) + _args, _kwargs)
+        if val: val = wxBrushPtr(val) 
         return val
-    def GetAlignment(self):
-        val = windows2c.wxGridCell_GetAlignment(self.this)
+    def GetAlignment(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_GetAlignment,(self,) + _args, _kwargs)
         return val
-    def SetAlignment(self,arg0):
-        val = windows2c.wxGridCell_SetAlignment(self.this,arg0)
+    def SetAlignment(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_SetAlignment,(self,) + _args, _kwargs)
         return val
-    def GetCellBitmap(self):
-        val = windows2c.wxGridCell_GetCellBitmap(self.this)
-        val = wxBitmapPtr(val)
+    def GetCellBitmap(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_GetCellBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
         return val
-    def SetCellBitmap(self,arg0):
-        val = windows2c.wxGridCell_SetCellBitmap(self.this,arg0.this)
+    def SetCellBitmap(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridCell_SetCellBitmap,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxGridCell instance>"
+        return "<C wxGridCell instance at %s>" % (self.this,)
 class wxGridCell(wxGridCellPtr):
-    def __init__(self) :
-        self.this = windows2c.new_wxGridCell()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows2c.new_wxGridCell,_args,_kwargs)
         self.thisown = 1
 
 
@@ -76,233 +76,226 @@ class wxGridPtr(wxPanelPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def AdjustScrollbars(self):
-        val = windows2c.wxGrid_AdjustScrollbars(self.this)
+    def AdjustScrollbars(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_AdjustScrollbars,(self,) + _args, _kwargs)
         return val
-    def AppendCols(self,*args):
-        val = apply(windows2c.wxGrid_AppendCols,(self.this,)+args)
+    def AppendCols(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_AppendCols,(self,) + _args, _kwargs)
         return val
-    def AppendRows(self,*args):
-        val = apply(windows2c.wxGrid_AppendRows,(self.this,)+args)
+    def AppendRows(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_AppendRows,(self,) + _args, _kwargs)
         return val
-    def BeginBatch(self):
-        val = windows2c.wxGrid_BeginBatch(self.this)
+    def BeginBatch(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_BeginBatch,(self,) + _args, _kwargs)
         return val
-    def CellHitTest(self,arg0,arg1):
-        val = windows2c.wxGrid_CellHitTest(self.this,arg0,arg1)
+    def CellHitTest(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_CellHitTest,(self,) + _args, _kwargs)
         return val
-    def CreateGrid(self,arg0,arg1,*args):
-        val = apply(windows2c.wxGrid_CreateGrid,(self.this,arg0,arg1,)+args)
+    def CreateGrid(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_CreateGrid,(self,) + _args, _kwargs)
         return val
-    def CurrentCellVisible(self):
-        val = windows2c.wxGrid_CurrentCellVisible(self.this)
+    def CurrentCellVisible(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_CurrentCellVisible,(self,) + _args, _kwargs)
         return val
-    def DeleteCols(self,*args):
-        val = apply(windows2c.wxGrid_DeleteCols,(self.this,)+args)
+    def DeleteCols(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_DeleteCols,(self,) + _args, _kwargs)
         return val
-    def DeleteRows(self,*args):
-        val = apply(windows2c.wxGrid_DeleteRows,(self.this,)+args)
+    def DeleteRows(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_DeleteRows,(self,) + _args, _kwargs)
         return val
-    def EndBatch(self):
-        val = windows2c.wxGrid_EndBatch(self.this)
+    def EndBatch(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_EndBatch,(self,) + _args, _kwargs)
         return val
-    def GetBatchCount(self):
-        val = windows2c.wxGrid_GetBatchCount(self.this)
+    def GetBatchCount(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetBatchCount,(self,) + _args, _kwargs)
         return val
-    def GetCell(self,arg0,arg1):
-        val = windows2c.wxGrid_GetCell(self.this,arg0,arg1)
-        val = wxGridCellPtr(val)
+    def GetCell(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetCell,(self,) + _args, _kwargs)
+        if val: val = wxGridCellPtr(val) 
         return val
-    def GetCellAlignment(self,arg0,arg1):
-        val = windows2c.wxGrid_GetCellAlignment(self.this,arg0,arg1)
+    def GetCellAlignment(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetCellAlignment,(self,) + _args, _kwargs)
         return val
-    def GetDefCellAlignment(self):
-        val = windows2c.wxGrid_GetDefCellAlignment(self.this)
+    def GetDefCellAlignment(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetDefCellAlignment,(self,) + _args, _kwargs)
         return val
-    def GetCellBackgroundColour(self,arg0,arg1):
-        val = windows2c.wxGrid_GetCellBackgroundColour(self.this,arg0,arg1)
-        val = wxColourPtr(val)
+    def GetCellBackgroundColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetCellBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
         return val
-    def GetDefCellBackgroundColour(self):
-        val = windows2c.wxGrid_GetDefCellBackgroundColour(self.this)
-        val = wxColourPtr(val)
+    def GetDefCellBackgroundColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetDefCellBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
         return val
-    def GetCells(self):
-        val = windows2c.wxGrid_GetCells(self.this)
+    def GetCells(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetCells,(self,) + _args, _kwargs)
         return val
-    def GetCellTextColour(self,arg0,arg1):
-        val = windows2c.wxGrid_GetCellTextColour(self.this,arg0,arg1)
-        val = wxColourPtr(val)
+    def GetCellTextColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetCellTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
         return val
-    def GetDefCellTextColour(self):
-        val = windows2c.wxGrid_GetDefCellTextColour(self.this)
-        val = wxColourPtr(val)
+    def GetDefCellTextColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetDefCellTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
         return val
-    def GetCellTextFont(self,arg0,arg1):
-        val = windows2c.wxGrid_GetCellTextFont(self.this,arg0,arg1)
-        val = wxFontPtr(val)
+    def GetCellTextFont(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetCellTextFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) 
         return val
-    def GetDefCellTextFont(self):
-        val = windows2c.wxGrid_GetDefCellTextFont(self.this)
-        val = wxFontPtr(val)
+    def GetDefCellTextFont(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetDefCellTextFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) 
         return val
-    def GetCellValue(self,arg0,arg1):
-        val = windows2c.wxGrid_GetCellValue(self.this,arg0,arg1)
+    def GetCellValue(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetCellValue,(self,) + _args, _kwargs)
         return val
-    def GetCols(self):
-        val = windows2c.wxGrid_GetCols(self.this)
+    def GetCols(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetCols,(self,) + _args, _kwargs)
         return val
-    def GetColumnWidth(self,arg0):
-        val = windows2c.wxGrid_GetColumnWidth(self.this,arg0)
+    def GetColumnWidth(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetColumnWidth,(self,) + _args, _kwargs)
         return val
-    def GetCurrentRect(self):
-        val = windows2c.wxGrid_GetCurrentRect(self.this)
-        val = wxRectPtr(val)
-        val.thisown = 1
+    def GetCurrentRect(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetCurrentRect,(self,) + _args, _kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
         return val
-    def GetCursorColumn(self):
-        val = windows2c.wxGrid_GetCursorColumn(self.this)
+    def GetCursorColumn(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetCursorColumn,(self,) + _args, _kwargs)
         return val
-    def GetCursorRow(self):
-        val = windows2c.wxGrid_GetCursorRow(self.this)
+    def GetCursorRow(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetCursorRow,(self,) + _args, _kwargs)
         return val
-    def GetEditable(self):
-        val = windows2c.wxGrid_GetEditable(self.this)
+    def GetEditable(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetEditable,(self,) + _args, _kwargs)
         return val
-    def GetHorizScrollBar(self):
-        val = windows2c.wxGrid_GetHorizScrollBar(self.this)
-        val = wxScrollBarPtr(val)
+    def GetHorizScrollBar(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetHorizScrollBar,(self,) + _args, _kwargs)
+        if val: val = wxScrollBarPtr(val) 
         return val
-    def GetLabelAlignment(self,arg0):
-        val = windows2c.wxGrid_GetLabelAlignment(self.this,arg0)
+    def GetLabelAlignment(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetLabelAlignment,(self,) + _args, _kwargs)
         return val
-    def GetLabelBackgroundColour(self):
-        val = windows2c.wxGrid_GetLabelBackgroundColour(self.this)
-        val = wxColourPtr(val)
+    def GetLabelBackgroundColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetLabelBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
         return val
-    def GetLabelSize(self,arg0):
-        val = windows2c.wxGrid_GetLabelSize(self.this,arg0)
+    def GetLabelSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetLabelSize,(self,) + _args, _kwargs)
         return val
-    def GetLabelTextColour(self):
-        val = windows2c.wxGrid_GetLabelTextColour(self.this)
-        val = wxColourPtr(val)
+    def GetLabelTextColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetLabelTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
         return val
-    def GetLabelTextFont(self):
-        val = windows2c.wxGrid_GetLabelTextFont(self.this)
-        val = wxFontPtr(val)
+    def GetLabelTextFont(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetLabelTextFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) 
         return val
-    def GetLabelValue(self,arg0,arg1):
-        val = windows2c.wxGrid_GetLabelValue(self.this,arg0,arg1)
+    def GetLabelValue(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetLabelValue,(self,) + _args, _kwargs)
         return val
-    def GetRowHeight(self,arg0):
-        val = windows2c.wxGrid_GetRowHeight(self.this,arg0)
+    def GetRowHeight(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetRowHeight,(self,) + _args, _kwargs)
         return val
-    def GetRows(self):
-        val = windows2c.wxGrid_GetRows(self.this)
+    def GetRows(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetRows,(self,) + _args, _kwargs)
         return val
-    def GetScrollPosX(self):
-        val = windows2c.wxGrid_GetScrollPosX(self.this)
+    def GetScrollPosX(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetScrollPosX,(self,) + _args, _kwargs)
         return val
-    def GetScrollPosY(self):
-        val = windows2c.wxGrid_GetScrollPosY(self.this)
+    def GetScrollPosY(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetScrollPosY,(self,) + _args, _kwargs)
         return val
-    def GetTextItem(self):
-        val = windows2c.wxGrid_GetTextItem(self.this)
-        val = wxTextCtrlPtr(val)
+    def GetTextItem(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetTextItem,(self,) + _args, _kwargs)
+        if val: val = wxTextCtrlPtr(val) 
         return val
-    def GetVertScrollBar(self):
-        val = windows2c.wxGrid_GetVertScrollBar(self.this)
-        val = wxScrollBarPtr(val)
+    def GetVertScrollBar(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetVertScrollBar,(self,) + _args, _kwargs)
+        if val: val = wxScrollBarPtr(val) 
         return val
-    def InsertCols(self,*args):
-        val = apply(windows2c.wxGrid_InsertCols,(self.this,)+args)
+    def InsertCols(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_InsertCols,(self,) + _args, _kwargs)
         return val
-    def InsertRows(self,*args):
-        val = apply(windows2c.wxGrid_InsertRows,(self.this,)+args)
+    def InsertRows(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_InsertRows,(self,) + _args, _kwargs)
         return val
-    def OnActivate(self,arg0):
-        val = windows2c.wxGrid_OnActivate(self.this,arg0)
+    def OnActivate(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_OnActivate,(self,) + _args, _kwargs)
         return val
-    def SetCellAlignment(self,arg0,arg1,arg2):
-        val = windows2c.wxGrid_SetCellAlignment(self.this,arg0,arg1,arg2)
+    def SetCellAlignment(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetCellAlignment,(self,) + _args, _kwargs)
         return val
-    def SetDefCellAlignment(self,arg0):
-        val = windows2c.wxGrid_SetDefCellAlignment(self.this,arg0)
+    def SetDefCellAlignment(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetDefCellAlignment,(self,) + _args, _kwargs)
         return val
-    def SetCellBackgroundColour(self,arg0,arg1,arg2):
-        val = windows2c.wxGrid_SetCellBackgroundColour(self.this,arg0.this,arg1,arg2)
+    def SetCellBackgroundColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetCellBackgroundColour,(self,) + _args, _kwargs)
         return val
-    def SetDefCellBackgroundColour(self,arg0):
-        val = windows2c.wxGrid_SetDefCellBackgroundColour(self.this,arg0.this)
+    def SetDefCellBackgroundColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetDefCellBackgroundColour,(self,) + _args, _kwargs)
         return val
-    def SetCellTextColour(self,arg0,arg1,arg2):
-        val = windows2c.wxGrid_SetCellTextColour(self.this,arg0.this,arg1,arg2)
+    def SetCellTextColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetCellTextColour,(self,) + _args, _kwargs)
         return val
-    def SetDefCellTextColour(self,arg0):
-        val = windows2c.wxGrid_SetDefCellTextColour(self.this,arg0.this)
+    def SetDefCellTextColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetDefCellTextColour,(self,) + _args, _kwargs)
         return val
-    def SetCellTextFont(self,arg0,arg1,arg2):
-        val = windows2c.wxGrid_SetCellTextFont(self.this,arg0.this,arg1,arg2)
+    def SetCellTextFont(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetCellTextFont,(self,) + _args, _kwargs)
         return val
-    def SetDefCellTextFont(self,arg0):
-        val = windows2c.wxGrid_SetDefCellTextFont(self.this,arg0.this)
+    def SetDefCellTextFont(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetDefCellTextFont,(self,) + _args, _kwargs)
         return val
-    def SetCellValue(self,arg0,arg1,arg2):
-        val = windows2c.wxGrid_SetCellValue(self.this,arg0,arg1,arg2)
+    def SetCellValue(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetCellValue,(self,) + _args, _kwargs)
         return val
-    def SetColumnWidth(self,arg0,arg1):
-        val = windows2c.wxGrid_SetColumnWidth(self.this,arg0,arg1)
+    def SetColumnWidth(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetColumnWidth,(self,) + _args, _kwargs)
         return val
-    def SetDividerPen(self,arg0):
-        val = windows2c.wxGrid_SetDividerPen(self.this,arg0.this)
+    def SetDividerPen(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetDividerPen,(self,) + _args, _kwargs)
         return val
-    def SetEditable(self,arg0):
-        val = windows2c.wxGrid_SetEditable(self.this,arg0)
+    def SetEditable(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetEditable,(self,) + _args, _kwargs)
         return val
-    def SetGridCursor(self,arg0,arg1):
-        val = windows2c.wxGrid_SetGridCursor(self.this,arg0,arg1)
+    def SetGridCursor(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetGridCursor,(self,) + _args, _kwargs)
         return val
-    def SetLabelAlignment(self,arg0,arg1):
-        val = windows2c.wxGrid_SetLabelAlignment(self.this,arg0,arg1)
+    def SetLabelAlignment(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetLabelAlignment,(self,) + _args, _kwargs)
         return val
-    def SetLabelBackgroundColour(self,arg0):
-        val = windows2c.wxGrid_SetLabelBackgroundColour(self.this,arg0.this)
+    def SetLabelBackgroundColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetLabelBackgroundColour,(self,) + _args, _kwargs)
         return val
-    def SetLabelSize(self,arg0,arg1):
-        val = windows2c.wxGrid_SetLabelSize(self.this,arg0,arg1)
+    def SetLabelSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetLabelSize,(self,) + _args, _kwargs)
         return val
-    def SetLabelTextColour(self,arg0):
-        val = windows2c.wxGrid_SetLabelTextColour(self.this,arg0.this)
+    def SetLabelTextColour(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetLabelTextColour,(self,) + _args, _kwargs)
         return val
-    def SetLabelTextFont(self,arg0):
-        val = windows2c.wxGrid_SetLabelTextFont(self.this,arg0.this)
+    def SetLabelTextFont(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetLabelTextFont,(self,) + _args, _kwargs)
         return val
-    def SetLabelValue(self,arg0,arg1,arg2):
-        val = windows2c.wxGrid_SetLabelValue(self.this,arg0,arg1,arg2)
+    def SetLabelValue(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetLabelValue,(self,) + _args, _kwargs)
         return val
-    def SetRowHeight(self,arg0,arg1):
-        val = windows2c.wxGrid_SetRowHeight(self.this,arg0,arg1)
+    def SetRowHeight(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetRowHeight,(self,) + _args, _kwargs)
         return val
-    def UpdateDimensions(self):
-        val = windows2c.wxGrid_UpdateDimensions(self.this)
+    def UpdateDimensions(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_UpdateDimensions,(self,) + _args, _kwargs)
         return val
-    def GetEditInPlace(self):
-        val = windows2c.wxGrid_GetEditInPlace(self.this)
+    def GetEditInPlace(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_GetEditInPlace,(self,) + _args, _kwargs)
         return val
-    def SetEditInPlace(self,*args):
-        val = apply(windows2c.wxGrid_SetEditInPlace,(self.this,)+args)
+    def SetEditInPlace(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGrid_SetEditInPlace,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxGrid instance>"
+        return "<C wxGrid instance at %s>" % (self.this,)
 class wxGrid(wxGridPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(windows2c.new_wxGrid,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows2c.new_wxGrid,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
         wx._checkForCallback(self, 'OnSelectCell',           wxEVT_GRID_SELECT_CELL)
@@ -322,68 +315,67 @@ class wxGridEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetRow(self):
-        val = windows2c.wxGridEvent_GetRow(self.this)
+    def GetRow(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridEvent_GetRow,(self,) + _args, _kwargs)
         return val
-    def GetCol(self):
-        val = windows2c.wxGridEvent_GetCol(self.this)
+    def GetCol(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridEvent_GetCol,(self,) + _args, _kwargs)
         return val
-    def GetPosition(self):
-        val = windows2c.wxGridEvent_GetPosition(self.this)
-        val = wxPointPtr(val)
-        val.thisown = 1
+    def GetPosition(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridEvent_GetPosition,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
-    def ControlDown(self):
-        val = windows2c.wxGridEvent_ControlDown(self.this)
+    def ControlDown(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridEvent_ControlDown,(self,) + _args, _kwargs)
         return val
-    def ShiftDown(self):
-        val = windows2c.wxGridEvent_ShiftDown(self.this)
+    def ShiftDown(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridEvent_ShiftDown,(self,) + _args, _kwargs)
         return val
-    def GetCell(self):
-        val = windows2c.wxGridEvent_GetCell(self.this)
-        val = wxGridCellPtr(val)
+    def GetCell(self, *_args, **_kwargs):
+        val = apply(windows2c.wxGridEvent_GetCell,(self,) + _args, _kwargs)
+        if val: val = wxGridCellPtr(val) 
         return val
     def __setattr__(self,name,value):
         if name == "m_row" :
-            windows2c.wxGridEvent_m_row_set(self.this,value)
+            windows2c.wxGridEvent_m_row_set(self,value)
             return
         if name == "m_col" :
-            windows2c.wxGridEvent_m_col_set(self.this,value)
+            windows2c.wxGridEvent_m_col_set(self,value)
             return
         if name == "m_x" :
-            windows2c.wxGridEvent_m_x_set(self.this,value)
+            windows2c.wxGridEvent_m_x_set(self,value)
             return
         if name == "m_y" :
-            windows2c.wxGridEvent_m_y_set(self.this,value)
+            windows2c.wxGridEvent_m_y_set(self,value)
             return
         if name == "m_control" :
-            windows2c.wxGridEvent_m_control_set(self.this,value)
+            windows2c.wxGridEvent_m_control_set(self,value)
             return
         if name == "m_shift" :
-            windows2c.wxGridEvent_m_shift_set(self.this,value)
+            windows2c.wxGridEvent_m_shift_set(self,value)
             return
         if name == "m_cell" :
-            windows2c.wxGridEvent_m_cell_set(self.this,value.this)
+            windows2c.wxGridEvent_m_cell_set(self,value.this)
             return
         self.__dict__[name] = value
     def __getattr__(self,name):
         if name == "m_row" : 
-            return windows2c.wxGridEvent_m_row_get(self.this)
+            return windows2c.wxGridEvent_m_row_get(self)
         if name == "m_col" : 
-            return windows2c.wxGridEvent_m_col_get(self.this)
+            return windows2c.wxGridEvent_m_col_get(self)
         if name == "m_x" : 
-            return windows2c.wxGridEvent_m_x_get(self.this)
+            return windows2c.wxGridEvent_m_x_get(self)
         if name == "m_y" : 
-            return windows2c.wxGridEvent_m_y_get(self.this)
+            return windows2c.wxGridEvent_m_y_get(self)
         if name == "m_control" : 
-            return windows2c.wxGridEvent_m_control_get(self.this)
+            return windows2c.wxGridEvent_m_control_get(self)
         if name == "m_shift" : 
-            return windows2c.wxGridEvent_m_shift_get(self.this)
+            return windows2c.wxGridEvent_m_shift_get(self)
         if name == "m_cell" : 
-            return wxGridCellPtr(windows2c.wxGridEvent_m_cell_get(self.this))
+            return wxGridCellPtr(windows2c.wxGridEvent_m_cell_get(self))
         raise AttributeError,name
     def __repr__(self):
-        return "<C wxGridEvent instance>"
+        return "<C wxGridEvent instance at %s>" % (self.this,)
 class wxGridEvent(wxGridEventPtr):
     def __init__(self,this):
         self.this = this
@@ -395,20 +387,20 @@ class wxNotebookEventPtr(wxNotifyEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetSelection(self):
-        val = windows2c.wxNotebookEvent_GetSelection(self.this)
+    def GetSelection(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebookEvent_GetSelection,(self,) + _args, _kwargs)
         return val
-    def GetOldSelection(self):
-        val = windows2c.wxNotebookEvent_GetOldSelection(self.this)
+    def GetOldSelection(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebookEvent_GetOldSelection,(self,) + _args, _kwargs)
         return val
-    def SetOldSelection(self,arg0):
-        val = windows2c.wxNotebookEvent_SetOldSelection(self.this,arg0)
+    def SetOldSelection(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebookEvent_SetOldSelection,(self,) + _args, _kwargs)
         return val
-    def SetSelection(self,arg0):
-        val = windows2c.wxNotebookEvent_SetSelection(self.this,arg0)
+    def SetSelection(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebookEvent_SetSelection,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxNotebookEvent instance>"
+        return "<C wxNotebookEvent instance at %s>" % (self.this,)
 class wxNotebookEvent(wxNotebookEventPtr):
     def __init__(self,this):
         self.this = this
@@ -420,70 +412,64 @@ class wxNotebookPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetPageCount(self):
-        val = windows2c.wxNotebook_GetPageCount(self.this)
+    def GetPageCount(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_GetPageCount,(self,) + _args, _kwargs)
         return val
-    def SetSelection(self,arg0):
-        val = windows2c.wxNotebook_SetSelection(self.this,arg0)
+    def SetSelection(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_SetSelection,(self,) + _args, _kwargs)
         return val
-    def AdvanceSelection(self,*args):
-        val = apply(windows2c.wxNotebook_AdvanceSelection,(self.this,)+args)
+    def AdvanceSelection(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_AdvanceSelection,(self,) + _args, _kwargs)
         return val
-    def GetSelection(self):
-        val = windows2c.wxNotebook_GetSelection(self.this)
+    def GetSelection(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_GetSelection,(self,) + _args, _kwargs)
         return val
-    def SetPageText(self,arg0,arg1):
-        val = windows2c.wxNotebook_SetPageText(self.this,arg0,arg1)
+    def SetPageText(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_SetPageText,(self,) + _args, _kwargs)
         return val
-    def GetPageText(self,arg0):
-        val = windows2c.wxNotebook_GetPageText(self.this,arg0)
+    def GetPageText(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_GetPageText,(self,) + _args, _kwargs)
         return val
-    def SetImageList(self,arg0):
-        val = windows2c.wxNotebook_SetImageList(self.this,arg0.this)
+    def SetImageList(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_SetImageList,(self,) + _args, _kwargs)
         return val
-    def GetImageList(self):
-        val = windows2c.wxNotebook_GetImageList(self.this)
-        val = wxImageListPtr(val)
+    def GetImageList(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_GetImageList,(self,) + _args, _kwargs)
+        if val: val = wxImageListPtr(val) 
         return val
-    def GetPageImage(self,arg0):
-        val = windows2c.wxNotebook_GetPageImage(self.this,arg0)
+    def GetPageImage(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_GetPageImage,(self,) + _args, _kwargs)
         return val
-    def SetPageImage(self,arg0,arg1):
-        val = windows2c.wxNotebook_SetPageImage(self.this,arg0,arg1)
+    def SetPageImage(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_SetPageImage,(self,) + _args, _kwargs)
         return val
-    def GetRowCount(self):
-        val = windows2c.wxNotebook_GetRowCount(self.this)
+    def GetRowCount(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_GetRowCount,(self,) + _args, _kwargs)
         return val
-    def DeletePage(self,arg0):
-        val = windows2c.wxNotebook_DeletePage(self.this,arg0)
+    def DeletePage(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_DeletePage,(self,) + _args, _kwargs)
         return val
-    def RemovePage(self,arg0):
-        val = windows2c.wxNotebook_RemovePage(self.this,arg0)
+    def RemovePage(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_RemovePage,(self,) + _args, _kwargs)
         return val
-    def DeleteAllPages(self):
-        val = windows2c.wxNotebook_DeleteAllPages(self.this)
+    def DeleteAllPages(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_DeleteAllPages,(self,) + _args, _kwargs)
         return val
-    def AddPage(self,arg0,arg1,*args):
-        val = apply(windows2c.wxNotebook_AddPage,(self.this,arg0.this,arg1,)+args)
+    def AddPage(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_AddPage,(self,) + _args, _kwargs)
         return val
-    def GetPage(self,arg0):
-        val = windows2c.wxNotebook_GetPage(self.this,arg0)
-        val = wxWindowPtr(val)
+    def GetPage(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_GetPage,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
         return val
-    def ResizeChildren(self):
-        val = windows2c.wxNotebook_ResizeChildren(self.this)
+    def ResizeChildren(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_ResizeChildren,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxNotebook instance>"
+        return "<C wxNotebook instance at %s>" % (self.this,)
 class wxNotebook(wxNotebookPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(windows2c.new_wxNotebook,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows2c.new_wxNotebook,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -494,24 +480,24 @@ class wxSplitterEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetSashPosition(self):
-        val = windows2c.wxSplitterEvent_GetSashPosition(self.this)
+    def GetSashPosition(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterEvent_GetSashPosition,(self,) + _args, _kwargs)
         return val
-    def GetX(self):
-        val = windows2c.wxSplitterEvent_GetX(self.this)
+    def GetX(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterEvent_GetX,(self,) + _args, _kwargs)
         return val
-    def GetY(self):
-        val = windows2c.wxSplitterEvent_GetY(self.this)
+    def GetY(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterEvent_GetY,(self,) + _args, _kwargs)
         return val
-    def GetWindowBeingRemoved(self):
-        val = windows2c.wxSplitterEvent_GetWindowBeingRemoved(self.this)
-        val = wxWindowPtr(val)
+    def GetWindowBeingRemoved(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterEvent_GetWindowBeingRemoved,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
         return val
-    def SetSashPosition(self,arg0):
-        val = windows2c.wxSplitterEvent_SetSashPosition(self.this,arg0)
+    def SetSashPosition(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterEvent_SetSashPosition,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxSplitterEvent instance>"
+        return "<C wxSplitterEvent instance at %s>" % (self.this,)
 class wxSplitterEvent(wxSplitterEventPtr):
     def __init__(self,this):
         self.this = this
@@ -523,74 +509,64 @@ class wxSplitterWindowPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetBorderSize(self):
-        val = windows2c.wxSplitterWindow_GetBorderSize(self.this)
+    def GetBorderSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetBorderSize,(self,) + _args, _kwargs)
         return val
-    def GetMinimumPaneSize(self):
-        val = windows2c.wxSplitterWindow_GetMinimumPaneSize(self.this)
+    def GetMinimumPaneSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetMinimumPaneSize,(self,) + _args, _kwargs)
         return val
-    def GetSashPosition(self):
-        val = windows2c.wxSplitterWindow_GetSashPosition(self.this)
+    def GetSashPosition(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetSashPosition,(self,) + _args, _kwargs)
         return val
-    def GetSashSize(self):
-        val = windows2c.wxSplitterWindow_GetSashSize(self.this)
+    def GetSashSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetSashSize,(self,) + _args, _kwargs)
         return val
-    def GetSplitMode(self):
-        val = windows2c.wxSplitterWindow_GetSplitMode(self.this)
+    def GetSplitMode(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetSplitMode,(self,) + _args, _kwargs)
         return val
-    def GetWindow1(self):
-        val = windows2c.wxSplitterWindow_GetWindow1(self.this)
-        val = wxWindowPtr(val)
+    def GetWindow1(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetWindow1,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
         return val
-    def GetWindow2(self):
-        val = windows2c.wxSplitterWindow_GetWindow2(self.this)
-        val = wxWindowPtr(val)
+    def GetWindow2(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetWindow2,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
         return val
-    def Initialize(self,arg0):
-        val = windows2c.wxSplitterWindow_Initialize(self.this,arg0.this)
+    def Initialize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_Initialize,(self,) + _args, _kwargs)
         return val
-    def IsSplit(self):
-        val = windows2c.wxSplitterWindow_IsSplit(self.this)
+    def IsSplit(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_IsSplit,(self,) + _args, _kwargs)
         return val
-    def SetBorderSize(self,arg0):
-        val = windows2c.wxSplitterWindow_SetBorderSize(self.this,arg0)
+    def SetBorderSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SetBorderSize,(self,) + _args, _kwargs)
         return val
-    def SetSashPosition(self,arg0,*args):
-        val = apply(windows2c.wxSplitterWindow_SetSashPosition,(self.this,arg0,)+args)
+    def SetSashPosition(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SetSashPosition,(self,) + _args, _kwargs)
         return val
-    def SetSashSize(self,arg0):
-        val = windows2c.wxSplitterWindow_SetSashSize(self.this,arg0)
+    def SetSashSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SetSashSize,(self,) + _args, _kwargs)
         return val
-    def SetMinimumPaneSize(self,arg0):
-        val = windows2c.wxSplitterWindow_SetMinimumPaneSize(self.this,arg0)
+    def SetMinimumPaneSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SetMinimumPaneSize,(self,) + _args, _kwargs)
         return val
-    def SetSplitMode(self,arg0):
-        val = windows2c.wxSplitterWindow_SetSplitMode(self.this,arg0)
+    def SetSplitMode(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SetSplitMode,(self,) + _args, _kwargs)
         return val
-    def SplitHorizontally(self,arg0,arg1,*args):
-        val = apply(windows2c.wxSplitterWindow_SplitHorizontally,(self.this,arg0.this,arg1.this,)+args)
+    def SplitHorizontally(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SplitHorizontally,(self,) + _args, _kwargs)
         return val
-    def SplitVertically(self,arg0,arg1,*args):
-        val = apply(windows2c.wxSplitterWindow_SplitVertically,(self.this,arg0.this,arg1.this,)+args)
+    def SplitVertically(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SplitVertically,(self,) + _args, _kwargs)
         return val
-    def Unsplit(self,*args):
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        args = tuple(argl)
-        val = apply(windows2c.wxSplitterWindow_Unsplit,(self.this,)+args)
+    def Unsplit(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_Unsplit,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxSplitterWindow instance>"
+        return "<C wxSplitterWindow instance at %s>" % (self.this,)
 class wxSplitterWindow(wxSplitterWindowPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(windows2c.new_wxSplitterWindow,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows2c.new_wxSplitterWindow,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 

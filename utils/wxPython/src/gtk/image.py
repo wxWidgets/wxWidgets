@@ -8,35 +8,35 @@ class wxImageHandlerPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetName(self):
-        val = imagec.wxImageHandler_GetName(self.this)
+    def GetName(self, *_args, **_kwargs):
+        val = apply(imagec.wxImageHandler_GetName,(self,) + _args, _kwargs)
         return val
-    def GetExtension(self):
-        val = imagec.wxImageHandler_GetExtension(self.this)
+    def GetExtension(self, *_args, **_kwargs):
+        val = apply(imagec.wxImageHandler_GetExtension,(self,) + _args, _kwargs)
         return val
-    def GetType(self):
-        val = imagec.wxImageHandler_GetType(self.this)
+    def GetType(self, *_args, **_kwargs):
+        val = apply(imagec.wxImageHandler_GetType,(self,) + _args, _kwargs)
         return val
-    def GetMimeType(self):
-        val = imagec.wxImageHandler_GetMimeType(self.this)
+    def GetMimeType(self, *_args, **_kwargs):
+        val = apply(imagec.wxImageHandler_GetMimeType,(self,) + _args, _kwargs)
         return val
-    def SetName(self,arg0):
-        val = imagec.wxImageHandler_SetName(self.this,arg0)
+    def SetName(self, *_args, **_kwargs):
+        val = apply(imagec.wxImageHandler_SetName,(self,) + _args, _kwargs)
         return val
-    def SetExtension(self,arg0):
-        val = imagec.wxImageHandler_SetExtension(self.this,arg0)
+    def SetExtension(self, *_args, **_kwargs):
+        val = apply(imagec.wxImageHandler_SetExtension,(self,) + _args, _kwargs)
         return val
-    def SetType(self,arg0):
-        val = imagec.wxImageHandler_SetType(self.this,arg0)
+    def SetType(self, *_args, **_kwargs):
+        val = apply(imagec.wxImageHandler_SetType,(self,) + _args, _kwargs)
         return val
-    def SetMimeType(self,arg0):
-        val = imagec.wxImageHandler_SetMimeType(self.this,arg0)
+    def SetMimeType(self, *_args, **_kwargs):
+        val = apply(imagec.wxImageHandler_SetMimeType,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxImageHandler instance>"
+        return "<C wxImageHandler instance at %s>" % (self.this,)
 class wxImageHandler(wxImageHandlerPtr):
-    def __init__(self) :
-        self.this = imagec.new_wxImageHandler()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxImageHandler,_args,_kwargs)
         self.thisown = 1
 
 
@@ -47,10 +47,10 @@ class wxPNGHandlerPtr(wxImageHandlerPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxPNGHandler instance>"
+        return "<C wxPNGHandler instance at %s>" % (self.this,)
 class wxPNGHandler(wxPNGHandlerPtr):
-    def __init__(self) :
-        self.this = imagec.new_wxPNGHandler()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxPNGHandler,_args,_kwargs)
         self.thisown = 1
 
 
@@ -61,10 +61,10 @@ class wxJPEGHandlerPtr(wxImageHandlerPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxJPEGHandler instance>"
+        return "<C wxJPEGHandler instance at %s>" % (self.this,)
 class wxJPEGHandler(wxJPEGHandlerPtr):
-    def __init__(self) :
-        self.this = imagec.new_wxJPEGHandler()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxJPEGHandler,_args,_kwargs)
         self.thisown = 1
 
 
@@ -75,10 +75,10 @@ class wxBMPHandlerPtr(wxImageHandlerPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxBMPHandler instance>"
+        return "<C wxBMPHandler instance at %s>" % (self.this,)
 class wxBMPHandler(wxBMPHandlerPtr):
-    def __init__(self) :
-        self.this = imagec.new_wxBMPHandler()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxBMPHandler,_args,_kwargs)
         self.thisown = 1
 
 
@@ -89,10 +89,10 @@ class wxGIFHandlerPtr(wxImageHandlerPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxGIFHandler instance>"
+        return "<C wxGIFHandler instance at %s>" % (self.this,)
 class wxGIFHandler(wxGIFHandlerPtr):
-    def __init__(self) :
-        self.this = imagec.new_wxGIFHandler()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxGIFHandler,_args,_kwargs)
         self.thisown = 1
 
 
@@ -102,90 +102,88 @@ class wxImagePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self, imagec=imagec):
+    def __del__(self,imagec=imagec):
         if self.thisown == 1 :
-            imagec.delete_wxImage(self.this)
-    def ConvertToBitmap(self):
-        val = imagec.wxImage_ConvertToBitmap(self.this)
-        val = wxBitmapPtr(val)
-        val.thisown = 1
+            imagec.delete_wxImage(self)
+    def ConvertToBitmap(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_ConvertToBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) ; val.thisown = 1
         return val
-    def Create(self,arg0,arg1):
-        val = imagec.wxImage_Create(self.this,arg0,arg1)
+    def Create(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_Create,(self,) + _args, _kwargs)
         return val
-    def Destroy(self):
-        val = imagec.wxImage_Destroy(self.this)
+    def Destroy(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_Destroy,(self,) + _args, _kwargs)
         return val
-    def Scale(self,arg0,arg1):
-        val = imagec.wxImage_Scale(self.this,arg0,arg1)
-        val = wxImagePtr(val)
-        val.thisown = 1
+    def Scale(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_Scale,(self,) + _args, _kwargs)
+        if val: val = wxImagePtr(val) ; val.thisown = 1
         return val
-    def Rescale(self,arg0,arg1):
-        val = imagec.wxImage_Rescale(self.this,arg0,arg1)
+    def Rescale(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_Rescale,(self,) + _args, _kwargs)
         return val
-    def SetRGB(self,arg0,arg1,arg2,arg3,arg4):
-        val = imagec.wxImage_SetRGB(self.this,arg0,arg1,arg2,arg3,arg4)
+    def SetRGB(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_SetRGB,(self,) + _args, _kwargs)
         return val
-    def GetRed(self,arg0,arg1):
-        val = imagec.wxImage_GetRed(self.this,arg0,arg1)
+    def GetRed(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetRed,(self,) + _args, _kwargs)
         return val
-    def GetGreen(self,arg0,arg1):
-        val = imagec.wxImage_GetGreen(self.this,arg0,arg1)
+    def GetGreen(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetGreen,(self,) + _args, _kwargs)
         return val
-    def GetBlue(self,arg0,arg1):
-        val = imagec.wxImage_GetBlue(self.this,arg0,arg1)
+    def GetBlue(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetBlue,(self,) + _args, _kwargs)
         return val
-    def LoadFile(self,arg0,*args):
-        val = apply(imagec.wxImage_LoadFile,(self.this,arg0,)+args)
+    def LoadFile(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_LoadFile,(self,) + _args, _kwargs)
         return val
-    def LoadMimeFile(self,arg0,arg1):
-        val = imagec.wxImage_LoadMimeFile(self.this,arg0,arg1)
+    def LoadMimeFile(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_LoadMimeFile,(self,) + _args, _kwargs)
         return val
-    def SaveFile(self,arg0,arg1):
-        val = imagec.wxImage_SaveFile(self.this,arg0,arg1)
+    def SaveFile(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_SaveFile,(self,) + _args, _kwargs)
         return val
-    def SaveMimeFile(self,arg0,arg1):
-        val = imagec.wxImage_SaveMimeFile(self.this,arg0,arg1)
+    def SaveMimeFile(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_SaveMimeFile,(self,) + _args, _kwargs)
         return val
-    def Ok(self):
-        val = imagec.wxImage_Ok(self.this)
+    def Ok(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_Ok,(self,) + _args, _kwargs)
         return val
-    def GetWidth(self):
-        val = imagec.wxImage_GetWidth(self.this)
+    def GetWidth(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetWidth,(self,) + _args, _kwargs)
         return val
-    def GetHeight(self):
-        val = imagec.wxImage_GetHeight(self.this)
+    def GetHeight(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetHeight,(self,) + _args, _kwargs)
         return val
-    def GetData(self):
-        val = imagec.wxImage_GetData(self.this)
+    def GetData(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetData,(self,) + _args, _kwargs)
         return val
-    def SetData(self,arg0):
-        val = imagec.wxImage_SetData(self.this,arg0)
+    def SetData(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_SetData,(self,) + _args, _kwargs)
         return val
-    def SetMaskColour(self,arg0,arg1,arg2):
-        val = imagec.wxImage_SetMaskColour(self.this,arg0,arg1,arg2)
+    def SetMaskColour(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_SetMaskColour,(self,) + _args, _kwargs)
         return val
-    def GetMaskRed(self):
-        val = imagec.wxImage_GetMaskRed(self.this)
+    def GetMaskRed(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetMaskRed,(self,) + _args, _kwargs)
         return val
-    def GetMaskGreen(self):
-        val = imagec.wxImage_GetMaskGreen(self.this)
+    def GetMaskGreen(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetMaskGreen,(self,) + _args, _kwargs)
         return val
-    def GetMaskBlue(self):
-        val = imagec.wxImage_GetMaskBlue(self.this)
+    def GetMaskBlue(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetMaskBlue,(self,) + _args, _kwargs)
         return val
-    def SetMask(self,*args):
-        val = apply(imagec.wxImage_SetMask,(self.this,)+args)
+    def SetMask(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_SetMask,(self,) + _args, _kwargs)
         return val
-    def HasMask(self):
-        val = imagec.wxImage_HasMask(self.this)
+    def HasMask(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_HasMask,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxImage instance>"
+        return "<C wxImage instance at %s>" % (self.this,)
 class wxImage(wxImagePtr):
-    def __init__(self,arg0,*args) :
-        self.this = apply(imagec.new_wxImage,(arg0,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxImage,_args,_kwargs)
         self.thisown = 1
 
 
@@ -195,33 +193,27 @@ class wxImage(wxImagePtr):
 
 #-------------- FUNCTION WRAPPERS ------------------
 
-def wxNullImage():
-    val = imagec.wxNullImage()
-    val = wxImagePtr(val)
-    val.thisown = 1
+def wxNullImage(*_args, **_kwargs):
+    val = apply(imagec.wxNullImage,_args,_kwargs)
+    if val: val = wxImagePtr(val); val.thisown = 1
     return val
 
-def wxEmptyImage(arg0,arg1):
-    val = imagec.wxEmptyImage(arg0,arg1)
-    val = wxImagePtr(val)
-    val.thisown = 1
+def wxEmptyImage(*_args, **_kwargs):
+    val = apply(imagec.wxEmptyImage,_args,_kwargs)
+    if val: val = wxImagePtr(val); val.thisown = 1
     return val
 
-def wxImageFromMime(arg0,arg1):
-    val = imagec.wxImageFromMime(arg0,arg1)
-    val = wxImagePtr(val)
-    val.thisown = 1
+def wxImageFromMime(*_args, **_kwargs):
+    val = apply(imagec.wxImageFromMime,_args,_kwargs)
+    if val: val = wxImagePtr(val); val.thisown = 1
     return val
 
-def wxImageFromBitmap(arg0):
-    val = imagec.wxImageFromBitmap(arg0.this)
-    val = wxImagePtr(val)
-    val.thisown = 1
+def wxImageFromBitmap(*_args, **_kwargs):
+    val = apply(imagec.wxImageFromBitmap,_args,_kwargs)
+    if val: val = wxImagePtr(val); val.thisown = 1
     return val
 
-def wxImage_AddHandler(arg0):
-    val = imagec.wxImage_AddHandler(arg0.this)
-    return val
+wxImage_AddHandler = imagec.wxImage_AddHandler
 
 
 

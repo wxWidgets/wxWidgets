@@ -6,38 +6,38 @@ class wxEventPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetEventObject(self):
-        val = eventsc.wxEvent_GetEventObject(self.this)
+    def GetEventObject(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEvent_GetEventObject,(self,) + _args, _kwargs)
         return val
-    def GetEventType(self):
-        val = eventsc.wxEvent_GetEventType(self.this)
+    def GetEventType(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEvent_GetEventType,(self,) + _args, _kwargs)
         return val
-    def GetId(self):
-        val = eventsc.wxEvent_GetId(self.this)
+    def GetId(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEvent_GetId,(self,) + _args, _kwargs)
         return val
-    def GetSkipped(self):
-        val = eventsc.wxEvent_GetSkipped(self.this)
+    def GetSkipped(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEvent_GetSkipped,(self,) + _args, _kwargs)
         return val
-    def GetTimestamp(self):
-        val = eventsc.wxEvent_GetTimestamp(self.this)
+    def GetTimestamp(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEvent_GetTimestamp,(self,) + _args, _kwargs)
         return val
-    def SetEventObject(self,arg0):
-        val = eventsc.wxEvent_SetEventObject(self.this,arg0)
+    def SetEventObject(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEvent_SetEventObject,(self,) + _args, _kwargs)
         return val
-    def SetEventType(self,arg0):
-        val = eventsc.wxEvent_SetEventType(self.this,arg0)
+    def SetEventType(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEvent_SetEventType,(self,) + _args, _kwargs)
         return val
-    def SetId(self,arg0):
-        val = eventsc.wxEvent_SetId(self.this,arg0)
+    def SetId(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEvent_SetId,(self,) + _args, _kwargs)
         return val
-    def SetTimestamp(self,arg0):
-        val = eventsc.wxEvent_SetTimestamp(self.this,arg0)
+    def SetTimestamp(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEvent_SetTimestamp,(self,) + _args, _kwargs)
         return val
-    def Skip(self,*args):
-        val = apply(eventsc.wxEvent_Skip,(self.this,)+args)
+    def Skip(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEvent_Skip,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxEvent instance>"
+        return "<C wxEvent instance at %s>" % (self.this,)
 class wxEvent(wxEventPtr):
     def __init__(self,this):
         self.this = this
@@ -49,13 +49,12 @@ class wxSizeEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetSize(self):
-        val = eventsc.wxSizeEvent_GetSize(self.this)
-        val = wxSizePtr(val)
-        val.thisown = 1
+    def GetSize(self, *_args, **_kwargs):
+        val = apply(eventsc.wxSizeEvent_GetSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def __repr__(self):
-        return "<C wxSizeEvent instance>"
+        return "<C wxSizeEvent instance at %s>" % (self.this,)
 class wxSizeEvent(wxSizeEventPtr):
     def __init__(self,this):
         self.this = this
@@ -67,26 +66,26 @@ class wxCloseEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def SetLoggingOff(self,arg0):
-        val = eventsc.wxCloseEvent_SetLoggingOff(self.this,arg0)
+    def SetLoggingOff(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCloseEvent_SetLoggingOff,(self,) + _args, _kwargs)
         return val
-    def GetLoggingOff(self):
-        val = eventsc.wxCloseEvent_GetLoggingOff(self.this)
+    def GetLoggingOff(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCloseEvent_GetLoggingOff,(self,) + _args, _kwargs)
         return val
-    def Veto(self,*args):
-        val = apply(eventsc.wxCloseEvent_Veto,(self.this,)+args)
+    def Veto(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCloseEvent_Veto,(self,) + _args, _kwargs)
         return val
-    def CanVeto(self):
-        val = eventsc.wxCloseEvent_CanVeto(self.this)
+    def CanVeto(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCloseEvent_CanVeto,(self,) + _args, _kwargs)
         return val
-    def GetVeto(self):
-        val = eventsc.wxCloseEvent_GetVeto(self.this)
+    def GetVeto(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCloseEvent_GetVeto,(self,) + _args, _kwargs)
         return val
-    def SetCanVeto(self,arg0):
-        val = eventsc.wxCloseEvent_SetCanVeto(self.this,arg0)
+    def SetCanVeto(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCloseEvent_SetCanVeto,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxCloseEvent instance>"
+        return "<C wxCloseEvent instance at %s>" % (self.this,)
 class wxCloseEvent(wxCloseEventPtr):
     def __init__(self,this):
         self.this = this
@@ -98,26 +97,26 @@ class wxCommandEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Checked(self):
-        val = eventsc.wxCommandEvent_Checked(self.this)
+    def Checked(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCommandEvent_Checked,(self,) + _args, _kwargs)
         return val
-    def GetExtraLong(self):
-        val = eventsc.wxCommandEvent_GetExtraLong(self.this)
+    def GetExtraLong(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCommandEvent_GetExtraLong,(self,) + _args, _kwargs)
         return val
-    def GetInt(self):
-        val = eventsc.wxCommandEvent_GetInt(self.this)
+    def GetInt(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCommandEvent_GetInt,(self,) + _args, _kwargs)
         return val
-    def GetSelection(self):
-        val = eventsc.wxCommandEvent_GetSelection(self.this)
+    def GetSelection(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCommandEvent_GetSelection,(self,) + _args, _kwargs)
         return val
-    def GetString(self):
-        val = eventsc.wxCommandEvent_GetString(self.this)
+    def GetString(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCommandEvent_GetString,(self,) + _args, _kwargs)
         return val
-    def IsSelection(self):
-        val = eventsc.wxCommandEvent_IsSelection(self.this)
+    def IsSelection(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCommandEvent_IsSelection,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxCommandEvent instance>"
+        return "<C wxCommandEvent instance at %s>" % (self.this,)
 class wxCommandEvent(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
@@ -129,14 +128,14 @@ class wxScrollEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetOrientation(self):
-        val = eventsc.wxScrollEvent_GetOrientation(self.this)
+    def GetOrientation(self, *_args, **_kwargs):
+        val = apply(eventsc.wxScrollEvent_GetOrientation,(self,) + _args, _kwargs)
         return val
-    def GetPosition(self):
-        val = eventsc.wxScrollEvent_GetPosition(self.this)
+    def GetPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxScrollEvent_GetPosition,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxScrollEvent instance>"
+        return "<C wxScrollEvent instance at %s>" % (self.this,)
 class wxScrollEvent(wxScrollEventPtr):
     def __init__(self,this):
         self.this = this
@@ -149,7 +148,7 @@ class wxSpinEventPtr(wxScrollEventPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxSpinEvent instance>"
+        return "<C wxSpinEvent instance at %s>" % (self.this,)
 class wxSpinEvent(wxSpinEventPtr):
     def __init__(self,this):
         self.this = this
@@ -161,105 +160,103 @@ class wxMouseEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def IsButton(self):
-        val = eventsc.wxMouseEvent_IsButton(self.this)
+    def IsButton(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_IsButton,(self,) + _args, _kwargs)
         return val
-    def ButtonDown(self,*args):
-        val = apply(eventsc.wxMouseEvent_ButtonDown,(self.this,)+args)
+    def ButtonDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_ButtonDown,(self,) + _args, _kwargs)
         return val
-    def ButtonDClick(self,*args):
-        val = apply(eventsc.wxMouseEvent_ButtonDClick,(self.this,)+args)
+    def ButtonDClick(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_ButtonDClick,(self,) + _args, _kwargs)
         return val
-    def ButtonUp(self,*args):
-        val = apply(eventsc.wxMouseEvent_ButtonUp,(self.this,)+args)
+    def ButtonUp(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_ButtonUp,(self,) + _args, _kwargs)
         return val
-    def Button(self,arg0):
-        val = eventsc.wxMouseEvent_Button(self.this,arg0)
+    def Button(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_Button,(self,) + _args, _kwargs)
         return val
-    def ButtonIsDown(self,arg0):
-        val = eventsc.wxMouseEvent_ButtonIsDown(self.this,arg0)
+    def ButtonIsDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_ButtonIsDown,(self,) + _args, _kwargs)
         return val
-    def ControlDown(self):
-        val = eventsc.wxMouseEvent_ControlDown(self.this)
+    def ControlDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_ControlDown,(self,) + _args, _kwargs)
         return val
-    def MetaDown(self):
-        val = eventsc.wxMouseEvent_MetaDown(self.this)
+    def MetaDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_MetaDown,(self,) + _args, _kwargs)
         return val
-    def AltDown(self):
-        val = eventsc.wxMouseEvent_AltDown(self.this)
+    def AltDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_AltDown,(self,) + _args, _kwargs)
         return val
-    def ShiftDown(self):
-        val = eventsc.wxMouseEvent_ShiftDown(self.this)
+    def ShiftDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_ShiftDown,(self,) + _args, _kwargs)
         return val
-    def LeftDown(self):
-        val = eventsc.wxMouseEvent_LeftDown(self.this)
+    def LeftDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_LeftDown,(self,) + _args, _kwargs)
         return val
-    def MiddleDown(self):
-        val = eventsc.wxMouseEvent_MiddleDown(self.this)
+    def MiddleDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_MiddleDown,(self,) + _args, _kwargs)
         return val
-    def RightDown(self):
-        val = eventsc.wxMouseEvent_RightDown(self.this)
+    def RightDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_RightDown,(self,) + _args, _kwargs)
         return val
-    def LeftUp(self):
-        val = eventsc.wxMouseEvent_LeftUp(self.this)
+    def LeftUp(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_LeftUp,(self,) + _args, _kwargs)
         return val
-    def MiddleUp(self):
-        val = eventsc.wxMouseEvent_MiddleUp(self.this)
+    def MiddleUp(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_MiddleUp,(self,) + _args, _kwargs)
         return val
-    def RightUp(self):
-        val = eventsc.wxMouseEvent_RightUp(self.this)
+    def RightUp(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_RightUp,(self,) + _args, _kwargs)
         return val
-    def LeftDClick(self):
-        val = eventsc.wxMouseEvent_LeftDClick(self.this)
+    def LeftDClick(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_LeftDClick,(self,) + _args, _kwargs)
         return val
-    def MiddleDClick(self):
-        val = eventsc.wxMouseEvent_MiddleDClick(self.this)
+    def MiddleDClick(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_MiddleDClick,(self,) + _args, _kwargs)
         return val
-    def RightDClick(self):
-        val = eventsc.wxMouseEvent_RightDClick(self.this)
+    def RightDClick(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_RightDClick,(self,) + _args, _kwargs)
         return val
-    def LeftIsDown(self):
-        val = eventsc.wxMouseEvent_LeftIsDown(self.this)
+    def LeftIsDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_LeftIsDown,(self,) + _args, _kwargs)
         return val
-    def MiddleIsDown(self):
-        val = eventsc.wxMouseEvent_MiddleIsDown(self.this)
+    def MiddleIsDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_MiddleIsDown,(self,) + _args, _kwargs)
         return val
-    def RightIsDown(self):
-        val = eventsc.wxMouseEvent_RightIsDown(self.this)
+    def RightIsDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_RightIsDown,(self,) + _args, _kwargs)
         return val
-    def Dragging(self):
-        val = eventsc.wxMouseEvent_Dragging(self.this)
+    def Dragging(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_Dragging,(self,) + _args, _kwargs)
         return val
-    def Moving(self):
-        val = eventsc.wxMouseEvent_Moving(self.this)
+    def Moving(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_Moving,(self,) + _args, _kwargs)
         return val
-    def Entering(self):
-        val = eventsc.wxMouseEvent_Entering(self.this)
+    def Entering(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_Entering,(self,) + _args, _kwargs)
         return val
-    def Leaving(self):
-        val = eventsc.wxMouseEvent_Leaving(self.this)
+    def Leaving(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_Leaving,(self,) + _args, _kwargs)
         return val
-    def Position(self):
-        val = eventsc.wxMouseEvent_Position(self.this)
+    def Position(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_Position,(self,) + _args, _kwargs)
         return val
-    def GetPosition(self):
-        val = eventsc.wxMouseEvent_GetPosition(self.this)
-        val = wxPointPtr(val)
-        val.thisown = 1
+    def GetPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_GetPosition,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
-    def GetLogicalPosition(self,arg0):
-        val = eventsc.wxMouseEvent_GetLogicalPosition(self.this,arg0.this)
-        val = wxPointPtr(val)
-        val.thisown = 1
+    def GetLogicalPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_GetLogicalPosition,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
-    def GetX(self):
-        val = eventsc.wxMouseEvent_GetX(self.this)
+    def GetX(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_GetX,(self,) + _args, _kwargs)
         return val
-    def GetY(self):
-        val = eventsc.wxMouseEvent_GetY(self.this)
+    def GetY(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseEvent_GetY,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxMouseEvent instance>"
+        return "<C wxMouseEvent instance at %s>" % (self.this,)
 class wxMouseEvent(wxMouseEventPtr):
     def __init__(self,this):
         self.this = this
@@ -271,23 +268,23 @@ class wxKeyEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def ControlDown(self):
-        val = eventsc.wxKeyEvent_ControlDown(self.this)
+    def ControlDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_ControlDown,(self,) + _args, _kwargs)
         return val
-    def MetaDown(self):
-        val = eventsc.wxKeyEvent_MetaDown(self.this)
+    def MetaDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_MetaDown,(self,) + _args, _kwargs)
         return val
-    def AltDown(self):
-        val = eventsc.wxKeyEvent_AltDown(self.this)
+    def AltDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_AltDown,(self,) + _args, _kwargs)
         return val
-    def ShiftDown(self):
-        val = eventsc.wxKeyEvent_ShiftDown(self.this)
+    def ShiftDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_ShiftDown,(self,) + _args, _kwargs)
         return val
-    def KeyCode(self):
-        val = eventsc.wxKeyEvent_KeyCode(self.this)
+    def KeyCode(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_KeyCode,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxKeyEvent instance>"
+        return "<C wxKeyEvent instance at %s>" % (self.this,)
 class wxKeyEvent(wxKeyEventPtr):
     def __init__(self,this):
         self.this = this
@@ -299,13 +296,12 @@ class wxMoveEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetPosition(self):
-        val = eventsc.wxMoveEvent_GetPosition(self.this)
-        val = wxPointPtr(val)
-        val.thisown = 1
+    def GetPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMoveEvent_GetPosition,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
     def __repr__(self):
-        return "<C wxMoveEvent instance>"
+        return "<C wxMoveEvent instance at %s>" % (self.this,)
 class wxMoveEvent(wxMoveEventPtr):
     def __init__(self,this):
         self.this = this
@@ -318,7 +314,7 @@ class wxPaintEventPtr(wxEventPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxPaintEvent instance>"
+        return "<C wxPaintEvent instance at %s>" % (self.this,)
 class wxPaintEvent(wxPaintEventPtr):
     def __init__(self,this):
         self.this = this
@@ -330,12 +326,12 @@ class wxEraseEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetDC(self):
-        val = eventsc.wxEraseEvent_GetDC(self.this)
-        val = wxDCPtr(val)
+    def GetDC(self, *_args, **_kwargs):
+        val = apply(eventsc.wxEraseEvent_GetDC,(self,) + _args, _kwargs)
+        if val: val = wxDCPtr(val) 
         return val
     def __repr__(self):
-        return "<C wxEraseEvent instance>"
+        return "<C wxEraseEvent instance at %s>" % (self.this,)
 class wxEraseEvent(wxEraseEventPtr):
     def __init__(self,this):
         self.this = this
@@ -348,7 +344,7 @@ class wxFocusEventPtr(wxEventPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxFocusEvent instance>"
+        return "<C wxFocusEvent instance at %s>" % (self.this,)
 class wxFocusEvent(wxFocusEventPtr):
     def __init__(self,this):
         self.this = this
@@ -360,11 +356,11 @@ class wxActivateEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetActive(self):
-        val = eventsc.wxActivateEvent_GetActive(self.this)
+    def GetActive(self, *_args, **_kwargs):
+        val = apply(eventsc.wxActivateEvent_GetActive,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxActivateEvent instance>"
+        return "<C wxActivateEvent instance at %s>" % (self.this,)
 class wxActivateEvent(wxActivateEventPtr):
     def __init__(self,this):
         self.this = this
@@ -377,7 +373,7 @@ class wxInitDialogEventPtr(wxEventPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxInitDialogEvent instance>"
+        return "<C wxInitDialogEvent instance at %s>" % (self.this,)
 class wxInitDialogEvent(wxInitDialogEventPtr):
     def __init__(self,this):
         self.this = this
@@ -389,11 +385,11 @@ class wxMenuEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetMenuId(self):
-        val = eventsc.wxMenuEvent_GetMenuId(self.this)
+    def GetMenuId(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMenuEvent_GetMenuId,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxMenuEvent instance>"
+        return "<C wxMenuEvent instance at %s>" % (self.this,)
 class wxMenuEvent(wxMenuEventPtr):
     def __init__(self,this):
         self.this = this
@@ -405,14 +401,14 @@ class wxShowEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def SetShow(self,arg0):
-        val = eventsc.wxShowEvent_SetShow(self.this,arg0)
+    def SetShow(self, *_args, **_kwargs):
+        val = apply(eventsc.wxShowEvent_SetShow,(self,) + _args, _kwargs)
         return val
-    def GetShow(self):
-        val = eventsc.wxShowEvent_GetShow(self.this)
+    def GetShow(self, *_args, **_kwargs):
+        val = apply(eventsc.wxShowEvent_GetShow,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxShowEvent instance>"
+        return "<C wxShowEvent instance at %s>" % (self.this,)
 class wxShowEvent(wxShowEventPtr):
     def __init__(self,this):
         self.this = this
@@ -425,7 +421,7 @@ class wxIconizeEventPtr(wxEventPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxIconizeEvent instance>"
+        return "<C wxIconizeEvent instance at %s>" % (self.this,)
 class wxIconizeEvent(wxIconizeEventPtr):
     def __init__(self,this):
         self.this = this
@@ -438,7 +434,7 @@ class wxMaximizeEventPtr(wxEventPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxMaximizeEvent instance>"
+        return "<C wxMaximizeEvent instance at %s>" % (self.this,)
 class wxMaximizeEvent(wxMaximizeEventPtr):
     def __init__(self,this):
         self.this = this
@@ -450,58 +446,57 @@ class wxJoystickEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetPosition(self):
-        val = eventsc.wxJoystickEvent_GetPosition(self.this)
-        val = wxPointPtr(val)
-        val.thisown = 1
+    def GetPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_GetPosition,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
-    def GetZPosition(self):
-        val = eventsc.wxJoystickEvent_GetZPosition(self.this)
+    def GetZPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_GetZPosition,(self,) + _args, _kwargs)
         return val
-    def GetButtonState(self):
-        val = eventsc.wxJoystickEvent_GetButtonState(self.this)
+    def GetButtonState(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_GetButtonState,(self,) + _args, _kwargs)
         return val
-    def GetButtonChange(self):
-        val = eventsc.wxJoystickEvent_GetButtonChange(self.this)
+    def GetButtonChange(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_GetButtonChange,(self,) + _args, _kwargs)
         return val
-    def GetJoystick(self):
-        val = eventsc.wxJoystickEvent_GetJoystick(self.this)
+    def GetJoystick(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_GetJoystick,(self,) + _args, _kwargs)
         return val
-    def SetJoystick(self,arg0):
-        val = eventsc.wxJoystickEvent_SetJoystick(self.this,arg0)
+    def SetJoystick(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_SetJoystick,(self,) + _args, _kwargs)
         return val
-    def SetButtonState(self,arg0):
-        val = eventsc.wxJoystickEvent_SetButtonState(self.this,arg0)
+    def SetButtonState(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_SetButtonState,(self,) + _args, _kwargs)
         return val
-    def SetButtonChange(self,arg0):
-        val = eventsc.wxJoystickEvent_SetButtonChange(self.this,arg0)
+    def SetButtonChange(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_SetButtonChange,(self,) + _args, _kwargs)
         return val
-    def SetPosition(self,arg0):
-        val = eventsc.wxJoystickEvent_SetPosition(self.this,arg0.this)
+    def SetPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_SetPosition,(self,) + _args, _kwargs)
         return val
-    def SetZPosition(self,arg0):
-        val = eventsc.wxJoystickEvent_SetZPosition(self.this,arg0)
+    def SetZPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_SetZPosition,(self,) + _args, _kwargs)
         return val
-    def IsButton(self):
-        val = eventsc.wxJoystickEvent_IsButton(self.this)
+    def IsButton(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_IsButton,(self,) + _args, _kwargs)
         return val
-    def IsMove(self):
-        val = eventsc.wxJoystickEvent_IsMove(self.this)
+    def IsMove(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_IsMove,(self,) + _args, _kwargs)
         return val
-    def IsZMove(self):
-        val = eventsc.wxJoystickEvent_IsZMove(self.this)
+    def IsZMove(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_IsZMove,(self,) + _args, _kwargs)
         return val
-    def ButtonDown(self,*args):
-        val = apply(eventsc.wxJoystickEvent_ButtonDown,(self.this,)+args)
+    def ButtonDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_ButtonDown,(self,) + _args, _kwargs)
         return val
-    def ButtonUp(self,*args):
-        val = apply(eventsc.wxJoystickEvent_ButtonUp,(self.this,)+args)
+    def ButtonUp(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_ButtonUp,(self,) + _args, _kwargs)
         return val
-    def ButtonIsDown(self,*args):
-        val = apply(eventsc.wxJoystickEvent_ButtonIsDown,(self.this,)+args)
+    def ButtonIsDown(self, *_args, **_kwargs):
+        val = apply(eventsc.wxJoystickEvent_ButtonIsDown,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxJoystickEvent instance>"
+        return "<C wxJoystickEvent instance at %s>" % (self.this,)
 class wxJoystickEvent(wxJoystickEventPtr):
     def __init__(self,this):
         self.this = this
@@ -513,19 +508,18 @@ class wxDropFilesEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetPosition(self):
-        val = eventsc.wxDropFilesEvent_GetPosition(self.this)
-        val = wxPointPtr(val)
-        val.thisown = 1
+    def GetPosition(self, *_args, **_kwargs):
+        val = apply(eventsc.wxDropFilesEvent_GetPosition,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
-    def GetNumberOfFiles(self):
-        val = eventsc.wxDropFilesEvent_GetNumberOfFiles(self.this)
+    def GetNumberOfFiles(self, *_args, **_kwargs):
+        val = apply(eventsc.wxDropFilesEvent_GetNumberOfFiles,(self,) + _args, _kwargs)
         return val
-    def GetFiles(self):
-        val = eventsc.wxDropFilesEvent_GetFiles(self.this)
+    def GetFiles(self, *_args, **_kwargs):
+        val = apply(eventsc.wxDropFilesEvent_GetFiles,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxDropFilesEvent instance>"
+        return "<C wxDropFilesEvent instance at %s>" % (self.this,)
 class wxDropFilesEvent(wxDropFilesEventPtr):
     def __init__(self,this):
         self.this = this
@@ -537,14 +531,14 @@ class wxIdleEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def RequestMore(self,*args):
-        val = apply(eventsc.wxIdleEvent_RequestMore,(self.this,)+args)
+    def RequestMore(self, *_args, **_kwargs):
+        val = apply(eventsc.wxIdleEvent_RequestMore,(self,) + _args, _kwargs)
         return val
-    def MoreRequested(self):
-        val = eventsc.wxIdleEvent_MoreRequested(self.this)
+    def MoreRequested(self, *_args, **_kwargs):
+        val = apply(eventsc.wxIdleEvent_MoreRequested,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxIdleEvent instance>"
+        return "<C wxIdleEvent instance at %s>" % (self.this,)
 class wxIdleEvent(wxIdleEventPtr):
     def __init__(self,this):
         self.this = this
@@ -556,35 +550,35 @@ class wxUpdateUIEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetChecked(self):
-        val = eventsc.wxUpdateUIEvent_GetChecked(self.this)
+    def GetChecked(self, *_args, **_kwargs):
+        val = apply(eventsc.wxUpdateUIEvent_GetChecked,(self,) + _args, _kwargs)
         return val
-    def GetEnabled(self):
-        val = eventsc.wxUpdateUIEvent_GetEnabled(self.this)
+    def GetEnabled(self, *_args, **_kwargs):
+        val = apply(eventsc.wxUpdateUIEvent_GetEnabled,(self,) + _args, _kwargs)
         return val
-    def GetText(self):
-        val = eventsc.wxUpdateUIEvent_GetText(self.this)
+    def GetText(self, *_args, **_kwargs):
+        val = apply(eventsc.wxUpdateUIEvent_GetText,(self,) + _args, _kwargs)
         return val
-    def GetSetText(self):
-        val = eventsc.wxUpdateUIEvent_GetSetText(self.this)
+    def GetSetText(self, *_args, **_kwargs):
+        val = apply(eventsc.wxUpdateUIEvent_GetSetText,(self,) + _args, _kwargs)
         return val
-    def GetSetChecked(self):
-        val = eventsc.wxUpdateUIEvent_GetSetChecked(self.this)
+    def GetSetChecked(self, *_args, **_kwargs):
+        val = apply(eventsc.wxUpdateUIEvent_GetSetChecked,(self,) + _args, _kwargs)
         return val
-    def GetSetEnabled(self):
-        val = eventsc.wxUpdateUIEvent_GetSetEnabled(self.this)
+    def GetSetEnabled(self, *_args, **_kwargs):
+        val = apply(eventsc.wxUpdateUIEvent_GetSetEnabled,(self,) + _args, _kwargs)
         return val
-    def Check(self,arg0):
-        val = eventsc.wxUpdateUIEvent_Check(self.this,arg0)
+    def Check(self, *_args, **_kwargs):
+        val = apply(eventsc.wxUpdateUIEvent_Check,(self,) + _args, _kwargs)
         return val
-    def Enable(self,arg0):
-        val = eventsc.wxUpdateUIEvent_Enable(self.this,arg0)
+    def Enable(self, *_args, **_kwargs):
+        val = apply(eventsc.wxUpdateUIEvent_Enable,(self,) + _args, _kwargs)
         return val
-    def SetText(self,arg0):
-        val = eventsc.wxUpdateUIEvent_SetText(self.this,arg0)
+    def SetText(self, *_args, **_kwargs):
+        val = apply(eventsc.wxUpdateUIEvent_SetText,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxUpdateUIEvent instance>"
+        return "<C wxUpdateUIEvent instance at %s>" % (self.this,)
 class wxUpdateUIEvent(wxUpdateUIEventPtr):
     def __init__(self,this):
         self.this = this
@@ -597,7 +591,7 @@ class wxSysColourChangedEventPtr(wxEventPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxSysColourChangedEvent instance>"
+        return "<C wxSysColourChangedEvent instance at %s>" % (self.this,)
 class wxSysColourChangedEvent(wxSysColourChangedEventPtr):
     def __init__(self,this):
         self.this = this
@@ -609,20 +603,20 @@ class wxPyEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self, eventsc=eventsc):
+    def __del__(self,eventsc=eventsc):
         if self.thisown == 1 :
-            eventsc.delete_wxPyEvent(self.this)
-    def SetUserData(self,arg0):
-        val = eventsc.wxPyEvent_SetUserData(self.this,arg0)
+            eventsc.delete_wxPyEvent(self)
+    def SetUserData(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPyEvent_SetUserData,(self,) + _args, _kwargs)
         return val
-    def GetUserData(self):
-        val = eventsc.wxPyEvent_GetUserData(self.this)
+    def GetUserData(self, *_args, **_kwargs):
+        val = apply(eventsc.wxPyEvent_GetUserData,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyEvent instance>"
+        return "<C wxPyEvent instance at %s>" % (self.this,)
 class wxPyEvent(wxPyEventPtr):
-    def __init__(self,*args) :
-        self.this = apply(eventsc.new_wxPyEvent,()+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxPyEvent,_args,_kwargs)
         self.thisown = 1
 
 
@@ -632,14 +626,14 @@ class wxNotifyEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def IsAllowed(self):
-        val = eventsc.wxNotifyEvent_IsAllowed(self.this)
+    def IsAllowed(self, *_args, **_kwargs):
+        val = apply(eventsc.wxNotifyEvent_IsAllowed,(self,) + _args, _kwargs)
         return val
-    def Veto(self):
-        val = eventsc.wxNotifyEvent_Veto(self.this)
+    def Veto(self, *_args, **_kwargs):
+        val = apply(eventsc.wxNotifyEvent_Veto,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxNotifyEvent instance>"
+        return "<C wxNotifyEvent instance at %s>" % (self.this,)
 class wxNotifyEvent(wxNotifyEventPtr):
     def __init__(self,this):
         self.this = this

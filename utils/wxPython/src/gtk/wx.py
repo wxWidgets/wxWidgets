@@ -34,74 +34,73 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self, wxc=wxc):
+    def __del__(self,wxc=wxc):
         if self.thisown == 1 :
-            wxc.delete_wxPyApp(self.this)
-    def GetAppName(self):
-        val = wxc.wxPyApp_GetAppName(self.this)
+            wxc.delete_wxPyApp(self)
+    def GetAppName(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_GetAppName,(self,) + _args, _kwargs)
         return val
-    def GetClassName(self):
-        val = wxc.wxPyApp_GetClassName(self.this)
+    def GetClassName(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_GetClassName,(self,) + _args, _kwargs)
         return val
-    def GetExitOnFrameDelete(self):
-        val = wxc.wxPyApp_GetExitOnFrameDelete(self.this)
+    def GetExitOnFrameDelete(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_GetExitOnFrameDelete,(self,) + _args, _kwargs)
         return val
-    def GetPrintMode(self):
-        val = wxc.wxPyApp_GetPrintMode(self.this)
+    def GetPrintMode(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_GetPrintMode,(self,) + _args, _kwargs)
         return val
-    def GetTopWindow(self):
-        val = wxc.wxPyApp_GetTopWindow(self.this)
-        val = wxWindowPtr(val)
+    def GetTopWindow(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_GetTopWindow,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
         return val
-    def GetVendorName(self):
-        val = wxc.wxPyApp_GetVendorName(self.this)
+    def GetVendorName(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_GetVendorName,(self,) + _args, _kwargs)
         return val
-    def Dispatch(self):
-        val = wxc.wxPyApp_Dispatch(self.this)
+    def Dispatch(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_Dispatch,(self,) + _args, _kwargs)
         return val
-    def ExitMainLoop(self):
-        val = wxc.wxPyApp_ExitMainLoop(self.this)
+    def ExitMainLoop(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_ExitMainLoop,(self,) + _args, _kwargs)
         return val
-    def Initialized(self):
-        val = wxc.wxPyApp_Initialized(self.this)
+    def Initialized(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_Initialized,(self,) + _args, _kwargs)
         return val
-    def MainLoop(self):
-        val = wxc.wxPyApp_MainLoop(self.this)
+    def MainLoop(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_MainLoop,(self,) + _args, _kwargs)
         return val
-    def Pending(self):
-        val = wxc.wxPyApp_Pending(self.this)
+    def Pending(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_Pending,(self,) + _args, _kwargs)
         return val
-    def ProcessIdle(self):
-        val = wxc.wxPyApp_ProcessIdle(self.this)
+    def ProcessIdle(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_ProcessIdle,(self,) + _args, _kwargs)
         return val
-    def SetAppName(self,arg0):
-        val = wxc.wxPyApp_SetAppName(self.this,arg0)
+    def SetAppName(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_SetAppName,(self,) + _args, _kwargs)
         return val
-    def SetClassName(self,arg0):
-        val = wxc.wxPyApp_SetClassName(self.this,arg0)
+    def SetClassName(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_SetClassName,(self,) + _args, _kwargs)
         return val
-    def SetExitOnFrameDelete(self,arg0):
-        val = wxc.wxPyApp_SetExitOnFrameDelete(self.this,arg0)
+    def SetExitOnFrameDelete(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_SetExitOnFrameDelete,(self,) + _args, _kwargs)
         return val
-    def SetPrintMode(self,arg0):
-        val = wxc.wxPyApp_SetPrintMode(self.this,arg0)
+    def SetPrintMode(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_SetPrintMode,(self,) + _args, _kwargs)
         return val
-    def SetTopWindow(self,arg0):
-        val = wxc.wxPyApp_SetTopWindow(self.this,arg0.this)
+    def SetTopWindow(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_SetTopWindow,(self,) + _args, _kwargs)
         return val
-    def SetVendorName(self,arg0):
-        val = wxc.wxPyApp_SetVendorName(self.this,arg0)
+    def SetVendorName(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_SetVendorName,(self,) + _args, _kwargs)
         return val
-    def GetStdIcon(self,arg0):
-        val = wxc.wxPyApp_GetStdIcon(self.this,arg0)
-        val = wxIconPtr(val)
-        val.thisown = 1
+    def GetStdIcon(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_GetStdIcon,(self,) + _args, _kwargs)
+        if val: val = wxIconPtr(val) ; val.thisown = 1
         return val
     def __repr__(self):
-        return "<C wxPyApp instance>"
+        return "<C wxPyApp instance at %s>" % (self.this,)
 class wxPyApp(wxPyAppPtr):
-    def __init__(self) :
-        self.this = wxc.new_wxPyApp()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(wxc.new_wxPyApp,_args,_kwargs)
         self.thisown = 1
 
 
@@ -111,14 +110,14 @@ class __wxPyCleanupPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self, wxc=wxc):
+    def __del__(self,wxc=wxc):
         if self.thisown == 1 :
-            wxc.delete___wxPyCleanup(self.this)
+            wxc.delete___wxPyCleanup(self)
     def __repr__(self):
-        return "<C __wxPyCleanup instance>"
+        return "<C __wxPyCleanup instance at %s>" % (self.this,)
 class __wxPyCleanup(__wxPyCleanupPtr):
-    def __init__(self) :
-        self.this = wxc.new___wxPyCleanup()
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(wxc.new___wxPyCleanup,_args,_kwargs)
         self.thisown = 1
 
 

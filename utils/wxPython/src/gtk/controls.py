@@ -13,14 +13,14 @@ class wxControlPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetLabel(self):
-        val = controlsc.wxControl_GetLabel(self.this)
+    def GetLabel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControl_GetLabel,(self,) + _args, _kwargs)
         return val
-    def SetLabel(self,arg0):
-        val = controlsc.wxControl_SetLabel(self.this,arg0)
+    def SetLabel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControl_SetLabel,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxControl instance>"
+        return "<C wxControl instance at %s>" % (self.this,)
 class wxControl(wxControlPtr):
     def __init__(self,this):
         self.this = this
@@ -32,20 +32,14 @@ class wxButtonPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def SetDefault(self):
-        val = controlsc.wxButton_SetDefault(self.this)
+    def SetDefault(self, *_args, **_kwargs):
+        val = apply(controlsc.wxButton_SetDefault,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxButton instance>"
+        return "<C wxButton instance at %s>" % (self.this,)
 class wxButton(wxButtonPtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxButton,(arg0.this,arg1,arg2,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxButton,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -56,45 +50,39 @@ class wxBitmapButtonPtr(wxButtonPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetBitmapLabel(self):
-        val = controlsc.wxBitmapButton_GetBitmapLabel(self.this)
-        val = wxBitmapPtr(val)
+    def GetBitmapLabel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_GetBitmapLabel,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
         return val
-    def GetBitmapDisabled(self):
-        val = controlsc.wxBitmapButton_GetBitmapDisabled(self.this)
-        val = wxBitmapPtr(val)
+    def GetBitmapDisabled(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_GetBitmapDisabled,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
         return val
-    def GetBitmapFocus(self):
-        val = controlsc.wxBitmapButton_GetBitmapFocus(self.this)
-        val = wxBitmapPtr(val)
+    def GetBitmapFocus(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_GetBitmapFocus,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
         return val
-    def GetBitmapSelected(self):
-        val = controlsc.wxBitmapButton_GetBitmapSelected(self.this)
-        val = wxBitmapPtr(val)
+    def GetBitmapSelected(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_GetBitmapSelected,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
         return val
-    def SetBitmapDisabled(self,arg0):
-        val = controlsc.wxBitmapButton_SetBitmapDisabled(self.this,arg0.this)
+    def SetBitmapDisabled(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_SetBitmapDisabled,(self,) + _args, _kwargs)
         return val
-    def SetBitmapFocus(self,arg0):
-        val = controlsc.wxBitmapButton_SetBitmapFocus(self.this,arg0.this)
+    def SetBitmapFocus(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_SetBitmapFocus,(self,) + _args, _kwargs)
         return val
-    def SetBitmapSelected(self,arg0):
-        val = controlsc.wxBitmapButton_SetBitmapSelected(self.this,arg0.this)
+    def SetBitmapSelected(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_SetBitmapSelected,(self,) + _args, _kwargs)
         return val
-    def SetBitmapLabel(self,arg0):
-        val = controlsc.wxBitmapButton_SetBitmapLabel(self.this,arg0.this)
+    def SetBitmapLabel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_SetBitmapLabel,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxBitmapButton instance>"
+        return "<C wxBitmapButton instance at %s>" % (self.this,)
 class wxBitmapButton(wxBitmapButtonPtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxBitmapButton,(arg0.this,arg1,arg2.this,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxBitmapButton,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -105,23 +93,17 @@ class wxCheckBoxPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetValue(self):
-        val = controlsc.wxCheckBox_GetValue(self.this)
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckBox_GetValue,(self,) + _args, _kwargs)
         return val
-    def SetValue(self,arg0):
-        val = controlsc.wxCheckBox_SetValue(self.this,arg0)
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckBox_SetValue,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxCheckBox instance>"
+        return "<C wxCheckBox instance at %s>" % (self.this,)
 class wxCheckBox(wxCheckBoxPtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxCheckBox,(arg0.this,arg1,arg2,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxCheckBox,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -132,50 +114,44 @@ class wxChoicePtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Append(self,arg0):
-        val = controlsc.wxChoice_Append(self.this,arg0)
+    def Append(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_Append,(self,) + _args, _kwargs)
         return val
-    def Clear(self):
-        val = controlsc.wxChoice_Clear(self.this)
+    def Clear(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_Clear,(self,) + _args, _kwargs)
         return val
-    def FindString(self,arg0):
-        val = controlsc.wxChoice_FindString(self.this,arg0)
+    def FindString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_FindString,(self,) + _args, _kwargs)
         return val
-    def GetColumns(self):
-        val = controlsc.wxChoice_GetColumns(self.this)
+    def GetColumns(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_GetColumns,(self,) + _args, _kwargs)
         return val
-    def GetSelection(self):
-        val = controlsc.wxChoice_GetSelection(self.this)
+    def GetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_GetSelection,(self,) + _args, _kwargs)
         return val
-    def GetString(self,arg0):
-        val = controlsc.wxChoice_GetString(self.this,arg0)
+    def GetString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_GetString,(self,) + _args, _kwargs)
         return val
-    def GetStringSelection(self):
-        val = controlsc.wxChoice_GetStringSelection(self.this)
+    def GetStringSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_GetStringSelection,(self,) + _args, _kwargs)
         return val
-    def Number(self):
-        val = controlsc.wxChoice_Number(self.this)
+    def Number(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_Number,(self,) + _args, _kwargs)
         return val
-    def SetColumns(self,*args):
-        val = apply(controlsc.wxChoice_SetColumns,(self.this,)+args)
+    def SetColumns(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_SetColumns,(self,) + _args, _kwargs)
         return val
-    def SetSelection(self,arg0):
-        val = controlsc.wxChoice_SetSelection(self.this,arg0)
+    def SetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_SetSelection,(self,) + _args, _kwargs)
         return val
-    def SetStringSelection(self,arg0):
-        val = controlsc.wxChoice_SetStringSelection(self.this,arg0)
+    def SetStringSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_SetStringSelection,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxChoice instance>"
+        return "<C wxChoice instance at %s>" % (self.this,)
 class wxChoice(wxChoicePtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxChoice,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxChoice,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -186,77 +162,74 @@ class wxComboBoxPtr(wxChoicePtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Append(self,arg0):
-        val = controlsc.wxComboBox_Append(self.this,arg0)
+    def Append(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_Append,(self,) + _args, _kwargs)
         return val
-    def Clear(self):
-        val = controlsc.wxComboBox_Clear(self.this)
+    def Clear(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_Clear,(self,) + _args, _kwargs)
         return val
-    def Copy(self):
-        val = controlsc.wxComboBox_Copy(self.this)
+    def Copy(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_Copy,(self,) + _args, _kwargs)
         return val
-    def Cut(self):
-        val = controlsc.wxComboBox_Cut(self.this)
+    def Cut(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_Cut,(self,) + _args, _kwargs)
         return val
-    def Delete(self,arg0):
-        val = controlsc.wxComboBox_Delete(self.this,arg0)
+    def Delete(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_Delete,(self,) + _args, _kwargs)
         return val
-    def FindString(self,arg0):
-        val = controlsc.wxComboBox_FindString(self.this,arg0)
+    def FindString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_FindString,(self,) + _args, _kwargs)
         return val
-    def GetInsertionPoint(self):
-        val = controlsc.wxComboBox_GetInsertionPoint(self.this)
+    def GetInsertionPoint(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_GetInsertionPoint,(self,) + _args, _kwargs)
         return val
-    def GetLastPosition(self):
-        val = controlsc.wxComboBox_GetLastPosition(self.this)
+    def GetLastPosition(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_GetLastPosition,(self,) + _args, _kwargs)
         return val
-    def GetSelection(self):
-        val = controlsc.wxComboBox_GetSelection(self.this)
+    def GetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_GetSelection,(self,) + _args, _kwargs)
         return val
-    def GetString(self,arg0):
-        val = controlsc.wxComboBox_GetString(self.this,arg0)
+    def GetString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_GetString,(self,) + _args, _kwargs)
         return val
-    def GetStringSelection(self):
-        val = controlsc.wxComboBox_GetStringSelection(self.this)
+    def GetStringSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_GetStringSelection,(self,) + _args, _kwargs)
         return val
-    def GetValue(self):
-        val = controlsc.wxComboBox_GetValue(self.this)
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_GetValue,(self,) + _args, _kwargs)
         return val
-    def Number(self):
-        val = controlsc.wxComboBox_Number(self.this)
+    def Number(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_Number,(self,) + _args, _kwargs)
         return val
-    def Paste(self):
-        val = controlsc.wxComboBox_Paste(self.this)
+    def Paste(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_Paste,(self,) + _args, _kwargs)
         return val
-    def Replace(self,arg0,arg1,arg2):
-        val = controlsc.wxComboBox_Replace(self.this,arg0,arg1,arg2)
+    def Replace(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_Replace,(self,) + _args, _kwargs)
         return val
-    def Remove(self,arg0,arg1):
-        val = controlsc.wxComboBox_Remove(self.this,arg0,arg1)
+    def Remove(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_Remove,(self,) + _args, _kwargs)
         return val
-    def SetInsertionPoint(self,arg0):
-        val = controlsc.wxComboBox_SetInsertionPoint(self.this,arg0)
+    def SetInsertionPoint(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_SetInsertionPoint,(self,) + _args, _kwargs)
         return val
-    def SetInsertionPointEnd(self):
-        val = controlsc.wxComboBox_SetInsertionPointEnd(self.this)
+    def SetInsertionPointEnd(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_SetInsertionPointEnd,(self,) + _args, _kwargs)
         return val
-    def SetMark(self,arg0,arg1):
-        val = controlsc.wxComboBox_SetMark(self.this,arg0,arg1)
+    def SetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_SetSelection,(self,) + _args, _kwargs)
         return val
-    def SetValue(self,arg0):
-        val = controlsc.wxComboBox_SetValue(self.this,arg0)
+    def SetMark(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_SetMark,(self,) + _args, _kwargs)
+        return val
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_SetValue,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxComboBox instance>"
+        return "<C wxComboBox instance at %s>" % (self.this,)
 class wxComboBox(wxComboBoxPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[1] = argl[1].this
-        except: pass
-        try: argl[2] = argl[2].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxComboBox,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxComboBox,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -267,41 +240,35 @@ class wxGaugePtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetBezelFace(self):
-        val = controlsc.wxGauge_GetBezelFace(self.this)
+    def GetBezelFace(self, *_args, **_kwargs):
+        val = apply(controlsc.wxGauge_GetBezelFace,(self,) + _args, _kwargs)
         return val
-    def GetRange(self):
-        val = controlsc.wxGauge_GetRange(self.this)
+    def GetRange(self, *_args, **_kwargs):
+        val = apply(controlsc.wxGauge_GetRange,(self,) + _args, _kwargs)
         return val
-    def GetShadowWidth(self):
-        val = controlsc.wxGauge_GetShadowWidth(self.this)
+    def GetShadowWidth(self, *_args, **_kwargs):
+        val = apply(controlsc.wxGauge_GetShadowWidth,(self,) + _args, _kwargs)
         return val
-    def GetValue(self):
-        val = controlsc.wxGauge_GetValue(self.this)
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxGauge_GetValue,(self,) + _args, _kwargs)
         return val
-    def SetBezelFace(self,arg0):
-        val = controlsc.wxGauge_SetBezelFace(self.this,arg0)
+    def SetBezelFace(self, *_args, **_kwargs):
+        val = apply(controlsc.wxGauge_SetBezelFace,(self,) + _args, _kwargs)
         return val
-    def SetRange(self,arg0):
-        val = controlsc.wxGauge_SetRange(self.this,arg0)
+    def SetRange(self, *_args, **_kwargs):
+        val = apply(controlsc.wxGauge_SetRange,(self,) + _args, _kwargs)
         return val
-    def SetShadowWidth(self,arg0):
-        val = controlsc.wxGauge_SetShadowWidth(self.this,arg0)
+    def SetShadowWidth(self, *_args, **_kwargs):
+        val = apply(controlsc.wxGauge_SetShadowWidth,(self,) + _args, _kwargs)
         return val
-    def SetValue(self,arg0):
-        val = controlsc.wxGauge_SetValue(self.this,arg0)
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxGauge_SetValue,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxGauge instance>"
+        return "<C wxGauge instance at %s>" % (self.this,)
 class wxGauge(wxGaugePtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxGauge,(arg0.this,arg1,arg2,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxGauge,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -313,16 +280,10 @@ class wxStaticBoxPtr(wxControlPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxStaticBox instance>"
+        return "<C wxStaticBox instance at %s>" % (self.this,)
 class wxStaticBox(wxStaticBoxPtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxStaticBox,(arg0.this,arg1,arg2,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxStaticBox,_args,_kwargs)
         self.thisown = 1
 
 
@@ -333,16 +294,10 @@ class wxStaticLinePtr(wxControlPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxStaticLine instance>"
+        return "<C wxStaticLine instance at %s>" % (self.this,)
 class wxStaticLine(wxStaticLinePtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxStaticLine,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxStaticLine,_args,_kwargs)
         self.thisown = 1
 
 
@@ -352,23 +307,17 @@ class wxStaticTextPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetLabel(self):
-        val = controlsc.wxStaticText_GetLabel(self.this)
+    def GetLabel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxStaticText_GetLabel,(self,) + _args, _kwargs)
         return val
-    def SetLabel(self,arg0):
-        val = controlsc.wxStaticText_SetLabel(self.this,arg0)
+    def SetLabel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxStaticText_SetLabel,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxStaticText instance>"
+        return "<C wxStaticText instance at %s>" % (self.this,)
 class wxStaticText(wxStaticTextPtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxStaticText,(arg0.this,arg1,arg2,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxStaticText,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -379,68 +328,62 @@ class wxListBoxPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Append(self,arg0):
-        val = controlsc.wxListBox_Append(self.this,arg0)
+    def Append(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_Append,(self,) + _args, _kwargs)
         return val
-    def Clear(self):
-        val = controlsc.wxListBox_Clear(self.this)
+    def Clear(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_Clear,(self,) + _args, _kwargs)
         return val
-    def Delete(self,arg0):
-        val = controlsc.wxListBox_Delete(self.this,arg0)
+    def Delete(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_Delete,(self,) + _args, _kwargs)
         return val
-    def Deselect(self,arg0):
-        val = controlsc.wxListBox_Deselect(self.this,arg0)
+    def Deselect(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_Deselect,(self,) + _args, _kwargs)
         return val
-    def FindString(self,arg0):
-        val = controlsc.wxListBox_FindString(self.this,arg0)
+    def FindString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_FindString,(self,) + _args, _kwargs)
         return val
-    def GetSelection(self):
-        val = controlsc.wxListBox_GetSelection(self.this)
+    def GetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_GetSelection,(self,) + _args, _kwargs)
         return val
-    def GetSelections(self):
-        val = controlsc.wxListBox_GetSelections(self.this)
+    def GetSelections(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_GetSelections,(self,) + _args, _kwargs)
         return val
-    def GetString(self,arg0):
-        val = controlsc.wxListBox_GetString(self.this,arg0)
+    def GetString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_GetString,(self,) + _args, _kwargs)
         return val
-    def GetStringSelection(self):
-        val = controlsc.wxListBox_GetStringSelection(self.this)
+    def GetStringSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_GetStringSelection,(self,) + _args, _kwargs)
         return val
-    def Number(self):
-        val = controlsc.wxListBox_Number(self.this)
+    def Number(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_Number,(self,) + _args, _kwargs)
         return val
-    def Selected(self,arg0):
-        val = controlsc.wxListBox_Selected(self.this,arg0)
+    def Selected(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_Selected,(self,) + _args, _kwargs)
         return val
-    def Set(self,arg0,*args):
-        val = apply(controlsc.wxListBox_Set,(self.this,arg0,)+args)
+    def Set(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_Set,(self,) + _args, _kwargs)
         return val
-    def SetFirstItem(self,arg0):
-        val = controlsc.wxListBox_SetFirstItem(self.this,arg0)
+    def SetFirstItem(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_SetFirstItem,(self,) + _args, _kwargs)
         return val
-    def SetFirstItemStr(self,arg0):
-        val = controlsc.wxListBox_SetFirstItemStr(self.this,arg0)
+    def SetFirstItemStr(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_SetFirstItemStr,(self,) + _args, _kwargs)
         return val
-    def SetSelection(self,arg0,*args):
-        val = apply(controlsc.wxListBox_SetSelection,(self.this,arg0,)+args)
+    def SetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_SetSelection,(self,) + _args, _kwargs)
         return val
-    def SetString(self,arg0,arg1):
-        val = controlsc.wxListBox_SetString(self.this,arg0,arg1)
+    def SetString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_SetString,(self,) + _args, _kwargs)
         return val
-    def SetStringSelection(self,arg0,*args):
-        val = apply(controlsc.wxListBox_SetStringSelection,(self.this,arg0,)+args)
+    def SetStringSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_SetStringSelection,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxListBox instance>"
+        return "<C wxListBox instance at %s>" % (self.this,)
 class wxListBox(wxListBoxPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxListBox,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxListBox,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -451,26 +394,20 @@ class wxCheckListBoxPtr(wxListBoxPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def IsChecked(self,arg0):
-        val = controlsc.wxCheckListBox_IsChecked(self.this,arg0)
+    def IsChecked(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckListBox_IsChecked,(self,) + _args, _kwargs)
         return val
-    def Check(self,arg0,*args):
-        val = apply(controlsc.wxCheckListBox_Check,(self.this,arg0,)+args)
+    def Check(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckListBox_Check,(self,) + _args, _kwargs)
         return val
-    def GetItemHeight(self):
-        val = controlsc.wxCheckListBox_GetItemHeight(self.this)
+    def GetItemHeight(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckListBox_GetItemHeight,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxCheckListBox instance>"
+        return "<C wxCheckListBox instance at %s>" % (self.this,)
 class wxCheckListBox(wxCheckListBoxPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxCheckListBox,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxCheckListBox,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -481,116 +418,110 @@ class wxTextCtrlPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Clear(self):
-        val = controlsc.wxTextCtrl_Clear(self.this)
+    def Clear(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Clear,(self,) + _args, _kwargs)
         return val
-    def Copy(self):
-        val = controlsc.wxTextCtrl_Copy(self.this)
+    def Copy(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Copy,(self,) + _args, _kwargs)
         return val
-    def Cut(self):
-        val = controlsc.wxTextCtrl_Cut(self.this)
+    def Cut(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Cut,(self,) + _args, _kwargs)
         return val
-    def DiscardEdits(self):
-        val = controlsc.wxTextCtrl_DiscardEdits(self.this)
+    def DiscardEdits(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_DiscardEdits,(self,) + _args, _kwargs)
         return val
-    def GetInsertionPoint(self):
-        val = controlsc.wxTextCtrl_GetInsertionPoint(self.this)
+    def GetInsertionPoint(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetInsertionPoint,(self,) + _args, _kwargs)
         return val
-    def GetLastPosition(self):
-        val = controlsc.wxTextCtrl_GetLastPosition(self.this)
+    def GetLastPosition(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetLastPosition,(self,) + _args, _kwargs)
         return val
-    def GetLineLength(self,arg0):
-        val = controlsc.wxTextCtrl_GetLineLength(self.this,arg0)
+    def GetLineLength(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetLineLength,(self,) + _args, _kwargs)
         return val
-    def GetLineText(self,arg0):
-        val = controlsc.wxTextCtrl_GetLineText(self.this,arg0)
+    def GetLineText(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetLineText,(self,) + _args, _kwargs)
         return val
-    def GetNumberOfLines(self):
-        val = controlsc.wxTextCtrl_GetNumberOfLines(self.this)
+    def GetNumberOfLines(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetNumberOfLines,(self,) + _args, _kwargs)
         return val
-    def GetValue(self):
-        val = controlsc.wxTextCtrl_GetValue(self.this)
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetValue,(self,) + _args, _kwargs)
         return val
-    def IsModified(self):
-        val = controlsc.wxTextCtrl_IsModified(self.this)
+    def IsModified(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_IsModified,(self,) + _args, _kwargs)
         return val
-    def LoadFile(self,arg0):
-        val = controlsc.wxTextCtrl_LoadFile(self.this,arg0)
+    def LoadFile(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_LoadFile,(self,) + _args, _kwargs)
         return val
-    def Paste(self):
-        val = controlsc.wxTextCtrl_Paste(self.this)
+    def Paste(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Paste,(self,) + _args, _kwargs)
         return val
-    def PositionToXY(self,arg0):
-        val = controlsc.wxTextCtrl_PositionToXY(self.this,arg0)
+    def PositionToXY(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_PositionToXY,(self,) + _args, _kwargs)
         return val
-    def Remove(self,arg0,arg1):
-        val = controlsc.wxTextCtrl_Remove(self.this,arg0,arg1)
+    def Remove(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Remove,(self,) + _args, _kwargs)
         return val
-    def Replace(self,arg0,arg1,arg2):
-        val = controlsc.wxTextCtrl_Replace(self.this,arg0,arg1,arg2)
+    def Replace(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Replace,(self,) + _args, _kwargs)
         return val
-    def SaveFile(self,arg0):
-        val = controlsc.wxTextCtrl_SaveFile(self.this,arg0)
+    def SaveFile(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SaveFile,(self,) + _args, _kwargs)
         return val
-    def SetEditable(self,arg0):
-        val = controlsc.wxTextCtrl_SetEditable(self.this,arg0)
+    def SetEditable(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetEditable,(self,) + _args, _kwargs)
         return val
-    def SetInsertionPoint(self,arg0):
-        val = controlsc.wxTextCtrl_SetInsertionPoint(self.this,arg0)
+    def SetInsertionPoint(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetInsertionPoint,(self,) + _args, _kwargs)
         return val
-    def SetInsertionPointEnd(self):
-        val = controlsc.wxTextCtrl_SetInsertionPointEnd(self.this)
+    def SetInsertionPointEnd(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetInsertionPointEnd,(self,) + _args, _kwargs)
         return val
-    def SetSelection(self,arg0,arg1):
-        val = controlsc.wxTextCtrl_SetSelection(self.this,arg0,arg1)
+    def SetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetSelection,(self,) + _args, _kwargs)
         return val
-    def SetValue(self,arg0):
-        val = controlsc.wxTextCtrl_SetValue(self.this,arg0)
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_SetValue,(self,) + _args, _kwargs)
         return val
-    def ShowPosition(self,arg0):
-        val = controlsc.wxTextCtrl_ShowPosition(self.this,arg0)
+    def ShowPosition(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_ShowPosition,(self,) + _args, _kwargs)
         return val
-    def WriteText(self,arg0):
-        val = controlsc.wxTextCtrl_WriteText(self.this,arg0)
+    def WriteText(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_WriteText,(self,) + _args, _kwargs)
         return val
-    def AppendText(self,arg0):
-        val = controlsc.wxTextCtrl_AppendText(self.this,arg0)
+    def AppendText(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_AppendText,(self,) + _args, _kwargs)
         return val
-    def XYToPosition(self,arg0,arg1):
-        val = controlsc.wxTextCtrl_XYToPosition(self.this,arg0,arg1)
+    def XYToPosition(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_XYToPosition,(self,) + _args, _kwargs)
         return val
-    def CanCopy(self):
-        val = controlsc.wxTextCtrl_CanCopy(self.this)
+    def CanCopy(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_CanCopy,(self,) + _args, _kwargs)
         return val
-    def CanCut(self):
-        val = controlsc.wxTextCtrl_CanCut(self.this)
+    def CanCut(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_CanCut,(self,) + _args, _kwargs)
         return val
-    def CanPaste(self):
-        val = controlsc.wxTextCtrl_CanPaste(self.this)
+    def CanPaste(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_CanPaste,(self,) + _args, _kwargs)
         return val
-    def CanRedo(self):
-        val = controlsc.wxTextCtrl_CanRedo(self.this)
+    def CanRedo(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_CanRedo,(self,) + _args, _kwargs)
         return val
-    def CanUndo(self):
-        val = controlsc.wxTextCtrl_CanUndo(self.this)
+    def CanUndo(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_CanUndo,(self,) + _args, _kwargs)
         return val
-    def GetSelection(self):
-        val = controlsc.wxTextCtrl_GetSelection(self.this)
+    def GetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_GetSelection,(self,) + _args, _kwargs)
         return val
-    def IsEditable(self):
-        val = controlsc.wxTextCtrl_IsEditable(self.this)
+    def IsEditable(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_IsEditable,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxTextCtrl instance>"
+        return "<C wxTextCtrl instance at %s>" % (self.this,)
 class wxTextCtrl(wxTextCtrlPtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[1] = argl[1].this
-        except: pass
-        try: argl[2] = argl[2].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxTextCtrl,(arg0.this,arg1,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxTextCtrl,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -601,35 +532,29 @@ class wxScrollBarPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetRange(self):
-        val = controlsc.wxScrollBar_GetRange(self.this)
+    def GetRange(self, *_args, **_kwargs):
+        val = apply(controlsc.wxScrollBar_GetRange,(self,) + _args, _kwargs)
         return val
-    def GetPageSize(self):
-        val = controlsc.wxScrollBar_GetPageSize(self.this)
+    def GetPageSize(self, *_args, **_kwargs):
+        val = apply(controlsc.wxScrollBar_GetPageSize,(self,) + _args, _kwargs)
         return val
-    def GetThumbPosition(self):
-        val = controlsc.wxScrollBar_GetThumbPosition(self.this)
+    def GetThumbPosition(self, *_args, **_kwargs):
+        val = apply(controlsc.wxScrollBar_GetThumbPosition,(self,) + _args, _kwargs)
         return val
-    def GetThumbSize(self):
-        val = controlsc.wxScrollBar_GetThumbSize(self.this)
+    def GetThumbSize(self, *_args, **_kwargs):
+        val = apply(controlsc.wxScrollBar_GetThumbSize,(self,) + _args, _kwargs)
         return val
-    def SetThumbPosition(self,arg0):
-        val = controlsc.wxScrollBar_SetThumbPosition(self.this,arg0)
+    def SetThumbPosition(self, *_args, **_kwargs):
+        val = apply(controlsc.wxScrollBar_SetThumbPosition,(self,) + _args, _kwargs)
         return val
-    def SetScrollbar(self,arg0,arg1,arg2,arg3,*args):
-        val = apply(controlsc.wxScrollBar_SetScrollbar,(self.this,arg0,arg1,arg2,arg3,)+args)
+    def SetScrollbar(self, *_args, **_kwargs):
+        val = apply(controlsc.wxScrollBar_SetScrollbar,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxScrollBar instance>"
+        return "<C wxScrollBar instance at %s>" % (self.this,)
 class wxScrollBar(wxScrollBarPtr):
-    def __init__(self,arg0,*args) :
-        argl = map(None,args)
-        try: argl[1] = argl[1].this
-        except: pass
-        try: argl[2] = argl[2].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxScrollBar,(arg0.this,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxScrollBar,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -640,32 +565,26 @@ class wxSpinButtonPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetMax(self):
-        val = controlsc.wxSpinButton_GetMax(self.this)
+    def GetMax(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinButton_GetMax,(self,) + _args, _kwargs)
         return val
-    def GetMin(self):
-        val = controlsc.wxSpinButton_GetMin(self.this)
+    def GetMin(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinButton_GetMin,(self,) + _args, _kwargs)
         return val
-    def GetValue(self):
-        val = controlsc.wxSpinButton_GetValue(self.this)
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinButton_GetValue,(self,) + _args, _kwargs)
         return val
-    def SetRange(self,arg0,arg1):
-        val = controlsc.wxSpinButton_SetRange(self.this,arg0,arg1)
+    def SetRange(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinButton_SetRange,(self,) + _args, _kwargs)
         return val
-    def SetValue(self,arg0):
-        val = controlsc.wxSpinButton_SetValue(self.this,arg0)
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinButton_SetValue,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxSpinButton instance>"
+        return "<C wxSpinButton instance at %s>" % (self.this,)
 class wxSpinButton(wxSpinButtonPtr):
-    def __init__(self,arg0,*args) :
-        argl = map(None,args)
-        try: argl[1] = argl[1].this
-        except: pass
-        try: argl[2] = argl[2].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxSpinButton,(arg0.this,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxSpinButton,_args,_kwargs)
         self.thisown = 1
 
 
@@ -675,27 +594,21 @@ class wxStaticBitmapPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetBitmap(self):
-        val = controlsc.wxStaticBitmap_GetBitmap(self.this)
-        val = wxBitmapPtr(val)
+    def GetBitmap(self, *_args, **_kwargs):
+        val = apply(controlsc.wxStaticBitmap_GetBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
         return val
-    def SetBitmap(self,arg0):
-        val = controlsc.wxStaticBitmap_SetBitmap(self.this,arg0.this)
+    def SetBitmap(self, *_args, **_kwargs):
+        val = apply(controlsc.wxStaticBitmap_SetBitmap,(self,) + _args, _kwargs)
         return val
-    def SetIcon(self,arg0):
-        val = controlsc.wxStaticBitmap_SetIcon(self.this,arg0.this)
+    def SetIcon(self, *_args, **_kwargs):
+        val = apply(controlsc.wxStaticBitmap_SetIcon,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxStaticBitmap instance>"
+        return "<C wxStaticBitmap instance at %s>" % (self.this,)
 class wxStaticBitmap(wxStaticBitmapPtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxStaticBitmap,(arg0.this,arg1,arg2.this,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxStaticBitmap,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -706,56 +619,50 @@ class wxRadioBoxPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Enable(self,arg0):
-        val = controlsc.wxRadioBox_Enable(self.this,arg0)
+    def Enable(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_Enable,(self,) + _args, _kwargs)
         return val
-    def EnableItem(self,arg0,arg1):
-        val = controlsc.wxRadioBox_EnableItem(self.this,arg0,arg1)
+    def EnableItem(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_EnableItem,(self,) + _args, _kwargs)
         return val
-    def FindString(self,arg0):
-        val = controlsc.wxRadioBox_FindString(self.this,arg0)
+    def FindString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_FindString,(self,) + _args, _kwargs)
         return val
-    def GetItemLabel(self,arg0):
-        val = controlsc.wxRadioBox_GetItemLabel(self.this,arg0)
+    def GetItemLabel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_GetItemLabel,(self,) + _args, _kwargs)
         return val
-    def GetSelection(self):
-        val = controlsc.wxRadioBox_GetSelection(self.this)
+    def GetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_GetSelection,(self,) + _args, _kwargs)
         return val
-    def GetString(self,arg0):
-        val = controlsc.wxRadioBox_GetString(self.this,arg0)
+    def GetString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_GetString,(self,) + _args, _kwargs)
         return val
-    def GetStringSelection(self):
-        val = controlsc.wxRadioBox_GetStringSelection(self.this)
+    def GetStringSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_GetStringSelection,(self,) + _args, _kwargs)
         return val
-    def Number(self):
-        val = controlsc.wxRadioBox_Number(self.this)
+    def Number(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_Number,(self,) + _args, _kwargs)
         return val
-    def SetItemLabel(self,arg0,arg1):
-        val = controlsc.wxRadioBox_SetItemLabel(self.this,arg0,arg1)
+    def SetItemLabel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_SetItemLabel,(self,) + _args, _kwargs)
         return val
-    def SetSelection(self,arg0):
-        val = controlsc.wxRadioBox_SetSelection(self.this,arg0)
+    def SetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_SetSelection,(self,) + _args, _kwargs)
         return val
-    def SetStringSelection(self,arg0):
-        val = controlsc.wxRadioBox_SetStringSelection(self.this,arg0)
+    def SetStringSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_SetStringSelection,(self,) + _args, _kwargs)
         return val
-    def Show(self,arg0):
-        val = controlsc.wxRadioBox_Show(self.this,arg0)
+    def Show(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_Show,(self,) + _args, _kwargs)
         return val
-    def ShowItem(self,arg0,arg1):
-        val = controlsc.wxRadioBox_ShowItem(self.this,arg0,arg1)
+    def ShowItem(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_ShowItem,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxRadioBox instance>"
+        return "<C wxRadioBox instance at %s>" % (self.this,)
 class wxRadioBox(wxRadioBoxPtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxRadioBox,(arg0.this,arg1,arg2,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxRadioBox,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -766,23 +673,17 @@ class wxRadioButtonPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetValue(self):
-        val = controlsc.wxRadioButton_GetValue(self.this)
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioButton_GetValue,(self,) + _args, _kwargs)
         return val
-    def SetValue(self,arg0):
-        val = controlsc.wxRadioButton_SetValue(self.this,arg0)
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioButton_SetValue,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxRadioButton instance>"
+        return "<C wxRadioButton instance at %s>" % (self.this,)
 class wxRadioButton(wxRadioButtonPtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxRadioButton,(arg0.this,arg1,arg2,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxRadioButton,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 
@@ -793,74 +694,68 @@ class wxSliderPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def ClearSel(self):
-        val = controlsc.wxSlider_ClearSel(self.this)
+    def ClearSel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_ClearSel,(self,) + _args, _kwargs)
         return val
-    def ClearTicks(self):
-        val = controlsc.wxSlider_ClearTicks(self.this)
+    def ClearTicks(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_ClearTicks,(self,) + _args, _kwargs)
         return val
-    def GetLineSize(self):
-        val = controlsc.wxSlider_GetLineSize(self.this)
+    def GetLineSize(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_GetLineSize,(self,) + _args, _kwargs)
         return val
-    def GetMax(self):
-        val = controlsc.wxSlider_GetMax(self.this)
+    def GetMax(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_GetMax,(self,) + _args, _kwargs)
         return val
-    def GetMin(self):
-        val = controlsc.wxSlider_GetMin(self.this)
+    def GetMin(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_GetMin,(self,) + _args, _kwargs)
         return val
-    def GetPageSize(self):
-        val = controlsc.wxSlider_GetPageSize(self.this)
+    def GetPageSize(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_GetPageSize,(self,) + _args, _kwargs)
         return val
-    def GetSelEnd(self):
-        val = controlsc.wxSlider_GetSelEnd(self.this)
+    def GetSelEnd(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_GetSelEnd,(self,) + _args, _kwargs)
         return val
-    def GetSelStart(self):
-        val = controlsc.wxSlider_GetSelStart(self.this)
+    def GetSelStart(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_GetSelStart,(self,) + _args, _kwargs)
         return val
-    def GetThumbLength(self):
-        val = controlsc.wxSlider_GetThumbLength(self.this)
+    def GetThumbLength(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_GetThumbLength,(self,) + _args, _kwargs)
         return val
-    def GetTickFreq(self):
-        val = controlsc.wxSlider_GetTickFreq(self.this)
+    def GetTickFreq(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_GetTickFreq,(self,) + _args, _kwargs)
         return val
-    def GetValue(self):
-        val = controlsc.wxSlider_GetValue(self.this)
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_GetValue,(self,) + _args, _kwargs)
         return val
-    def SetRange(self,arg0,arg1):
-        val = controlsc.wxSlider_SetRange(self.this,arg0,arg1)
+    def SetRange(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_SetRange,(self,) + _args, _kwargs)
         return val
-    def SetTickFreq(self,arg0,arg1):
-        val = controlsc.wxSlider_SetTickFreq(self.this,arg0,arg1)
+    def SetTickFreq(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_SetTickFreq,(self,) + _args, _kwargs)
         return val
-    def SetLineSize(self,arg0):
-        val = controlsc.wxSlider_SetLineSize(self.this,arg0)
+    def SetLineSize(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_SetLineSize,(self,) + _args, _kwargs)
         return val
-    def SetPageSize(self,arg0):
-        val = controlsc.wxSlider_SetPageSize(self.this,arg0)
+    def SetPageSize(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_SetPageSize,(self,) + _args, _kwargs)
         return val
-    def SetSelection(self,arg0,arg1):
-        val = controlsc.wxSlider_SetSelection(self.this,arg0,arg1)
+    def SetSelection(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_SetSelection,(self,) + _args, _kwargs)
         return val
-    def SetThumbLength(self,arg0):
-        val = controlsc.wxSlider_SetThumbLength(self.this,arg0)
+    def SetThumbLength(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_SetThumbLength,(self,) + _args, _kwargs)
         return val
-    def SetTick(self,arg0):
-        val = controlsc.wxSlider_SetTick(self.this,arg0)
+    def SetTick(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_SetTick,(self,) + _args, _kwargs)
         return val
-    def SetValue(self,arg0):
-        val = controlsc.wxSlider_SetValue(self.this,arg0)
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_SetValue,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxSlider instance>"
+        return "<C wxSlider instance at %s>" % (self.this,)
 class wxSlider(wxSliderPtr):
-    def __init__(self,arg0,arg1,arg2,arg3,arg4,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(controlsc.new_wxSlider,(arg0.this,arg1,arg2,arg3,arg4,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxSlider,_args,_kwargs)
         self.thisown = 1
         wx._StdWindowCallbacks(self)
 

@@ -17,76 +17,70 @@ class wxFramePtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Centre(self,*args):
-        val = apply(framesc.wxFrame_Centre,(self.this,)+args)
+    def Centre(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_Centre,(self,) + _args, _kwargs)
         return val
-    def CreateStatusBar(self,*args):
-        val = apply(framesc.wxFrame_CreateStatusBar,(self.this,)+args)
-        val = wxStatusBarPtr(val)
+    def CreateStatusBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_CreateStatusBar,(self,) + _args, _kwargs)
+        if val: val = wxStatusBarPtr(val) 
         return val
-    def CreateToolBar(self,*args):
-        val = apply(framesc.wxFrame_CreateToolBar,(self.this,)+args)
-        val = wxToolBarPtr(val)
+    def CreateToolBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_CreateToolBar,(self,) + _args, _kwargs)
+        if val: val = wxToolBarPtr(val) 
         return val
-    def GetMenuBar(self):
-        val = framesc.wxFrame_GetMenuBar(self.this)
-        val = wxMenuBarPtr(val)
+    def GetMenuBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_GetMenuBar,(self,) + _args, _kwargs)
+        if val: val = wxMenuBarPtr(val) 
         return val
-    def GetStatusBar(self):
-        val = framesc.wxFrame_GetStatusBar(self.this)
-        val = wxStatusBarPtr(val)
+    def GetStatusBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_GetStatusBar,(self,) + _args, _kwargs)
+        if val: val = wxStatusBarPtr(val) 
         return val
-    def GetTitle(self):
-        val = framesc.wxFrame_GetTitle(self.this)
+    def GetTitle(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_GetTitle,(self,) + _args, _kwargs)
         return val
-    def GetToolBar(self):
-        val = framesc.wxFrame_GetToolBar(self.this)
-        val = wxToolBarPtr(val)
+    def GetToolBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_GetToolBar,(self,) + _args, _kwargs)
+        if val: val = wxToolBarPtr(val) 
         return val
-    def Iconize(self,arg0):
-        val = framesc.wxFrame_Iconize(self.this,arg0)
+    def Iconize(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_Iconize,(self,) + _args, _kwargs)
         return val
-    def IsIconized(self):
-        val = framesc.wxFrame_IsIconized(self.this)
+    def IsIconized(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_IsIconized,(self,) + _args, _kwargs)
         return val
-    def Maximize(self,arg0):
-        val = framesc.wxFrame_Maximize(self.this,arg0)
+    def Maximize(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_Maximize,(self,) + _args, _kwargs)
         return val
-    def SetAcceleratorTable(self,arg0):
-        val = framesc.wxFrame_SetAcceleratorTable(self.this,arg0.this)
+    def SetAcceleratorTable(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_SetAcceleratorTable,(self,) + _args, _kwargs)
         return val
-    def SetIcon(self,arg0):
-        val = framesc.wxFrame_SetIcon(self.this,arg0.this)
+    def SetIcon(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_SetIcon,(self,) + _args, _kwargs)
         return val
-    def SetMenuBar(self,arg0):
-        val = framesc.wxFrame_SetMenuBar(self.this,arg0.this)
+    def SetMenuBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_SetMenuBar,(self,) + _args, _kwargs)
         return val
-    def SetStatusBar(self,arg0):
-        val = framesc.wxFrame_SetStatusBar(self.this,arg0.this)
+    def SetStatusBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_SetStatusBar,(self,) + _args, _kwargs)
         return val
-    def SetStatusText(self,arg0,*args):
-        val = apply(framesc.wxFrame_SetStatusText,(self.this,arg0,)+args)
+    def SetStatusText(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_SetStatusText,(self,) + _args, _kwargs)
         return val
-    def SetStatusWidths(self,arg0,*args):
-        val = apply(framesc.wxFrame_SetStatusWidths,(self.this,arg0,)+args)
+    def SetStatusWidths(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_SetStatusWidths,(self,) + _args, _kwargs)
         return val
-    def SetTitle(self,arg0):
-        val = framesc.wxFrame_SetTitle(self.this,arg0)
+    def SetTitle(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_SetTitle,(self,) + _args, _kwargs)
         return val
-    def SetToolBar(self,arg0):
-        val = framesc.wxFrame_SetToolBar(self.this,arg0.this)
+    def SetToolBar(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_SetToolBar,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
-        return "<C wxFrame instance>"
+        return "<C wxFrame instance at %s>" % (self.this,)
 class wxFrame(wxFramePtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(framesc.new_wxFrame,(arg0.this,arg1,arg2,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(framesc.new_wxFrame,_args,_kwargs)
         self.thisown = 1
         wx._StdFrameCallbacks(self)
 
@@ -98,16 +92,10 @@ class wxMiniFramePtr(wxFramePtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxMiniFrame instance>"
+        return "<C wxMiniFrame instance at %s>" % (self.this,)
 class wxMiniFrame(wxMiniFramePtr):
-    def __init__(self,arg0,arg1,arg2,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(framesc.new_wxMiniFrame,(arg0.this,arg1,arg2,)+args)
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(framesc.new_wxMiniFrame,_args,_kwargs)
         self.thisown = 1
         wx._StdFrameCallbacks(self)
 
