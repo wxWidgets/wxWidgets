@@ -612,6 +612,19 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def __repr__(self):
         return "<C wxTreeCtrl instance>"
+    
+    # Redefine a couple methods that SWIG gets a bit confused on...
+    def GetFirstChild(self,arg0,arg1):
+        val1, val2 = controls2c.wxTreeCtrl_GetFirstChild(self.this,arg0.this,arg1)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1,val2)
+    def GetNextChild(self,arg0,arg1):
+        val1, val2 = controls2c.wxTreeCtrl_GetFirstChild(self.this,arg0.this,arg1)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1,val2)
+
 class wxTreeCtrl(wxTreeCtrlPtr):
     def __init__(self,arg0,*args) :
         argl = map(None,args)

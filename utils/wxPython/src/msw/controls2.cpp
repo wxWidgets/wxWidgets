@@ -3178,10 +3178,9 @@ static PyObject *_wrap_new_wxTreeCtrl(PyObject *self, PyObject *args) {
 #define wxTreeCtrl_GetCount(_swigobj)  (_swigobj->GetCount())
 static PyObject *_wrap_wxTreeCtrl_GetCount(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
-    size_t * _result;
+    size_t  _result;
     wxTreeCtrl * _arg0;
     char * _argc0 = 0;
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTuple(args,"s:wxTreeCtrl_GetCount",&_argc0)) 
@@ -3194,11 +3193,10 @@ static PyObject *_wrap_wxTreeCtrl_GetCount(PyObject *self, PyObject *args) {
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = new size_t (wxTreeCtrl_GetCount(_arg0));
+        _result = (size_t )wxTreeCtrl_GetCount(_arg0);
 
     wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_size_t_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -5316,6 +5314,10 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_wxListEvent","_class_wxListEvent",0);
 	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
+	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
+	 SWIG_RegisterMapping("_size_t","_int",0);
+	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
+	 SWIG_RegisterMapping("_size_t","_uint",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_wxPrinterDC","_class_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
@@ -5335,6 +5337,7 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
+	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
@@ -5438,6 +5441,7 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_wxControl","_wxListCtrl",SwigwxListCtrlTowxControl);
 	 SWIG_RegisterMapping("_wxControl","_class_wxControl",0);
 	 SWIG_RegisterMapping("_class_wxListBox","_wxListBox",0);
+	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_unsigned_int","_int",0);
@@ -5456,11 +5460,13 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_class_wxSlider","_wxSlider",0);
 	 SWIG_RegisterMapping("_class_wxImageList","_wxImageList",0);
 	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
+	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_signed_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_unsigned_int",0);
+	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);
 	 SWIG_RegisterMapping("_int","_wxWindowID",0);

@@ -4174,6 +4174,201 @@ static PyObject *_wrap_wxTextCtrl_XYToPosition(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxTextCtrl_CanCopy(_swigobj)  (_swigobj->CanCopy())
+static PyObject *_wrap_wxTextCtrl_CanCopy(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxTextCtrl_CanCopy",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanCopy. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_CanCopy(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_CanCut(_swigobj)  (_swigobj->CanCut())
+static PyObject *_wrap_wxTextCtrl_CanCut(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxTextCtrl_CanCut",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanCut. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_CanCut(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_CanPaste(_swigobj)  (_swigobj->CanPaste())
+static PyObject *_wrap_wxTextCtrl_CanPaste(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxTextCtrl_CanPaste",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanPaste. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_CanPaste(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_CanRedo(_swigobj)  (_swigobj->CanRedo())
+static PyObject *_wrap_wxTextCtrl_CanRedo(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxTextCtrl_CanRedo",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanRedo. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_CanRedo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_CanUndo(_swigobj)  (_swigobj->CanUndo())
+static PyObject *_wrap_wxTextCtrl_CanUndo(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxTextCtrl_CanUndo",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_CanUndo. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_CanUndo(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_GetSelection(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetSelection(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTextCtrl_GetSelection(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    long * _arg1;
+    long  temp;
+    long * _arg2;
+    long  temp0;
+    char * _argc0 = 0;
+
+    self = self;
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTuple(args,"s:wxTextCtrl_GetSelection",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetSelection. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTextCtrl_GetSelection(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+#define wxTextCtrl_IsEditable(_swigobj)  (_swigobj->IsEditable())
+static PyObject *_wrap_wxTextCtrl_IsEditable(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxTextCtrl_IsEditable",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_IsEditable. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxTextCtrl_IsEditable(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxScrollBarTowxControl(void *ptr) {
     wxScrollBar *src;
     wxControl *dest;
@@ -6092,6 +6287,13 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxScrollBar_GetPageSize", _wrap_wxScrollBar_GetPageSize, 1 },
 	 { "wxScrollBar_GetRange", _wrap_wxScrollBar_GetRange, 1 },
 	 { "new_wxScrollBar", _wrap_new_wxScrollBar, 1 },
+	 { "wxTextCtrl_IsEditable", _wrap_wxTextCtrl_IsEditable, 1 },
+	 { "wxTextCtrl_GetSelection", _wrap_wxTextCtrl_GetSelection, 1 },
+	 { "wxTextCtrl_CanUndo", _wrap_wxTextCtrl_CanUndo, 1 },
+	 { "wxTextCtrl_CanRedo", _wrap_wxTextCtrl_CanRedo, 1 },
+	 { "wxTextCtrl_CanPaste", _wrap_wxTextCtrl_CanPaste, 1 },
+	 { "wxTextCtrl_CanCut", _wrap_wxTextCtrl_CanCut, 1 },
+	 { "wxTextCtrl_CanCopy", _wrap_wxTextCtrl_CanCopy, 1 },
 	 { "wxTextCtrl_XYToPosition", _wrap_wxTextCtrl_XYToPosition, 1 },
 	 { "wxTextCtrl_AppendText", _wrap_wxTextCtrl_AppendText, 1 },
 	 { "wxTextCtrl_WriteText", _wrap_wxTextCtrl_WriteText, 1 },
@@ -6286,6 +6488,10 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
+	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
+	 SWIG_RegisterMapping("_size_t","_int",0);
+	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
+	 SWIG_RegisterMapping("_size_t","_uint",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_wxPrinterDC","_class_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
@@ -6305,6 +6511,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
+	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
@@ -6464,6 +6671,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxListBox","_class_wxCheckListBox",SwigwxCheckListBoxTowxListBox);
 	 SWIG_RegisterMapping("_class_wxListBox","_wxCheckListBox",SwigwxCheckListBoxTowxListBox);
 	 SWIG_RegisterMapping("_class_wxListBox","_wxListBox",0);
+	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_unsigned_int","_int",0);
@@ -6481,11 +6689,13 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxSlider","_wxSlider",0);
 	 SWIG_RegisterMapping("_class_wxImageList","_wxImageList",0);
 	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
+	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_signed_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_unsigned_int",0);
+	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);
 	 SWIG_RegisterMapping("_int","_wxWindowID",0);

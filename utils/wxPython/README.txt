@@ -1,44 +1,21 @@
 wxPython README
 ---------------
 
-Introduction
-------------
-The code in this subtree is a Python Extension Module that enables the
-use of wxWindows from the Python language.  So what is Python?  Go to
-http://www.python.org to learn more but in a nutshell, it's an
-extremly cool object oriented language.  It's easier than Perl and
-nearly as powerful.  It runs on more platforms than Java, and by some
-reports, is even faster than Java with a JIT compiler!
+Welcome to the wonderful world of wxPython!
 
-So why would you want to use wxPython over just C++ and wxWindows?
-Personally I prefer using Python for everything.  I only use C++ when
-I absolutly have to eek more performance out of an algorithm, and even
-then I ususally code it as an extension module and leave the majority
-of the program in Python.  Another good thing to use wxPython for is
-quick prototyping of your wxWindows apps.  With C++ you have to
-continuously go though the edit-compile-link-run cycle, which can be
-quite time comsuming.  With Python it is only an edit-run cycle.  You
-can easily build an application in a few hours with Python that would
-normally take a few days with C++.  Converting a wxPython app to a
-C++/wxWindows app should be a straight forward task.
+Now that you have installed the Win32 extension module, you can try it
+out by going to the [install dir]\wxPython\demo directory and typing:
 
-This extension module attempts to mirror the class heiarchy of
-wxWindows as closely as possble.  This means that there is a wxFrame
-class in wxPython that looks, smells, tastes and acts almost the same
-as the wxFrame class in the C++ version.  Unfortunatly, I wasn't able
-to match things exactly because of differences in the languages, but
-the differences should be easy to absorb because they are natural to
-Python.  For example, some methods that return mutliple values via
-argument pointers in C++ will return a tuple of values in Python.
-These differences have not been documented yet so if something isn't
-working the same as described in the wxWindows documents the best
-thing to do is to scan through the wxPython sources, especially the .i
-files, as that is where the interfaces for wxPython are defined.
+    python demo.py
 
-I have reports of successfully embedding wxPython within a wxWindows
-C++ app on GTK.  It hasn't yet been attempted on MSW (to my knowledge)
-so I don't know how successful such an attempt would be.  However it
-is certainly possible.
+There are also some other sample files there for you to play with and
+learn from.
+
+If you selected to install the documentation then point your browser
+to [install dir]\wxPython\docs\index.htm and you will then be looking
+at the docs for wxWindows.  For the most part you can use the C++ docs
+as most classes and methods are used identically.  Where there are
+differences they are documented with a "wxPython Note."
 
 
 
@@ -56,7 +33,6 @@ going to
 Or you can send mail directly to the list using this address:
 
        wxpython-users@starship.python.net
-
 
 
 What's new in 2.0b9
@@ -88,6 +64,9 @@ Added wxImage, wxImageHandler, wxPNGHandler, wxJPEGHandler,
 wxGIFHandler and wxBMPHandler.
 
 Added new methods to wxTextCtrl.
+
+Fixed some problems with how SWIG was wrapping some wxTreeCtrl
+methods.
 
 
 
@@ -125,7 +104,7 @@ with the 2.0 version of wxWindows.
 
 I have finally started documenting wxPython.  There are several pages
 in the wxWindows documentation tree specifically about wxPython, and I
-have added notes within the class references about where wxPython
+have added notes within the class references about where and how wxPython
 diverges from wxWindows.
 
 Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
@@ -205,6 +184,7 @@ version segfault shortly after starting up.
 
 
 
+
 Build Instructions
 ------------------
 I used SWIG (http://www.swig.org) to create the source code for the
@@ -218,8 +198,8 @@ I added a few minor features to SWIG to control some of the code
 generation.  If you want to playaround with this the patches are in
 wxPython/SWIG.patches and they should be applied to the 1.1p5 version
 of SWIG.  These new patches are documented at
-http://starship.skyport.net/crew/robind/python/#swig, and they should
-also end up in the 1.2 version of SWIG.
+http://starship.skyport.net/crew/robind/#swig, and they should also
+end up in the 1.2 version of SWIG.
 
 wxPython is organized as a Python package.  This means that the
 directory containing the results of the build process should be a
@@ -250,17 +230,15 @@ above.
 5. If it builds successfully, congratulations!  Move on to the next
 step.  If not then you can try mailing me for help.  Also, I will
 always have a pre-built win32 version of this extension module at
-http://starship.skyport.net/crew/robind/python.
+http://alldunn.com/wxPython/.
 
-6. Change to the $(WXWIN)/utils/wxPython/tests directory.
+6. Change to the $(WXWIN)/utils/wxPython/demo directory.
 
-7. Try executing the test programs.  Note that some of these print
-diagnositc or test info to standard output, so they will require the
-console version of python.  For example:
+7. Try executing the demo program.  For example:
 
-    python test1.py
+    python demo.py
 
-To run them without requiring a console, you can use the pythonw.exe
+To run it without requiring a console, you can use the pythonw.exe
 version of Python either from the command line or from a shortcut.
 
 
@@ -285,17 +263,13 @@ module:
     make install
 
 
-5. Change to the $(WXWIN)/utils/wxPython/tests directory.
+5. Change to the $(WXWIN)/utils/wxPython/demo directory.
 
-6. Try executing the test programs.  For example:
+6. Try executing the demo program.  For example:
 
-    python test1.py
+    python demo.py
 
-
-
-------------------------
-10/20/1998
-
+----------------
 Robin Dunn
 robin@alldunn.com
 

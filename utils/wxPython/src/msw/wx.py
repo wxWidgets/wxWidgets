@@ -1330,7 +1330,11 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.9  1999/04/30 03:29:48  RD
+# Revision 1.10  1999/05/02 02:06:37  RD
+# More for wxPython 2.0b9 (hopefully the last...)
+#
+# Revision 1.12  1999/04/30 03:29:18  RD
+#
 # wxPython 2.0b9, first phase (win32)
 # Added gobs of stuff, see wxPython/README.txt for details
 #

@@ -420,6 +420,20 @@ public:
     void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
     bool IsBold(const wxTreeItemId& item) const;
     wxTreeItemId HitTest(const wxPoint& point);
+
+%pragma(python) addtoclass = "
+    # Redefine a couple methods that SWIG gets a bit confused on...
+    def GetFirstChild(self,arg0,arg1):
+        val1, val2 = controls2c.wxTreeCtrl_GetFirstChild(self.this,arg0.this,arg1)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1,val2)
+    def GetNextChild(self,arg0,arg1):
+        val1, val2 = controls2c.wxTreeCtrl_GetFirstChild(self.this,arg0.this,arg1)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1,val2)
+"
 };
 
 
@@ -483,7 +497,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.18  1999/05/02 02:06:15  RD
+// More for wxPython 2.0b9 (hopefully the last...)
+//
 // Revision 1.17  1999/04/30 03:29:18  RD
+//
 // wxPython 2.0b9, first phase (win32)
 // Added gobs of stuff, see wxPython/README.txt for details
 //

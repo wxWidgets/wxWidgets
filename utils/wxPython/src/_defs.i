@@ -151,7 +151,7 @@ typedef short int       WXTYPE;
 typedef int             wxWindowID;
 typedef unsigned int    uint;
 typedef signed   int    EBool;
-
+typedef unsigned int    size_t
 
 //---------------------------------------------------------------------------
 
@@ -829,7 +829,11 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.14  1999/05/02 02:06:15  RD
+// More for wxPython 2.0b9 (hopefully the last...)
+//
 // Revision 1.13  1999/04/30 03:29:18  RD
+//
 // wxPython 2.0b9, first phase (win32)
 // Added gobs of stuff, see wxPython/README.txt for details
 //

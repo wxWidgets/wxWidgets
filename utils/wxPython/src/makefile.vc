@@ -83,7 +83,7 @@ TARGET = wxc
 OBJECTS = wx.obj         helpers.obj    windows.obj    events.obj     \
 	  misc.obj       gdi.obj        mdi.obj        controls.obj   \
 	  controls2.obj  windows2.obj   cmndlgs.obj    stattool.obj   \
-	  frames.obj     windows3.obj   image.obj \
+	  frames.obj     windows3.obj   image.obj  \
 !if "$(SEPARATE)" == "0"
 	  utils.obj \
 !if "$(WITH_GLCANVAS)" == "1"

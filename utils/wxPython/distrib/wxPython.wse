@@ -994,7 +994,7 @@ item: Install File
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\distrib\SelfInst-README.txt
+  Source=e:\Projects\wx\utils\wxPython\README.txt
   Destination=%MAINDIR%\wxPython\README.txt
   Description=README file
   Flags=0000000010000010

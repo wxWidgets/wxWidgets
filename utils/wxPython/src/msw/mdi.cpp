@@ -704,6 +704,10 @@ SWIGEXPORT(void,initmdic)() {
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
+	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
+	 SWIG_RegisterMapping("_size_t","_int",0);
+	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
+	 SWIG_RegisterMapping("_size_t","_uint",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_wxPrinterDC","_class_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
@@ -726,6 +730,7 @@ SWIGEXPORT(void,initmdic)() {
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
 	 SWIG_RegisterMapping("_wxMiniFrame","_class_wxMiniFrame",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
+	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
@@ -823,6 +828,7 @@ SWIGEXPORT(void,initmdic)() {
 	 SWIG_RegisterMapping("_class_wxMenu","_wxMenu",0);
 	 SWIG_RegisterMapping("_wxControl","_class_wxControl",0);
 	 SWIG_RegisterMapping("_class_wxListBox","_wxListBox",0);
+	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_unsigned_int","_int",0);
@@ -845,11 +851,13 @@ SWIGEXPORT(void,initmdic)() {
 	 SWIG_RegisterMapping("_wxFrame","_class_wxMDIParentFrame",SwigwxMDIParentFrameTowxFrame);
 	 SWIG_RegisterMapping("_wxFrame","_wxMDIParentFrame",SwigwxMDIParentFrameTowxFrame);
 	 SWIG_RegisterMapping("_wxFrame","_class_wxFrame",0);
+	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_signed_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_unsigned_int",0);
+	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);
 	 SWIG_RegisterMapping("_int","_wxWindowID",0);

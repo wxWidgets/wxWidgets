@@ -15,8 +15,8 @@ class MyCanvas(wxScrolledWindow):
         self.Connect(-1, -1, wxEVT_MOTION,    self.OnLeftButtonEvent)
 
         self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
-        bmp = wxBitmap('bitmaps/test2.bmp', wxBITMAP_TYPE_BMP)
-        self.bmp = bmp
+        #bmp = wxBitmap('bitmaps/image.bmp', wxBITMAP_TYPE_BMP)
+        #self.bmp = bmp
 
         self.SetScrollbars(20, 20, 50, 50)
 
@@ -54,9 +54,9 @@ class MyCanvas(wxScrolledWindow):
         dc.SetPen(wxGREEN_PEN)
         dc.DrawSpline(lst+[(100,100)])
 
-        dc.DrawBitmap(self.bmp, 200, 20)
-        dc.SetTextForeground(wxColour(0, 0xFF, 0x80))
-        dc.DrawText("a bitmap", 200, 80)
+        #dc.DrawBitmap(self.bmp, 200, 20)
+        #dc.SetTextForeground(wxColour(0, 0xFF, 0x80))
+        #dc.DrawText("a bitmap", 200, 80)
 
         self.DrawSavedLines(dc)
         dc.EndDrawing()

@@ -133,7 +133,7 @@ class wxPythonDemo(wxFrame):
         splitter2.SetMinimumPaneSize(20)
 
         # make our log window be stdout
-        sys.stdout = self
+        #sys.stdout = self
 
     #---------------------------------------------
     def WriteText(self, text):
