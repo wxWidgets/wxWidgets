@@ -1233,10 +1233,11 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 
     // the rich text control doesn't handle setting background colour, so don't
     // even try if it's the only thing we want to change
-    if ( !style.HasFont() && !style.HasTextColour() )
+    if ( wxRichEditModule::GetLoadedVersion() < 2 &&
+         !style.HasFont() && !style.HasTextColour() )
     {
-        // nothing to do: return TRUE if there was really nothing to doand
-        // FALSE fi we failed to set bg colour
+        // nothing to do: return TRUE if there was really nothing to do and
+        // FALSE if we failed to set bg colour
         return !style.HasBackgroundColour();
     }
 
@@ -1260,7 +1261,11 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
         SendMessage(GetHwnd(), EM_SETSEL, (WPARAM) start, (LPARAM) end);
 
     // initialize CHARFORMAT struct
+#if wxUSE_RICHEDIT2
+    CHARFORMAT2 cf;
+#else
     CHARFORMAT cf;
+#endif
     wxZeroMemory(cf);
     cf.cbSize = sizeof(cf);
 
@@ -1307,6 +1312,13 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
         cf.crTextColor = wxColourToRGB(style.GetTextColour());
     }
 
+#if wxUSE_RICHEDIT2
+    if ( wxRichEditModule::GetLoadedVersion() > 1 && style.HasBackgroundColour() )
+    {
+        cf.dwMask |= CFM_BACKCOLOR;
+        cf.crBackColor = wxColourToRGB(style.GetBackgroundColour());
+    }
+#endif
     // do format the selection
     bool ok = ::SendMessage(GetHwnd(), EM_SETCHARFORMAT,
                             SCF_SELECTION, (LPARAM)&cf) != 0;
