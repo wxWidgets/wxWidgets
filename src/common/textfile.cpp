@@ -97,7 +97,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
     char *strBuf, *strPtr, *strEnd;
     char ch, chLast = '\0';
     char buf[1024];
-    int n, nRead;
+    wxFileSize_t nRead;
 
     strPtr = strBuf = new char[1024];
     strEnd = strBuf + 1024;
@@ -112,7 +112,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
             return false;
         }
 
-        for (n = 0; n < nRead; n++)
+        for (wxFileSize_t n = 0; n < nRead; n++)
         {
             ch = buf[n];
             switch ( ch )

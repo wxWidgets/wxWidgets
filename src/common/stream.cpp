@@ -621,7 +621,7 @@ wxFileOffset wxStreamBuffer::Seek(wxFileOffset pos, wxSeekMode mode)
 
 wxFileOffset wxStreamBuffer::Tell() const
 {
-    wxFileOffset pos;
+    wxFileSize_t pos;
 
     // ask the stream for position if we have a real one
     if ( m_stream )
@@ -889,7 +889,7 @@ wxFileOffset wxInputStream::SeekI(wxFileOffset pos, wxSeekMode mode)
 
 wxFileOffset wxInputStream::TellI() const
 {
-    wxFileOffset pos = OnSysTell();
+    wxFileSize_t pos = OnSysTell();
 
     if (pos != wxInvalidOffset)
         pos -= (m_wbacksize - m_wbackcur);
@@ -1122,7 +1122,7 @@ wxFileOffset wxBufferedInputStream::SeekI(wxFileOffset pos, wxSeekMode mode)
 
 wxFileOffset wxBufferedInputStream::TellI() const
 {
-    wxFileOffset pos = m_i_streambuf->Tell();
+    wxFileSize_t pos = m_i_streambuf->Tell();
 
     if (pos != wxInvalidOffset)
         pos -= (m_wbacksize - m_wbackcur);

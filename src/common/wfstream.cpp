@@ -69,7 +69,7 @@ size_t wxFileInputStream::GetSize() const
 
 size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
 {
-    wxFileOffset ret = m_file->Read(buffer, size);
+    wxFileSize_t ret = m_file->Read(buffer, size);
 
     // NB: we can't use a switch here because HP-UX CC doesn't allow
     //     switching over long long (which off_t is in 64bit mode)
@@ -234,9 +234,7 @@ size_t wxFFileInputStream::GetSize() const
 
 size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
 {
-    wxFileOffset ret;
-
-    ret = m_file->Read(buffer, size);
+    wxFileSize_t ret = m_file->Read(buffer, size);
 
     if (m_file->Eof())
         m_lasterror = wxSTREAM_EOF;

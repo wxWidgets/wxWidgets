@@ -843,15 +843,15 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     wxUint16        aWord;
     wxInt32         dbuf[4];
     wxInt8          bbuf[4];
-    off_t           offset;
 
-    offset = 0; // keep gcc quiet
+    wxFileSize_t offset = 0; // keep gcc quiet
     if ( IsBmp )
     {
         // read the header off the .BMP format file
 
         offset = stream.TellI();
-        if (offset == wxInvalidOffset) offset = 0;
+        if (offset == wxInvalidOffset)
+            offset = 0;
 
         stream.Read(bbuf, 2);
         stream.Read(dbuf, 16);

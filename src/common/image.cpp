@@ -1485,7 +1485,7 @@ bool wxImageHandler::CanRead( const wxString& name )
 
 bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
 {
-    off_t posOld = stream.TellI();
+    wxFileSize_t posOld = stream.TellI();
     if ( posOld == wxInvalidOffset )
     {
         // can't test unseekable stream
