@@ -135,8 +135,6 @@ wxRendererMac::DrawHeaderButton(wxWindow *win,
                                 const wxRect& rect,
                                 int flags)
 {
-    const int CORNER = 1;
-
     const wxCoord x = rect.x-1,
                   y = rect.y-1,
                   w = rect.width,

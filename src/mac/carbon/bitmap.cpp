@@ -216,6 +216,7 @@ PicHandle wxMacCreatePicHandle( const wxBitmap &bmp )
         GWorldPtr monoworld ;
         clipRgn = NewRgn() ;
         OSStatus err = NewGWorld( &monoworld , 1 , &rect , NULL , NULL , 0 ) ;
+        verify_noerr(err) ;
         LockPixels( GetGWorldPixMap( monoworld ) ) ;
         LockPixels( GetGWorldPixMap( mask ) ) ;
         SetGWorld( monoworld , NULL ) ;
