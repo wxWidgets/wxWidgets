@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/hashes/hashes.cpp
-// Purpose:     wxArray unit test
+// Purpose:     wxHashTable, wxHashMap, wxHashSet unit test
 // Author:      Vadim Zeitlin, Mattia Barbon
 // Created:     2004-05-16
 // RCS-ID:      $Id$
@@ -295,10 +295,176 @@ void HashesTestCase::wxTypedHashTableTest()
     CPPUNIT_ASSERT( Foo::count == 0 );
 }
 
+// test compilation of basic map types
+WX_DECLARE_HASH_MAP( int*, int*, wxPointerHash, wxPointerEqual, myPtrHashMap );
+WX_DECLARE_HASH_MAP( long, long, wxIntegerHash, wxIntegerEqual, myLongHashMap );
+WX_DECLARE_HASH_MAP( unsigned long, unsigned, wxIntegerHash, wxIntegerEqual,
+                     myUnsignedHashMap );
+WX_DECLARE_HASH_MAP( unsigned int, unsigned, wxIntegerHash, wxIntegerEqual,
+                     myTestHashMap1 );
+WX_DECLARE_HASH_MAP( int, unsigned, wxIntegerHash, wxIntegerEqual,
+                     myTestHashMap2 );
+WX_DECLARE_HASH_MAP( short, unsigned, wxIntegerHash, wxIntegerEqual,
+                     myTestHashMap3 );
+WX_DECLARE_HASH_MAP( unsigned short, unsigned, wxIntegerHash, wxIntegerEqual,
+                     myTestHashMap4 );
+
+// same as:
+// WX_DECLARE_HASH_MAP( wxString, wxString, wxStringHash, wxStringEqual,
+//                      myStringHashMap );
+WX_DECLARE_STRING_HASH_MAP(wxString, myStringHashMap);
+
+typedef myStringHashMap::iterator Itor;
+
 void HashesTestCase::wxHashMapTest()
 {
+    myStringHashMap sh(0); // as small as possible
+    wxString buf;
+    size_t i;
+    const size_t count = 10000;
+
+    // init with some data
+    for( i = 0; i < count; ++i )
+    {
+        buf.Printf(wxT("%d"), i );
+        sh[buf] = wxT("A") + buf + wxT("C");
+    }
+
+    // test that insertion worked
+    CPPUNIT_ASSERT( sh.size() == count );
+
+    for( i = 0; i < count; ++i )
+    {
+        buf.Printf(wxT("%d"), i );
+        CPPUNIT_ASSERT( sh[buf] == wxT("A") + buf + wxT("C") );
+    }
+
+    // check that iterators work
+    Itor it;
+    for( i = 0, it = sh.begin(); it != sh.end(); ++it, ++i )
+    {
+        CPPUNIT_ASSERT( i != count );
+        CPPUNIT_ASSERT( it->second == sh[it->first] );
+    }
+
+    CPPUNIT_ASSERT( sh.size() == i );
+
+    // test copy ctor, assignment operator
+    myStringHashMap h1( sh ), h2( 0 );
+    h2 = sh;
+
+    for( i = 0, it = sh.begin(); it != sh.end(); ++it, ++i )
+    {
+        CPPUNIT_ASSERT( h1[it->first] == it->second );
+        CPPUNIT_ASSERT( h2[it->first] == it->second );
+    }
+
+    // other tests
+    for( i = 0; i < count; ++i )
+    {
+        buf.Printf(wxT("%d"), i );
+        size_t sz = sh.size();
+
+        // test find() and erase(it)
+        if( i < 100 )
+        {
+            it = sh.find( buf );
+            CPPUNIT_ASSERT( it != sh.end() );
+
+            sh.erase( it );
+
+            CPPUNIT_ASSERT( sh.find( buf ) == sh.end() );
+        }
+        else
+        // test erase(key)
+        {
+            size_t c = sh.erase( buf );
+            CPPUNIT_ASSERT( c == 1 );
+            CPPUNIT_ASSERT( sh.find( buf ) == sh.end() );
+        }
+
+        // count should decrease
+        CPPUNIT_ASSERT( sh.size() == sz - 1 );
+    }
 }
+
+// test compilation of basic set types
+WX_DECLARE_HASH_SET( int*, wxPointerHash, wxPointerEqual, myPtrHashSet );
+WX_DECLARE_HASH_SET( long, wxIntegerHash, wxIntegerEqual, myLongHashSet );
+WX_DECLARE_HASH_SET( unsigned long, wxIntegerHash, wxIntegerEqual,
+                     myUnsignedHashSet );
+WX_DECLARE_HASH_SET( unsigned int, wxIntegerHash, wxIntegerEqual,
+                     myTestHashSet1 );
+WX_DECLARE_HASH_SET( int, wxIntegerHash, wxIntegerEqual,
+                     myTestHashSet2 );
+WX_DECLARE_HASH_SET( short, wxIntegerHash, wxIntegerEqual,
+                     myTestHashSet3 );
+WX_DECLARE_HASH_SET( unsigned short, wxIntegerHash, wxIntegerEqual,
+                     myTestHashSet4 );
+WX_DECLARE_HASH_SET( wxString, wxStringHash, wxStringEqual,
+                     myTestHashSet5 );
+
+struct MyStruct
+{
+    int* ptr;
+    wxString str;
+};
+
+class MyHash
+{
+public:
+    unsigned long operator()(const MyStruct& s) const
+        { return m_dummy(s.ptr); }
+    MyHash& operator=(const MyHash&) { return *this; }
+private:
+    wxPointerHash m_dummy;
+};
+
+class MyEqual
+{
+public:
+    bool operator()(const MyStruct& s1, const MyStruct& s2) const
+        { return s1.ptr == s2.ptr; }
+    MyEqual& operator=(const MyEqual&) { return *this; }
+};
+
+WX_DECLARE_HASH_SET( MyStruct, MyHash, MyEqual, mySet );
+
+typedef myTestHashSet5 wxStringHashSet;
 
 void HashesTestCase::wxHashSetTest()
 {
+    wxStringHashSet set1;
+
+    set1.insert( _T("abc") );
+
+    CPPUNIT_ASSERT( set1.size() == 1 );
+
+    set1.insert( _T("bbc") );
+    set1.insert( _T("cbc") );
+
+    CPPUNIT_ASSERT( set1.size() == 3 );
+
+    set1.insert( _T("abc") );
+
+    CPPUNIT_ASSERT( set1.size() == 3 );
+
+    mySet set2;
+    int dummy;
+    MyStruct tmp;
+
+    tmp.ptr = &dummy; tmp.str = _T("ABC");
+    set2.insert( tmp );
+    tmp.ptr = &dummy + 1;
+    set2.insert( tmp );
+    tmp.ptr = &dummy; tmp.str = _T("CDE");
+    set2.insert( tmp );
+
+    CPPUNIT_ASSERT( set2.size() == 2 );
+
+    mySet::iterator it = set2.find( tmp );
+
+    CPPUNIT_ASSERT( it != set2.end() );
+    CPPUNIT_ASSERT( it->ptr == &dummy );
+    CPPUNIT_ASSERT( it->str == _T("ABC") );
 }

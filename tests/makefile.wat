@@ -197,6 +197,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_fontmaptest.obj &
 	$(OBJS)\test_formatconvertertest.obj &
 	$(OBJS)\test_hashes.obj &
+	$(OBJS)\test_lists.obj &
 	$(OBJS)\test_longlongtest.obj &
 	$(OBJS)\test_mbconvtest.obj &
 	$(OBJS)\test_regextest.obj &
@@ -206,6 +207,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_unicode.obj &
 	$(OBJS)\test_crt.obj &
 	$(OBJS)\test_bstream.obj &
+	$(OBJS)\test_datastreamtest.obj &
 	$(OBJS)\test_ffilestream.obj &
 	$(OBJS)\test_filestream.obj &
 	$(OBJS)\test_memstream.obj &
@@ -278,6 +280,9 @@ $(OBJS)\test_formatconvertertest.obj :  .AUTODEPEND .\formatconverter\formatconv
 $(OBJS)\test_hashes.obj :  .AUTODEPEND .\hashes\hashes.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_lists.obj :  .AUTODEPEND .\lists\lists.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_longlongtest.obj :  .AUTODEPEND .\longlong\longlongtest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
@@ -303,6 +308,9 @@ $(OBJS)\test_crt.obj :  .AUTODEPEND .\strings\crt.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_bstream.obj :  .AUTODEPEND .\streams\bstream.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_datastreamtest.obj :  .AUTODEPEND .\streams\datastreamtest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_ffilestream.obj :  .AUTODEPEND .\streams\ffilestream.cpp

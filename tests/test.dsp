@@ -451,6 +451,10 @@ SOURCE=.\strings\crt.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\streams\datastreamtest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\datetime\datetimetest.cpp
 # End Source File
 # Begin Source File
@@ -490,6 +494,10 @@ SOURCE=.\formatconverter\formatconvertertest.cpp
 # Begin Source File
 
 SOURCE=.\hashes\hashes.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\lists\lists.cpp
 # End Source File
 # Begin Source File
 

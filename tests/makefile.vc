@@ -36,6 +36,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_fontmaptest.obj \
 	$(OBJS)\test_formatconvertertest.obj \
 	$(OBJS)\test_hashes.obj \
+	$(OBJS)\test_lists.obj \
 	$(OBJS)\test_longlongtest.obj \
 	$(OBJS)\test_mbconvtest.obj \
 	$(OBJS)\test_regextest.obj \
@@ -45,6 +46,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_unicode.obj \
 	$(OBJS)\test_crt.obj \
 	$(OBJS)\test_bstream.obj \
+	$(OBJS)\test_datastreamtest.obj \
 	$(OBJS)\test_ffilestream.obj \
 	$(OBJS)\test_filestream.obj \
 	$(OBJS)\test_memstream.obj \
@@ -282,6 +284,9 @@ $(OBJS)\test_formatconvertertest.obj: .\formatconverter\formatconvertertest.cpp
 $(OBJS)\test_hashes.obj: .\hashes\hashes.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
+$(OBJS)\test_lists.obj: .\lists\lists.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
 $(OBJS)\test_longlongtest.obj: .\longlong\longlongtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
@@ -307,6 +312,9 @@ $(OBJS)\test_crt.obj: .\strings\crt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_bstream.obj: .\streams\bstream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_datastreamtest.obj: .\streams\datastreamtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_ffilestream.obj: .\streams\ffilestream.cpp

@@ -49,6 +49,7 @@ TEST_OBJECTS =  \
 	test_fontmaptest.o \
 	test_formatconvertertest.o \
 	test_hashes.o \
+	test_lists.o \
 	test_longlongtest.o \
 	test_mbconvtest.o \
 	test_regextest.o \
@@ -58,6 +59,7 @@ TEST_OBJECTS =  \
 	test_unicode.o \
 	test_crt.o \
 	test_bstream.o \
+	test_datastreamtest.o \
 	test_ffilestream.o \
 	test_filestream.o \
 	test_memstream.o \
@@ -180,6 +182,9 @@ test_formatconvertertest.o: $(srcdir)/formatconverter/formatconvertertest.cpp $(
 test_hashes.o: $(srcdir)/hashes/hashes.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
+test_lists.o: $(srcdir)/lists/lists.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
 test_longlongtest.o: $(srcdir)/longlong/longlongtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
@@ -205,6 +210,9 @@ test_crt.o: $(srcdir)/strings/crt.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_bstream.o: $(srcdir)/streams/bstream.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_datastreamtest.o: $(srcdir)/streams/datastreamtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_ffilestream.o: $(srcdir)/streams/ffilestream.cpp $(TEST_ODEP)

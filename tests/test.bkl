@@ -29,6 +29,7 @@
             fontmap/fontmaptest.cpp
             formatconverter/formatconvertertest.cpp
             hashes/hashes.cpp
+            lists/lists.cpp
             longlong/longlongtest.cpp
             mbconv/mbconvtest.cpp
             regex/regextest.cpp
