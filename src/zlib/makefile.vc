@@ -15,13 +15,13 @@ FINAL=0
 !endif
 
 !if "$(FINAL)" == "0"
-CFLAGS=/Od $(CRTFLAG) /GX /Fo$@
+CFLAGS=/nologo /Od $(CRTFLAG) /GX /Fo$@
 _CRTFLAG=/MDd
 !else if "$(FINAL)" == "hybrid"
-CFLAGS=/Od $(CRTFLAG) /GX /Fo$@
+CFLAGS=/nologo /Od $(CRTFLAG) /GX /Fo$@
 _CRTFLAG=/MD
 !else
-CFLAGS=-O2 $(CRTFLAG) /GX /Fo$@
+CFLAGS=/nologo -O2 $(CRTFLAG) /GX /Fo$@
 _CRTFLAG=/MD
 !endif
 
