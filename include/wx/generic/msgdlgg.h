@@ -27,15 +27,19 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxMessageBoxCaptionStr;
 class WXDLLEXPORT wxGenericMessageDialog: public wxDialog
 {
 DECLARE_DYNAMIC_CLASS(wxGenericMessageDialog)
-protected:
-    long m_dialogStyle;
+
 public:
-    wxGenericMessageDialog(wxWindow *parent, const wxString& message, const wxString& caption = wxMessageBoxCaptionStr,
+    wxGenericMessageDialog(wxWindow *parent, const wxString& message, 
+        const wxString& caption = wxMessageBoxCaptionStr,
         long style = wxOK|wxCENTRE, const wxPoint& pos = wxDefaultPosition);
 
     void OnYes(wxCommandEvent& event);
     void OnNo(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event);
+    
+private:
+    wxList  m_buttons;
+    int     m_dialogStyle;
 
 DECLARE_EVENT_TABLE()
 };

@@ -3532,6 +3532,7 @@ bool wxWindow::Layout()
     GetSizer()->LayoutPhase1(&noChanges);
     GetSizer()->LayoutPhase2(&noChanges);
     GetSizer()->SetConstraintSizes(); // Recursively set the real window sizes
+    
     return TRUE;
   }
   else

@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        msgdlgg.cpp
 // Purpose:     wxGenericMessageDialog
-// Author:      Julian Smart
+// Author:      Julian Smart, Robert Roebling
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
+// Copyright:   (c) Julian Smart, Markus Holzem, Robert Roebling
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -39,36 +39,40 @@
 // New dialog box implementations
 
 // Split message, using constraints to position controls
-void wxSplitMessage2(const wxChar *message, wxList *messageList, wxWindow *parent, wxRowColSizer *sizer)
+wxSize wxSplitMessage2( const wxString &message, wxWindow *parent )
 {
-  wxChar *copyMessage = copystring(message);
-  size_t i = 0;
-  size_t len = wxStrlen(copyMessage);
-  wxChar *currentMessage = copyMessage;
-
-//  wxWindow *lastWindow = parent;
-
-  while (i < len) {
-    while ((i < len) && (copyMessage[i] != _T('\n'))) i++;
-    if (i < len) copyMessage[i] = 0;
-    wxStaticText *mess = new wxStaticText(parent, -1, currentMessage);
-
-/*
-    wxLayoutConstraints *c = new wxLayoutConstraints;
-    c->left.SameAs       	(parent, wxLeft, 10);
-    c->top.SameAs        	(lastWindow, wxBottom, 5);
-    c->right.AsIs      		();
-    c->height.AsIs			();
-
-    mess->SetConstraints(c);
-*/
-    sizer->AddSizerChild(mess);
-
-    messageList->Append(mess);
-
-    currentMessage = copyMessage + i + 1;
-  }
-  delete[] copyMessage;
+    int y = 10;
+    int w = 50;
+    wxString line( _T("") );
+    for (uint pos = 0; pos < message.Len(); pos++)
+    {
+        if (message[pos] == _T('\n'))
+	{
+	    if (!line.IsEmpty())
+	    {
+	        wxStaticText *s1 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
+	        wxSize size1( s1->GetSize() );
+	        if (size1.x > w) w = size1.x;
+	        line = _T("");
+	    }
+	    y += 18;
+	}
+	else
+	{
+	    line += message[pos];
+	}
+    }
+    
+    if (!line.IsEmpty())
+    {
+	wxStaticText *s2 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
+	wxSize size2( s2->GetSize() );
+	if (size2.x > w) w = size2.x;
+    }
+	
+    y += 18;
+    
+    return wxSize(w+30,y);
 }
 
 #if !USE_SHARED_LIBRARY
@@ -81,106 +85,90 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog)
 #endif
 
-wxGenericMessageDialog::wxGenericMessageDialog(wxWindow *parent, const wxString& message, const wxString& caption,
-        long style, const wxPoint& pos):
-	wxDialog(parent, -1, caption, pos,
-#ifdef __WXMOTIF_
-           wxSize(400, 300),
-#else
-           wxDefaultSize,
-#endif
-           wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString& message, 
+   const wxString& caption, long style, const wxPoint& pos) :
+  wxDialog( parent, -1, caption, pos, wxDefaultSize )
 {
     m_dialogStyle = style;
 
-    wxBeginBusyCursor();
+    wxSize message_size( wxSplitMessage2( message, this ) );
 
-    wxSizer *topSizer = new wxSizer(this, wxSizerShrink);
-    topSizer->SetBorder(10, 10);
-
-    // message sizer at the top
-    wxRowColSizer *messageSizer = new wxRowColSizer(topSizer, wxSIZER_COLS, 100);
-    messageSizer->SetName(_T("messageSizer"));
-
-//    bool centre = ((style & wxCENTRE) == wxCENTRE);
-
-    wxList messageList;
-    wxSplitMessage2(message, &messageList, this, messageSizer);
-
-    // spacer size in the middle
-    wxSpacingSizer *spacingSizer = new wxSpacingSizer(topSizer, wxBelow, messageSizer, 20);
-
-    // row size at the bottom
-    wxRowColSizer *buttonSizer = new wxRowColSizer(topSizer, wxSIZER_ROWS );
-    buttonSizer->SetName(_T("buttonSizer"));
-    buttonSizer->SetSpacing(12,0);
-
-    // Specify constraints for the button sizer
-    wxLayoutConstraints *c = new wxLayoutConstraints;
-    c->width.AsIs		();
-    c->height.AsIs		();
-    c->top.Below		(spacingSizer);
-    c->left.Absolute            (10);
-//    c->centreX.SameAs	(spacingSizer, wxCentreX);
-    buttonSizer->SetConstraints(c);
-    
     wxButton *ok = (wxButton *) NULL;
     wxButton *cancel = (wxButton *) NULL;
     wxButton *yes = (wxButton *) NULL;
     wxButton *no = (wxButton *) NULL;
-
-    if (style & wxYES_NO) {
-       yes = new wxButton(this, wxID_YES, _("Yes"), wxDefaultPosition, wxSize(75,-1) );
-       no = new wxButton(this, wxID_NO, _("No"), wxDefaultPosition, wxSize(75,-1) );
-
-       buttonSizer->AddSizerChild(yes);
-       buttonSizer->AddSizerChild(no);
+    
+    int y = message_size.y + 30;
+    
+    if (style & wxYES_NO) 
+    {
+        yes = new wxButton( this, wxID_YES, _("Yes"), wxPoint(-1,y), wxSize(80,-1) );
+	m_buttons.Append( yes );
+        no = new wxButton( this, wxID_NO, _("No"), wxPoint(-1,y), wxSize(80,-1) );
+	m_buttons.Append( no );
     }
 
-    if (style & wxOK) {
-        ok = new wxButton(this, wxID_OK, _("OK"), wxDefaultPosition, wxSize(75,-1) );
-        buttonSizer->AddSizerChild(ok);
+    if (style & wxOK) 
+    {
+        ok = new wxButton( this, wxID_OK, _("OK"), wxPoint(-1,y), wxSize(80,-1) );
+	m_buttons.Append( ok );
     }
 
-    if (style & wxCANCEL) {
-        cancel = new wxButton(this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxSize(75,-1) );
-        buttonSizer->AddSizerChild(cancel);
+    if (style & wxCANCEL) 
+    {
+        cancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxPoint(-1,y), wxSize(80,-1) );
+	m_buttons.Append( cancel );
     }
 
     if (ok)
     {
-      ok->SetDefault();
-      ok->SetFocus();
+        ok->SetDefault();
+        ok->SetFocus();
     }
     else if (yes)
     {
-      yes->SetDefault();
-      yes->SetFocus();
+        yes->SetDefault();
+        yes->SetFocus();
     }
-
-    Layout();
     
-    Centre(wxBOTH);
+    int w = m_buttons.GetCount() * 100;
+    if (message_size.x > w) w = message_size.x;
+    int space = w / (m_buttons.GetCount()*2);
+    
+    int n = 0;
+    wxNode *node = m_buttons.First();
+    while (node)
+    {
+        wxWindow *win = (wxWindow*)node->Data();
+	int x = (n*2+1)*space - 40 + 15;
+	win->Move( x, -1 );
+        node = node->Next();
+	n++;
+    }
+    
+    SetSize( w+30, y+40 );
 
-    wxEndBusyCursor();
+    Centre( wxBOTH );
 }
 
 void wxGenericMessageDialog::OnYes(wxCommandEvent& WXUNUSED(event))
 {
-    EndModal(wxID_YES);
+    EndModal( wxID_YES );
 }
 
 void wxGenericMessageDialog::OnNo(wxCommandEvent& WXUNUSED(event))
 {
-    EndModal(wxID_NO);
+    EndModal( wxID_NO );
 }
 
 void wxGenericMessageDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-    // Allow cancellation via ESC/Close button except if
-    // only YES and NO are specified.
+    /* Allow cancellation via ESC/Close button except if
+       only YES and NO are specified. */
     if ( (m_dialogStyle & wxYES_NO) != wxYES_NO || (m_dialogStyle & wxCANCEL) )
-        EndModal(wxID_CANCEL);
+    {
+        EndModal( wxID_CANCEL );
+    }
 }
 
 

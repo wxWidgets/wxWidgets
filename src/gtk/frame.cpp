@@ -196,16 +196,18 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
     
     if ((win->m_windowStyle & wxCAPTION) == 0)
 	decor |= GDK_DECOR_TITLE;
-/*  if ((win->m_windowStyle & wxMINIMIZE) == 0)
-	func |= GDK_FUNC_MINIMIZE;
-    if ((win->m_windowStyle & wxMAXIMIZE) == 0)
-	func |= GDK_FUNC_MAXIMIZE;            */
     if ((win->m_windowStyle & wxSYSTEM_MENU) == 0)
 	decor |= GDK_DECOR_MENU;
     if ((win->m_windowStyle & wxMINIMIZE_BOX) == 0)
+    {
+	func |= GDK_FUNC_MINIMIZE;
 	decor |= GDK_DECOR_MINIMIZE;
+    }
     if ((win->m_windowStyle & wxMAXIMIZE_BOX) == 0)
+    {
+	func |= GDK_FUNC_MAXIMIZE;
 	decor |= GDK_DECOR_MAXIMIZE;
+    }
     if ((win->m_windowStyle & wxRESIZE_BORDER) == 0)
 	func |= GDK_FUNC_RESIZE;
 	

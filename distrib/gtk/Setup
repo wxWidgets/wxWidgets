@@ -11,7 +11,7 @@ CCC=g++
 WXWIN=~/wxWindows
 GENCODEDIR=gtk
 srcdir=$(GENCODEDIR)
-WX_CONFIG_CFLAGS=`wx-config --cflags`
+WX_CONFIG_CFLAGS=`wx-config --cflags` `gtk-config --cflags`
 WX_CONFIG_LIBS=`wx-config --libs`
 
 # Depending on how your Python was built, you may have to set this
