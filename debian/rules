@@ -556,7 +556,8 @@ install-gtk-py: install-gtk-py-lib
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/helpviewer.1 \
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyalacarte.1 \
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyalamode.1  \
-		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pywrap.1
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pywrap.1     \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pywxrc.1
 
 
 install-common: DH_OPTIONS=-p$(package_common)
