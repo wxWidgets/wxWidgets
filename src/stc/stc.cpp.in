@@ -398,7 +398,7 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     // alt let's skip it.
     bool ctrl = evt.ControlDown();
     bool alt  = evt.AltDown();
-    bool skip = (ctrl || alt && ! (ctrl && alt));
+    bool skip = ((ctrl || alt) && ! (ctrl && alt));
 
     if (key <= 0xff && !iscntrl(key) && !m_lastKeyDownConsumed && !skip) {
         m_swx->DoAddChar(key);
