@@ -110,13 +110,13 @@ public:
 
   // file pointer operations (return ofsInvalid on failure)
     // move ptr ofs bytes related to start/current off_t/end of file
-  wxFileOffset Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
+  wxFileSize_t Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
     // move ptr to ofs bytes before the end
-  wxFileOffset SeekEnd(wxFileOffset ofs = 0) { return Seek(ofs, wxFromEnd); }
+  wxFileSize_t SeekEnd(wxFileOffset ofs = 0) { return Seek(ofs, wxFromEnd); }
     // get current off_t
-  wxFileOffset Tell() const;
+  wxFileSize_t Tell() const;
     // get current file length
-  wxFileOffset Length() const;
+  wxFileSize_t Length() const;
 
   // simple accessors
     // is file opened?
