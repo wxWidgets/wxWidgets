@@ -129,11 +129,13 @@ int _System soclose(int);
 /*
  * OSX 10.2 has int args instead of SOCKLENXXX_T
  */
-#if defined( __WXMAC__ ) && ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
-#undef SOCKOPTLEN_T 
-#undef SOCKLEN_T
-#define SOCKOPTLEN_T int
-#define SOCKLEN_T int
+#if defined( __WXMAC__ ) || defined ( __WXCOCOA__ ) 
+#  if ( MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_2 )
+#    undef SOCKOPTLEN_T 
+#    undef SOCKLEN_T
+#    define SOCKOPTLEN_T int
+#    define SOCKLEN_T int
+#  endif
 #endif
 
 /*
