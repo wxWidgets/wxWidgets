@@ -181,6 +181,10 @@ SOURCE=.\common\docview.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\dseldlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\dynarray.cpp
 # End Source File
 # Begin Source File

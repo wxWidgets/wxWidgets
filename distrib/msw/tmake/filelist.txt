@@ -136,6 +136,7 @@ dndcmn.cpp	Common
 dobjcmn.cpp	Common
 docmdi.cpp	Common
 docview.cpp	Common
+dseldlg.cpp	Common
 dynarray.cpp	Common	Base
 dynlib.cpp	Common	Base
 effects.cpp	Common
