@@ -25,6 +25,7 @@
 #include "wx/cursor.h"          // we have member variables of these classes
 #include "wx/font.h"            // so we can't do without them
 #include "wx/colour.h"
+#include "wx/bitmap.h"          // for wxNullBitmap
 #include "wx/brush.h"
 #include "wx/pen.h"
 #include "wx/palette.h"
