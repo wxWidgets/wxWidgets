@@ -547,10 +547,13 @@ bool wxYieldIfNeeded()
 // Id generation
 static long wxCurrentId = 100;
 
-long
-wxNewId (void)
+long wxNewId()
 {
-  return wxCurrentId++;
+    // skip the part of IDs space that contains hard-coded values:
+    if (wxCurrentId == wxID_LOWEST)
+        wxCurrentId = wxID_HIGHEST + 1;
+
+    return wxCurrentId++;
 }
 
 long
