@@ -65,7 +65,10 @@ public:
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
+    void OnFromPoint(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+
+    void OnLeftClick(wxMouseEvent& event);
 
 private:
     // any class wishing to process wxWindows events must use this macro
@@ -82,6 +85,8 @@ enum
     // menu items
     Display_Quit = 1,
 
+    Display_FromPoint,
+
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
     // (where it is special and put into the "Apple" menu)
@@ -97,7 +102,10 @@ enum
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Display_Quit,  MyFrame::OnQuit)
+    EVT_MENU(Display_FromPoint,  MyFrame::OnFromPoint)
     EVT_MENU(Display_About, MyFrame::OnAbout)
+
+    EVT_LEFT_UP(MyFrame::OnLeftClick)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -145,22 +153,26 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
 #if wxUSE_MENUS
     // create a menu bar
-    wxMenu *menuFile = new wxMenu;
+    wxMenu *menuDisplay = new wxMenu;
+    menuDisplay->Append(Display_FromPoint, _("&Find from point..."));
+    menuDisplay->AppendSeparator();
+    menuDisplay->Append(Display_Quit, _("E&xit\tAlt-X"), _("Quit this program"));
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(Display_About, _("&About...\tF1"), _("Show about dialog"));
 
-    menuFile->Append(Display_Quit, _("E&xit\tAlt-X"), _("Quit this program"));
-
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, _("&File"));
+    menuBar->Append(menuDisplay, _("&Display"));
     menuBar->Append(helpMenu, _("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
+
+    // create status bar
+    CreateStatusBar();
 
     // create child controls
     wxNotebook *notebook = new wxNotebook(this, -1);
@@ -176,14 +188,22 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
         sizer->AddGrowableCol(1);
 
         const wxRect r(display.GetGeometry());
-        sizer->Add(new wxStaticText(page, -1, _T("Geometry: ")));
+        sizer->Add(new wxStaticText(page, -1, _T("Origin: ")));
         sizer->Add(new wxStaticText
                        (
                         page,
                         -1,
-                        wxString::Format(_T("(%d, %d)-(%d, %d)"),
-                                         r.x, r.y,
-                                         r.x + r.width, r.y + r.height)
+                        wxString::Format(_T("(%d, %d)"),
+                                         r.x, r.y)
+                       ));
+
+        sizer->Add(new wxStaticText(page, -1, _T("Size: ")));
+        sizer->Add(new wxStaticText
+                       (
+                        page,
+                        -1,
+                        wxString::Format(_T("(%d, %d)"),
+                                         r.width, r.height)
                        ));
 
         sizer->Add(new wxStaticText(page, -1, _T("Depth: ")));
@@ -193,6 +213,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
                         -1,
                         wxString::Format(_T("%d bpp"), display.GetDepth())
                        ));
+
+        sizer->Add(new wxStaticText(page, -1, _T("Name: ")));
+        sizer->Add(new wxStaticText(page, -1, display.GetName()));
 
         sizer->Add(new wxStaticText(page, -1, _T("Colour: ")));
         sizer->Add(new wxStaticText(page, -1, display.IsColour() ? _T("Yes")
@@ -224,3 +247,30 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  wxOK | wxICON_INFORMATION,
                  this);
 }
+
+void MyFrame::OnFromPoint(wxCommandEvent& WXUNUSED(event))
+{
+    SetStatusText(_T("Press the mouse anywhere..."));
+
+    CaptureMouse();
+}
+
+void MyFrame::OnLeftClick(wxMouseEvent& event)
+{
+    if ( HasCapture() )
+    {
+        // mouse events are in client coords, wxDisplay works in screen ones
+        const wxPoint ptScreen = ClientToScreen(event.GetPosition());
+        int dpy = wxDisplay::GetFromPoint(ptScreen);
+        if ( dpy == wxNOT_FOUND )
+        {
+            wxLogError(_T("Mouse clicked outside of display!!"));
+        }
+
+        wxLogStatus(this, _T("Mouse clicked in display %d (at (%d, %d))"),
+                    dpy, ptScreen.x, ptScreen.y);
+
+        ReleaseMouse();
+    }
+}
+
