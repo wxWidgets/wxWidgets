@@ -168,7 +168,7 @@ Adds a separator for spacing groups of tools.
 
 \membersection{wxToolBar::AddTool}\label{wxtoolbaraddtool}
 
-\func{wxToolBarTool*}{AddTool}{\param{int}{ toolIndex}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
+\func{wxToolBarTool*}{AddTool}{\param{int}{ toolId}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
 \param{const wxBitmap\&}{ bitmap2 = wxNullBitmap}, \param{bool}{ isToggle = FALSE},\rtfsp
 \param{long}{ xPos = -1}, \param{long}{ yPos = -1},\rtfsp
 \param{wxObject* }{clientData = NULL}, \param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
@@ -177,7 +177,7 @@ Adds a tool to the toolbar.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{An integer by which
+\docparam{toolId}{An integer by which
 the tool may be identified in subsequent operations.}
 
 \docparam{isToggle}{Specifies whether the tool is a toggle or not: a toggle tool may be in
@@ -198,11 +198,10 @@ as a pressed button (GTK). }
 \docparam{clientData}{An optional pointer to client data which can be
 retrieved later using \helpref{wxToolBar::GetToolClientData}{wxtoolbargettoolclientdata}.}
 
-\docparam{shortHelpString}{Used for displaying a tooltip for the tool in the
-Windows 95 implementation of wxButtonBar. Pass the empty string if this is not required.}
+\docparam{shortHelpString}{This string is used for the tools tooltip}
 
-\docparam{longHelpString}{Used to displayer longer help, such as status line help.
-Pass the empty string if this is not required.}
+\docparam{longHelpString}{This string is shown in the statusbar (if any) of the
+parent frame when the mouse pointer is inside the tool}
 
 \wxheading{Remarks}
 
@@ -212,45 +211,43 @@ order to have the tools appear.
 \wxheading{See also}
 
 \helpref{wxToolBar::AddSeparator}{wxtoolbaraddseparator},
+\helpref{wxToolBar::InsertTool}{wxtoolbarinserttool},
+\helpref{wxToolBar::DeleteTool}{wxtoolbardeletetool},
 \helpref{wxToolBar::Realize}{wxtoolbarrealize},
 
-\membersection{wxToolBar::CreateTools}\label{wxtoolbarcreatetools}
+\membersection{wxToolBar::DeleteTool}\label{wxtoolbardeletetool}
 
-\func{bool}{CreateTools}{\void}
+\func{bool}{DeleteTool}{\param{int }{toolId}}
 
-This function is implemented for some toolbar classes to create the tools and display them.
-The portable way of calling it is to call \helpref{wxToolBar::Realize}{wxtoolbarrealize} after
-you have added tools and separators.
+Removes the specified tool from the toolbar and deletes it. If you don't want
+to delete the tool, but just to remove it from the toolbar (to possibly add it
+back later), you may use \helpref{RemoveTool}{wxtoolbarremovetool} instead.
+
+Note that it is unnecessary to call \helpref{Realize}{wxtoolbarrealize} for the
+change to take place, it will happen immediately.
+
+Returns TRUE if the tool was deleted, FALSE otherwise.
 
 \wxheading{See also}
 
-\helpref{wxToolBar::AddTool}{wxtoolbaraddtool}, \helpref{wxToolBar::Realize}{wxtoolbarrealize}
+\helpref{DeleteToolByPos}{wxtoolbardeletetoolbypos}
 
-\membersection{wxToolBar::DrawTool}\label{wxtoolbardrawtool}
+\membersection{wxToolBar::DeleteToolByPos}\label{wxtoolbardeletetoolbypos}
 
-\func{void}{DrawTool}{\param{wxMemoryDC\& }{memDC}, \param{wxToolBarTool* }{tool}}
+\func{bool}{DeleteToolByPos}{\param{size\_t }{pos}}
 
-Draws the specified tool onto the window using the given memory device context.
-
-\wxheading{Parameters}
-
-\docparam{memDC}{A memory DC to be used for drawing the tool.}
-
-\docparam{tool}{Tool to be drawn.}
-
-\wxheading{Remarks}
-
-For internal use only.
+This function behaves like \helpref{DeleteTool}{wxtoolbardeletetool} but it
+deletes the tool at the specified position and not the one with the given id.
 
 \membersection{wxToolBar::EnableTool}\label{wxtoolbarenabletool}
 
-\func{void}{EnableTool}{\param{int }{toolIndex}, \param{const bool}{ enable}}
+\func{void}{EnableTool}{\param{int }{toolId}, \param{const bool}{ enable}}
 
 Enables or disables the tool.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{Tool to enable or disable.}
+\docparam{toolId}{Tool to enable or disable.}
 
 \docparam{enable}{If TRUE, enables the tool, otherwise disables it.}
 
@@ -262,7 +259,6 @@ will change the visible state of the tool to indicate that it is disabled.
 \wxheading{See also}
 
 \helpref{wxToolBar::GetToolEnabled}{wxtoolbargettoolenabled},\rtfsp
-%\helpref{wxToolBar::SetToolState}{wxtoolbarsettoolstate},\rtfsp
 \helpref{wxToolBar::ToggleTool}{wxtoolbartoggletool}
 
 \membersection{wxToolBar::FindToolForPosition}\label{wxtoolbarfindtoolforposition}
@@ -323,22 +319,15 @@ Returns the left/right and top/bottom margins, which are also used for inter-too
 
 \helpref{wxToolBar::SetMargins}{wxtoolbarsetmargins}
 
-\membersection{wxToolBar::GetMaxSize}\label{wxtoolbargetmaxsize}
-
-\constfunc{wxSize}{GetMaxSize}{\void}
-
-Gets the maximum size taken up by the tools after layout, including margins.
-This can be used to size a frame around the toolbar window.
-
 \membersection{wxToolBar::GetToolClientData}\label{wxtoolbargettoolclientdata}
 
-\constfunc{wxObject*}{GetToolClientData}{\param{int }{toolIndex}}
+\constfunc{wxObject*}{GetToolClientData}{\param{int }{toolId}}
 
 Get any client data associated with the tool.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{Index of the tool, as passed to \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.}
+\docparam{toolId}{Id of the tool, as passed to \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.}
 
 \wxheading{Return value}
 
@@ -346,31 +335,31 @@ Client data, or NULL if there is none.
 
 \membersection{wxToolBar::GetToolEnabled}\label{wxtoolbargettoolenabled}
 
-\constfunc{bool}{GetToolEnabled}{\param{int }{toolIndex}}
+\constfunc{bool}{GetToolEnabled}{\param{int }{toolId}}
 
 Called to determine whether a tool is enabled (responds to user input).
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{Index of the tool in question.}
+\docparam{toolId}{Id of the tool in question.}
 
 \wxheading{Return value}
 
 TRUE if the tool is enabled, FALSE otherwise.
 
-%\wxheading{See also}
-%
-%\helpref{wxToolBar::SetToolEnabled}{wxtoolbarsettoolenabled}
-%
+\wxheading{See also}
+
+\helpref{wxToolBar::EnableTool}{wxtoolbarenabletool}
+
 \membersection{wxToolBar::GetToolLongHelp}\label{wxtoolbargettoollonghelp}
 
-\constfunc{wxString}{GetToolLongHelp}{\param{int }{toolIndex}}
+\constfunc{wxString}{GetToolLongHelp}{\param{int }{toolId}}
 
 Returns the long help for the given tool.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{The tool in question.}
+\docparam{toolId}{The tool in question.}
 
 \wxheading{See also}
 
@@ -399,7 +388,7 @@ Returns the default separator size.
 
 \membersection{wxToolBar::GetToolShortHelp}\label{wxtoolbargettoolshorthelp}
 
-\constfunc{wxString}{GetToolShortHelp}{\param{int }{toolIndex}}
+\constfunc{wxString}{GetToolShortHelp}{\param{int }{toolId}}
 
 Returns the short help for the given tool.
 
@@ -407,7 +396,7 @@ Returns the long help for the given tool.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{The tool in question.}
+\docparam{toolId}{The tool in question.}
 
 \wxheading{See also}
 
@@ -416,41 +405,69 @@ Returns the long help for the given tool.
 
 \membersection{wxToolBar::GetToolState}\label{wxtoolbargettoolstate}
 
-\constfunc{bool}{GetToolState}{\param{int }{toolIndex}}
+\constfunc{bool}{GetToolState}{\param{int }{toolId}}
 
 Gets the on/off state of a toggle tool.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{The tool in question.}
+\docparam{toolId}{The tool in question.}
 
 \wxheading{Return value}
 
 TRUE if the tool is toggled on, FALSE otherwise.
 
-%\wxheading{See also}
-%
-%\helpref{wxToolBar::SetToolState}{wxtoolbarsettoolstate}
-%
-\membersection{wxToolBar::Layout}\label{wxtoolbarlayout}
+\wxheading{See also}
 
-\func{void}{Layout}{\void}
+\helpref{wxToolBar::ToggleTool}{wxtoolbartoggletool}
 
-Called by the application after the tools have been added to
-automatically lay the tools out on the window. If you have given
-absolute positions when adding the tools, do not call this.
+\membersection{wxToolBar::InsertControl}\label{wxtoolbarinsertcontrol}
 
-This function is only implemented for some toolbar classes.
-The portable way of calling it is to call \helpref{wxToolBar::Realize}{wxtoolbarrealize} after
-you have added tools and separators.
+\func{wxToolBarTool *}{InsertControl}{\param{size\_t }{pos}, \param{wxControl *}{control}}
+
+Inserts the control into the toolbar at the given position.
+
+You must call \helpref{Realize}{wxtoolbarrealize} for the change to take place.
 
 \wxheading{See also}
 
-\helpref{wxToolBar::AddTool}{wxtoolbaraddtool}, \helpref{wxToolBar::Realize}{wxtoolbarrealize}
+\helpref{AddControl}{wxtoolbaraddcontrol},\\
+\helpref{InsertTool}{wxtoolbarinserttool}
+
+\membersection{wxToolBar::InsertSeparator}\label{wxtoolbarinsertseparator}
+
+\func{wxToolBarTool *}{InsertSeparator}{\param{size\_t }{pos}}
+
+Inserts the separator into the toolbar at the given position.
+
+You must call \helpref{Realize}{wxtoolbarrealize} for the change to take place.
+
+\wxheading{See also}
+
+\helpref{AddSeparator}{wxtoolbaraddseparator},\\
+\helpref{InsertTool}{wxtoolbarinserttool}
+
+\membersection{wxToolBar::InsertTool}\label{wxtoolbarinserttool}
+
+\func{wxToolBarTool *}{InsertTool}{\param{size\_t }{pos},\rtfsp
+{\param{int}{ toolId}, \param{const wxBitmap\&}{ bitmap1},\rtfsp
+\param{const wxBitmap\&}{ bitmap2 = wxNullBitmap}, \param{bool}{ isToggle = FALSE},\rtfsp
+\param{wxObject* }{clientData = NULL}, \param{const wxString\& }{shortHelpString = ""}, \param{const wxString\& }{longHelpString = ""}}
+
+Inserts the tool with the specified attributes into the toolbar at the given
+position.
+
+You must call \helpref{Realize}{wxtoolbarrealize} for the change to take place.
+
+\wxheading{See also}
+
+\helpref{AddTool}{wxtoolbaraddtool},\\
+\helpref{InsertControl}{wxtoolbarinsertcontrol},\\
+\helpref{InsertSeparator}{wxtoolbarinsertseparator}
 
 \membersection{wxToolBar::OnLeftClick}\label{wxtoolbaronleftclick}
 
-\func{bool}{OnLeftClick}{\param{int}{ toolIndex}, \param{bool}{ toggleDown}}
+\func{bool}{OnLeftClick}{\param{int}{ toolId}, \param{bool}{ toggleDown}}
 
 Called when the user clicks on a tool with the left mouse button.
 
@@ -459,7 +476,7 @@ you should use the EVT\_MENU or EVT\_TOOL macro instead.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{The identifier passed to \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.}
+\docparam{toolId}{The identifier passed to \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.}
 
 \docparam{toggleDown}{TRUE if the tool is a toggle and the toggle is down, otherwise is FALSE.}
 
@@ -476,7 +493,7 @@ specifying that toggle operations are not permitted in some circumstances.
 
 \membersection{wxToolBar::OnMouseEnter}\label{wxtoolbaronmouseenter}
 
-\func{void}{OnMouseEnter}{\param{int}{ toolIndex}}
+\func{void}{OnMouseEnter}{\param{int}{ toolId}}
 
 This is called when the mouse cursor moves into a tool or out of
 the toolbar.
@@ -486,7 +503,7 @@ you should use the EVT\_TOOL\_ENTER macro instead.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{Greater than -1 if the mouse cursor has moved into the tool,
+\docparam{toolId}{Greater than -1 if the mouse cursor has moved into the tool,
 or -1 if the mouse cursor has moved. The
 programmer can override this to provide extra information about the tool,
 such as a short description on the status line.}
@@ -498,7 +515,7 @@ detect it. Therefore this function may not always be called when expected.
 
 \membersection{wxToolBar::OnRightClick}\label{wxtoolbaronrightclick}
 
-\func{void}{OnRightClick}{\param{int}{ toolIndex}, \param{float}{ x}, \param{float}{ y}}
+\func{void}{OnRightClick}{\param{int}{ toolId}, \param{float}{ x}, \param{float}{ y}}
 
 Called when the user clicks on a tool with the right mouse button. The
 programmer should override this function to detect right tool clicks.
@@ -508,7 +525,7 @@ you should use the EVT\_TOOL\_RCLICKED macro instead.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{The identifier passed to \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.}
+\docparam{toolId}{The identifier passed to \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}.}
 
 \docparam{x}{The x position of the mouse cursor.}
 
@@ -534,6 +551,20 @@ either \helpref{wxToolBar::CreateTools}{wxtoolbarcreatetools} or
 
 If you are using absolute positions for your tools when using a wxToolBarSimple object,
 do not call this function. You must call it at all other times.
+
+\membersection{wxToolBar::RemoveTool}\label{wxtoolbarremovetool}
+
+\func{wxToolBarTool *}{RemoveTool}{\param{int }{id}}
+
+Removes the given tool from the toolbar but doesn't delete it. This allows to
+insert/add this tool back to this (or another) toolbar later.
+
+Note that it is unnecessary to call \helpref{Realize}{wxtoolbarrealize} for the
+change to take place, it will happen immediately.
+
+\wxheading{See also}
+
+\helpref{DeleteTool}{wxtoolbardeletetool}
 
 \membersection{wxToolBar::SetToolBitmapSize}\label{wxtoolbarsettoolbitmapsize}
 
@@ -585,13 +616,13 @@ default (zero-size) margins are to be overridden.
 
 \membersection{wxToolBar::SetToolLongHelp}\label{wxtoolbarsettoollonghelp}
 
-\func{void}{SetToolLongHelp}{\param{int }{toolIndex}, \param{const wxString\& }{helpString}}
+\func{void}{SetToolLongHelp}{\param{int }{toolId}, \param{const wxString\& }{helpString}}
 
 Sets the long help for the given tool.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{The tool in question.}
+\docparam{toolId}{The tool in question.}
 
 \docparam{helpString}{A string for the long help.}
 
@@ -625,13 +656,13 @@ and for spacing in the horizontal direction if the toolbar is vertical.
 
 \membersection{wxToolBar::SetToolShortHelp}\label{wxtoolbarsettoolshorthelp}
 
-\func{void}{SetToolShortHelp}{\param{int }{toolIndex}, \param{const wxString\& }{helpString}}
+\func{void}{SetToolShortHelp}{\param{int }{toolId}, \param{const wxString\& }{helpString}}
 
 Sets the short help for the given tool.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{The tool in question.}
+\docparam{toolId}{The tool in question.}
 
 \docparam{helpString}{The string for the short help.}
 
@@ -659,13 +690,13 @@ Sets the default separator size. The default value is 5.
 
 \membersection{wxToolBar::ToggleTool}\label{wxtoolbartoggletool}
 
-\func{void}{ToggleTool}{\param{int }{toolIndex}, \param{const bool}{ toggle}}
+\func{void}{ToggleTool}{\param{int }{toolId}, \param{const bool}{ toggle}}
 
 Toggles a tool on or off. This does not cause any event to get emitted.
 
 \wxheading{Parameters}
 
-\docparam{toolIndex}{Tool in question.}
+\docparam{toolId}{Tool in question.}
 
 \docparam{toggle}{If TRUE, toggles the tool on, otherwise toggles it off.}
 

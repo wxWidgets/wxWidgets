@@ -610,6 +610,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     (void)new wxBitmapButton(panel, -1, bitmap, wxPoint(100, 20));
 
+    bitmap = wxBitmap("../../utils/wxPython/tests/bitmaps/test2.bmp",
+                      wxBITMAP_TYPE_BMP);
+    bitmap.SetMask(new wxMask(bitmap, *wxBLUE));
+    (void)new wxBitmapButton(panel, -1, bitmap, wxPoint(300, 120));
+
     wxBitmap bmp1(wxTheApp->GetStdIcon(wxICON_INFORMATION)),
              bmp2(wxTheApp->GetStdIcon(wxICON_WARNING)),
              bmp3(wxTheApp->GetStdIcon(wxICON_QUESTION));

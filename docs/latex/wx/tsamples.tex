@@ -93,3 +93,24 @@ documents without much work. In fact, only few function calls are sufficient.
 while {\it Helpview} is simple tool that only pops up help window and
 displays help books given at command line.
 
+\subsection{Toolbar sample}\label{sampletoolbar}
+
+The toolbar sample shows the \helpref{wxToolBar}{wxtoolbar} class in action.
+
+The following things are demonstrated:
+
+\begin{itemize}
+
+\item Creating the toolbar using \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}
+and \helpref{wxToolBar::AddControl}{wxtoolbaraddcontrol}: see
+MyApp::InitToolbar in the sample.
+
+\item Using {\tt EVT\_UPDATE\_UI} handler for automatically enabling/disabling
+toolbar buttons without having to explicitly call EnableTool. This is is done
+in MyFrame::OnUpdateCopyAndCut.
+
+\item Using \helpref{wxToolBar::DeleteTool}{wxtoolbardeletetool} and 
+\helpref{wxToolBar::InsertTool}{wxtoolbarinserttool} to dynamically update the
+toolbar.
+
+\end{itemize}
