@@ -30,10 +30,6 @@
 #include  "wx/menuitem.h"
 #include  "wx/checklst.h"
 
-#ifdef __WXGTK__
-#include "mondrian.xpm"
-#endif
-
 // Define a new application type
 class CheckListBoxApp: public wxApp
 {
@@ -74,8 +70,7 @@ BEGIN_EVENT_TABLE(CheckListBoxFrame, wxFrame)
   EVT_MENU(Menu_Quit, CheckListBoxFrame::OnQuit)
   EVT_LISTBOX(Control_Listbox, CheckListBoxFrame::OnListboxSelect)
   EVT_CHECKLISTBOX(Control_Listbox, CheckListBoxFrame::OnCheckboxToggle)
-  EVT_COMMAND(Control_Listbox, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED,
-              CheckListBoxFrame::OnListboxDblClick)
+  EVT_LISTBOX_DCLICK(Control_Listbox, CheckListBoxFrame::OnListboxDblClick)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(CheckListBoxApp);
@@ -94,8 +89,11 @@ bool CheckListBoxApp::OnInit(void)
 CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
          : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
-  // set the icon
-  SetIcon(wxICON(mondrian));
+  // create the status line
+  const int widths[] = { -1, 60 };
+  CreateStatusBar(2);
+  SetStatusWidths(2, widths);
+  SetStatusText("no selection", 0);
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -133,19 +131,14 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame, char *title, int x, int y, 
 
   delete [] astrChoices;
 
-#ifdef __WXMSW__
+  // not implemented in wxGTK yet
+#ifndef __WXGTK__
   for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 ) {
     m_pListBox->GetItem(ui)->SetBackgroundColour(wxColor(200, 200, 200));
   }
-#endif
+#endif // wxGTK
 
   m_pListBox->Check(2);
-
-  // create the status line
-  const int widths[] = { -1, 60 };
-  CreateStatusBar(2);
-  SetStatusWidths(2, widths);
-  SetStatusText("no selection", 0);
 
   Show(TRUE);
 }
