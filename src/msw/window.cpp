@@ -497,15 +497,15 @@ bool wxWindowMSW::Show(bool show)
     if ( show )
     {
 #ifdef __WXMICROWIN__
-	// It seems that MicroWindows brings the _parent_ of the
-	// window to the top, which can be the wrong one.
+        // It seems that MicroWindows brings the _parent_ of the
+        // window to the top, which can be the wrong one.
 
-	/* activate (set focus to) specified window*/
-	::SetFocus(hWnd);
+        // activate (set focus to) specified window
+        ::SetFocus(hWnd);
 
-	/* raise top level parent to top of z order*/
-	::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
-		SWP_NOMOVE|SWP_NOSIZE);
+        // raise top level parent to top of z order
+        ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
+                SWP_NOMOVE|SWP_NOSIZE);
 #else
         BringWindowToTop(hWnd);
 #endif
@@ -521,15 +521,14 @@ void wxWindowMSW::Raise()
     ::BringWindowToTop(GetHwnd());
 #else // Win32
 #ifdef __WXMICROWIN__
-	// It seems that MicroWindows brings the _parent_ of the
-	// window to the top, which can be the wrong one.
+    // It seems that MicroWindows brings the _parent_ of the
+    // window to the top, which can be the wrong one.
 
-	/* activate (set focus to) specified window*/
-	::SetFocus(GetHwnd());
+    // activate (set focus to) specified window
+    ::SetFocus(GetHwnd());
 
-	/* raise top level parent to top of z order*/
-	::SetWindowPos(GetHwnd(), HWND_TOP, 0, 0, 0, 0,
-		SWP_NOMOVE|SWP_NOSIZE);
+    // raise top level parent to top of z order
+    ::SetWindowPos(GetHwnd(), HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
 #else
     ::SetForegroundWindow(GetHwnd());
 #endif
@@ -2166,8 +2165,9 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
          {
                 processed = FALSE;
 #ifdef __WXMICROWIN__
-                // MicroWindows seems to ignore the fact that a window
-                // is disabled. So catch mouse events and throw them away if necessary.
+                // MicroWindows seems to ignore the fact that a window is
+                // disabled. So catch mouse events and throw them away if
+                // necessary.
                 wxWindowMSW* win = this;
                 while (win)
                 {
@@ -2180,7 +2180,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                     if (win && win->IsTopLevel())
                         break;
                 }
-#endif
+#endif // __WXMICROWIN__
                 if (!processed)
                 {
                     if (message == WM_LBUTTONDOWN && AcceptsFocus())
@@ -2223,9 +2223,9 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 }
                 break;
             }
-#endif
+#endif // __WXMICROWIN__
 
-#ifdef MM_JOY1MOVE // __WXMICROWIN__
+#ifdef MM_JOY1MOVE
         case MM_JOY1MOVE:
         case MM_JOY2MOVE:
         case MM_JOY1ZMOVE:
@@ -2239,7 +2239,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                                             GET_Y_LPARAM(lParam),
                                             wParam);
             break;
-#endif
+#endif // __WXMICROWIN__
 
         case WM_SYSCOMMAND:
             processed = HandleSysCommand(wParam, lParam);
@@ -2262,7 +2262,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 #endif  // Win95
 
             // for these messages we must return TRUE if process the message
-#ifdef WM_DRAWITEM // __WXMICROWIN__
+#ifdef WM_DRAWITEM
         case WM_DRAWITEM:
         case WM_MEASUREITEM:
             {
@@ -2282,7 +2282,8 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                     rc.result = TRUE;
             }
             break;
-#endif
+#endif // defined(WM_DRAWITEM)
+
         case WM_GETDLGCODE:
             if ( m_lDlgCode )
             {
@@ -2418,7 +2419,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                                            lParam);
             }
             break;
-#endif
+#endif // !__WXMICROWIN__
 
             // the return value for this message is ignored
         case WM_SYSCOLORCHANGE:
@@ -2810,8 +2811,7 @@ bool wxWindowMSW::MSWCreate(int id,
 
     }
     else // creating a normal window, not a dialog
-#endif
-	// __WXMICROWIN__
+#endif // !__WXMICROWIN__
     {
         int controlId = 0;
         if ( style & WS_CHILD )
@@ -2908,7 +2908,7 @@ bool wxWindowMSW::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     // finally try this window too (catches toolbar case)
     return MSWOnNotify(idCtrl, lParam, result);
-#else
+#else // __WXMICROWIN__
     return FALSE;
 #endif
 }
@@ -3143,7 +3143,7 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
     delete[] files;
 
     return rc;
-#else
+#else // __WXMICROWIN__
     return FALSE;
 #endif
 }
@@ -3229,7 +3229,8 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
         // cursor set, stop here
         return TRUE;
     }
-#endif
+#endif // __WXMICROWIN__
+
     // pass up the window chain
     return FALSE;
 }
@@ -3345,7 +3346,7 @@ bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush,
         *brush = hBrush;
 
     return hBrush != 0;
-#else
+#else // __WXMICROWIN__
     return FALSE;
 #endif
 }
@@ -4420,7 +4421,8 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
 
     return (int)CallNextHookEx(wxTheKeyboardHook, nCode, wParam, lParam);
 }
-#endif
+
+#endif // !__WXMICROWIN__
 
 #ifdef __WXDEBUG__
 const char *wxGetMessageName(int message)
