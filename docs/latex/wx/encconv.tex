@@ -49,14 +49,14 @@ cannot be converted because it does not exist in output encoding:
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf wxCONVERT\_STRICT}}{follow behaviour of GNU Recode -
-just copy unconvertable  characters to output and don't change them 
+just copy unconvertible  characters to output and don't change them 
 (its integer value will stay the same)}
 \twocolitem{{\bf wxCONVERT\_SUBSTITUTE}}{try some (lossy) substitutions 
-- e.g. replace unconvertable latin capitals with acute by ordinary
+- e.g. replace unconvertible latin capitals with acute by ordinary
 capitals, replace en-dash or em-dash by '-' etc.}
 \end{twocollist}
 
-Both modes gurantee that output string will have same length
+Both modes guarantee that output string will have same length
 as input string.
 
 \wxheading{Return value} 
@@ -108,10 +108,10 @@ unix            CP1252  {ISO8859_1,ISO8859_15}
 \end{verbatim}
 
 Equivalence is defined in terms of convertibility:
-2 encodings are equivalent if you can convert text between
-then without loosing information (it may - and will - happen
-that you loose special chars like quotation marks or em-dashes
-but you shouldn't loose any diacritics and language-specific
+two encodings are equivalent if you can convert text between
+then without losing information (it may - and will - happen
+that you lose special chars like quotation marks or em-dashes
+but you shouldn't lose any diacritics and language-specific
 characters when converting between equivalent encodings).
 
 Remember that this function does {\bf NOT} check for presence of
@@ -122,14 +122,14 @@ encodings. (It usually returns only one encoding.)
 
 \begin{itemize}\itemsep=0pt
 \item Note that argument {\it enc} itself may be present in the returned array,
-so that you can - as a side effect - detect whether the
+so that you can, as a side-effect, detect whether the
 encoding is native for this platform or not.
-\item helpref{Convert}{wxencodingconverterconvert} is not limited to 
-converting between equivalent encodings, it can convert between arbitrary
-two encodings.
-\item If {\it enc} is present in returned array, then it is {\bf always} first
+\item \helpref{Convert}{wxencodingconverterconvert} is not limited to 
+converting between equivalent encodings, it can convert between two arbitrary
+encodings.
+\item If {\it enc} is present in the returned array, then it is {\bf always} the first
 item of it.
-\item Please note that the returned array may not contain any items at all.
+\item Please note that the returned array may contain no items at all.
 \end{itemize}
 
 \membersection{wxEncodingConverter::GetAllEquivalents}\label{wxencodingconvertergetallequivalents}
@@ -139,7 +139,7 @@ item of it.
 Similar to 
 \helpref{GetPlatformEquivalents}{wxencodingconvertergetplatformequivalents}, 
 but this one will return ALL 
-equivalent encodings, regardless the platform, and including itself.
+equivalent encodings, regardless of the platform, and including itself.
 
 This platform's encodings are before others in the array. And again, if {\it enc} is in the array,
 it is the very first item in it.

@@ -3,8 +3,8 @@
 The wxHTML library uses a {\bf virtual file systems} mechanism
 similar to the one used in Midnight Commander, Dos Navigator,
 FAR or almost any modern file manager. (Do you remember? You can
-press enter on ZIP file and its contents is displayed as if it
-were a local directory...)
+press enter on a ZIP file and its contents are displayed as if it
+were a local directory.)
 
 \wxheading{Classes}
 
@@ -17,14 +17,14 @@ on opened file (name, input stream, mime type and anchor).
 Its main methods are ChangePathTo() and OpenFile(). This class
 is most often used by the end user.
 \item The \helpref{wxFileSystemHandler}{wxfilesystemhandler} is the core
-if VFS mechanism. You can derive your own handler and pass it to
+of the VFS mechanism. You can derive your own handler and pass it to
 wxFileSystem's AddHandler() method. In the new handler you only need to
-overwrite OpenFile() and CanOpen() methods.
+override the OpenFile() and CanOpen() methods.
 \end{itemize}
 
 \wxheading{Locations}
 
-Locations (aka filenames aka addresses) are constructed from 4 parts:
+Locations (aka filenames aka addresses) are constructed from four parts:
 
 \begin{itemize}\itemsep=0pt
 \item {\bf protocol} - handler can recognize if it is able to open a
@@ -40,8 +40,8 @@ See Combined Protocols paragraph for details.
 
 \wxheading{Combined Protocols}
 
-Left location pretends protocol in URL string. 
-It's not used by global protocols like HTTP but it's used
+The left location pretends the protocol in the URL string. 
+It is not used by global protocols like HTTP but it is used
 by local ones - for example you can see this address:
 
 file:archives/cpp\_doc.zip\#zip:reference/fopen.htm\#syntax
@@ -61,7 +61,7 @@ which is at WWW.
 
 \wxheading{File Systems Included in wxHTML}
 
-Following VFS handlers are part of wxWindows so far:
+The following VFS handlers are part of wxWindows so far:
 
 \begin{twocollist}
 \twocolitem{{\bf wxInternetFSHandler}}{Handler for accessing documents
@@ -77,7 +77,6 @@ Include file is <wx/fs_mem.h>. UURL is prefixed with memory:, e.g.
 
 In addition, wxFileSystem can access local files.
 
-
 Use \helpref{wxFileSystem::AddHandler}{wxfilesystemaddhandler} to initialize
 a handler, for example:
 
@@ -90,7 +89,6 @@ bool MyApp::OnInit()
 {
     wxFileSystem::AddHandler(new wxMemoryFSHandler);
 ...
+}
 \end{verbatim}
-
-
 

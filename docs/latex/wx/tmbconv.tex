@@ -21,7 +21,7 @@ in use.
 
 \subsection{Background: The need for conversion}
 
-As programs are becoming more and more globalized, and user exchange documents
+As programs are becoming more and more globalized, and users exchange documents
 across country boundaries as never before, applications increasingly need to
 take into account all the different character sets in use around the world. It
 is no longer enough to just depend on the default byte-sized character set that
@@ -33,7 +33,7 @@ it would resolve the character set problems once and for all.
 
 But it hasn't happened yet, and the migration towards Unicode has created new
 challenges, resulting in "compatibility encodings" such as UTF-8. A large
-amount of systems out there still depends on the old 8-bit encodings, hampered
+number of systems out there still depends on the old 8-bit encodings, hampered
 by the huge amounts of legacy code still widely deployed. Even sending
 Unicode data from one Unicode-aware system to another may need encoding to an
 8-bit multibyte encoding (UTF-7 or UTF-8 is typically used for this purpose), to
@@ -51,7 +51,7 @@ literals).
 But often, your environment doesn't want Unicode strings. You could be sending
 data over a network, or processing a text file for some other application. You
 need a way to quickly convert your easily-handled Unicode data to and from a
-traditional 8-bit-encoding. And this is what the wxMBConv classes does.
+traditional 8-bit-encoding. And this is what the wxMBConv classes do.
 
 \subsection{wxMBConv classes}
 
