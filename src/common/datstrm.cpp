@@ -117,7 +117,7 @@ wxString wxDataInputStream::ReadString()
     delete[] tmp;
 #else
     wxString ret;
-    m_input->Read(s.GetWriteBuf(len), len);
+    m_input->Read( ret.GetWriteBuf(len), len);
     ret.UngetWriteBuf();
 #endif
     return ret;
