@@ -44,12 +44,7 @@ class WXDLLEXPORT wxToolBar;
 // CreateXXXBar() is called.
 // ----------------------------------------------------------------------------
 
-// FIXME - temporary hack in absence of wxTLW !!
-#ifndef wxTopLevelWindowNative
-class WXDLLEXPORT wxFrameBase : public wxTopLevelWindowBase
-#else
 class WXDLLEXPORT wxFrameBase : public wxTopLevelWindow
-#endif
 {
 public:
     // construction

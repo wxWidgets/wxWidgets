@@ -46,10 +46,7 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-// FIXME: some platforms don't have wxTopLevelWindow yet
-#ifdef wxTopLevelWindowNative
-    IMPLEMENT_DYNAMIC_CLASS(wxTopLevelWindow, wxWindow)
-#endif
+IMPLEMENT_DYNAMIC_CLASS(wxTopLevelWindow, wxWindow)
 
 // ----------------------------------------------------------------------------
 // construction/destruction
