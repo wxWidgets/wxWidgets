@@ -774,7 +774,7 @@ void wxListBox::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
     GList *child = m_list->children;
     while (child)
     {
-        gtk_tooltips_set_tip( tips, GTK_WIDGET( child->data ), tip, (gchar*) NULL );
+        gtk_tooltips_set_tip( tips, GTK_WIDGET( child->data ), wxConv_local.cWX2MB(tip), (gchar*) NULL );
         child = child->next;
     }
 }
