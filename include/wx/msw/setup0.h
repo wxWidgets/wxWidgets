@@ -172,7 +172,7 @@
 // Set wxUSE_UNICODE_MSLU to 1 if you want to compile wxWindows in Unicode mode
 // and be able to run compiled apps under Windows 9x as well as NT/2000/XP.
 // This setting enables use of unicows.dll from MSLU (MS Layer for Unicode, see
-// http://www.microsoft.com/globaldev/Articles/mslu_announce.asp). Note that
+// http://www.microsoft.com/globaldev/handson/dev/mslu_announce.mspx). Note that
 // you will have to modify the makefiles to include unicows.lib import library
 // as the first library (if you use MSVC, you can run the makefile with "nmake
 // MSLU=1 UNICODE=1" command).
