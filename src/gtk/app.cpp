@@ -24,6 +24,7 @@
 #include "wx/font.h"
 #include "wx/settings.h"
 #include "wx/dialog.h"
+#include "wx/msgdlg.h"
 
 #if wxUSE_WX_RESOURCES
     #include "wx/resource.h"
@@ -212,6 +213,13 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     // from some safely-looking functions
     if ( wxTheApp->IsInAssert() )
     {
+        // But repaint the assertion message if necessary
+        if (wxTopLevelWindows.GetCount() > 0)
+        {
+            wxWindow* win = (wxWindow*) wxTopLevelWindows.Last()->Data();
+            if (win->IsKindOf(CLASSINFO(wxGenericMessageDialog)))
+                win->OnInternalIdle();
+        }
         return TRUE;
     }
 #endif // __WXDEBUG__
