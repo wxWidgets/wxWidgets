@@ -59,7 +59,7 @@ class RunDemoApp(wx.App):
         menuBar = wx.MenuBar()
         menu = wx.Menu()
         item = menu.Append(-1, "E&xit\tAlt-X", "Exit demo")
-        self.Bind(wx.EVT_MENU, self.OnExit, item)
+        self.Bind(wx.EVT_MENU, self.OnExitApp, item)
         menuBar.Append(menu, "&File")
 
         ns = {}
@@ -115,7 +115,7 @@ class RunDemoApp(wx.App):
         return True
 
 
-    def OnExit(self, evt):
+    def OnExitApp(self, evt):
         self.frame.Close(True)
 
 
