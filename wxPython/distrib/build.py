@@ -811,6 +811,10 @@ endif
 $(TARGETDIR)/%% : %%
 	cp -f $< $@
 
+$(TARGETDIR)/$(TARGET) : $(TARGET)
+	cp -f $< $@
+	strip $@
+
 $(TARGETDIR)/%% : $(GENCODEDIR)/%%
 	cp -f $< $@
 
