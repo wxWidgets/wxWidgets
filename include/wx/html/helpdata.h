@@ -58,13 +58,8 @@ protected:
 };
 
 
-#undef WXDLLEXPORTLOCAL
-#define WXDLLEXPORTLOCAL WXDLLEXPORT
-     // ?? Don't know why - but Allen Van Sickel reported it to fix problems with DLL
-WX_DECLARE_OBJARRAY(wxHtmlBookRecord, wxHtmlBookRecArray);
+WX_DECLARE_EXPORTED_OBJARRAY(wxHtmlBookRecord, wxHtmlBookRecArray);
 
-#undef WXDLLEXPORTLOCAL
-#define WXDLLEXPORTLOCAL
 
 
 typedef struct
