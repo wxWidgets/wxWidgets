@@ -109,16 +109,12 @@ wxObjectRefData *wxIcon::CloneRefData(const wxObjectRefData *dataOrig) const
     if ( !data )
         return NULL;
 
-    wxIcon *self = wx_const_cast(wxIcon *, this);
-    self->UnRef();
-    self->m_refData = new wxIconRefData(*data);
-
-    if ( data->m_hIcon )
-    {
-        ::CopyIcon(HICON(data->m_hIcon));
-    }
-
-    return m_refData;
+    // we don't have to copy m_hIcon because we're only called from SetHICON()
+    // which overwrites m_hIcon anyhow currently
+    //
+    // and if we're called from SetWidth/Height/Depth(), it doesn't make sense
+    // to copy it neither as the handle would be inconsistent with the new size
+    return new wxIconRefData(*data);
 }
 
 void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
