@@ -159,6 +159,9 @@ typedef struct tagNMLVDISPINFOW {
 #endif
 #endif
 
+#ifndef HDN_GETDISPINFOW
+#define HDN_GETDISPINFOW (HDN_FIRST-29)
+#endif
 
 // ----------------------------------------------------------------------------
 // MS HTML Help
