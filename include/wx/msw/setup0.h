@@ -813,6 +813,14 @@
 // Recommended setting: 1
 #define wxUSE_DRAG_AND_DROP 1
 
+// Use wxAccessible for enhanced and customisable accessibility.
+// Depends on wxUSE_OLE.
+//
+// Default is 0.
+//
+// Recommended setting (at present): 0
+#define wxUSE_ACCESSIBILITY 0
+
 // ----------------------------------------------------------------------------
 // miscellaneous settings
 // ----------------------------------------------------------------------------

@@ -40,6 +40,10 @@
     #include "wx/accel.h"
 #endif // wxUSE_ACCEL
 
+#if wxUSE_ACCESSIBILITY
+#include "wx/access.h"
+#endif
+
 // when building wxUniv/Foo we don't want the code for native menu use to be
 // compiled in - it should only be used when building real wxFoo
 #ifdef __WXUNIVERSAL__
@@ -64,6 +68,10 @@ class WXDLLEXPORT wxSizer;
 class WXDLLEXPORT wxToolTip;
 class WXDLLEXPORT wxWindowBase;
 class WXDLLEXPORT wxWindow;
+
+#if wxUSE_ACCESSIBILITY
+class WXDLLEXPORT wxAccessible;
+#endif
 
 // ----------------------------------------------------------------------------
 // (pseudo)template list classes
@@ -818,6 +826,22 @@ public:
     void SetContainingSizer(wxSizer* sizer) { m_containingSizer = sizer; }
     wxSizer *GetContainingSizer() const { return m_containingSizer; }
 
+    // accessibility
+    // ----------------------
+#if wxUSE_ACCESSIBILITY
+    // Override to create a specific accessible object.
+    virtual wxAccessible* CreateAccessible();
+
+    // Sets the accessible object.
+    void SetAccessible(wxAccessible* accessible) ;
+
+    // Returns the accessible object.
+    wxAccessible* GetAccessible() { return m_accessible; };
+
+    // Returns the accessible object, creating if necessary.
+    wxAccessible* GetOrCreateAccessible() ;
+#endif
+
     // backward compatibility
     // ----------------------
 #if WXWIN_COMPATIBILITY
@@ -958,6 +982,9 @@ protected:
     bool                 m_hasCustomPalette;
 #endif // wxUSE_PALETTE
 
+#if wxUSE_ACCESSIBILITY
+    wxAccessible*       m_accessible;
+#endif
     // Virtual size (scrolling)
     wxSize                m_virtualSize;
 
@@ -1174,6 +1201,102 @@ WXDLLEXPORT wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 // deprecated (doesn't start with 'wx' prefix), use wxWindow::NewControlId()
 inline int NewControlId() { return wxWindowBase::NewControlId(); }
+
+#if wxUSE_ACCESSIBILITY
+// ----------------------------------------------------------------------------
+// accessible object for windows
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxWindowAccessible: public wxAccessible
+{
+public:
+    wxWindowAccessible(wxWindow* win): wxAccessible(win) {}
+    virtual ~wxWindowAccessible() {};
+
+// Overridables
+
+        // Can return either a child object, or an integer
+        // representing the child element, starting from 1.
+    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject);
+
+        // Returns the rectangle for this object (id = 0) or a child element (id > 0).
+    virtual wxAccStatus GetLocation(wxRect& rect, int elementId);
+
+        // Navigates from fromId to toId/toObject.
+    virtual wxAccStatus Navigate(wxNavDir navDir, int fromId,
+                int* toId, wxAccessible** toObject);
+
+        // Gets the name of the specified object.
+    virtual wxAccStatus GetName(int childId, wxString* name);
+
+        // Gets the number of children.
+    virtual wxAccStatus GetChildCount(int* childId);
+
+        // Gets the specified child (starting from 1).
+        // If *child is NULL and return value is wxACC_OK,
+        // this means that the child is a simple element and
+        // not an accessible object.
+    virtual wxAccStatus GetChild(int childId, wxAccessible** child);
+
+        // Gets the parent, or NULL.
+    virtual wxAccStatus GetParent(wxAccessible** parent);
+
+        // Performs the default action. childId is 0 (the action for this object)
+        // or > 0 (the action for a child).
+        // Return wxACC_NOT_SUPPORTED if there is no default action for this
+        // window (e.g. an edit control).
+    virtual wxAccStatus DoDefaultAction(int childId);
+
+        // Gets the default action for this object (0) or > 0 (the action for a child).
+        // Return wxACC_OK even if there is no action. actionName is the action, or the empty
+        // string if there is no action.
+        // The retrieved string describes the action that is performed on an object,
+        // not what the object does as a result. For example, a toolbar button that prints
+        // a document has a default action of "Press" rather than "Prints the current document."
+    virtual wxAccStatus GetDefaultAction(int childId, wxString* actionName);
+
+        // Returns the description for this object or a child.
+    virtual wxAccStatus GetDescription(int childId, wxString* description);
+
+        // Returns help text for this object or a child, similar to tooltip text.
+    virtual wxAccStatus GetHelpText(int childId, wxString* helpText);
+
+        // Returns the keyboard shortcut for this object or child.
+        // Return e.g. ALT+K
+    virtual wxAccStatus GetKeyboardShortcut(int childId, wxString* shortcut);
+
+        // Returns a role constant.
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role);
+
+        // Returns a state constant.
+    virtual wxAccStatus GetState(int childId, long* state);
+
+        // Returns a localized string representing the value for the object
+        // or child.
+    virtual wxAccStatus GetValue(int childId, wxString* strValue);
+
+        // Selects the object or child.
+    virtual wxAccStatus Select(int childId, wxAccSelectionFlags selectFlags);
+
+        // Gets the window with the keyboard focus.
+        // If childId is 0 and child is NULL, no object in
+        // this subhierarchy has the focus.
+        // If this object has the focus, child should be 'this'.
+    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child);
+
+        // Gets a variant representing the selected children
+        // of this object.
+        // Acceptable values:
+        // - a null variant (IsNull() returns TRUE)
+        // - a list variant (GetType() == wxT("list")
+        // - an integer representing the selected child element,
+        //   or 0 if this object is selected (GetType() == wxT("long")
+        // - a "void*" pointer to a wxAccessible child object
+    virtual wxAccStatus GetSelections(wxVariant* selections);
+};
+
+#endif // wxUSE_ACCESSIBILITY
+
 
 #endif
     // _WX_WINDOW_H_BASE_
