@@ -75,9 +75,9 @@ protected:
     virtual void EventLoop_Install_Callback(GSocketEvent event) = 0;
     virtual void EventLoop_Uninstall_Callback(GSocketEvent event) = 0;
 public:
-//DFE: We can't protect these data member until the GUI code is updated
-//protected:
-#else //def wxUSE_GSOCKET_CPLUSPLUS
+    /* DFE: We can't protect these data member until the GUI code is updated */
+    /* protected: */
+#else /* def wxUSE_GSOCKET_CPLUSPLUS */
 
 #ifdef __cplusplus
 extern "C" {
@@ -85,7 +85,7 @@ extern "C" {
 /* Definition of GSocket */
 struct _GSocket
 {
-#endif //def wxUSE_GSOCKET_CPLUSPLUS
+#endif /* def wxUSE_GSOCKET_CPLUSPLUS */
   int m_fd;
   GAddress *m_local;
   GAddress *m_peer;
@@ -113,8 +113,8 @@ struct _GSocket
 }
 #endif  /* __cplusplus */
 #else
-///////////////////////////////////////////////////////////////////////////
-// GSocketBSDGUIShim
+/**************************************************************************/
+/* GSocketBSDGUIShim */
 class GSocketBSDGUIShim:public GSocketBSD
 {
     friend void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc);
@@ -136,7 +136,7 @@ private:
     static struct GSocketGUIFunctionsTable *ms_gui_functions;
 };
 
-#endif //ndef wxUSE_GSOCKET_CPLUSPLUS
+#endif /* ndef wxUSE_GSOCKET_CPLUSPLUS */
 
 #ifdef __cplusplus
 extern "C" {
@@ -156,7 +156,7 @@ struct _GAddress
 }
 #endif  /* __cplusplus */
 
-// Compatibility methods to support old C API (from gsocket.h)
+/* Compatibility methods to support old C API (from gsocket.h) */
 #ifdef wxUSE_GSOCKET_CPLUSPLUS
 inline void GSocket_Shutdown(GSocket *socket)
 {   socket->Shutdown(); }
@@ -192,7 +192,7 @@ inline void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
 inline void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
 {   socket->UnsetCallback(flags); }
 
-#endif //def wxUSE_GSOCKET_CPLUSPLUS
+#endif /* def wxUSE_GSOCKET_CPLUSPLUS */
 
 #ifdef __cplusplus
 extern "C" {
@@ -226,7 +226,7 @@ void _GSocket_Disable(GSocket *socket, GSocketEvent event);
 #ifndef wxUSE_GSOCKET_CPLUSPLUS
 void _GSocket_Detected_Read(GSocket *socket);
 void _GSocket_Detected_Write(GSocket *socket);
-#endif //ndef wxUSE_GSOCKET_CPLUSPLUS
+#endif /* ndef wxUSE_GSOCKET_CPLUSPLUS */
 
 /* GAddress */
 

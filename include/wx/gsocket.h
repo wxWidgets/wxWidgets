@@ -23,7 +23,7 @@
 #include "wx/setup.h"
 #include "wx/platform.h"
 
-#include "wx/dlimpexp.h" // for WXDLLIMPEXP_NET
+#include "wx/dlimpexp.h" /* for WXDLLIMPEXP_NET */
 
 #endif
 
@@ -46,7 +46,7 @@
 
 #ifdef wxUSE_GSOCKET_CPLUSPLUS
 typedef class GSocketBSD GSocket;
-#endif //def wxUSE_GSOCKET_CPLUSPLUS
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,7 +54,7 @@ extern "C" {
 
 #ifndef wxUSE_GSOCKET_CPLUSPLUS
 typedef struct _GSocket GSocket;
-#endif //ndef wxUSE_GSOCKET_CPLUSPLUS
+#endif
 typedef struct _GAddress GAddress;
 
 typedef enum {
@@ -286,7 +286,7 @@ void GSocket_SetNonBlocking(GSocket *socket, int non_block);
  */
 void GSocket_SetTimeout(GSocket *socket, unsigned long millisec);
 
-#endif //ndef wxUSE_GSOCKET_CPLUSPLUS
+#endif /* ndef wxUSE_GSOCKET_CPLUSPLUS */
 
 /* GSocket_GetError:
  *  Returns the last error occured for this socket. Note that successful
@@ -336,7 +336,7 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
  */
 void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags);
 
-#endif //ndef wxUSE_GSOCKET_CPLUSPLUS
+#endif /* ndef wxUSE_GSOCKET_CPLUSPLUS */
 
 
 /* GAddress */
@@ -377,7 +377,7 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 
 #ifdef wxUSE_GSOCKET_CPLUSPLUS
 #include "wx/unix/gsockunx.h"
-#endif // def wxUSE_GSOCKET_CPLUSPLUS
+#endif
 
 #endif    /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
 

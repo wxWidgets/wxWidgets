@@ -261,7 +261,7 @@ GSocket *GSocket_new(void)
 void GSocket_close(GSocket *socket)
 {
     _GSocket_Disable_Events(socket);
-// gsockosx.c calls CFSocketInvalidate which closes the socket for us
+    /* gsockosx.c calls CFSocketInvalidate which closes the socket for us */
 #if !(defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__)))
     close(socket->m_fd);
 #endif
@@ -1616,7 +1616,7 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   {
 #else
   /* Use gethostbyname by default */
-  int val = 1;  //VA doesn't like constants in conditional expressions at all
+  int val = 1;  /* VA doesn't like constants in conditional expressions */
   if (val)
   {
 #endif
