@@ -108,7 +108,6 @@ if os.name == 'nt':
 
     includes = ['src',
                 os.path.join(WXDIR, 'include'),
-                ##os.path.join(WXDIR, 'contrib/include'),
                 ]
 
     defines = [ ('WIN32', None),        # Some of these are no longer
@@ -434,5 +433,3 @@ setup(name             = PKGDIR,
       ext_modules = wxpExtensions,
 
       )
-
-

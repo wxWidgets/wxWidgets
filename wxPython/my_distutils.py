@@ -276,10 +276,3 @@ def contrib_copy_tree(src, dest, verbose=0):
     mkpath(dest, verbose=verbose)
     copy_tree(src, dest, update=1, verbose=verbose)
 
-
-
-
-
-
-
-
