@@ -111,7 +111,7 @@ wxSplashScreenWindow::wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* par
 {
     m_bitmap = bitmap;
 
-#ifndef __WXGTK__
+#if !defined(__WXGTK__) && wxUSE_PALETTE
     bool hiColour = (wxDisplayDepth() >= 16) ;
 
     if (bitmap.GetPalette() && !hiColour)
