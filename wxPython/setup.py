@@ -1183,8 +1183,8 @@ else:
                ]
 
 
-DATA_FILES += find_data_files('wxPython/tools/XRCed', '*.txt', '*.xrc')
-DATA_FILES += find_data_files('wxPython/py', '*.txt', '*.ico', '*.css', '*.html')
+DATA_FILES += find_data_files('wx/tools/XRCed', '*.txt', '*.xrc')
+DATA_FILES += find_data_files('wx/py', '*.txt', '*.ico', '*.css', '*.html')
 DATA_FILES += find_data_files('wx', '*.txt', '*.css', '*.html')
 
 
