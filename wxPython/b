@@ -24,9 +24,8 @@ python$PYVER -c "import sys;print '\n', sys.version, '\n'"
 
 
 SETUP="python$PYVER -u setup.py"
-FLAGS="USE_SWIG=1 IN_CVS_TREE=1" # BUILD_GLCANVAS=0"
+FLAGS="USE_SWIG=1 SWIG=/opt/swig/bin/swig" # BUILD_GLCANVAS=0"
 OTHERFLAGS=""
-
 
 
 # "c" --> clean

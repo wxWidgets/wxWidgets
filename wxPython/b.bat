@@ -5,8 +5,7 @@ REM ----------------------------------------------------------------------
 call wxset.btm
 setlocal
 
-set FLAGS=USE_SWIG=1 IN_CVS_TREE=1
-
+set FLAGS=USE_SWIG=1 SWIG=e:/projects/SWIG-cvs/swig.exe
 
 rem  Use non-default python?
 iff "%1" == "15" .or. "%1" == "20" .or. "%1" == "21" .or. "%1" == "22" .or. "%1" == "23" then

@@ -74,19 +74,13 @@ PREP_ONLY = 0      # Only run the prepatory steps, not the actual build.
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
                    # files already in the distribution?
 
+SWIG = "swig"      # The swig executable to use.
+
 BUILD_RENAMERS = 1 # Should we build the renamer modules too?
 
 UNICODE = 0        # This will pass the 'wxUSE_UNICODE' flag to SWIG and
                    # will ensure that the right headers are found and the
                    # right libs are linked.
-
-IN_CVS_TREE = 1    # Set to true if building in a full wxWindows CVS
-                   # tree, or the new style of a full wxPythonSrc tarball.
-                   # wxPython used to be distributed as a separate source
-                   # tarball without the wxWindows but with a copy of the
-                   # needed contrib code.  That's no longer the case and so
-                   # this setting is now defaulting to true.  Eventually it
-                   # should be removed entirly.
 
 UNDEF_NDEBUG = 1   # Python 2.2 on Unix/Linux by default defines NDEBUG,
                    # and distutils will pick this up and use it on the
@@ -183,7 +177,7 @@ if os.name == 'nt':
 # Boolean (int) flags
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN',
-             'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'UNICODE',
+             'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS', 'BUILD_RENAMERS',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
@@ -194,7 +188,7 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
                 sys.argv[x] = ''
 
 # String options
-for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE', 'WXPORT']:
+for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE', 'WXPORT', 'SWIG']:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(option) == 0:
             pos = sys.argv[x].find('=') + 1
@@ -493,7 +487,7 @@ if os.name == 'nt':
 #----------------------------------------------------------------------
 
 elif os.name == 'posix':
-    WXDIR = '..'              # assumes IN_CVS_TREE
+    WXDIR = '..'      
     includes = ['include', 'src']
     defines = [('SWIG_GLOBAL', None),
                ('HAVE_CONFIG_H', None),
@@ -608,11 +602,7 @@ RELEASE_NUMBER = RELEASE_VERSION  # for compatibility
 # SWIG defaults
 #----------------------------------------------------------------------
 
-swig_cmd = '/opt/swig/bin/swig'  # TODO: fix this...
-if os.name == 'nt':
-    swig_cmd = 'e:/projects/SWIG-cvs/swig.exe'
-
-
+swig_cmd = SWIG
 swig_force = force
 swig_args = ['-c++',
              '-Wall',
@@ -676,10 +666,10 @@ copy_file('src/__init__.py', PKGDIR, update=1, verbose=0)
 copy_file('src/__version__.py', PKGDIR, update=1, verbose=0)
 
 
-if IN_CVS_TREE:   # update the license files
-    mkpath('licence')
-    for file in ['preamble.txt', 'licence.txt', 'licendoc.txt', 'lgpl.txt']:
-        copy_file(opj(WXDIR, 'docs', file), opj('licence',file), update=1, verbose=0)
+# update the license files
+mkpath('licence')
+for file in ['preamble.txt', 'licence.txt', 'licendoc.txt', 'lgpl.txt']:
+    copy_file(opj(WXDIR, 'docs', file), opj('licence',file), update=1, verbose=0)
 
 
 if os.name == 'nt':
