@@ -25,14 +25,14 @@ from the path.
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 
-\membersection{wxPathList::wxPathList}
+\membersection{wxPathList::wxPathList}\label{wxpathlistctor}
 
 \func{}{wxPathList}{\void}
 
 Constructor.
 
 
-\membersection{wxPathList::AddEnvList}
+\membersection{wxPathList::AddEnvList}\label{wxpathlistaddenvlist}
 
 \func{void}{AddEnvList}{\param{const wxString\& }{env\_variable}}
 
@@ -41,7 +41,7 @@ to the path list. Useful for finding files in the PATH variable, for
 example.
 
 
-\membersection{wxPathList::Add}
+\membersection{wxPathList::Add}\label{wxpathlistadd}
 
 \func{void}{Add}{\param{const wxString\& }{path}}
 
@@ -50,7 +50,7 @@ check if the path was already on the list (use
 \helpref{wxPathList::Member()}{wxpathlistmember} for this).
 
 
-\membersection{wxPathList::EnsureFileAccessible}
+\membersection{wxPathList::EnsureFileAccessible}\label{wxpathlistensurefileaccessible}
 
 \func{void}{EnsureFileAccessible}{\param{const wxString\& }{filename}}
 
@@ -59,7 +59,7 @@ can be accessed using the pathlist. It does this by stripping the
 filename and adding the path to the list if not already there.
 
 
-\membersection{wxPathList::FindAbsoluteValidPath}
+\membersection{wxPathList::FindAbsoluteValidPath}\label{wxpathlistfindabsolutepath}
 
 \func{wxString}{FindAbsoluteValidPath}{\param{const wxString\& }{file}}
 
@@ -68,7 +68,7 @@ successive members of the path list.  If the file wasn't found, an empty
 string is returned.
 
 
-\membersection{wxPathList::FindValidPath}
+\membersection{wxPathList::FindValidPath}\label{wxpathlistfindvalidpath}
 
 \func{wxString}{FindValidPath}{\param{const wxString\& }{file}}
 

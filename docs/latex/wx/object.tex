@@ -22,7 +22,7 @@ wxPen, wxBitmap and others.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxObject::wxObject}\label{wxobjectconstr}
+\membersection{wxObject::wxObject}\label{wxobjectctor}
 
 \func{}{wxObject}{\void}
 
@@ -30,7 +30,7 @@ wxPen, wxBitmap and others.
 
 Default and copy constructors.
 
-\membersection{wxObject::\destruct{wxObject}}
+\membersection{wxObject::\destruct{wxObject}}\label{wxobjectdtor}
 
 \func{}{wxObject}{\void}
 
@@ -197,20 +197,20 @@ you will need to cast to your own derived class.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxObjectRefData::m\_count}
+\membersection{wxObjectRefData::m\_count}\label{wxobjectrefdatamcount}
 
 \member{int}{m\_count}
 
 Reference count. When this goes to zero during a \helpref{wxObject::UnRef}{wxobjectunref}, an object
 can delete the {\bf wxObjectRefData} object.
 
-\membersection{wxObjectRefData::wxObjectRefData}\label{wxobjectrefdataconstr}
+\membersection{wxObjectRefData::wxObjectRefData}\label{wxobjectrefdatactor}
 
 \func{}{wxObjectRefData}{\void}
 
 Default constructor. Initialises the {\bf m\_count} member to 1.
 
-\membersection{wxObjectRefData::\destruct{wxObjectRefData}}
+\membersection{wxObjectRefData::\destruct{wxObjectRefData}}\label{wxobjectrefdatadtor}
 
 \func{}{wxObjectRefData}{\void}
 

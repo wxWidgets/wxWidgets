@@ -36,7 +36,7 @@ No base class
 
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
-\membersection{Static functions}
+\membersection{Static functions}\label{staticlogfunctions}
 
 The functions in this section work with and manipulate the active log target.
 The \helpref{OnLog()}{wxlogonlog} is called by the {\it wxLogXXX()} functions
@@ -54,7 +54,7 @@ situations because it may easily lead to a loss of messages.
 \helpref{Suspend}{wxlogsuspend}\\
 \helpref{Resume}{wxlogresume}
 
-\membersection{Logging functions}
+\membersection{Logging functions}\label{loggingfunctions}
 
 There are two functions which must be implemented by any derived class to
 actually process the log messages: \helpref{DoLog}{wxlogdolog} and
@@ -402,14 +402,14 @@ delete wxLog::SetActiveTarget(...something else or NULL...);
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxLogChain::wxLogChain}\label{wxlogchainwxlogchain}
+\membersection{wxLogChain::wxLogChain}\label{wxlogchainctor}
 
 \func{}{wxLogChain}{\param{wxLog *}{logger}}
 
 Sets the specified {\tt logger} (which may be {\tt NULL}) as the default log
 target but the log messages are also passed to the previous log target if any.
 
-\membersection{wxLogChain::\destruct{wxLogChain}}
+\membersection{wxLogChain::\destruct{wxLogChain}}\label{wxlogchaindtor}
 
 \func{}{\destruct{wxLogChain}}{\void}
 
@@ -445,7 +445,7 @@ true}.
 \func{void}{SetLog}{\param{wxLog *}{logger}}
 
 Sets another log target to use (may be {\tt NULL}). The log target specified
-in the \helpref{constructor}{wxlogchainwxlogchain} or in a previous call to
+in the \helpref{constructor}{wxlogchainctor} or in a previous call to
 this function is deleted.
 
 This doesn't change the old log target value (the one the messages are
@@ -470,7 +470,7 @@ startup and is deleted by wxWidgets during the program shut down.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxLogGui::wxLogGui}
+\membersection{wxLogGui::wxLogGui}\label{wxlogguictor}
 
 \func{}{wxLogGui}{\void}
 
@@ -535,13 +535,13 @@ would be better written as:
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxLogNull::wxLogNull}
+\membersection{wxLogNull::wxLogNull}\label{wxlognullctor}
 
 \func{}{wxLogNull}{\void}
 
 Suspends logging.
 
-\membersection{wxLogNull::\destruct{wxLogNull}}
+\membersection{wxLogNull::\destruct{wxLogNull}}\label{wxlognulldtor}
 
 Resumes logging.
 
@@ -594,7 +594,7 @@ wxWidgets applications which send all the output to {\tt stderr}.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxLogStderr::wxLogStderr}
+\membersection{wxLogStderr::wxLogStderr}\label{wxlogstderrctor}
 
 \func{}{wxLogStderr}{\param{FILE }{*fp = NULL}}
 
@@ -625,7 +625,7 @@ the standard iostream library support ({\tt wxUSE\_STD\_IOSTREAM} must be on).
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxLogStream::wxLogStream}
+\membersection{wxLogStream::wxLogStream}\label{wxlogstreamctor}
 
 \func{}{wxLogStream}{\param{std::ostream }{*ostr = NULL}}
 
@@ -655,7 +655,7 @@ caller previously.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxLogTextCtrl::wxLogTextCtrl}
+\membersection{wxLogTextCtrl::wxLogTextCtrl}\label{wxlogtextctrlctor}
 
 \func{}{wxLogTextCtrl}{\param{wxTextCtrl }{*textctrl}}
 
@@ -686,7 +686,7 @@ them normally by showing the standard log dialog.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxLogWindow::wxLogWindow}
+\membersection{wxLogWindow::wxLogWindow}\label{wxlogwindowctor}
 
 \func{}{wxLogWindow}{\param{wxFrame }{*parent}, \param{const wxChar }{*title}, \param{bool }{show = {\tt true}}, \param{bool }{passToOld = {\tt true}}}
 
@@ -711,14 +711,14 @@ log frame.}
 
 Shows or hides the frame.
 
-\membersection{wxLogWindow::GetFrame}
+\membersection{wxLogWindow::GetFrame}\label{wxlogwindowgetframe}
 
 \constfunc{wxFrame *}{GetFrame}{\void}
 
 Returns the associated log frame window. This may be used to position or resize
 it but use \helpref{wxLogWindow::Show}{wxlogwindowshow} to show or hide it.
 
-\membersection{wxLogWindow::OnFrameCreate}
+\membersection{wxLogWindow::OnFrameCreate}\label{wxlogwindowonframecreate}
 
 \func{virtual void}{OnFrameCreate}{\param{wxFrame }{*frame}}
 

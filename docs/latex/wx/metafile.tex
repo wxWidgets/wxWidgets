@@ -20,7 +20,7 @@ is to use a wxMetafileDC.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxMetafile::wxMetafile}
+\membersection{wxMetafile::wxMetafile}\label{wxmetafilector}
 
 \func{}{wxMetafile}{\param{const wxString\& }{filename = ""}}
 
@@ -28,7 +28,7 @@ Constructor. If a filename is given, the Windows disk metafile is
 read in. Check whether this was performed successfully by
 using the \helpref{wxMetafile::Ok}{wxmetafileok} member.
 
-\membersection{wxMetafile::\destruct{wxMetafile}}
+\membersection{wxMetafile::\destruct{wxMetafile}}\label{wxmetafiledtor}
 
 \func{}{\destruct{wxMetafile}}{\void}
 
@@ -47,7 +47,7 @@ Returns true if the metafile is valid.
 Plays the metafile into the given device context, returning
 true if successful.
 
-\membersection{wxMetafile::SetClipboard}
+\membersection{wxMetafile::SetClipboard}\label{wxmetafilesetclipboard}
 
 \func{bool}{SetClipboard}{\param{int}{ width = 0}, \param{int}{ height = 0}}
 
@@ -108,14 +108,14 @@ closing your disk-based metafile device context.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxMetafileDC::wxMetafileDC}
+\membersection{wxMetafileDC::wxMetafileDC}\label{wxmetafiledcctor}
 
 \func{}{wxMetafileDC}{\param{const wxString\& }{filename = ""}}
 
 Constructor. If no filename is passed, the metafile is created
 in memory.
 
-\membersection{wxMetafileDC::\destruct{wxMetafileDC}}
+\membersection{wxMetafileDC::\destruct{wxMetafileDC}}\label{wxmetafiledcdtor}
 
 \func{}{\destruct{wxMetafileDC}}{\void}
 

@@ -25,7 +25,7 @@ None
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxMemoryBuffer::wxMemoryBuffer}
+\membersection{wxMemoryBuffer::wxMemoryBuffer}\label{wxmemorybufferctor}
 
 \func{}{wxMemoryBuffer}{\param{const wxMemoryBuffer\&}{ src}}
 
@@ -39,31 +39,31 @@ Create a new buffer.
 
 \docparam{size}{size of new buffer.}
 
-\membersection{wxMemoryBuffer::GetData}
+\membersection{wxMemoryBuffer::GetData}\label{wxmemorybuffergetdata}
 
 \func{void* }{GetData}{\void}
 
 Return a pointer to the data in the buffer.
 
-\membersection{wxMemoryBuffer::GetBufSize}
+\membersection{wxMemoryBuffer::GetBufSize}\label{wxmemorybuffergetbufsize}
 
 \func{size\_t}{GetBufSize}{\void}
 
 Returns the size of the buffer.
 
-\membersection{wxMemoryBuffer::GetDataLen}
+\membersection{wxMemoryBuffer::GetDataLen}\label{wxmemorybuffergetdatalen}
 
 \func{size\_t}{GetDataLen}{\void}
 
 Returns the length of the valid data in the buffer.
 
-\membersection{wxMemoryBuffer::SetBufSize}
+\membersection{wxMemoryBuffer::SetBufSize}\label{wxmemorybuffersetbufsize}
 
 \func{void}{SetBufSize}{\param{size\_t}{ size}}
 
 Ensures the buffer has at least {\it size} bytes available.
 
-\membersection{wxMemoryBuffer::SetDataLen}
+\membersection{wxMemoryBuffer::SetDataLen}\label{wxmemorybuffersetdatalen}
 
 \func{void}{SetDataLen}{\param{size\_t}{ size}}
 
@@ -72,7 +72,7 @@ Sets the length of the data stored in the buffer.  Mainly useful for truncating 
 \docparam{size}{New length of the valid data in the buffer. This is
 distinct from the allocated size}
 
-\membersection{wxMemoryBuffer::GetWriteBuf}
+\membersection{wxMemoryBuffer::GetWriteBuf}\label{wxmemorybuffergetwritebuf}
 
 \func{void *}{GetWriteBuf}{\param{size\_t}{ sizeNeeded}}
 
@@ -80,7 +80,7 @@ Ensure the buffer is big enough and return a pointer to the
 buffer which can be used to directly write into the buffer
 up to {\it sizeNeeded} bytes.
 
-\membersection{wxMemoryBuffer::UngetWriteBuf}
+\membersection{wxMemoryBuffer::UngetWriteBuf}\label{wxmemorybufferungetwritebuf}
 
 \func{void}{UngetWriteBuf}{\param{size\_t}{ sizeUsed}}
 
@@ -90,7 +90,7 @@ you must have used GetWriteBuf() to initialise.
 \docparam{sizeUsed}{The amount of data written in to buffer
 by the direct write}
 
-\membersection{wxMemoryBuffer::GetAppendBuf}
+\membersection{wxMemoryBuffer::GetAppendBuf}\label{wxmemorybuffergetappendbuf}
 
 \func{void *}{GetAppendBuf}{\param{size\_t}{ sizeNeeded}}
 
@@ -102,7 +102,7 @@ the existing data.
 \docparam{sizeNeeded}{Amount of extra space required in the buffer for
 the append operation}
 
-\membersection{wxMemoryBuffer::UngetAppendBuf}
+\membersection{wxMemoryBuffer::UngetAppendBuf}\label{wxmemorybufferungetappendbuf}
 
 \func{void}{UngetAppendBuf}{\param{size\_t}{ sizeUsed}}
 
@@ -112,7 +112,7 @@ you must have used GetAppendBuf() to initialise.
 \docparam{sizeUsed}{This is the amount of new data that has been 
 appended.}
 
-\membersection{wxMemoryBuffer::AppendByte}
+\membersection{wxMemoryBuffer::AppendByte}\label{wxmemorybufferappendbyte}
 
 \func{void}{AppendByte}{\param{char}{ data}}
 
@@ -120,7 +120,7 @@ Append a single byte to the buffer.
 
 \docparam{data}{New byte to append to the buffer.}
 
-\membersection{wxMemoryBuffer::AppendData}
+\membersection{wxMemoryBuffer::AppendData}\label{wxmemorybufferappenddata}
 
 \func{void}{AppendData}{\param{void*}{ data}, \param{size\_t}{ len}}
 
