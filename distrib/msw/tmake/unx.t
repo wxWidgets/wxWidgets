@@ -12,7 +12,19 @@
     #! %wxCommon, %wxGeneric, %wxHtml, %wxUnix and %wxGTK hashes.
     IncludeTemplate("filelist.t");
 
-    #! now transform these hashes into $project tags
+    #! Generic
+    
+    foreach $file (sort keys %wxGeneric) {
+        #! native wxDirDlg can't be compiled due to GnuWin32/OLE limitations,
+        #! so take the generic version
+        if ( $wxGeneric{$file} =~ /\b(PS|G|U|16)\b/ ) {
+            next unless $file =~ /^dirdlgg\./;
+        }
+
+        $file =~ s/cp?p?$/\o/;
+        $project{"WXMSW_GENERICOBJS"} .= "src/generic/" . $file . " "
+    }
+
     foreach $file (sort keys %wxGeneric) {
         next if $wxGeneric{$file} =~ /\bR\b/;
 
@@ -20,7 +32,6 @@
         $project{"WXGTK_GENERICOBJS"} .= "src/generic/" . $file . " "
     }
 
-    #! now transform these hashes into $project tags
     foreach $file (sort keys %wxGeneric) {
         next if $wxCommon{$file} =~ /\bX\b/;
 
@@ -28,6 +39,8 @@
         $project{"WXMOTIF_GENERICOBJS"} .= "src/generic/" . $file . " "
     }
 
+    #! Common
+    
     foreach $file (sort keys %wxCommon) {
         next if $wxCommon{$file} =~ /\bR\b/;
 
@@ -42,6 +55,30 @@
         $project{"WXMOTIF_COMMONOBJS"} .= "src/common/" . $file . " "
     }
 
+    foreach $file (sort keys %wxCommon) {
+        next if $wxCommon{$file} =~ /\b(16)\b/;
+
+        #! needs extra files (sql*.h) so not compiled by default.
+        next if $file =~ /^odbc\./;
+
+        $file =~ s/cp?p?$/\o/;
+        $project{"WXMSW_COMMONOBJS"} .= "src/common/" . $file . " "
+    }
+
+    #! GUI
+    
+    foreach $file (sort keys %wxMSW) {
+        #! Mingw32 doesn't have the OLE headers and has some troubles with
+        #! socket code
+        next if $wxMSW{$file} =~ /\b(O|16)\b/;
+
+        #! native wxDirDlg can't be compiled due to GnuWin32/OLE limitations,
+        next if $file =~ /^dirdlg\./;
+
+        $file =~ s/cp?p?$/\o/;
+        $project{"WXMSW_GUIOBJS"} .= "src/msw/" . $file . " "
+    }
+
     foreach $file (sort keys %wxGTK) {
         $file =~ s/cp?p?$/\o/;
         $project{"WXGTK_GUIOBJS"} .= "src/gtk/" . $file . " "
@@ -52,6 +89,8 @@
         $project{"WXMOTIF_GUIOBJS"} .= "src/motif/" . $file . " "
     }
 
+    #! others
+    
     foreach $file (sort keys %wxHTML) {
         $file =~ s/cp?p?$/\o/;
         $project{"WXHTMLOBJS"} .= "src/html/" . $file . " "
@@ -61,6 +100,8 @@
         $file =~ s/cp?p?$/\o/;
         $project{"WXUNIXOBJS"} .= "src/unix/" . $file . " "
     }
+    
+    #! headers
     
     foreach $file (sort keys %wxWXINCLUDE) {
         $project{"WX_HEADERS"} .= $file . " "
@@ -188,6 +229,7 @@ JPEGDIR = $(WXDIR)/src/jpeg
 ZLIBDIR = $(WXDIR)/src/zlib
 GTKDIR  = $(WXDIR)/src/gtk
 MOTIFDIR = $(WXDIR)/src/motif
+MSWDIR = $(WXDIR)/src/msw
 INCDIR  = $(WXDIR)/include
 
 DOCDIR = $(WXDIR)/docs
@@ -235,6 +277,15 @@ MOTIF_COMMONOBJS = \
 MOTIF_GUIOBJS = \
 		src/motif/xmcombo/xmcombo.o \
 		#$ ExpandList("WXMOTIF_GUIOBJS");
+
+MSW_GENERICOBJS = \
+		#$ ExpandList("WXMSW_GENERICOBJS");
+
+MSW_COMMONOBJS = \
+		#$ ExpandList("WXMSW_COMMONOBJS");
+
+MSW_GUIOBJS = \
+		#$ ExpandList("WXMSW_GUIOBJS");
 
 HTMLOBJS = \
 		#$ ExpandList("WXHTMLOBJS");
@@ -325,13 +376,13 @@ JPEGOBJS    = \
 		src/jpeg/jdmerge.o
 
 
-OBJECTS = $(@GUIOBJS@) $(@COMMONOBJS@) $(@GENERICOBJS@) $(HTMLOBJS) $(UNIXOBJS) \
+OBJECTS = $(@GUIOBJS@) $(@COMMONOBJS@) $(@GENERICOBJS@) $(@UNIXOBJS@) $(HTMLOBJS) \
 	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS)
 
 HEADERS = $(@GUIHEADERS@) $(HTML_HEADERS) $(UNIX_HEADERS) $(PROTOCOL_HEADERS) \
 	  $(GENERIC_HEADERS) $(WX_HEADERS)
 
-REQUIRED_DIRS = ./lib ./src ./src/common ./src/gtk ./src/motif \
+REQUIRED_DIRS = ./lib ./src ./src/common ./src/gtk ./src/motif ./src/msw \
                 ./src/generic ./src/unix ./src/motif/xmombo ./src/html \
 		./src/zlib ./src/jpeg ./src/png
 
@@ -341,6 +392,7 @@ $(REQUIRED_DIRS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDI
 	@if test ! -d ./lib; then mkdir ./lib; fi
 	@if test ! -d ./src; then mkdir ./src; fi
 	@if test ! -d ./src/common; then mkdir ./src/common; fi
+	@if test ! -d ./src/msw; then mkdir ./src/msw; fi
 	@if test ! -d ./src/gtk; then mkdir ./src/gtk; fi
 	@if test ! -d ./src/motif; then mkdir ./src/motif; fi
 	@if test ! -d ./src/motif/xmcombo; then mkdir ./src/motif/xmcombo; fi
@@ -412,6 +464,7 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(
 	$(INSTALL_DATA) $(top_builddir)/setup.h $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
 	
 	@if test ! -d $(includedir)/wx; then mkdir $(includedir)/wx; fi
+	@if test ! -d $(includedir)/wx/msw; then mkdir $(includedir)/wx/msw; fi
 	@if test ! -d $(includedir)/wx/gtk; then mkdir $(includedir)/wx/gtk; fi
 	@if test ! -d $(includedir)/wx/motif; then mkdir $(includedir)/wx/motif; fi
 	@if test ! -d $(includedir)/wx/html; then mkdir $(includedir)/wx/html; fi
@@ -460,6 +513,7 @@ uninstall:
 	@if test -d $(libdir)/wx; then rmdir $(libdir)/wx; fi
 	@if test -d $(includedir)/wx/gtk; then rmdir $(includedir)/wx/gtk; fi
 	@if test -d $(includedir)/wx/motif; then rmdir $(includedir)/wx/motif; fi
+	@if test -d $(includedir)/wx/motif; then rmdir $(includedir)/wx/msw; fi
 	@if test -d $(includedir)/wx/html; then rmdir $(includedir)/wx/html; fi
 	@if test -d $(includedir)/wx/unix; then rmdir $(includedir)/wx/unix; fi
 	@if test -d $(includedir)/wx/generic; then rmdir $(includedir)/wx/generic; fi

@@ -1378,25 +1378,31 @@ WXGTK12=
 WXWINE=
 
 if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
-  AC_MSG_CHECKING(for Windows headers)
-  WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
-  INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS msw"
+    AC_MSG_CHECKING(for Windows headers)
+    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
+    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS msw"
   
-  dnl --- Quick & Dirty ; link against most/all libraries
-  dnl --- This will bloat the executable, but it'll work for now...
-  LIBS="$LIBS  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -loldnames -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
+    dnl --- Quick & Dirty ; link against most/all libraries
+    dnl --- This will bloat the executable, but it'll work for now...
+    LIBS="$LIBS  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -loldnames -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
 
-  if test "$ac_find_includes" != "" ; then
-    AC_MSG_RESULT(found $ac_find_includes)
-    TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
-  else
-    AC_MSG_RESULT(no)
-    if test "$cross_compiling" != "yes" ; then
-      AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
-    fi  
-  fi
+    if test "$ac_find_includes" != "" ; then
+        AC_MSG_RESULT(found $ac_find_includes)
+        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
+    else
+        AC_MSG_RESULT(no)
+        if test "$cross_compiling" != "yes" ; then
+            AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
+        fi  
+    fi
 
-  TOOLKIT=MSW
+    TOOLKIT=MSW
+    
+    GUIOBJS=MSW_GUIOBJS
+    GUIHEADERS=
+    COMMONOBJS=MSW_COMMONOBJS
+    GENERICOBJS=MSW_GENERICOBJS
+    UNIXOBJS=
 fi
 
 if test "$wxUSE_GTK" = 1; then
@@ -1415,6 +1421,7 @@ if test "$wxUSE_GTK" = 1; then
     GUIHEADERS=GTK_HEADERS
     COMMONOBJS=GTK_COMMONOBJS
     GENERICOBJS=GTK_GENERICOBJS
+    UNIXOBJS=UNIXOBJS
 fi
 
 if test "$wxUSE_WINE" = 1; then
@@ -1456,6 +1463,12 @@ if test "$wxUSE_WINE" = 1; then
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     WXWINE=1
     TOOLKIT=MSW
+    
+    GUIOBJS=MSW_GUIOBJS
+    GUIHEADERS=
+    COMMONOBJS=MSW_COMMONOBJS
+    GENERICOBJS=MSW_GENERICOBJS
+    UNIXOBJS=UNIXOBJS
 fi
 
 if test "$wxUSE_MOTIF" = 1; then
@@ -1526,6 +1539,7 @@ if test "$wxUSE_MOTIF" = 1; then
     GUIHEADERS=MOTIF_HEADERS
     COMMONOBJS=MOTIF_COMMONOBJS
     GENERICOBJS=MOTIF_GENERICOBJS
+    UNIXOBJS=UNIXOBJS
 fi
 
 dnl the name of the directory where the files for this toolkit live
@@ -1617,8 +1631,12 @@ case "${host}" in
     SHARED_LD="/usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o"
   ;;
   *-*-cygwin32* )
+    dnl only static for now
+    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
   ;;
   *-*-mingw32* )
+    dnl only static for now
+    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
   ;;
   *-pc-os2_emx )
   ;;
@@ -2642,6 +2660,7 @@ AC_SUBST(GUIOBJS)
 AC_SUBST(GUIHEADERS)
 AC_SUBST(COMMONOBJS)
 AC_SUBST(GENERICOBJS)
+AC_SUBST(UNIXOBJS)
 
 dnl additional subdirectories where we will build
 AC_SUBST(SRC_SUBDIRS)

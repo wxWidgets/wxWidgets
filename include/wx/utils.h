@@ -23,7 +23,6 @@
 #include "wx/setup.h"
 #include "wx/object.h"
 #include "wx/list.h"
-#include "wx/window.h"
 #include "wx/filefn.h"
 
 #ifdef __X__
@@ -39,6 +38,7 @@
 
 class WXDLLEXPORT wxProcess;
 class WXDLLEXPORT wxFrame;
+class WXDLLEXPORT wxWindow;
 
 // FIXME should use wxStricmp() instead
 #if defined(__GNUWIN32__)
