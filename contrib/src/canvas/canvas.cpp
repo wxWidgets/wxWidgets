@@ -41,7 +41,7 @@
 // globals
 //----------------------------------------------------------------------------
 
-const double pi = 3.1415926535;
+static const double pi = 3.1415926535;
 
 #if wxUSE_FREETYPE
 FT_Library g_freetypeLibrary;
