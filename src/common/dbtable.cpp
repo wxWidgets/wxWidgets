@@ -177,7 +177,7 @@ bool wxDbTable::initialize(wxDb *pwxDb, const wxString &tblName, const int nCols
     
     wxString s;
     tableID = ++lastTableID;
-    s.Printf(wxT("wxDbTable constructor (%-20s) tableID:[%6lu] pDb:[%p]"), tblName,tableID,pDb);
+    s.Printf(wxT("wxDbTable constructor (%-20s) tableID:[%6lu] pDb:[%p]"), tblName.c_str(), tableID, pDb);
     
 #ifdef __WXDEBUG__
     wxTablesInUse *tableInUse;
@@ -300,7 +300,7 @@ void wxDbTable::cleanup()
     wxString s;
     if (pDb)
     {
-        s.Printf(wxT("wxDbTable destructor (%-20s) tableID:[%6lu] pDb:[%p]"), tableName,tableID,pDb);
+        s.Printf(wxT("wxDbTable destructor (%-20s) tableID:[%6lu] pDb:[%p]"), tableName.c_str(), tableID, pDb);
         pDb->WriteSqlLog(s);
     }
 
@@ -344,20 +344,41 @@ void wxDbTable::cleanup()
     if (!queryOnly)
     {
         if (hstmtInsert)
+        {
+/*
+ODBC 3.0 says to use this form
+            if (SQLFreeHandle(*hstmtDel, SQL_DROP) != SQL_SUCCESS)
+*/
             if (SQLFreeStmt(hstmtInsert, SQL_DROP) != SQL_SUCCESS)
                 pDb->DispAllErrors(henv, hdbc);
+        }
 
         if (hstmtDelete)
+        {
+/*
+ODBC 3.0 says to use this form
+            if (SQLFreeHandle(*hstmtDel, SQL_DROP) != SQL_SUCCESS)
+*/
             if (SQLFreeStmt(hstmtDelete, SQL_DROP) != SQL_SUCCESS)
+                pDb->DispAllErrors(henv, hdbc);
+        }
 
         if (hstmtUpdate)
+        {
+/*
+ODBC 3.0 says to use this form
+            if (SQLFreeHandle(*hstmtDel, SQL_DROP) != SQL_SUCCESS)
+*/
             if (SQLFreeStmt(hstmtUpdate, SQL_DROP) != SQL_SUCCESS)
                 pDb->DispAllErrors(henv, hdbc);
+        }
     }
 
     if (hstmtInternal)
+    {
         if (SQLFreeStmt(hstmtInternal, SQL_DROP) != SQL_SUCCESS)
             pDb->DispAllErrors(henv, hdbc);
+    }
 
     // Delete dynamically allocated cursors
     if (hstmtDefault)
@@ -676,9 +697,9 @@ bool wxDbTable::Open(bool checkPrivileges)
         wxString p;
 
         if (!tablePath.IsEmpty())
-            p.Printf(wxT("Error opening '%s/%s'.\n"),tablePath,tableName);
+            p.Printf(wxT("Error opening '%s/%s'.\n"),tablePath.c_str(),tableName.c_str());
         else
-            p.Printf(wxT("Error opening '%s'.\n"), tableName);
+            p.Printf(wxT("Error opening '%s'.\n"), tableName.c_str());
 
         p += s;
         pDb->LogError(p.GetData());
@@ -711,7 +732,7 @@ bool wxDbTable::Open(bool checkPrivileges)
     if (!queryOnly && noCols > 0)
     {
         bool needComma = FALSE;
-        sqlStmt.Printf(wxT("INSERT INTO %s ("), tableName);
+        sqlStmt.Printf(wxT("INSERT INTO %s ("), tableName.c_str());
         for (i = 0; i < noCols; i++)
         {
             if (! colDefs[i].InsertAllowed)
@@ -862,11 +883,11 @@ void wxDbTable::BuildDeleteStmt(wxString &pSqlStmt, int typeOfDel, const wxStrin
     // delete all records from the database in this case.
     if (typeOfDel == DB_DEL_WHERE && (pWhereClause.Length() == 0))
     {
-        pSqlStmt.Printf(wxT("DELETE FROM %s"), tableName);
+        pSqlStmt.Printf(wxT("DELETE FROM %s"), tableName.c_str());
         return;
     }
 
-    pSqlStmt.Printf(wxT("DELETE FROM %s WHERE "), tableName);
+    pSqlStmt.Printf(wxT("DELETE FROM %s WHERE "), tableName.c_str());
 
     // Append the WHERE clause to the SQL DELETE statement
     switch(typeOfDel)
@@ -1060,7 +1081,7 @@ void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxStrin
 
     bool firstColumn = TRUE;
 
-    pSqlStmt.Printf(wxT("UPDATE %s SET "), tableName);
+    pSqlStmt.Printf(wxT("UPDATE %s SET "), tableName.c_str());
 
     // Append a list of columns to be updated
     int i;
@@ -1276,7 +1297,7 @@ bool wxDbTable::CreateTable(bool attemptDrop)
 
     // Build a CREATE TABLE string from the colDefs structure.
     bool needComma = FALSE;
-    sqlStmt.Printf(wxT("CREATE TABLE %s ("), tableName);
+    sqlStmt.Printf(wxT("CREATE TABLE %s ("), tableName.c_str());
 
     for (i = 0; i < noCols; i++)
     {
@@ -1402,7 +1423,7 @@ bool wxDbTable::DropTable()
 
     wxString sqlStmt;
 
-    sqlStmt.Printf(wxT("DROP TABLE %s"), tableName);
+    sqlStmt.Printf(wxT("DROP TABLE %s"), tableName.c_str());
 
     pDb->WriteSqlLog(sqlStmt);
 
@@ -1576,12 +1597,12 @@ bool wxDbTable::DropIndex(const wxString &idxName)
     wxString sqlStmt;
 
     if (pDb->Dbms() == dbmsACCESS || pDb->Dbms() == dbmsMY_SQL)
-        sqlStmt.Printf(wxT("DROP INDEX %s ON %s"),idxName,tableName);
+        sqlStmt.Printf(wxT("DROP INDEX %s ON %s"),idxName.c_str(), tableName.c_str());
     else if ((pDb->Dbms() == dbmsMS_SQL_SERVER) ||
              (pDb->Dbms() == dbmsSYBASE_ASE))
-        sqlStmt.Printf(wxT("DROP INDEX %s.%s"),tableName,idxName);
+        sqlStmt.Printf(wxT("DROP INDEX %s.%s"),tableName.c_str(), idxName.c_str());
     else
-        sqlStmt.Printf(wxT("DROP INDEX %s"),idxName);
+        sqlStmt.Printf(wxT("DROP INDEX %s"),idxName.c_str());
 
     pDb->WriteSqlLog(sqlStmt);
 
@@ -2319,6 +2340,11 @@ bool wxDbTable::DeleteCursor(HSTMT *hstmtDel)
     if (!hstmtDel)  // Cursor already deleted
         return(result);
 
+/*
+ODBC 3.0 says to use this form
+    if (SQLFreeHandle(*hstmtDel, SQL_DROP) != SQL_SUCCESS)
+    
+*/
     if (SQLFreeStmt(*hstmtDel, SQL_DROP) != SQL_SUCCESS)
     {
         pDb->DispAllErrors(henv, hdbc);
