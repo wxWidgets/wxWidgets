@@ -2488,11 +2488,24 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 m_lastOnSame = FALSE;
             }
         }
-        else
+        else // !RightDown() && !LeftUp() ==> LeftDown() || LeftDClick()
         {
             if ( event.LeftDown() )
             {
                 m_lastOnSame = item == m_current;
+            }
+
+            if ( flags & wxTREE_HITTEST_ONITEMBUTTON )
+            {
+                // only toggle the item for a single click, double click on
+                // the button doesn't do anything (it toggles the item twice)
+                if ( event.LeftDown() )
+                {
+                    Toggle( item );
+                }
+
+                // don't select the item if the button was clicked
+                return;
             }
 
             // how should the selection work for this event?
