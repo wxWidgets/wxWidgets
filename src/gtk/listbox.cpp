@@ -445,4 +445,10 @@ bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
   return FALSE;
 }
 
+void wxListBox::SetBackgroundColour(const wxColour &colour)
+{
+  wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
+
+  SetBackgroundColourHelper( colour, GTK_WIDGET(m_list)->window );
+}
 

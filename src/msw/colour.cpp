@@ -31,7 +31,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
 // Colour
 
-wxColour::wxColour (void)
+wxColour::wxColour ()
 {
   m_isInit = FALSE;
   m_pixel = 0;
@@ -66,7 +66,7 @@ wxColour& wxColour::operator =(const wxColour& col)
   return *this;
 }
 
-wxColour::wxColour (const wxString& col)
+void wxColour::InitFromName(const wxString& col)
 {
   wxColour *the_colour = wxTheColourDatabase->FindColour (col);
   if (the_colour)
@@ -86,7 +86,7 @@ wxColour::wxColour (const wxString& col)
   m_pixel = PALETTERGB (m_red, m_green, m_blue);
 }
 
-wxColour::~wxColour (void)
+wxColour::~wxColour()
 {
 }
 

@@ -1021,7 +1021,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-wxWindow::~wxWindow(void)
+wxWindow::~wxWindow()
 {
   m_hasVMT = FALSE;
 
@@ -1113,7 +1113,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_hasOwnStyle = FALSE;
 }
 
-void wxWindow::PostCreation(void)
+void wxWindow::PostCreation()
 {
   if (m_parent) m_parent->AddChild( this );
 
@@ -1168,7 +1168,7 @@ void wxWindow::ConnectWidget( GtkWidget *widget )
     GTK_SIGNAL_FUNC(gtk_window_leave_callback), (gpointer)this );
 }
 
-bool wxWindow::HasVMT(void)
+bool wxWindow::HasVMT()
 {
   return m_hasVMT;
 }
@@ -1184,7 +1184,7 @@ bool wxWindow::Close( bool force )
   return GetEventHandler()->ProcessEvent(event);
 }
 
-bool wxWindow::Destroy(void)
+bool wxWindow::Destroy()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
@@ -1193,7 +1193,7 @@ bool wxWindow::Destroy(void)
   return TRUE;
 }
 
-bool wxWindow::DestroyChildren(void)
+bool wxWindow::DestroyChildren()
 {
   if (GetChildren())
   {
@@ -1216,7 +1216,7 @@ void wxWindow::PrepareDC( wxDC &WXUNUSED(dc) )
   // are we to set fonts here ?
 }
 
-void wxWindow::ImplementSetSize(void)
+void wxWindow::ImplementSetSize()
 {
   if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
   if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
@@ -1225,7 +1225,7 @@ void wxWindow::ImplementSetSize(void)
   gtk_widget_set_usize( m_widget, m_width, m_height );
 }
 
-void wxWindow::ImplementSetPosition(void)
+void wxWindow::ImplementSetPosition()
 {
   if (IS_KIND_OF(this,wxFrame) || IS_KIND_OF(this,wxDialog))
   {
@@ -1523,7 +1523,7 @@ void wxWindow::Centre( int direction )
   }
 }
 
-void wxWindow::Fit(void)
+void wxWindow::Fit()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
@@ -1582,7 +1582,7 @@ void wxWindow::Enable( bool enable )
   if (m_wxwindow) gtk_widget_set_sensitive( m_wxwindow, enable );
 }
 
-int wxWindow::GetCharHeight(void) const
+int wxWindow::GetCharHeight() const
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
@@ -1596,7 +1596,7 @@ int wxWindow::GetCharHeight(void) const
   return font->ascent + font->descent;
 }
 
-int wxWindow::GetCharWidth(void) const
+int wxWindow::GetCharWidth() const
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
@@ -1650,7 +1650,7 @@ void wxWindow::MakeModal( bool modal )
   }
 }
 
-void wxWindow::SetFocus(void)
+void wxWindow::SetFocus()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
@@ -1664,7 +1664,7 @@ void wxWindow::SetFocus(void)
   }
 }
 
-bool wxWindow::OnClose(void)
+bool wxWindow::OnClose()
 {
   return TRUE;
 }
@@ -1740,7 +1740,7 @@ void wxWindow::AddChild( wxWindow *child )
   gtk_widget_set_usize( child->m_widget, child->m_width, child->m_height );
 }
 
-wxList *wxWindow::GetChildren(void)
+wxList *wxWindow::GetChildren()
 {
   return (&m_children);
 }
@@ -1757,26 +1757,26 @@ void wxWindow::SetReturnCode( int retCode )
   m_retCode = retCode;
 }
 
-int wxWindow::GetReturnCode(void)
+int wxWindow::GetReturnCode()
 {
   return m_retCode;
 }
 
-void wxWindow::Raise(void)
+void wxWindow::Raise()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
   if (m_widget) gdk_window_raise( m_widget->window );
 }
 
-void wxWindow::Lower(void)
+void wxWindow::Lower()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
   if (m_widget) gdk_window_lower( m_widget->window );
 }
 
-wxEvtHandler *wxWindow::GetEventHandler(void)
+wxEvtHandler *wxWindow::GetEventHandler()
 {
   return m_eventHandler;
 }
@@ -1812,7 +1812,7 @@ wxEvtHandler *wxWindow::PopEventHandler(bool deleteHandler)
    return (wxEvtHandler *) NULL;
 }
 
-wxValidator *wxWindow::GetValidator(void)
+wxValidator *wxWindow::GetValidator()
 {
   return m_windowValidator;
 }
@@ -1824,7 +1824,7 @@ void wxWindow::SetValidator( const wxValidator& validator )
   if (m_windowValidator) m_windowValidator->SetWindow(this);
 }
 
-bool wxWindow::IsBeingDeleted(void)
+bool wxWindow::IsBeingDeleted()
 {
   return FALSE;
 }
@@ -1834,7 +1834,7 @@ void wxWindow::SetId( wxWindowID id )
   m_windowId = id;
 }
 
-wxWindowID wxWindow::GetId(void)
+wxWindowID wxWindow::GetId()
 {
   return m_windowId;
 }
@@ -1937,33 +1937,36 @@ bool wxWindow::IsExposed( const wxRect& rect ) const
   return (m_updateRegion.Contains( rect.x, rect.y, rect.width, rect.height ) != wxOutRegion );
 }
 
-void wxWindow::Clear(void)
+void wxWindow::Clear()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
   if (m_wxwindow && m_wxwindow->window) gdk_window_clear( m_wxwindow->window );
 }
 
-wxColour wxWindow::GetBackgroundColour(void) const
+wxColour wxWindow::GetBackgroundColour() const
 {
   return m_backgroundColour;
 }
 
-void wxWindow::SetBackgroundColour( const wxColour &colour )
+void wxWindow::SetBackgroundColourHelper(const wxColour& colour,
+                                         GdkWindow *window)
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
-
   m_backgroundColour = colour;
-  if (m_wxwindow)
-  {
-    m_backgroundColour.CalcPixel( m_wxwindow->style->colormap );
-    gdk_window_set_background( m_wxwindow->window, m_backgroundColour.GetColor() );
-    gdk_window_clear( m_wxwindow->window );
-  }
-  // do something ?
+  m_backgroundColour.CalcPixel( gdk_window_get_colormap(window) );
+  gdk_window_set_background( window, m_backgroundColour.GetColor() );
+  gdk_window_clear( window );
 }
 
-wxColour wxWindow::GetForegroundColour(void) const
+void wxWindow::SetBackgroundColour( const wxColour &colour )
+{
+  wxASSERT_MSG( m_widget != NULL, "invalid window" );
+
+  GtkWidget *widget = m_wxwindow == NULL ? m_widget : m_wxwindow;
+  SetBackgroundColourHelper( colour, widget->window );
+}
+
+wxColour wxWindow::GetForegroundColour() const
 {
   return m_foregroundColour;
 }
@@ -1973,7 +1976,7 @@ void wxWindow::SetForegroundColour( const wxColour &colour )
   m_foregroundColour = colour;
 }
 
-bool wxWindow::Validate(void)
+bool wxWindow::Validate()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
@@ -1988,7 +1991,7 @@ bool wxWindow::Validate(void)
   return TRUE;
 }
 
-bool wxWindow::TransferDataToWindow(void)
+bool wxWindow::TransferDataToWindow()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
@@ -2007,7 +2010,7 @@ bool wxWindow::TransferDataToWindow(void)
   return TRUE;
 }
 
-bool wxWindow::TransferDataFromWindow(void)
+bool wxWindow::TransferDataFromWindow()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
@@ -2032,7 +2035,7 @@ void wxWindow::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
   TransferDataToWindow();
 }
 
-void wxWindow::InitDialog(void)
+void wxWindow::InitDialog()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
@@ -2110,7 +2113,7 @@ void wxWindow::DisconnectDnDWidget( GtkWidget *widget )
   m_pDropTarget->UnregisterWidget( widget );
 }
 
-GtkWidget* wxWindow::GetConnectWidget(void)
+GtkWidget* wxWindow::GetConnectWidget()
 {
   GtkWidget *connect_widget = m_widget;
   if (m_wxwindow) connect_widget = m_wxwindow;
@@ -2150,7 +2153,7 @@ void wxWindow::SetFont( const wxFont &font )
   gtk_widget_set_style( m_widget, style );
 }
 
-wxFont *wxWindow::GetFont(void)
+wxFont *wxWindow::GetFont()
 {
   return &m_font;
 }
@@ -2160,12 +2163,12 @@ void wxWindow::SetWindowStyleFlag( long flag )
   m_windowStyle = flag;
 }
 
-long wxWindow::GetWindowStyleFlag(void) const
+long wxWindow::GetWindowStyleFlag() const
 {
   return m_windowStyle;
 }
 
-void wxWindow::CaptureMouse(void)
+void wxWindow::CaptureMouse()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
@@ -2182,7 +2185,7 @@ void wxWindow::CaptureMouse(void)
   g_capturing = TRUE;
 }
 
-void wxWindow::ReleaseMouse(void)
+void wxWindow::ReleaseMouse()
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
 
@@ -2198,12 +2201,12 @@ void wxWindow::SetTitle( const wxString &WXUNUSED(title) )
 {
 }
 
-wxString wxWindow::GetTitle(void) const
+wxString wxWindow::GetTitle() const
 {
   return (wxString&)m_windowName;
 }
 
-wxString wxWindow::GetLabel(void) const
+wxString wxWindow::GetLabel() const
 {
   return GetTitle();
 }
@@ -2213,17 +2216,17 @@ void wxWindow::SetName( const wxString &name )
   m_windowName = name;
 }
 
-wxString wxWindow::GetName(void) const
+wxString wxWindow::GetName() const
 {
   return (wxString&)m_windowName;
 }
 
-bool wxWindow::IsShown(void) const
+bool wxWindow::IsShown() const
 {
   return m_isShown;
 }
 
-bool wxWindow::IsRetained(void)
+bool wxWindow::IsRetained()
 {
   return FALSE;
 }
@@ -2442,7 +2445,7 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 //          Layout
 //-------------------------------------------------------------------------------------
 
-wxLayoutConstraints *wxWindow::GetConstraints(void) const
+wxLayoutConstraints *wxWindow::GetConstraints() const
 {
   return m_constraints;
 }
@@ -2484,12 +2487,12 @@ void wxWindow::SetAutoLayout( bool autoLayout )
   m_autoLayout = autoLayout;
 }
 
-bool wxWindow::GetAutoLayout(void) const
+bool wxWindow::GetAutoLayout() const
 {
   return m_autoLayout;
 }
 
-wxSizer *wxWindow::GetSizer(void) const
+wxSizer *wxWindow::GetSizer() const
 {
   return m_windowSizer;
 }
@@ -2499,7 +2502,7 @@ void wxWindow::SetSizerParent( wxWindow *win )
   m_sizerParent = win;
 }
 
-wxWindow *wxWindow::GetSizerParent(void) const
+wxWindow *wxWindow::GetSizerParent() const
 {
   return m_sizerParent;
 }
@@ -2547,7 +2550,7 @@ void wxWindow::RemoveConstraintReference(wxWindow *otherWin)
 }
 
 // Reset any constraints that mention this window
-void wxWindow::DeleteRelatedConstraints(void)
+void wxWindow::DeleteRelatedConstraints()
 {
   if (m_constraintsInvolvedIn)
   {
@@ -2589,7 +2592,7 @@ void wxWindow::SetSizer(wxSizer *sizer)
  * New version
  */
 
-bool wxWindow::Layout(void)
+bool wxWindow::Layout()
 {
   if (GetConstraints())
   {
@@ -2689,7 +2692,7 @@ bool wxWindow::DoPhase(int phase)
   return TRUE;
 }
 
-void wxWindow::ResetConstraints(void)
+void wxWindow::ResetConstraints()
 {
   wxLayoutConstraints *constr = GetConstraints();
   if (constr)

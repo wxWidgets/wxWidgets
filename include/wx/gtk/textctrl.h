@@ -102,7 +102,8 @@ class wxTextCtrl: public wxControl, public streambuf
     wxTextCtrl& operator<<(const char c);
 
     void SetFont( const wxFont &font );
-    
+    virtual void SetBackgroundColour(const wxColour &colour);
+
   // implementation    
     
     GtkWidget* GetConnectWidget(void);

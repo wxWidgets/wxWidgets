@@ -27,9 +27,9 @@ class wxColourRefData: public wxObjectRefData
 {
   public:
   
-    wxColourRefData(void);
-    ~wxColourRefData(void);
-    void FreeColour(void);
+    wxColourRefData();
+    ~wxColourRefData();
+    void FreeColour();
   
     GdkColor     m_color;
     GdkColormap *m_colormap;
@@ -38,7 +38,7 @@ class wxColourRefData: public wxObjectRefData
     friend wxColour;
 };
 
-wxColourRefData::wxColourRefData(void)
+wxColourRefData::wxColourRefData()
 {
   m_color.red = 0;
   m_color.green = 0;
@@ -48,12 +48,12 @@ wxColourRefData::wxColourRefData(void)
   m_hasPixel = FALSE;
 }
 
-wxColourRefData::~wxColourRefData(void)
+wxColourRefData::~wxColourRefData()
 {
   FreeColour();
 }
 
-void wxColourRefData::FreeColour(void)
+void wxColourRefData::FreeColour()
 {
 //  if (m_hasPixel) gdk_colors_free( m_colormap, &m_color, 1, 0 );
 }
@@ -66,7 +66,7 @@ void wxColourRefData::FreeColour(void)
 
 IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
 
-wxColour::wxColour(void)
+wxColour::wxColour()
 {
 }
 
@@ -79,7 +79,7 @@ wxColour::wxColour( char red, char green, char blue )
   M_COLDATA->m_color.pixel = 0;
 }
   
-wxColour::wxColour( const wxString &colourName )
+void wxColour::InitFromName( const wxString &colourName )
 {
   wxNode *node = (wxNode *) NULL;
   if ( (wxTheColourDatabase) && (node = wxTheColourDatabase->Find(colourName)) ) 
@@ -110,7 +110,7 @@ wxColour::wxColour( const wxColour* col )
   if (col) Ref( *col ); 
 }
 
-wxColour::~wxColour(void)
+wxColour::~wxColour()
 {
 }
 
@@ -163,7 +163,7 @@ void wxColour::Set( const unsigned char red, const unsigned char green, const un
   M_COLDATA->m_color.pixel = 0;
 }
 
-unsigned char wxColour::Red(void) const
+unsigned char wxColour::Red() const
 {
   if (!Ok())
   {
@@ -174,7 +174,7 @@ unsigned char wxColour::Red(void) const
   return (unsigned char)(M_COLDATA->m_color.red >> SHIFT);
 }
 
-unsigned char wxColour::Green(void) const
+unsigned char wxColour::Green() const
 {
   if (!Ok())
   {
@@ -185,7 +185,7 @@ unsigned char wxColour::Green(void) const
   return (unsigned char)(M_COLDATA->m_color.green >> SHIFT);
 }
 
-unsigned char wxColour::Blue(void) const
+unsigned char wxColour::Blue() const
 {
   if (!Ok())
   {
@@ -196,7 +196,7 @@ unsigned char wxColour::Blue(void) const
   return (unsigned char)(M_COLDATA->m_color.blue >> SHIFT);
 }
 
-bool wxColour::Ok(void) const
+bool wxColour::Ok() const
 {
   return (m_refData != NULL);
 }
@@ -225,14 +225,14 @@ void wxColour::CalcPixel( GdkColormap *cmap )
   M_COLDATA->m_colormap = cmap;
 }
 
-int wxColour::GetPixel(void)
+int wxColour::GetPixel() const
 {
   if (!Ok()) return 0;
   
   return M_COLDATA->m_color.pixel;
 }
 
-GdkColor *wxColour::GetColor(void)
+GdkColor *wxColour::GetColor() const
 {
   if (!Ok()) return (GdkColor *) NULL;
   

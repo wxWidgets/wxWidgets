@@ -85,6 +85,7 @@ class wxListBox: public wxControl
     
     void SetFont( const wxFont &font );
     void SetDropTarget( wxDropTarget *dropTarget );
+    virtual void SetBackgroundColour(const wxColour &colour);
 
   // implementation
     

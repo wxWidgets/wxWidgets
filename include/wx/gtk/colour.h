@@ -39,25 +39,24 @@ class wxColour;
 
 class wxColour: public wxGDIObject
 {
-  DECLARE_DYNAMIC_CLASS(wxColour)
-
   public:
 
-    wxColour(void);
+    wxColour();
     wxColour( char red, char green, char blue );
-    wxColour( const wxString &colourName );
+    wxColour( const wxString &colourName ) { InitFromName(colourName); }
+    wxColour( const char *colourName ) { InitFromName(colourName); }
     wxColour( const wxColour& col );
     wxColour( const wxColour* col );
-    ~wxColour(void);
+    ~wxColour();
     wxColour& operator = ( const wxColour& col );
     wxColour& operator = ( const wxString& colourName );
     bool operator == ( const wxColour& col );
     bool operator != ( const wxColour& col );
     void Set( const unsigned char red, const unsigned char green, const unsigned char blue );
-    unsigned char Red(void) const;
-    unsigned char Green(void) const;
-    unsigned char Blue(void) const;
-    bool Ok(void) const;
+    unsigned char Red() const;
+    unsigned char Green() const;
+    unsigned char Blue() const;
+    bool Ok() const;
 
   private:
   public:
@@ -68,10 +67,15 @@ class wxColour: public wxGDIObject
     friend wxWindow;
         
     void CalcPixel( GdkColormap *cmap );
-    int GetPixel(void);
-    GdkColor *GetColor(void);
+    int GetPixel() const;
+    GdkColor *GetColor() const;
     
-    // no data :-)
+protected:
+    // helper functions
+    void InitFromName(const wxString& colourName);
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxColour)
 };
   
 #endif // __GTKCOLOURH__

@@ -19,17 +19,18 @@
 // Colour
 class WXDLLEXPORT wxColour: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxColour)
 public:
-  wxColour(void);
+  wxColour();
   wxColour(const unsigned char r, const unsigned char g, const unsigned char b);
   wxColour(unsigned long colRGB) { Set(colRGB); }
   wxColour(const wxColour& col);
-  wxColour(const wxString& col);
-  ~wxColour(void) ;
+  wxColour(const wxString& col) { InitFromName(col); }
+  wxColour(const char *col) { InitFromName(col); }
+  ~wxColour();
+
   wxColour& operator =(const wxColour& src) ;
   wxColour& operator =(const wxString& src) ;
-  inline int Ok(void) const { return (m_isInit) ; }
+  inline int Ok() const { return (m_isInit) ; }
 
   void Set(unsigned char r, unsigned char g, unsigned char b);
   void Set(unsigned long colRGB) 
@@ -46,23 +47,30 @@ public:
   void Get(unsigned char *r, unsigned char *g, unsigned char *b) const;
 #endif
 
-  inline unsigned char Red(void) const { return m_red; }
-  inline unsigned char Green(void) const { return m_green; }
-  inline unsigned char Blue(void) const { return m_blue; }
+  inline unsigned char Red() const { return m_red; }
+  inline unsigned char Green() const { return m_green; }
+  inline unsigned char Blue() const { return m_blue; }
 
   inline bool operator == (const wxColour& colour) { return (m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue); }
 
   inline bool operator != (const wxColour& colour) { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
 
-  WXCOLORREF GetPixel(void) const { return m_pixel; };
+  WXCOLORREF GetPixel() const { return m_pixel; };
 
- private:
+private:
   bool 			m_isInit;
   unsigned char m_red;
   unsigned char m_blue;
   unsigned char m_green;
- public:
+
+  // helper func
+  void InitFromName(const wxString& colourName);
+
+public:
   WXCOLORREF m_pixel ;
+
+private:
+  DECLARE_DYNAMIC_CLASS(wxColour)
 };
 
 #define wxColor wxColour

@@ -209,6 +209,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
 {
   m_text = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,50), wxSize(100,50), wxTE_MULTILINE );
+  m_text->SetBackgroundColour("yellow");
   
   m_notebook = new wxNotebook( this, ID_NOTEBOOK, wxPoint(0,0), wxSize(200,150) );
   
@@ -233,13 +234,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   
   wxASSERT( WXSIZEOF(aIconNames) == Image_Max ); // keep in sync
 
-  // fill the image list
-#ifdef __WXMSW__
-  wxString strIconDir = "icons/";
-#else
-  wxString strIconDir = "../icons/";
-#endif
+  // TODO should find the dir from path to program
+  wxString strIconDir = "icons/"; 
 
+  // fill the image list
   wxImageList *imagelist = new wxImageList(32, 32);
   for ( size_t n = 0; n < Image_Max; n++ ) 
   {
@@ -250,9 +248,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 
   wxPanel *panel = new wxPanel(m_notebook);
   m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 4, choices );
+  m_listbox->SetBackgroundColour("red");
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
-  (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
+  wxButton *btn = new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
+  btn->SetBackgroundColour("green");
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );

@@ -115,7 +115,8 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
 
   m_widget = gtk_handle_box_new();
 
-  m_toolbar = GTK_TOOLBAR( gtk_toolbar_new( GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_ICONS ) );
+  m_toolbar = GTK_TOOLBAR( gtk_toolbar_new( GTK_ORIENTATION_HORIZONTAL,
+                                            GTK_TOOLBAR_ICONS ) );
   gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
 
   gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
@@ -177,53 +178,49 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
   wxCHECK_MSG( bitmap.GetPixmap() != NULL, (wxToolBarTool *)NULL,
                "wxToolBar::Add needs a wxBitmap" );
   
-  GtkWidget *tool_pixmap = (GtkWidget *) NULL;
+  GtkWidget *tool_pixmap = (GtkWidget *)NULL;
   
   if (TRUE) // FIXME huh?
   {
     GdkPixmap *pixmap = bitmap.GetPixmap();
 
-    GdkBitmap *mask = (GdkBitmap *) NULL;
-    if (bitmap.GetMask()) mask = bitmap.GetMask()->GetBitmap();
+    GdkBitmap *mask = (GdkBitmap *)NULL;
+    if ( bitmap.GetMask() )
+      mask = bitmap.GetMask()->GetBitmap();
     
     tool_pixmap = gtk_pixmap_new( pixmap, mask );
   }
   
   gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
 
-#if 0
   GtkToolbarChildType ctype = toggle ? GTK_TOOLBAR_CHILD_TOGGLEBUTTON
                                      : GTK_TOOLBAR_CHILD_BUTTON;
 
-  tool->m_item = gtk_toolbar_append_element
-                 (
-                  GTK_TOOLBAR(m_toolbar),
-                  ctype,
-                  (GtkWidget *)NULL,
-                  (const char *)NULL,
-                  helpString1,
-                  "",
-                  tool_pixmap,
-                  (GtkSignalFunc)gtk_toolbar_callback,
-                  (gpointer)tool
-                 );
+  GtkWidget *item = gtk_toolbar_append_element
+                     (
+                      GTK_TOOLBAR(m_toolbar),
+                      ctype,
+                      (GtkWidget *)NULL,
+                      (const char *)NULL,
+                      helpString1,
+                      "",
+                      tool_pixmap,
+                      (GtkSignalFunc)gtk_toolbar_callback,
+                      (gpointer)tool
+                     );
+
+  // VZ: we don't want GDK_NO_EXPOSE events because for some reason our
+  // toolbar buttons get them (it doesn't happen in a standalone GTK+ program
+  // for unknown reasons) and it prevents tooltips from appearing.
+  gtk_widget_set_events( GTK_WIDGET(item),
+                         gtk_widget_get_events( GTK_WIDGET(item) ) &
+                         ~GDK_EXPOSURE_MASK);
+  tool->m_item = item;
 
   gtk_signal_connect( GTK_OBJECT(tool->m_item),
                       "enter_notify_event", 
                       GTK_SIGNAL_FUNC(gtk_toolbar_enter_callback),
                       (gpointer)tool );
-#else
-  tool->m_item = gtk_toolbar_append_item 
-                 (
-                  GTK_TOOLBAR(m_toolbar),
-                  (const char *)NULL,
-                  helpString1,
-                  "",
-                  tool_pixmap,
-                  (GtkSignalFunc)gtk_toolbar_callback,
-                  (gpointer)tool
-                 );
-#endif
 
   m_tools.Append( tool );
 

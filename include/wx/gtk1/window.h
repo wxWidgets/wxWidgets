@@ -315,6 +315,12 @@ public:
   virtual void GetClientSizeConstraint(int *w, int *h) const ;
   virtual void GetPositionConstraint(int *x, int *y) const ;
 
+protected:
+  // set background colour for arbitrary window (useful because some windows
+  // don't work with m_wxwindow, e.g. wxTextCtrl)
+  void SetBackgroundColourHelper( const wxColour &colour, GdkWindow *window );
+
+private:
   DECLARE_EVENT_TABLE()
 };
 
