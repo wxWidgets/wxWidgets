@@ -98,7 +98,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     gs_pfnXErrorHandler = XSetErrorHandler( wxXErrorHandler );
 #endif // __WXDEBUG__
 
-    char *displayName = NULL;
+    wxString displayName;
     bool syncDisplay = FALSE;
 
     int argcOrig = argc;
@@ -126,7 +126,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
                 if (wxSscanf(argv[i], _T("%dx%d"), &w, &h) != 2)
                 {
                     wxLogError( _("Invalid geometry specification '%s'"),
-                                wxString::FromAscii(argv[i]).c_str() );
+                                wxString(argv[i]).c_str() );
                 }
                 else
                 {
@@ -166,7 +166,11 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     }
 
     // X11 display stuff
-    Display *xdisplay = XOpenDisplay( displayName );
+    Display *xdisplay;
+    if ( displayName.empty() )
+        xdisplay = XOpenDisplay( NULL );
+    else
+        xdisplay = XOpenDisplay( displayName.ToAscii() );
     if (!xdisplay)
     {
         wxLogError( _("wxWindows could not open display. Exiting.") );
