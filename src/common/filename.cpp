@@ -899,9 +899,17 @@ bool wxFileName::SetTimes(const wxDateTime *dtCreate,
                           const wxDateTime *dtMod)
 {
 #if defined(__UNIX_LIKE__)
+    if ( !dtAccess && !dtMod )
+    {
+        // can't modify the creation time anyhow, don't try
+        return TRUE;
+    }
+
+    // if dtAccess or dtMod is not specified, use the other one (which must be
+    // non NULL because of the test above) for both times
     utimbuf utm;
-    utm.actime = dtAccess ? dtAccess : dtAccess->GetTicks();
-    utm.modtime = dtMod ? dtMod : dtMod->GetTicks();
+    utm.actime = dtAccess ? dtAccess->GetTicks() : dtMod->GetTicks();
+    utm.modtime = dtMod ? dtMod->GetTicks() : dtAccess->GetTicks();
     if ( utime(GetFullPath(), &utm) == 0 )
     {
         return TRUE;
