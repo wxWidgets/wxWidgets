@@ -1,26 +1,26 @@
-# Microsoft Developer Studio Project File - Name="ToolbarVC" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="wxibVC" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=ToolbarVC - Win32 Debug
+CFG=wxibVC - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "ToolbarVC.mak".
+!MESSAGE NMAKE /f "wxibVC.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "ToolbarVC.mak" CFG="ToolbarVC - Win32 Debug"
+!MESSAGE NMAKE /f "wxibVC.mak" CFG="wxibVC - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "ToolbarVC - Win32 Release" (based on "Win32 (x86) Application")
-!MESSAGE "ToolbarVC - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "ToolbarVC - Win32 Debug DLL" (based on "Win32 (x86) Application")
-!MESSAGE "ToolbarVC - Win32 Release DLL" (based on "Win32 (x86) Application")
+!MESSAGE "wxibVC - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "wxibVC - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "wxibVC - Win32 Debug DLL" (based on "Win32 (x86) Application")
+!MESSAGE "wxibVC - Win32 Release DLL" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -31,7 +31,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "ToolbarVC - Win32 Release"
+!IF  "$(CFG)" == "wxibVC - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -56,9 +56,9 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib winmm.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wx.lib xpm.lib png.lib zlib.lib jpeg.lib tiff.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libci.lib" /nodefaultlib:"msvcrtd.lib" /out:"Release/toolbar.exe" /libpath:"../../lib" /libpath:"../../contrib/lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wx.lib xpm.lib png.lib zlib.lib jpeg.lib tiff.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libci.lib" /nodefaultlib:"msvcrtd.lib" /out:"Release/wxib.exe" /libpath:"../../lib" /libpath:"../../contrib/lib"
 
-!ELSEIF  "$(CFG)" == "ToolbarVC - Win32 Debug"
+!ELSEIF  "$(CFG)" == "wxibVC - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -82,9 +82,9 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib winmm.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wxd.lib xpmd.lib pngd.lib zlibd.lib jpegd.lib tiffd.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libcid.lib" /nodefaultlib:"msvcrt.lib" /out:"Debug/toolbar.exe" /pdbtype:sept /libpath:"../../lib" /libpath:"../../contrib/lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wxd.lib xpmd.lib pngd.lib zlibd.lib jpegd.lib tiffd.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libcid.lib" /nodefaultlib:"msvcrt.lib" /out:"wxib.exe" /pdbtype:sept /libpath:"../../lib" /libpath:"../../contrib/lib"
 
-!ELSEIF  "$(CFG)" == "ToolbarVC - Win32 Debug DLL"
+!ELSEIF  "$(CFG)" == "wxibVC - Win32 Debug DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -108,9 +108,9 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib winmm.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wxdlld.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libcid.lib" /out:"DebugDLL/toolbar.exe" /pdbtype:sept /libpath:"../../lib" /libpath:"../../contrib/lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wxdlld.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd.lib" /nodefaultlib:"libcid.lib" /out:"DebugDLL/wxib.exe" /pdbtype:sept /libpath:"../../lib" /libpath:"../../contrib/lib"
 
-!ELSEIF  "$(CFG)" == "ToolbarVC - Win32 Release DLL"
+!ELSEIF  "$(CFG)" == "wxibVC - Win32 Release DLL"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -135,39 +135,39 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib winmm.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wxdll.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libci.lib" /out:"ReleaseDLL/toolbar.exe" /libpath:"../../lib" /libpath:"../../contrib/lib"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib comctl32.lib rpcrt4.lib wsock32.lib winmm.lib wxdll.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libci.lib" /out:"ReleaseDLL/wxib.exe" /libpath:"../../lib" /libpath:"../../contrib/lib"
 
 !ENDIF 
 
 # Begin Target
 
-# Name "ToolbarVC - Win32 Release"
-# Name "ToolbarVC - Win32 Debug"
-# Name "ToolbarVC - Win32 Debug DLL"
-# Name "ToolbarVC - Win32 Release DLL"
+# Name "wxibVC - Win32 Release"
+# Name "wxibVC - Win32 Debug"
+# Name "wxibVC - Win32 Debug DLL"
+# Name "wxibVC - Win32 Release DLL"
 # Begin Source File
 
-SOURCE=.\toolbar.cpp
+SOURCE=.\wxib.cpp
 
-!IF  "$(CFG)" == "ToolbarVC - Win32 Release"
+!IF  "$(CFG)" == "wxibVC - Win32 Release"
 
-!ELSEIF  "$(CFG)" == "ToolbarVC - Win32 Debug"
+!ELSEIF  "$(CFG)" == "wxibVC - Win32 Debug"
 
 # SUBTRACT CPP /YX /Yc /Yu
 
-!ELSEIF  "$(CFG)" == "ToolbarVC - Win32 Debug DLL"
+!ELSEIF  "$(CFG)" == "wxibVC - Win32 Debug DLL"
 
 # SUBTRACT BASE CPP /YX /Yc /Yu
 # SUBTRACT CPP /YX /Yc /Yu
 
-!ELSEIF  "$(CFG)" == "ToolbarVC - Win32 Release DLL"
+!ELSEIF  "$(CFG)" == "wxibVC - Win32 Release DLL"
 
 !ENDIF 
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\toolbar.rc
+SOURCE=.\wxib.rc
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809 /i "../../include" /i "../../contrib/include"
 # End Source File
