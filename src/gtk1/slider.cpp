@@ -131,10 +131,10 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     m_adjust = gtk_range_get_adjustment( GTK_RANGE(m_widget) );
 
+    GtkEnableEvents();
+
     SetRange( minValue, maxValue );
     SetValue( value );
-
-    GtkEnableEvents();
 
     m_parent->DoAddChild( this );
 
