@@ -467,7 +467,8 @@ const wxChar* wxURI::ParseServer(const wxChar* uri)
     // IP-literal    = "[" ( IPv6address / IPvFuture  ) "]"
     if (*uri == wxT('['))
     {
-        if (ParseIPv6address(++uri) && *uri == wxT(']'))
+        ++uri; //some compilers don't support *&ing a ++*
+        if (ParseIPv6address(uri) && *uri == wxT(']'))
         {
             ++uri;
             m_hostType = wxURI_IPV6ADDRESS;
@@ -480,7 +481,8 @@ const wxChar* wxURI::ParseServer(const wxChar* uri)
         {
             uri = uricopy;
 
-            if (ParseIPvFuture(++uri) && *uri == wxT(']'))
+            ++uri; //some compilers don't support *&ing a ++*
+            if (ParseIPvFuture(uri) && *uri == wxT(']'))
             {
                 ++uri;
                 m_hostType = wxURI_IPVFUTURE;
