@@ -21,6 +21,7 @@
 #include "wx/region.h"
 #include "wx/gdicmn.h"
 #include "wx/thread.h"
+#include "wx/module.h"
 
 #include <mgraph.hpp>
 
@@ -290,6 +291,27 @@ wxRegionContain wxRegion::Contains(const wxRect& rect) const
 //                               wxRegionIterator                                 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#if wxUSE_THREADS
+static wxMutex *gs_mutexIterator;
+
+class wxMglRegionModule : public wxModule
+{
+public:
+    virtual bool OnInit()
+    {
+        gs_mutexIterator = new wxMutex();
+        return TRUE;
+    }
+    virtual void OnExit()
+    {
+        wxDELETE(gs_mutexIterator);
+    }
+
+    DECLARE_DYNAMIC_CLASS(wxMglRegionModule)
+};
+IMPLEMENT_DYNAMIC_CLASS(wxMglRegionModule, wxModule)
+#endif
+
 /*
  * Initialize empty iterator
  */
@@ -331,10 +353,11 @@ void wxRegionIterator::Reset(const wxRegion& region)
 
     if (!region.Empty())
     {
-        wxMutexGuiEnter();
+#if wxUSE_THREADS
+        wxMutexLocker(*gs_mutexIterator);
+#endif
         gs_rectList = &m_rects;
         M_REGION_OF(region).traverse(wxMGL_region_callback);
-        wxMutexGuiLeave();
         m_currentNode = m_rects.GetFirst();
     }
 }
