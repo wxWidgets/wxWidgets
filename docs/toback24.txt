@@ -312,3 +312,32 @@ new revision: 1.28; previous revision: 1.27
 done
 
 
+26.  Fix Unicode + .wxr
+
+Using an #if wxUSE_UNICODE in include/wx/wxexpr.h, safer for
+binary compatibility.
+
+Checking in include/wx/resource.h;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/resource.h,v  <--  resource.h
+new revision: 1.18; previous revision: 1.17
+done
+Checking in include/wx/wxexpr.h;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/wxexpr.h,v  <--  wxexpr.h
+new revision: 1.19; previous revision: 1.18
+done
+cvs diff: [23:38:56] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/include/wx
+Checking in samples/resource/resource.cpp;
+/pack/cvsroots/wxwindows/wxWindows/samples/resource/resource.cpp,v  <--  resource.cpp
+new revision: 1.14; previous revision: 1.13
+done
+cvs diff: [23:39:00] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/samples/resource
+Checking in src/common/resource.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/resource.cpp,v  <--  resource.cpp
+new revision: 1.85; previous revision: 1.84
+done
+Checking in src/common/wxexpr.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/wxexpr.cpp,v  <--  wxexpr.cpp
+new revision: 1.27; previous revision: 1.26
+done
+
+
