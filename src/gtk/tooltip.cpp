@@ -11,7 +11,7 @@
     #pragma implementation "tooltip.h"
 #endif
 
-#include "wx/defs.h"
+#include "wx/setup.h"
 
 #if wxUSE_TOOLTIPS
 
