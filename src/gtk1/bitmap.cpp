@@ -110,14 +110,14 @@ bool wxMask::Create( const wxBitmap& bitmap,
     if (bpp == 15)
     {
         red = red & 0xf8;
-        blue = blue & 0xf8;
         green = green & 0xf8;
+        blue = blue & 0xf8;
     }
     if (bpp == 16)
     {
         red = red & 0xf8;
-        blue = blue & 0xfc;
-        green = green & 0xf8;
+        green = green & 0xfc;
+        blue = blue & 0xf8;
     }
 
     color.red = 0;

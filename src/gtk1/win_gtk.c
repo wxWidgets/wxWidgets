@@ -997,12 +997,12 @@ gtk_pizza_expose_predicate (Display *display,
                   XEvent  *xevent,
                   XPointer arg)
 {
-  if ((xevent->type == Expose) ||
-      ((xevent->xany.window == *(Window *)arg) &&
+    if ((xevent->type == Expose) ||
+       ((xevent->xany.window == *(Window *)arg) &&
        (xevent->type == ConfigureNotify)))
-    return True;
-  else
-    return False;
+        return True;
+    else
+        return False;
 }
 
 /* This is the main routine to do the scrolling. Scrolling is
@@ -1020,40 +1020,40 @@ gtk_pizza_expose_predicate (Display *display,
 void
 gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
 {
-  GtkWidget *widget;
-  XEvent xevent;
+    GtkWidget *widget;
+    XEvent xevent;
 
-  gint x,y,w,h,border;
+    gint x,y,w,h,border;
 
-  widget = GTK_WIDGET (pizza);
+    widget = GTK_WIDGET (pizza);
 
-  pizza->xoffset += dx;
-  pizza->yoffset += dy;
+    pizza->xoffset += dx;
+    pizza->yoffset += dy;
 
-  if (!GTK_WIDGET_MAPPED (pizza))
+    if (!GTK_WIDGET_MAPPED (pizza))
     {
-      gtk_pizza_position_children (pizza);
-      return;
+        gtk_pizza_position_children (pizza);
+        return;
     }
 
-  gtk_pizza_adjust_allocations (pizza, -dx, -dy);
+    gtk_pizza_adjust_allocations (pizza, -dx, -dy);
 
-  if (pizza->shadow_type == GTK_MYSHADOW_NONE)
-    border = 0;
-  else
-  if (pizza->shadow_type == GTK_MYSHADOW_THIN)
-    border = 1;
-  else
-    border = 2;
+    if (pizza->shadow_type == GTK_MYSHADOW_NONE)
+        border = 0;
+    else
+    if (pizza->shadow_type == GTK_MYSHADOW_THIN)
+        border = 1;
+    else
+        border = 2;
 
-  x = 0;
-  y = 0;
-  w = widget->allocation.width - 2*border;
-  h = widget->allocation.height - 2*border;
+    x = 0;
+    y = 0;
+    w = widget->allocation.width - 2*border;
+    h = widget->allocation.height - 2*border;
 
-  if (dx > 0)
+    if (dx > 0)
     {
-      if (gravity_works)
+        if (gravity_works)
         {
           gdk_window_resize (pizza->bin_window,
                              w + dx,
@@ -1061,20 +1061,14 @@ gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
           gdk_window_move   (pizza->bin_window, x-dx, y);
           gdk_window_move_resize (pizza->bin_window, x, y, w, h );
         }
-      else
+        else
         {
           /* FIXME */
         }
-
-      gtk_pizza_expose_area (pizza,
-                              MAX ((gint)w - dx, 0),
-                              0,
-                              MIN (dx, w),
-                              h);
     }
-  else if (dx < 0)
+    else if (dx < 0)
     {
-      if (gravity_works)
+        if (gravity_works)
         {
           gdk_window_move_resize (pizza->bin_window,
                                   x + dx,
@@ -1084,102 +1078,73 @@ gtk_pizza_scroll (GtkPizza *pizza, gint dx, gint dy)
           gdk_window_move   (pizza->bin_window, x, y);
           gdk_window_resize (pizza->bin_window, w, h );
         }
-      else
+        else
         {
           /* FIXME */
         }
-
-      gtk_pizza_expose_area (pizza,
-                              0,
-                              0,
-                              MIN (-dx, w),
-                              h);
     }
 
-  if (dy > 0)
+    if (dy > 0)
     {
-      if (gravity_works)
+        if (gravity_works)
         {
           gdk_window_resize (pizza->bin_window, w, h + dy);
           gdk_window_move   (pizza->bin_window, x, y-dy);
           gdk_window_move_resize (pizza->bin_window,
                                   x, y, w, h );
         }
-      else
+        else
         {
           /* FIXME */
         }
-
-      gtk_pizza_expose_area (pizza,
-                              0,
-                              MAX ((gint)h - dy, 0),
-                              w,
-                              MIN (dy, h));
     }
-  else if (dy < 0)
+    else if (dy < 0)
     {
-      if (gravity_works)
+        if (gravity_works)
         {
           gdk_window_move_resize (pizza->bin_window,
                                   x, y+dy, w, h - dy );
           gdk_window_move   (pizza->bin_window, x, y);
           gdk_window_resize (pizza->bin_window, w, h );
         }
-      else
+        else
         {
           /* FIXME */
         }
-      gtk_pizza_expose_area (pizza,
-                              0,
-                              0,
-                              w,
-                              MIN (-dy, (gint)h));
     }
 
-  gtk_pizza_position_children (pizza);
+    gtk_pizza_position_children (pizza);
 
-  /* We have to make sure that all exposes from this scroll get
-   * processed before we scroll again, or the expose events will
-   * have invalid coordinates.
-   *
-   * We also do expose events for other windows, since otherwise
-   * their updating will fall behind the scrolling
-   *
-   * This also avoids a problem in pre-1.0 GTK where filters don't
-   * have access to configure events that were compressed.
-   */
-
-  gdk_flush();
-  while (XCheckIfEvent(GDK_WINDOW_XDISPLAY (pizza->bin_window),
-                       &xevent,
-                       gtk_pizza_expose_predicate,
-                       (XPointer)&GDK_WINDOW_XWINDOW (pizza->bin_window)))
+    gdk_flush();
+    while (XCheckIfEvent(GDK_WINDOW_XDISPLAY (pizza->bin_window),
+                         &xevent,
+                         gtk_pizza_expose_predicate,
+                         (XPointer)&GDK_WINDOW_XWINDOW (pizza->bin_window)))
     {
-      GdkEvent event;
-      GtkWidget *event_widget;
+        GdkEvent event;
+        GtkWidget *event_widget;
 
-      if ((xevent.xany.window == GDK_WINDOW_XWINDOW (pizza->bin_window)) &&
-          (gtk_pizza_filter (&xevent, &event, pizza) == GDK_FILTER_REMOVE))
-        continue;
+        if ((xevent.xany.window == GDK_WINDOW_XWINDOW (pizza->bin_window)) )
+            gtk_pizza_filter (&xevent, &event, pizza);
 
-      if (xevent.type == Expose)
+        if (xevent.type == Expose)
         {
-          event.expose.window = gdk_window_lookup (xevent.xany.window);
-          gdk_window_get_user_data (event.expose.window,
+            event.expose.window = gdk_window_lookup (xevent.xany.window);
+            gdk_window_get_user_data (event.expose.window,
                                     (gpointer *)&event_widget);
 
-          if (event_widget)
+            if (event_widget)
             {
-              event.expose.type = GDK_EXPOSE;
-              event.expose.area.x = xevent.xexpose.x;
-              event.expose.area.y = xevent.xexpose.y;
-              event.expose.area.width = xevent.xexpose.width;
-              event.expose.area.height = xevent.xexpose.height;
-              event.expose.count = xevent.xexpose.count;
+                event.expose.type = GDK_EXPOSE;
+                event.expose.area.x = xevent.xexpose.x;
+                event.expose.area.y = xevent.xexpose.y;
+                event.expose.area.width = xevent.xexpose.width;
+                event.expose.area.height = xevent.xexpose.height;
+                event.expose.count = xevent.xexpose.count;
 
-              gdk_window_ref (event.expose.window);
-              gtk_widget_event (event_widget, &event);
-              gdk_window_unref (event.expose.window);
+                gdk_window_ref (event.expose.window);
+                gtk_widget_event (event_widget, &event);
+                gdk_window_unref (event.expose.window);
             }
         }
     }
@@ -1210,25 +1175,17 @@ gtk_pizza_filter (GdkXEvent *gdk_xevent,
     if (!pizza->use_filter)
         return GDK_FILTER_CONTINUE;
 
-  switch (xevent->type)
+    switch (xevent->type)
     {
     case Expose:
       if (xevent->xexpose.serial == pizza->configure_serial)
         {
-          if (pizza->visibility == GDK_VISIBILITY_UNOBSCURED)
-            return GDK_FILTER_REMOVE;
-          else
-            {
-              xevent->xexpose.x += pizza->scroll_x;
-              xevent->xexpose.y += pizza->scroll_y;
-
-              break;
-            }
+          xevent->xexpose.x += pizza->scroll_x;
+          xevent->xexpose.y += pizza->scroll_y;
         }
       break;
 
     case ConfigureNotify:
-       if ((xevent->xconfigure.x != 0) || (xevent->xconfigure.y != 0))
         {
           pizza->configure_serial = xevent->xconfigure.serial;
           pizza->scroll_x = xevent->xconfigure.x;
@@ -1280,8 +1237,6 @@ gtk_pizza_main_filter (GdkXEvent *gdk_xevent,
 
     return GDK_FILTER_CONTINUE;
 }
-
-
 
 
 #ifdef __cplusplus

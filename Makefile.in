@@ -130,11 +130,18 @@ INTLDIR  = $(WXDIR)/locale
 
 ########################## Archive name ###############################
 
-WXARCHIVE = @DISTDIR@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
-WXGLARCHIVE = @DISTDIR@-gl-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
-WXSAMPLES = wx$(TOOLKIT)-samples-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
-WXDEMOS = wx$(TOOLKIT)-demos-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
+WXARCHIVE = @DISTDIR@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
+WXGLARCHIVE = @DISTDIR@-gl-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
+WXSAMPLES = wx$(TOOLKIT)-samples-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
+WXDEMOS = wx$(TOOLKIT)-demos-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.gz
+
+WXARCHIVE_BZIP = @DISTDIR@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
+WXGLARCHIVE_BZIP = @DISTDIR@-gl-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
+WXSAMPLES_BZIP = wx$(TOOLKIT)-samples-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
+WXDEMOS_BZIP = wx$(TOOLKIT)-demos-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tar.bz2
+
 DISTDIR = ./_dist_dir/@DISTDIR@
+
 
 ############################## Files ##################################
 
@@ -677,6 +684,7 @@ DEMOS_DIST: ALL_GUI_DIST
 	cp $(DEMODIR)/life/*.h $(DISTDIR)/demos/life
 	cp $(DEMODIR)/life/*.xpm $(DISTDIR)/demos/life
 	cp $(DEMODIR)/life/*.inc $(DISTDIR)/demos/life
+	cp $(DEMODIR)/life/*.lif $(DISTDIR)/demos/life
 	cp $(DEMODIR)/life/bitmaps/*.xpm $(DISTDIR)/demos/life/bitmaps
 	
 	mkdir $(DISTDIR)/demos/poem
@@ -1222,6 +1230,7 @@ distclean:
 	$(RM) -r _dist_dir
 
 dist: @GUIDIST@
+	cp $(WXDIR)/src/files.lst $(DISTDIR)/src/
 	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
 	cd _dist_dir; tar ch @DISTDIR@ | gzip -f9 > $(WXARCHIVE); mv $(WXARCHIVE) ..
 	@if test "$(USE_GUI)" = 1; then \
@@ -1231,6 +1240,20 @@ dist: @GUIDIST@
 	mv wxSamples samples; \
 	mv demos wxDemos; \
 	tar ch wxDemos | gzip -f9 > ../../$(WXDEMOS); \
+	mv wxDemos demos; \
+	fi
+
+bzip-dist: @GUIDIST@
+	cp $(WXDIR)/src/files.lst $(DISTDIR)/src/
+	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	cd _dist_dir; tar ch @DISTDIR@ | bzip2 -f9 > $(WXARCHIVE_BZIP); mv $(WXARCHIVE_BZIP) ..
+	@if test "$(USE_GUI)" = 1; then \
+	cd $(DISTDIR); \
+	mv samples wxSamples; \
+	tar ch wxSamples | bzip2 -f9 > ../../$(WXSAMPLES_BZIP); \
+	mv wxSamples samples; \
+	mv demos wxDemos; \
+	tar ch wxDemos | bzip2 -f9 > ../../$(WXDEMOS_BZIP); \
 	mv wxDemos demos; \
 	fi
 

@@ -1,6 +1,6 @@
 # Note that this is NOT a relocatable package
 %define pref /usr
-%define ver 2.2.0
+%define ver 2.2.1
 %define rel 0
 
 Summary: The GTK+ 1.2 port of the wxWindows library
