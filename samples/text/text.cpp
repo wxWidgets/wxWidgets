@@ -42,6 +42,7 @@
 
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
+#include "wx/numdlg.h"
 
 //----------------------------------------------------------------------
 // class definitions
