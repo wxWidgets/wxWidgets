@@ -95,7 +95,7 @@ This method is only valid for multi selection listboxes.
 Returns the index of the first selected item in the listbox or 
 {\tt wxNOT\_FOUND} if no items are currently selected.
 
-{\it cookie} is an opaque parameter which should be passed to the subsequent
+\arg{cookie} is an opaque parameter which should be passed to the subsequent
 calls to \helpref{GetNextSelected}{wxvlistboxgetnextselected}. It is needed in
 order to allow parallel iterations over the selected items.
 
@@ -213,6 +213,19 @@ current.
 \constfunc{bool}{IsSelected}{\param{size\_t }{item}}
 
 Returns {\tt true} if this item is selected, {\tt false} otherwise.
+
+
+\membersection{wxVListBox::OnDrawBackground}\label{wxvlistboxondrawbackground}
+
+\constfunc{void}{OnDrawBackground}{\param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{size\_t }{n}}
+
+This method is used to draw the items background and, maybe, a border
+around it.
+
+The base class version implements a reasonable default behaviour which
+consists in drawing the selected item with the standard background
+colour and drawing a border around the item if it is either selected or
+current.
 
 
 \membersection{wxVListBox::OnDrawItem}\label{wxvlistboxondrawitem}
@@ -354,7 +367,7 @@ the standard cells may be changed by simply calling
 
 \func{void}{Toggle}{\param{size\_t }{item}}
 
-Toggles the state of the specified {\it item}, i.e. selects it if it was
+Toggles the state of the specified \arg{item}, i.e. selects it if it was
 unselected and deselects it if it was selected.
 
 This method is only valid for multi selection listboxes.
