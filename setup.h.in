@@ -613,11 +613,6 @@
 #define wxUSE_OPENGL 0
 
 /*
- * Don't use GUI (defined to 1 when compiling/using base only)
- */
-#define wxUSE_NOGUI 0
-
-/*
  * Set to 1 to compile MS Windows XP theme engine support
  */
 #define wxUSE_UXTHEME 1

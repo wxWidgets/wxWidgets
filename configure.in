@@ -4509,8 +4509,6 @@ if test "$wxUSE_GUI" = "yes"; then
   dnl    need the dcs, pens, brushes, ...), this just can't be done now
   dnl 4. menu stuff: wxMenu, wxMenuBar, wxMenuItem
   dnl 5. misc stuff: timers, settings, message box
-else
-  AC_DEFINE(wxUSE_NOGUI)
 fi
 
 dnl ---------------------------------------------------------------------------

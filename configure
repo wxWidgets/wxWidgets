@@ -33548,12 +33548,7 @@ if test "$wxUSE_GUI" = "yes"; then
 _ACEOF
 
 
-                      else
-  cat >>confdefs.h <<\_ACEOF
-#define wxUSE_NOGUI 1
-_ACEOF
-
-fi
+                      fi
 
 
 if test "$wxUSE_UNIX" = "yes"; then
