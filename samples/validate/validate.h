@@ -32,7 +32,7 @@ public:
 class MyFrame : public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h);
+    MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h);
 
     void OnQuit(wxCommandEvent& event);
     void OnTestDialog(wxCommandEvent& event);

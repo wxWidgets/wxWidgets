@@ -26,8 +26,9 @@
 #define _WX_RENDERER_H_
 
 class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxWindow;
+
+#include "wx/gdicmn.h" // for wxPoint
 
 // ----------------------------------------------------------------------------
 // constants
@@ -61,6 +62,8 @@ enum
 class WXDLLEXPORT wxRendererNative
 {
 public:
+    virtual ~wxRendererNative() { } // stop GCC warning
+
     // drawing functions
     // -----------------
 

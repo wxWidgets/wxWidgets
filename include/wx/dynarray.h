@@ -122,6 +122,7 @@ classexp name : public std::vector<T>                               \
 {                                                                   \
   typedef predicate Predicate;                                      \
   typedef predicate::CMPFUNC SCMPFUNC;                              \
+public:                                                             \
   typedef wxArray_SortFunction<T>::CMPFUNC CMPFUNC;                 \
 public:                                                             \
   void Empty() { clear(); }                                         \

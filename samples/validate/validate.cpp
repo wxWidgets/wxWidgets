@@ -43,13 +43,13 @@
 MyData g_data;
 
 wxString g_listbox_choices[] =
-    {"one",  "two",  "three"};
+    {wxT("one"),  wxT("two"),  wxT("three")};
 
 wxString g_combobox_choices[] =
-    {"yes", "no", "maybe"};
+    {wxT("yes"), wxT("no"), wxT("maybe")};
 
 wxString g_radiobox_choices[] =
-    {"green", "yellow", "red"};
+    {wxT("green"), wxT("yellow"), wxT("red")};
 
 // ----------------------------------------------------------------------------
 // MyData
@@ -62,7 +62,7 @@ MyData::MyData()
     // is performed only when 'OK' is pressed. It would be nice to
     // enhance this so that validation would occur when the text
     // control loses focus.
-    m_string = "Spaces are invalid here";
+    m_string = wxT("Spaces are invalid here");
     m_listbox_choices.Add(0);
 }
 
@@ -75,7 +75,8 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create and display the main frame window.
-    MyFrame *frame = new MyFrame((wxFrame *) NULL, "Validator Test", 50, 50, 300, 250);
+    MyFrame *frame = new MyFrame((wxFrame *) NULL, wxT("Validator Test"),
+                                 50, 50, 300, 250);
     frame->Show(true);
     SetTopWindow(frame);
     return true;
@@ -91,7 +92,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(VALIDATE_TOGGLE_BELL, MyFrame::OnToggleBell)
 END_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h)
+MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h)
        : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h)),
          m_silent(true)
 {
@@ -105,13 +106,13 @@ MyFrame::MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h)
 
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(VALIDATE_TEST_DIALOG, "&Test", "Demonstrate validators");
-    file_menu->Append(VALIDATE_TOGGLE_BELL, "&Bell on error", "Toggle bell on error", true);
+    file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test"), wxT("Demonstrate validators"));
+    file_menu->Append(VALIDATE_TOGGLE_BELL, wxT("&Bell on error"), wxT("Toggle bell on error"), true);
     file_menu->AppendSeparator();
-    file_menu->Append(wxID_EXIT, "E&xit");
+    file_menu->Append(wxID_EXIT, wxT("E&xit"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, "File");
+    menu_bar->Append(file_menu, wxT("File"));
     SetMenuBar(menu_bar);
 
     // All validators share a common (static) flag that controls
@@ -133,7 +134,7 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
     // and variables together. Values are transferred between them behind
     // the scenes, so here we don't have to query the controls for their
     // values.
-    MyDialog dialog(this, "Validator demonstration");
+    MyDialog dialog(this, wxT("Validator demonstration"));
 
     // When the dialog is displayed, validators automatically transfer
     // data from variables to their corresponding controls.
@@ -183,7 +184,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     // Pointers to some of these controls are saved in member variables
     // so that we can use them elsewhere, like this one.
-    text = new wxTextCtrl(this, VALIDATE_TEXT, "",
+    text = new wxTextCtrl(this, VALIDATE_TEXT, wxT(""),
         wxPoint(10, 10), wxSize(120, -1), 0,
         wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
     flexgridsizer->Add(text);
@@ -192,7 +193,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // because we don't use it elsewhere--it can be anonymous.
     // We don't need any such pointer to query its state, which
     // can be gotten directly from g_data.
-    flexgridsizer->Add(new wxCheckBox(this, VALIDATE_CHECK, "Sample checkbox",
+    flexgridsizer->Add(new wxCheckBox(this, VALIDATE_CHECK, wxT("Sample checkbox"),
         wxPoint(130, 10), wxSize(120, -1), 0,
         wxGenericValidator(&g_data.m_checkbox_state)));
 
@@ -201,7 +202,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
         3, g_listbox_choices, wxLB_MULTIPLE,
         wxGenericValidator(&g_data.m_listbox_choices)));
 
-    combobox = new wxComboBox((wxWindow*)this, VALIDATE_COMBO, "",
+    combobox = new wxComboBox((wxWindow*)this, VALIDATE_COMBO, wxT(""),
         wxPoint(130, 30), wxSize(120, -1),
         3, g_combobox_choices, 0L,
         wxGenericValidator(&g_data.m_combobox_choice));
@@ -209,7 +210,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     mainsizer->Add(flexgridsizer, 1, wxGROW | wxALL, 10);
 
-    mainsizer->Add(new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, "Pick a color",
+    mainsizer->Add(new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, wxT("Pick a color"),
         wxPoint(10, 100), wxSize(-1, -1),
         3, g_radiobox_choices, 1, wxRA_SPECIFY_ROWS,
         wxGenericValidator(&g_data.m_radiobox_choice)),
@@ -217,10 +218,10 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     wxGridSizer *gridsizer = new wxGridSizer(2, 2, 5, 5);
 
-    wxButton *ok_button = new wxButton(this, wxID_OK, "OK", wxPoint(250, 70), wxSize(80, 30));
+    wxButton *ok_button = new wxButton(this, wxID_OK, wxT("OK"), wxPoint(250, 70), wxSize(80, 30));
     ok_button->SetDefault();
     gridsizer->Add(ok_button);
-    gridsizer->Add(new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(250, 100), wxSize(80, 30)));
+    gridsizer->Add(new wxButton(this, wxID_CANCEL, wxT("Cancel"), wxPoint(250, 100), wxSize(80, 30)));
 
     mainsizer->Add(gridsizer, 0, wxGROW | wxALL, 10);
 

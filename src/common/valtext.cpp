@@ -244,8 +244,8 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
         if (
              !(keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode > WXK_START) &&
              (
-              ((m_validatorStyle & wxFILTER_INCLUDE_CHAR_LIST) && !IsInCharIncludeList(wxString((char) keyCode, 1))) ||
-              ((m_validatorStyle & wxFILTER_EXCLUDE_CHAR_LIST) && !IsNotInCharExcludeList(wxString((char) keyCode, 1))) ||
+              ((m_validatorStyle & wxFILTER_INCLUDE_CHAR_LIST) && !IsInCharIncludeList(wxString((wxChar) keyCode, 1))) ||
+              ((m_validatorStyle & wxFILTER_EXCLUDE_CHAR_LIST) && !IsNotInCharExcludeList(wxString((wxChar) keyCode, 1))) ||
               ((m_validatorStyle & wxFILTER_ASCII) && !isascii(keyCode)) ||
               ((m_validatorStyle & wxFILTER_ALPHA) && !wxIsalpha(keyCode)) ||
               ((m_validatorStyle & wxFILTER_ALPHANUMERIC) && !wxIsalnum(keyCode)) ||

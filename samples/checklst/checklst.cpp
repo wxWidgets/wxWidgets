@@ -310,7 +310,7 @@ void CheckListBoxFrame::OnListboxSelect(wxCommandEvent& event)
 void CheckListBoxFrame::OnListboxDblClick(wxCommandEvent& WXUNUSED(event))
 {
     wxString strSelection;
-    strSelection.sprintf(wxT("Item %d double clicked"), m_pListBox->GetSelection());
+    strSelection.Printf(wxT("Item %d double clicked"), m_pListBox->GetSelection());
     wxMessageDialog dialog(this, strSelection, wxT("wxCheckListBox message"), wxICON_INFORMATION);
     dialog.ShowModal();
 }
