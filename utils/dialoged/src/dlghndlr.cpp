@@ -34,6 +34,7 @@
 #include "dlghndlr.h"
 #include "edlist.h"
 
+
 IMPLEMENT_CLASS(wxResourceEditorDialogHandler, wxEvtHandler)
 IMPLEMENT_CLASS(wxResourceEditorControlHandler, wxEvtHandler)
 
@@ -138,7 +139,7 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
         }
         return;
     }
-    
+
     // Round down to take account of dialog units
     wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(handlerDialog);
     if (resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
@@ -218,6 +219,12 @@ void wxResourceEditorDialogHandler::OnRightClick(int x, int y, int WXUNUSED(keys
 {
     wxMenu *menu = resourceManager->GetPopupMenu();
     menu->SetClientData((char *)handlerDialog);
+
+    wxString str("wxDialog : ");
+    str += handlerDialog->GetName();
+
+    menu->SetLabel(OBJECT_MENU_TITLE,str);
+
     handlerDialog->PopupMenu(menu, x, y);
 }
 
@@ -298,6 +305,22 @@ return;
     
     wxMenu *menu = resourceManager->GetPopupMenu();
     menu->SetClientData((char *)item);
+
+    wxWindow *win = (wxWindow *)item;
+
+    wxWindowPropertyInfo *info = resourceManager->CreatePropertyInfoForWindow(win);
+    if (info)
+    {
+        info->SetResource(resourceManager->FindResourceForWindow(win));
+        wxString str;
+        str = win->GetClassInfo()->GetClassName();
+        str += " : ";
+        if (win->GetName() != "")
+            str += win->GetName();
+
+        menu->SetLabel(OBJECT_MENU_TITLE,str);
+    }
+
     handlerDialog->PopupMenu(menu, x, y);
 }
 
@@ -327,8 +350,12 @@ void wxResourceEditorDialogHandler::OnMouseEvent(wxMouseEvent& event)
         // continue dragging.
         if (dragMode != wxDRAG_MODE_NONE)
         {
-            ProcessItemEvent(dragItem, event, dragType);
-            return;
+            if (dragType != wxDRAG_TYPE_BOUNDING_BOX && 
+                dragItem != NULL)
+            {
+                ProcessItemEvent(dragItem, event, dragType);
+                return;
+            }
         }
         
         wxCoord x, y;
@@ -352,7 +379,7 @@ void wxResourceEditorDialogHandler::OnMouseEvent(wxMouseEvent& event)
             }
             node = node->Next();
         }
-        
+
         // We're not on an item or selection handle.
         // so... check for a left or right click event
         // to send to the application.
@@ -360,15 +387,160 @@ void wxResourceEditorDialogHandler::OnMouseEvent(wxMouseEvent& event)
         if (event.ShiftDown()) keys = keys | wxKEY_SHIFT;
         if (event.ControlDown()) keys = keys | wxKEY_CTRL;
         
-        if (event.LeftUp())
+        if (node == NULL)
+        {
+            if (event.Dragging() &&
+                (dragType == wxDRAG_TYPE_BOUNDING_BOX))
+
+            {
+                if (dragMode == wxDRAG_MODE_CONTINUE_LEFT)
+                { 
+                    wxClientDC dc(handlerDialog);
+                    OnDragContinue(FALSE, oldDragX, oldDragY, keys, dc, NULL);
+                    OnDragContinue(TRUE, x, y, keys, dc, NULL);
+                    oldDragX = x; oldDragY = y;
+                }
+/*
+                else if (event.LeftUp() && dragMode == wxDRAG_MODE_CONTINUE_LEFT)
+                {
+
+                    wxClientDC dc(handlerDialog);
+                    OnDragContinue(FALSE, oldDragX, oldDragY, keys, dc, NULL);
+                    OnDragContinue(TRUE, x, y, keys, dc, NULL);
+                    oldDragX = x; oldDragY = y;
+                }
+*/
+            }
+        }
+
+        if (event.LeftDown())
+        {
+            if (!m_mouseCaptured)
+            {
+                handlerDialog->CaptureMouse();
+                m_mouseCaptured = TRUE;
+            }
+
+            // Starting to draw a bounding box around
+            // some numbe of controls on the dialog
+            if (node == NULL &&
+                wxResourceManager::GetCurrentResourceManager()->GetEditorControlList()->GetSelection() == RESED_POINTER)
+            {
+                dragItem = NULL;
+                dragMode = wxDRAG_MODE_START_LEFT;
+                firstDragX = x;
+                firstDragY = y;
+                dragType = wxDRAG_TYPE_BOUNDING_BOX;
+                wxClientDC dc(handlerDialog);
+                OnDragBegin(x, y, keys, dc, NULL);
+                dragMode = wxDRAG_MODE_CONTINUE_LEFT;
+                oldDragX = x; oldDragY = y;
+            }
+
+            event.Skip();
+        }
+        else if (event.LeftUp())
         {
             if (m_mouseCaptured)
             {
                 handlerDialog->ReleaseMouse();
                 m_mouseCaptured = FALSE;
             }
-            
-            OnLeftClick(x, y, keys);
+
+            if (dragType == wxDRAG_TYPE_BOUNDING_BOX)
+            {
+                // Determine the bounds of the surrounding box
+                int upperLeftX =  (x < firstDragX) ? x : firstDragX;
+                int upperLeftY =  (y < firstDragY) ? y : firstDragY;
+                int lowerRightX = (x > firstDragX) ? x : firstDragX;
+                int lowerRightY = (y > firstDragY) ? y : firstDragY;
+
+                int xpos,ypos;
+                int width,height;
+
+                bool widgetWithinBounds = FALSE;
+
+                int needsRefresh = 0;
+
+                wxClientDC dc(handlerDialog);
+
+                // Determine what widgets which fall within the bounding box
+                // and select them
+                wxNode *node = handlerDialog->GetChildren().First();
+                while (node)
+                {
+                    widgetWithinBounds = FALSE;
+                    wxWindow *win = (wxWindow *)node->Data();
+                    if (win->IsKindOf(CLASSINFO(wxControl)))
+                    {
+                        wxControl *item = (wxControl *)win;
+                        wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
+
+                        // Unselect all widgets that are currently selected
+                        if (!(keys & wxKEY_SHIFT) && childHandler->IsSelected())
+                        {
+                            needsRefresh ++;
+                            OnItemSelect(item, FALSE);
+                            childHandler->SelectItem(FALSE);
+                        }
+
+                        // Get X,Y and WIDTH,HEIGHT of the widget to be able
+                        // to determine if any portion of it is within the bounded
+                        // area
+                        childHandler->handlerControl->GetPosition(&xpos, &ypos);
+                        childHandler->handlerControl->GetSize(&width, &height);
+
+                        // Check if the current widget is inside the rectangle
+                        // that was just bounded
+                        if (xpos >= upperLeftX && xpos <= lowerRightX)
+                        {
+                            if (ypos >= upperLeftY && ypos <= lowerRightY)
+                                widgetWithinBounds = TRUE;
+                            else if (ypos+height >= upperLeftY && ypos+height <= lowerRightY)
+                                widgetWithinBounds = TRUE;
+                        }
+                        else if (xpos+width >= upperLeftX && xpos <= lowerRightX)
+                        {
+                            if (ypos >= upperLeftY && ypos <= lowerRightY)
+                                widgetWithinBounds = TRUE;
+                            else if (ypos+height >= upperLeftY && ypos+height <= lowerRightY)
+                                widgetWithinBounds = TRUE;
+                        }
+
+                        if (widgetWithinBounds)
+                        {
+                            childHandler->SelectItem(TRUE);
+                            OnItemSelect(item, TRUE);
+
+//                            childHandler->DrawSelectionHandles(dc);
+                        }
+
+                    }
+                    node = node->Next();
+                }
+
+                OnDragContinue(FALSE, oldDragX, oldDragY, keys, dc, NULL);
+                OnDragEnd(x, y, keys, dc, NULL);
+
+                if (needsRefresh > 0)
+                {
+                    dc.Clear();
+                    handlerDialog->Refresh();
+                }
+
+                // Always paint, in case the bounding box overlapped with
+                // the handles of any selected widgets, that way when the 
+                // bounding box is cleared, the handles don't get partially
+                // erased where the overlap occured
+                PaintSelectionHandles(dc);
+
+                dragMode = wxDRAG_MODE_NONE;
+                checkTolerance = TRUE;
+                dragItem = NULL;
+                dragType = wxDRAG_TYPE_NONE;
+            }
+            else
+                OnLeftClick(x, y, keys);
         }
         else if (event.RightDown())
         {
@@ -420,6 +592,7 @@ void wxResourceEditorDialogHandler::ProcessItemEvent(wxControl *item, wxMouseEve
     if (event.ShiftDown()) keys = keys | wxKEY_SHIFT;
     if (event.ControlDown()) keys = keys | wxKEY_CTRL;
     bool dragging = event.Dragging();
+
     if (dragging)
     {
         int dx = (int)abs((x - firstDragX));
@@ -623,6 +796,79 @@ void wxResourceEditorDialogHandler::PaintSelectionHandles(wxDC& dc)
     }
     dc.EndDrawing();
 }
+
+
+
+void wxResourceEditorDialogHandler::DrawBoundingBox(wxDC& dc, int x, int y, int w, int h)
+{
+    dc.DrawRectangle(x, y, w, h);
+}
+
+
+void wxResourceEditorDialogHandler::OnDragBegin(int x, int y, int WXUNUSED(keys), wxDC& dc, int selectionHandle)
+{
+/*
+    dc.BeginDrawing();
+
+    dc.SetOptimization(FALSE);
+
+    dc.SetLogicalFunction(wxINVERT);
+
+    wxPen pen(wxColour(0, 0, 0), 1, wxDOT);
+    dc.SetPen(pen);
+    dc.SetBrush(* wxTRANSPARENT_BRUSH);
+
+    dc.SetOptimization(TRUE);
+
+//    Refresh();
+//    DrawBoundingBox(dc, xpos, ypos, width, height);
+
+    dc.EndDrawing();
+*/
+}  //wxResourceEditorDialogHandler::OnDragBegin()
+
+
+void wxResourceEditorDialogHandler::OnDragContinue(bool WXUNUSED(paintIt), int x, int y, int WXUNUSED(keys), wxDC& dc, int selectionHandle)
+{
+    int upperLeftX =  (x < firstDragX) ? x : firstDragX;
+    int upperLeftY =  (y < firstDragY) ? y : firstDragY;
+    int lowerRightX = (x > firstDragX) ? x : firstDragX;
+    int lowerRightY = (y > firstDragY) ? y : firstDragY;
+
+    dc.BeginDrawing();
+    dc.SetLogicalFunction(wxINVERT);
+    wxPen pen(wxColour(0, 0, 0), 1, wxDOT);
+    dc.SetPen(pen);
+    dc.SetBrush(* wxTRANSPARENT_BRUSH);
+    
+    DrawBoundingBox(dc, (int)upperLeftX, upperLeftY, 
+                    lowerRightX-upperLeftX, lowerRightY-upperLeftY);
+    
+    dc.EndDrawing();
+
+}  // wxResourceEditorDialogHandler::OnDragContinue()
+
+
+void wxResourceEditorDialogHandler::OnDragEnd(int x, int y, int WXUNUSED(keys), wxDC& dc, int selectionHandle)
+{
+/*
+    dc.BeginDrawing();
+    
+    dc.SetOptimization(FALSE);
+    
+    dc.SetLogicalFunction(wxCOPY);
+    dc.SetPen(* wxBLACK_PEN);
+    dc.SetBrush(* wxBLACK_BRUSH);
+    
+    dc.SetOptimization(TRUE);
+    
+    dc.EndDrawing();
+*/    
+
+}  // wxResourceEditorDialogHandler::OnDragEnd()
+
+
+
 
 /*
 * Event handler for controls
