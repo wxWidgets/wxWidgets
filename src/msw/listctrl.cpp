@@ -482,6 +482,9 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     lvItem.pszText = NULL;
   }
 
+  if (info.m_mask & wxLIST_MASK_DATA)
+     lvItem.mask |= LVIF_PARAM ;
+
   if ( info.m_mask & wxLIST_MASK_STATE )
   {
     lvItem.mask |= LVIF_STATE;

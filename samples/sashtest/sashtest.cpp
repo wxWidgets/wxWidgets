@@ -43,7 +43,7 @@ bool MyApp::OnInit(void)
   // Create the main frame window
 
   frame = new MyFrame(NULL, -1, "Sash Demo", wxPoint(0, 0), wxSize(500, 400),
-   wxDEFAULT_FRAME | wxHSCROLL | wxVSCROLL);
+   wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
 
   // Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
