@@ -76,6 +76,8 @@ class wxDllLoader
        @return A handle to the loaded DLL. Use success parameter to test if it is valid.
    */
    static wxDllType LoadLibrary(const wxString & libname, bool *success);
+   /** This function unloads the shared library. */
+   static void UnloadLibrary(wxDllType dll);
    /** This function returns a valid handle for the main program
        itself. */
    static wxDllType GetProgramHandle(void);

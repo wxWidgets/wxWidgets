@@ -221,6 +221,14 @@ wxDllLoader::LoadLibrary(const wxString & lib_name, bool *success)
    return handle;
 }
 
+
+/* static */
+void
+wxDllLoader::UnloadLibrary(wxDllType handle)
+{
+   wxDllClose(handle);
+}
+
 /* static */
 void *
 wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
