@@ -9,6 +9,7 @@ Added wxLog and friends.
 
 Added wxFrame.ShowFullScreen for MSW.
 
+Added PyShellWindow to the wxPython.lib package.
 
 
 

@@ -20,7 +20,7 @@ from   wxPython.html import wxHtmlWindow
 
 
 _treeList = [
-    ('New since last release', ['wxDragImage', 'wxCalendarCtrl', 'wxSpinCtrl',
+    ('New since last release', ['PyShellWindow',
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -40,7 +40,7 @@ _treeList = [
                   'wxComboBox', 'wxGauge', 'wxListBox', 'wxListCtrl', 'wxTextCtrl',
                   'wxTreeCtrl', 'wxSpinButton', 'wxSpinCtrl', 'wxStaticText',
                   'wxStaticBitmap', 'wxRadioBox', 'wxSlider', 'wxToolBar',
-                  #'wxToggleButton'
+                  'wxCalendarCtrl',
                   ]),
 
     ('Window Layout', ['wxLayoutConstraints', 'Sizers', 'OldSizers']),
@@ -50,7 +50,7 @@ _treeList = [
                         'wxImage', 'wxMask', 'PrintFramework', 'wxOGL',
                         'PythonEvents', 'Threads',
                         'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
-                        'wxDragImage', 'wxCalendarCtrl',
+                        'wxDragImage', 'PyShellWindow',
                         ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
