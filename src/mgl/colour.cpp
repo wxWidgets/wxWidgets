@@ -26,13 +26,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
 // Colour
 
-wxColour::wxColour ()
+wxColour::wxColour()
 {
   m_red = m_blue = m_green = 0;
   m_isInit = FALSE;
 }
 
-wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
+wxColour::wxColour(unsigned char r, unsigned char g, unsigned char b)
 {
   m_red = r;
   m_green = g;
@@ -40,7 +40,7 @@ wxColour::wxColour (unsigned char r, unsigned char g, unsigned char b)
   m_isInit = TRUE;
 }
 
-wxColour::wxColour (const wxColour& col)
+wxColour::wxColour(const wxColour& col)
 {
   m_red = col.m_red;
   m_green = col.m_green;
@@ -62,9 +62,9 @@ void wxColour::InitFromName(const wxString& col)
   wxColour *the_colour = wxTheColourDatabase->FindColour (col);
   if (the_colour)
     {
-      m_red = the_colour->Red ();
-      m_green = the_colour->Green ();
-      m_blue = the_colour->Blue ();
+      m_red = the_colour->Red();
+      m_green = the_colour->Green();
+      m_blue = the_colour->Blue();
       m_isInit = TRUE;
     }
   else
@@ -80,7 +80,7 @@ wxColour::~wxColour()
 {
 }
 
-void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
+void wxColour::Set(unsigned char r, unsigned char g, unsigned char b)
 {
   m_red = r;
   m_green = g;
@@ -90,7 +90,7 @@ void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
 
 // Obsolete
 #if WXWIN_COMPATIBILITY
-void wxColour::Get (unsigned char *r, unsigned char *g, unsigned char *b) const
+void wxColour::Get(unsigned char *r, unsigned char *g, unsigned char *b) const
 {
   *r = m_red;
   *g = m_green;
