@@ -1,3 +1,14 @@
+0.1.4-1
+-------
+
+Edit->Locate command (Ctrl-L) for quick selection of items.
+Works with event-handling controls (buttons, text fields) but
+not with labels/sizers.
+
+Some improvements: relative paths for files supplied as command-
+line argument work correctly, notebook panels are highlighted 
+better.
+
 0.1.2-1
 _______
 
