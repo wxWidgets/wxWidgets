@@ -4170,14 +4170,14 @@ int wxCharCodeMSWToWX(int keySym)
         case VK_NUMPAD7:    id = WXK_NUMPAD7; break;
         case VK_NUMPAD8:    id = WXK_NUMPAD8; break;
         case VK_NUMPAD9:    id = WXK_NUMPAD9; break;
-        case VK_MULTIPLY:   id = WXK_MULTIPLY; break;
-        case 0xBB: // VK_OEM_PLUS
-        case VK_ADD:        id = WXK_ADD; break;
-        case 0xBD: // VK_OEM_MINUS
-        case VK_SUBTRACT:   id = WXK_SUBTRACT; break;
-        case 0xBE: // VK_OEM_PERIOD
-        case VK_DECIMAL:    id = WXK_DECIMAL; break;
-        case VK_DIVIDE:     id = WXK_DIVIDE; break;
+        case VK_MULTIPLY:   id = WXK_NUMPAD_MULTIPLY; break;
+        case 0xBB:          id = WXK_NUMPAD_ADD; break; // VK_OEM_PLUS
+        case VK_ADD:        id = WXK_NUMPAD_ADD; break;
+        case 0xBD:          id = WXK_NUMPAD_SUBTRACT; break; // VK_OEM_MINUS
+        case VK_SUBTRACT:   id = WXK_NUMPAD_SUBTRACT; break;
+        case 0xBE:          id = WXK_NUMPAD_DECIMAL; break; // VK_OEM_PERIOD
+        case VK_DECIMAL:    id = WXK_NUMPAD_DECIMAL; break;
+        case VK_DIVIDE:     id = WXK_NUMPAD_DIVIDE; break;
         case VK_F1:         id = WXK_F1; break;
         case VK_F2:         id = WXK_F2; break;
         case VK_F3:         id = WXK_F3; break;
@@ -4247,11 +4247,11 @@ int wxCharCodeWXToMSW(int id, bool *isVirtual)
     case WXK_NUMPAD7:   keySym = VK_NUMPAD7; break;
     case WXK_NUMPAD8:   keySym = VK_NUMPAD8; break;
     case WXK_NUMPAD9:   keySym = VK_NUMPAD9; break;
-    case WXK_MULTIPLY:  keySym = VK_MULTIPLY; break;
-    case WXK_ADD:       keySym = VK_ADD; break;
-    case WXK_SUBTRACT:  keySym = VK_SUBTRACT; break;
-    case WXK_DECIMAL:   keySym = VK_DECIMAL; break;
-    case WXK_DIVIDE:    keySym = VK_DIVIDE; break;
+    case WXK_NUMPAD_MULTIPLY:  keySym = VK_MULTIPLY; break;
+    case WXK_NUMPAD_ADD:       keySym = VK_ADD; break;
+    case WXK_NUMPAD_SUBTRACT:  keySym = VK_SUBTRACT; break;
+    case WXK_NUMPAD_DECIMAL:   keySym = VK_DECIMAL; break;
+    case WXK_NUMPAD_DIVIDE:    keySym = VK_DIVIDE; break;
     case WXK_F1:        keySym = VK_F1; break;
     case WXK_F2:        keySym = VK_F2; break;
     case WXK_F3:        keySym = VK_F3; break;
