@@ -31,9 +31,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __WINE__
-#include <search.h>
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/defs.h"

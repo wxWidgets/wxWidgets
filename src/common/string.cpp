@@ -41,9 +41,6 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-#ifdef __WINE__
-#include <search.h>
-#endif
 
 #ifdef __SALFORDC__
   #include <clib.h>

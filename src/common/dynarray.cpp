@@ -28,9 +28,6 @@
 
 #include <stdlib.h>
 #include <string.h> // for memmove
-#ifdef __WINE__
-#include <search.h>
-#endif
 
 #ifndef max
   #define max(a, b)   (((a) > (b)) ? (a) : (b))
