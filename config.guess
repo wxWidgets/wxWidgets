@@ -880,6 +880,13 @@ EOF
 	rm -f $dummy.c $dummy
 	test x"${TENTATIVE}" != x && echo "${TENTATIVE}" && exit 0
 	;;
+    i*86:OS/2:*:*)
+	# If we were able to find `uname', then EMX Unix compatibility
+	# is probably installed.
+	# Do this prior to checking i*86:*:version-number:* which tends
+	# to misdetect OS/2 as a system V unix.
+	echo ${UNAME_MACHINE}-pc-os2-emx
+	exit 0 ;;
     i*86:DYNIX/ptx:4*:*)
 	# ptx 4.0 does uname -s correctly, with DYNIX/ptx in there.
 	# earlier versions are messed up and put the nodename in both
@@ -1087,11 +1094,6 @@ EOF
 	    UNAME_MACHINE="$cputype"
 	fi
 	echo ${UNAME_MACHINE}-unknown-plan9
-	exit 0 ;;
-    i*86:OS/2:*:*)
-	# If we were able to find `uname', then EMX Unix compatibility
-	# is probably installed.
-	echo ${UNAME_MACHINE}-pc-os2-emx
 	exit 0 ;;
     *:TOPS-10:*:*)
 	echo pdp10-unknown-tops10
