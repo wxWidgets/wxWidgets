@@ -90,6 +90,18 @@ void wxFrame::Init()
     m_nFsToolBarHeight   = 0;
     m_bFsIsMaximized     = FALSE;
     m_bFsIsShowing       = FALSE;
+
+    //
+    // Initialize SWP's
+    //
+    memset(&m_vSwp, 0, sizeof(SWP));
+    memset(&m_vSwpClient, 0, sizeof(SWP));
+    memset(&m_vSwpTitleBar, 0, sizeof(SWP));
+    memset(&m_vSwpMenuBar, 0, sizeof(SWP));
+    memset(&m_vSwpHScroll, 0, sizeof(SWP));
+    memset(&m_vSwpVScroll, 0, sizeof(SWP));
+    memset(&m_vSwpStatusBar, 0, sizeof(SWP));
+    memset(&m_vSwpToolBar, 0, sizeof(SWP));
 } // end of wxFrame::Init
 
 bool wxFrame::Create(
@@ -160,7 +172,7 @@ wxFrame::~wxFrame()
 
         if (wxTheApp->GetExitOnFrameDelete())
         {
-            ::WinPostMsg(GetHwnd(), WM_QUIT, 0, 0);
+            ::WinPostMsg(m_hFrame, WM_QUIT, 0, 0);
         }
     }
     wxModelessWindows.DeleteObject(this);
@@ -202,14 +214,12 @@ void wxFrame::DoGetClientSize(
     // top-left thus the += instead of the -=
     //
     RECTL                           vRect;
-    HWND                            hWndClient;
 
     //
     // PM has no GetClientRect that inherantly knows about the client window
     // We have to explicitly go fetch it!
     //
-    hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
-    ::WinQueryWindowRect(hWndClient, &vRect);
+    ::WinQueryWindowRect(GetHwnd(), &vRect);
 
 #if wxUSE_STATUSBAR
     if ( GetStatusBar() )
@@ -245,14 +255,12 @@ void wxFrame::DoSetClientSize(
 )
 {
     HWND                            hWnd = GetHwnd();
-    HWND                            hWndClient;
     RECTL                           vRect;
     RECTL                           vRect2;
 
-    hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
-    ::WinQueryWindowRect(hWndClient, &vRect);
+    ::WinQueryWindowRect(GetHwnd(), &vRect);
 
-    ::WinQueryWindowRect(hWnd, &vRect2);
+    ::WinQueryWindowRect(m_hFrame, &vRect2);
 
     //
     // Find the difference between the entire window (title bar and all)
@@ -284,7 +292,7 @@ void wxFrame::DoSetClientSize(
     vPointl.x = vRect2.xLeft;
     vPoint.y  = vRect2.yTop;
 
-    ::WinSetWindowPos( hWnd
+    ::WinSetWindowPos( m_hFrame
                       ,HWND_TOP
                       ,vPointl.x
                       ,vPointl.y
@@ -309,7 +317,7 @@ void wxFrame::DoGetSize(
 {
     RECTL                           vRect;
 
-    ::WinQueryWindowRect(GetHwnd(), &vRect);
+    ::WinQueryWindowRect(m_hFrame, &vRect);
     *pWidth = vRect.xRight - vRect.xLeft;
     *pHeight = vRect.yTop - vRect.yBottom;
 } // end of wxFrame::DoGetSize
@@ -322,7 +330,7 @@ void wxFrame::DoGetPosition(
     RECTL                           vRect;
     POINTL                          vPoint;
 
-    ::WinQueryWindowRect(GetHwnd(), &vRect);
+    ::WinQueryWindowRect(m_hFrame, &vRect);
     vPoint.x = vRect.xLeft;
 
     //
@@ -348,8 +356,7 @@ void wxFrame::DoShowWindow(
     //
     // Reset the window position
     //
-    hClient = WinWindowFromID(GetHwnd(), FID_CLIENT);
-    WinQueryWindowPos(GetHwnd(), &vSwp);
+    WinQueryWindowPos(m_hFrame, &vSwp);
     WinSetWindowPos( GetHwnd()
                     ,HWND_TOP
                     ,vSwp.x
@@ -358,8 +365,8 @@ void wxFrame::DoShowWindow(
                     ,vSwp.cy
                     ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE
                    );
+    ::WinShowWindow(m_hFrame, (BOOL)bShowCmd);
     ::WinShowWindow(GetHwnd(), (BOOL)bShowCmd);
-    ::WinShowWindow(hClient, (BOOL)bShowCmd);
 } // end of wxFrame::DoShowWindow
 
 bool wxFrame::Show(
@@ -374,9 +381,9 @@ bool wxFrame::Show(
     {
         wxActivateEvent             vEvent(wxEVT_ACTIVATE, TRUE, m_windowId);
 
-        ::WinQueryWindowPos(GetHwnd(), &vSwp);
+        ::WinQueryWindowPos(m_hFrame, &vSwp);
         m_bIconized = vSwp.fl & SWP_MINIMIZE;
-        ::WinEnableWindow(GetHwnd(), TRUE);
+        ::WinEnableWindow(m_hFrame, TRUE);
         vEvent.SetEventObject(this);
         GetEventHandler()->ProcessEvent(vEvent);
     }
@@ -444,7 +451,7 @@ bool wxFrame::IsMaximized() const
     SWP                             vSwp;
     bool                            bIconic;
 
-    ::WinQueryWindowPos(GetHwnd(), &vSwp);
+    ::WinQueryWindowPos(m_hFrame, &vSwp);
     return (vSwp.fl & SWP_MAXIMIZE);
 } // end of wxFrame::IsMaximized
 
@@ -456,12 +463,12 @@ void wxFrame::SetIcon(
 
     if ((m_icon.GetHICON()) != NULLHANDLE)
     {
-        ::WinSendMsg( GetHwnd()
+        ::WinSendMsg( m_hFrame
                      ,WM_SETICON
                      ,(MPARAM)((HPOINTER)m_icon.GetHICON())
                      ,NULL
                     );
-        ::WinSendMsg( GetHwnd()
+        ::WinSendMsg( m_hFrame
                      ,WM_UPDATEFRAME
                      ,(MPARAM)FCF_ICON
                      ,(MPARAM)0
@@ -501,8 +508,7 @@ void wxFrame::PositionStatusBar()
         HWND                        hWndClient;
         RECTL                       vRect;
 
-        hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
-        ::WinQueryWindowRect(hWndClient, &vRect);
+        ::WinQueryWindowRect(GetHwnd(), &vRect);
         nWidth = vRect.xRight - vRect.xLeft;
         nHeight = vRect.yTop - vRect.yBottom;
 
@@ -579,14 +585,14 @@ void wxFrame::SetMenuBar(
     //
     // Set the parent and owner of the menubar to be the frame
     //
-    if (!::WinSetParent(m_hMenu, GetHwnd(), FALSE))
+    if (!::WinSetParent(m_hMenu, m_hFrame, FALSE))
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError("Error setting parent for submenu. Error: %s\n", sError);
     }
 
-    if (!::WinSetOwner(m_hMenu, GetHwnd()))
+    if (!::WinSetOwner(m_hMenu, m_hFrame))
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
@@ -600,17 +606,16 @@ void wxFrame::SetMenuBar(
     //
     // Now resize the client to fit the new frame
     //
-    WinQueryWindowPos(GetHwnd(), &vSwp);
-    hClient = WinWindowFromID(GetHwnd(), FID_CLIENT);
-    hTitlebar = WinWindowFromID(GetHwnd(), FID_TITLEBAR);
+    WinQueryWindowPos(m_hFrame, &vSwp);
+    hTitlebar = WinWindowFromID(m_hFrame, FID_TITLEBAR);
     WinQueryWindowPos(hTitlebar, &vSwpTitlebar);
-    hHScroll = WinWindowFromID(GetHwnd(), FID_HORZSCROLL);
+    hHScroll = WinWindowFromID(m_hFrame, FID_HORZSCROLL);
     WinQueryWindowPos(hHScroll, &vSwpHScroll);
-    hVScroll = WinWindowFromID(GetHwnd(), FID_VERTSCROLL);
+    hVScroll = WinWindowFromID(m_hFrame, FID_VERTSCROLL);
     WinQueryWindowPos(hVScroll, &vSwpVScroll);
-    hMenuBar = WinWindowFromID(GetHwnd(), FID_MENU);
+    hMenuBar = WinWindowFromID(m_hFrame, FID_MENU);
     WinQueryWindowPos(hMenuBar, &vSwpMenu);
-    WinSetWindowPos( hClient
+    WinSetWindowPos( GetHwnd()
                     ,HWND_TOP
                     ,SV_CXSIZEBORDER/2
                     ,(SV_CYSIZEBORDER/2) + vSwpHScroll.cy/2
@@ -622,7 +627,7 @@ void wxFrame::SetMenuBar(
 
 void wxFrame::InternalSetMenuBar()
 {
-    WinSendMsg((HWND)GetHwnd(), WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
+    WinSendMsg((HWND)m_hFrame, WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
 } // end of wxFrame::InternalSetMenuBar
 
 //
@@ -799,10 +804,9 @@ bool wxFrame::OS2Create(
     HWND                            hTitlebar = NULLHANDLE;
     HWND                            hHScroll = NULLHANDLE;
     HWND                            hVScroll = NULLHANDLE;
-    SWP                             vSwp;
-    SWP                             vSwpTitlebar;
-    SWP                             vSwpVScroll;
-    SWP                             vSwpHScroll;
+    SWP                             vSwp[10];
+    RECTL                           vRect[10];
+    USHORT                          uCtlCount;
 
     m_hDefaultIcon = (WXHICON) (wxSTD_FRAME_ICON ? wxSTD_FRAME_ICON : wxDEFAULT_FRAME_ICON);
 
@@ -871,66 +875,43 @@ bool wxFrame::OS2Create(
     //
     // Create the frame window
     //
-    if (!wxWindow::OS2Create( hParent
-                             ,WC_FRAME
-                             ,zTitle
-                             ,ulStyleFlags
-                             ,(long)nX
-                             ,(long)nY
-                             ,(long)nWidth
-                             ,(long)nHeight
+    if ((m_hFrame = ::WinCreateWindow( hParent               // Frame is parent
+                                      ,WC_FRAME              // standard frame class
+                                      ,(PSZ)zTitle           // Window title
+                                      ,0                     // No styles
+                                      ,0, 0, 0, 0            // Window position
+                                      ,NULLHANDLE            // Owner
+                                      ,HWND_TOP              // Sibling
+                                      ,(ULONG)nId            // ID
+                                      ,(PVOID)&vFrameCtlData // Creation data
+                                     ,NULL                   // Window Pres Params
+                                     )) == 0L)
+    {
+        return FALSE;
+    }
+
+    if (!wxWindow::OS2Create( m_hFrame
+                             ,wxFrameClassName
+                             ,NULL
+                             ,0L
+                             ,0L
+                             ,0L
+                             ,0L
+                             ,0L
                              ,NULLHANDLE
                              ,HWND_TOP
-                             ,(long)nId
-                             ,(void*)&vFrameCtlData
+                             ,(unsigned long)FID_CLIENT
+                             ,NULL
                              ,NULL
                             ))
     {
         return FALSE;
     }
 
-    hFrame = GetHwnd();
-
-    //
-    // Since under PM the controling window proc is associated with the client window handle
-    // not the frame's we have to perform the hook here in order to associated the client handle,
-    // not the frame's with the window object !
-    //
-
-    wxWndHook = this;
-    //
-    // Create the client window.  We must call the API from here rather than
-    // the static base class create because we need a separate handle
-    //
-    if ((hClient = ::WinCreateWindow( hFrame   // Frame is parent
-                                     ,wxFrameClassName
-                                     ,NULL        // Window title
-                                     ,0           // No styles
-                                     ,0, 0, 0, 0  // Window position
-                                     ,NULLHANDLE  // Owner
-                                     ,HWND_TOP    // Sibling
-                                     ,FID_CLIENT  // standard client ID
-                                     ,NULL        // Creation data
-                                     ,NULL        // Window Pres Params
-                                     )) == 0L)
-    {
-        return FALSE;
-    }
-
-    wxWndHook = NULL;
-    //
-    // Send anything to initialize the frame
-    //
-    ::WinSendMsg( hFrame
-                 ,WM_UPDATEFRAME
-                 ,(MPARAM)FCF_TASKLIST
-                 ,(MPARAM)0
-                );
-
     //
     // Now size everything.  If adding a menu the client will need to be resized.
     //
-    if (!::WinSetWindowPos( hFrame
+    if (!::WinSetWindowPos( m_hFrame
                            ,HWND_TOP
                            ,nX
                            ,nY
@@ -940,20 +921,28 @@ bool wxFrame::OS2Create(
                           ))
         return FALSE;
 
-    WinQueryWindowPos(GetHwnd(), &vSwp);
-    hClient = WinWindowFromID(GetHwnd(), FID_CLIENT);
-    hTitlebar = WinWindowFromID(GetHwnd(), FID_TITLEBAR);
-    WinQueryWindowPos(hTitlebar, &vSwpTitlebar);
-    hHScroll = WinWindowFromID(GetHwnd(), FID_HORZSCROLL);
-    WinQueryWindowPos(hHScroll, &vSwpHScroll);
-    hVScroll = WinWindowFromID(GetHwnd(), FID_VERTSCROLL);
-    WinQueryWindowPos(hVScroll, &vSwpVScroll);
+    uCtlCount = SHORT1FROMMP(::WinSendMsg(m_hFrame, WM_FORMATFRAME, (MPARAM)vSwp, (MPARAM)vRect));
+    for (int i = 0; i < uCtlCount; i++)
+    {
+        if (vSwp[i].hwnd == m_hFrame)
+            memcpy(&m_vSwp, &vSwp[i], sizeof(SWP));
+        else if (vSwp[i].hwnd == m_hVScroll)
+            memcpy(&m_vSwpVScroll, &vSwp[i], sizeof(SWP));
+        else if (vSwp[i].hwnd == m_hHScroll)
+            memcpy(&m_vSwpVScroll, &vSwp[i], sizeof(SWP));
+        else if (vSwp[i].hwnd == m_hTitleBar)
+            memcpy(&m_vSwpTitleBar, &vSwp[i], sizeof(SWP));
+    }
+
+    //
+    // Now set the size of the client
+    //
     WinSetWindowPos( hClient
                     ,HWND_TOP
                     ,SV_CXSIZEBORDER/2
-                    ,(SV_CYSIZEBORDER/2) + vSwpHScroll.cy/2
-                    ,vSwp.cx - ((SV_CXSIZEBORDER + 1) + vSwpVScroll.cx)
-                    ,vSwp.cy - ((SV_CYSIZEBORDER + 1) + vSwpTitlebar.cy + vSwpHScroll.cy/2)
+                    ,(SV_CYSIZEBORDER/2) + m_vSwpHScroll.cy/2
+                    ,m_vSwp.cx - ((SV_CXSIZEBORDER + 1) + m_vSwpVScroll.cx)
+                    ,m_vSwp.cy - ((SV_CYSIZEBORDER + 1) + m_vSwpTitleBar.cy + m_vSwpHScroll.cy/2)
                     ,SWP_SIZE | SWP_MOVE
                    );
 
@@ -1056,8 +1045,7 @@ void wxFrame::PositionToolBar()
     HWND                            hWndClient;
     RECTL                           vRect;
 
-    hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
-    ::WinQueryWindowRect(hWndClient, &vRect);
+    ::WinQueryWindowRect(GetHwnd(), &vRect);
 
 #if wxUSE_STATUSBAR
     if (GetStatusBar())
@@ -1162,7 +1150,7 @@ bool wxFrame::HandlePaint()
 {
     RECTL                           vRect;
 
-    if (::WinQueryUpdateRect(GetHwnd(), &vRect))
+    if (::WinQueryUpdateRect(m_hFrame, &vRect))
     {
         if (m_bIconized)
         {
@@ -1172,7 +1160,7 @@ bool wxFrame::HandlePaint()
             HPOINTER                hIcon;
 
             if (m_icon.Ok())
-                hIcon = (HPOINTER)::WinSendMsg(GetHwnd(), WM_QUERYICON, 0L, 0L);
+                hIcon = (HPOINTER)::WinSendMsg(m_hFrame, WM_QUERYICON, 0L, 0L);
             else
                 hIcon = (HPOINTER)m_hDefaultIcon;
 
@@ -1181,7 +1169,7 @@ bool wxFrame::HandlePaint()
             // is being processed
             //
             RECTL                   vRect2;
-            HPS                     hPs = ::WinBeginPaint(GetHwnd(), NULLHANDLE, &vRect2);
+            HPS                     hPs = ::WinBeginPaint(m_hFrame, NULLHANDLE, &vRect2);
 
             //
             // Erase background before painting or we get white background
@@ -1193,8 +1181,7 @@ bool wxFrame::HandlePaint()
                 HWND                            hWndClient;
                 RECTL                           vRect3;
 
-                hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
-                ::WinQueryWindowRect(hWndClient, &vRect3);
+                ::WinQueryWindowRect(GetHwnd(), &vRect3);
 
                 static const int    nIconWidth = 32;
                 static const int    nIconHeight = 32;
@@ -1433,12 +1420,21 @@ MRESULT wxFrame::OS2WindowProc(
             bProcessed = HandlePaint();
             break;
 
+        case WM_ERASEBACKGROUND:
+            //
+            // Return TRUE to request PM to paint the window background
+            // in SYSCLR_WINDOW.
+            //
+            bProcessed = TRUE;
+            mRc = (MRESULT)(TRUE);
+            break;
+
         case CM_QUERYDRAGIMAGE:
             {
                 HPOINTER                hIcon;
 
                 if (m_icon.Ok())
-                    hIcon = (HPOINTER)::WinSendMsg(GetHwnd(), WM_QUERYICON, 0L, 0L);
+                    hIcon = (HPOINTER)::WinSendMsg(m_hFrame, WM_QUERYICON, 0L, 0L);
                 else
                     hIcon = (HPOINTER)m_hDefaultIcon;
                 mRc = (MRESULT)hIcon;

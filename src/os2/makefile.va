@@ -989,10 +989,6 @@ $(WXDIR)\lib\wx.lib: \
 
 !else
 
-# Update the import library
-$(WXDIR)\lib\wx214.lib: $(OBJECTS)
-    implib $(WXDIR)\lib\wx214.lib $(WXDIR)\lib\wx214.def
-
 # Update the dynamic link library
 $(WXDIR)\lib\wx214.dll: $(OBJECTS)
     icc @<<

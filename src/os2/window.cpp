@@ -2357,7 +2357,7 @@ bool wxWindow::OS2Create(
         (ULONG)zClass == (ULONG)WC_COMBOBOX ||
         (ULONG)zClass == (ULONG)WC_CONTAINER ||
         (ULONG)zClass == (ULONG)WC_ENTRYFIELD ||
-	(ULONG)zClass == (ULONG)WC_FRAME ||
+        (ULONG)zClass == (ULONG)WC_FRAME ||
         (ULONG)zClass == (ULONG)WC_LISTBOX ||
         (ULONG)zClass == (ULONG)WC_MENU ||
         (ULONG)zClass == (ULONG)WC_NOTEBOOK ||
@@ -2796,6 +2796,9 @@ void wxWindow::OnSysColourChanged(
 bool wxWindow::HandlePaint()
 {
     HRGN                            hRgn = NULLHANDLE;
+    wxPaintEvent                    vEvent;
+    HPS                             hPS;
+    RECTL                           vRect;
 
     if (::WinQueryUpdateRegion(GetHwnd(), hRgn) == RGN_NULL)
     {
@@ -2804,7 +2807,9 @@ bool wxWindow::HandlePaint()
     }
     m_updateRegion = wxRegion(hRgn);
 
-    wxPaintEvent                    vEvent;
+    hPS = WinBeginPaint(GetHwnd(), 0L, &vRect);
+    WinFillRect(hPS, &vRect, SYSCLR_WINDOW);
+    WinEndPaint(hPS);
 
     vEvent.SetEventObject(this);
     return (GetEventHandler()->ProcessEvent(vEvent));

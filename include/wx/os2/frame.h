@@ -202,6 +202,33 @@ private:
     WXHWND                          m_hWndToolTip;
 #endif // tooltips
 
+    //
+    // The main handle of a frame window, that used for message processing
+    // is the client handle under PM.  But we still need the frame handle
+    // as well
+    //
+    WXHWND                          m_hFrame;
+
+    //
+    // Handles to child windows of the Frame that we don't have child objects for
+    //
+    WXHWND                          m_hTitleBar;
+    WXHWND                          m_hHScroll;
+    WXHWND                          m_hVScroll;
+
+    //
+    // Swp structures for various client data 
+    // DW: Better off in attached RefData?
+    //
+    SWP                             m_vSwp;
+    SWP                             m_vSwpClient;
+    SWP                             m_vSwpTitleBar;
+    SWP                             m_vSwpMenuBar;
+    SWP                             m_vSwpHScroll;
+    SWP                             m_vSwpVScroll;
+    SWP                             m_vSwpStatusBar;
+    SWP                             m_vSwpToolBar;
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxFrame)
 };
