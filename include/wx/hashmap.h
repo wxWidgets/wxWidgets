@@ -86,18 +86,18 @@ public: \
     /* should these be protected? */ \
     typedef const KEY_T const_key_type; \
     typedef const VALUE_T const_mapped_type; \
-protected: \
+public: \
     struct Node; \
     typedef KEY_EX_T key_extractor; \
     typedef CLASSNAME Self; \
- \
+protected: \
     Node** m_table; \
     size_t m_tableBuckets; \
     size_t m_items; \
     hasher m_hasher; \
     key_equal m_equals; \
     key_extractor m_getKey; \
- \
+public: \
     struct Node:public _wxHashTable_NodeBase \
     { \
     public: \
@@ -109,13 +109,13 @@ protected: \
     }; \
  \
     struct Iterator; \
-    friend struct CLASSNAME::Iterator; \
- \
+    friend struct Iterator; \
+protected: \
     static void DeleteNode( _wxHashTable_NodeBase* node ) \
     { \
         delete (Node*)node; \
     } \
- \
+public: \
     /*                  */ \
     /* forward iterator */ \
     /*                  */ \
