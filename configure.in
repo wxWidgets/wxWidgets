@@ -60,7 +60,7 @@ AC_DEFUN(WX_INCLUDE_PATH_EXIST,
   if test $result = 0; then
     ac_path_to_include=""
   else
-    ac_path_to_include="-I$1"
+    ac_path_to_include=" -I$1"
   fi
 ])
 
@@ -74,7 +74,7 @@ AC_DEFUN(WX_LINK_PATH_EXIST,
   if test $result = 0; then
     ac_path_to_link=""
   else
-    ac_path_to_link="-L$1"
+    ac_path_to_link=" -L$1"
   fi
 ])
 
@@ -2133,8 +2133,8 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                 WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
                 WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
 
-                GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-                TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
+                GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
+                TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
                 AC_MSG_RESULT(found at $ac_find_libraries)
             else
                 dnl it might happen that we found headers in one of the standard
@@ -2165,7 +2165,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
         if test "$ac_find_libraries" != "" ; then
             WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY$ac_path_to_link"
             xpm_link=" -lXpm"
             AC_DEFINE(wxHAVE_LIB_XPM)
             AC_MSG_RESULT(found at $ac_find_libraries)
@@ -2308,43 +2308,60 @@ dnl ---------------------------------------------------------------------------
 dnl OpenGL libraries
 dnl ---------------------------------------------------------------------------
 if test "$wxUSE_OPENGL" = "yes"; then
-  if test "$wxUSE_MAC" = 1; then
-    OPENGL_LIBS="-framework OpenGL -framework AGL"
-  else
+    if test "$wxUSE_MAC" = 1; then
+        OPENGL_LIBS="-framework OpenGL -framework AGL"
+    else
+
+        AC_CHECK_HEADER(GL/gl.h,
+            [
+                WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],[GL])
+                if test "$ac_find_libraries" != "" ; then
+                    WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
+                    LDFLAGS_GL="$LDFLAGS$ac_path_to_link"
+                    OPENGL_LIBS="-lGL -lGLU"
+                else
+                    WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],[MesaGL])
+                    if test "$ac_find_libraries" != "" ; then
+                        WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
+                        LDFLAGS_GL="$LDFLAGS$ac_path_to_link"
+                        OPENGL_LIBS="-lMesaGL -lMesaGLU"
+                    fi
+                fi
+            ])
 
     dnl check for OpenGL libs availability first
     dnl -lGL requires -lm with soem OpenGL versions
 
-    AC_CHECK_HEADER(GL/gl.h,
-        [
-            AC_CHECK_LIB(GL, glFlush,
-                [
-                    OPENGL_LIBS="-lGL -lGLU"
-                ],
-                [
-                    AC_CHECK_LIB(MesaGL, glFlush,
-                        [
-                            OPENGL_LIBS="-lMesaGL -lMesaGLU"
-                        ],
-                        [],
-                        [-lm])
-                ],
-                [-lm])
-        ])
+#    AC_CHECK_HEADER(GL/gl.h,
+#        [
+#            AC_CHECK_LIB(GL, glFlush,
+#                [
+#                    OPENGL_LIBS="-lGL -lGLU"
+#                ],
+#                [
+#                    AC_CHECK_LIB(MesaGL, glFlush,
+#                        [
+#                            OPENGL_LIBS="-lMesaGL -lMesaGLU"
+#                        ],
+#                        [],
+#                        [-lm])
+#                ],
+#                [-lm])
+#        ])
 
-    if test "x$OPENGL_LIBS" = "x"; then
-        dnl it should be an error and not a warning because OpenGL is not on
-        dnl by default and so if it had been explicitely requested, we
-        dnl shouldn't just fall back to compiling the library without it
-        AC_MSG_ERROR(OpenGL libraries not available)
+        if test "x$OPENGL_LIBS" = "x"; then
+            dnl it should be an error and not a warning because OpenGL is not on
+            dnl by default and so if it had been explicitely requested, we
+            dnl shouldn't just fall back to compiling the library without it
+            AC_MSG_ERROR(OpenGL libraries not available)
+        fi
     fi
-  fi
 
-  if test "$wxUSE_OPENGL" = "yes"; then
-    AC_DEFINE(wxUSE_OPENGL)
-    AC_DEFINE(wxUSE_GLCANVAS)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl"
-  fi
+    if test "$wxUSE_OPENGL" = "yes"; then
+        AC_DEFINE(wxUSE_OPENGL)
+        AC_DEFINE(wxUSE_GLCANVAS)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl"
+    fi
 fi
 
 if test -z "$TOOLKIT_VPATH" ; then
@@ -4774,6 +4791,7 @@ AC_SUBST(SAMPLES_SUBDIRS)
 
 dnl additional libraries and linker settings
 AC_SUBST(LDFLAGS)
+AC_SUBST(LDFLAGS_GL)
 AC_SUBST(OPENGL_LIBS)
 AC_SUBST(DMALLOC_LIBS)
 AC_SUBST(EXTRADEFS)

@@ -107,7 +107,7 @@ while test $# -gt 0; do
 
       ;;
     --gl-libs)
-      echo @WXCONFIG_LIBS_GL@
+      echo @LDFLAGS_GL@ @WXCONFIG_LIBS_GL@
       ;;
     --cc)
       echo $CC
