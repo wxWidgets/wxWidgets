@@ -1,0 +1,12 @@
+
+LIBTARGET=$(WXWIN)/lib/libregex.a
+
+OBJECTS= \
+		regcomp.o \
+		regexec.o \
+		regerror.o \
+		regfree.o
+
+# Pull in standard variable definitions
+
+include $(WXWIN)/src/makelib.g95
