@@ -52,7 +52,7 @@ wxFileDialogBase::wxFileDialogBase(wxWindow *parent,
     m_dialogStyle = style;
     m_filterIndex = 0;
 
-    if ( wildCard.empty() )
+    if ( wildCard.empty() || wildCard == wxFileSelectorDefaultWildcardStr )
     {
         m_wildCard = wxString::Format(_("All files (%s)|%s"),
                                       wxFileSelectorDefaultWildcardStr,
@@ -72,9 +72,9 @@ wxFileDialogBase::wxFileDialogBase(wxWindow *parent,
             m_wildCard = wxString::Format
                          (
                             _("%s files (%s)|%s"),
-                            m_wildCard.c_str() + nDot,
-                            m_wildCard.c_str(),
-                            m_wildCard.c_str()
+                            wildCard.c_str() + nDot,
+                            wildCard.c_str(),
+                            wildCard.c_str()
                          );
         }
     }
