@@ -92,12 +92,15 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
+
     // create the control of the given Window class
     bool MSWCreateControl(const wxChar *classname,
                           const wxString& label,
                           const wxPoint& pos,
                           const wxSize& size,
-                          long style);
+                          long style,
+                          bool visible = true);
+
 
     // NB: the method below is deprecated now, with MSWGetStyle() the method
     //     above should be used instead! Once all the controls are updated to
@@ -117,7 +120,8 @@ protected:
                           const wxPoint& pos = wxDefaultPosition,
                           const wxSize& size = wxDefaultSize,
                           const wxString& label = wxEmptyString,
-                          WXDWORD exstyle = (WXDWORD)-1);
+                          WXDWORD exstyle = (WXDWORD)-1,
+                          bool visible = true);
 
     // default style for the control include WS_TABSTOP if it AcceptsFocus()
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;

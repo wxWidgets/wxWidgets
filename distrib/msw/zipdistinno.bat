@@ -239,7 +239,11 @@ erase /Y distrib
 rem Now copy some binary files to 'bin'
 if not isdir bin mkdir bin
 copy %src\bin\dialoged.exe bin
+copy %src\bin\dialoged.hlp bin
+copy %src\bin\dialoged.chm bin
 copy %src\bin\tex2rtf.exe bin
+copy %src\bin\tex2rtf.hlp bin
+copy %src\bin\tex2rtf.cnt bin
 copy %src\bin\dbgview.* bin
 copy %src\bin\widgets.exe bin
 copy %src\bin\widgets.exe.manifest bin

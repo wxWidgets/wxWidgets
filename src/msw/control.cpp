@@ -79,12 +79,13 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
                                  const wxString& label,
                                  const wxPoint& pos,
                                  const wxSize& size,
-                                 long style)
+                                 long style,
+                                 bool visible)
 {
     WXDWORD exstyle;
     WXDWORD msStyle = MSWGetStyle(style, &exstyle);
 
-    return MSWCreateControl(classname, msStyle, pos, size, label, exstyle);
+    return MSWCreateControl(classname, msStyle, pos, size, label, exstyle, visible);
 }
 
 bool wxControl::MSWCreateControl(const wxChar *classname,
@@ -92,7 +93,8 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
                                  const wxPoint& pos,
                                  const wxSize& size,
                                  const wxString& label,
-                                 WXDWORD exstyle)
+                                 WXDWORD exstyle,
+                                 bool visible)
 {
     // want3D tells us whether or not the style specified a 3D border.
     // If so, under WIN16 we can use Ctl3D to give it an appropriate style.
@@ -108,7 +110,18 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 
     // all controls should have these styles (wxWindows creates all controls
     // visible by default)
-    style |= WS_CHILD | WS_VISIBLE;
+    style |= WS_CHILD;
+    
+    // sometimes, controls will defer showing the window until
+    // all configuration, sizing, and positioning is completed
+    if (!visible)
+    {
+        m_isShown = FALSE;
+    }
+     else
+    {
+        style |= WS_VISIBLE;
+    }
 
     int x = pos.x == -1 ? 0 : pos.x,
         y = pos.y == -1 ? 0 : pos.y,

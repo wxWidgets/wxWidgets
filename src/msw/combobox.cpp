@@ -326,7 +326,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
 
     // and now create the MSW control
-    if ( !MSWCreateControl(_T("COMBOBOX"), msStyle) )
+    if ( !MSWCreateControl(_T("COMBOBOX"), msStyle, pos, size, wxEmptyString, (WXDWORD)-1, false) )
         return FALSE;
 
     // A choice/combobox normally has a white background (or other, depending
@@ -359,6 +359,9 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                                         (LPARAM)wxComboEditWndProc
                                       );
     }
+
+    // finally, show the combo box
+    Show(true);
 
     return TRUE;
 }
