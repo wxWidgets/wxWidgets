@@ -64,6 +64,8 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
         wxapp_install_idle_handler();
 
     GtkFontSelectionDialog *fontdlg = GTK_FONT_SELECTION_DIALOG(dialog->m_widget);
+
+#ifndef __WXGTK20__
     GdkFont *gfont = gtk_font_selection_dialog_get_font(fontdlg);
 
     if (!gfont)
@@ -72,11 +74,9 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
                      wxOK | wxICON_ERROR);
         return;
     }
+#endif
 
     gchar *fontname = gtk_font_selection_dialog_get_font_name(fontdlg);
-    
-    // printf( "font %s\n", fontname );
-
     dialog->SetChosenFont( fontname);
 
     g_free( fontname );
