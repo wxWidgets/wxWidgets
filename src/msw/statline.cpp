@@ -69,6 +69,10 @@ bool wxStaticLine::Create(wxWindow *parent,
 
 WXDWORD wxStaticLine::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
+    // we never have border
+    style &= ~wxBORDER_MASK;
+    style |= wxBORDER_NONE;
+
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
     // add our default styles

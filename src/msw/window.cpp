@@ -1084,7 +1084,8 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     if ( flags & wxCLIP_SIBLINGS )
         style |= WS_CLIPSIBLINGS;
 
-    if ( (flags & wxBORDER_MASK) != wxBORDER_NONE )
+    wxBorder border = (wxBorder)(flags & wxBORDER_MASK);
+    if ( border != wxBORDER_NONE && border != wxBORDER_DEFAULT )
         style |= WS_BORDER;
 
     // now deal with ext style if the caller wants it
@@ -1103,6 +1104,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 
             case wxBORDER_NONE:
             case wxBORDER_SIMPLE:
+            case wxBORDER_DEFAULT:
                 break;
 
             case wxBORDER_STATIC:
@@ -1113,7 +1115,6 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
                 *exstyle |= WS_EX_WINDOWEDGE;
                 break;
 
-            case wxBORDER_DEFAULT:
             case wxBORDER_SUNKEN:
                 *exstyle |= WS_EX_CLIENTEDGE;
                 break;

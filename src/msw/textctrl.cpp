@@ -357,6 +357,12 @@ void wxTextCtrl::AdoptAttributesFromHWND()
 
 WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
+    // default border for the text controls is the sunken one
+    if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
+    {
+        style |= wxBORDER_SUNKEN;
+    }
+
     long msStyle = wxControl::MSWGetStyle(style, exstyle);
 
     // default styles
