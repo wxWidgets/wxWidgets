@@ -1440,11 +1440,11 @@ void wxWindowMac::DoGetClientSize(int *x, int *y) const
 
     if (m_hScrollBar  && m_hScrollBar->IsShown() )
     {
-        hh -= m_hScrollBar->GetSize().y ; // MAC_SCROLLBAR_SIZE ;
+        hh -= m_hScrollBar->GetSize().y ;
     }
     if (m_vScrollBar  && m_vScrollBar->IsShown() )
     {
-        ww -= m_vScrollBar->GetSize().x ; // MAC_SCROLLBAR_SIZE;
+        ww -= m_vScrollBar->GetSize().x ;
     }
     if(x)   *x = ww;
     if(y)   *y = hh;
@@ -1752,8 +1752,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         m_cachedClippedRectValid = false ;
         m_peer->SetRect( &r ) ;
         
-        if ( doMove )
-            wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
+        wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
 
         MacInvalidateBorders() ;
 
@@ -2735,6 +2734,12 @@ wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const
     return win ;
 }
 
+const wxRect& wxWindowMac::MacGetClippedClientRect() const 
+{
+    MacUpdateClippedRects() ;
+    return m_cachedClippedClientRect ;
+}
+
 const wxRect& wxWindowMac::MacGetClippedRect() const 
 {
     MacUpdateClippedRects() ;
@@ -2776,7 +2781,7 @@ void wxWindowMac::MacUpdateClippedRects() const
 
     Rect r ;
     Rect rIncludingOuterStructures ;
-
+    
     m_peer->GetRect( &r ) ;
     r.left -= MacGetLeftBorderSize() ;
     r.top -= MacGetTopBorderSize() ;
@@ -2790,55 +2795,55 @@ void wxWindowMac::MacUpdateClippedRects() const
 
     rIncludingOuterStructures = r ;
     InsetRect( &rIncludingOuterStructures , -4 , -4 ) ;
- 
-    if ( !IsTopLevel() )
+    
+    wxRect cl = GetClientRect() ;
+    Rect rClient = { cl.y , cl.x , cl.y + cl.height , cl.x + cl.width } ;
+    
+    const wxWindow* child = this ;
+    const wxWindow* parent = NULL ;
+    while( !child->IsTopLevel() && ( parent = child->GetParent() ) != NULL )
     {
-        const wxWindow* child = this ;
-        const wxWindow* parent = child->GetParent() ;
-        while( parent )
+        int x , y ;
+        wxSize size ;
+
+        if ( parent->MacIsChildOfClientArea(child) )
         {
-            int x , y ;
-            wxSize size ;
-            // we have to find a better clipping algorithm here, in order not to clip things
-            // positioned like status and toolbar
-            if ( 1 /* parent->IsTopLevel() && child->IsKindOf( CLASSINFO( wxToolBar ) ) */ )
-            {
-                size = parent->GetSize() ;
-                x = y = 0 ;
-            }
-            else
-            {
-                size = parent->GetClientSize() ;
-                wxPoint origin = parent->GetClientAreaOrigin() ;
-                x = origin.x ;
-                y = origin.y ;
-            }
-            parent->MacWindowToRootWindow( &x, &y ) ;
-            MacRootWindowToWindow( &x , &y ) ;
-
-            Rect rparent = { 
-                y + parent->MacGetTopBorderSize() , x + parent->MacGetLeftBorderSize() , 
-                y + size.y - parent->MacGetBottomBorderSize() ,
-                x + size.x - parent->MacGetRightBorderSize() } ;
-
-            // the content will always be clipped
-            SectRect( &r , &rparent , &r ) ;
-
-            // the structure only at 'hard' borders
-            if ( parent->MacClipChildren() ||
-                ( parent->GetParent() && parent->GetParent()->MacClipGrandChildren() ) )
-            {
-                SectRect( &rIncludingOuterStructures , &rparent , &rIncludingOuterStructures ) ;
-            }
-
-            if ( parent->IsTopLevel() )
-                break ;
-            child = parent ;
-            parent = child->GetParent() ;
+            size = parent->GetClientSize() ;
+            wxPoint origin = parent->GetClientAreaOrigin() ;
+            x = origin.x ;
+            y = origin.y ;
         }
+        else
+        {
+            // this will be true for scrollbars, toolbars etc.
+            size = parent->GetSize() ;
+            y = parent->MacGetTopBorderSize() ;
+            x = parent->MacGetLeftBorderSize() ;
+            size.x -= parent->MacGetLeftBorderSize() + parent->MacGetRightBorderSize() ;
+            size.y -= parent->MacGetTopBorderSize() + parent->MacGetBottomBorderSize() ;
+        }
+
+        parent->MacWindowToRootWindow( &x, &y ) ;
+        MacRootWindowToWindow( &x , &y ) ;
+
+        Rect rparent = { y , x , y + size.y , x + size.x } ;
+
+        // the wxwindow and client rects will always be clipped
+        SectRect( &r , &rparent , &r ) ;
+        SectRect( &rClient , &rparent , &rClient ) ;
+
+        // the structure only at 'hard' borders
+        if ( parent->MacClipChildren() ||
+            ( parent->GetParent() && parent->GetParent()->MacClipGrandChildren() ) )
+        {
+            SectRect( &rIncludingOuterStructures , &rparent , &rIncludingOuterStructures ) ;
+        }
+        child = parent ;
     }
     
     m_cachedClippedRect = wxRect( r.left , r.top , r.right - r.left , r.bottom - r.top ) ;
+    m_cachedClippedClientRect = wxRect( rClient.left , rClient.top , 
+        rClient.right - rClient.left , rClient.bottom - rClient.top ) ;
     m_cachedClippedRectWithOuterStructure = wxRect( 
         rIncludingOuterStructures.left , rIncludingOuterStructures.top , 
         rIncludingOuterStructures.right - rIncludingOuterStructures.left , 
@@ -2846,6 +2851,7 @@ void wxWindowMac::MacUpdateClippedRects() const
     
     m_cachedClippedRegionWithOuterStructure = wxRegion( m_cachedClippedRectWithOuterStructure ) ;
     m_cachedClippedRegion = wxRegion( m_cachedClippedRect ) ;
+    m_cachedClippedClientRegion = wxRegion( m_cachedClippedClientRect ) ;
     
     m_cachedClippedRectValid = true ;
 }
@@ -3013,6 +3019,14 @@ void wxWindowMac::MacCreateScrollBars( long style )
 
     // because the create does not take into account the client area origin
     MacRepositionScrollBars() ; // we might have a real position shift
+}
+
+bool wxWindowMac::MacIsChildOfClientArea( const wxWindow* child ) const
+{
+    if ( child != NULL && ( child == m_hScrollBar || child == m_vScrollBar ) )
+        return false ;
+    else
+        return true ;
 }
 
 void wxWindowMac::MacRepositionScrollBars()

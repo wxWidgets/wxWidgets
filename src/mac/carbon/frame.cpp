@@ -251,6 +251,21 @@ void wxFrame::DoGetClientSize(int *x, int *y) const
 #endif // wxUSE_TOOLBAR
 }
 
+bool wxFrame::MacIsChildOfClientArea( const wxWindow* child ) const 
+{
+#if wxUSE_STATUSBAR
+    if ( child == GetStatusBar() )
+        return false ;
+#endif // wxUSE_STATUSBAR
+
+#if wxUSE_TOOLBAR
+    if ( child == GetToolBar() )
+        return false ;
+#endif // wxUSE_TOOLBAR
+
+    return wxFrameBase::MacIsChildOfClientArea( child ) ;
+}
+
 void wxFrame::DoSetClientSize(int clientwidth, int clientheight)
 {
     int currentclientwidth , currentclientheight ;
