@@ -216,7 +216,7 @@ bool wxFrame::Create( wxWindow *parent,
                       long style,
                       const wxString &name )
 {
-    bool rt = wxTopLevelWindow::Create(parent, id, title, pos, sizeOrig, 
+    bool rt = wxTopLevelWindow::Create(parent, id, title, pos, sizeOrig,
                                        style, name);
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInFrame;
     return rt;
@@ -235,7 +235,7 @@ wxFrame::~wxFrame()
 void wxFrame::DoGetClientSize( int *width, int *height ) const
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-    
+
     wxTopLevelWindow::DoGetClientSize( width, height );
 
     if (height)
@@ -253,7 +253,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
 
 #if wxUSE_STATUSBAR
         // status bar
-        if (m_frameStatusBar && m_frameStatusBar->IsShown()) 
+        if (m_frameStatusBar && m_frameStatusBar->IsShown())
             (*height) -= wxSTATUS_HEIGHT;
 #endif // wxUSE_STATUSBAR
 
@@ -443,7 +443,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
                 ww = m_width - 2*m_miniEdge;
                 hh = m_toolBarDetached ? wxPLACE_HOLDER
                                        : m_frameToolBar->m_height;
-                                       
+
                 client_area_y_offset += hh;
             }
 
@@ -485,7 +485,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     }
 #endif // wxUSE_STATUSBAR
 
-    GtkUpdateSize();
+    m_sizeSet = TRUE;
 
     // send size event to frame
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
