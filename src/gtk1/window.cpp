@@ -208,6 +208,7 @@ extern wxCursor   g_globalCursor;
 // inside it
 static wxWindowGTK  *g_captureWindow = (wxWindowGTK*) NULL;
 static bool g_captureWindowHasMouse = FALSE;
+static wxWindowList g_capturedWindows;
 
 /* extern */ wxWindowGTK  *g_focusWindow = (wxWindowGTK*) NULL;
 
@@ -2474,6 +2475,8 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
 wxWindowGTK::~wxWindowGTK()
 {
+    wxASSERT_MSG( g_capturedWindows.IndexOf(this) == wxNOT_FOUND, wxT("trying to destroy window that didn't release focus") );
+
     if (g_focusWindow == this)
         g_focusWindow = NULL;
 
@@ -3751,19 +3754,17 @@ bool wxWindowGTK::SetFont( const wxFont &font )
     return TRUE;
 }
 
-void wxWindowGTK::CaptureMouse()
+static void wxDoCaptureMouse(wxWindowGTK *wnd)
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
-
     GdkWindow *window = (GdkWindow*) NULL;
-    if (m_wxwindow)
-        window = GTK_PIZZA(m_wxwindow)->bin_window;
+    if (wnd->m_wxwindow)
+        window = GTK_PIZZA(wnd->m_wxwindow)->bin_window;
     else
-        window = GetConnectWidget()->window;
+        window = wnd->GetConnectWidget()->window;
 
     wxCHECK_RET( window, _T("CaptureMouse() failed") );
 
-    wxCursor* cursor = & m_cursor;
+    wxCursor* cursor = &wnd->GetCursor();
     if (!cursor->Ok())
         cursor = wxSTANDARD_CURSOR;
 
@@ -3776,27 +3777,54 @@ void wxWindowGTK::CaptureMouse()
                       (GdkWindow *) NULL,
                       cursor->GetCursor(),
                       (guint32)GDK_CURRENT_TIME );
-    g_captureWindow = this;
+    g_captureWindow = wnd;
     g_captureWindowHasMouse = TRUE;
+    wxLogDebug("captured %p", wnd);
 }
 
-void wxWindowGTK::ReleaseMouse()
+static void wxDoReleaseMouse(wxWindowGTK *wnd)
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
-
+    wxLogDebug("trying to release %p", wnd);
     wxCHECK_RET( g_captureWindow, wxT("can't release mouse - not captured") );
 
     GdkWindow *window = (GdkWindow*) NULL;
-    if (m_wxwindow)
-        window = GTK_PIZZA(m_wxwindow)->bin_window;
+    if (wnd->m_wxwindow)
+        window = GTK_PIZZA(wnd->m_wxwindow)->bin_window;
     else
-        window = GetConnectWidget()->window;
+        window = wnd->GetConnectWidget()->window;
 
     if (!window)
         return;
 
     gdk_pointer_ungrab ( (guint32)GDK_CURRENT_TIME );
     g_captureWindow = (wxWindowGTK*) NULL;
+    wxLogDebug("released %p", wnd);
+}
+
+void wxWindowGTK::CaptureMouse()
+{
+     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
+
+    wxLogDebug("CAPTURE %p", this);
+    wxWindowList::Node *last = g_capturedWindows.GetLast();
+    if (last)
+        wxDoReleaseMouse(last->GetData());
+
+     g_capturedWindows.Append(this);
+     wxDoCaptureMouse(this);
+}
+
+void wxWindowGTK::ReleaseMouse()
+{
+    wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
+
+    wxLogDebug("RELEASE %p", this);
+    wxDoReleaseMouse(this);   
+    g_capturedWindows.DeleteObject(this);
+
+    wxWindowList::Node *last = g_capturedWindows.GetLast();
+    if (last)
+        wxDoCaptureMouse(last->GetData());
 }
 
 /* static */
