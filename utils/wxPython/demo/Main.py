@@ -63,7 +63,7 @@ _treeList = [
 
 class wxPythonDemo(wxFrame):
     def __init__(self, parent, id, title):
-        wxFrame.__init__(self, parent, -1, title, size = (725, 550),
+        wxFrame.__init__(self, parent, -1, title, size = (800, 600),
                          style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
 
         self.cwd = os.getcwd()
@@ -185,7 +185,7 @@ class wxPythonDemo(wxFrame):
         if _useSplitter:
             if _useNestedSplitter:
                 splitter2.SplitHorizontally(self.nb, self.log)
-                splitter2.SetSashPosition(360, true)
+                splitter2.SetSashPosition(450, true)
                 splitter2.SetMinimumPaneSize(20)
 
                 splitter.SplitVertically(self.tree, splitter2)

@@ -18,10 +18,14 @@ class TestComboBox(wxPanel):
         wxComboBox(self, 500, "default value", wxPoint(80, 50), wxSize(95, -1),
                    sampleList, wxCB_DROPDOWN)
         EVT_COMBOBOX(self, 500, self.EvtComboBox)
+        EVT_TEXT(self, 500, self.EvtText)
 
 
     def EvtComboBox(self, event):
         self.log.WriteText('EvtComboBox: %s\n' % event.GetString())
+
+    def EvtText(self, event):
+        self.log.WriteText('EvtText: %s\n' % event.GetString())
 
 #---------------------------------------------------------------------------
 

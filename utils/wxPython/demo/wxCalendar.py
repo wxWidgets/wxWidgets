@@ -5,7 +5,7 @@
 # Author:       Lorne White (email: lwhite1@planet.eon.net)
 #
 # Created:
-# Version       0.7 200/03/30
+# Version       0.8 2000/04/16
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -70,6 +70,7 @@ class TestPanel(wxPanel):
 
         self.calend.hide_title = TRUE
         self.calend.HideGrid()
+        self.calend.SetWeekColor('WHITE', 'BLACK')
 
 # display routine
 
@@ -186,6 +187,7 @@ class TestPanel(wxPanel):
         except:
             set_days = [1, 5, 12]
 
+        self.calend.AddSelect([4, 11], 'BLUE', 'WHITE')
         self.calend.SetSelDay(set_days)
         self.calend.Refresh()
 
@@ -257,6 +259,8 @@ class CalenDlg(wxDialog):
         self.calend.SetYear(start_year)
 
         self.calend.HideTitle()
+        self.calend.ShowWeekEnd()
+
         self.ResetDisplay()
 
         self.Connect(self.calend.GetId(), -1, 2100, self.MouseClick)
@@ -303,6 +307,8 @@ class CalenDlg(wxDialog):
         except:
             set_days = [1, 5, 12]
 
+        self.calend.AddSelect([4, 11], 'BLUE', 'WHITE')
+
         self.calend.SetSelDay(set_days)
         self.calend.Refresh()
 
@@ -326,6 +332,9 @@ class CalendFrame(wxFrame):
         self.calend = wxCalendar(self, -1)
         self.calend.SetCurrentDay()
         self.calend.grid_color = 'BLUE'
+        self.calend.SetBusType()
+#        self.calend.ShowWeekEnd()
+
         self.ResetDisplay()
 
         self.Connect(self.calend.GetId(), -1, 2100, self.MouseClick)
@@ -343,6 +352,8 @@ class CalendFrame(wxFrame):
             set_days = test_days[month]
         except:
             set_days = [1, 5, 12]
+
+        self.calend.AddSelect([2, 16], 'GREEN', 'WHITE')
 
         self.calend.SetSelDay(set_days)
         self.calend.Refresh()
@@ -525,20 +536,29 @@ class PrintCalend:
         cal.font = self.font
         cal.bold = self.bold
 
-        cal_size = wxSize(3.0, 2.0)
+        cal_size = wxSize(3.0, 3.0)
         cal.SetSize(cal_size)
 
         year, month = self.year, self.month
+
         x = 1.0
         for i in range(2):
             y = 0.5
             for j in range(3):
                 cal.SetCal(year, month)       # current month
                 cal.SetPos(x, y)
-                cal.DrawCal(DC, self.sel_lst)
+
+                try:
+                    set_days = test_days[month]
+                except:
+                    set_days = [1, 5, 12]
+
+                cal.AddSelect([2, 16], 'GREEN', 'WHITE')
+
+                cal.DrawCal(DC, set_days)
 
                 year, month = self.IncMonth(year, month)
-                y = y + 2.5
+                y = y + 3.5
             x = x + 4.0     # next colum
 
         DC.EndDrawing()
@@ -695,8 +715,9 @@ def runTest(frame, nb, log):
 
 overview = """\
 This control provides a calendar control class for displaying and selecting dates.  In addition, the class is extended and can now be used for printing/previewing.
+Additional features include weekend highlighting and business type Monday-Sunday format.
 
-See example for various methods used to set display month, year, and highlighted dates (different colour).
+See example for various methods used to set display month, year, and highlighted dates (different font and background colours).
 
 by Lorne White
 

@@ -14,18 +14,22 @@ except:
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
-    def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)#, style=wxCLIP_CHILDREN)
+class TestPanel(wxWindow):
+    def __init__(self, parent, log, frame=None):
+        wxWindow.__init__(self, parent, -1)#, style=wxCLIP_CHILDREN)
         self.log = log
         self.current = "http://alldunn.com/"
+        self.frame = frame
+        if frame:
+            self.titleBase = frame.GetTitle()
+
 
         sizer = wxBoxSizer(wxVERTICAL)
         btnSizer = wxBoxSizer(wxHORIZONTAL)
 
         # Make a new class that derives from the WebBrowser class in the
-        # COM module imported above.  This class also drives from wxWindow and
-        # implements the machinery needed to integrate the two things.
+        # COM module imported above.  This class also derives from wxWindow and
+        # implements the machinery needed to integrate the two worlds.
         theClass = MakeActiveXClass(browserModule.WebBrowser,
                                     eventObj = self)
 
@@ -50,24 +54,44 @@ class TestPanel(wxPanel):
 
         self.location = wxComboBox(self, wxNewId(), "", style=wxCB_DROPDOWN)
         EVT_COMBOBOX(self, self.location.GetId(), self.OnLocationSelect)
+        EVT_KEY_UP(self.location, self.OnLocationKey)
+        #EVT_CHAR(self.location, self.IgnoreReturn)
         btnSizer.Add(self.location, 1, wxEXPAND|wxALL, 5)
 
         sizer.Add(btnSizer, 0, wxEXPAND)
         sizer.Add(self.ie, 1, wxEXPAND)
 
         self.ie.Navigate(self.current)
-
+        self.location.Append(self.current)
 
         self.SetSizer(sizer)
         self.SetAutoLayout(true)
 
+
+    def OnSize(self, evt):
+        self.Layout()
 
     def __del__(self):
         self.ie.Cleanup()
         self.ie = None
 
     def OnLocationSelect(self, evt):
-        pass
+        url = self.location.GetStringSelection()
+        self.log.write('OnLocationSelect: %s\n' % url)
+        self.ie.Navigate(url)
+
+    def OnLocationKey(self, evt):
+        if evt.KeyCode() == WXK_RETURN:
+            URL = self.location.GetValue()
+            self.location.Append(URL)
+            self.ie.Navigate(URL)
+        else:
+            evt.Skip()
+
+    def IgnoreReturn(self, evt):
+        print 'IgnoreReturn'
+        if evt.KeyCode() != WXK_RETURN:
+            evt.Skip()
 
     def OnOpenButton(self, event):
         dlg = wxTextEntryDialog(self, "Open Location",
@@ -100,12 +124,22 @@ class TestPanel(wxPanel):
         self.current = URL
         self.location.SetValue(URL)
 
+    def OnTitleChange(self, text):
+        self.log.write('OnTitleChange: %s\n' % text)
+        if self.frame:
+            self.frame.SetTitle(self.titleBase + ' -- ' + text)
+
+    def OnStatusTextChange(self, text):
+        self.log.write('OnStatusTextChange: %s\n' % text)
+        if self.frame:
+            self.frame.SetStatusText(text)
+
 
 #----------------------------------------------------------------------
 # for the demo framework...
 
 def runTest(frame, nb, log):
-    win = TestPanel(nb, log)
+    win = TestPanel(nb, log, frame)
     return win
 
 
@@ -120,7 +154,8 @@ if __name__ == '__main__':
             wxFrame.__init__(self, None, -1, "ActiveX test -- Internet Explorer",
                              size=(640, 480),
                              style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
-            self.tp = TestPanel(self, sys.stdout)
+            self.CreateStatusBar()
+            self.tp = TestPanel(self, sys.stdout, self)
 
         def OnCloseWindow(self, event):
             self.tp.ie.Cleanup()

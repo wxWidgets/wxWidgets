@@ -30,7 +30,13 @@ mouthful!) and wxCalendar has printing support.
 
 Added ActiveXWrapper to the library, and some good demos of it too.
 It works great for embedding a COM (a.k.a OCX, a.k.a Activex) control
-in a window and calling its methods.
+in a window and calling its methods.  It actually creates a new class
+on the fly that derives from wxWindow, the COM CoClass and others
+needed to make it all work.  The resulting class can be instantiated
+just like wxWindow, used in sizers, etc.  It also responds to all COM
+method calls, properties, etc., and if the class or a mix-in has
+matching method names, then the COM events will be propogated back to
+them.
 
 
 
