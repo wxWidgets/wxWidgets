@@ -1457,13 +1457,13 @@ static PyObject *_wrap_new_wxBitmap(PyObject *self, PyObject *args, PyObject *kw
     PyObject * _resultobj;
     wxBitmap * _result;
     wxString * _arg0;
-    wxBitmapType  _arg1;
+    wxBitmapType  _arg1 = (wxBitmapType ) wxBITMAP_TYPE_BMP;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "name","type", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:new_wxBitmap",_kwnames,&_obj0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:new_wxBitmap",_kwnames,&_obj0,&_arg1)) 
         return NULL;
 {
 #if PYTHON_API_VERSION >= 1009
@@ -1607,13 +1607,13 @@ static PyObject *_wrap_wxBitmap_LoadFile(PyObject *self, PyObject *args, PyObjec
     bool  _result;
     wxBitmap * _arg0;
     wxString * _arg1;
-    long  _arg2;
+    wxBitmapType  _arg2 = (wxBitmapType ) wxBITMAP_TYPE_BMP;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","name","flags", NULL };
+    char *_kwnames[] = { "self","name","type", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOl:wxBitmap_LoadFile",_kwnames,&_argo0,&_obj1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxBitmap_LoadFile",_kwnames,&_argo0,&_obj1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1660,7 +1660,7 @@ static PyObject *_wrap_wxBitmap_SaveFile(PyObject *self, PyObject *args, PyObjec
     bool  _result;
     wxBitmap * _arg0;
     wxString * _arg1;
-    int  _arg2;
+    wxBitmapType  _arg2;
     wxPalette * _arg3 = (wxPalette *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;

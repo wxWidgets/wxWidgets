@@ -313,6 +313,32 @@ class wxPyTimer(wxPyTimerPtr):
 
 
 
+class wxStopWatchPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Start(self, *_args, **_kwargs):
+        val = apply(misc2c.wxStopWatch_Start,(self,) + _args, _kwargs)
+        return val
+    def Pause(self, *_args, **_kwargs):
+        val = apply(misc2c.wxStopWatch_Pause,(self,) + _args, _kwargs)
+        return val
+    def Resume(self, *_args, **_kwargs):
+        val = apply(misc2c.wxStopWatch_Resume,(self,) + _args, _kwargs)
+        return val
+    def Time(self, *_args, **_kwargs):
+        val = apply(misc2c.wxStopWatch_Time,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxStopWatch instance at %s>" % (self.this,)
+class wxStopWatch(wxStopWatchPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxStopWatch,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxLogPtr :
     def __init__(self,this):
         self.this = this
@@ -726,6 +752,170 @@ class wxWave(wxWavePtr):
 
 
 
+class wxFileTypeInfoPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def IsValid(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_IsValid,(self,) + _args, _kwargs)
+        return val
+    def SetIcon(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_SetIcon,(self,) + _args, _kwargs)
+        return val
+    def SetShortDesc(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_SetShortDesc,(self,) + _args, _kwargs)
+        return val
+    def GetMimeType(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_GetMimeType,(self,) + _args, _kwargs)
+        return val
+    def GetOpenCommand(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_GetOpenCommand,(self,) + _args, _kwargs)
+        return val
+    def GetPrintCommand(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_GetPrintCommand,(self,) + _args, _kwargs)
+        return val
+    def GetShortDesc(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_GetShortDesc,(self,) + _args, _kwargs)
+        return val
+    def GetDescription(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_GetDescription,(self,) + _args, _kwargs)
+        return val
+    def GetExtensions(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_GetExtensions,(self,) + _args, _kwargs)
+        return val
+    def GetExtensionsCount(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_GetExtensionsCount,(self,) + _args, _kwargs)
+        return val
+    def GetIconFile(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_GetIconFile,(self,) + _args, _kwargs)
+        return val
+    def GetIconIndex(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileTypeInfo_GetIconIndex,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxFileTypeInfo instance at %s>" % (self.this,)
+class wxFileTypeInfo(wxFileTypeInfoPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxFileTypeInfo,_args,_kwargs)
+        self.thisown = 1
+
+
+
+def wxFileTypeInfoSequence(*_args,**_kwargs):
+    val = wxFileTypeInfoPtr(apply(misc2c.new_wxFileTypeInfoSequence,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+def wxNullFileTypeInfo(*_args,**_kwargs):
+    val = wxFileTypeInfoPtr(apply(misc2c.new_wxNullFileTypeInfo,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+
+class wxFileTypePtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetMimeType(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_GetMimeType,(self,) + _args, _kwargs)
+        return val
+    def GetMimeTypes(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_GetMimeTypes,(self,) + _args, _kwargs)
+        return val
+    def GetExtensions(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_GetExtensions,(self,) + _args, _kwargs)
+        return val
+    def GetIcon(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_GetIcon,(self,) + _args, _kwargs)
+        if val: val = wxIconPtr(val) ; val.thisown = 1
+        return val
+    def GetIconInfo(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_GetIconInfo,(self,) + _args, _kwargs)
+        return val
+    def GetDescription(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_GetDescription,(self,) + _args, _kwargs)
+        return val
+    def GetOpenCommand(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_GetOpenCommand,(self,) + _args, _kwargs)
+        return val
+    def GetPrintCommand(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_GetPrintCommand,(self,) + _args, _kwargs)
+        return val
+    def GetAllCommands(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_GetAllCommands,(self,) + _args, _kwargs)
+        return val
+    def SetCommand(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_SetCommand,(self,) + _args, _kwargs)
+        return val
+    def SetDefaultIcon(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_SetDefaultIcon,(self,) + _args, _kwargs)
+        return val
+    def Unassociate(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileType_Unassociate,(self,) + _args, _kwargs)
+        return val
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxFileType(self)
+    def __repr__(self):
+        return "<C wxFileType instance at %s>" % (self.this,)
+class wxFileType(wxFileTypePtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxFileType,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxMimeTypesManagerPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Initialize(self, *_args, **_kwargs):
+        val = apply(misc2c.wxMimeTypesManager_Initialize,(self,) + _args, _kwargs)
+        return val
+    def ClearData(self, *_args, **_kwargs):
+        val = apply(misc2c.wxMimeTypesManager_ClearData,(self,) + _args, _kwargs)
+        return val
+    def GetFileTypeFromExtension(self, *_args, **_kwargs):
+        val = apply(misc2c.wxMimeTypesManager_GetFileTypeFromExtension,(self,) + _args, _kwargs)
+        if val: val = wxFileTypePtr(val) ; val.thisown = 1
+        return val
+    def GetFileTypeFromMimeType(self, *_args, **_kwargs):
+        val = apply(misc2c.wxMimeTypesManager_GetFileTypeFromMimeType,(self,) + _args, _kwargs)
+        if val: val = wxFileTypePtr(val) ; val.thisown = 1
+        return val
+    def ReadMailcap(self, *_args, **_kwargs):
+        val = apply(misc2c.wxMimeTypesManager_ReadMailcap,(self,) + _args, _kwargs)
+        return val
+    def ReadMimeTypes(self, *_args, **_kwargs):
+        val = apply(misc2c.wxMimeTypesManager_ReadMimeTypes,(self,) + _args, _kwargs)
+        return val
+    def EnumAllFileTypes(self, *_args, **_kwargs):
+        val = apply(misc2c.wxMimeTypesManager_EnumAllFileTypes,(self,) + _args, _kwargs)
+        return val
+    def AddFallback(self, *_args, **_kwargs):
+        val = apply(misc2c.wxMimeTypesManager_AddFallback,(self,) + _args, _kwargs)
+        return val
+    def Associate(self, *_args, **_kwargs):
+        val = apply(misc2c.wxMimeTypesManager_Associate,(self,) + _args, _kwargs)
+        if val: val = wxFileTypePtr(val) ; val.thisown = 1
+        return val
+    def Unassociate(self, *_args, **_kwargs):
+        val = apply(misc2c.wxMimeTypesManager_Unassociate,(self,) + _args, _kwargs)
+        return val
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxMimeTypesManager(self)
+    def __repr__(self):
+        return "<C wxMimeTypesManager instance at %s>" % (self.this,)
+class wxMimeTypesManager(wxMimeTypesManagerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxMimeTypesManager,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -929,6 +1119,10 @@ wxLog_GetTraceMask = misc2c.wxLog_GetTraceMask
 
 wxLog_IsAllowedTraceMask = misc2c.wxLog_IsAllowedTraceMask
 
+wxFileType_ExpandCommand = misc2c.wxFileType_ExpandCommand
+
+wxMimeTypesManager_IsOfType = misc2c.wxMimeTypesManager_IsOfType
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------
@@ -1030,3 +1224,10 @@ wxLOG_Trace = misc2c.wxLOG_Trace
 wxLOG_Progress = misc2c.wxLOG_Progress
 wxLOG_User = misc2c.wxLOG_User
 wxEVT_END_PROCESS = misc2c.wxEVT_END_PROCESS
+wxMAILCAP_STANDARD = misc2c.wxMAILCAP_STANDARD
+wxMAILCAP_NETSCAPE = misc2c.wxMAILCAP_NETSCAPE
+wxMAILCAP_KDE = misc2c.wxMAILCAP_KDE
+wxMAILCAP_GNOME = misc2c.wxMAILCAP_GNOME
+wxMAILCAP_ALL = misc2c.wxMAILCAP_ALL
+cvar = misc2c.cvar
+wxTheMimeTypesManager = wxMimeTypesManagerPtr(misc2c.cvar.wxTheMimeTypesManager)
