@@ -1770,7 +1770,15 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         dc.SetBrush(wxBrush(colBg, wxSOLID));
     }
 
-    dc.DrawRectangle( item->GetX()-2, item->GetY(), item->GetWidth()+2, total_h );
+    if (item->IsSelected() && image != NO_IMAGE)
+    {
+        // If it's selected, and there's an image, then we should
+        // take care to leave the area under the image painted in the
+        // background colour.
+        dc.DrawRectangle( item->GetX() + image_w - 2, item->GetY(), item->GetWidth() - image_w + 2, total_h );
+    }
+    else
+        dc.DrawRectangle( item->GetX()-2, item->GetY(), item->GetWidth()+2, total_h );
 
     if ( image != NO_IMAGE )
     {
