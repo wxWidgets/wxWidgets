@@ -70,6 +70,7 @@ wxHtmlPRECell::wxHtmlPRECell(const wxString& s, wxDC& dc) : wxHtmlCell()
     while (tokenizer.HasMoreTokens()) {
         if (i % 10 == 0) m_Text = (wxString**) realloc(m_Text, sizeof(wxString*) * (i + 10));
         tmp = tokenizer.NextToken();
+        tmp.Replace(wxT("&copy;"), wxT("(c)"), TRUE);
         tmp.Replace(wxT("&nbsp;"), wxT(" "), TRUE);
         tmp.Replace(wxT("&quot;"), wxT("\""), TRUE);
         tmp.Replace(wxT("&lt;"), wxT("<"), TRUE);
