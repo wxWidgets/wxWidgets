@@ -155,7 +155,7 @@ class CalDraw:
 
         if self.outer_border is True:
             rect = wxRect(self.cx_st, self.cy_st, self.sizew, self.sizeh)  # full display window area
-            self.DC.DrawRectangle(rect.x, rect.y, rect.width, rect.height)
+            self.DC.DrawRectangleRect(rect)
 
     def DrawNumVal(self):
         self.DrawNum()
@@ -226,7 +226,7 @@ class CalDraw:
 
         tw,th = self.DC.GetTextExtent(month)
         adjust = self.cx_st + (self.sizew-tw)/2
-        self.DC.DrawText(month, adjust, self.cy_st + th)
+        self.DC.DrawText(month, (adjust, self.cy_st + th))
 
         year = str(self.year)
         tw,th = self.DC.GetTextExtent(year)
@@ -236,7 +236,7 @@ class CalDraw:
 
         f = wxFont(sizef, self.font, wxNORMAL, self.bold)
         self.DC.SetFont(f)
-        self.DC.DrawText(year, self.cx_st + adjust, self.cy_st + th)
+        self.DC.DrawText(year, (self.cx_st + adjust, self.cy_st + th))
 
     def DrawWeek(self):     # draw the week days
         width = self.gridx[1]-self.gridx[0]
@@ -265,7 +265,7 @@ class CalDraw:
 
         brush = wxBrush(wxNamedColour(self.week_color), wxSOLID)
         self.DC.SetBrush(brush)
-#        self.DC.DrawRectangle(self.gridx[0], self.gridy[0], rect_w+1, height)
+#        self.DC.DrawRectangle((self.gridx[0], self.gridy[0]), (rect_w+1, height))
 
         if self.cal_type == "NORMAL":
             cal_days = CalDays
@@ -282,8 +282,8 @@ class CalDraw:
 
             x = self.gridx[cnt_x]
             y = self.gridy[cnt_y]
-            self.DC.DrawRectangle(self.gridx[cnt_x], self.gridy[0], width+1, height)
-            self.DC.DrawText(day, x+diffx, y+diffy)
+            self.DC.DrawRectangle((self.gridx[cnt_x], self.gridy[0]), (width+1, height))
+            self.DC.DrawText(day, (x+diffx, y+diffy))
             cnt_x = cnt_x + 1
 
     def DrawNum(self):      # draw the day numbers
@@ -337,7 +337,7 @@ class CalDraw:
 
             adj_v = adj_v + self.num_indent_vert
 
-            self.DC.DrawText(val, x+adj_h, y+adj_v)
+            self.DC.DrawText(val, (x+adj_h, y+adj_v))
             if cnt_x < 6:
                 cnt_x = cnt_x + 1
             else:
@@ -367,7 +367,7 @@ class CalDraw:
                 self.DC.SetPen(wxPen(wxNamedColour(self.back_color), 0))
             nkey = key + self.st_pos -1
             rect = self.rg[nkey]
-            self.DC.DrawRectangle(rect.x, rect.y, rect.width+1, rect.height+1)
+            self.DC.DrawRectangle((rect.x, rect.y), (rect.width+1, rect.height+1))
 
     def DrawGrid(self):         # calculate and draw the grid lines
         self.DC.SetPen(wxPen(wxNamedColour(self.grid_color), 0))
@@ -384,7 +384,7 @@ class CalDraw:
         y2 = y1 + self.cheight
         for i in range(8):
             if self.hide_grid is False:
-                self.DC.DrawLine(x1, y1, x1, y2)
+                self.DC.DrawLine((x1, y1), (x1, y2))
             self.gridx.append(x1)
             x1 = x1 + self.dl_w
 
@@ -394,7 +394,7 @@ class CalDraw:
         x2 = x1 + self.cwidth
         for i in range(8):
             if self.hide_grid is False:
-                self.DC.DrawLine(x1, y1, x2, y1)
+                self.DC.DrawLine((x1, y1), (x2, y1))
             self.gridy.append(y1)
             if i == 0:
                 y1 = y1 + self.dl_th
@@ -439,7 +439,7 @@ class wxCalendar(wxWindow):
 
         self.select_list = []
 
-        self.SetBackgroundColour(wxNamedColor(self.back_color))
+        self.SetBackgroundColour(wxNamedColour(self.back_color))
         self.Connect(-1, -1, wxEVT_LEFT_DOWN, self.OnLeftEvent)
         self.Connect(-1, -1, wxEVT_LEFT_DCLICK, self.OnLeftDEvent)
         self.Connect(-1, -1, wxEVT_RIGHT_DOWN, self.OnRightEvent)
@@ -671,7 +671,7 @@ class wxCalendar(wxWindow):
         DC.SetPen(wxPen(wxNamedColour(color), width))
 
         rect = self.rg[key]
-        DC.DrawRectangle(rect.x, rect.y, rect.width+1, rect.height+1)
+        DC.DrawRectangle((rect.x, rect.y), (rect.width+1, rect.height+1))
 
         DC.EndDrawing()
 
@@ -696,7 +696,7 @@ class wxCalendar(wxWindow):
 
 class CalenDlg(wxDialog):
     def __init__(self, parent, month=None, day = None, year=None):
-        wxDialog.__init__(self, parent, -1, "Event Calendar", wxPyDefaultPosition, wxSize(280, 360))
+        wxDialog.__init__(self, parent, -1, "Event Calendar", wxDefaultPosition, wxSize(280, 360))
 
     # set the calendar and attributes
         self.calend = wxCalendar(self, -1, wxPoint(20, 60), wxSize(240, 200))

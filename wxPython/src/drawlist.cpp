@@ -274,7 +274,7 @@ PyObject* wxPyDrawTextList(wxDC& dc, PyObject* textList, PyObject* pyPoints, PyO
             else {
                 obj = PySequence_GetItem(foregroundList, i);
             }
-            if (! wxPyConvertSwigPtr(obj, (void **) &color, wxT("wxColour_p"))) {
+            if (! wxPyConvertSwigPtr(obj, (void **) &color, wxT("wxColour"))) {
                 if (!isFastForeground)
                     Py_DECREF(obj);
                 goto err2;

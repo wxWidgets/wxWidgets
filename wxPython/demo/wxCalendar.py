@@ -612,17 +612,6 @@ def MessageDlg(self, message, type = 'Message'):
 
 #---------------------------------------------------------------------------
 
-def main():
-    app = MyApp(0)
-    app.MainLoop()
-
-
-if __name__ == '__main__':
-    main()
-
-
-#---------------------------------------------------------------------------
-
 def runTest(frame, nb, log):
     win = TestPanel(nb, log, frame)
     return win
@@ -640,3 +629,12 @@ See example for various methods used to set display month, year, and highlighted
 by Lorne White
 
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

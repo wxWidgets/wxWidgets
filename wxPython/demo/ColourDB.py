@@ -47,7 +47,7 @@ class TestWindow(wxScrolledWindow):
         while x < sz.width:
             y = -dy
             while y < sz.height:
-                dc.DrawBitmap(self.bg_bmp, x, y)
+                dc.DrawBitmap(self.bg_bmp, (x, y))
                 y = y + h
             x = x + w
 
@@ -89,11 +89,12 @@ class TestWindow(wxScrolledWindow):
         for line in range(max(0,start), min(stop,numColours)):
             clr = colours[line]
             y = (line+1) * self.lineHeight + 2
-            dc.DrawText(clr, self.cellWidth, y)
+            dc.DrawText(clr, (self.cellWidth, y))
 
             brush = wxBrush(clr, wxSOLID)
             dc.SetBrush(brush)
-            dc.DrawRectangle(12 * self.cellWidth, y, 6 * self.cellWidth, self.textHeight)
+            dc.DrawRectangle((12 * self.cellWidth, y),
+                             (6 * self.cellWidth, self.textHeight))
 
         dc.EndDrawing()
 

@@ -376,7 +376,7 @@ public:
 class wxPreviewCanvas: public wxScrolledWindow
 {
 public:
-    %addtofunc wxPreviewCanvas   "self._self._setOORInfo(self)"
+    %addtofunc wxPreviewCanvas   "self._setOORInfo(self)"
 
     wxPreviewCanvas(wxPrintPreview *preview,
                     wxWindow *parent,
@@ -389,7 +389,7 @@ public:
 
 class wxPreviewFrame : public wxFrame {
 public:
-    %addtofunc wxPreviewFrame   "self._self._setOORInfo(self)"
+    %addtofunc wxPreviewFrame   "self._setOORInfo(self)"
 
     wxPreviewFrame(wxPrintPreview* preview, wxFrame* parent, const wxString& title,
                    const wxPoint& pos = wxDefaultPosition,
@@ -429,7 +429,7 @@ enum {
 class wxPreviewControlBar: public wxPanel
 {
 public:
-    %addtofunc wxPreviewControlBar   "self._self._setOORInfo(self)"
+    %addtofunc wxPreviewControlBar   "self._setOORInfo(self)"
 
     wxPreviewControlBar(wxPrintPreview *preview,
                         long buttons,

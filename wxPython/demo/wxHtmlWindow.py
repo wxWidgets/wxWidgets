@@ -7,6 +7,8 @@ import wxPython.lib.wxpTag
 
 from Main import opj
 
+##wxTrap()
+
 #----------------------------------------------------------------------
 
 # This shows how to catch the OnLinkClicked non-event.  (It's a virtual

@@ -64,6 +64,7 @@ public:
     virtual long GetInsertionPoint() const;
     virtual long GetLastPosition() const;
     virtual void Replace(long from, long to, const wxString& value);
+    void SetSelection(int n);
     %name(SetMark) virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
 

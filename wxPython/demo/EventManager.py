@@ -52,17 +52,17 @@ class TestPanel(wxPanel):
         message2 = wxStaticText(self, -1, txt)
         message2.SetFont(f1)
 
-        targetPanel = Tile(self, log, bgColor=wxColor(80,10,10), active=0)
+        targetPanel = Tile(self, log, bgColor=wxColour(80,10,10), active=0)
         buttonPanel = wxPanel(self ,-1)
         sizer       = wxBoxSizer(wxHORIZONTAL)
         target      = targetPanel.tile
 
-        sizer.Add(0,0,1)
+        sizer.Add((0,0), 1)
         for factor in [0.2, 0.3, 0.4, 0.5, 0.6, 0.7]:
             sizer.Add(Tile(buttonPanel, log, factor-0.05, target), 0, wxALIGN_CENTER)
-            sizer.Add(0,0,1)
+            sizer.Add((0,0),1)
             sizer.Add(Tile(buttonPanel, log, factor,      target), 0, wxALIGN_CENTER)
-            sizer.Add(0,0,1)
+            sizer.Add((0,0),1)
 
         buttonPanel.SetAutoLayout(1)
         buttonPanel.SetSizer(sizer)
@@ -88,9 +88,9 @@ class Tile(wxPanel):
     its border color in response to certain mouse
     events over its contained 'InnerTile'.
     """
-    normal = wxColor(150,150,150)
-    active = wxColor(250,245,245)
-    hover  = wxColor(210,220,210)
+    normal = wxColour(150,150,150)
+    active = wxColour(250,245,245)
+    hover  = wxColour(210,220,210)
 
     def __init__(self, parent, log, factor=1, thingToWatch=None, bgColor=None, active=1, size=(38,38), borderWidth=3):
         wxPanel.__init__(self, parent, -1, size=size, style=wxCLIP_CHILDREN)
@@ -128,10 +128,10 @@ class Tile(wxPanel):
 
 
 class InnerTile(wxPanel):
-    IDLE_COLOR  = wxColor( 80, 10, 10)
-    START_COLOR = wxColor(200, 70, 50)
-    FINAL_COLOR = wxColor( 20, 80,240)
-    OFF_COLOR   = wxColor(185,190,185)
+    IDLE_COLOR  = wxColour( 80, 10, 10)
+    START_COLOR = wxColour(200, 70, 50)
+    FINAL_COLOR = wxColour( 20, 80,240)
+    OFF_COLOR   = wxColour(185,190,185)
     # Some pre-computation.
     DELTAS            = map(lambda a,b: b-a, START_COLOR.Get(), FINAL_COLOR.Get())
     START_COLOR_TUPLE = START_COLOR.Get()
@@ -188,7 +188,7 @@ class InnerTile(wxPanel):
         r = InnerTile.START_COLOR_TUPLE[0] + (InnerTile.DELTAS[0] * percent)
         g = InnerTile.START_COLOR_TUPLE[1] + (InnerTile.DELTAS[1] * percent)
         b = InnerTile.START_COLOR_TUPLE[2] + (InnerTile.DELTAS[2] * percent)
-        self.setColor(wxColor(int(r), int(g), int(b)))
+        self.setColor(wxColour(int(r), int(g), int(b)))
 
 
 

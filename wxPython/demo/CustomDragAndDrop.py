@@ -39,7 +39,7 @@ class DoodlePad(wxWindow):
         dc.SetPen(wxPen(wxBLUE, 3))
         for line in self.lines:
             for coords in line:
-                apply(dc.DrawLine, coords)
+                dc.DrawLineXY(*coords)
         dc.EndDrawing()
 
 
@@ -71,7 +71,7 @@ class DoodlePad(wxWindow):
             dc.SetPen(wxPen(wxBLUE, 3))
             coords = (self.x, self.y) + event.GetPositionTuple()
             self.curLine.append(coords)
-            apply(dc.DrawLine, coords)
+            dc.DrawLineXY(*coords)
             self.x, self.y = event.GetPositionTuple()
             dc.EndDrawing()
 
@@ -197,7 +197,7 @@ class DoodleViewer(wxWindow):
         dc.SetPen(wxPen(wxRED, 3))
         for line in self.lines:
             for coords in line:
-                apply(dc.DrawLine, coords)
+                dc.DrawLineXY(*coords)
         dc.EndDrawing()
 
 #----------------------------------------------------------------------
@@ -239,7 +239,7 @@ class CustomDnDPanel(wxPanel):
         rbox.Add(rb2)
         box.Add(text1, 0, wxALL, 10)
         box.Add(rbox, 0, wxALIGN_CENTER)
-        box.Add(10,90)
+        box.Add((10,90))
         box.Add(text2, 0, wxALL, 10)
 
         sizer.Add(box)

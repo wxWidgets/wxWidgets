@@ -29,9 +29,9 @@ class DragShape:
             memDC = wxMemoryDC()
             memDC.SelectObject(self.bmp)
 
-            dc.Blit(self.pos.x, self.pos.y,
-                    self.bmp.GetWidth(), self.bmp.GetHeight(),
-                    memDC, 0, 0, op, True)
+            dc.Blit((self.pos.x, self.pos.y),
+                    (self.bmp.GetWidth(), self.bmp.GetHeight()),
+                    memDC, (0, 0), op, True)
 
             return True
         else:
@@ -74,7 +74,7 @@ class DragCanvas(wxScrolledWindow):
         dc.Clear()
         dc.SetTextForeground(wxRED)
         dc.SetFont(font)
-        dc.DrawText(text, 0, 0)
+        dc.DrawText(text, (0, 0))
         dc.SelectObject(wxNullBitmap)
         mask = wxMaskColour(bmp, bg_colour)
         bmp.SetMask(mask)
@@ -117,7 +117,7 @@ class DragCanvas(wxScrolledWindow):
         while x < sz.width:
             y = 0
             while y < sz.height:
-                dc.DrawBitmap(self.bg_bmp, x, y)
+                dc.DrawBitmap(self.bg_bmp, (x, y))
                 y = y + h
             x = x + w
 

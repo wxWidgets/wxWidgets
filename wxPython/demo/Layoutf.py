@@ -11,15 +11,15 @@ class TestLayoutf(wxPanel):
         self.SetAutoLayout(True)
         EVT_BUTTON(self, 100, self.OnButton)
 
-        self.panelA = wxWindow(self, -1, wxPyDefaultPosition, wxPyDefaultSize, wxSIMPLE_BORDER)
+        self.panelA = wxWindow(self, -1, style=wxSIMPLE_BORDER)
         self.panelA.SetBackgroundColour(wxBLUE)
         self.panelA.SetConstraints(Layoutf('t=t10#1;l=l10#1;b=b10#1;r%r50#1',(self,)))
 
-        self.panelB = wxWindow(self, -1, wxPyDefaultPosition, wxPyDefaultSize, wxSIMPLE_BORDER)
+        self.panelB = wxWindow(self, -1, style=wxSIMPLE_BORDER)
         self.panelB.SetBackgroundColour(wxRED)
         self.panelB.SetConstraints(Layoutf('t=t10#1;r=r10#1;b%b30#1;l>10#2', (self,self.panelA)))
 
-        self.panelC = wxWindow(self, -1, wxPyDefaultPosition, wxPyDefaultSize, wxSIMPLE_BORDER)
+        self.panelC = wxWindow(self, -1, style=wxSIMPLE_BORDER)
         self.panelC.SetBackgroundColour(wxWHITE)
         self.panelC.SetConstraints(Layoutf('t_10#3;r=r10#1;b=b10#1;l>10#2', (self,self.panelA,self.panelB)))
 
@@ -29,7 +29,7 @@ class TestLayoutf(wxPanel):
         b = wxButton(self.panelB, 100, ' Panel B ')
         b.SetConstraints(Layoutf('t=t2#1;r=r4#1;h*;w*', (self.panelB,)))
 
-        self.panelD = wxWindow(self.panelC, -1, wxPyDefaultPosition, wxPyDefaultSize, wxSIMPLE_BORDER)
+        self.panelD = wxWindow(self.panelC, -1, style=wxSIMPLE_BORDER)
         self.panelD.SetBackgroundColour(wxGREEN)
         self.panelD.SetConstraints(Layoutf('b%h50#1;r%w50#1;h=h#2;w=w#2', (self.panelC, b)))
 

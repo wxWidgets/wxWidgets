@@ -762,13 +762,13 @@ def DLG_PNT(win, point_or_x, y=None):
     if y is None:
         return win.ConvertDialogPointToPixels(point_or_x)
     else:
-        return win.ConvertDialogPointToPixels(wxPoint(point_or_x, y))
+        return win.ConvertDialogPointToPixels(wx.Point(point_or_x, y))
 
 def DLG_SZE(win, size_width, height=None):
     if height is None:
         return win.ConvertDialogSizeToPixels(size_width)
     else:
-        return win.ConvertDialogSizeToPixels(wxSize(size_width, height))
+        return win.ConvertDialogSizeToPixels(wx.Size(size_width, height))
 }
 
 

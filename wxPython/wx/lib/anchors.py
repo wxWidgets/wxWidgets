@@ -67,12 +67,12 @@ class LayoutAnchors(wxLayoutConstraints):
         self.setConstraintSides(self.left, wxLeft, left,
                                 self.right, wxRight, right,
                                 self.width, wxWidth, self.centreX,
-                                cPos.x, cSize.x, pSize.x, parent)
+                                cPos.x, cSize.width, pSize.width, parent)
 
         self.setConstraintSides(self.top, wxTop, top,
                                 self.bottom, wxBottom, bottom,
                                 self.height, wxHeight, self.centreY,
-                                cPos.y, cSize.y, pSize.y, parent)
+                                cPos.y, cSize.height, pSize.height, parent)
 
     def setConstraintSides(self, side1, side1Edge, side1Anchor,
                                  side2, side2Edge, side2Anchor,

@@ -81,8 +81,8 @@ class TestPanel( wxScrolledPanel ):
         self.target_ctrl = wxTimeCtrl( self, -1, name="new" )
 
         grid2 = wxFlexGridSizer( 0, 2, 0, 0 )
-        grid2.Add( 20, 0, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid2.Add( 20, 0, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid2.Add( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
+        grid2.Add( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
 
         grid2.Add( self.set_bounds, 0, wxALIGN_LEFT|wxALL, 5 )
         grid3 = wxFlexGridSizer( 0, 2, 5, 5 )
@@ -93,16 +93,16 @@ class TestPanel( wxScrolledPanel ):
         grid2.Add(grid3, 0, wxALIGN_LEFT )
 
         grid2.Add( self.limit_check, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid2.Add( 20, 0, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid2.Add( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
 
-        grid2.Add( 20, 0, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid2.Add( 20, 0, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid2.Add( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
+        grid2.Add( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
         grid2.Add( label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
         grid2.Add( self.target_ctrl, 0, wxALIGN_LEFT|wxALL, 5 )
         boundsbox.Add(grid2, 0, wxALIGN_CENTER|wxEXPAND|wxALL, 5)
 
         vbox = wxBoxSizer( wxVERTICAL )
-        vbox.AddSpacer(20, 20)
+        vbox.Add( (20, 20) )
         vbox.Add( hbox, 0, wxALIGN_LEFT|wxALL, 5)
         vbox.Add( boundsbox, 0, wxALIGN_LEFT|wxALL, 5 )
 

@@ -121,7 +121,9 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyDropTarget, wxDropTarget, OnDrop);
 %name(DropTarget) class wxPyDropTarget // : public wxDropTarget
 {
 public:
-    %addtofunc wxPyDropTarget "if args: args[1].thisown = 0; self._setCallbackInfo(self, DropTarget)"
+    %addtofunc wxPyDropTarget
+       "if args: args[0].thisown = 0;
+        self._setCallbackInfo(self, DropTarget)"
 
     wxPyDropTarget(wxDataObject *dataObject = NULL);
     void _setCallbackInfo(PyObject* self, PyObject* _class);

@@ -1,6 +1,5 @@
 
 from wxPython.wx import *
-from wxPython.help import *
 
 #----------------------------------------------------------------------
 # We first have to set an application-wide help provider.  Normally you
@@ -27,25 +26,25 @@ class TestPanel(wxPanel):
         s = wxBoxSizer(wxHORIZONTAL)
         s.Add(cBtn, 0, wxALL, 5)
         s.Add(cBtnText, 0, wxALL, 5)
-        sizer.Add(20,20)
+        sizer.Add((20,20))
         sizer.Add(s)
 
         text = wxTextCtrl(self, -1, "Each sub-window can have its own help message",
                           size=(240, 60), style = wxTE_MULTILINE)
         text.SetHelpText("This is my very own help message.  This is a really long long long long long long long long long long long long long long long long long long long long message!")
-        sizer.Add(20,20)
+        sizer.Add((20,20))
         sizer.Add(text)
 
         text = wxTextCtrl(self, -1, "You can also intercept the help event if you like.  Watch the log window when you click here...",
                           size=(240, 60), style = wxTE_MULTILINE)
         text.SetHelpText("Yet another context help message.")
-        sizer.Add(20,20)
+        sizer.Add((20,20))
         sizer.Add(text)
         EVT_HELP(text, text.GetId(), self.OnCtxHelp)
 
         text = wxTextCtrl(self, -1, "This one displays the tip itself...",
                           size=(240, 60), style = wxTE_MULTILINE)
-        sizer.Add(20,20)
+        sizer.Add((20,20))
         sizer.Add(text)
         EVT_HELP(text, text.GetId(), self.OnCtxHelp2)
 

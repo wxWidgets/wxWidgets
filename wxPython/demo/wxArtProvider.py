@@ -126,9 +126,9 @@ class TestPanel(wxPanel):
         fgs.AddWindow(cb, 0, wxALIGN_CENTRE|wxALL, 5)
         EVT_CHECKBOX(self, cb.GetId(), self.OnUseCustom)
 
-        fgs.AddSpacer(10, 10, 0, wxALIGN_CENTRE|wxALL, 5)
-        fgs.AddSpacer(10, 10, 0, wxALIGN_CENTRE|wxALL, 5)
-        fgs.AddSpacer(10, 10, 0, wxALIGN_CENTRE|wxALL, 5)
+        fgs.Add((10, 10), 0, wxALIGN_CENTRE|wxALL, 5)
+        fgs.Add((10, 10), 0, wxALIGN_CENTRE|wxALL, 5)
+        fgs.Add((10, 10), 0, wxALIGN_CENTRE|wxALL, 5)
 
         box = wxBoxSizer(wxVERTICAL)
         bmp = wxEmptyBitmap(16,16)

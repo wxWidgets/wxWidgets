@@ -85,7 +85,7 @@ class RowColSizer(wxPySizer):
         assert row != -1, "Row must be specified"
         assert col != -1, "Column must be specified"
 
-        wxPySizer.AddSpacer(self, width, height, option, flag, border,
+        wxPySizer.AddSpacer(self, (width, height), option, flag, border,
                             userData=(row, col, row+rowspan, col+colspan))
 
     #--------------------------------------------------

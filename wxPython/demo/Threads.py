@@ -98,18 +98,18 @@ class GraphWindow(wxWindow):
         dc.SetBackground(wxBrush(self.GetBackgroundColour()))
         dc.Clear()
         dc.SetPen(wxPen(wxBLACK, 3, wxSOLID))
-        dc.DrawLine(self.linePos, 0, self.linePos, size.height-10)
+        dc.DrawLine((self.linePos, 0), (self.linePos, size.height-10))
 
         bh = ypos = self.barHeight
         for x in range(len(self.values)):
             label, val = self.values[x]
-            dc.DrawText(label, 5, ypos)
+            dc.DrawText(label, (5, ypos))
 
             if val:
                 color = self.colors[ x % len(self.colors) ]
                 dc.SetPen(wxPen(color))
                 dc.SetBrush(wxBrush(color))
-                dc.DrawRectangle(self.linePos+3, ypos, val, bh)
+                dc.DrawRectangle((self.linePos+3, ypos), (val, bh))
 
             ypos = ypos + 2*bh
             if ypos > size.height-10:
@@ -125,7 +125,7 @@ class GraphWindow(wxWindow):
 
         wdc = wxPaintDC(self)
         wdc.BeginDrawing()
-        wdc.Blit(0,0, size.width, size.height, dc, 0,0)
+        wdc.Blit((0,0), size, dc, (0,0))
         wdc.EndDrawing()
 
         dc.SelectObject(wxNullBitmap)

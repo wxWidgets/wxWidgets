@@ -239,7 +239,7 @@ value to fall within the current bounds.
 </body></html>
 """
 
-import string, copy
+import string, copy, types
 from wxPython.wx import *
 from wxPython.tools.dbg import Logger
 from wxPython.lib.maskededit import wxMaskedTextCtrl, Field

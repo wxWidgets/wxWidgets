@@ -65,17 +65,17 @@ class TestMaskWindow(wxScrolledWindow):
         # make an interesting background...
         dc.SetPen(wxMEDIUM_GREY_PEN)
         for i in range(100):
-            dc.DrawLine(0,i*10,i*10,0)
+            dc.DrawLine((0,i*10), (i*10,0))
 
         # draw raw image, mask, and masked images
-        dc.DrawText('original image', 0,0)
-        dc.DrawBitmap(self.bmp_nomask, 0,20, 0)
-        dc.DrawText('with colour mask', 0,100)
-        dc.DrawBitmap(self.bmp_withcolourmask, 0,120, 1)
-        dc.DrawText('the mask image', 0,200)
-        dc.DrawBitmap(self.bmp_themask, 0,220, 0)
-        dc.DrawText('masked image', 0,300)
-        dc.DrawBitmap(self.bmp_withmask, 0,320, 1)
+        dc.DrawText('original image', (0,0))
+        dc.DrawBitmap(self.bmp_nomask, (0,20), 0)
+        dc.DrawText('with colour mask', (0,100))
+        dc.DrawBitmap(self.bmp_withcolourmask, (0,120), 1)
+        dc.DrawText('the mask image', (0,200))
+        dc.DrawBitmap(self.bmp_themask, (0,220), 0)
+        dc.DrawText('masked image', (0,300))
+        dc.DrawBitmap(self.bmp_withmask, (0,320), 1)
 
         cx,cy = self.bmp_themask.GetWidth(), self.bmp_themask.GetHeight()
 
@@ -84,9 +84,9 @@ class TestMaskWindow(wxScrolledWindow):
         i = 0
         for text, code in logicList:
             x,y = 120+150*(i%4), 20+100*(i/4)
-            dc.DrawText(text, x, y-20)
+            dc.DrawText(text, (x, y-20))
             mdc.SelectObject(self.bmp_withcolourmask)
-            dc.Blit(x,y, cx,cy, mdc, 0,0, code, True)
+            dc.Blit((x,y), (cx,cy), mdc, (0,0), code, True)
             i = i + 1
 
 

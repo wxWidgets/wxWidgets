@@ -23,7 +23,7 @@ class TestPanel(wxScrolledPanel):
         desc.SetForegroundColour("Blue")
         vbox.Add(desc, 0, wxALIGN_LEFT|wxALL, 5)
         vbox.Add(wxStaticLine(self, -1, size=(1024,-1)), 0, wxALL, 5)
-        vbox.AddSpacer(20,20)
+        vbox.Add((20,20))
 
         words = text.split()
 
@@ -71,16 +71,16 @@ class TestPanel(wxScrolledPanel):
         panel3.SetupScrolling()
 
         hbox = wxBoxSizer(wxHORIZONTAL)
-        hbox.AddSpacer(20,20)
+        hbox.Add((20,20))
         hbox.Add(panel1, 0)
-        hbox.AddSpacer(40, 10)
+        hbox.Add((40, 10))
 
         vbox2 = wxBoxSizer(wxVERTICAL)
         vbox2.Add(panel2, 0)
-        vbox2.AddSpacer(20, 50)
+        vbox2.Add((20, 50))
 
         vbox2.Add(panel3, 0)
-        vbox2.AddSpacer(20, 10)
+        vbox2.Add((20, 10))
         hbox.Add(vbox2)
 
         vbox.AddSizer(hbox, 0)

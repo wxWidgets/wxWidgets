@@ -42,15 +42,15 @@ class TestPanel(wxPanel):
         text.SetForegroundColour(wxBLUE)
         outsideSizer.Add(text, 0, wxEXPAND|wxALL, 5)
         outsideSizer.Add(wxStaticLine(self, -1), 0, wxEXPAND)
-        outsideSizer.Add(20,20)
+        outsideSizer.Add((20,20))
 
         self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, False))
 
         inSizer = wxFlexGridSizer(2, 2, 5, 5)
         inSizer.AddGrowableCol(0)
 
-        inSizer.Add(20,20)
-        inSizer.Add(20,20)
+        inSizer.Add((20,20))
+        inSizer.Add((20,20))
         inSizer.Add(wxStaticText(self, -1,
                                  "Drag URLs from your browser to\nthis window:",
                                  style = wxALIGN_RIGHT),

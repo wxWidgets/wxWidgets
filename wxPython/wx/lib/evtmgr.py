@@ -316,7 +316,7 @@ class EventMacroInfo:
             win = FakeWindow()
             try:
                 eventMacro(win, None, None)
-            except TypeError:
+            except (TypeError, AssertionError):
                 eventMacro(win, None)
             self.lookupTable[eventMacro] = win.eventTypes
             return win.eventTypes
@@ -406,7 +406,7 @@ class EventAdapter:
         try:
             func(win, id, self.handleEvent)
             self.callStyle = 3
-        except TypeError:
+        except (TypeError, AssertionError):
             func(win, self.handleEvent)
             self.callStyle = 2
 

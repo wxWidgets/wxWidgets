@@ -82,7 +82,7 @@ def makeSimpleBox7(win):
     box.Add(wxButton(win, 1010, "one"), 0, wxEXPAND)
     box.Add(wxButton(win, 1010, "two"), 0, wxEXPAND)
     box.Add(wxButton(win, 1010, "three"), 0, wxEXPAND)
-    box.Add(60, 20, 0, wxEXPAND)
+    box.Add((60, 20), 0, wxEXPAND)
     box.Add(wxButton(win, 1010, "five"), 1, wxEXPAND)
 
     return box
@@ -92,9 +92,9 @@ def makeSimpleBox7(win):
 def makeSimpleBox8(win):
     box = wxBoxSizer(wxVERTICAL)
     box.Add(wxButton(win, 1010, "one"), 0, wxEXPAND)
-    box.Add(0,0, 1)
+    box.Add((0,0), 1)
     box.Add(wxButton(win, 1010, "two"), 0, wxALIGN_CENTER)
-    box.Add(0,0, 1)
+    box.Add((0,0), 1)
     box.Add(wxButton(win, 1010, "three"), 0, wxEXPAND)
     box.Add(wxButton(win, 1010, "four"), 0, wxEXPAND)
 #    box.Add(wxButton(win, 1010, "five"), 1, wxEXPAND)

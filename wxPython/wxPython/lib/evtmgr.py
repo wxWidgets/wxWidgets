@@ -11,3 +11,4 @@ EventMacroInfo = wx.lib.evtmgr.EventMacroInfo
 EventManager = wx.lib.evtmgr.EventManager
 FakeWindow = wx.lib.evtmgr.FakeWindow
 MessageAdapter = wx.lib.evtmgr.MessageAdapter
+eventManager  = wx.lib.evtmgr.eventManager

@@ -33,14 +33,14 @@ class TestPanel( wxPanel ):
         grid.AddWindow( self.max, 0, wxALIGN_LEFT|wxALL, 5 )
 
         grid.AddWindow( self.limit_target, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid.AddSpacer( 20, 0, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid.AddSpacer( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
         grid.AddWindow( self.allow_none, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid.AddSpacer( 20, 0, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid.AddSpacer( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
         grid.AddWindow( self.allow_long, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid.AddSpacer( 20, 0, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid.AddSpacer( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
 
-        grid.AddSpacer( 20, 0, 0, wxALIGN_LEFT|wxALL, 5 )
-        grid.AddSpacer( 20, 0, 0, wxALIGN_LEFT|wxALL, 5 )
+        grid.AddSpacer( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
+        grid.AddSpacer( (20, 0), 0, wxALIGN_LEFT|wxALL, 5 )
 
         grid.AddWindow( label, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5 )
         grid.AddWindow( self.target_ctl, 0, wxALIGN_LEFT|wxALL, 5 )

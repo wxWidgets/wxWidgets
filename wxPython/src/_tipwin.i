@@ -35,11 +35,10 @@ public:
     
     %extend {
         wxTipWindow(wxWindow *parent,
-                    const wxString* text,
+                    const wxString& text,
                     wxCoord maxLength = 100,
                     wxRect* rectBound = NULL) {
-            wxString tmp = *text;
-            return new wxTipWindow(parent, tmp, maxLength, NULL, rectBound);
+            return new wxTipWindow(parent, text, maxLength, NULL, rectBound);
         }
     }
 

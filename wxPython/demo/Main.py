@@ -143,6 +143,7 @@ _treeList = [
         'wxIntCtrl',
         'wxMimeTypesManager',
         'wxMaskedNumCtrl',
+        'wxScrolledPanel',
         'wxStyledTextCtrl_1',
         'wxStyledTextCtrl_2',
         'wxTimeCtrl',

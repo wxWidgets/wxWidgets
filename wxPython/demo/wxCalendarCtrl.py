@@ -1,7 +1,7 @@
 
 from wxPython.wx import *
 from wxPython.calendar import *
-from wxPython.utils import *
+
 
 #----------------------------------------------------------------------
 

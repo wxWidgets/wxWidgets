@@ -80,7 +80,7 @@ class MyPrintout(wxPrintout):
         #-------------------------------------------
 
         self.canvas.DoDrawing(dc, True)
-        dc.DrawText("Page: %d" % page, marginX/2, maxY-marginY)
+        dc.DrawText("Page: %d" % page, (marginX/2, maxY-marginY))
 
         return True
 

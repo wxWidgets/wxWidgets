@@ -21,6 +21,7 @@ import os
 import wx
 
 # ------------------------------------------------------------------------------
+
 THROBBER_EVENT = wx.NewEventType()
 def EVT_UPDATE_THROBBER(win, func):
     win.Connect(-1, -1, THROBBER_EVENT, func)
@@ -134,13 +135,13 @@ class Throbber(wx.Panel):
 
 
     def Draw(self, dc):
-        dc.DrawBitmap(self.submaps[self.sequence[self.current]], 0, 0, True)
+        dc.DrawBitmap(self.submaps[self.sequence[self.current]], (0, 0), True)
         if self.overlay and self.showOverlay:
-            dc.DrawBitmap(self.overlay, self.overlayX, self.overlayY, True)
+            dc.DrawBitmap(self.overlay, (self.overlayX, self.overlayY), True)
         if self.label and self.showLabel:
-            dc.DrawText(self.label, self.labelX, self.labelY)
+            dc.DrawText(self.label, (self.labelX, self.labelY))
             dc.SetTextForeground(wx.WHITE)
-            dc.DrawText(self.label, self.labelX-1, self.labelY-1)
+            dc.DrawText(self.label, (self.labelX-1, self.labelY-1))
 
 
     def OnPaint(self, event):
@@ -194,7 +195,7 @@ class Throbber(wx.Panel):
         """Start the animation"""
         if not self.running:
             self.running = not self.running
-            self.timer.Start(self.frameDelay * 1000)
+            self.timer.Start(int(self.frameDelay * 1000))
 
 
     def Stop(self):

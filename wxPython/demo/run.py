@@ -48,7 +48,7 @@ class RunDemoApp(wx.App):
 
         self.SetAssertMode(assertMode)
 
-        frame = wx.Frame(None, -1, "RunDemo: " + self.name, pos=(50,50), size=(0,0),
+        frame = wx.Frame(None, -1, "RunDemo: " + self.name, pos=(50,50), size=(200,100),
                         style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.DEFAULT_FRAME_STYLE)
         frame.CreateStatusBar()
         menuBar = wx.MenuBar()
