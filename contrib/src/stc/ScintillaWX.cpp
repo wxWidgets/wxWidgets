@@ -96,7 +96,7 @@ void ScintillaWX::Finalise() {
 
 
 void ScintillaWX::StartDrag() {
-    wxDropSource        source;
+    wxDropSource        source(wMain.GetID());
     wxTextDataObject    data(dragChars);
     wxDragResult        result;
 
@@ -129,9 +129,9 @@ void ScintillaWX::SetTicking(bool on) {
 
 
 void ScintillaWX::SetMouseCapture(bool on) {
-    if (on)
+    if (on && !capturedMouse)
         wMain.GetID()->CaptureMouse();
-    else
+    else if (!on && capturedMouse)
         wMain.GetID()->ReleaseMouse();
     capturedMouse = on;
 }
