@@ -789,14 +789,14 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                                    "<font size=+4>font size +4</font><br>"
 
                                    "<p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
-                                   "<b><i>bold italic <u>underlined</u></i></b></tt><br>"
+                                   "<b><i>bold italic <u>underlined</u></i></b><br>"
                                    "<font size=-2>font size -2</font><br>"
                                    "<font size=-1>font size -1</font><br>"
                                    "<font size=+0>font size +0</font><br>"
                                    "<font size=+1>font size +1</font><br>"
                                    "<font size=+2>font size +2</font><br>"
                                    "<font size=+3>font size +3</font><br>"
-                                   "<font size=+4>font size +4</font>"
+                                   "<font size=+4>font size +4</font></tt>"
                                    "</body></html>"));
             }
 
