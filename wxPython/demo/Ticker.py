@@ -123,6 +123,11 @@ class TestPanel(wx.Panel):
     def ChangePPF(self, evt):
         self.ticker.SetPPF(evt.GetPosition())
 
+
+    def ShutdownDemo(self):
+        self.ticker.Stop()
+
+        
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
