@@ -328,13 +328,13 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 {
     if ( !wxMenuBarBase::Replace(pos, menu, title) )
-        return FALSE;
+        return (wxMenu*) NULL;
 
     // remove the old item and insert a new one
     wxMenu *menuOld = Remove(pos);
     if ( menuOld && !Insert(pos, menu, title) )
     {
-        return NULL;
+        return (wxMenu*) NULL;
     }
 
     // either Insert() succeeded or Remove() failed and menuOld is NULL
@@ -345,35 +345,23 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 {
     wxMenu *menu = wxMenuBarBase::Remove(pos);
     if ( !menu )
-        return FALSE;
+        return (wxMenu*) NULL;
 
-#ifdef __WXGTK12__
-    // gtk_item_factory_delete_entry() is buggy as of GTK+ 1.2.6, so don't use
-    // it but delete the widget manually instead
-    wxString path = _T("<main>/"),
-             title = menu->GetTitle();
-    for ( const wxChar *p = title.c_str(); *p; p++ )
-    {
-        if ( *p != _T('_') )
-            path += *p;
-    }
-
-    GtkWidget *widget = gtk_item_factory_get_item(m_factory, path.mb_str());
-    if ( widget )
-    {
-        gtk_widget_destroy(widget);
-
-        return menu;
-    }
-
-    // shouldn't happen (FIXME but does now)
-    wxFAIL_MSG( _T("gtk_item_factory_get_item() failed") );
-#else // GTK < 1.2
-    // this should be very simple to implement
-    wxFAIL_MSG( wxT("TODO") );
-#endif // GTK 1.2/1.0
-
-    return NULL;
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
+    printf( "factory entries before %d\n", (int)g_slist_length(m_factory->items) );
+    printf( "menu shell entries before %d\n", (int)g_list_length( menu_shell->children ) );
+    
+    // unparent calls unref() and that would delete the widget so we raise
+    // the ref count to 2 artificially before invoking unparent.
+    gtk_widget_ref( menu->m_menu );
+    gtk_widget_unparent( menu->m_menu );
+    
+    gtk_widget_destroy( menu->m_owner );
+    
+    printf( "factory entries after %d\n", (int)g_slist_length(m_factory->items) );
+    printf( "menu shell entries after %d\n", (int)g_list_length( menu_shell->children ) );
+    
+    return menu;
 }
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )

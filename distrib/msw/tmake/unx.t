@@ -289,6 +289,7 @@ HTMLDIR  = $(WXDIR)/src/html
 UNIXDIR  = $(WXDIR)/src/unix
 PNGDIR   = $(WXDIR)/src/png
 JPEGDIR  = $(WXDIR)/src/jpeg
+TIFFDIR  = $(WXDIR)/src/tiff
 ZLIBDIR  = $(WXDIR)/src/zlib
 GTKDIR   = $(WXDIR)/src/gtk
 MOTIFDIR = $(WXDIR)/src/motif
@@ -567,6 +568,8 @@ DEPFILES = @ALL_DEPFILES@
 
 HEADERS = @ALL_HEADERS@
 
+BURNT_LIBRARY_NAME = @BURNT_LIBRARY_NAME@
+
 all: @WX_ALL@
 
 @WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
@@ -576,7 +579,7 @@ all: @WX_ALL@
 
 @WX_LIBRARY_NAME_SHARED@:  $(OBJECTS)
 	@$(INSTALL) -d ./lib
-	$(SHARED_LD) ./lib/$@ $(OBJECTS) $(EXTRALIBS)
+	$(SHARED_LD) ./lib/$@ $(BURNT_LIBRARY_NAME) $(OBJECTS) $(EXTRALIBS)
 	
 CREATE_LINKS: @WX_LIBRARY_NAME_SHARED@
 	@$(RM) ./lib/@WX_LIBRARY_LINK1@
@@ -749,6 +752,7 @@ ALL_DIST:
 	mkdir $(DISTDIR)/src/unix
 	mkdir $(DISTDIR)/src/png
 	mkdir $(DISTDIR)/src/jpeg
+	mkdir $(DISTDIR)/src/tiff
 	mkdir $(DISTDIR)/src/zlib
 	mkdir $(DISTDIR)/src/iodbc
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
@@ -772,6 +776,9 @@ ALL_DIST:
 	cp $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/*.c $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/README $(DISTDIR)/src/jpeg
+	cp $(TIFFDIR)/*.h $(DISTDIR)/src/tiff
+	cp $(TIFFDIR)/*.c $(DISTDIR)/src/tiff
+	cp $(TIFFDIR)/README $(DISTDIR)/src/tiff
 	cp $(ODBCDIR)/*.h $(DISTDIR)/src/iodbc
 	cp $(ODBCDIR)/*.c $(DISTDIR)/src/iodbc
 	cp $(ODBCDIR)/*.ci $(DISTDIR)/src/iodbc

@@ -1735,6 +1735,7 @@ SHARED_LD=
 PIC_FLAG=
 WX_ALL=
 WX_ALL_INSTALLED=
+BURNT_LIBRARY_NAME=
 
 if test "$wxUSE_SHARED" = "yes"; then
     case "${host}" in
@@ -1754,6 +1755,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         PIC_FLAG="-fPIC"
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
+	BURNT_LIBRARY_NAME="-Wl,-soname -Wl,${WX_LIBRARY_NAME_SHARED}"
       ;;
       *-*-irix5* | *-*-irix6* )
         if test "$GCC" = yes ; then
@@ -3031,6 +3033,7 @@ AC_SUBST(WX_ALL_INSTALLED)
 AC_SUBST(SHARED_LD)
 AC_SUBST(PIC_FLAG)
 AC_SUBST(DEP_INFO_FLAGS)
+AC_SUBST(BURNT_LIBRARY_NAME)
 
 dnl debugging options
 AC_SUBST(WXDEBUG_DEFINE)
