@@ -53,10 +53,10 @@
  *
  */
 
-class WXDLLIMPEXP_BASE wxTCPServer;
-class WXDLLIMPEXP_BASE wxTCPClient;
+class WXDLLIMPEXP_NET wxTCPServer;
+class WXDLLIMPEXP_NET wxTCPClient;
 
-class WXDLLIMPEXP_BASE wxTCPConnection: public wxConnectionBase
+class WXDLLIMPEXP_NET wxTCPConnection: public wxConnectionBase
 {
   DECLARE_DYNAMIC_CLASS(wxTCPConnection)
 

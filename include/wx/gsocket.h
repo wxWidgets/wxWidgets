@@ -17,8 +17,8 @@
 /* kludge for GTK..  gsockgtk.c craps out miserably if we include
    defs.h ...  no idea how other files get away with it.. */
 
-#if !defined( __WXMSW__ ) && !defined(  WXDLLEXPORT )
-#define WXDLLEXPORT
+#if !defined( __WXMSW__ ) && !defined(  WXDLLIMPEXP_NET )
+#define WXDLLIMPEXP_NET
 #endif
 
 #endif
@@ -251,7 +251,7 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millisec);
  *  operations do not clear this back to GSOCK_NOERROR, so use it only
  *  after an error.
  */
-GSocketError WXDLLEXPORT GSocket_GetError(GSocket *socket);
+GSocketError WXDLLIMPEXP_NET GSocket_GetError(GSocket *socket);
 
 
 /* Callbacks */

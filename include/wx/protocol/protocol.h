@@ -50,7 +50,7 @@ typedef enum
 // wxProtocol: abstract base class for all protocols
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxProtocol
+class WXDLLIMPEXP_NET wxProtocol
 #if wxUSE_SOCKETS
  : public wxSocketClient
 #else
@@ -86,7 +86,7 @@ private:
 };
 
 #if wxUSE_SOCKETS
-wxProtocolError WXDLLIMPEXP_BASE GetLine(wxSocketBase *sock, wxString& result);
+wxProtocolError WXDLLIMPEXP_NET GetLine(wxSocketBase *sock, wxString& result);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -108,7 +108,7 @@ bool wxProtocolUse##class = TRUE;
         wxProtocolUserFor##class() { wxProtocolUse##class = TRUE; } \
     } wxProtocolDoUse##class;
 
-class WXDLLIMPEXP_BASE wxProtoInfo : public wxObject
+class WXDLLIMPEXP_NET wxProtoInfo : public wxObject
 {
 public:
     wxProtoInfo(const wxChar *name,

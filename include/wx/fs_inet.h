@@ -39,7 +39,7 @@ limitation)
 // wxInternetFSHandler
 //--------------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxInternetFSHandler : public wxFileSystemHandler
+class WXDLLIMPEXP_NET wxInternetFSHandler : public wxFileSystemHandler
 {
     private:
         wxHashTable m_Cache;

@@ -18,9 +18,10 @@
 #include "wx/hashmap.h"
 #include "wx/protocol/protocol.h"
 
-WX_DECLARE_EXPORTED_STRING_HASH_MAP( wxString, wxStringToStringHashMap );
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxString, wxStringToStringHashMap,
+                                      class WXDLLIMPEXP_NET );
 
-class WXDLLIMPEXP_BASE wxHTTP : public wxProtocol
+class WXDLLIMPEXP_NET wxHTTP : public wxProtocol
 {
 public:
   wxHTTP();

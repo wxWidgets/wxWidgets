@@ -39,7 +39,6 @@
 <set var="BASE_UNIX_SRC" hints="files">
     src/unix/baseunix.cpp
     src/unix/dir.cpp
-    src/unix/gsocket.c
     src/unix/mimetype.cpp
     src/unix/snglinst.cpp
     src/unix/threadpsx.cpp
@@ -48,13 +47,10 @@
     src/unix/utilsunx.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
-    wx/unix/gsockunx.h
     wx/unix/mimetype.h
 </set>
 
 <set var="BASE_WIN32_SRC" hints="files">
-    src/msw/gsocket.c
-    src/msw/gsockmsw.c
     src/msw/basemsw.cpp
     src/msw/dde.cpp
     src/msw/dir.cpp
@@ -85,7 +81,6 @@
 <set var="BASE_DARWIN_SRC" hints="files">
     src/unix/baseunix.cpp
     src/unix/dir.cpp
-    src/unix/gsocket.c
     src/unix/mimetype.cpp
     src/unix/snglinst.cpp
     src/unix/threadpsx.cpp
@@ -99,7 +94,6 @@
 <set var="BASE_MAC_SRC" hints="files">
     src/unix/baseunix.cpp
     src/mac/dirmac.cpp
-    src/mac/gsocket.c
     src/mac/mimetmac.cpp
     src/mac/utils.cpp
     src/mac/utilsexc.cpp
@@ -139,12 +133,9 @@
     src/common/filename.cpp
     src/common/filesys.cpp
     src/common/fmapbase.cpp
-    src/common/fs_inet.cpp
     src/common/fs_zip.cpp
-    src/common/ftp.cpp
     src/common/hash.cpp
     src/common/hashmap.cpp
-    src/common/http.cpp
     src/common/init.cpp
     src/common/intl.cpp
     src/common/ipcbase.cpp
@@ -157,13 +148,7 @@
     src/common/mstream.cpp
     src/common/object.cpp
     src/common/process.cpp
-    src/common/protocol.cpp
     src/common/regex.cpp
-    src/common/sckaddr.cpp
-    src/common/sckfile.cpp
-    src/common/sckipc.cpp
-    src/common/sckstrm.cpp
-    src/common/socket.cpp
     src/common/stopwatch.cpp
     src/common/strconv.cpp
     src/common/stream.cpp
@@ -174,7 +159,6 @@
     src/common/tokenzr.cpp
     src/common/txtstrm.cpp
     src/common/unzip.c
-    src/common/url.cpp
     src/common/variant.cpp
     src/common/wfstream.cpp
     src/common/wxchar.cpp
@@ -229,10 +213,8 @@
     wx/filesys.h
     wx/fontenc.h
     wx/fontmap.h
-    wx/fs_inet.h
     wx/fs_zip.h
     wx/fs_mem.h
-    wx/gsocket.h
     wx/hash.h
     wx/hashmap.h
     wx/iconloc.h
@@ -258,10 +240,6 @@
     wx/platform.h
     wx/process.h
     wx/regex.h
-    wx/sckaddr.h
-    wx/sckipc.h
-    wx/sckstrm.h
-    wx/socket.h
     wx/snglinst.h
     wx/stopwatch.h
     wx/strconv.h
@@ -274,7 +252,6 @@
     wx/thrimpl.cpp
     wx/tokenzr.h
     wx/txtstrm.h
-    wx/url.h
     wx/utils.h
     wx/variant.h
     wx/vector.h
@@ -286,8 +263,71 @@
     wx/wxprec.h
     wx/zipstrm.h
     wx/zstream.h
+</set>
+
+
+<!-- ====================================================================== -->
+<!--                          wxNet (part of wxBase)                        -->
+<!-- ====================================================================== -->
+
+<set var="NET_UNIX_SRC" hints="files">
+    src/unix/gsocket.c
+</set>
+<set var="NET_UNIX_HDR" hints="files">
+    wx/unix/gsockunx.h
+</set>
+
+<set var="NET_WIN32_SRC" hints="files">
+    src/msw/gsocket.c
+    src/msw/gsockmsw.c
+</set>
+<set var="NET_WIN32_HDR" hints="files">
+    wx/msw/gsockmsw.h
+</set>
+
+<set var="NET_DARWIN_SRC" hints="files">
+    src/unix/gsocket.c
+</set>
+<set var="NET_DARWIN_HDR" hints="files">
+    wx/unix/gsockunx.h
+</set>
+
+<set var="NET_MAC_SRC" hints="files">
+    src/mac/gsocket.c
+</set>
+<set var="NET_MAC_HDR" hints="files">
+    wx/mac/gsockmac.h
+</set>
+
+<set var="NET_OS2_SRC" hints="files">
+</set>
+<set var="NET_OS2_HDR" hints="files">
+</set>
+
+<set var="NET_CMN_SRC" hints="files">
+    src/common/fs_inet.cpp
+    src/common/ftp.cpp
+    src/common/http.cpp
+    src/common/protocol.cpp
+    src/common/url.cpp
+    src/common/sckfile.cpp
+    src/common/sckaddr.cpp
+    src/common/sckipc.cpp
+    src/common/sckstrm.cpp
+    src/common/socket.cpp
+</set>
+<set var="NET_CMN_HDR" hints="files">
+    wx/fs_inet.h
+    wx/url.h
     wx/protocol/protocol.h
     wx/protocol/http.h
+    wx/protocol/ftp.h
+    wx/protocol/file.h
+    wx/gsocket.h
+    wx/sckaddr.h
+    wx/sckipc.h
+    wx/sckstrm.h
+    wx/socket.h
 </set>
 
 
@@ -2008,6 +2048,8 @@
 <!--                    Define sources for specific libraries:              -->
 <!-- ====================================================================== -->
 
+    <!-- wxBase files: -->
+
     <!-- Nested if would be nicer, but this works -->
     <set var="BASE_MACOSX_SRC" hints="files">
         <if cond="TOOLKIT=='MAC'">$(BASE_MAC_SRC)</if>
@@ -2038,8 +2080,35 @@
     <set var="BASE_AND_GUI_SRC" hints="files">
         $(BASE_AND_GUI_CMN_SRC) $(BASE_AND_GUI_PLATFORM_SRC)
     </set>
+    
+    
+    <!-- wxNet files: -->
+    <set var="NET_MACOSX_SRC" hints="files">
+        <if cond="TOOLKIT=='MAC'">$(NET_MAC_SRC)</if>
+        <if cond="TOOLKIT=='COCOA'">$(NET_DARWIN_SRC)</if>
+        <if cond="TOOLKIT=='GTK'">$(NET_DARWIN_SRC)</if>
+        <!-- FIXME: TOOLKIT!='MAC' is what we really want -->
+    </set>
+    <set var="NET_PLATFORM_SRC" hints="files">
+        <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_SRC)</if>
+        <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_SRC)</if>
+        <if cond="PLATFORM_MACOSX=='1'">$(NET_MACOSX_SRC)</if>
+    </set>
+    <set var="NET_PLATFORM_HDR" hints="files">
+        <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_HDR)</if>
+        <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR)</if>
+        <if cond="TOOLKIT=='MAC'">$(NET_MAC_HDR)</if>
+        <if cond="TOOLKIT=='COCOA'">$(NET_DARWIN_HDR)</if>
+    </set>
+
+    <set var="NET_SRC" hints="files">
+        $(NET_CMN_SRC) $(NET_PLATFORM_SRC)
+    </set>
 
 
+
+    <!-- GUI sources: -->
+    
     <set var="LOWLEVEL_SRC" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
@@ -2060,7 +2129,7 @@
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_HDR)</if>
     </set>
-
+    
     <set var="GUI_SRC" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_SRC)</if>
@@ -2099,6 +2168,7 @@
 
     <set var="ALL_HEADERS" hints="files">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
+        $(NET_CMN_HDR) $(NET_PLATFORM_HDR)
         $(ALL_GUI_HEADERS)
         $(HTML_HDR) $(XML_HDR)
         $(OPENGL_HDR)

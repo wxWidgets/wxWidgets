@@ -23,7 +23,30 @@
         <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
         <msvc-headers>$(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)</msvc-headers>
     </lib>
+    
+    
+    <!-- ================================================================= -->
+    <!--                             wxNet library                         -->
+    <!-- ================================================================= -->
+    
+    <dll id="netdll" template="wx_base_dll"
+         cond="SHARED=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_NET</define>
+        <sources>$(NET_SRC)</sources>
+        <msvc-headers>$(NET_CMN_HDR) $(NET_PLATFORM_HDR)</msvc-headers>
+        <library>basedll</library>
+    </dll>
+    
+    <lib id="netlib" template="wx_base_lib"
+         cond="SHARED=='0' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_NET</define>
+        <sources>$(NET_SRC)</sources>
+        <msvc-headers>$(NET_CMN_HDR)</msvc-headers>
+    </lib>
 
+    
     <!-- ================================================================= -->
     <!--                           Main GUI library                        -->
     <!-- ================================================================= -->

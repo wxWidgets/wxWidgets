@@ -27,7 +27,6 @@
 #if wxUSE_FILESYSTEM
 
 #include "wx/stream.h"
-#include "wx/url.h"
 #include "wx/datetime.h"
 #include "wx/filename.h"
 

@@ -38,8 +38,8 @@
 #include "unzip.h"
 #endif
 
-WX_DECLARE_EXPORTED_HASH_MAP( long, long, wxIntegerHash, wxIntegerEqual,
-                              wxLongToLongHashMap );
+WX_DECLARE_HASH_MAP_WITH_DECL( long, long, wxIntegerHash, wxIntegerEqual,
+                               wxLongToLongHashMap, class WXDLLIMPEXP_BASE );
 
 //----------------------------------------------------------------------------
 // wxZipFSHandler

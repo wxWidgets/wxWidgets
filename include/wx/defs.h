@@ -395,6 +395,7 @@ typedef int wxWindowID;
         #define WXMAKINGDLL_BASE
     #endif
 
+    #define WXMAKINGDLL_NET
     #define WXMAKINGDLL_CORE
     #define WXMAKINGDLL_HTML
     #define WXMAKINGDLL_XML
@@ -411,6 +412,17 @@ typedef int wxWindowID;
 #else // not making nor using DLL
     #define WXDLLIMPEXP_BASE
     #define WXDLLIMPEXP_DATA_BASE(type) type
+#endif
+
+#ifdef WXMAKINGDLL_NET
+    #define WXDLLIMPEXP_NET WXEXPORT
+    #define WXDLLIMPEXP_DATA_NET(type) WXEXPORT type
+#elif defined(WXUSINGDLL)
+    #define WXDLLIMPEXP_NET WXIMPORT
+    #define WXDLLIMPEXP_DATA_NET(type) WXIMPORT type
+#else // not making nor using DLL
+    #define WXDLLIMPEXP_NET
+    #define WXDLLIMPEXP_DATA_NET(type) type
 #endif
 
 #ifdef WXMAKINGDLL_CORE
