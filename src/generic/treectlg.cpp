@@ -2226,7 +2226,9 @@ wxTreeItemId wxGenericTreeCtrl::HitTest(const wxPoint& point, int& flags)
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYieldIfNeeded();
+    // JACS: removed this because the yield can cause the window to be
+    // deleted from under us if a close window event is pending
+    // if (m_dirty) wxYieldIfNeeded();
 
     wxClientDC dc(this);
     PrepareDC(dc);
