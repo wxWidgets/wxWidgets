@@ -410,6 +410,20 @@ STDMETHODIMP wxIDataObject::GetDataHere(FORMATETC *pformatetc,
     return S_OK;
 }
 
+#ifdef __DIGITALMARS__
+extern "C"
+size_t wxDataObjectComposite::GetBufferOffset( const wxDataFormat& format );
+
+extern "C"
+const void* wxDataObjectComposite::GetSizeFromBuffer( const void* buffer,
+                                                      size_t* size,
+                                                      const wxDataFormat& format ) ;
+extern "C"
+void* wxDataObjectComposite::SetSizeInBuffer( void* buffer, size_t size,
+                                              const wxDataFormat& format ) ;
+
+#endif
+
 // set data functions
 STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                                     STGMEDIUM *pmedium,
@@ -959,6 +973,12 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
 
 bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
 {
+//FIX ME  __DIGITALMARS__   
+#if defined (__DIGITALMARS__)
+    //DragQueryFile not in any library
+    wxLogDebug(wxT("In wxFileDataObject::SetData code not executed - no Digital Mars library "));
+    return FALSE;
+#endif
     m_filenames.Empty();
 
     // the documentation states that the first member of DROPFILES structure is
