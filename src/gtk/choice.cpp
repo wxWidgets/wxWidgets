@@ -474,7 +474,7 @@ wxSize wxChoice::DoGetBestSize() const
     if ( ret.x < 80 )
         ret.x = 80;
 
-    ret.y = 16 + gdk_char_height(GET_STYLE_FONT( m_widget->style ), 'H' );
+    ret.y = 16 + GetCharHeight();
 
     return ret;
 }

@@ -76,10 +76,6 @@ void wxToolTip::Apply( wxWindow *win )
         g_style->fg[GTK_STATE_NORMAL] = ss_fg;
         g_style->bg[GTK_STATE_NORMAL] = ss_bg;
 
-#ifndef  __WXGTK20__
-        SET_STYLE_FONT( g_style, GtkGetDefaultGuiFont() );
-#endif
-
         gtk_widget_set_style( ss_tooltips->tip_window, g_style );
 #else // GTK+ 1.0
         gtk_tooltips_set_colors( ss_tooltips, &ss_bg, &ss_fg );

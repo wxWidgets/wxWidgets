@@ -4145,12 +4145,16 @@ void wxWindowGTK::SetWidgetStyle()
 
     GtkStyle *style = GetWidgetStyle();
 
-#ifndef __WXGTK20__
     if (m_font != wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ))
     {
-        SET_STYLE_FONT(style, m_font.GetInternalFont( 1.0 ));
-    }
+#ifdef __WXGTK20__
+        pango_font_description_free( style->font_desc );
+        pango_font_description_copy( m_font.GetNativeFontInfo()->description );
+#else
+        gdk_font_unref( style->font );
+        style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) )
 #endif
+    }
 
     if (m_foregroundColour.Ok())
     {
