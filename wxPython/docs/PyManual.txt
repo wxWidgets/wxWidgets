@@ -28,6 +28,14 @@ and includes PyCrust, so PyCrust is no longer distributed separately.
 .. _wxPython: http://www.wxpython.org/
 
 
+Developer Reference
+===================
+
+Source code documentation for developers is available at:
+
+http://www.orbtech.com/www/wx/epydoc/public/wx.py-module.html
+
+
 What is Py?
 ===========
 
