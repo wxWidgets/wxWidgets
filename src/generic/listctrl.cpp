@@ -2,9 +2,8 @@
 // Name:        listctrl.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Created:     01/02/97
-// Id:
-// Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
+// Id:          $Id$
+// Copyright:   (c) 1998 Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -12,6 +11,8 @@
 #pragma implementation "listctrl.h"
 #endif
 
+#include "wx/dcscreen.h"
+#include "wx/app.h"
 #include "wx/listctrl.h"
 
 //-----------------------------------------------------------------------------
@@ -74,8 +75,8 @@ void wxListItemData::SetPosition( int x, int y )
 
 void wxListItemData::SetSize( int const width, int height )
 {
-  m_width = width;
-  m_height = height;
+  if (width != -1) m_width = width;
+  if (height != -1) m_height = height;
 }
 
 void wxListItemData::SetColour( wxColour *col )
@@ -537,7 +538,7 @@ void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
     while (node)
     {
       wxListItemData *info = (wxListItemData*)node->Data();
-      dc->SetClippingRegion( info->GetX(), info->GetY(), info->GetWidth(), info->GetHeight() );
+      dc->SetClippingRegion( info->GetX(), info->GetY(), info->GetWidth()-3, info->GetHeight() );
       info->GetText( s );
 	if (hilight)
 	  dc->SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
@@ -650,6 +651,7 @@ wxListHeaderWindow::wxListHeaderWindow( void )
   m_owner = (wxListMainWindow *) NULL;
   m_currentCursor = (wxCursor *) NULL;
   m_resizeCursor = (wxCursor *) NULL;
+  m_isDraging = FALSE;
 }
 
 wxListHeaderWindow::wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner, 
@@ -722,23 +724,86 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
   dc.EndDrawing();
 }
 
+void wxListHeaderWindow::DrawCurrent()
+{
+  int x1 = m_currentX;
+  int y1 = 0;
+  int x2 = m_currentX-1;
+  int y2 = 0;
+  m_owner->GetClientSize( (int*)NULL, &y2 );
+  ClientToScreen( &x1, &y1 );
+  m_owner->ClientToScreen( &x2, &y2 );
+
+  wxScreenDC dc;
+  dc.SetLogicalFunction( wxXOR );
+  dc.SetPen( wxPen( *wxBLACK, 2, wxSOLID ) );
+  dc.SetBrush( *wxTRANSPARENT_BRUSH );
+
+  dc.DrawLine( x1, y1, x2, y2 );
+
+  dc.SetLogicalFunction( wxCOPY );
+
+  dc.SetPen( wxNullPen );
+  dc.SetBrush( wxNullBrush );   
+}
+
 void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 {
-  float fx = 0;
-  float fy = 0;
-  event.Position( &fx, &fy );
-  int x = (int)fx;
-  int y = (int)fy;
+  int x = event.GetX();
+  int y = event.GetY();
+  if (m_isDraging)
+  {
+    DrawCurrent();
+    if (event.ButtonUp())
+    {
+//      wxScreenDC::EndDrawingOnTop();
+      ReleaseMouse();
+      wxYield();  // for debugging
+      m_isDraging = FALSE;
+      m_owner->SetColumnWidth( m_column, m_currentX-m_minX );
+    }
+    else
+    {
+      int size_x = 0;
+      GetClientSize( &size_x, (int*) NULL );
+      if (x > m_minX+7)
+        m_currentX = x;
+      else
+        m_currentX = m_minX+7;
+      if (m_currentX > size_x-7) m_currentX = size_x-7;
+      DrawCurrent();
+    }
+    return;
+  }
+  
+  m_minX = 0;
+  bool hit_border = FALSE;
+  int xpos = 0;
+  for (int j = 0; j < m_owner->GetColumnCount(); j++)
+  {
+    xpos += m_owner->GetColumnWidth( j );
+    if ((abs(x-xpos) < 3) && (y < 22)) 
+    { 
+      hit_border = TRUE;
+      m_column = j;
+      break;
+    }
+    m_minX = xpos;
+  }
+  
+  if (event.LeftDown() && hit_border)
+  {
+    m_isDraging = TRUE;
+    m_currentX = x;
+//    wxScreenDC::StartDrawingOnTop( m_owner );
+    DrawCurrent();
+    CaptureMouse();
+    return;
+  }
+  
   if (event.Moving())
   {
-    bool hit = FALSE;
-    int xpos = 0;
-    for (int j = 0; j < m_owner->GetColumnCount(); j++)
-    {
-      xpos += m_owner->GetColumnWidth( j );
-      if ((abs(x-xpos) < 2) && (y < 14)) { hit = TRUE; break; }
-    }
-    if (hit)
+    if (hit_border)
     {
       if (m_currentCursor == wxSTANDARD_CURSOR) SetCursor( m_resizeCursor );
       m_currentCursor = m_resizeCursor;
@@ -1514,17 +1579,38 @@ void wxListMainWindow::SetColumn( int col, wxListItem &item )
     wxListHeaderData *column = (wxListHeaderData*)node->Data();
     column->SetItem( item );
   }
+  wxListCtrl *lc = (wxListCtrl*) GetParent();
+  if (lc->m_headerWin) lc->m_headerWin->Refresh();
 }
 
 void wxListMainWindow::SetColumnWidth( int col, int width )
 {
+  if (!(m_mode & wxLC_REPORT)) return;
+
   m_dirty = TRUE;
+  
   wxNode *node = m_columns.Nth( col );
   if (node)
   {
     wxListHeaderData *column = (wxListHeaderData*)node->Data();
     column->SetWidth( width );
   }
+  
+  node = m_lines.First();
+  while (node) 
+  {
+    wxListLineData *line = (wxListLineData*)node->Data();
+    wxNode *n = line->m_items.Nth( col );
+    if (n)
+    {
+      wxListItemData *item = (wxListItemData*)n->Data();
+      item->SetSize( width, -1 );
+    }
+    node = node->Next();
+  }
+  
+  wxListCtrl *lc = (wxListCtrl*) GetParent();
+  if (lc->m_headerWin) lc->m_headerWin->Refresh();
 }
 
 void wxListMainWindow::GetColumn( int col, wxListItem &item )

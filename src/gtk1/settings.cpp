@@ -166,7 +166,7 @@ wxFont wxSystemSettings::GetSystemFont( int index )
     case wxSYS_DEFAULT_GUI_FONT:
     {
       if (!g_systemFont)
-        g_systemFont = new wxFont( 10, wxSWISS, wxNORMAL, wxNORMAL );
+        g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
       return *g_systemFont;
     }
   }

@@ -34,8 +34,8 @@ extern "C" {
 #include "gdk/gdkx.h"
 #include <netinet/in.h>
 
-int nevent_masks = 17;
-int event_mask_table[19] =
+int my_nevent_masks = 17;
+int my_event_masks_table[19] =
 {
   ExposureMask,
   PointerMotionMask,
@@ -143,10 +143,10 @@ gdk_window_transparent_new ( GdkWindow     *parent,
   xvisual = ((GdkVisualPrivate*) visual)->xvisual;
 
   xattributes.event_mask = StructureNotifyMask;
-  for (i = 0; i < nevent_masks; i++)
+  for (i = 0; i < my_nevent_masks; i++)
     {
       if (attributes->event_mask & (1 << (i + 1)))
-	xattributes.event_mask |= event_mask_table[i];
+	xattributes.event_mask |= my_event_masks_table[i];
     }
 
   if (xattributes.event_mask)

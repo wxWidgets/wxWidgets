@@ -232,7 +232,7 @@ class wxListItemData : public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxListItemData);
 
-  protected:
+  public:
     wxString   m_text;
     int        m_image;
     long       m_data;
@@ -306,7 +306,7 @@ class wxListLineData : public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxListLineData);
 
-  protected:
+  public:
     wxList              m_items;
     wxRectangle         m_bound_all;
     wxRectangle         m_bound_label;
@@ -359,6 +359,10 @@ class wxListHeaderWindow : public wxWindow
     wxListMainWindow  *m_owner;
     wxCursor          *m_currentCursor;
     wxCursor          *m_resizeCursor;
+    bool               m_isDraging;
+    int                m_column;
+    int                m_minX;
+    int                m_currentX;
 
   public:
     wxListHeaderWindow( void );
@@ -367,6 +371,7 @@ class wxListHeaderWindow : public wxWindow
       long style = 0, const wxString &name = "columntitles" );
     void DoDrawRect( wxPaintDC *dc, int x, int y, int w, int h );
     void OnPaint( wxPaintEvent &event );
+    void DrawCurrent();
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
 
@@ -618,7 +623,7 @@ class wxListCtrl: public wxControl
     bool PopupMenu( wxMenu *menu, int x, int y )
       { return m_mainWin->PopupMenu( menu, x, y ); }
 
-  protected:
+  // implementation
 
 //  wxListTextCtrl       m_textCtrl;
     wxImageList         *m_imageListNormal;
