@@ -42,8 +42,11 @@ private:
         CPPUNIT_TEST( Constructors );
 #if wxUSE_WCHAR_T
         CPPUNIT_TEST( ConstructorsWithConversion );
-#endif
         CPPUNIT_TEST( Conversion );
+#endif
+#if wxUSE_UNICODE
+        CPPUNIT_TEST( ConversionUTF7 );
+#endif
         CPPUNIT_TEST( Extraction );
         CPPUNIT_TEST( Find );
         CPPUNIT_TEST( Tokenizer );
@@ -61,8 +64,11 @@ private:
     void Constructors();
 #if wxUSE_WCHAR_T
     void ConstructorsWithConversion();
-#endif
     void Conversion();
+#endif
+#if wxUSE_UNICODE
+    void ConversionUTF7();
+#endif
     void Extraction();
     void Find();
     void SingleTokenizerTest( wxChar *str, wxChar *delims, size_t count , wxStringTokenizerMode mode );
@@ -180,7 +186,6 @@ void StringTestCase::ConstructorsWithConversion()
     CPPUNIT_ASSERT( s3 == sub );
     CPPUNIT_ASSERT( s4 == sub );
 }
-#endif
 
 void StringTestCase::Conversion()
 {
@@ -193,7 +198,6 @@ void StringTestCase::Conversion()
         wxString szTheString2("The\0String", wxConvLocal, 10);
         CPPUNIT_ASSERT( wxMemcmp(szTheString2.c_str(), L"The\0String", 11) == 0 );
 #else
-#   if wxUSE_WCHAR_T
         wxString szTheString(wxT("TheString"));
         szTheString.insert(3, 1, '\0');
         wxWCharBuffer theBuffer = szTheString.wc_str(wxConvLibc);
@@ -205,9 +209,21 @@ void StringTestCase::Conversion()
         wxWCharBuffer theLocalBuffer = szLocalTheString.wc_str(wxConvLocal);
 
         CPPUNIT_ASSERT( memcmp(theLocalBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
-#   endif
 #endif
 }
+#endif // wxUSE_WCHAR_T
+
+#if wxUSE_UNICODE
+void StringTestCase::ConversionUTF7()
+{
+    const wxChar wdata[] = { 0x00A3, 0x00A3, 0x00A3, 0x00A3, 0 }; // pound signs
+    const char *utf7 = "+AKM-+AKM-+AKM-+AKM-";
+    wxString str(wdata);
+
+    wxCSConv conv(_T("utf-7"));
+    CPPUNIT_ASSERT( strcmp(str.mb_str(conv), utf7) == 0 );
+}
+#endif // wxUSE_UNICODE
 
 void StringTestCase::Extraction()
 {
