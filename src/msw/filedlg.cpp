@@ -51,6 +51,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "wx/filename.h"
 #include "wx/tokenzr.h"
 
 #ifndef OFN_EXPLORER
@@ -229,7 +230,10 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
     size_t count = m_fileNames.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        paths.Add(dir + m_fileNames[n]);
+        if (wxFileName(m_fileNames[n]).IsAbsolute())
+            paths.Add(m_fileNames[n]);
+        else
+            paths.Add(dir + m_fileNames[n]);
     }
 }
 
