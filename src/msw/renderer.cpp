@@ -45,6 +45,11 @@ public:
 
     static wxRendererNative& Get();
 
+    virtual void DrawComboBoxDropButton(wxWindow *win,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags = 0);
+
 private:
     DECLARE_NO_COPY_CLASS(wxRendererMSW)
 };
@@ -70,6 +75,7 @@ public:
                                   wxCoord position,
                                   wxOrientation orient,
                                   int flags = 0);
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
@@ -94,6 +100,27 @@ wxRendererNative& wxRendererMSW::Get()
     static wxRendererMSW s_rendererMSW;
 
     return s_rendererMSW;
+}
+
+void
+wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
+                                      wxDC& dc,
+                                      const wxRect& rect,
+                                      int flags)
+{
+    RECT r;
+    r.left = rect.GetLeft();
+    r.top = rect.GetTop();
+    r.bottom = rect.GetBottom();
+    r.right = rect.GetRight();
+
+    int style = DFCS_SCROLLCOMBOBOX;
+    if ( flags & wxCONTROL_DISABLED )
+        style |= DFCS_INACTIVE;
+    if ( flags & wxCONTROL_PRESSED )
+        style |= DFCS_PUSHED;
+
+    ::DrawFrameControl(GetHdcOf(dc), &r, DFC_SCROLL, style);
 }
 
 // ============================================================================
