@@ -1,3 +1,4 @@
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        textctrl.cpp
 // Purpose:
@@ -995,7 +996,14 @@ void wxTextCtrl::SetSelection( long from, long to )
     if (m_windowStyle & wxTE_MULTILINE)
     {
 #ifdef __WXGTK20__
-        // ????
+        GtkTextBuffer *buf = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
+
+        GtkTextIter fromi, toi;
+        gtk_text_buffer_get_iter_at_offset( buf, &fromi, from );
+        gtk_text_buffer_get_iter_at_offset( buf, &toi, to );
+
+        gtk_text_buffer_place_cursor( buf, &toi );
+        gtk_text_buffer_move_mark_by_name( buf, "selection_bound", &fromi );
 #else
         gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 #endif
