@@ -9616,7 +9616,7 @@ static PyObject *_wrap_VScrolledWindow_RefreshLines(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_VScrolledWindow_HitTestXT(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_VScrolledWindow_HitTestXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
     int arg2 ;
@@ -9629,7 +9629,7 @@ static PyObject *_wrap_VScrolledWindow_HitTestXT(PyObject *self, PyObject *args,
         (char *) "self",(char *) "x",(char *) "y", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:VScrolledWindow_HitTestXT",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:VScrolledWindow_HitTestXY",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyVScrolledWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     arg2 = (int) SWIG_AsInt(obj1); 
@@ -25399,7 +25399,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VScrolledWindow_ScrollPages", (PyCFunction) _wrap_VScrolledWindow_ScrollPages, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"VScrolledWindow_RefreshLine", (PyCFunction) _wrap_VScrolledWindow_RefreshLine, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"VScrolledWindow_RefreshLines", (PyCFunction) _wrap_VScrolledWindow_RefreshLines, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"VScrolledWindow_HitTestXT", (PyCFunction) _wrap_VScrolledWindow_HitTestXT, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VScrolledWindow_HitTestXY", (PyCFunction) _wrap_VScrolledWindow_HitTestXY, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"VScrolledWindow_HitTest", (PyCFunction) _wrap_VScrolledWindow_HitTest, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"VScrolledWindow_RefreshAll", (PyCFunction) _wrap_VScrolledWindow_RefreshAll, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"VScrolledWindow_GetLineCount", (PyCFunction) _wrap_VScrolledWindow_GetLineCount, METH_VARARGS | METH_KEYWORDS },

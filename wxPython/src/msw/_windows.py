@@ -27,6 +27,8 @@ class Panel(_core.Window):
         Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
             String name=PanelNameStr) -> bool
+
+        Create the GUI part of the Window for 2-phase creation mode.
         """
         return _windows_.Panel_Create(*args, **kwargs)
 
@@ -110,6 +112,8 @@ class ScrolledWindow(Panel):
         Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxHSCROLL|wxVSCROLL, 
             String name=PanelNameStr) -> bool
+
+        Create the GUI part of the Window for 2-phase creation mode.
         """
         return _windows_.ScrolledWindow_Create(*args, **kwargs)
 
@@ -1811,13 +1815,13 @@ class VScrolledWindow(Panel):
         """RefreshLines(self, size_t from, size_t to)"""
         return _windows_.VScrolledWindow_RefreshLines(*args, **kwargs)
 
-    def HitTestXT(*args, **kwargs):
+    def HitTestXY(*args, **kwargs):
         """
-        HitTestXT(self, int x, int y) -> int
+        HitTestXY(self, int x, int y) -> int
 
         Test where the given (in client coords) point lies
         """
-        return _windows_.VScrolledWindow_HitTestXT(*args, **kwargs)
+        return _windows_.VScrolledWindow_HitTestXY(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
         """
