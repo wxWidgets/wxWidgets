@@ -224,6 +224,7 @@ bool wxScrollBar::OS2OnScroll (
                                            ,m_windowId
                                           );
 
+    vEvent.SetOrientation(IsVertical() ? wxVERTICAL : wxHORIZONTAL);
     vEvent.SetPosition(nPosition);
     vEvent.SetEventObject(this);
     return GetEventHandler()->ProcessEvent(vEvent);

@@ -291,6 +291,7 @@ COMMONOBJS = \
   ..\common\$D\protocol.obj \
   ..\common\$D\quantize.obj \
   ..\common\$D\radiocmn.obj \
+  ..\common\$D\rgncmn.obj \
   ..\common\$D\regex.obj \
   ..\common\$D\resource.obj \
   ..\common\$D\sckaddr.obj \
@@ -428,6 +429,7 @@ COMLIBOBJS3 = \
   protocol.obj \
   quantize.obj \
   radiocmn.obj \
+  rgncmn.obj \
   regex.obj \
   resource.obj \
   sckaddr.obj \
@@ -461,10 +463,10 @@ COMLIBOBJS3 = \
   wfstream.obj \
   wincmn.obj \
   wxchar.obj \
-  wxexpr.obj \
-  xpmdecod.obj
+  wxexpr.obj
 
 COMLIBOBJS4 = \
+  xpmdecod.obj \
   y_tab.obj \
   zipstrm.obj \
   zstream.obj
@@ -796,6 +798,7 @@ $(COMLIBOBJS3):
   copy ..\common\$D\protocol.obj
   copy ..\common\$D\quantize.obj
   copy ..\common\$D\radiocmn.obj
+  copy ..\common\$D\rgncmn.obj
   copy ..\common\$D\regex.obj
   copy ..\common\$D\resource.obj
   copy ..\common\$D\sckaddr.obj
@@ -830,9 +833,9 @@ $(COMLIBOBJS3):
   copy ..\common\$D\wincmn.obj
   copy ..\common\$D\wxchar.obj
   copy ..\common\$D\wxexpr.obj
-  copy ..\common\$D\xpmdecod.obj
 
 $(COMLIBOBJS4):
+  copy ..\common\$D\xpmdecod.obj
   copy ..\common\$D\y_tab.obj
   copy ..\common\$D\zipstrm.obj
   copy ..\common\$D\zstream.obj
@@ -1198,9 +1201,9 @@ clean:  $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_tiff
         rd      ..\common\$D
         rd      ..\html\$D
         rd      ..\os2\$D
-        del      $(LIBTARGET)
+        del     ..\lib\wx.lib
 !if "$(WXMAKINGDLL)" == "1"
-        erase /N ..\..\lib\wx24.lib
+        del ..\lib\wx24.lib
 !endif
         erase /N $(COMMDIR)\y_tab.c
         erase /N $(COMMDIR)\lex_yy.c

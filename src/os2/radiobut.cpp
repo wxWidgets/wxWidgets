@@ -227,36 +227,42 @@ void wxRadioButton::SetValue(
 
         wxCHECK_RET(pNodeThis, _T("radio button not a child of its parent?"));
 
-        // 
-        // Turn off all radio buttons before this one
         //
-        for ( wxWindowList::Node* pNodeBefore = pNodeThis->GetPrevious();
-              pNodeBefore;
-              pNodeBefore = pNodeBefore->GetPrevious() )
+        // If it's not the first item of the group ...
+        //
+        if ( !HasFlag(wxRB_GROUP) )
         {
-            wxRadioButton*          pBtn = wxDynamicCast( pNodeBefore->GetData()
+            //
+            // ...turn off all radio buttons before this one
+            //
+            for ( wxWindowList::Node* pNodeBefore = pNodeThis->GetPrevious();
+                  pNodeBefore;
+                  pNodeBefore = pNodeBefore->GetPrevious() )
+            {
+                wxRadioButton*      pBtn = wxDynamicCast( pNodeBefore->GetData()
                                                          ,wxRadioButton
                                                         );
-            if (!pBtn)
-            {
-                // 
-                // The radio buttons in a group must be consecutive, so there
-                // are no more of them
-                //
-                break;
-            }
-            pBtn->SetValue(FALSE);
-            if (pBtn->HasFlag(wxRB_GROUP))
-            {
-                // 
-                // Even if there are other radio buttons before this one,
-                // they're not in the same group with us
-                //
-                break;
+                if (!pBtn)
+                {
+                    //
+                    // The radio buttons in a group must be consecutive, so there
+                    // are no more of them
+                    //
+                    break;
+                }
+                pBtn->SetValue(FALSE);
+                if (pBtn->HasFlag(wxRB_GROUP))
+                {
+                    //
+                    // Even if there are other radio buttons before this one,
+                    // they're not in the same group with us
+                    //
+                    break;
+                }
             }
         }
 
-        // 
+        //
         // ... and all after this one
         //
         for (wxWindowList::Node* pNodeAfter = pNodeThis->GetNext();
@@ -269,7 +275,7 @@ void wxRadioButton::SetValue(
 
             if (!pBtn || pBtn->HasFlag(wxRB_GROUP) )
             {
-                // 
+                //
                 // No more buttons or the first button of the next group
                 //
                 break;

@@ -2126,6 +2126,8 @@ EXPORTS
       __vft12wxFileConfig12wxConfigBase
       ;wxFileConfigEntry::wxFileConfigEntry(wxFileConfigGroup*,const wxString&,int)
       __ct__17wxFileConfigEntryFP17wxFileConfigGroupRC8wxStringi
+      ;wxFileConfigGroup::SetLastEntry(wxFileConfigEntry*)
+      SetLastEntry__17wxFileConfigGroupFP17wxFileConfigEntry
       ;wxFileConfig::~wxFileConfig()
       __dt__12wxFileConfigFv
       ;wxFileConfigGroup::SetDirty()
@@ -2312,10 +2314,10 @@ EXPORTS
       GetHomeDir__10wxFileNameFv
       ;wxFileName::AppendDir(const wxString&)
       AppendDir__10wxFileNameFRC8wxString
-      ;wxFileName::SplitPath(const wxString&,wxString*,wxString*,wxString*,wxString*,wxPathFormat)
-      SplitPath__10wxFileNameFRC8wxStringP8wxStringN3212wxPathFormat
       ;wxFileName::Normalize(int,const wxString&,wxPathFormat)
       Normalize__10wxFileNameFiRC8wxString12wxPathFormat
+      ;wxFileName::SplitPath(const wxString&,wxString*,wxString*,wxString*,wxString*,wxPathFormat)
+      SplitPath__10wxFileNameFRC8wxStringP8wxStringN3212wxPathFormat
       ;wxFileName::MakeRelativeTo(const wxString&,wxPathFormat)
       MakeRelativeTo__10wxFileNameFRC8wxString12wxPathFormat
       ;wxFileName::AssignDir(const wxString&,wxPathFormat)
@@ -3221,11 +3223,13 @@ EXPORTS
       __vft7wxImage8wxObject
       ;wxImage::Rotate(double,const wxPoint&,unsigned long,wxPoint*) const
       Rotate__7wxImageCFdRC7wxPointUlP7wxPoint
-      ;wxImage::Replace(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)
-      Replace__7wxImageFUcN51
+      ;wxImage::ShrinkBy(int,int) const
+      ShrinkBy__7wxImageCFiT1
       wxNullImage
       ;wxImage::SaveFile(const wxString&,const wxString&) const
       SaveFile__7wxImageCFRC8wxStringT1
+      ;wxImage::Replace(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)
+      Replace__7wxImageFUcN51
       ;wxImage::LoadFile(const wxString&,const wxString&,int)
       LoadFile__7wxImageFRC8wxStringT1i
       ;wxImageRefData::wxImageRefData()
@@ -4818,6 +4822,12 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxRadioBoxBase::GetNextItem(int,wxDirection,long) const
       GetNextItem__14wxRadioBoxBaseCFi11wxDirectionl
+  ;From object file:  ..\common\rgncmn.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxRegion::Union(const wxBitmap&,const wxColour&,int)
+      Union__8wxRegionFRC8wxBitmapRC8wxColouri
+      ;wxRegion::ConvertToBitmap() const
+      ConvertToBitmap__8wxRegionCFv
   ;From object file:  ..\common\regex.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxRegEx::Replace(wxString*,const wxString&,unsigned int) const
@@ -11318,6 +11328,8 @@ EXPORTS
       HasParam__9wxHtmlTagCFRC8wxString
       ;wxHtmlTagsCache::QueryTag(int,int*,int*)
       QueryTag__15wxHtmlTagsCacheFiPiT2
+      ;wxIsCDATAElement(const char*)
+      wxIsCDATAElement__FPCc
       ;wxHtmlTag::~wxHtmlTag()
       __dt__9wxHtmlTagFv
       ;wxHtmlTag::GetFirstSibling() const
@@ -11407,6 +11419,8 @@ EXPORTS
       __as__18wxHtmlHistoryArrayFRC18wxHtmlHistoryArray
       ;wxHtmlWindow::SetRelatedStatusBar(int)
       SetRelatedStatusBar__12wxHtmlWindowFi
+      ;wxHtmlWindow::LoadFile(const wxFileName&)
+      LoadFile__12wxHtmlWindowFRC10wxFileName
       ;wxHtmlWindow::CleanUpStatics()
       CleanUpStatics__12wxHtmlWindowFv
       ;wxHtmlWindow::LoadPage(const wxString&)
@@ -11483,10 +11497,12 @@ EXPORTS
       __dt__14wxHtmlPrintoutFv
       ;wxHtmlEasyPrinting::PageSetup()
       PageSetup__18wxHtmlEasyPrintingFv
-      ;wxHtmlPrintout::RenderPage(wxDC*,int)
-      RenderPage__14wxHtmlPrintoutFP4wxDCi
+      ;wxHtmlDCRenderer::SetFonts(wxString,wxString,const int*)
+      SetFonts__16wxHtmlDCRendererF8wxStringT1PCi
       ;wxHtmlPrintout::SetHeader(const wxString&,int)
       SetHeader__14wxHtmlPrintoutFRC8wxStringi
+      ;wxHtmlPrintout::RenderPage(wxDC*,int)
+      RenderPage__14wxHtmlPrintoutFP4wxDCi
       ;wxHtmlEasyPrinting::PreviewText(const wxString&,const wxString&)
       PreviewText__18wxHtmlEasyPrintingFRC8wxStringT1
       ;wxHtmlDCRenderer::GetTotalHeight()
@@ -11499,6 +11515,8 @@ EXPORTS
       OnBeginDocument__14wxHtmlPrintoutFiT1
       ;wxHtmlEasyPrinting::SetFooter(const wxString&,int)
       SetFooter__18wxHtmlEasyPrintingFRC8wxStringi
+      ;wxHtmlPrintout::SetFonts(wxString,wxString,const int*)
+      SetFonts__14wxHtmlPrintoutF8wxStringT1PCi
       ;wxHtmlPrintout::GetPageInfo(int*,int*,int*,int*)
       GetPageInfo__14wxHtmlPrintoutFPiN31
       ;wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout*,wxHtmlPrintout*)
@@ -14312,6 +14330,8 @@ EXPORTS
       SetFocus__10wxSpinCtrlFv
       ;wxSpinCtrl::SetValue(const wxString&)
       SetValue__10wxSpinCtrlFRC8wxString
+      ;wxSpinCtrl::OnSetFocus(wxFocusEvent&)
+      OnSetFocus__10wxSpinCtrlFR12wxFocusEvent
       ;wxSpinCtrl::sm_classwxSpinCtrl
       sm_classwxSpinCtrl__10wxSpinCtrl
       ;wxSpinCtrl::m_svAllSpins

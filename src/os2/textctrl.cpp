@@ -507,6 +507,16 @@ void wxTextCtrl::SetInsertionPointEnd()
 {
     long                            lPos = GetLastPosition();
 
+    //
+    // We must not do anything if the caret is already there because calling
+    // SetInsertionPoint() thaws the controls if Freeze() had been called even
+    // if it doesn't actually move the caret anywhere and so the simple fact of
+    // doing it results in horrible flicker when appending big amounts of text
+    // to the control in a few chunks (see DoAddText() test in the text sample)
+    //
+    if (GetInsertionPoint() == GetLastPosition())
+        return;
+
     SetInsertionPoint(lPos);
 } // end of wxTextCtrl::SetInsertionPointEnd
 
