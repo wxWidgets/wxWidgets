@@ -25,6 +25,7 @@
 #include "wx/font.h"
 #include "wx/colour.h"
 #include "wx/settings.h"
+#include "wx/log.h"
 #endif
 
 #include "wx/generic/panelg.h"

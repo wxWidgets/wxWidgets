@@ -636,7 +636,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
                          const wxArrayLong& times,
                          const wxString& caption,
                          long style)
-           : wxDialog(parent, -1, caption),
+           : wxDialog(parent, -1, caption ),
              m_messages(messages), m_severity(severity), m_times(times)
 {
     m_showingDetails = FALSE; // not initially
@@ -697,7 +697,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
             // create it now
             m_listctrl = new wxListCtrl(this, -1,
                                         wxDefaultPosition, wxDefaultSize,
-                                        wxLC_REPORT | wxLC_NO_HEADER);
+                                        wxLC_REPORT | wxLC_NO_HEADER );
             m_listctrl->InsertColumn(0, _("Message"));
             m_listctrl->InsertColumn(1, _("Time"));
 
@@ -775,6 +775,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
     m_showingDetails = !m_showingDetails;
 
     // in any case, our size changed - update
+    sizer->SetSizeHints(this);
     sizer->Fit(this);
 }
 

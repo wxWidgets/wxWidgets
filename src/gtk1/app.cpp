@@ -138,9 +138,6 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     // thread so we must lock it here ourselves
     gdk_threads_enter();
 
-    /* sent idle event to all who request them */
-    while (wxTheApp->ProcessIdle()) { }
-
     /* we don't want any more idle events until the next event is
        sent to wxGTK */
     gtk_idle_remove( wxTheApp->m_idleTag );
@@ -152,6 +149,9 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
        once each time after the event queue has been completely
        emptied */
     g_isIdle = TRUE;
+
+    /* sent idle event to all who request them */
+    while (wxTheApp->ProcessIdle()) { }
 
     // release lock again
     gdk_threads_leave();
@@ -352,11 +352,11 @@ bool wxApp::ProcessIdle()
 void wxApp::OnIdle( wxIdleEvent &event )
 {
     static bool s_inOnIdle = FALSE;
-
+    
     /* Avoid recursion (via ProcessEvent default case) */
     if (s_inOnIdle)
         return;
-
+    
     s_inOnIdle = TRUE;
 
     /* Resend in the main thread events which have been prepared in other
@@ -366,13 +366,6 @@ void wxApp::OnIdle( wxIdleEvent &event )
     /* 'Garbage' collection of windows deleted with Close(). */
     DeletePendingObjects();
 
-    /* flush the logged messages if any */
-#if wxUSE_LOG
-    wxLog *log = wxLog::GetActiveTarget();
-    if (log != NULL && log->HasPendingMessages())
-        log->Flush();
-#endif // wxUSE_LOG
-
     /* Send OnIdle events to all windows */
     bool needMore = SendIdleEvents();
 
@@ -380,6 +373,13 @@ void wxApp::OnIdle( wxIdleEvent &event )
         event.RequestMore(TRUE);
 
     s_inOnIdle = FALSE;
+
+    /* flush the logged messages if any */
+#if wxUSE_LOG
+    wxLog *log = wxLog::GetActiveTarget();
+    if (log != NULL && log->HasPendingMessages())
+        log->Flush();
+#endif // wxUSE_LOG
 }
 
 bool wxApp::SendIdleEvents()

@@ -2334,7 +2334,7 @@ long wxListMainWindow::GetNextItem( long item, int WXUNUSED(geometry), int state
     long ret = 0;
     if (item > 0) ret = item;
     if(ret >= GetItemCount()) return -1;
-    wxNode *node = m_lines.Nth( (size_t)ret );
+    wxNode *node = m_lines.Nth( (size_t)++ret );
     while (node)
     {
         wxListLineData *line = (wxListLineData*)node->Data();
@@ -2715,9 +2715,15 @@ bool wxListCtrl::Create(wxWindow *parent,
     m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, style );
 
     if (HasFlag(wxLC_REPORT))
+    {
         m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(size.x,23), wxTAB_TRAVERSAL );
+        if (HasFlag(wxLC_NO_HEADER))
+            m_headerWin->Show( FALSE );
+    }
     else
+    {
         m_headerWin = (wxListHeaderWindow *) NULL;
+    }
 
     SetBackgroundColour( *wxWHITE );
 
