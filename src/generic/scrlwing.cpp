@@ -167,14 +167,20 @@ void wxAutoScrollTimer::Notify()
 
 bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 {
+    wxEventType evType = event.GetEventType();
+    
+    if ( evType == wxEVT_SIZE )  // Don't let wxPanel catch the size events. RR.
+    {
+        m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
+        return TRUE;
+    }
+    
     if ( wxEvtHandler::ProcessEvent(event) )
         return TRUE;
-
+        
     // reset the skipped flag to FALSE as it might have been set to TRUE in
     // ProcessEvent() above
     event.Skip(FALSE);
-
-    wxEventType evType = event.GetEventType();
 
     if ( evType == wxEVT_PAINT )
     {
@@ -209,10 +215,6 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
     }
 #endif // wxUSE_MOUSEWHEEL
-    else if ( evType == wxEVT_SIZE )
-    {
-        m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
-    }
     else if ( evType == wxEVT_CHAR )
     {
         m_scrollHelper->HandleOnChar((wxKeyEvent &)event);
