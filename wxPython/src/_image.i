@@ -150,6 +150,9 @@ public:
         }
     }
 
+    // TODO: wxImage( char** xpmData );
+
+
     void Create( int width, int height );
     void Destroy();
 
@@ -452,7 +455,16 @@ MAKE_CONST_WXSTRING(IMAGE_OPTION_SAMPLESPERPIXEL);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_COMPRESSION);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_IMAGEDESCRIPTOR);
 
-                    
+MAKE_CONST_WXSTRING(IMAGE_OPTION_PNG_FORMAT);
+MAKE_CONST_WXSTRING(IMAGE_OPTION_PNG_BITDEPTH);
+
+enum
+{
+    wxPNG_TYPE_COLOUR = 0,
+    wxPNG_TYPE_GREY = 2,
+    wxPNG_TYPE_GREY_RED = 3
+};
+
 enum
 {
     wxBMP_24BPP        = 24, // default, do not need to set

@@ -507,6 +507,9 @@
 %rename(NullImage)                          wxNullImage;
 %rename(IMAGE_RESOLUTION_INCHES)            wxIMAGE_RESOLUTION_INCHES;
 %rename(IMAGE_RESOLUTION_CM)                wxIMAGE_RESOLUTION_CM;
+%rename(PNG_TYPE_COLOUR)                    wxPNG_TYPE_COLOUR;
+%rename(PNG_TYPE_GREY)                      wxPNG_TYPE_GREY;
+%rename(PNG_TYPE_GREY_RED)                  wxPNG_TYPE_GREY_RED;
 %rename(BMP_24BPP)                          wxBMP_24BPP;
 %rename(BMP_8BPP)                           wxBMP_8BPP;
 %rename(BMP_8BPP_GREY)                      wxBMP_8BPP_GREY;
