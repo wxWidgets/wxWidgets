@@ -247,27 +247,46 @@ void wxFileName::Assign(const wxString& fullpath,
     Assign(volume, path, name, ext, format);
 }
 
-void wxFileName::Assign(const wxString& fullpath,
+void wxFileName::Assign(const wxString& fullpathOrig,
                         const wxString& fullname,
                         wxPathFormat format)
 {
+    // always recognize fullpath as directory, even if it doesn't end with a
+    // slash
+    wxString fullpath = fullpathOrig;
+    if ( !wxEndsWithPathSeparator(fullpath) )
+    {
+        fullpath += GetPathSeparators(format)[0u];
+    }
+
     wxString volume, path, name, ext;
+
+    // do some consistency checks in debug mode: the name should be really just
+    // the filename and the path should be realyl just a path
+#ifdef __WXDEBUG__
+    wxString pathDummy, nameDummy, extDummy;
+
+    SplitPath(fullname, &pathDummy, &name, &ext, format);
+
+    wxASSERT_MSG( pathDummy.empty(),
+                  _T("the file name shouldn't contain the path") );
+
+    SplitPath(fullpath, &volume, &path, &nameDummy, &extDummy, format);
+
+    wxASSERT_MSG( nameDummy.empty() && extDummy.empty(),
+                  _T("the path shouldn't contain file name nor extension") );
+
+#else // !__WXDEBUG__
     SplitPath(fullname, NULL /* no path */, &name, &ext, format);
     SplitPath(fullpath, &volume, &path, NULL, NULL, format);
+#endif // __WXDEBUG__/!__WXDEBUG__
 
     Assign(volume, path, name, ext, format);
 }
 
 void wxFileName::AssignDir(const wxString& dir, wxPathFormat format)
 {
-    // always recognize dir as directory, even if it doesn't end with a slash
-    wxString dirname = dir;
-    if ( !wxEndsWithPathSeparator(dirname) )
-    {
-        dirname += GetPathSeparators(format)[0u];
-    }
-
-    Assign(dirname, _T(""), format);
+    Assign(dir, _T(""), format);
 }
 
 void wxFileName::Clear()

@@ -740,6 +740,17 @@ static void TestFileConfRead()
 
 #include "wx/filename.h"
 
+static void DumpFileName(const wxFileName& fn)
+{
+    wxString full = fn.GetFullPath();
+
+    wxString vol, path, name, ext;
+    wxFileName::SplitPath(full, &vol, &path, &name, &ext);
+
+    wxPrintf(_T("Filename '%s' -> vol '%s', path '%s', name '%s', ext '%s'\n"),
+             full.c_str(), vol.c_str(), path.c_str(), name.c_str(), ext.c_str());
+}
+
 static struct FileNameInfo
 {
     const wxChar *fullname;
@@ -5216,11 +5227,19 @@ int main(int argc, char **argv)
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
-    TestFileNameTemp();
+    if ( 0 )
+    {
+        wxFileName fn;
+        fn.Assign("c:\\foo", "bar.baz");
+
+        DumpFileName(fn);
+    }
+
     if ( 0 )
     {
     TestFileNameConstruction();
     TestFileNameSplit();
+    TestFileNameTemp();
         TestFileNameCwd();
         TestFileNameComparison();
         TestFileNameOperations();

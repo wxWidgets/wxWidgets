@@ -173,7 +173,11 @@ Constructor from a directory name and a file name.
 
 \func{}{wxFileName}{\param{const wxString\& }{path}, \param{const wxString\& }{name}, \param{const wxString\& }{ext}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-Constructor from a directory name, file base name and extension
+Constructor from a directory name, base file name and extension
+
+\func{}{wxFileName}{\param{const wxString\& }{volume}, \param{const wxString\& }{path}, \param{const wxString\& }{name}, \param{const wxString\& }{ext}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
+Constructor from a volume name, a directory name, base file name and extension
 
 \membersection{wxFileName::AppendDir}\label{wxfilenameappenddir}
 
@@ -208,15 +212,14 @@ volume (or current volume if {\it volume} is empty).
 
 \func{void}{AssignDir}{\param{const wxString\& }{dir}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-empty volume
-
+Set this file name object to the given directory name. The name and extension
+will be empty.
 
 \membersection{wxFileName::AssignHomeDir}\label{wxfilenameassignhomedir}
 
 \func{void}{AssignHomeDir}{\void}
 
-get the value of user home (Unix only mainly)
-
+Set this file name object to the home directory.
 
 \membersection{wxFileName::AssignTempFileName}\label{wxfilenameassigntempfilename}
 

@@ -96,6 +96,14 @@ public:
                wxPathFormat format = wxPATH_NATIVE)
         { Assign(path, name, format); }
 
+        // from a volume, directory name, file base name and extension
+    wxFileName(const wxString& volume,
+               const wxString& path,
+               const wxString& name,
+               const wxString& ext,
+               wxPathFormat format = wxPATH_NATIVE)
+        { Assign(volume, path, name, ext, format); }
+
         // from a directory name, file base name and extension
     wxFileName(const wxString& path,
                const wxString& name,
