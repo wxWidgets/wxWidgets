@@ -3577,7 +3577,9 @@ the value of the trace mask (possible during the run-time).
 
 For the second function (taking a string mask), the message is logged only if
 the mask has been previously enabled by the call to
-\helpref{AddTraceMask}{wxlogaddtracemask}. The predefined string trace masks
+\helpref{AddTraceMask}{wxlogaddtracemask} or by setting
+\helpref{{\tt WXTRACE} environment variable}{envvars}.
+The predefined string trace masks
 used by wxWindows are:
 
 \begin{itemize}\itemsep=0pt
