@@ -916,6 +916,7 @@ progdlg.h	WXH
 prop.h	WXH
 propform.h	WXH
 proplist.h	WXH
+quantize.h	WXH
 radiobox.h	WXH
 radiobut.h	WXH
 regex.h	WXH	Base

@@ -427,6 +427,7 @@ ALL_HEADERS = \
 		prop.h \
 		propform.h \
 		proplist.h \
+		quantize.h \
 		radiobox.h \
 		radiobut.h \
 		regex.h \

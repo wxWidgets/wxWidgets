@@ -11,7 +11,7 @@
 # Makefile : Builds wxWindows library for Watcom C++, WIN32
 !include ..\makewat.env
 
-LIBTARGET   = $(WXDIR)\lib\wx$(TOOLKIT)$(DEBGUSUFFIX)_w.lib
+LIBTARGET   = $(WXDIR)\lib\wx$(TOOLKIT)$(DEBGUSUFFIX)$(WATCOM_SUFFIX).lib
 
 EXTRATARGETS = png zlib jpeg tiff regex
 EXTRATARGETSCLEAN = clean_png clean_zlib clean_jpeg clean_tiff clean_regex
@@ -362,11 +362,11 @@ $(OUTPUTDIR):
 $(SETUP_H): $(WXDIR)\include\wx\msw\setup.h $(ARCHINCDIR)\wx
 	copy $(WXDIR)\include\wx\msw\setup.h $@
 
-LBCFILE=$(OUTPUTDIR)wx$(TOOLKIT).lbc
+LBCFILE=wx$(TOOLKIT).lbc
 $(LIBTARGET) : $(OBJECTS)
     %create $(LBCFILE)
     @for %i in ( $(OBJECTS) ) do @%append $(LBCFILE) +%i
-    $(LIB) /b /c /n $(LIBPAGESIZE) $^@ @$(LBCFILE)
+    wlib /b /c /n /p=512 $^@ @$(LBCFILE)
 
 
 clean:   .SYMBOLIC $(EXTRATARGETSCLEAN)
@@ -1109,7 +1109,7 @@ $(OUTPUTDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
   *$(CC) $(CFLAGS) -DUSE_DEFINE $(COMMDIR)\y_tab.c
 
 $(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-    copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
+        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
 
 $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c

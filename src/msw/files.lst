@@ -456,6 +456,7 @@ ALL_HEADERS = \
 		prop.h \
 		propform.h \
 		proplist.h \
+		quantize.h \
 		radiobox.h \
 		radiobut.h \
 		regex.h \
@@ -988,6 +989,8 @@ GUI_LOWLEVEL_OBJS = \
 		dde.o \
 		dialup.o \
 		dib.o \
+		dirdlg.o \
+		enhmeta.o \
 		evtloop.o \
 		font.o \
 		fontenum.o \

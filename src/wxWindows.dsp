@@ -2170,6 +2170,10 @@ SOURCE=..\include\wx\proplist.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\quantize.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\radiobox.h
 # End Source File
 # Begin Source File
