@@ -200,11 +200,11 @@ public:
 
     // compatibility only, don't use
 #if WXWIN_COMPATIBILITY_2_2
-    const wxBitmap& GetBitmap1() const { return GetNormalBitmap(); }
-    const wxBitmap& GetBitmap2() const { return GetDisabledBitmap(); }
+    wxDEPRECATED( const wxBitmap& GetBitmap1() const );
+    wxDEPRECATED( const wxBitmap& GetBitmap2() const );
 
-    void SetBitmap1(const wxBitmap& bmp) { SetNormalBitmap(bmp); }
-    void SetBitmap2(const wxBitmap& bmp) { SetDisabledBitmap(bmp); }
+    wxDEPRECATED( void SetBitmap1(const wxBitmap& bmp) );
+    wxDEPRECATED( void SetBitmap2(const wxBitmap& bmp) );
 #endif // WXWIN_COMPATIBILITY_2_2
 
 protected:

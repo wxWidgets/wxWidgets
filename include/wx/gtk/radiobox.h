@@ -97,17 +97,16 @@ public:
 
     // for compatibility only, don't use these methods in new code!
 #if WXWIN_COMPATIBILITY_2_2
-    int Number() const { return GetCount(); }
-    wxString GetLabel(int n) const { return GetString(n); }
-    void SetLabel( int item, const wxString& label )
-        { SetString(item, label); }
+    wxDEPRECATED( int Number() const );
+    wxDEPRECATED( wxString GetLabel(int n) const );
+    wxDEPRECATED( void SetLabel( int item, const wxString& label ) );
 #endif // WXWIN_COMPATIBILITY_2_2
 
     // we have to override those to avoid virtual function name hiding
     virtual wxString GetLabel() const { return wxControl::GetLabel(); }
     virtual void SetLabel( const wxString& label );
-    virtual bool Show( bool show = TRUE );
-    virtual bool Enable( bool enable = TRUE );
+    virtual bool Show( bool show = true );
+    virtual bool Enable( bool enable = true );
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

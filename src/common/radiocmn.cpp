@@ -148,5 +148,24 @@ void wxRadioBoxBase::SetNumberOfRowsOrCols(int WXUNUSED(n))
 
 #endif // WXWIN_COMPATIBILITY_2_4
 
+#if WXWIN_COMPATIBILITY_2_2
+
+int wxRadioBoxBase::Number() const
+{
+    return GetCount();
+}
+
+wxString wxRadioBoxBase::GetLabel(int n) const
+{
+    return GetString(n);
+}
+
+void wxRadioBoxBase::SetLabel(int n, const wxString& label)
+{
+    SetString(n, label);
+}
+
+#endif // WXWIN_COMPATIBILITY_2_2
+
 #endif // wxUSE_RADIOBOX
 

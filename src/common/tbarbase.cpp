@@ -114,6 +114,30 @@ bool wxToolBarToolBase::SetLongHelp(const wxString& help)
     return true;
 }
 
+#if WXWIN_COMPATIBILITY_2_2
+
+const wxBitmap& wxToolBarToolBase::GetBitmap1() const
+{
+    return GetNormalBitmap();
+}
+
+const wxBitmap& wxToolBarToolBase::GetBitmap2() const
+{
+    return GetDisabledBitmap();
+}
+
+void wxToolBarToolBase::SetBitmap1(const wxBitmap& bmp)
+{
+    SetNormalBitmap(bmp);
+}
+
+void wxToolBarToolBase::SetBitmap2(const wxBitmap& bmp)
+{
+    SetDisabledBitmap(bmp);
+}
+
+#endif // WXWIN_COMPATIBILITY_2_2
+
 // ----------------------------------------------------------------------------
 // wxToolBarBase adding/deleting items
 // ----------------------------------------------------------------------------

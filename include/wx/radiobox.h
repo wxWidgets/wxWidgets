@@ -97,9 +97,9 @@ public:
 
     // for compatibility only, don't use these methods in new code!
 #if WXWIN_COMPATIBILITY_2_2
-    int Number() const { return GetCount(); }
-    wxString GetLabel(int n) const { return GetString(n); }
-    void SetLabel(int n, const wxString& label) { SetString(n, label); }
+    wxDEPRECATED( int Number() const );
+    wxDEPRECATED( wxString GetLabel(int n) const );
+    wxDEPRECATED( void SetLabel(int n, const wxString& label) );
 #endif // WXWIN_COMPATIBILITY_2_2
 };
 
