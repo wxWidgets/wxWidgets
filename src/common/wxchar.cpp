@@ -106,6 +106,15 @@ bool WXDLLEXPORT wxOKlibc()
   return TRUE;
 }
 
+#ifdef wxNEED_WCSLEN
+size_t   WXDLLEXPORT wcslen(const wchar_t *s)
+{
+  size_t len;
+  while (s[len]) len++;
+  return len;
+}
+#endif
+
 #ifndef wxStrdup
 wxChar * WXDLLEXPORT wxStrdup(const wxChar *psz)
 {
