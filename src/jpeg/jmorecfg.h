@@ -186,7 +186,7 @@ typedef unsigned int JDIMENSION;
  * or code profilers that require it.
  */
 
-#if defined(__VISAGECPP__) && !defined(JPEGLOCAL) /* need this for /common/imagjpeg.obj but not loclly */
+#if defined(__VISAGECPP__) /* need this for /common/imagjpeg.obj but not loclly */
 /* a function called through method pointers: */
 #define METHODDEF(type)		static type _Optlink
 /* a function used only in its module: */
@@ -212,12 +212,22 @@ typedef unsigned int JDIMENSION;
  * Again, you can customize this if you need special linkage keywords.
  */
 
+#if defined(__VISAGECPP__) /* need this for /common/imagjpeg.obj but not loclly */
+#ifdef HAVE_PROTOTYPES
+#define JMETHOD(type,methodname,arglist)  type (_Optlink *methodname) arglist
+#else
+#define JMETHOD(type,methodname,arglist)  type (_Optlink *methodname) ()
+#endif
+
+#else
+
 #ifdef HAVE_PROTOTYPES
 #define JMETHOD(type,methodname,arglist)  type (*methodname) arglist
 #else
 #define JMETHOD(type,methodname,arglist)  type (*methodname) ()
 #endif
 
+#endif
 
 /* Here is the pseudo-keyword for declaring pointers that must be "far"
  * on 80x86 machines.  Most of the specialized coding for 80x86 is handled

@@ -13,17 +13,26 @@
 OBJSUFF=obj
 SRCSUFF=cpp
 
-OS2FLAGS=/c /W2 /DOS232 /D__VISAGECPP__ /D__WXPM__ /DJPEGLOCAL /Ss /Q /N100
+OS2FLAGS=/c /W2 /DOS232 /D__VISAGECPP__ /D__WXPM__ /DJPEGLOCAL /Ss /Q /N100 /Tdc
 OS2LINKFLAGS=/BASE:0x00010000 /PMTYPE:PM /NOE /NOD /ALIGN:16
 OS2LIBFLAGS=/NOL /NOE
 OS2LIBS=CPPOM30.lib CPPOOC3.LIB OS2386.LIB
+
+!if "$(WXMAKINGDLL)" != "0"
+EXTRADLLFLAGS=/DWXMAKINGDLL=1 /Ge- /D__OS2DLL__
+EXTRALNKFLAGS=/DLL
+!endif
 
 # Change WXDIR or WXWIN to wherever wxWindows is found
 WXDIR = $(WXWIN)
 
 OS2JPEGDIR=$(WXDIR)\src\jpeg
 OS2JPEGINC=$(WINJPEGDIR)
+!if "$(WXMAKINGDLL)" != "1"
 OS2JPEGLIB=$(WXDIR)\lib\os2jpeg.lib
+!else
+OS2JPEGLIB=$(WXDIR)\lib\os2jpeg.dll
+!endif
 
 TEMP1TGT=$(WXDIR)\lib\os2jpeg1.lib
 TEMP2TGT=$(WXDIR)\lib\os2jpeg2.lib
@@ -44,7 +53,12 @@ MAKEPRECOMP=/Fi$(PCH)
 !endif
 
 !if "$(FINAL)" == "0"
+!if "$(WXMAKINGDLL)" == "1"
+D=DebugOS2DLL
+!else
 D=DebugOS2
+!endif
+
 OPT =
 DEBUG_FLAGS= /Ti /D__WXDEBUG__ #/Fb
 LINK_DEBUG_FLAGS=/DEBUG
@@ -52,7 +66,11 @@ CRTFLAG=/Gm /Gd
 !else
 # /O1 - smallest code
 # /O2 - fastest code
+!if "$(WXMAKINGDLL)" == "1"
+D=RelseOS2DLL
+!else
 D=RelseOS2
+!endif
 OPT = /O+ /Oc /G5
 DEBUG_FLAGS=
 LINK_DEBUG_FLAGS=/RELEASE
@@ -62,7 +80,8 @@ CRTFLAG=/Gm /Gd
 !if [md $(OS2JPEGDIR)\$D]
 !endif
 
-CPPFLAGS=$(OS2FLAGS) $(DEBUG_FLAGS) $(PRECOMP) $(INC) $(OPT) $(CRTFLAG)
+CPPFLAGS=$(OS2FLAGS) $(EXTRADLLFLAGS) $(DEBUG_FLAGS) $(PRECOMP) $(INC) $(OPT) $(CRTFLAG)
+LINKFKAGS=$(OS2LINKFLAGS) $(EXTRALNKFLAGS)
 
 {..\jpeg}.c{..\jpeg\$D}.obj:
     @echo $<
@@ -263,6 +282,8 @@ $(DLIBLIBOBJS):
   copy ..\jpeg\$D\jquant2.obj
   copy ..\jpeg\$D\jdmerge.obj
 
+!if "$(WXMAKINGDLL)" != "1"
+
 $(WXDIR)\lib\os2jpeg1.lib: \
     $(COMLIBOBJS) \
     $(CLIBLIBOBJS)
@@ -290,6 +311,20 @@ $(WXDIR)\lib\os2jpeg.lib: \
   del *.obj
   del $(TEMP1TGT)
   del $(TEMP2TGT)
+
+!else
+
+# Update the dynamic link library
+$(WXDIR)\lib\os2jpeg.dll: $(OBJECTS)
+    icc @<<
+    /B" $(LINKFLAGS)" /Fe$@
+    $(LIBS)
+    $(OBJECTS)
+    $(WXDIR)\lib\os2jpeg.def
+<<
+    implib $(WXDIR)\lib\os2jpegd.lib $(WXDIR)\lib\os2jpeg.def
+
+!endif
 
 clean:
         del      $(OS2JPEGLIB)
