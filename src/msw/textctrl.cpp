@@ -151,6 +151,21 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
   if (m_windowStyle & wxTE_PASSWORD) // hidden input
     msStyle |= ES_PASSWORD;
 
+    // we always want the characters and the arrows
+    m_lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
+
+    // we may have several different cases:
+    // 1. normal case: both TAB and ENTER are used for dialog navigation
+    // 2. ctrl which wants TAB for itself: ENTER is used to pass to the next
+    //    control in the dialog
+    // 3. ctrl which wants ENTER for itself: TAB is used for dialog navigation
+    // 4. ctrl which wants both TAB and ENTER: Ctrl-ENTER is used to pass to
+    //    the next control
+    if ( m_windowStyle & wxTE_PROCESS_ENTER )
+        m_lDlgCode |= DLGC_WANTMESSAGE;
+    if ( m_windowStyle & wxTE_PROCESS_TAB )
+        m_lDlgCode |= DLGC_WANTTAB;
+
   const wxChar *windowClass = _T("EDIT");
 
 #if wxUSE_RICHEDIT
@@ -1121,26 +1136,6 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
     // FIXME
     event.Skip();
-}
-
-long wxTextCtrl::MSWGetDlgCode()
-{
-    // we always want the characters and the arrows
-    long lRc = DLGC_WANTCHARS | DLGC_WANTARROWS;
-
-    // we may have several different cases:
-    // 1. normal case: both TAB and ENTER are used for dialog navigation
-    // 2. ctrl which wants TAB for itself: ENTER is used to pass to the next
-    //    control in the dialog
-    // 3. ctrl which wants ENTER for itself: TAB is used for dialog navigation
-    // 4. ctrl which wants both TAB and ENTER: Ctrl-ENTER is used to pass to
-    //    the next control
-    if ( m_windowStyle & wxTE_PROCESS_ENTER )
-        lRc |= DLGC_WANTMESSAGE;
-    if ( m_windowStyle & wxTE_PROCESS_TAB )
-        lRc |= DLGC_WANTTAB;
-
-    return lRc;
 }
 
 bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))

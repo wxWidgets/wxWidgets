@@ -181,7 +181,6 @@ public:
 
     virtual void AdoptAttributesFromHWND();
     virtual void SetupColours();
-    virtual long MSWGetDlgCode();
 
 protected:
 #if wxUSE_RICHEDIT

@@ -296,12 +296,12 @@ public:
     bool HandleSysCommand(WXWPARAM wParam, WXLPARAM lParam);
 
     bool HandleCtlColor(WXHBRUSH *hBrush,
-                               WXHDC hdc,
-                               WXHWND hWnd,
-                               WXUINT nCtlColor,
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam);
+                        WXHDC hdc,
+                        WXHWND hWnd,
+                        WXUINT nCtlColor,
+                        WXUINT message,
+                        WXWPARAM wParam,
+                        WXLPARAM lParam);
 
     bool HandlePaletteChanged(WXHWND hWndPalChange);
     bool HandleQueryNewPalette();
@@ -384,6 +384,9 @@ protected:
 #endif // wxUSE_MOUSEEVENT_HACK
 
     WXHMENU               m_hMenu; // Menu, if any
+
+    // the return value of WM_GETDLGCODE handler
+    long m_lDlgCode;
 
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;

@@ -317,6 +317,20 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
         msflags |= WS_BORDER;
     }
 
+    // calculate the value to return from WM_GETDLGCODE handler
+    if ( GetWindowStyleFlag() & wxWANTS_CHARS )
+    {
+        // want everything: i.e. all keys and WM_CHAR message
+        m_lDlgCode = DLGC_WANTARROWS | DLGC_WANTCHARS |
+                     DLGC_WANTTAB | DLGC_WANTMESSAGE;
+        
+    }
+    else
+    {
+        // default behaviour
+        m_lDlgCode = 0;
+    }
+
     MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
               pos.x, pos.y,
               WidthDefault(size.x), HeightDefault(size.y),
@@ -1756,11 +1770,12 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
 
         case WM_GETDLGCODE:
-            if ( GetWindowStyleFlag() & wxWANTS_CHARS )
+            if ( m_lDlgCode )
             {
-                rc.result = DLGC_WANTARROWS | DLGC_WANTCHARS | DLGC_WANTTAB;
+                rc.result = m_lDlgCode;
                 processed = TRUE;
             }
+            //else: get the dlg code from the DefWindowProc()
             break;
 
         case WM_KEYDOWN:
