@@ -96,51 +96,6 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
         return;
     }
     ::GetPort( &macPrintFormerPort ) ;
-    /*
-    m_macPrintSessionPort = ::PrOpenDoc( (THPrint) m_printData.m_macPrintSettings , NULL , NULL ) ;
-    err = PrError() ;
-    if ( err )
-    {
-        message.Printf( "Print Error %ld", err ) ;
-        wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
-        dialog.ShowModal();
-        UMAPrClose(NULL) ;
-        m_ok = FALSE;
-        return;
-    }
-    // sets current port
-    m_macPort = (GrafPtr ) m_macPrintSessionPort ;
-    */
-#else
-    /*
-  #if PM_USE_SESSION_APIS
-    err = PMSessionBeginDocument((PMPrintSession)m_macPrintSessionPort,
-              (PMPrintSettings)m_printData.m_macPrintSettings, 
-              (PMPageFormat)m_printData.m_macPageFormat);
-    if ( err != noErr )
-  #else
-    m_macPrintSessionPort = kPMNoReference ;
-    err = PMBeginDocument(
-              m_printData.m_macPrintSettings, 
-              m_printData.m_macPageFormat, 
-              &m_macPrintSessionPort);
-    if ( err != noErr || m_macPrintSessionPort == kPMNoReference )
-  #endif
-    {
-        message.Printf( "Print Error %ld", err ) ;
-        wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
-        dialog.ShowModal();
-  #if TARGET_CARBON && PM_USE_SESSION_APIS
-        PMRelease(&m_macPrintSessionPort) ;
-  #else
-        UMAPrClose(NULL) ;
-  #endif
-        m_ok = FALSE;
-        return;
-    }
-    // sets current port
-    ::GetPort( (GrafPtr *)&m_macPort ) ;
-    */
 #endif
     m_ok = TRUE ;
     m_minY = m_minX = 0 ;
@@ -164,8 +119,8 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
     m_maxX = wxCoord(rPage.right - rPage.left) ;
     m_maxY = wxCoord(rPage.bottom - rPage.top);
 #else
-    m_maxX = (**(THPrint)m_printData.m_macPrintSettings).rPage.right - (**(THPrint)m_printData.m_macPrintSettings).rPage.left ;
-    m_maxY = (**(THPrint)m_printData.m_macPrintSettings).rPage.bottom - (**(THPrint)m_printData.m_macPrintSettings).rPage.top ;
+    m_maxX = (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.right - (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.left ;
+    m_maxY = (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.bottom - (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.top ;
 #endif
 }
 
@@ -176,45 +131,12 @@ wxPrinterDC::~wxPrinterDC(void)
 #if !TARGET_CARBON
     if ( m_ok )
     {
-        /*
-        ::PrCloseDoc( (TPPrPort) m_macPrintSessionPort  ) ;
-        err = PrError() ;
-        
-        if ( err == noErr )
-        {
-            if ( (**(THPrint)m_printData.m_macPrintSettings).prJob.bJDocLoop == bSpoolLoop )
-            {
-                TPrStatus status ;
-                ::PrPicFile( (THPrint) m_printData.m_macPrintSettings , NULL , NULL , NULL , &status ) ;
-            }
-        }
-        else
-        {
-            message.Printf( "Print Error %ld", err ) ;
-            wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
-            dialog.ShowModal();
-        }
-        */
         ::UMAPrClose(NULL) ;
-//      ::SetPort( macPrintFormerPort ) ;
         ::SetPort( LMGetWMgrPort() ) ;
     }
 #else
     if ( m_ok ) 
     {
-/*
-  #if PM_USE_SESSION_APIS
-        err = PMSessionEndDocument((PMPrintSession)m_macPrintSessionPort);
-  #else
-        err = PMEndDocument(m_macPrintSessionPort);
-  #endif
-         if ( err != noErr )
-         {
-            message.Printf( "Print Error %ld", err ) ;
-            wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
-            dialog.ShowModal();
-         }
-         */
   #if TARGET_CARBON && PM_USE_SESSION_APIS
         PMRelease(&m_macPrintSessionPort) ;
   #else
@@ -294,8 +216,8 @@ bool wxPrinterDC::StartDoc( const wxString& WXUNUSED(message) )
     m_maxX = rPage.right - rPage.left ;
     m_maxY = rPage.bottom - rPage.top ;
 #else
-    m_maxX = (**(THPrint)m_printData.m_macPrintSettings).rPage.right - (**(THPrint)m_printData.m_macPrintSettings).rPage.left ;
-    m_maxY = (**(THPrint)m_printData.m_macPrintSettings).rPage.bottom - (**(THPrint)m_printData.m_macPrintSettings).rPage.top ;
+    m_maxX = (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.right - (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.left ;
+    m_maxY = (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.bottom - (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.top ;
 #endif
     return m_ok ;
 }
