@@ -57,6 +57,7 @@ public:
                const wxValidator &validator = wxDefaultValidator,
                const wxString& name = wxTreeCtrlNameStr)
     {
+        Init();
         Create(parent, id, pos, size, style, validator, name);
     }
 

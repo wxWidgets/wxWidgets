@@ -706,6 +706,11 @@ wxString wxGetDisplayName()
     return gs_displayName;
 }
 
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+{
+    return wxGenericFindWindowAtPoint(pt);
+}
+
 // ----------------------------------------------------------------------------
 // accelerators
 // ----------------------------------------------------------------------------

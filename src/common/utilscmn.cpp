@@ -694,16 +694,19 @@ wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt)
         return NULL;
 }
 
-wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt)
 {
-    wxNode* node = wxTopLevelWindows.First();
+    // Go backwards through the list since windows
+    // on top are likely to have been appended most
+    // recently.
+    wxNode* node = wxTopLevelWindows.Last();
     while (node)
     {
         wxWindow* win = (wxWindow*) node->Data();
         wxWindow* found = wxFindWindowAtPoint(win, pt);
         if (found)
             return found;
-        node = node->Next();
+        node = node->Previous();
     }
     return NULL;
 }

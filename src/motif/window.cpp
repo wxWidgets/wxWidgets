@@ -2992,9 +2992,7 @@ wxWindow *wxGetActiveWindow()
 // position.
 wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 {
-    pt = wxGetMousePosition();
-    wxWindow* found = wxFindWindowAtPoint(pt);
-    return found;
+    return wxFindWindowAtPoint(wxGetMousePosition());
 }
 
 // Get the current mouse position.

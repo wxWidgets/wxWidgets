@@ -191,8 +191,8 @@ bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
 #if !defined(__WXMSW__)
 static char * csquery_xpm[] = {
 "12 11 2 1",
-" 	c None",
-".	c Black",
+"  c None",
+". c #000000",
 "            ",
 "    ....    ",
 "   ..  ..   ",
@@ -228,7 +228,7 @@ wxContextHelpButton::wxContextHelpButton(wxWindow* parent, wxWindowID id,
 
 void wxContextHelpButton::OnContextHelp(wxCommandEvent& event)
 {
-    wxContextHelp contextHelp;
+    wxContextHelp contextHelp(GetParent());
 }
 
 #endif // wxUSE_HELP

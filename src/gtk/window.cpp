@@ -3777,6 +3777,8 @@ wxPoint wxGetMousePosition()
 
     int x, y;
     GdkWindow* windowAtPtr = gdk_window_at_pointer(& x, & y);
+    if (!windowAtPtr)
+      return wxPoint(-999, -999);
 
     Display *display = GDK_WINDOW_XDISPLAY(windowAtPtr);
     Window rootWindow = RootWindowOfScreen (DefaultScreenOfDisplay(display));

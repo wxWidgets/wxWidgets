@@ -329,3 +329,7 @@ void wxDisplaySize(int *width, int *height)
  #endif
 }
 
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+{
+    return wxGenericFindWindowAtPoint(pt);
+}

@@ -4389,9 +4389,15 @@ static TEXTMETRIC wxGetTextMetrics(const wxWindow *win)
 // position.
 wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 {
-    // Use current message to find last mouse position
-    extern MSG s_currentMsg;
-    HWND hWndHit = ::WindowFromPoint(s_currentMsg.pt);
+    return wxFindWindowAtPoint(wxGetMousePosition());
+}
+
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+{
+    POINT pt2;
+    pt2.x = pt.x;
+    pt2.y = pt.y;
+    HWND hWndHit = ::WindowFromPoint(pt2);
 
     wxWindow* win = wxFindWinFromHandle((WXHWND) hWndHit) ;
     HWND hWnd = hWndHit;

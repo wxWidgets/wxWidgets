@@ -638,8 +638,6 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent, wxWindowID id,
                         const wxValidator &validator,
                         const wxString& name )
 {
-    Init();
-
     wxScrolledWindow::Create( parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, name );
 
 #if wxUSE_VALIDATORS

@@ -111,6 +111,12 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
   return wxGTK;
 }
 
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+{
+    return wxGenericFindWindowAtPoint(pt);
+}
+
+
 // ----------------------------------------------------------------------------
 // subprocess routines
 // ----------------------------------------------------------------------------
