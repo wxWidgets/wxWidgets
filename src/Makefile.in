@@ -81,6 +81,7 @@ LIB_CPP_SRC=\
  gtk/filedlg.cpp \
  gtk/font.cpp \
  gtk/frame.cpp \
+ gtk/gauge.cpp \
  gtk/gdiobj.cpp \
  gtk/icon.cpp \
  gtk/listbox.cpp \
