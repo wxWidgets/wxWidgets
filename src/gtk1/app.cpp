@@ -82,24 +82,26 @@ void wxExit()
 
 bool wxYield()
 {
-    bool has_idle = (wxTheApp->m_idleTag != 0);
+#ifdef __WXDEBUG__
+    static bool s_inYield = FALSE;
+    
+    if (s_inYield)
+        wxFAIL_MSG( wxT("wxYield called recursively" ) );
+    
+    s_inYield = TRUE;
+#endif
 
-    if (has_idle)
+    if (!g_isIdle)
     {
-        /* We need to temporarily remove idle callbacks or the loop will
-           never finish. */
+        // We need to remove idle callbacks or the loop will
+        // never finish.
         gtk_idle_remove( wxTheApp->m_idleTag );
         wxTheApp->m_idleTag = 0;
+        g_isIdle = TRUE;
     }
 
     while (gtk_events_pending())
         gtk_main_iteration();
-
-    if (has_idle)
-    {
-        /* re-add idle handler (very low priority) */
-        wxTheApp->m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
-    }
 
     // disable log flushing from here because a call to wxYield() shouldn't
     // normally result in message boxes popping up &c
@@ -112,6 +114,10 @@ bool wxYield()
 
     // let the logs be flashed again
     wxLog::Resume();
+
+#ifdef __WXDEBUG__
+    s_inYield = FALSE;
+#endif
 
     return TRUE;
 }
@@ -199,6 +205,8 @@ void wxapp_install_idle_handler()
 {
     wxASSERT_MSG( wxTheApp->m_idleTag == 0, wxT("attempt to install idle handler twice") );
 
+    g_isIdle = FALSE;
+
     if (g_pendingTag == 0)
         g_pendingTag = gtk_idle_add_priority( 900, wxapp_pending_callback, (gpointer) NULL );
         
@@ -209,8 +217,6 @@ void wxapp_install_idle_handler()
        idle time). Very low priority. */
 
     wxTheApp->m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
-
-    g_isIdle = FALSE;
 }
 
 #if wxUSE_THREADS
