@@ -722,7 +722,7 @@ bool wxRegKey::HasValue(const wxChar *szValue) const
   // this function should be silent, so suppress possible messages from Open()
   wxLogNull nolog;
 
-    if ( !CONST_CAST Open() )
+    if ( !CONST_CAST Open(Read) )
         return FALSE;
 
     LONG dwRet = ::RegQueryValueEx((HKEY) m_hKey,
@@ -762,7 +762,7 @@ bool wxRegKey::HasSubKey(const wxChar *szKey) const
   // this function should be silent, so suppress possible messages from Open()
   wxLogNull nolog;
 
-  if ( !CONST_CAST Open() )
+  if ( !CONST_CAST Open(Read) )
     return FALSE;
 
   return KeyExists(m_hKey, szKey);
@@ -770,7 +770,7 @@ bool wxRegKey::HasSubKey(const wxChar *szKey) const
 
 wxRegKey::ValueType wxRegKey::GetValueType(const wxChar *szValue) const
 {
-    if ( ! CONST_CAST Open() )
+    if ( ! CONST_CAST Open(Read) )
       return Type_None;
 
     DWORD dwType;
@@ -802,7 +802,7 @@ bool wxRegKey::SetValue(const wxChar *szValue, long lValue)
 
 bool wxRegKey::QueryValue(const wxChar *szValue, long *plValue) const
 {
-  if ( CONST_CAST Open() ) {
+  if ( CONST_CAST Open(Read) ) {
     DWORD dwType, dwSize = sizeof(DWORD);
     RegString pBuf = (RegString)plValue;
     m_dwLastError = RegQueryValueEx((HKEY) m_hKey, WXSTRINGCAST szValue, RESERVED,
@@ -830,7 +830,7 @@ bool wxRegKey::QueryValue(const wxChar *szValue,
                           wxString& strValue,
                           bool raw) const
 {
-  if ( CONST_CAST Open() ) {
+  if ( CONST_CAST Open(Read) ) {
 
       // first get the type and size of the data
       DWORD dwType, dwSize;
@@ -922,7 +922,7 @@ wxString wxRegKey::QueryDefaultValue() const
 
 bool wxRegKey::GetFirstValue(wxString& strValueName, long& lIndex)
 {
-  if ( !Open() )
+  if ( !Open(Read) )
     return FALSE;
 
   lIndex = 0;
@@ -967,7 +967,7 @@ bool wxRegKey::GetNextValue(wxString& strValueName, long& lIndex) const
 
 bool wxRegKey::GetFirstKey(wxString& strKeyName, long& lIndex)
 {
-  if ( !Open() )
+  if ( !Open(Read) )
     return FALSE;
 
   lIndex = 0;
