@@ -81,7 +81,6 @@ bool MyApp::OnInit()
   // Create a new server
   my_server = new MyServer;
   my_server->Create(server_name);
-
   frame->Show(TRUE);
 
   return TRUE;
@@ -164,8 +163,11 @@ MyConnection::MyConnection(char *buf, int size):wxConnection(buf, size)
 
 MyConnection::~MyConnection(void)
 {
-  dialog->Destroy();
-  the_connection = NULL;
+  if (the_connection)
+  {
+    dialog->Destroy();
+    the_connection = NULL;
+  }
 }
 
 bool MyConnection::OnExecute(const wxString& topic, char *data, int size, wxIPCFormat format)
@@ -191,6 +193,6 @@ char *MyConnection::OnRequest(const wxString& topic, const wxString& item, int *
 
 bool MyConnection::OnStartAdvise(const wxString& topic, const wxString& item)
 {
-    return TRUE;
+  return TRUE;
 }
 

@@ -79,7 +79,12 @@ bool MyApp::OnInit()
   frame->Fit();
 
   wxString server = "4242";
+
+#if wxUSE_DDE_FOR_SAMPLE
   wxString hostName = wxGetHostName();
+#else
+  wxString hostName = "localhost";
+#endif
 
   if (argc > 1)
     server = argv[1];
@@ -99,7 +104,8 @@ bool MyApp::OnInit()
 #endif
     return FALSE;
   }
-  the_connection->StartAdvise("Item");
+  if (!the_connection->StartAdvise("Item"))
+    wxMessageBox("StartAdvise failed", "Client Demo Error");
 
   frame->Show(TRUE);
 
@@ -132,13 +138,15 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, cons
 void MyFrame::OnExecute(wxCommandEvent& event)
 {
       if (the_connection)
-        the_connection->Execute("Hello from the client!");
+        if (!the_connection->Execute("Hello from the client!"))
+          wxMessageBox("Execute failed", "Client Demo Error");
 }
 
 void MyFrame::OnPoke(wxCommandEvent& event)
 {
       if (the_connection)
-        the_connection->Poke("An item", "Some data to poke at the server!");
+        if (!the_connection->Poke("An item", "Some data to poke at the server!"))
+          wxMessageBox("Poke failed", "Client Demo Error");
 }
 
 void MyFrame::OnRequest(wxCommandEvent& event)
@@ -148,6 +156,8 @@ void MyFrame::OnRequest(wxCommandEvent& event)
         char *data = the_connection->Request("An item");
         if (data)
           wxMessageBox(data, "Client: Request", wxOK);
+        else
+          wxMessageBox("Request failed", "Client Demo Error");
       }
 }
 
