@@ -1540,39 +1540,53 @@ wxString wxFileSelector( const wxChar *title,
     }
 }
 
-wxString wxLoadFileSelector( const wxChar *what, const wxChar *ext, const wxChar *default_name, wxWindow *parent )
+static wxString GetWildcardString(const wxChar *ext)
 {
-    wxString prompt = wxString::Format(_("Load %s file"), what);
+    wxString wild;
+    if ( ext )
+    {
+        if ( *ext == wxT('.') )
+            ext++;
 
-    if (*ext == wxT('.'))
-        ext++;
+        wild << _T("*.") << ext;
+    }
+    else // no extension specified
+    {
+        wild = wxFileSelectorDefaultWildcardStr;
+    }
 
-    wxString wild = wxString::Format(_T("*.%s"), ext);
-
-    return wxFileSelector(prompt, (const wxChar *) NULL, default_name,
-                          ext, wild, 0, parent);
+    return wild;
 }
 
-wxString wxSaveFileSelector(const wxChar *what, const wxChar *extension, const wxChar *default_name,
-         wxWindow *parent )
+wxString wxLoadFileSelector(const wxChar *what,
+                            const wxChar *ext,
+                            const wxChar *nameDef,
+                            wxWindow *parent)
 {
-    wxChar *ext = (wxChar *)extension;
+    wxString prompt;
+    if ( what && *what )
+        prompt = wxString::Format(_("Load %s file"), what);
+    else
+        prompt = _("Load file");
 
-    wxString prompt = wxString::Format(_("Save %s file"), what);
-
-    if (*ext == wxT('.'))
-        ext++;
-
-    wxString wild = wxString::Format(_T("*.%s"), ext);
-
-    return wxFileSelector(prompt, (const wxChar *) NULL, default_name,
-                          ext, wild, 0, parent);
+    return wxFileSelector(prompt, NULL, nameDef, ext,
+                          GetWildcardString(ext), 0, parent);
 }
 
+wxString wxSaveFileSelector(const wxChar *what,
+                            const wxChar *ext,
+                            const wxChar *nameDef,
+                            wxWindow *parent)
+{
+    wxString prompt;
+    if ( what && *what )
+        prompt = wxString::Format(_("Save %s file"), what);
+    else
+        prompt = _("Save file");
 
-
-
-
+    return wxFileSelector(prompt, NULL, nameDef, ext,
+                          GetWildcardString(ext), 0, parent);
+}
 
 // A module to allow icons table cleanup
 
