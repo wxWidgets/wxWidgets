@@ -169,7 +169,7 @@ int wxBaseArray::Index(long lItem, bool bFromEnd) const
 }
 
 // search for an item in a sorted array (binary search)
-int wxBaseArray::Index(long lItem, CMPFUNC fnCompare)
+int wxBaseArray::Index(long lItem, CMPFUNC fnCompare) const
 {
   uint i,
        lo = 0,

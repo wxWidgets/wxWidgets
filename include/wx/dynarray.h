@@ -125,7 +125,7 @@ protected:
      */
   int Index(long lItem, bool bFromEnd = FALSE) const;
     /// search for an item using binary search in a sorted array
-  int Index(long lItem, CMPFUNC fnCompare);
+  int Index(long lItem, CMPFUNC fnCompare) const;
     /// add new element at the end
   void Add(long lItem);
     /// add item assuming the array is sorted with fnCompare function

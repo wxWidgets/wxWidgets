@@ -231,7 +231,6 @@ public:
     void SetLine(LineList *pLine);
   };
 
-protected:
   class ConfigGroup
   {
   private:
