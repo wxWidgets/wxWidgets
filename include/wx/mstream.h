@@ -32,6 +32,8 @@ class wxMemoryInputStream: virtual public wxMemoryStreamBase, public wxInputStre
   wxMemoryInputStream(const char *data, size_t length);
   virtual ~wxMemoryInputStream();
 
+  char Peek();
+
  protected:
  
   size_t DoRead(void *buffer, size_t size);

@@ -75,6 +75,13 @@ wxMemoryInputStream::~wxMemoryInputStream()
 {
 }
 
+char wxMemoryInputStream::Peek()
+{
+   // wxStreamBuffer is disabled so just peek the current character.
+
+   return m_buffer[m_position_i];
+}
+
 size_t wxMemoryInputStream::DoRead(void *buffer, size_t size)
 {
   if (m_iolimit == 2) {
