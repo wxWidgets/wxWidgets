@@ -126,8 +126,7 @@ public:
 
     wxVectorBase& operator = (const wxVectorBase& vb)
     {
-        bool rc = copy(vb);
-        wxASSERT(rc);
+        wxCHECK(copy(vb), *this);
         return *this;
     }
 };
@@ -146,8 +145,7 @@ public:\
     cls() {}\
     cls(const cls& c)\
     {\
-        bool rc = copy(c);\
-        wxASSERT(rc);\
+        wxCHECK2(copy(c), return);\
     }\
     ~cls()\
     {\
@@ -161,8 +159,7 @@ class exp cls : public wxVectorBase\
 public:\
     void push_back(const obj& o)\
     {\
-        bool rc = Alloc(size() + 1);\
-        wxASSERT(rc);\
+        wxCHECK2(Alloc(size() + 1), return);\
         Append(new obj(o));\
     };\
     void pop_back()\

@@ -151,9 +151,11 @@ void wxFileSelOk(Widget WXUNUSED(fs), XtPointer WXUNUSED(client_data), XmFileSel
 
 static wxString ParseWildCard( const wxString& wild )
 {
+#ifdef __WXDEBUG__
     static const wxChar* msg =
         _T("Motif file dialog does not understand this ")
         _T("wildcard syntax");
+#endif
 
     wxStringTokenizer tok( wild, _T("|") );
 

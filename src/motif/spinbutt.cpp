@@ -183,7 +183,7 @@ bool wxArrowButton::Create( wxSpinButton* parent, wxWindowID id,
                             ArrowDirection d,
                             const wxPoint& pos, const wxSize& size )
 {
-    int arrow_dir;
+    int arrow_dir = XmARROW_UP;
 
     switch( d )
     {

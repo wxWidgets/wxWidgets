@@ -285,7 +285,7 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
 {
     // the generic version is unused in wxMSW
 #ifndef __WIN32__
-    wxChar ch;
+    wxChar ch = 0;
     int keycode = event.GetKeyCode();
     switch ( keycode )
     {
