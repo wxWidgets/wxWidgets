@@ -151,7 +151,7 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
 
     m_ZipFile = left;
     wxString nativename = wxFileSystem::URLToFileName(m_ZipFile).GetFullPath();
-    m_Archive = (void*) unzOpen(nativename.mb_str());
+    m_Archive = (void*) unzOpen(nativename.fn_str());
     m_Pattern = right.AfterLast(wxT('/'));
     m_BaseDir = right.BeforeLast(wxT('/'));
 
@@ -196,7 +196,7 @@ wxString wxZipFSHandler::DoFind()
     {
         unzGetCurrentFileInfo((unzFile)m_Archive, NULL, namebuf, 1024, NULL, 0, NULL, 0);
         for (c = namebuf; *c; c++) if (*c == '\\') *c = '/';
-        namestr = wxString::FromAscii( namebuf );    // TODO what encoding does ZIP use?
+        namestr = wxString::FromAscii(namebuf); // TODO what encoding does ZIP use?
 
         if (m_AllowDirs)
         {

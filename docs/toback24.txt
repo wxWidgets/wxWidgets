@@ -221,6 +221,17 @@ Checking in src/msw/regconf.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/regconf.cpp,v  <--  regconf.cpp
 new revision: 1.48; previous revision: 1.47
 
+31. Cleanup of ZIP charset conversion in Unicode build
+
+Checking in fs_zip.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/fs_zip.cpp,v  <--  fs_zip.cpp
+new revision: 1.27; previous revision: 1.26
+done
+Checking in zipstrm.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/zipstrm.cpp,v  <--  zipstrm.cpp
+new revision: 1.10; previous revision: 1.9
+done
+
 
 TODO for 2.4 (items that are not backports)
 ===========================================

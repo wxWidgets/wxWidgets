@@ -40,13 +40,14 @@ wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file
 
     m_Pos = 0;
     m_Size = 0;
-    m_Archive = (void*) unzOpen(archive.mb_str());
+    m_Archive = (void*) unzOpen(archive.fn_str());
     if (m_Archive == NULL)
     {
         m_lasterror = wxSTREAM_READ_ERROR;
         return;
     }
-    if (unzLocateFile((unzFile)m_Archive, file.mb_str(), 0) != UNZ_OK)
+    // TODO what encoding does ZIP use?
+    if (unzLocateFile((unzFile)m_Archive, file.ToAscii(), 0) != UNZ_OK)
     {
         m_lasterror = wxSTREAM_READ_ERROR;
         return;
