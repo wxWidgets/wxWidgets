@@ -10,6 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/defs.h"
+
+#if wxUSE_GUI
+
 #include "wx/dc.h"
 #include <MacTextEditor.h>
 
@@ -30,6 +33,7 @@
 #endif
 #include "wx/mac/uma.h"
 
+
 // since we have decided that we only support 8.6 upwards we are
 // checking for these minimum requirements in the startup code of
 // the application so all wxWindows code can safely assume that appearance 1.1
@@ -40,7 +44,6 @@ static bool    sUMAHasAppearance = false ;
 static long sUMAAppearanceVersion = 0 ;
 static long sUMASystemVersion = 0 ;
 static bool sUMAHasAquaLayout = false ;
-static bool sUMASystemInitialized = false ;
 
 extern int gAGABackgroundColor ;
 bool UMAHasAppearance() { return sUMAHasAppearance ; }
@@ -53,7 +56,7 @@ static long sUMAWindowManagerAttr = 0 ;
 bool UMAHasWindowManager() { return sUMAHasWindowManager ; }
 long UMAGetWindowManagerAttr() { return sUMAWindowManagerAttr ; }
 bool UMAHasAquaLayout() { return sUMAHasAquaLayout ; }
-bool UMASystemIsInitialized() { return sUMASystemInitialized ; }
+
 
 void UMACleanupToolbox()
 {
@@ -158,7 +161,7 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
   }
 
 
-  sUMASystemInitialized = true ;
+  UMASetSystemIsInitialized(true);
 
 }
 
@@ -295,7 +298,7 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
             // for some reasons this must be 0 right now
             // everything else leads to just the first function key item
             // to be selected. Thanks to Ryan Wilcox for finding out.
-            macKey = 0 ; 
+            macKey = 0 ;
             glyph = kMenuF1Glyph + ( key - WXK_F1 ) ;
             if ( key >= WXK_F13 )
                 glyph += 13 ;
@@ -777,3 +780,21 @@ OSStatus UMAPutScrap( Size size , OSType type , void *data )
     return err ;
 }
 
+#endif  // wxUSE_GUI
+
+#if wxUSE_BASE
+
+static bool sUMASystemInitialized = false ;
+
+bool UMASystemIsInitialized()
+{
+    return sUMASystemInitialized ;
+}
+
+void UMASetSystemIsInitialized(bool val)
+{
+    sUMASystemInitialized = val;
+}
+
+
+#endif // wxUSE_BASE

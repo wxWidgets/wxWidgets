@@ -109,10 +109,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/mimetmac.cpp
     src/unix/baseunix.cpp
     src/mac/utilsexc.cpp
+    src/mac/thread.cpp
+    src/mac/macnotfy.cpp
+    src/mac/morefilex/MoreFilesX.c
 </set>
 
 <set var="BASE_AND_GUI_MAC_SRC" hints="files">
     src/mac/utils.cpp
+    src/mac/uma.cpp
 </set>
 
 <set var="BASE_MAC_HDR" hints="files">
@@ -1546,13 +1550,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/gdiobj.cpp
     src/mac/icon.cpp
     src/mac/listbox.cpp
-    src/mac/macnotfy.cpp
     src/mac/mdi.cpp
     src/mac/menu.cpp
     src/mac/menuitem.cpp
     src/mac/metafile.cpp
     src/mac/minifram.cpp
-    src/mac/morefilex/MoreFilesX.c
     src/mac/msgdlg.cpp
     src/mac/notebmac.cpp
     src/mac/palette.cpp
@@ -1575,12 +1577,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/stattext.cpp
     src/mac/tabctrl.cpp
     src/mac/textctrl.cpp
-    src/mac/thread.cpp
     src/mac/timer.cpp
     src/mac/toolbar.cpp
     src/mac/tooltip.cpp
     src/mac/toplevel.cpp
-    src/mac/uma.cpp
     src/mac/window.cpp
     <!-- Generic implementations used by wxMac: -->
     src/generic/caret.cpp

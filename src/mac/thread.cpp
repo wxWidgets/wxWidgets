@@ -37,9 +37,11 @@
 #ifdef __WXMAC__
 #include <Threads.h>
 #include "wx/mac/uma.h"
+#include "wx/mac/macnotfy.h"
 #endif
 
 #define INFINITE 0xFFFFFFFF
+
 
 // ----------------------------------------------------------------------------
 // constants
@@ -257,12 +259,12 @@ public:
     }
 
     bool IsOk() const { return m_mutex.IsOk() ; }
-    
+
     wxCondError Wait()
     {
         return WaitTimeout(0xFFFFFFFF );
     }
-    
+
     wxCondError WaitTimeout(unsigned long msectimeout)
     {
         wxMacStCritical critical ;
@@ -300,7 +302,7 @@ public:
     {
         wxMacStCritical critical ;
         return wxCOND_NO_ERROR;
-    }    
+    }
 
     wxArrayLong m_waiters ;
     wxInt32     m_excessSignals ;
@@ -844,7 +846,7 @@ bool wxThreadModule::OnInit()
 #endif
     if ( !hasThreadManager )
     {
-        wxMessageBox( wxT("Error") , wxT("Thread Support is not available on this System") , wxOK ) ;
+        wxLogSysError( wxT("Thread Support is not available on this System") );
         return FALSE ;
     }
 

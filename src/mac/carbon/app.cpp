@@ -104,7 +104,6 @@ long      wxApp::sm_lastMessageTime = 0;
 long      wxApp::s_lastModifiers = 0 ;
 
 
-bool      wxApp::s_macDefaultEncodingIsPC = true ;
 bool      wxApp::s_macSupportPCMenuShortcuts = true ;
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 long      wxApp::s_macPreferencesMenuItemId = wxID_PREFERENCES ;
@@ -1561,7 +1560,7 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
                     {
                         // Activate window first
                         ::SelectWindow( window ) ;
-                        
+
                         // Send event later
                         if ( win )
                             win->MacMouseDown( ev , windowPart ) ;
@@ -2177,7 +2176,7 @@ void wxApp::MacHandleMouseMovedEvent(wxInt32 x , wxInt32 y ,wxUint32 modifiers ,
         event.m_controlDown = modifiers & controlKey;
         event.m_altDown = modifiers & optionKey;
         event.m_metaDown = modifiers & cmdKey;
- 
+
         event.m_x = x;
         event.m_y = y;
         event.m_timeStamp = timestamp;

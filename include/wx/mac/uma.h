@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     03/02/99
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -22,12 +22,16 @@ long UMAGetAppearanceVersion() ;
 bool UMAHasWindowManager() ;
 long UMAGetWindowManagerAttr() ;
 bool UMAHasAquaLayout() ;
+
 bool UMASystemIsInitialized() ;
+void UMASetSystemIsInitialized(bool val);
 
 // process manager
 
 long UMAGetProcessMode() ;
 bool UMAGetProcessModeDoesActivateOnFGSwitch() ;
+
+#if wxUSE_GUI
 
 // menu manager
 
@@ -121,6 +125,8 @@ OSStatus UMAPutScrap( Size size , OSType type , void *data ) ;
 // calls not in carbon
 
 #endif
-#define GetWindowUpdateRgn( inWindow , updateRgn ) GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn ) 
+#define GetWindowUpdateRgn( inWindow , updateRgn ) GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn )
+
+#endif // wxUSE_GUI
 
 #endif

@@ -43,7 +43,7 @@ bool WXDLLEXPORT wxYield();
 class WXDLLEXPORT wxApp: public wxAppBase
 {
     DECLARE_DYNAMIC_CLASS(wxApp)
-        
+
     wxApp();
     virtual ~wxApp() {}
 
@@ -57,10 +57,10 @@ class WXDLLEXPORT wxApp: public wxAppBase
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle();
-    
+
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
-    
+
 #if wxUSE_GUI
     // setting up all MacOS Specific Event-Handlers etc
     virtual bool OnInitGui();
@@ -69,11 +69,11 @@ class WXDLLEXPORT wxApp: public wxAppBase
     void OnIdle(wxIdleEvent& event);
     void OnEndSession(wxCloseEvent& event);
     void OnQueryEndSession(wxCloseEvent& event);
-    
+
     // Windows only, but for compatibility...
     inline void SetAuto3D(bool flag) { m_auto3D = flag; }
     inline bool GetAuto3D() const { return m_auto3D; }
-    
+
 protected:
     bool                  m_showOnInit;
     int                   m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
@@ -84,7 +84,7 @@ public:
     // Implementation
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
-    
+
     bool IsExiting() { return !m_keepGoing ; }
 #if TARGET_CARBON
     // the installed application event handler
@@ -100,9 +100,9 @@ public:
     static int            s_lastMouseDown ; // 0 = none , 1 = left , 2 = right
     static WXHRGN         s_macCursorRgn ;
     static long           s_lastModifiers ;
-    
+
     int                   m_nCmdShow;
-    
+
 private:
     bool                  m_keepGoing ;
 
@@ -114,7 +114,6 @@ private:
     WXEVENTREF            m_macCurrentEvent ;
 
 public:
-    static bool           s_macDefaultEncodingIsPC ;
     static bool           s_macSupportPCMenuShortcuts ;
     static long           s_macAboutMenuItemId ;
     static long           s_macPreferencesMenuItemId ;
@@ -135,12 +134,12 @@ public:
     WXHRGN                m_macCursorRgn ;
     WXHRGN                m_macSleepRgn ;
     WXHRGN                m_macHelpRgn ;
-    
+
     virtual void          MacSuspend( bool convertClipboard ) ;
     virtual void          MacResume( bool convertClipboard ) ;
     virtual void          MacConvertPrivateToPublicScrap() ;
     virtual void          MacConvertPublicToPrivateScrap() ;
-    
+
     void                  MacDoOneEvent() ;
     WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
     void                  MacHandleOneEvent( WXEVENTREF ev ) ;
@@ -158,12 +157,12 @@ public:
     virtual void          MacHandleKeyDownEvent( WXEVENTREF ev ) ;
     virtual void          MacHandleKeyUpEvent( WXEVENTREF ev ) ;
     virtual void          MacHandleHighLevelEvent( WXEVENTREF ev ) ;
-    
+
 #else
     virtual void          MacHandleMouseMovedEvent( wxInt32 x , wxInt32 y ,wxUint32 modifiers , long timestamp ) ;
 #endif
 
-    void                  MacHandleMenuCommand( wxUint32 command ) ;    
+    void                  MacHandleMenuCommand( wxUint32 command ) ;
     bool                    MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
     bool                    MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
 
@@ -171,7 +170,7 @@ public:
     virtual short         MacHandleAEPDoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEOApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEQuit(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
-    
+
     // in response of an open-document apple event
     virtual void         MacOpenFile(const wxString &fileName) ;
     // in response of a print-document apple event
@@ -191,8 +190,8 @@ public:
     // opaque pointer for CFragInitBlock
     static void OpenSharedLibraryResource(const void *) ;
     static void CloseSharedLibraryResource() ;
-    
-private:    
+
+private:
     short       m_currentRefNum ;
 } ;
 

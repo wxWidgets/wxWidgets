@@ -359,6 +359,10 @@ bool wxIsBusy()
     return (gs_wxBusyCursorCount > 0);
 }
 
+#endif // wxUSE_GUI
+
+#if wxUSE_BASE
+
 wxString wxMacFindFolder( short        vol,
               OSType       folderType,
               Boolean      createFolder)
@@ -377,6 +381,10 @@ wxString wxMacFindFolder( short        vol,
     }
     return strDir ;
 }
+
+#endif // wxUSE_BASE
+
+#if wxUSE_GUI
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
@@ -534,10 +542,6 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 }
 #endif // !__DARWIN__
 
-#endif // wxUSE_BASE
-
-#if wxUSE_GUI
-
 //---------------------------------------------------------------------------
 // wxMac Specific utility functions
 //---------------------------------------------------------------------------
@@ -691,6 +695,7 @@ wxWCharBuffer wxMacStringToWString( const wxString &from )
     return result ;
 }
 
+
 wxString wxMacMakeStringFromCString( const char * from , int len )
 {
     OSStatus status = noErr ;
@@ -770,6 +775,11 @@ wxString wxMacMakeStringFromPascal( ConstStringPtr from )
 {
     return wxMacMakeStringFromCString( (char*) &from[1] , from[0] ) ;
 }
+
+#endif // wxUSE_BASE
+
+#if wxUSE_GUI
+
 
 //
 // CFStringRefs (Carbon only)

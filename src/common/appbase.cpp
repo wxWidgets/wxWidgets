@@ -93,6 +93,10 @@ wxAppConsole *wxAppConsole::ms_appInstance = NULL;
 
 wxAppInitializerFunction wxAppConsole::ms_appInitFn = NULL;
 
+#ifdef __WXMAC__
+bool wxAppConsole::s_macDefaultEncodingIsPC = true ;
+#endif
+
 // ============================================================================
 // wxAppConsole implementation
 // ============================================================================
@@ -371,10 +375,10 @@ bool wxAppConsole::CheckBuildOptions(const char *optionsSignature,
         wxString prog = wxString::FromAscii(optionsSignature);
         wxString progName = wxString::FromAscii(componentName);
         wxString msg;
-        
+
         msg.Printf(_T("Mismatch between the program and library build versions detected.\nThe library used %s,\nand %s used %s."),
                    lib.c_str(), progName.c_str(), prog.c_str());
-        
+
         wxLogFatalError(msg);
 
         // normally wxLogFatalError doesn't return
@@ -456,7 +460,7 @@ void wxConsoleAppTraitsBase::RemoveFromPendingDelete(wxObject * WXUNUSED(object)
 {
     // nothing to do
 }
-    
+
 #if wxUSE_SOCKETS
 GSocketGUIFunctionsTable* wxConsoleAppTraitsBase::GetSocketGUIFunctionsTable()
 {
@@ -533,7 +537,7 @@ void wxAssert(int cond,
               const wxChar *szFile,
               int nLine,
               const wxChar *szCond,
-              const wxChar *szMsg) 
+              const wxChar *szMsg)
 {
     if ( !cond )
         wxOnAssert(szFile, nLine, szCond, szMsg);

@@ -1166,6 +1166,9 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
     }
 }
 
+#endif // wxUSE_GUI
+#if wxUSE_BASE
+
 void wxHandleProcessTermination(wxEndProcessData *proc_data)
 {
     // notify user about termination if required
@@ -1186,5 +1189,5 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
     }
 }
 
-#endif // wxUSE_GUI
 
+#endif // wxUSE_BASE
