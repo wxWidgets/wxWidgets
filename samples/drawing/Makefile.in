@@ -22,4 +22,4 @@ DATAFILES=pat4.bmp pat35.bmp pat36.bmp image.bmp mask.bmp
 
 include ../../src/makeprog.env
 
--include $(DEPFILES)
+@IF_GNU_MAKE@-include $(DEPFILES)

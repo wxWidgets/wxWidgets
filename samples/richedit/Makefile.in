@@ -20,4 +20,4 @@ DEPFILES=$(PROGRAM).d kbList.d wxllist.d wxlparser.d wxlwindow.d
 
 include ../../src/makeprog.env
 
--include $(DEPFILES)
+@IF_GNU_MAKE@-include $(DEPFILES)

@@ -40,4 +40,4 @@ DEPFILES=button.d \
 
 include ../../src/makeprog.env
 
--include $(DEPFILES)
+@IF_GNU_MAKE@-include $(DEPFILES)

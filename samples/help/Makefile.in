@@ -43,4 +43,4 @@ DATAFILES=doc.cnt doc.hlp doc.hpj doc.tex doc.zip back.gif forward.gif \
 
 include ../../src/makeprog.env
 
--include $(DEPFILES)
+@IF_GNU_MAKE@-include $(DEPFILES)

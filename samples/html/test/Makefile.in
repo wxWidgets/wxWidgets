@@ -23,4 +23,4 @@ DATAFILES=f.html fft.html imagemap.htm imagemap.png pic.png pic2.bmp \
 
 include ../../../src/makeprog.env
 
--include $(DEPFILES)
+@IF_GNU_MAKE@-include $(DEPFILES)

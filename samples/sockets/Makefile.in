@@ -28,4 +28,4 @@ clean-both:
 
 include ../../src/makeprog.env
 
--include $(DEPFILES)
+@IF_GNU_MAKE@-include $(DEPFILES)

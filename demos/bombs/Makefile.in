@@ -20,4 +20,4 @@ DEPFILES= bombs.d bombs1.d game.d
 
 include ../../src/makeprog.env
 
--include $(DEPFILES)
+@IF_GNU_MAKE@-include $(DEPFILES)

@@ -20,4 +20,4 @@ DEPFILES=$(PROGRAM).d canvas.d card.d game.d pile.d playerdg.d scoredg.d scorefi
 
 include ../../src/makeprog.env
 
--include $(DEPFILES)
+@IF_GNU_MAKE@-include $(DEPFILES)
