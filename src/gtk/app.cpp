@@ -164,20 +164,31 @@ bool wxApp::Yield(bool onlyIfNeeded)
 // wxWakeUpIdle
 //-----------------------------------------------------------------------------
 
+// RR/KH: The wxMutexGui calls are not needed on GTK2 according to
+// the GTK faq, http://www.gtk.org/faq/#AEN500
+// The calls to gdk_threads_enter() and leave() are specifically noted
+// as not being necessary.  The MutexGui calls are still left in for GTK1.
+// Eliminating the MutexGui calls fixes the long-standing "random" lockup
+// when using wxPostEvent (which calls WakeUpIdle) from a thread.
+
 void wxApp::WakeUpIdle()
 {
+#ifndef __WXGTK20__
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
         wxMutexGuiEnter();
-#endif
+#endif // wxUSE_THREADS_
+#endif // __WXGTK2__
 
     if (g_isIdle)
         wxapp_install_idle_handler();
 
+#ifndef __WXGTK20__
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
         wxMutexGuiLeave();
-#endif
+#endif // wxUSE_THREADS_
+#endif // __WXGTK2__
 }
 
 //-----------------------------------------------------------------------------
