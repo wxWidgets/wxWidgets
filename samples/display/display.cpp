@@ -2,7 +2,7 @@
 // Name:        display.cpp
 // Purpose:     wxWindows sample showing the features of wxDisplay class
 // Author:      Vadim Zeitlin
-// Modified by:
+// Modified by: Ryan Norton & Brian Victor
 // Created:     23.02.03
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin <vadim@wxwindows.org>
@@ -31,16 +31,27 @@
 // for all others, include the necessary headers explicitly
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/frame.h"
-
     #include "wx/stattext.h"
 
     #include "wx/layout.h"
+    #include "wx/intl.h"
+    #include "wx/menu.h"
+    #include "wx/sizer.h"
+    #include "wx/choice.h"
+    #include "wx/msgdlg.h"
+    #include "wx/log.h"
+    #include "wx/panel.h"
+    #include "wx/button.h"
 #endif
 
 #include "wx/notebook.h"
 
 #include "wx/display.h"
+
+// the application icon (under Windows and OS/2 it is in resources)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
+    #include "../sample.xpm"
+#endif
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -195,7 +206,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
        : wxFrame(NULL, -1, title, pos, size, style)
 {
     // set the frame icon
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
 #if wxUSE_MENUS
     // create a menu bar
