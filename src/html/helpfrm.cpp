@@ -924,7 +924,7 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
                                    "</body></html>"));
             }
 
-        void OnUpdate(wxCloseEvent& event)
+        void OnUpdate(wxCommandEvent& event)
             {
                 UpdateTestWin();
             }

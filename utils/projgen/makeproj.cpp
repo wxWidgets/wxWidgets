@@ -304,6 +304,12 @@ void MyApp::GenerateSamples(const wxString& dir)
 
     GenerateSample("PoemVC", "wxpoem", dir + wxString("/demos/poem"), wxStringList("wxpoem.cpp", "wxpoem.h", 0));
 
+    GenerateSample("DbbrowseVC", "dbbrowse", dir + wxString("/demos/dbbrowse"),
+       wxStringList("dbbrowse.cpp", "browsedb.cpp", "dbgrid.cpp", "dbtree.cpp", "dlguser.cpp", "doc.cpp",
+        "pgmctrl.cpp", "tabpgwin.cpp",
+        "dbbrowse.h", "browsedb.h", "dbgrid.h", "dbtree.h", "dlguser.h", "doc.h", "pgmctrl.h", "std.h", "tabpgwin.h",
+        0));
+
     //// Utilities
 
     // Dialog Editor

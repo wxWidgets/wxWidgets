@@ -4338,7 +4338,7 @@ void wxGrid::SelectCol( int col, bool addToSelected )
 void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
 {
     int temp;
-    bool changed = false;
+    bool changed = FALSE;
     wxGridCellCoords updateTopLeft, updateBottomRight;
 
     if ( topRow > bottomRow )
@@ -4370,7 +4370,7 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
             if (updateTopLeft.GetCol() > leftCol)
               updateTopLeft.SetCol(leftCol);
         }
-        changed = true;
+        changed = TRUE;
     }
 
     updateBottomRight = m_selectedBottomRight;
@@ -4388,7 +4388,7 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
             if (updateBottomRight.GetCol() < rightCol)
                 updateBottomRight.SetCol(rightCol);
         }
-        changed = true;
+        changed = TRUE;
     }
 
     if (changed)

@@ -48,8 +48,8 @@
 
 #include "wx/dialup.h"
 
-// Doesn't yet compile under BC++, mingw, Watcom C++: no wininet.h
-#if !defined(__BORLANDC__) && !defined(__GNUWIN32_OLD__) && !defined(__GNUWIN32__) && !defined(__WATCOMC__)
+// Doesn't yet compile under VC++ 4, BC++, mingw, Watcom C++: no wininet.h
+#if !defined(__BORLANDC__) && !defined(__GNUWIN32_OLD__) && !defined(__GNUWIN32__) && !defined(__WATCOMC__) && ! (defined(__VISUALC__) && (__VISUALC__ < 1020))
 
 #include <ras.h>
 #include <raserror.h>
