@@ -494,15 +494,19 @@ public:
     // domains are searched in the last to first order, i.e. catalogs
     // added later override those added before.
     const wxChar *GetString(const wxChar *szOrigString,
-                            const wxChar *szDomain = (const wxChar *) NULL) const;
+                            const wxChar *szDomain = NULL) const;
     // plural form version of the same:
     const wxChar *GetString(const wxChar *szOrigString,
                             const wxChar *szOrigString2,
                             size_t n,
-                            const wxChar *szDomain = (const wxChar *) NULL) const;
+                            const wxChar *szDomain = NULL) const;
 
     // Returns the current short name for the locale
     const wxString& GetName() const { return m_strShort; }
+
+    // return the contents of .po file header
+    wxString GetHeaderValue( const wxChar* szHeader,
+                             const wxChar* szDomain = NULL ) const;
 
     // These two methods are for internal use only. First one creates
     // ms_languagesDB if it doesn't already exist, second one destroys

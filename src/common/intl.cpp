@@ -2502,6 +2502,58 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
     return pszTrans;
 }
 
+wxString wxLocale::GetHeaderValue( const wxChar* szHeader,
+                                   const wxChar* szDomain ) const
+{
+    if ( wxIsEmpty(Header) )
+        return wxEmptyString;
+
+    wxChar const * pszTrans = NULL;
+    wxMsgCatalog *pMsgCat;
+
+    if ( szDomain != NULL )
+    {
+        pMsgCat = FindCatalog(szDomain);
+
+        // does the catalog exist?
+        if ( pMsgCat == NULL )
+            return wxEmptyString;
+
+        pszTrans = pMsgCat->GetString(wxT(""), (size_t)-1);
+    }
+    else
+    {
+        // search in all domains
+        for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
+        {
+            pszTrans = pMsgCat->GetString(wxT(""), (size_t)-1);
+            if ( pszTrans != NULL )   // take the first found
+                break;
+        }
+    }
+
+    if ( wxIsEmpty(pszTrans) )
+      return wxEmptyString;
+
+    wxChar const * pszFound = wxStrstr(pszTrans, Header);
+    if ( pszFound == NULL )
+      return wxEmptyString;
+    
+    pszFound += wxStrlen(Header) + 2 /* ': ' */;
+
+    // Every header is separated by \n
+    
+    wxChar const * pszEndLine = wxStrchr(pszFound, wxT('\n'));
+    if ( pszEndLine == NULL ) pszEndLine = pszFound + wxStrlen(pszFound);
+
+
+    // wxString( wxChar*, length);
+    wxString retVal( pszFound, pszEndLine - pszFound );
+
+    return retVal;
+}
+
+
 // find catalog by name in a linked list, return NULL if !found
 wxMsgCatalog *wxLocale::FindCatalog(const wxChar *szDomain) const
 {

@@ -551,6 +551,14 @@ Domains are searched in the last to first order, i.e. catalogs
 added later override those added before.
 
 
+\membersection{wxLocale::GetHeaderValue}\label{wxlocalegetheadervalue}
+
+\constfunc{wxString}{GetHeaderValue}{\param{const char }{*szHeader}, \param{const char }{*szDomain = NULL}}
+
+Returns the header value for header \arg{szHeader}. The search for \arg{szHeader} is case sensitive. If an \arg{szDomain}
+is passed, this domain is searched. Else all domains will be searched until a header has been found.
+The return value is the value of the header if found. Else this will be empty.
+
 \membersection{wxLocale::GetSysName}\label{wxlocalegetsysname}
 
 \constfunc{wxString}{GetSysName}{\void}
