@@ -25,7 +25,7 @@ wxPython Developer Reference
 `The wxPython source code documentation`_ is for developers, and was
 created using the Epydoc tool.
 
-.. _The wxPython source code documentation: wx/epydoc/
+.. _The wxPython source code documentation: http://www.orbtech.com/www/wx/epydoc/
 
 
 wxPython Tutorial
@@ -74,4 +74,4 @@ Py Developer Reference
 `The Py source code documentation`_ is for developers, and was created
 using the Epydoc tool.
 
-.. _The Py source code documentation: wx/epydoc/public/wx.py-module.html
+.. _The Py source code documentation: http://www.orbtech.com/www/wx/epydoc/public/wx.py-module.html
