@@ -24,7 +24,7 @@ public:
     // default
   wxColour();
     // from RGB
-  wxColour( char red, char green, char blue );
+  wxColour( unsigned char red, unsigned char green, unsigned char blue );
     // implicit conversion from the colour name
   wxColour( const wxString &colourName ) { InitFromName(colourName); }
   wxColour( const char *colourName ) { InitFromName(colourName); }
