@@ -951,7 +951,8 @@ int wxStyledTextCtrl::FindText(int minPos, int maxPos,
                      TextToFind  ft;
                      ft.chrg.cpMin = minPos;
                      ft.chrg.cpMax = maxPos;
-                     ft.lpstrText = (char*)(const char*)wx2stc(text);
+                     wxWX2MBbuf buf = wx2stc(text);
+                     ft.lpstrText = (char*)(const char*)buf;
 
                      return SendMsg(2150, flags, (long)&ft);
 }
