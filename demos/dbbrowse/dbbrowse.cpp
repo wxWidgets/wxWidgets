@@ -93,6 +93,7 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
         langid   = argv[1];         // cz, std, fr, de , pl
         break;
     case 1:
+    case 0:
         break;
     };
     //---------------------------------------------------------------------------------------
