@@ -41,22 +41,8 @@ protected:
                        const wxPoint& pos,
                        const wxSize& size,
                        long style,
-#if wxUSE_VALIDATORS
                        const wxValidator& validator,
-#endif
                        const wxString& name);
-
-    // an overloaded version for the controls without validators
-    bool CreateControl(wxWindowBase *parent,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name)
-    {
-        return CreateControl(parent, id, pos, size, style,
-                             wxDefaultValidator, name);
-    }
 
     // inherit colour and font settings from the parent window
     void InheritAttributes();

@@ -131,9 +131,7 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
                     const wxString &value = wxEmptyString,
                     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
                     int style = 0,
-#if wxUSE_VALIDATORS
                     const wxValidator& validator = wxDefaultValidator,
-#endif
                     const wxString &name = wxTextCtrlNameStr );
     void OnChar( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
@@ -156,9 +154,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
-#if wxUSE_VALIDATORS
                const wxValidator &validator = wxDefaultValidator,
-#endif
                const wxString& name = wxTreeCtrlNameStr)
     {
         Create(parent, id, pos, size, style, validator, name);
@@ -170,9 +166,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
-#if wxUSE_VALIDATORS
                 const wxValidator &validator = wxDefaultValidator,
-#endif
                 const wxString& name = wxTreeCtrlNameStr);
 
     // accessors

@@ -75,6 +75,8 @@
 #include "wx/dirdlg.h"
 #include "wx/toolbar.h"
 
+#include "wx/validate.h"        // always include, even if !wxUSE_VALIDATORS
+
 #if wxUSE_VALIDATORS
     #include "wx/valtext.h"
 #endif // wxUSE_VALIDATORS

@@ -1027,13 +1027,18 @@ BEGIN_EVENT_TABLE(wxListTextCtrl,wxTextCtrl)
     EVT_KILL_FOCUS     (wxListTextCtrl::OnKillFocus)
 END_EVENT_TABLE()
 
-wxListTextCtrl::wxListTextCtrl( wxWindow *parent, const wxWindowID id,
-    bool *accept, wxString *res, wxListMainWindow *owner,
-    const wxString &value, const wxPoint &pos, const wxSize &size,
-#if wxUSE_VALIDATORS
-    int style, const wxValidator& validator, const wxString &name ) :
-#endif
-  wxTextCtrl( parent, id, value, pos, size, style, validator, name )
+wxListTextCtrl::wxListTextCtrl( wxWindow *parent,
+                                const wxWindowID id,
+                                bool *accept,
+                                wxString *res,
+                                wxListMainWindow *owner,
+                                const wxString &value,
+                                const wxPoint &pos,
+                                const wxSize &size,
+                                int style,
+                                const wxValidator& validator,
+                                const wxString &name )
+              : wxTextCtrl( parent, id, value, pos, size, style, validator, name )
 {
     m_res = res;
     m_accept = accept;
@@ -2679,9 +2684,7 @@ bool wxListCtrl::Create(wxWindow *parent,
                         const wxPoint &pos,
                         const wxSize &size,
                         long style,
-#if wxUSE_VALIDATORS
                         const wxValidator &validator,
-#endif
                         const wxString &name)
 {
     m_imageListNormal = (wxImageList *) NULL;
@@ -2695,19 +2698,7 @@ bool wxListCtrl::Create(wxWindow *parent,
         style = style | wxLC_LIST;
     }
 
-    bool ret = wxControl::Create( parent,
-                                  id,
-                                  pos,
-                                  size,
-                                  style,
-#if wxUSE_VALIDATORS
-                                  validator,
-#endif
-                                  name );
-
-#if wxUSE_VALIDATORS
-    SetValidator( validator );
-#endif
+    bool ret = wxControl::Create( parent, id, pos, size, style, validator, name );
 
     if (style & wxSUNKEN_BORDER)
         style -= wxSUNKEN_BORDER;

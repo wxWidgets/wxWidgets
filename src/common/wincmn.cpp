@@ -158,9 +158,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               const wxPoint& WXUNUSED(pos),
                               const wxSize& WXUNUSED(size),
                               long style,
-#if wxUSE_VALIDATORS
                               const wxValidator& validator,
-#endif
                               const wxString& name)
 {
     // m_isWindow is set to TRUE in wxWindowBase::Init() as well as many other
@@ -174,7 +172,10 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     SetName(name);
     SetWindowStyleFlag(style);
     SetParent(parent);
+
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif // wxUSE_VALIDATORS
 
     return TRUE;
 }

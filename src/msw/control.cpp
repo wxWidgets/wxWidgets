@@ -60,9 +60,7 @@ wxControl::~wxControl()
 bool wxControl::Create(wxWindow *parent, wxWindowID id,
                        const wxPoint& pos,
                        const wxSize& size, long style,
-#if wxUSE_VALIDATORS
                        const wxValidator& validator,
-#endif
                        const wxString& name)
 {
     bool rval = wxWindow::Create(parent, id, pos, size, style, name);

@@ -31,9 +31,7 @@ bool wxControl::Create( wxWindow *parent,
                       const wxPoint &pos,
                       const wxSize &size,
                       long style,
-#if wxUSE_VALIDATORS
                       const wxValidator& validator,
-#endif
                       const wxString &name )
 {
     bool ret = wxWindow::Create(parent, id, pos, size, style, name);

@@ -38,24 +38,16 @@ public:
     wxControl(wxWindow *parent, wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize, long style = 0,
-#if wxUSE_VALIDATORS
              const wxValidator& validator = wxDefaultValidator,
-#endif
              const wxString& name = wxControlNameStr)
     {
-        Create(parent, id, pos, size, style,
-#if wxUSE_VALIDATORS
-            validator, 
-#endif
-            name);
+        Create(parent, id, pos, size, style, validator, name);
     }
 
     bool Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
-#if wxUSE_VALIDATORS
             const wxValidator& validator = wxDefaultValidator,
-#endif
             const wxString& name = wxControlNameStr);
 
     // this function will filter out '&' characters and will put the accelerator

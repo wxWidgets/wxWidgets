@@ -48,24 +48,15 @@ wxControl::wxControl( wxWindow *parent,
                       const wxPoint &pos,
                       const wxSize &size,
                       long style,
-                      const wxString &name )
-{
-    (void)Create(parent, id, pos, size, style, name);
-}
-
-#if wxUSE_VALIDATORS
-wxControl::wxControl( wxWindow *parent,
-                      wxWindowID id,
-                      const wxPoint &pos,
-                      const wxSize &size,
-                      long style,
                       const wxValidator& validator,
                       const wxString &name)
 {
     (void)Create(parent, id, pos, size, style, name);
+
+#if wxUSE_VALIDATORS
     SetValidator(validator);
-}
 #endif
+}
 
 wxControl::~wxControl()
 {

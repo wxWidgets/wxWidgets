@@ -30,9 +30,7 @@ public:
    wxControl(wxWindow *parent, wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize, long style = 0,
-#if wxUSE_VALIDATORS
              const wxValidator& validator = wxDefaultValidator,
-#endif
              const wxString& name = wxControlNameStr)
     {
         Create(parent, id, pos, size, style, validator, name);
@@ -41,9 +39,7 @@ public:
     bool Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
-#if wxUSE_VALIDATORS
             const wxValidator& validator = wxDefaultValidator,
-#endif
             const wxString& name = wxControlNameStr);
 
     virtual ~wxControl();

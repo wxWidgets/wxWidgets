@@ -251,9 +251,7 @@ public:
                     const wxString &value = "",
                     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
                     int style = 0,
-#if wxUSE_VALIDATORS
                     const wxValidator& validator = wxDefaultValidator,
-#endif
                     const wxString &name = "wxListTextCtrlText" );
     void OnChar( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
@@ -379,23 +377,25 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 {
 public:
     wxListCtrl();
-    wxListCtrl( wxWindow *parent, wxWindowID id = -1,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-#if wxUSE_VALIDATORS
-      long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator,
-#endif
-       const wxString &name = "listctrl" )
+    wxListCtrl( wxWindow *parent,
+                wxWindowID id = -1,
+                const wxPoint &pos = wxDefaultPosition,
+                const wxSize &size = wxDefaultSize,
+                long style = wxLC_ICON,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString &name = "listctrl" )
     {
         Create(parent, id, pos, size, style, validator, name);
     }
     ~wxListCtrl();
     
-    bool Create( wxWindow *parent, wxWindowID id = -1,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-#if wxUSE_VALIDATORS
-      long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator,
-#endif
-      const wxString &name = "listctrl" );
+    bool Create( wxWindow *parent,
+                 wxWindowID id = -1,
+                 const wxPoint &pos = wxDefaultPosition,
+                 const wxSize &size = wxDefaultSize,
+                 long style = wxLC_ICON,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString &name = "listctrl" );
 
     bool GetColumn( int col, wxListItem& item ) const;
     bool SetColumn( int col, wxListItem& item );

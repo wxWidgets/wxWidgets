@@ -349,22 +349,22 @@ void wxRegionIterator::Reset( const wxRegion& region )
 
 wxRegionIterator::operator bool () const
 {
-    return m_current < m_region.GetRectList()->Number();
+    return m_current < (size_t)m_region.GetRectList()->Number();
 }
 
 bool wxRegionIterator::HaveRects() const
 {
-    return m_current < m_region.GetRectList()->Number();
+    return m_current < (size_t)m_region.GetRectList()->Number();
 }
 
 void wxRegionIterator::operator ++ ()
 {
-    if (m_current < m_region.GetRectList()->Number()) ++m_current;
+    if (m_current < (size_t)m_region.GetRectList()->Number()) ++m_current;
 }
 
 void wxRegionIterator::operator ++ (int)
 {
-    if (m_current < m_region.GetRectList()->Number()) ++m_current;
+    if (m_current < (size_t)m_region.GetRectList()->Number()) ++m_current;
 }
 
 wxCoord wxRegionIterator::GetX() const

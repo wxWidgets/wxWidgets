@@ -30,9 +30,7 @@
 #include "wx/region.h"
 #include "wx/utils.h"
 
-#if wxUSE_VALIDATORS
-    #include "wx/validate.h"    // defines wxDefaultValidator
-#endif // wxUSE_VALIDATORS
+#include "wx/validate.h"        // for wxDefaultValidator (always include it)
 
 #if wxUSE_ACCEL
     #include "wx/accel.h"
@@ -121,10 +119,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
-
-#if wxUSE_VALIDATORS
                     const wxValidator& validator = wxDefaultValidator,
-#endif // wxUSE_VALIDATORS
                     const wxString& name = wxPanelNameStr);
 
     virtual ~wxWindowBase();

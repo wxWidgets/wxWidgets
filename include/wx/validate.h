@@ -16,13 +16,16 @@
     #pragma interface "validate.h"
 #endif
 
-#include "wx/event.h"
-
 #if defined(wxUSE_VALIDATORS) && !wxUSE_VALIDATORS
-    // wxWindows is compiled without support for wxValidator
+    // wxWindows is compiled without support for wxValidator, but we still
+    // want to be able to pass wxDefaultValidator to the functions which take
+    // a wxValidator parameter to avoid using "#if wxUSE_VALIDATORS"
+    // everywhere
     class WXDLLEXPORT wxValidator;
     #define wxDefaultValidator (*((wxValidator *)NULL))
 #else // wxUSE_VALIDATORS
+
+#include "wx/event.h"
 
 class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxWindowBase;

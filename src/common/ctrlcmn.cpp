@@ -42,9 +42,7 @@ bool wxControlBase::CreateControl(wxWindowBase *parent,
                                   const wxPoint& pos,
                                   const wxSize& size,
                                   long style,
-#if wxUSE_VALIDATORS
                                   const wxValidator& validator,
-#endif
                                   const wxString& name)
 {
     // even if it's possible to create controls without parents in some port,

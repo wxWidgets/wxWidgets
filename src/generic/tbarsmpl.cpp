@@ -303,8 +303,8 @@ bool wxToolBarSimple::Realize()
                     m_lastX = m_xMargin;
                     m_lastY += maxToolHeight + m_toolPacking;
                 }
-                tool->m_x = (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
-                tool->m_y = (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
+                tool->m_x = (wxCoord)(m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
+                tool->m_y = (wxCoord)(m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
 
                 m_lastX += maxToolWidth + m_toolPacking;
             }
@@ -316,8 +316,8 @@ bool wxToolBarSimple::Realize()
                     m_lastX += (maxToolWidth + m_toolPacking);
                     m_lastY = m_yMargin;
                 }
-                tool->m_x = (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
-                tool->m_y = (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
+                tool->m_x = (wxCoord)(m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
+                tool->m_y = (wxCoord)(m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
 
                 m_lastY += maxToolHeight + m_toolPacking;
             }

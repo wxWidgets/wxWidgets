@@ -208,13 +208,18 @@ BEGIN_EVENT_TABLE(wxTreeTextCtrl,wxTextCtrl)
     EVT_KILL_FOCUS     (wxTreeTextCtrl::OnKillFocus)
 END_EVENT_TABLE()
 
-wxTreeTextCtrl::wxTreeTextCtrl( wxWindow *parent, const wxWindowID id,
-    bool *accept, wxString *res, wxTreeCtrl *owner,
-    const wxString &value, const wxPoint &pos, const wxSize &size,
-#if wxUSE_VALIDATORS
-    int style, const wxValidator& validator, const wxString &name ) :
-#endif
-  wxTextCtrl( parent, id, value, pos, size, style, validator, name )
+wxTreeTextCtrl::wxTreeTextCtrl( wxWindow *parent,
+                                const wxWindowID id,
+                                bool *accept,
+                                wxString *res,
+                                wxTreeCtrl *owner,
+                                const wxString &value,
+                                const wxPoint &pos,
+                                const wxSize &size,
+                                int style,
+                                const wxValidator& validator,
+                                const wxString &name )
+              : wxTextCtrl( parent, id, value, pos, size, style, validator, name )
 {
     m_res = res;
     m_accept = accept;
@@ -547,10 +552,8 @@ void wxTreeCtrl::Init()
 bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos, const wxSize& size,
                         long style,
-#if wxUSE_VALIDATORS
-            const wxValidator &validator,
-#endif
-            const wxString& name )
+                        const wxValidator &validator,
+                        const wxString& name )
 {
     Init();
 
