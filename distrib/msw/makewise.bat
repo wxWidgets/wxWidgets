@@ -22,7 +22,11 @@ set len=%@LINES[%TEMP\files1.tmp]
 erase /Y %TEMP\files2.tmp
 
 Rem, first add system files
-cat %WXWIN\distrib\msw\wisesys.txt > %temp\files2.tmp
+Rem NB: not doing this for now, because I'm not sure which are the right files
+Rem for Win9x/NT/W2K
+Rem cat %WXWIN\distrib\msw\wisesys.txt > %temp\files2.tmp
+
+echo. > %temp\files2.tmp
 
 do i = 0 to %len by 1
     set line=%@LINE[%TEMP\files1.tmp,%i]

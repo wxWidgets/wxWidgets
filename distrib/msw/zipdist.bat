@@ -5,7 +5,7 @@ set dest=%src\deliver
 set wise=0
 
 Rem Set this to the required version
-set version=2.2.4
+set version=2.2.5
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -33,7 +33,7 @@ erase %dest\utils.zip
 erase %dest\extradoc.zip
 erase %dest\*-win32.zip
 
-if direxist %dest\wx del /sxyz %dest\wx\
+if direxist %dest\wx erase /sxyz %dest\wx\
 
 cd %src
 echo Zipping...
@@ -170,7 +170,7 @@ erase /Y contrib\docs\winhelp\stc.*
 erase /Y contrib\docs\htmlhelp\mmedia.*
 erase /Y contrib\docs\htmlhelp\stc.*
 erase /Y contrib\docs\pdf\*.*
-del /sxzy contrib\docs\latex\ogl
+erase /sxzy contrib\docs\latex\ogl
 erase /Y src\mingegcs.bat
 erase /Y distrib
 
@@ -198,7 +198,7 @@ erase /Y %dest\setup.*
 rem Now invoke WISE install on the new wxwin2.wse
 set wisecmd="c:\Program Files\wise\wise32.exe" /C %WXWIN\distrib\msw\wxwin2.wse
 echo Invoking %wisecmd...
-start %wisecmd
+start "WISE" /w %wisecmd%
 pause Press any key to continue with the wxWindows distribution...
 Rem ren %WXWIN\deliver\setup.EXE %WXWIN\deliver\wxMSW-%version%-setup.exe
 
