@@ -35,10 +35,13 @@
 IMPLEMENT_ABSTRACT_CLASS(wxFileSystemHandler, wxObject)
 
 
+#if wxUSE_MIMETYPE
 static wxFileTypeInfo *gs_FSMimeFallbacks = NULL;
+#endif
 
 wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 {
+#if wxUSE_MIMETYPE
     wxString ext = wxEmptyString, mime = wxEmptyString;
     wxString loc = GetRightLocation(location);
     char c;
@@ -67,6 +70,9 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
     delete ft;
 
     return mime;
+#else
+    return wxEmptyString;
+#endif
 }
 
 
@@ -407,6 +413,7 @@ class wxFileSystemModule : public wxModule
         {
             wxFileSystem::AddHandler(new wxLocalFSHandler);
 
+        #if wxUSE_MIMETYPE
             gs_FSMimeFallbacks = new wxFileTypeInfo[6];
             gs_FSMimeFallbacks[0] =
             wxFileTypeInfo("image/jpeg",
@@ -441,12 +448,14 @@ class wxFileSystemModule : public wxModule
             gs_FSMimeFallbacks[5] =
             // must terminate the table with this!
             wxFileTypeInfo();
-
+        #endif
             return TRUE;
         }
         virtual void OnExit()
     	{
+        #if wxUSE_MIMETYPE
             delete [] gs_FSMimeFallbacks;
+        #endif
             wxFileSystem::CleanUpHandlers();
     	}
 };
