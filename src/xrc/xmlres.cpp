@@ -38,6 +38,7 @@
 #include "wx/image.h"
 #include "wx/fontmap.h"
 #include "wx/artprov.h"
+#include "wx/settings.h"
 
 #include "wx/xml/xml.h"
 #include "wx/xrc/xmlres.h"
