@@ -58,13 +58,6 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
     m_bmpNormal = m_bmpNormalOriginal = bitmap;
     m_bmpSelected = m_bmpSelectedOriginal = bitmap;
 
-    /*
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
-    */
-
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
     /*
@@ -231,16 +224,6 @@ void wxBitmapButton::DoSetBitmap()
         }
         else
             armPixmap = (Pixmap) m_bitmapCache.GetArmPixmap(m_mainWidget);
-
-#if 0
-        // <- the Get...Pixmap()-functions return the same pixmap!
-        if (insensPixmap == pixmap) 
-        {
-            insensPixmap =
-                XCreateInsensitivePixmap(DisplayOfScreen(XtScreen((Widget) m_mainWidget)), pixmap);
-            m_insensPixmap = (WXPixmap) insensPixmap;
-        }
-#endif
 
         XtVaSetValues ((Widget) m_mainWidget,
             XmNlabelPixmap, pixmap,
