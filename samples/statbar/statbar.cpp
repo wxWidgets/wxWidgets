@@ -370,16 +370,25 @@ MyAboutDialog::MyAboutDialog(wxWindow *parent)
                                           "wxStatusBar sample\n"
                                           "(c) 2000 Vadim Zeitlin");
 
-    wxStatusBar *statbar = new wxStatusBar(this, -1);
-    statbar->SetFieldsCount(2);
-    statbar->SetStatusText("This is a status bar", 0);
-    statbar->SetStatusText("in a dialog", 1);
+    // create the top status bar without the size grip (default style),
+    // otherwise it looks weird
+    wxStatusBar *statbarTop = new wxStatusBar(this, -1, 0);
+    statbarTop->SetFieldsCount(3);
+    statbarTop->SetStatusText("This is a top status bar", 0);
+    statbarTop->SetStatusText("in a dialog", 1);
+    statbarTop->SetStatusText("Great, isn't it?", 2);
+
+    wxStatusBar *statbarBottom = new wxStatusBar(this, -1);
+    statbarBottom->SetFieldsCount(2);
+    statbarBottom->SetStatusText("This is a bottom status bar", 0);
+    statbarBottom->SetStatusText("in a dialog", 1);
 
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
+    sizerTop->Add(statbarTop, 0, wxGROW);
     sizerTop->Add(-1, 10, 1, wxGROW);
     sizerTop->Add(text, 0, wxCENTRE);
     sizerTop->Add(-1, 10, 1, wxGROW);
-    sizerTop->Add(statbar, 0, wxGROW);
+    sizerTop->Add(statbarBottom, 0, wxGROW);
 
     SetAutoLayout(TRUE);
     SetSizer(sizerTop);

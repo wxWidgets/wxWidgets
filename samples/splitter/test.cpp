@@ -152,13 +152,13 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
 
   // Make a menubar
   fileMenu = new wxMenu;
-  fileMenu->Append(SPLIT_VERTICAL, "Split &Vertically", "Split vertically");
-  fileMenu->Append(SPLIT_HORIZONTAL, "Split &Horizontally", "Split horizontally");
-  fileMenu->Append(SPLIT_UNSPLIT, "&Unsplit", "Unsplit");
+  fileMenu->Append(SPLIT_VERTICAL, "Split &Vertically\tCtrl-V", "Split vertically");
+  fileMenu->Append(SPLIT_HORIZONTAL, "Split &Horizontally\tCtrl-H", "Split horizontally");
+  fileMenu->Append(SPLIT_UNSPLIT, "&Unsplit\tCtrl-U", "Unsplit");
   fileMenu->AppendSeparator();
   fileMenu->Append(SPLIT_SETMINSIZE, "Set &min size", "Set minimum pane size");
   fileMenu->AppendSeparator();
-  fileMenu->Append(SPLIT_QUIT, "E&xit", "Exit");
+  fileMenu->Append(SPLIT_QUIT, "E&xit\tAlt-X", "Exit");
 
   menuBar = new wxMenuBar;
   menuBar->Append(fileMenu, "&File");
