@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        except.cpp
-// Purpose:     Except wxWidgets sample
-// Author:      Julian Smart
+// Name:        samples/except/except.cpp
+// Purpose:     shows how C++ exceptions can be used in wxWidgets
+// Author:      Vadim Zeitlin
 // Modified by:
-// Created:     04/01/98
+// Created:     2003-09-17
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) 2003-2005 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -23,6 +23,10 @@
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#if !wxUSE_EXCEPTIONS
+    #error "This sample only works with wxUSE_EXCEPTIONS == 1"
+#endif // !wxUSE_EXCEPTIONS
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -107,6 +111,7 @@ public:
     // event handlers
     void OnThrowInt(wxCommandEvent& event);
     void OnThrowObject(wxCommandEvent& event);
+    void OnCrash(wxCommandEvent& event);
 
 private:
     DECLARE_EVENT_TABLE()
@@ -134,6 +139,7 @@ enum
     // control ids
     Except_ThrowInt = 100,
     Except_ThrowObject,
+    Except_Crash,
 
     // menu items
     Except_ThrowString = 200,
@@ -160,6 +166,7 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(Except_ThrowInt, MyDialog::OnThrowInt)
     EVT_BUTTON(Except_ThrowObject, MyDialog::OnThrowObject)
+    EVT_BUTTON(Except_Crash, MyDialog::OnCrash)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -311,6 +318,8 @@ MyDialog::MyDialog(wxFrame *parent)
                   0, wxCENTRE | wxALL, 5);
     sizerTop->Add(new wxButton(this, Except_ThrowObject, _T("Throw &object")),
                   0, wxCENTRE | wxALL, 5);
+    sizerTop->Add(new wxButton(this, Except_Crash, _T("&Crash")),
+                  0, wxCENTRE | wxALL, 5);
     sizerTop->Add(new wxButton(this, wxID_CANCEL, _T("&Cancel")),
                   0, wxCENTRE | wxALL, 5);
 
@@ -326,5 +335,11 @@ void MyDialog::OnThrowInt(wxCommandEvent& WXUNUSED(event))
 void MyDialog::OnThrowObject(wxCommandEvent& WXUNUSED(event))
 {
     throw MyException(_T("Exception thrown from the dialog"));
+}
+
+void MyDialog::OnCrash(wxCommandEvent& WXUNUSED(event))
+{
+    char *p = 0;
+    strcpy(p, "Let's crash");
 }
 
