@@ -572,9 +572,9 @@ void wxLogFrame::OnSave(wxCommandEvent& event)
   // open file
   // ---------
   wxFile file;
-  Bool bOk;
+  bool bOk;
   if ( wxFile::Exists(szFileName) ) {
-    Bool bAppend;
+    bool bAppend;
     wxString strMsg;
     strMsg.Printf(_("Append log to file '%s' "
                     "(choosing [No] will overwrite it)?"), szFileName);
@@ -636,7 +636,7 @@ wxLogWindow::wxLogWindow(const wxTString& strTitle)
   m_pLogFrame = new wxLogFrame(strTitle);
 }
 
-void wxLogWindow::Show(Bool bShow)
+void wxLogWindow::Show(bool bShow)
 {
   m_pLogFrame->Show(bShow);
 }
