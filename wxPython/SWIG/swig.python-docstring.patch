@@ -1,11 +1,11 @@
 Index: Source/Modules/python.cxx
 ===================================================================
 RCS file: /cvsroot/SWIG/Source/Modules/python.cxx,v
-retrieving revision 1.27
-diff -u -r1.27 python.cxx
---- Source/Modules/python.cxx	12 Nov 2003 17:14:00 -0000	1.27
-+++ Source/Modules/python.cxx	19 Nov 2003 06:23:46 -0000
-@@ -315,6 +315,17 @@
+retrieving revision 1.28
+diff -u -r1.28 python.cxx
+--- Source/Modules/python.cxx	18 Nov 2003 20:19:15 -0000	1.28
++++ Source/Modules/python.cxx	19 Nov 2003 17:34:55 -0000
+@@ -68,6 +68,17 @@
       -noexcept       - No automatic exception handling\n\
       -noproxy        - Don't generate proxy classes \n\n";
  
@@ -23,7 +23,7 @@ diff -u -r1.27 python.cxx
  class PYTHON : public Language {
  public:
  
-@@ -662,15 +673,21 @@
+@@ -415,15 +426,21 @@
     * ------------------------------------------------------------ */
  
    void emitFunctionShadowHelper(Node *n, File *f_dest, String *name, int kw) {
@@ -49,7 +49,7 @@ diff -u -r1.27 python.cxx
      }
    }
  
-@@ -686,6 +703,193 @@
+@@ -439,6 +456,193 @@
  
  
    /* ------------------------------------------------------------
@@ -243,7 +243,7 @@ diff -u -r1.27 python.cxx
     * have_addtofunc()
     *    Check if there is a %addtofunc directive and it has text
     * ------------------------------------------------------------ */
-@@ -1908,7 +2112,9 @@
+@@ -1661,7 +1865,9 @@
  	}
        }
        Printf(f_shadow,":\n");
@@ -254,7 +254,7 @@ diff -u -r1.27 python.cxx
        if (!modern) {
          Printv(f_shadow,tab4,"__swig_setmethods__ = {}\n",NIL);
          if (Len(base_class)) {
-@@ -2043,14 +2249,20 @@
+@@ -1796,14 +2002,20 @@
  	  Printv(f_shadow,pycode,"\n",NIL);
  	} else {
  
@@ -282,7 +282,7 @@ diff -u -r1.27 python.cxx
            }
          }
  
-@@ -2067,12 +2279,18 @@
+@@ -1820,12 +2032,18 @@
      String *symname = Getattr(n,"sym:name");
      Language::staticmemberfunctionHandler(n);
      if (shadow) {
@@ -305,7 +305,7 @@ diff -u -r1.27 python.cxx
          Printv(f_shadow, tab4, modern ? "" : "if _newclass:",  symname,
                 " = staticmethod(", symname, ")\n", NIL);
  
-@@ -2159,6 +2377,8 @@
+@@ -1912,6 +2130,8 @@
  
              Printv(f_shadow, tab4, "def __init__(self, *args",
                     (allow_kwargs ? ", **kwargs" : ""), "):\n", NIL);
@@ -314,7 +314,7 @@ diff -u -r1.27 python.cxx
              Printv(f_shadow, pass_self, NIL);
              if (!modern) {
                Printv(f_shadow, tab8, "_swig_setattr(self, ", rclassname, ", 'this', ", 
-@@ -2174,7 +2394,7 @@
+@@ -1927,7 +2147,7 @@
                Printv(f_shadow, tab8, "del newobj.thisown\n", NIL);
              }
              if ( have_addtofunc(n) )
@@ -323,7 +323,7 @@ diff -u -r1.27 python.cxx
    	    Delete(pass_self);
    	  }
  	  have_constructor = 1;
-@@ -2192,6 +2412,8 @@
+@@ -1945,6 +2165,8 @@
  
              Printv(f_shadow_stubs, "\ndef ", symname, "(*args",
                     (allow_kwargs ? ", **kwargs" : ""), "):\n", NIL);
@@ -332,7 +332,7 @@ diff -u -r1.27 python.cxx
              Printv(f_shadow_stubs, tab4, "val = ",
                     funcCallHelper(Swig_name_construct(symname), allow_kwargs), "\n", NIL);
  	    Printv(f_shadow_stubs, tab4, "val.thisown = 1\n", NIL);
-@@ -2225,11 +2447,13 @@
+@@ -1978,11 +2200,13 @@
  	Printv(f_shadow,pycode,"\n", NIL);
        } else {
  	Printv(f_shadow, tab4, "def __del__(self, destroy=", module, ".", Swig_name_destroy(symname), "):\n", NIL);
