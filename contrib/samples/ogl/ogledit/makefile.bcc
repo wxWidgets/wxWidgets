@@ -13,8 +13,7 @@
 WXDIR = $(WXWIN)
 
 TARGET=ogledit
-EXTRALIBS=$(WXDIR)\contrib\lib\ogl.lib
-# EXTRACPPFLAGS=-I$(WXDIR)\utils\ogl\src
+EXTRALIBS=$(WXDIR)\lib\ogl.lib
 OBJECTS = $(TARGET).obj doc.obj view.obj palette.obj
 
 !include $(WXDIR)\src\makeprog.b32

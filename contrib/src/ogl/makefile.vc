@@ -28,7 +28,7 @@ PROGRAM=test
 OBJECTS = $(D)\basic.obj $(D)\basic2.obj $(D)\canvas.obj $(D)\ogldiag.obj $(D)\lines.obj $(D)\misc.obj $(D)\divided.obj $(D)\constrnt.obj\
  $(D)\composit.obj $(D)\drawn.obj $(D)\bmpshape.obj $(D)\mfutils.obj
 
-LIBTARGET=$(WXDIR)\contrib\lib\ogl$(LIBEXT).lib
+LIBTARGET=$(WXDIR)\lib\ogl$(LIBEXT).lib
 
 all:    $(D) $(LIBTARGET)
 

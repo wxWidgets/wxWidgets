@@ -8,7 +8,7 @@
 WXDIR = $(%WXWIN)
 
 PROGRAM = ogledit
-EXTRALIBS = $(WXDIR)\contrib\lib\ogl.lib
+EXTRALIBS = $(WXDIR)\lib\ogl.lib
 OBJECTS = $(PROGRAM).obj doc.obj view.obj palette.obj
 
 !include $(WXDIR)\src\makeprog.wat

@@ -20,7 +20,7 @@ OGLDIR = $(WXDIR)\contrib\src\ogl
 THISDIR = $(OGLDIR)
 DOCDIR = $(WXDIR)\contrib\docs\latex\ogl
 
-GRAPHICSLIB = $(WXDIR)\contrib\lib\ogl.lib
+GRAPHICSLIB = $(WXDIR)\lib\ogl.lib
 INC = /I$(WXDIR)\include /I$(WXDIR)\contrib\include
 
 # Normally set OPTIONS =

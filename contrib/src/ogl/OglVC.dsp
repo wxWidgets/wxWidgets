@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\lib\ogl.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\ogl.lib"
 
 !ELSEIF  "$(CFG)" == "OglVC - Win32 Debug"
 
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\lib\ogld.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\ogld.lib"
 
 !ENDIF 
 

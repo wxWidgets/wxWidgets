@@ -9,7 +9,7 @@
 
 WXDIR = ../../..
 
-LIBTARGET=$(WXDIR)/contrib/lib/libogl.a
+LIBTARGET=$(WXDIR)/lib/libogl.a
 OBJECTS = basic.o basic2.o canvas.o ogldiag.o lines.o misc.o divided.o constrnt.o\
  composit.o drawn.o bmpshape.o mfutils.o
 

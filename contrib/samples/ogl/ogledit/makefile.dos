@@ -16,8 +16,8 @@ WXDIR = $(WXWIN)
 !include $(WXDIR)\src\makemsc.env
 
 THISDIR = $(WXDIR)\contrib\samples\ogl\ogledit
-WXLIB = $(WXDIR)\contrib\lib\wx.lib
-OGLLIB = $(WXDIR)\contrib\lib\ogl.lib
+WXLIB = $(WXDIR)\lib\wx.lib
+OGLLIB = $(WXDIR)\lib\ogl.lib
 
 LIBS=$(WXLIB) $(OGLLIB) oldnames libw llibcew commdlg shell ddeml
 

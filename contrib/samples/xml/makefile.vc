@@ -7,7 +7,7 @@ WXDIR = $(WXWIN)
 PROGRAM = xmldemo
 
 OBJECTS = $(PROGRAM).obj
-EXTRALIBS = $(WXDIR)\contrib\lib\wxxml$(LIBEXT).lib
+EXTRALIBS = $(WXDIR)\lib\wxxml$(LIBEXT).lib
 EXTRAINC = -I$(WXDIR)\contrib\include
 
 !include $(WXDIR)\src\makeprog.vc
