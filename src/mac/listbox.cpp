@@ -173,9 +173,12 @@ int wxListBox::DoAppend(const wxString& item)
 	if( wxApp::s_macDefaultEncodingIsPC )
 	{
 		m_stringArray.Add( wxMacMakeMacStringFromPC( item ) ) ;
+		m_dataArray.Add( NULL );
 	}
-	else
+	else {
 		m_stringArray.Add( item ) ;
+		m_dataArray.Add( NULL );
+	}
  	m_noItems ++;
 	MacAppend( item ) ;
 
