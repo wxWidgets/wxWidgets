@@ -10,6 +10,9 @@ Most C++ compilers cannot compile the WINE sources yet (this includes
 all versions of g++ and egcs) so you have to make a minimal change
 and recompile all of WINE in order to get anywhere.
 
+(Note: this information may be out of date now. See notes at
+the bottom of this file.)
+
 This change has do be applied to the /include/windef.h file, line 59
 in the section "Calling convention definitions", where the sources
 reads:
@@ -153,18 +156,18 @@ You can get the newest version of the WINE from the WINE homepage at:
 -----------------------------
 
 Usage:
-	./configure options
+    ./configure options
 
 If you want to use system's C and C++ compiler,
 set environment variables CC and CCC as
 
-	% setenv CC cc
-	% setenv CCC CC
-	% ./configure options
+    % setenv CC cc
+    % setenv CCC CC
+    % ./configure options
 
 to see all the options please use:
 
-	./configure --help
+    ./configure --help
 
 The basic philosophy is that if you want to use different
 configurations, like a debug and a release version, 
@@ -192,52 +195,52 @@ in wxWindows snapshot 6, but not yet all (ODBC not).
 
 You must do this by running configure with either of:
 
-        --with-wine              Use the WINE library
-	
+    --with-wine              Use the WINE library
+    
 The following options handle the kind of library you want to build.
 
-	--enable-threads        Compile without thread support. Threads
-	                        support is also required for the
-				socket code to work.
+    --enable-threads        Compile with thread support. Threads
+                            support is also required for the
+                            socket code to work.
 
-	--disable-shared        Do not create shared libraries.
+    --disable-shared        Do not create shared libraries.
 
-	--disable-optimise	Do not optimise the code. Can
-	                        sometimes be useful for debugging
-				and is required on some architectures
-				such as Sun with gcc 2.8.X which
-				would otherwise produce segvs.
+    --disable-optimise        Do not optimise the code. Can
+                            sometimes be useful for debugging
+                            and is required on some architectures
+                            such as Sun with gcc 2.8.X which
+                            would otherwise produce segvs.
 
-	--enable-profile        Add profiling info to the object 
-				files. Currently broken, I think.
-				
-	--enable-no_rtti        Enable compilation without creation of
-	                        C++ RTTI information in object files. 
-				This will speed-up compilation and reduce 
-				binary size.
-				
-	--enable-no_exceptions  Enable compilation without creation of
-	                        C++ exception information in object files. 
-				This will speed-up compilation and reduce 
-				binary size. Also fewer crashes during the
-				actual compilation...
-				
-	--enable-mem_tracing    Add built-in memory tracing. 
-				
-	--enable-dmalloc        Use the dmalloc memory debugger.
-	                        Read more at www.letters.com/dmalloc/
-				
-	--enable-debug_info	Add debug info to object files and
-	                        executables for use with debuggers
-				such as gdb (or its many frontends).
+    --enable-profile        Add profiling info to the object 
+                            files. Currently broken, I think.
+                
+    --enable-no_rtti        Enable compilation without creation of
+                            C++ RTTI information in object files. 
+                            This will speed-up compilation and reduce 
+                            binary size.
+                
+    --enable-no_exceptions  Enable compilation without creation of
+                            C++ exception information in object files. 
+                            This will speed-up compilation and reduce 
+                            binary size. Also fewer crashes during the
+                            actual compilation...
+                
+    --enable-mem_tracing    Add built-in memory tracing. 
+                
+    --enable-dmalloc        Use the dmalloc memory debugger.
+                            Read more at www.letters.com/dmalloc/
+                
+    --enable-debug_info     Add debug info to object files and
+                            executables for use with debuggers
+                            such as gdb (or its many frontends).
 
-	--enable-debug_flag	Define __DEBUG__ and __WXDEBUG__ when
-	                        compiling. This enable wxWindows' very
-				useful internal debugging tricks (such
-				as automatically reporting illegal calls)
-				to work. Note that program and library
-				must be compiled with the same debug 
-				options.
+    --enable-debug_flag     Define __DEBUG__ and __WXDEBUG__ when
+                            compiling. This enable wxWindows' very
+                            useful internal debugging tricks (such
+                            as automatically reporting illegal calls)
+                            to work. Note that program and library
+                            must be compiled with the same debug 
+                            options.
 
 * Feature Options
 -------------------
@@ -251,38 +254,38 @@ drastically reduced by removing features from wxWindows that
 are not used in your program. The most relevant such features
 are
 
-	--without-libpng	Disables PNG image format code.
-	
-	--without-libjpeg	Disables JPEG image format code.
-	
-{	--without-odbc          Disables ODBC code. Not yet. }
-	
-        --disable-resources     Disables the use of *.wxr type
-	                        resources.
-		
-	--disable-threads       Disables threads. Will also
-	                        disable sockets.
+    --without-libpng    Disables PNG image format code.
+    
+    --without-libjpeg    Disables JPEG image format code.
+    
+{   --without-odbc          Disables ODBC code. Not yet. }
+    
+    --disable-resources     Disables the use of *.wxr type
+                            resources.
+        
+    --disable-threads       Disables threads. Will also
+                            disable sockets.
 
-	--disable-sockets       Disables sockets.
+    --disable-sockets       Disables sockets.
 
-	--disable-dnd           Disables Drag'n'Drop.
-	
-	--disable-clipboard     Disables Clipboard.
-	
-	--disable-serial        Disables object instance serialisation.
-	
-	--disable-streams       Disables the wxStream classes.
-	
-	--disable-file          Disables the wxFile class.
-	
-	--disable-textfile      Disables the wxTextFile class.
-	
-	--disable-intl          Disables the internationalisation.
-	
-	--disable-validators    Disables validators.
-	
-	--disable-accel         Disables accel.
-	
+    --disable-dnd           Disables Drag'n'Drop.
+    
+    --disable-clipboard     Disables Clipboard.
+    
+    --disable-serial        Disables object instance serialisation.
+    
+    --disable-streams       Disables the wxStream classes.
+    
+    --disable-file          Disables the wxFile class.
+    
+    --disable-textfile      Disables the wxTextFile class.
+    
+    --disable-intl          Disables the internationalisation.
+    
+    --disable-validators    Disables validators.
+    
+    --disable-accel         Disables accel.
+    
 Apart from disabling certain features you can very often "strip"
 the program of its debugging information resulting in a significant
 reduction in size.
@@ -296,7 +299,7 @@ or ~/wxWin or whatever)
 Now the makefiles are created (by configure) and you can compile 
 the library by typing:
 
-	make
+    make
 
 make yourself some coffee, as it will take some time. On an old
 386SX possibly two weeks. During compilation, you'll get a few 
@@ -310,16 +313,16 @@ Then you may install the library and its header files under
 have to log in as root (i.e. run "su" and enter the root
 password) and type
 
-        make install	
+        make install    
 
 You can remove any traces of wxWindows by typing
 
         make uninstall
-	
+    
 If you want to save disk space by removing unnecessary
 object-files:
 
-	 make clean
+     make clean
 
 in the various directories will do the work for you.
 
@@ -343,7 +346,7 @@ minimal.o: minimal.cpp mondrian.xpm
     $(CC) `wx-config --cflags` -c minimal.cpp -o minimal.o
 
 clean: 
-	rm -f *.o minimal
+    rm -f *.o minimal
 
 This is certain to become the standard way unless we decide
 to stick to tmake.
@@ -370,5 +373,38 @@ go ahead yourself :-)
 In the hope that it will be useful,
 
         Robert Roebling <roebling@sun2.ruf.uni-freiburg.de>
-	
-	
+    
+
+Addition notes by Julian Smart, August 2002
+===========================================    
+
+I've fixed some compile errors, and got as far as
+compiling wxWINE, but actually linking a sample will take
+further work.
+
+To compile wxWINE, export these variables:
+
+export CPPFLAGS=-I/usr/local/include/wine
+export LDFLAGS=-L/usr/local/lib/wine
+
+and configure with:
+
+configure --disable-static --enable-shared --enable-gui \
+ --with-wine --without-libpng --enable-debug_flag --enable-log \
+ --enable-debug_info --enable-ole --enable-clipboard --enable-dataobj \
+ --enable-debug --enable-threads --disable-sockets \
+ --with-libjpeg --enable-debug_cntxt
+
+Compiling a sample won't work yet because 'winebuild' needs
+to be called, and the resuling C file compiled and linked.
+Plus, Windows DLLs need to be imported.
+
+Note that the documentation on the WINE web site on using
+winebuild is out of date (August 2002) -- the spec file no
+longer supports import and type keywords. Instead look at
+samples in the WINE 'programs' directory for inspiration
+and compile options to use. It's probable that the
+wxWINE library will need recompiling with different options.
+
+Any progress on this front will be very welcome.
+

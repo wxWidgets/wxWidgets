@@ -43,11 +43,16 @@ public:
 
     // get the current tip and update the internal state to return the next tip
     // when called for the next time
-    virtual wxString GetTip() = 0;
+    virtual wxString GetTip() = 0;  
 
     // get the current tip "index" (or whatever allows the tip provider to know
     // from where to start the next time)
     size_t GetCurrentTip() const { return m_currentTip; }
+
+    // Allows any user-derived class to optionally override this function to 
+    // modify the tip as soon as it is read. If return wxEmptyString, then 
+    // the tip is skipped, and the next one is read.
+    virtual wxString PreprocessTip(const wxString& tip) { return tip; }
 
     // virtual dtor for the base class
     virtual ~wxTipProvider() { }

@@ -136,17 +136,56 @@ wxString wxFileTipProvider::GetTip()
 {
     size_t count = m_textfile.GetLineCount();
     if ( !count )
-        return _("Tips not available, sorry!");
-
-    // notice that it may be greater, actually, if we remembered it from the
-    // last time and the number of tips changed
-    if ( m_currentTip == count )
     {
-        // wrap
-        m_currentTip = 0;
+        return _("Tips not available, sorry!");
     }
+    
+    wxString tip;
 
-    return m_textfile.GetLine(m_currentTip++);
+    // Comments start with a # symbol.
+    // Loop reading lines until get the first one that isn't a comment.
+    // The max number of loop executions is the number of lines in the 
+    // textfile so that can't go into an eternal loop in the [oddball] 
+    // case of a comment-only tips file, or the developer has vetoed 
+    // them all via PreprecessTip().
+    for ( size_t i=0; i < count; i++ )
+    {    
+        // The current tip may be at the last line of the textfile, (or 
+        // past it, if the number of lines in the textfile changed, such 
+        // as changing to a different textfile, with less tips). So check
+        // to see at last line of text file, (or past it)...
+        if ( m_currentTip >= count )
+        {
+            // .. and if so, wrap back to line 0.
+            m_currentTip = 0;
+        }  
+        
+        // Read the tip, and increment the current tip counter.
+        tip = m_textfile.GetLine(m_currentTip++);
+        
+        // Allow a derived class's overrided virtual to modify the tip 
+        // now if so desired.
+        tip = PreprocessTip(tip); 
+        
+        // Break if tip isn't a comment, and isn't an empty string
+        // (or only stray space characters).
+        if ( !tip.StartsWith(wxT("#")) && (tip.Trim() != wxEmptyString) )
+        {
+            break;
+        }
+    }
+        
+    // If tip starts with '_(', then it is a gettext string of format
+    // _("My \"global\" tip text") so first strip off the leading '_("'...
+    if ( tip.StartsWith(wxT("_(\"" ), &tip))
+    {
+        //...and strip off the trailing '")'...
+        tip = tip.BeforeLast(wxT('\"'));
+        // ...and replace escaped quotes     
+        tip.Replace(wxT("\\\""), wxT("\"")); 
+    } 
+    
+    return tip;    
 }
 
 // ----------------------------------------------------------------------------

@@ -32,7 +32,7 @@ hardcode the tips inside your program), you just have to derive another class
 from wxTipProvider and pass a pointer to the object of this class to wxShowTip
 - then you don't need wxCreateFileTipProvider at all.
 
-Finally, you will probably want to save somewhere the index of the tip last
+You will probably want to save somewhere the index of the tip last
 shown - so that the program doesn't always show the same tip on startup. As you
 also need to remember whether to show tips or not (you shouldn't do it if the
 user unchecked "Show tips on startup" checkbox in the dialog), you will
@@ -41,3 +41,26 @@ last shown tip (as returned by
 \helpref{wxTipProvider::GetCurrentTip}{wxtipprovidergetcurrenttip} and the flag
 telling whether to show the tips at startup at all.
 
+In a tips.txt file, lines that begin with a \# character are considered comments 
+and are automatically skipped. Blank lines and lines only having spaces are also 
+skipped.
+
+You can easily add runtime-translation capacity by placing each line of the 
+tips.txt file inside the usual translation macro. For example, your tips.txt 
+file would look like this:
+\begin{verbatim}
+_("This is my first tip")
+_("This is my second tip")
+\end{verbatim}
+Now add your tips.txt file into the list of files that gettext searches 
+for translatable strings. The tips will thus get included into your 
+generated .po file catalog and be translated at runtime along with the rest of 
+your aplication's translatable strings. 
+Note1: Each line in the tips.txt file needs to strictly begin with exactly the 
+3 characters of underscore-parenthesis-doublequote, and end with 
+doublequote-parenthesis, as shown above. 
+Note2: Remember to escape any doublequote characters within the tip string with
+a backslash-doublequote.
+
+See the dialogs program in your samples folder for a working example inside a 
+program.
