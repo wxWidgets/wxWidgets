@@ -117,7 +117,10 @@ wxDialogEditorPropertyListFrame::~wxDialogEditorPropertyListFrame()
 bool wxPropertyInfo::Edit(wxWindow *parent, const wxString& title)
 {
     if (sm_propertyWindow)
-        return FALSE;
+    {
+        sm_propertyWindow->Raise();
+        return TRUE;
+    }
 
   int width = wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().width;
   int height = wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().height;
@@ -1269,14 +1272,14 @@ wxProperty *wxRadioBoxPropertyInfo::GetProperty(wxString& name)
   }
   if (name == "orientation")
   {
-    char *pos = NULL;
-    if (propertyWindow->GetWindowStyleFlag() & wxHORIZONTAL)
-      pos = "wxHORIZONTAL";
+    wxString orient;
+    if (propertyWindow->GetWindowStyleFlag() & wxRA_HORIZONTAL)
+      orient = "wxRA_HORIZONTAL";
     else
-      pos = "wxVERTICAL";
+      orient = "wxRA_VERTICAL";
 
-    return new wxProperty("orientation", pos, "string",
-       new wxStringListValidator(new wxStringList("wxHORIZONTAL", "wxVERTICAL",
+    return new wxProperty("orientation", orient, "string",
+       new wxStringListValidator(new wxStringList("wxRA_HORIZONTAL", "wxRA_VERTICAL",
           NULL)));
   }
   else if (name == "values")
@@ -1304,19 +1307,21 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   {
     long windowStyle = radioBox->GetWindowStyleFlag();
     wxString val(property->GetValue().StringValue());
-    if (val == "wxHORIZONTAL")
+    if (val == "wxRA_HORIZONTAL")
     {
-      if (windowStyle & wxVERTICAL)
-        windowStyle -= wxVERTICAL;
-      windowStyle |= wxHORIZONTAL;
+      if (windowStyle & wxRA_VERTICAL)
+        windowStyle -= wxRA_VERTICAL;
+      windowStyle |= wxRA_HORIZONTAL;
     }
     else
     {
-      if (windowStyle & wxHORIZONTAL)
-        windowStyle -= wxHORIZONTAL;
-      windowStyle |= wxVERTICAL;
+      if (windowStyle & wxRA_HORIZONTAL)
+        windowStyle -= wxRA_HORIZONTAL;
+      windowStyle |= wxRA_VERTICAL;
     }
     radioBox->SetWindowStyleFlag(windowStyle);
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(radioBox);
+    resource->SetStyle(windowStyle);
     
     wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(radioBox, this);
     return TRUE;
