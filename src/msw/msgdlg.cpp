@@ -61,7 +61,11 @@ int wxMessageDialog::ShowModal(void)
       msStyle = MB_YESNOCANCEL;
     else
       msStyle = MB_YESNO;
+
+    if (m_dialogStyle & wxNO_DEFAULT)
+        msStyle |= MB_DEFBUTTON2;
   }
+
   if (m_dialogStyle & wxOK)
   {
     if (m_dialogStyle & wxCANCEL)
@@ -82,7 +86,7 @@ int wxMessageDialog::ShowModal(void)
     msStyle |= MB_APPLMODAL;
   else
     msStyle |= MB_TASKMODAL;
-    
+
   int msAns = MessageBox(hWnd, (LPCTSTR)(const wxChar *)m_message, (LPCTSTR)(const wxChar *)m_caption, msStyle);
   int ans = wxOK;
   switch (msAns)
