@@ -1126,6 +1126,11 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   return GSOCK_NOERROR;
 }
 
+GSocketError GAddress_INET_SetAnyAddress(GAddress *address)
+{
+  return GAddress_INET_SetHostAddress(address, INADDR_ANY);
+}
+
 GSocketError GAddress_INET_SetHostAddress(GAddress *address,
                                           unsigned long hostaddr)
 {
@@ -1233,6 +1238,33 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
 
   addr = (struct sockaddr_in *)address->m_addr;
   return ntohs(addr->sin_port);
+}
+
+/*
+ * -------------------------------------------------------------------------
+ * Unix address family
+ * -------------------------------------------------------------------------
+ */
+
+GSocketError _GAddress_Init_UNIX(GAddress *address)
+{
+  assert (address != NULL);
+  address->m_error = GSOCK_INVADDR;
+  return GSOCK_INVADDR;
+}
+
+GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path)
+{
+  assert (address != NULL);
+  address->m_error = GSOCK_INVADDR;
+  return GSOCK_INVADDR;
+}
+
+GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
+{
+  assert (address != NULL);
+  address->m_error = GSOCK_INVADDR;
+  return GSOCK_INVADDR;
 }
 
 #endif
