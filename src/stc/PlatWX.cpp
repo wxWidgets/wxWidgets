@@ -437,7 +437,7 @@ void Window::SetCursor(Cursor curs) {
         cursorId = wxCURSOR_SIZENS;
         break;
     case cursorReverseArrow:
-        cursorId = wxCURSOR_POINT_RIGHT;
+        cursorId = wxCURSOR_RIGHT_ARROW;
         break;
     default:
         cursorId = wxCURSOR_ARROW;

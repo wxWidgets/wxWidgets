@@ -68,7 +68,9 @@ wxCursor::wxCursor( int cursorId )
     GdkCursorType gdk_cur = GDK_LEFT_PTR;
     switch (cursorId)
     {
+        case wxCURSOR_ARROW:            // fall through to default
         case wxCURSOR_DEFAULT:          gdk_cur = GDK_LEFT_PTR; break;
+        case wxCURSOR_RIGHT_ARROW:      gdk_cur = GDK_RIGHT_PTR; break;
         case wxCURSOR_HAND:             gdk_cur = GDK_HAND1; break;
         case wxCURSOR_CROSS:            gdk_cur = GDK_CROSSHAIR; break;
         case wxCURSOR_SIZEWE:           gdk_cur = GDK_SB_H_DOUBLE_ARROW; break;
@@ -103,8 +105,6 @@ wxCursor::wxCursor( int cursorId )
         default:
             wxFAIL_MSG(wxT("unsupported cursor type"));
             // will use the standard one
-
-        case wxCURSOR_ARROW:
             break;
     }
 
@@ -211,7 +211,7 @@ wxCursor::wxCursor( const wxImage & image )
     unsigned long key;
     unsigned long value;
     unsigned long keyMaskColor = 0;
-    if (bHasMask) 
+    if (bHasMask)
         keyMaskColor = (r << 16) | (g << 8) | b;
 
     tmpImage.ComputeHistogram(histogram);
@@ -249,14 +249,14 @@ wxCursor::wxCursor( const wxImage & image )
                              (unsigned char)(NextFreqCol >> 8),
                              (unsigned char)(NextFreqCol) ) ;
 
-    int hotSpotX=0; 
+    int hotSpotX=0;
     int hotSpotY=0;
 
     if (image.HasOption(wxCUR_HOTSPOT_X))
         hotSpotX = image.GetOptionInt(wxCUR_HOTSPOT_X);
     if (image.HasOption(wxCUR_HOTSPOT_Y))
         hotSpotY = image.GetOptionInt(wxCUR_HOTSPOT_Y);
-   
+
     if (hotSpotX < 0 || hotSpotX >= w)
         hotSpotX = 0;
     if (hotSpotY < 0 || hotSpotY >= h)
@@ -358,7 +358,7 @@ void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
 
     if (wxTheApp)
         wxTheApp->SendIdleEvents();
-        
+
     gdk_flush();
 }
 

@@ -187,7 +187,7 @@ wxCursor::wxCursor( const wxImage & image )
     wxCursorRefData *refData = new wxCursorRefData;
     m_refData = refData;
     refData->m_hCursor = (WXHCURSOR) CreateCursor ( wxGetInstance(), hotSpotX, hotSpotY, w, h, /*AND*/ maskBits, /*XOR*/ bits   );
-  
+
     delete [] bits ;
     delete [] maskBits;
 
@@ -382,6 +382,11 @@ wxCursor::wxCursor(int cursor_type)
     {
       refData->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_BLANK"));
       break;
+    }
+    case wxCURSOR_RIGHT_ARROW:
+    {
+        refData->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_RIGHT_ARROW"));
+        break;
     }
     default:
     case wxCURSOR_ARROW:

@@ -90,6 +90,7 @@ enum wxStockCursor
 {
     wxCURSOR_NONE,          // should be 0
     wxCURSOR_ARROW,
+    wxCURSOR_RIGHT_ARROW,
     wxCURSOR_BULLSEYE,
     wxCURSOR_CHAR,
     wxCURSOR_CROSS,
