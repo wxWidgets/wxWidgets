@@ -139,9 +139,8 @@
     #define va_list __gnuc_va_list
 #endif // HP-UX
 
-// Mingw32 gcc-2.95 uses new windows headers which are more ms-like
-// we are setting this define because of the complex check
-// using NORLANDER as Cygwin may follow. (header author is Anders Norlander)
+// Cygwin / Mingw32 with gcc >= 2.95 use new windows headers which
+// are more ms-like (header author is Anders Norlander, hence the name)
 #if (defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
     #ifndef wxUSE_NORLANDER_HEADERS
         #define wxUSE_NORLANDER_HEADERS 1
@@ -152,9 +151,9 @@
     #endif
 #endif
 
-// "old" GNUWIN32 is the one without Norlander's headers: it lacks the standard
-// Win32 headers and we define the used stuff ourselves for it in
-// wx/msw/gnuwin32/extra.h
+// "old" GNUWIN32 is the one without Norlander's headers: it lacks the
+// standard Win32 headers and we define the used stuff ourselves for it
+// in wx/msw/gnuwin32/extra.h
 #if defined(__GNUC__) && !wxUSE_NORLANDER_HEADERS
     #define __GNUWIN32_OLD__
 #endif
