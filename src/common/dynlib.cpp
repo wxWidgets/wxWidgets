@@ -127,18 +127,21 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 
   if (!handle)
     return NULL;
-#endif
-#ifdef __WINDOWS__
+#elif defined( __WINDOWS__ )
   lib_name += ".dll";
 
   HMODULE handle = LoadLibrary(lib_name);
   if (!handle)
     return NULL;
+#else
+    return NULL;
 #endif
+#if defined(__LINUX__) || defined(__SGI__) || defined (__WINDOWS__)
   lib = new wxLibrary((void *)handle);
 
   m_loaded.Append(name.GetData(), lib);
   return lib;
+#endif
 }
 
 wxObject *wxLibraries::CreateObject(const wxString& path)
