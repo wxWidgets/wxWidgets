@@ -1,31 +1,36 @@
 wxMotif TODO
 ------------
 
-Updated: 21/9/98
+Updated: 16/10/98
 
          -------------------------------o-------------------------
 
-- wxDCs
+High Priority
+-------------
 
-- wxBitmap, wxIcon, wxCursor, wxPalette. What about XPMs, can we assume
-  libxpm exists and use that? What about PNGs? Can we use gdk
-  as per wxGTK? Probably not.
+- wxScreenDC
+
+- Extra wxBitmap formats. What about XPMs, can we assume
+  libxpm exists and use that?
 
 - Work out why XFreeFont in font.cpp produces a segv. This is
   currently commented out, which presumably causes a memory leak.
 
-- wxRegion
-
 - Bitmap versions of widgets (wxBitmapButton etc.)
 
-- wxCheckBoxList
+- wxRadioBox
 
-- Remaining common widgets (wxListBox, wxRadioBox, wxRadioButton, wxChoice,
-  wxGauge, wxComboBox etc.). Use combobox.c code as bundled in wxWin 1.68.
+- wxRadioButton
+
+- wxComboBox: use combobox.c code as bundled in wxWin 1.68
+
+- wxGauge: use xmgauge as per wxWin 1.68
+
+- wxSpinButton
+
+- wxSlider
 
 - wxTextCtrl text file loading and saving.
-
-- Scrolling in wxWindow.
 
 - A generic version of wxNotebook that can be used in wxMotif and
   other toolkits that don't have a native control. Perhaps use wxTab as a
@@ -33,13 +38,8 @@ Updated: 21/9/98
 
 - MDI classes: use existing Motif widgets for this.
 
-- Miscellaneous classes e.g. wxJoystick (identical to GTK's one for
-  Linux)
-
-- Dialogs e.g. wxFileSelector. Use a native Motif wxMessageBox.
+- Dialogs e.g. wxFileSelector.
   Some others need tidying, such as the colour and font selectors.
-
-- Write generic wxDirDialog (directory selector).
 
 - Use generic wxTreeCtrl, wxListCtrl: enhance these.
 
@@ -47,11 +47,6 @@ Updated: 21/9/98
   Alternatively, write a toolbar using Motif as described here:
   http://www.motifzone.com/tmd/articles/Kurt_Huhner/jun96.html.
   This article also explains how to implement tooltips.
-
-- Optimize colour management so we don't get clashes when e.g.
-  Netscape is running.
-
-- Print/preview framework in print.cpp (see wxGTK's).
 
 - Colour and font setting in widgets.
 
@@ -61,24 +56,43 @@ Updated: 21/9/98
 
 - wxThread (hopefully, similar to wxGTK)
 
-- Copy and paste, drag and drop. Use a standard X drag
-  and drop standard - see http://www.cco.caltech.edu/~jafl/xdnd/
-  or use Motif drag and drop as described here:
-  http://www.motifzone.com/tmd/articles/DnD/dnd.html
+- Write makefiles for all samples.
 
-- Optimize screen refresh for non-native widgets, e.g. wxWindow
-  created with Create(), using technique in flicker patch for 1.68
-  (see JACS for latest patch).
+- Create some samples for testing.
+
+Low Priority
+------------
+
+- Print/preview framework in print.cpp (see wxGTK).
 
 - Enhance event handling such that you override e.g. left-click
   and unless you call the base OnMouseEvent, the click won't be
   sent to the button. Required for Dialog Editor.
 
-- Write makefiles for all samples.
-
-- Create some samples for testing.
-
 - Get Dialog Editor working under Motif.
 
 - New wxHelp version: try using the XmHTML widget at
   http://www.xs4all.nl/~ripley/XmHTML/
+
+- Optimize screen refresh for non-native widgets, e.g. wxWindow
+  created with Create(), using technique in flicker patch for 1.68
+  (see JACS for latest patch).
+
+- Copy and paste, drag and drop. Use a standard X drag
+  and drop standard - see http://www.cco.caltech.edu/~jafl/xdnd/
+  or use Motif drag and drop as described here:
+  http://www.motifzone.com/tmd/articles/DnD/dnd.html
+
+- Optimize colour management so we don't get clashes when e.g.
+  Netscape is running.
+
+- wxCheckBoxList
+
+- Write generic wxDirDialog (directory selector).
+
+- Use native Motif dialogs for wxMessageBox.
+
+- Miscellaneous classes e.g. wxJoystick (identical to GTK's one for
+  Linux)
+
+
