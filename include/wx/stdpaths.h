@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FILELOC_H_
-#define _WX_FILELOC_H_
+#ifndef _WX_STDPATHS_H_
+#define _WX_STDPATHS_H_
 
 // ----------------------------------------------------------------------------
 // wxStandardPaths returns the standard locations in the file system
@@ -81,5 +81,5 @@ public:
     static wxString GetPluginsDir();
 };
 
-#endif // _WX_FILELOC_H_
+#endif // _WX_STDPATHS_H_
 
