@@ -113,6 +113,8 @@ public:
     *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);
     return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
   }
+  wxDash* GetDash() const { return (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*)NULL); };
+  inline int GetDashCount() const { return (M_PENDATA ? M_PENDATA->m_nbDash : 0); };
 
   inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); };
 
