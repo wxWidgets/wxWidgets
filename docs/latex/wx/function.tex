@@ -1326,7 +1326,9 @@ Now obsolete: use \helpref{wxWindow::Close}{wxwindowclose} instead.
 \func{bool}{wxSafeYield}{\param{wxWindow*}{ win = NULL}}
 
 This function is similar to wxYield, except that it disables the user input to
-the given window {\it win} or to all program windows if {\it win} is NULL.
+all program windows before calling wxYield and re-enables it again
+afterwards. If {\it win} is not NULL, this window will remain enabled, 
+allowing the implementation of some limited user interaction.
 
 Returns the result of the call to \helpref{::wxYield}{wxyield}.
 
