@@ -972,7 +972,7 @@ public:
                           const wxString& normal_face = wxPyEmptyString,
                           const wxString& fixed_face = wxPyEmptyString);
     
-    int Render(int x, int y, int from = 0, int dont_render = false, int to = INT_MAX,
+    int Render(int x, int y, int from = 0, int dont_render = false, int maxHeight = INT_MAX,
                //int *known_pagebreaks = NULL, int number_of_pages = 0
                int* choices=NULL, int LCOUNT = 0
                );

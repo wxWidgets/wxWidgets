@@ -89,6 +89,11 @@ styles.", "");
 have a wx.STIPPLE style, then the return value may be non-None but an
 uninitialised bitmap (`wx.Bitmap.Ok` returns False).", "");
 
+    
+    DocDeclStr(
+        bool , IsHatch() const,
+        "Is the current style a hatch type?", "");
+    
 
     DocDeclStr(
         bool , Ok(),
