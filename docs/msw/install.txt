@@ -63,7 +63,7 @@ General installation notes
 --------------------------
 
 Alter your WXWIN environment variable to point to the root directory of the
-wxWindows installation. For Cygwin or Mingw32 compilation, make sure WXWIN
+wxWindows installation. For Cygwin or MinGW compilation, make sure WXWIN
 contains only forward slashes.
 
 If installing from the CVS server, copy include/wx/msw/setup0.h to
@@ -154,7 +154,7 @@ Makefile notes:
   doesn't occur when using project files to build wxWindows.
 
   To build Unicode versions of the libraries, add UNICODE=1
-  to the nmake invocation ( default is UNICODE=0 ). If you want to
+  to the nmake invocation (default is UNICODE=0). If you want to
   be able to use Unicode version on Windows9x, you will need 
   MSLU (Microsoft Layer for Unicode) runtime DLL and import lib.
   The former can be downloaded from Microsoft, the latter is part
@@ -172,7 +172,7 @@ Makefile notes:
 
 To build the DLL version using makefiles:
 
-1. Change directory to wx\src\msw. Type 'nmake -f makefile.vc dll pch'
+1. Change directory to wx\src\msw. Type 'nmake -f makefile.vc dll'
    to make both a suitable DLL and import library, and to build a
    suitable precompiled header file for compiling applications.
    See the previous section for library names.
@@ -468,34 +468,34 @@ Metrowerks CodeWarrior compilation
          minimal.rc and minimal.cpp and adding the files griddemo.rc and 
          griddemo.cpp.  Build and run....
 
-Cygwin/Mingw32 compilation
+Cygwin/MinGW compilation
 ----------------------------------
 
 wxWindows 2 supports Cygwin (formerly GnuWin32) betas and
-releases, and Mingw32. Cygwin can be downloaded from:
+releases, and MinGW. Cygwin can be downloaded from:
 
-    http://sources.redhat.com/cygwin
+    http://sources.redhat.com/cygwin/
 
-and Mingw32 from:
+and MinGW from:
 
-    http://www.mingw.org
+    http://www.mingw.org/
 
-Both Cygwin and MinGW can be used with the same makefiles.
+Both Cygwin and MinGW can be used with the same makefiles, and both can be
+used with configure.
 
-NOTE: some notes specific to old Cygwin ( < 1.1.x )
-      and MinGW ( < 1.0 ) are at the end of this section
-      ( see OLD VERSIONS )
+NOTE: some notes specific to old Cygwin (< 1.1.x)
+      and MinGW (< 1.0) are at the end of this section
+      (see OLD VERSIONS)
 
 There are two methods of compiling wxWindows, by using the
 makefiles provided or by using 'configure'.
 
-Retrieve and install the latest version of Cygwin, or Mingw32, as per
+Retrieve and install the latest version of Cygwin, or MinGW, as per
 the instructions with either of these packages.
 
-If using Mingw32, you can download the add-on MSYS package to
+If using MinGW, you can download the add-on MSYS package to
 provide Unix-like tools that you'll need to build wxWindows.
-
-The solution prior to MSYS was to download extra utilities from
+If you do not want to use MSYS, then you need to download extra utilities from
 ports/mingw32 on the wxWindows ftp site or CD-ROM:
 
   ftp://biolpc22.york.ac.uk/pub/ports/mingw32/extra.zip
@@ -530,13 +530,13 @@ NOTE: The makefile are for compilation under Cygwin, MSYS, or
 Here are the steps required using the provided makefiles:
 
 - Set your WXWIN variable to where wxWindows is installed.
-  *** IMPORTANT: For Cygwin/Mingw32, use forward slashes in the path, not
+  *** IMPORTANT: For Cygwin/MinGW, use forward slashes in the path, not
   backslashes.
 
 - Edit src/makeg95.env and set the MINGW32 variable at the top of
-  the file to either 1 (you have Mingw32) or 0 (if you have
-  Cygwin). If using Mingw32, also set the MINGW32VERSION variable
-  appropriately.
+  the file to either 1 (you have MinGW) or 0 (if you have
+  Cygwin); also set the MINGW32VERSION variable appropriately for your
+  GCC version.
 
 - Use the makefile.g95 files for compiling wxWindows and samples,
   e.g. to compile a debugging version of wxWindows:
@@ -571,11 +571,12 @@ Here are the steps required using the provided makefiles:
   > make -f makefile.g95 cleanall
   > make -f makefile.g95 UNICODE=1
 
-  Options can be combined ( e.g.: UNICODE=1 FINAL=1 )
+  Options can be combined (e.g.: UNICODE=1 FINAL=1)
 
   Ignore the warning about the default entry point.
 
-- Use the 'strip' command to reduce executable size.
+- Use the 'strip' command to reduce executable/dll size (note that
+  stripping an executable/dll will remove debug information!).
 
 - With Cygwin, you can invoke gdb --nw myfile.exe to
   debug an executable. If there are memory leaks, they will be
@@ -594,8 +595,7 @@ system to generate appropriate makefiles, as used on Unix
 and Mac OS X systems.
 
 Change directory to the root of the wxWindows distribution,
-make a build directory, run 'sh', and then from this shell
-run configure and make.
+make a build directory, and run configure and make in this directory.
 
 For example:
 
@@ -610,13 +610,13 @@ For example:
 
 Notes:
 
-1. See also the Cygwin/Mingw32 on the web site or CD-ROM for
+1. See also the Cygwin/MinGW on the web site or CD-ROM for
    further information about using wxWindows with these compilers.
 
 2. libwx.a is 100 MB or more - but much less if compiled with no
    debug info (-g0) and level 4 optimization (-O4).
 
-3. If you get a link error under Mingw32 2.95.2 referring to:
+3. If you get a link error under MinGW 2.95.2 referring to:
 
    EnumDAdvise__11IDataObjectPP13IEnumSTATDATA@8
 
@@ -625,7 +625,7 @@ Notes:
 
    STDMETHOD(EnumDAdvise)(THIS_ IEnumSTATDATA**) PURE;
 
-4. There's a bug in Mingw32 headers for some early distributions.
+4. There's a bug in MinGW headers for some early distributions.
 
    in include/windows32/defines.h, where it says:
 
@@ -644,7 +644,7 @@ Notes:
 6. If there's a problem executing the windres program, try
    commenting out RCPREPROCESSOR in makeg95.env.
 
-7. OpenGL support should work with Mingw32 as-is. However,
+7. OpenGL support should work with MinGW as-is. However,
    if you wish to generate import libraries appropriate either for
    the MS OpenGL libraries or the SGI OpenGL libraries, go to
    include/wx/msw/gl and use:
@@ -659,9 +659,9 @@ Notes:
 
 OLD VERSIONS:
 
-- If using Mingw32 2.95 and below with wxWindows 2.1 or above, you
+- If using MinGW 2.95 and below with wxWindows 2.1 or above, you
   must hand-patch with Mingw32-gcc295.patches (located in the
-  top-level of the wxWindows 2 installation). Mingw32 2.95.2
+  top-level of the wxWindows 2 installation). MinGW 2.95.2
   and above contain the fixes already.
 
 - Modify the file wx/src/cygnus.bat (or mingw32.bat or mingegcs.bat)
@@ -674,7 +674,7 @@ OLD VERSIONS:
   supplied).
 
 - If using GnuWin32 b18, you will need to copy windres.exe
-  from e.g. the Mingw32 distribution, to a directory in your path.
+  from e.g. the MinGW distribution, to a directory in your path.
 
 Symantec C++ compilation
 ------------------------
