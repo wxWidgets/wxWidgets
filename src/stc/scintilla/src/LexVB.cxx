@@ -116,7 +116,7 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 			} else if (sc.ch == '#') {
 				int n = 1;
 				int chSeek = ' ';
-				while (chSeek == ' ' || chSeek == '\t') {
+				while ((n < 100) && (chSeek == ' ' || chSeek == '\t')) {
 					chSeek = sc.GetRelative(n);
 					n++;
 				}
@@ -200,6 +200,11 @@ static void ColouriseVBScriptDoc(unsigned int startPos, int length, int initStyl
 	ColouriseVBDoc(startPos, length, initStyle, keywordlists, styler, true);
 }
 
-LexerModule lmVB(SCLEX_VB, ColouriseVBNetDoc, "vb", FoldVBDoc);
-LexerModule lmVBScript(SCLEX_VBSCRIPT, ColouriseVBScriptDoc, "vbscript", FoldVBDoc);
+static const char * const vbWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+LexerModule lmVB(SCLEX_VB, ColouriseVBNetDoc, "vb", FoldVBDoc, vbWordListDesc);
+LexerModule lmVBScript(SCLEX_VBSCRIPT, ColouriseVBScriptDoc, "vbscript", FoldVBDoc, vbWordListDesc);
 
