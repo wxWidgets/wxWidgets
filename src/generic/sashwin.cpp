@@ -480,16 +480,16 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
         {
             if (edge == wxSASH_LEFT)
             {
-                // Draw a black line on the left to indicate that the
+                // Draw a dark grey line on the left to indicate that the
                 // sash is raised
-                dc.SetPen(blackPen);
+                dc.SetPen(mediumShadowPen);
                 dc.DrawLine(GetEdgeMargin(edge), 0, GetEdgeMargin(edge), h);
             }
             else
             {
-                // Draw a white line on the right to indicate that the
+                // Draw a light grey line on the right to indicate that the
                 // sash is raised
-                dc.SetPen(whitePen);
+                dc.SetPen(lightShadowPen);
                 dc.DrawLine(w - GetEdgeMargin(edge), 0, w - GetEdgeMargin(edge), h);
             }
         }
@@ -510,17 +510,17 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
         {
             if (edge == wxSASH_BOTTOM)
             {
-                // Draw a black line on the bottom to indicate that the
+                // Draw a light grey line on the bottom to indicate that the
                 // sash is raised
-                dc.SetPen(blackPen);
-                dc.DrawLine(0, h - GetEdgeMargin(edge), w, h - GetEdgeMargin(edge));
+                dc.SetPen(lightShadowPen);
+                dc.DrawLine(0, h - GetEdgeMargin(edge), w-1, h - GetEdgeMargin(edge));
             }
             else
             {
-                // Draw a white line on the top to indicate that the
+                // Draw a drak grey line on the top to indicate that the
                 // sash is raised
-                dc.SetPen(whitePen);
-                dc.DrawLine(0, GetEdgeMargin(edge), w, GetEdgeMargin(edge));
+                dc.SetPen(mediumShadowPen);
+                dc.DrawLine(1, GetEdgeMargin(edge), w-1, GetEdgeMargin(edge));
             }
         }
     }

@@ -112,7 +112,8 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
                        (
                         classname,
                         wxT(""),
-                        winstyle | WS_CHILD | WS_VISIBLE | WS_DISABLED,
+                        // NOT DISABLED!!! We want to move it in Dialog Editor.
+                        winstyle | WS_CHILD | WS_VISIBLE, // | WS_DISABLED,
                         0, 0, 0, 0,
                         (HWND)parent->GetHWND(),
                         (HMENU)m_windowId,

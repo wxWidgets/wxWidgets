@@ -337,7 +337,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, const wxItemResource* c
           }
           if (bitmap.Ok())
            control = new wxBitmapButton(parent, id, bitmap, pos, size,
-               childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
+               childResource->GetStyle() | wxBU_AUTODRAW, wxDefaultValidator, childResource->GetName());
         }
         else
           // Normal, text button

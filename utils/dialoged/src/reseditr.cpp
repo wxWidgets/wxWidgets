@@ -1059,7 +1059,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
       MakeUniqueName("button", buf);
       res->SetName(buf);
       if (isBitmap)
-        newItem = new wxBitmapButton(panel, -1, * m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
+        newItem = new wxBitmapButton(panel, -1, * m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), wxBU_AUTODRAW, wxDefaultValidator, buf);
       else
         newItem = new wxButton(panel, -1, "Button", wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
     }
@@ -1068,7 +1068,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
       prefix = "ID_BITMAPBUTTON";
       MakeUniqueName("button", buf);
       res->SetName(buf);
-      newItem = new wxBitmapButton(panel, -1, * m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, wxDefaultValidator, buf);
+      newItem = new wxBitmapButton(panel, -1, * m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), wxBU_AUTODRAW, wxDefaultValidator, buf);
     }
   else if (itemType == "wxMessage" || itemType == "wxStaticText")
     {

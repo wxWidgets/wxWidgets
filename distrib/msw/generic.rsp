@@ -1055,6 +1055,7 @@ demos/fractal/*.ico
 demos/fractal/*.rc
 
 demos/life/*.cpp
+demos/life/*.inc
 demos/life/*.h
 demos/life/makefile*
 demos/life/*.rc
