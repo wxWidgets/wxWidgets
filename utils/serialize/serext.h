@@ -20,5 +20,7 @@
 #include "serwnd.h"
 
 DECLARE_SERIAL_CLASS(wxSplitterWindow, wxWindow)
+DECLARE_SERIAL_CLASS(wxGrid, wxPanel)
+DECLARE_SERIAL_CLASS(wxGridCell, wxObject)
 
 #endif

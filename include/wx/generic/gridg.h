@@ -302,6 +302,7 @@ class WXDLLEXPORT wxGridCell: public wxObject
   inline wxColour& GetBackgroundColour(void) { return backgroundColour; }
   void SetBackgroundColour(const wxColour& colour);
   inline wxBrush *GetBackgroundBrush(void) { return backgroundBrush; }
+  inline void SetBackgroundBrush(wxBrush *brush) { backgroundBrush = brush; }
   inline int GetAlignment(void) { return alignment; }
   inline void SetAlignment(int align) { alignment = align; }
   inline wxBitmap *GetCellBitmap(void) { return cellBitmap; }

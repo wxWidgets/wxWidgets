@@ -18,6 +18,7 @@
 
 #include <wx/serbase.h>
 
-DECLARE_SERIAL_CLASS(wxList,wxObject)
+DECLARE_SERIAL_CLASS(wxList, wxObject)
+DECLARE_SERIAL_CLASS(wxHashTable, wxObject)
 
 #endif

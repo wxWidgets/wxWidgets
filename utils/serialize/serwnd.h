@@ -50,5 +50,7 @@ DECLARE_SERIAL_CLASS(wxMenuBar, wxWindow)
 DECLARE_SERIAL_CLASS(wxMenuItem, wxObject)
 DECLARE_SERIAL_CLASS(wxMenu, wxObject)
 DECLARE_SERIAL_CLASS(wxMDIParentFrame, wxFrame)
+DECLARE_SERIAL_CLASS(wxMDIChildFrame, wxFrame)
+DECLARE_SERIAL_CLASS(wxMDIClientWindow, wxFrame)
 
 #endif

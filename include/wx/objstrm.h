@@ -27,6 +27,7 @@ class wxObjectStreamInfo : public wxObject {
   wxList children;
   wxObjectStreamInfo *parent;
   wxObject *object;
+  bool duplicate;
 };
 
 class wxObjectOutputStream : public wxFilterOutputStream {
@@ -49,6 +50,7 @@ class wxObjectOutputStream : public wxFilterOutputStream {
   int m_stage;
   bool m_saving;
   wxObjectStreamInfo *m_current_info;
+  wxList m_saved_objs;
 };
 
 class wxObjectInputStream : public wxFilterInputStream {
@@ -56,6 +58,7 @@ class wxObjectInputStream : public wxFilterInputStream {
   wxObjectInputStream(wxInputStream& s);
 
   wxObject *GetChild(int no) const;
+  wxObject *GetChild();
   int NumberOfChildren() const { return m_current_info->n_children; }
   void RemoveChildren(int nb);
   wxObject *GetParent() const;

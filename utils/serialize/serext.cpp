@@ -13,12 +13,16 @@
 #pragma implementation "serext.h"
 #endif
 
+#include "serext.h"
+#include <wx/wx.h>
 #include <wx/splitter.h>
+#include <wx/grid.h>
 #include <wx/objstrm.h>
 #include <wx/datstrm.h>
-#include "serext.h"
 
 IMPLEMENT_SERIAL_CLASS(wxSplitterWindow, wxWindow)
+IMPLEMENT_SERIAL_CLASS(wxGridCell, wxObject)
+IMPLEMENT_SERIAL_CLASS(wxGrid, wxPanel)
 
 void WXSERIAL(wxSplitterWindow)::StoreObject(wxObjectOutputStream& s)
 {
@@ -68,4 +72,66 @@ void WXSERIAL(wxSplitterWindow)::LoadObject(wxObjectInputStream& s)
   splitter->SetSashSize(sash_size);
   splitter->SetBorderSize(border_size);
   splitter->SetMinimumPaneSize(min_pane_size);
+}
+
+void WXSERIAL(wxGridCell)::StoreObject(wxObjectOutputStream& s)
+{
+  wxGridCell *cell = (wxGridCell *)Object();
+  wxDataOutputStream data_s(s);
+
+  if (s.FirstStage()) {
+    s.AddChild( cell->GetFont() );
+    s.AddChild( cell->GetBackgroundBrush() );
+    s.AddChild( cell->GetCellBitmap() );
+    s.AddChild( &(cell->GetTextColour()) );
+    s.AddChild( &(cell->GetBackgroundColour()) );
+    return;
+  }
+
+  data_s.WriteString( cell->GetTextValue() );
+  data_s.Write16( cell->GetAlignment() );
+}
+
+void WXSERIAL(wxGridCell)::LoadObject(wxObjectInputStream& s)
+{
+  wxGridCell *cell = (wxGridCell *)Object();
+  wxDataInputStream data_s(s);
+
+  cell->SetTextValue( data_s.ReadString() );
+  cell->SetAlignment( data_s.Read16() );
+  cell->SetFont( (wxFont *)s.GetChild() );
+  cell->SetBackgroundBrush( (wxBrush *)s.GetChild() );
+  cell->SetCellBitmap( (wxBitmap *)s.GetChild() );
+  cell->SetTextColour( *((wxColour *)s.GetChild()) );
+  cell->SetBackgroundColour( *((wxColour *)s.GetChild()) );
+}
+
+void WXSERIAL(wxGrid)::StoreObject(wxObjectOutputStream& s)
+{
+  wxDataOutputStream data_s(s);
+  wxGrid *grid = (wxGrid *)Object();
+  int n_rows = grid->GetRows(), n_cols = grid->GetCols();
+  int r, c;
+
+  if (s.FirstStage()) {
+    for (r=0;r<n_rows;r++)
+      for (c=0;c<n_cols;c++)
+	s.AddChild( grid->GetCell(r, c) );
+
+    s.AddChild( grid->GetDividerPen() );
+    WXSERIAL(wxPanel)::StoreObject(s);
+    return;
+  }
+
+  data_s.Write16( n_rows );
+  data_s.Write16( n_cols );
+  data_s.Write16( grid->GetCursorRow() );
+  data_s.Write16( grid->GetCursorColumn() );
+
+  WXSERIAL(wxPanel)::StoreObject(s);
+}
+
+void WXSERIAL(wxGrid)::LoadObject(wxObjectInputStream& s)
+{
+  WXSERIAL(wxPanel)::LoadObject(s);
 }

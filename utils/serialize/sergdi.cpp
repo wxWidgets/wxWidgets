@@ -116,9 +116,7 @@ void WXSERIAL(wxPen)::StoreObject(wxObjectOutputStream& s)
 void WXSERIAL(wxPen)::LoadObject(wxObjectInputStream& s)
 {
   wxPen *pen = (wxPen *)Object();
-  wxColour *col = (wxColour *) s.GetChild(0);
-
-  s.RemoveChildren(1);
+  wxColour *col = (wxColour *) s.GetChild();
 
   WXSERIAL(wxGDIObject)::LoadObject(s);
 
@@ -149,10 +147,8 @@ void WXSERIAL(wxBrush)::StoreObject(wxObjectOutputStream& s)
 void WXSERIAL(wxBrush)::LoadObject(wxObjectInputStream& s)
 {
   wxBrush *brush = (wxBrush *)Object();
-  wxColour *col = (wxColour *)s.GetChild(0);
-  wxBitmap *bmap = (wxBitmap *)s.GetChild(1);
-
-  s.RemoveChildren(2);
+  wxColour *col = (wxColour *)s.GetChild();
+  wxBitmap *bmap = (wxBitmap *)s.GetChild();
 
   WXSERIAL(wxGDIObject)::LoadObject(s);
 
@@ -226,5 +222,5 @@ void WXSERIAL(wxImageList)::LoadObject(wxObjectInputStream& s)
 
   count = data_s.Read32();
   for (i=0;i<count;i++)
-    list->Add(*((wxBitmap *)s.GetChild(i)));
+    list->Add(*((wxBitmap *)s.GetChild()));
 }

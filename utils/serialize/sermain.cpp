@@ -36,8 +36,8 @@ WXDLL_ENTRY_FUNCTION()
   REGISTER_CLASS(wxIndividualLayoutConstraint);
   REGISTER_CLASS(wxLayoutConstraints);
   REGISTER_CLASS(wxFrame);
-//  REGISTER_CLASS(wxPanel);
-//  REGISTER_CLASS(wxDialog);
+  REGISTER_CLASS(wxPanel);
+  REGISTER_CLASS(wxDialog);
   REGISTER_CLASS(wxMenu);
   REGISTER_CLASS(wxMenuItem);
   REGISTER_CLASS(wxMenuBar);
@@ -48,6 +48,7 @@ WXDLL_ENTRY_FUNCTION()
   REGISTER_CLASS(wxFont);
   REGISTER_CLASS(wxPen);
   REGISTER_CLASS(wxBrush);
+  REGISTER_CLASS(wxImageList);
   REGISTER_CLASS(wxPenList);
   REGISTER_CLASS(wxBrushList);
   REGISTER_CLASS(wxFontList);

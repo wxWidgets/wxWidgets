@@ -20,6 +20,7 @@
 #define WXOBJ_BEG_LEN 6
 
 #define TAG_EMPTY_OBJECT "NULL"
+#define TAG_DUPLICATE_OBJECT "DUPLIC"
 
 // ----------------------------------------------------------------------------
 // wxObjectOutputStream
@@ -45,6 +46,12 @@ void wxObjectOutputStream::WriteObjectDef(wxObjectStreamInfo& info)
 
   Write(WXOBJ_BEGIN, WXOBJ_BEG_LEN);
 
+  if (info.duplicate) {
+    data_s.WriteString(TAG_DUPLICATE_OBJECT);
+    data_s.WriteString(GetObjectName(info.object));
+    return;
+  }
+
   if (info.object) {
     data_s.WriteString(info.object->GetClassInfo()->GetClassName());
   } else {
@@ -54,7 +61,8 @@ void wxObjectOutputStream::WriteObjectDef(wxObjectStreamInfo& info)
   data_s.WriteString(GetObjectName(info.object));
 
   // I assume an object will not have millions of children
-  data_s.Write8(info.children.Number());
+  // Hmmm ... it could have (for example wxGrid)
+  data_s.Write32(info.children.Number());
 }
 
 void wxObjectOutputStream::AddChild(wxObject *obj)
@@ -65,6 +73,13 @@ void wxObjectOutputStream::AddChild(wxObject *obj)
     return;
 
   info = new wxObjectStreamInfo;
+
+  if (m_saved_objs.Member(obj) != NULL) {
+    info->duplicate = TRUE;
+  } else {
+    info->duplicate = FALSE;
+    m_saved_objs.Append(obj);
+  }
   info->n_children = 0;
   info->object = obj;
   info->parent = m_current_info; // Not useful here.
@@ -78,7 +93,7 @@ void wxObjectOutputStream::ProcessObjectDef(wxObjectStreamInfo *info)
 
   m_current_info = info;
   // First stage: get children of obj
-  if (info->object)
+  if (info->object && !info->duplicate)
     info->object->StoreObject(*this);
 
   // Prepare and write the sub-entry about the child obj.
@@ -98,7 +113,7 @@ void wxObjectOutputStream::ProcessObjectData(wxObjectStreamInfo *info)
 
   m_current_info = info;
 
-  if (info->object)
+  if (info->object && !info->duplicate)
     info->object->StoreObject(*this);
 
   while (node) {
@@ -126,6 +141,7 @@ bool wxObjectOutputStream::SaveObject(wxObject& obj)
   ProcessObjectData(&info);
 
   info.children.Clear();
+  m_saved_objs.Clear();
 
   m_saving = FALSE;
 
@@ -194,17 +210,18 @@ bool wxObjectInputStream::ReadObjectDef(wxObjectStreamInfo *info)
     return FALSE;
 
   class_name = data_s.ReadString();
-  printf("class_name = %s\n", WXSTRINGCAST class_name);
+  info->object_name = data_s.ReadString();
+  info->children_removed = 0;
+
   if (class_name == TAG_EMPTY_OBJECT)
     info->object = NULL;
-  else
+  else if (class_name == TAG_DUPLICATE_OBJECT) {
+    info->object = SolveName(info->object_name);
+    info->n_children = 0;
+  } else {
     info->object = wxCreateDynamicObject( WXSTRINGCAST class_name);
-  info->object_name = data_s.ReadString();
-  printf("object_name = %s\n", WXSTRINGCAST info->object_name);
-  info->n_children = data_s.Read8();
-  info->children_removed = 0;
-  printf("n_children = %d\n", info->n_children);
-
+    info->n_children = data_s.Read8();
+  }
   return TRUE;
 }
 
@@ -235,7 +252,6 @@ wxObjectStreamInfo *wxObjectInputStream::ProcessObjectDef(wxObjectStreamInfo *pa
 void wxObjectInputStream::ProcessObjectData(wxObjectStreamInfo *info)
 {
   wxNode *node = info->children.First();
-  wxObjectStreamInfo *c_info;
 
   m_current_info = info;
 

@@ -40,6 +40,10 @@ IMPLEMENT_SERIAL_CLASS(wxMenuBar, wxWindow)
 IMPLEMENT_SERIAL_CLASS(wxMenuItem, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxMenu, wxObject)
 
+IMPLEMENT_SERIAL_CLASS(wxMDIParentFrame, wxFrame)
+IMPLEMENT_SERIAL_CLASS(wxMDIChildFrame, wxFrame)
+IMPLEMENT_SERIAL_CLASS(wxMDIClientWindow, wxWindow)
+
 /////////////////////////////////////////////////////////////////////////////
 
 void WXSERIAL(wxWindow)::StoreObject(wxObjectOutputStream& s)
@@ -107,10 +111,10 @@ void WXSERIAL(wxWindow)::LoadObject(wxObjectInputStream& s)
 
   /* I assume we will never create raw wxWindow object */
 
-  m_validator = (wxValidator *)s.GetChild(1);
-  win_object->SetDefaultBackgroundColour(*((wxColour *)s.GetChild(2)));
-  win_object->SetDefaultForegroundColour(*((wxColour *)s.GetChild(3)));
-  win_object->SetFont(*((wxFont *)s.GetChild(4)));
+  m_validator = (wxValidator *)s.GetChild();
+  win_object->SetDefaultBackgroundColour(*((wxColour *)s.GetChild()));
+  win_object->SetDefaultForegroundColour(*((wxColour *)s.GetChild()));
+  win_object->SetFont(*((wxFont *)s.GetChild()));
 
   return;
 }
@@ -219,6 +223,9 @@ void WXSERIAL(wxFrame)::StoreObject(wxObjectOutputStream& s)
 
   wxDataOutputStream data_s(s);
   wxStatusBar *statbar = frame->GetStatusBar();
+
+  // AAARGH !! I absolutely need to be able to modify internal fields of
+  // wxFrame (wxToolBar and wxStatusBar)
  
   if (statbar)
     data_s.Write8(statbar->GetFieldsCount());
@@ -231,9 +238,8 @@ void WXSERIAL(wxFrame)::StoreObject(wxObjectOutputStream& s)
 void WXSERIAL(wxFrame)::LoadObject(wxObjectInputStream& s)
 {
   wxFrame *frame = (wxFrame *)Object();
-  wxMenuBar *mbar = (wxMenuBar *)s.GetChild(0);
+  wxMenuBar *mbar = (wxMenuBar *)s.GetChild();
 
-  s.RemoveChildren(1);
   WXSERIAL(wxWindow)::LoadObject(s);
 
   wxDataInputStream data_s(s);
@@ -275,7 +281,7 @@ void WXSERIAL(wxMenuBar)::LoadObject(wxObjectInputStream& s)
 
   mcount = data_s.Read8();
   for (i=0;i<mcount;i++) {
-    wxMenu *menu = (wxMenu *)s.GetChild(0);
+    wxMenu *menu = (wxMenu *)s.GetChild();
     mbar->Append( menu, menu->GetTitle() );
   }
 
@@ -301,12 +307,12 @@ void WXSERIAL(wxMenu)::StoreObject(wxObjectOutputStream& s)
 void WXSERIAL(wxMenu)::LoadObject(wxObjectInputStream& s)
 {
   wxMenu *menu = (wxMenu *)Object();
-  wxList *items = (wxList *)s.GetChild(0);
+  wxList *items = (wxList *)s.GetChild();
   wxNode *node = items->First();
 
   wxDataInputStream data_s(s);
 
-//  menu->SetTitle( data_s.ReadString() );
+  menu->SetTitle( data_s.ReadString() );
 
   while (node) {
 // NOT IMPLEMENTED in wxGTK
@@ -345,7 +351,7 @@ void WXSERIAL(wxMenuItem)::LoadObject(wxObjectInputStream& s)
   item->SetCheckable( data_s.Read8() );
   item->Enable( data_s.Read8() );
   item->Check( data_s.Read8() );
-  item->SetSubMenu( (wxMenu *)s.GetChild(0) );
+  item->SetSubMenu( (wxMenu *)s.GetChild() );
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -398,12 +404,41 @@ void WXSERIAL(wxMDIParentFrame)::LoadObject(wxObjectInputStream& s)
   wxMDIParentFrame *frame = (wxMDIParentFrame *)Object();
   wxMDIClientWindow *client;
 
-  client = (wxMDIClientWindow *) s.GetChild(0);
-  s.RemoveChildren(1);
+  client = (wxMDIClientWindow *) s.GetChild();
 
   frame->Create(m_parent, m_id, m_title, wxPoint(m_x, m_y),
                 wxSize(m_w, m_h), m_style, m_name);
-//  client->CreateClient(this, style_client);
 
   WXSERIAL(wxFrame)::LoadObject(s);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+void WXSERIAL(wxMDIChildFrame)::StoreObject(wxObjectOutputStream& s)
+{
+  WXSERIAL(wxFrame)::StoreObject(s);
+}
+
+void WXSERIAL(wxMDIChildFrame)::LoadObject(wxObjectInputStream& s)
+{
+  WXSERIAL(wxFrame)::LoadObject(s);
+
+  ((wxMDIChildFrame *)Object())->Create((wxMDIParentFrame *)m_parent,
+                                        m_id, m_title,
+                                        wxPoint(m_x, m_y), wxSize(m_w, m_h),
+                                        m_style, m_name);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+void WXSERIAL(wxMDIClientWindow)::StoreObject(wxObjectOutputStream& s)
+{
+  WXSERIAL(wxWindow)::StoreObject(s);
+}
+
+void WXSERIAL(wxMDIClientWindow)::LoadObject(wxObjectInputStream& s)
+{
+  WXSERIAL(wxWindow)::LoadObject(s);
+
+  ((wxMDIClientWindow *)Object())->CreateClient((wxMDIParentFrame *)m_parent, m_style);
 }

@@ -29,6 +29,8 @@ DECLARE_SERIAL_CLASS(wxGauge, wxControl)
 DECLARE_SERIAL_CLASS(wxListBox, wxControl)
 DECLARE_SERIAL_CLASS(wxNotebook, wxControl)
 DECLARE_SERIAL_CLASS(wxRadioBox, wxControl)
+DECLARE_SERIAL_CLASS(wxRadioButton, wxControl)
 DECLARE_SERIAL_CLASS(wxStaticText, wxControl)
+DECLARE_SERIAL_CLASS(wxStaticBox, wxControl)
 
 #endif

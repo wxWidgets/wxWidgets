@@ -23,7 +23,9 @@
 #include <wx/listbox.h>
 #include <wx/notebook.h>
 #include <wx/radiobox.h>
+#include <wx/radiobut.h>
 #include <wx/stattext.h>
+#include <wx/statbox.h>
 #include <wx/combobox.h>
 #include <wx/imaglist.h>
 #include <wx/objstrm.h>
@@ -41,9 +43,11 @@ IMPLEMENT_SERIAL_CLASS(wxGauge, wxControl)
 IMPLEMENT_SERIAL_CLASS(wxListBox, wxControl)
 IMPLEMENT_SERIAL_CLASS(wxNotebook, wxControl)
 IMPLEMENT_SERIAL_CLASS(wxRadioBox, wxControl)
-
+IMPLEMENT_SERIAL_CLASS(wxRadioButton, wxControl)
 IMPLEMENT_SERIAL_CLASS(wxButton, wxControl)
 IMPLEMENT_SERIAL_CLASS(wxStaticText, wxControl)
+
+//-----------------------------------------------------------------------------
 
 void WXSERIAL(wxButton)::StoreObject(wxObjectOutputStream& s)
 {
@@ -60,6 +64,8 @@ void WXSERIAL(wxButton)::LoadObject(wxObjectInputStream& s)
   button->Create(m_parent, m_id, m_label, wxPoint(m_x, m_y), wxSize(m_w, m_h),
                  m_style, *m_validator, m_name);
 }
+
+//-----------------------------------------------------------------------------
 
 void WXSERIAL(wxCheckBox)::StoreObject(wxObjectOutputStream& s)
 {
@@ -84,6 +90,8 @@ void WXSERIAL(wxCheckBox)::LoadObject(wxObjectInputStream& s)
 
   chkbox->SetValue(data_s.Read8());
 }
+
+//-----------------------------------------------------------------------------
 
 void WXSERIAL(wxSlider)::StoreObject(wxObjectOutputStream& s)
 {
@@ -130,6 +138,8 @@ void WXSERIAL(wxSlider)::LoadObject(wxObjectInputStream& s)
   slider->SetThumbLength( data_s.Read32() );
 }
 
+//-----------------------------------------------------------------------------
+
 void WXSERIAL(wxGauge)::StoreObject(wxObjectOutputStream& s)
 {
   WXSERIAL(wxControl)::StoreObject(s);
@@ -163,6 +173,8 @@ void WXSERIAL(wxGauge)::LoadObject(wxObjectInputStream& s)
   gauge->SetValue( data_s.Read32() );
 }
 
+//-----------------------------------------------------------------------------
+
 void WXSERIAL(wxChoice)::StoreObject(wxObjectOutputStream& s)
 {
   WXSERIAL(wxControl)::StoreObject(s);
@@ -194,6 +206,8 @@ void WXSERIAL(wxChoice)::LoadObject(wxObjectInputStream& s)
     choice->Append( data_s.ReadString() );
 }
 
+//-----------------------------------------------------------------------------
+
 void WXSERIAL(wxListBox)::StoreObject(wxObjectOutputStream& s)
 {
   WXSERIAL(wxControl)::StoreObject(s);
@@ -221,6 +235,8 @@ void WXSERIAL(wxListBox)::LoadObject(wxObjectInputStream& s)
   for (i=0;i<num;i++)
     listbox->Append( data_s.ReadString() );
 }
+
+//-----------------------------------------------------------------------------
 
 void WXSERIAL(wxNotebook)::StoreObject(wxObjectOutputStream& s)
 {
@@ -250,8 +266,7 @@ void WXSERIAL(wxNotebook)::LoadObject(wxObjectInputStream& s)
   int i, pcount;
   wxImageList *imaglist;
 
-  imaglist = (wxImageList *)s.GetChild(0);
-  s.RemoveChildren(1);
+  imaglist = (wxImageList *)s.GetChild();
 
   WXSERIAL(wxControl)::LoadObject(s);
 
@@ -264,6 +279,8 @@ void WXSERIAL(wxNotebook)::LoadObject(wxObjectInputStream& s)
   for (i=0;i<pcount;i++)
     notebook->SetPageText(i, data_s.ReadString() );
 }
+
+//-----------------------------------------------------------------------------
 
 void WXSERIAL(wxRadioBox)::StoreObject(wxObjectOutputStream& s)
 {
@@ -303,6 +320,29 @@ void WXSERIAL(wxRadioBox)::LoadObject(wxObjectInputStream& s)
   box->Create(m_parent, m_id, m_title, wxPoint(m_x, m_y), wxSize(m_w, m_h),
               n_items, items, 0, m_style, *m_validator, m_name);
 }
+
+//-----------------------------------------------------------------------------
+
+void WXSERIAL(wxRadioButton)::StoreObject(wxObjectOutputStream& s)
+{
+  WXSERIAL(wxControl)::StoreObject(s);
+
+  if (s.FirstStage())
+    return;
+
+  wxDataOutputStream data_s(s);
+  data_s.Write8( (char) ((wxRadioButton *)Object())->GetValue() );
+}
+
+void WXSERIAL(wxRadioButton)::LoadObject(wxObjectInputStream& s)
+{
+  wxDataInputStream data_s(s);
+
+  WXSERIAL(wxControl)::LoadObject(s);
+  ((wxRadioButton *)Object())->SetValue( (bool)data_s.Read8() );
+}
+
+//-----------------------------------------------------------------------------
 
 void WXSERIAL(wxComboBox)::StoreObject(wxObjectOutputStream& s)
 {
@@ -346,6 +386,8 @@ void WXSERIAL(wxComboBox)::LoadObject(wxObjectInputStream& s)
   box->SetValue( data_s.ReadString() );
 }
 
+//-----------------------------------------------------------------------------
+
 void WXSERIAL(wxStaticText)::StoreObject(wxObjectOutputStream& s)
 {
   WXSERIAL(wxControl)::StoreObject(s);
@@ -357,4 +399,19 @@ void WXSERIAL(wxStaticText)::LoadObject(wxObjectInputStream& s)
 
   ((wxStaticText *)Object())->Create(m_parent, m_id, m_label, wxPoint(m_x, m_y),
                                      wxSize(m_w, m_h), m_style, m_name);
+}
+
+//-----------------------------------------------------------------------------
+
+void WXSERIAL(wxStaticBox)::StoreObject(wxObjectOutputStream& s)
+{
+  WXSERIAL(wxControl)::StoreObject(s);
+}
+
+void WXSERIAL(wxStaticBox)::LoadObject(wxObjectInputStream& s)
+{
+  WXSERIAL(wxControl)::LoadObject(s);
+
+  ((wxStaticBox *)Object())->Create(m_parent, m_id, m_label, wxPoint(m_x, m_y),
+                                    wxSize(m_w, m_h), m_style, m_name);
 }
