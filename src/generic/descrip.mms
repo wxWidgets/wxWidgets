@@ -31,7 +31,6 @@ CC_DEFINE =
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
 OBJECTS = \
-		accel.obj,\
 		busyinfo.obj,\
 		calctrl.obj,\
 		caret.obj,\
@@ -119,10 +118,9 @@ SOURCES = \
 		wizard.cpp
 
 .ifdef __WXMOTIF__
-OBJECTS0=,statline.obj,\
-		notebook.obj
+OBJECTS0=,statline.obj,notebook.obj,scrlwing.obj,spinctlg.obj
 .else
-OBJECTS0=,filedlgg.obj,paletteg.obj
+OBJECTS0=,accel.obj,filedlgg.obj,paletteg.obj
 .endif
 
 all : $(SOURCES)
@@ -168,6 +166,8 @@ progdlgg.obj : progdlgg.cpp
 prop.obj : prop.cpp
 propform.obj : propform.cpp
 proplist.obj : proplist.cpp
+scrlwing.obj : scrlwing.cpp
+spinctlg.obj : spinctlg.cpp
 sashwin.obj : sashwin.cpp
 splitter.obj : splitter.cpp
 statline.obj : statline.cpp

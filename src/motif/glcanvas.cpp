@@ -22,7 +22,13 @@
 #include "wx/utils.h"
 #include "wx/app.h"
 
+#ifdef __VMS
+# pragma message disable nosimpint
+#endif
 #include <Xm/Xm.h>
+#ifdef __VMS
+# pragma message enable nosimpint
+#endif
 #include "wx/motif/private.h"
 
 #ifdef OLD_MESA

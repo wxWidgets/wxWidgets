@@ -51,6 +51,7 @@ OBJECTS = \
 		frame.obj,\
 		gauge.obj,\
 		gdiobj.obj,\
+		glcanvas.obj,\
 		gsockmot.obj,\
 		icon.obj,\
 		listbox.obj,\
@@ -105,6 +106,7 @@ SOURCES = \
 		frame.cpp,\
 		gauge.cpp,\
 		gdiobj.cpp,\
+		glcanvas.cpp,\
 		gsockmot.c,\
 		icon.cpp,\
 		listbox.cpp,\
@@ -168,6 +170,7 @@ font.obj : font.cpp
 frame.obj : frame.cpp
 gauge.obj : gauge.cpp
 gdiobj.obj : gdiobj.cpp
+glcanvas.obj : glcanvas.cpp
 gsockmot.obj : gsockmot.c
 icon.obj : icon.cpp
 listbox.obj : listbox.cpp

@@ -213,7 +213,11 @@
 /*
  * Use wxPopupWindow (useful in wxUniv only for now)
  */
+#ifdef __WXMOTIF__
+#define wxUSE_POPUPWIN 0
+#else
 #define wxUSE_POPUPWIN 1
+#endif
 
 /*
    Use wxTipWindow
@@ -666,7 +670,11 @@
 /*
  * Use tooltips
  */
+#ifdef __WXMOTIF__
+#define wxUSE_TOOLTIPS 0
+#else
 #define wxUSE_TOOLTIPS 1
+#endif
 /*
  * Use dnd
  */
