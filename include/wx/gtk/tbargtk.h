@@ -113,7 +113,7 @@ class wxToolBar: public wxControl
     virtual void AddSeparator(void);
     virtual void ClearTools(void);
     
-    virtual void Realize(void);
+    virtual bool Realize(void);
 
     virtual void EnableTool(int toolIndex, bool enable);
     virtual void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on
@@ -124,15 +124,30 @@ class wxToolBar: public wxControl
 
     virtual void SetMargins(int x, int y);
     void SetMargins(const wxSize& size) { SetMargins(size.x, size.y); };
+    virtual wxSize GetToolMargins(void) { return wxSize(m_xMargin, m_yMargin); }
+    
     virtual void SetToolPacking(int packing);
     virtual void SetToolSeparation(int separation);
+    virtual int GetToolPacking();
+    virtual int GetToolSeparation();
+    
+    virtual wxString GetToolLongHelp(int toolIndex);
+    virtual wxString GetToolShortHelp(int toolIndex);
+    
+    virtual void SetToolLongHelp(int toolIndex, const wxString& helpString);
+    virtual void SetToolShortHelp(int toolIndex, const wxString& helpString);
 
   // implementation
   
     GtkToolbar   *m_toolbar;
+    int           m_separation;
     wxList        m_tools;
+    
     GdkColor      m_fg;
     GdkColor      m_bg;
+    int           m_xMargin;
+    int           m_yMargin;
+    bool          m_hasToolAlready;
 };
 
 #endif

@@ -28,7 +28,6 @@
 #include "wx/imaglist.h"
 #include "wx/spinbutt.h"
 #include "wx/clipbrd.h"
-#include "wx/checklst.h"
 
 // XPM doesn't seem to work under Windows at present. Or, wxNotebook images
 // aren't working.
@@ -208,8 +207,6 @@ const int  ID_GAUGE             = 180;
 const int  ID_SLIDER            = 181;
 
 const int  ID_SPIN              = 182;
-
-const int  ID_CHECKLIST         = 190;
 
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
@@ -410,14 +407,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_spinbutton->SetRange(0,100);
 
   m_notebook->AddPage(panel, "wxGauge", FALSE, Image_Gauge);
-
-  panel = new wxPanel(m_notebook);
-  panel->SetBackgroundColour("cadet blue");
-  panel->SetForegroundColour("blue");
-  m_listbox = new wxCheckListBox( panel, ID_CHECKLIST, wxPoint(10,10), wxSize(160,70), 5, choices );
-  m_listbox->SetBackgroundColour("wheat");
-  button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
-  m_notebook->AddPage(panel, "wxCheckListBox", FALSE, Image_List);
 }
 
 void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )

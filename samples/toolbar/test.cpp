@@ -71,6 +71,8 @@ bool MyApp::OnInit(void)
 
   // Create the toolbar
   frame->CreateToolBar(wxNO_BORDER|wxHORIZONTAL|wxTB_FLAT, ID_TOOLBAR);
+  
+  frame->GetToolBar()->SetMargins( 2, 2 );
 
   InitToolbar(frame->GetToolBar());
 

@@ -59,6 +59,28 @@ gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event,
 }
 
 //-----------------------------------------------------------------------------
+// "key_press_event"
+//-----------------------------------------------------------------------------
+
+static gint 
+gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxListBox *listbox )
+{
+    if (g_blockEventsOnDrag) return FALSE;
+
+    if (!listbox->HasVMT()) return FALSE;
+
+    if (gdk_event->keyval != ' ') return FALSE;
+    
+    int sel = listbox->GetIndex( widget );
+    
+    wxCheckListBox *clb = (wxCheckListBox *)listbox;
+    
+    clb->Check( sel, !clb->IsChecked(sel) );
+    
+    return FALSE;
+}
+
+//-----------------------------------------------------------------------------
 // "select" and "deselect"
 //-----------------------------------------------------------------------------
 
@@ -173,6 +195,11 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 	                        "button_press_event",
                                 (GtkSignalFunc)gtk_listbox_button_press_callback, 
 				(gpointer) this );
+				
+            gtk_signal_connect( GTK_OBJECT(list_item), 
+	                        "key_press_event",
+                                (GtkSignalFunc)gtk_listbox_key_press_callback, 
+				(gpointer)this );
 	}
 	
         ConnectWidget( list_item );	
@@ -235,6 +262,11 @@ void wxListBox::AppendCommon( const wxString &item )
 	                        "button_press_event",
                                 (GtkSignalFunc)gtk_listbox_button_press_callback, 
 				(gpointer) this );
+				
+            gtk_signal_connect( GTK_OBJECT(list_item), 
+	                        "key_press_event",
+                                (GtkSignalFunc)gtk_listbox_key_press_callback, 
+				(gpointer)this );    
     }
 	
     gtk_widget_show( list_item );
