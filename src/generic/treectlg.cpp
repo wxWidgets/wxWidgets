@@ -376,10 +376,11 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     x += image_w;
     w -= image_w + 4;
 #ifdef __WXMAC__
+    wxSize bs = DoGetBestSize() ;
     // edit control height
-    if ( h > 22 - 8 )
+    if ( h > bs.y - 8 )
     {
-        int diff = h - ( 22 - 8 ) ;
+        int diff = h - ( bs.y - 8 ) ;
         h -= diff ;
         y += diff / 2 ;
     }
