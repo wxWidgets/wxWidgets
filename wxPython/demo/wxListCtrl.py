@@ -264,30 +264,37 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
 
     def OnRightClick(self, event):
         self.log.WriteText("OnRightClick %s\n" % self.list.GetItemText(self.currentItem))
+
+        # only do this part the first time
+        if not hasattr(self, "popupID1"):
+            self.popupID1 = wxNewId()
+            self.popupID2 = wxNewId()
+            self.popupID3 = wxNewId()
+            self.popupID4 = wxNewId()
+            self.popupID5 = wxNewId()
+            EVT_MENU(self, self.popupID1, self.OnPopupOne)
+            EVT_MENU(self, self.popupID2, self.OnPopupTwo)
+            EVT_MENU(self, self.popupID3, self.OnPopupThree)
+            EVT_MENU(self, self.popupID4, self.OnPopupFour)
+            EVT_MENU(self, self.popupID5, self.OnPopupFive)
+
+        # make a menu
         menu = wxMenu()
-        tPopupID1 = 0
-        tPopupID2 = 1
-        tPopupID3 = 2
-        tPopupID4 = 3
-        tPopupID5 = 5
-
         # Show how to put an icon in the menu
-        item = wxMenuItem(menu, tPopupID1,"One")
+        item = wxMenuItem(menu, self.popupID1,"One")
         item.SetBitmap(images.getSmilesBitmap())
-
         menu.AppendItem(item)
-        menu.Append(tPopupID2, "Two")
-        menu.Append(tPopupID3, "ClearAll and repopulate")
-        menu.Append(tPopupID4, "DeleteAllItems")
-        menu.Append(tPopupID5, "GetItem")
-        EVT_MENU(self, tPopupID1, self.OnPopupOne)
-        EVT_MENU(self, tPopupID2, self.OnPopupTwo)
-        EVT_MENU(self, tPopupID3, self.OnPopupThree)
-        EVT_MENU(self, tPopupID4, self.OnPopupFour)
-        EVT_MENU(self, tPopupID5, self.OnPopupFive)
+        # add some other items
+        menu.Append(self.popupID2, "Two")
+        menu.Append(self.popupID3, "ClearAll and repopulate")
+        menu.Append(self.popupID4, "DeleteAllItems")
+        menu.Append(self.popupID5, "GetItem")
+
+        # Popup the menu.  If an item is selected then its handler
+        # will be called before PopupMenu returns.
         self.PopupMenu(menu, wxPoint(self.x, self.y))
         menu.Destroy()
-        event.Skip()
+
 
     def OnPopupOne(self, event):
         self.log.WriteText("Popup one\n")
