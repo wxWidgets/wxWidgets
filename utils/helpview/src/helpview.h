@@ -16,6 +16,8 @@
 #pragma interface "help.cpp"
 #endif
 
+#define hvVERSION 1.01
+
 // If 1, start a server to allow this to be used
 // as an external help viewer.
 #define hvUSE_IPC 1

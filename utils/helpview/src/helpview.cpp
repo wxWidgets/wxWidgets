@@ -65,7 +65,7 @@ bool hvApp::OnInit()
     wxFileSystem::AddHandler(new wxZipFSHandler);
 
     SetVendorName("wxWindows");
-    SetAppName("wxHTMLHelp"); 
+    SetAppName("wxHTMLHelp");
     wxConfig::Get(); // create an instance
 
     m_helpController = new wxHtmlHelpController(
@@ -94,6 +94,13 @@ bool hvApp::OnInit()
 #endif
 
     m_helpController -> DisplayContents();
+
+    if (m_helpController->GetFrame())
+    {
+        wxString verStr;
+        verStr.Printf(wxT("HelpView %.2f, built %s"), hvVERSION, __DATE__);
+        m_helpController->GetFrame()->SetStatusText(verStr);
+    }
 
 #if hvUSE_IPC
     if (useAsServer)
@@ -256,7 +263,8 @@ wxBitmap AlternateArtProvider::CreateBitmap(const wxArtID& id,
     ART(wxART_FILE_OPEN,                           helpopen)
     if (client == wxART_HELP_BROWSER)
     {
-        ART(wxART_FRAME_ICON,                          helpicon)
+        //ART(wxART_FRAME_ICON,                          helpicon)
+        ART(wxART_HELP,                          helpicon)
     }
 
     //ART(wxART_GO_HOME,                             home)
