@@ -1405,6 +1405,8 @@ public:
     {
         m_extraWidth = extraWidth;
         m_extraHeight = extraHeight;
+
+        CalcDimensions();
     }
 
     // Accessors for component windows
