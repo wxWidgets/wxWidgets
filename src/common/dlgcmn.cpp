@@ -101,7 +101,7 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString& message )
         switch ( text[pos] )
         {
             case wxT('\n'):
-                if (!line.IsEmpty())
+                if (!line.empty())
                 {
                     wxStaticText *s = new wxStaticText( this, wxID_ANY, line );
                     box->Add( s );
@@ -155,7 +155,7 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString& message )
     }
 
     // remaining text behind last '\n'
-    if (!line.IsEmpty())
+    if (!line.empty())
     {
         wxStaticText *s2 = new wxStaticText( this, wxID_ANY, line );
         box->Add( s2 );
@@ -177,38 +177,36 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
 {
     wxStdDialogButtonSizer *sizer = new wxStdDialogButtonSizer();
     wxButton *ok = NULL;
-    wxButton *cancel = NULL;
     wxButton *yes = NULL;
     wxButton *no = NULL;
-    wxButton *help = NULL;
-    
+
     if (flags & wxOK){
-    	ok = new wxButton(this, wxID_OK, _("OK"));
-    	sizer->AddButton(ok);
+        ok = new wxButton(this, wxID_OK, _("OK"));
+        sizer->AddButton(ok);
     }
-    
+
     if (flags & wxCANCEL){
-    	cancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
-    	sizer->AddButton(cancel);	
+        wxButton *cancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
+        sizer->AddButton(cancel);
     }
-    
+
     if (flags & wxYES){
-    	yes = new wxButton(this, wxID_YES, _("Yes"));
-    	sizer->AddButton(yes);
+        yes = new wxButton(this, wxID_YES, _("Yes"));
+        sizer->AddButton(yes);
     }
-    
+
     if (flags & wxNO){
-    	no = new wxButton(this, wxID_NO, _("No"));
-    	sizer->AddButton(no);
+        no = new wxButton(this, wxID_NO, _("No"));
+        sizer->AddButton(no);
     }
-    
+
     if (flags & wxHELP){
-    	help = new wxButton(this, wxID_HELP, _("Help"));
-    	sizer->AddButton(help);
+        wxButton *help = new wxButton(this, wxID_HELP, _("Help"));
+        sizer->AddButton(help);
     }
-    
+
     sizer->Finalise();
-           
+
     if (flags & wxNO_DEFAULT)
     {
         if (no)
