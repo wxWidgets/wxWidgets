@@ -414,10 +414,11 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
     WXDWORD exflags;
     WXDWORD flags = MSWGetCreateWindowFlags(&exflags);
 
-	wxSize sz(size);
 #if _WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP)
 	// Always expand to fit the screen in PocketPC or SmartPhone
-	sz = wxDefaultSize;
+	wxSize sz(wxDefaultSize);
+#else // other (including normal desktop) Windows
+	wxSize sz(size);
 #endif
 
     return MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
@@ -934,29 +935,36 @@ wxDlgProc(HWND hDlg,
           WPARAM WXUNUSED(wParam),
           LPARAM WXUNUSED(lParam))
 {
-    switch ( message )
+    if ( message == WM_INITDIALOG )
     {
-        case WM_INITDIALOG:
-            // for this message, returning TRUE tells system to set focus to
-            // the first control in the dialog box, but as we set the focus
-            // ourselves, we return FALSE from here as well, so fall through
-			// Standard SDK doesn't have aygshell.dll: see include/wx/msw/wince/libraries.h
-#if defined(__WXWINCE__) && !defined(WCE_PLATFORM_STANDARDSDK)
-        {
-            SHINITDLGINFO shidi;
-            shidi.dwMask = SHIDIM_FLAGS;
-            shidi.dwFlags = SHIDIF_DONEBUTTON |
-                            SHIDIF_SIZEDLGFULLSCREEN;
-            shidi.hDlg = hDlg;
-            SHInitDialog( &shidi );
-        }
-#endif
+        // under CE, add a "Ok" button in the dialog title bar and make it full
+        // screen
+        //
+        // VZ: we should probably allow for overriding this, e.g. by including
+        //     MAXIMIZED flag in the dialog style by default and doing this
+        //     only if it is present...
 
-        default:
-            // for all the other ones, FALSE means that we didn't process the
-            // message
-            return FALSE;
+        // Standard SDK doesn't have aygshell.dll: see
+        // include/wx/msw/wince/libraries.h
+#if defined(__WXWINCE__) && !defined(WCE_PLATFORM_STANDARDSDK)
+        SHINITDLGINFO shidi;
+        shidi.dwMask = SHIDIM_FLAGS;
+        shidi.dwFlags = SHIDIF_DONEBUTTON |
+                        SHIDIF_SIZEDLGFULLSCREEN;
+        shidi.hDlg = hDlg;
+        SHInitDialog( &shidi );
+#else // no SHInitDialog()
+        wxUnusedVar(hDlg);
+#endif
     }
+
+    // for almost all messages, returning FALSE means that we didn't process
+    // the message
+    //
+    // for WM_INITDIALOG, returning TRUE tells system to set focus to
+    // the first control in the dialog box, but as we set the focus
+    // ourselves, we return FALSE for it as well
+    return FALSE;
 }
 
 // ============================================================================
