@@ -47,14 +47,14 @@ public:
   pthread_mutex_t p_mutex;
 };
 
-wxMutex::wxMutex(void)
+wxMutex::wxMutex()
 {
   p_internal = new wxMutexInternal;
   pthread_mutex_init(&(p_internal->p_mutex), NULL);
   m_locked = false;
 }
 
-wxMutex::~wxMutex(void)
+wxMutex::~wxMutex()
 {
   if (m_locked)
     pthread_mutex_unlock(&(p_internal->p_mutex));
@@ -62,7 +62,7 @@ wxMutex::~wxMutex(void)
   delete p_internal;
 }
 
-wxMutexError wxMutex::Lock(void)
+wxMutexError wxMutex::Lock()
 {
   int err;
 
@@ -74,7 +74,7 @@ wxMutexError wxMutex::Lock(void)
   return MUTEX_NO_ERROR;
 }
 
-wxMutexError wxMutex::TryLock(void)
+wxMutexError wxMutex::TryLock()
 {
   int err;
 
@@ -88,7 +88,7 @@ wxMutexError wxMutex::TryLock(void)
   return MUTEX_NO_ERROR;
 }
 
-wxMutexError wxMutex::Unlock(void)
+wxMutexError wxMutex::Unlock()
 {
   if (m_locked > 0) m_locked--;
   pthread_mutex_unlock(&(p_internal->p_mutex));
@@ -104,13 +104,13 @@ public:
   pthread_cond_t p_condition;
 };
 
-wxCondition::wxCondition(void)
+wxCondition::wxCondition()
 {
   p_internal = new wxConditionInternal;
   pthread_cond_init(&(p_internal->p_condition), NULL);
 }
 
-wxCondition::~wxCondition(void)
+wxCondition::~wxCondition()
 {
   pthread_cond_destroy(&(p_internal->p_condition));
   delete p_internal;
@@ -130,12 +130,12 @@ bool wxCondition::Wait(wxMutex& mutex, unsigned long sec, unsigned long nsec)
   return (pthread_cond_timedwait(&(p_internal->p_condition), &(mutex.p_internal->p_mutex), &tspec) != ETIMEDOUT);
 }
 
-void wxCondition::Signal(void)
+void wxCondition::Signal()
 {
   pthread_cond_signal(&(p_internal->p_condition));
 }
 
-void wxCondition::Broadcast(void)
+void wxCondition::Broadcast()
 {
   pthread_cond_broadcast(&(p_internal->p_condition));
 }
@@ -210,7 +210,7 @@ void wxThread::SetPriority(int prio)
   p_internal->prio = prio;
 }
 
-int wxThread::GetPriority(void)
+int wxThread::GetPriority() const
 {
   return p_internal->prio;
 }
@@ -223,7 +223,7 @@ void wxThread::DeferDestroy(bool on)
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 }
 
-wxThreadError wxThread::Destroy(void)
+wxThreadError wxThread::Destroy()
 {
   int res = 0;
 
@@ -255,7 +255,7 @@ void *wxThread::Join()
   return status;
 }
 
-unsigned long wxThread::GetID()
+unsigned long wxThread::GetID() const
 {
   return (unsigned long)p_internal->thread_id;
 }
@@ -274,7 +274,7 @@ void wxThread::TestDestroy()
   pthread_testcancel();
 }
 
-bool wxThread::IsMain(void)
+bool wxThread::IsMain() const
 {
   return (bool)pthread_equal(pthread_self(), p_mainid);
 }
@@ -300,7 +300,7 @@ void wxThread::OnExit()
 class wxThreadModule : public wxModule {
   DECLARE_DYNAMIC_CLASS(wxThreadModule)
 public:
-  virtual bool OnInit(void) {
+  virtual bool OnInit() {
     wxThreadGuiInit();
     p_mainid = pthread_self();
     wxMainMutex.Lock();
@@ -308,7 +308,7 @@ public:
     return TRUE;
   }
 
-  virtual void OnExit(void) {
+  virtual void OnExit() {
     wxMainMutex.Unlock();
     wxThreadGuiExit();
   }

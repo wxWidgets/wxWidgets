@@ -54,20 +54,20 @@ wxMutex::~wxMutex()
 {
 }
 
-wxMutex::MutexError wxMutex::Lock(void)
+wxMutex::MutexError wxMutex::Lock()
 {
   spin_lock(&(p_internal->p_mutex));
   return NO_ERROR;
 }
 
-wxMutex::MutexError wxMutex::TryLock(void)
+wxMutex::MutexError wxMutex::TryLock()
 {
   if (acquire_lock(&(p_internal->p_mutex)) != 0)
     return BUSY;
   return NO_ERROR;
 }
 
-wxMutex::MutexError wxMutex::Unlock(void)
+wxMutex::MutexError wxMutex::Unlock()
 {
   release_lock(&(p_internal->p_mutex));
   return NO_ERROR;
@@ -75,13 +75,13 @@ wxMutex::MutexError wxMutex::Unlock(void)
 
 // GLH: Don't now how it works on SGI. Wolfram ?
 
-wxCondition::wxCondition(void) {}
-wxCondition::~wxCondition(void) {}
+wxCondition::wxCondition() {}
+wxCondition::~wxCondition() {}
 int wxCondition::Wait(wxMutex& WXUNUSED(mutex)) { return 0;}
 int wxCondition::Wait(wxMutex& WXUNUSED(mutex), unsigned long WXUNUSED(sec),
                       unsigned long WXUNUSED(nsec)) { return 0; }
-int wxCondition::Signal(void) { return 0; }
-int wxCondition::Broadcast(void) { return 0; }
+int wxCondition::Signal() { return 0; }
+int wxCondition::Broadcast() { return 0; }
 
 class
 wxThreadPrivate {
@@ -153,7 +153,7 @@ void *wxThread::Join()
   return 0;
 }
 
-unsigned long wxThread::GetID()
+unsigned long wxThread::GetID() const
 {
   return (unsigned long)p_internal->thread_id;
 }
@@ -170,8 +170,9 @@ void wxThread::SetPriority(int prio)
 {
 }
 
-int wxThread::GetPriority(void)
+int wxThread::GetPriority() const
 {
+    return 0;
 }
 
 bool wxThreadIsMain()
@@ -201,13 +202,13 @@ void wxThread::OnExit()
 class wxThreadModule : public wxModule {
   DECLARE_DYNAMIC_CLASS(wxThreadModule)
 public:
-  virtual bool OnInit(void) {
+  virtual bool OnInit() {
     wxThreadGuiInit();
     p_mainid = (int)getpid();
     wxMainMutex.Lock();
   }
 
-  virtual void OnExit(void) {
+  virtual void OnExit() {
     wxMainMutex.Unlock();
     wxThreadGuiExit();
   }

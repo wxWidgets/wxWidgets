@@ -21,12 +21,12 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
-#include <wx/file.h>
-#include <wx/msw/wave.h>
-#include <wx/msw/private.h>
+#include "wx/file.h"
+#include "wx/msw/wave.h"
+#include "wx/msw/private.h"
 
 #include <windows.h>
 #include <windowsx.h>
@@ -36,10 +36,10 @@
 #endif
 
 #ifdef __GNUWIN32__
-#include <wx/msw/gnuwin32/extra.h>
+#include "wx/msw/gnuwin32/extra.h"
 #endif
 
-wxWave::wxWave(void)
+wxWave::wxWave()
   : m_waveLength(0), m_isResource(FALSE), m_waveData(NULL)
 {
 }
@@ -51,7 +51,7 @@ wxWave::wxWave(const wxString& sFileName, bool isResource)
 }
 
 
-wxWave::~wxWave(void)
+wxWave::~wxWave()
 {
   Free();
 }
@@ -117,8 +117,7 @@ bool wxWave::Play(bool async, bool looped) const
 #endif
 }
 
-bool
-wxWave::Free(void)
+bool wxWave::Free()
 {
   if (m_waveData)
   {

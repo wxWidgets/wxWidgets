@@ -14,38 +14,38 @@
 
 #include "wx/wx.h"
 
-wxMutex::wxMutex(void)
+wxMutex::wxMutex()
 {
   m_locked = FALSE;
 }
 
-wxMutex::~wxMutex(void)
+wxMutex::~wxMutex()
 {
 }
 
-MutexError wxMutex::Lock(void)
+MutexError wxMutex::Lock()
 {
   m_locked = TRUE;
   return NO_ERROR;
 }
 
-MutexError wxMutex::TryLock(void)
+MutexError wxMutex::TryLock()
 {
   m_locked = TRUE;
   return NO_ERROR;
 }
 
-MutexError wxMutex::Unlock(void)
+MutexError wxMutex::Unlock()
 {
   m_locked = FALSE;
   return NO_ERROR;
 }
 
-wxCondition::wxCondition(void)
+wxCondition::wxCondition()
 {
 }
 
-wxCondition::~wxCondition(void)
+wxCondition::~wxCondition()
 {
 }
 
@@ -59,11 +59,11 @@ bool wxCondition::Wait(wxMutex& WXUNUSED(mutex), unsigned long WXUNUSED(sec),
   return FALSE;
 }
 
-void wxCondition::Signal(void)
+void wxCondition::Signal()
 {
 }
 
-void wxCondition::Broadcast(void)
+void wxCondition::Broadcast()
 {
 }
 
@@ -72,23 +72,23 @@ struct wxThreadPrivate {
 	void* exit_status;
 };
 
-ThreadError wxThread::Create(void)
+ThreadError wxThread::Create()
 {
   p_internal->exit_status = Entry();
   OnExit();
   return NO_ERROR;
 }
 
-ThreadError wxThread::Destroy(void)
+ThreadError wxThread::Destroy()
 {
   return RUNNING;
 }
 
-void wxThread::DifferDestroy(void)
+void wxThread::DeferDestroy()
 {
 }
 
-void wxThread::TestDestroy(void)
+void wxThread::TestDestroy()
 {
 }
 
@@ -97,23 +97,23 @@ void *wxThread::Join()
   return p_internal->exit_status;
 }
 
-unsigned long wxThread::GetID()
+unsigned long wxThread::GetID() const
 {
   return 0;
 }
 
-bool wxThread::IsMain(void)
+bool wxThread::IsMain()
 {
   return TRUE;
 }
 
-bool wxThread::IsAlive(void)
+bool wxThread::IsAlive() const
 {
   return FALSE;
 }
 
 void wxThread::SetPriority(int WXUNUSED(prio)) { }
-int wxThread::GetPriority(void) { }
+int wxThread::GetPriority() const { }
 
 wxMutex wxMainMutex; // controls access to all GUI functions
 

@@ -58,13 +58,13 @@ BEGIN_EVENT_TABLE(wxTabCtrl, wxControl)
 END_EVENT_TABLE()
 #endif
 
-wxTabCtrl::wxTabCtrl(void)
+wxTabCtrl::wxTabCtrl()
 {
     m_imageList = NULL;
 }
 
-bool wxTabCtrl::Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size,
-            const long style, const wxString& name)
+bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+            long style, const wxString& name)
 {
   m_imageList = NULL;
 
@@ -136,7 +136,7 @@ bool wxTabCtrl::Create(wxWindow *parent, const wxWindowID id, const wxPoint& pos
   return TRUE;
 }
 
-wxTabCtrl::~wxTabCtrl(void)
+wxTabCtrl::~wxTabCtrl()
 {
   UnsubclassWin();
 }
@@ -211,37 +211,37 @@ void wxTabCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
 }
 
 // Delete all items
-bool wxTabCtrl::DeleteAllItems(void)
+bool wxTabCtrl::DeleteAllItems()
 {
     return ( TabCtrl_DeleteAllItems( (HWND) GetHWND() ) != FALSE );
 }
 
 // Delete an item
-bool wxTabCtrl::DeleteItem(const int item)
+bool wxTabCtrl::DeleteItem(int item)
 {
     return ( TabCtrl_DeleteItem( (HWND) GetHWND(), item) != FALSE );
 }
 
 // Get the selection
-int wxTabCtrl::GetSelection(void) const
+int wxTabCtrl::GetSelection() const
 {
     return (int) TabCtrl_GetCurSel( (HWND) GetHWND() );
 }
 
 // Get the associated image list
-wxImageList* wxTabCtrl::GetImageList(void) const
+wxImageList* wxTabCtrl::GetImageList() const
 {
     return m_imageList;
 }
 
 // Get the number of items
-int wxTabCtrl::GetItemCount(void) const
+int wxTabCtrl::GetItemCount() const
 {
     return (int) TabCtrl_GetItemCount( (HWND) GetHWND() );
 }
 
 // Get the rect corresponding to the tab
-bool wxTabCtrl::GetItemRect(const int item, wxRect& wxrect) const
+bool wxTabCtrl::GetItemRect(int item, wxRect& wxrect) const
 {
     RECT rect;
     if ( !TabCtrl_GetItemRect( (HWND) GetHWND(), item, & rect) )
@@ -256,13 +256,13 @@ bool wxTabCtrl::GetItemRect(const int item, wxRect& wxrect) const
 }
 
 // Get the number of rows
-int wxTabCtrl::GetRowCount(void) const
+int wxTabCtrl::GetRowCount() const
 {
     return (int) TabCtrl_GetRowCount( (HWND) GetHWND() );
 }
 
 // Get the item text
-wxString wxTabCtrl::GetItemText(const int item) const
+wxString wxTabCtrl::GetItemText(int item) const
 {
     char buf[256];
     wxString str("");
@@ -278,7 +278,7 @@ wxString wxTabCtrl::GetItemText(const int item) const
 }
 
 // Get the item image
-int wxTabCtrl::GetItemImage(const int item) const
+int wxTabCtrl::GetItemImage(int item) const
 {
     TC_ITEM tcItem;
     tcItem.mask = TCIF_IMAGE;
@@ -290,7 +290,7 @@ int wxTabCtrl::GetItemImage(const int item) const
 }
 
 // Get the item data
-void* wxTabCtrl::GetItemData(const int item) const
+void* wxTabCtrl::GetItemData(int item) const
 {
     TC_ITEM tcItem;
     tcItem.mask = TCIF_PARAM;
@@ -321,7 +321,7 @@ int wxTabCtrl::HitTest(const wxPoint& pt, long& flags)
 }
 
 // Insert an item
-int wxTabCtrl::InsertItem(const int item, const wxString& text, const int imageId, void* data)
+bool wxTabCtrl::InsertItem(int item, const wxString& text, int imageId, void* data)
 {
     char buf[256];
     TC_ITEM tcItem;
@@ -340,11 +340,11 @@ int wxTabCtrl::InsertItem(const int item, const wxString& text, const int imageI
         tcItem.iImage = imageId;
     }
 
-    return (int) TabCtrl_InsertItem( (HWND) GetHWND(), item, & tcItem);
+    return (TabCtrl_InsertItem( (HWND) GetHWND(), item, & tcItem) != -1);
 }
 
 // Set the selection
-int wxTabCtrl::SetSelection(const int item)
+int wxTabCtrl::SetSelection(int item)
 {
     return (int) TabCtrl_SetCurSel( (HWND) GetHWND(), item );
 }
@@ -357,7 +357,7 @@ void wxTabCtrl::SetImageList(wxImageList* imageList)
 }
 
 // Set the text for an item
-bool wxTabCtrl::SetItemText(const int item, const wxString& text)
+bool wxTabCtrl::SetItemText(int item, const wxString& text)
 {
     char buf[256];
     TC_ITEM tcItem;
@@ -370,7 +370,7 @@ bool wxTabCtrl::SetItemText(const int item, const wxString& text)
 }
 
 // Set the image for an item
-bool wxTabCtrl::SetItemImage(const int item, const int image)
+bool wxTabCtrl::SetItemImage(int item, int image)
 {
     TC_ITEM tcItem;
     tcItem.mask = TCIF_IMAGE;
@@ -380,7 +380,7 @@ bool wxTabCtrl::SetItemImage(const int item, const int image)
 }
 
 // Set the data for an item
-bool wxTabCtrl::SetItemData(const int item, void* data)
+bool wxTabCtrl::SetItemData(int item, void* data)
 {
     TC_ITEM tcItem;
     tcItem.mask = TCIF_PARAM;

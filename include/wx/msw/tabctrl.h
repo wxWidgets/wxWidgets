@@ -37,55 +37,55 @@ class WXDLLEXPORT wxTabCtrl: public wxControl
     * Public interface
     */
 
-    wxTabCtrl(void);
+    wxTabCtrl();
 
-    inline wxTabCtrl(wxWindow *parent, const wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            const long style = 0, const wxString& name = "tabCtrl")
+    inline wxTabCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+            long style = 0, const wxString& name = "tabCtrl")
     {
         Create(parent, id, pos, size, style, name);
     }
-    ~wxTabCtrl(void);
+    ~wxTabCtrl();
 
 // Accessors
 
     // Get the selection
-    int GetSelection(void) const;
+    int GetSelection() const;
 
     // Get the associated image list
-    wxImageList* GetImageList(void) const;
+    wxImageList* GetImageList() const;
 
     // Get the number of items
-    int GetItemCount(void) const;
+    int GetItemCount() const;
 
     // Get the rect corresponding to the tab
-    bool GetItemRect(const int item, wxRect& rect) const;
+    bool GetItemRect(int item, wxRect& rect) const;
 
     // Get the number of rows
-    int GetRowCount(void) const;
+    int GetRowCount() const;
 
     // Get the item text
-    wxString GetItemText(const int item) const ;
+    wxString GetItemText(int item) const ;
 
     // Get the item image
-    int GetItemImage(const int item) const;
+    int GetItemImage(int item) const;
 
     // Get the item data
-    void* GetItemData(const int item) const;
+    void* GetItemData(int item) const;
 
     // Set the selection
-    int SetSelection(const int item);
+    int SetSelection(int item);
 
     // Set the image list
     void SetImageList(wxImageList* imageList);
 
     // Set the text for an item
-    bool SetItemText(const int item, const wxString& text);
+    bool SetItemText(int item, const wxString& text);
 
     // Set the image for an item
-    bool SetItemImage(const int item, const int image);
+    bool SetItemImage(int item, int image);
 
     // Set the data for an item
-    bool SetItemData(const int item, void* data);
+    bool SetItemData(int item, void* data);
 
     // Set the size for a fixed-width tab control
     void SetItemSize(const wxSize& size);
@@ -99,16 +99,16 @@ class WXDLLEXPORT wxTabCtrl: public wxControl
                 const long style = 0, const wxString& name = "tabCtrl");
 
     // Delete all items
-    bool DeleteAllItems(void);
+    bool DeleteAllItems();
 
     // Delete an item
-    bool DeleteItem(const int item);
+    bool DeleteItem(int item);
 
     // Hit test
     int HitTest(const wxPoint& pt, long& flags);
 
     // Insert an item
-    int InsertItem(const int item, const wxString& text, const int imageId = -1, void* data = NULL);
+    bool InsertItem(int item, const wxString& text, int imageId = -1, void* data = NULL);
 
 // Implementation
 

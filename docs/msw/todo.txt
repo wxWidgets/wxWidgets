@@ -24,6 +24,8 @@ window id).
 
 Registry classes (check out wxConfig class - see issues.txt).
 
+Change DnD classes to use global symbols, and wxString.
+
 Update manual.
     wxApp changes       DONE
     wxMenu changes      DONE
@@ -37,12 +39,13 @@ Update manual.
     wxMsgCatalog etc.
     wxLog
     wxConfig, wxRegKey
-    wxTabCtrl
-    wxWave
+    wxTabCtrl           DONE
+    wxNotebook
+    wxWave              DONE
     wxJoystick
     wxStatusBar95 and wxFrame status bar functions
     wxListBox changes (for ownerdraw functionality)
-    wxThread
+    wxThread            DONE (except for topic overview)
     wxString
     wxTString
     Drag and drop (change API if required, e.g. const).

@@ -16,22 +16,22 @@
 #pragma interface "wave.h"
 #endif
 
-#include <wx/object.h>
+#include "wx/object.h"
 
 class wxWave : public wxObject
 {
 public:
-  wxWave(void);
+  wxWave();
   wxWave(const wxString& fileName, bool isResource = FALSE);
-  ~wxWave(void);
+  ~wxWave();
 
 public:
-  bool  Create(const wxString& sFileName, bool isResource = FALSE);
-  bool  IsOk(void) const { return (m_waveData ? TRUE : FALSE); };
+  bool  Create(const wxString& fileName, bool isResource = FALSE);
+  bool  IsOk() const { return (m_waveData ? TRUE : FALSE); };
   bool  Play(bool async = TRUE, bool looped = FALSE) const;
 
 protected:
-  bool  Free(void);
+  bool  Free();
 
 private:
   byte* m_waveData;

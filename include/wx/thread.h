@@ -43,18 +43,18 @@ class wxMutexInternal;
 class WXDLLEXPORT wxMutex {
 public:
   // constructor & destructor 
-  wxMutex(void);
-  ~wxMutex(void);
+  wxMutex();
+  ~wxMutex();
 
   // Lock the mutex.
-  wxMutexError Lock(void);
+  wxMutexError Lock();
   // Try to lock the mutex: if it can't, returns immediately with an error.
-  wxMutexError TryLock(void);
+  wxMutexError TryLock();
   // Unlock the mutex.
-  wxMutexError Unlock(void);
+  wxMutexError Unlock();
 
   // Returns true if the mutex is locked.
-  bool IsLocked(void) { return (m_locked > 0); }
+  bool IsLocked() const { return (m_locked > 0); }
 protected:
   friend class wxCondition;
 
@@ -68,17 +68,17 @@ class wxConditionInternal;
 class WXDLLEXPORT wxCondition {
 public:
   // constructor & destructor
-  wxCondition(void);
-  ~wxCondition(void);
+  wxCondition();
+  ~wxCondition();
 
-  // Waits undefinitely.
+  // Waits indefinitely.
   void Wait(wxMutex& mutex);
   // Waits until a signal is raised or the timeout is elapsed.
   bool Wait(wxMutex& mutex, unsigned long sec, unsigned long nsec);
   // Raises a signal: only one "Waiter" is released.
-  void Signal(void);
+  void Signal();
   // Broadcasts to all "Waiters".
-  void Broadcast(void);
+  void Broadcast();
 private:
   wxConditionInternal *p_internal;
 };
@@ -89,46 +89,46 @@ class wxThreadInternal;
 class WXDLLEXPORT wxThread {
 public:
   // constructor & destructor.
-  wxThread(void);
-  virtual ~wxThread(void);
+  wxThread();
+  virtual ~wxThread();
 
   // Create a new thread, this method should check there is only one thread
   // running by object.
-  wxThreadError Create(void);
+  wxThreadError Create();
 
-  // Destroys the thread immediately if the flag DIFFER isn't true.
-  wxThreadError Destroy(void);
+  // Destroys the thread immediately if the defer flag isn't true.
+  wxThreadError Destroy();
 
-  // Switches on the DIFFER flag.
+  // Switches on the defer flag.
   void DeferDestroy(bool on);
 
   // Waits for the termination of the thread.
-  void *Join(void);
+  void *Join();
 
   // Sets the priority to "prio". (Warning: The priority can only be set before
   // the thread is created)
   void SetPriority(int prio);
   // Get the current priority.
-  int GetPriority(void);
+  int GetPriority() const;
 
   // Get the thread ID
-  unsigned long GetID(void);
+  unsigned long GetID() const;
 
   // Returns true if the thread is alive.
-  bool IsAlive(void);
+  bool IsAlive() const;
   // Returns true if the thread is the main thread (aka the GUI thread).
-  static bool IsMain(void);
+  static bool IsMain();
 
   // Called when thread exits.
-  virtual void OnExit(void);
+  virtual void OnExit();
 protected:
   // In case, the DIFFER flag is true, enables another thread to kill this one.
-  void TestDestroy(void);
+  void TestDestroy();
   // Exits from the current thread.
   void Exit(void *status = NULL);
 private:
   // Entry point for the thread.
-  virtual void *Entry(void) = 0;
+  virtual void *Entry() = 0;
 
 private:
   friend class wxThreadInternal;

@@ -52,19 +52,19 @@ public:
   HANDLE p_mutex;
 };
 
-wxMutex::wxMutex(void)
+wxMutex::wxMutex()
 {
   p_internal = new wxMutexInternal;
   p_internal->p_mutex = CreateMutex(NULL, FALSE, NULL);
   m_locked = 0;
 }
 
-wxMutex::~wxMutex(void)
+wxMutex::~wxMutex()
 {
   CloseHandle(p_internal->p_mutex);
 }
 
-wxMutexError wxMutex::Lock(void)
+wxMutexError wxMutex::Lock()
 {
   DWORD ret;
 
@@ -76,7 +76,7 @@ wxMutexError wxMutex::Lock(void)
   return MUTEX_NO_ERROR;
 }
 
-wxMutexError wxMutex::TryLock(void)
+wxMutexError wxMutex::TryLock()
 {
   DWORD ret;
 
@@ -88,7 +88,7 @@ wxMutexError wxMutex::TryLock(void)
   return MUTEX_NO_ERROR;
 }
 
-wxMutexError wxMutex::Unlock(void)
+wxMutexError wxMutex::Unlock()
 {
   BOOL ret;
 
@@ -107,14 +107,14 @@ public:
   int waiters;
 };
 
-wxCondition::wxCondition(void)
+wxCondition::wxCondition()
 {
   p_internal = new wxConditionInternal;
   p_internal->event = CreateEvent(NULL, FALSE, FALSE, NULL);
   p_internal->waiters = 0;
 }
 
-wxCondition::~wxCondition(void)
+wxCondition::~wxCondition()
 {
   CloseHandle(p_internal->event);
 }
@@ -142,12 +142,12 @@ bool wxCondition::Wait(wxMutex& mutex, unsigned long sec,
   return (ret != WAIT_TIMEOUT);
 }
 
-void wxCondition::Signal(void)
+void wxCondition::Signal()
 {
   SetEvent(p_internal->event);
 }
 
-void wxCondition::Broadcast(void)
+void wxCondition::Broadcast()
 {
   int i;
 
@@ -176,7 +176,7 @@ DWORD wxThreadInternal::WinThreadStart(LPVOID arg)
   return ret;
 }
 
-wxThreadError wxThread::Create(void)
+wxThreadError wxThread::Create()
 {
   int win_prio, prio = p_internal->prio;
 
@@ -231,7 +231,7 @@ void wxThread::SetPriority(int prio)
   p_internal->prio = prio;
 }
 
-int wxThread::GetPriority(void)
+int wxThread::GetPriority()
 {
   return p_internal->prio;
 }
@@ -268,12 +268,12 @@ void *wxThread::Join()
   return (void *)exit_code;
 }
 
-unsigned long wxThread::GetID()
+unsigned long wxThread::GetID() const
 {
   return (unsigned long)p_internal->tid;
 }
 
-bool wxThread::IsMain()
+bool wxThread::IsMain() const
 {
   return (GetCurrentThread() == p_mainid);
 }
@@ -304,14 +304,14 @@ void wxThread::OnExit()
 class wxThreadModule : public wxModule {
   DECLARE_DYNAMIC_CLASS(wxThreadModule)
 public:
-  virtual bool OnInit(void) {
+  virtual bool OnInit() {
     p_mainid = GetCurrentThread();
     wxMainMutex.Lock();
     return TRUE;
   }
 
   // Global cleanup
-  virtual void OnExit(void) {
+  virtual void OnExit() {
     wxMainMutex.Unlock();
   }
 };
