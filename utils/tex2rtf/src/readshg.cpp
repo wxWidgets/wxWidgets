@@ -90,7 +90,7 @@ int   ParseSHG( const wxChar* fileName, HotSpot **hotspots)
   if(nMacroStrings > 0)
     fseek( fSHG, nMacroStrings, SEEK_CUR);  //nMacroStrings is byte offset...
   // and, at the last, read through the strings: hotspot-id[ignored], then topic/macro
-  int  c;
+  int c;
   for( i = 0 ; i < nHotspots ; ++i)
   {
     while( (c = fgetc( fSHG)) != 0)
@@ -99,7 +99,7 @@ int   ParseSHG( const wxChar* fileName, HotSpot **hotspots)
     int j = 0;
     while( (c = fgetc( fSHG)) != 0)
     {
-      (*hotspots)[i].szHlpTopic_Macro[j] = c;
+      (*hotspots)[i].szHlpTopic_Macro[j] = (wxChar)c;
       ++j;
     }
     (*hotspots)[i].szHlpTopic_Macro[j] = 0;
