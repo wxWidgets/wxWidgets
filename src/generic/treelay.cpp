@@ -427,8 +427,6 @@ wxString wxTreeLayoutStored::HitTest(wxMouseEvent& event, wxDC& dc)
     int i;
     for (i = 0; i < m_maxNodes; i++)
     {
-        wxStoredNode* item = &m_nodes[i];
-        
         long width, height;
         dc.GetTextExtent(m_nodes[i].m_name, &width, &height);
         
