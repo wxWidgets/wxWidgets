@@ -1,13 +1,13 @@
 /**
-*  Name:        wx/features.h 
-*  Purpose:     test macros for the features which might be available in some 
-*               wxWindows ports but not others 
-*  Author:      Vadim Zeitlin 
+*  Name:        wx/features.h
+*  Purpose:     test macros for the features which might be available in some
+*               wxWindows ports but not others
+*  Author:      Vadim Zeitlin
 *  Modified by: Ryan Norton (Converted to C)
-*  Created:     18.03.02 
-*  RCS-ID:      $Id$ 
-*  Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwindows.org> 
-*  Licence:     wxWindows licence 
+*  Created:     18.03.02
+*  RCS-ID:      $Id$
+*  Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwindows.org>
+*  Licence:     wxWindows licence
 */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
@@ -58,10 +58,6 @@
 
 /*  wxRE_ADVANCED is not always available, depending on regex library used
  *  (it's unavailable only if compiling via configure against system library) */
-#ifdef __INNOTEK_LIBC__
-    #define WX_NO_REGEX_ADVANCED
-#endif
-
 #ifndef WX_NO_REGEX_ADVANCED
     #define wxHAS_REGEX_ADVANCED
 #else
