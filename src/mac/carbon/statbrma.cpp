@@ -27,6 +27,7 @@ END_EVENT_TABLE()
 
 #ifdef __WXMAC__
 #include "wx/mac/private.h"
+#include "wx/toplevel.h"
 #endif
 
 // ============================================================================
