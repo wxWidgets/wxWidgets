@@ -1208,6 +1208,27 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     return FALSE;
 }
 
+// ============================================================================
+// the mouse events
+// ============================================================================
+
+// init wxMouseEvent with the info from gdk_event
+#define InitMouseEvent(win, event, gdk_event) \
+    { \
+    event.SetTimestamp( gdk_event->time ); \
+    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK); \
+    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK); \
+    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK); \
+    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK); \
+    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK); \
+    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK); \
+    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK); \
+\
+    wxPoint pt = win->GetClientAreaOrigin(); \
+    event.m_x = (wxCoord)gdk_event->x - pt.x; \
+    event.m_y = (wxCoord)gdk_event->y - pt.y; \
+    }
+
 // ----------------------------------------------------------------------------
 // mouse event processing helper
 // ----------------------------------------------------------------------------
@@ -1320,17 +1341,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     }
 
     wxMouseEvent event( event_type );
-    event.SetTimestamp( gdk_event->time );
-    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
-    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
-    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
-    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
-    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
-    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
-    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
-
-    event.m_x = (wxCoord)gdk_event->x;
-    event.m_y = (wxCoord)gdk_event->y;
+    InitMouseEvent( win, event, gdk_event );
 
     AdjustEventButtonState(event);
     
@@ -1461,16 +1472,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     }
 
     wxMouseEvent event( event_type );
-    event.SetTimestamp( gdk_event->time );
-    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
-    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
-    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
-    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
-    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
-    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
-    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
-    event.m_x = (wxCoord)gdk_event->x;
-    event.m_y = (wxCoord)gdk_event->y;
+    InitMouseEvent( win, event, gdk_event );
 
     AdjustEventButtonState(event);
 
@@ -1557,24 +1559,6 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     return FALSE;
 }
 
-// ============================================================================
-// the mouse events
-// ============================================================================
-
-// init wxMouseEvent with the info from gdk_event
-#define InitMouseEvent(event, gdk_event) \
-    event.SetTimestamp( gdk_event->time ); \
-    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK); \
-    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK); \
-    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK); \
-    event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK); \
-    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK); \
-    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK); \
-    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK); \
-\
-    event.m_x = (wxCoord)gdk_event->x; \
-    event.m_y = (wxCoord)gdk_event->y \
-
 //-----------------------------------------------------------------------------
 // "motion_notify_event"
 //-----------------------------------------------------------------------------
@@ -1612,7 +1596,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
 */
 
     wxMouseEvent event( wxEVT_MOTION );
-    InitMouseEvent(event, gdk_event);
+    InitMouseEvent(win, event, gdk_event);
 
     if ( g_captureWindow )
     {
@@ -1626,7 +1610,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
 
             wxMouseEvent event(g_captureWindowHasMouse ? wxEVT_ENTER_WINDOW
                                                        : wxEVT_LEAVE_WINDOW);
-            InitMouseEvent(event, gdk_event);
+            InitMouseEvent(win, event, gdk_event);
             event.SetEventObject(win);
             win->GetEventHandler()->ProcessEvent(event);
         }
@@ -1909,10 +1893,10 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     gdk_window_get_pointer( widget->window, &x, &y, &state );
 
-    InitMouseEvent(event, gdk_event);
-
-    event.m_x = x;
-    event.m_y = y;
+    InitMouseEvent(win, event, gdk_event);
+    wxPoint pt = win->GetClientAreaOrigin();
+    event.m_x = x + pt.x;
+    event.m_y = y + pt.y;
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
@@ -1957,8 +1941,9 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     event.m_middleDown = (state & GDK_BUTTON2_MASK);
     event.m_rightDown = (state & GDK_BUTTON3_MASK);
 
-    event.m_x = x;
-    event.m_y = y;
+    wxPoint pt = win->GetClientAreaOrigin();
+    event.m_x = x + pt.x;
+    event.m_y = y + pt.y;
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {

@@ -159,7 +159,7 @@ public:
     // the layouting functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
     void GtkUpdateSize() { m_sizeSet = FALSE; }
-
+    
     // position and size of the window
     int                  m_x, m_y;
     int                  m_width, m_height;
