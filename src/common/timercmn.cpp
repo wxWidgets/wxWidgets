@@ -55,7 +55,9 @@
 
 #if defined(__VISAGECPP__) && !defined(HAVE_FTIME)
     #define HAVE_FTIME
-    #define ftime(x) _ftime(x)
+#  if __IBMCPP__ >= 400
+    #  define ftime(x) _ftime(x)
+#  endif
 #endif
 
 #include <time.h>
