@@ -695,7 +695,7 @@ wxResourceEditorScrolledWindow *wxResourceManager::OnCreateEditorPanel(wxFrame *
   return panel;
 }
 
-wxToolBarBase *wxResourceManager::OnCreateToolBar(wxFrame *parent)
+wxToolBar *wxResourceManager::OnCreateToolBar(wxFrame *parent)
 {
   // Load palette bitmaps
 #ifdef __WXMSW__

@@ -191,7 +191,7 @@ public:
    virtual wxFrame *OnCreateEditorFrame(const char *title);
    virtual wxMenuBar *OnCreateEditorMenuBar(wxFrame *parent);
    virtual wxResourceEditorScrolledWindow *OnCreateEditorPanel(wxFrame *parent);
-   virtual wxToolBarBase *OnCreateToolBar(wxFrame *parent);
+   virtual wxToolBar *OnCreateToolBar(wxFrame *parent);
 
    // Create a window information object for the give window
    wxWindowPropertyInfo* CreatePropertyInfoForWindow(wxWindow *win);
