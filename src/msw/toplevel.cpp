@@ -740,7 +740,7 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
                      rect.x, rect.y, rect.width, rect.height,
                      flags);
 
-#if __WXWINCE__ && _WIN32_WCE < 400
+#if defined(__WXWINCE__) && _WIN32_WCE < 400
         ::SHFullScreen(GetHwnd(), SHFS_HIDETASKBAR | SHFS_HIDESIPBUTTON);
 #endif
 
@@ -750,7 +750,7 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
     }
     else // stop showing full screen
     {
-#if __WXWINCE__ && _WIN32_WCE < 400
+#if defined(__WXWINCE__) && _WIN32_WCE < 400
         ::SHFullScreen(GetHwnd(), SHFS_SHOWTASKBAR | SHFS_SHOWSIPBUTTON);
 #endif
         Maximize(m_fsIsMaximized);
