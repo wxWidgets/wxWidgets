@@ -216,12 +216,12 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.SetBrush( *wxWHITE_BRUSH );
     dc.DrawRectangle( 170, 50, 60, 60 );
 
-    if (my_anti && my_anti->Ok()) 
+    if (my_anti && my_anti->Ok())
         dc.DrawBitmap( *my_anti, 280, 30 );
 
     dc.DrawText( "PNG handler", 30, 135 );
     if (my_horse_png && my_horse_png->Ok())
-    { 
+    {
         dc.DrawBitmap( *my_horse_png, 30, 150 );
         wxRect rect(0,0,100,100);
         wxBitmap sub( my_horse_png->GetSubBitmap(rect) );
@@ -230,47 +230,47 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     dc.DrawText( "JPEG handler", 30, 365 );
-    if (my_horse_jpeg && my_horse_jpeg->Ok()) 
+    if (my_horse_jpeg && my_horse_jpeg->Ok())
         dc.DrawBitmap( *my_horse_jpeg, 30, 380 );
 
     dc.DrawText( "GIF handler", 30, 595 );
-    if (my_horse_gif && my_horse_gif->Ok()) 
+    if (my_horse_gif && my_horse_gif->Ok())
         dc.DrawBitmap( *my_horse_gif, 30, 610 );
 
     dc.DrawText( "PCX handler", 30, 825 );
-    if (my_horse_pcx && my_horse_pcx->Ok()) 
+    if (my_horse_pcx && my_horse_pcx->Ok())
         dc.DrawBitmap( *my_horse_pcx, 30, 840 );
 
     dc.DrawText( "BMP handler", 30, 1055 );
-    if (my_horse_bmp && my_horse_bmp->Ok()) 
+    if (my_horse_bmp && my_horse_bmp->Ok())
         dc.DrawBitmap( *my_horse_bmp, 30, 1070 );
 
     dc.DrawText( "PNM handler", 30, 1285 );
-    if (my_horse_pnm && my_horse_pnm->Ok()) 
+    if (my_horse_pnm && my_horse_pnm->Ok())
         dc.DrawBitmap( *my_horse_pnm, 30, 1300 );
-  
+
     dc.DrawText( "TIFF handler", 30, 1515 );
-    if (my_horse_tiff && my_horse_tiff->Ok()) 
+    if (my_horse_tiff && my_horse_tiff->Ok())
         dc.DrawBitmap( *my_horse_tiff, 30, 1530 );
 
-    if (my_smile_xbm && my_smile_xbm->Ok()) 
+    if (my_smile_xbm && my_smile_xbm->Ok())
     {
         dc.DrawText( "XBM bitmap", 30, 1745 );
         dc.SetTextForeground( "RED" );
         dc.SetTextBackground( "GREEN" );
         dc.DrawBitmap( *my_smile_xbm, 30, 1760 );
-	
+
         dc.DrawText( "After wxImage conversion", 150, 1745 );
         wxImage i( *my_smile_xbm );
-	    i.SetMaskColour( 0,0,0 );
-	    i.Replace( 255,255,255, 
+        i.SetMaskColour( 0,0,0 );
+        i.Replace( 255,255,255,
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
         dc.DrawBitmap( i.ConvertToBitmap(), 150, 1760, TRUE );
     }
     dc.SetTextForeground( "BLACK" );
-    
+
     wxBitmap mono( 30,30,1 );
     wxMemoryDC memdc;
     memdc.SelectObject( mono );
@@ -280,17 +280,17 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     memdc.SetBrush( *wxWHITE_BRUSH );
     memdc.DrawRectangle( 5,5,20,20 );
     memdc.SelectObject( wxNullBitmap );
-    if (mono.Ok()) 
+    if (mono.Ok())
     {
         dc.DrawText( "Mono bitmap", 30, 1845 );
         dc.SetTextForeground( "RED" );
         dc.SetTextBackground( "GREEN" );
         dc.DrawBitmap( mono, 30, 1860 );
-	
+
         dc.DrawText( "After wxImage conversion", 150, 1845 );
         wxImage i( mono );
-	    i.SetMaskColour( 0,0,0 );
-	    i.Replace( 255,255,255, 
+        i.SetMaskColour( 255,255,255 );
+        i.Replace( 0,0,0,
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
