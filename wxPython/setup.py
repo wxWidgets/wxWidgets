@@ -59,7 +59,7 @@ BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 0      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_XRC = 1      # XML based resource system
-BUILD_GIZMOS = 0   # Build a module for the gizmos contrib library
+BUILD_GIZMOS = 1   # Build a module for the gizmos contrib library
 BUILD_DLLWIDGET = 0# Build a module that enables unknown wx widgets
                    # to be loaded from a DLL and to be used from Python.
 
@@ -1077,11 +1077,10 @@ if BUILD_GIZMOS:
     msg('Preparing GIZMOS...')
     location = 'contrib/gizmos'
 
-    swig_files = ['gizmos.i']
-    swig_sources = run_swig(swig_files, location, '', PKGDIR,
+    swig_sources = run_swig(['gizmos.i'], location, '', PKGDIR,
                             USE_SWIG, swig_force, swig_args, swig_deps)
 
-    ext = Extension('gizmosc',
+    ext = Extension('_gizmos',
                     [ '%s/treelistctrl.cpp' % location ] + swig_sources,
 
                     include_dirs =  includes,

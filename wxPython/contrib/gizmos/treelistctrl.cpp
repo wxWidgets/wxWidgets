@@ -2457,12 +2457,92 @@ void wxTreeListMainWindow::SendDeleteEvent(wxTreeListItem *item)
     m_owner->ProcessEvent( event );
 }
 
+// inline
+// void wxTreeListMainWindow::DeleteChildren(const wxTreeItemId& itemId)
+// {
+//     m_dirty = TRUE;     // do this first so stuff below doesn't cause flicker
+
+//     wxTreeListItem *item = (wxTreeListItem*) itemId.m_pItem;
+//     item->DeleteChildren(this);
+// }
+
+// inline
+// void wxTreeListMainWindow::Delete(const wxTreeItemId& itemId)
+// {
+//     m_dirty = TRUE;     // do this first so stuff below doesn't cause flicker
+
+//     wxTreeListItem *item = (wxTreeListItem*) itemId.m_pItem;
+
+//     // don't stay with invalid m_key_current or we will crash in
+//     // the next call to OnChar()
+//     bool changeKeyCurrent = FALSE;
+//     wxTreeListItem *itemKey = m_key_current;
+//     while ( itemKey )
+//     {
+//         if ( itemKey == item )
+//         {
+//             // m_key_current is a descendant of the item being deleted
+//             changeKeyCurrent = TRUE;
+//             break;
+//         }
+//         itemKey = itemKey->GetParent();
+//     }
+
+//     wxTreeListItem *parent = item->GetParent();
+//     if ( parent )
+//     {
+//         parent->GetChildren().Remove( item );  // remove by value
+//     }
+
+//     if ( changeKeyCurrent )
+//     {
+//         // may be NULL or not
+//         m_key_current = parent;
+//     }
+
+//     item->DeleteChildren(this);
+//     SendDeleteEvent(item);
+//     delete item;
+// }
+
+// inline
+// void wxTreeListMainWindow::DeleteAllItems()
+// {
+//     if ( m_anchor )
+//     {
+//         m_dirty = TRUE;
+
+//         m_anchor->DeleteChildren(this);
+//         delete m_anchor;
+
+//         m_anchor = NULL;
+//     }
+// }
+
+
 inline
 void wxTreeListMainWindow::DeleteChildren(const wxTreeItemId& itemId)
 {
     m_dirty = TRUE;     // do this first so stuff below doesn't cause flicker
 
     wxTreeListItem *item = (wxTreeListItem*) itemId.m_pItem;
+
+    // mst:16.10.03
+    // moved from Delete()
+    // don't stay with invalid m_key_current or we will crash in
+    // the next call to OnChar()
+    wxTreeListItem *itemKey = m_key_current;
+    while ( itemKey )
+    {
+        if ( itemKey == item )
+        {
+            // m_key_current is a descendant of the item which childrens being deleted
+            m_key_current = item;
+            break;
+        }
+        itemKey = itemKey->GetParent();
+    }
+
     item->DeleteChildren(this);
 }
 
@@ -2473,35 +2553,19 @@ void wxTreeListMainWindow::Delete(const wxTreeItemId& itemId)
 
     wxTreeListItem *item = (wxTreeListItem*) itemId.m_pItem;
 
-    // don't stay with invalid m_key_current or we will crash in
-    // the next call to OnChar()
-    bool changeKeyCurrent = FALSE;
-    wxTreeListItem *itemKey = m_key_current;
-    while ( itemKey )
-    {
-        if ( itemKey == item )
-        {
-            // m_key_current is a descendant of the item being deleted
-            changeKeyCurrent = TRUE;
-            break;
-        }
-        itemKey = itemKey->GetParent();
-    }
+    // mst:16.10.03
+    item->DeleteChildren(this);
 
     wxTreeListItem *parent = item->GetParent();
+
     if ( parent )
-    {
-        parent->GetChildren().Remove( item );  // remove by value
-    }
+       parent->GetChildren().Remove( item );  // remove by value
 
-    if ( changeKeyCurrent )
-    {
-        // may be NULL or not
-        m_key_current = parent;
-    }
+    if (m_key_current == item)
+      m_key_current = parent;
 
-    item->DeleteChildren(this);
     SendDeleteEvent(item);
+
     delete item;
 }
 
@@ -2512,12 +2576,15 @@ void wxTreeListMainWindow::DeleteAllItems()
     {
         m_dirty = TRUE;
 
+        m_key_current = NULL;  // mst:16.10.03
+
         m_anchor->DeleteChildren(this);
         delete m_anchor;
 
         m_anchor = NULL;
     }
 }
+
 
 void wxTreeListMainWindow::Expand(const wxTreeItemId& itemId)
 {
