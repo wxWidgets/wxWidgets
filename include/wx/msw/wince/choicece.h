@@ -98,6 +98,11 @@ public:
     // get the subclassed window proc of the buddy list of choices
     WXFARPROC GetBuddyWndProc() const { return m_wndProcBuddy; }
 
+    // return the choice object whose buddy is the given window or NULL
+    static wxChoice *GetChoiceForListBox(WXHWND hwndBuddy);
+
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
+
 protected:
     virtual void DoSetItemClientData( int n, void* clientData );
     virtual void* DoGetItemClientData( int n ) const;

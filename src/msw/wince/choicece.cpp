@@ -109,6 +109,22 @@ LRESULT APIENTRY _EXPORT wxBuddyChoiceWndProc(HWND hwnd,
                             hwnd, message, wParam, lParam);
 }
 
+wxChoice *wxChoice::GetChoiceForListBox(WXHWND hwndBuddy)
+{
+    wxChoice *choice = (wxChoice *)wxGetWindowUserData((HWND)hwndBuddy);
+
+    int i = ms_allChoiceSpins.Index(choice);
+
+    if ( i == wxNOT_FOUND )
+        return NULL;
+
+    // sanity check
+    wxASSERT_MSG( choice->m_hwndBuddy == hwndBuddy,
+                  _T("wxChoice has incorrect buddy HWND!") );
+
+    return choice;
+}
+
 // ----------------------------------------------------------------------------
 // creation
 // ----------------------------------------------------------------------------
@@ -284,7 +300,34 @@ WXDWORD wxChoice::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( style & wxCB_SORT )
         msStyle |= LBS_SORT;
 
+    msStyle |= LBS_NOTIFY;
+
     return msStyle;
+}
+
+bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
+{
+    if ( param != LBN_SELCHANGE)
+    {
+        // "selection changed" is the only event we're after
+        return false;
+    }
+
+    int n = GetSelection();
+    if (n > -1)
+    {
+        wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId);
+        event.SetInt(n);
+        event.SetEventObject(this);
+        event.SetString(GetStringSelection());
+        if ( HasClientObjectData() )
+            event.SetClientObject( GetClientObject(n) );
+        else if ( HasClientUntypedData() )
+            event.SetClientData( GetClientData(n) );
+        ProcessCommand(event);
+    }
+
+    return true;
 }
 
 wxChoice::~wxChoice()

@@ -4269,17 +4269,26 @@ bool wxWindowMSW::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
         return GetEventHandler()->ProcessEvent(event);
     }
-#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__)
     else
     {
+#if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__)
         // the text ctrl which is logically part of wxSpinCtrl sends WM_COMMAND
         // notifications to its parent which we want to reflect back to
         // wxSpinCtrl
         wxSpinCtrl *spin = wxSpinCtrl::GetSpinForTextCtrl(control);
         if ( spin && spin->ProcessTextCommand(cmd, id) )
             return true;
-    }
 #endif // wxUSE_SPINCTRL
+
+#if wxUSE_CHOICE && defined(__SMARTPHONE__)
+        // the listbox ctrl which is logically part of wxChoice sends WM_COMMAND
+        // notifications to its parent which we want to reflect back to
+        // wxChoice
+        wxChoice *choice = wxChoice::GetChoiceForListBox(control);
+        if ( choice && choice->MSWCommand(cmd, id) )
+            return true;
+#endif
+    }
 
     return false;
 }
