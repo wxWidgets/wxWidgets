@@ -946,10 +946,12 @@ bool wxStdSliderButtonInputHandler::HandleKey(wxInputConsumer *consumer,
                 break;
 
             case WXK_PRIOR:
+            case WXK_PAGEUP:
                 action = wxACTION_SLIDER_PAGE_UP;
                 break;
 
             case WXK_NEXT:
+            case WXK_PAGEDOWN:
                 action = wxACTION_SLIDER_PAGE_DOWN;
                 break;
         }

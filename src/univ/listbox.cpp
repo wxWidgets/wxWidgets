@@ -1255,7 +1255,9 @@ bool wxStdListboxInputHandler::HandleKey(wxInputConsumer *consumer,
             // movement
             case WXK_UP:    action = wxACTION_LISTBOX_MOVEUP; break;
             case WXK_DOWN:  action = wxACTION_LISTBOX_MOVEDOWN; break;
+            case WXK_PAGEUP:
             case WXK_PRIOR: action = wxACTION_LISTBOX_PAGEUP; break;
+            case WXK_PAGEDOWN:
             case WXK_NEXT:  action = wxACTION_LISTBOX_PAGEDOWN; break;
             case WXK_HOME:  action = wxACTION_LISTBOX_START; break;
             case WXK_END:   action = wxACTION_LISTBOX_END; break;

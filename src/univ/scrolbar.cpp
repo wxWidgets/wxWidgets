@@ -675,7 +675,9 @@ bool wxStdScrollBarInputHandler::HandleKey(wxInputConsumer *consumer,
             case WXK_LEFT:      action = wxACTION_SCROLL_LINE_UP;   break;
             case WXK_HOME:      action = wxACTION_SCROLL_START;     break;
             case WXK_END:       action = wxACTION_SCROLL_END;       break;
+            case WXK_PAGEUP:
             case WXK_PRIOR:     action = wxACTION_SCROLL_PAGE_UP;   break;
+            case WXK_PAGEDOWN:
             case WXK_NEXT:      action = wxACTION_SCROLL_PAGE_DOWN; break;
         }
 
