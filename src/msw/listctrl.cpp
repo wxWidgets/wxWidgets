@@ -2376,9 +2376,9 @@ wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) cons
 
 int wxListCtrl::OnGetItemImage(long WXUNUSED(item)) const
 {
-    // same as above
-    wxFAIL_MSG( _T("wxListCtrl::OnGetItemImage not supposed to be called") );
-
+    wxCHECK_MSG(!GetImageList(wxIMAGE_LIST_SMALL),
+                -1,
+                wxT("List control has an image list, OnGetItemImage should be overridden."));
     return -1;
 }
 
