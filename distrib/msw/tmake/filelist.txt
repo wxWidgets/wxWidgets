@@ -584,8 +584,8 @@ colour.cpp	Cocoa
 control.mm	Cocoa
 cursor.mm	Cocoa
 data.cpp	Cocoa
-dc.cpp	Cocoa
-dcclient.cpp	Cocoa
+dc.mm	Cocoa
+dcclient.mm	Cocoa
 dcmemory.cpp	Cocoa
 dcscreen.cpp	Cocoa
 dialog.mm	Cocoa
