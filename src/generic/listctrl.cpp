@@ -65,6 +65,10 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_DESELECTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_KEY_DOWN)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_INSERT_ITEM)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_CLICK)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_RIGHT_CLICK)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_DRAGGING)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_END_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_ACTIVATED)
@@ -1973,19 +1977,22 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
             m_minX = xpos;
         }
 
-        if (event.LeftDown())
+        if (event.LeftDown() || event.RightUp())
         {
-            if (hit_border)
+            if (hit_border && event.LeftDown())
             {
                 m_isDragging = TRUE;
                 m_currentX = x;
                 DrawCurrent();
                 CaptureMouse();
             }
-            else
+            else // click on a column
             {
                 wxWindow *parent = GetParent();
-                wxListEvent le( wxEVT_COMMAND_LIST_COL_CLICK, parent->GetId() );
+                wxListEvent le( event.LeftDown()
+                                    ? wxEVT_COMMAND_LIST_COL_CLICK
+                                    : wxEVT_COMMAND_LIST_COL_RIGHT_CLICK,
+                                parent->GetId() );
                 le.SetEventObject( parent );
                 le.m_col = m_column;
                 parent->GetEventHandler()->ProcessEvent( le );

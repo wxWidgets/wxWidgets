@@ -33,6 +33,10 @@ public:
     void InsertItemInReportView(int i);
 
     void OnColClick(wxListEvent& event);
+    void OnColRightClick(wxListEvent& event);
+    void OnColBeginDrag(wxListEvent& event);
+    void OnColDragging(wxListEvent& event);
+    void OnColEndDrag(wxListEvent& event);
     void OnBeginDrag(wxListEvent& event);
     void OnBeginRDrag(wxListEvent& event);
     void OnBeginLabelEdit(wxListEvent& event);

@@ -90,7 +90,13 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_LIST_ITEM_DESELECTED(LIST_CTRL, MyListCtrl::OnDeselected)
     EVT_LIST_KEY_DOWN(LIST_CTRL, MyListCtrl::OnListKeyDown)
     EVT_LIST_ITEM_ACTIVATED(LIST_CTRL, MyListCtrl::OnActivated)
+
     EVT_LIST_COL_CLICK(LIST_CTRL, MyListCtrl::OnColClick)
+    EVT_LIST_COL_RIGHT_CLICK(LIST_CTRL, MyListCtrl::OnColRightClick)
+    EVT_LIST_COL_BEGIN_DRAG(LIST_CTRL, MyListCtrl::OnColBeginDrag)
+    EVT_LIST_COL_DRAGGING(LIST_CTRL, MyListCtrl::OnColDragging)
+    EVT_LIST_COL_END_DRAG(LIST_CTRL, MyListCtrl::OnColEndDrag)
+
     EVT_LIST_CACHE_HINT(LIST_CTRL, MyListCtrl::OnCacheHint)
 
     EVT_CHAR(MyListCtrl::OnChar)
@@ -575,6 +581,26 @@ void MyListCtrl::OnCacheHint(wxListEvent& event)
 void MyListCtrl::OnColClick(wxListEvent& event)
 {
     wxLogMessage( wxT("OnColumnClick at %d."), event.GetColumn() );
+}
+
+void MyListCtrl::OnColRightClick(wxListEvent& event)
+{
+    wxLogMessage( wxT("OnColumnRightClick at %d."), event.GetColumn() );
+}
+
+void MyListCtrl::OnColBeginDrag(wxListEvent& event)
+{
+    wxLogMessage( wxT("OnColBeginDrag: column %d."), event.GetColumn() );
+}
+
+void MyListCtrl::OnColDragging(wxListEvent& event)
+{
+    wxLogMessage( wxT("OnColDragging: column %d."), event.GetColumn() );
+}
+
+void MyListCtrl::OnColEndDrag(wxListEvent& event)
+{
+    wxLogMessage( wxT("OnColEndDrag: column %d."), event.GetColumn() );
 }
 
 void MyListCtrl::OnBeginDrag(wxListEvent& event)

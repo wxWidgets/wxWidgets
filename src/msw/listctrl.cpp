@@ -117,6 +117,10 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_DESELECTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_KEY_DOWN)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_INSERT_ITEM)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_CLICK)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_RIGHT_CLICK)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_DRAGGING)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_COL_END_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_ITEM_ACTIVATED)
@@ -1478,172 +1482,249 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     NMHDR *nmhdr = (NMHDR *)lParam;
 
-    // almost all messages use NM_LISTVIEW
-    NM_LISTVIEW *nmLV = (NM_LISTVIEW *)nmhdr;
+    // check for messages from the header (in report view)
+    HWND hwndHdr = ListView_GetHeader(GetHwnd());
 
-    // this is true for almost all events
-    event.m_item.m_data = nmLV->lParam;
-
-    switch ( nmhdr->code )
+    // is it a message from the header?
+    if ( nmhdr->hwndFrom == hwndHdr )
     {
-        case LVN_BEGINRDRAG:
-            eventType = wxEVT_COMMAND_LIST_BEGIN_RDRAG;
-            // fall through
+        NMHEADER *nmHDR = (NMHEADER *)nmhdr;
+        event.m_itemIndex = -1;
 
-        case LVN_BEGINDRAG:
-            if ( eventType == wxEVT_NULL )
-            {
-                eventType = wxEVT_COMMAND_LIST_BEGIN_DRAG;
-            }
+        switch ( nmhdr->code )
+        {
+            // yet another comctl32.dll bug: under NT/W2K it sends Unicode
+            // TRACK messages even to ANSI programs: on my system I get
+            // HDN_BEGINTRACKW and HDN_ENDTRACKA and no HDN_TRACK at all!
+            //
+            // work around is to simply catch both versions and hope that it
+            // works (why should this message exist in ANSI and Unicode is
+            // beyond me as it doesn't deal with strings at all...)
+            case HDN_BEGINTRACKA:
+            case HDN_BEGINTRACKW:
+                eventType = wxEVT_COMMAND_LIST_COL_BEGIN_DRAG;
+                // fall through
 
-            event.m_itemIndex = nmLV->iItem;
-            event.m_pointDrag.x = nmLV->ptAction.x;
-            event.m_pointDrag.y = nmLV->ptAction.y;
-            break;
+            case HDN_TRACKA:
+            case HDN_TRACKW:
+                if ( eventType == wxEVT_NULL )
+                    eventType = wxEVT_COMMAND_LIST_COL_DRAGGING;
+                // fall through
 
-        case LVN_BEGINLABELEDIT:
-            {
-                eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
-                LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
-                event.m_itemIndex = event.m_item.m_itemId;
-            }
-            break;
+            case HDN_ENDTRACKA:
+            case HDN_ENDTRACKW:
+                if ( eventType == wxEVT_NULL )
+                    eventType = wxEVT_COMMAND_LIST_COL_END_DRAG;
+                event.m_col = nmHDR->iItem;
+                break;
 
-        case LVN_COLUMNCLICK:
-            eventType = wxEVT_COMMAND_LIST_COL_CLICK;
-            event.m_itemIndex = -1;
-            event.m_col = nmLV->iSubItem;
-            break;
-
-        case LVN_DELETEALLITEMS:
-            eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
-            event.m_itemIndex = -1;
-
-            FreeAllAttrs();
-
-            break;
-
-        case LVN_DELETEITEM:
-            eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
-            event.m_itemIndex = nmLV->iItem;
-
-            if ( m_hasAnyAttr )
-            {
-                delete (wxListItemAttr *)m_attrs.Delete(nmLV->iItem);
-            }
-            break;
-
-        case LVN_ENDLABELEDIT:
-            {
-                eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
-                LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
-                if ( info->item.pszText == NULL || info->item.iItem == -1 )
-                    return FALSE;
-
-                event.m_itemIndex = event.m_item.m_itemId;
-            }
-            break;
-
-        case LVN_SETDISPINFO:
-            {
-                eventType = wxEVT_COMMAND_LIST_SET_INFO;
-                LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
-            }
-            break;
-
-        case LVN_INSERTITEM:
-            eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;
-            event.m_itemIndex = nmLV->iItem;
-            break;
-
-        case LVN_ITEMCHANGED:
-            // This needs to be sent to wxListCtrl as a rather more concrete
-            // event. For now, just detect a selection or deselection.
-            if ( (nmLV->uNewState & LVIS_SELECTED) && !(nmLV->uOldState & LVIS_SELECTED) )
-            {
-                eventType = wxEVT_COMMAND_LIST_ITEM_SELECTED;
-                event.m_itemIndex = nmLV->iItem;
-            }
-            else if ( !(nmLV->uNewState & LVIS_SELECTED) && (nmLV->uOldState & LVIS_SELECTED) )
-            {
-                eventType = wxEVT_COMMAND_LIST_ITEM_DESELECTED;
-                event.m_itemIndex = nmLV->iItem;
-            }
-            else
-            {
-                return FALSE;
-            }
-            break;
-
-        case LVN_KEYDOWN:
-            {
-                LV_KEYDOWN *info = (LV_KEYDOWN *)lParam;
-                WORD wVKey = info->wVKey;
-
-                // get the current selection
-                long lItem = GetNextItem(-1,
-                                         wxLIST_NEXT_ALL,
-                                         wxLIST_STATE_SELECTED);
-
-                // <Enter> or <Space> activate the selected item if any (but
-                // not with Shift and/or Ctrl as then they have a predefined
-                // meaning for the list view)
-                if ( lItem != -1 &&
-                     (wVKey == VK_RETURN || wVKey == VK_SPACE) &&
-                     !(wxIsShiftDown() || wxIsCtrlDown()) )
+            case NM_RCLICK:
                 {
-                    eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+                    eventType = wxEVT_COMMAND_LIST_COL_RIGHT_CLICK;
+                    event.m_col = -1;
+
+                    // find the column clicked: we have to search for it
+                    // ourselves as the notification message doesn't provide
+                    // this info
+
+                    // where did the click occur?
+                    POINT ptClick;
+                    if ( !::GetCursorPos(&ptClick) )
+                    {
+                        wxLogLastError(_T("GetCursorPos"));
+                    }
+
+                    if ( !::ScreenToClient(hwndHdr, &ptClick) )
+                    {
+                        wxLogLastError(_T("ScreenToClient(listctrl header)"));
+                    }
+
+                    event.m_pointDrag.x = ptClick.x;
+                    event.m_pointDrag.y = ptClick.y;
+
+                    int colCount = Header_GetItemCount(hwndHdr);
+
+                    RECT rect;
+                    for ( int col = 0; col < colCount; col++ )
+                    {
+                        if ( Header_GetItemRect(hwndHdr, col, &rect) )
+                        {
+                            if ( ::PtInRect(&rect, ptClick) )
+                            {
+                                event.m_col = col;
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+
+            default:
+                return wxControl::MSWOnNotify(idCtrl, lParam, result);
+        }
+    }
+    else if ( nmhdr->hwndFrom == GetHwnd() )
+    {
+        // almost all messages use NM_LISTVIEW
+        NM_LISTVIEW *nmLV = (NM_LISTVIEW *)nmhdr;
+
+        // this is true for almost all events
+        event.m_item.m_data = nmLV->lParam;
+
+        switch ( nmhdr->code )
+        {
+            case LVN_BEGINRDRAG:
+                eventType = wxEVT_COMMAND_LIST_BEGIN_RDRAG;
+                // fall through
+
+            case LVN_BEGINDRAG:
+                if ( eventType == wxEVT_NULL )
+                {
+                    eventType = wxEVT_COMMAND_LIST_BEGIN_DRAG;
+                }
+
+                event.m_itemIndex = nmLV->iItem;
+                event.m_pointDrag.x = nmLV->ptAction.x;
+                event.m_pointDrag.y = nmLV->ptAction.y;
+                break;
+
+            case LVN_BEGINLABELEDIT:
+                {
+                    eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
+                    LV_DISPINFO *info = (LV_DISPINFO *)lParam;
+                    wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
+                    event.m_itemIndex = event.m_item.m_itemId;
+                }
+                break;
+
+            case LVN_COLUMNCLICK:
+                eventType = wxEVT_COMMAND_LIST_COL_CLICK;
+                event.m_itemIndex = -1;
+                event.m_col = nmLV->iSubItem;
+                break;
+
+            case LVN_DELETEALLITEMS:
+                eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
+                event.m_itemIndex = -1;
+
+                FreeAllAttrs();
+
+                break;
+
+            case LVN_DELETEITEM:
+                eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
+                event.m_itemIndex = nmLV->iItem;
+
+                if ( m_hasAnyAttr )
+                {
+                    delete (wxListItemAttr *)m_attrs.Delete(nmLV->iItem);
+                }
+                break;
+
+            case LVN_ENDLABELEDIT:
+                {
+                    eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
+                    LV_DISPINFO *info = (LV_DISPINFO *)lParam;
+                    wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
+                    if ( info->item.pszText == NULL || info->item.iItem == -1 )
+                        return FALSE;
+
+                    event.m_itemIndex = event.m_item.m_itemId;
+                }
+                break;
+
+            case LVN_SETDISPINFO:
+                {
+                    eventType = wxEVT_COMMAND_LIST_SET_INFO;
+                    LV_DISPINFO *info = (LV_DISPINFO *)lParam;
+                    wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
+                }
+                break;
+
+            case LVN_INSERTITEM:
+                eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;
+                event.m_itemIndex = nmLV->iItem;
+                break;
+
+            case LVN_ITEMCHANGED:
+                // This needs to be sent to wxListCtrl as a rather more concrete
+                // event. For now, just detect a selection or deselection.
+                if ( (nmLV->uNewState & LVIS_SELECTED) && !(nmLV->uOldState & LVIS_SELECTED) )
+                {
+                    eventType = wxEVT_COMMAND_LIST_ITEM_SELECTED;
+                    event.m_itemIndex = nmLV->iItem;
+                }
+                else if ( !(nmLV->uNewState & LVIS_SELECTED) && (nmLV->uOldState & LVIS_SELECTED) )
+                {
+                    eventType = wxEVT_COMMAND_LIST_ITEM_DESELECTED;
+                    event.m_itemIndex = nmLV->iItem;
                 }
                 else
                 {
-                    eventType = wxEVT_COMMAND_LIST_KEY_DOWN;
-                    event.m_code = wxCharCodeMSWToWX(wVKey);
+                    return FALSE;
                 }
+                break;
 
-                event.m_itemIndex =
-                event.m_item.m_itemId = lItem;
-
-                if ( lItem != -1 )
+            case LVN_KEYDOWN:
                 {
-                    // fill the other fields too
-                    event.m_item.m_text = GetItemText(lItem);
-                    event.m_item.m_data = GetItemData(lItem);
+                    LV_KEYDOWN *info = (LV_KEYDOWN *)lParam;
+                    WORD wVKey = info->wVKey;
+
+                    // get the current selection
+                    long lItem = GetNextItem(-1,
+                                             wxLIST_NEXT_ALL,
+                                             wxLIST_STATE_SELECTED);
+
+                    // <Enter> or <Space> activate the selected item if any (but
+                    // not with Shift and/or Ctrl as then they have a predefined
+                    // meaning for the list view)
+                    if ( lItem != -1 &&
+                         (wVKey == VK_RETURN || wVKey == VK_SPACE) &&
+                         !(wxIsShiftDown() || wxIsCtrlDown()) )
+                    {
+                        eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+                    }
+                    else
+                    {
+                        eventType = wxEVT_COMMAND_LIST_KEY_DOWN;
+                        event.m_code = wxCharCodeMSWToWX(wVKey);
+                    }
+
+                    event.m_itemIndex =
+                    event.m_item.m_itemId = lItem;
+
+                    if ( lItem != -1 )
+                    {
+                        // fill the other fields too
+                        event.m_item.m_text = GetItemText(lItem);
+                        event.m_item.m_data = GetItemData(lItem);
+                    }
                 }
-            }
-            break;
+                break;
 
-        case NM_DBLCLK:
-            // if the user processes it in wxEVT_COMMAND_LEFT_CLICK(), don't do
-            // anything else
-            if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
-            {
-                return TRUE;
-            }
+            case NM_DBLCLK:
+                // if the user processes it in wxEVT_COMMAND_LEFT_CLICK(), don't do
+                // anything else
+                if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
+                {
+                    return TRUE;
+                }
 
-            // else translate it into wxEVT_COMMAND_LIST_ITEM_ACTIVATED event
-            // if it happened on an item (and not on empty place)
-            if ( nmLV->iItem == -1 )
-            {
-                // not on item
-                return FALSE;
-            }
+                // else translate it into wxEVT_COMMAND_LIST_ITEM_ACTIVATED event
+                // if it happened on an item (and not on empty place)
+                if ( nmLV->iItem == -1 )
+                {
+                    // not on item
+                    return FALSE;
+                }
 
-            eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
-            event.m_itemIndex = nmLV->iItem;
-            event.m_item.m_text = GetItemText(nmLV->iItem);
-            event.m_item.m_data = GetItemData(nmLV->iItem);
-            break;
+                eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+                event.m_itemIndex = nmLV->iItem;
+                event.m_item.m_text = GetItemText(nmLV->iItem);
+                event.m_item.m_data = GetItemData(nmLV->iItem);
+                break;
 
-        case NM_RCLICK:
-            /* TECH NOTE: NM_RCLICK isn't really good enough here. We want to
-               subclass and check for the actual WM_RBUTTONDOWN message,
-               because NM_RCLICK waits for the WM_RBUTTONUP message as well
-               before firing off. We want to have notify events for both down
-               -and- up. */
-            {
+            case NM_RCLICK:
                 // if the user processes it in wxEVT_COMMAND_RIGHT_CLICK(),
                 // don't do anything else
                 if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
@@ -1667,89 +1748,76 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         event.m_pointDrag.y = lvhti.pt.y;
                     }
                 }
-            }
-            break;
-
-#if 0
-        case NM_MCLICK: // ***** THERE IS NO NM_MCLICK. Subclass anyone? ******
-            {
-                // if the user processes it in wxEVT_COMMAND_MIDDLE_CLICK(), don't do
-                // anything else
-                if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
-                {
-                    return TRUE;
-                }
-
-                // else translate it into wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK event
-                eventType = wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK;
-                NMITEMACTIVATE* hdr = (NMITEMACTIVATE*)lParam;
-                event.m_itemIndex = hdr->iItem;
-            }
-            break;
-#endif // 0
+                break;
 
 #if defined(_WIN32_IE) && _WIN32_IE >= 0x300 \
-    && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
-        case NM_CUSTOMDRAW:
-            *result = OnCustomDraw(lParam);
-
-            return TRUE;
-#endif // _WIN32_IE >= 0x300
-
-        case LVN_ODCACHEHINT:
-            {
-                const NM_CACHEHINT *cacheHint = (NM_CACHEHINT *)lParam;
-
-                eventType = wxEVT_COMMAND_LIST_CACHE_HINT;
-
-                // we get some really stupid cache hints like ones for items in
-                // range 0..0 for an empty control or, after deleting an item,
-                // for items in invalid range - filter this garbage out
-                if ( cacheHint->iFrom < cacheHint->iTo )
-                {
-                    event.m_oldItemIndex = cacheHint->iFrom;
-
-                    long iMax = GetItemCount();
-                    event.m_itemIndex = cacheHint->iTo < iMax ? cacheHint->iTo
-                                                              : iMax - 1;
-                }
-                else
-                {
-                    return FALSE;
-                }
-            }
-            break;
-
-        case LVN_GETDISPINFO:
-            if ( IsVirtual() )
-            {
-                LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-
-                LV_ITEM& lvi = info->item;
-                long item = lvi.iItem;
-
-                if ( lvi.mask & LVIF_TEXT )
-                {
-                    wxString text = OnGetItemText(item, lvi.iSubItem);
-                    wxStrncpy(lvi.pszText, text, lvi.cchTextMax);
-                }
-
-                if ( lvi.mask & LVIF_IMAGE )
-                {
-                    lvi.iImage = OnGetItemImage(item);
-                }
-
-                // a little dose of healthy paranoia: as we never use
-                // LVM_SETCALLBACKMASK we're not supposed to get these ones
-                wxASSERT_MSG( !(lvi.mask & LVIF_STATE),
-                              _T("we don't support state callbacks yet!") );
+        && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
+            case NM_CUSTOMDRAW:
+                *result = OnCustomDraw(lParam);
 
                 return TRUE;
-            }
-            // fall through
+#endif // _WIN32_IE >= 0x300
 
-        default:
-            return wxControl::MSWOnNotify(idCtrl, lParam, result);
+            case LVN_ODCACHEHINT:
+                {
+                    const NM_CACHEHINT *cacheHint = (NM_CACHEHINT *)lParam;
+
+                    eventType = wxEVT_COMMAND_LIST_CACHE_HINT;
+
+                    // we get some really stupid cache hints like ones for items in
+                    // range 0..0 for an empty control or, after deleting an item,
+                    // for items in invalid range - filter this garbage out
+                    if ( cacheHint->iFrom < cacheHint->iTo )
+                    {
+                        event.m_oldItemIndex = cacheHint->iFrom;
+
+                        long iMax = GetItemCount();
+                        event.m_itemIndex = cacheHint->iTo < iMax ? cacheHint->iTo
+                                                                  : iMax - 1;
+                    }
+                    else
+                    {
+                        return FALSE;
+                    }
+                }
+                break;
+
+            case LVN_GETDISPINFO:
+                if ( IsVirtual() )
+                {
+                    LV_DISPINFO *info = (LV_DISPINFO *)lParam;
+
+                    LV_ITEM& lvi = info->item;
+                    long item = lvi.iItem;
+
+                    if ( lvi.mask & LVIF_TEXT )
+                    {
+                        wxString text = OnGetItemText(item, lvi.iSubItem);
+                        wxStrncpy(lvi.pszText, text, lvi.cchTextMax);
+                    }
+
+                    if ( lvi.mask & LVIF_IMAGE )
+                    {
+                        lvi.iImage = OnGetItemImage(item);
+                    }
+
+                    // a little dose of healthy paranoia: as we never use
+                    // LVM_SETCALLBACKMASK we're not supposed to get these ones
+                    wxASSERT_MSG( !(lvi.mask & LVIF_STATE),
+                                  _T("we don't support state callbacks yet!") );
+
+                    return TRUE;
+                }
+                // fall through
+
+            default:
+                return wxControl::MSWOnNotify(idCtrl, lParam, result);
+        }
+    }
+    else
+    {
+        // where did this one come from?
+        return FALSE;
     }
 
     // process the event
