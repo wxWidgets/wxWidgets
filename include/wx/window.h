@@ -753,7 +753,7 @@ private:
 // forward dependencies
 // ----------------------------------------------------------------------------
 
-wxWindow *wxWindowBase::GetGrandParent() const
+inline wxWindow *wxWindowBase::GetGrandParent() const
 {
     return m_parent ? m_parent->GetParent() : (wxWindow *)NULL;
 }
