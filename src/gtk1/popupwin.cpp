@@ -141,11 +141,11 @@ static void wxInsertChildInDialog( wxPopupWindow* parent, wxWindow* child )
 // wxPopupWindow
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxPopupWindow,wxPopupWindowBase)
-    EVT_SIZE    (wxPopupWindow::OnSize)
+BEGIN_EVENT_TABLE(wxPopupWindow, wxPopupWindowBase)
+    EVT_SIZE(wxPopupWindow::OnSize)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow,wxPopupWindowBase)
+IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
 
 bool wxPopupWindow::Create( wxWindow *parent, int style )
 {

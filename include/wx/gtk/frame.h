@@ -70,10 +70,6 @@ public:
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; };
 
-#if wxUSE_MENUS
-    virtual void SetMenuBar( wxMenuBar *menuBar );
-#endif // wxUSE_MENUS
-
 #if wxUSE_STATUSBAR
     virtual void PositionStatusBar();
 
@@ -134,8 +130,13 @@ protected:
     virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize( int *width, int *height ) const;
 
+#if wxUSE_MENUS_NATIVE
+    virtual void DetachMenuBar();
+    virtual void AttachMenuBar(wxMenuBar *menubar);
+#endif // wxUSE_MENUS_NATIVE
+
     // is the frame currently iconized?
-    bool          m_isIconized;
+    bool m_isIconized;
 };
 
 #endif // __GTKFRAMEH__

@@ -300,8 +300,7 @@ void wxComboControl::DoMoveWindow(int x, int y, int width, int height)
     width -= rectBorders.x + rectBorders.width;
     height -= rectBorders.y + rectBorders.height;
 
-    wxSize sizeBtn = m_btn->GetSize(),
-           sizeText = m_text->GetSize();
+    wxSize sizeBtn = m_btn->GetSize();
 
     wxCoord wText = width - sizeBtn.x;
     m_text->SetSize(x, y, wText, height);

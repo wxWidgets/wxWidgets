@@ -50,7 +50,6 @@ public:
     virtual void Iconize(bool iconize = TRUE);
     virtual bool IsIconized() const;
     virtual void Restore();
-    virtual void SetMenuBar(wxMenuBar *menubar);
     virtual void SetIcon(const wxIcon& icon);
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; };
@@ -134,10 +133,10 @@ protected:
 
     virtual void DoSetClientSize(int width, int height);
 
-    // helper
-    void DetachMenuBar();
-
 #if wxUSE_MENUS_NATIVE
+    // perform MSW-specific action when menubar is changed
+    virtual void AttachMenuBar(wxMenuBar *menubar);
+
     // a plug in for MDI frame classes which need to do something special when
     // the menubar is set
     virtual void InternalSetMenuBar();

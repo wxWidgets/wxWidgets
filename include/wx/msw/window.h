@@ -28,14 +28,6 @@
 // a better solution should be found later...
 #define wxUSE_MOUSEEVENT_HACK 0
 
-// when building wxUniv/MSW we don't want the code for native menu use to be
-// compiled in - it should only be used when building real wxMSW
-#ifdef __WXUNIVERSAL__
-    #define wxUSE_MENUS_NATIVE 0
-#else // __WXMSW__
-    #define wxUSE_MENUS_NATIVE wxUSE_MENUS
-#endif // __WXUNIVERSAL__/__WXMSW__
-
 // ---------------------------------------------------------------------------
 // constants
 // ---------------------------------------------------------------------------

@@ -256,6 +256,7 @@ dragimag.cpp	MSW
 dropsrc.cpp	MSW	OLE
 droptgt.cpp	MSW	OLE
 enhmeta.cpp	MSW	Win32Only
+evtloop.cpp	MSW	LowLevel
 filedlg.cpp	MSW
 font.cpp	MSW
 fontdlg.cpp	MSW
@@ -390,6 +391,7 @@ dcmemory.cpp	GTK	LowLevel
 dcscreen.cpp	GTK	LowLevel
 dialog.cpp	GTK	LowLevel
 dnd.cpp	GTK	LowLevel
+evtloop.cpp	GTK	LowLevel
 font.cpp	GTK	LowLevel
 fontdlg.cpp	GTK
 frame.cpp	GTK	LowLevel

@@ -4,15 +4,15 @@
 // Author:      Robert Roebling
 // Created:
 // Id:          $Id$
-// Copyright:   (c) 1998 Robert Roebling
-// Licence:           wxWindows licence
+// Copyright:   (c) 2001 Robert Roebling
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GTKPOPUPWINH__
 #define __GTKPOPUPWINH__
 
 #ifdef __GNUG__
-#pragma interface
+    #pragma interface "popupwin.h"
 #endif
 
 #include "wx/defs.h"

@@ -2260,11 +2260,13 @@ wxWindow *wxGetActiveWindow()
 // wxWindowGTK
 //-----------------------------------------------------------------------------
 
+// in wxUniv/MSW this class is abstract because it doesn't have DoPopupMenu()
+// method
 #ifdef __WXUNIVERSAL__
-    IMPLEMENT_DYNAMIC_CLASS(wxWindowGTK, wxWindowBase)
-#else
+    IMPLEMENT_ABSTRACT_CLASS(wxWindowGTK, wxWindowBase)
+#else // __WXGTK__
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
-#endif
+#endif // __WXUNIVERSAL__/__WXGTK__
 
 void wxWindowGTK::Init()
 {
@@ -3605,7 +3607,7 @@ void wxWindowGTK::ApplyWidgetStyle()
 // Pop-up menu stuff
 //-----------------------------------------------------------------------------
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
 
 static void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
 {
@@ -3677,7 +3679,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     return TRUE;
 }
 
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
 #if wxUSE_DRAG_AND_DROP
 

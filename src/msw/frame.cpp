@@ -486,24 +486,10 @@ void wxFrameMSW::PositionStatusBar()
 }
 #endif // wxUSE_STATUSBAR
 
-void wxFrameMSW::DetachMenuBar()
-{
-#if wxUSE_MENUS
-    if ( m_frameMenuBar )
-    {
-        m_frameMenuBar->Detach();
-        m_frameMenuBar = NULL;
-    }
-#endif // wxUSE_MENUS
-}
-
-void wxFrameMSW::SetMenuBar(wxMenuBar *menubar)
-{
-#if wxUSE_MENUS
-    // detach the old menu bar in any case
-    DetachMenuBar();
-
 #if wxUSE_MENUS_NATIVE
+
+void wxFrameMSW::AttachMenuBar(wxMenuBar *menubar)
+{
     if ( !menubar )
     {
         // actually remove the menu from the frame
@@ -519,7 +505,7 @@ void wxFrameMSW::SetMenuBar(wxMenuBar *menubar)
         }
         else
         {
-            if (menubar->IsAttached())
+            if ( menubar->IsAttached() )
                 menubar->Detach();
 
             m_hMenu = menubar->Create();
@@ -530,17 +516,7 @@ void wxFrameMSW::SetMenuBar(wxMenuBar *menubar)
 
         InternalSetMenuBar();
     }
-#endif // wxUSE_MENUS_NATIVE
-
-    if ( menubar )
-    {
-        m_frameMenuBar = menubar;
-        menubar->Attach((wxFrame *)this);
-    }
-#endif // wxUSE_MENUS
 }
-
-#if wxUSE_MENUS_NATIVE
 
 void wxFrameMSW::InternalSetMenuBar()
 {

@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "popupwin.h"
+    #pragma implementation "popupwinbase.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".

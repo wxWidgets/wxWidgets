@@ -13,7 +13,7 @@
 #define _WX_POPUPWIN_H_BASE_
 
 #ifdef __GNUG__
-    #pragma interface "popupwin.h"
+    #pragma interface "popupwinbase.h"
 #endif
 
 #include "wx/window.h"

@@ -8,12 +8,15 @@ UNIVOBJS = \
 		colschem.o \
 		control.o \
 		combobox.o \
+        evtloop.o \
 		framuniv.o \
 		gauge.o \
 		gtk.o \
 		inphand.o \
 		listbox.o \
+        menu.o \
 		notebook.o \
+		popupcmn.o \
 		radiobox.o \
 		radiobut.o \
 		renderer.o \

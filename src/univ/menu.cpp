@@ -2038,7 +2038,7 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
                 }
                 else // right
                 {
-                    if ( ++currentNew == (int)count )
+                    if ( ++currentNew == count )
                         currentNew = 0;
                 }
 
@@ -2263,7 +2263,7 @@ void wxMenuBar::OnDismissMenu(bool dismissMenuBar)
 
 void wxMenuBar::OnDismiss()
 {
-    ReleaseCapture();
+    ReleaseMouse();
 
     if ( m_current != -1 )
     {

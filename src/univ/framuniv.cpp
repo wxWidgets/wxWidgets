@@ -41,11 +41,7 @@ BEGIN_EVENT_TABLE(wxFrame, wxFrameNative)
     EVT_SIZE(wxFrame::OnSize)
 END_EVENT_TABLE()
 
-#if defined(__WXMSW__)
-    IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxFrameMSW)
-#elif defined(__WXGTK__)
-    IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxFrameGTK)
-#endif
+IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 
 // ----------------------------------------------------------------------------
 // ctors

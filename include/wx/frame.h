@@ -105,7 +105,7 @@ public:
     // ------------------
 
 #if wxUSE_MENUS
-    virtual void SetMenuBar(wxMenuBar *menubar) = 0;
+    virtual void SetMenuBar(wxMenuBar *menubar);
     virtual wxMenuBar *GetMenuBar() const { return m_frameMenuBar; }
 #endif // wxUSE_MENUS
 
@@ -199,6 +199,14 @@ protected:
 #if wxUSE_MENUS
     // override to update menu bar position when the frame size changes
     virtual void PositionMenuBar() { }
+
+    // override to do something special when the menu bar is being removed
+    // from the frame
+    virtual void DetachMenuBar();
+
+    // override to do something special when the menu bar is attached to the
+    // frame
+    virtual void AttachMenuBar(wxMenuBar *menubar);
 
     wxMenuBar *m_frameMenuBar;
 #endif // wxUSE_MENUS

@@ -4027,17 +4027,24 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 
     if ( m_lineFrom == (size_t)-1 )
     {
-        m_lineFrom = GetScrollPos(wxVERTICAL);
-
         size_t count = GetItemCount();
+        if ( count )
+        {
+            m_lineFrom = GetScrollPos(wxVERTICAL);
 
-        wxASSERT_MSG( m_lineFrom < count, _T("invalid scroll position?") );
+            wxASSERT_MSG( m_lineFrom < count, _T("invalid scroll position?") );
 
-        // we redraw one extra line but this is needed to make the redrawing
-        // logic work when there is a fractional number of lines on screen
-        m_lineTo = m_lineFrom + m_linesPerPage;
-        if ( m_lineTo >= count )
-            m_lineTo = count - 1;
+            // we redraw one extra line but this is needed to make the redrawing
+            // logic work when there is a fractional number of lines on screen
+            m_lineTo = m_lineFrom + m_linesPerPage;
+            if ( m_lineTo >= count )
+                m_lineTo = count - 1;
+        }
+        else // empty control
+        {
+            m_lineFrom = 0;
+            m_lineTo = (size_t)-1;
+        }
     }
 
     wxASSERT_MSG( m_lineFrom <= m_lineTo && m_lineTo < GetItemCount(),

@@ -321,6 +321,13 @@ bool wxFrameBase::SendIconizeEvent(bool iconized)
     return GetEventHandler()->ProcessEvent(event);
 }
 
+void wxFrameBase::OnIdle(wxIdleEvent& WXUNUSED(event) )
+{
+#if wxUSE_MENUS
+    DoMenuUpdates();
+#endif // wxUSE_MENUS
+}
+
 // ----------------------------------------------------------------------------
 // status bar stuff
 // ----------------------------------------------------------------------------
@@ -449,15 +456,8 @@ wxToolBar* wxFrameBase::OnCreateToolBar(long style,
 #endif // wxUSE_TOOLBAR
 
 // ----------------------------------------------------------------------------
-// Menu UI updating
+// menus
 // ----------------------------------------------------------------------------
-
-void wxFrameBase::OnIdle(wxIdleEvent& WXUNUSED(event) )
-{
-#if wxUSE_MENUS
-    DoMenuUpdates();
-#endif // wxUSE_MENUS
-}
 
 #if wxUSE_MENUS
 
@@ -508,6 +508,37 @@ void wxFrameBase::DoMenuUpdates(wxMenu* menu, wxWindow* focusWin)
         }
         node = node->GetNext();
     }
+}
+
+void wxFrameBase::DetachMenuBar()
+{
+    if ( m_frameMenuBar )
+    {
+        m_frameMenuBar->Detach();
+        m_frameMenuBar = NULL;
+    }
+}
+
+void wxFrameBase::AttachMenuBar(wxMenuBar *menubar)
+{
+    if ( menubar )
+    {
+        m_frameMenuBar = menubar;
+        menubar->Attach((wxFrame *)this);
+    }
+}
+
+void wxFrameBase::SetMenuBar(wxMenuBar *menubar)
+{
+    if ( menubar == GetMenuBar() )
+    {
+        // nothing to do
+        return;
+    }
+
+    DetachMenuBar();
+
+    AttachMenuBar(menubar);
 }
 
 #endif // wxUSE_MENUS

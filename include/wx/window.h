@@ -36,6 +36,14 @@
     #include "wx/accel.h"
 #endif // wxUSE_ACCEL
 
+// when building wxUniv/Foo we don't want the code for native menu use to be
+// compiled in - it should only be used when building real wxFoo
+#ifdef __WXUNIVERSAL__
+    #define wxUSE_MENUS_NATIVE 0
+#else // __WXMSW__
+    #define wxUSE_MENUS_NATIVE wxUSE_MENUS
+#endif // __WXUNIVERSAL__/__WXMSW__
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------

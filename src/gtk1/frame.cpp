@@ -153,7 +153,8 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
     return TRUE;
 }
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
+
 //-----------------------------------------------------------------------------
 // "child_attached" of menu bar
 //-----------------------------------------------------------------------------
@@ -177,7 +178,8 @@ static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
     win->m_menuBarDetached = TRUE;
     win->GtkUpdateSize();
 }
-#endif // wxUSE_MENUS
+
+#endif // wxUSE_MENUS_NATIVE
 
 #if wxUSE_TOOLBAR
 //-----------------------------------------------------------------------------
@@ -1050,17 +1052,14 @@ void wxFrameGTK::OnInternalIdle()
 // menu/tool/status bar stuff
 // ----------------------------------------------------------------------------
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS_NATIVE
 
-void wxFrameGTK::SetMenuBar( wxMenuBar *menuBar )
+void wxFrameGTK::DetachMenuBar()
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
 
-    if (menuBar == m_frameMenuBar)
-        return;
-
-    if (m_frameMenuBar)
+    if ( m_frameMenuBar )
     {
         m_frameMenuBar->UnsetInvokingWindow( this );
 
@@ -1078,7 +1077,12 @@ void wxFrameGTK::SetMenuBar( wxMenuBar *menuBar )
         gtk_widget_unparent( m_frameMenuBar->m_widget );
     }
 
-    m_frameMenuBar = menuBar;
+    wxFrameBase::DetachMenuBar();
+}
+
+void wxFrameGTK::AttachMenuBar( wxMenuBar *menuBar )
+{
+    wxFrameBase::AttachMenuBar(menuBar);
 
     if (m_frameMenuBar)
     {
@@ -1108,7 +1112,7 @@ void wxFrameGTK::SetMenuBar( wxMenuBar *menuBar )
     m_sizeSet = FALSE;
 }
 
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS_NATIVE
 
 #if wxUSE_TOOLBAR
 
