@@ -92,10 +92,11 @@ void wxShapeCanvas::OnPaint(wxPaintEvent& event)
 
     PrepareDC(dc);
 
+    dc.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
     dc.Clear();
 
-	if (GetDiagram())
-		GetDiagram()->Redraw(dc);
+    if (GetDiagram())
+        GetDiagram()->Redraw(dc);
 }
 
 void wxShapeCanvas::OnMouseEvent(wxMouseEvent& event)
