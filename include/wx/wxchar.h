@@ -113,6 +113,11 @@
     // time.h functions  -- none defined in tchar.h
     #define  wxAsctime   asctime
     #define  wxCtime     ctime
+#elif defined(__MWERKS__)
+    // for wcslen
+    #if wxUSE_WCHAR_T
+    #include <wchar.h>
+    #endif
 #endif // compilers with (good) TCHAR support
 
 #ifdef wxHAVE_TCHAR_FUNCTIONS
