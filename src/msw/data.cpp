@@ -152,6 +152,9 @@ const char *wxDoubleToStringStr = "%.2f";
 const char *wxUserResourceStr = "TEXT";
 #endif
 
+#if USE_POSTSCRIPT
+wxPrintPaperDatabase* wxThePrintPaperDatabase = NULL;
+#endif
 
 #if USE_SHARED_LIBRARY
 /*

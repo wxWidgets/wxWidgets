@@ -46,14 +46,22 @@ public:
 	}
 };
 
+// Here's a macro you can use if your compiler
+// really, really wants main() to be in your main program
+// (e.g. hello.cpp).
+// Now IMPLEMENT_APP should add this code if required.
+
+#if defined(AIX) || defined(AIX4) /* || defined(____HPUX__) */
+#define IMPLEMENT_WXWIN_MAIN int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
+#else
+#define IMPLEMENT_WXWIN_MAIN
+#endif
+
 #define IMPLEMENT_APP(appname)                          \
         wxApp *wxCreateApp(void) { return new appname; }      \
 		wxAppInitializer wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp); \
         appname& wxGetApp(void) { return *(appname *)wxTheApp; } \
-\
-        extern int wxEntry( int argc, char *argv[] ); \
-        int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
-
+        IMPLEMENT_WXWIN_MAIN
 
 #define DECLARE_APP(appname) \
 	extern appname& wxGetApp(void) ;
