@@ -633,8 +633,6 @@ class GridCellCoords(object):
         elif index == 1: self.SetCol(val)
         else: raise IndexError
 
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxGridCellCoords instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
 class GridCellCoordsPtr(GridCellCoords):
     def __init__(self, this):

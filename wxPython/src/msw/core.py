@@ -674,8 +674,6 @@ class Size(object):
     def __getstate__(self):              return self.asTuple()
     def __setstate__(self, state):       self.Set(*state)
 
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxSize instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
 class SizePtr(Size):
     def __init__(self, this):
@@ -717,8 +715,6 @@ class RealPoint(object):
     def __getstate__(self):              return self.asTuple()
     def __setstate__(self, state):       self.Set(*state)
 
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxRealPoint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
 class RealPointPtr(RealPoint):
     def __init__(self, this):
@@ -762,8 +758,6 @@ class Point(object):
     def __getstate__(self):              return self.asTuple()
     def __setstate__(self, state):       self.Set(*state)
 
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPoint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
 class PointPtr(Point):
     def __init__(self, this):
@@ -837,8 +831,6 @@ class Rect(object):
     def __getstate__(self):              return self.asTuple()
     def __setstate__(self, state):       self.Set(*state)
 
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxRect instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
 class RectPtr(Rect):
     def __init__(self, this):
@@ -910,8 +902,6 @@ class Point2D(object):
     def __setstate__(self, state):       self.Set(*state)
 
 
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPoint2D instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
 class Point2DPtr(Point2D):
     def __init__(self, this):

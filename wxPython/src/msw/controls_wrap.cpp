@@ -30,6 +30,23 @@ private:
 
 #include "Python.h"
 
+/*************************************************************** -*- c -*-
+ * python/precommon.swg
+ *
+ * Rename all exported symbols from common.swg, to avoid symbol
+ * clashes if multiple interpreters are included
+ *
+ ************************************************************************/
+
+#define SWIG_TypeRegister    SWIG_Python_TypeRegister
+#define SWIG_TypeCheck       SWIG_Python_TypeCheck
+#define SWIG_TypeCast        SWIG_Python_TypeCast
+#define SWIG_TypeDynamicCast SWIG_Python_TypeDynamicCast
+#define SWIG_TypeName        SWIG_Python_TypeName
+#define SWIG_TypeQuery       SWIG_Python_TypeQuery
+#define SWIG_TypeClientData  SWIG_Python_TypeClientData
+
+
 /***********************************************************************
  * common.swg for wxPython
  *
@@ -146,15 +163,42 @@ typedef struct swig_const_info {
 
 
 
-SWIGIMPORT(PyObject *)        SWIG_newvarlink(void);
-SWIGIMPORT(void)              SWIG_addvarlink(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
-SWIGIMPORT(int)               SWIG_ConvertPtr(PyObject *, void **, swig_type_info *, int);
-SWIGIMPORT(int)               SWIG_ConvertPacked(PyObject *, void *, int sz, swig_type_info *, int);
-SWIGIMPORT(char *)            SWIG_PackData(char *c, void *, int);
-SWIGIMPORT(char *)            SWIG_UnpackData(char *c, void *, int);
-SWIGIMPORT(PyObject *)        SWIG_NewPointerObj(void *, swig_type_info *,int own);
-SWIGIMPORT(PyObject *)        SWIG_NewPackedObj(void *, int sz, swig_type_info *);
-SWIGIMPORT(void)              SWIG_InstallConstants(PyObject *d, swig_const_info constants[]);
+/* Common SWIG API */
+#define SWIG_ConvertPtr(obj, pp, type, flags) \
+  SWIG_Python_ConvertPtr(obj, pp, type, flags)
+#define SWIG_NewPointerObj(p, type, flags) \
+  SWIG_Python_NewPointerObj(p, type, flags)
+#define SWIG_MustGetPtr(p, type, argnum, flags) \
+  SWIG_Python_MustGetPtr(p, type, argnum, flags)
+
+/* Python-specific SWIG API */
+#define SWIG_newvarlink() \
+  SWIG_Python_newvarlink()
+#define SWIG_addvarlink(p, name, get_attr, set_attr) \
+  SWIG_Python_addvarlink(p, name, get_attr, set_attr)
+#define SWIG_ConvertPacked(obj, ptr, sz, ty, flags) \
+  SWIG_Python_ConvertPacked(obj, ptr, sz, ty, flags)
+#define SWIG_PackData(c, ptr, sz) \
+  SWIG_Python_PackData(c, ptr, sz)
+#define SWIG_UnpackData(c, ptr, sz) \
+  SWIG_Python_UnpackData(c, ptr, sz)
+#define SWIG_NewPackedObj(ptr, sz, type) \
+  SWIG_Python_NewPackedObj(ptr, sz, type)
+#define SWIG_InstallConstants(d, constants) \
+  SWIG_Python_InstallConstants(d, constants)
+
+
+SWIGEXPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
+SWIGEXPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
+SWIGEXPORT(void *)	      SWIG_Python_MustGetPtr(PyObject *, swig_type_info *, int, int);
+
+SWIGEXPORT(PyObject *)        SWIG_Python_newvarlink(void);
+SWIGEXPORT(void)              SWIG_Python_addvarlink(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
+SWIGEXPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int sz, swig_type_info *, int);
+SWIGEXPORT(char *)            SWIG_Python_PackData(char *c, void *, int);
+SWIGEXPORT(char *)            SWIG_Python_UnpackData(char *c, void *, int);
+SWIGEXPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
+SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
 
 /* Contract support */
@@ -188,77 +232,76 @@ SWIGIMPORT(void)              SWIG_InstallConstants(PyObject *d, swig_const_info
 #define  SWIGTYPE_p_wxEvent swig_types[8] 
 #define  SWIGTYPE_p_wxGenericDirCtrl swig_types[9] 
 #define  SWIGTYPE_p_bool swig_types[10] 
-#define  SWIGTYPE_p_wxTreeItemData swig_types[11] 
-#define  SWIGTYPE_p_wxPyTreeItemData swig_types[12] 
-#define  SWIGTYPE_p_wxItemContainer swig_types[13] 
+#define  SWIGTYPE_p_wxPyTreeItemData swig_types[11] 
+#define  SWIGTYPE_p_wxItemContainer swig_types[12] 
+#define  SWIGTYPE_p_wxDirFilterListCtrl swig_types[13] 
 #define  SWIGTYPE_p_wxPyListCtrl swig_types[14] 
-#define  SWIGTYPE_p_wxDirFilterListCtrl swig_types[15] 
-#define  SWIGTYPE_p_wxStaticLine swig_types[16] 
-#define  SWIGTYPE_p_wxControl swig_types[17] 
-#define  SWIGTYPE_p_wxPyControl swig_types[18] 
-#define  SWIGTYPE_p_wxGauge swig_types[19] 
-#define  SWIGTYPE_p_wxToolBarBase swig_types[20] 
-#define  SWIGTYPE_p_wxFont swig_types[21] 
-#define  SWIGTYPE_p_wxToggleButton swig_types[22] 
-#define  SWIGTYPE_p_wxRadioButton swig_types[23] 
-#define  SWIGTYPE_p_wxChoice swig_types[24] 
-#define  SWIGTYPE_p_wxListItemAttr swig_types[25] 
-#define  SWIGTYPE_p_int swig_types[26] 
-#define  SWIGTYPE_p_wxSize swig_types[27] 
-#define  SWIGTYPE_p_wxListView swig_types[28] 
-#define  SWIGTYPE_p_wxIcon swig_types[29] 
-#define  SWIGTYPE_p_wxTextCtrl swig_types[30] 
-#define  SWIGTYPE_p_wxNotebook swig_types[31] 
-#define  SWIGTYPE_p_wxNotifyEvent swig_types[32] 
-#define  SWIGTYPE_p_wxArrayString swig_types[33] 
-#define  SWIGTYPE_p_wxListbook swig_types[34] 
-#define  SWIGTYPE_p_wxStaticBitmap swig_types[35] 
-#define  SWIGTYPE_p_wxSlider swig_types[36] 
-#define  SWIGTYPE_p_wxStaticBox swig_types[37] 
-#define  SWIGTYPE_p_wxArrayInt swig_types[38] 
-#define  SWIGTYPE_p_wxContextHelp swig_types[39] 
-#define  SWIGTYPE_p_long swig_types[40] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[41] 
-#define  SWIGTYPE_p_wxListEvent swig_types[42] 
-#define  SWIGTYPE_p_wxListBox swig_types[43] 
-#define  SWIGTYPE_p_wxCheckListBox swig_types[44] 
-#define  SWIGTYPE_p_wxBookCtrl swig_types[45] 
-#define  SWIGTYPE_p_wxSpinButton swig_types[46] 
-#define  SWIGTYPE_p_wxButton swig_types[47] 
-#define  SWIGTYPE_p_wxBitmapButton swig_types[48] 
-#define  SWIGTYPE_p_wxRect swig_types[49] 
-#define  SWIGTYPE_p_wxContextHelpButton swig_types[50] 
-#define  SWIGTYPE_p_wxRadioBox swig_types[51] 
-#define  SWIGTYPE_p_wxScrollBar swig_types[52] 
-#define  SWIGTYPE_p_wxTreeItemId swig_types[53] 
-#define  SWIGTYPE_p_wxComboBox swig_types[54] 
-#define  SWIGTYPE_p_wxHelpEvent swig_types[55] 
-#define  SWIGTYPE_p_wxListItem swig_types[56] 
-#define  SWIGTYPE_p_wxNotebookSizer swig_types[57] 
-#define  SWIGTYPE_p_wxSpinCtrl swig_types[58] 
-#define  SWIGTYPE_p_wxImageList swig_types[59] 
-#define  SWIGTYPE_p_wxHelpProvider swig_types[60] 
-#define  SWIGTYPE_p_wxTextAttr swig_types[61] 
-#define  SWIGTYPE_p_wxSimpleHelpProvider swig_types[62] 
-#define  SWIGTYPE_p_wxPoint swig_types[63] 
-#define  SWIGTYPE_p_wxListbookEvent swig_types[64] 
-#define  SWIGTYPE_p_wxNotebookEvent swig_types[65] 
-#define  SWIGTYPE_p_wxObject swig_types[66] 
-#define  SWIGTYPE_p_wxKeyEvent swig_types[67] 
-#define  SWIGTYPE_p_wxWindow swig_types[68] 
-#define  SWIGTYPE_p_wxString swig_types[69] 
-#define  SWIGTYPE_p_wxBitmap swig_types[70] 
-#define  SWIGTYPE_p_wxTreeEvent swig_types[71] 
-#define  SWIGTYPE_p_wxMouseEvent swig_types[72] 
-#define  SWIGTYPE_p_wxCommandEvent swig_types[73] 
-#define  SWIGTYPE_p_wxStaticText swig_types[74] 
-#define  SWIGTYPE_p_wxControlWithItems swig_types[75] 
-#define  SWIGTYPE_p_wxToolBarToolBase swig_types[76] 
-#define  SWIGTYPE_p_wxColour swig_types[77] 
-#define  SWIGTYPE_p_wxToolBar swig_types[78] 
-#define  SWIGTYPE_p_wxBookCtrlSizer swig_types[79] 
-#define  SWIGTYPE_p_wxValidator swig_types[80] 
-static swig_type_info *swig_types[82];
+#define  SWIGTYPE_p_wxStaticLine swig_types[15] 
+#define  SWIGTYPE_p_wxControl swig_types[16] 
+#define  SWIGTYPE_p_wxPyControl swig_types[17] 
+#define  SWIGTYPE_p_wxGauge swig_types[18] 
+#define  SWIGTYPE_p_wxToolBarBase swig_types[19] 
+#define  SWIGTYPE_p_wxFont swig_types[20] 
+#define  SWIGTYPE_p_wxToggleButton swig_types[21] 
+#define  SWIGTYPE_p_wxRadioButton swig_types[22] 
+#define  SWIGTYPE_p_wxChoice swig_types[23] 
+#define  SWIGTYPE_p_wxListItemAttr swig_types[24] 
+#define  SWIGTYPE_p_int swig_types[25] 
+#define  SWIGTYPE_p_wxSize swig_types[26] 
+#define  SWIGTYPE_p_wxListView swig_types[27] 
+#define  SWIGTYPE_p_wxIcon swig_types[28] 
+#define  SWIGTYPE_p_wxTextCtrl swig_types[29] 
+#define  SWIGTYPE_p_wxNotebook swig_types[30] 
+#define  SWIGTYPE_p_wxNotifyEvent swig_types[31] 
+#define  SWIGTYPE_p_wxArrayString swig_types[32] 
+#define  SWIGTYPE_p_wxListbook swig_types[33] 
+#define  SWIGTYPE_p_wxStaticBitmap swig_types[34] 
+#define  SWIGTYPE_p_wxSlider swig_types[35] 
+#define  SWIGTYPE_p_wxStaticBox swig_types[36] 
+#define  SWIGTYPE_p_wxArrayInt swig_types[37] 
+#define  SWIGTYPE_p_wxContextHelp swig_types[38] 
+#define  SWIGTYPE_p_long swig_types[39] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[40] 
+#define  SWIGTYPE_p_wxListEvent swig_types[41] 
+#define  SWIGTYPE_p_wxListBox swig_types[42] 
+#define  SWIGTYPE_p_wxCheckListBox swig_types[43] 
+#define  SWIGTYPE_p_wxBookCtrl swig_types[44] 
+#define  SWIGTYPE_p_wxSpinButton swig_types[45] 
+#define  SWIGTYPE_p_wxButton swig_types[46] 
+#define  SWIGTYPE_p_wxBitmapButton swig_types[47] 
+#define  SWIGTYPE_p_wxRect swig_types[48] 
+#define  SWIGTYPE_p_wxContextHelpButton swig_types[49] 
+#define  SWIGTYPE_p_wxRadioBox swig_types[50] 
+#define  SWIGTYPE_p_wxScrollBar swig_types[51] 
+#define  SWIGTYPE_p_wxTreeItemId swig_types[52] 
+#define  SWIGTYPE_p_wxComboBox swig_types[53] 
+#define  SWIGTYPE_p_wxHelpEvent swig_types[54] 
+#define  SWIGTYPE_p_wxListItem swig_types[55] 
+#define  SWIGTYPE_p_wxNotebookSizer swig_types[56] 
+#define  SWIGTYPE_p_wxSpinCtrl swig_types[57] 
+#define  SWIGTYPE_p_wxImageList swig_types[58] 
+#define  SWIGTYPE_p_wxHelpProvider swig_types[59] 
+#define  SWIGTYPE_p_wxTextAttr swig_types[60] 
+#define  SWIGTYPE_p_wxSimpleHelpProvider swig_types[61] 
+#define  SWIGTYPE_p_wxPoint swig_types[62] 
+#define  SWIGTYPE_p_wxListbookEvent swig_types[63] 
+#define  SWIGTYPE_p_wxNotebookEvent swig_types[64] 
+#define  SWIGTYPE_p_wxObject swig_types[65] 
+#define  SWIGTYPE_p_wxKeyEvent swig_types[66] 
+#define  SWIGTYPE_p_wxWindow swig_types[67] 
+#define  SWIGTYPE_p_wxString swig_types[68] 
+#define  SWIGTYPE_p_wxBitmap swig_types[69] 
+#define  SWIGTYPE_p_wxTreeEvent swig_types[70] 
+#define  SWIGTYPE_p_wxMouseEvent swig_types[71] 
+#define  SWIGTYPE_p_wxCommandEvent swig_types[72] 
+#define  SWIGTYPE_p_wxStaticText swig_types[73] 
+#define  SWIGTYPE_p_wxControlWithItems swig_types[74] 
+#define  SWIGTYPE_p_wxToolBarToolBase swig_types[75] 
+#define  SWIGTYPE_p_wxColour swig_types[76] 
+#define  SWIGTYPE_p_wxToolBar swig_types[77] 
+#define  SWIGTYPE_p_wxBookCtrlSizer swig_types[78] 
+#define  SWIGTYPE_p_wxValidator swig_types[79] 
+static swig_type_info *swig_types[81];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -564,8 +607,13 @@ wxWindow *wxPyListCtrl_GetMainWindow(wxPyListCtrl *self){
     const wxChar* wx_TreeCtrlNameStr = _T("wxTreeCtrl");
     DECLARE_DEF_STRING(_TreeCtrlNameStr);
 
-bool wxTreeItemId_operator_ee___(wxTreeItemId *self,wxTreeItemId const &other){
-            return *self == other;
+bool wxTreeItemId_operator_ee___(wxTreeItemId *self,wxTreeItemId const *other){
+            if (!other) return false;
+            return *self == *other;
+        }
+bool wxTreeItemId_operator_Ne___(wxTreeItemId *self,wxTreeItemId const *other){
+            if (!other) return true;
+            return *self != *other;
         }
 void wxPyTreeItemData_Destroy(wxPyTreeItemData *self){ delete self; }
  // C++ version of Python aware wxTreeCtrl
@@ -19858,7 +19906,7 @@ static PyObject *_wrap_TreeItemId_IsOk(PyObject *self, PyObject *args, PyObject 
 static PyObject *_wrap_TreeItemId___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTreeItemId *arg1 = (wxTreeItemId *) 0 ;
-    wxTreeItemId *arg2 = 0 ;
+    wxTreeItemId *arg2 = (wxTreeItemId *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -19869,12 +19917,37 @@ static PyObject *_wrap_TreeItemId___eq__(PyObject *self, PyObject *args, PyObjec
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeItemId___eq__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTreeItemId,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTreeItemId,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxTreeItemId_operator_ee___(arg1,(wxTreeItemId const &)*arg2);
+        result = (bool)wxTreeItemId_operator_ee___(arg1,(wxTreeItemId const *)arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_TreeItemId___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxTreeItemId *arg1 = (wxTreeItemId *) 0 ;
+    wxTreeItemId *arg2 = (wxTreeItemId *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeItemId___ne__",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxTreeItemId,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxTreeItemId,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxTreeItemId_operator_Ne___(arg1,(wxTreeItemId const *)arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -22200,7 +22273,7 @@ static PyObject *_wrap_TreeCtrl_AddRoot(PyObject *self, PyObject *args, PyObject
     wxString *arg2 = 0 ;
     int arg3 = (int) -1 ;
     int arg4 = (int) -1 ;
-    wxTreeItemData *arg5 = (wxTreeItemData *) NULL ;
+    wxPyTreeItemData *arg5 = (wxPyTreeItemData *) NULL ;
     wxTreeItemId result;
     bool temp2 = false ;
     PyObject * obj0 = 0 ;
@@ -22218,7 +22291,7 @@ static PyObject *_wrap_TreeCtrl_AddRoot(PyObject *self, PyObject *args, PyObject
         temp2 = true;
     }
     if (obj4) {
-        if ((SWIG_ConvertPtr(obj4,(void **) &arg5, SWIGTYPE_p_wxTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj4,(void **) &arg5, SWIGTYPE_p_wxPyTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -22253,7 +22326,7 @@ static PyObject *_wrap_TreeCtrl_PrependItem(PyObject *self, PyObject *args, PyOb
     wxString *arg3 = 0 ;
     int arg4 = (int) -1 ;
     int arg5 = (int) -1 ;
-    wxTreeItemData *arg6 = (wxTreeItemData *) NULL ;
+    wxPyTreeItemData *arg6 = (wxPyTreeItemData *) NULL ;
     wxTreeItemId result;
     bool temp3 = false ;
     PyObject * obj0 = 0 ;
@@ -22276,7 +22349,7 @@ static PyObject *_wrap_TreeCtrl_PrependItem(PyObject *self, PyObject *args, PyOb
         temp3 = true;
     }
     if (obj5) {
-        if ((SWIG_ConvertPtr(obj5,(void **) &arg6, SWIGTYPE_p_wxTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj5,(void **) &arg6, SWIGTYPE_p_wxPyTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -22312,7 +22385,7 @@ static PyObject *_wrap_TreeCtrl_InsertItem(PyObject *self, PyObject *args, PyObj
     wxString *arg4 = 0 ;
     int arg5 = (int) -1 ;
     int arg6 = (int) -1 ;
-    wxTreeItemData *arg7 = (wxTreeItemData *) NULL ;
+    wxPyTreeItemData *arg7 = (wxPyTreeItemData *) NULL ;
     wxTreeItemId result;
     bool temp4 = false ;
     PyObject * obj0 = 0 ;
@@ -22340,7 +22413,7 @@ static PyObject *_wrap_TreeCtrl_InsertItem(PyObject *self, PyObject *args, PyObj
         temp4 = true;
     }
     if (obj6) {
-        if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_wxTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_wxPyTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -22376,7 +22449,7 @@ static PyObject *_wrap_TreeCtrl_InsertItemBefore(PyObject *self, PyObject *args,
     wxString *arg4 = 0 ;
     int arg5 = (int) -1 ;
     int arg6 = (int) -1 ;
-    wxTreeItemData *arg7 = (wxTreeItemData *) NULL ;
+    wxPyTreeItemData *arg7 = (wxPyTreeItemData *) NULL ;
     wxTreeItemId result;
     bool temp4 = false ;
     PyObject * obj0 = 0 ;
@@ -22402,7 +22475,7 @@ static PyObject *_wrap_TreeCtrl_InsertItemBefore(PyObject *self, PyObject *args,
         temp4 = true;
     }
     if (obj6) {
-        if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_wxTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_wxPyTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -22437,7 +22510,7 @@ static PyObject *_wrap_TreeCtrl_AppendItem(PyObject *self, PyObject *args, PyObj
     wxString *arg3 = 0 ;
     int arg4 = (int) -1 ;
     int arg5 = (int) -1 ;
-    wxTreeItemData *arg6 = (wxTreeItemData *) NULL ;
+    wxPyTreeItemData *arg6 = (wxPyTreeItemData *) NULL ;
     wxTreeItemId result;
     bool temp3 = false ;
     PyObject * obj0 = 0 ;
@@ -22460,7 +22533,7 @@ static PyObject *_wrap_TreeCtrl_AppendItem(PyObject *self, PyObject *args, PyObj
         temp3 = true;
     }
     if (obj5) {
-        if ((SWIG_ConvertPtr(obj5,(void **) &arg6, SWIGTYPE_p_wxTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj5,(void **) &arg6, SWIGTYPE_p_wxPyTreeItemData,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -25920,6 +25993,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_TreeItemId", (PyCFunction) _wrap_delete_TreeItemId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeItemId_IsOk", (PyCFunction) _wrap_TreeItemId_IsOk, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeItemId___eq__", (PyCFunction) _wrap_TreeItemId___eq__, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"TreeItemId___ne__", (PyCFunction) _wrap_TreeItemId___ne__, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeItemId_m_pItem_set", (PyCFunction) _wrap_TreeItemId_m_pItem_set, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeItemId_m_pItem_get", (PyCFunction) _wrap_TreeItemId_m_pItem_get, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TreeItemId_swigregister", TreeItemId_swigregister, METH_VARARGS },
@@ -27057,11 +27131,10 @@ static swig_type_info _swigt__p_wxPyTreeCtrl[] = {{"_p_wxPyTreeCtrl", 0, "wxPyTr
 static swig_type_info _swigt__p_wxEvent[] = {{"_p_wxEvent", 0, "wxEvent *", 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxEvent},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxEvent},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxEvent},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxEvent},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxEvent},{"_p_wxTreeEvent", _p_wxTreeEventTo_p_wxEvent},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxEvent},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxEvent},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxEvent},{"_p_wxTextUrlEvent", _p_wxTextUrlEventTo_p_wxEvent},{"_p_wxBookCtrlEvent", _p_wxBookCtrlEventTo_p_wxEvent},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxEvent},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxEvent},{"_p_wxListEvent", _p_wxListEventTo_p_wxEvent},{"_p_wxHelpEvent", _p_wxHelpEventTo_p_wxEvent},{"_p_wxNotebookEvent", _p_wxNotebookEventTo_p_wxEvent},{"_p_wxListbookEvent", _p_wxListbookEventTo_p_wxEvent},{"_p_wxEvent"},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxEvent},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxEvent},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxEvent},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxEvent},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxEvent},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxEvent},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxEvent},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxEvent},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxEvent},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxEvent},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxEvent},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxEvent},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxEvent},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxEvent},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxEvent},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxEvent},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxEvent},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxEvent},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxEvent},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxEvent},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxEvent},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxEvent},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxEvent},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxEvent},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxEvent},{0}};
 static swig_type_info _swigt__p_wxGenericDirCtrl[] = {{"_p_wxGenericDirCtrl", 0, "wxGenericDirCtrl *", 0},{"_p_wxGenericDirCtrl"},{0}};
 static swig_type_info _swigt__p_bool[] = {{"_p_bool", 0, "bool *", 0},{"_p_bool"},{0}};
-static swig_type_info _swigt__p_wxTreeItemData[] = {{"_p_wxTreeItemData", 0, "wxTreeItemData *", 0},{"_p_wxTreeItemData"},{0}};
 static swig_type_info _swigt__p_wxPyTreeItemData[] = {{"_p_wxPyTreeItemData", 0, "wxPyTreeItemData *", 0},{"_p_wxPyTreeItemData"},{0}};
 static swig_type_info _swigt__p_wxItemContainer[] = {{"_p_wxItemContainer", 0, "wxItemContainer *", 0},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxItemContainer},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxItemContainer},{"_p_wxChoice", _p_wxChoiceTo_p_wxItemContainer},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxItemContainer},{"_p_wxListBox", _p_wxListBoxTo_p_wxItemContainer},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxItemContainer},{"_p_wxItemContainer"},{0}};
-static swig_type_info _swigt__p_wxPyListCtrl[] = {{"_p_wxPyListCtrl", 0, "wxPyListCtrl *", 0},{"_p_wxPyListCtrl"},{"_p_wxListView", _p_wxListViewTo_p_wxPyListCtrl},{0}};
 static swig_type_info _swigt__p_wxDirFilterListCtrl[] = {{"_p_wxDirFilterListCtrl", 0, "wxDirFilterListCtrl *", 0},{"_p_wxDirFilterListCtrl"},{0}};
+static swig_type_info _swigt__p_wxPyListCtrl[] = {{"_p_wxPyListCtrl", 0, "wxPyListCtrl *", 0},{"_p_wxPyListCtrl"},{"_p_wxListView", _p_wxListViewTo_p_wxPyListCtrl},{0}};
 static swig_type_info _swigt__p_wxStaticLine[] = {{"_p_wxStaticLine", 0, "wxStaticLine *", 0},{"_p_wxStaticLine"},{0}};
 static swig_type_info _swigt__p_wxControl[] = {{"_p_wxControl", 0, "wxControl *", 0},{"_p_wxBookCtrl", _p_wxBookCtrlTo_p_wxControl},{"_p_wxToolBar", _p_wxToolBarTo_p_wxControl},{"_p_wxToggleButton", _p_wxToggleButtonTo_p_wxControl},{"_p_wxRadioButton", _p_wxRadioButtonTo_p_wxControl},{"_p_wxControl"},{"_p_wxPyControl", _p_wxPyControlTo_p_wxControl},{"_p_wxToolBarBase", _p_wxToolBarBaseTo_p_wxControl},{"_p_wxPyListCtrl", _p_wxPyListCtrlTo_p_wxControl},{"_p_wxDirFilterListCtrl", _p_wxDirFilterListCtrlTo_p_wxControl},{"_p_wxComboBox", _p_wxComboBoxTo_p_wxControl},{"_p_wxGenericDirCtrl", _p_wxGenericDirCtrlTo_p_wxControl},{"_p_wxScrollBar", _p_wxScrollBarTo_p_wxControl},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxControl},{"_p_wxGauge", _p_wxGaugeTo_p_wxControl},{"_p_wxStaticLine", _p_wxStaticLineTo_p_wxControl},{"_p_wxListbook", _p_wxListbookTo_p_wxControl},{"_p_wxPyTreeCtrl", _p_wxPyTreeCtrlTo_p_wxControl},{"_p_wxCheckBox", _p_wxCheckBoxTo_p_wxControl},{"_p_wxRadioBox", _p_wxRadioBoxTo_p_wxControl},{"_p_wxCheckListBox", _p_wxCheckListBoxTo_p_wxControl},{"_p_wxListBox", _p_wxListBoxTo_p_wxControl},{"_p_wxChoice", _p_wxChoiceTo_p_wxControl},{"_p_wxListView", _p_wxListViewTo_p_wxControl},{"_p_wxNotebook", _p_wxNotebookTo_p_wxControl},{"_p_wxStaticBitmap", _p_wxStaticBitmapTo_p_wxControl},{"_p_wxSpinCtrl", _p_wxSpinCtrlTo_p_wxControl},{"_p_wxStaticText", _p_wxStaticTextTo_p_wxControl},{"_p_wxStaticBox", _p_wxStaticBoxTo_p_wxControl},{"_p_wxSlider", _p_wxSliderTo_p_wxControl},{"_p_wxBitmapButton", _p_wxBitmapButtonTo_p_wxControl},{"_p_wxButton", _p_wxButtonTo_p_wxControl},{"_p_wxSpinButton", _p_wxSpinButtonTo_p_wxControl},{"_p_wxContextHelpButton", _p_wxContextHelpButtonTo_p_wxControl},{"_p_wxTextCtrl", _p_wxTextCtrlTo_p_wxControl},{0}};
 static swig_type_info _swigt__p_wxPyControl[] = {{"_p_wxPyControl", 0, "wxPyControl *", 0},{"_p_wxPyControl"},{0}};
@@ -27140,11 +27213,10 @@ _swigt__p_wxPyTreeCtrl,
 _swigt__p_wxEvent, 
 _swigt__p_wxGenericDirCtrl, 
 _swigt__p_bool, 
-_swigt__p_wxTreeItemData, 
 _swigt__p_wxPyTreeItemData, 
 _swigt__p_wxItemContainer, 
-_swigt__p_wxPyListCtrl, 
 _swigt__p_wxDirFilterListCtrl, 
+_swigt__p_wxPyListCtrl, 
 _swigt__p_wxStaticLine, 
 _swigt__p_wxControl, 
 _swigt__p_wxPyControl, 

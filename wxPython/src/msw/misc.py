@@ -1707,8 +1707,6 @@ class DateTime(object):
     def __str__(self):
         return self.Format()
 
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxDateTime instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
 class DateTimePtr(DateTime):
     def __init__(self, this):
@@ -1832,8 +1830,6 @@ class TimeSpan(object):
     def __str__(self):
         return self.Format()
 
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxTimeSpan instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
 class TimeSpanPtr(TimeSpan):
     def __init__(self, this):
