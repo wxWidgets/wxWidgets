@@ -217,6 +217,8 @@ enum
     LogicalOrigin_MoveUp,
     LogicalOrigin_MoveLeft,
     LogicalOrigin_MoveRight,
+    LogicalOrigin_Set,
+    LogicalOrigin_Restore,
 
     Colour_TextForeground,
     Colour_TextBackground,
@@ -1025,12 +1027,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuMapMode->Append( MapMode_Metric, "&METRIC map mode" );
 
     wxMenu *menuUserScale = new wxMenu;
-    menuUserScale->Append( UserScale_StretchHoriz, "Stretch horizontally\tCtrl-H" );
-    menuUserScale->Append( UserScale_ShrinkHoriz, "Shrink  horizontally\tCtrl-G" );
-    menuUserScale->Append( UserScale_StretchVertic, "Stretch vertically\tCtrl-V" );
-    menuUserScale->Append( UserScale_ShrinkVertic, "Shrink vertically\tCtrl-W" );
+    menuUserScale->Append( UserScale_StretchHoriz, "Stretch &horizontally\tCtrl-H" );
+    menuUserScale->Append( UserScale_ShrinkHoriz, "Shrin&k horizontally\tCtrl-G" );
+    menuUserScale->Append( UserScale_StretchVertic, "Stretch &vertically\tCtrl-V" );
+    menuUserScale->Append( UserScale_ShrinkVertic, "&Shrink vertically\tCtrl-W" );
     menuUserScale->AppendSeparator();
-    menuUserScale->Append( UserScale_Restore, "Restore to normal\tCtrl-0" );
+    menuUserScale->Append( UserScale_Restore, "&Restore to normal\tCtrl-0" );
 
     wxMenu *menuAxis = new wxMenu;
     menuAxis->Append( AxisMirror_Horiz, "Mirror horizontally\tCtrl-M", "", TRUE );
@@ -1041,21 +1043,24 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuLogical->Append( LogicalOrigin_MoveUp, "Move &up\tCtrl-U" );
     menuLogical->Append( LogicalOrigin_MoveLeft, "Move &right\tCtrl-L" );
     menuLogical->Append( LogicalOrigin_MoveRight, "Move &left\tCtrl-R" );
+    menuLogical->AppendSeparator();
+    menuLogical->Append( LogicalOrigin_Set, "Set to (&100, 100)\tShift-Ctrl-1" );
+    menuLogical->Append( LogicalOrigin_Restore, "&Restore to normal\tShift-Ctrl-0" );
 
     wxMenu *menuColour = new wxMenu;
-    menuColour->Append( Colour_TextForeground, "Text foreground..." );
-    menuColour->Append( Colour_TextBackground, "Text background..." );
-    menuColour->Append( Colour_Background, "Background colour..." );
-    menuColour->Append( Colour_BackgroundMode, "Opaque/transparent\tCtrl-B", "", TRUE );
-    menuColour->Append( Colour_TextureBackgound, "Draw textured background\tCtrl-T", "", TRUE);
+    menuColour->Append( Colour_TextForeground, "Text &foreground..." );
+    menuColour->Append( Colour_TextBackground, "Text &background..." );
+    menuColour->Append( Colour_Background, "Background &colour..." );
+    menuColour->Append( Colour_BackgroundMode, "&Opaque/transparent\tCtrl-B", "", TRUE );
+    menuColour->Append( Colour_TextureBackgound, "Draw textured back&ground\tCtrl-T", "", TRUE);
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(menuFile, "&File");
-    menuBar->Append(menuMapMode, "&MapMode");
-    menuBar->Append(menuUserScale, "&UserScale");
+    menuBar->Append(menuMapMode, "&Mode");
+    menuBar->Append(menuUserScale, "&Scale");
     menuBar->Append(menuAxis, "&Axis");
-    menuBar->Append(menuLogical, "&LogicalOrigin");
+    menuBar->Append(menuLogical, "&Origin");
     menuBar->Append(menuColour, "&Colours");
 
     // ... and attach this menu bar to the frame
@@ -1138,6 +1143,14 @@ void MyFrame::OnOption(wxCommandEvent& event)
         case LogicalOrigin_MoveRight:
             m_xLogicalOrigin -= 10;
             break;
+        case LogicalOrigin_Set:
+            m_xLogicalOrigin =
+            m_yLogicalOrigin = -100;
+            break;
+        case LogicalOrigin_Restore:
+            m_xLogicalOrigin =
+            m_yLogicalOrigin = 0;
+            break;
 
         case UserScale_StretchHoriz:
             m_xUserScale *= 1.10;
@@ -1197,10 +1210,10 @@ void MyFrame::OnOption(wxCommandEvent& event)
 
 void MyFrame::PrepareDC(wxDC& dc)
 {
-    dc.SetMapMode( m_mapMode );
-    dc.SetUserScale( m_xUserScale, m_yUserScale );
     dc.SetLogicalOrigin( m_xLogicalOrigin, m_yLogicalOrigin );
     dc.SetAxisOrientation( !m_xAxisReversed, m_yAxisReversed );
+    dc.SetUserScale( m_xUserScale, m_yUserScale );
+    dc.SetMapMode( m_mapMode );
 }
 
 wxColour MyFrame::SelectColour()
