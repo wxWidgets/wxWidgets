@@ -983,8 +983,15 @@ void wxWindowBase::InheritAttributes()
         if ( parent->m_inheritFgCol && !m_hasFgCol )
             SetForegroundColour(parent->GetForegroundColour());
 
+        // inheriting (solid) background colour is wrong as it totally breaks
+        // any kind of themed backgrounds
+        //
+        // instead, the controls should use the same background as their parent
+        // (ideally by not drawing it at all)
+#if 0
         if ( parent->m_inheritBgCol && !m_hasBgCol )
             SetBackgroundColour(parent->GetBackgroundColour());
+#endif // 0
     }
 }
 
