@@ -52,6 +52,10 @@
 
 #include "wx/tokenzr.h"
 
+#ifndef OFN_EXPLORER
+    #define OFN_EXPLORER 0x00080000
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -242,12 +246,18 @@ int wxFileDialog::ShowModal()
         msw_flags |= OFN_HIDEREADONLY;
     if ( m_dialogStyle & wxFILE_MUST_EXIST )
         msw_flags |= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
     if (m_dialogStyle & wxMULTIPLE )
-        msw_flags |=
-#if defined(OFN_EXPLORER)
-        OFN_EXPLORER |
-#endif // OFN_EXPLORER
-        OFN_ALLOWMULTISELECT;
+    {
+        // OFN_EXPLORER must always be specified with OFN_ALLOWMULTISELECT
+        msw_flags |= OFN_EXPLORER | OFN_ALLOWMULTISELECT;
+    }
+
+    // if wxCHANGE_DIR flag is not given we shouldn't change the CWD
+    if ( !(m_dialogStyle & wxCHANGE_DIR) )
+    {
+        msw_flags |= OFN_NOCHANGEDIR;
+    }
 
     OPENFILENAME of;
     wxZeroMemory(of);
