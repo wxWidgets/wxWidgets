@@ -266,6 +266,7 @@ END_EVENT_TABLE()
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size):
  wxScrolledWindow(parent, -1, pos, size, wxSUNKEN_BORDER)
 {
+    SetBackgroundColour(* wxWHITE);
 }
 
 // Define the repainting behaviour

@@ -171,7 +171,7 @@ copy %src\docs\winhelp\dialoged.hlp %src\docs\winhelp\dialoged.cnt bin
 copy %src\docs\winhelp\tex2rtf.hlp %src\docs\winhelp\tex2rtf.cnt bin
 
 Rem Make wxMSW-xxx.zip
-zip32 ..\wxMSW-%version%.zip *
+zip32 -r ..\wxMSW-%version%.zip *
 
 rem Time to regenerate the WISE install script, wxwin2.wse.
 rem NB: if you've changed wxwin2.wse using WISE, call splitwise.exe
@@ -213,7 +213,7 @@ ren setup.w07 s
 ren s setup.w07
 
 rem Put all the setup files into a single zip archive.
-zip32 wxWindows-%version%-setup.zip readme.txt setup.*
+zip32 wxMSW-%version%-setup.zip readme.txt setup.*
 
 echo wxWindows archived.
 

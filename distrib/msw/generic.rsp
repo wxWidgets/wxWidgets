@@ -39,6 +39,7 @@ locale/*.po
 locale/*.mo
 
 docs/readme.txt
+docs/readme_vms.txt
 docs/install.txt
 docs/release.txt
 docs/changes.txt

@@ -25,6 +25,9 @@ cd $1
 echo Removing backup files...
 rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
 
+echo Setting permissions...
+chmod a+x $1/configure $1/config.sub $1/config.guess $1/samples/configure $1/demos/configure $1/contrib/configure
+
 rm -f $2/wxMotif-${WXVER}*.tgz
 rm -f $2/wxWindows*.tgz
 rm -f $2/tex2rtf2.tgz
@@ -35,28 +38,28 @@ rm -f $2/tiff.tgz
 echo Tarring...
 
 ### wxMotif
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/jpeg.rsp $1/distrib/msw/tiff.rsp` > /tmp/wxmotif.txt
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/utilmake.rsp $1/distrib/msw/jpeg.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/wx_html.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/utils.rsp` > /tmp/wxmotif.txt
 tar cvf $2/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
 gzip $2/wxMotif-${WXVER}.tar
 mv $2/wxMotif-${WXVER}.tar.gz $2/wxMotif-${WXVER}.tgz
 
 ### HTML docs
 ls `cat $1/distrib/msw/wx_html.rsp` > /tmp/html.txt
-tar cvf $2/wxWindows-${WXVER}-htm.tar -T /tmp/html.txt
-gzip $2/wxWindows-${WXVER}-htm.tar
-mv $2/wxWindows-${WXVER}-htm.tar.gz $2/wxWindows-${WXVER}-htm.tgz
+tar cvf $2/wxWindows-${WXVER}-HTML.tar -T /tmp/html.txt
+gzip $2/wxWindows-${WXVER}-HTML.tar
+mv $2/wxWindows-${WXVER}-HTML.tar.gz $2/wxWindows-${WXVER}-HTML.tgz
 
 ### HTB (wxHTML Help) docs
 ls `cat $1/distrib/msw/wx_htb.rsp` > /tmp/htb.txt
-tar cvf $2/wxWindows-${WXVER}-htb.tar -T /tmp/htb.txt
-gzip $2/wxWindows-${WXVER}-htb.tar
-mv $2/wxWindows-${WXVER}-htb.tar.gz $2/wxWindows-${WXVER}-htb.tgz
+tar cvf $2/wxWindows-${WXVER}-HTB.tar -T /tmp/htb.txt
+gzip $2/wxWindows-${WXVER}-HTB.tar
+mv $2/wxWindows-${WXVER}-HTB.tar.gz $2/wxWindows-${WXVER}-HTB.tgz
 
 ### PDF docs
 ls `cat $1/distrib/msw/wx_pdf.rsp` > /tmp/pdf.txt
-tar cvf $2/wxWindows-${WXVER}-pdf.tar -T /tmp/pdf.txt
-gzip $2/wxWindows-${WXVER}-pdf.tar
-mv $2/wxWindows-${WXVER}-pdf.tar.gz $2/wxWindows-${WXVER}-pdf.tgz
+tar cvf $2/wxWindows-${WXVER}-PDF.tar -T /tmp/pdf.txt
+gzip $2/wxWindows-${WXVER}-PDF.tar
+mv $2/wxWindows-${WXVER}-PDF.tar.gz $2/wxWindows-${WXVER}-PDF.tgz
 
 ### Stubs files
 #ls `cat $1/distrib/msw/stubs.rsp` > /tmp/stubs.txt

@@ -26,6 +26,11 @@ See also: todo.txt.
 - wxFrame can accept events, but apps cannot draw into it for
   Workaround: use an embedded wxWindow.
 
+- The background of a window sometimes isn't restored when changing
+  notebook pages (see sashtest, mdi examples). The notebook background
+  colour shows through. A resize, or scroll, restores the correct
+  background colour.
+
 - In Life! sample, text above slider isn't legible.
 
 - samples/html/helpview and samples/help demonstrate that sometimes,
