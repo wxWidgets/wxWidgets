@@ -305,8 +305,7 @@ class FindFiles:
                 f = f + "."
             else:
                 f = f + ch
-
-        return re.compile(f)
+        return re.compile(f+'$')
 
     def StripExt(self, file_nm):
         fl_fld = os.path.splitext(file_nm)
