@@ -283,7 +283,7 @@ enum
     wxEVT_PLOT_AREA_SEL_CREATED = wxEVT_FIRST + 1015,
     wxEVT_PLOT_AREA_SEL_CHANGING = wxEVT_FIRST + 1016,
     wxEVT_PLOT_AREA_SEL_CHANGED = wxEVT_FIRST + 1017,
-    wxEVT_PLOT_BEGIN_X_LABEL_EDIT = wxEVT_FIRST + 1020,  
+    wxEVT_PLOT_BEGIN_X_LABEL_EDIT = wxEVT_FIRST + 1020,
     wxEVT_PLOT_END_X_LABEL_EDIT = wxEVT_FIRST + 1021,
     wxEVT_PLOT_BEGIN_Y_LABEL_EDIT = wxEVT_FIRST + 1022,
     wxEVT_PLOT_END_Y_LABEL_EDIT = wxEVT_FIRST + 1023,
@@ -1510,7 +1510,7 @@ public:
                   wxObjectEventFunction func = NULL,
                   wxObject *userData = (wxObject *) NULL )
         { return Disconnect(id, -1, eventType, func, userData); }
-	
+
     // implementation from now on
     virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
     bool SearchDynamicEventTable( wxEvent& event );

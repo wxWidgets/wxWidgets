@@ -195,23 +195,38 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
 
 bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
+    wxString value;
+    int sel = -1;
     switch ( param )
     {
         case CBN_SELCHANGE:
-            if (GetSelection() > -1)
+            sel = GetSelection();
+            if ( sel > -1 )
             {
+                value = GetString(sel);
+
                 wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, GetId());
-                event.SetInt(GetSelection());
+                event.SetInt(sel);
                 event.SetEventObject(this);
-                event.SetString(GetStringSelection());
+                event.SetString(value);
                 ProcessCommand(event);
             }
-            break;
+            else
+            {
+                break;
+            }
+
+            // fall through: for compability with wxGTK, also send the text
+            // update event when the selection changes (this also seems more
+            // logical as the text does change)
 
         case CBN_EDITCHANGE:
             {
+                // if sel != -1, value was initialized above (and we can't use
+                // GetValue() here as it would return the old selection and we
+                // want the new one)
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
-                event.SetString(GetValue());
+                event.SetString(sel == -1 ? GetValue() : value);
                 event.SetEventObject(this);
                 ProcessCommand(event);
             }

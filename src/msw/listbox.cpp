@@ -235,6 +235,11 @@ void wxListBox::SetupColours()
     SetForegroundColour(GetParent()->GetForegroundColour());
 }
 
+bool wxListBox::HasMultipleSelection() const
+{
+    return (m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED);
+}
+
 // ----------------------------------------------------------------------------
 // implementation of wxListBoxBase methods
 // ----------------------------------------------------------------------------
@@ -446,11 +451,6 @@ void wxListBox::DoSetItemClientData(int n, void *clientData)
 
     if ( ListBox_SetItemData(GetHwnd(), n, clientData) == LB_ERR )
         wxLogDebug(wxT("LB_SETITEMDATA failed"));
-}
-
-bool wxListBox::HasMultipleSelection() const
-{
-    return (m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED);
 }
 
 // Return number of selections and an array of selected integers
