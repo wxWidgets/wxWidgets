@@ -251,6 +251,7 @@ WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 m_value = wxEmptyString;
             else
                 m_value = GetString(wParam);
+            m_selectionOld = -1;
             break;
     }
 
