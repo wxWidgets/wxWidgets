@@ -1904,20 +1904,23 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
     int itemCount = GetItemCount();
     int i;
-    for (i = 0; i < itemCount; i++)
+    if (drawHRules)
     {
-        if (GetItemRect(i, itemRect))
+        for (i = 0; i < itemCount; i++)
         {
-            cy = itemRect.GetTop();
-            if (i != 0) // Don't draw the first one
+            if (GetItemRect(i, itemRect))
             {
-                dc.DrawLine(0, cy, clientSize.x, cy);
-            }
-            // Draw last line
-            if (i == (GetItemCount() - 1))
-            {
-                cy = itemRect.GetBottom();
-                dc.DrawLine(0, cy, clientSize.x, cy);
+                cy = itemRect.GetTop();
+                if (i != 0) // Don't draw the first one
+                {
+                    dc.DrawLine(0, cy, clientSize.x, cy);
+                }
+                // Draw last line
+                if (i == (GetItemCount() - 1))
+                {
+                    cy = itemRect.GetBottom();
+                    dc.DrawLine(0, cy, clientSize.x, cy);
+                }
             }
         }
     }
