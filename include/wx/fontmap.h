@@ -204,7 +204,7 @@ private:
 
 #if wxUSE_GUI
     // wxEncodingToCodepage (utils.cpp) needs wxGetNativeFontEncoding
-    #include "wx/fontenc.h"
+    #include "wx/fontutil.h"
 #endif
 
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
