@@ -80,6 +80,17 @@ remaining compatible with "C".
 Switched gizmos.TreeListCtrl to the newer version of the code from the
 wxCode project.
 
+OGL is dead! LONG LIVE OGL!  (Oops, sorry.  A bit of my dramatic side
+leaked out there...)  The wx.ogl module has been deprecated in favor
+of the new Python port of the OGL library located at wx.lib.ogl
+contributed by Pierre Hjälm.  This will hopefully greatly extend the
+life of OGL within wxPython by making it more easily maintainable and
+less prone to getting rusty as there seems to be less and less
+interest in maintaining the C++ version.  At this point there are just
+a couple minor known compatibility differences, please see the
+MigrationGuide_ file for details.
+
+.. _MigrationGuide: MigrationGuide.html
 
 
 

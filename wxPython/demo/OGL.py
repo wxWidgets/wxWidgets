@@ -1,14 +1,18 @@
+# -*- coding: iso-8859-1 -*-
 # 11/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o Updated for wx namespace
 # 
+# 20040508 - Pierre Hjälm
+#
+# o Changed to use the python version of OGL
+# o Added TextShape, CompositeShape and CompositeShape with divisions
+#
 
-import  wx
-import  wx.ogl  as  ogl
+import wx
+import wx.lib.ogl as ogl
 
 import  images
-
-##wx.Trap()
 
 #----------------------------------------------------------------------
 
@@ -20,13 +24,6 @@ class DiamondShape(ogl.PolygonShape):
         if h == 0.0:
             h = 60.0
 
-        # Either ogl.RealPoints or 2-tuples of floats  works.
-
-        #points = [ ogl.RealPoint(0.0,    -h/2.0),
-        #          ogl.RealPoint(w/2.0,  0.0),
-        #          ogl.RealPoint(0.0,    h/2.0),
-        #          ogl.RealPoint(-w/2.0, 0.0),
-        #          ]
         points = [ (0.0,    -h/2.0),
                    (w/2.0,  0.0),
                    (0.0,    h/2.0),
@@ -44,6 +41,67 @@ class RoundedRectangleShape(ogl.RectangleShape):
         self.SetCornerRadius(-0.3)
 
 
+#----------------------------------------------------------------------
+
+class CompositeDivisionShape(ogl.CompositeShape):
+    def __init__(self, canvas):
+        ogl.CompositeShape.__init__(self)
+
+        self.SetCanvas(canvas)
+
+        # create a division in the composite
+        self.MakeContainer()
+
+        # add a shape to the original division
+        shape2 = ogl.RectangleShape(40, 60)
+        self.GetDivisions()[0].AddChild(shape2)
+
+        # now divide the division so we get 2
+        self.GetDivisions()[0].Divide(wx.HORIZONTAL)
+
+        # and add a shape to the second division (and move it to the
+        # centre of the division)
+        shape3 = ogl.CircleShape(40)
+        shape3.SetBrush(wx.CYAN_BRUSH)
+        self.GetDivisions()[1].AddChild(shape3)
+        shape3.SetX(self.GetDivisions()[1].GetX())
+
+        for division in self.GetDivisions():
+            division.SetSensitivityFilter(0)
+        
+#----------------------------------------------------------------------
+
+class CompositeShape(ogl.CompositeShape):
+    def __init__(self, canvas):
+        ogl.CompositeShape.__init__(self)
+
+        self.SetCanvas(canvas)
+
+        constraining_shape = ogl.RectangleShape(120, 100)
+        constrained_shape1 = ogl.CircleShape(50)
+        constrained_shape2 = ogl.RectangleShape(80, 20)
+
+        constraining_shape.SetBrush(wx.BLUE_BRUSH)
+        constrained_shape2.SetBrush(wx.RED_BRUSH)
+        
+        self.AddChild(constraining_shape)
+        self.AddChild(constrained_shape1)
+        self.AddChild(constrained_shape2)
+
+        constraint = ogl.Constraint(ogl.CONSTRAINT_MIDALIGNED_BOTTOM, constraining_shape, [constrained_shape1, constrained_shape2])
+        self.AddConstraint(constraint)
+        self.Recompute()
+
+        # If we don't do this, the shapes will be able to move on their
+        # own, instead of moving the composite
+        constraining_shape.SetDraggable(False)
+        constrained_shape1.SetDraggable(False)
+        constrained_shape2.SetDraggable(False)
+
+        # If we don't do this the shape will take all left-clicks for itself
+        constraining_shape.SetSensitivityFilter(0)
+
+        
 #----------------------------------------------------------------------
 
 class DividedShape(ogl.DividedShape):
@@ -88,7 +146,7 @@ class DividedShape(ogl.DividedShape):
 
     def OnSizingEndDragLeft(self, pt, x, y, keys, attch):
         print "***", self
-        self.base_OnSizingEndDragLeft(pt, x, y, keys, attch)
+        ogl.DividedShape.OnSizingEndDragLeft(self, pt, x, y, keys, attch)
         self.SetRegionSizes()
         self.ReformatRegions()
         self.GetCanvas().Refresh()
@@ -103,15 +161,14 @@ class MyEvtHandler(ogl.ShapeEvtHandler):
         self.statbarFrame = frame
 
     def UpdateStatusBar(self, shape):
-        x,y = shape.GetX(), shape.GetY()
+        x, y = shape.GetX(), shape.GetY()
         width, height = shape.GetBoundingBoxMax()
-        self.statbarFrame.SetStatusText("Pos: (%d,%d)  Size: (%d, %d)" %
+        self.statbarFrame.SetStatusText("Pos: (%d, %d)  Size: (%d, %d)" %
                                         (x, y, width, height))
 
 
-    def OnLeftClick(self, x, y, keys = 0, attachment = 0):
+    def OnLeftClick(self, x, y, keys=0, attachment=0):
         shape = self.GetShape()
-        print shape.__class__, shape.GetClassName()
         canvas = shape.GetCanvas()
         dc = wx.ClientDC(canvas)
         canvas.PrepareDC(dc)
@@ -142,9 +199,9 @@ class MyEvtHandler(ogl.ShapeEvtHandler):
         self.UpdateStatusBar(shape)
 
 
-    def OnEndDragLeft(self, x, y, keys = 0, attachment = 0):
+    def OnEndDragLeft(self, x, y, keys=0, attachment=0):
         shape = self.GetShape()
-        self.base_OnEndDragLeft(x, y, keys, attachment)
+        ogl.ShapeEvtHandler.OnEndDragLeft(self, x, y, keys, attachment)
 
         if not shape.Selected():
             self.OnLeftClick(x, y, keys, attachment)
@@ -153,12 +210,12 @@ class MyEvtHandler(ogl.ShapeEvtHandler):
 
 
     def OnSizingEndDragLeft(self, pt, x, y, keys, attch):
-        self.base_OnSizingEndDragLeft(pt, x, y, keys, attch)
+        ogl.ShapeEvtHandler.OnSizingEndDragLeft(self, pt, x, y, keys, attch)
         self.UpdateStatusBar(self.GetShape())
 
 
     def OnMovePost(self, dc, x, y, oldX, oldY, display):
-        self.base_OnMovePost(dc, x, y, oldX, oldY, display)
+        ogl.ShapeEvtHandler.OnMovePost(self, dc, x, y, oldX, oldY, display)
         self.UpdateStatusBar(self.GetShape())
 
 
@@ -189,28 +246,43 @@ class TestWindow(ogl.ShapeCanvas):
         dsBrush = wx.Brush("WHEAT", wx.SOLID)
 
         self.MyAddShape(
+            CompositeDivisionShape(self), 
+            310, 310, wx.BLACK_PEN, wx.BLUE_BRUSH, "Division"
+            )
+        
+        self.MyAddShape(
+            CompositeShape(self), 
+            100, 260, wx.BLACK_PEN, wx.RED_BRUSH, "Composite"
+            )
+        
+        self.MyAddShape(
             ogl.CircleShape(80), 
             100, 100, wx.Pen(wx.BLUE, 3), wx.GREEN_BRUSH, "Circle"
             )
             
+        self.MyAddShape(
+            ogl.TextShape(45, 30), 
+            205, 60, wx.GREEN_PEN, wx.LIGHT_GREY_BRUSH, "Text"
+            )
+
         self.MyAddShape(
             ogl.RectangleShape(85, 50), 
             305, 60, wx.BLACK_PEN, wx.LIGHT_GREY_BRUSH, "Rectangle"
             )
 
         ds = self.MyAddShape(
-                    DividedShape(140, 150, self), 
-                    495, 145, wx.BLACK_PEN, dsBrush, ''
-                    )
+            DividedShape(140, 150, self), 
+            515, 145, wx.BLACK_PEN, dsBrush, ''
+            )
 
         self.MyAddShape(
             DiamondShape(90, 90), 
-            345, 235, wx.Pen(wx.BLUE, 3, wx.DOT), wx.RED_BRUSH, "Polygon"
+            445, 305, wx.Pen(wx.BLUE, 3, wx.DOT), wx.RED_BRUSH, "Polygon"
             )
             
         self.MyAddShape(
-            RoundedRectangleShape(95,70), 
-            140, 255, wx.Pen(wx.RED, 2), rRectBrush, "Rounded Rect"
+            RoundedRectangleShape(95, 70), 
+            345, 145, wx.Pen(wx.RED, 2), rRectBrush, "Rounded Rect"
             )
 
         bmp = images.getTest2Bitmap()
@@ -219,7 +291,7 @@ class TestWindow(ogl.ShapeCanvas):
 
         s = ogl.BitmapShape()
         s.SetBitmap(bmp)
-        self.MyAddShape(s, 225, 150, None, None, "Bitmap")
+        self.MyAddShape(s, 225, 130, None, None, "Bitmap")
 
         dc = wx.ClientDC(self)
         self.PrepareDC(dc)
@@ -241,14 +313,15 @@ class TestWindow(ogl.ShapeCanvas):
             self.diagram.AddShape(line)
             line.Show(True)
 
-            # for some reason, the shapes have to be moved for the line to show up...
-            fromShape.Move(dc, fromShape.GetX(), fromShape.GetY())
-
-        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
-
 
     def MyAddShape(self, shape, x, y, pen, brush, text):
-        shape.SetDraggable(True, True)
+        # Composites have to be moved for all children to get in place
+        if isinstance(shape, ogl.CompositeShape):
+            dc = wx.ClientDC(self)
+            self.PrepareDC(dc)
+            shape.Move(dc, x, y)
+        else:
+            shape.SetDraggable(True, True)
         shape.SetCanvas(self)
         shape.SetX(x)
         shape.SetY(y)
@@ -266,16 +339,6 @@ class TestWindow(ogl.ShapeCanvas):
 
         self.shapes.append(shape)
         return shape
-
-
-    def OnDestroy(self, evt):
-        # Do some cleanup
-        for shape in self.diagram.GetShapeList():
-            if shape.GetParent() == None:
-                shape.SetCanvas(None)
-                shape.Destroy()
-
-        self.diagram.Destroy()
 
 
     def OnBeginDragLeft(self, x, y, keys):
@@ -298,25 +361,32 @@ def runTest(frame, nb, log):
     
 #----------------------------------------------------------------------
 
-# The OGL library holds some resources that need to be freed before
-# the app shuts down.
-class __Cleanup:
-    def __del__(self, cleanup=ogl.OGLCleanUp):
-        cleanup()
 
-# When this module gets cleaned up by Python then __cu will be cleaned
-# up and it's __dell__ is called, which will then call ogl.OGLCleanUp.
-__cu = __Cleanup()
+overview = """<html><body>
+<h2>Object Graphics Library</h2>
 
-
-overview = """\
 The Object Graphics Library is a library supporting the creation and
 manipulation of simple and complex graphic images on a canvas.
+
+<p>The OGL library was originally written in C++ and provided to
+wxPython via an extension module wrapper as is most of the rest of
+wxPython.  The code has now been ported to Python (with many thanks to
+Pierre Hjälm!) in order to make it be more easily maintainable and
+less likely to get rusty because nobody cares about the C++ lib any
+more.
+
+<p>The Python version should be mostly drop-in compatible with the
+wrapped C++ version, except for the location of the package
+(wx.lib.ogl instead of wx.ogl) and that the base class methods are
+called the normal Python way (superclass.Method(self, ...)) instead of the
+hacky way that had to be done to support overloaded methods with the
+old SWIG (self.base_Method(...))
+
 
 """
 
 if __name__ == '__main__':
-    import sys,os
+    import sys, os
     import run
     run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
 

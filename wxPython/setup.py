@@ -707,6 +707,7 @@ if __name__ == "__main__":
                           'wx.lib.editor',
                           'wx.lib.masked',
                           'wx.lib.mixins',
+                          'wx.lib.ogl',
                           'wx.py',
                           'wx.tools',
                           'wx.tools.XRCed',

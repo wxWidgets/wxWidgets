@@ -30,7 +30,7 @@ import images
 
 _treeList = [
     # new stuff
-    ('Recent Additions', [
+    ('Recent Additions and Updates', [
         'VListBox',
         'Listbook',
         'MaskedNumCtrl',

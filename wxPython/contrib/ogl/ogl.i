@@ -12,7 +12,7 @@
 
 %define DOCSTRING
 "The Object Graphics Library provides for simple drawing and manipulation
-of 2D objects."
+of 2D objects.  (This version is deprecated, please use wx.lib.ogl instead.)"
 %enddef
 %module(docstring=DOCSTRING) ogl
 
@@ -28,6 +28,12 @@ of 2D objects."
 %import windows.i
 %pythoncode { wx = _core }
 %pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
+
+%pythoncode {
+    import warnings
+    warnings.warn("This module is deprecated.  Please use the wx.lib.ogl pacakge instead.",    
+                  DeprecationWarning, stacklevel=2)
+}
 
 
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);

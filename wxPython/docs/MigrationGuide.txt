@@ -3,10 +3,10 @@ wxPython 2.5 Migration Guide
 ============================
 
 This document will help explain some of the major changes in wxPython
-2.5 and let you know what you need to do to adapt your programs to
-those changes.  Be sure to also check in the CHANGES_ file like
-usual to see info about the not so major changes and other things that
-have been added to wxPython.
+2.5 since the 2.4 series and let you know what you need to do to adapt
+your programs to those changes.  Be sure to also check in the CHANGES_
+file like usual to see info about the not so major changes and other
+things that have been added to wxPython.
 
 .. _CHANGES: CHANGES.html
 
@@ -20,8 +20,8 @@ The **wxWindows** project and library is now known as
 .. _here: http://www.wxwidgets.org/name.htm
 
 This won't really affect wxPython all that much, other than the fact
-that the wxwindows.org domain name will be changing to wxwidgets.org,
-so mail list, CVS, and etc. addresses will be changing.  We're going
+that the wxwindows.org domain name has changed to wxwidgets.org,
+so mail list, CVS, and etc. addresses have also changed.  We're going
 to try and smooth the transition as much as possible, but I wanted you
 all to be aware of this change if you run into any issues.
 
@@ -582,6 +582,34 @@ the TypeInfo provided, and there is also a copy of this function's
 output appended as a comment to the modules produced by the
 genaxmodule tool.  Beyond that you'll need to consult the docs
 provided by the makers of the ActiveX control that you are using.
+
+
+
+OGL is dead! LONG LIVE OGL!
+---------------------------
+
+The wx.ogl module has been deprecated in favor of the new Python port
+of the OGL library located at wx.lib.ogl contributed by Pierre Hjälm.
+This will hopefully greatly extend the life of OGL within wxPython by
+making it more easily maintainable and less prone to getting rusty as
+there seems to be less and less interest in maintaining the C++
+version.  
+
+There are only a few known compatibility issues at this time.  First
+is the location of OGL.  The deprecated version is located in the
+wx.ogl module, and the new version is in the wx.lib.ogl package.  So
+this just means that to start using the new version you need to adjust
+your imports.  So if your code currently has something like this::
+
+     import wx
+     import wx.ogl as ogl
+
+Then just change it to this::
+
+     import wx
+     import wx.lib.ogl as ogl
+
+
 
 
 
