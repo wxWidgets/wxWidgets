@@ -43,7 +43,7 @@ force-update:
 	$(RM) wxstd.po
 
 # print out the percentage of the trsnalted strings
-stats:
+stats: FORCE
 	@for i in $(WX_LINGUAS); do \
 		x=`$(MSGFMT) -o /dev/null "$$i.po" 2>&1 | sed -e 's/[,\.]//g' \
 			-e 's/\([0-9]\+\) translated messages/TR=\1/' \
@@ -55,6 +55,8 @@ stats:
 		echo "$$i.po `expr 100 "*" $$TR / $$TOTAL`% of $$TOTAL strings"; \
 	done
 
-.PHONY: allpo allmo force-update percentage
+FORCE:
+
+.PHONY: allpo allmo force-update percentage FORCE
 
 # $Id$
