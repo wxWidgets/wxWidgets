@@ -142,6 +142,7 @@ OBJECTS1=fs_inet.obj,\
 		socket.obj,\
 		settcmn.obj,\
 		statbar.obj,\
+		stockitem.obj,\
 		stopwatch.obj,\
 		strconv.obj,\
 		stream.obj,\
@@ -280,6 +281,7 @@ SOURCES = \
 		socket.cpp,\
 		settcmn.cpp,\
 		statbar.cpp,\
+		stockitem.cpp,\
 		stopwatch.cpp,\
 		strconv.cpp,\
 		stream.cpp,\
@@ -451,6 +453,7 @@ sizer.obj : sizer.cpp
 socket.obj : socket.cpp
 settcmn.obj : settcmn.cpp
 statbar.obj : statbar.cpp
+stockitem.obj : stockitem.cpp
 stopwatch.obj : stopwatch.cpp
 strconv.obj : strconv.cpp
 stream.obj : stream.cpp
