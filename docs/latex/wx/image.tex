@@ -270,7 +270,7 @@ Returns number of colours in the histogram.
 
 \membersection{wxImage::ConvertAlphaToMask}\label{wximageconvertalphatomask}
 
-\func{bool}{ConvertAlphaToMask}{\param{unsigned char}{ threshold = 128}}
+\func{bool}{ConvertAlphaToMask}{\param{unsigned char}{ threshold = $128$}}
 
 If the image has alpha channel, this method converts it to mask. All pixels
 with alpha value less than \arg{threshold} are replaced with mask colour
@@ -706,6 +706,15 @@ of a given handler class in an application session.}
 \wxheading{See also}
 
 \helpref{wxImageHandler}{wximagehandler}
+
+
+\membersection{wxImage::IsTransparent}\label{wximageistransparent}
+
+\constfunc{IsTransparent}{\param{int }{x}, \param{int }{y}, \param{unsigned char threshold = $128$}}
+
+Returns \true if the given pixel is transparent, i.e. either has the mask
+colour if this image has a mask or if this image has alpha channel and alpha
+value of this pixel is strictly less than \arg{threshold}.
 
 
 \membersection{wxImage::LoadFile}\label{wximageloadfile}

@@ -46,6 +46,13 @@ enum
     wxIMAGE_RESOLUTION_CM = 2
 };
 
+// alpha channel values: fully transparent, default threshold separating
+// transparent pixels from opaque for a few functions dealing with alpha and
+// fully opaque
+const unsigned char wxIMAGE_ALPHA_TRANSPARENT = 0;
+const unsigned char wxIMAGE_ALPHA_THRESHOLD = 0x80;
+const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
+
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
@@ -240,7 +247,7 @@ public:
 
     // converts image's alpha channel to mask, if it has any, does nothing
     // otherwise:
-    bool ConvertAlphaToMask(unsigned char threshold = 128);
+    bool ConvertAlphaToMask(unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
 
     // This method converts an image where the original alpha
     // information is only available as a shades of a colour
@@ -289,6 +296,11 @@ public:
     bool HasAlpha() const { return GetAlpha() != NULL; }
     void SetAlpha(unsigned char *alpha = NULL, bool static_data=false);
     void InitAlpha();
+
+    // return true if this pixel is masked or has alpha less than specified
+    // threshold
+    bool IsTransparent(int x, int y,
+                       unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD) const;
 
     // Mask functions
     void SetMaskColour( unsigned char r, unsigned char g, unsigned char b );

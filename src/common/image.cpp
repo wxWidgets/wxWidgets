@@ -787,6 +787,20 @@ wxImage wxImage::ConvertToMono( unsigned char r, unsigned char g, unsigned char 
     return image;
 }
 
+int wxImage::GetWidth() const
+{
+    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+
+    return M_IMGDATA->m_width;
+}
+
+int wxImage::GetHeight() const
+{
+    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+
+    return M_IMGDATA->m_height;
+}
+
 long wxImage::XYToIndex(int x, int y) const
 {
     if ( Ok() &&
@@ -1022,8 +1036,6 @@ void wxImage::InitAlpha()
     unsigned char *alpha = M_IMGDATA->m_alpha;
     const size_t lenAlpha = M_IMGDATA->m_width * M_IMGDATA->m_height;
 
-    static const unsigned char ALPHA_TRANSPARENT = 0;
-    static const unsigned char ALPHA_OPAQUE = 0xff;
     if ( HasMask() )
     {
         // use the mask to initialize the alpha channel.
@@ -1037,8 +1049,8 @@ void wxImage::InitAlpha()
               src += 3, alpha++ )
         {
             *alpha = (src[0] == mr && src[1] == mg && src[2] == mb)
-                            ? ALPHA_TRANSPARENT
-                            : ALPHA_OPAQUE;
+                            ? wxIMAGE_ALPHA_TRANSPARENT
+                            : wxIMAGE_ALPHA_OPAQUE;
         }
 
         M_IMGDATA->m_hasMask = false;
@@ -1046,7 +1058,7 @@ void wxImage::InitAlpha()
     else // no mask
     {
         // make the image fully opaque
-        memset(alpha, ALPHA_OPAQUE, lenAlpha);
+        memset(alpha, wxIMAGE_ALPHA_OPAQUE, lenAlpha);
     }
 }
 
@@ -1117,18 +1129,35 @@ bool wxImage::HasMask() const
     return M_IMGDATA->m_hasMask;
 }
 
-int wxImage::GetWidth() const
+bool wxImage::IsTransparent(int x, int y, unsigned char threshold) const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+    long pos = XYToIndex(x, y);
+    wxCHECK_MSG( pos != -1, false, wxT("invalid image coordinates") );
 
-    return M_IMGDATA->m_width;
-}
+    // check mask
+    if ( M_IMGDATA->m_hasMask )
+    {
+        const unsigned char *p = M_IMGDATA->m_data + 3*pos;
+        if ( p[0] == M_IMGDATA->m_maskRed &&
+                p[1] == M_IMGDATA->m_maskGreen &&
+                    p[2] == M_IMGDATA->m_maskBlue )
+        {
+            return true;
+        }
+    }
 
-int wxImage::GetHeight() const
-{
-    wxCHECK_MSG( Ok(), 0, wxT("invalid image") );
+    // then check alpha
+    if ( M_IMGDATA->m_alpha )
+    {
+        if ( M_IMGDATA->m_alpha[pos] < threshold )
+        {
+            // transparent enough
+            return true;
+        }
+    }
 
-    return M_IMGDATA->m_height;
+    // not transparent
+    return false;
 }
 
 bool wxImage::SetMaskFromImage(const wxImage& mask,
@@ -1216,9 +1245,11 @@ bool wxImage::ConvertAlphaToMask(unsigned char threshold)
     return true;
 }
 
-#if wxUSE_PALETTE
-
+// ----------------------------------------------------------------------------
 // Palette functions
+// ----------------------------------------------------------------------------
+
+#if wxUSE_PALETTE
 
 bool wxImage::HasPalette() const
 {
@@ -1244,7 +1275,10 @@ void wxImage::SetPalette(const wxPalette& palette)
 
 #endif // wxUSE_PALETTE
 
+// ----------------------------------------------------------------------------
 // Option functions (arbitrary name/value mapping)
+// ----------------------------------------------------------------------------
+
 void wxImage::SetOption(const wxString& name, const wxString& value)
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
@@ -1291,6 +1325,10 @@ bool wxImage::HasOption(const wxString& name) const
 
     return (M_IMGDATA->m_optionNames.Index(name, false) != wxNOT_FOUND);
 }
+
+// ----------------------------------------------------------------------------
+// image I/O
+// ----------------------------------------------------------------------------
 
 bool wxImage::LoadFile( const wxString& filename, long type, int index )
 {
@@ -1548,6 +1586,10 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
     return handler->SaveFile( (wxImage*)this, stream );
 }
 #endif // wxUSE_STREAMS
+
+// ----------------------------------------------------------------------------
+// image I/O handlers
+// ----------------------------------------------------------------------------
 
 void wxImage::AddHandler( wxImageHandler *handler )
 {

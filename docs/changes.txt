@@ -29,6 +29,7 @@ All (GUI):
 - Added wxTE_BESTWRAP (based on patch by Mart Raudsepp).
 - wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED is now only sent once at the end of
   splitter dragging and not after each CHANGING event (Jacobo Vilella Vilahur).
+- Added wxImage::IsTransparent()
 
 Unix:
 
