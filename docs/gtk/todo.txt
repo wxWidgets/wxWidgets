@@ -1,7 +1,9 @@
 
 -------------------- High priority ---------------------
 
-Improve, update translations. Install *.mo files somewhere.
+Port to GTK 2.0 - including its Unicode support.
+
+Fix crash in DnD reported from Mahogany.
 
 -------------------- Medium priority ---------------------
 
@@ -14,13 +16,10 @@ Show accelerator control labels and actually implement them
 -------------------- Low priority ---------------------
     
 Right aligned checkboxes: focus highlighting is wrong, tooltips can't be set can't be set
-  -> Postponed. GTK 1.4 can do that.
+  -> Postponed. GTK 2.0 can do that.
 
 Add wxNoteBook::GetPageIndex()
 Add wxNoteBook::SetTabPosition()
-  -> Postponed.
-
-More testing of Unicode support.
   -> Postponed.
 
 Implement wxPalette
@@ -29,5 +28,3 @@ Implement wxPalette
 Implement different visuals and displays
   -> I cannot test this. Postponed.
 
-Cooperation with Qt
-  -> Would be nice.

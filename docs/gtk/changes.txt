@@ -1,8 +1,52 @@
-This file contains the detailed log of wxGTK-specific changes, please see
-doc/changes.txt for the concise log of important changes in all wxWindows
-ports.
 
-*** wxWindows 2.3.1 ***
+*** wxWindows 2.3.3 ***
+
+Reworked wxConfig class interface.
+
+Reworked wxDynamicLibary class for loading classes (particularly
+wxWindows classes) from dynmic libraries.
+
+Removed wxObjectStream class.
+
+Further improvements to wxFileName class.
+
+*** wxWindows 2.3.2 ***
+
+Addition of wxFileName class to handler DOS, Unix, Mac and VMS filenames
+and paths in a platform independant way.
+
+Addition of a wxPopupWindow class to imitate temporary windows such
+as those used combo boxes or in tool tips.
+
+Addition of wxToggleButton which was missing in wxWindows 2.2.
+
+Support for virtual lists in wxListCtrl.
+
+Addition wxSingleInstanceChecker which does just that.
+
+Addition of wxRegEx for regular expression parsing either
+using the built-in Unix function or a freeware add-on library.
+
+wxScrolledWindow completely reimplemented as a native GTK widget.
+
+Reimplemented event cloning used for inter-thread communication.
+
+Big improvements to the HTML display engine. Handles many more tags
+correctly now.
+
+Partial rewrite and enhancements to the XML based resource system wxXRC.
+It is now based on the Expat parser.
+
+Wider image type support including read/write support for XPM and
+reading support for ICO files. BMP can be saved in various bit depths now.
+
+Fixed some incompatibilities with GTK 1.2.10.
+
+Partially reworked build system for installation of multiple builds and
+cross coompilations.
+
+Improved wxSizer-based layout system for better support for dynamic
+layout.
 
 *** wxWindows 2.3.0 ***
 
