@@ -4,7 +4,7 @@
 // Author:      William Osborne
 // Modified by:
 // Created:     10/13/04
-// RCS-ID:      $Id: 
+// RCS-ID:      $Id:
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -38,16 +38,19 @@ public:
     virtual ~wxAcceleratorTable();
 
     wxAcceleratorTable& operator = (const wxAcceleratorTable& accel) { if ( *this != accel ) Ref(accel); return *this; }
+
+#if WXWIN_COMPATIBILITY_2_4
     bool operator==(const wxAcceleratorTable& accel) const
-        { return m_refData == accel.m_refData; } // FIXME: this is wrong (VZ)
+        { return m_refData == accel.m_refData; }
     bool operator!=(const wxAcceleratorTable& accel) const
         { return !(*this == accel); }
+#endif
 
     bool Ok() const;
     void SetHACCEL(WXHACCEL hAccel);
     WXHACCEL GetHACCEL() const;
 
-    // translate the accelerator, return TRUE if done
+    // translate the accelerator, return true if done
     bool Translate(wxWindow *window, WXMSG *msg) const;
 
 private:
