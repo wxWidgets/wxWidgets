@@ -225,20 +225,20 @@ void wxDiagram::RecentreAll(wxDC& dc)
 bool wxDiagram::SaveFile(const wxString& filename)
 {
   wxBeginBusyCursor();
-  
+
   wxExprDatabase *database = new wxExprDatabase;
 
   // First write the diagram type
   wxExpr *header = new wxExpr("diagram");
   OnHeaderSave(*database, *header);
-  
+
   database->Append(header);
-  
+
   wxNode *node = m_shapeList->First();
   while (node)
   {
     wxShape *shape = (wxShape *)node->Data();
-    
+
     if (!shape->IsKindOf(CLASSINFO(wxControlPoint)))
     {
       wxExpr *expr = NULL;
@@ -252,19 +252,19 @@ bool wxDiagram::SaveFile(const wxString& filename)
     node = node->Next();
   }
   OnDatabaseSave(*database);
-  
+
   char tempFile[400];
   wxGetTempFileName("diag", tempFile);
-  ofstream stream(tempFile);
-  if (stream.bad())
+  FILE* file = fopen(tempFile, "w");
+  if (! file)
   {
     wxEndBusyCursor();
     delete database;
     return FALSE;
   }
-  
-  database->Write(stream);
-  stream.close();
+
+  database->Write(file);
+  fclose(file);
   delete database;
 
 /*
@@ -301,14 +301,14 @@ bool wxDiagram::SaveFile(const wxString& filename)
 bool wxDiagram::LoadFile(const wxString& filename)
 {
   wxBeginBusyCursor();
-  
+
   wxExprDatabase database(wxExprInteger, "id");
   if (!database.Read(filename))
   {
     wxEndBusyCursor();
     return FALSE;
   }
-  
+
   DeleteAllShapes();
 
   database.BeginFind();
@@ -331,7 +331,7 @@ bool wxDiagram::LoadFile(const wxString& filename)
   ReadNodes(database);
   ReadContainerGeometry(database);
   ReadLines(database);
-  
+
   OnDatabaseLoad(database);
 
   wxEndBusyCursor();
@@ -356,7 +356,7 @@ void wxDiagram::ReadNodes(wxExprDatabase& database)
     {
       wxShape *shape = (wxShape *)classInfo->CreateObject();
       OnShapeLoad(database, *shape, *clause);
-      
+
       shape->SetCanvas(GetCanvas());
       shape->Show(TRUE);
 
@@ -378,7 +378,7 @@ void wxDiagram::ReadNodes(wxExprDatabase& database)
     }
     if (type)
       delete[] type;
-      
+
     clause = database.FindClauseByFunctor("shape");
   }
   return;
