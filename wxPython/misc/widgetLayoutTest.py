@@ -12,7 +12,7 @@ import os
 # stuff for debugging
 print "wx.VERSION_STRING = ", wx.VERSION_STRING
 print "pid:", os.getpid()
-#raw_input("Press Enter...")
+##raw_input("Press Enter...")
 
 class LayoutTestFrame(wx.Frame):
     def __init__(self):
