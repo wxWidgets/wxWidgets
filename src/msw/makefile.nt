@@ -2,7 +2,7 @@
 # File:		makefile.nt
 # Author:	Julian Smart
 # Created:	1997
-# Updated:	
+# Updated:
 # Copyright:	(c) 1997, Julian Smart
 #
 # "%W% %G%"
@@ -108,7 +108,7 @@ COMMONOBJS = \
   $(COMMDIR)\wxexpr.obj \
   $(COMMDIR)\y_tab.obj \
   $(COMMDIR)\extended.obj \
-  $(COMMDIR)\process.obj
+  $(COMMDIR)\process.obj \
   $(COMMDIR)\fstream.obj \
   $(COMMDIR)\mstream.obj \
   $(COMMDIR)\zstream.obj \
