@@ -179,6 +179,13 @@ bool wxPropertyInfo::Edit(wxWindow *WXUNUSED(parent), const wxString& title)
   view->ShowView(propSheet, propWin->GetPropertyPanel());
 
   propWin->Show(TRUE);
+
+  // Otherwise doesn't show itself
+#ifdef __WXMOTIF__
+  wxNoOptimize noOptimize;
+  propWin->SetSize(-1, -1, width, height);
+#endif
+
   return TRUE;
 }
 
@@ -416,7 +423,7 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         }
     }
 
-    if (x != newX)
+    if (x != pixelX)
     {
       m_propertyWindow->Move(pixelX, y);
       resource->SetSize(newX, resource->GetY(), resource->GetWidth(), resource->GetHeight());
@@ -452,7 +459,7 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         }
     }
 
-    if (y != newY)
+    if (y != pixelY)
     {
       m_propertyWindow->Move(x, pixelY);
       resource->SetSize(resource->GetX(), newY, resource->GetWidth(), resource->GetHeight());
@@ -488,7 +495,7 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         }
     }
 
-    if (width != newWidth)
+    if (width != pixelWidth)
     {
       m_propertyWindow->SetSize(pixelWidth, height);
       resource->SetSize(resource->GetX(), resource->GetY(), newWidth, resource->GetHeight());
@@ -524,9 +531,9 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         }
     }
 
-    if (height != newHeight)
+    if (height != pixelHeight)
     {
-      m_propertyWindow->SetSize(width, newHeight);
+      m_propertyWindow->SetSize(width, pixelHeight);
       resource->SetSize(resource->GetX(), resource->GetY(), resource->GetWidth(), newHeight);
     }
     return TRUE;
@@ -757,7 +764,7 @@ bool wxItemPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   {
     wxFont *newFont = SetFontProperty(name, property, font);
     if (newFont)
-      itemWindow->SetLabelFont(* newFont);
+      itemWindow->SetFont(* newFont);
     return TRUE;
   }
   else if (name == "label")
@@ -787,6 +794,7 @@ bool wxItemPropertyInfo::InstantiateResource(wxItemResource *resource)
   wxControl *item = (wxControl *)m_propertyWindow;
   wxString str(item->GetLabel());
   resource->SetTitle(str);
+
   if (item->GetFont().Ok())
     resource->SetFont(* wxTheFontList->FindOrCreateFont(item->GetFont().GetPointSize(),
 		item->GetFont().GetFamily(), item->GetFont().GetStyle(), item->GetFont().GetWeight(),
@@ -1754,8 +1762,8 @@ bool wxGaugePropertyInfo::InstantiateResource(wxItemResource *resource)
 wxProperty *wxScrollBarPropertyInfo::GetProperty(wxString& name)
 {
   wxScrollBar *scrollBar = (wxScrollBar *)m_propertyWindow;
-  if (name == "value")
-    return new wxProperty("value", (long)scrollBar->GetValue(), "integer");
+  if (name == "thumbPosition")
+    return new wxProperty("value", (long)scrollBar->GetThumbPosition(), "integer");
   else if (name == "orientation")
   {
     char *pos = NULL;
@@ -1770,24 +1778,20 @@ wxProperty *wxScrollBarPropertyInfo::GetProperty(wxString& name)
   }
   else if (name == "pageSize")
   {
-    int viewStart, pageLength, objectLength, viewLength;
-    scrollBar->GetValues(&viewStart, &viewLength, &objectLength, &pageLength);
+    int pageLength = scrollBar->GetPageSize();
     
     return new wxProperty("pageSize", (long)pageLength, "integer");
   }
-  else if (name == "viewLength")
+  else if (name == "thumbSize")
   {
-    int viewStart, pageLength, objectLength, viewLength;
-    scrollBar->GetValues(&viewStart, &viewLength, &objectLength, &pageLength);
+    int thumbSize = scrollBar->GetThumbSize();
     
-    return new wxProperty("viewLength", (long)viewLength, "integer");
+    return new wxProperty("thumbSize", (long)thumbSize, "integer");
   }
-  else if (name == "objectLength")
+  else if (name == "range")
   {
-    int viewStart, pageLength, objectLength, viewLength;
-    scrollBar->GetValues(&viewStart, &viewLength, &objectLength, &pageLength);
-    
-    return new wxProperty("objectLength", (long)objectLength, "integer");
+    int range = scrollBar->GetRange();
+    return new wxProperty("range", (long)range, "integer");
   }
   else
     return wxItemPropertyInfo::GetProperty(name);
@@ -1796,9 +1800,9 @@ wxProperty *wxScrollBarPropertyInfo::GetProperty(wxString& name)
 bool wxScrollBarPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 {
   wxScrollBar *scrollBar = (wxScrollBar *)m_propertyWindow;
-  if (name == "value")
+  if (name == "thumbPosition")
   {
-    scrollBar->SetValue((int)property->GetValue().IntegerValue());
+    scrollBar->SetThumbPosition((int)property->GetValue().IntegerValue());
     return TRUE;
   }
   else if (name == "orientation")
@@ -1835,17 +1839,26 @@ bool wxScrollBarPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   }
   else if (name == "pageSize")
   {
-    scrollBar->SetPageSize((int)property->GetValue().IntegerValue());
+    int pos = scrollBar->GetThumbPosition();
+    int range = scrollBar->GetRange();
+    int thumbSize = scrollBar->GetThumbSize();
+    scrollBar->SetScrollbar(pos, thumbSize, range, (int)property->GetValue().IntegerValue());
     return TRUE;
   }
-  else if (name == "viewLength")
+  else if (name == "thumbSize")
   {
-    scrollBar->SetViewLength((int)property->GetValue().IntegerValue());
+    int pos = scrollBar->GetThumbPosition();
+    int range = scrollBar->GetRange();
+    int pageSize = scrollBar->GetPageSize();
+    scrollBar->SetScrollbar(pos, (int)property->GetValue().IntegerValue(), range, pageSize);
     return TRUE;
   }
-  else if (name == "objectLength")
+  else if (name == "range")
   {
-    scrollBar->SetObjectLength((int)property->GetValue().IntegerValue());
+    int pos = scrollBar->GetThumbPosition();
+    int thumbSize = scrollBar->GetThumbSize();
+    int pageSize = scrollBar->GetPageSize();
+    scrollBar->SetScrollbar(pos, thumbSize, (int)property->GetValue().IntegerValue(), pageSize);
     return TRUE;
   }
   else
@@ -1856,10 +1869,10 @@ void wxScrollBarPropertyInfo::GetPropertyNames(wxStringList& names)
 {
   wxItemPropertyInfo::GetPropertyNames(names);
   names.Add("orientation");
-  names.Add("value");
+  names.Add("thumbPosition");
+  names.Add("thumbSize");
   names.Add("pageSize");
-  names.Add("viewLength");
-  names.Add("objectLength");
+  names.Add("range");
 
   // Remove some properties we don't inherit
   names.Delete("fontPoints");
@@ -1873,14 +1886,15 @@ bool wxScrollBarPropertyInfo::InstantiateResource(wxItemResource *resource)
 {
   wxScrollBar *sbar = (wxScrollBar *)m_propertyWindow;
 
-  resource->SetValue1(sbar->GetValue());
-
-  int viewStart, pageLength, objectLength, viewLength;
-  sbar->GetValues(&viewStart, &viewLength, &objectLength, &pageLength);
+  int thumbPosition = sbar->GetThumbPosition();
+  int thumbSize = sbar->GetThumbSize();
+  int pageSize = sbar->GetPageSize();
+  int range = sbar->GetRange();
   
-  resource->SetValue2(pageLength);
-  resource->SetValue3(objectLength);
-  resource->SetValue5(viewLength);
+  resource->SetValue1(thumbPosition);
+  resource->SetValue2(thumbSize);
+  resource->SetValue3(range);
+  resource->SetValue5(pageSize);
 
   return wxItemPropertyInfo::InstantiateResource(resource);
 }

@@ -181,7 +181,18 @@ wxRadioBox::~wxRadioBox()
 {
     delete[] m_radioButtonLabels;
     delete[] m_radioButtons;
+
     DetachWidget(m_formWidget);
+    DetachWidget(m_mainWidget);
+
+    if (m_labelWidget)
+       XtDestroyWidget((Widget) m_labelWidget);
+    XtDestroyWidget((Widget) m_mainWidget);
+    XtDestroyWidget((Widget) m_formWidget);
+
+    m_mainWidget = (WXWidget) 0;
+    m_formWidget = (WXWidget) 0;
+    m_labelWidget = (WXWidget) 0;
 }
 
 wxString wxRadioBox::GetLabel(int item) const

@@ -111,6 +111,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     m_windowFont = parent->GetFont();
     ChangeFont(FALSE);
     
+    SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, width, height);
     
     ChangeBackgroundColour();
@@ -765,6 +766,13 @@ void wxListBox::ChangeBackgroundColour()
     wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
     DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
     DoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
+
+    XtVaSetValues (hsb,
+        XmNtroughColor, backgroundColour.AllocColour(XtDisplay(hsb)),
+        NULL);
+    XtVaSetValues (vsb,
+        XmNtroughColor, backgroundColour.AllocColour(XtDisplay(vsb)),
+        NULL);
     
     DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
 }

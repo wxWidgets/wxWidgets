@@ -161,6 +161,10 @@ void wxScrollBar::ChangeFont(bool keepOriginalSize)
 void wxScrollBar::ChangeBackgroundColour()
 {
     wxWindow::ChangeBackgroundColour();
+
+    XtVaSetValues ((Widget) GetMainWidget(),
+        XmNtroughColor, m_backgroundColour.AllocColour(XtDisplay((Widget) GetMainWidget())),
+        NULL);
 }
 
 void wxScrollBar::ChangeForegroundColour()

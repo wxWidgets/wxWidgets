@@ -83,7 +83,7 @@ wxString wxControl::GetLabel() const
     }
     else
     {
-        XmStringFree(text);
+      //        XmStringFree(text);
         return wxEmptyString;
     }
 }

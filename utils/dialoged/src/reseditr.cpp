@@ -71,7 +71,7 @@
 static void ObjectMenuProc(wxMenu& menu, wxCommandEvent& event);
 wxResourceManager *wxResourceManager::sm_currentResourceManager = NULL;
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "bitmaps/load.xpm"
 #include "bitmaps/save.xpm"
 #include "bitmaps/new.xpm"
@@ -158,7 +158,7 @@ bool wxResourceManager::Initialize()
   GetWindowsDirectory(buf, 256);
   strcat(buf, "\\dialoged.ini");
   m_optionsResourceFilename = buf;
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK__) || defined(__WXMOTIF__)
   wxGetHomeDir( &m_optionsResourceFilename );
   m_optionsResourceFilename += "/.dialogedrc";
 #else
@@ -181,7 +181,7 @@ bool wxResourceManager::Initialize()
 #ifdef __WXMSW__
     m_bitmapImage = new wxBitmap("WXWINBMP", wxBITMAP_TYPE_BMP_RESOURCE);
 #endif
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
     m_bitmapImage = new wxBitmap( wxwin_xpm );
 #endif
   }
@@ -322,7 +322,7 @@ bool wxResourceManager::ShowResourceEditor(bool show, wxWindow *WXUNUSED(parent)
     c->right.SameAs      (m_editorFrame, wxRight, 0);
     c->bottom.SameAs     (m_editorFrame, wxBottom, 0);
     c->width.Unconstrained();
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
     c->height.Absolute(105);
 #else
     c->height.Absolute(60);
@@ -741,7 +741,11 @@ wxResourceEditorScrolledWindow *wxResourceManager::OnCreateEditorPanel(wxFrame *
 {
   wxResourceEditorScrolledWindow *panel = new wxResourceEditorScrolledWindow(parent, wxDefaultPosition, wxDefaultSize,
 //    wxSUNKEN_BORDER|wxCLIP_CHILDREN);
+#ifdef __WXMOTIF__
+    wxBORDER);
+#else
     wxSUNKEN_BORDER);
+#endif
 
   panel->SetScrollbars(10, 10, 100, 100);
 
@@ -766,7 +770,7 @@ wxToolBar *wxResourceManager::OnCreateToolBar(wxFrame *parent)
   wxBitmap ToolbarToFrontBitmap("TOFRONTTOOL");
   wxBitmap ToolbarHelpBitmap("HELPTOOL");
 #endif
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
   wxBitmap ToolbarLoadBitmap( load_xpm );
   wxBitmap ToolbarSaveBitmap( save_xpm);
   wxBitmap ToolbarNewBitmap( new_xpm );
@@ -798,47 +802,47 @@ wxToolBar *wxResourceManager::OnCreateToolBar(wxFrame *parent)
   int currentX = gap;
   toolbar->AddSeparator();
   toolbar->AddTool(TOOLBAR_NEW, ToolbarNewBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "New dialog");
+                   FALSE, currentX, -1, NULL, "New dialog");
   currentX += width + dx;
   toolbar->AddTool(TOOLBAR_LOAD_FILE, ToolbarLoadBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "Load");
+                   FALSE, currentX, -1, NULL, "Load");
   currentX += width + dx;
   toolbar->AddTool(TOOLBAR_SAVE_FILE, ToolbarSaveBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "Save");
+                   FALSE, currentX, -1, NULL, "Save");
   currentX += width + dx + gap;
   toolbar->AddSeparator();
   toolbar->AddTool(TOOLBAR_FORMAT_HORIZ, ToolbarVertBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "Horizontal align");
+                   FALSE, currentX, -1, NULL, "Horizontal align");
   currentX += width + dx;
   toolbar->AddTool(TOOLBAR_FORMAT_VERT_TOP_ALIGN, ToolbarAlignTBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "Top align");
+                   FALSE, currentX, -1, NULL, "Top align");
   currentX += width + dx;
   toolbar->AddTool(TOOLBAR_FORMAT_VERT_BOT_ALIGN, ToolbarAlignBBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "Bottom align");
+                   FALSE, currentX, -1, NULL, "Bottom align");
   currentX += width + dx;
   toolbar->AddTool(TOOLBAR_FORMAT_VERT, ToolbarHorizBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "Vertical align");
+                   FALSE, currentX, -1, NULL, "Vertical align");
   currentX += width + dx;
   toolbar->AddTool(TOOLBAR_FORMAT_HORIZ_LEFT_ALIGN, ToolbarAlignLBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "Left align");
+                   FALSE, currentX, -1, NULL, "Left align");
   currentX += width + dx;
   toolbar->AddTool(TOOLBAR_FORMAT_HORIZ_RIGHT_ALIGN, ToolbarAlignRBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "Right align");
+                   FALSE, currentX, -1, NULL, "Right align");
   currentX += width + dx;
   toolbar->AddTool(TOOLBAR_COPY_SIZE, ToolbarCopySizeBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "Copy size");
+                   FALSE, currentX, -1, NULL, "Copy size");
   currentX += width + dx + gap;
   toolbar->AddSeparator();
   toolbar->AddTool(TOOLBAR_TO_FRONT, ToolbarToFrontBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "To front");
+                   FALSE, currentX, -1, NULL, "To front");
   currentX += width + dx;
   toolbar->AddTool(TOOLBAR_TO_BACK, ToolbarToBackBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "To back");
+                   FALSE, currentX, -1, NULL, "To back");
   currentX += width + dx + gap;
 
   toolbar->AddSeparator();
   toolbar->AddTool(TOOLBAR_HELP, ToolbarHelpBitmap, wxNullBitmap,
-                   FALSE, (float)currentX, -1, NULL, "Help");
+                   FALSE, currentX, -1, NULL, "Help");
   currentX += width + dx;
   
   toolbar->Realize();
@@ -2196,6 +2200,8 @@ wxResourceEditorScrolledWindow::wxResourceEditorScrolledWindow(wxWindow *parent,
     m_marginX = 10;
     m_marginY = 40;
     m_childWindow = NULL;
+
+    SetBackgroundColour(* wxWHITE);
 }
 
 wxResourceEditorScrolledWindow::~wxResourceEditorScrolledWindow()
@@ -2275,7 +2281,7 @@ void ObjectMenuProc(wxMenu& menu, wxCommandEvent& event)
  *
  */
 
-#ifdef __WXGTK__   // I don't dare to delete it...
+#if defined(__WXGTK__) || defined(__WXMOTIF__)   // I don't dare to delete it...
  
 BEGIN_EVENT_TABLE(EditorToolBar, wxToolBar)
 END_EVENT_TABLE()

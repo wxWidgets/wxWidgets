@@ -127,6 +127,15 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 wxStaticBox::~wxStaticBox()
 {
    DetachWidget(m_formWidget);
+   DetachWidget(m_mainWidget);
+   XtDestroyWidget((Widget) m_mainWidget);
+   if (m_labelWidget)
+     XtDestroyWidget((Widget) m_labelWidget);
+   XtDestroyWidget((Widget) m_formWidget);
+
+   m_mainWidget = (WXWidget) 0;
+   m_labelWidget = (WXWidget) 0;
+   m_formWidget = (WXWidget) 0;
 }
 
 void wxStaticBox::SetLabel(const wxString& label)
