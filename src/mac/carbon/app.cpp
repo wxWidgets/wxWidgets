@@ -635,18 +635,12 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     wxString startupCwd = wxGetCwd() ;
     if ( startupCwd == wxT("/") || startupCwd.Right(15) == wxT("/Contents/MacOS") )
     {
-        wxString cwd ;
         CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle() ) ;
         CFURLRef urlParent = CFURLCreateCopyDeletingLastPathComponent( kCFAllocatorDefault , url ) ;
         CFRelease( url ) ;
         CFStringRef path = CFURLCopyFileSystemPath ( urlParent , kCFURLPOSIXPathStyle ) ;
         CFRelease( urlParent ) ;
-        CFIndex len = CFStringGetLength( path )  ;
-        CFIndex max = CFStringGetMaximumSizeForEncoding( len, kCFStringEncodingUTF8 ) ;
-        wxChar* buf = cwd.GetWriteBuf( max ) ;
-        CFStringGetCString( path , buf , max + 1 , kCFStringEncodingUTF8 ) ;
-        CFRelease( path ) ;
-        cwd.UngetWriteBuf() ;
+        wxString cwd = wxMacCFStringHolder(path).AsString(wxLocale::GetSystemEncoding());       
         wxSetWorkingDirectory( cwd ) ;
     }
 #endif
