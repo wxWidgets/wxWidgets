@@ -136,7 +136,7 @@ protected:
 // ----------------------------------------------------------------------------
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_END_PROCESS, 440)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_END_PROCESS, 440)
 END_DECLARE_EVENT_TYPES()
 
 class WXDLLIMPEXP_BASE wxProcessEvent : public wxEvent

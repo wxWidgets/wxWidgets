@@ -19,6 +19,7 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
+#include "wx/arrstr.h"
 #include "wx/list.h"
 
 #if wxUSE_DATETIME

@@ -123,25 +123,6 @@ copystring (const wxChar *s)
 
 #endif // WXWIN_COMPATIBILITY_2_4
 
-// Id generation
-static long wxCurrentId = 100;
-
-long
-wxNewId (void)
-{
-  return wxCurrentId++;
-}
-
-long
-wxGetCurrentId(void) { return wxCurrentId; }
-
-void
-wxRegisterId (long id)
-{
-  if (id >= wxCurrentId)
-    wxCurrentId = id + 1;
-}
-
 // ----------------------------------------------------------------------------
 // String <-> Number conversions (deprecated)
 // ----------------------------------------------------------------------------
@@ -354,8 +335,7 @@ wxString wxGetUserId()
     static const int maxLoginLen = 256; // FIXME arbitrary number
 
     wxString buf;
-    bool ok = wxGetUserId(buf.GetWriteBuf(maxLoginLen), maxLoginLen);
-    buf.UngetWriteBuf();
+    bool ok = wxGetUserId(wxStringBuffer(buf, maxLoginLen), maxLoginLen);
 
     if ( !ok )
         buf.Empty();
@@ -368,8 +348,7 @@ wxString wxGetUserName()
     static const int maxUserNameLen = 1024; // FIXME arbitrary number
 
     wxString buf;
-    bool ok = wxGetUserName(buf.GetWriteBuf(maxUserNameLen), maxUserNameLen);
-    buf.UngetWriteBuf();
+    bool ok = wxGetUserName(wxStringBuffer(buf, maxUserNameLen), maxUserNameLen);
 
     if ( !ok )
         buf.Empty();
@@ -382,9 +361,7 @@ wxString wxGetHostName()
     static const size_t hostnameSize = 257;
 
     wxString buf;
-    bool ok = wxGetHostName(buf.GetWriteBuf(hostnameSize), hostnameSize);
-
-    buf.UngetWriteBuf();
+    bool ok = wxGetHostName(wxStringBuffer(buf, hostnameSize), hostnameSize);
 
     if ( !ok )
         buf.Empty();
@@ -397,9 +374,7 @@ wxString wxGetFullHostName()
     static const size_t hostnameSize = 257;
 
     wxString buf;
-    bool ok = wxGetFullHostName(buf.GetWriteBuf(hostnameSize), hostnameSize);
-
-    buf.UngetWriteBuf();
+    bool ok = wxGetFullHostName(wxStringBuffer(buf, hostnameSize), hostnameSize);
 
     if ( !ok )
         buf.Empty();
@@ -553,6 +528,25 @@ bool wxYieldIfNeeded()
 // ============================================================================
 
 #if wxUSE_GUI
+
+// Id generation
+static long wxCurrentId = 100;
+
+long
+wxNewId (void)
+{
+  return wxCurrentId++;
+}
+
+long
+wxGetCurrentId(void) { return wxCurrentId; }
+
+void
+wxRegisterId (long id)
+{
+  if (id >= wxCurrentId)
+    wxCurrentId = id + 1;
+}
 
 #if wxUSE_MENUS
 
