@@ -38,8 +38,6 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/notebook.h"
-
 #include "wx/msw/private.h"
 
 #if wxUSE_TOOLTIPS
