@@ -1213,6 +1213,12 @@ wxDateTime& wxDateTime::Set(wxDateTime_t hour,
     tm->tm_min = minute;
     tm->tm_sec = second;
 
+    // and the DST in case it changes on this date
+    struct tm tm2(*tm);
+    mktime(&tm2);
+    if ( tm2.tm_isdst != tm->tm_isdst )
+        tm->tm_isdst = tm2.tm_isdst;
+
     (void)Set(*tm);
 
     // and finally adjust milliseconds
