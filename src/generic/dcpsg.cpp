@@ -1561,7 +1561,7 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
             m_printData.SetFilename(filename);
         }
 
-        m_pstream = wxFopen( m_printData.GetFilename().fn_str(), wxT("w+") );
+        m_pstream = wxFopen( m_printData.GetFilename(), wxT("w+") );
 
         if (!m_pstream)
         {
@@ -1971,7 +1971,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         {
             afmName = data->GetFontMetricPath();
             afmName << wxFILE_SEP_PATH << name;
-            afmFile = wxFopen(afmName.fn_str(),wxT("r"));
+            afmFile = wxFopen(afmName,wxT("r"));
         }
 
 #if defined(__UNIX__) && !defined(__VMS__)
@@ -1985,7 +1985,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                    << wxT("afm") << wxFILE_SEP_PATH
 #endif
                    << name;
-           afmFile = wxFopen(afmName.fn_str(),wxT("r"));
+           afmFile = wxFopen(afmName,wxT("r"));
         }
 #endif
 
