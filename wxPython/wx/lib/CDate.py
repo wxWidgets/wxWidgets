@@ -4,10 +4,10 @@
 # Author:       Lorne White (email: lwhite1@planet.eon.net)
 #
 # Created:
-# Version       0.2 1999/11/08
+# Version       0.2 08-Nov-1999
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
-# Updated:      12/01/2004
+# Updated:      01-Dec-2004
 # Action:       Cast the year variable to an integer under the Date Class
 # Reason:       When the year was compared in the isleap() function, if it was
 #               in a string format, then an error was raised.    
