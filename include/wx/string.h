@@ -226,6 +226,13 @@ private:
   void CopyBeforeWrite();
   void AllocBeforeWrite(size_t);
 
+  // this method is not implemented - there is _no_ conversion from int to
+  // string, you're doing something wrong if the compiler wants to call it!
+  //
+  // try `s << i' or `s.Printf("%d", i)' instead
+  wxString(int);
+  wxString(long);
+
 public:
   // constructors and destructor
     // ctor for an empty string
