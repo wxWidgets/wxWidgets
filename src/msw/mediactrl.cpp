@@ -154,10 +154,9 @@ public:
 class wxWMMEMediaCtrlImpl : public wxMediaCtrlImpl
 {
 public:
-/*
+
     wxWMMEMediaCtrlImpl();
     ~wxWMMEMediaCtrlImpl();
-
 
     virtual bool Create(wxMediaCtrl* ctrl);
 
@@ -179,10 +178,53 @@ public:
 
     virtual double GetPlaybackRate();
     virtual bool SetPlaybackRate(double);
-*/
+
     MCIDEVICEID m_hDev;
+    wxMediaCtrl* m_ctrl;
+    bool m_bVideo;
 };
 
+//---------------------------------------------------------------------------
+//  wxAVIFileMediaCtrlImpl
+//---------------------------------------------------------------------------
+/*
+#include <Vfw.h>
+//msvfw32.dll
+//#pragma comment(lib, "vfw32.lib")
+
+class wxAVIFileMediaCtrlImpl : public wxMediaCtrlImpl
+{
+public:
+
+    wxAVIFileMediaCtrlImpl();
+    ~wxAVIFileMediaCtrlImpl();
+
+    virtual bool Create(wxMediaCtrl* ctrl);
+
+    virtual bool Play();
+    virtual bool Pause();
+    virtual bool Stop();
+
+    virtual bool Load(const wxString& fileName);
+    virtual bool Load(const wxURI& location);
+
+    virtual wxMediaState GetState();
+
+    virtual bool SetPosition(long where);
+    virtual long GetPosition();
+    virtual long GetDuration();
+
+    virtual void DoMoveWindow(int x, int y, int w, int h);
+    wxSize DoGetBestSize() const;
+
+    virtual double GetPlaybackRate();
+    virtual bool SetPlaybackRate(double);
+
+    HMODULE m_hDll;
+    PAVIFILE m_hAVIFile;
+    wxMediaCtrl* m_ctrl;
+};
+*/
 
 //###########################################################################
 //
@@ -460,16 +502,15 @@ bool wxDXMediaCtrlImpl::Load(const wxString& fileName)
     //set the time format
     wxDSVERIFY( m_pMS->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME) );
 
+    //so that DoGetBestSize will work :)
+    m_bLoaded = true;
+
     //work around refresh issues
-    wxSize size = m_ctrl->GetParent()->GetSize();
-    m_ctrl->GetParent()->SetSize(wxSize(size.x+1, size.y+1));
-    m_ctrl->GetParent()->Refresh();
-    m_ctrl->GetParent()->Update();
-    m_ctrl->GetParent()->SetSize(size);
+    m_ctrl->InvalidateBestSize();
+    m_ctrl->GetParent()->Layout();
     m_ctrl->GetParent()->Refresh();
     m_ctrl->GetParent()->Update();
 
-    m_bLoaded = true;
     return true;
 }
 
@@ -633,5 +674,309 @@ void wxDXMediaCtrlImpl::DoMoveWindow(int x, int y, int w, int h)
 //
 //---------------------------------------------------------------------------
 
+wxWMMEMediaCtrlImpl::wxWMMEMediaCtrlImpl() : m_bVideo(false)
+{
+
+}
+
+wxWMMEMediaCtrlImpl::~wxWMMEMediaCtrlImpl()
+{
+    mciSendCommand(m_hDev, MCI_CLOSE, 0, 0);
+}
+
+bool wxWMMEMediaCtrlImpl::Create(wxMediaCtrl* ctrl)
+{    
+    m_ctrl = ctrl;
+    return true;
+}
+
+bool wxWMMEMediaCtrlImpl::Play()
+{
+    return (mciSendCommand(m_hDev, MCI_PLAY, 0, 0) == 0) ||
+           (mciSendCommand(m_hDev, MCI_RESUME, 0, 0) == 0);
+}
+
+bool wxWMMEMediaCtrlImpl::Pause()
+{
+    return (mciSendCommand(m_hDev, MCI_PAUSE, MCI_WAIT, 0) == 0);
+}
+
+bool wxWMMEMediaCtrlImpl::Stop()
+{
+    return (mciSendCommand(m_hDev, MCI_STOP, MCI_WAIT, 0) == 0);
+}
+
+#include "wx/log.h"
+
+bool wxWMMEMediaCtrlImpl::Load(const wxString& fileName)
+{
+    if(m_bLoaded)
+        mciSendCommand(m_hDev, MCI_CLOSE, 0, 0);
+
+    MCI_OPEN_PARMS openParms;
+    MCI_SET_PARMS setParms;
+
+    memset(&openParms, 0, sizeof(MCI_DGV_OPEN_PARMS));
+    openParms.lpstrElementName = (wxChar*) fileName.c_str();
+
+    bool bFound = false;
+
+    for(size_t i = MCI_DEVTYPE_FIRST; i <= MCI_DEVTYPE_LAST; ++i)
+    {
+        openParms.lpstrDeviceType = (LPSTR)i;
+
+        DWORD nError;
+
+        if ((nError = mciSendCommand(0, MCI_OPEN,
+                 MCI_OPEN_ELEMENT|MCI_OPEN_ELEMENT|MCI_OPEN_TYPE|MCI_OPEN_TYPE_ID,
+                (DWORD)(LPVOID)&openParms)) == 0)  
+        {
+            bFound = true;
+            break;
+        }
+    }
+
+    if(!bFound)
+        return false;
+
+    m_hDev = openParms.wDeviceID;
+
+
+    setParms.dwCallback = 0;
+    setParms.dwTimeFormat = MCI_FORMAT_MILLISECONDS;
+
+    if (mciSendCommand(m_hDev, MCI_SET, MCI_SET_TIME_FORMAT,
+                         (DWORD)(LPVOID)&setParms) != 0)
+        return false;
+
+
+    //TODO: Does this work?
+    /*
+    MCI_DGV_WINDOW_PARMS windowParms;
+
+  windowParms.hWnd = (HWND)m_ctrl->GetHWND();
+    m_bVideo = (mciSendCommand(m_hDev, MCI_WINDOW,
+                        MCI_DGV_WINDOW_HWND, (DWORD)(LPVOID)&windowParms) == 0);
+*/
+    m_bLoaded = true;
+
+    return true;
+}
+
+bool wxWMMEMediaCtrlImpl::Load(const wxURI& WXUNUSED(location))
+{
+    return false;
+}
+
+wxMediaState wxWMMEMediaCtrlImpl::GetState()
+{
+    MCI_STATUS_PARMS statusParms;
+    statusParms.dwItem = MCI_STATUS_MODE;
+    mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM,
+                         (DWORD)(LPVOID)&statusParms);
+
+    if(statusParms.dwReturn == MCI_MODE_PAUSE)
+        return wxMEDIASTATE_PAUSED;
+    else if(statusParms.dwReturn == MCI_MODE_PLAY)
+        return wxMEDIASTATE_PLAYING;
+    else
+        return wxMEDIASTATE_STOPPED;
+}
+
+bool wxWMMEMediaCtrlImpl::SetPosition(long where)
+{
+    MCI_SEEK_PARMS seekParms;
+    seekParms.dwCallback = 0;
+    seekParms.dwTo = where;
+
+    bool bReplay = GetState() == wxMEDIASTATE_PLAYING;
+
+    if( mciSendCommand(m_hDev, MCI_SEEK, MCI_TO, (DWORD)(LPVOID)&seekParms) != 0)
+        return false;
+/*        TCHAR sz[5000];
+	 mciGetErrorString(nError, sz, 5000);
+            wxMessageBox(wxString::Format(_T("Error:%s"), sz));
+  */          
+
+    if (bReplay)
+        return Play();
+    else
+        return true;
+}
+
+long wxWMMEMediaCtrlImpl::GetPosition()
+{
+    MCI_STATUS_PARMS statusParms;
+    
+    statusParms.dwItem = MCI_STATUS_POSITION; 
+    if (mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM, 
+        (DWORD)(LPSTR)&statusParms) != 0)
+        return 0;
+
+    return statusParms.dwReturn;
+}
+
+long wxWMMEMediaCtrlImpl::GetDuration()
+{
+    MCI_STATUS_PARMS statusParms;
+    
+    statusParms.dwItem = MCI_STATUS_LENGTH; 
+    if (mciSendCommand(m_hDev, MCI_STATUS, MCI_STATUS_ITEM, 
+        (DWORD)(LPSTR)&statusParms) != 0)
+        return 0;
+
+    return statusParms.dwReturn;
+}
+
+void wxWMMEMediaCtrlImpl::DoMoveWindow(int, int, int, int)
+{
+}
+
+wxSize wxWMMEMediaCtrlImpl::DoGetBestSize() const
+{
+    if(m_bVideo)
+    {
+        //TODO:  Does this work?
+        /*
+        MCI_DGV_RECT_PARMS rect; 
+
+        mciSendCommand(m_hDev, MCI_WHERE, MCI_DGV_WHERE_SOURCE, (DWORD)(LPSTR)&rect);
+        return wxSize(rect.rc.right, rect.rc.bottom);
+        */
+    }
+    return wxSize(0,0);
+}
+
+double wxWMMEMediaCtrlImpl::GetPlaybackRate()
+{
+    return 1.0;
+}
+
+bool wxWMMEMediaCtrlImpl::SetPlaybackRate(double)
+{
+    return false;
+}
+
+//---------------------------------------------------------------------------
+//
+//  wxAVIFileMediaCtrlImpl
+//
+//---------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------
+//  Functions located in msvfw32.dll
+//---------------------------------------------------------------------------
+
+/*
+
+typedef void (WINAPI *LPAVIFileInit) ();
+typedef void (WINAPI *LPAVIFileExit) ();
+
+typedef ULONG (WINAPI *LPAVIFileOpen) (
+PAVIFILE FAR * ppfile, 
+const wxChar* szFile,
+UINT uMode, 
+LPCLSID lpHandler
+);
+
+typedef ULONG (WINAPI *LPAVIFileRelease) (PAVIFILE pfile);
+
+wxAVIFileMediaCtrlImpl::wxAVIFileMediaCtrlImpl() 
+{
+}
+
+wxAVIFileMediaCtrlImpl::~wxAVIFileMediaCtrlImpl()
+{
+}
+
+bool wxAVIFileMediaCtrlImpl::Create(wxMediaCtrl* ctrl)
+{    
+    m_hDll = ::LoadLibrary(_T("avifil32.dll"));
+    
+    if(m_hDll == NULL)
+        return false;
+
+    LPAVIFileInit pAVIFileInit = (LPAVIFileInit) ::GetProcAddress(m_hDll, _T("AVIFileInit"));
+
+    if(!pAVIFileInit)
+        return false;
+
+    (*pAVIFileInit)();
+
+    m_ctrl = ctrl;
+    return false;
+}
+
+
+bool wxAVIFileMediaCtrlImpl::Load(const wxString& fileName)
+{
+//    if( AVIFileOpen(&m_hAVIFile, fileName.c_str(), OF_SHARE_DENY_WRITE, 0L) != 0)
+        return false;
+
+    m_bLoaded = true;
+
+    return true;
+}
+
+bool wxAVIFileMediaCtrlImpl::Load(const wxURI& WXUNUSED(location))
+{
+    return false;
+}
+
+bool wxAVIFileMediaCtrlImpl::Play()
+{
+    return 0;
+}
+
+bool wxAVIFileMediaCtrlImpl::Pause()
+{
+    return 0;
+}
+
+bool wxAVIFileMediaCtrlImpl::Stop()
+{
+    return 0;
+}
+
+wxMediaState wxAVIFileMediaCtrlImpl::GetState()
+{
+    return wxMEDIASTATE_STOPPED;
+}
+
+bool wxAVIFileMediaCtrlImpl::SetPosition(long where)
+{
+    return 0;
+}
+
+long wxAVIFileMediaCtrlImpl::GetPosition()
+{
+    return 0;
+}
+
+long wxAVIFileMediaCtrlImpl::GetDuration()
+{
+    return 0;
+}
+
+void wxAVIFileMediaCtrlImpl::DoMoveWindow(int, int, int, int)
+{
+}
+
+wxSize wxAVIFileMediaCtrlImpl::DoGetBestSize() const
+{
+    return wxSize(0,0);
+}
+
+double wxAVIFileMediaCtrlImpl::GetPlaybackRate()
+{
+    return 1.0;
+}
+
+bool wxAVIFileMediaCtrlImpl::SetPlaybackRate(double)
+{
+    return false;
+}
+
+  */
 
 #endif //wxUSE_MEDIACTRL
