@@ -109,6 +109,9 @@ def EVT_STC_DRAG_OVER(win, id, func):
 def EVT_STC_DO_DROP(win, id, func):
     win.Connect(id, -1, wxEVT_STC_DO_DROP, func)
 
+def EVT_STC_ZOOM(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_ZOOM, func)
+
 
 class wxStyledTextCtrlPtr(wxControlPtr):
     def __init__(self,this):
@@ -774,6 +777,24 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def GetLayoutCache(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_GetLayoutCache,(self,) + _args, _kwargs)
         return val
+    def SetScrollWidth(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetScrollWidth,(self,) + _args, _kwargs)
+        return val
+    def GetScrollWidth(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_GetScrollWidth,(self,) + _args, _kwargs)
+        return val
+    def TextWidth(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_TextWidth,(self,) + _args, _kwargs)
+        return val
+    def SetEndAtLastLine(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetEndAtLastLine,(self,) + _args, _kwargs)
+        return val
+    def GetEndAtLastLine(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_GetEndAtLastLine,(self,) + _args, _kwargs)
+        return val
+    def TextHeight(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_TextHeight,(self,) + _args, _kwargs)
+        return val
     def MoveCaretInsideView(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_MoveCaretInsideView,(self,) + _args, _kwargs)
         return val
@@ -831,9 +852,6 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def SearchPrev(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_SearchPrev,(self,) + _args, _kwargs)
-        return val
-    def SetCaretPolicy(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetCaretPolicy,(self,) + _args, _kwargs)
         return val
     def LinesOnScreen(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_LinesOnScreen,(self,) + _args, _kwargs)
@@ -918,6 +936,12 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def GetXOffset(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_GetXOffset,(self,) + _args, _kwargs)
+        return val
+    def SetXCaretPolicy(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetXCaretPolicy,(self,) + _args, _kwargs)
+        return val
+    def SetYCaretPolicy(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetYCaretPolicy,(self,) + _args, _kwargs)
         return val
     def StartRecord(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_StartRecord,(self,) + _args, _kwargs)
@@ -1319,15 +1343,14 @@ wxSTC_CMD_DELETEBACKNOTLINE = stc_c.wxSTC_CMD_DELETEBACKNOTLINE
 wxSTC_EDGE_NONE = stc_c.wxSTC_EDGE_NONE
 wxSTC_EDGE_LINE = stc_c.wxSTC_EDGE_LINE
 wxSTC_EDGE_BACKGROUND = stc_c.wxSTC_EDGE_BACKGROUND
-wxSTC_CARET_SLOP = stc_c.wxSTC_CARET_SLOP
-wxSTC_CARET_CENTER = stc_c.wxSTC_CARET_CENTER
-wxSTC_CARET_STRICT = stc_c.wxSTC_CARET_STRICT
-wxSTC_CARET_XEVEN = stc_c.wxSTC_CARET_XEVEN
-wxSTC_CARET_XJUMPS = stc_c.wxSTC_CARET_XJUMPS
 wxSTC_CURSORNORMAL = stc_c.wxSTC_CURSORNORMAL
 wxSTC_CURSORWAIT = stc_c.wxSTC_CURSORWAIT
 wxSTC_VISIBLE_SLOP = stc_c.wxSTC_VISIBLE_SLOP
 wxSTC_VISIBLE_STRICT = stc_c.wxSTC_VISIBLE_STRICT
+wxSTC_CARET_SLOP = stc_c.wxSTC_CARET_SLOP
+wxSTC_CARET_STRICT = stc_c.wxSTC_CARET_STRICT
+wxSTC_CARET_JUMPS = stc_c.wxSTC_CARET_JUMPS
+wxSTC_CARET_EVEN = stc_c.wxSTC_CARET_EVEN
 wxSTC_MOD_INSERTTEXT = stc_c.wxSTC_MOD_INSERTTEXT
 wxSTC_MOD_DELETETEXT = stc_c.wxSTC_MOD_DELETETEXT
 wxSTC_MOD_CHANGESTYLE = stc_c.wxSTC_MOD_CHANGESTYLE
@@ -1393,6 +1416,7 @@ wxSTC_LEX_ASP = stc_c.wxSTC_LEX_ASP
 wxSTC_LEX_PHP = stc_c.wxSTC_LEX_PHP
 wxSTC_LEX_BAAN = stc_c.wxSTC_LEX_BAAN
 wxSTC_LEX_MATLAB = stc_c.wxSTC_LEX_MATLAB
+wxSTC_LEX_SCRIPTOL = stc_c.wxSTC_LEX_SCRIPTOL
 wxSTC_LEX_AUTOMATIC = stc_c.wxSTC_LEX_AUTOMATIC
 wxSTC_P_DEFAULT = stc_c.wxSTC_P_DEFAULT
 wxSTC_P_COMMENTLINE = stc_c.wxSTC_P_COMMENTLINE
@@ -1427,15 +1451,6 @@ wxSTC_C_COMMENTLINEDOC = stc_c.wxSTC_C_COMMENTLINEDOC
 wxSTC_C_WORD2 = stc_c.wxSTC_C_WORD2
 wxSTC_C_COMMENTDOCKEYWORD = stc_c.wxSTC_C_COMMENTDOCKEYWORD
 wxSTC_C_COMMENTDOCKEYWORDERROR = stc_c.wxSTC_C_COMMENTDOCKEYWORDERROR
-wxSTC_B_DEFAULT = stc_c.wxSTC_B_DEFAULT
-wxSTC_B_COMMENT = stc_c.wxSTC_B_COMMENT
-wxSTC_B_NUMBER = stc_c.wxSTC_B_NUMBER
-wxSTC_B_KEYWORD = stc_c.wxSTC_B_KEYWORD
-wxSTC_B_STRING = stc_c.wxSTC_B_STRING
-wxSTC_B_PREPROCESSOR = stc_c.wxSTC_B_PREPROCESSOR
-wxSTC_B_OPERATOR = stc_c.wxSTC_B_OPERATOR
-wxSTC_B_IDENTIFIER = stc_c.wxSTC_B_IDENTIFIER
-wxSTC_B_DATE = stc_c.wxSTC_B_DATE
 wxSTC_H_DEFAULT = stc_c.wxSTC_H_DEFAULT
 wxSTC_H_TAG = stc_c.wxSTC_H_TAG
 wxSTC_H_TAGUNKNOWN = stc_c.wxSTC_H_TAGUNKNOWN
@@ -1576,6 +1591,20 @@ wxSTC_PL_STRING_QQ = stc_c.wxSTC_PL_STRING_QQ
 wxSTC_PL_STRING_QX = stc_c.wxSTC_PL_STRING_QX
 wxSTC_PL_STRING_QR = stc_c.wxSTC_PL_STRING_QR
 wxSTC_PL_STRING_QW = stc_c.wxSTC_PL_STRING_QW
+wxSTC_B_DEFAULT = stc_c.wxSTC_B_DEFAULT
+wxSTC_B_COMMENT = stc_c.wxSTC_B_COMMENT
+wxSTC_B_NUMBER = stc_c.wxSTC_B_NUMBER
+wxSTC_B_KEYWORD = stc_c.wxSTC_B_KEYWORD
+wxSTC_B_STRING = stc_c.wxSTC_B_STRING
+wxSTC_B_PREPROCESSOR = stc_c.wxSTC_B_PREPROCESSOR
+wxSTC_B_OPERATOR = stc_c.wxSTC_B_OPERATOR
+wxSTC_B_IDENTIFIER = stc_c.wxSTC_B_IDENTIFIER
+wxSTC_B_DATE = stc_c.wxSTC_B_DATE
+wxSTC_PROPS_DEFAULT = stc_c.wxSTC_PROPS_DEFAULT
+wxSTC_PROPS_COMMENT = stc_c.wxSTC_PROPS_COMMENT
+wxSTC_PROPS_SECTION = stc_c.wxSTC_PROPS_SECTION
+wxSTC_PROPS_ASSIGNMENT = stc_c.wxSTC_PROPS_ASSIGNMENT
+wxSTC_PROPS_DEFVAL = stc_c.wxSTC_PROPS_DEFVAL
 wxSTC_L_DEFAULT = stc_c.wxSTC_L_DEFAULT
 wxSTC_L_COMMAND = stc_c.wxSTC_L_COMMAND
 wxSTC_L_TAG = stc_c.wxSTC_L_TAG
@@ -1608,6 +1637,7 @@ wxSTC_ERR_BORLAND = stc_c.wxSTC_ERR_BORLAND
 wxSTC_ERR_PERL = stc_c.wxSTC_ERR_PERL
 wxSTC_ERR_NET = stc_c.wxSTC_ERR_NET
 wxSTC_ERR_LUA = stc_c.wxSTC_ERR_LUA
+wxSTC_ERR_CTAG = stc_c.wxSTC_ERR_CTAG
 wxSTC_ERR_DIFF_CHANGED = stc_c.wxSTC_ERR_DIFF_CHANGED
 wxSTC_ERR_DIFF_ADDITION = stc_c.wxSTC_ERR_DIFF_ADDITION
 wxSTC_ERR_DIFF_DELETION = stc_c.wxSTC_ERR_DIFF_DELETION
@@ -1627,6 +1657,13 @@ wxSTC_MAKE_IDENTIFIER = stc_c.wxSTC_MAKE_IDENTIFIER
 wxSTC_MAKE_OPERATOR = stc_c.wxSTC_MAKE_OPERATOR
 wxSTC_MAKE_TARGET = stc_c.wxSTC_MAKE_TARGET
 wxSTC_MAKE_IDEOL = stc_c.wxSTC_MAKE_IDEOL
+wxSTC_DIFF_DEFAULT = stc_c.wxSTC_DIFF_DEFAULT
+wxSTC_DIFF_COMMENT = stc_c.wxSTC_DIFF_COMMENT
+wxSTC_DIFF_COMMAND = stc_c.wxSTC_DIFF_COMMAND
+wxSTC_DIFF_HEADER = stc_c.wxSTC_DIFF_HEADER
+wxSTC_DIFF_POSITION = stc_c.wxSTC_DIFF_POSITION
+wxSTC_DIFF_DELETED = stc_c.wxSTC_DIFF_DELETED
+wxSTC_DIFF_ADDED = stc_c.wxSTC_DIFF_ADDED
 wxSTC_CONF_DEFAULT = stc_c.wxSTC_CONF_DEFAULT
 wxSTC_CONF_COMMENT = stc_c.wxSTC_CONF_COMMENT
 wxSTC_CONF_NUMBER = stc_c.wxSTC_CONF_NUMBER
@@ -1704,6 +1741,26 @@ wxSTC_MATLAB_KEYWORD = stc_c.wxSTC_MATLAB_KEYWORD
 wxSTC_MATLAB_STRING = stc_c.wxSTC_MATLAB_STRING
 wxSTC_MATLAB_OPERATOR = stc_c.wxSTC_MATLAB_OPERATOR
 wxSTC_MATLAB_IDENTIFIER = stc_c.wxSTC_MATLAB_IDENTIFIER
+wxSTC_SCRIPTOL_DEFAULT = stc_c.wxSTC_SCRIPTOL_DEFAULT
+wxSTC_SCRIPTOL_COMMENT = stc_c.wxSTC_SCRIPTOL_COMMENT
+wxSTC_SCRIPTOL_COMMENTLINE = stc_c.wxSTC_SCRIPTOL_COMMENTLINE
+wxSTC_SCRIPTOL_COMMENTDOC = stc_c.wxSTC_SCRIPTOL_COMMENTDOC
+wxSTC_SCRIPTOL_NUMBER = stc_c.wxSTC_SCRIPTOL_NUMBER
+wxSTC_SCRIPTOL_WORD = stc_c.wxSTC_SCRIPTOL_WORD
+wxSTC_SCRIPTOL_STRING = stc_c.wxSTC_SCRIPTOL_STRING
+wxSTC_SCRIPTOL_CHARACTER = stc_c.wxSTC_SCRIPTOL_CHARACTER
+wxSTC_SCRIPTOL_UUID = stc_c.wxSTC_SCRIPTOL_UUID
+wxSTC_SCRIPTOL_PREPROCESSOR = stc_c.wxSTC_SCRIPTOL_PREPROCESSOR
+wxSTC_SCRIPTOL_OPERATOR = stc_c.wxSTC_SCRIPTOL_OPERATOR
+wxSTC_SCRIPTOL_IDENTIFIER = stc_c.wxSTC_SCRIPTOL_IDENTIFIER
+wxSTC_SCRIPTOL_STRINGEOL = stc_c.wxSTC_SCRIPTOL_STRINGEOL
+wxSTC_SCRIPTOL_VERBATIM = stc_c.wxSTC_SCRIPTOL_VERBATIM
+wxSTC_SCRIPTOL_REGEX = stc_c.wxSTC_SCRIPTOL_REGEX
+wxSTC_SCRIPTOL_COMMENTLINEDOC = stc_c.wxSTC_SCRIPTOL_COMMENTLINEDOC
+wxSTC_SCRIPTOL_WORD2 = stc_c.wxSTC_SCRIPTOL_WORD2
+wxSTC_SCRIPTOL_COMMENTDOCKEYWORD = stc_c.wxSTC_SCRIPTOL_COMMENTDOCKEYWORD
+wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR = stc_c.wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR
+wxSTC_SCRIPTOL_COMMENTBASIC = stc_c.wxSTC_SCRIPTOL_COMMENTBASIC
 wxSTCNameStr = stc_c.wxSTCNameStr
 STC_USE_DND = stc_c.STC_USE_DND
 wxEVT_STC_CHANGE = stc_c.wxEVT_STC_CHANGE
@@ -1728,6 +1785,7 @@ wxEVT_STC_DWELLEND = stc_c.wxEVT_STC_DWELLEND
 wxEVT_STC_START_DRAG = stc_c.wxEVT_STC_START_DRAG
 wxEVT_STC_DRAG_OVER = stc_c.wxEVT_STC_DRAG_OVER
 wxEVT_STC_DO_DROP = stc_c.wxEVT_STC_DO_DROP
+wxEVT_STC_ZOOM = stc_c.wxEVT_STC_ZOOM
 
 
 #-------------- USER INCLUDE -----------------------
