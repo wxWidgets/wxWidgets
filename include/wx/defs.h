@@ -1911,13 +1911,38 @@ typedef ControlHandle   WXWidget;
 
 #ifdef __WXCOCOA__
 
+// NOTE: This ought to work with other compilers too, but I'm being cautious
+#if defined(__GNUC__) && defined(__APPLE__)
+/* It's desirable to have type safety for Objective-C(++) code as it does
+at least catch typos of method names among other things.  However, it
+is not possible to declare an Objective-C class from plain old C or C++
+code.  Furthermore, because of C++ name mangling, the type name must
+be the same for both C++ and Objective-C++ code.  Therefore, we define
+what should be a pointer to an Objective-C class as a pointer to a plain
+old C struct with the same name.  Unfortunately, because the compiler
+does not see a struct as an Objective-C class we cannot declare it
+as a struct in Objective-C(++) mode.
+*/
+#if defined(__OBJC__)
+#define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
+@class klass; \
+typedef klass *WX_##klass
+#else // not defined(__OBJC__)
+#define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
+typedef struct klass *WX_##klass
+#endif // defined(__OBJC__)
+
+#else // not GNU
+#warning "Objective-C types will not be checked by the compiler."
 // NOTE: typedef struct objc_object *id;
 // IOW, we're declaring these using the id type without using that name,
 // since "id" is used extensively not only within wxWindows itself, but
 // also in wxWindows application code.  The following works fine when
-// compiling C++ code, and works without typesafety for Obj-C++ code
+// compiling C(++) code, and works without typesafety for Obj-C(++) code
 #define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
 typedef struct objc_object *WX_##klass
+
+#endif // defined(__GNUC__) && defined(__APPLE__)
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSApplication);
 DECLARE_WXCOCOA_OBJC_CLASS(NSBox);
