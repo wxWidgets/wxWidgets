@@ -653,7 +653,7 @@ bool wxSocketBase::_Wait(long seconds,
     {
       m_connected = FALSE;
       m_establishing = FALSE;
-      return (flags & GSOCK_LOST_FLAG);
+      return (flags & GSOCK_LOST_FLAG) != 0;
     }
 
     // Wait more?

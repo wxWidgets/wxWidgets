@@ -37,7 +37,6 @@
 
 #endif /* __GSOCKET_STANDALONE__ */
 
-
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
@@ -50,6 +49,11 @@
 #ifndef SOCKLEN_T
 #define SOCKLEN_T  int
 #endif
+
+#ifdef _MSC_VER
+    /* using FD_SET results in this warning */
+    #pragma warning(disable:4127) /* conditional expression is constant */
+#endif /* Visual C++ */
 
 #define CLASSNAME  "_GSocket_Internal_Window_Class"
 #define WINDOWNAME "_GSocket_Internal_Window_Name"
@@ -397,7 +401,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
   if ((bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) != 0) ||
       (getsockname(sck->m_fd,
                    sck->m_local->m_addr,
-                   &sck->m_local->m_len) != 0) ||
+                   (SOCKLEN_T *)&sck->m_local->m_len) != 0) ||
       (listen(sck->m_fd, 5) != 0))
   {
     closesocket(sck->m_fd);
@@ -668,7 +672,7 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
   if ((bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) != 0) ||
       (getsockname(sck->m_fd,
                    sck->m_local->m_addr,
-                   &sck->m_local->m_len) != 0))
+                   (SOCKLEN_T *)&sck->m_local->m_len) != 0))
   {
     closesocket(sck->m_fd);
     sck->m_fd    = INVALID_SOCKET;
@@ -1445,6 +1449,10 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
  * Unix address family
  * -------------------------------------------------------------------------
  */
+
+#ifdef _MSC_VER
+    #pragma warning(disable:4100) /* unreferenced formal parameter */
+#endif /* Visual C++ */
 
 GSocketError _GAddress_Init_UNIX(GAddress *address)
 {
