@@ -53,6 +53,38 @@ void wxVScrolledWindow::Init()
 // various helpers
 // ----------------------------------------------------------------------------
 
+wxCoord wxVScrolledWindow::EstimateTotalHeight() const
+{
+    // estimate the total height: it is impossible to call
+    // OnGetLineHeight() for every line because there may be too many of
+    // them, so we just make a guess using some lines in the beginning,
+    // some in the end and some in the middle
+    static const size_t NUM_LINES_TO_SAMPLE = 10;
+
+    wxCoord heightTotal;
+    if ( m_lineMax < 3*NUM_LINES_TO_SAMPLE )
+    {
+        // in this case calculating exactly is faster and more correct than
+        // guessing
+        heightTotal = GetLinesHeight(0, m_lineMax);
+    }
+    else // too many lines to calculate exactly
+    {
+        // look at some lines in the beginning/middle/end
+        heightTotal =
+            GetLinesHeight(0, NUM_LINES_TO_SAMPLE) +
+                GetLinesHeight(m_lineMax - NUM_LINES_TO_SAMPLE, m_lineMax) +
+                    GetLinesHeight(m_lineMax/2 - NUM_LINES_TO_SAMPLE/2,
+                                   m_lineMax/2 + NUM_LINES_TO_SAMPLE/2);
+
+        // use the height of the lines we looked as the average
+        heightTotal = (wxCoord)
+                (((float)m_heightTotal / (3*NUM_LINES_TO_SAMPLE)) * m_lineMax);
+    }
+
+    return heightTotal;
+}
+
 wxCoord wxVScrolledWindow::GetLinesHeight(size_t lineMin, size_t lineMax) const
 {
     if ( lineMin == lineMax )
@@ -147,33 +179,8 @@ void wxVScrolledWindow::SetLineCount(size_t count)
     // save the number of lines
     m_lineMax = count;
 
-
-    // estimate the total height: it is impossible to call
-    // OnGetLineHeight() for every line because there may be too many of
-    // them, so we just make a guess using some lines in the beginning,
-    // some in the end and some in the middle
-    static const size_t NUM_LINES_TO_SAMPLE = 10;
-
-    if ( count < 3*NUM_LINES_TO_SAMPLE )
-    {
-        // in this case calculating exactly is faster and more correct than
-        // guessing
-        m_heightTotal = GetLinesHeight(0, m_lineMax);
-    }
-    else // too many lines to calculate exactly
-    {
-        // look at some lines in the beginning/middle/end
-        m_heightTotal =
-            GetLinesHeight(0, NUM_LINES_TO_SAMPLE) +
-                GetLinesHeight(count - NUM_LINES_TO_SAMPLE, count) +
-                    GetLinesHeight(count/2 - NUM_LINES_TO_SAMPLE/2,
-                                   count/2 + NUM_LINES_TO_SAMPLE/2);
-
-        // use the height of the lines we looked as the average
-        m_heightTotal = (wxCoord)
-                (((float)m_heightTotal / (3*NUM_LINES_TO_SAMPLE)) * m_lineMax);
-    }
-
+    // and our estimate for their total height
+    m_heightTotal = EstimateTotalHeight();
 
     // recalculate the scrollbars parameters
     m_lineFirst = 1;    // make sure it is != 0

@@ -144,6 +144,16 @@ protected:
     // usual
     virtual void OnGetLinesHint(size_t lineMin, size_t lineMax) const { }
 
+    // when the number of lines changes, we try to estimate the total height
+    // of all lines which is a rather expensive operation in terms of lines
+    // access, so if the user code may estimate the average height
+    // better/faster than we do, it should override this function to implement
+    // its own logic
+    //
+    // this function should return the best guess for the total height it may
+    // make
+    virtual wxCoord EstimateTotalHeight() const;
+
 
     // the event handlers
     void OnSize(wxSizeEvent& event);

@@ -90,6 +90,25 @@ Just as with the ctor above, {\tt wxVSCROLL} style is always used, there is no
 need to specify it explicitly.
 
 
+\membersection{wxVScrolledWindow::EstimateTotalHeight}\label{wxvscrolledwindowestimatetotalheight}
+
+\constfunc{virtual wxCoord}{EstimateTotalHeight}{\void}
+
+This protected function is used internally by wxVScrolledWindow to estimate the
+total height of the window when \helpref{SetLineCount}{wxvscrolledwindowsetlinecount} 
+is called. The default implementation uses the brute force approach if the
+number of the items in the control is small enough. Otherwise, it tries to find
+the average line height using some lines in the beginning, middle and the end.
+
+If it is undesirable to access all these lines (some of which might be never
+shown) just for the total height calculation, you may override the function and
+provide your own guess better and/or faster.
+
+Note that although returning a totally wrong value would still work, it risks
+to result in very strange scrollbar behaviour so this function should really
+try to make the best guess possible.
+
+
 \membersection{wxVScrolledWindow::GetFirstVisibleLine}\label{wxvscrolledwindowgetfirstvisibleline}
 
 \constfunc{size\_t}{GetFirstVisibleLine}{\void}
