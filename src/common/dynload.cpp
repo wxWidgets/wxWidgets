@@ -65,12 +65,12 @@ const char *dlerror(void);
 //        platform dependent files.
 
 #if defined(__WINDOWS__) || defined(__WXPM__) || defined(__EMX__)
-    const wxChar *wxDynamicLibrary::ms_dllext( _T(".dll") );
+    const wxChar *wxDynamicLibrary::ms_dllext = _T(".dll");
 #elif defined(__UNIX__)
     #if defined(__HPUX__)
-        const wxChar *wxDynamicLibrary::ms_dllext( _T(".sl") );
+        const wxChar *wxDynamicLibrary::ms_dllext = _T(".sl");
     #else
-        const wxChar *wxDynamicLibrary::ms_dllext( _T(".so") );
+        const wxChar *wxDynamicLibrary::ms_dllext = _T(".so");
     #endif
 #endif
 
