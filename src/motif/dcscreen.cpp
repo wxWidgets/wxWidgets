@@ -13,6 +13,7 @@
 #pragma implementation "dcscreen.h"
 #endif
 
+#include "wx/window.h"
 #include "wx/dcscreen.h"
 #include "wx/utils.h"
 
