@@ -97,13 +97,9 @@ wxThemeInfo::wxThemeInfo(Constructor c,
     }
     else // use native theme by default
     {
-        #if defined(__WXMSW__)
-            nameDefTheme = _T("win32");
-        #elif defined(__WXGTK__)
+        #if defined(__WXGTK__)
             nameDefTheme = _T("gtk");
-        #elif defined(__WXMGL__)
-            nameDefTheme = _T("win32");
-        #elif defined(__WXPM__)
+        #else
             nameDefTheme = _T("win32");
         #endif
     }
