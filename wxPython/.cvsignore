@@ -1,4 +1,6 @@
+.DS_Store
 .emacs.desktop
+.gdb_history
 MANIFEST
 build
 build.local

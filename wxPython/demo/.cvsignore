@@ -1,4 +1,5 @@
 *.pyc
+.DS_Store
 .emacs.desktop
 b.bat
 hangman_dict.txt
