@@ -32,20 +32,27 @@
 #   define    Str(str) str
 #endif
 
-enum wxLayoutObjectType { WXLO_TYPE_INVALID, WXLO_TYPE_TEXT, WXLO_TYPE_CMD, WXLO_TYPE_ICON, WXLO_TYPE_LINEBREAK };
+/// Types of currently supported layout objects.
+enum wxLayoutObjectType
+{ WXLO_TYPE_INVALID, WXLO_TYPE_TEXT, WXLO_TYPE_CMD, WXLO_TYPE_ICON, WXLO_TYPE_LINEBREAK };
 
+/// Type used for coordinates in drawing.
 typedef long CoordType;
 
 class wxLayoutList;
 class wxLayoutObjectBase;
 
+/// Define a list type of wxLayoutObjectBase pointers.
 KBLIST_DEFINE(wxLayoutObjectList, wxLayoutObjectBase);
-KBLIST_DEFINE(wxLayoutOLinesList, wxLayoutObjectList::iterator);
 
-
+/** The base class defining the interface to each object which can be
+    part of the layout. Each object needs to draw itself and calculate 
+    its size.
+*/
 class wxLayoutObjectBase
 {
 public:
+   /// return the type of this object
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_INVALID; } ;
    /** Draws an object.
        @param dc the wxDC to draw on
@@ -56,18 +63,31 @@ public:
    virtual void Draw(wxDC &dc, wxPoint position, CoordType baseLine,
                      bool draw = true) {};
 
+   /** Calculates and returns the size of the object. May need to be
+       called twice to work.
+       @param baseLine pointer where to store the baseline position of 
+       this object (i.e. the height from the top of the box to the
+       baseline)
+       @return the size of the object's box in pixels
+   */
    virtual wxPoint GetSize(CoordType *baseLine) const { return
                                                            wxPoint(0,0); };
    /// returns the number of cursor positions occupied by this object
    virtual CoordType CountPositions(void) const { return 1; }
 
+   /// constructor
    wxLayoutObjectBase() { m_UserData = NULL; }
+   /// note: any user data will be freed at the time the object is deleted
    virtual ~wxLayoutObjectBase() { if(m_UserData) delete m_UserData; }
 #ifdef WXLAYOUT_DEBUG
    virtual void Debug(void);
 #endif
 
+   /** Tells the object about some user data. This data is associated
+       with the object and will be deleted at destruction time.
+   */
    void   SetUserData(void *data) { m_UserData = data; }
+   /** Return the user data. */
    void * GetUserData(void) const { return m_UserData; }
 private:
    /// optional data for application's use
