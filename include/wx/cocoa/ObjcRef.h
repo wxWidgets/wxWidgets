@@ -25,7 +25,7 @@ class wxObjcAutoRefBase
 {
 protected:
     static struct objc_object* ObjcRetain(struct objc_object*);
-    static struct objc_object* ObjcRelease(struct objc_object*);
+    static void ObjcRelease(struct objc_object*);
 };
 
 // T should be a pointer like NSObject*

@@ -18,8 +18,8 @@
     return [obj retain];
 }
 
-/*static*/ struct objc_object* wxObjcAutoRefBase::ObjcRelease(struct objc_object* obj)
+/*static*/ void wxObjcAutoRefBase::ObjcRelease(struct objc_object* obj)
 {
-    return [obj release];
+    [obj release];
 }
 
