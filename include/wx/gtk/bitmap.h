@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -119,22 +119,10 @@ class wxBitmap: public wxObject
     wxPalette *GetColourMap() const
       { return GetPalette(); };
 
-  private:
-
-    friend wxDC;
-    friend wxPaintDC;
-    friend wxMemoryDC;
-    friend wxToolBar;
-    friend wxBitmapButton;
-    friend wxStaticBitmap;
-    friend wxFrame;
-    friend wxDialog;
-    friend wxTreeCtrl;
-    friend wxNotebook;
-
     GdkPixmap *GetPixmap() const;
     GdkBitmap *GetBitmap() const;
-  
+
+  private:
     void DestroyImage();
     void RecreateImage();
     void Render();
