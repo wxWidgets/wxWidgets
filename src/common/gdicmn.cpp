@@ -20,7 +20,6 @@
 #pragma hdrstop
 #endif
 
-#include "wx/log.h"
 
 #include "wx/gdicmn.h"
 #include "wx/brush.h"
@@ -31,6 +30,7 @@
 #include "wx/font.h"
 #include "wx/palette.h"
 
+#include "wx/log.h"
 #include <string.h>
 
 #ifdef __WXMSW__
