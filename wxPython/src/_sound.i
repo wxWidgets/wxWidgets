@@ -85,10 +85,21 @@ public:
     
     // Create from resource or file
     bool Create(const wxString& fileName, bool isResource = false);
-    
+
+#ifndef __WXMAC__
     // Create from data
     bool Create(int size, const wxByte* data);
-
+#else
+    %extend {
+        bool Create(int size, const wxByte* data) {
+            wxPyBeginBlockThreads();
+            PyErr_SetString(PyExc_NotImplementedError,
+                            "Create from data  is not available on this platform.");
+            wxPyEndBlockThreads();
+        }
+    }
+#endif
+    
     bool  IsOk();
     
     // Play the sound:
@@ -97,8 +108,13 @@ public:
     // Plays sound from filename:
     %name(PlaySound)static bool Play(const wxString& filename, unsigned flags = wxSOUND_ASYNC);
 
+#ifndef __WXMAC__
     static void Stop();
-
+#else
+    %extend {
+        static void Stop() {}
+    }
+#endif
 
     %pythoncode { def __nonzero__(self): return self.IsOk() }
 };
