@@ -728,8 +728,7 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     if ( info.m_mask & wxLIST_MASK_STATE )
     {
         lvItem.mask |= LVIF_STATE;
-        // the other bits are hardly interesting anyhow
-        lvItem.stateMask = LVIS_SELECTED | LVIS_FOCUSED;
+        wxConvertToMSWFlags(0, info.m_stateMask, lvItem);
     }
 
     bool success = ListView_GetItem((HWND)GetHWND(), &lvItem) != 0;
