@@ -189,6 +189,10 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     m_adjust->upper = fmax;
 
     gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
+    
+    // these two calls are required due to some bug in GTK
+    Refresh();
+    SetFocus();
 }
 
 void wxSpinButton::OnSize( wxSizeEvent &WXUNUSED(event) )

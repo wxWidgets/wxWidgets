@@ -35,7 +35,8 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool   g_blockEventsOnDrag;
+extern bool       g_blockEventsOnDrag;
+extern wxCursor   g_globalCursor;
 
 //-----------------------------------------------------------------------------
 //  "changed"
@@ -248,6 +249,8 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     SetBackgroundColour( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW) );
     SetForegroundColour( parent->GetForegroundColour() );
 
+    m_cursor = wxCursor( wxCURSOR_IBEAM );
+    
     Show( TRUE );
 
     return TRUE;
@@ -921,4 +924,31 @@ void wxTextCtrl::OnUpdateUndo(wxUpdateUIEvent& event)
 void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 {
     event.Enable( CanRedo() );
+}
+
+void wxTextCtrl::OnInternalIdle()
+{
+    wxCursor cursor = m_cursor;
+    if (g_globalCursor.Ok()) cursor = g_globalCursor;
+
+    if (cursor.Ok() && m_currentGdkCursor != cursor)
+    {
+        m_currentGdkCursor = cursor;
+	
+        GdkWindow *window = (GdkWindow*) NULL;
+	if (HasFlag(wxTE_MULTILINE))
+            window = GTK_TEXT(m_text)->text_area;
+        else
+            window = GTK_ENTRY(m_text)->text_area;
+	    
+        if (window)
+            gdk_window_set_cursor( window, cursor.GetCursor() );
+
+        if (!g_globalCursor.Ok())
+            cursor = *wxSTANDARD_CURSOR;
+
+        window = m_widget->window;
+        if (window)
+            gdk_window_set_cursor( window, cursor.GetCursor() );
+    }
 }

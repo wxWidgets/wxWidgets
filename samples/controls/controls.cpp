@@ -518,9 +518,9 @@ void MyPanel::OnPageChanging( wxNotebookEvent &event )
     int selOld = event.GetOldSelection();
     if ( selOld == 2 )
     {
-        if ( wxMessageBox("This demonstrates how a program may prevent the "
-                          "page change from taking place - if you select "
-                          "[No] the current page will stay the third one",
+        if ( wxMessageBox("This demonstrates how a program may prevent the\n"
+                          "page change from taking place - if you select\n"
+                          "[No] the current page will stay the third one\n",
                           "Control sample",
                           wxICON_QUESTION | wxYES_NO) != wxYES )
         {

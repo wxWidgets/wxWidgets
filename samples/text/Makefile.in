@@ -15,7 +15,7 @@ program_dir = samples/text
 
 DATAFILES = text.cpp
 
-PROGRAM=controls
+PROGRAM=text
 
 OBJECTS=$(PROGRAM).o
 

@@ -3,6 +3,13 @@
 % -----------------------------------------------------------------------------
 \section{\class{wxFileInputStream}}\label{wxfileinputstream}
 
+This classes represent data streams to and from a file. There are actually
+two such groups of classes: those documented here, and another group called
+wxFFileInputStream, wxFFileOutputStream and wxFFileStream which are not
+based on file descriptors (and their wxWindows equivalent wxFile) but the
+FILE* type (and wxFFile). Apart from the different constructor ("FILE *file"
+instead if "int fd") their interface is identical.
+
 \wxheading{Derived from}
 
 \helpref{wxInputStream}{wxinputstream}

@@ -132,7 +132,7 @@ extern bool       g_blockEventsOnDrag;
 extern bool       g_blockEventsOnScroll;
 extern wxCursor   g_globalCursor;
 static wxWindow  *g_captureWindow = (wxWindow*) NULL;
-wxWindow  *g_focusWindow = (wxWindow*) NULL;
+       wxWindow  *g_focusWindow = (wxWindow*) NULL;
 
 /* hack: we need something to pass to gtk_menu_popup, so we store the time of
    the last click here */

@@ -24,6 +24,11 @@
 #include "wx/string.h"
 #include "wx/stream.h"
 #include "wx/file.h"
+#include "wx/ffile.h"
+
+// ----------------------------------------------------------------------------
+// wxFileStream using wxFile
+// ----------------------------------------------------------------------------
 
 class wxFileInputStream: public wxInputStream {
  public:
@@ -81,6 +86,65 @@ class wxFileStream: public wxFileInputStream, public wxFileOutputStream {
   wxFileStream(const wxString& fileName);
 };
 
+// ----------------------------------------------------------------------------
+// wxFFileStream using wxFFile
+// ----------------------------------------------------------------------------
+
+class wxFFileInputStream: public wxInputStream {
+ public:
+  wxFFileInputStream(const wxString& ifileName);
+  wxFFileInputStream(wxFFile& file);
+  wxFFileInputStream(FILE *file);
+  ~wxFFileInputStream();
+
+  size_t GetSize() const;
+
+  bool Ok() const { return m_file->IsOpened(); }
+
+ protected:
+  wxFFileInputStream();
+
+  size_t OnSysRead(void *buffer, size_t size);
+  off_t OnSysSeek(off_t pos, wxSeekMode mode);
+  off_t OnSysTell() const;
+
+ protected:
+  wxFFile *m_file;
+  bool m_file_destroy;
+};
+
+class wxFFileOutputStream: public wxOutputStream {
+ public:
+  wxFFileOutputStream(const wxString& fileName);
+  wxFFileOutputStream(wxFFile& file);
+  wxFFileOutputStream(FILE *file);
+  virtual ~wxFFileOutputStream();
+
+  // To solve an ambiguity on GCC
+//  inline wxOutputStream& Write(const void *buffer, size_t size)
+//     { return wxOutputStream::Write(buffer, size); }
+
+  void Sync();
+  size_t GetSize() const;
+
+  bool Ok() const { return m_file->IsOpened(); }
+
+ protected:
+  wxFFileOutputStream();
+
+  size_t OnSysWrite(const void *buffer, size_t size);
+  off_t OnSysSeek(off_t pos, wxSeekMode mode);
+  off_t OnSysTell() const;
+
+ protected:
+  wxFFile *m_file;
+  bool m_file_destroy;
+};
+
+class wxFFileStream: public wxFFileInputStream, public wxFFileOutputStream {
+ public:
+  wxFFileStream(const wxString& fileName);
+};
 #endif
   // wxUSE_STREAMS && wxUSE_FILE
 

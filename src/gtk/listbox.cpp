@@ -193,6 +193,13 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 // "select" and "deselect"
 //-----------------------------------------------------------------------------
 
+static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox *listbox );
+
+static void gtk_listitem_deselect_callback( GtkWidget *widget, wxListBox *listbox )
+{
+    gtk_listitem_select_callback( widget, listbox );
+}
+
 static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox *listbox )
 {
     if (g_isIdle) wxapp_install_idle_handler();
@@ -310,7 +317,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
         if (style & wxLB_MULTIPLE)
             gtk_signal_connect( GTK_OBJECT(list_item), "deselect",
-              GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+              GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
 
         gtk_signal_connect( GTK_OBJECT(list_item),
                             "button_press_event",
@@ -480,7 +487,7 @@ void wxListBox::AppendCommon( const wxString &item )
 
     if (HasFlag(wxLB_MULTIPLE))
         gtk_signal_connect( GTK_OBJECT(list_item), "deselect",
-          GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+          GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
 
     gtk_signal_connect( GTK_OBJECT(list_item),
                         "button_press_event",
@@ -917,7 +924,7 @@ void wxListBox::DisableEvents()
 
         if (HasFlag(wxLB_MULTIPLE))
             gtk_signal_disconnect_by_func( GTK_OBJECT(child->data),
-              GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+              GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
 
         child = child->next;
     }
@@ -933,7 +940,7 @@ void wxListBox::EnableEvents()
 
         if (HasFlag(wxLB_MULTIPLE))
             gtk_signal_connect( GTK_OBJECT(child->data), "deselect",
-              GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+              GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
 	  
         child = child->next;
     }

@@ -127,6 +127,7 @@ public:
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
     void CalculateScrollbar();
+    void OnInternalIdle();
 
     void SetModified() { m_modified = TRUE; }
 

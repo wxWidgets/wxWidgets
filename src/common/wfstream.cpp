@@ -169,6 +169,148 @@ wxFileStream::wxFileStream(const wxString& fileName)
 {
 }
 
+// ----------------------------------------------------------------------------
+// wxFFileInputStream
+// ----------------------------------------------------------------------------
+
+wxFFileInputStream::wxFFileInputStream(const wxString& fileName)
+  : wxInputStream()
+{
+  m_file = new wxFFile(fileName, "r");
+  m_file_destroy = TRUE;
+}
+
+wxFFileInputStream::wxFFileInputStream()
+  : wxInputStream()
+{
+  m_file_destroy = FALSE;
+  m_file = NULL;
+}
+
+wxFFileInputStream::wxFFileInputStream(wxFFile& file)
+{
+  m_file = &file;
+  m_file_destroy = FALSE;
+}
+
+wxFFileInputStream::wxFFileInputStream(FILE *file)
+{
+  m_file = new wxFFile(file);
+  m_file_destroy = TRUE;
+}
+
+wxFFileInputStream::~wxFFileInputStream()
+{
+  if (m_file_destroy)
+    delete m_file;
+}
+
+size_t wxFFileInputStream::GetSize() const
+{
+  return m_file->Length();
+}
+
+size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
+{
+  off_t ret;
+
+  ret = m_file->Read(buffer, size);
+
+  if (m_file->Eof())
+    m_lasterror = wxStream_EOF;
+  if (ret == wxInvalidOffset) {
+    m_lasterror = wxStream_READ_ERR;
+    ret = 0;
+  } 
+
+  return ret;
+}
+
+off_t wxFFileInputStream::OnSysSeek(off_t pos, wxSeekMode mode)
+{
+  return m_file->Seek(pos, mode);
+}
+
+off_t wxFFileInputStream::OnSysTell() const
+{
+  return m_file->Tell();
+}
+
+// ----------------------------------------------------------------------------
+// wxFFileOutputStream
+// ----------------------------------------------------------------------------
+
+wxFFileOutputStream::wxFFileOutputStream(const wxString& fileName)
+{
+  m_file = new wxFFile(fileName, "w+");
+  m_file_destroy = TRUE;
+}
+
+wxFFileOutputStream::wxFFileOutputStream(wxFFile& file)
+{
+  m_file = &file;
+  m_file_destroy = FALSE;
+}
+
+wxFFileOutputStream::wxFFileOutputStream()
+  : wxOutputStream()
+{
+  m_file_destroy = FALSE;
+  m_file = NULL;
+}
+
+wxFFileOutputStream::wxFFileOutputStream(FILE *file)
+{
+  m_file = new wxFFile(file);
+  m_file_destroy = TRUE;
+}
+
+wxFFileOutputStream::~wxFFileOutputStream()
+{
+  if (m_file_destroy) {
+    Sync();
+    delete m_file;
+  }
+}
+
+size_t wxFFileOutputStream::OnSysWrite(const void *buffer, size_t size)
+{
+  size_t ret = m_file->Write(buffer, size);
+  if (m_file->Error())
+    m_lasterror = wxStream_WRITE_ERR;
+  else
+    m_lasterror = wxStream_NOERROR;
+  return ret;
+}
+
+off_t wxFFileOutputStream::OnSysTell() const
+{
+  return m_file->Tell();
+}
+
+off_t wxFFileOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
+{
+  return m_file->Seek(pos, mode);
+}
+
+void wxFFileOutputStream::Sync()
+{
+  wxOutputStream::Sync();
+  m_file->Flush();
+}
+
+size_t wxFFileOutputStream::GetSize() const
+{
+  return m_file->Length();
+}
+
+// ----------------------------------------------------------------------------
+// wxFFileStream
+// ----------------------------------------------------------------------------
+wxFFileStream::wxFFileStream(const wxString& fileName)
+ : wxFFileInputStream(fileName), wxFFileOutputStream(*wxFFileInputStream::m_file)
+{
+}
 #endif
   // wxUSE_STREAMS && wxUSE_FILE
 

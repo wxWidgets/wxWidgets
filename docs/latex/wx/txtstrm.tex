@@ -91,14 +91,14 @@ $\backslash$n or $\backslash$r$\backslash$n or $\backslash$r.
 This class provides functions that write text datas using an output stream.
 So, you can write \it{text} floats, integers.
 
-For example:
+You can also simulate the C++ cout class:
 \begin{verbatim}
-  wxFileOutputStream output( "mytext.txt" );
-  wxTextOutputStream text( output );
+  wxFFileOutputStream output( stderr );
+  wxTextOutputStream cout( output );
 
-  output << "This is a text line" << endl;
-  output << 1234;
-  output << 1.23456;
+  cout << "This is a text line" << endl;
+  cout << 1234;
+  cout << 1.23456;
 \end{verbatim}
 
 The wxTextOutputStream writes text files (or streams) on DOS, Macintosh

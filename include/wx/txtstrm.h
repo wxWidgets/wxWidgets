@@ -20,6 +20,14 @@
 
 #if wxUSE_STREAMS
 
+class WXDLLEXPORT wxTextInputStream;
+class WXDLLEXPORT wxTextOutputStream;
+
+typedef wxTextInputStream& (*__wxTextInputManip)(wxTextInputStream&);
+typedef wxTextOutputStream& (*__wxTextOutputManip)(wxTextOutputStream&);
+
+WXDLLEXPORT wxTextOutputStream &endl( wxTextOutputStream &stream );
+
 class WXDLLEXPORT wxTextInputStream {
 public:
   wxTextInputStream(wxInputStream& s);
@@ -40,7 +48,9 @@ public:
   wxTextInputStream& operator>>(wxUint32& i);
   wxTextInputStream& operator>>(double& i);
   wxTextInputStream& operator>>(float& f);
-
+  
+  wxTextInputStream& operator>>( __wxTextInputManip func) { return func(*this); }
+  
  protected:
   wxInputStream *m_input;
   
@@ -69,11 +79,11 @@ class WXDLLEXPORT wxTextOutputStream {
   wxTextOutputStream& operator<<(double f);
   wxTextOutputStream& operator<<(float f);
  
+  wxTextOutputStream& operator<<( __wxTextOutputManip func) { return func(*this); }
+  
  protected:
   wxOutputStream *m_output;
 };
-
-wxTextOutputStream &endl( wxTextOutputStream &stream );
 
 #endif
   // wxUSE_STREAMS
