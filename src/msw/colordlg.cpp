@@ -128,8 +128,8 @@ int wxColourDialog::ShowModal()
     chooseColorStruct.lCustData = (LPARAM)this;
     chooseColorStruct.lpfnHook = wxColourDialogHookProc;
 
-    if (!m_colourData.GetChooseFull())
-      chooseColorStruct.Flags |= CC_PREVENTFULLOPEN;
+    if (m_colourData.GetChooseFull())
+        chooseColorStruct.Flags |= CC_FULLOPEN;
 
     // Do the modal dialog
     bool success = ::ChooseColor(&(chooseColorStruct)) != 0;
