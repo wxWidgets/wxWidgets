@@ -40,6 +40,15 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
 
+#ifdef __GNUWIN32__
+typedef struct tagNMDATETIMECHANGE
+{
+    NMHDR       nmhdr;
+    DWORD       dwFlags;
+    SYSTEMTIME  st;
+} NMDATETIMECHANGE, FAR * LPNMDATETIMECHANGE;
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
