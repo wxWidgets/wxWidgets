@@ -2735,6 +2735,11 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
 wxWindowGTK::~wxWindowGTK()
 {
+    // Send destroy event
+    wxWindowDestroyEvent destroyEvent(this);
+    destroyEvent.SetId(GetId());
+    GetEventHandler()->ProcessEvent(destroyEvent);
+
     if (g_focusWindow == this)
         g_focusWindow = NULL;
 
@@ -3438,7 +3443,7 @@ int wxWindowGTK::GetCharHeight() const
     pango_layout_line_get_extents(line, NULL, &rect);
 
     g_object_unref( G_OBJECT( layout ) );
-    
+
     return (int) (rect.height / PANGO_SCALE);
 #else
     GdkFont *font = m_font.GetInternalFont( 1.0 );
@@ -3471,7 +3476,7 @@ int wxWindowGTK::GetCharWidth() const
     pango_layout_line_get_extents(line, NULL, &rect);
 
     g_object_unref( G_OBJECT( layout ) );
-    
+
     return (int) (rect.width / PANGO_SCALE);
 #else
     GdkFont *font = m_font.GetInternalFont( 1.0 );

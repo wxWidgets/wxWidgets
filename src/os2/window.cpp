@@ -3521,7 +3521,7 @@ bool wxWindowOS2::HandleCreate(
 bool wxWindowOS2::HandleDestroy()
 {
     wxWindowDestroyEvent            vEvent((wxWindow*)this);
-
+    vEvent.SetId(GetId());
     (void)GetEventHandler()->ProcessEvent(vEvent);
 
     //
