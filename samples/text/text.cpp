@@ -9,7 +9,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma interface "text.cpp"
     #pragma implementation "text.cpp"
 #endif
 

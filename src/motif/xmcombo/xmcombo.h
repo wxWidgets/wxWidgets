@@ -34,6 +34,10 @@
 extern "C" {
 #endif
 
+#ifdef XmNselectionCallback
+#undef XmNselectionCallback
+#endif
+    
 #define XmNselectionCallback		"selectionCallback"
 #define XmCSelectionCallback		"SelectionCallback"
 #define XmNunselectionCallback		"unselectionCallback"
