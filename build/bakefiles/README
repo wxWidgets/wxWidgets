@@ -3,8 +3,9 @@ This directory contains Bakefile (see http://bakefile.sourceforge.net)
 files needed to generate native makefiles for wxWindows library, contrib and
 samples.
 
-Use the bakefile_gen utility to regenerate the makefiles. If you run it with
-no arguments, it will generate all makefiles that are not up to date.
+Use the bakefile_gen utility to regenerate the makefiles (run it in this
+directory!). If you run it with no arguments, it will generate all makefiles
+that are not up to date.
 
 Use "bakefile_gen -c" to clean generated files.
 
