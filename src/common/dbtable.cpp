@@ -494,7 +494,7 @@ bool wxDbTable::bindParams(bool forUpdate)
                     else if (colDefs[i].SqlCtype == SQL_C_CHAR)
                         colDefs[i].CbValue = SQL_LEN_DATA_AT_EXEC(0);
                     else
-                    colDefs[i].CbValue = SQL_LEN_DATA_AT_EXEC(colDefs[i].SzDataObj);
+                        colDefs[i].CbValue = SQL_LEN_DATA_AT_EXEC(colDefs[i].SzDataObj);
                 break;
         }
         if (forUpdate)
