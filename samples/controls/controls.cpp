@@ -270,7 +270,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_notebook->AddPage(panel, "wxChoice", FALSE, Image_Choice);
   
   panel = new wxPanel(m_notebook);
-  m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(170,-1), 4, choices );
+  m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 4, choices );
   (void)new wxButton( panel, ID_COMBO_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_COMBO_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_COMBO_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );

@@ -25,7 +25,7 @@
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// wxRadioBox
+// "clicked"
 //-----------------------------------------------------------------------------
 
 static void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRadioBox *rb )
@@ -49,6 +49,8 @@ static void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRad
   rb->GetEventHandler()->ProcessEvent(event);
 }
 
+//-----------------------------------------------------------------------------
+// wxRadioBox
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox,wxControl)
@@ -90,6 +92,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
       
       m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, choices[i] ) );
       
+      ConnectWidget( GTK_WIDGET(m_radio) );
+  
       if (!i) gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_radio), TRUE );
       
       gtk_signal_connect( GTK_OBJECT(m_radio), "clicked", 
@@ -122,8 +126,10 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
   return TRUE;
 }
 
-void wxRadioBox::OnSize( wxSizeEvent &WXUNUSED(event) )
+void wxRadioBox::OnSize( wxSizeEvent &event )
 {
+  wxControl::OnSize( event );
+  
   int x = m_x+5;
   int y = m_y+15;
   
@@ -370,4 +376,19 @@ void wxRadioBox::SetFont( const wxFont &font )
     
     item = item->next;
   }
+}
+
+bool wxRadioBox::IsOwnGtkWindow( GdkWindow *window )
+{
+  if (window == m_widget->window) return TRUE;
+  
+  GSList *item = gtk_radio_button_group( m_radio );
+  while (item)
+  {
+    GtkWidget *button = GTK_WIDGET( item->data );
+    if (window == button->window) return TRUE;
+    item = item->next;
+  }
+  
+  return FALSE;
 }

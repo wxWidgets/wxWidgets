@@ -73,6 +73,7 @@ class wxChoice: public wxControl
     void SetColumns( int n = 1 );
     void SetSelection( int n );
     void SetStringSelection( const wxString &string );
+    
     void SetFont( const wxFont &font );
 };
 

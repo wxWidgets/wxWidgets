@@ -236,6 +236,7 @@ public:         // cannot get private going yet
   void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
     const wxSize &size, long style, const wxString &name );
   void PostCreation();
+  void ConnectWidget( GtkWidget *widget );
   bool HasVMT();
   virtual void ImplementSetSize();
   virtual void ImplementSetPosition();

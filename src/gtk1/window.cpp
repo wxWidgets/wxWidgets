@@ -28,11 +28,12 @@
 #include "wx/menu.h"
 #include "wx/notebook.h"
 #include "wx/statusbr.h"
-#include <wx/intl.h>
-#include "gdk/gdkkeysyms.h"
-#include <math.h>
+#include "wx/intl.h"
 #include "wx/gtk/win_gtk.h"
 #include "gdk/gdkprivate.h"
+#include "gdk/gdkkeysyms.h"
+
+#include <math.h>
 
 //-----------------------------------------------------------------------------
 // documentation on internals
@@ -592,6 +593,50 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
 }
 
 //-----------------------------------------------------------------------------
+// "enter_notify_event"
+//-----------------------------------------------------------------------------
+
+static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
+{
+  if (widget->window != gdk_event->window) return TRUE;
+  if (g_blockEventsOnDrag) return TRUE;
+  if (!win->HasVMT()) return TRUE;
+  
+  if (widget->window)
+    gdk_window_set_cursor( widget->window, win->m_cursor->GetCursor() );
+    
+  wxMouseEvent event( wxEVT_ENTER_WINDOW );
+  event.SetEventObject( win );
+  
+  if (win->GetEventHandler()->ProcessEvent( event ))
+    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "enter_notify_event" );
+  
+  return TRUE;
+}
+    
+//-----------------------------------------------------------------------------
+// "leave_notify_event"
+//-----------------------------------------------------------------------------
+
+static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
+{
+  if (widget->window != gdk_event->window) return TRUE;
+  if (!win->HasVMT()) return TRUE;
+  if (g_blockEventsOnDrag) return TRUE;
+  
+  if (widget->window)
+    gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
+    
+  wxMouseEvent event( wxEVT_LEAVE_WINDOW );
+  event.SetEventObject( win );
+  
+  if (win->GetEventHandler()->ProcessEvent( event ))
+    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "leave_notify_event" );
+  
+  return TRUE;
+}
+    
+//-----------------------------------------------------------------------------
 // "value_changed" from m_vAdjust
 //-----------------------------------------------------------------------------
 
@@ -739,42 +784,6 @@ static void gtk_window_drop_callback( GtkWidget *widget, GdkEvent *event, wxWind
 */
 }
 
-//-----------------------------------------------------------------------------
-// "enter_notify_event"
-//-----------------------------------------------------------------------------
-
-static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
-{
-  if (widget->window != gdk_event->window) return TRUE;
-  if (g_blockEventsOnDrag) return TRUE;
-  if (!win->HasVMT()) return TRUE;
-  
-  if (widget->window)
-    gdk_window_set_cursor( widget->window, win->m_cursor->GetCursor() );
-    
-  wxMouseEvent event( wxEVT_ENTER_WINDOW );
-  event.SetEventObject( win );
-  return win->GetEventHandler()->ProcessEvent( event );
-}
-    
-//-----------------------------------------------------------------------------
-// "leave_notify_event"
-//-----------------------------------------------------------------------------
-
-static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
-{
-  if (widget->window != gdk_event->window) return TRUE;
-  if (!win->HasVMT()) return TRUE;
-  if (g_blockEventsOnDrag) return TRUE;
-  
-  if (widget->window)
-    gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
-    
-  wxMouseEvent event( wxEVT_LEAVE_WINDOW );
-  event.SetEventObject( win );
-  return win->GetEventHandler()->ProcessEvent( event );
-}
-    
 //-----------------------------------------------------------------------------
 // wxWindow
 //-----------------------------------------------------------------------------
@@ -1019,11 +1028,6 @@ void wxWindow::PostCreation(void)
 {
   if (m_parent) m_parent->AddChild( this );
   
-//  GtkStyle *style = m_widget->style;
-//  style->font = m_font.GetInternalFont( 1.0 );          // destroy old font ?
-  
-  GtkWidget *connect_widget = GetConnectWidget();
- 
   if (m_wxwindow)
   {
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event", 
@@ -1033,40 +1037,7 @@ void wxWindow::PostCreation(void)
       GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
   }
   
-  gtk_signal_connect( GTK_OBJECT(connect_widget), "key_press_event",
-    GTK_SIGNAL_FUNC(gtk_window_key_press_callback), (gpointer)this );
-
-  gtk_signal_connect( GTK_OBJECT(connect_widget), "button_press_event",
-    GTK_SIGNAL_FUNC(gtk_window_button_press_callback), (gpointer)this );
-    
-  gtk_signal_connect( GTK_OBJECT(connect_widget), "button_release_event",
-    GTK_SIGNAL_FUNC(gtk_window_button_release_callback), (gpointer)this );
-    
-  gtk_signal_connect( GTK_OBJECT(connect_widget), "motion_notify_event",
-    GTK_SIGNAL_FUNC(gtk_window_motion_notify_callback), (gpointer)this );
-    
-  gtk_signal_connect( GTK_OBJECT(connect_widget), "focus_in_event", 
-    GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
-
-  gtk_signal_connect( GTK_OBJECT(connect_widget), "focus_out_event", 
-    GTK_SIGNAL_FUNC(gtk_window_focus_out_callback), (gpointer)this );
-
-  // Only for cursor handling
-    
-  gtk_signal_connect( GTK_OBJECT(m_widget), "enter_notify_event", 
-    GTK_SIGNAL_FUNC(gtk_window_enter_callback), (gpointer)this );
-    
-  gtk_signal_connect( GTK_OBJECT(m_widget), "leave_notify_event", 
-    GTK_SIGNAL_FUNC(gtk_window_leave_callback), (gpointer)this );
-    
-  if (m_wxwindow)
-  {
-    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "enter_notify_event", 
-      GTK_SIGNAL_FUNC(gtk_window_enter_callback), (gpointer)this );
-      
-    gtk_signal_connect( GTK_OBJECT(m_wxwindow), "leave_notify_event", 
-      GTK_SIGNAL_FUNC(gtk_window_leave_callback), (gpointer)this );
-  }
+  ConnectWidget( GetConnectWidget() );
   
   if (m_widget && m_parent) gtk_widget_realize( m_widget );
   
@@ -1079,6 +1050,33 @@ void wxWindow::PostCreation(void)
   SetCursor( wxSTANDARD_CURSOR );
   
   m_hasVMT = TRUE;
+}
+
+void wxWindow::ConnectWidget( GtkWidget *widget )
+{
+  gtk_signal_connect( GTK_OBJECT(widget), "key_press_event",
+    GTK_SIGNAL_FUNC(gtk_window_key_press_callback), (gpointer)this );
+
+  gtk_signal_connect( GTK_OBJECT(widget), "button_press_event",
+    GTK_SIGNAL_FUNC(gtk_window_button_press_callback), (gpointer)this );
+    
+  gtk_signal_connect( GTK_OBJECT(widget), "button_release_event",
+    GTK_SIGNAL_FUNC(gtk_window_button_release_callback), (gpointer)this );
+    
+  gtk_signal_connect( GTK_OBJECT(widget), "motion_notify_event",
+    GTK_SIGNAL_FUNC(gtk_window_motion_notify_callback), (gpointer)this );
+    
+  gtk_signal_connect( GTK_OBJECT(widget), "focus_in_event", 
+    GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
+
+  gtk_signal_connect( GTK_OBJECT(widget), "focus_out_event", 
+    GTK_SIGNAL_FUNC(gtk_window_focus_out_callback), (gpointer)this );
+
+  gtk_signal_connect( GTK_OBJECT(widget), "enter_notify_event", 
+    GTK_SIGNAL_FUNC(gtk_window_enter_callback), (gpointer)this );
+    
+  gtk_signal_connect( GTK_OBJECT(widget), "leave_notify_event", 
+    GTK_SIGNAL_FUNC(gtk_window_leave_callback), (gpointer)this );
 }
 
 bool wxWindow::HasVMT(void)

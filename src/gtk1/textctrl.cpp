@@ -324,7 +324,6 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
   {
     wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
     event.SetEventObject(this);
-    printf( "Hallo.\n" );
     if (GetEventHandler()->ProcessEvent(event)) return;
   }
   else if (key_event.KeyCode() == WXK_TAB) 

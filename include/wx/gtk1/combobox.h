@@ -94,6 +94,7 @@ class wxComboBox: public wxControl
   void SetEditable(bool editable);
   
   void SetFont( const wxFont &font );
+  void OnSize( wxSizeEvent &event );
   
   // implementation
 
@@ -102,8 +103,11 @@ class wxComboBox: public wxControl
   private:
   
     wxList   m_clientData;
+
+  GtkWidget* GetConnectWidget(void);
+  bool IsOwnGtkWindow( GdkWindow *window );
   
-    GtkWidget* GetConnectWidget(void);
+  DECLARE_EVENT_TABLE()
 };
 
 #endif // __GTKCOMBOBOXH__

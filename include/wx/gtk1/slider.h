@@ -84,8 +84,10 @@ class wxSlider: public wxControl
     int GetThumbLength(void) const;
     void SetTick( int tickPos );
 
-  public:
-  
+  // implementation    
+    
+    bool IsOwnGtkWindow( GdkWindow *window );
+    
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
     

@@ -84,6 +84,8 @@ class wxRadioBox: public wxControl
     
   // implementation    
     
+    bool IsOwnGtkWindow( GdkWindow *window );
+    
     bool            m_alreadySent;
     
   private:

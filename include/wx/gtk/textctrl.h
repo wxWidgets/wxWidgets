@@ -105,8 +105,8 @@ class wxTextCtrl: public wxControl, public streambuf
     
   // implementation    
     
-    virtual GtkWidget* GetConnectWidget(void);
-    virtual bool IsOwnGtkWindow( GdkWindow *window );
+    GtkWidget* GetConnectWidget(void);
+    bool IsOwnGtkWindow( GdkWindow *window );
     
   private:
   

@@ -238,3 +238,14 @@ void wxSlider::ClearSel(void)
 {
 }
 
+bool wxSlider::IsOwnGtkWindow( GdkWindow *window )
+{
+  GtkRange *range = GTK_RANGE(m_widget);
+  return ( (window == GTK_WIDGET(range)->window) ||
+           (window == range->trough) ||
+	   (window == range->slider) ||
+	   (window == range->step_forw) ||
+	   (window == range->step_back) );
+}
+
+

@@ -47,27 +47,14 @@ static void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox 
 }
 
 //-----------------------------------------------------------------------------
-// size 
-
-/*
-static gint gtk_combo_size_callback( GtkCombo *widget, GtkAllocation* alloc, wxComboBox *win )
-{ 
-  if (!win->HasVMT()) return FALSE;
-  if (g_blockEventsOnDrag) return FALSE;
-  if (!widget->button) return FALSE;
-  
-  widget->button->allocation.x = 
-    alloc->width - widget->button->allocation.width;
-  
-  return FALSE;
-}
-*/
-
-//-----------------------------------------------------------------------------
 // wxComboBox
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox,wxControl)
+
+BEGIN_EVENT_TABLE(wxComboBox, wxControl)
+  EVT_SIZE(wxComboBox::OnSize)
+END_EVENT_TABLE()
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
   const wxPoint& pos, const wxSize& size,
@@ -107,11 +94,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
   
   PostCreation();
 
-/*
-  gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate", 
-    GTK_SIGNAL_FUNC(gtk_combo_size_callback), (gpointer)this );
-*/
-
+  ConnectWidget( GTK_COMBO(m_widget)->button );
+  
   if (!value.IsNull()) SetValue( value );
     
   Show( TRUE );
@@ -375,10 +359,24 @@ void wxComboBox::Remove(long from, long to)
 
 void wxComboBox::SetSelection( long WXUNUSED(from), long WXUNUSED(to) )
 {
+  wxFAIL_MSG( "wxComboBox::SetSelection not implemented" );
 }
 
 void wxComboBox::SetEditable( bool WXUNUSED(editable) )
 {
+  wxFAIL_MSG( "wxComboBox::SetEditable not implemented" );
+}
+
+void wxComboBox::OnSize( wxSizeEvent &event )
+{
+  wxControl::OnSize( event );
+  
+  int w = 22;
+  
+  gtk_widget_set_usize( GTK_COMBO(m_widget)->entry, m_width-w-1, m_height );
+  
+  gtk_widget_set_uposition( GTK_COMBO(m_widget)->button, m_x+m_width-w, m_y );
+  gtk_widget_set_usize( GTK_COMBO(m_widget)->button, w, m_height );
 }
 
 void wxComboBox::SetFont( const wxFont &font )
@@ -404,10 +402,15 @@ void wxComboBox::SetFont( const wxFont &font )
     child = child->next;
   }
 }
-      
+
 GtkWidget* wxComboBox::GetConnectWidget(void)
 {
   return GTK_COMBO(m_widget)->entry;
 }
 
+bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
+{
+  return ( (window == GTK_ENTRY( GTK_COMBO(m_widget)->entry )->text_area) ||
+           (window == GTK_COMBO(m_widget)->button->window ) );
+}
 

@@ -84,16 +84,16 @@ class wxListBox: public wxControl
     void SetStringSelection( const wxString &string, bool select = TRUE );
     void SetFont( const wxFont &font );
 
-    virtual GtkWidget *GetConnectWidget(void);
-  
+  // implementation
+    
+    int GetIndex( GtkWidget *item ) const;
+    GtkWidget *GetConnectWidget(void);
+    
   private:
   
     GtkList   *m_list;
     wxList     m_clientData;
     
-  public:
-  
-    int GetIndex( GtkWidget *item ) const;
 };
 
 #endif // __GTKLISTBOXH__

@@ -23,7 +23,7 @@
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// wxScrollBar
+// "value_changed"
 //-----------------------------------------------------------------------------
 
 static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *win )
@@ -60,6 +60,10 @@ static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *wi
   win->ProcessEvent( cevent );
 */
 }
+
+//-----------------------------------------------------------------------------
+// wxScrollBar
+//-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar,wxControl)
 
@@ -209,3 +213,12 @@ void wxScrollBar::SetViewLength( int viewLength )
   SetScrollbar( pos, thumb, viewLength, page );
 }
 
+bool wxScrollBar::IsOwnGtkWindow( GdkWindow *window )
+{
+  GtkRange *range = GTK_RANGE(m_widget);
+  return ( (window == GTK_WIDGET(range)->window) ||
+           (window == range->trough) ||
+	   (window == range->slider) ||
+	   (window == range->step_forw) ||
+	   (window == range->step_back) );
+}

@@ -77,7 +77,9 @@ class wxScrollBar: public wxControl
     void SetObjectLength( int objectLength );
     void SetViewLength( int viewLength );
 
-  public:
+  // implementation    
+    
+    bool IsOwnGtkWindow( GdkWindow *window );
   
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
