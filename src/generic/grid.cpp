@@ -2944,6 +2944,9 @@ void wxGrid::Init()
     m_inOnKeyDown = FALSE;
     m_batchCount = 0;
 
+    m_extraWidth =
+    m_extraHeight = 50;
+
     CalcDimensions();
 }
 
@@ -3031,8 +3034,8 @@ void wxGrid::CalcDimensions()
 
     if ( m_numRows > 0  &&  m_numCols > 0 )
     {
-        int right = GetColRight( m_numCols-1 ) + 50;
-        int bottom = GetRowBottom( m_numRows-1 ) + 50;
+        int right = GetColRight( m_numCols-1 ) + m_extraWidth;
+        int bottom = GetRowBottom( m_numRows-1 ) + m_extraHeight;
 
         // TODO: restore the scroll position that we had before sizing
         //
@@ -6903,39 +6906,55 @@ void wxGrid::AutoSizeColumn( int col, bool setAsMin )
     }
 }
 
-void wxGrid::AutoSizeColumns( bool setAsMin )
+int wxGrid::SetOrCalcColumnSizes(bool calcOnly, bool setAsMin)
 {
     int width = m_rowLabelWidth;
 
     for ( int col = 0; col < m_numCols; col++ )
     {
-        AutoSizeColumn(col, setAsMin);
+        if ( !calcOnly )
+        {
+            AutoSizeColumn(col, setAsMin);
+        }
 
         width += GetColWidth(col);
     }
 
-    // also set the grid size to just fit the columns
-    SetSize(width, -1);
+    return width;
 }
 
-void wxGrid::AutoSizeRows(bool WXUNUSED(setAsMin))
+int wxGrid::SetOrCalcRowSizes(bool calcOnly, bool setAsMin)
 {
     int height = m_colLabelHeight;
 
     for ( int row = 0; row < m_numRows; row++ )
     {
-        // AutoSizeRow(row, setAsMin) -- TODO
+        // if ( !calcOnly ) AutoSizeRow(row, setAsMin) -- TODO
 
         height += GetRowHeight(row);
     }
 
-    SetSize(-1, height);
+    return height;
 }
 
 void wxGrid::AutoSize()
 {
-    AutoSizeColumns();
-    AutoSizeRows();
+    // set the size too
+    SetSize(SetOrCalcColumnSizes(FALSE), SetOrCalcRowSizes(FALSE));
+}
+
+wxSize wxGrid::DoGetBestSize() const
+{
+    // don't set sizes, only calculate them
+    wxGrid *self = (wxGrid *)this;  // const_cast
+
+    return wxSize(self->SetOrCalcColumnSizes(TRUE),
+                  self->SetOrCalcRowSizes(TRUE));
+}
+
+void wxGrid::Fit()
+{
+    AutoSize();
 }
 
 // ----------------------------------------------------------------------------

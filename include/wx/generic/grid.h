@@ -1078,9 +1078,11 @@ public:
     void     AutoSizeColumn( int col, bool setAsMin = TRUE );
 
     // auto size all columns (very ineffective for big grids!)
-    void     AutoSizeColumns( bool setAsMin = TRUE );
+    void     AutoSizeColumns( bool setAsMin = TRUE )
+        { (void)SetOrCalcColumnSizes(TRUE, setAsMin); }
 
-    void     AutoSizeRows( bool setAsMin = TRUE );
+    void     AutoSizeRows( bool setAsMin = TRUE )
+        { (void)SetOrCalcRowSizes(TRUE, setAsMin); }
 
     // auto size the grid, that is make the columns/rows of the "right" size
     // and also set the grid size to just fit its contents
@@ -1222,7 +1224,13 @@ public:
     wxGridCellEditor* GetDefaultEditorForType(const wxString& typeName) const;
     wxGridCellRenderer* GetDefaultRendererForType(const wxString& typeName) const;
 
-
+    // grid may occupy more space than needed for its rows/columns, this
+    // function allows to set how big this extra space is
+    void SetMargins(int extraWidth, int extraHeight)
+    {
+        m_extraWidth = extraWidth;
+        m_extraHeight = extraHeight;
+    }
 
     // ------ For compatibility with previous wxGrid only...
     //
@@ -1384,7 +1392,12 @@ public:
            wxGRID_CHOICE,
            wxGRID_COMBOBOX };
 
+    // overridden wxWindow methods
+    virtual void Fit();
+
 protected:
+    virtual wxSize DoGetBestSize() const;
+
     bool m_created;
     bool m_displayed;
 
@@ -1444,6 +1457,10 @@ protected:
     int m_rowLabelWidth;
     int m_colLabelHeight;
 
+    // the size of the margin left to the right and bottom of the cell area
+    int m_extraWidth,
+        m_extraHeight;
+
     wxColour   m_labelBackgroundColour;
     wxColour   m_labelTextColour;
     wxFont     m_labelFont;
@@ -1458,6 +1475,10 @@ protected:
 
     wxColour   m_gridLineColour;
     bool       m_gridLinesEnabled;
+
+    // common part of AutoSizeColumn/Row() and GetBestSize()
+    int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = TRUE);
+    int SetOrCalcRowSizes(bool calcOnly, bool setAsMin = TRUE);
 
     // if a column has a minimal width, it will be the value for it in this
     // hash table

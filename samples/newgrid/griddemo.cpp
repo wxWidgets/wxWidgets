@@ -756,10 +756,20 @@ static const wxChar* severities[] =
 static struct BugsGridData
 {
     int id;
-    const wxChar *summary;
+#ifndef __BORLANDC__
+    wxString
+#else
+    const wxChar *
+#endif
+        summary;
     Severity severity;
     int prio;
-    const wxChar *platform;
+#ifndef __BORLANDC__
+    wxString
+#else
+    const wxChar *
+#endif
+        platform;
     bool opened;
 } gs_dataBugsGrid [] =
 {
@@ -1003,7 +1013,8 @@ BugsGridFrame::BugsGridFrame()
     grid->SetColAttr(Col_Priority, attrRangeEditor);
     grid->SetColAttr(Col_Severity, attrCombo);
 
-    grid->AutoSize();
+    grid->SetMargins(0, 0);
 
+    grid->Fit();
     Fit();
 }
