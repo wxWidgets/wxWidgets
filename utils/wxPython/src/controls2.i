@@ -240,6 +240,25 @@ enum wxTreeItemIcon
 };
 
 
+// constants for HitTest
+enum {
+    wxTREE_HITTEST_ABOVE,
+    wxTREE_HITTEST_BELOW,
+    wxTREE_HITTEST_NOWHERE,
+    wxTREE_HITTEST_ONITEMBUTTON,
+    wxTREE_HITTEST_ONITEMICON,
+    wxTREE_HITTEST_ONITEMINDENT,
+    wxTREE_HITTEST_ONITEMLABEL,
+    wxTREE_HITTEST_ONITEMRIGHT,
+    wxTREE_HITTEST_ONITEMSTATEICON,
+    wxTREE_HITTEST_TOLEFT,
+    wxTREE_HITTEST_TORIGHT,
+    wxTREE_HITTEST_ONITEMUPPERPART,
+    wxTREE_HITTEST_ONITEMLOWERPART,
+    wxTREE_HITTEST_ONITEM
+};
+
+
 class wxTreeItemId {
 public:
     wxTreeItemId();
@@ -464,7 +483,7 @@ public:
 
     void SetItemBold(const wxTreeItemId& item, int bold = TRUE);
     bool IsBold(const wxTreeItemId& item) const;
-    wxTreeItemId HitTest(const wxPoint& point);
+    wxTreeItemId HitTest(const wxPoint& point, int& OUTPUT);
 
     void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);
     void SetItemBackgroundColour(const wxTreeItemId& item, const wxColour& col);
@@ -477,8 +496,13 @@ public:
     %addmethods {
         PyObject* GetBoundingRect(const wxTreeItemId& item, int textOnly = FALSE) {
             wxRect rect;
-            if (self->GetBoundingRect(item, rect, textOnly))
-                return wxPyConstructObject((void*)&rect, "wxRect");
+            if (self->GetBoundingRect(item, rect, textOnly)) {
+                bool doSave = wxPyRestoreThread();
+                wxRect* r = new wxRect(rect);
+                PyObject* val = wxPyConstructObject((void*)r, "wxRect");
+                wxPySaveThread(doSave);
+                return val;
+            }
             else {
                 Py_INCREF(Py_None);
                 return Py_None;

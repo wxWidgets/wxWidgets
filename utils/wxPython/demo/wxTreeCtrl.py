@@ -106,6 +106,9 @@ class TestTreeCtrlPanel(wxPanel):
     def OnSelChanged(self, event):
         self.item = event.GetItem()
         self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(self.item))
+        self.log.WriteText("BoundingRect: %s\n" %
+                           self.tree.GetBoundingRect(self.item, true))
+
 
 #---------------------------------------------------------------------------
 

@@ -5742,19 +5742,24 @@ static PyObject *_wrap_wxTreeCtrl_IsBold(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxTreeCtrl_HitTest(_swigobj,_swigarg0)  (_swigobj->HitTest(_swigarg0))
+#define wxTreeCtrl_HitTest(_swigobj,_swigarg0,_swigarg1)  (_swigobj->HitTest(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxTreeCtrl_HitTest(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTreeItemId * _result;
     wxTreeCtrl * _arg0;
     wxPoint * _arg1;
+    int * _arg2;
+    int  temp;
     PyObject * _argo0 = 0;
-    wxPoint  temp;
+    wxPoint  temp0;
     PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","point", NULL };
     char _ptemp[128];
 
     self = self;
+{
+  _arg2 = &temp;
+}
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_HitTest",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
@@ -5765,17 +5770,22 @@ static PyObject *_wrap_wxTreeCtrl_HitTest(PyObject *self, PyObject *args, PyObje
         }
     }
 {
-    _arg1 = &temp;
+    _arg1 = &temp0;
     if (! wxPoint_helper(_obj1, &_arg1))
         return NULL;
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxTreeItemId (wxTreeCtrl_HitTest(_arg0,*_arg1));
+        _result = new wxTreeItemId (wxTreeCtrl_HitTest(_arg0,*_arg1,*_arg2));
 
     wxPy_END_ALLOW_THREADS;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxTreeItemId_p");
     _resultobj = Py_BuildValue("s",_ptemp);
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
@@ -5953,8 +5963,13 @@ static PyObject *_wrap_wxTreeCtrl_SetItemDropHighlight(PyObject *self, PyObject 
 
 static PyObject * wxTreeCtrl_GetBoundingRect(wxTreeCtrl *self,const wxTreeItemId & item,int  textOnly) {
             wxRect rect;
-            if (self->GetBoundingRect(item, rect, textOnly))
-                return wxPyConstructObject((void*)&rect, "wxRect");
+            if (self->GetBoundingRect(item, rect, textOnly)) {
+                bool doSave = wxPyRestoreThread();
+                wxRect* r = new wxRect(rect);
+                PyObject* val = wxPyConstructObject((void*)r, "wxRect");
+                wxPySaveThread(doSave);
+                return val;
+            }
             else {
                 Py_INCREF(Py_None);
                 return Py_None;
@@ -6588,6 +6603,20 @@ SWIGEXPORT(void) initcontrols2c() {
 	 PyDict_SetItemString(d,"wxTreeItemIcon_Expanded", PyInt_FromLong((long) wxTreeItemIcon_Expanded));
 	 PyDict_SetItemString(d,"wxTreeItemIcon_SelectedExpanded", PyInt_FromLong((long) wxTreeItemIcon_SelectedExpanded));
 	 PyDict_SetItemString(d,"wxTreeItemIcon_Max", PyInt_FromLong((long) wxTreeItemIcon_Max));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_ABOVE", PyInt_FromLong((long) wxTREE_HITTEST_ABOVE));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_BELOW", PyInt_FromLong((long) wxTREE_HITTEST_BELOW));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_NOWHERE", PyInt_FromLong((long) wxTREE_HITTEST_NOWHERE));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEMBUTTON", PyInt_FromLong((long) wxTREE_HITTEST_ONITEMBUTTON));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEMICON", PyInt_FromLong((long) wxTREE_HITTEST_ONITEMICON));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEMINDENT", PyInt_FromLong((long) wxTREE_HITTEST_ONITEMINDENT));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEMLABEL", PyInt_FromLong((long) wxTREE_HITTEST_ONITEMLABEL));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEMRIGHT", PyInt_FromLong((long) wxTREE_HITTEST_ONITEMRIGHT));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEMSTATEICON", PyInt_FromLong((long) wxTREE_HITTEST_ONITEMSTATEICON));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_TOLEFT", PyInt_FromLong((long) wxTREE_HITTEST_TOLEFT));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_TORIGHT", PyInt_FromLong((long) wxTREE_HITTEST_TORIGHT));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEMUPPERPART", PyInt_FromLong((long) wxTREE_HITTEST_ONITEMUPPERPART));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEMLOWERPART", PyInt_FromLong((long) wxTREE_HITTEST_ONITEMLOWERPART));
+	 PyDict_SetItemString(d,"wxTREE_HITTEST_ONITEM", PyInt_FromLong((long) wxTREE_HITTEST_ONITEM));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)
