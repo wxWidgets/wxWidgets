@@ -34,9 +34,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
 
 #ifdef __WXWINCE__
+#include "wx/msw/wince/missing.h"
 
 int wxOpen(const wxChar *filename, int oflag, int WXUNUSED(pmode))
 {
