@@ -1,6 +1,16 @@
 wxWindows 2 Change Log
 ----------------------
 
+2.3.3
+-----
+
+wxBase:
+
+- wxRegEx class added
+
+2.3.2
+-----
+
 2.3.1
 -----
 

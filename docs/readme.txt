@@ -179,6 +179,10 @@ If you use JPEG image handler, documentation for your program should
 contain following sentence: "This software is based in part on the work of
 the Independent JPEG Group". See src/jpeg/README for details.
 
+If you use wxRegEx class on a system without native regular expressions
+support (i.e. MS Windows), see src/regex/COPYRIGHT file for Henry Spencer's
+regular expression library copyright.
+
 Documentation
 -------------
 
