@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Created:     2004-12-11
 // RCS-ID:      $Id$
-// Copyright:   (c) 2004 wxWindows 
+// Copyright:   (c) 2004 wxWindows
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -18,9 +18,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/gdicmn.h"
 #endif // WX_PRECOMP
-
-#include "wx/gdicmn.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -33,9 +32,11 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( RectTestCase );
+        CPPUNIT_TEST( Operators );
         CPPUNIT_TEST( Union );
     CPPUNIT_TEST_SUITE_END();
 
+    void Operators();
     void Union();
 
     DECLARE_NO_COPY_CLASS(RectTestCase)
@@ -46,6 +47,43 @@ CPPUNIT_TEST_SUITE_REGISTRATION( RectTestCase );
 
 // also include in it's own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RectTestCase, "RectTestCase" );
+
+void RectTestCase::Operators()
+{
+    // test + operator which works like Union but does not ignore empty rectangles
+    static const struct RectData
+    {
+        int x1, y1, w1, h1;
+        int x2, y2, w2, h2;
+        int x, y, w, h;
+
+        wxRect GetFirst() const { return wxRect(x1, y1, w1, h1); }
+        wxRect GetSecond() const { return wxRect(x2, y2, w2, h2); }
+        wxRect GetResult() const { return wxRect(x, y, w, h); }
+    } s_rects[] =
+    {
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 2, 2 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 4, 4 },
+        { 1, 1, 2, 2, 4, 4, 1, 1, 1, 1, 4, 4 },
+        { 2, 2, 2, 2, 4, 4, 4, 4, 2, 2, 6, 6 },
+        { 1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 4, 4 }
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(s_rects); n++ )
+    {
+        const RectData& data = s_rects[n];
+
+        CPPUNIT_ASSERT(
+            ( data.GetFirst() + data.GetSecond() ) == data.GetResult()
+        );
+
+        CPPUNIT_ASSERT(
+            ( data.GetSecond() + data.GetFirst() ) == data.GetResult()
+        );
+    }
+}
 
 void RectTestCase::Union()
 {
@@ -66,7 +104,7 @@ void RectTestCase::Union()
         { 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 4, 4 },
         { 1, 1, 2, 2, 4, 4, 1, 1, 1, 1, 4, 4 },
         { 2, 2, 2, 2, 4, 4, 4, 4, 2, 2, 6, 6 },
-        { 1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 4, 4 },
+        { 1, 1, 4, 4, 4, 4, 1, 1, 1, 1, 4, 4 }
     };
 
     for ( size_t n = 0; n < WXSIZEOF(s_rects); n++ )
@@ -82,4 +120,3 @@ void RectTestCase::Union()
         );
     }
 }
-
