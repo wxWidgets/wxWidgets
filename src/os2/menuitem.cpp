@@ -137,9 +137,9 @@ bool wxMenuItem::IsChecked() const
     return FALSE;
 }
 
-wxString wxMenuItem::GetLabel() const
+wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 {
-    return wxStripMenuCodes(m_text);
+    return wxStripMenuCodes(text);
 }
 
 // accelerators
