@@ -231,6 +231,10 @@ public:
     // returns true if it is a virtual list control
     bool IsVirtual() const { return (GetWindowStyle() & wxLC_VIRTUAL) != 0; }
 
+    // refresh items selectively (only useful for virtual list controls)
+    void RefreshItem(long item);
+    void RefreshItems(long itemFrom, long itemTo);
+
     // Operations
     ////////////////////////////////////////////////////////////////////////////
 

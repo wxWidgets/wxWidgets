@@ -1683,6 +1683,14 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
         case CDDS_ITEMPREPAINT:
             {
                 size_t item = (size_t)nmcd.dwItemSpec;
+                if ( item >= (size_t)GetItemCount() )
+                {
+                    // we get this message with item == 0 for an empty control,
+                    // we must ignore it as calling OnGetItemAttr() would be
+                    // wrong
+                    return CDRF_DODEFAULT;
+                }
+
                 wxListItemAttr *attr =
                     IsVirtual() ? OnGetItemAttr(item)
                                 : (wxListItemAttr *)m_attrs.Get(item);
@@ -1847,6 +1855,22 @@ void wxListCtrl::SetItemCount(long count)
     if ( !::SendMessage(GetHwnd(), LVM_SETITEMCOUNT, (WPARAM)count, 0) )
     {
         wxLogLastError(_T("ListView_SetItemCount"));
+    }
+}
+
+void wxListCtrl::RefreshItem(long item)
+{
+    if ( !ListView_Update(GetHwnd(), item) )
+    {
+        wxLogLastError(_T("ListView_Update"));
+    }
+}
+
+void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
+{
+    for ( long item = itemFrom; item <= itemTo; item++ )
+    {
+        RefreshItem(item);
     }
 }
 
