@@ -211,6 +211,14 @@ wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 
 
+#if defined(__WXMSW__) || defined(__WXMAC__)
+// Get the state of a key (true if pressed, false if not)
+// This is generally most useful getting the state of
+// Caps Lock, Num Lock and Scroll Lock...
+bool wxGetKeyState(wxKeyCode key);
+#endif
+
+
 //---------------------------------------------------------------------------
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
