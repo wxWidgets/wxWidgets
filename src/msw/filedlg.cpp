@@ -328,6 +328,7 @@ int wxFileDialog::ShowModal()
 
     DWORD errCode = CommDlgExtendedError();
 
+#ifdef __WIN32__
     if (!success && (errCode == CDERR_STRUCTSIZE))
     {
         // The struct size has changed so try a smaller or bigger size
@@ -345,6 +346,7 @@ int wxFileDialog::ShowModal()
                                             : (GetOpenFileName(&of) != 0);
         }
     }
+#endif
 
     if ( success )
     {

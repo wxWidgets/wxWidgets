@@ -548,6 +548,18 @@ bool wxFontMapper::TestAltEncoding(const wxString& configEntry,
     return FALSE;
 }
 
+#if wxUSE_GUI
+class ReentrancyBlocker
+{
+public:
+    ReentrancyBlocker(bool& b) : m_b(b) { m_b = TRUE; }
+    ~ReentrancyBlocker() { m_b = FALSE; }
+
+private:
+    bool& m_b;
+};
+#endif
+
 bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                                      wxNativeEncodingInfo *info,
                                      const wxString& facename,
@@ -568,15 +580,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     if ( interactive && s_inGetAltForEncoding )
         return FALSE;
 
-    class ReentrancyBlocker
-    {
-    public:
-        ReentrancyBlocker(bool& b) : m_b(b) { m_b = TRUE; }
-       ~ReentrancyBlocker() { m_b = FALSE; }
-
-    private:
-       bool& m_b;
-    } blocker(s_inGetAltForEncoding);
+    ReentrancyBlocker blocker(s_inGetAltForEncoding);
 #endif // wxUSE_GUI
 
     wxCHECK_MSG( info, FALSE, wxT("bad pointer in GetAltForEncoding") );

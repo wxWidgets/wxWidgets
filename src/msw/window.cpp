@@ -1097,11 +1097,14 @@ void wxWindow::DoGetSize(int *x, int *y) const
 {
     HWND hWnd = GetHwnd();
     RECT rect;
+#ifdef __WIN16__
+    ::GetWindowRect(hWnd, &rect);
+#else
     if ( !::GetWindowRect(hWnd, &rect) )
     {
         wxLogLastError(_T("GetWindowRect"));
     }
-
+#endif
     if ( x )
         *x = rect.right - rect.left;
     if ( y )
@@ -3060,10 +3063,14 @@ bool wxWindow::HandleGetMinMaxInfo(void *mmInfo)
 void wxWindow::SendSizeEvent()
 {
     RECT r;
+#ifdef __WIN16__
+    ::GetWindowRect(GetHwnd(), &r);
+#else
     if ( !::GetWindowRect(GetHwnd(), &r) )
     {
         wxLogLastError(_T("GetWindowRect"));
     }
+#endif
 
     (void)::PostMessage(GetHwnd(), WM_SIZE, SIZE_RESTORED,
                         MAKELPARAM(r.right - r.left, r.bottom - r.top));

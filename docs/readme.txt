@@ -1,5 +1,5 @@
-wxWindows 2.1.16
-----------------
+wxWindows 2.2.0
+---------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where
@@ -12,7 +12,7 @@ and facilities for writing TCP/IP applications, thread handling, and more.
 Where certain features are not available on a platform, such as MDI and
 tree controls on Unix, they are emulated.
 
-A detailed 1100-page reference manual is supplied in HTML, PDF and
+A detailed 1400-page reference manual is supplied in HTML, PDF and
 Windows Help form: see the docs hierarchy.
 
 For a quick start, point your Web browser at docs/html/index.htm for a
@@ -22,16 +22,6 @@ Changes in this release
 -----------------------
 
 Please see changes.txt for details.
-
-Note that there is a new contrib hierarchy for contributions,
-which mirrors the regular wxWindows hierarchy. The Object
-Graphics Library and MMedia library have been moved under
-contrib, so you may need to change your makefiles or project
-files, together with your source files. E.g. change #include "ogl.h"
-to #include <wx/ogl/ogl>.
-
-Also VC++ project files and makefiles have been made more
-consistent, so some paths and library names have changed.
 
 Platforms supported
 -------------------
@@ -46,6 +36,7 @@ wxWindows 2 currently supports the following platforms:
 
 Most popular C++ compilers are supported; see the install.txt
 file for each platform (available via docs/html/index.htm) for details.
+See also http://www.lpthe.jussieu.fr/~zeitlin/wxWindows/platform.html.
 
 Files
 -----
@@ -215,5 +206,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, 4th June, 2000
+The wxWindows Team, 9th July, 2000
 
