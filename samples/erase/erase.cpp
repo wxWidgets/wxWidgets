@@ -171,7 +171,7 @@ END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( MyFrame *parent )
  : wxScrolledWindow( parent, -1, wxDefaultPosition, wxDefaultSize, 
-                    wxScrolledWindowStyle|wxNO_FULL_REPAINT_ON_RESIZE )
+                    wxScrolledWindowStyle|wxNO_FULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER )
 {
     SetScrollbars( 10, 10, 40, 100, 0, 0 );
 }
@@ -180,6 +180,17 @@ void MyCanvas::OnPaint( wxPaintEvent &event )
 {
     wxPaintDC dc(this);
     PrepareDC( dc );
+        
+    wxRegionIterator upd( GetUpdateRegion() );
+    while (upd)
+    {
+        wxLogDebug( "Paint: %d %d %d %d", upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+        upd ++;
+    }
+    
+    dc.SetPen( *wxWHITE_PEN );
+    for (int i = 0; i < 20; i += 2)
+       dc.DrawLine( i,i, i+100,i );
     
     wxRegion region( 110, 110, 80, 80 );
     wxRegion hole( 130, 130, 40, 1 );
@@ -189,7 +200,7 @@ void MyCanvas::OnPaint( wxPaintEvent &event )
     dc.SetBrush( *wxRED_BRUSH );
     dc.DrawRectangle( 100, 100, 200, 200 );
     
-    dc.DestroyClipingRegion();
+    dc.DestroyClippingRegion();
 
     dc.SetPen( *wxTRANSPARENT_PEN );
     

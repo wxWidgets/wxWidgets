@@ -86,6 +86,7 @@ wxFont   wxNullFont;
 wxColour wxNullColour;
 
 // Default window names
+const char *wxControlNameStr = "control";
 const char *wxButtonNameStr = "button";
 const char *wxCanvasNameStr = "canvas";
 const char *wxCheckBoxNameStr = "check";
@@ -113,9 +114,6 @@ const char *wxButtonBarNameStr = "buttonbar";
 const char *wxEnhDialogNameStr = "Shell";
 const char *wxToolBarNameStr = "toolbar";
 const char *wxStatusLineNameStr = "status_line";
-#if 0  // this is defined in string.cpp
-const char *wxEmptyString = "";
-#endif
 const char *wxGetTextFromUserPromptStr = "Input Text";
 const char *wxMessageBoxCaptionStr = "Message";
 const char *wxFileSelectorPromptStr = "Select a file";

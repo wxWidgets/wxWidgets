@@ -31,6 +31,50 @@
                       const wxString& name = wxToolBarNameStr)
                 : wxToolBarSimple(parent, id, pos, size, style, name) { }
 
+            // the most commonly used version of AddTool()
+            wxToolBarToolBase *AddTool(int id,
+                               const wxBitmap& bitmap,
+                               const wxString& shortHelpString = wxEmptyString,
+                               const wxString& longHelpString = wxEmptyString)
+            {
+                return wxToolBarSimple::AddTool(id, bitmap, wxNullBitmap, FALSE, -1, -1, NULL,
+                       shortHelpString, longHelpString);
+            }
+            
+            // old form
+            wxToolBarToolBase *AddTool
+                               (
+                                   int id,
+                                   const wxBitmap& bitmap,
+                                   const wxBitmap& pushedBitmap,
+                                   bool toggle,
+                                   wxObject *clientData = NULL,
+                                   const wxString& shortHelpString = wxEmptyString,
+                                   const wxString& longHelpString = wxEmptyString
+                               )
+            {
+                return wxToolBarSimple::AddTool(id, bitmap, pushedBitmap, toggle, -1, -1, clientData,
+                       shortHelpString, longHelpString);
+            }
+            
+            // virtual overridden
+            virtual wxToolBarToolBase *AddTool
+                               (
+                                   int id,
+                                   const wxBitmap& bitmap,
+                                   const wxBitmap& pushedBitmap,
+                                   bool toggle,
+                                   wxCoord xPos,
+                                   wxCoord yPos = -1,
+                                   wxObject *clientData = NULL,
+                                   const wxString& shortHelpString = wxEmptyString,
+                                   const wxString& longHelpString = wxEmptyString
+                               )
+            {
+                return wxToolBarSimple::AddTool(id, bitmap, pushedBitmap, toggle, xPos, yPos, clientData,
+                       shortHelpString, longHelpString);
+            }
+            
         private:
             DECLARE_DYNAMIC_CLASS(wxToolBar)
         };

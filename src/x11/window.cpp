@@ -479,7 +479,7 @@ bool wxWindowX11::SetCursor(const wxCursor& cursor)
 
     Cursor xcursor = (Cursor) cursorToUse.GetCursor();
 
-    XDefineCursor( (Display*) wxGlobalDisplay(), xwindow, xcursor );
+    XDefineCursor( wxGlobalDisplay(), xwindow, xcursor );
 
     return TRUE;
 }
@@ -529,14 +529,15 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
     GC xgc = XCreateGC( xdisplay, xwindow, 0, NULL );
     XSetGraphicsExposures( xdisplay, xgc, True );
 
-    int s_x;
-    int s_y;
+    int s_x = 0;
+    int s_y = 0;
     int cw;
     int ch;
     if (rect)
     {
         s_x = rect->x;
         s_y = rect->y;
+        
         cw = rect->width;
         ch = rect->height;
     }
@@ -550,7 +551,7 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
     wxPoint offset = GetClientAreaOrigin();
     s_x += offset.x;
     s_y += offset.y;
-
+        
     int w = cw - abs(dx);
     int h = ch - abs(dy);
         
@@ -568,16 +569,17 @@ void wxWindowX11::ScrollWindow(int dx, int dy, const wxRect *rect)
     
         int d_x = s_x;
         int d_y = s_y;
+        
         if (dx < 0) s_x += -dx;
         if (dy < 0) s_y += -dy;
-        if (dx > 0) d_x = dx;
-        if (dy > 0) d_y = dy;
+        if (dx > 0) d_x = dx + offset.x;
+        if (dy > 0) d_y = dy + offset.y;
 
         XCopyArea( xdisplay, xwindow, xwindow, xgc, s_x, s_y, w, h, d_x, d_y );
         
-        // printf( "s_x %d s_y %d w %d h %d d_x %d d_y %d\n", s_x, s_y, w, h, d_x, d_y );
+        // wxLogDebug( "Copy: s_x %d s_y %d w %d h %d d_x %d d_y %d", s_x, s_y, w, h, d_x, d_y );
 
-        // printf( "rect %d %d %d %d\n", rect.x, rect.y, rect.width, rect.height );
+        // wxLogDebug( "Update: %d %d %d %d", rect.x, rect.y, rect.width, rect.height );
 
         m_updateRegion.Union( rect );
         m_clearRegion.Union( rect );
