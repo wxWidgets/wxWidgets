@@ -586,7 +586,7 @@ int vfwprintf(FILE *stream, const wxChar *format, va_list argptr)
     if ( rc != -1 )
     {
         // we can't do much better without Unicode support in libc...
-        if ( fprintf(stream, "%s", s.mb_str()) == -1 )
+        if ( fprintf(stream, "%s", (const char*)s.mb_str()) == -1 )
             return -1;
     }
 
