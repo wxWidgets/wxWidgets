@@ -1205,7 +1205,12 @@ static PyObject *_wrap_new_wxSingleChoiceDialog(PyObject *self, PyObject *args) 
         }
     }
 {
-    _arg3 = PyList_Size(_obj4);
+    if (_obj4) {
+        _arg3 = PyList_Size(_obj4);
+    }
+    else {
+        _arg3 = 0;
+    }
 }
     _result = (wxSingleChoiceDialog *)new_wxSingleChoiceDialog(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxSingleChoiceDialog_p");

@@ -853,7 +853,12 @@ static PyObject *_wrap_new_wxChoice(PyObject *self, PyObject *args) {
         }
     }
 {
-    _arg4 = PyList_Size(_obj5);
+    if (_obj5) {
+        _arg4 = PyList_Size(_obj5);
+    }
+    else {
+        _arg4 = 0;
+    }
 }
     _result = (wxChoice *)new_wxChoice(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7,_arg8);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxChoice_p");
@@ -1227,7 +1232,12 @@ static PyObject *_wrap_new_wxComboBox(PyObject *self, PyObject *args) {
         }
     }
 {
-    _arg5 = PyList_Size(_obj6);
+    if (_obj6) {
+        _arg5 = PyList_Size(_obj6);
+    }
+    else {
+        _arg5 = 0;
+    }
 }
     _result = (wxComboBox *)new_wxComboBox(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,*_arg8,_arg9);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxComboBox_p");
@@ -2303,7 +2313,12 @@ static PyObject *_wrap_new_wxListBox(PyObject *self, PyObject *args) {
         }
     }
 {
-    _arg4 = PyList_Size(_obj5);
+    if (_obj5) {
+        _arg4 = PyList_Size(_obj5);
+    }
+    else {
+        _arg4 = 0;
+    }
 }
     _result = (wxListBox *)new_wxListBox(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7,_arg8);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxListBox_p");
@@ -2590,7 +2605,12 @@ static PyObject *_wrap_wxListBox_Set(PyObject *self, PyObject *args) {
     }
 }
 {
-    _arg1 = PyList_Size(_obj2);
+    if (_obj2) {
+        _arg1 = PyList_Size(_obj2);
+    }
+    else {
+        _arg1 = 0;
+    }
 }
     wxListBox_Set(_arg0,_arg1,_arg2);
     Py_INCREF(Py_None);
@@ -2841,7 +2861,12 @@ static PyObject *_wrap_new_wxCheckListBox(PyObject *self, PyObject *args) {
         }
     }
 {
-    _arg4 = PyList_Size(_obj5);
+    if (_obj5) {
+        _arg4 = PyList_Size(_obj5);
+    }
+    else {
+        _arg4 = 0;
+    }
 }
     _result = (wxCheckListBox *)new_wxCheckListBox(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7,_arg8);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxCheckListBox_p");
@@ -4229,7 +4254,12 @@ static PyObject *_wrap_new_wxRadioBox(PyObject *self, PyObject *args) {
         }
     }
 {
-    _arg5 = PyList_Size(_obj6);
+    if (_obj6) {
+        _arg5 = PyList_Size(_obj6);
+    }
+    else {
+        _arg5 = 0;
+    }
 }
     _result = (wxRadioBox *)new_wxRadioBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,_arg8,*_arg9,_arg10);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxRadioBox_p");

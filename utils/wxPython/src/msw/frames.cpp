@@ -623,7 +623,12 @@ static PyObject *_wrap_wxFrame_SetStatusWidths(PyObject *self, PyObject *args) {
     }
 }
 {
-    _arg1 = PyList_Size(_obj2);
+    if (_obj2) {
+        _arg1 = PyList_Size(_obj2);
+    }
+    else {
+        _arg1 = 0;
+    }
 }
     wxFrame_SetStatusWidths(_arg0,_arg1,_arg2);
     Py_INCREF(Py_None);

@@ -176,6 +176,9 @@ public:
     %name(ConvertDialogPointToPixels) wxPoint ConvertDialogToPixels(const wxPoint& pt);
     %name(ConvertDialogSizeToPixels)  wxSize  ConvertDialogToPixels(const wxSize& sz);
 
+    %name(DLG_PNT) wxPoint ConvertDialogToPixels(const wxPoint& pt);
+    %name(DLG_SZE) wxSize  ConvertDialogToPixels(const wxSize& sz);
+
     %name(ConvertPixelPointToDialog) wxPoint ConvertPixelsToDialog(const wxPoint& pt);
     %name(ConvertPixelSizeToDialog)  wxSize  ConvertPixelsToDialog(const wxSize& sz);
 
@@ -354,6 +357,10 @@ public:
 
 class wxMenuItem {
 public:
+    wxMenuItem(wxMenu* parentMenu=NULL, int id=ID_SEPARATOR,
+               const wxString& text = wxPyEmptyStr,
+               const wxString& helpString = wxPyEmptyStr,
+               bool checkable = FALSE, wxMenu* subMenu = NULL);
     bool IsSeparator();
     bool IsEnabled();
     bool IsChecked();
@@ -361,13 +368,23 @@ public:
     int  GetId();
     wxMenu* GetSubMenu();
     void SetName(const wxString& strName);
-    const wxString& GetName();
-    const wxString& GetHelp();
+    wxString GetName();
+    wxString GetHelp();
     void SetHelp(const wxString& strHelp);
     void Enable(bool bDoEnable = TRUE);
     void Check(bool bDoCheck = TRUE);
 
 #ifdef __WXMSW__
+    wxColour& GetBackgroundColour();
+    wxBitmap GetBitmap(bool checked = TRUE);
+    wxFont& GetFont();
+    int GetMarginWidth();
+    wxColour& GetTextColour();
+    void SetBackgroundColour(const wxColour& colour);
+    void SetBitmaps(const wxBitmap& checked, const wxBitmap& unchecked = wxNullBitmap);
+    void SetFont(const wxFont& font);
+    void SetMarginWidth(int width);
+    void SetTextColour(const wxColour& colour);
     void DeleteSubMenu();
 #endif
 };
@@ -376,7 +393,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.14.4.1  1999/03/16 06:04:04  RD
+// wxPython 2.0b7
+//
 // Revision 1.14  1999/02/23 23:48:33  RD
+//
 // reenabled some methods for wxPython on wxGTK
 //
 // Revision 1.13  1999/02/20 10:02:38  RD

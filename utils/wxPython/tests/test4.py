@@ -22,7 +22,7 @@ class TestSimpleControlsDlg(wxDialog):
     def __init__(self, parent, log):
         self.log = log
         wxDialog.__init__(self, parent, -1, "Test Simple Controls",
-                          wxDefaultPosition, wxSize(350, 350))
+                          wxDefaultPosition, wxSize(350, 400))
 
 
         sampleList = ["zero", "one", "two", "three", "four", "five",
@@ -248,12 +248,12 @@ class ColoredPanel(wxWindow):
         self.SetBackgroundColour(color)
 
 
-class TestNotebookWindow(wxFrame):
+class TestNotebookWindow(wxDialog): #wxFrame):
     def __init__(self, parent, log):
-        wxFrame.__init__(self, parent, -1, 'Test wxNotebook',
-                         wxDefaultPosition, wxDefaultSize)
+        wxDialog.__init__(self, parent, -1, 'Test wxNotebook',
+                         wxDefaultPosition, wxSize(350, 300))
 
-        nb = wxNotebook(self, -1)
+        nb = wxNotebook(self, -1, wxPoint(0,0), self.GetClientSize())
 
         win = ColoredPanel(nb, wxBLUE)
         nb.AddPage(win, "Blue")
@@ -297,7 +297,6 @@ class TestNotebookWindow(wxFrame):
 
 
         nb.SetSelection(0)
-        self.SetSize(wxSize(350, 300))  # force a redraw so the notebook will draw
 
 
     def OnCloseWindow(self, event):
@@ -518,8 +517,8 @@ class TestListCtrlPanel(wxPanel):
                                wxLC_REPORT|wxSUNKEN_BORDER)
         self.list.SetImageList(self.il, wxIMAGE_LIST_SMALL)
 
-        self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
-        wxToolTip_Enable(true)
+        #self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
+        #wxToolTip_Enable(true)
 
         self.list.InsertColumn(0, "Column 0")
         self.list.InsertColumn(1, "Column 1")
@@ -1000,7 +999,11 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.15.2.1  1999/03/16 06:05:50  RD
+# wxPython 2.0b7
+#
 # Revision 1.15  1999/03/05 07:23:42  RD
+#
 # Minor wxPython changes for wxWin 2.0
 #
 # Revision 1.14  1999/02/27 04:20:50  RD

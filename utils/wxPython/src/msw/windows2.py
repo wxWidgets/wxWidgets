@@ -155,6 +155,7 @@ class wxGridPtr(wxPanelPtr):
     def GetCurrentRect(self):
         val = windows2c.wxGrid_GetCurrentRect(self.this)
         val = wxRectPtr(val)
+        val.thisown = 1
         return val
     def GetCursorColumn(self):
         val = windows2c.wxGrid_GetCursorColumn(self.this)

@@ -284,7 +284,12 @@ static PyObject *_wrap_wxGetSingleChoice(PyObject *self, PyObject *args) {
     }
     _arg7 = (bool ) tempbool7;
 {
-    _arg2 = PyList_Size(_obj3);
+    if (_obj3) {
+        _arg2 = PyList_Size(_obj3);
+    }
+    else {
+        _arg2 = 0;
+    }
 }
     _result = new wxString (wxGetSingleChoice(*_arg0,*_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8,_arg9));
 {
@@ -358,7 +363,12 @@ static PyObject *_wrap_wxGetSingleChoiceIndex(PyObject *self, PyObject *args) {
     }
     _arg7 = (bool ) tempbool7;
 {
-    _arg2 = PyList_Size(_obj3);
+    if (_obj3) {
+        _arg2 = PyList_Size(_obj3);
+    }
+    else {
+        _arg2 = 0;
+    }
 }
     _result = (int )wxGetSingleChoiceIndex(*_arg0,*_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8,_arg9);
     _resultobj = Py_BuildValue("i",_result);
@@ -3371,7 +3381,12 @@ static PyObject *_wrap_new_wxAcceleratorTable(PyObject *self, PyObject *args) {
     }
 }
 {
-    _arg0 = PyList_Size(_obj1);
+    if (_obj1) {
+        _arg0 = PyList_Size(_obj1);
+    }
+    else {
+        _arg0 = 0;
+    }
 }
     _result = (wxAcceleratorTable *)new_wxAcceleratorTable(_arg0,_arg1);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxAcceleratorTable_p");

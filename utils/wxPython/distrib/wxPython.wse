@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.0b6.exe
+  EXE Filename=wxPython-2.0b7.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -1034,6 +1034,11 @@ end
 item: Install File
   Source=e:\Projects\wxPython\utils.py
   Destination=%MAINDIR%\wxPython\utils.py
+  Flags=0000000010000010
+end
+item: Install File
+  Source=E:\PROJECTS\wxPython\utilsc.pyd
+  Destination=%MAINDIR%\wxPython\utilsc.pyd
   Flags=0000000010000010
 end
 item: Install File

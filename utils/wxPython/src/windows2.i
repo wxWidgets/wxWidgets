@@ -128,7 +128,7 @@ public:
     wxString& GetCellValue(int row, int col);
     int GetCols();
     int GetColumnWidth(int col);
-    wxRect& GetCurrentRect();
+    wxRect GetCurrentRect();
     int GetCursorColumn();
     int GetCursorRow();
     bool GetEditable();
@@ -332,7 +332,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.9.4.1  1999/03/16 06:04:05  RD
+// wxPython 2.0b7
+//
 // Revision 1.9  1999/02/25 07:08:36  RD
+//
 // wxPython version 2.0b5
 //
 // Revision 1.8  1998/12/17 18:05:53  RD

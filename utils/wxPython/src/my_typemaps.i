@@ -30,7 +30,12 @@ extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
 //----------------------------------------------------------------------
 
 %typemap(python,build) int LCOUNT {
-    $target = PyList_Size(_in_LIST);
+    if (_in_LIST) {
+        $target = PyList_Size(_in_LIST);
+    }
+    else {
+        $target = 0;
+    }
 }
 
 
@@ -198,7 +203,11 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4.4.1  1999/03/16 06:04:03  RD
+// wxPython 2.0b7
+//
 // Revision 1.4  1998/11/25 08:45:27  RD
+//
 // Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
 // Added events for wxGrid
 // Other various fixes and additions

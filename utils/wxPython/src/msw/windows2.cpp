@@ -1140,9 +1140,8 @@ static PyObject *_wrap_wxGrid_GetCurrentRect(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxRect & _result_ref = wxGrid_GetCurrentRect(_arg0);
-    _result = (wxRect *) &_result_ref;
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxRect_p");
+    _result = new wxRect (wxGrid_GetCurrentRect(_arg0));
+    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRect_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }

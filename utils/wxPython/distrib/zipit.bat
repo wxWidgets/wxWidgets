@@ -11,5 +11,6 @@ copy wxPython\docs\wx.htm wxPython\docs\index.htm
 zip -r wxPython\wxPython-docs-%1.zip wxPython\docs
 
 del /y wxPython\docs\*.*
+rmdir wxPython\docs
 
 move /R wxPython\*.zip wxPython\distrib

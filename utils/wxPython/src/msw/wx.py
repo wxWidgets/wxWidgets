@@ -1261,8 +1261,8 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.8  1999/03/05 07:23:07  RD
-# Minor wxPython changes for wxWin 2.0
+# Revision 1.8.2.1  1999/03/16 06:05:21  RD
+# wxPython 2.0b7
 #
 # Revision 1.11  1999/02/20 09:02:55  RD
 # Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a

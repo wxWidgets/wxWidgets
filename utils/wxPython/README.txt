@@ -59,6 +59,19 @@ Or you can send mail directly to the list using this address:
 
 
 
+What's new in 2.0b7
+-------------------
+Added DLG_PNT and DLG_SZE convienience methods to wxWindow class.
+
+Added missing constructor and other methods for wxMenuItem.
+
+
+
+What's new in 2.0b6
+-------------------
+Just a quickie update to fix the self-installer to be compatible with
+Python 1.5.2b2's Registry settings.
+
 
 What's new in 2.0b5
 -------------------
