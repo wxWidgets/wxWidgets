@@ -1171,46 +1171,38 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
 
         for ( size_t i = 0; i < dirCount; i++ )
         {
-            // TODO: What to do with ".." under VMS
-
             switch (format)
             {
                 case wxPATH_MAC:
-                {
                     if (m_dirs[i] == wxT("."))
                         break;
                     if (m_dirs[i] != wxT(".."))  // convert back from ".." to nothing
                          fullpath += m_dirs[i];
-                    fullpath += wxT(':');
                     break;
-                }
+
+                default:
+                    wxFAIL_MSG( wxT("unexpected path format") );
+                    // still fall through
+
                 case wxPATH_DOS:
-                {
-                    fullpath += m_dirs[i];
-                    fullpath += wxT('\\');
-                    break;
-                }
                 case wxPATH_UNIX:
-                {
                     fullpath += m_dirs[i];
-                    fullpath += wxT('/');
                     break;
-                }
+
                 case wxPATH_VMS:
-                {
+                    // TODO: What to do with ".." under VMS
                     if (m_dirs[i] != wxT(".."))  // convert back from ".." to nothing
                         fullpath += m_dirs[i];
-                    if (i == dirCount-1)
-                        fullpath += wxT(']');
-                    else
-                        fullpath += wxT('.');
                     break;
-                }
-                default:
-                {
-                    wxFAIL_MSG( wxT("error") );
-                }
             }
+
+            if ( i != dirCount - 1 )
+                fullpath += GetPathSeparator(format);
+        }
+
+        if ( format == wxPATH_VMS )
+        {
+            fullpath += wxT(']');
         }
     }
 
@@ -1224,91 +1216,11 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
 
 wxString wxFileName::GetFullPath( wxPathFormat format ) const
 {
-    format = GetFormat(format);
+    // we already have a function to get the path
+    wxString fullpath = GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR,
+                                format);
 
-    // first put the volume
-    wxString fullpath = wxGetVolumeString(m_volume, format);
-
-    // the leading character
-    if ( format == wxPATH_MAC )
-    {
-        if ( m_relative )
-            fullpath += wxFILE_SEP_PATH_MAC;
-    }
-    else if ( format == wxPATH_DOS )
-    {
-        if ( !m_relative )
-            fullpath += wxFILE_SEP_PATH_DOS;
-    }
-    else if ( format == wxPATH_UNIX )
-    {
-        if ( !m_relative )
-        {
-            // normally the absolute file names starts with a slash with one
-            // exception: file names like "~/foo.bar" don't have it
-            if ( m_dirs.IsEmpty() || m_dirs[0u] != _T('~') )
-            {
-                fullpath += wxFILE_SEP_PATH_UNIX;
-            }
-        }
-    }
-
-    // then concatenate all the path components using the path separator
-    size_t dirCount = m_dirs.GetCount();
-    if ( dirCount )
-    {
-        if ( format == wxPATH_VMS )
-        {
-            fullpath += wxT('[');
-        }
-
-
-        for ( size_t i = 0; i < dirCount; i++ )
-        {
-            // TODO: What to do with ".." under VMS
-
-            switch (format)
-            {
-                case wxPATH_MAC:
-                {
-                    if (m_dirs[i] == wxT("."))
-                        break;
-                    if (m_dirs[i] != wxT(".."))  // convert back from ".." to nothing
-                         fullpath += m_dirs[i];
-                    fullpath += wxT(':');
-                    break;
-                }
-                case wxPATH_DOS:
-                {
-                    fullpath += m_dirs[i];
-                    fullpath += wxT('\\');
-                    break;
-                }
-                case wxPATH_UNIX:
-                {
-                    fullpath += m_dirs[i];
-                    fullpath += wxT('/');
-                    break;
-                }
-                case wxPATH_VMS:
-                {
-                    if (m_dirs[i] != wxT(".."))  // convert back from ".." to nothing
-                        fullpath += m_dirs[i];
-                    if (i == dirCount-1)
-                        fullpath += wxT(']');
-                    else
-                        fullpath += wxT('.');
-                    break;
-                }
-                default:
-                {
-                    wxFAIL_MSG( wxT("error") );
-                }
-            }
-        }
-    }
-
-    // finally add the file name and extension
+    // now just add the file name and extension to it
     fullpath += GetFullName();
 
     return fullpath;
