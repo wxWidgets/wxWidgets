@@ -6,33 +6,53 @@
 from wxPython.wx import *
 from wxPython.lib.ErrorDialogs import *
 _debug = 0
-ID_BUTTON_wxPyFatalErrorDialog = 10001
-ID_BUTTON_wxPyNonFatalErrorDialog = 10002
-ID_BUTTON_wxPyFatalErrorDialogWithTraceback = 10003
-ID_BUTTON_wxPyNonFatalErrorDialogWithTraceback = 10004
+ID_TEXT = 10000
+ID_BUTTON_wxPyNonFatalError = 10001
+ID_BUTTON_wxPyFatalError = 10002
+ID_BUTTON_wxPyFatalErrorDialog = 10003
+ID_BUTTON_wxPyNonFatalErrorDialog = 10004
+ID_BUTTON_wxPyFatalErrorDialogWithTraceback = 10005
+ID_BUTTON_wxPyNonFatalErrorDialogWithTraceback = 10006
 
 def ErrorDialogsDemoPanelFunc( parent, call_fit = true, set_sizer = true ):
     item0 = wxBoxSizer( wxVERTICAL )
-
-    item1 = wxStaticText( parent, -1, "Please select one of the buttons below...", wxDefaultPosition, wxDefaultSize, 0 )
+    
+    item1 = wxStaticText( parent, ID_TEXT, "Please select one of the buttons below for an example using explicit errors...", wxDefaultPosition, wxDefaultSize, 0 )
     item0.AddWindow( item1, 0, wxALIGN_CENTRE|wxALL, 5 )
 
     item2 = wxFlexGridSizer( 0, 2, 0, 0 )
-
-    item6 = wxButton( parent, ID_BUTTON_wxPyNonFatalErrorDialogWithTraceback, "wxPyNonFatalErrorDialogWithTraceback", wxDefaultPosition, wxDefaultSize, 0 )
-    item6.SetDefault()
-    item2.AddWindow( item6, 0, wxALIGN_CENTRE|wxALL, 5 )
-
-    item3 = wxButton( parent, ID_BUTTON_wxPyFatalErrorDialog, "wxPyFatalErrorDialog", wxDefaultPosition, wxDefaultSize, 0 )
+    
+    item3 = wxButton( parent, ID_BUTTON_wxPyNonFatalError, "wxPyNonFatalError", wxDefaultPosition, wxDefaultSize, 0 )
     item2.AddWindow( item3, 0, wxALIGN_CENTRE|wxALL, 5 )
 
-    item4 = wxButton( parent, ID_BUTTON_wxPyNonFatalErrorDialog, "wxPyNonFatalErrorDialog", wxDefaultPosition, wxDefaultSize, 0 )
+    item4 = wxButton( parent, ID_BUTTON_wxPyFatalError, "wxPyFatalError", wxDefaultPosition, wxDefaultSize, 0 )
     item2.AddWindow( item4, 0, wxALIGN_CENTRE|wxALL, 5 )
 
-    item5 = wxButton( parent, ID_BUTTON_wxPyFatalErrorDialogWithTraceback, "wxPyFatalErrorDialogWithTraceback", wxDefaultPosition, wxDefaultSize, 0 )
-    item2.AddWindow( item5, 0, wxALIGN_CENTRE|wxALL, 5 )
-
     item0.AddSizer( item2, 0, wxALIGN_CENTRE|wxALL, 5 )
+
+    item5 = wxStaticText( parent, ID_TEXT, "Please select one of the buttons below for interpreter errors...", wxDefaultPosition, wxDefaultSize, 0 )
+    item0.AddWindow( item5, 0, wxALIGN_CENTRE|wxALL, 5 )
+
+    item6 = wxFlexGridSizer( 0, 2, 0, 0 )
+    
+    item7 = wxButton( parent, ID_BUTTON_wxPyFatalErrorDialog, "wxPyFatalErrorDialog", wxDefaultPosition, wxDefaultSize, 0 )
+    item6.AddWindow( item7, 0, wxALIGN_CENTRE|wxALL, 5 )
+
+    item8 = wxButton( parent, ID_BUTTON_wxPyNonFatalErrorDialog, "wxPyNonFatalErrorDialog", wxDefaultPosition, wxDefaultSize, 0 )
+    item6.AddWindow( item8, 0, wxALIGN_CENTRE|wxALL, 5 )
+
+    item9 = wxButton( parent, ID_BUTTON_wxPyFatalErrorDialogWithTraceback, "wxPyFatalErrorDialogWithTraceback", wxDefaultPosition, wxDefaultSize, 0 )
+    item6.AddWindow( item9, 0, wxALIGN_CENTRE|wxALL, 5 )
+
+    item10 = wxButton( parent, ID_BUTTON_wxPyNonFatalErrorDialogWithTraceback, "wxPyNonFatalErrorDialogWithTraceback", wxDefaultPosition, wxDefaultSize, 0 )
+    item10.SetDefault()
+    item6.AddWindow( item10, 0, wxALIGN_CENTRE|wxALL, 5 )
+
+    item0.AddSizer( item6, 0, wxALIGN_CENTRE|wxALL, 5 )
+
+    item11 = wxFlexGridSizer( 0, 2, 0, 0 )
+    
+    item0.AddSizer( item11, 0, wxALIGN_CENTRE|wxALL, 5 )
 
     if set_sizer == true:
         parent.SetAutoLayout( true )
@@ -40,10 +60,15 @@ def ErrorDialogsDemoPanelFunc( parent, call_fit = true, set_sizer = true ):
         if call_fit == true:
             item0.Fit( parent )
             item0.SetSizeHints( parent )
-
+    
     return item0
 
-# End of generated bit
+# Menu bar functions
+
+# Bitmap functions
+
+
+# End of generated file
 
 class MyPanel(wxPanel):
     def __init__(self,parent=None):
@@ -66,6 +91,12 @@ class MyPanel(wxPanel):
                    ID_BUTTON_wxPyFatalErrorDialog,
                    self.DoDialog)
         EVT_BUTTON(self,
+                   ID_BUTTON_wxPyNonFatalError,
+                   self.DoDialog)
+        EVT_BUTTON(self,
+                   ID_BUTTON_wxPyFatalError,
+                   self.DoDialog)
+        EVT_BUTTON(self,
                    ID_BUTTON_wxPyFatalErrorDialogWithTraceback,
                    self.DoDialog)
         EVT_BUTTON(self,
@@ -75,7 +106,7 @@ class MyPanel(wxPanel):
                    ID_BUTTON_wxPyNonFatalErrorDialogWithTraceback,
                    self.DoDialog)
         EVT_CLOSE(self,self.OnClose)
-
+    
     IndexFromID = {
         ID_BUTTON_wxPyFatalErrorDialog: 3,
         ID_BUTTON_wxPyFatalErrorDialogWithTraceback: 2,
@@ -84,9 +115,28 @@ class MyPanel(wxPanel):
         }
 
     def DoDialog(self,event):
-        sys.stderr = self.dialogs[self.IndexFromID[event.GetId()]]
-        print "%s.DoDialog(): testing %s..." % (self,sys.stderr)
-        this_will_generate_a_NameError_exception
+        id = event.GetId()
+        if id in [ID_BUTTON_wxPyFatalError,ID_BUTTON_wxPyNonFatalError]:
+            if id == ID_BUTTON_wxPyFatalError:
+                print "%s.DoDialog(): testing explicit wxPyFatalError..."\
+                      % self
+                wxPyFatalError(self,"Test Non-fatal error.<p>"
+                               "Nearly arbitrary HTML (i.e., that which is"
+                               " understood by <B><I>wxHtmlWindow</i></b>)."
+                               "<p><table border=\"2\"><tr><td>This</td><td>is</td></tr>"
+                               "<tr><td>a</td><td>table</td></tr></table></p>")
+            else:
+                print "%s.DoDialog(): testing explicit wxPyNonFatalError..."\
+                      % self
+                wxPyNonFatalError(self,"Test Non-fatal error.<p>"
+                                  "Nearly arbitrary HTML (i.e., that which is"
+                                  " understood by <B><I>wxHtmlWindow</i></b>)."
+                                  "<p><table border=\"2\"><tr><td>This</td><td>is</td></tr>"
+                                  "<tr><td>a</td><td>table</td></tr></table></p>")
+        else:
+            sys.stderr = self.dialogs[self.IndexFromID[id]]
+            print "%s.DoDialog(): testing %s..." % (self,sys.stderr)
+            this_will_generate_a_NameError_exception
 
     def OnClose(self,evt):
         for d in self.dialogs:
