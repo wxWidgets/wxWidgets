@@ -45,7 +45,12 @@
 #endif
 
 #if USE_HTML_HELP
-#   include "wx/generic/helpwxht.h"
+
+#include <wx/filesys.h>
+#include <wx/fs_zip.h>
+
+#include "wx/generic/helpwxht.h"
+#include "wx/html/helpctrl.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -84,18 +89,21 @@ public:
 
 #if USE_HTML_HELP
     wxHelpControllerHtml& GetHtmlHelpController() { return m_htmlHelp; }
+    wxHtmlHelpController& GetAdvancedHtmlHelpController() { return m_advancedHtmlHelp; }
 #endif
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
     void OnHtmlHelp(wxCommandEvent& event);
+    void OnAdvancedHtmlHelp(wxCommandEvent& event);
 
 private:
    wxHelpController         m_help;
 
 #if USE_HTML_HELP
    wxHelpControllerHtml     m_htmlHelp;
+   wxHtmlHelpController     m_advancedHtmlHelp;
 #endif
 
     // any class wishing to process wxWindows events must use this macro
@@ -123,11 +131,17 @@ enum
     HelpDemo_Html_Help_Help,
     HelpDemo_Html_Help_Search,
 
+    HelpDemo_Advanced_Html_Help_Index,
+    HelpDemo_Advanced_Html_Help_Classes,
+    HelpDemo_Advanced_Html_Help_Functions,
+    HelpDemo_Advanced_Html_Help_Help,
+    HelpDemo_Advanced_Html_Help_Search,
+
     HelpDemo_Help_KDE,
     HelpDemo_Help_GNOME,
     HelpDemo_Help_Netscape,
     // controls start here (the numbers are, of course, arbitrary)
-    HelpDemo_Text = 1000
+    HelpDemo_Text = 1000,
 };
 
 // ----------------------------------------------------------------------------
@@ -150,6 +164,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HelpDemo_Html_Help_Functions, MyFrame::OnHtmlHelp)
     EVT_MENU(HelpDemo_Html_Help_Help, MyFrame::OnHtmlHelp)
     EVT_MENU(HelpDemo_Html_Help_Search, MyFrame::OnHtmlHelp)
+
+    EVT_MENU(HelpDemo_Advanced_Html_Help_Index, MyFrame::OnAdvancedHtmlHelp)
+    EVT_MENU(HelpDemo_Advanced_Html_Help_Classes, MyFrame::OnAdvancedHtmlHelp)
+    EVT_MENU(HelpDemo_Advanced_Html_Help_Functions, MyFrame::OnAdvancedHtmlHelp)
+    EVT_MENU(HelpDemo_Advanced_Html_Help_Help, MyFrame::OnAdvancedHtmlHelp)
+    EVT_MENU(HelpDemo_Advanced_Html_Help_Search, MyFrame::OnAdvancedHtmlHelp)
 
     EVT_MENU(HelpDemo_Help_KDE, MyFrame::OnHelp)
     EVT_MENU(HelpDemo_Help_GNOME, MyFrame::OnHelp)
@@ -178,6 +198,12 @@ bool MyApp::OnInit()
 #if wxUSE_GIF
     // Required for images in the online documentation
     wxImage::AddHandler(new wxGIFHandler);
+
+    // Required for advanced HTML help
+#if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB
+      wxFileSystem::AddHandler(new wxZipFSHandler);
+#endif
+
 #endif
 #endif
 
@@ -199,11 +225,20 @@ bool MyApp::OnInit()
     }
 
 #if USE_HTML_HELP
-    // initialise the help system: this means that the HTML docs are in the
+    // initialise the standard HTML help system: this means that the HTML docs are in the
     // subdirectory doc for platforms using HTML help
     if ( !frame->GetHtmlHelpController().Initialize("doc") )
     {
         wxLogError("Cannot initialize the HTML help system, aborting.");
+
+        return FALSE;
+    }
+
+    // initialise the advanced HTML help system: this means that the HTML docs are in .htb
+    // (zipped) form
+    if ( !frame->GetAdvancedHtmlHelpController().Initialize("doc") )
+    {
+        wxLogError("Cannot initialize the advanced HTML help system, aborting.");
 
         return FALSE;
     }
@@ -230,7 +265,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_Help_Classes, "&Help on Classes...");
     menuFile->Append(HelpDemo_Help_Functions, "&Help on Functions...");
     menuFile->Append(HelpDemo_Help_Help, "&About Help Demo...");
-    menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Help_Search, "&Search help...");
 #if USE_HTML_HELP
     menuFile->AppendSeparator();
@@ -238,8 +272,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_Html_Help_Classes, "HTML &Help on Classes...");
     menuFile->Append(HelpDemo_Html_Help_Functions, "HTML &Help on Functions...");
     menuFile->Append(HelpDemo_Html_Help_Help, "HTML &About Help Demo...");
-    menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Html_Help_Search, "HTML &Search help...");
+    menuFile->AppendSeparator();
+    menuFile->Append(HelpDemo_Advanced_Html_Help_Index, "Advanced HTML &Help Index...");
+    menuFile->Append(HelpDemo_Advanced_Html_Help_Classes, "Advanced HTML &Help on Classes...");
+    menuFile->Append(HelpDemo_Advanced_Html_Help_Functions, "Advanced HTML &Help on Functions...");
+    menuFile->Append(HelpDemo_Advanced_Html_Help_Help, "Advanced HTML &About Help Demo...");
+    menuFile->Append(HelpDemo_Advanced_Html_Help_Search, "Advanced HTML &Search help...");
 #endif
 
 #ifndef __WXMSW__
@@ -360,6 +399,43 @@ void MyFrame::OnHtmlHelp(wxCommandEvent& event)
    case HelpDemo_Html_Help_Index:
    default:
       m_htmlHelp.DisplayContents();
+      break;
+   }
+#endif
+}
+
+void MyFrame::OnAdvancedHtmlHelp(wxCommandEvent& event)
+{
+#if USE_HTML_HELP
+   switch(event.GetId())
+   {
+
+   case HelpDemo_Advanced_Html_Help_Classes:
+      m_advancedHtmlHelp.DisplaySection(2);
+//      m_advancedHtmlHelp.Display("Classes"); // An alternative form
+      break;
+   case HelpDemo_Advanced_Html_Help_Functions:
+      m_advancedHtmlHelp.DisplaySection(1);
+//      m_advancedHtmlHelp.Display("Functions"); // An alternative form
+      break;
+   case HelpDemo_Advanced_Html_Help_Help:
+      m_advancedHtmlHelp.DisplaySection(3);
+//      m_advancedHtmlHelp.Display("About"); // An alternative form
+      break;
+
+   case HelpDemo_Advanced_Html_Help_Search:
+   {
+      wxString key = wxGetTextFromUser("Search for?",
+                                       "Search help for keyword",
+                                       "",
+                                       this);
+      if(! key.IsEmpty())
+         m_advancedHtmlHelp.KeywordSearch(key);
+   }
+   break;
+   case HelpDemo_Advanced_Html_Help_Index:
+   default:
+      m_advancedHtmlHelp.DisplayContents();
       break;
    }
 #endif

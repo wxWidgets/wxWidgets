@@ -129,7 +129,11 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     {
         m_gauge = new wxGauge(this, -1, maximum,
                 wxDefaultPosition, wxDefaultSize,
-                wxGA_HORIZONTAL | wxRAISED_BORDER | (style & wxGA_SMOOTH));
+                wxGA_HORIZONTAL | wxRAISED_BORDER);
+// Sorry, but wxGA_SMOOTH happens to also mean wxDIALOG_MODAL and will
+// cause the dialog to be modal. Have an extra style argument to wxProgressDialog,
+// perhaps.
+//                wxGA_HORIZONTAL | wxRAISED_BORDER | (style & wxGA_SMOOTH));
         c = new wxLayoutConstraints;
         c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
         c->top.Below(m_msg, 2*LAYOUT_Y_MARGIN);

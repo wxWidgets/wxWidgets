@@ -172,6 +172,12 @@ void wxToolBar::Init()
     m_maxHeight = -1;
     m_defaultWidth = 24;
     m_defaultHeight = 22;
+    m_toolPacking = 2;
+    m_toolSeparation = 8;
+    m_xMargin = 2;
+    m_yMargin = 2;
+    m_maxRows = 100;
+    m_maxCols = 100;
 }
 
 bool wxToolBar::Create(wxWindow *parent,

@@ -9,7 +9,7 @@
 wxHelpController!}
 
 This help controller provides an easy way of displaying HTML help in your
-application (see {\it test} sample). The help system is based on {\bf books}
+application (see {\it test} sample). The help system is based on {\bf books} 
 (see \helpref{AddBook}{wxhtmlhelpcontrolleraddbook}). A book is a logical
 section of documentation (for example "User's Guide" or "Programmer's Guide" or
 "C++ Reference" or "wxWindows Reference"). The help controller can handle as
@@ -33,9 +33,9 @@ have the following line in your .rc file:
 
 It is strongly recommended to use preprocessed {\bf .hhp.cached} version of
 projects. It can be either created on-the-fly (see 
-\helpref{SetTempDir}{wxhtmlhelpcontrollersettempdir}) or you can use
+\helpref{SetTempDir}{wxhtmlhelpcontrollersettempdir}) or you can use 
 {\bf hhp2cached} utility from {\it utils/hhp2cached} to create it and
-distribute the cached version together with helpfiles. See {\it samples/html/help}
+distribute the cached version together with helpfiles. See {\it samples/html/help} 
 sample for demonstration of its use.
 
 \wxheading{Derived from}
@@ -45,7 +45,6 @@ sample for demonstration of its use.
 \wxheading{Include files}
 
 <wx/html/helpctrl.h>
-
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -59,7 +58,7 @@ Constructor.
 
 {\it style} is combination of these flags:
 
-\begin{twocollist}
+\begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxHF\_TOOLBAR}}{Help frame has toolbar.}
 \twocolitem{\windowstyle{wxHF\_CONTENTS}}{Help frame has contents panel.}
 \twocolitem{\windowstyle{wxHF\_INDEX}}{Help frame has index panel.}
@@ -85,6 +84,13 @@ recommended way.
 
 If {\it show\_wait\_msg} is TRUE then a decorationless window with progress message is displayed.
 
+\membersection{wxHtmlHelpController::CreateHelpFrame}\label{wxhtmlhelpcontrollercreatehelpframe}
+
+\func{virtual wxHtmlHelpFrame*}{CreateHelpFrame}{\param{wxHtmlHelpData * }{data}}
+
+This protected virtual method may be overriden so that the controller
+uses slightly different frame. See {\it samples/html/helpview} sample for
+an example.
 \membersection{wxHtmlHelpController::Display}\label{wxhtmlhelpcontrollerdisplay}
 
 \func{void}{Display}{\param{const wxString\& }{x}}
@@ -152,7 +158,7 @@ Reads the controller's setting (position of window, etc.)
 
 Sets the path for storing temporary files - cached binary versions of index and contents files. These binary
 forms are much faster to read. Default value is empty string (empty string means
-that no cached data are stored). Note that these files are {\it not}
+that no cached data are stored). Note that these files are {\it not} 
 deleted when program exits.
 
 Once created these cached files will be used in all subsequent executions 
@@ -187,13 +193,5 @@ default wxConfig object if available (for details see
 \func{void}{WriteCustomization}{\param{wxConfigBase* }{cfg}, \param{wxString }{path = wxEmptyString}}
 
 Stores controllers setting (position of window etc.)
-
-\membersection{wxHtmlHelpController::CreateHelpFrame}\label{wxhtmlhelpcontrollercreatehelpframe}
-
-\func{virtual wxHtmlHelpFrame*}{CreateHelpFrame}{\param{wxHtmlHelpData * }{data}}
-
-This protected virtual method may be overriden so that the controller
-uses slightly different frame. See {\it samples/html/helpview} sample for
-an example.
 
 

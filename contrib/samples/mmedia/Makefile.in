@@ -17,7 +17,7 @@ PROGRAM=mmboard
 
 OBJECTS=mmboard.o mmbman.o
 
-EXTRA_LIBS= $(top_builddir)/lib/libwxmmedia2.a @ESD_LIBS@
+EXTRA_LIBS= $(top_builddir)/contrib/lib/libmmedia.a @ESD_LIBS@
 # the comment at the end of the next line is needed because otherwise autoconf
 # would remove this line completely - it contains a built-in hack to remove
 # any VPATH assignment not containing ':'
@@ -31,6 +31,9 @@ include ../../../src/make.env
 	$(CC) -c $(CPPFLAGS) $(EXTRA_CPPFLAGS) -o $@ $<
 
 all: $(PROGRAM)
+
+clean:
+	rm -f *.o $(PROGRAM)
 
 mmboard: $(OBJECTS)
 	$(CC) $(LDFLAGS) -o mmboard $(OBJECTS) $(EXTRA_LIBS) $(LDLIBS) $(top_builddir)/lib/@WX_TARGET_LIBRARY@

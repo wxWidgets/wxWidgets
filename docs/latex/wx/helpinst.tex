@@ -38,8 +38,7 @@ is reasonably close to the wxWindows help controller API; see {\tt wx/helpwxht.h
 details of use.
 \item \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}, a more sophisticated help controller using \helpref{wxHTML}{wxhtml}, in
 a similar style to the Windows HTML Help viewer and using some of the same files.
-The API is not the same as the standard API, which is why it is documented separately.
-\item wxXLPHelpController, for controlling wxHelp (from wxWindows 1). Obsolete.
+%The API is not the same as the standard API, which is why it is documented separately.
 \end{itemize}
 
 \wxheading{Derived from}
@@ -54,7 +53,7 @@ wxHelpControllerBase\\
 <wx/helpwin.h> (Windows Help controller)\\
 <wx/generic/helpext.h> (external HTML browser controller)
 <wx/generic/helpwxht.h> (wxHTML based help controller)
-<wx/generic/helpxlp.h> (wxHelp controller)
+<wx/html/helpctrl.h> (Advanced wxHTML based help controller: wxHtmlHelpController)
 
 \wxheading{See also}
 
@@ -85,7 +84,11 @@ number if using wxHelp. Does not invoke the help viewer.
 This must be called directly after the help instance object is created and before
 any attempts to communicate with the viewer.
 
-You may omit the file extension and a suitable one will be chosen.
+You may omit the file extension and a suitable one will be chosen. For
+wxHtmlHelpController, the extensions zip, htb and hhp will be appended while searching for
+a suitable file. For WinHelp, the hlp extension is appended. For wxHelpControllerHtml (the
+standard HTML help controller), the filename is assumed to be a directory containing
+the HTML files.
 
 \membersection{wxHelpController::DisplayBlock}\label{wxhelpcontrollerdisplayblock}
 
@@ -93,11 +96,11 @@ You may omit the file extension and a suitable one will be chosen.
 
 If the help viewer is not running, runs it and displays the file at the given block number.
 
-{\it wxHelp:} this is the wxHelp block number.
-
 {\it WinHelp:} Refers to the context number.
 
 {\it External HTML help:} the same as for \helpref{wxHelpController::DisplaySection}{wxhelpcontrollerdisplaysection}.
+
+{\it wxHtmlHelpController:} {\it sectionNo} is an identifier as specified in the {\tt .hhc} file. See \helpref{Help files format}{helpformat}.
 
 \membersection{wxHelpController::DisplayContents}\label{wxhelpcontrollerdisplaycontents}
 
@@ -112,8 +115,6 @@ contents.
 
 If the help viewer is not running, runs it and displays the given section.
 
-{\it wxHelp:} Sections are numbered starting from 1. Section numbers may be viewed by running wxHelp in edit mode.
-
 {\it WinHelp:} {\it sectionNo} is a context id.
 
 {\it External HTML help/wxHTML based help:} wxExtHelpController and wxHelpControllerHtml implement {\it sectionNo} as an id in a map file, which is of the form:
@@ -124,62 +125,24 @@ If the help viewer is not running, runs it and displays the given section.
 2  wx204.html          ; Function reference
 \end{verbatim}
 
-\membersection{wxHelpController::KeywordSearch}\label{wxhelpcontrollerkeywordsearch}
-
-\func{virtual bool}{KeywordSearch}{\param{const wxString\& }{keyWord}}
-
-If the help viewer is not running, runs it, and searches for sections matching the given keyword. If one
-match is found, the file is displayed at this section.
-
-{\it wxHelp:} If more than one
-match is found, the Search dialog is displayed with the matches.
-
-{\it WinHelp:} If more than one match is found, 
-the first topic is displayed.
-
-{\it External HTML help:} If more than one match is found, 
-a choice of topics is displayed.
-
-\membersection{wxHelpController::LoadFile}\label{wxhelpcontrollerloadfile}
-
-\func{virtual bool}{LoadFile}{\param{const wxString\& }{file = ""}}
-
-If the help viewer is not running, runs it and loads the given file.
-If the filename is not supplied or is
-NULL, the file specified in {\bf Initialize} is used. If the viewer is
-already displaying the specified file, it will not be reloaded. This
-member function may be used before each display call in case the user
-has opened another file.
-
-\membersection{wxHelpController::SetViewer}\label{wxhelpcontrollersetviewer}
-
-\func{virtual void}{SetViewer}{\param{const wxString\& }{viewer}, \param{long}{ flags}}
-
-Sets detailed viewer information. So far this is only relevant to wxExtHelpController.
-
-\membersection{wxHelpController::SetFrameParameters}\label{wxhelpcontrollersetframeparameters}
-\func{virtual void}{SetFrameParameters}
-{\param{const wxString \& }{title},
- \param{const wxSize \& }{size}, \param{const wxPoint \& }{pos = wxDefaultPosition},
- \param{bool }{newFrameEachTime = FALSE}}
-
-For the wxHelpControllerHtml, this allows the application to set the
-default frame title, size and position for the frame. If the title
-contains \%s, this will be replaced with the page title. If the
-parammeter newFrameEachTime is set, the controller will open a new
-help frame each time it is called. For all other help controllers this 
-function has no effect.
+{\it wxHtmlHelpController:} {\it sectionNo} is an identifier as specified in the {\tt .hhc} file. See \helpref{Help files format}{helpformat}.
 
 \membersection{wxHelpController::GetFrameParameters}\label{wxhelpcontrollergetframeparameters}
-\func{virtual wxFrame *}{GetFrameParameters}
-{\param{const wxSize * }{size = NULL}, \param{const wxPoint * }{pos = NULL},
+
+\func{virtual wxFrame *}{GetFrameParameters}{\param{const wxSize * }{size = NULL}, \param{const wxPoint * }{pos = NULL},
  \param{bool *}{newFrameEachTime = NULL}}
+
 This reads the current settings for the help frame in the case of the
 wxHelpControllerHtml, setting the frame size, position and
 the newFrameEachTime parameters to the last values used. It also
 returns the pointer to the last opened help frame. This can be used
 for example, to automatically close the help frame on program
-shutdown. For all other help controllers, this function does nothing
+shutdown.
+
+wxHtmlHelpController returns the frame,
+size and position.
+
+For all other help controllers, this function does nothing
 and just returns NULL.
 
 \wxheading{Parameters}
@@ -189,6 +152,34 @@ and just returns NULL.
 \docparam{flags}{This defaults to wxHELP\_NETSCAPE for wxExtHelpController, indicating
 that the viewer is a variant of Netscape Navigator.}
 
+\membersection{wxHelpController::KeywordSearch}\label{wxhelpcontrollerkeywordsearch}
+
+\func{virtual bool}{KeywordSearch}{\param{const wxString\& }{keyWord}}
+
+If the help viewer is not running, runs it, and searches for sections matching the given keyword. If one
+match is found, the file is displayed at this section.
+
+{\it WinHelp:} If more than one match is found, 
+the first topic is displayed.
+
+{\it External HTML help:} If more than one match is found, 
+a choice of topics is displayed.
+
+{\it wxHtmlHelpController:} see \helpref{wxHtmlHelpController::KeywordSearch}{wxhtmlhelpcontrollerkeywordsearch}.
+
+\membersection{wxHelpController::LoadFile}\label{wxhelpcontrollerloadfile}
+
+\func{virtual bool}{LoadFile}{\param{const wxString\& }{file = ""}}
+
+If the help viewer is not running, runs it and loads the given file.
+If the filename is not supplied or is
+empty, the file specified in {\bf Initialize} is used. If the viewer is
+already displaying the specified file, it will not be reloaded. This
+member function may be used before each display call in case the user
+has opened another file.
+
+wxHtmlHelpController ignores this call.
+
 \membersection{wxHelpController::OnQuit}\label{wxhelpcontrolleronquit}
 
 \func{virtual bool}{OnQuit}{\void}
@@ -196,6 +187,38 @@ that the viewer is a variant of Netscape Navigator.}
 Overridable member called when this application's viewer is quit by the user.
 
 This does not work for all help controllers.
+
+\membersection{wxHelpController::SetFrameParameters}\label{wxhelpcontrollersetframeparameters}
+
+\func{virtual void}{SetFrameParameters}{\param{const wxString \& }{title},
+ \param{const wxSize \& }{size}, \param{const wxPoint \& }{pos = wxDefaultPosition},
+ \param{bool }{newFrameEachTime = FALSE}}
+
+For wxHelpControllerHtml, this allows the application to set the
+default frame title, size and position for the frame. If the title
+contains \%s, this will be replaced with the page title. If the
+parameter newFrameEachTime is set, the controller will open a new
+help frame each time it is called.
+
+For wxHtmlHelpController, the title is set (again with \%s indicating the
+page title) and also the size and position of the frame if the frame is already
+open. {\it newFrameEachTime} is ignored.
+
+For all other help controllers this function has no effect.
+
+\membersection{wxHelpController::SetViewer}\label{wxhelpcontrollersetviewer}
+
+\func{virtual void}{SetViewer}{\param{const wxString\& }{viewer}, \param{long}{ flags}}
+
+Sets detailed viewer information. So far this is only relevant to wxExtHelpController.
+
+Some examples of usage:
+
+\begin{verbatim}
+  m_help.SetViewer("kdehelp");
+  m_help.SetViewer("gnome-help-browser");
+  m_help.SetViewer("netscape", wxHELP_NETSCAPE);
+\end{verbatim}
 
 \membersection{wxHelpController::Quit}\label{wxhelpcontrollerquit}
 

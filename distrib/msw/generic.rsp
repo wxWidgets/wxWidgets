@@ -152,66 +152,7 @@ utils/make*.*
 utils/configure
 utils/configure.in
 
-utils/wxgraph/src/*.cpp
-utils/wxgraph/src/*.c
-utils/wxgraph/src/*.h
-utils/wxgraph/src/makefile*
-utils/wxgraph/src/*.xbm
-utils/wxgraph/src/*.xpm
-utils/wxgraph/lib/dummy
-utils/wxgraph/src/*.ico
-utils/wxgraph/src/*.def
-utils/wxgraph/src/*.rc
-
-utils/rcparser/src/*.cpp
-utils/rcparser/src/*.c
-utils/rcparser/src/*.h
-utils/rcparser/src/makefile*
-utils/rcparser/src/*.xbm
-utils/rcparser/src/*.xpm
-utils/rcparser/lib/dummy
-utils/rcparser/src/*.ico
-utils/rcparser/src/*.def
-utils/rcparser/src/*.rc
-utils/rcparser/src/*.rh
-
-utils/colours/*.h
-utils/colours/*.cpp
-utils/colours/*.def
-utils/colours/*.rc
-utils/colours/makefile*
-utils/colours/*.xbm
-utils/colours/*.xpm
-utils/colours/*.txt
-
-utils/serialize/*.h
-utils/serialize/*.cpp
-utils/serialize/*.def
-utils/serialize/*.rc
-utils/serialize/makefile*
-utils/serialize/*.xbm
-utils/serialize/*.xpm
-utils/serialize/*.txt
-
-utils/hhp2cache/*.h
-utils/hhp2cache/*.cpp
-utils/hhp2cache/*.def
-utils/hhp2cache/*.rc
-utils/hhp2cache/makefile*
-utils/hhp2cache/*.xbm
-utils/hhp2cache/*.xpm
-utils/hhp2cache/*.txt
-
-utils/makegen/*.h
-utils/makegen/*.cpp
-utils/makegen/*.def
-utils/makegen/*.rc
-utils/makegen/makefile*
-utils/makegen/*.xbm
-utils/makegen/*.xpm
-utils/makegen/*.txt
-utils/makegen/templates/make*
-
+utils/dialoged/Makefile.in
 utils/dialoged/src/bitmaps/*.xbm
 utils/dialoged/src/bitmaps/*.xpm
 utils/dialoged/src/*.h
@@ -238,8 +179,18 @@ utils/dialoged/test/*.ico
 utils/dialoged/test/*.prj
 utils/dialoged/test/*.bmp
 
+utils/hhp2cache/*.h
+utils/hhp2cache/*.cpp
+utils/hhp2cache/*.def
+utils/hhp2cache/*.rc
+utils/hhp2cache/makefile*
+utils/hhp2cache/*.xbm
+utils/hhp2cache/*.xpm
+utils/hhp2cache/*.txt
+
 contrib/configure
 contrib/configure.in
+contrib/lib/dummy
 
 contrib/include/wx/mmedia/*.h
 contrib/include/wx/mmedia/internal/*.h
@@ -328,6 +279,8 @@ samples/help/*.bmp
 samples/help/*.rc
 samples/help/*.hlp
 samples/help/*.cnt
+samples/help/*.zip
+samples/help/*.htb
 samples/help/*.hpj
 samples/help/*.tex
 samples/help/*.ini
@@ -1069,7 +1022,6 @@ samples/opengl/cube/*.rc
 samples/opengl/cube/*.ico
 samples/opengl/cube/*.xbm
 samples/opengl/cube/make*.*
-samples/opengl/cube/Makefile
 
 samples/opengl/isosurf/*.cpp
 samples/opengl/isosurf/*.h
@@ -1078,7 +1030,6 @@ samples/opengl/isosurf/*.ico
 samples/opengl/isosurf/*.xbm
 samples/opengl/isosurf/*.dat.gz
 samples/opengl/isosurf/make*.*
-samples/opengl/isosurf/Makefile
 
 samples/opengl/penguin/*.cpp
 samples/opengl/penguin/*.c
@@ -1088,7 +1039,6 @@ samples/opengl/penguin/*.ico
 samples/opengl/penguin/*.xbm
 samples/opengl/penguin/*.xpm
 samples/opengl/penguin/make*.*
-samples/opengl/penguin/Makefile
 samples/opengl/penguin/penguin.lwo
 
 demos/makefile*

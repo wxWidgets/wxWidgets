@@ -1169,6 +1169,8 @@ enum wxStretch
 #define wxPD_ELAPSED_TIME       0x0008
 #define wxPD_ESTIMATED_TIME     0x0010
 // wxGA_SMOOTH = 0x0020 may also be used with wxProgressDialog
+// NO!!! This is wxDIALOG_MODAL and will cause the progress dialog to
+// be modal. No progress will then be made at all.
 #define wxPD_REMAINING_TIME     0x0040
 
 /*

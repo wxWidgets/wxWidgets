@@ -436,7 +436,7 @@ void csApp::CreateDiagramToolBar(wxFrame* parent)
     int zoomW = 60;
     int zoomH = 18;
 #ifdef __WXMOTIF__
-    controlX += 70;
+    controlX += 75;
     pointSizeW = 60;
     pointSizeH = 22;
     zoomW = 60;

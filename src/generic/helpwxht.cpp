@@ -212,6 +212,13 @@ wxHelpFrame::wxHelpFrame(wxWindow *parent, int id,
    m_htmlwin->SetRelatedStatusBar(0);
    m_htmlwin->AddFilter(m_filter);
 
+#ifdef __WXMOTIF__
+   // Motif needs a nudge to get it to resize properly
+   // when shown
+   wxSizeEvent event(size, GetId());
+   GetEventHandler()->ProcessEvent(event);
+#endif
+
    Show(TRUE);
 }
 

@@ -1,3 +1,4 @@
+utils/tex2rtf/Makefile.in
 utils/tex2rtf/src/*.cpp
 utils/tex2rtf/src/*.h
 utils/tex2rtf/src/make*.*

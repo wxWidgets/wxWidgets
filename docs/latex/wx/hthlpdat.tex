@@ -5,11 +5,10 @@
 
 \section{\class{wxHtmlHelpData}}\label{wxhtmlhelpdata}
 
-This class is used by \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}
+This class is used by \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} 
 and \helpref{wxHtmlHelpFrame}{wxhtmlhelpframe} to access HTML help items.
 It is internal class and should not be used directly - except for the case 
 you're writing your own HTML help controller.
-
 
 \wxheading{Derived from}
 
@@ -21,13 +20,11 @@ you're writing your own HTML help controller.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-
 \membersection{wxHtmlHelpData::wxHtmlHelpData}\label{wxhtmlhelpdatawxhtmlhelpdata}
 
 \func{}{wxHtmlHelpData}{\void}
 
 Constructor.
-
 
 \membersection{wxHtmlHelpData::AddBook}\label{wxhtmlhelpdataaddbook}
 
@@ -38,20 +35,17 @@ that contains arbitrary number of .hhp projects (this zip file can have
 either .zip or .htb extension, htb stands for "html book").
 Returns success.
 
-
 \membersection{wxHtmlHelpData::FindPageById}\label{wxhtmlhelpdatafindpagebyid}
 
 \func{wxString}{FindPageById}{\param{int }{id}}
 
 Returns page's URL based on integer ID stored in project.
 
-
 \membersection{wxHtmlHelpData::FindPageByName}\label{wxhtmlhelpdatafindpagebyname}
 
 \func{wxString}{FindPageByName}{\param{const wxString\& }{page}}
 
 Returns page's URL based on its (file)name.
-
 
 \membersection{wxHtmlHelpData::GetBookRecArray}\label{wxhtmlhelpdatagetbookrecarray}
 

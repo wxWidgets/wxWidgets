@@ -441,6 +441,9 @@ wxWindow::~wxWindow()
             m_borderWidget = (WXWidget) 0;
         }
     }
+    else // Why wasn't this here before? JACS 8/3/2000
+        DestroyChildren();
+
 
     // Destroy the window
     if (GetMainWidget())
