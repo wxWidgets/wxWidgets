@@ -88,9 +88,11 @@ public:
                            const wxRect& rect,
                            int flags = 0);
     virtual void DrawScrollbarThumb(wxDC& dc,
+                                    wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0);
     virtual void DrawScrollbarShaft(wxDC& dc,
+                                    wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0);
     virtual void DrawItem(wxDC& dc,
@@ -141,8 +143,44 @@ protected:
     void DrawAntiShadedRect(wxDC& dc, wxRect *rect,
                             const wxPen& pen1, const wxPen& pen2);
 
+    // used for drawing opened rectangles - draws only one side of it at once
+    // (and doesn't adjust the rect)
+    void DrawAntiShadedRectSide(wxDC& dc,
+                                const wxRect& rect,
+                                const wxPen& pen1,
+                                const wxPen& pen2,
+                                wxDirection dir);
+
+    // draw an opened rect for the arrow in given direction
+    void DrawArrowBorder(wxDC& dc,
+                         wxRect *rect,
+                         wxDirection dir);
+
+    // draw two sides of the rectangle
+    void DrawThumbBorder(wxDC& dc,
+                         wxRect *rect,
+                         wxOrientation orient);
+
     // draw the normal 3D border
     void DrawRaisedBorder(wxDC& dc, wxRect *rect);
+
+    // returns the size of the arrow for the scrollbar (depends on
+    // orientation)
+    wxSize GetScrollbarArrowSize(const wxScrollBar *scrollbar)
+    {
+        wxSize size;
+        if ( scrollbar->IsVertical() )
+        {
+            size = m_sizeScrollbarArrow;
+        }
+        else
+        {
+            size.x = m_sizeScrollbarArrow.y;
+            size.y = m_sizeScrollbarArrow.x;
+        }
+
+        return size;
+    }
 
 private:
     const wxColourScheme *m_scheme;
@@ -186,7 +224,31 @@ public:
         : wxStdScrollBarInputHandler(renderer, handler) { }
 
 protected:
+    virtual void Highlight(wxScrollBar *scrollbar, bool doIt)
+    {
+        // only arrows and the thumb can be highlighted
+        if ( !IsArrow() && m_htLast != wxHT_SCROLLBAR_THUMB )
+            return;
+
+        wxStdScrollBarInputHandler::Highlight(scrollbar, doIt);
+    }
+
+    virtual void Press(wxScrollBar *scrollbar, bool doIt)
+    {
+        // only arrows can be pressed
+        if ( !IsArrow() )
+            return;
+
+        wxStdScrollBarInputHandler::Press(scrollbar, doIt);
+    }
+
     virtual bool IsAllowedButton(int WXUNUSED(button)) { return TRUE; }
+
+    bool IsArrow() const
+    {
+        return m_htLast == wxHT_SCROLLBAR_ARROW_LINE_1 ||
+                m_htLast == wxHT_SCROLLBAR_ARROW_LINE_2;
+    }
 };
 
 // ----------------------------------------------------------------------------
@@ -262,6 +324,8 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
         else if ( control == _T("wxScrollBar") )
             handler = new wxGTKScrollBarInputHandler(m_renderer,
                                                      GetInputHandler(_T("wxControl")));
+        else if ( control == _T("wxListBox") )
+            handler = new wxStdListboxInputHandler(GetInputHandler(_T("wxControl")));
         else
             handler = new wxGTKInputHandler(m_renderer);
 
@@ -329,7 +393,7 @@ wxGTKRenderer::wxGTKRenderer(const wxColourScheme *scheme)
 {
     // init data
     m_scheme = scheme;
-    m_sizeScrollbarArrow = wxSize(12, 12);
+    m_sizeScrollbarArrow = wxSize(16, 14);
 
     // init pens
     m_penBlack = wxPen(scheme->Get(wxColourScheme::SHADOW_DARK), 0, wxSOLID);
@@ -385,6 +449,41 @@ void wxGTKRenderer::DrawShadedRect(wxDC& dc, wxRect *rect,
 
     // adjust the rect
     rect->Inflate(-1);
+}
+
+void wxGTKRenderer::DrawAntiShadedRectSide(wxDC& dc,
+                                           const wxRect& rect,
+                                           const wxPen& pen1,
+                                           const wxPen& pen2,
+                                           wxDirection dir)
+{
+    dc.SetPen(dir == wxLEFT || dir == wxUP ? pen1 : pen2);
+
+    switch ( dir )
+    {
+        case wxLEFT:
+            dc.DrawLine(rect.GetLeft(), rect.GetTop(),
+                        rect.GetLeft(), rect.GetBottom() + 1);
+            break;
+
+        case wxUP:
+            dc.DrawLine(rect.GetLeft(), rect.GetTop(),
+                        rect.GetRight() + 1, rect.GetTop());
+            break;
+
+        case wxRIGHT:
+            dc.DrawLine(rect.GetRight(), rect.GetTop(),
+                        rect.GetRight(), rect.GetBottom() + 1);
+            break;
+
+        case wxDOWN:
+            dc.DrawLine(rect.GetLeft(), rect.GetBottom(),
+                        rect.GetRight() + 1, rect.GetBottom());
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unknown rectangle side"));
+    }
 }
 
 void wxGTKRenderer::DrawAntiShadedRect(wxDC& dc, wxRect *rect,
@@ -656,13 +755,98 @@ void wxGTKRenderer::DrawBackground(wxDC& dc,
 // scrollbar
 // ----------------------------------------------------------------------------
 
+void wxGTKRenderer::DrawArrowBorder(wxDC& dc,
+                                    wxRect *rect,
+                                    wxDirection dir)
+{
+    static const wxDirection sides[] =
+    {
+        wxUP, wxLEFT, wxRIGHT, wxDOWN
+    };
+
+    wxRect rect1, rect2, rectInner;
+    rect1 =
+    rect2 =
+    rectInner = *rect;
+
+    rect2.Inflate(-1);
+    rectInner.Inflate(-2);
+
+    // find the side not to draw and also adjust the rectangles to compensate
+    // for it
+    wxDirection sideToOmit;
+    switch ( dir )
+    {
+        case wxUP:
+            sideToOmit = wxDOWN;
+            rect2.height += 1;
+            rectInner.height += 2;
+            break;
+
+        case wxDOWN:
+            sideToOmit = wxUP;
+            rect2.y -= 1;
+            rect2.height += 1;
+            rectInner.y -= 2;
+            rectInner.height += 2;
+            break;
+
+        case wxLEFT:
+            sideToOmit = wxRIGHT;
+            rect2.width += 1;
+            rectInner.width += 2;
+            break;
+
+        case wxRIGHT:
+            sideToOmit = wxLEFT;
+            rect2.x -= 1;
+            rect2.width += 1;
+            rectInner.x -= 2;
+            rectInner.width += 2;
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unknown arrow direction"));
+            return;
+    }
+
+    // the outer rect first
+    size_t n;
+    for ( n = 0; n < WXSIZEOF(sides); n++ )
+    {
+        wxDirection side = sides[n];
+        if ( side == sideToOmit )
+            continue;
+
+        DrawAntiShadedRectSide(dc, rect1, m_penDarkGrey, m_penHighlight, side);
+    }
+
+    // and then the inner one
+    for ( n = 0; n < WXSIZEOF(sides); n++ )
+    {
+        wxDirection side = sides[n];
+        if ( side == sideToOmit )
+            continue;
+
+        DrawAntiShadedRectSide(dc, rect2, m_penBlack, m_penGrey, side);
+    }
+
+    *rect = rectInner;
+    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::SCROLLBAR), rectInner);
+}
+
 // gtk_default_draw_arrow() takes ~350 lines and we can't do much better here
 // these people are just crazy :-(
 void wxGTKRenderer::DrawArrow(wxDC& dc,
                               wxDirection dir,
-                              const wxRect& rect,
+                              const wxRect& rectArrow,
                               int flags)
 {
+    // first of all, draw the border around it - but we don't want the border
+    // on the side opposite to the arrow point
+    wxRect rect = rectArrow;
+    DrawArrowBorder(dc, &rect, dir);
+
     enum
     {
         Point_First,
@@ -743,7 +927,6 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
 
         default:
             wxFAIL_MSG(_T("unknown arrow direction"));
-            return;
     }
 
     dc.DrawPolygon(WXSIZEOF(ptArrow), ptArrow);
@@ -825,7 +1008,42 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
     }
 }
 
+void wxGTKRenderer::DrawThumbBorder(wxDC& dc,
+                                    wxRect *rect,
+                                    wxOrientation orient)
+{
+    if ( orient == wxVERTICAL )
+    {
+        DrawAntiShadedRectSide(dc, *rect, m_penDarkGrey, m_penHighlight,
+                               wxLEFT);
+        DrawAntiShadedRectSide(dc, *rect, m_penDarkGrey, m_penHighlight,
+                               wxRIGHT);
+        rect->Inflate(-1, 0);
+
+        DrawAntiShadedRectSide(dc, *rect, m_penBlack, m_penGrey,
+                               wxLEFT);
+        DrawAntiShadedRectSide(dc, *rect, m_penBlack, m_penGrey,
+                               wxRIGHT);
+        rect->Inflate(-1, 0);
+    }
+    else
+    {
+        DrawAntiShadedRectSide(dc, *rect, m_penDarkGrey, m_penHighlight,
+                               wxUP);
+        DrawAntiShadedRectSide(dc, *rect, m_penDarkGrey, m_penHighlight,
+                               wxDOWN);
+        rect->Inflate(0, -1);
+
+        DrawAntiShadedRectSide(dc, *rect, m_penBlack, m_penGrey,
+                               wxUP);
+        DrawAntiShadedRectSide(dc, *rect, m_penBlack, m_penGrey,
+                               wxDOWN);
+        rect->Inflate(0, -1);
+    }
+}
+
 void wxGTKRenderer::DrawScrollbarThumb(wxDC& dc,
+                                       wxOrientation orient,
                                        const wxRect& rect,
                                        int flags)
 {
@@ -833,18 +1051,21 @@ void wxGTKRenderer::DrawScrollbarThumb(wxDC& dc,
     // scrollbar background never changes at all
     int flagsThumb = flags & ~(wxCONTROL_PRESSED | wxCONTROL_FOCUSED);
 
+    // we don't want the border in the direction of the scrollbar movement
     wxRect rectThumb = rect;
+    DrawThumbBorder(dc, &rectThumb, orient);
+
     DrawButtonBorder(dc, rectThumb, flagsThumb, &rectThumb);
     DrawBackground(dc, wxNullColour, rectThumb, flagsThumb);
 }
 
 void wxGTKRenderer::DrawScrollbarShaft(wxDC& dc,
+                                       wxOrientation orient,
                                        const wxRect& rect,
                                        int flags)
 {
     wxRect rectBar = rect;
-    DrawAntiShadedRect(dc, &rectBar, m_penDarkGrey, m_penHighlight);
-    DrawAntiShadedRect(dc, &rectBar, m_penBlack, m_penGrey);
+    DrawThumbBorder(dc, &rectBar, orient);
     DoDrawBackground(dc, m_scheme->Get(wxColourScheme::SCROLLBAR), rectBar);
 }
 
@@ -853,25 +1074,28 @@ wxRect wxGTKRenderer::GetScrollbarRect(const wxScrollBar *scrollbar,
                                        int thumbPos) const
 {
     return StandardGetScrollbarRect(scrollbar, elem,
-                                    thumbPos, m_sizeScrollbarArrow);
+                                    thumbPos, GetScrollbarArrowSize(scrollbar));
 }
 
 wxHitTest wxGTKRenderer::HitTestScrollbar(const wxScrollBar *scrollbar,
                                           const wxPoint& pt) const
 {
-    return StandardHitTestScrollbar(scrollbar, pt, m_sizeScrollbarArrow);
+    return StandardHitTestScrollbar(scrollbar, pt,
+                                    GetScrollbarArrowSize(scrollbar));
 }
 
 wxCoord wxGTKRenderer::ScrollbarToPixel(const wxScrollBar *scrollbar,
                                         int thumbPos)
 {
-    return StandardScrollbarToPixel(scrollbar, thumbPos, m_sizeScrollbarArrow);
+    return StandardScrollbarToPixel(scrollbar, thumbPos,
+                                    GetScrollbarArrowSize(scrollbar));
 }
 
 int wxGTKRenderer::PixelToScrollbar(const wxScrollBar *scrollbar,
                                     wxCoord coord)
 {
-    return StandardPixelToScrollbar(scrollbar, coord, m_sizeScrollbarArrow);
+    return StandardPixelToScrollbar(scrollbar, coord,
+                                    GetScrollbarArrowSize(scrollbar));
 }
 
 // ----------------------------------------------------------------------------
@@ -891,18 +1115,17 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
         // button border width
         size->y += 4;
     }
+    else if ( wxDynamicCast(window, wxScrollBar) )
+    {
+        // we only set the width of vert scrollbars and height of the
+        // horizontal ones
+        if ( window->GetWindowStyle() & wxSB_HORIZONTAL )
+            size->y = m_sizeScrollbarArrow.x;
+        else
+            size->x = m_sizeScrollbarArrow.x;
+    }
     else
     {
-        if ( wxDynamicCast(window, wxScrollBar) )
-        {
-            // we only set the width of vert scrollbars and height of the
-            // horizontal ones
-            if ( window->GetWindowStyle() & wxSB_HORIZONTAL )
-                size->y = m_sizeScrollbarArrow.y;
-            else
-                size->x = m_sizeScrollbarArrow.x;
-        }
-
         // take into account the border width
         wxBorder border = (wxBorder)(window->GetWindowStyle() & wxBORDER_MASK);
         switch ( border )

@@ -106,9 +106,11 @@ public:
                            const wxRect& rect,
                            int flags = 0);
     virtual void DrawScrollbarThumb(wxDC& dc,
+                                    wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0);
     virtual void DrawScrollbarShaft(wxDC& dc,
+                                    wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0);
     virtual void DrawItem(wxDC& dc,
@@ -218,6 +220,11 @@ public:
 
 protected:
     virtual bool IsAllowedButton(int button) { return button == 1; }
+
+    virtual void Highlight(wxScrollBar *scrollbar, bool doIt)
+    {
+        // we don't highlight anything
+    }
 
     // the first and last event which caused the thumb to move
     wxMouseEvent m_eventStartDrag,
@@ -1033,6 +1040,7 @@ void wxWin32Renderer::DrawArrowButton(wxDC& dc,
 }
 
 void wxWin32Renderer::DrawScrollbarThumb(wxDC& dc,
+                                         wxOrientation orient,
                                          const wxRect& rect,
                                          int flags)
 {
@@ -1043,6 +1051,7 @@ void wxWin32Renderer::DrawScrollbarThumb(wxDC& dc,
 }
 
 void wxWin32Renderer::DrawScrollbarShaft(wxDC& dc,
+                                         wxOrientation orient,
                                          const wxRect& rectBar,
                                          int flags)
 {

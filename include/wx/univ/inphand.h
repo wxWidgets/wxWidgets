@@ -156,11 +156,11 @@ protected:
     void SetElementState(wxScrollBar *scrollbar, int flag, bool doIt);
 
     // [un]highlight the scrollbar element corresponding to m_htLast
-    void Highlight(wxScrollBar *scrollbar, bool doIt)
+    virtual void Highlight(wxScrollBar *scrollbar, bool doIt)
         { SetElementState(scrollbar, wxCONTROL_CURRENT, doIt); }
 
     // [un]press the scrollbar element corresponding to m_htLast
-    void Press(wxScrollBar *scrollbar, bool doIt)
+    virtual void Press(wxScrollBar *scrollbar, bool doIt)
         { SetElementState(scrollbar, wxCONTROL_PRESSED, doIt); }
 
     // stop scrolling because we reached the end point

@@ -31,6 +31,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/control.h"
+    #include "wx/listbox.h"
     #include "wx/scrolbar.h"
     #include "wx/dc.h"
 #endif // WX_PRECOMP
@@ -475,6 +476,44 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
     // we will only redraw the parts which must be redrawn and not everything
     wxRegion rgnUpdate = scrollbar->GetUpdateRegion();
 
+    {
+        wxRect rectUpdate = rgnUpdate.GetBox();
+        wxLogTrace(_T("scroll"), _T("%s redraw: update box is (%d, %d)-(%d, %d)"),
+                   scrollbar->IsVertical() ? _T("vert") : _T("horz"),
+                   rectUpdate.GetLeft(),
+                   rectUpdate.GetTop(),
+                   rectUpdate.GetRight(),
+                   rectUpdate.GetBottom());
+    }
+
+    wxOrientation orient = scrollbar->IsVertical() ? wxVERTICAL
+                                                   : wxHORIZONTAL;
+
+    // the shaft
+    for ( int nBar = 0; nBar < 2; nBar++ )
+    {
+        wxScrollBar::Element elem =
+            (wxScrollBar::Element)(wxScrollBar::Element_Bar_1 + nBar);
+
+        wxRect rectBar = m_renderer->GetScrollbarRect(scrollbar, elem);
+
+        if ( rgnUpdate.Contains(rectBar) )
+        {
+            wxLogTrace(_T("scroll"),
+                       _T("drawing bar part %d at (%d, %d)-(%d, %d)"),
+                       nBar + 1,
+                       rectBar.GetLeft(),
+                       rectBar.GetTop(),
+                       rectBar.GetRight(),
+                       rectBar.GetBottom());
+
+            m_renderer->DrawScrollbarShaft(m_dc,
+                                           orient,
+                                           rectBar,
+                                           scrollbar->GetState(elem));
+        }
+    }
+
     // arrows
     static const wxDirection arrowDirs[2][2] =
     {
@@ -490,6 +529,14 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
         wxRect rectArrow = m_renderer->GetScrollbarRect(scrollbar, elem);
         if ( rgnUpdate.Contains(rectArrow) )
         {
+            wxLogTrace(_T("scroll"),
+                       _T("drawing arrow %d at (%d, %d)-(%d, %d)"),
+                       nArrow + 1,
+                       rectArrow.GetLeft(),
+                       rectArrow.GetTop(),
+                       rectArrow.GetRight(),
+                       rectArrow.GetBottom());
+
             m_renderer->DrawArrow(m_dc,
                                   arrowDirs[scrollbar->IsVertical()][nArrow],
                                   rectArrow,
@@ -499,53 +546,20 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
 
     // TODO: support for page arrows
 
-    // the shaft
-    for ( int nBar = 0; nBar < 2; nBar++ )
-    {
-        wxScrollBar::Element elem =
-            (wxScrollBar::Element)(wxScrollBar::Element_Bar_1 + nBar);
-
-        wxRect rectBar = m_renderer->GetScrollbarRect(scrollbar, elem);
-
-        if ( rgnUpdate.Contains(rectBar) )
-        {
-#if 0
-            // we try to avoid redrawing the entire shaft (which might be quite
-            // long) if possible by only redrawing the area between the old and
-            // current positions of the thumb
-            if ( thumbPosOld != -1 )
-            {
-                wxRect rectBarOld = m_renderer->GetScrollbarRect(scrollbar,
-                                                                 elem,
-                                                                 thumbPosOld);
-                if ( scrollbar->IsVertical() )
-                {
-                    if ( nBar )
-                        rectBar.SetBottom(rectBar.GetTop());
-                    else
-                        rectBar.SetTop(rectBarOld.GetBottom());
-                }
-                else // horizontal
-                {
-                    if ( nBar )
-                        rectBar.SetRight(rectBar.GetLeft());
-                    else
-                        rectBar.SetLeft(rectBarOld.GetRight());
-                }
-            }
-#endif // 0
-
-            m_renderer->DrawScrollbarShaft(m_dc, rectBar,
-                                           scrollbar->GetState(elem));
-        }
-    }
-
     // and the thumb
     wxScrollBar::Element elem = wxScrollBar::Element_Thumb;
     wxRect rectThumb = m_renderer->GetScrollbarRect(scrollbar, elem);
     if ( rgnUpdate.Contains(rectThumb) )
     {
-        m_renderer->DrawScrollbarThumb(m_dc, rectThumb,
+        wxLogTrace(_T("scroll"), _T("drawing thumb at (%d, %d)-(%d, %d)"),
+                   rectThumb.GetLeft(),
+                   rectThumb.GetTop(),
+                   rectThumb.GetRight(),
+                   rectThumb.GetBottom());
+
+        m_renderer->DrawScrollbarThumb(m_dc,
+                                       orient,
+                                       rectThumb,
                                        scrollbar->GetState(elem));
     }
 }

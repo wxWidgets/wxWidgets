@@ -4,6 +4,7 @@ UNIVOBJS = \
            colschem.o \
            control.o \
            inphand.o \
+           listbox.o \
            renderer.o \
            scrolbar.o \
            statbmp.o \
@@ -21,6 +22,7 @@ UNIVDEPS = \
            colschem.d \
            control.d \
            inphand.d \
+           listbox.d \
            renderer.d \
            scrolbar.d \
            statbmp.d \

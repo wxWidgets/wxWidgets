@@ -30,6 +30,8 @@
 #if wxUSE_LISTBOX
 
 #ifndef WX_PRECOMP
+    #include "wx/log.h"
+
     #include "wx/dcclient.h"
     #include "wx/listbox.h"
     #include "wx/validate.h"

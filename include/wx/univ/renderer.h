@@ -125,11 +125,13 @@ public:
 
     // draw the scrollbar thumb
     virtual void DrawScrollbarThumb(wxDC& dc,
+                                    wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0) = 0;
 
     // draw a (part of) scrollbar shaft
     virtual void DrawScrollbarShaft(wxDC& dc,
+                                    wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0) = 0;
 
@@ -255,13 +257,15 @@ public:
                            int flags = 0)
         { m_renderer->DrawArrow(dc, dir, rect, flags); }
     virtual void DrawScrollbarThumb(wxDC& dc,
+                                    wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0)
-        { m_renderer->DrawScrollbarThumb(dc, rect, flags); }
+        { m_renderer->DrawScrollbarThumb(dc, orient, rect, flags); }
     virtual void DrawScrollbarShaft(wxDC& dc,
+                                    wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0)
-        { m_renderer->DrawScrollbarShaft(dc, rect, flags); }
+        { m_renderer->DrawScrollbarShaft(dc, orient, rect, flags); }
     virtual void DrawItem(wxDC& dc,
                           const wxString& label,
                           const wxRect& rect,

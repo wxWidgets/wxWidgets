@@ -32,7 +32,7 @@
 #include "wx/utils.h"
 #include "wx/dcclient.h"
 
-#include "wx/generic/scrolwin.h"
+#include "wx/scrolwin.h"
 #include "wx/panel.h"
 
 #ifdef __WXMSW__

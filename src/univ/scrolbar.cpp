@@ -216,12 +216,35 @@ void wxScrollBar::OnIdle(wxIdleEvent& event)
             if ( m_elementsState[n] & wxCONTROL_DIRTY )
             {
                 wxRect rect = GetRenderer()->GetScrollbarRect(this, (Element)n);
- 
+
                 if ( rect.width && rect.height )
                 {
-                    // don't refresh the background when refreshing the shaft
-                    Refresh(TRUE, //(n != Element_Bar_1) && (n != Element_Bar_2)
-                            &rect);
+                    // we try to avoid redrawing the entire shaft (which might
+                    // be quite long) if possible by only redrawing the area
+                    // between the old and current positions of the thumb
+                    if ( m_thumbPosOld != -1 )
+                    {
+                        wxRect rectOld =
+                            GetRenderer()->GetScrollbarRect(this,
+                                                         (Element)n,
+                                                         m_thumbPosOld);
+                        if ( IsVertical() )
+                        {
+                            if ( n == Element_Bar_1 )
+                                rect.SetTop(rectOld.GetBottom());
+                            else
+                                rect.SetBottom(rect.GetTop());
+                        }
+                        else // horizontal
+                        {
+                            if ( n == Element_Bar_1 )
+                                rect.SetLeft(rectOld.GetRight());
+                            else
+                                rect.SetRight(rect.GetLeft());
+                        }
+                    }
+
+                    Refresh(TRUE, &rect);
                 }
 
                 m_elementsState[n] &= ~wxCONTROL_DIRTY;
@@ -247,7 +270,7 @@ void wxScrollBar::DoDraw(wxControlRenderer *renderer)
 
 void wxScrollBar::SetState(Element which, int flags)
 {
-    if ( (m_elementsState[which] & ~wxCONTROL_DIRTY) != flags )
+    if ( (m_elementsState[which] & ~wxCONTROL_DIRTY) != (unsigned)flags )
     {
         m_elementsState[which] = flags | wxCONTROL_DIRTY;
 
