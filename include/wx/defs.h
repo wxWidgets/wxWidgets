@@ -885,13 +885,13 @@ enum wxStretch
 /*
  * wxToolBar style flags
  */
-#define wxTB_3DBUTTONS          0x8000
-#define wxTB_HORIZONTAL         0x0002
-#define wxTB_VERTICAL           0x0004
+#define wxTB_HORIZONTAL         wxHORIZONTAL
+#define wxTB_VERTICAL           wxVERTICAL
+#define wxTB_3DBUTTONS          0x0010
 // Flatbar/Coolbar under Win98/ GTK 1.2
-#define wxTB_FLAT               0x0008
+#define wxTB_FLAT               0x0020
 // use native docking under GTK
-#define wxTB_DOCKABLE           0x0010
+#define wxTB_DOCKABLE           0x0040
 
 /*
  * wxMenuBar style flags

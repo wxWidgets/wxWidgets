@@ -87,19 +87,17 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
     {
         GdkGC *gc = gdk_gc_new( pizza->bin_window );
         GdkFont *font = wxSMALL_FONT->GetInternalFont(1.0);
-        int x = 2;
-        if (win->GetWindowStyle() & wxSYSTEM_MENU) x = 18;
         
         gdk_gc_set_foreground( gc, &widget->style->bg[GTK_STATE_SELECTED] );
         gdk_draw_rectangle( pizza->bin_window, gc, TRUE, 
-                            x, 
                             3, 
-                            win->m_width - 4 - x,
+                            3, 
+                            win->m_width - 7,
                             font->ascent + font->descent+1 );
                             
         gdk_gc_set_foreground( gc, &widget->style->white );
         gdk_draw_string( pizza->bin_window, font, gc, 
-                         x+2, 
+                         6, 
                          3+font->ascent, 
                          win->m_title.mb_str() );
         
@@ -133,19 +131,17 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
     {
         GdkGC *gc = gdk_gc_new( pizza->bin_window );
         GdkFont *font = wxSMALL_FONT->GetInternalFont(1.0);
-        int x = 2;
-        if (win->GetWindowStyle() & wxSYSTEM_MENU) x = 17;
         
         gdk_gc_set_foreground( gc, &widget->style->bg[GTK_STATE_SELECTED] );
         gdk_draw_rectangle( pizza->bin_window, gc, TRUE, 
-                            x, 
                             3, 
-                            win->m_width - 4 - x,
+                            3,
+                            win->m_width - 7,
                             font->ascent + font->descent+1 );
                             
         gdk_gc_set_foreground( gc, &widget->style->white );
         gdk_draw_string( pizza->bin_window, font, gc, 
-                         x+2, 
+                         6, 
                          3+font->ascent, 
                          win->m_title.mb_str() );
         
@@ -273,6 +269,33 @@ static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxMiniFram
 // wxMiniFrame
 //-----------------------------------------------------------------------------
 
+static char *cross_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"5 5 16 1",
+"  c Gray0",
+". c #bf0000",
+"X c #00bf00",
+"o c #bfbf00",
+"O c #0000bf",
+"+ c #bf00bf",
+"@ c #00bfbf",
+"# c None",
+"$ c #808080",
+"% c Red",
+"& c Green",
+"* c Yellow",
+"= c Blue",
+"- c Magenta",
+"; c Cyan",
+": c Gray100",
+/* pixels */
+" ### ",
+"# # #",
+"## ##",
+"# # #",
+" ### ",
+};
+
 IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame,wxFrame)
 
 bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
@@ -297,11 +320,21 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     if ((style & wxSYSTEM_MENU) &&
         ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
     {
-        GtkWidget *close_button = gtk_button_new_with_label( "x" );
+        GdkBitmap *mask = (GdkBitmap*) NULL;
+        GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
+        GdkPixmap *pixmap = gdk_pixmap_create_from_xpm_d( parent, &mask, NULL, cross_xpm );
+    
+        GtkWidget *pw = gtk_pixmap_new( pixmap, mask );
+        gdk_bitmap_unref( mask );
+        gdk_pixmap_unref( pixmap );
+        gtk_widget_show( pw );
+    
+        GtkWidget *close_button = gtk_button_new();
+        gtk_container_add( GTK_CONTAINER(close_button), pw );
     
         gtk_pizza_put( GTK_PIZZA(m_mainWidget), 
                          close_button, 
-                         4, 4, 12, 11 );
+                         size.x-16, 4, 11, 11 );
     
         gtk_widget_show( close_button );
     
