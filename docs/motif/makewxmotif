@@ -1,3 +1,4 @@
+#!/bin/sh
 # makewxmotif
 # Configures and makes wxMotif from either the root wxWindows directory
 # or a build directory underneath it.

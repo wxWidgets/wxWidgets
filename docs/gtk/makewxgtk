@@ -1,3 +1,4 @@
+#!/bin/sh
 # makewxgtk
 # Configures and makes wxGTK from either the root wxWindows directory
 # or a build directory underneath it.
