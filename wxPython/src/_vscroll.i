@@ -176,7 +176,7 @@ public:
 
     // return the item at the specified (in physical coordinates) position or
     // wxNOT_FOUND if none, i.e. if it is below the last item
-    %name(HitTestXT) int HitTest(wxCoord x, wxCoord y) const;
+    %name(HitTestXY) int HitTest(wxCoord x, wxCoord y) const;
     int HitTest(const wxPoint& pt) const;
 
     // recalculate all our parameters and redisplay all lines
