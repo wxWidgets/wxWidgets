@@ -29,6 +29,10 @@ protected:
 // DC stack
     virtual bool CocoaLockFocus();
     virtual bool CocoaUnlockFocus();
+// Blitting
+    virtual bool CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
+        wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,
+        int logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask);
 };
 
 #endif // __WX_COCOA_DCMEMORY_H__

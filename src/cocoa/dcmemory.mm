@@ -10,8 +10,11 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/dcmemory.h"
+#include "wx/log.h"
 
 #import <AppKit/NSImage.h>
+#import <AppKit/NSAffineTransform.h>
+#import <AppKit/NSGraphicsContext.h>
 
 //-----------------------------------------------------------------------------
 // wxMemoryDC
@@ -75,5 +78,43 @@ void wxMemoryDC::DoGetSize( int *width, int *height ) const
         *width = m_selectedBitmap.GetWidth();
     if(height)
         *height = m_selectedBitmap.GetHeight();
+}
+
+bool wxMemoryDC::CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
+    wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,
+    int logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask)
+{
+    if(!m_selectedBitmap.Ok())
+        return false;
+
+    NSAffineTransform *transform = [NSAffineTransform transform];
+    [transform translateXBy:xdest yBy:ydest];
+
+    NSAffineTransform *flipTransform = [NSAffineTransform transform];
+    /*  x' = 1x + 0y + 0
+        y' = 0x + -1y + window's height
+    */
+    NSAffineTransformStruct matrix = {
+        1,  0
+    ,   0, -1
+    ,   0, height
+    };
+    [flipTransform setTransformStruct: matrix];
+
+    NSGraphicsContext *context = [NSGraphicsContext currentContext];
+    [context saveGraphicsState];
+    [transform concat];
+    [flipTransform concat];
+
+    wxLogDebug("[m_cocoaNSImage isFlipped]=%d", [m_cocoaNSImage isFlipped]);
+    [m_cocoaNSImage drawAtPoint: NSMakePoint(0,0)
+        fromRect: NSMakeRect(xsrc,
+            m_selectedBitmap.GetHeight()-height-ysrc,
+            width, height)
+        operation: NSCompositeCopy // FIXME: raster ops
+        fraction: 1.0];
+        
+    [context restoreGraphicsState];
+    return false;
 }
 

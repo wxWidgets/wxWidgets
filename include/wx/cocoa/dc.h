@@ -56,6 +56,10 @@ protected:
     void CocoaApplyTransformations();
     float m_cocoaHeight;
     bool m_cocoaFlipped;
+// Blitting
+    virtual bool CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
+        wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,
+        int logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask);
 //-------------------------------------------------------------------------
 // Implementation
 //-------------------------------------------------------------------------

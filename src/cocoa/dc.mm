@@ -448,6 +448,16 @@ void wxDC::DoCrossHair(wxCoord x, wxCoord y)
 
 bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height, wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask , wxCoord xsrcMask, wxCoord ysrcMask)
 {
+    if(!CocoaTakeFocus()) return false;
+    if(!source) return false;
+    return source->CocoaDoBlitOnFocusedDC(xdest,ydest,width,height,
+        xsrc, ysrc, rop, useMask, xsrcMask, ysrcMask);
+}
+
+bool wxDC::CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
+    wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,
+    int logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask)
+{
     return false;
 }
 
