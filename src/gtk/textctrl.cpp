@@ -97,11 +97,9 @@ static gint gtk_text_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(ev
 
     g_focusWindow = win;
 
-    wxPanel *panel = wxDynamicCast(win->GetParent(), wxPanel);
-    if (panel)
-    {
-        panel->SetLastFocus(win);
-    }
+    // notify the parent that we got the focus
+    wxChildFocusEvent eventFocus(win);
+    (void)win->GetEventHandler()->ProcessEvent(eventFocus);
 
 #ifdef HAVE_XIM
     if (win->m_ic)
