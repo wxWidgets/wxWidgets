@@ -1354,117 +1354,6 @@ void wxGridStringTable::SetColLabelValue( int col, const wxString& value )
 
 
 //////////////////////////////////////////////////////////////////////
-
-IMPLEMENT_DYNAMIC_CLASS( wxGridTextCtrl, wxTextCtrl )
-
-BEGIN_EVENT_TABLE( wxGridTextCtrl, wxTextCtrl )
-    EVT_KEY_DOWN( wxGridTextCtrl::OnKeyDown )
-END_EVENT_TABLE()
-
-
-wxGridTextCtrl::wxGridTextCtrl( wxWindow *par,
-                                wxGrid *grid,
-                                bool isCellControl,
-                                wxWindowID id,
-                                const wxString& value,
-                                const wxPoint& pos,
-                                const wxSize& size,
-                                long style )
-        : wxTextCtrl( par, id, value, pos, size, style )
-{
-    m_grid = grid;
-    m_isCellControl = isCellControl;
-}
-
-
-void wxGridTextCtrl::OnKeyDown( wxKeyEvent& event )
-{
-    switch ( event.KeyCode() )
-    {
-#if 0
-        case WXK_ESCAPE:
-            m_grid->SetEditControlValue( startValue );
-            SetInsertionPointEnd();
-            break;
-#else
-        case WXK_ESCAPE:
-            m_grid->EnableCellEditControl( FALSE );
-#endif
-        case WXK_UP:
-        case WXK_DOWN:
-        case WXK_LEFT:
-        case WXK_RIGHT:
-        case WXK_PRIOR:
-        case WXK_NEXT:
-        case WXK_SPACE:
-            if ( m_isCellControl )
-            {
-                // send the event to the parent grid, skipping the
-                // event if nothing happens
-                //
-                event.Skip( m_grid->ProcessEvent( event ) );
-            }
-            else
-            {
-                // default text control response within the top edit
-                // control
-                //
-                event.Skip();
-            }
-            break;
-
-        case WXK_RETURN:
-            if ( m_isCellControl )
-            {
-                if ( !m_grid->ProcessEvent( event ) )
-                {
-#if defined(__WXMOTIF__) || defined(__WXGTK__)
-                    // wxMotif needs a little extra help...
-                    //
-                    int pos = GetInsertionPoint();
-                    wxString s( GetValue() );
-                    s = s.Left(pos) + "\n" + s.Mid(pos);
-                    SetValue(s);
-                    SetInsertionPoint( pos );
-#else
-                    // the other ports can handle a Return key press
-                    //
-                    event.Skip();
-#endif
-                }
-            }
-            break;
-        case WXK_HOME:
-        case WXK_END:
-            if ( m_isCellControl )
-            {
-                // send the event to the parent grid, skipping the
-                // event if nothing happens
-                //
-                event.Skip( m_grid->ProcessEvent( event ) );
-            }
-            else
-            {
-                // default text control response within the top edit
-                // control
-                //
-                event.Skip();
-            }
-            break;
-
-        default:
-            event.Skip();
-    }
-}
-
-void wxGridTextCtrl::SetStartValue( const wxString& s )
-{
-    startValue = s;
-    wxTextCtrl::SetValue(s);
-}
-
-
-
 //////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_DYNAMIC_CLASS( wxGridRowLabelWindow, wxWindow )
@@ -1813,6 +1702,11 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership )
 {
     if ( m_created )
     {
+        // RD: Actually, this should probably be allowed.  I think it would be
+        // nice to be able to switch multiple Tables in and out of a single
+        // View at runtime.  Is there anything in the implmentation that would
+        // prevent this?
+
         wxFAIL_MSG( wxT("wxGrid::CreateGrid or wxGrid::SetTable called more than once") );
         return FALSE;
     }
@@ -3678,7 +3572,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
         // Clear the old current cell highlight
         wxRect r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
-	m_currentCellCoords = coords;	// Otherwise refresh redraws the hilit!
+	m_currentCellCoords = coords;	// Otherwise refresh redraws the highlight!
         m_gridWin->Refresh( FALSE, &r );
     }
 
@@ -3688,13 +3582,9 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     if ( m_displayed )
     {
-#if 0
-        ShowCellEditControl();
-#else
         wxClientDC dc(m_gridWin);
         PrepareDC(dc);
         DrawCellHighlight(dc);
-#endif
 
         if ( IsSelection() )
         {
@@ -3811,7 +3701,6 @@ void wxGrid::DrawCellHighlight( wxDC& dc )
 
     dc.SetPen(wxPen(m_gridLineColour, 3, wxSOLID));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    //dc.SetLogicalFunction(wxINVERT);
 
     dc.DrawRectangle(rect);
 }
@@ -4258,6 +4147,8 @@ void wxGrid::HideCellEditControl()
 
 void wxGrid::SetEditControlValue( const wxString& value )
 {
+    // RD: The new Editors get the value from the table themselves now.  This
+    // method can probably be removed...
 }
 
 

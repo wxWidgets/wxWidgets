@@ -145,9 +145,9 @@ public:
     // Reset the value in the control back to its starting value
     virtual void Reset() = 0;
 
-    // If the editor is enabled by pressing keys on the grid, this
-    // will be called to let the editor do something about that key
-    // if desired.
+    // If the editor is enabled by pressing keys on the grid,
+    // this will be called to let the editor do something about
+    // that first key if desired.
     virtual void StartingKey(wxKeyEvent& event);
 
     // Some types of controls on some platforms may need some help
@@ -545,42 +545,6 @@ extern wxRect           wxGridNoCellRect;
 //
 WX_DECLARE_EXPORTED_OBJARRAY(wxGridCellCoords, wxGridCellCoordsArray);
 
-
-
-// This set of classes is to provide for the use of different types of
-// cell edit controls in the grid while avoiding the wx class info
-// system in deference to wxPython
-
-class WXDLLEXPORT wxGridTextCtrl : public wxTextCtrl
-{
-public:
-    wxGridTextCtrl() {}
-    wxGridTextCtrl( wxWindow *,
-                    wxGrid *,
-                    bool isCellControl,
-                    wxWindowID id,
-                    const wxString& value = wxEmptyString,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = 0 );
-
-    void     SetStartValue( const wxString& );
-    wxString GetStartValue() { return startValue; }
-
-private:
-    wxGrid *m_grid;
-
-    // TRUE for controls placed over cells,
-    // FALSE for a control on a grid control panel
-    bool m_isCellControl;
-
-    wxString startValue;
-
-    void OnKeyDown( wxKeyEvent& );
-
-    DECLARE_DYNAMIC_CLASS( wxGridTextCtrl )
-    DECLARE_EVENT_TABLE()
-};
 
 
 // ----------------------------------------------------------------------------
