@@ -201,6 +201,7 @@ Unix:
 
 - Unicode compilation fix in wxDateTime
 - typo in configure which broke AIX build fixed (Swengtoo)
+- fixed priorities of mailcap entries (David Hart)
 
 wxMSW:
 

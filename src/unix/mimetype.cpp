@@ -2559,7 +2559,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
 
             // and if we have, was it in this file?
             overwrite = nIndex == wxNOT_FOUND ||
-                            aIndicesSeenHere.Index(nIndex) != wxNOT_FOUND;
+                            aIndicesSeenHere.Index(nIndex) == wxNOT_FOUND;
         }
 
         wxLogTrace(TRACE_MIME, _T("mailcap %s: %s [%s]"),
