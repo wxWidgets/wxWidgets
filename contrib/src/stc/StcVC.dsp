@@ -147,6 +147,10 @@ SOURCE=.\scintilla\src\Document.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\scintilla\src\DocumentAccessor.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\scintilla\src\Editor.cxx
 # End Source File
 # Begin Source File
@@ -175,7 +179,27 @@ SOURCE=.\scintilla\src\KeyWords.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\scintilla\src\LexAda.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexAVE.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexConf.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\scintilla\src\LexCPP.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexCrontab.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexEiffel.cxx
 # End Source File
 # Begin Source File
 
@@ -183,7 +207,19 @@ SOURCE=.\scintilla\src\LexHTML.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\scintilla\src\LexLisp.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexLua.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\scintilla\src\LexOthers.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexPascal.cxx
 # End Source File
 # Begin Source File
 
@@ -192,6 +228,10 @@ SOURCE=.\scintilla\src\LexPerl.cxx
 # Begin Source File
 
 SOURCE=.\scintilla\src\LexPython.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexRuby.cxx
 # End Source File
 # Begin Source File
 
@@ -215,6 +255,10 @@ SOURCE=.\scintilla\src\PropSet.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=.\scintilla\src\RESearch.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\scintilla\src\ScintillaBase.cxx
 # End Source File
 # Begin Source File
@@ -231,6 +275,10 @@ SOURCE=.\scintilla\src\Style.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\scintilla\src\StyleContext.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=.\scintilla\src\SVector.h
 # End Source File
 # Begin Source File
@@ -240,6 +288,10 @@ SOURCE=.\scintilla\src\ViewStyle.cxx
 # Begin Source File
 
 SOURCE=.\scintilla\src\ViewStyle.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\WindowAccessor.cxx
 # End Source File
 # End Group
 # End Target
