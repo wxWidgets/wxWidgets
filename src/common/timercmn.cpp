@@ -28,7 +28,7 @@
 
 #include "wx/timer.h"
 
-#ifdef __SVR4__
+#if defined(__SVR4__) && !defined(__SYSV__)
 #define __SYSV__
 #endif
 

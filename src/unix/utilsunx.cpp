@@ -68,23 +68,21 @@
 // many versions of Unices have this function, but it is not defined in system
 // headers - please add your system here if it is the case for your OS.
 // SunOS (and Solaris) and DG-UX are like this.
-#if defined(__SOLARIS__) || defined(__osf__)
+#ifdef HAVE_WAIT4
+  #if defined(__SOLARIS__) || defined(__osf__)
     extern "C"
     {
         pid_t wait4(pid_t pid, int *statusp, int options,
                     struct rusage *rusage);
     }
+  #endif
 
-    #define wxWait4(pid, stat, flags, rusage) wait4(pid, stat, flags, rusage)
-#elif defined(__sgi) || defined(__HPUX__)
+  #define wxWait4(pid, stat, flags, rusage) wait4(pid, stat, flags, rusage)
+#else
     // no wait4() at all on these systems
     // TODO verify whether wait3() really works in this situation
     #define wxWait4(pid, stat, flags, rusage) wait3(stat, flags, rusage)
-#else
-    // other Unices: assume have wait4(), although it's not standard (but
-    // Linux and FreeBSD do have it)
-    #define wxWait4(pid, stat, flags, rusage) wait4(pid, stat, flags, rusage)
-#endif // wait4()
+#endif // HAVE_WAIT4
 
 // ============================================================================
 // implementation
@@ -278,11 +276,7 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
         open("/dev/null", O_WRONLY);  // stderr
 #endif
 
-#ifdef _AIX
-        execvp ((const char *)*argv, (const char **)argv);
-#else
         execvp (*argv, argv);
-#endif
 
         // there is no return after successful exec()
         fprintf(stderr, _("Can't execute '%s'\n"), *argv);

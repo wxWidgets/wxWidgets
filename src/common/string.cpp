@@ -114,6 +114,11 @@ extern const char WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
     #endif //compiler
 #endif // no vsnprintf
 
+#ifdef _AIX
+  // AIX has vsnprintf, but there's no prototype in the system headers.
+  extern "C" int vsnprintf(char* str, size_t n, const char* format, va_list ap);
+#endif
+
 // ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------

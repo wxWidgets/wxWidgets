@@ -323,7 +323,7 @@ public:
     // under Unix it is tested with configure, assume it works on other
     // platforms (there might be overloading problems if size_t and int are
     // the same type)
-#if !defined(__UNIX__) || defined(wxUSE_SIZE_T_STRING_OPERATOR)
+#if !defined(__UNIX__) || wxUSE_SIZE_T_STRING_OPERATOR
     // operator version of GetChar
     char  operator[](size_t n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
