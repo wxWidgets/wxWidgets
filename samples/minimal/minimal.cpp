@@ -61,8 +61,7 @@ class MyFrame : public wxFrame
 {
 public:
     // ctor(s)
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
-            long style = wxDEFAULT_FRAME_STYLE);
+    MyFrame(const wxString& title);
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
@@ -120,12 +119,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("Minimal wxWindows App"),
-#ifdef __WXWINCE__
-        wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxSYSTEM_MENU|wxCLIP_CHILDREN);
-#else
-        wxPoint(50, 50), wxSize(450, 340));
-#endif
+    MyFrame *frame = new MyFrame(_T("Minimal wxWindows App"));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -142,8 +136,8 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 // frame constructor
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, -1, title, pos, size, style)
+MyFrame::MyFrame(const wxString& title)
+       : wxFrame(NULL, -1, title)
 {
     // set the frame icon
     SetIcon(wxICON(mondrian));
