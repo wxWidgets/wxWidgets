@@ -2483,7 +2483,7 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
             }
         default:
             {
-                return wxBitmap(name, bitmapType);
+                return wxBitmap(name, (wxBitmapType)bitmapType);
             }
         }
 #ifndef __WXGTK__
