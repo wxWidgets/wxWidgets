@@ -193,8 +193,17 @@ bool wxFrame::Create(wxWindow *parent,
 
     SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
-#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
+#if defined(__SMARTPHONE__)
     SetLeftMenu(wxID_EXIT, _("Done"));
+#endif
+
+#if defined(__POCKETPC__)
+    // The guidelines state that Ctrl+Q should quit the app.
+    // Let's define an accelerator table to send wxID_EXIT.
+    wxAcceleratorEntry entries[1];
+    entries[0].Set(wxACCEL_CTRL,   'Q',         wxID_EXIT);
+    wxAcceleratorTable accel(1, entries);
+    SetAcceleratorTable(accel);
 #endif
 
     return true;
