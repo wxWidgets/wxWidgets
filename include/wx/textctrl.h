@@ -25,7 +25,8 @@
 #if wxUSE_TEXTCTRL
 
 #include "wx/control.h"         // the base class
-#include "wx/dynarray.h"
+#include "wx/dynarray.h"        // wxArrayInt
+#include "wx/gdicmn.h"          // wxPoint
 
 // 16-bit Borland 4.0 doesn't seem to allow multiple inheritance with wxWindow
 // and streambuf: it complains about deriving a huge class from the huge class
@@ -47,6 +48,17 @@
 
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxTextCtrlBase;
+
+// ----------------------------------------------------------------------------
+// wxTextCtrl types
+// ----------------------------------------------------------------------------
+
+// wxTextPos is the position in the text
+typedef long wxTextPos;
+
+// wxTextCoord is the line or row number (which should have been unsigned but
+// is long for backwards compatibility)
+typedef long wxTextCoord;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -101,6 +113,21 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxTextCtrlNameStr;
 // force using RichEdit version 2.0 or 3.0 instead of 1.0 (default) for
 // wxTE_RICH controls - can be used together with or instead of wxTE_RICH
 #define wxTE_RICH2          0x8000
+
+// ----------------------------------------------------------------------------
+// wxTextCtrl::HitTest return values
+// ----------------------------------------------------------------------------
+
+// the point asked is ...
+enum wxTextCtrlHitTestResult
+{
+    wxTE_HT_UNKNOWN = -2,   // this means HitTest() is simply not implemented
+    wxTE_HT_BEFORE,         // either to the left or upper
+    wxTE_HT_ON_TEXT,        // directly on
+    wxTE_HT_BELOW,          // below [the last line]
+    wxTE_HT_BEYOND          // after [the end of line]
+};
+// ... the character returned
 
 // ----------------------------------------------------------------------------
 // Types for wxTextAttr
@@ -294,6 +321,14 @@ public:
     virtual bool PositionToXY(long pos, long *x, long *y) const = 0;
 
     virtual void ShowPosition(long pos) = 0;
+
+    // find the character at position given in pixels
+    //
+    // NB: pt is in device coords (not adjusted for the client area origin nor
+    //     scrolling)
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
+                                            wxTextCoord *col,
+                                            wxTextCoord *row) const;
 
     // Clipboard operations
     virtual void Copy() = 0;

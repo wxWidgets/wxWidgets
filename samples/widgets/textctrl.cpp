@@ -209,6 +209,63 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// WidgetsTextCtrl
+// ----------------------------------------------------------------------------
+
+class WidgetsTextCtrl : public wxTextCtrl
+{
+public:
+    WidgetsTextCtrl(wxWindow *parent,
+                    wxWindowID id,
+                    const wxString& value,
+                    int flags)
+        : wxTextCtrl(parent, id, value, wxDefaultPosition, wxDefaultSize, flags)
+    {
+    }
+
+protected:
+    void OnRightClick(wxMouseEvent& event)
+    {
+        wxString where;
+        wxTextCoord x, y;
+        switch ( HitTest(event.GetPosition(), &x, &y) )
+        {
+            default:
+                wxFAIL_MSG( _T("unexpected HitTest() result") );
+                // fall through
+
+            case wxTE_HT_UNKNOWN:
+                x = y = -1;
+                where = _T("nowhere near");
+                break;
+
+            case wxTE_HT_BEFORE:
+                where = _T("before");
+                break;
+
+            case wxTE_HT_BELOW:
+                where = _T("below");
+                break;
+
+            case wxTE_HT_BEYOND:
+                where = _T("beyond");
+                break;
+
+            case wxTE_HT_ON_TEXT:
+                where = _T("at");
+                break;
+        }
+
+        wxLogMessage(_T("Mouse is %s (%ld, %ld)"), where.c_str(), x, y);
+
+        event.Skip();
+    }
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+// ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
 
@@ -235,6 +292,10 @@ BEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(WidgetsTextCtrl, wxTextCtrl)
+    EVT_RIGHT_UP(WidgetsTextCtrl::OnRightClick)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -552,10 +613,7 @@ void TextWidgetsPage::CreateText()
         valueOld = _T("Hello, Universe!");
     }
 
-    m_text = new wxTextCtrl(this, TextPage_Textctrl,
-                            valueOld,
-                            wxDefaultPosition, wxDefaultSize,
-                            flags);
+    m_text = new WidgetsTextCtrl(this, TextPage_Textctrl, valueOld, flags);
 
     // cast to int needed to silence gcc warning about different enums
     m_sizerText->Add(m_text, 1, wxALL |

@@ -488,6 +488,18 @@ void wxTextCtrlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
     }    
 }
 
+// ----------------------------------------------------------------------------
+// hit testing
+// ----------------------------------------------------------------------------
+
+wxTextCtrlHitTestResult
+wxTextCtrlBase::HitTest(const wxPoint& WXUNUSED(pt),
+                        wxTextCoord * WXUNUSED(col),
+                        wxTextCoord * WXUNUSED(row)) const
+{
+    // not implemented
+    return wxTE_HT_UNKNOWN;
+}
 
 #else // !wxUSE_TEXTCTRL
 

@@ -1257,6 +1257,23 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
 }
 
 // ----------------------------------------------------------------------------
+// Working with files
+// ----------------------------------------------------------------------------
+
+bool wxTextCtrl::LoadFile(const wxString& file)
+{
+    if ( wxTextCtrlBase::LoadFile(file) )
+    {
+        // update the size limit if needed
+        AdjustSpaceLimit();
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+// ----------------------------------------------------------------------------
 // Editing
 // ----------------------------------------------------------------------------
 
@@ -1271,19 +1288,6 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
 void wxTextCtrl::Remove(long from, long to)
 {
     Replace(from, to, wxEmptyString);
-}
-
-bool wxTextCtrl::LoadFile(const wxString& file)
-{
-    if ( wxTextCtrlBase::LoadFile(file) )
-    {
-        // update the size limit if needed
-        AdjustSpaceLimit();
-
-        return TRUE;
-    }
-
-    return FALSE;
 }
 
 bool wxTextCtrl::IsModified() const
@@ -1305,6 +1309,10 @@ int wxTextCtrl::GetNumberOfLines() const
 {
     return (int)SendMessage(GetHwnd(), EM_GETLINECOUNT, (WPARAM)0, (LPARAM)0);
 }
+
+// ----------------------------------------------------------------------------
+// Positions <-> coords
+// ----------------------------------------------------------------------------
 
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
@@ -1352,6 +1360,99 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 
     return TRUE;
 }
+
+wxTextCtrlHitTestResult
+wxTextCtrl::HitTest(const wxPoint& pt, wxTextCoord *col, wxTextCoord *row) const
+{
+    // first get the position from Windows
+    LPARAM lParam;
+
+#if wxUSE_RICHEDIT
+    POINTL ptl;
+    if ( IsRich() )
+    {
+        // for rich edit controls the position is passed iva the struct fields
+        ptl.x = pt.x;
+        ptl.y = pt.y;
+        lParam = (LPARAM)&ptl;
+    }
+    else
+#endif // wxUSE_RICHEDIT
+    {
+        // for the plain ones, we are limited to 16 bit positions which are
+        // combined in a single 32 bit value
+        lParam = MAKELPARAM(pt.x, pt.y);
+    }
+
+    LRESULT pos = SendMessage(GetHwnd(), EM_CHARFROMPOS, 0, lParam);
+
+    if ( pos == -1 )
+    {
+        // this seems to indicate an error...
+        return wxTE_HT_UNKNOWN;
+    }
+
+#if wxUSE_RICHEDIT
+    if ( !IsRich() )
+#endif // wxUSE_RICHEDIT
+    {
+        // for plain EDIT controls the higher word contains something else
+        pos = LOWORD(pos);
+    }
+
+
+    // next determine where it is relatively to our point: EM_CHARFROMPOS
+    // always returns the closest character but we need to be more precise, so
+    // double check that we really are where it pretends
+    POINTL ptReal;
+
+#if wxUSE_RICHEDIT
+    // FIXME: we need to distinguish between richedit 2 and 3 here somehow but
+    //        we don't know how to do it
+    if ( IsRich() )
+    {
+        SendMessage(GetHwnd(), EM_POSFROMCHAR, (WPARAM)&ptReal, pos);
+    }
+    else
+#endif // wxUSE_RICHEDIT
+    {
+        LRESULT lRc = SendMessage(GetHwnd(), EM_POSFROMCHAR, pos, 0);
+
+        if ( lRc == -1 )
+        {
+            // this is apparently returned when pos corresponds to the last
+            // position
+            ptReal.x =
+            ptReal.y = 0;
+        }
+        else
+        {
+            ptReal.x = LOWORD(lRc);
+            ptReal.y = HIWORD(lRc);
+        }
+    }
+
+    wxTextCtrlHitTestResult rc;
+
+    if ( pt.y > ptReal.y + GetCharHeight() )
+        rc = wxTE_HT_BELOW;
+    else if ( pt.x > ptReal.x + GetCharWidth() )
+        rc = wxTE_HT_BEYOND;
+    else
+        rc = wxTE_HT_ON_TEXT;
+
+    // finally translate to column/row
+    if ( !PositionToXY(pos, col, row) )
+    {
+        wxFAIL_MSG( _T("PositionToXY() not expected to fail in HitTest()") );
+    }
+
+    return rc;
+}
+
+// ----------------------------------------------------------------------------
+// 
+// ----------------------------------------------------------------------------
 
 void wxTextCtrl::ShowPosition(long pos)
 {
