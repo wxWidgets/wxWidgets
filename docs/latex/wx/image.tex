@@ -1,14 +1,15 @@
 \section{\class{wxImage}}\label{wximage}
 
 This class encapsulates a platform-independent image. An image can be created
-from data, or using the constructor taking a wxBitmap object. An image
+from data, or using \helpref{wxBitmap::ConvertToImage}{wxbitmapconverttoimage}. An image
 can be loaded from a file in a variety of formats, and is extensible to new formats
 via image format handlers. Functions are available to set and get image bits, so
 it can be used for basic image manipulation.
 
 A wxImage cannot (currently) be drawn directly to a \helpref{wxDC}{wxdc}. Instead, 
 a platform-specific \helpref{wxBitmap}{wxbitmap} object must be created from it using
-the \helpref{ConvertToBitmap}{wximageconverttobitmap} function. This bitmap can then
+the \helpref{wxBitmap::wxBitmap(wxImage,int depth)}{wxbitmapconstr} constructor. 
+This bitmap can then
 be drawn in a device context, using \helpref{wxDC::DrawBitmap}{wxdcdrawbitmap}.
 
 One colour value of the image may be used as a mask colour which will lead to the automatic
@@ -66,7 +67,8 @@ Copy constructor.
 
 \func{}{wxImage}{\param{const wxBitmap\&}{ bitmap}}
 
-Constructs an image from a platform-dependent bitmap. This preserves
+(Deprecated form, use \helpref{wxBitmap::ConvertToImage}{wxbitmapconverttoimage}
+instead.) Constructs an image from a platform-dependent bitmap. This preserves
 mask information so that bitmaps and images can be converted back
 and forth without loss in that respect.
 
@@ -186,19 +188,16 @@ This function is called by wxWindows on exit.
 
 \constfunc{wxBitmap}{ConvertToBitmap}{\void}
 
-Converts the image to a platform-specific bitmap object. This has to be done
-to actually display an image as you cannot draw an image directly on a window.
-The resulting bitmap will use the colour depth of the current system which entails
-that a colour reduction has to take place. 
+Deprecated, use equivalent \helpref{wxBitmap constructor}{wxbitmapconstr}
+(which takes wxImage and depth as its arguments) instead.
 
-When in 8-bit mode (PseudoColour mode), the GTK port will use a color cube created 
-on program start-up to look up colors. This ensures a very fast conversion, but
-the image quality won't be perfect (and could be better for photo images using more
-sophisticated dithering algorithms).
+\membersection{wxImage::ConvertToMono}\label{wxbitmapconverttomono}
 
-On Windows, if there is a palette present (set with SetPalette), it will be used when
-creating the wxBitmap (most useful in 8-bit display mode). On other platforms,
-the palette is currently ignored.
+\constfunc{wxImage}{ConvertToMono}{\param{unsigned char}{ r}, \param{unsigned char}{ g}, \param{unsigned char}{ b}}
+
+Returns monochromatic version of the image. The returned image has white
+colour where the original has {\it (r,g,b)} colour and black colour 
+everywhere else.
 
 \membersection{wxImage::Copy}\label{wximagecopy}
 
@@ -327,7 +326,7 @@ Gets the red value of the mask colour.
 \constfunc{const wxPalette\&}{GetPalette}{\void}
 
 Returns the palette associated with the image. Currently the palette is only
-used in ConvertToBitmap under Windows.
+used when converting to wxBitmap under Windows.
 
 Eventually wxImage handlers will set the palette if one exists in the image file.
 
@@ -639,7 +638,7 @@ Example:
     if ( bmp.GetWidth() != 32 || bmp.GetHeight() != 32 )
     {
         wxImage image(bmp);
-        bmp = image.Scale(32, 32).ConvertToBitmap();
+        bmp = wxBitmap(image.Scale(32, 32));
 
         // another possibility:
         image.Rescale(32, 32);
@@ -693,8 +692,8 @@ used, which is a number between 0 and 100 (0 is terrible, 100 is very good).
 
 \func{void}{SetPalette}{\param{const wxPalette\&}{ palette}}
 
-Associates a palette with the image. The palette may be used in ConvertToBitmap (MSW only at present)
-or in file save operations (none as yet).
+Associates a palette with the image. The palette may be used when converting
+wxImage to wxBitmap (MSW only at present) or in file save operations (none as yet).
 
 \membersection{wxImage::SetRGB}\label{wximagesetrgb}
 

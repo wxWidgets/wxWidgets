@@ -74,6 +74,23 @@ Creates a bitmap from XPM data.
 
 Loads a bitmap from a file or resource.
 
+\func{}{wxBitmap}{\param{const wxImage\&}{ img}, \param{int}{ depth = -1}}
+
+Creates bitmap object from the image. This has to be done
+to actually display an image as you cannot draw an image directly on a window.
+The resulting bitmap will use the provided colour depth (or that of the 
+current system if depth is -1) which entails that a colour reduction has 
+to take place.
+
+When in 8-bit mode (PseudoColour mode), the GTK port will use a color cube created 
+on program start-up to look up colors. This ensures a very fast conversion, but
+the image quality won't be perfect (and could be better for photo images using more
+sophisticated dithering algorithms).
+
+On Windows, if there is a palette present (set with SetPalette), it will be used when
+creating the wxBitmap (most useful in 8-bit display mode). On other platforms,
+the palette is currently ignored.
+
 \wxheading{Parameters}
 
 \docparam{bits}{Specifies an array of pixel values.}
@@ -108,6 +125,8 @@ Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.
 In addition, wxBitmap can read all formats that \helpref{wxImage}{wximage} can, which currently include 
 wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_TIF, wxBITMAP\_TYPE\_PNG, wxBITMAP\_TYPE\_GIF, wxBITMAP\_TYPE\_PCX, 
 and wxBITMAP\_TYPE\_PNM. Of course, you must have wxImage handlers loaded. }
+
+\docparam{img}{Platform-independent wxImage object.}
 
 \wxheading{Remarks}
 
@@ -206,6 +225,14 @@ of a given handler class in an application session.}
 Deletes all bitmap handlers.
 
 This function is called by wxWindows on exit.
+
+\membersection{wxBitmap::ConvertToImage}\label{wxbitmapconverttoimage}
+
+\func{wxImage}{ConvertToImage}{\void}
+
+Creates an image from a platform-dependent bitmap. This preserves
+mask information so that bitmaps and images can be converted back
+and forth without loss in that respect.
 
 \membersection{wxBitmap::Create}\label{wxbitmapcreate}
 
