@@ -14,7 +14,6 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include <sched.h>
 #include <pthread.h>
 #include <errno.h>
 #include "wx/thread.h"
