@@ -22,49 +22,49 @@
 #include "wx/cmndata.h"
 
 /*
- * wxPrinterDialog
- * The common dialog for printing.
- */
+* wxPrinterDialog
+* The common dialog for printing.
+*/
 
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxPrintDialog: public wxDialog
 {
-  DECLARE_DYNAMIC_CLASS(wxPrintDialog)
-
- public:
-  wxPrintDialog();
-  wxPrintDialog(wxWindow *parent, wxPrintData* data = NULL);
-  ~wxPrintDialog();
-
-  bool Create(wxWindow *parent, wxPrintData* data = NULL);
-  virtual int ShowModal();
-
-  inline wxPrintData& GetPrintData() { return m_printData; }
-  virtual wxDC *GetPrintDC();
-
- private:
-  wxPrintData       m_printData;
-  wxDC*             m_printerDC;
-  wxWindow*         m_dialogParent;
+    DECLARE_DYNAMIC_CLASS(wxPrintDialog)
+        
+public:
+    wxPrintDialog();
+    wxPrintDialog(wxWindow *parent, wxPrintData* data = NULL);
+    ~wxPrintDialog();
+    
+    bool Create(wxWindow *parent, wxPrintData* data = NULL);
+    virtual int ShowModal();
+    
+    inline wxPrintData& GetPrintData() { return m_printData; }
+    virtual wxDC *GetPrintDC();
+    
+private:
+    wxPrintData       m_printData;
+    wxDC*             m_printerDC;
+    wxWindow*         m_dialogParent;
 };
 
 class WXDLLEXPORT wxPageSetupDialog: public wxDialog
 {
-  DECLARE_DYNAMIC_CLASS(wxPageSetupDialog)
-
- private:
-  wxPageSetupData   m_pageSetupData;
-  wxWindow*         m_dialogParent;
- public:
-  wxPageSetupDialog();
-  wxPageSetupDialog(wxWindow *parent, wxPageSetupData *data = NULL);
-  ~wxPageSetupDialog();
-
-  bool Create(wxWindow *parent, wxPageSetupData *data = NULL);
-  virtual int ShowModal();
-
-  inline wxPageSetupData& GetPageSetupData() { return m_pageSetupData; }
+    DECLARE_DYNAMIC_CLASS(wxPageSetupDialog)
+        
+private:
+    wxPageSetupData   m_pageSetupData;
+    wxWindow*         m_dialogParent;
+public:
+    wxPageSetupDialog();
+    wxPageSetupDialog(wxWindow *parent, wxPageSetupData *data = NULL);
+    ~wxPageSetupDialog();
+    
+    bool Create(wxWindow *parent, wxPageSetupData *data = NULL);
+    virtual int ShowModal();
+    
+    inline wxPageSetupData& GetPageSetupData() { return m_pageSetupData; }
 };
 
 #endif
-    // _WX_PRINTDLG_H_
+// _WX_PRINTDLG_H_

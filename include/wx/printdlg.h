@@ -7,6 +7,8 @@
 #include "wx/generic/prntdlgg.h"
 #elif defined(__WXGTK__)
 #include "wx/generic/prntdlgg.h"
+#elif defined(__WXX11__)
+#include "wx/generic/prntdlgg.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/printdlg.h"
 #elif defined(__WXPM__)

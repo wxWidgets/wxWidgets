@@ -29,20 +29,20 @@ WXDLLEXPORT_DATA(extern const char*) wxMessageBoxCaptionStr;
 class WXDLLEXPORT wxMessageDialog: public wxDialog
 {
     DECLARE_DYNAMIC_CLASS(wxMessageDialog)
-
+        
 public:
     wxMessageDialog(wxWindow *parent,
-                    const wxString& message,
-                    const wxString& caption = wxMessageBoxCaptionStr,
-                    long style = wxOK | wxCENTRE,
-                    const wxPoint& pos = wxDefaultPosition);
-
+        const wxString& message,
+        const wxString& caption = wxMessageBoxCaptionStr,
+        long style = wxOK | wxCENTRE,
+        const wxPoint& pos = wxDefaultPosition);
+    
     int ShowModal();
-
+    
     // implementation only from now on
-        // called by the Motif callback
+    // called by the Motif callback
     void SetResult(long result) { m_result = result; }
-
+    
 protected:
     wxString    m_caption;
     wxString    m_message;
@@ -52,4 +52,4 @@ protected:
 };
 
 #endif
-    // _WX_MSGBOXDLG_H_
+// _WX_MSGBOXDLG_H_

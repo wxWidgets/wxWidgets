@@ -22,23 +22,23 @@
 class wxWave : public wxObject
 {
 public:
-  wxWave();
-  wxWave(const wxString& fileName, bool isResource = FALSE);
-  ~wxWave();
-
+    wxWave();
+    wxWave(const wxString& fileName, bool isResource = FALSE);
+    ~wxWave();
+    
 public:
-  bool  Create(const wxString& fileName, bool isResource = FALSE);
-  bool  IsOk() const { return (m_waveData ? TRUE : FALSE); };
-  bool  Play(bool async = TRUE, bool looped = FALSE) const;
-
+    bool  Create(const wxString& fileName, bool isResource = FALSE);
+    bool  IsOk() const { return (m_waveData ? TRUE : FALSE); };
+    bool  Play(bool async = TRUE, bool looped = FALSE) const;
+    
 protected:
-  bool  Free();
-
+    bool  Free();
+    
 private:
-  char* m_waveData;
-  int   m_waveLength;
-  bool  m_isResource;
+    char* m_waveData;
+    int   m_waveLength;
+    bool  m_isResource;
 };
 
 #endif
-    // _WX_WAVE_H_
+// _WX_WAVE_H_

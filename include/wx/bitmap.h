@@ -159,6 +159,8 @@ protected:
 #include "wx/motif/bitmap.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/bitmap.h"
+#elif defined(__WXX11__)
+#include "wx/x11/bitmap.h"
 #elif defined(__WXMGL__)
 #include "wx/mgl/bitmap.h"
 #elif defined(__WXMAC__)

@@ -20,6 +20,8 @@ enum
 #include "wx/motif/filedlg.h"
 #elif defined(__WXGTK__)
 #include "wx/generic/filedlgg.h"
+#elif defined(__WXX11__)
+#include "wx/generic/filedlg.h"
 #elif defined(__WXMGL__)
 #include "wx/generic/filedlgg.h"
 #elif defined(__WXMAC__)

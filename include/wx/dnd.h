@@ -187,6 +187,8 @@ protected:
     #include "wx/msw/ole/droptgt.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/dnd.h"
+#elif defined(__WXX11__)
+    #include "wx/x11/dnd.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/dnd.h"
 #elif defined(__WXMAC__)

@@ -23,40 +23,40 @@ WXDLLEXPORT_DATA(extern const char*) wxStaticTextNameStr;
 class WXDLLEXPORT wxStaticText: public wxControl
 {
     DECLARE_DYNAMIC_CLASS(wxStaticText)
-
+        
 public:
     wxStaticText() { }
-
+    
     wxStaticText(wxWindow *parent, wxWindowID id,
-            const wxString& label,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = 0,
-            const wxString& name = wxStaticTextNameStr)
+        const wxString& label,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = 0,
+        const wxString& name = wxStaticTextNameStr)
     {
         Create(parent, id, label, pos, size, style, name);
     }
-
+    
     bool Create(wxWindow *parent, wxWindowID id,
-            const wxString& label,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = 0,
-            const wxString& name = wxStaticTextNameStr);
-
+        const wxString& label,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = 0,
+        const wxString& name = wxStaticTextNameStr);
+    
     // implementation
     // --------------
-
+    
     // operations
     virtual bool ProcessCommand(wxCommandEvent& WXUNUSED(event))
     {
         return FALSE;
     }
-
+    
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
 };
 
 #endif
-    // _WX_STATTEXT_H_
+// _WX_STATTEXT_H_

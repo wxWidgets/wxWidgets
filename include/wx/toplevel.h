@@ -158,6 +158,9 @@ protected:
 #elif defined(__WXGTK__)
     #include "wx/gtk/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowGTK
+#elif defined(__WXX11__)
+    #include "wx/x11/toplevel.h"
+    #define wxTopLevelWindowNative wxTopLevelWindowX11
 #elif defined(__WXMGL__)
     #include "wx/mgl/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMGL

@@ -23,16 +23,16 @@
 class wxTaskBarIcon: public wxObject
 {
 public:
-	wxTaskBarIcon();
-	virtual ~wxTaskBarIcon();
-
-// Accessors
-
-// Operations
+    wxTaskBarIcon();
+    virtual ~wxTaskBarIcon();
+    
+    // Accessors
+    
+    // Operations
     bool SetIcon(const wxIcon& icon, const wxString& tooltip = "");
     bool RemoveIcon();
-
-// Overridables
+    
+    // Overridables
     virtual void OnMouseMove();
     virtual void OnLButtonDown();
     virtual void OnLButtonUp();
@@ -40,10 +40,10 @@ public:
     virtual void OnRButtonUp();
     virtual void OnLButtonDClick();
     virtual void OnRButtonDClick();
-
-// Data members
+    
+    // Data members
 protected:
 };
 
 #endif
-    // _WX_TASKBAR_H_
+// _WX_TASKBAR_H_

@@ -22,25 +22,25 @@
 #include "wx/cmndata.h"
 
 /*
- * Platform-specific colour dialog implementation
- */
+* Platform-specific colour dialog implementation
+*/
 
 class WXDLLEXPORT wxColourDialog: public wxDialog
 {
-DECLARE_DYNAMIC_CLASS(wxColourDialog)
+    DECLARE_DYNAMIC_CLASS(wxColourDialog)
 public:
     wxColourDialog();
     wxColourDialog(wxWindow *parent, wxColourData *data = NULL);
-
+    
     bool Create(wxWindow *parent, wxColourData *data = NULL);
-
+    
     int ShowModal();
     wxColourData& GetColourData() { return m_colourData; }
-
+    
 protected:
     wxColourData        m_colourData;
     wxWindow*           m_dialogParent;
 };
 
 #endif
-    // _WX_COLORDLG_H_
+// _WX_COLORDLG_H_

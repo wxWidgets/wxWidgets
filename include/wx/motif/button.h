@@ -13,7 +13,7 @@
 #define _WX_BUTTON_H_
 
 #ifdef __GNUG__
-    #pragma interface "button.h"
+#pragma interface "button.h"
 #endif
 
 #include "wx/control.h"
@@ -25,29 +25,29 @@ WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
 class WXDLLEXPORT wxButton: public wxControl
 {
     DECLARE_DYNAMIC_CLASS(wxButton)
-
+        
 public:
     wxButton() { }
     wxButton(wxWindow *parent,
-             wxWindowID id,
-             const wxString& label,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize, long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxButtonNameStr)
+        wxWindowID id,
+        const wxString& label,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = 0,
+        const wxValidator& validator = wxDefaultValidator,
+        const wxString& name = wxButtonNameStr)
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
-
+    
     bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize, long style = 0,
-            const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxButtonNameStr);
-
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = 0,
+        const wxValidator& validator = wxDefaultValidator,
+        const wxString& name = wxButtonNameStr);
+    
     virtual void SetDefault();
     virtual void Command(wxCommandEvent& event);
-
+    
     static wxSize GetDefaultSize();
     
     // Implementation
@@ -57,4 +57,4 @@ public:
 };
 
 #endif
-    // _WX_BUTTON_H_
+// _WX_BUTTON_H_

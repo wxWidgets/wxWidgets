@@ -23,30 +23,30 @@
 
 class WXDLLEXPORT wxXXXXHelpController: public wxHelpControllerBase
 {
-  DECLARE_CLASS(wxXXXXHelpController)
-
- public:
-  wxXXXXHelpController();
-  ~wxXXXXHelpController();
-
-  // Must call this to set the filename and server name
-  virtual bool Initialize(const wxString& file);
-
-  // If file is "", reloads file given  in Initialize
-  virtual bool LoadFile(const wxString& file = "");
-  virtual bool DisplayContents();
-  virtual bool DisplaySection(int sectionNo);
-  virtual bool DisplayBlock(long blockNo);
-  virtual bool KeywordSearch(const wxString& k);
-
-  virtual bool Quit();
-  virtual void OnQuit();
-
-  inline wxString GetHelpFile() const { return m_helpFile; }
-
+    DECLARE_CLASS(wxXXXXHelpController)
+        
+public:
+    wxXXXXHelpController();
+    ~wxXXXXHelpController();
+    
+    // Must call this to set the filename and server name
+    virtual bool Initialize(const wxString& file);
+    
+    // If file is "", reloads file given  in Initialize
+    virtual bool LoadFile(const wxString& file = "");
+    virtual bool DisplayContents();
+    virtual bool DisplaySection(int sectionNo);
+    virtual bool DisplayBlock(long blockNo);
+    virtual bool KeywordSearch(const wxString& k);
+    
+    virtual bool Quit();
+    virtual void OnQuit();
+    
+    inline wxString GetHelpFile() const { return m_helpFile; }
+    
 protected:
-  wxString m_helpFile;
+    wxString m_helpFile;
 };
 
 #endif
-    // _WX_HELPXXXX_H_
+// _WX_HELPXXXX_H_

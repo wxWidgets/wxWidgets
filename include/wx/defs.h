@@ -27,7 +27,7 @@
 #error "Target can't be both X and Windows"
 #elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
       !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__X__) && \
-      !defined(__WXMGL__) && wxUSE_GUI
+      !defined(__WXMGL__) && !defined(__WXX11__) && wxUSE_GUI
 #ifdef __UNIX__
 #error "No Target! You should use wx-config program for compilation flags!"
 #else // !Unix
@@ -424,6 +424,7 @@ enum
     wxGEOS,                   // GEOS
     wxOS2_PM,                 // OS/2 Workplace
     wxWINDOWS,                // Windows or WfW
+    wxMICROWINDOWS,           // MicroWindows
     wxPENWINDOWS,             // Windows for Pen Computing
     wxWINDOWS_NT,             // Windows NT
     wxWIN32S,                 // Windows 32S API
@@ -435,7 +436,8 @@ enum
     wxMGL_OS2,                // MGL on OS/2
     wxMGL_DOS,                // MGL on MS-DOS
     wxWINDOWS_OS2,            // Native OS/2 PM
-    wxUNIX                    // wxBase under Unix
+    wxUNIX,                   // wxBase under Unix
+    wxX11                     // Plain X11 and Universal widgets
 };
 
 // ----------------------------------------------------------------------------
@@ -1852,7 +1854,7 @@ typedef WXRESULT (_System *WXFARPROC)(WXHWND, WXMSGID, WXWPARAM, WXLPARAM);
 #endif //__WXPM__
 
 
-#ifdef __WXMOTIF__
+#if defined(__WXMOTIF__) || defined(__WXX11__)
 /* Stand-ins for X/Xt/Motif types */
 typedef void*           WXWindow;
 typedef void*           WXWidget;

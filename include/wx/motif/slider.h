@@ -23,42 +23,42 @@ WXDLLEXPORT_DATA(extern const char*) wxSliderNameStr;
 // Slider
 class WXDLLEXPORT wxSlider: public wxControl
 {
-DECLARE_DYNAMIC_CLASS(wxSlider)
-
+    DECLARE_DYNAMIC_CLASS(wxSlider)
+        
 public:
     wxSlider();
-
+    
     wxSlider(wxWindow *parent, wxWindowID id,
-            int value, int minValue, int maxValue,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxSL_HORIZONTAL,
-            const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxSliderNameStr)
+        int value, int minValue, int maxValue,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = wxSL_HORIZONTAL,
+        const wxValidator& validator = wxDefaultValidator,
+        const wxString& name = wxSliderNameStr)
     {
         Create(parent, id, value, minValue, maxValue, pos, size, style, validator, name);
     }
-
+    
     ~wxSlider();
-
+    
     bool Create(wxWindow *parent, wxWindowID id,
-            int value, int minValue, int maxValue,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxSL_HORIZONTAL,
-            const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxSliderNameStr);
-
+        int value, int minValue, int maxValue,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = wxSL_HORIZONTAL,
+        const wxValidator& validator = wxDefaultValidator,
+        const wxString& name = wxSliderNameStr);
+    
     virtual int GetValue() const ;
     virtual void SetValue(int);
-
+    
     void GetSize(int *x, int *y) const ;
-
+    
     void SetRange(int minValue, int maxValue);
-
+    
     inline int GetMin() const { return m_rangeMin; }
     inline int GetMax() const { return m_rangeMax; }
-
+    
     // For trackbars only
     void SetTickFreq(int n, int pos);
     inline int GetTickFreq() const { return m_tickFreq; }
@@ -74,28 +74,28 @@ public:
     void SetThumbLength(int len) ;
     int GetThumbLength() const ;
     void SetTick(int tickPos) ;
-
+    
     void Command(wxCommandEvent& event);
-
+    
     // Implementation
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
-
+    
 protected:
     int           m_rangeMin;
     int           m_rangeMax;
     int           m_pageSize;
     int           m_lineSize;
     int           m_tickFreq;
-
+    
     virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
-
+        int width, int height,
+        int sizeFlags = wxSIZE_AUTO);
+    
 private:
     DECLARE_EVENT_TABLE()
 };
 
 #endif
-    // _WX_SLIDER_H_
+// _WX_SLIDER_H_

@@ -43,6 +43,8 @@
            #include "wx/motif/toolbar.h"
         #elif defined(__WXGTK__)
            #include "wx/gtk/tbargtk.h"
+        #elif defined(__WXX11__)
+           #include "wx/x11/toolbar.h"
         #elif defined(__WXMAC__)
            #include "wx/mac/toolbar.h"
         #elif defined(__WXPM__)

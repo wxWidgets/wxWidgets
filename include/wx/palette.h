@@ -12,6 +12,8 @@
     #include "wx/motif/palette.h"
 #elif defined(__WXGTK__)
     #include "wx/generic/paletteg.h"
+#elif defined(__WXX11__)
+    #include "wx/x11/palette.h"
 #elif defined(__WXMGL__)
     #include "wx/mgl/palette.h"
 #elif defined(__WXMAC__)

@@ -9,6 +9,8 @@
 #include "wx/gtk/colour.h"
 #elif defined(__WXMGL__)
 #include "wx/mgl/colour.h"
+#elif defined(__WXX11__)
+#include "wx/x11/colour.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/colour.h"
 #elif defined(__WXPM__)

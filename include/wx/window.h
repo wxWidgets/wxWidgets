@@ -977,6 +977,14 @@ private:
         #define sm_classwxWindowGTK sm_classwxWindow
     #endif // wxUniv
     #include "wx/gtk/window.h"
+#elif defined(__WXX11__)
+    #ifdef __WXUNIVERSAL__
+        #define wxWindowNative wxWindowX11
+    #else // !wxUniv
+        #define wxWindowX11 wxWindow
+        #define sm_classwxWindowX11 sm_classwxWindow
+    #endif // wxUniv
+    #include "wx/x11/window.h"
 #elif defined(__WXMGL__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowMGL
