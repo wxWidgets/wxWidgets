@@ -20,7 +20,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxRadioBoxNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxRadioBoxNameStr;
 
 // ----------------------------------------------------------------------------
 // wxRadioBoxBase is not a normal base class, but rather a mix-in because the

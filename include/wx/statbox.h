@@ -5,7 +5,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBoxNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxStaticBoxNameStr;
 
 // ----------------------------------------------------------------------------
 // wxStaticBox: a grouping box with a label

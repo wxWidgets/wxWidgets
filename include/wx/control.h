@@ -26,7 +26,7 @@
 
 #include "wx/window.h"      // base class
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxControlNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxControlNameStr;
 
 // ----------------------------------------------------------------------------
 // wxControl is the base class for all controls

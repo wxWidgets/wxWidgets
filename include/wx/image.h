@@ -220,10 +220,10 @@ public:
     // draw grey values on the black background although they
     // actually mean to draw white with differnt alpha values.
     // This method reverses it, assuming a black (!) background
-    // and white text (actually only the red channel is read). 
+    // and white text (actually only the red channel is read).
     // The method will then fill up the whole image with the
     // colour given.
-    bool ConvertColourToAlpha( unsigned char r, unsigned char g, unsigned char b ); 
+    bool ConvertColourToAlpha( unsigned char r, unsigned char g, unsigned char b );
 
     static bool CanRead( const wxString& name );
     static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
@@ -330,7 +330,7 @@ private:
 
 extern void WXDLLEXPORT wxInitAllImageHandlers();
 
-WXDLLEXPORT_DATA(extern wxImage)    wxNullImage;
+extern WXDLLEXPORT_DATA(wxImage)    wxNullImage;
 
 //-----------------------------------------------------------------------------
 // wxImage handlers

@@ -529,71 +529,71 @@ public:
 // ---------------------------------------------------------------------------
 
 // Lists of GDI objects
-WXDLLEXPORT_DATA(extern wxPenList*)   wxThePenList;
-WXDLLEXPORT_DATA(extern wxBrushList*)   wxTheBrushList;
-WXDLLEXPORT_DATA(extern wxFontList*)    wxTheFontList;
-WXDLLEXPORT_DATA(extern wxBitmapList*)  wxTheBitmapList;
+extern WXDLLEXPORT_DATA(wxPenList*)   wxThePenList;
+extern WXDLLEXPORT_DATA(wxBrushList*)   wxTheBrushList;
+extern WXDLLEXPORT_DATA(wxFontList*)    wxTheFontList;
+extern WXDLLEXPORT_DATA(wxBitmapList*)  wxTheBitmapList;
 
 // Stock objects
-WXDLLEXPORT_DATA(extern wxFont*)      wxNORMAL_FONT;
-WXDLLEXPORT_DATA(extern wxFont*)      wxSMALL_FONT;
-WXDLLEXPORT_DATA(extern wxFont*)      wxITALIC_FONT;
-WXDLLEXPORT_DATA(extern wxFont*)      wxSWISS_FONT;
+extern WXDLLEXPORT_DATA(wxFont*)      wxNORMAL_FONT;
+extern WXDLLEXPORT_DATA(wxFont*)      wxSMALL_FONT;
+extern WXDLLEXPORT_DATA(wxFont*)      wxITALIC_FONT;
+extern WXDLLEXPORT_DATA(wxFont*)      wxSWISS_FONT;
 
-WXDLLEXPORT_DATA(extern wxPen*)      wxRED_PEN;
-WXDLLEXPORT_DATA(extern wxPen*)      wxCYAN_PEN;
-WXDLLEXPORT_DATA(extern wxPen*)      wxGREEN_PEN;
-WXDLLEXPORT_DATA(extern wxPen*)      wxBLACK_PEN;
-WXDLLEXPORT_DATA(extern wxPen*)      wxWHITE_PEN;
-WXDLLEXPORT_DATA(extern wxPen*)      wxTRANSPARENT_PEN;
-WXDLLEXPORT_DATA(extern wxPen*)      wxBLACK_DASHED_PEN;
-WXDLLEXPORT_DATA(extern wxPen*)      wxGREY_PEN;
-WXDLLEXPORT_DATA(extern wxPen*)      wxMEDIUM_GREY_PEN;
-WXDLLEXPORT_DATA(extern wxPen*)      wxLIGHT_GREY_PEN;
+extern WXDLLEXPORT_DATA(wxPen*)      wxRED_PEN;
+extern WXDLLEXPORT_DATA(wxPen*)      wxCYAN_PEN;
+extern WXDLLEXPORT_DATA(wxPen*)      wxGREEN_PEN;
+extern WXDLLEXPORT_DATA(wxPen*)      wxBLACK_PEN;
+extern WXDLLEXPORT_DATA(wxPen*)      wxWHITE_PEN;
+extern WXDLLEXPORT_DATA(wxPen*)      wxTRANSPARENT_PEN;
+extern WXDLLEXPORT_DATA(wxPen*)      wxBLACK_DASHED_PEN;
+extern WXDLLEXPORT_DATA(wxPen*)      wxGREY_PEN;
+extern WXDLLEXPORT_DATA(wxPen*)      wxMEDIUM_GREY_PEN;
+extern WXDLLEXPORT_DATA(wxPen*)      wxLIGHT_GREY_PEN;
 
-WXDLLEXPORT_DATA(extern wxBrush*)    wxBLUE_BRUSH;
-WXDLLEXPORT_DATA(extern wxBrush*)    wxGREEN_BRUSH;
-WXDLLEXPORT_DATA(extern wxBrush*)    wxWHITE_BRUSH;
-WXDLLEXPORT_DATA(extern wxBrush*)    wxBLACK_BRUSH;
-WXDLLEXPORT_DATA(extern wxBrush*)    wxGREY_BRUSH;
-WXDLLEXPORT_DATA(extern wxBrush*)    wxMEDIUM_GREY_BRUSH;
-WXDLLEXPORT_DATA(extern wxBrush*)    wxLIGHT_GREY_BRUSH;
-WXDLLEXPORT_DATA(extern wxBrush*)    wxTRANSPARENT_BRUSH;
-WXDLLEXPORT_DATA(extern wxBrush*)    wxCYAN_BRUSH;
-WXDLLEXPORT_DATA(extern wxBrush*)    wxRED_BRUSH;
+extern WXDLLEXPORT_DATA(wxBrush*)    wxBLUE_BRUSH;
+extern WXDLLEXPORT_DATA(wxBrush*)    wxGREEN_BRUSH;
+extern WXDLLEXPORT_DATA(wxBrush*)    wxWHITE_BRUSH;
+extern WXDLLEXPORT_DATA(wxBrush*)    wxBLACK_BRUSH;
+extern WXDLLEXPORT_DATA(wxBrush*)    wxGREY_BRUSH;
+extern WXDLLEXPORT_DATA(wxBrush*)    wxMEDIUM_GREY_BRUSH;
+extern WXDLLEXPORT_DATA(wxBrush*)    wxLIGHT_GREY_BRUSH;
+extern WXDLLEXPORT_DATA(wxBrush*)    wxTRANSPARENT_BRUSH;
+extern WXDLLEXPORT_DATA(wxBrush*)    wxCYAN_BRUSH;
+extern WXDLLEXPORT_DATA(wxBrush*)    wxRED_BRUSH;
 
-WXDLLEXPORT_DATA(extern wxColour*)    wxBLACK;
-WXDLLEXPORT_DATA(extern wxColour*)    wxWHITE;
-WXDLLEXPORT_DATA(extern wxColour*)    wxRED;
-WXDLLEXPORT_DATA(extern wxColour*)    wxBLUE;
-WXDLLEXPORT_DATA(extern wxColour*)    wxGREEN;
-WXDLLEXPORT_DATA(extern wxColour*)    wxCYAN;
-WXDLLEXPORT_DATA(extern wxColour*)    wxLIGHT_GREY;
+extern WXDLLEXPORT_DATA(wxColour*)    wxBLACK;
+extern WXDLLEXPORT_DATA(wxColour*)    wxWHITE;
+extern WXDLLEXPORT_DATA(wxColour*)    wxRED;
+extern WXDLLEXPORT_DATA(wxColour*)    wxBLUE;
+extern WXDLLEXPORT_DATA(wxColour*)    wxGREEN;
+extern WXDLLEXPORT_DATA(wxColour*)    wxCYAN;
+extern WXDLLEXPORT_DATA(wxColour*)    wxLIGHT_GREY;
 
 // 'Null' objects
-WXDLLEXPORT_DATA(extern wxBitmap)     wxNullBitmap;
-WXDLLEXPORT_DATA(extern wxIcon)       wxNullIcon;
-WXDLLEXPORT_DATA(extern wxCursor)     wxNullCursor;
-WXDLLEXPORT_DATA(extern wxPen)        wxNullPen;
-WXDLLEXPORT_DATA(extern wxBrush)      wxNullBrush;
-WXDLLEXPORT_DATA(extern wxPalette)     wxNullPalette;
-WXDLLEXPORT_DATA(extern wxFont)       wxNullFont;
-WXDLLEXPORT_DATA(extern wxColour)     wxNullColour;
+extern WXDLLEXPORT_DATA(wxBitmap)     wxNullBitmap;
+extern WXDLLEXPORT_DATA(wxIcon)       wxNullIcon;
+extern WXDLLEXPORT_DATA(wxCursor)     wxNullCursor;
+extern WXDLLEXPORT_DATA(wxPen)        wxNullPen;
+extern WXDLLEXPORT_DATA(wxBrush)      wxNullBrush;
+extern WXDLLEXPORT_DATA(wxPalette)     wxNullPalette;
+extern WXDLLEXPORT_DATA(wxFont)       wxNullFont;
+extern WXDLLEXPORT_DATA(wxColour)     wxNullColour;
 
 // Stock cursors types
-WXDLLEXPORT_DATA(extern wxCursor*)    wxSTANDARD_CURSOR;
-WXDLLEXPORT_DATA(extern wxCursor*)    wxHOURGLASS_CURSOR;
-WXDLLEXPORT_DATA(extern wxCursor*)    wxCROSS_CURSOR;
+extern WXDLLEXPORT_DATA(wxCursor*)    wxSTANDARD_CURSOR;
+extern WXDLLEXPORT_DATA(wxCursor*)    wxHOURGLASS_CURSOR;
+extern WXDLLEXPORT_DATA(wxCursor*)    wxCROSS_CURSOR;
 
-WXDLLEXPORT_DATA(extern wxColourDatabase*)  wxTheColourDatabase;
+extern WXDLLEXPORT_DATA(wxColourDatabase*)  wxTheColourDatabase;
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxPanelNameStr;
 
-WXDLLEXPORT_DATA(extern const wxSize) wxDefaultSize;
-WXDLLEXPORT_DATA(extern const wxPoint) wxDefaultPosition;
+extern WXDLLEXPORT_DATA(const wxSize) wxDefaultSize;
+extern WXDLLEXPORT_DATA(const wxPoint) wxDefaultPosition;
 
 // The list of objects which should be deleted
-WXDLLEXPORT_DATA(extern wxList) wxPendingDelete;
+extern WXDLLEXPORT_DATA(wxList) wxPendingDelete;
 
 // ---------------------------------------------------------------------------
 // global functions

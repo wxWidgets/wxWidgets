@@ -98,7 +98,7 @@ public:
     wxFileTypeInfo() { }
 
     // test if this object can be used
-    bool IsValid() const { return !m_mimeType.IsEmpty(); }
+    bool IsValid() const { return !m_mimeType.empty(); }
 
     // setters
         // set the icon info
@@ -388,7 +388,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // the default mime manager for wxWidgets programs
-WXDLLIMPEXP_DATA_BASE(extern wxMimeTypesManager *) wxTheMimeTypesManager;
+extern WXDLLIMPEXP_DATA_BASE(wxMimeTypesManager *) wxTheMimeTypesManager;
 
 #endif // wxUSE_MIMETYPE
 

@@ -127,7 +127,7 @@
 #ifdef __cplusplus
     /*  Use of wxFalse instead of false suppresses compiler warnings about testing */
     /*  constant expression */
-    WXDLLIMPEXP_DATA_BASE(extern const bool) wxFalse;
+    extern WXDLLIMPEXP_DATA_BASE(const bool) wxFalse;
 #endif
 
 #define wxAssertFailure wxFalse

@@ -9,9 +9,9 @@
 // constants
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogNameStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogDefaultFolderStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxDirSelectorPromptStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxDirDialogNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxDirDialogDefaultFolderStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxDirSelectorPromptStr;
 
 #define wxDD_DEFAULT_STYLE \
     (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON)

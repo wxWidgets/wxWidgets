@@ -36,9 +36,9 @@ class WXDLLEXPORT wxImage;
 // constants
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
-WXDLLEXPORT_DATA(extern const wxSize) wxDefaultSize;
-WXDLLEXPORT_DATA(extern const wxPoint) wxDefaultPosition;
+extern WXDLLEXPORT_DATA(const wxChar*) wxToolBarNameStr;
+extern WXDLLEXPORT_DATA(const wxSize) wxDefaultSize;
+extern WXDLLEXPORT_DATA(const wxPoint) wxDefaultPosition;
 
 enum wxToolBarToolStyle
 {

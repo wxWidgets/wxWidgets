@@ -36,7 +36,7 @@
 #define wxGA_PROGRESSBAR     0
 
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxGaugeNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxGaugeNameStr;
 
 // ----------------------------------------------------------------------------
 // wxGauge: a progress bar

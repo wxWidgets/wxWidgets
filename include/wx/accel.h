@@ -128,7 +128,7 @@ private:
     #include "wx/os2/accel.h"
 #endif
 
-WXDLLEXPORT_DATA(extern wxAcceleratorTable) wxNullAcceleratorTable;
+extern WXDLLEXPORT_DATA(wxAcceleratorTable) wxNullAcceleratorTable;
 
 #endif // wxUSE_ACCEL
 

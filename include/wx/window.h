@@ -116,7 +116,7 @@ WX_DECLARE_LIST_3(wxWindow, wxWindowBase, wxWindowList, wxWindowListNode, class 
 // global variables
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern wxWindowList) wxTopLevelWindows;
+extern WXDLLEXPORT_DATA(wxWindowList) wxTopLevelWindows;
 
 // ----------------------------------------------------------------------------
 // wxWindowBase is the base class for all GUI controls/widgets, this is the public
@@ -1408,13 +1408,13 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
 
 // Find the wxWindow at the current mouse position, also returning the mouse
 // position.
-WXDLLEXPORT extern wxWindow* wxFindWindowAtPointer(wxPoint& pt);
+extern WXDLLEXPORT wxWindow* wxFindWindowAtPointer(wxPoint& pt);
 
 // Get the current mouse position.
-WXDLLEXPORT extern wxPoint wxGetMousePosition();
+extern WXDLLEXPORT wxPoint wxGetMousePosition();
 
 // get the currently active window of this application or NULL
-WXDLLEXPORT extern wxWindow *wxGetActiveWindow();
+extern WXDLLEXPORT wxWindow *wxGetActiveWindow();
 
 // get the (first) top level parent window
 WXDLLEXPORT wxWindow* wxGetTopLevelParent(wxWindow *win);

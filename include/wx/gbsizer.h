@@ -76,7 +76,7 @@ private:
 };
 
 
-WXDLLEXPORT_DATA(extern const wxGBSpan) wxDefaultSpan;
+extern WXDLLEXPORT_DATA(const wxGBSpan) wxDefaultSpan;
 
 
 //---------------------------------------------------------------------------

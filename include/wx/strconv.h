@@ -89,7 +89,7 @@ public:
 // not very accurately named because it is not necessarily of type wxMBConvLibc
 // (but the name can't eb changed because of backwards compatibility) default
 // conversion
-WXDLLIMPEXP_DATA_BASE(extern wxMBConv&) wxConvLibc;
+extern WXDLLIMPEXP_DATA_BASE(wxMBConv&) wxConvLibc;
 
 // ----------------------------------------------------------------------------
 // wxMBConvUTF7 (for conversion using UTF7 encoding)
@@ -102,7 +102,7 @@ public:
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 };
 
-WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF7&) wxConvUTF7;
+extern WXDLLIMPEXP_DATA_BASE(wxMBConvUTF7&) wxConvUTF7;
 
 // ----------------------------------------------------------------------------
 // wxMBConvUTF8 (for conversion using UTF8 encoding)
@@ -115,7 +115,7 @@ public:
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 };
 
-WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF8&) wxConvUTF8;
+extern WXDLLIMPEXP_DATA_BASE(wxMBConvUTF8&) wxConvUTF8;
 
 // ----------------------------------------------------------------------------
 // wxMBConvUTF16LE (for conversion using UTF16 Little Endian encoding)
@@ -216,9 +216,9 @@ private:
 #define wxConvFile wxConvLocal
 #endif
 
-WXDLLIMPEXP_DATA_BASE(extern wxCSConv&) wxConvLocal;
-WXDLLIMPEXP_DATA_BASE(extern wxCSConv&) wxConvISO8859_1;
-WXDLLIMPEXP_DATA_BASE(extern wxMBConv *) wxConvCurrent;
+extern WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvLocal;
+extern WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvISO8859_1;
+extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent;
 
 // ----------------------------------------------------------------------------
 // endianness-dependent conversions
@@ -271,11 +271,11 @@ public:
 
 #define wxConvFile wxConvLocal
 
-WXDLLIMPEXP_DATA_BASE(extern wxMBConv) wxConvLibc,
+extern WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc,
                                        wxConvLocal,
                                        wxConvISO8859_1,
                                        wxConvUTF8;
-WXDLLIMPEXP_DATA_BASE(extern wxMBConv *) wxConvCurrent;
+extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent;
 
 #define wxFNCONV(name) name
 #define wxFNSTRINGCAST WXSTRINGCAST

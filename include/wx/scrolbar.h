@@ -5,7 +5,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxScrollBarNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxScrollBarNameStr;
 
 // ----------------------------------------------------------------------------
 // wxScrollBar: a scroll bar control

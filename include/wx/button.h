@@ -47,7 +47,7 @@
 
 class WXDLLEXPORT wxBitmap;
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxButtonNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxButtonNameStr;
 
 // ----------------------------------------------------------------------------
 // wxButton: a push button

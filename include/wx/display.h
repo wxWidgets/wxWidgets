@@ -29,7 +29,7 @@ class WXDLLEXPORT wxString;
 WX_DECLARE_EXPORTED_OBJARRAY(wxVideoMode, wxArrayVideoModes);
 
 // default, uninitialized, video mode object
-WXDLLEXPORT_DATA(extern const wxVideoMode) wxDefaultVideoMode;
+extern WXDLLEXPORT_DATA(const wxVideoMode) wxDefaultVideoMode;
 
 // ----------------------------------------------------------------------------
 // wxDisplayBase: represents a display/monitor attached to the system

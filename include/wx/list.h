@@ -307,7 +307,7 @@ private:
 // wxNodeBase class is a (base for) node in a double linked list
 // -----------------------------------------------------------------------------
 
-WXDLLIMPEXP_DATA_BASE(extern wxListKey) wxDefaultListKey;
+extern WXDLLIMPEXP_DATA_BASE(wxListKey) wxDefaultListKey;
 
 class WXDLLIMPEXP_BASE wxListBase;
 

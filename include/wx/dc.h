@@ -97,7 +97,7 @@ protected:
 // global variables
 // ---------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern int) wxPageNumber;
+extern WXDLLEXPORT_DATA(int) wxPageNumber;
 
 // ---------------------------------------------------------------------------
 // wxDC is the device context - object on which any drawing is done

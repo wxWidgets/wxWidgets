@@ -22,7 +22,7 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxSliderNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxSliderNameStr;
 
 // ----------------------------------------------------------------------------
 // wxSliderBase: define wxSlider interface

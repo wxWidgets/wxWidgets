@@ -19,7 +19,7 @@
 #include "wx/bitmap.h"
 #include "wx/button.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxButtonNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxButtonNameStr;
 
 // ----------------------------------------------------------------------------
 // wxBitmapButton: a button which shows bitmaps instead of the usual string.

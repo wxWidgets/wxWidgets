@@ -123,8 +123,8 @@ enum enumDummy {enumDum1};
 
 const int wxDB_PATH_MAX                 = 254;
 
-WXDLLIMPEXP_DATA_ODBC(extern wxChar const *) SQL_LOG_FILENAME;
-WXDLLIMPEXP_DATA_ODBC(extern wxChar const *) SQL_CATALOG_FILENAME;
+extern WXDLLIMPEXP_DATA_ODBC(wxChar const *) SQL_LOG_FILENAME;
+extern WXDLLIMPEXP_DATA_ODBC(wxChar const *) SQL_CATALOG_FILENAME;
 
 // Database Globals
 const int DB_TYPE_NAME_LEN            = 40;
@@ -473,7 +473,7 @@ enum wxDBMS
 // will overwrite the errors of the previously destroyed wxDb object in
 // this variable.
 
-WXDLLIMPEXP_DATA_ODBC(extern wxChar)
+extern WXDLLIMPEXP_DATA_ODBC(wxChar)
     DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
 
 

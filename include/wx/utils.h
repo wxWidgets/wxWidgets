@@ -143,8 +143,8 @@ WXDLLEXPORT long wxGetCurrentId();
 // these functions are deprecated, use wxString methods instead!
 #if WXWIN_COMPATIBILITY_2_4
 
-WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxFloatToStringStr;
-WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxDoubleToStringStr;
+extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxFloatToStringStr;
+extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxDoubleToStringStr;
 
 wxDEPRECATED( WXDLLIMPEXP_BASE void StringToFloat(const wxChar *s, float *number) );
 wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* FloatToString(float number, const wxChar *fmt = wxFloatToStringStr) );
@@ -456,7 +456,7 @@ private:
 
 // Set the cursor to the busy cursor for all windows
 class WXDLLEXPORT wxCursor;
-WXDLLEXPORT_DATA(extern wxCursor*) wxHOURGLASS_CURSOR;
+extern WXDLLEXPORT_DATA(wxCursor*) wxHOURGLASS_CURSOR;
 WXDLLEXPORT void wxBeginBusyCursor(wxCursor *cursor = wxHOURGLASS_CURSOR);
 
 // Restore cursor to normal
@@ -505,7 +505,7 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 // MSW only: get user-defined resource from the .res file.
 // Returns NULL or newly-allocated memory, so use delete[] to clean up.
 #ifdef __WXMSW__
-    WXDLLEXPORT extern const wxChar* wxUserResourceStr;
+    extern WXDLLEXPORT const wxChar* wxUserResourceStr;
     WXDLLEXPORT wxChar* wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr);
 #endif // MSW
 
@@ -559,11 +559,11 @@ WXDLLIMPEXP_BASE bool wxYieldIfNeeded();
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxDebugMsg(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1 );
 
 // Non-fatal error (continues)
-WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxInternalErrorStr;
+extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxInternalErrorStr;
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxError(const wxString& msg, const wxString& title = wxInternalErrorStr) );
 
 // Fatal error (exits)
-WXDLLIMPEXP_DATA_BASE(extern const wxChar*) wxFatalErrorStr;
+extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxFatalErrorStr;
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr) );
 
 #endif // WXWIN_COMPATIBILITY_2_2
