@@ -530,8 +530,7 @@ echo Minifram sample..
 
 cd minifram
 md \wxmsw_dist\wxMSW\samples\minifram
-copy Makefile.am \wxmsw_dist\wxMSW\samples\minifram
-copy Makefile.in \wxmsw_dist\wxMSW\samples\minifram
+copy Makefile.* \wxmsw_dist\wxMSW\samples\minifram
 copy *.cpp \wxmsw_dist\wxMSW\samples\minifram
 copy *.xpm \wxmsw_dist\wxMSW\samples\minifram
 copy *.ico \wxmsw_dist\wxMSW\samples\minifram
@@ -606,7 +605,7 @@ cd ..
 
 echo Scroll sample..
 
-cd sashtest
+cd scroll
 md \wxmsw_dist\wxMSW\samples\scroll
 copy Makefile.* \wxmsw_dist\wxMSW\samples\scroll
 copy *.cpp \wxmsw_dist\wxMSW\samples\scroll
@@ -653,8 +652,7 @@ echo Toolbar sample..
 
 cd toolbar
 md \wxmsw_dist\wxMSW\samples\toolbar
-copy Makefile.am \wxmsw_dist\wxMSW\samples\toolbar
-copy Makefile.in \wxmsw_dist\wxMSW\samples\toolbar
+copy Makefile.* \wxmsw_dist\wxMSW\samples\toolbar
 copy *.cpp \wxmsw_dist\wxMSW\samples\toolbar
 copy *.h \wxmsw_dist\wxMSW\samples\toolbar
 copy *.rc \wxmsw_dist\wxMSW\samples\toolbar

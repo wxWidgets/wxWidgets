@@ -157,6 +157,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
+    EVT_MENU(wxID_HELP, MyFrame::OnAbout)
     EVT_CLOSE(MyFrame::OnCloseWindow)
     EVT_MENU(-1, MyFrame::OnToolLeftClick)
     EVT_TOOL_ENTER(ID_TOOLBAR, MyFrame::OnToolEnter)
