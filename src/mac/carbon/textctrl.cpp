@@ -2113,24 +2113,16 @@ void wxMacMLTEClassicControl::MacSetObjectVisibility(Boolean vis)
         SetKeyboardFocus( m_txnWindow , m_controlRef , kControlFocusNoPart ) ;
     }
     
-    TXNControlTag iControlTags[] = 
-        { 
-            kTXNVisibilityTag ,
-        };
-    TXNControlData iControlData[] = 
-        { 
-            {(UInt32) false },
-        };
-        
-    int toptag = WXSIZEOF( iControlTags ) ;
+    TXNControlTag iControlTags[1] = { kTXNVisibilityTag };
+    TXNControlData iControlData[1] = { {(UInt32) false } };
 
-    verify_noerr( TXNGetTXNObjectControls( m_txn , toptag,
+    verify_noerr( TXNGetTXNObjectControls( m_txn , 1,
                                         iControlTags, iControlData ) ) ;
                                         
     if ( iControlData[0].uValue != vis )
     {
         iControlData[0].uValue = vis ;
-        verify_noerr( TXNSetTXNObjectControls( m_txn, false , toptag,
+        verify_noerr( TXNSetTXNObjectControls( m_txn, false , 1,
                                         iControlTags, iControlData )) ;
     }
     // we right now are always clipping as partial visibility (overlapped) visibility
