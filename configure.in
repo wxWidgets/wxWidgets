@@ -591,6 +591,7 @@ USE_VMS=
 USE_ULTRIX=
 USE_DATA_GENERAL=
 
+AC_DEFINE(__UNIX__)
 case "${canonical}" in
   *-hp-hpux* )
     USE_HPUX=1

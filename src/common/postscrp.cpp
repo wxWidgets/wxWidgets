@@ -169,6 +169,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPostScriptModule, wxModule)
 IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintSetupData, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperDatabase, wxList)
 #endif
 
 wxPostScriptDC::wxPostScriptDC ()

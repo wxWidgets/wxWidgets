@@ -303,8 +303,10 @@ public:
     char& Last()
       { wxASSERT( !IsEmpty() ); CopyBeforeWrite(); return m_pchData[Len()-1]; }
 
+    // Alternatively, we could uncomment one of them for 64bit platforms
+    // by using #if SIZEOF_INT > 32
+#ifdef __UNIX__
     /// operator version of GetChar
-#if 0
     char  operator[](size_t n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
 #endif
