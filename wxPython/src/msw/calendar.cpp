@@ -957,6 +957,99 @@ static PyObject *_wrap_new_wxCalendarCtrl(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define new_wxPreCalendarCtrl() (new wxCalendarCtrl())
+static PyObject *_wrap_new_wxPreCalendarCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCalendarCtrl * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPreCalendarCtrl",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxCalendarCtrl *)new_wxPreCalendarCtrl();
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxCalendarCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxCalendarCtrl_Create(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6)  (_swigobj->Create(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
+static PyObject *_wrap_wxCalendarCtrl_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCalendarCtrl * _arg0;
+    wxWindow * _arg1;
+    wxWindowID  _arg2;
+    wxDateTime * _arg3 = (wxDateTime *) &wxDefaultDateTime;
+    wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg5 = (wxSize *) &wxDefaultSize;
+    long  _arg6 = (long ) (wxCAL_SHOW_HOLIDAYS);
+    char * _arg7 = (char *) "calendar";
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _argo3 = 0;
+    wxPoint  temp;
+    PyObject * _obj4 = 0;
+    wxSize  temp0;
+    PyObject * _obj5 = 0;
+    char *_kwnames[] = { "self","parent","id","date","pos","size","style","name", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOOls:wxCalendarCtrl_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_argo3,&_obj4,&_obj5,&_arg6,&_arg7)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCalendarCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCalendarCtrl_Create. Expected _wxCalendarCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxCalendarCtrl_Create. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxDateTime_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxCalendarCtrl_Create. Expected _wxDateTime_p.");
+        return NULL;
+        }
+    }
+    if (_obj4)
+{
+    _arg4 = &temp;
+    if (! wxPoint_helper(_obj4, &_arg4))
+        return NULL;
+}
+    if (_obj5)
+{
+    _arg5 = &temp0;
+    if (! wxSize_helper(_obj5, &_arg5))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxCalendarCtrl_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,*_arg5,_arg6,_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxCalendarCtrl_SetDate(_swigobj,_swigarg0)  (_swigobj->SetDate(_swigarg0))
 static PyObject *_wrap_wxCalendarCtrl_SetDate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1677,6 +1770,8 @@ static PyMethodDef calendarcMethods[] = {
 	 { "wxCalendarCtrl_EnableYearChange", (PyCFunction) _wrap_wxCalendarCtrl_EnableYearChange, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarCtrl_GetDate", (PyCFunction) _wrap_wxCalendarCtrl_GetDate, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarCtrl_SetDate", (PyCFunction) _wrap_wxCalendarCtrl_SetDate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCalendarCtrl_Create", (PyCFunction) _wrap_wxCalendarCtrl_Create, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPreCalendarCtrl", (PyCFunction) _wrap_new_wxPreCalendarCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxCalendarCtrl", (PyCFunction) _wrap_new_wxCalendarCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarEvent_GetWeekDay", (PyCFunction) _wrap_wxCalendarEvent_GetWeekDay, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCalendarEvent_GetDate", (PyCFunction) _wrap_wxCalendarEvent_GetDate, METH_VARARGS | METH_KEYWORDS },

@@ -17,6 +17,9 @@ class wxStatusBarPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxStatusBar_Create,(self,) + _args, _kwargs)
+        return val
     def GetFieldRect(self, *_args, **_kwargs):
         val = apply(stattoolc.wxStatusBar_GetFieldRect,(self,) + _args, _kwargs)
         if val: val = wxRectPtr(val) ; val.thisown = 1
@@ -54,6 +57,11 @@ class wxStatusBar(wxStatusBarPtr):
         #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreStatusBar(*_args,**_kwargs):
+    val = wxStatusBarPtr(apply(stattoolc.new_wxPreStatusBar,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxToolBarToolBasePtr(wxObjectPtr):
@@ -291,6 +299,9 @@ class wxToolBarPtr(wxToolBarBasePtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBar_Create,(self,) + _args, _kwargs)
+        return val
     def FindToolForPosition(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBar_FindToolForPosition,(self,) + _args, _kwargs)
         return val
@@ -304,11 +315,19 @@ class wxToolBar(wxToolBarPtr):
 
 
 
+def wxPreToolBar(*_args,**_kwargs):
+    val = wxToolBarPtr(apply(stattoolc.new_wxPreToolBar,_args,_kwargs))
+    val.thisown = 1
+    return val
+
 
 class wxToolBarSimplePtr(wxToolBarBasePtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarSimple_Create,(self,) + _args, _kwargs)
+        return val
     def FindToolForPosition(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarSimple_FindToolForPosition,(self,) + _args, _kwargs)
         return val
@@ -321,6 +340,11 @@ class wxToolBarSimple(wxToolBarSimplePtr):
         #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreToolBarSimple(*_args,**_kwargs):
+    val = wxToolBarSimplePtr(apply(stattoolc.new_wxPreToolBarSimple,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 

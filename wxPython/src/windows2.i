@@ -42,207 +42,6 @@
 
 //---------------------------------------------------------------------------
 
-#ifdef OLD_GRID
-
-enum {
-    wxGRID_TEXT_CTRL,
-    wxGRID_HSCROLL,
-    wxGRID_VSCROLL
-};
-
-class wxGridCell {
-public:
-    wxGridCell();
-    ~wxGridCell();
-
-    wxString& GetTextValue();
-    void      SetTextValue(const wxString& str);
-    wxFont&   GetFont();
-    void      SetFont(wxFont& f);
-    wxColour GetTextColour();
-    void      SetTextColour(const wxColour& colour);
-    wxColour GetBackgroundColour();
-    void      SetBackgroundColour(const wxColour& colour);
-    wxBrush&  GetBackgroundBrush();
-    int       GetAlignment();
-    void      SetAlignment(int align);
-    wxBitmap* GetCellBitmap();
-    void      SetCellBitmap(wxBitmap* bitmap);
-};
-
-
-
-
-class wxGrid : public wxPanel {
-public:
-    wxGrid(wxWindow* parent, wxWindowID id,
-           const wxPoint& pos=wxDefaultPosition,
-           const wxSize& size=wxDefaultSize,
-           long style=0,
-           char* name="grid");
-
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnSelectCell',           wxEVT_GRID_SELECT_CELL)"
-    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnCreateCell',           wxEVT_GRID_CREATE_CELL)"
-    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnChangeLabels',         wxEVT_GRID_CHANGE_LABELS)"
-    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnChangeSelectionLabel', wxEVT_GRID_CHANGE_SEL_LABEL)"
-    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnCellChange',           wxEVT_GRID_CELL_CHANGE)"
-    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnCellLeftClick',        wxEVT_GRID_CELL_LCLICK)"
-    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnCellRightClick',       wxEVT_GRID_CELL_RCLICK)"
-    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnLabelLeftClick',       wxEVT_GRID_LABEL_LCLICK)"
-    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnLabelRightClick',      wxEVT_GRID_LABEL_RCLICK)"
-
-
-    void AdjustScrollbars();
-    bool AppendCols(int n=1, int updateLabels=TRUE);
-    bool AppendRows(int n=1, int updateLabels=TRUE);
-    void BeginBatch();
-    bool CellHitTest(int x, int y, int *OUTPUT, int *OUTPUT);
-
-    %addmethods {
-        // TODO:  For now we are just ignoring the initial cellValues
-        //        and widths.  Add support for loading them from
-        //        Python sequence objects.
-        bool CreateGrid(int rows, int cols,
-                        //PyObject* cellValues  = NULL,
-                        //PyObject* widths      = NULL,
-                        short defaultWidth      = wxGRID_DEFAULT_CELL_WIDTH,
-                        short defaultHeight     = wxGRID_DEFAULT_CELL_HEIGHT) {
-            return self->CreateGrid(rows, cols, NULL, NULL,
-                                    defaultWidth, defaultHeight);
-        }
-    }
-
-    bool CurrentCellVisible();
-    bool DeleteCols(int pos=0, int n=1, bool updateLabels=TRUE);
-    bool DeleteRows(int pos=0, int n=1, bool updateLabels=TRUE);
-    void EndBatch();
-
-    int  GetBatchCount();
-    wxGridCell* GetCell(int row, int col);
-    int GetCellAlignment(int row, int col);
-    %name(GetDefCellAlignment)int GetCellAlignment();
-    wxColour GetCellBackgroundColour(int row, int col);
-    %name(GetDefCellBackgroundColour) wxColour& GetCellBackgroundColour();
-
-    //wxGridCell *** GetCells();
-    %addmethods {
-        PyObject* GetCells() {
-            int row, col;
-            PyObject* rows = PyList_New(0);
-            for (row=0; row < self->GetRows(); row++) {
-                PyObject* rowList = PyList_New(0);
-                for (col=0; col < self->GetCols(); col++) {
-                    wxGridCell* cell = self->GetCell(row, col);
-
-                    bool doSave = wxPyRestoreThread();
-                    PyObject* pyCell = wxPyConstructObject(cell, "wxGridCell");
-                    wxPySaveThread(doSave);
-
-                    if (PyList_Append(rowList, pyCell) == -1)
-                        return NULL;
-                }
-                if (PyList_Append(rows, rowList) == -1)
-                    return NULL;
-            }
-            return rows;
-        }
-    }
-    wxColour GetCellTextColour(int row, int col);
-    %name(GetDefCellTextColour)wxColour& GetCellTextColour();
-    wxFont& GetCellTextFont(int row, int col);
-    %name(GetDefCellTextFont)wxFont& GetCellTextFont();
-    wxString& GetCellValue(int row, int col);
-    int GetCols();
-    int GetColumnWidth(int col);
-    wxRect GetCurrentRect();
-    int GetCursorColumn();
-    int GetCursorRow();
-    bool GetEditable();
-    wxScrollBar * GetHorizScrollBar();
-    int GetLabelAlignment(int orientation);
-    wxColour GetLabelBackgroundColour();
-    int GetLabelSize(int orientation);
-    wxColour GetLabelTextColour();
-    wxFont& GetLabelTextFont();
-    wxString& GetLabelValue(int orientation, int pos);
-    int GetRowHeight(int row);
-    int GetRows();
-    int GetScrollPosX();
-    int GetScrollPosY();
-    wxTextCtrl* GetTextItem();
-    wxScrollBar* GetVertScrollBar();
-
-    bool InsertCols(int pos=0, int n=1, bool updateLabels=TRUE);
-    bool InsertRows(int pos=0, int n=1, bool updateLabels=TRUE);
-
-    void OnActivate(bool active);
-
-    void SetCellAlignment(int alignment, int row, int col);
-    %name(SetDefCellAlignment)void SetCellAlignment(int alignment);
-    void SetCellBackgroundColour(const wxColour& colour, int row, int col);
-    %name(SetDefCellBackgroundColour)
-        void SetCellBackgroundColour(const wxColour& colour);
-    void SetCellTextColour(const wxColour& colour, int row, int col);
-    %name(SetDefCellTextColour)void SetCellTextColour(const wxColour& colour);
-    void SetCellTextFont(wxFont& font, int row, int col);
-    %name(SetDefCellTextFont)void SetCellTextFont(wxFont& font);
-    void SetCellValue(const wxString& val, int row, int col);
-    void SetColumnWidth(int col, int width);
-    void SetDividerPen(wxPen& pen);
-    void SetEditable(bool editable);
-    void SetGridCursor(int row, int col);
-    void SetLabelAlignment(int orientation, int alignment);
-    void SetLabelBackgroundColour(const wxColour& value);
-    void SetLabelSize(int orientation, int size);
-    void SetLabelTextColour(const wxColour& value);
-    void SetLabelTextFont(wxFont& font);
-    void SetLabelValue(int orientation, const wxString& value, int pos);
-    void SetRowHeight(int row, int height);
-
-    void UpdateDimensions();
-
-    bool GetEditInPlace();
-    void SetEditInPlace(int edit = TRUE);
-
-};
-
-
-class wxGridEvent : public wxEvent {
-public:
-    int         m_row;
-    int         m_col;
-    int         m_x;
-    int         m_y;
-    bool        m_control;
-    bool        m_shift;
-    wxGridCell* m_cell;
-
-    int GetRow();
-    int GetCol();
-    wxPoint GetPosition();
-    bool ControlDown();
-    bool ShiftDown();
-    wxGridCell* GetCell();
-};
-
-
-enum {
-    wxEVT_GRID_SELECT_CELL,
-    wxEVT_GRID_CREATE_CELL,
-    wxEVT_GRID_CHANGE_LABELS,
-    wxEVT_GRID_CHANGE_SEL_LABEL,
-    wxEVT_GRID_CELL_CHANGE,
-    wxEVT_GRID_CELL_LCLICK,
-    wxEVT_GRID_CELL_RCLICK,
-    wxEVT_GRID_LABEL_LCLICK,
-    wxEVT_GRID_LABEL_RCLICK,
-};
-
-#endif
-
-//---------------------------------------------------------------------------
-
 enum {
      /* notebook control event types */
     wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
@@ -252,6 +51,9 @@ enum {
 
 class wxNotebookEvent : public wxNotifyEvent {
 public:
+    wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
+                    int nSel = -1, int nOldSel = -1);
+
     int GetSelection();
     int GetOldSelection();
     void SetOldSelection(int page);
@@ -268,8 +70,14 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                char* name = "notebook");
+    %name(wxPreNotebook)wxNotebook();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow *parent,
+               wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               char* name = "notebook");
 
     int GetPageCount();
     int SetSelection(int nPage);
@@ -333,6 +141,9 @@ enum
 
 class wxSplitterEvent : public wxCommandEvent {
 public:
+     wxSplitterEvent(wxEventType type = wxEVT_NULL,
+                     wxSplitterWindow *splitter = NULL);
+
     int GetSashPosition();
     int GetX();
     int GetY();
@@ -350,28 +161,76 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style=wxSP_3D|wxCLIP_CHILDREN,
                      char* name = "splitterWindow");
+    %name(wxPreSplitterWindow)wxSplitterWindow();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxPoint& point = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style=wxSP_3D|wxCLIP_CHILDREN,
+                char* name = "splitterWindow");
 
-    int GetBorderSize();
-    int GetMinimumPaneSize();
-    int GetSashPosition();
-    int GetSashSize();
+
+    // Gets the only or left/top pane
+    wxWindow *GetWindow1();
+
+    // Gets the right/bottom pane
+    wxWindow *GetWindow2();
+
+    // Sets the split mode
+    void SetSplitMode(int mode);
+
+    // Gets the split mode
     int GetSplitMode();
-    wxWindow* GetWindow1();
-    wxWindow* GetWindow2();
-    void Initialize(wxWindow* window);
+
+    // Initialize with one window
+    void Initialize(wxWindow *window);
+
+    // Associates the given window with window 2, drawing the appropriate sash
+    // and changing the split mode.
+    // Does nothing and returns FALSE if the window is already split.
+    // A sashPosition of 0 means choose a default sash position,
+    // negative sashPosition specifies the size of right/lower pane as it's
+    // absolute value rather than the size of left/upper pane.
+    virtual bool SplitVertically(wxWindow *window1,
+                                 wxWindow *window2,
+                                 int sashPosition = 0);
+    virtual bool SplitHorizontally(wxWindow *window1,
+                                   wxWindow *window2,
+                                   int sashPosition = 0);
+
+    // Removes the specified (or second) window from the view
+    // Doesn't actually delete the window.
+    bool Unsplit(wxWindow *toRemove = NULL);
+
+    // Replaces one of the windows with another one (neither old nor new
+    // parameter should be NULL)
+    bool ReplaceWindow(wxWindow *winOld, wxWindow *winNew);
+
+    // Is the window split?
     bool IsSplit();
 
-    bool ReplaceWindow(wxWindow * winOld, wxWindow * winNew);
-    void SetBorderSize(int width);
-    void SetSashPosition(int position, int redraw = TRUE);
+    // Sets the sash size
     void SetSashSize(int width);
-    void SetMinimumPaneSize(int paneSize);
-    void SetSplitMode(int mode);
-    bool SplitHorizontally(wxWindow* window1, wxWindow* window2, int sashPosition = 0);
-    bool SplitVertically(wxWindow* window1, wxWindow* window2, int sashPosition = 0);
-    bool Unsplit(wxWindow* toRemove = NULL);
+
+    // Sets the border size
+    void SetBorderSize(int width);
+
+    // Gets the sash size
+    int GetSashSize();
+
+    // Gets the border size
+    int GetBorderSize();
+
+    // Set the sash position
+    void SetSashPosition(int position, bool redraw = TRUE);
+
+    // Gets the sash position
+    int GetSashPosition();
+
+    // If this is zero, we can remove panes by dragging the sash.
+    void SetMinimumPaneSize(int min);
+    int GetMinimumPaneSize();
+
 };
 
 //---------------------------------------------------------------------------

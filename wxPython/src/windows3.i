@@ -61,6 +61,8 @@ enum wxSashDragStatus
 
 class wxSashEvent : public wxCommandEvent {
 public:
+    wxSashEvent(int id = 0, wxSashEdgePosition edge = wxSASH_NONE);
+
     void SetEdge(wxSashEdgePosition edge);
     wxSashEdgePosition GetEdge();
     void SetDragRect(const wxRect& rect);
@@ -78,8 +80,13 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxCLIP_CHILDREN | wxSW_3D,
                  const char* name = "sashWindow");
+    %name(wxPreSashWindow)wxSashWindow();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxCLIP_CHILDREN | wxSW_3D,
+                 const char* name = "sashWindow");
 
     bool GetSashVisible(wxSashEdgePosition edge);
     int GetDefaultBorderSize();
@@ -126,6 +133,7 @@ enum {
 
 class wxQueryLayoutInfoEvent: public wxEvent {
 public:
+    wxQueryLayoutInfoEvent(wxWindowID id = 0);
 
     void SetRequestedLength(int length);
     int GetRequestedLength();
@@ -143,6 +151,8 @@ public:
 
 class wxCalculateLayoutEvent: public wxEvent {
 public:
+    wxCalculateLayoutEvent(wxWindowID id = 0);
+
     void SetFlags(int flags);
     int GetFlags();
     void SetRect(const wxRect& rect);
@@ -157,11 +167,13 @@ public:
                        const wxSize& size = wxDefaultSize,
                        long style = wxCLIP_CHILDREN | wxSW_3D,
                        const char* name = "layoutWindow");
+    %name(wxPreSashLayoutWindow)wxSashLayoutWindow();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnCalculateLayout',    wxEVT_CALCULATE_LAYOUT)"
-    %pragma(python) addtomethod = "__init__:#wx._checkForCallback(self, 'OnQueryLayoutInfo',    wxEVT_QUERY_LAYOUT_INFO)"
-
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxCLIP_CHILDREN | wxSW_3D,
+                const char* name = "layoutWindow");
 
     wxLayoutAlignment GetAlignment();
     wxLayoutOrientation GetOrientation();
@@ -185,6 +197,3 @@ public:
 
 //---------------------------------------------------------------------------
 
-
-
-//---------------------------------------------------------------------------

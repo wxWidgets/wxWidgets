@@ -64,8 +64,16 @@ public:
                        long style=0,
                        const wxValidator& validator=wxDefaultValidator,
                        const char* name="control");
+    %name(wxPreControl)wxControl();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos=wxDefaultPosition,
+                       const wxSize& size=wxDefaultSize,
+                       long style=0,
+                       const wxValidator& validator=wxDefaultValidator,
+                       const char* name="control");
+
 
     void Command(wxCommandEvent& event);
     wxString GetLabel();
@@ -83,20 +91,25 @@ public:
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              char* name = "button");
+    %name(wxPreButton)wxButton();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             char* name = "button");
+
 
     void SetDefault();
     void SetBackgroundColour(const wxColour& colour);
     void SetForegroundColour(const wxColour& colour);
+
+    void SetImageLabel(const wxBitmap& bitmap);
+    void SetImageMargins(wxCoord x, wxCoord y);
+
+    static wxSize GetDefaultSize();
 };
-
-
-%inline %{
-    wxSize wxButton_GetDefaultSize() {
-        return wxButton::GetDefaultSize();
-    }
-%}
 
 //----------------------------------------------------------------------
 
@@ -108,8 +121,15 @@ public:
                    long style = wxBU_AUTODRAW,
                    const wxValidator& validator = wxDefaultValidator,
                    char* name = "button");
+    %name(wxPreBitmapButton)wxBitmapButton();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxBU_AUTODRAW,
+                   const wxValidator& validator = wxDefaultValidator,
+                   char* name = "button");
+
 
     wxBitmap& GetBitmapLabel();
     wxBitmap& GetBitmapDisabled();
@@ -135,8 +155,15 @@ public:
                long style = 0,
                const wxValidator& val = wxDefaultValidator,
                char* name = "checkBox");
+    %name(wxPreCheckBox)wxCheckBox();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxValidator& val = wxDefaultValidator,
+               char* name = "checkBox");
+
 
     bool GetValue();
     void SetValue(const bool state);
@@ -153,8 +180,16 @@ public:
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              char* name = "choice");
+    %name(wxPreChoice)wxChoice();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow *parent, wxWindowID id,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             int LCOUNT=0, wxString* choices=NULL,
+             long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             char* name = "choice");
+
 
     void Append(const wxString& item);
     void Clear();
@@ -188,8 +223,16 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                char* name = "comboBox");
+    %name(wxPreComboBox)wxComboBox();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id, char* value = "",
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int LCOUNT=0, wxString* choices=NULL,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               char* name = "comboBox");
+
 
     void Append(const wxString& item);
     // TODO: void Append(const wxString& item, char* clientData);
@@ -228,8 +271,15 @@ public:
             long style = wxGA_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
             char* name = "gauge");
+    %name(wxPreGauge)wxGauge();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id, int range,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxGA_HORIZONTAL,
+            const wxValidator& validator = wxDefaultValidator,
+            char* name = "gauge");
+
 
     int GetBezelFace();
     int GetRange();
@@ -250,6 +300,13 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 char* name = "staticBox");
+    %name(wxPreStaticBox)wxStaticBox();
+
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                char* name = "staticBox");
 };
 
 
@@ -259,6 +316,13 @@ public:
 class wxStaticLine : public wxControl {
 public:
     wxStaticLine( wxWindow *parent, wxWindowID id,
+                  const wxPoint &pos = wxDefaultPosition,
+                  const wxSize &size = wxDefaultSize,
+                  long style = wxLI_HORIZONTAL,
+                  const char* name = "staticLine" );
+    %name(wxPreStaticLine)wxStaticLine();
+
+    bool Create( wxWindow *parent, wxWindowID id,
                   const wxPoint &pos = wxDefaultPosition,
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
@@ -275,8 +339,14 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  char* name = "staticText");
+    %name(wxPreStaticText)wxStaticText();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 char* name = "staticText");
+
 
     wxString GetLabel();
     void SetLabel(const wxString& label);
@@ -293,8 +363,16 @@ public:
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
               char* name = "listBox");
+    %name(wxPreListBox)wxListBox();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              int LCOUNT, wxString* choices = NULL,
+              long style = 0,
+              const wxValidator& validator = wxDefaultValidator,
+              char* name = "listBox");
+
 
     void Append(const wxString& item);
     // TODO:    void Append(const wxString& item, char* clientData);
@@ -348,8 +426,17 @@ public:
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    char* name = "listBox");
+    %name(wxPreCheckListBox)wxCheckListBox();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow *parent, wxWindowID id,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   int LCOUNT = 0,
+                   wxString* choices = NULL,
+                   long style = 0,
+                   const wxValidator& validator = wxDefaultValidator,
+                   char* name = "listBox");
+
 
     bool  IsChecked(int uiIndex);
     void  Check(int uiIndex, int bCheck = TRUE);
@@ -395,8 +482,15 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                char* name = "text");
+    %name(wxPreTextCtrl)wxTextCtrl();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id, char* value = "",
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               char* name = "text");
+
 
     void Clear();
     void Copy();
@@ -458,8 +552,15 @@ public:
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
                 char* name = "scrollBar");
+    %name(wxPreScrollBar)wxScrollBar();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxSB_HORIZONTAL,
+                const wxValidator& validator = wxDefaultValidator,
+                char* name = "scrollBar");
+
 
     int GetRange();
     int GetPageSize();
@@ -477,6 +578,13 @@ public:
 class wxSpinButton : public wxControl {
 public:
     wxSpinButton(wxWindow* parent, wxWindowID id = -1,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxSP_HORIZONTAL,
+                 char* name = "spinButton");
+    %name(wxPreSpinButton)wxSpinButton();
+
+    bool Create(wxWindow* parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxSP_HORIZONTAL,
@@ -499,8 +607,15 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    char* name = "staticBitmap");
+    %name(wxPreStaticBitmap)wxStaticBitmap();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id,
+                   const wxBitmap& bitmap,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = 0,
+                   char* name = "staticBitmap");
+
 
     const wxBitmap& GetBitmap();
     void SetBitmap(const wxBitmap& bitmap);
@@ -520,8 +635,18 @@ public:
                long style = wxRA_HORIZONTAL,
                const wxValidator& validator = wxDefaultValidator,
                char* name = "radioBox");
+    %name(wxPreRadioBox)wxRadioBox();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id,
+               const wxString& label,
+               const wxPoint& point = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int LCOUNT = 0, wxString* choices = NULL,
+               int majorDimension = 0,
+               long style = wxRA_HORIZONTAL,
+               const wxValidator& validator = wxDefaultValidator,
+               char* name = "radioBox");
+
 
     void Enable(bool enable);
     %name(EnableItem)void Enable(int n, bool enable);
@@ -564,8 +689,16 @@ public:
                   long style = 0,
                   const wxValidator& validator = wxDefaultValidator,
                   char* name = "radioButton");
+    %name(wxPreRadioButton)wxRadioButton();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id,
+                  const wxString& label,
+                  const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
+                  long style = 0,
+                  const wxValidator& validator = wxDefaultValidator,
+                  char* name = "radioButton");
+
 
     bool GetValue();
     void SetValue(bool value);
@@ -582,8 +715,16 @@ public:
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
              char* name = "slider");
+    %name(wxPreSlider)wxSlider();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, wxWindowID id,
+             int value, int minValue, int maxValue,
+             const wxPoint& point = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = wxSL_HORIZONTAL,
+             const wxValidator& validator = wxDefaultValidator,
+             char* name = "slider");
+
 
     void ClearSel();
     void ClearTicks();
@@ -619,6 +760,16 @@ public:
                long style = wxSP_ARROW_KEYS,
                int min = 0, int max = 100, int initial = 0,
                const char* name = "wxSpinCtrl");
+    %name(wxPreSpinCtrl)wxSpinCtrl();
+
+    bool Create(wxWindow *parent,
+               wxWindowID id = -1,
+               const char* value = "",
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxSP_ARROW_KEYS,
+               int min = 0, int max = 100, int initial = 0,
+               const char* name = "wxSpinCtrl");
 
 
     int GetMax();
@@ -637,6 +788,16 @@ enum { wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, };
 class wxToggleButton : public wxControl {
 public:
     wxToggleButton(wxWindow *parent,
+                   wxWindowID id,
+                   const wxString& label,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = 0,
+                   const wxValidator& validator = wxDefaultValidator,
+                   const char* name = "toggle");
+    %name(wxPreToggleButton)wxToggleButton();
+
+    bool Create(wxWindow *parent,
                    wxWindowID id,
                    const wxString& label,
                    const wxPoint& pos = wxDefaultPosition,

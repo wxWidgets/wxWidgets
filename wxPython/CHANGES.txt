@@ -15,6 +15,19 @@ Added the new virtual list capabilities to wxListCtrl.
 
 Added a wxSTC style editor from Riaan Booysen to the sample apps.
 
+Added XRCed to the wxPython Tools directory, contributed by Roman
+Rolinsky.
+
+Added a new "constructor" to most of the window classes that calls the
+default C++ contructor, (the on with no parameters) and also added the
+coresponding Create(...) method.  This allows you to do a 2-step
+creation of windows which is sometimes required for doing things such
+as setting extended style flags before the window is created, or for
+passing the object to the XRC resource system to be created from the
+resource.  The name of the new "constructor" is the original name of
+the class with a "Pre" in it.  For example, wxPreWindow, wxPreFrame,
+etc.
+
 
 
 

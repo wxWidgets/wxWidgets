@@ -43,6 +43,7 @@ public:
     //wxSizerItem( wxWindow *window, int option, int flag, int border, wxObject* userData );
     //wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxObject* userData );
 
+    wxPoint GetPosition();
     wxSize GetSize();
     wxSize CalcMin();
     void SetDimension( wxPoint pos, wxSize size );

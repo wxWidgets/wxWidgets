@@ -52,8 +52,13 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE,
             char* name = "frame");
+    %name(wxPreFrame)wxFrame();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdFrameCallbacks(self)"
+    bool Create(wxWindow* parent, const wxWindowID id, const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                char* name = "frame");
 
     void Centre(int direction = wxBOTH);
     wxStatusBar* CreateStatusBar(int number = 1,
@@ -99,8 +104,13 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
                 char* name = "frame");
+    %name(wxPreMiniFrame)wxMiniFrame();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdFrameCallbacks(self)"
+    bool Create(wxWindow* parent, const wxWindowID id, const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                char* name = "frame");
 };
 
 

@@ -332,10 +332,11 @@ public:
 };
 
 
-%{
+%{  // C++ Version of a Python aware class
 class wxPyListCtrl : public wxListCtrl {
     DECLARE_ABSTRACT_CLASS(wxPyListCtrl);
 public:
+    wxPyListCtrl() : wxListCtrl() {}
     wxPyListCtrl(wxWindow* parent, wxWindowID id,
                  const wxPoint& pos,
                  const wxSize& size,
@@ -343,6 +344,15 @@ public:
                  const wxValidator& validator,
                  char* name) :
         wxListCtrl(parent, id, pos, size, style, validator, name) {}
+
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxPoint& pos,
+                const wxSize& size,
+                long style,
+                const wxValidator& validator,
+                char* name) {
+        return wxListCtrl::Create(parent, id, pos, size, style, validator, name);
+    }
 
     DEC_PYCALLBACK_STRING_LONGLONG(OnGetItemText);
     DEC_PYCALLBACK_INT_LONG(OnGetItemImage);
@@ -367,9 +377,16 @@ public:
                  long style = wxLC_ICON,
                  const wxValidator& validator = wxDefaultValidator,
                  char* name = "listCtrl");
+    %name(wxPreListCtrl)wxPyListCtrl();
+
+    bool Create(wxWindow* parent, wxWindowID id = -1,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxLC_ICON,
+                 const wxValidator& validator = wxDefaultValidator,
+                 char* name = "listCtrl");
 
     void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
     %pragma(python) addtomethod = "__init__:self._setSelf(self, wxListCtrl)"
 
 
@@ -875,10 +892,11 @@ public:
 
 
 
-%{
+%{ // C++ version of Python aware wxTreeCtrl
 class wxPyTreeCtrl : public wxTreeCtrl {
     DECLARE_ABSTRACT_CLASS(wxPyTreeCtrl);
 public:
+    wxPyTreeCtrl() : wxTreeCtrl() {}
     wxPyTreeCtrl(wxWindow *parent, wxWindowID id,
                  const wxPoint& pos,
                  const wxSize& size,
@@ -886,6 +904,16 @@ public:
                  const wxValidator& validator,
                  char* name) :
         wxTreeCtrl(parent, id, pos, size, style, validator, name) {}
+
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxPoint& pos,
+                const wxSize& size,
+                long style,
+                const wxValidator& validator,
+                char* name) {
+        return wxTreeCtrl::Create(parent, id, pos, size, style, validator, name);
+    }
+
 
     int OnCompareItems(const wxTreeItemId& item1,
                        const wxTreeItemId& item2) {
@@ -921,9 +949,16 @@ public:
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                const wxValidator& validator = wxDefaultValidator,
                char* name = "wxTreeCtrl");
+    %name(wxPreTreeCtrl)wxPyTreeCtrl();
+
+    bool Create(wxWindow *parent, wxWindowID id = -1,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+               const wxValidator& validator = wxDefaultValidator,
+               char* name = "wxTreeCtrl");
 
     void _setSelf(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
     %pragma(python) addtomethod = "__init__:self._setSelf(self, wxTreeCtrl)"
 
     size_t GetCount();
@@ -1134,69 +1169,6 @@ public:
 "
 };
 
-
-//----------------------------------------------------------------------
-
-#ifdef SKIPTHIS
-#ifdef __WXMSW__
-
-
-enum {
-     /* tab control event types */
-    wxEVT_COMMAND_TAB_SEL_CHANGED,
-    wxEVT_COMMAND_TAB_SEL_CHANGING,
-};
-
-
-class wxTabEvent : public wxCommandEvent {
-public:
-};
-
-
-
-class wxTabCtrl : public wxControl {
-public:
-    wxTabCtrl(wxWindow* parent, wxWindowID id,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              long style = 0,
-              char* name = "tabCtrl");
-
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
-
-    bool DeleteAllItems();
-    bool DeleteItem(int item);
-    wxImageList* GetImageList();
-    int GetItemCount();
-    // TODO: void* GetItemData();
-    int GetItemImage(int item);
-
-    %addmethods {
-        %new wxRect* GetItemRect(int item) {
-            wxRect* rect = new wxRect;
-            self->GetItemRect(item, *rect);
-            return rect;
-        }
-    }
-
-    wxString GetItemText(int item);
-    bool GetRowCount();
-    int GetSelection();
-    int HitTest(const wxPoint& pt, long& OUTPUT);
-    void InsertItem(int item, const wxString& text,
-                    int imageId = -1, void* clientData = NULL);
-    // TODO: bool SetItemData(int item, void* data);
-    bool SetItemImage(int item, int image);
-    void SetImageList(wxImageList* imageList);
-    void SetItemSize(const wxSize& size);
-    bool SetItemText(int item, const wxString& text);
-    void SetPadding(const wxSize& padding);
-    int SetSelection(int item);
-
-};
-
-#endif
-#endif
 
 //----------------------------------------------------------------------
 

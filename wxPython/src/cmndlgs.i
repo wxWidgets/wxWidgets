@@ -54,8 +54,6 @@ class wxColourDialog : public wxDialog {
 public:
     wxColourDialog(wxWindow* parent, wxColourData* data = NULL);
 
-    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
-
     wxColourData& GetColourData();
     int ShowModal();
 };
@@ -70,8 +68,6 @@ public:
                 char* defaultPath = "",
                 long style = 0,
                 const wxPoint& pos = wxDefaultPosition);
-
-    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     wxString GetPath();
     wxString GetMessage();
@@ -92,8 +88,6 @@ public:
                  char* wildcard = "*.*",
                  long style = 0,
                  const wxPoint& pos = wxDefaultPosition);
-
-    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     wxString GetDirectory();
     wxString GetFilename();
@@ -160,9 +154,8 @@ public:
             return new wxSingleChoiceDialog(parent, *message, *caption,
                                             LCOUNT, choices, NULL, style, *pos);
         }
-    }
 
-    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
+    }
 
     int GetSelection();
     wxString GetStringSelection();
@@ -181,8 +174,6 @@ public:
                       char* defaultValue = "",
                       long style = wxOK | wxCANCEL | wxCENTRE,
                       const wxPoint& pos = wxDefaultPosition);
-
-    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     wxString GetValue();
     void SetValue(const wxString& value);
@@ -216,8 +207,6 @@ class wxFontDialog : public wxDialog {
 public:
     wxFontDialog(wxWindow* parent, wxFontData* data);
 
-    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
-
     wxFontData& GetFontData();
     int ShowModal();
 };
@@ -232,8 +221,6 @@ public:
                     char* caption = "Message box",
                     long style = wxOK | wxCANCEL | wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
-
-    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
     int ShowModal();
 };

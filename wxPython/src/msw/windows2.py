@@ -32,8 +32,9 @@ class wxNotebookEventPtr(wxNotifyEventPtr):
     def __repr__(self):
         return "<C wxNotebookEvent instance at %s>" % (self.this,)
 class wxNotebookEvent(wxNotebookEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows2c.new_wxNotebookEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -42,6 +43,9 @@ class wxNotebookPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_Create,(self,) + _args, _kwargs)
+        return val
     def GetPageCount(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_GetPageCount,(self,) + _args, _kwargs)
         return val
@@ -108,9 +112,13 @@ class wxNotebook(wxNotebookPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windows2c.new_wxNotebook,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreNotebook(*_args,**_kwargs):
+    val = wxNotebookPtr(apply(windows2c.new_wxPreNotebook,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxSplitterEventPtr(wxCommandEventPtr):
@@ -135,8 +143,9 @@ class wxSplitterEventPtr(wxCommandEventPtr):
     def __repr__(self):
         return "<C wxSplitterEvent instance at %s>" % (self.this,)
 class wxSplitterEvent(wxSplitterEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows2c.new_wxSplitterEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -145,20 +154,8 @@ class wxSplitterWindowPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetBorderSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetBorderSize,(self,) + _args, _kwargs)
-        return val
-    def GetMinimumPaneSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetMinimumPaneSize,(self,) + _args, _kwargs)
-        return val
-    def GetSashPosition(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetSashPosition,(self,) + _args, _kwargs)
-        return val
-    def GetSashSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetSashSize,(self,) + _args, _kwargs)
-        return val
-    def GetSplitMode(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetSplitMode,(self,) + _args, _kwargs)
+    def Create(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_Create,(self,) + _args, _kwargs)
         return val
     def GetWindow1(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterWindow_GetWindow1,(self,) + _args, _kwargs)
@@ -166,38 +163,53 @@ class wxSplitterWindowPtr(wxWindowPtr):
     def GetWindow2(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterWindow_GetWindow2,(self,) + _args, _kwargs)
         return val
-    def Initialize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_Initialize,(self,) + _args, _kwargs)
-        return val
-    def IsSplit(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_IsSplit,(self,) + _args, _kwargs)
-        return val
-    def ReplaceWindow(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_ReplaceWindow,(self,) + _args, _kwargs)
-        return val
-    def SetBorderSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SetBorderSize,(self,) + _args, _kwargs)
-        return val
-    def SetSashPosition(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SetSashPosition,(self,) + _args, _kwargs)
-        return val
-    def SetSashSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SetSashSize,(self,) + _args, _kwargs)
-        return val
-    def SetMinimumPaneSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SetMinimumPaneSize,(self,) + _args, _kwargs)
-        return val
     def SetSplitMode(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterWindow_SetSplitMode,(self,) + _args, _kwargs)
         return val
-    def SplitHorizontally(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SplitHorizontally,(self,) + _args, _kwargs)
+    def GetSplitMode(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetSplitMode,(self,) + _args, _kwargs)
+        return val
+    def Initialize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_Initialize,(self,) + _args, _kwargs)
         return val
     def SplitVertically(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterWindow_SplitVertically,(self,) + _args, _kwargs)
         return val
+    def SplitHorizontally(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SplitHorizontally,(self,) + _args, _kwargs)
+        return val
     def Unsplit(self, *_args, **_kwargs):
         val = apply(windows2c.wxSplitterWindow_Unsplit,(self,) + _args, _kwargs)
+        return val
+    def ReplaceWindow(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_ReplaceWindow,(self,) + _args, _kwargs)
+        return val
+    def IsSplit(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_IsSplit,(self,) + _args, _kwargs)
+        return val
+    def SetSashSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SetSashSize,(self,) + _args, _kwargs)
+        return val
+    def SetBorderSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SetBorderSize,(self,) + _args, _kwargs)
+        return val
+    def GetSashSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetSashSize,(self,) + _args, _kwargs)
+        return val
+    def GetBorderSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetBorderSize,(self,) + _args, _kwargs)
+        return val
+    def SetSashPosition(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SetSashPosition,(self,) + _args, _kwargs)
+        return val
+    def GetSashPosition(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetSashPosition,(self,) + _args, _kwargs)
+        return val
+    def SetMinimumPaneSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_SetMinimumPaneSize,(self,) + _args, _kwargs)
+        return val
+    def GetMinimumPaneSize(self, *_args, **_kwargs):
+        val = apply(windows2c.wxSplitterWindow_GetMinimumPaneSize,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxSplitterWindow instance at %s>" % (self.this,)
@@ -205,9 +217,13 @@ class wxSplitterWindow(wxSplitterWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windows2c.new_wxSplitterWindow,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreSplitterWindow(*_args,**_kwargs):
+    val = wxSplitterWindowPtr(apply(windows2c.new_wxPreSplitterWindow,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxTaskBarIconPtr(wxEvtHandlerPtr):

@@ -15,6 +15,9 @@ class wxControlPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxControl_Create,(self,) + _args, _kwargs)
+        return val
     def Command(self, *_args, **_kwargs):
         val = apply(controlsc.wxControl_Command,(self,) + _args, _kwargs)
         return val
@@ -30,15 +33,22 @@ class wxControl(wxControlPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxControl,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreControl(*_args,**_kwargs):
+    val = wxControlPtr(apply(controlsc.new_wxPreControl,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxButtonPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxButton_Create,(self,) + _args, _kwargs)
+        return val
     def SetDefault(self, *_args, **_kwargs):
         val = apply(controlsc.wxButton_SetDefault,(self,) + _args, _kwargs)
         return val
@@ -48,21 +58,34 @@ class wxButtonPtr(wxControlPtr):
     def SetForegroundColour(self, *_args, **_kwargs):
         val = apply(controlsc.wxButton_SetForegroundColour,(self,) + _args, _kwargs)
         return val
+    def SetImageLabel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxButton_SetImageLabel,(self,) + _args, _kwargs)
+        return val
+    def SetImageMargins(self, *_args, **_kwargs):
+        val = apply(controlsc.wxButton_SetImageMargins,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxButton instance at %s>" % (self.this,)
 class wxButton(wxButtonPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxButton,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreButton(*_args,**_kwargs):
+    val = wxButtonPtr(apply(controlsc.new_wxPreButton,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxBitmapButtonPtr(wxButtonPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxBitmapButton_Create,(self,) + _args, _kwargs)
+        return val
     def GetBitmapLabel(self, *_args, **_kwargs):
         val = apply(controlsc.wxBitmapButton_GetBitmapLabel,(self,) + _args, _kwargs)
         if val: val = wxBitmapPtr(val) 
@@ -106,15 +129,22 @@ class wxBitmapButton(wxBitmapButtonPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxBitmapButton,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreBitmapButton(*_args,**_kwargs):
+    val = wxBitmapButtonPtr(apply(controlsc.new_wxPreBitmapButton,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxCheckBoxPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckBox_Create,(self,) + _args, _kwargs)
+        return val
     def GetValue(self, *_args, **_kwargs):
         val = apply(controlsc.wxCheckBox_GetValue,(self,) + _args, _kwargs)
         return val
@@ -127,15 +157,22 @@ class wxCheckBox(wxCheckBoxPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxCheckBox,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreCheckBox(*_args,**_kwargs):
+    val = wxCheckBoxPtr(apply(controlsc.new_wxPreCheckBox,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxChoicePtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_Create,(self,) + _args, _kwargs)
+        return val
     def Append(self, *_args, **_kwargs):
         val = apply(controlsc.wxChoice_Append,(self,) + _args, _kwargs)
         return val
@@ -185,15 +222,22 @@ class wxChoice(wxChoicePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxChoice,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreChoice(*_args,**_kwargs):
+    val = wxChoicePtr(apply(controlsc.new_wxPreChoice,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxComboBoxPtr(wxChoicePtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_Create,(self,) + _args, _kwargs)
+        return val
     def Append(self, *_args, **_kwargs):
         val = apply(controlsc.wxComboBox_Append,(self,) + _args, _kwargs)
         return val
@@ -263,15 +307,22 @@ class wxComboBox(wxComboBoxPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxComboBox,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreComboBox(*_args,**_kwargs):
+    val = wxComboBoxPtr(apply(controlsc.new_wxPreComboBox,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxGaugePtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxGauge_Create,(self,) + _args, _kwargs)
+        return val
     def GetBezelFace(self, *_args, **_kwargs):
         val = apply(controlsc.wxGauge_GetBezelFace,(self,) + _args, _kwargs)
         return val
@@ -302,15 +353,22 @@ class wxGauge(wxGaugePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxGauge,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreGauge(*_args,**_kwargs):
+    val = wxGaugePtr(apply(controlsc.new_wxPreGauge,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxStaticBoxPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxStaticBox_Create,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxStaticBox instance at %s>" % (self.this,)
 class wxStaticBox(wxStaticBoxPtr):
@@ -320,11 +378,19 @@ class wxStaticBox(wxStaticBoxPtr):
 
 
 
+def wxPreStaticBox(*_args,**_kwargs):
+    val = wxStaticBoxPtr(apply(controlsc.new_wxPreStaticBox,_args,_kwargs))
+    val.thisown = 1
+    return val
+
 
 class wxStaticLinePtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxStaticLine_Create,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxStaticLine instance at %s>" % (self.this,)
 class wxStaticLine(wxStaticLinePtr):
@@ -334,11 +400,19 @@ class wxStaticLine(wxStaticLinePtr):
 
 
 
+def wxPreStaticLine(*_args,**_kwargs):
+    val = wxStaticLinePtr(apply(controlsc.new_wxPreStaticLine,_args,_kwargs))
+    val.thisown = 1
+    return val
+
 
 class wxStaticTextPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxStaticText_Create,(self,) + _args, _kwargs)
+        return val
     def GetLabel(self, *_args, **_kwargs):
         val = apply(controlsc.wxStaticText_GetLabel,(self,) + _args, _kwargs)
         return val
@@ -351,15 +425,22 @@ class wxStaticText(wxStaticTextPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxStaticText,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreStaticText(*_args,**_kwargs):
+    val = wxStaticTextPtr(apply(controlsc.new_wxPreStaticText,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxListBoxPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_Create,(self,) + _args, _kwargs)
+        return val
     def Append(self, *_args, **_kwargs):
         val = apply(controlsc.wxListBox_Append,(self,) + _args, _kwargs)
         return val
@@ -424,15 +505,22 @@ class wxListBox(wxListBoxPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxListBox,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreListBox(*_args,**_kwargs):
+    val = wxListBoxPtr(apply(controlsc.new_wxPreListBox,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxCheckListBoxPtr(wxListBoxPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckListBox_Create,(self,) + _args, _kwargs)
+        return val
     def IsChecked(self, *_args, **_kwargs):
         val = apply(controlsc.wxCheckListBox_IsChecked,(self,) + _args, _kwargs)
         return val
@@ -451,9 +539,13 @@ class wxCheckListBox(wxCheckListBoxPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxCheckListBox,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreCheckListBox(*_args,**_kwargs):
+    val = wxCheckListBoxPtr(apply(controlsc.new_wxPreCheckListBox,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxTextAttrPtr :
@@ -507,6 +599,9 @@ class wxTextCtrlPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxTextCtrl_Create,(self,) + _args, _kwargs)
+        return val
     def Clear(self, *_args, **_kwargs):
         val = apply(controlsc.wxTextCtrl_Clear,(self,) + _args, _kwargs)
         return val
@@ -634,15 +729,22 @@ class wxTextCtrl(wxTextCtrlPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxTextCtrl,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreTextCtrl(*_args,**_kwargs):
+    val = wxTextCtrlPtr(apply(controlsc.new_wxPreTextCtrl,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxScrollBarPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxScrollBar_Create,(self,) + _args, _kwargs)
+        return val
     def GetRange(self, *_args, **_kwargs):
         val = apply(controlsc.wxScrollBar_GetRange,(self,) + _args, _kwargs)
         return val
@@ -670,15 +772,22 @@ class wxScrollBar(wxScrollBarPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxScrollBar,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreScrollBar(*_args,**_kwargs):
+    val = wxScrollBarPtr(apply(controlsc.new_wxPreScrollBar,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxSpinButtonPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinButton_Create,(self,) + _args, _kwargs)
+        return val
     def GetMax(self, *_args, **_kwargs):
         val = apply(controlsc.wxSpinButton_GetMax,(self,) + _args, _kwargs)
         return val
@@ -703,11 +812,19 @@ class wxSpinButton(wxSpinButtonPtr):
 
 
 
+def wxPreSpinButton(*_args,**_kwargs):
+    val = wxSpinButtonPtr(apply(controlsc.new_wxPreSpinButton,_args,_kwargs))
+    val.thisown = 1
+    return val
+
 
 class wxStaticBitmapPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxStaticBitmap_Create,(self,) + _args, _kwargs)
+        return val
     def GetBitmap(self, *_args, **_kwargs):
         val = apply(controlsc.wxStaticBitmap_GetBitmap,(self,) + _args, _kwargs)
         if val: val = wxBitmapPtr(val) 
@@ -724,15 +841,22 @@ class wxStaticBitmap(wxStaticBitmapPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxStaticBitmap,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreStaticBitmap(*_args,**_kwargs):
+    val = wxStaticBitmapPtr(apply(controlsc.new_wxPreStaticBitmap,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxRadioBoxPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_Create,(self,) + _args, _kwargs)
+        return val
     def Enable(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_Enable,(self,) + _args, _kwargs)
         return val
@@ -786,15 +910,22 @@ class wxRadioBox(wxRadioBoxPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxRadioBox,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreRadioBox(*_args,**_kwargs):
+    val = wxRadioBoxPtr(apply(controlsc.new_wxPreRadioBox,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxRadioButtonPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioButton_Create,(self,) + _args, _kwargs)
+        return val
     def GetValue(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioButton_GetValue,(self,) + _args, _kwargs)
         return val
@@ -807,15 +938,22 @@ class wxRadioButton(wxRadioButtonPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxRadioButton,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreRadioButton(*_args,**_kwargs):
+    val = wxRadioButtonPtr(apply(controlsc.new_wxPreRadioButton,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxSliderPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSlider_Create,(self,) + _args, _kwargs)
+        return val
     def ClearSel(self, *_args, **_kwargs):
         val = apply(controlsc.wxSlider_ClearSel,(self,) + _args, _kwargs)
         return val
@@ -879,15 +1017,22 @@ class wxSlider(wxSliderPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxSlider,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
 
 
+
+def wxPreSlider(*_args,**_kwargs):
+    val = wxSliderPtr(apply(controlsc.new_wxPreSlider,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxSpinCtrlPtr(wxSpinButtonPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxSpinCtrl_Create,(self,) + _args, _kwargs)
+        return val
     def GetMax(self, *_args, **_kwargs):
         val = apply(controlsc.wxSpinCtrl_GetMax,(self,) + _args, _kwargs)
         return val
@@ -912,11 +1057,19 @@ class wxSpinCtrl(wxSpinCtrlPtr):
 
 
 
+def wxPreSpinCtrl(*_args,**_kwargs):
+    val = wxSpinCtrlPtr(apply(controlsc.new_wxPreSpinCtrl,_args,_kwargs))
+    val.thisown = 1
+    return val
+
 
 class wxToggleButtonPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controlsc.wxToggleButton_Create,(self,) + _args, _kwargs)
+        return val
     def SetValue(self, *_args, **_kwargs):
         val = apply(controlsc.wxToggleButton_SetValue,(self,) + _args, _kwargs)
         return val
@@ -934,6 +1087,11 @@ class wxToggleButton(wxToggleButtonPtr):
         self.thisown = 1
 
 
+
+def wxPreToggleButton(*_args,**_kwargs):
+    val = wxToggleButtonPtr(apply(controlsc.new_wxPreToggleButton,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 

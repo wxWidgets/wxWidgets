@@ -46,6 +46,11 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxST_SIZEGRIP,
                 char* name = "statusBar");
+    %name(wxPreStatusBar)wxStatusBar();
+
+    bool Create(wxWindow* parent, wxWindowID id,
+                long style = wxST_SIZEGRIP,
+                char* name = "statusBar");
 
     %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
@@ -60,10 +65,6 @@ public:
     wxString GetStatusText(int ir = 0);
     int GetBorderX();
     int GetBorderY();
-
-//      void DrawField(wxDC& dc, int i);
-//      void DrawFieldText(wxDC& dc, int i);
-//      void InitColours(void);
 
     void SetFieldsCount(int number = 1);
     void SetStatusText(const wxString& text, int i = 0);
@@ -283,6 +284,14 @@ public:
               const wxSize& size = wxDefaultSize,
               long style = wxNO_BORDER | wxTB_HORIZONTAL,
               const char* name = wxToolBarNameStr);
+    %name(wxPreToolBar)wxToolBar();
+
+    bool Create(wxWindow *parent,
+              wxWindowID id,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              long style = wxNO_BORDER | wxTB_HORIZONTAL,
+              const char* name = wxToolBarNameStr);
 
     %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
@@ -295,6 +304,14 @@ public:
 class wxToolBarSimple : public wxToolBarBase {
 public:
     wxToolBarSimple(wxWindow *parent,
+                    wxWindowID id,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxNO_BORDER | wxTB_HORIZONTAL,
+                    const char* name = wxToolBarNameStr);
+    %name(wxPreToolBarSimple)wxToolBarSimple();
+
+    bool Create(wxWindow *parent,
                     wxWindowID id,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,

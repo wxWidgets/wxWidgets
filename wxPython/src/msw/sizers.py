@@ -18,6 +18,10 @@ class wxSizerItemPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetPosition(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_GetPosition,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
     def GetSize(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_GetSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1

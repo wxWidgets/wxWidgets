@@ -73,30 +73,6 @@ public:
         }
     }
 
-//      %pragma(python) addtoclass = "
-//      _prop_list_ = {}
-//      "
-//      %pragma(python) addtoclass = "
-//      def __getattr__(self, name):
-//          pl = self._prop_list_
-//          if pl.has_key(name):
-//              getFunc, setFunc = pl[name]
-//              if getFunc:
-//                  return getattr(self, getFunc)()
-//              else:
-//                  raise TypeError, '%s property is write-only' % name
-//          raise AttributeError, name
-
-//      def __setattr__(self, name, value):
-//          pl = self._prop_list_
-//          if pl.has_key(name):
-//              getFunc, setFunc = pl[name]
-//              if setFunc:
-//                  return getattr(self, setFunc)(value)
-//              else:
-//                  raise TypeError, '%s property is read-only' % name
-//          self.__dict__[name] = value
-//      "
 };
 
 
@@ -114,13 +90,6 @@ public:
     static bool IsSilent();
     static void SetBellOnError(int doIt = TRUE);
 
-//      // Properties list
-//      %pragma(python) addtoclass = "
-//      _prop_list_ = {
-//          'window' : ('GetWindow', 'SetWindow'),
-//      }
-//      _prop_list_.update(wxEvtHandler._prop_list_)
-//      "
 };
 
 
@@ -189,14 +158,18 @@ public:
 
 class wxWindow : public wxEvtHandler {
 public:
-
     wxWindow(wxWindow* parent, const wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
              char* name = "panel");
+    %name(wxPreWindow)wxWindow();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent, const wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                char* name = "panel");
 
     void CaptureMouse();
     void Center(int direction = wxBOTH);
@@ -295,6 +268,8 @@ public:
 
     void Raise();
     void Refresh(bool eraseBackground = TRUE, const wxRect* rect = NULL);
+    void RefreshRect(const wxRect& rect);
+
     void ReleaseMouse();
     void RemoveChild(wxWindow* child);
     bool Reparent( wxWindow* newParent );
@@ -385,6 +360,7 @@ public:
 
     void Freeze();
     void Thaw();
+    void Update();
 
     wxString GetHelpText();
     void SetHelpText(const wxString& helpText);
@@ -396,40 +372,11 @@ public:
     bool PageUp();
     bool PageDown();
 
+    static wxWindow* FindFocus();
+    static int NewControlId();
+    static int NextControlId(int id);
+    static int PrevControlId(int id);
 
-
-//      // Properties list
-//      %pragma(python) addtoclass = "
-//      _prop_list_ = {
-//          'size'          : ('GetSize',                  'SetSize'),
-//          'enabled'       : ('IsEnabled',                'Enable'),
-//          'background'    : ('GetBackgroundColour',      'SetBackgroundColour'),
-//          'foreground'    : ('GetForegroundColour',      'SetForegroundColour'),
-//          'children'      : ('GetChildren',              None),
-//          'charHeight'    : ('GetCharHeight',            None),
-//          'charWidth'     : ('GetCharWidth',             None),
-//          'clientSize'    : ('GetClientSize',            'SetClientSize'),
-//          'font'          : ('GetFont',                  'SetFont'),
-//          'grandParent'   : ('GetGrandParent',           None),
-//          'handle'        : ('GetHandle',                None),
-//          'label'         : ('GetLabel',                 'SetLabel'),
-//          'name'          : ('GetName',                  'SetName'),
-//          'parent'        : ('GetParent',                None),
-//          'position'      : ('GetPosition',              'SetPosition'),
-//          'title'         : ('GetTitle',                 'SetTitle'),
-//          'style'         : ('GetWindowStyleFlag',       'SetWindowStyleFlag'),
-//          'visible'       : ('IsShown',                  'Show'),
-//          'toolTip'       : ('GetToolTip',               'SetToolTip'),
-//          'sizer'         : ('GetSizer',                 'SetSizer'),
-//          'validator'     : ('GetValidator',             'SetValidator'),
-//          'dropTarget'    : ('GetDropTarget',            'SetDropTarget'),
-//          'caret'         : ('GetCaret',                 'SetCaret'),
-//          'autoLayout'    : ('GetAutoLayout',            'SetAutoLayout'),
-//          'constraints'   : ('GetConstraints',           'SetConstraints'),
-
-//      }
-//      _prop_list_.update(wxEvtHandler._prop_list_)
-//      "
 };
 
 
@@ -449,12 +396,6 @@ def wxDLG_SZE(win, size_width, height=None):
         return win.ConvertDialogSizeToPixels(wxSize(size_width, height))
 "
 
-%inline %{
-    wxWindow* wxWindow_FindFocus() {
-        return wxWindow::FindFocus();
-    }
-%}
-
 
 #ifdef __WXMSW__
 %inline %{
@@ -467,18 +408,6 @@ wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
 %}
 #endif
 
-%inline %{
-    int wxWindow_NewControlId() {
-        return wxWindow::NewControlId();
-    }
-    int wxWindow_NextControlId(int id) {
-        return wxWindow::NextControlId(id);
-    }
-    int wxWindow_PrevControlId(int id) {
-        return wxWindow::PrevControlId(id);
-    }
-%}
-
 
 //---------------------------------------------------------------------------
 
@@ -490,8 +419,14 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxTAB_TRAVERSAL,
             const char* name = "panel");
+    %name(wxPrePanel)wxPanel();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    bool Create(wxWindow* parent,
+                const wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxTAB_TRAVERSAL,
+                const char* name = "panel");
 
     void InitDialog();
     wxButton* GetDefaultItem();
@@ -510,8 +445,15 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxDEFAULT_DIALOG_STYLE,
              const char* name = "dialogBox");
+    %name(wxPreDialog)wxDialog();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
+    bool Create(wxWindow* parent,
+                const wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_DIALOG_STYLE,
+                const char* name = "dialogBox");
 
     void Centre(int direction = wxBOTH);
     void EndModal(int retCode);
@@ -547,9 +489,14 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxHSCROLL | wxVSCROLL,
                      char* name = "scrolledWindow");
+    %name(wxPreScrolledWindow)wxScrolledWindow();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
-    %pragma(python) addtomethod = "__init__:#wx._StdOnScrollCallbacks(self)"
+    bool Create(wxWindow* parent,
+                const wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxHSCROLL | wxVSCROLL,
+                char* name = "scrolledWindow");
 
     void EnableScrolling(bool xScrolling, bool yScrolling);
     int GetScrollPageSize(int orient);

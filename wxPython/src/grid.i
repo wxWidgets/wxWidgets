@@ -1265,7 +1265,6 @@ public:
             long style = wxWANTS_CHARS,
             const char* name = wxPanelNameStr );
 
-    //~wxGrid();
 
     enum wxGridSelectionModes {wxGridSelectCells,
                                wxGridSelectRows,

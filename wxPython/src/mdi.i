@@ -41,8 +41,15 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const char* name = "frame");
+    %name(wxPreMDIParentFrame)wxMDIParentFrame();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdFrameCallbacks(self)"
+    bool Create(wxWindow *parent,
+                     const wxWindowID id,
+                     const wxString& title,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+                     const char* name = "frame");
 
     void ActivateNext();
     void ActivatePrevious();
@@ -75,8 +82,16 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
                     const char* name = "frame");
+    %name(wxPreMDIChildFrame)wxMDIChildFrame();
 
-    %pragma(python) addtomethod = "__init__:#wx._StdFrameCallbacks(self)"
+    bool Create(wxMDIParentFrame* parent,
+                    const wxWindowID id,
+                    const wxString& title,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxDEFAULT_FRAME_STYLE,
+                    const char* name = "frame");
+
 
     void Activate();
     void Maximize(bool maximize);
@@ -90,6 +105,13 @@ public:
 class wxMDIClientWindow : public wxWindow {
 public:
     wxMDIClientWindow(wxMDIParentFrame* parent, long style = 0);
+    %name(wxPreMDIClientWindow)wxMDIClientWindow();
+
+    %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
+    %pragma(python) addtomethod = "__init__:#wx._StdOnScrollCallbacks(self)"
+
+    bool Create(wxMDIParentFrame* parent, long style = 0);
+
     %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
     %pragma(python) addtomethod = "__init__:#wx._StdOnScrollCallbacks(self)"
 };
