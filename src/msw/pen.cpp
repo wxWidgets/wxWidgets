@@ -141,7 +141,7 @@ bool wxPen::RealizeResource()
        if (M_PENDATA->m_style==wxTRANSPARENT)
        {
            M_PENDATA->m_hPen = (WXHPEN) ::GetStockObject(NULL_PEN);
-           return TRUE;
+           return true;
        }
 
        COLORREF ms_colour = M_PENDATA->m_colour.GetPixel();
@@ -274,9 +274,9 @@ bool wxPen::RealizeResource()
        if (M_PENDATA->m_hPen==0)
            wxError("Cannot create pen","Internal error") ;
 #endif
-       return TRUE;
+       return true;
     }
-    return FALSE;
+    return false;
 }
 
 WXHANDLE wxPen::GetResourceHandle() const
@@ -293,9 +293,9 @@ bool wxPen::FreeResource(bool WXUNUSED(force))
   {
     DeleteObject((HPEN) M_PENDATA->m_hPen);
     M_PENDATA->m_hPen = 0;
-    return TRUE;
+    return true;
   }
-  else return FALSE;
+  else return false;
 }
 
 bool wxPen::IsFree() const

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PALETTE_H_
@@ -52,7 +52,7 @@ public:
   inline bool operator == (const wxPalette& palette) const { return m_refData == palette.m_refData; }
   inline bool operator != (const wxPalette& palette) const { return m_refData != palette.m_refData; }
 
-  virtual bool FreeResource(bool force = FALSE);
+  virtual bool FreeResource(bool force = false);
 
   inline WXHPALETTE GetHPALETTE(void) const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }
   void SetHPALETTE(WXHPALETTE pal);

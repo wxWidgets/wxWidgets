@@ -61,7 +61,7 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID& id)
                                     (DLGPROC) wxDlgProc);
 
     if ( !m_hWnd )
-        return FALSE;
+        return false;
 
     SubclassWin(GetHWND());
 
@@ -84,7 +84,7 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID& id)
             CreateWindowFromHWND(this, (WXHWND) hWndNext);
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindow::LoadNativeDialog(wxWindow* parent, const wxString& name)
@@ -98,7 +98,7 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, const wxString& name)
                                     (DLGPROC)wxDlgProc);
 
     if ( !m_hWnd )
-        return FALSE;
+        return false;
 
     SubclassWin(GetHWND());
 
@@ -121,7 +121,7 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, const wxString& name)
             CreateWindowFromHWND(this, (WXHWND) hWndNext);
     }
 
-    return TRUE;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -305,7 +305,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
             wxLogError(wxT("Please make SS_BITMAP statics into owner-draw buttons."));
         }
 #endif
-#endif	/* wxUSE_STATBMP */
+#endif /* wxUSE_STATBMP */
     }
 #endif
     else

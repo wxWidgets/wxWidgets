@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PEN_H_
@@ -132,7 +132,7 @@ public:
 
     // Internal
     bool RealizeResource();
-    bool FreeResource(bool force = FALSE);
+    bool FreeResource(bool force = false);
     WXHANDLE GetResourceHandle() const;
     bool IsFree() const;
     void Unshare();

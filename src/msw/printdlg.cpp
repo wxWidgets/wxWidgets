@@ -68,7 +68,7 @@ wxPrintDialog::wxPrintDialog()
 {
     m_dialogParent = NULL;
     m_printerDC = NULL;
-    m_destroyDC = TRUE;
+    m_destroyDC = true;
 }
 
 wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintDialogData* data)
@@ -89,14 +89,14 @@ bool wxPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
 {
     m_dialogParent = p;
     m_printerDC = NULL;
-    m_destroyDC = TRUE;
+    m_destroyDC = true;
 
     if ( data )
         m_printDialogData = *data;
 
     m_printDialogData.SetOwnerWindow(p);
 
-    return TRUE;
+    return true;
 }
 
 wxPrintDialog::~wxPrintDialog()
@@ -121,7 +121,7 @@ int wxPrintDialog::ShowModal()
 
     p->hwndOwner = 0;
 
-    if ( ret != FALSE && ((PRINTDLG *)m_printDialogData.GetNativeData())->hDC)
+    if ( ret != false && ((PRINTDLG *)m_printDialogData.GetNativeData())->hDC)
     {
         wxPrinterDC *pdc = new wxPrinterDC((WXHDC) ((PRINTDLG *)m_printDialogData.GetNativeData())->hDC);
         m_printerDC = pdc;
@@ -138,7 +138,7 @@ wxDC *wxPrintDialog::GetPrintDC()
 {
     if (m_printerDC)
     {
-        m_destroyDC = FALSE;
+        m_destroyDC = false;
         return m_printerDC;
     }
     else
@@ -169,7 +169,7 @@ bool wxPageSetupDialog::Create(wxWindow *p, wxPageSetupData *data)
 #if defined(__WIN95__)
     m_pageSetupData.SetOwnerWindow(p);
 #endif
-    return TRUE;
+    return true;
 }
 
 wxPageSetupDialog::~wxPageSetupDialog()
@@ -200,7 +200,7 @@ int wxPageSetupDialog::ShowModal()
     wxGenericPageSetupDialog *genericPageSetupDialog = new wxGenericPageSetupDialog(GetParent(), & m_pageSetupData);
     int ret = genericPageSetupDialog->ShowModal();
     m_pageSetupData = genericPageSetupDialog->GetPageSetupData();
-    genericPageSetupDialog->Close(TRUE);
+    genericPageSetupDialog->Close(true);
     return ret;
 #endif
 }

@@ -50,7 +50,7 @@ bool wxPopupWindow::Create(wxWindow *parent, int flags)
     Hide();
 
     return wxPopupWindowBase::Create(parent) &&
-               wxWindow::Create(parent, -1,
+               wxWindow::Create(parent, wxID_ANY,
                                 wxDefaultPosition, wxDefaultSize,
                                 flags | wxPOPUP_WINDOW);
 }
@@ -100,7 +100,7 @@ WXHWND wxPopupWindow::MSWGetParent() const
 bool wxPopupWindow::Show(bool show)
 {
     if ( !wxWindowMSW::Show(show) )
-        return FALSE;
+        return false;
 
     if ( show )
     {
@@ -111,7 +111,7 @@ bool wxPopupWindow::Show(bool show)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 #endif // #if wxUSE_POPUPWIN

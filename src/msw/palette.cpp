@@ -57,7 +57,7 @@ wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green
 
 wxPalette::~wxPalette(void)
 {
-//    FreeResource(TRUE);
+//    FreeResource(true);
 }
 
 bool wxPalette::FreeResource(bool WXUNUSED(force))
@@ -66,7 +66,7 @@ bool wxPalette::FreeResource(bool WXUNUSED(force))
     {
       DeleteObject((HPALETTE)M_PALETTEDATA->m_hPalette);
     }
-    return TRUE;
+    return true;
 }
 
 bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
@@ -75,7 +75,7 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
 
 #if defined(__WXMICROWIN__)
 
-  return (FALSE);
+  return false;
 
 #else
 
@@ -84,7 +84,7 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
   NPLOGPALETTE npPal = (NPLOGPALETTE)LocalAlloc(LMEM_FIXED, sizeof(LOGPALETTE) +
                         (WORD)n * sizeof(PALETTEENTRY));
   if (!npPal)
-    return(FALSE);
+    return false;
 
   npPal->palVersion = 0x300;
   npPal->palNumEntries = n;
@@ -99,7 +99,7 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
   }
   M_PALETTEDATA->m_hPalette = (WXHPALETTE) CreatePalette((LPLOGPALETTE)npPal);
   LocalFree((HANDLE)npPal);
-  return TRUE;
+  return true;
 
 #endif
 }
@@ -107,10 +107,10 @@ bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *gre
 int wxPalette::GetPixel(const unsigned char red, const unsigned char green, const unsigned char blue) const
 {
 #ifdef __WXMICROWIN__
-  return FALSE;
+  return 0;
 #else
   if ( !m_refData )
-    return FALSE;
+    return 0;
 
   return ::GetNearestPaletteIndex((HPALETTE) M_PALETTEDATA->m_hPalette, PALETTERGB(red, green, blue));
 #endif
@@ -119,13 +119,13 @@ int wxPalette::GetPixel(const unsigned char red, const unsigned char green, cons
 bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsigned char *blue) const
 {
 #ifdef __WXMICROWIN__
-  return FALSE;
+  return false;
 #else
   if ( !m_refData )
-    return FALSE;
+    return false;
 
   if (index < 0 || index > 255)
-         return FALSE;
+         return false;
 
   PALETTEENTRY entry;
   if (::GetPaletteEntries((HPALETTE) M_PALETTEDATA->m_hPalette, index, 1, &entry))
@@ -133,9 +133,9 @@ bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsi
          *red = entry.peRed;
          *green = entry.peGreen;
          *blue = entry.peBlue;
-         return TRUE;
+         return true;
   } else
-         return FALSE;
+         return false;
 #endif
 }
 

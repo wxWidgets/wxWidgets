@@ -30,7 +30,7 @@ public:
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
 
 protected:
     // popups handle the position like wxTopLevelWindow, not wxWindow

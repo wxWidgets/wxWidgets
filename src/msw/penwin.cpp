@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -57,32 +57,32 @@ void wxEnablePenAppHooks (bool hook)
   if (hook)
     {
       if (g_hPenWin)
-	return;
+      return;
 
       ///////////////////////////////////////////////////////////////////////
       // If running on a Pen Windows system, register this app so all
       // EDIT controls in dialogs are replaced by HEDIT controls.
       if ((g_hPenWin = (HANDLE)GetSystemMetrics (SM_PENWINDOWS)) != (HANDLE) NULL)
-	{
-	  // We do this fancy GetProcAddress simply because we don't
-	  // know if we're running Pen Windows.
-	  if ((RegPenApp = (PENREGPROC)GetProcAddress (g_hPenWin, "RegisterPenApp")) != NULL)
-	    (*RegPenApp) (RPA_DEFAULT, TRUE);
-	}
+      {
+        // We do this fancy GetProcAddress simply because we don't
+        // know if we're running Pen Windows.
+        if ((RegPenApp = (PENREGPROC)GetProcAddress (g_hPenWin, "RegisterPenApp")) != NULL)
+          (*RegPenApp) (RPA_DEFAULT, TRUE);
+      }
     }
   else
     {
       ///////////////////////////////////////////////////////////////////////
       // If running on a Pen Windows system, unregister
       if (g_hPenWin)
-	{
-	  // Unregister this app 
-	  if (RegPenApp != NULL)
-	    (*RegPenApp) (RPA_DEFAULT, FALSE);
-	  g_hPenWin = (HANDLE) NULL;
-	}
+      {
+        // Unregister this app
+        if (RegPenApp != NULL)
+          (*RegPenApp) (RPA_DEFAULT, FALSE);
+        g_hPenWin = (HANDLE) NULL;
+      }
     }
-#endif	/* ! Windows-NT */
+#endif /* ! Windows-NT */
 }
 
 #endif
@@ -113,7 +113,7 @@ void wxCleanUpPenWin(void)
   if (g_hPenWin) {
     // Unregister this app
     if (RegPenApp != NULL)
-	(*RegPenApp)(RPA_DEFAULT, FALSE);
+      (*RegPenApp)(RPA_DEFAULT, FALSE);
   }
 #endif
 }

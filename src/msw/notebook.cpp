@@ -126,7 +126,7 @@ wxBEGIN_FLAGS( wxNotebookStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -173,7 +173,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxNotebook)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_5( wxNotebook , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle) 
+wxCONSTRUCTOR_5( wxNotebook , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle)
 
 
 wxBEGIN_PROPERTIES_TABLE(wxNotebookPageInfo)
@@ -186,7 +186,7 @@ wxEND_PROPERTIES_TABLE()
 wxBEGIN_HANDLERS_TABLE(wxNotebookPageInfo)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_4( wxNotebookPageInfo , wxNotebookPage* , Page , wxString , Text , bool , Selected , int , ImageId ) 
+wxCONSTRUCTOR_4( wxNotebookPageInfo , wxNotebookPage* , Page , wxString , Text , bool , Selected , int , ImageId )
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
@@ -255,14 +255,14 @@ bool wxNotebook::Create(wxWindow *parent,
     {
         if (style & wxNB_BOTTOM)
             style &= ~wxNB_BOTTOM;
-        
+
         if (style & wxNB_LEFT)
             style &= ~wxNB_LEFT;
-        
+
         if (style & wxNB_RIGHT)
             style &= ~wxNB_RIGHT;
     }
-    
+
     if ( !CreateControl(parent, id, pos, size, style | wxTAB_TRAVERSAL,
                         wxDefaultValidator, name) )
         return false;
@@ -323,7 +323,7 @@ int wxNotebook::GetRowCount() const
 
 int wxNotebook::SetSelection(size_t nPage)
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
+  wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
 
   if ( int(nPage) != m_nSelection )
   {
@@ -437,7 +437,7 @@ void wxNotebook::SetTabSize(const wxSize& sz)
 wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
     wxSize sizeTotal = sizePage;
-    
+
     // We need to make getting tab size part of the wxWidgets API.
     wxSize tabSize(0, 0);
     if (GetPageCount() > 0)
@@ -509,8 +509,8 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
         if (selNew != -1)
         {
             // No selection change, just refresh the current selection.
-            // Because it could be that the slection index changed 
-            // we need to update it. 
+            // Because it could be that the slection index changed
+            // we need to update it.
             // Note: this does not mean the selection it self changed.
             m_nSelection = selNew;
             m_pages[m_nSelection]->Refresh();
@@ -518,13 +518,13 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
         else if (int(nPage) == m_nSelection)
         {
             // The selection was deleted.
-            
+
             // Determine new selection.
             if (m_nSelection == int(GetPageCount()))
                 selNew = m_nSelection - 1;
             else
                 selNew = m_nSelection;
-            
+
             // m_nSelection must be always valid so reset it before calling
             // SetSelection()
             m_nSelection = -1;
@@ -577,11 +577,11 @@ bool wxNotebook::InsertPage(size_t nPage,
     if (!g_TestedForTheme)
     {
         int commCtrlVersion = wxTheApp->GetComCtl32Version() ;
-        
+
         g_UseTheme = (commCtrlVersion >= 600);
         g_TestedForTheme = true;
     }
-    
+
     // Automatically apply the theme background,
     // changing the colour of the panel to match the
     // tab page colour. This won't work well with all
@@ -998,7 +998,7 @@ void wxNotebook::ApplyThemeBackground(wxWindow*, const wxColour&)
 #if wxUSE_UXTHEME
 
     window->ApplyParentThemeBackground(colour);
-    
+
     for ( wxWindowList::compatibility_iterator node = window->GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *child = node->GetData();

@@ -417,7 +417,7 @@ LONG APIENTRY _EXPORT wxAbortProc(HDC WXUNUSED(hPr), int WXUNUSED(Code))
 
     /* Process messages intended for the abort dialog box */
 
-    while (!wxPrinterBase::sm_abortIt && PeekMessage(&msg, 0, 0, 0, TRUE))
+    while (!wxPrinterBase::sm_abortIt && ::PeekMessage(&msg, 0, 0, 0, TRUE))
         if (!IsDialogMessage((HWND) wxPrinterBase::sm_abortWindow->GetHWND(), &msg)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);

@@ -33,7 +33,7 @@ public :
     wxNotebookPageInfo() { m_page = NULL ; m_imageId = -1 ; m_selected = false ; }
     virtual ~wxNotebookPageInfo() { }
 
-    void Create( wxNotebookPage *page , const wxString &text , bool selected , int imageId ) 
+    void Create( wxNotebookPage *page , const wxString &text , bool selected , int imageId )
     { m_page = page ; m_text = text ; m_selected = selected ; m_imageId = imageId ; }
     wxNotebookPage* GetPage() const { return m_page ; }
     wxString GetText() const { return m_text ; }
@@ -124,7 +124,7 @@ public:
   bool InsertPage(size_t nPage,
                   wxNotebookPage *pPage,
                   const wxString& strText,
-                  bool bSelect = FALSE,
+                  bool bSelect = false,
                   int imageId = -1);
 
   void AddPageInfo( wxNotebookPageInfo* info ) { AddPage( info->GetPage() , info->GetText() , info->GetSelected() , info->GetImageId() ) ; }
@@ -158,7 +158,7 @@ public:
   virtual bool MSWTranslateMessage(WXMSG *wxmsg);
 
 #if wxUSE_CONSTRAINTS
-  virtual void SetConstraintSizes(bool recurse = TRUE);
+  virtual void SetConstraintSizes(bool recurse = true);
   virtual bool DoPhase(int nPhase);
 #endif // wxUSE_CONSTRAINTS
 

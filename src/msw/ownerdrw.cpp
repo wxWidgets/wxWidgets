@@ -121,7 +121,7 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
     }
 
     m_bCheckable   = bCheckable;
-    m_bOwnerDrawn  = FALSE;
+    m_bOwnerDrawn  = false;
     m_nHeight      = 0;
     m_nMarginWidth = ms_nLastMarginWidth;
     m_nMinHeight   = wxMSWSystemMenuFontModule::ms_systemMenuHeight;
@@ -192,7 +192,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
   // remember height for use in OnDrawItem
   m_nHeight = *pheight;
 
-  return TRUE;
+  return true;
 }
 
 // draw the item
@@ -203,7 +203,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 {
   // we do nothing on focus change
   if ( act == wxODFocusChanged )
-    return TRUE;
+    return true;
 
 
   // this flag determines whether or not an edge will
@@ -386,7 +386,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
       dc.Blit(rc.x + (margin - nBmpWidth) / 2,
               rc.y + heightDiff / 2,
               nBmpWidth, nBmpHeight,
-              &dcMem, 0, 0, wxCOPY, TRUE /* use mask */);
+              &dcMem, 0, 0, wxCOPY, true /* use mask */);
 
       if ( st & wxODSelected && draw_bitmap_edge ) {
           RECT rectBmp = { rc.GetLeft(), rc.GetTop(),
@@ -402,7 +402,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   ::SetTextColor(hdc, colOldText);
   ::SetBkColor(hdc, colOldBack);
 
-  return TRUE;
+  return true;
 }
 
 
