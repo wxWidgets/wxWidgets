@@ -61,9 +61,7 @@ wxPaintDC::wxPaintDC(void)
 
 wxPaintDC::wxPaintDC( wxWindow *window )
 {
-    wxASSERT_MSG(!sm_focusedDC,"Found another wxDC with focus.  Do not use wxPaintDC outside of paint handlers!");
     wxASSERT_MSG([NSView focusView]==window->GetNSView(), "PaintDC's NSView does not have focus.  Please use wxPaintDC only as the first DC created in a paint handler");
-    sm_focusedDC=this;
     // This transform flips the graphics since wxDC uses top-left origin
     if(![window->GetNSView() isFlipped])
     {
@@ -86,7 +84,5 @@ wxPaintDC::wxPaintDC( wxWindow *window )
 
 wxPaintDC::~wxPaintDC(void)
 {
-    if(sm_focusedDC==this)
-        sm_focusedDC=NULL;
 };
 
