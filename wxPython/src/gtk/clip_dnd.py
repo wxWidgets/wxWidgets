@@ -4,6 +4,8 @@ import clip_dndc
 from misc import *
 
 from gdi import *
+
+from fonts import *
 import wx
 class wxDataFormatPtr :
     def __init__(self,this):

@@ -7,6 +7,8 @@ from misc import *
 
 from gdi import *
 
+from fonts import *
+
 from clip_dnd import *
 
 from events import *
@@ -104,39 +106,6 @@ class wxCaret(wxCaretPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxCaret,_args,_kwargs)
         self.thisown = 1
-
-
-
-
-class wxFontEnumeratorPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxFontEnumerator(self)
-    def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFontEnumerator__setCallbackInfo,(self,) + _args, _kwargs)
-        return val
-    def EnumerateFacenames(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFontEnumerator_EnumerateFacenames,(self,) + _args, _kwargs)
-        return val
-    def EnumerateEncodings(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFontEnumerator_EnumerateEncodings,(self,) + _args, _kwargs)
-        return val
-    def GetEncodings(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFontEnumerator_GetEncodings,(self,) + _args, _kwargs)
-        return val
-    def GetFacenames(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFontEnumerator_GetFacenames,(self,) + _args, _kwargs)
-        return val
-    def __repr__(self):
-        return "<C wxFontEnumerator instance at %s>" % (self.this,)
-class wxFontEnumerator(wxFontEnumeratorPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxFontEnumerator,_args,_kwargs)
-        self.thisown = 1
-        self._setCallbackInfo(self, wxFontEnumerator, 0)
 
 
 
@@ -366,9 +335,6 @@ class wxLogPtr :
         return val
     def HasPendingMessages(self, *_args, **_kwargs):
         val = apply(misc2c.wxLog_HasPendingMessages,(self,) + _args, _kwargs)
-        return val
-    def SetVerbose(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLog_SetVerbose,(self,) + _args, _kwargs)
         return val
     def GetVerbose(self, *_args, **_kwargs):
         val = apply(misc2c.wxLog_GetVerbose,(self,) + _args, _kwargs)
@@ -965,8 +931,8 @@ class wxFileHistoryPtr(wxObjectPtr):
     def AddFilesToMenu(self, *_args, **_kwargs):
         val = apply(misc2c.wxFileHistory_AddFilesToMenu,(self,) + _args, _kwargs)
         return val
-    def AddFilesToSingleMenu(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_AddFilesToSingleMenu,(self,) + _args, _kwargs)
+    def AddFilesToThisMenu(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFileHistory_AddFilesToThisMenu,(self,) + _args, _kwargs)
         return val
     def GetHistoryFile(self, *_args, **_kwargs):
         val = apply(misc2c.wxFileHistory_GetHistoryFile,(self,) + _args, _kwargs)
@@ -1178,6 +1144,8 @@ wxLog_Suspend = misc2c.wxLog_Suspend
 
 wxLog_Resume = misc2c.wxLog_Resume
 
+wxLog_SetVerbose = misc2c.wxLog_SetVerbose
+
 wxLog_DontCreateOnDemand = misc2c.wxLog_DontCreateOnDemand
 
 wxLog_SetTraceMask = misc2c.wxLog_SetTraceMask
@@ -1303,6 +1271,7 @@ wxEVT_END_PROCESS = misc2c.wxEVT_END_PROCESS
 wxEXEC_ASYNC = misc2c.wxEXEC_ASYNC
 wxEXEC_SYNC = misc2c.wxEXEC_SYNC
 wxEXEC_NOHIDE = misc2c.wxEXEC_NOHIDE
+wxEXEC_MAKE_GROUP_LEADER = misc2c.wxEXEC_MAKE_GROUP_LEADER
 wxMAILCAP_STANDARD = misc2c.wxMAILCAP_STANDARD
 wxMAILCAP_NETSCAPE = misc2c.wxMAILCAP_NETSCAPE
 wxMAILCAP_KDE = misc2c.wxMAILCAP_KDE

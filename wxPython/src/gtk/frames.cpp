@@ -515,6 +515,43 @@ static PyObject *_wrap_wxTopLevelWindow_SetIcon(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxTopLevelWindow_SetIcons(_swigobj,_swigarg0)  (_swigobj->SetIcons(_swigarg0))
+static PyObject *_wrap_wxTopLevelWindow_SetIcons(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTopLevelWindow * _arg0;
+    wxIconBundle * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","icons", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTopLevelWindow_SetIcons",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTopLevelWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTopLevelWindow_SetIcons. Expected _wxTopLevelWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIconBundle_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTopLevelWindow_SetIcons. Expected _wxIconBundle_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTopLevelWindow_SetIcons(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxTopLevelWindow_ShowFullScreen(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ShowFullScreen(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxTopLevelWindow_ShowFullScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2435,6 +2472,7 @@ static PyMethodDef framescMethods[] = {
 	 { "wxTopLevelWindow_SetTitle", (PyCFunction) _wrap_wxTopLevelWindow_SetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_IsFullScreen", (PyCFunction) _wrap_wxTopLevelWindow_IsFullScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_ShowFullScreen", (PyCFunction) _wrap_wxTopLevelWindow_ShowFullScreen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTopLevelWindow_SetIcons", (PyCFunction) _wrap_wxTopLevelWindow_SetIcons, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_SetIcon", (PyCFunction) _wrap_wxTopLevelWindow_SetIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_GetIcon", (PyCFunction) _wrap_wxTopLevelWindow_GetIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_IsIconized", (PyCFunction) _wrap_wxTopLevelWindow_IsIconized, METH_VARARGS | METH_KEYWORDS },

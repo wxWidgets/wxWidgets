@@ -5,6 +5,8 @@ from misc import *
 
 from gdi import *
 
+from fonts import *
+
 from windows import *
 
 from clip_dnd import *
@@ -43,6 +45,9 @@ class wxTopLevelWindowPtr(wxWindowPtr):
         return val
     def SetIcon(self, *_args, **_kwargs):
         val = apply(framesc.wxTopLevelWindow_SetIcon,(self,) + _args, _kwargs)
+        return val
+    def SetIcons(self, *_args, **_kwargs):
+        val = apply(framesc.wxTopLevelWindow_SetIcons,(self,) + _args, _kwargs)
         return val
     def ShowFullScreen(self, *_args, **_kwargs):
         val = apply(framesc.wxTopLevelWindow_ShowFullScreen,(self,) + _args, _kwargs)

@@ -1561,21 +1561,21 @@ static void *SwigwxToolBarBaseTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-static wxToolBarToolBase * wxToolBarBase_AddTool(wxToolBarBase *self,int  id,const wxString & label,const wxBitmap & bitmap,const wxBitmap & bmpDisabled,wxItemKind  kind,const wxString & shortHelp,const wxString & longHelp,PyObject * clientData) {
+static wxToolBarToolBase * wxToolBarBase_DoAddTool(wxToolBarBase *self,int  id,const wxString & label,const wxBitmap & bitmap,const wxBitmap & bmpDisabled,wxItemKind  kind,const wxString & shortHelp,const wxString & longHelp,PyObject * clientData) {
             wxPyUserData* udata = NULL;
-            if (clientData)
+            if (clientData && clientData != Py_None)
                 udata = new wxPyUserData(clientData);
             return self->AddTool(id, label, bitmap, bmpDisabled, kind,
                                  shortHelp, longHelp, udata);
         }
-static PyObject *_wrap_wxToolBarBase_AddTool(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_wxToolBarBase_DoAddTool(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxToolBarToolBase * _result;
     wxToolBarBase * _arg0;
     int  _arg1;
     wxString * _arg2;
     wxBitmap * _arg3;
-    wxBitmap * _arg4;
+    wxBitmap * _arg4 = (wxBitmap *) &wxNullBitmap;
     wxItemKind  _arg5 = (wxItemKind ) wxITEM_NORMAL;
     wxString * _arg6 = (wxString *) &wxPyEmptyString;
     wxString * _arg7 = (wxString *) &wxPyEmptyString;
@@ -1590,12 +1590,12 @@ static PyObject *_wrap_wxToolBarBase_AddTool(PyObject *self, PyObject *args, PyO
     char *_kwnames[] = { "self","id","label","bitmap","bmpDisabled","kind","shortHelp","longHelp","clientData", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOOO|iOOO:wxToolBarBase_AddTool",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_arg5,&_obj6,&_obj7,&_obj8)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOO|OiOOO:wxToolBarBase_DoAddTool",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_arg5,&_obj6,&_obj7,&_obj8)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_AddTool. Expected _wxToolBarBase_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_DoAddTool. Expected _wxToolBarBase_p.");
         return NULL;
         }
     }
@@ -1607,14 +1607,14 @@ static PyObject *_wrap_wxToolBarBase_AddTool(PyObject *self, PyObject *args, PyO
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
         else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxToolBarBase_AddTool. Expected _wxBitmap_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxToolBarBase_DoAddTool. Expected _wxBitmap_p.");
         return NULL;
         }
     }
     if (_argo4) {
         if (_argo4 == Py_None) { _arg4 = NULL; }
         else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxToolBarBase_AddTool. Expected _wxBitmap_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxToolBarBase_DoAddTool. Expected _wxBitmap_p.");
         return NULL;
         }
     }
@@ -1636,7 +1636,7 @@ static PyObject *_wrap_wxToolBarBase_AddTool(PyObject *self, PyObject *args, PyO
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxToolBarToolBase *)wxToolBarBase_AddTool(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,*_arg7,_arg8);
+    _result = (wxToolBarToolBase *)wxToolBarBase_DoAddTool(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6,*_arg7,_arg8);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1656,274 +1656,9 @@ static PyObject *_wrap_wxToolBarBase_AddTool(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-static wxToolBarToolBase * wxToolBarBase_AddSimpleTool(wxToolBarBase *self,int  id,const wxString & label,const wxBitmap & bitmap,const wxString & shortHelp,const wxString & longHelp,wxItemKind  kind) {
-            return self->AddTool(id, label, bitmap, wxNullBitmap, kind,
-                                 shortHelp, longHelp, NULL);
-        }
-static PyObject *_wrap_wxToolBarBase_AddSimpleTool(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBarToolBase * _result;
-    wxToolBarBase * _arg0;
-    int  _arg1;
-    wxString * _arg2;
-    wxBitmap * _arg3;
-    wxString * _arg4 = (wxString *) &wxPyEmptyString;
-    wxString * _arg5 = (wxString *) &wxPyEmptyString;
-    wxItemKind  _arg6 = (wxItemKind ) wxITEM_NORMAL;
-    PyObject * _argo0 = 0;
-    PyObject * _obj2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _obj4 = 0;
-    PyObject * _obj5 = 0;
-    char *_kwnames[] = { "self","id","label","bitmap","shortHelp","longHelp","kind", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOO|OOi:wxToolBarBase_AddSimpleTool",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_obj4,&_obj5,&_arg6)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_AddSimpleTool. Expected _wxToolBarBase_p.");
-        return NULL;
-        }
-    }
-{
-    _arg2 = wxString_in_helper(_obj2);
-    if (_arg2 == NULL)
-        return NULL;
-}
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxToolBarBase_AddSimpleTool. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    if (_obj4)
-{
-    _arg4 = wxString_in_helper(_obj4);
-    if (_arg4 == NULL)
-        return NULL;
-}
-    if (_obj5)
-{
-    _arg5 = wxString_in_helper(_obj5);
-    if (_arg5 == NULL)
-        return NULL;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxToolBarToolBase *)wxToolBarBase_AddSimpleTool(_arg0,_arg1,*_arg2,*_arg3,*_arg4,*_arg5,_arg6);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
-{
-    if (_obj2)
-        delete _arg2;
-}
-{
-    if (_obj4)
-        delete _arg4;
-}
-{
-    if (_obj5)
-        delete _arg5;
-}
-    return _resultobj;
-}
-
-static wxToolBarToolBase * wxToolBarBase_AddCheckTool(wxToolBarBase *self,int  id,const wxString & label,const wxBitmap & bitmap,const wxBitmap & bmpDisabled,const wxString & shortHelp,const wxString & longHelp,PyObject * clientData) {
-            wxPyUserData* udata = NULL;
-            if (clientData)
-                udata = new wxPyUserData(clientData);
-            return self->AddCheckTool(id, label, bitmap, bmpDisabled,
-                                      shortHelp, longHelp, udata);
-        }
-static PyObject *_wrap_wxToolBarBase_AddCheckTool(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBarToolBase * _result;
-    wxToolBarBase * _arg0;
-    int  _arg1;
-    wxString * _arg2;
-    wxBitmap * _arg3;
-    wxBitmap * _arg4 = (wxBitmap *) &wxNullBitmap;
-    wxString * _arg5 = (wxString *) &wxPyEmptyString;
-    wxString * _arg6 = (wxString *) &wxPyEmptyString;
-    PyObject * _arg7 = (PyObject *) NULL;
-    PyObject * _argo0 = 0;
-    PyObject * _obj2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
-    PyObject * _obj5 = 0;
-    PyObject * _obj6 = 0;
-    PyObject * _obj7 = 0;
-    char *_kwnames[] = { "self","id","label","bitmap","bmpDisabled","shortHelp","longHelp","clientData", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOO|OOOO:wxToolBarBase_AddCheckTool",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_obj5,&_obj6,&_obj7)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_AddCheckTool. Expected _wxToolBarBase_p.");
-        return NULL;
-        }
-    }
-{
-    _arg2 = wxString_in_helper(_obj2);
-    if (_arg2 == NULL)
-        return NULL;
-}
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxToolBarBase_AddCheckTool. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxToolBarBase_AddCheckTool. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    if (_obj5)
-{
-    _arg5 = wxString_in_helper(_obj5);
-    if (_arg5 == NULL)
-        return NULL;
-}
-    if (_obj6)
-{
-    _arg6 = wxString_in_helper(_obj6);
-    if (_arg6 == NULL)
-        return NULL;
-}
-    if (_obj7)
-{
-  _arg7 = _obj7;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxToolBarToolBase *)wxToolBarBase_AddCheckTool(_arg0,_arg1,*_arg2,*_arg3,*_arg4,*_arg5,*_arg6,_arg7);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
-{
-    if (_obj2)
-        delete _arg2;
-}
-{
-    if (_obj5)
-        delete _arg5;
-}
-{
-    if (_obj6)
-        delete _arg6;
-}
-    return _resultobj;
-}
-
-static wxToolBarToolBase * wxToolBarBase_AddRadioTool(wxToolBarBase *self,int  id,const wxString & label,const wxBitmap & bitmap,const wxBitmap & bmpDisabled,const wxString & shortHelp,const wxString & longHelp,PyObject * clientData) {
-            wxPyUserData* udata = NULL;
-            if (clientData)
-                udata = new wxPyUserData(clientData);
-            return self->AddRadioTool(id, label, bitmap, bmpDisabled,
-                                      shortHelp, longHelp, udata);
-        }
-static PyObject *_wrap_wxToolBarBase_AddRadioTool(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBarToolBase * _result;
-    wxToolBarBase * _arg0;
-    int  _arg1;
-    wxString * _arg2;
-    wxBitmap * _arg3;
-    wxBitmap * _arg4 = (wxBitmap *) &wxNullBitmap;
-    wxString * _arg5 = (wxString *) &wxPyEmptyString;
-    wxString * _arg6 = (wxString *) &wxPyEmptyString;
-    PyObject * _arg7 = (PyObject *) NULL;
-    PyObject * _argo0 = 0;
-    PyObject * _obj2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
-    PyObject * _obj5 = 0;
-    PyObject * _obj6 = 0;
-    PyObject * _obj7 = 0;
-    char *_kwnames[] = { "self","id","label","bitmap","bmpDisabled","shortHelp","longHelp","clientData", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOO|OOOO:wxToolBarBase_AddRadioTool",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_obj5,&_obj6,&_obj7)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_AddRadioTool. Expected _wxToolBarBase_p.");
-        return NULL;
-        }
-    }
-{
-    _arg2 = wxString_in_helper(_obj2);
-    if (_arg2 == NULL)
-        return NULL;
-}
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxToolBarBase_AddRadioTool. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxToolBarBase_AddRadioTool. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    if (_obj5)
-{
-    _arg5 = wxString_in_helper(_obj5);
-    if (_arg5 == NULL)
-        return NULL;
-}
-    if (_obj6)
-{
-    _arg6 = wxString_in_helper(_obj6);
-    if (_arg6 == NULL)
-        return NULL;
-}
-    if (_obj7)
-{
-  _arg7 = _obj7;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxToolBarToolBase *)wxToolBarBase_AddRadioTool(_arg0,_arg1,*_arg2,*_arg3,*_arg4,*_arg5,*_arg6,_arg7);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
-{
-    if (_obj2)
-        delete _arg2;
-}
-{
-    if (_obj5)
-        delete _arg5;
-}
-{
-    if (_obj6)
-        delete _arg6;
-}
-    return _resultobj;
-}
-
 static wxToolBarToolBase * wxToolBarBase_InsertTool(wxToolBarBase *self,size_t  pos,int  id,const wxString & label,const wxBitmap & bitmap,const wxBitmap & bmpDisabled,wxItemKind  kind,const wxString & shortHelp,const wxString & longHelp,PyObject * clientData) {
             wxPyUserData* udata = NULL;
-            if (clientData)
+            if (clientData && clientData != Py_None)
                 udata = new wxPyUserData(clientData);
             return self->InsertTool(pos, id, label, bitmap, bmpDisabled, kind,
                                     shortHelp, longHelp, udata);
@@ -2013,84 +1748,6 @@ static PyObject *_wrap_wxToolBarBase_InsertTool(PyObject *self, PyObject *args, 
 {
     if (_obj8)
         delete _arg8;
-}
-    return _resultobj;
-}
-
-static wxToolBarToolBase * wxToolBarBase_InsertSimpleTool(wxToolBarBase *self,size_t  pos,int  id,const wxString & label,const wxBitmap & bitmap,wxItemKind  kind,const wxString & shortHelp,const wxString & longHelp) {
-            return self->InsertTool(pos, id, label, bitmap, wxNullBitmap, kind,
-                                    shortHelp, longHelp);
-        }
-static PyObject *_wrap_wxToolBarBase_InsertSimpleTool(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxToolBarToolBase * _result;
-    wxToolBarBase * _arg0;
-    size_t  _arg1;
-    int  _arg2;
-    wxString * _arg3;
-    wxBitmap * _arg4;
-    wxItemKind  _arg5 = (wxItemKind ) wxITEM_NORMAL;
-    wxString * _arg6 = (wxString *) &wxPyEmptyString;
-    wxString * _arg7 = (wxString *) &wxPyEmptyString;
-    PyObject * _argo0 = 0;
-    PyObject * _obj3 = 0;
-    PyObject * _argo4 = 0;
-    PyObject * _obj6 = 0;
-    PyObject * _obj7 = 0;
-    char *_kwnames[] = { "self","pos","id","label","bitmap","kind","shortHelp","longHelp", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiiOO|iOO:wxToolBarBase_InsertSimpleTool",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&_argo4,&_arg5,&_obj6,&_obj7)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxToolBarBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBarBase_InsertSimpleTool. Expected _wxToolBarBase_p.");
-        return NULL;
-        }
-    }
-{
-    _arg3 = wxString_in_helper(_obj3);
-    if (_arg3 == NULL)
-        return NULL;
-}
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxToolBarBase_InsertSimpleTool. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    if (_obj6)
-{
-    _arg6 = wxString_in_helper(_obj6);
-    if (_arg6 == NULL)
-        return NULL;
-}
-    if (_obj7)
-{
-    _arg7 = wxString_in_helper(_obj7);
-    if (_arg7 == NULL)
-        return NULL;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxToolBarToolBase *)wxToolBarBase_InsertSimpleTool(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6,*_arg7);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
-{
-    if (_obj3)
-        delete _arg3;
-}
-{
-    if (_obj6)
-        delete _arg6;
-}
-{
-    if (_obj7)
-        delete _arg7;
 }
     return _resultobj;
 }
@@ -3775,12 +3432,8 @@ static PyMethodDef stattoolcMethods[] = {
 	 { "wxToolBarBase_AddSeparator", (PyCFunction) _wrap_wxToolBarBase_AddSeparator, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_InsertControl", (PyCFunction) _wrap_wxToolBarBase_InsertControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_AddControl", (PyCFunction) _wrap_wxToolBarBase_AddControl, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarBase_InsertSimpleTool", (PyCFunction) _wrap_wxToolBarBase_InsertSimpleTool, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarBase_InsertTool", (PyCFunction) _wrap_wxToolBarBase_InsertTool, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarBase_AddRadioTool", (PyCFunction) _wrap_wxToolBarBase_AddRadioTool, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarBase_AddCheckTool", (PyCFunction) _wrap_wxToolBarBase_AddCheckTool, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarBase_AddSimpleTool", (PyCFunction) _wrap_wxToolBarBase_AddSimpleTool, METH_VARARGS | METH_KEYWORDS },
-	 { "wxToolBarBase_AddTool", (PyCFunction) _wrap_wxToolBarBase_AddTool, METH_VARARGS | METH_KEYWORDS },
+	 { "wxToolBarBase_DoAddTool", (PyCFunction) _wrap_wxToolBarBase_DoAddTool, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarToolBase_SetClientData", (PyCFunction) _wrap_wxToolBarToolBase_SetClientData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarToolBase_GetClientData", (PyCFunction) _wrap_wxToolBarToolBase_GetClientData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolBarToolBase_Attach", (PyCFunction) _wrap_wxToolBarToolBase_Attach, METH_VARARGS | METH_KEYWORDS },
