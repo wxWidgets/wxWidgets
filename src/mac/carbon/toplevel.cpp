@@ -545,9 +545,13 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             // if built-in find control is finding the wrong control (ie static box instead of overlaid
             // button, we cannot let the standard handler do its job, but must handle manually
 
-            if ( ( cEvent.GetKind() == kEventMouseDown ) && 
+            if ( ( cEvent.GetKind() == kEventMouseDown ) 
+#ifdef __WXMAC_OSX__
+                && 
                 (FindControlUnderMouse(windowMouseLocation , window , &dummyPart) != 
-                wxMacFindControlUnderMouse( windowMouseLocation , window , &dummyPart ) ) )
+                wxMacFindControlUnderMouse( windowMouseLocation , window , &dummyPart ) ) 
+#endif
+                )
             {
                 if ( currentMouseWindow->MacIsReallyEnabled() ) 
                 {
@@ -1125,7 +1129,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 
     wxAssociateWinWithMacWindow( (WindowRef) m_macWindow , this ) ;
     UMASetWTitle( (WindowRef) m_macWindow , title , m_font.GetEncoding() ) ;
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
 #if TARGET_API_MAC_OSX
     // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of 
     // the content view, so we have to retrieve it explicitely

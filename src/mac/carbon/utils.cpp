@@ -1024,6 +1024,7 @@ void wxMacControl::SetDrawingEnabled( bool enable )
 #endif
 }
 
+#if TARGET_API_MAC_OSX
 bool wxMacControl::GetNeedsDisplay() const
 {
 #if TARGET_API_MAC_OSX
@@ -1042,6 +1043,7 @@ void wxMacControl::SetNeedsDisplay( bool needsDisplay , RgnHandle where )
         HIViewSetNeedsDisplay( m_controlRef , needsDisplay ) ;
 #endif
 }
+#endif
 
 void  wxMacControl::Convert( wxPoint *pt , wxMacControl *from , wxMacControl *to )
 {
@@ -1052,6 +1054,21 @@ void  wxMacControl::Convert( wxPoint *pt , wxMacControl *from , wxMacControl *to
     HIViewConvertPoint( &hiPoint , from->m_controlRef , to->m_controlRef  ) ;
     pt->x = (int)hiPoint.x ;
     pt->y = (int)hiPoint.y ;
+#else
+    Rect fromRect ;
+    Rect toRect ;
+    from->GetRect( &fromRect ) ;
+    to->GetRect( &toRect ) ;
+    
+    // correct the case of the root control 
+    if ( fromRect.left == -32768 && fromRect.top == -32768 && fromRect.bottom == 32767 && fromRect.right == 32767)
+        fromRect.left = fromRect.top = 0 ;
+
+    if ( toRect.left == -32768 && toRect.top == -32768 && toRect.bottom == 32767 && toRect.right == 32767  )
+        toRect.left = toRect.top = 0 ;
+        
+    pt->x = pt->x + fromRect.left - toRect.left ;
+    pt->y = pt->y + fromRect.top - toRect.top ;
 #endif
 }
 
