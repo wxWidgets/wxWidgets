@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/combobox.h"
+#include "wx/button.h"
 #include "wx/menu.h"
 #include "wx/mac/uma.h"
 
