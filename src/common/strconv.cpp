@@ -72,6 +72,8 @@ const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
     if (psz)
     {
         size_t nLen = MB2WC((wchar_t *) NULL, psz, 0);
+        if (nLen == (size_t)-1)
+            return wxWCharBuffer((wchar_t *) NULL);
         wxWCharBuffer buf(nLen);
         MB2WC((wchar_t *)(const wchar_t *) buf, psz, nLen);
         return buf;
@@ -85,6 +87,8 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *psz) const
     if (psz)
     {
         size_t nLen = WC2MB((char *) NULL, psz, 0);
+        if (nLen == (size_t)-1)
+            return wxCharBuffer((char *) NULL);
         wxCharBuffer buf(nLen);
         WC2MB((char *)(const char *) buf, psz, nLen);
         return buf;
