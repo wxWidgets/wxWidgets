@@ -43,7 +43,7 @@ erroneously.
 
 Add headers to VC++ project files.
 
-Test GLCanvas.
+Implement Robert's wxClipboard.
 
 Distribution naming?
 
@@ -88,8 +88,6 @@ Think about reimplementing wxBitmapButton, wxStaticBitmap using
 BS_BITMAP, SS_BITMAP - but this may not allow wxBitmap
 argument, so instead just allow controls loaded from native
 resource to deal with this style and call default processing.
-
-Better clipboard support (as per Robert's class).
 
 wxWizard class?
 

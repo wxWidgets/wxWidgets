@@ -429,8 +429,8 @@ void HelpGenVisitor::VisitClass( spClass& cl )
             }
 
             wxString baseclass = *i;
-            derived << "\\helpref{" << baseclass << "}"
-                       "{ " << baseclass.MakeLower()  << "}";
+            derived << "\\helpref{" << baseclass << "}";
+			derived << "{" << baseclass.MakeLower()  << "}";
         }
     }
     totalText << derived << "\n\n";
@@ -574,7 +574,7 @@ void HelpGenVisitor::VisitOperation( spOperation& op )
         funcname = dtor;
     }
 
-    totalText.Printf("\\membersection{%s::%s}\\label{%s}\n"
+    totalText.Printf("\\membersection{%s::%s}\\label{%s}\n\n"
                      "\\%sfunc{%s%s}{%s}{",
                      classname, funcname,
                      MakeLabel(classname, funcname).c_str(),

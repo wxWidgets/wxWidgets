@@ -1,64 +1,38 @@
 \section{\class{wxClipboard}}\label{wxclipboard}
 
-There is one wxClipboard object referenced by the pointer
-wxTheClipboard, initialized by calling \helpref{wxInitClipboard}{wxinitclipboard}.
-Under X, clipboard manipulation must be done by using this class, and
-such code will work under MS Windows also. Under MS Windows, you have the
-alternative of using the normal clipboard functions.
+A class for manipulating the clipboard. Note that this is not compatible with the
+clipboard class from wxWindows 1.xx, which has the same name but a different implementation.
 
-The documentation for this class will be expanded in due course. At present,
-wxClipboard is only used in the wxMediaWindow add-on library.
+To use the clipboard, construct a wxClipboard object on the stack and 
+call \helpref{wxClipboard::Open}{wxclipboardopen}. If this operation returns TRUE, you
+now own the clipboard. Call \helpref{wxClipboard::SetData}{wxclipboardsetdata} to put data
+on the clipboard (one or more times), or \helpref{wxClipboard::GetData}{wxclipboardgetdata} to
+retrieve data from the clipboard. Call \helpref{wxClipboard::Close}{wxclipboardclose} to close
+the clipboard and relinquish ownership. You should keep the clipboard open only momentarily.
 
-\wxheading{Derived from}
+For example:
 
-\helpref{wxObject}{wxobject}
+\begin{verbatim}
+  wxClipboard clipboard;
 
-\wxheading{See also}
+  // Write some text to the clipboard
+  if (clipboard.Open())
+  {
+    wxTextDataObject object("Some text");
+    clipboard.SetData(& object);
+    clipboard.Close();
+  }
 
-\helpref{wxClipboardClient}{wxclipboardclient}, \helpref{wxInitClipboard}{wxinitclipboard}.
+  // Read some text
+  if (clipboard.Open() && clipboard.IsSupportedFormat(wxDF_TEXT))
+  {
+    wxTextDataObject object;
+    clipboard.GetData(& object);
+    clipboard.Close();
 
-\latexignore{\rtfignore{\wxheading{Members}}}
-
-\membersection{wxClipboard::GetClipboardClient}
-
-\func{wxClipboardClient *}{GetClipboardClient}{\void}
-
-Get the clipboard client directly. Will be NULL if clipboard data
-is a string, or if some other application owns the clipboard. 
-This can be useful for shortcutting data translation, if the
-clipboard user can check for a specific client.
-
-\membersection{wxClipboard::GetClipboardData}
-
-\func{char*}{GetClipboardData}{\param{const wxString\& }{format}, \param{long *}{length}, \param{long}{ time}}
-
-Get data from the clipboard.
-
-\membersection{wxClipboard::GetClipboardString}
-
-\func{wxString}{GetClipboardString}{\param{long}{ time}}
-
-Get the data from the clipboard in the format ``TEXT".
-
-\membersection{wxClipboard::SetClipboardClient}
-
-\func{void}{SetClipboardClient}{\param{wxClipboardClient *}{client}, \param{long}{ time}}
-
-Set the clipboard data owner.
-
-\membersection{wxClipboard::SetClipboardString}
-
-\func{void}{SetClipboardString}{\param{const wxString\& }{data}, \param{long}{ time}}
-
-Set the clipboard string; does not require a client.
-
-\section{\class{wxClipboardClient}}\label{wxclipboardclient}
-
-Implemented under X and MS Windows, a clipboard client holds data
-belonging to the clipboard. For plain text, a client is not necessary.
-
-wxClipboardClient is an abstract class for which the virtual functions
-BeingReplaced and GetData must be overridden.
+    wxMessageBox(object.GetText());
+  }
+\end{verbatim}
 
 \wxheading{Derived from}
 
@@ -66,38 +40,67 @@ BeingReplaced and GetData must be overridden.
 
 \wxheading{See also}
 
-\helpref{wxClipboard}{wxclipboard}, \helpref{wxInitClipboard}{wxinitclipboard}.
+\helpref{Drag and drop overview}{wxdndoverview}, \helpref{wxDataObject}{wxdataobject}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxClipboardClient::formats}
+\membersection{wxClipboard::wxClipboard}
 
-\member{wxStringList}{formats}
+\func{}{wxClipboard}{\void}
 
-This list should be filled in with strings indicating the formats
-this client can provide. Almost all clients will provide``TEXT".
-Format names should be 4 characters long, so things will work
-out on the Macintosh.
+Constructor.
 
-\membersection{wxClipboardClient::BeingReplaced}
+\membersection{wxClipboard::\destruct{wxClipboard}}
 
-\func{void}{BeingReplaced}{\void}
+\func{}{\destruct{wxClipboard}}{\void}
 
-This method is called when the client is losing the selection.
+Destructor.
 
-\membersection{wxClipboardClient::GetData}
+\membersection{wxClipboard::Clear}\label{wxclipboardclear}
 
-\func{char*}{GetData}{\param{const wxString\& }{format}, \param{long *}{size}}
+\func{void}{Clear}{\void}
 
-This method is called when someone wants the data this client is
-supplying to the clipboard.
+Clears the global clipboard object and the system's clipboard if possible.
 
-{\it format} is a string indicating the
-format of the data - one of the strings from the ``formats"
-list.
+\membersection{wxClipboard::Close}\label{wxclipboardclose}
 
-{\it size} should be filled with the size of the resulting
-data. In the case of text, {\it size} does not count the
-NULL terminator.
+\func{bool}{Close}{\void}
 
+Call this function to close the clipboard, having opened it with \helpref{wxClipboard::Close}{wxclipboardclose}.
+
+\membersection{wxClipboard::GetData}\label{wxclipboardgetdata}
+
+\func{bool}{GetData}{\param{wxDataObject*}{ data}}
+
+Call this function to fill {\it data} with data on the clipboard, if available in the required
+format.
+
+\membersection{wxClipboard::IsSupportedFormat}\label{wxclipboardissupportedformat}
+
+\func{bool}{IsSupportedFormat}{\param{wxDataFormat}{ format}, \param{const wxString\&}{ id = ""}}
+
+Returns TRUE if the given format is available on the clipboard.
+
+\wxheading{Parameters}
+
+\docparam{format}{The format. See \helpref{wxDataObject}{wxdataobject} for a list of formats.}
+
+\docparam{id}{ If {\it format} is wxDF\_PRIVATE, {\it id} is the identifier of the private data format.}
+
+\membersection{wxClipboard::Open}\label{wxclipboardopen}
+
+\func{bool}{Open}{\void}
+
+Call this function to open the clipboard before calling \helpref{wxClipboard::SetData}{wxclipboardsetdata} 
+and \helpref{wxClipboard::GetData}{wxclipboardgetdata}.
+
+Call \helpref{wxClipboard::Close}{wxclipboardclose} when you have finished with the clipboard. You
+should keep the clipboard open for only a very short time.
+
+\membersection{wxClipboard::SetData}\label{wxclipboardsetdata}
+
+\func{bool}{SetData}{\param{wxDataObject*}{ data}}
+
+Call this function to set a data object to the clipboard. This function can be called several times
+to put different formats on the clipboard.
 

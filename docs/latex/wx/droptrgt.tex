@@ -1,0 +1,72 @@
+\section{\class{wxDropTarget}}\label{wxdroptarget}
+
+\overview{Overview}{wxdndoverview}
+
+This class represents a target for a drag and drop operation.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{Drag and drop overview}{wxdndoverview}, \helpref{wxDropSource}{wxdropsource}, 
+\helpref{wxTextDropTarget}{wxtextdroptarget}, \helpref{wxFileDropTarget}{wxfiledroptarget}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDropTarget::wxDropTarget}\label{wxdroptargetwxdroptarget}
+
+\func{}{wxDropTarget}{\void}
+
+Constructor.
+
+\membersection{wxDropTarget::\destruct{wxDropTarget}}\label{wxdroptargetdtor}
+
+\func{}{\destruct{wxDropTarget}}{\void}
+
+Destructor.
+
+\membersection{wxDropTarget::GetFormatCount}\label{wxdroptargetgetformatcount}
+
+\constfunc{virtual size\_t}{GetFormatCount}{\void}
+
+Override this to indicate how many formats you support.
+
+\membersection{wxDropTarget::GetFormat}\label{wxdroptargetgetformat}
+
+\constfunc{virtual wxDataFormat}{GetFormat}{\param{size\_t }{n}}
+
+Override this to indicate what kind of data you support.
+
+\membersection{wxDropTarget::OnEnter}\label{wxdroptargetonenter}
+
+\func{virtual void}{OnEnter}{\void}
+
+Called when the mouse enters the drop target.
+
+\membersection{wxDropTarget::OnDrop}\label{wxdroptargetondrop}
+
+\func{virtual bool}{OnDrop}{\param{long }{x}, \param{long }{y}, \param{const void* }{data}, \param{size\_t }{size}}
+
+Called when the user drops a data object on the target. Return FALSE to veto the operation.
+
+\wxheading{Parameters}
+
+\docparam{x}{The x coordinate of the mouse.}
+
+\docparam{y}{The y coordinate of the mouse.}
+
+\docparam{data}{The data being dropped.}
+
+\docparam{size}{The size of the data being dropped.}
+
+\wxheading{Return value}
+
+Return TRUE to accept the data, FALSE to veto the operation.
+
+\membersection{wxDropTarget::OnLeave}\label{wxdroptargetonleave}
+
+\func{virtual void}{OnLeave}{\void}
+
+Called when the mouse leaves the drop target.

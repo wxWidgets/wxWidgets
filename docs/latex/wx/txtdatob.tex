@@ -1,0 +1,42 @@
+\section{\class{wxTextDataObject}}\label{wxtextdataobject}
+
+ wxTextDataObject is a specialization of wxDataObject for text data.
+
+\wxheading{Derived from}
+
+\helpref{wxDataObject}{wxdataobject}
+
+\wxheading{See also}
+
+\helpref{wxDataObject}{wxdataobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTextDataObject::wxTextDataObject}\label{wxtextdataobjectwxtextdataobject}
+
+\func{}{wxTextDataObject}{\void}
+
+Default constructor.
+
+\func{}{wxTextDataObject}{\param{const wxString\& }{strText}}
+
+Constructor, passing text.
+
+\membersection{wxTextDataObject::GetFormat}\label{wxtextdataobjectgetformat}
+
+\constfunc{virtual wxDataFormat}{GetFormat}{\void}
+
+Returns wxDF\_TEXT.
+
+\membersection{wxTextDataObject::SetText}\label{wxtextdataobjectsettext}
+
+\func{virtual void}{SetText}{\param{const wxString\& }{strText}}
+
+Sets the text associated with the data object.
+
+\membersection{wxTextDataObject::GetText}\label{wxtextdataobjectgettext}
+
+\constfunc{virtual wxString}{GetText}{\void}
+
+Returns the text associated with the data object.
+

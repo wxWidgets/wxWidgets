@@ -648,7 +648,9 @@ wxString wxFileNameFromPath (const wxString& path1)
 	    return wxString(path + 2);
 #endif
     }
-  return wxString("");
+  // Yes, this should return the path, not an empty string, otherwise
+  // we get "thing.txt" -> "".
+  return path1;
 }
 
 // Return just the directory, or NULL if no directory

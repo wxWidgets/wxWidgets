@@ -1,16 +1,15 @@
 \section{Drag-and-drop and clipboard overview}\label{wxdndoverview}
 
-Classes: \helpref{wxDataObject}{wxdataobject}
-
-% \helpref{wxTextDataObject}{wxtextdataobject}
-% \helpref{wxDropSource}{wxdropsource}
-% \helpref{wxDropTarget}{wxdroptarget}
-% \helpref{wxTextDropTarget}{wxtextdroptarget}
-% \helpref{wxFileDropTarget}{wxfiledroptarget}
+Classes: \helpref{wxDataObject}{wxdataobject}, 
+\helpref{wxTextDataObject}{wxtextdataobject}, 
+\helpref{wxDropSource}{wxdropsource}, 
+\helpref{wxDropTarget}{wxdroptarget}, 
+\helpref{wxTextDropTarget}{wxtextdroptarget}, 
+\helpref{wxFileDropTarget}{wxfiledroptarget}
 
 Samples: see the dnd sample.
 
-Headers: <wx/dataobj.h>, <wx/dropsrc.h and <wx/droptgt.h>>
+Headers: <wx/dataobj.h>, <wx/dropsrc.h and <wx/droptgt.h> or <wx/dnd.h>
 (note that wxUSE\_DRAG\_AND\_DROP must be defined in setup.h)
 
 This overview describes wxWindows support for drag and drop and clipboard
@@ -63,7 +62,7 @@ under X Windows), the corresponding \helpref{wxDropTarget}{wxdroptarget} methods
 are called - see below.
 
 \item {\bf Processing the result:} DoDragDrop() returns an {\it effect code} which
-is one of the values of \helpref{wxDragResult}{wxdragresult} enum. Codes
+is one of the values of \helpref{wxDragResult}{wxdropsource} enum. Codes
 of wxDragError, wxDragNone and wxDragCancel have the obvious meaning and mean
 that there is nothing to do on the sending end (except of possibly logging the
 error in the first case). wxDragCopy means that the data has been successfully

@@ -1,0 +1,63 @@
+\section{\class{wxDataObject}}\label{wxdataobject}
+
+A wxDataObject represents data that can be copied to or from the clipboard, or
+dragged and dropped.
+
+There are several predefined data object classes, such as \helpref{wxFileDataObject}{wxfiledataobject}, 
+\helpref{wxTextDataObject}{wxtextdataobject}, and \helpref{wxBitmapDataObject}{wxbitmapdataobject}.
+
+You may also derive your own data object classes for user-defined types.
+
+TODO: how do user-defined types work?
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Types}
+
+\index{wxDataFormat}The following symbols are interchangable with the
+Windows equivalents.
+
+\begin{verbatim}
+enum wxDataFormat
+{
+  wxDF_TEXT =             1,  /* CF_TEXT */
+  wxDF_BITMAP =           2,  /* CF_BITMAP */
+  wxDF_METAFILE =         3,  /* CF_METAFILEPICT */
+  wxDF_DIB =              8,  /* CF_DIB */
+  wxDF_OEMTEXT =          7,  /* CF_OEMTEXT */
+  wxDF_FILENAME =         15, /* CF_HDROP */
+  wxDF_PRIVATE =          20
+};
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{wxFileDataObject}{wxfiledataobject}, 
+\helpref{wxTextDataObject}{wxtextdataobject}, 
+\helpref{wxBitmapDataObject}{wxbitmapdataobject}, 
+\helpref{Drag and drop overview}{wxdndoverview}, \helpref{wxDropTarget}{wxdroptarget}, 
+\helpref{wxDropSource}{wxdropsource}, 
+\helpref{wxTextDropTarget}{wxtextdroptarget}, \helpref{wxFileDropTarget}{wxfiledroptarget}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDataObject::wxDataObject}\label{wxdataobjectwxdataobject}
+
+\func{}{wxDataObject}{\void}
+
+Constructor.
+
+\membersection{wxDataObject::\destruct{wxDataObject}}\label{wxdataobjectdtor}
+
+\func{}{\destruct{wxDataObject}}{\void}
+
+Destructor.
+
+\membersection{wxDataObject::GetFormat}\label{wxdataobjectgetformat}
+
+\constfunc{virtual wxDataFormat}{GetFormat}{\void}
+
+Returns the format of the object. See \helpref{Types}{wxdataobject}.
+

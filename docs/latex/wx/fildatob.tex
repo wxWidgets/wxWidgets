@@ -1,0 +1,38 @@
+\section{\class{wxFileDataObject}}\label{wxfiledataobject}
+
+wxFileDataObject is a specialization of wxDataObject for file names.
+
+\wxheading{Derived from}
+
+\helpref{wxDataObject}{wxdataobject}
+
+\wxheading{See also}
+
+\helpref{wxDataObject}{wxdataobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxFileDataObject::wxFileDataObject}\label{wxfiledataobjectwxfiledataobject}
+
+\func{}{wxFileDataObject}{\void}
+
+Constructor.
+
+\membersection{wxFileDataObject::GetFormat}\label{wxfiledataobjectgetformat}
+
+\constfunc{virtual wxDataFormat}{GetFormat}{\void}
+
+Returns wxDF\_FILENAME.
+
+\membersection{wxFileDataObject::AddFile}\label{wxfiledataobjectaddfile}
+
+\func{virtual void}{AddFile}{\param{const wxString\& }{file}}
+
+Adds a filename to the data object.
+
+\membersection{wxFileDataObject::GetFiles}\label{wxfiledataobjectgetfiles}
+
+\constfunc{virtual wxString}{GetFiles}{\void}
+
+Returns files as a zero-separated list.
+

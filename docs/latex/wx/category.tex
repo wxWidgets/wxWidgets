@@ -316,14 +316,31 @@ facilities.
 
 \overview{Database classes overview}{odbcoverview}
 
-wxWindows provides a set of classes for accessing Microsoft's ODBC (Open Database Connectivity)
-product.
+wxWindows provides two alternative sets of classes for accessing Microsoft's ODBC (Open Database Connectivity)
+product. The new version by Remstar is documented in a separate manual.
+The older classes are as follows:
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxDatabase}{wxdatabase}}{Database class}
 \twocolitem{\helpref{wxQueryCol}{wxquerycol}}{Class representing a column}
 \twocolitem{\helpref{wxQueryField}{wxqueryfield}}{Class representing a field}
 \twocolitem{\helpref{wxRecordSet}{wxrecordset}}{Class representing one or more record}
+\end{twocollist}
+
+{\large {\bf Drag and drop and clipboard classes}}
+
+\overview{Drag and drop and clipboard overview}{wxdndoverview}
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxDropTarget}{wxdroptarget}}{Drop target class}
+\twocolitem{\helpref{wxFileDropTarget}{wxfiledroptarget}}{File drop target class}
+\twocolitem{\helpref{wxTextDropTarget}{wxtextdroptarget}}{Text drop target class}
+\twocolitem{\helpref{wxDropSource}{wxdropsource}}{Drop source class}
+\twocolitem{\helpref{wxDataObject}{wxdataobject}}{Data object class}
+\twocolitem{\helpref{wxTextDataObject}{wxtextdataobject}}{Text data object class}
+\twocolitem{\helpref{wxFileDataObject}{wxtextdataobject}}{File data object class}
+\twocolitem{\helpref{wxBitmapDataObject}{wxbitmapdataobject}}{Bitmap data object class}
+\twocolitem{\helpref{wxClipboard}{wxclipboard}}{Clipboard class}
 \end{twocollist}
 
 {\large {\bf File related classes}}
@@ -350,3 +367,4 @@ overview}{wxfileoverview} for more details.
 \twocolitem{\helpref{wxTimer}{wxtimer}}{Timer class}
 \twocolitem{\helpref{wxSystemSettings}{wxsystemsettings}}{System settings class}
 \end{twocollist}
+

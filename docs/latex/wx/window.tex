@@ -410,6 +410,17 @@ Returns a pointer to the window's layout constraints, or NULL if there are none.
 
 Returns a pointer to the button which is the default for this window, or NULL.
 
+\membersection{wxWindow::GetDropTarget}\label{wxwindowgetdroptarget}
+
+\constfunc{wxDropTarget*}{GetDropTarget}{\void}
+
+Returns the associated drop target, which may be NULL.
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetDropTarget}{wxwindowsetdroptarget}, 
+\helpref{Drag and drop overview}{wxdndoverview}
+
 \membersection{wxWindow::GetEventHandler}\label{wxwindowgeteventhandler}
 
 \constfunc{wxEvtHandler*}{GetEventHandler}{\void}
@@ -1515,6 +1526,19 @@ constraints.}
 You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a window to use
 the constraints automatically in OnSize; otherwise, you must
 override OnSize and call Layout explicitly.
+
+\membersection{wxWindow::SetDropTarget}\label{wxwindowsetdroptarget}
+
+\func{void}{SetDropTarget}{\param{wxDropTarget*}{ target}}
+
+Associates a drop target with this window.
+
+If the window already has a drop target, it is deleted.
+
+\wxheading{See also}
+
+\helpref{wxWindow::GetDropTarget}{wxwindowgetdroptarget}, 
+\helpref{Drag and drop overview}{wxdndoverview}
 
 \membersection{wxWindow::SetFocus}\label{wxwindowsetfocus}
 

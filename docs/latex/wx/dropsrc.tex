@@ -1,0 +1,87 @@
+\section{\class{wxDropSource}}\label{wxdropsource}
+
+\overview{Overview}{wxdndoverview}
+
+This class represents a source for a drag and drop operation.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Types}
+
+\index{wxDragResult}wxDragResult is defined as follows:
+
+{\small\begin{verbatim}
+enum wxDragResult
+  {
+    wxDragError,    // error prevented the d&d operation from completing
+    wxDragNone,     // drag target didn't accept the data
+    wxDragCopy,     // the data was successfully copied
+    wxDragMove,     // the data was successfully moved
+    wxDragCancel    // the operation was cancelled by user (not an error)
+  };
+\end{verbatim}%
+}
+
+\wxheading{See also}
+
+\helpref{Drag and drop overview}{wxdndoverview}, \helpref{wxDropTarget}{wxdroptarget}, 
+\helpref{wxTextDropTarget}{wxtextdroptarget}, \helpref{wxFileDropTarget}{wxfiledroptarget}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDropSource::wxDropSource}\label{wxdropsourcewxdropsource}
+
+\func{}{wxDropSource}{\param{wxWindow }{*win = NULL}}
+
+Default/wxGTK-specific constructor. If you use the default constructor you must
+call \helpref{wxDropSource::SetData}{wxdropsourcesetdata} later.
+
+{\it win} is only used by wxGTK. TODO: in what circumstances?
+
+\func{}{wxDropSource}{\param{wxDataObject }{\&data}, \param{wxWindow }{*win = NULL}}
+
+\wxheading{Parameters}
+
+\docparam{data}{A reference to the \helpref{data object}{wxdataobject} associated with the drop source.}
+
+\docparam{win}{Only used by wxGTK. TODO}
+
+\membersection{wxDropSource::\destruct{wxDropSource}}\label{wxdropsourcedtor}
+
+\func{virtual }{\destruct{wxDropSource}}{\void}
+
+\membersection{wxDropSource::SetData}\label{wxdropsourcesetdata}
+
+\func{void}{SetData}{\param{wxDataObject }{\&data}}
+
+Sets the data \helpref{data object}{wxdataobject} associated with the drop source.
+
+\membersection{wxDropSource::DoDragDrop}\label{wxdropsourcedodragdrop}
+
+\func{virtual wxDragResult}{DoDragDrop}{\param{bool }{bAllowMove = FALSE}}
+
+Do it (call this in response to a mouse button press, for example).
+
+If {\bf bAllowMove} is FALSE, data can only be copied.
+
+\membersection{wxDropSource::GiveFeedback}\label{wxdropsourcegivefeedback}
+
+\func{virtual bool}{GiveFeedback}{\param{wxDragResult }{effect}, \param{bool }{bScrolling}}
+
+Overridable: you may give some custom UI feedback during the drag and drop operation
+in this function. It is called on each mouse move, so your implementation must not be too
+slow.
+
+\wxheading{Parameters}
+
+\docparam{effect}{The effect to implement. One of wxDragCopy, wxDragMove.}
+
+\docparam{bScrolling}{TRUE if the window is scrolling.}
+
+\wxheading{Return value}
+
+Return FALSE if you want default feedback, or TRUE if you implement your own
+feedback.
+

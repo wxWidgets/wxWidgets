@@ -1,0 +1,38 @@
+\section{\class{wxBitmapDataObject}}\label{wxbitmapdataobject}
+
+ wxBitmapDataObject is a specialization of wxDataObject for bitmaps.
+
+\wxheading{Derived from}
+
+\helpref{wxDataObject}{wxdataobject}
+
+\wxheading{See also}
+
+\helpref{wxDataObject}{wxdataobject}, \helpref{wxBitmap}{wxbitmap}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxBitmapDataObject::wxBitmapDataObject}\label{wxbitmapdataobjectwxbitmapdataobject}
+
+\func{}{wxBitmapDataObject}{\void}
+
+Constructor. TODO: shouldn't there be a constructor taking a wxBitmap?
+
+\membersection{wxBitmapDataObject::GetFormat}\label{wxbitmapdataobjectgetformat}
+
+\func{virtual wxDataFormat}{GetFormat}{\void}
+
+Returns wxDF\_BITMAP.
+
+\membersection{wxBitmapDataObject::SetBitmap}\label{wxbitmapdataobjectsetbitmap}
+
+\func{virtual void}{SetBitmap}{\param{const wxBitmap\& }{bitmap}}
+
+Sets the bitmap for the data object.
+
+\membersection{wxBitmapDataObject::GetBitmap}\label{wxbitmapdataobjectgetbitmap}
+
+\constfunc{virtual wxBitmap}{GetBitmap}{\void}
+
+Returns the bitmap associated with the data object.
+

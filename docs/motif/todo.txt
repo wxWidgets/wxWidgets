@@ -43,6 +43,8 @@ High Priority
 
 - Implement missing wxImage functions for Motif.
 
+- wxClipboard
+
 Low Priority
 ------------
 
@@ -82,7 +84,7 @@ Low Priority
   - add the driver code to src/motif/helphtml.cpp (a frame, toolbar,
     history list).
 
-- Copy and paste, drag and drop. Use a standard X drag
+- Drag and drop. Use a standard X drag
   and drop standard - see http://www.cco.caltech.edu/~jafl/xdnd/
   or use Motif drag and drop as described here:
   http://www.motifzone.com/tmd/articles/DnD/dnd.html
