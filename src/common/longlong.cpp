@@ -609,11 +609,10 @@ void *wxLongLongWx::asArray(void) const
 
 wxString
 #if wxUSE_LONGLONG_NATIVE
-wxLongLongNative
+wxLongLongNative::ToString() const
 #else
-wxLognLongWx
+wxLongLongWx::ToString() const
 #endif
-::ToString() const
 {
     // TODO: this is awfully inefficient, anything better?
     wxString result;
