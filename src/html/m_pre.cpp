@@ -94,6 +94,8 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
 
         m_WParser->CloseContainer();
         c = m_WParser->OpenContainer();
+        c->SetWidthFloat(tag);
+        c = m_WParser->OpenContainer();
         c->SetAlignHor(wxHTML_ALIGN_LEFT);
         c->SetIndent(m_WParser->GetCharHeight(), wxHTML_INDENT_TOP);
 
@@ -106,6 +108,7 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
         m_Parser->DoParsing();
         m_Parser->RestoreState();
 
+        m_WParser->CloseContainer();
         m_WParser->CloseContainer();
         c = m_WParser->OpenContainer();
 
