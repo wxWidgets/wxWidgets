@@ -73,6 +73,10 @@
 
 #define HTML_COND_ISANCHOR              1
         // Finds the anchor of 'param' name (pointer to wxString).
+	
+#define HTML_COND_ISIMAGEMAP            2
+        // Finds imagemap of 'param' name (pointer to wxString).
+	// (used exclusively by mod_image.cpp)
 
 #define HTML_COND_USER              10000
         // User-defined conditions should start from this number

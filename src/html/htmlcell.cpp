@@ -38,8 +38,9 @@
 
 void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y, bool left, bool middle, bool right)
 {
-    if (GetLink() != wxEmptyString)
-        ((wxHtmlWindow*)parent) -> OnLinkClicked(GetLink());
+    wxString lnk = GetLink(x, y);
+    if (lnk != wxEmptyString)
+        ((wxHtmlWindow*)parent) -> OnLinkClicked(lnk);
         // note : this overcasting is legal because parent is *always* wxHtmlWindow
 }
 
