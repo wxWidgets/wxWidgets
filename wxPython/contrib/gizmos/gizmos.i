@@ -719,7 +719,24 @@ public:
     wxTreeItemId GetSelection() const;
 
     // get the items currently selected, return the number of such item
-    size_t GetSelections(wxArrayTreeItemIds&) const;
+    //size_t GetSelections(wxArrayTreeItemIds&) const;
+    %addmethods {
+        PyObject* GetSelections() {
+            wxPyBeginBlockThreads();
+            PyObject*           rval = PyList_New(0);
+            wxArrayTreeItemIds  array;
+            size_t              num, x;
+            num = self->GetSelections(array);
+            for (x=0; x < num; x++) {
+                wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
+                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), TRUE);
+                PyList_Append(rval, item);
+            }
+            wxPyEndBlockThreads();
+            return rval;
+        }
+    }
+
 
     // get the parent of this item (may return NULL if root)
     %name(GetItemParent)wxTreeItemId GetParent(const wxTreeItemId& item) const;

@@ -3530,18 +3530,19 @@ void wxTreeListMainWindow::OnChar( wxKeyEvent &event )
                         event.ControlDown(),
                         is_multiple, extended_select, unselect_others);
 
-    // + : Expand
-    // - : Collaspe
+    // + : Expand (not on Win32)
+    // - : Collaspe (not on Win32)
     // * : Expand all/Collapse all
     // ' ' | return : activate
     // up    : go up (not last children!)
     // down  : go down
-    // left  : go to parent
-    // right : open if parent and go next
+    // left  : go to parent (or collapse on Win32)
+    // right : open if parent and go next (or expand on Win32)
     // home  : go to root
     // end   : go to last item without opening parents
     switch (event.KeyCode())
     {
+#ifndef __WXMSW__ // mimic the standard win32 tree ctrl
         case '+':
         case WXK_ADD:
             if (m_current->HasPlus() && !IsExpanded(m_current))
@@ -3549,6 +3550,7 @@ void wxTreeListMainWindow::OnChar( wxKeyEvent &event )
                 Expand(m_current);
             }
             break;
+#endif // __WXMSW__
 
         case '*':
         case WXK_MULTIPLY:
@@ -3560,6 +3562,7 @@ void wxTreeListMainWindow::OnChar( wxKeyEvent &event )
             }
             //else: fall through to Collapse() it
 
+#ifndef __WXMSW__ // mimic the standard wxTreeCtrl behaviour
         case '-':
         case WXK_SUBTRACT:
             if (IsExpanded(m_current))
@@ -3567,6 +3570,7 @@ void wxTreeListMainWindow::OnChar( wxKeyEvent &event )
                 Collapse(m_current);
             }
             break;
+#endif // __WXMSW__
 
         case ' ':
         case WXK_RETURN:
@@ -3626,6 +3630,13 @@ void wxTreeListMainWindow::OnChar( wxKeyEvent &event )
 
             // left arrow goes to the parent
         case WXK_LEFT:
+#if defined(__WXMSW__) // mimic the standard win32 tree ctrl
+            if (IsExpanded(m_current))
+            {
+                Collapse(m_current);
+            }
+            else
+#endif // __WXMSW__
             {
                 wxTreeItemId prev = GetParent( m_current );
                 if ((prev == GetRootItem()) && HasFlag(wxTR_HIDE_ROOT))
@@ -3642,6 +3653,14 @@ void wxTreeListMainWindow::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_RIGHT:
+#if defined(__WXMSW__) // mimic the standard win32 tree ctrl
+            if (m_current->HasPlus() && !IsExpanded(m_current))
+            {
+                Expand(m_current);
+                break;
+            }
+#endif // __WXMSW__
+
             // this works the same as the down arrow except that we
             // also expand the item if it wasn't expanded yet
             Expand(m_current);

@@ -4665,18 +4665,29 @@ static PyObject *_wrap_wxTreeListCtrl_GetSelection(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-#define wxTreeListCtrl_GetSelections(_swigobj,_swigarg0)  (_swigobj->GetSelections(_swigarg0))
+static PyObject * wxPyTreeListCtrl_GetSelections(wxPyTreeListCtrl *self) {
+            wxPyBeginBlockThreads();
+            PyObject*           rval = PyList_New(0);
+            wxArrayTreeItemIds  array;
+            size_t              num, x;
+            num = self->GetSelections(array);
+            for (x=0; x < num; x++) {
+                wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
+                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), TRUE);
+                PyList_Append(rval, item);
+            }
+            wxPyEndBlockThreads();
+            return rval;
+        }
 static PyObject *_wrap_wxTreeListCtrl_GetSelections(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    size_t  _result;
+    PyObject * _result;
     wxPyTreeListCtrl * _arg0;
-    wxArrayTreeItemIds * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","arg2", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeListCtrl_GetSelections",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTreeListCtrl_GetSelections",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4685,19 +4696,15 @@ static PyObject *_wrap_wxTreeListCtrl_GetSelections(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    if (_argo1) {
-        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxArrayTreeItemIds_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeListCtrl_GetSelections. Expected _wxArrayTreeItemIds_p.");
-        return NULL;
-        }
-    }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (size_t )wxTreeListCtrl_GetSelections(_arg0,*_arg1);
+    _result = (PyObject *)wxPyTreeListCtrl_GetSelections(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
+}{
+  _resultobj = _result;
+}
     return _resultobj;
 }
 
