@@ -625,7 +625,13 @@ off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
     /* A call to SeekI() will automatically invalidate any previous call
        to Ungetch(), otherwise it would be possible to SeekI() to one
        one position, unread some bytes there, SeekI() to another position
-       and the data would be corrupted. */
+       and the data would be corrupted.
+
+       GRG: Could add code here to try to navigate within the wback
+       buffer if possible, but is it really needed? It would only work
+       when seeking in wxFromCurrent mode, else it would invalidate
+       anyway...
+     */
     if (m_wback) 
     {
         free(m_wback);
@@ -639,7 +645,13 @@ off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
 
 off_t wxInputStream::TellI() const
 {
-    return OnSysTell();
+    /* GRG: Changed to make it compatible with the wback buffer */
+    off_t pos = OnSysTell();
+
+    if (pos != wxInvalidOffset)
+        pos -= (m_wbacksize - m_wbackcur);
+
+    return pos;
 }
 
 // --------------------
