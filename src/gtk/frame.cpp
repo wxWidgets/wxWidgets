@@ -152,7 +152,7 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
         wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
-
+    
     win->m_x = event->x;
     win->m_y = event->y;
 
@@ -510,7 +510,6 @@ void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     {
         if ((m_x != old_x) || (m_y != old_y))
         {
-            /* we set the size here and in gtk_frame_map_callback */
             gtk_widget_set_uposition( m_widget, m_x, m_y );
         }
     }

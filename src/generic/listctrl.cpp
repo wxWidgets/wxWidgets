@@ -1781,7 +1781,7 @@ void wxListMainWindow::SetItemState( long item, long state, long stateMask )
             m_current = line;
             FocusLine( m_current );
             RefreshLine( m_current );
-            RefreshLine( oldCurrent );
+            if (oldCurrent) RefreshLine( oldCurrent );
         }
     }
 
@@ -1799,9 +1799,9 @@ void wxListMainWindow::SetItemState( long item, long state, long stateMask )
                 UnfocusLine( m_current );
                 m_current = line;
                 FocusLine( m_current );
-                oldCurrent->Hilight( FALSE );
+                if (oldCurrent) oldCurrent->Hilight( FALSE );
                 RefreshLine( m_current );
-                RefreshLine( oldCurrent );
+                if (oldCurrent) RefreshLine( oldCurrent );
             }
             bool on = state & wxLIST_STATE_SELECTED;
 	    if (on != line->IsHilighted())

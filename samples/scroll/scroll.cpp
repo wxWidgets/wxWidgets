@@ -101,7 +101,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
   wxListCtrl *m_listCtrl = new wxListCtrl(
 	this, -1, wxPoint(200, 10), wxSize(180, 120),
-	wxLC_REPORT | wxSUNKEN_BORDER);
+	wxLC_REPORT | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
 
   m_listCtrl->InsertColumn(0, "First", wxLIST_FORMAT_LEFT, 90);
   m_listCtrl->InsertColumn(1, "Last", wxLIST_FORMAT_LEFT, 90);
@@ -112,6 +112,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
       sprintf(buf, "Item %d", i);
       m_listCtrl->InsertItem(i, buf);
   }
+  m_listCtrl->SetItemState( 3, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 
   (void) new wxListBox( this, -1, wxPoint(200,180), wxSize(180,120), 5, choices, wxLB_ALWAYS_SB );
   
@@ -148,7 +149,6 @@ MyFrame::MyFrame()
        : wxFrame( (wxFrame *)NULL, -1, "wxScrolledWindow sample",
                   wxPoint(20,20), wxSize(470,360) )
 {
-/*
   wxMenu *file_menu = new wxMenu();
   file_menu->Append( ID_ABOUT, "&About..");
   file_menu->Append( ID_QUIT, "E&xit\tAlt-X");
@@ -162,7 +162,6 @@ MyFrame::MyFrame()
   int widths[] = { -1, 100 };
   SetStatusWidths( 2, widths );
 
-*/
   m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
   m_canvas->SetScrollbars( 10, 10, 50, 100 );
 }
