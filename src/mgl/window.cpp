@@ -569,12 +569,17 @@ wxWindowMGL::~wxWindowMGL()
 
     if (gs_activeFrame == this)
     {
-       gs_activeFrame = NULL;
-       // activate next frame in Z-order:
-       if ( m_wnd->prev )
-       {
-           wxWindowMGL *win = (wxWindowMGL*)m_wnd->prev->userData;
-           win->SetFocus();
+        gs_activeFrame = NULL;
+        // activate next frame in Z-order:
+        if ( m_wnd->prev )
+        {
+            wxWindowMGL *win = (wxWindowMGL*)m_wnd->prev->userData;
+            win->SetFocus();
+        }
+        else if ( m_wnd->next )
+        {
+            wxWindowMGL *win = (wxWindowMGL*)m_wnd->next->userData;
+            win->SetFocus();
         }
     }
     
@@ -760,11 +765,20 @@ bool wxWindowMGL::Show(bool show)
     
     if (!show && gs_activeFrame == this)
     {
-       // activate next frame in Z-order:
-       if ( m_wnd->prev )
-       {
-           wxWindowMGL *win = (wxWindowMGL*)m_wnd->prev->userData;
-           win->SetFocus();
+        // activate next frame in Z-order:
+        if ( m_wnd->prev )
+        {
+            wxWindowMGL *win = (wxWindowMGL*)m_wnd->prev->userData;
+            win->SetFocus();
+        }
+        else if ( m_wnd->next )
+        {
+            wxWindowMGL *win = (wxWindowMGL*)m_wnd->next->userData;
+            win->SetFocus();
+        }
+        else
+        {
+            gs_activeFrame = NULL;
         }
     }
 
