@@ -456,9 +456,12 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
                                  const wxString& name)
 {
     bool ret wxDUMMY_INITIALIZE(false);
-
+    int w, h;
+    
     // init our fields
     Init();
+    w = WidthDefault(size.x);
+    h = HeightDefault(size.y);
 
     m_windowStyle = style;
 
@@ -501,12 +504,12 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         if ( style & (wxRESIZE_BORDER | wxCAPTION) )
             dlgTemplate->style |= DS_MODALFRAME;
 
-        ret = CreateDialog(dlgTemplate, title, pos, size);
+        ret = CreateDialog(dlgTemplate, title, pos, wxSize(w,h));
         free(dlgTemplate);
     }
     else // !dialog
     {
-        ret = CreateFrame(title, pos, size);
+        ret = CreateFrame(title, pos, wxSize(w,h));
     }
 
     if ( ret && !(GetWindowStyleFlag() & wxCLOSE_BOX) )
