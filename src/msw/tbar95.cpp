@@ -930,9 +930,7 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(tog
 // Responds to colour changes, and passes event on to children.
 void wxToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    m_backgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
-                                  GetGValue(GetSysColor(COLOR_BTNFACE)),
-                                  GetBValue(GetSysColor(COLOR_BTNFACE)));
+    wxRGBToColour(m_backgroundColour, ::GetSysColor(COLOR_BTNFACE));
 
     // Remap the buttons
     Realize();
@@ -1012,19 +1010,6 @@ long wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 // private functions
 // ----------------------------------------------------------------------------
 
-// These are the default colors used to map the bitmap colors to the current
-// system colors. Note that they are in BGR format because this is what Windows
-// wants (and not RGB)
-
-/*
-#define BGR_BUTTONTEXT      (RGB(000,000,000))  // black
-#define BGR_BUTTONSHADOW    (RGB(128,128,128))  // dark grey
-#define BGR_BUTTONFACE      (RGB(192,192,192))  // bright grey
-#define BGR_BUTTONHILIGHT   (RGB(255,255,255))  // white
-#define BGR_BACKGROUNDSEL   (RGB(000,000,255))  // blue
-#define BGR_BACKGROUND      (RGB(255,000,255))  // magenta
-*/
-
 bool wxToolBar::sm_coloursInit = FALSE;
 long wxToolBar::sm_stdColours[6];
 
@@ -1073,20 +1058,7 @@ void wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
     //  ColorMap[4].from = sm_stdColours[4]; ColorMap[4].to = COLOR_HIGHLIGHT;  // blue         (0, 0, 255)
     ColorMap[4].from = sm_stdColours[5]; ColorMap[4].to = COLOR_WINDOW;       // magenta      (255, 0, 255)
 
-#if 0
-    {
-        {BGR_BUTTONTEXT,    COLOR_BTNTEXT},     // black
-        {BGR_BUTTONSHADOW,  COLOR_BTNSHADOW},   // dark grey
-        {BGR_BUTTONFACE,    COLOR_BTNFACE},     // bright grey
-        {BGR_BUTTONHILIGHT, COLOR_BTNHIGHLIGHT},// white
-        /*    {BGR_BACKGROUNDSEL, COLOR_HIGHLIGHT},   // blue */
-        {BGR_BACKGROUND,    COLOR_WINDOW}       // magenta
-    };
-#endif
-
-    int NUM_MAPS = (sizeof(ColorMap)/sizeof(COLORMAP));
-    int n;
-    for ( n = 0; n < NUM_MAPS; n++)
+    for ( int n = 0; n < WXSIZEOF(ColorMap); n++)
     {
         ColorMap[n].to = ::GetSysColor(ColorMap[n].to);
     }
@@ -1098,23 +1070,20 @@ void wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
     {
         hbmOld = (HBITMAP) SelectObject(hdcMem, hBitmap);
 
-        int i, j, k;
-        for ( i = 0; i < width; i++)
+        for ( int i = 0; i < width; i++ )
         {
-            for ( j = 0; j < height; j++)
+            for ( int j = 0; j < height; j++ )
             {
                 COLORREF pixel = ::GetPixel(hdcMem, i, j);
-                /*
-                BYTE red = GetRValue(pixel);
-                BYTE green = GetGValue(pixel);
-                BYTE blue = GetBValue(pixel);
-                */
 
-                for ( k = 0; k < NUM_MAPS; k ++)
+                for ( int k = 0; k < WXSIZEOF(ColorMap); k++ )
                 {
-                    if ( ColorMap[k].from == pixel )
+                    int distance = abs( GetRValue( pixel ) - GetRValue( ColorMap[k].from )) ;
+                    distance = max( distance , abs(GetGValue(pixel ) - GetGValue( ColorMap[k].from ))) ;
+                    distance = max( distance , abs(GetBValue(pixel ) - GetBValue( ColorMap[k].from ))) ;
+                    if ( distance < 0x10 )
                     {
-                        /* COLORREF actualPixel = */ ::SetPixel(hdcMem, i, j, ColorMap[k].to);
+                        ::SetPixel(hdcMem, i, j, ColorMap[k].to);
                         break;
                     }
                 }
