@@ -1009,12 +1009,7 @@
 //
 // Default is 0 for (most) Win32 (systems), 1 for Win16
 //
-// Recommended setting: same as default
-#if defined(__WIN95__)
 #define wxUSE_ITSY_BITSY             0
-#else
-#define wxUSE_ITSY_BITSY             1
-#endif
 
 // Set this to 1 to use RICHEDIT controls for wxTextCtrl with style wxTE_RICH
 // which allows to put more than ~32Kb of text in it even under Win9x (NT

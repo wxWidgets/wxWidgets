@@ -1,7 +1,7 @@
 #ifndef _WX_PRINTDLG_H_BASE_
 #define _WX_PRINTDLG_H_BASE_
 
-#if defined(__WXUNIVERSAL__)
+#if defined(__WXUNIVERSAL__) /* && !defined(__WXMSW__) */
 #include "wx/generic/prntdlgg.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/printdlg.h"
@@ -19,7 +19,7 @@
 #include "wx/generic/prntdlgg.h"
 #endif
 
-#if defined(__WXUNIVERSAL__) || (!defined(__WXMSW__) && !defined(__WXMAC__))
+#if (defined(__WXUNIVERSAL__) /* && !defined(__WXMSW__) */ ) || (!defined(__WXMSW__) && !defined(__WXMAC__))
 #define wxPrintDialog wxGenericPrintDialog
 #define sm_classwxPrintDialog sm_classwxGenericPrintDialog
 

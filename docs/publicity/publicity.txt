@@ -142,3 +142,6 @@ Organisations:
 http://www.egovos.org/ The Center of Open Source & Government 
 (Submitted to their directory, 2003-04-25)
 
+http://www.opensector.org/
+(nothing submitted yet)
+

@@ -35,6 +35,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#dll">Can you compile wxWindows 2 as a DLL?</a></li>
 <li><a href="#exesize">How can I reduce executable size?</a></li>
 <li><a href="#mfc">Is wxWindows compatible with MFC?</a></li>
+<li><a href="#setuph">Why do I get errors about setup.h not being found?</a></li>
 <li><a href="#asuffix">Why do I get errors about FooBarA when I only use FooBar in my program?</a></li>
 <li><a href="#newerrors">Why my code fails to compile with strange errors about new operator?</a></li>
 <li><a href="#mfcport">How do I port MFC applications to wxWindows?</a></li>
@@ -242,6 +243,21 @@ There is a sample which demonstrates MFC and wxWindows code co-existing in the s
 application. However, don&#39;t expect to be able to enable wxWindows windows with OLE-2
 functionality using MFC.<P>
 
+<H3><a name="setuph">Why do I get errors about setup.h not being found?</a></H3>
+
+When you build the wxWindows library, setup.h is copied
+from include/wx/msw/setup.h to e.g. lib/mswd/wx/setup.h (the path
+depends on the configuration you're building). So you need to add
+this include path if building using the static Debug library:<P>
+
+lib/mswd<P>
+
+or if building the static Release library, lib/msw.<P>
+
+See also the <a href="http://wiki.wxwindows.org/wiki.pl?Table_Of_Contents">wxWiki Contents</a>
+for more information.<P>
+
+
 <H3><a name="asuffix">Why do I get errors about FooBarA when I only use FooBar in my program?</H3>
 
 If you get errors like
@@ -280,7 +296,8 @@ the <a href="#vcdebug">VC++ CRT memory debugging features</a> instead.
 
 <H3><a name="mfcport">How do I port MFC applications to wxWindows?</a></H3>
 
-Set up your interface from scratch using wxWindows (especially wxDesigner --
+Set up your interface from scratch using wxWindows (especially <a href="http://www.robeling.de" target=_top>wxDesigner</a>
+or <a href="http://www.anthemion.co.uk/dialogblocks/" target=_new>DialogBlocks</a> --
 it&#39;ll save you a <i>lot</i> of time) and when you have a shell prepared, you can start
 &#39;pouring in&#39; code from the MFC app, with appropriate
 modifications. This is the approach I have used, and I found

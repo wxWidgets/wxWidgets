@@ -203,5 +203,8 @@ wxMiscellaneous
   behaviour (click, click, click, click away...) and
   reduce checkbox size on non-Windows platforms.
 - Add wxNotebook::HitTest for non-Windows platforms.
+- Implement rebar for all platforms. This will help us
+  get closer to native look and feel, e.g. the gradient
+  shadow on XP toolbars.
 
 Version:      $Id$
