@@ -18,9 +18,6 @@
 // Handling of wxInputStreams by Joerg Baumann
 // See stream.i for implementations
 
-// list class for return list of strings, e.g. readlines()
-WX_DECLARE_LIST(wxString, wxStringPtrList);
-
 
 // C++ class wxPyInputStream to act as base for python class wxInputStream
 // You can use it in python like a python file object.
