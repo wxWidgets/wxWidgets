@@ -3050,8 +3050,9 @@ static PyObject *_wrap_wxColour_Get(PyObject *self, PyObject *args, PyObject *kw
 static bool  wxColour___eq__(wxColour *self,PyObject * obj) {
             wxColour  tmp;
             wxColour* ptr = &tmp;
-            if (obj == Py_None)                 return FALSE;
-            if (! wxColour_helper(obj, &ptr))   return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxColour_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
 static PyObject *_wrap_wxColour___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -3088,8 +3089,9 @@ static PyObject *_wrap_wxColour___eq__(PyObject *self, PyObject *args, PyObject 
 static bool  wxColour___ne__(wxColour *self,PyObject * obj) {
             wxColour  tmp;
             wxColour* ptr = &tmp;
-            if (obj == Py_None)                 return TRUE;
-            if (! wxColour_helper(obj, &ptr))   return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxColour_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
 static PyObject *_wrap_wxColour___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {

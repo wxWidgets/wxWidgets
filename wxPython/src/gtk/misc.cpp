@@ -1353,8 +1353,9 @@ static PyObject *_wrap_wxSize_asTuple(PyObject *self, PyObject *args, PyObject *
 static bool  wxSize___eq__(wxSize *self,PyObject * obj) {
             wxSize  tmp;
             wxSize* ptr = &tmp;
-            if (obj == Py_None)               return FALSE;
-            if (! wxSize_helper(obj, &ptr))   return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxSize_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
 static PyObject *_wrap_wxSize___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -1391,8 +1392,9 @@ static PyObject *_wrap_wxSize___eq__(PyObject *self, PyObject *args, PyObject *k
 static bool  wxSize___ne__(wxSize *self,PyObject * obj) {
             wxSize  tmp;
             wxSize* ptr = &tmp;
-            if (obj == Py_None)               return TRUE;
-            if (! wxSize_helper(obj, &ptr))   return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxSize_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
 static PyObject *_wrap_wxSize___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -1740,8 +1742,9 @@ static PyObject *_wrap_wxRealPoint___sub__(PyObject *self, PyObject *args, PyObj
 static bool  wxRealPoint___eq__(wxRealPoint *self,PyObject * obj) {
             wxRealPoint  tmp;
             wxRealPoint* ptr = &tmp;
-            if (obj == Py_None)                    return FALSE;
-            if (! wxRealPoint_helper(obj, &ptr))   return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxRealPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
 static PyObject *_wrap_wxRealPoint___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -1778,8 +1781,9 @@ static PyObject *_wrap_wxRealPoint___eq__(PyObject *self, PyObject *args, PyObje
 static bool  wxRealPoint___ne__(wxRealPoint *self,PyObject * obj) {
             wxRealPoint  tmp;
             wxRealPoint* ptr = &tmp;
-            if (obj == Py_None)                    return TRUE;
-            if (! wxRealPoint_helper(obj, &ptr))   return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxRealPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
 static PyObject *_wrap_wxRealPoint___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -2127,8 +2131,9 @@ static PyObject *_wrap_wxPoint___sub__(PyObject *self, PyObject *args, PyObject 
 static bool  wxPoint___eq__(wxPoint *self,PyObject * obj) {
             wxPoint  tmp;
             wxPoint* ptr = &tmp;
-            if (obj == Py_None)                return FALSE;
-            if (! wxPoint_helper(obj, &ptr))   return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
 static PyObject *_wrap_wxPoint___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -2165,8 +2170,9 @@ static PyObject *_wrap_wxPoint___eq__(PyObject *self, PyObject *args, PyObject *
 static bool  wxPoint___ne__(wxPoint *self,PyObject * obj) {
             wxPoint  tmp;
             wxPoint* ptr = &tmp;
-            if (obj == Py_None)                return TRUE;
-            if (! wxPoint_helper(obj, &ptr))   return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxPoint_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
 static PyObject *_wrap_wxPoint___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -3382,8 +3388,9 @@ static PyObject *_wrap_wxRect___add__(PyObject *self, PyObject *args, PyObject *
 static bool  wxRect___eq__(wxRect *self,PyObject * obj) {
             wxRect  tmp;
             wxRect* ptr = &tmp;
-            if (obj == Py_None)                 return FALSE;
-            if (! wxRect_helper(obj, &ptr))     return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxRect_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
 static PyObject *_wrap_wxRect___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -3420,8 +3427,9 @@ static PyObject *_wrap_wxRect___eq__(PyObject *self, PyObject *args, PyObject *k
 static bool  wxRect___ne__(wxRect *self,PyObject * obj) {
             wxRect  tmp;
             wxRect* ptr = &tmp;
-            if (obj == Py_None)                 return TRUE;
-            if (! wxRect_helper(obj, &ptr))     return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxRect_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
 static PyObject *_wrap_wxRect___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -4241,8 +4249,9 @@ static PyObject *_wrap_wxPoint2DDouble___idiv__(PyObject *self, PyObject *args, 
 static bool  wxPoint2DDouble___eq__(wxPoint2DDouble *self,PyObject * obj) {
             wxPoint2DDouble  tmp;
             wxPoint2DDouble* ptr = &tmp;
-            if (obj == Py_None)                        return FALSE;
-            if (! wxPoint2DDouble_helper(obj, &ptr))   return FALSE;
+            if (obj == Py_None)    return FALSE;
+            wxPyBLOCK_THREADS(bool success = wxPoint2DDouble_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return FALSE;
             return *self == *ptr;
         }
 static PyObject *_wrap_wxPoint2DDouble___eq__(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -4279,8 +4288,9 @@ static PyObject *_wrap_wxPoint2DDouble___eq__(PyObject *self, PyObject *args, Py
 static bool  wxPoint2DDouble___ne__(wxPoint2DDouble *self,PyObject * obj) {
             wxPoint2DDouble  tmp;
             wxPoint2DDouble* ptr = &tmp;
-            if (obj == Py_None)                        return TRUE;
-            if (! wxPoint2DDouble_helper(obj, &ptr))   return TRUE;
+            if (obj == Py_None)    return TRUE;
+            wxPyBLOCK_THREADS(bool success = wxPoint2DDouble_helper(obj, &ptr); PyErr_Clear());
+            if (! success)         return TRUE;
             return *self != *ptr;
         }
 static PyObject *_wrap_wxPoint2DDouble___ne__(PyObject *self, PyObject *args, PyObject *kwargs) {
