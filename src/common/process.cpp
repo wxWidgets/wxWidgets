@@ -29,23 +29,21 @@
 IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)
 IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)
 
-wxProcess::wxProcess(wxEvtHandler *parent, bool needPipe, int id)
+void wxProcess::Init(wxEvtHandler *parent, int id, bool redirect)
 {
-    if (parent)
+    if ( parent )
         SetNextHandler(parent);
 
     m_id         = id;
-    m_needPipe   = needPipe;
-    m_in_stream  = NULL;
-    m_out_stream = NULL;
+    m_redirect   = redirect;
+    m_inputStream  = NULL;
+    m_outputStream = NULL;
 }
 
 wxProcess::~wxProcess()
 {
-    if (m_in_stream)
-      delete m_in_stream;
-    if (m_out_stream)
-      delete m_out_stream;
+    delete m_inputStream;
+    delete m_outputStream;
 }
 
 void wxProcess::OnTerminate(int pid, int status)
@@ -65,21 +63,7 @@ void wxProcess::Detach()
 
 void wxProcess::SetPipeStreams(wxInputStream *in_stream, wxOutputStream *out_stream)
 {
-    m_in_stream  = in_stream;
-    m_out_stream = out_stream;
+    m_inputStream  = in_stream;
+    m_outputStream = out_stream;
 }
 
-wxInputStream *wxProcess::GetInputStream() const
-{
-    return m_in_stream;
-}
-
-wxOutputStream *wxProcess::GetOutputStream() const
-{
-    return m_out_stream;
-}
-
-bool wxProcess::NeedPipe() const
-{
-    return m_needPipe;
-}

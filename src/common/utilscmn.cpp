@@ -48,6 +48,9 @@
     #endif // wxUSE_GUI
 #endif // WX_PRECOMP
 
+#include "wx/process.h"
+#include "wx/txtstrm.h"
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -965,45 +968,60 @@ static void wxFindDisabledWindows(wxWindowList& winDisabled, wxWindow *win)
     for ( node = win->GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *child = node->GetData();
+        wxFindDisabledWindows(winDisabled, child);
+
         if ( child->IsEnabled() )
         {
             winDisabled.Append(child);
+            child->Disable();
         }
-
-        wxFindDisabledWindows(winDisabled, child);
     }
+}
+
+wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
+{
+    // remember all windows we're going to (temporarily) disable
+    m_winDisabled = new wxWindowList;
+
+    wxWindowList::Node *node;
+    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
+    {
+        wxWindow *winTop = node->GetData();
+        if ( winTop->IsEnabled() )
+        {
+            wxFindDisabledWindows(*m_winDisabled, winTop);
+
+            m_winDisabled->Append(winTop);
+            winTop->Disable();
+        }
+    }
+
+    if ( winToSkip && m_winDisabled->Find(winToSkip) )
+    {
+        // always enable ourselves
+        m_winDisabled->DeleteObject(winToSkip);
+        winToSkip->Enable();
+    }
+}
+
+wxWindowDisabler::~wxWindowDisabler()
+{
+    wxWindowList::Node *node;
+    for ( node = m_winDisabled->GetFirst(); node; node = node->GetNext() )
+    {
+        node->GetData()->Enable();
+    }
+
+    delete m_winDisabled;
 }
 
 // Yield to other apps/messages and disable user input to all windows except
 // the given one
 bool wxSafeYield(wxWindow *win)
 {
-    // remember all windows we're going to (temporarily) disable
-    wxWindowList winDisabled;
-
-    wxWindowList::Node *node;
-    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
-    {
-        wxWindow *winTop = node->GetData();
-        wxFindDisabledWindows(winDisabled, winTop);
-
-        winTop->Disable();
-    }
-
-    if ( win )
-    {
-        // always enable ourselves
-        win->Enable();
-    }
+    wxWindowDisabler wd;
 
     bool rc = wxYield();
-
-    // don't call wxEnableTopLevelWindows(TRUE) because this will reenable even
-    // the window which had been disabled before, do it manually instead
-    for ( node = winDisabled.GetFirst(); node; node = node->GetNext() )
-    {
-        node->GetData()->Enable();
-    }
 
     return rc;
 }
@@ -1154,3 +1172,31 @@ wxString wxGetCurrentDir()
 }
 
 #endif // 0
+
+// ----------------------------------------------------------------------------
+// wxExecute
+// ----------------------------------------------------------------------------
+
+long wxExecute(const wxString& command, wxArrayString& output)
+{
+    // create a wxProcess which will capture the output
+    wxProcess *process = new wxProcess;
+    process->Redirect();
+
+    long rc = wxExecute(command, TRUE /* sync */, process);
+    if ( rc != -1 )
+    {
+        wxInputStream& is = *process->GetInputStream();
+        wxTextInputStream tis(is);
+        while ( !is.Eof() )
+        {
+            wxString line = tis.ReadLine();
+            if ( is.LastError() )
+                break;
+
+            output.Add(line);
+        }
+    }
+
+    return rc;
+}

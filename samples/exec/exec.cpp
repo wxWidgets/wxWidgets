@@ -66,6 +66,10 @@ public:
     virtual bool OnInit();
 };
 
+// Define an array of process pointers used by MyFrame
+class MyPipedProcess;
+WX_DEFINE_ARRAY(MyPipedProcess *, MyProcessesArray);
+
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
 {
@@ -86,13 +90,20 @@ public:
 
     void OnAbout(wxCommandEvent& event);
 
+    // polling output of async processes
+    void OnIdle(wxIdleEvent& event);
+
     // for MyPipedProcess
+    void OnProcessTerminated(MyPipedProcess *process)
+        { m_running.Remove(process); }
     wxListBox *GetLogListBox() const { return m_lbox; }
 
 private:
     wxString m_cmdLast;
 
     wxListBox *m_lbox;
+
+    MyProcessesArray m_running;
 
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
@@ -125,10 +136,12 @@ public:
     MyPipedProcess(MyFrame *parent, const wxString& cmd)
         : MyProcess(parent, cmd)
         {
-            m_needPipe = TRUE;
+            Redirect();
         }
 
     virtual void OnTerminate(int pid, int status);
+
+    bool HasInput();
 };
 
 // ----------------------------------------------------------------------------
@@ -169,6 +182,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_DDEExec, MyFrame::OnDDEExec)
 
     EVT_MENU(Exec_About, MyFrame::OnAbout)
+
+    EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -347,17 +362,58 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
     if ( !cmd )
         return;
 
-    wxProcess *process = new MyPipedProcess(this, cmd);
-    if ( !wxExecute(cmd, FALSE /* async */, process) )
+    bool sync;
+    switch ( wxMessageBox(_T("Execute it synchronously?"),
+                          _T("Exec question"),
+                          wxYES_NO | wxCANCEL | wxICON_QUESTION, this) )
     {
-        wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
+        case wxYES:
+            sync = TRUE;
+            break;
 
-        delete process;
+        case wxNO:
+            sync = FALSE;
+            break;
+
+        default:
+            return;
     }
-    else
+
+    if ( sync )
     {
-        m_cmdLast = cmd;
+        wxArrayString output;
+        int code = wxExecute(cmd, output);
+        wxLogStatus(_T("command '%s' terminated with exit code %d."),
+                    cmd.c_str(), code);
+
+        if ( code != -1 )
+        {
+            m_lbox->Append(wxString::Format(_T("--- Output of '%s' ---"),
+                                            cmd.c_str()));
+
+            size_t count = output.GetCount();
+            for ( size_t n = 0; n < count; n++ )
+            {
+                m_lbox->Append(output[n]);
+            }
+        }
     }
+    else // async exec
+    {
+        MyPipedProcess *process = new MyPipedProcess(this, cmd);
+        if ( !wxExecute(cmd, FALSE /* async */, process) )
+        {
+            wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
+
+            delete process;
+        }
+        else
+        {
+            m_running.Add(process);
+        }
+    }
+
+    m_cmdLast = cmd;
 }
 
 void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))
@@ -402,6 +458,19 @@ void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))
 #endif // __WINDOWS__
 }
 
+// input polling
+void MyFrame::OnIdle(wxIdleEvent& event)
+{
+    size_t count = m_running.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( m_running[n]->HasInput() )
+        {
+            event.RequestMore();
+        }
+    }
+}
+
 // ----------------------------------------------------------------------------
 // MyProcess
 // ----------------------------------------------------------------------------
@@ -415,17 +484,38 @@ void MyProcess::OnTerminate(int pid, int status)
     delete this;
 }
 
+// ----------------------------------------------------------------------------
+// MyPipedProcess
+// ----------------------------------------------------------------------------
+
+bool MyPipedProcess::HasInput()
+{
+    wxInputStream& is = *GetInputStream();
+    if ( !is.Eof() )
+    {
+        wxTextInputStream tis(is);
+
+        // this assumes that the output is always line buffered
+        wxString msg;
+        msg << m_cmd << _T(": ") << tis.ReadLine();
+
+        m_parent->GetLogListBox()->Append(msg);
+
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
 void MyPipedProcess::OnTerminate(int pid, int status)
 {
-    // show the program output
-    wxListBox *lbox = m_parent->GetLogListBox();
-    lbox->Append(wxString::Format(_T("--- Output of '%s' ---"), m_cmd.c_str()));
+    // show the rest of the output
+    while ( HasInput() )
+        ;
 
-    wxTextInputStream tis(*m_in_stream);
-    while ( !m_in_stream->LastError() )
-    {
-        lbox->Append(tis.ReadLine());
-    }
+    m_parent->OnProcessTerminated(this);
 
     MyProcess::OnTerminate(pid, status);
 }

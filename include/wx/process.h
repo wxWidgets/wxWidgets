@@ -52,30 +52,42 @@ class WXDLLEXPORT wxProcess : public wxEvtHandler
 DECLARE_DYNAMIC_CLASS(wxProcess)
 
 public:
-    wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, bool needPipe = FALSE, int id = -1);
-    ~wxProcess();
+    wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int id = -1)
+        { Init(parent, id, FALSE); }
+    wxProcess(wxEvtHandler *parent, bool redirect)
+        { Init(parent, -1, redirect); }
 
+    virtual ~wxProcess();
+
+    // may be overridden to be notified about process termination
     virtual void OnTerminate(int pid, int status);
+
+    // call this before passing the object to wxExecute() to redirect the
+    // launched process stdin/stdout, then use GetInputStream() and
+    // GetOutputStream() to get access to them
+    void Redirect() { m_redirect = TRUE; }
+    bool IsRedirected() const { return m_redirect; }
 
     // detach from the parent - should be called by the parent if it's deleted
     // before the process it started terminates
     void Detach();
 
     // Pipe handling
-    wxInputStream *GetInputStream() const;
-    wxOutputStream *GetOutputStream() const;
+    wxInputStream *GetInputStream() const { return m_inputStream; }
+    wxOutputStream *GetOutputStream() const { return m_outputStream; }
 
-    // These functions should not be called by the usual user. They are only
-    // intended to be used by wxExecute.
-    // Install pipes
-    void SetPipeStreams(wxInputStream *in_stream, wxOutputStream *out_stream);
-    bool NeedPipe() const;
+    // implementation only (for wxExecute)
+    void SetPipeStreams(wxInputStream *inStream, wxOutputStream *outStream);
 
 protected:
+    void Init(wxEvtHandler *parent, int id, bool redirect);
+
     int m_id;
-    bool m_needPipe;
-    wxInputStream *m_in_stream;
-    wxOutputStream *m_out_stream;
+
+    wxInputStream  *m_inputStream;
+    wxOutputStream *m_outputStream;
+
+    bool m_redirect;
 };
 
 typedef void (wxObject::*wxProcessEventFunction)(wxProcessEvent&);

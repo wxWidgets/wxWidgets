@@ -158,7 +158,7 @@ protected:
 wxPipeInputStream::wxPipeInputStream(HANDLE hInput)
 {
     m_hInput = hInput;
-}   
+}
 
 wxPipeInputStream::~wxPipeInputStream()
 {
@@ -186,7 +186,7 @@ size_t wxPipeInputStream::OnSysRead(void *buffer, size_t len)
 wxPipeOutputStream::wxPipeOutputStream(HANDLE hOutput)
 {
     m_hOutput = hOutput;
-}   
+}
 
 wxPipeOutputStream::~wxPipeOutputStream()
 {
@@ -401,32 +401,36 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 
     return result;
 #else // 1
-                     
+
     HANDLE h_readPipe[2];
     HANDLE h_writePipe[2];
     HANDLE h_oldreadPipe;
     HANDLE h_oldwritePipe;
     BOOL inheritHandles;
 
-    // ------------------------------------
-    // Pipe handling
-    // We are in the case of opening a pipe
+    // open the pipes to which child process IO will be redirected if needed
     inheritHandles = FALSE;
-    if (handler && handler->NeedPipe()) {
+    if ( handler && handler->IsRedirected() )
+    {
         SECURITY_ATTRIBUTES security;
 
         security.nLength              = sizeof(security);
         security.lpSecurityDescriptor = NULL;
         security.bInheritHandle       = TRUE;
 
-        if (! ::CreatePipe(&h_readPipe[0], &h_readPipe[1], &security, 0) ) {
-            wxLogSysError(_T("Can't create the inter-process read pipe"));
+        if (! ::CreatePipe(&h_readPipe[0], &h_readPipe[1], &security, 0) )
+        {
+            wxLogSysError(_("Can't create the inter-process read pipe"));
 
             return 0;
         }
 
-        if (! ::CreatePipe(&h_writePipe[0], &h_writePipe[1], &security, 0) ) {
-            wxLogSysError(_T("Can't create the inter-process read pipe"));
+        if (! ::CreatePipe(&h_writePipe[0], &h_writePipe[1], &security, 0) )
+        {
+            ::CloseHandle(h_readPipe[0]);
+            ::CloseHandle(h_readPipe[1]);
+
+            wxLogSysError(_("Can't create the inter-process write pipe"));
 
             return 0;
         }
@@ -464,12 +468,14 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
                          &pi         // process info
                         ) == 0 )
     {
-        if (inheritHandles) {
+        if ( inheritHandles )
+        {
             ::CloseHandle(h_writePipe[0]);
             ::CloseHandle(h_writePipe[1]);
             ::CloseHandle(h_readPipe[0]);
             ::CloseHandle(h_readPipe[1]);
         }
+
         wxLogSysError(_("Execution of command '%s' failed"), command.c_str());
 
         return 0;
@@ -589,16 +595,17 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 
     // waiting until command executed (disable everything while doing it)
 #if wxUSE_GUI
-    wxBeginBusyCursor();
-    wxEnableTopLevelWindows(FALSE);
+    {
+        wxBusyCursor bc;
+
+        wxWindowDisabler wd;
 #endif // wxUSE_GUI
 
     while ( data->state )
         wxYield();
 
 #if wxUSE_GUI
-    wxEnableTopLevelWindows(TRUE);
-    wxEndBusyCursor();
+    }
 #endif // wxUSE_GUI
 
     DWORD dwExitCode = data->dwExitCode;

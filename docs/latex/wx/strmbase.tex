@@ -39,6 +39,16 @@ Creates a dummy stream object. It doesn't do anything.
 
 Destructor.
 
+\membersection{wxStreamBase::IsOk}\label{wxstreambaseisok}
+
+\constfunc{wxStreamError}{IsOk}{\void}
+
+Returns TRUE if no error occured on the stream.
+
+\wxheading{See also}
+
+\helpref{LastError}{wxstreambaselasterror}
+
 \membersection{wxStreamBase::LastError}\label{wxstreambaselasterror}
 
 \constfunc{wxStreamError}{LastError}{\void}
@@ -84,7 +94,7 @@ See \helpref{OnSysRead}{wxstreambaseonsysread}.
 \constfunc{size\_t}{GetSize}{\void}
 
 This function returns the size of the stream. For example, for a file it is the size of
-the file).
+the file.
 
 \wxheading{Warning}
 

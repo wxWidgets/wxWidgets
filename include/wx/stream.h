@@ -38,12 +38,8 @@ WXDLLEXPORT wxOutputStream& wxEndL(wxOutputStream& o_stream);
 // wxStream: base classes
 // ---------------------------------------------------------------------------
 
-#define wxStream_NOERROR    wxSTREAM_NOERROR
-#define wxStream_EOF        wxSTREAM_EOF
-#define wxStream_WRITE_ERR  wxSTREAM_WRITE_ERROR
-#define wxStream_READ_ERR   wxSTREAM_READ_ERROR
-
-typedef enum {
+typedef enum
+{
   wxSTREAM_NO_ERROR = 0,
   wxSTREAM_NO_ERR = wxSTREAM_NO_ERROR,
   wxSTREAM_NOERROR = wxSTREAM_NO_ERROR,
@@ -58,14 +54,24 @@ typedef enum {
 
 } wxStreamError;
 
+// compatibility
+#define wxStream_NOERROR    wxSTREAM_NOERROR
+#define wxStream_EOF        wxSTREAM_EOF
+#define wxStream_WRITE_ERR  wxSTREAM_WRITE_ERROR
+#define wxStream_READ_ERR   wxSTREAM_READ_ERROR
+
 class WXDLLEXPORT wxStreamBase
 {
 public:
     wxStreamBase();
     virtual ~wxStreamBase();
 
-    bool operator!() const { return (LastError() != wxSTREAM_NOERROR); }
+    // error testing
     wxStreamError LastError() const { return m_lasterror; }
+    wxStreamError GetLastError() const { return m_lasterror; }
+    bool IsOk() const { return LastError() == wxSTREAM_NOERROR; }
+    bool operator!() const { return LastError() != wxSTREAM_NOERROR; }
+
     virtual size_t GetSize() const { return ~((size_t)0); }
     size_t StreamSize() const { return GetSize(); }
 
@@ -86,6 +92,9 @@ class WXDLLEXPORT wxInputStream: public wxStreamBase
 public:
     wxInputStream();
     virtual ~wxInputStream();
+
+    // is the stream at EOF?
+    virtual bool Eof() const;
 
     // IO functions
     virtual char Peek();

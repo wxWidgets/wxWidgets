@@ -208,8 +208,8 @@ long wxExecute( const wxString& command, bool sync, wxProcess *process )
 bool wxShell(const wxString& command)
 {
     wxString cmd;
-    if ( !!command )
-        cmd.Printf(wxT("xterm -e %s"), command.c_str());
+    if ( !command )
+        cmd = _T("xterm");
     else
         cmd = command;
 
@@ -270,92 +270,109 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
 
 #endif // wxUSE_GUI
 
-#if wxUSE_GUI
-    #define WXUNUSED_UNLESS_GUI(p)  p
-#else
-    #define WXUNUSED_UNLESS_GUI(p)
-#endif
+// ----------------------------------------------------------------------------
+// wxStream classes to support IO redirection in wxExecute
+// ----------------------------------------------------------------------------
 
-// New wxStream classes to clean up the data when the process terminates
+class wxProcessFileInputStream : public wxInputStream
+{
+public:
+    wxProcessFileInputStream(int fd) { m_fd = fd; }
+    ~wxProcessFileInputStream() { close(m_fd); }
 
-#if wxUSE_GUI
-class wxProcessFileInputStream: public wxInputStream {
- public:
-    wxProcessFileInputStream(int fd);
-    ~wxProcessFileInputStream();
+    virtual bool Eof() const;
 
- protected: 
+protected:
     size_t OnSysRead(void *buffer, size_t bufsize);
 
- protected:
+protected:
     int m_fd;
 };
 
-class wxProcessFileOutputStream: public wxOutputStream {
- public:
-    wxProcessFileOutputStream(int fd);
-    ~wxProcessFileOutputStream();
+class wxProcessFileOutputStream : public wxOutputStream
+{
+public:
+    wxProcessFileOutputStream(int fd) { m_fd = fd; }
+    ~wxProcessFileOutputStream() { close(m_fd); }
 
- protected:
+protected:
     size_t OnSysWrite(const void *buffer, size_t bufsize);
 
- protected:
+protected:
     int m_fd;
 };
 
-wxProcessFileInputStream::wxProcessFileInputStream(int fd)
+bool wxProcessFileInputStream::Eof() const
 {
-    m_fd = fd;
-}
+    if ( m_lasterror == wxSTREAM_EOF )
+        return TRUE;
 
-wxProcessFileInputStream::~wxProcessFileInputStream()
-{
-    close(m_fd);
+    // check if there is any input available
+    struct timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+
+    fd_set readfds;
+    FD_ZERO(&readfds);
+    FD_SET(m_fd, &readfds);
+    switch ( select(m_fd + 1, &readfds, NULL, NULL, &tv) )
+    {
+        case -1:
+            wxLogSysError(_("Impossible to get child process input"));
+            // fall through
+
+        case 0:
+            return TRUE;
+
+        default:
+            wxFAIL_MSG(_T("unexpected select() return value"));
+            // still fall through
+
+        case 1:
+            // input available: check if there is any
+            return wxInputStream::Eof();
+    }
 }
 
 size_t wxProcessFileInputStream::OnSysRead(void *buffer, size_t bufsize)
 {
-    int ret;
-
-    ret = read(m_fd, buffer, bufsize);
-    m_lasterror = wxSTREAM_NOERROR;
-    if (ret == 0)
-      m_lasterror = wxSTREAM_EOF;
-    if (ret == -1) {
-      m_lasterror = wxSTREAM_READ_ERROR;
-      ret = 0;
+    int ret = read(m_fd, buffer, bufsize);
+    if ( ret == 0 )
+    {
+        m_lasterror = wxSTREAM_EOF;
     }
+    else if ( ret == -1 )
+    {
+        m_lasterror = wxSTREAM_READ_ERROR;
+        ret = 0;
+    }
+    else
+    {
+        m_lasterror = wxSTREAM_NOERROR;
+    }
+
     return ret;
-}
-
-wxProcessFileOutputStream::wxProcessFileOutputStream(int fd)
-{
-    m_fd = fd;
-}
-
-wxProcessFileOutputStream::~wxProcessFileOutputStream()
-{
-    close(m_fd);
 }
 
 size_t wxProcessFileOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
 {
-    int ret;
-
-    ret = write(m_fd, buffer, bufsize);
-    m_lasterror = wxSTREAM_NOERROR;
-    if (ret == -1) {
-      m_lasterror = wxSTREAM_WRITE_ERROR;
-      ret = 0;
+    int ret = write(m_fd, buffer, bufsize);
+    if ( ret == -1 )
+    {
+        m_lasterror = wxSTREAM_WRITE_ERROR;
+        ret = 0;
     }
+    else
+    {
+        m_lasterror = wxSTREAM_NOERROR;
+    }
+
     return ret;
 }
 
-#endif
-      
 long wxExecute(wxChar **argv,
                bool sync,
-               wxProcess * WXUNUSED_UNLESS_GUI(process))
+               wxProcess *process)
 {
     wxCHECK_MSG( *argv, 0, wxT("can't exec empty command") );
 
@@ -365,9 +382,9 @@ long wxExecute(wxChar **argv,
 
     while (argv[mb_argc])
     {
-      wxWX2MBbuf mb_arg = wxConvertWX2MB(argv[mb_argc]);
-      mb_argv[mb_argc] = strdup(mb_arg);
-      mb_argc++;
+        wxWX2MBbuf mb_arg = wxConvertWX2MB(argv[mb_argc]);
+        mb_argv[mb_argc] = strdup(mb_arg);
+        mb_argc++;
     }
     mb_argv[mb_argc] = (char *) NULL;
 
@@ -385,9 +402,10 @@ long wxExecute(wxChar **argv,
 #if wxUSE_GUI
     // create pipes
     int end_proc_detect[2];
-    if (pipe(end_proc_detect) == -1)
+    if ( pipe(end_proc_detect) == -1 )
     {
         wxLogSysError( _("Pipe creation failed") );
+        wxLogError( _("Failed to execute '%s'\n"), *argv );
 
         ARGS_CLEANUP;
 
@@ -395,25 +413,29 @@ long wxExecute(wxChar **argv,
     }
 #endif // wxUSE_GUI
 
-#if wxUSE_GUI
-    int in_pipe[2] = { -1, -1 };
-    int out_pipe[2] = { -1, -1 };
-    // Only asynchronous mode is interresting
-    if (!sync && process && process->NeedPipe())
+    int pipeIn[2];
+    int pipeOut[2];
+    pipeIn[0] = pipeIn[1] =
+    pipeOut[0] = pipeOut[1] = -1;
+
+    if ( process && process->IsRedirected() )
     {
-        if (pipe(in_pipe) == -1 || pipe(out_pipe) == -1)
+        if ( pipe(pipeIn) == -1 || pipe(pipeOut) == -1 )
         {
-            /* Free fds */
+#if wxUSE_GUI
+            // free previously allocated resources
             close(end_proc_detect[0]);
             close(end_proc_detect[1]);
-            wxLogSysError( _("Pipe creation failed (Console pipes)") );
+#endif // wxUSE_GUI
+
+            wxLogSysError( _("Pipe creation failed") );
+            wxLogError( _("Failed to execute '%s'\n"), *argv );
 
             ARGS_CLEANUP;
 
             return 0;
         }
     }
-#endif // wxUSE_GUI
 
     // fork the process
 #ifdef HAVE_VFORK
@@ -421,92 +443,107 @@ long wxExecute(wxChar **argv,
 #else
     pid_t pid = fork();
 #endif
-    if (pid == -1)
+
+    if ( pid == -1 )     // error?
     {
 #if wxUSE_GUI
         close(end_proc_detect[0]);
         close(end_proc_detect[1]);
-        close(in_pipe[0]);
-        close(in_pipe[1]);
-        close(out_pipe[0]);
-        close(out_pipe[1]);
-#endif
+        close(pipeIn[0]);
+        close(pipeIn[1]);
+        close(pipeOut[0]);
+        close(pipeOut[1]);
+#endif // wxUSE_GUI
+
         wxLogSysError( _("Fork failed") );
 
         ARGS_CLEANUP;
 
         return 0;
     }
-    else if (pid == 0)
+    else if ( pid == 0 )  // we're in child
     {
 #if wxUSE_GUI
-        // we're in child
         close(end_proc_detect[0]); // close reading side
 #endif // wxUSE_GUI
 
-        // These three lines close the open file descriptors to to avoid any
+        // These lines close the open file descriptors to to avoid any
         // input/output which might block the process or irritate the user. If
-        // one wants proper IO for the subprocess, the right thing to do is
-        // to start an xterm executing it.
-        if (sync == 0)
+        // one wants proper IO for the subprocess, the right thing to do is to
+        // start an xterm executing it.
+        if ( !sync )
         {
-            // leave stderr opened, it won't do any hurm
             for ( int fd = 0; fd < FD_SETSIZE; fd++ )
             {
+                if ( fd == pipeIn[0] || fd == pipeOut[1]
 #if wxUSE_GUI
-                if ( fd == end_proc_detect[1] || fd == in_pipe[0] || fd == out_pipe[1] )
-                    continue;
+                     || fd == end_proc_detect[1]
 #endif // wxUSE_GUI
+                   )
+                {
+                    // don't close this one, we still need it
+                    continue;
+                }
 
+                // leave stderr opened too, it won't do any hurm
                 if ( fd != STDERR_FILENO )
                     close(fd);
             }
         }
 
-        // Fake a console by duplicating pipes
-#if wxUSE_GUI
-        if (in_pipe[0] != -1) {
-            dup2(in_pipe[0], STDIN_FILENO);
-            dup2(out_pipe[1], STDOUT_FILENO);
-            close(in_pipe[0]);
-            close(out_pipe[1]);
+        // redirect stdio and stdout
+        // (TODO: what about stderr?)
+        if ( pipeIn[0] != -1 )
+        {
+            if ( dup2(pipeIn[0], STDIN_FILENO) == -1 ||
+                 dup2(pipeOut[1], STDOUT_FILENO) == -1 )
+            {
+                wxLogSysError(_("Failed to redirect child process "
+                                "input/output"));
+            }
+
+            close(pipeIn[0]);
+            close(pipeOut[1]);
         }
-#endif // wxUSE_GUI
-
-#if 0
-        close(STDERR_FILENO);
-
-        // some programs complain about stderr not being open, so redirect
-        // them:
-        open("/dev/null", O_RDONLY);  // stdin
-        open("/dev/null", O_WRONLY);  // stdout
-        open("/dev/null", O_WRONLY);  // stderr
-#endif
 
         execvp (*mb_argv, mb_argv);
 
         // there is no return after successful exec()
-        wxFprintf(stderr, _("Can't execute '%s'\n"), *argv);
-
         _exit(-1);
     }
-    else
+    else // we're in parent
     {
+        ARGS_CLEANUP;
+
+        // pipe initialization: construction of the wxStreams
+        if ( process && process->IsRedirected() )
+        {
+            // These two streams are relative to this process.
+            wxOutputStream *outStream = new wxProcessFileOutputStream(pipeIn[1]);
+            wxInputStream *inStream = new wxProcessFileInputStream(pipeOut[0]);
+            close(pipeIn[0]); // close reading side
+            close(pipeOut[1]); // close writing side
+
+            process->SetPipeStreams(inStream, outStream);
+        }
+
 #if wxUSE_GUI
         wxEndProcessData *data = new wxEndProcessData;
 
-        ARGS_CLEANUP;
-
         if ( sync )
         {
-            wxASSERT_MSG( !process, wxT("wxProcess param ignored for sync exec") );
+            // we may have process for capturing the program output, but it's
+            // not used in wxEndProcessData in the case of sync execution
             data->process = NULL;
 
             // sync execution: indicate it by negating the pid
-            data->pid      = -pid;
-            data->tag      = wxAddProcessCallback(data, end_proc_detect[0]);
-            // we're in parent
+            data->pid = -pid;
+            data->tag = wxAddProcessCallback(data, end_proc_detect[0]);
+
             close(end_proc_detect[1]); // close writing side
+
+            wxBusyCursor bc;
+            wxWindowDisabler wd;
 
             // it will be set to 0 from GTK_EndProcessDetector
             while (data->pid != 0)
@@ -518,29 +555,15 @@ long wxExecute(wxChar **argv,
 
             return exitcode;
         }
-        else
+        else // async execution
         {
-            // pipe initialization: construction of the wxStreams
-            if (process && process->NeedPipe()) {
-                // These two streams are relative to this process.
-                wxOutputStream *my_output_stream;
-                wxInputStream *my_input_stream;
-
-                my_output_stream = new wxProcessFileOutputStream(in_pipe[1]);
-                my_input_stream = new wxProcessFileInputStream(out_pipe[0]);
-                close(in_pipe[0]); // close reading side
-                close(out_pipe[1]); // close writing side
-
-                process->SetPipeStreams(my_input_stream, my_output_stream);
-            }
-
             // async execution, nothing special to do - caller will be
             // notified about the process termination if process != NULL, data
             // will be deleted in GTK_EndProcessDetector
             data->process  = process;
             data->pid      = pid;
             data->tag      = wxAddProcessCallback(data, end_proc_detect[0]);
-            // we're in parent
+
             close(end_proc_detect[1]); // close writing side
 
             return pid;
@@ -557,7 +580,8 @@ long wxExecute(wxChar **argv,
         return exitcode;
 #endif // wxUSE_GUI
     }
-   return 0;
+
+    return 0;
 
     #undef ARGS_CLEANUP
 }

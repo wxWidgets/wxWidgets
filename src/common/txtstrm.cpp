@@ -6,7 +6,7 @@
 // Created:     28/06/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -52,13 +52,13 @@ wxChar wxTextInputStream::NextNonSeparators()
     wxChar c = (wxChar) 0;
     for (;;)
     {
-	if (!m_input) return (wxChar) 0;
+        if (!m_input) return (wxChar) 0;
         c = m_input.GetC();
-	
-	if (c != wxT('\n') && 
-	    c != wxT('\r') &&
-	    !m_separators.Contains(c)) 
-	  return c;
+
+        if (c != wxT('\n') &&
+            c != wxT('\r') &&
+            !m_separators.Contains(c))
+          return c;
     }
 
 }
@@ -66,12 +66,12 @@ wxChar wxTextInputStream::NextNonSeparators()
 inline bool wxTextInputStream::EatEOL(const wxChar &c)
 {
   if (c == wxT('\n')) return TRUE; // eat on UNIX
-  
+
   if (c == wxT('\r')) // eat on both Mac and DOS
     {
       if (!m_input) return TRUE;
       wxChar c2 = m_input.GetC();
-      
+
       if (c2 != wxT('\n'))  m_input.Ungetch( c2 ); // Don't eat on Mac
       return TRUE;
     }
@@ -88,11 +88,13 @@ void wxTextInputStream::SkipIfEndOfLine( wxChar c )
 wxUint32 wxTextInputStream::Read32()
 {
     /* I only implemented a simple integer parser */
+    // VZ: what about using strtol()?? (TODO)
+
     int sign;
     wxInt32 i;
 
     if (!m_input) return 0;
-    int c = NextNonSeparators(); 
+    int c = NextNonSeparators();
     if (c==(wxChar)0) return 0;
 
     i = 0;
@@ -142,6 +144,7 @@ wxUint8 wxTextInputStream::Read8()
 double wxTextInputStream::ReadDouble()
 {
     /* I only implemented a simple float parser */
+    // VZ: what about using strtod()?? (TODO)
     double f;
     int sign;
 
@@ -184,32 +187,32 @@ double wxTextInputStream::ReadDouble()
         c = m_input.GetC();
 
         while (isdigit(c))
-	{
+        {
             f += (c-wxT('0'))*f_multiplicator;
             f_multiplicator /= 10;
             c = m_input.GetC();
         }
 
         if (c == wxT('e'))
-	{
+        {
             double f_multiplicator = 0.0;
             int i, e;
 
             c = m_input.GetC();
 
             switch (c)
-	    {
+            {
                 case wxT('-'): f_multiplicator = 0.1;  break;
-		case wxT('+'): f_multiplicator = 10.0; break;
-	    }
+                case wxT('+'): f_multiplicator = 10.0; break;
+            }
 
             e = Read8();  // why only max 256 ?
 
             for (i=0;i<e;i++)
                 f *= f_multiplicator;
         }
-	else
-	    SkipIfEndOfLine( c );
+        else
+            SkipIfEndOfLine( c );
     }
     else
     {
@@ -223,7 +226,7 @@ double wxTextInputStream::ReadDouble()
 
 wxString wxTextInputStream::ReadString()
 {
-  return ReadLine();
+    return ReadLine();
 }
 
 wxString wxTextInputStream::ReadLine()
@@ -231,13 +234,15 @@ wxString wxTextInputStream::ReadLine()
     wxChar c;
     wxString line;
 
-    for (;;)
+    while ( !m_input.Eof() )
     {
-        if (!m_input) break;
         c = m_input.GetC();
-	
-	if (EatEOL(c)) break;
-	
+        if ( !m_input )
+            break;
+
+        if (EatEOL(c))
+            break;
+
         line += c;
     }
 
@@ -246,22 +251,28 @@ wxString wxTextInputStream::ReadLine()
 
 wxString wxTextInputStream::ReadWord()
 {
-    if (!m_input) return "";
-  
     wxString word;
-    wxChar c=NextNonSeparators();
-    if (c==(wxChar)0) return "";
 
-    for (;;)
+    if ( !m_input )
+        return word;
+
+    wxChar c = NextNonSeparators();
+    if ( !c )
+        return word;
+
+    while ( !m_input.Eof() )
     {
-	if (m_separators.Contains(c)) break;
-	
-	if (EatEOL(c)) break;
-	
+        if (m_separators.Contains(c))
+            break;
+
+        if (EatEOL(c))
+            break;
+
         word += c;
 
-	if (!m_input) break;
         c = m_input.GetC();
+        if (!m_input)
+            break;
     }
 
     return word;
@@ -269,8 +280,8 @@ wxString wxTextInputStream::ReadWord()
 
 wxTextInputStream& wxTextInputStream::operator>>(wxString& word)
 {
-  word = ReadWord();
-  return *this;
+    word = ReadWord();
+    return *this;
 }
 
 wxTextInputStream& wxTextInputStream::operator>>(wxChar& c)
@@ -397,19 +408,19 @@ void wxTextOutputStream::WriteString(const wxString& string)
         wxChar c = string[i];
         if (c == wxT('\n'))
         {
-	    if (m_mode == wxEOL_DOS)
-	    {
+            if (m_mode == wxEOL_DOS)
+            {
                  c = wxT('\r');
                  m_output.Write( (const void*)(&c), sizeof(wxChar) );
                  c = wxT('\n');
                  m_output.Write( (const void*)(&c), sizeof(wxChar) );
-	    } else 
-	    if (m_mode == wxEOL_MAC)
-	    {
+            } else
+            if (m_mode == wxEOL_MAC)
+            {
                  c = wxT('\r');
                  m_output.Write( (const void*)(&c), sizeof(wxChar) );
-	    } else
-	    {
+            } else
+            {
                  c = wxT('\n');
                  m_output.Write( (const void*)(&c), sizeof(wxChar) );
             }
@@ -444,7 +455,7 @@ wxTextOutputStream& wxTextOutputStream::operator<<(wxInt16 c)
     wxString str;
     str.Printf(wxT("%d"), (signed int)c);
     WriteString(str);
-    
+
     return *this;
 }
 
@@ -453,7 +464,7 @@ wxTextOutputStream& wxTextOutputStream::operator<<(wxInt32 c)
     wxString str;
     str.Printf(wxT("%ld"), (signed long)c);
     WriteString(str);
-    
+
     return *this;
 }
 
@@ -462,7 +473,7 @@ wxTextOutputStream& wxTextOutputStream::operator<<(wxUint16 c)
     wxString str;
     str.Printf(wxT("%u"), (unsigned int)c);
     WriteString(str);
-    
+
     return *this;
 }
 

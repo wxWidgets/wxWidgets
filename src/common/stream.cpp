@@ -236,7 +236,7 @@ char wxStreamBuffer::GetChar()
   }
 
   GetFromBuffer(&c, 1);
-  
+
   m_stream->m_lastcount = 1;
   return c;
 }
@@ -262,7 +262,7 @@ size_t wxStreamBuffer::Read(void *buffer, size_t size)
   size_t buf_left, orig_size = size;
 
   while (size > 0) {
-    buf_left = GetDataLeft(); 
+    buf_left = GetDataLeft();
 
     // First case: the requested buffer is larger than the stream buffer,
     //             we split it.
@@ -428,10 +428,10 @@ off_t wxStreamBuffer::Tell() const
         return wxInvalidOffset;
 
     pos += GetIntPosition();
-	
+
     if (m_mode == read && m_flushable)
         pos -= GetLastAccess();
-    
+
     return pos;
 }
 
@@ -440,7 +440,7 @@ size_t wxStreamBuffer::GetDataLeft()
     /* Why is this done? RR. */
     if (m_buffer_end == m_buffer_pos && m_flushable)
         FillBuffer();
-	
+
     return m_buffer_end-m_buffer_pos;
 }
 
@@ -494,6 +494,22 @@ wxInputStream::~wxInputStream()
     free(m_wback);
 }
 
+bool wxInputStream::Eof() const
+{
+    wxInputStream *self = (wxInputStream *)this;    // const_cast
+
+    char c;
+    self->Read(&c, 1);
+    if ( GetLastError() == wxSTREAM_EOF )
+    {
+        return TRUE;
+    }
+
+    self->Ungetch(c);
+
+    return FALSE;
+}
+
 char *wxInputStream::AllocSpaceWBack(size_t needed_size)
 {
     /* get number of bytes left from previous wback buffer */
@@ -533,14 +549,14 @@ size_t wxInputStream::GetWBack(char *buf, size_t bsize)
     memcpy(buf, (m_wback+m_wbackcur), s_toget);
 
     m_wbackcur += s_toget;
-    if (m_wbackcur == m_wbacksize) 
+    if (m_wbackcur == m_wbacksize)
     {
         free(m_wback);
         m_wback = (char *)NULL;
         m_wbacksize = 0;
         m_wbackcur = 0;
     }
-    
+
     return s_toget;
 }
 
@@ -549,7 +565,7 @@ size_t wxInputStream::Ungetch(const void *buf, size_t bufsize)
     char *ptrback = AllocSpaceWBack(bufsize);
     if (!ptrback)
         return 0;
- 
+
     memcpy(ptrback, buf, bufsize);
     return bufsize;
 }
@@ -576,7 +592,7 @@ wxInputStream& wxInputStream::Read(void *buffer, size_t size)
     char *buf = (char *)buffer;
 
     size_t retsize = GetWBack(buf, size);
-    if (retsize == size) 
+    if (retsize == size)
     {
         m_lastcount = size;
         m_lasterror = wxStream_NOERROR;
@@ -593,21 +609,21 @@ char wxInputStream::Peek()
 {
     char c;
     Read(&c, 1);
-    if (m_lasterror == wxStream_NOERROR) 
+    if (m_lasterror == wxStream_NOERROR)
     {
         Ungetch(c);
         return c;
     }
-    
+
     return 0;
 }
 
 wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
 {
-    char buf[BUF_TEMP_SIZE]; 
+    char buf[BUF_TEMP_SIZE];
     size_t bytes_read = BUF_TEMP_SIZE;
 
-    while (bytes_read == BUF_TEMP_SIZE) 
+    while (bytes_read == BUF_TEMP_SIZE)
     {
         bytes_read = Read(buf, bytes_read).LastRead();
         bytes_read = stream_out.Write(buf, bytes_read).LastWrite();
@@ -619,7 +635,7 @@ off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
 {
     /* Should be check and improve, just to remove a slight bug !
        I don't know whether it should be put as well in wxFileInputStream::OnSysSeek ? */
-    if (m_lasterror==wxSTREAM_EOF) 
+    if (m_lasterror==wxSTREAM_EOF)
         m_lasterror=wxSTREAM_NOERROR;
 
     /* A call to SeekI() will automatically invalidate any previous call
@@ -632,7 +648,7 @@ off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
        when seeking in wxFromCurrent mode, else it would invalidate
        anyway...
      */
-    if (m_wback) 
+    if (m_wback)
     {
         free(m_wback);
         m_wback = (char*) NULL;
@@ -750,9 +766,9 @@ off_t wxCountingOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
         m_currentPos = m_lastcount + pos;
     else
         m_currentPos += pos;
-    
+
     if (m_currentPos > m_lastcount) m_lastcount = m_currentPos;
-  
+
     return m_currentPos;
 }
 
@@ -760,7 +776,7 @@ off_t wxCountingOutputStream::OnSysTell() const
 {
     return m_currentPos;
 }
-  
+
 // ----------------------------------------------------------------------------
 // wxFilterInputStream
 // ----------------------------------------------------------------------------
@@ -828,7 +844,7 @@ wxInputStream& wxBufferedInputStream::Read(void *buffer, size_t size)
 
     retsize = GetWBack(buf, size);
     m_lastcount = retsize;
-    if (retsize == size) 
+    if (retsize == size)
     {
         m_lasterror = wxStream_NOERROR;
         return *this;

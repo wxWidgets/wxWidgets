@@ -39,6 +39,7 @@
 class WXDLLEXPORT wxProcess;
 class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxWindowList;
 
 // FIXME should use wxStricmp() instead
 #if defined(__GNUWIN32__)
@@ -145,6 +146,9 @@ WXDLLEXPORT long wxExecute(wxChar **argv, bool sync = FALSE,
                            wxProcess *process = (wxProcess *) NULL);
 WXDLLEXPORT long wxExecute(const wxString& command, bool sync = FALSE,
                            wxProcess *process = (wxProcess *) NULL);
+
+// execute the command capturing its output into an array line by line
+WXDLLEXPORT long wxExecute(const wxString& command, wxArrayString& output);
 
 enum wxSignal
 {
@@ -271,6 +275,18 @@ WXDLLEXPORT bool wxCheckForInterrupt(wxWindow *wnd);
 
 // Consume all events until no more left
 WXDLLEXPORT void wxFlushEvents();
+
+// a class which disables all windows (except, may be, thegiven one) in its
+// ctor and enables them back in its dtor
+class WXDLLEXPORT wxWindowDisabler
+{
+public:
+    wxWindowDisabler(wxWindow *winToSkip = (wxWindow *)NULL);
+    ~wxWindowDisabler();
+
+private:
+    wxWindowList *m_winDisabled;
+};
 
 // ----------------------------------------------------------------------------
 // Cursors
