@@ -6,6 +6,8 @@
 
 from xxx import *                       # xxx imports globals and params
 from undo import *
+from wxPython.html import wxHtmlWindow
+
 
 # Properties panel containing notebook
 class Panel(wxNotebook):
@@ -67,9 +69,10 @@ class Panel(wxNotebook):
             else:                       # nothing selected
                 # If first time, show some help
                 if g.conf.panic:
+                    import xrced
                     html = wxHtmlWindow(self.page1, -1, wxDefaultPosition,
                                         wxDefaultSize, wxSUNKEN_BORDER)
-                    html.SetPage(helpText)
+                    html.SetPage(xrced.helpText)
                     sizer.Add(html, 1, wxEXPAND)
                     g.conf.panic = false
                 else:
