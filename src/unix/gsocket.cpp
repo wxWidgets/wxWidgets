@@ -164,7 +164,7 @@ int _System soclose(int);
 /* Table of GUI-related functions. We must call them indirectly because
  * of wxBase and GUI separation: */
 
-static struct GSocketGUIFunctionsTable *gs_gui_functions;
+static GSocketGUIFunctionsTable *gs_gui_functions;
 
 class GSocketGUIFunctionsTableNull: public GSocketGUIFunctionsTable
 {
@@ -200,7 +200,7 @@ void GSocketGUIFunctionsTableNull::Disable_Events(GSocket *socket)
 {}
 /* Global initialisers */
 
-void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc)
+void GSocket_SetGUIFunctions(GSocketGUIFunctionsTable *guifunc)
 {
   gs_gui_functions = guifunc;
 }
@@ -209,7 +209,7 @@ int GSocket_Init(void)
 {
   if (!gs_gui_functions)
   {
-    static class GSocketGUIFunctionsTableNull table;
+    static GSocketGUIFunctionsTableNull table;
     gs_gui_functions = &table;
   }
   if ( !gs_gui_functions->OnInit() )

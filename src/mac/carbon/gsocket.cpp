@@ -202,7 +202,7 @@ static void SetDefaultEndpointModes(EndpointRef ep , void *data )
 
 /* Global initialisers */
 
-void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *table)
+void GSocket_SetGUIFunctions(GSocketGUIFunctionsTable *table)
 {
     // do nothing, wxMac doesn't have wxBase-GUI separation yet
 }

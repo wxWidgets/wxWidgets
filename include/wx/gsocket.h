@@ -118,7 +118,7 @@ public:
 
 /* Sets GUI functions callbacks. Must be called *before* GSocket_Init
    if the app uses async sockets. */
-void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc);
+void GSocket_SetGUIFunctions(GSocketGUIFunctionsTable *guifunc);
 
 /* GSocket_Init() must be called at the beginning */
 int GSocket_Init(void);
