@@ -49,4 +49,12 @@ class PyEventBinder(object):
 
         self.Bind(target, id1, id2, func)
 
+
+# These two are square pegs that don't fit the PyEventBinder hole...
+def EVT_COMMAND(win, id, cmd, func):
+    win.Connect(id, -1, cmd, func)
+def EVT_COMMAND_RANGE(win, id1, id2, cmd, func):
+    win.Connect(id1, id2, cmd, func)
+
+    
 #---------------------------------------------------------------------------
