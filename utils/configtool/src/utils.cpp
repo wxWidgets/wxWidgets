@@ -33,6 +33,8 @@
 #include "wx/cmdline.h"
 #include "wx/msgdlg.h"
 #include "wx/log.h"
+#include "wx/sizer.h"
+#include "wx/icon.h"
 
 #endif
 
