@@ -262,8 +262,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     m_btnInsertPage = new wxButton( m_panel, ID_BTN_INSERT_PAGE,
         wxT("&Insert page") );
 
-    m_btnDeletePage = new wxButton( m_panel, ID_BTN_DELETE_PAGE,
-        wxT("&Delete page") );
+    m_btnDeleteCurPage = new wxButton( m_panel, ID_BTN_DELETE_CUR_PAGE,
+        wxT("&Delete current page") );
+
+    m_btnDeleteLastPage = new wxButton( m_panel, ID_BTN_DELETE_LAST_PAGE,
+        wxT("Delete las&t page") );
 
     m_btnNextPage = new wxButton( m_panel, ID_BTN_NEXT_PAGE,
         wxT("&Next page") );
@@ -295,7 +298,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
 
         sizerLeft->Add(m_btnAddPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
         sizerLeft->Add(m_btnInsertPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
-        sizerLeft->Add(m_btnDeletePage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
+        sizerLeft->Add(m_btnDeleteCurPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
+        sizerLeft->Add(m_btnDeleteLastPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
         sizerLeft->Add(m_btnNextPage, 0, wxEXPAND | (wxTOP | wxBOTTOM), 4);
 
         sizerLeft->Add(0, 0, 1); // Spacer
@@ -411,9 +415,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_BUTTON(ID_BTN_ADD_PAGE, MyFrame::OnButtonAddPage)
     EVT_BUTTON(ID_BTN_INSERT_PAGE, MyFrame::OnButtonInsertPage)
-    EVT_BUTTON(ID_BTN_DELETE_PAGE, MyFrame::OnButtonDeletePage)
+    EVT_BUTTON(ID_BTN_DELETE_CUR_PAGE, MyFrame::OnButtonDeleteCurPage)
+    EVT_BUTTON(ID_BTN_DELETE_LAST_PAGE, MyFrame::OnButtonDeleteLastPage)
     EVT_BUTTON(ID_BTN_NEXT_PAGE, MyFrame::OnButtonNextPage)
     EVT_BUTTON(wxID_OK, MyFrame::OnButtonExit)
+
+    EVT_UPDATE_UI(ID_BTN_DELETE_CUR_PAGE, MyFrame::OnUpdateUIBtnDeleteCurPage)
+    EVT_UPDATE_UI(ID_BTN_DELETE_LAST_PAGE, MyFrame::OnUpdateUIBtnDeleteLastPage)
 
     EVT_NOTEBOOK_PAGE_CHANGED(ID_NOTEBOOK, MyFrame::OnNotebook)
     EVT_NOTEBOOK_PAGE_CHANGING(ID_NOTEBOOK, MyFrame::OnNotebook)
@@ -451,7 +459,17 @@ void MyFrame::OnButtonInsertPage( wxCommandEvent& WXUNUSED(event) )
     m_notebook->SetSelection(0);
 }
 
-void MyFrame::OnButtonDeletePage( wxCommandEvent& WXUNUSED(event) )
+void MyFrame::OnButtonDeleteLastPage( wxCommandEvent& WXUNUSED(event) )
+{
+    int page = m_notebook->GetPageCount();
+
+    if ( page != 0 )
+    {
+        m_notebook->DeletePage(page - 1);
+    }
+}
+
+void MyFrame::OnButtonDeleteCurPage( wxCommandEvent& WXUNUSED(event) )
 {
     int sel = m_notebook->GetSelection();
 
@@ -531,4 +549,14 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
 
         SetTitle(title);
     }
+}
+
+void MyFrame::OnUpdateUIBtnDeleteCurPage(wxUpdateUIEvent& event)
+{
+    event.Enable( m_notebook->GetSelection() != -1 );
+}
+
+void MyFrame::OnUpdateUIBtnDeleteLastPage(wxUpdateUIEvent& event)
+{
+    event.Enable( m_notebook->GetPageCount() != 0 );
 }

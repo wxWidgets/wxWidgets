@@ -60,15 +60,17 @@ public:
 
     void OnButtonAddPage(wxCommandEvent& event);
     void OnButtonInsertPage(wxCommandEvent& event);
-    void OnButtonDeletePage(wxCommandEvent& event);
+    void OnButtonDeleteCurPage(wxCommandEvent& event);
+    void OnButtonDeleteLastPage(wxCommandEvent& event);
     void OnButtonNextPage(wxCommandEvent& event);
-
     void OnButtonExit(wxCommandEvent& event);
 
     void OnNotebook(wxNotebookEvent& event);
 
-    void OnIdle(wxIdleEvent& event);
+    void OnUpdateUIBtnDeleteCurPage(wxUpdateUIEvent& event);
+    void OnUpdateUIBtnDeleteLastPage(wxUpdateUIEvent& event);
 
+    void OnIdle(wxIdleEvent& event);
 
 private:
     wxLog *m_logTargetOld;
@@ -83,7 +85,8 @@ private:
 
     wxButton *m_btnAddPage;
     wxButton *m_btnInsertPage;
-    wxButton *m_btnDeletePage;
+    wxButton *m_btnDeleteCurPage;
+    wxButton *m_btnDeleteLastPage;
     wxButton *m_btnNextPage;
     wxButton *m_btnExit;
 
@@ -116,7 +119,8 @@ enum ID_CONTROLS
     ID_CHK_SHOWIMAGES,
     ID_BTN_ADD_PAGE,
     ID_BTN_INSERT_PAGE,
-    ID_BTN_DELETE_PAGE,
+    ID_BTN_DELETE_CUR_PAGE,
+    ID_BTN_DELETE_LAST_PAGE,
     ID_BTN_NEXT_PAGE,
     ID_NOTEBOOK
 };
