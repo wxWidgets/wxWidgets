@@ -113,14 +113,14 @@
 
     // Show it and tell the application that it's our main window
     // @@@ what does it do exactly, in fact? is it necessary here?
-      frame->Show(TRUE);
+      frame->Show(true);
       SetTopWindow(frame);
 
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
-      return TRUE;
+      return true;
    }
 
 // ----------------------------------------------------------------------------
@@ -130,7 +130,7 @@
 
 // frame constructor
    MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-   : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+   : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
    {
     // create a menu bar
       wxMenu *menuFile = new wxMenu;
@@ -151,19 +151,19 @@
 
    void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
    {
-    // TRUE is to force the frame to close
-      Close(TRUE);
+    // true is to force the frame to close
+      Close(true);
    }
 
    void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
    {
         wxBoxSizer *topsizer;
         wxHtmlWindow *html;
-        wxDialog dlg(this, -1, wxString(_("About")));
+        wxDialog dlg(this, wxID_ANY, wxString(_("About")));
 
         topsizer = new wxBoxSizer(wxVERTICAL);
 
-        html = new wxHtmlWindow(&dlg, -1, wxDefaultPosition, wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
+        html = new wxHtmlWindow(&dlg, wxID_ANY, wxDefaultPosition, wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
         html -> SetBorders(0);
         html -> LoadPage(wxT("data/about.htm"));
         html -> SetSize(html -> GetInternalRepresentation() -> GetWidth(), 
@@ -171,14 +171,14 @@
 
         topsizer -> Add(html, 1, wxALL, 10);
 
-        topsizer -> Add(new wxStaticLine(&dlg, -1), 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+        topsizer -> Add(new wxStaticLine(&dlg, wxID_ANY), 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
                         
         wxButton *bu1 = new wxButton(&dlg, wxID_OK, _("OK"));
         bu1 -> SetDefault();
 
         topsizer -> Add(bu1, 0, wxALL | wxALIGN_RIGHT, 15);
 
-        dlg.SetAutoLayout(TRUE);
+        dlg.SetAutoLayout(true);
         dlg.SetSizer(topsizer);
         topsizer -> Fit(&dlg);
 

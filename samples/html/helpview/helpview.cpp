@@ -1,4 +1,3 @@
-
 /////////////////////////////////////////////////////////////////////////////
 // Name:        helpview.cpp
 // Purpose:     wxHtml help browser
@@ -75,7 +74,7 @@ bool MyApp::OnInit()
     if (argc < 2) {
         wxLogError(wxT("Usage : helpview <helpfile> [<more helpfiles>]"));
         wxLogError(wxT("  helpfile may be .hhp, .zip or .htb"));
-        return FALSE;
+        return false;
     }
 
     for (int i = 1; i < argc; i++)
@@ -87,7 +86,7 @@ bool MyApp::OnInit()
 
     help -> DisplayContents();
 
-    return TRUE;
+    return true;
 }
 
 

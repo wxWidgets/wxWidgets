@@ -120,14 +120,14 @@
 
     // Show it and tell the application that it's our main window
     // @@@ what does it do exactly, in fact? is it necessary here?
-      frame->Show(TRUE);
+      frame->Show(true);
       SetTopWindow(frame);
 
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
-      return TRUE;
+      return true;
    }
 
 // ----------------------------------------------------------------------------
@@ -137,7 +137,7 @@
 
 // frame constructor
    MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-   : wxFrame((wxFrame *)NULL, -1, title, pos, size), 
+   : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size), 
      help(wxHF_DEFAULT_STYLE | wxHF_OPEN_FILES)
    {
     // create a menu bar
@@ -169,8 +169,8 @@
 
    void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
    {
-    // TRUE is to force the frame to close
-      Close(TRUE);
+    // true is to force the frame to close
+      Close(true);
    }
 
    void MyFrame::OnHelp(wxCommandEvent& WXUNUSED(event))
@@ -183,7 +183,7 @@
        // Close the help frame; this will cause the config data to
        // get written.
        if ( help.GetFrame() ) // returns NULL if no help frame active
-           help.GetFrame()->Close(TRUE);
+           help.GetFrame()->Close(true);
        // now we can safely delete the config pointer
        event.Skip();   
        delete wxConfig::Set(NULL);
