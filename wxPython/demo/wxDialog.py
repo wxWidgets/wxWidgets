@@ -57,6 +57,10 @@ def runTest(frame, nb, log):
 
     box = wxBoxSizer(wxHORIZONTAL)
 
+    if wxPlatform != "__WXMSW__":
+        btn = wxContextHelpButton(win)
+        box.Add(btn, 0, wxALIGN_CENTRE|wxALL, 5)
+
     btn = wxButton(win, wxID_OK, " OK ")
     btn.SetDefault()
     btn.SetHelpText("The OK button completes the dialog")
