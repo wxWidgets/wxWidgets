@@ -17122,7 +17122,7 @@ if test "$TOOLKIT" != "MSW"; then
         case "${host}" in
           *-*-solaris2* | *-*-sunos4* )
                 if test "x$GCC" = "xyes"; then
-                                        THREAD_OPTS="$THREAD_OPTS -pthreads"
+                                        THREAD_OPTS="-pthreads $THREAD_OPTS"
                 else
                     THREAD_OPTS="-mt $THREAD_OPTS"
                 fi

@@ -3161,8 +3161,8 @@ if test "$TOOLKIT" != "MSW"; then
         case "${host}" in
           *-*-solaris2* | *-*-sunos4* )
                 if test "x$GCC" = "xyes"; then
-                    dnl apparently some Solaris/gcc combinations use this one
-                    THREAD_OPTS="$THREAD_OPTS -pthreads"
+                    dnl Solaris/gcc combination use this one for some reason
+                    THREAD_OPTS="-pthreads $THREAD_OPTS"
                 else
                     THREAD_OPTS="-mt $THREAD_OPTS"
                 fi
