@@ -124,12 +124,12 @@ arg1	:	WORD
  * for example, cross compilation. */
 #if (defined(__WXGTK__) || defined(__WXWINE__) || defined(__WXMOTIF__)) || defined(__WX_SETUP_H__) && !defined(NO_CONFIGURE)
 #include "lexer.c"
-#else
-#if (defined(__MWERKS__))
+#elif defined(__WXMAC__) && defined(__APPLE__)
+#include "lexer.c"
+#elif defined(__MWERKS__)
 #include "../common/cwlex_yy.c"
 #else
 #include "../common/lex_yy.c"
-#endif
 #endif
 
 /*
