@@ -17,6 +17,16 @@
 #include "wx/utils.h"
 #include <wx/intl.h>
 
+//-------------------------------------------------------------------------
+// conditional compilation
+//-------------------------------------------------------------------------
+
+#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MICRO_VERSION >= 5)
+#define NEW_GTK_SCROLL_CODE
+#endif
+#endif
+
 //-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
@@ -91,7 +101,12 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     gtk_list_set_selection_mode( GTK_LIST(m_list), mode );
 
+#ifdef NEW_GTK_SCROLL_CODE
+    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(m_widget), GTK_WIDGET(m_list) );
+#else
     gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_list) );
+#endif
+
     gtk_widget_show( GTK_WIDGET(m_list) );
 
     wxSize newSize = size;
@@ -163,7 +178,9 @@ void wxListBox::AppendCommon( const wxString &item )
 
     ConnectWidget( list_item );
 
+#ifndef NEW_GTK_DND_CODE
     if (m_dropTarget) m_dropTarget->RegisterWidget( list_item );
+#endif
 }
 
 void wxListBox::Append( const wxString &item )
@@ -481,46 +498,31 @@ void wxListBox::SetDropTarget( wxDropTarget *dropTarget )
 {
     wxCHECK_RET( m_list != NULL, "invalid listbox" );
   
+#ifndef NEW_GTK_DND_CODE
     if (m_dropTarget)
     {
         GList *child = m_list->children;
         while (child)
         {
-#ifdef NEW_GTK_DND_CODE
-            GtkBin *item = GTK_BIN( child->data );
-	    m_dropTarget->UnregisterWidget( item->child );
-#else
 	    m_dropTarget->UnregisterWidget( GTK_WIDGET( child->data ) );
-#endif
             child = child->next;
         }
     }
+#endif
+    
+    wxWindow::SetDropTarget( dropTarget );
 
 #ifndef NEW_GTK_DND_CODE
-    if (m_dropTarget) m_dropTarget->UnregisterWidget( m_list );
-#endif
-
-    if (m_dropTarget) delete m_dropTarget;
-    m_dropTarget = dropTarget;
-
-#ifndef NEW_GTK_DND_CODE
-    if (m_dropTarget) m_dropTarget->RegisterWidget( dnd_widget );
-#endif
-
     if (m_dropTarget)
     {
         GList *child = m_list->children;
         while (child)
         {
-#ifdef NEW_GTK_DND_CODE
-            GtkBin *item = GTK_BIN( child->data );
-	    m_dropTarget->RegisterWidget( item->child );
-#else
 	    m_dropTarget->RegisterWidget( GTK_WIDGET( child->data ) );
-#endif
             child = child->next;
         }
     }
+#endif
 }
 
 GtkWidget *wxListBox::GetConnectWidget()

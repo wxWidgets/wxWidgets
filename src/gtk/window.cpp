@@ -109,6 +109,16 @@
 
 */
 
+//-------------------------------------------------------------------------
+// conditional compilation
+//-------------------------------------------------------------------------
+
+#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MICRO_VERSION >= 5)
+#define NEW_GTK_SCROLL_CODE
+#endif
+#endif
+
 //-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
@@ -956,6 +966,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     PreCreation( parent, id, pos, size, style, name );
 
     m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
+    GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
     GtkScrolledWindow *s_window = GTK_SCROLLED_WINDOW(m_widget);
 
@@ -992,7 +1003,15 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     gtk_signal_connect(GTK_OBJECT(m_vAdjust), "changed",
           (GtkSignalFunc) gtk_window_vscroll_change_callback, (gpointer) this );
 
+    m_wxwindow = gtk_myfixed_new();
+
+#ifdef NEW_GTK_SCROLL_CODE
+    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(m_widget), m_wxwindow );
+    GtkViewport *viewport = GTK_VIEWPORT(s_window->child);
+#else
+    gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
     GtkViewport *viewport = GTK_VIEWPORT(s_window->viewport);
+#endif
 
     if (m_windowStyle & wxRAISED_BORDER)
     {
@@ -1007,16 +1026,10 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
         gtk_viewport_set_shadow_type( viewport, GTK_SHADOW_NONE );
     }
 
-    m_wxwindow = gtk_myfixed_new();
-
-    GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
-
     if (m_windowStyle & wxTAB_TRAVERSAL == wxTAB_TRAVERSAL)
         GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
     else
         GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
-
-    gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
 
     // shut the viewport up
     gtk_viewport_set_hadjustment( viewport, (GtkAdjustment*) gtk_adjustment_new( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) );
@@ -1403,7 +1416,12 @@ void wxWindow::SetClientSize( int width, int height )
       GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
       GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
 
+#ifdef NEW_GTK_SCROLL_CODE
+      GtkWidget *viewport = scroll_window->child;
+#else      
       GtkWidget *viewport = scroll_window->viewport;
+#endif
+
       GtkStyleClass *viewport_class = viewport->style->klass;
 
       GtkWidget *hscrollbar = scroll_window->hscrollbar;
@@ -1463,7 +1481,12 @@ void wxWindow::GetClientSize( int *width, int *height ) const
       GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
       GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
 
+#ifdef NEW_GTK_SCROLL_CODE
+      GtkWidget *viewport = scroll_window->child;
+#else      
       GtkWidget *viewport = scroll_window->viewport;
+#endif
+
       GtkStyleClass *viewport_class = viewport->style->klass;
 
       GtkWidget *hscrollbar = scroll_window->hscrollbar;

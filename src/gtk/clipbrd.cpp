@@ -155,7 +155,6 @@ void wxClipboard::SetData( wxDataObject *data )
 				 selection_handler,
 				 NULL );
       break;
-*/
     case wxDF_TEXT:
       gtk_selection_add_handler( m_clipboardWidget, 
                                  g_clipboardAtom, 
@@ -163,6 +162,7 @@ void wxClipboard::SetData( wxDataObject *data )
 				 selection_handler,
 				 NULL );
       break;
+*/
     default:
       break;
   }

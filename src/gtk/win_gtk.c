@@ -10,6 +10,16 @@
 #include "wx/gtk/win_gtk.h"
 #include <gtk/gtkfeatures.h>
 
+/*-------------------------------------------------------------------------
+// conditional compilation
+//------------------------------------------------------------------------- */
+
+#if (GTK_MINOR_VERSION == 1)
+#if (GTK_MICRO_VERSION >= 5)
+#define NEW_GTK_CONSTRUCT_CODE
+#endif
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -17,7 +27,9 @@ extern "C" {
 static void gtk_myfixed_class_init    (GtkMyFixedClass    *klass);
 static void gtk_myfixed_init          (GtkMyFixed         *myfixed);
 static void gtk_myfixed_map           (GtkWidget        *widget);
+#ifndef NEW_GTK_CONSTRUCT_CODE
 static void gtk_myfixed_unmap         (GtkWidget        *widget);
+#endif
 static void gtk_myfixed_realize       (GtkWidget        *widget);
 static void gtk_myfixed_size_request  (GtkWidget        *widget,
 				     GtkRequisition   *requisition);
@@ -39,6 +51,9 @@ static void gtk_myfixed_foreach       (GtkContainer     *container,
 #endif
 				     GtkCallback      callback,
 				     gpointer         callback_data);
+#ifdef NEW_GTK_CONSTRUCT_CODE
+static GtkType gtk_myfixed_child_type (GtkContainer     *container);
+#endif
 
 
 static GtkContainerClass *parent_class = NULL;
@@ -58,8 +73,14 @@ gtk_myfixed_get_type ()
 	sizeof (GtkMyFixedClass),
 	(GtkClassInitFunc) gtk_myfixed_class_init,
 	(GtkObjectInitFunc) gtk_myfixed_init,
-	(GtkArgSetFunc) NULL,
+#ifndef NEW_GTK_CONSTRUCT_CODE	
+        (GtkArgSetFunc) NULL,
         (GtkArgGetFunc) NULL,
+#else
+	/* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
+        (GtkClassInitFunc) NULL,
+#endif
       };
 
       myfixed_type = gtk_type_unique (gtk_container_get_type (), &myfixed_info);
@@ -79,10 +100,16 @@ gtk_myfixed_class_init (GtkMyFixedClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
+#ifndef NEW_GTK_CONSTRUCT_CODE
   parent_class = gtk_type_class (gtk_container_get_type ());
+#else
+  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
+#endif
 
   widget_class->map = gtk_myfixed_map;
+#ifndef NEW_GTK_CONSTRUCT_CODE
   widget_class->unmap = gtk_myfixed_unmap;
+#endif
   widget_class->realize = gtk_myfixed_realize;
   widget_class->size_request = gtk_myfixed_size_request;
   widget_class->size_allocate = gtk_myfixed_size_allocate;
@@ -96,13 +123,28 @@ gtk_myfixed_class_init (GtkMyFixedClass *klass)
 #else
   container_class->foreach = gtk_myfixed_foreach;
 #endif
+
+#ifdef NEW_GTK_CONSTRUCT_CODE
+  container_class->child_type = gtk_myfixed_child_type;
+#endif
 }
+
+#ifdef NEW_GTK_CONSTRUCT_CODE
+static GtkType
+gtk_myfixed_child_type (GtkContainer     *container)
+{
+  return GTK_TYPE_WIDGET;
+}
+#endif
 
 static void
 gtk_myfixed_init (GtkMyFixed *myfixed)
 {
   GTK_WIDGET_UNSET_FLAGS (myfixed, GTK_NO_WINDOW);
+  
+#ifndef NEW_GTK_CONSTRUCT_CODE
   GTK_WIDGET_SET_FLAGS (myfixed, GTK_BASIC);
+#endif
 
   myfixed->children = NULL;
 }
@@ -209,6 +251,7 @@ gtk_myfixed_map (GtkWidget *widget)
     }
 }
 
+#ifndef NEW_GTK_CONSTRUCT_CODE
 static void
 gtk_myfixed_unmap (GtkWidget *widget)
 {
@@ -217,6 +260,7 @@ gtk_myfixed_unmap (GtkWidget *widget)
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 }
+#endif
 
 static void
 gtk_myfixed_realize (GtkWidget *widget)

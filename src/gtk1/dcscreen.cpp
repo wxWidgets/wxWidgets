@@ -122,6 +122,8 @@ gdk_window_transparent_new ( GdkWindow     *parent,
   gprivate->height = (attributes->height > 1) ? (attributes->height) : (1);
   gprivate->window_type = attributes->window_type;
   gprivate->extension_events = FALSE;
+  
+#ifndef NEW_GTK_DND_CODE
   gprivate->dnd_drag_data_type = None;
   gprivate->dnd_drag_data_typesavail =
     gprivate->dnd_drop_data_typesavail = NULL;
@@ -130,6 +132,7 @@ gdk_window_transparent_new ( GdkWindow     *parent,
     gprivate->dnd_drop_data_numtypesavail =
     gprivate->dnd_drag_data_numtypesavail = 0;
   gprivate->dnd_drag_eventmask = gprivate->dnd_drag_savedeventmask = 0;
+#endif
 
   gprivate->filters = NULL;
   gprivate->children = NULL;
