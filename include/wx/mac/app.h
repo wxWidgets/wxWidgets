@@ -87,8 +87,11 @@ public:
     
     bool IsExiting() { return !m_keepGoing ; }
 #if TARGET_CARBON
+    // the installed application event handler
     WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
     WXEVENTHANDLERREF    MacGetCurrentEventHandlerCallRef() { return m_macCurrentEventHandlerCallRef ; }
+    void MacSetCurrentEvent( WXEVENTREF event , WXEVENTHANDLERCALLREF handler )
+    { m_macCurrentEvent = event ; m_macCurrentEventHandlerCallRef = handler ; }
 #endif
 
 public:
@@ -105,8 +108,8 @@ private:
 
     // mac specifics
 #if TARGET_CARBON
-    WXEVENTHANDLERREF      m_macEventHandler ;
-    WXEVENTHANDLERCALLREF      m_macCurrentEventHandlerCallRef ;
+    WXEVENTHANDLERREF     m_macEventHandler ;
+    WXEVENTHANDLERCALLREF m_macCurrentEventHandlerCallRef ;
 #endif
     WXEVENTREF            m_macCurrentEvent ;
 
