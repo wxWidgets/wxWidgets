@@ -8,9 +8,11 @@
 #ifndef __GSOCKET_H
 #define __GSOCKET_H
 
+#ifndef __GSOCKET_STANDALONE__
 #include "wx/setup.h"
+#endif
 
-#if wxUSE_SOCKETS
+#if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
 #include <stddef.h>
 #include <sys/types.h>
@@ -247,6 +249,6 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 #endif /* __cplusplus */
 
 
-#endif    /* wxUSE_SOCKETS */
+#endif    /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
 
 #endif    /* __GSOCKET_H */

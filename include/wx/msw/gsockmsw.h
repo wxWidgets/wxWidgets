@@ -10,6 +10,12 @@
 #define __GSOCK_MSW_H
 
 #ifndef __GSOCKET_STANDALONE__
+#include "wx/setup.h"
+#endif
+
+#if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
+
+#ifndef __GSOCKET_STANDALONE__
 #include "wx/gsocket.h"
 #else
 #include "gsocket.h"
@@ -83,5 +89,7 @@ GSocketError _GAddress_Init_UNIX(GAddress *address);
 #ifdef __cplusplus
 }
 #endif
+
+#endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
 
 #endif  /* __GSOCK_MSW_H */
