@@ -821,14 +821,19 @@ void wxTextCtrl::SetInsertionPoint( long pos )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    if (m_windowStyle & wxTE_MULTILINE)
+    if ( IsMultiLine() )
     {
 #ifdef __WXGTK20__
         GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
         GtkTextIter iter;
         gtk_text_buffer_get_iter_at_offset( text_buffer, &iter, pos );
         gtk_text_buffer_place_cursor( text_buffer, &iter );
-#else
+        gtk_text_view_scroll_mark_onscreen
+        (
+            GTK_TEXT_VIEW(m_text),
+            gtk_text_buffer_get_insert( text_buffer )
+        );
+#else // GTK+ 1.x
         gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
           GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
@@ -845,7 +850,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
 
         // bring editable's cursor uptodate. Bug in GTK.
         SET_EDITABLE_POS(m_text, gtk_text_get_point( GTK_TEXT(m_text) ));
-#endif
+#endif // GTK+ 2/1
     }
     else
     {
