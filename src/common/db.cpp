@@ -572,30 +572,74 @@ const wxChar *wxDb::convertUserID(const wxChar *userID, wxString &UserID)
 }  // wxDb::convertUserID()
 
 
-bool wxDb::open(bool failOnDataTypeUnsupported)
+bool wxDb::determineDataTypes(bool failOnDataTypeUnsupported)
 {
-/*
-    If using Intersolv branded ODBC drivers, this is the place where you would substitute
-    your branded driver license information
+    int iIndex;
 
-    SQLSetConnectOption(hdbc, 1041, (UDWORD) wxEmptyString);
-    SQLSetConnectOption(hdbc, 1042, (UDWORD) wxEmptyString);
-*/
+    // These are the possible SQL types we check for use against the datasource we are connected
+    // to for the purpose of determining which data type to use for the basic character strings
+    // column types
+    //
+    // NOTE: The first type in this enumeration that is determined to be supported by the 
+    //       datasource/driver is the one that will be used.
+    SWORD PossibleSqlCharTypes[] = {
+#if wxUSE_UNICODE && defined(SQL_WVARCHAR)
+        SQL_WVARCHAR,
+#endif
+        SQL_VARCHAR,
+#if wxUSE_UNICODE && defined(SQL_WVARCHAR)
+        SQL_WCHAR,
+#endif
+        SQL_CHAR
+    };
 
-    // Mark database as open
-    dbIsOpen = true;
+    // These are the possible SQL types we check for use against the datasource we are connected
+    // to for the purpose of determining which data type to use for the basic non-floating point
+    // column types
+    //
+    // NOTE: The first type in this enumeration that is determined to be supported by the 
+    //       datasource/driver is the one that will be used.
+    SWORD PossibleSqlIntegerTypes[] = {
+        SQL_INTEGER
+    };
 
-    // Allocate a statement handle for the database connection
-    if (SQLAllocStmt(hdbc, &hstmt) != SQL_SUCCESS)
-        return(DispAllErrors(henv, hdbc));
+    // These are the possible SQL types we check for use against the datasource we are connected
+    // to for the purpose of determining which data type to use for the basic floating point number
+    // column types
+    //
+    // NOTE: The first type in this enumeration that is determined to be supported by the 
+    //       datasource/driver is the one that will be used.
+    SWORD PossibleSqlFloatTypes[] = {
+        SQL_DOUBLE,
+        SQL_REAL,
+        SQL_FLOAT,
+        SQL_DECIMAL,
+        SQL_NUMERIC
+    };
 
-    // Set Connection Options
-    if (!setConnectionOptions())
-        return false;
+    // These are the possible SQL types we check for use agains the datasource we are connected
+    // to for the purpose of determining which data type to use for the date/time column types
+    //
+    // NOTE: The first type in this enumeration that is determined to be supported by the 
+    //       datasource/driver is the one that will be used.
+    SWORD PossibleSqlDateTypes[] = {
+        SQL_TIMESTAMP,
+        SQL_DATE,
+#ifdef SQL_DATETIME
+        SQL_DATETIME
+#endif
+    };
 
-    // Query the data source for inf. about itself
-    if (!getDbInfo(failOnDataTypeUnsupported))
-        return false;
+    // These are the possible SQL types we check for use agains the datasource we are connected
+    // to for the purpose of determining which data type to use for the BLOB column types.
+    //
+    // NOTE: The first type in this enumeration that is determined to be supported by the 
+    //       datasource/driver is the one that will be used.
+    SWORD PossibleSqlBlobTypes[] = {
+        SQL_LONGVARBINARY,
+        SQL_VARBINARY
+    };
+
 
     // Query the data source regarding data type information
 
@@ -604,7 +648,7 @@ bool wxDb::open(bool failOnDataTypeUnsupported)
     // for all of the possible SQL data types to see which ones were supported.  If
     // a type is not supported, the SQLFetch() that's called from getDataTypeInfo()
     // fails with SQL_NO_DATA_FOUND.  This is ugly because I'm sure the three SQL data
-    // types I've selected below will not alway's be what we want.  These are just
+    // types I've selected below will not always be what we want.  These are just
     // what happened to work against an Oracle 7/Intersolv combination.  The following is
     // a complete list of the results I got back against the Oracle 7 database:
     //
@@ -638,41 +682,41 @@ bool wxDb::open(bool failOnDataTypeUnsupported)
     // SQL_DOUBLE             type name = 'DOUBLE', Precision = 15
     // SQL_INTEGER            type name = 'LONG', Precision = 10
 
-    // VARCHAR = Variable length character string
-    if (!getDataTypeInfo(SQL_VARCHAR, typeInfVarchar))
-        if (!getDataTypeInfo(SQL_CHAR, typeInfVarchar))
-            return false;
-        else
-            typeInfVarchar.FsqlType = SQL_CHAR;
-    else
-        typeInfVarchar.FsqlType = SQL_VARCHAR;
+    // Query the data source for info about itself
+    if (!getDbInfo(failOnDataTypeUnsupported))
+        return false;
 
-    // Float
-    if (!getDataTypeInfo(SQL_DOUBLE,typeInfFloat))
-        if (!getDataTypeInfo(SQL_REAL,typeInfFloat))
-            if (!getDataTypeInfo(SQL_FLOAT,typeInfFloat))
-                if (!getDataTypeInfo(SQL_DECIMAL,typeInfFloat))
-                    if (!getDataTypeInfo(SQL_NUMERIC,typeInfFloat))
-                    {
-                        if (failOnDataTypeUnsupported)
-                            return false;
-                    }
-                    else
-                        typeInfFloat.FsqlType = SQL_NUMERIC;
-                else
-                    typeInfFloat.FsqlType = SQL_DECIMAL;
-            else
-                typeInfFloat.FsqlType = SQL_FLOAT;
-        else
-            typeInfFloat.FsqlType = SQL_REAL;
-    else
-        typeInfFloat.FsqlType = SQL_DOUBLE;
+    // --------------- Varchar - (Variable length character string) --------------- 
+    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlCharTypes) && 
+                     !getDataTypeInfo(PossibleSqlCharTypes[iIndex], typeInfVarchar); ++iIndex)
+    {}
 
-    // Integer
-    if (!getDataTypeInfo(SQL_INTEGER, typeInfInteger))
+    if (iIndex < WXSIZEOF(PossibleSqlCharTypes))
+        typeInfVarchar.FsqlType = PossibleSqlCharTypes[iIndex];
+    else if (failOnDataTypeUnsupported)
+        return false;
+
+    // --------------- Float --------------- 
+    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlFloatTypes) && 
+                     !getDataTypeInfo(PossibleSqlFloatTypes[iIndex], typeInfFloat); ++iIndex)
+    {}
+
+    if (iIndex < WXSIZEOF(PossibleSqlFloatTypes))
+        typeInfFloat.FsqlType = PossibleSqlFloatTypes[iIndex];
+    else if (failOnDataTypeUnsupported)
+        return false;
+
+    // --------------- Integer -------------
+    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlIntegerTypes) && 
+                     !getDataTypeInfo(PossibleSqlIntegerTypes[iIndex], typeInfInteger); ++iIndex)
+    {}
+
+    if (iIndex < WXSIZEOF(PossibleSqlIntegerTypes))
+        typeInfInteger.FsqlType = PossibleSqlIntegerTypes[iIndex];
+    else if (failOnDataTypeUnsupported)
     {
-        // If SQL_INTEGER is not supported, use the floating point
-        // data type to store integers as well as floats
+        // If no non-floating point data types are supported, we'll
+        // use the type assigned for floats to store integers as well
         if (!getDataTypeInfo(typeInfFloat.FsqlType, typeInfInteger))
         {
             if (failOnDataTypeUnsupported)
@@ -681,46 +725,54 @@ bool wxDb::open(bool failOnDataTypeUnsupported)
         else
             typeInfInteger.FsqlType = typeInfFloat.FsqlType;
     }
-    else
-        typeInfInteger.FsqlType = SQL_INTEGER;
 
-    // Date/Time
-    if (!getDataTypeInfo(SQL_TIMESTAMP,typeInfDate))
-    {
-        if (!getDataTypeInfo(SQL_DATE,typeInfDate))
-        {
-#ifdef SQL_DATETIME
-            if (getDataTypeInfo(SQL_DATETIME,typeInfDate))
-            {
-                typeInfDate.FsqlType = SQL_TIME;
-            }
-            else
-#endif // SQL_DATETIME defined
-            {
-                if (failOnDataTypeUnsupported)
-                    return false;
-            }
-        }
-        else
-            typeInfDate.FsqlType = SQL_DATE;
-    }
-    else
-        typeInfDate.FsqlType = SQL_TIMESTAMP;
+    // --------------- Date/Time --------------- 
+    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlDateTypes) && 
+                     !getDataTypeInfo(PossibleSqlDateTypes[iIndex], typeInfDate); ++iIndex)
+    {}
+
+    if (iIndex < WXSIZEOF(PossibleSqlDateTypes))
+        typeInfDate.FsqlType = PossibleSqlDateTypes[iIndex];
+    else if (failOnDataTypeUnsupported)
+        return false;
+
+    // --------------- BLOB --------------- 
+    for (iIndex = 0; iIndex < WXSIZEOF(PossibleSqlBlobTypes) && 
+                     !getDataTypeInfo(PossibleSqlBlobTypes[iIndex], typeInfBlob); ++iIndex)
+    {}
+
+    if (iIndex < WXSIZEOF(PossibleSqlBlobTypes))
+        typeInfBlob.FsqlType = PossibleSqlBlobTypes[iIndex];
+    else if (failOnDataTypeUnsupported)
+        return false;
+
+    return true;
+}  // wxDb::determineDataTypes
 
 
-    if (!getDataTypeInfo(SQL_LONGVARBINARY, typeInfBlob))
-    {
-        if (!getDataTypeInfo(SQL_VARBINARY,typeInfBlob))
-        {
-            if (failOnDataTypeUnsupported)
-                return false;
-        }
-        else
-            typeInfBlob.FsqlType = SQL_VARBINARY;
-    }
-    else
-        typeInfBlob.FsqlType = SQL_LONGVARBINARY;
+bool wxDb::open(bool failOnDataTypeUnsupported)
+{
+/*
+    If using Intersolv branded ODBC drivers, this is the place where you would substitute
+    your branded driver license information
 
+    SQLSetConnectOption(hdbc, 1041, (UDWORD) wxEmptyString);
+    SQLSetConnectOption(hdbc, 1042, (UDWORD) wxEmptyString);
+*/
+
+    // Mark database as open
+    dbIsOpen = true;
+
+    // Allocate a statement handle for the database connection
+    if (SQLAllocStmt(hdbc, &hstmt) != SQL_SUCCESS)
+        return(DispAllErrors(henv, hdbc));
+
+    // Set Connection Options
+    if (!setConnectionOptions())
+        return false;
+
+    if (!determineDataTypes(failOnDataTypeUnsupported))
+        return false;
 
 #ifdef DBDEBUG_CONSOLE
     cout << wxT("VARCHAR DATA TYPE: ") << typeInfVarchar.TypeName << endl;
@@ -1553,7 +1605,7 @@ bool wxDb::getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
     {
 #ifdef DBDEBUG_CONSOLE
         if (retcode == SQL_NO_DATA_FOUND)
-            cout << wxT("SQL_NO_DATA_FOUND fetching inf. about data type.") << endl;
+            cout << wxT("SQL_NO_DATA_FOUND fetching information about data type.") << endl;
 #endif
         DispAllErrors(henv, hdbc, hstmt);
         SQLFreeStmt(hstmt, SQL_CLOSE);
@@ -2292,7 +2344,6 @@ int wxDb::GetKeyFields(const wxString &tableName, wxDbColInf* colInf, UWORD noCo
     wxChar       szPkTable[DB_MAX_TABLE_NAME_LEN+1];  /* Primary key table name */
     wxChar       szFkTable[DB_MAX_TABLE_NAME_LEN+1];  /* Foreign key table name */
     SWORD        iKeySeq;
-//    SQLSMALLINT  iKeySeq;
     wxChar       szPkCol[DB_MAX_COLUMN_NAME_LEN+1];   /* Primary key column     */
     wxChar       szFkCol[DB_MAX_COLUMN_NAME_LEN+1];   /* Foreign key column     */
     SQLRETURN    retcode;
@@ -3796,8 +3847,6 @@ wxDBMS wxDb::Dbms(void)
 #ifdef DBDEBUG_CONSOLE
                // When run in console mode, use standard out to display errors.
                cout << "Database connecting to: " << dbInf.dbmsName << endl;
-               cout << wxT("Press any key to continue...") << endl;
-               getchar();
 #endif  // DBDEBUG_CONSOLE
 
     wxLogDebug(wxT("Database connecting to: "));
