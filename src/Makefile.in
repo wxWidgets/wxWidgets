@@ -93,6 +93,7 @@ all::
 	@if test ! -d png; then mkdir png; fi
 	@if test ! -d zlib; then mkdir zlib; fi
 	@if test ! -d iodbc; then mkdir iodbc; fi
+	@if test ! -d unix; then mkdir unix; fi
 
 install::
 	@echo " "
