@@ -255,6 +255,24 @@ bool wxCrashReport::Generate(int flags, EXCEPTION_POINTERS *ep)
     return impl.Generate(flags, ep);
 }
 
+/* static */
+bool wxCrashReport::GenerateNow(int flags)
+{
+    bool rc = false;
+
+    __try
+    {
+        RaiseException(0x1976, 0, 0, NULL);
+    }
+    __except( rc = Generate(flags, (EXCEPTION_POINTERS *)GetExceptionInformation()),
+              EXCEPTION_CONTINUE_EXECUTION )
+    {
+        // never executed because of EXCEPTION_CONTINUE_EXECUTION above
+    }
+
+    return rc;
+}
+
 // ----------------------------------------------------------------------------
 // wxCrashContext
 // ----------------------------------------------------------------------------

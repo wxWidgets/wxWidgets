@@ -48,7 +48,10 @@ enum
     //
     // this creates a much larger mini dump than just wxCRASH_REPORT_STACK but
     // still much smaller than wxCRASH_REPORT_LOCALS one
-    wxCRASH_REPORT_GLOBALS = 4
+    wxCRASH_REPORT_GLOBALS = 4,
+
+    // default is to create the smallest possible crash report
+    wxCRASH_REPORT_DEFAULT = wxCRASH_REPORT_LOCATION | wxCRASH_REPORT_STACK
 };
 
 // ----------------------------------------------------------------------------
@@ -101,10 +104,14 @@ struct WXDLLIMPEXP_BASE wxCrashReport
     //
     // if ep pointer is NULL, the global exception info which is valid only
     // inside wxApp::OnFatalException() is used
-    static bool Generate(int flags = wxCRASH_REPORT_LOCATION |
-                                     wxCRASH_REPORT_STACK,
+    static bool Generate(int flags = wxCRASH_REPORT_DEFAULT,
                          _EXCEPTION_POINTERS *ep = NULL);
 
+
+    // generate a crash report from outside of wxApp::OnFatalException(), this
+    // can be used to take "snapshots" of the program in wxApp::OnAssert() for
+    // example
+    static bool GenerateNow(int flags = wxCRASH_REPORT_DEFAULT);
 };
 
 #endif // wxUSE_CRASHREPORT
