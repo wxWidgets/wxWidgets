@@ -164,7 +164,7 @@ public:
     // set accessors
     void SetDateTime(const wxDateTime& dt)      { m_DateTime = dt; }
     void SetSize(wxFileOffset size)             { m_Size = size; }
-    void SetMethod(int method)                  { m_Method = method; }
+    void SetMethod(int method)                  { m_Method = (wxUint16)method; }
     void SetComment(const wxString& comment)    { m_Comment = comment; }
     void SetExternalAttributes(wxUint32 attr )  { m_ExternalAttributes = attr; }
     void SetSystemMadeBy(int system);
@@ -200,15 +200,15 @@ protected:
     int GetDiskStart() const                    { return m_DiskStart; }
     int GetInternalAttributes() const           { return m_InternalAttributes; }
 
-    void SetVersionNeeded(int version)          { m_VersionNeeded = version; }
+    void SetVersionNeeded(int version)          { m_VersionNeeded = (wxUint16)version; }
     void SetOffset(wxFileOffset offset)         { m_Offset = offset; }
-    void SetFlags(int flags)                    { m_Flags = flags; }
-    void SetVersionMadeBy(int version)          { m_VersionMadeBy = version; }
+    void SetFlags(int flags)                    { m_Flags = (wxUint16)flags; }
+    void SetVersionMadeBy(int version)          { m_VersionMadeBy = (wxUint8)version; }
     void SetCrc(wxUint32 crc)                   { m_Crc = crc; }
     void SetCompressedSize(wxFileOffset size)   { m_CompressedSize = size; }
     void SetKey(wxFileOffset offset)            { m_Key = offset; }
-    void SetDiskStart(int start)                { m_DiskStart = start; }
-    void SetInternalAttributes(int attr)        { m_InternalAttributes = attr; }
+    void SetDiskStart(int start)                { m_DiskStart = (wxUint16)start; }
+    void SetInternalAttributes(int attr)        { m_InternalAttributes = (wxUint16)attr; }
 
     virtual wxZipEntry *ZipClone() const        { return new wxZipEntry(*this); }
 

@@ -102,13 +102,13 @@ private:
 //
 void MyFrame::ResetStatus()
 {
-    m_basestatus = wxString::Format(_T("Size(x,y):%i,%i Length(Seconds):%u Speed:%1.1fx"), 
-    m_mediactrl->GetBestSize().x, 
-    m_mediactrl->GetBestSize().y, 
-    m_mediactrl->GetDuration() / 1000,
+    m_basestatus = wxString::Format(_T("Size(x,y):%i,%i Length(Seconds):%u Speed:%1.1fx"),
+    m_mediactrl->GetBestSize().x,
+    m_mediactrl->GetBestSize().y,
+    (unsigned)(m_mediactrl->GetDuration() / 1000),
     m_mediactrl->GetPlaybackRate()
     );
-    
+
     m_slider->SetRange(0, m_mediactrl->GetDuration() / 1000);
 }
 
@@ -147,15 +147,13 @@ public:
     {
         long lPosition = m_frame->m_mediactrl->GetPosition() / 1000;
         m_frame->m_slider->SetValue(lPosition);
-            
 
         m_frame->SetStatusText(wxString::Format(_T("%s Pos:%u State:%s"),
-                                    m_frame->m_basestatus.c_str(), 
-                                    lPosition,
+                                    m_frame->m_basestatus.c_str(),
+                                    (unsigned int)lPosition,
                                     wxGetMediaStateText(m_frame->m_mediactrl->GetState())
                                                 )
                                );
-    
     }
 
     MyFrame* m_frame;
@@ -268,7 +266,7 @@ MyFrame::MyFrame(const wxString& title)
     //  Create and attach the first/main sizer
     //
 
-    m_sizer = new wxBoxSizer(wxVERTICAL); 
+    m_sizer = new wxBoxSizer(wxVERTICAL);
     this->SetSizer(m_sizer);
     this->SetAutoLayout(true);
 
@@ -284,16 +282,16 @@ MyFrame::MyFrame(const wxString& title)
     //
 
     m_slider = new wxSlider(this, Minimal_Slider, 0, //init
-                            0, //start 
-                            0, //end 
-                            wxDefaultPosition, wxDefaultSize, 
+                            0, //start
+                            0, //end
+                            wxDefaultPosition, wxDefaultSize,
                             wxSL_HORIZONTAL );
     m_sizer->Add(m_slider, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND , 5);
 
 
     //
     //  Create the second sizer which will position things
-    //  vertically - 
+    //  vertically -
     //
     //  -------Menu----------
     //  [m_mediactrl]
@@ -392,8 +390,8 @@ void MyFrame::OnOpenFile(wxCommandEvent& WXUNUSED(event))
             wxMessageBox(wxT("Couldn't load file!"));
 
         if( !m_mediactrl->Play() )
-            wxMessageBox(wxT("Couldn't play movie!"));            
-            
+            wxMessageBox(wxT("Couldn't play movie!"));
+
         ResetStatus();
     }
 }
