@@ -3728,8 +3728,8 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
     DWORD hiWord = HIWORD(lParam);
     if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) )
     {
-        int id;
-        if ( (id = wxCharCodeMSWToWX(wParam)) != 0 )
+        int id = wxCharCodeMSWToWX(wParam);
+        if ( id != 0 )
         {
             wxKeyEvent event(wxEVT_CHAR_HOOK);
             if ( (HIWORD(lParam) & KF_ALTDOWN) == KF_ALTDOWN )
@@ -3737,25 +3737,31 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
 
             event.m_eventObject = NULL;
             event.m_keyCode = id;
-            /* begin Albert's fix for control and shift key 26.5 */
-            event.m_shiftDown = (::GetKeyState(VK_SHIFT)&0x100?TRUE:FALSE);
-            event.m_controlDown = (::GetKeyState(VK_CONTROL)&0x100?TRUE:FALSE);
-            /* end Albert's fix for control and shift key 26.5 */
+            event.m_shiftDown = ::GetKeyState(VK_SHIFT) & 0x100 != 0;
+            event.m_controlDown = ::GetKeyState(VK_CONTROL) & 0x100 != 0;
             event.SetTimestamp(s_currentMsg.time);
 
             wxWindow *win = wxGetActiveWindow();
+            wxEvtHandler *handler;
             if ( win )
             {
-                if ( win->GetEventHandler()->ProcessEvent(event) )
-                    return 1;
+                handler = win->GetEventHandler();
+                event.SetId(win->GetId());
             }
             else
             {
-                if ( wxTheApp && wxTheApp->ProcessEvent(event) )
-                    return 1;
+                handler = wxTheApp;
+                event.SetId(-1);
+            }
+
+            if ( handler && handler->ProcessEvent(event) )
+            {
+                // processed
+                return 1;
             }
         }
     }
+
     return (int)CallNextHookEx(wxTheKeyboardHook, nCode, wParam, lParam);
 }
 
