@@ -79,7 +79,7 @@ All GUI ports:
 - added wxRenderer class allowing to customize the drawing of generic controls
 - added wxCLOSE_BOX style for dialogs and frames
 - added wxSplitterWindow and wxWizard handlers to XRC
-- wxWizard is now sizer-friendly and may b resizeable (Robert Vazan)
+- wxWizard is now sizer-friendly and may be made resizeable (Robert Vazan)
 - added proportion to wxFlexGridSizer::AddGrowableRow/Col (Maxim Babitski)
 - added wxFlexGridSizer::SetFlexibleDirection() (Szczepan Holyszewski)
 - implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)
