@@ -293,29 +293,24 @@ typedef  _TUCHAR     wxUChar;
 #    elif defined(__VISAGECPP__) && (__IBMCPP__ < 400)
 #      define wxUSE_WCHAR_T 0
 #    else
-  // add additional compiler checks if this fails
+       // add additional compiler checks if this fails
 #      define wxUSE_WCHAR_T 1
 #    endif
 #  endif // !defined(wxUSE_WCHAR_T)
 
-#  if wxUSE_WCHAR_T
-#    ifdef HAVE_WCSTR_H
-#      include <wcstr.h>
-#    else
-#      if defined(HAVE_WCHAR_H)
-
-// include wchar.h to get wcslen() declaration used by wx/buffer.h
-#        include <wchar.h>
-
-#      elif defined(__FreeBSD__) || defined(__DARWIN__) || defined(__EMX__)
-
-// include stdlib.h for wchar_t, wcslen is provided in wxchar.cpp
-#        include <stdlib.h>
-size_t   WXDLLEXPORT wcslen(const wchar_t *s);
-
-#      endif
-#    endif
-#  endif
+#   if wxUSE_WCHAR_T
+#       ifdef HAVE_WCHAR_H
+            // include wchar.h to get wcslen() declaration used by wx/buffer.h
+#           include <wchar.h>
+#       elif defined(HAVE_WCSTR_H)
+            // old compilers have wcslen() here
+#           include <wcstr.h>
+#       elif defined(__FreeBSD__) || defined(__DARWIN__) || defined(__EMX__)
+            // include stdlib.h for wchar_t, wcslen is provided in wxchar.cpp
+#           include <stdlib.h>
+            size_t WXDLLEXPORT wcslen(const wchar_t *s);
+#       endif // HAVE_WCHAR_H
+#   endif // wxUSE_WCHAR_T
 
 // check whether we are doing Unicode
 #  if wxUSE_UNICODE
@@ -388,15 +383,9 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #    include <ctype.h>
 #    include <string.h>
 
-#   if 0 // temporary - preserve binary compatibilty
-        typedef char            wxChar;
-        typedef signed char     wxSChar;
-        typedef unsigned char   wxUChar;
-#   else
-#     define wxChar char
-#     define wxSChar signed char
-#     define wxUChar unsigned char
-#   endif
+    typedef char            wxChar;
+    typedef signed char     wxSChar;
+    typedef unsigned char   wxUChar;
 
 #   if defined(__FreeBSD__) || defined(__DARWIN__)
 #     undef _T
