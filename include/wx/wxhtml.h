@@ -15,13 +15,13 @@
 #endif
 
 
-#include <wx/html/htmldefs.h>
-#include <wx/html/htmltag.h>
-#include <wx/html/htmlcell.h>
-#include <wx/html/htmlpars.h>
-#include <wx/html/htmlwin.h>
-#include <wx/html/winpars.h>
-#include <wx/filesys.h>
-#include <wx/html/helpctrl.h>
+#include "wx/html/htmldefs.h"
+#include "wx/html/htmltag.h"
+#include "wx/html/htmlcell.h"
+#include "wx/html/htmlpars.h"
+#include "wx/html/htmlwin.h"
+#include "wx/html/winpars.h"
+#include "wx/filesys.h"
+#include "wx/html/helpctrl.h"
 
 #endif // __WXHTML_H__
