@@ -54,6 +54,7 @@ All (GUI):
 wxMSW:
 
 - fixed wxTE_*WRAP styles handling
+- wxTextCtrl::GetValue() works with text in non default encoding
 
 wxGTK:
 

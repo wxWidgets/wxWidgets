@@ -207,12 +207,13 @@ protected:
     // false if we hit the limit set by SetMaxLength() and so didn't change it
     bool AdjustSpaceLimit();
 
-#if wxUSE_RICHEDIT
+#if wxUSE_RICHEDIT && (!wxUSE_UNICODE || wxUSE_UNICODE_MSLU)
     // replace the selection or the entire control contents with the given text
     // in the specified encoding
-    bool StreamIn(const wxString& value,
-                  wxFontEncoding encoding,
-                  bool selOnly);
+    bool StreamIn(const wxString& value, wxFontEncoding encoding, bool selOnly);
+
+    // get the contents of the control out as text in the given encoding
+    wxString StreamOut(wxFontEncoding encoding, bool selOnly = false) const;
 #endif // wxUSE_RICHEDIT
 
     // replace the contents of the selection or of the entire control with the

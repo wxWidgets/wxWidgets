@@ -74,16 +74,6 @@
 #endif // wxUSE_RICHEDIT
 
 // ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-#if wxUSE_RICHEDIT
-
-DWORD CALLBACK wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb);
-
-#endif // wxUSE_RICHEDIT
-
-// ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
@@ -537,6 +527,35 @@ wxString wxTextCtrl::GetRange(long from, long to) const
         int len = GetWindowTextLength(GetHwnd());
         if ( len > from )
         {
+            if ( to == -1 )
+                to = len;
+
+            // we must use EM_STREAMOUT if we don't want to lose all characters
+            // not representable in the current character set (EM_GETTEXTRANGE
+            // simply replaces them with question marks...)
+            //
+            // as EM_STREAMOUT only works for the entire controls contents (or
+            // just the selection but it's probably a bad idea to play games
+            // with selection here...), we can't use it unless we're called
+            // from GetValue(), i.e. we want to retrieve all text
+            if ( GetRichVersion() > 1 && (from == 0 && to >= len) )
+            {
+                wxFont font = m_defaultStyle.GetFont();
+                if ( !font.Ok() )
+                    font = GetFont();
+
+                if ( font.Ok() )
+                {
+                   wxFontEncoding encoding = font.GetEncoding();
+                   if ( encoding != wxFONTENCODING_SYSTEM )
+                   {
+                       str = StreamOut(encoding);
+                   }
+                }
+            }
+
+            // StreamOut() wasn't used or failed, try to do it in normal way
+            if ( str.empty() )
             {
                 // alloc one extra WORD as needed by the control
                 wxStringBuffer tmp(str, ++len);
@@ -620,12 +639,17 @@ void wxTextCtrl::SetValue(const wxString& value)
 
 #if wxUSE_RICHEDIT && (!wxUSE_UNICODE || wxUSE_UNICODE_MSLU)
 
-DWORD CALLBACK wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
+// TODO: using memcpy() would improve performance a lot for big amounts of text
+
+DWORD CALLBACK
+wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 {
     *pcb = 0;
 
+    const wchar_t ** const ppws = (const wchar_t **)dwCookie;
+
     wchar_t *wbuf = (wchar_t *)buf;
-    const wchar_t *wpc = *(const wchar_t **)dwCookie;
+    const wchar_t *wpc = *ppws;
     while ( cb && *wpc )
     {
         *wbuf++ = *wpc++;
@@ -634,25 +658,51 @@ DWORD CALLBACK wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
         (*pcb) += sizeof(wchar_t);
     }
 
-    *(const wchar_t **)dwCookie = wpc;
+    *ppws = wpc;
 
     return 0;
 }
+
+DWORD CALLBACK
+wxRichEditStreamOut(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
+{
+    *pcb = 0;
+
+    wchar_t ** const ppws = (wchar_t **)dwCookie;
+
+    const wchar_t *wbuf = (const wchar_t *)buf;
+    wchar_t *wpc = *ppws;
+    while ( cb && *wpc )
+    {
+         *wpc++ = *wbuf++;
+
+        cb -= sizeof(wchar_t);
+        (*pcb) += sizeof(wchar_t);
+    }
+
+    *ppws = wpc;
+
+    return 0;
+}
+
 
 // from utils.cpp
 extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding);
 
 #if wxUSE_UNICODE_MSLU
-bool wxTextCtrl::StreamIn(const wxString& value,
-                          wxFontEncoding WXUNUSED(encoding),
-                          bool selectionOnly)
+    #define UNUSED_IF_MSLU(param)
+#else
+    #define UNUSED_IF_MSLU(param) param
+#endif
+
+bool
+wxTextCtrl::StreamIn(const wxString& value,
+                     wxFontEncoding UNUSED_IF_MSLU(encoding),
+                     bool selectionOnly)
 {
+#if wxUSE_UNICODE_MSLU
     const wchar_t *wpc = value.c_str();
 #else // !wxUSE_UNICODE_MSLU
-bool wxTextCtrl::StreamIn(const wxString& value,
-                          wxFontEncoding encoding,
-                          bool selectionOnly)
-{
     // we have to use EM_STREAMIN to force richedit control 2.0+ to show any
     // text in the non default charset -- otherwise it thinks it knows better
     // than we do and always shows it in the default one
@@ -715,6 +765,61 @@ bool wxTextCtrl::StreamIn(const wxString& value,
 
     return TRUE;
 }
+
+#if !wxUSE_UNICODE_MSLU
+
+wxString
+wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
+{
+    wxString out;
+
+    const int len = GetWindowTextLength(GetHwnd());
+
+#if wxUSE_WCHAR_T
+    wxWCharBuffer wchBuf(len);
+    wchar_t *wpc = wchBuf.data();
+#else
+    wchar_t *wchBuf = (wchar_t *)malloc((len + 1)*sizeof(wchar_t));
+    wchar_t *wpc = wchBuf;
+#endif
+
+    EDITSTREAM eds;
+    wxZeroMemory(eds);
+    eds.dwCookie = (DWORD)&wpc;
+    eds.pfnCallback = wxRichEditStreamOut;
+
+    ::SendMessage
+      (
+        GetHwnd(),
+        EM_STREAMOUT,
+        SF_TEXT | SF_UNICODE | (selectionOnly ? SFF_SELECTION : 0),
+        (LPARAM)&eds
+      );
+
+    if ( eds.dwError )
+    {
+        wxLogLastError(_T("EM_STREAMOUT"));
+    }
+    else // streamed out ok
+    {
+        // now convert to the given encoding (this is a lossful conversion but
+        // what else can we do)
+        wxCSConv conv(encoding);
+        size_t lenNeeded = conv.WC2MB(NULL, wchBuf, len);
+        if ( lenNeeded )
+        {
+            conv.WC2MB(wxStringBuffer(out, lenNeeded), wchBuf, len);
+        }
+    }
+
+#if !wxUSE_WCHAR_T
+    free(wchBuf);
+#endif // !wxUSE_WCHAR_T
+
+    return out;
+}
+
+#endif // !wxUSE_UNICODE_MSLU
 
 #endif // wxUSE_RICHEDIT
 
