@@ -419,6 +419,9 @@ void wxFrame::SetMenuBar(wxMenuBar *menu_bar)
     if (!menu_bar)
     {
         DetachMenuBar();
+        //actually remove the menu from the frame
+        m_hMenu=NULL;
+        InternalSetMenuBar();
         return;
     }
 
