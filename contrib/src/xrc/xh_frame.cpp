@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_frame.cpp
-// Purpose:     XML resource for dialogs
+// Purpose:     XRC resource for dialogs
 // Author:      Vaclav Slavik & Aleks.
 // Created:     2000/03/05
 // RCS-ID:      $Id$
@@ -55,7 +55,7 @@ wxObject *wxFrameXmlHandler::DoCreateResource()
 { 
     wxFrame *frame = wxDynamicCast(m_instance, wxFrame);
     
-    wxASSERT_MSG(frame, _("XML resource: Cannot create dialog without instance."));
+    wxASSERT_MSG(frame, _("XRC resource: Cannot create dialog without instance."));
     
     frame->Create(m_parentAsWindow,
                 GetID(),

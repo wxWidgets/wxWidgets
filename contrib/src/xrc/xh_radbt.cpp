@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_radbt.cpp
-// Purpose:     XML resource for wxRadioButton
+// Purpose:     XRC resource for wxRadioButton
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$

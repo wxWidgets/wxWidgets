@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_tree.cpp
-// Purpose:     XML resource for wxTreeCtrl
+// Purpose:     XRC resource for wxTreeCtrl
 // Author:      Brian Gavin
 // Created:     2000/09/09
 // RCS-ID:      $Id$

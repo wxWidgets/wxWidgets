@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_listc.cpp
-// Purpose:     XML resource for wxListCtrl
+// Purpose:     XRC resource for wxListCtrl
 // Author:      Brian Gavin
 // Created:     2000/09/09
 // RCS-ID:      $Id$

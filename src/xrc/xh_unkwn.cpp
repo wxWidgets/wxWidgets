@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_unkwn.cpp
-// Purpose:     XML resource for unknown widget
+// Purpose:     XRC resource for unknown widget
 // Author:      Vaclav Slavik
 // Created:     2000/09/09
 // RCS-ID:      $Id$

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_bttn.cpp
-// Purpose:     XML resource for buttons
+// Purpose:     XRC resource for buttons
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
 // RCS-ID:      $Id$

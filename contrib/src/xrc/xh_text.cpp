@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_text.cpp
-// Purpose:     XML resource for wxTextCtrl
+// Purpose:     XRC resource for wxTextCtrl
 // Author:      Aleksandras Gluchovas
 // Created:     2000/03/21
 // RCS-ID:      $Id$

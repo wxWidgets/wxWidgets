@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_menu.cpp
-// Purpose:     XML resource for menus and menubars
+// Purpose:     XRC resource for menus and menubars
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
 // RCS-ID:      $Id$

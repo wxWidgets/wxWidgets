@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_spin.cpp
-// Purpose:     XML resource for wxSpinButton
+// Purpose:     XRC resource for wxSpinButton
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$

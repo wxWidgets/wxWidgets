@@ -33,7 +33,7 @@
 
      - handle unknown encodings
      - process all elements, including CDATA
-     - XML resources should automatically select desired encoding based on
+     - XRC resources should automatically select desired encoding based on
        runtime environment (?) (would need BIN and BINZ formats modification,
        too)
 

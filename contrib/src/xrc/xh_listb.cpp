@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_listb.cpp
-// Purpose:     XML resource for wxListBox
+// Purpose:     XRC resource for wxListBox
 // Author:      Bob Mitchell & Vaclav Slavik
 // Created:     2000/07/29
 // RCS-ID:      $Id$

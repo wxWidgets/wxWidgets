@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_panel.cpp
-// Purpose:     XML resource for panels
+// Purpose:     XRC resource for panels
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
 // RCS-ID:      $Id$

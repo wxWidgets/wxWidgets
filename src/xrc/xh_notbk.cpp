@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_notbk.cpp
-// Purpose:     XML resource for wxNotebook
+// Purpose:     XRC resource for wxNotebook
 // Author:      Vaclav Slavik
 // Created:     2000/03/21
 // RCS-ID:      $Id$

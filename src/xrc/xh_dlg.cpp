@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_dlg.cpp
-// Purpose:     XML resource for dialogs
+// Purpose:     XRC resource for dialogs
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
 // RCS-ID:      $Id$
@@ -50,7 +50,7 @@ wxObject *wxDialogXmlHandler::DoCreateResource()
 { 
     wxDialog *dlg = wxDynamicCast(m_instance, wxDialog);
     
-    wxASSERT_MSG(dlg, _("XML resource: Cannot create dialog without instance."));
+    wxASSERT_MSG(dlg, _("XRC resource: Cannot create dialog without instance."));
     
     dlg->Create(m_parentAsWindow,
                 GetID(),

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_bmpbt.cpp
-// Purpose:     XML resource for bitmap buttons
+// Purpose:     XRC resource for bitmap buttons
 // Author:      Brian Gavin
 // Created:     2000/09/09
 // RCS-ID:      $Id$

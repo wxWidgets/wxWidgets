@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_sizer.cpp
-// Purpose:     XML resource for wxBoxSizer
+// Purpose:     XRC resource for wxBoxSizer
 // Author:      Vaclav Slavik
 // Created:     2000/03/21
 // RCS-ID:      $Id$
@@ -119,7 +119,7 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
     
     else if (m_class == wxT("spacer"))
     {
-        wxCHECK_MSG(m_parentSizer, NULL, wxT("Incorrect syntax of XML resource: spacer not within sizer!"));
+        wxCHECK_MSG(m_parentSizer, NULL, wxT("Incorrect syntax of XRC resource: spacer not within sizer!"));
         wxSize sz = GetSize();
         m_parentSizer->Add(sz.x, sz.y,
             GetLong(wxT("option")), GetStyle(wxT("flag")), GetDimension(wxT("border")));

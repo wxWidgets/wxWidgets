@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_html.cpp
-// Purpose:     XML resource for wxHtmlWindow
+// Purpose:     XRC resource for wxHtmlWindow
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$

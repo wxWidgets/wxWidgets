@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_stbmp.cpp
-// Purpose:     XML resource for wxStaticBitmap
+// Purpose:     XRC resource for wxStaticBitmap
 // Author:      Vaclav Slavik
 // Created:     2000/04/22
 // RCS-ID:      $Id$

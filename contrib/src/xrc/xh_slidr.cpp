@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_slidr.cpp
-// Purpose:     XML resource for wxSlider
+// Purpose:     XRC resource for wxSlider
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xmlres.cpp
-// Purpose:     XML resources
+// Purpose:     XRC resources
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
 // RCS-ID:      $Id$
@@ -310,7 +310,7 @@ void wxXmlResource::UpdateResources()
             }
             else if (m_data[i].Doc->GetRoot()->GetName() != wxT("resource"))
             {
-                wxLogError(_("Invalid XML resource '%s': doesn't have root node 'resource'."), m_data[i].File.c_str());
+                wxLogError(_("Invalid XRC resource '%s': doesn't have root node 'resource'."), m_data[i].File.c_str());
                 wxDELETE(m_data[i].Doc);
             }
             else
@@ -368,7 +368,7 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& cla
             }
     }
 
-    wxLogError(_("XML resource '%s' (class '%s') not found!"),
+    wxLogError(_("XRC resource '%s' (class '%s') not found!"),
                name.c_str(), classname.c_str());
     return NULL;
 }
@@ -499,7 +499,7 @@ wxString wxXmlResourceHandler::GetText(const wxString& param)
     const wxChar *dt;
     wxChar amp_char;
 
-    // VS: First version of XML resources used $ instead of & (which is illegal in XML),
+    // VS: First version of XRC resources used $ instead of & (which is illegal in XML),
     //     but later I realized that '_' fits this purpose much better (because
     //     &File means "File with F underlined").
     if (m_resource->CompareVersion(2,3,0,1) < 0)
@@ -601,7 +601,7 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param)
     if (v.Length() != 7 || v[0u] != wxT('#') ||
         wxSscanf(v.c_str(), wxT("#%lX"), &tmp) != 1)
     {
-        wxLogError(_("XML resource: Incorrect colour specification '%s' for property '%s'."),
+        wxLogError(_("XRC resource: Incorrect colour specification '%s' for property '%s'."),
                    v.c_str(), param.c_str());
         return wxNullColour;
     }
@@ -621,7 +621,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, wxSize size)
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name);
     if (fsfile == NULL)
     {
-        wxLogError(_("XML resource: Cannot create bitmap from '%s'."), param.c_str());
+        wxLogError(_("XRC resource: Cannot create bitmap from '%s'."), param.c_str());
         return wxNullBitmap;
     }
     wxImage img(*(fsfile->GetStream()));
@@ -631,7 +631,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, wxSize size)
 #endif
     if (!img.Ok())
     {
-        wxLogError(_("XML resource: Cannot create bitmap from '%s'."), param.c_str());
+        wxLogError(_("XRC resource: Cannot create bitmap from '%s'."), param.c_str());
         return wxNullBitmap;
     }
     if (!(size == wxDefaultSize)) img.Rescale(size.x, size.y);

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_sttxt.cpp
-// Purpose:     XML resource for wxStaticText
+// Purpose:     XRC resource for wxStaticText
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$

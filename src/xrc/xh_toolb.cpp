@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_toolb.cpp
-// Purpose:     XML resource for wxBoxSizer
+// Purpose:     XRC resource for wxBoxSizer
 // Author:      Vaclav Slavik
 // Created:     2000/08/11
 // RCS-ID:      $Id$
@@ -40,7 +40,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 { 
     if (m_class == wxT("tool"))
     {
-        wxCHECK_MSG(m_toolbar, NULL, wxT("Incorrect syntax of XML resource: tool not within a toolbar!"));
+        wxCHECK_MSG(m_toolbar, NULL, wxT("Incorrect syntax of XRC resource: tool not within a toolbar!"));
         m_toolbar->AddTool(GetID(),
                            GetBitmap(wxT("bitmap")),
                            GetBitmap(wxT("bitmap2")),
@@ -55,7 +55,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
     
     else if (m_class == wxT("separator"))
     {
-        wxCHECK_MSG(m_toolbar, NULL, wxT("Incorrect syntax of XML resource: separator not within a toolbar!"));
+        wxCHECK_MSG(m_toolbar, NULL, wxT("Incorrect syntax of XRC resource: separator not within a toolbar!"));
         m_toolbar->AddSeparator();
         return m_toolbar; // must return non-NULL
     }

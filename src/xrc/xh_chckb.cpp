@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_chckb.cpp
-// Purpose:     XML resource for wxCheckBox
+// Purpose:     XRC resource for wxCheckBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$

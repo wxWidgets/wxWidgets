@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_gauge.cpp
-// Purpose:     XML resource for wxGauge
+// Purpose:     XRC resource for wxGauge
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$

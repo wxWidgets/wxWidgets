@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_combo.cpp
-// Purpose:     XML resource for wxRadioBox
+// Purpose:     XRC resource for wxRadioBox
 // Author:      Bob Mitchell
 // Created:     2000/03/21
 // RCS-ID:      $Id$

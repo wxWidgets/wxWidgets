@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_scrol.cpp
-// Purpose:     XML resource for wxScrollBar
+// Purpose:     XRC resource for wxScrollBar
 // Author:      Brian Gavin
 // Created:     2000/09/09
 // RCS-ID:      $Id$

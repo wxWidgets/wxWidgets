@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_stbox.cpp
-// Purpose:     XML resource for wxStaticBox
+// Purpose:     XRC resource for wxStaticBox
 // Author:      Brian Gavin
 // Created:     2000/09/09
 // RCS-ID:      $Id$

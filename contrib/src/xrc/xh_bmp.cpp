@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xh_bmp.cpp
-// Purpose:     XML resource for wxBitmap and wxIcon
+// Purpose:     XRC resource for wxBitmap and wxIcon
 // Author:      Vaclav Slavik
 // Created:     2000/09/09
 // RCS-ID:      $Id$
