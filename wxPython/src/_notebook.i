@@ -51,6 +51,9 @@ public:
     // get the panel which represents the given page
     virtual wxWindow *GetPage(size_t n);
 
+    // get the current page or NULL if none
+    wxWindow* GetCurrentPage() const;
+
     // get the currently selected page or wxNOT_FOUND if none
     virtual int GetSelection() const/* = 0*/;
 
@@ -209,11 +212,6 @@ wx.NB_HITTEST flags.", "");
 
     // implement some base class functions
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
-
-#ifdef __WXMSW__
-    // Windows only: attempts to apply the UX theme page background to this page
-  void ApplyThemeBackground(wxWindow* window, const wxColour& colour);
-#endif
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
