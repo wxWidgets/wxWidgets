@@ -242,7 +242,7 @@ void wxPropertyValue::Insert(wxPropertyValue *expr)
 void wxPropertyValue::Delete(wxPropertyValue *node)
 {
   wxPropertyValue *expr = GetFirst();
-  
+
   wxPropertyValue *previous = NULL;
   while (expr && (expr != node))
   {
@@ -254,7 +254,7 @@ void wxPropertyValue::Delete(wxPropertyValue *node)
   {
     if (previous)
       previous->m_next = expr->m_next;
-      
+
     // If node was the first in the list,
     // make the list point to the NEXT one.
     if (GetFirst() == expr)
@@ -327,7 +327,7 @@ wxPropertyValue *wxPropertyValue::NewCopy(void) const
    case wxPropertyValueStringPtr:
      return new wxPropertyValue(m_value.stringPtr);
 
-   case wxPropertyValueNull: 
+   case wxPropertyValueNull:
 #ifdef __X__
     cerr << "Should never get here!\n";
 #endif
@@ -349,11 +349,11 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
     case wxPropertyValueReal:
       (*this) = copyFrom.RealValue();
       return ;
-      
+
     case wxPropertyValueString:
       (*this) = wxString(copyFrom.StringValue());
       return ;
-      
+
     case wxPropertyValuebool:
       (*this) = copyFrom.BoolValue();
       return ;
@@ -371,10 +371,10 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
     case wxPropertyValueStringPtr:
     {
       wxChar** s = copyFrom.StringValuePtr();
-      (*this) = s != 0;
+      (*this) = s;
       return ;
     }
-      
+
     case wxPropertyValueList:
     {
       m_value.first = NULL;
@@ -389,7 +389,7 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
       }
       return;
     }
-   case wxPropertyValueNull: 
+   case wxPropertyValueNull:
 #ifdef __X__
     cerr << "Should never get here!\n";
 #endif
@@ -463,7 +463,7 @@ void wxPropertyValue::WritePropertyClause(wxString& stream)  // Write this expre
         stream.Append( _T("  ") );
       node->WritePropertyType(stream);
       node = node->m_next;
-      if (node) 
+      if (node)
         stream.Append( _T(",\n" ) );
       first = FALSE;
     }
@@ -550,7 +550,7 @@ void wxPropertyValue::WritePropertyType(wxString& stream)    // Write as any oth
         {
           expr->WritePropertyType(stream);
           expr = expr->m_next;
-          if (expr) 
+          if (expr)
 	    stream.Append( _T(", ") );
         }
         stream.Append( _T("]") );
@@ -599,7 +599,7 @@ void wxPropertyValue::operator=(const wxString& val1)
     else
       *m_value.stringPtr = NULL;
   }
-  
+
   m_clientData = NULL;
   m_next = NULL;
   m_last = NULL;
@@ -773,7 +773,7 @@ wxChar **wxPropertyValue::StringValuePtr(void) const
 /*
  * A property (name plus value)
  */
- 
+
 IMPLEMENT_DYNAMIC_CLASS(wxProperty, wxObject)
 
 wxProperty::wxProperty(void)
@@ -863,7 +863,7 @@ void wxProperty::operator=(const wxPropertyValue& val)
 /*
  * Base property view class
  */
- 
+
 IMPLEMENT_DYNAMIC_CLASS(wxPropertyView, wxEvtHandler)
 
 wxPropertyView::wxPropertyView(long flags)
@@ -887,7 +887,7 @@ wxPropertyValidator *wxPropertyView::FindPropertyValidator(wxProperty *property)
 {
   if (property->GetValidator())
     return property->GetValidator();
-    
+
   wxNode *node = m_validatorRegistryList.First();
   while (node)
   {
@@ -964,8 +964,8 @@ void wxPropertySheet::RemoveProperty(const wxString& name)
 }	
 
 bool wxPropertySheet::HasProperty(const wxString& name) const
-{ 
-	return (GetProperty(name)?TRUE:FALSE); 
+{
+	return (GetProperty(name)?TRUE:FALSE);
 }
 
 // Clear all properties
@@ -991,7 +991,7 @@ void wxPropertySheet::SetAllModified(bool flag)
     wxProperty *prop = (wxProperty *)node->Data();
     prop->GetValue().SetModified(flag);
     node = node->Next();
-  }  
+  }
 }
 
 /*

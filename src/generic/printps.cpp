@@ -45,6 +45,7 @@
 #include "wx/dcprint.h"
 #include "wx/printdlg.h"
 #include "wx/generic/prntdlgg.h"
+#include "wx/generic/progdlgg.h"
 #include "wx/paper.h"
 
 #include <stdlib.h>
@@ -180,7 +181,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
        totalPages,
        parent,
        wxPD_CAN_ABORT|wxPD_AUTO_HIDE|wxPD_APP_MODAL);
-    
+
     printout->OnBeginPrinting();
 
     bool keepGoing = TRUE;

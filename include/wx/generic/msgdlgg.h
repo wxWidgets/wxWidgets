@@ -29,25 +29,30 @@ class WXDLLEXPORT wxGenericMessageDialog: public wxDialog
 DECLARE_DYNAMIC_CLASS(wxGenericMessageDialog)
 
 public:
-    wxGenericMessageDialog(wxWindow *parent, const wxString& message, 
+    wxGenericMessageDialog(wxWindow *parent, const wxString& message,
         const wxString& caption = wxMessageBoxCaptionStr,
         long style = wxOK|wxCENTRE, const wxPoint& pos = wxDefaultPosition);
 
     void OnYes(wxCommandEvent& event);
     void OnNo(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event);
-    
+
 private:
     int     m_dialogStyle;
 
 DECLARE_EVENT_TABLE()
 };
 
-#if !defined( __WXMSW__ ) && !defined( __WXMAC__)
+#if !defined( __WXMSW__ ) && !defined( __WXMAC__) && !defined(__WXPM__)
 #define wxMessageDialog wxGenericMessageDialog
 
-int wxMessageBox(const wxString& message, const wxString& caption = wxMessageBoxCaptionStr, 
-  long style = wxOK|wxCENTRE, wxWindow *parent = (wxWindow *) NULL, int x = -1, int y = -1);
+int wxMessageBox( const wxString& message
+                 ,const wxString& caption = wxMessageBoxCaptionStr
+                 ,long  style = wxOK|wxCENTRE
+                 ,wxWindow *parent = (wxWindow *) NULL
+                 ,int x = -1
+                 ,int y = -1
+                );
 
 #endif
 
