@@ -2,8 +2,10 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-What's new in 2.1.12
+What's new in 2.1.13
 --------------------
+Skipped a version number to match what has been released for wxGTK.
+
 Updated wxMVCTree and added a demo for it, also fixed layout on GTK
 and some flicker problems.
 
@@ -36,7 +38,8 @@ Added a set of Generic Buttons to the library.  These are simple
 window classes that look and act like native buttons, but you can have
 a bit more control over them.  The bezel width can be set in addition
 to colours, fonts, etc.  There is a ToggleButton as well as Bitmap
-versions too.
+versions too.  They should also serve as a good example of how to
+create your own classes derived from wxControl.
 
 The C++ wxToolBar classes have been redone, and so have the wxPython
 wrappers.  There have been slight modifications to some of the methods
@@ -62,7 +65,7 @@ methods look like this:
 There are also coresponding InsertTool and InsertSimpleTool methods
 that additionally take an integer position as the first parameter.
 
-Added a wrapper for the PCX and TIFF ImageHandlers.
+Added a wrapper for the new PCX and TIFF ImageHandlers.
 
 wxRect now simulates attributes named left, right, top and bottom.
 
