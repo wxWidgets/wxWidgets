@@ -544,6 +544,11 @@ void wxClipboard::Close()
     m_open = FALSE;
 }
 
+bool wxClipboard::IsOpened() const
+{
+    return m_open;
+}
+
 bool wxClipboard::IsSupported( const wxDataFormat& format )
 {
     /* store requested format to be asked for by callbacks */

@@ -66,6 +66,9 @@ public:
     // close the clipboard after SetData() and GetData()
     virtual void Close();
 
+    // query whether the clipboard is opened
+    virtual bool IsOpened() const;
+
     // set the clipboard data. all other formats will be deleted.
     virtual bool SetData( wxDataObject *data );
 

@@ -46,6 +46,9 @@ public:
     // close the clipboard after Add/SetData() and GetData()
     virtual void Close() = 0;
 
+    // query whether the clipboard is opened
+    virtual bool IsOpened() const = 0;
+
     // add to the clipboard data
     //
     // NB: the clipboard owns the pointer and will delete it, so data must be
@@ -101,6 +104,36 @@ public:
 
 // The global clipboard object
 WXDLLEXPORT_DATA(extern wxClipboard *) wxTheClipboard;
+
+// ----------------------------------------------------------------------------
+// helpful class for opening the clipboard and automatically closing it
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxClipboardLocker
+{
+public:
+    wxClipboardLocker(wxClipboard *clipboard = (wxClipboard *)NULL)
+    {
+        m_clipboard = clipboard ? clipboard : wxTheClipboard;
+        if ( m_clipboard )
+        {
+            m_clipboard->Open();
+        }
+    }
+
+    bool IsOk() const { return m_clipboard->IsOpened(); }
+
+    ~wxClipboardLocker()
+    {
+        if ( m_clipboard )
+        {
+            m_clipboard->Close();
+        }
+    }
+
+private:
+    wxClipboard *m_clipboard;
+};
 
 #endif // wxUSE_CLIPBOARD
 

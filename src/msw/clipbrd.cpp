@@ -474,6 +474,15 @@ bool wxClipboard::Open()
 #endif
 }
 
+bool wxClipboard::IsOpened() const
+{
+#if wxUSE_OLE_CLIPBOARD
+    return TRUE;
+#else
+    return wxIsClipboardOpened();
+#endif
+}
+
 bool wxClipboard::SetData( wxDataObject *data )
 {
     (void)wxEmptyClipboard();
