@@ -46,10 +46,10 @@
 // ----------------------------------------------------------------------------
 
 // the config paths we use
-static const char* FONTMAPPER_ROOT_PATH = _T("FontMapper");
-static const char* FONTMAPPER_CHARSET_PATH = _T("Charsets");
-static const char* FONTMAPPER_CHARSET_ALIAS_PATH = _T("Aliases");
-static const char* FONTMAPPER_FONT_FROM_ENCODING_PATH = _T("Encodings");
+static const wxChar* FONTMAPPER_ROOT_PATH = wxT("FontMapper");
+static const wxChar* FONTMAPPER_CHARSET_PATH = wxT("Charsets");
+static const wxChar* FONTMAPPER_CHARSET_ALIAS_PATH = wxT("Aliases");
+static const wxChar* FONTMAPPER_FONT_FROM_ENCODING_PATH = wxT("Encodings");
 
 // encodings supported by GetEncodingDescription
 static wxFontEncoding gs_encodings[] =
@@ -112,30 +112,30 @@ static const wxChar* gs_encodingDescs[] =
 // and the internal names
 static const wxChar* gs_encodingNames[] =
 {
-    "iso8859-1",
-    "iso8859-2",
-    "iso8859-3",
-    "iso8859-4",
-    "iso8859-5",
-    "iso8859-6",
-    "iso8859-7",
-    "iso8859-8",
-    "iso8859-9",
-    "iso8859-10",
-    "iso8859-11",
-    "iso8859-12",
-    "iso8859-13",
-    "iso8859-14",
-    "iso8859-15",
-    "koi8-r",
-    "windows1250",
-    "windows1251",
-    "windows1252",
-    "windows1253",
-    "windows1254",
-    "windows1255",
-    "windows1256",
-    "windows1257",
+    wxT( "iso8859-1" ),
+    wxT( "iso8859-2" ),
+    wxT( "iso8859-3" ),
+    wxT( "iso8859-4" ),
+    wxT( "iso8859-5" ),
+    wxT( "iso8859-6" ),
+    wxT( "iso8859-7" ),
+    wxT( "iso8859-8" ),
+    wxT( "iso8859-9" ),
+    wxT( "iso8859-10" ),
+    wxT( "iso8859-11" ),
+    wxT( "iso8859-12" ),
+    wxT( "iso8859-13" ),
+    wxT( "iso8859-14" ),
+    wxT( "iso8859-15" ),
+    wxT( "koi8-r" ),
+    wxT( "windows1250" ),
+    wxT( "windows1251" ),
+    wxT( "windows1252" ),
+    wxT( "windows1253" ),
+    wxT( "windows1254" ),
+    wxT( "windows1255" ),
+    wxT( "windows1256" ),
+    wxT( "windows1257" ),
 };
 
 // ----------------------------------------------------------------------------
@@ -395,7 +395,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         else if ( cs.Left(8) == _T("WINDOWS-") )
         {
             int value;
-            if ( wxSscanf(cs.c_str() + 8, "%u", &value) == 1 )
+            if ( wxSscanf(cs.c_str() + 8, wxT("%u"), &value) == 1 )
             {
                 if ( value >= 1250 )
                 {
