@@ -2972,6 +2972,26 @@ MRESULT wxWindowOS2::OS2WindowProc(
         case WM_CONTROL:
             switch(SHORT2FROMMP(wParam))
             {
+                case BN_PAINT:
+                    {
+                        HWND                hWnd = ::WinWindowFromID((HWND)GetHwnd(), SHORT1FROMMP(wParam));
+                        wxWindowOS2*        pWin = wxFindWinFromHandle(hWnd);
+
+                        if (!pWin)
+                        {
+                            bProcessed = FALSE;
+                            break;
+                        }
+                        if (pWin->IsKindOf(CLASSINFO(wxBitmapButton)))
+                        {
+                            wxBitmapButton*     pBitmapButton = wxDynamicCast(pWin, wxBitmapButton);
+
+                            pBitmapButton->OS2OnDraw((WXDRAWITEMSTRUCT *)lParam);
+                        }
+                        return 0;
+                    }
+                    break;
+
                 case BKN_PAGESELECTEDPENDING:
                     {
                         PPAGESELECTNOTIFY  pPage = (PPAGESELECTNOTIFY)lParam;

@@ -149,17 +149,6 @@ wxColour wxSystemSettingsNative::GetColour(
                     );
             break;
 
-        case wxSYS_COLOUR_BTNDARKSHADOW:
-            vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
-                                             ,SYSCLR_BUTTONDARK
-                                             ,0L
-                                            );
-            vCol.Set( GetRValue(vRef)
-                     ,GetGValue(vRef)
-                     ,GetBValue(vRef)
-                    );
-            break;
-
         case wxSYS_COLOUR_MENUBAR:
             vRef = (ULONG)::WinQuerySysColor( HWND_DESKTOP
                                              ,SYSCLR_MENU

@@ -67,10 +67,10 @@ bool wxBitmapButton::Create(
         m_windowId = vId;
 
     if (nWidth == -1 && rBitmap.Ok())
-        nWidth = rBitmap.GetWidth() + 2 * m_marginX;
+        nWidth = rBitmap.GetWidth() + 4 * m_marginX;
 
     if (nHeight == -1 && rBitmap.Ok())
-        nHeight = rBitmap.GetHeight() + 2 * m_marginY;
+        nHeight = rBitmap.GetHeight() + 4 * m_marginY;
 
     ULONG                           ulOS2Style = WS_VISIBLE | WS_TABSTOP | BS_USERBUTTON;
 
@@ -193,10 +193,8 @@ void wxBitmapButton::DrawFace (
     //
     // Set up drawing colors
     //
-    wxPen                           vHiLitePen(wxColour(255, 255, 255), 1, wxSOLID); // White
-    wxPen                           vLitePen(wxColour(223, 223, 223), 1, wxSOLID); // Very Light Grey
-    wxPen                           vShadowPen(wxColour(191, 191, 191), 1, wxSOLID); // Medium Grey
-    wxPen                           vDarkShadowPen(wxColour(128, 128, 128), 1, wxSOLID);
+    wxPen                           vHiLitePen(wxColour(255, 255, 255), 2, wxSOLID); // White
+    wxPen                           vDarkShadowPen(wxColour(85, 85, 85), 2, wxSOLID);
     wxColour                        vFaceColor(wxColour(204, 204, 204)); // Light Grey
 
     //
@@ -208,52 +206,29 @@ void wxBitmapButton::DrawFace (
     // Draw the border
     //
     rDC.SetPen(bSel ? vDarkShadowPen : vHiLitePen);
-    rDC.DrawLine( rDC.m_vRclPaint.xLeft
-                 ,rDC.m_vRclPaint.yTop
-                 ,rDC.m_vRclPaint.xRight - 1
-                 ,rDC.m_vRclPaint.yTop
-                );
-    rDC.DrawLine( rDC.m_vRclPaint.xLeft
-                 ,rDC.m_vRclPaint.yTop + 1
-                 ,rDC.m_vRclPaint.xLeft
-                 ,rDC.m_vRclPaint.yBottom - 1
-                );
-
-    rDC.SetPen(bSel ? vShadowPen : vLitePen);
     rDC.DrawLine( rDC.m_vRclPaint.xLeft + 1
-                 ,rDC.m_vRclPaint.yTop + 1
-                 ,rDC.m_vRclPaint.xRight - 2
-                 ,rDC.m_vRclPaint.yTop + 1
-                );
-    rDC.DrawLine( rDC.m_vRclPaint.xLeft + 1
-                 ,rDC.m_vRclPaint.yTop + 2
-                 ,rDC.m_vRclPaint.xLeft + 1
-                 ,rDC.m_vRclPaint.yBottom - 2
-                );
-
-    rDC.SetPen(bSel ? vLitePen : vShadowPen);
-    rDC.DrawLine( rDC.m_vRclPaint.xLeft + 1
-                 ,rDC.m_vRclPaint.yBottom - 2
-                 ,rDC.m_vRclPaint.xRight - 1
-                 ,rDC.m_vRclPaint.yBottom - 2
-                );
-    rDC.DrawLine( rDC.m_vRclPaint.xRight - 2
-                 ,rDC.m_vRclPaint.yBottom - 3
-                 ,rDC.m_vRclPaint.xRight - 2
-                 ,rDC.m_vRclPaint.yTop
-                );
-
-    rDC.SetPen(bSel ? vDarkShadowPen : vHiLitePen);
-    rDC.DrawLine( rDC.m_vRclPaint.xLeft
-                 ,rDC.m_vRclPaint.yBottom - 1
-                 ,rDC.m_vRclPaint.xRight + 2
-                 ,rDC.m_vRclPaint.yBottom - 1
-                );
-    rDC.DrawLine( rDC.m_vRclPaint.xRight - 1
-                 ,rDC.m_vRclPaint.yBottom - 2
+                 ,rDC.m_vRclPaint.yTop - 1
                  ,rDC.m_vRclPaint.xRight - 1
                  ,rDC.m_vRclPaint.yTop - 1
                 );
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft + 1
+                 ,rDC.m_vRclPaint.yTop - 1
+                 ,rDC.m_vRclPaint.xLeft + 1
+                 ,rDC.m_vRclPaint.yBottom + 1
+                );
+
+    rDC.SetPen(bSel ? vHiLitePen : vDarkShadowPen);
+    rDC.DrawLine( rDC.m_vRclPaint.xLeft + 1
+                 ,rDC.m_vRclPaint.yBottom + 1
+                 ,rDC.m_vRclPaint.xRight - 1
+                 ,rDC.m_vRclPaint.yBottom + 1
+                );
+    rDC.DrawLine( rDC.m_vRclPaint.xRight - 1
+                 ,rDC.m_vRclPaint.yTop - 1
+                 ,rDC.m_vRclPaint.xRight - 1
+                 ,rDC.m_vRclPaint.yBottom + 1
+                );
+
 } // end of wxBitmapButton::DrawFace
 
 void wxBitmapButton::DrawButtonFocus (
