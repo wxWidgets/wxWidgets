@@ -16,7 +16,7 @@ AC_CHECK_HEADER(esd.h, [
   ])
 ])
 
-if test ! -z $ESD_LINK; then
+if test "$ESD_LINK" != "" ; then
   echo "ESound detected"
 fi
 

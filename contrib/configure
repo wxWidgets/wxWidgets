@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# From configure.in Id
+# From configure.in Id: configure.in
 # Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using autoconf version 2.13 
 # Copyright (C) 1992, 93, 94, 95, 96 Free Software Foundation, Inc.
@@ -683,7 +683,7 @@ else
 fi
 
 
-if test ! -z $ESD_LINK; then
+if test "$ESD_LINK" != "" ; then
   echo "ESound detected"
 fi
 
