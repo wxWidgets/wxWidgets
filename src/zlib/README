@@ -1,7 +1,7 @@
-zlib 1.1.2 is a general purpose data compression library.  All the code
+zlib 1.1.4 is a general purpose data compression library.  All the code
 is thread safe.  The data format used by the zlib library
 is described by RFCs (Request for Comments) 1950 to 1952 in the files 
-ftp://ds.internic.net/rfc/rfc1950.txt (zlib format), rfc1951.txt (deflate
+http://www.ietf.org/rfc/rfc1950.txt (zlib format), rfc1951.txt (deflate
 format) and rfc1952.txt (gzip format). These documents are also available in
 other formats from ftp://ftp.uu.net/graphics/png/documents/zlib/zdoc-index.html
 
@@ -14,49 +14,54 @@ except example.c and minigzip.c.
 
 To compile all files and run the test program, follow the instructions
 given at the top of Makefile. In short "make test; make install"
-should work for most machines.  For MSDOS, use one of the special
-makefiles such as Makefile.msc; for VMS, use Make_vms.com or descrip.mms.
+should work for most machines. For Unix: "./configure; make test; make install"
+For MSDOS, use one of the special makefiles such as Makefile.msc.
+For VMS, use Make_vms.com or descrip.mms.
 
-Questions about zlib should be sent to <zlib@quest.jpl.nasa.gov> or,
-if this fails, to the addresses given below in the Copyright section.
-The zlib home page is http://www.cdrom.com/pub/infozip/zlib/
-The official zlib ftp site is ftp://ftp.cdrom.com/pub/infozip/zlib/
-Mark Nelson <markn@tiny.com> wrote an article about zlib for the Jan. 1997
+Questions about zlib should be sent to <zlib@gzip.org>, or to
+Gilles Vollant <info@winimage.com> for the Windows DLL version.
+The zlib home page is http://www.zlib.org or http://www.gzip.org/zlib/
+Before reporting a problem, please check this site to verify that
+you have the latest version of zlib; otherwise get the latest version and
+check whether the problem still exists or not.
+
+PLEASE read the zlib FAQ http://www.gzip.org/zlib/zlib_faq.html
+before asking for help.
+
+Mark Nelson <markn@ieee.org> wrote an article about zlib for the Jan. 1997
 issue of  Dr. Dobb's Journal; a copy of the article is available in
-http://web2.airmail.net/markn/articles/zlibtool/zlibtool.htm
+http://dogma.net/markn/articles/zlibtool/zlibtool.htm
 
-The changes made in version 1.1.2 are documented in the file ChangeLog.
-The main changes since 1.1.1 are:
+The changes made in version 1.1.4 are documented in the file ChangeLog.
+The only changes made since 1.1.3 are bug corrections:
 
-- added contrib/minzip, mini zip and unzip based on zlib (Gilles Vollant)
-  See http://www.winimage.com/zLibDll/unzip.html
-- preinitialize the inflate tables for fixed codes, to make the code
-  completely thread safe (Mark)
-- some simplifications and slight speed-up to the inflate code (Mark)
-- fix gzeof on non-compressed files (Allan Schrum)
-- add -std1 option in configure for OSF1 to fix gzprintf (Martin Mokrejs)
-- use default value of 4K for Z_BUFSIZE for 16-bit MSDOS (Tim Wegner + Glenn)
-- added os2/Makefile.def and os2/zlib.def (Andrew Zabolotny)
-- add shared lib support for UNIX_SV4.2MP (MATSUURA Takanori)
-- do not wrap extern "C" around system includes (Tom Lane)
-- added amiga/Makefile.pup for Amiga powerUP SAS/C PPC (Andreas Kleinert)
-- allow "make install prefix=..." even after configure (Glenn Randers-Pehrson)
-- allow "configure --prefix $HOME" (Tim Mooney)
+- ZFREE was repeated on same allocation on some error conditions.
+  This creates a security problem described in
+  http://www.zlib.org/advisory-2002-03-11.txt
+- Returned incorrect error (Z_MEM_ERROR) on some invalid data
+- Avoid accesses before window for invalid distances with inflate window
+  less than 32K.
+- force windowBits > 8 to avoid a bug in the encoder for a window size
+  of 256 bytes. (A complete fix will be available in 1.1.5).
+
+The beta version 1.1.5beta includes many more changes. A new official
+version 1.1.5 will be released as soon as extensive testing has been
+completed on it.
 
 
 Unsupported third party contributions are provided in directory "contrib".
 
-A Java implementation of zlib is available in the Java Development Kit 1.1
+A Java implementation of zlib is available in the Java Development Kit
 http://www.javasoft.com/products/JDK/1.1/docs/api/Package-java.util.zip.html
-See the zlib home page http://www.cdrom.com/pub/infozip/zlib/ for details.
+See the zlib home page http://www.zlib.org for details.
 
 A Perl interface to zlib written by Paul Marquess <pmarquess@bfsec.bt.co.uk>
-is in the CPAN (Comprehensive Perl Archive Network) sites, such as:
-ftp://ftp.cis.ufl.edu/pub/perl/CPAN/modules/by-module/Compress/Compress-Zlib*
+is in the CPAN (Comprehensive Perl Archive Network) sites
+http://www.cpan.org/modules/by-module/Compress/
 
 A Python interface to zlib written by A.M. Kuchling <amk@magnet.com>
-is available from the Python Software Association sites, such as:
-ftp://ftp.python.org/pub/python/contrib/Encoding/zlib*.tar.gz
+is available in Python 1.5 and later versions, see
+http://www.python.org/doc/lib/module-zlib.html
 
 A zlib binding for TCL written by Andreas Kupries <a.kupries@westend.com>
 is availlable at http://www.westend.com/~kupries/doc/trf/man/man.html
@@ -77,8 +82,8 @@ Notes for some targets:
 
   From Visual Basic, you can call the DLL functions which do not take
   a structure as argument: compress, uncompress and all gz* functions.
-  See contrib/visual-basic.txt for more information.
-  I don't know how to handle structures in Visual Basic, sorry.
+  See contrib/visual-basic.txt for more information, or get
+  http://www.tcfb.com/dowseware/cmp-z-it.zip
 
 - For 64-bit Irix, deflate.c must be compiled without any optimization.
   With -O, one libpng test fails. The test works in 32 bit mode (with
@@ -93,14 +98,13 @@ Notes for some targets:
 - zlib doesn't work on HP-UX 9.05 with some versions of /bin/cc. It works
   with other compilers. Use "make test" to check your compiler.
 
-- For shared memory multiprocessors, the decompression code assumes that
-  writes to pointers are atomic. Also the functions zalloc and zfree passed
-  to deflateInit must be multi-threaded in this case.
-
 - gzdopen is not supported on RISCOS, BEOS and by some Mac compilers.
 
 - For Turbo C the small model is supported only with reduced performance to
   avoid any far allocation; it was tested with -DMAX_WBITS=11 -DMAX_MEM_LEVEL=3
+
+- For PalmOs, see http://www.cs.uit.no/~perm/PASTA/pilot/software.html
+  Per Harald Myrvang <perm@stud.cs.uit.no>
 
 
 Acknowledgments:
@@ -112,7 +116,7 @@ Acknowledgments:
 
 Copyright notice:
 
- (C) 1995-1998 Jean-loup Gailly and Mark Adler
+ (C) 1995-2002 Jean-loup Gailly and Mark Adler
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages

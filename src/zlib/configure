@@ -24,18 +24,34 @@ VER=`sed -n -e '/VERSION "/s/.*"\(.*\)".*/\1/p' < zlib.h`
 AR=${AR-"ar rc"}
 RANLIB=${RANLIB-"ranlib"}
 prefix=${prefix-/usr/local}
+exec_prefix=${exec_prefix-'${prefix}'}
+libdir=${libdir-'${exec_prefix}/lib'}
+includedir=${includedir-'${prefix}/include'}
 shared_ext='.so'
 shared=0
 gcc=0
 old_cc="$CC"
 old_cflags="$CFLAGS"
 
+while test $# -ge 1
+do
 case "$1" in
-  -h* | --h*) echo 'syntax: configure [ --shared ] [--prefix PREFIX]'; exit 0;;
+    -h* | --h*)
+      echo 'usage:'
+      echo '  configure [--shared] [--prefix=PREFIX]  [--exec_prefix=EXPREFIX]'
+      echo '     [--libdir=LIBDIR] [--includedir=INCLUDEDIR]'
+        exit 0;;
   -p*=* | --p*=*) prefix=`echo $1 | sed 's/[-a-z_]*=//'`; shift;;
+    -e*=* | --e*=*) exec_prefix=`echo $1 | sed 's/[-a-z_]*=//'`; shift;;
+    -l*=* | --libdir=*) libdir=`echo $1 | sed 's/[-a-z_]*=//'`; shift;;
+    -i*=* | --includedir=*) includedir=`echo $1 | sed 's/[-a-z_]*=//'`;shift;;
   -p* | --p*) prefix="$2"; shift; shift;;
+    -e* | --e*) exec_prefix="$2"; shift; shift;;
+    -l* | --l*) libdir="$2"; shift; shift;;
+    -i* | --i*) includedir="$2"; shift; shift;;
   -s* | --s*) shared=1; shift;;
-esac
+    esac
+done
 
 test=ztest$$
 cat > $test.c <<EOF
@@ -46,6 +62,7 @@ EOF
 test -z "$CC" && echo Checking for gcc...
 cc=${CC-gcc}
 cflags=${CFLAGS-"-O3"}
+# to force the asm version use: CFLAGS="-O3 -DASMV" ./configure
 case "$cc" in
   *gcc*) gcc=1;;
 esac
@@ -71,7 +88,10 @@ else
   IRIX*)     SFLAGS=${CFLAGS-"-ansi -O2 -rpath ."}
 	     CFLAGS=${CFLAGS-"-ansi -O2"}
 	     LDSHARED=${LDSHARED-"cc -shared"};;
-  OSF1)      SFLAGS=${CFLAGS-"-O -std1"}
+  OSF1\ V4*) SFLAGS=${CFLAGS-"-O -std1"}
+	     CFLAGS=${CFLAGS-"-O -std1"}
+	     LDSHARED=${LDSHARED-"cc -shared  -Wl,-soname,$SHAREDLIB -Wl,-msym -Wl,-rpath,$(libdir) -Wl,-set_version,${VER}:1.0"};;
+  OSF1*)     SFLAGS=${CFLAGS-"-O -std1"}
 	     CFLAGS=${CFLAGS-"-O -std1"}
 	     LDSHARED=${LDSHARED-"cc -shared"};;
   QNX*)      SFLAGS=${CFLAGS-"-4 -O"}
@@ -124,11 +144,25 @@ if test $shared -eq 0; then
   echo Building static library $LIBS version $VER with $CC.
 fi
 
-if test -f /usr/include/unistd.h; then
+cat > $test.c <<EOF
+#include <unistd.h>
+int main() { return 0; }
+EOF
+if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
   CFLAGS="$CFLAGS -DHAVE_UNISTD_H"
+  echo "Checking for unistd.h... Yes."
+else
+  echo "Checking for unistd.h... No."
 fi
 
-if test ! -f /usr/include/errno.h; then
+cat > $test.c <<EOF
+#include <errno.h>
+int main() { return 0; }
+EOF
+if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
+  echo "Checking for errno.h...	 Yes."
+else
+  echo "Checking for errno.h...	 No."
   CFLAGS="$CFLAGS -DNO_ERRNO_H"
 fi
 
@@ -147,12 +181,24 @@ else
   echo Checking for mmap support... No.
 fi
 
+CPP=${CPP-"$CC -E"}
+case $CFLAGS in
+  *ASMV*)
+    if test "`nm $test.o | grep _hello`" = ""; then
+      CPP="$CPP -DNO_UNDERLINE"
+      echo Checking for underline in external names... No.
+    else
+      echo Checking for underline in external names... Yes.
+    fi;;
+esac
+
 rm -f $test.[co] $test$shared_ext
 
 # udpate Makefile
 sed < Makefile.in "
 /^CC *=/s%=.*%=$CC%
 /^CFLAGS *=/s%=.*%=$CFLAGS%
+/^CPP *=/s%=.*%=$CPP%
 /^LDSHARED *=/s%=.*%=$LDSHARED%
 /^LIBS *=/s%=.*%=$LIBS%
 /^SHAREDLIB *=/s%=.*%=$SHAREDLIB%
@@ -160,4 +206,7 @@ sed < Makefile.in "
 /^RANLIB *=/s%=.*%=$RANLIB%
 /^VER *=/s%=.*%=$VER%
 /^prefix *=/s%=.*%=$prefix%
+/^exec_prefix *=/s%=.*%=$exec_prefix%
+/^libdir *=/s%=.*%=$libdir%
+/^includedir *=/s%=.*%=$includedir%
 " > Makefile

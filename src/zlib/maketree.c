@@ -1,5 +1,5 @@
 /* maketree.c -- make inffixed.h table for decoding fixed codes
- * Copyright (C) 1998 Mark Adler
+ * Copyright (C) 1995-2002 Mark Adler
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
@@ -24,36 +24,6 @@
 #define exop word.what.Exop
 #define bits word.what.Bits
 
-/* showtree is only used for debugging purposes */
-void showtree(uInt b, inflate_huft *t, int d)
-{
-  int i, e;
-  char p[2*d+1];
-
-  for (i = 0; i < 2*d; i++)
-    p[i] = ' ';
-  p[i] = 0;
-  printf("%s[%d]\n", p, 1<<b);
-  for (i = 0; i < (1<<b); i++)
-  {
-    e = t[i].exop;
-    if (e == 0)                 /* simple code */
-      printf("%s%d(%d): literal=%d\n", p, i, t[i].bits, t[i].base);
-    else if (e & 16)            /* length */
-      printf("%s%d(%d): length/distance=%d+(%d)\n",
-                p, i, t[i].bits, t[i].base, e & 15);
-    else if ((e & 64) == 0)     /* next table */
-    {
-      printf("%s%d(%d): *sub table*\n", p, i, t[i].bits);
-      showtree(e, t + t[i].base, d + 1);
-    }
-    else if (e & 32)            /* end of block */
-      printf("%s%d(%d): end of block\n", p, i, t[i].bits);
-    else                        /* bad code */
-      printf("%s%d: bad code\n", p, i);
-  }
-}
-
 /* generate initialization table for an inflate_huft structure array */
 void maketree(uInt b, inflate_huft *t)
 {
@@ -68,9 +38,9 @@ void maketree(uInt b, inflate_huft *t)
       fprintf(stderr, "maketree: cannot initialize sub-tables!\n");
       exit(1);
     }
-    if (i % 5 == 0)
+    if (i % 4 == 0)
       printf("\n   ");
-    printf(" {{%u,%u},%u}", t[i].exop, t[i].bits, t[i].base);
+    printf(" {{{%u,%u}},%u}", t[i].exop, t[i].bits, t[i].base);
     if (++i == (1<<b))
       break;
     putchar(',');
@@ -95,10 +65,6 @@ void main(void)
     fprintf(stderr, "inflate_trees_fixed error %d\n", r);
     return;
   }
-  /* puts("Literal/Length Tree:");
-     showtree(bl, tl, 1);
-     puts("Distance Tree:");
-     showtree(bd, td, 1); */
   puts("/* inffixed.h -- table for decoding fixed codes");
   puts(" * Generated automatically by the maketree.c program");
   puts(" */");

@@ -1,6 +1,6 @@
 /* deflate.c -- compress data using the deflation algorithm
- * Copyright (C) 1995-1998 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * Copyright (C) 1995-2002 Jean-loup Gailly.
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 /*
@@ -52,7 +52,7 @@
 #include "deflate.h"
 
 const char deflate_copyright[] =
-   " deflate 1.1.2 Copyright 1995-1998 Jean-loup Gailly ";
+   " deflate 1.1.4 Copyright 1995-2002 Jean-loup Gailly ";
 /*
   If you use the zlib library in a product, an acknowledgment is welcome
   in the documentation of your product. If for some reason you cannot
@@ -242,7 +242,7 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
         windowBits = -windowBits;
     }
     if (memLevel < 1 || memLevel > MAX_MEM_LEVEL || method != Z_DEFLATED ||
-        windowBits < 8 || windowBits > 15 || level < 0 || level > 9 ||
+        windowBits < 9 || windowBits > 15 || level < 0 || level > 9 ||
 	strategy < 0 || strategy > Z_HUFFMAN_ONLY) {
         return Z_STREAM_ERROR;
     }
@@ -333,7 +333,7 @@ int ZEXPORT deflateReset (strm)
     z_streamp strm;
 {
     deflate_state *s;
-    
+
     if (strm == Z_NULL || strm->state == Z_NULL ||
         strm->zalloc == Z_NULL || strm->zfree == Z_NULL) return Z_STREAM_ERROR;
 
@@ -405,7 +405,7 @@ local void putShortMSB (s, b)
 {
     put_byte(s, (Byte)(b >> 8));
     put_byte(s, (Byte)(b & 0xff));
-}   
+}
 
 /* =========================================================================
  * Flush as much pending output as possible. All deflate() output goes
@@ -608,11 +608,13 @@ int ZEXPORT deflateCopy (dest, source)
     deflate_state *ss;
     ushf *overlay;
 
-    ss = source->state;
 
-    if (source == Z_NULL || dest == Z_NULL || ss == Z_NULL) {
+    if (source == Z_NULL || dest == Z_NULL || source->state == Z_NULL) {
         return Z_STREAM_ERROR;
     }
+
+    ss = source->state;
+
     *dest = *source;
 
     ds = (deflate_state *) ZALLOC(dest, 1, sizeof(deflate_state));
@@ -1197,7 +1199,7 @@ local block_state deflate_fast(s, flush)
                      * always MIN_MATCH bytes ahead.
                      */
                 } while (--s->match_length != 0);
-                s->strstart++; 
+                s->strstart++;
             } else
 #endif
 	    {
@@ -1217,7 +1219,7 @@ local block_state deflate_fast(s, flush)
             Tracevv((stderr,"%c", s->window[s->strstart]));
             _tr_tally_lit (s, s->window[s->strstart], bflush);
             s->lookahead--;
-            s->strstart++; 
+            s->strstart++;
         }
         if (bflush) FLUSH_BLOCK(s, 0);
     }

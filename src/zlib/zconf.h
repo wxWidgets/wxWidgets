@@ -1,6 +1,6 @@
 /* zconf.h -- configuration of the zlib compression library
- * Copyright (C) 1995-1998 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * Copyright (C) 1995-2002 Jean-loup Gailly.
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 /* @(#) $Id$ */
@@ -91,8 +91,8 @@
 #  define NO_DUMMY_DECL
 #endif
 
-/* Borland C incorrectly complains about missing returns: */
-#if defined(__BORLANDC__)
+/* Old Borland C incorrectly complains about missing returns: */
+#if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
 #  define NEED_DUMMY_RETURN
 #endif
 
@@ -148,7 +148,7 @@
    /* MSC small or medium model */
 #  define SMALL_MEDIUM
 #  ifdef _MSC_VER
-#    define FAR __far
+#    define FAR _far
 #  else
 #    define FAR far
 #  endif
@@ -156,12 +156,13 @@
 #if defined(__BORLANDC__) && (defined(__SMALL__) || defined(__MEDIUM__))
 #  ifndef __32BIT__
 #    define SMALL_MEDIUM
-#    define FAR __far
+#    define FAR _far
 #  endif
 #endif
 
 /* Compile with -DZLIB_DLL for Windows DLL support */
-#if (defined(_WINDOWS) || defined(WINDOWS)) && defined(ZLIB_DLL)
+#if defined(ZLIB_DLL)
+#  if defined(_WINDOWS) || defined(WINDOWS)
 #  ifdef FAR
 #    undef FAR
 #  endif
@@ -172,26 +173,51 @@
 #  else
 #    define ZEXPORTVA  FAR _cdecl _export
 #  endif
-#else
-#   if defined (__BORLANDC__) && defined (_Windows) && defined (__DLL__)
+#  endif
+#  if defined (__BORLANDC__)
+#    if (__BORLANDC__ >= 0x0500) && defined (WIN32)
+#      include <windows.h>
+#      define ZEXPORT __declspec(dllexport) WINAPI
+#      define ZEXPORTRVA __declspec(dllexport) WINAPIV
+#    else
+#      if defined (_Windows) && defined (__DLL__)
 #       define ZEXPORT _export
 #       define ZEXPORTVA _export
+#      endif
+#    endif
+#  endif
+#endif
+
+#if defined (__BEOS__)
+#  if defined (ZLIB_DLL)
+#    define ZEXTERN extern __declspec(dllexport)
 #   else
+#    define ZEXTERN extern __declspec(dllimport)
+#  endif
+#endif
+
+#ifndef ZEXPORT
 #       define ZEXPORT
+#endif
+#ifndef ZEXPORTVA
 #       define ZEXPORTVA
-#   endif
+#endif
+#ifndef ZEXTERN
+#  define ZEXTERN extern
 #endif
 
 #ifndef FAR
 #   define FAR
 #endif
 
+#if !defined(MACOS) && !defined(TARGET_OS_MAC)
 typedef unsigned char  Byte;  /* 8 bits */
+#endif
 typedef unsigned int   uInt;  /* 16 bits or more */
 typedef unsigned long  uLong; /* 32 bits or more */
 
-#if defined(__BORLANDC__) && defined(SMALL_MEDIUM)
-   /* Borland C/C++ ignores FAR inside typedef */
+#ifdef SMALL_MEDIUM
+   /* Borland C/C++ and some old MSC versions ignore FAR inside typedef */
 #  define Bytef Byte FAR
 #else
    typedef Byte  FAR Bytef;
@@ -217,6 +243,7 @@ typedef uLong FAR uLongf;
 #ifndef SEEK_SET
 #  define SEEK_SET        0       /* Seek from beginning of file.  */
 #  define SEEK_CUR        1       /* Seek from current position.  */
+#  define SEEK_END        2       /* Set file pointer to EOF plus "offset" */
 #endif
 #ifndef z_off_t
 #  define  z_off_t long

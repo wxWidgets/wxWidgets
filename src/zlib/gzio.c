@@ -1,5 +1,5 @@
 /* gzio.c -- IO on .gz files
- * Copyright (C) 1995-1998 Jean-loup Gailly.
+ * Copyright (C) 1995-2002 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  *
  * Compile this file with -DNO_DEFLATE to avoid the compression code.
@@ -122,7 +122,7 @@ local gzFile gz_open (path, mode, fd)
 	}
     } while (*p++ && m != fmode + sizeof(fmode));
     if (s->mode == '\0') return destroy(s), (gzFile)Z_NULL;
-    
+
     if (s->mode == 'w') {
 #ifdef NO_DEFLATE
         err = Z_STREAM_ERROR;
@@ -173,7 +173,7 @@ local gzFile gz_open (path, mode, fd)
 	check_header(s); /* skip the .gz header */
 	s->startpos = (ftell(s->file) - s->stream.avail_in);
     }
-    
+
     return (gzFile)s;
 }
 
@@ -414,10 +414,14 @@ int ZEXPORT gzread (file, buf, len)
 	    s->crc = crc32(s->crc, start, (uInt)(s->stream.next_out - start));
 	    start = s->stream.next_out;
 
-	    if (getLong(s) != s->crc || getLong(s) != s->stream.total_out) {
+	    if (getLong(s) != s->crc) {
 		s->z_err = Z_DATA_ERROR;
 	    } else {
-		/* Check for concatenated .gz files: */
+	        (void)getLong(s);
+                /* The uncompressed length returned by above getlong() may
+                 * be different from s->stream.total_out) in case of
+		 * concatenated .gz files. Check for such files:
+		 */
 		check_header(s);
 		if (s->z_err == Z_OK) {
 		    uLong total_in = s->stream.total_in;
@@ -623,10 +627,10 @@ local int do_flush (file, flush)
 	if (len == 0 && s->z_err == Z_BUF_ERROR) s->z_err = Z_OK;
 
         /* deflate has finished flushing only when it hasn't used up
-         * all the available space in the output buffer: 
+         * all the available space in the output buffer:
          */
         done = (s->stream.avail_out != 0 || s->z_err == Z_STREAM_END);
- 
+
         if (s->z_err != Z_OK && s->z_err != Z_STREAM_END) break;
     }
     return  s->z_err == Z_STREAM_END ? Z_OK : s->z_err;
@@ -664,13 +668,13 @@ z_off_t ZEXPORT gzseek (file, offset, whence)
 	s->z_err == Z_ERRNO || s->z_err == Z_DATA_ERROR) {
 	return -1L;
     }
-    
+
     if (s->mode == 'w') {
 #ifdef NO_DEFLATE
 	return -1L;
 #else
 	if (whence == SEEK_SET) {
-	    offset -= s->stream.total_out;
+	    offset -= s->stream.total_in;
 	}
 	if (offset < 0) return -1L;
 
@@ -732,19 +736,20 @@ z_off_t ZEXPORT gzseek (file, offset, whence)
 }
 
 /* ===========================================================================
-     Rewinds input file. 
+     Rewinds input file.
 */
 int ZEXPORT gzrewind (file)
     gzFile file;
 {
     gz_stream *s = (gz_stream*)file;
-    
+
     if (s == NULL || s->mode != 'r') return -1;
 
     s->z_err = Z_OK;
     s->z_eof = 0;
     s->stream.avail_in = 0;
     s->stream.next_in = s->inbuf;
+    s->crc = crc32(0L, Z_NULL, 0);
 	
     if (s->startpos == 0) { /* not a compressed file */
 	rewind(s->file);
@@ -774,7 +779,7 @@ int ZEXPORT gzeof (file)
     gzFile file;
 {
     gz_stream *s = (gz_stream*)file;
-    
+
     return (s == NULL || s->mode != 'r') ? 0 : s->z_eof;
 }
 
@@ -793,7 +798,8 @@ local void putLong (file, x)
 }
 
 /* ===========================================================================
-   Reads a long in LSB order from the given gz_stream. Sets 
+   Reads a long in LSB order from the given gz_stream. Sets z_err in case
+   of error.
 */
 local uLong getLong (s)
     gz_stream *s;
