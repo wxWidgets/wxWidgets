@@ -86,7 +86,6 @@ gridctrl.cpp	Generic
 gridsel.cpp	Generic
 helpext.cpp	Generic	Generic
 helphtml.cpp	Generic	Generic
-helpwxht.cpp	Generic	Generic
 imaglist.cpp	Generic	NotWin32
 laywin.cpp	Generic
 listctrl.cpp	Generic	NotWin32
@@ -1464,7 +1463,6 @@ grid.h	GenericH
 gridctrl.h	GenericH
 gridg.h	GenericH
 helpext.h	GenericH
-helpwxht.h	GenericH
 helphtml.h	GenericH
 imaglist.h	GenericH
 laywin.h	GenericH

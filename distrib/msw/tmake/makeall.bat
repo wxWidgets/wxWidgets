@@ -12,7 +12,9 @@ rem the root directory of wxWindows installation. TMAKE program should be in
 rem path or, alternatively, TMAKE environment variable should be set.
 
 rem set tmakecmd=E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake
-set tmakecmd=d:\programs\tmake\bin\tmake
+Rem set tmakecmd=d:\programs\tmake\bin\tmake
+Rem Let's assume that you have tmake in your PATH
+set tmakecmd=tmake
 
 if "x%WX%" == "x" goto skip
 set WXDIR=%WX%
@@ -63,7 +65,7 @@ echo Generating for Watcom C++...
 echo Generating for Unix and Configure...
 %tmakecmd% -t gtk wxwin.pro -o %WXDIR%\src\gtk\files.lst
 %tmakecmd% -t mgl wxwin.pro -o %WXDIR%\src\mgl\files.lst
-%tmakecmd% -t micro wxwin.pro -o %WXDIR%\src\micro\files.lst
+%tmakecmd% -t micro wxwin.pro -o %WXDIR%\src\microwin\files.lst
 %tmakecmd% -t univ wxwin.pro -o %WXDIR%\src\univ\files.lst
 %tmakecmd% -t msw wxwin.pro -o %WXDIR%\src\msw\files.lst
 %tmakecmd% -t mac wxwin.pro -o %WXDIR%\src\mac\files.lst

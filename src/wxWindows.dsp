@@ -2884,10 +2884,6 @@ SOURCE=..\include\wx\generic\helphtml.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\generic\helpwxht.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\generic\imaglist.h
 # End Source File
 # Begin Source File

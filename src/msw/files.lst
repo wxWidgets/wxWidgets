@@ -641,7 +641,6 @@ ALL_HEADERS = \
 		generic/gridg.h \
 		generic/helpext.h \
 		generic/helphtml.h \
-		generic/helpwxht.h \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \

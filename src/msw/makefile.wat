@@ -84,7 +84,6 @@ NONESSENTIALOBJS= accel.obj &
 	fontdlgg.obj &
 	helpext.obj &
 	helphtml.obj &
-	helpwxht.obj &
 	imaglist.obj &
 	listctrl.obj &
 	msgdlgg.obj &

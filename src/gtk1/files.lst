@@ -20,7 +20,6 @@ ALL_SOURCES = \
 		generic/gridsel.cpp \
 		generic/helpext.cpp \
 		generic/helphtml.cpp \
-		generic/helpwxht.cpp \
 		generic/imaglist.cpp \
 		generic/laywin.cpp \
 		generic/listctrl.cpp \
@@ -580,7 +579,6 @@ ALL_HEADERS = \
 		generic/gridg.h \
 		generic/helpext.h \
 		generic/helphtml.h \
-		generic/helpwxht.h \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \
@@ -772,7 +770,6 @@ GUIOBJS = \
 		gridsel.o \
 		helpext.o \
 		helphtml.o \
-		helpwxht.o \
 		imaglist.o \
 		laywin.o \
 		listctrl.o \
@@ -884,7 +881,6 @@ GUI_LOWLEVEL_OBJS = \
 		gridsel.o \
 		helpext.o \
 		helphtml.o \
-		helpwxht.o \
 		imaglist.o \
 		laywin.o \
 		listctrl.o \

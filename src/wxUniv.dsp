@@ -673,10 +673,6 @@ SOURCE=.\generic\helphtml.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\helpwxht.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\laywin.cpp
 # End Source File
 # Begin Source File
@@ -2232,10 +2228,6 @@ SOURCE=..\include\wx\generic\helpext.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\helphtml.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\generic\helpwxht.h
 # End Source File
 # Begin Source File
 

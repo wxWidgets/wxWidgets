@@ -33,10 +33,7 @@ distrib/gtk/*
 locale/*.po
 locale/*.mo
 
-art/browser/*.xpm
-art/framicon/*.xpm
-art/toolbar/*.xpm
-art/wxhtml/*.xpm
+art/*.xpm
 
 docs/readme.txt
 docs/readme_vms.txt
