@@ -164,7 +164,7 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    void OnIdle( wxIdleEvent &event );
+    void OnInternalIdle( );
     void OnSize( wxSizeEvent &event );
 
     // We have to hand down a few functions

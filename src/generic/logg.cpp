@@ -432,8 +432,6 @@ public:
 #endif // wxUSE_FILE
     void OnClear(wxCommandEvent& event);
 
-    void OnIdle(wxIdleEvent&);
-
     // accessors
     wxTextCtrl *TextCtrl() const { return m_pTextCtrl; }
 

@@ -964,8 +964,10 @@ void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
 
 
 
-void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
-{    
+void wxHtmlWindow::OnInternalIdle()
+{
+    wxWindow::OnInternalIdle();
+    
     if (m_tmpMouseMoved && (m_Cell != NULL))
     {
 #ifdef DEBUG_HTML_SELECTION
@@ -1312,7 +1314,6 @@ BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_LEFT_UP(wxHtmlWindow::OnMouseUp)
     EVT_RIGHT_UP(wxHtmlWindow::OnMouseUp)
     EVT_MOTION(wxHtmlWindow::OnMouseMove)
-    EVT_IDLE(wxHtmlWindow::OnIdle)
     EVT_ERASE_BACKGROUND(wxHtmlWindow::OnEraseBackground)
     EVT_PAINT(wxHtmlWindow::OnPaint)
 #if wxUSE_CLIPBOARD

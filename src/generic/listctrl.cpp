@@ -4432,7 +4432,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxGenericListCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxGenericListCtrl,wxControl)
   EVT_SIZE(wxGenericListCtrl::OnSize)
-  EVT_IDLE(wxGenericListCtrl::OnIdle)
 END_EVENT_TABLE()
 
 wxGenericListCtrl::wxGenericListCtrl()
@@ -5035,10 +5034,10 @@ void wxGenericListCtrl::ResizeReportView(bool showHeader)
     }
 }
 
-void wxGenericListCtrl::OnIdle( wxIdleEvent & event )
+void wxGenericListCtrl::OnInternalIdle()
 {
-    event.Skip();
-
+    wxWindow::OnInternalIdle();
+    
     // do it only if needed
     if ( !m_mainWin->m_dirty )
         return;

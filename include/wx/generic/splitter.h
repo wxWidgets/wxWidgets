@@ -190,7 +190,7 @@ public:
     void OnSize(wxSizeEvent& event);
 
     // In live mode, resize child windows in idle time
-    void OnIdle(wxIdleEvent& event);
+    void OnInternalIdle();
 
     // Draws borders
     virtual void DrawBorders(wxDC& dc);

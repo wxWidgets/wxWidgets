@@ -362,7 +362,7 @@ public:
     void OnKillFocus( wxFocusEvent &event );
     void OnChar( wxKeyEvent &event );
     void OnMouse( wxMouseEvent &event );
-    void OnIdle( wxIdleEvent &event );
+    void OnInternalIdle( );
 
     // implementation helpers
 protected:

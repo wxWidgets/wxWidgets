@@ -214,7 +214,6 @@ protected:
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseDown(wxMouseEvent& event);
     void OnMouseUp(wxMouseEvent& event);
-    void OnIdle(wxIdleEvent& event);
 #if wxUSE_CLIPBOARD
     void OnKeyUp(wxKeyEvent& event);
     void OnDoubleClick(wxMouseEvent& event);
@@ -222,6 +221,8 @@ protected:
     void OnMouseEnter(wxMouseEvent& event);
     void OnMouseLeave(wxMouseEvent& event);
 #endif // wxUSE_CLIPBOARD
+
+    virtual void OnInternalIdle();
 
     // Returns new filter (will be stored into m_DefaultFilter variable)
     virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}

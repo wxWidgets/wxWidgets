@@ -716,7 +716,6 @@ BEGIN_EVENT_TABLE(wxGenericTreeCtrl,wxScrolledWindow)
     EVT_CHAR           (wxGenericTreeCtrl::OnChar)
     EVT_SET_FOCUS      (wxGenericTreeCtrl::OnSetFocus)
     EVT_KILL_FOCUS     (wxGenericTreeCtrl::OnKillFocus)
-    EVT_IDLE           (wxGenericTreeCtrl::OnIdle)
 END_EVENT_TABLE()
 
 #if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
@@ -3158,8 +3157,10 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
     }
 }
 
-void wxGenericTreeCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
+void wxGenericTreeCtrl::OnInternalIdle()
 {
+    wxWindow::OnInternalIdle();
+    
     // Check if we need to select the root item
     // because nothing else has been selected.
     // Delaying it means that we can invoke event handlers

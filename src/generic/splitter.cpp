@@ -50,7 +50,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxSplitterEvent, wxNotifyEvent)
 BEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_PAINT(wxSplitterWindow::OnPaint)
     EVT_SIZE(wxSplitterWindow::OnSize)
-    EVT_IDLE(wxSplitterWindow::OnIdle)
     EVT_MOUSE_EVENTS(wxSplitterWindow::OnMouseEvent)
 
 #if defined( __WXMSW__ ) || defined( __WXMAC__)
@@ -156,12 +155,12 @@ void wxSplitterWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     DrawSash(dc);
 }
 
-void wxSplitterWindow::OnIdle(wxIdleEvent& event)
+void wxSplitterWindow::OnInternalIdle()
 {
+    wxWindow::OnInternalIdle();
+    
     if (m_needUpdating)
         SizeWindows();
-
-    event.Skip();
 }
 
 void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)

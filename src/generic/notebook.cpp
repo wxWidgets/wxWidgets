@@ -56,7 +56,6 @@ BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_MOUSE_EVENTS(wxNotebook::OnMouseEvent)
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
-//    EVT_IDLE(wxNotebook::OnIdle)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
@@ -457,8 +456,11 @@ void wxNotebook::OnSize(wxSizeEvent& event)
 // This was supposed to cure the non-display of the notebook
 // until the user resizes the window.
 // What's going on?
-void wxNotebook::OnIdle(wxIdleEvent& event)
+void wxNotebook::OnInternalIdle()
 {
+    wxWindow::OnInternalIdle();
+
+#if 0    
     static bool s_bFirstTime = TRUE;
     if ( s_bFirstTime ) {
       /*
@@ -478,7 +480,7 @@ void wxNotebook::OnIdle(wxIdleEvent& event)
       */
       s_bFirstTime = FALSE;
     }
-    event.Skip();
+#endif
 }
 
 // Implementation: calculate the layout of the view rect
