@@ -643,7 +643,7 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 			if ( focus.Ok() )
 			{
 		  		Rect clientrect = { 0 , 0 , m_height , m_width } ;
-				ClipRect( &clientrect ) ;
+				// ClipRect( &clientrect ) ;
 		    	InvalWindowRect( GetMacRootWindow() , &clientrect ) ;
 			}
 		}
@@ -678,7 +678,7 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 				if ( focus.Ok() )
 				{
 			  		Rect clientrect = { 0 , 0 , m_height , m_width } ;
-  					ClipRect( &clientrect ) ;
+  					// ClipRect( &clientrect ) ;
 			    	InvalWindowRect( GetMacRootWindow() , &clientrect ) ;
 				}
 			}
@@ -916,7 +916,7 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 	if ( focus.Ok() )
 	{
 	  	Rect clientrect = { 0 , 0 , m_height , m_width } ;
-  		ClipRect( &clientrect ) ;
+  		// ClipRect( &clientrect ) ;
 
     	if ( rect )
     	{
