@@ -853,6 +853,8 @@ static wxString GetHotKey( const wxMenuItem& item )
                 wxFAIL_MSG( wxT("unknown keyboard accel") );
         }
     }
+    if (accel)
+        delete accel;
 
     return hotkey;
 }

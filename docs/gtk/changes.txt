@@ -1,6 +1,11 @@
 
 25th October '99: My birthday, wxWindows 2.1.10 released
 
+There is still a unresolved problem with bitmap to image
+conversion on big-endian architectures (such as Solaris),
+where color values get exchanged. I'd need help on this
+one.
+
 Enlightment has struck the majority of the developers and
 they have chosen to use the Linux kernel numbering scheme
 for wxWindows from now on. This means that the next stable
@@ -83,9 +88,13 @@ wxSlider, wxWindow, wxScrollBar now emit the correct events
 for scrolling (like page up, line up etc) instead of just
 "thumb-track" as before.
 
-Corrected Reparent() code.
+Corrected Reparent() code, including the special case for
+wxToolBar (as the toolbar sits in a different window than
+normal windows).
 
-Corrected key accelerator code for toplevel child windows.
+Corrected key accelerator code for toplevel child windows
+and added support for more key combinations - pretty much
+all, actually.
 
 Corrected cursor handling in a number of special cases.
 

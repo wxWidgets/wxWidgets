@@ -90,7 +90,7 @@ program - or due to using a broken compiler (and its optimisation) such as GCC 2
 
 Now create your super-application myfoo.app and compile anywhere with
 
-g++ myfoo.cpp `wx-config --libs --cflags` -o myfoo
+gcc myfoo.cpp `wx-config --libs --cflags` -o myfoo
 
 * General
 -----------------------
@@ -143,7 +143,7 @@ make install
 ldconfig
 exit
   
-NB: DO NOT COMPILE WXGTK WITH GCC AND THREADS, SINCE ALL PROGRAMS WILL CRASH UPON 
+NB: DO NOT COMPILE WXGTK WITH GCC 2.7 AND THREADS, SINCE ALL PROGRAMS WILL CRASH UPON 
 START-UP! Just always use egcs and be happy.
 
 * Building wxGTK on OS/2
@@ -239,11 +239,11 @@ toolkit. You must do this by running configure with either of:
 
 The following options handle the kind of library you want to build.
 
-	--disable-threads       Compile without thread support. Threads
-	                        support is also required for the
-				socket code to work.
+	--disable-threads       Compile without thread support.
 
 	--disable-shared        Do not create shared libraries.
+
+	--enable-static         Create static libraries.
 
 	--disable-optimise	Do not optimise the code. Can
 	                        sometimes be useful for debugging
@@ -270,9 +270,9 @@ The following options handle the kind of library you want to build.
 				
 	--enable-permissive     Enable compilation without creation of
 	                        giving erros as soon as you compile with
-				Solaris ANSI-defying headers...
+				Solaris' ANSI-defying headers...
 				
-	--enable-mem_tracing    Add built-in memory tracing. 
+	--enable-mem_tracing    Add built-in memory tracing.
 				
 	--enable-dmalloc        Use the dmalloc memory debugger.
 	                        Read more at www.letters.com/dmalloc/
@@ -305,7 +305,13 @@ are
 	
 	--without-libjpeg	Disables JPEG image format code.
 	
-{	--without-odbc          Disables ODBC code. Not yet. }
+	--disable-pnm		Disables PNM image format code.
+	
+	--disable-gif		Disables GIF image format code.
+	
+	--disable-pcx		Disables PCX image format code.
+	
+	--without-odbc          Disables ODBC code.
 	
         --disable-resources     Disables the use of *.wxr type
 	                        resources.

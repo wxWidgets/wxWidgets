@@ -525,7 +525,7 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
         }
     }
 
-    return NULL;
+    return (wxAcceleratorEntry *)NULL;
 }
 
 #endif // wxUSE_ACCEL
