@@ -134,6 +134,14 @@
     #endif
 #endif
 
+/* Disable controls for pointing devices */
+#if defined(__SMARTPHONE__)
+    #undef wxUSE_NOTEBOOK
+    #undef wxUSE_LISTBOOK
+    #define wxUSE_NOTEBOOK 0
+    #define wxUSE_LISTBOOK 0
+#endif
+
 #endif
     /* _WX_MSW_CHKCONF_H_ */
 
