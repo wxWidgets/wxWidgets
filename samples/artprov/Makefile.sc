@@ -1,5 +1,5 @@
 #Makefile from wxHatch for Symantec/Digital Mars compiler 
-WXDIR=..\..\..\wxWindows
+WXDIR=..\..
 TARGET=arttest
 OBJECTS = $(TARGET).obj artbrows.obj 
 EXTRALIBS =

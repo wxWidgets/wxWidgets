@@ -1,5 +1,5 @@
 #Digital Mars (was Symantec) C++ makefile 
-WXDIR = $(WXWIN)
+WXDIR = ..\..
 TARGET=client
 OBJECTS=$(TARGET).obj
 EXTRALIBS=

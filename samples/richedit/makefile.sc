@@ -1,5 +1,5 @@
 #Digital Mars (was Symantec) C++ makefile 
-WXDIR = $(WXWIN)
+WXDIR = ..\..
 EXTRALIBS=
 TARGET=wxlayout
 OBJECTS = wxLayout.obj kbList.obj wxllist.obj wxlparser.obj wxlwindow.obj

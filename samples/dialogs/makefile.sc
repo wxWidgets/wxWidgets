@@ -1,5 +1,5 @@
 #Makefile from wxHatch for Symantec/Digital Mars compiler 
-WXDIR=..\..\..\wxWindows.25
+WXDIR=..\..
 TARGET=dialogs
 OBJECTS = $(TARGET).obj 
 EXTRALIBS =
