@@ -151,7 +151,7 @@ public:
     int GetSashPosition() const { return m_sashPosition; }
 
     // If this is zero, we can remove panes by dragging the sash.
-    void SetMinimumPaneSize(int min) { m_minimumPaneSize = min; }
+    void SetMinimumPaneSize(int min);
     int GetMinimumPaneSize() const { return m_minimumPaneSize; }
 
     // Called when the sash position is about to be changed, return
@@ -231,6 +231,9 @@ protected:
 
     // get either width or height depending on the split mode
     int GetWindowSize() const;
+    
+    // set m_sashPosition w/ safeguards
+    void DoSetSashPosition(int sashPos);
 
     wxSplitMode m_splitMode;
     bool        m_permitUnsplitAlways;
@@ -243,6 +246,7 @@ protected:
     int         m_borderSize;
     int         m_sashSize;     // Sash width or height
     int         m_sashPosition; // Number of pixels from left or top
+    int         m_requestedSashPosition;
     int         m_firstX;
     int         m_firstY;
     int         m_minimumPaneSize;

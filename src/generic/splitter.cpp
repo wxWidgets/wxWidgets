@@ -114,7 +114,7 @@ void wxSplitterWindow::Init()
     m_firstY = 0;
     m_sashSize = 7;
     m_borderSize = 2;
-    m_sashPosition = 0;
+    m_sashPosition = m_requestedSashPosition = 0;
     m_minimumPaneSize = 0;
     m_sashCursorWE = new wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = new wxCursor(wxCURSOR_SIZENS);
@@ -247,7 +247,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 m_windowOne = m_windowTwo;
                 m_windowTwo = (wxWindow *) NULL;
                 SendUnsplitEvent(removedWindow);
-                m_sashPosition = 0;
+                DoSetSashPosition(0);
             }
             else if ( new_sash_position == window_size )
             {
@@ -255,16 +255,16 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 wxWindow *removedWindow = m_windowTwo;
                 m_windowTwo = (wxWindow *) NULL;
                 SendUnsplitEvent(removedWindow);
-                m_sashPosition = 0;
+                DoSetSashPosition(0);
             }
             else
             {
-                m_sashPosition = new_sash_position;
+                DoSetSashPosition(new_sash_position);
             }
         }
         else
         {
-            m_sashPosition = new_sash_position;
+            DoSetSashPosition(new_sash_position);
         }
 
         SizeWindows();
@@ -366,7 +366,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         }
         else
         {
-            m_sashPosition = new_sash_position;
+            DoSetSashPosition(new_sash_position);
             m_needUpdating = TRUE;
         }
     }
@@ -427,12 +427,12 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         if ( m_splitMode == wxSPLIT_VERTICAL )
         {
             if ( m_sashPosition >= (cw - 5) )
-                m_sashPosition = wxMax(10, cw - 40);
+                DoSetSashPosition(wxMax(10, cw - 40));
         }
         else // m_splitMode == wxSPLIT_HORIZONTAL
         {
             if ( m_sashPosition >= (ch - 5) )
-                m_sashPosition = wxMax(10, ch - 40);
+                DoSetSashPosition(wxMax(10, ch - 40));
         }
     }
 
@@ -704,16 +704,6 @@ int wxSplitterWindow::AdjustSashPosition(int sashPos) const
 {
     int window_size = GetWindowSize();
 
-    // VZ: dirty fix, 20 is the initial window size under wxGTK, this is
-    //     going to be replaced with the correct Vaclav's code soon (FIXME)
-    if ( window_size <= 20 )
-    {
-        // don't do anything before the window has a valid size, otherwise we
-        // put the sash to 0 at the very beginning and it doesn't move from
-        // there any more
-        return sashPos;
-    }
-
     wxWindow *win;
 
     win = GetWindow1();
@@ -750,18 +740,27 @@ int wxSplitterWindow::AdjustSashPosition(int sashPos) const
     return sashPos;
 }
 
+void wxSplitterWindow::DoSetSashPosition(int sashPos)
+{
+    m_requestedSashPosition = sashPos;
+    m_sashPosition = (sashPos == 0) ? 0 : AdjustSashPosition(sashPos);
+}
+
 // Position and size subwindows.
 // Note that the border size applies to each subwindow, not
 // including the edges next to the sash.
 void wxSplitterWindow::SizeWindows()
 {
+    if ( m_requestedSashPosition != m_sashPosition )
+        DoSetSashPosition(m_requestedSashPosition);
+
     int w, h;
     GetClientSize(&w, &h);
 
     if ( GetWindow1() && !GetWindow2() )
     {
-        GetWindow1()->SetSize(GetBorderSize(), GetBorderSize(), w - 2*GetBorderSize(), h - 2*GetBorderSize());
-
+        GetWindow1()->SetSize(GetBorderSize(), GetBorderSize(), 
+                              w - 2*GetBorderSize(), h - 2*GetBorderSize());
     }
     else if ( GetWindow1() && GetWindow2() )
     {
@@ -801,7 +800,7 @@ void wxSplitterWindow::Initialize(wxWindow *window)
 {
     m_windowOne = window;
     m_windowTwo = (wxWindow *) NULL;
-    m_sashPosition = 0;
+    DoSetSashPosition(0);
 }
 
 // Associates the given window with window 2, drawing the appropriate sash
@@ -822,25 +821,17 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
 
     if ( sashPosition > 0 )
     {
-        m_sashPosition = sashPosition;
+        DoSetSashPosition(sashPosition);
     }
     else if ( sashPosition < 0 )
     {
         // It's negative so adding is subtracting
-        m_sashPosition = window_size + sashPosition;
+        DoSetSashPosition(window_size + sashPosition);
     }
     else
     {
         // default
-        m_sashPosition = window_size/2;
-    }
-
-    // don't do it initially, i.e. when creating the window because it doesn't
-    // have a proper size yet and AdjustSashPosition() would happily set the
-    // sash position to 0!
-    if ( window_size > 0 )
-    {
-        m_sashPosition = AdjustSashPosition(m_sashPosition);
+        DoSetSashPosition(window_size/2);
     }
 
     SizeWindows();
@@ -875,7 +866,7 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
     }
 
     SendUnsplitEvent(win);
-    m_sashPosition = 0;
+    DoSetSashPosition(0);
     SizeWindows();
 
     return TRUE;
@@ -907,9 +898,15 @@ bool wxSplitterWindow::ReplaceWindow(wxWindow *winOld, wxWindow *winNew)
     return TRUE;
 }
 
+void wxSplitterWindow::SetMinimumPaneSize(int min)
+{
+    m_minimumPaneSize = min;
+    SetSashPosition(m_sashPosition); // re-check limits
+}
+
 void wxSplitterWindow::SetSashPosition(int position, bool redraw)
 {
-    m_sashPosition = AdjustSashPosition(position);
+    DoSetSashPosition(position);
 
     if ( redraw )
     {
