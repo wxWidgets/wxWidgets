@@ -223,7 +223,7 @@ inline bool wxInitQT ()
         int nError;
         //-2093 no dll
             if ((nError = InitializeQTML(0)) != noErr)
-                wxLogSysError(wxString::Format("Couldn't Initialize Quicktime-%i", nError));
+                wxLogSysError(wxString::Format(wxT("Couldn't Initialize Quicktime-%i"), nError));
         #endif
         EnterMovies();
         return true;
