@@ -25,10 +25,8 @@ ALL_SOURCES = \
 		generic/listctrl.cpp \
 		generic/logg.cpp \
 		generic/msgdlgg.cpp \
-		generic/notebook.cpp \
 		generic/numdlgg.cpp \
 		generic/panelg.cpp \
-		generic/printps.cpp \
 		generic/prntdlgg.cpp \
 		generic/progdlgg.cpp \
 		generic/prop.cpp \
@@ -39,8 +37,6 @@ ALL_SOURCES = \
 		generic/spinctlg.cpp \
 		generic/splash.cpp \
 		generic/splitter.cpp \
-		generic/statline.cpp \
-		generic/statusbr.cpp \
 		generic/tabg.cpp \
 		generic/tbarsmpl.cpp \
 		generic/textdlgg.cpp \
@@ -708,10 +704,8 @@ GENERICOBJS = \
 		listctrl.o \
 		logg.o \
 		msgdlgg.o \
-		notebook.o \
 		numdlgg.o \
 		panelg.o \
-		printps.o \
 		prntdlgg.o \
 		progdlgg.o \
 		prop.o \
@@ -722,8 +716,6 @@ GENERICOBJS = \
 		spinctlg.o \
 		splash.o \
 		splitter.o \
-		statline.o \
-		statusbr.o \
 		tabg.o \
 		tbarsmpl.o \
 		textdlgg.o \
