@@ -279,7 +279,6 @@ void URITestCase::Comparison()
 #if TEST_URL
 
 #include "wx/url.h"
-#include "wx/mimetype.h"
 
 void URITestCase::URLCompat()
 {
@@ -317,8 +316,6 @@ void URITestCase::URLCompat()
     CPPUNIT_ASSERT( test.BuildURI() == wxT("file:%22myf%22ile.txt") );
     CPPUNIT_ASSERT( test.GetScheme() == wxT("file") );
     CPPUNIT_ASSERT( test.GetPath() == wxT("%22myf%22ile.txt") );
-//    CPPUNIT_ASSERT( wxURI::Unescape(wxT("%22myf%22ile.txt"))  );
-    wxPrintf(wxURI::Unescape(wxT("%22myf%22ile.txt")) );
 }
 
 #endif
