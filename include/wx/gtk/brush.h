@@ -11,7 +11,7 @@
 #ifndef __GTKBRUSHH__
 #define __GTKBRUSHH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface
 #endif
 

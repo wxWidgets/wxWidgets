@@ -13,7 +13,7 @@
 #ifndef __TOOLWND_G__
 #define __TOOLWND_G__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "toolwnd.h"
 #endif
 

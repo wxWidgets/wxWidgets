@@ -11,7 +11,7 @@
 #ifndef _WX_XH_COMBO_H_
 #define _WX_XH_COMBO_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "xh_combo.h"
 #endif
 

@@ -1,7 +1,7 @@
 #ifndef __WXBOUNDINGBOX_H__
 #define __WXBOUNDINGBOX_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "bbox.cpp"
 #endif
 

@@ -10,7 +10,7 @@
 #ifndef __CDUNIXH__
 #define __CDUNIXH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "cdunix.h"
 #endif
 

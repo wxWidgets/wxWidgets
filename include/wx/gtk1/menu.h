@@ -10,7 +10,7 @@
 #ifndef __GTKMENUH__
 #define __GTKMENUH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "menu.h"
 #endif
 

@@ -8,7 +8,7 @@
 #ifndef __WXLINER_H
 #define __WXLINER_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "liner.cpp"
 #endif
 

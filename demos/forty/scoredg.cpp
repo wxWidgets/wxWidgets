@@ -11,7 +11,7 @@
 // Last modified: 22nd July 1998 - ported to wxWindows 2.0
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma implementation
 #pragma interface
 #endif

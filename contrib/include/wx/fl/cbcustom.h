@@ -12,7 +12,7 @@
 #ifndef __CBCUSTOM_G__
 #define __CBCUSTOM_G__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "cbcustom.h"
 #endif
 

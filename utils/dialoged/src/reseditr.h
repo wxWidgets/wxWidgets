@@ -14,7 +14,7 @@
 
 #define wxDIALOG_EDITOR_VERSION 2.1
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "reseditr.h"
 #endif
 

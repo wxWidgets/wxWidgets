@@ -12,7 +12,7 @@
 #ifndef _SYMBTABL_H_
 #define _SYMBTABL_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "symbtabl.h"
 #endif
 

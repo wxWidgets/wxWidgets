@@ -11,7 +11,7 @@
 #ifndef __GTK_FONTDLGH__
 #define __GTK_FONTDLGH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "fontdlg.h"
 #endif
 

@@ -9,7 +9,7 @@
 #ifndef __WXPOLYGON_H__
 #define __WXPOLYGON_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "polygon.cpp"
 #endif
 

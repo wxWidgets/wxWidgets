@@ -12,7 +12,7 @@
 #ifndef _OGLSAMPLE_VIEW_H_
 #define _OGLSAMPLE_VIEW_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 // #pragma interface "view.h"
 #endif
 

@@ -11,7 +11,7 @@
 #ifndef __GTKNOTEBOOKH__
 #define __GTKNOTEBOOKH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface
 #endif
 

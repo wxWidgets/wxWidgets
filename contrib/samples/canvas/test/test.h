@@ -11,7 +11,7 @@
 #ifndef __test_H__
 #define __test_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "test.cpp"
 #endif
 

@@ -12,7 +12,7 @@
 #ifndef __HINTANIMPL_G__
 #define __HINTANIMPL_G__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "hintanimpl.h"
 #endif
 

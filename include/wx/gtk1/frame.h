@@ -11,7 +11,7 @@
 #ifndef __GTKFRAMEH__
 #define __GTKFRAMEH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "frame.h"
 #endif
 

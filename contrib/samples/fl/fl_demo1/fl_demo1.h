@@ -12,7 +12,7 @@
 #ifndef __NEW_TEST_G__
 #define __NEW_TEST_G__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "fl_demo1.h"
 #endif
 

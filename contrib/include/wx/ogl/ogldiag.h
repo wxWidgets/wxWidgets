@@ -12,7 +12,7 @@
 #ifndef _OGL_OGLDIAG_H_
 #define _OGL_OGLDIAG_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "ogldiag.h"
 #endif
 

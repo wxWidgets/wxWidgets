@@ -1,7 +1,7 @@
 #ifndef _WX_LEDNUMBERCTRL_H_
 #define _WX_LEDNUMBERCTRL_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "wxLEDNumberCtrl.h"
 #endif
 

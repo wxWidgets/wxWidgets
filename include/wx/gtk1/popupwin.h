@@ -11,7 +11,7 @@
 #ifndef __GTKPOPUPWINH__
 #define __GTKPOPUPWINH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "popupwin.h"
 #endif
 

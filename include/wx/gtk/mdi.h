@@ -11,7 +11,7 @@
 #ifndef __MDIH__
 #define __MDIH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface
 #endif
 

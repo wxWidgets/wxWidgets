@@ -12,7 +12,7 @@
 #ifndef __JOYSTICKH__
 #define __JOYSTICKH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "joystick.h"
 #endif
 

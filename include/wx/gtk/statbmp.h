@@ -11,7 +11,7 @@
 #ifndef __GTKSTATICBITMAPH__
 #define __GTKSTATICBITMAPH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface
 #endif
 

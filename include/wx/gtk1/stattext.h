@@ -11,7 +11,7 @@
 #ifndef __GTKSTATICTEXTH__
 #define __GTKSTATICTEXTH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface
 #endif
 

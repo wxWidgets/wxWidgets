@@ -11,7 +11,7 @@
 #ifndef __GTKCHECKLISTH__
 #define __GTKCHECKLISTH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface
 #endif
 

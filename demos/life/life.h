@@ -12,7 +12,7 @@
 #ifndef _LIFE_APP_H_
 #define _LIFE_APP_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "life.h"
 #endif
 

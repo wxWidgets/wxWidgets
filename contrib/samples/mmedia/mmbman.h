@@ -12,7 +12,7 @@
 #ifndef _MMBMAN_APP_H_
 #define _MMBMAN_APP_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
   #pragma interface "mmbman.cpp"
 #endif
 

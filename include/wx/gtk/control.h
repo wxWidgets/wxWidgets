@@ -10,7 +10,7 @@
 #ifndef __GTKCONTROLH__
 #define __GTKCONTROLH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface
 #endif
 

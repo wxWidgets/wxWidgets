@@ -10,7 +10,7 @@
 #ifndef __CDA_base_H__
 #define __CDA_base_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "cdbase.h"
 #endif
 

@@ -12,7 +12,7 @@
 #ifndef __GTKCOMBOBOXH__
 #define __GTKCOMBOBOXH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "combobox.h"
 #endif
 

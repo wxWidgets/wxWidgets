@@ -12,7 +12,7 @@
 #ifndef _WX_HELPVIEW_H_
 #define _WX_HELPVIEW_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "help.cpp"
 #endif
 
