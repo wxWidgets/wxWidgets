@@ -60,12 +60,14 @@ Here's the API for TimeCtrl:
     <B>TimeCtrl</B>(
          parent, id = -1,
          <B>value</B> = '12:00:00 AM',
-         pos = wxDefaultPosition,
-         size = wxDefaultSize,
+         pos = wx.DefaultPosition,
+         size = wx.DefaultSize,
          <B>style</B> = wxTE_PROCESS_TAB,
-         <B>validator</B> = wxDefaultValidator,
+         <B>validator</B> = wx.DefaultValidator,
          name = "time",
+         <B>format</B> = 'HHMMSS',         
          <B>fmt24hr</B> = False,
+         <B>displaySeconds</B> = True,
          <B>spinButton</B> = None,
          <B>min</B> = None,
          <B>max</B> = None,
@@ -80,7 +82,7 @@ Here's the API for TimeCtrl:
     with SetValue() after instantiation of the control.)
     <DL><B>size</B>
     <DD>The size of the control will be automatically adjusted for 12/24 hour format
-    if wxDefaultSize is specified.
+    if wx.DefaultSize is specified.
     <DT><B>style</B>
     <DD>By default, TimeCtrl will process TAB events, by allowing tab to the
     different cells within the control.
@@ -89,11 +91,23 @@ Here's the API for TimeCtrl:
     of its validation for entry control is handled internally.  However, a validator
     can be supplied to provide data transfer capability to the control.
     <BR>
+    <DT><B>format</B>
+    <DD>This parameter can be used instead of the fmt24hr and displaySeconds
+    parameters, respectively; it provides a shorthand way to specify the time
+    format you want.  Accepted values are 'HHMMSS', 'HHMM', '24HHMMSS', and
+    '24HHMM'.  If the format is specified, the other two  arguments will be ignored.    
+    <BR>
     <DT><B>fmt24hr</B>
     <DD>If True, control will display time in 24 hour time format; if False, it will
     use 12 hour AM/PM format.  SetValue() will adjust values accordingly for the
-    control, based on the format specified.
+    control, based on the format specified.  (This value is ignored if the <i>format</i>
+    parameter is specified.)
     <BR>
+    <DT><B>displaySeconds</B>
+    <DD>If True, control will include a seconds field; if False, it will
+    just show hours and minutes. (This value is ignored if the <i>format</i>
+    parameter is specified.)
+    <BR>    
     <DT><B>spinButton</B>
     <DD>If specified, this button's events will be bound to the behavior of the
     TimeCtrl, working like up/down cursor key events.  (See BindSpinButton.)
@@ -151,7 +165,7 @@ set to Jan 1, 1970.) (Same as GetValue(as_wxDateTime=True); provided for backwar
 compatibility with previous release.)
 <BR>
 <BR>
-<DT><B>BindSpinButton(wxSpinBtton)</B>
+<DT><B>BindSpinButton(SpinBtton)</B>
 <DD>Binds an externally created spin button to the control, so that up/down spin
 events change the active cell or selection in the control (in addition to the
 up/down cursor keys.)  (This is primarily to allow you to create a "standard"
@@ -258,7 +272,7 @@ import  types
 import  wx
 
 from wx.tools.dbg import Logger
-from wx.lib.maskededit import MaskedTextCtrl, Field
+from wx.lib.maskededit import BaseMaskedTextCtrl, Field
 
 dbg = Logger()
 dbg(enable=0)
@@ -281,11 +295,40 @@ class TimeUpdatedEvent(wx.PyCommandEvent):
         """Retrieve the value of the time control at the time this event was generated"""
         return self.value
 
+class TimeCtrlAccessorsMixin:
+    # Define TimeCtrl's list of attributes having their own
+    # Get/Set functions, ignoring those that make no sense for
+    # an numeric control.
+    exposed_basectrl_params = (
+         'defaultValue',
+         'description',
 
-class TimeCtrl(MaskedTextCtrl):
+         'useFixedWidthFont',
+         'emptyBackgroundColour',
+         'validBackgroundColour',
+         'invalidBackgroundColour',
+
+         'validFunc',
+         'validRequired',
+        )
+    for param in exposed_basectrl_params:
+        propname = param[0].upper() + param[1:]
+        exec('def Set%s(self, value): self.SetCtrlParameters(%s=value)' % (propname, param))
+        exec('def Get%s(self): return self.GetCtrlParameter("%s")''' % (propname, param))
+
+        if param.find('Colour') != -1:
+            # add non-british spellings, for backward-compatibility
+            propname.replace('Colour', 'Color')
+
+            exec('def Set%s(self, value): self.SetCtrlParameters(%s=value)' % (propname, param))
+            exec('def Get%s(self): return self.GetCtrlParameter("%s")''' % (propname, param))
+ 
+ 
+class TimeCtrl(BaseMaskedTextCtrl):
 
     valid_ctrl_params = {
-        'display_seconds' : True,   # by default, shows seconds
+        'format' :  'HHMMSS',       # default format code
+        'displaySeconds' : True,    # by default, shows seconds
         'min': None,                # by default, no bounds set
         'max': None,
         'limited': False,           # by default, no limiting even if bounds set
@@ -316,61 +359,39 @@ class TimeCtrl(MaskedTextCtrl):
         max = self.__max
         limited = self.__limited
         self.__posCurrent = 0
+        # handle deprecated keword argument name:
+        if kwargs.has_key('display_seconds'):
+            kwargs['displaySeconds'] = kwargs['display_seconds']
+            del kwargs['display_seconds']
+        if not kwargs.has_key('displaySeconds'):
+            kwargs['displaySeconds'] = True
 
+        # (handle positional arg (from original release) differently from rest of kwargs:)
+        self.__fmt24hr = False
+        if not kwargs.has_key('format'):
+            if fmt24hr:
+                if kwargs.has_key('displaySeconds') and kwargs['displaySeconds']:
+                    kwargs['format'] = '24HHMMSS'
+                    del kwargs['displaySeconds']
+                else:
+                    kwargs['format'] = '24HHMM'
+            else:
+                if kwargs.has_key('displaySeconds') and kwargs['displaySeconds']:
+                    kwargs['format'] = 'HHMMSS'
+                    del kwargs['displaySeconds']
+                else:
+                    kwargs['format'] = 'HHMM'
 
-        # (handle positional args (from original release) differently from rest of kwargs:)
-        self.__fmt24hr = fmt24hr
+        if not kwargs.has_key('useFixedWidthFont'):
+            # allow control over font selection:
+            kwargs['useFixedWidthFont'] = self.__useFixedWidthFont
 
-        maskededit_kwargs = {}
+        maskededit_kwargs = self.SetParameters(**kwargs)
 
-        # assign keyword args as appropriate:
-        for key, param_value in kwargs.items():
-            if key not in TimeCtrl.valid_ctrl_params.keys():
-                raise AttributeError('invalid keyword argument "%s"' % key)
-
-            if key == "display_seconds":
-                self.__display_seconds = param_value
-
-            elif key == "min":      min = param_value
-            elif key == "max":      max = param_value
-            elif key == "limited":  limited = param_value
-
-            elif key == "useFixedWidthFont":
-                maskededit_kwargs[key] = param_value
-            elif key == "oob_color":
-                maskededit_kwargs['invalidBackgroundColor'] = param_value
-
-        if self.__fmt24hr:
-            if self.__display_seconds:  maskededit_kwargs['autoformat'] = 'MILTIMEHHMMSS'
-            else:                       maskededit_kwargs['autoformat'] = 'MILTIMEHHMM'
-
-            # Set hour field to zero-pad, right-insert, require explicit field change,
-            # select entire field on entry, and require a resultant valid entry
-            # to allow character entry:
-            hourfield = Field(formatcodes='0r<SV', validRegex='0\d|1\d|2[0123]', validRequired=True)
-        else:
-            if self.__display_seconds:  maskededit_kwargs['autoformat'] = 'TIMEHHMMSS'
-            else:                       maskededit_kwargs['autoformat'] = 'TIMEHHMM'
-
-            # Set hour field to allow spaces (at start), right-insert,
-            # require explicit field change, select entire field on entry,
-            # and require a resultant valid entry to allow character entry:
-            hourfield = Field(formatcodes='_0<rSV', validRegex='0[1-9]| [1-9]|1[012]', validRequired=True)
-            ampmfield = Field(formatcodes='S', emptyInvalid = True, validRequired = True)
-
-        # Field 1 is always a zero-padded right-insert minute field,
-        # similarly configured as above:
-        minutefield = Field(formatcodes='0r<SV', validRegex='[0-5]\d', validRequired=True)
-
-        fields = [ hourfield, minutefield ]
-        if self.__display_seconds:
-            fields.append(copy.copy(minutefield))    # second field has same constraints as field 1
-
-        if not self.__fmt24hr:
-            fields.append(ampmfield)
-
-        # set fields argument:
-        maskededit_kwargs['fields'] = fields
+        # allow for explicit size specification:
+        if size != wx.DefaultSize:
+            # override (and remove) "autofit" autoformat code in standard time formats:
+            maskededit_kwargs['formatcodes'] = 'T!'
 
         # This allows range validation if set
         maskededit_kwargs['validFunc'] = self.IsInBounds
@@ -379,16 +400,8 @@ class TimeCtrl(MaskedTextCtrl):
         # dynamically without affecting individual field constraint validation
         maskededit_kwargs['retainFieldValidation'] = True
 
-        # allow control over font selection:
-        maskededit_kwargs['useFixedWidthFont'] = self.__useFixedWidthFont
-
-        # allow for explicit size specification:
-        if size != wx.DefaultSize:
-            # override (and remove) "autofit" autoformat code in standard time formats:
-            maskededit_kwargs['formatcodes'] = 'T!'
-
         # Now we can initialize the base control:
-        MaskedTextCtrl.__init__(
+        BaseMaskedTextCtrl.__init__(
                 self, parent, id=id,
                 pos=pos, size=size,
                 style = style,
@@ -425,7 +438,7 @@ class TimeCtrl(MaskedTextCtrl):
         self.Bind(wx.EVT_LEFT_DCLICK, self._OnDoubleClick ) ## select field under cursor on dclick
         self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown )        ## capture control events not normally seen, eg ctrl-tab.
         self.Bind(wx.EVT_CHAR, self.__OnChar )              ## remove "shift" attribute from colon key event,
-                                                            ## then call MaskedTextCtrl._OnChar with
+                                                            ## then call BaseMaskedTextCtrl._OnChar with
                                                             ## the possibly modified event.
         self.Bind(wx.EVT_TEXT, self.__OnTextChange, self )  ## color control appropriately and EVT_TIMEUPDATE events
 
@@ -441,6 +454,110 @@ class TimeCtrl(MaskedTextCtrl):
         if spinButton:
             self.BindSpinButton(spinButton)     # bind spin button up/down events to this control
 
+
+    def SetParameters(self, **kwargs):
+        dbg('TimeCtrl::SetParameters(%s)' % repr(kwargs), indent=1)
+        maskededit_kwargs = {}
+        reset_format = False
+
+        if kwargs.has_key('display_seconds'):
+            kwargs['displaySeconds'] = kwargs['display_seconds']
+            del kwargs['display_seconds']
+        if kwargs.has_key('format') and kwargs.has_key('displaySeconds'):
+            del kwargs['displaySeconds']    # always apply format if specified
+
+        # assign keyword args as appropriate:
+        for key, param_value in kwargs.items():
+            if key not in TimeCtrl.valid_ctrl_params.keys():
+                raise AttributeError('invalid keyword argument "%s"' % key)
+
+            if key == 'format':
+                # handle both local or generic 'maskededit' autoformat codes:
+                if param_value == 'HHMMSS' or param_value == 'TIMEHHMMSS':
+                    self.__displaySeconds = True
+                    self.__fmt24hr = False
+                elif param_value == 'HHMM' or param_value == 'TIMEHHMM':
+                    self.__displaySeconds = False
+                    self.__fmt24hr = False
+                elif param_value == '24HHMMSS' or param_value == '24HRTIMEHHMMSS':
+                    self.__displaySeconds = True
+                    self.__fmt24hr = True
+                elif param_value == '24HHMM' or param_value == '24HRTIMEHHMM':
+                    self.__displaySeconds = False
+                    self.__fmt24hr = True
+                else:
+                    raise AttributeError('"%s" is not a valid format' % param_value)
+                reset_format = True
+
+            elif key in ("displaySeconds",  "display_seconds") and not kwargs.has_key('format'):
+                self.__displaySeconds = param_value
+                reset_format = True
+
+            elif key == "min":      min = param_value
+            elif key == "max":      max = param_value
+            elif key == "limited":  limited = param_value
+
+            elif key == "useFixedWidthFont":
+                maskededit_kwargs[key] = param_value
+
+            elif key == "oob_color":
+                maskededit_kwargs['invalidBackgroundColor'] = param_value
+
+        if reset_format:
+            if self.__fmt24hr:
+                if self.__displaySeconds:  maskededit_kwargs['autoformat'] = '24HRTIMEHHMMSS'
+                else:                      maskededit_kwargs['autoformat'] = '24HRTIMEHHMM'
+
+                # Set hour field to zero-pad, right-insert, require explicit field change,
+                # select entire field on entry, and require a resultant valid entry
+                # to allow character entry:
+                hourfield = Field(formatcodes='0r<SV', validRegex='0\d|1\d|2[0123]', validRequired=True)
+            else:
+                if self.__displaySeconds:  maskededit_kwargs['autoformat'] = 'TIMEHHMMSS'
+                else:                      maskededit_kwargs['autoformat'] = 'TIMEHHMM'
+
+                # Set hour field to allow spaces (at start), right-insert,
+                # require explicit field change, select entire field on entry,
+                # and require a resultant valid entry to allow character entry:
+                hourfield = Field(formatcodes='_0<rSV', validRegex='0[1-9]| [1-9]|1[012]', validRequired=True)
+                ampmfield = Field(formatcodes='S', emptyInvalid = True, validRequired = True)
+
+            # Field 1 is always a zero-padded right-insert minute field,
+            # similarly configured as above:
+            minutefield = Field(formatcodes='0r<SV', validRegex='[0-5]\d', validRequired=True)
+
+            fields = [ hourfield, minutefield ]
+            if self.__displaySeconds:
+                fields.append(copy.copy(minutefield))    # second field has same constraints as field 1
+
+            if not self.__fmt24hr:
+                fields.append(ampmfield)
+
+            # set fields argument:
+            maskededit_kwargs['fields'] = fields
+
+            # This allows range validation if set
+            maskededit_kwargs['validFunc'] = self.IsInBounds
+
+            # This allows range limits to affect insertion into control or not
+            # dynamically without affecting individual field constraint validation
+            maskededit_kwargs['retainFieldValidation'] = True
+
+        if hasattr(self, 'controlInitialized') and self.controlInitialized:
+            self.SetCtrlParameters(**maskededit_kwargs)   # set appropriate parameters
+
+            # Validate initial value and set if appropriate
+            try:
+                self.SetBounds(min, max)
+                self.SetLimited(limited)
+                self.SetValue(value)
+            except:
+                self.SetValue('12:00:00 AM')
+            dbg(indent=0)
+            return {}   # no arguments to return
+        else:
+            dbg(indent=0)
+            return maskededit_kwargs
 
 
     def BindSpinButton(self, sb):
@@ -496,7 +613,7 @@ class TimeCtrl(MaskedTextCtrl):
             elif as_mxDateTimeDelta:
                 value = DateTime.DateTimeDelta(0, value.GetHour(), value.GetMinute(), value.GetSecond())
         else:
-            value = MaskedTextCtrl.GetValue(self)
+            value = BaseMaskedTextCtrl.GetValue(self)
         return value
 
 
@@ -888,6 +1005,16 @@ class TimeCtrl(MaskedTextCtrl):
         except ValueError:
             return False
 
+    def SetFormat(self, format):
+        self.SetParameters(format=format)
+
+    def GetFormat(self):
+        if self.__displaySeconds:
+            if self.__fmt24hr: return '24HHMMSS'
+            else:              return 'HHMMSS'
+        else:
+            if self.__fmt24hr: return '24HHMM'
+            else:              return 'HHMM'
 
 #-------------------------------------------------------------------------------------------------------------
 # these are private functions and overrides:
@@ -896,7 +1023,7 @@ class TimeCtrl(MaskedTextCtrl):
     def __OnTextChange(self, event=None):
         dbg('TimeCtrl::OnTextChange', indent=1)
 
-        # Allow wxMaskedtext base control to color as appropriate,
+        # Allow Maskedtext base control to color as appropriate,
         # and Skip the EVT_TEXT event (if appropriate.)
         ##! WS: For some inexplicable reason, every wxTextCtrl.SetValue()
         ## call is generating two (2) EVT_TEXT events. (!)
@@ -905,7 +1032,7 @@ class TimeCtrl(MaskedTextCtrl):
         ## event iff the value has actually changed.  The masked edit
         ## OnTextChange routine does this, and returns True on a valid event,
         ## False otherwise.
-        if not MaskedTextCtrl._OnTextChange(self, event):
+        if not BaseMaskedTextCtrl._OnTextChange(self, event):
             return
 
         dbg('firing TimeUpdatedEvent...')
@@ -922,7 +1049,7 @@ class TimeCtrl(MaskedTextCtrl):
         point is lost when the focus shifts to the spin button.
         """
         dbg('TimeCtrl::SetInsertionPoint', pos, indent=1)
-        MaskedTextCtrl.SetInsertionPoint(self, pos)                 # (causes EVT_TEXT event to fire)
+        BaseMaskedTextCtrl.SetInsertionPoint(self, pos)                 # (causes EVT_TEXT event to fire)
         self.__posCurrent = self.GetInsertionPoint()
         dbg(indent=0)
 
@@ -941,7 +1068,7 @@ class TimeCtrl(MaskedTextCtrl):
             sel_to = cell_end
 
         self.__bSelection = sel_start != sel_to
-        MaskedTextCtrl.SetSelection(self, sel_start, sel_to)
+        BaseMaskedTextCtrl.SetSelection(self, sel_start, sel_to)
         dbg(indent=0)
 
 
@@ -998,7 +1125,7 @@ class TimeCtrl(MaskedTextCtrl):
         if keycode == ord(':'):
             dbg('colon seen! removing shift attribute')
             event.m_shiftDown = False
-        MaskedTextCtrl._OnChar(self, event )              ## handle each keypress
+        BaseMaskedTextCtrl._OnChar(self, event )              ## handle each keypress
         dbg(indent=0)
 
 
@@ -1084,11 +1211,11 @@ class TimeCtrl(MaskedTextCtrl):
         converts it to a string appropriate for the format of the control.
         """
         if self.__fmt24hr:
-            if self.__display_seconds: strval = wxdt.Format('%H:%M:%S')
-            else:                      strval = wxdt.Format('%H:%M')
+            if self.__displaySeconds: strval = wxdt.Format('%H:%M:%S')
+            else:                     strval = wxdt.Format('%H:%M')
         else:
-            if self.__display_seconds: strval = wxdt.Format('%I:%M:%S %p')
-            else:                      strval = wxdt.Format('%I:%M %p')
+            if self.__displaySeconds: strval = wxdt.Format('%I:%M:%S %p')
+            else:                     strval = wxdt.Format('%I:%M %p')
 
         return strval
 
@@ -1178,3 +1305,11 @@ if __name__ == '__main__':
         app.MainLoop()
     except:
         traceback.print_exc()
+i=0
+## Version 1.2
+##   1. Changed parameter name display_seconds to displaySeconds, to follow
+##      other masked edit conventions.
+##   2. Added format parameter, to remove need to use both fmt24hr and displaySeconds.
+##   3. Changed inheritance to use BaseMaskedTextCtrl, to remove exposure of
+##      nonsensical parameter methods from the control, so it will work
+##      properly with Boa.
