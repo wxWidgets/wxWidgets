@@ -253,7 +253,7 @@ The following options handle the kind of library you want to build.
 				This will speed-up compilation and reduce 
 				binary size.
 				
-	--enable-no_rtti        Enable compilation without creation of
+	--enable-no_exceptions  Enable compilation without creation of
 	                        C++ exception information in object files. 
 				This will speed-up compilation and reduce 
 				binary size. Also fewer crashes during the

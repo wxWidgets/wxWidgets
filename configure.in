@@ -1763,11 +1763,13 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
     if test "$wxUSE_GTK" = 1; then
         if test "$WXGTK12" != 1; then
             AC_MSG_WARN([Drag and drop is only supported under wxGTK 2.1])
+	    wxUSE_DRAG_AND_DROP=no
         fi
     fi
 
     if test "$wxUSE_MOTIF" = 1; then
         AC_MSG_WARN([Drag and drop is not yet supported under Motif])
+	wxUSE_DRAG_AND_DROP=no
     fi
 
     if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
@@ -1888,7 +1890,11 @@ if test "$wxUSE_STATLINE" = "yes"; then
     if test "$wxUSE_WINE" = 1 ; then
         AC_MSG_WARN([wxStaticLine is not supported under WINE])
     else
-        AC_DEFINE(wxUSE_STATLINE)
+        if test "$wxUSE_MOTIF" = 1 ; then
+            AC_MSG_WARN([wxStaticLine is not supported under Motif])
+	else
+            AC_DEFINE(wxUSE_STATLINE)
+	fi
     fi
 fi
 
@@ -1908,10 +1914,10 @@ fi
 
 if test "$wxUSE_TOOLTIPS" = "yes"; then
     if test "$wxUSE_MOTIF" = 1; then
-        AC_MSG_WARN(Tooltips are not supported yet under Motif)
+        AC_MSG_WARN(wxTooltip not supported yet under Motif)
     else
         if test "$wxUSE_WINE" = 1; then
-            AC_MSG_WARN(Tooltips are not supported yet under WINE)
+            AC_MSG_WARN(wxTooltip not supported under WINE)
         else
             AC_DEFINE(wxUSE_TOOLTIPS)
         fi
@@ -1993,7 +1999,7 @@ dnl all -I options we must pass to the compiler
 INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TOOLKIT_INCLUDE"
 
 dnl C/C++ compiler options used to compile wxWindows
-if test "$ac_cv_prog_gcc" = "yes"; then
+if test "$GXX" = yes ; then
     dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
     CXXWARNINGS="-Wall"
     dnl there is one weird warning in docview.h:71 which prevents me from doing

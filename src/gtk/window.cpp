@@ -634,7 +634,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     /* wxMSW doesn't send char events with Alt pressed */
     if ((key_code != 0) &&
         ((gdk_event->state & GDK_MOD1_MASK) == 0) &&
-        ((gdk_event->state & GDK_MOD1_MASK) == 0))
+        ((gdk_event->state & GDK_MOD2_MASK) == 0))
     {
         wxKeyEvent event2( wxEVT_CHAR );                 
         event2.SetTimestamp( gdk_event->time );

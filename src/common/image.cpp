@@ -1485,7 +1485,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
 
     vi = XGetVisualInfo( dpy, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
 
-    wxCHECK_MSG( vi, wxNullBitmap, _T("no visual") );
+    wxCHECK_RET( vi, _T("no visual") );
 
     if ((bpp == 16) && (vi->red_mask != 0xf800)) bpp = 15;
 
