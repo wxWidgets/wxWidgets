@@ -34,6 +34,7 @@
 #include "wx/statline.h"
 #include "wx/listbook.h"
 #include "wx/imaglist.h"
+#include "wx/settings.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -150,11 +151,25 @@ wxSize wxListbook::GetListSize() const
     {
         size.x = sizeClient.x;
         size.y = heightMax;
+
+        if ( widthMax >= sizeClient.x )
+        {
+            // account for the scrollbar
+            size.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+        }
     }
     else // left/right aligned
     {
+        // +10 is due to an apparent bug in wxListCtrl::GetItemRect() but I
+        // can't fix it there right now so just add a fudge here...
         size.x = widthMax + 10;
         size.y = sizeClient.y;
+
+        if ( heightMax >= sizeClient.y )
+        {
+            // account for the scrollbar
+            size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+        }
     }
 
     return size;
