@@ -50,20 +50,6 @@ public:
            long style = wxDEFAULT_FRAME_STYLE,
            const wxString& name = wxFrameNameStr);
 
-#if WXWIN_COMPATIBILITY
-/*
-  // The default thing is to set the focus for the first child window.
-  // Override for your own behaviour.
-  virtual void OldOnActivate(bool flag);
-
-  // Default behaviour is to display a help string for the menu item.
-  virtual void OldOnMenuSelect(int id);
-
-  inline virtual void OldOnMenuCommand(int WXUNUSED(id)) {};         // Called on frame menu command
-  void OldOnSize(int x, int y);
-*/
-#endif
-
   virtual bool Destroy(void);
   void SetClientSize(int width, int height);
   void GetClientSize(int *width, int *height) const;

@@ -45,6 +45,13 @@
 #include "wx/app.h"
 #include "wx/msw/private.h"
 
+#ifndef TBSTYLE_FLAT
+#define TBSTYLE_LIST            0x1000
+#define TBSTYLE_FLAT            0x0800
+#define TBSTYLE_TRANSPARENT     0x8000
+#endif
+ // use TBSTYLE_TRANSPARENT if you use TBSTYLE_FLAT
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar95, wxToolBarBase)
 
@@ -123,12 +130,19 @@ bool wxToolBar95::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, co
     y = 0;
 
   m_windowId = (id < 0 ? NewControlId() : id);
+  DWORD msStyle = WS_CHILD | WS_BORDER | WS_VISIBLE | TBSTYLE_TOOLTIPS;
+
+  if (style & wxTB_FLAT)
+  {
+    if (wxTheApp->GetComCtl32Version() > 400)
+        msStyle |= TBSTYLE_FLAT;
+  }
 
   // Create the toolbar control.
   HWND hWndToolbar = CreateWindowEx(0L,   // No extended styles.
     TOOLBARCLASSNAME,                 // Class name for the toolbar.
     "",                               // No default text.
-    WS_CHILD | WS_BORDER | WS_VISIBLE | TBSTYLE_TOOLTIPS,    // Styles and defaults.
+    msStyle,    // Styles and defaults.
     x, y, width, height,                    // Standard toolbar size and position.
     (HWND) parent->GetHWND(),                       // Parent window of the toolbar.
     (HMENU)m_windowId,                // Toolbar ID.

@@ -34,80 +34,75 @@ class WXDLLEXPORT wxLog;
 
 WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
 
-void WXDLLEXPORT wxCleanUp(void);
-void WXDLLEXPORT wxCommonCleanUp(void); // Call this from the platform's wxCleanUp()
-void WXDLLEXPORT wxCommonInit(void);    // Call this from the platform's initialization
+void WXDLLEXPORT wxCleanUp();
+void WXDLLEXPORT wxCommonCleanUp(); // Call this from the platform's wxCleanUp()
+void WXDLLEXPORT wxCommonInit();    // Call this from the platform's initialization
 
 // Force an exit from main loop
-void WXDLLEXPORT wxExit(void);
+void WXDLLEXPORT wxExit();
 
 // Yield to other apps/messages
-bool WXDLLEXPORT wxYield(void);
+bool WXDLLEXPORT wxYield();
 
 // Represents the application. Derive OnInit and declare
 // a new App object to start application
 class WXDLLEXPORT wxApp: public wxEvtHandler
 {
   DECLARE_DYNAMIC_CLASS(wxApp)
-  wxApp(void);
-  inline ~wxApp(void) {}
+  wxApp();
+  inline ~wxApp() {}
 
   static void SetInitializerFunction(wxAppInitializerFunction fn) { m_appInitFn = fn; }
-  static wxAppInitializerFunction GetInitializerFunction(void) { return m_appInitFn; }
+  static wxAppInitializerFunction GetInitializerFunction() { return m_appInitFn; }
 
-  virtual int MainLoop(void);
-  void ExitMainLoop(void);
-  bool Initialized(void);
-  virtual bool Pending(void) ;
-  virtual void Dispatch(void) ;
+  virtual int MainLoop();
+  void ExitMainLoop();
+  bool Initialized();
+  virtual bool Pending() ;
+  virtual void Dispatch() ;
 
   virtual void OnIdle(wxIdleEvent& event);
 
 // Generic
-  virtual bool OnInit(void) { return FALSE; };
+  virtual bool OnInit() { return FALSE; };
 
   // No specific tasks to do here.
-  virtual bool OnInitGui(void) { return TRUE; }
+  virtual bool OnInitGui() { return TRUE; }
 
   // Called to set off the main loop
-  virtual int OnRun(void) { return MainLoop(); };
-  virtual int OnExit(void) { return 0; };
+  virtual int OnRun() { return MainLoop(); };
+  virtual int OnExit() { return 0; };
   inline void SetPrintMode(int mode) { m_printMode = mode; }
-  inline int GetPrintMode(void) const { return m_printMode; }
-  
+  inline int GetPrintMode() const { return m_printMode; }
+
   inline void SetExitOnFrameDelete(bool flag) { m_exitOnFrameDelete = flag; }
-  inline bool GetExitOnFrameDelete(void) const { return m_exitOnFrameDelete; }
+  inline bool GetExitOnFrameDelete() const { return m_exitOnFrameDelete; }
 
-/*
-  inline void SetShowFrameOnInit(bool flag) { m_showOnInit = flag; }
-  inline bool GetShowFrameOnInit(void) const { return m_showOnInit; }
-*/
-
-  inline wxString GetAppName(void) const {
+  inline wxString GetAppName() const {
       if (m_appName != "")
         return m_appName;
       else return m_className;
     }
 
   inline void SetAppName(const wxString& name) { m_appName = name; };
-  inline wxString GetClassName(void) const { return m_className; }
+  inline wxString GetClassName() const { return m_className; }
   inline void SetClassName(const wxString& name) { m_className = name; }
-  wxWindow *GetTopWindow(void) const ;
+  wxWindow *GetTopWindow() const ;
   inline void SetTopWindow(wxWindow *win) { m_topWindow = win; }
 
   inline void SetWantDebugOutput(bool flag) { m_wantDebugOutput = flag; }
-  inline bool GetWantDebugOutput(void) { return m_wantDebugOutput; }
+  inline bool GetWantDebugOutput() { return m_wantDebugOutput; }
 
   // Send idle event to all top-level windows.
   // Returns TRUE if more idle time is requested.
-  bool SendIdleEvents(void);
+  bool SendIdleEvents();
 
   // Send idle event to window and all subwindows
   // Returns TRUE if more idle time is requested.
   bool SendIdleEvents(wxWindow* win);
 
   inline void SetAuto3D(bool flag) { m_auto3D = flag; }
-  inline bool GetAuto3D(void) const { return m_auto3D; }
+  inline bool GetAuto3D() const { return m_auto3D; }
 
   // Creates a log object
   virtual wxLog* CreateLogTarget();
@@ -141,24 +136,15 @@ public:
 
   // Implementation
   static bool Initialize(WXHINSTANCE instance);
-  static void CommonInit(void);
-  static bool RegisterWindowClasses(void);
-  static void CleanUp(void);
-  static void CommonCleanUp(void);
-  virtual bool DoMessage(void);
+  static void CommonInit();
+  static bool RegisterWindowClasses();
+  static void CleanUp();
+  static void CommonCleanUp();
+  virtual bool DoMessage();
   virtual bool ProcessMessage(WXMSG* pMsg);
-  void DeletePendingObjects(void);
-  bool ProcessIdle(void);
-
-/*
-  inline void SetPendingCleanup(bool flag) { m_pendingCleanup = flag; }
-  inline bool GetPendingCleanup(void) { return m_pendingCleanup; }
-
-  bool DoResourceCleanup(void);
-  // Set resource collection scheme on or off.
-  inline void SetResourceCollection(bool flag) { m_resourceCollection = flag; }
-  inline bool GetResourceCollection(void) { return m_resourceCollection; }
-*/
+  void DeletePendingObjects();
+  bool ProcessIdle();
+  int GetComCtl32Version() const;
 
 public:
   static long       sm_lastMessageTime;

@@ -2,6 +2,12 @@
 wxWindows 2.0 for Windows Change Log
 ------------------------------------
 
+Alpha 12, July ??1998
+-----------------------
+
+- Added wxApp::GetComCtl32Version, and wxTB_FLAT style, so can
+  have flat toolbars on Win98 or Win95 with IE >= 3 installed.
+
 Alpha 11, July 3rd 1998
 -----------------------
 

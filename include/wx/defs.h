@@ -367,6 +367,8 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
  */
  
 #define wxTB_3DBUTTONS      0x8000
+// Flatbar/Coolbar under Win98
+#define wxTB_FLAT           0x0002
 
 /*
  * Apply to all panel items

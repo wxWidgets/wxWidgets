@@ -16,8 +16,6 @@ wx200gen.zip            Generic source code and samples (required)
 wx200msw.zip            Windows-specific source code and samples (required)
 wx200doc.zip            Documentation source code (not required)
 wx200hlp.zip            WinHelp documentation
-wx200ps.zip             PostScript documentation (will probably
-                        disappear in favour of PDF)
 wx200pdf.zip            Acrobat PDF documentation
 wx200htm.zip            HTML documentation
 
@@ -113,7 +111,8 @@ and other intermediate compiler files.
 
 Gotchas:
 
-- libwx.a is 28 MB or more.
+- libwx.a is 28 MB or more - but only 2.9 MB if compiled with no
+  debug info (-g0) and level 4 optimization (-O4).
 - install.exe doesn't have built-in decompression because lzexpand.lib
   isn't available with Gnu-Win32. However, you can use it with external
   decompression utilities.

@@ -392,26 +392,6 @@ public:
   void OnPaint(wxPaintEvent& event);
   void OnIdle(wxIdleEvent& event);
 
-//  virtual void OnChangeFocus(wxControl *from, wxControl *to);
-//  virtual bool OnFunctionKey(wxKeyEvent &event);
-
-/*
-#if WXWIN_COMPATIBILITY
-  virtual void OldOnMenuSelect(int WXUNUSED(cmd));
-  virtual void OldOnInitMenuPopup(int WXUNUSED(pos));
-  virtual void OldOnScroll(wxCommandEvent& WXUNUSED(event));
-  virtual void OldOnPaint(void);                 // Called when needs painting
-  virtual void OldOnSize(int width, int height);           // Called on resize
-  virtual void OldOnMouseEvent(wxMouseEvent& event);  // Called on mouse event
-  virtual void OldOnChar(wxKeyEvent& event);     // Called on character event
-  virtual void OldOnMenuCommand(int cmd); // Dealt with properly in wxFrame
-  inline virtual void OldOnMove(int WXUNUSED(x), int WXUNUSED(y));          // Called on move
-  inline virtual void OldOnActivate(bool WXUNUSED(active));       // Called on window activation (MSW)
-  virtual void OldOnSetFocus(void);              // Called on setting focus
-  virtual void OldOnKillFocus(void);             // Called on killing focus
-#endif
-*/
-
 public:
   ////////////////////////////////////////////////////////////////////////
   //// IMPLEMENTATION
@@ -616,11 +596,6 @@ protected:
   int                   m_caretHeight;
   bool                  m_caretEnabled;
   bool                  m_caretShown;
-
-  // Device context being stored whilst drawing is done
-//  WXHDC                 m_tempHDC;
-  // Temporary device context stored during an OnPaint
-//  WXHDC                 m_paintHDC;
   wxFont                m_windowFont;                               // Window's font
   bool                  m_isShown;
   bool                  m_doubleClickAllowed ;
@@ -641,8 +616,6 @@ protected:
   wxColour              m_defaultForegroundColour;
 
   bool                  m_backgroundTransparent;
-
-//  wxDC *                m_windowDC;    // The canvas's device context
 
   int                   m_xThumbSize;
   int                   m_yThumbSize;
@@ -709,19 +682,7 @@ inline wxColour wxWindow::GetDefaultBackgroundColour(void) const { return m_defa
 
 inline wxButton *wxWindow::GetDefaultItem(void) const { return m_defaultItem; }
 inline void wxWindow::SetDefaultItem(wxButton *but) { m_defaultItem = but; }
-// inline wxDC *wxWindow::GetDC(void) const { return m_windowDC; }
 inline bool wxWindow::IsRetained(void) const { return ((m_windowStyle & wxRETAINED) == wxRETAINED); }
-
-/*
-#if WXWIN_COMPATIBILITY
-inline void wxWindow::OldOnMenuSelect(int WXUNUSED(cmd)) { Default(); };
-inline void wxWindow::OldOnInitMenuPopup(int WXUNUSED(pos)) { Default(); };
-inline void wxWindow::OldOnScroll(wxCommandEvent& WXUNUSED(event)) { Default(); };
-inline void wxWindow::OldOnMenuCommand(int WXUNUSED(cmd)) { Default(); } // Dealt with properly in wxFrame
-inline void wxWindow::OldOnMove(int WXUNUSED(x), int WXUNUSED(y)) { Default(); };          // Called on move
-inline void wxWindow::OldOnActivate(bool WXUNUSED(active)) { Default(); };       // Called on window activation (MSW)
-#endif
-*/
 
 inline void wxWindow::SetShowing(bool show) { m_isShown = show; }
 inline wxList *wxWindow::GetConstraintsInvolvedIn(void) const { return m_constraintsInvolvedIn; }

@@ -966,31 +966,6 @@ class WXDLLEXPORT wxEvtHandler: public wxObject
   // Default behaviour
   virtual long Default(void) { if (GetNextHandler()) return GetNextHandler()->Default(); else return 0; };
 
-/*
-#if WXWIN_COMPATIBILITY
-  virtual void OldOnMenuCommand(int WXUNUSED(cmd));
-  virtual void OldOnMenuSelect(int WXUNUSED(cmd));
-  virtual void OldOnInitMenuPopup(int WXUNUSED(pos));
-  virtual void OldOnScroll(wxCommandEvent& WXUNUSED(event));
-  virtual void OldOnPaint(void);
-  virtual void OldOnSize(int WXUNUSED(width), int WXUNUSED(height));
-  virtual void OldOnMove(int WXUNUSED(x), int WXUNUSED(y));
-  virtual void OldOnMouseEvent(wxMouseEvent& WXUNUSED(event));
-  virtual void OldOnChar(wxKeyEvent& WXUNUSED(event));
-  // Under Windows, we can intercept character input per dialog or frame
-  virtual bool OldOnCharHook(wxKeyEvent& WXUNUSED(event));
-  virtual void OldOnActivate(bool WXUNUSED(active));
-  virtual void OldOnSetFocus(void);
-  virtual void OldOnKillFocus(void);
-  virtual bool OldOnSysColourChange(void);
-  virtual void OldOnDropFiles(int n, char *files[], int x, int y);
-
-  virtual void OnDefaultAction(wxControl *WXUNUSED(initiatingItem)) {};
-  virtual void OnChangeFocus(wxControl *WXUNUSED(from), wxControl *WXUNUSED(to)) {};
-  virtual bool OnFunctionKey(wxKeyEvent &WXUNUSED(event)) { return FALSE; };
-#endif
-*/
-
   virtual bool OnClose(void);
 
   inline char *GetClientData(void) const { return m_clientData; }

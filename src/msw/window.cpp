@@ -1668,10 +1668,6 @@ void wxWindow::MSWOnMenuHighlight(WXWORD WXUNUSED(item), WXWORD WXUNUSED(flags),
 
 void wxWindow::MSWOnInitMenuPopup(WXHMENU menu, int pos, bool isSystem)
 {
-/*
-  if (!isSystem)
-    OldOnInitMenuPopup(pos);
-*/
 }
 
 bool wxWindow::MSWOnActivate(int state, bool WXUNUSED(minimized), WXHWND WXUNUSED(activate))
@@ -3591,54 +3587,6 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
 
   return exStyle;
 }
-
-/*
-#if WXWIN_COMPATIBILITY
-void wxWindow::OldOnPaint(void)
-{
-  wxPaintEvent event(m_windowId);
-  event.m_eventObject = this;
-  if (!GetEventHandler()->ProcessEvent(event))
-    Default();
-};
-
-void wxWindow::OldOnSize(int w, int h)
-{
-  wxSizeEvent event(wxSize(w, h), m_windowId);
-  event.m_eventObject = this;
-  if (!GetEventHandler()->ProcessEvent(event))
-    Default();
-};
-
-void wxWindow::OldOnMouseEvent(wxMouseEvent& event)
-{
-  if (!GetEventHandler()->ProcessEvent(event))
-    Default();
-};
-
-void wxWindow::OldOnChar(wxKeyEvent& event)
-{
-  if (!GetEventHandler()->ProcessEvent(event))
-    Default();
-};
-
-void wxWindow::OldOnSetFocus(void)
-{
-  wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
-  event.m_eventObject = this;
-  if (!GetEventHandler()->ProcessEvent(event))
-    Default();
-};
-
-void wxWindow::OldOnKillFocus(void)
-{
-  wxFocusEvent event(wxEVT_KILL_FOCUS, m_windowId);
-  event.m_eventObject = this;
-  if (!GetEventHandler()->ProcessEvent(event))
-    Default();
-};
-#endif
-*/
 
 void wxWindow::OnChar(wxKeyEvent& event)
 {

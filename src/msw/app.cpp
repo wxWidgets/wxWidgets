@@ -161,7 +161,7 @@ bool wxApp::Initialize(WXHANDLE instance)
   return TRUE;
 }
 
-bool wxApp::RegisterWindowClasses(void)
+bool wxApp::RegisterWindowClasses()
 {
 ///////////////////////////////////////////////////////////////////////
 // Register the frame window class.
@@ -286,7 +286,7 @@ bool wxApp::RegisterWindowClasses(void)
 }
 
 // Cleans up any wxWindows internal structures left lying around
-void wxApp::CleanUp(void)
+void wxApp::CleanUp()
 {
   wxModule::CleanUpModules();
 
@@ -335,7 +335,7 @@ void wxApp::CleanUp(void)
   delete wxLog::SetActiveTarget(NULL);
 }
 
-void wxApp::CommonInit(void)
+void wxApp::CommonInit()
 {
 #ifdef __WINDOWS__
   wxBuffer = new char[1500];
@@ -345,32 +345,8 @@ void wxApp::CommonInit(void)
 
   wxClassInfo::InitializeClasses();
 
-#ifdef __X__
-  wxTheFontNameDirectory.Initialize();
-#endif
-
-#if defined(__X__) && USE_RESOURCES
-  // Read standard font names from .Xdefaults
-
-  extern char *wxDecorativeFontName;
-  extern char *wxRomanFontName;
-  extern char *wxModernFontName;
-  extern char *wxSwissFontName;
-  extern char *wxScriptFontName;
-  extern char *wxTeletypeFontName;
-  extern char *wxDefaultFontName;
-
-  (void) wxGetResource("wxWindows", "defaultFamily", &wxDefaultFontName);
-  (void) wxGetResource("wxWindows", "decorativeFamily", &wxDecorativeFontName);
-  (void) wxGetResource("wxWindows", "romanFamily", &wxRomanFontName);
-  (void) wxGetResource("wxWindows", "modernFamily", &wxModernFontName);
-  (void) wxGetResource("wxWindows", "swissFamily", &wxSwissFontName);
-  (void) wxGetResource("wxWindows", "scriptFamily", &wxScriptFontName);
-  (void) wxGetResource("wxWindows", "teletypeFamily", &wxTeletypeFontName);
-#endif
-
 #if USE_RESOURCES
-  (void) wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
+  wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
 #endif
 
   wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
@@ -393,7 +369,7 @@ void wxApp::CommonInit(void)
   g_globalCursor = new wxCursor;
 }
 
-void wxApp::CommonCleanUp(void)
+void wxApp::CommonCleanUp()
 {
 #if USE_WX_RESOURCES
   wxCleanUpResourceSystem();
@@ -660,7 +636,7 @@ int wxEntry(WXHINSTANCE hInstance)
 // Static member initialization
 wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
 
-wxApp::wxApp(void)
+wxApp::wxApp()
 {
   m_topWindow = NULL;
   wxTheApp = this;
@@ -677,13 +653,11 @@ wxApp::wxApp(void)
 #else
   m_printMode = wxPRINT_POSTSCRIPT;
 #endif
-//  work_proc = NULL;
   m_exitOnFrameDelete = TRUE;
-//  m_showOnInit = TRUE;
   m_auto3D = TRUE;
 }
 
-bool wxApp::Initialized(void)
+bool wxApp::Initialized()
 {
 #ifndef _WINDLL
   if (GetTopWindow())
@@ -701,7 +675,7 @@ bool wxApp::Initialized(void)
  * received.
  *
  */
-bool wxApp::DoMessage(void)
+bool wxApp::DoMessage()
 {
   if (!::GetMessage(&s_currentMsg, (HWND) NULL, 0, 0))
   {
@@ -732,7 +706,7 @@ bool wxApp::DoMessage(void)
  * are processed (it'll sit in DoMessage).
  */
 
-int wxApp::MainLoop(void)
+int wxApp::MainLoop()
 {
   m_keepGoing = TRUE;
   while (m_keepGoing)
@@ -747,7 +721,7 @@ int wxApp::MainLoop(void)
 }
 
 // Returns TRUE if more time is needed.
-bool wxApp::ProcessIdle(void)
+bool wxApp::ProcessIdle()
 {
     wxIdleEvent event;
     event.SetEventObject(this);
@@ -756,17 +730,17 @@ bool wxApp::ProcessIdle(void)
     return event.MoreRequested();
 }
 
-void wxApp::ExitMainLoop(void)
+void wxApp::ExitMainLoop()
 {
   m_keepGoing = FALSE;
 }
 
-bool wxApp::Pending(void)
+bool wxApp::Pending()
 {
   return (::PeekMessage(&s_currentMsg, 0, 0, 0, PM_NOREMOVE) != 0) ;
 }
 
-void wxApp::Dispatch(void)
+void wxApp::Dispatch()
 {
     if (!DoMessage())
       m_keepGoing = FALSE;
@@ -834,7 +808,7 @@ void wxApp::OnIdle(wxIdleEvent& event)
 }
 
 // Send idle event to all top-level windows
-bool wxApp::SendIdleEvents(void)
+bool wxApp::SendIdleEvents()
 {
     bool needMore = FALSE;
 	wxNode* node = wxTopLevelWindows.First();
@@ -873,7 +847,7 @@ bool wxApp::SendIdleEvents(wxWindow* win)
     return needMore ;
 }
 
-void wxApp::DeletePendingObjects(void)
+void wxApp::DeletePendingObjects()
 {
   wxNode *node = wxPendingDelete.First();
   while (node)
@@ -893,7 +867,7 @@ void wxApp::DeletePendingObjects(void)
 
 /*
 // Free up font objects that are not being used at present.
-bool wxApp::DoResourceCleanup(void)
+bool wxApp::DoResourceCleanup()
 {
 //  wxDebugMsg("ResourceCleanup\n");
 
@@ -945,12 +919,12 @@ bool wxApp::DoResourceCleanup(void)
 }
 */
 
-wxLog* wxApp::CreateLogTarget(void)
+wxLog* wxApp::CreateLogTarget()
 {
     return new wxLogGui;
 }
 
-wxWindow* wxApp::GetTopWindow(void) const
+wxWindow* wxApp::GetTopWindow() const
 {
     if (m_topWindow)
         return m_topWindow;
@@ -960,14 +934,57 @@ wxWindow* wxApp::GetTopWindow(void) const
         return NULL;
 }
 
-void wxExit(void)
+int wxApp::GetComCtl32Version() const
+{
+    // have we loaded COMCTL32 yet?
+    HMODULE theModule = ::GetModuleHandle("COMCTL32");
+    int version = 0;
+	
+    // if so, then we can check for the version
+    if (theModule)
+    {
+        // InitCommonControlsEx is unique to 4.7 and later
+        FARPROC theProc = ::GetProcAddress(theModule, "InitCommonControlsEx");
+		
+        if (! theProc)
+        {                    // not found, must be 4.00
+			version = 400;
+        }
+        else
+        {
+			// The following symbol are unique to 4.71
+			//   DllInstall
+			//   FlatSB_EnableScrollBar FlatSB_GetScrollInfo FlatSB_GetScrollPos
+			//   FlatSB_GetScrollProp FlatSB_GetScrollRange FlatSB_SetScrollInfo
+			//   FlatSB_SetScrollPos FlatSB_SetScrollProp FlatSB_SetScrollRange
+			//   FlatSB_ShowScrollBar
+			//   _DrawIndirectImageList _DuplicateImageList
+			//   InitializeFlatSB
+			//   UninitializeFlatSB
+			// we could check for any of these - I chose DllInstall
+			FARPROC theProc = ::GetProcAddress(theModule, "DllInstall");
+			if (! theProc)
+			{
+				// not found, must be 4.70
+				version = 470;
+			}
+			else
+			{                         // found, must be 4.71
+				version = 471;
+			}
+        }
+    }
+    return version;
+}
+
+void wxExit()
 {
   wxApp::CleanUp();
   FatalAppExit(0, "Fatal error: exiting");
 }
 
 // Yield to incoming messages
-bool wxYield(void)
+bool wxYield()
 {
   MSG msg;
   // We want to go back to the main message loop
