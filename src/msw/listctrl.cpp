@@ -1313,14 +1313,22 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
 
 // Find an item whose data matches this data, starting from the item after 'start'
 // or the beginning if 'start' is -1.
+// NOTE : Lindsay Mathieson - 14-July-2002
+//        No longer use ListView_FindItem as the data attribute is now stored
+//        in a wxListItemInternalData structure refernced by the actual lParam
 long wxListCtrl::FindItem(long start, long data)
 {
-    LV_FINDINFO findInfo;
+    long  idx = start + 1;
+    long count = GetItemCount();
 
-    findInfo.flags = LVFI_PARAM;
-    findInfo.lParam = data;
+    while (idx < count)
+    {
+        if (GetItemData(idx) == data)
+            return idx;
+        idx++;
+    };
 
-    return ListView_FindItem(GetHwnd(), (int) start, & findInfo);
+    return -1;
 }
 
 // Find an item nearest this position in the specified direction, starting from
