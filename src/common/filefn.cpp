@@ -189,6 +189,25 @@ const off_t wxInvalidOffset = (off_t)-1;
 // implementation
 // ============================================================================
 
+#if defined(__WXMAC__) && !defined(__DARWIN__)
+
+WXDLLEXPORT int wxStat( const wxChar *file_name, wxStructStat *buf )
+{
+    return stat( wxMacStringToCString( file_name ), buf );
+}
+
+WXDLLEXPORT int wxAccess( const wxChar *pathname, int mode )
+{
+    return access( wxMacStringToCString( pathname ), mode );
+}
+
+WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode )
+{
+    return open( wxMacStringToCString( pathname ), flags, mode );
+}
+
+#endif
+
 #ifdef wxNEED_WX_UNISTD_H
 
 WXDLLEXPORT int wxStat( const wxChar *file_name, wxStructStat *buf )

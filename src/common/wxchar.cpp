@@ -51,6 +51,10 @@
 using namespace std ;
 #endif
 
+#ifdef __WXMAC__
+    #include "wx/mac/private.h"
+#endif
+
 #if wxUSE_WCHAR_T
 size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
@@ -1194,6 +1198,28 @@ WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
   return ret;
 }
 #endif // wxNEED_WX_STRING_H
+
+#if defined(__WXMAC__) && !defined(__DARWIN__)
+WXDLLEXPORT FILE * wxFopen(const wxChar *path, const wxChar *mode)
+{
+    return fopen( wxMacStringToCString(path), mode );
+}
+
+WXDLLEXPORT FILE * wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream)
+{
+    return freopen( wxMacStringToCString(path), mode, stream );
+}
+
+WXDLLEXPORT int wxRemove(const wxChar *path)
+{
+    return remove( wxMacStringToCString(path) );
+}
+
+WXDLLEXPORT int wxRename(const wxChar *oldpath, const wxChar *newpath)
+{
+    return rename( wxMacStringToCString(oldpath), wxMacStringToCString(newpath) );
+}
+#endif
 
 #ifdef wxNEED_WX_STDIO_H
 WXDLLEXPORT FILE * wxFopen(const wxChar *path, const wxChar *mode)
