@@ -65,6 +65,7 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
   EVT_TREE_SEL_CHANGED(TreeTest_Ctrl, MyTreeCtrl::OnSelChanged)
   EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, MyTreeCtrl::OnSelChanging)
   EVT_TREE_KEY_DOWN(TreeTest_Ctrl, MyTreeCtrl::OnTreeKeyDown)
+  EVT_TREE_ITEM_ACTIVATED(TreeTest_Ctrl, MyTreeCtrl::OnItemActivated)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -319,6 +320,11 @@ void MyTreeCtrl::OnItemCollapsing(wxTreeEvent& event)
 
 void MyTreeCtrl::OnTreeKeyDown(wxTreeEvent&WXUNUSED(event))
 {
+  wxLogMessage("OnTreeKeyDown");
+}
+
+void MyTreeCtrl::OnItemActivated(wxTreeEvent&WXUNUSED(event))
+{
   // show some info about this item
   wxTreeItemId itemId = GetSelection();
   MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
@@ -328,7 +334,7 @@ void MyTreeCtrl::OnTreeKeyDown(wxTreeEvent&WXUNUSED(event))
     item->ShowInfo(this);
   }
 
-  wxLogMessage("OnTreeKeyDown");
+  wxLogMessage("OnItemActivated");
 }
 
 static inline const char *Bool2String(bool b)

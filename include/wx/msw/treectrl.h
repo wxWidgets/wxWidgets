@@ -535,5 +535,8 @@ typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
 // be deleted just after the return of this event handler (if any)
 #define EVT_TREE_DELETE_ITEM(id, fn) { wxEVT_COMMAND_TREE_DELETE_ITEM, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
 
+// GetItem() returns the item that was activated (double click, enter, space)
+#define EVT_TREE_ITEM_ACTIVATED(id, fn) { wxEVT_COMMAND_TREE_ITEM_ACTIVATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
+
 #endif
     // _WX_TREECTRL_H_

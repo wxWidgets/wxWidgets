@@ -56,6 +56,7 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
 	EVT_LIST_ITEM_SELECTED(LIST_CTRL, MyListCtrl::OnSelected)
 	EVT_LIST_ITEM_DESELECTED(LIST_CTRL, MyListCtrl::OnDeselected)
 	EVT_LIST_KEY_DOWN(LIST_CTRL, MyListCtrl::OnListKeyDown)
+	EVT_LIST_ITEM_ACTIVATED(LIST_CTRL, MyListCtrl::OnActivated)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -449,6 +450,18 @@ void MyListCtrl::OnDeselected(wxListEvent& WXUNUSED(event))
 	text->WriteText("OnDeselected\n");
 }
 
+void MyListCtrl::OnActivated(wxListEvent& WXUNUSED(event))
+{
+	if ( !wxGetApp().GetTopWindow() )
+		return;
+
+	wxTextCtrl *text = ((MyFrame *)wxGetApp().GetTopWindow())->m_logWindow;
+	if ( !text )
+		return;
+
+	text->WriteText("OnActivated\n");
+}
+
 void MyListCtrl::OnListKeyDown(wxListEvent& WXUNUSED(event))
 {
 	if ( !wxGetApp().GetTopWindow() )
@@ -460,4 +473,5 @@ void MyListCtrl::OnListKeyDown(wxListEvent& WXUNUSED(event))
 
 	text->WriteText("OnListKeyDown\n");
 }
+
 

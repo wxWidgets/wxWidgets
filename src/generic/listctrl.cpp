@@ -1216,7 +1216,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         m_lastOnSame = FALSE;
         m_renameTimer->Stop();
     
-        SendNotify( line, wxEVT_COMMAND_LIST_KEY_DOWN );
+        SendNotify( line, wxEVT_COMMAND_LIST_ITEM_ACTIVATED );
     
        return;
     }
@@ -1369,6 +1369,11 @@ void wxListMainWindow::OnArrowChar( wxListLineData *newCurrent, bool shiftDown )
 
 void wxListMainWindow::OnChar( wxKeyEvent &event )
 {
+  wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, m_parent->GetId() );
+  le.m_code = event.KeyCode();
+  le.SetEventObject( m_parent );
+  m_parent->GetEventHandler()->ProcessEvent( le );
+  
 /*
   if (event.KeyCode() == WXK_TAB)
   {
@@ -1482,7 +1487,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     case WXK_RETURN:
     case WXK_EXECUTE:
     {
-      wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetParent()->GetId() );
+      wxListEvent le( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, GetParent()->GetId() );
       le.SetEventObject( GetParent() );
       le.m_itemIndex = GetIndexOfLine( m_current );
       m_current->GetItem( 0, le.m_item );

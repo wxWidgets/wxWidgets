@@ -37,6 +37,7 @@ public:
 	void OnSelected(wxListEvent& event);
 	void OnDeselected(wxListEvent& event);
 	void OnListKeyDown(wxListEvent& event);
+	void OnActivated(wxListEvent& event);
 
    DECLARE_EVENT_TABLE()
 };

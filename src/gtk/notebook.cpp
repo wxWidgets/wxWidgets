@@ -99,6 +99,8 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
   }
 
   win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
+  
+  if (win->GetAutoLayout()) win->Layout();
 }
 
 //-----------------------------------------------------------------------------

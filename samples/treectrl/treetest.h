@@ -55,6 +55,7 @@ public:
   void OnSelChanged(wxTreeEvent& event);
   void OnSelChanging(wxTreeEvent& event);
   void OnTreeKeyDown(wxTreeEvent& event);
+  void OnItemActivated(wxTreeEvent& event);
 
   void GetItemsRecursively(const wxTreeItemId& idParent, long cookie);
 

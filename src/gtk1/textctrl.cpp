@@ -303,7 +303,8 @@ bool wxTextCtrl::LoadFile( const wxString &file )
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
-      gtk_editable_insert_text( GTK_EDITABLE(m_text), text, 0, &len );
+      gint pos = 0;
+      gtk_editable_insert_text( GTK_EDITABLE(m_text), text, len, &pos );
     }
     else
     {
@@ -555,7 +556,7 @@ void wxTextCtrl::Replace( long from, long to, const wxString &value )
 
     gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
     if (value.IsNull()) return;
-    gint pos = (gint)to;
+    gint pos = (gint)from;
     gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &pos );
 }
 

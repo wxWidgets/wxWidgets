@@ -1112,6 +1112,11 @@ void wxTreeCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 
 void wxTreeCtrl::OnChar( wxKeyEvent &event )
 {
+  wxTreeEvent te( wxEVT_COMMAND_TREE_KEY_DOWN, GetId() );
+  te.m_code = event.KeyCode();
+  te.SetEventObject( this );
+  GetEventHandler()->ProcessEvent( te );
+
   if (m_current == 0)
   {
      event.Skip();
@@ -1144,7 +1149,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
     case ' ':
     case WXK_RETURN:
       {
-        wxTreeEvent event( wxEVT_COMMAND_TREE_KEY_DOWN, GetId() );
+        wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
         event.m_item = m_current;
         event.m_code = 0;
         event.SetEventObject( this );
@@ -1236,7 +1241,7 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 
   if ( event.LeftDClick() )
   {
-    wxTreeEvent event( wxEVT_COMMAND_TREE_KEY_DOWN, GetId() );
+    wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
     event.m_item = item;
     event.m_code = 0;
     event.SetEventObject( this );
