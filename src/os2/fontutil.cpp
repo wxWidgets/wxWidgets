@@ -325,6 +325,9 @@ void wxFillLogFont(
 
     wxString                        sVals;
 
+    //
+    // For debugging, delete later
+    //
     for (int i = 0; i < lNumFonts; i++)
     {
          sVals << "Face: " << pFM[i].szFacename
@@ -440,12 +443,12 @@ void wxOS2SelectMatchingFontByName(
     int                             nPointSize;
     int                             nDiff;
     int                             nIs;
-    int                             nIndex;
     int                             nMinDiff;
     int                             nMinDiff0;
     int                             nApirc;
     int                             anDiff[16];
     int                             anMinDiff[16];
+    int                             nIndex = 0;
     STR8                            zFn;
     char                            zFontFaceName[FACESIZE];
     wxString                        sFaceName;
@@ -612,16 +615,8 @@ void wxOS2SelectMatchingFontByName(
     pFattrs->lMatch         = pFM[nIndex].lMatch;      // force match
     pFattrs->idRegistry     = pFM[nIndex].idRegistry;  // uses default registry
     pFattrs->usCodePage     = pFM[nIndex].usCodePage;  // code-page
-    if(pFM[nIndex].lMatch)
-    {
-        pFattrs->lMaxBaselineExt = pFM[nIndex].lMaxBaselineExt; // requested font height
-        pFattrs->lAveCharWidth   = pFM[nIndex].lAveCharWidth ;  // requested font width
-    }
-    else
-    {
-        pFattrs->lMaxBaselineExt = 0;
-        pFattrs->lAveCharWidth   = 0;
-    }
+    pFattrs->lMaxBaselineExt = 0;   // OUTLINE fonts need this set to 0 as they use other attributes to match
+    pFattrs->lAveCharWidth   = 0;   // OUTLINE fonts need this set to 0 as they use other attributes to match
     pFattrs->fsType    = 0;// pfm->fsType;              /* uses default type       */
     pFattrs->fsFontUse = 0;
 

@@ -1218,6 +1218,7 @@ void wxOS2SetFont(
     char                            zStyle[30];
 
     if (hWnd == NULLHANDLE)
+        return;
 
     //
     // The fonts available for Presentation Params are just three
@@ -1227,20 +1228,29 @@ void wxOS2SetFont(
     switch(rFont.GetFamily())
     {
         case wxSCRIPT:
+            strcpy(zFacename, "Script");
+            break;
+
         case wxDECORATIVE:
         case wxROMAN:
-            strcpy(zFacename,"Times New Roman");
+            strcpy(zFacename,"Tms Rmn");
             break;
 
         case wxTELETYPE:
-        case wxMODERN:
             strcpy(zFacename, "Courier");
             break;
 
+        case wxMODERN:
+            strcpy(zFacename, "System Vio");
+            break;
+
         case wxSWISS:
+            strcpy(zFacename, "Helv");
+            break;
+
         case wxDEFAULT:
         default:
-            strcpy(zFacename, "Helvetica");
+            strcpy(zFacename, "System Vio");
             break;
     }
 

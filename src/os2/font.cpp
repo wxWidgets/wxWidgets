@@ -363,6 +363,9 @@ bool wxFontRefData::Alloc(
 {
     wxString                        sFaceName;
     long                            flId = m_hFont;
+    long                            lRc;
+    short                           nIndex = 0;
+    PFONTMETRICS                    pFM = NULL;
 
     if (!m_bNativeFontInfoOk)
     {
@@ -377,22 +380,21 @@ bool wxFontRefData::Alloc(
         m_bNativeFontInfoOk = TRUE;
     }
 
-    if(::GpiCreateLogFont( m_hPS
-                          ,NULL
-                          ,flId
-                          ,&m_vNativeFontInfo.fa
-                         ) != GPI_ERROR)
+    if((lRc = ::GpiCreateLogFont( m_hPS
+                                 ,NULL
+                                 ,flId
+                                 ,&m_vNativeFontInfo.fa
+                                )) != GPI_ERROR)
+    {
        m_hFont = (WXHFONT)flId;
        m_nFontId = flId;
-
+    }
     if (!m_hFont)
     {
         wxLogLastError("CreateFont");
     }
 
-    //
-    // Query for the actual metrics of the current font being used
-    //
+    ::GpiSetCharSet(m_hPS, flId); // sets font for presentation space
     ::GpiQueryFontMetrics(m_hPS, sizeof(FONTMETRICS), &m_vNativeFontInfo.fm);
 
     //
@@ -403,13 +405,21 @@ bool wxFontRefData::Alloc(
     m_nPointSize  = m_vNativeFontInfo.fm.lEmHeight;
     if (strcmp(m_vNativeFontInfo.fa.szFacename, "Times New Roman") == 0)
         m_nFamily = wxROMAN;
+    else if (strcmp(m_vNativeFontInfo.fa.szFacename, "Tms Rmn") == 0)
+        m_nFamily = wxSWISS;
     else if (strcmp(m_vNativeFontInfo.fa.szFacename, "WarpSans") == 0)
+        m_nFamily = wxSWISS;
+    else if (strcmp(m_vNativeFontInfo.fa.szFacename, "Helvitica") == 0)
+        m_nFamily = wxSWISS;
+    else if (strcmp(m_vNativeFontInfo.fa.szFacename, "Helv") == 0)
         m_nFamily = wxSWISS;
     else if (strcmp(m_vNativeFontInfo.fa.szFacename, "Script") == 0)
         m_nFamily = wxSCRIPT;
     else if (strcmp(m_vNativeFontInfo.fa.szFacename, "Courier New") == 0)
-        m_nFamily = wxMODERN;
+        m_nFamily = wxTELETYPE;
     else if (strcmp(m_vNativeFontInfo.fa.szFacename, "Courier") == 0)
+        m_nFamily = wxTELETYPE;
+    else if (strcmp(m_vNativeFontInfo.fa.szFacename, "System VIO") == 0)
         m_nFamily = wxMODERN;
     else
         m_nFamily = wxSWISS;
