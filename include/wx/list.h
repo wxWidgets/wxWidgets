@@ -475,8 +475,7 @@ public:
     wxNode *Add(const char *s)
         { return (wxNode *)wxStringListBase::Append(copystring(s)); }
 
-    void Delete(const char *s)
-        { wxStringListBase::DeleteObject((char *)s); }
+    bool Delete(const char *s);
 
     char **ListToArray(bool new_copies = FALSE) const;
     bool Member(const char *s) const;

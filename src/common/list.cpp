@@ -397,7 +397,6 @@ bool wxListBase::DeleteObject(void *object)
     return FALSE;
 }
 
-
 void wxListBase::Clear()
 {
     wxNodeBase *current = m_nodeFirst;
@@ -518,6 +517,23 @@ void wxObjectListNode::DeleteData()
 void wxStringListNode::DeleteData()
 {
     delete [] (char *)GetData();
+}
+
+bool wxStringList::Delete(const char *s)
+{
+    wxStringListNode *current;
+
+    for ( current = GetFirst(); current; current = current->GetNext() )
+    {
+        if ( strcmp(current->GetData(), s) == 0 )
+        {
+            DeleteNode(current);
+            return TRUE;
+        }
+    }
+
+    // not found
+    return FALSE;
 }
 
 void wxStringList::DoCopy(const wxStringList& other)
