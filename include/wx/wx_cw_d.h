@@ -44,5 +44,9 @@
 #define __WXDEBUG__ 1
 #define WXDEBUG 1
 
+// in order to avoid problems further down in wxWindows
+
+char *strdup(const char *s) ;
+
 #endif
     // _WX_CW__
