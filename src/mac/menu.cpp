@@ -408,112 +408,110 @@ void wxMenu::MacEnableMenu( bool bDoEnable )
 
 bool wxMenu::MacMenuSelect( wxEvtHandler* handler, long when , int macMenuId, int macMenuItemNum )
 {
-  int pos;
-  wxNode *node;
+    int pos;
+    wxNode *node;
 
-	if ( m_macMenuId == macMenuId )
-	{
-		node = GetMenuItems().Nth(macMenuItemNum-1);
-		if (node) 
-		{
-			wxMenuItem *pItem = (wxMenuItem*)node->Data();
-
-			if (pItem->IsCheckable())
-				pItem->Check(! pItem->IsChecked());
-
-			wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, pItem->GetId());
-			event.m_timeStamp = when;
-			event.SetEventObject(handler);
-     		event.SetInt( pItem->GetId() );
-			{
-				bool processed = false ;
-
+    if ( m_macMenuId == macMenuId )
+    {
+        node = GetMenuItems().Nth(macMenuItemNum-1);
+        if (node) 
+        {
+            wxMenuItem *pItem = (wxMenuItem*)node->Data();
+            
+            if (pItem->IsCheckable())
+                pItem->Check(! pItem->IsChecked());
+            
+            wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, pItem->GetId());
+            event.m_timeStamp = when;
+            event.SetEventObject(handler);
+            event.SetInt( pItem->GetId() );
+            {
+                bool processed = false ;
+                
 #if WXWIN_COMPATIBILITY
-			    // Try a callback
-			    if (m_callback)
-			    {
-			            (void) (*(m_callback)) (*this, event);
-			            processed = TRUE;
-			    }
+                // Try a callback
+                if (m_callback)
+                {
+                    (void) (*(m_callback)) (*this, event);
+                    processed = TRUE;
+                }
 #endif			
-			    // Try the menu's event handler
-			    if ( !processed && handler)
-			    {
-			            processed = handler->ProcessEvent(event);
-			    }
-			
-			  	// Try the window the menu was popped up from (and up
-			  	// through the hierarchy)
-			  	if ( !processed && GetInvokingWindow())
-			    	processed = GetInvokingWindow()->GetEventHandler()->ProcessEvent(event);
-		  	}
-			return true ;
-		}
-	}
-#ifndef __DARWIN__
-	else if ( macMenuId == kHMHelpMenuID )
-	{
-		int menuItem = firstUserHelpMenuItem-1 ;
-	  for (pos = 0, node = GetMenuItems().First(); node; node = node->Next(), pos++) 
-	  {	
-	  	wxMenuItem * pItem = (wxMenuItem *)  node->Data() ;
-	  	
-	  	wxMenu *pSubMenu = pItem->GetSubMenu() ;
-			if ( pSubMenu != NULL )
-			{
-			}
-			else
-			{
-				if ( pItem->GetId() != wxApp::s_macAboutMenuItemId )
-					++menuItem ;
-					
-				if ( menuItem == macMenuItemNum )
-				{
-					wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, pItem->GetId());
-					event.m_timeStamp = when;
-					event.SetEventObject(handler);
-       				event.SetInt( pItem->GetId() );
-					{
-						bool processed = false ;
+                // Try the menu's event handler
+                if ( !processed && handler)
+                {
+                    processed = handler->ProcessEvent(event);
+                }
+                
+                // Try the window the menu was popped up from (and up
+                // through the hierarchy)
+                if ( !processed && GetInvokingWindow())
+                    processed = GetInvokingWindow()->GetEventHandler()->ProcessEvent(event);
+            }
+            return true ;
+        }
+    }
+    else if ( macMenuId == kHMHelpMenuID )
+    {
+        int menuItem = firstUserHelpMenuItem-1 ;
+        for (pos = 0, node = GetMenuItems().First(); node; node = node->Next(), pos++) 
+        {	
+            wxMenuItem * pItem = (wxMenuItem *)  node->Data() ;
+            
+            wxMenu *pSubMenu = pItem->GetSubMenu() ;
+            if ( pSubMenu != NULL )
+            {
+            }
+            else
+            {
+                if ( pItem->GetId() != wxApp::s_macAboutMenuItemId )
+                    ++menuItem ;
+                
+                if ( menuItem == macMenuItemNum )
+                {
+                    wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, pItem->GetId());
+                    event.m_timeStamp = when;
+                    event.SetEventObject(handler);
+                    event.SetInt( pItem->GetId() );
+                    {
+                        bool processed = false ;
 #if WXWIN_COMPATIBILITY
-					    // Try a callback
-					    if (m_callback)
-					    {
-					            (void) (*(m_callback)) (*this, event);
-					            processed = TRUE;
-					    }
+                        // Try a callback
+                        if (m_callback)
+                        {
+                            (void) (*(m_callback)) (*this, event);
+                            processed = TRUE;
+                        }
 #endif					
-					    // Try the menu's event handler
-					    if ( !processed && handler)
-					    {
-					            processed = handler->ProcessEvent(event);
-					    }
-					
-					  	// Try the window the menu was popped up from (and up
-					  	// through the hierarchy)
-					  	if ( !processed && GetInvokingWindow())
-					    	processed = GetInvokingWindow()->GetEventHandler()->ProcessEvent(event);
-				  	}
-					return true ;
-				}
-			}
-	  }
-	}
-#endif // __DARWIN__
-
-  for (pos = 0, node = GetMenuItems().First(); node; node = node->Next(), pos++) 
-  {	
-  		wxMenuItem * pItem = (wxMenuItem *)  node->Data() ;
+                        // Try the menu's event handler
+                        if ( !processed && handler)
+                        {
+                            processed = handler->ProcessEvent(event);
+                        }
+                        
+                        // Try the window the menu was popped up from (and up
+                        // through the hierarchy)
+                        if ( !processed && GetInvokingWindow())
+                            processed = GetInvokingWindow()->GetEventHandler()->ProcessEvent(event);
+                    }
+                    return true ;
+                }
+            }
+        }
+    }
+    
+    for (pos = 0, node = GetMenuItems().First(); node; node = node->Next(), pos++) 
+    {	
+        wxMenuItem * pItem = (wxMenuItem *)  node->Data() ;
   	
-  		wxMenu *pSubMenu = pItem->GetSubMenu() ;
-		if ( pSubMenu != NULL )
-		{
-			if ( pSubMenu->MacMenuSelect( handler , when , macMenuId , macMenuItemNum ) )
-				return true ;
-		}
-  }
-
-	return false ;
+        wxMenu *pSubMenu = pItem->GetSubMenu() ;
+        if ( pSubMenu != NULL )
+        {
+            if ( pSubMenu->MacMenuSelect( handler , when , macMenuId , macMenuItemNum ) )
+                return true ;
+        }
+    }
+    
+    return false ;
 }
 
 // Menu Bar
@@ -878,36 +876,31 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
 void wxMenuBar::MacMenuSelect(wxEvtHandler* handler, long when , int macMenuId, int macMenuItemNum)
 {
-	// first scan fast for direct commands, i.e. menus which have these commands directly in their own list
-
-	if ( macMenuId == kwxMacAppleMenuId && macMenuItemNum == 1 )
-	{
-			wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, wxApp::s_macAboutMenuItemId );
-			event.m_timeStamp = when;
-			event.SetEventObject(handler);
-     	event.SetInt( wxApp::s_macAboutMenuItemId );
-			handler->ProcessEvent(event);
-	}
-	else
-	{		
-	  for (int i = 0; i < m_menus.GetCount() ; i++)
-	  {
-	  	if ( m_menus[i]->MacGetMenuId() == macMenuId
-#ifndef __DARWIN__
-		     || 
-	  		( macMenuId == kHMHelpMenuID && ( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName ) )
-#endif
-	  		)
-	  	{
-	  		if ( m_menus[i]->MacMenuSelect( handler , when , macMenuId , macMenuItemNum ) )
-	  			return ;
-	  		else
-	  		{
-	  			//TODO flag this as an error since it must contain the item
-	  			return ;
-	  		}
-	  	}
-		}
+    // first scan fast for direct commands, i.e. menus which have these commands directly in their own list
+    
+    if ( macMenuId == kwxMacAppleMenuId && macMenuItemNum == 1 )
+    {
+        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, wxApp::s_macAboutMenuItemId );
+        event.m_timeStamp = when;
+        event.SetEventObject(handler);
+        event.SetInt( wxApp::s_macAboutMenuItemId );
+        handler->ProcessEvent(event);
+    }
+    else
+    {		
+        for (int i = 0; i < m_menus.GetCount() ; i++)
+        {
+            if ( m_menus[i]->MacGetMenuId() == macMenuId || ( macMenuId == kHMHelpMenuID && ( m_titles[i] == "?" || m_titles[i] == "&?"  || m_titles[i] == wxApp::s_macHelpMenuTitleName ) ) )
+            {
+                if ( m_menus[i]->MacMenuSelect( handler , when , macMenuId , macMenuItemNum ) )
+                    return ;
+                else
+                {
+                    //TODO flag this as an error since it must contain the item
+                    return ;
+                }
+            }
+        }
 	
 	  for (int i = 0; i < m_menus.GetCount(); i++)
 	  {
