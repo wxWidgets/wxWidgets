@@ -266,6 +266,8 @@ public:
   size_t Len() const { return GetStringData()->nDataLength; }
     // string contains any characters?
   bool IsEmpty() const { return Len() == 0; }
+    // empty string is "FALSE", so !str will return TRUE
+  bool operator!() const { return IsEmpty(); }
     // empty string contents
   void Empty()
   {
