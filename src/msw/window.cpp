@@ -1484,6 +1484,23 @@ void wxWindow::GetCaretPos(int *x, int *y) const
 // popup menu
 // ---------------------------------------------------------------------------
 
+// yield for WM_COMMAND events only, i.e. process all WM_COMMANDs in the queue
+// immediately, without waiting for the next event loop iteration
+//
+// NB: this function should probably be made public later as it can almost
+//     surely replace wxYield() elsewhere as well
+static void wxYieldForCommandsOnly()
+{
+    // peek all WM_COMMANDs (it will always return WM_QUIT too but we don't
+    // want to process it here)
+    MSG msg;
+    while ( ::PeekMessage(&msg, (HWND)0, WM_COMMAND, WM_COMMAND, PM_REMOVE)
+                && msg.message != WM_QUIT )
+    {
+        wxTheApp->DoMessage((WXMSG *)&msg);
+    }
+}
+
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->SetInvokingWindow(this);
@@ -1497,7 +1514,16 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     ::ClientToScreen(hWnd, &point);
     wxCurrentPopupMenu = menu;
     ::TrackPopupMenu(hMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, hWnd, NULL);
-    wxYieldIfNeeded();
+
+    // we need to do it righ now as otherwise the events are never going to be
+    // sent to wxCurrentPopupMenu from HandleCommand()
+    //
+    // note that even eliminating (ugly) wxCurrentPopupMenu global wouldn't
+    // help and we'd still need wxYieldForCommandsOnly() as the menu may be
+    // destroyed as soon as we return (it can be a local variable in the caller
+    // for example) and so we do need to process the event immediately
+    wxYieldForCommandsOnly();
+
     wxCurrentPopupMenu = NULL;
 
     menu->SetInvokingWindow(NULL);

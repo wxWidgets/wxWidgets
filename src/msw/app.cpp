@@ -957,14 +957,19 @@ bool wxApp::DoMessage()
 #endif // wxUSE_THREADS
 
         // Process the message
-        if ( !ProcessMessage((WXMSG *)&s_currentMsg) )
-        {
-            ::TranslateMessage(&s_currentMsg);
-            ::DispatchMessage(&s_currentMsg);
-        }
+        DoMessage((WXMSG *)&s_currentMsg);
     }
 
     return TRUE;
+}
+
+void wxApp::DoMessage(WXMSG *pMsg)
+{
+    if ( !ProcessMessage(pMsg) )
+    {
+        ::TranslateMessage((MSG *)pMsg);
+        ::DispatchMessage((MSG *)pMsg);
+    }
 }
 
 /*

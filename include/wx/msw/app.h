@@ -77,10 +77,25 @@ public:
     static void CleanUp();
 
     static bool RegisterWindowClasses();
+
     // Convert Windows to argc, argv style
     void ConvertToStandardCommandArgs(char* p);
+
+    // message processing
+    // ------------------
+
+    // process the given message
+    virtual void DoMessage(WXMSG *pMsg);
+
+    // retrieve the next message from the queue and process it
     virtual bool DoMessage();
+
+    // preprocess the message
     virtual bool ProcessMessage(WXMSG* pMsg);
+
+    // idle processing
+    // ---------------
+
     void DeletePendingObjects();
     bool ProcessIdle();
 
