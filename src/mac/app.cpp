@@ -1406,11 +1406,11 @@ void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
         short keychar ;
         keychar = short(ev->message & charCodeMask);
         keycode = short(ev->message & keyCodeMask) >> 8 ;
-
+        long keyval = wxMacTranslateKey(keychar, keycode) ;
+        bool handled = false ;
         wxWindow* focus = wxWindow::FindFocus() ;
         if ( focus )
         {
-            long keyval = wxMacTranslateKey(keychar, keycode) ;
 
             wxKeyEvent event(wxEVT_KEY_DOWN);
             event.m_shiftDown = ev->modifiers & shiftKey;
@@ -1422,7 +1422,7 @@ void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
             event.m_y = ev->where.v;
             event.m_timeStamp = ev->when;
             event.SetEventObject(focus);
-            bool handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+            handled = focus->GetEventHandler()->ProcessEvent( event ) ;
             if ( !handled )
             {
                 #if wxUSE_ACCEL
@@ -1475,14 +1475,34 @@ void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
                 new_event.SetCurrentFocus( focus );
                 handled = focus->GetEventHandler()->ProcessEvent( new_event );
             }
-            /* generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs) */
-            if ( (!handled) &&
-                 (keyval == '.' && event.ControlDown() ) )
+        }
+        if ( !handled )
+        {
+            // if window is not having a focus still testing for default enter or cancel
+            // TODO add the UMA version for ActiveNonFloatingWindow
+          focus = wxFindWinFromMacWindow( FrontWindow() ) ;
+          if ( focus )
+          {
+            if ( keyval == WXK_RETURN )
             {
-                wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
-                new_event.SetEventObject( focus );
-                handled = focus->GetEventHandler()->ProcessEvent( new_event );
+                 wxButton *def = wxDynamicCast(focus->GetDefaultItem(),
+                                                       wxButton);
+                 if ( def && def->IsEnabled() )
+                 {
+                     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                     event.SetEventObject(def);
+                     def->Command(event);
+                     return ;
+                }
             }
+            /* generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs) */
+            else if (keyval == WXK_ESCAPE || (keyval == '.' && ev->modifiers & cmdKey ) )
+            {
+                  wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+                  new_event.SetEventObject( focus );
+                  handled = focus->GetEventHandler()->ProcessEvent( new_event );
+            }
+          }
         }
     }
 }
