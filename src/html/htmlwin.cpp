@@ -94,11 +94,11 @@ void wxHtmlWindow::Init()
     SetBorders(10);
 }
 
-bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id, 
+bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
                           const wxPoint& pos, const wxSize& size,
-                          long style, const wxString& name) 
+                          long style, const wxString& name)
 {
-    if (!wxScrolledWindow::Create(parent, id, pos, size, 
+    if (!wxScrolledWindow::Create(parent, id, pos, size,
                                   style | wxVSCROLL | wxHSCROLL, name))
         return FALSE;
 
@@ -215,7 +215,7 @@ bool wxHtmlWindow::AppendToPage(const wxString& source)
 bool wxHtmlWindow::LoadPage(const wxString& location)
 {
     wxBusyCursor busyCursor;
-    
+
     wxFSFile *f;
     bool rt_val;
     bool needs_refresh = FALSE;
@@ -262,7 +262,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             m_RelatedFrame->SetStatusText(_("Connecting..."), m_RelatedStatusBar);
             Refresh(FALSE);
         }
-        
+
         f = m_Parser->OpenURL(wxHTML_URL_PAGE, location);
 
         if (f == NULL)
@@ -643,8 +643,8 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
     dc.SetBackgroundMode(wxTRANSPARENT);
     GetViewStart(&x, &y);
 
-    m_Cell->Draw(dc, 0, 0, 
-                 y * wxHTML_SCROLL_STEP + rect.GetTop(), 
+    m_Cell->Draw(dc, 0, 0,
+                 y * wxHTML_SCROLL_STEP + rect.GetTop(),
                  y * wxHTML_SCROLL_STEP + rect.GetBottom());
 }
 
@@ -665,6 +665,7 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
 
     if (event.ButtonDown())
     {
+        SetFocus();
         if ( m_Cell )
         {
             int sx, sy;
