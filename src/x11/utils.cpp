@@ -20,6 +20,7 @@
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/app.h"
+#include "wx/apptrait.h"
 #include "wx/msgdlg.h"
 #include "wx/cursor.h"
 #include "wx/window.h" // for wxTopLevelWindows
@@ -97,7 +98,7 @@ void wxBell()
     XBell ((Display*) wxGetDisplay(), 0);
 }
 
-int wxGetOsVersion(int *majorVsn, int *minorVsn)
+int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
 {
     if (majorVsn)
         *majorVsn = 0;

@@ -22,6 +22,7 @@
 #include "wx/os2/private.h"
 #include "wx/timer.h"
 #include "wx/intl.h"
+#include "wx/apptrait.h"
 
 #include <ctype.h>
 #ifdef __EMX__
@@ -360,9 +361,7 @@ void wxBell()
     DosBeep(1000,1000); // 1kHz during 1 sec.
 }
 
-// Chris Breeze 27/5/98: revised WIN32 code to
-// detect WindowsNT correctly
-int wxGetOsVersion(
+int wxGUIAppTraits::GetOSVersion(
   int*                              pMajorVsn
 , int*                              pMinorVsn
 )
