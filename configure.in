@@ -4760,8 +4760,16 @@ fi
 
 
 dnl all -I options we must pass to the compiler
-INCLUDES="-I\${top_builddir}/lib/wx/include/${TOOLCHAIN_NAME} -I\${top_srcdir}/include \
-$REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $TOOLKIT_INCLUDE"
+dnl
+dnl note that the order is somewhat important, in particular the ZLIB_INCLUDE
+dnl and other stuff for the built in libraries should come first to avoid
+dnl including the system headers with the same name (it is particularly
+dnl important for zlib because XFree 4.2.0 has its own, horribly old and
+dnl incompatible, zlib.h) and the wxWindows headers should come first anyhow
+INCLUDES="-I\${top_builddir}/lib/wx/include/${TOOLCHAIN_NAME} \
+-I\${top_srcdir}/include \
+$REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE \
+$TOOLKIT_INCLUDE"
 
 dnl wxGTK does not need TOOLKIT includes in wx-config
 if test "$wxUSE_GTK" = 1; then
