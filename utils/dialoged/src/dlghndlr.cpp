@@ -169,6 +169,9 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
         case RESED_CHOICE:
           resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxChoice", x, y);
           break;
+        case RESED_COMBOBOX:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxComboBox", x, y);
+          break;
         case RESED_CHECKBOX:
           resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxCheckBox", x, y);
           break;
@@ -203,111 +206,6 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
     wxResourceManager::GetCurrentResourceManager()->GetEditorControlList()->SetItemState(RESED_POINTER, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
   }
 }
-
-#if 0
-void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
-{
-  if (keys & wxKEY_CTRL)
-  {
-    wxResourceManager::GetCurrentResourceManager()->EditWindow(handlerDialog);
-    return;
-  }
-
-  // Deselect all items if click on panel
-  if (resourceManager->GetEditorPalette()->currentlySelected == PALETTE_ARROW)
-  {
-    int needsRefresh = 0;
-    wxNode *node = handlerDialog->GetChildren()->First();
-    while (node)
-    {
-      wxControl *item = (wxControl *)node->Data();
-	  wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
-      if (item->IsKindOf(CLASSINFO(wxControl)) && childHandler->IsSelected())
-      {
-        needsRefresh ++;
-        OnItemSelect(item, FALSE);
-        childHandler->SelectItem(FALSE);
-      }
-      node = node->Next();
-    }
-    if (needsRefresh > 0)
-    {
-	  wxClientDC dc(handlerDialog);
-      dc.Clear();
-      handlerDialog->Refresh();
-    }
-    return;
-  }
-
-  wxResourceManager* manager = resourceManager;
-
-  switch (resourceManager->GetEditorPalette()->currentlySelected)
-  {
-        case PALETTE_FRAME:
-          break;
-        case PALETTE_DIALOG_BOX:
-          break;
-        case PALETTE_PANEL:
-          break;
-        case PALETTE_CANVAS:
-          break;
-        case PALETTE_TEXT_WINDOW:
-          break;
-        case PALETTE_BUTTON:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxButton", x, y);
-          break;
-        case PALETTE_BITMAP_BUTTON:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxButton", x, y, TRUE);
-          break;
-        case PALETTE_MESSAGE:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxStaticText", x, y);
-          break;
-        case PALETTE_BITMAP_MESSAGE:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxStaticBitmap", x, y, TRUE);
-          break;
-        case PALETTE_TEXT:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxTextCtrl (single-line)", x, y);
-          break;
-        case PALETTE_MULTITEXT:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxTextCtrl (multi-line)", x, y);
-          break;
-        case PALETTE_CHOICE:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxChoice", x, y);
-          break;
-        case PALETTE_CHECKBOX:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxCheckBox", x, y);
-          break;
-        case PALETTE_RADIOBOX:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxRadioBox", x, y);
-          break;
-        case PALETTE_LISTBOX:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxListBox", x, y);
-          break;
-        case PALETTE_SLIDER:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxSlider", x, y);
-          break;
-        case PALETTE_GAUGE:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxGauge", x, y);
-          break;
-        case PALETTE_GROUPBOX:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxStaticBox", x, y);
-          break;
-        case PALETTE_SCROLLBAR:
-          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxScrollBar", x, y);
-          break;
-        default:
-          break;
-  }
-
-  // Now switch pointer on.
-  if (manager->GetEditorPalette()->currentlySelected != PALETTE_ARROW)
-  {
-    manager->GetEditorPalette()->ToggleTool(manager->GetEditorPalette()->currentlySelected, FALSE);
-    manager->GetEditorPalette()->ToggleTool(PALETTE_ARROW, TRUE);
-    manager->GetEditorPalette()->currentlySelected = PALETTE_ARROW;
-  }
-}
-#endif
 
 void wxResourceEditorDialogHandler::OnRightClick(int x, int y, int keys)
 {

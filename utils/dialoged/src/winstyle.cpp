@@ -248,10 +248,12 @@ static wxWindowStylePair g_WindowStylesWindow[] = {
   { "wxSTATIC_BORDER", wxSTATIC_BORDER},
   { "wxTRANSPARENT_WINDOW", wxTRANSPARENT_WINDOW},
   { "wxNO_BORDER", wxNO_BORDER},
-  { "wxCLIP_CHILDREN", wxCLIP_CHILDREN},
-  { "wxRETAINED", wxRETAINED},
+  { "wxCLIP_CHILDREN", wxCLIP_CHILDREN}
+
+/* Would be duplicated with e.g. wxLB_HSCROLL
   { "wxVSCROLL", wxVSCROLL },
   { "wxHSCROLL", wxHSCROLL }
+*/
 };
 
 int g_WindowStylesWindowCount = sizeof(g_WindowStylesWindow)/sizeof(wxWindowStylePair) ;

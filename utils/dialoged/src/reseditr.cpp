@@ -993,17 +993,17 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
   else if (itemType == "wxMessage" || itemType == "wxStaticText")
     {
       prefix = "ID_STATIC";
-      MakeUniqueName("message", buf);
+      MakeUniqueName("statictext", buf);
       res->SetName(buf);
       if (isBitmap)
         newItem = new wxStaticBitmap(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(0, 0), 0, buf);
       else
-        newItem = new wxStaticText(panel, -1, "Message", wxPoint(x, y), wxSize(-1, -1), 0, buf);
+        newItem = new wxStaticText(panel, -1, "Static", wxPoint(x, y), wxSize(-1, -1), 0, buf);
     }
   else if (itemType == "wxStaticBitmap")
     {
       prefix = "ID_STATICBITMAP";
-      MakeUniqueName("message", buf);
+      MakeUniqueName("static", buf);
       res->SetName(buf);
       newItem = new wxStaticBitmap(panel, -1, m_bitmapImage, wxPoint(x, y), wxSize(-1, -1), 0, buf);
     }
@@ -1047,12 +1047,19 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
       res->SetName(buf);
       newItem = new wxChoice(panel, -1, wxPoint(x, y), wxSize(-1, -1), 0, NULL, 0, wxDefaultValidator, buf);
     }
+  else if (itemType == "wxComboBox")
+    {
+      prefix = "ID_COMBOBOX";
+      MakeUniqueName("combobox", buf);
+      res->SetName(buf);
+      newItem = new wxComboBox(panel, -1, "", wxPoint(x, y), wxSize(-1, -1), 0, NULL, wxCB_DROPDOWN, wxDefaultValidator, buf);
+    }
   else if (itemType == "wxGroupBox" || itemType == "wxStaticBox")
     {
       prefix = "ID_STATICBOX";
-      MakeUniqueName("group", buf);
+      MakeUniqueName("staticbox", buf);
       res->SetName(buf);
-      newItem = new wxStaticBox(panel, -1, "Groupbox", wxPoint(x, y), wxSize(200, 200), 0, buf);
+      newItem = new wxStaticBox(panel, -1, "Static", wxPoint(x, y), wxSize(200, 200), 0, buf);
     }
   else if (itemType == "wxGauge")
     {
@@ -1702,8 +1709,12 @@ wxWindow *wxResourceManager::RecreateWindowFromResource(wxWindow *win, wxWindowP
   else
   {
     DisassociateResource(resource);
+    if (win->GetEventHandler() != win)
+        win->PopEventHandler(TRUE);
+
     DeleteWindow(win);
     newWin = m_resourceTable.CreateItem((wxPanel *)parent, resource);
+    newWin->PushEventHandler(new wxResourceEditorControlHandler((wxControl*) newWin, (wxControl*) newWin));
     AssociateResource(resource, newWin);
     UpdateResourceList();
   }
@@ -1859,6 +1870,10 @@ wxWindowPropertyInfo *wxResourceManager::CreatePropertyInfoForWindow(wxWindow *w
   else if (win->IsKindOf(CLASSINFO(wxChoice)))
         {
           info = new wxChoicePropertyInfo(win);
+        }
+  else if (win->IsKindOf(CLASSINFO(wxComboBox)))
+        {
+          info = new wxComboBoxPropertyInfo(win);
         }
   else if (win->IsKindOf(CLASSINFO(wxButton)))
         {

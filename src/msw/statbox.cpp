@@ -213,20 +213,6 @@ void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
 
 long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
- 	// TODO: somehow, this has to accept mouse clicks in user interface edit mode,
-	// but not otherwise. Only there is no longer a UI edit mode...
-
-	// It worked before because the message could be processed if not in UI
-	// edit mode. We have to find some way of distinguishing this.
-	// Maybe this class can have an AcceptMouseEvents(bool) function; a sort of
-	// kludge... or, we can search for an active event table entry that will
-	// intercept mouse events, and if one exists (that isn't the default),
-	// skip the code below. Too time consuming though.
-	// Perhaps it's ok to do the default thing *anyway* because the title or edge
-	// of the window may still be active!
-//	if (nMsg == WM_NCHITTEST)
-//            return Default();
-
 	if (nMsg == WM_NCHITTEST)
     {
         int xPos = LOWORD(lParam);  // horizontal position of cursor

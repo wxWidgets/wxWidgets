@@ -214,6 +214,20 @@ class wxChoicePropertyInfo: public wxItemPropertyInfo
   bool InstantiateResource(wxItemResource *resource);
 };
 
+// For choice items
+class wxComboBoxPropertyInfo: public wxChoicePropertyInfo
+{
+ protected:
+ public:
+  wxComboBoxPropertyInfo(wxWindow *win, wxItemResource *res = NULL):
+    wxChoicePropertyInfo(win, res) {}
+  ~wxComboBoxPropertyInfo(void) {}
+  wxProperty *GetProperty(wxString& name);
+  bool SetProperty(wxString& name, wxProperty *property);
+  void GetPropertyNames(wxStringList& names);
+  bool InstantiateResource(wxItemResource *resource);
+};
+
 // For radiobox items
 class wxRadioBoxPropertyInfo: public wxItemPropertyInfo
 {

@@ -121,6 +121,8 @@ public:
   inline WXHWND *GetRadioButtons(void) const { return m_radioButtons; }
   bool ContainsHWND(WXHWND hWnd) const ;
 
+  long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
 protected:
   WXHWND *          m_radioButtons;
   int               m_majorDim ;

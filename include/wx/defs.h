@@ -395,21 +395,14 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
  * Styles for wxListBox
  */
 
-// In wxListBox style flag
-#define wxSB_MASK           0x0008
-#define wxNEEDED_SB         0x0000
-#define wxALWAYS_SB         0x0008
-
-// New naming convention
-#define wxLB_NEEDED_SB      wxNEEDED_SB
-#define wxLB_ALWAYS_SB      wxALWAYS_SB
 #define wxLB_SORT           0x0010
-// These duplicate the styles in the Multiple argument
-#define wxLB_SINGLE         0x0000
+#define wxLB_SINGLE         0x0020
 #define wxLB_MULTIPLE       0x0040
 #define wxLB_EXTENDED       0x0080
 // wxLB_OWNERDRAW is Windows-only
 #define wxLB_OWNERDRAW      0x0100
+#define wxLB_NEEDED_SB      0x0200
+#define wxLB_ALWAYS_SB      0x0400
 #define wxLB_HSCROLL        wxHSCROLL
 
 /*
@@ -422,10 +415,6 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxTE_READONLY       0x0010
 #define wxTE_MULTILINE      0x0020
 
-// TODO For backward compatibility, need wxOLD_READONLY
-#define wxREADONLY          wxTE_READONLY
-#define wxEDITABLE          0
-
 // MSW-only
 #define wxTE_RICHTEXT       0x0020
 
@@ -433,9 +422,9 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
  * wxComboBox style flags
  */
 #define wxCB_SIMPLE         0x0004
-#define wxCB_DROPDOWN       0x0000
 #define wxCB_SORT           0x0008
-#define wxCB_READONLY       wxREADONLY
+#define wxCB_READONLY       0x0010
+#define wxCB_DROPDOWN       0x0020
 
 /*
  * wxRadioBox/wxRadioButton style flags

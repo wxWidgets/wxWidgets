@@ -74,9 +74,12 @@ void wxControl::SetLabel(const wxString& label)
 
 wxString wxControl::GetLabel(void) const
 {
-  wxBuffer[0] = 0;
-  if (GetHWND())
-    GetWindowText((HWND)GetHWND(), wxBuffer, 1000);
+    wxBuffer[0] = 0;
+    if (GetHWND())
+    {
+        int len = GetWindowText((HWND)GetHWND(), wxBuffer, 256);
+        wxBuffer[len] = 0;
+    }
 
   return wxString(wxBuffer);
 }

@@ -86,6 +86,9 @@ Add a wxTabCtrl sample.
 Improve printing. More API functions for printer DCs (to get
 printer characteristics) and more reliable printing framework.
 
+Add GetIcon, GetBitmap to wxImageList. Perhaps store bitmaps
+in image list so we can get them later.
+
 LOW PRIORITY
 ------------
 

@@ -214,7 +214,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
   else if (itemType == "wxStaticBox")
     {
       GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
-      stream << item->GetId() << ", " << "wxGroupBox, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      stream << item->GetId() << ", " << "wxStaticBox, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       if (item->GetFont())
@@ -329,7 +329,7 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       stream << item->GetWidth() << ", " << item->GetHeight();
 
       if (itemType == "wxComboBox")
-        stream << SafeWord(item->GetValue4()) << ", ";
+        stream << ", " << SafeWord(item->GetValue4());
 
       // Default list of values
 
@@ -508,6 +508,12 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
         node = node->Next();
       }
       stream << ").\";\n\n";
+    }
+    else
+    {
+        wxString str("Unimplemented resource type: ");
+        str += itemType;
+        wxMessageBox(str);
     }
   return TRUE;
 }

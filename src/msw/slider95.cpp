@@ -154,6 +154,10 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 
   SubclassWin(GetHWND());
 
+  SetWindowText((HWND) m_hWnd, "");
+
+  SetFont(* parent->GetFont());
+
   if ( m_windowStyle & wxSL_LABELS )
   {
       // Finally, create max value static item
@@ -163,7 +167,6 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
                              0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                              wxGetInstance(), NULL);
 
-      SetFont(parent->GetFont());
 
       if (GetFont())
       {
@@ -418,6 +421,11 @@ void wxSlider95::SetSize(int x, int y, int width, int height, int sizeFlags)
 	else
 	{
 		// No labels
+		// If we're prepared to use the existing size, then...
+		if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
+		{
+			GetSize(&w1, &h1);
+		}
 		if ( w1 < 0 )
 			w1 = 200;
 		if ( h1 < 0 )
@@ -479,6 +487,11 @@ void wxSlider95::SetSize(int x, int y, int width, int height, int sizeFlags)
 	else
 	{
 		// No labels
+		// If we're prepared to use the existing size, then...
+		if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
+		{
+			GetSize(&w1, &h1);
+		}
 		if ( w1 < 0 )
 			w1 = 20;
 		if ( h1 < 0 )

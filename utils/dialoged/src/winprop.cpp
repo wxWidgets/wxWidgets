@@ -516,7 +516,7 @@ void wxWindowPropertyInfo::GetPropertyNames(wxStringList& names)
 // Fill in the wxItemResource members to mirror the current window settings
 bool wxWindowPropertyInfo::InstantiateResource(wxItemResource *resource)
 {
-  resource->SetType(propertyWindow->GetClassInfo()->GetClassName());
+//  resource->SetType(propertyWindow->GetClassInfo()->GetClassName());
   
 //  resource->SetStyle(propertyWindow->GetWindowStyleFlag());
   wxString str(propertyWindow->GetName());
@@ -1086,6 +1086,125 @@ bool wxChoicePropertyInfo::InstantiateResource(wxItemResource *resource)
 }
 
 /*
+ * Choice item
+ */
+
+wxProperty *wxComboBoxPropertyInfo::GetProperty(wxString& name)
+{
+  wxComboBox *choice = (wxComboBox *)propertyWindow;
+  if (name == "values")
+  {
+    wxStringList *stringList = new wxStringList;
+    int i;
+    for (i = 0; i < choice->Number(); i++)
+      stringList->Add(choice->GetString(i));
+
+    return new wxProperty(name, stringList, "stringlist");
+  }
+  else if (name == "sort")
+  {
+    bool sort = ((propertyWindow->GetWindowStyleFlag() & wxCB_SORT) == wxCB_SORT);
+    return new wxProperty(name, sort, "bool");
+  }
+  else if (name == "style")
+  {
+    wxString styleStr("dropdown");
+    if (propertyWindow->GetWindowStyleFlag() & wxCB_SIMPLE)
+      styleStr = "simple";
+    else if (propertyWindow->GetWindowStyleFlag() & wxCB_READONLY)
+      styleStr = "readonly";
+    else
+      styleStr = "dropdown";
+
+    return new wxProperty(name, styleStr, "string",
+       new wxStringListValidator(new wxStringList("simple", "dropdown", "readonly",
+          NULL)));
+  }
+  else
+    return wxItemPropertyInfo::GetProperty(name);
+}
+
+bool wxComboBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
+{
+  wxComboBox *choice = (wxComboBox *)propertyWindow;
+  if (name == "values")
+  {
+    choice->Clear();
+    wxPropertyValue *expr = property->GetValue().GetFirst();
+    while (expr)
+    {
+      char *s = expr->StringValue();
+      if (s)
+        choice->Append(s);
+      expr = expr->GetNext();
+    }
+    if (choice->Number() > 0)
+      choice->SetSelection(0);
+    return TRUE;
+  }
+  else if (name == "sort")
+  {
+    SetWindowStyle(propertyWindow, wxCB_SORT, property->GetValue().BoolValue());
+
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(propertyWindow);
+    resource->SetStyle(propertyWindow->GetWindowStyleFlag());
+
+    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(propertyWindow, this);
+    return TRUE;
+  }
+  else if (name == "style")
+  {
+    SetWindowStyle(propertyWindow, wxCB_SIMPLE, FALSE);
+    SetWindowStyle(propertyWindow, wxCB_DROPDOWN, FALSE);
+    SetWindowStyle(propertyWindow, wxCB_READONLY, FALSE);
+
+    wxString styleStr(property->GetValue().StringValue());
+    if (styleStr == "simple")
+      SetWindowStyle(propertyWindow, wxCB_SIMPLE, TRUE);
+    else if (styleStr == "dropdown")
+      SetWindowStyle(propertyWindow, wxCB_DROPDOWN, TRUE);
+    else if (styleStr == "readonly")
+      SetWindowStyle(propertyWindow, wxCB_READONLY, TRUE);
+
+      // Necesary?
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(propertyWindow);
+    resource->SetStyle(propertyWindow->GetWindowStyleFlag());
+
+    wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(propertyWindow, this);
+
+    return TRUE;
+  }
+  else
+    return wxItemPropertyInfo::SetProperty(name, property);
+}
+
+void wxComboBoxPropertyInfo::GetPropertyNames(wxStringList& names)
+{
+  wxItemPropertyInfo::GetPropertyNames(names);
+  names.Add("values");
+  names.Add("style");
+  names.Add("sort");
+}
+
+bool wxComboBoxPropertyInfo::InstantiateResource(wxItemResource *resource)
+{
+  wxComboBox *choice = (wxComboBox *)propertyWindow;
+  int i;
+  if (choice->Number() == 0)
+    resource->SetStringValues(NULL);
+  else
+  {
+    wxStringList *slist = new wxStringList;
+    
+    for (i = 0; i < choice->Number(); i++)
+      slist->Add(choice->GetString(i));
+      
+    resource->SetStringValues(slist);
+  }
+  return wxItemPropertyInfo::InstantiateResource(resource);
+}
+
+/*
  * Radiobox item
  */
 
@@ -1338,10 +1457,10 @@ wxProperty *wxSliderPropertyInfo::GetProperty(wxString& name)
        new wxStringListValidator(new wxStringList("wxHORIZONTAL", "wxVERTICAL",
           NULL)));
   }
-  else if (name == "min_value")
-    return new wxProperty("min_value", (long)slider->GetMin(), "integer");
-  else if (name == "max_value")
-    return new wxProperty("max_value", (long)slider->GetMax(), "integer");
+  else if (name == "minValue")
+    return new wxProperty("minValue", (long)slider->GetMin(), "integer");
+  else if (name == "maxValue")
+    return new wxProperty("maxValue", (long)slider->GetMax(), "integer");
   else
     return wxItemPropertyInfo::GetProperty(name);
 }
@@ -1386,12 +1505,12 @@ bool wxSliderPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     
     return TRUE;
   }
-  else if (name == "min_value")
+  else if (name == "minValue")
   {
     slider->SetRange((int)property->GetValue().IntegerValue(), slider->GetMax());
     return TRUE;
   }
-  else if (name == "max_value")
+  else if (name == "maxValue")
   {
     slider->SetRange(slider->GetMin(), (int)property->GetValue().IntegerValue());
     return TRUE;
@@ -1405,8 +1524,8 @@ void wxSliderPropertyInfo::GetPropertyNames(wxStringList& names)
   wxItemPropertyInfo::GetPropertyNames(names);
   names.Add("value");
   names.Add("orientation");
-  names.Add("min_value");
-  names.Add("max_value");
+  names.Add("minValue");
+  names.Add("maxValue");
 }
 
 bool wxSliderPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -1427,8 +1546,8 @@ wxProperty *wxGaugePropertyInfo::GetProperty(wxString& name)
   wxGauge *gauge = (wxGauge *)propertyWindow;
   if (name == "value")
     return new wxProperty("value", (long)gauge->GetValue(), "integer");
-  else if (name == "max_value")
-    return new wxProperty("max_value", (long)gauge->GetRange(), "integer");
+  else if (name == "maxValue")
+    return new wxProperty("maxValue", (long)gauge->GetRange(), "integer");
   else
     return wxItemPropertyInfo::GetProperty(name);
 }
@@ -1441,7 +1560,7 @@ bool wxGaugePropertyInfo::SetProperty(wxString& name, wxProperty *property)
     gauge->SetValue((int)property->GetValue().IntegerValue());
     return TRUE;
   }
-  else if (name == "max_value")
+  else if (name == "maxValue")
   {
     gauge->SetRange((int)property->GetValue().IntegerValue());
     return TRUE;
@@ -1454,7 +1573,7 @@ void wxGaugePropertyInfo::GetPropertyNames(wxStringList& names)
 {
   wxItemPropertyInfo::GetPropertyNames(names);
   names.Add("value");
-  names.Add("max_value");
+  names.Add("maxValue");
 }
 
 bool wxGaugePropertyInfo::InstantiateResource(wxItemResource *resource)

@@ -245,8 +245,8 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
   }
 
   // If non-default width...
-  if (width >= 0)
-    control_width = (float)width;
+  if (w1 >= 0)
+    control_width = (float)w1;
 
   control_height = (float)h1;
 
