@@ -19,6 +19,8 @@ import wx.html
 import images
 
 ##wx.Trap()
+##raw_input("Press a key...")
+
 
 # Use Python's bool constants if available, make aliases if not
 try:
@@ -37,6 +39,7 @@ _treeList = [
         'wxListbook',
         'wxMaskedNumCtrl',
         'FloatCanvas',
+        'wxXmlResourceSubclass',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -158,6 +161,7 @@ _treeList = [
         'wxScrolledPanel',
         'wxXmlResource',
         'wxXmlResourceHandler',
+        'wxXmlResourceSubclass',
         ]),
 
     # ditto
