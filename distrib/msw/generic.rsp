@@ -467,6 +467,17 @@ samples/docview/*.txt
 samples/docview/*.ico
 samples/docview/*.bmp
 
+samples/docvwmdi/*.h
+samples/docvwmdi/*.cpp
+samples/docvwmdi/*.def
+samples/docvwmdi/*.rc
+samples/docvwmdi/makefile*
+samples/docvwmdi/*.xbm
+samples/docvwmdi/*.xpm
+samples/docvwmdi/*.txt
+samples/docvwmdi/*.ico
+samples/docvwmdi/*.bmp
+
 samples/memcheck/*.h
 samples/memcheck/*.cpp
 samples/memcheck/*.def

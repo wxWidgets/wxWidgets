@@ -965,6 +965,7 @@ void * operator new (size_t size)
 #endif
 }
 
+#if !( defined (_MSC_VER) && (_MSC_VER <= 1020) )
 void * operator new[] (size_t size)
 {
 #ifdef NO_DEBUG_ALLOCATION
@@ -973,6 +974,7 @@ void * operator new[] (size_t size)
   return wxDebugAlloc(size, NULL, 0, FALSE, TRUE);
 #endif
 }
+#endif
 
 #if !( defined (_MSC_VER) && (_MSC_VER <= 1020) )
 void * operator new[] (size_t size, char * fileName, int lineNum)

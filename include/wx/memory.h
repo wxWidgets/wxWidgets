@@ -55,7 +55,10 @@ void wxDebugFree(void * buf, bool isVect = FALSE);
 
 // Added JACS 25/11/98: needed for some compilers
 void * operator new (size_t size);
+
+#if !( defined (_MSC_VER) && (_MSC_VER <= 1020) )
 void * operator new[] (size_t size);
+#endif
 
 void * operator new (size_t size, char * fileName, int lineNum);
 void operator delete (void * buf);
