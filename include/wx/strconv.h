@@ -211,7 +211,7 @@ private:
     bool m_deferred;
 };
 
-#ifdef __WXGTK20__
+#ifdef __UNIX__
 
 // ----------------------------------------------------------------------------
 // wxConvBrokenFileNames is made for GTK2 in Unicode mode when
@@ -234,7 +234,7 @@ private:
     wxMBConv *m_conv;
 };
 #endif
-// __WXGTK20__
+// __UNIX__
 
 // ----------------------------------------------------------------------------
 // declare predefined conversion objects
