@@ -1,0 +1,24 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998 Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile for toolbar example (UNIX).
+
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+program_dir = samples/help
+
+PROGRAM=help
+
+OBJECTS=demo.o
+
+DATAFILES=doc
+
+include ../../src/makeprog.env
+
+

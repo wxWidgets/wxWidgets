@@ -210,10 +210,19 @@ enum
 
 bool MyApp::OnInit()
 {
+    // parse the cmd line
+    int x = 50,
+        y = 50;
+    if ( argc == 2 )
+    {
+        wxSscanf(argv[1], "%d", &x);
+        wxSscanf(argv[2], "%d", &y);
+    }
+
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *) NULL,
             "Controls wxWindows App",
-            50, 50, 530, 420);
+            x, y, 530, 420);
 
     // Give it an icon
     // The wxICON() macros loads an icon from a resource under Windows
@@ -705,6 +714,8 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
 
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
+    GetParent()->Move(100, 100);
+
     wxListBox *listbox = event.GetId() == ID_LISTBOX ? m_listbox
                                                      : m_listboxSorted;
 

@@ -556,7 +556,7 @@ void MyFrame::OnRightDown(wxMouseEvent &event )
     menu.AppendSeparator();
     menu.Append(Menu_File_Quit, "E&xit");
 
-    menu.Delete(Menu_Popup_ToBeDeleted);
+    //menu.Delete(Menu_Popup_ToBeDeleted);
     menu.Check(Menu_Popup_ToBeChecked, TRUE);
     menu.Enable(Menu_Popup_ToBeGreyed, FALSE);
 

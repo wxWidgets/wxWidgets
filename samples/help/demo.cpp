@@ -71,6 +71,8 @@ public:
     // ctor(s)
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 
+    wxHelpController& GetHelpController() { return m_help; }
+
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
@@ -147,9 +149,17 @@ bool MyApp::OnInit()
     frame->Show(TRUE);
     SetTopWindow(frame);
 
-    // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
-    // application would exit immediately.
+
+    // initialise the help system: this means that we'll use doc.hlp file under
+    // Windows and that the HTML docs are in the subdirectory doc for platforms
+    // using HTML help
+    if ( !frame->GetHelpController().Initialize("doc") )
+    {
+        wxLogError("Cannot initialize the help system, aborting.");
+
+        return FALSE;
+    }
+
     return TRUE;
 }
 
@@ -174,7 +184,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Help_Search, "&Search help...");
 #ifndef __WXMSW__
-#ifndef wxUSE_HTML
+#if !wxUSE_HTML
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Help_KDE, "Use &KDE");
     menuFile->Append(HelpDemo_Help_GNOME, "Use &GNOME");
@@ -203,11 +213,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // and a static control whose parent is the panel
     (void)new wxStaticText(panel, -1, "Hello, world!", wxPoint(10, 10));
-
-    // initialise the help system: this means that we'll use doc.hlp file under
-    // Windows and that the HTML docs are in the subdirectory doc for platforms
-    // using HTML help
-    m_help.Initialize("doc");
 }
 
 

@@ -126,6 +126,7 @@ public:
     void OnMoveToEndOfEntry( wxCommandEvent &event )
         { m_panel->DoMoveToEndOfEntry(); }
 
+    void OnLogClear(wxCommandEvent& event);
     void OnFileLoad(wxCommandEvent& event);
 
     void OnIdle( wxIdleEvent& event );
@@ -151,6 +152,7 @@ enum
     TEXT_QUIT = 100,
     TEXT_ABOUT,
     TEXT_LOAD,
+    TEXT_CLEAR,
 
     // clipboard menu
     TEXT_CLIPBOARD_COPY = 200,
@@ -173,6 +175,8 @@ bool MyApp::OnInit()
     frame->SetSizeHints( 500, 400 );
 
     wxMenu *file_menu = new wxMenu;
+    file_menu->Append(TEXT_CLEAR, "&Clear the log\tCtrl-C",
+                      "Clear the log window contents");
     file_menu->Append(TEXT_LOAD, "&Load file\tCtrl-O",
                       "Load the sample file into text control");
     file_menu->AppendSeparator();
@@ -601,6 +605,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_QUIT,   MyFrame::OnQuit)
     EVT_MENU(TEXT_ABOUT,  MyFrame::OnAbout)
     EVT_MENU(TEXT_LOAD,   MyFrame::OnFileLoad)
+    EVT_MENU(TEXT_CLEAR,  MyFrame::OnLogClear)
 
 #if wxUSE_TOOLTIPS
     EVT_MENU(TEXT_TOOLTIPS_SETDELAY,  MyFrame::OnSetTooltipDelay)
@@ -633,6 +638,9 @@ void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
+    SetSize(40, 40, 200, 200);
+    return;
+
     wxBeginBusyCursor();
 
     wxMessageDialog dialog(this,
@@ -682,6 +690,11 @@ void MyFrame::OnToggleTooltips(wxCommandEvent& event)
     wxLogStatus(this, _T("Tooltips %sabled"), s_enabled ? _T("en") : _T("dis") );
 }
 #endif // tooltips
+
+void MyFrame::OnLogClear(wxCommandEvent& WXUNUSED(event))
+{
+    m_panel->m_log->Clear();
+}
 
 void MyFrame::OnFileLoad(wxCommandEvent& event)
 {
