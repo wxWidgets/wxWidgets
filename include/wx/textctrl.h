@@ -82,6 +82,12 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 // doesn't have focus - use this style to force it to always show it
 #define wxTE_NOHIDESEL      0x2000
 
+// use wxHSCROLL to not wrap text at all, wxTE_LINEWRAP to wrap it at any
+// position and wxTE_WORDWRAP to wrap at words boundary
+#define wxTE_DONTWRAP       wxHSCROLL
+#define wxTE_LINEWRAP       0x4000
+#define wxTE_WORDWRAP       0x0000  // it's just == !wxHSCROLL
+
 // ----------------------------------------------------------------------------
 // wxTextAttr: a structure containing the visual attributes of a text
 // ----------------------------------------------------------------------------
