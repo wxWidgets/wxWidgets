@@ -57,8 +57,16 @@ class wxSizePtr :
         raise AttributeError,name
     def __repr__(self):
         return "<C wxSize instance at %s>" % (self.this,)
-    def __str__(self): return str(self.asTuple())
-    def __repr__(self): return str(self.asTuple())
+    
+    def __str__(self):                   return str(self.asTuple())
+    def __repr__(self):                  return str(self.asTuple())
+    def __len__(self):                   return len(self.asTuple())
+    def __getitem__(self, index):        return self.asTuple()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.width = val
+        elif index == 1: self.height = val
+        else: raise IndexError
+
 class wxSize(wxSizePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(miscc.new_wxSize,_args,_kwargs)
@@ -107,8 +115,16 @@ class wxRealPointPtr :
         raise AttributeError,name
     def __repr__(self):
         return "<C wxRealPoint instance at %s>" % (self.this,)
-    def __str__(self): return str(self.asTuple())
-    def __repr__(self): return str(self.asTuple())
+    
+    def __str__(self):                   return str(self.asTuple())
+    def __repr__(self):                  return str(self.asTuple())
+    def __len__(self):                   return len(self.asTuple())
+    def __getitem__(self, index):        return self.asTuple()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.width = val
+        elif index == 1: self.height = val
+        else: raise IndexError
+
 class wxRealPoint(wxRealPointPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(miscc.new_wxRealPoint,_args,_kwargs)
@@ -157,8 +173,16 @@ class wxPointPtr :
         raise AttributeError,name
     def __repr__(self):
         return "<C wxPoint instance at %s>" % (self.this,)
-    def __str__(self): return str(self.asTuple())
-    def __repr__(self): return str(self.asTuple())
+    
+    def __str__(self):                   return str(self.asTuple())
+    def __repr__(self):                  return str(self.asTuple())
+    def __len__(self):                   return len(self.asTuple())
+    def __getitem__(self, index):        return self.asTuple()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.x = val
+        elif index == 1: self.y = val
+        else: raise IndexError
+
 class wxPoint(wxPointPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(miscc.new_wxPoint,_args,_kwargs)
@@ -272,9 +296,18 @@ class wxRectPtr :
         raise AttributeError,name
     def __repr__(self):
         return "<C wxRect instance at %s>" % (self.this,)
-    def __str__(self): return str(self.asTuple())
-    def __repr__(self): return str(self.asTuple())
     
+    def __str__(self):                   return str(self.asTuple())
+    def __repr__(self):                  return str(self.asTuple())
+    def __len__(self):                   return len(self.asTuple())
+    def __getitem__(self, index):        return self.asTuple()[index]
+    def __setitem__(self, index, val):
+        if index == 0: self.x = val
+        elif index == 1: self.y = val
+        elif index == 2: self.width = val
+        elif index == 3: self.height = val
+        else: raise IndexError
+
     # override the __getattr__ made by SWIG
     def __getattr__(self, name):
         d = {

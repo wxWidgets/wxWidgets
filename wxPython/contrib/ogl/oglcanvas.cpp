@@ -1119,20 +1119,16 @@ static PyObject *_wrap_wxDiagram_Snap(PyObject *self, PyObject *args, PyObject *
     PyObject * _resultobj;
     wxDiagram * _arg0;
     double * _arg1;
-    double  temp;
     double * _arg2;
-    double  temp0;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
+    double  temp;
+    PyObject * _obj1 = 0;
+    double  temp0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","INOUT","INOUT", NULL };
 
     self = self;
-{
-  _arg1 = &temp;
-}
-{
-  _arg2 = &temp0;
-}
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxDiagram_Snap",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxDiagram_Snap",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1141,6 +1137,14 @@ static PyObject *_wrap_wxDiagram_Snap(PyObject *self, PyObject *args, PyObject *
         return NULL;
         }
     }
+{
+  temp = PyFloat_AsDouble(_obj1);
+  _arg1 = &temp;
+}
+{
+  temp0 = PyFloat_AsDouble(_obj2);
+  _arg2 = &temp0;
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxDiagram_Snap(_arg0,_arg1,_arg2);
@@ -1896,20 +1900,16 @@ static PyObject *_wrap_wxPyShapeCanvas_Snap(PyObject *self, PyObject *args, PyOb
     PyObject * _resultobj;
     wxPyShapeCanvas * _arg0;
     double * _arg1;
-    double  temp;
     double * _arg2;
-    double  temp0;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
+    double  temp;
+    PyObject * _obj1 = 0;
+    double  temp0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","INOUT","INOUT", NULL };
 
     self = self;
-{
-  _arg1 = &temp;
-}
-{
-  _arg2 = &temp0;
-}
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyShapeCanvas_Snap",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyShapeCanvas_Snap",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1918,6 +1918,14 @@ static PyObject *_wrap_wxPyShapeCanvas_Snap(PyObject *self, PyObject *args, PyOb
         return NULL;
         }
     }
+{
+  temp = PyFloat_AsDouble(_obj1);
+  _arg1 = &temp;
+}
+{
+  temp0 = PyFloat_AsDouble(_obj2);
+  _arg2 = &temp0;
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxPyShapeCanvas_Snap(_arg0,_arg1,_arg2);

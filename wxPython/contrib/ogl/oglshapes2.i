@@ -207,6 +207,9 @@ public:
     bool IsSpline();
     void MakeLineControlPoints(int n);
 
+    // TODO:
+    //   inline wxList *GetLineControlPoints() { return m_lineControlPoints; }
+
     void SetAttachmentFrom(int fromAttach);
     void SetAttachments(int fromAttach, int toAttach);
     void SetAttachmentTo(int toAttach);

@@ -91,7 +91,7 @@ public:
     void SetQuickEditMode(bool mode);
     void SetSnapToGrid(bool snap);
     void ShowAll(bool show);
-    void Snap(double *OUTPUT, double *OUTPUT);
+    void Snap(double *INOUT, double *INOUT);
 
 };
 
@@ -147,7 +147,7 @@ public:
     void Redraw(wxDC& dc);
     void RemoveShape(wxPyShape *shape);
     void SetDiagram(wxDiagram *diagram);
-    void Snap(double *OUTPUT, double *OUTPUT);
+    void Snap(double *INOUT, double *INOUT);
 
 };
 

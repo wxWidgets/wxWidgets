@@ -64,7 +64,7 @@ public:
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
     def __repr__(self):                  return str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple()
+    def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
         if index == 0: self.width = val
@@ -113,7 +113,7 @@ public:
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
     def __repr__(self):                  return str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple()
+    def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
         if index == 0: self.width = val
@@ -160,7 +160,7 @@ public:
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
     def __repr__(self):                  return str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple()
+    def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
         if index == 0: self.x = val
@@ -229,7 +229,7 @@ public:
     %pragma(python) addtoclass = "
     def __str__(self):                   return str(self.asTuple())
     def __repr__(self):                  return str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple()
+    def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
         if index == 0: self.x = val
