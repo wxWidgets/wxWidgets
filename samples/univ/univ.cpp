@@ -38,6 +38,7 @@
     #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/listbox.h"
+    #include "wx/radiobox.h"
     #include "wx/radiobut.h"
     #include "wx/scrolbar.h"
     #include "wx/scrolwin.h"
@@ -345,6 +346,17 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                    wxALIGN_RIGHT);
     new wxRadioButton(this, -1, _T("Toggle me"), wxPoint(10, 600));
     new wxRadioButton(this, -1, _T("And then me"), wxPoint(150, 600));
+
+    new wxRadioBox(this, -1, _T("&Horizontal"),
+                   wxPoint(100, 470), wxDefaultSize,
+                   WXSIZEOF(choices), choices,
+                   WXSIZEOF(choices),
+                   wxRA_SPECIFY_COLS);
+    new wxRadioBox(this, -1, _T("&Vertical"),
+                   wxPoint(300, 550), wxDefaultSize,
+                   WXSIZEOF(choices), choices,
+                   WXSIZEOF(choices),
+                   wxRA_SPECIFY_ROWS);
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)

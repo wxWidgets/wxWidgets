@@ -65,9 +65,54 @@ bool wxStaticBox::Create(wxWindow *parent,
 
 void wxStaticBox::DoDraw(wxControlRenderer *renderer)
 {
-    // we never have a border, so don't call the base class version whcih draws
+    // we never have a border, so don't call the base class version which draws
     // it
     renderer->DrawFrame();
+}
+
+// ----------------------------------------------------------------------------
+// geometry
+// ----------------------------------------------------------------------------
+
+wxRect wxStaticBox::GetBorderGeometry() const
+{
+    // FIXME should use the renderer here
+    wxRect rect;
+    rect.width =
+    rect.x = GetCharWidth() / 2 + 1;
+    rect.y = GetCharHeight() + 1;
+    rect.height = rect.y / 2;
+
+    return rect;
+}
+
+wxPoint wxStaticBox::GetClientAreaOrigin() const
+{
+    wxPoint pt = wxControl::GetClientAreaOrigin();
+    wxRect rect = GetBorderGeometry();
+    pt.x += rect.x;
+    pt.y += rect.y;
+
+    return pt;
+}
+
+void wxStaticBox::DoSetClientSize(int width, int height)
+{
+    wxRect rect = GetBorderGeometry();
+
+    wxControl::DoSetClientSize(width + rect.x + rect.width,
+                               height + rect.y + rect.height);
+}
+
+void wxStaticBox::DoGetClientSize(int *width, int *height) const
+{
+    wxControl::DoGetClientSize(width, height);
+
+    wxRect rect = GetBorderGeometry();
+    if ( width )
+        *width -= rect.x + rect.width;
+    if ( height )
+        *height -= rect.y + rect.height;
 }
 
 #endif // wxUSE_STATBOX

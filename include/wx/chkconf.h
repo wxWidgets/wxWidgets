@@ -68,6 +68,19 @@
 #   endif
 #endif /* wxUSE_RADIOBTN */
 
+#if wxUSE_RADIOBOX
+#   if !wxUSE_RADIOBTN || !wxUSE_STATBOX
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_RADIOBOX requires wxUSE_RADIOBTN and wxUSE_STATBOX"
+#        else
+#            undef wxUSE_RADIOBTN
+#            undef wxUSE_STATBOX
+#            define wxUSE_RADIOBTN 1
+#            define wxUSE_STATBOX 1
+#        endif
+#   endif
+#endif /* wxUSE_RADIOBOX */
+
 #if wxUSE_STOPWATCH
 #    if !wxUSE_LONGLONG
 #        ifdef wxABORT_ON_CONFIG_ERROR
