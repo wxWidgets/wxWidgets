@@ -141,7 +141,7 @@ bool wxPyApp::OnInitGui() {
     // wxPyBeginBlockThreads();  *** only called from within __wxStart so we already have the GIL
     if (wxPyCBH_findCallback(m_myInst, "OnInitGui"))
         rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
-    // wxPyEndBlockThreads();
+    // wxPyEndBlockThreads();    ***
     return rval;
 }
 
@@ -2225,8 +2225,8 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
         return TRUE;
     }
     // otherwise a string is expected
-    else if (PyString_Check(source)) {
-        wxString spec(PyString_AS_STRING(source), *wxConvCurrent);
+    else if (PyString_Check(source) || PyUnicode_Check(source)) {
+        wxString spec = Py2wxString(source);
         if (spec.GetChar(0) == '#' && spec.Length() == 7) {  // It's  #RRGGBB
             long red, green, blue;
             red = green = blue = 0;

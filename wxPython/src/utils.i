@@ -772,7 +772,7 @@ public:
             return self.__sub__DT(other)
         if isinstance(other, wxTimeSpanPtr):
             return self.__sub__TS(other)
-        if isinstnace(other, wxDateSpanPtr):
+        if isinstance(other, wxDateSpanPtr):
             return self.__sub__DS(other)
         raise TypeError, 'Invalid r.h.s. type for __sub__'
 "
