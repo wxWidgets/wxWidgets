@@ -1104,14 +1104,24 @@ void wxDC::EndPage()
 
 wxCoord wxDC::GetCharHeight() const
 {
-    // TODO
-    return(8);
+    FONTMETRICS                     vFM; // metrics structure
+
+    ::GpiQueryFontMetrics( m_hPS
+                          ,sizeof(FONTMETRICS)
+                          ,&vFM
+                         );
+    return YDEV2LOGREL(vFM.lXHeight);
 }
 
 wxCoord wxDC::GetCharWidth() const
 {
-    // TODO
-    return(8);
+    FONTMETRICS                     vFM; // metrics structure
+
+    ::GpiQueryFontMetrics( m_hPS
+                          ,sizeof(FONTMETRICS)
+                          ,&vFM
+                         );
+    return XDEV2LOGREL(vFM.lAveCharWidth);
 }
 
 void wxDC::DoGetTextExtent(

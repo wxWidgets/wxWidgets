@@ -761,6 +761,12 @@ bool wxApp::ProcessMessage(
 #endif // wxUSE_TOOLTIPS
 
     //
+    // We must relay Timer events to wxTimer's processing function
+    //
+    if (pMsg->msg == WM_TIMER)
+        wxTimerProc(NULL, 0, pMsg->mp1, 0);
+
+    //
     // For some composite controls (like a combobox), wndThis might be NULL
     // because the subcontrol is not a wxWindow, but only the control itself
     // is - try to catch this case
