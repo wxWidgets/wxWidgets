@@ -1061,6 +1061,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
     return TRUE;
 }
 
+#ifndef __WXGTK20__
 static gint gtk_window_key_press_callback( GtkWidget *widget,
                                            GdkEventKey *gdk_event,
                                            wxWindow *win )
@@ -1208,36 +1209,6 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         }
     }
 
-    // Doesn't work.
-#if 0 
-    // Pressing F10 will activate the menu bar of the top frame
-    if ( (!ret) &&
-         (gdk_event->keyval == GDK_F10) )
-    {
-        wxWindowGTK *ancestor = win;
-        while (ancestor)
-        {
-            if (wxIsKindOf(ancestor,wxFrame))
-            {
-                wxFrame *frame = (wxFrame*) ancestor;
-                wxMenuBar *menubar = frame->GetMenuBar();
-                if (menubar)
-                {
-                    wxNode *node = menubar->GetMenus().First();
-                    if (node)
-                    {
-                        wxMenu *firstMenu = (wxMenu*) node->Data();
-                        gtk_menu_item_select( GTK_MENU_ITEM(firstMenu->m_owner) );
-                        ret = TRUE;
-                        break;
-                    }
-                }
-            }
-            ancestor = ancestor->GetParent();
-        }
-    }
-#endif // 0
-
     if (ret)
     {
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
@@ -1246,6 +1217,165 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     
     return FALSE;
 }
+#endif
+
+#ifdef __WXGTK20__
+static gint gtk_window_key_press_callback( GtkWidget *widget,
+                                           GdkEventKey *gdk_event,
+                                           wxWindow *win )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    if (!win->m_hasVMT)
+        return FALSE;
+    if (g_blockEventsOnDrag)
+        return FALSE;
+    
+    bool ret = FALSE;
+    bool dont_use_IM = FALSE;
+    
+    wxKeyEvent event( wxEVT_KEY_DOWN );
+    long keycode = wxTranslateKeySymToWXKey( gdk_event->keyval, FALSE );
+    if (keycode)
+    {
+        // We were able to decode the key press without
+        // any input method, so don't use it.
+        dont_use_IM = TRUE;
+         
+        // now fill all the other fields
+        int x = 0;
+        int y = 0;
+        GdkModifierType state;
+        if (gdk_event->window)
+            gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
+
+        event.SetTimestamp( gdk_event->time );
+        event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK) != 0;
+        event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK) != 0;
+        event.m_altDown = (gdk_event->state & GDK_MOD1_MASK) != 0;
+        event.m_metaDown = (gdk_event->state & GDK_MOD2_MASK) != 0;
+        event.m_keyCode = keycode;
+        event.m_scanCode = gdk_event->keyval;
+        event.m_rawCode = (wxUint32) gdk_event->keyval;
+        event.m_rawFlags = 0;
+        event.m_x = x;
+        event.m_y = y;
+        event.SetEventObject( win );
+        
+        // send key down event
+        ret = win->GetEventHandler()->ProcessEvent( event );
+        
+        if (!ret)        
+        {
+            // Implement OnCharHook by checking ancesteror top level windows
+            wxWindow *parent = win;
+            while (parent && !parent->IsTopLevel())
+            parent = parent->GetParent();
+            if (parent)
+            {
+                event.SetEventType( wxEVT_CHAR_HOOK );
+                ret = parent->GetEventHandler()->ProcessEvent( event );
+            }
+
+            if (!ret)
+            {
+                event.SetEventType(wxEVT_CHAR);
+                ret = win->GetEventHandler()->ProcessEvent( event );
+            }
+        }
+        
+        // win is a control: tab can be propagated up
+        if ( !ret &&
+             ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
+            win->GetParent() && (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
+        {
+            wxNavigationKeyEvent new_event;
+            new_event.SetEventObject( win->GetParent() );
+            // GDK reports GDK_ISO_Left_Tab for SHIFT-TAB
+            new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
+            // CTRL-TAB changes the (parent) window, i.e. switch notebook page
+            new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
+            new_event.SetCurrentFocus( win );
+            ret = win->GetParent()->GetEventHandler()->ProcessEvent( new_event );
+        }
+
+        if ( !ret &&
+             (gdk_event->keyval == GDK_Escape) )
+        {
+            wxWindow *winForCancel = win, *btnCancel = NULL;
+            while ( winForCancel )
+            {
+                btnCancel = winForCancel->FindWindow(wxID_CANCEL);
+                if ( btnCancel ) break;
+
+                if ( winForCancel->IsTopLevel() ) break;
+                
+                winForCancel = winForCancel->GetParent();
+            }
+
+            if ( btnCancel )
+            {
+                wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+                event.SetEventObject(btnCancel);
+                ret = btnCancel->GetEventHandler()->ProcessEvent(event);
+            }
+        }
+    }
+        
+    if (ret)
+    {
+        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+        return TRUE;
+    }
+    
+    if (!dont_use_IM && win->m_imContext)
+    {
+        // In GTK 2.0, we need to hand over the key
+        // event to an input method and the IM will
+        // emit a "commit" event containing the
+        // actual utf8 character.  
+        gtk_im_context_filter_keypress ( (GtkIMContext*) win->m_imContext, gdk_event );
+        
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+static void gtk_wxwindow_commit_cb (GtkIMContext *context,
+						   const gchar  *str,
+						   wxWindow     *window)
+{
+    bool ret = FALSE;   
+    
+    wxKeyEvent event( wxEVT_KEY_DOWN );
+    
+    // I wonder how well keyval represents a Unicode char
+    gunichar ch = g_utf8_get_char( str );
+    event.m_keyCode = ch;
+    
+    if (!ret)
+    {
+        // Implement OnCharHook by checking ancesteror top level windows
+        wxWindow *parent = window;
+        while (parent && !parent->IsTopLevel())
+        parent = parent->GetParent();
+        if (parent)
+        {
+            event.SetEventType( wxEVT_CHAR_HOOK );
+            ret = parent->GetEventHandler()->ProcessEvent( event );
+        }
+
+        if (!ret)
+        {
+            event.SetEventType(wxEVT_CHAR);
+            ret = window->GetEventHandler()->ProcessEvent( event );
+        }
+    }
+}
+#endif
+
 
 //-----------------------------------------------------------------------------
 // "key_release_event" from any window
@@ -2121,7 +2251,7 @@ static void gtk_window_destroy_callback( GtkWidget* widget, wxWindow *win )
    been realized, so we do this directly after realization. */
 
 static gint
-gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
+gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
 {
     DEBUG_MAIN_THREAD
 
@@ -2133,6 +2263,14 @@ gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
 
     if (win->m_delayedForegroundColour)
         win->GtkSetForegroundColour( win->GetForegroundColour() );
+        
+#ifdef __WXGTK20__
+    if (win->m_imContext)
+    {
+        GtkPizza *pizza = GTK_PIZZA( m_widget );
+        gtk_im_context_set_client_window( (GtkIMContext*) win->m_imContext, pizza->bin_window );
+    }
+#endif
 
     wxWindowCreateEvent event( win );
     event.SetEventObject( win );
@@ -2393,9 +2531,13 @@ void wxWindowGTK::Init()
     m_delayedForegroundColour = FALSE;
     m_delayedBackgroundColour = FALSE;
 
+#ifdef __WXGTK20__
+    m_imContext = NULL;
+#else            
 #ifdef HAVE_XIM
     m_ic = (GdkIC*) NULL;
     m_icattr = (GdkICAttr*) NULL;
+#endif
 #endif
 }
 
@@ -2516,6 +2658,17 @@ bool wxWindowGTK::Create( wxWindow *parent,
           (GtkSignalFunc) gtk_window_hscroll_callback, (gpointer) this );
     gtk_signal_connect( GTK_OBJECT(m_vAdjust), "value_changed",
           (GtkSignalFunc) gtk_window_vscroll_callback, (gpointer) this );
+
+#ifdef __WXGTK20__
+    // Create input method handler
+    m_imContext = (GtkIMMulticontext*) gtk_im_multicontext_new ();
+    
+    // Cannot handle drawing preedited text yet
+    gtk_im_context_set_use_preedit( (GtkIMContext*) m_imContext, FALSE );
+  
+    g_signal_connect (G_OBJECT (m_imContext), "commit",
+        G_CALLBACK (gtk_wxwindow_commit_cb), this);
+#endif
 
     gtk_widget_show( m_wxwindow );
 
@@ -2642,6 +2795,18 @@ void wxWindowGTK::PostCreation()
 #else
             // gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ) );
 #endif
+
+#ifdef __WXGTK20__
+        // Create input method handler
+        m_imContext = (GtkIMMulticontext*) gtk_im_multicontext_new ();
+    
+        // Cannot handle drawing preedited text yet
+        gtk_im_context_set_use_preedit( (GtkIMContext*) m_imContext, FALSE );
+  
+        g_signal_connect (G_OBJECT (m_imContext), "commit",
+            G_CALLBACK (gtk_wxwindow_commit_cb), this);
+#endif
+
         }
 
         // these are called when the "sunken" or "raised" borders are drawn

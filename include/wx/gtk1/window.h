@@ -195,10 +195,14 @@ public:
     // this widget will be queried for GTK's focus events
     GtkWidget           *m_focusWidget;
 
+#ifdef __WXGTK20__
+    GtkIMMulticontext   *m_imContext;
+#else
 #if HAVE_XIM
     // XIM support for wxWindows
     GdkIC               *m_ic;
     GdkICAttr           *m_icattr;
+#endif
 #endif
 
 #ifndef __WXGTK20__

@@ -2088,6 +2088,9 @@ typedef GtkWidget *WXWidget;
 typedef struct _PangoContext         PangoContext;
 typedef struct _PangoLayout          PangoLayout;
 typedef struct _PangoFontDescription PangoFontDescription;
+
+/* Input method thing */
+typedef struct _GtkIMMulticontext    GtkIMMulticontext;
 #endif // GTK+ 2.0
 
 #endif // GTK
