@@ -881,10 +881,9 @@ WXHANDLE wxNotebook::QueryBgBitmap(wxWindow *win)
 
         return (WXHANDLE)c;
     }
-    else // we are asked to create the brush
-    {
-        return (WXHANDLE)::CreatePatternBrush(hBmp);
-    }
+
+    // else we are asked to create the brush
+    return (WXHANDLE)::CreatePatternBrush(hBmp);
 }
 
 void wxNotebook::UpdateBgBrush()
