@@ -149,15 +149,12 @@ bool DatabaseDemoApp::OnInit()
         delete DbConnectInf;
     }
 
-
     READONLY_DB = wxDbGetConnection(DbConnectInf);
     if (READONLY_DB == 0)
     {
         wxMessageBox(wxT("Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the CONTACT table prior to making a connection\n(using tools provided by the database manufacturer)"), wxT("DB CONNECTION ERROR..."),wxOK | wxICON_EXCLAMATION);
         DemoFrame->BuildParameterDialog(NULL);
-        DbConnectInf->SetDsn("");
-        DbConnectInf->SetUid("");
-        DbConnectInf->SetPassword("");
+        delete DbConnectInf;
         wxMessageBox(wxT("Now exiting program.\n\nRestart program to try any new settings."),wxT("Notice..."),wxOK | wxICON_INFORMATION);
         return(FALSE);
     }
@@ -1656,7 +1653,9 @@ END_EVENT_TABLE()
 
  
 // CqueryDlg() constructor
-CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[], wxChar *pWhereArg) : wxDialog (parent, QUERY_DIALOG, wxT("Query"), wxPoint(-1, -1), wxSize(480, 360))
+CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[], 
+                     const wxString &pWhereArg) :
+    wxDialog (parent, QUERY_DIALOG, wxT("Query"), wxPoint(-1, -1), wxSize(480, 360))
 {
     wxBeginBusyCursor();
 
@@ -1667,8 +1666,8 @@ CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[], wxChar *pWh
     pDB = pDb;
 
     // Initialize the WHERE clause from the string passed in
-    pWhere = pWhereArg;                                            // Save a pointer to the output buffer
-    if (wxStrlen(pWhere) > (unsigned int)DB_MAX_WHERE_CLAUSE_LEN)  // Check the length of the buffer passed in
+    pWhere = pWhereArg;                                           // Save a pointer to the output buffer
+    if (pWhere.Length() > (unsigned int)DB_MAX_WHERE_CLAUSE_LEN)  // Check the length of the buffer passed in
     {
         wxString s;
         s.Printf(wxT("Maximum where clause length exceeded.\nLength must be less than %d"), DB_MAX_WHERE_CLAUSE_LEN+1);
@@ -1757,7 +1756,7 @@ CqueryDlg::CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[], wxChar *pWh
 
     pQueryHintMsg->SetLabel(langQRY_EQ);
 
-    pQuerySqlWhereMtxt->SetValue(pWhere);
+    pQuerySqlWhereMtxt->SetValue(pWhere.c_str());
 
     wxEndBusyCursor();
 
@@ -1955,7 +1954,7 @@ void CqueryDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         if (!ValidateWhereClause())
             return;
         // Copy the where clause to the output buffer and exit
-        wxStrcpy(pWhere, pQuerySqlWhereMtxt->GetValue());
+        pWhere = pQuerySqlWhereMtxt->GetValue();
         Close();
         return;
     }  // Done button

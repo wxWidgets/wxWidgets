@@ -431,7 +431,7 @@ class CqueryDlg : public wxDialog
         wxDbColInf  *colInf;            // Column inf. returned by db->GetColumns()
         wxDbTable   *dbTable;           // generic wxDbTable object for attaching to the table to query
         wxChar      *masterTableName;   // Name of the table that 'dbTable' will be associated with
-        wxChar      *pWhere;            // A pointer to the storage for the resulting where clause
+        wxString     pWhere;            // A pointer to the storage for the resulting where clause
         wxDb        *pDB;
 
     public:
@@ -470,7 +470,7 @@ class CqueryDlg : public wxDialog
 
         wxTextCtrl              *pFocusTxt;
 
-        CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[], wxChar *pWhereArg);
+        CqueryDlg(wxWindow *parent, wxDb *pDb, wxChar *tblName[], const wxString &pWhereArg);
         ~CqueryDlg();
 
         void        OnButton( wxCommandEvent &event );
