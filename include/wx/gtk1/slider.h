@@ -41,7 +41,7 @@ extern const char *wxSliderNameStr;
 class wxSlider: public wxControl
 {
 public:
-    wxSlider();
+    wxSlider() {}
     inline wxSlider( wxWindow *parent, wxWindowID id,
            int value, int minValue, int maxValue,
            const wxPoint& pos = wxDefaultPosition,
@@ -52,7 +52,6 @@ public:
     {
       Create( parent, id, value, minValue, maxValue, pos, size, style, validator, name );
     }
-    ~wxSlider();
     bool Create(wxWindow *parent, wxWindowID id,
            int value, int minValue, int maxValue,
            const wxPoint& pos = wxDefaultPosition,
