@@ -66,6 +66,39 @@ wxMacPortSetter::~wxMacPortSetter()
 	m_dc->MacCleanupPort(&m_ph) ;
 }
 
+wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) 
+{
+    m_formerClip = NewRgn() ;
+    m_newClip = NewRgn() ;
+    GetClip( m_formerClip ) ;
+    
+    if ( win )
+    {
+        RgnHandle insidergn = NewRgn() ;
+        int x = 0 , y = 0;
+        wxWindow *parent = win->GetParent() ;
+        parent->MacWindowToRootWindow( &x,&y ) ;
+
+        wxSize size = parent->GetSize() ;
+        SetRectRgn( insidergn , parent->MacGetLeftBorderSize() , parent->MacGetTopBorderSize() , 
+      	  size.x - parent->MacGetLeftBorderSize() - parent->MacGetRightBorderSize(), 
+      	  size.y - parent->MacGetTopBorderSize() - parent->MacGetBottomBorderSize()) ;
+
+        CopyRgn( (RgnHandle) parent->MacGetVisibleRegion(false).GetWXHRGN() , m_newClip ) ;
+    	SectRgn( m_newClip , insidergn , m_newClip ) ;
+        OffsetRgn( m_newClip , x , y ) ;
+        SetClip( m_newClip ) ;
+    	DisposeRgn( insidergn ) ;
+	}
+}
+
+wxMacWindowClipper::~wxMacWindowClipper() 
+{
+    SetClip( m_formerClip ) ;
+	DisposeRgn( m_newClip ) ;
+	DisposeRgn( m_formerClip ) ;
+}
+
 //-----------------------------------------------------------------------------
 // Local functions
 //-----------------------------------------------------------------------------
