@@ -106,3 +106,24 @@ Checking in src/msw/textctrl.cpp;
 new revision: 1.157; previous revision: 1.156
 done
 
+
+
+10 wxMotif filedialog/wildcard corrections
+
+  Documented wxMotif filedialog limitations WRT wildcard syntax.
+Modified filedialog to either extract the wildcard (if only one wildcard
+is present) or assert (if more than one is present).
+
+Checking in docs/latex/wx/filedlg.tex;
+/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/filedlg.tex,v  <--  filedlg.tex
+new revision: 1.14; previous revision: 1.13
+done
+Checking in samples/dialogs/dialogs.cpp;
+/pack/cvsroots/wxwindows/wxWindows/samples/dialogs/dialogs.cpp,v  <--  dialogs.cpp
+new revision: 1.88; previous revision: 1.87
+done
+cvs diff: [15:36:24] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/docs/latex/wx
+Checking in src/motif/filedlg.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/motif/filedlg.cpp,v  <--  filedlg.cpp
+new revision: 1.16; previous revision: 1.15
+done
