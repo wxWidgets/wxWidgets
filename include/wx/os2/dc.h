@@ -333,6 +333,10 @@ protected:
                                ,int     nFillStyle = wxODDEVEN_RULE
                               );
 
+#if wxUSE_PALETTE
+    void DoSelectPalette(bool bRealize = FALSE);
+    void InitializePalette(void);
+#endif // wxUSE_PALETTE
 
     //
     // common part of DoDrawText() and DoDrawRotatedText()

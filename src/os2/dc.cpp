@@ -1366,6 +1366,52 @@ void wxDC::DoDrawRotatedText(
 // set GDI objects
 // ---------------------------------------------------------------------------
 
+void wxDC::DoSelectPalette(
+  bool                              bRealize
+)
+{
+    //
+    // Set the old object temporarily, in case the assignment deletes an object
+    // that's not yet selected out.
+    //
+    if (m_hOldPalette)
+    {
+        m_hOldPalette = 0;
+    }
+
+    if (m_palette.Ok())
+    {
+        HPALETTE                    hOldPal;
+
+        hOldPal = ::GpiSelectPalette((HDC) m_hPS, (HPALETTE) m_palette.GetHPALETTE());
+        if (!m_hOldPalette)
+            m_hOldPalette = (WXHPALETTE)hOldPal;
+    }
+} // end of wxDC::DoSelectPalette
+
+void wxDC::InitializePalette()
+{
+    if (wxDisplayDepth() <= 8 )
+    {
+        //
+        // Look for any window or parent that has a custom palette. If any has
+        // one then we need to use it in drawing operations
+        //
+        wxWindow*                   pWin = m_pCanvas->GetAncestorWithCustomPalette();
+
+        m_hasCustomPalette = pWin && pWin->HasCustomPalette();
+        if (m_hasCustomPalette)
+        {
+            m_palette = pWin->GetPalette();
+
+            //
+            // turn on PM translation for this palette
+            //
+            DoSelectPalette();
+        }
+    }
+} // end of wxDC::InitializePalette
+
 void wxDC::SetPalette(
   const wxPalette&                  rPalette
 )

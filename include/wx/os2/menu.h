@@ -13,10 +13,11 @@
 #define _WX_MENU_H_
 
 #if wxUSE_ACCEL
-    #include "wx/accel.h"
-    #include "wx/dynarray.h"
+//    #include "wx/accel.h"
+//    #include "wx/list.h"        // for "template" list classes
+//    #include "wx/dynarray.h"
 
-    WX_DEFINE_EXPORTED_ARRAY(wxAcceleratorEntry *, wxAcceleratorArray);
+//    WX_DECLARE_EXPORTED_LIST(wxAcceleratorEntry, wxAcceleratorList);
 #endif // wxUSE_ACCEL
 
 class WXDLLEXPORT wxFrame;
@@ -99,8 +100,8 @@ public:
     //
     // Called by wxMenuBar to build its accel table from the accels of all menus
     //
-    bool   HasAccels(void) const { return !m_vAccels.IsEmpty(); }
-    size_t GetAccelCount(void) const { return m_vAccels.GetCount(); }
+    bool   HasAccels(void) const { return m_vAccels[0] != NULL; }
+    size_t GetAccelCount(void) const { return (size_t)m_nNextAccel; }
     size_t CopyAccels(wxAcceleratorEntry* pAccels) const;
 
     //
@@ -170,7 +171,8 @@ private:
     //
     // The accelerators for our menu items
     //
-    wxAcceleratorArray              m_vAccels;
+    wxAcceleratorEntry*             m_vAccels[128];
+    int                             m_nNextAccel;
 #endif // wxUSE_ACCEL
 
     DECLARE_DYNAMIC_CLASS(wxMenu)

@@ -144,10 +144,6 @@ void wxWindowDC::InitDC()
 {
     wxColour                        vColor;
 
-    vColor.InitFromName("BLACK");
-    m_pen.SetColour(vColor);
-    vColor.Set("WHITE");
-    m_brush.SetColour(vColor);
     //
     // The background mode is only used for text background and is set in
     // DrawText() to OPAQUE as required, otherwise always TRANSPARENT,
@@ -158,6 +154,12 @@ void wxWindowDC::InitDC()
     // Default bg colour is pne of the window
     //
     SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
+
+    vColor.InitFromName("BLACK");
+    m_pen.SetColour(vColor);
+    vColor.Set("WHITE");
+    m_brush.SetColour(vColor);
+    InitializePalette();
 } // end of wxWindowDC::InitDC
 
 void wxWindowDC::DoGetSize(

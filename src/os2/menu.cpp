@@ -151,6 +151,9 @@ void wxMenu::Init()
               );
         AppendSeparator();
     }
+    for (int i = 0; i < 128; i++)
+        m_vAccels[i] = NULL;
+    m_nNextAccel = 0;
 } // end of wxMenu::Init
 
 //
@@ -175,7 +178,15 @@ wxMenu::~wxMenu()
     // Delete accels
     //
 #if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
-    WX_CLEAR_ARRAY(m_vAccels);
+    for (int i = 0; i < 128; i++)
+    {
+        if (m_vAccels[i])
+        {
+            delete m_vAccels[i];
+            m_vAccels[i] = NULL;
+        }
+    }
+//    WX_CLEAR_ARRAY(m_vAccels);
 #endif
 #endif // wxUSE_ACCEL
 } // end of wxMenu::~wxMenu
@@ -201,12 +212,15 @@ int wxMenu::FindAccel(
 ) const
 {
     size_t                          n;
-    size_t                          nCount = m_vAccels.GetCount();
+//    size_t                          nCount = m_vAccels.GetCount();
 
-    for (n = 0; n < nCount; n++)
+    for (n = 0; n < m_nNextAccel; n++)
     {
-        if (m_vAccels[n]->m_command == nId)
-            return n;
+        if (m_vAccels[n] != NULL)
+        {
+            if (m_vAccels[n]->m_command == nId)
+                return n;
+        }
     }
     return wxNOT_FOUND;
 } // end of wxMenu::FindAccel
@@ -238,7 +252,7 @@ void wxMenu::UpdateAccel(
         //
         // Find the old one
         //
-        int                             n = FindAccel(pItem->GetId());
+        size_t                      n = FindAccel(pItem->GetId());
 
         if (n == wxNOT_FOUND)
         {
@@ -246,7 +260,15 @@ void wxMenu::UpdateAccel(
             // No old, add new if any
             //
             if (pAccel)
-                m_vAccels.Add(pAccel);
+            {
+                if (m_nNextAccel < 128)
+                {
+                    m_vAccels[m_nNextAccel] = pAccel;
+                    m_nNextAccel++;
+                }
+                else
+                    return;     // skipping RebuildAccelTable() below
+            }
             else
                 return;     // skipping RebuildAccelTable() below
         }
@@ -255,12 +277,11 @@ void wxMenu::UpdateAccel(
             //
             // Replace old with new or just remove the old one if no new
             //
-            delete                      m_vAccels[n];
+            delete m_vAccels[n];
+            m_vAccels[n] = NULL;
 
             if (pAccel)
                 m_vAccels[n] = pAccel;
-            else
-                m_vAccels.RemoveAt(n);
         }
 
         if (IsAttached())
@@ -280,6 +301,10 @@ bool wxMenu::DoInsertOrAppend(
 , size_t                            nPos
 )
 {
+    wxMenu*                         pSubmenu = pItem->GetSubMenu();
+    MENUITEM&                       rItem = (pSubmenu != NULL)?pSubmenu->m_vMenuData:
+                                            pItem->m_vMenuData;
+
     ERRORID                         vError;
     wxString                        sError;
     char                            zMsg[128];
@@ -292,9 +317,6 @@ bool wxMenu::DoInsertOrAppend(
     // MENUITEM for submenus as required by ::MM_INSERTITEM message API
     //
 
-    wxMenu*                         pSubmenu = pItem->GetSubMenu();
-    MENUITEM&                       rItem = (pSubmenu != NULL)?pSubmenu->m_vMenuData:
-                                            pItem->m_vMenuData;
     if(pSubmenu != NULL)
     {
         wxASSERT_MSG(pSubmenu->GetHMenu(), wxT("invalid submenu"));
@@ -521,7 +543,7 @@ wxMenuItem* wxMenu::DoRemove(
     if (n != wxNOT_FOUND)
     {
         delete m_vAccels[n];
-        m_vAccels.RemoveAt(n);
+        m_vAccels[n] = NULL;
     }
 
 #endif // wxUSE_ACCEL
