@@ -49,15 +49,6 @@ void wxClientDisplayRect(int *x,int *y,int *width,int *height)
         *height=768;
 }
 
-int wxGUIAppTraits::GetOSVersion(int *verMaj, int *verMin)
-{
-    if(verMaj)
-        *verMaj=0;
-    if(verMin)
-        *verMin=0;
-    return 0;
-}
-
 // Return TRUE if we have a colour display
 bool wxColourDisplay()
 {
