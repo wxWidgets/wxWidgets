@@ -231,6 +231,7 @@ wxFrame::wxFrame()
     m_mainWidget = (GtkWidget*) NULL;
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
+    m_insertCallback = wxInsertChildInFrame;
 }
 
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
@@ -246,6 +247,7 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     m_mainWidget = (GtkWidget*) NULL;
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
+    m_insertCallback = wxInsertChildInFrame;
     Create( parent, id, title, pos, size, style, name );
 }
 
