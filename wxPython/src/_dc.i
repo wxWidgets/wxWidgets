@@ -790,7 +790,7 @@ public:
 %newgroup
 
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
 
 %{
 #include <wx/metafile.h>
@@ -808,8 +808,10 @@ public:
     int GetWidth();
     int GetHeight();
 
+#ifdef __WXMSW__
     const wxString& GetFileName() const;
-
+#endif
+    
     %pythoncode { def __nonzero__(self): return self.Ok() }
 };
 
