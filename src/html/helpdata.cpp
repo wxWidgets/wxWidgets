@@ -307,22 +307,34 @@ inline static wxInt32 CacheReadInt32(wxInputStream *f)
 }
 
 inline static void CacheWriteString(wxOutputStream *f, const wxChar *str)
-{
-    size_t len = wxStrlen(str)+1;
+{    
+#if wxUSE_UNICODE
+    wxWX2MBbuf mbstr(wxConvUTF8.cWX2MB(str));
+#else
+    const wxChar *mbstr = str;
+#endif
+    size_t len = strlen(mbstr)+1;
     CacheWriteInt32(f, len);
-    f->Write(str, len * sizeof(wxChar));
+    f->Write(mbstr, len);
 }
 
-inline static wxChar *CacheReadString(wxInputStream *f)
+inline static wxChar* CacheReadString(wxInputStream *f)
 {
-    wxChar *str;
+    char *str;
     size_t len = (size_t)CacheReadInt32(f);
-    str = new wxChar[len];
-    f->Read(str, len * sizeof(wxChar));
+    str = new char[len];
+    f->Read(str, len);
+#if !wxUSE_UNICODE
     return str;
+#else
+    wxMB2WXbuf wxstr(wxConvUTF8.cMB2WX(str));
+    wxChar *outstr = new wxChar[wxStrlen(wxstr)+1];
+    wxStrcpy(outstr, wxstr);
+    return outstr;
+#endif
 }
 
-#define CURRENT_CACHED_BOOK_VERSION     2
+#define CURRENT_CACHED_BOOK_VERSION     3
 
 bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
 {
@@ -331,7 +343,7 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
 
     /* load header - version info : */
     version = CacheReadInt32(f);
-
+    
     if (version != CURRENT_CACHED_BOOK_VERSION)
     {
         // NB: We can just silently return FALSE here and don't worry about
