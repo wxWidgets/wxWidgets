@@ -16,7 +16,6 @@
 #endif
 
 #include <wx/stream.h>
-#include "../zlib/zlib.h"   // don't change this, Robert
 
 class wxZlibInputStream: public wxFilterInputStream {
  public:
@@ -33,7 +32,7 @@ class wxZlibInputStream: public wxFilterInputStream {
  protected:
   size_t m_z_size;
   unsigned char *m_z_buffer;
-  struct z_stream_s m_inflate;
+  struct z_stream_s *m_inflate;
 };
 
 class wxZlibOutputStream: public wxFilterOutputStream {
@@ -53,7 +52,7 @@ class wxZlibOutputStream: public wxFilterOutputStream {
  protected:
   size_t m_z_size;
   unsigned char *m_z_buffer;
-  struct z_stream_s m_deflate;
+  struct z_stream_s *m_deflate;
 };
 
 #endif

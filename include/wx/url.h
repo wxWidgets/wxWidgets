@@ -42,6 +42,7 @@ protected:
   wxHTTP m_proxy;
   wxURLError m_error;
   wxString m_protoname, m_hostname, m_servname, m_path, m_url;
+  wxString m_user, m_password;
 
   bool PrepProto(wxString& url);
   bool PrepHost(wxString& url);

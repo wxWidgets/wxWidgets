@@ -39,7 +39,7 @@ class wxLibrary: public wxObject {
   void MergeWithSystem();
 
  protected:
-  void PrepareClasses(wxClassInfo **first);
+  void PrepareClasses(wxClassInfo *first);
 };
 
 // ---------------------------------------------------------------------------
@@ -65,9 +65,9 @@ extern wxLibraries wxTheLibraries;
 // Interesting defines
 
 #define WXDLL_ENTRY_FUNCTION() \
-extern "C" wxClassInfo **wxGetClassFirst(); \
-wxClassInfo **wxGetClassFirst() { \
-  return &wxClassInfo::first; \
+extern "C" wxClassInfo *wxGetClassFirst(); \
+wxClassInfo *wxGetClassFirst() { \
+  return wxClassInfo::GetFirst(); \
 }
 
 #endif

@@ -177,6 +177,7 @@ bool wxObjectOutputStream::SaveObject(wxObject& obj)
 wxObjectInputStream::wxObjectInputStream(wxInputStream& s)
   : wxFilterInputStream(s)
 {
+  m_secondcall = FALSE;
 }
 
 wxObject *wxObjectInputStream::SolveName(const wxString& name) const

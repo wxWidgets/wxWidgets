@@ -58,8 +58,8 @@ void WXSERIAL(wxWindow)::StoreObject(wxObjectOutputStream& s)
     s.AddChild(win_object->GetValidator());
 
     // BAD HACK, but I don't have access to the internal variable of wxWindow.
-    m_bg_colour = win_object->GetDefaultBackgroundColour();
-    m_fg_colour = win_object->GetDefaultForegroundColour();
+    m_bg_colour = win_object->GetBackgroundColour();
+    m_fg_colour = win_object->GetForegroundColour();
     s.AddChild(&m_bg_colour);
     s.AddChild(&m_fg_colour);
     s.AddChild(win_object->GetFont());
@@ -98,7 +98,24 @@ void WXSERIAL(wxWindow)::LoadObject(wxObjectInputStream& s)
   wxWindow *win_object = (wxWindow *)Object();
   wxColour *colour;
   wxFont *font;
-  int number;
+
+  if (s.SecondCall()) {
+    /* I assume we will never create raw wxWindow object */
+    (void)s.GetChild(); // We pass wxLayoutConstraints.
+    (void)s.GetChild(); // We pass wxValidator.
+
+    colour = (wxColour *)s.GetChild();
+    if (colour)
+      win_object->SetBackgroundColour(*colour);
+    colour = (wxColour *)s.GetChild();
+    if (colour)
+      win_object->SetForegroundColour(*colour);
+    font = (wxFont *)s.GetChild();
+    if (font)
+      win_object->SetFont(*font);
+    s.RemoveChildren(m_number);
+    return;
+  }
 
   m_parent = (wxWindow *)s.GetParent();
 
@@ -110,31 +127,22 @@ void WXSERIAL(wxWindow)::LoadObject(wxObjectInputStream& s)
   m_shown       = data_s.Read8();
   m_style       = data_s.Read32();
   m_id          = data_s.Read32();
-  number        = data_s.Read8();
+  m_number      = data_s.Read8();
 
   m_x = data_s.Read16();
   m_y = data_s.Read16();
   m_w = data_s.Read16();
   m_h = data_s.Read16();
 
-  /* I assume we will never create raw wxWindow object */
   (void)s.GetChild(); // We pass wxLayoutConstraints.
- 
+
   m_validator = (wxValidator *)s.GetChild();
   if (!m_validator)
     m_validator = (wxValidator *)&wxDefaultValidator;
 
-  colour = (wxColour *)s.GetChild();
-  if (colour)
-    win_object->SetDefaultBackgroundColour(*colour);
-  colour = (wxColour *)s.GetChild();
-  if (colour)
-    win_object->SetDefaultForegroundColour(*colour);
-  font = (wxFont *)s.GetChild();
-  if (font)
-    win_object->SetFont(*font);
+  s.RemoveChildren(m_number+3);
 
-  s.RemoveChildren(number);
+  s.Recall();
 
   return;
 }
@@ -262,12 +270,15 @@ void WXSERIAL(wxFrame)::LoadObject(wxObjectInputStream& s)
 
   WXSERIAL(wxWindow)::LoadObject(s);
 
+  if (s.SecondCall())
+    return;
+
   wxDataInputStream data_s(s);
 
-  frame->SetMenuBar(mbar);
   if (frame->GetClassInfo() == CLASSINFO(wxFrame))
     frame->Create(m_parent, m_id, m_title, wxPoint(m_x, m_y),
                   wxSize(m_w, m_h), m_style, m_name);
+  frame->SetMenuBar(mbar);
 
   frame->CreateStatusBar(data_s.Read8());
 }
@@ -348,17 +359,21 @@ void WXSERIAL(wxMenuItem)::StoreObject(wxObjectOutputStream& s)
   wxMenuItem *item = (wxMenuItem *)Object();
 
   if (s.FirstStage()) {
+#ifdef __WXGTK__
     s.AddChild(item->GetSubMenu());
+#endif
     return;
   }
 
   wxDataOutputStream data_s(s);
 
+#ifdef __WXGTK__
   data_s.Write8( item->GetId() );
   data_s.WriteString( item->GetText() );
   data_s.Write8( item->IsCheckable() );
   data_s.Write8( item->IsEnabled() );
   data_s.Write8( item->IsChecked() );
+#endif
 }
 
 void WXSERIAL(wxMenuItem)::LoadObject(wxObjectInputStream& s)
@@ -366,12 +381,14 @@ void WXSERIAL(wxMenuItem)::LoadObject(wxObjectInputStream& s)
   wxMenuItem *item = (wxMenuItem *)Object();
   wxDataInputStream data_s(s);
 
+#ifdef __WXGTK__
   item->SetId( data_s.Read8() );
   item->SetText( data_s.ReadString() );
   item->SetCheckable( data_s.Read8() );
   item->Enable( data_s.Read8() );
   item->Check( data_s.Read8() );
   item->SetSubMenu( (wxMenu *)s.GetChild() );
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -384,6 +401,9 @@ void WXSERIAL(wxPanel)::StoreObject(wxObjectOutputStream& s)
 void WXSERIAL(wxPanel)::LoadObject(wxObjectInputStream& s)
 {
   WXSERIAL(wxWindow)::LoadObject(s);
+
+  if (s.SecondCall())
+    return;
 
   ((wxPanel *)Object())->Create(m_parent, m_id, wxPoint(m_x, m_y),
                                 wxSize(m_w, m_h), m_style, m_name);
@@ -399,6 +419,9 @@ void WXSERIAL(wxDialog)::StoreObject(wxObjectOutputStream& s)
 void WXSERIAL(wxDialog)::LoadObject(wxObjectInputStream& s)
 {
   WXSERIAL(wxWindow)::LoadObject(s);
+
+  if (s.SecondCall())
+    return;
 
   ((wxDialog *)Object())->Create(m_parent, m_id, m_title, wxPoint(m_x, m_y),
                                  wxSize(m_w, m_h), m_style, m_name);
@@ -424,6 +447,11 @@ void WXSERIAL(wxMDIParentFrame)::LoadObject(wxObjectInputStream& s)
   wxMDIParentFrame *frame = (wxMDIParentFrame *)Object();
   wxMDIClientWindow *client;
 
+  if (s.SecondCall()) {
+    WXSERIAL(wxFrame)::LoadObject(s);
+    return;
+  }
+
   client = (wxMDIClientWindow *) s.GetChild();
 
   frame->Create(m_parent, m_id, m_title, wxPoint(m_x, m_y),
@@ -443,6 +471,9 @@ void WXSERIAL(wxMDIChildFrame)::LoadObject(wxObjectInputStream& s)
 {
   WXSERIAL(wxFrame)::LoadObject(s);
 
+  if (s.SecondCall())
+    return;
+
   ((wxMDIChildFrame *)Object())->Create((wxMDIParentFrame *)m_parent,
                                         m_id, m_title,
                                         wxPoint(m_x, m_y), wxSize(m_w, m_h),
@@ -459,6 +490,9 @@ void WXSERIAL(wxMDIClientWindow)::StoreObject(wxObjectOutputStream& s)
 void WXSERIAL(wxMDIClientWindow)::LoadObject(wxObjectInputStream& s)
 {
   WXSERIAL(wxWindow)::LoadObject(s);
+
+  if (s.SecondCall())
+    return;
 
   ((wxMDIClientWindow *)Object())->CreateClient((wxMDIParentFrame *)m_parent, m_style);
 }

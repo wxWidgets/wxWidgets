@@ -431,7 +431,7 @@ IMPLEMENT_PROTOCOL(wxHTTP, "http", "80", TRUE)
 #include "wx/protocol/ftp.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxFTP, wxProtocol)
-IMPLEMENT_PROTOCOL(wxFTP, "ftp", "ftp", TRUE)
+IMPLEMENT_PROTOCOL(wxFTP, "ftp", "21", TRUE)
 
 #include "wx/protocol/sckfile.h"
 

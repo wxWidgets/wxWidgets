@@ -409,6 +409,50 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar95, wxToolBarBase)
 
 #endif
 
+#include "wx/sckaddr.h"
+
+IMPLEMENT_DYNAMIC_CLASS(wxIPV4address, wxSockAddress)
+#ifdef ENABLE_IPV6
+IMPLEMENT_DYNAMIC_CLASS(wxIPV6address, wxSockAddress)
+#endif
+#ifndef __UNIX__
+IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
+#endif
+
+#include "wx/socket.h"
+
+IMPLEMENT_CLASS(wxSocketBase, wxEvtHandler)
+IMPLEMENT_CLASS(wxSocketClient, wxSocketBase)
+IMPLEMENT_CLASS(wxSocketServer, wxSocketBase)
+IMPLEMENT_CLASS(wxSocketHandler, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
+
+#include "wx/url.h"
+
+IMPLEMENT_CLASS(wxProtoInfo, wxObject)
+IMPLEMENT_CLASS(wxURL, wxObject)
+
+#include "wx/protocol/http.h"
+
+IMPLEMENT_DYNAMIC_CLASS(wxHTTP, wxProtocol)
+IMPLEMENT_PROTOCOL(wxHTTP, "http", "80", TRUE)
+
+#include "wx/protocol/ftp.h"
+
+IMPLEMENT_DYNAMIC_CLASS(wxFTP, wxProtocol)
+IMPLEMENT_PROTOCOL(wxFTP, "ftp", "21", TRUE)
+
+#include "wx/protocol/sckfile.h"
+
+IMPLEMENT_DYNAMIC_CLASS(wxFileProto, wxProtocol)
+IMPLEMENT_PROTOCOL(wxFileProto, "file", NULL, FALSE)
+
+#include "wx/sckipc.h"
+
+IMPLEMENT_DYNAMIC_CLASS(wxTCPServer, wxServerBase)
+IMPLEMENT_DYNAMIC_CLASS(wxTCPClient, wxClientBase)
+IMPLEMENT_DYNAMIC_CLASS(wxTCPConnection, wxConnectionBase)
+
 #include "wx/statusbr.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxWindow)

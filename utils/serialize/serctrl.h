@@ -21,11 +21,16 @@
 
 DECLARE_ALIAS_SERIAL_CLASS(wxControl, wxWindow)
 DECLARE_SERIAL_CLASS(wxButton, wxControl)
+#ifdef __WINDOWS__
+DECLARE_SERIAL_CLASS(wxSlider95, wxControl)
+DECLARE_SERIAL_CLASS(wxGauge95, wxControl)
+#else
 DECLARE_SERIAL_CLASS(wxSlider, wxControl)
+DECLARE_SERIAL_CLASS(wxGauge, wxControl)
+#endif
 DECLARE_SERIAL_CLASS(wxCheckBox, wxControl)
 DECLARE_SERIAL_CLASS(wxChoice, wxControl)
 DECLARE_SERIAL_CLASS(wxComboBox, wxControl)
-DECLARE_SERIAL_CLASS(wxGauge, wxControl)
 DECLARE_SERIAL_CLASS(wxListBox, wxControl)
 DECLARE_SERIAL_CLASS(wxRadioBox, wxControl)
 DECLARE_SERIAL_CLASS(wxRadioButton, wxControl)

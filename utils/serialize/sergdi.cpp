@@ -25,12 +25,13 @@
 #include <wx/colour.h>
 #include <wx/palette.h>
 #include <wx/dcmemory.h>
+#include <wx/log.h>
 #include "sergdi.h"
 
 IMPLEMENT_SERIAL_CLASS(wxBitmap, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxGDIObject, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxRegion, wxGDIObject)
-IMPLEMENT_SERIAL_CLASS(wxColour, wxGDIObject)
+IMPLEMENT_SERIAL_CLASS(wxColour, wxObject)
 IMPLEMENT_SERIAL_CLASS(wxFont, wxGDIObject)
 IMPLEMENT_SERIAL_CLASS(wxPen, wxGDIObject)
 IMPLEMENT_SERIAL_CLASS(wxBrush, wxGDIObject)
@@ -89,7 +90,11 @@ void WXSERIAL(wxBitmap)::LoadObject(wxObjectInputStream& s)
   w = data_s.Read16();
   h = data_s.Read16();
 
+#ifdef __WXGTK__
   bitmap->Resize(w, h);
+#else
+  bitmap->Create(w, h);
+#endif
   dc.SelectObject(*bitmap);
 
   for (y=0;y<h;y++)
@@ -161,13 +166,19 @@ void WXSERIAL(wxRegion)::LoadObject(wxObjectInputStream& s)
 
 void WXSERIAL(wxColour)::StoreObject(wxObjectOutputStream& s)
 {
-  WXSERIAL(wxGDIObject)::StoreObject(s);
-
   if (s.FirstStage())
     return;
 
   wxDataOutputStream data_s(s);
   wxColour *colour = (wxColour *)Object();
+
+  if (!colour->Ok()) {
+    data_s.Write8(0);
+    data_s.Write8(0);
+    data_s.Write8(0);
+    wxLogDebug("wxColour (0x%x) isn't ready.\n", colour);
+    return;
+  }
 
   data_s.Write8(colour->Red());
   data_s.Write8(colour->Green());
@@ -176,8 +187,6 @@ void WXSERIAL(wxColour)::StoreObject(wxObjectOutputStream& s)
 
 void WXSERIAL(wxColour)::LoadObject(wxObjectInputStream& s)
 {
-  WXSERIAL(wxGDIObject)::LoadObject(s);
-  
   wxDataInputStream data_s(s);
   wxColour *colour = (wxColour *)Object();
   int r, g, b;
@@ -305,8 +314,10 @@ void WXSERIAL(wxImageList)::StoreObject(wxObjectOutputStream& s)
   int i;
 
   if (s.FirstStage()) {
+#ifdef __WXGTK__
     for (i=0;i<list->GetImageCount();i++)
       s.AddChild(list->GetBitmap(i));
+#endif
   }
 
   wxDataOutputStream data_s(s);

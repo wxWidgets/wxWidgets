@@ -38,52 +38,55 @@ wxZlibInputStream::wxZlibInputStream(wxInputStream& stream)
   // I need a private stream buffer.
   m_i_streambuf = new wxStreamBuffer(*this);
   m_i_destroybuf = TRUE;
+  m_inflate = new z_stream_s;
 
-  m_inflate.zalloc = (alloc_func)0;
-  m_inflate.zfree = (free_func)0;
-  m_inflate.opaque = (void*)0;
+  m_inflate->zalloc = (alloc_func)0;
+  m_inflate->zfree = (free_func)0;
+  m_inflate->opaque = (voidpf)0;
 
-  err = inflateInit(&m_inflate);
+  err = inflateInit(m_inflate);
   if (err != Z_OK) {
-    inflateEnd(&m_inflate);
+    inflateEnd(m_inflate);
+    delete m_inflate;
     return;
   }
 
   m_z_buffer = new unsigned char[ZSTREAM_BUFFER_SIZE];
   m_z_size = ZSTREAM_BUFFER_SIZE;
 
-  m_inflate.avail_in = 0;
-  m_inflate.next_in = NULL;
+  m_inflate->avail_in = 0;
+  m_inflate->next_in = NULL;
 }
 
 wxZlibInputStream::~wxZlibInputStream()
 {
-  inflateEnd(&m_inflate);
+  inflateEnd(m_inflate);
+  delete m_inflate;
 }
 
 size_t wxZlibInputStream::DoRead(void *buffer, size_t size)
 {
   int err;
 
-  m_inflate.next_out = (unsigned char *)buffer;
-  m_inflate.avail_out = size;
+  m_inflate->next_out = (unsigned char *)buffer;
+  m_inflate->avail_out = size;
 
-  while (m_inflate.avail_out > 0) {
-    if (m_inflate.avail_in == 0) {
+  while (m_inflate->avail_out > 0) {
+    if (m_inflate->avail_in == 0) {
 
       m_parent_i_stream->Read(m_z_buffer, m_z_size);
-      m_inflate.next_in = m_z_buffer;
-      m_inflate.avail_in = m_parent_i_stream->LastRead();
+      m_inflate->next_in = m_z_buffer;
+      m_inflate->avail_in = m_parent_i_stream->LastRead();
 
       if (m_parent_i_stream->Eof())
-        return (size - m_inflate.avail_in);
+        return (size - m_inflate->avail_in);
     }
-    err = inflate(&m_inflate, Z_FINISH);
+    err = inflate(m_inflate, Z_FINISH);
     if (err == Z_STREAM_END)
-      return (size - m_inflate.avail_in);
+      return (size - m_inflate->avail_in);
   }
 
-  return size-m_inflate.avail_in;
+  return size-m_inflate->avail_in;
 }
 
 bool wxZlibInputStream::Eof() const
@@ -104,23 +107,24 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream)
 
   m_o_streambuf = new wxStreamBuffer(*this);
   m_o_destroybuf = TRUE;
+  m_deflate = new z_stream_s;
 
-  m_deflate.zalloc = (alloc_func)0;
-  m_deflate.zfree = (free_func)0;
-  m_deflate.opaque = (void*)0;
+  m_deflate->zalloc = (alloc_func)0;
+  m_deflate->zfree = (free_func)0;
+  m_deflate->opaque = (voidpf)0;
 
-  err = deflateInit(&m_deflate, Z_DEFAULT_COMPRESSION);
+  err = deflateInit(m_deflate, Z_DEFAULT_COMPRESSION);
   if (err != Z_OK) {
-    deflateEnd(&m_deflate);
+    deflateEnd(m_deflate);
     return;
   }
 
   m_z_buffer = new unsigned char[ZSTREAM_BUFFER_SIZE];
   m_z_size = ZSTREAM_BUFFER_SIZE;
 
-  m_deflate.avail_in = 0;
-  m_deflate.next_out = m_z_buffer;
-  m_deflate.avail_out = m_z_size;
+  m_deflate->avail_in = 0;
+  m_deflate->next_out = m_z_buffer;
+  m_deflate->avail_out = m_z_size;
 }
 
 wxZlibOutputStream::~wxZlibOutputStream()
@@ -129,14 +133,14 @@ wxZlibOutputStream::~wxZlibOutputStream()
 
   Sync();
 
-  err = deflate(&m_deflate, Z_FINISH);
+  err = deflate(m_deflate, Z_FINISH);
   if (err != Z_STREAM_END) {
     wxDebugMsg(_("wxZlibOutputStream: an error occured while we was closing "
                "the stream.\n"));
     return;
   }
 
-  deflateEnd(&m_deflate);
+  deflateEnd(m_deflate);
 
   delete[] m_z_buffer;
 }
@@ -145,42 +149,42 @@ void wxZlibOutputStream::Sync()
 {
   int err;
 
-  m_parent_o_stream->Write(m_z_buffer, m_z_size-m_deflate.avail_out);
-  m_deflate.next_out  = m_z_buffer;
-  m_deflate.avail_out = m_z_size;
+  m_parent_o_stream->Write(m_z_buffer, m_z_size-m_deflate->avail_out);
+  m_deflate->next_out  = m_z_buffer;
+  m_deflate->avail_out = m_z_size;
 
-  err = deflate(&m_deflate, Z_FULL_FLUSH);
+  err = deflate(m_deflate, Z_FULL_FLUSH);
   if (err != Z_OK) {
     m_bad = TRUE;
     return;
   }
 
-  m_parent_o_stream->Write(m_z_buffer, m_z_size-m_deflate.avail_out);
-  m_deflate.next_out  = m_z_buffer;
-  m_deflate.avail_out = m_z_size;
+  m_parent_o_stream->Write(m_z_buffer, m_z_size-m_deflate->avail_out);
+  m_deflate->next_out  = m_z_buffer;
+  m_deflate->avail_out = m_z_size;
 }
 
 size_t wxZlibOutputStream::DoWrite(const void *buffer, size_t size)
 {
   int err;
 
-  m_deflate.next_in = (unsigned char *)buffer;
-  m_deflate.avail_in = size;
+  m_deflate->next_in = (unsigned char *)buffer;
+  m_deflate->avail_in = size;
 
-  while (m_deflate.avail_in > 0) {
+  while (m_deflate->avail_in > 0) {
 
-    if (m_deflate.avail_out == 0) {
+    if (m_deflate->avail_out == 0) {
       m_parent_o_stream->Write(m_z_buffer, m_z_size);
       if (m_parent_o_stream->Bad())
-        return (size - m_deflate.avail_in);
+        return (size - m_deflate->avail_in);
 
-      m_deflate.next_out = m_z_buffer;
-      m_deflate.avail_out = m_z_size;
+      m_deflate->next_out = m_z_buffer;
+      m_deflate->avail_out = m_z_size;
     }
 
-    err = deflate(&m_deflate, Z_NO_FLUSH);
+    err = deflate(m_deflate, Z_NO_FLUSH);
     if (err != Z_OK)
-      return (size - m_deflate.avail_in);
+      return (size - m_deflate->avail_in);
   }
   return size;
 }

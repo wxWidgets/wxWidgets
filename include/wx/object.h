@@ -57,7 +57,7 @@ class WXDLLEXPORT wxClassInfo
    inline wxClassInfo* GetBaseClass2() const { return m_baseInfo2; }
    inline int GetSize(void) const { return m_objectSize; }
    inline wxObjectConstructorFn GetConstructor() const { return m_objectConstructor; }
-   inline wxClassInfo* GetFirst() const { return sm_first; }
+   static inline wxClassInfo* GetFirst() { return sm_first; }
    inline wxClassInfo* GetNext() const { return m_next; }
    bool IsKindOf(wxClassInfo *info) const;
 

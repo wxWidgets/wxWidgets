@@ -38,6 +38,7 @@ class WXSERIAL(wxWindow) : public WXSERIAL(wxObject)
   wxValidator *m_validator;
   wxColour m_bg_colour, m_fg_colour;
   long m_style;
+  int m_number;
 };
 
 DECLARE_SERIAL_CLASS(wxIndividualLayoutConstraint, wxObject)

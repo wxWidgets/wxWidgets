@@ -106,7 +106,6 @@ bool MyApp::OnInit(void)
   socket_menu->Append(SKDEMO_CONNECT, "Open session");
   socket_menu->AppendSeparator();
   socket_menu->Append(SKDEMO_TEST1, "Start test 1");
-  socket_menu->Append(SKDEMO_TEST2, "Start test 2");
   socket_menu->AppendSeparator();
   socket_menu->Append(SKDEMO_CLOSE, "Close session");
   socket_menu->AppendSeparator();
@@ -117,7 +116,7 @@ bool MyApp::OnInit(void)
   frame->SetMenuBar(menu_bar);
 
   // Make a panel with a message
-  (void)new wxPanel(frame, 0, 0, 300, 100);
+  txtctrl = new wxTextCtrl(this);
 
   // Show the frame
   frame->Show(TRUE);
@@ -266,8 +265,8 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
 
 void MyFrame::OnExecUrlTest(wxCommandEvent& WXUNUSED(evt))
 {
-  wxString urlname = wxGetTextFromUser("Enter the address of the wxSocket Sample Server",
-                                     "Connect ...", "localhost");
+  wxString urlname = wxGetTextFromUser("Enter an URL to get",
+                                     "URL:", "http://localhost");
 
   wxURL url(urlname);
   wxInputStream *datas = url.GetInputStream();
@@ -275,7 +274,8 @@ void MyFrame::OnExecUrlTest(wxCommandEvent& WXUNUSED(evt))
   if (!datas)
     wxMessageBox("Error in getting data from the URL.", "Alert !");
   else {
-    wxMessageBox("Success !!", "OK !");
+    wxMessageBox("Success !! Click on OK to see the text.", "OK");
+    wxMessageBox(
     delete datas;
   }
 }

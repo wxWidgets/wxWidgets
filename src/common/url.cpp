@@ -138,6 +138,7 @@ bool wxURL::PrepProto(wxString& url)
 
 bool wxURL::PrepHost(wxString& url)
 {
+  wxString temp_url;
   int pos, pos2;
 
   if ((url.GetChar(0) != '/') || (url.GetChar(1) != '/'))
@@ -149,17 +150,41 @@ bool wxURL::PrepHost(wxString& url)
   if (pos == -1)
     pos = url.Length();
 
-  pos2 = url.Find(':');
+  if (pos == 0)
+    return FALSE;
+
+  temp_url = url(0, pos);
+  url = url(url.Find('/'), url.Length());
+
+  // Retrieve service number
+  pos2 = temp_url.Find(':', TRUE);
   if (pos2 != -1 && pos2 < pos) {
     m_servname = url(pos2, pos);
     if (!m_servname.IsNumber())
       return FALSE;
     pos2 = pos;
+    temp_url = temp_url(0, pos2);
   }
 
-  m_hostname = url(0, pos);
+  // Retrieve user and password.
+  pos2 = temp_url.Find('@');
+  // Even if pos2 equals -1, this code is right.
+  m_hostname = temp_url(pos2+1, temp_url.Length());
 
-  url = url(url.Find('/'), url.Length());
+  m_user = "";
+  m_password = "";
+
+  if (pos2 == -1)
+    return TRUE;
+
+  temp_url = temp_url(0, pos2);
+  pos2 = temp_url.Find(':');
+
+  if (pos2 == -1)
+    return FALSE;
+
+  m_user = temp_url(0, pos2);
+  m_password = temp_url(pos2+1, url.Length());
 
   return TRUE;
 }
@@ -212,6 +237,11 @@ wxInputStream *wxURL::GetInputStream(void)
   }
 
   m_error = wxURL_NOERR;
+  if (m_user != "") {
+    m_protocol->SetUser(m_user);
+    m_protocol->SetPassword(m_password);
+  }
+
   if (m_protoinfo->m_needhost) {
     if (!addr.Hostname(m_hostname)) {
       m_error = wxURL_NOHOST;

@@ -55,7 +55,7 @@ wxLibraries wxTheLibraries;
 
 wxLibrary::wxLibrary(void *handle)
 {
-  typedef wxClassInfo **(*t_get_first)(void);
+  typedef wxClassInfo *(*t_get_first)(void);
   t_get_first get_first;
 
   m_handle = handle;
@@ -90,19 +90,19 @@ wxObject *wxLibrary::CreateObject(const wxString& name)
   return info->CreateObject();
 }
 
-void wxLibrary::PrepareClasses(wxClassInfo **first)
+void wxLibrary::PrepareClasses(wxClassInfo *first)
 {
   // Index all class infos by their class name
-  wxClassInfo *info = *first;
+  wxClassInfo *info = first;
   while (info)
   {
     if (info->m_className)
       classTable.Put(info->m_className, (wxObject *)info);
-    info = info->m_next;
+    info = info->GetNext();
   }
 
   // Set base pointers for each wxClassInfo
-  info = *first;
+  info = first;
   while (info)
   {
     if (info->GetBaseClassName1())
@@ -111,7 +111,6 @@ void wxLibrary::PrepareClasses(wxClassInfo **first)
       info->m_baseInfo2 = (wxClassInfo *)classTable.Get(info->GetBaseClassName2());
     info = info->m_next;
   }
-  *first = NULL;
 }
 
 void *wxLibrary::GetSymbol(const wxString& symbname)
@@ -150,9 +149,14 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
   wxString lib_name = name;
   wxNode *node;
   wxLibrary *lib;
+  wxClassInfo *old_sm_first;
 
   if ( (node = m_loaded.Find(name.GetData())) )
     return ((wxLibrary *)node->Data());
+
+  // If DLL shares data, this is necessary.
+  old_sm_first = wxClassInfo::sm_first;
+  wxClassInfo::sm_first = NULL;
 
 #if defined(__UNIX__)
   lib_name.Prepend("./lib");
@@ -161,6 +165,8 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
   printf("lib_name = %s\n", WXSTRINGCAST lib_name);
 
   void *handle = dlopen(WXSTRINGCAST lib_name, RTLD_LAZY);
+
+  printf("error = %s\n", dlerror());
 
   if (!handle)
     return NULL;
@@ -179,6 +185,8 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 #endif
 
   lib = new wxLibrary((void *)handle);
+
+  wxClassInfo::sm_first = old_sm_first;
 
   m_loaded.Append(name.GetData(), lib);
   return lib;
