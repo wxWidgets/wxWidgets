@@ -61,6 +61,9 @@ All (GUI):
 - wxEvtHandler cannot be copied/assigned any longer - this never worked but
   now it results in compile-time error instead of run-time crashes
 
+- WXK_NUMLOCK and WXK_SCROLL keys no longer result in EVT_CHAR() events,
+  they only generate EVT_KEY_DOWN/UP() ones
+
 wxMSW:
 
 - build system changed: setup.h is not a static file in include/wx any more

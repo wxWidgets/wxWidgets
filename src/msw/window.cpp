@@ -2491,15 +2491,19 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 break;
             }
 
-            // we consider these message "not interesting" to OnChar
-            if ( wParam == VK_SHIFT || wParam == VK_CONTROL )
-            {
-                processed = TRUE;
-                break;
-            }
-
             switch ( wParam )
             {
+                // we consider these message "not interesting" to OnChar, so
+                // just don't do anything more with them
+                case VK_SHIFT:
+                case VK_CONTROL:
+                case VK_MENU:
+                case VK_CAPITAL:
+                case VK_NUMLOCK:
+                case VK_SCROLL:
+                    processed = TRUE;
+                    break;
+
                 // avoid duplicate messages to OnChar for these ASCII keys:
                 // they will be translated by TranslateMessage() and received
                 // in WM_CHAR
@@ -2544,10 +2548,6 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                     break;
 #endif // VK_APPS
 
-                case VK_LEFT:
-                case VK_RIGHT:
-                case VK_DOWN:
-                case VK_UP:
                 default:
                     if ( m_lastKeydownProcessed )
                     {
