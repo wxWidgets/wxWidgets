@@ -7,7 +7,9 @@
 #! Version: $Id$
 #!#############################################################################
 #${
-    use lib './lib';
+#!  prepackaged tmake.exe does not have lib.pm
+#!  use lib './lib';
+    BEGIN { unshift @INC, './lib' }
     use wxFileInfo;
 
     open(FILELIST, "filelist.txt") or die "Can't open filelist file: $!\n";
