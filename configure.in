@@ -2749,22 +2749,24 @@ WCHAR_OK=0
 if test "$wx_cv_sizeof_wchar_t" != "0"; then
     dnl check for wcslen
     WCHAR_LINK=
-    AC_CHECK_LIB(c, wcslen, [
+    AC_CHECK_FUNCS(wcslen, [
+                    AC_DEFINE(HAVE_WCSLEN)
+                    WCHAR_OK=1
+                  ])
+
+    if test "$WCHAR_OK" = 0; then
+        if test "$TOOLKIT" = "MSW"; then
+            AC_CHECK_LIB(msvcrt, wcslen, [
                 AC_DEFINE(HAVE_WCSLEN)
                 WCHAR_OK=1
-            ], [
-                AC_CHECK_LIB(w, wcslen, [
-                    AC_DEFINE(HAVE_WCSLEN)
-                    WCHAR_LINK=" -lw"
-                    WCHAR_OK=1
-                ])
             ])
-
-    if test "$TOOLKIT" = "MSW" -a "$WCHAR_OK" = 0; then
-        AC_CHECK_LIB(msvcrt, wcslen, [
-            AC_DEFINE(HAVE_WCSLEN)
-            WCHAR_OK=1
-        ])
+        else
+            AC_CHECK_LIB(w, wcslen, [
+                            AC_DEFINE(HAVE_WCSLEN)
+                            WCHAR_LINK=" -lw"
+                            WCHAR_OK=1
+                        ])
+        fi
     fi
 fi
 
