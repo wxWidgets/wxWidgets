@@ -701,6 +701,28 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
     if (!menu->IsEnabled(id))
         return;
 
+    wxMenuItem* item = menu->FindChildItem( id );
+    wxCHECK_RET( item, wxT("error in menu item callback") );
+
+    if (item->IsCheckable())
+    {
+        bool isReallyChecked = item->IsChecked(),
+            isInternallyChecked = item->wxMenuItemBase::IsChecked();
+
+        // ensure that the internal state is always consistent with what is
+        // shown on the screen
+        item->wxMenuItemBase::Check(isReallyChecked);
+
+        // we must not report the events for the radio button going up nor the
+        // events resulting from the calls to wxMenuItem::Check()
+        if ( (item->GetKind() == wxITEM_RADIO && !isReallyChecked) ||
+             (isInternallyChecked == isReallyChecked) )
+        {
+            return;
+        }
+    }
+
+
     // Is this menu on a menubar?  (possibly nested)
     wxFrame* frame = NULL;
     wxMenu*  pm = menu;
@@ -708,41 +730,24 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
     {
         if ( pm->IsAttached() )
             frame = pm->GetMenuBar()->GetFrame();
-        else
-            pm = pm->GetParent();
+        pm = pm->GetParent();
     }
 
-    // If it is then let the frame send the event
     if (frame)
     {
-        frame->ProcessCommand(id);
+        // If it is attached then let the frame send the event.
+        // Don't call frame->ProcessCommand(id) because it toggles
+        // checkable items and we've already done that above.
+        wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
+        commandEvent.SetEventObject(frame);
+        if (item->IsCheckable())
+            commandEvent.SetInt(item->IsChecked());
+
+        frame->GetEventHandler()->ProcessEvent(commandEvent);
     }
-    // otherwise let the menu have it
     else
     {
-        wxMenuItem* item = menu->FindChildItem( id );
-        wxCHECK_RET( item, wxT("error in menu item callback") );
-
-        if (item->IsCheckable())
-        {
-            bool isReallyChecked = item->IsChecked(),
-                isInternallyChecked = item->wxMenuItemBase::IsChecked();
-
-            // ensure that the internal state is always consistent with what is
-            // shown on the screen
-            item->wxMenuItemBase::Check(isReallyChecked);
-
-            // we must not report the events for the radio button going up nor the
-            // events resulting from the calls to wxMenuItem::Check()
-            if ( (item->GetKind() == wxITEM_RADIO && !isReallyChecked) ||
-                 (isInternallyChecked == isReallyChecked) )
-            {
-                return;
-            }
-
-            // the user pressed on the menu item: report the event below
-        }
-
+        // otherwise let the menu have it
         menu->SendEvent(id, item->IsCheckable() ? item->IsChecked() : -1);
     }
 }
