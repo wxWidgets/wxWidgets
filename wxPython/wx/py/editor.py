@@ -365,7 +365,7 @@ class EditorNotebook(wx.Notebook):
 
     def __init__(self, parent):
         """Create EditorNotebook instance."""
-        wx.Notebook.__init__(self, parent, id=-1, style=wx.NO_FULL_REPAINT_ON_RESIZE)
+        wx.Notebook.__init__(self, parent, id=-1, style=wx.CLIP_CHILDREN)
         wx.EVT_NOTEBOOK_PAGE_CHANGING(self, self.GetId(),
                                       self.OnPageChanging)
         wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(),
