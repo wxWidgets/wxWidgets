@@ -1688,7 +1688,7 @@ if test "$wxUSE_RADIOBTN" = "yes"; then
   AC_DEFINE(wxUSE_RADIOBTN)
 fi
 
-if test "wxUSE_SASH" = "yes"; then
+if test "$wxUSE_SASH" = "yes"; then
   AC_DEFINE(wxUSE_SASH)
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sashtest"
 fi
