@@ -142,6 +142,9 @@ void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 
     wxStatusBarBase::SetFieldsCount(number, widths);
 
+    // forget the old cached pixel widths
+    m_widthsAbs.Empty();
+
     wxASSERT_MSG( m_nFields == (int)m_statusStrings.GetCount(),
                   _T("This really should never happen, can we do away with m_nFields here?") );
 }
