@@ -488,7 +488,7 @@
 //
 // Default is 1
 //
-// Recommended setting: 1 (requires XRC)
+// Recommended setting: 1 (requires wxUSE_XML)
 #define wxUSE_XRC       1
 
 // XML parsing classes. Note that their API will change in the future, so
