@@ -131,39 +131,5 @@ inline wxEventType GtkScrollWinTypeToWx(guint scrollType)
             wxEVT_SCROLLWIN_TOP - wxEVT_SCROLL_TOP;
 }
 
-
-
-// In wxGTK2 the wxMessageDialog is not a real wxDialog, instead a
-// gtk_message_dialog is created, shown and destroyed inside the ShowModal()
-// call.  Since its m_widget will always be NULL there would normally be lots
-// of wxCHECK asserts triggered by calling base class methods that are valid
-// calls (or just ignored) on other wx ports.  Using these macros instead of
-// wxCHECK will silence those asserts if the window is a wxMessageDialog and
-// will let the method doing the check just be ignored in that case.  If it's
-// not a wxMessageDialog then it behaves just like before.
-//
-// NOTE: Once more native dialogs are used then this will need to be
-//       generalized a bit, perhaps with a IsNativeGTKDialog method or
-//       something...
-
-#if wxUSE_MSGDLG && defined(__WXGTK20__) && !defined(__WXGPE__)
-#define wxCHECK_VALID_WIDGET(rc)   \
-    if (!(m_widget != NULL)) { \
-        if (!wxIsKindOf(this, wxMessageDialog)) { wxFAIL_MSG(wxT("invalid window")); } \
-        return rc; \
-    }
-
-#define wxCHECK_VALID_WIDGET_RET()    \
-    if (!(m_widget != NULL)) { \
-        if (!wxIsKindOf(this, wxMessageDialog)) { wxFAIL_MSG(wxT("invalid window")); } \
-        return; \
-    }
-
-#else  // not wxGTK2, so just use wxCHECK
-#define wxCHECK_VALID_WIDGET(rc)   wxCHECK_MSG( (m_widget != NULL), rc, wxT("invalid window") )
-#define wxCHECK_VALID_WIDGET_RET() wxCHECK_RET( (m_widget != NULL),     wxT("invalid window") );
-#endif
-
-
 #endif // _WX_GTK_PRIVATE_H_
 
