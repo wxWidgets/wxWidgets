@@ -286,28 +286,6 @@ if test "$USE_UNIX" = 1 ; then
     AC_DEFINE(__UNIX__)
 fi
 
-dnl check for glibc version
-if test "$USE_LINUX" = 1; then
-    AC_CACHE_CHECK([for glibc 2.1 or later], wx_lib_glibc21,[
-        AC_TRY_COMPILE([#include <features.h>],
-            [
-                #if !__GLIBC_PREREQ(2, 1)
-                    #error not glibc2.1
-                #endif
-            ],
-            [
-                wx_lib_glibc21=yes
-            ],
-            [
-                wx_lib_glibc21=no
-            ]
-        )
-    ])
-    if test "$wx_lib_glibc21" = "yes"; then
-        AC_DEFINE(wxHAVE_GLIBC2)
-    fi
-fi
-
 dnl ---------------------------------------------------------------------------
 dnl command line options for configure
 dnl ---------------------------------------------------------------------------
@@ -1383,6 +1361,28 @@ dnl ------------------------------------------------------------------------
 
 dnl flush the cache because checking for libraries below might abort
 AC_CACHE_SAVE
+
+dnl check for glibc version
+if test "$USE_LINUX" = 1; then
+    AC_CACHE_CHECK([for glibc 2.1 or later], wx_cv_lib_glibc21,[
+        AC_TRY_COMPILE([#include <features.h>],
+            [
+                #if !__GLIBC_PREREQ(2, 1)
+                    #error not glibc2.1
+                #endif
+            ],
+            [
+                wx_cv_lib_glibc21=yes
+            ],
+            [
+                wx_cv_lib_glibc21=no
+            ]
+        )
+    ])
+    if test "$wx_cv_lib_glibc21" = "yes"; then
+        AC_DEFINE(wxHAVE_GLIBC2)
+    fi
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries
@@ -2582,6 +2582,11 @@ dnl AC_CHECK_HEADERS(wctype.h)
 
 dnl defines HAVE_FNMATCH_H
 AC_CHECK_HEADERS(fnmatch.h)
+
+if test "x$ac_cv_header_fnmatch_h" = "xyes"; then
+    AC_CHECK_FUNCS(fnmatch)
+fi
+
 dnl defines HAVE_LANGINFO_H (GNU libc locale parameters)
 AC_CHECK_HEADERS(langinfo.h)
 
@@ -3359,7 +3364,7 @@ if test "$TOOLKIT" != "MSW"; then
       dnl (strictly speaking we only need _XOPEN_SOURCE=500 but just defining
       dnl this disables _BSD_SOURCE which breaks libtiff compilation, so it is
       dnl simpler to just define _GNU_SOURCE to get everything)
-      if test "x$wx_lib_glibc21" = "xyes"; then
+      if test "x$wx_cv_lib_glibc21" = "xyes"; then
           CPPFLAGS="$CPPFLAGS -D_GNU_SOURCE"
       fi
 
