@@ -425,6 +425,7 @@ class wxListEventPtr(wxNotifyEventPtr):
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxListEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     GetCode = GetKeyCode
+    GetPostiion = GetPoint
 class wxListEvent(wxListEventPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = controls2c.new_wxListEvent(*_args,**_kwargs)

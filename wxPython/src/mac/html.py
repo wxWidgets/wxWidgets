@@ -343,6 +343,12 @@ class wxHtmlCellPtr(wxObjectPtr):
     def GetDescent(self, *_args, **_kwargs):
         val = htmlc.wxHtmlCell_GetDescent(self, *_args, **_kwargs)
         return val
+    def GetId(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_GetId(self, *_args, **_kwargs)
+        return val
+    def SetId(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_SetId(self, *_args, **_kwargs)
+        return val
     def GetLink(self, *_args, **_kwargs):
         val = htmlc.wxHtmlCell_GetLink(self, *_args, **_kwargs)
         if val: val = wxHtmlLinkInfoPtr(val) 
@@ -801,6 +807,13 @@ wxHTML_INDENT_ALL = htmlc.wxHTML_INDENT_ALL
 wxHTML_COND_ISANCHOR = htmlc.wxHTML_COND_ISANCHOR
 wxHTML_COND_ISIMAGEMAP = htmlc.wxHTML_COND_ISIMAGEMAP
 wxHTML_COND_USER = htmlc.wxHTML_COND_USER
+wxHTML_FONT_SIZE_1 = htmlc.wxHTML_FONT_SIZE_1
+wxHTML_FONT_SIZE_2 = htmlc.wxHTML_FONT_SIZE_2
+wxHTML_FONT_SIZE_3 = htmlc.wxHTML_FONT_SIZE_3
+wxHTML_FONT_SIZE_4 = htmlc.wxHTML_FONT_SIZE_4
+wxHTML_FONT_SIZE_5 = htmlc.wxHTML_FONT_SIZE_5
+wxHTML_FONT_SIZE_6 = htmlc.wxHTML_FONT_SIZE_6
+wxHTML_FONT_SIZE_7 = htmlc.wxHTML_FONT_SIZE_7
 wxHW_SCROLLBAR_NEVER = htmlc.wxHW_SCROLLBAR_NEVER
 wxHW_SCROLLBAR_AUTO = htmlc.wxHW_SCROLLBAR_AUTO
 wxHTML_OPEN = htmlc.wxHTML_OPEN

@@ -1135,6 +1135,9 @@ class wxSpinCtrlPtr(wxSpinButtonPtr):
     def SetValue(self, *_args, **_kwargs):
         val = controlsc.wxSpinCtrl_SetValue(self, *_args, **_kwargs)
         return val
+    def SetValueString(self, *_args, **_kwargs):
+        val = controlsc.wxSpinCtrl_SetValueString(self, *_args, **_kwargs)
+        return val
     def SetSelection(self, *_args, **_kwargs):
         val = controlsc.wxSpinCtrl_SetSelection(self, *_args, **_kwargs)
         return val

@@ -58,12 +58,11 @@ extern PyObject *SWIG_newvarlink(void);
 #ifdef __WXMSW__
 #include <windows.h>
 #endif
-#include <wx/listctrl.h>
-#include <wx/treectrl.h>
-#include <wx/imaglist.h>
-#include <wx/dirctrl.h>
 
 #include "pytree.h"
+
+#include <wx/imaglist.h>
+#include <wx/dirctrl.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -103,35 +102,9 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     static const wxString wxPyEmptyString(wxT(""));
 
     static const long longzero = 0;
-  // C++ Version of a Python aware class
-class wxPyListCtrl : public wxListCtrl {
-    DECLARE_ABSTRACT_CLASS(wxPyListCtrl);
-public:
-    wxPyListCtrl() : wxListCtrl() {}
-    wxPyListCtrl(wxWindow* parent, wxWindowID id,
-                 const wxPoint& pos,
-                 const wxSize& size,
-                 long style,
-                 const wxValidator& validator,
-                 const wxString& name) :
-        wxListCtrl(parent, id, pos, size, style, validator, name) {}
 
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxPoint& pos,
-                const wxSize& size,
-                long style,
-                const wxValidator& validator,
-                const wxString& name) {
-        return wxListCtrl::Create(parent, id, pos, size, style, validator, name);
-    }
-
-    DEC_PYCALLBACK_STRING_LONGLONG(OnGetItemText);
-    DEC_PYCALLBACK_INT_LONG(OnGetItemImage);
-    DEC_PYCALLBACK_LISTATTR_LONG(OnGetItemAttr);
-
-    PYPRIVATE;
-};
-
+// See declaration in pytree.h
+    
 IMPLEMENT_ABSTRACT_CLASS(wxPyListCtrl, wxListCtrl);
 
 IMP_PYCALLBACK_STRING_LONGLONG(wxPyListCtrl, wxListCtrl, OnGetItemText);
@@ -155,31 +128,13 @@ IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
         return retval;
     }
 
- // C++ version of Python aware wxTreeCtrl
-class wxPyTreeCtrl : public wxTreeCtrl {
-    DECLARE_ABSTRACT_CLASS(wxPyTreeCtrl);
-public:
-    wxPyTreeCtrl() : wxTreeCtrl() {}
-    wxPyTreeCtrl(wxWindow *parent, wxWindowID id,
-                 const wxPoint& pos,
-                 const wxSize& size,
-                 long style,
-                 const wxValidator& validator,
-                 const wxString& name) :
-        wxTreeCtrl(parent, id, pos, size, style, validator, name) {}
+ // See class def in pytree.h
 
-    bool Create(wxWindow *parent, wxWindowID id,
-                const wxPoint& pos,
-                const wxSize& size,
-                long style,
-                const wxValidator& validator,
-                const wxString& name) {
-        return wxTreeCtrl::Create(parent, id, pos, size, style, validator, name);
-    }
+IMPLEMENT_ABSTRACT_CLASS(wxPyTreeCtrl, wxTreeCtrl);
 
-
-    int OnCompareItems(const wxTreeItemId& item1,
-                       const wxTreeItemId& item2) {
+int wxPyTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
+                       const wxTreeItemId& item2)
+    {
         int rval = 0;
         bool found;
         wxPyBeginBlockThreads();
@@ -195,11 +150,7 @@ public:
             rval = wxTreeCtrl::OnCompareItems(item1, item2);
         return rval;
     }
-    PYPRIVATE;
-};
-
-IMPLEMENT_ABSTRACT_CLASS(wxPyTreeCtrl, wxTreeCtrl);
-
+ 
 #ifdef __cplusplus
 extern "C" {
 #endif

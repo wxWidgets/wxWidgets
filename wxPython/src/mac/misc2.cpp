@@ -56,6 +56,8 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include "pyistream.h"
+#include "pytree.h"
+    
 #include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/caret.h>
@@ -74,6 +76,8 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/snglinst.h>
 #include <wx/effects.h>
 //#include <wx/spawnbrowser.h>
+
+   
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -3626,7 +3630,7 @@ static PyObject *_wrap_new_wxDragString(PyObject *self, PyObject *args, PyObject
 static PyObject *_wrap_new_wxDragTreeItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGenericDragImage * _result;
-    wxTreeCtrl * _arg0;
+    wxPyTreeCtrl * _arg0;
     wxTreeItemId * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
@@ -3637,8 +3641,8 @@ static PyObject *_wrap_new_wxDragTreeItem(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:new_wxDragTreeItem",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
-        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragTreeItem. Expected _wxTreeCtrl_p.");
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragTreeItem. Expected _wxPyTreeCtrl_p.");
         return NULL;
         }
     }
@@ -3668,7 +3672,7 @@ static PyObject *_wrap_new_wxDragTreeItem(PyObject *self, PyObject *args, PyObje
 static PyObject *_wrap_new_wxDragListItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGenericDragImage * _result;
-    wxListCtrl * _arg0;
+    wxPyListCtrl * _arg0;
     long  _arg1;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "listCtrl","id", NULL };
@@ -3678,8 +3682,8 @@ static PyObject *_wrap_new_wxDragListItem(PyObject *self, PyObject *args, PyObje
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:new_wxDragListItem",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
-        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragListItem. Expected _wxListCtrl_p.");
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragListItem. Expected _wxPyListCtrl_p.");
         return NULL;
         }
     }
