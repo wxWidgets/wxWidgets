@@ -517,9 +517,11 @@ bool wxMenuBase::SendEvent(int id, int checked)
 #endif // wxUSE_MENU_CALLBACK
 
     // Try the menu's event handler
-    if ( !processed && GetEventHandler() )
+    if ( !processed )
     {
-        processed = GetEventHandler()->ProcessEvent(event);
+        wxEvtHandler *handler = GetEventHandler();
+        if ( handler )
+            processed = handler->ProcessEvent(event);
     }
 
     // Try the window the menu was popped up from (and up through the

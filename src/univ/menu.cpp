@@ -144,6 +144,9 @@ public:
     // refresh the given item
     void RefreshItem(wxMenuItem *item);
 
+    // preselect the first item
+    void SelectFirst() { SetCurrent(m_menu->GetMenuItems().GetFirst()); }
+
     // process the key event, return TRUE if done
     bool ProcessKeyDown(int key);
 
@@ -368,7 +371,10 @@ wxPopupMenuWindow::GetNextNode(wxMenuItemList::Node *node) const
 
 void wxPopupMenuWindow::Popup(wxWindow *focus)
 {
-    SetCurrent(m_menu->GetMenuItems().GetFirst());
+    // check that the current item had been properly reset before
+    wxASSERT_MSG( !m_nodeCurrent ||
+                  m_nodeCurrent == m_menu->GetMenuItems()->GetFirst(),
+                  _T("menu current item preselected incorrectly") );
 
     wxPopupTransientWindow::Popup(focus);
 
@@ -1033,7 +1039,15 @@ void wxMenu::Attach(wxMenuBarBase *menubar)
 
     wxCHECK_RET( m_menuBar, _T("menubar can't be NULL after attaching") );
 
-    SetNextHandler(m_menuBar->GetEventHandler());
+    // unfortunately, we can't use m_menuBar->GetEventHandler() here because,
+    // if the menubar is currently showing a menu, its event handler is a
+    // temporary one installed by wxPopupWindow and so will disappear soon any
+    // any attempts to use it from the newly attached menu would result in a
+    // crash
+    //
+    // so we use the menubar itself, even if it's a pity as it means we can't
+    // redirect all menu events by changing the menubar handler (FIXME)
+    SetNextHandler(m_menuBar);
 }
 
 void wxMenu::Detach()
@@ -1118,25 +1132,18 @@ void wxMenu::OnDismiss(bool dismissParent)
     }
 }
 
-void wxMenu::Popup(const wxPoint& pos, const wxSize& size)
+void wxMenu::Popup(const wxPoint& pos, const wxSize& size, bool selectFirst)
 {
     // create the popup window if not done yet
     if ( !m_popupMenu )
     {
-#if 0
-        // find the parent window
-        wxWindow *parent = m_menuParent ? m_menuParent->m_popupMenu : NULL;
-        if ( !parent )
-        {
-            parent = GetRootWindow();
-        }
-
-        wxCHECK_RET( parent, _T("no parent menu, no menu bar, no window??") );
-
-        m_popupMenu = new wxPopupMenuWindow(parent, this);
-#else
         m_popupMenu = new wxPopupMenuWindow(GetRootWindow(), this);
-#endif
+    }
+
+    // select the first item unless disabled
+    if ( selectFirst )
+    {
+        m_popupMenu->SelectFirst();
     }
 
     // the geometry might have changed since the last time we were shown, so
@@ -1733,11 +1740,11 @@ void wxMenuBar::DoSelectMenu(size_t pos)
 
 void wxMenuBar::PopupMenu(size_t pos)
 {
-    wxCHECK_RET( pos < GetCount(), _T("invalid menu index in PopupMenu") );
+    wxCHECK_RET( pos < GetCount(), _T("invalid menu index in PopupCurrentMenu") );
 
     SetFocus();
     DoSelectMenu(pos);
-    PopupMenu();
+    PopupCurrentMenu();
 }
 
 // ----------------------------------------------------------------------------
@@ -1792,7 +1799,7 @@ void wxMenuBar::OnLeftDown(wxMouseEvent& event)
             RefreshItem((size_t)m_current);
 
             // show the menu
-            PopupMenu();
+            PopupCurrentMenu(FALSE /* don't select first item - as Windows does */);
         }
     }
 }
@@ -1839,7 +1846,7 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
     if ( m_shouldShowMenu )
     {
         // open the new menu if the old one we closed had been opened
-        PopupMenu();
+        PopupCurrentMenu(FALSE /* don't select first item - as Windows does */);
     }
 
     return TRUE;
@@ -1917,7 +1924,7 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
 
                 if ( wasMenuOpened )
                 {
-                    PopupMenu();
+                    PopupCurrentMenu();
                 }
             }
             break;
@@ -1926,7 +1933,7 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
         case WXK_UP:
         case WXK_RETURN:
             // open the menu
-            PopupMenu();
+            PopupCurrentMenu();
             break;
 
         default:
@@ -1952,7 +1959,7 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
                     if ( unique && IsEnabledTop((size_t)idxFound) )
                     {
                         // open the menu
-                        PopupMenu();
+                        PopupCurrentMenu();
                     }
 
                     // skip the "event.Skip()" below
@@ -2074,7 +2081,7 @@ bool wxMenuBar::ProcessAccelEvent(const wxKeyEvent& event)
 // wxMenuBar menus showing
 // ----------------------------------------------------------------------------
 
-void wxMenuBar::PopupMenu()
+void wxMenuBar::PopupCurrentMenu(bool selectFirst)
 {
     wxCHECK_RET( m_current != -1, _T("no menu to popup") );
 
@@ -2089,12 +2096,22 @@ void wxMenuBar::PopupMenu()
         // remember the menu we show
         m_menuShown = GetMenu(m_current);
 
-        // position it correctly: note that we must use screen coords and that we
-        // pass 0 as width to position the menu exactly below the item, not to the
-        // right of it
-        wxRect rectItem = GetItemRect(m_current);
-        m_menuShown->Popup(ClientToScreen(rectItem.GetPosition()),
-                           wxSize(0, rectItem.GetHeight()));
+        // we don't show the menu at all if it has no items
+        if ( !m_menuShown->IsEmpty() )
+        {
+            // position it correctly: note that we must use screen coords and
+            // that we pass 0 as width to position the menu exactly below the
+            // item, not to the right of it
+            wxRect rectItem = GetItemRect(m_current);
+            m_menuShown->Popup(ClientToScreen(rectItem.GetPosition()),
+                               wxSize(0, rectItem.GetHeight()),
+                               selectFirst);
+        }
+        else
+        {
+            // reset it back as no menu is shown
+            m_menuShown = NULL;
+        }
     }
     //else: don't show disabled menu
 }

@@ -62,8 +62,13 @@ public:
     // called by wxMenuItem when an item of this menu changes
     void RefreshItem(wxMenuItem *item);
 
-    // show this menu at the given position (in screen coords)
-    void Popup(const wxPoint& pos, const wxSize& size);
+    // does the menu have any items?
+    bool IsEmpty() const { return !GetMenuItems().GetFirst(); }
+
+    // show this menu at the given position (in screen coords) and optionally
+    // select its first item
+    void Popup(const wxPoint& pos, const wxSize& size,
+               bool selectFirst = TRUE);
 
     // dismiss the menu
     void Dismiss();
@@ -238,7 +243,7 @@ protected:
     void DoSelectMenu(size_t pos);
 
     // popup the currently selected menu
-    void PopupMenu();
+    void PopupCurrentMenu(bool selectFirst = TRUE);
 
     // hide the currently selected menu
     void DismissMenu();
