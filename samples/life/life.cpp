@@ -14,7 +14,7 @@
 // ==========================================================================
 
 // minimum and maximum table size, in each dimension
-#define LIFE_MIN 10
+#define LIFE_MIN 20
 #define LIFE_MAX 200
 
 // some shortcuts
@@ -63,15 +63,21 @@
 #endif
 
 // --------------------------------------------------------------------------
-// private classes
+// classes
 // --------------------------------------------------------------------------
 
 class Life;
+class LifeShape;
 class LifeCanvas;
 class LifeTimer;
 class LifeFrame;
 class LifeApp;
+class LifeNewGameDialog;
+class LifeSamplesDialog;
 
+// --------------------------------------------------------------------------
+// non-GUI classes
+// --------------------------------------------------------------------------
 
 // Life
 class Life
@@ -83,15 +89,19 @@ public:
     void Create(int width, int height);
     void Destroy();
 
-    // public accessors
+    // accessors
     inline int  GetWidth()  const { return m_width; };
     inline int  GetHeight() const { return m_height; };
     inline bool IsAlive(int x, int y) const;
     inline bool HasChanged(int x, int y) const;
-    inline void SetCell(int x, int y, bool alive = TRUE);
 
-    // member funcions
+    // flags
+    void SetBorderWrap(bool on);
+
+    // game logic
     void Clear();
+    void SetCell(int x, int y, bool alive = TRUE);
+    void SetShape(LifeShape &shape);
     bool NextTic();
 
 private:
@@ -108,14 +118,49 @@ private:
     int   m_width;
     int   m_height;
     Cell *m_cells;
+    bool  m_wrap;
 };
+
+// LifeShape
+class LifeShape
+{
+public:
+    LifeShape::LifeShape(wxString name,
+                         wxString desc,
+                         int width, int height, char *data,
+                         int fieldWidth = 20, int fieldHeight = 20,
+                         bool wrap = TRUE)
+    {
+        m_name        = name;
+        m_desc        = desc;
+        m_width       = width;
+        m_height      = height;
+        m_data        = data;
+        m_fieldWidth  = fieldWidth;
+        m_fieldHeight = fieldHeight;
+        m_wrap        = wrap;
+    }
+
+    wxString  m_name;
+    wxString  m_desc;
+    int       m_width;
+    int       m_height;
+    char     *m_data;
+    int       m_fieldWidth;
+    int       m_fieldHeight;
+    bool      m_wrap;
+};
+
+// --------------------------------------------------------------------------
+// GUI classes
+// --------------------------------------------------------------------------
 
 // Life canvas
 class LifeCanvas : public wxScrolledWindow
 {
 public:
     // ctor and dtor
-    LifeCanvas(wxWindow* parent, Life* life);
+    LifeCanvas(wxWindow* parent, Life* life, bool interactive = TRUE);
     ~LifeCanvas();
 
     // member functions
@@ -149,6 +194,7 @@ private:
     wxCoord      m_xoffset;
     wxCoord      m_yoffset;
     MouseStatus  m_status;
+    bool         m_interactive;
 };
 
 // Life timer
@@ -172,6 +218,7 @@ public:
     // event handlers
     void OnMenu(wxCommandEvent& event);
     void OnNewGame(wxCommandEvent& event);
+    void OnSamples(wxCommandEvent& event);
     void OnStart();
     void OnStop();
     void OnTimer();
@@ -210,13 +257,37 @@ private:
     wxSpinCtrl *m_spinctrlh;
 };
 
+// Life sample configurations dialog
+class LifeSamplesDialog : public wxDialog
+{
+public:
+    // ctor and dtor
+    LifeSamplesDialog(wxWindow *parent);
+    ~LifeSamplesDialog();
+
+    // members
+    int GetValue();
+
+    // event handlers
+    void OnListBox(wxCommandEvent &event);
+
+private:
+    // any class wishing to process wxWindows events must use this macro
+    DECLARE_EVENT_TABLE();
+
+    int         m_value;
+    wxListBox  *m_list;
+    wxTextCtrl *m_text;
+    LifeCanvas *m_canvas;
+    Life       *m_life;
+};
+
 // Life app
 class LifeApp : public wxApp
 {
 public:
     virtual bool OnInit();
 };
-
 
 // --------------------------------------------------------------------------
 // constants
@@ -227,15 +298,25 @@ enum
 {
     // menu items and toolbar buttons
     ID_NEWGAME = 1001,
+    ID_SAMPLES,
+    ID_ABOUT,
+    ID_EXIT,
     ID_CLEAR,
     ID_START,
+    ID_STEP,
     ID_STOP,
-    ID_EXIT,
-    ID_ABOUT,
+    ID_WRAP,
 
-    // slider
+    // speed selection slider
     ID_SLIDER,
+
+    // listbox in samples dialog
+    ID_LISTBOX
 };
+
+
+// built-in sample games
+#include "samples.inc"
 
 // --------------------------------------------------------------------------
 // event tables and other macros for wxWindows
@@ -244,11 +325,14 @@ enum
 // Event tables
 BEGIN_EVENT_TABLE(LifeFrame, wxFrame)
     EVT_MENU           (ID_NEWGAME, LifeFrame::OnNewGame)
-    EVT_MENU           (ID_CLEAR,   LifeFrame::OnMenu)
-    EVT_MENU           (ID_START,   LifeFrame::OnMenu)
-    EVT_MENU           (ID_STOP,    LifeFrame::OnMenu)
+    EVT_MENU           (ID_SAMPLES, LifeFrame::OnSamples)
     EVT_MENU           (ID_ABOUT,   LifeFrame::OnMenu)
     EVT_MENU           (ID_EXIT,    LifeFrame::OnMenu)
+    EVT_MENU           (ID_CLEAR,   LifeFrame::OnMenu)
+    EVT_MENU           (ID_START,   LifeFrame::OnMenu)
+    EVT_MENU           (ID_STEP,    LifeFrame::OnMenu)
+    EVT_MENU           (ID_STOP,    LifeFrame::OnMenu)
+    EVT_MENU           (ID_WRAP,    LifeFrame::OnMenu)
     EVT_COMMAND_SCROLL (ID_SLIDER,  LifeFrame::OnSlider)
 END_EVENT_TABLE()
 
@@ -260,6 +344,10 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(LifeNewGameDialog, wxDialog)
     EVT_BUTTON         (wxID_OK,    LifeNewGameDialog::OnOK)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(LifeSamplesDialog, wxDialog)
+    EVT_LISTBOX        (ID_LISTBOX, LifeSamplesDialog::OnListBox)
 END_EVENT_TABLE()
 
 
@@ -300,19 +388,28 @@ LifeFrame::LifeFrame() : wxFrame((wxFrame *)0, -1, _("Life!"), wxPoint(50, 50))
 
     // menu bar
     wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
+    wxMenu *menuGame = new wxMenu("", wxMENU_TEAROFF);
 
-    menuFile->Append(ID_NEWGAME, _("&New game...\tCtrl-N"), _("Start a new game"));
-    menuFile->Append(ID_CLEAR, _("&Clear\tCtrl-C"), _("Clear game board"));
-    menuFile->Append(ID_START, _("&Start\tCtrl-S"), _("Start"));
-    menuFile->Append(ID_STOP, _("S&top\tCtrl-T"), _("Stop"));
+    menuFile->Append(ID_NEWGAME, _("New game..."), _("Start a new game"));
+    menuFile->Append(ID_SAMPLES, _("Sample game..."), _("Select a sample configuration"));
     menuFile->AppendSeparator();
     menuFile->Append(ID_ABOUT, _("&About...\tCtrl-A"), _("Show about dialog"));
     menuFile->AppendSeparator();
     menuFile->Append(ID_EXIT, _("E&xit\tAlt-X"), _("Quit this program"));
-    menuFile->Enable(ID_STOP, FALSE);
+
+    menuGame->Append(ID_CLEAR, _("&Clear\tCtrl-C"), _("Clear game field"));
+    menuGame->Append(ID_START, _("&Start\tCtrl-S"), _("Start"));
+    menuGame->Append(ID_STEP, _("&Next\tCtrl-N"), _("Single step"));
+    menuGame->Append(ID_STOP, _("S&top\tCtrl-T"), _("Stop"));
+    menuGame->Enable(ID_STOP, FALSE);
+    menuGame->AppendSeparator();
+    menuGame->Append(ID_WRAP, _("&Wraparound\tCtrl-W"), _("Wrap around borders"), TRUE);
+    menuGame->Check (ID_WRAP, TRUE);
+
 
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, _("&File"));
+    menuBar->Append(menuGame, _("&Game"));
     SetMenuBar(menuBar);
 
     // tool bar
@@ -348,13 +445,14 @@ LifeFrame::LifeFrame() : wxFrame((wxFrame *)0, -1, _("Life!"), wxPoint(50, 50))
 
     // slider
     wxSlider *slider = new wxSlider(panel, ID_SLIDER, 5, 1, 10,
-        wxDefaultPosition, wxSize(200,-1), wxSL_HORIZONTAL | wxSL_AUTOTICKS);
+        wxDefaultPosition, wxSize(200, -1), wxSL_HORIZONTAL | wxSL_AUTOTICKS);
 
     // component layout
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(new wxStaticLine(panel, -1), 0, wxGROW | wxCENTRE);
     sizer->Add(m_canvas, 1, wxGROW | wxCENTRE | wxALL, 5);
     sizer->Add(new wxStaticLine(panel, -1), 0, wxGROW | wxCENTRE);
-    sizer->Add(m_text, 0, wxCENTRE | wxNORTH, 5);
+    sizer->Add(m_text, 0, wxCENTRE | wxTOP, 5);
     sizer->Add(slider, 0, wxCENTRE | wxALL, 5);
     panel->SetSizer(sizer);
     panel->SetAutoLayout(TRUE);
@@ -382,8 +480,15 @@ void LifeFrame::OnMenu(wxCommandEvent& event)
     switch (event.GetId())
     {
         case ID_START   : OnStart(); break;
+        case ID_STEP    : OnTimer(); break;
         case ID_STOP    : OnStop(); break;
-        case ID_CLEAR   :
+        case ID_WRAP    :
+        {
+            bool checked = GetMenuBar()->GetMenu(1)->IsChecked(ID_WRAP);
+            m_life->SetBorderWrap(checked);
+            break;
+        }
+        case ID_CLEAR   : 
         {
             OnStop();
             m_life->Clear();
@@ -425,19 +530,22 @@ void LifeFrame::OnNewGame(wxCommandEvent& WXUNUSED(event))
     LifeNewGameDialog dialog(this, &w, &h);
     result = dialog.ShowModal();
 
-    // create new game
+    // new game?
     if (result == wxID_OK)
     {
         // check dimensions
         if (w >= LIFE_MIN && w <= LIFE_MAX &&
             h >= LIFE_MIN && h <= LIFE_MAX)
         {
+            // resize game field
             m_life->Destroy();
             m_life->Create(w, h);
+            
+            // tell the canvas
             m_canvas->Reset();
+            m_canvas->Refresh();
             m_tics = 0;
             UpdateInfoText();
-            m_canvas->Refresh();
         }
         else
         {
@@ -449,26 +557,84 @@ void LifeFrame::OnNewGame(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void LifeFrame::OnSamples(wxCommandEvent& WXUNUSED(event))
+{
+    // stop if it was running
+    OnStop();
+
+    // show dialog box
+    LifeSamplesDialog dialog(this);
+
+    // new game?
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        int result = dialog.GetValue();
+
+        if (result == -1)
+            return;
+
+        int gw   = g_shapes[result].m_fieldWidth;
+        int gh   = g_shapes[result].m_fieldHeight;
+        int wrap = g_shapes[result].m_wrap;
+
+        // set wraparound (don't ask the user)
+        m_life->SetBorderWrap(wrap);
+        GetMenuBar()->GetMenu(1)->Check(ID_WRAP, wrap);
+
+        // need to resize the game field?
+        if (gw > m_life->GetWidth() || gh > m_life->GetHeight())
+        {
+            wxString s;
+            s.Printf(_("Your game field is too small for this configuration.\n"
+                       "It is recommended to resize it to %u x %u. Proceed?\n"),
+                       gw, gh);
+
+            if (wxMessageBox(s, _("Question"), wxYES_NO | wxICON_QUESTION, this) == wxYES)
+            {
+                m_life->Destroy();
+                m_life->Create(gw, gh);
+            }
+        }
+
+        // put the shape
+        m_life->SetShape(g_shapes[result]);
+
+        // tell the canvas about the change
+        m_canvas->Reset();
+        m_canvas->Refresh();
+        m_tics = 0;
+        UpdateInfoText();
+    }
+}
+
 void LifeFrame::OnStart()
 {
-    GetToolBar()->EnableTool(ID_START, FALSE);
-    GetToolBar()->EnableTool(ID_STOP,  TRUE);
-    GetMenuBar()->GetMenu(0)->Enable(ID_START, FALSE);
-    GetMenuBar()->GetMenu(0)->Enable(ID_STOP,  TRUE);
+    if (!m_running)
+    {
+        GetToolBar()->EnableTool(ID_START, FALSE);
+        GetToolBar()->EnableTool(ID_STOP,  TRUE);
+        GetMenuBar()->GetMenu(1)->Enable(ID_START, FALSE);
+        GetMenuBar()->GetMenu(1)->Enable(ID_STEP,  FALSE);
+        GetMenuBar()->GetMenu(1)->Enable(ID_STOP,  TRUE);
 
-    m_timer->Start(m_interval);
-    m_running = TRUE;
+        m_timer->Start(m_interval);
+        m_running = TRUE;
+    }
 }
 
 void LifeFrame::OnStop()
 {
-    GetToolBar()->EnableTool(ID_START, TRUE);
-    GetToolBar()->EnableTool(ID_STOP,  FALSE);
-    GetMenuBar()->GetMenu(0)->Enable(ID_START, TRUE);
-    GetMenuBar()->GetMenu(0)->Enable(ID_STOP,  FALSE);
-
-    m_timer->Stop();
-    m_running = FALSE;
+    if (m_running)
+    {
+        GetToolBar()->EnableTool(ID_START, TRUE);
+        GetToolBar()->EnableTool(ID_STOP,  FALSE);
+        GetMenuBar()->GetMenu(1)->Enable(ID_START, TRUE);
+        GetMenuBar()->GetMenu(1)->Enable(ID_STEP,  TRUE);
+        GetMenuBar()->GetMenu(1)->Enable(ID_STOP,  FALSE);
+        
+        m_timer->Stop();
+        m_running = FALSE;
+    }
 }
 
 void LifeFrame::OnTimer()
@@ -501,29 +667,23 @@ void LifeFrame::OnSlider(wxScrollEvent& event)
 // LifeTimer
 // --------------------------------------------------------------------------
 
-/*
-LifeTimer::LifeTimer() : wxTimer()
-{
-}
-*/
-
 void LifeTimer::Notify()
 {
     GET_FRAME()->OnTimer();
-}
+};
 
 // --------------------------------------------------------------------------
-// LifeCavas
+// LifeCanvas
 // --------------------------------------------------------------------------
 
 // canvas constructor
-LifeCanvas::LifeCanvas(wxWindow *parent, Life *life)
+LifeCanvas::LifeCanvas(wxWindow *parent, Life *life, bool interactive)
           : wxScrolledWindow(parent, -1, wxPoint(0, 0), wxSize(100, 100))
 {
-    m_life     = life;
-    m_cellsize = 8;
-    m_bmp      = NULL;
-
+    m_life        = life;
+    m_interactive = interactive;
+    m_cellsize    = 8;
+    m_bmp         = NULL;
     Reset();
 }
 
@@ -541,17 +701,16 @@ void LifeCanvas::Reset()
     m_width    = CellToCoord(m_life->GetWidth()) + 1;
     m_height   = CellToCoord(m_life->GetHeight()) + 1;
     m_bmp      = new wxBitmap(m_width, m_height);
-    wxCoord w  = GetSize().GetX();
-    wxCoord h  = GetSize().GetY();
+    wxCoord w  = GetClientSize().GetX();
+    wxCoord h  = GetClientSize().GetY();
     m_xoffset  = (w > m_width)?  ((w - m_width) / 2)  : 0;
     m_yoffset  = (h > m_height)? ((h - m_height) / 2) : 0;
 
-    // redraw all, incl. background
+    // redraw everything
     DrawEverything(TRUE);
     SetScrollbars(10, 10, (m_width + 9) / 10, (m_height + 9) / 10);
 }
 
-// draw everything
 void LifeCanvas::DrawEverything(bool force)
 {
     wxMemoryDC dc;
@@ -559,13 +718,13 @@ void LifeCanvas::DrawEverything(bool force)
     dc.SelectObject(*m_bmp);
     dc.BeginDrawing();
 
-    // cells
-    for (int j = 0; j < m_life->GetHeight(); j++)
-        for (int i = 0; i < m_life->GetWidth(); i++)
+    // draw cells
+    for (int j = 0; j < m_life->GetWidth(); j++)
+        for (int i = 0; i < m_life->GetHeight(); i++)
             if (force || m_life->HasChanged(i, j))
                 DrawCell(i, j, dc);
 
-    // bounding rectangle (always drawn)
+    // bounding rectangle (always drawn - better than clipping region)
     dc.SetPen(*wxBLACK_PEN);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawRectangle(0, 0, m_width, m_height);
@@ -574,7 +733,6 @@ void LifeCanvas::DrawEverything(bool force)
     dc.SelectObject(wxNullBitmap);
 }
 
-// draw a single cell
 void LifeCanvas::DrawCell(int i, int j)
 {
     wxMemoryDC dc;
@@ -582,6 +740,7 @@ void LifeCanvas::DrawCell(int i, int j)
     dc.SelectObject(*m_bmp);
     dc.BeginDrawing();
 
+    dc.SetClippingRegion(1, 1, m_width - 2, m_height - 2);
     DrawCell(i, j, dc);
 
     dc.EndDrawing();
@@ -623,7 +782,7 @@ void LifeCanvas::OnPaint(wxPaintEvent& event)
     wxMemoryDC memdc;
 
     wxRegionIterator upd(GetUpdateRegion());
-    int x, y, w, h, xx, yy;
+    wxCoord x, y, w, h, xx, yy;
 
     dc.BeginDrawing();
     memdc.SelectObject(*m_bmp);
@@ -646,6 +805,9 @@ void LifeCanvas::OnPaint(wxPaintEvent& event)
 
 void LifeCanvas::OnMouse(wxMouseEvent& event)
 {
+    if (!m_interactive)
+        return;
+
     int x, y, xx, yy, i, j;
 
     // which cell are we pointing at?
@@ -717,18 +879,14 @@ void LifeCanvas::OnSize(wxSizeEvent& event)
 // --------------------------------------------------------------------------
 
 LifeNewGameDialog::LifeNewGameDialog(wxWindow *parent, int *w, int *h)
-                 : wxDialog(parent, -1, _("New game"),
-                            wxDefaultPosition, wxDefaultSize,
+                 : wxDialog(parent, -1,
+                            _("New game"),
+                            wxDefaultPosition,
+                            wxDefaultSize,
                             wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL)
 {
     m_w = w;
     m_h = h;
-
-    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-
-    // text message
-    topsizer->Add( CreateTextSizer(_("Enter board dimensions")), 0, wxALL, 10 );
-    topsizer->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
     // prompts and text controls
     wxString strw, strh;
@@ -737,18 +895,21 @@ LifeNewGameDialog::LifeNewGameDialog(wxWindow *parent, int *w, int *h)
     m_spinctrlw = new wxSpinCtrl( this, -1, strw );
     m_spinctrlh = new wxSpinCtrl( this, -1, strh );
 
+    // component layout
     wxBoxSizer *inputsizer1 = new wxBoxSizer( wxHORIZONTAL );
-    inputsizer1->Add( new wxStaticText(this, -1, _("Width")), 1, wxCENTER | wxLEFT, 20);
-    inputsizer1->Add( m_spinctrlw, 2, wxCENTER | wxLEFT | wxRIGHT, 20 );
-    wxBoxSizer *inputsizer2 = new wxBoxSizer( wxHORIZONTAL );
-    inputsizer2->Add( new wxStaticText(this, -1, _("Height")), 1, wxCENTER | wxLEFT, 20);
-    inputsizer2->Add( m_spinctrlh, 2, wxCENTER | wxLEFT | wxRIGHT, 20 );
+    inputsizer1->Add( new wxStaticText(this, -1, _("Width")), 1, wxCENTRE | wxLEFT, 20);
+    inputsizer1->Add( m_spinctrlw, 2, wxCENTRE | wxLEFT | wxRIGHT, 20 );
 
+    wxBoxSizer *inputsizer2 = new wxBoxSizer( wxHORIZONTAL );
+    inputsizer2->Add( new wxStaticText(this, -1, _("Height")), 1, wxCENTRE | wxLEFT, 20);
+    inputsizer2->Add( m_spinctrlh, 2, wxCENTRE | wxLEFT | wxRIGHT, 20 );
+
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+    topsizer->Add( CreateTextSizer(_("Enter board dimensions")), 0, wxALL, 10 );
+    topsizer->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
     topsizer->Add( inputsizer1, 1, wxGROW | wxLEFT | wxRIGHT, 5 );
     topsizer->Add( inputsizer2, 1, wxGROW | wxLEFT | wxRIGHT, 5 );
     topsizer->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 10);
-
-    // buttons
     topsizer->Add( CreateButtonSizer(wxOK | wxCANCEL), 0, wxCENTRE | wxALL, 10);
 
     // activate
@@ -768,11 +929,95 @@ void LifeNewGameDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 }
 
 // --------------------------------------------------------------------------
+// LifeSamplesDialog
+// --------------------------------------------------------------------------
+
+LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
+                 : wxDialog(parent, -1,
+                            _("Sample games"),
+                            wxDefaultPosition,
+                            wxDefaultSize,
+                            wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL)
+{
+    m_value = 0;
+   
+    // create and populate the list of available samples
+    m_list = new wxListBox( this, ID_LISTBOX,
+        wxDefaultPosition,
+        wxDefaultSize,
+        0, NULL,
+        wxLB_SINGLE | wxLB_NEEDED_SB | wxLB_HSCROLL );
+
+    for (unsigned i = 0; i < (sizeof(g_shapes) / sizeof(LifeShape)); i++)
+        m_list->Append(g_shapes[i].m_name);
+
+    // descriptions
+    wxStaticBox *statbox = new wxStaticBox( this, -1, _("Description"));
+    m_life   = new Life( 16, 16 );
+    m_life->SetShape(g_shapes[0]);
+    m_canvas = new LifeCanvas( this, m_life, FALSE );
+    m_text   = new wxTextCtrl( this, -1,
+        g_shapes[0].m_desc,
+        wxDefaultPosition,
+        wxSize(300, 60),
+        wxTE_MULTILINE | wxTE_READONLY);
+
+    // layout components
+    wxStaticBoxSizer *sizer1 = new wxStaticBoxSizer( statbox, wxVERTICAL );
+    sizer1->Add( m_canvas, 2, wxGROW | wxCENTRE | wxALL, 5);
+    sizer1->Add( m_text, 1, wxGROW | wxCENTRE | wxALL, 5 );
+
+    wxBoxSizer *sizer2 = new wxBoxSizer( wxHORIZONTAL );
+    sizer2->Add( m_list, 0, wxGROW | wxCENTRE | wxALL, 5 );
+    sizer2->Add( sizer1, 1, wxGROW | wxCENTRE | wxALL, 5 );
+
+    wxBoxSizer *sizer3 = new wxBoxSizer( wxVERTICAL );
+    sizer3->Add( CreateTextSizer(_("Select one configuration")), 0, wxALL, 10 );
+    sizer3->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10 );
+    sizer3->Add( sizer2, 1, wxGROW | wxCENTRE | wxALL, 5 );
+    sizer3->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10 );
+    sizer3->Add( CreateButtonSizer(wxOK | wxCANCEL), 0, wxCENTRE | wxALL, 10 );
+
+    // activate
+    SetSizer(sizer3);
+    SetAutoLayout(TRUE);
+    sizer3->SetSizeHints(this);
+    sizer3->Fit(this);
+    Centre(wxBOTH);
+}
+
+LifeSamplesDialog::~LifeSamplesDialog()
+{
+    m_canvas->Destroy();
+    delete m_life;
+}
+
+int LifeSamplesDialog::GetValue()
+{
+    return m_value;
+}
+
+void LifeSamplesDialog::OnListBox(wxCommandEvent& event)
+{
+    if (event.GetSelection() != -1)
+    {
+        m_value = m_list->GetSelection();
+        m_text->SetValue(g_shapes[ event.GetSelection() ].m_desc);
+        m_life->SetShape(g_shapes[ event.GetSelection() ]);
+
+        m_canvas->DrawEverything(TRUE);     // force redraw everything
+        m_canvas->Refresh(FALSE);           // do not erase background
+    }
+}
+
+// --------------------------------------------------------------------------
 // Life
 // --------------------------------------------------------------------------
 
 Life::Life(int width, int height)
-{
+{            
+    m_wrap   = TRUE;
+    m_cells  = NULL;
     Create(width, height);
 }
 
@@ -783,7 +1028,7 @@ Life::~Life()
 
 void Life::Create(int width, int height)
 {
-    wxASSERT(width > 0 || height > 0);
+    wxASSERT(width > 0 && height > 0);
 
     m_width  = width;
     m_height = height;
@@ -804,23 +1049,42 @@ void Life::Clear()
 
 bool Life::IsAlive(int x, int y) const
 {
-    wxASSERT(x < m_width || y < m_height);
+    wxASSERT(x >= 0 && y >= 0 && x < m_width && y < m_height);
 
     return (m_cells[y * m_width + x] & CELL_ALIVE);
 }
 
 bool Life::HasChanged(int x, int y) const
 {
-    wxASSERT(x < m_width || y < m_height);
+    wxASSERT(x >= 0 && y >= 0 && x < m_width && y < m_height);
 
     return (m_cells[y * m_width + x] & CELL_MARK) != 0;
 }
 
+void Life::SetBorderWrap(bool on)
+{
+    m_wrap = on;
+}
+
 void Life::SetCell(int x, int y, bool alive)
 {
-    wxASSERT(x < m_width || y < m_height);
+    wxASSERT(x >= 0 && y >= 0 && x < m_width && y < m_height);
 
     m_cells[y * m_width + x] = (alive? CELL_ALIVE : CELL_DEAD);
+}
+
+void Life::SetShape(LifeShape& shape)
+{
+    wxASSERT((m_width >= shape.m_width) && (m_height >= shape.m_height));
+
+    int x0  = (m_width - shape.m_width) / 2;
+    int y0  = (m_height - shape.m_height) / 2;
+    char *p = shape.m_data;
+
+    Clear();
+    for (int j = y0; j < y0 + shape.m_height; j++)
+        for (int i = x0; i < x0 + shape.m_width; i++)
+            SetCell(i, j, *(p++) == '*');
 }
 
 bool Life::NextTic()
@@ -875,17 +1139,32 @@ bool Life::NextTic()
 
 int Life::GetNeighbors(int x, int y) const
 {
-    wxASSERT(x < m_width || y < m_height);
+    wxASSERT(x >= 0 && y >= 0 && x < m_width && y < m_height);
 
-    // count number of neighbors (wrap around board limits)
     int neighbors = 0;
-    for (int j = y - 1; j <= y + 1; j++)
-        for (int i = x - 1; i <= x + 1; i++)
-        {
-            if (IsAlive( ((i < 0)? (i + m_width ) : (i % m_width)),
-                         ((j < 0)? (j + m_height) : (j % m_height)) ))
-                neighbors++;
-        }
+
+    int i0 = (x)? (x - 1) : 0;
+    int j0 = (y)? (y - 1) : 0;
+    int i1 = (x < (m_width - 1))? (x + 1) : (m_width - 1);
+    int j1 = (y < (m_height - 1))? (y + 1) : (m_height - 1);
+
+    if (m_wrap && ( !x || !y || x == (m_width - 1) || y == (m_height - 1)))
+    {
+        // this is an outer cell and wraparound is on
+        for (int j = y - 1; j <= y + 1; j++)
+            for (int i = x - 1; i <= x + 1; i++)
+                if (IsAlive( ((i < 0)? (i + m_width ) : (i % m_width)),
+                             ((j < 0)? (j + m_height) : (j % m_height)) ))
+                     neighbors++;
+    }
+    else
+    {
+        // this is an inner cell, or wraparound is off
+        for (int j = j0; j <= j1; j++)
+            for (int i = i0; i <= i1; i++)
+                if (IsAlive(i, j))
+                     neighbors++;
+    }
 
     // do not count ourselves
     if (IsAlive(x, y)) neighbors--;
@@ -895,7 +1174,7 @@ int Life::GetNeighbors(int x, int y) const
 
 void Life::SetCell(int x, int y, Cell status)
 {
-    wxASSERT(x < m_width || y < m_height);
+    wxASSERT(x >= 0 && y >= 0 && x < m_width && y < m_height);
 
     m_cells[y * m_width + x] = status;
 }
