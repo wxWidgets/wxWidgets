@@ -113,7 +113,8 @@ static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
 
 #if (GTK_MINOR_VERSION > 0)
     wxWindow *top_frame = win;
-    while (top_frame->GetParent()) top_frame = top_frame->GetParent();
+    while (top_frame->GetParent() && !(top_frame->GetParent()->m_isFrame)) 
+        top_frame = top_frame->GetParent();
 
     /* support for native hot keys  */
     gtk_accel_group_detach( menu->m_accel, GTK_OBJECT(top_frame->m_widget) );
@@ -135,8 +136,8 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
 
 #if (GTK_MINOR_VERSION > 0)
     wxWindow *top_frame = win;
-    while (top_frame->GetParent())
-       top_frame = top_frame->GetParent();
+    while (top_frame->GetParent() && !(top_frame->GetParent()->m_isFrame)) 
+        top_frame = top_frame->GetParent();
 
     /* support for native hot keys  */
     gtk_accel_group_attach( menu->m_accel, GTK_OBJECT(top_frame->m_widget) );
@@ -157,8 +158,8 @@ void wxMenuBar::SetInvokingWindow( wxWindow *win )
     m_invokingWindow = win;
 #if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
     wxWindow *top_frame = win;
-    while (top_frame->GetParent())
-       top_frame = top_frame->GetParent();
+    while (top_frame->GetParent() && !(top_frame->GetParent()->m_isFrame)) 
+        top_frame = top_frame->GetParent();
 
     /* support for native key accelerators indicated by underscroes */
     gtk_accel_group_attach( m_accel, GTK_OBJECT(top_frame->m_widget) );
@@ -178,8 +179,8 @@ void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
     m_invokingWindow = (wxWindow*) NULL;
 #if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
     wxWindow *top_frame = win;
-    while (top_frame->GetParent())
-       top_frame = top_frame->GetParent();
+    while (top_frame->GetParent() && !(top_frame->GetParent()->m_isFrame)) 
+        top_frame = top_frame->GetParent();
 
     /* support for native key accelerators indicated by underscroes */
     gtk_accel_group_detach( m_accel, GTK_OBJECT(top_frame->m_widget) );

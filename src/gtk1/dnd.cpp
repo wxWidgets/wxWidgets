@@ -188,8 +188,8 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
        this is only valid for the duration of this call */
     drop_target->SetDragContext( context );
 
-    /* TODO: what should be the default behaviour? Copy or move? */
     wxDragResult result = wxDragMove;
+    if (context->suggested_action == GDK_ACTION_COPY) result = wxDragCopy;
 
     if (drop_target->m_firstMotion)
     {
@@ -202,12 +202,13 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
         result = drop_target->OnDragOver( x, y, result );
     }
 
-    /* we don't yet handle which "actions" (i.e. copy or move)
-       the target accepts. so far we simply accept the
-       suggested action. TODO. */
     bool ret = result != wxDragNone;
     if (ret)
+    {
+        GdkDragAction action = GDK_ACTION_MOVE;
+	if (result == wxDragCopy) action == GDK_ACTION_COPY;
         gdk_drag_status( context, context->suggested_action, time );
+    }
 
     /* after this, invalidate the drop_target's GdkDragContext */
     drop_target->SetDragContext( (GdkDragContext*) NULL );
@@ -254,6 +255,11 @@ static gboolean target_drag_drop( GtkWidget *widget,
        this is only valid for the duration of this call */
     drop_target->SetDragTime( time );
 
+/*
+    wxDragResult result = wxDragMove;
+    if (context->suggested_action == GDK_ACTION_COPY) result = wxDragCopy;
+*/
+
     bool ret = drop_target->OnDrop( x, y );
 
     if (!ret)
@@ -278,6 +284,11 @@ static gboolean target_drag_drop( GtkWidget *widget,
         GdkAtom format = drop_target->GetMatchingPair();
         wxASSERT( format );
         
+/*
+        GdkDragAction action = GDK_ACTION_MOVE;
+	if (result == wxDragCopy) action == GDK_ACTION_COPY;
+	context->action = action;
+*/
         /* this should trigger an "drag_data_received" event */
         gtk_drag_get_data( widget,
                            context,
