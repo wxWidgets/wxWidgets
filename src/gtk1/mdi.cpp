@@ -312,9 +312,9 @@ void wxMDIChildFrame::GetClientSize( int *width, int *height ) const
     wxWindow::GetClientSize( width, height );
 }
 
-void wxMDIChildFrame::AddChild( wxWindow *child )
+void wxMDIChildFrame::AddChild( wxWindowBase *child )
 {
-    wxWindow::AddChild( child );
+    wxWindow::AddChild(child);
 }
 
 void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )

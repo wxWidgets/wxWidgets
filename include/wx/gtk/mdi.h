@@ -115,7 +115,7 @@ class wxMDIChildFrame: public wxFrame
   virtual wxMenuBar *GetMenuBar() const;
 
   virtual void GetClientSize( int *width, int *height ) const;
-  virtual void AddChild( wxWindow *child );
+  virtual void AddChild( wxWindowBase *child );
 
   virtual void Activate();
     
