@@ -1,13 +1,14 @@
 .emacs.desktop
 Makefile
 Makefile.pre
+Setup
+Setup.save
 Setup.save
 config.c
-sedscript
-transfer.zip
-Setup.save
 make.bat
+sedscript
 templates
+transfer.zip
 vc50.pdb
 vc60.pdb
 wxPython.001
