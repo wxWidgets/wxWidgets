@@ -991,6 +991,22 @@ void wxWindow::OnKeyDown(wxKeyEvent& event)
             }
 #endif // wxUSE_MENUS
 
+            // if it wasn't in a menu, try to find a button
+            if ( command != -1 )
+            {
+                wxWindow* child = win->FindWindow(command);
+                if ( child && wxDynamicCast(child, wxButton) )
+                {
+                    wxCommandEvent eventCmd(wxEVT_COMMAND_BUTTON_CLICKED, command);
+                    eventCmd.SetEventObject(child);
+                    if ( child->GetEventHandler()->ProcessEvent(eventCmd) )
+                    {
+                        // skip "event.Skip()" below
+                        return;
+                    }
+                }
+            }
+
             // don't propagate accels from the child frame to the parent one
             break;
         }
