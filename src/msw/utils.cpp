@@ -1339,7 +1339,8 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
         case wxFONTENCODING_MACROMANIAN:    return 10009;
         case wxFONTENCODING_UTF7:           return 65000;
         case wxFONTENCODING_UTF8:           return 65001;
-        default: return -1;
+        /* to avoid warnings just do nothing and pass to return at the end */
+        default:                            break;
     }
 
     return -1;
