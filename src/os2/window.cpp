@@ -1628,7 +1628,14 @@ void wxWindowOS2::DoMoveWindow(
         MoveChildren(nYDiff);
         ::WinQueryWindowPos(GetHwnd(), &m_vWinSwp);
     }
+#if 0
+    // FIXME: By my logic, the next line should be needed as it moves child
+    //        windows when resizing the parent (see comment at beginning of
+    //	      function). However, this seems to cause lots of problems. At
+    //        least, e.g. the grid sample almost works with this line
+    //        commented out but crashes badly with it. 
     MoveChildren(nHeightDelta);
+#endif
 } // end of wxWindowOS2::DoMoveWindow
 
 //
@@ -4416,6 +4423,10 @@ void wxWindowOS2::MoveChildren(
             ::WinQueryWindowPos( GetHwndOf(pWin)
                                 ,&vSwp
                                );
+            // Actually, only move children that already are placed on the
+            // frame, not ones which are still at wxDefaultCoord.
+            if (vSwp.y == wxDefaultCoord)
+                continue;
             if (pWin->IsKindOf(CLASSINFO(wxControl)))
             {
                 wxControl*          pCtrl;
