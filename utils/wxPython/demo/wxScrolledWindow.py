@@ -18,6 +18,8 @@ class MyCanvas(wxScrolledWindow):
 
         self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
         bmp = wxBitmap('bitmaps/test2.bmp', wxBITMAP_TYPE_BMP)
+        mask = wxMaskColour(bmp, wxBLUE)
+        bmp.SetMask(mask)
         self.bmp = bmp
 
         self.SetScrollbars(20, 20, self.maxWidth/20, self.maxHeight/20)
@@ -61,7 +63,7 @@ class MyCanvas(wxScrolledWindow):
         dc.SetPen(wxGREEN_PEN)
         dc.DrawSpline(lst+[(100,100)])
 
-        dc.DrawBitmap(self.bmp, 200, 20)
+        dc.DrawBitmap(self.bmp, 200, 20, true)
         dc.SetTextForeground(wxColour(0, 0xFF, 0x80))
         dc.DrawText("a bitmap", 200, 85)
 
