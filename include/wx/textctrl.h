@@ -157,7 +157,7 @@ public:
     // If the return values from and to are the same, there is no selection.
     virtual void GetSelection(long* from, long* to) const = 0;
 
-    virtual wxString GetSelection() const;
+    virtual wxString GetStringSelection() const;
 
     // operations
     // ----------

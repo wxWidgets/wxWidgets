@@ -648,7 +648,7 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
     }
 }
 
-wxString wxTextCtrl::GetSelection() const
+wxString wxTextCtrl::GetStringSelection() const
 {
     // the base class version works correctly for the rich text controls
     // because there the lines are terminated with just '\r' which means that
@@ -657,7 +657,7 @@ wxString wxTextCtrl::GetSelection() const
     // we break the indices
 #if wxUSE_RICHEDIT
     if ( m_isRich )
-        return wxTextCtrlBase::GetSelection();
+        return wxTextCtrlBase::GetStringSelection();
 #endif // wxUSE_RICHEDIT
 
     long from, to;

@@ -42,7 +42,7 @@ it to always show it. It doesn't do anything under other platforms.}
 \twocolitem{\windowstyle{wxHSCROLL}}{A horizontal scrollbar will be created. No effect under GTK+.}
 \end{twocollist}
 
-See also \helpref{window styles overview}{windowstyles} and 
+See also \helpref{window styles overview}{windowstyles} and
 \helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlconstr}.
 
 \wxheading{wxTextCtrl and C++ streams}
@@ -138,7 +138,7 @@ generated when enter is pressed in a single-line text control.}
 \twocolitem{{\bf EVT\_TEXT\_URL(id, func)}}{A mouse event occured over an URL
 in the text control (Win32 only)}
 \twocolitem{{\bf EVT\_TEXT\_MAXLEN(id, func)}}{User tried to enter more text
-into the control than the limit set by 
+into the control than the limit set by
 \helpref{SetMaxLength}{wxtextctrlsetmaxlength}.}
 \end{twocollist}%
 
@@ -371,8 +371,8 @@ no selection.
 Please note that the indices returned may be used with the other wxTextctrl
 methods but don't necessarily represent the correct indices into the string
 returned by \helpref{GetValue()}{wxtextctrlgetvalue} for multiline controls
-under Windows, you should use another version of 
-\helpref{GetSelection()}{wxtextctrlgetselectionstring} to get the selected
+under Windows (at least,) you should use
+\helpref{GetStringSelection()}{wxtextctrlgetstringselection} to get the selected
 text.
 
 \wxheading{Parameters}
@@ -387,9 +387,9 @@ consisting of the from and to values.}
 \perlnote{In wxPerl this method takes no parameter and returns a
 2-element list {\tt ( from, to )}.}
 
-\membersection{wxTextCtrl::GetSelection}\label{wxtextctrlgetselectionstring}
+\membersection{wxTextCtrl::GetStringSelection}\label{wxtextctrlgetstringselection}
 
-\func{virtual wxString}{GetSelection}{\void}
+\func{virtual wxString}{GetStringSelection}{\void}
 
 Gets the text currently selected in the control. If there is no selection, the
 returned string is empty.
@@ -594,7 +594,7 @@ and the user may enter as much text as the underlying native text control
 widget supports (typically at least 32Kb).
 
 If the user tries to enter more characters into the text control when it
-already is filled up to the maximal length, a 
+already is filled up to the maximal length, a
 {\tt wxEVT\_COMMAND\_TEXT\_MAXLEN} event is sent to notify the program about it
 (giving it the possibility to show an explanatory message, for example) and the
 extra input is discarded.

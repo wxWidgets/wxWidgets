@@ -244,7 +244,7 @@ void wxTextCtrlBase::SelectAll()
     SetSelection(0, GetLastPosition());
 }
 
-wxString wxTextCtrlBase::GetSelection() const
+wxString wxTextCtrlBase::GetStringSelection() const
 {
     long from, to;
     GetSelection(&from, &to);

@@ -56,7 +56,7 @@ public:
     virtual bool IsEditable() const;
 
     virtual void GetSelection(long* from, long* to) const;
-    virtual wxString GetSelection() const;
+    virtual wxString GetStringSelection() const;
 
     // operations
     // ----------
