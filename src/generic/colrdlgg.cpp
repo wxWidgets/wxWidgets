@@ -255,42 +255,43 @@ void wxGenericColourDialog::CreateWidgets()
 {
     wxBeginBusyCursor();
 
-    int sliderX = singleCustomColourRect.x + singleCustomColourRect.width + sectionSpacing;
-#if defined(__WXMOTIF__)
-    int sliderSpacing = 65;
-    int sliderHeight = 160;
-#else
-    int sliderSpacing = 45;
-    int sliderHeight = 160;
-#endif
+    const int sliderX = singleCustomColourRect.x + singleCustomColourRect.width + sectionSpacing;
+    const int sliderHeight = 160;
 
     redSlider = new wxSlider(this, wxID_RED_SLIDER, singleCustomColour.Red(), 0, 255,
-        wxPoint(sliderX, 10), wxSize(wxDefaultSize.x, sliderHeight), wxVERTICAL|wxSL_LABELS);
+        wxDefaultPosition, wxSize(wxDefaultCoord, sliderHeight), wxVERTICAL|wxSL_LABELS);
     greenSlider = new wxSlider(this, wxID_GREEN_SLIDER, singleCustomColour.Green(), 0, 255,
-        wxPoint(sliderX + sliderSpacing, 10), wxSize(wxDefaultSize.x, sliderHeight), wxVERTICAL|wxSL_LABELS);
+        wxDefaultPosition, wxSize(wxDefaultCoord, sliderHeight), wxVERTICAL|wxSL_LABELS);
     blueSlider = new wxSlider(this, wxID_BLUE_SLIDER, singleCustomColour.Blue(), 0, 255,
-        wxPoint(sliderX + 2*sliderSpacing, 10), wxSize(wxDefaultSize.x, sliderHeight), wxVERTICAL|wxSL_LABELS);
+        wxDefaultPosition, wxSize(wxDefaultCoord, sliderHeight), wxVERTICAL|wxSL_LABELS);
 
-    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer *sliderSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    // 1) space for explicitly layouted controls
-    topsizer->Add( sliderX + 3*sliderSpacing, sliderHeight+25 );
+    // 1) space for sliders
+    sliderSizer->Add( sliderX, sliderHeight );
+    sliderSizer->Add( redSlider, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 10 );
+    sliderSizer->Add( greenSlider, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 10 );
+    sliderSizer->Add( blueSlider, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 10 );
+
+    wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
+
+    topSizer->Add( sliderSizer, 0, wxCENTRE | wxALL, 10 );
 
 #if wxUSE_STATLINE
     // 2) static line
-    topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
+    topSizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif
 
     // 3) buttons
     wxSizer *buttonsizer = CreateButtonSizer( wxOK|wxCANCEL );
     buttonsizer->Add( new wxButton(this, wxID_ADD_CUSTOM, _("Add to custom colours") ), 0, wxLEFT|wxRIGHT, 10 );
-    topsizer->Add( buttonsizer, 0, wxCENTRE | wxALL, 10 );
+    topSizer->Add( buttonsizer, 0, wxCENTRE | wxALL, 10 );
 
     SetAutoLayout( true );
-    SetSizer( topsizer );
+    SetSizer( topSizer );
 
-    topsizer->SetSizeHints( this );
-    topsizer->Fit( this );
+    topSizer->SetSizeHints( this );
+    topSizer->Fit( this );
 
     Centre( wxBOTH );
 
