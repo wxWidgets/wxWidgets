@@ -599,9 +599,9 @@ wxThreadInternal::WaitForTerminate(bool shouldCancel,
         {
             if ( shouldCancel )
             {
-                // WinThreadStart() will see it and terminate immediately, no need
-                // to cancel the thread - but we still need to resume it to let it
-                // run
+                // WinThreadStart() will see it and terminate immediately, no
+                // need to cancel the thread -- but we still need to resume it
+                // to let it run
                 m_state = STATE_EXITED;
 
                 Resume();   // it knows about STATE_EXITED special case
@@ -613,7 +613,11 @@ wxThreadInternal::WaitForTerminate(bool shouldCancel,
 
             // shouldResume is correctly set to FALSE here
         }
-        else
+        else if ( m_state == STATE_EXITED )
+        {
+            return wxTHREAD_NOT_RUNNING;
+        }
+        else // running (but maybe paused or cancelled)
         {
             shouldResume = m_state == STATE_PAUSED;
         }
