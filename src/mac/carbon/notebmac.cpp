@@ -371,7 +371,7 @@ void wxNotebook::MacSetupTabs()
         SetTabEnabled( (ControlHandle) m_macControl , ii+1 , true ) ;
 
 #if TARGET_CARBON
-        if ( GetImageList() && GetPageImage(ii) >= 0 )
+        if ( GetImageList() && GetPageImage(ii) >= 0 && UMAGetSystemVersion() >= 0x1020 )
         {
         	// tab controls only support very specific types of images, therefore we are doing an odyssee
         	// accross the icon worlds (even Apple DTS did not find a shorter path)
@@ -391,8 +391,8 @@ void wxNotebook::MacSetupTabs()
          	info.u.iconRef = iconRef ;
         	SetControlData( (ControlHandle) m_macControl, ii+1,kControlTabImageContentTag,
                         sizeof( info ), (Ptr)&info );
-			// we ignore the error, since if there is no support for icons on tabs, the data cannot be set
-            UnregisterIconRef( 'WXNG' , (OSType) 1 ) ;
+            wxASSERT_MSG( err == noErr , "Error when setting icon on tab" ) ;
+           	UnregisterIconRef( 'WXNG' , (OSType) 1 ) ;
             ReleaseIconRef( iconRef ) ;
             DisposeHandle( (Handle) iconFamily ) ;
         }
