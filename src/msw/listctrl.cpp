@@ -480,6 +480,8 @@ void wxListCtrl::FreeAllInternalData()
         m_ignoreChangeMessages = false;
 
         m_AnyInternalData = false;
+
+        m_count = 0;
     }
 }
 
@@ -1917,7 +1919,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
             case LVN_DELETEALLITEMS:
-                m_count = 0;
                 eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
                 event.m_itemIndex = -1;
                 break;

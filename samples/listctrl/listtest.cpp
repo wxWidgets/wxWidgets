@@ -656,10 +656,12 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 {
     wxStopWatch sw;
 
+    size_t itemCount = m_listCtrl->GetItemCount();
+
     m_listCtrl->DeleteAllItems();
 
     m_logWindow->WriteText(wxString::Format(_T("Deleting %d items took %ld ms\n"),
-                                            m_listCtrl->GetItemCount(),
+                                            itemCount,
                                             sw.Time()));
 }
 
