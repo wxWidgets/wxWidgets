@@ -1,0 +1,1993 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_REVISION($Id$)dnl
+
+dnl ---------------------------------------------------------------------------
+dnl
+dnl Top-level configure.in for wxWindows by Robert Roebling, Phil Blecker and
+dnl Vadim Zeitlin
+dnl
+dnl This script is under the wxWindows licence.
+dnl
+dnl Version: $Id$
+dnl ////////////////////////////////////////////////////////////////////////
+
+dnl ---------------------------------------------------------------------------
+dnl initialization
+dnl ---------------------------------------------------------------------------
+
+dnl the file passed to AC_INIT should be speicific to our package
+AC_INIT(wx-config.in)
+
+AC_CANONICAL_HOST
+AM_INIT_AUTOMAKE(wxWindows, 2.1.0)
+
+WX_MAJOR_VERSION_NUMBER=2
+WX_MINOR_VERSION_NUMBER=1
+WX_RELEASE_NUMBER=0
+
+dnl FIXME this hack suppresses automake 1.4 warning about @LTLIBOBJS@ being
+dnl       never defined in configure.in (remove these lines to see what I'm
+dnl       speaking about) - Tom Tromey <tromey@cygnus.com> told me that it will
+dnl       be fixed in the next release.
+LIBOBJS=
+LIBOBJS="$LIBOBJS common/extended.o"
+
+dnl ------------------------------------------------------------------------
+dnl Check platform (host system)
+dnl ------------------------------------------------------------------------
+
+dnl assume Unix
+USE_UNIX=1
+USE_LINUX=
+USE_SGI=
+USE_HPUX=
+USE_SYSV=
+USE_SVR4=
+USE_AIX=
+USE_SUN=
+USE_SOLARIS=
+USE_SUNOS=
+USE_ALPHA=
+USE_OSF=
+USE_BSD=
+USE_FREEBSD=
+USE_VMS=
+USE_ULTRIX=
+USE_CYGWIN=
+USE_MINGW32=
+USE_DATA_GENERAL=
+
+dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
+dnl     which are either yes or no
+DEFAULT_wxUSE_GTK=0
+DEFAULT_wxUSE_MOTIF=0
+DEFAULT_wxUSE_MSW=0
+
+case "${host}" in
+  *-hp-hpux* )
+    USE_HPUX=1
+    DEFAULT_wxUSE_MOTIF=1
+    AC_DEFINE(__HPUX__)
+  ;;
+  *-*-linux* )
+    USE_LINUX=1
+    AC_DEFINE(__LINUX__)
+    TMP=`uname -m`
+    if test "x$TMP" = "xalpha"; then
+      USE_ALPHA=1
+      AC_DEFINE(__ALPHA__)
+    fi
+    DEFAULT_wxUSE_GTK=1
+  ;;
+  *-*-irix5* | *-*-irix6* )
+    USE_SGI=1
+    USE_SVR4=1
+    AC_DEFINE(__SGI__)
+    AC_DEFINE(__SVR4__)
+    DEFAULT_wxUSE_MOTIF=1
+  ;;
+  *-*-solaris2* )
+    USE_SUN=1
+    USE_SOLARIS=1
+    USE_SVR4=1
+    AC_DEFINE(__SUN__)
+    AC_DEFINE(__SOLARIS__)
+    AC_DEFINE(__SVR4__)
+    DEFAULT_wxUSE_MOTIF=1
+  ;;
+  *-*-sunos4* )
+    USE_SUN=1
+    USE_SUNOS=1
+    USE_BSD=1
+    AC_DEFINE(__SUN__)
+    AC_DEFINE(__SUNOS__)
+    AC_DEFINE(__BSD__)
+    DEFAULT_wxUSE_MOTIF=1
+  ;;
+  *-*-freebsd* | *-*-netbsd*)
+    USE_BSD=1
+    USE_FREEBSD=1
+    AC_DEFINE(__FREEBSD__)
+    AC_DEFINE(__BSD__)
+    DEFAULT_wxUSE_GTK=1
+  ;;
+  *-*-osf* )
+    USE_ALPHA=1
+    USE_OSF=1
+    AC_DEFINE(__ALPHA__)
+    AC_DEFINE(__OSF__)
+    DEFAULT_wxUSE_MOTIF=1
+  ;;
+  *-*-dgux5* )
+    USE_ALPHA=1
+    USE_SVR4=1
+    AC_DEFINE(__ALPHA__)
+    AC_DEFINE(__SVR4__)
+    DEFAULT_wxUSE_MOTIF=1
+  ;;
+  *-*-sysv5* )
+    USE_SYSV=1
+    USE_SVR4=1
+    AC_DEFINE(__SYSV__)
+    AC_DEFINE(__SVR4__)
+    DEFAULT_wxUSE_MOTIF=1
+  ;;
+  *-*-aix* )
+    USE_AIX=1
+    USE_SYSV=1
+    USE_SVR4=1
+    AC_DEFINE(__AIX__)
+    AC_DEFINE(__SYSV__)
+    AC_DEFINE(__SVR4__)
+    DEFAULT_wxUSE_MOTIF=1
+  ;;
+  *)
+    AC_MSG_ERROR(unknown system type $(host).)
+esac
+
+if test "$USE_UNIX" = 1 ; then
+  wxUSE_UNIX=yes
+  AC_DEFINE(__UNIX__)
+fi
+
+dnl Linux: test for libc5/glibc2: glibc2 has gettext() included
+if test "$USE_LINUX" = 1; then
+  AC_CHECK_LIB(c,gettext,AC_DEFINE(wxHAVE_GLIBC2))
+fi
+
+dnl TODO cross-compiling for Windows not yet supported
+AC_DEFINE(__UNIX__)
+
+dnl if eval "test $USE_CYGWIN != 1 -a $USE_MINGW32 != 1"; then
+dnl   AC_DEFINE(__UNIX__)
+dnl else
+dnl   AC_DEFINE(__WINDOWS__)
+dnl   DEFAULT_wxUSE_MSW=1
+dnl fi
+
+dnl ---------------------------------------------------------------------------
+dnl command line options for configure
+dnl ---------------------------------------------------------------------------
+
+dnl the default values for all options - we collect them all here to simplify
+dnl modification of the default values (for example, if the defaults for some
+dnl platform should be changed, it can be done here too)
+dnl
+dnl NB: see also DEFAULT_wxUSE<toolkit> variables defined above
+
+dnl useful to test the compilation with minimum options, define as 0 for normal
+dnl usage
+DEBUG_CONFIGURE=0
+if test $DEBUG_CONFIGURE = 1; then
+  DEFAULT_wxUSE_THREADS=yes
+
+  DEFAULT_wxUSE_OPTIMISE=no
+  DEFAULT_wxUSE_PROFILE=no
+  DEFAULT_wxUSE_DEBUG_FLAG=yes
+  DEFAULT_wxUSE_DEBUG_INFO=yes
+  DEFAULT_wxUSE_DEBUG_GDB=yes
+  DEFAULT_wxUSE_MEM_TRACING=no
+  DEFAULT_wxUSE_DMALLOC=no
+  DEFAULT_wxUSE_APPLE_IEEE=no
+
+  DEFAULT_wxUSE_LOG=yes
+
+  DEFAULT_wxUSE_GUI=yes
+
+  DEFAULT_wxUSE_ZLIB=no
+  DEFAULT_wxUSE_LIBPNG=no
+  DEFAULT_wxUSE_LIBGIF=no
+  DEFAULT_wxUSE_LIBJPEG=no
+  DEFAULT_wxUSE_ODBC=no
+
+  DEFAULT_wxUSE_FILE=no
+  DEFAULT_wxUSE_TEXTFILE=no
+  DEFAULT_wxUSE_TIMEDATE=no
+  DEFAULT_wxUSE_INTL=no
+  DEFAULT_wxUSE_CONFIG=no
+  DEFAULT_wxUSE_STREAMS=no
+  DEFAULT_wxUSE_SOCKETS=no
+  DEFAULT_wxUSE_SERIAL=no
+  DEFAULT_wxUSE_JOYSTICK=no
+  DEFAULT_wxUSE_DYNLIB_CLASS=no
+  DEFAULT_wxUSE_LONGLONG=no
+
+  DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT=no
+  DEFAULT_wxUSE_NORMALIZED_PS_FONTS=no
+  DEFAULT_wxUSE_POSTSCRIPT=no
+
+  DEFAULT_wxUSE_X_RESOURCES=no
+  DEFAULT_wxUSE_CLIPBOARD=no
+  DEFAULT_wxUSE_TOOLTIPS=no
+  DEFAULT_wxUSE_DRAG_AND_DROP=no
+  DEFAULT_wxUSE_SPLINES=no
+
+  DEFAULT_wxUSE_MDI_ARCHITECTURE=no
+  DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=no
+  DEFAULT_wxUSE_PRINTING_ARCHITECTURE=no
+
+  DEFAULT_wxUSE_PROLOGIO=no
+  DEFAULT_wxUSE_RESOURCES=no
+  DEFAULT_wxUSE_CONSTRAINTS=no
+  DEFAULT_wxUSE_IPC=no
+  DEFAULT_wxUSE_HELP=no
+  DEFAULT_wxUSE_WXTREE=no
+  DEFAULT_wxUSE_METAFILE=no
+
+  DEFAULT_wxUSE_COMMONDLGS=no
+  DEFAULT_wxUSE_MINIFRAME=no
+  DEFAULT_wxUSE_VALIDATORS=yes
+
+  DEFAULT_wxUSE_ACCEL=no
+  DEFAULT_wxUSE_CARET=no
+  DEFAULT_wxUSE_BMPBUTTON=no
+  DEFAULT_wxUSE_CHECKBOX=no
+  DEFAULT_wxUSE_CHECKLST=no
+  DEFAULT_wxUSE_COMBOBOX=no
+  DEFAULT_wxUSE_GAUGE=no
+  DEFAULT_wxUSE_GRID=no
+  DEFAULT_wxUSE_IMAGLIST=no
+  DEFAULT_wxUSE_LISTBOX=no
+  DEFAULT_wxUSE_LISTCTRL=no
+  DEFAULT_wxUSE_NOTEBOOK=no
+  DEFAULT_wxUSE_RADIOBOX=no
+  DEFAULT_wxUSE_RADIOBTN=no
+  DEFAULT_wxUSE_SASHWINDOW=no
+  DEFAULT_wxUSE_SCROLLBAR=no
+  DEFAULT_wxUSE_SLIDER=no
+  DEFAULT_wxUSE_SPINBTN=no
+  DEFAULT_wxUSE_SPLITTER=no
+  DEFAULT_wxUSE_STATBMP=no
+  DEFAULT_wxUSE_STATBOX=no
+  DEFAULT_wxUSE_STATLINE=no
+  DEFAULT_wxUSE_STATUSBAR=yes
+  DEFAULT_wxUSE_TABDIALOG=no
+  DEFAULT_wxUSE_TOOLBAR=no
+  DEFAULT_wxUSE_TREECTRL=no
+
+  DEFAULT_wxUSE_UNICODE=no
+  DEFAULT_wxUSE_WCSRTOMBS=no
+else
+  DEFAULT_wxUSE_THREADS=yes
+
+  DEFAULT_wxUSE_OPTIMISE=yes
+  DEFAULT_wxUSE_PROFILE=no
+  DEFAULT_wxUSE_DEBUG_FLAG=no
+  DEFAULT_wxUSE_DEBUG_INFO=no
+  DEFAULT_wxUSE_DEBUG_GDB=no
+  DEFAULT_wxUSE_MEM_TRACING=no
+  DEFAULT_wxUSE_DMALLOC=no
+  DEFAULT_wxUSE_APPLE_IEEE=yes
+
+  DEFAULT_wxUSE_LOG=yes
+
+  DEFAULT_wxUSE_GUI=yes
+
+  DEFAULT_wxUSE_ZLIB=yes
+  DEFAULT_wxUSE_LIBPNG=yes
+  DEFAULT_wxUSE_LIBGIF=yes
+  DEFAULT_wxUSE_LIBJPEG=yes
+  DEFAULT_wxUSE_ODBC=no
+
+  DEFAULT_wxUSE_FILE=yes
+  DEFAULT_wxUSE_TEXTFILE=yes
+  DEFAULT_wxUSE_TIMEDATE=yes
+  DEFAULT_wxUSE_INTL=yes
+  DEFAULT_wxUSE_CONFIG=yes
+  DEFAULT_wxUSE_STREAMS=yes
+  DEFAULT_wxUSE_SOCKETS=yes
+  DEFAULT_wxUSE_SERIAL=yes
+  DEFAULT_wxUSE_JOYSTICK=yes
+  DEFAULT_wxUSE_DYNLIB_CLASS=yes
+  DEFAULT_wxUSE_LONGLONG=no
+
+  DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT=yes
+  DEFAULT_wxUSE_NORMALIZED_PS_FONTS=yes
+  DEFAULT_wxUSE_POSTSCRIPT=yes
+
+  DEFAULT_wxUSE_X_RESOURCES=no
+  DEFAULT_wxUSE_CLIPBOARD=yes
+  DEFAULT_wxUSE_TOOLTIPS=yes
+  DEFAULT_wxUSE_DRAG_AND_DROP=yes
+  DEFAULT_wxUSE_SPLINES=yes
+
+  DEFAULT_wxUSE_MDI_ARCHITECTURE=yes
+  DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=yes
+  DEFAULT_wxUSE_PRINTING_ARCHITECTURE=yes
+
+  DEFAULT_wxUSE_PROLOGIO=yes
+  DEFAULT_wxUSE_RESOURCES=yes
+  DEFAULT_wxUSE_CONSTRAINTS=yes
+  DEFAULT_wxUSE_IPC=yes
+  DEFAULT_wxUSE_HELP=yes
+  DEFAULT_wxUSE_WXTREE=yes
+  DEFAULT_wxUSE_METAFILE=yes
+
+  DEFAULT_wxUSE_COMMONDLGS=yes
+  DEFAULT_wxUSE_MINIFRAME=yes
+  DEFAULT_wxUSE_VALIDATORS=yes
+
+  DEFAULT_wxUSE_ACCEL=yes
+  DEFAULT_wxUSE_CARET=yes
+  DEFAULT_wxUSE_BMPBUTTON=yes
+  DEFAULT_wxUSE_CHECKBOX=yes
+  DEFAULT_wxUSE_CHECKLST=yes
+  DEFAULT_wxUSE_COMBOBOX=yes
+  DEFAULT_wxUSE_GAUGE=yes
+  DEFAULT_wxUSE_GRID=yes
+  DEFAULT_wxUSE_IMAGLIST=yes
+  DEFAULT_wxUSE_LISTBOX=yes
+  DEFAULT_wxUSE_LISTCTRL=yes
+  DEFAULT_wxUSE_NOTEBOOK=yes
+  DEFAULT_wxUSE_RADIOBOX=yes
+  DEFAULT_wxUSE_RADIOBTN=yes
+  DEFAULT_wxUSE_SASHWINDOW=yes
+  DEFAULT_wxUSE_SCROLLBAR=yes
+  DEFAULT_wxUSE_SLIDER=yes
+  DEFAULT_wxUSE_SPINBTN=yes
+  DEFAULT_wxUSE_SPLITTER=yes
+  DEFAULT_wxUSE_STATBMP=yes
+  DEFAULT_wxUSE_STATBOX=yes
+  DEFAULT_wxUSE_STATLINE=yes
+  DEFAULT_wxUSE_STATUSBAR=yes
+  DEFAULT_wxUSE_TABDIALOG=no
+  DEFAULT_wxUSE_TOOLBAR=yes
+  DEFAULT_wxUSE_TREECTRL=yes
+
+  DEFAULT_wxUSE_UNICODE=no
+  DEFAULT_wxUSE_WCSRTOMBS=no
+fi
+
+dnl AC_ARG_WITH should be used to select whether an external package will be
+dnl used or not, to configure compile-time features of this package itself,
+dnl use AC_ARG_ENABLE instead
+
+dnl ============================
+dnl external package dependecies
+dnl ============================
+
+AC_ARG_WITH(gtk-prefix,        [  --with-gtk-prefix=PFX   prefix where GTK is installed],
+            gtk_config_prefix="$withval", gtk_config_prefix="")
+AC_ARG_WITH(gtk-exec-prefix,    [  --with-gtk-exec-prefix=PFX  exec prefix where GTK is installed],
+            gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
+AC_ARG_WITH(gtk,        [  --with-gtk              use GTK+],
+            wxUSE_GTK="$withval",wxUSE_GTK=0)
+AC_ARG_WITH(motif,        [  --with-motif            use Motif/Lesstif],
+            wxUSE_MOTIF="$withval",wxUSE_MOTIF=0)
+AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows],
+            wxUSE_CYGWIN="$withval",wxUSE_CYGWIN=0)
+AC_ARG_WITH(mingw,        [  --with-mingw            use GCC Minimal MS-Windows],
+            wxUSE_MINGW="$withval",wxUSE_MINGW=0)
+
+AC_ARG_WITH(dmalloc,        [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)],
+            wxUSE_DMALLOC="$withval",wxUSE_DMALLOC=$DEFAULT_wxUSE_DMALLOC)
+AC_ARG_WITH(zlib,        [  --with-zlib             use zlib for LZW compression],
+            wxUSE_ZLIB="$withval",wxUSE_ZLIB=$DEFAULT_wxUSE_ZLIB)
+AC_ARG_WITH(libpng,        [  --with-libpng           use libpng (PNG image format)],
+            wxUSE_LIBPNG="$withval",wxUSE_LIBPNG=$DEFAULT_wxUSE_LIBPNG)
+AC_ARG_WITH(libgif,     [  --with-libgif          use libgif (GIF file format)],
+            wxUSE_LIBGIF="${withval}",wxUSE_LIBGIF=$DEFAULT_wxUSE_LIBGIF)
+AC_ARG_WITH(libjpeg,     [  --with-libjpeg          use libjpeg (JPEG file format)],
+            wxUSE_LIBJPEG="${withval}",wxUSE_LIBJPEG=$DEFAULT_wxUSE_LIBJPEG)
+AC_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)],
+            wxUSE_OPENGL="$withval",wxUSE_OPENGL=$DEFAULT_wxUSE_OPENGL)
+AC_ARG_WITH(odbc,        [  --with-odbc             use the IODBC and wxODBC classes],
+            wxUSE_ODBC="$withval",wxUSE_ODBC=$DEFAULT_wxUSE_ODBC)
+
+dnl ====================
+dnl compile-time options
+dnl ====================
+
+dnl ---------------------------------------------------------------------------
+dnl compile options
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_ENABLE(optimise,        [  --enable-optimise       create optimised code],
+            wxUSE_OPTIMISE="$enableval",wxUSE_OPTIMISE=$DEFAULT_wxUSE_OPTIMISE)
+AC_ARG_ENABLE(optimize,        [  --enable-optimize       create optimized code],
+            wxUSE_OPTIMISE="$enableval",wxUSE_OPTIMISE=$DEFAULT_wxUSE_OPTIMISE)
+AC_ARG_ENABLE(debug_flag,    [  --enable-debug_flag     set __WXDEBUG__ flag (recommended for developers!)],
+            wxUSE_DEBUG_FLAG="$enableval",wxUSE_DEBUG_FLAG=$DEFAULT_wxUSE_DEBUG_FLAG)
+AC_ARG_ENABLE(debug_info,    [  --enable-debug_info     create code with debugging information],
+            wxUSE_DEBUG_INFO="$enableval",wxUSE_DEBUG_INFO=$DEFAULT_wxUSE_DEBUG_INFO)
+AC_ARG_ENABLE(debug_gdb,    [  --enable-debug_gdb      create code with extra GDB debugging information],
+            wxUSE_DEBUG_GDB="$enableval",wxUSE_DEBUG_GDB=$DEFAULT_wxUSE_DEBUG_GDB)
+AC_ARG_ENABLE(debug_cntxt,    [  --enable-debug_cntxt    use wxDebugContext],
+             AC_DEFINE(wxUSE_DEBUG_CONTEXT))
+AC_ARG_ENABLE(mem_tracing,    [  --enable-mem_tracing    create code with memory tracing],
+            wxUSE_MEM_TRACING="$enableval", wxUSE_MEM_TRACING=$DEFAULT_wxUSE_MEM_TRACING)
+AC_ARG_ENABLE(profile,        [  --enable-profile        create code with profiling information],
+            wxUSE_PROFILE="$enableval",wxUSE_PROFILE=$DEFAULT_wxUSE_PROFILE)
+
+dnl ---------------------------------------------------------------------------
+dnl --disable-gui will build only non-GUI part of wxWindows
+dnl
+dnl NB: this is still in testing stage, don't use if you don't know what you're
+dnl     doing
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_ENABLE(gui,        [  --enable-gui            use GUI classes],
+            wxUSE_GUI="$enableval",wxUSE_GUI=$DEFAULT_wxUSE_GUI)
+
+dnl ---------------------------------------------------------------------------
+dnl (small) optional non GUI classes
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_ENABLE(intl,        [  --enable-intl           use internationalization system],
+            wxUSE_INTL="$enableval",wxUSE_INTL=$DEFAULT_wxUSE_INTL)
+AC_ARG_ENABLE(config,        [  --enable-config         use wxConfig (and derived) classes],
+            wxUSE_CONFIG="$enableval",wxUSE_CONFIG=$DEFAULT_wxUSE_CONFIG)
+AC_ARG_ENABLE(sockets,        [  --enable-sockets        use socket/network classes],
+              wxUSE_SOCKETS="$enableval",wxUSE_SOCKETS=$DEFAULT_wxUSE_SOCKETS)
+AC_ARG_ENABLE(ipc,        [  --enable-ipc            use interprocess communication (wxSocket etc.)],
+            wxUSE_IPC="$enableval",wxUSE_IPC=$DEFAULT_wxUSE_IPC)
+AC_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec],
+            wxUSE_APPLE_IEEE="$enableval",wxUSE_APPLE_IEEE=$DEFAULT_wxUSE_APPLE_IEEE)
+AC_ARG_ENABLE(timedate,        [  --enable-timedate       use date/time classes],
+            wxUSE_TIMEDATE="$enableval",wxUSE_TIMEDATE=$DEFAULT_wxUSE_TIMEDATE)
+AC_ARG_ENABLE(fraction,        [  --enable-fraction       use wxFraction class],
+            wxUSE_FRACTION="$enableval",wxUSE_FRACTION=$DEFAULT_wxUSE_FRACTION)
+AC_ARG_ENABLE(dynlib,        [  --enable-dynlib         use wxLibrary class for DLL loading],
+            wxUSE_DYNLIB_CLASS="$enableval",wxUSE_DYNLIB_CLASS=$DEFAULT_wxUSE_DYNLIB_CLASS)
+AC_ARG_ENABLE(longlong, [  --enable-longlong       use wxLongLong class],
+            wxUSE_LONGLONG="${enableval}",wxUSE_LONGLONG=$DEFAULT_wxUSE_LONGLONG)
+AC_ARG_ENABLE(log,        [  --enable-log            use logging system],
+            wxUSE_LOG="$enableval",wxUSE_LOG=$DEFAULT_wxUSE_LOG)
+AC_ARG_ENABLE(streams,        [  --enable-streams        use wxStream etc classes],
+            wxUSE_STREAMS="$enableval",wxUSE_STREAMS=$DEFAULT_wxUSE_STREAMS)
+AC_ARG_ENABLE(file,        [  --enable-file           use wxFile classes],
+            wxUSE_FILE="$enableval",wxUSE_FILE=$DEFAULT_wxUSE_FILE)
+AC_ARG_ENABLE(textfile,        [  --enable-textfile       use wxTextFile classes],
+            wxUSE_TEXTFILE="$enableval",wxUSE_TEXTFILE=$DEFAULT_wxUSE_TEXTFILE)
+AC_ARG_ENABLE(unicode,        [  --enable-unicode        compile wxString with Unicode support],
+            wxUSE_UNICODE="$enableval",wxUSE_UNICODE=$DEFAULT_wxUSE_UNICODE)
+AC_ARG_ENABLE(wcsrtombs,    [  --enable-wcsrtombs      use wcsrtombs instead of buggy (GNU libc1/Linux libc5) wcstombs],
+            wxUSE_WCSRTOMBS="$enableval",wxUSE_WCSRTOMBS=$DEFAULT_wxUSE_WCSRTOMBS)
+AC_ARG_ENABLE(joystick,        [  --enable-joystick       compile in joystick support (Linux only)],
+            wxUSE_JOYSTICK="$enableval", wxUSE_JOYSTICK=$DEFAULT_wxUSE_JOYSTICK)
+
+dnl ---------------------------------------------------------------------------
+dnl "big" options (i.e. those which change a lot of things throughout the library)
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_ENABLE(threads,        [  --enable-threads        use threads],
+            wxUSE_THREADS="${enableval}",wxUSE_THREADS=$DEFAULT_wxUSE_THREADS)
+AC_ARG_ENABLE(serial,        [  --enable-serial         use class serialization],
+            wxUSE_SERIAL="${enableval}",wxUSE_SERIAL=$DEFAULT_wxUSE_SERIAL)
+
+dnl ---------------------------------------------------------------------------
+dnl "big" GUI options
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_ENABLE(docview,        [  --enable-docview        use document view architecture],
+            wxUSE_DOC_VIEW_ARCHITECTURE="$enableval",wxUSE_DOC_VIEW_ARCHITECTURE=$DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE)
+AC_ARG_ENABLE(help,        [  --enable-help           use help (using external browser at present)],
+            wxUSE_HELP="$enableval",wxUSE_HELP=$DEFAULT_wxUSE_HELP)
+AC_ARG_ENABLE(constraints,    [  --enable-constraints    use layout-constraints system],
+            wxUSE_CONSTRAINTS="$enableval",wxUSE_CONSTRAINTS=$DEFAULT_wxUSE_CONSTRAINTS)
+AC_ARG_ENABLE(printarch,    [  --enable-printarch      use printing architecture],
+            wxUSE_PRINTING_ARCHITECTURE="${enableval}",wxUSE_PRINTING_ARCHITECTURE=$DEFAULT_wxUSE_PRINTING_ARCHITECTURE)
+AC_ARG_ENABLE(mdi,        [  --enable-mdi            use multiple document interface architecture],
+            wxUSE_MDI_ARCHITECTURE="${enableval}",wxUSE_MDI_ARCHITECTURE=$DEFAULT_wxUSE_MDI_ARCHITECTURE)
+
+dnl ---------------------------------------------------------------------------
+dnl PostScript options
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(postscript,    [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)],
+              wxUSE_POSTSCRIPT="$enableval",wxUSE_POSTSCRIPT=$DEFAULT_wxUSE_POSTSCRIPT)
+
+dnl VZ: these options seem to be always on, if someone wants to change it please do
+dnl AC_ARG_ENABLE(PS-normalized,    [  --enable-PS-normalized  use normalized PS fonts],
+dnl             wxUSE_NORMALIZED_PS_FONTS="${enableval}",wxUSE_NORMALIZED_PS_FONTS=$DEFAULT_wxUSE_NORMALIZED_PS_FONTS)
+dnl AC_ARG_ENABLE(afmfonts,        [  --enable-afmfonts       use Adobe Font Metric Font table],
+dnl             wxUSE_AFM_FOR_POSTSCRIPT="${enableval}",wxUSE_AFM_FOR_POSTSCRIPT=$DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT)
+
+dnl ---------------------------------------------------------------------------
+dnl resources
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(prologio,        [  --enable-prologio       use Prolog IO library],
+            wxUSE_PROLOGIO="${enableval}",wxUSE_PROLOGIO=$DEFAULT_wxUSE_PROLOGIO)
+AC_ARG_ENABLE(resources,    [  --enable-resources      use wxWindows resources],
+            wxUSE_RESOURCES="${enableval}",wxUSE_RESOURCES=$DEFAULT_wxUSE_RESOURCES)
+
+AC_ARG_ENABLE(xresources, [  --enable-xresources     use X resources for save (default for gtk+)],
+            wxUSE_X_RESOURCES="${enableval}",wxUSE_X_RESOURCES=$DEFAULT_wxUSE_X_RESOURCES)
+dnl ---------------------------------------------------------------------------
+dnl IPC &c
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(clipboard,    [  --enable-clipboard      use wxClipboard classes],
+            wxUSE_CLIPBOARD="${enableval}",wxUSE_CLIPBOARD=$DEFAULT_wxUSE_CLIPBOARD)
+AC_ARG_ENABLE(dnd,        [  --enable-dnd            use Drag'n'Drop classes],
+            wxUSE_DRAG_AND_DROP="${enableval}",wxUSE_DRAG_AND_DROP=$DEFAULT_wxUSE_DRAG_AND_DROP)
+
+dnl ---------------------------------------------------------------------------
+dnl options which don't work yet
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(wxtree,        [  --enable-wxtree         make wxTree library],
+            wxUSE_WXTREE="${enableval}",wxUSE_WXTREE=$DEFAULT_wxUSE_WXTREE)
+
+dnl ---------------------------------------------------------------------------
+dnl optional GUI controls (in alphabetical order except the first one)
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_ENABLE(controls, [  --enable-controls       use all usual controls],
+            wxUSE_CONTROLS="${enableval}")
+
+dnl even with --enable-controls, some may be disabled by giving
+dnl --disable-<control> later on the command line - but by default all will be
+dnl used (and vice versa)
+if test "$wxUSE_CONTROLS" = "yes"; then
+  DEFAULT_wxUSE_ACCEL=yes
+  DEFAULT_wxUSE_CARET=yes
+  DEFAULT_wxUSE_COMBOBOX=yes
+  DEFAULT_wxUSE_BMPBUTTON=yes
+  DEFAULT_wxUSE_CHECKBOX=yes
+  DEFAULT_wxUSE_CHECKLISTBOX=yes
+  DEFAULT_wxUSE_GAUGE=yes
+  DEFAULT_wxUSE_GRID=yes
+  DEFAULT_wxUSE_IMAGLIST=yes
+  DEFAULT_wxUSE_LISTBOX=yes
+  DEFAULT_wxUSE_LISTCTRL=yes
+  DEFAULT_wxUSE_NOTEBOOK=yes
+  DEFAULT_wxUSE_RADIOBOX=yes
+  DEFAULT_wxUSE_RADIOBTN=yes
+  DEFAULT_wxUSE_SASH=yes
+  DEFAULT_wxUSE_SCROLLBAR=yes
+  DEFAULT_wxUSE_SLIDER=yes
+  DEFAULT_wxUSE_SPINBTN=yes
+  DEFAULT_wxUSE_SPLITTER=yes
+  DEFAULT_wxUSE_STATBMP=yes
+  DEFAULT_wxUSE_STATBOX=yes
+  DEFAULT_wxUSE_STATLINE=yes
+  DEFAULT_wxUSE_STATUSBAR=yes
+  DEFAULT_wxUSE_TAB_DIALOG=yes
+  DEFAULT_wxUSE_TOOLBAR=yes
+  DEFAULT_wxUSE_TOOLTIPS=yes
+  DEFAULT_wxUSE_TREECTRL=yes
+elif test "$wxUSE_CONTROLS" = "no"; then
+  DEFAULT_wxUSE_ACCEL=no
+  DEFAULT_wxUSE_CARET=no
+  DEFAULT_wxUSE_COMBOBOX=no
+  DEFAULT_wxUSE_BMPBUTTON=no
+  DEFAULT_wxUSE_CHECKBOX=no
+  DEFAULT_wxUSE_CHECKLISTBOX=no
+  DEFAULT_wxUSE_GAUGE=no
+  DEFAULT_wxUSE_GRID=no
+  DEFAULT_wxUSE_IMAGLIST=no
+  DEFAULT_wxUSE_LISTBOX=no
+  DEFAULT_wxUSE_LISTCTRL=no
+  DEFAULT_wxUSE_NOTEBOOK=no
+  DEFAULT_wxUSE_RADIOBOX=no
+  DEFAULT_wxUSE_RADIOBTN=no
+  DEFAULT_wxUSE_SASH=no
+  DEFAULT_wxUSE_SCROLLBAR=no
+  DEFAULT_wxUSE_SLIDER=no
+  DEFAULT_wxUSE_SPINBTN=no
+  DEFAULT_wxUSE_SPLITTER=no
+  DEFAULT_wxUSE_STATBMP=no
+  DEFAULT_wxUSE_STATBOX=no
+  DEFAULT_wxUSE_STATLINE=no
+  DEFAULT_wxUSE_STATUSBAR=no
+  DEFAULT_wxUSE_TAB_DIALOG=no
+  DEFAULT_wxUSE_TOOLBAR=no
+  DEFAULT_wxUSE_TOOLTIPS=no
+  DEFAULT_wxUSE_TREECTRL=no
+fi
+
+AC_ARG_ENABLE(accel, [  --enable-accel          use accelerators],
+            wxUSE_ACCEL="${enableval}",wxUSE_ACCEL=$DEFAULT_wxUSE_ACCEL)
+AC_ARG_ENABLE(caret, [  --enable-caret          use wxCaret class],
+            wxUSE_CARET="${enableval}",wxUSE_CARET=$DEFAULT_wxUSE_CARET)
+AC_ARG_ENABLE(bmpbutton, [  --enable-bmpbutton      use wxBitmapButton class],
+            wxUSE_BMPBUTTON="${enableval}",wxUSE_BMPBUTTON=$DEFAULT_wxUSE_BMPBUTTON)
+AC_ARG_ENABLE(checkbox, [  --enable-checkbox       use wxCheckBox class],
+            wxUSE_CHECKBOX="${enableval}",wxUSE_CHECKBOX=$DEFAULT_wxUSE_CHECKBOX)
+AC_ARG_ENABLE(checklst, [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class],
+            wxUSE_CHECKLST="${enableval}",wxUSE_CHECKLST=$DEFAULT_wxUSE_CHECKLST)
+AC_ARG_ENABLE(combobox, [  --enable-combobox       use wxChoice and wxComboBox classes],
+            wxUSE_COMBOBOX="${enableval}",wxUSE_COMBOBOX=$DEFAULT_wxUSE_COMBOBOX)
+AC_ARG_ENABLE(gauge, [  --enable-gauge          use wxGauge class],
+            wxUSE_GAUGE="${enableval}",wxUSE_GAUGE=$DEFAULT_wxUSE_GAUGE)
+AC_ARG_ENABLE(grid, [  --enable-grid           use wxGrid class],
+            wxUSE_GRID="${enableval}",wxUSE_GRID=$DEFAULT_wxUSE_GRID)
+AC_ARG_ENABLE(imaglist, [  --enable-imaglist       use wxImageList class],
+            wxUSE_IMAGLIST="${enableval}",wxUSE_IMAGLIST=$DEFAULT_wxUSE_IMAGLIST)
+AC_ARG_ENABLE(listbox, [  --enable-listbox        use wxListBox class],
+            wxUSE_LISTBOX="${enableval}",wxUSE_LISTBOX=$DEFAULT_wxUSE_LISTBOX)
+AC_ARG_ENABLE(listctrl, [  --enable-listctrl       use wxListCtrl class],
+            wxUSE_LISTCTRL="${enableval}",wxUSE_LISTCTRL=$DEFAULT_wxUSE_LISTCTRL)
+AC_ARG_ENABLE(notebook, [  --enable-notebook       use wxNotebook class],
+            wxUSE_NOTEBOOK="${enableval}",wxUSE_NOTEBOOK=$DEFAULT_wxUSE_NOTEBOOK)
+AC_ARG_ENABLE(radiobox, [  --enable-radiobox       use wxRadioBox class],
+            wxUSE_RADIOBOX="${enableval}",wxUSE_RADIOBOX=$DEFAULT_wxUSE_RADIOBOX)
+AC_ARG_ENABLE(radiobtn, [  --enable-radiobtn       use wxRadioButton class],
+            wxUSE_RADIOBTN="${enableval}",wxUSE_RADIOBTN=$DEFAULT_wxUSE_RADIOBTN)
+AC_ARG_ENABLE(sash, [  --enable-sash           use wxSashWindow class],
+            wxUSE_SASH="${enableval}",wxUSE_SASH=$DEFAULT_wxUSE_SASH)
+AC_ARG_ENABLE(scrollbar, [  --enable-scrollbar      use wxScrollBar class and scrollable windows],
+            wxUSE_SCROLLBAR="${enableval}",wxUSE_SCROLLBAR=$DEFAULT_wxUSE_SCROLLBAR)
+AC_ARG_ENABLE(slider, [  --enable-slider         use wxSlider class],
+            wxUSE_SLIDER="${enableval}",wxUSE_SLIDER=$DEFAULT_wxUSE_SLIDER)
+AC_ARG_ENABLE(spinbtn, [  --enable-spinbtn        use wxSpinButton class],
+            wxUSE_SPINBTN="${enableval}",wxUSE_SPINBTN=$DEFAULT_wxUSE_SPINBTN)
+AC_ARG_ENABLE(splitter, [  --enable-splitter       use wxSplitterWindow class],
+            wxUSE_SPLITTER="${enableval}",wxUSE_SPLITTER=$DEFAULT_wxUSE_SPLITTER)
+AC_ARG_ENABLE(statbmp, [  --enable-statbmp         use wxStaticBitmap class],
+            wxUSE_STATBMP="${enableval}",wxUSE_STATBMP=$DEFAULT_wxUSE_STATBMP)
+AC_ARG_ENABLE(statbox, [  --enable-statbox       use wxStaticBox class],
+            wxUSE_STATBOX="${enableval}",wxUSE_STATBOX=$DEFAULT_wxUSE_STATBOX)
+AC_ARG_ENABLE(statline, [  --enable-statline       use wxStaticLine class],
+            wxUSE_STATLINE="${enableval}",wxUSE_STATLINE=$DEFAULT_wxUSE_STATLINE)
+AC_ARG_ENABLE(statusbar, [  --enable-statusbar      use wxStatusBar class],
+            wxUSE_STATUSBAR="${enableval}",wxUSE_STATUSBAR=$DEFAULT_wxUSE_STATUSBAR)
+AC_ARG_ENABLE(tabdialog, [  --enable-tabdialog        use wxTabControl class],
+            wxUSE_TABDIALOG="${enableval}",wxUSE_TABDIALOG=$DEFAULT_wxUSE_TABDIALOG)
+AC_ARG_ENABLE(toolbar, [  --enable-toolbar      use wxToolBar class],
+            wxUSE_TOOLBAR="${enableval}",wxUSE_TOOLBAR=$DEFAULT_wxUSE_TOOLBAR)
+AC_ARG_ENABLE(treectrl, [  --enable-treectrl       use wxTreeCtrl class],
+            wxUSE_TREECTRL="${enableval}",wxUSE_TREECTRL=$DEFAULT_wxUSE_TREECTRL)
+
+dnl ---------------------------------------------------------------------------
+dnl misc GUI options
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_ENABLE(commondlg,        [  --enable-commondlg      use common dialogs (wxDirDialog, wxProgressDialog, wxTextDialog, ...)],
+            wxUSE_COMMONDLGS="${enableval}",wxUSE_COMMONDLGS=$DEFAULT_wxUSE_COMMONDLGS)
+AC_ARG_ENABLE(miniframe, [  --enable-miniframe      use wxMiniFrame class],
+            wxUSE_MINIFRAME="${enableval}",wxUSE_MINIFRAME=$DEFAULT_wxUSE_MINIFRAME)
+AC_ARG_ENABLE(tooltips, [  --enable-tooltips       use wxToolTip class],
+            wxUSE_TOOLTIPS="${enableval}",wxUSE_TOOLTIPS=$DEFAULT_wxUSE_TOOLTIPS)
+AC_ARG_ENABLE(splines, [  --enable-splines        use spline drawing code],
+            wxUSE_SPLINES="${enableval}",wxUSE_SPLINES=$DEFAULT_wxUSE_SPLINES)
+AC_ARG_ENABLE(validators, [  --enable-validators     use wxValidator and derived classes],
+            wxUSE_VALIDATORS="${enableval}",wxUSE_VALIDATORS=$DEFAULT_wxUSE_VALIDATORS)
+
+dnl check that no more than one toolkit is given and that if none are given that
+dnl we have a default one
+dnl
+dnl NB: this supposes that the shell is able to handle arithmetic expansion and
+dnl     the ${VAR:-VALUE} construction. It does simplify our life though...
+NUM_TOOLKITS="$((${wxUSE_GTK:-0}+${wxUSE_MOTIF:-0}+${wxUSE_MSW:-0}))"
+
+case "$NUM_TOOLKITS" in
+  1)
+  ;;
+  0)
+    if test "$((${DEFAULT_wxUSE_GTK:-0}+${DEFAULT_wxUSE_MOTIF:-0}+${DEFAULT_wxUSE_MSW:-0}))" = 0; then
+      AC_MSG_ERROR(Please specify a toolkit)
+    fi
+
+    wxUSE_GTK=$DEFAULT_wxUSE_GTK
+    wxUSE_MOTIF=$DEFAULT_wxUSE_MOTIF
+    wxUSE_MSW=$DEFAULT_wxUSE_MSW
+  ;;
+  *)
+    AC_MSG_ERROR(Please specify at most one toolkit)
+esac
+
+dnl ---------------------------------------------------------------------------
+dnl Checks for programs
+dnl ---------------------------------------------------------------------------
+
+dnl flush the cache because checking for programs might abort
+AC_CACHE_SAVE
+
+dnl cross-compiling support: we're cross compiling if the build system is
+dnl different from the target one (assume host and target be always the same)
+if eval "test $host != $build"; then
+  if eval "test $build != NONE"; then
+    CC="$build-gcc"
+    CXX="$build-g++"
+    RANLIB="$build-ranlib"
+    NM="$build-nm"
+  fi
+fi
+
+dnl C-compiler checks
+dnl   defines CC with the compiler to use
+dnl   defines GCC with yes if using gcc
+dnl   defines GCC empty if not using gcc
+dnl   defines CFLAGS
+AC_PROG_CC
+
+CFLAGS=`echo "$CFLAGS" | sed 's/-g//g'`
+
+dnl what is the c-preprocessor
+dnl   defines CPP with the c-preprocessor
+AC_PROG_CPP
+
+dnl is -traditional needed for correct compilations
+dnl   adds -traditional for gcc if needed
+AC_PROG_GCC_TRADITIONAL
+
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+dnl C++-compiler checks
+dnl   defines CXX with the compiler to use
+dnl   defines GXX with yes if using gxx
+dnl   defines GXX empty if not using gxx
+dnl   defines CXXFLAGS
+AC_PROG_CXX
+
+dnl what is the C++-preprocessor
+dnl   defines CXXCPP with the C++-preprocessor
+AC_PROG_CXXCPP
+
+CXXFLAGS=`echo "$CXXFLAGS" | sed 's/-g//g'`
+
+AC_LANG_RESTORE
+
+dnl ranlib command
+dnl   defines RANLIB with the appropriate command
+AC_PROG_RANLIB
+
+dnl ar command
+dnl   defines AR with the appropriate command
+AC_CHECK_PROG(AR, ar, ar, ar)
+
+dnl install checks
+dnl   defines INSTALL with the appropriate command
+AC_PROG_INSTALL
+
+dnl does ln -s works
+dnl   defines LN_S with the appropriate command
+AC_PROG_LN_S
+
+dnl strip command
+dnl   defines STRIP as strip or nothing if not found
+AC_CHECK_PROG(STRIP, strip, strip, true)
+
+dnl check if VPATH works
+AC_MSG_CHECKING("make for VPATH support")
+dnl create Makefile
+cat - << EOF > confMake
+check : file
+	cp \$? \$@
+	cp \$? final_file
+EOF
+
+if test ! -d sub ; then
+  mkdir sub
+fi
+echo dummy > sub/file
+${MAKE-make} -f confMake VPATH=sub 2> config.log > /dev/null
+RESULT=$?
+rm -f sub/file check final_file confMake
+rmdir sub
+if test "$RESULT" = 0; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR(
+You need a make-utility that is able to use the variable
+VPATH correctly.
+If your version of make does not support VPATH correctly,
+please install GNU-make (possibly as gmake), and start
+configure with the following command:
+export MAKE=gmake; ./configure  for sh-type shells
+setenv MAKE gmake; ./configure  for csh-type shells
+Also please do remember to use gmake in this case every time
+you are trying to compile.
+)
+fi
+
+dnl YACC checks
+dnl   defines YACC with the appropriate command
+AC_PROG_YACC
+
+dnl LEX checks
+dnl   defines LEX with the appropriate command
+dnl   defines LEXLIB with the appropriate library
+dnl this AM version (don't use AC_PROG_LEX!) also
+dnl   defines YYTEXT_POINTER  if yytext is char*
+dnl   defines LEX_OUTPUT_ROOT as to the base of the
+dnl                           filename output by the lexer
+AM_PROG_LEX
+
+dnl libtool checks (disable static libs by default, this takes too much time...)
+AM_DISABLE_STATIC
+AM_PROG_LIBTOOL
+
+dnl ---------------------------------------------------------------------------
+dnl Define search path for includes and libraries: all headers and libs will be
+dnl looked for in all directories of this path
+dnl ---------------------------------------------------------------------------
+
+SEARCH_INCLUDE="\
+    /usr/Motif-1.2/include    \
+    /usr/Motif-2.1/include    \
+                              \
+    /usr/include/Motif1.2     \
+    /opt/xpm/include/X11      \
+                              \
+    /usr/Motif1.2/include     \
+    /usr/dt/include           \
+    /usr/include/Xm           \
+                              \
+    /usr/X11R6/include        \
+    /usr/X11R5/include        \
+    /usr/X11R4/include        \
+                              \
+    /usr/X11R6/lib            \
+    /usr/X11R5/lib            \
+    /usr/X11R4/lib            \
+                              \
+    /usr/include/X11R6        \
+    /usr/include/X11R5        \
+    /usr/include/X11R4        \
+                              \
+    /usr/local/X11R6/include  \
+    /usr/local/X11R5/include  \
+    /usr/local/X11R4/include  \
+                              \
+    /usr/local/include/X11R6  \
+    /usr/local/include/X11R5  \
+    /usr/local/include/X11R4  \
+                              \
+    /usr/X11/include          \
+    /usr/include/X11          \
+    /usr/local/X11/include    \
+    /usr/local/include/X11    \
+                              \
+    /usr/X386/include         \
+    /usr/x386/include         \
+    /usr/XFree86/include/X11  \
+                              \
+    /usr/include              \
+    /usr/include/gtk          \
+    /usr/include/gdk          \
+    /usr/include/glib         \
+    /usr/local/include        \
+    /usr/unsupported/include  \
+    /usr/athena/include       \
+    /usr/local/x11r5/include  \
+    /usr/lpp/Xamples/include  \
+                              \
+    /usr/local/include/gtk    \
+    /usr/local/include/qt     \
+    /usr/include/qt           \
+                              \
+    /usr/openwin/include      \
+    /usr/openwin/share/include \
+    "
+
+SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` "
+
+dnl ------------------------------------------------------------------------
+dnl Check for libraries
+dnl ------------------------------------------------------------------------
+
+dnl flush the cache because checking for libraries might abort
+AC_CACHE_SAVE
+
+dnl find the X11 include and library files
+dnl   defines x_includes and x_libraries
+AC_PATH_XTRA
+
+if test "$no_x" = "yes"; then
+  AC_MSG_ERROR(X11 libraries not found, aborting)
+fi
+
+CHECK_INCLUDE="-I/usr/include $X_CFLAGS"
+CHECK_LIB="-L/lib -L/usr/lib $X_LIBS"
+
+dnl ----------------------------------------------------------------
+dnl search for toolkit (widget sets)
+dnl ----------------------------------------------------------------
+
+TOOLKIT=
+TOOLKIT_DEF=
+TOOLKIT_DIR=
+TOOLKIT_INCLUDE=
+
+GUI_TK_LIBRARY=
+GUI_TK_LINK=
+
+WXGTK12=
+
+if test "$wxUSE_GTK" = 1; then
+  dnl avoid calling AM_PATH_GTK twice, so check first for the newer version and
+  dnl only then, if it wasn't found, for an older one
+  AM_PATH_GTK(1.2.0, WXGTK12=1)
+  if test "$WXGTK12" != 1; then
+    AM_PATH_GTK(1.0.0, , AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.X or 1.0.X?))
+  fi
+
+  TOOLKIT_INCLUDE="$GTK_CFLAGS"
+  GUI_TK_LIBRARY="$GTK_LIBS"
+
+  TOOLKIT=GTK
+  LTLIBOBJS="$LTLIBOBJS image.lo utilsgtk.lo win_gtk.lo"
+fi
+
+if test "$wxUSE_MOTIF" = 1; then
+    AC_MSG_CHECKING(for Motif/Lesstif includes)
+    AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
+    if test "$ac_find_includes" != "" ; then
+        AC_MSG_RESULT(found $ac_find_includes)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
+    fi
+
+    AC_MSG_CHECKING(for Motif/Lesstif library)
+    AC_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
+    if test "$ac_find_libraries" != "" ; then
+        AC_INCLUDE_PATH_EXIST($ac_find_includes, $CHECK_INCLUDE)
+        AC_LINK_PATH_EXIST($ac_find_libraries, $CHECK_LIB)
+
+        CHECK_LINK="$CHECK_LIB $ac_path_to_link"
+        CHECK_INCLUDE="$CHECK_INCLUDE $ac_path_to_include"
+        AC_MSG_RESULT(found at $ac_find_libraries)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
+    fi
+
+    AC_MSG_CHECKING(for Xt library)
+    AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
+    if test "$ac_find_libraries" != "" ; then
+        AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
+        CHECK_LINK="$CHECK_LIB $ac_path_to_link"
+        AC_MSG_RESULT(found at $ac_find_libraries)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR(please set LDFLAGS to contain the location of libXt)
+    fi
+
+    XPM_LINK=""
+    AC_MSG_CHECKING(for Xpm library)
+    AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
+    if test "$ac_find_libraries" != "" ; then
+        AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
+        CHECK_LINK="$CHECK_LIB $ac_path_to_link"
+        XPM_LINK="-lXpm "
+        AC_DEFINE(wxHAVE_LIB_XPM)
+        AC_MSG_RESULT(found at $ac_find_libraries)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_WARN(library will be compiled without support for images in XPM format)
+    fi
+
+    GUI_TK_LINK="-lXm $(XPM_LINK)-lXmu -lXt -lX11 -lm"
+    GUI_TK_LIBRARY="$CHECK_LIB $GUI_TK_LINK"
+    TOOLKIT=MOTIF
+fi
+
+dnl the name of the directory where the files for this toolkit live
+TOOLKIT_DIR=`echo ${TOOLKIT} | tr "A-Z" "a-z"`
+
+dnl the symbol which allows conditional compilation for the given toolkit
+TOOLKIT_DEF=-D__WX${TOOLKIT}__
+
+dnl the name (without leading 'wx_') of the library
+WX_LIBRARY=${TOOLKIT_DIR}2
+
+dnl ------------------------------------------------------------------------
+dnl Check for headers
+dnl ------------------------------------------------------------------------
+
+dnl defines HAVE_STRINGS_H (where some string functions live on AIX for example)
+AC_CHECK_HEADERS(strings.h)
+dnl defines HAVE_UNISTD_H
+AC_CHECK_HEADERS(unistd.h)
+dnl defines HAVE_WCHAR_H
+AC_CHECK_HEADERS(wchar.h)
+dnl defines HAVE_WCSTR_H
+AC_CHECK_HEADERS(wcstr.h)
+dnl defines HAVE_FNMATCH_H
+AC_CHECK_HEADERS(fnmatch.h)
+
+dnl ---------------------------------------------------------------------------
+dnl Checks for typedefs
+dnl ---------------------------------------------------------------------------
+
+dnl   defines mode_t if not already defined
+AC_TYPE_MODE_T
+dnl   defines off_t if not already defined
+AC_TYPE_OFF_T
+dnl   defines pid_t if not already defined
+AC_TYPE_PID_T
+dnl   defines size_t if not already defined
+AC_TYPE_SIZE_T
+dnl   defines uid_t and gid_t if not already defined
+AC_TYPE_UID_T
+
+dnl ---------------------------------------------------------------------------
+dnl Checks for structures
+dnl ---------------------------------------------------------------------------
+
+dnl ---------------------------------------------------------------------------
+dnl Checks for compiler characteristics
+dnl ---------------------------------------------------------------------------
+
+dnl defines const to be empty if c-compiler does not support const fully
+AC_C_CONST
+dnl defines inline to a sensible value for the c-compiler
+AC_C_INLINE
+
+dnl check the sizes of integral types (give some reasonable default values for
+dnl cross-compiling)
+dnl   defines the size of certain types of variables in SIZEOF_<TYPE>
+AC_CHECK_SIZEOF(int *, 4)
+AC_CHECK_SIZEOF(int, 4)
+AC_CHECK_SIZEOF(long, 4)
+AC_CHECK_SIZEOF(long long, 0)
+
+dnl check for iostream (as opposed to iostream.h) standard header
+WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
+
+dnl check whether C++ compiler supports bool built-in type
+WX_CPP_BOOL
+
+dnl check whether overloading on size_t/int parameter works
+WX_CPP_SIZE_T_IS_NOT_INT
+
+dnl ---------------------------------------------------------------------------
+dnl Check for functions
+dnl ---------------------------------------------------------------------------
+
+dnl check for wcslen
+AC_CHECK_LIB(c, wcslen, [
+            AC_DEFINE(HAVE_WCSLEN)
+            WCHAR_LINK=""
+        ], [
+            AC_CHECK_LIB(w, wcslen, [
+                AC_DEFINE(HAVE_WCSLEN)
+                WCHAR_LINK="-lw"
+            ])
+        ])
+
+dnl check for vprintf/vsprintf() which are GNU extensions
+AC_FUNC_VPRINTF
+
+dnl check for vsnprintf() - a safe version of vsprintf()
+AC_CHECK_FUNCS(vsnprintf,
+               AC_DEFINE(HAVE_VSNPRINTF),
+               AC_MSG_WARN(unsafe function sprintf will be used instead of snprintf)
+              )
+
+dnl check for vfork() (even if it's the same as fork() in modern Unices)
+AC_CHECK_FUNCS(vfork)
+
+POSIX4_LINK=
+AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP), [
+    AC_CHECK_LIB(posix4, nanosleep, [
+      AC_DEFINE(HAVE_NANOSLEEP)
+      POSIX4_LINK="-lposix4"
+    ], [
+    AC_CHECK_FUNCS(usleep,
+        AC_DEFINE(HAVE_USLEEP),
+        AC_MSG_WARN([wxSleep() function will not work]))
+    ])
+])
+
+dnl check for uname (POSIX) and gethostname (BSD)
+AC_CHECK_FUNCS(uname gethostname, break)
+
+dnl ===========================================================================
+dnl Now we have all the info we need - use it!
+dnl ===========================================================================
+
+dnl flush the cache
+AC_CACHE_SAVE
+
+dnl ---------------------------------------------------------------------------
+dnl thread support
+dnl ---------------------------------------------------------------------------
+
+dnl the code below:
+dnl   defines THREADS_OBJ which contains the object files to build
+dnl   defines THREADS_LINK which contains the thread library to link with
+dnl   defines wxUSE_THREADS=1 if thread support is activated
+
+THREADS_LINK=""
+THREADS_OBJ=""
+
+if test "$wxUSE_THREADS" = "yes"; then
+    dnl find if POSIX threads are available
+
+    dnl standard lib name is pthread
+    dnl We no longer test for pthread-0.7 as it breaks compilation on some
+    dnl glibc2 systems, especially for static linkage.
+    AC_CHECK_LIB(pthread, pthread_create, [
+            THREADS_OBJ="threadpsx.lo"
+            THREADS_LINK="pthread"
+        ], [
+            dnl thread functions are in libc_r under FreeBSD
+            AC_CHECK_LIB(c_r, pthread_create, [
+                THREADS_OBJ="threadpsx.lo"
+                THREADS_LINK="c_r"
+            ], [
+                dnl VZ: SGI threads are not supported currently
+                AC_CHECK_HEADER(sys/prctl.h, [
+                    THREADS_OBJ="threadsgi.lo"
+                ])
+            ])
+        ])
+    if test "$THREADS_LINK" != ""; then
+        AC_DEFINE(wxUSE_THREADS)
+    else
+        AC_MSG_WARN(No thread support on this system)
+    fi
+fi
+
+if test -z "$THREADS_OBJ"; then
+  wxUSE_THREADS=no
+fi
+
+dnl do other tests only if we are using threads
+if test "$wxUSE_THREADS" = "yes"; then
+  dnl must define _REENTRANT for multithreaded code
+  CFLAGS="${CFLAGS} -D_REENTRANT"
+  CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
+  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/unix"
+  LTLIBOBJS="$LTLIBOBJS $THREADS_OBJ"
+
+  dnl define autoconf macro to check for given function in both pthread and
+  dnl posix4 libraries
+  dnl usage: AC_FUNC_THREAD(FUNCTION_NAME)
+  dnl VZ: TODO
+  dnl AC_DEFUN(AC_FUNC_THREAD,
+  dnl [
+  dnl     AC_CHECK_LIB($THREADS_LINK, $1,
+  dnl            AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'),
+  dnl            [AC_CHECK_LIB("posix4", $1,
+  dnl                [AC_DEFINE(HAVE_`'translit($1, `A-Z', 'a-z'))
+  dnl                 POSIX4_LINK="-lposix4"
+  dnl             ])
+  dnl            ])
+  dnl ])
+
+  AC_CHECK_HEADERS(sched.h)
+
+  AC_CHECK_LIB($THREADS_LINK, sched_yield,
+               AC_DEFINE(HAVE_SCHED_YIELD),
+               [AC_CHECK_LIB("posix4", sched_yield,
+                   [AC_DEFINE(HAVE_SCHED_YIELD) POSIX4_LINK="-lposix4"],
+                   AC_MSG_WARN(wxThread::Yield will not work properly)
+                )]
+               )
+
+  dnl VZ: we should be checking for all of the following functions instead:
+  dnl   1. pthread_attr_getschedpolicy
+  dnl   2. sched_get_priority_min and sched_get_priority_max
+  dnl   3. pthread_attr_getschedparam and pthread_attr_setschedparam
+  dnl but it seems that if the first one is there, the other ones are too (of
+  dnl course the proper solution would be to implement AC_FUNC_THREAD above
+  dnl and do test for them all - anyone?)
+  AC_CHECK_LIB($THREADS_LINK, pthread_attr_getschedpolicy,
+               AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS),
+               [AC_CHECK_LIB("posix4", pthread_attr_getschedpolicy,
+                   [AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS) POSIX4_LINK="-lposix4"],
+                   AC_MSG_WARN(Setting thread priority will not work)
+                )]
+               )
+
+  AC_CHECK_LIB($THREADS_LINK, pthread_cancel,
+               AC_DEFINE(HAVE_PTHREAD_CANCEL),
+               AC_MSG_WARN([wxThread::Kill() will not work properly]))
+
+  AC_CACHE_CHECK([for pthread_cleanup_push/pop], wx_cv_func_pthread_cleanup_push,
+  [
+    AC_TRY_COMPILE([#include <pthread.h>],
+                 [
+                    pthread_cleanup_push(NULL, NULL);
+                    pthread_cleanup_pop(0);
+                 ], [
+                    wx_cv_func_pthread_cleanup_push=yes
+                    AC_DEFINE(HAVE_THREAD_CLEANUP_FUNCTIONS)
+                 ], [
+                    wx_cv_func_pthread_cleanup_push=no
+                 ])
+  ])
+
+  THREADS_LINK="-l$THREADS_LINK"
+fi
+
+if test "$WXGTK12" = 1 ; then
+  AC_DEFINE_UNQUOTED(__WXGTK12__,$WXGTK12)
+fi
+
+WXDEBUG=
+if test "$wxUSE_DEBUG_GDB" = "yes" ; then
+    wxUSE_DEBUG_INFO=yes
+    WXDEBUG="-ggdb"
+fi
+
+if test "$wxUSE_DEBUG_INFO" = "yes" ; then
+    WXDEBUG="-g"
+    wxUSE_OPTIMISE=no
+fi
+
+if test "$wxUSE_DEBUG_FLAG" = "yes" ; then
+  AC_DEFINE(WXDEBUG)
+  WXDEBUG_DEFINE="-D__WXDEBUG__"
+else
+  WXDEBUG_DEFINE="-DGTK_NO_CHECK_CASTS"
+fi
+
+if test "$wxUSE_MEM_TRACING" = "yes" ; then
+  AC_DEFINE(wxUSE_MEMORY_TRACING)
+  AC_DEFINE(wxUSE_GLOBAL_MEMORY_OPERATORS)
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS memcheck"
+fi
+
+if test "$wxUSE_DMALLOC" = "yes" ; then
+  DMALLOC_LINK="-ldmalloc"
+fi
+
+PROFILE=
+if test "$wxUSE_PROFILE" = "yes" ; then
+  PROFILE="-pg"
+fi
+
+CXXFLAGS=`echo "${CXXFLAGS}" | sed "s/\-O.//g" `
+CFLAGS=`echo "${CFLAGS}" | sed "s/\-O.//g" `
+if test "$wxUSE_OPTIMISE" = "no" ; then
+  OPTIMISE=
+else
+  if test "$GCC" = yes ; then
+    OPTIMISE="-O2"
+    case "${host}" in
+      i586-*-*|i686-*-* )
+        OPTIMISE="${OPTIMISE} "
+    ;;
+    esac
+  else
+    OPTIMISE="-O"
+  fi
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl Optional libraries
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_ZLIB" = "yes" ; then
+  AC_DEFINE(wxUSE_ZLIB)
+  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/zlib"
+  LTLIBOBJS="$LTLIBOBJS adler32.lo compress.lo crc32.lo gzio.lo uncompr.lo deflate.lo trees.lo zutil.lo inflate.lo infblock.lo inftrees.lo infcodes.lo infutil.lo inffast.lo"
+  if eval "test x$wxUSE_STREAMS = x1"; then
+    LTLIBOBJS="$LTLIBOBJS zstream.lo"
+  fi
+fi
+
+if test "$wxUSE_LIBPNG" = "yes" ; then
+  AC_DEFINE(wxUSE_LIBPNG)
+  LTLIBOBJS="$LTLIBOBJS imagpng.lo png.lo pngset.lo pngget.lo pngrutil.lo pngtrans.lo pngwutil.lo pngread.lo pngrio.lo pngwio.lo pngwrite.lo pngrtran.lo pngwtran.lo pngmem.lo pngerror.lo pngpread.lo"
+  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/png"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS png"
+fi
+
+if test "$wxUSE_LIBGIF" = "yes" ; then
+  AC_DEFINE(wxUSE_LIBGIF)
+  LTLIBOBJS="$LTLIBOBJS imaggif.lo"
+fi
+
+if test "$wxUSE_LIBJPEG" = "yes" ; then
+  AC_DEFINE(wxUSE_LIBJPEG)
+  EXTRA_VPATH="$EXTRA_VPATH:\${srcdir}/jpeg"
+  LTLIBOBJS="$LTLIBOBJS imagjpeg.lo \
+             jcomapi.lo jutils.lo jerror.lo jmemmgr.lo jmemnobs.lo \
+             jcapimin.lo jcapistd.lo jctrans.lo jcparam.lo jdatadst.lo \
+             jcinit.lo jcmaster.lo jcmarker.lo jcmainct.lo jcprepct.lo \
+             jccoefct.lo jccolor.lo jcsample.lo jchuff.lo jcphuff.lo \
+             jcdctmgr.lo jfdctfst.lo jfdctflt.lo jfdctint.lo \
+             jdapimin.lo jdapistd.lo jdtrans.lo jdatasrc.lo \
+             jdmaster.lo jdinput.lo jdmarker.lo jdhuff.lo jdphuff.lo \
+             jdmainct.lo jdcoefct.lo jdpostct.lo jddctmgr.lo jidctfst.lo \
+             jidctflt.lo jidctint.lo jidctred.lo jdsample.lo jdcolor.lo \
+             jquant1.lo jquant2.lo jdmerge.lo"
+fi
+
+if test "$wxUSE_OPENGL" = "yes"; then
+  AC_CHECK_HEADER(GL/gl.h, [
+    AC_CHECK_LIB(GL, glInitNames, [
+      OPENGL_LINK="-lGL"
+      AC_DEFINE(wxUSE_OPENGL)
+      UTILS_SUBDIRS="$UTILS_SUBDIRS glcanvas/src"
+    ],[
+        AC_CHECK_LIB(MesaGL, glInitNames, [
+        OPENGL_LINK="-lMesaGL"
+        AC_DEFINE(wxUSE_OPENGL)
+        UTILS_SUBDIRS="$UTILS_SUBDIRS glcanvas/src"
+      ],wxUSE_OPENGL=0)
+     ],wxUSE_OPENGL=0)
+    ],wxUSE_OPENGL=0)
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl the library may be built without GUI classes at all
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_GUI" = "yes"; then
+  AC_DEFINE(wxUSE_GUI)
+
+  dnl the things we always pull in the GUI version of the library:
+  dnl 1. basic things like wxApp, wxWindow, wxControl, wxFrame, wxDialog (the
+  dnl    library really can't be built without those)
+  dnl 2. basic controls: wxButton, wxStaticText, wxTextCtrl (these are used in
+  dnl    almost any program and the first 2 are needed to show a message box
+  dnl    which want to be always able to do)
+  dnl 3. GDI stuff: icon, cursors and all that. Although it would be very nice
+  dnl    to compile without them (if the app doesn't do any drawing, it doesn't
+  dnl    need the dcs, pens, brushes, ...), this just can't be done now
+  dnl 4. menu stuff: wxMenu, wxMenuBar, wxMenuItem
+  dnl 5. misc stuff: timers, settings, message box
+  LTLIBOBJS="$LTLIBOBJS \
+main.lo app.lo event.lo wincmn.lo window.lo control.lo framecmn.lo frame.lo dialog.lo panelg.lo \
+button.lo stattext.lo textctrl.lo \
+bitmap.lo brush.lo colour.lo cursor.lo data.lo dc.lo dcbase.lo dcclient.lo \
+dcmemory.lo dcscreen.lo font.lo gdicmn.lo gdiobj.lo icon.lo palette.lo pen.lo region.lo \
+menu.lo \
+settings.lo timer.lo msgdlgg.lo"
+else
+  AC_DEFINE(wxUSE_NOGUI)
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl Unix/Windows
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_UNIX" = "yes"; then
+  AC_DEFINE(wxUSE_UNIX)
+  LTLIBOBJS="$LTLIBOBJS utilsunx.lo"
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl Register non-GUI class options for makefiles and setup.h
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_APPLE_IEEE" = "yes"; then
+  AC_DEFINE(wxUSE_APPLE_IEEE)
+  LTLIBOBJS="$LTLIBOBJS extended.lo"
+fi
+
+if test "$wxUSE_TIMEDATE" = "yes"; then
+  AC_DEFINE(wxUSE_TIMEDATE)
+  LTLIBOBJS="$LTLIBOBJS date.lo time.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"
+fi
+
+if test "$wxUSE_FILE" = "yes"; then
+  AC_DEFINE(wxUSE_FILE)
+  LTLIBOBJS="$LTLIBOBJS file.lo"
+fi
+
+if test "$wxUSE_TEXTFILE" = "yes"; then
+  if test "$wxUSE_FILE" != "yes"; then
+    AC_MSG_WARN(wxTextFile requires wxFile and it won't be compiled without it)
+  else
+    AC_DEFINE(wxUSE_TEXTFILE)
+    LTLIBOBJS="$LTLIBOBJS textfile.lo"
+  fi
+fi
+
+if test "$wxUSE_CONFIG" = "yes" ; then
+  if test "$wxUSE_TEXTFILE" != "yes"; then
+    AC_MSG_WARN(wxConfig requires wxTextFile and it won't be compiled without it)
+  else
+    AC_DEFINE(wxUSE_CONFIG)
+    LTLIBOBJS="$LTLIBOBJS config.lo fileconf.lo"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS config"
+  fi
+fi
+
+if test "$wxUSE_INTL" = "yes" ; then
+  if test "$wxUSE_FILE" != "yes"; then
+    AC_MSG_WARN(I18n code requires wxFile and it won't be compiled without it)
+  else
+    AC_DEFINE(wxUSE_INTL)
+    LTLIBOBJS="$LTLIBOBJS intl.lo"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS internat"
+  fi
+fi
+
+if test "$wxUSE_LOG" = "yes"; then
+  AC_DEFINE(wxUSE_LOG)
+  LTLIBOBJS="$LTLIBOBJS log.lo"
+fi
+
+if test "$wxUSE_LONGLONG" = "yes"; then
+  AC_DEFINE(wxUSE_LONGLONG)
+  LTLIBOBJS="$LTLIBOBJS longlong.lo"
+fi
+
+if test "$wxUSE_SOCKETS" = "yes" ; then
+    if test "$wxUSE_THREADS" = "yes" ; then
+        AC_DEFINE(wxUSE_SOCKETS)
+        LTLIBOBJS="$LTLIBOBJS sckint.lo socket.lo sckaddr.lo protocol.lo http.lo ftp.lo url.lo"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wxsocket"
+    else
+        AC_MSG_WARN(socket classes require --with-threads and won't be compiled without it)
+        wxUSE_SOCKETS=0
+    fi
+fi
+
+if test "$wxUSE_STREAMS" = "yes" ; then
+  AC_DEFINE(wxUSE_STREAMS)
+  LTLIBOBJS="$LTLIBOBJS stream.lo wfstream.lo datstrm.lo mstream.lo objstrm.lo"
+  if test "$wxUSE_SOCKETS" = "yes" ; then
+    LTLIBOBJS="$LTLIBOBJS sckstrm.lo"
+  fi
+fi
+
+if test "$wxUSE_SERIAL" = "yes" ; then
+  AC_DEFINE(wxUSE_SERIAL)
+fi
+
+dnl ------------------------------------------------------------------------
+dnl wxSocket
+dnl ------------------------------------------------------------------------
+
+if test "$wxUSE_SOCKETS" = "yes"; then
+    AC_LANG_SAVE
+    AC_LANG_CPLUSPLUS
+    dnl determine the type of third argument for getsockname
+    AC_MSG_CHECKING(the type of the third argument of getsockname)
+    AC_TRY_COMPILE(
+        [#include <sys/socket.h>],
+        [socklen_t len; getsockname(0, NULL, &len);],
+        AC_DEFINE(SOCKLEN_T, socklen_t) AC_MSG_RESULT(socklen_t),
+           AC_TRY_COMPILE(
+            [#include <sys/socket.h>],
+            [size_t len; getsockname(0, NULL, &len);],
+            AC_DEFINE(SOCKLEN_T, size_t) AC_MSG_RESULT(size_t),
+            AC_TRY_COMPILE(
+                [#include <sys/socket.h>],
+                [int len; getsockname(0, NULL, &len);],
+                AC_DEFINE(SOCKLEN_T, int) AC_MSG_RESULT(int),
+            AC_MSG_RESULT(unknown)
+        )
+        )
+    )
+    AC_LANG_RESTORE
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl Joystick support
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_JOYSTICK" = 1; then
+  dnl joystick support is only for Linux 2.1.x or greater
+  AC_CHECK_HEADERS(linux/joystick.h)
+  if test "$ac_cv_header_linux_joystick_h" = "yes"; then
+    AC_DEFINE(wxUSE_JOYSTICK)
+    LTLIBOBJS="$LTLIBOBJS joystick.lo"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
+  fi
+fi
+
+dnl ------------------------------------------------------------------------
+dnl DLL support
+dnl ------------------------------------------------------------------------
+
+HAVE_DL_FUNCS=0
+HAVE_SHL_FUNCS=0
+if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
+    dnl the test is a bit complicated because we check for dlopen() both with
+    dnl and without -ldl
+    AC_CHECK_FUNCS(dlopen,
+        [AC_DEFINE(HAVE_DLOPEN) HAVE_DL_FUNCS=1],
+        [AC_CHECK_LIB(dl, dlopen,
+            [AC_DEFINE(HAVE_DLOPEN) HAVE_DL_FUNCS=1])])
+    AC_CHECK_FUNCS( shl_load,
+                    [AC_DEFINE(HAVE_SHL_LOAD) HAVE_DL_FUNCS=1 HAVE_SHL_FUNCS=1])
+
+    if test "$HAVE_DL_FUNCS" = 0; then
+        AC_MSG_WARN("--with-dynlib and --with-odbc will be disabled due to missing shared library support")
+        wxUSE_ODBC=no
+        wxUSE_DYNLIB_CLASS=no
+    fi
+fi
+
+if test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
+  AC_DEFINE(wxUSE_DYNLIB_CLASS)
+  LTLIBOBJS="$LTLIBOBJS dynlib.lo"
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl Unicode
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_UNICODE" = "yes" ; then
+  AC_DEFINE(wxUSE_UNICODE)
+fi
+
+if test "$wxUSE_WCSRTOMBS" = "yes" ; then
+  AC_DEFINE(wxUSE_WCSRTOMBS)
+fi
+
+dnl ----------------------------------------------------------------
+dnl iODBC support
+dnl ----------------------------------------------------------------
+
+IODBC_C_SRC=""
+if test "$wxUSE_ODBC" = "yes" ; then
+  AC_DEFINE(wxUSE_ODBC)
+  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/iodbc"
+  LTLIBOBJS="$LTLIBOBJS catalog.lo connect.lo dlf.lo dlproc.lo execute.lo fetch.lo hdbc.lo henv.lo herr.lo hstmt.lo info.lo itrace.lo misc.lo prepare.lo result.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
+fi
+
+dnl ----------------------------------------------------------------
+dnl Register PostScript options for makefiles and setup.h
+dnl ----------------------------------------------------------------
+
+if test "$wxUSE_POSTSCRIPT" = "yes" ; then
+  AC_DEFINE(wxUSE_POSTSCRIPT)
+  LTLIBOBJS="$LTLIBOBJS printps.lo dcpsg.lo"
+fi
+
+AC_DEFINE(wxUSE_AFM_FOR_POSTSCRIPT)
+
+AC_DEFINE(wxUSE_NORMALIZED_PS_FONTS)
+
+dnl ---------------------------------------------------------------------------
+dnl big GUI components: MDI, doc/view, printing, help, ...
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_CONSTRAINTS" = "yes"; then
+  AC_DEFINE(wxUSE_CONSTRAINTS)
+
+  LTLIBOBJS="$LTLIBOBJS layout.lo laywin.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS layout"
+fi
+
+if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
+  AC_DEFINE(wxUSE_MDI_ARCHITECTURE)
+  LTLIBOBJS="$LTLIBOBJS mdi.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mdi"
+fi
+
+if test "$wxUSE_DOC_VIEW_ARCHITECTURE" = "yes" ; then
+  AC_DEFINE(wxUSE_DOC_VIEW_ARCHITECTURE)
+  LTLIBOBJS="$LTLIBOBJS docview.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS docview"
+  if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
+    LTLIBOBJS="$LTLIBOBJS docmdi.lo"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS docvwmdi"
+  fi
+fi
+
+if test "$wxUSE_HELP" = "yes"; then
+  AC_DEFINE(wxUSE_HELP)
+  LTLIBOBJS="$LTLIBOBJS helpext.lo helphtml.lo helpbase.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS help"
+fi
+
+if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
+  AC_DEFINE(wxUSE_PRINTING_ARCHITECTURE)
+  LTLIBOBJS="$LTLIBOBJS prntbase.lo paper.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS printing"
+fi
+
+if test "$wxUSE_PROLOGIO" = "yes" ; then
+  AC_DEFINE(wxUSE_PROLOGIO)
+  LTLIBOBJS="$LTLIBOBJS wxexpr.lo parser.lo"
+fi
+
+if test "$wxUSE_RESOURCES" = "yes" ; then
+  if test "$wxUSE_PROLOGIO" = "yes" ; then
+    AC_DEFINE(wxUSE_RESOURCES)
+    LTLIBOBJS="$LTLIBOBJS resource.lo"
+    if test "$wxUSE_GTK" = 1; then
+      LTLIBOBJS="$LTLIBOBJS utilsres.lo"
+    fi
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
+  else
+    AC_MSG_WARN([wxWindows ressource system requires PrologIO and can't be compiled without it.])
+  fi
+fi
+
+if test "$wxUSE_X_RESOURCES" = "yes"; then
+  AC_DEFINE(wxUSE_X_RESOURCES)
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl IPC: IPC, d-n-d, clipboard, ...
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_IPC" = "yes"; then
+  AC_DEFINE(wxUSE_IPC)
+  LTLIBOBJS="$LTLIBOBJS ipcbase.lo sckipc.lo"
+fi
+
+if test "$wxUSE_CLIPBOARD" = "yes"; then
+  AC_DEFINE(wxUSE_CLIPBOARD)
+  LTLIBOBJS="$LTLIBOBJS clipbrd.lo dataobj.lo"
+fi
+
+if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
+  if test "$WXGTK12" = 1 ; then
+    AC_DEFINE(wxUSE_DRAG_AND_DROP)
+    LTLIBOBJS="$LTLIBOBJS dnd.lo"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
+    if test "$wxUSE_CLIPBOARD" != "yes"; then
+      LTLIBOBJS="$LTLIBOBJS dataobj.lo"
+    fi
+  else
+    AC_MSG_WARN(drag and drop is only supported under GTK 1.2)
+  fi
+fi
+
+if test "$wxUSE_SPLINES" = "yes" ; then
+  AC_DEFINE(wxUSE_SPLINES)
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl GUI controls
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_ACCEL" = "yes"; then
+  AC_DEFINE(wxUSE_ACCEL)
+  LTLIBOBJS="$LTLIBOBJS accel.lo"
+fi
+
+if test "$wxUSE_CARET" = "yes"; then
+  AC_DEFINE(wxUSE_CARET)
+  LTLIBOBJS="$LTLIBOBJS caret.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS caret"
+fi
+
+if test "$wxUSE_COMBOBOX" = "yes"; then
+  AC_DEFINE(wxUSE_COMBOBOX)
+  LTLIBOBJS="$LTLIBOBJS choice.lo combobox.lo"
+fi
+
+if test "$wxUSE_BMPBUTTON" = "yes"; then
+  AC_DEFINE(wxUSE_BMPBUTTON)
+  LTLIBOBJS="$LTLIBOBJS bmpbuttn.lo"
+fi
+
+if test "$wxUSE_CHECKBOX" = "yes"; then
+  AC_DEFINE(wxUSE_CHECKBOX)
+  LTLIBOBJS="$LTLIBOBJS checkbox.lo"
+fi
+
+if test "$wxUSE_CHECKLST" = "yes"; then
+  AC_DEFINE(wxUSE_CHECKLISTBOX)
+  LTLIBOBJS="$LTLIBOBJS checklst.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS checklst"
+fi
+
+if test "$wxUSE_GAUGE" = "yes"; then
+  AC_DEFINE(wxUSE_GAUGE)
+  LTLIBOBJS="$LTLIBOBJS gauge.lo"
+fi
+
+if test "$wxUSE_GRID" = "yes"; then
+  AC_DEFINE(wxUSE_GRID)
+  LTLIBOBJS="$LTLIBOBJS gridg.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS grid"
+fi
+
+if test "$wxUSE_IMAGLIST" = "yes"; then
+  AC_DEFINE(wxUSE_IMAGLIST)
+  LTLIBOBJS="$LTLIBOBJS imaglist.lo"
+fi
+
+if test "$wxUSE_LISTBOX" = "yes"; then
+  AC_DEFINE(wxUSE_LISTBOX)
+  LTLIBOBJS="$LTLIBOBJS listbox.lo"
+fi
+
+if test "$wxUSE_LISTCTRL" = "yes"; then
+  if test "$wxUSE_IMAGLIST" = "yes"; then
+    AC_DEFINE(wxUSE_LISTCTRL)
+    LTLIBOBJS="$LTLIBOBJS listctrl.lo"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS listctrl"
+  else
+    AC_MSG_WARN([wxListCtrl requires wxImageList and won't be compiled without it])
+  fi
+fi
+
+if test "$wxUSE_NOTEBOOK" = "yes"; then
+  AC_DEFINE(wxUSE_NOTEBOOK)
+  LTLIBOBJS="$LTLIBOBJS notebook.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS notebook"
+fi
+
+if test "$wxUSE_RADIOBOX" = "yes"; then
+  AC_DEFINE(wxUSE_RADIOBOX)
+  LTLIBOBJS="$LTLIBOBJS radiobox.lo"
+fi
+
+if test "$wxUSE_RADIOBTN" = "yes"; then
+  AC_DEFINE(wxUSE_RADIOBTN)
+  LTLIBOBJS="$LTLIBOBJS radiobut.lo"
+fi
+
+if test "wxUSE_SASH" = 1; then
+  AC_DEFINE(wxUSE_SASH)
+  LTLIBOBJS="$LTLIBOBJS sashwin.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sashtest"
+fi
+
+if test "$wxUSE_SCROLLBAR" = "yes"; then
+  AC_DEFINE(wxUSE_SCROLLBAR)
+  LTLIBOBJS="$LTLIBOBJS scrolbar.lo scrolwin.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll"
+fi
+
+if test "$wxUSE_SLIDER" = "yes"; then
+  AC_DEFINE(wxUSE_SLIDER)
+  LTLIBOBJS="$LTLIBOBJS slider.lo"
+fi
+
+if test "$wxUSE_SPINBTN" = "yes"; then
+  AC_DEFINE(wxUSE_SPINBTN)
+  LTLIBOBJS="$LTLIBOBJS spinbutt.lo"
+fi
+
+if test "$wxUSE_SPLITTER" = "yes"; then
+  AC_DEFINE(wxUSE_SPLITTER)
+  LTLIBOBJS="$LTLIBOBJS splitter.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS splitter"
+fi
+
+if test "$wxUSE_STATBMP" = "yes"; then
+  AC_DEFINE(wxUSE_STATBMP)
+  LTLIBOBJS="$LTLIBOBJS statbmp.lo"
+fi
+
+if test "$wxUSE_STATBOX" = "yes"; then
+  AC_DEFINE(wxUSE_STATBOX)
+  LTLIBOBJS="$LTLIBOBJS statbox.lo"
+fi
+
+if test "$wxUSE_STATLINE" = "yes"; then
+  AC_DEFINE(wxUSE_STATLINE)
+  LTLIBOBJS="$LTLIBOBJS statline.lo"
+fi
+
+if test "$wxUSE_STATUSBAR" = "yes"; then
+  AC_DEFINE(wxUSE_STATUSBAR)
+  LTLIBOBJS="$LTLIBOBJS statusbr.lo"
+fi
+
+if test "$wxUSE_TABDIALOG" = "yes"; then
+  AC_DEFINE(wxUSE_TAB_DIALOG)
+  LTLIBOBJS="$LTLIBOBJS tabg.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS tab"
+fi
+
+if test "$wxUSE_TOOLBAR" = "yes"; then
+  AC_DEFINE(wxUSE_TOOLBAR)
+  LTLIBOBJS="$LTLIBOBJS tbarbase.lo tbargtk.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS toolbar"
+fi
+
+if test "$wxUSE_TOOLTIPS" = "yes" ; then
+    if test "$wxUSE_MOTIF" = "yes"; then
+      AC_MSG_WARN(tooltips are not supported yet under Motif)
+    else
+      AC_DEFINE(wxUSE_TOOLTIPS)
+      LTLIBOBJS="$LTLIBOBJS tooltip.lo"
+    fi
+fi
+
+if test "$wxUSE_TREECTRL" = "yes"; then
+  if test "$wxUSE_IMAGLIST" = "yes"; then
+    AC_DEFINE(wxUSE_TREECTRL)
+    LTLIBOBJS="$LTLIBOBJS treectrl.lo"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treectrl"
+  else
+    AC_MSG_WARN([wxTreeCtrl requires wxImageList and won't be compiled without it])
+  fi
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl misc options
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_WXTREE" = "yes"; then
+  AC_DEFINE(wxUSE_WXTREE)
+fi
+
+if test "$wxUSE_METAFILE" = "yes"; then
+  AC_DEFINE(wxUSE_METAFILE)
+  LTLIBOBJS="$LTLIBOBJS metafile.lo"
+fi
+
+if test "$wxUSE_COMMONDLGS" = "yes"; then
+  dnl these classes don't depend on anything at all
+  LTLIBOBJS="$LTLIBOBJS progdlgg.lo filedlg.lo fontdlgg.lo"
+
+  if test "$wxUSE_CONSTRAINTS" != "yes"; then
+    AC_MSG_WARN(many common dialogs cannot be used without constraints so they won't be compiled without them)
+  else
+    AC_DEFINE(wxUSE_CONSTRAINTS)
+    AC_DEFINE(wxUSE_TEXTDLG)
+    LTLIBOBJS="$LTLIBOBJS colrdlgg.lo textdlgg.lo choicdgg.lo"
+
+    if test "$wxUSE_TREECTRL" != "yes"; then
+      AC_MSG_WARN(wxDirDialog cannot be used without wxTreeCtrl and it won't be compiled without it)
+    else
+      AC_DEFINE(wxUSE_DIRDLG)
+      LTLIBOBJS="$LTLIBOBJS dirdlgg.lo"
+    fi
+  fi
+
+  if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes"; then
+    LTLIBOBJS="$LTLIBOBJS prntdlgg.lo"
+  else
+    AC_MSG_WARN([wxPrintDialog class won't be compiled without printing support])
+  fi
+fi
+
+if test "$wxUSE_MINIFRAME" = "yes"; then
+  AC_DEFINE(wxUSE_MINIFRAME)
+  LTLIBOBJS="$LTLIBOBJS minifram.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
+fi
+
+if test "$wxUSE_VALIDATORS" = "yes"; then
+  AC_DEFINE(wxUSE_VALIDATORS)
+  LTLIBOBJS="$LTLIBOBJS valgen.lo validate.lo valtext.lo"
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl Output the makefiles and such from the results found above
+dnl ---------------------------------------------------------------------------
+
+dnl if we add wxUSE_GUI in the future, it might be handy to separate the libs
+dnl into GUI and non-GUI parts
+GUILIBS="$GUI_TK_LIBRARY $OPENGL_LINK $LIBPNG_LINK $ZLIB_LINK $TOOLKIT_LINK"
+
+dnl all additional libraries (except wxWindows itself) we link with
+EXTRA_LIBS="$LIBS $POSIX4_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $GUILIBS"
+
+dnl all the libraries needed to link wxWindows programs (when the library is not
+dnl yet installed)
+LIBS="\${top_builddir}/src/libwx_${WX_LIBRARY}.la $EXTRA_LIBS"
+
+dnl all -I options we must pass to the compiler
+INCLUDES="$TOOLKIT_INCLUDE $ZLIB_INCLUDE $LIBPNG_INCLUDE -I. -I\${top_builddir}/include -I\${top_srcdir}/include"
+
+dnl C/C++ compiler options used to compile wxWindows
+if test "$ac_cv_prog_gcc" = "yes"; then
+  dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
+  CXXWARNINGS="-Wall"
+  dnl there is one weird warning in docview.h:71 which prevents me from doing
+  dnl this...
+  dnl CXXWARNINGS="-Wall -Werror"
+fi
+EXTRA_CFLAGS="$WXDEBUG $PROFILE $OPTIMISE $INCLUDES"
+
+CFLAGS="$CFLAGS $EXTRA_CFLAGS"
+CXXFLAGS="$CXXFLAGS $EXTRA_CFLAGS $CXXWARNINGS"
+
+if test "$wxUSE_GUI" = "yes"; then
+  dnl TODO add checks that these samples will really compile (i.e. all the
+  dnl      library features they need are present)
+
+  dnl TODO some samples are never built so far:
+  dnl      mfc, nativdlg, oleauto, ownerdrw, proplist
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS bombs controls dialogs drawing dynamic \
+                   forty fractal image wxpoem"
+fi
+
+dnl global options
+AC_SUBST(WX_MAJOR_VERSION_NUMBER)
+AC_SUBST(WX_MINOR_VERSION_NUMBER)
+AC_SUBST(WX_RELEASE_NUMBER)
+AC_SUBST(WX_LIBRARY)
+
+dnl suppress libtool's informational messages - they duplicate its command line
+LIBTOOL="$LIBTOOL --silent"
+AC_SUBST(LIBTOOL)
+
+dnl debugging options
+AC_SUBST(WXDEBUG_DEFINE)
+
+dnl toolkit options
+AC_SUBST(TOOLKIT)
+AC_SUBST(TOOLKIT_DEF)
+AC_SUBST(TOOLKIT_DIR)
+AC_SUBST(TOOLKIT_INCLUDE)
+
+dnl additional sources
+AC_SUBST(EXTRA_VPATH)
+AC_SUBST(LTLIBOBJS)
+
+dnl additional subdirectories where we will build
+AC_SUBST(UTILS_SUBDIRS)
+AC_SUBST(DOCS_SUBDIRS)
+AC_SUBST(SAMPLES_SUBDIRS)
+AC_SUBST(USER_SUBDIRS)
+
+dnl additional libraries
+AC_SUBST(EXTRA_LIBS)
+AC_SUBST(LIBS)
+
+dnl create the configuration header file from the template
+SETUPH_DIR=include/wx/${TOOLKIT_DIR}
+mkdir -p ${SETUPH_DIR}
+AM_CONFIG_HEADER(${SETUPH_DIR}/setup.h:include/wx/unix/setup.h.in)
+
+dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
+dnl itself (this is macro is required if SUBDIRS variable is used in Makefile.am
+dnl - and we do use it)
+AC_PROG_MAKE_SET
+
+dnl create each of the files in the space separated list from the file.in
+dnl (the original file name may be overriden by appending another name after a
+dnl colon)
+AC_OUTPUT([
+            Makefile src/Makefile wx-config
+            samples/Makefile
+            samples/bombs/Makefile
+            samples/caret/Makefile
+            samples/checklst/Makefile
+            samples/config/Makefile
+            samples/controls/Makefile
+            samples/db/Makefile
+            samples/dialogs/Makefile
+            samples/dnd/Makefile
+            samples/docview/Makefile
+            samples/docvwmdi/Makefile
+            samples/drawing/Makefile
+            samples/dynamic/Makefile
+            samples/forty/Makefile
+            samples/fractal/Makefile
+            samples/grid/Makefile
+            samples/help/Makefile
+            samples/image/Makefile
+            samples/internat/Makefile
+            samples/joytest/Makefile
+            samples/layout/Makefile
+            samples/listctrl/Makefile
+            samples/mdi/Makefile
+            samples/memcheck/Makefile
+            samples/mfc/Makefile
+            samples/minifram/Makefile
+            samples/minimal/Makefile
+            samples/nativdlg/Makefile
+            samples/notebook/Makefile
+            samples/oleauto/Makefile
+            samples/ownerdrw/Makefile
+            samples/png/Makefile
+            samples/printing/Makefile
+            samples/proplist/Makefile
+            samples/regtest/Makefile
+            samples/resource/Makefile
+            samples/sashtest/Makefile
+            samples/scroll/Makefile
+            samples/splitter/Makefile
+            samples/tab/Makefile
+            samples/taskbar/Makefile
+            samples/thread/Makefile
+            samples/toolbar/Makefile
+            samples/treectrl/Makefile
+            samples/typetest/Makefile
+            samples/validate/Makefile
+            samples/wxpoem/Makefile
+            samples/wxsocket/Makefile
+          ],
+          [chmod +x wx-config], [SETUPH_DIR=${SETUPH_DIR}])
+
