@@ -36,7 +36,7 @@
 #elif defined(__WXMAC__) && defined(__UNIX__)
    #include <Kernel/net/zlib.h>
 #else
-   #include <zlib.h>
+   #include "zlib.h"
 #endif
 
 #define ZSTREAM_BUFFER_SIZE 1024
