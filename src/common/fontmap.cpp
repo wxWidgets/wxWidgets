@@ -237,6 +237,10 @@ wxFontMapper::wxFontMapper()
 
 wxFontMapper::~wxFontMapper()
 {
+#if wxUSE_CONFIG
+    if ( m_configIsDummy )
+        delete m_config;
+#endif // wxUSE_CONFIG
 }
 
 // ----------------------------------------------------------------------------
@@ -289,6 +293,7 @@ wxConfigBase *wxFontMapper::GetConfig()
     {
         // VS: in case we created dummy m_config (see above), we want to switch back
         //     to the real one as soon as one becomes available.
+        delete m_config;
         m_config = wxConfig::Get(FALSE);
         m_configIsDummy = FALSE;
         // FIXME: ideally, we should add keys from dummy config to the real one now,
