@@ -336,6 +336,14 @@
 #   endif
 #endif /* !defined(wxUSE_RADIOBTN) */
 
+#ifndef wxUSE_REGEX
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_REGEX must be defined."
+#   else
+#       define wxUSE_REGEX 0
+#   endif
+#endif /* !defined(wxUSE_REGEX) */
+
 #ifndef wxUSE_SASH
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SASH must be defined."
