@@ -57,7 +57,7 @@ IMPLEMENT_CLASS(wxHtmlTagsCache,wxObject)
 
 #define CACHE_INCREMENT  64
 
-inline bool wxIsCDATAElement(const wxChar *tag)
+bool wxIsCDATAElement(const wxChar *tag)
 {
     return (wxStrcmp(tag, _T("SCRIPT")) == 0) ||
            (wxStrcmp(tag, _T("STYLE")) == 0);
