@@ -30,22 +30,28 @@
     #include "wx/wx.h"
 #endif
 
-#include "wx/access.h"
+#if wxUSE_ACCESSIBILITY
+    #include "wx/access.h"
+#endif // wxUSE_ACCESSIBILITY
+
 #include "wx/splitter.h"
 #include "wx/cshelp.h"
 
 #ifdef __WXMSW__
-#include "windows.h"
-#include <ole2.h>
-#include <oleauto.h>
-#include <oleacc.h>
-#include "wx/msw/ole/oleutils.h"
-#include "wx/msw/winundef.h"
+    #include "windows.h"
+    #include <ole2.h>
+    #include <oleauto.h>
 
-#ifndef OBJID_CLIENT
-#define OBJID_CLIENT 0xFFFFFFFC
-#endif
+    #if wxUSE_ACCESSIBILITY
+        #include <oleacc.h>
+    #endif // wxUSE_ACCESSIBILITY
 
+    #include "wx/msw/ole/oleutils.h"
+    #include "wx/msw/winundef.h"
+
+    #ifndef OBJID_CLIENT
+        #define OBJID_CLIENT 0xFFFFFFFC
+    #endif
 #endif
 
 // ----------------------------------------------------------------------------
@@ -74,6 +80,8 @@ public:
     virtual bool OnInit();
 
 };
+
+#if wxUSE_ACCESSIBILITY
 
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
@@ -135,6 +143,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(AccessTest_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
+#endif // wxUSE_ACCESSIBILITY
+
 // Create a new application object: this macro will allow wxWindows to create
 // the application object during program execution (it's better than using a
 // static object for many reasons) and also declares the accessor function
@@ -153,6 +163,7 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+#if wxUSE_ACCESSIBILITY
     // Note: JAWS for Windows will only speak the context-sensitive
     // help if you use this help provider:
     // wxHelpProvider::Set(new wxHelpControllerHelpProvider(m_helpController)).
@@ -172,7 +183,13 @@ bool MyApp::OnInit()
     // loop and the application will run. If we returned FALSE here, the
     // application would exit immediately.
     return TRUE;
+#else
+    wxMessageBox( _T("This sample has to be compiled with wxUSE_ACCESSIBILITY"), _T("Building error"), wxOK);
+    return FALSE;
+#endif // wxUSE_ACCESSIBILITY
 }
+
+#if wxUSE_ACCESSIBILITY
 
 class FrameAccessible: public wxWindowAccessible
 {
@@ -610,7 +627,7 @@ wxAccStatus SplitterWindowAccessible::GetName(int childId, wxString* name)
 
 // Can return either a child object, or an integer
 // representing the child element, starting from 1.
-wxAccStatus SplitterWindowAccessible::HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject)
+wxAccStatus SplitterWindowAccessible::HitTest(const wxPoint& pt, int* childId, wxAccessible** WXUNUSED(childObject))
 {
     wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
     if (splitter)
@@ -670,12 +687,7 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
         {
         case wxNAVDIR_DOWN:
             {
-                if (splitter->GetSplitMode() == wxSPLIT_VERTICAL)
-                {
-                    // Can't go down spatially if split vertically.
-                    return wxACC_FALSE;           
-                }
-                else
+                if (splitter->GetSplitMode() != wxSPLIT_VERTICAL)
                 {
                     if (fromId == 1)
                     {
@@ -689,11 +701,12 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                         *toObject = splitter->GetWindow2()->GetAccessible();
                         return wxACC_OK;
                     }
-                    else
-                        return wxACC_FALSE;
                 }
-
+                return wxACC_FALSE;
+                #if 0
+                // below line is not executed due to earlier return
                 break;
+                #endif
             }
         case wxNAVDIR_FIRSTCHILD:
             {
@@ -711,12 +724,7 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
             
         case wxNAVDIR_LEFT:
             {
-                if (splitter->GetSplitMode() == wxSPLIT_HORIZONTAL)
-                {
-                    // Can't go left spatially if split horizontally.
-                    return wxACC_FALSE;           
-                }
-                else
+                if (splitter->GetSplitMode() != wxSPLIT_HORIZONTAL)
                 {
                     if (fromId == 3)
                     {
@@ -730,11 +738,13 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                         *toObject = splitter->GetWindow1()->GetAccessible();
                         return wxACC_OK;
                     }
-                    else
-                        return wxACC_FALSE;
                 }
+                return wxACC_FALSE;
             }
+            #if 0
+            // below line is not executed due to earlier return
             break;
+            #endif
             
         case wxNAVDIR_NEXT:
             {
@@ -750,10 +760,12 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                     *toObject = splitter->GetWindow2()->GetAccessible();
                     return wxACC_OK;
                 }
-                else
                     return wxACC_FALSE;
             }
+            #if 0
+            // below line is not executed due to earlier return
             break;
+            #endif
             
         case wxNAVDIR_PREVIOUS:
             {
@@ -769,19 +781,16 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                     *toObject = splitter->GetWindow1()->GetAccessible();
                     return wxACC_OK;
                 }
-                else
                     return wxACC_FALSE;
             }
+            #if 0
+            // below line is not executed due to earlier return
             break;
+            #endif
             
         case wxNAVDIR_RIGHT:
             {
-                if (splitter->GetSplitMode() == wxSPLIT_HORIZONTAL)
-                {
-                    // Can't go right spatially if split horizontally.
-                    return wxACC_FALSE;           
-                }
-                else
+                if (splitter->GetSplitMode() != wxSPLIT_HORIZONTAL)
                 {
                     if (fromId == 1)
                     {
@@ -795,20 +804,18 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                         *toObject = splitter->GetWindow2()->GetAccessible();
                         return wxACC_OK;
                     }
-                    else
-                        return wxACC_FALSE;
                 }
+                // Can't go right spatially if split horizontally.
+                return wxACC_FALSE;           
             }
+            #if 0
+            // below line is not executed due to earlier return
             break;
+            #endif
             
         case wxNAVDIR_UP:
             {
-                if (splitter->GetSplitMode() == wxSPLIT_VERTICAL)
-                {
-                    // Can't go up spatially if split vertically.
-                    return wxACC_FALSE;           
-                }
-                else
+                if (splitter->GetSplitMode() != wxSPLIT_VERTICAL)
                 {
                     if (fromId == 3)
                     {
@@ -821,11 +828,14 @@ wxAccStatus SplitterWindowAccessible::Navigate(wxNavDir navDir, int fromId,
                         *toObject = splitter->GetWindow1()->GetAccessible();
                         return wxACC_OK;
                     }
-                    else
-                        return wxACC_FALSE;
                 }
 
+                // Can't go up spatially if split vertically.
+                return wxACC_FALSE;           
+                #if 0
+                // below line is not executed due to earlier return
                 break;
+                #endif
             }
         }
         
@@ -930,7 +940,7 @@ wxAccStatus SplitterWindowAccessible::GetChild(int childId, wxAccessible** child
 }
 
 // Gets the parent, or NULL.
-wxAccStatus SplitterWindowAccessible::GetParent(wxAccessible** parent)
+wxAccStatus SplitterWindowAccessible::GetParent(wxAccessible** WXUNUSED(parent))
 {
     return wxACC_NOT_IMPLEMENTED;
 }
@@ -939,7 +949,7 @@ wxAccStatus SplitterWindowAccessible::GetParent(wxAccessible** parent)
 // or > 0 (the action for a child).
 // Return wxACC_NOT_SUPPORTED if there is no default action for this
 // window (e.g. an edit control).
-wxAccStatus SplitterWindowAccessible::DoDefaultAction(int childId)
+wxAccStatus SplitterWindowAccessible::DoDefaultAction(int WXUNUSED(childId))
 {
     return wxACC_NOT_IMPLEMENTED;
 }
@@ -950,7 +960,7 @@ wxAccStatus SplitterWindowAccessible::DoDefaultAction(int childId)
 // The retrieved string describes the action that is performed on an object,
 // not what the object does as a result. For example, a toolbar button that prints
 // a document has a default action of "Press" rather than "Prints the current document."
-wxAccStatus SplitterWindowAccessible::GetDefaultAction(int childId, wxString* actionName)
+wxAccStatus SplitterWindowAccessible::GetDefaultAction(int childId, wxString* WXUNUSED(actionName))
 {
     wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
     if (splitter && splitter->IsSplit() && childId == 2)
@@ -1002,7 +1012,7 @@ wxAccStatus SplitterWindowAccessible::GetHelpText(int childId, wxString* helpTex
 
 // Returns the keyboard shortcut for this object or child.
 // Return e.g. ALT+K
-wxAccStatus SplitterWindowAccessible::GetKeyboardShortcut(int childId, wxString* shortcut)
+wxAccStatus SplitterWindowAccessible::GetKeyboardShortcut(int childId, wxString* WXUNUSED(shortcut))
 {
     wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
     if (splitter && splitter->IsSplit() && childId == 2)
@@ -1066,7 +1076,7 @@ wxAccStatus SplitterWindowAccessible::GetValue(int childId, wxString* strValue)
 }
 
 // Selects the object or child.
-wxAccStatus SplitterWindowAccessible::Select(int childId, wxAccSelectionFlags selectFlags)
+wxAccStatus SplitterWindowAccessible::Select(int childId, wxAccSelectionFlags WXUNUSED(selectFlags))
 {
     wxSplitterWindow* splitter = wxDynamicCast(GetWindow(), wxSplitterWindow);
     if (splitter && splitter->IsSplit() && childId == 2)
@@ -1082,7 +1092,7 @@ wxAccStatus SplitterWindowAccessible::Select(int childId, wxAccSelectionFlags se
 // If childId is 0 and child is NULL, no object in
 // this subhierarchy has the focus.
 // If this object has the focus, child should be 'this'.
-wxAccStatus SplitterWindowAccessible::GetFocus(int* childId, wxAccessible** child)
+wxAccStatus SplitterWindowAccessible::GetFocus(int* WXUNUSED(childId), wxAccessible** WXUNUSED(child))
 {
     return wxACC_NOT_IMPLEMENTED;
 }
@@ -1095,8 +1105,9 @@ wxAccStatus SplitterWindowAccessible::GetFocus(int* childId, wxAccessible** chil
 // - an integer representing the selected child element,
 //   or 0 if this object is selected (GetType() == wxT("long"))
 // - a "void*" pointer to a wxAccessible child object
-wxAccStatus SplitterWindowAccessible::GetSelections(wxVariant* selections)
+wxAccStatus SplitterWindowAccessible::GetSelections(wxVariant* WXUNUSED(selections))
 {
     return wxACC_NOT_IMPLEMENTED;
 }
 
+#endif // wxUSE_ACCESSIBILITY
