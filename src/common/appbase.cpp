@@ -53,6 +53,10 @@
     #include "wx/fontmap.h"
 #endif // wxUSE_FONTMAP
 
+#if wxUSE_SOCKETS
+    #include "wx/gsocket.h"
+#endif // wxUSE_SOCKETS
+
 #if defined(__WXMAC__)
     // VZ: MacTypes.h is enough under Mac OS X (where I could test it) but
     //     I don't know which headers are needed under earlier systems so
@@ -474,6 +478,16 @@ void wxConsoleAppTraitsBase::RemoveFromPendingDelete(wxObject * WXUNUSED(object)
 GSocketGUIFunctionsTable* wxConsoleAppTraitsBase::GetSocketGUIFunctionsTable()
 {
     return NULL;
+}
+
+// TODO: Use a different class that only stubs out the event loop functions
+GSocketBSD* wxConsoleAppTraitsBase::CreateGSocket()
+{
+#ifdef wxUSE_GSOCKET_CPLUSPLUS
+    return new GSocketBSDGUIShim();
+#else
+    return NULL;
+#endif
 }
 #endif
 
