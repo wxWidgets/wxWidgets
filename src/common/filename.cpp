@@ -24,7 +24,7 @@
 
                 There are also UNC names of the form \\share\fullpath
 
-   wxPATH_MAC:  Mac OS 8/9 and Mac OS X under CodeWarrior 7 format, absolute file 
+   wxPATH_MAC:  Mac OS 8/9 and Mac OS X under CodeWarrior 7 format, absolute file
                 names have the form
                     volume:dir1:...:dirN:filename
                 and the relative file names are either
@@ -367,7 +367,7 @@ wxString wxFileName::GetCwd(const wxString& volume)
     {
         SetCwd(cwdOld);
     }
-    
+
     return cwd;
 }
 
@@ -629,7 +629,7 @@ bool wxFileName::Normalize(wxPathNormalize flags,
     wxFileName curDir;
 
     format = GetFormat(format);
-    
+
     // make the path absolute
     if ( (flags & wxPATH_NORM_ABSOLUTE) && !IsAbsolute() )
     {
@@ -656,7 +656,7 @@ bool wxFileName::Normalize(wxPathNormalize flags,
             }
         }
     }
-    
+
     // handle ~ stuff under Unix only
     if ( (format == wxPATH_UNIX) && (flags & wxPATH_NORM_TILDE) )
     {
@@ -709,7 +709,7 @@ bool wxFileName::Normalize(wxPathNormalize flags,
                     return FALSE;
                 }
 
-                m_dirs.Remove(m_dirs.GetCount() - 1);
+                m_dirs.RemoveAt(m_dirs.GetCount() - 1);
                 continue;
             }
         }
@@ -770,8 +770,8 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
     while ( !m_dirs.IsEmpty() && !fnBase.m_dirs.IsEmpty() &&
                 m_dirs[0u].IsSameAs(fnBase.m_dirs[0u], withCase) )
     {
-        m_dirs.Remove(0u);
-        fnBase.m_dirs.Remove(0u);
+        m_dirs.RemoveAt(0);
+        fnBase.m_dirs.RemoveAt(0);
     }
 
     // add as many ".." as needed
