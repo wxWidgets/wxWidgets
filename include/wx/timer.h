@@ -138,7 +138,7 @@ long WXDLLEXPORT wxGetLocalTime();
 // Get number of seconds since GMT 00:00:00, Jan 1st 1970.
 long WXDLLEXPORT wxGetUTCTime();
 
-
+#define wxGetCurrentTime() wxGetLocalTime()
 
 #endif
     // _WX_TIMER_H_BASE_
