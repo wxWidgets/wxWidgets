@@ -2731,26 +2731,23 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 m_renameTimer->Stop();
                 m_lastOnSame = FALSE;
 
-                if (item->HasPlus() && !HasButtons())
+                // send activate event first
+                wxTreeEvent nevent( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
+                nevent.m_item = (long) item;
+                nevent.m_code = 0;
+                CalcScrolledPosition(x, y,
+                                     &nevent.m_pointDrag.x,
+                                     &nevent.m_pointDrag.y);
+                nevent.SetEventObject( this );
+                if ( !GetEventHandler()->ProcessEvent( nevent ) )
                 {
-                    // If the control has no buttons,the only way
-                    // to expand/collapse it is by double clicking
-                    // an item. In this case we cannot send any
-                    // activate event.
-                    Toggle(item);
-                }
-                else
-                {
-                    // If we have buttons, just send activate event.
-                    wxTreeEvent nevent( wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
-                                        GetId() );
-                    nevent.m_item = (long) item;
-                    nevent.m_code = 0;
-                    CalcScrolledPosition(x, y,
-                                         &nevent.m_pointDrag.x,
-                                         &nevent.m_pointDrag.y);
-                    nevent.SetEventObject( this );
-                    GetEventHandler()->ProcessEvent( nevent );
+                    // if the user code didn't process the activate event,
+                    // handle it ourselves by toggling the item when it is
+                    // double clicked
+                    if ( item->HasPlus() )
+                    {
+                        Toggle(item);
+                    }
                 }
             }
         }
