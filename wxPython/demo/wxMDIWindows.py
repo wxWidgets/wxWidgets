@@ -19,7 +19,7 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.ShowMDIDemo, b1)
 
         b2 = wx.Button(self, -1, "MDI with SashWindows demo")
-        self.Bind(wx.EVT_BUTTON, self.ShowMDIDemo, b2)
+        self.Bind(wx.EVT_BUTTON, self.ShowMDISashDemo, b2)
 
         box = wx.BoxSizer(wx.VERTICAL)
         box.Add((20, 30))

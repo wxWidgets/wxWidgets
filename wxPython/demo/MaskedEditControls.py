@@ -174,7 +174,7 @@ class demoPage2(scroll.ScrolledPanel, demoMixin):
 
         label = wx.StaticText( self, -1, """\
 All these controls have been created by passing a single parameter, the autoformat code,
-and use the factory class wxMaskedCtrl with its default controlType.
+and use the factory class MaskedCtrl with its default controlType.
 The maskededit module contains an internal dictionary of types and formats (autoformats).
 Many of these already do complicated validation; To see some examples, try
 29 Feb 2002 vs. 2004 for the date formats, or email address validation.
@@ -199,7 +199,7 @@ Many of these already do complicated validation; To see some examples, try
         for autoformat, desc in med.autoformats:
             grid.Add( wx.StaticText( self, -1, desc), 0, wx.ALIGN_LEFT )
             grid.Add( wx.StaticText( self, -1, autoformat), 0, wx.ALIGN_LEFT )
-            grid.Add( mctl.wxMaskedCtrl( self, -1, "",
+            grid.Add( mctl.MaskedCtrl( self, -1, "",
                                     autoformat       = autoformat,
                                     demo             = True,
                                     name             = autoformat),
@@ -375,7 +375,7 @@ A state name selector,
 with auto-select:""")
 
         # Create this one using factory function:
-        statename = mctl.wxMaskedCtrl( self, -1, med.state_names[0],
+        statename = mctl.MaskedCtrl( self, -1, med.state_names[0],
                                   controlType = mctl.controlTypes.MASKEDCOMBO,
                                   choices = med.state_names,
                                   autoformat="USSTATENAME",
@@ -399,7 +399,7 @@ A masked ComboBox for fraction selection.
 Choices for each side of the fraction can
 be selected with PageUp/Down:""")
 
-        fraction = mctl.wxMaskedCtrl( self, -1, "",
+        fraction = mctl.MaskedCtrl( self, -1, "",
                                  controlType = mctl.MASKEDCOMBO,
                                  choices = choices,
                                  choiceRequired = True,
@@ -424,7 +424,7 @@ text from a list of numeric codes:""")
 Programmatically set
 choice sets:""")
         self.list_selector = wx.ComboBox(self, -1, '', choices = ['list1', 'list2', 'list3'])
-        self.dynamicbox = mctl.wxMaskedCtrl( self, -1, '    ',
+        self.dynamicbox = mctl.MaskedCtrl( self, -1, '    ',
                                       controlType = mctl.controlTypes.MASKEDCOMBO,
                                       mask =    'XXXX',
                                       formatcodes = 'F_',
@@ -452,7 +452,7 @@ Here are some examples of IpAddrCtrl, a control derived from MaskedTextCtrl:""")
         label_ipaddr3 = wx.StaticText( self, -1, """\
 A control with restricted legal values:
 10. (1|2) . (129..255) . (0..255)""")
-        ipaddr3 = mctl.wxMaskedCtrl( self, -1,
+        ipaddr3 = mctl.MaskedCtrl( self, -1,
                                 controlType = mctl.controlTypes.IPADDR,
                                 mask=" 10.  #.###.###")
         ipaddr3.SetFieldParameters(0, validRegex="1|2",validRequired=False )   # requires entry to match or not allowed
