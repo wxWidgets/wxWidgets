@@ -36,6 +36,11 @@
 #include <commctrl.h>
 #endif
 
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+// the tooltip parent window
 WXHWND wxToolTip::hwndTT = NULL;
 
 // ----------------------------------------------------------------------------
@@ -126,8 +131,10 @@ WXHWND wxToolTip::GetToolTipCtrl()
                                 wxGetInstance(),
                                 NULL);
        if ( hwndTT )
-        SetWindowPos(hwndTT, HWND_TOPMOST,0, 0, 0, 0,
-             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+       {
+           SetWindowPos((HWND)hwndTT, HWND_TOPMOST, 0, 0, 0, 0,
+                        SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+       }
 
     }
 
