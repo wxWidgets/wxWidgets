@@ -655,6 +655,7 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
                             this,   // parent
                             wxPD_CAN_ABORT |
                             wxPD_APP_MODAL |
+                            // wxPD_AUTO_HIDE | -- try this as well
                             wxPD_ELAPSED_TIME |
                             wxPD_ESTIMATED_TIME |
                             wxPD_REMAINING_TIME);
@@ -796,25 +797,34 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
     {
         wxFindReplaceDialog *dlg = event.GetDialog();
 
+        int idMenu;
         const wxChar *txt;
         if ( dlg == m_dlgFind )
         {
             txt = _T("Find");
+            idMenu = DIALOGS_FIND;
             m_dlgFind = NULL;
         }
         else if ( dlg == m_dlgReplace )
         {
             txt = _T("Replace");
+            idMenu = DIALOGS_REPLACE;
             m_dlgReplace = NULL;
         }
         else
         {
             txt = _T("Unknown");
+            idMenu = -1;
 
             wxFAIL_MSG( _T("unexpected event") );
         }
 
-        wxLogMessage(wxT("%s dialog is being closed."), txt),
+        wxLogMessage(wxT("%s dialog is being closed."), txt);
+
+        if ( idMenu != -1 )
+        {
+            GetMenuBar()->Check(idMenu, FALSE);
+        }
 
         dlg->Destroy();
     }
