@@ -41,6 +41,7 @@ enum
     SPLIT_HORIZONTAL,
     SPLIT_VERTICAL,
     SPLIT_UNSPLIT,
+    SPLIT_LIVE,
     SPLIT_SETMINSIZE
 };
 
@@ -64,7 +65,9 @@ public:
     void SplitHorizontal(wxCommandEvent& event);
     void SplitVertical(wxCommandEvent& event);
     void Unsplit(wxCommandEvent& event);
+    void ToggleLive(wxCommandEvent& event);
     void SetMinSize(wxCommandEvent& event);
+
     void Quit(wxCommandEvent& event);
 
     // Menu command update functions
@@ -134,8 +137,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_VERTICAL, MyFrame::SplitVertical)
     EVT_MENU(SPLIT_HORIZONTAL, MyFrame::SplitHorizontal)
     EVT_MENU(SPLIT_UNSPLIT, MyFrame::Unsplit)
-    EVT_MENU(SPLIT_QUIT, MyFrame::Quit)
+    EVT_MENU(SPLIT_LIVE, MyFrame::ToggleLive)
     EVT_MENU(SPLIT_SETMINSIZE, MyFrame::SetMinSize)
+
+    EVT_MENU(SPLIT_QUIT, MyFrame::Quit)
 
     EVT_UPDATE_UI(SPLIT_VERTICAL, MyFrame::UpdateUIVertical)
     EVT_UPDATE_UI(SPLIT_HORIZONTAL, MyFrame::UpdateUIHorizontal)
@@ -156,6 +161,7 @@ MyFrame::MyFrame()
     fileMenu->Append(SPLIT_HORIZONTAL, _T("Split &Horizontally\tCtrl-H"), _T("Split horizontally"));
     fileMenu->Append(SPLIT_UNSPLIT, _T("&Unsplit\tCtrl-U"), _T("Unsplit"));
     fileMenu->AppendSeparator();
+    fileMenu->Append(SPLIT_LIVE, _T("&Live update"), _T("Toggle live update mode"), TRUE);
     fileMenu->Append(SPLIT_SETMINSIZE, _T("Set &min size"), _T("Set minimum pane size"));
     fileMenu->AppendSeparator();
     fileMenu->Append(SPLIT_QUIT, _T("E&xit\tAlt-X"), _T("Exit"));
@@ -165,6 +171,7 @@ MyFrame::MyFrame()
 
     SetMenuBar(menuBar);
 
+    menuBar->Check(SPLIT_LIVE, TRUE);
     m_splitter = new MySplitterWindow(this);
 
 #if 1
@@ -231,6 +238,17 @@ void MyFrame::Unsplit(wxCommandEvent& WXUNUSED(event) )
     if ( m_splitter->IsSplit() )
         m_splitter->Unsplit();
     SetStatusText(_T("No splitter"));
+}
+
+void MyFrame::ToggleLive(wxCommandEvent& event )
+{
+    long style = m_splitter->GetWindowStyleFlag();
+    if ( event.IsChecked() )
+        style |= wxSP_LIVE_UPDATE;
+    else
+        style &= ~wxSP_LIVE_UPDATE;
+
+    m_splitter->SetWindowStyleFlag(style);
 }
 
 void MyFrame::SetMinSize(wxCommandEvent& WXUNUSED(event) )
