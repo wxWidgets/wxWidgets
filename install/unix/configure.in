@@ -14,9 +14,9 @@ AC_DEFUN(AM_PATH_GTK,
 [dnl 
 dnl Get the cflags and libraries from the gtk-config script
 dnl
-AC_ARG_WITH(gtk-prefix,[  --with-gtk-prefix=PFX   Prefix where GTK is installed (optional)],
+AC_ARG_WITH(gtk-prefix,[**--with-gtk-prefix=PFX   Prefix where GTK is installed],
             gtk_config_prefix="$withval", gtk_config_prefix="")
-AC_ARG_WITH(gtk-exec-prefix,[  --with-gtk-exec-prefix=PFX Exec prefix where GTK is installed (optional)],
+AC_ARG_WITH(gtk-exec-prefix,[**--with-gtk-exec-prefix=PFX Exec prefix where GTK is installed],
             gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
 
   if test x$gtk_config_exec_prefix != x ; then
@@ -655,62 +655,70 @@ DEFAULT_USE_DEBUG_FLAG=0
 DEFAULT_USE_DEBUG_INFO=0
 DEFAULT_USE_MEM_TRACING=0
 DEFAULT_USE_DMALLOC=0
+DEFAULT_USE_APPLE_IEEE=1
+DEFAULT_USE_IOSTREAMH=1
 
 DEFAULT_USE_ZLIB=1
 DEFAULT_USE_GDK_IMLIB=1
 DEFAULT_USE_LIBPNG=1
 DEFAULT_USE_ODBC=1
 
-DEFAULT_USE_APPLE_IEEE=1
-DEFAULT_USE_STORABLE_CLASSES=1
-DEFAULT_USE_AUTOTRANS=1
-DEFAULT_USE_AFM_FOR_POSTSCRIPT=1
-DEFAULT_WX_NORMALIZED_PS_FONTS=1
-
-DEFAULT_USE_IOSTREAMH=1
-
-DEFAULT_USE_OPENGL=0
-
-DEFAULT_USE_WXCONFIG=1
-DEFAULT_USE_POSTSCRIPT=1
-DEFAULT_USE_IPC=1
-DEFAULT_USE_RESOURCES=1
-DEFAULT_USE_TIMEDATE=1
-DEFAULT_USE_FRACTION=1
-DEFAULT_USE_CONSTRAINTS=1
-DEFAULT_USE_TOOLBAR=1
 DEFAULT_USE_GAUGE=1
 DEFAULT_USE_SCROLLBAR=1
+DEFAULT_USE_LISTCTRL=1
+DEFAULT_USE_TREECTRL=1
+DEFAULT_USE_GRID=1
+DEFAULT_USE_TAB_DIALOG=1
+DEFAULT_USE_NOTEBOOK=1
+
+DEFAULT_USE_TIMEDATE=1
+DEFAULT_USE_FRACTION=1
+DEFAULT_USE_LOG=1
+DEFAULT_USE_INTL=1
+DEFAULT_USE_CONFIG=1
+DEFAULT_USE_STREAMS=1
+DEFAULT_USE_SERIAL=1
+DEFAULT_USE_FILE=1
+DEFAULT_USE_TEXTFILE=1
+
+DEFAULT_USE_AFM_FOR_POSTSCRIPT=1
+DEFAULT_WX_NORMALIZED_PS_FONTS=1
+DEFAULT_USE_POSTSCRIPT=1
+
+DEFAULT_USE_IPC=1
+DEFAULT_USE_RESOURCES=1
+DEFAULT_USE_CONSTRAINTS=1
+DEFAULT_USE_CLIPBOARD=0
+DEFAULT_USE_DND=1
+
+DEFAULT_USE_MDI_ARCHITECTURE=1
 DEFAULT_USE_DOC_VIEW_ARCHITECTURE=1
 DEFAULT_USE_PRINTING_ARCHITECTURE=1
 
+DEFAULT_USE_PROLOGIO=1
+DEFAULT_USE_WX_RESOURCES=1
+DEFAULT_USE_RPC=0
+
+DEFAULT_USE_OPENGL=0
 DEFAULT_USE_METAFILE=0
-DEFAULT_USE_HELP=0
-DEFAULT_USE_CLIPBOARD=0
-DEFAULT_USE_VLBOX=0
 DEFAULT_USE_WXGRAPH=0
 DEFAULT_USE_WXTREE=0
-DEFAULT_USE_ENHANCED_DIALOG=0
-
-DEFAULT_USE_FORM=0
-DEFAULT_USE_PROLOGIO=1
-DEFAULT_USE_RPC=0
-DEFAULT_USE_WX_RESOURCES=1
+DEFAULT_USE_HELP=0
 
 dnl ----------------------------------------------------------------
 dnl toolkit options
 dnl ----------------------------------------------------------------
 
 AC_OVERRIDES(gtk,gtk,
-**--with-gtk           use GTK,
+**--with-gtk              use GTK,
 USE_GTK)
 
 AC_OVERRIDES(qt,qt,
-**--with-qt           use Qt,
+**--with-qt               use Qt,
 USE_QT)
 
 AC_OVERRIDES(motif,motif,
-**--with-motif           use Motif/Lesstif,
+**--with-motif            use Motif/Lesstif,
 USE_MOTIF)
 
 dnl ----------------------------------------------------------------
@@ -722,7 +730,7 @@ AC_OVERRIDES(shared,shared,
 USE_SHARED)
 
 AC_OVERRIDES(optimise,optimise,
-**--with-optimise      create optimised code,
+**--with-optimise         create optimised code,
 USE_OPTIMISE)
 
 AC_OVERRIDES(debug_flag,debug_flag,
@@ -730,7 +738,7 @@ AC_OVERRIDES(debug_flag,debug_flag,
 USE_DEBUG_FLAG)
 
 AC_OVERRIDES(debug_info,debug_info,
-**--with-debug_info       create code with debuging information included,
+**--with-debug_info       create code with debuging information,
 USE_DEBUG_INFO)
 
 AC_OVERRIDES(mem_tracing,mem_tracing,
@@ -738,19 +746,23 @@ AC_OVERRIDES(mem_tracing,mem_tracing,
 USE_MEM_TRACING)
 
 AC_OVERRIDES(dmalloc,dmalloc,
-**--with-dmalloc           use dmalloc memory debug library (www.letters.com/dmalloc/),
+**--with-dmalloc          use dmalloc memory debug library (www.letters.com/dmalloc/),
 USE_DMALLOC)
 
 AC_OVERRIDES(profile,profile,
-**--with-profile          create code with profiling information included,
+**--with-profile          create code with profiling information,
 USE_PROFILE)
 
+AC_OVERRIDES(apple_ieee, apple_ieee,
+**--with_apple_ieee	  use the Apple IEEE codec,
+USE_APPLE_IEEE)
+
 dnl ----------------------------------------------------------------
-dnl user options for libraries (no choice yet)
+dnl user options for libraries
 dnl ----------------------------------------------------------------
 
 AC_OVERRIDES(zlib,zlib,
-**--with-zlib             use zlib (LZW comression),
+**--with-zlib             use zlib for LZW comression,
 USE_ZLIB)
 
 AC_OVERRIDES(gdk_imlib,gdk_imlib,
@@ -762,28 +774,88 @@ AC_OVERRIDES(libpng,libpng,
 USE_LIBPNG)
 
 AC_OVERRIDES(odbc,odbc,
-**--with-odbc           use iODBC,
+**--with-odbc             use iODBC and wxODBC classes,
 USE_ODBC)
 
 AC_OVERRIDES(opengl,opengl,
-**--with-opengl           use opengl (OpenGL or Mesa),
+**--with-opengl           use OpenGL (or Mesa),
 USE_OPENGL)
 
 dnl ----------------------------------------------------------------
-dnl user options for code features (no choice yet)
+dnl user options for GUI control classes
 dnl ----------------------------------------------------------------
 
-AC_OVERRIDES(apple_ieee, apple_ieee,
-**--with_apple_ieee	  use the Apple IEEE codec,
-USE_APPLE_IEEE)
+AC_OVERRIDES(gauge,gauge,
+**--with-gauge            use wxGauge class,
+USE_GAUGE)
 
-AC_OVERRIDES(storable,storable,
-**--with-storable         use storable classes,
-USE_STORABLE_CLASSES)
+AC_OVERRIDES(scrollbar,scrollbar,
+**--with-scrollbar        use wxScrollbar class,
+USE_SCROLLBAR)
 
-AC_OVERRIDES(autotrans,autotrans,
-**--with-autotrans        use gettext automatic translation,
-USE_AUTOTRANS)
+AC_OVERRIDES(listctrl,listctrl,
+**--with-listctrl         use wxListCtrl class,
+USE_LISTCTRL)
+
+AC_OVERRIDES(treectrl,treectrl,
+**--with-treectrl         use wxTreeCtrl class,
+USE_TREECTRL)
+
+AC_OVERRIDES(grid,grid,
+**--with-grid             use wxGrid class,
+USE_GRID)
+
+AC_OVERRIDES(tab_dialog,tab_dialog,
+**--with-tab_dialog       use wxTabDia class,
+USE_TAB_DIALOG)
+
+AC_OVERRIDES(notebook,notebook,
+**--with-notebook         use wxNotebook class,
+USE_NOTEBOOK)
+
+dnl ----------------------------------------------------------------
+dnl user options for non-GUI classes
+dnl ----------------------------------------------------------------
+
+AC_OVERRIDES(timedate, timedate,
+**--with-timedate         use wxTime and wxDate classes,
+USE_TIMEDATE)
+
+AC_OVERRIDES(fraction,fraction,
+**--with-fraction         use wxFraction class,
+USE_FRACTION)
+
+AC_OVERRIDES(log,log,
+**--with-log              use logging system,
+USE_LOG)
+
+AC_OVERRIDES(intl,intl,
+**--with-intl             use internationalization system,
+USE_INTL)
+
+AC_OVERRIDES(config,config,
+**--with-config           use wxConfig class,
+USE_CONFIG)
+
+AC_OVERRIDES(streams,streams,
+**--with-streams          use wxStream etc classes,
+USE_STREAMS)
+
+AC_OVERRIDES(serial,serial,
+**--with-serial           use class serialization,
+USE_SERIAL)
+
+AC_OVERRIDES(file,file,
+**--with-file             use wxFile class,
+USE_FILE)
+
+AC_OVERRIDES(textfile,textfile,
+**--with-textfile         use wxTextFile class,
+USE_TEXTFILE)
+
+dnl ----------------------------------------------------------------
+dnl user options for PostScript
+dnl ----------------------------------------------------------------
 
 AC_OVERRIDES(afmfonts,afmfonts,
 **--with-afmfonts         use Adobe Font Metric Font table,
@@ -793,81 +865,57 @@ AC_OVERRIDES(normalized, normalized,
 **--with-PS-normalized    use normalized PS fonts,
 WX_NORMALIZED_PS_FONTS)
 
-AC_OVERRIDES(rpc,RPC,
-**--with-rpc              use RPC,
-USE_RPC)
+AC_OVERRIDES(postscript, postscript,
+**--with-postscript       use wxPostscriptDC device context,
+USE_POSTSCRIPT)
+
+dnl ----------------------------------------------------------------
+dnl user options for Prolog and Resources
+dnl ----------------------------------------------------------------
 
 AC_OVERRIDES(wxresources,wxresources,
-**--with-wxresources      use wxresources,
+**--with-wxresources      use wxWindows's resources,
 USE_WX_RESOURCES)
 
 AC_OVERRIDES(prologio,prologio,
-**--with-prologio         use prologio,
+**--with-prologio         use Prolog IO library,
 USE_PROLOGIO)
 
-AC_OVERRIDES(postscript, postscript,
-**--with-postscript       use postscript-device-context,
-USE_POSTSCRIPT)
+AC_OVERRIDES(rpc,RPC,
+**--with-rpc              use Prolog's remote procedure calls,
+USE_RPC)
 
-AC_OVERRIDES(wxconfig, wxconfig,
-**--with-wxconfig         use wxconfig,
-USE_WXCONFIG)
-
-AC_OVERRIDES(metafile, metafile,
-**--with-metafile         use metafile,
-USE_METAFILE)
-
-AC_OVERRIDES(form,form,
-**--with-form             use form,
-USE_FORM)
-
-AC_OVERRIDES(help,help,
-**--with-help             use help,
-USE_HELP)
+dnl ----------------------------------------------------------------
+dnl user options for misc stuff
+dnl ----------------------------------------------------------------
 
 AC_OVERRIDES(ipc,IPC,
-**--with-ipc              use ipc,
+**--with-ipc              use interprocess communication (wxSocket etc.),
 USE_IPC)
 
-AC_OVERRIDES(enhanceddialog,enhanced dialog,
-**--with-enhanceddialog   use enhanced dialog,
-USE_ENHANCED_DIALOG)
-
 AC_OVERRIDES(resources,resources,
-**--with-resources        use resources,
+**--with-resources        use X resources for saving information,
 USE_RESOURCES)
 
 AC_OVERRIDES(clipboard,clipboard,
-**--with-clipboard        use clipboard,
+**--with-clipboard        use wxClipboard classes,
 USE_CLIPBOARD)
 
-AC_OVERRIDES(timedate, timedate,
-**--with-timedate         use timedate,
-USE_TIMEDATE)
-
-AC_OVERRIDES(fraction,fraction,
-**--with-fraction         use fraction,
-USE_FRACTION)
+AC_OVERRIDES(dnd,dnd,
+**--with-dnd              use Drag'n'Drop classes,
+USE_DND)
 
 AC_OVERRIDES(constraints,constrains,
-**--with-constraints      use constraints,
+**--with-constraints      use layout-constraints system,
 USE_CONSTRAINTS)
 
-AC_OVERRIDES(toolbar,toolbar,
-**--with-toolbar          use toolbar,
-USE_TOOLBAR)
+dnl ----------------------------------------------------------------
+dnl user options for architectures
+dnl ----------------------------------------------------------------
 
-AC_OVERRIDES(gauge,gauge,
-**--with-gauge            use gauge,
-USE_GAUGE)
-
-AC_OVERRIDES(vllist,vllist,
-**--with-vlbox            use virtual list box,
-USE_VLBOX)
-
-AC_OVERRIDES(scrollbar,scrollbar,
-**--with-scrollbar        use scrollbar,
-USE_SCROLLBAR)
+AC_OVERRIDES(mdi,mdi,
+**--with-mdi              use multiple document interface architecture,
+USE_MDI_ARCHITECTURE)
 
 AC_OVERRIDES(docview,docview,
 **--with-docview          use document view architecture,
@@ -877,20 +925,28 @@ AC_OVERRIDES(printarch,printarch,
 **--with-printarch        use printing architecture,
 USE_PRINTING_ARCHITECTURE)
 
-AC_OVERRIDES(typetree,typetree,
-**--with-typetree         use typetree,
-USE_TYPETREE)
-
-AC_OVERRIDES(wxgraph,wxgraph,
-**--with-wxgraph          use wxgraph,
-USE_WXGRAPH)
-
-AC_OVERRIDES(wxtree,wxtree,
-**--with-wxtree           use wxtree,
-USE_WXTREE)
-
+dnl ----------------------------------------------------------------
+dnl user options with no effect yet
+dnl ----------------------------------------------------------------
+dnl
+dnl AC_OVERRIDES(metafile, metafile,
+dnl **--with-metafile         use metafile (no effect),
+dnl USE_METAFILE)
+dnl
+dnl AC_OVERRIDES(help,help,
+dnl **--with-help             use help (no effect),
+dnl USE_HELP)
+dnl
+dnl AC_OVERRIDES(wxgraph,wxgraph,
+dnl **--with-wxgraph          use wxgraph (no effect),
+dnl USE_WXGRAPH)
+dnl
+dnl AC_OVERRIDES(wxtree,wxtree,
+dnl **--with-wxtree           use wxtree (no effect),
+dnl USE_WXTREE)
+dnl
 dnl AC_OVERRIDES(package,message,helpmessage,variable)
-
+dnl
 dnl ----------------------------------------------------------------
 dnl Unix, obviously
 dnl ----------------------------------------------------------------
@@ -989,46 +1045,8 @@ AC_SUBST(TOOLKIT_DEF)
 AC_SUBST(MAKEINCLUDE)
 
 dnl ----------------------------------------------------------------
-dnl register changes for Makefiles (via substit) and setup.h
+dnl Register compile options for makefiles and setup.h
 dnl ----------------------------------------------------------------
-
-ZLIB=NONE
-if test "$USE_ZLIB" = 1 ; then
-  ZLIB="ZLIB"
-fi
-
-GDK_IMLIB=NONE
-if test "$USE_GDK_IMLIB" = 1 ; then
-  GDK_IMLIB="GDK_IMLIB"
-fi
-
-LIBPNG=NONE
-if test "$USE_LIBPNG" = 1 ; then
-  LIBPNG="LIBPNG"
-fi
-
-ODBC=NONE
-if test "$USE_ODBC" = 1 ; then
-  ODBC="ODBC"
-fi
-
-APPLE_IEEE=NONE
-if test "$USE_APPLE_IEEE" = 1 ; then
-  APPLE_IEEE="APPLE_IEEE"
-  AC_DEFINE_UNQUOTED(USE_APPLE_IEEE,$USE_APPLE_IEEE)
-fi
-
-STORABLE=NONE
-if test "$USE_STORABLE_CLASSES" = 1 ; then
-  STORABLE="STORABLE"
-  AC_DEFINE_UNQUOTED(USE_STORABLE_CLASSES,$USE_STORABLE_CLASSES)
-fi
-
-AUTOTRANS=NONE
-if test "$USE_AUTOTRANS" = 1 ; then
-  AUTOTRANS="AUTOTRANS"
-  AC_DEFINE_UNQUOTED(USE_AUTOTRANS,$USE_AUTOTRANS)
-fi
 
 WXDEBUG=
 if test "$USE_DEBUG_INFO" = 1 ; then
@@ -1077,43 +1095,178 @@ else
 fi
 AC_SUBST(OPTIMISE)
 
+APPLE_IEEE=NONE
+if test "$USE_APPLE_IEEE" = 1 ; then
+  APPLE_IEEE="APPLE_IEEE"
+  AC_DEFINE_UNQUOTED(USE_APPLE_IEEE,$USE_APPLE_IEEE)
+fi
+
 USE_IOSTREAMH=$DEFAULT_USE_IOSTREAMH
 AC_DEFINE_UNQUOTED(USE_IOSTREAMH,$USE_IOSTREAMH)
 
-RPC=NONE
+dnl ----------------------------------------------------------------
+dnl Register library options for makefiles and setup.h
+dnl ----------------------------------------------------------------
+
+if test "$USE_ZLIB" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_ZLIB,$USE_ZLIB)
+fi
+
+if test "$USE_GDK_IMLIB" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_GDK_IMLIB,$USE_GDK_IMLIB)
+fi
+
+if test "$USE_LIBPNG" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_LIBPNG,$USE_LIBPNG) 
+fi
+
+if test "$USE_ODBC" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_ODBC,$USE_ODBC) 
+fi
+
+dnl ----------------------------------------------------------------
+dnl Register GUI-control options for makefiles and setup.h
+dnl ----------------------------------------------------------------
+
+if test "$USE_GAUGE" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_GAUGE,$USE_GAUGE)
+fi
+
+if test "$USE_SCROLLBAR" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_SCROLLBAR,$USE_SCROLLBAR)
+fi
+
+if test "$USE_LISTCTRL" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_LISTCTRL,$USE_LISTCTRL)
+fi
+
+if test "$USE_TREECTRL" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_TREECTRL,$USE_TREECTRL)
+fi
+
+if test "$USE_GRID" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_GRID,$USE_GRID)
+fi
+
+if test "$USE_TAB_DIALOG" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_TAB_DIALOG,$USE_TAB_DIALOG)
+fi
+
+if test "$USE_NOTEBOOK" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_NOTEBOOK,$USE_NOTEBOOK)
+fi
+
+dnl ----------------------------------------------------------------
+dnl Register non-GUI class options for makefiles and setup.h
+dnl ----------------------------------------------------------------
+
+if test "$USE_CONFIG" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_CONFIG,$USE_CONFIG)
+fi
+
+if test "$USE_TIMEDATE" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_TIMEDATE,$USE_TIMEDATE)
+fi
+
+if test "$USE_FRACTION" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_FRACTION,$USE_FRACTION)
+fi
+
+if test "$USE_LOG" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_LOG,$USE_LOG)
+fi
+
+if test "$USE_INTL" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_INTL,$USE_INTL)
+fi
+
+if test "$USE_STREAMS" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_STREAMS,$USE_STREAMS)
+fi
+
+if test "$USE_SERIAL" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_SERIAL,$USE_SERIAL)
+fi
+
+if test "$USE_FILE" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_FILE,$USE_FILE)
+fi
+
+if test "$USE_TEXTFILE" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_TEXTFILE,$USE_TEXTFILE)
+fi
+
+dnl ----------------------------------------------------------------
+dnl Register Prolog and Resources options for makefiles and setup.h
+dnl ----------------------------------------------------------------
+
 if test "$USE_RPC" = 1 ; then
-  RPC="RPC"
   AC_DEFINE_UNQUOTED(USE_RPC,$USE_RPC)
 fi
-AC_SUBST(RPC)
 
-WXRESOURCES=NONE
 if test "$USE_WX_RESOURCES" = 1 ; then
-  WXRESOURCES="WXRESOURCES"
   AC_DEFINE_UNQUOTED(USE_WX_RESOURCES,$USE_WX_RESOURCES)
 fi
-AC_SUBST(WXRESOURCES)
 
-PROLOGIO=NONE
-PROLOGIOSRC=NONE
 if test "$USE_PROLOGIO" = 1 ; then
-  PROLOGIO="PROLOGIO"
-  PROLOGIOSRC="PROLOGIOSRC"
   AC_DEFINE_UNQUOTED(USE_PROLOGIO)
 fi
-AC_SUBST(PROLOGIO)
-AC_SUBST(PROLOGIOSRC)
 
-POSTSCRIPTDC=NONE
+dnl ----------------------------------------------------------------
+dnl Register PostScript options for makefiles and setup.h
+dnl ----------------------------------------------------------------
+
 if test "$USE_POSTSCRIPT" = 1 ; then
-  POSTSCRIPTDC="POSTSCRIPTDC"
   AC_DEFINE_UNQUOTED(USE_POSTSCRIPT)
 fi
-AC_SUBST(POSTSCRIPTDC)
 
-if test "$USE_WXCONFIG" = 1 ; then
-  AC_DEFINE_UNQUOTED(USE_WXCONFIG,$USE_WXCONFIG)
+AC_DEFINE_UNQUOTED(USE_AFM_FOR_POSTSCRIPT,$USE_AFM_FOR_POSTSCRIPT)
+
+AC_DEFINE_UNQUOTED(WX_NORMALIZED_PS_FONTS,$WX_NORMALIZED_PS_FONTS)
+
+dnl ----------------------------------------------------------------
+dnl Register architecture options for makefiles and setup.h
+dnl ----------------------------------------------------------------
+
+if test "$USE_MDI_ARCHITECTURE" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_MDI_ARCHITECTURE,$USE_MDI_ARCHITECTURE)
 fi
+
+if test "$USE_DOC_VIEW_ARCHITECTURE" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_DOC_VIEW_ARCHITECTURE,$USE_DOC_VIEW_ARCHITECTURE)
+fi
+
+if test "$USE_PRINTING_ARCHITECTURE" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_PRINTING_ARCHITECTURE,$USE_PRINTING_ARCHITECTURE)
+fi
+
+dnl ----------------------------------------------------------------
+dnl Register misc options for makefiles and setup.h
+dnl ----------------------------------------------------------------
+
+if test "$USE_IPC" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_IPC)
+fi
+
+if test "$USE_RESOURCES" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_RESOURCES,$USE_RESOURCES)
+fi
+
+if test "$USE_CLIPBOARD" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_CLIPBOARD,$USE_CLIPBOARD)
+fi
+
+if test "$USE_DND" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_DND,$USE_DND)
+fi
+
+if test "$USE_CONSTRAINTS" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_CONSTRAINTS,$USE_CONSTRAINTS)
+fi
+
+dnl ----------------------------------------------------------------
+dnl No effect
+dnl ----------------------------------------------------------------
 
 METAFILE=NONE
 if test "$USE_METAFILE" = 1 ; then
@@ -1122,118 +1275,12 @@ if test "$USE_METAFILE" = 1 ; then
 fi
 AC_SUBST(METAFILE)
 
-FORM=NONE
-if test "$USE_FORM" = 1 ; then
-  FORM="FORM"
-  AC_DEFINE_UNQUOTED(USE_FORM,$USE_FORM)
-fi
-AC_SUBST(FORM)
-
 HELP=NONE
 if test "$USE_HELP" = 1 ; then
   HELP="HELP"
   AC_DEFINE_UNQUOTED(USE_HELP,$USE_HELP)
 fi
 AC_SUBST(HELP)
-
-IPC=NONE
-if test "$USE_IPC" = 1 ; then
-  IPC="IPC"
-  AC_DEFINE_UNQUOTED(USE_IPC)
-fi
-AC_SUBST(IPC)
-
-ENHDIALOGBOX=NONE
-if test "$USE_ENHANCED_DIALOG" = 1 ; then
-  ENHDIALOGBOX="ENHDIALOGBOX"
-  AC_DEFINE_UNQUOTED(USE_ENHANCED_DIALOG,$USE_ENHANCED_DIALOG)
-fi
-AC_SUBST(ENHDIALOGBOX)
-
-XRESOURCES=NONE
-if test "$USE_RESOURCES" = 1 ; then
-  XRESOURCES="XRESOURCES"
-  AC_DEFINE_UNQUOTED(USE_RESOURCES,$USE_RESOURCES)
-fi
-AC_SUBST(XRESOURCES)
-
-CLIPBOARD=NONE
-if test "$USE_CLIPBOARD" = 1 ; then
-  CLIPBOARD="CLIPBOARD"
-  AC_DEFINE_UNQUOTED(USE_CLIPBOARD,$USE_CLIPBOARD)
-fi
-AC_SUBST(CLIPBOARD)
-
-CONSTRAINTS=NONE
-if test "$USE_CONSTRAINTS" = 1 ; then
-  CONSTRAINTS="CONSTRAINTS"
-  AC_DEFINE_UNQUOTED(USE_CONSTRAINTS,$USE_CONSTRAINTS)
-fi
-AC_SUBST(CONSTRAINTS)
-
-TIMEDATE=NONE
-if test "$USE_TIMEDATE" = 1 ; then
-  TIMEDATE="TIMEDATE"
-  AC_DEFINE_UNQUOTED(USE_TIMEDATE,$USE_TIMEDATE)
-fi
-AC_SUBST(TIMEDATE)
-
-FRACTION=NONE
-if test "$USE_FRACTION" = 1 ; then
-  FRACTION="FRACTION"
-  AC_DEFINE_UNQUOTED(USE_FRACTION,$USE_FRACTION)
-fi
-AC_SUBST(FRACTION)
-
-TOOLBAR=NONE
-if test "$USE_TOOLBAR" = 1 ; then
-  TOOLBAR="TOOLBAR"
-  AC_DEFINE_UNQUOTED(USE_TOOLBAR,$USE_TOOLBAR)
-  AC_DEFINE_UNQUOTED(USE_XT_TOOLBAR,$USE_XT_TOOLBAR)
-fi
-AC_SUBST(TOOLBAR)
-
-GAUGE=NONE
-if test "$USE_GAUGE" = 1 ; then
-  GAUGE="GAUGE"
-  AC_SUBST(GAUGE)
-  AC_DEFINE_UNQUOTED(USE_GAUGE,$USE_GAUGE)
-fi
-
-VIRLISTBOX=NONE
-if test "$USE_VLBOX" = 1 ; then
-  VIRTLISTBOX="VIRLISTBOX"
-  AC_DEFINE_UNQUOTED(USE_VIRLISTBOX,$USE_VIRLISTBOX)
-fi
-AC_SUBST(VIRLISTBOX)
-
-SCROLLBAR=NONE
-if test "$USE_SCROLLBAR" = 1 ; then
-  SCROLLBAR="SCROLLBAR"
-  AC_DEFINE_UNQUOTED(USE_SCROLLBAR,$USE_SCROLLBAR)
-fi
-AC_SUBST(SCROLLBAR)
-
-DOCVIEW=NONE
-if test "$USE_DOC_VIEW_ARCHITECTURE" = 1 ; then
-  DOCVIEW="DOCVIEW"
-  AC_DEFINE_UNQUOTED(USE_DOC_VIEW_ARCHITECTURE,$USE_DOC_VIEW_ARCHITECTURE)
-fi
-AC_SUBST(DOCVIEW)
-
-PRINTPREVIEW=NONE
-if test "$USE_PRINTING_ARCHITECTURE" = 1 ; then
-  PRINTPREVIEW="PRINTPREVIEW"
-  AC_DEFINE_UNQUOTED(USE_PRINTING_ARCHITECTURE,$USE_PRINTING_ARCHITECTURE)
-fi
-AC_SUBST(PRINTPREVIEW)
-
-TYPETREE=NONE
-if test "$USE_TYPETREE" = 1 ; then
-  TYPETREE="TYPETREE"
-  AC_DEFINE_UNQUOTED(USE_TYPETREE,$USE_TYPETREE)
-fi
-AC_SUBST(TYPETREE)
 
 WXGRAPH=NONE
 if test "$USE_WXGRAPH" = 1 ; then
@@ -1254,10 +1301,6 @@ if test "$USE_OPENGL" = 1 ; then
   GLCANVAS="GLCANVAS"
 fi
 
-AC_DEFINE_UNQUOTED(USE_AFM_FOR_POSTSCRIPT,$USE_AFM_FOR_POSTSCRIPT)
-
-AC_DEFINE_UNQUOTED(WX_NORMALIZED_PS_FONTS,$WX_NORMALIZED_PS_FONTS)
-
 dnl ----------------------------------------------------------------
 dnl select  dynamic loader (used by iODBC to load drivers)
 dnl ----------------------------------------------------------------
@@ -1275,7 +1318,7 @@ THREADS_LINK=""
 UNIX_THREAD=""
 
 AC_ARG_WITH(threads,
-[  --without-threads       Force disabling threads ],
+[**--without-threads       Force disabling threads ],
 [USE_THREADS="$withval"])
 
 if test "$USE_THREADS" = "1"; then
@@ -1363,125 +1406,6 @@ if test "$USE_OPENGL" = 1; then
     AC_MSG_ERROR(no)
   fi
 fi
-
-dnl ----------------------------------------------------------------
-dnl search for gdk_imlib
-dnl ----------------------------------------------------------------
-dnl 
-dnl GDK_IMLIB_INCLUDE=
-dnl GDK_IMLIB_LIBRARY=
-dnl GDK_IMLIB_LINK=
-dnl 
-    if test "$USE_GDK_IMLIB" = 1; then
-dnl   AC_MSG_CHECKING(for gdk_imlib includes)
-dnl   AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,gdk_imlib.h)
-dnl   if test "$ac_find_includes" != "" ; then
-dnl     dnl GDK_IMLIB_INCLUDE="-I$ac_find_includes"
-dnl     AC_MSG_RESULT(found $ac_find_includes)
-dnl     AC_MSG_CHECKING(for gdk_imlib library)
-dnl     AC_PATH_FIND_LIBRARIES($SEARCH_LIB,gdk_imlib)
-dnl     if test "$ac_find_libraries" != "" ; then
-dnl       AC_INCLUDE_PATH_EXIST($ac_find_includes,$CHECK_INCLUDE)
-dnl       AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
-dnl       CHECK_LINK="$CHECK_INCLUDE $ac_path_to_link"
-dnl       CHECK_INCLUDE="$CHECK_INCLUDE $ac_path_to_include"
-dnl       GDK_IMLIB_LIBRARY="$ac_path_to_link"
-dnl       GDK_IMLIB_INCLUDE="$ac_path_to_include"
-dnl       GDK_IMLIB_LINK="-lgdk_imlib"
-dnl       AC_MSG_RESULT(found gdk_imlib at $ac_find_libraries)
-dnl     else
-dnl       AC_MSG_ERROR(no)
-dnl     fi
-dnl   else
-dnl     AC_MSG_ERROR(no)
-dnl   fi
-      AC_DEFINE_UNQUOTED(USE_GDK_IMLIB,$USE_GDK_IMLIB)
-    fi
-dnl AC_SUBST(GDK_IMLIB_INCLUDE)
-dnl AC_SUBST(GDK_IMLIB_LIBRARY)
-dnl AC_SUBST(GDK_IMLIB_LINK)
-
-dnl ----------------------------------------------------------------
-dnl search for zlib
-dnl ----------------------------------------------------------------
-dnl
-dnl ZLIB_INCLUDE=
-dnl ZLIB_LINK=
-dnl 
-    if test "$USE_ZLIB" = 1; then
-dnl   AC_MSG_CHECKING(for zlib includes)
-dnl   AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,zlib.h)
-dnl   if test "$ac_find_includes" != "" ; then
-dnl     AC_MSG_RESULT(found $ac_find_includes)
-dnl     AC_MSG_CHECKING(for zlib library)
-dnl     AC_PATH_FIND_LIBRARIES($SEARCH_LIB,z)
-dnl     if test "$ac_find_libraries" != "" ; then
-dnl       AC_INCLUDE_PATH_EXIST($ac_find_includes,$CHECK_INCLUDE)
-dnl       AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
-dnl       CHECK_LINK="$CHECK_INCLUDE $ac_path_to_link"
-dnl       CHECK_INCLUDE="$CHECK_INCLUDE $ac_path_to_include"
-dnl       ZLIB_INCLUDE="$ac_path_to_include"
-dnl       ZLIB_LINK="-lz"
-dnl       AC_MSG_RESULT(found zlib at $ac_find_libraries)
-dnl     else
-dnl       AC_MSG_ERROR(no)
-dnl     fi
-dnl   else
-dnl     AC_MSG_ERROR(no)
-dnl   fi
-      AC_DEFINE_UNQUOTED(USE_ZLIB,$USE_ZLIB)
-    fi
-dnl AC_SUBST(ZLIB_INCLUDE)
-dnl AC_SUBST(ZLIB_LIBRARY)
-dnl AC_SUBST(ZLIB_LINK)
-
-dnl ----------------------------------------------------------------
-dnl search for libpng
-dnl ----------------------------------------------------------------
-dnl 
-dnl LIBPNG_INCLUDE=
-dnl LIBPNG_LIBRARY=
-dnl LIBPNG_LINK=
-dnl 
-    if test "$USE_LIBPNG" = 1; then
-dnl   AC_MSG_CHECKING(for libpng includes)
-dnl   AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,png.h)
-dnl   if test "$ac_find_includes" != "" ; then
-dnl     AC_MSG_RESULT(found $ac_find_includes)
-dnl     AC_MSG_CHECKING(for libpng library)
-dnl     AC_PATH_FIND_LIBRARIES($SEARCH_LIB,png)
-dnl     if test "$ac_find_libraries" != "" ; then
-dnl       AC_INCLUDE_PATH_EXIST($ac_find_includes,$CHECK_INCLUDE)
-dnl       AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
-dnl       CHECK_LINK="$CHECK_INCLUDE $ac_path_to_link"
-dnl       CHECK_INCLUDE="$CHECK_INCLUDE $ac_path_to_include"
-dnl       LIBPNG_LIBRARY="$ac_path_to_link"
-dnl       LIBPNG_INCLUDE="$ac_path_to_include"
-dnl       LIBPNG_LINK="-lpng"
-dnl       AC_MSG_RESULT(found libpng at $ac_find_libraries)
-dnl     else
-dnl       AC_MSG_RESULT(no)
-dnl     fi
-dnl   else
-dnl     AC_MSG_ERROR(no)
-dnl   fi
-      AC_DEFINE_UNQUOTED(USE_LIBPNG,$USE_LIBPNG) 
-    fi
-dnl AC_SUBST(LIBPNG_INCLUDE)
-dnl AC_SUBST(LIBPNG_LIBRARY)
-dnl AC_SUBST(LIBPNG_LINK)
-
-dnl ----------------------------------------------------------------
-dnl search for iODBC
-dnl ----------------------------------------------------------------
-dnl 
-    if test "$USE_ODBC" = 1; then
-      AC_DEFINE_UNQUOTED(USE_ODBC,$USE_ODBC) 
-    fi
-
-dnl ----------------------------------------------------------------
-dnl search for Python
-dnl ----------------------------------------------------------------
 
 dnl ----------------------------------------------------------------
 dnl left-over

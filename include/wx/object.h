@@ -78,7 +78,7 @@ class WXDLLEXPORT wxClassInfo
 
 wxObject* WXDLLEXPORT wxCreateDynamicObject(char *name);
 
-#ifdef USE_STORABLE_CLASSES
+#ifdef USE_SERIAL
 wxObject* WXDLLEXPORT wxCreateStoredObject( wxInputStream& stream );
 #endif
 
@@ -183,7 +183,7 @@ class WXDLLEXPORT wxObject
   virtual void Dump(ostream& str);
 #endif
 
-#ifdef USE_STORABLE_CLASSES
+#ifdef USE_SERIAL
   virtual void StoreObject( wxObjectOutputStream &stream );
   virtual void LoadObject( wxObjectInputStream &stream );
 #endif

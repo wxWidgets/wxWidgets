@@ -228,7 +228,7 @@ wxObject *wxCreateDynamicObject(char *name)
   return info->CreateObject();
 }
 
-#ifdef USE_STORABLE_CLASSES
+#ifdef USE_SERIAL
 
 #include "wx/serbase.h"
 #include "wx/dynlib.h"

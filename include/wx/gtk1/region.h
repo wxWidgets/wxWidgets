@@ -89,11 +89,46 @@ class wxRegion : public wxGDIObject
 
     wxRegionContain Contains( long x, long y ) const;
     wxRegionContain Contains( long x, long y, long w, long h ) const;
+    wxRegionContain Contains(const wxPoint& pt) const;
+    wxRegionContain Contains(const wxRect& rect) const;
     
   public:
-    
+  
+    wxList    *GetRectList() const;    
     GdkRegion *GetRegion(void) const;
 };
+
+class wxRegionIterator: public wxObject 
+{
+  DECLARE_DYNAMIC_CLASS(wxRegionIterator);
+  
+  public:
+  
+    wxRegionIterator(void);
+    wxRegionIterator(const wxRegion& region);
+
+    void Reset(void) { m_current = 0; }
+    void Reset(const wxRegion& region);
+
+    operator bool (void) const;
+    bool HaveRects(void) const;
+
+    void operator ++ (void);
+    void operator ++ (int);
+
+    long GetX(void) const;
+    long GetY(void) const;
+    long GetW(void) const;
+    long GetWidth(void) const { return GetW(); }
+    long GetH(void) const;
+    long GetHeight(void) const { return GetH(); }
+
+  private:
+  
+   long       m_current;
+   wxRegion   m_region;
+};
+
 
 #endif
 	// __REGIONH__

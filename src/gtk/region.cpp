@@ -29,6 +29,7 @@ class wxRegionRefData: public wxObjectRefData
   public:    
 
     GdkRegion  *m_region;
+    wxList      m_rects;
 };
 
 wxRegionRefData::wxRegionRefData(void)
@@ -39,6 +40,14 @@ wxRegionRefData::wxRegionRefData(void)
 wxRegionRefData::~wxRegionRefData(void)
 {
   if (m_region) gdk_region_destroy( m_region );
+  
+  wxNode *node = m_rects.First();
+  while (node)
+  {
+    wxRect *r = (wxRect*)node->Data();
+    delete r;
+    node = node->Next();
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -58,6 +67,7 @@ wxRegion::wxRegion( long x, long y, long w, long h )
   rect.height = h;
   M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
   gdk_region_destroy( reg );
+  M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(x,y,w,h) );
 }
 
 wxRegion::wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight )
@@ -71,6 +81,7 @@ wxRegion::wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight )
   rect.height = bottomRight.y - rect.y;
   M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
   gdk_region_destroy( reg );
+  M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(topLeft,bottomRight) );
 }
 
 wxRegion::wxRegion( const wxRect& rect )
@@ -84,6 +95,14 @@ wxRegion::wxRegion( const wxRect& rect )
   g_rect.height = rect.height;
   M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &g_rect );
   gdk_region_destroy( reg );
+  
+  wxNode *node = M_REGIONDATA->m_rects.First();
+  while (node)
+  {
+    wxRect *r = (wxRect*)node->Data();
+    M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(r->x,r->y,r->width,r->height) );
+    node = node->Next();
+  }
 }
 
 wxRegion::wxRegion(void)
@@ -113,6 +132,7 @@ bool wxRegion::Union( long x, long y, long width, long height )
   GdkRegion *reg = gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
   gdk_region_destroy( M_REGIONDATA->m_region );
   M_REGIONDATA->m_region = reg;
+  M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(x,y,width,height) );
   return TRUE;
 }
 
@@ -126,6 +146,7 @@ bool wxRegion::Union( const wxRect& rect )
   GdkRegion *reg = gdk_region_union_with_rect( M_REGIONDATA->m_region, &g_rect );
   gdk_region_destroy( M_REGIONDATA->m_region );
   M_REGIONDATA->m_region = reg;
+  M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(rect.x,rect.y,rect.width,rect.height) );
   return TRUE;
 }
 
@@ -134,6 +155,15 @@ bool wxRegion::Union( const wxRegion& region )
   GdkRegion *reg = gdk_regions_union( M_REGIONDATA->m_region, region.GetRegion() );
   gdk_region_destroy( M_REGIONDATA->m_region );
   M_REGIONDATA->m_region = reg;
+  
+  wxNode *node = region.GetRectList()->First();
+  while (node)
+  {
+    wxRect *r = (wxRect*)node->Data();
+    M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(r->x,r->y,r->width,r->height) );
+    node = node->Next();
+  }
+  
   return TRUE;
 }
 
@@ -200,6 +230,15 @@ bool wxRegion::Xor( const wxRegion& region )
   GdkRegion *reg = gdk_regions_xor( M_REGIONDATA->m_region, region.GetRegion() );
   gdk_region_destroy( M_REGIONDATA->m_region );
   M_REGIONDATA->m_region = reg;
+  
+  wxNode *node = region.GetRectList()->First();
+  while (node)
+  {
+    wxRect *r = (wxRect*)node->Data();
+    M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(r->x,r->y,r->width,r->height) );
+    node = node->Next();
+  }
+  
   return TRUE;
 }
 
@@ -209,11 +248,50 @@ void wxRegion::GetBox( long& x, long& y, long&w, long &h ) const
   y = 0;
   w = -1;
   h = -1;
+  wxNode *node = GetRectList()->First();
+  while (node)
+  {
+    wxRect *r = (wxRect*)node->Data();
+    if (node == GetRectList()->First())
+    {
+      x = r->x;
+      y = r->y;
+      w = r->width;
+      h = r->height;
+    }
+    else
+    {
+      if (r->x < x)
+      {
+        x = r->x;
+        w += x - r->x;
+      }
+      if (r->y < y) 
+      {
+        y = r->y;
+        h += y - r->y;
+      }
+      if (r->width+r->x > x+w) 
+      {
+        w = r->x + r->width - x;
+      }
+      if (r->height+r->y > y+h) 
+      {
+        h = r->y + r->height - y;
+      }
+    }
+    node = node->Next();
+  }
 }
 
 wxRect wxRegion::GetBox(void) const
 {
-  return wxRect( 0, 0, -1, -1 );
+  long x = 0;
+  long y = 0;
+  long w = -1;
+  long h = -1;
+  GetBox( x, y, w, h );
+  return wxRect( x, y, w, h );
 }
 
 bool wxRegion::Empty(void) const
@@ -246,8 +324,99 @@ wxRegionContain wxRegion::Contains( long x, long y, long w, long h ) const
   return wxOutRegion;
 }
 
+wxRegionContain wxRegion::Contains(const wxPoint& pt) const
+{
+  return Contains( pt.x, pt.y );
+}
+
+wxRegionContain wxRegion::Contains(const wxRect& rect) const
+{
+  return Contains( rect.x, rect.y, rect.width, rect.height );
+}
+
 GdkRegion *wxRegion::GetRegion(void) const
 {
   return M_REGIONDATA->m_region;
 }
+
+wxList *wxRegion::GetRectList() const
+{
+  return &(M_REGIONDATA->m_rects);
+}
+
+//-----------------------------------------------------------------------------
+// wxRegion
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator,wxObject);
+  
+wxRegionIterator::wxRegionIterator(void)
+{
+  m_current = 0;
+}
+
+wxRegionIterator::wxRegionIterator( const wxRegion& region )
+{
+  m_region = region;
+  m_current = 0;
+}
+
+void wxRegionIterator::Reset( const wxRegion& region )
+{
+  m_region = region;
+  m_current = 0;
+}
+
+wxRegionIterator::operator bool (void) const 
+{ 
+  return m_current < m_region.GetRectList()->Number(); 
+}
+
+bool wxRegionIterator::HaveRects(void) const 
+{ 
+  return m_current < m_region.GetRectList()->Number(); 
+}
+
+void wxRegionIterator::operator ++ (void)
+{
+  if (m_current < m_region.GetRectList()->Number()) ++m_current;
+}
+
+void wxRegionIterator::operator ++ (int)
+{
+  if (m_current < m_region.GetRectList()->Number()) ++m_current;
+}
+
+long wxRegionIterator::GetX(void) const
+{
+  wxNode *node = m_region.GetRectList()->Nth( m_current );
+  if (!node) return 0;
+  wxRect *r = (wxRect*)node->Data();
+  return r->x;
+}
+
+long wxRegionIterator::GetY(void) const
+{
+  wxNode *node = m_region.GetRectList()->Nth( m_current );
+  if (!node) return 0;
+  wxRect *r = (wxRect*)node->Data();
+  return r->y;
+}
+
+long wxRegionIterator::GetW(void) const
+{
+  wxNode *node = m_region.GetRectList()->Nth( m_current );
+  if (!node) return 0;
+  wxRect *r = (wxRect*)node->Data();
+  return r->width;
+}
+
+long wxRegionIterator::GetH(void) const
+{
+  wxNode *node = m_region.GetRectList()->Nth( m_current );
+  if (!node) return 0;
+  wxRect *r = (wxRect*)node->Data();
+  return r->height;
+}
+
 

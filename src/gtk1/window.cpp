@@ -228,10 +228,12 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     
   if (!win->HasVMT()) return TRUE;
     
+/*
   printf( "OnButtonPress from " );
   if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
     printf( win->GetClassInfo()->GetClassName() );
   printf( ".\n" );
+*/
 
   wxEventType event_type = wxEVT_LEFT_DOWN;
   
@@ -1652,14 +1654,29 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
   }
 }
 
-bool wxWindow::IsExposed( long x, long y )
+wxRegion wxWindow::GetUpdateRegion() const
+{
+  return m_updateRegion;
+}
+
+bool wxWindow::IsExposed( int x, int y) const
 {
   return (m_updateRegion.Contains( x, y ) != wxOutRegion );
 }
 
-bool wxWindow::IsExposed( long x, long y, long width, long height )
+bool wxWindow::IsExposed( int x, int y, int w, int h ) const
 {
-  return (m_updateRegion.Contains( x, y, width, height ) != wxOutRegion );
+  return (m_updateRegion.Contains( x, y, w, h ) != wxOutRegion );
+}
+
+bool wxWindow::IsExposed( const wxPoint& pt ) const
+{
+  return (m_updateRegion.Contains( pt.x, pt.y ) != wxOutRegion );
+}
+
+bool wxWindow::IsExposed( const wxRect& rect ) const
+{
+  return (m_updateRegion.Contains( rect.x, rect.y, rect.width, rect.height ) != wxOutRegion );
 }
 
 void wxWindow::Clear(void)

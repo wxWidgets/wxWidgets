@@ -326,7 +326,7 @@ int wxEntry( int argc, char *argv[] )
   {
     if (!wxApp::GetInitializerFunction())
     {
-      printf( _("wxWindows error: No initializer - use IMPLEMENT_APP macro.\n") );
+      printf( "wxWindows error: No initializer - use IMPLEMENT_APP macro.\n" );
       return 0;
     }
 

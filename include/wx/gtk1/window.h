@@ -140,8 +140,12 @@ public:
 
   virtual void Refresh( bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL );
   virtual void Clear();
-  virtual bool IsExposed( long x, long y );
-  virtual bool IsExposed( long x, long y, long width, long height );
+  
+  virtual wxRegion GetUpdateRegion() const;
+  virtual bool IsExposed(int x, int y) const;
+  virtual bool IsExposed(int x, int y, int w, int h) const;
+  virtual bool IsExposed(const wxPoint& pt) const;
+  virtual bool IsExposed(const wxRect& rect) const;
 
   virtual wxColour GetBackgroundColour() const;
   virtual void SetBackgroundColour( const wxColour &colour );
