@@ -299,6 +299,7 @@ scrolbar.cpp	M
 settings.cpp	M
 slider95.cpp	M	32
 slidrmsw.cpp	M	16
+snglinst.cpp	M	B
 spinbutt.cpp	M
 spinctrl.cpp	M
 statbmp.cpp	M
@@ -327,6 +328,7 @@ dir.cpp	U	B
 fontenum.cpp	U
 fontutil.cpp	U
 mimetype.cpp	U	B
+snglinst.cpp	U	B
 threadpsx.cpp	U	B
 utilsunx.cpp	U	B
 gsocket.c	U	B
@@ -710,6 +712,7 @@ setup.h	W	B
 sizer.h	W
 slider.h	W
 socket.h	W	B
+snglinst.h	W	B
 spinbutt.h	W
 spinctrl.h	W
 splash.h	W

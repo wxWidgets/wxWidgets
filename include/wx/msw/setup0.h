@@ -486,13 +486,6 @@
 // smaller library.
 #define wxUSE_HTML          1
 
-// wxPlot is a class to display functions plots in wxWindow.
-//
-// Default is 1.
-//
-// Recommended setting: 1
-#define wxUSE_PLOT           1
-
 // OpenGL canvas
 #define wxUSE_GLCANVAS       0
 
@@ -502,6 +495,15 @@
 // ----------------------------------------------------------------------------
 // miscellaneous settings
 // ----------------------------------------------------------------------------
+
+// wxSingleInstanceChecker class allows to verify at startup if another program
+// instance is running (it is only available under Win32)
+//
+// Default is 1
+//
+// Recommended setting: 1 (the class is tiny, disabling it won't save much
+// space)
+#define wxUSE_SNGLINST_CHECKER  1
 
 #define wxUSE_IPC         1
                                 // 0 for no interprocess comms
