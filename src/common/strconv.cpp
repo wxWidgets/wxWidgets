@@ -2216,7 +2216,10 @@ public:
     {
         size_t inbuf = strlen(psz);
         if (buf)
-            m2w.Convert(psz,buf);
+        {
+            if (!m2w.Convert(psz,buf))
+                return (size_t)-1;
+        }
         return inbuf;
     }
 
@@ -2224,7 +2227,10 @@ public:
     {
         const size_t inbuf = wxWcslen(psz);
         if (buf)
-            w2m.Convert(psz,buf);
+        {
+            if (!w2m.Convert(psz,buf))
+                return (size_t)-1;
+        }
 
         return inbuf;
     }
