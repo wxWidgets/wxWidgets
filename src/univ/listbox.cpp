@@ -274,7 +274,8 @@ void wxListBox::Clear()
 
 void wxListBox::Delete(int n)
 {
-    wxCHECK_RET( n < GetCount(), _T("invalid index in wxListBox::Delete") );
+    wxCHECK_RET( n >= 0 && n < GetCount(),
+                 _T("invalid index in wxListBox::Delete") );
 
     // do it before removing the index as otherwise the last item will not be
     // refreshed (as GetCount() will be decremented)
