@@ -32,7 +32,7 @@
 //TODO:  Implement  Apple Software Guidelines - show the top window it it's not shown,
 //and force it to be unminimized - and all unminimized windows should be brought to 
 //the front
-//http://developer.apple.com/documentation/MacOSX/Conceptual/AppleSWDesign/MacOSXEnvironment/chapter_6_section_4.html
+//
 //TODO:
 IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 
@@ -114,22 +114,26 @@ pascal OSStatus wxDockEventHandler(	EventHandlerCallRef inHandlerCallRef,
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxDockEventHandler );
 
 wxTaskBarIcon::wxTaskBarIcon(const wxTaskBarIconType& nType)
-    : m_nType(nType), m_pEvent(NULL), m_pMenu(NULL), m_iconAdded(false)
+    : m_nType(nType), m_pEvent(NULL), m_pEventHandlerRef(NULL), m_pMenu(NULL), m_iconAdded(false)
 {
     //Register the events that will return the dock menu
 	EventTypeSpec tbEventList[] = { { kEventClassCommand, kEventProcessCommand },
                                     { kEventClassApplication, kEventAppGetDockTileMenu } };
 	
-	OSStatus err = InstallApplicationEventHandler(
+#ifdef __WXDEBUG__
+	OSStatus err =
+#endif
+      InstallApplicationEventHandler(
             GetwxDockEventHandlerUPP(),
             GetEventTypeCount(tbEventList), tbEventList, 
-			this, NULL);
+			this, (&(EventHandlerRef&)m_pEventHandlerRef));
 			
 	wxASSERT(err == noErr);
 }
+
 wxTaskBarIcon::~wxTaskBarIcon()
 {
-	//TODO:uninstall event handler
+    RemoveEventHandler((EventHandlerRef&)m_pEventHandlerRef);
 }
 
 void wxTaskBarIcon::SetInternalEvent(void* pEvent)
@@ -162,6 +166,8 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     return true;
     #else
     //TODO: (IT WORKS!)  Make work without mask - mayby by using a wxDC?
+    
+    wxASSERT(icon.GetMask() != NULL);
     
 	CGImageRef pImage;
 	//create the icon from the bitmap and mask bitmap contained within

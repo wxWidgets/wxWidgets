@@ -52,6 +52,7 @@ public:
 protected:
     wxTaskBarIconType m_nType;
     void* m_pEvent;
+    void* m_pEventHandlerRef;
     wxMenu* m_pMenu;
     bool m_iconAdded;
         
