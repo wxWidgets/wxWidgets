@@ -81,7 +81,7 @@ mv $2/wxGTK-${WXVER}.tar.gz $2/wxGTK-${WXVER}.tgz
 
 ### wxMotif
 ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp` > /tmp/wxmotif.txt
-tar cvf $2/wxWindows-${WXVER}-mot.tar -T /tmp/wxmotif.txt
+tar cvf $2/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
 gzip $2/wxMotif-${WXVER}.tar
 mv $2/wxMotif-${WXVER}.tar.gz $2/wxMotif-${WXVER}.tgz
 
