@@ -27,10 +27,15 @@
 #include "wx/wx.h"
 #endif
 
+#if wxUSE_IOSTREAMH
 #if defined(__WXMSW__) && !defined(GNUWIN32)
 #include <strstrea.h>
 #else
 #include <strstream.h>
+#endif
+#else
+#include <strstream>
+using namespace std;
 #endif
 #include "scorefil.h"
 #include "scoredg.h"
