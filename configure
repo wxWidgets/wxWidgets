@@ -6784,7 +6784,7 @@ if test ! -d sub ; then
   mkdir sub
 fi
 echo dummy > sub/file
-${MAKE-make} -f confMake VPATH=sub 2> config.log > /dev/null
+${MAKE-make} -f confMake VPATH=sub 2>&5 > /dev/null
 RESULT=$?
 rm -f sub/file check final_file confMake
 rmdir sub
