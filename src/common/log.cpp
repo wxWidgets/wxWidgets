@@ -265,10 +265,10 @@ wxLog *wxLog::GetActiveTarget()
   return ms_pLogger;
 }
 
-wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
+wxLog *wxLog::SetActiveTarget(wxLog *pLogger, bool bNoFlashOld)
 {
   // flush the old messages before changing
-  if ( ms_pLogger != NULL )
+  if ( (ms_pLogger != NULL) && !bNoFlashOld )
     ms_pLogger->Flush();
 
   wxLog *pOldLogger = ms_pLogger;
@@ -423,7 +423,7 @@ void wxLogGui::Flush()
 
   // do it right now to block any new calls to Flush() while we're here
   m_bHasMessages = FALSE;
-  
+
   // @@@ ugly...
 
   // concatenate all strings (but not too many to not overfill the msg box)
@@ -633,7 +633,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
   // open file
   // ---------
   wxFile file;
-  bool bOk = FALSE; 
+  bool bOk = FALSE;
   if ( wxFile::Exists(szFileName) ) {
     bool bAppend = FALSE;
     wxString strMsg;
@@ -723,7 +723,7 @@ void wxLogWindow::Flush()
   if ( m_pOldLog != NULL )
     m_pOldLog->Flush();
 
-  m_bHasMessages = FALSE; 
+  m_bHasMessages = FALSE;
 }
 
 void wxLogWindow::DoLog(wxLogLevel level, const char *szString)

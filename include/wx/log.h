@@ -82,6 +82,9 @@ public:
   bool HasPendingMessages() const { return m_bHasMessages; }
 
   // only one sink is active at each moment
+    // get current log target, will call wxApp::CreateLogTarget() to create one
+    // if none exists
+  static wxLog *GetActiveTarget();
     // change log target, pLogger = NULL disables logging. if bNoFlashOld is true,
     // the old log target isn't flashed which might lead to loss of messages!
     // returns the previous log target
