@@ -5,8 +5,8 @@
 // Modified by:
 // Created:     05/25/99
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) wxWindows team
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -17,14 +17,15 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
    #include "wx/window.h"
+#endif
+
 #ifdef __WXMSW__
    #include "wx/msw/private.h"
-#endif
 #endif
 
 #include "wx/dc.h"
