@@ -196,6 +196,7 @@ ALL_SOURCES = \
 		gtk/minifram.cpp \
 		gtk/notebook.cpp \
 		gtk/pen.cpp \
+		gtk/popupwin.cpp \
 		gtk/radiobox.cpp \
 		gtk/radiobut.cpp \
 		gtk/region.cpp \
@@ -1062,6 +1063,7 @@ GUI_LOWLEVEL_OBJS = \
 		icon.o \
 		main.o \
 		pen.o \
+		popupwin.o \
 		region.o \
 		settings.o \
 		timer.o \

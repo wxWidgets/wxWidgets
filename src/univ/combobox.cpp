@@ -201,6 +201,8 @@ void wxComboControl::Init()
     m_popup = (wxComboPopup *)NULL;
     m_winPopup = (wxPopupComboWindow *)NULL;
     m_isPopupShown = FALSE;
+    m_btn = NULL;
+    m_text = NULL;
 }
 
 bool wxComboControl::Create(wxWindow *parent,
@@ -326,8 +328,11 @@ bool wxComboControl::Show(bool show)
     if ( !wxControl::Show(show) )
         return FALSE;
 
-    m_btn->Show(show);
-    m_text->Show(show);
+    if (m_btn)
+        m_btn->Show(show);
+    
+    if (m_text)
+        m_text->Show(show);
 
     return TRUE;
 }

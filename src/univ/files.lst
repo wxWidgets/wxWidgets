@@ -7,6 +7,7 @@ UNIVOBJS = \
 		checklst.o \
 		colschem.o \
 		control.o \
+		combobox.o \
 		framuniv.o \
 		gauge.o \
 		gtk.o \

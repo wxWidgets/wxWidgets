@@ -50,6 +50,8 @@ public:
 // include the real class declaration
 #ifdef __WXMSW__
     #include "wx/msw/popupwin.h"
+#elif __WXGTK__
+    #include "wx/gtk/popupwin.h"
 #else
     #error "wxPopupWindow is not supported under this platform."
 #endif

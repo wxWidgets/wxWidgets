@@ -270,6 +270,8 @@ public:
     virtual void Select(int n);
     virtual int GetSelection() const;
     void SetSelection(int n) { Select(n); }
+    
+    void SetStringSelection(const wxString& s) {  }
 
 protected:
     virtual int DoAppend(const wxString& item);

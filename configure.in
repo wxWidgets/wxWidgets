@@ -750,6 +750,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
   DEFAULT_wxUSE_TREECTRL=no
+  DEFAULT_wxUSE_POPUPWIN=no
 
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
@@ -902,6 +903,7 @@ else
   DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=yes
   DEFAULT_wxUSE_TREECTRL=yes
+  DEFAULT_wxUSE_POPUPWIN=yes
 
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
@@ -1144,6 +1146,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=yes
   DEFAULT_wxUSE_TOOLTIPS=yes
   DEFAULT_wxUSE_TREECTRL=yes
+  DEFAULT_wxUSE_POPUPWIN=yes
 elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_ACCEL=no
   DEFAULT_wxUSE_BMPBUTTON=no
@@ -1180,6 +1183,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
   DEFAULT_wxUSE_TOOLTIPS=no
   DEFAULT_wxUSE_TREECTRL=no
+  DEFAULT_wxUSE_POPUPWIN=no
 fi
 
 WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
@@ -1218,6 +1222,7 @@ WX_ARG_ENABLE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUS
 WX_ARG_ENABLE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
 WX_ARG_ENABLE(tbarsmpl,    [  --enable-tbarsmpl       use wxToolBarSimple class], wxUSE_TOOLBAR_SIMPLE)
 WX_ARG_ENABLE(treectrl,    [  --enable-treectrl       use wxTreeCtrl class], wxUSE_TREECTRL)
+WX_ARG_ENABLE(popupwin,    [  --enable-popupwin       use wxPopUpWindow class], wxUSE_POPUPWIN)
 
 dnl ---------------------------------------------------------------------------
 dnl common dialogs
@@ -4201,6 +4206,11 @@ if test "$wxUSE_TREECTRL" = "yes"; then
     else
         AC_MSG_WARN([wxTreeCtrl requires wxImageList and won't be compiled without it])
     fi
+fi
+
+if test "$wxUSE_POPUPWIN" = "yes"; then
+    AC_DEFINE(wxUSE_POPUPWIN)
+    USES_CONTROLS=1
 fi
 
 if test "$USES_CONTROLS" = 1; then

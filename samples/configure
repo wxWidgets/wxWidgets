@@ -692,6 +692,7 @@ trap 'rm -fr `echo "
             sashtest/Makefile
             scroll/Makefile
             scrollsub/Makefile
+            sockets/Makefile
             splitter/Makefile
             statbar/Makefile
             text/Makefile
@@ -701,7 +702,7 @@ trap 'rm -fr `echo "
             treelay/Makefile
             typetest/Makefile
             validate/Makefile
-            sockets/Makefile
+            widgets/Makefile
             wizard/Makefile
             html/Makefile
             html/about/Makefile
@@ -838,6 +839,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             sashtest/Makefile
             scroll/Makefile
             scrollsub/Makefile
+            sockets/Makefile
             splitter/Makefile
             statbar/Makefile
             text/Makefile
@@ -847,7 +849,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             treelay/Makefile
             typetest/Makefile
             validate/Makefile
-            sockets/Makefile
+            widgets/Makefile
             wizard/Makefile
             html/Makefile
             html/about/Makefile
