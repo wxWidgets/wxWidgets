@@ -4024,15 +4024,15 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
 {
     // do we need to apply any changes at all?
     if ( !forceStyle &&
-         !m_hasFont && !m_hasFgCol &&
-         (!m_hasBgCol || !m_backgroundColour.Ok()) )
+         !m_font.Ok() &&
+         !m_foregroundColour.Ok() && !m_backgroundColour.Ok() )
     {
         return NULL;
     }
 
     GtkRcStyle *style = gtk_rc_style_new();
 
-    if ( m_hasFont )
+    if ( m_font.Ok() )
     {
 #ifdef __WXGTK20__
         style->font_desc = 
