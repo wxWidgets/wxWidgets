@@ -65,10 +65,9 @@
         #define wxLongLong_t long long
 #else // no native long long type
     // both warning and pragma warning are not portable, but at least an
-    // unknown pragma should never be an error.
-    // Err, actually, Watcom C++ doesn't like it.
-    // (well, if the compilers are _that_ broken, I'm removing it (VZ))
-#if 0 //ndef __WATCOMC__
+    // unknown pragma should never be an error - unless the compiler is
+    // seriously broken as Watcom C++ seems to be...
+#ifndef __WATCOMC__
     #pragma warning "Your compiler does not appear to support 64 bit "\
                     "integers, using emulation class instead."
 #endif
@@ -80,7 +79,7 @@
 // both classes) but by default we only use one class
 #if (defined(wxUSE_LONGLONG_WX) && wxUSE_LONGLONG_WX) || !defined(wxLongLong_t)
     // don't use both classes unless wxUSE_LONGLONG_NATIVE was explicitly set:
-    // this is useful in test programs nad only there
+    // this is useful in test programs and only there
     #ifndef wxUSE_LONGLONG_NATIVE
         #define wxUSE_LONGLONG_NATIVE 0
     #endif

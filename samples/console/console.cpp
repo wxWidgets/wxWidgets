@@ -37,7 +37,7 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-//#define TEST_DATETIME
+#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_ENVIRON
@@ -45,7 +45,7 @@
 //#define TEST_FILE
 //#define TEST_FILECONF
 //#define TEST_FILENAME
-#define TEST_FTP
+//#define TEST_FTP
 //#define TEST_HASH
 //#define TEST_LIST
 //#define TEST_LOG
@@ -4098,7 +4098,7 @@ int main(int argc, char **argv)
 #endif // TEST_TIMER
 
 #ifdef TEST_DATETIME
-    if ( 0 )
+    if ( 1 )
     {
         TestTimeSet();
         TestTimeStatic();
