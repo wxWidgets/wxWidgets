@@ -910,14 +910,19 @@ private:
 	bool	m_locked;
 };
 
-static MemoryCriticalSection memLocker;
+MemoryCriticalSection &GetMemLocker()
+{
+    static MemoryCriticalSection memLocker;
+    return memLocker;
+}
+
 #endif
 
 // TODO: store whether this is a vector or not.
 void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool WXUNUSED(isVect) )
 {
 #if USE_THREADSAFE_MEMORY_ALLOCATION
-  MemoryCriticalSectionLocker lock(memLocker);
+  MemoryCriticalSectionLocker lock(GetMemLocker());
 #endif
 
   // If not in debugging allocation mode, do the normal thing
@@ -977,7 +982,7 @@ void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, 
 void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
 {
 #if USE_THREADSAFE_MEMORY_ALLOCATION
-  MemoryCriticalSectionLocker lock(memLocker);
+  MemoryCriticalSectionLocker lock(GetMemLocker());
 #endif
 
   if (!buf)
