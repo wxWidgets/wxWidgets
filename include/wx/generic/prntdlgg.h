@@ -245,8 +245,6 @@ public:
     wxTextCtrl*     m_marginBottomText;
     wxComboBox*       m_paperTypeChoice;
 
-    static bool     m_pageSetupDialogCancelled;
-
     wxPageSetupData m_pageData;
 
 private:
@@ -257,4 +255,4 @@ private:
 #endif
 
 #endif
-// __PRINTDLGH_G__
+// __PRINTDLGH_G_
