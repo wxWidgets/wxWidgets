@@ -2135,7 +2135,13 @@ assertion).
 
 \func{}{wxASSERT}{\param{}{condition}}
 
-Assert macro. An error message will be generated if the condition is FALSE.
+Assert macro. An error message will be generated if the condition is FALSE in
+debug mode, but nothing will be done in the release build.
+
+Please note that the condition in wxASSERT() should have no side effects
+because it will not be executed in release mode at all.
+
+See also: \helpref{wxASSERT\_MSG}{wxassertmsg}
 
 \membersection{wxASSERT\_MSG}\label{wxassertmsg}
 
@@ -2143,17 +2149,27 @@ Assert macro. An error message will be generated if the condition is FALSE.
 
 Assert macro with message. An error message will be generated if the condition is FALSE.
 
+See also: \helpref{wxASSERT}{wxassert}
+
 \membersection{wxFAIL}\label{wxfail}
 
-\func{}{wxFAIL}{\param{}{condition}}
+\func{}{wxFAIL}{\void}
 
 Will always generate an assert error if this code is reached (in debug mode).
 
+See also: \helpref{wxFAIL\_MSG}{wxfailmsg}
+
 \membersection{wxFAIL\_MSG}\label{wxfailmsg}
 
-\func{}{wxFAIL\_MSG}{\param{}{condition}, \param{}{msg}}
+\func{}{wxFAIL\_MSG}{\param{}{msg}}
 
 Will always generate an assert error with specified message if this code is reached (in debug mode).
+
+This macro is useful for marking unreachable" code areas, for example
+it may be used in the "default:" branch of a switch statement if all possible
+cases are processed above.
+
+See also: \helpref{wxFAIL}{wxfail}
 
 \membersection{wxCHECK}\label{wxcheck}
 
@@ -2168,4 +2184,36 @@ This check is done even in release mode.
 
 Checks that the condition is true, returns with the given return value if not (FAILs in debug mode).
 This check is done even in release mode.
+
+This macro may be only used in non void functions, see also 
+\helpref{wxCHECK\_RET}{wxcheckret}.
+
+\membersection{wxCHECK\_RET}\label{wxcheckret}
+
+\func{}{wxCHECK\_RET}{\param{}{condition}, \param{}{msg}}
+
+Checks that the condition is true, and returns if not (FAILs with given error
+message in debug mode). This check is done even in release mode.
+
+This macro should be used in void functions instead of 
+\helpref{wxCHECK\_MSG}{wxcheckmsg}.
+
+\membersection{wxCHECK2}\label{wxcheck2}
+
+\func{}{wxCHECK2}{\param{}{condition}, \param{}{operation}}
+
+Checks that the condition is true and \helpref{wxFAIL}{wxfail} and execute 
+{\it operation} if it is not. This is a generalisation of 
+\helpref{wxCHECK}{wxcheck} and may be used when something else than just
+returning from the function must be done when the {\it condition} is false.
+
+This check is done even in release mode.
+
+\membersection{wxCHECK2\_MSG}\label{wxcheck2msg}
+
+\func{}{wxCHECK2}{\param{}{condition}, \param{}{operation}, \param{}{msg}}
+
+This is the same as \helpref{wxCHECK2}{wxcheck2}, but 
+\helpref{wxFAIL\_MSG}{wxfailmsg} with the specified {\it msg} is called
+instead of wxFAIL() if the {\it condition} is false.
 
