@@ -6807,6 +6807,7 @@ void TestStdString()
     //       01234567890123456789012345
     s1 = _T("abcdefgABCDEFGabcABCabcABC");
     s2 = _T("gAB");
+    s3 = _T("ab");
 
     is_nom( s1.rfind(_T('A')), 23u );
     is_nom( s1.rfind(_T('A'), 7), 7u );
@@ -6823,6 +6824,7 @@ void TestStdString()
     is_nom( s1.rfind(s2), 6u );
     is_nom( s1.rfind(s2, 5), wxString::npos );
     is_nom( s1.rfind(s2, 6), 6u );
+    is_nom( s1.rfind(s3, 1), 0u );
 
     // resize
     s1 = s2 = s3 = s4 = _T("abcABCdefDEF");

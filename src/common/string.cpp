@@ -504,8 +504,7 @@ size_t wxStringBase::rfind(const wxStringBase& str, size_t nStart) const
             {
                 return cursor - c_str();
             }
-            --cursor;
-        } while ( cursor > c_str() );
+        } while ( cursor-- > c_str() );
     }
     
     return npos;
