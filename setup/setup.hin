@@ -477,6 +477,7 @@
 #undef SIZEOF_INT
 #undef SIZEOF_INT_P
 #undef SIZEOF_LONG
+#undef SIZEOF_LONG_LONG
 
 /* Define to `unsigned' if <sys/types.h> doesn't define.  */
 #undef size_t
