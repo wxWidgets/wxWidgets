@@ -346,6 +346,7 @@ wxEXEC_ASYNC = wx._misc.EXEC_ASYNC
 wxEXEC_SYNC = wx._misc.EXEC_SYNC
 wxEXEC_NOHIDE = wx._misc.EXEC_NOHIDE
 wxEXEC_MAKE_GROUP_LEADER = wx._misc.EXEC_MAKE_GROUP_LEADER
+wxEXEC_NODISABLE = wx._misc.EXEC_NODISABLE
 wxExecute = wx._misc.Execute
 wxKill = wx._misc.Kill
 wxJOYSTICK1 = wx._misc.JOYSTICK1

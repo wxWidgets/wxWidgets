@@ -975,7 +975,7 @@ class Timer(_core.EvtHandler):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        self._setCallbackInfo(self, Timer, 0); self._setOORInfo(self)
+        self._setCallbackInfo(self, Timer, 0); self._setOORInfo(self, 0)
 
     def __del__(self, destroy=_misc_.delete_Timer):
         """__del__(self)"""
@@ -1018,6 +1018,10 @@ class Timer(_core.EvtHandler):
     def GetId(*args, **kwargs):
         """GetId(self) -> int"""
         return _misc_.Timer_GetId(*args, **kwargs)
+
+    def Destroy():
+        """NO-OP: Timers must be destroyed by normal refrence counting"""
+        pass
 
 
 class TimerPtr(Timer):
@@ -1733,6 +1737,7 @@ EXEC_ASYNC = _misc_.EXEC_ASYNC
 EXEC_SYNC = _misc_.EXEC_SYNC
 EXEC_NOHIDE = _misc_.EXEC_NOHIDE
 EXEC_MAKE_GROUP_LEADER = _misc_.EXEC_MAKE_GROUP_LEADER
+EXEC_NODISABLE = _misc_.EXEC_NODISABLE
 
 def Execute(*args, **kwargs):
     """Execute(String command, int flags=EXEC_ASYNC, Process process=None) -> long"""

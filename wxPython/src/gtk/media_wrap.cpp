@@ -208,14 +208,14 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define  SWIGTYPE_p_wxLongLong swig_types[0] 
-#define  SWIGTYPE_p_wxControl swig_types[1] 
-#define  SWIGTYPE_p_wxWindow swig_types[2] 
-#define  SWIGTYPE_p_wxEvent swig_types[3] 
-#define  SWIGTYPE_p_wxObject swig_types[4] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[5] 
-#define  SWIGTYPE_p_char swig_types[6] 
-#define  SWIGTYPE_p_wxMediaCtrl swig_types[7] 
+#define  SWIGTYPE_p_wxControl swig_types[0] 
+#define  SWIGTYPE_p_wxWindow swig_types[1] 
+#define  SWIGTYPE_p_wxEvent swig_types[2] 
+#define  SWIGTYPE_p_wxObject swig_types[3] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[4] 
+#define  SWIGTYPE_p_char swig_types[5] 
+#define  SWIGTYPE_p_wxMediaCtrl swig_types[6] 
+#define  SWIGTYPE_p_wxFileOffset swig_types[7] 
 #define  SWIGTYPE_p_wxValidator swig_types[8] 
 #define  SWIGTYPE_p_wxNotifyEvent swig_types[9] 
 #define  SWIGTYPE_p_wxCommandEvent swig_types[10] 
@@ -307,10 +307,6 @@ enum wxMediaState
     wxMEDIASTATE_PLAYING=0
 };
 
-enum wxMediaTimeFormat
-{
-    wxMEDIATIMEFORMAT_TIME=0
-};
 
 class wxMediaEvent : public wxNotifyEvent
 {
@@ -332,15 +328,15 @@ public:
                 const wxValidator& ,
                 const wxString& ) { wxPyRaiseNotImplemented(); }
 
-    wxMediaCtrl(wxWindow* ,
-                wxWindowID ,
-                const wxURI& ,
-                const wxPoint&,
-                const wxSize& ,
-                long style,
-                const wxString& ,
-                const wxValidator& ,
-                const wxString& ) { wxPyRaiseNotImplemented(); }
+//     wxMediaCtrl(wxWindow* ,
+//                 wxWindowID ,
+//                 const wxURI& ,
+//                 const wxPoint&,
+//                 const wxSize& ,
+//                 long style,
+//                 const wxString& ,
+//                 const wxValidator& ,
+//                 const wxString& ) { wxPyRaiseNotImplemented(); }
 
     bool Create(wxWindow* , wxWindowID ,
                 const wxString& ,
@@ -351,15 +347,15 @@ public:
                 const wxValidator& ,
                 const wxString& ) { return false; }
 
-    bool Create(wxWindow* ,
-                wxWindowID ,
-                const wxURI& ,
-                const wxPoint&,
-                const wxSize& ,
-                long style,
-                const wxString& ,
-                const wxValidator& ,
-                const wxString& ) { return false; }
+//     bool Create(wxWindow* ,
+//                 wxWindowID ,
+//                 const wxURI& ,
+//                 const wxPoint&,
+//                 const wxSize& ,
+//                 long style,
+//                 const wxString& ,
+//                 const wxValidator& ,
+//                 const wxString& ) { return false; }
     
     bool Play() { return false; }
     bool Pause() { return false; }
@@ -373,12 +369,14 @@ public:
 
     wxMediaState GetState() { return wxMEDIASTATE_STOPPED; }
 
-    double GetPlaybackRate() { return 0.0; };
+    double GetPlaybackRate()  { return 0.0; }
     bool SetPlaybackRate(double dRate) { return false; }
 
-    bool SetPosition(wxLongLong where) { return false; }
-    wxLongLong GetPosition() { return 0; }
-    wxLongLong GetDuration() { return 0; }
+    wxFileOffset Seek(wxFileOffset where, wxSeekMode mode = wxFromStart)
+    { return 0; }
+    
+    wxFileOffset Tell()    { return 0; }
+    wxFileOffset Length()    { return 0; }
 };
 
 const wxEventType wxEVT_MEDIA_FINISHED = 0;
@@ -508,14 +506,6 @@ SWIG_Check_long(PyObject* obj)
   return SWIG_AsVal_long(obj, (long*)0);
 }
 
-wxMediaCtrl *new_wxMediaCtrl(wxWindow *parent,int id,wxString const &location,wxPoint const &pos,wxSize const &size,long style,wxString const &szBackend,wxValidator const &validator,wxString const &name){
-            return new wxMediaCtrl(parent, id, wxURI(location),
-                                   pos, size, style, szBackend, validator, name);
-        }
-bool wxMediaCtrl_CreateFromURI(wxMediaCtrl *self,wxWindow *parent,int id,wxString const &location,wxPoint const &pos,wxSize const &size,long style,wxString const &szBackend,wxValidator const &validator,wxString const &name){
-            return self->Create(parent, id, wxURI(location),
-                                pos, size, style, szBackend, validator, name);
-        }
 bool wxMediaCtrl_LoadFromURI(wxMediaCtrl *self,wxString const &location){
             return self->Load(wxURI(location));
         }
@@ -818,267 +808,6 @@ static PyObject *_wrap_new_PreMediaCtrl(PyObject *, PyObject *args, PyObject *kw
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxMediaCtrl, 1);
     return resultobj;
     fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_MediaCtrlFromURI(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 = (int) -1 ;
-    wxString const &arg3_defvalue = wxPyEmptyString ;
-    wxString *arg3 = (wxString *) &arg3_defvalue ;
-    wxPoint const &arg4_defvalue = wxDefaultPosition ;
-    wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
-    wxSize const &arg5_defvalue = wxDefaultSize ;
-    wxSize *arg5 = (wxSize *) &arg5_defvalue ;
-    long arg6 = (long) 0 ;
-    wxString const &arg7_defvalue = wxPyEmptyString ;
-    wxString *arg7 = (wxString *) &arg7_defvalue ;
-    wxValidator const &arg8_defvalue = wxDefaultValidator ;
-    wxValidator *arg8 = (wxValidator *) &arg8_defvalue ;
-    wxString const &arg9_defvalue = wxPyMediaCtrlNameStr ;
-    wxString *arg9 = (wxString *) &arg9_defvalue ;
-    wxMediaCtrl *result;
-    bool temp3 = false ;
-    wxPoint temp4 ;
-    wxSize temp5 ;
-    bool temp7 = false ;
-    bool temp9 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    PyObject * obj3 = 0 ;
-    PyObject * obj4 = 0 ;
-    PyObject * obj5 = 0 ;
-    PyObject * obj6 = 0 ;
-    PyObject * obj7 = 0 ;
-    PyObject * obj8 = 0 ;
-    char *kwnames[] = {
-        (char *) "parent",(char *) "id",(char *) "location",(char *) "pos",(char *) "size",(char *) "style",(char *) "szBackend",(char *) "validator",(char *) "name", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOOOO:new_MediaCtrlFromURI",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if (obj1) {
-        arg2 = (int)SWIG_As_int(obj1); 
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj2) {
-        {
-            arg3 = wxString_in_helper(obj2);
-            if (arg3 == NULL) SWIG_fail;
-            temp3 = true;
-        }
-    }
-    if (obj3) {
-        {
-            arg4 = &temp4;
-            if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
-        }
-    }
-    if (obj4) {
-        {
-            arg5 = &temp5;
-            if ( ! wxSize_helper(obj4, &arg5)) SWIG_fail;
-        }
-    }
-    if (obj5) {
-        arg6 = (long)SWIG_As_long(obj5); 
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj6) {
-        {
-            arg7 = wxString_in_helper(obj6);
-            if (arg7 == NULL) SWIG_fail;
-            temp7 = true;
-        }
-    }
-    if (obj7) {
-        if ((SWIG_ConvertPtr(obj7,(void **)(&arg8),SWIGTYPE_p_wxValidator,
-        SWIG_POINTER_EXCEPTION | 0)) == -1)
-        SWIG_fail;
-        if (arg8 == NULL) {
-            PyErr_SetString(PyExc_TypeError,"null reference");
-            SWIG_fail;
-        }
-    }
-    if (obj8) {
-        {
-            arg9 = wxString_in_helper(obj8);
-            if (arg9 == NULL) SWIG_fail;
-            temp9 = true;
-        }
-    }
-    {
-        if (!wxPyCheckForApp()) SWIG_fail;
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxMediaCtrl *)new_wxMediaCtrl(arg1,arg2,(wxString const &)*arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7,(wxValidator const &)*arg8,(wxString const &)*arg9);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxMediaCtrl, 1);
-    {
-        if (temp3)
-        delete arg3;
-    }
-    {
-        if (temp7)
-        delete arg7;
-    }
-    {
-        if (temp9)
-        delete arg9;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp3)
-        delete arg3;
-    }
-    {
-        if (temp7)
-        delete arg7;
-    }
-    {
-        if (temp9)
-        delete arg9;
-    }
-    return NULL;
-}
-
-
-static PyObject *_wrap_MediaCtrl_CreateFromURI(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
-    wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 = (int) -1 ;
-    wxString const &arg4_defvalue = wxPyEmptyString ;
-    wxString *arg4 = (wxString *) &arg4_defvalue ;
-    wxPoint const &arg5_defvalue = wxDefaultPosition ;
-    wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
-    wxSize const &arg6_defvalue = wxDefaultSize ;
-    wxSize *arg6 = (wxSize *) &arg6_defvalue ;
-    long arg7 = (long) 0 ;
-    wxString const &arg8_defvalue = wxPyEmptyString ;
-    wxString *arg8 = (wxString *) &arg8_defvalue ;
-    wxValidator const &arg9_defvalue = wxDefaultValidator ;
-    wxValidator *arg9 = (wxValidator *) &arg9_defvalue ;
-    wxString const &arg10_defvalue = wxPyMediaCtrlNameStr ;
-    wxString *arg10 = (wxString *) &arg10_defvalue ;
-    bool result;
-    bool temp4 = false ;
-    wxPoint temp5 ;
-    wxSize temp6 ;
-    bool temp8 = false ;
-    bool temp10 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    PyObject * obj3 = 0 ;
-    PyObject * obj4 = 0 ;
-    PyObject * obj5 = 0 ;
-    PyObject * obj6 = 0 ;
-    PyObject * obj7 = 0 ;
-    PyObject * obj8 = 0 ;
-    PyObject * obj9 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "parent",(char *) "id",(char *) "location",(char *) "pos",(char *) "size",(char *) "style",(char *) "szBackend",(char *) "validator",(char *) "name", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOOOO:MediaCtrl_CreateFromURI",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMediaCtrl,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if (obj2) {
-        arg3 = (int)SWIG_As_int(obj2); 
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj3) {
-        {
-            arg4 = wxString_in_helper(obj3);
-            if (arg4 == NULL) SWIG_fail;
-            temp4 = true;
-        }
-    }
-    if (obj4) {
-        {
-            arg5 = &temp5;
-            if ( ! wxPoint_helper(obj4, &arg5)) SWIG_fail;
-        }
-    }
-    if (obj5) {
-        {
-            arg6 = &temp6;
-            if ( ! wxSize_helper(obj5, &arg6)) SWIG_fail;
-        }
-    }
-    if (obj6) {
-        arg7 = (long)SWIG_As_long(obj6); 
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if (obj7) {
-        {
-            arg8 = wxString_in_helper(obj7);
-            if (arg8 == NULL) SWIG_fail;
-            temp8 = true;
-        }
-    }
-    if (obj8) {
-        if ((SWIG_ConvertPtr(obj8,(void **)(&arg9),SWIGTYPE_p_wxValidator,
-        SWIG_POINTER_EXCEPTION | 0)) == -1)
-        SWIG_fail;
-        if (arg9 == NULL) {
-            PyErr_SetString(PyExc_TypeError,"null reference");
-            SWIG_fail;
-        }
-    }
-    if (obj9) {
-        {
-            arg10 = wxString_in_helper(obj9);
-            if (arg10 == NULL) SWIG_fail;
-            temp10 = true;
-        }
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)wxMediaCtrl_CreateFromURI(arg1,arg2,arg3,(wxString const &)*arg4,(wxPoint const &)*arg5,(wxSize const &)*arg6,arg7,(wxString const &)*arg8,(wxValidator const &)*arg9,(wxString const &)*arg10);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-    }
-    {
-        if (temp4)
-        delete arg4;
-    }
-    {
-        if (temp8)
-        delete arg8;
-    }
-    {
-        if (temp10)
-        delete arg10;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp4)
-        delete arg4;
-    }
-    {
-        if (temp8)
-        delete arg8;
-    }
-    {
-        if (temp10)
-        delete arg10;
-    }
     return NULL;
 }
 
@@ -1531,32 +1260,44 @@ static PyObject *_wrap_MediaCtrl_SetPlaybackRate(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_MediaCtrl_SetMediaPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MediaCtrl_Seek(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
-    wxLongLong arg2 ;
-    bool result;
+    wxFileOffset arg2 ;
+    int arg3 = (int) wxFromStart ;
+    wxFileOffset result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "where", NULL 
+        (char *) "self",(char *) "where",(char *) "mode", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MediaCtrl_SetMediaPosition",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:MediaCtrl_Seek",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMediaCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
+        if (sizeof(wxFileOffset) > sizeof(long))
         arg2 = PyLong_AsLongLong(obj1);
+        else
+        arg2 = PyInt_AsLong(obj1);
+    }
+    if (obj2) {
+        arg3 = (int)SWIG_As_int(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->SetPosition(arg2);
+        result = (arg1)->Seek(arg2,(wxSeekMode )arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+        if (sizeof(wxFileOffset) > sizeof(long))
+        resultobj = PyLong_FromLongLong(result);
+        else
+        resultobj = PyInt_FromLong(result);
     }
     return resultobj;
     fail:
@@ -1564,27 +1305,30 @@ static PyObject *_wrap_MediaCtrl_SetMediaPosition(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_MediaCtrl_GetMediaPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MediaCtrl_Tell(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
-    wxLongLong result;
+    wxFileOffset result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_GetMediaPosition",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_Tell",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMediaCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->GetPosition();
+        result = (arg1)->Tell();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = PyLong_FromLongLong((&result)->GetValue());
+        if (sizeof(wxFileOffset) > sizeof(long))
+        resultobj = PyLong_FromLongLong(result);
+        else
+        resultobj = PyInt_FromLong(result);
     }
     return resultobj;
     fail:
@@ -1592,27 +1336,30 @@ static PyObject *_wrap_MediaCtrl_GetMediaPosition(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_MediaCtrl_GetMediaDuration(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MediaCtrl_Length(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMediaCtrl *arg1 = (wxMediaCtrl *) 0 ;
-    wxLongLong result;
+    wxFileOffset result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_GetMediaDuration",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MediaCtrl_Length",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMediaCtrl,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->GetDuration();
+        result = (arg1)->Length();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = PyLong_FromLongLong((&result)->GetValue());
+        if (sizeof(wxFileOffset) > sizeof(long))
+        resultobj = PyLong_FromLongLong(result);
+        else
+        resultobj = PyInt_FromLong(result);
     }
     return resultobj;
     fail:
@@ -1632,8 +1379,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MediaEvent_swigregister", MediaEvent_swigregister, METH_VARARGS, NULL },
 	 { (char *)"new_MediaCtrl", (PyCFunction) _wrap_new_MediaCtrl, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_PreMediaCtrl", (PyCFunction) _wrap_new_PreMediaCtrl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_MediaCtrlFromURI", (PyCFunction) _wrap_new_MediaCtrlFromURI, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MediaCtrl_CreateFromURI", (PyCFunction) _wrap_MediaCtrl_CreateFromURI, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"MediaCtrl_Create", (PyCFunction) _wrap_MediaCtrl_Create, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"MediaCtrl_Play", (PyCFunction) _wrap_MediaCtrl_Play, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"MediaCtrl_Pause", (PyCFunction) _wrap_MediaCtrl_Pause, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -1645,9 +1390,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MediaCtrl_GetState", (PyCFunction) _wrap_MediaCtrl_GetState, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"MediaCtrl_GetPlaybackRate", (PyCFunction) _wrap_MediaCtrl_GetPlaybackRate, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"MediaCtrl_SetPlaybackRate", (PyCFunction) _wrap_MediaCtrl_SetPlaybackRate, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MediaCtrl_SetMediaPosition", (PyCFunction) _wrap_MediaCtrl_SetMediaPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MediaCtrl_GetMediaPosition", (PyCFunction) _wrap_MediaCtrl_GetMediaPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"MediaCtrl_GetMediaDuration", (PyCFunction) _wrap_MediaCtrl_GetMediaDuration, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MediaCtrl_Seek", (PyCFunction) _wrap_MediaCtrl_Seek, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MediaCtrl_Tell", (PyCFunction) _wrap_MediaCtrl_Tell, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MediaCtrl_Length", (PyCFunction) _wrap_MediaCtrl_Length, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"MediaCtrl_swigregister", MediaCtrl_swigregister, METH_VARARGS, NULL },
 	 { NULL, NULL, 0, NULL }
 };
@@ -2066,7 +1811,6 @@ static void *_p_wxPyCommandEventTo_p_wxCommandEvent(void *x) {
 static void *_p_wxMediaEventTo_p_wxCommandEvent(void *x) {
     return (void *)((wxCommandEvent *) (wxNotifyEvent *) ((wxMediaEvent *) x));
 }
-static swig_type_info _swigt__p_wxLongLong[] = {{"_p_wxLongLong", 0, "wxLongLong *", 0, 0, 0, 0},{"_p_wxLongLong", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxControl[] = {{"_p_wxControl", 0, "wxControl *", 0, 0, 0, 0},{"_p_wxControl", 0, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxControl, 0, 0, 0, 0, 0},{"_p_wxMediaCtrl", _p_wxMediaCtrlTo_p_wxControl, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxWindow", 0, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMediaCtrl", _p_wxMediaCtrlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxEvent[] = {{"_p_wxEvent", 0, "wxEvent *", 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEvent", 0, 0, 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMediaEvent", _p_wxMediaEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -2074,13 +1818,13 @@ static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0
 static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxEvtHandler", 0, 0, 0, 0, 0, 0},{"_p_wxMediaCtrl", _p_wxMediaCtrlTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0, 0, 0, 0},{"_p_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMediaCtrl[] = {{"_p_wxMediaCtrl", 0, "wxMediaCtrl *", 0, 0, 0, 0},{"_p_wxMediaCtrl", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxFileOffset[] = {{"_p_wxFileOffset", 0, "wxFileOffset *", 0, 0, 0, 0},{"_p_wxFileOffset", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxValidator[] = {{"_p_wxValidator", 0, "wxValidator *", 0, 0, 0, 0},{"_p_wxValidator", 0, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxValidator, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxNotifyEvent[] = {{"_p_wxNotifyEvent", 0, "wxNotifyEvent *", 0, 0, 0, 0},{"_p_wxNotifyEvent", 0, 0, 0, 0, 0, 0},{"_p_wxMediaEvent", _p_wxMediaEventTo_p_wxNotifyEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", 0, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxMediaEvent", _p_wxMediaEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMediaEvent[] = {{"_p_wxMediaEvent", 0, "wxMediaEvent *", 0, 0, 0, 0},{"_p_wxMediaEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 
 static swig_type_info *swig_types_initial[] = {
-_swigt__p_wxLongLong, 
 _swigt__p_wxControl, 
 _swigt__p_wxWindow, 
 _swigt__p_wxEvent, 
@@ -2088,6 +1832,7 @@ _swigt__p_wxObject,
 _swigt__p_wxEvtHandler, 
 _swigt__p_char, 
 _swigt__p_wxMediaCtrl, 
+_swigt__p_wxFileOffset, 
 _swigt__p_wxValidator, 
 _swigt__p_wxNotifyEvent, 
 _swigt__p_wxCommandEvent, 
@@ -2128,7 +1873,6 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"MEDIASTATE_STOPPED", SWIG_From_int((int)wxMEDIASTATE_STOPPED));
     PyDict_SetItemString(d,"MEDIASTATE_PAUSED", SWIG_From_int((int)wxMEDIASTATE_PAUSED));
     PyDict_SetItemString(d,"MEDIASTATE_PLAYING", SWIG_From_int((int)wxMEDIASTATE_PLAYING));
-    PyDict_SetItemString(d,"MEDIATIMEFORMAT_TIME", SWIG_From_int((int)wxMEDIATIMEFORMAT_TIME));
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
     SWIG_addvarlink(SWIG_globals,(char*)"MediaCtrlNameStr",_wrap_MediaCtrlNameStr_get, _wrap_MediaCtrlNameStr_set);
     PyDict_SetItemString(d, "wxEVT_MEDIA_FINISHED", PyInt_FromLong(wxEVT_MEDIA_FINISHED));

@@ -1438,9 +1438,9 @@ bool wxEvtHandler_Disconnect(wxEvtHandler *self,int id,int lastId,wxEventType ev
                                    (wxObjectEventFunction)
                                     &wxPyCallback::EventThunker);
         }
-void wxEvtHandler__setOORInfo(wxEvtHandler *self,PyObject *_self){
+void wxEvtHandler__setOORInfo(wxEvtHandler *self,PyObject *_self,bool incref){
             if (_self && _self != Py_None) {
-                self->SetClientObject(new wxPyOORClientData(_self));
+                self->SetClientObject(new wxPyOORClientData(_self, incref));
             }
             else {
                 wxPyOORClientData* data = (wxPyOORClientData*)self->GetClientObject();
@@ -12721,19 +12721,25 @@ static PyObject *_wrap_EvtHandler__setOORInfo(PyObject *, PyObject *args, PyObje
     PyObject *resultobj;
     wxEvtHandler *arg1 = (wxEvtHandler *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "_self", NULL 
+        (char *) "self",(char *) "_self",(char *) "incref", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:EvtHandler__setOORInfo",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:EvtHandler__setOORInfo",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxEvtHandler,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     arg2 = obj1;
+    if (obj2) {
+        arg3 = (bool)SWIG_As_bool(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxEvtHandler__setOORInfo(arg1,arg2);
+        wxEvtHandler__setOORInfo(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

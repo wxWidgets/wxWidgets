@@ -2,7 +2,7 @@
 # Don't modify this file, modify the SWIG interface instead.
 
 """
-Classes for a medai player control
+Classes for a media player control
 """
 
 import _media
@@ -13,7 +13,6 @@ __docfilter__ = wx.__DocFilter(globals())
 MEDIASTATE_STOPPED = _media.MEDIASTATE_STOPPED
 MEDIASTATE_PAUSED = _media.MEDIASTATE_PAUSED
 MEDIASTATE_PLAYING = _media.MEDIASTATE_PLAYING
-MEDIATIMEFORMAT_TIME = _media.MEDIATIMEFORMAT_TIME
 class MediaEvent(_core.NotifyEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMediaEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -47,16 +46,6 @@ class MediaCtrl(_core.Control):
         self.thisown = 1
         del newobj.thisown
         self._setOORInfo(self)
-
-    def CreateFromURI(*args, **kwargs):
-        """
-        CreateFromURI(self, Window parent, int id=-1, String location=EmptyString, 
-            Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String szBackend=EmptyString, 
-            Validator validator=DefaultValidator, 
-            String name=MediaCtrlNameStr) -> bool
-        """
-        return _media.MediaCtrl_CreateFromURI(*args, **kwargs)
 
     def Create(*args, **kwargs):
         """
@@ -108,21 +97,17 @@ class MediaCtrl(_core.Control):
         """SetPlaybackRate(self, double dRate) -> bool"""
         return _media.MediaCtrl_SetPlaybackRate(*args, **kwargs)
 
-    def SetMediaPosition(*args, **kwargs):
-        """SetMediaPosition(self, wxLongLong where) -> bool"""
-        return _media.MediaCtrl_SetMediaPosition(*args, **kwargs)
+    def Seek(*args, **kwargs):
+        """Seek(self, wxFileOffset where, int mode=FromStart) -> wxFileOffset"""
+        return _media.MediaCtrl_Seek(*args, **kwargs)
 
-    def GetMediaPosition(*args, **kwargs):
-        """
-        GetMediaPosition(self) -> wxLongLong
+    def Tell(*args, **kwargs):
+        """Tell(self) -> wxFileOffset"""
+        return _media.MediaCtrl_Tell(*args, **kwargs)
 
-        Get the window's position.
-        """
-        return _media.MediaCtrl_GetMediaPosition(*args, **kwargs)
-
-    def GetMediaDuration(*args, **kwargs):
-        """GetMediaDuration(self) -> wxLongLong"""
-        return _media.MediaCtrl_GetMediaDuration(*args, **kwargs)
+    def Length(*args, **kwargs):
+        """Length(self) -> wxFileOffset"""
+        return _media.MediaCtrl_Length(*args, **kwargs)
 
 
 class MediaCtrlPtr(MediaCtrl):
@@ -138,19 +123,6 @@ def PreMediaCtrl(*args, **kwargs):
     """PreMediaCtrl() -> MediaCtrl"""
     val = _media.new_PreMediaCtrl(*args, **kwargs)
     val.thisown = 1
-    return val
-
-def MediaCtrlFromURI(*args, **kwargs):
-    """
-    MediaCtrlFromURI(Window parent, int id=-1, String location=EmptyString, 
-        Point pos=DefaultPosition, Size size=DefaultSize, 
-        long style=0, String szBackend=EmptyString, 
-        Validator validator=DefaultValidator, 
-        String name=MediaCtrlNameStr) -> MediaCtrl
-    """
-    val = _media.new_MediaCtrlFromURI(*args, **kwargs)
-    val.thisown = 1
-    self._setOORInfo(self)
     return val
 
 wxEVT_MEDIA_FINISHED = _media.wxEVT_MEDIA_FINISHED

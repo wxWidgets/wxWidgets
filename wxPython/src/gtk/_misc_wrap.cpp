@@ -754,7 +754,14 @@ IMP_PYCALLBACK_STRING_STRING(wxPyTipProvider, wxTipProvider, PreprocessTip);
 //IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
 
 IMPLEMENT_ABSTRACT_CLASS(wxPyTimer, wxTimer);
-    
+
+wxPyTimer::wxPyTimer(wxEvtHandler *owner, int id)
+    : wxTimer(owner, id)
+{
+    if (owner == NULL) SetOwner(this);
+}
+
+
 void wxPyTimer::Notify() {
     bool found;
     bool blocked = wxPyBeginBlockThreads();
@@ -30806,6 +30813,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"EXEC_SYNC", SWIG_From_int((int)wxEXEC_SYNC));
     PyDict_SetItemString(d,"EXEC_NOHIDE", SWIG_From_int((int)wxEXEC_NOHIDE));
     PyDict_SetItemString(d,"EXEC_MAKE_GROUP_LEADER", SWIG_From_int((int)wxEXEC_MAKE_GROUP_LEADER));
+    PyDict_SetItemString(d,"EXEC_NODISABLE", SWIG_From_int((int)wxEXEC_NODISABLE));
     
     wxPyPtrTypeMap_Add("wxProcess", "wxPyProcess");
     

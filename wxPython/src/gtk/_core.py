@@ -2744,7 +2744,7 @@ class EvtHandler(Object):
         return _core_.EvtHandler_Disconnect(*args, **kwargs)
 
     def _setOORInfo(*args, **kwargs):
-        """_setOORInfo(self, PyObject _self)"""
+        """_setOORInfo(self, PyObject _self, bool incref=True)"""
         return _core_.EvtHandler__setOORInfo(*args, **kwargs)
 
     def Bind(self, event, handler, source=None, id=wx.ID_ANY, id2=wx.ID_ANY):

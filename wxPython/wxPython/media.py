@@ -22,14 +22,12 @@ del sys, _wx
 wxMEDIASTATE_STOPPED = wx.media.MEDIASTATE_STOPPED
 wxMEDIASTATE_PAUSED = wx.media.MEDIASTATE_PAUSED
 wxMEDIASTATE_PLAYING = wx.media.MEDIASTATE_PLAYING
-wxMEDIATIMEFORMAT_TIME = wx.media.MEDIATIMEFORMAT_TIME
 wxMediaEvent = wx.media.MediaEvent
 wxMediaEventPtr = wx.media.MediaEventPtr
 wxMediaCtrlNameStr = wx.media.MediaCtrlNameStr
 wxMediaCtrl = wx.media.MediaCtrl
 wxMediaCtrlPtr = wx.media.MediaCtrlPtr
 wxPreMediaCtrl = wx.media.PreMediaCtrl
-wxMediaCtrlFromURI = wx.media.MediaCtrlFromURI
 wxEVT_MEDIA_FINISHED = wx.media.wxEVT_MEDIA_FINISHED
 wxEVT_MEDIA_STOP = wx.media.wxEVT_MEDIA_STOP
 
