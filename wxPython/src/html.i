@@ -390,7 +390,7 @@ public:
     void DrawInvisible(wxDC& dc, int x, int y);
     const wxHtmlCell* Find(int condition, const void* param);
 
-    bool AdjustPagebreak(int * pagebreak);
+    bool AdjustPagebreak(int* INOUT);
     void SetCanLiveOnPagebreak(bool can);
 
 };
