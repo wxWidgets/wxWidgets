@@ -23,7 +23,9 @@
 
 #include "wx/region.h"
 #include "wx/bitmap.h"
+#if wxUSE_IMAGE
 #include "wx/image.h"
+#endif
 #include "wx/dcmemory.h"
 
 
@@ -52,6 +54,7 @@ bool wxRegion::Union(const wxBitmap& bmp,
                      const wxColour& transColour,
                      int   tolerance)
 {
+#if wxUSE_IMAGE
     unsigned char loR, loG, loB;
     unsigned char hiR, hiG, hiB;
 
@@ -114,6 +117,10 @@ bool wxRegion::Union(const wxBitmap& bmp,
     }
 
     return TRUE;
+#else
+    // No wxImage support
+    return FALSE;
+#endif
 }
 
 //---------------------------------------------------------------------------

@@ -40,7 +40,9 @@
 
 #include "wx/scrolwin.h"
 #include "wx/panel.h"
+#if wxUSE_TIMER
 #include "wx/timer.h"
+#endif
 #include "wx/sizer.h"
 
 #ifdef __WXMSW__
@@ -91,6 +93,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxScrollHelperEvtHandler)
 };
 
+#if wxUSE_TIMER
 // ----------------------------------------------------------------------------
 // wxAutoScrollTimer: the timer used to generate a stream of scroll events when
 // a captured mouse is held outside the window
@@ -175,6 +178,7 @@ void wxAutoScrollTimer::Notify()
         }
     }
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // wxScrollHelperEvtHandler
@@ -1072,11 +1076,13 @@ bool wxScrollHelper::SendAutoScrollEvents(wxScrollWinEvent& event) const
 
 void wxScrollHelper::StopAutoScrolling()
 {
+#if wxUSE_TIMER
     if ( m_timerAutoScroll )
     {
         delete m_timerAutoScroll;
         m_timerAutoScroll = (wxTimer *)NULL;
     }
+#endif
 }
 
 void wxScrollHelper::HandleOnMouseEnter(wxMouseEvent& event)
@@ -1138,6 +1144,7 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
         if ( !m_targetWindow->HasScrollbar(orient) )
             return;
 
+#if wxUSE_TIMER
         delete m_timerAutoScroll;
         m_timerAutoScroll = new wxAutoScrollTimer
                                 (
@@ -1148,6 +1155,7 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
                                     orient
                                 );
         m_timerAutoScroll->Start(50); // FIXME: make configurable
+#endif
     }
 }
 
