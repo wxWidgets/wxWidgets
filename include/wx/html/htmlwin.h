@@ -130,8 +130,11 @@ public:
     void SetFonts(wxString normal_face, wxString fixed_face,
                   const int *sizes = NULL);
 
-    // Sets font sizes to be relative to the given size or the system default size
-    void NormalizeFontSizes(int size=-1);
+    // Sets font sizes to be relative to the given size or the system
+    // default size; use either specified or default font
+    void SetStandardFonts(int size = -1,
+                          const wxString& normal_face = wxEmptyString,
+                          const wxString& fixed_face = wxEmptyString);
     
     // Sets space between text and window borders.
     void SetBorders(int b) {m_Borders = b;}

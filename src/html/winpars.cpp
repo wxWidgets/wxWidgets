@@ -154,11 +154,15 @@ void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face,
                     }
 }
 
-void wxHtmlWinParser::NormalizeFontSizes(int size)
+void wxHtmlWinParser::SetStandardFonts(int size,
+                                       const wxString& normal_face,
+                                       const wxString& fixed_face)
 {
+    wxFont defaultFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    
     int f_sizes[7];
     if (size == -1)
-        size = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize();
+        size = defaultFont.GetPointSize();
 
     f_sizes[0] = int(size * 0.6);
     f_sizes[1] = int(size * 0.8);
@@ -167,8 +171,11 @@ void wxHtmlWinParser::NormalizeFontSizes(int size)
     f_sizes[4] = int(size * 1.4);
     f_sizes[5] = int(size * 1.6);
     f_sizes[6] = int(size * 1.8);
+
+    wxString normal = normal_face.empty() ? 
+                      defaultFont.GetFaceName() : normal_face;
     
-    SetFonts(wxEmptyString, wxEmptyString, f_sizes);
+    SetFonts(normal, fixed_face, f_sizes);
 }
 
 void wxHtmlWinParser::InitParser(const wxString& source)

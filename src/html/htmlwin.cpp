@@ -246,24 +246,21 @@ void wxHtmlWindow::SetFonts(wxString normal_face, wxString fixed_face, const int
     m_Parser->SetFonts(normal_face, fixed_face, sizes);
     // fonts changed => contents invalid, so reload the page:
     SetPage(wxT("<html><body></body></html>"));
-    if (!op.IsEmpty()) LoadPage(op);
+    if (!op.empty())
+        LoadPage(op);
 }
 
-void wxHtmlWindow::NormalizeFontSizes(int size)
+void wxHtmlWindow::SetStandardFonts(int size,
+                                    const wxString& normal_face,
+                                    const wxString& fixed_face)
 {
-    int f_sizes[7];
-    if (size == -1)
-        size = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize();
+    wxString op = m_OpenedPage;
 
-    f_sizes[0] = int(size * 0.6);
-    f_sizes[1] = int(size * 0.8);
-    f_sizes[2] = size;
-    f_sizes[3] = int(size * 1.2);
-    f_sizes[4] = int(size * 1.4);
-    f_sizes[5] = int(size * 1.6);
-    f_sizes[6] = int(size * 1.8);
-    
-    SetFonts(wxEmptyString, wxEmptyString, f_sizes);
+    m_Parser->SetStandardFonts(size, normal_face, fixed_face);
+    // fonts changed => contents invalid, so reload the page:
+    SetPage(wxT("<html><body></body></html>"));
+    if (!op.empty())
+        LoadPage(op);
 }
 
 

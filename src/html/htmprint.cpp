@@ -98,25 +98,17 @@ void wxHtmlDCRenderer::SetFonts(wxString normal_face, wxString fixed_face,
                                 const int *sizes)
 {
     m_Parser->SetFonts(normal_face, fixed_face, sizes);
-    if (m_DC == NULL && m_Cells != NULL) m_Cells->Layout(m_Width);
+    if (m_DC == NULL && m_Cells != NULL)
+        m_Cells->Layout(m_Width);
 }
 
-
-void wxHtmlDCRenderer::NormalizeFontSizes(int size)
+void wxHtmlDCRenderer::SetStandardFonts(int size,
+                                        const wxString& normal_face,
+                                        const wxString& fixed_face)
 {
-    int f_sizes[7];
-    if (size == -1)
-        size = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize();
-
-    f_sizes[0] = int(size * 0.6);
-    f_sizes[1] = int(size * 0.8);
-    f_sizes[2] = size;
-    f_sizes[3] = int(size * 1.2);
-    f_sizes[4] = int(size * 1.4);
-    f_sizes[5] = int(size * 1.6);
-    f_sizes[6] = int(size * 1.8);
-    
-    SetFonts(wxEmptyString, wxEmptyString, f_sizes);
+    m_Parser->SetStandardFonts(size, normal_face, fixed_face);
+    if (m_DC == NULL && m_Cells != NULL)
+        m_Cells->Layout(m_Width);
 }
 
 
@@ -470,22 +462,12 @@ void wxHtmlPrintout::SetFonts(wxString normal_face, wxString fixed_face,
     m_RendererHdr->SetFonts(normal_face, fixed_face, sizes);
 }
 
-
-void wxHtmlPrintout::NormalizeFontSizes(int size)
+void wxHtmlPrintout::SetStandardFonts(int size,
+                                      const wxString& normal_face,
+                                      const wxString& fixed_face)
 {
-    int f_sizes[7];
-    if (size == -1)
-        size = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize();
-
-    f_sizes[0] = int(size * 0.6);
-    f_sizes[1] = int(size * 0.8);
-    f_sizes[2] = size;
-    f_sizes[3] = int(size * 1.2);
-    f_sizes[4] = int(size * 1.4);
-    f_sizes[5] = int(size * 1.6);
-    f_sizes[6] = int(size * 1.8);
-    
-    SetFonts(wxEmptyString, wxEmptyString, f_sizes);
+    m_Renderer->SetStandardFonts(size, normal_face, fixed_face);
+    m_RendererHdr->SetStandardFonts(size, normal_face, fixed_face);
 }
 
 
@@ -664,6 +646,7 @@ void wxHtmlEasyPrinting::SetFooter(const wxString& footer, int pg)
 void wxHtmlEasyPrinting::SetFonts(wxString normal_face, wxString fixed_face,
                                   const int *sizes)
 {
+    m_fontMode = FontMode_Explicit;
     m_FontFaceNormal = normal_face;
     m_FontFaceFixed = fixed_face;
 
@@ -676,21 +659,14 @@ void wxHtmlEasyPrinting::SetFonts(wxString normal_face, wxString fixed_face,
         m_FontsSizes = NULL;
 }
 
-void wxHtmlEasyPrinting::NormalizeFontSizes(int size)
+void wxHtmlEasyPrinting::SetStandardFonts(int size,
+                                          const wxString& normal_face,
+                                          const wxString& fixed_face)
 {
-    int f_sizes[7];
-    if (size == -1)
-        size = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize();
-
-    f_sizes[0] = int(size * 0.6);
-    f_sizes[1] = int(size * 0.8);
-    f_sizes[2] = size;
-    f_sizes[3] = int(size * 1.2);
-    f_sizes[4] = int(size * 1.4);
-    f_sizes[5] = int(size * 1.6);
-    f_sizes[6] = int(size * 1.8);
-    
-    SetFonts(wxEmptyString, wxEmptyString, f_sizes);
+    m_fontMode = FontMode_Standard;
+    m_FontFaceNormal = normal_face;
+    m_FontFaceFixed = fixed_face;
+    m_FontsSizesArr[0] = size;
 }
 
 
@@ -698,7 +674,15 @@ wxHtmlPrintout *wxHtmlEasyPrinting::CreatePrintout()
 {
     wxHtmlPrintout *p = new wxHtmlPrintout(m_Name);
 
-    p->SetFonts(m_FontFaceNormal, m_FontFaceFixed, m_FontsSizes);
+    if (m_fontMode == FontMode_Explicit)
+    {
+        p->SetFonts(m_FontFaceNormal, m_FontFaceFixed, m_FontsSizes);
+    }
+    else // FontMode_Standard
+    {
+        p->SetStandardFonts(m_FontsSizesArr[0],
+                            m_FontFaceNormal, m_FontFaceFixed);
+    }
 
     p->SetHeader(m_Headers[0], wxPAGE_EVEN);
     p->SetHeader(m_Headers[1], wxPAGE_ODD);
