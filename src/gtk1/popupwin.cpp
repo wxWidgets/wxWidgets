@@ -11,6 +11,10 @@
 #pragma implementation "popupwin.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_POPUPWIN
+
 #include "wx/popupwin.h"
 #include "wx/frame.h"
 #include "wx/app.h"
@@ -332,3 +336,4 @@ bool wxPopupWindow::Show( bool show )
     return ret;
 }
 
+#endif // wxUSE_POPUPWIN
