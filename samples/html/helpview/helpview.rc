@@ -1,5 +1,5 @@
 /* We need this to get the right default icon. */
-aaaaaa  ICON "wx/html/msw/help.ico"
+aaaaaa  ICON "wx/html/msw/whelp.ico"
 
 #include "wx/msw/wx.rc"
 #include "wx/html/msw/wxhtml.rc"
