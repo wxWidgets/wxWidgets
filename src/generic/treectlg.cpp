@@ -3177,7 +3177,13 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
         if ( event.RightDown() )
         {
-            DoSelectItem(item, true, false);
+            // If the item is already selected, do not update the selection.
+            // Multi-selections should not be cleared if a selected item is clicked.
+            if (!IsSelected(item))
+            {
+                DoSelectItem(item, true, false);
+            }
+
             wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, GetId());
             nevent.m_item = item;
             nevent.m_pointDrag = CalcScrolledPosition(pt);
