@@ -4090,14 +4090,20 @@ void wxWindowGTK::ApplyWidgetStyle(bool forceStyle)
     GtkRcStyle *style = CreateWidgetStyle(forceStyle);
     if ( style )
     {
-        if (m_wxwindow)
-            // should we also do m_widget in this case?
-            gtk_widget_modify_style(m_wxwindow, style);
-        else
-            gtk_widget_modify_style(m_widget, style);
+        DoApplyWidgetStyle(style);
         gtk_rc_style_unref(style);
     }
 }
+
+void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
+{
+    if (m_wxwindow)
+        // should we also do m_widget in this case?
+        gtk_widget_modify_style(m_wxwindow, style);
+    else
+        gtk_widget_modify_style(m_widget, style);
+}
+
 
 //-----------------------------------------------------------------------------
 // Pop-up menu stuff

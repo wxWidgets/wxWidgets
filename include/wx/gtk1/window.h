@@ -264,6 +264,10 @@ protected:
 
     // Overridden in many GTK widgets who have to handle subwidgets
     virtual void ApplyWidgetStyle(bool forceStyle = false);
+    
+    // helper function to ease native widgets wrapping, called by 
+    // ApplyWidgetStyle -- override this, not ApplyWidgetStyle
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)

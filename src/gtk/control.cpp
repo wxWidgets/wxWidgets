@@ -278,21 +278,5 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* (*widget_new)(GtkAdjustm
     return attr;
 }
 
-void wxControl::ApplyWidgetStyle(bool forceStyle)
-{
-    GtkRcStyle *style = CreateWidgetStyle(forceStyle);
-    if ( style )
-    {
-        DoApplyWidgetStyle(style);
-        gtk_rc_style_unref(style);
-    }
-}
-
-void wxControl::DoApplyWidgetStyle(GtkRcStyle *style)
-{
-    gtk_widget_modify_style(m_widget, style);
-}
-
-
 #endif // wxUSE_CONTROLS
 
