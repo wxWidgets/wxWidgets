@@ -1,0 +1,85 @@
+                      XRC resources format specification
+                      ==================================
+
+                         !!!!! NOT YET FINISHED !!!!!
+
+0. Introduction
+---------------
+
+This note describes the file format used for storing XRC resources that are
+used by wxXmlResource class. It is probably only useful for those implementing
+dialog editors with XRC support.
+
+If you only want to use the resources, you can choose from a number of editors:
+  a) wxDesigner (http://www.roebling.de)
+  b) XRCed (wxPython/tools)
+  c) wxWorkshop (http://wxworkshop.sf.net)
+  b) wxrcedit (contrib/utils/wxrcedit)
+
+The XRC format is based on XML 1.0 (please consult W3C's specification). There
+is no DTD available since it is not possible to fully describe the format with
+the limited expressive power of DTDs.
+
+1. Terminology
+--------------
+
+The usual XML terminology applies. In particular, we shall use the terms 
+"node", "property" and "value" in the XML sense:
+
+    <node property1="value1" property2="value2">...</node>
+
+The term "attribute" is specific to XRC and refers to a property-less subnode 
+of an <object> or <object_ref> node. In the example bellow, <pos>, <label> and
+<style> are attributes, while neither <resource> nor either of <object>s is:
+
+    <?xml version="1.0" encoding="utf-8">
+    <resource version="2.3.0.1">
+        <object class="wxPanel">
+            <style>wxSUNKEN_BORDER</style>
+            <object class="wxStaticText">
+                <label>A label</label>
+                <pos>10,10</pos>
+            </object>
+        </object>
+    </resource>
+
+2. Elementary description
+-------------------------
+
+XRC resource file is a well-formed XML 1.0 document. 
+
+The root node of XRC document must be <resource>. The <resource> node has 
+optional "version" property. Default version  (in absence of the version 
+property) is "0.0.0.0". The version consists of four integers separated by 
+periods. Version of XRC format changes only if there was an incompatible 
+change introduced (i.e. either the library cannot understand old resource 
+files or older versions of the library wouldn't understand the new format).
+The first three integers are major, minor and release number of the wxWindows 
+release when the change was introduced, the last one is revision number and 
+is 0 for the first incompatible change in given wxWindows release, 1 for 
+the second etc.
+
+Differences between versions are described within this document in paragraphs
+entitled "Version Note". 
+
+The <resource> node is only allowed to have <object> and <object_ref>
+subnodes, all of which must have the "name" property.
+
+<object> - TODO (name, class, subclass)
+
+<object_ref> - TODO (name, ref, subclass)
+
+
+3. Common attributes
+--------------------
+
+TODO
+
+4. Supported classes
+--------------------
+
+TODO
+
+=== EOF ===
+
+Version: $Id$

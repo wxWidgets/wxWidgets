@@ -11,6 +11,7 @@ TN0010   Compiling wxWindows applications in the VC++ IDE
 TN0011   All about version numbers
 TN0012   wxWindows platform, toolkit and library names
 TN0013   how to make a wxGTK distribution
+TN0014   XRC resources format specification
 
 
 Version: $Id$
