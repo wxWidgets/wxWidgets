@@ -532,7 +532,7 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     wxStrcpy( buf, _T("/") );
     wxStrcat( buf, text );
     
-    wxWX2MBbuf pbuf = wxConv_current->cWX2MB(buf);
+    const wxWX2MBbuf pbuf = wxConv_current->cWX2MB(buf);
     GtkItemFactoryEntry entry;
     entry.path = MBSTRINGCAST pbuf;
     entry.accelerator = (gchar*) NULL;
