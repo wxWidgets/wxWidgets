@@ -35,6 +35,8 @@ def addMakefile(bake, makedirs, deps=[], args={}):
         a = ''
         if 'all' in args: a += ' %s' % args['all']
         if format in args: a += ' %s' % args[format]
+        if format != 'autoconf' and 'not_autoconf' in args:
+            a += ' %s' % args['not_autoconf']
         if format in makedirs:
             makedir = makedirs[format]
         else:
@@ -52,6 +54,7 @@ def addMakefile(bake, makedirs, deps=[], args={}):
     add(bake, makedirs, 'Makefile.in', dep, 'autoconf', args)
     add(bake, makedirs, 'makefile.bcc', dep, 'borland', args)
     add(bake, makedirs, 'makefile.vc', dep, 'msvc', args)
+    add(bake, makedirs, 'makefile.gcc', dep, 'mingw', args)
 
 
 
@@ -70,16 +73,24 @@ addMakefile('../../samples/samples.bkl', {'all':'../../samples'},
 
 
 CONTRIB_DIR = 1
+SAMPLES_DIR = 2
 
 def onSubmakefile(type, dirname, names):
     bakes = [x for x in names if x.endswith('.bkl')]
     if len(bakes) == 0: return
+    dirname = dirname.replace(os.sep, '/')
     depth = dirname.count('/') - 2
     if depth <= 0: return
-    prefix = ''.join(['../' for i in range(0,depth)])
+    
+    if type==SAMPLES_DIR:
+        prefix = ''.join(['../' for i in range(0,depth)])
+        dirflags = '-DWXTOPDIR=%s../' % prefix
+    elif type==CONTRIB_DIR:
+        dirflags = '-DSRCDIR=../../src/%s' % dirname.split('/')[-1]
+        dirflags += ' -DWXTOPDIR=../../../'
 
     args = {
-        'all':'-DWXTOPDIR=%s../' % prefix,
+        'not_autoconf':dirflags,
         'autoconf':'-DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4',
     }
     
@@ -95,8 +106,10 @@ def onSubmakefile(type, dirname, names):
                     deps=['common.bkl',ruledep,'config.bkl'],
                     args=args)
 
-os.path.walk('../../samples', onSubmakefile, None)
-os.path.walk('../../contrib/build', onSubmakefile, CONTRIB_DIR)
+os.path.walk(os.path.join('..','..','samples'),
+             onSubmakefile, SAMPLES_DIR)
+os.path.walk(os.path.join('..','..','contrib','build'),
+             onSubmakefile, CONTRIB_DIR)
 
 
 cleanCmds = ''
