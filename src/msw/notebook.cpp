@@ -787,26 +787,27 @@ wxColour wxNotebook::GetThemeBackgroundColour()
 #if wxUSE_UXTHEME
     if (wxUxThemeEngine::Get())
     {
-        WXHTHEME hTheme = wxUxThemeEngine::Get()->m_pfnOpenThemeData(GetHWND(), L"TAB");
+        wxUxThemeHandle hTheme(this, L"TAB");
         if (hTheme)
         {
             // This is total guesswork.
             // See PlatformSDK\Include\Tmschema.h for values
             COLORREF themeColor;
-            wxUxThemeEngine::Get()->
-                m_pfnGetThemeColor(hTheme,
-                10 /* TABP_BODY */,
-                1 /* NORMAL */,
-                3821, /* FILLCOLORHINT */
-                & themeColor);
-            
-            wxUxThemeEngine::Get()->m_pfnCloseThemeData(hTheme);
+            wxUxThemeEngine::Get()->GetThemeColor
+                                    (
+                                        hTheme,
+                                        10 /* TABP_BODY */,
+                                        1 /* NORMAL */,
+                                        3821, /* FILLCOLORHINT */
+                                        & themeColor
+                                    );
             
             wxColour colour(GetRValue(themeColor), GetGValue(themeColor), GetBValue(themeColor));
             return colour;
         }
     }
-#endif
+#endif // wxUSE_UXTHEME
+
     return GetBackgroundColour();
 }
 
