@@ -864,6 +864,7 @@ imagjpeg.h	WXH
 imaglist.h	WXH
 intl.h	WXH	Base
 ioswrap.h	WXH	Base
+ipc.h	WXH	Base
 ipcbase.h	WXH	Base
 isql.h	WXH	Base
 isqlext.h	WXH	Base

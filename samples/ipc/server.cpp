@@ -74,7 +74,7 @@ bool MyApp::OnInit()
     (new MyFrame(NULL, "Server"))->Show(TRUE);
 
     // service name (DDE classes) or port number (TCP/IP based classes)
-    wxString service = "4242";
+    wxString service = IPC_SERVICE;
 
     if (argc > 1)
         service = argv[1];
@@ -136,7 +136,7 @@ void MyFrame::OnListBoxClick(wxCommandEvent& WXUNUSED(event))
         wxString value = listBox->GetStringSelection();
         if (the_connection)
         {
-            the_connection->Advise("Item", (wxChar *)value.c_str());
+            the_connection->Advise(IPC_ADVISE_NAME, (wxChar *)value.c_str());
         }
     }
 }
@@ -173,10 +173,11 @@ void IPCDialogBox::OnQuit(wxCommandEvent& event)
 
 wxConnectionBase *MyServer::OnAcceptConnection(const wxString& topic)
 {
-    if (strcmp(topic, "STDIO") != 0 && strcmp(topic, "IPC TEST") == 0)
+    if ( topic == IPC_TOPIC )
         return new MyConnection(ipc_buffer, WXSIZEOF(ipc_buffer));
-    else
-        return NULL;
+
+    // unknown topic
+    return NULL;
 }
 
 // ----------------------------------------------------------------------------

@@ -9,34 +9,16 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-/*
- * Adjust this before compiling, to switch between real DDE and TCP/IP
- * implementations.
- */
+// You may set this to 0 to prevent DDE from being used even under Windows
+//#define wxUSE_DDE_FOR_IPC 0
 
-// If 1, use real DDE. If 0, use TCP/IP
+#include <wx/ipc.h>
 
-#ifdef __WXMSW__
-#define wxUSE_DDE_FOR_SAMPLE 0
-#else
-#define wxUSE_DDE_FOR_SAMPLE 0
-#endif
+// the default service name
+#define IPC_SERVICE "4242"
 
-#if wxUSE_DDE_FOR_SAMPLE
+// the IPC topic
+#define IPC_TOPIC "IPC TEST"
 
-#define wxConnection    wxDDEConnection
-#define wxServer        wxDDEServer
-#define wxClient        wxDDEClient
-
-#include <wx/dde.h>
-
-#else
-
-#define wxConnection    wxTCPConnection
-#define wxServer        wxTCPServer
-#define wxClient        wxTCPClient
-
-#include <wx/sckipc.h>
-
-#endif
-
+// the name of the item we're being advised about
+#define IPC_ADVISE_NAME "Item"

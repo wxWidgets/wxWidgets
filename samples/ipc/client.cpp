@@ -75,7 +75,7 @@ MyClient *my_client;
 bool MyApp::OnInit()
 {
     // service name (DDE classes) or port number (TCP/IP based classes)
-    wxString service = "4242";
+    wxString service = IPC_SERVICE;
 
     // ignored under DDE, host name in TCP/IP based classes
     wxString hostName = "localhost";
@@ -91,7 +91,8 @@ bool MyApp::OnInit()
     // suppress the log messages from MakeConnection()
     {
         wxLogNull nolog;
-        the_connection = (MyConnection *)my_client->MakeConnection(hostName, service, "IPC TEST");
+        the_connection = (MyConnection *)
+            my_client->MakeConnection(hostName, service, IPC_TOPIC);
 
         while ( !the_connection )
         {
@@ -107,7 +108,7 @@ bool MyApp::OnInit()
         }
     }
 
-    if (!the_connection->StartAdvise("Item"))
+    if (!the_connection->StartAdvise(IPC_ADVISE_NAME))
         wxMessageBox("StartAdvise failed", "Client Demo Error");
 
     // Create the main frame window

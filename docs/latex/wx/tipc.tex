@@ -20,6 +20,16 @@ for programming popular Internet protocols.
 
 Further information on these classes will be available in due course.
 
+Notice that by including {\tt <wx/ipc.h>} you may define convnient synonyms for
+the IPC classes: {\tt wxServer} for either {\tt wxDDEServer} or 
+{\tt wxTCPServer} depending on whether DDE-based or socket-based implementation
+is used and the same thing for {\tt wxClient} and {\tt wxConnection}. By
+default, DDE implementation is used under Windows. If you want to use IPC
+between the different workstations you should define {\tt wxUSE\_DDE\_FOR\_IPC}
+as $0$ before including this header -- this will force using TCP/IP
+implementation even under Windows.
+
+
 wxWindows has a high-level protocol based on Windows DDE.
 There are two implementations of this DDE-like protocol:
 one using real DDE running on Windows only, and another using TCP/IP (sockets) that runs
