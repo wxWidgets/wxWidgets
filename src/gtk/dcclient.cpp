@@ -1258,12 +1258,6 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         wxCoord bm_width = memDC->m_selected.GetWidth();
         wxCoord bm_height = memDC->m_selected.GetHeight();
 
-        // get clip coords
-        wxRegion tmp( xx,yy,ww,hh );
-        tmp.Intersect( m_currentClippingRegion );
-        wxCoord cx,cy,cw,ch;
-        tmp.GetBox(cx,cy,cw,ch);
-        
         // interpret userscale of src too
         double xsc,ysc;
         memDC->GetUserScale(&xsc,&ysc);
@@ -1273,16 +1267,32 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         wxCoord bm_ww = XLOG2DEVREL( bm_width );
         wxCoord bm_hh = YLOG2DEVREL( bm_height );
 
-        // scale bitmap if required
-        wxBitmap use_bitmap;
+        // Get clip coords for the bitmap. If we don't
+        // use wxBitmap::Rescale(), which can clip the
+        // bitmap, these are the same as the original
+        // coordinates
+        wxCoord cx = xx;
+        wxCoord cy = yy;
+        wxCoord cw = ww;
+        wxCoord ch = hh;
 
+        // Scale bitmap if required
+        wxBitmap use_bitmap;
         if ((bm_width != bm_ww) || (bm_height != bm_hh))
         {
-            use_bitmap = memDC->m_selected.Rescale(cx-xx,cy-yy,cw,ch,bm_ww,bm_hh);  
+            // This indicates that the blitting code below will get
+            // a clipped bitmap and therefore needs to move the origin
+            // accordingly
+            wxRegion tmp( xx,yy,ww,hh );
+            tmp.Intersect( m_currentClippingRegion );
+            tmp.GetBox(cx,cy,cw,ch);
+            
+            // Scale and clipped bitmap
+            use_bitmap = memDC->m_selected.Rescale(cx-xx,cy-yy,cw,ch,bm_ww,bm_hh);
         }
         else
         {
-            // FIXME: use cx,cy,cw,ch here, too?
+            // Don't scale bitmap
             use_bitmap = memDC->m_selected;
         }
 
@@ -1453,7 +1463,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     pango_layout_set_text( layout, (const char*)data, strlen((const char*)data) );
 
-    if (abs(m_scaleY - 1.0) < 0.00001)
+    if (fabs(m_scaleY - 1.0) < 0.00001)
     {
          // If there is a user or actually any scale applied to
          // the device context, scale the font.

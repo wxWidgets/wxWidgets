@@ -1050,11 +1050,19 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
     for (int h = 0; h < height; h++)
     {
         char outbyte = 0;
+        int old_x = -1;
+        guint32 old_pixval;
 
         for (int w=0; w<width; w++)
         {
-            guint32 pixval = gdk_image_get_pixel( img, tablex[w], tabley[h] );
-            if (bpp==1)
+            guint32 pixval;
+            int x = tablex[w];
+            if (x == old_x)
+                pixval = old_pixval;
+            else
+                pixval = gdk_image_get_pixel( img, x, tabley[h] );
+                
+            if (bpp == 1)
             {
                 if (!pixval)
                 {
