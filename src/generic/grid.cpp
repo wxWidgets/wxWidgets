@@ -4397,7 +4397,11 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
 
     if ( event.Dragging() )
     {
-        m_isDragging = TRUE;
+        if (!m_isDragging)
+        {
+            m_isDragging = TRUE;
+            m_rowLabelWin->CaptureMouse();
+        }
 
         if ( event.LeftIsDown() )
         {
@@ -4443,8 +4447,14 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
         return;
     }
 
-    m_isDragging = FALSE;
+    if ( m_isDragging && (event.Entering() || event.Leaving()) )
+        return;
 
+    if (m_isDragging)
+    {
+        m_rowLabelWin->ReleaseMouse();
+        m_isDragging = FALSE;
+    }
 
     // ------------ Entering or leaving the window
     //
