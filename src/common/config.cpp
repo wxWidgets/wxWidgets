@@ -222,11 +222,12 @@ wxString wxExpandEnvVars(const wxString& str)
           // check the closing bracket
           if ( bracket != Bracket_None ) {
             if ( m == str.Len() || str[m] != (char)bracket ) {
-              wxLogWarning(_("missing '%c' at position %d in '%s'."),
+              wxLogWarning(_("Environment variables expansion failed: "
+                             "missing '%c' at position %d in '%s'."),
                            (char)bracket, m + 1, str.c_str());
             }
             else {
-              // skip closing bracket
+              // skip closing bracket unless the variables wasn't expanded
               if ( pszValue == NULL )
                 strResult << (char)bracket;
               m++;
@@ -236,6 +237,15 @@ wxString wxExpandEnvVars(const wxString& str)
           n = m - 1;  // skip variable name
         }
         break;
+
+      case '\\':
+        // backslash can be used to suppress special meaning of % and $
+        if ( n != str.Len() && (str[n + 1] == '%' || str[n + 1] == '$') ) {
+          strResult += str[++n];
+
+          break;
+        }
+        //else: fall through
 
       default:
         strResult += str[n];
