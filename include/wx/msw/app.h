@@ -39,7 +39,7 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
 
-    virtual bool Yield(bool onlyIfNeeded = FALSE);
+    virtual bool Yield(bool onlyIfNeeded = false);
     virtual void WakeUpIdle();
 
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
@@ -63,7 +63,7 @@ public:
     static bool UnregisterWindowClasses();
 
 #if wxUSE_RICHEDIT
-    // initialize the richedit DLL of (at least) given version, return TRUE if
+    // initialize the richedit DLL of (at least) given version, return true if
     // ok (Win95 has version 1, Win98/NT4 has 1 and 2, W2K has 3)
     static bool InitRichEdit(int version = 2);
 #endif // wxUSE_RICHEDIT

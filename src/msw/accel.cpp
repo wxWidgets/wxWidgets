@@ -51,7 +51,7 @@ protected:
 
 wxAcceleratorRefData::wxAcceleratorRefData()
 {
-  m_ok = FALSE;
+  m_ok = false;
   m_hAccel = 0;
 }
 

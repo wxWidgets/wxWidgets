@@ -290,7 +290,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
          MB_ICONERROR | MB_OK
         );
 
-        return FALSE;
+        return false;
     }
 #endif // wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
 
@@ -343,7 +343,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     wxWinHandleHash = new wxWinHashTable(wxKEY_INTEGER, 100);
 
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-    wxSetKeyboardHook(TRUE);
+    wxSetKeyboardHook(true);
 #endif
 
     callBaseCleanup.Dismiss();
@@ -430,7 +430,7 @@ bool wxApp::RegisterWindowClasses()
         wxLogLastError(wxT("RegisterClass(no redraw MDI child)"));
     }
 
-    return TRUE;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -439,7 +439,7 @@ bool wxApp::RegisterWindowClasses()
 
 bool wxApp::UnregisterWindowClasses()
 {
-    bool retval = TRUE;
+    bool retval = true;
 
 #ifndef __WXMICROWIN__
     // MDI frame window class.
@@ -447,7 +447,7 @@ bool wxApp::UnregisterWindowClasses()
     {
         wxLogLastError(wxT("UnregisterClass(MDI parent)"));
 
-        retval = FALSE;
+        retval = false;
     }
 
     // "no redraw" MDI frame
@@ -455,7 +455,7 @@ bool wxApp::UnregisterWindowClasses()
     {
         wxLogLastError(wxT("UnregisterClass(no redraw MDI parent frame)"));
 
-        retval = FALSE;
+        retval = false;
     }
 
     // MDI child frame window class.
@@ -463,7 +463,7 @@ bool wxApp::UnregisterWindowClasses()
     {
         wxLogLastError(wxT("UnregisterClass(MDI child)"));
 
-        retval = FALSE;
+        retval = false;
     }
 
     // "no redraw" MDI child frame
@@ -471,7 +471,7 @@ bool wxApp::UnregisterWindowClasses()
     {
         wxLogLastError(wxT("UnregisterClass(no redraw MDI child)"));
 
-        retval = FALSE;
+        retval = false;
     }
 
     // canvas class name
@@ -479,14 +479,14 @@ bool wxApp::UnregisterWindowClasses()
     {
         wxLogLastError(wxT("UnregisterClass(canvas)"));
 
-        retval = FALSE;
+        retval = false;
     }
 
     if ( !::UnregisterClass(wxCanvasClassNameNR, wxhInstance) )
     {
         wxLogLastError(wxT("UnregisterClass(no redraw canvas)"));
 
-        retval = FALSE;
+        retval = false;
     }
 #endif // __WXMICROWIN__
 
@@ -502,7 +502,7 @@ void wxApp::CleanUp()
     wxAppBase::CleanUp();
 
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-    wxSetKeyboardHook(FALSE);
+    wxSetKeyboardHook(false);
 #endif
 
 #if wxUSE_PENWINDOWS
@@ -604,7 +604,7 @@ void wxApp::WakeUpIdle()
 void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
 {
     if (GetTopWindow())
-        GetTopWindow()->Close(TRUE);
+        GetTopWindow()->Close(true);
 }
 
 // Default behaviour: close the application with prompts. The
@@ -614,7 +614,7 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
     if (GetTopWindow())
     {
         if (!GetTopWindow()->Close(!event.CanVeto()))
-            event.Veto(TRUE);
+            event.Veto(true);
     }
 }
 
@@ -713,7 +713,7 @@ int wxApp::GetComCtl32Version()
 bool wxApp::Yield(bool onlyIfNeeded)
 {
     // MT-FIXME
-    static bool s_inYield = FALSE;
+    static bool s_inYield = false;
 
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
@@ -728,10 +728,10 @@ bool wxApp::Yield(bool onlyIfNeeded)
             wxFAIL_MSG( wxT("wxYield called recursively" ) );
         }
 
-        return FALSE;
+        return false;
     }
 
-    s_inYield = TRUE;
+    s_inYield = true;
 
     // we don't want to process WM_QUIT from here - it should be processed in
     // the main event loop in order to stop it
@@ -755,9 +755,9 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxLog::Resume();
 #endif // wxUSE_LOG
 
-    s_inYield = FALSE;
+    s_inYield = false;
 
-    return TRUE;
+    return true;
 }
 
 #if wxUSE_EXCEPTIONS

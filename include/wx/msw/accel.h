@@ -47,7 +47,7 @@ public:
     void SetHACCEL(WXHACCEL hAccel);
     WXHACCEL GetHACCEL() const;
 
-    // translate the accelerator, return TRUE if done
+    // translate the accelerator, return true if done
     bool Translate(wxWindow *window, WXMSG *msg) const;
 
 private:
