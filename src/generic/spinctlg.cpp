@@ -107,11 +107,20 @@ public:
     }
 
 protected:
-    void OnSpinButton(wxSpinEvent& event)
+    void OnSpinButton(wxSpinEvent& eventSpin)
     {
-        m_spin->SetTextValue(event.GetPosition());
+#ifdef __WXMAC__
+      m_spin->SetTextValue(eventSpin.GetPosition());
 
+      wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
+      event.SetEventObject(m_spin);
+      event.SetInt(eventSpin.GetPosition());
+
+      m_spin->GetEventHandler()->ProcessEvent(event);
+#else
+        m_spin->SetTextValue(event.GetPosition());
         event.Skip();
+#endif
     }
 
 private:
