@@ -264,6 +264,7 @@ public:
                     const wxValidator& validator = wxDefaultValidator,
                     const wxString &name = "listctrltextctrl" );
     void OnChar( wxKeyEvent &event );
+    void OnKeyUp( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
 
 private:
@@ -1469,6 +1470,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxListTextCtrl,wxTextCtrl);
 
 BEGIN_EVENT_TABLE(wxListTextCtrl,wxTextCtrl)
     EVT_CHAR           (wxListTextCtrl::OnChar)
+    EVT_KEY_UP         (wxListTextCtrl::OnKeyUp)    
     EVT_KILL_FOCUS     (wxListTextCtrl::OnKillFocus)
 END_EVENT_TABLE()
 
@@ -1519,6 +1521,21 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
         return;
     }
 
+    event.Skip();
+}
+
+void wxListTextCtrl::OnKeyUp( wxKeyEvent &event )
+{
+    // auto-grow the textctrl:
+    wxSize parentSize = m_owner->GetSize();
+    wxPoint myPos = GetPosition();
+    wxSize mySize = GetSize();
+    int sx, sy;
+    GetTextExtent(GetValue() + _T("MM"), &sx, &sy);
+    if (myPos.x + sx > parentSize.x) sx = parentSize.x - myPos.x;
+    if (mySize.x > sx) sx = mySize.x;
+    SetSize(sx, -1);
+    
     event.Skip();
 }
 

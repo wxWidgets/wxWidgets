@@ -89,6 +89,7 @@ public:
                     const wxString &name = wxTextCtrlNameStr );
 
     void OnChar( wxKeyEvent &event );
+    void OnKeyUp( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
 
 private:
@@ -266,6 +267,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTreeTextCtrl,wxTextCtrl);
 
 BEGIN_EVENT_TABLE(wxTreeTextCtrl,wxTextCtrl)
     EVT_CHAR           (wxTreeTextCtrl::OnChar)
+    EVT_KEY_UP         (wxTreeTextCtrl::OnKeyUp)
     EVT_KILL_FOCUS     (wxTreeTextCtrl::OnKillFocus)
 END_EVENT_TABLE()
 
@@ -315,6 +317,21 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
             
         return;
     }
+    event.Skip();
+}
+
+void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
+{
+    // auto-grow the textctrl:
+    wxSize parentSize = m_owner->GetSize();
+    wxPoint myPos = GetPosition();
+    wxSize mySize = GetSize();
+    int sx, sy;
+    GetTextExtent(GetValue() + _T("MM"), &sx, &sy);
+    if (myPos.x + sx > parentSize.x) sx = parentSize.x - myPos.x;
+    if (mySize.x > sx) sx = mySize.x;
+    SetSize(sx, -1);
+    
     event.Skip();
 }
 
