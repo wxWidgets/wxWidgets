@@ -30,8 +30,9 @@
 // what to test?
 
 //#define TEST_ARRAYS
+#define TEST_DIR
 //#define TEST_LOG
-#define TEST_MIME
+//#define TEST_MIME
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIME
@@ -40,6 +41,83 @@
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxDir
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_DIR
+
+#include <wx/dir.h>
+
+static void TestDirEnumHelper(wxDir& dir,
+                              int flags = wxDIR_DEFAULT,
+                              const wxString& filespec = wxEmptyString)
+{
+    wxString filename;
+
+    if ( !dir.IsOpened() )
+        return;
+
+    bool cont = dir.GetFirst(&filename, filespec, flags);
+    while ( cont )
+    {
+        printf("\t%s\n", filename.c_str());
+
+        cont = dir.GetNext(&filename);
+    }
+
+    puts("");
+}
+
+static void TestDirEnum()
+{
+    wxDir dir(wxGetCwd());
+
+    puts("Enumerating everything in current directory:");
+    TestDirEnumHelper(dir);
+
+    puts("Enumerating really everything in current directory:");
+    TestDirEnumHelper(dir, wxDIR_DEFAULT | wxDIR_DOTDOT);
+
+    puts("Enumerating object files in current directory:");
+    TestDirEnumHelper(dir, wxDIR_DEFAULT, "*.o");
+
+    puts("Enumerating directories in current directory:");
+    TestDirEnumHelper(dir, wxDIR_DIRS);
+
+    puts("Enumerating files in current directory:");
+    TestDirEnumHelper(dir, wxDIR_FILES);
+
+    puts("Enumerating files including hidden in current directory:");
+    TestDirEnumHelper(dir, wxDIR_FILES | wxDIR_HIDDEN);
+
+#ifdef __UNIX__
+    dir.Open("/");
+#elif defined(__WXMSW__)
+    dir.Open("c:\\");
+#else
+    #error "don't know where the root directory is"
+#endif
+
+    puts("Enumerating everything in root directory:");
+    TestDirEnumHelper(dir, wxDIR_DEFAULT);
+
+    puts("Enumerating directories in root directory:");
+    TestDirEnumHelper(dir, wxDIR_DIRS);
+
+    puts("Enumerating files in root directory:");
+    TestDirEnumHelper(dir, wxDIR_FILES);
+
+    puts("Enumerating files including hidden in root directory:");
+    TestDirEnumHelper(dir, wxDIR_FILES | wxDIR_HIDDEN);
+
+    puts("Enumerating files in non existing directory:");
+    wxDir dirNo("nosuchdir");
+    TestDirEnumHelper(dirNo);
+}
+
+#endif // TEST_DIR
 
 // ----------------------------------------------------------------------------
 // MIME types
@@ -675,6 +753,10 @@ int main(int argc, char **argv)
     PrintArray("a2", a2);
     PrintArray("a3", a3);
 #endif // TEST_ARRAYS
+
+#ifdef TEST_DIR
+    TestDirEnum();
+#endif // TEST_DIR
 
 #ifdef TEST_LOG
     wxString s;
