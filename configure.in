@@ -2027,12 +2027,14 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         mgl_lib_type=""
 
         if test "$wxUSE_DEBUG_FLAG" = yes ; then
-            if test -f $MGL_ROOT/lib/debug/$mgl_os/libmgl.a ; then
+            if test -f $MGL_ROOT/lib/debug/$mgl_os/libmgl.a -o \
+                    -f $MGL_ROOT/lib/debug/$mgl_os/libmgl.so; then
                 mgl_lib_type=debug
             fi
         fi
         if test "x$mgl_lib_type" = x ; then
-            if test -f $MGL_ROOT/lib/release/$mgl_os/libmgl.a ; then
+            if test -f $MGL_ROOT/lib/release/$mgl_os/libmgl.a -o \
+                    -f $MGL_ROOT/lib/release/$mgl_os/libmgl.so; then
                 mgl_lib_type=release
             else
                 AC_MSG_ERROR([Cannot find MGL libraries, make sure they are compiled.])
