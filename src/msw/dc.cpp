@@ -914,8 +914,8 @@ void wxDC::GetTextExtent(const wxString& string, long *x, long *y,
   GetTextExtentPoint((HDC) m_hDC, (char *)(const char *) string, strlen((char *)(const char *) string), &sizeRect);
   GetTextMetrics((HDC) m_hDC, &tm);
 
-  *x = XDEV2LOGREL(sizeRect.cx);
-  *y = YDEV2LOGREL(sizeRect.cy);
+  if (x) *x = XDEV2LOGREL(sizeRect.cx);
+  if (y) *y = YDEV2LOGREL(sizeRect.cy);
   if (descent) *descent = tm.tmDescent;
   if (externalLeading) *externalLeading = tm.tmExternalLeading;
 }
