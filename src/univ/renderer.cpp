@@ -417,6 +417,7 @@ wxControlRenderer::wxControlRenderer(wxWindow *window,
 void wxControlRenderer::DrawLabel(const wxBitmap& bitmap,
                                   wxCoord marginX, wxCoord marginY)
 {
+    m_dc.SetBackgroundMode(wxTRANSPARENT);
     m_dc.SetFont(m_window->GetFont());
     m_dc.SetTextForeground(m_window->GetForegroundColour());
 

@@ -156,11 +156,10 @@ protected:
     
 protected:
     WXWindow              m_mainWidget;
-    
     wxRegion              m_clearRegion;
     bool                  m_clipPaintRegion;
-    
     bool                  m_winCaptured;  // ????
+    bool                  m_needsInputFocus; // Input focus set in OnIdle
 
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;

@@ -78,6 +78,10 @@ protected:
 
     virtual void DoGetClientSize( int *width, int *height ) const;
     virtual void DoSetClientSize(int width, int height);
+    virtual void DoSetSize(int x, int y,
+        int width, int height,
+        int sizeFlags = wxSIZE_AUTO);
+    virtual void DoGetPosition( int *x, int *y ) const;
     
     // is the frame currently iconized?
     bool m_iconized;

@@ -457,6 +457,7 @@ void wxTopLevelWindowX11::DoGetClientSize( int *width, int *height ) const
 void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
 {
     wxWindowX11::DoSetClientSize(width, height);
+
 #if 0
     if (!GetMainWindow())
         return;
@@ -477,4 +478,91 @@ void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
     XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
         valueMask, & windowChanges);
 #endif
+}
+
+void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    wxString msg;
+    msg.Printf("Setting pos: %d, %d", x, y);
+    wxLogDebug(msg);
+    wxWindowX11::DoSetSize(x, y, width, height, sizeFlags);
+
+    wxPoint pt = GetPosition();
+    msg.Printf("After, pos: %d, %d", pt.x, pt.y);
+    wxLogDebug(msg);
+#if 0
+    XSync(wxGlobalDisplay(), False);
+    int w, h;
+    GetSize(& w, & h);
+    wxString msg;
+    msg.Printf("Before setting size: %d, %d", w, h);
+    wxLogDebug(msg);
+    if (!GetMainWindow())
+        return;
+
+    XWindowChanges windowChanges;
+    int valueMask = 0;
+
+    if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    {
+	int yy = 0;
+        AdjustForParentClientOrigin( x, yy, sizeFlags);
+        windowChanges.x = x;
+        valueMask |= CWX;
+    }
+    if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    {
+	int xx = 0;
+        AdjustForParentClientOrigin( xx, y, sizeFlags);
+        windowChanges.y = y;
+        valueMask |= CWY;
+    }
+    if (width != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    {
+        windowChanges.width = width /* - m_borderSize*2 */;
+        valueMask |= CWWidth;
+    }
+    if (height != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    {
+        windowChanges.height = height /* -m_borderSize*2*/;
+        valueMask |= CWHeight;
+    }
+
+    XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
+		     valueMask, & windowChanges);
+    XSync(wxGlobalDisplay(), False);
+    GetSize(& w, & h);
+    msg.Printf("Tried to set to %d, %d. After setting size: %d, %d", width, height, w, h);
+    wxLogDebug(msg);
+#endif
+}
+
+void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
+{
+    XSync(wxGlobalDisplay(), False);
+    Window window = (Window) m_mainWidget;
+    if (window)
+    {
+	int offsetX = 0;
+	int offsetY = 0;
+	
+        wxLogDebug("Translating...");
+        Window childWindow;
+        XTranslateCoordinates(wxGlobalDisplay(), window, XDefaultRootWindow(wxGlobalDisplay()),
+				  0, 0, & offsetX, & offsetY, & childWindow);
+
+	wxString msg;
+	msg.Printf("Offset: %d, %d", offsetX, offsetY);
+	wxLogDebug(msg);
+	
+        XWindowAttributes attr;
+        Status status = XGetWindowAttributes(wxGlobalDisplay(), window, & attr);
+        wxASSERT(status);
+        
+        if (status)
+        {
+            *x = attr.x + offsetX;
+            *y = attr.y + offsetY;
+        }
+    }
 }

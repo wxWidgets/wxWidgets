@@ -1231,3 +1231,11 @@ void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, boo
 
 #endif
     // __WXMOTIF__
+
+bool wxWindowIsVisible(Window win)
+{
+    XWindowAttributes wa;
+    XGetWindowAttributes(wxGlobalDisplay(), win, &wa);
+
+    return (wa.map_state == IsViewable);
+}

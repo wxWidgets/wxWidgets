@@ -66,14 +66,6 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxApp::OnIdle)
 END_EVENT_TABLE()
 
-static const wxCmdLineEntryDesc g_cmdLineDesc[] =
-{
-    { wxCMD_LINE_SWITCH, "sync", "sync", "synchronize the display" },
-    { wxCMD_LINE_OPTION, "display", "display",  "use the given display", wxCMD_LINE_VAL_STRING },
-
-    { wxCMD_LINE_NONE }
-};
-
 #ifdef __WXDEBUG__
 typedef int (*XErrorHandlerFunc)(Display *, XErrorEvent *);
 
@@ -179,9 +171,7 @@ int wxEntryStart( int& argc, char *argv[] )
 
     /// TODO
 #if 0
-    // Parse the arguments. Is it OK to use the command line
-    // parser before calling Initialize?
-    wxCmdLineParser cmdLine(argv, argv);
+    // Parse the arguments.
 #endif
 
     Display* xdisplay = XOpenDisplay(NULL);
@@ -413,7 +403,10 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             return;
         }
         case ClientMessage:
-        {           
+        {
+            if (win && !win->IsEnabled())
+                return;
+
             Atom wm_delete_window = XInternAtom(wxGlobalDisplay(), "WM_DELETE_WINDOW", True);;
             Atom wm_protocols = XInternAtom(wxGlobalDisplay(), "WM_PROTOCOLS", True);;
 

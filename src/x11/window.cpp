@@ -93,12 +93,10 @@ void wxWindowX11::Init()
 
     // X11-specific
     m_mainWidget = (WXWindow) 0;
-
     m_winCaptured = FALSE;
-
+    m_needsInputFocus = FALSE;
     m_isShown = TRUE;
     m_isBeingDeleted = FALSE;
-    
     m_lastTS = 0;
     m_lastButton = 0;
 }
@@ -209,8 +207,16 @@ void wxWindowX11::SetFocus()
     Window xwindow = (Window) GetMainWindow();
     
     wxCHECK_RET( xwindow, wxT("invalid window") );
-    
-    XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
+
+    if (wxWindowIsVisible(xwindow))
+    {
+        XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
+	m_needsInputFocus = FALSE;
+    }
+    else
+    {
+	m_needsInputFocus = TRUE;
+    }
 }
 
 // Get the window with the focus
@@ -651,6 +657,7 @@ void wxWindowX11::DoGetSize(int *x, int *y) const
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
     
+    XSync(wxGlobalDisplay(), False);
     XWindowAttributes attr;
     Status status = XGetWindowAttributes( wxGlobalDisplay(), xwindow, &attr );
     wxASSERT(status);
@@ -667,6 +674,7 @@ void wxWindowX11::DoGetPosition(int *x, int *y) const
     Window window = (Window) m_mainWidget;
     if (window)
     {
+        XSync(wxGlobalDisplay(), False);
         XWindowAttributes attr;
         Status status = XGetWindowAttributes(wxGlobalDisplay(), window, & attr);
         wxASSERT(status);
@@ -720,6 +728,7 @@ void wxWindowX11::DoGetClientSize(int *x, int *y) const
 
     if (window)
     {
+        XSync(wxGlobalDisplay(), False);
         XWindowAttributes attr;
         Status status = XGetWindowAttributes( wxGlobalDisplay(), window, &attr );
         wxASSERT(status);
@@ -767,6 +776,7 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
         valueMask, & windowChanges);
+    XSync(wxGlobalDisplay(), False);
 }
 
 void wxWindowX11::DoSetClientSize(int width, int height)
@@ -789,6 +799,7 @@ void wxWindowX11::DoSetClientSize(int width, int height)
     }
     XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
         valueMask, & windowChanges);
+    XSync(wxGlobalDisplay(), False);
 }
 
 // For implementation purposes - sometimes decorations make the client area
@@ -1040,6 +1051,10 @@ void wxWindowX11::OnInternalIdle()
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
     UpdateWindowUI();
+
+    // Set the input focus if couldn't do it before
+    if (m_needsInputFocus)
+	SetFocus();
 }
 
 // ----------------------------------------------------------------------------

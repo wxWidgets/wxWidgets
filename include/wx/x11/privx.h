@@ -38,18 +38,6 @@ extern int wxComputeColours (Display *display, wxColour * back, wxColour * fore)
 // For convenience
 inline Display* wxGlobalDisplay() { return (Display*) wxGetDisplay(); }
 
-#define wxNO_COLORS   0x00
-#define wxBACK_COLORS 0x01
-#define wxFORE_COLORS 0x02
-
-extern XColor itemColors[5] ;
-
-#define wxBACK_INDEX 0
-#define wxFORE_INDEX 1
-#define wxSELE_INDEX 2
-#define wxTOPS_INDEX 3
-#define wxBOTS_INDEX 4
-
 #define wxMAX_RGB           0xff
 #define wxMAX_SV            1000
 #define wxSIGN(x)           ((x < 0) ? -x : x)
@@ -73,6 +61,9 @@ void wxAllocColor(Display *display,Colormap colormap,XColor *xcolor);
 #ifdef __WXDEBUG__
 wxString wxGetXEventName(XEvent& event);
 #endif
+
+// Is the window visible?
+bool wxWindowIsVisible(Window win);
 
 #endif
 // _WX_PRIVX_H_

@@ -15,8 +15,7 @@
 #include "wx/defs.h"
 #include "X11/Xlib.h"
 
-class wxMouseEvent;
-class wxKeyEvent;
+#include "wx/x11/privx.h"
 
 // Put any private declarations here: native Motif types may be used because
 // this header is included after Xm/Xm.h
@@ -49,20 +48,11 @@ extern char wxFindMnemonic(const char* s);
 extern char * wxFindAccelerator (const char *s);
 extern XmString wxFindAcceleratorText (const char *s);
 
-extern int wxCharCodeXToWX(KeySym keySym);
-extern KeySym wxCharCodeWXToX(int id);
-
 // ----------------------------------------------------------------------------
 // TranslateXXXEvent() functions - translate Motif event to wxWindow one
 // ----------------------------------------------------------------------------
 extern bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
 extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
-
-int wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap);
-Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
-
-extern XColor g_itemColors[];
-extern int wxComputeColours (Display *display, wxColour * back, wxColour * fore);
 
 extern void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
 extern void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
@@ -116,25 +106,6 @@ private:
 // ----------------------------------------------------------------------------
 
 extern "C" XtAppContext wxGetAppContext();
-
-#define wxMAX_RGB           0xff
-#define wxMAX_SV            1000
-#define wxSIGN(x)           ((x < 0) ? -x : x)
-#define wxH_WEIGHT          4
-#define wxS_WEIGHT          1
-#define wxV_WEIGHT          2
-
-typedef struct wx_hsv {
-                        int h,s,v;
-                      } wxHSV;
-
-#define wxMax3(x,y,z) ((x > y) ? ((x > z) ? x : z) : ((y > z) ? y : z))
-#define wxMin3(x,y,z) ((x < y) ? ((x < z) ? x : z) : ((y < z) ? y : z))
-
-void wxHSVToXColor(wxHSV *hsv,XColor *xcolor);
-void wxXColorToHSV(wxHSV *hsv,XColor *xcolor);
-void wxAllocNearestColor(Display *display,Colormap colormap,XColor *xcolor);
-void wxAllocColor(Display *display,Colormap colormap,XColor *xcolor);
 
 #endif
 // _WX_PRIVATE_H_
