@@ -37,7 +37,11 @@ struct WXDLLEXPORT wxNativeEncodingInfo
     wxString facename;          // may be empty meaning "any"
     wxFontEncoding encoding;    // so that we know what this struct represents
 
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMAC__) || defined(__WXCOCOA__) // FIXME: __WXCOCOA__
+#if defined(__WXMSW__) || \
+    defined(__WXPM__)  || \
+    defined(__WXMAC__) || \
+    defined(__WXCOCOA__) // FIXME: __WXCOCOA__
+
     wxNativeEncodingInfo()
         : facename()
         , encoding(wxFONTENCODING_SYSTEM)
