@@ -183,13 +183,6 @@ protected:
     
     // Motif-specific
     
-    // CanvasXXXSiize functions
-    void CanvasGetSize(int* width, int* height) const; // If have drawing area
-    void CanvasGetClientSize(int *width, int *height) const;
-    void CanvasGetPosition(int *x, int *y) const; // If have drawing area
-    void CanvasSetClientSize(int width, int size);
-    void CanvasSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-    
     void SetMainWidget(WXWidget w) { m_mainWidget = w; }
     
     bool CanAddEventHandler() const { return m_canAddEventHandler; }
@@ -202,6 +195,18 @@ protected:
     void DoSetSizeIntr(int x, int y,
                        int width, int height,
                        int sizeFlags, bool fromCtor);
+
+    // for DoMoveWindowIntr flags
+    enum
+    {
+        wxMOVE_X = 1,
+        wxMOVE_Y = 2,
+        wxMOVE_WIDTH = 4,
+        wxMOVE_HEIGHT = 8
+    };
+
+    void DoMoveWindowIntr(int x, int y, int width, int height,
+                          int flags);
 public:
     WXPixmap GetBackingPixmap() const { return m_backingPixmap; }
     void SetBackingPixmap(WXPixmap pixmap) { m_backingPixmap = pixmap; }
