@@ -1060,24 +1060,33 @@ void wxListTextCtrl::OnChar( wxKeyEvent &event )
     {
         (*m_accept) = TRUE;
         (*m_res) = GetValue();
-        m_owner->SetFocus();
+        
+        if (!wxPendingDelete.Member(this))
+            wxPendingDelete.Append(this);
+
+        if ((*m_accept) && ((*m_res) != m_startValue))
+            m_owner->OnRenameAccept();
+            
         return;
     }
     if (event.m_keyCode == WXK_ESCAPE)
     {
         (*m_accept) = FALSE;
         (*m_res) = "";
-        m_owner->SetFocus();
+        
+        if (!wxPendingDelete.Member(this))
+            wxPendingDelete.Append(this);
+            
         return;
     }
+    
     event.Skip();
 }
 
 void wxListTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 {
-    if (wxPendingDelete.Member(this)) return;
-
-    wxPendingDelete.Append(this);
+    if (!wxPendingDelete.Member(this))
+        wxPendingDelete.Append(this);
 
     if ((*m_accept) && ((*m_res) != m_startValue))
         m_owner->OnRenameAccept();

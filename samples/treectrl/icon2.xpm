@@ -5,7 +5,7 @@ static char *icon2_xpm[] = {
 /* colors */
 ". c #000000",
 "# c #ff0000",
-"a c #ffffff",
+"a c None",
 /* pixels */
 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",

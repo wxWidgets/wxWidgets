@@ -2147,7 +2147,10 @@ wxWindow::~wxWindow()
 
     if (m_widgetStyle)
     {
-        gtk_style_unref( m_widgetStyle );
+        // don't delete if it's a pixmap theme style
+        if (!m_widgetStyle->engine_data)
+            gtk_style_unref( m_widgetStyle );
+            
         m_widgetStyle = (GtkStyle*) NULL;
     }
 
