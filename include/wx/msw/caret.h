@@ -52,6 +52,7 @@ protected:
     virtual void DoMove();
     virtual void DoShow();
     virtual void DoHide();
+    virtual void DoSize();
 
     // helper function which creates the system caret
     bool MSWCreateCaret();

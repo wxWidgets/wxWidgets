@@ -160,3 +160,19 @@ void wxCaret::DoMove()
     }
     //else: we don't have caret right now, nothing to do (this does happen)
 }
+
+
+// ---------------------------------------------------------------------------
+// resizing the caret
+// ---------------------------------------------------------------------------
+
+void wxCaret::DoSize()
+{
+    if ( m_hasCaret )
+    {
+        m_hasCaret = FALSE;
+        CALL_CARET_API(DestroyCaret, ());
+        MSWCreateCaret();
+        DoMove();
+    }
+}

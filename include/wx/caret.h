@@ -96,7 +96,11 @@ public:
     wxWindow *GetWindow() const { return (wxWindow *)m_window; }
 
         // change the size of the caret
-    void SetSize(int width, int height) { m_width = width; m_height = height; }
+    void SetSize(int width, int height) {
+        m_width = width;
+        m_height = height;
+        DoSize();
+    }
     void SetSize(const wxSize& size) { SetSize(size.x, size.y); }
 
 
@@ -155,6 +159,7 @@ protected:
     virtual void DoShow() = 0;
     virtual void DoHide() = 0;
     virtual void DoMove() = 0;
+    virtual void DoSize() { }
 
     // the common initialization
     void Init()
