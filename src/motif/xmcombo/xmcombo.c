@@ -93,6 +93,11 @@
  */
 #ifdef __VMS
 #include <wx/vms_x_fix.h>
+#undef XtDisplay
+#undef XtScreen
+#undef XtWindow
+#undef XtIsRealized
+#undef XtParent
 #endif
 
 #include <X11/IntrinsicP.h>
