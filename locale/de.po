@@ -6,7 +6,7 @@ msgstr ""
 "Last-Translator: Mark Johnson <wxWindows@mj10777.de>\n"
 "Language-Team: wxWindows Team <wx-devel@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: ../src/generic/dirctrlg.cpp:1303 ../src/generic/dirdlgg.cpp:544
