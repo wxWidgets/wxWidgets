@@ -111,7 +111,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     m_dirCtrl = new wxGenericDirCtrl(this, ID_DIRCTRL,
                                      m_path, wxPoint(5, 5),
                                      wxSize(300, 200), 
-                                     wxDIRCTRL_DIR_ONLY|wxSUNKEN_BORDER);
+                                     wxDIRCTRL_DIR_ONLY|wxDIRCTRL_EDITABLE|wxSUNKEN_BORDER);
 
     topsizer->Add( m_dirCtrl, 1, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
 

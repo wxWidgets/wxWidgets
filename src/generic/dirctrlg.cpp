@@ -503,13 +503,10 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     Init();
 
     long treeStyle = wxTR_HAS_BUTTONS;
-#ifdef __WXMSW__
-    // VS: Do **NOT** remove this style, ever. MSW native wxTreeCtrl::EditLabel doesn't 
-    //     work without this style and we need it to be able to create new directories.
-    //     Generic wxTreeCtrl can do it even w/o wxTR_EDIT_LABELS, so we only add it
-    //     in case of wxMSW (as it is arguably better to not have the style enabled)
-    treeStyle |= wxTR_EDIT_LABELS;
-#endif
+
+    if (style & wxDIRCTRL_EDITABLE)
+        treeStyle |= wxTR_EDIT_LABELS;
+
 #ifndef __WXMSW__
     // FIXME, doesn't work for some reason
     treeStyle |= wxTR_HIDE_ROOT;

@@ -45,7 +45,9 @@ enum
     // Show the filter list
     wxDIRCTRL_SHOW_FILTERS   = 0x0040,
     // Use 3D borders on internal controls
-    wxDIRCTRL_3D_INTERNAL    = 0x0080
+    wxDIRCTRL_3D_INTERNAL    = 0x0080,
+    // Editable labels
+    wxDIRCTRL_EDITABLE       = 0x0100
 };
 
 //-----------------------------------------------------------------------------
