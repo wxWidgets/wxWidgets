@@ -593,7 +593,7 @@ bool wxVariantDataBool::Write(wxOutputStream& str) const
 {
     wxTextOutputStream s(str);
 
-    s.Write8(m_value); 
+    s.Write8(m_value);
     return TRUE;
 }
 
@@ -1088,11 +1088,11 @@ public:
     wxVariantDataDateTime() { }
     wxVariantDataDateTime(const wxDateTime& value) { m_value = value; }
 #if wxUSE_ODBC
-    wxVariantDataDateTime(const TIME_STRUCT* valptr) 
+    wxVariantDataDateTime(const TIME_STRUCT* valptr)
         { m_value = wxDateTime(valptr->hour, valptr->minute, valptr->second); }
-    wxVariantDataDateTime(const DATE_STRUCT* valptr) 
+    wxVariantDataDateTime(const DATE_STRUCT* valptr)
         { m_value = wxDateTime(valptr->day, (wxDateTime::Month) (valptr->month - 1),valptr->year); }
-    wxVariantDataDateTime(const TIMESTAMP_STRUCT* valptr) 
+    wxVariantDataDateTime(const TIMESTAMP_STRUCT* valptr)
         { m_value = wxDateTime(valptr->day, (wxDateTime::Month) (valptr->month - 1), valptr->year,
                         valptr->hour, valptr->minute, valptr->second, valptr->fraction ); }
 #endif //ODBC
@@ -1103,11 +1103,11 @@ public:
     virtual void Copy(wxVariantData& data);
     virtual bool Eq(wxVariantData& data) const;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(ostream& str) const;
+    virtual bool Write(wxSTD ostream& str) const;
 #endif
     virtual bool Write(wxString& str) const;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(istream& str);
+    virtual bool Read(wxSTD istream& str);
 #endif
     virtual bool Read(wxString& str);
     virtual wxString GetType() const { return wxT("datetime"); };
@@ -1141,7 +1141,7 @@ bool wxVariantDataDateTime::Eq(wxVariantData& data) const
 
 
 #if wxUSE_STD_IOSTREAM
-bool wxVariantDataDateTime::Write(ostream& str) const
+bool wxVariantDataDateTime::Write(wxSTD ostream& str) const
 {
     // Not implemented
     return FALSE;
@@ -1157,7 +1157,7 @@ bool wxVariantDataDateTime::Write(wxString& str) const
 
 
 #if wxUSE_STD_IOSTREAM
-bool wxVariantDataDateTime::Read(istream& WXUNUSED(str))
+bool wxVariantDataDateTime::Read(wxSTD istream& WXUNUSED(str))
 {
     // Not implemented
     return FALSE;
