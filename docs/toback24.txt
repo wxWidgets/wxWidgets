@@ -34,3 +34,43 @@ Checking in intl.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
 new revision: 1.93; previous revision: 1.92
 done
+
+5. proper AcceptsFocus() implementation for containers
+
+http://sf.net/tracker/index.php?func=detail&aid=718913&group_id=9863&atid=309863
+
+Checking in include/wx/containr.h;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/containr.h,v  <--  containr.h
+new revision: 1.10; previous revision: 1.9
+Checking in src/common/containr.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/containr.cpp,v  <--  containr.cpp
+new revision: 1.17; previous revision: 1.16
+
+6. fixes for user dash wxPens handling
+
+http://sf.net/tracker/index.php?func=detail&aid=717736&group_id=9863&atid=309863
+
+Checking in include/wx/msw/pen.h;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/pen.h,v  <--  pen.h
+new revision: 1.16; previous revision: 1.15
+Checking in src/msw/pen.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/pen.cpp,v  <--  pen.cpp
+new revision: 1.20; previous revision: 1.19
+Checking in src/gtk/pen.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/gtk/pen.cpp,v  <--  pen.cpp
+new revision: 1.23; previous revision: 1.22
+Checking in samples/drawing/drawing.cpp;
+/pack/cvsroots/wxwindows/wxWindows/samples/drawing/drawing.cpp,v  <--  drawing.cpp
+new revision: 1.67; previous revision: 1.66
+Checking in docs/changes.txt;
+/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+new revision: 1.266; previous revision: 1.265
+
+7. use one gdk_draw_lines() call instead of multiple gdk_draw_line() ones
+
+http://sf.net/tracker/index.php?func=detail&aid=717012&group_id=9863&atid=309863
+
+Checking in src/gtk/dcclient.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/gtk/dcclient.cpp,v  <--  dcclient.cpp
+new revision: 1.169; previous revision: 1.168
+
