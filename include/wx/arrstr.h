@@ -47,6 +47,7 @@ public:
 
     void Sort(bool reverseOrder = false);
     void Sort(CompareFunction function);
+    void Sort(CMPFUNCwxString function) { wxArrayStringBase::Sort(function); }
 };
 
 class WXDLLIMPEXP_BASE wxSortedArrayString : public wxSortedArrayStringBase
