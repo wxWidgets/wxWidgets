@@ -37,7 +37,7 @@
 
 // Normally, new is automatically defined to be the
 // debugging version. If not, this does it.
-#if !defined(new) && defined(WXDEBUG_NEW) && wxUSE_DEBUG_CONTEXT
+#if !defined(new) && defined(WXDEBUG_NEW) && wxUSE_MEMORY_TRACING
 #define new WXDEBUG_NEW
 #endif
 
@@ -83,7 +83,7 @@ bool MyApp::OnInit(void)
   // Show the frame
   frame->Show(TRUE);
 
-#if wxUSE_DEBUG_CONTEXT
+#if wxUSE_MEMORY_TRACING
   wxDebugContext::SetCheckpoint();
 #endif
 
@@ -102,7 +102,7 @@ bool MyApp::OnInit(void)
 
   const char *data = (const char*) thing ;
 
-#if wxUSE_DEBUG_CONTEXT
+#if wxUSE_MEMORY_TRACING
   // On MSW, Dump() crashes if using wxLogGui,
   // so use wxLogStderr instead.
   wxLog* oldLog = wxLog::SetActiveTarget(new wxLogStderr);
