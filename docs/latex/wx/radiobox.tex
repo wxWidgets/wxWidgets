@@ -23,6 +23,8 @@ labelled buttons.
 maximum number of rows.}
 \twocolitem{\windowstyle{wxRA\_SPECIFY\_COLS}}{The major dimension parameter refers to the
 maximum number of columns.}
+\twocolitem{\windowstyle{wxRA\_USE\_CHECKBOX}}{Use of the checkbox controls instead of radio
+buttons (currently supported only on PalmOS)}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
@@ -221,9 +223,9 @@ Returns the label for the button at the given position.
 
 \constfunc{int}{Number}{\void}
 
-{\bf Obsolescence note:} This method is obsolete and was replaced with 
+{\bf Obsolescence note:} This method is obsolete and was replaced with
 \helpref{GetCount}{wxradioboxgetcount}, please use the new method in the new
-code. This method is only available if wxWidgets was compiled with 
+code. This method is only available if wxWidgets was compiled with
 {\tt WXWIN\_COMPATIBILITY\_2\_2} defined and will disappear completely in
 future versions.
 
