@@ -1441,6 +1441,37 @@ static PyObject *_wrap_wxPyApp_ProcessIdle(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+#define wxPyApp_Yield(_swigobj,_swigarg0)  (_swigobj->Yield(_swigarg0))
+static PyObject *_wrap_wxPyApp_Yield(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyApp * _arg0;
+    bool  _arg1 = (bool ) (0);
+    PyObject * _argo0 = 0;
+    int tempbool1 = (int) (0);
+    char *_kwnames[] = { "self","onlyIfNeeded", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxPyApp_Yield",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_Yield. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyApp_Yield(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxPyApp_SetAppName(_swigobj,_swigarg0)  (_swigobj->SetAppName(_swigarg0))
 static PyObject *_wrap_wxPyApp_SetAppName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1726,6 +1757,7 @@ static PyMethodDef wxcMethods[] = {
 	 { "wxPyApp_SetClassName", (PyCFunction) _wrap_wxPyApp_SetClassName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetAuto3D", (PyCFunction) _wrap_wxPyApp_SetAuto3D, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetAppName", (PyCFunction) _wrap_wxPyApp_SetAppName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_Yield", (PyCFunction) _wrap_wxPyApp_Yield, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_ProcessIdle", (PyCFunction) _wrap_wxPyApp_ProcessIdle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_Pending", (PyCFunction) _wrap_wxPyApp_Pending, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_MainLoop", (PyCFunction) _wrap_wxPyApp_MainLoop, METH_VARARGS | METH_KEYWORDS },
@@ -1978,6 +2010,10 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxTE_DONTWRAP", PyInt_FromLong((long) wxTE_DONTWRAP));
 	 PyDict_SetItemString(d,"wxTE_LINEWRAP", PyInt_FromLong((long) wxTE_LINEWRAP));
 	 PyDict_SetItemString(d,"wxTE_WORDWRAP", PyInt_FromLong((long) wxTE_WORDWRAP));
+	 PyDict_SetItemString(d,"wxTE_LEFT", PyInt_FromLong((long) wxTE_LEFT));
+	 PyDict_SetItemString(d,"wxTE_RIGHT", PyInt_FromLong((long) wxTE_RIGHT));
+	 PyDict_SetItemString(d,"wxTE_CENTER", PyInt_FromLong((long) wxTE_CENTER));
+	 PyDict_SetItemString(d,"wxTE_CENTRE", PyInt_FromLong((long) wxTE_CENTRE));
 	 PyDict_SetItemString(d,"wxCB_SIMPLE", PyInt_FromLong((long) wxCB_SIMPLE));
 	 PyDict_SetItemString(d,"wxCB_DROPDOWN", PyInt_FromLong((long) wxCB_DROPDOWN));
 	 PyDict_SetItemString(d,"wxCB_SORT", PyInt_FromLong((long) wxCB_SORT));

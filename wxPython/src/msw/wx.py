@@ -91,6 +91,9 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def ProcessIdle(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_ProcessIdle,(self,) + _args, _kwargs)
         return val
+    def Yield(self, *_args, **_kwargs):
+        val = apply(wxc.wxPyApp_Yield,(self,) + _args, _kwargs)
+        return val
     def SetAppName(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp_SetAppName,(self,) + _args, _kwargs)
         return val
@@ -261,6 +264,10 @@ wxTE_NOHIDESEL = wxc.wxTE_NOHIDESEL
 wxTE_DONTWRAP = wxc.wxTE_DONTWRAP
 wxTE_LINEWRAP = wxc.wxTE_LINEWRAP
 wxTE_WORDWRAP = wxc.wxTE_WORDWRAP
+wxTE_LEFT = wxc.wxTE_LEFT
+wxTE_RIGHT = wxc.wxTE_RIGHT
+wxTE_CENTER = wxc.wxTE_CENTER
+wxTE_CENTRE = wxc.wxTE_CENTRE
 wxCB_SIMPLE = wxc.wxCB_SIMPLE
 wxCB_DROPDOWN = wxc.wxCB_DROPDOWN
 wxCB_SORT = wxc.wxCB_SORT

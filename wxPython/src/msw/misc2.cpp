@@ -72,6 +72,9 @@ extern PyObject *SWIG_newvarlink(void);
 #endif
 
 #include <wx/mimetype.h>
+#include <wx/snglinst.h>
+#include <wx/effects.h>
+//#include <wx/spawnbrowser.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -128,12 +131,12 @@ public:
         : wxTipProvider(currentTip) {}
 
     DEC_PYCALLBACK_STRING__pure(GetTip);
-
+    DEC_PYCALLBACK_STRING_STRING(PreprocessTip);
     PYPRIVATE;
 };
 
 IMP_PYCALLBACK_STRING__pure( wxPyTipProvider, wxTipProvider, GetTip);
-
+IMP_PYCALLBACK_STRING_STRING(wxPyTipProvider, wxTipProvider, PreprocessTip);
 
 #include <wx/generic/dragimgg.h>
 
@@ -3597,6 +3600,54 @@ static PyObject *_wrap_wxTipProvider_GetCurrentTip(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+#define wxTipProvider_PreprocessTip(_swigobj,_swigarg0)  (_swigobj->PreprocessTip(_swigarg0))
+static PyObject *_wrap_wxTipProvider_PreprocessTip(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxTipProvider * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","tip", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTipProvider_PreprocessTip",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTipProvider_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTipProvider_PreprocessTip. Expected _wxTipProvider_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxTipProvider_PreprocessTip(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 static void *SwigwxPyTipProviderTowxTipProvider(void *ptr) {
     wxPyTipProvider *src;
     wxTipProvider *dest;
@@ -5086,6 +5137,32 @@ static PyObject *_wrap_wxLog_ClearTraceMasks(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxLog_GetTraceMasks(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxArrayString * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxLog_GetTraceMasks",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxArrayString & _result_ref = wxLog::GetTraceMasks();
+    _result = (wxArrayString *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxArrayString_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
     return _resultobj;
 }
 
@@ -10453,7 +10530,740 @@ static PyObject *_wrap_wxFileHistory_GetNoHistoryFiles(PyObject *self, PyObject 
     return _resultobj;
 }
 
+static void *SwigwxEffectsTowxObject(void *ptr) {
+    wxEffects *src;
+    wxObject *dest;
+    src = (wxEffects *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxEffects() (new wxEffects())
+static PyObject *_wrap_new_wxEffects(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEffects * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxEffects",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxEffects *)new_wxEffects();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxEffects_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxEffects_GetHighlightColour(_swigobj)  (_swigobj->GetHighlightColour())
+static PyObject *_wrap_wxEffects_GetHighlightColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxEffects * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEffects_GetHighlightColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_GetHighlightColour. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxEffects_GetHighlightColour(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxEffects_GetLightShadow(_swigobj)  (_swigobj->GetLightShadow())
+static PyObject *_wrap_wxEffects_GetLightShadow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxEffects * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEffects_GetLightShadow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_GetLightShadow. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxEffects_GetLightShadow(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxEffects_GetFaceColour(_swigobj)  (_swigobj->GetFaceColour())
+static PyObject *_wrap_wxEffects_GetFaceColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxEffects * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEffects_GetFaceColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_GetFaceColour. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxEffects_GetFaceColour(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxEffects_GetMediumShadow(_swigobj)  (_swigobj->GetMediumShadow())
+static PyObject *_wrap_wxEffects_GetMediumShadow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxEffects * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEffects_GetMediumShadow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_GetMediumShadow. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxEffects_GetMediumShadow(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxEffects_GetDarkShadow(_swigobj)  (_swigobj->GetDarkShadow())
+static PyObject *_wrap_wxEffects_GetDarkShadow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxEffects * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEffects_GetDarkShadow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_GetDarkShadow. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxEffects_GetDarkShadow(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxEffects_SetHighlightColour(_swigobj,_swigarg0)  (_swigobj->SetHighlightColour(_swigarg0))
+static PyObject *_wrap_wxEffects_SetHighlightColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEffects * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","c", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxEffects_SetHighlightColour",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_SetHighlightColour. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxEffects_SetHighlightColour(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxEffects_SetLightShadow(_swigobj,_swigarg0)  (_swigobj->SetLightShadow(_swigarg0))
+static PyObject *_wrap_wxEffects_SetLightShadow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEffects * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","c", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxEffects_SetLightShadow",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_SetLightShadow. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxEffects_SetLightShadow(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxEffects_SetFaceColour(_swigobj,_swigarg0)  (_swigobj->SetFaceColour(_swigarg0))
+static PyObject *_wrap_wxEffects_SetFaceColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEffects * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","c", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxEffects_SetFaceColour",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_SetFaceColour. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxEffects_SetFaceColour(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxEffects_SetMediumShadow(_swigobj,_swigarg0)  (_swigobj->SetMediumShadow(_swigarg0))
+static PyObject *_wrap_wxEffects_SetMediumShadow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEffects * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","c", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxEffects_SetMediumShadow",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_SetMediumShadow. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxEffects_SetMediumShadow(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxEffects_SetDarkShadow(_swigobj,_swigarg0)  (_swigobj->SetDarkShadow(_swigarg0))
+static PyObject *_wrap_wxEffects_SetDarkShadow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEffects * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","c", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxEffects_SetDarkShadow",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_SetDarkShadow. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxEffects_SetDarkShadow(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxEffects_Set(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->Set(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_wxEffects_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEffects * _arg0;
+    wxColour * _arg1;
+    wxColour * _arg2;
+    wxColour * _arg3;
+    wxColour * _arg4;
+    wxColour * _arg5;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    wxColour  temp0;
+    PyObject * _obj2 = 0;
+    wxColour  temp1;
+    PyObject * _obj3 = 0;
+    wxColour  temp2;
+    PyObject * _obj4 = 0;
+    wxColour  temp3;
+    PyObject * _obj5 = 0;
+    char *_kwnames[] = { "self","highlightColour","lightShadow","faceColour","mediumShadow","darkShadow", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOOOO:wxEffects_Set",_kwnames,&_argo0,&_obj1,&_obj2,&_obj3,&_obj4,&_obj5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_Set. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    _arg2 = &temp0;
+    if (! wxColour_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    _arg3 = &temp1;
+    if (! wxColour_helper(_obj3, &_arg3))
+        return NULL;
+}
+{
+    _arg4 = &temp2;
+    if (! wxColour_helper(_obj4, &_arg4))
+        return NULL;
+}
+{
+    _arg5 = &temp3;
+    if (! wxColour_helper(_obj5, &_arg5))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxEffects_Set(_arg0,*_arg1,*_arg2,*_arg3,*_arg4,*_arg5);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxEffects_DrawSunkenEdge(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->DrawSunkenEdge(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxEffects_DrawSunkenEdge(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEffects * _arg0;
+    wxDC * _arg1;
+    wxRect * _arg2;
+    int  _arg3 = (int ) 1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    wxRect  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","dc","rect","borderSize", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|i:wxEffects_DrawSunkenEdge",_kwnames,&_argo0,&_argo1,&_obj2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_DrawSunkenEdge. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxEffects_DrawSunkenEdge. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = &temp;
+    if (! wxRect_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxEffects_DrawSunkenEdge(_arg0,*_arg1,*_arg2,_arg3);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxEffects_TileBitmap(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->TileBitmap(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxEffects_TileBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxEffects * _arg0;
+    wxRect * _arg1;
+    wxDC * _arg2;
+    wxBitmap * _arg3;
+    PyObject * _argo0 = 0;
+    wxRect  temp;
+    PyObject * _obj1 = 0;
+    PyObject * _argo2 = 0;
+    PyObject * _argo3 = 0;
+    char *_kwnames[] = { "self","rect","dc","bitmap", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO:wxEffects_TileBitmap",_kwnames,&_argo0,&_obj1,&_argo2,&_argo3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEffects_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEffects_TileBitmap. Expected _wxEffects_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxRect_helper(_obj1, &_arg1))
+        return NULL;
+}
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxEffects_TileBitmap. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxEffects_TileBitmap. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxEffects_TileBitmap(_arg0,*_arg1,*_arg2,*_arg3);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define new_wxSingleInstanceChecker(_swigarg0,_swigarg1) (new wxSingleInstanceChecker(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxSingleInstanceChecker(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSingleInstanceChecker * _result;
+    wxString * _arg0;
+    wxString * _arg1 = (wxString *) &wxPyEmptyString;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "name","path", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxSingleInstanceChecker",_kwnames,&_obj0,&_obj1)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+    if (_obj1)
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxSingleInstanceChecker *)new_wxSingleInstanceChecker(*_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxSingleInstanceChecker_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define new_wxPreSingleInstanceChecker() (new wxSingleInstanceChecker())
+static PyObject *_wrap_new_wxPreSingleInstanceChecker(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSingleInstanceChecker * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPreSingleInstanceChecker",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxSingleInstanceChecker *)new_wxPreSingleInstanceChecker();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxSingleInstanceChecker_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxSingleInstanceChecker(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxSingleInstanceChecker(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSingleInstanceChecker * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxSingleInstanceChecker",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSingleInstanceChecker_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxSingleInstanceChecker. Expected _wxSingleInstanceChecker_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete_wxSingleInstanceChecker(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSingleInstanceChecker_Create(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Create(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxSingleInstanceChecker_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSingleInstanceChecker * _arg0;
+    wxString * _arg1;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","name","path", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:wxSingleInstanceChecker_Create",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSingleInstanceChecker_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSingleInstanceChecker_Create. Expected _wxSingleInstanceChecker_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    if (_obj2)
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxSingleInstanceChecker_Create(_arg0,*_arg1,*_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxSingleInstanceChecker_IsAnotherRunning(_swigobj)  (_swigobj->IsAnotherRunning())
+static PyObject *_wrap_wxSingleInstanceChecker_IsAnotherRunning(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSingleInstanceChecker * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSingleInstanceChecker_IsAnotherRunning",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSingleInstanceChecker_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSingleInstanceChecker_IsAnotherRunning. Expected _wxSingleInstanceChecker_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxSingleInstanceChecker_IsAnotherRunning(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static PyMethodDef misc2cMethods[] = {
+	 { "wxSingleInstanceChecker_IsAnotherRunning", (PyCFunction) _wrap_wxSingleInstanceChecker_IsAnotherRunning, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSingleInstanceChecker_Create", (PyCFunction) _wrap_wxSingleInstanceChecker_Create, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxSingleInstanceChecker", (PyCFunction) _wrap_delete_wxSingleInstanceChecker, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPreSingleInstanceChecker", (PyCFunction) _wrap_new_wxPreSingleInstanceChecker, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxSingleInstanceChecker", (PyCFunction) _wrap_new_wxSingleInstanceChecker, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_TileBitmap", (PyCFunction) _wrap_wxEffects_TileBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_DrawSunkenEdge", (PyCFunction) _wrap_wxEffects_DrawSunkenEdge, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_Set", (PyCFunction) _wrap_wxEffects_Set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_SetDarkShadow", (PyCFunction) _wrap_wxEffects_SetDarkShadow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_SetMediumShadow", (PyCFunction) _wrap_wxEffects_SetMediumShadow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_SetFaceColour", (PyCFunction) _wrap_wxEffects_SetFaceColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_SetLightShadow", (PyCFunction) _wrap_wxEffects_SetLightShadow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_SetHighlightColour", (PyCFunction) _wrap_wxEffects_SetHighlightColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_GetDarkShadow", (PyCFunction) _wrap_wxEffects_GetDarkShadow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_GetMediumShadow", (PyCFunction) _wrap_wxEffects_GetMediumShadow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_GetFaceColour", (PyCFunction) _wrap_wxEffects_GetFaceColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_GetLightShadow", (PyCFunction) _wrap_wxEffects_GetLightShadow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEffects_GetHighlightColour", (PyCFunction) _wrap_wxEffects_GetHighlightColour, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxEffects", (PyCFunction) _wrap_new_wxEffects, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileHistory_GetNoHistoryFiles", (PyCFunction) _wrap_wxFileHistory_GetNoHistoryFiles, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileHistory_GetCount", (PyCFunction) _wrap_wxFileHistory_GetCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileHistory_GetHistoryFile", (PyCFunction) _wrap_wxFileHistory_GetHistoryFile, METH_VARARGS | METH_KEYWORDS },
@@ -10616,6 +11426,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxLog_GetVerbose", (PyCFunction) _wrap_wxLog_GetVerbose, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_GetTimestamp", (PyCFunction) _wrap_wxLog_GetTimestamp, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_SetTimestamp", (PyCFunction) _wrap_wxLog_SetTimestamp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLog_GetTraceMasks", (PyCFunction) _wrap_wxLog_GetTraceMasks, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_ClearTraceMasks", (PyCFunction) _wrap_wxLog_ClearTraceMasks, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_RemoveTraceMask", (PyCFunction) _wrap_wxLog_RemoveTraceMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_AddTraceMask", (PyCFunction) _wrap_wxLog_AddTraceMask, METH_VARARGS | METH_KEYWORDS },
@@ -10664,6 +11475,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "new_wxDragImage", (PyCFunction) _wrap_new_wxDragImage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyTipProvider__setCallbackInfo", (PyCFunction) _wrap_wxPyTipProvider__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyTipProvider", (PyCFunction) _wrap_new_wxPyTipProvider, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTipProvider_PreprocessTip", (PyCFunction) _wrap_wxTipProvider_PreprocessTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTipProvider_GetCurrentTip", (PyCFunction) _wrap_wxTipProvider_GetCurrentTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTipProvider_GetTip", (PyCFunction) _wrap_wxTipProvider_GetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxTipProvider", (PyCFunction) _wrap_delete_wxTipProvider, METH_VARARGS | METH_KEYWORDS },
@@ -10830,6 +11642,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_wxDateTime_t",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_wxObject","_wxEffects",SwigwxEffectsTowxObject},
     { "_wxObject","_wxFileHistory",SwigwxFileHistoryTowxObject},
     { "_wxObject","_wxPyArtProvider",SwigwxPyArtProviderTowxObject},
     { "_wxObject","_wxWave",SwigwxWaveTowxObject},
