@@ -10,3 +10,11 @@ all:
 clean:
 	@for d in $(CONTRIB_SUBDIRS); do (cd $$d && $(MAKE) clean); done
 
+install:
+	@for d in $(CONTRIB_SUBDIRS); do (cd $$d && $(MAKE) install); done
+
+uninstall:
+	@for d in $(CONTRIB_SUBDIRS); do (cd $$d && $(MAKE) uninstall); done
+
+.PHONY: all clean install uninstall
+

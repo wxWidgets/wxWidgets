@@ -690,6 +690,8 @@ fi
 
 PATH_IFS=$wx_cv_path_ifs
 WX_TARGET_LIBRARY=$wx_cv_target_library
+WX_TARGET_LIBRARY_TYPE=$wx_cv_target_libtype
+
 
 
 
@@ -854,6 +856,7 @@ s%@CPP@%$CPP%g
 s%@PATH_IFS@%$PATH_IFS%g
 s%@ESD_LINK@%$ESD_LINK%g
 s%@WX_TARGET_LIBRARY@%$WX_TARGET_LIBRARY%g
+s%@WX_TARGET_LIBRARY_TYPE@%$WX_TARGET_LIBRARY_TYPE%g
 
 CEOF
 EOF

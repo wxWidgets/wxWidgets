@@ -25,10 +25,12 @@ dnl Final subst
 
 PATH_IFS=$wx_cv_path_ifs
 WX_TARGET_LIBRARY=$wx_cv_target_library
+WX_TARGET_LIBRARY_TYPE=$wx_cv_target_libtype
 
 AC_SUBST(PATH_IFS)
 AC_SUBST(ESD_LINK)
 AC_SUBST(WX_TARGET_LIBRARY)
+AC_SUBST(WX_TARGET_LIBRARY_TYPE)
 
 dnl -----------
 dnl File output

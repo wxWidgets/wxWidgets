@@ -17,7 +17,9 @@ PROGRAM=mmboard
 
 OBJECTS=mmboard.o mmbman.o
 
-EXTRA_LIBS= $(top_builddir)/contrib/lib/libmmedia.a @ESD_LIBS@
+EXTRA_LIBS= $(top_builddir)/contrib/src/mmedia/libmmedia.@WX_TARGET_LIBRARY_TYPE@ @ESD_LINK@
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include
+
 # the comment at the end of the next line is needed because otherwise autoconf
 # would remove this line completely - it contains a built-in hack to remove
 # any VPATH assignment not containing ':'

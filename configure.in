@@ -2122,11 +2122,14 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
         WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_SHARED_GL}"
     fi
+    dnl do not alter the LIBRARY_TYPE strings "so" and "a", they are magic
+    WX_TARGET_LIBRARY_TYPE="so"
 else
     dnl set target to static
     WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
     WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
     WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+    WX_TARGET_LIBRARY_TYPE="a"
 fi
 
 dnl ------------------------------------------------------------------------
@@ -3631,6 +3634,7 @@ AC_SUBST(DEP_INFO_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS)
 AC_SUBST(BURNT_LIBRARY_NAME)
 AC_SUBST(BURNT_LIBRARY_NAME_GL)
+AC_SUBST(WX_TARGET_LIBRARY_TYPE)
 
 dnl debugging options
 AC_SUBST(WXDEBUG_DEFINE)
@@ -3720,6 +3724,7 @@ if test "$wxUSE_GUI" = "yes"; then
     wx_cv_path_ifs=$PATH_IFS
     wx_cv_program_ext=$PROGRAM_EXT
     wx_cv_target_library=$WX_TARGET_LIBRARY
+    wx_cv_target_libtype=$WX_TARGET_LIBRARY_TYPE
     AC_CONFIG_SUBDIRS(demos samples utils contrib)
 fi
 dnl from wxUSE_GUI
