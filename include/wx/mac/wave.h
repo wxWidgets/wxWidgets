@@ -19,11 +19,12 @@
 
 #include "wx/object.h"
 
-class wxWave : public wxObject
+class WXDLLEXPORT wxWave : public wxObject
 {
 public:
   wxWave();
   wxWave(const wxString& fileName, bool isResource = FALSE);
+  wxWave(int size, const wxByte* data);
   ~wxWave();
 
 public:
