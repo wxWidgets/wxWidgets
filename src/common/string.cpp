@@ -958,8 +958,13 @@ wxString wxString::AfterFirst(wxChar ch) const
 }
 
 // replace first (or all) occurences of some substring with another one
-size_t wxString::Replace(const wxChar *szOld, const wxChar *szNew, bool bReplaceAll)
+size_t
+wxString::Replace(const wxChar *szOld, const wxChar *szNew, bool bReplaceAll)
 {
+    // if we tried to replace an empty string we'd enter an infinite loop below
+    wxCHECK_MSG( szOld && *szOld && szNew, 0,
+                 _T("wxString::Replace(): invalid parameter") );
+
   size_t uiCount = 0;   // count of replacements made
 
   size_t uiOldLen = wxStrlen(szOld);
