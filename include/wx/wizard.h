@@ -7,6 +7,7 @@
 // Modified by: Robert Cavanaugh
 //              Added capability to use .WXR resource files in Wizard pages
 //              Added wxWIZARD_HELP event
+//              Robert Vazan (sizers)
 // Created:     15.08.99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -167,7 +168,8 @@ public:
                  int id = -1,
                  const wxString& title = wxEmptyString,
                  const wxBitmap& bitmap = wxNullBitmap,
-                 const wxPoint& pos = wxDefaultPosition);
+                 const wxPoint& pos = wxDefaultPosition,
+                 long style = wxDEFAULT_DIALOG_STYLE);
     */
 
     // executes the wizard starting from the given page, returns TRUE if it was
@@ -182,8 +184,7 @@ public:
     // itself and will never be less than some predefined fixed size
     virtual void SetPageSize(const wxSize& size) = 0;
 
-    // get the size available for the page: the wizards are not resizeable, so
-    // this size doesn't change
+    // get the size available for the page
     virtual wxSize GetPageSize() const = 0;
 
     // set the best size for the wizard, i.e. make it big enough to contain all
@@ -195,6 +196,13 @@ public:
     // default)
     virtual void FitToPage(const wxWizardPage *firstPage) = 0;
 
+    // Adding pages to page area sizer enlarges wizard
+    virtual wxSizer *GetPageAreaSizer() const = 0;
+    
+    // Set border around page area. Default is 0 if you add at least one
+    // page to GetPageAreaSizer and 5 if you don't.
+    virtual void SetBorder(int border) = 0;
+    
     // wxWizard should be created using "new wxWizard" now, not with Create()
 #ifdef WXWIN_COMPATIBILITY_2_2
     static wxWizard *Create(wxWindow *parent,
