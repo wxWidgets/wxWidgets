@@ -1287,6 +1287,25 @@ OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType in
 }
 
 // ----------------------------------------------------------------------------
+// Control Access Support
+// ----------------------------------------------------------------------------
+
+OSStatus wxMacControl::GetData(ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize )
+{
+    return ::GetControlData( m_controlRef , inPartCode , inTag , inBufferSize , inOutBuffer , outActualSize ) ;   
+}
+
+OSStatus wxMacControl::GetDataSize(ControlPartCode inPartCode , ResType inTag , Size * outActualSize )
+{
+    return ::GetControlDataSize( m_controlRef , inPartCode , inTag , outActualSize ) ;   
+}
+
+OSStatus wxMacControl::SetData(ControlPartCode inPartCode , ResType inTag , Size inSize , const void * inData)
+{
+    return ::SetControlData( m_controlRef , inPartCode , inTag , inSize , inData ) ;   
+}
+
+// ----------------------------------------------------------------------------
 // debugging support
 // ----------------------------------------------------------------------------
 

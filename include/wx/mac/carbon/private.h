@@ -283,7 +283,10 @@ public :
     {
         return SetParameter<T>( inName, wxMacGetEventParamType<T>() , &data ) ;
     }
-    
+    UInt32 GetClass()
+    {
+        return ::GetEventClass( m_eventRef ) ;
+    }
     UInt32 GetKind()
     {
         return ::GetEventKind( m_eventRef ) ;
@@ -298,6 +301,52 @@ public :
     }
 protected :
     EventRef m_eventRef ;
+} ;
+
+class wxMacControl
+{
+public :
+    wxMacControl( ControlRef control ) 
+    {
+        m_controlRef = control ;
+    }
+    wxMacControl( WXWidget control )
+    {
+        m_controlRef = (ControlRef) control ;
+    }
+    
+    OSStatus SetData( ControlPartCode inPartCode , ResType inTag , Size inSize , const void * inData ) ;
+    OSStatus GetData( ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize ) ;
+    OSStatus GetDataSize( ControlPartCode inPartCode , ResType inTag , Size * outActualSize ) ;
+    Size GetDataSize( ControlPartCode inPartCode , ResType inTag )
+    {
+        Size sz ;
+        verify_noerr( GetDataSize( inPartCode , inTag , &sz ) ) ;
+        return sz ;
+    }
+    template <typename T> OSStatus SetData( ControlPartCode inPartCode , ResType inTag , T *data )
+    {
+        return SetData( inPartCode , inTag , sizeof( T ) , data ) ;
+    }
+    template <typename T> OSStatus SetData( ControlPartCode inPartCode , ResType inTag , T data )
+    {
+        return SetData( inPartCode , inTag , sizeof( T ) , &data ) ;
+    }
+    template <typename T> OSStatus GetData( ControlPartCode inPartCode , ResType inTag , T *data )
+    {
+        Size dummy ;
+        return GetData( inPartCode , inTag , sizeof( T ) , data , &dummy ) ;
+    }
+    template <typename T> T GetData( ControlPartCode inPartCode , ResType inTag )
+    {
+        T value ;
+        verify_noerr( GetData<T>( inPartCode , inTag , &value ) ) ;
+        return value ;
+    }
+    operator ControlRef () { return m_controlRef; }   
+    operator ControlRef * () { return &m_controlRef; }   
+protected :
+    ControlRef m_controlRef ;
 } ;
 
 #endif // wxUSE_GUI
