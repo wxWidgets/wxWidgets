@@ -591,6 +591,36 @@ provided by the makers of the ActiveX control that you are using.
 
 
 
+
+PNG Images
+----------
+
+Prior to 2.5 the PNG image handler would convert all alpha channel
+information to a mask when the image was loaded.  Pixels that were
+more than halfway transparent would be made fully transparent by the
+mask and the rest would be made fully opaque.
+
+In 2.5 the image handler has been updated to preserve the alpha
+channel and will now only create a mask when all the pixels in the
+image are either fully transparent or fully opaque.  In addition, the
+wx.DC.DrawBitmap and wx.DC.Blit methods are able to correctly blend
+the pixels in the image with partially transparent alpha values.
+(Currently only on MSW and Mac, if anybody knows how to do it for GTK
+then please submit a patch!)
+
+If you are using a PNG with an alpha channel but you need to have a
+wx.Mask like you automatically got in 2.4 then you can do one of the
+following:
+
+    * Edit the image and make all the partially transparent pixels be
+      fully transparent.
+
+    * Use a different image type.
+
+    * Set a mask based on colour after you load the image.
+
+
+
 OGL is dead! LONG LIVE OGL!
 ---------------------------
 
