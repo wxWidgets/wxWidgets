@@ -72,7 +72,7 @@ MyFrame::MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h)
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, "E&xit");
 
-  file_menu->Check(VALIDATE_SILENT, wxValidator::IsSilent());
+  file_menu->Check(VALIDATE_SILENT, !wxValidator::IsSilent());
 
   wxMenuBar *menu_bar = new wxMenuBar;
   menu_bar->Append(file_menu, "File");
