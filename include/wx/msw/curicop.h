@@ -58,6 +58,6 @@ struct tagICONFILERES {
 
 typedef struct tagICONFILERES ICONFILERES;
 
-HANDLE ReadIcon( char *szFileName, int *W = 0, int *H = 0);
+HANDLE ReadIcon( wxChar *szFileName, int *W = 0, int *H = 0);
 HICON  MakeIcon( HANDLE hDIB, HINSTANCE hInst);
 
