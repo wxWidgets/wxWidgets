@@ -181,6 +181,7 @@ void wxHtmlWindow::Init()
 #endif // wxUSE_CLIPBOARD
     m_backBuffer = NULL;
     m_eraseBgInOnPaint = false;
+    m_tmpSelFromCell = NULL;
 }
 
 bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
@@ -270,6 +271,9 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     wxString newsrc(source);
 
     wxDELETE(m_selection);
+
+    // we will soon delete all the cells, so clear pointers to them:
+    m_tmpSelFromCell = NULL;
 
     // pass HTML through registered processors:
     if (m_Processors || m_GlobalProcessors)
