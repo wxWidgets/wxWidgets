@@ -33,6 +33,11 @@
   #define max(a, b)   (((a) > (b)) ? (a) : (b))
 #endif
 
+// we cast the value to long from which we cast it to void * in IndexForInsert:
+// this can't work if the pointers are not big enough
+wxCOMPILE_TIME_ASSERT( sizeof(long) <= sizeof(void *),
+                       wxArraySizeOfPtrLessSizeOfLong ); // < 32 symbols
+
 // ============================================================================
 // constants
 // ============================================================================
@@ -219,7 +224,8 @@ size_t name::IndexForInsert(T lItem, CMPFUNC fnCompare) const               \
   while ( lo < hi ) {                                                       \
     i = (lo + hi)/2;                                                        \
                                                                             \
-    res = (*fnCompare)((const void *)lItem, (const void *)(m_pItems[i]));   \
+    res = (*fnCompare)((const void *)(long)lItem,                           \
+                       (const void *)(long)(m_pItems[i]));                  \
     if ( res < 0 )                                                          \
       hi = i;                                                               \
     else if ( res > 0 )                                                     \
