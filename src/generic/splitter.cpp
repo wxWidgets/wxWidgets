@@ -36,6 +36,10 @@
     #include "wx/settings.h"
 #endif
 
+#ifdef __WXMAC__
+    #include "wx/mac/private.h"
+#endif
+
 #include "wx/renderer.h"
 
 #include "wx/splitter.h"
