@@ -1244,86 +1244,99 @@ enum wxBorder
 // standard IDs
 // ----------------------------------------------------------------------------
 
+// any id: means that we don't care about the id, whether when installing an
+// event handler or when creating a new window
+enum
+{
+    wxID_ANY = -1
+};
+
 // id for a separator line in the menu (invalid for normal item)
-#define wxID_SEPARATOR (-1)
+enum
+{
+    wxID_SEPARATOR = -1
+};
 
 // Standard menu IDs
-#define wxID_LOWEST             4999
+enum
+{
+    wxID_LOWEST = 4999,
 
-#define wxID_OPEN               5000
-#define wxID_CLOSE              5001
-#define wxID_NEW                5002
-#define wxID_SAVE               5003
-#define wxID_SAVEAS             5004
-#define wxID_REVERT             5005
-#define wxID_EXIT               5006
-#define wxID_UNDO               5007
-#define wxID_REDO               5008
-#define wxID_HELP               5009
-#define wxID_PRINT              5010
-#define wxID_PRINT_SETUP        5011
-#define wxID_PREVIEW            5012
-#define wxID_ABOUT              5013
-#define wxID_HELP_CONTENTS      5014
-#define wxID_HELP_COMMANDS      5015
-#define wxID_HELP_PROCEDURES    5016
-#define wxID_HELP_CONTEXT       5017
-#define wxID_CLOSE_ALL          5018
+    wxID_OPEN,
+    wxID_CLOSE,
+    wxID_NEW,
+    wxID_SAVE,
+    wxID_SAVEAS,
+    wxID_REVERT,
+    wxID_EXIT,
+    wxID_UNDO,
+    wxID_REDO,
+    wxID_HELP,
+    wxID_PRINT,
+    wxID_PRINT_SETUP,
+    wxID_PREVIEW,
+    wxID_ABOUT,
+    wxID_HELP_CONTENTS,
+    wxID_HELP_COMMANDS,
+    wxID_HELP_PROCEDURES,
+    wxID_HELP_CONTEXT,
+    wxID_CLOSE_ALL,
 
-#define wxID_CUT                5030
-#define wxID_COPY               5031
-#define wxID_PASTE              5032
-#define wxID_CLEAR              5033
-#define wxID_FIND               5034
-#define wxID_DUPLICATE          5035
-#define wxID_SELECTALL          5036
+    wxID_CUT = 5030,
+    wxID_COPY,
+    wxID_PASTE,
+    wxID_CLEAR,
+    wxID_FIND,
+    wxID_DUPLICATE,
+    wxID_SELECTALL,
 
-#define wxID_FILE1              5050
-#define wxID_FILE2              5051
-#define wxID_FILE3              5052
-#define wxID_FILE4              5053
-#define wxID_FILE5              5054
-#define wxID_FILE6              5055
-#define wxID_FILE7              5056
-#define wxID_FILE8              5057
-#define wxID_FILE9              5058
+    wxID_FILE1 = 5050,
+    wxID_FILE2,
+    wxID_FILE3,
+    wxID_FILE4,
+    wxID_FILE5,
+    wxID_FILE6,
+    wxID_FILE7,
+    wxID_FILE8,
+    wxID_FILE9,
 
-// Standard button IDs
-#define wxID_OK                 5100
-#define wxID_CANCEL             5101
-#define wxID_APPLY              5102
-#define wxID_YES                5103
-#define wxID_NO                 5104
-#define wxID_STATIC             5105
-#define wxID_FORWARD            5106
-#define wxID_BACKWARD           5107
-#define wxID_DEFAULT            5108
-#define wxID_MORE               5109
-#define wxID_SETUP              5110
-#define wxID_RESET              5111
-#define wxID_CONTEXT_HELP       5112
-#define wxID_YESTOALL           5113
-#define wxID_NOTOALL            5114
-#define wxID_ABORT              5115
-#define wxID_RETRY              5116
-#define wxID_IGNORE             5117
+    // Standard button IDs
+    wxID_OK = 5100,
+    wxID_CANCEL,
+    wxID_APPLY,
+    wxID_YES,
+    wxID_NO,
+    wxID_STATIC,
+    wxID_FORWARD,
+    wxID_BACKWARD,
+    wxID_DEFAULT,
+    wxID_MORE,
+    wxID_SETUP,
+    wxID_RESET,
+    wxID_CONTEXT_HELP,
+    wxID_YESTOALL,
+    wxID_NOTOALL,
+    wxID_ABORT,
+    wxID_RETRY,
+    wxID_IGNORE,
 
-// System menu IDs (used by wxUniv):
-#define wxID_SYSTEM_MENU        5200
-#define wxID_CLOSE_FRAME        5201
-#define wxID_MOVE_FRAME         5202
-#define wxID_RESIZE_FRAME       5203
-#define wxID_MAXIMIZE_FRAME     5204
-#define wxID_ICONIZE_FRAME      5205
-#define wxID_RESTORE_FRAME      5206
+    // System menu IDs (used by wxUniv):
+    wxID_SYSTEM_MENU = 5200,
+    wxID_CLOSE_FRAME,
+    wxID_MOVE_FRAME,
+    wxID_RESIZE_FRAME,
+    wxID_MAXIMIZE_FRAME,
+    wxID_ICONIZE_FRAME,
+    wxID_RESTORE_FRAME,
 
-// IDs used by generic file dialog (13 consecutive starting from this value)
-#define wxID_FILEDLGG           5900
+    // IDs used by generic file dialog (13 consecutive starting from this value)
+    wxID_FILEDLGG = 5900,
 
-#define wxID_HIGHEST            5999
+    wxID_HIGHEST = 5999
+};
 
 // ----------------------------------------------------------------------------
-// constants
+// other constants
 // ----------------------------------------------------------------------------
 
 // menu and toolbar item kinds
@@ -1384,60 +1397,62 @@ enum wxHitTest
 // GDI descriptions
 // ----------------------------------------------------------------------------
 
-enum {
-// Text font families
-  wxDEFAULT    = 70,
-  wxDECORATIVE,
-  wxROMAN,
-  wxSCRIPT,
-  wxSWISS,
-  wxMODERN,
-  wxTELETYPE,  /* @@@@ */
+enum
+{
+    // Text font families
+    wxDEFAULT    = 70,
+    wxDECORATIVE,
+    wxROMAN,
+    wxSCRIPT,
+    wxSWISS,
+    wxMODERN,
+    wxTELETYPE,  /* @@@@ */
 
-// Proportional or Fixed width fonts (not yet used)
-  wxVARIABLE   = 80,
-  wxFIXED,
+    // Proportional or Fixed width fonts (not yet used)
+    wxVARIABLE   = 80,
+    wxFIXED,
 
-  wxNORMAL     = 90,
-  wxLIGHT,
-  wxBOLD,
-// Also wxNORMAL for normal (non-italic text)
-  wxITALIC,
-  wxSLANT,
+    wxNORMAL     = 90,
+    wxLIGHT,
+    wxBOLD,
+    // Also wxNORMAL for normal (non-italic text)
+    wxITALIC,
+    wxSLANT,
 
-// Pen styles
-  wxSOLID      =   100,
-  wxDOT,
-  wxLONG_DASH,
-  wxSHORT_DASH,
-  wxDOT_DASH,
-  wxUSER_DASH,
+    // Pen styles
+    wxSOLID      =   100,
+    wxDOT,
+    wxLONG_DASH,
+    wxSHORT_DASH,
+    wxDOT_DASH,
+    wxUSER_DASH,
 
-  wxTRANSPARENT,
+    wxTRANSPARENT,
 
-// Brush & Pen Stippling. Note that a stippled pen cannot be dashed!!
-// Note also that stippling a Pen IS meaningfull, because a Line is
-  wxSTIPPLE_MASK_OPAQUE, //mask is used for blitting monochrome using text fore and back ground colors
-  wxSTIPPLE_MASK,        //mask is used for masking areas in the stipple bitmap (TO DO)
-// drawn with a Pen, and without any Brush -- and it can be stippled.
-  wxSTIPPLE =          110,
-  wxBDIAGONAL_HATCH,
-  wxCROSSDIAG_HATCH,
-  wxFDIAGONAL_HATCH,
-  wxCROSS_HATCH,
-  wxHORIZONTAL_HATCH,
-  wxVERTICAL_HATCH,
-#define IS_HATCH(s)    ((s)>=wxBDIAGONAL_HATCH && (s)<=wxVERTICAL_HATCH)
+    // Brush & Pen Stippling. Note that a stippled pen cannot be dashed!!
+    // Note also that stippling a Pen IS meaningfull, because a Line is
+    wxSTIPPLE_MASK_OPAQUE, //mask is used for blitting monochrome using text fore and back ground colors
+    wxSTIPPLE_MASK,        //mask is used for masking areas in the stipple bitmap (TO DO)
+    // drawn with a Pen, and without any Brush -- and it can be stippled.
+    wxSTIPPLE =          110,
+    wxBDIAGONAL_HATCH,
+    wxCROSSDIAG_HATCH,
+    wxFDIAGONAL_HATCH,
+    wxCROSS_HATCH,
+    wxHORIZONTAL_HATCH,
+    wxVERTICAL_HATCH,
 
-  wxJOIN_BEVEL =     120,
-  wxJOIN_MITER,
-  wxJOIN_ROUND,
+    wxJOIN_BEVEL =     120,
+    wxJOIN_MITER,
+    wxJOIN_ROUND,
 
-  wxCAP_ROUND =      130,
-  wxCAP_PROJECTING,
-  wxCAP_BUTT
+    wxCAP_ROUND =      130,
+    wxCAP_PROJECTING,
+    wxCAP_BUTT
 };
 
+// VZ: why doesn't it start with "wx"? FIXME
+#define IS_HATCH(s)    ((s)>=wxBDIAGONAL_HATCH && (s)<=wxVERTICAL_HATCH)
 
 // Logical ops
 typedef enum
@@ -1460,19 +1475,28 @@ typedef enum
   wxSET,          wxROP_WHITE = wxSET,               wxBLIT_WHITENESS = wxSET           // 1
 } form_ops_t;
 
-/* Flood styles */
-#define  wxFLOOD_SURFACE   1
-#define  wxFLOOD_BORDER    2
+// Flood styles
+enum
+{
+    wxFLOOD_SURFACE = 1,
+    wxFLOOD_BORDER
+};
 
-/* Polygon filling mode */
-#define  wxODDEVEN_RULE    1
-#define  wxWINDING_RULE    2
+// Polygon filling mode
+enum
+{
+    wxODDEVEN_RULE = 1,
+    wxWINDING_RULE
+};
 
-/* ToolPanel in wxFrame */
-#define    wxTOOL_TOP       1
-#define    wxTOOL_BOTTOM       2
-#define    wxTOOL_LEFT       3
-#define    wxTOOL_RIGHT       4
+// ToolPanel in wxFrame (VZ: unused?)
+enum
+{
+    wxTOOL_TOP = 1,
+    wxTOOL_BOTTOM,
+    wxTOOL_LEFT,
+    wxTOOL_RIGHT
+};
 
 // the values of the format constants should be the same as correspondign
 // CF_XXX constants in Windows API
@@ -1500,135 +1524,137 @@ enum wxDataFormatId
     wxDF_MAX
 };
 
-/* Virtual keycodes */
-
+// Virtual keycodes
 enum wxKeyCode
 {
-  WXK_BACK    =    8,
-  WXK_TAB     =    9,
-  WXK_RETURN  =    13,
-  WXK_ESCAPE  =    27,
-  WXK_SPACE   =    32,
-  WXK_DELETE  =    127,
+    WXK_BACK    =    8,
+    WXK_TAB     =    9,
+    WXK_RETURN  =    13,
+    WXK_ESCAPE  =    27,
+    WXK_SPACE   =    32,
+    WXK_DELETE  =    127,
 
-  WXK_START   = 300,
-  WXK_LBUTTON,
-  WXK_RBUTTON,
-  WXK_CANCEL,
-  WXK_MBUTTON,
-  WXK_CLEAR,
-  WXK_SHIFT,
-  WXK_ALT,
-  WXK_CONTROL,
-  WXK_MENU,
-  WXK_PAUSE,
-  WXK_CAPITAL,
-  WXK_PRIOR,  // Page up
-  WXK_NEXT,   // Page down
-  WXK_END,
-  WXK_HOME,
-  WXK_LEFT,
-  WXK_UP,
-  WXK_RIGHT,
-  WXK_DOWN,
-  WXK_SELECT,
-  WXK_PRINT,
-  WXK_EXECUTE,
-  WXK_SNAPSHOT,
-  WXK_INSERT,
-  WXK_HELP,
-  WXK_NUMPAD0,
-  WXK_NUMPAD1,
-  WXK_NUMPAD2,
-  WXK_NUMPAD3,
-  WXK_NUMPAD4,
-  WXK_NUMPAD5,
-  WXK_NUMPAD6,
-  WXK_NUMPAD7,
-  WXK_NUMPAD8,
-  WXK_NUMPAD9,
-  WXK_MULTIPLY,
-  WXK_ADD,
-  WXK_SEPARATOR,
-  WXK_SUBTRACT,
-  WXK_DECIMAL,
-  WXK_DIVIDE,
-  WXK_F1,
-  WXK_F2,
-  WXK_F3,
-  WXK_F4,
-  WXK_F5,
-  WXK_F6,
-  WXK_F7,
-  WXK_F8,
-  WXK_F9,
-  WXK_F10,
-  WXK_F11,
-  WXK_F12,
-  WXK_F13,
-  WXK_F14,
-  WXK_F15,
-  WXK_F16,
-  WXK_F17,
-  WXK_F18,
-  WXK_F19,
-  WXK_F20,
-  WXK_F21,
-  WXK_F22,
-  WXK_F23,
-  WXK_F24,
-  WXK_NUMLOCK,
-  WXK_SCROLL,
-  WXK_PAGEUP,
-  WXK_PAGEDOWN,
+    WXK_START   = 300,
+    WXK_LBUTTON,
+    WXK_RBUTTON,
+    WXK_CANCEL,
+    WXK_MBUTTON,
+    WXK_CLEAR,
+    WXK_SHIFT,
+    WXK_ALT,
+    WXK_CONTROL,
+    WXK_MENU,
+    WXK_PAUSE,
+    WXK_CAPITAL,
+    WXK_PRIOR,  // Page up
+    WXK_NEXT,   // Page down
+    WXK_END,
+    WXK_HOME,
+    WXK_LEFT,
+    WXK_UP,
+    WXK_RIGHT,
+    WXK_DOWN,
+    WXK_SELECT,
+    WXK_PRINT,
+    WXK_EXECUTE,
+    WXK_SNAPSHOT,
+    WXK_INSERT,
+    WXK_HELP,
+    WXK_NUMPAD0,
+    WXK_NUMPAD1,
+    WXK_NUMPAD2,
+    WXK_NUMPAD3,
+    WXK_NUMPAD4,
+    WXK_NUMPAD5,
+    WXK_NUMPAD6,
+    WXK_NUMPAD7,
+    WXK_NUMPAD8,
+    WXK_NUMPAD9,
+    WXK_MULTIPLY,
+    WXK_ADD,
+    WXK_SEPARATOR,
+    WXK_SUBTRACT,
+    WXK_DECIMAL,
+    WXK_DIVIDE,
+    WXK_F1,
+    WXK_F2,
+    WXK_F3,
+    WXK_F4,
+    WXK_F5,
+    WXK_F6,
+    WXK_F7,
+    WXK_F8,
+    WXK_F9,
+    WXK_F10,
+    WXK_F11,
+    WXK_F12,
+    WXK_F13,
+    WXK_F14,
+    WXK_F15,
+    WXK_F16,
+    WXK_F17,
+    WXK_F18,
+    WXK_F19,
+    WXK_F20,
+    WXK_F21,
+    WXK_F22,
+    WXK_F23,
+    WXK_F24,
+    WXK_NUMLOCK,
+    WXK_SCROLL,
+    WXK_PAGEUP,
+    WXK_PAGEDOWN,
 
-  WXK_NUMPAD_SPACE,
-  WXK_NUMPAD_TAB,
-  WXK_NUMPAD_ENTER,
-  WXK_NUMPAD_F1,
-  WXK_NUMPAD_F2,
-  WXK_NUMPAD_F3,
-  WXK_NUMPAD_F4,
-  WXK_NUMPAD_HOME,
-  WXK_NUMPAD_LEFT,
-  WXK_NUMPAD_UP,
-  WXK_NUMPAD_RIGHT,
-  WXK_NUMPAD_DOWN,
-  WXK_NUMPAD_PRIOR,
-  WXK_NUMPAD_PAGEUP,
-  WXK_NUMPAD_NEXT,
-  WXK_NUMPAD_PAGEDOWN,
-  WXK_NUMPAD_END,
-  WXK_NUMPAD_BEGIN,
-  WXK_NUMPAD_INSERT,
-  WXK_NUMPAD_DELETE,
-  WXK_NUMPAD_EQUAL,
-  WXK_NUMPAD_MULTIPLY,
-  WXK_NUMPAD_ADD,
-  WXK_NUMPAD_SEPARATOR,
-  WXK_NUMPAD_SUBTRACT,
-  WXK_NUMPAD_DECIMAL,
-  WXK_NUMPAD_DIVIDE
+    WXK_NUMPAD_SPACE,
+    WXK_NUMPAD_TAB,
+    WXK_NUMPAD_ENTER,
+    WXK_NUMPAD_F1,
+    WXK_NUMPAD_F2,
+    WXK_NUMPAD_F3,
+    WXK_NUMPAD_F4,
+    WXK_NUMPAD_HOME,
+    WXK_NUMPAD_LEFT,
+    WXK_NUMPAD_UP,
+    WXK_NUMPAD_RIGHT,
+    WXK_NUMPAD_DOWN,
+    WXK_NUMPAD_PRIOR,
+    WXK_NUMPAD_PAGEUP,
+    WXK_NUMPAD_NEXT,
+    WXK_NUMPAD_PAGEDOWN,
+    WXK_NUMPAD_END,
+    WXK_NUMPAD_BEGIN,
+    WXK_NUMPAD_INSERT,
+    WXK_NUMPAD_DELETE,
+    WXK_NUMPAD_EQUAL,
+    WXK_NUMPAD_MULTIPLY,
+    WXK_NUMPAD_ADD,
+    WXK_NUMPAD_SEPARATOR,
+    WXK_NUMPAD_SUBTRACT,
+    WXK_NUMPAD_DECIMAL,
+    WXK_NUMPAD_DIVIDE
 };
 
-// Mapping modes (as per Windows)
-#define wxMM_TEXT             1
-#define wxMM_LOMETRIC         2
-#define wxMM_HIMETRIC         3
-#define wxMM_LOENGLISH        4
-#define wxMM_HIENGLISH        5
-#define wxMM_TWIPS            6
-#define wxMM_ISOTROPIC        7
-#define wxMM_ANISOTROPIC      8
-
-#define wxMM_POINTS           9
-#define wxMM_METRIC          10
+// Mapping modes (same values as used by Windows, don't change)
+enum
+{
+    wxMM_TEXT = 1,
+    wxMM_LOMETRIC,
+    wxMM_HIMETRIC,
+    wxMM_LOENGLISH,
+    wxMM_HIENGLISH,
+    wxMM_TWIPS,
+    wxMM_ISOTROPIC,
+    wxMM_ANISOTROPIC,
+    wxMM_POINTS,
+    wxMM_METRIC,
+};
 
 /* Shortcut for easier dialog-unit-to-pixel conversion */
 #define wxDLG_UNIT(parent, pt) parent->ConvertDialogToPixels(pt)
 
 /* Paper types */
-typedef enum {
+typedef enum
+{
     wxPAPER_NONE,               // Use specific dimensions
     wxPAPER_LETTER,             // Letter, 8 1/2 by 11 inches
     wxPAPER_LEGAL,              // Legal, 8 1/2 by 14 inches
@@ -1698,7 +1724,7 @@ typedef enum {
     wxPAPER_A3_TRANSVERSE,      // A3 Transverse 297 x 420 mm
     wxPAPER_A3_EXTRA_TRANSVERSE // A3 Extra Transverse 322 x 445 mm
 
-} wxPaperSize ;
+} wxPaperSize;
 
 /* Printing orientation */
 #ifndef wxPORTRAIT
@@ -1709,11 +1735,12 @@ typedef enum {
 /* Duplex printing modes
  */
 
-typedef enum {
+enum wxDuplexMode
+{
     wxDUPLEX_SIMPLEX, // Non-duplex
     wxDUPLEX_HORIZONTAL,
     wxDUPLEX_VERTICAL
-} wxDuplexMode;
+};
 
 /* Print quality.
  */
@@ -1728,12 +1755,13 @@ typedef int wxPrintQuality;
 /* Print mode (currently PostScript only)
  */
 
-typedef enum {
+enum wxPrintMode
+{
     wxPRINT_MODE_NONE =    0,
     wxPRINT_MODE_PREVIEW = 1,   // Preview in external application
     wxPRINT_MODE_FILE =    2,   // Print to file
     wxPRINT_MODE_PRINTER = 3    // Send to printer
-} wxPrintMode;
+};
 
 // ----------------------------------------------------------------------------
 // miscellaneous
