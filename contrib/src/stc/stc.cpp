@@ -178,6 +178,8 @@ void wxStyledTextCtrl::Create(wxWindow *parent,
     SetCodePage(wxSTC_CP_UTF8);
 #endif
 
+    // Reduces flicker on GTK+/X11
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
     SetBestFittingSize(size);
 }
 
