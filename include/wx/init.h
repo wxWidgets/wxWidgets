@@ -44,6 +44,13 @@ extern void WXDLLIMPEXP_BASE wxEntryCleanup();
 // returns the program exit code
 extern int WXDLLIMPEXP_BASE wxEntry(int& argc, wxChar **argv);
 
+// we overload wxEntry[Start]() to take "char **" pointers too
+#if wxUSE_UNICODE
+
+extern bool wxEntryStart(int& argc, char **argv);
+extern int wxEntry(int& argc, char **argv);
+
+#endif// wxUSE_UNICODE
 
 // ----------------------------------------------------------------------------
 // Using the library without (explicit) application object: you may avoid using
