@@ -59,7 +59,7 @@ public:
    virtual bool OS2OnDraw(WXDRAWITEMSTRUCT *WXUNUSED(item)) { return FALSE; };
    virtual bool OS2OnMeasure(WXMEASUREITEMSTRUCT *WXUNUSED(item)) { return FALSE; };
 
-   wxList& GetSubcontrols() { return m_subControls; }
+   wxArrayLong& GetSubcontrols() { return m_subControls; }
 
    void OnEraseBackground(wxEraseEvent& event);
 
