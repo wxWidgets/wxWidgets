@@ -208,21 +208,21 @@ void MyFrame::OnQuit(wxCommandEvent&)
 
 void MyFrame::OnAbout(wxCommandEvent&)
 {
-  wxMessageBox("wxConfig demo\n© Vadim Zeitlin 1998", "About",
+  wxMessageBox(_T("wxConfig demo\n© Vadim Zeitlin 1998"), _T("About"),
                wxICON_INFORMATION | wxOK);
 }
 
 void MyFrame::OnDelete(wxCommandEvent&)
 {
     if ( wxConfigBase::Get()->DeleteAll() ) {
-        wxLogMessage("Config file/registry key successfully deleted.");
+        wxLogMessage(_T("Config file/registry key successfully deleted."));
 
         delete wxConfigBase::Set((wxConfigBase *) NULL);
         wxConfigBase::DontCreateOnDemand();
     }
     else
     {
-        wxLogError("Deleting config file/registry key failed.");
+        wxLogError(_T("Deleting config file/registry key failed."));
     }
 }
 
