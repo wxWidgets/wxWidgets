@@ -32,6 +32,7 @@ a reference to your application object) to be visible to other files.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxApp::wxApp}
 
 \func{void}{wxApp}{\void}
@@ -321,12 +322,16 @@ Return {\tt true} to continue normal execution or {\tt false} to return
 
 \membersection{wxApp::OnExit}\label{wxapponexit}
 
-\func{int}{OnExit}{\void}
+\func{virtual int}{OnExit}{\void}
 
-Provide this member function for any processing which needs to be
+Override this member function for any processing which needs to be
 done as the application is about to exit. OnExit is called after
 destroying all application windows and controls, but before
-wxWindows cleanup.
+wxWindows cleanup. Note that it is not called at all if 
+\helpref{OnInit}{wxapponinit} failed.
+
+The return value of this function is currently ignored, return the same value
+as returned by the base class method if you override it.
 
 
 \membersection{wxApp::OnFatalException}\label{wxapponfatalexception}
@@ -404,13 +409,16 @@ work and, in fact, probably won't.
 
 This must be provided by the application, and will usually create the
 application's main window, optionally calling 
-\helpref{wxApp::SetTopWindow}{wxappsettopwindow}.
+\helpref{wxApp::SetTopWindow}{wxappsettopwindow}. You may use 
+\helpref{OnExit}{wxapponexit} to clean up anything initialized here, provided
+that the function returns \true.
 
 Notice that if you want to to use the command line processing provided by
 wxWindows you have to call the base class version in the derived class
 OnInit().
 
-Return true to continue processing, false to exit the application.
+Return \true to continue processing, \false to exit the application
+immediately.
 
 
 \membersection{wxApp::OnInitCmdLine}\label{wxapponinitcmdline}
@@ -456,6 +464,7 @@ Under Windows, OnQueryEndSession is called in response to the WM\_QUERYENDSESSIO
 \helpref{wxWindow::Close}{wxwindowclose},\rtfsp
 \helpref{wxCloseEvent}{wxcloseevent}\rtfsp
 
+
 \membersection{wxApp::OnRun}\label{wxapponrun}
 
 \func{virtual int}{OnRun}{\void}
@@ -468,6 +477,10 @@ the last frame has been deleted and
 \helpref{GetExitOnFrameDelete}{wxappgetexitonframedelete} flag is \true (this
 is the default).
 
+The return value of this function becomes the exit code of the program, so it
+should return $0$ in case of successful termination.
+
+
 \membersection{wxApp::OnUnhandledException}\label{wxapponunhandledexception}
 
 \func{virtual void}{OnUnhandledException}{\void}
@@ -478,6 +491,7 @@ startup and shutdown might not be caught at all).
 Note that the exception type is lost by now, so if you want to really handle
 the exception you should override \helpref{OnRun()}{wxapponrun} and put a
 try/catch clause around the call to the base class version there.
+
 
 \membersection{wxApp::ProcessMessage}\label{wxappprocessmessage}
 
