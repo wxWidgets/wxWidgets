@@ -28,6 +28,7 @@
     #include "wx/app.h"
 #endif //WX_PRECOMP
 
+#import <AppKit/NSView.h>
 #import <AppKit/NSWindow.h>
 // ----------------------------------------------------------------------------
 // globals
@@ -93,7 +94,12 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
 
 wxTopLevelWindowCocoa::~wxTopLevelWindowCocoa()
 {
+    // Hand ownership of the content view to wxWindow so it can destroy
+    // itself properly.
+    NSView *view = [m_cocoaNSView retain];
     SetNSWindow(NULL);
+    SetNSView(view);
+    [view release];
 }
 
 // ----------------------------------------------------------------------------
@@ -104,8 +110,7 @@ void wxTopLevelWindowCocoa::SetNSWindow(WX_NSWindow cocoaNSWindow)
 {
     bool need_debug = cocoaNSWindow || m_cocoaNSWindow;
     if(need_debug) wxLogDebug("wxTopLevelWindowCocoa=%p::SetNSWindow [m_cocoaNSWindow=%p retainCount]=%d",this,m_cocoaNSWindow,[m_cocoaNSWindow retainCount]);
-    if(m_cocoaNSWindow)
-        DisassociateNSWindow(m_cocoaNSWindow);
+    DisassociateNSWindow(m_cocoaNSWindow);
     [cocoaNSWindow retain];
     [m_cocoaNSWindow release];
     m_cocoaNSWindow = cocoaNSWindow;
@@ -113,8 +118,7 @@ void wxTopLevelWindowCocoa::SetNSWindow(WX_NSWindow cocoaNSWindow)
         SetNSView([m_cocoaNSWindow contentView]);
     else
         SetNSView(NULL);
-    if(m_cocoaNSWindow)
-        AssociateNSWindow(m_cocoaNSWindow);
+    AssociateNSWindow(m_cocoaNSWindow);
     if(need_debug) wxLogDebug("wxTopLevelWindowCocoa=%p::SetNSWindow [cocoaNSWindow=%p retainCount]=%d",this,cocoaNSWindow,[cocoaNSWindow retainCount]);
 }
 
