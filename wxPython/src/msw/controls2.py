@@ -645,7 +645,7 @@ class wxListCtrlPtr(wxControlPtr):
         return "<%s.%s instance; proxy of C++ wxListCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     
     def GetColumn(self, *_args, **_kwargs):
-        val = ontrols2c.wxListCtrl_GetColumn(self, *_args, **_kwargs)
+        val = controls2c.wxListCtrl_GetColumn(self, *_args, **_kwargs)
         if val is not None: val.thisown = 1
         return val
     
