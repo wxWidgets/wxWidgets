@@ -253,22 +253,6 @@ bool wxApp::Initialize(
   #endif //wxUSE_CONSOLEDEBUG
 #endif
 
-    //
-    // OS2 has to have an anchorblock
-    //
-    vHab = WinInitialize(0);
-
-    if (!vHab)
-        return FALSE;
-    else
-        vHabmain = vHab;
-
-    // Some people may wish to use this, but
-    // probably it shouldn't be here by default.
-#ifdef __WXDEBUG__
-    //    wxRedirectIOToConsole();
-#endif
-
     wxBuffer = new wxChar[1500]; // FIXME; why?
 
     wxClassInfo::InitializeClasses();
@@ -289,7 +273,22 @@ bool wxApp::Initialize(
 
     wxBitmap::InitStandardHandlers();
 
-    RegisterWindowClasses(vHab);
+    //
+    // OS2 has to have an anchorblock
+    //
+    vHab = WinInitialize(0);
+
+    if (!vHab)
+        return FALSE;
+    else
+        vHabmain = vHab;
+
+    // Some people may wish to use this, but
+    // probably it shouldn't be here by default.
+#ifdef __WXDEBUG__
+    //    wxRedirectIOToConsole();
+#endif
+
     wxWinHandleList = new wxList(wxKEY_INTEGER);
 
     // This is to foil optimizations in Visual C++ that throw out dummy.obj.
@@ -304,6 +303,7 @@ bool wxApp::Initialize(
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules())
         return FALSE;
+    RegisterWindowClasses(vHab);
     return TRUE;
 } // end of wxApp::Initialize
 
@@ -413,7 +413,7 @@ bool wxApp::RegisterWindowClasses(
     if (!::WinRegisterClass( vHab
                             ,wxCanvasClassName
                             ,wxWndProc
-                            ,CS_SIZEREDRAW | CS_HITTEST | CS_SYNCPAINT | CS_CLIPCHILDREN
+                            ,CS_SIZEREDRAW | CS_HITTEST | CS_SYNCPAINT
                             ,sizeof(ULONG)
                            ))
     {
@@ -900,6 +900,16 @@ bool wxApp::ProcessMessage(
     //
     if (pMsg->msg == WM_TIMER)
         wxTimerProc(NULL, 0, (int)pMsg->mp1, 0);
+
+    //
+    // Allow the window to prevent certain messages from being
+    // translated/processed (this is currently used by wxTextCtrl to always
+    // grab Ctrl-C/V/X, even if they are also accelerators in some parent)
+    //
+    if (pWndThis && !pWndThis->OS2ShouldPreProcessMessage(pWxmsg))
+    {
+        return FALSE;
+    }
 
     //
     // For some composite controls (like a combobox), wndThis might be NULL

@@ -368,7 +368,7 @@ bool wxFontRefData::Alloc(
     {
         wxFillLogFont( &m_vNativeFontInfo.fa
                       ,&m_vNativeFontInfo.fn
-                      ,m_hPS
+                      ,&m_hPS
                       ,&flId
                       ,sFaceName
                       ,pFont
@@ -424,6 +424,8 @@ bool wxFontRefData::Alloc(
     else if (strcmp(m_vNativeFontInfo.fa.szFacename, "Script") == 0)
         m_nFamily = wxSCRIPT;
     else if (strcmp(m_vNativeFontInfo.fa.szFacename, "Courier New") == 0)
+        m_nFamily = wxMODERN;
+    else if (strcmp(m_vNativeFontInfo.fa.szFacename, "Courier") == 0)
         m_nFamily = wxMODERN;
     else
         m_nFamily = wxSWISS;

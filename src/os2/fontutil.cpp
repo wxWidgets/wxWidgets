@@ -261,7 +261,7 @@ bool wxTestFontEncoding(
 void wxFillLogFont(
   LOGFONT*                          pFattrs  // OS2 GPI FATTRS
 , PFACENAMEDESC                     pFaceName
-, HPS                               hPS
+, HPS*                              phPS
 , long*                             pflId
 , wxString&                         sFaceName
 , wxFont*                           pFont
@@ -269,7 +269,7 @@ void wxFillLogFont(
 {
     LONG                            lNumFonts = 0L;       // For system font count
     ERRORID                         vError;               // For logging API errors
-    LONG                            lTemp;
+    LONG                            lTemp = 0L;
     bool                            bInternalPS = FALSE;  // if we have to create one
     PFONTMETRICS                    pFM = NULL;
 
@@ -277,22 +277,30 @@ void wxFillLogFont(
     // Initial house cleaning to free data buffers and ensure we have a
     // functional PS to work with
     //
-    if (!hPS)
+    if (!*phPS)
     {
-        hPS = ::WinGetPS(HWND_DESKTOP);
+        *phPS = ::WinGetPS(HWND_DESKTOP);
         bInternalPS = TRUE;
     }
 
     //
     // Determine the number of fonts.
     //
-    lNumFonts = ::GpiQueryFonts( hPS
-                                ,QF_PUBLIC
-                                ,NULL
-                                ,&lTemp
-                                ,(LONG) sizeof(FONTMETRICS)
-                                ,NULL
-                               );
+    if((lNumFonts = ::GpiQueryFonts( *phPS
+                                    ,QF_PUBLIC
+                                    ,NULL
+                                    ,&lTemp
+                                    ,(LONG) sizeof(FONTMETRICS)
+                                    ,NULL
+                                   )) < 0L)
+    {
+        ERRORID                     vError;
+        wxString                    sError;
+
+        vError = ::WinGetLastError(wxGetInstance());
+        sError = wxPMErrorToStr(vError);
+        return;
+    }
 
     //
     // Allocate space for the font metrics.
@@ -303,7 +311,7 @@ void wxFillLogFont(
     // Retrieve the font metrics.
     //
     lTemp = lNumFonts;
-    lTemp = ::GpiQueryFonts( hPS
+    lTemp = ::GpiQueryFonts( *phPS
                             ,QF_PUBLIC
                             ,NULL
                             ,&lTemp
@@ -355,7 +363,7 @@ void wxFillLogFont(
     // We should now have the correct FATTRS set with the selected
     // font, so now we need to generate an ID
     //
-    long                            lNumLids = ::GpiQueryNumberSetIds(hPS);
+    long                            lNumLids = ::GpiQueryNumberSetIds(*phPS);
     long                            lGpiError;
 
     if(lNumLids )
@@ -364,7 +372,7 @@ void wxFillLogFont(
         STR8                        azNames[255];
         long                        alIds[255];
 
-        if(!::GpiQuerySetIds( hPS
+        if(!::GpiQuerySetIds( *phPS
                              ,lNumLids
                              ,alTypes
                              ,azNames
@@ -372,7 +380,7 @@ void wxFillLogFont(
                             ))
         {
             if (bInternalPS)
-                ::WinReleasePS(hPS);
+                ::WinReleasePS(*phPS);
             return;
         }
 
@@ -382,16 +390,17 @@ void wxFillLogFont(
         if(*pflId > 254)  // wow, no id available!
         {
             if (bInternalPS)
-               ::WinReleasePS(hPS);
+               ::WinReleasePS(*phPS);
            return;
         }
     }
-
+    else
+        *pflId = 1L;
     //
     // Release and delete the current font
     //
-    ::GpiSetCharSet(hPS, LCID_DEFAULT);/* release the font before deleting */
-    ::GpiDeleteSetId(hPS, 1L);         /* delete the logical font          */
+    ::GpiSetCharSet(*phPS, LCID_DEFAULT);/* release the font before deleting */
+    ::GpiDeleteSetId(*phPS, 1L);         /* delete the logical font          */
 
     //
     // Now build a facestring
@@ -400,7 +409,7 @@ void wxFillLogFont(
 
     strcpy(zFacename, pFattrs->szFacename);
 
-    if(::GpiQueryFaceString( hPS
+    if(::GpiQueryFaceString( *phPS
                             ,zFacename
                             ,pFaceName
                             ,FACESIZE

@@ -965,6 +965,13 @@ WXHBRUSH wxTextCtrl::OnCtlColor(
     return (WXHBRUSH)pBackgroundBrush->GetResourceHandle();
 } // end of wxTextCtrl::OnCtlColor
 
+bool wxTextCtrl::OS2ShouldPreProcessMessage(
+  WXMSG*                            pMsg
+)
+{
+    return wxControl::OS2ShouldPreProcessMessage(pMsg);
+} // end of wxTextCtrl::OS2ShouldPreProcessMessage
+
 void wxTextCtrl::OnChar(
   wxKeyEvent&                       rEvent
 )

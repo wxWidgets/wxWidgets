@@ -248,6 +248,26 @@ wxStatusBar* wxFrame::OnCreateStatusBar(
     if( !pStatusBar )
         return NULL;
 
+    wxClientDC                      vDC(pStatusBar);
+    int                             nY;
+
+    //
+    // Set the height according to the font and the border size
+    //
+    vDC.SetFont(pStatusBar->GetFont()); // Screws up the menues for some reason
+    vDC.GetTextExtent( "X"
+                      ,NULL
+                      ,&nY
+                     );
+
+    int                             nHeight = ((11 * nY) / 10 + 2 * pStatusBar->GetBorderY());
+
+    pStatusBar->SetSize( -1
+                        ,-1
+                        ,-1
+                        ,nHeight
+                       );
+
     ::WinSetParent( pStatusBar->GetHWND()
                    ,m_hFrame
                    ,FALSE

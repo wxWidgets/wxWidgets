@@ -12321,8 +12321,8 @@ EXPORTS
       wxGetNativeFontEncoding__F14wxFontEncodingP20wxNativeEncodingInfo
       ;wxOS2SelectMatchingFontByName(_FATTRS*,_FACENAMEDESC*,_FONTMETRICS*,int,const wxFont*)
       wxOS2SelectMatchingFontByName__FP7_FATTRSP13_FACENAMEDESCP12_FONTMETRICSiPC6wxFont
-      ;wxFillLogFont(_FATTRS*,_FACENAMEDESC*,unsigned long,long*,wxString&,wxFont*)
-      wxFillLogFont__FP7_FATTRSP13_FACENAMEDESCUlPlR8wxStringP6wxFont
+      ;wxFillLogFont(_FATTRS*,_FACENAMEDESC*,unsigned long*,long*,wxString&,wxFont*)
+      wxFillLogFont__FP7_FATTRSP13_FACENAMEDESCPUlPlR8wxStringP6wxFont
       ;wxGpiStrcmp(char*,char*)
       wxGpiStrcmp__FPcT1
       ;wxNativeEncodingInfo::FromString(const wxString&)
@@ -14019,6 +14019,8 @@ EXPORTS
       Cut__10wxTextCtrlFv
       ;wxTextCtrl::SetInsertionPointEnd()
       SetInsertionPointEnd__10wxTextCtrlFv
+      ;wxTextCtrl::OS2ShouldPreProcessMessage(void**)
+      OS2ShouldPreProcessMessage__10wxTextCtrlFPPv
       ;wxTextCtrl::DiscardEdits()
       DiscardEdits__10wxTextCtrlFv
       ;wxTextCtrl::CanUndo() const
@@ -14650,6 +14652,8 @@ EXPORTS
       OS2WindowProc__8wxWindowFUiPvT2
       ;wxWindow::OS2TranslateMessage(void**)
       OS2TranslateMessage__8wxWindowFPPv
+      ;wxWindow::OS2ShouldPreProcessMessage(void**)
+      OS2ShouldPreProcessMessage__8wxWindowFPPv
       ;wxWindow::OS2DefWindowProc(unsigned int,void*,void*)
       OS2DefWindowProc__8wxWindowFUiPvT2
       ;wxWindow::HandleMinimize()

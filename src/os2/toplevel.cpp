@@ -351,7 +351,7 @@ bool wxTopLevelWindowOS2::CreateFrame(
     wxAssociateWinWithHandle(m_hWnd, this);
     wxAssociateWinWithHandle(m_hFrame, this);
 
-    m_backgroundColour.Set(wxString("GREY"));
+    m_backgroundColour.Set(wxString("DARK GREY"));
 
     LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
 
@@ -403,6 +403,14 @@ bool wxTopLevelWindowOS2::CreateFrame(
         wxLogError("Error sizing frame. Error: %s\n", sError);
         return FALSE;
     }
+    lStyle =  ::WinQueryWindowULong( m_hWnd
+                                    ,QWL_STYLE
+                                   );
+    lStyle |= WS_CLIPCHILDREN;
+    ::WinSetWindowULong( m_hWnd
+                        ,QWL_STYLE
+                        ,lStyle
+                       );
     return TRUE;
 } // end of wxTopLevelWindowOS2::CreateFrame
 
@@ -584,7 +592,7 @@ void wxTopLevelWindowOS2::DoShowWindow(
   int                               nShowCmd
 )
 {
-    ::WinShowWindow(m_hFrame, (BOOL)nShowCmd);
+    ::WinShowWindow(m_hFrame, (BOOL)(nShowCmd & SWP_SHOW));
     m_bIconized = nShowCmd == SWP_MINIMIZE;
 } // end of wxTopLevelWindowOS2::DoShowWindow
 
@@ -600,12 +608,12 @@ bool wxTopLevelWindowOS2::Show(
     {
         if (m_bMaximizeOnShow)
         {
-            nShowCmd = SWP_SHOW;
+            nShowCmd = SWP_MAXIMIZE;
             m_bMaximizeOnShow = FALSE;
         }
         else
         {
-            nShowCmd = SWP_HIDE;
+            nShowCmd = SWP_SHOW;
         }
     }
     else // hide

@@ -2265,6 +2265,14 @@ bool wxWindowOS2::OS2TranslateMessage(
 #endif //wxUSE_ACCEL
 } // end of wxWindowOS2::OS2TranslateMessage
 
+bool wxWindowOS2::OS2ShouldPreProcessMessage(
+  WXMSG*                            pMsg
+)
+{
+    // preprocess all messages by default
+    return TRUE;
+} // end of wxWindowOS2::OS2ShouldPreProcessMessage
+
 // ---------------------------------------------------------------------------
 // message params unpackers
 // ---------------------------------------------------------------------------
@@ -3138,6 +3146,13 @@ bool wxWindowOS2::HandleSetFocus(
   WXHWND                            WXUNUSED(hWnd)
 )
 {
+    //
+    // Notify the parent keeping track of focus for the kbd navigation
+    // purposes that we got it
+    //
+    wxChildFocusEvent               vEventFocus((wxWindow *)this);
+    (void)GetEventHandler()->ProcessEvent(vEventFocus);
+
 #if wxUSE_CARET
     //
     // Deal with caret
