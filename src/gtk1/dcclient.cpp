@@ -1379,7 +1379,6 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     {
         gdk_gc_set_foreground( m_textGC, m_textBackgroundColour.GetColor() );
         gdk_draw_rectangle( m_window, m_textGC, TRUE, x, y, width, height );
-        gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
     }
     gdk_draw_string( m_window, font, m_textGC, x, y + font->ascent, text.mbc_str() );
 #endif
@@ -1878,30 +1877,36 @@ void wxWindowDC::SetTextForeground( const wxColour &col )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
-    if (m_textForegroundColour == col) return;
+    // don't set m_textForegroundColour to an invalid colour as we'd crash
+    // later then (we use m_textForegroundColour.GetColor() without checking
+    // in a few places)
+    if ( !col.Ok() || (m_textForegroundColour == col) )
+        return;
 
     m_textForegroundColour = col;
-    if (!m_textForegroundColour.Ok()) return;
 
-    if (!m_window) return;
-
-    m_textForegroundColour.CalcPixel( m_cmap );
-    gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
+    if ( m_window )
+    {
+        m_textForegroundColour.CalcPixel( m_cmap );
+        gdk_gc_set_foreground( m_textGC, m_textForegroundColour.GetColor() );
+    }
 }
 
 void wxWindowDC::SetTextBackground( const wxColour &col )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
-    if (m_textBackgroundColour == col) return;
+    // same as above
+    if ( !col.Ok() || (m_textBackgroundColour == col) )
+        return;
 
     m_textBackgroundColour = col;
-    if (!m_textBackgroundColour.Ok()) return;
 
-    if (!m_window) return;
-
-    m_textBackgroundColour.CalcPixel( m_cmap );
-    gdk_gc_set_background( m_textGC, m_textBackgroundColour.GetColor() );
+    if ( m_window )
+    {
+        m_textBackgroundColour.CalcPixel( m_cmap );
+        gdk_gc_set_background( m_textGC, m_textBackgroundColour.GetColor() );
+    }
 }
 
 void wxWindowDC::SetBackgroundMode( int mode )
