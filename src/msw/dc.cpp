@@ -82,9 +82,86 @@ static const int MM_METRIC = 10;
 // convert degrees to radians
 static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+// instead of duplicating the same code which sets and then restores text
+// colours in each wxDC method working with wxSTIPPLE_MASK_OPAQUE brushes,
+// encapsulate this in a small helper class
+
+// wxColourChanger: changes the text colours in the ctor if required and
+//                  restores them in the dtor
+class wxColourChanger
+{
+public:
+    wxColourChanger(wxDC& dc);
+   ~wxColourChanger();
+
+private:
+    wxDC& m_dc;
+
+    COLORREF m_colFgOld, m_colBgOld;
+
+    bool m_changed;
+};
+
 // ===========================================================================
 // implementation
 // ===========================================================================
+
+// ----------------------------------------------------------------------------
+// wxColourChanger
+// ----------------------------------------------------------------------------
+
+wxColourChanger::wxColourChanger(wxDC& dc) : m_dc(dc)
+{
+    if ( dc.GetBrush().GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+    {
+        HDC hdc = GetHdcOf(dc);
+        m_colFgOld = ::GetTextColor(hdc);
+        m_colBgOld = ::GetBkColor(hdc);
+
+        // note that Windows convention is opposite to wxWindows one, this is
+        // why text colour becomes the background one and vice versa
+        const wxColour& colFg = dc.GetTextForeground();
+        if ( colFg.Ok() )
+        {
+            ::SetBkColor(hdc, colFg.GetPixel());
+        }
+
+        const wxColour& colBg = dc.GetTextBackground();
+        if ( colBg.Ok() )
+        {
+            ::SetTextColor(hdc, colBg.GetPixel());
+        }
+
+        SetBkMode(hdc,
+                  dc.GetBackgroundMode() == wxTRANSPARENT ? TRANSPARENT
+                                                          : OPAQUE);
+
+        // flag which telsl us to undo changes in the dtor
+        m_changed = TRUE;
+    }
+    else
+    {
+        // nothing done, nothing to undo
+        m_changed = FALSE;
+    }
+}
+
+wxColourChanger::~wxColourChanger()
+{
+    if ( m_changed )
+    {
+        // restore the colours we changed
+        HDC hdc = GetHdcOf(m_dc);
+
+        ::SetBkMode(hdc, TRANSPARENT);
+        ::SetTextColor(hdc, m_colFgOld);
+        ::SetBkColor(hdc, m_colBgOld);
+    }
+}
 
 // ---------------------------------------------------------------------------
 // wxDC
@@ -311,31 +388,12 @@ void wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
+    wxCHECK_MSG( col, FALSE, _T("NULL colour parameter in wxDC::GetPixel") );
+
     // get the color of the pixel
     COLORREF pixelcolor = ::GetPixel(GetHdc(), XLOG2DEV(x), YLOG2DEV(y));
 
-    // JACS: what was this for?
-#if 0
-    // get the color of the pen
-    COLORREF pencolor = 0x00ffffff;
-    if (m_pen.Ok())
-    {
-        pencolor = m_pen.GetColour().GetPixel();
-    }
-#endif
-
-    // return the color of the pixel
-    if( col )
-    {
-        col->Set(GetRValue(pixelcolor),
-                 GetGValue(pixelcolor),
-                 GetBValue(pixelcolor));
-    }
-
-    // check, if color of the pixels is the same as the color of the current
-    // pen and return TRUE if it is, FALSE otherwise
-    // JACS, 24/02/2000: can't understand the reason for this, so returning TRUE instead.
-    // return pixelcolor == pencolor;
+    wxRGBToColour(*col, pixelcolor);
 
     return TRUE;
 }
@@ -370,39 +428,23 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     CalcBoundingBox(x2, y2);
 }
 
-void wxDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2, wxCoord xc, wxCoord yc)
+// Draws an arc of a circle, centred on (xc, yc), with starting point (x1, y1)
+// and ending at (x2, y2)
+void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
+                     wxCoord x2, wxCoord y2,
+                     wxCoord xc, wxCoord yc)
 {
-    COLORREF colFgOld = 0,
-             colBgOld = 0;
+    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
-    if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
+    double dx = xc - x1;
+    double dy = yc - y1;
+    double radius = (double)sqrt(dx*dx+dy*dy);
+    wxCoord r = (wxCoord)radius;
+
+    // treat the special case of full circle separately
+    if ( x1 == x2 && y1 == y2 )
     {
-       colFgOld = ::GetTextColor(GetHdc());
-       colBgOld = ::GetBkColor(GetHdc());
-
-       if (m_textForegroundColour.Ok())
-       {   //just the oposite from what is expected see help on pattern brush
-           // 1 in mask becomes bk color
-           ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel() );
-       }
-       if (m_textBackgroundColour.Ok())
-       {   //just the oposite from what is expected
-           // 0 in mask becomes text color
-           ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel() );
-       }
-
-       if (m_backgroundMode == wxTRANSPARENT)
-           SetBkMode(GetHdc(), TRANSPARENT);
-       else
-           SetBkMode(GetHdc(), OPAQUE);
-    }
-
-    double dx = xc-x1;
-    double dy = yc-y1;
-    double radius = (double)sqrt(dx*dx+dy*dy) ;;
-    if (x1==x2 && x2==y2)
-    {
-        DrawEllipse(xc,yc,(wxCoord)(radius*2.0),(wxCoord)(radius*2.0));
+        DrawEllipse(xc - r, yc - r, 2*r, 2*r);
         return;
     }
 
@@ -414,35 +456,27 @@ void wxDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2, wxCoord xc, wx
     wxCoord yyc = YLOG2DEV(yc);
     wxCoord ray = (wxCoord) sqrt(double((xxc-xx1)*(xxc-xx1)+(yyc-yy1)*(yyc-yy1)));
 
-    (void)MoveToEx(GetHdc(), (int) xx1, (int) yy1, NULL);
     wxCoord xxx1 = (wxCoord) (xxc-ray);
     wxCoord yyy1 = (wxCoord) (yyc-ray);
     wxCoord xxx2 = (wxCoord) (xxc+ray);
     wxCoord yyy2 = (wxCoord) (yyc+ray);
-    if (m_brush.Ok() && m_brush.GetStyle() !=wxTRANSPARENT)
+
+    if ( m_brush.Ok() && m_brush.GetStyle() != wxTRANSPARENT )
     {
         // Have to add 1 to bottom-right corner of rectangle
         // to make semi-circles look right (crooked line otherwise).
         // Unfortunately this is not a reliable method, depends
         // on the size of shape.
         // TODO: figure out why this happens!
-        Pie(GetHdc(),xxx1,yyy1,xxx2+1,yyy2+1,
-            xx1,yy1,xx2,yy2);
+        Pie(GetHdc(),xxx1,yyy1,xxx2+1,yyy2+1, xx1,yy1,xx2,yy2);
     }
     else
-        Arc(GetHdc(),xxx1,yyy1,xxx2,yyy2,
-        xx1,yy1,xx2,yy2);
-
-    CalcBoundingBox((wxCoord)(xc-radius), (wxCoord)(yc-radius));
-    CalcBoundingBox((wxCoord)(xc+radius), (wxCoord)(yc+radius));
-
-    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
     {
-        // restore the colours we changed
-        ::SetBkMode(GetHdc(), TRANSPARENT);
-        ::SetTextColor(GetHdc(), colFgOld);
-        ::SetBkColor(GetHdc(), colBgOld);
+        Arc(GetHdc(),xxx1,yyy1,xxx2,yyy2, xx1,yy1,xx2,yy2);
     }
+
+    CalcBoundingBox(xc - r, yc - r);
+    CalcBoundingBox(xc + r, yc + r);
 }
 
 void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
@@ -495,30 +529,7 @@ void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 
 void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle)
 {
-    COLORREF colFgOld = 0,
-             colBgOld = 0;
-
-    if (m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE)
-    {
-       colFgOld = ::GetTextColor(GetHdc());
-       colBgOld = ::GetBkColor(GetHdc());
-
-       if (m_textForegroundColour.Ok())
-       {   //just the oposite from what is expected see help on pattern brush
-           // 1 in mask becomes bk color
-           ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel() );
-       }
-       if (m_textBackgroundColour.Ok())
-       {   //just the oposite from what is expected
-           // 0 in mask becomes text color
-           ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel() );
-       }
-
-       if (m_backgroundMode == wxTRANSPARENT)
-           SetBkMode(GetHdc(), TRANSPARENT);
-       else
-           SetBkMode(GetHdc(), OPAQUE);
-    }
+    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
@@ -546,14 +557,6 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
         (void)Polygon(GetHdc(), (POINT*) points, n);
         SetPolyFillMode(GetHdc(),prev);
-    }
-
-    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
-    {
-        // restore the colours we changed
-        ::SetBkMode(GetHdc(), TRANSPARENT);
-        ::SetTextColor(GetHdc(), colFgOld);
-        ::SetBkColor(GetHdc(), colBgOld);
     }
 }
 
@@ -586,31 +589,7 @@ void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    COLORREF colFgOld = 0,
-             colBgOld = 0;
-
-    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
-    {
-        colFgOld = ::GetTextColor(GetHdc());
-        colBgOld = ::GetBkColor(GetHdc());
-
-        if ( m_textForegroundColour.Ok() )
-        {
-            // just the oposite from what is expected see help on pattern brush
-            // 1 in mask becomes bk color
-            ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel());
-        }
-
-        if ( m_textBackgroundColour.Ok() )
-        {
-            // 0 in mask becomes text color
-            ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel());
-        }
-
-        // VZ: IMHO this does strictly nothing here
-        SetBkMode(GetHdc(), m_backgroundMode == wxTRANSPARENT ? TRANSPARENT
-                                                              : OPAQUE);
-    }
+    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     wxCoord x2 = x + width;
     wxCoord y2 = y + height;
@@ -628,7 +607,7 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     {
         // Windows draws the filled rectangles without outline (i.e. drawn with a
         // transparent pen) one pixel smaller in both directions and we want them
-	    // to have the same size regardless of which pen is used - adjust
+        // to have the same size regardless of which pen is used - adjust
 
         // I wonder if this shouldn´t be done after the LOG2DEV() conversions. RR.
         if ( m_pen.GetStyle() == wxTRANSPARENT )
@@ -637,49 +616,17 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
             y2++;
         }
 
-	    (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
+        (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
     }
 
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
-
-    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
-    {
-        // restore the colours we changed
-        ::SetBkMode(GetHdc(), TRANSPARENT);
-        ::SetTextColor(GetHdc(), colFgOld);
-        ::SetBkColor(GetHdc(), colBgOld);
-    }
 }
 
 void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
-    COLORREF colFgOld = 0,
-             colBgOld = 0;
-
-    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
-    {
-        colFgOld = ::GetTextColor(GetHdc());
-        colBgOld = ::GetBkColor(GetHdc());
-
-        if ( m_textForegroundColour.Ok() )
-        {
-            // just the oposite from what is expected see help on pattern brush
-            // 1 in mask becomes bk color
-            ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel());
-        }
-
-        if ( m_textBackgroundColour.Ok() )
-        {
-            // 0 in mask becomes text color
-            ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel());
-        }
-
-        // VZ: IMHO this does strictly nothing here
-        SetBkMode(GetHdc(), m_backgroundMode == wxTRANSPARENT ? TRANSPARENT
-                                                              : OPAQUE);
-    }
+    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     // Now, a negative radius value is interpreted to mean
     // 'the proportion of the smallest X or Y dimension'
@@ -711,43 +658,11 @@ void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
-
-    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
-    {
-        // restore the colours we changed
-        ::SetBkMode(GetHdc(), TRANSPARENT);
-        ::SetTextColor(GetHdc(), colFgOld);
-        ::SetBkColor(GetHdc(), colBgOld);
-    }
 }
 
 void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    COLORREF colFgOld = 0,
-             colBgOld = 0;
-
-    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
-    {
-        colFgOld = ::GetTextColor(GetHdc());
-        colBgOld = ::GetBkColor(GetHdc());
-
-        if ( m_textForegroundColour.Ok() )
-        {
-            // just the oposite from what is expected see help on pattern brush
-            // 1 in mask becomes bk color
-            ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel());
-        }
-
-        if ( m_textBackgroundColour.Ok() )
-        {
-            // 0 in mask becomes text color
-            ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel());
-        }
-
-        // VZ: IMHO this does strictly nothing here
-        SetBkMode(GetHdc(), m_backgroundMode == wxTRANSPARENT ? TRANSPARENT
-                                                              : OPAQUE);
-    }
+    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     wxCoord x2 = (x+width);
     wxCoord y2 = (y+height);
@@ -756,47 +671,15 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
-
-    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
-    {
-        // restore the colours we changed
-        ::SetBkMode(GetHdc(), TRANSPARENT);
-        ::SetTextColor(GetHdc(), colFgOld);
-        ::SetBkColor(GetHdc(), colBgOld);
-    }
 }
 
 // Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
 void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
-    COLORREF colFgOld = 0,
-             colBgOld = 0;
+    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
-    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
-    {
-        colFgOld = ::GetTextColor(GetHdc());
-        colBgOld = ::GetBkColor(GetHdc());
-
-        if ( m_textForegroundColour.Ok() )
-        {
-            // just the oposite from what is expected see help on pattern brush
-            // 1 in mask becomes bk color
-            ::SetBkColor(GetHdc(), m_textForegroundColour.GetPixel());
-        }
-
-        if ( m_textBackgroundColour.Ok() )
-        {
-            // 0 in mask becomes text color
-            ::SetTextColor(GetHdc(), m_textBackgroundColour.GetPixel());
-        }
-
-        // VZ: IMHO this does strictly nothing here
-        SetBkMode(GetHdc(), m_backgroundMode == wxTRANSPARENT ? TRANSPARENT
-                                                              : OPAQUE);
-    }
-
-    wxCoord x2 = (x+w);
-    wxCoord y2 = (y+h);
+    wxCoord x2 = x + w;
+    wxCoord y2 = y + h;
 
     int rx1 = XLOG2DEV(x+w/2);
     int ry1 = YLOG2DEV(y+h/2);
@@ -813,31 +696,25 @@ void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,d
 
     // draw pie with NULL_PEN first and then outline otherwise a line is
     // drawn from the start and end points to the centre
-    HPEN orig_pen = (HPEN) ::SelectObject(GetHdc(), (HPEN) ::GetStockObject(NULL_PEN));
+    HPEN hpenOld = (HPEN) ::SelectObject(GetHdc(), (HPEN) ::GetStockObject(NULL_PEN));
     if (m_signY > 0)
     {
         (void)Pie(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2)+1, YLOG2DEV(y2)+1,
-            rx1, ry1, rx2, ry2);
+                  rx1, ry1, rx2, ry2);
     }
     else
     {
         (void)Pie(GetHdc(), XLOG2DEV(x), YLOG2DEV(y)-1, XLOG2DEV(x2)+1, YLOG2DEV(y2),
-            rx1, ry1-1, rx2, ry2-1);
+                  rx1, ry1-1, rx2, ry2-1);
     }
-    ::SelectObject(GetHdc(), orig_pen);
+
+    ::SelectObject(GetHdc(), hpenOld);
+
     (void)Arc(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2),
-        rx1, ry1, rx2, ry2);
+              rx1, ry1, rx2, ry2);
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
-
-    if ( m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
-    {
-        // restore the colours we changed
-        ::SetBkMode(GetHdc(), TRANSPARENT);
-        ::SetTextColor(GetHdc(), colFgOld);
-        ::SetBkColor(GetHdc(), colBgOld);
-    }
 }
 
 void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)

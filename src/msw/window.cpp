@@ -1094,7 +1094,10 @@ void wxWindow::DoGetSize(int *x, int *y) const
 {
     HWND hWnd = GetHwnd();
     RECT rect;
-    GetWindowRect(hWnd, &rect);
+    if ( !::GetWindowRect(hWnd, &rect) )
+    {
+        wxLogLastError(_T("GetWindowRect"));
+    }
 
     if ( x )
         *x = rect.right - rect.left;

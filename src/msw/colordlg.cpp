@@ -92,21 +92,20 @@ UINT CALLBACK wxColourDialogHookProc(HWND hwnd,
 
 wxColourDialog::wxColourDialog()
 {
-  m_dialogParent = NULL;
 }
 
 wxColourDialog::wxColourDialog(wxWindow *parent, wxColourData *data)
 {
-  Create(parent, data);
+    Create(parent, data);
 }
 
 bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 {
-  m_dialogParent = parent;
+    m_parent = parent;
+    if (data)
+        m_colourData = *data;
 
-  if (data)
-    m_colourData = *data;
-  return TRUE;
+    return TRUE;
 }
 
 int wxColourDialog::ShowModal()
@@ -120,8 +119,8 @@ int wxColourDialog::ShowModal()
       custColours[i] = wxColourToRGB(m_colourData.custColours[i]);
 
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
-    if ( m_dialogParent )
-        chooseColorStruct.hwndOwner = GetHwndOf(m_dialogParent);
+    if ( m_parent )
+        chooseColorStruct.hwndOwner = GetHwndOf(m_parent);
     chooseColorStruct.rgbResult = wxColourToRGB(m_colourData.dataColour);
     chooseColorStruct.lpCustColors = custColours;
 
@@ -156,6 +155,10 @@ int wxColourDialog::ShowModal()
     return success ? wxID_OK : wxID_CANCEL;
 }
 
+// ----------------------------------------------------------------------------
+// title
+// ----------------------------------------------------------------------------
+
 void wxColourDialog::SetTitle(const wxString& title)
 {
     m_title = title;
@@ -166,3 +169,34 @@ wxString wxColourDialog::GetTitle()
     return m_title;
 }
 
+// ----------------------------------------------------------------------------
+// position/size
+// ----------------------------------------------------------------------------
+
+void wxColourDialog::DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
+                               int WXUNUSED(width), int WXUNUSED(height),
+                               int WXUNUSED(sizeFlags))
+{
+    // ignore - we can't change the size of this standard dialog
+    return;
+}
+
+// NB: of course, both of these functions are completely bogus, but it's better
+//     than nothing
+void wxColourDialog::DoGetSize(int *width, int *height) const
+{
+    // the standard dialog size
+    if ( width )
+        *width = 225;
+    if ( height )
+        *height = 324;
+}
+
+void wxColourDialog::DoGetClientSize(int *width, int *height) const
+{
+    // the standard dialog size
+    if ( width )
+        *width = 219;
+    if ( height )
+        *height = 299;
+}

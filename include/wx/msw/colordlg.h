@@ -37,11 +37,17 @@ public:
     // override some base class virtuals
     virtual void SetTitle(const wxString& title);
     virtual wxString GetTitle();
+
     virtual int ShowModal();
 
 protected:
+    virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoGetClientSize(int *width, int *height) const;
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+
     wxColourData        m_colourData;
-    wxWindow*           m_dialogParent;
     wxString            m_title;
 
     DECLARE_DYNAMIC_CLASS(wxColourDialog)
