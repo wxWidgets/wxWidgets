@@ -4217,6 +4217,12 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
     }
 #endif // wxUSE_SCROLLBAR/!wxUSE_SCROLLBAR
 
+#if wxUSE_BMPBUTTON
+    if ( wxDynamicCast(window, wxBitmapButton) )
+    {
+        // do nothing
+    } else
+#endif // wxUSE_BMPBUTTON
 #if wxUSE_BUTTON
     if ( wxDynamicCast(window, wxButton) )
     {
