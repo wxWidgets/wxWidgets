@@ -41,7 +41,7 @@
 
 // the application icon (under Windows and OS/2 it is in resources)
 #if !defined(__WXMSW__) && !defined(__WXOS2__)
-    #include "mondrian.xpm"
+    #include "../sample.xpm"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -237,7 +237,7 @@ VScrollFrame::VScrollFrame()
                       wxSize(400, 350))
 {
     // set the frame icon
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
 #if wxUSE_MENUS
     // create a menu bar

@@ -78,7 +78,7 @@ MyFrame::MyFrame() :
 {
 #if wxUSE_STATUSBAR
    CreateStatusBar( 2 );
-   SetStatusText( _T("wxLayout by Karsten Ballüder.") );
+   SetStatusText( _T("wxLayout by Karsten Ballueder.") );
 #endif // wxUSE_STATUSBAR
 
    wxMenuBar *menu_bar = new wxMenuBar();
