@@ -383,6 +383,19 @@ wxMenuBar and wxStatusBar children; objects of these types are automatically
 set as frame's tool-, menu- and statusbar respectively.
 
 
+wxMDIParentFrame
+----------------
+
+Supports same attributes and children nodes as wxFrame. Additionally, children
+may be of the wxMDIChildFrame type.
+
+
+wxMDIChildFrame
+---------------
+
+Supports same attributes and children nodes as wxFrame.
+
+
 wxScrolledWindow
 ----------------
 pos                        Position                -1,-1

@@ -1069,6 +1069,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_datectrl.o \
 	xrcdll_xh_dlg.o \
 	xrcdll_xh_frame.o \
+	xrcdll_xh_mdi.o \
 	xrcdll_xh_gauge.o \
 	xrcdll_xh_gdctl.o \
 	xrcdll_xh_html.o \
@@ -1117,6 +1118,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_datectrl.o \
 	xrclib_xh_dlg.o \
 	xrclib_xh_frame.o \
+	xrclib_xh_mdi.o \
 	xrclib_xh_gauge.o \
 	xrclib_xh_gdctl.o \
 	xrclib_xh_html.o \
@@ -2511,6 +2513,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_datectrl.h \
 	wx/xrc/xh_dlg.h \
 	wx/xrc/xh_frame.h \
+	wx/xrc/xh_mdi.h \
 	wx/xrc/xh_gauge.h \
 	wx/xrc/xh_gdctl.h \
 	wx/xrc/xh_html.h \
@@ -2782,6 +2785,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_datectrl.o \
 	monodll_xh_dlg.o \
 	monodll_xh_frame.o \
+	monodll_xh_mdi.o \
 	monodll_xh_gauge.o \
 	monodll_xh_gdctl.o \
 	monodll_xh_html.o \
@@ -4238,6 +4242,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_datectrl.o \
 	monolib_xh_dlg.o \
 	monolib_xh_frame.o \
+	monolib_xh_mdi.o \
 	monolib_xh_gauge.o \
 	monolib_xh_gdctl.o \
 	monolib_xh_html.o \
@@ -10651,6 +10656,9 @@ monodll_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(MONODLL_ODEP)
 monodll_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
 
+monodll_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
+
 monodll_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp
 
@@ -14085,6 +14093,9 @@ monolib_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(MONOLIB_ODEP)
 
 monolib_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
+
+monolib_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
 
 monolib_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp
@@ -23707,6 +23718,9 @@ xrcdll_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(XRCDLL_ODEP)
 xrcdll_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
 
+xrcdll_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
+
 xrcdll_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp
 
@@ -23832,6 +23846,9 @@ xrclib_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
+
+xrclib_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
 
 xrclib_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp
@@ -24468,7 +24485,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/Makefile.in $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/makefile.unx $(DISTDIR)/samples/dnd
-	cp $(SAMPDIR)/dnd/*.wxr $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/*.cpp $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/*.xpm $(DISTDIR)/samples/dnd
 	cp $(SAMPDIR)/dnd/*.txt $(DISTDIR)/samples/dnd

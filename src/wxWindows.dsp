@@ -1711,6 +1711,10 @@ SOURCE=.\xrc\xh_listc.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xrc\xh_mdi.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xrc\xh_menu.cpp
 # End Source File
 # Begin Source File
@@ -3096,6 +3100,10 @@ SOURCE=..\include\wx\xrc\xh_listbk.h
 # Begin Source File
 
 SOURCE=..\include\wx\xrc\xh_listc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_mdi.h
 # End Source File
 # Begin Source File
 

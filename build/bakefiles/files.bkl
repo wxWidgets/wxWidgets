@@ -2562,6 +2562,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_datectrl.cpp
     src/xrc/xh_dlg.cpp
     src/xrc/xh_frame.cpp
+    src/xrc/xh_mdi.cpp
     src/xrc/xh_gauge.cpp
     src/xrc/xh_gdctl.cpp
     src/xrc/xh_html.cpp
@@ -2607,6 +2608,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_datectrl.h
     wx/xrc/xh_dlg.h
     wx/xrc/xh_frame.h
+    wx/xrc/xh_mdi.h
     wx/xrc/xh_gauge.h
     wx/xrc/xh_gdctl.h
     wx/xrc/xh_html.h

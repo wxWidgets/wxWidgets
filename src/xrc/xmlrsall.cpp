@@ -117,6 +117,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_DATEPICKCTRL
     AddHandler(new wxDateCtrlXmlHandler);
 #endif
+#if wxUSE_MDI
+    AddHandler(new wxMdiXmlHandler);
+#endif
 }
 
 #endif // wxUSE_XRC
