@@ -187,7 +187,7 @@ valgen.cpp	C
 validate.cpp	C
 valtext.cpp	C
 variant.cpp	C	B
-wfstream.cpp	C
+wfstream.cpp	C	B
 wincmn.cpp	C
 wxchar.cpp	C	B
 wxexpr.cpp	C
@@ -695,7 +695,7 @@ valtext.h	W
 variant.h	W	B
 version.h	W	B
 wave.h	W
-wfstream.h	W
+wfstream.h	W	B
 window.h	W
 wizard.h	W
 wx.h	W	B

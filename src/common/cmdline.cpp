@@ -142,8 +142,8 @@ struct wxCmdLineParserData
 {
     // options
     wxString m_switchChars;     // characters which may start an option
-
     bool m_enableLongOptions;   // TRUE if long options are enabled
+    wxString m_logo;            // some extra text to show in Usage()
 
     // cmd line data
     wxArrayString m_arguments;  // == argv, argc == m_arguments.GetCount()
@@ -264,6 +264,11 @@ void wxCmdLineParser::EnableLongOptions(bool enable)
     m_data->m_enableLongOptions = enable;
 }
 
+void wxCmdLineParser::SetLogo(const wxString& logo)
+{
+    m_data->m_logo = logo;
+}
+
 // ----------------------------------------------------------------------------
 // command line construction
 // ----------------------------------------------------------------------------
@@ -275,7 +280,8 @@ void wxCmdLineParser::SetDesc(const wxCmdLineEntryDesc *desc)
         switch ( desc->kind )
         {
             case wxCMD_LINE_SWITCH:
-                AddSwitch(desc->shortName, desc->longName, desc->description);
+                AddSwitch(desc->shortName, desc->longName, desc->description,
+                          desc->flags);
                 break;
 
             case wxCMD_LINE_OPTION:
@@ -840,6 +846,11 @@ void wxCmdLineParser::Usage()
         {
             brief << _T(']');
         }
+    }
+
+    if ( !!m_data->m_logo )
+    {
+        wxLogMessage(m_data->m_logo);
     }
 
     wxLogMessage(brief);

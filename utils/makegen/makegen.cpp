@@ -9,6 +9,13 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+/*
+ * TODO
+ *
+ *  1. support for programs with multiple object files
+ *  2. support for programs under utils and demos, not only samples
+ */
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -29,6 +36,7 @@
 #include <wx/dir.h>
 #include <wx/textfile.h>
 #include <wx/datetime.h>
+#include <wx/cmdline.h>
 
 // ----------------------------------------------------------------------------
 // the application class
@@ -37,18 +45,20 @@
 class MakeGenApp : public wxApp
 {
 public:
+    MakeGenApp() { m_quiet = FALSE; }
+
     virtual bool OnInit();
 
     virtual int OnRun();
 
 private:
-    void Usage();               // give the usage message
-
     bool GenerateMakefile(const wxString& filename);
 
-    wxString m_sampleName,      // the name of the sample
+    wxString m_progname,        // the name of the sample
              m_dirname,         // directory with the template files
-             m_outputDir;       // directory to output files to
+             m_outdir;          // directory to output files to
+
+    bool m_quiet;               // don't give non essential messages
 };
 
 IMPLEMENT_APP(MakeGenApp);
@@ -61,11 +71,6 @@ IMPLEMENT_APP(MakeGenApp);
 // MakeGenApp
 // ----------------------------------------------------------------------------
 
-void MakeGenApp::Usage()
-{
-    wxLogError(_T("Usage: %s [-o output_dir] sample_name"), argv[0]);
-}
-
 bool MakeGenApp::GenerateMakefile(const wxString& filename)
 {
     wxTextFile fileIn(m_dirname + filename);
@@ -76,7 +81,7 @@ bool MakeGenApp::GenerateMakefile(const wxString& filename)
         return FALSE;
     }
 
-    wxFFile fileOut(m_outputDir + filename, "w");
+    wxFFile fileOut(m_outdir + filename, "w");
     if ( !fileOut.IsOpened() )
     {
         wxLogError(_T("Makefile '%s' couldn't be generated."), filename.c_str());
@@ -84,13 +89,16 @@ bool MakeGenApp::GenerateMakefile(const wxString& filename)
         return FALSE;
     }
 
+    wxLogVerbose(_T("Generating '%s' for '%s'..."),
+                 (m_outdir + filename).c_str(), m_progname.c_str());
+
     size_t count = fileIn.GetLineCount();
     for ( size_t n = 0; n < count; n++ )
     {
         wxString line = fileIn[n];
 
         line.Replace(_T("#DATE"), wxDateTime::Now().FormatISODate());
-        line.Replace(_T("#NAME"), m_sampleName);
+        line.Replace(_T("#NAME"), m_progname);
 
         fileOut.Write(line + _T('\n'));
     }
@@ -98,28 +106,65 @@ bool MakeGenApp::GenerateMakefile(const wxString& filename)
     return TRUE;
 }
 
+// parse the cmd line
 bool MakeGenApp::OnInit()
 {
-    // parse the cmd line
-    if ( (argc == 1) || (argc == 3) ||
-         (argv[1][0] == _T('-') && argv[1][1] != _T('o')) ||
-         (argc == 2 && argv[1][0] == _T('-')) )
+    static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
-        Usage();
+        { wxCMD_LINE_SWITCH, _T("h"), _T("help"),    _T("give this usage message"),
+            wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
+        { wxCMD_LINE_SWITCH, _T("v"), _T("verbose"), _T("be more verbose") },
+        { wxCMD_LINE_SWITCH, _T("q"), _T("quiet"),   _T("be quiet") },
 
+        { wxCMD_LINE_OPTION, _T("i"), _T("input"),   _T("directory with template files") },
+
+        { wxCMD_LINE_PARAM,  NULL, NULL,     _T("output_directory") },
+
+        { wxCMD_LINE_NONE }
+    };
+
+    wxCmdLineParser parser(cmdLineDesc, argc, argv);
+    parser.SetLogo(_T("MakeGen: a makefile generator for wxWindows\n"
+                      "Copyright (c) 2000 Vadim Zeitlin"));
+
+    if ( parser.Parse() != 0 )
+    {
+        // failed to parse the cmd line or help was requested (and given)
         return FALSE;
     }
 
-    m_sampleName = argv[1];
-    if ( m_sampleName[0u] == _T('-') )
+    (void)parser.Found(_T("i"), &m_dirname);
+    if ( parser.Found(_T("q")) )
     {
-        m_outputDir = argv[2];
-        if ( !wxEndsWithPathSeparator(m_outputDir) )
-        {
-            m_outputDir += _T('/');
-        }
+        m_quiet = TRUE;
 
-        m_sampleName = argv[3];
+        wxLog::GetActiveTarget()->SetVerbose(FALSE);
+    }
+    else if ( parser.Found(_T("v")) )
+    {
+        wxLog::GetActiveTarget()->SetVerbose();
+    }
+
+    m_outdir = parser.GetParam();
+
+#ifdef __WINDOWS__
+    m_outdir.Replace(_T("\\"), _T("/"));
+#endif
+
+    if ( !!m_outdir && m_outdir.Last() == _T('/') )
+    {
+        m_outdir.Truncate(m_outdir.length() - 1);
+    }
+
+    m_progname = m_outdir.AfterLast(_T('/'));
+
+    if ( !m_progname )
+    {
+        wxLogError(_T("Output directory should be specified."));
+
+        parser.Usage();
+
+        return FALSE;
     }
 
     return TRUE;
@@ -127,10 +172,13 @@ bool MakeGenApp::OnInit()
 
 int MakeGenApp::OnRun()
 {
-    m_dirname = wxGetenv(_T("MAKEGEN_PATH"));
     if ( !m_dirname )
     {
-        m_dirname = wxGetCwd();
+        m_dirname = wxGetenv(_T("MAKEGEN_PATH"));
+        if ( !m_dirname )
+        {
+            m_dirname = wxGetCwd();
+        }
     }
 
     if ( !wxEndsWithPathSeparator(m_dirname) )
@@ -153,7 +201,7 @@ int MakeGenApp::OnRun()
 
     wxString filename;
     size_t n = 0;
-    bool cont = dir.GetFirst(&filename, _T("?akefile.*"), wxDIR_FILES);
+    bool cont = dir.GetFirst(&filename, wxEmptyString, wxDIR_FILES);
     while ( cont )
     {
         n++;
@@ -171,9 +219,9 @@ int MakeGenApp::OnRun()
     if ( n )
     {
         wxLogVerbose(_T("Successfully generated %u makefiles in '%s'."),
-                     n, m_outputDir.c_str());
+                     n, m_outdir.c_str());
     }
-    else
+    else if ( !m_quiet )
     {
         wxLogWarning(_T("No makefiles found: either set MAKEGEN_PATH variable "
                         "or run the program from its directory"));

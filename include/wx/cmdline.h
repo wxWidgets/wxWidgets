@@ -126,6 +126,9 @@ public:
     void EnableLongOptions(bool enable = TRUE);
     void DisableLongOptions() { EnableLongOptions(FALSE); }
 
+    // extra text may be shown by Usage() method if set by this function
+    void SetLogo(const wxString& logo);
+
     // construct the cmd line description
     // ----------------------------------
 
@@ -181,7 +184,7 @@ public:
     size_t GetParamCount() const;
 
     // gets the value of Nth parameter (as string only for now)
-    wxString GetParam(size_t n) const;
+    wxString GetParam(size_t n = 0u) const;
 
 private:
     // common part of all ctors
