@@ -55,8 +55,8 @@ class wxRegion : public wxGDIObject
     wxRegion( long x, long y, long w, long h );
     wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight );
     wxRegion( const wxRect& rect );
-    wxRegion(void);
-    ~wxRegion(void);
+    wxRegion();
+    ~wxRegion();
 
     inline wxRegion( const wxRegion& r ): wxGDIObject()
       { Ref(r); }
@@ -66,7 +66,7 @@ class wxRegion : public wxGDIObject
     bool operator == ( const wxRegion& region );
     bool operator != ( const wxRegion& region );
     
-    void Clear(void);
+    void Clear();
 
     bool Union( long x, long y, long width, long height );
     bool Union( const wxRect& rect );
@@ -85,9 +85,10 @@ class wxRegion : public wxGDIObject
     bool Xor( const wxRegion& region );
 
     void GetBox( long& x, long& y, long&w, long &h ) const;
-    wxRect GetBox(void) const ;
+    wxRect GetBox() const ;
 
-    bool Empty(void) const;
+    bool Empty() const;
+    bool IsEmpty() const { return Empty(); }
 
     wxRegionContain Contains( long x, long y ) const;
     wxRegionContain Contains( long x, long y, long w, long h ) const;
@@ -97,7 +98,7 @@ class wxRegion : public wxGDIObject
   public:
   
     wxList    *GetRectList() const;    
-    GdkRegion *GetRegion(void) const;
+    GdkRegion *GetRegion() const;
 };
 
 class wxRegionIterator: public wxObject 
@@ -106,24 +107,24 @@ class wxRegionIterator: public wxObject
   
   public:
   
-    wxRegionIterator(void);
+    wxRegionIterator();
     wxRegionIterator(const wxRegion& region);
 
-    void Reset(void) { m_current = 0; }
+    void Reset() { m_current = 0; }
     void Reset(const wxRegion& region);
 
-    operator bool (void) const;
-    bool HaveRects(void) const;
+    operator bool () const;
+    bool HaveRects() const;
 
-    void operator ++ (void);
+    void operator ++ ();
     void operator ++ (int);
 
-    long GetX(void) const;
-    long GetY(void) const;
-    long GetW(void) const;
-    long GetWidth(void) const { return GetW(); }
-    long GetH(void) const;
-    long GetHeight(void) const { return GetH(); }
+    long GetX() const;
+    long GetY() const;
+    long GetW() const;
+    long GetWidth() const { return GetW(); }
+    long GetH() const;
+    long GetHeight() const { return GetH(); }
     wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
 
   private:
