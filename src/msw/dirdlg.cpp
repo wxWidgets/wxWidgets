@@ -80,14 +80,15 @@ static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp,
 wxDirDialog::wxDirDialog(wxWindow *parent,
                          const wxString& message,
                          const wxString& defaultPath,
-                         long WXUNUSED(style),
+                         long style,
                          const wxPoint& WXUNUSED(pos),
                          const wxSize& WXUNUSED(size),
                          const wxString& WXUNUSED(name))
 {
     m_message = message;
     m_parent = parent;
-    
+
+    SetStyle(style);
     SetPath(defaultPath);
 }
 
@@ -113,6 +114,10 @@ void wxDirDialog::SetPath(const wxString& path)
     }
 }
 
+#ifndef BIF_NEWDIALOGSTYLE
+#define BIF_NEWDIALOGSTYLE 0x0040
+#endif
+
 int wxDirDialog::ShowModal()
 {
     wxWindow *parent = GetParent();
@@ -125,6 +130,12 @@ int wxDirDialog::ShowModal()
     bi.ulFlags        = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
     bi.lpfn           = BrowseCallbackProc;
     bi.lParam         = (LPARAM)m_path.c_str();    // param for the callback
+
+    if ((GetStyle() & wxDD_NEW_DIR_BUTTON) &&
+        (wxApp::GetComCtl32Version() >= 500))
+    {
+        bi.ulFlags |= BIF_NEWDIALOGSTYLE;
+    }
 
     LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
 
