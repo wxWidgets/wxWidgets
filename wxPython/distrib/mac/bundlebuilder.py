@@ -37,7 +37,6 @@ import getopt
 from plistlib import Plist
 from types import FunctionType as function
 
-
 class BundleBuilderError(Exception): pass
 
 
@@ -84,7 +83,7 @@ class BundleBuilder(Defaults):
 	              CFBundleInfoDictionaryVersion = "6.0")
 
 	# The type of the bundle.
-	type = "APPL"
+	type = "BNDL"
 	# The creator code of the bundle.
 	creator = None
 
@@ -102,9 +101,6 @@ class BundleBuilder(Defaults):
 	# Directory where the bundle will be assembled.
 	builddir = "build"
 
-	# platform, name of the subfolder of Contents that contains the executable.
-	platform = "MacOS"
-
 	# Make symlinks instead copying files. This is handy during debugging, but
 	# makes the bundle non-distributable.
 	symlink = 0
@@ -120,7 +116,6 @@ class BundleBuilder(Defaults):
 		bundleextension = ext
 		# misc (derived) attributes
 		self.bundlepath = pathjoin(self.builddir, self.name + bundleextension)
-		self.execdir = pathjoin("Contents", self.platform)
 
 		plist = self.plist
 		plist.CFBundleName = self.name
@@ -216,7 +211,7 @@ else:
 	PYC_EXT = ".pyo"
 
 MAGIC = imp.get_magic()
-USE_ZIPIMPORT = 0  ## "zipimport" in sys.builtin_module_names
+USE_ZIPIMPORT = "zipimport" in sys.builtin_module_names
 
 # For standalone apps, we have our own minimal site.py. We don't need
 # all the cruft of the real site.py.
@@ -236,6 +231,10 @@ if USE_ZIPIMPORT:
 
 SITE_CO = compile(SITE_PY, "<-bundlebuilder.py->", "exec")
 
+#
+# Extension modules can't be in the modules zip archive, so a placeholder
+# is added instead, that loads the extension from a specified location.
+#
 EXT_LOADER = """\
 def __load():
 	import imp, sys, os
@@ -258,22 +257,54 @@ MAYMISS_MODULES = ['mac', 'os2', 'nt', 'ntpath', 'dos', 'dospath',
 
 STRIP_EXEC = "/usr/bin/strip"
 
+#
+# We're using a stock interpreter to run the app, yet we need
+# a way to pass the Python main program to the interpreter. The
+# bootstrapping script fires up the interpreter with the right
+# arguments. os.execve() is used as OSX doesn't like us to
+# start a real new process. Also, the executable name must match
+# the CFBundleExecutable value in the Info.plist, so we lie
+# deliberately with argv[0]. The actual Python executable is
+# passed in an environment variable so we can "repair"
+# sys.executable later.
+#
 BOOTSTRAP_SCRIPT = """\
-#!/bin/sh
+#!%(hashbang)s
 
-execdir=$(dirname "${0}")
-DYLD_LIBRARY_PATH=$(dirname "${execdir}")/Frameworks
-export DYLD_LIBRARY_PATH
-executable=${execdir}/%(executable)s
-resdir=$(dirname "${execdir}")/Resources
-main=${resdir}/%(mainprogram)s
-PYTHONPATH=$resdir
-export PYTHONPATH
-exec "${executable}" "${main}" "${1}"
+import sys, os
+execdir = os.path.dirname(sys.argv[0])
+executable = os.path.join(execdir, "%(executable)s")
+resdir = os.path.join(os.path.dirname(execdir), "Resources")
+libdir = os.path.join(os.path.dirname(execdir), "Frameworks")
+mainprogram = os.path.join(resdir, "%(mainprogram)s")
+
+sys.argv.insert(1, mainprogram)
+os.environ["PYTHONPATH"] = resdir
+os.environ["PYTHONHOME"] = resdir
+os.environ["PYTHONEXECUTABLE"] = executable
+os.environ["DYLD_LIBRARY_PATH"] = libdir
+os.execve(executable, sys.argv, os.environ)
+"""
+
+
+#
+# Optional wrapper that converts "dropped files" into sys.argv values.
+#
+ARGV_EMULATOR = """\
+import argvemulator, os
+
+argvemulator.ArgvCollector().mainloop()
+execfile(os.path.join(os.path.split(__file__)[0], "%(realmainprogram)s"))
 """
 
 
 class AppBuilder(BundleBuilder):
+
+	# Override type of the bundle.
+	type = "APPL"
+
+	# platform, name of the subfolder of Contents that contains the executable.
+	platform = "MacOS"
 
 	# A Python main program. If this argument is given, the main
 	# executable in the bundle will be a small wrapper that invokes
@@ -299,6 +330,10 @@ class AppBuilder(BundleBuilder):
 
 	# If True, build standalone app.
 	standalone = 0
+	
+	# If True, add a real main program that emulates sys.argv before calling
+	# mainprogram
+	argv_emulation = 0
 
 	# The following attributes are only used when building a standalone app.
 
@@ -331,6 +366,8 @@ class AppBuilder(BundleBuilder):
 		if self.mainprogram is None and self.executable is None:
 			raise BundleBuilderError, ("must specify either or both of "
 					"'executable' and 'mainprogram'")
+
+		self.execdir = pathjoin("Contents", self.platform)
 
 		if self.name is not None:
 			pass
@@ -374,11 +411,40 @@ class AppBuilder(BundleBuilder):
 		if self.mainprogram is not None:
 			mainprogram = os.path.basename(self.mainprogram)
 			self.files.append((self.mainprogram, pathjoin(resdir, mainprogram)))
+			if self.argv_emulation:
+				# Change the main program, and create the helper main program (which
+				# does argv collection and then calls the real main).
+				# Also update the included modules (if we're creating a standalone
+				# program) and the plist
+				realmainprogram = mainprogram
+				mainprogram = '__argvemulator_' + mainprogram
+				resdirpath = pathjoin(self.bundlepath, resdir)
+				mainprogrampath = pathjoin(resdirpath, mainprogram)
+				makedirs(resdirpath)
+				open(mainprogrampath, "w").write(ARGV_EMULATOR % locals())
+				if self.standalone:
+					self.includeModules.append("argvemulator")
+					self.includeModules.append("os")
+				if not self.plist.has_key("CFBundleDocumentTypes"):
+					self.plist["CFBundleDocumentTypes"] = [
+						{ "CFBundleTypeOSTypes" : [
+							"****",
+							"fold",
+							"disk"],
+						  "CFBundleTypeRole": "Viewer"}]
 			# Write bootstrap script
 			executable = os.path.basename(self.executable)
 			execdir = pathjoin(self.bundlepath, self.execdir)
 			bootstrappath = pathjoin(execdir, self.name)
 			makedirs(execdir)
+			if self.standalone:
+				# XXX we're screwed when the end user has deleted
+				# /usr/bin/python
+				hashbang = "/usr/bin/python"
+			else:
+				hashbang = sys.executable
+				while os.path.islink(hashbang):
+					hashbang = os.readlink(hashbang)
 			open(bootstrappath, "w").write(BOOTSTRAP_SCRIPT % locals())
 			os.chmod(bootstrappath, 0775)
 
@@ -461,6 +527,9 @@ class AppBuilder(BundleBuilder):
 		site = mf.add_module("site")
 		site.__code__ = SITE_CO
 		mf.scan_code(SITE_CO, site)
+
+		# warnings.py gets imported implicitly from C
+		mf.import_hook("warnings")
 
 		includeModules = self.includeModules[:]
 		for name in self.includePackages:
@@ -623,8 +692,11 @@ Options:
   -b, --builddir=DIR     the build directory; defaults to "build"
   -n, --name=NAME        application name
   -r, --resource=FILE    extra file or folder to be copied to Resources
+  -f, --file=SRC:DST     extra file or folder to be copied into the bundle;
+                         DST must be a path relative to the bundle root
   -e, --executable=FILE  the executable to be used
   -m, --mainprogram=FILE the Python main program
+  -a, --argv             add a wrapper main program to create sys.argv
   -p, --plist=FILE       .plist file (default: generate one)
       --nib=NAME         main nib name
   -c, --creator=CCCC     4-char creator code (default: '????')
@@ -634,8 +706,8 @@ Options:
       --link-exec        symlink the executable instead of copying it
       --standalone       build a standalone application, which is fully
                          independent of a Python installation
-      --lib=FILE	 shared library or framework to be copied into
-			 the bundle
+      --lib=FILE         shared library or framework to be copied into
+                         the bundle
   -x, --exclude=MODULE   exclude module (with --standalone)
   -i, --include=MODULE   include module (with --standalone)
       --package=PACKAGE  include a whole package (with --standalone)
@@ -655,10 +727,10 @@ def main(builder=None):
 	if builder is None:
 		builder = AppBuilder(verbosity=1)
 
-	shortopts = "b:n:r:e:m:c:p:lx:i:hvq"
-	longopts = ("builddir=", "name=", "resource=", "executable=",
+	shortopts = "b:n:r:f:e:m:c:p:lx:i:hvqa"
+	longopts = ("builddir=", "name=", "resource=", "file=", "executable=",
 		"mainprogram=", "creator=", "nib=", "plist=", "link",
-		"link-exec", "help", "verbose", "quiet", "standalone",
+		"link-exec", "help", "verbose", "quiet", "argv", "standalone",
 		"exclude=", "include=", "package=", "strip", "iconfile=",
 		"lib=")
 
@@ -674,10 +746,18 @@ def main(builder=None):
 			builder.name = arg
 		elif opt in ('-r', '--resource'):
 			builder.resources.append(arg)
+		elif opt in ('-f', '--file'):
+			srcdst = arg.split(':')
+			if len(srcdst) != 2:
+				usage("-f or --file argument must be two paths, "
+				      "separated by a colon")
+			builder.files.append(srcdst)
 		elif opt in ('-e', '--executable'):
 			builder.executable = arg
 		elif opt in ('-m', '--mainprogram'):
 			builder.mainprogram = arg
+		elif opt in ('-a', '--argv'):
+			builder.argv_emulation = 1
 		elif opt in ('-c', '--creator'):
 			builder.creator = arg
 		elif opt == '--iconfile':
