@@ -22,7 +22,9 @@ TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) -DHAVE_W32API_H \
 	-I.\..\include -I$(SETUPHDIR) -Wall -I. $(__DLLFLAG_p) $(CPPUNIT_CFLAGS) \
 	$(__EXCEPTIONSFLAG_4) $(__EXCEPTIONSFLAG_5) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
+	$(OBJS)\test_dummy.o \
 	$(OBJS)\test_test.o \
+	$(OBJS)\test_archivetest.o \
 	$(OBJS)\test_arrays.o \
 	$(OBJS)\test_datetimetest.o \
 	$(OBJS)\test_fileconftest.o \
@@ -44,6 +46,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_filestream.o \
 	$(OBJS)\test_memstream.o \
 	$(OBJS)\test_sstream.o \
+	$(OBJS)\test_textstreamtest.o \
 	$(OBJS)\test_zlibstream.o \
 	$(OBJS)\test_uris.o
 
@@ -183,7 +186,13 @@ data:
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %%f in (testdata.fc) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
+$(OBJS)\test_dummy.o: ./dummy.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_test.o: ./test.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_archivetest.o: ./archive/archivetest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_arrays.o: ./arrays/arrays.cpp
@@ -247,6 +256,9 @@ $(OBJS)\test_memstream.o: ./streams/memstream.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_sstream.o: ./streams/sstream.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_textstreamtest.o: ./streams/textstreamtest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_zlibstream.o: ./streams/zlibstream.cpp

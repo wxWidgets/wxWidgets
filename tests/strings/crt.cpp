@@ -12,7 +12,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/wxprec.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -23,8 +23,6 @@
 #endif // WX_PRECOMP
 
 #include "wx/textfile.h"
-
-#include "wx/cppunit.h"
 
 // ----------------------------------------------------------------------------
 // test class

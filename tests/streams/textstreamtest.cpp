@@ -11,7 +11,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/wxprec.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -23,8 +23,6 @@
 
 #include "wx/txtstrm.h"
 #include "wx/wfstream.h"
-
-#include "wx/cppunit.h"
 
 // ----------------------------------------------------------------------------
 // test class

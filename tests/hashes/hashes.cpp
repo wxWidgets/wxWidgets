@@ -11,7 +11,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/wxprec.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -24,8 +24,6 @@
 #include "wx/hash.h"
 #include "wx/hashmap.h"
 #include "wx/hashset.h"
-
-#include "wx/cppunit.h"
 
 // --------------------------------------------------------------------------
 // helper class for typed/untyped wxHashTable

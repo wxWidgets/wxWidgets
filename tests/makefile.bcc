@@ -29,9 +29,12 @@ SETUPHDIR = \
 TEST_CXXFLAGS = $(__RUNTIME_LIBS_6) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG_2) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\include -I$(SETUPHDIR) -I. \
-	$(__DLLFLAG_p) $(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+	$(__DLLFLAG_p) $(CPPUNIT_CFLAGS) -Hu -H=$(OBJS)\testprec_test.csm \
+	$(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
+	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
+	$(OBJS)\test_archivetest.obj \
 	$(OBJS)\test_arrays.obj \
 	$(OBJS)\test_datetimetest.obj \
 	$(OBJS)\test_fileconftest.obj \
@@ -53,6 +56,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_filestream.obj \
 	$(OBJS)\test_memstream.obj \
 	$(OBJS)\test_sstream.obj \
+	$(OBJS)\test_textstreamtest.obj \
 	$(OBJS)\test_zlibstream.obj \
 	$(OBJS)\test_uris.obj
 
@@ -180,7 +184,7 @@ clean:
 	-if exist $(OBJS)\test.ilf del $(OBJS)\test.ilf
 	-if exist $(OBJS)\test.ils del $(OBJS)\test.ils
 
-$(OBJS)\test.exe: $(TEST_OBJECTS)
+$(OBJS)\test.exe: $(OBJS)\test_dummy.obj  $(TEST_OBJECTS)
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(CPPUNIT_LIBS) @&&|
 	c0x32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
@@ -189,7 +193,13 @@ data:
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
+$(OBJS)\test_dummy.obj: .\dummy.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) -H $**
+
 $(OBJS)\test_test.obj: .\test.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_archivetest.obj: .\archive\archivetest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_arrays.obj: .\arrays\arrays.cpp
@@ -253,6 +263,9 @@ $(OBJS)\test_memstream.obj: .\streams\memstream.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_sstream.obj: .\streams\sstream.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_textstreamtest.obj: .\streams\textstreamtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_zlibstream.obj: .\streams\zlibstream.cpp

@@ -11,7 +11,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/wxprec.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -22,8 +22,6 @@
 #endif // WX_PRECOMP
 
 #include "wx/filesys.h"
-
-#include "wx/cppunit.h"
 
 #if wxUSE_FILESYSTEM
 

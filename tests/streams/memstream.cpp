@@ -7,13 +7,9 @@
 // Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma implementation
-    #pragma interface
-#endif
-
 // For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
+// and "wx/cppunit.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -24,7 +20,6 @@
     #include "wx/wx.h"
 #endif
 
-#include "wx/cppunit.h"
 #include "wx/mstream.h"
 
 #include "bstream.h"

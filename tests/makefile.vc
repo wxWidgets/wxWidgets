@@ -22,9 +22,12 @@ TEST_CXXFLAGS = /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__OPTIMIZEFLAG_4) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\include /I$(SETUPHDIR) /W4 \
 	/I. $(__DLLFLAG_p) /D_CONSOLE $(CPPUNIT_CFLAGS) $(__EXCEPTIONSFLAG_8) \
-	$(__EXCEPTIONSFLAG_9) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG_9) /Yu"testprec.h" /Fp"$(OBJS)\testprec_test.pch" \
+	$(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
+	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
+	$(OBJS)\test_archivetest.obj \
 	$(OBJS)\test_arrays.obj \
 	$(OBJS)\test_datetimetest.obj \
 	$(OBJS)\test_fileconftest.obj \
@@ -46,6 +49,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_filestream.obj \
 	$(OBJS)\test_memstream.obj \
 	$(OBJS)\test_sstream.obj \
+	$(OBJS)\test_textstreamtest.obj \
 	$(OBJS)\test_zlibstream.obj \
 	$(OBJS)\test_uris.obj
 
@@ -236,7 +240,7 @@ clean:
 	-if exist $(OBJS)\test.ilk del $(OBJS)\test.ilk
 	-if exist $(OBJS)\test.pdb del $(OBJS)\test.pdb
 
-$(OBJS)\test.exe: $(TEST_OBJECTS)
+$(OBJS)\test.exe: $(OBJS)\test_dummy.obj  $(TEST_OBJECTS)
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(CPPUNIT_LIBS) @<<
 	$(TEST_OBJECTS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib
 <<
@@ -245,7 +249,13 @@ data:
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
+$(OBJS)\test_dummy.obj: .\dummy.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) /Yctestprec.h $**
+
 $(OBJS)\test_test.obj: .\test.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_archivetest.obj: .\archive\archivetest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_arrays.obj: .\arrays\arrays.cpp
@@ -309,6 +319,9 @@ $(OBJS)\test_memstream.obj: .\streams\memstream.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_sstream.obj: .\streams\sstream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_textstreamtest.obj: .\streams\textstreamtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_zlibstream.obj: .\streams\zlibstream.cpp

@@ -11,7 +11,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/wxprec.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -23,8 +23,6 @@
 
 #include "wx/uri.h"
 #include "wx/url.h"
-
-#include "wx/cppunit.h"
 
 // Test wxURL & wxURI compat?
 #define TEST_URL ( 0 && wxUSE_URL )

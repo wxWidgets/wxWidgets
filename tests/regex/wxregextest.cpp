@@ -7,7 +7,7 @@
 // Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "wx/wxprec.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
 #   pragma hdrstop
@@ -20,7 +20,6 @@
 #if wxUSE_REGEX
 
 #include "wx/regex.h"
-#include "wx/cppunit.h"
 #include "wx/tokenzr.h"
 #include <string>
 

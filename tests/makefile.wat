@@ -182,10 +182,13 @@ SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEST_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=.\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 -i=. $(__DLLFLAG_p) &
-	$(CPPUNIT_CFLAGS) $(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
+	-i=.\..\include -i=$(SETUPHDIR) -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. &
+	$(__DLLFLAG_p) $(CPPUNIT_CFLAGS) /fh=$(OBJS)\testprec_test.pch &
+	$(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  &
+	$(OBJS)\test_dummy.obj &
 	$(OBJS)\test_test.obj &
+	$(OBJS)\test_archivetest.obj &
 	$(OBJS)\test_arrays.obj &
 	$(OBJS)\test_datetimetest.obj &
 	$(OBJS)\test_fileconftest.obj &
@@ -207,6 +210,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_filestream.obj &
 	$(OBJS)\test_memstream.obj &
 	$(OBJS)\test_sstream.obj &
+	$(OBJS)\test_textstreamtest.obj &
 	$(OBJS)\test_zlibstream.obj &
 	$(OBJS)\test_uris.obj
 
@@ -241,7 +245,13 @@ data : .SYMBOLIC
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
+$(OBJS)\test_dummy.obj :  .AUTODEPEND .\dummy.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_test.obj :  .AUTODEPEND .\test.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_archivetest.obj :  .AUTODEPEND .\archive\archivetest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_arrays.obj :  .AUTODEPEND .\arrays\arrays.cpp
@@ -305,6 +315,9 @@ $(OBJS)\test_memstream.obj :  .AUTODEPEND .\streams\memstream.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_sstream.obj :  .AUTODEPEND .\streams\sstream.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_textstreamtest.obj :  .AUTODEPEND .\streams\textstreamtest.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_zlibstream.obj :  .AUTODEPEND .\streams\zlibstream.cpp

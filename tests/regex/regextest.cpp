@@ -30,7 +30,7 @@
 //
 
 // For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -48,7 +48,6 @@
 #ifdef wxHAS_REGEX_ADVANCED
 
 #include "wx/regex.h"
-#include "wx/cppunit.h"
 #include <string>
 #include <vector>
 
@@ -133,6 +132,7 @@ RegExTestCase::RegExTestCase(
     m_advanced(false)
 {
     bool badconv = m_pattern == convError() || m_data == convError();
+    //RN:  Removing the std:: here will break MSVC6 compilation
     std::vector<const char *>::const_iterator it;
 
     for (it = expected.begin(); it != expected.end(); ++it) {

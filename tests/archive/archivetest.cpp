@@ -7,7 +7,7 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "wx/wxprec.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
 #   pragma hdrstop
@@ -25,7 +25,6 @@
 #include "wx/mstream.h"
 #include "wx/wfstream.h"
 #include "wx/dir.h"
-#include "wx/cppunit.h"
 #include <string>
 #include <list>
 #include <sys/stat.h>
@@ -104,7 +103,7 @@ class TestEntry
 {
 public:
     TestEntry(const wxDateTime& dt, int len, const char *data);
-    ~TestEntry() { delete [] m_data; }
+    ~TestEntry() { delete [] (char*) m_data; }
 
     wxDateTime GetDateTime() const  { return m_dt; }
     wxFileOffset GetLength() const  { return m_len; }
@@ -279,7 +278,7 @@ public:
     TestInputStream(TestOutputStream& out) : m_data(NULL) { SetData(out); }
     // this ctor 'dups'
     TestInputStream(const TestInputStream& in);
-    ~TestInputStream() { delete [] m_data; }
+    ~TestInputStream() { delete [] (char*) m_data; }
 
     void Rewind();
     wxFileOffset GetLength() const { return m_size; }
@@ -323,7 +322,7 @@ void TestInputStream::Rewind()
 
 void TestInputStream::SetData(TestOutputStream& out)
 {
-    delete [] m_data;
+    delete [] (char*) m_data;
     m_options = out.GetOptions();
     out.GetData(m_data, m_size);
     Rewind();
@@ -602,21 +601,21 @@ protected:
 
 template <class Classes>
 ArchiveTestCase<Classes>::ArchiveTestCase(const wxString& name,
-                                          int id,
-                                          ClassFactoryT *factory,
-                                          int options,
-                                          const wxString& archiver,
-                                          const wxString& unarchiver)
-  : CppUnit::TestCase(std::string(name.mb_str())),
-    m_factory(factory),
-    m_options(options),
-    m_timeStamp(1, wxDateTime::Mar, 2005, 12, 0),
-    m_id(id),
-    m_archiver(archiver),
-    m_unarchiver(unarchiver)
+                int id,
+                typename Classes::ClassFactoryT *factory,
+                int options,
+                const wxString& archiver,
+                const wxString& unarchiver)
+                : CppUnit::TestCase(std::string(name.mb_str())),
+                    m_factory(factory),
+                    m_options(options),
+                    m_timeStamp(1, wxDateTime::Mar, 2005, 12, 0),
+                    m_id(id),
+                    m_archiver(archiver),
+                    m_unarchiver(unarchiver)
 {
 }
-
+    
 template <class Classes>
 ArchiveTestCase<Classes>::~ArchiveTestCase()
 {

@@ -11,7 +11,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/wxprec.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -24,8 +24,6 @@
 #if wxUSE_FONTMAP
 
 #include "wx/fontmap.h"
-
-#include "wx/cppunit.h"
 
 // ----------------------------------------------------------------------------
 // test class

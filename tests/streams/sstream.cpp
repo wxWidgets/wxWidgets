@@ -8,7 +8,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
+// and "wx/cppunit.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -18,7 +19,6 @@
 #ifndef WX_PRECOMP
 #endif
 
-#include "wx/cppunit.h"
 #include "wx/sstream.h"
 
 #include "bstream.h"

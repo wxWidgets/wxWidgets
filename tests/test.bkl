@@ -7,6 +7,17 @@
 
     <exe id="test" template="wx_test_console"
                    template_append="wx_append_base">
+
+        <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
+            <if cond="FORMAT!='autoconf' and TOOLKIT=='MSW'">
+                <sources>dummy.cpp</sources>
+                <precomp-headers-gen>dummy.cpp</precomp-headers-gen>
+            </if>
+            <precomp-headers-header>testprec.h</precomp-headers-header>
+            <precomp-headers>on</precomp-headers>
+            <precomp-headers-file>testprec_$(id)</precomp-headers-file>
+        </if>
+
         <sources>
             test.cpp
             archive/archivetest.cpp

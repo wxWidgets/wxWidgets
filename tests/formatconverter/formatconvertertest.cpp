@@ -36,7 +36,7 @@
 //
 
 // For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
+#include "testprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -46,8 +46,6 @@
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
-
-#include "wx/cppunit.h"
 
 // wxFormatConverter can only be tested in a Unicode non-Windows debug build
 //

@@ -36,8 +36,8 @@ SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 DESTDIR = 
 WX_RELEASE = 2.5
 LIBDIRNAME = $(top_builddir)lib
-TEST_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir) \
-	$(__DLLFLAG_p) $(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+TEST_CXXFLAGS = $(__test_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(srcdir) $(__DLLFLAG_p) $(CPPUNIT_CFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	test_test.o \
 	test_archivetest.o \
@@ -62,8 +62,10 @@ TEST_OBJECTS =  \
 	test_filestream.o \
 	test_memstream.o \
 	test_sstream.o \
+	test_textstreamtest.o \
 	test_zlibstream.o \
 	test_uris.o
+TEST_ODEP =  $(___pch_testprec_test_testprec_h_gch___depname)
 
 ### Conditionally set variables: ###
 
@@ -82,6 +84,9 @@ TEST_OBJECTS =  \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL test$(EXEEXT)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
+@COND_GCC_PCH_1@__test_PCH_INC = -I.pch/testprec_test
+@COND_GCC_PCH_1@___pch_testprec_test_testprec_h_gch___depname \
+@COND_GCC_PCH_1@	= .pch/testprec_test/testprec.h.gch
 COND_MONOLITHIC_0___WXLIB_NET_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_NET_p = $(COND_MONOLITHIC_0___WXLIB_NET_p)
@@ -134,6 +139,9 @@ test$(EXEEXT): $(TEST_OBJECTS)
 	$(__test___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
+@COND_GCC_PCH_1@.pch/testprec_test/testprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/testprec_test/testprec.h.gch testprec.h $(CXX) $(TEST_CXXFLAGS)
+
 data: 
 	@mkdir -p .
 	@for f in testdata.fc; do \
@@ -142,79 +150,82 @@ data:
 	fi; \
 	done
 
-test_test.o: $(srcdir)/test.cpp
+test_test.o: $(srcdir)/test.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_archivetest.o: $(srcdir)/archive/archivetest.cpp
+test_archivetest.o: $(srcdir)/archive/archivetest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_arrays.o: $(srcdir)/arrays/arrays.cpp
+test_arrays.o: $(srcdir)/arrays/arrays.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_datetimetest.o: $(srcdir)/datetime/datetimetest.cpp
+test_datetimetest.o: $(srcdir)/datetime/datetimetest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_fileconftest.o: $(srcdir)/fileconf/fileconftest.cpp
+test_fileconftest.o: $(srcdir)/fileconf/fileconftest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_filenametest.o: $(srcdir)/filename/filenametest.cpp
+test_filenametest.o: $(srcdir)/filename/filenametest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_filesystest.o: $(srcdir)/filesys/filesystest.cpp
+test_filesystest.o: $(srcdir)/filesys/filesystest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_fontmaptest.o: $(srcdir)/fontmap/fontmaptest.cpp
+test_fontmaptest.o: $(srcdir)/fontmap/fontmaptest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_formatconvertertest.o: $(srcdir)/formatconverter/formatconvertertest.cpp
+test_formatconvertertest.o: $(srcdir)/formatconverter/formatconvertertest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_hashes.o: $(srcdir)/hashes/hashes.cpp
+test_hashes.o: $(srcdir)/hashes/hashes.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_longlongtest.o: $(srcdir)/longlong/longlongtest.cpp
+test_longlongtest.o: $(srcdir)/longlong/longlongtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_mbconvtest.o: $(srcdir)/mbconv/mbconvtest.cpp
+test_mbconvtest.o: $(srcdir)/mbconv/mbconvtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_regextest.o: $(srcdir)/regex/regextest.cpp
+test_regextest.o: $(srcdir)/regex/regextest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_wxregextest.o: $(srcdir)/regex/wxregextest.cpp
+test_wxregextest.o: $(srcdir)/regex/wxregextest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_strings.o: $(srcdir)/strings/strings.cpp
+test_strings.o: $(srcdir)/strings/strings.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_stdstrings.o: $(srcdir)/strings/stdstrings.cpp
+test_stdstrings.o: $(srcdir)/strings/stdstrings.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_unicode.o: $(srcdir)/strings/unicode.cpp
+test_unicode.o: $(srcdir)/strings/unicode.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_crt.o: $(srcdir)/strings/crt.cpp
+test_crt.o: $(srcdir)/strings/crt.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_bstream.o: $(srcdir)/streams/bstream.cpp
+test_bstream.o: $(srcdir)/streams/bstream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_ffilestream.o: $(srcdir)/streams/ffilestream.cpp
+test_ffilestream.o: $(srcdir)/streams/ffilestream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_filestream.o: $(srcdir)/streams/filestream.cpp
+test_filestream.o: $(srcdir)/streams/filestream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_memstream.o: $(srcdir)/streams/memstream.cpp
+test_memstream.o: $(srcdir)/streams/memstream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_sstream.o: $(srcdir)/streams/sstream.cpp
+test_sstream.o: $(srcdir)/streams/sstream.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_zlibstream.o: $(srcdir)/streams/zlibstream.cpp
+test_textstreamtest.o: $(srcdir)/streams/textstreamtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
-test_uris.o: $(srcdir)/uris/uris.cpp
+test_zlibstream.o: $(srcdir)/streams/zlibstream.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_uris.o: $(srcdir)/uris/uris.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 
