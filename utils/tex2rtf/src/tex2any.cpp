@@ -901,7 +901,7 @@ bool ParseNewCommand(wxChar *buffer, int *pos)
     int braceCount = 0;
     while (!end)
     {
-      char ch = buffer[*pos];
+      wxChar ch = buffer[*pos];
       if (ch == _T('{'))
         braceCount ++;
       else if (ch == _T('}'))
@@ -942,7 +942,7 @@ void MacroError(wxChar *buffer)
   wxChar macroBuf[200];
   macroBuf[0] = '\\';
   int i = 1;
-  char ch;
+  wxChar ch;
   while (((ch = buffer[i-1]) != '\n') && (ch != 0))
   {
     macroBuf[i] = ch;
@@ -1093,15 +1093,15 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
       }
     }
 
-    char ch = buffer[pos];
+    wxChar wxCh = buffer[pos];
     // End of optional argument -- pretend it's right brace for simplicity
-    if (thisArg->optional && (ch == ']'))
-      ch = '}';
+    if (thisArg->optional && (wxCh == _T(']')))
+      wxCh = _T('}');
 
-    switch (ch)
+    switch (wxCh)
     {
       case 0:
-      case '}':  // End of argument
+      case _T('}'):  // End of argument
       {
         if (buf_ptr > 0)
         {
@@ -1110,10 +1110,10 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
           chunk->value = copystring(BigBuffer);
           children.Append((wxObject *)chunk);
         }
-        if (ch == '}') pos ++;
+        if (wxCh == _T('}')) pos ++;
         return pos;
       }
-      case '\\':
+      case _T('\\'):
       {
         if (buf_ptr > 0)  // Finish off the string we've read so far
         {
@@ -1154,8 +1154,8 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
           bool end = false;
           while (!end)
           {
-            int ch = buffer[pos];
-            if (ch == '}')
+            wxChar ch = buffer[pos];
+            if (ch == _T('}'))
             {
               noBraces --;
               if (noBraces == 0)
@@ -1165,32 +1165,32 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
               }
               else
               {
-                wxTex2RTFBuffer[i] = '}';
+                wxTex2RTFBuffer[i] = _T('}');
                 i ++;
               }
               pos ++;
             }
-            else if (ch == '{')
+            else if (ch == _T('{'))
             {
-              wxTex2RTFBuffer[i] = '{';
+              wxTex2RTFBuffer[i] = _T('{');
               i ++;
               pos ++;
             }
-            else if (ch == '\\' && buffer[pos+1] == '}')
+            else if (ch == _T('\\') && buffer[pos+1] == _T('}'))
             {
-              wxTex2RTFBuffer[i] = '}';
+              wxTex2RTFBuffer[i] = _T('}');
               pos += 2;
               i++;
             }
-            else if (ch == '\\' && buffer[pos+1] == '{')
+            else if (ch == _T('\\') && buffer[pos+1] == _T('{'))
             {
-              wxTex2RTFBuffer[i] = '{';
+              wxTex2RTFBuffer[i] = _T('{');
               pos += 2;
               i++;
             }
             else
             {
-              wxTex2RTFBuffer[i] = (wxChar)ch;
+              wxTex2RTFBuffer[i] = ch;
               pos ++;
               i ++;
               if (ch == 0)
@@ -1218,7 +1218,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
         else if (wxStrncmp(buffer+pos, _T("verb"), 4) == 0)
         {
           pos += 4;
-          if (buffer[pos] == '*')
+          if (buffer[pos] == _T('*'))
             pos ++;
 
           // Find the delimiter character
@@ -1256,8 +1256,8 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
 
           children.Append((wxObject *)chunk);
         }
-    else
-    {
+        else
+        {
           wxChar *env = NULL;
           bool tmpParseToBrace = true;
           TexMacroDef *def = MatchMacro(buffer, &pos, &env, &tmpParseToBrace);
@@ -1310,10 +1310,10 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
       }
       // Parse constructs like {\bf thing} as if they were
       // \bf{thing}
-      case '{':
+      case _T('{'):
       {
         pos ++;
-        if (buffer[pos] == '\\')
+        if (buffer[pos] == _T('\\'))
         {
           if (buf_ptr > 0)
           {
@@ -1363,7 +1363,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
           }
         }
         else
-    {
+        {
          /*
           * If all else fails, we assume that we have
           * a pair of braces on their own, so return a `dummy' macro
@@ -1396,10 +1396,10 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
           arg->macroId = chunk->macroId;
 
           pos = ParseArg(arg, arg->children, buffer, pos, NULL, true, customMacroArgs);
-    }
+        }
         break;
       }
-      case '$':
+      case _T('$'):
       {
         if (buf_ptr > 0)
         {
@@ -1412,7 +1412,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
 
         pos ++;
 
-        if (buffer[pos] == '$')
+        if (buffer[pos] == _T('$'))
         {
           TexChunk *chunk = new TexChunk(CHUNK_TYPE_MACRO);
           chunk->no_args = 0;
@@ -1431,7 +1431,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
         }
         break;
       }
-      case '~':
+      case _T('~'):
       {
         if (buf_ptr > 0)
         {
@@ -1450,7 +1450,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
         children.Append((wxObject *)chunk);
         break;
       }
-      case '#': // Either treat as a special TeX character or as a macro arg
+      case _T('#'): // Either treat as a special TeX character or as a macro arg
       {
         if (buf_ptr > 0)
         {
@@ -1486,12 +1486,12 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
         }
         break;
       }
-      case '&':
+      case _T('&'):
       {
         // Remove white space before and after the ampersand,
         // since this is probably a table column separator with
         // some convenient -- but useless -- white space in the text.
-        while ((buf_ptr > 0) && ((BigBuffer[buf_ptr-1] == ' ') || (BigBuffer[buf_ptr-1] == 9)))
+        while ((buf_ptr > 0) && ((BigBuffer[buf_ptr-1] == _T(' ')) || (BigBuffer[buf_ptr-1] == 9)))
           buf_ptr --;
 
         if (buf_ptr > 0)
@@ -1505,7 +1505,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
 
         pos ++;
 
-        while (buffer[pos] == ' ' || buffer[pos] == 9)
+        while (buffer[pos] == _T(' ') || buffer[pos] == 9)
           pos ++;
 
         TexChunk *chunk = new TexChunk(CHUNK_TYPE_MACRO);
@@ -1516,13 +1516,13 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
         break;
       }
       // Eliminate end-of-line comment
-      case '%':
+      case _T('%'):
       {
-        ch = buffer[pos];
-        while (ch != 10 && ch != 13 && ch != 0)
+        wxCh = buffer[pos];
+        while (wxCh != 10 && wxCh != 13 && wxCh != 0)
         {
           pos ++;
-          ch = buffer[pos];
+          wxCh = buffer[pos];
         }
         if (buffer[pos] == 10 || buffer[pos] == 13)
         {
@@ -1534,7 +1534,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
       // Eliminate tab
       case 9:
       {
-        BigBuffer[buf_ptr] = ' ';
+        BigBuffer[buf_ptr] = _T(' ');
         BigBuffer[buf_ptr+1] = 0;
         buf_ptr ++;
         pos ++;
@@ -1542,7 +1542,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
       }
       default:
       {
-        BigBuffer[buf_ptr] = ch;
+        BigBuffer[buf_ptr] = wxCh;
         BigBuffer[buf_ptr+1] = 0;
         buf_ptr ++;
         pos ++;

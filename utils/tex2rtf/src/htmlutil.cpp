@@ -262,7 +262,7 @@ void ProcessText2HTML(TexChunk *chunk)
   bool changed = false;
   int ptr = 0;
   int i = 0;
-  char ch = 1;
+  wxChar ch = 1;
   int len = wxStrlen(chunk->value);
   while (ch != 0)
   {
@@ -277,19 +277,19 @@ void ProcessText2HTML(TexChunk *chunk)
       i += 2;
       changed = true;
     }
-    else if (!inVerbatim && ch == '`' && (len >= i+1 && chunk->value[i+1] == '`'))
+    else if (!inVerbatim && ch == _T('`') && (len >= i+1 && chunk->value[i+1] == '`'))
     {
       BigBuffer[ptr] = '"'; ptr ++;
       i += 2;
       changed = true;
     }
-    else if (!inVerbatim && ch == '`') // Change ` to '
+    else if (!inVerbatim && ch == _T('`')) // Change ` to '
     {
       BigBuffer[ptr] = 39; ptr ++;
       i += 1;
       changed = true;
     }
-    else if (ch == '<') // Change < to &lt
+    else if (ch == _T('<')) // Change < to &lt
     {
       BigBuffer[ptr] = 0;
       wxStrcat(BigBuffer, _T("&lt;"));
@@ -297,7 +297,7 @@ void ProcessText2HTML(TexChunk *chunk)
       i += 1;
       changed = true;
     }
-    else if (ch == '>') // Change > to &gt
+    else if (ch == _T('>')) // Change > to &gt
     {
       BigBuffer[ptr] = 0;
       wxStrcat(BigBuffer, _T("&gt;"));
