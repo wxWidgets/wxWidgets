@@ -102,7 +102,7 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
         int scroll_height, mouse_pos;
 
         // get the mouse position when the click is done 
-        if (widget->orientation == GTK_ORIENTATION_VERTICAL)
+        if (win->HasFlag(wxSB_VERTICAL))        
         {   
             scroll_height = GTK_WIDGET(widget)->allocation.height - 16;
             mouse_pos = (int)gdk_event->y;
