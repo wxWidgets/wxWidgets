@@ -7965,43 +7965,6 @@ static PyObject *_wrap_wxImageList_Replace(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-#define wxImageList_ReplaceIcon(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Replace(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxImageList_ReplaceIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxImageList * _arg0;
-    int  _arg1;
-    wxIcon * _arg2;
-    PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","index","icon", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxImageList_ReplaceIcon",_kwnames,&_argo0,&_arg1,&_argo2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImageList_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_ReplaceIcon. Expected _wxImageList_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxIcon_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxImageList_ReplaceIcon. Expected _wxIcon_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxImageList_ReplaceIcon(_arg0,_arg1,*_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 #define wxImageList_Draw(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->Draw(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
 static PyObject *_wrap_wxImageList_Draw(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -8132,7 +8095,6 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxImageList_Remove", (PyCFunction) _wrap_wxImageList_Remove, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_GetImageCount", (PyCFunction) _wrap_wxImageList_GetImageCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_Draw", (PyCFunction) _wrap_wxImageList_Draw, METH_VARARGS | METH_KEYWORDS },
-	 { "wxImageList_ReplaceIcon", (PyCFunction) _wrap_wxImageList_ReplaceIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_Replace", (PyCFunction) _wrap_wxImageList_Replace, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_AddIcon", (PyCFunction) _wrap_wxImageList_AddIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_AddWithColourMask", (PyCFunction) _wrap_wxImageList_AddWithColourMask, METH_VARARGS | METH_KEYWORDS },

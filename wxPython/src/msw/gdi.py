@@ -855,9 +855,6 @@ class wxImageListPtr :
     def Replace(self, *_args, **_kwargs):
         val = apply(gdic.wxImageList_Replace,(self,) + _args, _kwargs)
         return val
-    def ReplaceIcon(self, *_args, **_kwargs):
-        val = apply(gdic.wxImageList_ReplaceIcon,(self,) + _args, _kwargs)
-        return val
     def Draw(self, *_args, **_kwargs):
         val = apply(gdic.wxImageList_Draw,(self,) + _args, _kwargs)
         return val
