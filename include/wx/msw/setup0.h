@@ -1086,12 +1086,6 @@
 #define wxUSE_DEBUG_NEW_ALWAYS          0
 #endif // wxUSE_MFC
 
-// ODBC classes aren't Unicode-compatible yet
-#if wxUSE_UNICODE
-#undef wxUSE_ODBC
-#define wxUSE_ODBC 0
-#endif
-
 #if (!defined(WIN32) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
 // Can't use OLE drag and drop in Windows 3.1 because we don't know how
 // to implement UUIDs

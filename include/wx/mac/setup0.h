@@ -1017,12 +1017,6 @@
 #define wxUSE_DEBUG_NEW_ALWAYS          0
 #endif // wxUSE_MFC
 
-// ODBC classes aren't Unicode-compatible yet
-#if wxUSE_UNICODE
-#undef wxUSE_ODBC
-#define wxUSE_ODBC 0
-#endif
-
 
 // Only WIN32 supports wxStatusBar95
 #if !defined(__WIN32__) && wxUSE_NATIVE_STATUSBAR

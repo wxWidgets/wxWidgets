@@ -773,6 +773,16 @@
 #   endif
 #endif /* wxUSE_UNICODE_MSLU */
 
+#if wxUSE_ODBC && wxUSE_UNICODE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+        /* (ODBC classes aren't Unicode-compatible yet) */
+#       error "wxUSE_ODBC can't be used with wxUSE_UNICODE"
+#   else
+#       undef wxUSE_ODBC
+#       define wxUSE_ODBC 0
+#   endif
+#endif /* wxUSE_ODBC */
+
 /* the rest of the tests is for the GUI settings only */
 #if wxUSE_GUI
 

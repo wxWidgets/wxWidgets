@@ -956,8 +956,8 @@ bool wxDialUpManagerMSW::IsAlwaysOnline() const
             if ( pfnInternetGetConnectedState(&flags, 0 /* reserved */) )
             {
                 // there is some connection to the net, see of which type
-                ms_isAlwaysOnline = (flags & INTERNET_CONNECTION_LAN != 0) ||
-                                    (flags & INTERNET_CONNECTION_PROXY != 0);
+                ms_isAlwaysOnline = ((flags & INTERNET_CONNECTION_LAN) != 0)
+                                    || ((flags & INTERNET_CONNECTION_PROXY) != 0);
             }
             else
             {

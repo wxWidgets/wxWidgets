@@ -174,6 +174,19 @@
    #endif
 #endif
 
+
+/*
+  When this file is included, sometimes the wxCHECK_W32API_VERSION macro
+  is undefined. With for example CodeWarrior this gives problems with
+  the following code:
+  #if 0 && wxCHECK_W32API_VERSION( 0, 5 )
+  Because CodeWarrior does macro expansion before test evaluation.
+  We define wxCHECK_W32API_VERSION here if it's undefined.
+*/
+#if !defined(__GNUG__) && !defined(wxCHECK_W32API_VERSION)
+    #define wxCHECK_W32API_VERSION(maj, min) (0)
+#endif
+
 // StartDoc
 
 #ifdef StartDoc
