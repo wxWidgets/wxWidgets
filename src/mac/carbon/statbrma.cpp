@@ -53,7 +53,8 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
     if( !wxStatusBarGeneric::Create( parent , id , style , name ) )
         return FALSE ;
     
-    m_macBackgroundBrush.MacSetTheme( kThemeBrushDialogBackgroundActive ) ;    
+    if ( parent->MacGetTopLevelWindow()->MacGetMetalAppearance() )
+        MacSetBackgroundBrush( wxNullBrush ) ;    
     
     return TRUE ;
 }
@@ -66,7 +67,7 @@ void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
     wxRect rect;
     GetFieldRect(i, rect);
     
-    if ( !IsWindowHilited( MAC_WXHWND( MacGetTopLevelWindowRef() ) ) )
+    if ( !MacGetTopLevelWindow()->MacGetMetalAppearance() && !IsWindowHilited( MAC_WXHWND( MacGetTopLevelWindowRef() ) ) )
     {
         dc.SetTextForeground( wxColour( 0x80 , 0x80 , 0x80 ) ) ;
     }
@@ -78,7 +79,7 @@ void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
     dc.GetTextExtent(text, &x, &y);
     
     int xpos = rect.x + leftMargin + 1 ;
-    int ypos = 1 ;
+    int ypos = 2 ;
     
     dc.SetClippingRegion(rect.x, 0, rect.width, h);
     
@@ -118,13 +119,16 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
     int w, h ;
     GetSize( &w , &h ) ;
 
-	if ( IsWindowHilited( MAC_WXHWND( MacGetTopLevelWindowRef() ) ) )
+	if ( IsWindowHilited( MAC_WXHWND( MacGetTopLevelWindowRef() ) ) || MacGetTopLevelWindow()->MacGetMetalAppearance() )
 	{
 		wxPen white( wxWHITE , 1 , wxSOLID ) ;
-        if (major >= 10) 
+        if (major >= 10 ) 
         {
             //Finder statusbar border color: (Project builder similar is 9B9B9B)
-            dc.SetPen(wxPen(wxColour(0xB1,0xB1,0xB1),1,wxSOLID));  
+            if ( MacGetTopLevelWindow()->MacGetMetalAppearance() )
+                dc.SetPen(wxPen(wxColour(0x40,40,40) ,1,wxSOLID)) ;
+            else
+                dc.SetPen(wxPen(wxColour(0xB1,0xB1,0xB1),1,wxSOLID));  
         }
         else
         {
