@@ -785,11 +785,13 @@ wxString wxTextCtrl::GetValue() const
     wxString value;
 
     if( wxApp::s_macDefaultEncodingIsPC )
+    {
         value = wxMacMakePCStringFromMac( wxBuffer ) ;
+        value.Replace( "\r", "\n" );
+	}
     else
         value = wxBuffer;
         
-    value.Replace( "\r", "\n" );
     
     return value;
 }
@@ -812,11 +814,13 @@ void wxTextCtrl::SetValue(const wxString& st)
     wxString value;
     
     if( wxApp::s_macDefaultEncodingIsPC )
+    {
         value = wxMacMakeMacStringFromPC( st ) ;
+   	 	value.Replace( "\n", "\r" );
+    }
     else
         value = st;
         
-    value.Replace( "\n", "\r" );
         
     if ( !m_macUsesTXN )
     {
@@ -1178,9 +1182,13 @@ void wxTextCtrl::WriteText(const wxString& text)
 {
     wxString value ;
     if( wxApp::s_macDefaultEncodingIsPC )
+    {
         value = wxMacMakeMacStringFromPC( text ) ;
+    	value.Replace( "\n", "\r" );
+    }
     else
         value = text ;
+        
     if ( !m_macUsesTXN )
     {
         TEInsert( value , value.Length() , ((TEHandle) m_macTE) ) ;
