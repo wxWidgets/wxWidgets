@@ -46,13 +46,43 @@ wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 // private functions
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_HASH_MAP( long,
-                     wxTimer *,
-                     wxIntegerHash,
-                     wxIntegerEqual,
-                     wxTimerMap );
+// define a hash containing all the timers: it is indexed by HWND and timer id
+struct wxTimerKey
+{
+    wxTimerKey(WXHWND hwnd, int id) : m_hwnd(hwnd), m_id(id) { }
+    wxTimerKey(HWND hwnd, int id) : m_hwnd((WXHWND)hwnd), m_id(id) { }
 
-wxTimerMap wxTimerList;
+    WXHWND m_hwnd;
+    int m_id;
+};
+
+static inline bool operator==(const wxTimerKey& tk1, const wxTimerKey& tk2)
+{
+    return tk1.m_hwnd == tk2.m_hwnd && tk1.m_id == tk2.m_id;
+}
+
+struct wxTimerKeyHash
+{
+    wxTimerKeyHash() { }
+    unsigned long operator()(const wxTimerKey& tk) const
+        { return (unsigned long)tk.m_hwnd + tk.m_id; }
+
+    wxTimerKeyHash& operator=(const wxTimerKeyHash&) { return *this; }
+};
+
+struct wxTimerKeyEqual
+{
+    wxTimerKeyEqual() { }
+    bool operator()(const wxTimerKey& tk1, const wxTimerKey& tk2) const
+        { return tk1 == tk2; }
+
+    wxTimerKeyEqual& operator=(const wxTimerKeyEqual&) { return *this; }
+};
+
+WX_DECLARE_HASH_MAP(wxTimerKey, wxTimer *, wxTimerKeyHash, wxTimerKeyEqual,
+                    wxTimerMap);
+
+static wxTimerMap g_timerMap;
 
 void WINAPI wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 
@@ -115,12 +145,7 @@ void wxTimer::Init()
 
 wxTimer::~wxTimer()
 {
-    // save id as Stop() changes it
-    long id = m_id;
-
     wxTimer::Stop();
-
-    wxTimerList.erase(id);
 }
 
 bool wxTimer::Start(int milliseconds, bool oneShot)
@@ -182,7 +207,7 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
         return false;
     }
 
-    wxTimerList[m_id] = this;
+    g_timerMap[wxTimerKey(m_hwnd, m_id)] = this;
 
     return true;
 }
@@ -194,7 +219,7 @@ void wxTimer::Stop()
         ::KillTimer((HWND)m_hwnd, (UINT)m_id);
         m_hwnd = NULL;
 
-        wxTimerList.erase(m_id);
+        g_timerMap.erase(wxTimerKey(m_hwnd, m_id));
     }
 
     m_id = 0;
@@ -206,9 +231,7 @@ void wxTimer::Stop()
 
 void wxProcessTimer(wxTimer& timer)
 {
-    // Avoid to process spurious timer events
-    if ( timer.m_id == 0)
-        return;
+    wxASSERT_MSG( timer.m_id != 0, _T("bogus timer id") );
 
     if ( timer.IsOneShot() )
         timer.Stop();
@@ -216,11 +239,11 @@ void wxProcessTimer(wxTimer& timer)
     timer.Notify();
 }
 
-void WINAPI wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
+void WINAPI wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD)
 {
-    wxTimerMap::iterator node = wxTimerList.find((long)idTimer);
+    wxTimerMap::iterator node = g_timerMap.find(wxTimerKey(hwnd, idTimer));
 
-    wxASSERT_MSG( node != wxTimerList.end(), wxT("bogus timer id in wxTimerProc") );
+    wxCHECK_RET( node != g_timerMap.end(), wxT("bogus timer id in wxTimerProc") );
 
     wxProcessTimer(*(node->second));
 }
