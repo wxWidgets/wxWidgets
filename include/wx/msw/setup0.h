@@ -532,6 +532,9 @@
 #define wxUSE_WX_RESOURCES        1
                                 // Use .wxr resource mechanism (requires PrologIO library)
 
+#define wxUSE_MOUSEWHEEL        1
+                                // Include mouse wheel support
+
 // ----------------------------------------------------------------------------
 // postscript support settings
 // ----------------------------------------------------------------------------
@@ -555,10 +558,10 @@
 
 // For backward compatibility reasons, this parameter now only controls the
 // default scrolling method used by cursors.  This default behavior can be
-// overriden by setting the second param of wxDB::wxDbGetConnection() or 
+// overriden by setting the second param of wxDB::wxDbGetConnection() or
 // wxDb() constructor to indicate whether the connection (and any wxDbTable()s
-// that use the connection) should support forward only scrolling of cursors, 
-// or both forward and backward support for backward scrolling cursors is 
+// that use the connection) should support forward only scrolling of cursors,
+// or both forward and backward support for backward scrolling cursors is
 // dependent on the data source as well as the ODBC driver being used.
 #define wxODBC_FWD_ONLY_CURSORS	 1
 

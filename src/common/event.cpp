@@ -150,6 +150,7 @@ DEFINE_EVENT_TYPE(wxEVT_MIDDLE_DCLICK)
 DEFINE_EVENT_TYPE(wxEVT_RIGHT_DCLICK)
 DEFINE_EVENT_TYPE(wxEVT_SET_FOCUS)
 DEFINE_EVENT_TYPE(wxEVT_KILL_FOCUS)
+DEFINE_EVENT_TYPE(wxEVT_MOUSEWHEEL)
 
 // Non-client mouse events
 DEFINE_EVENT_TYPE(wxEVT_NC_LEFT_DOWN)
@@ -414,6 +415,9 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
     m_middleDown = FALSE;
     m_x = 0;
     m_y = 0;
+    m_wheelRotation = 0;
+    m_wheelDelta = 0;
+    m_linesPerAction = 0;
 }
 
 void wxMouseEvent::CopyObject(wxObject& obj_d) const

@@ -151,6 +151,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_RIGHT_DCLICK, 111)
     DECLARE_EVENT_TYPE(wxEVT_SET_FOCUS, 112)
     DECLARE_EVENT_TYPE(wxEVT_KILL_FOCUS, 113)
+    DECLARE_EVENT_TYPE(wxEVT_MOUSEWHEEL, 114)
 
         // Non-client mouse events
     DECLARE_EVENT_TYPE(wxEVT_NC_LEFT_DOWN, 200)
@@ -669,6 +670,25 @@ public:
     // Get Y position
     wxCoord GetY() const { return m_y; }
 
+    // Get wheel rotation, positive or negative indicates direction of
+    // rotation.  Current devices all send an event when rotation is equal to
+    // +/-WheelDelta, but this allows for finer resolution devices to be
+    // created in the future.  Because of this you shouldn't assume that one
+    // event is equal to 1 line or whatever, but you should be able to either
+    // do partial line scrolling or wait until +/-WheelDelta rotation values
+    // have been accumulated before scrolling.
+    int GetWheelRotation() const { return m_wheelRotation; }
+
+    // Get wheel delta, normally 120.  This is the threshold for action to be
+    // taken, and one such action (for example, scrolling one increment)
+    // should occur for each delta.
+    int GetWheelDelta() const { return m_wheelDelta; }
+
+    // Returns the configured number of lines (or whatever) to be scrolled per
+    // wheel action.  Defaults to one.
+    int GetLinesPerAction() const { return m_linesPerAction; }
+
+
     void CopyObject(wxObject& obj) const;
 
 public:
@@ -682,6 +702,10 @@ public:
     bool          m_shiftDown;
     bool          m_altDown;
     bool          m_metaDown;
+
+    int           m_wheelRotation;
+    int           m_wheelDelta;
+    int           m_linesPerAction;
 };
 
 // Cursor set event
@@ -1756,6 +1780,7 @@ typedef void (wxEvtHandler::*wxHelpEventFunction)(wxHelpEvent&);
 #define EVT_RIGHT_DCLICK(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
 #define EVT_LEAVE_WINDOW(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEAVE_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
 #define EVT_ENTER_WINDOW(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_ENTER_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+#define EVT_MOUSEWHEEL(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MOUSEWHEEL, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
 
 // All mouse events
 #define EVT_MOUSE_EVENTS(func) \
@@ -1770,7 +1795,8 @@ typedef void (wxEvtHandler::*wxHelpEventFunction)(wxHelpEvent&);
  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MIDDLE_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
  DECLARE_EVENT_TABLE_ENTRY( wxEVT_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
  DECLARE_EVENT_TABLE_ENTRY( wxEVT_ENTER_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
- DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEAVE_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_LEAVE_WINDOW, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),\
+ DECLARE_EVENT_TABLE_ENTRY( wxEVT_MOUSEWHEEL, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL ),
 
 // EVT_COMMAND
 #define EVT_COMMAND(id, event, fn)  DECLARE_EVENT_TABLE_ENTRY( event, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),

@@ -108,6 +108,15 @@
 #define SIF_TRACKPOS 16
 #endif
 
+#if wxUSE_MOUSEWHEEL
+    #ifndef WM_MOUSEWHEEL
+        #define WM_MOUSEWHEEL           0x020A
+        #define WHEEL_DELTA             120
+        #define SPI_GETWHEELSCROLLLINES 104
+    #endif
+#endif
+
+
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
@@ -1910,6 +1919,12 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                                         wParam);
             break;
 
+#if wxUSE_MOUSEWHEEL
+        case WM_MOUSEWHEEL:
+            processed = HandleMouseWheel(wParam, lParam);
+            break;
+#endif
+
         case WM_LBUTTONDOWN:
            // set focus to this window
            if (AcceptsFocus())
@@ -3347,6 +3362,31 @@ bool wxWindow::HandleMouseMove(int x, int y, WXUINT flags)
     return HandleMouseEvent(WM_MOUSEMOVE, x, y, flags);
 }
 
+
+bool wxWindow::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
+{
+#if wxUSE_MOUSEWHEEL
+    wxMouseEvent event(wxEVT_MOUSEWHEEL);
+    InitMouseEvent(event,
+                   GET_X_LPARAM(lParam),
+                   GET_Y_LPARAM(lParam),
+                   LOWORD(wParam));
+
+    event.m_wheelRotation = (short)HIWORD(wParam);
+    event.m_wheelDelta = WHEEL_DELTA;
+
+    int linesPer;
+    if (!SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &linesPer, 0))
+        linesPer = 1;
+    event.m_linesPerAction = linesPer;
+
+    return GetEventHandler()->ProcessEvent(event);
+#else
+    return FALSE;
+#endif
+}
+
+
 // ---------------------------------------------------------------------------
 // keyboard handling
 // ---------------------------------------------------------------------------
@@ -4098,6 +4138,7 @@ const char *wxGetMessageName(int message)
         case 0x0207: return "WM_MBUTTONDOWN";
         case 0x0208: return "WM_MBUTTONUP";
         case 0x0209: return "WM_MBUTTONDBLCLK";
+        case 0x020A: return "WM_MOUSEWHEEL";
         case 0x0210: return "WM_PARENTNOTIFY";
         case 0x0211: return "WM_ENTERMENULOOP";
         case 0x0212: return "WM_EXITMENULOOP";

@@ -9,15 +9,15 @@ drawbacks: the LEAVE\_WINDOW event might be received some time after the mouse
 left the window and the state variables for it may have changed during this
 time.
 
-{\bf NB: } Note the difference between methods like 
-\helpref{LeftDown}{wxmouseeventleftdown} and 
+{\bf NB: } Note the difference between methods like
+\helpref{LeftDown}{wxmouseeventleftdown} and
 \helpref{LeftIsDown}{wxmouseeventleftisdown}: the formet returns {\tt TRUE}
 when the event corresponds to the left mouse button click while the latter
 returns {\tt TRUE} if the left mouse button is currently being pressed. For
-example, when the user is dragging the mouse you can use 
+example, when the user is dragging the mouse you can use
 \helpref{LeftIsDown}{wxmouseeventleftisdown} to test
 whether the left mouse button is (still) depressed. Also, by convention, if
-\helpref{LeftDown}{wxmouseeventleftdown} returns {\tt TRUE}, 
+\helpref{LeftDown}{wxmouseeventleftdown} returns {\tt TRUE},
 \helpref{LeftIsDown}{wxmouseeventleftisdown} will also return {\tt TRUE} in
 wxWindows whatever the underlying GUI behaviour is (which is
 platform-dependent). The same applies, of course, to other mouse buttons as
@@ -50,6 +50,7 @@ functions that take a wxMouseEvent argument.
 \twocolitem{{\bf EVT\_MOTION(func)}}{Process a wxEVT\_MOTION event.}
 \twocolitem{{\bf EVT\_ENTER\_WINDOW(func)}}{Process a wxEVT\_ENTER\_WINDOW event.}
 \twocolitem{{\bf EVT\_LEAVE\_WINDOW(func)}}{Process a wxEVT\_LEAVE\_WINDOW event.}
+\twocolitem{{\bf EVT\_MOUSEWHEEL(func)}}{Process a wxEVT\_MOUSEWHEEL event.}
 \twocolitem{{\bf EVT\_MOUSE\_EVENTS(func)}}{Process all mouse events.}
 \end{twocollist}%
 
@@ -85,12 +86,6 @@ TRUE if the middle mouse button is currently pressed down.
 
 TRUE if the right mouse button is currently pressed down.
 
-\membersection{wxMouseEvent::m\_leftDown}
-
-\member{bool}{m\_leftDown}
-
-TRUE if the left mouse button is currently pressed down.
-
 \membersection{wxMouseEvent::m\_metaDown}
 
 \member{bool}{m\_metaDown}
@@ -115,6 +110,26 @@ X-coordinate of the event.
 
 Y-coordinate of the event.
 
+\membersection{wxMouseEvent::m\_wheelRotation}
+
+\member{int}{m\_wheelRotation}
+
+The distance the mouse wheel is rotated.
+
+\membersection{wxMouseEvent::m\_wheelDelta}
+
+\member{int}{m\_wheelDelta}
+
+The wheel delta, normally 120.
+
+\membersection{wxMouseEvent::m\_linesPerAction}
+
+\member{int}{m\_linesPerAction}
+
+The configured number of lines (or whatever) to be scrolled per wheel
+action.
+
+
 \membersection{wxMouseEvent::wxMouseEvent}
 
 \func{}{wxMouseEvent}{\param{WXTYPE}{ mouseEventType = 0}, \param{int}{ id = 0}}
@@ -135,6 +150,7 @@ Constructor. Valid event types are:
 \item {\bf wxEVT\_RIGHT\_UP}
 \item {\bf wxEVT\_RIGHT\_DCLICK}
 \item {\bf wxEVT\_MOTION}
+\item {\bf wxEVT\_MOUSEWHEEL}
 \end{itemize}
 
 \membersection{wxMouseEvent::AltDown}
@@ -217,6 +233,34 @@ Returns the physical mouse position in pixels.
 Returns the logical mouse position in pixels (i.e. translated according to the
 translation set for the DC, which usually indicates that the window has been scrolled).
 
+
+\membersection{wxMouseEvent::GetLinesPerAction}\label{wxmouseeventgetlinesperaction}
+
+\constfunc{int}{GetLinesPerAction}{\void}
+
+Returns the configured number of lines (or whatever) to be scrolled per
+wheel action.  Defaults to one.
+
+\membersection{wxMouseEvent::GetWheelRotation}\label{wxmouseeventgetwheelrotation}
+
+\constfunc{int}{GetWheelRotation}{\void}
+
+Get wheel rotation, positive or negative indicates direction of
+rotation.  Current devices all send an event when rotation is equal to
++/-WheelDelta, but this allows for finer resolution devices to be
+created in the future.  Because of this you shouldn't assume that one
+event is equal to 1 line or whatever, but you should be able to either
+do partial line scrolling or wait until +/-WheelDelta rotation values
+have been accumulated before scrolling.
+
+\membersection{wxMouseEvent::GetWheelDelta}\label{wxmouseeventgetwheeldelta}
+
+\constfunc{int}{GetWheelDelta}{\void}
+
+Get wheel delta, normally 120.  This is the threshold for action to be
+taken, and one such action (for example, scrolling one increment)
+should occur for each delta.
+
 \membersection{wxMouseEvent::GetX}\label{wxmouseeventgetx}
 
 \constfunc{long}{GetX}{\void}
@@ -263,7 +307,7 @@ Returns TRUE if the left mouse button changed to down.
 Returns TRUE if the left mouse button is currently down, independent
 of the current event type.
 
-Please notice that it is {\bf not} the same as 
+Please notice that it is {\bf not} the same as
 \helpref{LeftDown}{wxmouseeventleftdown} which returns TRUE if the left mouse
 button was just pressed. Rather, it describes the state of the mouse button
 before the event happened.

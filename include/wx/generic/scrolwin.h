@@ -126,6 +126,7 @@ public:
     void OnSize(wxSizeEvent& event);
     void OnPaint(wxPaintEvent& event);
     void OnChar(wxKeyEvent& event);
+    void OnMouseWheel(wxMouseEvent& event);
 
     // Calculate scroll increment
     virtual int CalcScrollInc(wxScrollWinEvent& event);
@@ -144,6 +145,7 @@ protected:
     int                   m_yScrollLinesPerPage;
     double                m_scaleX;
     double                m_scaleY;
+    int                   m_wheelRotation;
 
 private:
     DECLARE_EVENT_TABLE()

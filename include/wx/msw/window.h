@@ -327,6 +327,7 @@ public:
 
     bool HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags);
     bool HandleMouseMove(int x, int y, WXUINT flags);
+    bool HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam);
 
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII = FALSE);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);

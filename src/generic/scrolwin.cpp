@@ -68,6 +68,7 @@ BEGIN_EVENT_TABLE(wxGenericScrolledWindow, wxPanel)
     EVT_SIZE(wxGenericScrolledWindow::OnSize)
     EVT_PAINT(wxGenericScrolledWindow::OnPaint)
     EVT_CHAR(wxGenericScrolledWindow::OnChar)
+    EVT_MOUSEWHEEL(wxGenericScrolledWindow::OnMouseWheel)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericScrolledWindow, wxPanel)
@@ -94,6 +95,7 @@ wxGenericScrolledWindow::wxGenericScrolledWindow()
     m_yScrollLinesPerPage = 0;
     m_scaleX = 1.0;
     m_scaleY = 1.0;
+    m_wheelRotation = 0;
     m_targetWindow = (wxWindow*) NULL;
 }
 
@@ -116,6 +118,7 @@ bool wxGenericScrolledWindow::Create(wxWindow *parent,
     m_yScrollLinesPerPage = 0;
     m_scaleX = 1.0;
     m_scaleY = 1.0;
+    m_wheelRotation = 0;
 
     m_targetWindow = this;
 
@@ -151,7 +154,7 @@ void wxGenericScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUn
     bool do_refresh =
     (
       (noUnitsX != 0 && m_xScrollLines == 0) ||
-      (noUnitsX < m_xScrollLines && xpos > pixelsPerUnitX*noUnitsX) || 
+      (noUnitsX < m_xScrollLines && xpos > pixelsPerUnitX*noUnitsX) ||
 
       (noUnitsY != 0 && m_yScrollLines == 0) ||
       (noUnitsY < m_yScrollLines && ypos > pixelsPerUnitY*noUnitsY) ||
@@ -548,7 +551,7 @@ void wxGenericScrolledWindow::Scroll( int x_pos, int y_pos )
         // the visible portion of it or if below zero
         m_yScrollPosition = wxMin( m_yScrollLines-noPagePositions, m_yScrollPosition );
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
-        
+
         if (old_y != m_yScrollPosition) {
             m_targetWindow->SetScrollPos( wxVERTICAL, m_yScrollPosition, TRUE );
             m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
@@ -702,3 +705,24 @@ void wxGenericScrolledWindow::OnChar(wxKeyEvent& event)
             event.Skip();
     }
 }
+
+
+void wxGenericScrolledWindow::OnMouseWheel(wxMouseEvent& event)
+{
+    int lines;
+    int vsx, vsy;
+
+    m_wheelRotation += event.GetWheelRotation();
+    lines = m_wheelRotation / event.GetWheelDelta();
+    m_wheelRotation -= lines * event.GetWheelDelta();
+
+    if (lines != 0) {
+        lines *= event.GetLinesPerAction();
+        GetViewStart(&vsx, &vsy);
+        Scroll(-1, vsy - lines);
+    }
+}
+
+
+
+
