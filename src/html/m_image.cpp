@@ -373,10 +373,10 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 }
                 wxHtmlImageCell *cel = NULL;
                 if (str) {
-                    cel = new wxHtmlImageCell(str, 
-                                (int)(m_WParser -> GetPixelScale() * (double)w), 
-                                (int)(m_WParser -> GetPixelScale() * (double)h), 
-                                al, mn);
+		    int neww = (w == -1) ? -1 : (int)(m_WParser -> GetPixelScale() * (double)w),
+		        newh = (h == -1) ? -1 : (int)(m_WParser -> GetPixelScale() * (double)h);
+		    
+                    cel = new wxHtmlImageCell(str, neww, newh, al, mn);
                     cel -> SetLink(m_WParser -> GetLink());
                     m_WParser -> GetContainer() -> InsertCell(cel);
                     delete str;
