@@ -44,9 +44,9 @@ public:
     virtual ~wxDropSourceBase() { }
 
     // set the data which is transfered by drag and drop
-    void SetData(wxDataObject& data) 
+    void SetData(wxDataObject& data)
       { m_data = &data; }
-      
+
     wxDataObject *GetDataObject()
       { return m_data; }
 
@@ -94,8 +94,8 @@ public:
     wxDataObject *GetDataObject() const
         { return m_dataObject; }
     void SetDataObject(wxDataObject *dataObject)
-        { if (m_dataObject) delete m_dataObject; 
-	  m_dataObject = dataObject; }
+        { if (m_dataObject) delete m_dataObject;
+    m_dataObject = dataObject; }
 
     // these functions are called when data is moved over position (x, y) and
     // may return either wxDragCopy, wxDragMove or wxDragNone depending on
@@ -115,11 +115,11 @@ public:
     virtual wxDragResult OnDragOver(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                                     wxDragResult def)
         { return def; }
-    
+
     // called when mouse leaves the window: might be used to remove the
     // feedback which was given in OnEnter()
     virtual void OnLeave() { }
-    
+
     // this function is called when data is dropped at position (x, y) - if it
     // returns TRUE, OnData() will be called immediately afterwards which will
     // allow to retrieve the data dropped.

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        gtk/dataform.h
+// Name:        os2/dataform.h
 // Purpose:     declaration of the wxDataFormat class
 // Author:      David Webster (lifted from dnd.h)
 // Modified by:

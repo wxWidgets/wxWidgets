@@ -339,6 +339,7 @@ OS2OBJS = \
   ..\os2\$D\control.obj \
   ..\os2\$D\cursor.obj \
   ..\os2\$D\data.obj \
+  ..\os2\$D\dataobj.obj \
   ..\os2\$D\dc.obj \
   ..\os2\$D\dcclient.obj \
   ..\os2\$D\dcmemory.obj \
@@ -416,6 +417,7 @@ OS2LIBOBJS1 = \
   control.obj \
   cursor.obj \
   data.obj \
+  dataobj.obj \
   dc.obj \
   dcclient.obj \
   dcmemory.obj \
@@ -444,10 +446,10 @@ OS2LIBOBJS1 = \
   menuitem.obj \
   metafile.obj \
   minifram.obj \
-  msgdlg.obj \
-  nativdlg.obj
+  msgdlg.obj
 
 OS2LIBOBJS2 = \
+  nativdlg.obj \
   notebook.obj \
   ownerdrw.obj \
   palette.obj \

@@ -157,7 +157,7 @@ public:
 #elif defined(__WXMAC__)
     #include "wx/mac/dnd.h"
 #elif defined(__WXPM__)
-    #include "wx/os2/dnd.h"
+    #include "wx/os2/dataobj.h"
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/dnd.h"
 #endif
@@ -312,6 +312,16 @@ public:
 
 private:
     wxString m_text;
+
+#if defined(__VISAGECPP__)
+    // Virtual function hiding supression
+    size_t GetDataSize(const wxDataFormat& rFormat) const
+    { return(wxDataObjectSimple::GetDataSize(rFormat)); }
+    bool GetDataHere(const wxDataFormat& WXUNUSED(rFormat), void *pBuf) const
+    { return(GetDataHere(pBuf)); }
+    bool SetData(const wxDataFormat& rFormat, size_t nLen, const void* pBuf)
+    { return(wxDataObjectSimple::SetData(rFormat, nLen, pBuf)); }
+#endif
 };
 
 // ----------------------------------------------------------------------------
@@ -359,6 +369,15 @@ public:
 
 protected:
     wxArrayString m_filenames;
+
+#if defined(__VISAGECPP__)
+private:
+    // Virtual function hiding supression
+    size_t GetDataSize(const wxDataFormat& rFormat) const
+    { return(wxDataObjectSimple::GetDataSize(rFormat)); }
+    bool GetDataHere(const wxDataFormat& WXUNUSED(rformat), void* pBuf) const
+    { return(GetDataHere(pBuf)); }
+#endif
 };
 
 // ----------------------------------------------------------------------------
@@ -405,6 +424,16 @@ public:
 private:
     size_t m_size;
     void  *m_data;
+
+#if defined(__VISAGECPP__)
+    // Virtual function hiding supression
+    size_t GetDataSize(const wxDataFormat& rFormat) const
+    { return(wxDataObjectSimple::GetDataSize(rFormat)); }
+    bool GetDataHere(const wxDataFormat& rFormat, void* pBuf) const
+    { return(wxDataObjectSimple::GetDataHere(rFormat, pBuf)); }
+    bool SetData(const wxDataFormat& rFormat, size_t nLen, const void* pBuf)
+    { return(wxDataObjectSimple::SetData(rFormat, nLen, pBuf)); }
+#endif
 };
 
 // ----------------------------------------------------------------------------
@@ -417,6 +446,8 @@ private:
     // #include "wx/motif/dataobj2.h" -- not yet
 #elif defined(__WXGTK__)
     #include "wx/gtk/dataobj2.h"
+#elif defined(__WXPM__)
+    #include "wx/os2/dataobj2.h"
 #endif
 
 #endif // _WX_DATAOBJ_H_BASE_

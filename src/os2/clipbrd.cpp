@@ -451,9 +451,20 @@ void wxClipboard::Clear()
 {
 }
 
+bool wxClipboard::Flush()
+{
+    // TODO:
+    return FALSE;
+}
+
 bool wxClipboard::Open()
 {
     return wxOpenClipboard();
+}
+
+bool wxClipboard::IsOpened() const
+{
+    return wxIsClipboardOpened();
 }
 
 bool wxClipboard::SetData( wxDataObject *data )
@@ -602,25 +613,6 @@ bool wxClipboard::GetData( wxDataObject *data )
 */
     return FALSE;
 #endif
-}
-
-//-----------------------------------------------------------------------------
-// wxClipboardModule
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxClipboardModule,wxModule)
-
-bool wxClipboardModule::OnInit()
-{
-    wxTheClipboard = new wxClipboard();
-
-    return TRUE;
-}
-
-void wxClipboardModule::OnExit()
-{
-    if (wxTheClipboard) delete wxTheClipboard;
-    wxTheClipboard = (wxClipboard*) NULL;
 }
 
 #else

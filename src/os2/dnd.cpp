@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        dnd.cpp
 // Purpose:     wxDropTarget, wxDropSource, wxDataObject implementation
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/21/99
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 AUTHOR
 // Licence:     wxWindows licence
@@ -26,108 +26,153 @@
 // wxDropTarget
 // ----------------------------------------------------------------------------
 
-wxDropTarget::wxDropTarget()
+wxDropTarget::wxDropTarget(
+  wxDataObject*                     pDataObject
+)
 {
+    // TODO:
 };
 
 wxDropTarget::~wxDropTarget()
 {
 };
 
+void wxDropTarget::Register(
+  WXHWND                            hwnd
+)
+{
+    //TODO:
+};
+
+void wxDropTarget::Revoke(
+  WXHWND                            hwnd
+)
+{
+    //TODO:
+};
+
+wxDragResult wxDropTarget::OnDragOver(
+  wxCoord                           x
+, wxCoord                           y
+, wxDragResult                      vDef
+)
+{
+    //TODO:
+    return vDef;
+};
+
+bool wxDropTarget::OnDrop(
+  wxCoord                           x
+, wxCoord                           y
+)
+{
+    //TODO:
+    return FALSE;
+};
+
+bool wxDropTarget::OnData(
+  wxCoord                           x
+, wxCoord                           y
+)
+{
+    //TODO:
+    return FALSE;
+};
+
+bool wxDropTarget::GetData()
+{
+    //TODO:
+    return FALSE;
+};
+
+bool wxDropTarget::IsAcceptable(
+  DRAGINFO*                         pInfo
+)
+{
+    //TODO:
+    return FALSE;
+};
+
 // ----------------------------------------------------------------------------
 // wxTextDropTarget
 // ----------------------------------------------------------------------------
 
-bool wxTextDropTarget::OnDrop( long x, long y, const void *pData )
+wxTextDropTarget::wxTextDropTarget()
 {
-  OnDropText( x, y, (const char*)pData );
-  return TRUE;
-};
-
-bool wxTextDropTarget::OnDropText( long x, long y, const char *psz )
-{
-  printf( "Got dropped text: %s.\n", psz );
-  printf( "At x: %d, y: %d.\n", (int)x, (int)y );
-  return TRUE;
-};
-
-size_t wxTextDropTarget::GetFormatCount() const
-{
-  return 1;
+    // TODO:
 }
 
-wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
+wxTextDropTarget::~wxTextDropTarget()
 {
-  return wxDF_TEXT;
+    // TODO:
 }
+
+bool wxTextDropTarget::OnData(
+  wxCoord                           x
+, wxCoord                           y
+)
+{
+    // TODO:
+    return FALSE;
+};
 
 // ----------------------------------------------------------------------------
 // wxFileDropTarget
 // ----------------------------------------------------------------------------
 
-bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * const WXUNUSED(aszFiles)[] )
+wxFileDropTarget::wxFileDropTarget()
 {
-  printf( "Got %d dropped files.\n", (int)nFiles );
-  printf( "At x: %d, y: %d.\n", (int)x, (int)y );
-  return TRUE;
+    // TODO:
 }
 
-bool wxFileDropTarget::OnDrop(long x, long y, const void *WXUNUSED(pData) )
+wxFileDropTarget::~wxFileDropTarget()
 {
-  char *str = "/this/is/a/path.txt";
-
-  return OnDropFiles(x, y, 1, &str ); 
+    // TODO:
 }
 
-size_t wxFileDropTarget::GetFormatCount() const
+bool wxFileDropTarget::OnData(
+  wxCoord                           x
+, wxCoord                           y
+)
 {
-  return 1;
-}
-
-wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
-{
-  return wxDF_FILENAME;
-}
+    // TODO:
+    return FALSE;
+};
 
 //-------------------------------------------------------------------------
 // wxDropSource
 //-------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-// drag request
-
-wxDropSource::wxDropSource( wxWindow *win )
+wxDropSource::wxDropSource(
+  wxWindow*                         pWin
+)
 {
     // TODO
-  //    m_window = win;
-    m_data = NULL;
-
-    //    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
-    //    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
 };
 
-wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
+wxDropSource::wxDropSource(
+  wxDataObject&                     rData
+, wxWindow*                         pWin
+)
 {
     // TODO
-  //    m_window = win;
-    m_data = &data;
-
-    //    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
-    //    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
 };
 
-void wxDropSource::SetData( wxDataObject &data )
+wxDropSource::~wxDropSource()
 {
-    m_data = &data;
+    // TODO
 };
 
-wxDropSource::~wxDropSource(void)
-{
-};
-   
-wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
+wxDragResult wxDropSource::DoDragDrop(
+  bool                              WXUNUSED(bAllowMove)
+)
 {
     // TODO
     return wxDragError;
+};
+
+void wxDropSource::Init()
+{
+    // TODO
 };
 
