@@ -93,7 +93,7 @@ int ListCompare( long data1, long data2, long WXUNUSED(data) )
      if (fd2->GetName() == wxT("..")) return 1;
      if (fd1->IsDir() && !fd2->IsDir()) return -1;
      if (fd2->IsDir() && !fd1->IsDir()) return 1;
-     return strcmp( fd1->GetName(), fd2->GetName() );
+     return wxStrcmp( fd1->GetName(), fd2->GetName() );
 }
 
 //-----------------------------------------------------------------------------
@@ -108,9 +108,9 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
     m_fileName = fname;
 
     struct stat buff;
-    stat( m_fileName.GetData(), &buff );
+    stat( m_fileName.fn_str(), &buff );
     struct stat lbuff;
-    lstat( m_fileName.GetData(), &lbuff );
+    lstat( m_fileName.fn_str(), &lbuff );
 
     struct tm *t = localtime( &lbuff.st_mtime );
 //  struct passwd *user = getpwuid( buff.st_uid );
@@ -128,10 +128,10 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
     m_day = t->tm_mday;
     m_year = t->tm_year;
 
-    m_permissions.sprintf( "%c%c%c",
-     ((( buff.st_mode & S_IRUSR ) == S_IRUSR ) ? 'r' : '-'),
-     ((( buff.st_mode & S_IWUSR ) == S_IWUSR ) ? 'w' : '-'),
-     ((( buff.st_mode & S_IXUSR ) == S_IXUSR ) ? 'x' : '-') );
+    m_permissions.sprintf( wxT("%c%c%c"),
+     ((( buff.st_mode & S_IRUSR ) == S_IRUSR ) ? wxT('r') : wxT('-')),
+     ((( buff.st_mode & S_IWUSR ) == S_IWUSR ) ? wxT('w') : wxT('-')),
+     ((( buff.st_mode & S_IXUSR ) == S_IXUSR ) ? wxT('x') : wxT('-')) );
 }
 
 wxString wxFileData::GetName() const

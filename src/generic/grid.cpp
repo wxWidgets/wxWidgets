@@ -63,8 +63,8 @@ wxGridTableBase::~wxGridTableBase()
 
 bool wxGridTableBase::InsertRows( size_t pos, size_t numRows )
 {
-    wxLogWarning( "Called grid table class function InsertRows(pos=%d, N=%d)\n"
-                  "but your derived table class does not override this function",
+    wxLogWarning( wxT("Called grid table class function InsertRows(pos=%d, N=%d)\n"
+                  "but your derived table class does not override this function"),
                   pos, numRows );
     
     return FALSE;
@@ -72,8 +72,8 @@ bool wxGridTableBase::InsertRows( size_t pos, size_t numRows )
 
 bool wxGridTableBase::AppendRows( size_t numRows )
 {
-    wxLogWarning( "Called grid table class function AppendRows(N=%d)\n"
-                  "but your derived table class does not override this function",
+    wxLogWarning( wxT("Called grid table class function AppendRows(N=%d)\n"
+                  "but your derived table class does not override this function"),
                   numRows );
     
     return FALSE;
@@ -81,8 +81,8 @@ bool wxGridTableBase::AppendRows( size_t numRows )
 
 bool wxGridTableBase::DeleteRows( size_t pos, size_t numRows )
 {
-    wxLogWarning( "Called grid table class function DeleteRows(pos=%d, N=%d)\n"
-                  "but your derived table class does not override this function",
+    wxLogWarning( wxT("Called grid table class function DeleteRows(pos=%d, N=%d)\n"
+                  "but your derived table class does not override this function"),
                   pos, numRows );
     
     return FALSE;
@@ -90,8 +90,8 @@ bool wxGridTableBase::DeleteRows( size_t pos, size_t numRows )
 
 bool wxGridTableBase::InsertCols( size_t pos, size_t numCols )
 {
-    wxLogWarning( "Called grid table class function InsertCols(pos=%d, N=%d)\n"
-                  "but your derived table class does not override this function",
+    wxLogWarning( wxT("Called grid table class function InsertCols(pos=%d, N=%d)\n"
+                  "but your derived table class does not override this function"),
                   pos, numCols );
     
     return FALSE;
@@ -99,8 +99,8 @@ bool wxGridTableBase::InsertCols( size_t pos, size_t numCols )
 
 bool wxGridTableBase::AppendCols( size_t numCols )
 {
-    wxLogWarning( "Called grid table class function AppendCols(N=%d)\n"
-                  "but your derived table class does not override this function",
+    wxLogWarning( wxT("Called grid table class function AppendCols(N=%d)\n"
+                  "but your derived table class does not override this function"),
                   numCols );
     
     return FALSE;
@@ -108,8 +108,8 @@ bool wxGridTableBase::AppendCols( size_t numCols )
 
 bool wxGridTableBase::DeleteCols( size_t pos, size_t numCols )
 {
-    wxLogWarning( "Called grid table class function DeleteCols(pos=%d, N=%d)\n"
-                  "but your derived table class does not override this function",
+    wxLogWarning( wxT("Called grid table class function DeleteCols(pos=%d, N=%d)\n"
+                  "but your derived table class does not override this function"),
                   pos, numCols );
     
     return FALSE;
@@ -354,8 +354,8 @@ bool wxGridStringTable::DeleteRows( size_t pos, size_t numRows )
     
     if ( pos >= curNumRows )
     {
-        wxLogError( "Called wxGridStringTable::DeleteRows(pos=%d, N=%d)...\n"
-                    "Pos value is invalid for present table with %d rows",
+        wxLogError( wxT("Called wxGridStringTable::DeleteRows(pos=%d, N=%d)...\n"
+                    "Pos value is invalid for present table with %d rows"),
                     pos, numRows, curNumRows );
         return FALSE;
     }
@@ -432,8 +432,8 @@ bool wxGridStringTable::AppendCols( size_t numCols )
     {
         // TODO: something better than this ?
         //
-        wxLogError( "Unable to append cols to a grid table with no rows.\n"
-                    "Call AppendRows() first" );
+        wxLogError( wxT("Unable to append cols to a grid table with no rows.\n"
+                    "Call AppendRows() first") );
         return FALSE;
     }
     
@@ -466,8 +466,8 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
     
     if ( pos >= curNumCols )
     {
-	wxLogError( "Called wxGridStringTable::DeleteCols(pos=%d, N=%d)...\n"
-		    "Pos value is invalid for present table with %d cols",
+	wxLogError( wxT("Called wxGridStringTable::DeleteCols(pos=%d, N=%d)...\n"
+		    "Pos value is invalid for present table with %d cols"),
 		    pos, numCols, curNumCols );
 	return FALSE;
     }
@@ -1792,7 +1792,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& ev )
     {
         // shouldn't be here - we are going round in circles...
         //
-        wxLogFatalError( "wxGrid::OnKeyDown called while alread active" );
+        wxLogFatalError( wxT("wxGrid::OnKeyDown called while alread active") );
     }
 
     m_inOnKeyDown = TRUE;
@@ -3380,7 +3380,7 @@ bool wxGrid::CreateGrid( int numRows, int numCols )
 {
     if ( m_created )
     {
-        wxLogError( "wxGrid::CreateGrid(numRows, numCols) called more than once" );
+        wxLogError( wxT("wxGrid::CreateGrid(numRows, numCols) called more than once") );
         return FALSE;
     }
     else
@@ -3420,7 +3420,7 @@ bool wxGrid::InsertRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
 
     if ( !m_created )
     {
-        wxLogError( "Called wxGrid::InsertRows() before calling CreateGrid()" );
+        wxLogError( wxT("Called wxGrid::InsertRows() before calling CreateGrid()") );
         return FALSE;
     }
     
@@ -3468,7 +3468,7 @@ bool wxGrid::AppendRows( int numRows, bool WXUNUSED(updateLabels) )
     
     if ( !m_created )
     {
-        wxLogError( "Called wxGrid::AppendRows() before calling CreateGrid()" );
+        wxLogError( wxT("Called wxGrid::AppendRows() before calling CreateGrid()") );
         return FALSE;
     }
     
@@ -3500,7 +3500,7 @@ bool wxGrid::DeleteRows( int pos, int numRows, bool WXUNUSED(updateLabels) )
 
     if ( !m_created )
     {
-        wxLogError( "Called wxGrid::DeleteRows() before calling CreateGrid()" );
+        wxLogError( wxT("Called wxGrid::DeleteRows() before calling CreateGrid()") );
         return FALSE;
     }
     
@@ -3529,7 +3529,7 @@ bool wxGrid::InsertCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
     
     if ( !m_created )
     {
-        wxLogError( "Called wxGrid::InsertCols() before calling CreateGrid()" );
+        wxLogError( wxT("Called wxGrid::InsertCols() before calling CreateGrid()") );
         return FALSE;
     }
 
@@ -3569,7 +3569,7 @@ bool wxGrid::AppendCols( int numCols, bool WXUNUSED(updateLabels) )
 
     if ( !m_created )
     {
-	wxLogError( "Called wxGrid::AppendCols() before calling CreateGrid()" );
+	wxLogError( wxT("Called wxGrid::AppendCols() before calling CreateGrid()") );
 	return FALSE;
     }
 
@@ -3600,7 +3600,7 @@ bool wxGrid::DeleteCols( int pos, int numCols, bool WXUNUSED(updateLabels) )
     
     if ( !m_created )
     {
-        wxLogError( "Called wxGrid::DeleteCols() before calling CreateGrid()" );
+        wxLogError( wxT("Called wxGrid::DeleteCols() before calling CreateGrid()") );
         return FALSE;
     }
     

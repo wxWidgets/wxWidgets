@@ -1856,8 +1856,8 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
         if (afmFile==NULL)
         {
-            wxLogDebug( "GetTextExtent: can't open AFM file '%s'\n", afmName );
-            wxLogDebug( "               using approximate values\n");
+            wxLogDebug( wxT("GetTextExtent: can't open AFM file '%hs'\n"), afmName );
+            wxLogDebug( wxT("               using approximate values\n"));
             for (int i=0; i<256; i++) lastWidths[i] = 500; /* an approximate value */
             lastDescender = -150; /* dito. */
         }
@@ -1879,7 +1879,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                     if ((sscanf(line,"%s%d",descString,&lastDescender)!=2) ||
                             (strcmp(descString,"Descender")!=0))
                     {
-                        wxLogDebug( "AFM-file '%s': line '%s' has error (bad descender)\n", afmName,line );
+                        wxLogDebug( wxT("AFM-file '%hs': line '%hs' has error (bad descender)\n"), afmName,line );
                     }
                 }
                 /* JC 1.) check for UnderlinePosition */
@@ -1888,7 +1888,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                     if ((sscanf(line,"%s%lf",upString,&UnderlinePosition)!=2) ||
                             (strcmp(upString,"UnderlinePosition")!=0))
                     {
-                        wxLogDebug( "AFM-file '%s': line '%s' has error (bad UnderlinePosition)\n", afmName, line );
+                        wxLogDebug( wxT("AFM-file '%hs': line '%hs' has error (bad UnderlinePosition)\n"), afmName, line );
                     }
                 }
                 /* JC 2.) check for UnderlineThickness */
@@ -1897,7 +1897,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                     if ((sscanf(line,"%s%lf",utString,&UnderlineThickness)!=2) ||
                             (strcmp(utString,"UnderlineThickness")!=0))
                     {
-                        wxLogDebug( "AFM-file '%s': line '%s' has error (bad UnderlineThickness)\n", afmName, line );
+                        wxLogDebug( wxT("AFM-file '%hs': line '%hs' has error (bad UnderlineThickness)\n"), afmName, line );
                     }
                 }
                 /* JC 3.) check for EncodingScheme */
@@ -1906,11 +1906,11 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                     if ((sscanf(line,"%s%s",utString,encString)!=2) ||
                             (strcmp(utString,"EncodingScheme")!=0))
                     {
-                        wxLogDebug("AFM-file '%s': line '%s' has error (bad EncodingScheme)\n", afmName, line );
+                        wxLogDebug( wxT("AFM-file '%hs': line '%hs' has error (bad EncodingScheme)\n"), afmName, line );
                     }
                     else if (strncmp(encString, "AdobeStandardEncoding", 21))
                     {
-                        wxLogDebug( "AFM-file '%s': line '%s' has error (unsupported EncodingScheme %s)\n",
+                        wxLogDebug( wxT("AFM-file '%hs': line '%hs' has error (unsupported EncodingScheme %hs)\n"),
                                 afmName,line, encString);
                     }
                 }
@@ -1919,11 +1919,11 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                 {
                     if (sscanf(line,"%s%d%s%s%d",cString,&ascii,semiString,WXString,&cWidth)!=5)
                     {
-                        wxLogDebug("AFM-file '%s': line '%s' has an error (bad character width)\n",afmName,line);
+                        wxLogDebug(wxT("AFM-file '%hs': line '%hs' has an error (bad character width)\n"),afmName,line);
                     }
                     if(strcmp(cString,"C")!=0 || strcmp(semiString,";")!=0 || strcmp(WXString,"WX")!=0)
                     {
-                        wxLogDebug("AFM-file '%s': line '%s' has a format error\n",afmName,line);
+                        wxLogDebug(wxT("AFM-file '%hs': line '%hs' has a format error\n"),afmName,line);
                     }
                     /* printf("            char '%c'=%d has width '%d'\n",ascii,ascii,cWidth); */
                     if (ascii>=0 && ascii<256)
@@ -1970,11 +1970,11 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     double widthSum=0;
     wxCoord height=Size; /* by default */
     unsigned char *p;
-    for(p=(unsigned char *)strbuf; *p; p++)
+    for(p=(unsigned char *)wxMBSTRINGCAST strbuf; *p; p++)
     {
         if(lastWidths[*p]== INT_MIN)
         {
-            wxLogDebug("GetTextExtent: undefined width for character '%c' (%d)\n", *p,*p);
+            wxLogDebug(wxT("GetTextExtent: undefined width for character '%hc' (%d)\n"), *p,*p);
             widthSum += /*(wxCoord)*/(lastWidths[' ']/1000.0F * Size); /* assume space */
         }
         else

@@ -520,7 +520,7 @@ void wxDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
   do {
             new_name = wxT("NewName");
       wxString num;
-      num.Printf( "%d", i );
+      num.Printf( wxT("%d"), i );
       new_name += num;
 
             path = data->m_path;
