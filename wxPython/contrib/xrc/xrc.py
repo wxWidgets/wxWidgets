@@ -342,6 +342,9 @@ class wxXmlDocumentPtr(wxObjectPtr):
     def GetEncoding(self, *_args, **_kwargs):
         val = apply(xrcc.wxXmlDocument_GetEncoding,(self,) + _args, _kwargs)
         return val
+    def SetEncoding(self, *_args, **_kwargs):
+        val = apply(xrcc.wxXmlDocument_SetEncoding,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxXmlDocument instance at %s>" % (self.this,)
 class wxXmlDocument(wxXmlDocumentPtr):

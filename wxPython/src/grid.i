@@ -747,6 +747,9 @@ public:
     wxControl* GetControl();
     void SetControl(wxControl* control);
 
+    wxGridCellAttr* GetCellAttr();
+    void SetCellAttr(wxGridCellAttr* attr);
+
     void SetParameters(const wxString& params);
     void IncRef();
     void DecRef();

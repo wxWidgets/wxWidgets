@@ -3555,6 +3555,51 @@ static PyObject *_wrap_wxXmlDocument_GetEncoding(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+static void  wxXmlDocument_SetEncoding(wxXmlDocument *self,const wxString & enc) {
+        #if wxUSE_UNICODE
+            // do nothing
+        #else
+            self->SetEncoding(enc);
+        #endif
+        }
+static PyObject *_wrap_wxXmlDocument_SetEncoding(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxXmlDocument * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","enc", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxXmlDocument_SetEncoding",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxXmlDocument_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxXmlDocument_SetEncoding. Expected _wxXmlDocument_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxXmlDocument_SetEncoding(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 static void *SwigwxPyXmlResourceHandlerTowxObject(void *ptr) {
     wxPyXmlResourceHandler *src;
     wxObject *dest;
@@ -5041,6 +5086,7 @@ static PyMethodDef xrccMethods[] = {
 	 { "wxXmlResourceHandler_CreateResource", (PyCFunction) _wrap_wxXmlResourceHandler_CreateResource, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResourceHandler__setCallbackInfo", (PyCFunction) _wrap_wxXmlResourceHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxXmlResourceHandler", (PyCFunction) _wrap_new_wxXmlResourceHandler, METH_VARARGS | METH_KEYWORDS },
+	 { "wxXmlDocument_SetEncoding", (PyCFunction) _wrap_wxXmlDocument_SetEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlDocument_GetEncoding", (PyCFunction) _wrap_wxXmlDocument_GetEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlDocument_SetFileEncoding", (PyCFunction) _wrap_wxXmlDocument_SetFileEncoding, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlDocument_SetVersion", (PyCFunction) _wrap_wxXmlDocument_SetVersion, METH_VARARGS | METH_KEYWORDS },

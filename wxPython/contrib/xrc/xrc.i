@@ -411,6 +411,13 @@ public:
             return self->GetEncoding();
         #endif
         }
+        void SetEncoding(const wxString& enc) {
+        #if wxUSE_UNICODE
+            // do nothing
+        #else
+            self->SetEncoding(enc);
+        #endif
+        }
     }
 };
 

@@ -339,6 +339,9 @@ class wxBoxSizerPtr(wxSizerPtr):
     def GetOrientation(self, *_args, **_kwargs):
         val = apply(sizersc.wxBoxSizer_GetOrientation,(self,) + _args, _kwargs)
         return val
+    def SetOrientation(self, *_args, **_kwargs):
+        val = apply(sizersc.wxBoxSizer_SetOrientation,(self,) + _args, _kwargs)
+        return val
     def RecalcSizes(self, *_args, **_kwargs):
         val = apply(sizersc.wxBoxSizer_RecalcSizes,(self,) + _args, _kwargs)
         return val

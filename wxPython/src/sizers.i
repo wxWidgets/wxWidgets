@@ -339,6 +339,7 @@ public:
     wxBoxSizer(int orient = wxHORIZONTAL);
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     int GetOrientation();
+    void SetOrientation(int orient);
     void RecalcSizes();
     wxSize CalcMin();
 };

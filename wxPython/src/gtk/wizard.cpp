@@ -2328,6 +2328,7 @@ SWIGEXPORT(void) initwizardc() {
 	 PyDict_SetItemString(d,"wxEVT_WIZARD_PAGE_CHANGING", PyInt_FromLong((long) wxEVT_WIZARD_PAGE_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_WIZARD_CANCEL", PyInt_FromLong((long) wxEVT_WIZARD_CANCEL));
 	 PyDict_SetItemString(d,"wxEVT_WIZARD_HELP", PyInt_FromLong((long) wxEVT_WIZARD_HELP));
+	 PyDict_SetItemString(d,"wxEVT_WIZARD_FINISHED", PyInt_FromLong((long) wxEVT_WIZARD_FINISHED));
 
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();

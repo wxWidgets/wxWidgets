@@ -43,7 +43,8 @@ enum {
     wxEVT_WIZARD_PAGE_CHANGED,
     wxEVT_WIZARD_PAGE_CHANGING,
     wxEVT_WIZARD_CANCEL,
-    wxEVT_WIZARD_HELP
+    wxEVT_WIZARD_HELP,
+    wxEVT_WIZARD_FINISHED
 };
 
 
@@ -60,6 +61,9 @@ def EVT_WIZARD_CANCEL(win, id, func):
 
 def EVT_WIZARD_HELP(win, id, func):
     win.Connect(id, -1, wxEVT_WIZARD_HELP, func)
+
+def EVT_WIZARD_FINISHED(win, id, func):
+    win.Connect(id, -1, wxEVT_WIZARD_FINISHED, func)
 
 "
 

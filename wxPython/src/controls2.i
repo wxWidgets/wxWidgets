@@ -1304,12 +1304,11 @@ public:
     void SelectItem(const wxTreeItemId& item);
     void EnsureVisible(const wxTreeItemId& item);
     void ScrollTo(const wxTreeItemId& item);
-#ifdef __WXMSW__
-    wxTextCtrl* EditLabel(const wxTreeItemId& item);
+
     wxTextCtrl* GetEditControl();
-    void EndEditLabel(const wxTreeItemId& item, int discardChanges = FALSE);
-#else
     void EditLabel(const wxTreeItemId& item);
+#ifdef __WXMSW__
+    void EndEditLabel(const wxTreeItemId& item, int discardChanges = FALSE);
 #endif
 
     void SortChildren(const wxTreeItemId& item);
