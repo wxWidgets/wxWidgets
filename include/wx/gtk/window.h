@@ -233,7 +233,7 @@ public:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)
-    DECLARE_NO_COPY_CLASS(wxWindowGTK);
+    DECLARE_NO_COPY_CLASS(wxWindowGTK)
 };
 
 extern wxWindow *wxFindFocusedChild(wxWindowGTK *win);

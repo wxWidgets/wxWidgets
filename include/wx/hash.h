@@ -69,7 +69,7 @@ protected:
 
 private:
     // no copy ctor/assignment operator (yet)
-    DECLARE_NO_COPY_CLASS(wxHashTableBase);
+    DECLARE_NO_COPY_CLASS(wxHashTableBase)
 };
 
 // ----------------------------------------------------------------------------
@@ -106,7 +106,7 @@ private:
     size_t m_count;
 
     // not implemented yet
-    DECLARE_NO_COPY_CLASS(wxHashTableLong);
+    DECLARE_NO_COPY_CLASS(wxHashTableLong)
 };
 
 // ----------------------------------------------------------------------------
@@ -136,7 +136,7 @@ private:
     // the size of array above
     size_t m_hashSize;
 
-    DECLARE_NO_COPY_CLASS(wxStringHashTable);
+    DECLARE_NO_COPY_CLASS(wxStringHashTable)
 };
 
 // ----------------------------------------------------------------------------

@@ -171,7 +171,7 @@ private:
 
     // no copy ctor/assignment operators (or we'd try to unload the library
     // twice)
-    DECLARE_NO_COPY_CLASS(wxDynamicLibrary);
+    DECLARE_NO_COPY_CLASS(wxDynamicLibrary)
 };
 
 // ----------------------------------------------------------------------------

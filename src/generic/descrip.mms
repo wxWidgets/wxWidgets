@@ -31,6 +31,7 @@ CC_DEFINE =
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
 OBJECTS = \
+		accel.obj,\
 		busyinfo.obj,\
 		calctrl.obj,\
 		caret.obj,\
@@ -59,7 +60,6 @@ OBJECTS = \
 		propform.obj,\
 		proplist.obj,\
 		sashwin.obj,\
-		scrolwin.obj,\
 		splitter.obj,\
 		statusbr.obj,\
 		tbarsmpl.obj,\
@@ -71,6 +71,7 @@ OBJECTS = \
 		wizard.obj
 
 SOURCES = \
+		accel.cpp,\
 		busyinfo.cpp,\
 		calctrl.cpp,\
 		caret.cpp,\
@@ -102,7 +103,6 @@ SOURCES = \
 		propform.cpp,\
 		proplist.cpp,\
 		sashwin.cpp,\
-		scrolwin.cpp,\
 		splitter.cpp,\
 		statline.cpp,\
 		statusbr.cpp,\
@@ -131,6 +131,7 @@ all : $(SOURCES)
 .endif
 .endif
 
+accel.obj : accel.cpp
 busyinfo.obj : busyinfo.cpp
 calctrl.obj : calctrl.cpp
 caret.obj : caret.cpp
@@ -162,7 +163,6 @@ prop.obj : prop.cpp
 propform.obj : propform.cpp
 proplist.obj : proplist.cpp
 sashwin.obj : sashwin.cpp
-scrolwin.obj : scrolwin.cpp
 splitter.obj : splitter.cpp
 statline.obj : statline.cpp
 statusbr.obj : statusbr.cpp

@@ -187,7 +187,7 @@ protected:
     int m_countVisible;
 
 private:
-    DECLARE_NO_COPY_CLASS(wxCaretBase);
+    DECLARE_NO_COPY_CLASS(wxCaretBase)
 };
 
 // ---------------------------------------------------------------------------

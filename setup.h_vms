@@ -199,9 +199,49 @@
 #define wxUSE_VALIDATORS 1
 
 /*
+ * Use wxControl
+ */
+#define wxUSE_CONTROLS 1
+
+/*
+ * Use wxPopupWindow (useful in wxUniv only for now)
+ */
+#define wxUSE_POPUPWIN 1
+
+/*
  * Use accelerators
  */
 #define wxUSE_ACCEL 1
+
+/*
+ * Use wxCalendarCtrl
+ */
+#define wxUSE_CALENDARCTRL 1
+
+/*
+ * Use wxFileDialog
+ */
+#define wxUSE_FILEDLG 1
+
+/*
+ * Use wxFontDialog
+ */
+#define wxUSE_FONTDLG 1
+
+/*
+ * Use wxMimeTypesManager and related classes
+ */
+#define wxUSE_MIMETYPE 1
+
+/*
+ * Use wxMessageDialog (and wxMessageBox)
+ */
+#define wxUSE_MSGDLG 1
+
+/*
+ * Use wxNumberEntryDialog
+ */
+#define wxUSE_NUMBERDLG 1
 
 /*
  * Use wxTextEntryDialog
@@ -219,9 +259,39 @@
 #define wxUSE_PROGRESSDLG 1
 
 /*
+ * Use chooser dialog
+ */
+#define wxUSE_CHOICEDLG 1
+
+/*
+ * Use colour picker dialog
+ */
+#define wxUSE_COLOURDLG 1
+
+/*
  * Use directory chooser dialog
  */
 #define wxUSE_DIRDLG 1
+
+/*
+ * Use wxDragImage class
+ */
+#define wxUSE_DRAGIMAGE 1
+
+/*
+ * Use property sheet classes
+ */
+#define wxUSE_PROPSHEET 1
+
+/*
+ * Use wxWizard
+ */
+#define wxUSE_WIZARDDLG 1
+
+/*
+ * Use splash screen
+ */
+#define wxUSE_SPLASH 1
 
 /*
  * Joystick support (Linux/GTK only)
@@ -232,6 +302,10 @@
  * Use this control
  */
 #define wxUSE_CARET 1
+/*
+ * Use this control
+ */
+#define wxUSE_BUTTON 1
 /*
  * Use this control
  */
@@ -281,6 +355,10 @@
  * Use wxPlot class
  */
  #define wxUSE_PLOT 1
+/*
+ * Use wxMenuBar, wxMenuItem and wxMenu
+ */
+#define wxUSE_MENUS 1
 /*
  * Use this control
  */
@@ -332,6 +410,10 @@
 /*
  * Use this control
  */
+#define wxUSE_STATTEXT 1
+/*
+ * Use this control
+ */
 #define wxUSE_STATUSBAR 1
 /*
  * Use this control
@@ -344,7 +426,12 @@
 /* compatibility */
 #define wxUSE_TABDIALOG wxUSE_TAB_DIALOG
 /*
- * Use this control
+ * Use wxTextCtrl
+ */
+#define wxUSE_TEXTCTRL 1
+
+/*
+ * Use wxToollBar
  */
 #define wxUSE_TOOLBAR 1
 
@@ -381,6 +468,19 @@
 #define wxUSE_GEOMETRY 1
 
 /*
+ * Use wxFFile class
+ */
+#define wxUSE_FFILE 1
+ 
+/*
+ * Use wxCmdLineParser class
+ */
+#define wxUSE_CMDLINE_PARSER 1
+/*
+ * Use wxDateTime
+ */
+#define wxUSE_DATETIME 1
+/*
  * Use wxFile class
  */
 #define wxUSE_FILE 1
@@ -393,6 +493,18 @@
  */
 #define wxUSE_LOG 1
 /*
+ * Use log window
+ */
+#define wxUSE_LOGWINDOW 1
+/*
+ * Use standard GUI logger
+ */
+#define wxUSE_LOGGUI 1
+/*
+ * Use wxStopWatch
+ */
+#define wxUSE_STOPWATCH 1
+/*
  * Use time and date classes
  */
 #define wxUSE_TIMEDATE 1
@@ -404,6 +516,10 @@
  * Use config system
  */
 #define wxUSE_CONFIG 1
+/*
+ * Use font mapping/conversion classes
+ */
+#define wxUSE_FONTMAP 1
 /*
  * Use intl system
  */
@@ -423,7 +539,7 @@
 /*
  * Use dialup manager
  */
-#define wxUSE_DIALUP_MANAGER 0
+#define wxUSE_DIALUP_MANAGER 1
 /*
  * Use standard C++ streams if 1. If 0, use wxWin
  * streams implementation.
@@ -433,6 +549,11 @@
  * wxLibrary class
  */
 #define wxUSE_DYNLIB_CLASS 1
+
+/*
+ * Use wxTimer
+ */
+#define wxUSE_TIMER 1
 
 /*
  * Use font metric files in GetTextExtent for wxPostScriptDC
@@ -488,9 +609,13 @@
  */
 #define wxUSE_CLIPBOARD 1
 /*
+ * Use wxDataObject
+*/
+#define wxUSE_DATAOBJ 1
+/*
  * Use tooltips
  */
-#define wxUSE_TOOLTIPS 0
+#define wxUSE_TOOLTIPS 1
 /*
  * Use dnd
  */
@@ -538,6 +663,11 @@
  */
 #define wxUSE_HELP 1
 /*
+ * Use built-in HTML-based help controller
+ */
+#define wxUSE_WXHTML_HELP 1
+
+/*
  * Use iostream.h rather than iostream
  */
 #define wxUSE_IOSTREAMH 1
@@ -545,10 +675,15 @@
  * Use Apple Ieee-double converter
  */
 #define wxUSE_APPLE_IEEE 0
+
 /*
  * Compatibility with 2.0 API.
  */
-#define WXWIN_COMPATIBILITY_2 1
+#define WXWIN_COMPATIBILITY_2 0
+/*
+ * Compatibility with 2.2 API
+ */
+#define WXWIN_COMPATIBILITY_2_2 1
 /*
  * Enables debugging: memory tracing, assert, etc., contains debug level
  */
@@ -762,6 +897,12 @@
 /* The number of bytes in a short.  */
 #define SIZEOF_SHORT 2
 
+/* Define if size_t on your machine is the same type as unsigned int. */
+#define wxSIZE_T_IS_UINT  1
+
+/* Define if size_t on your machine is the same type as unsigned long. */
+#undef wxSIZE_T_IS_ULONG
+
 /* Define if you have the dlopen function.  */
 #define HAVE_DLOPEN 1
 
@@ -833,5 +974,8 @@
 
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
 #undef HAVE_XIM
+
+/* now check the settings self consistency */
+#include "wx/chkconf.h"
 
 #endif /* __WX_SETUP_H__ */
