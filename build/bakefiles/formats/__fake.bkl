@@ -21,6 +21,7 @@ makefiles, e.g. wx24dsp or rpmspec ones.
         <define-tag name="debug-runtime-libs"/>
         <define-tag name="runtime-libs"/>
         <define-tag name="optimize"/>
+        <define-tag name="warnings"/>
         <define-tag name="threading"/>
         <define-tag name="cppflags"/>
         <define-tag name="cflags"/>
