@@ -85,6 +85,13 @@ elseiff "%1" == "a" then
 	call b.bat 22 h UNICODE=1
 	call b.bat 22 r UNICODE=1
 
+	call b.bat 23 d
+	call b.bat 23 h
+	call b.bat 23 r
+	call b.bat 23 d UNICODE=1
+	call b.bat 23 h UNICODE=1
+	call b.bat 23 r UNICODE=1
+
 
 rem "b" --> both debug and hybrid builds
 elseiff "%1" == "b" then
