@@ -96,7 +96,7 @@ void wxUsleep(unsigned long milliseconds)
     // of Solaris has a safe usleep() function but please notice that usleep()
     // is known to lead to crashes in MT programs in Solaris 2.[67] and is not
     // documented as MT-Safe
-    #if defined(__SUN__) && defined(wxUSE_THREADS)
+    #if defined(__SUN__) && wxUSE_THREADS
         #error "usleep() cannot be used in MT programs under Solaris."
     #endif // Sun
 
