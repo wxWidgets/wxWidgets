@@ -20,6 +20,7 @@
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/utils.h"
+#include "wx/settings.h"
 
 #include <stdio.h>
 
