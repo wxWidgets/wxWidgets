@@ -78,7 +78,14 @@ class wxPythonDemo(wxFrame):
         self.cwd = os.getcwd()
         self.curOverview = ""
 
-        icon = wxIconFromXPMData(images.getMondrianData())
+        if 1:
+            icon = wxIconFromXPMData(images.getMondrianData())
+        else:
+            # another way to do it
+            bmp = images.getMondrianBitmap()
+            icon = wxEmptyIcon()
+            icon.CopyFromBitmap(bmp)
+
         self.SetIcon(icon)
 
         if wxPlatform == '__WXMSW__':
