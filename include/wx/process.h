@@ -87,6 +87,10 @@ protected:
 // wxProcess events
 // ----------------------------------------------------------------------------
 
+BEGIN_DECLARE_EVENT_TYPES()
+    DECLARE_EVENT_TYPE(wxEVT_END_PROCESS, 440)
+END_DECLARE_EVENT_TYPES()
+
 class WXDLLEXPORT wxProcessEvent : public wxEvent
 {
 public:
@@ -109,10 +113,6 @@ public:
 
     DECLARE_DYNAMIC_CLASS(wxProcessEvent)
 };
-
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_END_PROCESS, 440)
-END_DECLARE_EVENT_TYPES()
 
 typedef void (wxObject::*wxProcessEventFunction)(wxProcessEvent&);
 
