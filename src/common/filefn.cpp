@@ -1003,7 +1003,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     // instead of our code if available
     //
     // NB: 3rd parameter is bFailIfExists i.e. the inverse of overwrite
-    return ::CopyFile(file1, file2, !overwrite);
+    return ::CopyFile(file1, file2, !overwrite) != 0;
 #else // !Win32
     wxStructStat fbuf;
 
