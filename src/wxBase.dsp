@@ -48,8 +48,8 @@ RSC=rc.exe
 # PROP Intermediate_Dir "../BaseReleaseUnicodeDll"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" " /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/basedllu" /I "../include" /I "./regex" /I "./zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 " /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/basedllu" /I "../include" /I "./regex" /I "./zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 " /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE/Yu"wx/wxprec.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -74,8 +74,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "../BaseDebugUnicodeDll"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" " /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/basedllud" /I "../include" /I "./regex" /I "./zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 " /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/basedllud" /I "../include" /I "./regex" /I "./zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 " /D "WXMAKINGDLL" /D "_UNICODE" /D "UNICODE/Yu"wx/wxprec.h" /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -99,8 +99,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\lib"
 # PROP Intermediate_Dir "..\BaseReleaseUnicode"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" " /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/baseu" /I "../include" /I "./regex" /I "./zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 " /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/baseu" /I "../include" /I "./regex" /I "./zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 " /D "_UNICODE" /D "UNICODE/Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -122,8 +122,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib"
 # PROP Intermediate_Dir "..\BaseDebugUnicode"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" " /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/baseud" /I "../include" /I "./regex" /I "./zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "WIN32" /D "__WXDEBUG__" /D WINVER=0x400 " /D "_UNICODE" /D "UNICODE" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/baseud" /I "../include" /I "./regex" /I "./zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "WIN32" /D "__WXDEBUG__" /D WINVER=0x400 " /D "_UNICODE" /D "UNICODE/Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -146,8 +146,8 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "../BaseReleaseDll"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" " /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/basedll" /I "../include" /I "./regex" /I "./zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 " /D "WXMAKINGDLL" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/basedll" /I "../include" /I "./regex" /I "./zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 " /D "WXMAKINGDLL/Yu"wx/wxprec.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -172,8 +172,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "../BaseDebugDll"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" " /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/basedlld" /I "../include" /I "./regex" /I "./zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 " /D "WXMAKINGDLL" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/basedlld" /I "../include" /I "./regex" /I "./zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 " /D "WXMAKINGDLL/Yu"wx/wxprec.h" /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -197,8 +197,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\lib"
 # PROP Intermediate_Dir "..\BaseRelease"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" " /YX /FD /c
-# ADD CPP /nologo /MD /W4 /O2 /I "../lib/base" /I "../include" /I "./regex" /I "./zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 " /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/base" /I "../include" /I "./regex" /I "./zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 /Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -220,8 +220,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib"
 # PROP Intermediate_Dir "..\BaseDebug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" " /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/based" /I "../include" /I "./regex" /I "./zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "WIN32" /D "__WXDEBUG__" /D WINVER=0x400 " /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/based" /I "../include" /I "./regex" /I "./zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "WIN32" /D "__WXDEBUG__" /D WINVER=0x400 /Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -575,7 +575,7 @@ SOURCE=.\msw\gsockmsw.c
 
 SOURCE=..\include\wx\msw\setup.h
 !IF  "$(CFG)" == "wxBase - Win32 Release Unicode DLL"
-# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+# Begin Custom Build - Copying $(InputPath) to $(TargetDir)
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/basedllu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
@@ -583,14 +583,14 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Debug Unicode DLL"
-# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+# Begin Custom Build - Copying $(InputPath) to $(TargetDir)
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/basedllud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\lib\basedllud\wx\setup.h
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Release Unicode"
-# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+# Begin Custom Build - Copying $(InputPath) to $(TargetDir)
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/baseu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
@@ -598,7 +598,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Debug Unicode"
-# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+# Begin Custom Build - Copying $(InputPath) to $(TargetDir)
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/baseud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
@@ -606,7 +606,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Release DLL"
-# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+# Begin Custom Build - Copying $(InputPath) to $(TargetDir)
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/basedll/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
@@ -614,14 +614,14 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Debug DLL"
-# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+# Begin Custom Build - Copying $(InputPath) to $(TargetDir)
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/basedlld/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy $(InputPath) ..\lib\basedlld\wx\setup.h
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Release"
-# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+# Begin Custom Build - Copying $(InputPath) to $(TargetDir)
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/base/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
@@ -629,7 +629,7 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Debug"
-# Begin Custom Build - Creating $(TargetPath) from $(InputPath)
+# Begin Custom Build - Copying $(InputPath) to $(TargetDir)
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/based/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
