@@ -54,6 +54,8 @@ public:
 
     GtkWidget *m_widgetCheckbox;
     GtkWidget *m_widgetLabel;
+    
+    bool       m_blockEvent;
 
 protected:
     virtual wxSize DoGetBestSize() const;

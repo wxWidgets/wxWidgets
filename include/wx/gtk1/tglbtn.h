@@ -63,12 +63,10 @@ public:
     void SetLabel(const wxString& label);
     bool Enable(bool enable = TRUE);
 
-protected:
-    // Callback function given to gtk
-    static void gtk_togglebutton_clicked_callback(GtkWidget *widget,
-                                                  wxToggleButton *win);
+ 
+    // implementation
+    bool m_blockEvent;
 
-    // wx stuff
     void ApplyWidgetStyle();
     bool IsOwnGtkWindow(GdkWindow *window);
 

@@ -24,13 +24,15 @@ extern wxCursor   g_globalCursor;
 
 // void gtk_togglebutton_clicked_callback(GtkWidget *widget, wxToggleButton *cb)
 // Callback function given to gtk.
-void wxToggleButton::gtk_togglebutton_clicked_callback(GtkWidget *WXUNUSED(widget), wxToggleButton *cb)
+static void gtk_togglebutton_clicked_callback(GtkWidget *WXUNUSED(widget), wxToggleButton *cb)
 {
    if (g_isIdle)
       wxapp_install_idle_handler();
 
    if (!cb->m_hasVMT || g_blockEventsOnDrag)
       return;
+      
+   if (cb->m_blockEvent) return;
 
    // Generate a wx event.
    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, cb->GetId());
@@ -54,6 +56,8 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
 {
    m_needParent = TRUE;
    m_acceptsFocus = TRUE;
+   
+   m_blockEvent = FALSE;
 
    if (!PreCreation(parent, pos, size) ||
        !CreateBase(parent, id, pos, size, style, validator, name )) {
@@ -102,15 +106,11 @@ void wxToggleButton::SetValue(bool state)
    if (state == GetValue())
       return;
 
-   gtk_signal_disconnect_by_func(GTK_OBJECT(m_widget),
-                                 GTK_SIGNAL_FUNC(gtk_togglebutton_clicked_callback),
-                                 (gpointer *)this);
+   m_blockEvent = TRUE;
 
    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_widget), state);
 
-   gtk_signal_connect(GTK_OBJECT(m_widget), "clicked",
-                      GTK_SIGNAL_FUNC(gtk_togglebutton_clicked_callback),
-                      (gpointer *)this);
+   m_blockEvent = FALSE;
 }
 
 // bool GetValue() const

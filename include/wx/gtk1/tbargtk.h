@@ -62,7 +62,7 @@ public:
     GdkColor     *m_fg;
     GdkColor     *m_bg;
 
-    bool          m_blockNextEvent;
+    bool          m_blockEvent;
 
     void OnInternalIdle();
 

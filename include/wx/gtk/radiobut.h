@@ -50,6 +50,8 @@ public:
     bool IsOwnGtkWindow( GdkWindow *window );
     void OnInternalIdle();
     
+    bool m_blockEvent;
+    
 protected:
     virtual wxSize DoGetBestSize() const;
 

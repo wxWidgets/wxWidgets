@@ -99,11 +99,8 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
         wxapp_install_idle_handler();
 
     wxToolBar *tbar = (wxToolBar *)tool->GetToolBar();
-    if ( tbar->m_blockNextEvent )
-    { 
-        tbar->m_blockNextEvent = FALSE;
-        return;
-    }
+    
+    if (tbar->m_blockEvent) return;
 
     if (g_blockEventsOnDrag) return;
     if (!tool->IsEnabled()) return;
@@ -196,7 +193,7 @@ void wxToolBar::Init()
     m_fg =
     m_bg = (GdkColor *)NULL;
     m_toolbar = (GtkToolbar *)NULL;
-    m_blockNextEvent = FALSE;
+    m_blockEvent = FALSE;
 }
 
 wxToolBar::~wxToolBar()
@@ -440,9 +437,11 @@ void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle )
             gtk_pixmap_set( pixmap, bitmap.GetPixmap(), mask );
         }
 
-        m_blockNextEvent = TRUE;  // we cannot use gtk_signal_disconnect here
+        m_blockEvent = TRUE;
 
         gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(item), toggle );
+        
+        m_blockEvent = FALSE;
     }
 }
 

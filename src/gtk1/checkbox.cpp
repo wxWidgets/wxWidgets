@@ -46,6 +46,8 @@ static void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckB
     if (!cb->m_hasVMT) return;
 
     if (g_blockEventsOnDrag) return;
+    
+    if (cb->m_blockEvent) return;
 
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, cb->GetId());
     event.SetInt( cb->GetValue() );
@@ -74,6 +76,7 @@ bool wxCheckBox::Create(wxWindow *parent,
 {
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
+    m_blockEvent = FALSE;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
@@ -143,16 +146,11 @@ void wxCheckBox::SetValue( bool state )
     if (state == GetValue())
         return;
 
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widgetCheckbox),
-                        GTK_SIGNAL_FUNC(gtk_checkbox_clicked_callback),
-                        (gpointer *)this );
+    m_blockEvent = TRUE;
 
     gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widgetCheckbox), state );
 
-    gtk_signal_connect( GTK_OBJECT(m_widgetCheckbox),
-                        "clicked",
-                        GTK_SIGNAL_FUNC(gtk_checkbox_clicked_callback),
-                        (gpointer *)this );
+    m_blockEvent = FALSE;
 }
 
 bool wxCheckBox::GetValue() const

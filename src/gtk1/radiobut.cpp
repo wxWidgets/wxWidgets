@@ -49,6 +49,8 @@ void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *r
     if (g_blockEventsOnDrag) return;
   
     if (!button->active) return;
+    
+    if (rb->m_blockEvent) return;
   
     wxCommandEvent event( wxEVT_COMMAND_RADIOBUTTON_SELECTED, rb->GetId());
     event.SetInt( rb->GetValue() );
@@ -69,22 +71,24 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
     m_acceptsFocus = TRUE;
     m_needParent = TRUE;
     m_isRadioButton = TRUE;
+    
+    m_blockEvent = FALSE;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxRadioButton creation failed") );
-    return FALSE;
+        return FALSE;
     }
 
     if (HasFlag(wxRB_GROUP))
     {
-        /* start a new group */
+        // start a new group
         m_radioButtonGroup = (GSList*) NULL;
     }
     else
     {
-        /* search backward for last group start */
+        // search backward for last group start
         wxRadioButton *chief = (wxRadioButton*) NULL;
         wxWindowList::Node *node = parent->GetChildren().GetLast();
         while (node)
@@ -99,12 +103,12 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
         }
         if (chief)
         {
-            /* we are part of the group started by chief */
+            // we are part of the group started by chief
             m_radioButtonGroup = gtk_radio_button_group( GTK_RADIO_BUTTON(chief->m_widget) );
         }
         else
         {
-            /* start a new group */
+            // start a new group
             m_radioButtonGroup = (GSList*) NULL;
         }
     }
@@ -156,8 +160,7 @@ void wxRadioButton::SetValue( bool val )
     if (val == GetValue())
         return;
 
-    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
-      GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
+    m_blockEvent = TRUE;
 
     if (val)
     {
@@ -170,8 +173,7 @@ void wxRadioButton::SetValue( bool val )
         //      as FALSE.  Failing silently is probably TRTTD here.
     }
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "clicked", 
-      GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
+    m_blockEvent = FALSE;
 }
 
 bool wxRadioButton::GetValue() const
