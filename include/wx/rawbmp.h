@@ -636,7 +636,9 @@ class wxPixelData :
     public wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>
 {
 public:
-    typedef wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat> Base;
+    typedef
+        typename wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>
+        Base;
 
     wxPixelData(Image& image) : Base(image) { }
 
