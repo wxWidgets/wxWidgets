@@ -9,6 +9,8 @@ wxWindows uses Tex2RTF to process Latex-like input files (.tex)
 and output in HTML, WinHelp RTF and Word RTF. Tex2RTF is provided
 in the wxWindows distribution and in the CVS archive, under
 utils/tex2rtf. Please start by perusing the Tex2RTF manual.
+See http://www.wxwindows.org/tex2rtf/index.htm for a browseable
+manual and binaries for specific platforms.
 
 If adding to the existing manual in docs/latex/wx, you need to
 create a new .tex file, e.g. myclass.tex, and add it to the

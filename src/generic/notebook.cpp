@@ -679,4 +679,36 @@ void wxNotebookTabView::OnTabActivate(int activateId, int deactivateId)
   m_notebook->GetEventHandler()->ProcessEvent(event);
 }
 
+// Allows Vetoing
+bool wxNotebookTabView::OnTabPreActivate(int activateId, int deactivateId)
+{
+  bool retval = TRUE;
+  
+  if (m_notebook)
+  {
+    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_notebook->GetId());
+
+#if defined (__WIN16__)
+    int activatePos = activateId;
+    int deactivatePos = deactivateId;
+#else
+    // Translate from wxTabView's ids (which aren't position-dependent)
+    // to wxNotebook's (which are).
+    wxNotebookPage* pActive = (wxNotebookPage*) activateId;
+    wxNotebookPage* pDeactive = (wxNotebookPage*) deactivateId;
+
+    int activatePos = m_notebook->FindPagePosition(pActive);
+    int deactivatePos = m_notebook->FindPagePosition(pDeactive);
+
+#endif
+    event.SetEventObject(m_notebook);
+    event.SetSelection(activatePos);
+    event.SetOldSelection(deactivatePos);
+    if (m_notebook->GetEventHandler()->ProcessEvent(event))
+    {
+      retval = event.IsAllowed();
+    }
+  }
+  return retval;
+} 
 

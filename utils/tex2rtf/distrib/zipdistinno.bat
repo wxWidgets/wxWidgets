@@ -105,6 +105,9 @@ start "Inno Setup" /w %innocmd%
 Rem Rename to give it a version
 move setup.exe tex2rtf_%ver_filename%_setup.exe
 
+Rem Copy the source
+move %src%\tex2rtf_src.zip %dest%\tex2rtf-source-%tex2rtfver%.zip
+
 Rem clean up files
 cd %src%
 erase /EFY *.bmp *.htm *.exe *.hlp *.cnt *.txt *.rtf *.doc *.gif *.jpg *.manifest *.chm

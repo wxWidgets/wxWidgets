@@ -54,6 +54,8 @@ public:
 
   // Called when a tab is activated
   virtual void OnTabActivate(int activateId, int deactivateId);
+  // Allows vetoing
+  virtual bool OnTabPreActivate(int activateId, int deactivateId);
 
 protected:
    wxNotebook*      m_notebook;
