@@ -1563,28 +1563,41 @@ if test "$wxUSE_WINE" = 1; then
 fi
 
 if test "$wxUSE_MOTIF" = 1; then
-    AC_MSG_CHECKING(for X11 headers)
-    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, X11/Intrinsic.h)
-    if test "$ac_find_includes" != "" ; then
-        AC_MSG_RESULT(found $ac_find_includes)
-    else
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
+    dnl use standard macros to check for X headers/libs, this brings support
+    dnl for the standard configure options --x-includes and --x-libraries
+    AC_PATH_XTRA
+
+    if test "$no_x" = "yes"; then
+        AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
     fi
 
-    AC_MSG_CHECKING(for X11 libraries)
-    WX_PATH_FIND_LIBRARIES($SEARCH_LIB, X11)
-    if test "$ac_find_libraries" != "" ; then
-        WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
-        WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
+    GUI_TK_LIBRARY="$X_LIBS"
+    TOOLKIT_INCLUDE="$X_CFLAGS"
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
-        AC_MSG_RESULT(found at $ac_find_libraries)
-    else
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
-    fi
+    dnl manual check for X11 headers/libs
+    dnl
+    dnl    AC_MSG_CHECKING(for X11 headers)
+    dnl    WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, X11/Intrinsic.h)
+    dnl    if test "$ac_find_includes" != "" ; then
+    dnl        AC_MSG_RESULT(found $ac_find_includes)
+    dnl    else
+    dnl        AC_MSG_RESULT(no)
+    dnl        AC_MSG_ERROR(please set CFLAGS to contain the location of X11/Intrinsic.h)
+    dnl    fi
+    dnl
+    dnl    AC_MSG_CHECKING(for X11 libraries)
+    dnl    WX_PATH_FIND_LIBRARIES($SEARCH_LIB, X11)
+    dnl    if test "$ac_find_libraries" != "" ; then
+    dnl        WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
+    dnl        WX_LINK_PATH_EXIST($ac_find_libraries, $GUI_TK_LIBRARY)
+    dnl
+    dnl        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
+    dnl        TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE $ac_path_to_include"
+    dnl        AC_MSG_RESULT(found at $ac_find_libraries)
+    dnl    else
+    dnl        AC_MSG_RESULT(no)
+    dnl        AC_MSG_ERROR(please set LDFLAGS to contain the location of libX11)
+    dnl    fi
 
     AC_MSG_CHECKING(for Motif/Lesstif headers)
     WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
