@@ -302,31 +302,45 @@ wxRegionIterator::wxRegionIterator()
 
 wxRegionIterator::~wxRegionIterator()
 {
-    if (m_rects)
+    if (m_rects) {
         delete[] m_rects;
+        m_rects = NULL;
+    }
 }
 
 wxRegionIterator::wxRegionIterator(const wxRegionIterator& iterator)
     : wxObject()
     , m_current(iterator.m_current)
-    , m_numRects(iterator.m_numRects)
+    , m_numRects(0)
     , m_rects(NULL)
 {
-    int i;
-    if (iterator.m_rects)
-    {
-        m_rects = new wxRect[iterator.m_numRects];
-        for (i = 0; i < iterator.m_numRects; i++)
-            m_rects[i] = iterator.m_rects[i];
-    }
+    SetRects(iterator.m_numRects, iterator.m_rects);
 }
 
 wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& iterator)
 {
     m_current  = iterator.m_current;
-    m_numRects = iterator.m_numRects;
-    m_rects    = iterator.m_rects;
+    SetRects(iterator.m_numRects, iterator.m_rects);
     return *this;
+}
+
+/*!
+ * Set iterator rects for region
+ */
+void wxRegionIterator::SetRects(long numRects, wxRect *rects)
+{
+    if (m_rects) {
+        delete[] m_rects;
+        m_rects = NULL;
+    }
+    if (rects)
+    {
+        int i;
+        m_rects = new wxRect[numRects];
+        for (i = 0; i < numRects; i++)
+            m_rects[i] = rects[i];
+    }
+    m_numRects = numRects;
 }
 
 /*!
@@ -344,22 +358,22 @@ wxRegionIterator::wxRegionIterator(const wxRegion& region)
  */
 void wxRegionIterator::Reset(const wxRegion& region)
 {
-	m_current = 0;
-	m_region = region;
+    m_current = 0;
+    m_region = region;
 
-    if (m_rects)
+    if (m_rects) {
         delete[] m_rects;
+        m_rects = NULL;
+    }
 
-    m_rects = NULL;
-
-	if (m_region.Empty())
-		m_numRects = 0;
-	else
+    if (m_region.Empty())
+        m_numRects = 0;
+    else
     {
     	// we cannot dissolve it into rects on mac
         m_rects = new wxRect[1];
-		Rect rect ;
-		GetRegionBounds( OTHER_M_REGION( region ) , &rect ) ;
+        Rect rect ;
+        GetRegionBounds( OTHER_M_REGION( region ) , &rect ) ;
         m_rects[0].x = rect.left;
         m_rects[0].y = rect.top;
         m_rects[0].width = rect.right - rect.left;

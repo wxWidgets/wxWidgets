@@ -128,13 +128,13 @@ public:
     ~wxRegionIterator();
 
     wxRegionIterator& operator=(const wxRegionIterator& iterator);
-    
+
     void Reset() { m_current = 0; }
     void Reset(const wxRegion& region);
     
     operator bool () const { return m_current < m_numRects; }
     bool HaveRects() const { return m_current < m_numRects; }
-    
+
     wxRegionIterator& operator++();
     wxRegionIterator operator++(int);
     
@@ -146,6 +146,8 @@ public:
     long GetHeight() const { return GetH(); }
     wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
 private:
+    void SetRects(long numRects, wxRect *rects);
+
     long     m_current;
     long     m_numRects;
     wxRegion m_region;
