@@ -29,17 +29,21 @@ enum    DialogModes {mView,mCreate,mEdit,mSearch};
 
 // this seems to be missing, Robert Roebling (?)
 #ifndef MAX_PATH
-#define MAX_PATH   200
+    #if defined(__WXMAC__)
+        #define MAX_PATH   260 /* max. length of full pathname */
+    #else  /* _MAC */
+        #define MAX_PATH   256 /* max. length of full pathname */
+    #endif
 #endif
 
 // Name of the table to be created/opened
-const wxChar      CONTACT_TABLE_NAME[]        =    "contacts";
+const wxChar     CONTACT_TABLE_NAME[]       = "contacts";
 
-// Nuber of columns in the above table
-const int       CONTACT_NO_COLS            = 12;        // 0-11
+// Number of columns in the CONTACT table
+const int        CONTACT_NO_COLS            = 12;        // 0-11
 
-// Global structure for holding ODBC connection information
-struct wxDbConnectInf  DbConnectInf;
+const wxChar     PARAM_FILENAME[]            = "dbtest.cfg";
+
 
 enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
 
@@ -47,26 +51,23 @@ enum Language {langENGLISH, langFRENCH, langGERMAN, langSPANISH, langOTHER};
 class CeditorDlg;
 class CparameterDlg;
 
-const wxChar paramFilename[] = "dbtest.cfg";
-
-
-/*
- * This class contains the actual data members that are used for transferring
- * data back and forth from the database to the program.  
- *
- * NOTE: The object described in this class is just for example purposes, and has no
- * real meaning other than to show each type of field being used by the database
- */
+//
+// This class contains the actual data members that are used for transferring
+// data back and forth from the database to the program.  
+//
+// NOTE: The object described in this class is just for example purposes, and has no
+// real meaning other than to show each type of field being used by the database
+//
 class CstructContact : public wxObject
 {
     public:
-        wxChar               Name[50+1];          //    Contact's name
-        wxChar               Addr1[50+1];
-        wxChar               Addr2[50+1];
-        wxChar               City[25+1];
-        wxChar               State[25+1];
-        wxChar               PostalCode[15+1];
-        wxChar               Country[20+1];
+        wxChar             Name[50+1];          //    Contact's name
+        wxChar             Addr1[50+1];
+        wxChar             Addr2[50+1];
+        wxChar             City[25+1];
+        wxChar             State[25+1];
+        wxChar             PostalCode[15+1];
+        wxChar             Country[20+1];
         TIMESTAMP_STRUCT   JoinDate;            // Date on which this person joined the wxWindows project
         Language           NativeLanguage;      // Enumerated type indicating person's native language
         bool               IsDeveloper;         // Is this person a developer for wxWindows, or just a subscriber
@@ -76,48 +77,61 @@ class CstructContact : public wxObject
 
 
 //
-// NOTE: Ccontact inherits wxDbTable, which gives access to all the database functionality
+// The Ccontact class derives from wxDbTable, so we have access to all
+// of the database table functions and the local memory variables that
+// the database classes will store the data into (and read the data from)
+// all combined in this one class.
 //
 class Ccontact : public wxDbTable, public CstructContact
 { 
     private:
+        // Used to keep track of whether this class had a wxDb instance
+        // passed in to it or not.  If an existing wxDb instance was not 
+        // passed in at Ccontact creation time, then when the Ccontact
+        // instance is deleted, the connection will be freed as Ccontact
+        // created its own connection when it was created.
         bool                 freeDbConn;
+
+        // Calls wxDbTable::SetColDefs() once for each column that is
+        // to be associated with some member variable for use with
+        // this database object.
         void                 SetupColumns();
 
     public:
+        // Used in places where we need to construct a WHERE clause to 
+        // be passed to the SetWhereClause() function.  From example,
+        // where building the WHERE clause requires using ::Printf()
+        // to build the string.
         wxString             whereStr;
-        wxString             qryWhereStr;   // Where string returned from the query dialog
+
+        // WHERE string returned from the query dialog
+        wxString             qryWhereStr;
 
         Ccontact(wxDb *pwxDb=NULL);
         ~Ccontact();
 
         void                 Initialize();
+
+        // Contains all the index definitions and calls to wxDbTable::CreateIndex()
+        // required to create all the indexes we wish to define for this table.
         bool                 CreateIndexes(void);
-        bool                 FetchByName(wxChar *name);
+
+        // Since we do not wish to have duplicate code blocks all over our program
+        // for a common query/fetch that we will need to do in many places, we
+        // include this member function that does it all for us in one place.
+        bool                 FetchByName(const wxString &name);
 
 };  // Ccontact class definition
 
 
 typedef struct Cparameters
 {
-    // The length of these strings were arbitrarily picked, and are
-    // dependent on the OS and database engine you will be using.
-    wxChar    ODBCSource[100+1];
-    wxChar    UserName[25+1];
-    wxChar    Password[25+1];
+    wxChar    ODBCSource[SQL_MAX_DSN_LENGTH+1];
+    wxChar    UserName[SQL_MAX_USER_NAME_LEN+1];
+    wxChar    Password[SQL_MAX_AUTHSTR_LEN+1];
     wxChar    DirPath[MAX_PATH+1];
 } Cparameters;
 
-
-// Define a new application type
-class DatabaseDemoApp: public wxApp
-{
-    public:
-        Cparameters  params;
-        bool         OnInit();
-};  // DatabaseDemoApp
-
-DECLARE_APP(DatabaseDemoApp)
 
 // Define a new frame type
 class DatabaseDemoFrame: public wxFrame
@@ -137,7 +151,6 @@ class DatabaseDemoFrame: public wxFrame
         void    OnEditParameters(wxCommandEvent& event);
         void    OnAbout(wxCommandEvent& event);
 
-        void    CreateDataTable(bool recreate);
         void    BuildEditorDialog();
         void    BuildParameterDialog(wxWindow *parent);
 
@@ -145,13 +158,73 @@ DECLARE_EVENT_TABLE()
 };  // DatabaseDemoFrame
 
 
+// Define a new application type
+class DatabaseDemoApp: public wxApp
+{
+    public:
+        // These are the parameters that are stored in the "PARAM_FILENAME" file
+        // that are read in at startup of the program that indicate the connection
+        // parameters to be used for connecting to the ODBC data source.
+        Cparameters      params;
+
+        // Pointer to the main frame used by the App
+        DatabaseDemoFrame *DemoFrame;
+
+        // Pointer to the main database connection used in the program.  This
+        // pointer would normally be used for doing things as database lookups
+        // for user login names and passwords, getting workstation settings, etc.
+        //         
+        // ---> IMPORTANT <---
+        // 
+        // For each database object created which uses this wxDb pointer
+        // connection to the database, when a CommitTrans() or RollBackTrans()
+        // will commit or rollback EVERY object which uses this wxDb pointer.
+        // 
+        // To allow each table object (those derived from wxDbTable) to be 
+        // individually committed or rolled back, you MUST use a different
+        // instance of wxDb in the constructor of the table.  Doing so creates 
+        // more overhead, and will use more database connections (some DBs have
+        // connection limits...), so use connections sparringly.
+        // 
+        // It is recommended that one "main" database connection be created for
+        // the entire program to use for READ-ONLY database accesses, but for each
+        // table object which will do a CommitTrans() or RollbackTrans() that a
+        // new wxDb object be created and used for it.
+        wxDb            *READONLY_DB;
+
+        // Contains the ODBC connection information used by 
+        // all database connections
+        wxDbConnectInf  *DbConnectInf;
+
+        bool             OnInit();
+
+        // Read/Write ODBC connection parameters to the "PARAM_FILENAME" file
+        bool             ReadParamFile(Cparameters &params);
+        bool             WriteParamFile(Cparameters &params);
+
+        void             CreateDataTable(bool recreate);
+};  // DatabaseDemoApp
+
+
+DECLARE_APP(DatabaseDemoApp)
+
 
 // *************************** CeditorDlg ***************************
 
 class CeditorDlg : public wxPanel
 {
     private:
+        // Used to indicate whether all of the widget pointers (defined
+        // below) have been initialized to point to the memory for 
+        // the named widget.  Used as a safeguard from using the widget
+        // before it has been initialized.
         bool             widgetPtrsSet;
+
+        // Used when the EDIT button has been pressed to maintain the 
+        // original name that was displayed in the editor before the 
+        // EDIT button was pressed, so that if CANCEL is pressed, a
+        // FetchByName() can be done to retrieve the original data
+        // to repopulate the dialog.
         wxString         saveName;
 
         // Pointers to all widgets on the dialog
@@ -167,9 +240,16 @@ class CeditorDlg : public wxPanel
         wxStaticText    *pNativeLangMsg;
 
     public:
+        // Indicates if the editor dialog has been initialized yet (used to
+        // help trap if the Initialize() function failed to load all required
+        // resources or not.
         bool             initialized;
+
         enum DialogModes mode;
-        Ccontact        *Contact;    // this is the table object that will be being manipulated
+
+        // Pointer to the wxDbTable instance that is used to manipulate
+        // the data in memory and in the database
+        Ccontact        *Contact;
 
         CeditorDlg(wxWindow *parent);
 
@@ -179,14 +259,32 @@ class CeditorDlg : public wxPanel
         void    OnActivate(bool) {};  // necessary for hot keys
 
         bool    Initialize();
+
+        // Sets wxStaticText fields to be editable or not depending
+        // on the current value of 'mode'
         void    FieldsEditable();
+
+        // Sets the editor mode, determining what state widgets
+        // on the dialog are to be in based on the operation
+        // being performed.
         void    SetMode(enum DialogModes m);
+
+        // Update/Retrieve data from the widgets on the dialog
         bool    PutData();
         bool    GetData();
+
+        // Inserts/updates the database with the current data
+        // retrieved from the editor dialog
         bool    Save();
+
+        // Database functions for changing the data that is to 
+        // be displayed on the dialog.  GetNextRec()/GetPrevRec()
+        // provide database independent methods that do not require
+        // backward scrolling cursors to obtain the record that
+        // is prior to the current record in the search sequence.
         bool    GetNextRec();
         bool    GetPrevRec();
-        bool    GetRec(wxChar *whereStr);
+        bool    GetRec(const wxString &whereStr);
         
 DECLARE_EVENT_TABLE()
 };  // CeditorDlg
@@ -238,9 +336,19 @@ DECLARE_EVENT_TABLE()
 class CparameterDlg : public wxDialog
 {
     private:
+        // Used to indicate whether all of the widget pointers (defined
+        // below) have been initialized to point to the memory for 
+        // the named widget.  Used as a safeguard from using the widget
+        // before it has been initialized.
         bool                 widgetPtrsSet;
+
         enum DialogModes     mode;
+
+        // Have the parameters been saved yet, or do they 
+        // need to be saved to update the params on disk
         bool                 saved;
+
+        // Original params
         Cparameters          savedParamSettings;
 
         // Pointers to all widgets on the dialog
@@ -258,9 +366,16 @@ class CparameterDlg : public wxDialog
         void    OnCommand(wxWindow& win, wxCommandEvent& event);
         void    OnActivate(bool) {};  // necessary for hot keys
 
+        // Update/Retrieve data from the widgets on the dialog
         bool    PutData();
         bool    GetData();
+
+        // Stores the defined parameter for connecting to the selected ODBC
+        // data source to the config file name in "PARAM_FILENAME"
         bool    Save();
+
+        // Populates the 'pParamODBCSourceList' listbox with the names of all
+        // ODBC datasource defined for use at the current workstation
         void    FillDataSourceList();
 
 DECLARE_EVENT_TABLE()
@@ -313,13 +428,17 @@ wxChar * const langQRY_BETWEEN      = "column BETWEEN value AND value";
 class CqueryDlg : public wxDialog
 {
     private:
-        wxDbColInf  *colInf;        // Column inf. returned by db->GetColumns()
-        wxDbTable   *dbTable;
-        wxChar        *masterTableName;
-        wxChar        *pWhere;        // A pointer to the storage for the resulting where clause
+        wxDbColInf  *colInf;            // Column inf. returned by db->GetColumns()
+        wxDbTable   *dbTable;           // generic wxDbTable object for attaching to the table to query
+        wxChar      *masterTableName;   // Name of the table that 'dbTable' will be associated with
+        wxChar      *pWhere;            // A pointer to the storage for the resulting where clause
         wxDb        *pDB;
 
     public:
+        // Used to indicate whether all of the widget pointers (defined
+        // below) have been initialized to point to the memory for 
+        // the named widget.  Used as a safeguard from using the widget
+        // before it has been initialized.
         bool                     widgetPtrsSet;
 
         // Widget pointers

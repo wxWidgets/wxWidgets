@@ -59,13 +59,7 @@
 extern wxDbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 
 #include "listdb.h"
-
-// Global structure for holding ODBC connection information
-extern wxDbConnectInf DbConnectInf;
-
-// Global database connection
-extern wxDb *READONLY_DB;
-
+//#include "dbtest.h"
 
 // Used for passing the selected listbox selection back to the calling
 // routine.  This variable must be declared as 'extern' in the calling
@@ -79,6 +73,8 @@ wxChar ListDB_Selection2[LOOKUP_COL_LEN+1];
 // Constants
 const int LISTDB_NO_SPACES_BETWEEN_COLS = 3;
 
+
+extern wxApp *DatabaseDemoApp;
 
 
 /*
@@ -143,8 +139,9 @@ const wxChar *GetExtendedDBErrorMsg2(wxChar *ErrFile, int ErrLine)
 
 
 // Clookup constructor
-Clookup::Clookup(wxChar *tblName, wxChar *colName) :
-     wxDbTable(READONLY_DB, tblName, 1, wxT(""), !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)
+Clookup::Clookup(wxChar *tblName, wxChar *colName, wxDb *pDb, const wxString &defDir)
+   : wxDbTable(pDb, tblName, 1, wxT(""), !wxDB_QUERY_ONLY,
+               defDir)
 {
 
     SetColDefs (0, colName, DB_DATA_TYPE_VARCHAR, lookupCol, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
@@ -153,9 +150,16 @@ Clookup::Clookup(wxChar *tblName, wxChar *colName) :
 
 
 // Clookup2 constructor
-Clookup2::Clookup2(wxChar *tblName, wxChar *colName1, wxChar *colName2, wxDb *pDb)
-   : wxDbTable(pDb, tblName, (1 + (wxStrlen(colName2) > 0)), NULL, !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)
+Clookup2::Clookup2(wxChar *tblName, wxChar *colName1, wxChar *colName2,
+                   wxDb *pDb, const wxString &defDir)
+   : wxDbTable(pDb, tblName, (1 + (wxStrlen(colName2) > 0)), wxT(""),
+               !wxDB_QUERY_ONLY, defDir)
 {
+    wxASSERT(pDb);
+    wxASSERT(tblName);
+    wxASSERT(colName1);
+    wxASSERT(colName2);
+
     int i = 0;
 
     SetColDefs (i, colName1, DB_DATA_TYPE_VARCHAR, lookupCol1, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
@@ -167,15 +171,17 @@ Clookup2::Clookup2(wxChar *tblName, wxChar *colName1, wxChar *colName2, wxDb *pD
 
 
 BEGIN_EVENT_TABLE(ClookUpDlg, wxDialog)
-//     EVT_LISTBOX(LOOKUP_DIALOG_SELECT, ClookUpDlg::SelectCallback)
     EVT_BUTTON(LOOKUP_DIALOG_OK,  ClookUpDlg::OnButton)
     EVT_BUTTON(LOOKUP_DIALOG_CANCEL,  ClookUpDlg::OnButton)
     EVT_CLOSE(ClookUpDlg::OnClose)
 END_EVENT_TABLE()
 
+
 // This is a generic lookup constructor that will work with any table and any column
-ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName, wxChar *colName,
-    wxChar *where, wxChar *orderBy)  : wxDialog (parent, LOOKUP_DIALOG, wxT("Select..."), wxPoint(-1, -1), wxSize(400, 290))
+ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
+                       wxChar *colName, wxChar *where, wxChar *orderBy,
+                       wxDb *pDb, const wxString &defDir)
+   : wxDialog (parent, LOOKUP_DIALOG, wxT("Select..."), wxPoint(-1, -1), wxSize(400, 290))
 {
     wxBeginBusyCursor();
     
@@ -186,14 +192,14 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     noDisplayCols = 1;
     col1Len = 0;
 
-    pLookUpSelectList       = new wxListBox(this, LOOKUP_DIALOG_SELECT,                 wxPoint(  5,  15), wxSize(384, 195), 0, 0, wxLB_SINGLE|wxLB_ALWAYS_SB, wxDefaultValidator, wxT("LookUpSelectList"));
-    pLookUpOkBtn            = new wxButton(this, LOOKUP_DIALOG_OK,      wxT("&Ok"),     wxPoint(113, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpOkBtn"));
-    pLookUpCancelBtn        = new wxButton(this, LOOKUP_DIALOG_CANCEL,  wxT("C&ancel"), wxPoint(212, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpCancelBtn"));
+    pLookUpSelectList       = new wxListBox(this, LOOKUP_DIALOG_SELECT,                  wxPoint(  5,  15), wxSize(384, 195), 0, 0, wxLB_SINGLE|wxLB_ALWAYS_SB, wxDefaultValidator, wxT("LookUpSelectList"));
+    pLookUpOkBtn            = new wxButton(this,  LOOKUP_DIALOG_OK,      wxT("&Ok"),     wxPoint(113, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpOkBtn"));
+    pLookUpCancelBtn        = new wxButton(this,  LOOKUP_DIALOG_CANCEL,  wxT("C&ancel"), wxPoint(212, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpCancelBtn"));
 
     widgetPtrsSet = TRUE;
 
     // Query the lookup table and display the result set
-    if (!(lookup = new Clookup(tableName, colName)))
+    if (!(lookup = new Clookup(tableName, colName, pDb, defDir)))
     {
         wxMessageBox(wxT("Error allocating memory for 'Clookup'object."),wxT("Error..."));
         Close();
@@ -263,13 +269,15 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
 // since it cannot be derived when you query using your own sql statement.
 //
 // The optional database connection can be used if you'd like the lookup class
-// to use a database pointer other than the global READONLY_DB.  This is necessary if
+// to use a database pointer other than wxGetApp().READONLY_DB.  This is necessary if
 // records are being saved, but not committed to the db, yet should be included
 // in the lookup window.
 //
 ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
-    wxChar *dispCol1, wxChar *dispCol2, wxChar *where, wxChar *orderBy, bool distinctValues,
-    wxChar *selectStmt, int maxLenCol1, wxDb *pDb, bool allowOk)  : wxDialog (parent, LOOKUP_DIALOG, wxT("Select..."), wxPoint(-1, -1), wxSize(400, 290))
+                       wxChar *dispCol1, wxChar *dispCol2, wxChar *where, wxChar *orderBy,
+                       wxDb *pDb, const wxString &defDir, bool distinctValues, 
+                       wxChar *selectStmt, int maxLenCol1, bool allowOk)
+   : wxDialog (parent, LOOKUP_DIALOG, wxT("Select..."), wxPoint(-1, -1), wxSize(400, 290))
 {
     wxBeginBusyCursor();
     
@@ -295,7 +303,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     widgetPtrsSet = TRUE;
 
     // Query the lookup table and display the result set
-    if (!(lookup2 = new Clookup2(tableName, dispCol1, dispCol2, pDb)))
+    if (!(lookup2 = new Clookup2(tableName, dispCol1, dispCol2, pDb, defDir)))
     {
         wxMessageBox(wxT("Error allocating memory for 'Clookup2' object."),wxT("Error..."));
         Close();

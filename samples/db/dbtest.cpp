@@ -51,33 +51,8 @@ extern wxDbList WXDLLEXPORT *PtrBegDbList;    /* from db.cpp, used in getting ba
 
 IMPLEMENT_APP(DatabaseDemoApp)
 
-extern wxChar ListDB_Selection[];        /* Used to return the first column value for the selected line from the listDB routines */
-extern wxChar ListDB_Selection2[];    /* Used to return the second column value for the selected line from the listDB routines */
-
-DatabaseDemoFrame *DemoFrame;       /* Pointer to the main frame */
-
-/* Pointer to the main database connection used in the program.  This
- * pointer would normally be used for doing things as database lookups
- * for user login names and passwords, getting workstation settings, etc.
- * ---> IMPORTANT <---
- * 
- *        For each database object created which uses this wxDb pointer
- *    connection to the database, when a CommitTrans() or RollBackTrans()
- *    will commit or rollback EVERY object which uses this wxDb pointer.
- *
- *    To allow each table object (those derived from wxDbTable) to be 
- *    individually committed or rolled back, you MUST use a different
- *    instance of wxDb in the constructor of the table.  Doing so creates 
- *        more overhead, and will use more database connections (some DBs have
- *    connection limits...), so use connections sparringly.
- *
- *        It is recommended that one "main" database connection be created for
- *        the entire program to use for READ-ONLY database accesses, but for each
- *        table object which will do a CommitTrans() or RollbackTrans() that a
- *        new wxDb object be created and used for it.
- */
- 
-wxDb    *READONLY_DB;
+extern wxChar ListDB_Selection[];   /* Used to return the first column value for the selected line from the listDB routines */
+extern wxChar ListDB_Selection2[];  /* Used to return the second column value for the selected line from the listDB routines */
 
 const char *GetExtendedDBErrorMsg(wxDb *pDb, char *ErrFile, int ErrLine)
 {
@@ -121,6 +96,8 @@ const char *GetExtendedDBErrorMsg(wxDb *pDb, char *ErrFile, int ErrLine)
 
 bool DatabaseDemoApp::OnInit()
 {
+    DbConnectInf = NULL;
+
     // Create the main frame window
     DemoFrame = new DatabaseDemoFrame(NULL, wxT("wxWindows Database Demo"), wxPoint(50, 50), wxSize(537, 480));
 
@@ -146,13 +123,6 @@ bool DatabaseDemoApp::OnInit()
     menu_bar->Append(about_menu, wxT("&About"));
     DemoFrame->SetMenuBar(menu_bar);
 
-    // Initialize the ODBC Environment for Database Operations
-    if (SQLAllocEnv(&DbConnectInf.Henv) != SQL_SUCCESS)
-    {
-        wxMessageBox(wxT("A problem occured while trying to get a connection to the data source"),wxT("DB CONNECTION ERROR"),wxOK | wxICON_EXCLAMATION);
-        return NULL;
-    }
-
     params.ODBCSource[0] = 0;
     params.UserName[0]   = 0;
     params.Password[0]   = 0;
@@ -161,15 +131,57 @@ bool DatabaseDemoApp::OnInit()
     // Show the frame
     DemoFrame->Show(TRUE);
 
+    ReadParamFile(params);
+
+    // Passing NULL for the SQL environment handle causes
+    // the wxDbConnectInf constructor to obtain a handle
+    // for you.
+    //
+    // WARNING: Be certain that you do not free this handle
+    //          directly with SQLFreeEnv().  Use either the
+    //          method ::FreeHenv() or delete the DbConnectInf.
+    DbConnectInf = new wxDbConnectInf(NULL, params.ODBCSource, params.UserName, 
+                                      params.Password, params.DirPath);
+
+    if (!DbConnectInf || !DbConnectInf->GetHenv())
+    {
+        wxMessageBox(wxT("Unable to define data source connection info."), wxT("DB CONNECTION ERROR..."),wxOK | wxICON_EXCLAMATION);
+        delete DbConnectInf;
+    }
+
+
+    READONLY_DB = wxDbGetConnection(DbConnectInf);
+    if (READONLY_DB == 0)
+    {
+        wxMessageBox(wxT("Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the CONTACT table prior to making a connection\n(using tools provided by the database manufacturer)"), wxT("DB CONNECTION ERROR..."),wxOK | wxICON_EXCLAMATION);
+        DemoFrame->BuildParameterDialog(NULL);
+        DbConnectInf->SetDsn("");
+        DbConnectInf->SetUid("");
+        DbConnectInf->SetPassword("");
+        wxMessageBox(wxT("Now exiting program.\n\nRestart program to try any new settings."),wxT("Notice..."),wxOK | wxICON_INFORMATION);
+        return(FALSE);
+    }
+
+    DemoFrame->BuildEditorDialog();
+
+    // Show the frame
+    DemoFrame->Refresh();
+
+    return TRUE;
+}  // DatabaseDemoApp::OnInit()
+
+
+bool DatabaseDemoApp::ReadParamFile(Cparameters &params)
+{
     FILE *paramFile;
-    if ((paramFile = fopen(paramFilename, wxT("r"))) == NULL)
+    if ((paramFile = fopen(PARAM_FILENAME, wxT("r"))) == NULL)
     {
         wxString tStr;
-        tStr.Printf(wxT("Unable to open the parameter file '%s' for reading.\n\nYou must specify the data source, user name, and\npassword that will be used and save those settings."),paramFilename);
+        tStr.Printf(wxT("Unable to open the parameter file '%s' for reading.\n\nYou must specify the data source, user name, and\npassword that will be used and save those settings."),PARAM_FILENAME);
         wxMessageBox(tStr,wxT("File I/O Error..."),wxOK | wxICON_EXCLAMATION);
 
         DemoFrame->BuildParameterDialog(NULL);
-        if ((paramFile = fopen(paramFilename, wxT("r"))) == NULL)
+        if ((paramFile = fopen(PARAM_FILENAME, wxT("r"))) == NULL)
             return FALSE;
     }
 
@@ -192,31 +204,89 @@ bool DatabaseDemoApp::OnInit()
 
     fclose(paramFile);
 
-    // Connect to datasource
-    DbConnectInf.Dsn        = params.ODBCSource;    // ODBC data source name (created with ODBC Administrator under Win95/NT)
-    DbConnectInf.Uid        = params.UserName;      // database username - must already exist in the data source
-    DbConnectInf.AuthStr    = params.Password;      // password database username
-    DbConnectInf.defaultDir = params.DirPath;       // path where the table exists (needed for dBase)
+    return TRUE;
+}  // DatabaseDemoApp::ReadParamFile()
 
-    READONLY_DB = wxDbGetConnection(&DbConnectInf);
-    if (READONLY_DB == 0)
+
+bool DatabaseDemoApp::WriteParamFile(Cparameters &params)
+{
+    FILE *paramFile;
+    if ((paramFile = fopen(PARAM_FILENAME, wxT("wt"))) == NULL)
     {
-        wxMessageBox(wxT("Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the CONTACT table prior to making a connection\n(using tools provided by the database manufacturer)"), wxT("DB CONNECTION ERROR..."),wxOK | wxICON_EXCLAMATION);
-        DemoFrame->BuildParameterDialog(NULL);
-        DbConnectInf.Dsn.Empty();
-        DbConnectInf.Uid.Empty();
-        DbConnectInf.AuthStr.Empty();
-        wxMessageBox(wxT("Now exiting program.\n\nRestart program to try any new settings."),wxT("Notice..."),wxOK | wxICON_INFORMATION);
-        return(FALSE);
+        wxString tStr;
+        tStr.Printf(wxT("Unable to write/overwrite '%s'."),PARAM_FILENAME);
+        wxMessageBox(tStr,wxT("File I/O Error..."),wxOK | wxICON_EXCLAMATION);
+        return FALSE;
     }
 
-    DemoFrame->BuildEditorDialog();
-
-    // Show the frame
-    DemoFrame->Refresh();
+    fputs(wxGetApp().params.ODBCSource, paramFile);
+    fputc(wxT('\n'), paramFile);
+    fputs(wxGetApp().params.UserName, paramFile);
+    fputc(wxT('\n'), paramFile);
+    fputs(wxGetApp().params.Password, paramFile);
+    fputc(wxT('\n'), paramFile);
+    fputs(wxGetApp().params.DirPath, paramFile);
+    fputc(wxT('\n'), paramFile);
+    fclose(paramFile);
 
     return TRUE;
-}  // DatabaseDemoApp::OnInit()
+}  // DatabaseDemoApp::WriteParamFile()
+
+
+void DatabaseDemoApp::CreateDataTable(bool recreate)
+{
+    bool Ok = TRUE;
+    if (recreate)
+       Ok = (wxMessageBox(wxT("Any data currently residing in the table will be erased.\n\nAre you sure?"),wxT("Confirm"),wxYES_NO|wxICON_QUESTION) == wxYES);
+
+    if (!Ok)
+        return;
+
+    wxBeginBusyCursor();
+
+    bool success = TRUE;
+
+    // Use a temporary instance of a new Ccontact table object
+    // for creating the table within the datasource.
+    Ccontact *Contact = new Ccontact();
+
+    if (!Contact)
+    {
+        wxEndBusyCursor();
+        wxMessageBox(wxT("Error allocating memory for 'Ccontact'object.\n\nTable was not created."),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
+        return;
+    }
+
+    if (!Contact->CreateTable(recreate))
+    {
+        wxEndBusyCursor();
+        wxString tStr;
+        tStr  = wxT("Error creating CONTACTS table.\nTable was not created.\n\n");
+        tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+        wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
+        success = FALSE;
+    }
+    else
+    {
+        if (!Contact->CreateIndexes())
+        {
+            wxEndBusyCursor();
+            wxString tStr;
+            tStr  = wxT("Error creating CONTACTS indexes.\nIndexes will be unavailable.\n\n");
+            tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
+            wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
+            success = FALSE;
+        }
+    }
+    while (wxIsBusy())
+        wxEndBusyCursor();
+
+    delete Contact;
+    Contact = NULL;
+
+    if (success)
+        wxMessageBox(wxT("Table and index(es) were successfully created."),wxT("Notice..."),wxOK | wxICON_INFORMATION);
+}  // DatabaseDemoApp::CreateDataTable()
 
 
 BEGIN_EVENT_TABLE(DatabaseDemoFrame, wxFrame)
@@ -243,13 +313,13 @@ DatabaseDemoFrame::DatabaseDemoFrame(wxFrame *frame, const wxString& title,
 
 void DatabaseDemoFrame::OnCreate(wxCommandEvent& event)
 {
-    CreateDataTable(FALSE);
+    wxGetApp().CreateDataTable(FALSE);
 }  // DatabaseDemoFrame::OnCreate()
 
 
 void DatabaseDemoFrame::OnRecreateTable(wxCommandEvent& event)
 {
-    CreateDataTable(TRUE);
+    wxGetApp().CreateDataTable(TRUE);
 }  // DatabaseDemoFrame::OnRecreate()
 
 
@@ -300,11 +370,10 @@ void DatabaseDemoFrame::OnAbout(wxCommandEvent& event)
 }  // DatabaseDemoFrame::OnAbout()
 
 
+// Put any additional checking necessary to make certain it is alright
+// to close the program here that is not done elsewhere
 void DatabaseDemoFrame::OnCloseWindow(wxCloseEvent& event)
 {
-    // Put any additional checking necessary to make certain it is alright
-    // to close the program here that is not done elsewhere
-
     // Clean up time
     if (pEditorDlg && pEditorDlg->Close())
         pEditorDlg = NULL;
@@ -321,65 +390,15 @@ void DatabaseDemoFrame::OnCloseWindow(wxCloseEvent& event)
     // previously cached.
     wxDbCloseConnections();
 
-    // Cleans up the environment space allocated for the SQL/ODBC connection handle
-    SQLFreeEnv(DbConnectInf.Henv);
+    // Deletion of the wxDbConnectInf instance must be the LAST thing done that
+    // has anything to do with the database.  Deleting this before disconnecting,
+    // freeing/closing connections, etc will result in a crash!
+    delete wxGetApp().DbConnectInf;
+    wxGetApp().DbConnectInf = NULL;
 
     this->Destroy();
 
 }  // DatabaseDemoFrame::OnCloseWindow()
-
-
-void DatabaseDemoFrame::CreateDataTable(bool recreate)
-{
-    bool Ok = TRUE;
-    if (recreate)
-       Ok = (wxMessageBox(wxT("Any data currently residing in the table will be erased.\n\nAre you sure?"),wxT("Confirm"),wxYES_NO|wxICON_QUESTION) == wxYES);
-
-    if (!Ok)
-        return;
-
-    wxBeginBusyCursor();
-
-    bool success = TRUE;
-
-    Ccontact *Contact = new Ccontact();
-    if (!Contact)
-    {
-        wxEndBusyCursor();
-        wxMessageBox(wxT("Error allocating memory for 'Ccontact'object.\n\nTable was not created."),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
-        return;
-    }
-
-    if (!Contact->CreateTable(recreate))
-    {
-        wxEndBusyCursor();
-        wxString tStr;
-        tStr  = wxT("Error creating CONTACTS table.\nTable was not created.\n\n");
-        tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-        wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
-        success = FALSE;
-    }
-    else
-    {
-        if (!Contact->CreateIndexes())
-        {
-            wxEndBusyCursor();
-            wxString tStr;
-            tStr  = wxT("Error creating CONTACTS indexes.\nIndexes will be unavailable.\n\n");
-            tStr += GetExtendedDBErrorMsg(Contact->GetDb(),__FILE__,__LINE__);
-            wxMessageBox(tStr,wxT("ODBC Error..."),wxOK | wxICON_EXCLAMATION);
-            success = FALSE;
-        }
-    }
-    while (wxIsBusy())
-        wxEndBusyCursor();
-
-    delete Contact;
-    Contact = NULL;
-
-    if (success)
-        wxMessageBox(wxT("Table and index(es) were successfully created."),wxT("Notice..."),wxOK | wxICON_INFORMATION);
-}  // DatabaseDemoFrame::CreateDataTable()
 
 
 void DatabaseDemoFrame::BuildEditorDialog()
@@ -394,13 +413,13 @@ void DatabaseDemoFrame::BuildEditorDialog()
             pEditorDlg->Close();
             pEditorDlg = NULL;
             wxMessageBox(wxT("Unable to initialize the editor dialog for some reason"),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
-            DemoFrame->Close();
+            Close();
         }
     } 
     else
     {
         wxMessageBox(wxT("Unable to create the editor dialog for some reason"),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
-        DemoFrame->Close();
+        Close();
     }
 }  // DatabaseDemoFrame::BuildEditorDialog()
 
@@ -426,7 +445,9 @@ void DatabaseDemoFrame::BuildParameterDialog(wxWindow *parent)
  *     or creating a table objects which use the same pDb, know that all the objects
  *     will be committed or rolled back when any of the objects has this function call made.
  */
-Ccontact::Ccontact (wxDb *pwxDb) : wxDbTable(pwxDb ? pwxDb : wxDbGetConnection(&DbConnectInf), CONTACT_TABLE_NAME,CONTACT_NO_COLS, wxT(""), !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)
+Ccontact::Ccontact (wxDb *pwxDb) : wxDbTable(pwxDb ? pwxDb : wxDbGetConnection(wxGetApp().DbConnectInf),
+                                             CONTACT_TABLE_NAME, CONTACT_NO_COLS, wxT(""),
+                                             !wxDB_QUERY_ONLY, wxGetApp().DbConnectInf->GetDefaultDir())
 {
     // This is used to represent whether the database connection should be released
     // when this instance of the object is deleted.  If using the same connection
@@ -529,7 +550,7 @@ bool Ccontact::CreateIndexes(void)
  * very efficient and tighter coding so that it is available where ever the object
  * is.  Great for use with multiple tables when not using views or outer joins
  */
-bool Ccontact::FetchByName(wxChar *name)
+bool Ccontact::FetchByName(const wxString &name)
 {
     whereStr.Printf(wxT("NAME = '%s'"),name);
     SetWhereClause(whereStr.c_str());
@@ -705,7 +726,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
         else
         {
             // Requery previous record
-            if (Contact->FetchByName((wxChar*) (const wxChar*) saveName))
+            if (Contact->FetchByName(saveName))
             {
                 PutData();
                 SetMode(mView);
@@ -821,9 +842,9 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 
         if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
         {
-            Contact->whereStr        = wxT("NAME = (SELECT MIN(NAME) FROM ");
-            Contact->whereStr        += CONTACT_TABLE_NAME;
-            Contact->whereStr        += wxT(")");
+            Contact->whereStr  = wxT("NAME = (SELECT MIN(NAME) FROM ");
+            Contact->whereStr += CONTACT_TABLE_NAME;
+            Contact->whereStr += wxT(")");
         }
 
         Contact->SetWhereClause(Contact->whereStr.c_str());
@@ -846,21 +867,23 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 
     if (widgetName == pNameListBtn->GetName())
     {
-        new ClookUpDlg(/* wxWindow  *parent        */ this,
+        new ClookUpDlg(/* wxWindow    *parent        */ this,
                        /* wxChar      *windowTitle   */ wxT("Select contact name"),
                        /* wxChar      *tableName     */ (wxChar *) CONTACT_TABLE_NAME,
                        /* wxChar      *dispCol1      */ wxT("NAME"),
                        /* wxChar      *dispCol2      */ wxT("JOINDATE"),
                        /* wxChar      *where         */ wxT(""),
                        /* wxChar      *orderBy       */ wxT("NAME"),
-                       /* bool      distinctValues */ TRUE);
+                       /* wxDb        *pDb           */ wxGetApp().READONLY_DB,
+                       /* const wxString &defDir     */ wxGetApp().DbConnectInf->GetDefaultDir(),
+                       /* bool        distinctValues */ TRUE);
 
         if (ListDB_Selection && wxStrlen(ListDB_Selection))
         {
             wxString w = wxT("NAME = '");
             w += ListDB_Selection;
             w += wxT("'");
-            GetRec((wxChar*) (const wxChar*) w);
+            GetRec(w);
         }
 
         return;
@@ -883,7 +906,9 @@ bool CeditorDlg::Initialize()
 
     // Check if the table exists or not.  If it doesn't, ask the user if they want to 
     // create the table.  Continue trying to create the table until it exists, or user aborts
-    while (!Contact->GetDb()->TableExists((wxChar *)CONTACT_TABLE_NAME,DbConnectInf.Uid,DbConnectInf.defaultDir))
+    while (!Contact->GetDb()->TableExists((wxChar *)CONTACT_TABLE_NAME, 
+                                          wxGetApp().DbConnectInf->GetUserID(), 
+                                          wxGetApp().DbConnectInf->GetDefaultDir()))
     {
         wxString tStr;
         tStr.Printf(wxT("Unable to open the table '%s'.\n\nTable may need to be created...?\n\n"),CONTACT_TABLE_NAME);
@@ -898,7 +923,7 @@ bool CeditorDlg::Initialize()
             return FALSE;
         }
         else
-            DemoFrame->CreateDataTable(TRUE);
+            wxGetApp().CreateDataTable(TRUE);
     }
 
     // Tables must be "opened" before anything other than creating/deleting table can be done
@@ -912,7 +937,7 @@ bool CeditorDlg::Initialize()
 // in the 2.4 release.  This check will determine whether the open failing was due
 // to the table not existing, or the users privileges being insufficient to
 // open the table.
-        if (!Contact->GetDb()->TablePrivileges(CONTACT_TABLE_NAME,wxT("SELECT"),Contact->GetDb()->GetUsername(),Contact->GetDb()->GetUsername(),DbConnectInf.defaultDir))
+        if (!Contact->GetDb()->TablePrivileges(CONTACT_TABLE_NAME,wxT("SELECT"),Contact->GetDb()->GetUsername(),Contact->GetDb()->GetUsername(),DbConnectInf->GetDefaultDir()))
         {
             wxString tStr;
             tStr.Printf(wxT("Unable to open the table '%s'.\n\n"),CONTACT_TABLE_NAME);
@@ -921,7 +946,8 @@ bool CeditorDlg::Initialize()
         }
         else 
 #endif
-        if (Contact->GetDb()->TableExists(CONTACT_TABLE_NAME,Contact->GetDb()->GetUsername(),DbConnectInf.defaultDir))
+        if (Contact->GetDb()->TableExists(CONTACT_TABLE_NAME, Contact->GetDb()->GetUsername(),
+                                          wxGetApp().DbConnectInf->GetDefaultDir()))
         {
             wxString tStr;
             tStr.Printf(wxT("Unable to open the table '%s'.\n\n"),CONTACT_TABLE_NAME);
@@ -1004,9 +1030,9 @@ bool CeditorDlg::Initialize()
     
     if (Contact->GetDb()->Dbms() != dbmsPOSTGRES && Contact->GetDb()->Dbms() != dbmsMY_SQL)
     {
-        Contact->whereStr.sprintf(wxT("NAME = (SELECT MIN(NAME) FROM %s)"),Contact->GetTableName());
+        Contact->whereStr.Printf(wxT("NAME = (SELECT MIN(NAME) FROM %s)"),Contact->GetTableName());
         // NOTE: (const wxChar*) returns a pointer which may not be valid later, so this is short term use only
-        Contact->SetWhereClause(Contact->whereStr.c_str());
+        Contact->SetWhereClause(Contact->whereStr);
     }
     else
        Contact->SetWhereClause(wxT(""));
@@ -1147,7 +1173,7 @@ bool CeditorDlg::GetData()
         return FALSE;
     }
 
-    bool    invalid = FALSE;
+    bool   invalid = FALSE;
     int    mm,dd,yyyy;
     int    first, second;
 
@@ -1281,7 +1307,8 @@ bool CeditorDlg::Save()
         }
         else  // mode == mEdit
         {
-            if (!Contact->Update())
+            Contact->whereStr.Printf("NAME = '%s'",saveName.c_str());
+            if (!Contact->UpdateWhere(Contact->whereStr))
             {
                 wxString tStr;
                 tStr  = wxT("Database update failed\n\n");
@@ -1336,7 +1363,7 @@ bool CeditorDlg::GetNextRec()
     }
 
     w += wxT(")");
-    return(GetRec((wxChar*) (const wxChar*) w));
+    return(GetRec(w));
 
 }  // CeditorDlg::GetNextRec()
 
@@ -1372,7 +1399,7 @@ bool CeditorDlg::GetPrevRec()
 
     w += wxT(")");
 
-    return(GetRec((wxChar*) (const wxChar*)w));
+    return(GetRec(w));
 
 }  // CeditorDlg::GetPrevRec()
 
@@ -1381,7 +1408,7 @@ bool CeditorDlg::GetPrevRec()
  * This function is here to avoid duplicating this same code in both the
  * GetPrevRec() and GetNextRec() functions
  */
-bool CeditorDlg::GetRec(wxChar *whereStr)
+bool CeditorDlg::GetRec(const wxString &whereStr)
 {
     Contact->SetWhereClause(whereStr);
     Contact->SetOrderByClause(wxT("NAME"));
@@ -1586,31 +1613,15 @@ bool CparameterDlg::GetData()
 
 bool CparameterDlg::Save()
 {
-    Cparameters saveParams = wxGetApp().params;
+    // Copy the current params in case user cancels changing
+    // the params, so that we can reset them.
     if (!GetData())
     {
-        wxGetApp().params = saveParams;
+        wxGetApp().params = savedParamSettings;
         return FALSE;
     }
 
-    FILE *paramFile;
-    if ((paramFile = fopen(paramFilename, wxT("wt"))) == NULL)
-    {
-        wxString tStr;
-        tStr.Printf(wxT("Unable to write/overwrite '%s'."),paramFilename);
-        wxMessageBox(tStr,wxT("File I/O Error..."),wxOK | wxICON_EXCLAMATION);
-        return FALSE;
-    }
-
-    fputs(wxGetApp().params.ODBCSource, paramFile);
-    fputc(wxT('\n'), paramFile);
-    fputs(wxGetApp().params.UserName, paramFile);
-    fputc(wxT('\n'), paramFile);
-    fputs(wxGetApp().params.Password, paramFile);
-    fputc(wxT('\n'), paramFile);
-    fputs(wxGetApp().params.DirPath, paramFile);
-    fputc(wxT('\n'), paramFile);
-    fclose(paramFile);
+    wxGetApp().WriteParamFile(wxGetApp().params);
 
     return TRUE;
 }  // CparameterDlg::Save()
@@ -1622,7 +1633,8 @@ void CparameterDlg::FillDataSourceList()
     wxChar DsDesc[255];
     wxStringList strList;
 
-    while (wxDbGetDataSource(DbConnectInf.Henv, Dsn, SQL_MAX_DSN_LENGTH+1, DsDesc, 255))
+    while (wxDbGetDataSource(wxGetApp().DbConnectInf->GetHenv(), Dsn,
+                             SQL_MAX_DSN_LENGTH+1, DsDesc, 255))
         strList.Add(Dsn);
 
     strList.Sort();
@@ -2112,7 +2124,9 @@ void CqueryDlg::ProcessCountBtn()
 
     if (dbTable == 0)  // wxDbTable object needs to be created and opened
     {
-        if (!(dbTable = new wxDbTable(pDB, masterTableName, 0, wxT(""), !wxDB_QUERY_ONLY, DbConnectInf.defaultDir)))
+        if (!(dbTable = new wxDbTable(pDB, masterTableName, 0, wxT(""),
+                                      !wxDB_QUERY_ONLY, 
+                                      wxGetApp().DbConnectInf->GetDefaultDir())))
         {
             wxMessageBox(wxT("Memory allocation failed creating a wxDbTable object."),wxT("Error..."),wxOK | wxICON_EXCLAMATION);
             return;
