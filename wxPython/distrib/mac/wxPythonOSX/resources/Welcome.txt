@@ -1,5 +1,5 @@
 Welcome!
 
-This program will install wxPython 2.4.0.4 for MacPython-OSX 2.3.
+This program will install wxPython 2.4.0.6 for MacPython-OSX 2.3.
 
-Build date:   Thu Mar  6 00:08:13 PST 2003
+Build date:   Wed Mar 12 02:14:18 PST 2003

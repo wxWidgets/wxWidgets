@@ -268,13 +268,13 @@ EOF
 	--iconfile=$PROGDIR/PieShell.icns \
 	build
 
-#     # Make an app to launch XRCed
-#     pythonw $PROGDIR/../buildapp.py \
-# 	--builddir=$APPDIR \
-# 	--name=XRCed \
-# 	--mainprogram=$INSTALLROOT$PREFIX/bin/xrced.py \
-# 	--iconfile=$PROGDIR/XRCed.icns \
-# 	build
+     # Make an app to launch XRCed
+     pythonw $PROGDIR/../buildapp.py \
+ 	--builddir=$APPDIR \
+ 	--name=XRCed \
+ 	--mainprogram=$INSTALLROOT$PREFIX/bin/xrced.py \
+ 	--iconfile=$PROGDIR/XRCed.icns \
+ 	build
 
 
     # Make the welcome message
@@ -309,6 +309,8 @@ EOF
 chmod a+w /Applications/wxPythonOSX-$VERSION/demo/data
 
 # and the wxPython pacakge should be group writable
+chgrp -R admin \$2$SITEPACKAGES/wxPython
+chgrp -R admin /Applications/wxPythonOSX-$VERSION
 chmod -R g+w \$2$SITEPACKAGES/wxPython
 chmod -R g+w /Applications/wxPythonOSX-$VERSION
 
@@ -357,7 +359,7 @@ The wxPython extension modules, library, demo and samples are
 contained in the wxPythonOSX package. You should install at least this
 package to use wxPython.
 
-If you have any need to create applicaitons of extension modules that
+If you have any need to create applicaitons or extension modules that
 link with the same wxMac that wxPython does, then you can also install
 the wxPythonOSX-devel package to get the necessary header files and
 such.  Otherwise you don't need it.
