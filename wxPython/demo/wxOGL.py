@@ -84,7 +84,9 @@ class DividedShape(wxDividedShape):
 
     def OnSizingEndDragLeft(self, pt, x, y, keys, attch):
         self.base_OnSizingEndDragLeft(pt, x, y, keys, attch)
-        wxCallAfter(self.ReformatRegions)
+        self.SetRegionSizes()
+        self.ReformatRegions()
+        self.GetCanvas().Refresh()
 
 
 #----------------------------------------------------------------------
