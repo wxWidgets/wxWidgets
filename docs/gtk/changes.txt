@@ -1,5 +1,5 @@
 
-1st November '99: wxWindows 2.1.11 released
+7st November '99: wxWindows 2.1.11 released
 
 There is still an unresolved problem with bitmap to image
 conversion on big-endian architectures (such as Solaris),

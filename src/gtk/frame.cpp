@@ -404,7 +404,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInFrame;
 
-    GtkWindowType win_type = GTK_WINDOW_DIALOG;  // this makes window placement work
+    GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
     if (style & wxSIMPLE_BORDER) win_type = GTK_WINDOW_POPUP;
 
     m_widget = gtk_window_new( win_type );
@@ -645,8 +645,6 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
 void wxFrame::DoSetClientSize( int width, int height )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-    printf( "set size %d %d\n", width, height );
 
         /* menu bar */
         if (m_frameMenuBar)
