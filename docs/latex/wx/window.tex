@@ -2844,6 +2844,10 @@ implements the following methods:\par
 \func{virtual void}{SetSizeHints}{\param{int}{ minW=-1}, \param{int}{ minH=-1}, \param{int}{ maxW=-1}, \param{int}{ maxH=-1},
  \param{int}{ incW=-1}, \param{int}{ incH=-1}}
 
+\func{void}{SetSizeHints}{\param{const wxSize\&}{ minSize},
+\param{const wxSize\&}{ maxSize=wxDefaultSize}, \param{const wxSize\&}{ incSize=wxDefaultSize}}
+
+
 Allows specification of minimum and maximum window sizes, and window size increments.
 If a pair of values is not set (or set to -1), the default values will be used.
 
@@ -2860,6 +2864,12 @@ If a pair of values is not set (or set to -1), the default values will be used.
 \docparam{incW}{Specifies the increment for sizing the width (Motif/Xt only).}
 
 \docparam{incH}{Specifies the increment for sizing the height (Motif/Xt only).}
+
+\docparam{minSize}{Minimum size.}
+
+\docparam{maxSize}{Maximum size.}
+
+\docparam{incSize}{Increment size (Motif/Xt only).}
 
 \wxheading{Remarks}
 
@@ -2972,6 +2982,10 @@ Sets the virtual size of the window in pixels.
 
 \func{virtual void}{SetVirtualSizeHints}{\param{int}{ minW},\param{int}{ minH}, \param{int}{ maxW=-1}, \param{int}{ maxH=-1}}
 
+\func{void}{SetVirtualSizeHints}{\param{const wxSize\&}{ minSize=wxDefaultSize}, 
+\param{const wxSize\&}{ maxSize=wxDefaultSize}}
+
+
 Allows specification of minimum and maximum virtual window sizes.
 If a pair of values is not set (or set to -1), the default values
 will be used.
@@ -2985,6 +2999,10 @@ will be used.
 \docparam{maxW}{Specifies the maximum width allowable.}
 
 \docparam{maxH}{Specifies the maximum height allowable.}
+
+\docparam{minSize}{Minimum size.}
+
+\docparam{maxSize}{Maximum size.}
 
 \wxheading{Remarks}
 

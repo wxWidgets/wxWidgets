@@ -340,9 +340,22 @@ public:
     virtual void SetSizeHints( int minW, int minH,
                                int maxW = -1, int maxH = -1,
                                int incW = -1, int incH = -1 );
+    void SetSizeHints( const wxSize& minSize,
+                       const wxSize& maxSize=wxDefaultSize,
+                       const wxSize& incSize=wxDefaultSize)
+    {
+        SetSizeHints(minSize.x, minSize.y,
+                     maxSize.x, maxSize.y,
+                     incSize.x, incSize.y);
+    }
 
     virtual void SetVirtualSizeHints( int minW, int minH,
                                       int maxW = -1, int maxH = -1 );
+    void SetVirtualSizeHints( const wxSize& minSize,
+                              const wxSize& maxSize=wxDefaultSize)
+    {
+        SetVirtualSizeHints(minSize.x, minSize.y, maxSize.x, maxSize.y);
+    }
 
     virtual int GetMinWidth() const { return m_minWidth; }
     virtual int GetMinHeight() const { return m_minHeight; }
@@ -351,7 +364,8 @@ public:
 
         // Override this method to control the values given to Sizers etc.
     virtual wxSize GetMaxSize() const { return wxSize( m_maxWidth, m_maxHeight ); }
-
+    virtual wxSize GetMinSize() const { return wxSize( m_minWidth, m_minHeight ); }
+    
         // Methods for accessing the virtual size of a window.  For most
         // windows this is just the client area of the window, but for
         // some like scrolled windows it is more or less independent of
