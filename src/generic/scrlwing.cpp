@@ -978,9 +978,24 @@ void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
     {
         lines *= event.GetLinesPerAction();
 
-        int vsx, vsy;
-        GetViewStart(&vsx, &vsy);
-        Scroll(-1, vsy - lines);
+        wxScrollWinEvent newEvent;
+
+        newEvent.SetPosition(m_xScrollPosition - lines);
+        newEvent.SetOrientation(wxVERTICAL);
+        newEvent.m_eventObject = m_win;
+        if (lines > 0)
+            newEvent.m_eventType = wxEVT_SCROLLWIN_LINEUP;
+        else
+            newEvent.m_eventType = wxEVT_SCROLLWIN_LINEDOWN;
+
+        int times = abs(lines);
+        for (; times > 0; times --)
+            m_win->GetEventHandler()->ProcessEvent(newEvent);
+
+        /* Old Way */
+        // int vsx, vsy;
+        // GetViewStart(&vsx, &vsy);
+        // Scroll(-1, vsy - lines);    
     }
 }
 
