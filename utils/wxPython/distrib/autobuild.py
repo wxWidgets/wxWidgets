@@ -6,8 +6,8 @@ from ftplib import FTP
 
 logfile = 'e:\\temp\\autobuild.log'
 WXDIR   = os.environ['WXWIN']
-dllVer  = '21_13'
-wxpVer  = '2.1.13'
+dllVer  = '21_14'
+wxpVer  = '2.1.14'
 dateSt  = time.strftime("%Y%m%d", time.localtime(time.time()))
 
 #----------------------------------------------------------------------

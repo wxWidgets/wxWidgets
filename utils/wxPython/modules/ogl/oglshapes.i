@@ -331,7 +331,7 @@ public:
     //wxOGLConstraint(int type, wxPyShape *constraining, wxList& constrained);
     %addmethods {
         wxOGLConstraint(int type, wxPyShape *constraining, PyObject* constrained) {
-            wxList* list = wxPy_wxListHelper(constrained, "wxPyShape");
+            wxList* list = wxPy_wxListHelper(constrained, "_wxPyShape_p");
             wxOGLConstraint* rv = new wxOGLConstraint(type, constraining, *list);
             delete list;
             return rv;
@@ -371,7 +371,7 @@ public:
     %addmethods {
         wxOGLConstraint * AddConstrainedShapes(int type, wxPyShape *constraining,
                                                PyObject* constrained) {
-            wxList* list = wxPy_wxListHelper(constrained, "wxPyShape");
+            wxList* list = wxPy_wxListHelper(constrained, "_wxPyShape_p");
             wxOGLConstraint* rv = self->AddConstraint(type, constraining, *list);
             delete list;
             return rv;

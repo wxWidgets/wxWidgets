@@ -173,7 +173,7 @@ public:
     //void AddArrowOrdered(wxArrowHead *arrow, wxList& referenceList, int end);
     %addmethods {
         void AddArrowOrdered(wxArrowHead *arrow, PyObject* referenceList, int end) {
-            wxList* list = wxPy_wxListHelper(referenceList, "wxArrowHead");
+            wxList* list = wxPy_wxListHelper(referenceList, "_wxArrowHead_p");
             self->AddArrowOrdered(arrow, *list, end);
             delete list;
         }

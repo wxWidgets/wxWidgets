@@ -107,6 +107,21 @@ class FileBrowseButton(wxPanel):
         ''' Convenient setting of text control value '''
         return self.textControl.SetValue (value)
 
+    def Enable (self, value):
+        ''' Convenient enabling/disabling of entire control '''
+        self.label.Enable (value)
+        self.textControl.Enable (value)
+        return self.browseButton.Enable (value)
+
+    def GetLabel( self ):
+        ''' Retrieve the label's current text '''
+        return self.label.GetLabel()
+
+    def SetLabel( self, value ):
+        ''' Set the label's current text '''
+        return self.label.SetLabel( value )
+
+
 
 #----------------------------------------------------------------------
 

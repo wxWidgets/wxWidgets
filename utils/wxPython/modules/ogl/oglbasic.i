@@ -332,7 +332,7 @@ public:
     //void ApplyAttachmentOrdering(wxList& linesToSort);
     %addmethods {
         void ApplyAttachmentOrdering(PyObject* linesToSort) {
-            wxList* list = wxPy_wxListHelper(linesToSort, "wxPyLineShape");
+            wxList* list = wxPy_wxListHelper(linesToSort, "_wxPyLineShape_p");
             self->ApplyAttachmentOrdering(*list);
             delete list;
         }

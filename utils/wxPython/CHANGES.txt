@@ -11,8 +11,8 @@ flags that clairify where the click was in relation to the item.
 Fixed thread state problem in wxTreeCtrl.GetBoundingBox and
 GetSelections.
 
-Fixed some problems in OGL.  wxShape.SetClientData and .GetClientData
-can now deal with Python objects.
+Fixed some problems in OGL.  Also wxShape.SetClientData and
+.GetClientData can now deal with Python objects.
 
 
 
