@@ -1211,6 +1211,14 @@ wxFileDialog::~wxFileDialog()
     }
 }
 
+void wxFileDialog::SetFilterIndex( int filterindex )
+{
+    m_choice->SetSelection( filterindex );
+    wxCommandEvent event;
+    event.SetInt( filterindex );
+    OnChoice( event );
+}
+
 void wxFileDialog::OnChoice( wxCommandEvent &event )
 {
     int index = (int)event.GetInt();
