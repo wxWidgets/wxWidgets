@@ -308,7 +308,7 @@
  */
 #if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
     defined( __CYGWIN__ ) || \
-    (defined(__WATCOMC__) && __WATCOMC__ >= 1200) || defined(__DIGITALMARS__)
+    (defined(__WATCOMC__) && __WATCOMC__ >= 1200)
     #include "wx/msw/gccpriv.h"
 #else
     #undef wxCHECK_W32API_VERSION
