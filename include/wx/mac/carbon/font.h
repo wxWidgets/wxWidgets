@@ -99,12 +99,21 @@ public:
     virtual bool GetNoAntiAliasing() const  ;
 
     // Mac-specific, risks to change, don't use in portable code
+    
+    // 'old' Quickdraw accessors
+    
     short MacGetFontNum() const;
     short MacGetFontSize() const;
     wxByte  MacGetFontStyle() const;
+    
+    // 'new' ATSUI accessors
+    
     wxUint32 MacGetATSUFontID() const;
     wxUint32 MacGetATSUAdditionalQDStyles() const;
     wxUint16 MacGetThemeFontID() const ;
+    // Returns an ATSUStyle not ATSUStyle*
+    void* MacGetATSUStyle() const ; 
+    
 protected:
     // common part of all ctors
     void Init();
