@@ -5728,13 +5728,13 @@ Get the width, height, decent and leading of the text using the current or speci
         return _core.Window_GetToolTip(*args, **kwargs)
 
     def SetDropTarget(*args, **kwargs):
-        """SetDropTarget(wxDropTarget dropTarget)"""
+        """SetDropTarget(wxPyDropTarget dropTarget)"""
         val = _core.Window_SetDropTarget(*args, **kwargs)
         args[1].thisown = 0
         return val
 
     def GetDropTarget(*args, **kwargs):
-        """GetDropTarget() -> wxDropTarget"""
+        """GetDropTarget() -> wxPyDropTarget"""
         return _core.Window_GetDropTarget(*args, **kwargs)
 
     def SetConstraints(*args, **kwargs):

@@ -17189,5 +17189,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"ThePenList",_wrap_ThePenList_get, _wrap_ThePenList_set);
     SWIG_addvarlink(SWIG_globals,(char*)"TheBrushList",_wrap_TheBrushList_get, _wrap_TheBrushList_set);
     SWIG_addvarlink(SWIG_globals,(char*)"TheColourDatabase",_wrap_TheColourDatabase_get, _wrap_TheColourDatabase_set);
+    
+    // Work around a chicken/egg problem in drawlist.cpp
+    wxPyDrawList_SetAPIPtr();
+    
 }
 

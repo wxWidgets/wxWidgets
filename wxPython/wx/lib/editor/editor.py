@@ -149,12 +149,12 @@ class wxEditor(wxScrolledWindow):
         else:
             self.sh = self.bh / self.fh
             if self.LinesInFile() >= self.sh:
-                self.bw = self.bw - wxSystemSettings_GetSystemMetric(wxSYS_VSCROLL_X)
+                self.bw = self.bw - wxSystemSettings_GetMetric(wxSYS_VSCROLL_X)
                 self.sw = (self.bw / self.fw) - 1
 
             self.sw = (self.bw / self.fw) - 1
             if self.CalcMaxLineLen() >= self.sw:
-                self.bh = self.bh - wxSystemSettings_GetSystemMetric(wxSYS_HSCROLL_Y)
+                self.bh = self.bh - wxSystemSettings_GetMetric(wxSYS_HSCROLL_Y)
                 self.sh = self.bh / self.fh
 
 
@@ -197,7 +197,7 @@ class wxEditor(wxScrolledWindow):
         pass
 
     def DrawEditText(self, t, x, y, dc):
-        dc.DrawText(t, x * self.fw, y * self.fh)
+        dc.DrawText(t, (x * self.fw, y * self.fh))
 
     def DrawLine(self, line, dc):
         if self.IsLine(line):
@@ -245,7 +245,7 @@ class wxEditor(wxScrolledWindow):
         x = 0
         y = (len(self.lines) - self.sy) * self.fh
         hasTransparency = 1
-        dc.DrawBitmap(self.eofMarker, x, y, hasTransparency)
+        dc.DrawBitmap(self.eofMarker, (x, y), hasTransparency)
 
 ##------------------ cursor-related functions
 
@@ -274,7 +274,7 @@ class wxEditor(wxScrolledWindow):
         szy = self.fh
         x = xp * szx
         y = yp * szy
-        dc.Blit(x,y,szx,szy,dc,x,y,wxSRC_INVERT)
+        dc.Blit((x,y), (szx,szy), dc, (x,y), wxSRC_INVERT)
         self.sco_x = xp
         self.sco_y = yp
 

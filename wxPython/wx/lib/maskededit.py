@@ -1723,7 +1723,7 @@ class wxMaskedEditMixin:
                     'foregroundColour', 'signedForegroundColour'):
             if ctrl_kwargs.has_key(key):
                 if type(ctrl_kwargs[key]) in (types.StringType, types.UnicodeType):
-                    c = wxNamedColor(ctrl_kwargs[key])
+                    c = wxNamedColour(ctrl_kwargs[key])
                     if c.Get() == (-1, -1, -1):
                         raise TypeError('%s not a legal color specification for %s' % (repr(ctrl_kwargs[key]), key))
                     else:
@@ -2262,7 +2262,7 @@ class wxMaskedEditMixin:
             # if no fillchar change, but old value == old template, replace it:
             if newvalue == old_template:
                 newvalue = self._template
-                reset_value = true
+                reset_value = True
         else:
             self._defaultValue = None
 
@@ -2768,7 +2768,7 @@ class wxMaskedEditMixin:
                         if newfield != field and newfield._selectOnFieldEntry:
                             dbg('queuing selection: (%d, %d)' % (newfield._extent[0], newfield._extent[1]))
                             wxCallAfter(self._SetSelection, newfield._extent[0], newfield._extent[1])
-                    keep_processing = false
+                    keep_processing = False
 
             elif keep_processing:
                 dbg('char not allowed')
@@ -2985,7 +2985,7 @@ class wxMaskedEditMixin:
 
     def _OnCtrl_Z(self, event=None):
         """ Handles ctrl-Z keypress in control and Undo operation on context menu.
-            Should return false to skip other processing. """
+            Should return False to skip other processing. """
         dbg("wxMaskedEditMixin::_OnCtrl_Z", indent=1)
         self.Undo()
         dbg(indent=0)
@@ -3415,7 +3415,7 @@ class wxMaskedEditMixin:
                 dbg('cursor before 1st field; cannot change to a previous field')
                 if not wxValidator_IsSilent():
                     wxBell()
-                return false
+                return False
 
             if event.ControlDown():
                 dbg('queuing select to beginning of field:', field_start, pos)
@@ -4218,7 +4218,7 @@ class wxMaskedEditMixin:
 
 
         if self._isTemplateChar( pos ):  ## if a template character, return empty
-            dbg('%d is a template character; returning false' % pos, indent=0)
+            dbg('%d is a template character; returning False' % pos, indent=0)
             return False
 
         if self._isMaskChar( pos ):
@@ -4263,7 +4263,7 @@ class wxMaskedEditMixin:
             dbg(indent=0)
             return approved
         else:
-            dbg('%d is a !???! character; returning false', indent=0)
+            dbg('%d is a !???! character; returning False', indent=0)
             return False
 
 
@@ -4846,7 +4846,7 @@ class wxMaskedEditMixin:
         else:
             text = candidate
 
-        valid = True    # assume true
+        valid = True    # assume True
         for i in [-1] + self._field_indices:   # process global constraints first:
             field = self._fields[i]
             start, end = field._extent
@@ -5840,12 +5840,12 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
                 self._isNeg = False     # (clear current assumptions)
                 value = self._adjustInt(value)
             elif self._isDate and not self.IsValid(value) and self._4digityear:
-                value = self._adjustDate(value, fixcentury=true)
+                value = self._adjustDate(value, fixcentury=True)
         except ValueError:
             # If date, year might be 2 digits vs. 4; try adjusting it:
             if self._isDate and self._4digityear:
                 dateparts = value.split(' ')
-                dateparts[0] = self._adjustDate(dateparts[0], fixcentury=true)
+                dateparts[0] = self._adjustDate(dateparts[0], fixcentury=True)
                 value = string.join(dateparts, ' ')
                 dbg('adjusted value: "%s"' % value)
                 value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
@@ -6157,12 +6157,12 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
                 self._isNeg = False     # (clear current assumptions)
                 value = self._adjustInt(value)
             elif self._isDate and not self.IsValid(value) and self._4digityear:
-                value = self._adjustDate(value, fixcentury=true)
+                value = self._adjustDate(value, fixcentury=True)
         except ValueError:
             # If date, year might be 2 digits vs. 4; try adjusting it:
             if self._isDate and self._4digityear:
                 dateparts = value.split(' ')
-                dateparts[0] = self._adjustDate(dateparts[0], fixcentury=true)
+                dateparts[0] = self._adjustDate(dateparts[0], fixcentury=True)
                 value = string.join(dateparts, ' ')
                 dbg('adjusted value: "%s"' % value)
                 value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
@@ -6547,7 +6547,7 @@ class wxIpAddrCtrl( wxMaskedTextCtrl ):
             dbg(indent=0)
             raise ValueError('%s must be a string', str(value))
 
-        bValid = True   # assume true
+        bValid = True   # assume True
         parts = value.split('.')
         if len(parts) != 4:
             bValid = False

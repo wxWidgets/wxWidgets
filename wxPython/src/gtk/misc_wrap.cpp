@@ -1058,71 +1058,16 @@ public:
 };    
 
 
-#include <wx/dnd.h>
 
-
-class wxPyDropSource : public wxDropSource {
-public:
-#ifndef __WXGTK__
-     wxPyDropSource(wxWindow *win = NULL,
-                    const wxCursor &copy = wxNullCursor,
-                    const wxCursor &move = wxNullCursor,
-                    const wxCursor &none = wxNullCursor)
-         : wxDropSource(win, copy, move, none) {}
-#else
-    wxPyDropSource(wxWindow *win = NULL,
-                   const wxIcon& copy = wxNullIcon,
-                   const wxIcon& move = wxNullIcon,
-                   const wxIcon& none = wxNullIcon)
-        : wxDropSource(win, copy, move, none) {}
-#endif
-    ~wxPyDropSource() { }
-
-    DEC_PYCALLBACK_BOOL_DR(GiveFeedback);
-    PYPRIVATE;
-};
 
 IMP_PYCALLBACK_BOOL_DR(wxPyDropSource, wxDropSource, GiveFeedback);
 
-
-
-class wxPyDropTarget : public wxDropTarget {
-public:
-    wxPyDropTarget(wxDataObject *dataObject = NULL)
-        : wxDropTarget(dataObject) {}
-
-    // called when mouse leaves the window: might be used to remove the
-    // feedback which was given in OnEnter()
-    DEC_PYCALLBACK__(OnLeave);
-
-    // called when the mouse enters the window (only once until OnLeave())
-    DEC_PYCALLBACK_DR_2WXCDR(OnEnter);
-
-    // called when the mouse moves in the window - shouldn't take long to
-    // execute or otherwise mouse movement would be too slow
-    DEC_PYCALLBACK_DR_2WXCDR(OnDragOver);
-    
-    // called after OnDrop() returns True: you will usually just call
-    // GetData() from here and, probably, also refresh something to update the
-    // new data and, finally, return the code indicating how did the operation
-    // complete (returning default value in case of success and wxDragError on
-    // failure is usually ok)
-    DEC_PYCALLBACK_DR_2WXCDR_pure(OnData);
-    
-    // this function is called when data is dropped at position (x, y) - if it
-    // returns True, OnData() will be called immediately afterwards which will
-    // allow to retrieve the data dropped.
-    DEC_PYCALLBACK_BOOL_INTINT(OnDrop);
-
-    PYPRIVATE;
-};
 
 IMP_PYCALLBACK__(wxPyDropTarget, wxDropTarget, OnLeave);
 IMP_PYCALLBACK_DR_2WXCDR(wxPyDropTarget, wxDropTarget, OnEnter);
 IMP_PYCALLBACK_DR_2WXCDR(wxPyDropTarget, wxDropTarget, OnDragOver);
 IMP_PYCALLBACK_DR_2WXCDR_pure(wxPyDropTarget, wxDropTarget, OnData);
 IMP_PYCALLBACK_BOOL_INTINT(wxPyDropTarget, wxDropTarget, OnDrop);
-
 
 
 class wxPyTextDropTarget : public wxTextDropTarget {
@@ -5706,6 +5651,36 @@ static PyObject *_wrap_delete_Timer(PyObject *self, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_Timer__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyTimer *arg1 = (wxPyTimer *) 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
+    PyObject *arg3 = (PyObject *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "self",(char *) "_class", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Timer__setCallbackInfo",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTimer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    arg2 = obj1;
+    arg3 = obj2;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->_setCallbackInfo(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Timer_SetOwner(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyTimer *arg1 = (wxPyTimer *) 0 ;
@@ -5779,30 +5754,6 @@ static PyObject *_wrap_Timer_Stop(PyObject *self, PyObject *args, PyObject *kwar
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Stop();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Timer_Notify(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxPyTimer *arg1 = (wxPyTimer *) 0 ;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Timer_Notify",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTimer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->Notify();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -16673,6 +16624,7 @@ static PyObject *_wrap_DateTime_ToTimezone(PyObject *self, PyObject *args, PyObj
     wxDateTime::TimeZone *arg2 = 0 ;
     bool arg3 = (bool) False ;
     wxDateTime result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -16684,6 +16636,7 @@ static PyObject *_wrap_DateTime_ToTimezone(PyObject *self, PyObject *args, PyObj
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+        temp2 = True;
     }
     if (obj2) {
         arg3 = PyInt_AsLong(obj2) ? true : false;
@@ -16702,12 +16655,12 @@ static PyObject *_wrap_DateTime_ToTimezone(PyObject *self, PyObject *args, PyObj
         resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxDateTime, 1);
     }
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -16719,6 +16672,7 @@ static PyObject *_wrap_DateTime_MakeTimezone(PyObject *self, PyObject *args, PyO
     wxDateTime::TimeZone *arg2 = 0 ;
     bool arg3 = (bool) False ;
     wxDateTime *result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -16730,6 +16684,7 @@ static PyObject *_wrap_DateTime_MakeTimezone(PyObject *self, PyObject *args, PyO
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+        temp2 = True;
     }
     if (obj2) {
         arg3 = PyInt_AsLong(obj2) ? true : false;
@@ -16747,12 +16702,12 @@ static PyObject *_wrap_DateTime_MakeTimezone(PyObject *self, PyObject *args, PyO
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxDateTime, 0);
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -16909,6 +16864,7 @@ static PyObject *_wrap_DateTime_GetYear(PyObject *self, PyObject *args, PyObject
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
     int result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -16920,6 +16876,7 @@ static PyObject *_wrap_DateTime_GetYear(PyObject *self, PyObject *args, PyObject
     if (obj1) {
         {
             arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+            temp2 = True;
         }
     }
     {
@@ -16931,12 +16888,12 @@ static PyObject *_wrap_DateTime_GetYear(PyObject *self, PyObject *args, PyObject
     }
     resultobj = PyInt_FromLong((long)result);
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -16948,6 +16905,7 @@ static PyObject *_wrap_DateTime_GetMonth(PyObject *self, PyObject *args, PyObjec
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
     int result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -16959,6 +16917,7 @@ static PyObject *_wrap_DateTime_GetMonth(PyObject *self, PyObject *args, PyObjec
     if (obj1) {
         {
             arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+            temp2 = True;
         }
     }
     {
@@ -16970,12 +16929,12 @@ static PyObject *_wrap_DateTime_GetMonth(PyObject *self, PyObject *args, PyObjec
     }
     resultobj = PyInt_FromLong((long)result);
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -16987,6 +16946,7 @@ static PyObject *_wrap_DateTime_GetDay(PyObject *self, PyObject *args, PyObject 
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
     int result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -16998,6 +16958,7 @@ static PyObject *_wrap_DateTime_GetDay(PyObject *self, PyObject *args, PyObject 
     if (obj1) {
         {
             arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+            temp2 = True;
         }
     }
     {
@@ -17009,12 +16970,12 @@ static PyObject *_wrap_DateTime_GetDay(PyObject *self, PyObject *args, PyObject 
     }
     resultobj = PyInt_FromLong((long)result);
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -17026,6 +16987,7 @@ static PyObject *_wrap_DateTime_GetWeekDay(PyObject *self, PyObject *args, PyObj
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
     int result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17037,6 +16999,7 @@ static PyObject *_wrap_DateTime_GetWeekDay(PyObject *self, PyObject *args, PyObj
     if (obj1) {
         {
             arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+            temp2 = True;
         }
     }
     {
@@ -17048,12 +17011,12 @@ static PyObject *_wrap_DateTime_GetWeekDay(PyObject *self, PyObject *args, PyObj
     }
     resultobj = PyInt_FromLong((long)result);
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -17065,6 +17028,7 @@ static PyObject *_wrap_DateTime_GetHour(PyObject *self, PyObject *args, PyObject
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
     int result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17076,6 +17040,7 @@ static PyObject *_wrap_DateTime_GetHour(PyObject *self, PyObject *args, PyObject
     if (obj1) {
         {
             arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+            temp2 = True;
         }
     }
     {
@@ -17087,12 +17052,12 @@ static PyObject *_wrap_DateTime_GetHour(PyObject *self, PyObject *args, PyObject
     }
     resultobj = PyInt_FromLong((long)result);
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -17104,6 +17069,7 @@ static PyObject *_wrap_DateTime_GetMinute(PyObject *self, PyObject *args, PyObje
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
     int result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17115,6 +17081,7 @@ static PyObject *_wrap_DateTime_GetMinute(PyObject *self, PyObject *args, PyObje
     if (obj1) {
         {
             arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+            temp2 = True;
         }
     }
     {
@@ -17126,12 +17093,12 @@ static PyObject *_wrap_DateTime_GetMinute(PyObject *self, PyObject *args, PyObje
     }
     resultobj = PyInt_FromLong((long)result);
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -17143,6 +17110,7 @@ static PyObject *_wrap_DateTime_GetSecond(PyObject *self, PyObject *args, PyObje
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
     int result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17154,6 +17122,7 @@ static PyObject *_wrap_DateTime_GetSecond(PyObject *self, PyObject *args, PyObje
     if (obj1) {
         {
             arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+            temp2 = True;
         }
     }
     {
@@ -17165,12 +17134,12 @@ static PyObject *_wrap_DateTime_GetSecond(PyObject *self, PyObject *args, PyObje
     }
     resultobj = PyInt_FromLong((long)result);
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -17182,6 +17151,7 @@ static PyObject *_wrap_DateTime_GetMillisecond(PyObject *self, PyObject *args, P
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
     int result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17193,6 +17163,7 @@ static PyObject *_wrap_DateTime_GetMillisecond(PyObject *self, PyObject *args, P
     if (obj1) {
         {
             arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+            temp2 = True;
         }
     }
     {
@@ -17204,12 +17175,12 @@ static PyObject *_wrap_DateTime_GetMillisecond(PyObject *self, PyObject *args, P
     }
     resultobj = PyInt_FromLong((long)result);
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -17221,6 +17192,7 @@ static PyObject *_wrap_DateTime_GetDayOfYear(PyObject *self, PyObject *args, PyO
     wxDateTime::TimeZone const &arg2_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg2 = (wxDateTime::TimeZone *) &arg2_defvalue ;
     int result;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -17232,6 +17204,7 @@ static PyObject *_wrap_DateTime_GetDayOfYear(PyObject *self, PyObject *args, PyO
     if (obj1) {
         {
             arg2 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj1));
+            temp2 = True;
         }
     }
     {
@@ -17243,12 +17216,12 @@ static PyObject *_wrap_DateTime_GetDayOfYear(PyObject *self, PyObject *args, PyO
     }
     resultobj = PyInt_FromLong((long)result);
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return resultobj;
     fail:
     {
-        if (arg2) delete arg2;
+        if (temp2) delete arg2;
     }
     return NULL;
 }
@@ -17261,6 +17234,7 @@ static PyObject *_wrap_DateTime_GetWeekOfYear(PyObject *self, PyObject *args, Py
     wxDateTime::TimeZone const &arg3_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg3 = (wxDateTime::TimeZone *) &arg3_defvalue ;
     int result;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -17272,6 +17246,7 @@ static PyObject *_wrap_DateTime_GetWeekOfYear(PyObject *self, PyObject *args, Py
     if (obj2) {
         {
             arg3 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj2));
+            temp3 = True;
         }
     }
     {
@@ -17283,12 +17258,12 @@ static PyObject *_wrap_DateTime_GetWeekOfYear(PyObject *self, PyObject *args, Py
     }
     resultobj = PyInt_FromLong((long)result);
     {
-        if (arg3) delete arg3;
+        if (temp3) delete arg3;
     }
     return resultobj;
     fail:
     {
-        if (arg3) delete arg3;
+        if (temp3) delete arg3;
     }
     return NULL;
 }
@@ -17301,6 +17276,7 @@ static PyObject *_wrap_DateTime_GetWeekOfMonth(PyObject *self, PyObject *args, P
     wxDateTime::TimeZone const &arg3_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg3 = (wxDateTime::TimeZone *) &arg3_defvalue ;
     int result;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
@@ -17312,6 +17288,7 @@ static PyObject *_wrap_DateTime_GetWeekOfMonth(PyObject *self, PyObject *args, P
     if (obj2) {
         {
             arg3 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj2));
+            temp3 = True;
         }
     }
     {
@@ -17323,12 +17300,12 @@ static PyObject *_wrap_DateTime_GetWeekOfMonth(PyObject *self, PyObject *args, P
     }
     resultobj = PyInt_FromLong((long)result);
     {
-        if (arg3) delete arg3;
+        if (temp3) delete arg3;
     }
     return resultobj;
     fail:
     {
-        if (arg3) delete arg3;
+        if (temp3) delete arg3;
     }
     return NULL;
 }
@@ -18785,6 +18762,7 @@ static PyObject *_wrap_DateTime_Format(PyObject *self, PyObject *args, PyObject 
     wxDateTime::TimeZone *arg3 = (wxDateTime::TimeZone *) &arg3_defvalue ;
     wxString result;
     bool temp2 = False ;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -18804,6 +18782,7 @@ static PyObject *_wrap_DateTime_Format(PyObject *self, PyObject *args, PyObject 
     if (obj2) {
         {
             arg3 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong(obj2));
+            temp3 = True;
         }
     }
     {
@@ -18825,7 +18804,7 @@ static PyObject *_wrap_DateTime_Format(PyObject *self, PyObject *args, PyObject 
         delete arg2;
     }
     {
-        if (arg3) delete arg3;
+        if (temp3) delete arg3;
     }
     return resultobj;
     fail:
@@ -18834,7 +18813,7 @@ static PyObject *_wrap_DateTime_Format(PyObject *self, PyObject *args, PyObject 
         delete arg2;
     }
     {
-        if (arg3) delete arg3;
+        if (temp3) delete arg3;
     }
     return NULL;
 }
@@ -24475,10 +24454,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CreateFileTipProvider", (PyCFunction) _wrap_CreateFileTipProvider, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_Timer", (PyCFunction) _wrap_new_Timer, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_Timer", (PyCFunction) _wrap_delete_Timer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Timer__setCallbackInfo", (PyCFunction) _wrap_Timer__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_SetOwner", (PyCFunction) _wrap_Timer_SetOwner, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_Start", (PyCFunction) _wrap_Timer_Start, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_Stop", (PyCFunction) _wrap_Timer_Stop, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Timer_Notify", (PyCFunction) _wrap_Timer_Notify, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_IsRunning", (PyCFunction) _wrap_Timer_IsRunning, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_GetInterval", (PyCFunction) _wrap_Timer_GetInterval, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_IsOneShot", (PyCFunction) _wrap_Timer_IsOneShot, METH_VARARGS | METH_KEYWORDS },

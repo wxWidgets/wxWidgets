@@ -321,7 +321,7 @@ SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxPyApp swig_types[103] 
 #define  SWIGTYPE_p_wxCommandEvent swig_types[104] 
 #define  SWIGTYPE_p_wxPyCommandEvent swig_types[105] 
-#define  SWIGTYPE_p_wxDropTarget swig_types[106] 
+#define  SWIGTYPE_p_wxPyDropTarget swig_types[106] 
 #define  SWIGTYPE_p_wxChildFocusEvent swig_types[107] 
 #define  SWIGTYPE_p_wxFocusEvent swig_types[108] 
 #define  SWIGTYPE_p_wxDropFilesEvent swig_types[109] 
@@ -23640,7 +23640,7 @@ static PyObject *_wrap_Window_GetToolTip(PyObject *self, PyObject *args, PyObjec
 static PyObject *_wrap_Window_SetDropTarget(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxDropTarget *arg2 = (wxDropTarget *) 0 ;
+    wxPyDropTarget *arg2 = (wxPyDropTarget *) 0 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -23649,7 +23649,7 @@ static PyObject *_wrap_Window_SetDropTarget(PyObject *self, PyObject *args, PyOb
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetDropTarget",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxPyDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetDropTarget(arg2);
@@ -23667,7 +23667,7 @@ static PyObject *_wrap_Window_SetDropTarget(PyObject *self, PyObject *args, PyOb
 static PyObject *_wrap_Window_GetDropTarget(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxDropTarget *result;
+    wxPyDropTarget *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -23677,12 +23677,12 @@ static PyObject *_wrap_Window_GetDropTarget(PyObject *self, PyObject *args, PyOb
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxDropTarget *)((wxWindow const *)arg1)->GetDropTarget();
+        result = (wxPyDropTarget *)((wxWindow const *)arg1)->GetDropTarget();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxDropTarget, 0);
+    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxPyDropTarget, 0);
     return resultobj;
     fail:
     return NULL;
@@ -36740,7 +36740,7 @@ static swig_type_info _swigt__p_wxMouseEvent[] = {{"_p_wxMouseEvent", 0, "wxMous
 static swig_type_info _swigt__p_wxPyApp[] = {{"_p_wxPyApp", 0, "wxPyApp *", 0},{"_p_wxPyApp"},{0}};
 static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent},{"_p_wxCommandEvent"},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent},{0}};
 static swig_type_info _swigt__p_wxPyCommandEvent[] = {{"_p_wxPyCommandEvent", 0, "wxPyCommandEvent *", 0},{"_p_wxPyCommandEvent"},{0}};
-static swig_type_info _swigt__p_wxDropTarget[] = {{"_p_wxDropTarget", 0, "wxDropTarget *", 0},{"_p_wxDropTarget"},{0}};
+static swig_type_info _swigt__p_wxPyDropTarget[] = {{"_p_wxPyDropTarget", 0, "wxPyDropTarget *", 0},{"_p_wxPyDropTarget"},{0}};
 static swig_type_info _swigt__p_wxChildFocusEvent[] = {{"_p_wxChildFocusEvent", 0, "wxChildFocusEvent *", 0},{"_p_wxChildFocusEvent"},{0}};
 static swig_type_info _swigt__p_wxFocusEvent[] = {{"_p_wxFocusEvent", 0, "wxFocusEvent *", 0},{"_p_wxFocusEvent"},{0}};
 static swig_type_info _swigt__p_wxDropFilesEvent[] = {{"_p_wxDropFilesEvent", 0, "wxDropFilesEvent *", 0},{"_p_wxDropFilesEvent"},{0}};
@@ -36856,7 +36856,7 @@ _swigt__p_wxMouseEvent,
 _swigt__p_wxPyApp, 
 _swigt__p_wxCommandEvent, 
 _swigt__p_wxPyCommandEvent, 
-_swigt__p_wxDropTarget, 
+_swigt__p_wxPyDropTarget, 
 _swigt__p_wxChildFocusEvent, 
 _swigt__p_wxFocusEvent, 
 _swigt__p_wxDropFilesEvent, 

@@ -27,11 +27,12 @@
 //---------------------------------------------------------------------------
 
 
-%typemap(in) wxDateTime::TimeZone& {
+%typemap(in) wxDateTime::TimeZone& (bool temp=False) {
     $1 = new wxDateTime::TimeZone((wxDateTime::TZ)PyInt_AsLong($input));
+    temp = True;
 }
 %typemap(python,freearg) wxDateTime::TimeZone& {
-    if ($1) delete $1;
+    if (temp$argnum) delete $1;
 }
 
 

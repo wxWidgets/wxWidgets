@@ -952,8 +952,8 @@ class wxGridCellChoiceEditor : public wxGridCellEditor
 {
 public:
     %addtofunc wxGridCellChoiceEditor  "self._setOORInfo(self)"
-    wxGridCellChoiceEditor(int LCOUNT = 0,
-                           const wxString* choices = NULL,
+    wxGridCellChoiceEditor(int choices = 0,
+                           const wxString* choices_array = NULL,
                            bool allowOthers = False);
     virtual wxString GetValue();
 };

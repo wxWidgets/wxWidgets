@@ -657,7 +657,7 @@ class StatusBar(core.Window):
         return _windows.StatusBar_SetStatusWidths(*args, **kwargs)
 
     def GetFieldRect(*args, **kwargs):
-        """GetFieldRect(int i, Rect rect) -> bool"""
+        """GetFieldRect(int i) -> Rect"""
         return _windows.StatusBar_GetFieldRect(*args, **kwargs)
 
     def SetMinHeight(*args, **kwargs):

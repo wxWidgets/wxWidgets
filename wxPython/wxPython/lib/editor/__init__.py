@@ -1,1 +1,2 @@
-#
+from editor    import wxEditor
+

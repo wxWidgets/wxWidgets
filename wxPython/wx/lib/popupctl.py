@@ -29,12 +29,12 @@ class PopButton(wxPyControl):
         EVT_PAINT(self,                 self.OnPaint)
 
     def InitColours(self):
-        faceClr      = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNFACE)
+        faceClr      = wxSystemSettings_GetColour(wxSYS_COLOUR_BTNFACE)
         self.faceDnClr = faceClr
         self.SetBackgroundColour(faceClr)
 
-        shadowClr    = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNSHADOW)
-        highlightClr = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNHIGHLIGHT)
+        shadowClr    = wxSystemSettings_GetColour(wxSYS_COLOUR_BTNSHADOW)
+        highlightClr = wxSystemSettings_GetColour(wxSYS_COLOUR_BTNHIGHLIGHT)
         self.shadowPen    = wxPen(shadowClr, 1, wxSOLID)
         self.highlightPen = wxPen(highlightClr, 1, wxSOLID)
         self.blackPen     = wxPen(wxBLACK, 1, wxSOLID)
@@ -95,8 +95,8 @@ class PopButton(wxPyControl):
         else:
             dc.SetPen(self.shadowPen)
         for i in range(2):
-            dc.DrawLine(x1+i, y1, x1+i, y2-i)
-            dc.DrawLine(x1, y1+i, x2-i, y1+i)
+            dc.DrawLine((x1+i, y1), (x1+i, y2-i))
+            dc.DrawLine((x1, y1+i), (x2-i, y1+i))
 
         # draw the lower right sides
         if self.up:
@@ -104,20 +104,20 @@ class PopButton(wxPyControl):
         else:
             dc.SetPen(self.highlightPen)
         for i in range(2):
-            dc.DrawLine(x1+i, y2-i, x2+1, y2-i)
-            dc.DrawLine(x2-i, y1+i, x2-i, y2)
+            dc.DrawLine((x1+i, y2-i), (x2+1, y2-i))
+            dc.DrawLine((x2-i, y1+i), (x2-i, y2))
 
     def DrawArrow(self,dc):
         size = self.GetSize()
-        mx = size.x / 2
-        my = size.y / 2
+        mx = size.width / 2
+        my = size.height / 2
         dc.SetPen(self.highlightPen)
-        dc.DrawLine(mx-5,my-5,mx+5,my-5)
-        dc.DrawLine(mx-5,my-5,mx,my+5)
+        dc.DrawLine((mx-5,my-5), (mx+5,my-5))
+        dc.DrawLine((mx-5,my-5), (mx,my+5))
         dc.SetPen(self.shadowPen)
-        dc.DrawLine(mx+4,my-5,mx,my+5)
+        dc.DrawLine((mx+4,my-5), (mx,my+5))
         dc.SetPen(self.blackPen)
-        dc.DrawLine(mx+5,my-5,mx,my+5)
+        dc.DrawLine((mx+5,my-5), (mx,my+5))
 
     def OnPaint(self, event):
         width, height = self.GetClientSizeTuple()
@@ -161,15 +161,15 @@ class wxPopupDialog(wxDialog):
         selfSize = self.GetSize()
         tcSize = self.ctrl.GetSize()
 
-        pos.x -= (selfSize.x - tcSize.x) / 2
-        if pos.x + selfSize.x > dSize.x:
-            pos.x = dSize.x - selfSize.x
+        pos.x -= (selfSize.width - tcSize.width) / 2
+        if pos.x + selfSize.width > dSize.width:
+            pos.x = dSize.width - selfSize.width
         if pos.x < 0:
             pos.x = 0
 
         pos.y += tcSize.height
-        if pos.y + selfSize.y > dSize.y:
-            pos.y = dSize.y - selfSize.y
+        if pos.y + selfSize.height > dSize.height:
+            pos.y = dSize.height - selfSize.height
         if pos.y < 0:
             pos.y = 0
 

@@ -365,6 +365,11 @@ bool wxDialog_IsModalShowing(wxDialog *self){
         }
 
 
+wxRect wxStatusBar_GetFieldRect(wxStatusBar *self,int i){
+            wxRect r;
+            self->GetFieldRect(i, r);
+            return r;
+        }
 
     static const wxChar* wxSplitterNameStr = wxT("splitter");
     DECLARE_DEF_STRING(SplitterNameStr);
@@ -4848,29 +4853,26 @@ static PyObject *_wrap_StatusBar_GetFieldRect(PyObject *self, PyObject *args, Py
     PyObject *resultobj;
     wxStatusBar *arg1 = (wxStatusBar *) 0 ;
     int arg2 ;
-    wxRect *arg3 = 0 ;
-    bool result;
-    wxRect temp3 ;
+    wxRect result;
     PyObject * obj0 = 0 ;
-    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "i",(char *) "rect", NULL 
+        (char *) "self",(char *) "i", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:StatusBar_GetFieldRect",kwnames,&obj0,&arg2,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:StatusBar_GetFieldRect",kwnames,&obj0,&arg2)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStatusBar,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
-        arg3 = &temp3;
-        if ( ! wxRect_helper(obj2, &arg3)) SWIG_fail;
-    }
-    {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)((wxStatusBar const *)arg1)->GetFieldRect(arg2,*arg3);
+        result = wxStatusBar_GetFieldRect(arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = PyInt_FromLong((long)result);
+    {
+        wxRect * resultptr;
+        resultptr = new wxRect((wxRect &) result);
+        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxRect, 1);
+    }
     return resultobj;
     fail:
     return NULL;

@@ -935,11 +935,17 @@ class Timer(core.EvtHandler):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+        self._setCallbackInfo(self, Timer)
+
     def __del__(self, destroy=_misc.delete_Timer):
         """__del__()"""
         try:
             if self.thisown: destroy(self)
         except: pass
+
+    def _setCallbackInfo(*args, **kwargs):
+        """_setCallbackInfo(PyObject self, PyObject _class)"""
+        return _misc.Timer__setCallbackInfo(*args, **kwargs)
 
     def SetOwner(*args, **kwargs):
         """SetOwner(EvtHandler owner, int id=-1)"""
@@ -952,10 +958,6 @@ class Timer(core.EvtHandler):
     def Stop(*args, **kwargs):
         """Stop()"""
         return _misc.Timer_Stop(*args, **kwargs)
-
-    def Notify(*args, **kwargs):
-        """Notify()"""
-        return _misc.Timer_Notify(*args, **kwargs)
 
     def IsRunning(*args, **kwargs):
         """IsRunning() -> bool"""

@@ -48,3 +48,11 @@ wxPreCalendarCtrl = wx.calendar.PreCalendarCtrl
 wxCalendarCtrl = wx.calendar.CalendarCtrl
 
 
+d = globals()
+for k, v in wx.calendar.__dict__.iteritems():
+    if k.startswith('EVT'):
+        d[k] = v
+del d, k, v
+
+
+

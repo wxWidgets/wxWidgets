@@ -40,6 +40,7 @@ IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
 %name(Timer) class wxPyTimer : public wxEvtHandler
 {
 public:
+    %addtofunc wxPyTimer         "self._setCallbackInfo(self, Timer)"
 
     // if you don't call SetOwner() or provide an owner in the contstructor
     // then you must override Notify() inorder to receive the timer
@@ -47,6 +48,8 @@ public:
     // notifications which can be handled with EVT_TIMER.
     wxPyTimer(wxEvtHandler *owner=NULL, int id = -1);
     virtual ~wxPyTimer();
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
 
     // Set the owner instance that will receive the EVT_TIMER events using the
     // given id.
@@ -65,7 +68,7 @@ public:
 
     // override this in your wxTimer-derived class if you want to process timer
     // messages in it, use non default ctor or SetOwner() otherwise
-    virtual void Notify();
+    //virtual void Notify();
 
     // return True if the timer is running
     virtual bool IsRunning() const;

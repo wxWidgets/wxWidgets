@@ -32,42 +32,91 @@ from wxPython.wx import *
 EVT_COMMAND_COLOURSELECT = wxNewId()
 
 class ColourSelectEvent(wxPyCommandEvent):
-        def __init__(self, id, value):
-                wxPyCommandEvent.__init__(self, id = id)
-                self.SetEventType(EVT_COMMAND_COLOURSELECT)
-                self.value = value
+    def __init__(self, id, value):
+        wxPyCommandEvent.__init__(self, id = id)
+        self.SetEventType(EVT_COMMAND_COLOURSELECT)
+        self.value = value
 
-        def GetValue(self):
-                return self.value
+    def GetValue(self):
+        return self.value
 
 def EVT_COLOURSELECT(win, id, func):
     win.Connect(id, -1, EVT_COMMAND_COLOURSELECT, func)
 
-class ColourSelect(wxButton):
-    def __init__(self, parent, id, label = "", bcolour=(0, 0, 0),
-            pos = wxDefaultPosition, size = wxDefaultSize,
-                callback = None):
-        wxButton.__init__(self, parent, id, label, pos=pos, size=size)
-        self.SetColour(bcolour)
+
+
+
+class ColourSelect(wxBitmapButton):
+    def __init__(self, parent, id, label="", colour=wxBLACK,
+                 pos=wxDefaultPosition, size=wxDefaultSize,
+                 callback=None, style=0):
+        if label:
+            w, h = parent.GetTextExtent(label)
+            w += 6
+            h += 6
+        else:
+            w, h = 20, 20
+        wxBitmapButton.__init__(self, parent, id, wxEmptyBitmap(w,h),
+                                pos=pos, size=size, style=style|wxBU_AUTODRAW)
+        if type(colour) == type( () ):
+            colour = wxColour(*colour)
+        self.colour = colour
+        self.SetLabel(label)
         self.callback = callback
+        bmp = self.MakeBitmap()
+        self.SetBitmap(bmp)
         EVT_BUTTON(parent, self.GetId(), self.OnClick)
 
+
     def GetColour(self):
-        return self.set_colour
+        return self.colour
+
 
     def GetValue(self):
-        return self.set_colour
+        return self.colour
 
-    def SetColour(self, bcolour):
-        self.set_colour_val = wxColor(bcolour[0], bcolour[1], bcolour[2])
-        self.SetBackgroundColour(self.set_colour_val)
-        avg = reduce(lambda a, b: a + b, bcolour) / 3
-        fcolour = avg > 128 and (0, 0, 0) or (255, 255, 255)
-        self.SetForegroundColour(apply(wxColour, fcolour))
-        self.set_colour = bcolour
 
-    def SetValue(self, bcolour):
-        self.SetColour(bcolour)
+    def SetValue(self, colour):
+        self.SetColour(colour)
+
+
+    def SetColour(self, colour):
+        if type(colour) == type( () ):
+            colour = wxColour(*colour)
+        self.colour = colour
+        bmp = self.MakeBitmap()
+        self.SetBitmap(bmp)
+
+
+    def MakeBitmap(self):
+        bdr = 10
+        sz = self.GetSize()
+        bmp = wxEmptyBitmap(sz.width-bdr, sz.height-bdr)
+        dc = wxMemoryDC()
+        dc.SelectObject(bmp)
+        label = self.GetLabel()
+        # Just make a little colored bitmap
+        dc.SetBackground(wxBrush(self.colour))
+        dc.Clear()
+        if label:
+            # Add a label to it
+            avg = reduce(lambda a, b: a + b, self.colour.Get()) / 3
+            fcolour = avg > 128 and wxBLACK or wxWHITE
+            dc.SetTextForeground(fcolour)
+            dc.DrawLabel(label, (0,0, sz.width-bdr, sz.height-bdr),
+                         wxALIGN_CENTER)
+            
+        dc.SelectObject(wxNullBitmap)
+        return bmp
+
+
+    def SetBitmap(self, bmp):
+        self.SetBitmapLabel(bmp)
+        self.SetBitmapSelected(bmp)
+        self.SetBitmapDisabled(bmp)
+        self.SetBitmapFocus(bmp)
+        self.SetBitmapSelected(bmp)
+
 
     def OnChange(self):
         wxPostEvent(self, ColourSelectEvent(self.GetId(), self.GetValue()))
@@ -77,12 +126,12 @@ class ColourSelect(wxButton):
     def OnClick(self, event):
         data = wxColourData()
         data.SetChooseFull(True)
-        data.SetColour(self.set_colour_val)
+        data.SetColour(self.colour)
         dlg = wxColourDialog(self.GetParent(), data)
         changed = dlg.ShowModal() == wxID_OK
         if changed:
             data = dlg.GetColourData()
-            self.SetColour(data.GetColour().Get())
+            self.SetColour(data.GetColour())
         dlg.Destroy()
 
         if changed:

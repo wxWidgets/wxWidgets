@@ -506,7 +506,7 @@ class GridCellChoiceEditor(GridCellEditor):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellChoiceEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int LCOUNT=0, wxString choices=None, bool allowOthers=False) -> GridCellChoiceEditor"""
+        """__init__(int choices=0, wxString choices_array=None, bool allowOthers=False) -> GridCellChoiceEditor"""
         newobj = _grid.new_GridCellChoiceEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1

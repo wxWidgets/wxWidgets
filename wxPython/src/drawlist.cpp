@@ -17,18 +17,21 @@
 #include "wx/wxPython/pydrawxxx.h"
 
 
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
+
+// Called from _gdiinit so we can do the API import while the GIL is held
+void wxPyDrawList_SetAPIPtr()
+{
+    wxPyCoreAPI_IMPORT();
+}
 
 
 PyObject* wxPyDrawXXXList(wxDC& dc, wxPyDrawListOp_t doDraw,
-                          PyObject* pyCoords, PyObject* pyPens, PyObject* pyBrushes) {
-
+                          PyObject* pyCoords, PyObject* pyPens, PyObject* pyBrushes)
+{
     wxPyBeginBlockThreads(); 
 
-    if ( !wxPyCoreAPIPtr)
-        wxPyCoreAPI_IMPORT();
-    
     bool      isFastSeq  = PyList_Check(pyCoords) || PyTuple_Check(pyCoords);
     bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
     bool      isFastBrushes = PyList_Check(pyBrushes) || PyTuple_Check(pyBrushes);
@@ -141,7 +144,8 @@ PyObject* wxPyDrawXXXList(wxDC& dc, wxPyDrawListOp_t doDraw,
 
 
 
-bool wxPyDrawXXXPoint(wxDC& dc, PyObject* coords) {
+bool wxPyDrawXXXPoint(wxDC& dc, PyObject* coords)
+{
     int x, y;
 
     if (! wxPy2int_seq_helper(coords, &x, &y)) {
@@ -152,7 +156,8 @@ bool wxPyDrawXXXPoint(wxDC& dc, PyObject* coords) {
     return True;
 }
 
-bool wxPyDrawXXXLine(wxDC& dc, PyObject* coords) {
+bool wxPyDrawXXXLine(wxDC& dc, PyObject* coords)
+{
     int x1, y1, x2, y2;
 
     if (! wxPy4int_seq_helper(coords, &x1, &y1, &x2, &y2)) {
@@ -163,7 +168,8 @@ bool wxPyDrawXXXLine(wxDC& dc, PyObject* coords) {
     return True;
 }
 
-bool wxPyDrawXXXRectangle(wxDC& dc, PyObject* coords) {
+bool wxPyDrawXXXRectangle(wxDC& dc, PyObject* coords)
+{
     int x, y, w, h;
 
     if (! wxPy4int_seq_helper(coords, &x, &y, &w, &h)) {
@@ -174,7 +180,8 @@ bool wxPyDrawXXXRectangle(wxDC& dc, PyObject* coords) {
     return True;
 }
 
-bool wxPyDrawXXXEllipse(wxDC& dc, PyObject* coords) {
+bool wxPyDrawXXXEllipse(wxDC& dc, PyObject* coords)
+{
     int x, y, w, h;
 
     if (! wxPy4int_seq_helper(coords, &x, &y, &w, &h)) {
@@ -186,7 +193,8 @@ bool wxPyDrawXXXEllipse(wxDC& dc, PyObject* coords) {
 }
 
 
-bool wxPyDrawXXXPolygon(wxDC& dc, PyObject* coords) {
+bool wxPyDrawXXXPolygon(wxDC& dc, PyObject* coords)
+{
     wxPoint* points;
     int numPoints;
 
@@ -200,16 +208,14 @@ bool wxPyDrawXXXPolygon(wxDC& dc, PyObject* coords) {
 }
 
 
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 
 
-PyObject* wxPyDrawTextList(wxDC& dc, PyObject* textList, PyObject* pyPoints, PyObject* foregroundList, PyObject* backgroundList) {
+PyObject* wxPyDrawTextList(wxDC& dc, PyObject* textList, PyObject* pyPoints, PyObject* foregroundList, PyObject* backgroundList)
+{
     wxPyBeginBlockThreads();
 
-    if ( !wxPyCoreAPIPtr)
-        wxPyCoreAPI_IMPORT();
-    
     bool      isFastSeq  = PyList_Check(pyPoints) || PyTuple_Check(pyPoints);
     bool      isFastText = PyList_Check(textList) || PyTuple_Check(textList);
     bool      isFastForeground = PyList_Check(foregroundList) || PyTuple_Check(foregroundList);
@@ -353,4 +359,4 @@ PyObject* wxPyDrawTextList(wxDC& dc, PyObject* textList, PyObject* pyPoints, PyO
 
 
 
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------------

@@ -92,7 +92,7 @@ wxGrid.RowToRect = _RowToRect
 
 class ColDragWindow(wxWindow):
     def __init__(self,parent,image,dragCol):
-        wxWindow.__init__(self,parent,wxSIMPLE_BORDER)
+        wxWindow.__init__(self,parent,-1, style=wxSIMPLE_BORDER)
         self.image = image
         self.SetSize((self.image.GetWidth(),self.image.GetHeight()))
         self.ux = parent.GetScrollPixelsPerUnit()[0]
@@ -139,19 +139,19 @@ class ColDragWindow(wxWindow):
     def OnPaint(self,evt):
         dc = wxPaintDC(self)
         w,h = self.GetSize()
-        dc.DrawBitmap(self.image,0,0)
+        dc.DrawBitmap(self.image, (0,0))
         dc.SetPen(wxPen(wxBLACK,1,wxSOLID))
         dc.SetBrush(wxTRANSPARENT_BRUSH)
-        dc.DrawRectangle(0,0,w,h)
+        dc.DrawRectangle((0,0), (w,h))
         iPos = self.GetInsertionPos()
-        dc.DrawLine(iPos,h - 10,iPos,h)
+        dc.DrawLine((iPos,h - 10), (iPos,h))
 
 
 
 
 class RowDragWindow(wxWindow):
     def __init__(self,parent,image,dragRow):
-        wxWindow.__init__(self,parent,wxSIMPLE_BORDER)
+        wxWindow.__init__(self,parent,-1, style=wxSIMPLE_BORDER)
         self.image = image
         self.SetSize((self.image.GetWidth(),self.image.GetHeight()))
         self.uy = parent.GetScrollPixelsPerUnit()[1]
@@ -198,12 +198,12 @@ class RowDragWindow(wxWindow):
     def OnPaint(self,evt):
         dc = wxPaintDC(self)
         w,h = self.GetSize()
-        dc.DrawBitmap(self.image,0,0)
+        dc.DrawBitmap(self.image, (0,0))
         dc.SetPen(wxPen(wxBLACK,1,wxSOLID))
         dc.SetBrush(wxTRANSPARENT_BRUSH)
-        dc.DrawRectangle(0,0,w,h)
+        dc.DrawRectangle((0,0), (w,h))
         iPos = self.GetInsertionPos()
-        dc.DrawLine(w - 10,iPos,w,iPos)
+        dc.DrawLine((w - 10,iPos), (w,iPos))
 
 #----------------------------------------------------------------------------
 
@@ -306,7 +306,7 @@ class wxGridColMover(wxEvtHandler):
         memdc = wxMemoryDC()
         memdc.SelectObject(bmp)
         dc = wxWindowDC(self.lwin)
-        memdc.Blit(0,0,rect.width,rect.height,dc,rect.x,rect.y)
+        memdc.Blit((0,0), rect.GetSize(), dc, rect.GetPosition())
         memdc.SelectObject(wxNullBitmap)
         return bmp
 
@@ -411,7 +411,7 @@ class wxGridRowMover(wxEvtHandler):
         memdc = wxMemoryDC()
         memdc.SelectObject(bmp)
         dc = wxWindowDC(self.lwin)
-        memdc.Blit(0,0,rect.width,rect.height,dc,rect.x,rect.y)
+        memdc.Blit((0,0), rect.GetSize(), dc, rect.GetPosition())
         memdc.SelectObject(wxNullBitmap)
         return bmp
 

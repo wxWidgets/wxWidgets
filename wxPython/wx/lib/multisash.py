@@ -592,10 +592,8 @@ class MultiCreator(wxWindow):
         dc.SetBackground(wxBrush(self.GetBackgroundColour(),wxSOLID))
         dc.Clear()
 
-        highlight = wxPen(wxSystemSettings_GetSystemColour(
-            wxSYS_COLOUR_BTNHIGHLIGHT),1,wxSOLID)
-        shadow = wxPen(wxSystemSettings_GetSystemColour(
-            wxSYS_COLOUR_BTNSHADOW),1,wxSOLID)
+        highlight = wxPen(wxSystemSettings_GetColour(wxSYS_COLOUR_BTNHIGHLIGHT), 1, wxSOLID)
+        shadow = wxPen(wxSystemSettings_GetColour(wxSYS_COLOUR_BTNSHADOW), 1, wxSOLID)
         black = wxPen(wxBLACK,1,wxSOLID)
         w,h = self.GetSizeTuple()
         w -= 1
@@ -603,13 +601,13 @@ class MultiCreator(wxWindow):
 
         # Draw outline
         dc.SetPen(highlight)
-        dc.DrawLine(0,0,0,h)
-        dc.DrawLine(0,0,w,0)
+        dc.DrawLine((0,0), (0,h))
+        dc.DrawLine((0,0), (w,0))
         dc.SetPen(black)
-        dc.DrawLine(0,h,w+1,h)
-        dc.DrawLine(w,0,w,h)
+        dc.DrawLine((0,h), (w+1,h))
+        dc.DrawLine((w,0), (w,h))
         dc.SetPen(shadow)
-        dc.DrawLine(w-1,2,w-1,h)
+        dc.DrawLine((w-1,2), (w-1,h))
 
 #----------------------------------------------------------------------
 
@@ -685,11 +683,11 @@ def DrawSash(win,x,y,direction):
     bmp = wxEmptyBitmap(8,8)
     bdc = wxMemoryDC()
     bdc.SelectObject(bmp)
-    bdc.DrawRectangle(-1,-1,10,10)
+    bdc.DrawRectangle((-1,-1), (10,10))
     for i in range(8):
         for j in range(8):
             if ((i + j) & 1):
-                bdc.DrawPoint(i,j)
+                bdc.DrawPoint((i,j))
 
     brush = wxBrush(wxColour(0,0,0))
     brush.SetStipple(bmp)
@@ -719,8 +717,8 @@ def DrawSash(win,x,y,direction):
     h = body_h
 
     if direction == MV_HOR:
-        dc.DrawRectangle(x,y-2,w,4)
+        dc.DrawRectangle((x,y-2), (w,4))
     else:
-        dc.DrawRectangle(x-2,y,4,h)
+        dc.DrawRectangle((x-2,y), (4,h))
 
     dc.EndDrawingOnTop()

@@ -163,12 +163,12 @@ class PyPalette(canvas.Canvas):
         """Returns a colour value at a specific x, y coordinate pair. This
         is useful for determining the colour found a specific mouse click
         in an external event handler."""
-        return self.buffer.GetPixel(x, y)
+        return self.buffer.GetPixel((x, y))
 
     def DrawBuffer(self):
         """Draws the palette XPM into the memory buffer."""
         #self.GeneratePaletteBMP ("foo.bmp")
-        self.buffer.DrawBitmap(self.palette, 0, 0, 0)
+        self.buffer.DrawBitmap(self.palette, (0, 0), 0)
 
     def HighlightPoint(self, x, y):
         """Highlights an area of the palette with a little circle around
@@ -176,7 +176,7 @@ class PyPalette(canvas.Canvas):
         colour = wxColour(0, 0, 0)
         self.buffer.SetPen(wxPen(colour, 1, wxSOLID))
         self.buffer.SetBrush(wxBrush(colour, wxTRANSPARENT))
-        self.buffer.DrawCircle(x, y, 3)
+        self.buffer.DrawCircle((x, y), 3)
         self.Refresh()
 
     def GeneratePaletteBMP(self, file_name, granularity=1):
@@ -204,9 +204,8 @@ class PyPalette(canvas.Canvas):
                 colour = wxColour(int(r * 255.0), int(g * 255.0), int(b * 255.0))
                 self.buffer.SetPen(wxPen(colour, 1, wxSOLID))
                 self.buffer.SetBrush(wxBrush(colour, wxSOLID))
-                self.buffer.DrawRectangle(x, y,
-                                          self.HORIZONTAL_STEP,
-                                          self.vertical_step)
+                self.buffer.DrawRectangle((x, y),
+                                          (self.HORIZONTAL_STEP, self.vertical_step))
 
         # this code is now simpler (and works)
         bitmap = self.buffer.GetBitmap()

@@ -59,8 +59,14 @@ public:
     virtual void SetStatusWidths(int widths, const int* widths_field); // uses typemap in _toplvl.i
 
     // Get the position and size of the field's internal bounding rectangle
-    virtual bool GetFieldRect(int i, wxRect& rect) const;
-
+    %extend {
+        wxRect GetFieldRect(int i) {
+            wxRect r;
+            self->GetFieldRect(i, r);
+            return r;
+        }
+    }
+    
     // sets the minimal vertical size of the status bar
     virtual void SetMinHeight(int height);
 
