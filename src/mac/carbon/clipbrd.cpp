@@ -252,7 +252,7 @@ bool wxClipboard::AddData( wxDataObject *data )
                         }
         #endif
            }
-           break;
+           break ;
 
 #if wxUSE_DRAG_AND_DROP
         case wxDF_METAFILE:
@@ -274,7 +274,7 @@ bool wxClipboard::AddData( wxDataObject *data )
       #endif
                     HUnlock(  (Handle) pict ) ;
            }
-           break;
+           break ;
 #endif
            case wxDF_BITMAP:
            case wxDF_DIB:
@@ -389,6 +389,8 @@ bool wxClipboard::GetData( wxDataObject& data )
                     transferred = true ;
                   }
               }
+							break ;
+
               default :
                 break ;
           }
