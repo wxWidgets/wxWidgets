@@ -254,8 +254,13 @@
     #define  wxIsspace   _istspace
     #define  wxIsupper   _istupper
     #define  wxIsxdigit  _istxdigit
-    #define  wxTolower   _totlower
-    #define  wxToupper   _totupper
+
+    /*
+       There is a bug in VC6 C RTL: toxxx() functions dosn't do anything with
+       signed chars < 0, so "fix" it here.
+     */
+    #define  wxTolower(c) _totlower((wxUChar)(c))
+    #define  wxToupper(c) _totupper((wxUChar)(c))
 
     /* locale.h functons */
     #define  wxSetlocale _tsetlocale
