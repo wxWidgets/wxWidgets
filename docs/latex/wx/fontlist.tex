@@ -38,7 +38,7 @@ Used by wxWindows to add a font to the list, called in the font constructor.
 \membersection{wxFontList::FindOrCreateFont}\label{findorcreatefont}
 
 \func{wxFont *}{FindOrCreateFont}{\param{int}{ point\_size}, \param{int}{ family}, \param{int}{ style}, \param{int}{ weight}, \param{bool}{ underline = FALSE},
- \param{const wxString\& }{facename = NULL}}
+ \param{const wxString\& }{facename = NULL}, \param{wxFontEncoding }{encoding = wxFONTENCODING_DEFAULT}{}}
 
 Finds a font of the given specification, or creates one and adds it to the list. See the \helpref{wxFont constructor}{wxfontconstr} for
 details of the arguments.

@@ -26,6 +26,7 @@
 #include "wx/string.h"
 #include "wx/setup.h"
 #include "wx/colour.h"
+#include "wx/font.h"
 
 // ---------------------------------------------------------------------------
 // forward declarations
@@ -347,7 +348,8 @@ public:
     void RemoveFont(wxFont *font);
     wxFont *FindOrCreateFont(int pointSize, int family, int style, int weight,
                              bool underline = FALSE,
-                             const wxString& face = wxEmptyString);
+                             const wxString& face = wxEmptyString,
+                             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 };
 
 class WXDLLEXPORT wxColourDatabase : public wxList

@@ -591,7 +591,7 @@ void wxFontList::RemoveFont (wxFont * font)
 }
 
 wxFont *wxFontList::
-        FindOrCreateFont (int PointSize, int FamilyOrFontId, int Style, int Weight, bool underline, const wxString& Face)
+        FindOrCreateFont (int PointSize, int FamilyOrFontId, int Style, int Weight, bool underline, const wxString& Face, wxFontEncoding encoding)
 {
   for (wxNode * node = First (); node; node = node->Next ())
     {
@@ -610,11 +610,12 @@ wxFont *wxFontList::
 #else
           each_font->GetFamily() == FamilyOrFontId &&
 #endif
-          ((each_font->GetFaceName() == wxT("")) || each_font->GetFaceName() == Face))
+          ((each_font->GetFaceName() == wxT("")) || each_font->GetFaceName() == Face) &&
+          (encoding == wxFONTENCODING_DEFAULT || each_font->GetEncoding() == encoding))
         //#endif
         return each_font;
     }
-  wxFont *font = new wxFont (PointSize, FamilyOrFontId, Style, Weight, underline, Face);
+  wxFont *font = new wxFont (PointSize, FamilyOrFontId, Style, Weight, underline, Face, encoding);
   font->SetVisible(TRUE);
   return font;
 }
