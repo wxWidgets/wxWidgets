@@ -84,6 +84,8 @@
                                     // Define 1 to compile listbox
 
 #define wxUSE_SPINBTN 1
+
+#define wxUSE_NOTEBOOK 1
                                     // Define 1 to compile spin button
 
 // use wxStaticLine class (separator line in the dialog)?
