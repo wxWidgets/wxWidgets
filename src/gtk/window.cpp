@@ -1172,7 +1172,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     if ( !wxTranslateGTKKeyEventToWx(event, win, gdk_event) )
     {
         // unknown key pressed, ignore (the event would be useless anyhow)
-        // 2005.02.22 modified by PCMan.
+        // 2005.02.22 modified by hzysoft@sina.com.tw.
         // In GTK+ 1.2, strings sent by IMs are also regarded as key_press events whose 
         // keyCodes cannot be recognized by wxWidgets. These MBCS strings, however, are 
         // composed of more than one character, which means gdk_event->length will always 
