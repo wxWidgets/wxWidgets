@@ -74,10 +74,15 @@ typedef long celt;				/* type to hold chr, MCCE number, or
 										 * literal */
 #define DIGITVAL(c) ((c)-'0')	/* turn chr digit into its value */
 
-#define CHRBITS (SIZEOF_WCHAR_T << 3)			/* bits in a chr; must not use sizeof */
-#define CHR_MAX ((1 << CHRBITS) - 1)
-#define CHR_MIN 0x00000000		/* smallest and largest chr; the value */
-
+#if wxUSE_WCHAR_T
+#   define CHRBITS (SIZEOF_WCHAR_T << 3)			/* bits in a chr; must not use sizeof */
+#   define CHR_MAX ((1 << CHRBITS) - 1)
+#   define CHR_MIN 0x00000000		/* smallest and largest chr; the value */
+#else /*ANSI*/
+#   define CHRBITS 8
+#   define CHR_MAX 0xFF
+#   define CHR_MIN 0x00
+#endif /*wxUSE_WCHAR_T*/
 
 /* functions operating on chr */
 #define iscalnum(x) wx_isalnum(x)
