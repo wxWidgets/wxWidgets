@@ -84,7 +84,8 @@ public:
     bool Show(bool show = true);
 
     void SetModal(bool flag);
-    virtual bool IsModal() const;
+    virtual bool IsModal() const { return m_isModal; }
+    bool m_isModal;
 
     // For now, same as Show(TRUE) but returns return code
     virtual int ShowModal();

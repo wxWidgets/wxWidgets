@@ -42,6 +42,7 @@ WX_IMPLEMENT_COCOA_OWNER(wxDialog,NSPanel,NSWindow,NSWindow)
 
 void wxDialog::Init()
 {
+    m_isModal = false;
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 }
 
@@ -96,82 +97,82 @@ void wxDialog::CocoaDelegate_windowWillClose(void)
 
 void wxDialog::SetModal(bool flag)
 {
-    if ( flag )
-    {
-        wxModelessWindows.DeleteObject(this);
-        m_windowStyle |= wxDIALOG_MODAL ;
-    }
-    else
-    {
-        m_windowStyle &= ~wxDIALOG_MODAL ;
-        wxModelessWindows.Append(this);
-    }
+    wxFAIL_MSG( wxT("wxDialog:SetModal obsolete now") );
 }
 
 bool wxDialog::Show(bool show)
 {
     if(m_isShown == show)
         return false;
+
     if(show)
-        InitDialog();
-    if(IsModal())
     {
-        m_isShown = show;
-        if(show)
-        {
-            wxAutoNSAutoreleasePool pool;
-            wxModalDialogs.Append(this);
-            wxLogTrace(wxTRACE_COCOA,wxT("runModal"));
-            NSApplication *theNSApp = wxTheApp->GetNSApplication();
-            // If the app hasn't started, flush the event queue
-            // If we don't do this, the Dock doesn't get the message that
-            // the app has started so will refuse to activate it.
-            if(![theNSApp isRunning])
-            {
-                while(NSEvent *event = [theNSApp
-                            nextEventMatchingMask:NSAnyEventMask
-                            untilDate:[NSDate distantPast]
-                            inMode:NSDefaultRunLoopMode
-                            dequeue: YES])
-                {
-                    [theNSApp sendEvent: event];
-                }
-            }
-            [wxTheApp->GetNSApplication() runModalForWindow:m_cocoaNSWindow];
-            wxLogTrace(wxTRACE_COCOA,wxT("runModal END"));
-        }
-        else
-        {
-            wxLogTrace(wxTRACE_COCOA,wxT("abortModal"));
-            [wxTheApp->GetNSApplication() abortModal];
-            [m_cocoaNSWindow orderOut:m_cocoaNSWindow];
-            wxModalDialogs.DeleteObject(this);
+        wxAutoNSAutoreleasePool pool;
+        InitDialog();
+        if(IsModal())
+        {   // ShowModal() will show the dialog
+            m_isShown = true;
+            return true;
         }
     }
     else
-        return wxTopLevelWindow::Show(show);
-    return true;
+    {
+        if(IsModal())
+        {   // this doesn't hide the dialog, base class Show(false) does.
+            wxLogTrace(wxTRACE_COCOA,wxT("abortModal"));
+            [wxTheApp->GetNSApplication() abortModal];
+            wxModalDialogs.DeleteObject(this);
+            m_isModal = false;
+        }
+    }
+    return wxTopLevelWindow::Show(show);
 }
 
-// Replacement for Show(TRUE) for modal dialogs - returns return code
+// Shows the dialog and begins a modal event loop.  When the event loop
+// is stopped (via EndModal()) it returns the exit code.
 int wxDialog::ShowModal()
 {
-    if(!IsModal())
-        SetModal(true);
+    wxCHECK_MSG(!IsModal(),GetReturnCode(),wxT("wxDialog::ShowModal called within its own modal loop"));
+
+    // Show(true) will set m_isShown = true
+    m_isShown = false;
+    m_isModal = true;
+    wxModalDialogs.Append(this);
+
+    wxLogTrace(wxTRACE_COCOA,wxT("runModal"));
+    NSApplication *theNSApp = wxTheApp->GetNSApplication();
+    // If the app hasn't started, flush the event queue
+    // If we don't do this, the Dock doesn't get the message that
+    // the app has started so will refuse to activate it.
+    if(![theNSApp isRunning])
+    {
+        // We should only do a few iterations so one pool should be okay
+        wxAutoNSAutoreleasePool pool;
+        while(NSEvent *event = [theNSApp
+                    nextEventMatchingMask:NSAnyEventMask
+                    untilDate:[NSDate distantPast]
+                    inMode:NSDefaultRunLoopMode
+                    dequeue: YES])
+        {
+            [theNSApp sendEvent: event];
+        }
+    }
+
     Show(true);
+    do {
+        wxAutoNSAutoreleasePool pool;
+        [wxTheApp->GetNSApplication() runModalForWindow:m_cocoaNSWindow];
+    } while(0);
+    wxLogTrace(wxTRACE_COCOA,wxT("runModal END"));
+
     return GetReturnCode();
 }
 
-// EndModal will work for any dialog
 void wxDialog::EndModal(int retCode)
 {
+    wxASSERT(IsModal(), wxT("EndModal() should only be used within ShowModal()"));
     SetReturnCode(retCode);
     Show(false);
-}
-
-bool wxDialog::IsModal() const
-{
-    return (GetWindowStyleFlag() & wxDIALOG_MODAL);
 }
 
 void wxDialog::OnCloseWindow(wxCloseEvent& event)
