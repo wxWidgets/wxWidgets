@@ -250,6 +250,16 @@ selection_handler( GtkWidget *WXUNUSED(widget),
 
     wxDataFormat format( selection_data->target );
 
+#ifdef __WXDEBUG__
+    wxLogTrace(TRACE_CLIPBOARD,
+               _T("clipboard data in format %s, GtkSelectionData is target=%s type=%s selection=%s"),
+               format.GetId().c_str(),
+               wxString::FromAscii(gdk_atom_name(selection_data->target)).c_str(),
+               wxString::FromAscii(gdk_atom_name(selection_data->type)).c_str(),
+               wxString::FromAscii(gdk_atom_name(selection_data->selection)).c_str()
+               );
+#endif
+    
     if (!data->IsSupportedFormat( format )) return;
 
     int size = data->GetDataSize( format );
@@ -261,12 +271,27 @@ selection_handler( GtkWidget *WXUNUSED(widget),
     // Text data will be in UTF8 in Unicode mode.
     data->GetDataHere( selection_data->target, d );
 
-    gtk_selection_data_set(
-        selection_data,
-        GDK_SELECTION_TYPE_STRING,
-        8*sizeof(gchar),
-        (unsigned char*) d,
-        size );
+#ifdef __WXGTK20__
+    // NB: GTK+ requires special treatment of UTF8_STRING data, the text
+    //     would show as UTF-8 data interpreted as latin1 (?) in other
+    //     GTK+ apps if we used gtk_selection_data_set()
+    if (format == wxDataFormat(wxDF_UNICODETEXT))
+    {
+        gtk_selection_data_set_text(
+            selection_data,
+            (const gchar*)d,
+            size);
+    }
+    else
+#endif
+    {
+        gtk_selection_data_set(
+            selection_data,
+            GDK_SELECTION_TYPE_STRING,
+            8*sizeof(gchar),
+            (unsigned char*) d,
+            size );
+    }
 
     free(d);
 }
@@ -478,11 +503,9 @@ bool wxClipboard::IsSupported( const wxDataFormat& format )
     /* store requested format to be asked for by callbacks */
     m_targetRequested = format;
 
-#if 0
     wxLogTrace( TRACE_CLIPBOARD,
                 wxT("wxClipboard:IsSupported: requested format: %s"),
                 format.GetId().c_str() );
-#endif
 
     wxCHECK_MSG( m_targetRequested, FALSE, wxT("invalid clipboard format") );
 
@@ -515,9 +538,7 @@ bool wxClipboard::IsSupported( const wxDataFormat& format )
     }
 #endif
 
-    if (!m_formatSupported) return FALSE;
-
-    return TRUE;
+    return m_formatSupported;
 }
 
 bool wxClipboard::GetData( wxDataObject& data )
