@@ -5,7 +5,6 @@
 # RCS-ID:       $Id$
 
 from xxx import *                       # xxx imports globals and params
-from wxPython.xrc import *
 
 # Icons
 import images
@@ -496,7 +495,7 @@ class XML_Tree(wxTreeCtrl):
         else:
             elem.setAttribute('name', xxx.name)
         memFile.close()                 # write to wxMemoryFS
-        res = wxXmlResource('')
+        res = wxXmlResource('', g.xmlFlags)
         res.Load('memory:xxx.xrc')
         if xxx.__class__ == xxxFrame:
             # Frame can't have many children,
