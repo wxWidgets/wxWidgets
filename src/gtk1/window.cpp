@@ -3040,6 +3040,18 @@ GtkStyle *wxWindow::GetWidgetStyle()
 
 void wxWindow::SetWidgetStyle()
 {
+    if (m_widget->style->engine_data)
+    {
+        static bool s_warningPrinted = FALSE;
+        if (!s_warningPrinted)
+        {
+            printf( "wxWindows warning: Widget styles disabled due to buggy GTK theme.\n" );
+            s_warningPrinted = TRUE;
+        }
+        m_widgetStyle = m_widget->style;
+        return;
+    }
+
     GtkStyle *style = GetWidgetStyle();
 
     if (m_font != wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ))

@@ -567,7 +567,7 @@ int wxEntry( int argc, char *argv[] )
         (gtk_minor_version == 2) &&
         (gtk_micro_version < 4))
     {
-        printf( "wxWindows warning: Disabled GUI threading due to outdated GTK version\n" );
+        printf( "wxWindows warning: GUI threading disabled due to outdated GTK version\n" );
     }
     else
     {
