@@ -58,9 +58,9 @@
 // static class variables definition
 // ---------------------------------------------------------------------------
 
-#ifdef  STD_STRING_COMPATIBILITY
+#ifdef  wxSTD_STRING_COMPATIBILITY
   const size_t wxString::npos = STRING_MAXLEN;
-#endif
+#endif // wxSTD_STRING_COMPATIBILITY
 
 // ----------------------------------------------------------------------------
 // static data
@@ -109,7 +109,7 @@ extern const char *g_szNul = &g_strEmpty.dummy;
 // global functions
 // ----------------------------------------------------------------------------
 
-#ifdef  STD_STRING_COMPATIBILITY
+#ifdef  wxSTD_STRING_COMPATIBILITY
 
 // MS Visual C++ version 5.0 provides the new STL headers as well as the old
 // iostream ones.
@@ -253,7 +253,7 @@ wxString::wxString(const unsigned char* psz, size_t nLength)
   InitWith((const char *)psz, 0, nLength);
 }
 
-#ifdef  STD_STRING_COMPATIBILITY
+#ifdef  wxSTD_STRING_COMPATIBILITY
 
 // poor man's iterators are "void *" pointers
 wxString::wxString(const void *pStart, const void *pEnd)
@@ -1091,7 +1091,7 @@ int wxString::Freq(char ch) const
 // ---------------------------------------------------------------------------
 // standard C++ library string functions
 // ---------------------------------------------------------------------------
-#ifdef  STD_STRING_COMPATIBILITY
+#ifdef  wxSTD_STRING_COMPATIBILITY
 
 wxString& wxString::insert(size_t nPos, const wxString& str)
 {
