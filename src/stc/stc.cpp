@@ -475,7 +475,7 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp)
         buff[len] = 0;
         SendMsg(2049, markerNumber, (long)buff);
         delete [] buff;
-
+        
 }
 
 // Set a margin to be either numeric or symbolic.
@@ -858,7 +858,7 @@ void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
         buff[len] = 0;
         SendMsg(2405, type, (long)buff);
         delete [] buff;
-
+     
 }
 
 // Clear all the registered images.
@@ -1618,6 +1618,11 @@ void wxStyledTextCtrl::LineEndDisplayExtend() {
     SendMsg(2348, 0, 0);
 }
 
+// Copy the line containing the caret.
+void wxStyledTextCtrl::LineCopy() {
+    SendMsg(2455, 0, 0);
+}
+
 // Move the caret inside current view if it's not there already.
 void wxStyledTextCtrl::MoveCaretInsideView() {
     SendMsg(2401, 0, 0);
@@ -1903,6 +1908,28 @@ void wxStyledTextCtrl::SetHotspotActiveBackground(bool useSetting, const wxColou
 // Enable / Disable underlining active hotspots.
 void wxStyledTextCtrl::SetHotspotActiveUnderline(bool underline) {
     SendMsg(2412, underline, 0);
+}
+
+// Given a valid document position, return the previous position taking code
+// page into account. Returns 0 if passed 0.
+int wxStyledTextCtrl::PositionBefore(int pos) {
+    return SendMsg(2417, pos, 0);
+}
+
+// Given a valid document position, return the next position taking code
+// page into account. Maximum value returned is the last position in the document.
+int wxStyledTextCtrl::PositionAfter(int pos) {
+    return SendMsg(2418, pos, 0);
+}
+
+// Copy a range of text to the clipboard. Positions are clipped into the document.
+void wxStyledTextCtrl::CopyRange(int start, int end) {
+    SendMsg(2419, start, end);
+}
+
+// Copy argument text to the clipboard.
+void wxStyledTextCtrl::CopyText(int length, const wxString& text) {
+    SendMsg(2420, length, (long)(const char*)wx2stc(text));
 }
 
 // Start notifying the container of all key presses and commands.
