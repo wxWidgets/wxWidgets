@@ -75,6 +75,7 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
                       wxHSCROLL | wxVSCROLL | wxBORDER)
 
 {
+   SetStatusBar(NULL); // don't use statusbar
    m_Editable = false;
    m_doSendEvents = false;
    m_ViewStartX = 0; m_ViewStartY = 0;
@@ -160,23 +161,33 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    bool found;
    wxLayoutObject *obj = m_llist->FindObjectScreen(dc, findPos,
                                                    &cursorPos, &found);
+   wxLayoutObject::UserData *u = obj ? obj->GetUserData() : NULL;
 
    //has the mouse only been moved?
    if(eventId == WXLOWIN_MENU_MOUSEMOVE)
    {
       // found is only true if we are really over an object, not just
       // behind it
-      if(found && obj && obj->GetUserData() != NULL)
+      if(found && u)
       {
          if(!m_HandCursor)
             SetCursor(wxCURSOR_HAND);
          m_HandCursor = TRUE;
+         if(m_StatusBar && m_StatusFieldLabel != -1) 
+         {
+            const wxString &label = u->GetLabel();
+            if(label.Length())
+               m_StatusBar->SetStatusText(label,
+                                          m_StatusFieldLabel);
+         }
       }
       else
       {
          if(m_HandCursor)
             SetCursor(wxCURSOR_IBEAM);
          m_HandCursor = FALSE;
+         if(m_StatusBar && m_StatusFieldLabel != -1) 
+            m_StatusBar->SetStatusText("", m_StatusFieldLabel);
       }
       if(event.LeftIsDown())
       {
@@ -198,6 +209,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
          m_Selecting = false;
          DoPaint(FALSE); 
       }
+      if(u) u->DecRef();
       return;
    }
 
@@ -210,18 +222,24 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
       ScrollToCursor();
       DoPaint(FALSE); // DoPaint suppresses flicker under GTK
    }
+
    if(!m_doSendEvents) // nothing to do
+   {
+      if(u) u->DecRef();
       return;
+   }
 
    // only do the menu if activated, editable and not on a clickable object
    if(eventId == WXLOWIN_MENU_RCLICK
       && IsEditable()
-      && (! obj || (obj && obj->GetUserData() == NULL))
-      )
+      && (! obj || u == NULL))
    {
       PopupMenu(m_PopupMenu, m_ClickPosition.x, m_ClickPosition.y);
+      if(u) u->DecRef();
       return;
    }
+
+   if(u) u->DecRef();
    // find the object at this position
    if(obj)
    {
@@ -412,7 +430,10 @@ void
 wxLayoutWindow::OnKeyUp(wxKeyEvent& event)
 {
    if(event.KeyCode() == WXK_SHIFT && m_llist->IsSelecting())
+   {
       m_llist->EndSelection();
+      m_Selecting = false;
+   }
    event.Skip();
 }
 
@@ -605,6 +626,12 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 
    ResetDirty();
    m_ScrollToCursor = false;
+   if(m_StatusBar && m_StatusFieldCursor != -1) 
+   {
+      wxString label;
+      label.Printf(_("L:%d C:%d"), m_llist->GetCursorPos().x+1, m_llist->GetCursorPos().y+1);
+      m_StatusBar->SetStatusText(label, m_StatusFieldCursor);
+   }
 }
 
 // change the range and position of scrollbars

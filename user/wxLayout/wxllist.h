@@ -99,10 +99,13 @@ public:
    struct UserData
    {
       UserData() { m_refcount = 1; }
-      void IncRef(void) { m_refcount++; }
-      void DecRef(void) { m_refcount--; if(m_refcount == 0) delete this;}
+      inline void IncRef(void) { m_refcount++; }
+      inline void DecRef(void) { m_refcount--; if(m_refcount == 0) delete this;}
+      inline void SetLabel(const wxString &l) { m_label = l; }
+      inline const wxString & GetLabel(void) const { return m_label; }
    private:
       int m_refcount;
+      wxString m_label;
    protected:
       virtual ~UserData() { wxASSERT(m_refcount == 0); }
       /// prevents gcc from generating stupid warnings
@@ -161,6 +164,7 @@ public:
 
    /** Tells the object about some user data. This data is associated
        with the object and will be deleted at destruction time.
+       It is reference counted.
    */
    void   SetUserData(UserData *data)
       {
@@ -171,8 +175,11 @@ public:
             m_UserData->IncRef();
       }
    
-   /** Return the user data. */
-   void * GetUserData(void) const { if(m_UserData) m_UserData->IncRef(); return m_UserData; }
+   /** Return the user data.
+    Increments the object's reference count. When no longer needed,
+    caller must call DecRef() on the pointer returned.
+   */
+   UserData * GetUserData(void) const { if(m_UserData) m_UserData->IncRef(); return m_UserData; }
 
    /** Makes a copy of this object.
     */
@@ -745,8 +752,8 @@ public:
       { MoveCursorHorizontally(-m_CursorPos.x); }
 
    /// Returns current cursor position.
-   wxPoint GetCursorPos(wxDC &dc) const { return m_CursorPos; }
-   wxPoint GetCursorPos() const { return m_CursorPos; }
+   const wxPoint &GetCursorPos(wxDC &dc) const { return m_CursorPos; }
+   const wxPoint &GetCursorPos() const { return m_CursorPos; }
    
    //@}
 

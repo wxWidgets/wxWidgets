@@ -18,10 +18,13 @@ TODO
 
   - UNDO!!
   - replacement of llist in window
+  - selection highlighting is a bit broken
+Improve speed! (See layout problem below!)
 
 The following two probs can probably be fixed by adding the
 RecalculateLayout() method:
- Funny re-layout shows again in sample text.
+Funny re-layout shows again in sample text.
+(Gone after calling layout for all objects before drawing one.)
  Printing works again, but layout at begin of new page is corrupted.
 
 

@@ -163,7 +163,19 @@ public:
    bool IsModified(void) const { return m_Modified; }
    /// Mark list as modified or unchanged.
    void SetModified(bool modified = true) { m_Modified = modified; }
-
+   /** Tell window to update a wxStatusBar with UserData labels and
+       cursor positions.
+       @param bar wxStatusBar pointer
+       @param labelfield field to use in statusbar for URLs/userdata labels, or -1 to disable
+       @param cursorfield field to use for cursor position, or -1 to disable
+   */
+   inline SetStatusBar(class wxStatusBar *bar,
+                       int labelfield = -1,
+                       int cursorfield = -1)
+      {
+         m_StatusBar = bar; m_StatusFieldLabel = labelfield;
+         m_StatusFieldCursor = cursorfield;
+      }
 protected:   
    /// generic function for mouse events processing
    void OnMouse(int eventId, wxMouseEvent& event);
@@ -211,6 +223,12 @@ private:
    wxMemoryDC  *m_memDC;
    wxBitmap    *m_bitmap;
    wxPoint      m_bitmapSize;
+   /// A frame's statusbar to update
+   class wxStatusBar *m_StatusBar;
+   /// statusbar field for labels
+   int          m_StatusFieldLabel;
+   /// statusbar field for cursor positions
+   int          m_StatusFieldCursor;
    /// a pointer to a bitmap for the background
    wxBitmap    *m_BGbitmap;
    DECLARE_EVENT_TABLE()

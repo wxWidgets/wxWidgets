@@ -598,6 +598,11 @@ wxLayoutLine::RecalculatePosition(wxLayoutList *llist)
 void
 wxLayoutLine::RecalculatePositions(int recurse, wxLayoutList *llist)
 {
+   //FIXME: is this really needed? We run Layout() anyway.
+   // Recursing here, drives computation time up exponentially, as
+   // each line will cause all following lines to be recalculated.
+   return;
+   
    wxASSERT(recurse >= 0);
    wxPoint pos = m_Position;
    CoordType height = m_Height;
@@ -1243,7 +1248,8 @@ wxLayoutLine::Copy(wxLayoutList *llist,
    CoordType firstOffset, lastOffset;
 
    if(to == -1) to = GetLength();
-   
+   if(from == to) return;
+      
    wxLOiterator first = FindObject(from, &firstOffset);
    wxLOiterator last  = FindObject(to, &lastOffset);
 
@@ -1562,6 +1568,7 @@ bool
 wxLayoutList::Insert(wxLayoutObject *obj)
 {
    wxASSERT(m_CursorLine);
+   if(! m_CursorLine) m_CursorLine = GetFirstLine();
    SetUpdateRect(m_CursorScreenPos);
    SetUpdateRect(m_CursorScreenPos+m_CursorSize);
    m_CursorLine->Insert(m_CursorPos.x, obj);
