@@ -44,7 +44,7 @@ private:
 };
 
 
-
+#if wxUSE_DRAG_AND_DROP
 bool wxSTCDropTarget::OnDropText(wxCoord x, wxCoord y, const wxString& data) {
     return swx->DoDropText(x, y, data);
 }
@@ -60,6 +60,7 @@ wxDragResult  wxSTCDropTarget::OnDragOver(wxCoord x, wxCoord y, wxDragResult def
 void  wxSTCDropTarget::OnLeave() {
     swx->DoDragLeave();
 }
+#endif
 
 
 class wxSTCCallTip : public wxWindow {
@@ -109,9 +110,11 @@ ScintillaWX::~ScintillaWX() {
 
 void ScintillaWX::Initialise() {
     //ScintillaBase::Initialise();
+#if wxUSE_DRAG_AND_DROP
     dropTarget = new wxSTCDropTarget;
     dropTarget->SetScintilla(this);
     stc->SetDropTarget(dropTarget);
+#endif
 }
 
 
@@ -121,6 +124,7 @@ void ScintillaWX::Finalise() {
 
 
 void ScintillaWX::StartDrag() {
+#if wxUSE_DRAG_AND_DROP
     wxString dragText(drag.s, drag.len);
 
     // Send an event to allow the drag text to be changed
@@ -146,6 +150,7 @@ void ScintillaWX::StartDrag() {
         inDragDrop = FALSE;
         SetDragPosition(invalidPosition);
     }
+#endif
 }
 
 
@@ -500,6 +505,7 @@ void ScintillaWX::DoOnListBox() {
 
 //----------------------------------------------------------------------
 
+#if wxUSE_DRAG_AND_DROP
 bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
     SetDragPosition(invalidPosition);
 
@@ -551,7 +557,7 @@ wxDragResult ScintillaWX::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
 void ScintillaWX::DoDragLeave() {
     SetDragPosition(invalidPosition);
 }
-
+#endif
 //----------------------------------------------------------------------
 
 // Redraw all of text area. This paint will not be abandoned.

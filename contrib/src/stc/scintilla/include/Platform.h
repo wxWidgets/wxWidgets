@@ -64,6 +64,28 @@
 #include <wx/wx.h>
 #endif
 
+#define ColourID        scColourID
+#define FontID          scFontID
+#define SurfaceID       scSurfaceID
+#define WindowID        scWindowID
+#define MenuID          scMenuID
+#define Point           scPoint
+#define PRectangle      scPRectangle
+#define Colour          scColour
+#define ColourPair      scColourPair
+#define Window          scWindow
+#define Palette         scPalette
+#define Font            scFont
+#define Surface         scSurface
+#define Window          scWindow
+#define ListBox         scListBox
+#define Menu            scMenu
+#define Platform        scPlatform
+#define TextRange       scTextRange
+#define KeyMap          scKeyMap
+#define Style           scStyle
+
+
 // Underlying the implementation of the platform classes are platform specific types.
 // Sometimes these need to be passed around by client code so they are defined here
 
