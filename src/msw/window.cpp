@@ -1243,6 +1243,7 @@ bool wxWindowMSW::IsMouseInWindow() const
 
 void wxWindowMSW::OnInternalIdle()
 {
+#ifdef __WXWINCE__
     // Check if we need to send a LEAVE event
     if ( m_mouseInWindow )
     {
@@ -1250,44 +1251,10 @@ void wxWindowMSW::OnInternalIdle()
         // or doesn't have mouse capture
         if ( !IsMouseInWindow() )
         {
-            // Generate a LEAVE event
-            m_mouseInWindow = false;
-
-            // Unfortunately the mouse button and keyboard state may have
-            // changed by the time the OnInternalIdle function is called, so 'state'
-            // may be meaningless.
-            int state = 0;
-            if ( wxIsShiftDown() )
-                state |= MK_SHIFT;
-            if ( wxIsCtrlDown() )
-                state |= MK_CONTROL;
-
-            // Only the high-order bit should be tested
-            if ( GetKeyState( VK_LBUTTON ) & (1<<15) )
-                state |= MK_LBUTTON;
-            if ( GetKeyState( VK_MBUTTON ) & (1<<15) )
-                state |= MK_MBUTTON;
-            if ( GetKeyState( VK_RBUTTON ) & (1<<15) )
-                state |= MK_RBUTTON;
-
-            POINT pt;
-            if ( !::GetCursorPos(&pt) )
-            {
-                wxLogLastError(_T("GetCursorPos"));
-            }
-
-            // we need to have client coordinates here for symmetry with
-            // wxEVT_ENTER_WINDOW
-            RECT rect = wxGetWindowRect(GetHwnd());
-            pt.x -= rect.left;
-            pt.y -= rect.top;
-
-            wxMouseEvent event2(wxEVT_LEAVE_WINDOW);
-            InitMouseEvent(event2, pt.x, pt.y, state);
-
-            (void)GetEventHandler()->ProcessEvent(event2);
+            GenerateMouseLeave();
         }
     }
+#endif // !__WXWINCE__
 
     if (wxUpdateUIEvent::CanUpdate(this))
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
@@ -2434,61 +2401,23 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                                         wParam);
             break;
 
-            // Seems to be broken currently
-#if 0 // ndef __WXWINCE__
+#ifdef WM_MOUSELEAVE
         case WM_MOUSELEAVE:
-           {
-            wxASSERT_MSG( !m_mouseInWindow, wxT("the mouse should be in a window to generate this event!") );
-
-            // only process this message if the mouse is not in the window,
-            // This can also check for children in composite windows.
-            // however, this may mean the the wxEVT_LEAVE_WINDOW is never sent
-            // if the mouse does not enter the window from it's child before
-            // leaving the scope of the window. ( perhaps this can be picked
-            // up in the OnIdle code as before, for this special case )
-            if ( /*IsComposite() && */ !IsMouseInWindow() )
             {
-                m_mouseInWindow = false;
-
-                // Unfortunately no mouse state is passed with a WM_MOUSE_LEAVE
-                int state = 0;
-                if ( wxIsShiftDown() )
-                    state |= MK_SHIFT;
-                if ( wxIsCtrlDown() )
-                    state |= MK_CONTROL;
-                if ( GetKeyState( VK_LBUTTON ) )
-                    state |= MK_LBUTTON;
-                if ( GetKeyState( VK_MBUTTON ) )
-                    state |= MK_MBUTTON;
-                if ( GetKeyState( VK_RBUTTON ) )
-                    state |= MK_RBUTTON;
-
-                POINT pt;
-                if ( !::GetCursorPos(&pt) )
+                // filter out excess WM_MOUSELEAVE events sent after PopupMenu() (on XP at least)
+                if ( m_mouseInWindow )
                 {
-                    wxLogLastError(_T("GetCursorPos"));
+                    GenerateMouseLeave();
                 }
 
-                // we need to have client coordinates here for symmetry with
-                // wxEVT_ENTER_WINDOW
-                RECT rect = wxGetWindowRect(GetHwnd());
-                pt.x -= rect.left;
-                pt.y -= rect.top;
-
-                wxMouseEvent event2(wxEVT_LEAVE_WINDOW);
-                InitMouseEvent(event2, pt.x, pt.y, state);
-
-                (void)GetEventHandler()->ProcessEvent(event2);
+                // always pass processed back as false, this allows the window
+                // manager to process the message too.  This is needed to
+                // ensure windows XP themes work properly as the mouse moves
+                // over widgets like buttons.
+                processed = false;
             }
-            // always pass processed back as false, this allows the window
-            // manager to process the message too.  This is needed to ensure
-            // windows XP themes work properly as the mouse moves over widgets
-            // like buttons.
-            processed = false;
-           }
-           break;
-#endif
- // __WXWINCE__
+            break;
+#endif // WM_MOUSELEAVE
 
 #if wxUSE_MOUSEWHEEL
         case WM_MOUSEWHEEL:
@@ -4395,9 +4324,6 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.m_leftDown = (flags & MK_LBUTTON) != 0;
     event.m_middleDown = (flags & MK_MBUTTON) != 0;
     event.m_rightDown = (flags & MK_RBUTTON) != 0;
- //   event.m_altDown = (::GetKeyState(VK_MENU) & 0x80000000) != 0;
-    // Returns different negative values on WinME and WinNT,
-    // so simply test for negative value.
     event.m_altDown = ::GetKeyState(VK_MENU) < 0;
 
 #ifndef __WXWINCE__
@@ -4516,7 +4442,6 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
         {
             // Generate an ENTER event
             m_mouseInWindow = true;
-#if _WIN32_WINNT >= 0x0400
 #ifndef __WXWINCE__
             TRACKMOUSEEVENT trackinfo;
 
@@ -4527,8 +4452,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             // appropriate TrackMouseEvent or emulate it ( win95 )
             // else we need _WIN32_WINNT >= 0x0400
             _TrackMouseEvent(&trackinfo);
-#endif
-#endif
+#endif // __WXWINCE__
             wxMouseEvent event(wxEVT_ENTER_WINDOW);
             InitMouseEvent(event, x, y, flags);
 
@@ -4583,14 +4507,49 @@ bool wxWindowMSW::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
     event.m_linesPerAction = s_linesPerRotation;
     return GetEventHandler()->ProcessEvent(event);
 
-#else
-    (void) wParam;
-    (void) lParam;
+#else // !wxUSE_MOUSEWHEEL
+    wxUnusedVar(wParam);
+    wxUnusedVar(lParam);
 
     return false;
-#endif
+#endif // wxUSE_MOUSEWHEEL/!wxUSE_MOUSEWHEEL
 }
 
+void wxWindowMSW::GenerateMouseLeave()
+{
+    m_mouseInWindow = false;
+
+    int state = 0;
+    if ( wxIsShiftDown() )
+        state |= MK_SHIFT;
+    if ( wxIsCtrlDown() )
+        state |= MK_CONTROL;
+
+    // Only the high-order bit should be tested
+    if ( GetKeyState( VK_LBUTTON ) & (1<<15) )
+        state |= MK_LBUTTON;
+    if ( GetKeyState( VK_MBUTTON ) & (1<<15) )
+        state |= MK_MBUTTON;
+    if ( GetKeyState( VK_RBUTTON ) & (1<<15) )
+        state |= MK_RBUTTON;
+
+    POINT pt;
+    if ( !::GetCursorPos(&pt) )
+    {
+        wxLogLastError(_T("GetCursorPos"));
+    }
+
+    // we need to have client coordinates here for symmetry with
+    // wxEVT_ENTER_WINDOW
+    RECT rect = wxGetWindowRect(GetHwnd());
+    pt.x -= rect.left;
+    pt.y -= rect.top;
+
+    wxMouseEvent event(wxEVT_LEAVE_WINDOW);
+    InitMouseEvent(event, pt.x, pt.y, state);
+
+    (void)GetEventHandler()->ProcessEvent(event);
+}
 
 // ---------------------------------------------------------------------------
 // keyboard handling

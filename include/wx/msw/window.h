@@ -411,6 +411,9 @@ public:
     // check if mouse is in the window
     bool IsMouseInWindow() const;
 
+    // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
+    void GenerateMouseLeave();
+
     // virtual function for implementing internal idle
     // behaviour
     virtual void OnInternalIdle() ;
