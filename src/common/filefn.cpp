@@ -1075,9 +1075,9 @@ bool wxMkdir(const wxString& dir, int perm)
 
     // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
     // for the GNU compiler
-#if (!(defined(__WXMSW__) || defined(__WXPM__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
+#if (!(defined(__WXMSW__) || defined(__OS2__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WXWINE__)
     if ( mkdir(wxFNCONV(dirname), perm) != 0 )
-#else  // MSW and OS/2
+#else  // !MSW and !OS/2 VAC++
     if ( mkdir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
 #endif // !MSW/MSW
     {
