@@ -119,11 +119,7 @@ static bool wxIsAlphaNumeric(const wxString& val)
 // This function can pop up an error message.
 bool wxTextValidator::Validate(wxWindow *parent)
 {
-    if ( !m_validatorWindow )
-        return FALSE;
-    if ( !m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)) )
-        return FALSE;
-    if ( !m_stringValue )
+    if( !CheckValidator() )
         return FALSE;
 
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
@@ -195,11 +191,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
 // Called to transfer data to the window
 bool wxTextValidator::TransferToWindow(void)
 {
-    if ( !m_validatorWindow )
-        return FALSE;
-    if ( !m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)) )
-        return FALSE;
-    if ( !m_stringValue )
+    if( !CheckValidator() )
         return FALSE;
 
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
@@ -211,11 +203,7 @@ bool wxTextValidator::TransferToWindow(void)
 // Called to transfer data to the window
 bool wxTextValidator::TransferFromWindow(void)
 {
-    if ( !m_validatorWindow )
-        return FALSE;
-    if ( !m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)) )
-        return FALSE;
-    if ( !m_stringValue )
+    if( !CheckValidator() )
         return FALSE;
 
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
