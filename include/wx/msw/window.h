@@ -502,7 +502,11 @@ public:
 #include "wx/hash.h"
 
 // pseudo-template HWND <-> wxWindow hash table
+#if WXWIN_COMPATIBILITY_2_4
+WX_DECLARE_HASH(wxWindow, wxWindowList, wxWinHashTable);
+#else
 WX_DECLARE_HASH(wxWindowMSW, wxWindowList, wxWinHashTable);
+#endif
 
 extern wxWinHashTable *wxWinHandleHash;
 
