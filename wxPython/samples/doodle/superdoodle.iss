@@ -1,3 +1,10 @@
+;; An InnoSetup script to build a self-installer of the superdoodle standalone
+;; executable produced from setup.py.  You can get InnoSetup from
+;; http://www.jrsoftware.org/.  You may have to edit this file to make it work
+;; for your environment and python installation.
+;;
+
+
 [Setup]
 AppName = SuperDoodle
 AppVerName = SuperDoodle 1.0
@@ -13,8 +20,8 @@ AppPublisherURL = http://wxPython.org/
 
 
 [Files]
-Source: "c:\WINNT\SYSTEM32\MSVCRT.dll";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall;
-Source: "c:\WINNT\SYSTEM32\MSVCIRT.dll";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall;
+Source: "c:\WINNT\SYSTEM32\MSVCRT.dll";   DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace;
+Source: "c:\WINNT\SYSTEM32\MSVCIRT.dll";  DestDir: "{sys}"; CopyMode: alwaysskipifsameorolder; Flags: sharedfile uninsneveruninstall restartreplace;
 Source: "dist\superdoodle\superdoodle.exe";    DestDir: "{app}";
 Source: "dist\superdoodle\_sre.pyd";           DestDir: "{app}";
 Source: "dist\superdoodle\htmlc.pyd";          DestDir: "{app}";
