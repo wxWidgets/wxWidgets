@@ -1900,7 +1900,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__NANOX__"
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY \$MICROWIN/src/lib/libnano-X.a \$MICROWIN/src/lib/libmwengine.a \$MICROWIN/src/lib/libmwfonts.a \$MICROWIN/src/lib/libmwdrivers.a \$MICROWIN/src/lib/libmwobjects.a"
         else
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lX11"
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lX11$xpm_link"
         fi
 
         TOOLKIT_VPATH="\${top_srcdir}/src/x11"
@@ -3723,10 +3723,17 @@ dnl ------------------------------------------------------------------------
 dnl wxSocket
 dnl ------------------------------------------------------------------------
 
-dnl under MSW we always have sockets
-if test "$TOOLKIT" != "MSW"; then
+dnl VZ: the GUI hooks wxSocket needs are not implemented yet in wxX11
+if test "$wxUSE_SOCKETS" = "yes"; then
+    if test "$TOOLKIT" = "X11"; then
+        AC_MSG_WARN([wxSocket not yet supported under X11... disabled])
+        wxUSE_SOCKETS="no"
+    fi
+fi
 
-    if test "$wxUSE_SOCKETS" = "yes"; then
+if test "$wxUSE_SOCKETS" = "yes"; then
+    dnl under MSW we always have sockets
+    if test "$TOOLKIT" != "MSW"; then
         dnl under Solaris, socket functions live in -lsocket
         AC_CHECK_FUNC(socket,,
             AC_CHECK_LIB(socket, socket,
@@ -3738,12 +3745,13 @@ if test "$TOOLKIT" != "MSW"; then
             )
         )
     fi
+fi
 
+if test "$wxUSE_SOCKETS" = "yes" ; then
     dnl this test may be appropriate if building under cygwin
     dnl right now I'm assuming it also uses the winsock stuff
     dnl like mingw does..  -- RL
-
-    if test "$wxUSE_SOCKETS" = "yes" ; then
+    if test "$TOOLKIT" != "MSW"; then
         dnl determine the type of third argument for getsockname
         AC_CACHE_CHECK([what is the type of the third argument of getsockname],
                        wx_cv_type_getsockname3,
@@ -3797,7 +3805,6 @@ if test "$TOOLKIT" != "MSW"; then
         fi
     fi
 fi
-dnl if !MSW
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
     AC_DEFINE(wxUSE_SOCKETS)
