@@ -181,11 +181,11 @@ LifeAboutDialog::LifeAboutDialog(wxWindow *parent)
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( sbmp, 0, wxCENTRE | wxALL, 10 );
     sizer->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
-    sizer->Add( CreateTextSizer(_("Life! version 2.2 for wxWindows\n\n"
-                                  "(c) 2000 Guillermo Rodriguez Garcia\n\n"
-                                  "<guille@iies.es>\n\n"
-                                  "Portions of the code are based in XLife;\n"
-                                  "XLife is (c) 1989 by Jon Bennett et al.")),
+    sizer->Add( CreateTextSizer(_("Life! version 2.2 for wxWindows\n\n\
+(c) 2000 Guillermo Rodriguez Garcia\n\n\
+<guille@iies.es>\n\n\
+Portions of the code are based in XLife;\n\
+XLife is (c) 1989 by Jon Bennett et al.")),
                                   0, wxCENTRE | wxALL, 20 );
     sizer->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
     sizer->Add( CreateButtonSizer(wxOK), 0, wxCENTRE | wxALL, 10 );
