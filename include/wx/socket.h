@@ -62,7 +62,7 @@ typedef enum {
   wxSOCKET_NOHOST = GSOCK_NOHOST,
   wxSOCKET_INVPORT = GSOCK_INVPORT,
   wxSOCKET_WOULDBLOCK = GSOCK_WOULDBLOCK,
-  wxSOCKET_TIMEOUT = GSOCK_TIMEOUT,
+  wxSOCKET_TIMEDOUT = GSOCK_TIMEDOUT,
   wxSOCKET_MEMERR = GSOCK_MEMERR
 } wxSocketError;
 
@@ -89,12 +89,12 @@ protected:
   wxSockFlags m_flags;			// wxSocket flags
   wxSockType m_type;			// wxSocket type
   wxSocketEventFlags m_neededreq;	// Specify which requet signals we need
-  size_t m_lcount;			// Last IO request size
+  wxUint32 m_lcount;			// Last IO request size
   unsigned long m_timeout;		// IO timeout value
 
   char *m_unread;			// Pushback buffer
-  size_t m_unrd_size;			// Pushback buffer size
-  size_t m_unrd_cur;			// Pushback pointer
+  wxUint32 m_unrd_size;			// Pushback buffer size
+  wxUint32 m_unrd_cur;			// Pushback pointer
 
   wxSockCbk m_cbk;			// C callback
   char *m_cdata;			// C callback data
@@ -108,7 +108,7 @@ protected:
     DEFER_READ, DEFER_WRITE, NO_DEFER
   } m_defering;                         // Defering state
   char *m_defer_buffer;                 // Defering target buffer
-  size_t m_defer_nbytes;                // Defering buffer size
+  wxUint32 m_defer_nbytes;                // Defering buffer size
   wxTimer *m_defer_timer;		// Timer for defering mode
 
   wxList m_states;			// Stack of states
@@ -119,17 +119,17 @@ public:
   virtual bool Close();
 
   // Base IO
-  wxSocketBase& Peek(char* buffer, size_t nbytes);
-  wxSocketBase& Read(char* buffer, size_t nbytes);
-  wxSocketBase& Write(const char *buffer, size_t nbytes);
-  wxSocketBase& Unread(const char *buffer, size_t nbytes);
-  wxSocketBase& ReadMsg(char *buffer, size_t nbytes);
-  wxSocketBase& WriteMsg(const char *buffer, size_t nbytes);
+  wxSocketBase& Peek(char* buffer, wxUint32 nbytes);
+  wxSocketBase& Read(char* buffer, wxUint32 nbytes);
+  wxSocketBase& Write(const char *buffer, wxUint32 nbytes);
+  wxSocketBase& Unread(const char *buffer, wxUint32 nbytes);
+  wxSocketBase& ReadMsg(char *buffer, wxUint32 nbytes);
+  wxSocketBase& WriteMsg(const char *buffer, wxUint32 nbytes);
   void Discard();
 
   // Try not to use this two methods (they sould be protected)
-  void CreatePushbackAfter(const char *buffer, size_t size);
-  void CreatePushbackBefore(const char *buffer, size_t size);
+  void CreatePushbackAfter(const char *buffer, wxUint32 size);
+  void CreatePushbackBefore(const char *buffer, wxUint32 size);
 
   // Status
   inline bool Ok() const { return (m_socket != NULL); };
@@ -139,21 +139,21 @@ public:
   inline bool IsDisconnected() const { return !IsConnected(); };
   inline bool IsNoWait() const { return ((m_flags & NOWAIT) != 0); };
   bool IsData() const;
-  inline size_t LastCount() const { return m_lcount; }
+  inline wxUint32 LastCount() const { return m_lcount; }
   inline wxSocketError LastError() const { return (wxSocketError)GSocket_GetError(m_socket); }
   inline wxSockType GetType() const { return m_type; }
 
   void SetFlags(wxSockFlags _flags);
   wxSockFlags GetFlags() const;
-  inline void SetTimeout(unsigned long sec) { m_timeout = sec; }
+  void SetTimeout(unsigned long sec);
 
   // seconds = -1 means infinite wait
   // seconds = 0 means no wait
   // seconds > 0 means specified wait
-  bool Wait(long seconds = -1, long microseconds = 0);
-  bool WaitForRead(long seconds = -1, long microseconds = 0);
-  bool WaitForWrite(long seconds = -1, long microseconds = 0);
-  bool WaitForLost(long seconds = -1, long microseconds = 0);
+  bool Wait(long seconds = -1, long milliseconds = 0);
+  bool WaitForRead(long seconds = -1, long milliseconds = 0);
+  bool WaitForWrite(long seconds = -1, long milliseconds = 0);
+  bool WaitForLost(long seconds = -1, long milliseconds = 0);
 
   // Save the current state of Socket
   void SaveState();
@@ -200,14 +200,14 @@ public:
 protected:
 #endif
 
-  bool _Wait(long seconds, long microseconds, int type);
+  bool _Wait(long seconds, long milliseconds, int type);
 
-  int DeferRead(char *buffer, size_t nbytes);
-  int DeferWrite(const char *buffer, size_t nbytes);
+  int DeferRead(char *buffer, wxUint32 nbytes);
+  int DeferWrite(const char *buffer, wxUint32 nbytes);
   void DoDefer(wxSocketNotify evt);
 
   // Pushback library
-  size_t GetPushback(char *buffer, size_t size, bool peek);
+  wxUint32 GetPushback(char *buffer, wxUint32 size, bool peek);
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -237,7 +237,7 @@ public:
 
   virtual bool Connect(wxSockAddress& addr_man, bool wait = TRUE);
 
-  bool WaitOnConnect(long seconds = -1, long microseconds = 0);
+  bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
 
   virtual void OnRequest(wxSocketNotify flags);
 };

@@ -114,6 +114,9 @@
      #if wxUSE_LIBJPEG
      wxImage::AddHandler(new wxJPEGHandler);
      #endif
+     #if wxUSE_LIBGIF
+     wxImage::AddHandler(new wxGIFHandler);
+     #endif
     // Create the main application window
       MyFrame *frame = new MyFrame("wxHtmlWindow testing application",
          wxPoint(50, 50), wxSize(640, 480));

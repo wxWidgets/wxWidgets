@@ -82,6 +82,7 @@ public:
 #endif
 
   static wxString ConvertToValidURI(const wxString& uri);
+  static wxString ConvertFromURI(const wxString& uri);
 };
 
 #endif

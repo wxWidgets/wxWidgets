@@ -8,9 +8,31 @@
 
 <wx/socket.h>
 
-\wxheading{See also}
+\wxheading{wxSocket errors}{wxsocketerrs}
 
-GSocket for wxWindows
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSOCKET\_NOERROR}}{No error happened.}
+\twocolitem{{\bf wxSOCKET\_INVOP}}{Invalid operation.}
+\twocolitem{{\bf wxSOCKET\_IOERR}}{Input/Output error.}
+\twocolitem{{\bf wxSOCKET\_INVADDR}}{Invalid address passed to wxSocket.}
+\twocolitem{{\bf wxSOCKET\_INVSOCK}}{Invalid socket (uninitialized).}
+\twocolitem{{\bf wxSOCKET\_NOHOST}}{No corresponding host.}
+\twocolitem{{\bf wxSOCKET\_INVPORT}}{Invalid port.}
+\twocolitem{{\bf wxSOCKET\_TRYAGAIN}}{The IO call has a timeout or is in non-blocking mode.}
+\twocolitem{{\bf wxSOCKET\_MEMERR}}{Memory exhausted.}
+\end{twocollist}%
+
+\wxheading{wxSocket events}{wxsocketevents}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSOCKET\_INPUT}}{Some data are ready to be got.}
+\twocolitem{{\bf wxSOCKET\_OUTPUT}}{The socket is ready to be written to.}
+\twocolitem{{\bf wxSOCKET\_CONNECTION}}{Someone want to connect our server.}
+\twocolitem{{\bf wxSOCKET\_LOST}}{The connection has been broken.}
+\twocolitem{{\bf wxSOCKET\_MAX\_EVENT}}{This should never happen but the compiler may complain about it.}
+\end{twocollist}%
 
 % ---------------------------------------------------------------------------
 % Event handling
@@ -78,10 +100,35 @@ Destroys the wxSocketBase object.
 %
 \membersection{wxSocketBase::SetNotify}\label{wxsocketbasesetnotify}
 
-\func{void}{SetNotify}{\param{GSocketEventFlags}{ event_flags}}
+\func{void}{SetNotify}{\param{wxSocketEventFlags}{ event_flags}}
 
 SetNotify setups which socket events are to be sent to the event handler.
-For more information on socket events see GSocket events.
+You specify in parameters a mask of wxSocket events. The flags is:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSOCKET\_INPUT\_FLAG}}{to receive wxSOCKET_INPUT}
+\twocolitem{{\bf wxSOCKET\_OUTPUT\_FLAG}}{to receive wxSOCKET_OUTPUT}
+\twocolitem{{\bf wxSOCKET\_CONNECTION\_FLAG}}{to receive wxSOCKET_CONNECTION}
+\twocolitem{{\bf wxSOCKET\_LOST\_FLAG}}{to receive wxSOCKET_LOST}
+\end{twocollist}%
+
+For example:
+\begin{verbatim}
+  sock.SetNotify(wxSOCKET\_INPUT\_FLAG | wxSOCKET\_LOST\_FLAG);
+\end{verbatim}
+In this example, the user will be notified about incoming socket datas and
+a broken connection.
+
+For more information on socket events see \helpref{wxSocket events}{wxsocketevents}.
+
+%
+% SetTimeout
+%
+\membersection{wxSocketBase::SetTimeout}{wxsocketbasesettimeout}
+\func{void}{SetTimeout}{\param{int }{seconds}}
+
+This function sets the socket timeout in seconds.
 
 %
 % Notify
@@ -136,15 +183,15 @@ Returns TRUE if the socket mustn't wait.
 
 \membersection{wxSocketBase::LastCount}\label{wxsocketbaselastcount}
 
-\constfunc{size\_t}{LastCount}{\void}
+\constfunc{wxUint32}{LastCount}{\void}
 
 Returns the number of bytes read or written by the last IO call.
 
 \membersection{wxSocketBase::LastError}\label{wxsocketbaselasterror}
 
-\constfunc{GSocketError}{LastError}{\void}
+\constfunc{wxSocketError}{LastError}{\void}
 
-Returns an error in the GSocket format. See GSocket errors.
+Returns the last occured wxSocket error. See \helpref{wxSocket errors}{wxsocketerrs}.
 
 % ---------------------------------------------------------------------------
 % IO calls
@@ -154,7 +201,7 @@ Returns an error in the GSocket format. See GSocket errors.
 %
 \membersection{wxSocketBase::Peek}\label{wxsocketbasepeek}
 
-\func{wxSocketBase\&}{Peek}{\param{char *}{ buffer}, \param{size\_t}{ nbytes}}
+\func{wxSocketBase\&}{Peek}{\param{char *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function peeks a buffer of {\it nbytes} bytes from the socket. Peeking a buffer
 doesn't delete it from the system socket in-queue.
@@ -180,7 +227,7 @@ Returns a reference to the current object.
 %
 \membersection{wxSocketBase::Read}\label{wxsocketbaseread}
 
-\func{wxSocketBase\&}{Read}{\param{char *}{ buffer}, \param{size\_t}{ nbytes}}
+\func{wxSocketBase\&}{Read}{\param{char *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function reads a buffer of {\it nbytes} bytes from the socket.
 
@@ -219,7 +266,7 @@ This remark is also valid for all IO call.
 %
 \membersection{wxSocketBase::Write}\label{wxsocketbasewrite}
 
-\func{wxSocketBase\&}{Write}{\param{const char *}{ buffer}, \param{size\_t}{ nbytes}}
+\func{wxSocketBase\&}{Write}{\param{const char *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function writes a buffer of {\it nbytes} bytes from the socket.
 
@@ -256,7 +303,7 @@ Returns a reference to the current object.
 %
 \membersection{wxSocketBase::WriteMsg}\label{wxsocketbasewritemsg}
 
-\func{wxSocketBase\&}{WriteMsg}{\param{const char *}{ buffer}, \param{size\_t}{ nbytes}}
+\func{wxSocketBase\&}{WriteMsg}{\param{const char *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function writes a buffer of {\it nbytes} bytes from the socket. But it
 writes a short header before so that ReadMsg can alloc the right size for
@@ -284,7 +331,7 @@ Returns a reference to the current object.
 %
 \membersection{wxSocketBase::ReadMsg}\label{wxsocketbasereadmsg}
 
-\func{wxSocketBase\&}{ReadMsg}{\param{char *}{ buffer}, \param{size\_t}{ nbytes}}
+\func{wxSocketBase\&}{ReadMsg}{\param{char *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function reads a buffer sent by WriteMsg on a socket. If the buffer passed
 to the function isn't big enough, the function filled it and then discard the
@@ -312,7 +359,7 @@ Returns a reference to the current object.
 %
 \membersection{wxSocketBase::Unread}\label{wxsocketbaseunread}
 
-\func{wxSocketBase\&}{Unread}{\param{const char *}{ buffer}, \param{size\_t}{ nbytes}}
+\func{wxSocketBase\&}{Unread}{\param{const char *}{ buffer}, \param{wxUint32}{ nbytes}}
 
 This function unreads a buffer. It means that the buffer is put in the top
 of the incoming queue. But, it is put also at the end of all unread buffers.
@@ -349,7 +396,7 @@ doesn't wait.
 % ---------------------------------------------------------------------------
 \membersection{wxSocketBase::Wait}\label{wxsocketbasewait}
 
-\func{bool}{Wait}{\param{long}{ seconds = -1}, \param{long}{ microsecond = 0}}
+\func{bool}{Wait}{\param{long}{ seconds = -1}, \param{long}{ millisecond = 0}}
 
 This function waits for an event: it could be an incoming byte, the possibility
 for the client to write, a lost connection, an incoming connection, an
@@ -359,7 +406,7 @@ established connection.
 
 \docparam{seconds}{Number of seconds to wait. By default, it waits infinitely.}
 
-\docparam{microsecond}{Number of microseconds to wait.}
+\docparam{millisecond}{Number of milliseconds to wait.}
 
 \wxheading{Return value}
 
@@ -376,7 +423,7 @@ Returns TRUE if an event occured, FALSE if the timeout was reached.
 %
 \membersection{wxSocketBase::WaitForRead}\label{wxsocketbasewaitforread}
 
-\func{bool}{WaitForRead}{\param{long}{ seconds = -1}, \param{long}{ microsecond = 0}}
+\func{bool}{WaitForRead}{\param{long}{ seconds = -1}, \param{long}{ millisecond = 0}}
 
 This function waits for a read event.
 
@@ -384,7 +431,7 @@ This function waits for a read event.
 
 \docparam{seconds}{Number of seconds to wait. By default, it waits infinitely.}
 
-\docparam{microsecond}{Number of microseconds to wait.}
+\docparam{millisecond}{Number of milliseconds to wait.}
 
 \wxheading{Return value}
 
@@ -401,7 +448,7 @@ Returns TRUE if a byte arrived, FALSE if the timeout was reached.
 %
 \membersection{wxSocketBase::WaitForWrite}\label{wxsocketbasewaitforwrite}
 
-\func{bool}{WaitForWrite}{\param{long}{ seconds = -1}, \param{long}{ microsecond = 0}}
+\func{bool}{WaitForWrite}{\param{long}{ seconds = -1}, \param{long}{ millisecond = 0}}
 
 This function waits for a write event.
 
@@ -409,7 +456,7 @@ This function waits for a write event.
 
 \docparam{seconds}{Number of seconds to wait. By default, it waits infinitely.}
 
-\docparam{microsecond}{Number of microseconds to wait.}
+\docparam{millisecond}{Number of milliseconds to wait.}
 
 \wxheading{Return value}
 
@@ -426,7 +473,7 @@ Returns TRUE if a write event occured, FALSE if the timeout was reached.
 %
 \membersection{wxSocketBase::WaitForLost}\label{wxsocketbasewaitforlost}
 
-\func{bool}{Wait}{\param{long}{ seconds = -1}, \param{long}{ microsecond = 0}}
+\func{bool}{Wait}{\param{long}{ seconds = -1}, \param{long}{ millisecond = 0}}
 
 This function waits for a "lost" event. For instance, the peer may have closed
 the connection, or the connection may have been broken.
@@ -435,7 +482,7 @@ the connection, or the connection may have been broken.
 
 \docparam{seconds}{Number of seconds to wait. By default, it waits infinitely.}
 
-\docparam{microsecond}{Number of microseconds to wait.}
+\docparam{millisecond}{Number of milliseconds to wait.}
 
 \wxheading{Return value}
 
@@ -475,7 +522,49 @@ actually it saves all flags and the state of the asynchronous callbacks.
 
 \wxheading{See also}
 
+%
+% SaveState
+%
+
 \helpref{wxSocketBase::RestoreState}{wxsocketbaserestorestate}
+\membersection{wxSocketBase::RestoreState}\label{wxsocketbaserestorestate}
+
+\func{void}{RestoreState}{\void}
+
+This function restores the previous state of the socket (include flags,
+notify flags, notify state, C callback function and data).
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::SaveState}{wxsocketbasesavestate}
+
+%
+% GetLocal
+%
+\membersection{wxSocketBase::GetLocal}{wxsocketbasegetlocal}
+\constfunc{bool}{GetLocal}{\param{wxSockAddress\& }{addr_man}}
+
+This function returns the local address field of the socket. The local
+address field contains the complete local address of the socket (local
+address, local port, ...).
+
+\wxheading{Return value}
+
+It returns TRUE if no errors happened, FALSE otherwise.
+
+%
+% GetPeer
+%
+\membersection{wxSocketBase::GetPeer}{wxsocketbasegetlocal}
+\constfunc{bool}{GetPeer}{\param{wxSockAddress\& }{addr_man}}
+
+This function returns the peer address field of the socket. The peer 
+address field contains the complete peer host address of the socket
+(address, port, ...).
+
+\wxheading{Return value}
+
+It returns TRUE if no errors happened, FALSE otherwise.
 
 % ---------------------------------------------------------------------------
 % Socket callbacks
@@ -494,7 +583,43 @@ Sets an event handler to be called when a socket event occured.
 
 \wxheading{See also}
 
+\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}
+\helpref{wxSocketBase::Notify}{wxsocketbasenotify}
 \helpref{wxSocketEvent}{wxsocketevent}
+\helpref{wxEvtHandler}{wxevthandler}
+
+\membersection{wxSocketBase::Callback}\label{wxsocketbasecallback}
+
+\func{wxSocketBase::wxSockCbk}{Callback}{\param{wxSocketBase::wxSockCbk}{ callback}}
+
+wxSocket event handler can call C callback. This function allows you to set it.
+The format of the callback is as followed:
+\begin{verbatim}
+void SocketCallback(wxSocketBase& sock,wxSocketNotify evt,char *cdata);
+\end{verbatim}
+
+The first parameter reminds you of the caller socket. The second parameter
+informs you about the current event (See \helpref{wxSocket events}{wxsocketevents}).
+The third parameters is the client data you specified using \helpref{CallbackData}{wxsocketcallbackdata}.
+
+\wxheading{Return value}
+
+It returns the previous callback.
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}
+\helpref{wxSocketBase::Notify}{wxsocketbasenotify}
+
+\membersection{wxSocketBase::CallbackData}\label{wxsocketcallbackdata}
+
+\func{char *}{CallbackData}{\param{char *}{cdata}}
+
+This function sets the the client data which will be passed to a \helpref{C callback}{wxsocketcallback}.
+
+\wxheading{Return value}
+
+This function returns the old value of the client data pointer.
 
 % ---------------------------------------------------------------------------
 % CLASS wxSocketClient
@@ -563,7 +688,7 @@ Returns TRUE if the connection is established and no error occurs.
 %
 \membersection{wxSocketClient::WaitOnConnect}\label{wxsocketclientwaitonconnect}
 
-\func{bool}{WaitOnConnect}{\param{long}{ seconds = -1}, \param{long}{ microseconds = 0}}
+\func{bool}{WaitOnConnect}{\param{long}{ seconds = -1}, \param{long}{ milliseconds = 0}}
 
 Wait for a "connect" event.
 
@@ -612,7 +737,7 @@ Constructor.
 
 \membersection{wxSocketEvent::SocketEvent}\label{wxsocketeventsocketevent}
 
-\constfunc{GSocketEvent}{SocketEvent}{\void}
+\constfunc{wxSocketNotify}{SocketEvent}{\void}
 
 Returns the socket event type.
 

@@ -159,6 +159,8 @@ public:
 // wxGIFHandler
 //-----------------------------------------------------------------------------
 
+#if wxUSE_LIBGIF
+
 class WXDLLEXPORT wxGIFHandler : public wxImageHandler
 {
   DECLARE_DYNAMIC_CLASS(wxGIFHandler)
@@ -179,6 +181,8 @@ public:
   virtual bool CanRead( wxInputStream& stream );
 #endif
 };
+
+#endif
 
 //-----------------------------------------------------------------------------
 // wxPNMHandler

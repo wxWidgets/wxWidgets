@@ -139,7 +139,7 @@ class _wxSocketInternalTimer: public wxTimer {
      }
 };
 
-int wxSocketBase::DeferRead(char *buffer, size_t nbytes)
+int wxSocketBase::DeferRead(char *buffer, wxUint32 nbytes)
 {
   wxSocketEventFlags old_event_flags;
   bool old_notify_state;
@@ -187,7 +187,7 @@ int wxSocketBase::DeferRead(char *buffer, size_t nbytes)
   return nbytes-m_defer_nbytes;
 }
 
-wxSocketBase& wxSocketBase::Read(char* buffer, size_t nbytes)
+wxSocketBase& wxSocketBase::Read(char* buffer, wxUint32 nbytes)
 {
   int ret = 1;
 
@@ -232,7 +232,7 @@ wxSocketBase& wxSocketBase::Read(char* buffer, size_t nbytes)
   return *this;
 }
 
-wxSocketBase& wxSocketBase::ReadMsg(char* buffer, size_t nbytes)
+wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
 {
   unsigned long len, len2, sig;
   struct {
@@ -241,23 +241,23 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, size_t nbytes)
   } msg;
 
   // sig should be an explicit 32-bit unsigned integer; I've seen
-  // compilers in which size_t was actually a 16-bit unsigned integer
+  // compilers in which wxUint32 was actually a 16-bit unsigned integer
 
   Read((char *)&msg, sizeof(msg));
   if (m_lcount != sizeof(msg))
     return *this;
 
   sig = msg.sig[0] & 0xff;
-  sig |= (size_t)(msg.sig[1] & 0xff) << 8;
-  sig |= (size_t)(msg.sig[2] & 0xff) << 16;
-  sig |= (size_t)(msg.sig[3] & 0xff) << 24;
+  sig |= (wxUint32)(msg.sig[1] & 0xff) << 8;
+  sig |= (wxUint32)(msg.sig[2] & 0xff) << 16;
+  sig |= (wxUint32)(msg.sig[3] & 0xff) << 24;
 
   if (sig != 0xfeeddead)
     return *this;
   len = msg.len[0] & 0xff;
-  len |= (size_t)(msg.len[1] & 0xff) << 8;
-  len |= (size_t)(msg.len[2] & 0xff) << 16;
-  len |= (size_t)(msg.len[3] & 0xff) << 24;
+  len |= (wxUint32)(msg.len[1] & 0xff) << 8;
+  len |= (wxUint32)(msg.len[2] & 0xff) << 16;
+  len |= (wxUint32)(msg.len[3] & 0xff) << 24;
 
   // len2 is incorrectly computed in the original; this sequence is
   // the fix
@@ -279,9 +279,9 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, size_t nbytes)
     return *this;
 
   sig = msg.sig[0] & 0xff;
-  sig |= (size_t)(msg.sig[1] & 0xff) << 8;
-  sig |= (size_t)(msg.sig[2] & 0xff) << 16;
-  sig |= (size_t)(msg.sig[3] & 0xff) << 24;
+  sig |= (wxUint32)(msg.sig[1] & 0xff) << 8;
+  sig |= (wxUint32)(msg.sig[2] & 0xff) << 16;
+  sig |= (wxUint32)(msg.sig[3] & 0xff) << 24;
 
 // ERROR
   if (sig != 0xdeadfeed)
@@ -290,7 +290,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, size_t nbytes)
   return *this;
 }
 
-wxSocketBase& wxSocketBase::Peek(char* buffer, size_t nbytes)
+wxSocketBase& wxSocketBase::Peek(char* buffer, wxUint32 nbytes)
 {
   Read(buffer, nbytes);
   CreatePushbackAfter(buffer, nbytes);
@@ -298,7 +298,7 @@ wxSocketBase& wxSocketBase::Peek(char* buffer, size_t nbytes)
   return *this;
 }
 
-int wxSocketBase::DeferWrite(const char *buffer, size_t nbytes)
+int wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
 {
   wxSocketEventFlags old_event_flags;
   bool old_notify_state;
@@ -343,7 +343,7 @@ int wxSocketBase::DeferWrite(const char *buffer, size_t nbytes)
   return nbytes-m_defer_nbytes;
 }
 
-wxSocketBase& wxSocketBase::Write(const char *buffer, size_t nbytes)
+wxSocketBase& wxSocketBase::Write(const char *buffer, wxUint32 nbytes)
 {
   int ret;
 
@@ -358,7 +358,7 @@ wxSocketBase& wxSocketBase::Write(const char *buffer, size_t nbytes)
   return *this;
 }
 
-wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, size_t nbytes)
+wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
 {
   struct {
     char sig[4];
@@ -399,7 +399,7 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, size_t nbytes)
 #endif // __VISUALC__
 }
 
-wxSocketBase& wxSocketBase::Unread(const char *buffer, size_t nbytes)
+wxSocketBase& wxSocketBase::Unread(const char *buffer, wxUint32 nbytes)
 {
   m_lcount = 0;
   if (nbytes != 0) {
@@ -461,7 +461,7 @@ void wxSocketBase::Discard()
 {
 #define MAX_BUFSIZE (10*1024)
   char *my_data = new char[MAX_BUFSIZE];
-  size_t recv_size = MAX_BUFSIZE;
+  wxUint32 recv_size = MAX_BUFSIZE;
 
   SaveState();
   SetFlags(NOWAIT | SPEED);
@@ -742,7 +742,7 @@ void wxSocketBase::SetEventHandler(wxEvtHandler& h_evt, int id)
 // --------- wxSocketBase pushback library ----------------------
 // --------------------------------------------------------------
 
-void wxSocketBase::CreatePushbackAfter(const char *buffer, size_t size)
+void wxSocketBase::CreatePushbackAfter(const char *buffer, wxUint32 size)
 {
   char *curr_pos;
 
@@ -757,7 +757,7 @@ void wxSocketBase::CreatePushbackAfter(const char *buffer, size_t size)
   m_unrd_size += size;
 }
 
-void wxSocketBase::CreatePushbackBefore(const char *buffer, size_t size)
+void wxSocketBase::CreatePushbackBefore(const char *buffer, wxUint32 size)
 {
   if (m_unread == NULL)
     m_unread = (char *)malloc(size);
@@ -776,7 +776,7 @@ void wxSocketBase::CreatePushbackBefore(const char *buffer, size_t size)
   memcpy(m_unread, buffer, size);
 }
 
-size_t wxSocketBase::GetPushback(char *buffer, size_t size, bool peek)
+wxUint32 wxSocketBase::GetPushback(char *buffer, wxUint32 size, bool peek)
 {
   if (!m_unrd_size)
     return 0;

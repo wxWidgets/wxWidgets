@@ -60,9 +60,6 @@ public:
   wxString Hostname();
   unsigned short Service();
 
-  void Build(struct sockaddr*& addr, size_t& len);
-  void Disassemble(struct sockaddr *addr, size_t len);
-
   inline int Type() { return wxSockAddress::IPV4; }
 };
 

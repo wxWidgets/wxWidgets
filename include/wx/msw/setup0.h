@@ -190,6 +190,8 @@
                                   // Use PNG bitmap code
 #define wxUSE_LIBJPEG       0
                                   // Use JPEG bitmap code
+#define wxUSE_LIBGIF        0
+				  // Use GIF bitmap code
 #define wxUSE_SERIAL        0
                                   // Use serialization (requires utils/serialize)
 #define wxUSE_DYNLIB_CLASS  0

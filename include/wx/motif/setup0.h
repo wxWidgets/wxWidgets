@@ -62,6 +62,10 @@
  */
 #define wxUSE_LIBJPEG 0
 /*
+ * Use gif
+ */
+#define wxUSE_LIBGIF 0
+/*
  * Use iODBC
  */
 #define wxUSE_ODBC 0

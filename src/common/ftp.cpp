@@ -340,7 +340,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
     return NULL;
   }
 
-  tmp_str = _T("RETR ") + path;
+  tmp_str = _T("RETR ") + wxURL::ConvertFromURI(path);
   if (!SendCommand(tmp_str, '1'))
     return NULL;
 

@@ -385,3 +385,33 @@ wxString wxURL::ConvertToValidURI(const wxString& uri)
   return out_str;
 }
 
+wxString wxURL::ConvertFromURI(const wxString& uri)
+{
+  int code;
+  int i;
+  wxString new_uri;
+
+  new_uri.Empty();
+  
+  i = 0;
+  while (i<uri.Len()) {
+    if (uri[i] == _T('%')) {
+      i++;
+      if (uri[i] >= _T('A') && uri[i] <= _T('F'))
+        code = (uri[i] - _T('A') + 10) * 16;
+      else
+        code = (uri[i] - _T('0')) * 16;
+      i++;
+      if (uri[i] >= _T('A') && uri[i] <= _T('F'))
+        code += (uri[i] - _T('A')) + 10;
+      else
+        code += (uri[i] - _T('0'));
+      i++;
+      new_uri += (wxChar)code;
+      continue;
+    }
+    new_uri += uri[i];
+    i++;
+  }
+  return new_uri;
+}

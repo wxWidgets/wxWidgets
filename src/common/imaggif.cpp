@@ -23,7 +23,7 @@
 #  include "wx/defs.h"
 #endif
 
-#if 1   // change this to #if wxUSE_GIF
+#if wxUSE_LIBGIF
 
 #include "wx/image.h"
 #include "wx/gifdecod.h"

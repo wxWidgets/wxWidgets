@@ -26,6 +26,7 @@ struct _GSocket {
   GSocketError m_error;
 
   bool m_non_blocking, m_server, m_stream, m_oriented;
+  bool m_establishing;
   unsigned long m_timeout;
 
   /* Callbacks */

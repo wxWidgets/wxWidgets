@@ -289,7 +289,7 @@ size_t wxHTTPStream::OnSysRead(void *buffer, size_t bufsize)
 
 bool wxHTTP::Abort(void)
 {
-  bool ret, connected;
+  bool ret;
 
   ret = wxSocketClient::Close();
 
