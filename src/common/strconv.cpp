@@ -188,12 +188,12 @@ static size_t decode_utf16(const wchar_t* input, wxUint32& output)
 
 size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
-    return wxMB2WC(buf, psz, n);
+    return wxMB2WC(buf, psz, n)+1;
 }
 
 size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
-    return wxWC2MB(buf, psz, n);
+    return wxWC2MB(buf, psz, n)+1;
 }
 
 const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
