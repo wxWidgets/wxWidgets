@@ -741,13 +741,10 @@ int wxEntry(WXHINSTANCE hInstance,
     __except ( gs_handleExceptions ? EXCEPTION_EXECUTE_HANDLER
                                    : EXCEPTION_CONTINUE_SEARCH ) {
         if ( wxTheApp )
+        {
+           // give the user a chance to do something special about this
            wxTheApp->OnFatalException();
-
-        // using wxLog would be unsafe here
-        ::MessageBox(NULL,
-                     _("Unrecoverable program error detected: the application will terminate."),
-                     _("Fatal Error"),
-                     MB_APPLMODAL | MB_ICONSTOP | MB_OK);
+        }
 
         ::ExitProcess(3); // the same exit code as abort()
 

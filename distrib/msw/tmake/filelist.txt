@@ -253,7 +253,7 @@ gaugemsw.cpp	M	16
 gdiimage.cpp	M
 gdiobj.cpp	M
 glcanvas.cpp	M
-helpchm.cpp	M       32
+helpchm.cpp	M	32
 helpwin.cpp	M
 icon.cpp	M
 imaglist.cpp	M	32

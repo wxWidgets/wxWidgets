@@ -308,12 +308,12 @@ private:
   $VARNAME or ${VARNAME} where VARNAME contains alphanumeric characters and
   '_' only. '$' must be escaped ('\$') in order to be taken literally.
  */
-extern wxString wxExpandEnvVars(const wxString &sz);
+extern WXDLLEXPORT wxString wxExpandEnvVars(const wxString &sz);
 
 /*
   Split path into parts removing '..' in progress
  */
-extern void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
+extern WXDLLEXPORT void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
 
 #endif
   // _WX_CONFIG_H_
