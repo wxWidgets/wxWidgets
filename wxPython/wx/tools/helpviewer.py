@@ -41,28 +41,23 @@ def main(args=sys.argv):
         print __doc__
         return
 
-    from wxPython.wx import wxPySimpleApp, wxConfigBase_Get, \
-         wxLog_SetActiveTarget, wxLogStderr, \
-         wxLog_SetLogLevel, wxLOG_Error, \
-         wxFileSystem_AddHandler, wxZipFSHandler
-    import wxPython.html
-    from wxPython.htmlhelp import wxHtmlHelpController
+    import wx
+    import wx.html
 
-
-    app = wxPySimpleApp()
-    #wxLog_SetActiveTarget(wxLogStderr())
-    wxLog_SetLogLevel(wxLOG_Error)
+    app = wx.PySimpleApp()
+    #wx.Log.SetActiveTarget(wx.LogStderr())
+    wx.Log.SetLogLevel(wx.LOG_Error)
 
     # Set up the default config so the htmlhelp frame can save its preferences
     app.SetVendorName('wxWindows')
     app.SetAppName('helpviewer')
-    cfg = wxConfigBase_Get()
+    cfg = wx.ConfigBase.Get()
 
     # Add the Zip filesystem
-    wxFileSystem_AddHandler(wxZipFSHandler())
+    wx.FileSystem.AddHandler(wx.ZipFSHandler())
 
     # Create the viewer
-    helpctrl = wxHtmlHelpController()
+    helpctrl = wx.html.HtmlHelpController()
     if cachedir:
         helpctrl.SetTempDir(cachedir)
 
@@ -78,3 +73,5 @@ def main(args=sys.argv):
 
 if __name__ == '__main__':
     main()
+
+
