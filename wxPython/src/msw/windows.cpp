@@ -5270,6 +5270,62 @@ static PyObject *_wrap_wxWindow_GetCaret(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+#define wxWindow_Freeze(_swigobj)  (_swigobj->Freeze())
+static PyObject *_wrap_wxWindow_Freeze(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_Freeze",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_Freeze. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxWindow_Freeze(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxWindow_Thaw(_swigobj)  (_swigobj->Thaw())
+static PyObject *_wrap_wxWindow_Thaw(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_Thaw",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_Thaw. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxWindow_Thaw(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxPanelTowxWindow(void *ptr) {
     wxPanel *src;
     wxWindow *dest;
@@ -8590,6 +8646,58 @@ static PyObject *_wrap_wxMenuBar_GetLabelTop(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxMenuBar_FindMenu(_swigobj,_swigarg0)  (_swigobj->FindMenu(_swigarg0))
+static PyObject *_wrap_wxMenuBar_FindMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxMenuBar * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","title", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMenuBar_FindMenu",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenuBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuBar_FindMenu. Expected _wxMenuBar_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxMenuBar_FindMenu(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 #define wxMenuBar_FindMenuItem(_swigobj,_swigarg0,_swigarg1)  (_swigobj->FindMenuItem(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxMenuBar_FindMenuItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10332,6 +10440,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenuBar_Enable", (PyCFunction) _wrap_wxMenuBar_Enable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_FindItemById", (PyCFunction) _wrap_wxMenuBar_FindItemById, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_FindMenuItem", (PyCFunction) _wrap_wxMenuBar_FindMenuItem, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMenuBar_FindMenu", (PyCFunction) _wrap_wxMenuBar_FindMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_GetLabelTop", (PyCFunction) _wrap_wxMenuBar_GetLabelTop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_SetLabelTop", (PyCFunction) _wrap_wxMenuBar_SetLabelTop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuBar_EnableTop", (PyCFunction) _wrap_wxMenuBar_EnableTop, METH_VARARGS | METH_KEYWORDS },
@@ -10417,6 +10526,8 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxPanel_GetDefaultItem", (PyCFunction) _wrap_wxPanel_GetDefaultItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPanel_InitDialog", (PyCFunction) _wrap_wxPanel_InitDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPanel", (PyCFunction) _wrap_new_wxPanel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_Thaw", (PyCFunction) _wrap_wxWindow_Thaw, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_Freeze", (PyCFunction) _wrap_wxWindow_Freeze, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetCaret", (PyCFunction) _wrap_wxWindow_GetCaret, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetCaret", (PyCFunction) _wrap_wxWindow_SetCaret, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetBestSize", (PyCFunction) _wrap_wxWindow_GetBestSize, METH_VARARGS | METH_KEYWORDS },

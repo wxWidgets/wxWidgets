@@ -411,7 +411,6 @@ void wxPySaveThread(bool doSave) {
 
 //---------------------------------------------------------------------------
 
-
 IMPLEMENT_ABSTRACT_CLASS(wxPyCallback, wxObject);
 
 wxPyCallback::wxPyCallback(PyObject* func) {

@@ -383,6 +383,9 @@ public:
         return val
     "
 
+    void Freeze();
+    void Thaw();
+
 
 //      // Properties list
 //      %pragma(python) addtoclass = "
@@ -648,6 +651,7 @@ public:
     void EnableTop(size_t pos, bool enable);
     void SetLabelTop(size_t pos, const wxString& label);
     wxString GetLabelTop(size_t pos);
+    int FindMenu(const wxString& title);
     int FindMenuItem(const wxString& menuString, const wxString& itemString);
     %name(FindItemById)wxMenuItem* FindItem(int id/*, wxMenu **menu = NULL*/);
     void Enable(int id, bool enable);

@@ -745,6 +745,12 @@ class wxRadioBoxPtr(wxControlPtr):
     def SetString(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_SetString,(self,) + _args, _kwargs)
         return val
+    def GetColumnCount(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_GetColumnCount,(self,) + _args, _kwargs)
+        return val
+    def GetRowCount(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_GetRowCount,(self,) + _args, _kwargs)
+        return val
     def GetSelection(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_GetSelection,(self,) + _args, _kwargs)
         return val
@@ -753,12 +759,6 @@ class wxRadioBoxPtr(wxControlPtr):
         return val
     def GetCount(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_GetCount,(self,) + _args, _kwargs)
-        return val
-    def GetColumnCount(self, *_args, **_kwargs):
-        val = apply(controlsc.wxRadioBox_GetColumnCount,(self,) + _args, _kwargs)
-        return val
-    def GetRowCount(self, *_args, **_kwargs):
-        val = apply(controlsc.wxRadioBox_GetRowCount,(self,) + _args, _kwargs)
         return val
     def SetSelection(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_SetSelection,(self,) + _args, _kwargs)

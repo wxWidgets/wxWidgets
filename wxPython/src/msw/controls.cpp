@@ -7407,6 +7407,62 @@ static PyObject *_wrap_wxRadioBox_SetString(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+#define wxRadioBox_GetColumnCount(_swigobj)  (_swigobj->GetColumnCount())
+static PyObject *_wrap_wxRadioBox_GetColumnCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxRadioBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxRadioBox_GetColumnCount",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRadioBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_GetColumnCount. Expected _wxRadioBox_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxRadioBox_GetColumnCount(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxRadioBox_GetRowCount(_swigobj)  (_swigobj->GetRowCount())
+static PyObject *_wrap_wxRadioBox_GetRowCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxRadioBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxRadioBox_GetRowCount",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRadioBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_GetRowCount. Expected _wxRadioBox_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxRadioBox_GetRowCount(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxRadioBox_GetSelection(_swigobj)  (_swigobj->GetSelection())
 static PyObject *_wrap_wxRadioBox_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7489,62 +7545,6 @@ static PyObject *_wrap_wxRadioBox_GetCount(PyObject *self, PyObject *args, PyObj
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (int )wxRadioBox_GetCount(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxRadioBox_GetColumnCount(_swigobj)  (_swigobj->GetColumnCount())
-static PyObject *_wrap_wxRadioBox_GetColumnCount(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxRadioBox * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxRadioBox_GetColumnCount",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRadioBox_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_GetColumnCount. Expected _wxRadioBox_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxRadioBox_GetColumnCount(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxRadioBox_GetRowCount(_swigobj)  (_swigobj->GetRowCount())
-static PyObject *_wrap_wxRadioBox_GetRowCount(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxRadioBox * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxRadioBox_GetRowCount",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRadioBox_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_GetRowCount. Expected _wxRadioBox_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxRadioBox_GetRowCount(_arg0);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -9032,11 +9032,11 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxRadioBox_Show", (PyCFunction) _wrap_wxRadioBox_Show, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRadioBox_SetStringSelection", (PyCFunction) _wrap_wxRadioBox_SetStringSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRadioBox_SetSelection", (PyCFunction) _wrap_wxRadioBox_SetSelection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxRadioBox_GetRowCount", (PyCFunction) _wrap_wxRadioBox_GetRowCount, METH_VARARGS | METH_KEYWORDS },
-	 { "wxRadioBox_GetColumnCount", (PyCFunction) _wrap_wxRadioBox_GetColumnCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRadioBox_GetCount", (PyCFunction) _wrap_wxRadioBox_GetCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRadioBox_GetStringSelection", (PyCFunction) _wrap_wxRadioBox_GetStringSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRadioBox_GetSelection", (PyCFunction) _wrap_wxRadioBox_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRadioBox_GetRowCount", (PyCFunction) _wrap_wxRadioBox_GetRowCount, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRadioBox_GetColumnCount", (PyCFunction) _wrap_wxRadioBox_GetColumnCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRadioBox_SetString", (PyCFunction) _wrap_wxRadioBox_SetString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRadioBox_GetString", (PyCFunction) _wrap_wxRadioBox_GetString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRadioBox_FindString", (PyCFunction) _wrap_wxRadioBox_FindString, METH_VARARGS | METH_KEYWORDS },

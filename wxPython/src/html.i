@@ -102,7 +102,6 @@ public:
     //int ScanParam(const wxString& par, const char *format, void* param);
 
     wxString GetAllParams();
-    bool IsEnding();
     bool HasEnding();
     int GetBeginPos();
     int GetEndPos1();
