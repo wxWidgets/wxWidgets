@@ -430,7 +430,7 @@ install-examples: build-examples-stamp
 	dh_installdirs
 
 binary-common:
-	dh_testversion 1.1.17
+	dh_testversion 2
 	dh_testdir
 	dh_testroot
 	dh_installdocs

@@ -1,5 +1,7 @@
-wxwindows2.2 (2.2.5) unstable; urgency=low
+wxwindows2.2 (2.2.5.1) unstable; urgency=low
 
+  * "This One's for Dirk"  Closes: #84696
+  * 2.2.5 has known issues and will not be released for Debian.
   * Fixed parser.y for Alpha builds (#82949)
   * changed mesa dependency to the virtual libgl package and
     added Conflicts for the old 2.1 packages (which are now

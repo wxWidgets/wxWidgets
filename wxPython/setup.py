@@ -249,7 +249,7 @@ if not GL_ONLY:
                     extra_compile_args = cflags,
                     extra_link_args = lflags,
                     )
-        wxpExtensions.append(ext)
+    wxpExtensions.append(ext)
 
 
     # Extension for the grid module
