@@ -1440,12 +1440,17 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
 #endif
     }
-    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
-    PangoRectangle rect;
-    pango_layout_line_get_extents(line, NULL, &rect);
-    wxCoord width = rect.width;
-    wxCoord height = rect.height;
+    
+    // Measure layout.
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    wxCoord width = w;
+    wxCoord height = h;
+    
+    // Draw layout.
     gdk_draw_layout( m_window, m_textGC, x, y, layout );
+    
+    g_object_unref( G_OBJECT( layout ) );
 #else // GTK+ 1.x
     wxCoord width = gdk_string_width( font, text.mbc_str() );
     wxCoord height = font->ascent + font->descent;
@@ -1469,9 +1474,6 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     }
 #endif // GTK+ 2.0/1.x
 
-#if defined(__WXGTK20__)
-    g_object_unref( G_OBJECT( layout ) );
-#endif
 
     width = wxCoord(width / m_scaleX);
     height = wxCoord(height / m_scaleY);
@@ -1596,8 +1598,6 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
                                  wxCoord *descent, wxCoord *externalLeading,
                                  wxFont *theFont) const
 {
-    wxFont fontToUse = m_font;
-    if (theFont) fontToUse = *theFont;
     if (string.IsEmpty())
     {
         if (width) (*width) = 0;
@@ -1606,9 +1606,14 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
     }
     
 #ifdef __WXGTK20__
-    PangoFontDescription *desc = fontToUse.GetNativeFontInfo()->description;
+    // Create layout and set font description
     PangoLayout *layout = pango_layout_new(m_context);
-    pango_layout_set_font_description(layout, desc);
+    if (theFont)
+        pango_layout_set_font_description( layout, theFont->GetNativeFontInfo()->description );
+    else
+        pango_layout_set_font_description(layout, m_fontdesc);
+        
+    // Set layout's text
 #if wxUSE_UNICODE
         const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
         pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
@@ -1617,23 +1622,25 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
         const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
         pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
 #endif
-    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
  
-    PangoRectangle rect;
-    pango_layout_line_get_extents(line, NULL, &rect);
-       
+    // Measure text.
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
     
-    if (width) (*width) = (wxCoord) (rect.width / PANGO_SCALE);
-    if (height) (*height) = (wxCoord) (rect.height / PANGO_SCALE);
+    if (width) (*width) = (wxCoord) w; 
+    if (height) (*height) = (wxCoord) h;
     if (descent)
     {
-        // Do something about metrics here
+        // Do something about metrics here. TODO.
         (*descent) = 0;
     }
     if (externalLeading) (*externalLeading) = 0;  // ??
     
     g_object_unref( G_OBJECT( layout ) );
 #else
+    wxFont fontToUse = m_font;
+    if (theFont) fontToUse = *theFont;
+    
     GdkFont *font = fontToUse.GetInternalFont( m_scaleY );
     if (width) (*width) = wxCoord(gdk_string_width( font, string.mbc_str() ) / m_scaleX);
     if (height) (*height) = wxCoord((font->ascent + font->descent) / m_scaleY);
