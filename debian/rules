@@ -620,9 +620,20 @@ install-gtk-py: build-gtk-py-stamp
 	dh_clean -k
 	dh_installdirs
 	cd wxPython \
-		&& ./setup.py install --prefix=`pwd`/../debian/$(package_gtk_py)/usr
+		&& ./setup.py install \
+			      --prefix=`pwd`/../debian/$(package_gtk_py)/usr \
+			      WX_CONFIG='$(wxconfig)'
 	find debian/$(package_gtk_py)/usr/lib/$(python_dir)/site-packages/wxPython \
 		-name '*.py?' -exec rm '{}' ';'
+
+	dh_installman debian/wxPython-tools.1
+	dh_link usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2py.1  \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2xpm.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/img2png.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pycrust.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pyshell.1 \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/xrced.1   \
+		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/helpviewer.1
 
 install-headers: DH_OPTIONS=-p$(package_headers)
 install-headers: install-gtk-lib
@@ -641,13 +652,7 @@ install-headers: install-gtk-lib
 #	dh_movefiles --sourcedir=$(objdir_univ_install)
 	dh_movefiles --sourcedir=debian/$(package_gtk_lib)
 
-	dh_installmanpages \
-		ansi2knr.1 \
-		jpegtran.1 \
-		libpng.3   \
-		libpngpf.3 \
-		zlib.3     \
-		png.5
+	dh_installman debian/wx-config.1
 
 install-i18n: DH_OPTIONS=-p$(package_i18n)
 install-i18n: build-i18n-stamp install-gtk-lib
