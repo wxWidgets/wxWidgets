@@ -5,15 +5,93 @@ BAKEFILE = bakefile
 BAKEARGS = -v
 
 
+MSVC_ALL = ../makefile.vc ../../samples/makefile.vc ../../samples/db/makefile.vc ../../samples/dnd/makefile.vc ../../samples/ipc/makefile.vc ../../samples/mdi/makefile.vc ../../samples/mfc/makefile.vc ../../samples/png/makefile.vc ../../samples/tab/makefile.vc ../../samples/exec/makefile.vc ../../samples/font/makefile.vc ../../samples/help/makefile.vc ../../samples/grid/makefile.vc ../../samples/menu/makefile.vc ../../samples/text/makefile.vc ../../samples/console/makefile.vc ../../samples/treectrl/makefile.vc ../../samples/listctrl/makefile.vc ../../samples/joytest/makefile.vc ../../samples/regtest/makefile.vc ../../samples/dialogs/makefile.vc ../../samples/nativdlg/makefile.vc ../../samples/display/makefile.vc ../../samples/notebook/makefile.vc ../../samples/caret/makefile.vc ../../samples/erase/makefile.vc ../../samples/event/makefile.vc ../../samples/image/makefile.vc ../../samples/sashtest/makefile.vc ../../samples/docview/makefile.vc ../../samples/typetest/makefile.vc ../../samples/drawing/makefile.vc ../../samples/splitter/makefile.vc ../../samples/listbox/makefile.vc ../../samples/multimon/makefile.vc ../../samples/dynamic/makefile.vc ../../samples/checklst/makefile.vc ../../samples/taskbar/makefile.vc ../../samples/dragimag/makefile.vc ../../samples/sockets/makefile.vc ../../samples/calendar/makefile.vc ../../samples/minimal/makefile.vc ../../samples/access/makefile.vc ../../samples/statbar/makefile.vc ../../samples/config/makefile.vc ../../samples/dialup/makefile.vc ../../samples/controls/makefile.vc ../../samples/richedit/makefile.vc ../../samples/newgrid/makefile.vc ../../samples/toolbar/makefile.vc ../../samples/htlbox/makefile.vc ../../samples/layout/makefile.vc ../../samples/minifram/makefile.vc ../../samples/mobile/makefile.vc ../../samples/opengl/makefile.vc ../../samples/scroll/makefile.vc ../../samples/rotate/makefile.vc ../../samples/shaped/makefile.vc ../../samples/thread/makefile.vc ../../samples/wizard/makefile.vc ../../samples/printing/makefile.vc ../../samples/oleauto/makefile.vc ../../samples/wxtest/makefile.vc ../../samples/artprov/makefile.vc ../../samples/propsize/makefile.vc ../../samples/ownerdrw/makefile.vc ../../samples/vscroll/makefile.vc ../../samples/validate/makefile.vc ../../samples/widgets/makefile.vc ../../samples/keyboard/makefile.vc ../../samples/docvwmdi/makefile.vc ../../samples/scrollsub/makefile.vc ../../samples/memcheck/makefile.vc ../../samples/internat/makefile.vc ../../contrib/build/xrc/makefile.vc ../../contrib/build/gizmos/makefile.vc
 AUTOCONF_ALL = ../../configure ../../Makefile.in ../../samples/Makefile.in ../../samples/db/Makefile.in ../../samples/dnd/Makefile.in ../../samples/ipc/Makefile.in ../../samples/mdi/Makefile.in ../../samples/mfc/Makefile.in ../../samples/png/Makefile.in ../../samples/tab/Makefile.in ../../samples/exec/Makefile.in ../../samples/font/Makefile.in ../../samples/help/Makefile.in ../../samples/grid/Makefile.in ../../samples/menu/Makefile.in ../../samples/text/Makefile.in ../../samples/console/Makefile.in ../../samples/treectrl/Makefile.in ../../samples/listctrl/Makefile.in ../../samples/joytest/Makefile.in ../../samples/regtest/Makefile.in ../../samples/dialogs/Makefile.in ../../samples/nativdlg/Makefile.in ../../samples/display/Makefile.in ../../samples/notebook/Makefile.in ../../samples/caret/Makefile.in ../../samples/erase/Makefile.in ../../samples/event/Makefile.in ../../samples/image/Makefile.in ../../samples/sashtest/Makefile.in ../../samples/docview/Makefile.in ../../samples/typetest/Makefile.in ../../samples/drawing/Makefile.in ../../samples/splitter/Makefile.in ../../samples/listbox/Makefile.in ../../samples/multimon/Makefile.in ../../samples/dynamic/Makefile.in ../../samples/checklst/Makefile.in ../../samples/taskbar/Makefile.in ../../samples/dragimag/Makefile.in ../../samples/sockets/Makefile.in ../../samples/calendar/Makefile.in ../../samples/minimal/Makefile.in ../../samples/access/Makefile.in ../../samples/statbar/Makefile.in ../../samples/config/Makefile.in ../../samples/dialup/Makefile.in ../../samples/controls/Makefile.in ../../samples/richedit/Makefile.in ../../samples/newgrid/Makefile.in ../../samples/toolbar/Makefile.in ../../samples/htlbox/Makefile.in ../../samples/layout/Makefile.in ../../samples/minifram/Makefile.in ../../samples/mobile/Makefile.in ../../samples/opengl/Makefile.in ../../samples/scroll/Makefile.in ../../samples/rotate/Makefile.in ../../samples/shaped/Makefile.in ../../samples/thread/Makefile.in ../../samples/wizard/Makefile.in ../../samples/printing/Makefile.in ../../samples/oleauto/Makefile.in ../../samples/wxtest/Makefile.in ../../samples/artprov/Makefile.in ../../samples/propsize/Makefile.in ../../samples/ownerdrw/Makefile.in ../../samples/vscroll/Makefile.in ../../samples/validate/Makefile.in ../../samples/widgets/Makefile.in ../../samples/keyboard/Makefile.in ../../samples/docvwmdi/Makefile.in ../../samples/scrollsub/Makefile.in ../../samples/memcheck/Makefile.in ../../samples/internat/Makefile.in ../../contrib/src/xrc/Makefile.in ../../contrib/src/gizmos/Makefile.in
 BORLAND_ALL = ../makefile.bcc ../../samples/makefile.bcc ../../samples/db/makefile.bcc ../../samples/dnd/makefile.bcc ../../samples/ipc/makefile.bcc ../../samples/mdi/makefile.bcc ../../samples/mfc/makefile.bcc ../../samples/png/makefile.bcc ../../samples/tab/makefile.bcc ../../samples/exec/makefile.bcc ../../samples/font/makefile.bcc ../../samples/help/makefile.bcc ../../samples/grid/makefile.bcc ../../samples/menu/makefile.bcc ../../samples/text/makefile.bcc ../../samples/console/makefile.bcc ../../samples/treectrl/makefile.bcc ../../samples/listctrl/makefile.bcc ../../samples/joytest/makefile.bcc ../../samples/regtest/makefile.bcc ../../samples/dialogs/makefile.bcc ../../samples/nativdlg/makefile.bcc ../../samples/display/makefile.bcc ../../samples/notebook/makefile.bcc ../../samples/caret/makefile.bcc ../../samples/erase/makefile.bcc ../../samples/event/makefile.bcc ../../samples/image/makefile.bcc ../../samples/sashtest/makefile.bcc ../../samples/docview/makefile.bcc ../../samples/typetest/makefile.bcc ../../samples/drawing/makefile.bcc ../../samples/splitter/makefile.bcc ../../samples/listbox/makefile.bcc ../../samples/multimon/makefile.bcc ../../samples/dynamic/makefile.bcc ../../samples/checklst/makefile.bcc ../../samples/taskbar/makefile.bcc ../../samples/dragimag/makefile.bcc ../../samples/sockets/makefile.bcc ../../samples/calendar/makefile.bcc ../../samples/minimal/makefile.bcc ../../samples/access/makefile.bcc ../../samples/statbar/makefile.bcc ../../samples/config/makefile.bcc ../../samples/dialup/makefile.bcc ../../samples/controls/makefile.bcc ../../samples/richedit/makefile.bcc ../../samples/newgrid/makefile.bcc ../../samples/toolbar/makefile.bcc ../../samples/htlbox/makefile.bcc ../../samples/layout/makefile.bcc ../../samples/minifram/makefile.bcc ../../samples/mobile/makefile.bcc ../../samples/opengl/makefile.bcc ../../samples/scroll/makefile.bcc ../../samples/rotate/makefile.bcc ../../samples/shaped/makefile.bcc ../../samples/thread/makefile.bcc ../../samples/wizard/makefile.bcc ../../samples/printing/makefile.bcc ../../samples/oleauto/makefile.bcc ../../samples/wxtest/makefile.bcc ../../samples/artprov/makefile.bcc ../../samples/propsize/makefile.bcc ../../samples/ownerdrw/makefile.bcc ../../samples/vscroll/makefile.bcc ../../samples/validate/makefile.bcc ../../samples/widgets/makefile.bcc ../../samples/keyboard/makefile.bcc ../../samples/docvwmdi/makefile.bcc ../../samples/scrollsub/makefile.bcc ../../samples/memcheck/makefile.bcc ../../samples/internat/makefile.bcc ../../contrib/build/xrc/makefile.bcc ../../contrib/build/gizmos/makefile.bcc
-all: autoconf borland
+all: msvc autoconf borland
 
+msvc: $(MSVC_ALL)
 autoconf: $(AUTOCONF_ALL)
 borland: $(BORLAND_ALL)
 
 clean:
 	rm -f ../../autoconf_inc.m4
+	rm -f ../makefile.vc
+	rm -f ../../samples/makefile.vc
+	rm -f ../../samples/db/makefile.vc
+	rm -f ../../samples/dnd/makefile.vc
+	rm -f ../../samples/ipc/makefile.vc
+	rm -f ../../samples/mdi/makefile.vc
+	rm -f ../../samples/mfc/makefile.vc
+	rm -f ../../samples/png/makefile.vc
+	rm -f ../../samples/tab/makefile.vc
+	rm -f ../../samples/exec/makefile.vc
+	rm -f ../../samples/font/makefile.vc
+	rm -f ../../samples/help/makefile.vc
+	rm -f ../../samples/grid/makefile.vc
+	rm -f ../../samples/menu/makefile.vc
+	rm -f ../../samples/text/makefile.vc
+	rm -f ../../samples/console/makefile.vc
+	rm -f ../../samples/treectrl/makefile.vc
+	rm -f ../../samples/listctrl/makefile.vc
+	rm -f ../../samples/joytest/makefile.vc
+	rm -f ../../samples/regtest/makefile.vc
+	rm -f ../../samples/dialogs/makefile.vc
+	rm -f ../../samples/nativdlg/makefile.vc
+	rm -f ../../samples/display/makefile.vc
+	rm -f ../../samples/notebook/makefile.vc
+	rm -f ../../samples/caret/makefile.vc
+	rm -f ../../samples/erase/makefile.vc
+	rm -f ../../samples/event/makefile.vc
+	rm -f ../../samples/image/makefile.vc
+	rm -f ../../samples/sashtest/makefile.vc
+	rm -f ../../samples/docview/makefile.vc
+	rm -f ../../samples/typetest/makefile.vc
+	rm -f ../../samples/drawing/makefile.vc
+	rm -f ../../samples/splitter/makefile.vc
+	rm -f ../../samples/listbox/makefile.vc
+	rm -f ../../samples/multimon/makefile.vc
+	rm -f ../../samples/dynamic/makefile.vc
+	rm -f ../../samples/checklst/makefile.vc
+	rm -f ../../samples/taskbar/makefile.vc
+	rm -f ../../samples/dragimag/makefile.vc
+	rm -f ../../samples/sockets/makefile.vc
+	rm -f ../../samples/calendar/makefile.vc
+	rm -f ../../samples/minimal/makefile.vc
+	rm -f ../../samples/access/makefile.vc
+	rm -f ../../samples/statbar/makefile.vc
+	rm -f ../../samples/config/makefile.vc
+	rm -f ../../samples/dialup/makefile.vc
+	rm -f ../../samples/controls/makefile.vc
+	rm -f ../../samples/richedit/makefile.vc
+	rm -f ../../samples/newgrid/makefile.vc
+	rm -f ../../samples/toolbar/makefile.vc
+	rm -f ../../samples/htlbox/makefile.vc
+	rm -f ../../samples/layout/makefile.vc
+	rm -f ../../samples/minifram/makefile.vc
+	rm -f ../../samples/mobile/makefile.vc
+	rm -f ../../samples/opengl/makefile.vc
+	rm -f ../../samples/scroll/makefile.vc
+	rm -f ../../samples/rotate/makefile.vc
+	rm -f ../../samples/shaped/makefile.vc
+	rm -f ../../samples/thread/makefile.vc
+	rm -f ../../samples/wizard/makefile.vc
+	rm -f ../../samples/printing/makefile.vc
+	rm -f ../../samples/oleauto/makefile.vc
+	rm -f ../../samples/wxtest/makefile.vc
+	rm -f ../../samples/artprov/makefile.vc
+	rm -f ../../samples/propsize/makefile.vc
+	rm -f ../../samples/ownerdrw/makefile.vc
+	rm -f ../../samples/vscroll/makefile.vc
+	rm -f ../../samples/validate/makefile.vc
+	rm -f ../../samples/widgets/makefile.vc
+	rm -f ../../samples/keyboard/makefile.vc
+	rm -f ../../samples/docvwmdi/makefile.vc
+	rm -f ../../samples/scrollsub/makefile.vc
+	rm -f ../../samples/memcheck/makefile.vc
+	rm -f ../../samples/internat/makefile.vc
+	rm -f ../../contrib/build/xrc/makefile.vc
+	rm -f ../../contrib/build/gizmos/makefile.vc
 	rm -f ../../configure
 	rm -f ../../Makefile.in
 	rm -f ../../samples/Makefile.in
@@ -189,6 +267,9 @@ Makefile: regenMakefile.py
 ../makefile.bcc: common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl wxwin.py wx.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../makefile.bcc wx.bkl
 	touch ../makefile.bcc
+../makefile.vc: common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl wxwin.py wx.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../makefile.vc wx.bkl
+	touch ../makefile.vc
 
 # from ../../samples/samples.bkl
 ../../samples/Makefile.in: ../../samples/samples.bkl
@@ -197,6 +278,9 @@ Makefile: regenMakefile.py
 ../../samples/makefile.bcc: ../../samples/samples.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/makefile.bcc ../../samples/samples.bkl
 	touch ../../samples/makefile.bcc
+../../samples/makefile.vc: ../../samples/samples.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/makefile.vc ../../samples/samples.bkl
+	touch ../../samples/makefile.vc
 
 # from ../../samples/db/db.bkl
 ../../samples/db/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/db/db.bkl
@@ -205,6 +289,9 @@ Makefile: regenMakefile.py
 ../../samples/db/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/db/db.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/db/makefile.bcc -DWXTOPDIR=../../ ../../samples/db/db.bkl
 	touch ../../samples/db/makefile.bcc
+../../samples/db/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/db/db.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/db/makefile.vc -DWXTOPDIR=../../ ../../samples/db/db.bkl
+	touch ../../samples/db/makefile.vc
 
 # from ../../samples/dnd/dnd.bkl
 ../../samples/dnd/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/dnd/dnd.bkl
@@ -213,6 +300,9 @@ Makefile: regenMakefile.py
 ../../samples/dnd/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/dnd/dnd.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/dnd/makefile.bcc -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
 	touch ../../samples/dnd/makefile.bcc
+../../samples/dnd/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/dnd/dnd.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/dnd/makefile.vc -DWXTOPDIR=../../ ../../samples/dnd/dnd.bkl
+	touch ../../samples/dnd/makefile.vc
 
 # from ../../samples/ipc/ipc.bkl
 ../../samples/ipc/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/ipc/ipc.bkl
@@ -221,6 +311,9 @@ Makefile: regenMakefile.py
 ../../samples/ipc/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/ipc/ipc.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/ipc/makefile.bcc -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
 	touch ../../samples/ipc/makefile.bcc
+../../samples/ipc/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/ipc/ipc.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/ipc/makefile.vc -DWXTOPDIR=../../ ../../samples/ipc/ipc.bkl
+	touch ../../samples/ipc/makefile.vc
 
 # from ../../samples/mdi/mdi.bkl
 ../../samples/mdi/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/mdi/mdi.bkl
@@ -229,6 +322,9 @@ Makefile: regenMakefile.py
 ../../samples/mdi/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/mdi/mdi.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/mdi/makefile.bcc -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
 	touch ../../samples/mdi/makefile.bcc
+../../samples/mdi/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/mdi/mdi.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/mdi/makefile.vc -DWXTOPDIR=../../ ../../samples/mdi/mdi.bkl
+	touch ../../samples/mdi/makefile.vc
 
 # from ../../samples/mfc/mfc.bkl
 ../../samples/mfc/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/mfc/mfc.bkl
@@ -237,6 +333,9 @@ Makefile: regenMakefile.py
 ../../samples/mfc/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/mfc/mfc.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/mfc/makefile.bcc -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
 	touch ../../samples/mfc/makefile.bcc
+../../samples/mfc/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/mfc/mfc.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/mfc/makefile.vc -DWXTOPDIR=../../ ../../samples/mfc/mfc.bkl
+	touch ../../samples/mfc/makefile.vc
 
 # from ../../samples/png/png.bkl
 ../../samples/png/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/png/png.bkl
@@ -245,6 +344,9 @@ Makefile: regenMakefile.py
 ../../samples/png/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/png/png.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/png/makefile.bcc -DWXTOPDIR=../../ ../../samples/png/png.bkl
 	touch ../../samples/png/makefile.bcc
+../../samples/png/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/png/png.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/png/makefile.vc -DWXTOPDIR=../../ ../../samples/png/png.bkl
+	touch ../../samples/png/makefile.vc
 
 # from ../../samples/tab/tab.bkl
 ../../samples/tab/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/tab/tab.bkl
@@ -253,6 +355,9 @@ Makefile: regenMakefile.py
 ../../samples/tab/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/tab/tab.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/tab/makefile.bcc -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
 	touch ../../samples/tab/makefile.bcc
+../../samples/tab/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/tab/tab.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/tab/makefile.vc -DWXTOPDIR=../../ ../../samples/tab/tab.bkl
+	touch ../../samples/tab/makefile.vc
 
 # from ../../samples/exec/exec.bkl
 ../../samples/exec/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/exec/exec.bkl
@@ -261,6 +366,9 @@ Makefile: regenMakefile.py
 ../../samples/exec/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/exec/exec.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/exec/makefile.bcc -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
 	touch ../../samples/exec/makefile.bcc
+../../samples/exec/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/exec/exec.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/exec/makefile.vc -DWXTOPDIR=../../ ../../samples/exec/exec.bkl
+	touch ../../samples/exec/makefile.vc
 
 # from ../../samples/font/font.bkl
 ../../samples/font/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/font/font.bkl
@@ -269,6 +377,9 @@ Makefile: regenMakefile.py
 ../../samples/font/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/font/font.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/font/makefile.bcc -DWXTOPDIR=../../ ../../samples/font/font.bkl
 	touch ../../samples/font/makefile.bcc
+../../samples/font/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/font/font.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/font/makefile.vc -DWXTOPDIR=../../ ../../samples/font/font.bkl
+	touch ../../samples/font/makefile.vc
 
 # from ../../samples/help/help.bkl
 ../../samples/help/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/help/help.bkl
@@ -277,6 +388,9 @@ Makefile: regenMakefile.py
 ../../samples/help/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/help/help.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/help/makefile.bcc -DWXTOPDIR=../../ ../../samples/help/help.bkl
 	touch ../../samples/help/makefile.bcc
+../../samples/help/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/help/help.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/help/makefile.vc -DWXTOPDIR=../../ ../../samples/help/help.bkl
+	touch ../../samples/help/makefile.vc
 
 # from ../../samples/grid/grid.bkl
 ../../samples/grid/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/grid/grid.bkl
@@ -285,6 +399,9 @@ Makefile: regenMakefile.py
 ../../samples/grid/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/grid/grid.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/grid/makefile.bcc -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
 	touch ../../samples/grid/makefile.bcc
+../../samples/grid/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/grid/grid.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/grid/makefile.vc -DWXTOPDIR=../../ ../../samples/grid/grid.bkl
+	touch ../../samples/grid/makefile.vc
 
 # from ../../samples/menu/menu.bkl
 ../../samples/menu/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/menu/menu.bkl
@@ -293,6 +410,9 @@ Makefile: regenMakefile.py
 ../../samples/menu/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/menu/menu.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/menu/makefile.bcc -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
 	touch ../../samples/menu/makefile.bcc
+../../samples/menu/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/menu/menu.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/menu/makefile.vc -DWXTOPDIR=../../ ../../samples/menu/menu.bkl
+	touch ../../samples/menu/makefile.vc
 
 # from ../../samples/text/text.bkl
 ../../samples/text/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/text/text.bkl
@@ -301,6 +421,9 @@ Makefile: regenMakefile.py
 ../../samples/text/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/text/text.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/text/makefile.bcc -DWXTOPDIR=../../ ../../samples/text/text.bkl
 	touch ../../samples/text/makefile.bcc
+../../samples/text/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/text/text.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/text/makefile.vc -DWXTOPDIR=../../ ../../samples/text/text.bkl
+	touch ../../samples/text/makefile.vc
 
 # from ../../samples/console/console.bkl
 ../../samples/console/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/console/console.bkl
@@ -309,6 +432,9 @@ Makefile: regenMakefile.py
 ../../samples/console/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/console/console.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/console/makefile.bcc -DWXTOPDIR=../../ ../../samples/console/console.bkl
 	touch ../../samples/console/makefile.bcc
+../../samples/console/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/console/console.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/console/makefile.vc -DWXTOPDIR=../../ ../../samples/console/console.bkl
+	touch ../../samples/console/makefile.vc
 
 # from ../../samples/treectrl/treectrl.bkl
 ../../samples/treectrl/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/treectrl/treectrl.bkl
@@ -317,6 +443,9 @@ Makefile: regenMakefile.py
 ../../samples/treectrl/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/treectrl/treectrl.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/treectrl/makefile.bcc -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
 	touch ../../samples/treectrl/makefile.bcc
+../../samples/treectrl/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/treectrl/treectrl.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/treectrl/makefile.vc -DWXTOPDIR=../../ ../../samples/treectrl/treectrl.bkl
+	touch ../../samples/treectrl/makefile.vc
 
 # from ../../samples/listctrl/listctrl.bkl
 ../../samples/listctrl/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/listctrl/listctrl.bkl
@@ -325,6 +454,9 @@ Makefile: regenMakefile.py
 ../../samples/listctrl/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/listctrl/listctrl.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/listctrl/makefile.bcc -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
 	touch ../../samples/listctrl/makefile.bcc
+../../samples/listctrl/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/listctrl/listctrl.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/listctrl/makefile.vc -DWXTOPDIR=../../ ../../samples/listctrl/listctrl.bkl
+	touch ../../samples/listctrl/makefile.vc
 
 # from ../../samples/joytest/joytest.bkl
 ../../samples/joytest/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/joytest/joytest.bkl
@@ -333,6 +465,9 @@ Makefile: regenMakefile.py
 ../../samples/joytest/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/joytest/joytest.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/joytest/makefile.bcc -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
 	touch ../../samples/joytest/makefile.bcc
+../../samples/joytest/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/joytest/joytest.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/joytest/makefile.vc -DWXTOPDIR=../../ ../../samples/joytest/joytest.bkl
+	touch ../../samples/joytest/makefile.vc
 
 # from ../../samples/regtest/regtest.bkl
 ../../samples/regtest/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/regtest/regtest.bkl
@@ -341,6 +476,9 @@ Makefile: regenMakefile.py
 ../../samples/regtest/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/regtest/regtest.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/regtest/makefile.bcc -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
 	touch ../../samples/regtest/makefile.bcc
+../../samples/regtest/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/regtest/regtest.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/regtest/makefile.vc -DWXTOPDIR=../../ ../../samples/regtest/regtest.bkl
+	touch ../../samples/regtest/makefile.vc
 
 # from ../../samples/dialogs/dialogs.bkl
 ../../samples/dialogs/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/dialogs/dialogs.bkl
@@ -349,6 +487,9 @@ Makefile: regenMakefile.py
 ../../samples/dialogs/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/dialogs/dialogs.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/dialogs/makefile.bcc -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
 	touch ../../samples/dialogs/makefile.bcc
+../../samples/dialogs/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/dialogs/dialogs.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/dialogs/makefile.vc -DWXTOPDIR=../../ ../../samples/dialogs/dialogs.bkl
+	touch ../../samples/dialogs/makefile.vc
 
 # from ../../samples/nativdlg/nativdlg.bkl
 ../../samples/nativdlg/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/nativdlg/nativdlg.bkl
@@ -357,6 +498,9 @@ Makefile: regenMakefile.py
 ../../samples/nativdlg/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/nativdlg/nativdlg.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/nativdlg/makefile.bcc -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
 	touch ../../samples/nativdlg/makefile.bcc
+../../samples/nativdlg/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/nativdlg/nativdlg.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/nativdlg/makefile.vc -DWXTOPDIR=../../ ../../samples/nativdlg/nativdlg.bkl
+	touch ../../samples/nativdlg/makefile.vc
 
 # from ../../samples/display/display.bkl
 ../../samples/display/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/display/display.bkl
@@ -365,6 +509,9 @@ Makefile: regenMakefile.py
 ../../samples/display/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/display/display.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/display/makefile.bcc -DWXTOPDIR=../../ ../../samples/display/display.bkl
 	touch ../../samples/display/makefile.bcc
+../../samples/display/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/display/display.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/display/makefile.vc -DWXTOPDIR=../../ ../../samples/display/display.bkl
+	touch ../../samples/display/makefile.vc
 
 # from ../../samples/notebook/notebook.bkl
 ../../samples/notebook/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/notebook/notebook.bkl
@@ -373,6 +520,9 @@ Makefile: regenMakefile.py
 ../../samples/notebook/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/notebook/notebook.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/notebook/makefile.bcc -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
 	touch ../../samples/notebook/makefile.bcc
+../../samples/notebook/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/notebook/notebook.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/notebook/makefile.vc -DWXTOPDIR=../../ ../../samples/notebook/notebook.bkl
+	touch ../../samples/notebook/makefile.vc
 
 # from ../../samples/caret/caret.bkl
 ../../samples/caret/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/caret/caret.bkl
@@ -381,6 +531,9 @@ Makefile: regenMakefile.py
 ../../samples/caret/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/caret/caret.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/caret/makefile.bcc -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
 	touch ../../samples/caret/makefile.bcc
+../../samples/caret/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/caret/caret.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/caret/makefile.vc -DWXTOPDIR=../../ ../../samples/caret/caret.bkl
+	touch ../../samples/caret/makefile.vc
 
 # from ../../samples/erase/erase.bkl
 ../../samples/erase/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/erase/erase.bkl
@@ -389,6 +542,9 @@ Makefile: regenMakefile.py
 ../../samples/erase/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/erase/erase.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/erase/makefile.bcc -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
 	touch ../../samples/erase/makefile.bcc
+../../samples/erase/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/erase/erase.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/erase/makefile.vc -DWXTOPDIR=../../ ../../samples/erase/erase.bkl
+	touch ../../samples/erase/makefile.vc
 
 # from ../../samples/event/event.bkl
 ../../samples/event/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/event/event.bkl
@@ -397,6 +553,9 @@ Makefile: regenMakefile.py
 ../../samples/event/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/event/event.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/event/makefile.bcc -DWXTOPDIR=../../ ../../samples/event/event.bkl
 	touch ../../samples/event/makefile.bcc
+../../samples/event/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/event/event.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/event/makefile.vc -DWXTOPDIR=../../ ../../samples/event/event.bkl
+	touch ../../samples/event/makefile.vc
 
 # from ../../samples/image/image.bkl
 ../../samples/image/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/image/image.bkl
@@ -405,6 +564,9 @@ Makefile: regenMakefile.py
 ../../samples/image/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/image/image.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/image/makefile.bcc -DWXTOPDIR=../../ ../../samples/image/image.bkl
 	touch ../../samples/image/makefile.bcc
+../../samples/image/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/image/image.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/image/makefile.vc -DWXTOPDIR=../../ ../../samples/image/image.bkl
+	touch ../../samples/image/makefile.vc
 
 # from ../../samples/sashtest/sashtest.bkl
 ../../samples/sashtest/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/sashtest/sashtest.bkl
@@ -413,6 +575,9 @@ Makefile: regenMakefile.py
 ../../samples/sashtest/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/sashtest/sashtest.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/sashtest/makefile.bcc -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
 	touch ../../samples/sashtest/makefile.bcc
+../../samples/sashtest/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/sashtest/sashtest.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/sashtest/makefile.vc -DWXTOPDIR=../../ ../../samples/sashtest/sashtest.bkl
+	touch ../../samples/sashtest/makefile.vc
 
 # from ../../samples/docview/docview.bkl
 ../../samples/docview/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/docview/docview.bkl
@@ -421,6 +586,9 @@ Makefile: regenMakefile.py
 ../../samples/docview/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/docview/docview.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/docview/makefile.bcc -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
 	touch ../../samples/docview/makefile.bcc
+../../samples/docview/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/docview/docview.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/docview/makefile.vc -DWXTOPDIR=../../ ../../samples/docview/docview.bkl
+	touch ../../samples/docview/makefile.vc
 
 # from ../../samples/typetest/typetest.bkl
 ../../samples/typetest/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/typetest/typetest.bkl
@@ -429,6 +597,9 @@ Makefile: regenMakefile.py
 ../../samples/typetest/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/typetest/typetest.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/typetest/makefile.bcc -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
 	touch ../../samples/typetest/makefile.bcc
+../../samples/typetest/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/typetest/typetest.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/typetest/makefile.vc -DWXTOPDIR=../../ ../../samples/typetest/typetest.bkl
+	touch ../../samples/typetest/makefile.vc
 
 # from ../../samples/drawing/drawing.bkl
 ../../samples/drawing/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/drawing/drawing.bkl
@@ -437,6 +608,9 @@ Makefile: regenMakefile.py
 ../../samples/drawing/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/drawing/drawing.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/drawing/makefile.bcc -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
 	touch ../../samples/drawing/makefile.bcc
+../../samples/drawing/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/drawing/drawing.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/drawing/makefile.vc -DWXTOPDIR=../../ ../../samples/drawing/drawing.bkl
+	touch ../../samples/drawing/makefile.vc
 
 # from ../../samples/splitter/splitter.bkl
 ../../samples/splitter/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/splitter/splitter.bkl
@@ -445,6 +619,9 @@ Makefile: regenMakefile.py
 ../../samples/splitter/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/splitter/splitter.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/splitter/makefile.bcc -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
 	touch ../../samples/splitter/makefile.bcc
+../../samples/splitter/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/splitter/splitter.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/splitter/makefile.vc -DWXTOPDIR=../../ ../../samples/splitter/splitter.bkl
+	touch ../../samples/splitter/makefile.vc
 
 # from ../../samples/listbox/listbox.bkl
 ../../samples/listbox/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/listbox/listbox.bkl
@@ -453,6 +630,9 @@ Makefile: regenMakefile.py
 ../../samples/listbox/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/listbox/listbox.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/listbox/makefile.bcc -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
 	touch ../../samples/listbox/makefile.bcc
+../../samples/listbox/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/listbox/listbox.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/listbox/makefile.vc -DWXTOPDIR=../../ ../../samples/listbox/listbox.bkl
+	touch ../../samples/listbox/makefile.vc
 
 # from ../../samples/multimon/multimon.bkl
 ../../samples/multimon/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/multimon/multimon.bkl
@@ -461,6 +641,9 @@ Makefile: regenMakefile.py
 ../../samples/multimon/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/multimon/multimon.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/multimon/makefile.bcc -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
 	touch ../../samples/multimon/makefile.bcc
+../../samples/multimon/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/multimon/multimon.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/multimon/makefile.vc -DWXTOPDIR=../../ ../../samples/multimon/multimon.bkl
+	touch ../../samples/multimon/makefile.vc
 
 # from ../../samples/dynamic/dynamic.bkl
 ../../samples/dynamic/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/dynamic/dynamic.bkl
@@ -469,6 +652,9 @@ Makefile: regenMakefile.py
 ../../samples/dynamic/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/dynamic/dynamic.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/dynamic/makefile.bcc -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
 	touch ../../samples/dynamic/makefile.bcc
+../../samples/dynamic/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/dynamic/dynamic.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/dynamic/makefile.vc -DWXTOPDIR=../../ ../../samples/dynamic/dynamic.bkl
+	touch ../../samples/dynamic/makefile.vc
 
 # from ../../samples/checklst/checklst.bkl
 ../../samples/checklst/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/checklst/checklst.bkl
@@ -477,6 +663,9 @@ Makefile: regenMakefile.py
 ../../samples/checklst/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/checklst/checklst.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/checklst/makefile.bcc -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
 	touch ../../samples/checklst/makefile.bcc
+../../samples/checklst/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/checklst/checklst.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/checklst/makefile.vc -DWXTOPDIR=../../ ../../samples/checklst/checklst.bkl
+	touch ../../samples/checklst/makefile.vc
 
 # from ../../samples/taskbar/taskbar.bkl
 ../../samples/taskbar/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/taskbar/taskbar.bkl
@@ -485,6 +674,9 @@ Makefile: regenMakefile.py
 ../../samples/taskbar/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/taskbar/taskbar.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/taskbar/makefile.bcc -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
 	touch ../../samples/taskbar/makefile.bcc
+../../samples/taskbar/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/taskbar/taskbar.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/taskbar/makefile.vc -DWXTOPDIR=../../ ../../samples/taskbar/taskbar.bkl
+	touch ../../samples/taskbar/makefile.vc
 
 # from ../../samples/dragimag/dragimag.bkl
 ../../samples/dragimag/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/dragimag/dragimag.bkl
@@ -493,6 +685,9 @@ Makefile: regenMakefile.py
 ../../samples/dragimag/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/dragimag/dragimag.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/dragimag/makefile.bcc -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
 	touch ../../samples/dragimag/makefile.bcc
+../../samples/dragimag/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/dragimag/dragimag.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/dragimag/makefile.vc -DWXTOPDIR=../../ ../../samples/dragimag/dragimag.bkl
+	touch ../../samples/dragimag/makefile.vc
 
 # from ../../samples/sockets/sockets.bkl
 ../../samples/sockets/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/sockets/sockets.bkl
@@ -501,6 +696,9 @@ Makefile: regenMakefile.py
 ../../samples/sockets/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/sockets/sockets.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/sockets/makefile.bcc -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
 	touch ../../samples/sockets/makefile.bcc
+../../samples/sockets/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/sockets/sockets.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/sockets/makefile.vc -DWXTOPDIR=../../ ../../samples/sockets/sockets.bkl
+	touch ../../samples/sockets/makefile.vc
 
 # from ../../samples/calendar/calendar.bkl
 ../../samples/calendar/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/calendar/calendar.bkl
@@ -509,6 +707,9 @@ Makefile: regenMakefile.py
 ../../samples/calendar/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/calendar/calendar.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/calendar/makefile.bcc -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
 	touch ../../samples/calendar/makefile.bcc
+../../samples/calendar/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/calendar/calendar.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/calendar/makefile.vc -DWXTOPDIR=../../ ../../samples/calendar/calendar.bkl
+	touch ../../samples/calendar/makefile.vc
 
 # from ../../samples/minimal/minimal.bkl
 ../../samples/minimal/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/minimal/minimal.bkl
@@ -517,6 +718,9 @@ Makefile: regenMakefile.py
 ../../samples/minimal/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/minimal/minimal.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/minimal/makefile.bcc -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
 	touch ../../samples/minimal/makefile.bcc
+../../samples/minimal/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/minimal/minimal.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/minimal/makefile.vc -DWXTOPDIR=../../ ../../samples/minimal/minimal.bkl
+	touch ../../samples/minimal/makefile.vc
 
 # from ../../samples/access/access.bkl
 ../../samples/access/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/access/access.bkl
@@ -525,6 +729,9 @@ Makefile: regenMakefile.py
 ../../samples/access/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/access/access.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/access/makefile.bcc -DWXTOPDIR=../../ ../../samples/access/access.bkl
 	touch ../../samples/access/makefile.bcc
+../../samples/access/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/access/access.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/access/makefile.vc -DWXTOPDIR=../../ ../../samples/access/access.bkl
+	touch ../../samples/access/makefile.vc
 
 # from ../../samples/statbar/statbar.bkl
 ../../samples/statbar/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/statbar/statbar.bkl
@@ -533,6 +740,9 @@ Makefile: regenMakefile.py
 ../../samples/statbar/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/statbar/statbar.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/statbar/makefile.bcc -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
 	touch ../../samples/statbar/makefile.bcc
+../../samples/statbar/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/statbar/statbar.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/statbar/makefile.vc -DWXTOPDIR=../../ ../../samples/statbar/statbar.bkl
+	touch ../../samples/statbar/makefile.vc
 
 # from ../../samples/config/config.bkl
 ../../samples/config/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/config/config.bkl
@@ -541,6 +751,9 @@ Makefile: regenMakefile.py
 ../../samples/config/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/config/config.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/config/makefile.bcc -DWXTOPDIR=../../ ../../samples/config/config.bkl
 	touch ../../samples/config/makefile.bcc
+../../samples/config/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/config/config.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/config/makefile.vc -DWXTOPDIR=../../ ../../samples/config/config.bkl
+	touch ../../samples/config/makefile.vc
 
 # from ../../samples/dialup/dialup.bkl
 ../../samples/dialup/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/dialup/dialup.bkl
@@ -549,6 +762,9 @@ Makefile: regenMakefile.py
 ../../samples/dialup/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/dialup/dialup.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/dialup/makefile.bcc -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
 	touch ../../samples/dialup/makefile.bcc
+../../samples/dialup/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/dialup/dialup.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/dialup/makefile.vc -DWXTOPDIR=../../ ../../samples/dialup/dialup.bkl
+	touch ../../samples/dialup/makefile.vc
 
 # from ../../samples/controls/controls.bkl
 ../../samples/controls/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/controls/controls.bkl
@@ -557,6 +773,9 @@ Makefile: regenMakefile.py
 ../../samples/controls/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/controls/controls.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/controls/makefile.bcc -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
 	touch ../../samples/controls/makefile.bcc
+../../samples/controls/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/controls/controls.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/controls/makefile.vc -DWXTOPDIR=../../ ../../samples/controls/controls.bkl
+	touch ../../samples/controls/makefile.vc
 
 # from ../../samples/richedit/richedit.bkl
 ../../samples/richedit/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/richedit/richedit.bkl
@@ -565,6 +784,9 @@ Makefile: regenMakefile.py
 ../../samples/richedit/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/richedit/richedit.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/richedit/makefile.bcc -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
 	touch ../../samples/richedit/makefile.bcc
+../../samples/richedit/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/richedit/richedit.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/richedit/makefile.vc -DWXTOPDIR=../../ ../../samples/richedit/richedit.bkl
+	touch ../../samples/richedit/makefile.vc
 
 # from ../../samples/newgrid/newgrid.bkl
 ../../samples/newgrid/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/newgrid/newgrid.bkl
@@ -573,6 +795,9 @@ Makefile: regenMakefile.py
 ../../samples/newgrid/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/newgrid/newgrid.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/newgrid/makefile.bcc -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
 	touch ../../samples/newgrid/makefile.bcc
+../../samples/newgrid/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/newgrid/newgrid.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/newgrid/makefile.vc -DWXTOPDIR=../../ ../../samples/newgrid/newgrid.bkl
+	touch ../../samples/newgrid/makefile.vc
 
 # from ../../samples/toolbar/toolbar.bkl
 ../../samples/toolbar/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/toolbar/toolbar.bkl
@@ -581,6 +806,9 @@ Makefile: regenMakefile.py
 ../../samples/toolbar/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/toolbar/toolbar.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/toolbar/makefile.bcc -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
 	touch ../../samples/toolbar/makefile.bcc
+../../samples/toolbar/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/toolbar/toolbar.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/toolbar/makefile.vc -DWXTOPDIR=../../ ../../samples/toolbar/toolbar.bkl
+	touch ../../samples/toolbar/makefile.vc
 
 # from ../../samples/htlbox/htlbox.bkl
 ../../samples/htlbox/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/htlbox/htlbox.bkl
@@ -589,6 +817,9 @@ Makefile: regenMakefile.py
 ../../samples/htlbox/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/htlbox/htlbox.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/htlbox/makefile.bcc -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
 	touch ../../samples/htlbox/makefile.bcc
+../../samples/htlbox/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/htlbox/htlbox.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/htlbox/makefile.vc -DWXTOPDIR=../../ ../../samples/htlbox/htlbox.bkl
+	touch ../../samples/htlbox/makefile.vc
 
 # from ../../samples/layout/layout.bkl
 ../../samples/layout/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/layout/layout.bkl
@@ -597,6 +828,9 @@ Makefile: regenMakefile.py
 ../../samples/layout/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/layout/layout.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/layout/makefile.bcc -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
 	touch ../../samples/layout/makefile.bcc
+../../samples/layout/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/layout/layout.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/layout/makefile.vc -DWXTOPDIR=../../ ../../samples/layout/layout.bkl
+	touch ../../samples/layout/makefile.vc
 
 # from ../../samples/minifram/minifram.bkl
 ../../samples/minifram/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/minifram/minifram.bkl
@@ -605,6 +839,9 @@ Makefile: regenMakefile.py
 ../../samples/minifram/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/minifram/minifram.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/minifram/makefile.bcc -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
 	touch ../../samples/minifram/makefile.bcc
+../../samples/minifram/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/minifram/minifram.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/minifram/makefile.vc -DWXTOPDIR=../../ ../../samples/minifram/minifram.bkl
+	touch ../../samples/minifram/makefile.vc
 
 # from ../../samples/mobile/mobile.bkl
 ../../samples/mobile/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/mobile/mobile.bkl
@@ -613,6 +850,9 @@ Makefile: regenMakefile.py
 ../../samples/mobile/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/mobile/mobile.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/mobile/makefile.bcc -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
 	touch ../../samples/mobile/makefile.bcc
+../../samples/mobile/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/mobile/mobile.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/mobile/makefile.vc -DWXTOPDIR=../../ ../../samples/mobile/mobile.bkl
+	touch ../../samples/mobile/makefile.vc
 
 # from ../../samples/opengl/opengl.bkl
 ../../samples/opengl/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/opengl/opengl.bkl
@@ -621,6 +861,9 @@ Makefile: regenMakefile.py
 ../../samples/opengl/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/opengl/opengl.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/opengl/makefile.bcc -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
 	touch ../../samples/opengl/makefile.bcc
+../../samples/opengl/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/opengl/opengl.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/opengl/makefile.vc -DWXTOPDIR=../../ ../../samples/opengl/opengl.bkl
+	touch ../../samples/opengl/makefile.vc
 
 # from ../../samples/scroll/scroll.bkl
 ../../samples/scroll/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/scroll/scroll.bkl
@@ -629,6 +872,9 @@ Makefile: regenMakefile.py
 ../../samples/scroll/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/scroll/scroll.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/scroll/makefile.bcc -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
 	touch ../../samples/scroll/makefile.bcc
+../../samples/scroll/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/scroll/scroll.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/scroll/makefile.vc -DWXTOPDIR=../../ ../../samples/scroll/scroll.bkl
+	touch ../../samples/scroll/makefile.vc
 
 # from ../../samples/rotate/rotate.bkl
 ../../samples/rotate/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/rotate/rotate.bkl
@@ -637,6 +883,9 @@ Makefile: regenMakefile.py
 ../../samples/rotate/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/rotate/rotate.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/rotate/makefile.bcc -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
 	touch ../../samples/rotate/makefile.bcc
+../../samples/rotate/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/rotate/rotate.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/rotate/makefile.vc -DWXTOPDIR=../../ ../../samples/rotate/rotate.bkl
+	touch ../../samples/rotate/makefile.vc
 
 # from ../../samples/shaped/shaped.bkl
 ../../samples/shaped/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/shaped/shaped.bkl
@@ -645,6 +894,9 @@ Makefile: regenMakefile.py
 ../../samples/shaped/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/shaped/shaped.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/shaped/makefile.bcc -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
 	touch ../../samples/shaped/makefile.bcc
+../../samples/shaped/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/shaped/shaped.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/shaped/makefile.vc -DWXTOPDIR=../../ ../../samples/shaped/shaped.bkl
+	touch ../../samples/shaped/makefile.vc
 
 # from ../../samples/thread/thread.bkl
 ../../samples/thread/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/thread/thread.bkl
@@ -653,6 +905,9 @@ Makefile: regenMakefile.py
 ../../samples/thread/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/thread/thread.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/thread/makefile.bcc -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
 	touch ../../samples/thread/makefile.bcc
+../../samples/thread/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/thread/thread.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/thread/makefile.vc -DWXTOPDIR=../../ ../../samples/thread/thread.bkl
+	touch ../../samples/thread/makefile.vc
 
 # from ../../samples/wizard/wizard.bkl
 ../../samples/wizard/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/wizard/wizard.bkl
@@ -661,6 +916,9 @@ Makefile: regenMakefile.py
 ../../samples/wizard/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/wizard/wizard.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/wizard/makefile.bcc -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
 	touch ../../samples/wizard/makefile.bcc
+../../samples/wizard/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/wizard/wizard.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/wizard/makefile.vc -DWXTOPDIR=../../ ../../samples/wizard/wizard.bkl
+	touch ../../samples/wizard/makefile.vc
 
 # from ../../samples/printing/printing.bkl
 ../../samples/printing/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/printing/printing.bkl
@@ -669,6 +927,9 @@ Makefile: regenMakefile.py
 ../../samples/printing/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/printing/printing.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/printing/makefile.bcc -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
 	touch ../../samples/printing/makefile.bcc
+../../samples/printing/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/printing/printing.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/printing/makefile.vc -DWXTOPDIR=../../ ../../samples/printing/printing.bkl
+	touch ../../samples/printing/makefile.vc
 
 # from ../../samples/oleauto/oleauto.bkl
 ../../samples/oleauto/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/oleauto/oleauto.bkl
@@ -677,6 +938,9 @@ Makefile: regenMakefile.py
 ../../samples/oleauto/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/oleauto/oleauto.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/oleauto/makefile.bcc -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
 	touch ../../samples/oleauto/makefile.bcc
+../../samples/oleauto/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/oleauto/oleauto.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/oleauto/makefile.vc -DWXTOPDIR=../../ ../../samples/oleauto/oleauto.bkl
+	touch ../../samples/oleauto/makefile.vc
 
 # from ../../samples/wxtest/wxtest.bkl
 ../../samples/wxtest/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/wxtest/wxtest.bkl
@@ -685,6 +949,9 @@ Makefile: regenMakefile.py
 ../../samples/wxtest/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/wxtest/wxtest.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/wxtest/makefile.bcc -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
 	touch ../../samples/wxtest/makefile.bcc
+../../samples/wxtest/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/wxtest/wxtest.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/wxtest/makefile.vc -DWXTOPDIR=../../ ../../samples/wxtest/wxtest.bkl
+	touch ../../samples/wxtest/makefile.vc
 
 # from ../../samples/artprov/artprov.bkl
 ../../samples/artprov/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/artprov/artprov.bkl
@@ -693,6 +960,9 @@ Makefile: regenMakefile.py
 ../../samples/artprov/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/artprov/artprov.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/artprov/makefile.bcc -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
 	touch ../../samples/artprov/makefile.bcc
+../../samples/artprov/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/artprov/artprov.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/artprov/makefile.vc -DWXTOPDIR=../../ ../../samples/artprov/artprov.bkl
+	touch ../../samples/artprov/makefile.vc
 
 # from ../../samples/propsize/propsize.bkl
 ../../samples/propsize/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/propsize/propsize.bkl
@@ -701,6 +971,9 @@ Makefile: regenMakefile.py
 ../../samples/propsize/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/propsize/propsize.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/propsize/makefile.bcc -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
 	touch ../../samples/propsize/makefile.bcc
+../../samples/propsize/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/propsize/propsize.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/propsize/makefile.vc -DWXTOPDIR=../../ ../../samples/propsize/propsize.bkl
+	touch ../../samples/propsize/makefile.vc
 
 # from ../../samples/ownerdrw/ownerdrw.bkl
 ../../samples/ownerdrw/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/ownerdrw/ownerdrw.bkl
@@ -709,6 +982,9 @@ Makefile: regenMakefile.py
 ../../samples/ownerdrw/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/ownerdrw/ownerdrw.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/ownerdrw/makefile.bcc -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
 	touch ../../samples/ownerdrw/makefile.bcc
+../../samples/ownerdrw/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/ownerdrw/ownerdrw.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/ownerdrw/makefile.vc -DWXTOPDIR=../../ ../../samples/ownerdrw/ownerdrw.bkl
+	touch ../../samples/ownerdrw/makefile.vc
 
 # from ../../samples/vscroll/vscroll.bkl
 ../../samples/vscroll/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/vscroll/vscroll.bkl
@@ -717,6 +993,9 @@ Makefile: regenMakefile.py
 ../../samples/vscroll/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/vscroll/vscroll.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/vscroll/makefile.bcc -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
 	touch ../../samples/vscroll/makefile.bcc
+../../samples/vscroll/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/vscroll/vscroll.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/vscroll/makefile.vc -DWXTOPDIR=../../ ../../samples/vscroll/vscroll.bkl
+	touch ../../samples/vscroll/makefile.vc
 
 # from ../../samples/validate/validate.bkl
 ../../samples/validate/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/validate/validate.bkl
@@ -725,6 +1004,9 @@ Makefile: regenMakefile.py
 ../../samples/validate/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/validate/validate.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/validate/makefile.bcc -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
 	touch ../../samples/validate/makefile.bcc
+../../samples/validate/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/validate/validate.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/validate/makefile.vc -DWXTOPDIR=../../ ../../samples/validate/validate.bkl
+	touch ../../samples/validate/makefile.vc
 
 # from ../../samples/widgets/widgets.bkl
 ../../samples/widgets/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/widgets/widgets.bkl
@@ -733,6 +1015,9 @@ Makefile: regenMakefile.py
 ../../samples/widgets/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/widgets/widgets.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/widgets/makefile.bcc -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
 	touch ../../samples/widgets/makefile.bcc
+../../samples/widgets/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/widgets/widgets.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/widgets/makefile.vc -DWXTOPDIR=../../ ../../samples/widgets/widgets.bkl
+	touch ../../samples/widgets/makefile.vc
 
 # from ../../samples/keyboard/keyboard.bkl
 ../../samples/keyboard/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/keyboard/keyboard.bkl
@@ -741,6 +1026,9 @@ Makefile: regenMakefile.py
 ../../samples/keyboard/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/keyboard/keyboard.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/keyboard/makefile.bcc -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
 	touch ../../samples/keyboard/makefile.bcc
+../../samples/keyboard/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/keyboard/keyboard.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/keyboard/makefile.vc -DWXTOPDIR=../../ ../../samples/keyboard/keyboard.bkl
+	touch ../../samples/keyboard/makefile.vc
 
 # from ../../samples/docvwmdi/docvwmdi.bkl
 ../../samples/docvwmdi/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/docvwmdi/docvwmdi.bkl
@@ -749,6 +1037,9 @@ Makefile: regenMakefile.py
 ../../samples/docvwmdi/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/docvwmdi/docvwmdi.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/docvwmdi/makefile.bcc -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
 	touch ../../samples/docvwmdi/makefile.bcc
+../../samples/docvwmdi/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/docvwmdi/docvwmdi.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/docvwmdi/makefile.vc -DWXTOPDIR=../../ ../../samples/docvwmdi/docvwmdi.bkl
+	touch ../../samples/docvwmdi/makefile.vc
 
 # from ../../samples/scrollsub/scrollsub.bkl
 ../../samples/scrollsub/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/scrollsub/scrollsub.bkl
@@ -757,6 +1048,9 @@ Makefile: regenMakefile.py
 ../../samples/scrollsub/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/scrollsub/scrollsub.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/scrollsub/makefile.bcc -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
 	touch ../../samples/scrollsub/makefile.bcc
+../../samples/scrollsub/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/scrollsub/scrollsub.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/scrollsub/makefile.vc -DWXTOPDIR=../../ ../../samples/scrollsub/scrollsub.bkl
+	touch ../../samples/scrollsub/makefile.vc
 
 # from ../../samples/memcheck/memcheck.bkl
 ../../samples/memcheck/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/memcheck/memcheck.bkl
@@ -765,6 +1059,9 @@ Makefile: regenMakefile.py
 ../../samples/memcheck/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/memcheck/memcheck.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/memcheck/makefile.bcc -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
 	touch ../../samples/memcheck/makefile.bcc
+../../samples/memcheck/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/memcheck/memcheck.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/memcheck/makefile.vc -DWXTOPDIR=../../ ../../samples/memcheck/memcheck.bkl
+	touch ../../samples/memcheck/makefile.vc
 
 # from ../../samples/internat/internat.bkl
 ../../samples/internat/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/internat/internat.bkl
@@ -773,6 +1070,9 @@ Makefile: regenMakefile.py
 ../../samples/internat/makefile.bcc: common.bkl common_samples.bkl config.bkl ../../samples/internat/internat.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../samples/internat/makefile.bcc -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
 	touch ../../samples/internat/makefile.bcc
+../../samples/internat/makefile.vc: common.bkl common_samples.bkl config.bkl ../../samples/internat/internat.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../samples/internat/makefile.vc -DWXTOPDIR=../../ ../../samples/internat/internat.bkl
+	touch ../../samples/internat/makefile.vc
 
 # from ../../contrib/build/xrc/xrc.bkl
 ../../contrib/src/xrc/Makefile.in: common.bkl common_contrib.bkl config.bkl ../../contrib/build/xrc/xrc.bkl
@@ -781,6 +1081,9 @@ Makefile: regenMakefile.py
 ../../contrib/build/xrc/makefile.bcc: common.bkl common_contrib.bkl config.bkl ../../contrib/build/xrc/xrc.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../contrib/build/xrc/makefile.bcc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
 	touch ../../contrib/build/xrc/makefile.bcc
+../../contrib/build/xrc/makefile.vc: common.bkl common_contrib.bkl config.bkl ../../contrib/build/xrc/xrc.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../contrib/build/xrc/makefile.vc -DWXTOPDIR=../../../ ../../contrib/build/xrc/xrc.bkl
+	touch ../../contrib/build/xrc/makefile.vc
 
 # from ../../contrib/build/gizmos/gizmos.bkl
 ../../contrib/src/gizmos/Makefile.in: common.bkl common_contrib.bkl config.bkl ../../contrib/build/gizmos/gizmos.bkl
@@ -789,3 +1092,6 @@ Makefile: regenMakefile.py
 ../../contrib/build/gizmos/makefile.bcc: common.bkl common_contrib.bkl config.bkl ../../contrib/build/gizmos/gizmos.bkl
 	$(BAKEFILE) $(BAKEARGS) -fborland -o../../contrib/build/gizmos/makefile.bcc -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
 	touch ../../contrib/build/gizmos/makefile.bcc
+../../contrib/build/gizmos/makefile.vc: common.bkl common_contrib.bkl config.bkl ../../contrib/build/gizmos/gizmos.bkl
+	$(BAKEFILE) $(BAKEARGS) -fmsvc -o../../contrib/build/gizmos/makefile.vc -DWXTOPDIR=../../../ ../../contrib/build/gizmos/gizmos.bkl
+	touch ../../contrib/build/gizmos/makefile.vc
