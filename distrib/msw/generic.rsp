@@ -1075,6 +1075,7 @@ demos/life/*.def
 demos/life/*.ico
 demos/life/*.xpm
 demos/life/*.txt
+demos/life/*.lif
 demos/life/bitmaps/*.xpm
 demos/life/bitmaps/*.bmp
 

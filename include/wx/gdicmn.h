@@ -197,8 +197,8 @@ public:
     bool operator==(const wxSize& sz) const { return x == sz.x && y == sz.y; }
 
     // FIXME are these really useful? If they're, we should have += &c as well
-    wxSize operator+(const wxSize& sz) { return wxSize(x + sz.x, y + sz.y); }
-    wxSize operator-(const wxSize& sz) { return wxSize(x - sz.x, y - sz.y); }
+    wxSize operator+(const wxSize& sz) const { return wxSize(x + sz.x, y + sz.y); }
+    wxSize operator-(const wxSize& sz) const { return wxSize(x - sz.x, y - sz.y); }
 
     // accessors
     void Set(int xx, int yy) { x = xx; y = yy; }
