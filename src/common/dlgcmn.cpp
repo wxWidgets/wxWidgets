@@ -64,7 +64,7 @@ void wxDialogBase::Init()
 
 #if wxUSE_STATTEXT && wxUSE_TEXTCTRL
 
-wxSizer *wxDialogBase::CreateTextSizer( const wxString &message )
+wxSizer *wxDialogBase::CreateTextSizer( const wxString& message )
 {
     wxBoxSizer *box = new wxBoxSizer( wxVERTICAL );
 
@@ -76,24 +76,34 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString &message )
     GetTextExtent(_T("H"), (int*)NULL, &y, (int*)NULL, (int*)NULL, &font);
 
     wxString line;
-    for (size_t pos = 0; pos < message.Len(); pos++)
+    for ( size_t pos = 0; pos < message.length(); pos++ )
     {
-        if (message[pos] == wxT('\n'))
+        switch ( message[pos] )
         {
-            if (!line.IsEmpty())
-            {
-                wxStaticText *s1 = new wxStaticText( this, -1, line );
-                box->Add( s1 );
-                line = wxT("");
-            }
-            else
-            {
-                box->Add( 5, y );
-            }
-        }
-        else
-        {
-            line += message[pos];
+            case _T('\n'):
+                if (!line.IsEmpty())
+                {
+                    wxStaticText *s1 = new wxStaticText( this, -1, line );
+                    box->Add( s1 );
+                    line = wxT("");
+                }
+                else
+                {
+                    box->Add( 5, y );
+                }
+                break;
+
+            case _T('&'):
+                // this is used as accel mnemonic prefix in the wxWindows
+                // controls but in the static messages created by
+                // CreateTextSizer() (used by wxMessageBox, for example), we
+                // don't want this special meaning, so we need to quote it
+                line += _T('&');
+
+                // fall through to add it normally too
+
+            default:
+                line += message[pos];
         }
     }
 
