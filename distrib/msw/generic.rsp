@@ -151,9 +151,6 @@ lib/dummy
 
 tools/gettext/*.*
 
-misc/afm/*.afm
-misc/gs_afm/*.afm
-
 utils/*.bkl
 utils/make*.*
 utils/configure
@@ -1427,8 +1424,8 @@ demos/dbbrowse/*.bkl
 
 tests/*.bkl
 tests/makefile*.*
-tests/test.dsp
-tests/test.dsw
+tests/*.dsp
+tests/*.dsw
 tests/*.cpp
 tests/*.fc
 
@@ -1439,7 +1436,9 @@ tests/filename/*.cpp
 tests/filesys/*.cpp
 tests/fontmap/*.cpp
 tests/formatconverter/*.cpp
+tests/geometry/*.cpp
 tests/hashes/*.cpp
+tests/lists/*.cpp
 tests/longlong/*.cpp
 tests/mbconv/*.cpp
 

@@ -74,15 +74,6 @@
             <install-to>$(DATADIR)/aclocal</install-to>
         </data-files>
 
-        <data-files-tg id="install-afm" cond="USE_GUI=='1'">
-            <files>misc/afm/*.afm</files>
-            <install-to>$(DATADIR)/wx/afm</install-to>
-        </data-files-tg>
-        <data-files-tg id="install-gsafm" cond="USE_GUI=='1'">
-            <files>misc/gs_afm/*.afm</files>
-            <install-to>$(DATADIR)/wx/gs_afm</install-to>
-        </data-files-tg>
-
         <action id="install-wxconfig">
             <dependency-of>install</dependency-of>
             <command>

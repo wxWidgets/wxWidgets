@@ -84,6 +84,7 @@ include/wx/msw/ole/*.h
 include/wx/msw/*.cur
 include/wx/msw/*.ico
 include/wx/msw/*.bmp
+include/wx/msvc/wx/*.h
 
 include/wx/msw/wince/*.h
 include/wx/msw/wince/*.rc

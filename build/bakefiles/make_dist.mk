@@ -972,11 +972,6 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/wxrc/*.rc $(DISTDIR)/utils/wxrc
 
 MISC_DIST: ALL_GUI_DIST
-	mkdir $(DISTDIR)/misc
-	mkdir $(DISTDIR)/misc/afm
-	cp $(MISCDIR)/afm/*.afm  $(DISTDIR)/misc/afm
-	mkdir $(DISTDIR)/misc/gs_afm
-	cp $(MISCDIR)/gs_afm/*.afm  $(DISTDIR)/misc/gs_afm
 
 INTL_DIST:
 	mkdir $(DISTDIR)/locale

@@ -8605,8 +8605,6 @@ COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
 @COND_USE_XRC_1@__wxrc___depname = wxrc
 @COND_USE_XRC_1@__clean_wxrc___depname = clean-wxrc
 @COND_USE_XRC_1@__install_wxrc___depname = install-wxrc
-@COND_USE_GUI_1@__install_afm___depname = install-afm
-@COND_USE_GUI_1@__install_gsafm___depname = install-gsafm
 @COND_TOOLKIT_MAC@__macos_res___depname = lib/libwx_$(TOOLCHAIN_NAME).3.r
 @COND_TOOLKIT_MAC@__macos_res_install___depname = macos-res-install
 @COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).3.r
@@ -9167,14 +9165,6 @@ samples:
 
 @COND_USE_XRC_1@install-wxrc: 
 @COND_USE_XRC_1@	(test -d utils/wxrc && cd utils/wxrc && $(MAKE) install) || true
-
-@COND_USE_GUI_1@install-afm: 
-@COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(datadir)/wx/afm
-@COND_USE_GUI_1@	(cd $(srcdir) ; $(INSTALL_DATA)  misc/afm/*.afm $(DESTDIR)$(datadir)/wx/afm)
-
-@COND_USE_GUI_1@install-gsafm: 
-@COND_USE_GUI_1@	$(INSTALL_DIR) $(DESTDIR)$(datadir)/wx/gs_afm
-@COND_USE_GUI_1@	(cd $(srcdir) ; $(INSTALL_DATA)  misc/gs_afm/*.afm $(DESTDIR)$(datadir)/wx/gs_afm)
 
 install-wxconfig: 
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
@@ -24012,11 +24002,6 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/wxrc/*.rc $(DISTDIR)/utils/wxrc
 
 MISC_DIST: ALL_GUI_DIST
-	mkdir $(DISTDIR)/misc
-	mkdir $(DISTDIR)/misc/afm
-	cp $(MISCDIR)/afm/*.afm  $(DISTDIR)/misc/afm
-	mkdir $(DISTDIR)/misc/gs_afm
-	cp $(MISCDIR)/gs_afm/*.afm  $(DISTDIR)/misc/gs_afm
 
 INTL_DIST:
 	mkdir $(DISTDIR)/locale
