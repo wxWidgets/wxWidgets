@@ -665,6 +665,23 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
 
     tool->Detach();
 
+    wxToolBarTool* tl = wx_static_cast( wxToolBarTool* , tool ) ;
+    switch ( tool->GetStyle() )
+    {
+        case wxTOOL_STYLE_CONTROL:
+            tool->GetControl()->Destroy();
+            break;
+
+        case wxTOOL_STYLE_BUTTON:
+        case wxTOOL_STYLE_SEPARATOR:
+            if ( tl->GetControlHandle() )
+            {
+                DisposeControl( (ControlRef) tl->GetControlHandle() ) ;
+                tl->SetControlHandle( (ControlRef) NULL ) ;
+            }
+            break;
+    }
+
     // and finally reposition all the controls after this one
     
     for ( /* node -> first after deleted */ ; node; node = node->GetNext() )
