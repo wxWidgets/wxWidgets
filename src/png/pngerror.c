@@ -147,8 +147,8 @@ png_format_buffer(png_structp png_ptr, png_charp buffer, png_const_charp
  
       buffer[iout++] = ':';
       buffer[iout++] = ' ';
-      png_strncpy(buffer+iout, error_message, 63);
-      buffer[iout+63] = 0;
+      png_strncpy(buffer+iout, error_message, len);
+      buffer[iout+len] = 0;
    }
 }
 
