@@ -191,10 +191,12 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
 
   // associate drop targets with 2 text controls
-//  m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
+#ifdef __WXMSW__  // it's not supported (yet) on other platforms
+  m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
+#endif  //MSW
   m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));  
 
- wxLayoutConstraints *c;
+  wxLayoutConstraints *c;
 
   // Top-left listbox
   c = new wxLayoutConstraints;
@@ -260,19 +262,21 @@ void DnDFrame::OnHelp(wxCommandEvent& /* event */)
 "This small program demonstrates drag & drop support in wxWindows. The program window\n"
 "consists of 3 parts: the bottom pane is for debug messages, so that you can see what's\n"
 "going on inside. The top part is split into 2 listboxes, the left one accepts files\n" 
-"and the right one accepts text."
+"and the right one accepts text.\n"
 "\n"
 "To test wxDropTarget: open wordpad (write.exe), select some text in it and drag it to\n" 
 "the right listbox (you'll notice the usual visual feedback, i.e. the cursor will change).\n" 
 "Also, try dragging some files (you can select several at once) from Windows Explorer (or \n"
 "File Manager) to the left pane. Hold down Ctrl/Shift keys when you drop text (doesn't \n"
-"work with files) and see what changes."
+"work with files) and see what changes.\n"
 "\n"
 "To test wxDropSource: just press any mouse button on the empty zone of the window and drag\n" 
 "it to wordpad or any other droptarget accepting text (and of course you can just drag it\n"
 "to the right pane). Due to a lot of trace messages, the cursor might take some time to \n"
 "change, don't release the mouse button until it does. You can change the string being\n" 
 "dragged in in \"File|Test drag...\" dialog.\n"
+"\n"
+"\n"
 "Please send all questions/bug reports/suggestions &c to \n"
 "Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>",
                         "wxDnD Help");
