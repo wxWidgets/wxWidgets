@@ -16,7 +16,7 @@
     
     <option name="WXUNIV">
         <values>0,1</values>
-        <values-description>,wxUniv</values-description>
+        <values-description>,Universal</values-description>
         <default-value>0</default-value>
         <description>
             Build wxUniversal instead of native port?
