@@ -837,18 +837,14 @@ Selects all cells in the grid.
 
 \membersection{wxGrid::SelectBlock}\label{wxgridselectblock}
 
-\func{void}{SelectBlock}{\param{int }{topRow}, \param{int }{leftCol}, \param{int }{bottomRow}, \param{int }{rightCol}}
+\func{void}{SelectBlock}{\param{int }{topRow}, \param{int }{leftCol}, 
+\param{int }{bottomRow}, \param{int }{rightCol}, \param{bool }{addToSelected = FALSE}}
 
-\func{void}{SelectBlock}{\param{const wxGridCellCoords\& }{topLeft}, \param{const wxGridCellCoords\& }{bottomRight}}
+\func{void}{SelectBlock}{\param{const wxGridCellCoords\& }{topLeft}, 
+\param{const wxGridCellCoords\& }{bottomRight}, \param{bool }{addToSelected = FALSE}}
 
-Highlights a rectangular block of cells but does not select it !
-
-\wxheading{Note} \\ This is obviously inconsistent with the other wxGrid::SelectXXX functions, each
-of which call the corresponding wxGridSelection function whereas wxGrid::SelectBlock is only
-responsible for highlighting a block of cells. There is presently no way to add a block to the
-selection programmatically. This will probably be changed soon so that the existing SelectBlock
-function is renamed to HighlightBlock and a new SelectBlock function introduced to call
-wxGridSelection::SelectBlock. 
+Selects a rectangular block of cells. If addToSelected is FALSE then any existing selection will be
+deselected; if TRUE the column will be added to the existing selection. 
 
 \membersection{wxGrid::SelectCol}\label{wxgridselectcol}
 
