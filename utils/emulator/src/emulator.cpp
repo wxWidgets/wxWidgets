@@ -38,6 +38,7 @@
 #include "wx/fileconf.h"
 #include "wx/cmdline.h"
 #include "wx/image.h"
+#include "wx/file.h"
 
 #ifdef __WXX11__
 #include "wx/x11/reparent.h"
