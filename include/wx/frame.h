@@ -147,7 +147,6 @@ public:
 #if wxUSE_MENUS
     // send wxUpdateUIEvents for all menu items (called from OnIdle())
     void DoMenuUpdates();
-    void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
 #endif // wxUSE_MENUS
 
     // do the UI update processing for this window

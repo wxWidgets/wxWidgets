@@ -413,47 +413,12 @@ void wxFrameBase::DoMenuUpdates()
 {
     wxMenuBar* bar = GetMenuBar();
 
-#ifdef __WXMSW__
-    wxWindow* focusWin = wxFindFocusDescendant((wxWindow*) this);
-#else
-    wxWindow* focusWin = (wxWindow*) NULL;
-#endif
     if ( bar != NULL )
     {
+        wxEvtHandler* source = GetEventHandler();
         int nCount = bar->GetMenuCount();
         for (int n = 0; n < nCount; n++)
-            DoMenuUpdates(bar->GetMenu(n), focusWin);
-    }
-}
-
-// update a menu and all submenus recursively
-void wxFrameBase::DoMenuUpdates(wxMenu* menu, wxWindow* focusWin)
-{
-    wxEvtHandler* evtHandler = focusWin ? focusWin->GetEventHandler() : GetEventHandler();
-    wxMenuItemList::Node* node = menu->GetMenuItems().GetFirst();
-    while (node)
-    {
-        wxMenuItem* item = node->GetData();
-        if ( !item->IsSeparator() )
-        {
-            wxWindowID id = item->GetId();
-            wxUpdateUIEvent event(id);
-            event.SetEventObject( this );
-
-            if (evtHandler->ProcessEvent(event))
-            {
-                if (event.GetSetText())
-                    menu->SetLabel(id, event.GetText());
-                if (event.GetSetChecked())
-                    menu->Check(id, event.GetChecked());
-                if (event.GetSetEnabled())
-                    menu->Enable(id, event.GetEnabled());
-            }
-
-            if (item->GetSubMenu())
-                DoMenuUpdates(item->GetSubMenu(), focusWin);
-        }
-        node = node->GetNext();
+            bar->GetMenu(n)->UpdateUI(source);
     }
 }
 

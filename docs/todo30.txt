@@ -157,18 +157,8 @@ In addition to wxCOMPATIBILITY code:
 - contrib/src/canvas?
 - contrib/src/mmedia
 - contrib/src/applet?
-- utils/Install
-- wxDate, wxTime
 - Old wxODBC code
-- wxExpr (rewriting some OGL code or bundling wxExpr with OGL)
-- Old resource system
-- samples/resource
 - Dialog Editor
-- generic/src/htmlhelp.cpp
-- all code that uses layout constraints,
-  so constraints can be compiled out of the
-  core library
-
 
 wxMiscellaneous
 ===============

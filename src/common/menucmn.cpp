@@ -553,7 +553,7 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
 
             if ( source->ProcessEvent(event) )
             {
-                // if anything changed, update the chanegd attribute
+                // if anything changed, update the changed attribute
                 if (event.GetSetText())
                     SetLabel(id, event.GetText());
                 if (event.GetSetChecked())
@@ -566,7 +566,7 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
             if ( item->GetSubMenu() )
                 item->GetSubMenu()->UpdateUI(source);
         }
-        //else: item is a separator (which don't process update UI events)
+        //else: item is a separator (which doesn't process update UI events)
 
         node = node->GetNext();
     }
