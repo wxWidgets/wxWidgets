@@ -130,7 +130,7 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
 }
 #endif // wxMAC
 
-#ifdef __VMS__
+#if defined( __VMS__ ) && ( __VMS_VER < 70000000 )
 // we have no strI functions under VMS, therefore I have implemented
 // an inefficient but portable version: convert copies of strings to lowercase
 // and then use the normal comparison
