@@ -58,7 +58,7 @@
 
 #include "wx/datetime.h"
 
-#include "wx/dynload.h"
+#include "wx/dynlib.h"
 
 #include "wx/msw/crashrpt.h"
 
