@@ -38,12 +38,15 @@ END_EVENT_TABLE()
 
 void wxRadioBox::OnRadioButton( wxCommandEvent &outer )
 {
+  if ( outer.IsChecked() )
+  {
     wxCommandEvent event(wxEVT_COMMAND_RADIOBOX_SELECTED, m_windowId);
     int i = GetSelection() ;
     event.SetInt( i );
     event.SetString( GetString( i ) );
     event.SetEventObject( this );
     ProcessCommand(event);
+  }
 }
 
 wxRadioBox::wxRadioBox()

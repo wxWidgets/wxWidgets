@@ -71,7 +71,6 @@ void wxRadioButton::SetValue(bool val)
 	    return ;
 	    
    ::SetControlValue( m_macControl , val ) ;
-   Refresh() ;
    if (val) 
    {
    		cycle=this->NextInCycle();
@@ -82,6 +81,10 @@ void wxRadioButton::SetValue(bool val)
    				}
    			}
    		}
+    wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, m_windowId );
+    event.SetEventObject(this);
+    event.SetInt( GetValue() );
+    ProcessCommand(event);
 }
 
 bool wxRadioButton::GetValue() const
@@ -98,10 +101,6 @@ void wxRadioButton::Command (wxCommandEvent & event)
 void wxRadioButton::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
 {
 	  SetValue(true) ;
-    wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, m_windowId );
-    event.SetEventObject(this);
-    event.SetInt( GetValue() );
-    ProcessCommand(event);
 }
 
 wxRadioButton *wxRadioButton::AddInCycle(wxRadioButton *cycle)
