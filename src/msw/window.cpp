@@ -134,6 +134,9 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 // mouse clicks
 static void TranslateKbdEventToMouse(wxWindow *win, int *x, int *y, WPARAM *flags);
 
+// get the text metrics for the current font
+static TEXTMETRIC wxGetTextMetrics(const wxWindow *win);
+
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
@@ -1334,26 +1337,14 @@ void wxWindow::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
 
 int wxWindow::GetCharHeight() const
 {
-    TEXTMETRIC lpTextMetric;
-    HWND hWnd = GetHwnd();
-    HDC dc = ::GetDC(hWnd);
-
-    GetTextMetrics(dc, &lpTextMetric);
-    ::ReleaseDC(hWnd, dc);
-
-    return lpTextMetric.tmHeight;
+    return wxGetTextMetrics(this).tmHeight;
 }
 
 int wxWindow::GetCharWidth() const
 {
-    TEXTMETRIC lpTextMetric;
-    HWND hWnd = GetHwnd();
-    HDC dc = ::GetDC(hWnd);
-
-    GetTextMetrics(dc, &lpTextMetric);
-    ::ReleaseDC(hWnd, dc);
-
-    return lpTextMetric.tmAveCharWidth;
+    // +1 is needed because Windows apparently adds it when calculating the
+    // dialog units size in pixels
+    return wxGetTextMetrics(this).tmAveCharWidth + 1;
 }
 
 void wxWindow::GetTextExtent(const wxString& string,
@@ -4279,4 +4270,32 @@ static void TranslateKbdEventToMouse(wxWindow *win, int *x, int *y, WPARAM *flag
     *y = GET_Y_LPARAM(dwPos);
 
     win->ScreenToClient(x, y);
+}
+
+static TEXTMETRIC wxGetTextMetrics(const wxWindow *win)
+{
+    // prepare the DC
+    TEXTMETRIC tm;
+    HWND hwnd = GetHwndOf(win);
+    HDC hdc = ::GetDC(hwnd);
+
+    // and select the current font into it
+    HFONT hfont = GetHfontOf(win->GetFont());
+    if ( hfont )
+    {
+        hfont = (HFONT)::SelectObject(hdc, hfont);
+    }
+
+    // finally retrieve the text metrics from it
+    GetTextMetrics(hdc, &tm);
+
+    // and clean up
+    if ( hfont )
+    {
+        (void)::SelectObject(hdc, hfont);
+    }
+
+    ::ReleaseDC(hwnd, hdc);
+
+    return tm;
 }

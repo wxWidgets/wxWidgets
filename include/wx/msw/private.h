@@ -289,6 +289,9 @@ private:
 #define GetHcursor()            ((HCURSOR)GetHCURSOR())
 #define GetHcursorOf(cursor)    ((HCURSOR)(cursor).GetHCURSOR())
 
+#define GetHfont()              ((HFONT)GetHFONT())
+#define GetHfontOf(font)        ((HFONT)(font).GetHFONT())
+
 #endif // wxUSE_GUI
 
 // ---------------------------------------------------------------------------

@@ -229,6 +229,11 @@ bool wxFont::FreeResource(bool force)
 
 WXHANDLE wxFont::GetResourceHandle()
 {
+    return GetHFONT();
+}
+
+WXHFONT wxFont::GetHFONT() const
+{
     if ( !M_FONTDATA )
         return 0;
     else
