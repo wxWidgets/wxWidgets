@@ -314,44 +314,27 @@ void wxWindowBase::Centre(int direction)
     int width, height;
     GetSize(&width, &height);
 
-    int new_x = -1,
-        new_y = -1;
+    int xNew = -1,
+        yNew = -1;
 
     if ( direction & wxHORIZONTAL )
-        new_x = (widthParent - width)/2;
+        xNew = (widthParent - width)/2;
 
     if ( direction & wxVERTICAL )
-        new_y = (heightParent - height)/2;
+        yNew = (heightParent - height)/2;
 
-    Move(new_x, new_y);
-}
+    // controls are always centered on their parent because it doesn't make
+    // sense to centre them on the screen
+    if ( (direction & wxCENTER_FRAME) || wxDynamicCast(this, wxControl) )
+    {
+        // adjust to the parents client area origin
+        wxPoint posParent = parent->ClientToScreen(wxPoint(0, 0));
 
-// Center TopLevel windows over thier parent instead of the whole screen
-void wxWindowBase::CentreOnParent(int direction)
-{
-    wxPoint     ppos;
-    wxSize      psze;
-    wxSize      wsze;
-    wxWindow*   parent = GetParent();
-    int         x, y;
-
-    if (!parent || !IsTopLevel()) {
-        Centre(direction);
-        return;
+        xNew += posParent.x;
+        yNew += posParent.y;
     }
 
-    psze = parent->GetSize();
-    ppos = parent->ClientToScreen(wxPoint(0,0));
-    wsze = GetSize();
-
-    x = y = -1;
-
-    if (direction == wxBOTH || direction == wxHORIZONTAL)
-        x = ppos.x + (psze.x  - wsze.x)/2;
-    if (direction == wxBOTH || direction == wxVERTICAL)
-        y = ppos.y + (psze.y - wsze.y)/2;
-
-    Move(x, y);
+    Move(xNew, yNew);
 }
 
 // fits the window around the children

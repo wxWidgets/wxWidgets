@@ -257,10 +257,10 @@ public:
     }
 
         // centre with respect to the the parent window
-    void Centre( int direction = wxHORIZONTAL );
-    void Center( int direction = wxHORIZONTAL ) { Centre(direction); }
-    void CentreOnParent(int direction = wxHORIZONTAL );
-    void CenterOnParent(int direction = wxHORIZONTAL ) { CentreOnParent(direction); }
+    void Centre( int direction = wxBOTH );
+    void Center( int direction = wxBOTH ) { Centre(direction); }
+    void CentreOnParent( int dir = wxBOTH ) { Centre(dir | wxCENTER_FRAME); }
+    void CenterOnParent( int dir = wxBOTH ) { Centre(dir | wxCENTER_FRAME); }
 
         // set window size to wrap around its children
     virtual void Fit();
