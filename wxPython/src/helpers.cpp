@@ -2154,6 +2154,20 @@ bool wxPy4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4) {
 
 //----------------------------------------------------------------------
 
+bool wxPySimple_typecheck(PyObject* source, const wxChar* classname, int seqLen)
+{
+    void* ptr;
+    
+    if (wxPySwigInstance_Check(source) &&
+        wxPyConvertSwigPtr(source, (void **)&ptr, classname))
+        return true;
+
+    PyErr_Clear();
+    if (PySequence_Check(source) && PySequence_Length(source) == seqLen)
+        return true;
+    
+    return false;
+}    
 
 bool wxSize_helper(PyObject* source, wxSize** obj)
 {
@@ -2161,38 +2175,9 @@ bool wxSize_helper(PyObject* source, wxSize** obj)
 }
 
 
-bool wxSize_typecheck(PyObject* source) {
-    void* ptr;
-    
-    if (wxPySwigInstance_Check(source) &&
-        wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxSize")))
-        return true;
-
-    PyErr_Clear();
-    if (PySequence_Check(source) && PySequence_Length(source) == 2)
-        return true;
-    
-    return false;
-}
-
-
 bool wxPoint_helper(PyObject* source, wxPoint** obj)
 {
     return wxPyTwoIntItem_helper(source, obj, wxT("wxPoint"));
-}
-
-bool wxPoint_typecheck(PyObject* source) {
-    void* ptr;
-    
-    if (wxPySwigInstance_Check(source) &&
-        wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxPoint")))
-        return true;
-
-    PyErr_Clear();
-    if (PySequence_Check(source) && PySequence_Length(source) == 2)
-        return true;
-    
-    return false;
 }
 
 
@@ -2227,20 +2212,6 @@ bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj) {
     return FALSE;
 }
 
-
-bool wxRealPoint_typecheck(PyObject* source) {
-    void* ptr;
-    
-    if (wxPySwigInstance_Check(source) &&
-        wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxRealPoint")))
-        return true;
-
-    PyErr_Clear();
-    if (PySequence_Check(source) && PySequence_Length(source) == 2)
-        return true;
-    
-    return false;
-}
 
 
 bool wxRect_helper(PyObject* source, wxRect** obj) {
@@ -2281,21 +2252,6 @@ bool wxRect_helper(PyObject* source, wxRect** obj) {
     return FALSE;
 }
 
-
-
-bool wxRect_typecheck(PyObject* source) {
-    void* ptr;
-    
-    if (wxPySwigInstance_Check(source) &&
-        wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxRect")))
-        return true;
-
-    PyErr_Clear();
-    if (PySequence_Check(source) && PySequence_Length(source) == 4)
-        return true;
-    
-    return false;
-}
 
 
 bool wxColour_helper(PyObject* source, wxColour** obj) {
@@ -2352,21 +2308,14 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
 
 
 bool wxColour_typecheck(PyObject* source) {
-    void* ptr;
-    
-    if (wxPySwigInstance_Check(source) &&
-        wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxColour")))
+
+    if (wxPySimple_typecheck(source, wxT("wxColour"), 3))
         return true;
 
-    PyErr_Clear();
     if (PyString_Check(source) || PyUnicode_Check(source))
         return true;
     
-    if (PySequence_Check(source) && PySequence_Length(source) == 3)
-        return true;
-    
-    return false;
-    
+    return false;   
 }
 
 
@@ -2398,21 +2347,6 @@ bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj) {
  error:
     PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of floats or a wxPoint2D object.");
     return FALSE;
-}
-
-
-bool wxPoint2D_typecheck(PyObject* source) {
-    void* ptr;
-    
-    if (wxPySwigInstance_Check(source) &&
-        wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxPoint2D")))
-        return true;
-
-    PyErr_Clear();
-    if (PySequence_Check(source) && PySequence_Length(source) == 2)
-        return true;
-    
-    return false;
 }
 
 

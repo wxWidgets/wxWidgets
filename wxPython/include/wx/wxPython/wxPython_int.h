@@ -159,12 +159,8 @@ bool wxColour_helper(PyObject* source, wxColour** obj);
 bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj);
 
 
-bool wxSize_typecheck(PyObject* source);
-bool wxPoint_typecheck(PyObject* source);
-bool wxRealPoint_typecheck(PyObject* source);
-bool wxRect_typecheck(PyObject* source);
+bool wxPySimple_typecheck(PyObject* source, const wxChar* classname, int seqLen);
 bool wxColour_typecheck(PyObject* source);
-bool wxPoint2D_typecheck(PyObject* source);
 
 
 template<class T>
@@ -381,12 +377,9 @@ struct wxPyCoreAPI {
     bool                (*p_wxColour_helper)(PyObject* source, wxColour** obj);
     bool                (*p_wxPoint2D_helper)(PyObject* source, wxPoint2DDouble** obj);
 
-    bool                (*p_wxSize_typecheck)(PyObject* source);
-    bool                (*p_wxPoint_typecheck)(PyObject* source);
-    bool                (*p_wxRealPoint_typecheck)(PyObject* source);
-    bool                (*p_wxRect_typecheck)(PyObject* source);
+    
+    bool                (*p_wxPySimple_typecheck)(PyObject* source, const wxChar* classname, int seqLen);
     bool                (*p_wxColour_typecheck)(PyObject* source);
-    bool                (*p_wxPoint2D_typecheck)(PyObject* source);
 
     void                (*p_wxPyCBH_setCallbackInfo)(wxPyCallbackHelper& cbh, PyObject* self, PyObject* klass, int incref);
     bool                (*p_wxPyCBH_findCallback)(const wxPyCallbackHelper& cbh, const char* name);

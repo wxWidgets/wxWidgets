@@ -169,12 +169,8 @@ static wxPyCoreAPI API = {
     wxColour_helper,
     wxPoint2D_helper,
                                              
-    wxSize_typecheck,
-    wxPoint_typecheck,
-    wxRealPoint_typecheck,
-    wxRect_typecheck,
+    wxPySimple_typecheck,
     wxColour_typecheck,
-    wxPoint2D_typecheck,
 
     wxPyCBH_setCallbackInfo,
     wxPyCBH_findCallback,

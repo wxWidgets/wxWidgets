@@ -234,7 +234,7 @@
     if ( ! wxSize_helper($input, &$1)) SWIG_fail;
 }
 %typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxSize& {
-    $1 = wxSize_typecheck($input);
+    $1 = wxPySimple_typecheck($input, wxT("wxSize"), 2);
 }
 
 
@@ -243,7 +243,7 @@
     if ( ! wxPoint_helper($input, &$1)) SWIG_fail;
 }
 %typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxPoint& {
-    $1 = wxPoint_typecheck($input);
+    $1 = wxPySimple_typecheck($input, wxT("wxPoint"), 2);
 }
 
 
@@ -252,7 +252,7 @@
     if ( ! wxRealPoint_helper($input, &$1)) SWIG_fail;
 }
 %typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxRealPoint& {
-    $1 = wxRealPoint_typecheck($input);
+    $1 = wxPySimple_typecheck($input, wxT("wxRealPoint"), 2);
 }
 
 
@@ -261,7 +261,7 @@
     if ( ! wxRect_helper($input, &$1)) SWIG_fail;
 }
 %typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxRect& {
-    $1 = wxRect_typecheck($input);
+    $1 = wxPySimple_typecheck($input, wxT("wxRect"), 4);
 }
 
 
@@ -270,7 +270,7 @@
     if ( ! wxPoint2D_helper($input, &$1)) SWIG_fail;
 }
 %typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxPoint2D& {
-    $1 = wxPoint2D_typecheck($input);
+    $1 = wxPySimple_typecheck($input, wxT("wxPoint2D"), 2);
 }
 
 

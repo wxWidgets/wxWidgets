@@ -19,6 +19,39 @@
 %}
 
 //---------------------------------------------------------------------------
+
+%typemap(in) wxGBPosition& (wxGBPosition temp) {
+    $1 = &temp;
+    if ( ! wxGBPosition_helper($input, &$1)) SWIG_fail;
+}
+%typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxGBPosition& {
+    $1 = wxPySimple_typecheck($input, wxT("wxGBPosition"), 2);
+}
+
+%typemap(in) wxGBSpan& (wxGBSpan temp) {
+    $1 = &temp;
+    if ( ! wxGBSpan_helper($input, &$1)) SWIG_fail;
+}
+%typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxGBSpan& {
+    $1 = wxPySimple_typecheck($input, wxT("wxGBSpan"), 2);
+}
+
+
+%{
+bool wxGBPosition_helper(PyObject* source, wxGBPosition** obj)
+{
+    return wxPyTwoIntItem_helper(source, obj, wxT("wxGBPosition"));
+}
+
+bool wxGBSpan_helper(PyObject* source, wxGBSpan** obj)
+{
+    return wxPyTwoIntItem_helper(source, obj, wxT("wxGBSpan"));
+}
+
+%}
+
+
+//---------------------------------------------------------------------------
 %newgroup;
 %noautorepr wxGBPosition;
 
@@ -119,34 +152,6 @@ public:
 const wxGBSpan wxDefaultSpan;
 %mutable;
 
-
-%typemap(in) wxGBPosition& (wxGBPosition temp) {
-    $1 = &temp;
-    if ( ! wxGBPosition_helper($input, &$1)) SWIG_fail;
-}
-// %typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxGBPosition& {
-//     $1 = wxGBPosition_typecheck($input);
-// }
-
-%typemap(in) wxGBSpan& (wxGBSpan temp) {
-    $1 = &temp;
-    if ( ! wxGBSpan_helper($input, &$1)) SWIG_fail;
-}
-// %typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxGBPosition& {
-//     $1 = wxGBSpan_typecheck($input);
-// }
-
-%{
-bool wxGBPosition_helper(PyObject* source, wxGBPosition** obj)
-{
-    return wxPyTwoIntItem_helper(source, obj, wxT("wxGBPosition"));
-}
-
-bool wxGBSpan_helper(PyObject* source, wxGBSpan** obj)
-{
-    return wxPyTwoIntItem_helper(source, obj, wxT("wxGBSpan"));
-}
-%}
 
 //---------------------------------------------------------------------------
 

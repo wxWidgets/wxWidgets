@@ -88,12 +88,8 @@ static void wxPyCoreAPI_IMPORT() {
 #define wxColour_helper(a,b)                    (wxPyCoreAPIPtr->p_wxColour_helper(a,b))
 #define wxPoint2D_helper(a,b)                   (wxPyCoreAPIPtr->p_wxPoint2D_helper(a,b))
 
-#define wxSize_typecheck(a)                     (wxPyCoreAPIPtr->p_wxSize_typecheck(a))
-#define wxPoint_typecheck(a)                    (wxPyCoreAPIPtr->p_wxPoint_typecheck(a))
-#define wxRealPoint_typecheck(a)                (wxPyCoreAPIPtr->p_wxRealPoint_typecheck(a))
-#define wxRect_typecheck(a)                     (wxPyCoreAPIPtr->p_wxRect_typecheck(a))
+#define wxPySimple_typecheck(a,b,c)             (wxPyCoreAPIPtr->p_wxPySimple_typecheck(a,b,c))
 #define wxColour_typecheck(a)                   (wxPyCoreAPIPtr->p_wxColour_typecheck(a))
-#define wxPoint2D_typecheck(a)                  (wxPyCoreAPIPtr->p_wxPoint2D_typecheck(a))
 
 #define wxPyCBH_setCallbackInfo(a, b, c, d)     (wxPyCoreAPIPtr->p_wxPyCBH_setCallbackInfo(a,b,c,d))
 #define wxPyCBH_findCallback(a, b)              (wxPyCoreAPIPtr->p_wxPyCBH_findCallback(a, b))
