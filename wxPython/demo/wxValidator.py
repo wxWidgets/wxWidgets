@@ -127,9 +127,14 @@ class TextObjectValidator(wxPyValidator):
 
          if len(text) == 0:
              wxMessageBox("A text object must contain some text!", "Error")
+             textCtrl.SetBackgroundColour("pink")
              textCtrl.SetFocus()
+             textCtrl.Refresh()
              return false
          else:
+             textCtrl.SetBackgroundColour(
+                 wxSystemSettings_GetColour(wxSYS_COLOUR_WINDOW))
+             textCtrl.Refresh()
              return true
 
 
@@ -182,7 +187,9 @@ class TestValidateDialog(wxDialog):
 
 
         buttons = wxBoxSizer(wxHORIZONTAL)
-        buttons.Add(wxButton(self, wxID_OK, "Okay"), 0, wxALL, 10)
+        b = wxButton(self, wxID_OK, "Okay")
+        b.SetDefault()
+        buttons.Add(b, 0, wxALL, 10)
         buttons.Add(wxButton(self, wxID_CANCEL, "Cancel"), 0, wxALL, 10)
 
         border = wxBoxSizer(wxVERTICAL)
