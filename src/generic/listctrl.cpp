@@ -942,6 +942,7 @@ BEGIN_EVENT_TABLE(wxListMainWindow,wxScrolledWindow)
   EVT_SIZE           (wxListMainWindow::OnSize)
   EVT_MOUSE_EVENTS   (wxListMainWindow::OnMouse)
   EVT_CHAR           (wxListMainWindow::OnChar)
+  EVT_KEY_DOWN       (wxListMainWindow::OnKeyDown)
   EVT_SET_FOCUS      (wxListMainWindow::OnSetFocus)
   EVT_KILL_FOCUS     (wxListMainWindow::OnKillFocus)
 END_EVENT_TABLE()
@@ -1381,6 +1382,25 @@ void wxListMainWindow::OnArrowChar( wxListLineData *newCurrent, bool shiftDown )
     UnfocusLine( oldCurrent );
 }
 
+void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
+{
+    wxWindow *parent = GetParent();
+  
+    /* we propagate the key event up */
+    wxKeyEvent ke( wxEVT_KEY_DOWN );
+    ke.m_shiftDown = event.m_shiftDown;
+    ke.m_controlDown = event.m_controlDown;
+    ke.m_altDown = event.m_altDown;
+    ke.m_metaDown = event.m_metaDown;
+    ke.m_keyCode = event.m_keyCode;
+    ke.m_x = event.m_x;
+    ke.m_y = event.m_y;
+    ke.SetEventObject( parent );
+    if (parent->GetEventHandler()->ProcessEvent( ke )) return;
+    
+    event.Skip();
+}
+  
 void wxListMainWindow::OnChar( wxKeyEvent &event )
 {
     wxWindow *parent = GetParent();
@@ -1391,8 +1411,8 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     le.SetEventObject( parent );
     parent->GetEventHandler()->ProcessEvent( le );
 
-    /* we propagate the key event up */
-    wxKeyEvent ke( wxEVT_KEY_DOWN );
+    /* we propagate the char event up */
+    wxKeyEvent ke( wxEVT_CHAR );
     ke.m_shiftDown = event.m_shiftDown;
     ke.m_controlDown = event.m_controlDown;
     ke.m_altDown = event.m_altDown;

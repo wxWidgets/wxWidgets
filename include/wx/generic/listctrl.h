@@ -481,6 +481,7 @@ class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
     void MoveToFocus( void );
     void OnArrowChar( wxListLineData *newCurrent, bool shiftDown );
     void OnChar( wxKeyEvent &event );
+    void OnKeyDown( wxKeyEvent &event );
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
     void OnSize( wxSizeEvent &event );
