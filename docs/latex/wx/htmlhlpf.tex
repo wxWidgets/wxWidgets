@@ -19,10 +19,21 @@ Title=@title of your book@
 Default topic=@default page to be displayed.htm@
 \end{verbatim}
 
-All filenames (including the Default topic) are relative to the location of .hhp file.
+All filenames (including the Default topic) are relative to the 
+location of .hhp file.
 
-For larger projects I recommend storing everything but .hhp file into one .zip archive. (The contents file 
-would then be referred to as myhelp.zip\#zip:contents.hhc)
+{\bf Localization note:} In addition, .hhp file may contain line
+
+\begin{verbatim}
+Charset=@rfc_charset@
+\end{verbatim}
+
+which specifies what charset (e.g. "iso8859_1") was used in contents
+and index files. Please note that this line is incompatible with
+MS HTML Help Workshop and it would either silently remove it or complain
+with some error. See also 
+\helpref{Writing non-English applications.}{nonenglishoverview}
+
 
 \wxheading{Contents file (.hhc)}
 
