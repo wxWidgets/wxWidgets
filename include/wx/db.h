@@ -65,6 +65,9 @@
     //
     #include "sql.h"
     #include "sqlext.h"
+    //#if wxUSE_UNICODE
+    //    #include <sqlucode.h>
+    //#endif
     #include "odbcinst.h"
 #else
     #if defined(__WINDOWS__) && ( defined(HAVE_W32API_H) || defined(__BORLANDC__) )
@@ -76,9 +79,16 @@
         // Use the ones from the library
         #include "wx/isql.h"
         #include "wx/isqlext.h"
+        // Not available in v2.x of iODBC
+        #ifndef __WXMSW__
+            typedef wxChar SQLTCHAR;
+        #endif
     #else
         #include <sql.h>
         #include <sqlext.h>
+        //#if wxUSE_UNICODE
+        //    #include <sqlucode.h>
+        //#endif
     #endif
     }
 #endif
@@ -93,11 +103,6 @@ typedef float SFLOAT;
 typedef double SDOUBLE;
 typedef unsigned int UINT;
 #define ULONG UDWORD
-
-// Not available in iODBC
-#ifndef __WXMSW__
-typedef UCHAR SQLTCHAR;
-#endif
 
 #ifndef wxODBC_FWD_ONLY_CURSORS
 #define wxODBC_FWD_ONLY_CURSORS 1
@@ -461,7 +466,18 @@ enum wxDBMS
     dbmsINTERBASE,
     dbmsPERVASIVE_SQL,
     dbmsXBASE_SEQUITER,
-    dbmsFIREBIRD
+    dbmsFIREBIRD,
+    dbmsMAXDB,
+    dbmsFuture1,
+    dbmsFuture2,
+    dbmsFuture3,
+    dbmsFuture4,
+    dbmsFuture5,
+    dbmsFuture6,
+    dbmsFuture7,
+    dbmsFuture8,
+    dbmsFuture9,
+    dbmsFuture10
 };
 
 
