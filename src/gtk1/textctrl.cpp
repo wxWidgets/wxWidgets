@@ -51,7 +51,7 @@ static void wxGtkTextInsert(GtkWidget *text,
                             const char *txt,
                             size_t len)
 {
-#ifndef __WXGTK__
+#ifndef __WXGTK20__
     GdkFont *font = attr.HasFont() ? attr.GetFont().GetInternalFont()
                                    : NULL;
 
