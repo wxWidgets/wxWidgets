@@ -294,6 +294,11 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 #endif // __WXMSW__
 
         int diff = m_splitMode == wxSPLIT_VERTICAL ? x - m_oldX : y - m_oldY;
+        if ( !diff )
+        {
+            // nothing to do, mouse didn't really move far enough
+            return;
+        }
 
         int posSashOld = isLive ? m_sashPosition : m_sashPositionCurrent;
         int posSashNew = OnSashPositionChanging(posSashOld + diff);
