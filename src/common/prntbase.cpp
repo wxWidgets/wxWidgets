@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:       wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -37,7 +37,8 @@
 #include "wx/stattext.h"
 #include "wx/intl.h"
 #include "wx/textdlg.h"
-#endif
+#include "wx/sizer.h"
+#endif // !WX_PRECOMP
 
 #include "wx/prntbase.h"
 #include "wx/dcprint.h"
@@ -47,8 +48,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <wx/sizer.h>
-                                         
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
     #include <commdlg.h>
@@ -507,8 +506,7 @@ void wxPreviewControlBar::SetZoomControl(int zoom)
 {
     wxChar buf[20];
     wxSprintf( buf, wxT("%d%%"), zoom );
-    
-    // Someone is calling methods that do no exist in wxChoice!! So I'll just comment out for VA for now
+
     if (m_zoomControl)
         m_zoomControl->SetStringSelection(buf);
 }
