@@ -54,7 +54,11 @@
 
 /* use wxWindows' configure */
 /* #define INLINE __inline__ */
+#if defined(__VISAGECPP__) && (__IBMCPP__ >= 400 || __IBMC__ >= 400)
+#define INLINE
+#else
 #define INLINE inline
+#endif
 
 /* These are for configuring the JPEG memory manager. */
 #undef DEFAULT_MAX_MEM
