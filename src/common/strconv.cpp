@@ -40,6 +40,9 @@
 
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
+#endif
+
+#ifdef __WINDOWS__
     #include "wx/msw/missing.h"
 #endif
 
@@ -69,6 +72,7 @@
 
 #include "wx/encconv.h"
 #include "wx/fontmap.h"
+#include "wx/utils.h"
 
 #ifdef __WXMAC__
 #include <ATSUnicode.h>
@@ -1117,8 +1121,10 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 #ifdef wxHAVE_WIN32_MB2WC
 
 // from utils.cpp
+#if wxUSE_FONTMAP 
 extern WXDLLIMPEXP_BASE long wxCharsetToCodepage(const wxChar *charset);
 extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding);
+#endif
 
 class wxMBConv_win32 : public wxMBConv
 {
@@ -1128,6 +1134,7 @@ public:
         m_CodePage = CP_ACP;
     }
 
+#if wxUSE_FONTMAP
     wxMBConv_win32(const wxChar* name)
     {
         m_CodePage = wxCharsetToCodepage(name);
@@ -1137,6 +1144,7 @@ public:
     {
         m_CodePage = wxEncodingToCodepage(encoding);
     }
+#endif
 
     size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const
     {
@@ -1601,12 +1609,16 @@ wxMBConv *wxCSConv::DoCreate() const
 
 #ifdef wxHAVE_WIN32_MB2WC
     {
+#if wxUSE_FONTMAP
         wxMBConv_win32 *conv = m_name ? new wxMBConv_win32(m_name)
                                       : new wxMBConv_win32(m_encoding);
         if ( conv->IsOk() )
             return conv;
 
         delete conv;
+#else
+        return NULL;
+#endif
     }
 #endif // wxHAVE_WIN32_MB2WC
 #if defined(__WXMAC__) 
