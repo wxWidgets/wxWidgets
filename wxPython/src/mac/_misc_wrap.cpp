@@ -261,40 +261,41 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxRect swig_types[50] 
 #define  SWIGTYPE_p_char swig_types[51] 
 #define  SWIGTYPE_p_wxSingleInstanceChecker swig_types[52] 
-#define  SWIGTYPE_p_wxFileTypeInfo swig_types[53] 
-#define  SWIGTYPE_p_wxFrame swig_types[54] 
-#define  SWIGTYPE_p_wxTimer swig_types[55] 
-#define  SWIGTYPE_p_wxMimeTypesManager swig_types[56] 
-#define  SWIGTYPE_p_wxPyArtProvider swig_types[57] 
-#define  SWIGTYPE_p_wxPyTipProvider swig_types[58] 
-#define  SWIGTYPE_p_wxTipProvider swig_types[59] 
-#define  SWIGTYPE_p_wxJoystick swig_types[60] 
-#define  SWIGTYPE_p_wxSystemOptions swig_types[61] 
-#define  SWIGTYPE_p_wxPoint swig_types[62] 
-#define  SWIGTYPE_p_wxJoystickEvent swig_types[63] 
-#define  SWIGTYPE_p_wxCursor swig_types[64] 
-#define  SWIGTYPE_p_wxObject swig_types[65] 
-#define  SWIGTYPE_p_wxOutputStream swig_types[66] 
-#define  SWIGTYPE_p_wxDateTime swig_types[67] 
-#define  SWIGTYPE_p_wxPyDropSource swig_types[68] 
-#define  SWIGTYPE_p_wxWindow swig_types[69] 
-#define  SWIGTYPE_p_wxString swig_types[70] 
-#define  SWIGTYPE_p_wxPyProcess swig_types[71] 
-#define  SWIGTYPE_p_wxBitmap swig_types[72] 
-#define  SWIGTYPE_p_wxConfig swig_types[73] 
-#define  SWIGTYPE_p_wxChar swig_types[74] 
-#define  SWIGTYPE_p_wxBusyInfo swig_types[75] 
-#define  SWIGTYPE_p_wxPyDropTarget swig_types[76] 
-#define  SWIGTYPE_p_wxPyTextDropTarget swig_types[77] 
-#define  SWIGTYPE_p_wxPyFileDropTarget swig_types[78] 
-#define  SWIGTYPE_p_wxProcessEvent swig_types[79] 
-#define  SWIGTYPE_p_wxPyLog swig_types[80] 
-#define  SWIGTYPE_p_wxLogNull swig_types[81] 
-#define  SWIGTYPE_p_wxColour swig_types[82] 
-#define  SWIGTYPE_p_wxConfigPathChanger swig_types[83] 
-#define  SWIGTYPE_p_wxPyTimer swig_types[84] 
-#define  SWIGTYPE_p_wxDateSpan swig_types[85] 
-static swig_type_info *swig_types[87];
+#define  SWIGTYPE_p_wxStandardPaths swig_types[53] 
+#define  SWIGTYPE_p_wxFileTypeInfo swig_types[54] 
+#define  SWIGTYPE_p_wxFrame swig_types[55] 
+#define  SWIGTYPE_p_wxTimer swig_types[56] 
+#define  SWIGTYPE_p_wxMimeTypesManager swig_types[57] 
+#define  SWIGTYPE_p_wxPyArtProvider swig_types[58] 
+#define  SWIGTYPE_p_wxPyTipProvider swig_types[59] 
+#define  SWIGTYPE_p_wxTipProvider swig_types[60] 
+#define  SWIGTYPE_p_wxJoystick swig_types[61] 
+#define  SWIGTYPE_p_wxSystemOptions swig_types[62] 
+#define  SWIGTYPE_p_wxPoint swig_types[63] 
+#define  SWIGTYPE_p_wxJoystickEvent swig_types[64] 
+#define  SWIGTYPE_p_wxCursor swig_types[65] 
+#define  SWIGTYPE_p_wxObject swig_types[66] 
+#define  SWIGTYPE_p_wxOutputStream swig_types[67] 
+#define  SWIGTYPE_p_wxDateTime swig_types[68] 
+#define  SWIGTYPE_p_wxPyDropSource swig_types[69] 
+#define  SWIGTYPE_p_wxWindow swig_types[70] 
+#define  SWIGTYPE_p_wxString swig_types[71] 
+#define  SWIGTYPE_p_wxPyProcess swig_types[72] 
+#define  SWIGTYPE_p_wxBitmap swig_types[73] 
+#define  SWIGTYPE_p_wxConfig swig_types[74] 
+#define  SWIGTYPE_p_wxChar swig_types[75] 
+#define  SWIGTYPE_p_wxBusyInfo swig_types[76] 
+#define  SWIGTYPE_p_wxPyDropTarget swig_types[77] 
+#define  SWIGTYPE_p_wxPyTextDropTarget swig_types[78] 
+#define  SWIGTYPE_p_wxPyFileDropTarget swig_types[79] 
+#define  SWIGTYPE_p_wxProcessEvent swig_types[80] 
+#define  SWIGTYPE_p_wxPyLog swig_types[81] 
+#define  SWIGTYPE_p_wxLogNull swig_types[82] 
+#define  SWIGTYPE_p_wxColour swig_types[83] 
+#define  SWIGTYPE_p_wxConfigPathChanger swig_types[84] 
+#define  SWIGTYPE_p_wxPyTimer swig_types[85] 
+#define  SWIGTYPE_p_wxDateSpan swig_types[86] 
+static swig_type_info *swig_types[88];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -1759,6 +1760,11 @@ PyObject *wxDisplay_GetModes(wxDisplay *self,wxVideoMode const &mode){
             wxPyEndBlockThreads(blocked);
             return pyList;
         }
+
+#include <wx/stdpaths.h>
+
+void wxStandardPaths_SetInstallPrefix(wxStandardPaths *self,wxString const &prefix){}
+wxString wxStandardPaths_GetInstallPrefix(wxStandardPaths *self){ return wxEmptyString; }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -28587,6 +28593,335 @@ static PyObject * Display_swigregister(PyObject *, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static PyObject *_wrap_StandardPaths_Get(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStandardPaths *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":StandardPaths_Get",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        {
+            wxStandardPaths &_result_ref = wxStandardPaths::Get();
+            result = (wxStandardPaths *) &_result_ref;
+        }
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxStandardPaths, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StandardPaths_GetConfigDir(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StandardPaths_GetConfigDir",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStandardPaths,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxStandardPaths const *)arg1)->GetConfigDir();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StandardPaths_GetUserConfigDir(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StandardPaths_GetUserConfigDir",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStandardPaths,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxStandardPaths const *)arg1)->GetUserConfigDir();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StandardPaths_GetDataDir(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StandardPaths_GetDataDir",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStandardPaths,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxStandardPaths const *)arg1)->GetDataDir();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StandardPaths_GetLocalDataDir(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StandardPaths_GetLocalDataDir",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStandardPaths,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxStandardPaths const *)arg1)->GetLocalDataDir();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StandardPaths_GetUserDataDir(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StandardPaths_GetUserDataDir",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStandardPaths,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxStandardPaths const *)arg1)->GetUserDataDir();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StandardPaths_GetUserLocalDataDir(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StandardPaths_GetUserLocalDataDir",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStandardPaths,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxStandardPaths const *)arg1)->GetUserLocalDataDir();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StandardPaths_GetPluginsDir(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StandardPaths_GetPluginsDir",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStandardPaths,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxStandardPaths const *)arg1)->GetPluginsDir();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StandardPaths_SetInstallPrefix(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+    wxString *arg2 = 0 ;
+    bool temp2 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "prefix", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StandardPaths_SetInstallPrefix",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStandardPaths,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxStandardPaths_SetInstallPrefix(arg1,(wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_StandardPaths_GetInstallPrefix(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+    wxString result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StandardPaths_GetInstallPrefix",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStandardPaths,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxStandardPaths_GetInstallPrefix(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+#if wxUSE_UNICODE
+        resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+        resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * StandardPaths_swigregister(PyObject *, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxStandardPaths, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SystemSettings_GetColour", (PyCFunction) _wrap_SystemSettings_GetColour, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"SystemSettings_GetFont", (PyCFunction) _wrap_SystemSettings_GetFont, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -29388,6 +29723,17 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Display_ChangeMode", (PyCFunction) _wrap_Display_ChangeMode, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Display_ResetMode", (PyCFunction) _wrap_Display_ResetMode, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Display_swigregister", Display_swigregister, METH_VARARGS, NULL },
+	 { (char *)"StandardPaths_Get", (PyCFunction) _wrap_StandardPaths_Get, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StandardPaths_GetConfigDir", (PyCFunction) _wrap_StandardPaths_GetConfigDir, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StandardPaths_GetUserConfigDir", (PyCFunction) _wrap_StandardPaths_GetUserConfigDir, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StandardPaths_GetDataDir", (PyCFunction) _wrap_StandardPaths_GetDataDir, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StandardPaths_GetLocalDataDir", (PyCFunction) _wrap_StandardPaths_GetLocalDataDir, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StandardPaths_GetUserDataDir", (PyCFunction) _wrap_StandardPaths_GetUserDataDir, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StandardPaths_GetUserLocalDataDir", (PyCFunction) _wrap_StandardPaths_GetUserLocalDataDir, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StandardPaths_GetPluginsDir", (PyCFunction) _wrap_StandardPaths_GetPluginsDir, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StandardPaths_SetInstallPrefix", (PyCFunction) _wrap_StandardPaths_SetInstallPrefix, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StandardPaths_GetInstallPrefix", (PyCFunction) _wrap_StandardPaths_GetInstallPrefix, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"StandardPaths_swigregister", StandardPaths_swigregister, METH_VARARGS, NULL },
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -29948,6 +30294,7 @@ static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtH
 static swig_type_info _swigt__p_wxRect[] = {{"_p_wxRect", 0, "wxRect *", 0, 0, 0, 0},{"_p_wxRect", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0, 0, 0, 0},{"_p_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxSingleInstanceChecker[] = {{"_p_wxSingleInstanceChecker", 0, "wxSingleInstanceChecker *", 0, 0, 0, 0},{"_p_wxSingleInstanceChecker", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxStandardPaths[] = {{"_p_wxStandardPaths", 0, "wxStandardPaths *", 0, 0, 0, 0},{"_p_wxStandardPaths", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFileTypeInfo[] = {{"_p_wxFileTypeInfo", 0, "wxFileTypeInfo *", 0, 0, 0, 0},{"_p_wxFileTypeInfo", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFrame[] = {{"_p_wxFrame", 0, "wxFrame *", 0, 0, 0, 0},{"_p_wxFrame", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxTimer[] = {{"_p_wxTimer", 0, "wxTimer *", 0, 0, 0, 0},{"_p_wxTimer", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -30036,6 +30383,7 @@ _swigt__p_wxEvtHandler,
 _swigt__p_wxRect, 
 _swigt__p_char, 
 _swigt__p_wxSingleInstanceChecker, 
+_swigt__p_wxStandardPaths, 
 _swigt__p_wxFileTypeInfo, 
 _swigt__p_wxFrame, 
 _swigt__p_wxTimer, 

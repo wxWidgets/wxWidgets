@@ -1320,6 +1320,16 @@ def RectPS(*args, **kwargs):
     val.thisown = 1
     return val
 
+def RectS(*args, **kwargs):
+    """
+    RectS(Size size) -> Rect
+
+    Create a new Rect from a size only.
+    """
+    val = _core_.new_RectS(*args, **kwargs)
+    val.thisown = 1
+    return val
+
 
 def IntersectRect(*args, **kwargs):
     """
@@ -8891,6 +8901,14 @@ class SizerItem(Object):
         """
         return _core_.SizerItem_GetRatio(*args, **kwargs)
 
+    def GetRect(*args, **kwargs):
+        """
+        GetRect(self) -> Rect
+
+        Returns the rectangle that the sizer item should occupy
+        """
+        return _core_.SizerItem_GetRect(*args, **kwargs)
+
     def IsWindow(*args, **kwargs):
         """
         IsWindow(self) -> bool
@@ -9129,7 +9147,7 @@ class Sizer(Object):
     def Add(*args, **kwargs):
         """
         Add(self, item, int proportion=0, int flag=0, int border=0,
-            PyObject userData=None)
+            PyObject userData=None) -> wx.SizerItem
 
         Appends a child item to the sizer.
         """
@@ -9138,7 +9156,7 @@ class Sizer(Object):
     def Insert(*args, **kwargs):
         """
         Insert(self, int before, item, int proportion=0, int flag=0, int border=0,
-            PyObject userData=None)
+            PyObject userData=None) -> wx.SizerItem
 
         Inserts a new item into the list of items managed by this sizer before
         the item at index *before*.  See `Add` for a description of the parameters.
@@ -9148,7 +9166,7 @@ class Sizer(Object):
     def Prepend(*args, **kwargs):
         """
         Prepend(self, item, int proportion=0, int flag=0, int border=0,
-            PyObject userData=None)
+            PyObject userData=None) -> wx.SizerItem
 
         Adds a new item to the begining of the list of sizer items managed by
         this sizer.  See `Add` for a description of the parameters.
@@ -9179,6 +9197,16 @@ class Sizer(Object):
         was found and detached.
         """
         return _core_.Sizer_Detach(*args, **kwargs)
+
+    def GetItem(*args, **kwargs):
+        """
+        GetItem(self, item) -> wx.SizerItem
+
+        Returns the `wx.SizerItem` which holds the *item* given.  The *item*
+        parameter can be either a window, a sizer, or the zero-based index of
+        the item to be detached.
+        """
+        return _core_.Sizer_GetItem(*args, **kwargs)
 
     def _SetItemMinSize(*args, **kwargs):
         """_SetItemMinSize(self, PyObject item, Size size)"""
@@ -10240,7 +10268,7 @@ class GridBagSizer(FlexGridSizer):
     def Add(*args, **kwargs):
         """
         Add(self, item, GBPosition pos, GBSpan span=DefaultSpan, int flag=0,
-        int border=0, userData=None)
+        int border=0, userData=None) -> wx.GBSizerItem
 
         Adds an item to the sizer at the grid cell *pos*, optionally spanning
         more than one row or column as specified with *span*.  The remaining
@@ -10254,7 +10282,7 @@ class GridBagSizer(FlexGridSizer):
 
     def AddItem(*args, **kwargs):
         """
-        Add(self, GBSizerItem item) -> bool
+        Add(self, GBSizerItem item) -> wx.GBSizerItem
 
         Add an item to the sizer using a `wx.GBSizerItem`.  Returns True if
         the item was successfully placed at its given cell position, False if

@@ -5727,4 +5727,147 @@ def Display_GetFromWindow(*args, **kwargs):
     """
     return _misc_.Display_GetFromWindow(*args, **kwargs)
 
+#---------------------------------------------------------------------------
+
+class StandardPaths(object):
+    """
+    wx.StandardPaths returns the standard locations in the file system and
+    should be used by the programs to find their data files in a portable
+    way.
+
+    In the description of the methods below, the example return values are
+    given for the Unix, Windows and Mac OS X systems, however please note
+    that these are just the examples and the actual values may differ. For
+    example, under Windows: the system administrator may change the
+    standard directories locations, i.e. the Windows directory may be
+    named W:\Win2003 instead of the default C:\Windows.
+
+    The strings appname and username should be replaced with the value
+    returned by `wx.App.GetAppName` and the name of the currently logged
+    in user, respectively. The string prefix is only used under Unix and
+    is /usr/local by default but may be changed using `SetInstallPrefix`.
+
+    The directories returned by the methods of this class may or may not
+    exist. If they don't exist, it's up to the caller to create them,
+    wxStandardPaths doesn't do it.
+
+    Finally note that these functions only work with standardly packaged
+    applications. I.e. under Unix you should follow the standard
+    installation conventions and under Mac you should create your
+    application bundle according to the Apple guidelines. Again, this
+    class doesn't help you to do it.
+    """
+    def __init__(self): raise RuntimeError, "No constructor defined"
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxStandardPaths instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def Get(*args, **kwargs):
+        """
+        Get() -> StandardPaths
+
+        Return the global standard paths object
+        """
+        return _misc_.StandardPaths_Get(*args, **kwargs)
+
+    Get = staticmethod(Get)
+    def GetConfigDir(*args, **kwargs):
+        """
+        GetConfigDir(self) -> String
+
+        Return the directory with system config files: /etc under Unix,
+        c:\Documents and Settings\All Users\Application Data under Windows,
+        /Library/Preferences for Mac
+        """
+        return _misc_.StandardPaths_GetConfigDir(*args, **kwargs)
+
+    def GetUserConfigDir(*args, **kwargs):
+        """
+        GetUserConfigDir(self) -> String
+
+        Return the directory for the user config files: $HOME under Unix,
+        c:\Documents and Settings\username under Windows,
+        ~/Library/Preferences under Mac
+            
+        Only use this if you have a single file to put there, otherwise
+        `GetUserDataDir` is more appropriate
+        """
+        return _misc_.StandardPaths_GetUserConfigDir(*args, **kwargs)
+
+    def GetDataDir(*args, **kwargs):
+        """
+        GetDataDir(self) -> String
+
+        Return the location of the application's global, (i.e. not
+        user-specific,) data files: prefix/share/appname under Unix,
+        c:\Program Filesppname under Windows,
+        appname.app/Contents/SharedSupport app bundle directory under Mac.
+        """
+        return _misc_.StandardPaths_GetDataDir(*args, **kwargs)
+
+    def GetLocalDataDir(*args, **kwargs):
+        """
+        GetLocalDataDir(self) -> String
+
+        Return the location for application data files which are
+        host-specific.  Same as `GetDataDir` except under Unix where it is
+        /etc/appname
+        """
+        return _misc_.StandardPaths_GetLocalDataDir(*args, **kwargs)
+
+    def GetUserDataDir(*args, **kwargs):
+        """
+        GetUserDataDir(self) -> String
+
+        Return the directory for the user-dependent application data files:
+        $HOME/.appname under Unix, c:\Documents and
+        Settings\username\Application Datappname under Windows and
+        ~/Library/Application Support/appname under Mac
+        """
+        return _misc_.StandardPaths_GetUserDataDir(*args, **kwargs)
+
+    def GetUserLocalDataDir(*args, **kwargs):
+        """
+        GetUserLocalDataDir(self) -> String
+
+        Return the directory for user data files which shouldn't be shared
+        with the other machines
+
+        Same as `GetUserDataDir` for all platforms except Windows where it is
+        the 'Local Settings\Application Datappname' directory.
+        """
+        return _misc_.StandardPaths_GetUserLocalDataDir(*args, **kwargs)
+
+    def GetPluginsDir(*args, **kwargs):
+        """
+        GetPluginsDir(self) -> String
+
+        Return the directory where the loadable modules (plugins) live:
+        prefix/lib/appname under Unix, program directory under Windows and
+        Contents/Plugins app bundle subdirectory under Mac
+        """
+        return _misc_.StandardPaths_GetPluginsDir(*args, **kwargs)
+
+    def SetInstallPrefix(*args, **kwargs):
+        """SetInstallPrefix(self, String prefix)"""
+        return _misc_.StandardPaths_SetInstallPrefix(*args, **kwargs)
+
+    def GetInstallPrefix(*args, **kwargs):
+        """GetInstallPrefix(self) -> String"""
+        return _misc_.StandardPaths_GetInstallPrefix(*args, **kwargs)
+
+
+class StandardPathsPtr(StandardPaths):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = StandardPaths
+_misc_.StandardPaths_swigregister(StandardPathsPtr)
+
+def StandardPaths_Get(*args, **kwargs):
+    """
+    StandardPaths_Get() -> StandardPaths
+
+    Return the global standard paths object
+    """
+    return _misc_.StandardPaths_Get(*args, **kwargs)
+
 

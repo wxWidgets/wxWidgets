@@ -246,7 +246,7 @@ class Palette(GDIObject):
         return _gdi_.Palette_GetPixel(*args, **kwargs)
 
     def GetRGB(*args, **kwargs):
-        """GetRGB(int pixel) -> (R,G,B)"""
+        """GetRGB(self, int pixel) -> (R,G,B)"""
         return _gdi_.Palette_GetRGB(*args, **kwargs)
 
     def Ok(*args, **kwargs):
@@ -592,6 +592,10 @@ class Bitmap(GDIObject):
         ``type`` parameter.
         """
         return _gdi_.Bitmap_LoadFile(*args, **kwargs)
+
+    def GetPalette(*args, **kwargs):
+        """GetPalette(self) -> Palette"""
+        return _gdi_.Bitmap_GetPalette(*args, **kwargs)
 
     def CopyFromIcon(*args, **kwargs):
         """CopyFromIcon(self, Icon icon) -> bool"""
@@ -1010,6 +1014,10 @@ class Region(GDIObject):
     def Clear(*args, **kwargs):
         """Clear(self)"""
         return _gdi_.Region_Clear(*args, **kwargs)
+
+    def Offset(*args, **kwargs):
+        """Offset(self, int x, int y) -> bool"""
+        return _gdi_.Region_Offset(*args, **kwargs)
 
     def Contains(*args, **kwargs):
         """Contains(self, int x, int y) -> int"""

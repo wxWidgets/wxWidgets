@@ -535,10 +535,6 @@ class XmlResourceHandler(_core.Object):
         """GetParentAsWindow(self) -> Window"""
         return _xrc.XmlResourceHandler_GetParentAsWindow(*args, **kwargs)
 
-    def GetInstanceAsWindow(*args, **kwargs):
-        """GetInstanceAsWindow(self) -> Window"""
-        return _xrc.XmlResourceHandler_GetInstanceAsWindow(*args, **kwargs)
-
     def IsOfClass(*args, **kwargs):
         """IsOfClass(self, XmlNode node, String classname) -> bool"""
         return _xrc.XmlResourceHandler_IsOfClass(*args, **kwargs)

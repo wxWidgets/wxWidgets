@@ -928,12 +928,38 @@ PyObject *wxPyFontEnumerator_GetFacenames(wxPyFontEnumerator *self){
                 return PyList_New(0);
         }
 
+#include <locale.h>
 
 wxLocale *new_wxLocale(int language,int flags){
+            wxLocale* loc;
             if (language == -1)
-                return new wxLocale();
+                loc = new wxLocale();
             else
-                return new wxLocale(language, flags);
+                loc = new wxLocale(language, flags);
+            // Python before 2.4 needs to have LC_NUMERIC set to "C" in order
+            // for the floating point conversions and such to work right.
+#if PY_VERSION_HEX < 0x02040000
+            setlocale(LC_NUMERIC, "C");
+#endif
+            return loc;
+        }
+bool wxLocale_Init1(wxLocale *self,wxString const &szName,wxString const &szShort,wxString const &szLocale,bool bLoadDefault,bool bConvertEncoding){
+            bool rc = self->Init(szName, szShort, szLocale, bLoadDefault, bConvertEncoding);
+            // Python before 2.4 needs to have LC_NUMERIC set to "C" in order
+            // for the floating point conversions and such to work right.
+#if PY_VERSION_HEX < 0x02040000
+            setlocale(LC_NUMERIC, "C");
+#endif
+            return rc;
+        }
+bool wxLocale_Init2(wxLocale *self,int language,int flags){
+            bool rc = self->Init(language, flags);
+            // Python before 2.4 needs to have LC_NUMERIC set to "C" in order
+            // for the floating point conversions and such to work right.
+#if PY_VERSION_HEX < 0x02040000
+            setlocale(LC_NUMERIC, "C");
+#endif
+            return rc;
         }
 
 #include "wx/wxPython/pydrawxxx.h"
@@ -3393,6 +3419,32 @@ static PyObject *_wrap_Bitmap_LoadFile(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
+static PyObject *_wrap_Bitmap_GetPalette(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBitmap *arg1 = (wxBitmap *) 0 ;
+    wxPalette *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Bitmap_GetPalette",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBitmap,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxPalette *)((wxBitmap const *)arg1)->GetPalette();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPalette, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Bitmap_CopyFromIcon(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBitmap *arg1 = (wxBitmap *) 0 ;
@@ -4962,6 +5014,42 @@ static PyObject *_wrap_Region_Clear(PyObject *, PyObject *args, PyObject *kwargs
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Region_Offset(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxRegion *arg1 = (wxRegion *) 0 ;
+    int arg2 ;
+    int arg3 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "x",(char *) "y", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Region_Offset",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxRegion,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int)SWIG_As_int(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    arg3 = (int)SWIG_As_int(obj2); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Offset(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -9532,7 +9620,7 @@ static PyObject *_wrap_Locale_Init1(PyObject *, PyObject *args, PyObject *kwargs
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->Init((wxString const &)*arg2,(wxString const &)*arg3,(wxString const &)*arg4,arg5,arg6);
+        result = (bool)wxLocale_Init1(arg1,(wxString const &)*arg2,(wxString const &)*arg3,(wxString const &)*arg4,arg5,arg6);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -9596,7 +9684,7 @@ static PyObject *_wrap_Locale_Init2(PyObject *, PyObject *args, PyObject *kwargs
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->Init(arg2,arg3);
+        result = (bool)wxLocale_Init2(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18725,6 +18813,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Bitmap_GetSubBitmap", (PyCFunction) _wrap_Bitmap_GetSubBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_SaveFile", (PyCFunction) _wrap_Bitmap_SaveFile, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_LoadFile", (PyCFunction) _wrap_Bitmap_LoadFile, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Bitmap_GetPalette", (PyCFunction) _wrap_Bitmap_GetPalette, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_CopyFromIcon", (PyCFunction) _wrap_Bitmap_CopyFromIcon, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_SetHeight", (PyCFunction) _wrap_Bitmap_SetHeight, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Bitmap_SetWidth", (PyCFunction) _wrap_Bitmap_SetWidth, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -18778,6 +18867,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_RegionFromPoints", (PyCFunction) _wrap_new_RegionFromPoints, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"delete_Region", (PyCFunction) _wrap_delete_Region, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Region_Clear", (PyCFunction) _wrap_Region_Clear, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Region_Offset", (PyCFunction) _wrap_Region_Offset, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Region_Contains", (PyCFunction) _wrap_Region_Contains, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Region_ContainsPoint", (PyCFunction) _wrap_Region_ContainsPoint, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Region_ContainsRect", (PyCFunction) _wrap_Region_ContainsRect, METH_VARARGS | METH_KEYWORDS, NULL },

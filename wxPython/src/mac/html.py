@@ -1318,10 +1318,6 @@ class HtmlEasyPrinting(_core.Object):
         """PrintText(self, String htmltext, String basepath=EmptyString)"""
         return _html.HtmlEasyPrinting_PrintText(*args, **kwargs)
 
-    def PrinterSetup(*args, **kwargs):
-        """PrinterSetup(self)"""
-        return _html.HtmlEasyPrinting_PrinterSetup(*args, **kwargs)
-
     def PageSetup(*args, **kwargs):
         """PageSetup(self)"""
         return _html.HtmlEasyPrinting_PageSetup(*args, **kwargs)
