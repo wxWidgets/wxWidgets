@@ -61,7 +61,7 @@ public:
 
   // format available on the clipboard ? 
   // supply ID if private format, the same as wxPrivateDataObject::SetId() 
-  virtual bool IsSupportedFormat( wxDataFormat format, const wxString &id = wxEmptyString );
+  virtual bool IsSupported( wxDataFormat format );
   
   // fill data with data on the clipboard (if available)
   virtual bool GetData( wxDataObject *data );

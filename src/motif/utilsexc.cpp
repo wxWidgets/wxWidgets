@@ -15,6 +15,7 @@
 
 #include "wx/utils.h"
 #include "wx/app.h"
+#include "wx/process.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -105,13 +106,15 @@ void xt_notify_end_process(XtPointer client, int *fid,
     
     XtRemoveInput(*id);
     if (process_data->process)
-        process_data->process->OnTerminate(process_data->pid);
+      process_data->process->OnTerminate(process_data->pid, 0); // What should 'status' be?
     
     process_data->end_process = TRUE;
-    
+
+/* double deletion!
     if (process_data->pid > 0)
         delete process_data;
     else
+*/
         process_data->pid = 0;
 }
 
@@ -180,7 +183,10 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
             XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
         
         if (WIFEXITED(process_data->end_process) != 0)
+        {
+            delete process_data;
             return WEXITSTATUS(process_data->end_process);
+        }
     }
     
     delete process_data;

@@ -306,7 +306,7 @@ void wxClipboard::Close()
     wxCloseClipboard();
 }
 
-bool wxClipboard::IsSupportedFormat( wxDataFormat format, const wxString& WXUNUSED(id) )
+bool wxClipboard::IsSupported( wxDataFormat format)
 {
     return wxIsClipboardFormatAvailable(format);
 }

@@ -141,7 +141,8 @@ relative to the panel.
 
 \func{void}{Clear}{\void}
 
-Clears the window by filling it with the current background colour.
+Clears the window by filling it with the current background colour. Does not
+cause an erase background event to be generated.
 
 \membersection{wxWindow::ClientToScreen}
 
@@ -464,12 +465,10 @@ Returns the identifier of the window.
 Each window has an integer identifier. If the application has not provided one,
 an identifier will be generated.
 
-TODO: perhaps there should be a default identifier for each class, rather
-choosing one, which could clash with other ones.
-
 \wxheading{See also}
 
-\helpref{wxWindow::SetId}{wxwindowsetid}
+\helpref{wxWindow::SetId}{wxwindowsetid}\rtfsp
+\helpref{Window identifiers}{windowids}
 
 \membersection{wxWindow::GetPosition}
 
@@ -701,14 +700,6 @@ default resource table will be used.}
 \wxheading{Return value}
 
 TRUE if the operation succeeded, otherwise FALSE.
-
-\wxheading{Remarks}
-
-TODO
-
-\wxheading{See also}
-
-TODO
 
 \membersection{wxWindow::Lower}\label{wxwindowlower}
 
@@ -1543,11 +1534,17 @@ Sets the background colour of the window.
 The background colour is usually painted by the default\rtfsp
 \helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground} event handler function.
 
+Note that setting the background colour does not cause an immediate refresh, so you
+may wish to call \helpref{wxWindow::Clear}{wxwindowclear} or \helpref{wxWindow::Refresh}{wxwindowrefresh} after
+calling this function.
+
 \wxheading{See also}
 
 \helpref{wxWindow::GetBackgroundColour}{wxwindowgetbackgroundcolour},\rtfsp
 \helpref{wxWindow::SetForegroundColour}{wxwindowsetforegroundcolour},\rtfsp
 \helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
+\helpref{wxWindow::Clear}{wxwindowclear},\rtfsp
+\helpref{wxWindow::Refresh}{wxwindowrefresh},\rtfsp
 \helpref{wxWindow::OnEraseBackground}{wxwindowonerasebackground}
 
 \membersection{wxWindow::SetConstraints}\label{wxwindowsetconstraints}
@@ -1637,13 +1634,10 @@ Each window has an integer identifier. If the application has not provided one,
 an identifier will be generated. Normally, the identifier should be provided
 on creation and should not be modified subsequently.
 
-TODO: perhaps there should be a default identifier for each class, rather
-choosing one, which could clash with other ones.
-
 \wxheading{See also}
 
-\helpref{wxWindow::GetId}{wxwindowgetid}
-
+\helpref{wxWindow::GetId}{wxwindowgetid},\rtfsp
+\helpref{Window identifiers}{windowids}
 
 \membersection{wxWindow::SetName}\label{wxwindowsetname}
 
