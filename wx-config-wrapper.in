@@ -174,7 +174,7 @@ for i in $*; do
     esac
 done
 
-args="$args --prefix=$prefix --exec-prefix=$exec_prefix"
+args="--prefix=$prefix --exec-prefix=$exec_prefix $args"
 
 script=`find_wx_config_script`;
 if test "x$script" != "x" ; then
