@@ -3222,32 +3222,26 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
         // in Unicode mode this is just what we need
         ttText->lpszText = (wxChar *)ttip.c_str();
 #else // !Unicode
-/*
-        MultiByteToWideChar(CP_ACP, 0, ttip, ttip.length()+1,
-                            (wchar_t *)ttText->szText,
-                            sizeof(ttText->szText) / sizeof(wchar_t));
-*/
-        // Fix by dimitrishortcut: see patch 771772
+        // Convert tooltip from multi byte to Unicode.
 
-        // FIXME: szText has a max of 80 bytes, so limit the tooltip string
-        // length accordingly. Ideally lpszText should be used, but who
-        // would be responsible for freeing the buffer?
+        // We don't want to use the szText buffer because it has a limit of 80
+        // bytes, for now use our own static buffer with a higher fixed max
+        // length.
+        // Preferably a dynamic buffer should be used, but who frees the buffer?
 
-        // Maximum length of a tip is 39 characters. 39 is 80/2 minus 1 byte
-        // needed for NULL character.
-        size_t tipLength = wxMin(ttip.Len(), 39);
+        static const int MAX_LENGTH = 512;
+        static wchar_t buf[MAX_LENGTH+1];
+
+        ttText->lpszText = (LPSTR) buf;
+
+        // Truncate tooltip length if needed
+        size_t tipLength = wxMin(ttip.Len(), MAX_LENGTH);
 
         // Convert to WideChar without adding the NULL character. The NULL
-        // character is added afterwards (Could have used ttip.Left(tipLength)
-        // and a cchMultiByte parameter of tipLength+1, but this is more
-        //efficient.
-        ::MultiByteToWideChar(CP_ACP, 0, ttip, tipLength,
-                             (wchar_t *)ttText->szText,
-                             sizeof(ttText->szText) / sizeof(wchar_t));
+        // character is added afterwards (this is more efficient).
+        ::MultiByteToWideChar(CP_ACP, 0, ttip, tipLength, buf, MAX_LENGTH);
 
-        // Add the NULL character.
-        ttText->szText[tipLength*2+0] = '\0';
-        ttText->szText[tipLength*2+1] = '\0';
+        buf[tipLength] = '\0';
 
 #endif // Unicode/!Unicode
     }
