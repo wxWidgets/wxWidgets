@@ -6,8 +6,7 @@
 */
 
 #ifdef __GNUG__
-#pragma implementation "convert.cpp"
-#pragma interface "convert.cpp"
+#pragma implementation "convert.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".

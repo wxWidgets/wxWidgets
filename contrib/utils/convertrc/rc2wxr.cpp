@@ -11,8 +11,7 @@ This code was used as a starting point for my rc2xml converter
 */
 
 #ifdef __GNUG__
-#pragma implementation "rc2wxr.cpp"
-#pragma interface "rc2wxr.cpp"
+#pragma implementation "rc2wxr.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".

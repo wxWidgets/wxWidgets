@@ -13,7 +13,7 @@
 #define _MMBMAN_APP_H_
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-  #pragma interface "mmbman.cpp"
+  #pragma interface "mmbman.h"
 #endif
 
 #include "wx/stream.h"
@@ -46,7 +46,7 @@ class MMBoardFile {
   virtual bool NeedWindow() = 0;
 
   virtual void SetWindow(wxWindow *window) = 0;
-  
+
   virtual void Play() = 0;
   virtual void Pause() = 0;
   virtual void Resume() = 0;
@@ -55,7 +55,7 @@ class MMBoardFile {
   virtual MMBoardTime GetPosition() = 0;
   virtual MMBoardTime GetLength() = 0;
   virtual void SetPosition(MMBoardTime btime) = 0;
-  
+
   virtual bool IsStopped() = 0;
   virtual bool IsPaused() = 0;
 

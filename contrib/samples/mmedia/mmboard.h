@@ -13,7 +13,7 @@
 #define _MMBOARD_APP_H_
 
 #if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "mmboard.cpp"
+    #pragma interface "mmboard.h"
 #endif
 
 // for compilers that support precompilation, includes "wx/wx.h"
@@ -50,7 +50,7 @@ public:
   // ----------------------------
 
   virtual bool OnInit();
-  
+
   wxUint8 TestMultimediaCaps();
 };
 

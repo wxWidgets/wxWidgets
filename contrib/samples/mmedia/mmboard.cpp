@@ -17,7 +17,7 @@
 // headers
 // ----------------------------------------------------------------------------
 #ifdef __GNUG__
-    #pragma implementation "mmboard.cpp"
+    #pragma implementation "mmboard.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".

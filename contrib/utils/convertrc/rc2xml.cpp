@@ -16,8 +16,7 @@ cross platform (wxGTK,etc)
 */
 
 #ifdef __GNUG__
-#pragma implementation "rc2xml.cpp"
-#pragma interface "rc2xml.cpp"
+#pragma implementation "rc2xml.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".

@@ -17,8 +17,7 @@
 // headers
 // ----------------------------------------------------------------------------
 #ifdef __GNUG__
-    #pragma implementation "tree.cpp"
-    #pragma interface "tree.cpp"
+    #pragma implementation "tree.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".

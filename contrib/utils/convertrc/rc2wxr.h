@@ -5,6 +5,10 @@
 #if !defined(RC2WXR_H)
 #define RC2WXR_H
 
+#ifdef __GNUG__
+#pragma interface "rc2wxr.h"
+#endif
+
 #include "wx/file.h"
 #include "stdio.h"
 
