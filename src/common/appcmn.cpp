@@ -503,14 +503,17 @@ void wxGUIAppTraitsBase::RemoveFromPendingDelete(wxObject *object)
     #include "wx/unix/gsockunx.h"
 #elif defined(__WINDOWS__)
     #include "wx/msw/gsockmsw.h"
-#elif defined(__MAC__)
-    #include "wx/mac/gsockmac.h"
 #else
     #error "Must include correct GSocket header here"
 #endif
 
 GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
 {
+#ifdef __MAC__
+    // NB: wxMac does not have any GUI-specific functions in gsocket.c and
+    //     so it doesn't need this table at all
+    return NULL;
+#else
     static GSocketGUIFunctionsTable table =
     {
         _GSocket_GUI_Init,
@@ -525,6 +528,7 @@ GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
         _GSocket_Disable_Events
     };
     return &table;
+#endif
 }
 
 #endif
