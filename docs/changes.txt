@@ -122,6 +122,7 @@ All GUI ports:
   styles for use with conservative idle and update event modes.
 - wxMSW and wxGTK now send menu update events only when a menu is
   about to be used.
+- improved event processing performance (Hans Van Leemputten)
 
 Unix:
 

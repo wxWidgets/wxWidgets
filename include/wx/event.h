@@ -27,6 +27,8 @@
 
 #include "wx/thread.h"
 
+#include "wx/dynarray.h"
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -86,6 +88,8 @@ typedef int wxEventType;
 #define DECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
     wxEventTableEntry(type, winid, idLast, fn, obj)
 
+#define EMPTY_PARAMETER_VALUE /* Fake macro parameter value */
+
 #define BEGIN_DECLARE_EVENT_TYPES()
 #define END_DECLARE_EVENT_TYPES()
 #define DECLARE_EXPORTED_EVENT_TYPE(expdecl, name, value) \
@@ -93,7 +97,7 @@ typedef int wxEventType;
 #define DECLARE_EVENT_TYPE(name, value) \
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, name, value)
 #define DECLARE_LOCAL_EVENT_TYPE(name, value) \
-    DECLARE_EXPORTED_EVENT_TYPE(/* */, name, value)
+    DECLARE_EXPORTED_EVENT_TYPE(EMPTY_PARAMETER_VALUE, name, value)
 #define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
 #define DEFINE_LOCAL_EVENT_TYPE(name) DEFINE_EVENT_TYPE(name)
 
@@ -2083,6 +2087,56 @@ struct WXDLLIMPEXP_BASE wxEventTable
 };
 
 // ----------------------------------------------------------------------------
+// wxEventHashTable: a helper of wxEvtHandler to speed up wxEventTable lookups.
+// ----------------------------------------------------------------------------
+
+WX_DEFINE_ARRAY(const wxEventTableEntry*, wxEventTableEntryPointerArray);
+class WXDLLIMPEXP_BASE wxEvtHandler;
+
+class WXDLLIMPEXP_BASE wxEventHashTable
+{
+private:
+    // Internal data structs
+    struct EventTypeTable
+    {
+        wxEventType                   eventType;
+        wxEventTableEntryPointerArray eventEntryTable;
+    };
+    typedef EventTypeTable* EventTypeTablePointer;
+
+public:
+    // Constructor, needs the event table it needs to hash later on.
+    // Note: hashing of the event table is not done in the constructor as it 
+    //       can be that the event table is not yet full initialize, the hash 
+    //       will gets initialized when handling the first event look-up request.
+    wxEventHashTable(const wxEventTable &table);
+    // Destructor.
+    ~wxEventHashTable();
+
+    // Handle the given event, in other words search the event table hash 
+    // and call self->ProcessEvent() if a match was found.
+    bool HandleEvent(wxEvent &event, wxEvtHandler *self);
+
+protected:
+    // Init the hash table with the entries of the static event table.
+    void InitHashTable();
+    // Helper funtion of InitHashTable() to insert 1 entry into the hash table.
+    void AddEntry(const wxEventTableEntry &entry);
+    // Allocate and init with null pointers the base hash table.
+    void AllocEventTypeTable(size_t size);
+    // Grow the hash table in size and transfer all items currently 
+    // in the table to the correct location in the new table.
+    void GrowEventTypeTable();
+
+protected:
+    const wxEventTable    &m_table;
+    bool                   m_rebuildHash;
+
+    size_t                 m_size;
+    EventTypeTablePointer *m_eventTypeTable;
+};
+
+// ----------------------------------------------------------------------------
 // wxEvtHandler: the base class for all objects handling wxWindows events
 // ----------------------------------------------------------------------------
 
@@ -2201,9 +2255,11 @@ protected:
     virtual bool TryParent(wxEvent& event);
 
 
-    static const wxEventTable sm_eventTable;
-
+    static const wxEventTable sm_eventTable;    
     virtual const wxEventTable *GetEventTable() const;
+
+    static wxEventHashTable   sm_eventHashTable;
+    virtual wxEventHashTable& GetEventHashTable() const;
 
     wxEvtHandler*       m_nextHandler;
     wxEvtHandler*       m_previousHandler;
@@ -2303,16 +2359,22 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
         static const wxEventTableEntry sm_eventTableEntries[]; \
     protected: \
         static const wxEventTable        sm_eventTable; \
-        virtual const wxEventTable*        GetEventTable() const;
+        virtual const wxEventTable*      GetEventTable() const; \
+        static wxEventHashTable          sm_eventHashTable; \
+        virtual wxEventHashTable&        GetEventHashTable() const;
 
 // N.B.: when building DLL with Borland C++ 5.5 compiler, you must initialize
 //       sm_eventTable before using it in GetEventTable() or the compiler gives
 //       E2233 (see http://groups.google.com/groups?selm=397dcc8a%241_2%40dnews)
+
 #define BEGIN_EVENT_TABLE(theClass, baseClass) \
     const wxEventTable theClass::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass::sm_eventTableEntries[0] }; \
     const wxEventTable *theClass::GetEventTable() const \
         { return &theClass::sm_eventTable; } \
+    wxEventHashTable theClass::sm_eventHashTable(theClass::sm_eventTable); \
+    wxEventHashTable &theClass::GetEventHashTable() const \
+        { return theClass::sm_eventHashTable; } \
     const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 
 #define END_EVENT_TABLE() DECLARE_EVENT_TABLE_ENTRY( wxEVT_NULL, 0, 0, 0, 0 ) };

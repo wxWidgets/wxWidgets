@@ -104,6 +104,11 @@ const wxEventTable *wxEvtHandler::GetEventTable() const
 const wxEventTable wxEvtHandler::sm_eventTable =
     { (const wxEventTable *)NULL, &wxEvtHandler::sm_eventTableEntries[0] };
 
+wxEventHashTable &wxEvtHandler::GetEventHashTable() const
+    { return wxEvtHandler::sm_eventHashTable; }
+
+wxEventHashTable wxEvtHandler::sm_eventHashTable(wxEvtHandler::sm_eventTable);
+
 const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
     { DECLARE_EVENT_TABLE_ENTRY(wxEVT_NULL, 0, 0, (wxObjectEventFunction)NULL, NULL) };
 
@@ -123,7 +128,7 @@ wxList *wxPendingEvents = (wxList *)NULL;
 
 // common event types are defined here, other event types are defined by the
 // components which use them
-    
+
 const wxEventType wxEVT_FIRST = 10000;
 const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
 
@@ -358,13 +363,12 @@ wxEvent::wxEvent(const wxEvent &src)
  */
 
 wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
-  : wxEvent(theId, commandType)
+              : wxEvent(theId, commandType)
 {
     m_clientData = (char *) NULL;
     m_clientObject = (wxClientData *) NULL;
     m_extraLong = 0;
     m_commandInt = 0;
-    m_commandString = wxEmptyString;
     m_isCommandEvent = TRUE;
 }
 
@@ -389,7 +393,7 @@ bool wxUpdateUIEvent::CanUpdate(wxWindow* win)
        (GetMode() == wxUPDATE_UI_PROCESS_SPECIFIED &&
        ((win->GetExtraStyle() & wxWS_EX_PROCESS_UI_UPDATES) == 0)))
         return FALSE;
-    
+
     if (sm_updateInterval == -1)
         return FALSE;
     else if (sm_updateInterval == 0)
@@ -404,7 +408,7 @@ bool wxUpdateUIEvent::CanUpdate(wxWindow* win)
         }
 #else
         // If we don't have wxStopWatch or wxLongLong, we
-        // should err on the safe side and update now anyway. 
+        // should err on the safe side and update now anyway.
         return TRUE;
 #endif
     }
@@ -430,7 +434,7 @@ void wxUpdateUIEvent::ResetUpdateTime()
 /*
  * Idle events
  */
- 
+
 wxIdleMode wxIdleEvent::sm_idleMode = wxIDLE_PROCESS_ALL;
 
 // Can we send an idle event?
@@ -442,7 +446,7 @@ bool wxIdleEvent::CanSend(wxWindow* win)
        (GetMode() == wxIDLE_PROCESS_SPECIFIED &&
        ((win->GetExtraStyle() & wxWS_EX_PROCESS_IDLE) == 0)))
         return FALSE;
-    
+
     return TRUE;
 }
 
@@ -705,6 +709,182 @@ wxChildFocusEvent::wxChildFocusEvent(wxWindow *win)
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
+// wxEventHashTable
+// ----------------------------------------------------------------------------
+
+static const int EVENT_TYPE_TABLE_INIT_SIZE = 31; // Not to big not to small...
+
+wxEventHashTable::wxEventHashTable(const wxEventTable &table)
+                : m_table(table),
+                  m_rebuildHash(TRUE)
+{
+    AllocEventTypeTable(EVENT_TYPE_TABLE_INIT_SIZE);
+}
+
+wxEventHashTable::~wxEventHashTable()
+{
+    size_t i;
+    for(i = 0; i < m_size; i++)
+    {
+        EventTypeTablePointer  eTTnode = m_eventTypeTable[i];
+        if (eTTnode)
+        {
+            delete eTTnode;
+        }
+    }
+
+    delete[] m_eventTypeTable;
+}
+
+bool wxEventHashTable::HandleEvent(wxEvent &event, wxEvtHandler *self)
+{
+    if (m_rebuildHash)
+    {
+        InitHashTable();
+        m_rebuildHash = FALSE;
+    }
+
+    // Find all entries for the given event type.
+    wxEventType eventType = event.GetEventType();
+    const EventTypeTablePointer eTTnode = m_eventTypeTable[eventType % m_size];
+    if (eTTnode && eTTnode->eventType == eventType)
+    {
+        // Now start the search for an event handler
+        // that can handle an event with the given ID.
+        int eventId = event.GetId();
+        const wxEventTableEntryPointerArray &eventEntryTable = eTTnode->eventEntryTable;
+
+        size_t n;
+        size_t count = eventEntryTable.GetCount();
+        for (n = 0; n < count; n++)
+        {
+            const wxEventTableEntry* entry = eventEntryTable[n];
+            int tableId1 = entry->m_id,
+                tableId2 = entry->m_lastId;
+
+            if ((tableId1 == -1) ||
+                (tableId2 == -1 && tableId1 == eventId) ||
+                (tableId2 != -1 &&
+                 (eventId >= tableId1 && eventId <= tableId2)))
+            {
+                event.Skip(FALSE);
+                event.m_callbackUserData = entry->m_callbackUserData;
+
+                (self->*((wxEventFunction) (entry->m_fn)))(event);
+
+                if (!event.GetSkipped())
+                    return TRUE;
+            }
+        }
+
+        return FALSE;
+    }
+
+    return FALSE;
+}
+
+void wxEventHashTable::InitHashTable()
+{
+    // Loop over the event tables and all its base tables.
+    const wxEventTable *table = &m_table;
+    while (table)
+    {
+        // Retrieve all valid event handler entries
+        const wxEventTableEntry *entry = table->entries;
+        while (entry->m_fn != 0)
+        {
+            // Add the event entry in the Hash.
+            AddEntry(*entry);
+
+            entry++;
+        }
+
+        table = table->baseTable;
+    }
+
+    // Lets free some memory.
+    size_t i;
+    for(i = 0; i < m_size; i++)
+    {
+        EventTypeTablePointer  eTTnode = m_eventTypeTable[i];
+        if (eTTnode)
+        {
+            eTTnode->eventEntryTable.Shrink();
+        }
+    }
+}
+
+void wxEventHashTable::AddEntry(const wxEventTableEntry &entry)
+{
+    EventTypeTablePointer *peTTnode = &m_eventTypeTable[entry.m_eventType % m_size];
+    EventTypeTablePointer  eTTnode = *peTTnode;
+
+    if (eTTnode)
+    {
+        if (eTTnode->eventType != entry.m_eventType)
+        {
+            // Resize the table!
+            GrowEventTypeTable();
+            // Try again to add it.
+            AddEntry(entry);
+            return;
+        }
+    }
+    else
+    {
+        eTTnode = new EventTypeTable;
+        eTTnode->eventType = entry.m_eventType;
+        *peTTnode = eTTnode;
+    }
+
+    // Fill all hash entries between entry.m_id and entry.m_lastId...
+    eTTnode->eventEntryTable.Add(&entry);
+}
+
+void wxEventHashTable::AllocEventTypeTable(size_t size)
+{
+    m_eventTypeTable = new EventTypeTablePointer[size];
+    memset((void *)m_eventTypeTable, 0, sizeof(EventTypeTablePointer)*size);
+    m_size = size;
+}
+
+void wxEventHashTable::GrowEventTypeTable()
+{
+    size_t oldSize = m_size;
+    EventTypeTablePointer *oldEventTypeTable = m_eventTypeTable;
+
+    // TODO: Search the most optimal grow sequence
+    AllocEventTypeTable(/* GetNextPrime(oldSize) */oldSize*2+1);
+
+    for ( size_t i = 0; i < oldSize; /* */ )
+    {
+        EventTypeTablePointer  eTToldNode = oldEventTypeTable[i];
+        if (eTToldNode)
+        {
+            EventTypeTablePointer *peTTnode = &m_eventTypeTable[eTToldNode->eventType % m_size];
+            EventTypeTablePointer  eTTnode = *peTTnode;
+
+            // Check for collision, we don't want any.
+            if (eTTnode)
+            {
+                GrowEventTypeTable();
+                continue; // Don't increment the counter,
+                          // as we still need to add this element.
+            }
+            else
+            {
+                // Get the old value and put it in the new table.
+                *peTTnode = oldEventTypeTable[i];
+            }
+        }
+
+        i++;
+    }
+
+    delete[] oldEventTypeTable;
+}
+
+// ----------------------------------------------------------------------------
 // wxEvtHandler
 // ----------------------------------------------------------------------------
 
@@ -765,7 +945,7 @@ wxEvtHandler::~wxEvtHandler()
 #  if !defined(__VISAGECPP__)
     delete m_eventsLocker;
 #  endif
-   
+
     // Remove us from wxPendingEvents if necessary.
     if(wxPendingEventsLocker)
         wxENTER_CRIT_SECT(*wxPendingEventsLocker);
@@ -930,15 +1110,9 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
         if ( m_dynamicEvents && SearchDynamicEventTable(event) )
             return TRUE;
 
-        // Then static per-class event tables (and search upwards through the
-        // inheritance hierarchy)
-        for ( const wxEventTable *table = GetEventTable();
-              table;
-              table = table->baseTable )
-        {
-            if ( SearchEventTable((wxEventTable&)*table, event) )
-                return TRUE;
-        }
+        // Then static per-class event tables
+        if ( GetEventHashTable().HandleEvent(event, this) )
+            return TRUE;
     }
 
     // Try going down the event handler chain
@@ -952,6 +1126,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // application object as necessary
     return TryParent(event);
 }
+
 
 bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 {
@@ -1089,7 +1264,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
                 if (entry->m_eventSink)
                     ((entry->m_eventSink)->*((wxEventFunction) (entry->m_fn)))(event);
                 else
-#endif                    
+#endif
                     (this->*((wxEventFunction) (entry->m_fn)))(event);
 
                 if ( ! event.GetSkipped() )
