@@ -357,12 +357,12 @@ bool wxListCtrl::Create(wxWindow *parent,
     // versions of _some_ messages (notably LVN_GETDISPINFOA) in MSLU build
     wxSetCCUnicodeFormat(GetHwnd());
 
-    // for comctl32.dll v 4.70+ we want to have this attribute because it's
-    // prettier (and also because wxGTK does it like this)
+    // for comctl32.dll v 4.70+ we want to have some non default extended
+    // styles because it's prettier (and also because wxGTK does it like this)
     if ( InReportView() && wxApp::GetComCtl32Version() >= 470 )
     {
         ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE,
-                      0, LVS_EX_FULLROWSELECT);
+                      0, LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT);
     }
 
     return true;
