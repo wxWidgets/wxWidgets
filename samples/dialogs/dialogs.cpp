@@ -399,6 +399,8 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 {
+//    wxFAIL_MSG( "Test assert" );
+
     wxFileDialog dialog(this, "Testing open file dialog", "", "", "*.txt", 0);
 
     if (dialog.ShowModal() == wxID_OK)
@@ -420,6 +422,9 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 // one will use it by default
 void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
 {
+    wxOnAssert( "Test assert.txt", 20, "Test" );
+    return;
+
     static wxString s_extDef;
     wxString path = wxFileSelector(
                                     _T("Select the file to load"),

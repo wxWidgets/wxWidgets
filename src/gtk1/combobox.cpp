@@ -57,8 +57,18 @@ gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 
     combo->m_alreadySent = TRUE;
 
+    int curSelection = combo->GetSelection();
+
+    if (combo->m_prevSelection != curSelection)
+    {
+        GtkWidget *list = GTK_COMBO(combo->m_widget)->list;
+        gtk_list_unselect_item( GTK_LIST(list), combo->m_prevSelection );
+    }
+
+    combo->m_prevSelection = curSelection;
+
     wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
-    event.SetInt( combo->GetSelection() );
+    event.SetInt( curSelection );
     event.SetString( combo->GetStringSelection() );
     event.SetEventObject( combo );
 
@@ -102,6 +112,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     m_alreadySent = FALSE;
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
+    m_prevSelection = 0;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
@@ -120,6 +131,8 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
+
+    gtk_list_set_selection_mode( GTK_LIST(list), GTK_SELECTION_MULTIPLE );
 
     for (int i = 0; i < n; i++)
     {
@@ -433,7 +446,9 @@ void wxComboBox::SetSelection( int n )
     DisableEvents();
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
+    gtk_list_unselect_item( GTK_LIST(list), m_prevSelection );
     gtk_list_select_item( GTK_LIST(list), n );
+    m_prevSelection = n;
 
     EnableEvents();
 }

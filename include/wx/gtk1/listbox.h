@@ -96,6 +96,7 @@ public:
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX
 
+    int      m_prevSelection;
 protected:
     virtual wxSize DoGetBestSize() const;
 

@@ -114,6 +114,7 @@ public:
     bool     m_alreadySent;
     wxList   m_clientDataList;
     wxList   m_clientObjectList;
+    int      m_prevSelection;
 
     void DisableEvents();
     void EnableEvents();

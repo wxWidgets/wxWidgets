@@ -261,7 +261,7 @@ static void gtk_listitem_deselect_callback( GtkWidget *widget, wxListBox *listbo
     gtk_listitem_select_cb( widget, listbox, FALSE );
 }
 
-static void gtk_listitem_select_cb( GtkWidget *WXUNUSED(widget), wxListBox *listbox, bool is_selection )
+static void gtk_listitem_select_cb( GtkWidget *widget, wxListBox *listbox, bool is_selection )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
@@ -270,7 +270,19 @@ static void gtk_listitem_select_cb( GtkWidget *WXUNUSED(widget), wxListBox *list
 
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
     event.SetEventObject( listbox );
-    event.SetExtraLong( (long) is_selection );
+//    MSW doesn't do that either
+//    event.SetExtraLong( (long) is_selection );
+
+
+    if ((listbox->GetWindowStyleFlag() & wxLB_SINGLE) != 0)
+    {
+        int sel = listbox->GtkGetIndex( widget );
+
+        if (listbox->m_prevSelection != sel)
+            gtk_list_unselect_item( listbox->m_list, listbox->m_prevSelection );
+
+        listbox->m_prevSelection = sel;
+    }
 
     wxArrayInt aSelections;
     int n, count = listbox->GetSelections(aSelections);
@@ -290,8 +302,9 @@ static void gtk_listitem_select_cb( GtkWidget *WXUNUSED(widget), wxListBox *list
 
     event.m_commandInt = n;
 
-    listbox->GetEventHandler()->AddPendingEvent( event );
-//    listbox->GetEventHandler()->ProcessEvent( event );
+//    No longer required with new code in wxLB_SINGLE
+//    listbox->GetEventHandler()->AddPendingEvent( event );
+    listbox->GetEventHandler()->ProcessEvent( event );
 }
 
 //-----------------------------------------------------------------------------
@@ -320,6 +333,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 {
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
+    m_prevSelection = 0;  // or -1 ??
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
@@ -355,7 +369,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     {
         // if style was 0 set single mode
         m_windowStyle |= wxLB_SINGLE;
-        mode = GTK_SELECTION_BROWSE;
+        mode = GTK_SELECTION_MULTIPLE;
     }
 
     gtk_list_set_selection_mode( GTK_LIST(m_list), mode );
@@ -535,7 +549,7 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
     gtk_signal_connect( GTK_OBJECT(list_item), "select",
       GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
-    if (HasFlag(wxLB_MULTIPLE))
+    if (HasFlag(wxLB_MULTIPLE) || HasFlag(wxLB_EXTENDED))
         gtk_signal_connect( GTK_OBJECT(list_item), "deselect",
           GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
 
@@ -844,7 +858,12 @@ void wxListBox::SetSelection( int n, bool select )
     GtkDisableEvents();
 
     if (select)
+    {
+        if ((m_windowStyle & wxLB_SINGLE) != 0)
+            gtk_list_unselect_item( m_list, m_prevSelection );
         gtk_list_select_item( m_list, n );
+        m_prevSelection = n;
+    }
     else
         gtk_list_unselect_item( m_list, n );
 
