@@ -101,7 +101,6 @@ COMMONOBJS = \
 		$(COMMDIR)\dynarray.obj \
 		$(COMMDIR)\dynlib.obj \
 		$(COMMDIR)\event.obj \
-		$(COMMDIR)\extended.obj \
 		$(COMMDIR)\ffile.obj \
 		$(COMMDIR)\file.obj \
 		$(COMMDIR)\fileconf.obj \
@@ -118,7 +117,6 @@ COMMONOBJS = \
 		$(COMMDIR)\image.obj \
 		$(COMMDIR)\imaggif.obj \
 		$(COMMDIR)\imagjpeg.obj \
-		$(COMMDIR)\imagpng.obj \
 		$(COMMDIR)\imagpnm.obj \
 		$(COMMDIR)\intl.obj \
 		$(COMMDIR)\ipcbase.obj \
@@ -146,7 +144,6 @@ COMMONOBJS = \
 		$(COMMDIR)\timercmn.obj \
 		$(COMMDIR)\tokenzr.obj \
 		$(COMMDIR)\txtstrm.obj \
-		$(COMMDIR)\unzip.obj \
 		$(COMMDIR)\utilscmn.obj \
 		$(COMMDIR)\valgen.obj \
 		$(COMMDIR)\validate.obj \
@@ -157,7 +154,13 @@ COMMONOBJS = \
 		$(COMMDIR)\wxchar.obj \
 		$(COMMDIR)\wxexpr.obj \
 		$(COMMDIR)\zipstrm.obj \
+		$(COMMDIR)\extended.obj \
+		$(COMMDIR)\unzip.obj \
 		$(COMMDIR)\zstream.obj
+
+# Won't compile
+#		$(COMMDIR)\imagpng.obj \
+#
 
 MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\app.obj \
@@ -210,7 +213,6 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\palette.obj \
 		$(MSWDIR)\pen.obj \
 		$(MSWDIR)\penwin.obj \
-		$(MSWDIR)\pnghand.obj \
 		$(MSWDIR)\printdlg.obj \
 		$(MSWDIR)\printwin.obj \
 		$(MSWDIR)\radiobox.obj \
@@ -234,6 +236,9 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\window.obj \
 		$(MSWDIR)\xpmhand.obj
 
+# Won't compile
+#		$(MSWDIR)\pnghand.obj \
+#
 # TODO: Implement XPM and PNG targets in this makefile!
 #  $(OLEDIR)\xpmhand \
 #  $(OLEDIR)\pnghand \
@@ -745,9 +750,9 @@ $(COMMDIR)/event.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
-$(COMMDIR)/extended.obj:     $*.$(SRCSUFF)
+$(COMMDIR)/extended.obj:     $*.c
         cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /Fo$@ /c /Tc $*.c
 <<
 
 $(COMMDIR)/ffile.obj:     $*.$(SRCSUFF)
@@ -970,9 +975,9 @@ $(COMMDIR)/txtstrm.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
-$(COMMDIR)/unzip.obj:     $*.$(SRCSUFF)
+$(COMMDIR)/unzip.obj:     $*.c
         cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /Fo$@ /c /Tc $*.c
 <<
 
 $(COMMDIR)/utilscmn.obj:     $*.$(SRCSUFF)

@@ -52,3 +52,4 @@ wxBusyInfo::~wxBusyInfo()
 
 #endif
   // wxUSE_BUSYINFO
+
