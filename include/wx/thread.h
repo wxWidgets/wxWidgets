@@ -594,6 +594,27 @@ inline void WXDLLEXPORT wxMutexGuiLeave() { }
 
 #endif // wxUSE_THREADS/!wxUSE_THREADS
 
+// mark part of code as being a critical section: this macro declares a
+// critical section with the given name and enters it immediately and leaves
+// it at the end of the current scope
+//
+// example:
+//
+//      int Count()
+//      {
+//          static int s_counter = 0;
+//
+//          wxCRITICAL_SECTION(counter);
+//
+//          return ++s_counter;
+//      }
+//
+// this function is MT-safe in presence of the threads but there is no
+// overhead when the library is compiled without threads
+#define wxCRITICAL_SECTION(name) \
+    wxCRIT_SECT_DECLARE(s_cs##name);  \
+    wxCRIT_SECT_LOCKER(cs##name##Locker, s_cs##name)
+
 // automatically lock GUI mutex in ctor and unlock it in dtor
 class WXDLLEXPORT wxMutexGuiLocker
 {
