@@ -80,6 +80,10 @@ package.
 
 Changed all the "LIST" parameter names to "choices" to match the docs.
 
+More fixes for the wxFloatBar, and it now works on wxGTK even better
+than wxMSW!  (The feat is accomplished by using the wxTB_DOCKABLE
+style flag instead of trying to float it ourselves.)
+
 
 
 
