@@ -1,4 +1,4 @@
-!include makewat.env
+!include $(WXDIR)\src\makewat.env
 
 all: $(OUTPUTDIR) $(LIBTARGET)
 
