@@ -1004,7 +1004,7 @@ bool wxTextCtrl::SetFont( const wxFont &font )
 {
     wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
 
-    if ( !wxWindowBase::SetFont(font) )
+    if ( !wxTextCtrlBase::SetFont(font) )
     {
         // font didn't change, nothing to do
         return FALSE;
