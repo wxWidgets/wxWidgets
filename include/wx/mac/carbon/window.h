@@ -239,10 +239,15 @@ protected:
     wxList              m_subControls;
     // number of calls to Freeze() minus number of calls to Thaw()
     unsigned int        m_frozenness;
-    
+    // the true native ControlRef / = HIViewRef on OSX
     WXWidget            m_macControl ;
+    // true if is is not a native control but a wxWindow control
 	bool				m_macIsUserPane ;
     wxBrush             m_macBackgroundBrush ;
+    // topleft inset of the mac control from the wx top left corner
+    wxPoint             m_macTopLeftInset ;
+    // bottom right inset of the mac control from the wx bottom right corner
+    wxPoint             m_macBottomRightInset ;
     
     wxScrollBar*        m_hScrollBar ;
     wxScrollBar*        m_vScrollBar ;
