@@ -16,6 +16,9 @@
     #if TARGET_CARBON
 	    #define	USE_PRECOMPILED_MAC_HEADERS	0  /*Set to 0 if you don't want to use precompiled MacHeaders*/
 		#include "MacHeaders.c"
+		#if UNIVERSAL_INTERFACES_VERSION < 0x0340
+		    #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
+		#endif
     	/*
 	    #define	USE_PRECOMPILED_MAC_HEADERS	0 
 	   		#ifdef __cplusplus
