@@ -776,6 +776,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 
 	mkdir $(DISTDIR)/samples/exec
 	cp $(SAMPDIR)/exec/Makefile.in $(DISTDIR)/samples/exec
+	cp $(SAMPDIR)/exec/makefile.unx $(DISTDIR)/samples/exec
 	cp $(SAMPDIR)/exec/*.cpp $(DISTDIR)/samples/exec
 
 	mkdir $(DISTDIR)/samples/font
@@ -864,6 +865,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 
 	mkdir $(DISTDIR)/samples/ipc
 	cp $(SAMPDIR)/ipc/Makefile.in $(DISTDIR)/samples/ipc
+	cp $(SAMPDIR)/ipc/makefile.unx $(DISTDIR)/samples/ipc
 	cp $(SAMPDIR)/ipc/*.cpp $(DISTDIR)/samples/ipc
 	cp $(SAMPDIR)/ipc/*.h $(DISTDIR)/samples/ipc
 	cp $(SAMPDIR)/ipc/*.xpm $(DISTDIR)/samples/ipc
@@ -992,6 +994,7 @@ SAMPLES_DIST: ALL_GUI_DIST
     
 	mkdir $(DISTDIR)/samples/richedit
 	cp $(SAMPDIR)/richedit/Makefile.in $(DISTDIR)/samples/richedit
+	cp $(SAMPDIR)/richedit/makefile.unx $(DISTDIR)/samples/richedit
 	cp $(SAMPDIR)/richedit/*.cpp $(DISTDIR)/samples/richedit
 	cp $(SAMPDIR)/richedit/*.h $(DISTDIR)/samples/richedit
 	cp $(SAMPDIR)/richedit/*.xpm $(DISTDIR)/samples/richedit
@@ -1000,16 +1003,19 @@ SAMPLES_DIST: ALL_GUI_DIST
     
 	mkdir $(DISTDIR)/samples/proplist
 	cp $(SAMPDIR)/proplist/Makefile.in $(DISTDIR)/samples/proplist
+	cp $(SAMPDIR)/proplist/makefile.unx $(DISTDIR)/samples/proplist
 	cp $(SAMPDIR)/proplist/*.cpp $(DISTDIR)/samples/proplist
 	cp $(SAMPDIR)/proplist/*.h $(DISTDIR)/samples/proplist
     
 	mkdir $(DISTDIR)/samples/propsize
 	cp $(SAMPDIR)/propsize/Makefile.in $(DISTDIR)/samples/propsize
+	cp $(SAMPDIR)/propsize/makefile.unx $(DISTDIR)/samples/propsize
 	cp $(SAMPDIR)/propsize/*.cpp $(DISTDIR)/samples/propsize
 	cp $(SAMPDIR)/propsize/*.xpm $(DISTDIR)/samples/propsize
     
 	mkdir $(DISTDIR)/samples/sashtest
 	cp $(SAMPDIR)/sashtest/Makefile.in $(DISTDIR)/samples/sashtest
+	cp $(SAMPDIR)/sashtest/makefile.unx $(DISTDIR)/samples/sashtest
 	cp $(SAMPDIR)/sashtest/*.cpp $(DISTDIR)/samples/sashtest
 	cp $(SAMPDIR)/sashtest/*.h $(DISTDIR)/samples/sashtest
     
@@ -1025,16 +1031,18 @@ SAMPLES_DIST: ALL_GUI_DIST
     
 	mkdir $(DISTDIR)/samples/sockets
 	cp $(SAMPDIR)/sockets/Makefile.in $(DISTDIR)/samples/sockets
+	cp $(SAMPDIR)/sockets/makefile.unx $(DISTDIR)/samples/sockets
 	cp $(SAMPDIR)/sockets/*.cpp $(DISTDIR)/samples/sockets
 	cp $(SAMPDIR)/sockets/*.xpm $(DISTDIR)/samples/sockets
 
 	mkdir $(DISTDIR)/samples/splitter
-	cp $(SAMPDIR)/splitter/makefile.unx $(DISTDIR)/samples/splitter
 	cp $(SAMPDIR)/splitter/Makefile.in $(DISTDIR)/samples/splitter
+	cp $(SAMPDIR)/splitter/makefile.unx $(DISTDIR)/samples/splitter
 	cp $(SAMPDIR)/splitter/*.cpp $(DISTDIR)/samples/splitter
     
 	mkdir $(DISTDIR)/samples/statbar
 	cp $(SAMPDIR)/statbar/Makefile.in $(DISTDIR)/samples/statbar
+	cp $(SAMPDIR)/statbar/makefile.unx $(DISTDIR)/samples/statbar
 	cp $(SAMPDIR)/statbar/*.cpp $(DISTDIR)/samples/statbar
 	cp $(SAMPDIR)/statbar/*.xpm $(DISTDIR)/samples/statbar
 
@@ -1051,6 +1059,7 @@ SAMPLES_DIST: ALL_GUI_DIST
     
 	mkdir $(DISTDIR)/samples/toolbar
 	cp $(SAMPDIR)/toolbar/Makefile.in $(DISTDIR)/samples/toolbar
+	cp $(SAMPDIR)/toolbar/makefile.unx $(DISTDIR)/samples/toolbar
 	cp $(SAMPDIR)/toolbar/*.cpp $(DISTDIR)/samples/toolbar
 	cp $(SAMPDIR)/toolbar/*.xpm $(DISTDIR)/samples/toolbar
 	mkdir $(DISTDIR)/samples/toolbar/bitmaps
@@ -1058,6 +1067,7 @@ SAMPLES_DIST: ALL_GUI_DIST
     
 	mkdir $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/Makefile.in $(DISTDIR)/samples/treectrl
+	cp $(SAMPDIR)/treectrl/makefile.unx $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/*.cpp $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/*.h $(DISTDIR)/samples/treectrl
 	cp $(SAMPDIR)/treectrl/*.xpm $(DISTDIR)/samples/treectrl
@@ -1072,18 +1082,21 @@ SAMPLES_DIST: ALL_GUI_DIST
     
 	mkdir $(DISTDIR)/samples/typetest
 	cp $(SAMPDIR)/typetest/Makefile.in $(DISTDIR)/samples/typetest
+	cp $(SAMPDIR)/typetest/makefile.unx $(DISTDIR)/samples/typetest
 	cp $(SAMPDIR)/typetest/*.cpp $(DISTDIR)/samples/typetest
 	cp $(SAMPDIR)/typetest/*.h $(DISTDIR)/samples/typetest
 	cp $(SAMPDIR)/typetest/*.xpm $(DISTDIR)/samples/typetest
     
 	mkdir $(DISTDIR)/samples/validate
 	cp $(SAMPDIR)/validate/Makefile.in $(DISTDIR)/samples/validate
+	cp $(SAMPDIR)/validate/makefile.unx $(DISTDIR)/samples/validate
 	cp $(SAMPDIR)/validate/*.cpp $(DISTDIR)/samples/validate
 	cp $(SAMPDIR)/validate/*.h $(DISTDIR)/samples/validate
 	cp $(SAMPDIR)/validate/*.xpm $(DISTDIR)/samples/validate
     
 	mkdir $(DISTDIR)/samples/wizard
 	cp $(SAMPDIR)/wizard/Makefile.in $(DISTDIR)/samples/wizard
+	cp $(SAMPDIR)/wizard/makefile.unx $(DISTDIR)/samples/wizard
 	cp $(SAMPDIR)/wizard/*.cpp $(DISTDIR)/samples/wizard
 	cp $(SAMPDIR)/wizard/*.xpm $(DISTDIR)/samples/wizard
     
