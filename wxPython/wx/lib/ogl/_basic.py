@@ -1180,7 +1180,7 @@ class Shape(ShapeEvtHandler):
             return
 
         region = self._regions[0]
-        region.ClearText()
+        #region.ClearText()
         new_line = ShapeTextLine(0, 0, string)
         text = region.GetFormattedText()
         text.append(new_line)
