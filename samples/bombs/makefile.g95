@@ -1,0 +1,44 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for bombs example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/bombs.$(OBJSUFF) $(OBJDIR)/bombs1.$(OBJSUFF) $(OBJDIR)/game.$(OBJSUFF)\
+   $(OBJDIR)/bombs_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) bombs$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+bombs$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o bombs$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/bombs.$(OBJSUFF):	bombs.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ bombs.$(SRCSUFF)
+
+$(OBJDIR)/bombs1.$(OBJSUFF):	bombs1.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ bombs1.$(SRCSUFF)
+
+$(OBJDIR)/game.$(OBJSUFF):	game.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ game.$(SRCSUFF)
+
+$(OBJDIR)/bombs_resources.o:  bombs.rc
+	$(RESCOMP) -i bombs.rc -o $(OBJDIR)/bombs_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) bombs$(GUISUFFIX).exe core *.rsc *.res

@@ -53,6 +53,11 @@ Using makefiles:
 3. Change directory to wx\samples and type 'nmake -f makefile.nt'
    to make all the samples. You can also make them individually.
 
+Notes: if you wish to use templates, please edit
+include\wx\msw\setup.h and set wxUSE_DEBUG_NEW_ALWAYS to 0.
+Without this, the redefinition of 'new' will cause problems in
+the headers. Alternatively, #undef new before including template headers.
+
 Visual C++ 1.5 compilation
 --------------------------
 

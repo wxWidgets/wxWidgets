@@ -59,10 +59,6 @@ extern char ListDB_Selection2[]; // Used to return the second column value for t
 DatabaseDemoFrame	*DemoFrame;		// Pointer to the main frame
 
 
-// This statement initializes the whole application and calls OnInit
-DatabaseDemoApp DatabaseDemoApp;
-
-
 /* Pointer to the main database connection used in the program.  This
  * pointer would normally be used for doing things as database lookups
  * for user login names and passwords, getting workstation settings, etc.
@@ -1300,7 +1296,7 @@ CparameterDlg::CparameterDlg(wxWindow *parent) : wxDialog (parent, PARAMETER_DIA
 	widgetPtrsSet = TRUE;
 
 	saved = FALSE;
-	savedParamSettings = DatabaseDemoApp.params;
+	savedParamSettings = wxGetApp().params;
 
 	Centre(wxBOTH);
 	PutData();
@@ -1319,7 +1315,7 @@ bool CparameterDlg::OnClose()
 		if (!Ok)
 			return FALSE;
 
-		DatabaseDemoApp.params = savedParamSettings;
+		wxGetApp().params = savedParamSettings;
 	}
 
 	if (GetParent() != NULL)
@@ -1366,9 +1362,9 @@ bool CparameterDlg::PutData()
 	FillDataSourceList();
 
 	// Fill in the fields from the params object
-	pParamODBCSourceList->SetStringSelection(DatabaseDemoApp.params.ODBCSource);
-	pParamUserNameTxt->SetValue(DatabaseDemoApp.params.UserName);
-	pParamPasswordTxt->SetValue(DatabaseDemoApp.params.Password);
+	pParamODBCSourceList->SetStringSelection(wxGetApp().params.ODBCSource);
+	pParamUserNameTxt->SetValue(wxGetApp().params.UserName);
+	pParamPasswordTxt->SetValue(wxGetApp().params.Password);
 	return TRUE;
 }  // CparameterDlg::PutData()
 
@@ -1379,47 +1375,47 @@ bool CparameterDlg::GetData()
 	if (pParamODBCSourceList->GetStringSelection())
 	{
 		tStr = pParamODBCSourceList->GetStringSelection();
-		if (tStr.Length() > (sizeof(DatabaseDemoApp.params.ODBCSource)-1))
+		if (tStr.Length() > (sizeof(wxGetApp().params.ODBCSource)-1))
 		{
 			wxString errmsg;
 			errmsg.Printf("ODBC Data source name is longer than the data structure to hold it.\n'Cparameter.ODBCSource' must have a larger character array\nto handle a data source with this long of a name\n\nThe data source currently selected is %d characters long.",tStr.Length());
 			wxMessageBox(errmsg,"Internal program error...",wxOK | wxICON_EXCLAMATION);
 			return FALSE;
 		}
-		strcpy(DatabaseDemoApp.params.ODBCSource, tStr);
+		strcpy(wxGetApp().params.ODBCSource, tStr);
 	}
 	else
 		return FALSE;
 	
 	tStr = pParamUserNameTxt->GetValue();
-	if (tStr.Length() > (sizeof(DatabaseDemoApp.params.UserName)-1))
+	if (tStr.Length() > (sizeof(wxGetApp().params.UserName)-1))
 	{
 		wxString errmsg;
 		errmsg.Printf("User name is longer than the data structure to hold it.\n'Cparameter.UserName' must have a larger character array\nto handle a data source with this long of a name\n\nThe user name currently specified is %d characters long.",tStr.Length());
 		wxMessageBox(errmsg,"Internal program error...",wxOK | wxICON_EXCLAMATION);
 		return FALSE;
 	}
-	strcpy(DatabaseDemoApp.params.UserName, tStr);
+	strcpy(wxGetApp().params.UserName, tStr);
 
 	tStr = pParamPasswordTxt->GetValue();
-	if (tStr.Length() > (sizeof(DatabaseDemoApp.params.Password)-1))
+	if (tStr.Length() > (sizeof(wxGetApp().params.Password)-1))
 	{
 		wxString errmsg;
 		errmsg.Printf("Password is longer than the data structure to hold it.\n'Cparameter.Password' must have a larger character array\nto handle a data source with this long of a name\n\nThe password currently specified is %d characters long.",tStr.Length());
 		wxMessageBox(errmsg,"Internal program error...",wxOK | wxICON_EXCLAMATION);
 		return FALSE;
 	}
-	strcpy(DatabaseDemoApp.params.Password,tStr);
+	strcpy(wxGetApp().params.Password,tStr);
 	return TRUE;
 }  // CparameterDlg::GetData()
 
 
 bool CparameterDlg::Save()
 {
-	Cparameters saveParams = DatabaseDemoApp.params;
+	Cparameters saveParams = wxGetApp().params;
 	if (!GetData())
 	{
-		DatabaseDemoApp.params = saveParams;
+		wxGetApp().params = saveParams;
 		return FALSE;
 	}
 
@@ -1432,11 +1428,11 @@ bool CparameterDlg::Save()
 		return FALSE;
 	}
 
-	fputs(DatabaseDemoApp.params.ODBCSource, paramFile);
+	fputs(wxGetApp().params.ODBCSource, paramFile);
 	fputc('\n', paramFile);
-	fputs(DatabaseDemoApp.params.UserName, paramFile);
+	fputs(wxGetApp().params.UserName, paramFile);
 	fputc('\n', paramFile);
-	fputs(DatabaseDemoApp.params.Password, paramFile);
+	fputs(wxGetApp().params.Password, paramFile);
 	fputc('\n', paramFile);
 	fclose(paramFile);
 
