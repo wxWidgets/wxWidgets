@@ -259,8 +259,6 @@ public:
     bool operator==(const wxString& filename)
         { return *this == wxFileName(filename); }
 
-    // Tests
-
         // are the file names of this type cases sensitive?
     static bool IsCaseSensitive( wxPathFormat format = wxPATH_NATIVE );
 
@@ -271,6 +269,12 @@ public:
         // is this filename relative?
     bool IsRelative() const
         { return m_relative; }
+        
+        // forcibly set the flag
+    void SetAbsolute()
+        { m_relative = FALSE; }
+    void SetRelative()
+        { m_relative = TRUE; }
 
     // Information about path format
 
@@ -315,6 +319,8 @@ public:
     // Construct path only - possibly with the trailing separator
     wxString GetPath( bool add_separator = FALSE,
                       wxPathFormat format = wxPATH_NATIVE ) const;
+    // Replace current path with this one
+    void SetPath( const wxString &path, wxPathFormat format = wxPATH_NATIVE );
 
     // more readable synonym
     wxString GetPathWithSep(wxPathFormat format = wxPATH_NATIVE ) const

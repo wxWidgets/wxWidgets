@@ -54,12 +54,12 @@ inline wxDateTime wxDateTime::Now()
 /* static */
 inline wxDateTime wxDateTime::Today()
 {
-    struct tm *tm = GetTmNow();
-    tm->tm_hour =
-    tm->tm_min =
-    tm->tm_sec = 0;
+    struct tm *time = GetTmNow();
+    time->tm_hour = 0;
+    time->tm_min = 0;
+    time->tm_sec = 0;
 
-    return wxDateTime(*tm);
+    return wxDateTime(*time);
 }
 
 #if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))

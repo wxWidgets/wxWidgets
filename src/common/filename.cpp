@@ -232,6 +232,15 @@ void wxFileName::Assign(const wxString& volume,
                         const wxString& ext,
                         wxPathFormat format )
 {
+    SetPath( path, format );
+
+    m_volume = volume;
+    m_ext = ext;
+    m_name = name;
+}
+
+void wxFileName::SetPath( const wxString &path, wxPathFormat format )
+{
     wxPathFormat my_format = GetFormat( format );
     wxString my_path = path;
 
@@ -297,10 +306,10 @@ void wxFileName::Assign(const wxString& volume,
             }
         }
     }
-
-    m_volume = volume;
-    m_ext = ext;
-    m_name = name;
+    else
+    {
+        m_relative = TRUE;
+    }
 }
 
 void wxFileName::Assign(const wxString& fullpath,

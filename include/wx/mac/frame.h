@@ -6,7 +6,7 @@
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FRAME_H_
@@ -60,7 +60,7 @@ public:
     // -------------------------------
 
     // override some more virtuals
-   	virtual bool Enable(bool enable) ;
+    virtual bool Enable(bool enable = TRUE) ;
 
     // get the origin of the client area (which may be different from (0, 0)
     // if the frame has a toolbar) in client coordinates
