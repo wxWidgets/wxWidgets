@@ -3090,24 +3090,26 @@ int wxGridStringTable::GetNumberCols()
 
 wxString wxGridStringTable::GetValue( int row, int col )
 {
-    wxASSERT_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
-                  _T("invalid row or column index in wxGridStringTable") );
+    wxCHECK_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
+                 wxEmptyString,
+                 _T("invalid row or column index in wxGridStringTable") );
 
     return m_data[row][col];
 }
 
 void wxGridStringTable::SetValue( int row, int col, const wxString& value )
 {
-    wxASSERT_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
-                  _T("invalid row or column index in wxGridStringTable") );
+    wxCHECK_RET( (row < GetNumberRows()) && (col < GetNumberCols()),
+                 _T("invalid row or column index in wxGridStringTable") );
 
     m_data[row][col] = value;
 }
 
 bool wxGridStringTable::IsEmptyCell( int row, int col )
 {
-    wxASSERT_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
-                  _T("invalid row or column index in wxGridStringTable") );
+    wxCHECK_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
+                 TRUE,
+                 _T("invalid row or column index in wxGridStringTable") );
 
     return (m_data[row][col] == wxEmptyString);
 }
