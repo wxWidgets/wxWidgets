@@ -3322,6 +3322,32 @@ static PyObject *_wrap_wxLocale_IsLoaded(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+static PyObject *_wrap_wxLocale_GetLanguageInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLanguageInfo * _result;
+    int  _arg0;
+    char *_kwnames[] = { "lang", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxLocale_GetLanguageInfo",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxLanguageInfo *)wxLocale::GetLanguageInfo(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxLanguageInfo_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxLocale_AddLanguage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxLanguageInfo * _arg0;
@@ -3648,6 +3674,7 @@ static PyMethodDef fontscMethods[] = {
 	 { "wxLocale_GetName", (PyCFunction) _wrap_wxLocale_GetName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_GetString", (PyCFunction) _wrap_wxLocale_GetString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_AddLanguage", (PyCFunction) _wrap_wxLocale_AddLanguage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLocale_GetLanguageInfo", (PyCFunction) _wrap_wxLocale_GetLanguageInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_IsLoaded", (PyCFunction) _wrap_wxLocale_IsLoaded, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_AddCatalog", (PyCFunction) _wrap_wxLocale_AddCatalog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLocale_AddCatalogLookupPathPrefix", (PyCFunction) _wrap_wxLocale_AddCatalogLookupPathPrefix, METH_VARARGS | METH_KEYWORDS },

@@ -755,6 +755,11 @@ public:
     // check if the given catalog is loaded
     bool IsLoaded(const wxString& szDomain) const;
 
+    // Retrieve the language info struct for the given language
+    //
+    // Returns NULL if no info found, pointer must *not* be deleted by caller
+    static const wxLanguageInfo *GetLanguageInfo(int lang);
+
     // Add custom language to the list of known languages.
     // Notes: 1) wxLanguageInfo contains platform-specific data
     //        2) must be called before Init to have effect
