@@ -172,7 +172,7 @@ wxChoice::~wxChoice()
     }
 }
 
-void wxChoice::Append(const wxString& item)
+int wxChoice::DoAppend(const wxString& item)
 {
     Widget w = XtVaCreateManagedWidget (wxStripMenuCodes(item),
 #if USE_GADGETS
@@ -226,6 +226,8 @@ void wxChoice::Append(const wxString& item)
         m_clientList.Insert( m_clientList.Item(m_noStrings-1),
                                  (wxObject*) NULL );
     m_noStrings ++;
+
+    return Number() - 1;
 }
 
 void wxChoice::Delete(int WXUNUSED(n))
@@ -517,11 +519,13 @@ int wxChoice::GetCount() const
     return Number();
 }
 
+/*
 int wxChoice::DoAppend(const wxString& item)
 {
     Append(item);
     return GetCount() - 1;
 }
+*/
 
 // Just appends, doesn't yet insert
 void wxChoice::DoInsertItems(const wxArrayString& items, int WXUNUSED(pos))

@@ -16,12 +16,10 @@
 #pragma interface "choice.h"
 #endif
 
-#include "wx/ctrlsub.h"
-
 WXDLLEXPORT_DATA(extern const char*) wxChoiceNameStr;
 
 // Choice item
-class WXDLLEXPORT wxChoice: public wxControlWithItems
+class WXDLLEXPORT wxChoice: public wxChoiceBase
 {
     DECLARE_DYNAMIC_CLASS(wxChoice)
         
@@ -63,7 +61,7 @@ public:
     virtual void SetString(int n, const wxString& s);
     
     // Original API
-    virtual void Append(const wxString& item);
+    //    virtual void Append(const wxString& item);
     virtual void Delete(int n);
     virtual void Clear();
     virtual int GetSelection() const ;
