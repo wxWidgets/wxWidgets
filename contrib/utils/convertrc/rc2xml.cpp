@@ -21,7 +21,7 @@ cross platform (wxGTK,etc)
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -68,10 +68,15 @@ bool rc2xml::Convert(wxString rcfile, wxString xmlfile)
     m_rc.Open(rcfile.c_str());
     m_filesize=m_rc.Length();
     
+
     m_workingpath=wxPathOnly(rcfile);
+
     m_targetpath=wxPathOnly(xmlfile)+"\\";
 
+
+
     wxSetWorkingDirectory(m_workingpath);
+
 
     bool result;
     result=m_xmlfile.Open(xmlfile.c_str(),"w+t");
@@ -1029,7 +1034,9 @@ wxString rc2xml::CleanName(wxString name)
     name.Replace("idr_","");
     name.Replace("idb_","");
     name.Replace("idc_","");
+
     name.Replace(".ico","");
+
     name.Replace(".bmp","");
     return name;
 }
@@ -1184,6 +1191,7 @@ void rc2xml::WriteBitmap(wxString bitmapname)
     
     wxString *bitmappath;
     bitmappath=(wxString *)node->Data();
+
     bitmapname=wxFileNameFromPath(*bitmappath);
     wxBitmap bitmap;
     if (!bitmap.LoadFile(*bitmappath,wxBITMAP_TYPE_BMP ))

@@ -9,7 +9,7 @@
 #pragma implementation "sndg72x.cpp"
 #endif
 
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
     #include "wx/defs.h"

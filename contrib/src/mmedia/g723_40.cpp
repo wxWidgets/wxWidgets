@@ -45,7 +45,7 @@
  * the name of the module which it is implementing.
  *
  */
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 #include "wx/mmedia/internal/g72x.h"
 
 /*

@@ -11,7 +11,7 @@
 #pragma implementation "vidbase.h"
 #endif
 
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
 #include <wx/stream.h>

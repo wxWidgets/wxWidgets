@@ -37,7 +37,7 @@
  * of workstation attributes, such as hardware 2's complement arithmetic.
  *
  */
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 #include "wx/mmedia/internal/g72x.h"
 
 /*
