@@ -106,10 +106,10 @@ This is the operator version of \helpref{Item}{wxarraystringitem} method.
 
 \membersection{wxArrayString::Add}\label{wxarraystringadd}
 
-\func{size\_t}{Add}{\param{const wxString\& }{str}}
+\func{size\_t}{Add}{\param{const wxString\& }{str}, \param{size\_t}{ copies = $1$}}
 
-Appends a new item to the array and return the index of th new item in the
-array.
+Appends the given number of {\it copies} of the new item {\it str} to the
+array and returns the index of the first new item in the array.
 
 {\bf Warning:} For sorted arrays, the index of the inserted item will not be,
 in general, equal to \helpref{GetCount()}{wxarraystringgetcount} - 1 because
@@ -177,9 +177,9 @@ Returns index of the first item matched or wxNOT\_FOUND if there is no match.
 
 \membersection{wxArrayString::Insert}\label{wxarraystringinsert}
 
-\func{void}{Insert}{\param{const wxString\& }{str}, \param{size\_t}{ nIndex}}
+\func{void}{Insert}{\param{const wxString\& }{str}, \param{size\_t}{ nIndex}, \param{size\_t }{copies = $1$}}
 
-Insert a new element in the array before the position {\it nIndex}. Thus, for
+Insert the given number of {\it copies} of the new element in the array before the position {\it nIndex}. Thus, for
 example, to insert the string in the beginning of the array you would write
 
 \begin{verbatim}
@@ -228,9 +228,9 @@ an attempt to remove an element which does not exist in debug build.
 
 See also: \helpref{Index}{wxarraystringindex}
 
-\func{void}{Remove}{\param{size\_t }{nIndex}}
+\func{void}{Remove}{\param{size\_t }{nIndex}, \param{size\_t }{count = $1$}}
 
-Removes the item at given position.
+Removes {\it count} items starting at position {\it nIndex} from the array.
 
 \membersection{wxArrayString::Shrink}\label{wxarraystringshrink}
 
