@@ -118,6 +118,9 @@
      #if wxUSE_GIF
      wxImage::AddHandler(new wxGIFHandler);
      #endif
+     #if wxUSE_FS_INET
+     wxFileSystem::AddHandler(new wxInternetFSHandler);
+     #endif
     // Create the main application window
       MyFrame *frame = new MyFrame("wxHtmlWindow testing application",
          wxPoint(50, 50), wxSize(640, 480));
