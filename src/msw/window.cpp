@@ -1254,15 +1254,17 @@ void wxWindowMSW::OnInternalIdle()
             // changed by the time the OnInternalIdle function is called, so 'state'
             // may be meaningless.
             int state = 0;
-            if ( wxIsShiftDown() )
+			if ( wxIsShiftDown() )
                 state |= MK_SHIFT;
             if ( wxIsCtrlDown() )
                 state |= MK_CONTROL;
-            if ( GetKeyState( VK_LBUTTON ) )
+
+            // Only the high-order bit should be tested
+            if ( GetKeyState( VK_LBUTTON ) & (1<<15) )
                 state |= MK_LBUTTON;
-            if ( GetKeyState( VK_MBUTTON ) )
+            if ( GetKeyState( VK_MBUTTON ) & (1<<15) )
                 state |= MK_MBUTTON;
-            if ( GetKeyState( VK_RBUTTON ) )
+            if ( GetKeyState( VK_RBUTTON ) & (1<<15) )
                 state |= MK_RBUTTON;
 
             POINT pt;
