@@ -51,6 +51,7 @@ class DragCanvas(wx.ScrolledWindow):
         # Make a shape from an image and mask.  This one will demo
         # dragging outside the window
         bmp = images.getTestStarBitmap()
+        ##bmp = wx.Bitmap('bitmaps/toucan.png')
         shape = DragShape(bmp)
         shape.pos = (5, 5)
         shape.fullscreen = True

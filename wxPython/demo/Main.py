@@ -38,6 +38,7 @@ _treeList = [
         'GridBagSizer',
         'Cursor',
         'PyPlot',
+        'ImageAlpha',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -193,6 +194,7 @@ _treeList = [
         'Cursor',
         'DragImage',
         'Image',
+        'ImageAlpha',
         'ImageFromStream',
         'Mask',
         'Throbber',
