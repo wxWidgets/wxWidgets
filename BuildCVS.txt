@@ -67,7 +67,7 @@ c) Build instructions
  
 -> type: cd c:\wxWin\src\msw
 -> type: make -f makefile.g95  (if using GNU tools)
-or type: make -f makefile.vc   (if using MS VC++)
+or type: nmake -f makefile.vc   (if using MS VC++)
 
 
 II) Unix ports
