@@ -23,7 +23,7 @@
 #include "wx/window.h"
 #include "wx/panel.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxPanelNameStr;
 
 // default scrolled window style
 #ifndef wxScrolledWindowStyle
@@ -72,7 +72,7 @@ public:
     virtual void DoSetVirtualSize(int x, int y);
 
 #ifdef __WXMAC__
-	virtual bool MacClipChildren() const { return true ; }
+    virtual bool MacClipChildren() const { return true ; }
 #endif
 protected:
     // this is needed for wxEVT_PAINT processing hack described in

@@ -25,7 +25,7 @@
 
 class WXDLLEXPORT wxControlContainer;
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxPanelNameStr;
 
 // ----------------------------------------------------------------------------
 // wxPanel contains other controls and implements TAB traversal between them

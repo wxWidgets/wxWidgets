@@ -24,8 +24,8 @@
 #include "wx/panel.h"
 #include "wx/notebook.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxStatusLineNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxFrameNameStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxStatusLineNameStr;
 
 
 //-----------------------------------------------------------------------------

@@ -285,7 +285,7 @@ protected:
 };
 
 // The global fileicons table
-WXDLLEXPORT_DATA(extern wxFileIconsTable *) wxTheFileIconsTable;
+extern WXDLLEXPORT_DATA(wxFileIconsTable *) wxTheFileIconsTable;
 
 #endif // wxUSE_DIRDLG || wxUSE_FILEDLG
 

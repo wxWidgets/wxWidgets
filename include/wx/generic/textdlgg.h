@@ -27,8 +27,8 @@
 
 class WXDLLEXPORT wxTextCtrl;
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxGetTextFromUserPromptStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxGetPasswordFromUserPromptStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxGetTextFromUserPromptStr;
+extern WXDLLEXPORT_DATA(const wxChar*) wxGetPasswordFromUserPromptStr;
 
 #define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE | wxWS_EX_VALIDATE_RECURSIVELY)
 
