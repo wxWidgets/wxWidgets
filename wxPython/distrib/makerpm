@@ -177,6 +177,8 @@ if [ -z "${skipcopy}" ]; then
     rm locale/*.mo
     cleanup ".#*"
     cleanup "*~"
+    cleanup "*.orig"
+    cleanup "*.rej"
     cleanup "*.pyc"
     cleanup core
     cleanup "core.[0-9]*"
