@@ -133,6 +133,7 @@ public:
     %nokwargs wxPageSetupDialogData;
     wxPageSetupDialogData();
     wxPageSetupDialogData(const wxPageSetupDialogData& data);  // for making copies
+    wxPageSetupDialogData(const wxPrintData& data); 
     ~wxPageSetupDialogData();
 
     void EnableHelp(bool flag);
@@ -140,6 +141,7 @@ public:
     void EnableOrientation(bool flag);
     void EnablePaper(bool flag);
     void EnablePrinter(bool flag);
+    
     bool GetDefaultMinMargins();
     bool GetEnableMargins();
     bool GetEnableOrientation();
@@ -155,11 +157,6 @@ public:
     wxSize GetPaperSize();
 
     wxPrintData& GetPrintData();
-//     %addmethods {
-//         %new wxPrintData* GetPrintData() {
-//             return new wxPrintData(self->GetPrintData());  // force a copy
-//         }
-//     }
 
     bool Ok();
 
@@ -171,7 +168,15 @@ public:
     void SetMinMarginBottomRight(const wxPoint& pt);
     void SetPaperId(wxPaperSize id);
     void SetPaperSize(const wxSize& size);
+    
     void SetPrintData(const wxPrintData& printData);
+
+    // Use paper size defined in this object to set the wxPrintData
+    // paper id
+    void CalculateIdFromPaperSize();
+
+    // Use paper id in wxPrintData to set this object's paper size
+    void CalculatePaperSizeFromId();
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
 };
@@ -201,7 +206,8 @@ class wxPrintDialogData : public wxObject {
 public:
     %nokwargs wxPrintDialogData;
     wxPrintDialogData();
-    wxPrintDialogData(const wxPrintData& printData);  // for making copies
+    wxPrintDialogData(const wxPrintData& printData);
+    wxPrintDialogData(const wxPrintDialogData& printData);  // for making copies
     ~wxPrintDialogData();
 
     int GetFromPage() const;
