@@ -52,7 +52,16 @@
 #  define _GSocket_Disable_Events(socket)
 #endif /* wxUSE_GUI */
 
+#ifndef __WXWINCE__
 #include <assert.h>
+#else
+#define assert(x)
+#ifndef isdigit
+#define isdigit(x) (x > 47 && x < 58)
+#endif
+#include "wx/msw/wince/net.h"
+#endif
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -36,7 +36,7 @@
 #include "wx/msw/private.h"     // includes <windows.h>
 #include "wx/msw/missing.h"     // CHARSET_HANGUL
 
-#ifdef __GNUWIN32_OLD__
+#if defined(__GNUWIN32_OLD__) || defined(__WXWINCE__)
     // apparently we need to include winsock.h to get WSADATA and other stuff
     // used in wxGetFullHostName() with the old mingw32 versions
     #include <winsock.h>
@@ -158,7 +158,6 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
     // shouldn't use winsock.dll (a.k.a. ws2_32.dll) at all so only use this
     // code if we link with it anyhow
 #if wxUSE_SOCKETS
-
     WSADATA wsa;
     if ( WSAStartup(MAKEWORD(1, 1), &wsa) == 0 )
     {

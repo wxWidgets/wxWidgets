@@ -8,6 +8,14 @@
  */
 
 /*
+ * TODO: for WinCE we need to replace WSAAsyncSelect
+ * (Windows message-based notification of network events for a socket)
+ * with another mechanism.
+ * We may need to have a separate thread that polls for socket events
+ * using select() and sends a message to the main thread.
+ */
+
+/*
  * PLEASE don't put C++ comments here - this is a C source file.
  */
 
@@ -17,6 +25,14 @@
  */
 #ifdef _MSC_VER
 #  pragma warning(disable:4115) /* named type definition in parentheses */
+#endif
+
+/* This needs to be before the wx/defs/h inclusion
+ * for some reason
+ */
+
+#ifdef __WXWINCE__
+#include <windows.h>
 #endif
 
 #ifndef __GSOCKET_STANDALONE__
@@ -46,7 +62,14 @@
 
 #endif /* __GSOCKET_STANDALONE__ */
 
+#ifndef __WXWINCE__
 #include <assert.h>
+#else
+#define assert(x)
+#include <winsock.h>
+#include "wx/msw/wince/net.h"
+#endif
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
