@@ -1090,11 +1090,13 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
 // wxBitmap accessors
 // ----------------------------------------------------------------------------
 
+#if wxUSE_PALETTE
 wxPalette* wxBitmap::GetPalette() const
 {
     return GetBitmapData() ? &GetBitmapData()->m_bitmapPalette
                            : (wxPalette *) NULL;
 }
+#endif
 
 wxMask *wxBitmap::GetMask() const
 {

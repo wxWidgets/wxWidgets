@@ -200,6 +200,13 @@ private:
 // do NOT use! This is for backward compatibility, use wxFontMapper::Get() instead
 #define wxTheFontMapper (wxFontMapper::Get())
 
-#endif // wxUSE_FONTMAP
+#else // !wxUSE_FONTMAP
+
+#if wxUSE_GUI
+    // wxEncodingToCodepage (utils.cpp) needs wxGetNativeFontEncoding
+    #include "wx/fontenc.h"
+#endif
+
+#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
 
 #endif // _WX_FONTMAPPER_H_

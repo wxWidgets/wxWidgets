@@ -42,6 +42,8 @@
     #include "wx/msgdlg.h"
 #endif
 
+#if wxUSE_COLOURDLG
+
 #include <windows.h>
 
 #if !defined(__WIN32__) || defined(__SALFORDC__)
@@ -226,3 +228,4 @@ void wxColourDialog::DoGetClientSize(int *width, int *height) const
         *height = 299;
 }
 
+#endif

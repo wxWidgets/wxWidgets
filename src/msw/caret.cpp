@@ -35,6 +35,8 @@
 
 #include "wx/caret.h"
 
+#if wxUSE_CARET
+
 #include "wx/msw/private.h"
 
 // ---------------------------------------------------------------------------
@@ -192,3 +194,5 @@ void wxCaret::DoSize()
         OnSetFocus();
     }
 }
+
+#endif
