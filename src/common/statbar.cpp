@@ -127,12 +127,16 @@ wxArrayInt wxStatusBarBase::CalculateAbsWidths(wxCoord widthTotal) const
 
     if ( m_statusWidths == NULL )
     {
-        // default: all fields have the same width
-        int nWidth = widthTotal / m_nFields;
-        for ( int i = 0; i < m_nFields; i++ )
+        if ( m_nFields )
         {
-            widths.Add(nWidth);
+            // default: all fields have the same width
+            int nWidth = widthTotal / m_nFields;
+            for ( int i = 0; i < m_nFields; i++ )
+            {
+                widths.Add(nWidth);
+            }
         }
+        //else: we're empty anyhow
     }
     else // have explicit status widths
     {

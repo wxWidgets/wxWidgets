@@ -124,7 +124,7 @@ void wxStatusBarUniv::DoDraw(wxControlRenderer *renderer)
         if ( IsExposed(rect) )
         {
             wxTopLevelWindow *parentTLW = wxDynamicCast(GetParent(), wxTopLevelWindow);
-            
+
             // the size grip may be drawn only on the last field and only if we
             // have the corresponding style and even then only if we really can
             // resize this frame
@@ -208,13 +208,41 @@ void wxStatusBarUniv::SetStatusWidths(int n, const int widths[])
 
 void wxStatusBarUniv::OnSize(wxSizeEvent& event)
 {
-    // invalidate the widths, we'll have to recalc them
-    m_widthsAbs.Empty();
+    // we don't need to refresh the fields whose width didn't change, so find
+    // the first field whose width did change and refresh starting from it
+    int field;
+    if ( m_statusWidths )
+    {
+        for ( field = 0; field < m_nFields; field++ )
+        {
+            if ( m_statusWidths[field] < 0 )
+            {
+                // var width field
+                break;
+            }
+        }
+    }
+    else // all fields have the same width
+    {
+        // hence all fields widths have changed
+        field = 0;
+    }
 
-    // refresh entirely, shouldn't matter much as the statusbar is quick to
-    // redraw and it would be difficult to avoid it as we'd need to find out
-    // which fields exactly were affected...
-    Refresh();
+    if ( field < m_nFields )
+    {
+        // call this before invalidating the old widths as we want to use them,
+        // not the new ones
+        wxRect rect = DoGetFieldRect(field);
+
+        // invalidate the widths, we'll have to recalc them
+        m_widthsAbs.Empty();
+
+        // refresh everything after the first invalid field
+        rect.y = 0;
+        rect.SetRight(event.GetSize().x);
+        rect.height = event.GetSize().y;
+        RefreshRect(rect);
+    }
 
     event.Skip();
 }
@@ -228,11 +256,25 @@ bool wxStatusBarUniv::GetFieldRect(int n, wxRect& rect) const
     // GetFieldRect() is called from the derived class OnSize() handler, then
     // our geometry info is wrong as our OnSize() didn't invalidate m_widthsAbs
     // yet - so recalc it just in case
+    wxConstCast(this, wxStatusBarUniv)->m_widthsAbs.Empty();
+
+    rect = DoGetFieldRect(n);
+
+    return TRUE;
+}
+
+wxRect wxStatusBarUniv::DoGetFieldRect(int n) const
+{
     wxStatusBarUniv *self = wxConstCast(this, wxStatusBarUniv);
-    self->m_widthsAbs.Empty();
 
     wxCoord borderBetweenFields;
-    rect = self->GetTotalFieldRect(&borderBetweenFields);
+    wxRect rect = self->GetTotalFieldRect(&borderBetweenFields);
+
+    // it's the caller responsability to check this, if unsure - call
+    // GetFieldRect() instead
+    wxCHECK_MSG( !m_widthsAbs.IsEmpty(), rect,
+                 _T("can't be called if we don't have the widths") );
+
     for ( int i = 0; i <= n; i++ )
     {
         rect.width = m_widthsAbs[i];
@@ -241,7 +283,7 @@ bool wxStatusBarUniv::GetFieldRect(int n, wxRect& rect) const
             rect.x += rect.width + borderBetweenFields;
     }
 
-    return TRUE;
+    return rect;
 }
 
 wxCoord wxStatusBarUniv::GetHeight() const
