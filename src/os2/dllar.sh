@@ -92,7 +92,8 @@ CleanUp() {
 
 # Print usage and exit script with rc=1.
 PrintHelp() {
- echo 'Usage: dllar [-o[utput] output_file] [-i[mport] importlib_name]'
+ echo 'Usage: dllar.sh [-o[utput] output_file] [-i[mport] importlib_name]'
+ echo '       [-name-mangler-script script.sh]'
  echo '       [-d[escription] "dll descrption"] [-cc "CC"] [-f[lags] "CFLAGS"]'
  echo '       [-ord[inals]] -ex[clude] "symbol(s)"'
  echo '       [-libf[lags] "{INIT|TERM}{GLOBAL|INSTANCE}"] [-nocrt[dll]] [-nolxl[ite]]'
@@ -106,6 +107,13 @@ PrintHelp() {
  echo '   This name is used as the import library name and may be longer and'
  echo '   more descriptive than the DLL name which has to follow the old '
  echo '   8.3 convention of FAT.'
+ echo '*> "script.sh may be given to override the output_file name by a'
+ echo '   different name. It is mainly useful if the regular make process'
+ echo '   of some package does not take into account OS/2 restriction of'
+ echo '   DLL name lengths. It takes the importlib name as input and is'
+ echo '   supposed to procude a shorter name as output. The script should'
+ echo '   expect to get importlib_name without extension and should produce'
+ echo '   a (max.) 8 letter name without extension.'
  echo '*> "cc" is used to use another GCC executable.   (default: gcc.exe)'
  echo '*> "flags" should be any set of valid GCC flags. (default: -s -Zcrtdll)'
  echo '   These flags will be put at the start of GCC command line.'
@@ -155,6 +163,7 @@ cmdLine=$*
 outFile=""
 outimpFile=""
 inputFiles=""
+renameScript=""
 description=""
 CC=gcc.exe
 CFLAGS="-s -Zcrtdll"
@@ -186,6 +195,10 @@ while [ $1 ]; do
     -i*)
         shift
         outimpFile=$1
+        ;;
+    -name-mangler-script)
+        shift
+        renameScript=$1
         ;;
     -d*)
         shift
@@ -369,19 +382,13 @@ arcFile="${outimpFile}.a"
 arcFile2="${outimpFile}.lib"
 
 #create $dllFile as something matching 8.3 restrictions,
-dllFile="$outFile"
-case $dllFile in
-*wx_base_*)
-    dllFile=`echo $dllFile | sed 's/base_\(...\)/b\1/'`
-    ;;
-*wx_*_*)
-    dllFile=`echo $dllFile | sed 's/_\(..\)[^_]*_\(..\)[^-]*-/\1\2/'`
-    ;;
-*)
-    ;;
-esac
-dllFile="`echo $dllFile | sed 's/\.//' | sed 's/_//' | sed 's/-//'`"
-
+if [ -z $renameScript ] ; then
+    dllFile="$outFile"
+    echo "using outFile as dllFile ($outFile)".
+else
+    dllFile=`$renameScript $outimpFile`
+    echo "modified $outimpFile to $dllFile"
+fi
 
 if [ $do_backup -ne 0 ] ; then
     if [ -f $arcFile ] ; then
@@ -408,7 +415,8 @@ done
 # Create the def file.
 rm -f $defFile
 echo "LIBRARY `basnam $dllFile` $library_flags" >> $defFile
-dllFile="$dllFile.dll"
+dllFile="${dllFile}.dll"
+echo "dllFile now $dllFile";
 if [ ! -z $description ]; then
     echo "DESCRIPTION  \"${description}\"" >> $defFile
 fi
