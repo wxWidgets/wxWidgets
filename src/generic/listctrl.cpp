@@ -586,9 +586,13 @@ int wxListLineData::GetImage( int index )
 void wxListLineData::SetAttributes(wxDC *dc,
                                    const wxListItemAttr *attr,
                                    const wxColour& colText,
-                                   const wxFont& font)
+                                   const wxFont& font,
+                                   bool hilight)
 {
-    if ( attr && attr->HasTextColour() )
+    // don't use foregroud colour for drawing highlighted items - this might
+    // make them completely invisible (and there is no way to do bit
+    // arithmetics on wxColour, unfortunately)
+    if ( !hilight && attr && attr->HasTextColour() )
     {
         dc->SetTextForeground(attr->GetTextColour());
     }
@@ -640,7 +644,7 @@ void wxListLineData::DoDraw( wxDC *dc, bool hilight, bool paintBG )
     //     customize the subitems (in report mode) too.
     wxListItemData *item = (wxListItemData*)m_items.First()->Data();
     wxListItemAttr *attr = item->GetAttributes();
-    SetAttributes(dc, attr, colText, font);
+    SetAttributes(dc, attr, colText, font, hilight);
 
     bool hasBgCol = attr && attr->HasBackgroundColour();
     if ( paintBG || hasBgCol )
@@ -867,9 +871,10 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int cw = item.m_width-2;
 #if wxUSE_GENERIC_LIST_EXTENSIONS
         if ((i+1 == numColumns) || ( dc.LogicalToDeviceX(x+item.m_width) > w-5))
-                cw = dc.DeviceToLogicalX(w)-x-1;
+            cw = dc.DeviceToLogicalX(w)-x-1;
 #else
-        if ((i+1 == numColumns) || (x+item.m_width > w-5)) cw = w-x-1;
+        if ((i+1 == numColumns) || (x+item.m_width > w-5))
+            cw = w-x-1;
 #endif
         dc.SetPen( *wxWHITE_PEN );
 

@@ -180,7 +180,8 @@ public:
 private:
     void SetAttributes(wxDC *dc,
                        const wxListItemAttr *attr,
-                       const wxColour& colText, const wxFont& font);
+                       const wxColour& colText, const wxFont& font,
+                       bool hilight);
 
     DECLARE_DYNAMIC_CLASS(wxListLineData);
 };
