@@ -2828,6 +2828,9 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
                                            int& x, int& y,
                                            int& w, int& h) const
 {
+    static const int DEFAULT_Y = 200;
+    static const int DEFAULT_H = 250;
+
     bool nonDefault = FALSE;
 
     if ( pos.x == -1 )
@@ -2839,8 +2842,11 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
     }
     else
     {
+        // OTOH, if x is not set to CW_USEDEFAULT, y shouldn't be set to it
+        // neither because it is not handled as a special value by Windows then
+        // and so we have to choose some default value for it
         x = pos.x;
-        y = pos.y == -1 ? CW_USEDEFAULT : pos.y;
+        y = pos.y == -1 ? DEFAULT_Y : pos.y;
 
         nonDefault = TRUE;
     }
@@ -2863,14 +2869,15 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
      */
     if ( size.x == -1 )
     {
-        // as abobe, h is not used at all in this case anyhow
+        // as above, h is not used at all in this case anyhow
         w =
         h = CW_USEDEFAULT;
     }
     else
     {
+        // and, again as above, we can't set the height to CW_USEDEFAULT here
         w = size.x;
-        h = size.y == -1 ? CW_USEDEFAULT : size.y;
+        h = size.y == -1 ? DEFAULT_H  : size.y;
 
         nonDefault = TRUE;
     }
