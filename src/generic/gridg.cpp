@@ -1538,7 +1538,7 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
           HighlightCell(dc, TRUE);
 #endif
     }
-  else
+  else if (!wxIPE_HIGHLIGHT)
     {
       // 1) Why isn't this needed for Windows??
       // Probably because of the SetValue?? JS.
@@ -1547,10 +1547,11 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
       //
       // 3) It *is* needed for Motif - michael
       //
-#if defined(__WXMOTIF__)
-      if ((wxIPE_HIGHLIGHT || !(m_editable && m_editInPlace)))
+      // 4) It *seems* to be needed whenever
+      //    wxIPE_HIGHLIGHT is not set (i.e.
+      //    for both wxGTK and wxMOTIF)... SN.
+      if (!(m_editable && m_editInPlace)))
           HighlightCell(dc, TRUE);
-#endif
     }
 
   dc->DestroyClippingRegion();

@@ -3994,6 +3994,9 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
     int i;
     bool result = FALSE;
 
+    // Clear the attribute cache as the attribute might refer to a different
+    // cell than stored in the cache after adding/removing rows/columns.
+    ClearAttrCache();
 #if 0
     // if we were using the default widths/heights so far, we must change them
     // now
