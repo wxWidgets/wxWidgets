@@ -36,6 +36,10 @@
 #endif // Unix/!Unix
 #endif
 
+#if !wxUSE_GUI && !defined(__WXBASE__)
+    #define __WXBASE__
+#endif
+
 // include the feature test macros
 #include "wx/features.h"
 
@@ -77,16 +81,6 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/version.h"
-
-// possibility to build non GUI apps is new, so don't burden ourselves with
-// compatibility code
-#if !wxUSE_GUI
-#undef WXWIN_COMPATIBILITY_2
-#undef WXWIN_COMPATIBILITY_2_2
-
-#define WXWIN_COMPATIBILITY_2 0
-#define WXWIN_COMPATIBILITY_2_2 0
-#endif // !GUI
 
 // ============================================================================
 // non portable C++ features
