@@ -2,7 +2,15 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-2.4.0.5
+2.4.0.6 (a.k.a. the I'm so stupid release)
+-------
+The new deprecation class for the old true/false symbols can now be
+returned from OnInit.  And I promise to be sure I am testing what I
+think I am testing in the future...
+
+
+
+2.4.0.5 (a.k.a. the blame it on Kevin release)
 -------
 A few little but annoying bug fixes.
 
@@ -73,7 +81,7 @@ always call them.  The functions are:
        wxApp_SetMacExitMenuItemId
        wxApp_SetMacHelpMenuTitleName
 
-Refactored, enhanced and added capabilites for the DrawXXXList
+Refactored, enhanced and added capabilities for the DrawXXXList
 functions, inspired by code from Chris Barker.
 
 The wxWindows .mo language catalog files are now installed in a
@@ -396,8 +404,8 @@ Added XRCed to the wxPython Tools directory, contributed by Roman
 Rolinsky.
 
 Added a new "constructor" to most of the window classes that calls the
-default C++ contructor, (the one with no parameters) and also added the
-coresponding Create(...) method.  This allows you to do a 2-step
+default C++ constructor, (the one with no parameters) and also added the
+corresponding  Create(...) method.  This allows you to do a 2-step
 creation of windows which is sometimes required for doing things such
 as setting extended style flags before the window is created, or for
 passing the object to the XRC resource system to be created from the
@@ -933,7 +941,7 @@ methods look like this:
                           toggle=FALSE)
 
 
-There are also coresponding InsertTool and InsertSimpleTool methods
+There are also corresponding InsertTool and InsertSimpleTool methods
 that additionally take an integer position as the first parameter.
 
 Added a wrapper for the new PCX and TIFF ImageHandlers.

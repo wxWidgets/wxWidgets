@@ -445,26 +445,35 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     // Call the Python App's OnInit function
     arglist = PyTuple_New(0);
     result = PyEval_CallObject(onInitFunc, arglist);
+    Py_DECREF(arglist);
     if (!result) {      // an exception was raised.
         return NULL;
     }
 
-    if (! PyInt_Check(result)) {
+    PyObject* pyint = PyNumber_Int(result);
+    if (! pyint) {
         PyErr_SetString(PyExc_TypeError, "OnInit should return a boolean value");
-        return NULL;
+        goto error;
     }
-    bResult = PyInt_AS_LONG(result);
+    bResult = PyInt_AS_LONG(pyint);
     if (! bResult) {
         PyErr_SetString(PyExc_SystemExit, "OnInit returned FALSE, exiting...");
-        return NULL;
+        goto error;
     }
 
 #ifdef __WXGTK__
     wxTheApp->m_initialized = (wxTopLevelWindows.GetCount() > 0);
 #endif
 
+    Py_DECREF(result);
+    Py_DECREF(pyint);
     Py_INCREF(Py_None);
     return Py_None;
+
+ error:
+    Py_XDECREF(result);
+    Py_XDECREF(pyint);
+    return NULL;
 }
 
 
