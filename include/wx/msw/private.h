@@ -291,12 +291,45 @@ inline RECT wxGetClientRect(HWND hwnd)
 class ScreenHDC
 {
 public:
-    ScreenHDC() { m_hdc = GetDC(NULL);    }
-   ~ScreenHDC() { ReleaseDC(NULL, m_hdc); }
-    operator HDC() const { return m_hdc;  }
+    ScreenHDC() { m_hdc = ::GetDC(NULL);    }
+   ~ScreenHDC() { ::ReleaseDC(NULL, m_hdc); }
+
+    operator HDC() const { return m_hdc; }
 
 private:
     HDC m_hdc;
+};
+
+// the same as ScreenHDC but for memory DCs: creates the HDC in ctor and
+// destroys it in dtor
+class MemoryHDC
+{
+public:
+    MemoryHDC() { m_hdc = ::CreateCompatibleDC(NULL); }
+   ~MemoryHDC() { ::DeleteObject(m_hdc);              }
+
+    operator HDC() const { return m_hdc; }
+
+private:
+    HDC m_hdc;
+};
+
+// a class which selects a GDI object into a DC in its ctor and deselects in
+// dtor
+class SelectInHDC
+{
+public:
+    SelectInHDC(HDC hdc, HGDIOBJ hgdiobj) : m_hdc(hdc)
+        { m_hgdiobj = ::SelectObject(hdc, hgdiobj); }
+
+   ~SelectInHDC() { ::SelectObject(m_hdc, m_hgdiobj); }
+
+   // return true if the object was successfully selected
+   operator bool() const { return m_hgdiobj != 0; }
+
+private:
+   HDC m_hdc;
+   HGDIOBJ m_hgdiobj;
 };
 
 // ---------------------------------------------------------------------------
