@@ -49,15 +49,15 @@ bool wxStaticLine::Create( wxWindow *parent,
                            long style,
                            const wxString &name)
 {
-	Rect bounds ;
-	Str255 title ;
-	
-	MacPreControlCreate( parent , id ,  "" , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
+    Rect bounds ;
+    Str255 title ;
+    
+    MacPreControlCreate( parent , id ,  "" , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
 
-	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
-	  	kControlSeparatorLineProc , (long) this ) ;
-	
-	MacPostControlCreate() ;
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+          kControlSeparatorLineProc , (long) this ) ;
+    
+    MacPostControlCreate() ;
 
     return TRUE;
 }

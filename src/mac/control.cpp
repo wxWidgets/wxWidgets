@@ -89,54 +89,54 @@ ControlDefUPP wxMacControlActionUPP = NULL ;
 pascal SInt32  wxMacControlDefinition(SInt16 varCode, ControlRef theControl, ControlDefProcMessage message, SInt32 param)
 {
     
-	wxControl*  wx = (wxControl*) wxFindControlFromMacControl( theControl ) ;
-	if ( wx != NULL && wx->IsKindOf( CLASSINFO( wxControl ) ) )
-	{
-	    if( message == drawCntl )
-	    {
-	        wxMacWindowClipper clip( wx ) ;
-	        return InvokeControlDefUPP( varCode , theControl , message , param , (ControlDefUPP) wx->MacGetControlAction() ) ;
-	    }
-	    else
-	        return InvokeControlDefUPP( varCode , theControl , message , param , (ControlDefUPP) wx->MacGetControlAction() ) ;
-	}
-	return  NULL ;
+    wxControl*  wx = (wxControl*) wxFindControlFromMacControl( theControl ) ;
+    if ( wx != NULL && wx->IsKindOf( CLASSINFO( wxControl ) ) )
+    {
+        if( message == drawCntl )
+        {
+            wxMacWindowClipper clip( wx ) ;
+            return InvokeControlDefUPP( varCode , theControl , message , param , (ControlDefUPP) wx->MacGetControlAction() ) ;
+        }
+        else
+            return InvokeControlDefUPP( varCode , theControl , message , param , (ControlDefUPP) wx->MacGetControlAction() ) ;
+    }
+    return  NULL ;
 }
 
 pascal OSStatus wxMacSetupControlBackground( ControlRef iControl , SInt16 iMessage , SInt16 iDepth , Boolean iIsColor )
 {
-	OSStatus status = noErr ;
-	switch( iMessage )
-	{
-		case kControlMsgSetUpBackground :
-			{
-	        	wxControl*  wx = (wxControl*) GetControlReference( iControl ) ;
-	        	if ( wx != NULL && wx->IsKindOf( CLASSINFO( wxControl ) ) )
-	        	{
-	        		wxDC::MacSetupBackgroundForCurrentPort( wx->MacGetBackgroundBrush() ) ;
+    OSStatus status = noErr ;
+    switch( iMessage )
+    {
+        case kControlMsgSetUpBackground :
+            {
+                wxControl*  wx = (wxControl*) GetControlReference( iControl ) ;
+                if ( wx != NULL && wx->IsKindOf( CLASSINFO( wxControl ) ) )
+                {
+                    wxDC::MacSetupBackgroundForCurrentPort( wx->MacGetBackgroundBrush() ) ;
 #if TARGET_CARBON
-					// under classic this would lead to partial redraws
-					RgnHandle clip = NewRgn() ;
-			        int x = 0 , y = 0;
+                    // under classic this would lead to partial redraws
+                    RgnHandle clip = NewRgn() ;
+                    int x = 0 , y = 0;
 
-			        wx->MacWindowToRootWindow( &x,&y ) ;
-			        CopyRgn( (RgnHandle) wx->MacGetVisibleRegion(false).GetWXHRGN() , clip ) ;
-			        OffsetRgn( clip , x , y ) ;
-			        SetClip( clip ) ;
-			    	DisposeRgn( clip ) ;
+                    wx->MacWindowToRootWindow( &x,&y ) ;
+                    CopyRgn( (RgnHandle) wx->MacGetVisibleRegion(false).GetWXHRGN() , clip ) ;
+                    OffsetRgn( clip , x , y ) ;
+                    SetClip( clip ) ;
+                    DisposeRgn( clip ) ;
 #endif
-				}
-				else
-				{
-					status = paramErr ;
-				}
-			}
-			break ;
-		default :
-			status = paramErr ;
-			break ;
-	}
-	return status ;
+                }
+                else
+                {
+                    status = paramErr ;
+                }
+            }
+            break ;
+        default :
+            status = paramErr ;
+            break ;
+    }
+    return status ;
 }
  
 wxControl::wxControl()
@@ -389,14 +389,14 @@ void wxControl::MacPostControlCreate()
     m_macControlIsShown  = true ;
 
     wxAssociateControlWithMacControl( (ControlHandle) m_macControl , this ) ;
-	if ( wxMacSetupControlBackgroundUPP == NULL )
-	{
-		wxMacSetupControlBackgroundUPP = NewControlColorUPP( wxMacSetupControlBackground ) ;
-	}
-	if ( wxMacControlActionUPP == NULL )
-	{
-	    wxMacControlActionUPP = NewControlDefUPP( wxMacControlDefinition ) ;
-	}
+    if ( wxMacSetupControlBackgroundUPP == NULL )
+    {
+        wxMacSetupControlBackgroundUPP = NewControlColorUPP( wxMacSetupControlBackground ) ;
+    }
+    if ( wxMacControlActionUPP == NULL )
+    {
+        wxMacControlActionUPP = NewControlDefUPP( wxMacControlDefinition ) ;
+    }
     // The following block of code is responsible for crashes when switching
     // back to windows, which can be seen in the dialogs sample.
     // It is disabled until a proper solution can be found.
@@ -414,35 +414,35 @@ void wxControl::MacPostControlCreate()
     cdef = (cdefHandle) NewHandle( sizeof(cdefRec) ) ;
     if (  (**(ControlHandle)m_macControl).contrlDefProc != NULL )
     {
-      (**cdef).instruction = 0x4EF9;  /* JMP instruction */
-      (**cdef).function = (void(*)()) wxMacControlActionUPP;
-      (**(ControlHandle)m_macControl).contrlDefProc = (Handle) cdef ;
+        (**cdef).instruction = 0x4EF9;  /* JMP instruction */
+        (**cdef).function = (void(*)()) wxMacControlActionUPP;
+        (**(ControlHandle)m_macControl).contrlDefProc = (Handle) cdef ;
     }
 #endif
 #endif
-	SetControlColorProc( (ControlHandle) m_macControl , wxMacSetupControlBackgroundUPP ) ;
- 
-     // Adjust the controls size and position
-     wxPoint pos(m_x, m_y);
-     wxSize best_size( DoGetBestSize() );
-     wxSize new_size( m_width, m_height );
- 
-     m_x = m_y = m_width = m_height = -1;  // Forces SetSize to move/size the control
- 
-     if (new_size.x == -1) {
+    SetControlColorProc( (ControlHandle) m_macControl , wxMacSetupControlBackgroundUPP ) ;
+    
+    // Adjust the controls size and position
+    wxPoint pos(m_x, m_y);
+    wxSize best_size( DoGetBestSize() );
+    wxSize new_size( m_width, m_height );
+    
+    m_x = m_y = m_width = m_height = -1;  // Forces SetSize to move/size the control
+    
+    if (new_size.x == -1) {
         new_size.x = best_size.x;
-     }
-     if (new_size.y == -1) {
-         new_size.y = best_size.y;
-     }
- 
-     SetSize(pos.x, pos.y, new_size.x, new_size.y);
- 
-     UMAShowControl( (ControlHandle) m_macControl ) ;
-     
-     SetCursor( *wxSTANDARD_CURSOR ) ;
-     
-     Refresh() ;
+    }
+    if (new_size.y == -1) {
+        new_size.y = best_size.y;
+    }
+    
+    SetSize(pos.x, pos.y, new_size.x, new_size.y);
+    
+    UMAShowControl( (ControlHandle) m_macControl ) ;
+    
+    SetCursor( *wxSTANDARD_CURSOR ) ;
+    
+    Refresh() ;
 }
 
 void wxControl::MacAdjustControlRect() 
@@ -496,7 +496,7 @@ void wxControl::MacAdjustControlRect()
 
             m_height += 2 * m_macVerticalBorder + MacGetTopBorderSize() + MacGetBottomBorderSize() ;
         }
-  		MacUpdateDimensions() ;      
+          MacUpdateDimensions() ;      
 //        UMASizeControl( (ControlHandle) m_macControl , m_width - 2 * m_macHorizontalBorder, m_height -  2 * m_macVerticalBorder ) ;
     }
 }
@@ -511,19 +511,19 @@ WXWidget wxControl::MacGetContainerForEmbedding()
 
 void wxControl::MacUpdateDimensions() 
 {
-	// actually in the current systems this should never be possible, but later reparenting
-	// may become a reality
-	
-	if ( (ControlHandle) m_macControl == NULL )
-		return ;
-		
-	if ( GetParent() == NULL )
-		return ;
-		
+    // actually in the current systems this should never be possible, but later reparenting
+    // may become a reality
+    
+    if ( (ControlHandle) m_macControl == NULL )
+        return ;
+        
+    if ( GetParent() == NULL )
+        return ;
+        
     WindowRef rootwindow = (WindowRef) MacGetRootWindow() ;
     if ( rootwindow == NULL )
-    	return ;
-    	
+        return ;
+        
     Rect oldBounds ;       
     GetControlBounds( (ControlHandle) m_macControl , &oldBounds ) ; 
     
@@ -535,23 +535,23 @@ void wxControl::MacUpdateDimensions()
     GetParent()->MacWindowToRootWindow( & new_x , & new_y ) ;
     bool doMove = new_x != oldBounds.left || new_y != oldBounds.top ;
     bool doResize =  ( oldBounds.right - oldBounds.left ) != new_width || (oldBounds.bottom - oldBounds.top ) != new_height ;
-	if ( doMove || doResize )
-	{
-		InvalWindowRect( rootwindow, &oldBounds ) ;
-		if ( doMove )
-		{
-			UMAMoveControl( (ControlHandle) m_macControl , new_x , new_y ) ;
-		}
-		if ( doResize )
-		{
-			UMASizeControl( (ControlHandle) m_macControl , new_width , new_height ) ;
-		}
-	}
+    if ( doMove || doResize )
+    {
+        InvalWindowRect( rootwindow, &oldBounds ) ;
+        if ( doMove )
+        {
+            UMAMoveControl( (ControlHandle) m_macControl , new_x , new_y ) ;
+        }
+        if ( doResize )
+        {
+            UMASizeControl( (ControlHandle) m_macControl , new_width , new_height ) ;
+        }
+    }
 }
 
 void wxControl::MacSuperChangedPosition() 
 {
- 	MacUpdateDimensions() ;
+     MacUpdateDimensions() ;
     wxWindow::MacSuperChangedPosition() ;
 }
 
@@ -561,7 +561,7 @@ void wxControl::MacSuperEnabled( bool enabled )
     wxWindow::MacSuperEnabled( enabled ) ;
 }
 
-void  wxControl::MacSuperShown( bool show ) 
+void wxControl::MacSuperShown( bool show ) 
 {
     if ( (ControlHandle) m_macControl )
     {
@@ -593,19 +593,19 @@ void  wxControl::DoSetSize(int x, int y,
     wxWindow::DoSetSize( x , y ,width , height ,sizeFlags ) ;
 #if 0
     {
-    	Rect meta , control ;
-    	GetControlBounds( (ControlHandle) m_macControl , &control ) ;
-    	RgnHandle rgn = NewRgn() ;
-    	GetControlRegion( (ControlHandle) m_macControl , kControlStructureMetaPart , rgn ) ;
-    	GetRegionBounds( rgn , &meta ) ;
-    	if ( !EmptyRect( &meta ) )
-    	{
-			wxASSERT( meta.left >= control.left - m_macHorizontalBorder ) ;
-			wxASSERT( meta.right <= control.right + m_macHorizontalBorder ) ;
-			wxASSERT( meta.top >= control.top - m_macVerticalBorder ) ;
-			wxASSERT( meta.bottom <= control.bottom + m_macVerticalBorder ) ;
-		}
-    	DisposeRgn( rgn ) ;
+        Rect meta , control ;
+        GetControlBounds( (ControlHandle) m_macControl , &control ) ;
+        RgnHandle rgn = NewRgn() ;
+        GetControlRegion( (ControlHandle) m_macControl , kControlStructureMetaPart , rgn ) ;
+        GetRegionBounds( rgn , &meta ) ;
+        if ( !EmptyRect( &meta ) )
+        {
+            wxASSERT( meta.left >= control.left - m_macHorizontalBorder ) ;
+            wxASSERT( meta.right <= control.right + m_macHorizontalBorder ) ;
+            wxASSERT( meta.top >= control.top - m_macVerticalBorder ) ;
+            wxASSERT( meta.bottom <= control.bottom + m_macVerticalBorder ) ;
+        }
+        DisposeRgn( rgn ) ;
     }
 #endif
     return ;
@@ -814,16 +814,16 @@ void  wxControl::OnKeyDown( wxKeyEvent &event )
     
 #if TARGET_CARBON
 
-	char charCode ;
-	UInt32 keyCode ;	
+    char charCode ;
+    UInt32 keyCode ;    
     UInt32 modifiers ;
 
-	GetEventParameter( (EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyMacCharCodes, typeChar, NULL,sizeof(char), NULL,&charCode );
-	GetEventParameter( (EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyCode, typeUInt32, NULL,  sizeof(UInt32), NULL, &keyCode );
-   	GetEventParameter((EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers);
+    GetEventParameter( (EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyMacCharCodes, typeChar, NULL,sizeof(char), NULL,&charCode );
+    GetEventParameter( (EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyCode, typeUInt32, NULL,  sizeof(UInt32), NULL, &keyCode );
+       GetEventParameter((EventRef) wxTheApp->MacGetCurrentEvent(), kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers);
 
     ::HandleControlKey( (ControlHandle) m_macControl , keyCode , charCode , modifiers ) ;
-	
+    
 #else
     EventRecord *ev = (EventRecord*) wxTheApp->MacGetCurrentEvent() ;
     short keycode ;
@@ -895,11 +895,10 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
 
 bool wxControl::MacCanFocus() const
 {
-        { if ( (ControlHandle) m_macControl == NULL ) 
-                return true ; 
-            else
-            return false ; 
-        }
+    if ( (ControlHandle) m_macControl == NULL ) 
+        return true ; 
+    else
+        return false ; 
 }
 
 void wxControl::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 

@@ -1,13 +1,13 @@
 /////////////////////////////////////////////////////////////////////////
 // File:        taskbar.h
-// Purpose:	    Defines wxTaskBarIcon class for manipulating icons on the
+// Purpose:        Defines wxTaskBarIcon class for manipulating icons on the
 //              task bar. Optional.
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TASKBAR_H_
@@ -23,8 +23,8 @@
 class wxTaskBarIcon: public wxObject
 {
 public:
-	wxTaskBarIcon();
-	virtual ~wxTaskBarIcon();
+    wxTaskBarIcon();
+    virtual ~wxTaskBarIcon();
 
 // Accessors
 

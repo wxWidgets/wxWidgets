@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -29,25 +29,25 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-	wxSize size = s ;
-	Rect bounds ;
-	Str255 title ;
-	m_rangeMax = range ;
-	m_gaugePos = 0 ;
-	
-	if ( size.x == wxDefaultSize.x && size.y == wxDefaultSize.y)
-	{
-		size = wxSize( 200 , 16 ) ;
-	}
-	
-	MacPreControlCreate( parent , id ,  "" , pos , size ,style & 0xE0FFFFFF /* no borders on mac */ , validator , name , &bounds , title ) ;
-
-	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , range, 
-	  	kControlProgressBarProc , (long) this ) ;
-	
-	MacPostControlCreate() ;
-
-  return TRUE;
+    wxSize size = s ;
+    Rect bounds ;
+    Str255 title ;
+    m_rangeMax = range ;
+    m_gaugePos = 0 ;
+    
+    if ( size.x == wxDefaultSize.x && size.y == wxDefaultSize.y)
+    {
+        size = wxSize( 200 , 16 ) ;
+    }
+    
+    MacPreControlCreate( parent , id ,  "" , pos , size ,style & 0xE0FFFFFF /* no borders on mac */ , validator , name , &bounds , title ) ;
+    
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , range, 
+        kControlProgressBarProc , (long) this ) ;
+    
+    MacPostControlCreate() ;
+    
+    return TRUE;
 }
 
 void wxGauge::SetShadowWidth(int w)
@@ -67,7 +67,7 @@ void wxGauge::SetRange(int r)
 void wxGauge::SetValue(int pos)
 {
     m_gaugePos = pos;
-   	::SetControl32BitValue( (ControlHandle) m_macControl , m_gaugePos ) ;
+       ::SetControl32BitValue( (ControlHandle) m_macControl , m_gaugePos ) ;
 }
 
 int wxGauge::GetShadowWidth() const

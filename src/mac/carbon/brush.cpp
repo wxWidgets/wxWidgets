@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -112,17 +112,17 @@ wxBrush::wxBrush(ThemeBrush macThemeBrush )
 }
 void wxBrush::Unshare()
 {
-	// Don't change shared data
-	if (!m_refData)
+    // Don't change shared data
+    if (!m_refData)
     {
-		m_refData = new wxBrushRefData();
-	}
+        m_refData = new wxBrushRefData();
+    }
     else
     {
-		wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
-		UnRef();
-		m_refData = ref;
-	}
+        wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
+        UnRef();
+        m_refData = ref;
+    }
 }
 
 void wxBrush::SetColour(const wxColour& col)
@@ -203,25 +203,27 @@ unsigned long wxBrush::GetMacThemeBackground( WXRECTPTR extent)  const
   }
 }
 
-short wxBrush::GetMacTheme()  const 
+short wxBrush::GetMacTheme() const 
 { 
-  return (M_BRUSHDATA ? ( M_BRUSHDATA->m_macBrushKind == kwxMacBrushTheme ? M_BRUSHDATA->m_macThemeBrush : kThemeBrushBlack) : kThemeBrushBlack); 
-};
+    return (M_BRUSHDATA ? ( M_BRUSHDATA->m_macBrushKind == kwxMacBrushTheme ? M_BRUSHDATA->m_macThemeBrush : kThemeBrushBlack) : kThemeBrushBlack); 
+}
 
 wxColour& wxBrush::GetColour() const 
-{ return (M_BRUSHDATA ? M_BRUSHDATA->m_colour : wxNullColour); };
+{
+    return (M_BRUSHDATA ? M_BRUSHDATA->m_colour : wxNullColour);
+}
 
 int wxBrush::GetStyle() const 
 { 
-  return (M_BRUSHDATA ? M_BRUSHDATA->m_style : 0); 
-};
+    return (M_BRUSHDATA ? M_BRUSHDATA->m_style : 0); 
+}
 
 wxBitmap *wxBrush::GetStipple() const 
 { 
-  return (M_BRUSHDATA ? & M_BRUSHDATA->m_stipple : 0); 
-};
+    return (M_BRUSHDATA ? & M_BRUSHDATA->m_stipple : 0); 
+}
 
 wxMacBrushKind wxBrush::MacGetBrushKind()  const 
 { 
-  return (M_BRUSHDATA ? M_BRUSHDATA->m_macBrushKind : kwxMacBrushColour); 
-};
+    return (M_BRUSHDATA ? M_BRUSHDATA->m_macBrushKind : kwxMacBrushColour); 
+}

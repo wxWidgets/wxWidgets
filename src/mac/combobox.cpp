@@ -96,7 +96,7 @@ protected:
 
                 wxWindow *parent = GetParent();
                 while( parent && !parent->IsTopLevel() && parent->GetDefaultItem() == NULL ) {
-                  parent = parent->GetParent() ;
+                    parent = parent->GetParent() ;
                 }
                 if ( parent && parent->GetDefaultItem() )
                 {
@@ -314,9 +314,9 @@ void wxComboBox::SetValue(const wxString& value)
     int s = FindString (value);
     if (s == wxNOT_FOUND && !HasFlag(wxCB_READONLY) )
     {
-    	m_choice->Append(value) ;
+        m_choice->Append(value) ;
     }
-	SetStringSelection( value ) ;
+    SetStringSelection( value ) ;
 }
 
 // Clipboard operations

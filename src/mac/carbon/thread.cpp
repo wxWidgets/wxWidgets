@@ -902,5 +902,3 @@ bool WXDLLEXPORT wxIsWaitingForThread()
 #include "wx/thrimpl.cpp"
 
 #endif // wxUSE_THREADS
-
-// vi:sts=4:sw=4:et

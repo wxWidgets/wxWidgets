@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(__APPLE__)
@@ -92,17 +92,17 @@ class WXDLLEXPORT wxGLCanvas: public wxWindow
    wxGLCanvas( wxWindow *parent, const wxGLContext *shared = (wxGLContext *)NULL,
         wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "GLCanvas", 
-	      int *attribList = (int*) NULL, const wxPalette& palette = wxNullPalette );
+          int *attribList = (int*) NULL, const wxPalette& palette = wxNullPalette );
 
    wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared = (wxGLCanvas *)NULL, wxWindowID id = -1,
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, 
-		const wxString& name = "GLCanvas", int *attribList = 0, const wxPalette& palette = wxNullPalette );
+        const wxString& name = "GLCanvas", int *attribList = 0, const wxPalette& palette = wxNullPalette );
 
    ~wxGLCanvas();
 
    bool Create(wxWindow *parent, const wxGLContext *shared, wxWindowID id,
                const wxPoint& pos, const wxSize& size, long style, const wxString& name,
-	       int *attribList, const wxPalette& palette);
+           int *attribList, const wxPalette& palette);
 
    void SetCurrent();
    void SetColour(const char *colour);
@@ -115,9 +115,9 @@ class WXDLLEXPORT wxGLCanvas: public wxWindow
    // You shouldn't call glViewport yourself either (use SetViewport if you must reset it.)
    void OnSize(wxSizeEvent& event);
    
-	 virtual void MacSuperChangedPosition() ;
-	 virtual void MacTopLevelWindowChangedPosition() ;
-	 void MacUpdateView() ;
+     virtual void MacSuperChangedPosition() ;
+     virtual void MacTopLevelWindowChangedPosition() ;
+     void MacUpdateView() ;
 
    inline wxGLContext* GetContext() const { return m_glContext; }
 

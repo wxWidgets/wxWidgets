@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -22,7 +22,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxStaticBox, wxControl)
-	EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
+    EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
 END_EVENT_TABLE()
 
 #endif
@@ -38,15 +38,15 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
-	Rect bounds ;
-	Str255 title ;
-	
-	MacPreControlCreate( parent , id ,  label , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
-
-	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
-	  	kControlGroupBoxTextTitleProc , (long) this ) ;
-	
-	MacPostControlCreate() ;
-
-  return TRUE;
+    Rect bounds ;
+    Str255 title ;
+    
+    MacPreControlCreate( parent , id ,  label , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
+    
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+        kControlGroupBoxTextTitleProc , (long) this ) ;
+    
+    MacPostControlCreate() ;
+    
+    return TRUE;
 }

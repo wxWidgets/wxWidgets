@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -50,27 +50,27 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 // Get hostname only (without domain name)
 bool wxGetHostName(char *buf, int maxSize)
 {
-	// Gets Chooser name of user by examining a System resource.
+    // Gets Chooser name of user by examining a System resource.
 
-	const short kComputerNameID = -16413;
-	
-	short oldResFile = CurResFile() ;
-	UseResFile(0);
-	StringHandle chooserName = (StringHandle)::GetString(kComputerNameID);
-	UseResFile(oldResFile);
+    const short kComputerNameID = -16413;
+    
+    short oldResFile = CurResFile() ;
+    UseResFile(0);
+    StringHandle chooserName = (StringHandle)::GetString(kComputerNameID);
+    UseResFile(oldResFile);
 
-	if (chooserName && *chooserName)
-	{
-	  int length = (*chooserName)[0] ;
-	  if ( length + 1 > maxSize )
-	  {
-	    length = maxSize - 1 ;
-	  }
-	  strncpy( buf , (char*) &(*chooserName)[1] , length ) ;
-	  buf[length] = 0 ;
-	}
-	else
-		buf[0] = 0 ;
+    if (chooserName && *chooserName)
+    {
+      int length = (*chooserName)[0] ;
+      if ( length + 1 > maxSize )
+      {
+        length = maxSize - 1 ;
+      }
+      strncpy( buf , (char*) &(*chooserName)[1] , length ) ;
+      buf[length] = 0 ;
+    }
+    else
+        buf[0] = 0 ;
 
   return TRUE;
 }
@@ -83,34 +83,34 @@ bool wxGetUserId(char *buf, int maxSize)
 
 const wxChar* wxGetHomeDir(wxString *pstr)
 {
-	*pstr = wxMacFindFolder(  (short) kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder ) ;
-	return pstr->c_str() ;
+    *pstr = wxMacFindFolder(  (short) kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder ) ;
+    return pstr->c_str() ;
 }
 
 // Get user name e.g. Stefan Csomor
 bool wxGetUserName(char *buf, int maxSize)
 {
-	// Gets Chooser name of user by examining a System resource.
+    // Gets Chooser name of user by examining a System resource.
 
-	const short kChooserNameID = -16096;
-	
-	short oldResFile = CurResFile() ;
-	UseResFile(0);
-	StringHandle chooserName = (StringHandle)::GetString(kChooserNameID);
-	UseResFile(oldResFile);
+    const short kChooserNameID = -16096;
+    
+    short oldResFile = CurResFile() ;
+    UseResFile(0);
+    StringHandle chooserName = (StringHandle)::GetString(kChooserNameID);
+    UseResFile(oldResFile);
 
-	if (chooserName && *chooserName)
-	{
-	  int length = (*chooserName)[0] ;
-	  if ( length + 1 > maxSize )
-	  {
-	    length = maxSize - 1 ;
-	  }
-	  strncpy( buf , (char*) &(*chooserName)[1] , length ) ;
-	  buf[length] = 0 ;
-	}
-	else
-		buf[0] = 0 ;
+    if (chooserName && *chooserName)
+    {
+      int length = (*chooserName)[0] ;
+      if ( length + 1 > maxSize )
+      {
+        length = maxSize - 1 ;
+      }
+      strncpy( buf , (char*) &(*chooserName)[1] , length ) ;
+      buf[length] = 0 ;
+    }
+    else
+        buf[0] = 0 ;
 
   return TRUE;
 }
@@ -123,15 +123,15 @@ int wxKill(long pid, wxSignal sig , wxKillError *rc )
 
 WXDLLEXPORT bool wxGetEnv(const wxString& var, wxString *value)
 {
-  // TODO : under classic there is no environement support, under X yes
-  return false ;
+    // TODO : under classic there is no environement support, under X yes
+    return false ;
 }
 
 // set the env var name to the given value, return TRUE on success
 WXDLLEXPORT bool wxSetEnv(const wxString& var, const wxChar *value)
 {
-  // TODO : under classic there is no environement support, under X yes
-  return false ;
+    // TODO : under classic there is no environement support, under X yes
+    return false ;
 }
 
 //
@@ -161,7 +161,7 @@ void wxUsleep(unsigned long milliseconds)
     clock_t start = clock() ;
     do 
     {
-	YieldToAnyThread() ;
+        YieldToAnyThread() ;
     } while( clock() - start < milliseconds / CLOCKS_PER_SEC ) ;
 }
 
@@ -180,34 +180,34 @@ void wxFlushEvents()
 // Output a debug message, in a system dependent fashion.
 void wxDebugMsg(const char *fmt ...)
 {
-  va_list ap;
-  static char buffer[512];
-
-  if (!wxTheApp->GetWantDebugOutput())
-    return ;
-
-  va_start(ap, fmt);
-
-  vsprintf(buffer,fmt,ap) ;
-  strcat(buffer,";g") ;
-  c2pstr(buffer) ;
-  DebugStr((unsigned char*) buffer) ;
-
-  va_end(ap);
+    va_list ap;
+    static char buffer[512];
+    
+    if (!wxTheApp->GetWantDebugOutput())
+        return ;
+    
+    va_start(ap, fmt);
+    
+    vsprintf(buffer,fmt,ap) ;
+    strcat(buffer,";g") ;
+    c2pstr(buffer) ;
+    DebugStr((unsigned char*) buffer) ;
+    
+    va_end(ap);
 }
 
 // Non-fatal error: pop up message box and (possibly) continue
 void wxError(const wxString& msg, const wxString& title)
 {
-  	if (wxMessageBox(wxString::Format(wxT("%s\nContinue?"),msg), title, wxYES_NO) == wxID_NO )
-		wxExit();
+      if (wxMessageBox(wxString::Format(wxT("%s\nContinue?"),msg), title, wxYES_NO) == wxID_NO )
+        wxExit();
 }
 
 // Fatal error: pop up message box and abort
 void wxFatalError(const wxString& msg, const wxString& title)
 {
-  wxMessageBox(wxString::Format(wxT("%s: %s"),title,msg));
-  wxExit();
+    wxMessageBox(wxString::Format(wxT("%s: %s"),title,msg));
+    wxExit();
 }
 
 #endif // WXWIN_COMPATIBILITY_2_2
@@ -225,13 +225,13 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
     long theSystem ;
     
     // are there x-platform conventions ?
-
+    
     Gestalt(gestaltSystemVersion, &theSystem) ;
     if (minorVsn != NULL) {
-	*minorVsn = (theSystem & 0xFF ) ;
+        *minorVsn = (theSystem & 0xFF ) ;
     }
     if (majorVsn != NULL) {
-	*majorVsn = (theSystem >> 8 ) ;
+        *majorVsn = (theSystem >> 8 ) ;
     }
 #ifdef __DARWIN__
     return wxMAC_DARWIN;
@@ -250,23 +250,23 @@ bool wxWriteResource(const wxString& section, const wxString& entry, const wxStr
 
 bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
 {
-  char buf[50];
-  sprintf(buf, "%.4f", value);
-  return wxWriteResource(section, entry, buf, file);
+    char buf[50];
+    sprintf(buf, "%.4f", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file)
 {
-  char buf[50];
-  sprintf(buf, "%ld", value);
-  return wxWriteResource(section, entry, buf, file);
+    char buf[50];
+    sprintf(buf, "%ld", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file)
 {
-  char buf[50];
-  sprintf(buf, "%d", value);
-  return wxWriteResource(section, entry, buf, file);
+    char buf[50];
+    sprintf(buf, "%d", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file)
@@ -277,81 +277,81 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
 
 bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file)
 {
-  char *s = NULL;
-  bool succ = wxGetResource(section, entry, (char **)&s, file);
-  if (succ)
-  {
-    *value = (float)strtod(s, NULL);
-    delete[] s;
-    return TRUE;
-  }
-  else return FALSE;
+    char *s = NULL;
+    bool succ = wxGetResource(section, entry, (char **)&s, file);
+    if (succ)
+    {
+        *value = (float)strtod(s, NULL);
+        delete[] s;
+        return TRUE;
+    }
+    else return FALSE;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file)
 {
-  char *s = NULL;
-  bool succ = wxGetResource(section, entry, (char **)&s, file);
-  if (succ)
-  {
-    *value = strtol(s, NULL, 10);
-    delete[] s;
-    return TRUE;
-  }
-  else return FALSE;
+    char *s = NULL;
+    bool succ = wxGetResource(section, entry, (char **)&s, file);
+    if (succ)
+    {
+        *value = strtol(s, NULL, 10);
+        delete[] s;
+        return TRUE;
+    }
+    else return FALSE;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file)
 {
-  char *s = NULL;
-  bool succ = wxGetResource(section, entry, (char **)&s, file);
-  if (succ)
-  {
-    *value = (int)strtol(s, NULL, 10);
-    delete[] s;
-    return TRUE;
-  }
-  else return FALSE;
+    char *s = NULL;
+    bool succ = wxGetResource(section, entry, (char **)&s, file);
+    if (succ)
+    {
+        *value = (int)strtol(s, NULL, 10);
+        delete[] s;
+        return TRUE;
+    }
+    else return FALSE;
 }
 #endif // wxUSE_RESOURCES
 
 int gs_wxBusyCursorCount = 0;
-extern wxCursor	gMacCurrentCursor ;
-wxCursor		gMacStoredActiveCursor ;
+extern wxCursor    gMacCurrentCursor ;
+wxCursor        gMacStoredActiveCursor ;
 
 // Set the cursor to the busy cursor for all windows
 void wxBeginBusyCursor(wxCursor *cursor)
 {
-  if (gs_wxBusyCursorCount++ == 0)
-  {
-  	gMacStoredActiveCursor = gMacCurrentCursor ;
-	cursor->MacInstall() ;
-  }
-  //else: nothing to do, already set
+    if (gs_wxBusyCursorCount++ == 0)
+    {
+        gMacStoredActiveCursor = gMacCurrentCursor ;
+        cursor->MacInstall() ;
+    }
+    //else: nothing to do, already set
 }
 
 // Restore cursor to normal
 void wxEndBusyCursor()
 {
     wxCHECK_RET( gs_wxBusyCursorCount > 0,
-                 wxT("no matching wxBeginBusyCursor() for wxEndBusyCursor()") );
-
-  if (--gs_wxBusyCursorCount == 0)
-  {
-	gMacStoredActiveCursor.MacInstall() ;
-	gMacStoredActiveCursor = wxNullCursor ;
-  }
+        wxT("no matching wxBeginBusyCursor() for wxEndBusyCursor()") );
+    
+    if (--gs_wxBusyCursorCount == 0)
+    {
+        gMacStoredActiveCursor.MacInstall() ;
+        gMacStoredActiveCursor = wxNullCursor ;
+    }
 }
 
 // TRUE if we're between the above two calls
 bool wxIsBusy()
 {
-  return (gs_wxBusyCursorCount > 0);
+    return (gs_wxBusyCursorCount > 0);
 }
 
 wxString wxMacFindFolder( short        vol,
-			  OSType       folderType,
-			  Boolean      createFolder)
+              OSType       folderType,
+              Boolean      createFolder)
 {
     short    vRefNum  ;
     long     dirID ;
@@ -437,24 +437,24 @@ bool wxColourDisplay()
 // Returns depth of screen
 int wxDisplayDepth()
 {
-	Rect globRect ;
-	SetRect(&globRect, -32760, -32760, 32760, 32760);
-	GDHandle	theMaxDevice;
+    Rect globRect ;
+    SetRect(&globRect, -32760, -32760, 32760, 32760);
+    GDHandle    theMaxDevice;
 
-	int theDepth = 8;
-	theMaxDevice = GetMaxDevice(&globRect);
-	if (theMaxDevice != nil)
-		theDepth = (**(**theMaxDevice).gdPMap).pixelSize;
+    int theDepth = 8;
+    theMaxDevice = GetMaxDevice(&globRect);
+    if (theMaxDevice != nil)
+        theDepth = (**(**theMaxDevice).gdPMap).pixelSize;
 
-	return theDepth ;
+    return theDepth ;
 }
 
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-  	BitMap screenBits;
-  	GetQDGlobalsScreenBits( &screenBits );
-
+    BitMap screenBits;
+    GetQDGlobalsScreenBits( &screenBits );
+    
     *width = screenBits.bounds.right - screenBits.bounds.left  ;
     *height = screenBits.bounds.bottom - screenBits.bounds.top ;
 }
@@ -595,29 +595,29 @@ void wxMacConvertToPC( const char *from , char *to , int len )
 
 wxString wxMacMakeMacStringFromPC( const char * p )
 {
-	wxString result ;
+    wxString result ;
     int len = strlen ( p ) ;
-	if ( len > 0 )
-	{
-		wxChar* ptr = result.GetWriteBuf(len) ;
-	    wxMacConvertFromPC( p , ptr , len ) ;
-		ptr[len] = 0 ;
-	    result.UngetWriteBuf( len ) ;
-	}
+    if ( len > 0 )
+    {
+        wxChar* ptr = result.GetWriteBuf(len) ;
+        wxMacConvertFromPC( p , ptr , len ) ;
+        ptr[len] = 0 ;
+        result.UngetWriteBuf( len ) ;
+    }
     return result ;
 }
 
 wxString wxMacMakePCStringFromMac( const char * p )
 {
-	wxString result ;
+    wxString result ;
     int len = strlen ( p ) ;
-	if ( len > 0 )
-	{
-		wxChar* ptr = result.GetWriteBuf(len) ;
-	    wxMacConvertToPC( p , ptr , len ) ;
-		ptr[len] = 0 ;
-	    result.UngetWriteBuf( len ) ;
-	}
+    if ( len > 0 )
+    {
+        wxChar* ptr = result.GetWriteBuf(len) ;
+        wxMacConvertToPC( p , ptr , len ) ;
+        ptr[len] = 0 ;
+        result.UngetWriteBuf( len ) ;
+    }
     return result ;
 }
 
@@ -639,9 +639,9 @@ wxString wxMacMakeStringFromMacString( const char* from , bool mac2pcEncoding )
 
 wxString wxMacMakeStringFromPascal( ConstStringPtr from , bool mac2pcEncoding )
 {
-  	// this is safe since a pascal string can never be larger than 256 bytes
-  	char s[256] ;
-  	CopyPascalStringToC( from , s ) ;
+      // this is safe since a pascal string can never be larger than 256 bytes
+      char s[256] ;
+      CopyPascalStringToC( from , s ) ;
     if (mac2pcEncoding)
     {
       return wxMacMakePCStringFromMac( s ) ;
@@ -672,9 +672,9 @@ void wxMacStringToPascal( const char * from , StringPtr to , bool pc2macEncoding
 // converts this string into a carbon foundation string with optional pc 2 mac encoding
 CFStringRef wxMacCreateCFString( const wxString &str , bool pc2macEncoding ) 
 {
-	return CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
-		pc2macEncoding ? 
-		kCFStringEncodingWindowsLatin1 : CFStringGetSystemEncoding() ) ;
+    return CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
+        pc2macEncoding ? 
+        kCFStringEncodingWindowsLatin1 : CFStringGetSystemEncoding() ) ;
 }
 
 #endif //TARGET_CARBON

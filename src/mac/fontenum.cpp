@@ -103,46 +103,46 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
 
 void wxFontEnumeratorHelper::DoEnumerate()
 {
-	MenuHandle	menu ;
-	Str255		p_name ;
+    MenuHandle    menu ;
+    Str255        p_name ;
 
-	short 		lines ;
-	
-	menu = NewMenu( 32000 , "\pFont" )  ;
-	AppendResMenu( menu , 'FONT' ) ;
-	lines = CountMenuItems( menu ) ;
+    short         lines ;
+    
+    menu = NewMenu( 32000 , "\pFont" )  ;
+    AppendResMenu( menu , 'FONT' ) ;
+    lines = CountMenuItems( menu ) ;
 
-	for ( int i = 1 ; i < lines+1  ; i ++ )
-	{
-	    GetMenuItemText( menu , i , p_name ) ;
-	    wxString c_name = wxMacMakeStringFromPascal(p_name) ;
+    for ( int i = 1 ; i < lines+1  ; i ++ )
+    {
+        GetMenuItemText( menu , i , p_name ) ;
+        wxString c_name = wxMacMakeStringFromPascal(p_name) ;
 
-	    /*
-	      
-	      if ( m_fixedOnly )
-	    {
-	        // check that it's a fixed pitch font (there is *no* error here, the
-	        // flag name is misleading!)
-	        if ( tm->tmPitchAndFamily & TMPF_FIXED_PITCH )
-	        {
-	            // not a fixed pitch font
-	            return TRUE;
-	        }
-	    }
-	
-	    if ( m_charset != -1 )
-	    {
-	        // check that we have the right encoding
-	        if ( lf->lfCharSet != m_charset )
-	        {
-	            return TRUE;
-	        }
-	    }
-	
-		*/
-		m_fontEnum->OnFacename( c_name ) ;
-	}
-	DisposeMenu( menu ) ;
+        /*
+          
+          if ( m_fixedOnly )
+        {
+            // check that it's a fixed pitch font (there is *no* error here, the
+            // flag name is misleading!)
+            if ( tm->tmPitchAndFamily & TMPF_FIXED_PITCH )
+            {
+                // not a fixed pitch font
+                return TRUE;
+            }
+        }
+    
+        if ( m_charset != -1 )
+        {
+            // check that we have the right encoding
+            if ( lf->lfCharSet != m_charset )
+            {
+                return TRUE;
+            }
+        }
+    
+        */
+        m_fontEnum->OnFacename( c_name ) ;
+    }
+    DisposeMenu( menu ) ;
 }
 
 // ----------------------------------------------------------------------------

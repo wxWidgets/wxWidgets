@@ -105,7 +105,7 @@ bool wxFileTypeImpl::GetDescription(wxString *desc) const
 
 size_t
 wxFileTypeImpl::GetAllCommands(wxArrayString * verbs, wxArrayString * commands,
-			       const wxFileType::MessageParameters& params) const
+                   const wxFileType::MessageParameters& params) const
 {
     wxFAIL_MSG( _T("wxFileTypeImpl::GetAllCommands() not yet implemented") );
     return 0;

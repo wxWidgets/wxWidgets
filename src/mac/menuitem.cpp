@@ -66,144 +66,144 @@ wxMenuItem::~wxMenuItem()
 
 void wxMenuItem::SetBitmap(const wxBitmap& bitmap) 
 { 
-  	m_bitmap = bitmap; 
-  	UpdateItemBitmap() ;
+      m_bitmap = bitmap; 
+      UpdateItemBitmap() ;
 }
 
 void wxMenuItem::UpdateItemBitmap() 
 {
-	if ( !m_parentMenu )
-		return ;
-		
-	MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
-	MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
-	if( mhandle == NULL || index == 0)
-		return ;
-		
-	if ( m_bitmap.Ok() )
-	{
-		ControlButtonContentInfo info ;
-		wxMacCreateBitmapButton( &info , m_bitmap , kControlContentCIconHandle ) ;
-		if ( info.contentType != kControlNoContent )
-		{
-			if ( info.contentType == kControlContentCIconHandle )
-				SetMenuItemIconHandle( mhandle , index , 
-					kMenuColorIconType , (Handle) info.u.cIconHandle ) ;
-	    }
-			
-	}
+    if ( !m_parentMenu )
+        return ;
+        
+    MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
+    MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
+    if( mhandle == NULL || index == 0)
+        return ;
+        
+    if ( m_bitmap.Ok() )
+    {
+        ControlButtonContentInfo info ;
+        wxMacCreateBitmapButton( &info , m_bitmap , kControlContentCIconHandle ) ;
+        if ( info.contentType != kControlNoContent )
+        {
+            if ( info.contentType == kControlContentCIconHandle )
+                SetMenuItemIconHandle( mhandle , index , 
+                    kMenuColorIconType , (Handle) info.u.cIconHandle ) ;
+        }
+            
+    }
 }
 
 void wxMenuItem::UpdateItemStatus() 
 {
-	if ( !m_parentMenu )
-		return ;
-		
-	MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
-	MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
-	if( mhandle == NULL || index == 0)
-		return ;
+    if ( !m_parentMenu )
+        return ;
+        
+    MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
+    MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
+    if( mhandle == NULL || index == 0)
+        return ;
 
-  	UMAEnableMenuItem( mhandle , index , m_isEnabled ) ;
-  	if ( IsCheckable() && IsChecked() )
-		::SetItemMark( mhandle , index , 0x12 ) ; // checkmark
-	else
-		::SetItemMark( mhandle , index , 0 ) ; // no mark
+      UMAEnableMenuItem( mhandle , index , m_isEnabled ) ;
+      if ( IsCheckable() && IsChecked() )
+        ::SetItemMark( mhandle , index , 0x12 ) ; // checkmark
+    else
+        ::SetItemMark( mhandle , index , 0 ) ; // no mark
 
-   	UMASetMenuItemText( mhandle , index , m_text ) ; 
-   	wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
-	UMASetMenuItemShortcut( mhandle , index , entry ) ;
-	delete entry ;
+       UMASetMenuItemText( mhandle , index , m_text ) ; 
+       wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
+    UMASetMenuItemShortcut( mhandle , index , entry ) ;
+    delete entry ;
 }
 
 void wxMenuItem::UpdateItemText() 
 {
-	if ( !m_parentMenu )
-		return ;
-		
-	MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
-	MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
-	if( mhandle == NULL || index == 0)
-		return ;
+    if ( !m_parentMenu )
+        return ;
+        
+    MenuHandle mhandle = MAC_WXHMENU(m_parentMenu->GetHMenu()) ;
+    MenuItemIndex index = m_parentMenu->MacGetIndexFromItem( this ) ;
+    if( mhandle == NULL || index == 0)
+        return ;
 
-   	UMASetMenuItemText( mhandle , index , m_text ) ; 
-   	wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
-	UMASetMenuItemShortcut( mhandle , index , entry ) ;
-	delete entry ;
+       UMASetMenuItemText( mhandle , index , m_text ) ; 
+       wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
+    UMASetMenuItemShortcut( mhandle , index , entry ) ;
+    delete entry ;
 }
 
 
 void wxMenuItem::Enable(bool bDoEnable)
 {
-	if ( m_isEnabled != bDoEnable ) 
-	{
-		wxMenuItemBase::Enable( bDoEnable ) ;
-		UpdateItemStatus() ;
-	}
+    if ( m_isEnabled != bDoEnable ) 
+    {
+        wxMenuItemBase::Enable( bDoEnable ) ;
+        UpdateItemStatus() ;
+    }
 }
 void wxMenuItem::UncheckRadio()
 {
-	if ( m_isChecked ) 
-	{
-		wxMenuItemBase::Check( false ) ;
-		UpdateItemStatus() ;
-	}
+    if ( m_isChecked ) 
+    {
+        wxMenuItemBase::Check( false ) ;
+        UpdateItemStatus() ;
+    }
 }
 
 void wxMenuItem::Check(bool bDoCheck)
 {
-	wxCHECK_RET( IsCheckable(), "only checkable items may be checked" );
+    wxCHECK_RET( IsCheckable(), "only checkable items may be checked" );
 
-	if ( m_isChecked != bDoCheck ) 
-	{
-		if ( GetKind() == wxITEM_RADIO )
-		{
-			if ( bDoCheck )
-			{
-				wxMenuItemBase::Check( bDoCheck ) ;
-				UpdateItemStatus() ;
-				
-		        // get the index of this item in the menu
-		        const wxMenuItemList& items = m_parentMenu->GetMenuItems();
-		        int pos = items.IndexOf(this);
-		        wxCHECK_RET( pos != wxNOT_FOUND,
-		                     _T("menuitem not found in the menu items list?") );
+    if ( m_isChecked != bDoCheck ) 
+    {
+        if ( GetKind() == wxITEM_RADIO )
+        {
+            if ( bDoCheck )
+            {
+                wxMenuItemBase::Check( bDoCheck ) ;
+                UpdateItemStatus() ;
+                
+                // get the index of this item in the menu
+                const wxMenuItemList& items = m_parentMenu->GetMenuItems();
+                int pos = items.IndexOf(this);
+                wxCHECK_RET( pos != wxNOT_FOUND,
+                             _T("menuitem not found in the menu items list?") );
 
-		        // get the radio group range
-		        int start,
-		            end;
+                // get the radio group range
+                int start,
+                    end;
 
-		        if ( m_isRadioGroupStart )
-		        {
-		            // we already have all information we need
-		            start = pos;
-		            end = m_radioGroup.end;
-		        }
-		        else // next radio group item
-		        {
-		            // get the radio group end from the start item
-		            start = m_radioGroup.start;
-		            end = items.Item(start)->GetData()->m_radioGroup.end;
-		        }
+                if ( m_isRadioGroupStart )
+                {
+                    // we already have all information we need
+                    start = pos;
+                    end = m_radioGroup.end;
+                }
+                else // next radio group item
+                {
+                    // get the radio group end from the start item
+                    start = m_radioGroup.start;
+                    end = items.Item(start)->GetData()->m_radioGroup.end;
+                }
 
-		        // also uncheck all the other items in this radio group
-		        wxMenuItemList::Node *node = items.Item(start);
-		        for ( int n = start; n <= end && node; n++ )
-		        {
-		            if ( n != pos )
-		            {
-		                ((wxMenuItem*)node->GetData())->UncheckRadio();
-		            }
-		            node = node->GetNext();
-		        }
-			}
-		}
-		else
-		{
-			wxMenuItemBase::Check( bDoCheck ) ;
-			UpdateItemStatus() ;
-		}
-	}
+                // also uncheck all the other items in this radio group
+                wxMenuItemList::Node *node = items.Item(start);
+                for ( int n = start; n <= end && node; n++ )
+                {
+                    if ( n != pos )
+                    {
+                        ((wxMenuItem*)node->GetData())->UncheckRadio();
+                    }
+                    node = node->GetNext();
+                }
+            }
+        }
+        else
+        {
+            wxMenuItemBase::Check( bDoCheck ) ;
+            UpdateItemStatus() ;
+        }
+    }
 }
 
 void wxMenuItem::SetText(const wxString& text)

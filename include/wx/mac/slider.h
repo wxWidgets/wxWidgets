@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SLIDER_H_
@@ -87,12 +87,12 @@ public:
      virtual void   DoMoveWindow(int x, int y, int w, int h);
  
   void Command(wxCommandEvent& event);
-	void 					MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
-	virtual void            MacUpdateDimensions() ;
+    void                     MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+    virtual void            MacUpdateDimensions() ;
 
- 	wxStaticText*	m_macMinimumStatic ;
- 	wxStaticText*	m_macMaximumStatic ;
- 	wxStaticText*	m_macValueStatic ;
+     wxStaticText*    m_macMinimumStatic ;
+     wxStaticText*    m_macMaximumStatic ;
+     wxStaticText*    m_macValueStatic ;
 
   int           m_rangeMin;
   int           m_rangeMax;

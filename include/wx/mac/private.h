@@ -8,7 +8,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PRIVATE_H_
@@ -50,14 +50,14 @@ public:
     GrafPtr GetCurrentPort() { return m_currentPort ; }
 
 private:
-    GrafPtr	      m_currentPort ;
-    GrafPtr	      m_oldPort ;
-    RgnHandle	      m_clip ;
+    GrafPtr          m_currentPort ;
+    GrafPtr          m_oldPort ;
+    RgnHandle          m_clip ;
     ThemeDrawingState m_drawingState ;
-    short	      m_textFont ;
-    short	      m_textSize ;
-    short	      m_textStyle ;
-    short 	      m_textMode ;
+    short          m_textFont ;
+    short          m_textSize ;
+    short          m_textStyle ;
+    short           m_textMode ;
 } ;
 
 class WXDLLEXPORT wxMacPortSetter
@@ -123,12 +123,12 @@ WXDLLEXPORT wxString wxMacFindFolder(short vRefNum,
                                      OSType folderType,
                                      Boolean createFolder);
 
-GWorldPtr 	    wxMacCreateGWorld( int width , int height , int depth ) ;
-void 		        wxMacDestroyGWorld( GWorldPtr gw ) ;
-PicHandle 	    wxMacCreatePict( GWorldPtr gw , GWorldPtr mask = NULL ) ;
+GWorldPtr         wxMacCreateGWorld( int width , int height , int depth ) ;
+void                 wxMacDestroyGWorld( GWorldPtr gw ) ;
+PicHandle         wxMacCreatePict( GWorldPtr gw , GWorldPtr mask = NULL ) ;
 CIconHandle     wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth , short iconSize  ) ;
-void 		        wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
-CTabHandle 	    wxMacCreateColorTable( int numColors ) ;
+void                 wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
+CTabHandle         wxMacCreateColorTable( int numColors ) ;
 void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 ) ;
 
 #define MAC_WXCOLORREF(a) (*((RGBColor*)&(a)))
@@ -165,7 +165,7 @@ inline wxString wxMacMakeStringFromMacString( const char* from  )
 // converts this c string into a wxString with pc 2 mac encoding if s_macDefaultEncodingIsPC
 inline wxString wxMacMakeStringFromMacString( const wxString& from  ) 
   { return wxApp::s_macDefaultEncodingIsPC ? 
-  	wxMacMakeStringFromMacString( from.c_str() , true ) : from ; }
+      wxMacMakeStringFromMacString( from.c_str() , true ) : from ; }
 
 // 
 // Pascal Strings

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -31,15 +31,15 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxValidator& validator,
            const wxString& name)
 {
-	Rect bounds ;
-	Str255 title ;
-	
-	MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
+    Rect bounds ;
+    Str255 title ;
+    
+    MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
-	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
-	  	kControlCheckBoxProc , (long) this ) ;
-	
-	MacPostControlCreate() ;
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+          kControlCheckBoxProc , (long) this ) ;
+    
+    MacPostControlCreate() ;
 
   return TRUE;
 }
@@ -63,7 +63,7 @@ void wxCheckBox::Command (wxCommandEvent & event)
 
 void wxCheckBox::MacHandleControlClick( WXWidget WXUNUSED(control), wxInt16 WXUNUSED(controlpart) ) 
 {
-	SetValue( !GetValue() ) ;
+    SetValue( !GetValue() ) ;
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
     event.SetInt(GetValue());
     event.SetEventObject(this);

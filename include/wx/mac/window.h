@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WINDOW_H_
@@ -38,7 +38,7 @@ class WXDLLEXPORT wxWindowMac: public wxWindowBase
     friend class wxPaintDC;
     
 public:
-	
+    
     wxWindowMac()
         : m_macBackgroundBrush()
         , m_macVisibleRegion()
@@ -155,7 +155,7 @@ public:
     void MacRootWindowToClient( int *x , int *y ) const ;
     void MacWindowToRootWindow( int *x , int *y ) const ;
     void MacRootWindowToWindow( int *x , int *y ) const ;
-	
+    
     virtual wxString MacGetToolTipString( wxPoint &where ) ;
 
     // simple accessors
@@ -163,7 +163,7 @@ public:
 
 //    WXHWND GetHWND() const { return m_hWnd; }
 //    void SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
-	virtual WXWidget GetHandle() const { return (WXWidget) NULL ; }
+    virtual WXWidget GetHandle() const { return (WXWidget) NULL ; }
 
     bool GetUseCtl3D() const { return m_useCtl3D; }
     bool GetTransparentBackground() const { return m_backgroundTransparent; }
@@ -171,7 +171,7 @@ public:
 
     // event handlers
     // --------------
-	void OnSetFocus(wxFocusEvent& event) ;
+    void OnSetFocus(wxFocusEvent& event) ;
     void OnNcPaint(wxNcPaintEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
     void OnIdle(wxIdleEvent& event);
@@ -233,7 +233,7 @@ public:
     static long          MacRemoveBordersFromStyle( long style ) ;
     virtual void         MacSuperChangedPosition() ;
     // the absolute coordinates of this item within the toplevel window may have changed
-    virtual void		 MacUpdateDimensions() {}
+    virtual void         MacUpdateDimensions() {}
     // the absolute coortinates of this window's root have changed
     virtual void         MacTopLevelWindowChangedPosition() ;
     virtual void         MacSuperShown( bool show ) ;

@@ -93,7 +93,7 @@ public:
     short MacGetWindowBackgroundTheme() const { return m_macWindowBackgroundTheme ; }
 
 #if TARGET_CARBON
-	WXEVENTHANDLERREF	MacGetEventHandler() { return m_macEventHandler ; }
+    WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
 #endif
 protected:
     // common part of all ctors
@@ -116,7 +116,7 @@ protected:
     static WXWindow s_macWindowInUpdate ;
 private :
 #if TARGET_CARBON
-	WXEVENTHANDLERREF	m_macEventHandler ;
+    WXEVENTHANDLERREF    m_macEventHandler ;
 #endif
 };
 

@@ -1,9 +1,9 @@
 /*
- * File:	pngread.h
- * Purpose:	PNG file reader
- * Author:	Alejandro Aguilar Sierra/Julian Smart
- * Created:	1995
- * Copyright:	(c) 1995, Alejandro Aguilar Sierra <asierra@servidor.unam.mx>
+ * File:    pngread.h
+ * Purpose:    PNG file reader
+ * Author:    Alejandro Aguilar Sierra/Julian Smart
+ * Created:    1995
+ * Copyright:    (c) 1995, Alejandro Aguilar Sierra <asierra@servidor.unam.mx>
  *
  *
  */
@@ -25,30 +25,30 @@ typedef byte * ImagePointerType;
 
 typedef struct
 {
-	byte red;
-	byte green;
+    byte red;
+    byte green;
    byte blue;
 } rgb_color_struct;
 
 
-#define COLORTYPE_PALETTE	1
-#define COLORTYPE_COLOR		2
-#define COLORTYPE_ALPHA		4
+#define COLORTYPE_PALETTE    1
+#define COLORTYPE_COLOR        2
+#define COLORTYPE_ALPHA        4
 
 class wxPNGReader
 {
 protected:
   int filetype;
   char filename[255];
-  ImagePointerType RawImage;  	//  Image data
+  ImagePointerType RawImage;      //  Image data
 
-  int Width, Height;   	        //  Dimensions
-  int Depth;	 		// (bits x pixel)
-  int ColorType;		// Bit 1 = Palette used
-				// Bit 2 = Color used
-				// Bit 3 = Alpha used
+  int Width, Height;               //  Dimensions
+  int Depth;             // (bits x pixel)
+  int ColorType;        // Bit 1 = Palette used
+                // Bit 2 = Color used
+                // Bit 3 = Alpha used
 
-  long EfeWidth;	 	// Efective Width
+  long EfeWidth;         // Efective Width
 
   void *lpbi;
   int bgindex;
@@ -98,9 +98,9 @@ public:
 class wxPNGReaderIter
 {
 protected:
-  int Itx, Ity;				// Counters
+  int Itx, Ity;                // Counters
   int Stepx, Stepy;
-  ImagePointerType IterImage;  		//  Image pointer
+  ImagePointerType IterImage;          //  Image pointer
   wxPNGReader *ima;
 public:
 // Constructors
@@ -146,7 +146,7 @@ inline
 wxPNGReaderIter::wxPNGReaderIter(wxPNGReader *imax): ima(imax)
 {
   if (ima)
-	 IterImage = ima->RawImage;
+     IterImage = ima->RawImage;
   Itx = Ity = 0;
   Stepx = Stepy = 0;
 }
@@ -161,9 +161,9 @@ inline
 bool wxPNGReaderIter::ItOK ()
 {
   if (ima)
-	 return ima->Inside(Itx, Ity);
+     return ima->Inside(Itx, Ity);
   else
-	 return FALSE;
+     return FALSE;
 }
 
 
@@ -209,7 +209,7 @@ inline void wxPNGReaderIter::SetRow(byte *buf, int n)
 // Here should be bcopy or memcpy
   //_fmemcpy(IterImage, (void far *)buf, n);
   if (n<0)
-	 n = ima->GetWidth();
+     n = ima->GetWidth();
 
   for (int i=0; i<n; i++) IterImage[i] = buf[i];
 }
@@ -227,45 +227,45 @@ inline ImagePointerType wxPNGReaderIter::GetRow()
 inline bool wxPNGReaderIter::NextByte()
 {
   if (++Itx < ima->EfeWidth)
-	 return 1;
+     return 1;
   else
-	 if (++Ity < ima->Height)
-	 {
-		IterImage += ima->EfeWidth;
-		Itx = 0;
-		return 1;
-	 } else
-		return 0;
+     if (++Ity < ima->Height)
+     {
+        IterImage += ima->EfeWidth;
+        Itx = 0;
+        return 1;
+     } else
+        return 0;
 }
 
 inline bool wxPNGReaderIter::PrevByte()
 {
   if (--Itx >= 0)
-	 return 1;
+     return 1;
   else
-	 if (--Ity >= 0)
-	 {
-		IterImage -= ima->EfeWidth;
-		Itx = 0;
-		return 1;
-	 } else
-		return 0;
+     if (--Ity >= 0)
+     {
+        IterImage -= ima->EfeWidth;
+        Itx = 0;
+        return 1;
+     } else
+        return 0;
 }
 
 inline bool wxPNGReaderIter::NextStep()
 {
   Itx += Stepx;
   if (Itx < ima->EfeWidth)
-	 return 1;
+     return 1;
   else {
-	 Ity += Stepy;
-	 if (Ity < ima->Height)
-	 {
-		IterImage += ima->EfeWidth;
-		Itx = 0;
-		return 1;
-	 } else
-		return 0;
+     Ity += Stepy;
+     if (Ity < ima->Height)
+     {
+        IterImage += ima->EfeWidth;
+        Itx = 0;
+        return 1;
+     } else
+        return 0;
   }
 }
 
@@ -273,16 +273,16 @@ inline bool wxPNGReaderIter::PrevStep()
 {
   Itx -= Stepx;
   if (Itx >= 0)
-	 return 1;
-  else {       
-	 Ity -= Stepy;
-	 if (Ity >= 0 && Ity < ima->Height)
-	 {
-		IterImage -= ima->EfeWidth;
-		Itx = 0;
-		return 1;
-	 } else
-		return 0;
+     return 1;
+  else {
+     Ity -= Stepy;
+     if (Ity >= 0 && Ity < ima->Height)
+     {
+        IterImage -= ima->EfeWidth;
+        Itx = 0;
+        return 1;
+     } else
+        return 0;
   }
 }
 

@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -45,35 +45,35 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
         m_windowId = id;
 
     if ( width == -1 && bitmap.Ok())
-	width = bitmap.GetWidth() + 2*m_marginX;
+    width = bitmap.GetWidth() + 2*m_marginX;
 
     if ( height == -1 && bitmap.Ok())
-	height = bitmap.GetHeight() + 2*m_marginY;
+    height = bitmap.GetHeight() + 2*m_marginY;
 
-	Rect bounds ;
-	Str255 title ;
+    Rect bounds ;
+    Str255 title ;
     m_bmpNormal = bitmap;
-	wxBitmapRefData * bmap = NULL ;
-	
-	if ( m_bmpNormal.Ok() )
-		bmap = (wxBitmapRefData*) ( m_bmpNormal.GetRefData()) ;
-	
-	MacPreControlCreate( parent , id ,  "" , pos , wxSize( width , height ) ,style, validator , name , &bounds , title ) ;
+    wxBitmapRefData * bmap = NULL ;
+    
+    if ( m_bmpNormal.Ok() )
+        bmap = (wxBitmapRefData*) ( m_bmpNormal.GetRefData()) ;
+    
+    MacPreControlCreate( parent , id ,  "" , pos , wxSize( width , height ) ,style, validator , name , &bounds , title ) ;
 
-	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 
-		kControlBehaviorOffsetContents + 
-		    ( bmap && bmap->m_bitmapType == kMacBitmapTypeIcon ? 
-		    kControlContentCIconHandle : kControlContentPictHandle ) , 0, 
-	  	(( style & wxBU_AUTODRAW ) ? kControlBevelButtonSmallBevelProc : kControlBevelButtonNormalBevelProc ), (long) this ) ;
-	wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
-	
-	ControlButtonContentInfo info ;
-	wxMacCreateBitmapButton( &info , m_bmpNormal ) ;
-	if ( info.contentType != kControlNoContent )
-	{
-	    ::SetControlData( (ControlHandle) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 
+        kControlBehaviorOffsetContents + 
+            ( bmap && bmap->m_bitmapType == kMacBitmapTypeIcon ? 
+            kControlContentCIconHandle : kControlContentPictHandle ) , 0, 
+          (( style & wxBU_AUTODRAW ) ? kControlBevelButtonSmallBevelProc : kControlBevelButtonNormalBevelProc ), (long) this ) ;
+    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
+    
+    ControlButtonContentInfo info ;
+    wxMacCreateBitmapButton( &info , m_bmpNormal ) ;
+    if ( info.contentType != kControlNoContent )
+    {
+        ::SetControlData( (ControlHandle) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
     }
-	MacPostControlCreate() ;
+    MacPostControlCreate() ;
 
     return TRUE;
 }

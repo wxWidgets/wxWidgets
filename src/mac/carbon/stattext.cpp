@@ -137,44 +137,44 @@ void wxStaticText::OnDraw( wxDC &dc )
 {
     if (m_width <= 0 || m_height <= 0)
         return;
-/*
-    dc.Clear() ;
-    wxRect rect(0,0,m_width,m_height) ;
-    dc.SetFont(*wxSMALL_FONT) ;
-
-    dc.DrawRectangle(rect) ;
-*/
-  if ( !IsWindowHilited( (WindowRef) MacGetRootWindow() ) &&
-    ( GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE )
-      || GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE) ) )
-  {
-    dc.SetTextForeground( wxColour( 0x80 , 0x80 , 0x80 ) ) ;
-  }
-  else
-  {
-    dc.SetTextForeground( GetForegroundColour() ) ;
-  }
-
-  wxString paragraph;
-  size_t i = 0 ;
-  wxString text = m_label;
-  int y = 0 ;
-  while (i < text.Length())
-  {
-
-    if (text[i] == 13 || text[i] == 10)
+    /*
+        dc.Clear() ;
+        wxRect rect(0,0,m_width,m_height) ;
+        dc.SetFont(*wxSMALL_FONT) ;
+        
+          dc.DrawRectangle(rect) ;
+    */
+    if ( !IsWindowHilited( (WindowRef) MacGetRootWindow() ) &&
+        ( GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE )
+        || GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE) ) )
     {
-        DrawParagraph(dc, paragraph,y);
-        paragraph = "" ;
+        dc.SetTextForeground( wxColour( 0x80 , 0x80 , 0x80 ) ) ;
     }
     else
     {
-        paragraph += text[i];
+        dc.SetTextForeground( GetForegroundColour() ) ;
     }
-    ++i;
-  }
-  if (paragraph.Length() > 0)
-      DrawParagraph(dc, paragraph,y);
+    
+    wxString paragraph;
+    size_t i = 0 ;
+    wxString text = m_label;
+    int y = 0 ;
+    while (i < text.Length())
+    {
+        
+        if (text[i] == 13 || text[i] == 10)
+        {
+            DrawParagraph(dc, paragraph,y);
+            paragraph = "" ;
+        }
+        else
+        {
+            paragraph += text[i];
+        }
+        ++i;
+    }
+    if (paragraph.Length() > 0)
+        DrawParagraph(dc, paragraph,y);
 }
 
 void wxStaticText::OnPaint( wxPaintEvent & WXUNUSED(event) )

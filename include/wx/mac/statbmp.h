@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_STATBMP_H_
@@ -50,8 +50,8 @@ class WXDLLEXPORT wxStaticBitmap: public wxStaticBitmapBase
   wxBitmap GetBitmap() const { return m_bitmap; }
   wxIcon GetIcon() const
       {
-	  // icons and bitmaps are really the same thing in wxMac
-	  return (const wxIcon &)m_bitmap;
+      // icons and bitmaps are really the same thing in wxMac
+      return (const wxIcon &)m_bitmap;
       }
   void  SetIcon(const wxIcon& icon) { SetBitmap( (const wxBitmap &)icon ) ; }
 
@@ -61,7 +61,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxStaticBitmapBase
 
  protected:
   wxBitmap m_bitmap;
-	DECLARE_EVENT_TABLE() 
+    DECLARE_EVENT_TABLE() 
 };
 
 #endif

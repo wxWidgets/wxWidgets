@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -59,16 +59,16 @@ wxIcon::~wxIcon()
 bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
     int desiredWidth, int desiredHeight)
 {
-  UnRef();
-
-  m_refData = new wxBitmapRefData;
-
-  wxBitmapHandler *handler = FindHandler((wxBitmapType)type);
-
-  if ( handler )
-	return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
-  else
-	return FALSE;
+    UnRef();
+    
+    m_refData = new wxBitmapRefData;
+    
+    wxBitmapHandler *handler = FindHandler((wxBitmapType)type);
+    
+    if ( handler )
+        return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
+    else
+        return FALSE;
 }
 
 void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
@@ -80,9 +80,9 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
 IMPLEMENT_DYNAMIC_CLASS(wxICONResourceHandler, wxBitmapHandler)
 
 bool  wxICONResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-          int desiredWidth, int desiredHeight)
+                                      int desiredWidth, int desiredHeight)
 {
-	short theId = -1 ;
+    short theId = -1 ;
     if ( name == "wxICON_INFORMATION" )
     {
         theId = kNoteIcon ;
@@ -93,46 +93,46 @@ bool  wxICONResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
     }
     else if ( name == "wxICON_WARNING" )
     {
-         theId = kCautionIcon ;
-   }
+        theId = kCautionIcon ;
+    }
     else if ( name == "wxICON_ERROR" )
     {
         theId = kStopIcon ;
     }
     else
     {
-    	Str255 theName ;
-    	OSType theType ;
-
-    #if TARGET_CARBON
-    	c2pstrcpy( (StringPtr) theName , name ) ;
-    #else
-    	strcpy( (char *) theName , name ) ;
-    	c2pstr( (char *) theName ) ;
-    #endif
-    	
-    	Handle resHandle = GetNamedResource( 'cicn' , theName ) ;
-    	if ( resHandle != 0L )
-    	{
-    		GetResInfo( resHandle , &theId , &theType , theName ) ;
-    		ReleaseResource( resHandle ) ;
-    	}
+        Str255 theName ;
+        OSType theType ;
+        
+#if TARGET_CARBON
+        c2pstrcpy( (StringPtr) theName , name ) ;
+#else
+        strcpy( (char *) theName , name ) ;
+        c2pstr( (char *) theName ) ;
+#endif
+        
+        Handle resHandle = GetNamedResource( 'cicn' , theName ) ;
+        if ( resHandle != 0L )
+        {
+            GetResInfo( resHandle , &theId , &theType , theName ) ;
+            ReleaseResource( resHandle ) ;
+        }
     }
-	if ( theId != -1 )
-	{
-		CIconHandle theIcon = (CIconHandle ) GetCIcon( theId ) ;
-		if ( theIcon )
-		{
-			M_BITMAPHANDLERDATA->m_hIcon = theIcon ;
-			M_BITMAPHANDLERDATA->m_width =  32 ;
-			M_BITMAPHANDLERDATA->m_height = 32 ;
-			
-			M_BITMAPHANDLERDATA->m_depth = 8 ;
-			M_BITMAPHANDLERDATA->m_ok = true ;
-			M_BITMAPHANDLERDATA->m_numColors = 256 ;
-			M_BITMAPHANDLERDATA->m_bitmapType = kMacBitmapTypeIcon ;
-			return TRUE ;
-		}
-	}
-	return FALSE ;
+    if ( theId != -1 )
+    {
+        CIconHandle theIcon = (CIconHandle ) GetCIcon( theId ) ;
+        if ( theIcon )
+        {
+            M_BITMAPHANDLERDATA->m_hIcon = theIcon ;
+            M_BITMAPHANDLERDATA->m_width =  32 ;
+            M_BITMAPHANDLERDATA->m_height = 32 ;
+            
+            M_BITMAPHANDLERDATA->m_depth = 8 ;
+            M_BITMAPHANDLERDATA->m_ok = true ;
+            M_BITMAPHANDLERDATA->m_numColors = 256 ;
+            M_BITMAPHANDLERDATA->m_bitmapType = kMacBitmapTypeIcon ;
+            return TRUE ;
+        }
+    }
+    return FALSE ;
 }

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Microsoft, Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(__APPLE__)
@@ -22,9 +22,9 @@ class WXDLLEXPORT wxPNGFileHandler: public wxBitmapHandler
 public:
   inline wxPNGFileHandler(void)
   {
-	m_name = "PNG bitmap file";
-	m_extension = "bmp";
-	m_type = wxBITMAP_TYPE_PNG;
+    m_name = "PNG bitmap file";
+    m_extension = "bmp";
+    m_type = wxBITMAP_TYPE_PNG;
   };
 
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,

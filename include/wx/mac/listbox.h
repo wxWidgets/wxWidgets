@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -94,7 +94,7 @@ public:
     virtual void* DoGetItemClientData(int n) const;
     virtual void DoSetItemClientObject(int n, wxClientData* clientData);
     virtual wxClientData* DoGetItemClientObject(int n) const;
-    virtual void  	 DoSetSize(int x, int y,int width, int height,int sizeFlags = wxSIZE_AUTO ) ;
+    virtual void       DoSetSize(int x, int y,int width, int height,int sizeFlags = wxSIZE_AUTO ) ;
 
     // wxCheckListBox support
 #if wxUSE_OWNER_DRAWN
@@ -112,7 +112,7 @@ public:
 
     virtual void    SetupColours();
     virtual void    MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
-   	virtual bool MacCanFocus() const { return true ; }
+       virtual bool MacCanFocus() const { return true ; }
     void OnChar(wxKeyEvent& event);
 
     void*           m_macList ;
@@ -145,8 +145,8 @@ protected:
 
     int m_noItems;
     int m_selected;
-	wxString  m_typeIn ;
-	long      m_lastTypeIn ;
+    wxString  m_typeIn ;
+    long      m_lastTypeIn ;
 
     virtual wxSize DoGetBestSize() const;
 

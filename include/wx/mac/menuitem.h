@@ -46,10 +46,10 @@ public:
     virtual void SetBitmap(const wxBitmap& bitmap) ;
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
 
-	// update the os specific representation
-	void UpdateItemBitmap() ;
-	void UpdateItemText() ;
-	void UpdateItemStatus() ;
+    // update the os specific representation
+    void UpdateItemBitmap() ;
+    void UpdateItemText() ;
+    void UpdateItemStatus() ;
 
     // mark item as belonging to the given radio group
     void SetAsRadioGroupStart();

@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -67,66 +67,66 @@ wxFontRefData::~wxFontRefData()
 
 void wxFontRefData::MacFindFont()
 {
-	if( m_faceName == "" )
-	{
-		switch( m_family )
-		{
-			case wxDEFAULT :
-				m_macFontNum = ::GetAppFont() ;
-				break ;
-			case wxDECORATIVE :
-				::GetFNum( "\pTimes" , &m_macFontNum) ;
-				break ;
-			case wxROMAN :
-				::GetFNum( "\pTimes" , &m_macFontNum) ;
-				break ;
-			case wxSCRIPT :
-				::GetFNum( "\pTimes" , &m_macFontNum) ;
-				break ;
-			case wxSWISS :
-				::GetFNum( "\pGeneva" , &m_macFontNum) ;
-				break ;
-			case wxMODERN :
-				::GetFNum( "\pMonaco" , &m_macFontNum) ;
-				break ;
-		}
-		Str255 name ;
-		GetFontName( m_macFontNum , name ) ;
-		CopyPascalStringToC( name , (char*) name ) ;
-		m_faceName = (char*) name ;
-	}
-	else
-	{
-		if ( m_faceName == "systemfont" )
-			m_macFontNum = ::GetSysFont() ;
-		else if ( m_faceName == "applicationfont" )
-			m_macFontNum = ::GetAppFont() ;
-		else
-		{
-			Str255 fontname ;
-			wxMacStringToPascal( m_faceName , fontname ) ;
-			::GetFNum( fontname, &m_macFontNum);
-		}
-	}
+    if( m_faceName == "" )
+    {
+        switch( m_family )
+        {
+            case wxDEFAULT :
+                m_macFontNum = ::GetAppFont() ;
+                break ;
+            case wxDECORATIVE :
+                ::GetFNum( "\pTimes" , &m_macFontNum) ;
+                break ;
+            case wxROMAN :
+                ::GetFNum( "\pTimes" , &m_macFontNum) ;
+                break ;
+            case wxSCRIPT :
+                ::GetFNum( "\pTimes" , &m_macFontNum) ;
+                break ;
+            case wxSWISS :
+                ::GetFNum( "\pGeneva" , &m_macFontNum) ;
+                break ;
+            case wxMODERN :
+                ::GetFNum( "\pMonaco" , &m_macFontNum) ;
+                break ;
+        }
+        Str255 name ;
+        GetFontName( m_macFontNum , name ) ;
+        CopyPascalStringToC( name , (char*) name ) ;
+        m_faceName = (char*) name ;
+    }
+    else
+    {
+        if ( m_faceName == "systemfont" )
+            m_macFontNum = ::GetSysFont() ;
+        else if ( m_faceName == "applicationfont" )
+            m_macFontNum = ::GetAppFont() ;
+        else
+        {
+            Str255 fontname ;
+            wxMacStringToPascal( m_faceName , fontname ) ;
+            ::GetFNum( fontname, &m_macFontNum);
+        }
+    }
 
-	m_macFontStyle = 0;
-	if (m_weight == wxBOLD)
-		 m_macFontStyle |= bold;
-	if (m_style == wxITALIC || m_style == wxSLANT) 
-		m_macFontStyle |= italic;
-	if (m_underlined) 
-		m_macFontStyle |= underline;
-	m_macFontSize = m_pointSize ;
-	
-	//TODO:if we supply the style as an additional parameter we must make a testing
-	//sequence in order to degrade gracefully while trying to maintain most of the style
-	//information, meanwhile we just take the normal font and apply the features after
-	OSStatus status = ::ATSUFONDtoFontID(m_macFontNum, normal /*qdStyle*/, (UInt32*)&m_macATSUFontID); 
+    m_macFontStyle = 0;
+    if (m_weight == wxBOLD)
+         m_macFontStyle |= bold;
+    if (m_style == wxITALIC || m_style == wxSLANT) 
+        m_macFontStyle |= italic;
+    if (m_underlined) 
+        m_macFontStyle |= underline;
+    m_macFontSize = m_pointSize ;
+    
+    //TODO:if we supply the style as an additional parameter we must make a testing
+    //sequence in order to degrade gracefully while trying to maintain most of the style
+    //information, meanwhile we just take the normal font and apply the features after
+    OSStatus status = ::ATSUFONDtoFontID(m_macFontNum, normal /*qdStyle*/, (UInt32*)&m_macATSUFontID); 
     /*
     status = ATSUFindFontFromName ( (Ptr) m_faceName , strlen( m_faceName ) ,
-        kFontFullName,	kFontMacintoshPlatform, kFontRomanScript , kFontNoLanguage  ,  (UInt32*)&m_macATSUFontID ) ;
+        kFontFullName,    kFontMacintoshPlatform, kFontRomanScript , kFontNoLanguage  ,  (UInt32*)&m_macATSUFontID ) ;
     */
-	wxASSERT_MSG( status == noErr , "couldn't retrieve font identifier" ) ;
+    wxASSERT_MSG( status == noErr , "couldn't retrieve font identifier" ) ;
 }
 
 // ----------------------------------------------------------------------------
@@ -173,7 +173,7 @@ wxFont::~wxFont()
 
 bool wxFont::RealizeResource()
 {
-	M_FONTDATA->MacFindFont() ;
+    M_FONTDATA->MacFindFont() ;
     return TRUE;
 }
 
@@ -188,17 +188,17 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
 
 void wxFont::Unshare()
 {
-	// Don't change shared data
-	if (!m_refData)
+    // Don't change shared data
+    if (!m_refData)
     {
-		m_refData = new wxFontRefData();
-	}
+        m_refData = new wxFontRefData();
+    }
     else
     {
-		wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
-		UnRef();
-		m_refData = ref;
-	}
+        wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
+        UnRef();
+        m_refData = ref;
+    }
 }
 
 void wxFont::SetPointSize(int pointSize)

@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_ICON_H_
@@ -41,7 +41,7 @@ public:
   bool LoadFile(const wxString& name, wxBitmapType flags /* = wxBITMAP_TYPE_ICON_RESOURCE */ ,
       int desiredWidth /* = -1 */ , int desiredHeight = -1);
   bool LoadFile(const wxString& name ,wxBitmapType flags = wxBITMAP_TYPE_ICON_RESOURCE )
-  	{ return LoadFile( name , flags , -1 , -1 ) ; } 
+      { return LoadFile( name , flags , -1 , -1 ) ; } 
 
   inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
   inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
@@ -60,9 +60,9 @@ class WXDLLEXPORT wxICONFileHandler: public wxBitmapHandler
 public:
   inline wxICONFileHandler()
   {
-	m_name = "ICO icon file";
-	m_extension = "ico";
-	m_type = wxBITMAP_TYPE_ICO;
+    m_name = "ICO icon file";
+    m_extension = "ico";
+    m_type = wxBITMAP_TYPE_ICO;
   };
 
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
@@ -76,9 +76,9 @@ class WXDLLEXPORT wxICONResourceHandler: public wxBitmapHandler
 public:
   inline wxICONResourceHandler()
   {
-	m_name = "ICON resource";
-	m_extension = "";
-	m_type = wxBITMAP_TYPE_ICON_RESOURCE;
+    m_name = "ICON resource";
+    m_extension = "";
+    m_type = wxBITMAP_TYPE_ICON_RESOURCE;
   };
 
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,

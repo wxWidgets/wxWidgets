@@ -54,8 +54,8 @@ struct _GSocket
 
 struct _GAddress
 {
-  UInt32 		m_host ;
-  UInt16 		m_port ;
+  UInt32         m_host ;
+  UInt16         m_port ;
   GAddressType m_family;
   GSocketError m_error;
 };

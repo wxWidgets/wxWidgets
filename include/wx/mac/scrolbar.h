@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SCROLBAR_H_
@@ -57,7 +57,7 @@ public:
     bool refresh = TRUE);
 
   void Command(wxCommandEvent& event);
-		virtual void 						MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+        virtual void                         MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 
 protected:
     int m_pageSize;

@@ -3,7 +3,7 @@
 // Purpose:   Region class
 // Author:    Markus Holzem/Julian Smart/Stefan Csomor
 // Created:   Fri Oct 24 10:46:34 MET 1997
-// RCS-ID:	  $Id$
+// RCS-ID:      $Id$
 // Copyright: (c) 1997 Markus Holzem/Julian Smart/Stefan Csomor
 // Licence:   wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -17,8 +17,8 @@
 #include "wx/mac/uma.h"
 
 #if !USE_SHARED_LIBRARY
-	IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
-	IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
 #endif
 
 //-----------------------------------------------------------------------------
@@ -43,7 +43,7 @@ public:
     {
         DisposeRgn( m_macRgn ) ;
     }
-    RgnHandle	m_macRgn ;
+    RgnHandle    m_macRgn ;
 };
 
 #define M_REGION (((wxRegionRefData*)m_refData)->m_macRgn)
@@ -106,20 +106,20 @@ void wxRegion::Clear()
 //! Combine rectangle (x, y, w, h) with this.
 bool wxRegion::Combine(long x, long y, long width, long height, wxRegionOp op)
 {
-	// Don't change shared data
-	if (!m_refData) 
-	{
-		m_refData = new wxRegionRefData();
-	} 
-	else if (m_refData->GetRefCount() > 1) 
-	{
-		wxRegionRefData* ref = (wxRegionRefData*)m_refData;
-		UnRef();
-		m_refData = new wxRegionRefData(*ref);
-	}
+    // Don't change shared data
+    if (!m_refData) 
+    {
+        m_refData = new wxRegionRefData();
+    } 
+    else if (m_refData->GetRefCount() > 1) 
+    {
+        wxRegionRefData* ref = (wxRegionRefData*)m_refData;
+        UnRef();
+        m_refData = new wxRegionRefData(*ref);
+    }
     RgnHandle rgn = NewRgn() ;
-		SetRectRgn( rgn , x , y, x+width,y + height ) ;
-		
+        SetRectRgn( rgn , x , y, x+width,y + height ) ;
+        
     switch (op)
     {
         case wxRGN_AND:
@@ -136,11 +136,11 @@ bool wxRegion::Combine(long x, long y, long width, long height, wxRegionOp op)
             break ;
         case wxRGN_COPY:
         default:
-       			CopyRgn( rgn ,M_REGION ) ;
+                   CopyRgn( rgn ,M_REGION ) ;
             break ;
     }
 
-		DisposeRgn( rgn ) ;
+        DisposeRgn( rgn ) ;
 
     return TRUE;
 }
@@ -148,19 +148,19 @@ bool wxRegion::Combine(long x, long y, long width, long height, wxRegionOp op)
 //! Union /e region with this.
 bool wxRegion::Combine(const wxRegion& region, wxRegionOp op)
 {
-	if (region.Empty())
-		return FALSE;
+    if (region.Empty())
+        return FALSE;
 
-	// Don't change shared data
-	if (!m_refData) {
-		m_refData = new wxRegionRefData();
-	} 
-	else	if (m_refData->GetRefCount() > 1) 
-	{
-		wxRegionRefData* ref = (wxRegionRefData*)m_refData;
-		UnRef();
-		m_refData = new wxRegionRefData(*ref);
-	}
+    // Don't change shared data
+    if (!m_refData) {
+        m_refData = new wxRegionRefData();
+    } 
+    else    if (m_refData->GetRefCount() > 1) 
+    {
+        wxRegionRefData* ref = (wxRegionRefData*)m_refData;
+        UnRef();
+        m_refData = new wxRegionRefData(*ref);
+    }
 
     switch (op)
     {
@@ -178,11 +178,11 @@ bool wxRegion::Combine(const wxRegion& region, wxRegionOp op)
             break ;
         case wxRGN_COPY:
         default:
-       			CopyRgn( OTHER_M_REGION(region) ,M_REGION ) ;
+                   CopyRgn( OTHER_M_REGION(region) ,M_REGION ) ;
             break ;
     }
 
-	return TRUE;
+    return TRUE;
 }
 
 bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
@@ -197,19 +197,19 @@ bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
 // Outer bounds of region
 void wxRegion::GetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
 {
-	if (m_refData) 
-	{
-		Rect box ;
-		GetRegionBounds( M_REGION , &box ) ;
+    if (m_refData) 
+    {
+        Rect box ;
+        GetRegionBounds( M_REGION , &box ) ;
         x = box.left ;
         y = box.top ;
         w = box.right - box.left ;
         h = box.bottom - box.top ;
-	} 
-	else 
-	{
-		x = y = w = h = 0;
-	}
+    } 
+    else 
+    {
+        x = y = w = h = 0;
+    }
 }
 
 wxRect wxRegion::GetBox() const
@@ -227,7 +227,7 @@ bool wxRegion::Empty() const
 
 const WXHRGN wxRegion::GetWXHRGN() const
 {
-	return M_REGION ;
+    return M_REGION ;
 }
 
 //-----------------------------------------------------------------------------
@@ -237,8 +237,8 @@ const WXHRGN wxRegion::GetWXHRGN() const
 // Does the region contain the point (x,y)?
 wxRegionContain wxRegion::Contains(long x, long y) const
 {
-	if (!m_refData)
-		return wxOutRegion;
+    if (!m_refData)
+        return wxOutRegion;
 
     // TODO. Return wxInRegion if within region.
     if (0)
@@ -249,8 +249,8 @@ wxRegionContain wxRegion::Contains(long x, long y) const
 // Does the region contain the point pt?
 wxRegionContain wxRegion::Contains(const wxPoint& pt) const
 {
-	if (!m_refData)
-		return wxOutRegion;
+    if (!m_refData)
+        return wxOutRegion;
 
     Point p = { pt.y , pt.x } ;
     if (PtInRgn( p , M_REGION ) )
@@ -262,8 +262,8 @@ wxRegionContain wxRegion::Contains(const wxPoint& pt) const
 // Does the region contain the rectangle (x, y, w, h)?
 wxRegionContain wxRegion::Contains(long x, long y, long w, long h) const
 {
-	if (!m_refData)
-		return wxOutRegion;
+    if (!m_refData)
+        return wxOutRegion;
 
     Rect rect = { y , x , y + h , x + w } ;
     if (RectInRgn( &rect , M_REGION ) )
@@ -275,8 +275,8 @@ wxRegionContain wxRegion::Contains(long x, long y, long w, long h) const
 // Does the region contain the rectangle rect
 wxRegionContain wxRegion::Contains(const wxRect& rect) const
 {
-	if (!m_refData)
-		return wxOutRegion;
+    if (!m_refData)
+        return wxOutRegion;
 
     long x, y, w, h;
     x = rect.x;
@@ -370,7 +370,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
         m_numRects = 0;
     else
     {
-    	// we cannot dissolve it into rects on mac
+        // we cannot dissolve it into rects on mac
         m_rects = new wxRect[1];
         Rect rect ;
         GetRegionBounds( OTHER_M_REGION( region ) , &rect ) ;
@@ -409,29 +409,29 @@ wxRegionIterator wxRegionIterator::operator ++ (int)
 
 long wxRegionIterator::GetX() const
 {
-	if (m_current < m_numRects)
-		return m_rects[m_current].x;
-	return 0;
+    if (m_current < m_numRects)
+        return m_rects[m_current].x;
+    return 0;
 }
 
 long wxRegionIterator::GetY() const
 {
-	if (m_current < m_numRects)
-		return m_rects[m_current].y;
-	return 0;
+    if (m_current < m_numRects)
+        return m_rects[m_current].y;
+    return 0;
 }
 
 long wxRegionIterator::GetW() const
 {
-	if (m_current < m_numRects)
-		return m_rects[m_current].width ;
-	return 0;
+    if (m_current < m_numRects)
+        return m_rects[m_current].width ;
+    return 0;
 }
 
 long wxRegionIterator::GetH() const
 {
-	if (m_current < m_numRects)
-		return m_rects[m_current].height;
-	return 0;
+    if (m_current < m_numRects)
+        return m_rects[m_current].height;
+    return 0;
 }
 

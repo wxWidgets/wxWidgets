@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_STATTEXT_H_
@@ -53,7 +53,7 @@ class WXDLLEXPORT wxStaticText: public wxStaticTextBase
   virtual wxSize DoGetBestSize() const ;
   virtual bool AcceptsFocus() const { return FALSE; }
  private :
- 	wxString	m_label ;
+     wxString    m_label ;
 
    DECLARE_EVENT_TABLE()
 };

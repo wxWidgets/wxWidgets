@@ -5,7 +5,7 @@
 // Modified by:
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_NOTEBOOK_H_
@@ -135,7 +135,7 @@ public:
   virtual void Command(wxCommandEvent& event);
 protected:
     virtual wxNotebookPage *DoRemovePage(int page) ;
-	virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
   // common part of all ctors
   void Init();
 

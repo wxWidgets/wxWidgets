@@ -141,7 +141,7 @@ bool wxDataObject::IsSupportedFormat(
     }
     else
     {
-        wxDataFormat*               pFormats = new wxDataFormat[nFormatCount];
+        wxDataFormat* pFormats = new wxDataFormat[nFormatCount];
         GetAllFormats( pFormats
                       ,vDir
                      );
@@ -183,7 +183,7 @@ bool wxFileDataObject::GetDataHere(
 
 size_t wxFileDataObject::GetDataSize() const
 {
-    size_t                          nRes = 0;
+    size_t nRes = 0;
 
     for (size_t i = 0; i < m_filenames.GetCount(); i++)
     {
@@ -201,7 +201,7 @@ bool wxFileDataObject::SetData(
 {
     m_filenames.Empty();
 
-    wxString                        sFile( (const char *)pBuf);  /* char, not wxChar */
+    wxString sFile( (const char *)pBuf);  /* char, not wxChar */
 
     AddFile(sFile);
 
@@ -225,15 +225,15 @@ wxBitmapDataObject::wxBitmapDataObject()
 }
 
 wxBitmapDataObject::wxBitmapDataObject(
-  const wxBitmap&                   rBitmap
+  const wxBitmap& rBitmap
 )
 : wxBitmapDataObjectBase(rBitmap)
 {
     Init();
     if ( m_bitmap.Ok() )
     {
-		m_pictHandle = m_bitmap.GetPict( &m_pictCreated ) ;
-	}
+        m_pictHandle = m_bitmap.GetPict( &m_pictCreated ) ;
+    }
 }
 
 wxBitmapDataObject::~wxBitmapDataObject()
@@ -249,23 +249,23 @@ void wxBitmapDataObject::SetBitmap(
     wxBitmapDataObjectBase::SetBitmap(rBitmap);
     if ( m_bitmap.Ok() )
     {
-		m_pictHandle = m_bitmap.GetPict( &m_pictCreated ) ;
-	}
+        m_pictHandle = m_bitmap.GetPict( &m_pictCreated ) ;
+    }
 }
 
 void wxBitmapDataObject::Init() 
 { 
-	m_pictHandle = NULL ;
-	m_pictCreated = false ;
+    m_pictHandle = NULL ;
+    m_pictCreated = false ;
 } 
 
 void wxBitmapDataObject::Clear() 
 {
-	if ( m_pictCreated && m_pictHandle )
-	{
-		KillPicture( (PicHandle) m_pictHandle ) ;
-	}
-	m_pictHandle = NULL ;
+    if ( m_pictCreated && m_pictHandle )
+    {
+        KillPicture( (PicHandle) m_pictHandle ) ;
+    }
+    m_pictHandle = NULL ;
 }
 
 bool wxBitmapDataObject::GetDataHere(
@@ -283,7 +283,7 @@ bool wxBitmapDataObject::GetDataHere(
 
 size_t wxBitmapDataObject::GetDataSize() const
 {
-	return GetHandleSize((Handle)m_pictHandle) ;
+    return GetHandleSize((Handle)m_pictHandle) ;
 }
 
 bool wxBitmapDataObject::SetData(
@@ -299,7 +299,7 @@ bool wxBitmapDataObject::SetData(
     Rect frame = (**picHandle).picFrame ;
     
     m_bitmap.SetPict( picHandle ) ;
-	m_bitmap.SetWidth( frame.right - frame.left ) ;
-	m_bitmap.SetHeight( frame.bottom - frame.top ) ;
+    m_bitmap.SetWidth( frame.right - frame.left ) ;
+    m_bitmap.SetHeight( frame.bottom - frame.top ) ;
     return m_bitmap.Ok();
 }

@@ -218,8 +218,8 @@ CIconHandle wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth ,
 
     if ( mask )
     {
-    	Rect r ;
-    	GetPortBounds( image , &r ) ;
+        Rect r ;
+        GetPortBounds( image , &r ) ;
       LockPixels(GetGWorldPixMap(mask) ) ;
       CopyBits(GetPortBitMapForCopyBits(mask) ,
           &(**icon).iconBMap , &r , &r, srcCopy , nil ) ;
@@ -229,8 +229,8 @@ CIconHandle wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth ,
     }
     else
     {
-    	Rect r ;
-    	GetPortBounds( image , &r ) ;
+        Rect r ;
+        GetPortBounds( image , &r ) ;
         LockPixels(GetGWorldPixMap(image));
       CopyBits(GetPortBitMapForCopyBits(image) ,
           &(**icon).iconBMap , &r , &r, srcCopy , nil ) ;
@@ -275,7 +275,7 @@ PicHandle wxMacCreatePict(GWorldPtr wp, GWorldPtr mask)
   if ( clipRgn )
     GetRegionBounds( clipRgn , &portRect ) ;   
   else
-  	GetPortBounds( wp , &portRect ) ;
+      GetPortBounds( wp , &portRect ) ;
   pict = OpenPicture(&portRect);   
   if(pict)  
   {
@@ -283,7 +283,7 @@ PicHandle wxMacCreatePict(GWorldPtr wp, GWorldPtr mask)
     RGBBackColor( &white ) ;
     
     if ( clipRgn )
-    	SetClip( clipRgn ) ;
+        SetClip( clipRgn ) ;
     
     LockPixels( GetGWorldPixMap( wp ) ) ;
     CopyBits(GetPortBitMapForCopyBits(wp),          
@@ -296,7 +296,7 @@ PicHandle wxMacCreatePict(GWorldPtr wp, GWorldPtr mask)
   }
   SetGWorld( origPort , origDev ) ;
   if ( clipRgn )
-  	DisposeRgn( clipRgn ) ;
+      DisposeRgn( clipRgn ) ;
   return pict;                  
 }
 
@@ -335,19 +335,19 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
                 info->contentType = kControlContentPictHandle ;
                 if ( bitmap.GetMask() )
                 {
-				    info->u.picture = wxMacCreatePict( MAC_WXHBITMAP(bmap->m_hBitmap) , MAC_WXHBITMAP(bitmap.GetMask()->GetMaskBitmap() ) ) ;
+                    info->u.picture = wxMacCreatePict( MAC_WXHBITMAP(bmap->m_hBitmap) , MAC_WXHBITMAP(bitmap.GetMask()->GetMaskBitmap() ) ) ;
                }
                 else
                 {
-				    info->u.picture = wxMacCreatePict( MAC_WXHBITMAP(bmap->m_hBitmap) , NULL ) ;
+                    info->u.picture = wxMacCreatePict( MAC_WXHBITMAP(bmap->m_hBitmap) , NULL ) ;
                 }
             }
         }
-		else if ( bmap->m_bitmapType == kMacBitmapTypeIcon )
-		{
-	        info->contentType = kControlContentCIconHandle ;
-	        info->u.cIconHandle = MAC_WXHICON(bmap->m_hIcon) ;
-		}
+        else if ( bmap->m_bitmapType == kMacBitmapTypeIcon )
+        {
+            info->contentType = kControlContentCIconHandle ;
+            info->u.cIconHandle = MAC_WXHICON(bmap->m_hIcon) ;
+        }
     }
 }
 
@@ -369,46 +369,46 @@ wxBitmapRefData::wxBitmapRefData()
 // TODO move this to a public function of Bitmap Ref
 static void DisposeBitmapRefData(wxBitmapRefData *data)
 {
-	if ( !data )
-		return ;
-		
-	switch (data->m_bitmapType)
-	{
-	    case kMacBitmapTypePict :
-	        {
-	            if ( data->m_hPict )
-	            {
-	                KillPicture( MAC_WXHMETAFILE( data->m_hPict ) ) ;
-	                data->m_hPict = NULL ;
-	            }
-	        }
-	        break ;
-	    case kMacBitmapTypeGrafWorld :
-	        {
-	            if ( data->m_hBitmap )
-	            {
-	                wxMacDestroyGWorld( MAC_WXHBITMAP(data->m_hBitmap) ) ;
-	                data->m_hBitmap = NULL ;
-	            }
-	        }
-	        break ;
-	    case kMacBitmapTypeIcon :
-	        if ( data->m_hIcon )
-	        {
-	            DisposeCIcon( MAC_WXHICON(data->m_hIcon) ) ;
-	            data->m_hIcon = NULL ;
-	        }
-	    
-	    default :
-	        // unkown type ?
-	        break ;
-	}
+    if ( !data )
+        return ;
+        
+    switch (data->m_bitmapType)
+    {
+        case kMacBitmapTypePict :
+            {
+                if ( data->m_hPict )
+                {
+                    KillPicture( MAC_WXHMETAFILE( data->m_hPict ) ) ;
+                    data->m_hPict = NULL ;
+                }
+            }
+            break ;
+        case kMacBitmapTypeGrafWorld :
+            {
+                if ( data->m_hBitmap )
+                {
+                    wxMacDestroyGWorld( MAC_WXHBITMAP(data->m_hBitmap) ) ;
+                    data->m_hBitmap = NULL ;
+                }
+            }
+            break ;
+        case kMacBitmapTypeIcon :
+            if ( data->m_hIcon )
+            {
+                DisposeCIcon( MAC_WXHICON(data->m_hIcon) ) ;
+                data->m_hIcon = NULL ;
+            }
+        
+        default :
+            // unkown type ?
+            break ;
+    }
     
-	if (data->m_bitmapMask)
-	{
-		delete data->m_bitmapMask;
-		data->m_bitmapMask = NULL;
-	}
+    if (data->m_bitmapMask)
+    {
+        delete data->m_bitmapMask;
+        data->m_bitmapMask = NULL;
+    }
 }
 
 wxBitmapRefData::~wxBitmapRefData()
@@ -642,8 +642,8 @@ void wxBitmap::SetHBITMAP(WXHBITMAP bmp)
 {
     if (!M_BITMAPDATA)
         m_refData = new wxBitmapRefData;
-	else
-    	DisposeBitmapRefData( M_BITMAPDATA ) ;
+    else
+        DisposeBitmapRefData( M_BITMAPDATA ) ;
     
     M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
     M_BITMAPDATA->m_hBitmap = bmp ;
@@ -654,8 +654,8 @@ void wxBitmap::SetHICON(WXHICON ico)
 {
     if (!M_BITMAPDATA)
         m_refData = new wxBitmapRefData;
-	else
-    	DisposeBitmapRefData( M_BITMAPDATA ) ;
+    else
+        DisposeBitmapRefData( M_BITMAPDATA ) ;
     
     M_BITMAPDATA->m_bitmapType = kMacBitmapTypeIcon ;
     M_BITMAPDATA->m_hIcon = ico ;
@@ -666,8 +666,8 @@ void wxBitmap::SetPict(WXHMETAFILE pict)
 {
     if (!M_BITMAPDATA)
         m_refData = new wxBitmapRefData;
-	else
-    	DisposeBitmapRefData( M_BITMAPDATA ) ;
+    else
+        DisposeBitmapRefData( M_BITMAPDATA ) ;
     
     M_BITMAPDATA->m_bitmapType = kMacBitmapTypePict ;
     M_BITMAPDATA->m_hPict = pict ;
@@ -820,26 +820,26 @@ wxImage wxBitmap::ConvertToImage() const
     GetGWorld( &origPort, &origDevice );
     if ( GetBitmapType() != kMacBitmapTypeGrafWorld )
     {
-    	tempPort = wxMacCreateGWorld( width , height , -1) ;
+        tempPort = wxMacCreateGWorld( width , height , -1) ;
     }
     else
     {
-    	tempPort =  (GWorldPtr) GetHBITMAP() ;
-	}
-	LockPixels(GetGWorldPixMap(tempPort));
-	SetGWorld( tempPort, NULL);
-	if ( GetBitmapType() == kMacBitmapTypePict || GetBitmapType() == kMacBitmapTypeIcon )
-	{
+        tempPort =  (GWorldPtr) GetHBITMAP() ;
+    }
+    LockPixels(GetGWorldPixMap(tempPort));
+    SetGWorld( tempPort, NULL);
+    if ( GetBitmapType() == kMacBitmapTypePict || GetBitmapType() == kMacBitmapTypeIcon )
+    {
         Rect bitmaprect = { 0 , 0 , height, width };
-    	if ( GetBitmapType() == kMacBitmapTypeIcon )
-    	{
-        	::PlotCIconHandle( &bitmaprect , atNone , ttNone , MAC_WXHICON(GetHICON()) ) ;
-        	maskRgn = NewRgn() ;
-        	BitMapToRegion( maskRgn , &(**(MAC_WXHICON(GetHICON()))).iconMask ) ; 
+        if ( GetBitmapType() == kMacBitmapTypeIcon )
+        {
+            ::PlotCIconHandle( &bitmaprect , atNone , ttNone , MAC_WXHICON(GetHICON()) ) ;
+            maskRgn = NewRgn() ;
+            BitMapToRegion( maskRgn , &(**(MAC_WXHICON(GetHICON()))).iconMask ) ; 
         }
-     	else
-         	::DrawPicture( (PicHandle) GetPict(), &bitmaprect ) ;
-	}
+         else
+             ::DrawPicture( (PicHandle) GetPict(), &bitmaprect ) ;
+    }
     // Copy data into image
     index = 0;
     for (int yy = 0; yy < height; yy++)
@@ -854,28 +854,28 @@ wxImage wxBitmap::ConvertToImage() const
             data[index + 1] = g;
             data[index + 2] = b;
             if ( maskRgn )
-            {	
-            	Point pt ;
-            	pt.h = xx ;
-            	pt.v = yy ;
-            	if ( !PtInRgn( pt , maskRgn ) )
-            	{
+            {    
+                Point pt ;
+                pt.h = xx ;
+                pt.v = yy ;
+                if ( !PtInRgn( pt , maskRgn ) )
+                {
                     data[index    ] = mask_r;
                     data[index + 1] = mask_g;
                     data[index + 2] = mask_b;
-            	}
+                }
             }
             else
             {
-	            if (mask)
-	            {
-	                if (mask->PointMasked(xx,yy))
-	                {
-	                    data[index    ] = mask_r;
-	                    data[index + 1] = mask_g;
-	                    data[index + 2] = mask_b;
-	                }
-	            }
+                if (mask)
+                {
+                    if (mask->PointMasked(xx,yy))
+                    {
+                        data[index    ] = mask_r;
+                        data[index + 1] = mask_g;
+                        data[index + 2] = mask_b;
+                    }
+                }
             }
             index += 3;
         }
@@ -891,11 +891,11 @@ wxImage wxBitmap::ConvertToImage() const
     SetGWorld(origPort, origDevice);
     if ( GetBitmapType() != kMacBitmapTypeGrafWorld )
     {
-    	wxMacDestroyGWorld( tempPort ) ;
+        wxMacDestroyGWorld( tempPort ) ;
     }
     if ( maskRgn )
     {
-    	DisposeRgn( maskRgn ) ;
+        DisposeRgn( maskRgn ) ;
     }
 
     return image;
@@ -1038,33 +1038,33 @@ WXHBITMAP wxBitmap::GetHBITMAP() const
 
 WXHMETAFILE wxBitmap::GetPict( bool *created ) const
 {
-	wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
    
-	PicHandle picture = NULL ;       // This is the returned picture
-	if ( created )
-		(*created) = false ;
-	// If bitmap already in Pict format return pointer
-	if(M_BITMAPDATA->m_bitmapType == kMacBitmapTypePict) {
-	   return M_BITMAPDATA->m_hPict;
-	}
-	else if(M_BITMAPDATA->m_bitmapType != kMacBitmapTypeGrafWorld) {
-	   // Invalid bitmap
-	   return NULL;
-	}
-	else
-	{
-		if ( GetMask() )
-		{
-		    picture = wxMacCreatePict( MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) , MAC_WXHBITMAP(GetMask()->GetMaskBitmap() ) ) ;
-		}
-		else
-		{
-		    picture = wxMacCreatePict( MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) , NULL ) ;
-		}
-		if ( created && picture )
-			(*created) = true ;
+    PicHandle picture = NULL ;       // This is the returned picture
+    if ( created )
+        (*created) = false ;
+    // If bitmap already in Pict format return pointer
+    if(M_BITMAPDATA->m_bitmapType == kMacBitmapTypePict) {
+       return M_BITMAPDATA->m_hPict;
     }
- 	return picture ;
+    else if(M_BITMAPDATA->m_bitmapType != kMacBitmapTypeGrafWorld) {
+       // Invalid bitmap
+       return NULL;
+    }
+    else
+    {
+        if ( GetMask() )
+        {
+            picture = wxMacCreatePict( MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) , MAC_WXHBITMAP(GetMask()->GetMaskBitmap() ) ) ;
+        }
+        else
+        {
+            picture = wxMacCreatePict( MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap) , NULL ) ;
+        }
+        if ( created && picture )
+            (*created) = true ;
+    }
+     return picture ;
 }
 
 /*

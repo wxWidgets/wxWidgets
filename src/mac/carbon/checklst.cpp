@@ -73,9 +73,9 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
     RgnHandle savedClipRegion;
     SInt32 savedPenMode;
     wxCheckListBox*          list;
-  GetPort(&savePort);
-  SetPort((**listHandle).port);
-  grafPtr = (**listHandle).port ;
+    GetPort(&savePort);
+    SetPort((**listHandle).port);
+    grafPtr = (**listHandle).port ;
     // typecast our refCon
     list = (wxCheckListBox*) GetControlReference( (ControlHandle) GetListRefCon(listHandle) );
     
@@ -102,13 +102,13 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
             ClipRect( drawRect );
             EraseRect( drawRect );
             
-			wxFontRefData * font = (wxFontRefData*) (list->GetFont().GetRefData()) ;
+            wxFontRefData * font = (wxFontRefData*) (list->GetFont().GetRefData()) ;
 
-			if ( font )
-			{
-				::TextFont( font->m_macFontNum ) ;
-				::TextSize( font->m_macFontSize)  ;
-				::TextFace( font->m_macFontStyle ) ;
+            if ( font )
+            {
+                ::TextFont( font->m_macFontNum ) ;
+                ::TextSize( font->m_macFontSize)  ;
+                ::TextFace( font->m_macFontStyle ) ;
             }
                        
             ThemeButtonDrawInfo info ;
@@ -123,11 +123,11 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
             checkRect.right = checkRect.left + list->m_checkBoxWidth ;
             checkRect.bottom = checkRect.top + list->m_checkBoxHeight ;
             DrawThemeButton(&checkRect,kThemeCheckBox,
-              &info,NULL,NULL, NULL,0);
-
-        MoveTo(drawRect->left + 2 + list->m_checkBoxWidth+2, drawRect->top + list->m_TextBaseLineOffset );
- 
-        DrawText(text, 0 , text.Length());
+                &info,NULL,NULL, NULL,0);
+            
+            MoveTo(drawRect->left + 2 + list->m_checkBoxWidth+2, drawRect->top + list->m_TextBaseLineOffset );
+            
+            DrawText(text, 0 , text.Length());
             //  If the cell is hilited, do the hilite now. Paint the cell contents with the
             //  appropriate QuickDraw transform mode.
             
@@ -142,8 +142,8 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
             
             SetClip( savedClipRegion );
             DisposeRgn( savedClipRegion );
-            }
-            break;
+        }
+        break;
         case lHiliteMsg:
             
             //  Hilite or unhilite the cell. Paint the cell contents with the
@@ -194,7 +194,7 @@ bool wxCheckListBox::Create(wxWindow *parent,
     GetThemeMetric(kThemeMetricCheckBoxWidth,(long *)&m_checkBoxWidth);    
     GetThemeMetric(kThemeMetricCheckBoxHeight,&h);
 #endif
-	  wxFontRefData * font = (wxFontRefData*) (GetFont().GetRefData()) ;
+      wxFontRefData * font = (wxFontRefData*) (GetFont().GetRefData()) ;
 
     FontInfo finfo;
     FetchFontInfo(font->m_macFontNum,short(font->m_macFontSize),font->m_macFontStyle,&finfo);
@@ -202,12 +202,12 @@ bool wxCheckListBox::Create(wxWindow *parent,
     m_TextBaseLineOffset= finfo.leading+finfo.ascent;
     m_checkBoxHeight= finfo.leading+finfo.ascent+finfo.descent;
     
-	if (m_checkBoxHeight<h)
-	{
-		m_TextBaseLineOffset+= (h-m_checkBoxHeight)/2;
-		m_checkBoxHeight= h;
-	}
-		
+    if (m_checkBoxHeight<h)
+    {
+        m_TextBaseLineOffset+= (h-m_checkBoxHeight)/2;
+        m_checkBoxHeight= h;
+    }
+        
     Rect bounds ;
     Str255 title ;
     
@@ -376,55 +376,55 @@ END_EVENT_TABLE()
 
 void wxCheckListBox::OnChar(wxKeyEvent& event)
 {
-  if ( event.GetKeyCode() == WXK_SPACE )
-  {
-    int index = GetSelection() ;
-    if ( index >= 0 )
+    if ( event.GetKeyCode() == WXK_SPACE )
     {
-      Check(index, !IsChecked(index) ) ;
-      wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, GetId());
-      event.SetInt(index);
-      event.SetEventObject(this);
-      GetEventHandler()->ProcessEvent(event);
+        int index = GetSelection() ;
+        if ( index >= 0 )
+        {
+            Check(index, !IsChecked(index) ) ;
+            wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, GetId());
+            event.SetInt(index);
+            event.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(event);
+        }
     }
-  }
-  else
-    event.Skip();
+    else
+        event.Skip();
 }
 
 void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
 {
-  // clicking on the item selects it, clicking on the checkmark toggles
-  if ( event.GetX() <= 20 /*check width*/ ) {
-    int lineheight ;
-    int topcell ;
+    // clicking on the item selects it, clicking on the checkmark toggles
+    if ( event.GetX() <= 20 /*check width*/ ) {
+        int lineheight ;
+        int topcell ;
 #if TARGET_CARBON
-    Point pt ;
-    GetListCellSize( (ListHandle)m_macList , &pt ) ;
-    lineheight = pt.v ;
-    ListBounds visible ;
-    GetListVisibleCells( (ListHandle)m_macList , &visible ) ;
-    topcell = visible.top ;
+        Point pt ;
+        GetListCellSize( (ListHandle)m_macList , &pt ) ;
+        lineheight = pt.v ;
+        ListBounds visible ;
+        GetListVisibleCells( (ListHandle)m_macList , &visible ) ;
+        topcell = visible.top ;
 #else
-    lineheight =  (**(ListHandle)m_macList).cellSize.v ;
-    topcell = (**(ListHandle)m_macList).visible.top ;
+        lineheight =  (**(ListHandle)m_macList).cellSize.v ;
+        topcell = (**(ListHandle)m_macList).visible.top ;
 #endif
-    size_t nItem = ((size_t)event.GetY()) / lineheight + topcell ;
-    
-    if ( nItem < (size_t)m_noItems )
-    {
-      Check(nItem, !IsChecked(nItem) ) ;
-      wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, GetId());
-      event.SetInt(nItem);
-      event.SetEventObject(this);
-      GetEventHandler()->ProcessEvent(event);
+        size_t nItem = ((size_t)event.GetY()) / lineheight + topcell ;
+        
+        if ( nItem < (size_t)m_noItems )
+        {
+            Check(nItem, !IsChecked(nItem) ) ;
+            wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, GetId());
+            event.SetInt(nItem);
+            event.SetEventObject(this);
+            GetEventHandler()->ProcessEvent(event);
+        }
+        //else: it's not an error, just click outside of client zone
     }
-    //else: it's not an error, just click outside of client zone
-  }
-  else {
-    // implement default behaviour: clicking on the item selects it
-    event.Skip();
-  }
+    else {
+        // implement default behaviour: clicking on the item selects it
+        event.Skip();
+    }
 }
 
 #endif // wxUSE_CHECKLISTBOX

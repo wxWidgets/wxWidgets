@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_GDIOBJ_H_
@@ -21,8 +21,8 @@
 class WXDLLEXPORT wxGDIRefData: public wxObjectRefData {
 public:
     inline wxGDIRefData()
-	{
- 	}
+    {
+     }
 };
 
 #define M_GDIDATA ((wxGDIRefData *)m_refData)

@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -38,13 +38,13 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
            const wxString& name)
 {
     SetName(name);
-	wxSize size = s ;
-	if ( bitmap.Ok() )
-	{
-    	if ( size.x == -1 )
-    	    size.x = bitmap.GetWidth() ;
-    	if ( size.y == -1 )
-    	    size.y = bitmap.GetHeight() ;
+    wxSize size = s ;
+    if ( bitmap.Ok() )
+    {
+        if ( size.x == -1 )
+            size.x = bitmap.GetWidth() ;
+        if ( size.y == -1 )
+            size.y = bitmap.GetHeight() ;
     }
 
     m_backgroundColour = parent->GetBackgroundColour() ;
@@ -52,14 +52,14 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 
     m_bitmap = bitmap;
     if ( id == -1 )
-  	    m_windowId = (int)NewControlId();
+          m_windowId = (int)NewControlId();
     else
-	    m_windowId = id;
+        m_windowId = id;
 
     m_windowStyle = style;
 
     bool ret = wxControl::Create( parent, id, pos, size, style , wxDefaultValidator , name );
-	SetBestSize( size ) ;
+    SetBestSize( size ) ;
     
     return ret;
 }

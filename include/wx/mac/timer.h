@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TIMER_H_
@@ -26,8 +26,8 @@ struct MacTimerInfo ;
 class WXDLLEXPORT wxTimer: public wxTimerBase
 {
 public:
-	wxTimer() { Init(); }
-	wxTimer(wxEvtHandler *owner, int id = -1) : wxTimerBase(owner, id) { Init(); }
+    wxTimer() { Init(); }
+    wxTimer(wxEvtHandler *owner, int id = -1) : wxTimerBase(owner, id) { Init(); }
     ~wxTimer();
 
     virtual bool Start(int milliseconds = -1,
@@ -38,7 +38,7 @@ public:
 
     MacTimerInfo* m_info;
 protected :
-	void Init();
+    void Init();
 private:
 
     DECLARE_ABSTRACT_CLASS(wxTimer)

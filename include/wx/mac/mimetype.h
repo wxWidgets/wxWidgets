@@ -71,7 +71,7 @@ public:
     // the first extension found, index 1 for the second and so on
     
     void Init(wxMimeTypesManagerImpl *manager, size_t index)
-	{ m_manager = manager; m_index.Add(index); }
+    { m_manager = manager; m_index.Add(index); }
 
     // initialize us with our file type name
     void SetFileType(const wxString& strFileType)
@@ -98,10 +98,10 @@ public:
     // remove the record for this file type
     // probably a mistake to come here, use wxMimeTypesManager.Unassociate (ft) instead
     bool Unassociate(wxFileType *ft)
-	{
-	    return m_manager->Unassociate(ft);
-	}
-    
+    {
+        return m_manager->Unassociate(ft);
+    }
+
     // set an arbitrary command, ask confirmation if it already exists and
     // overwriteprompt is TRUE
     bool SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt = TRUE);

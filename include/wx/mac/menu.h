@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MENU_H_
@@ -57,9 +57,9 @@ public:
     // implementation only from now on
     // -------------------------------
 
-  	int	MacGetIndexFromId( int id ) ; 
-  	int	MacGetIndexFromItem( wxMenuItem *pItem ) ; 
-  	void MacEnableMenu( bool bDoEnable ) ;
+      int    MacGetIndexFromId( int id ) ; 
+      int    MacGetIndexFromItem( wxMenuItem *pItem ) ;
+      void MacEnableMenu( bool bDoEnable ) ;
 
     // semi-private accessors
         // get the window which contains this menu
@@ -67,7 +67,7 @@ public:
         // get the menu handle
     WXHMENU GetHMenu() const { return m_hMenu; }
 
-	short MacGetMenuId() { return m_macMenuId ; }
+    short MacGetMenuId() { return m_macMenuId ; }
 
 private:
     // common part of all ctors
@@ -88,9 +88,9 @@ private:
     // the menu handle of this menu
     WXHMENU m_hMenu;
 
-  	short				m_macMenuId;
+      short                m_macMenuId;
 
-  	static short		s_macNextMenuId ;
+      static short        s_macNextMenuId ;
 
     DECLARE_DYNAMIC_CLASS(wxMenu)
 };
@@ -146,11 +146,11 @@ public:
         // attach to a frame
     void Attach(wxFrame *frame);
 
-		// clear the invoking window for all menus and submenus
-	void UnsetInvokingWindow() ;
+        // clear the invoking window for all menus and submenus
+    void UnsetInvokingWindow() ;
 
-		// set the invoking window for all menus and submenus
-	void SetInvokingWindow( wxFrame* frame ) ;
+        // set the invoking window for all menus and submenus
+    void SetInvokingWindow( wxFrame* frame ) ;
 
     // if the menubar is modified, the display is not updated automatically,
     // call this function to update it (m_menuBarFrame should be !NULL)
@@ -171,7 +171,7 @@ protected:
     wxArrayString m_titles;
 
 private:
-  static wxMenuBar*			s_macInstalledMenuBar ;
+  static wxMenuBar*            s_macInstalledMenuBar ;
 
     DECLARE_DYNAMIC_CLASS(wxMenuBar)
 };

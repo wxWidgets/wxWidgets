@@ -83,11 +83,11 @@ public:
     const wxString& GetName() const { return m_dirname; }
 
 private:
-	CInfoPBRec			m_CPB ;
-	wxInt16				m_index ;
-	long				m_dirId ;
-	Str255				m_name ;
-	Boolean				m_isDir ;
+    CInfoPBRec            m_CPB ;
+    wxInt16                m_index ;
+    long                m_dirId ;
+    Str255                m_name ;
+    Boolean                m_isDir ;
 
     wxString m_dirname;
     wxString m_filespec;
@@ -145,26 +145,26 @@ wxDirData::~wxDirData()
 
 void wxDirData::Rewind() 
 {
-	m_index = 0 ;
+    m_index = 0 ;
 }
 
 bool wxDirData::Read(wxString *filename)
 {
     if ( !m_isDir )
         return FALSE ;
-		
+        
 #if TARGET_CARBON
-	char c_name[256] ;
+    char c_name[256] ;
 #endif
     wxString result;
 
     short err = noErr ;
-	
+    
     while ( err == noErr )
     {
         m_index++ ;
         m_CPB.dirInfo.ioFDirIndex = m_index;
-        m_CPB.dirInfo.ioDrDirID = m_dirId;	/* we need to do this every time */
+        m_CPB.dirInfo.ioDrDirID = m_dirId;    /* we need to do this every time */
         err = PBGetCatInfoSync((CInfoPBPtr)&m_CPB);
         if ( err != noErr )
             break ;
@@ -270,12 +270,12 @@ wxString wxDir::GetName() const
     wxString name;
     if ( m_data )
     {
-	name = M_DIR->GetName();
-	if ( !name.empty() && (name.Last() == _T('/')) )
-	{
-	    // chop off the last (back)slash
-	    name.Truncate(name.length() - 1);
-	}
+    name = M_DIR->GetName();
+    if ( !name.empty() && (name.Last() == _T('/')) )
+    {
+        // chop off the last (back)slash
+        name.Truncate(name.length() - 1);
+    }
     }
 
     return name;

@@ -44,7 +44,7 @@
 class wxDisplayMacPriv
 {
 public:
-	GDHandle m_hndl;
+    GDHandle m_hndl;
 };
 
 size_t wxDisplayBase::GetCount()

@@ -6,7 +6,7 @@
 // Created:     1998-01-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_REGION_H_
@@ -24,7 +24,7 @@ class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxPoint;
 
 enum wxRegionContain {
-	wxOutRegion = 0, wxPartRegion = 1, wxInRegion = 2
+    wxOutRegion = 0, wxPartRegion = 1, wxInRegion = 2
 };
 
 // So far, for internal use only
@@ -38,7 +38,7 @@ wxRGN_XOR           // Creates the union of two combined regions except for any 
 
 class WXDLLEXPORT wxRegion : public wxGDIObject {
 DECLARE_DYNAMIC_CLASS(wxRegion);
-	friend class WXDLLEXPORT wxRegionIterator;
+    friend class WXDLLEXPORT wxRegionIterator;
 public:
     wxRegion(long x, long y, long w, long h);
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
@@ -155,4 +155,4 @@ private:
 };
 
 #endif
-	// _WX_REGION_H_
+    // _WX_REGION_H_
