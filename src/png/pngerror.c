@@ -109,14 +109,6 @@ static PNG_CONST char png_digit[16] = {
    'A', 'B', 'C', 'D', 'E', 'F'
 };
 
-static size_t wxstrnlen( const char *s, size_t maxlen )
-{
-	size_t i ;
-	for ( i = 0 ; s[i] && i < maxlen ; ++i )
-		;
-	return i ;
-}
-
 static void /* PRIVATE */
 png_format_buffer(png_structp png_ptr, png_charp buffer, png_const_charp
    error_message)
@@ -143,12 +135,10 @@ png_format_buffer(png_structp png_ptr, png_charp buffer, png_const_charp
       buffer[iout] = 0;
    else
    {
-      int len = wxstrnlen(error_message, 64);
- 
       buffer[iout++] = ':';
       buffer[iout++] = ' ';
-      png_strncpy(buffer+iout, error_message, len);
-      buffer[iout+len] = 0;
+      png_strncpy(buffer+iout, error_message, 63);
+      buffer[iout+63] = 0;
    }
 }
 
