@@ -15,24 +15,6 @@ from wxPython.wx import *
 
 #----------------------------------------------------------------------
 
-def bitmapFromFile(filename):
-    '''Non-portable test for bitmap type...'''
-    import imghdr
-    BITMAPTYPEGUESSDICT = {
-        "bmp" :wxBITMAP_TYPE_BMP,
-        "png" :wxBITMAP_TYPE_PNG,
-        "jpeg":wxBITMAP_TYPE_JPEG,
-        "jpg" :wxBITMAP_TYPE_JPEG,
-        "gif" :wxBITMAP_TYPE_GIF,
-        "xbm" :wxBITMAP_TYPE_XBM,
-    }
-    # following assumes bitmap type if we cannot resolve image type
-    typ = BITMAPTYPEGUESSDICT.get(imghdr.what(filename), wxBITMAP_TYPE_BMP)
-    bitmap = wxImage(filename, typ).ConvertToBitmap()
-    return bitmap
-
-#----------------------------------------------------------------------
-
 class SplashScreen(wxFrame):
     def __init__(self, parent, ID=-1, title="SplashScreen",
                  style=wxSIMPLE_BORDER|wxSTAY_ON_TOP,
@@ -41,11 +23,12 @@ class SplashScreen(wxFrame):
         '''
         parent, ID, title, style -- see wxFrame
         duration -- milliseconds to display the splash screen
-        bitmapfile -- absolute or relative pathname, extension used for type negotiation
-        callback -- if specified, is called when timer completes, callback is responsible for closing the splash screen
+        bitmapfile -- absolute or relative pathname to image file
+        callback -- if specified, is called when timer completes, callback is
+                    responsible for closing the splash screen
         '''
         ### Loading bitmap
-        self.bitmap = bmp = bitmapFromFile(bitmapfile)
+        self.bitmap = bmp = wxImage(bitmapfile, wxBITMAP_TYPE_ANY).ConvertToBitmap()
         ### Determine size of bitmap to size window...
         size = (bmp.GetWidth(), bmp.GetHeight())
         # size of screen
@@ -66,8 +49,7 @@ class SplashScreen(wxFrame):
         EVT_ERASE_BACKGROUND(self, self.OnEraseBG)
 
         self.Show(true)
-        #dc = wxClientDC(self)
-        #dc.DrawBitmap(self.bitmap, 0,0, false)
+
 
         class SplashTimer(wxTimer):
             def __init__(self, targetFunction):
