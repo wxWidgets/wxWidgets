@@ -113,6 +113,9 @@ protected:
     // common part of all ctors
     void Init();
 
+    // end either modal or modeless dialog
+    void EndDialog(int rc);
+
 private:
     wxWindow*   m_oldFocus;
     bool        m_endModalCalled; // allow for closing within InitDialog

@@ -368,7 +368,15 @@ void wxDialog::EndModal(int retCode)
     m_endModalCalled = true;
     SetReturnCode(retCode);
 
-    Show(false);
+    Hide();
+}
+
+void wxDialog::EndDialog(int rc)
+{
+    if ( IsModal() )
+        EndModal(rc);
+    else
+        Hide();
 }
 
 // ----------------------------------------------------------------------------
@@ -380,7 +388,7 @@ void wxDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
   if ( Validate() && TransferDataFromWindow() )
   {
-      EndModal(wxID_OK);
+      EndDialog(wxID_OK);
   }
 }
 
@@ -394,7 +402,7 @@ void wxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
 
 void wxDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-    EndModal(wxID_CANCEL);
+    EndDialog(wxID_CANCEL);
 }
 
 void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
