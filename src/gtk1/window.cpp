@@ -669,17 +669,12 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     if (g_blockEventsOnDrag) return FALSE;
 
 /*
+    wxString tmp;
+    tmp += (char)gdk_event->keyval;
+    printf( "KeyDown-Code is: %s.\n", tmp.c_str() );
     printf( "KeyDown-ScanCode is: %d.\n", gdk_event->keyval );
-    if (gdk_event->state & GDK_SHIFT_MASK)
-      printf( "ShiftDown.\n" );
-    else
-      printf( "ShiftUp.\n" );
-    if (gdk_event->state & GDK_CONTROL_MASK)
-      printf( "ControlDown.\n" );
-    else
-      printf( "ControlUp.\n" );
-    printf( "\n" );
 */
+    
     int x = 0;
     int y = 0;
     GdkModifierType state;
@@ -1314,6 +1309,11 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
         panel->SetLastFocus(win);
     }
 
+#ifdef HAVE_XIM
+    if (win->m_ic)
+        gdk_im_begin(win->m_ic, win->m_wxwindow->window);
+#endif
+
     wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
     event.SetEventObject( win );
 
@@ -1351,6 +1351,11 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
         printf( win->GetClassInfo()->GetClassName() );
     printf( ".\n" );
 */
+
+#ifdef HAVE_XIM
+    if (win->m_ic)
+        gdk_im_end();
+#endif
 
     wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
     event.SetEventObject( win );
@@ -1617,8 +1622,8 @@ wxWindow *wxWindowBase::FindFocus()
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
-/* we cannot set colours and fonts before the widget has
-   been realized, so we do this directly after realization */
+/* We cannot set colours and fonts before the widget has
+   been realized, so we do this directly after realization. */
 
 static gint
 gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
@@ -1640,6 +1645,33 @@ gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
     win->GetEventHandler()->ProcessEvent( event );
 
     return FALSE;
+}
+
+//-----------------------------------------------------------------------------
+// "size_allocate"
+//-----------------------------------------------------------------------------
+
+/* Resize XIM window */
+
+static void gtk_wxwindow_size_callback( GtkWidget *widget, GtkAllocation* alloc, wxFrame *win )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    if (!win->m_ic)
+        return;
+
+#ifdef HAVE_XIM
+    if  (gdk_ic_get_style (win->m_ic) & GDK_IM_PREEDIT_POSITION)
+    {
+        gint width, height;
+
+	gdk_window_get_size (widget->window, &width, &height);
+        win->m_icattr->preedit_area.width = width;
+        win->m_icattr->preedit_area.height = height;
+        gdk_ic_set_attr (win->m_ic, win->m_icattr, GDK_IC_PREEDIT_AREA);
+    }
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1668,14 +1700,15 @@ gtk_wxwindow_realized_callback( GtkWidget *widget, wxWindow *win )
     GdkICAttr *attr = win->m_icattr;
     GdkICAttributesType attrmask = GDK_IC_ALL_REQ;
     GdkIMStyle style;
-    GdkIMStyle supported_style = GDK_IM_PREEDIT_NONE |
+    GdkIMStyle supported_style = (GdkIMStyle)
+                                  (GDK_IM_PREEDIT_NONE |
 				   GDK_IM_PREEDIT_NOTHING |
 			           GDK_IM_PREEDIT_POSITION |
 			           GDK_IM_STATUS_NONE |
-				   GDK_IM_STATUS_NOTHING;
+				   GDK_IM_STATUS_NOTHING);
 
     if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
-	supported_style &= ~GDK_IM_PREEDIT_POSITION;
+	supported_style = (GdkIMStyle)(supported_style & ~GDK_IM_PREEDIT_POSITION);
 
     attr->style = style = gdk_im_decide_style (supported_style);
     attr->client_window = widget->window;
@@ -1713,8 +1746,8 @@ gtk_wxwindow_realized_callback( GtkWidget *widget, wxWindow *win )
 	  attr->preedit_fontset = widget->style->font;
 
 	  break;
-	}
-
+    }
+	
       win->m_ic = gdk_ic_new (attr, attrmask);
      
       if (win->m_ic == NULL)
@@ -1722,7 +1755,7 @@ gtk_wxwindow_realized_callback( GtkWidget *widget, wxWindow *win )
       else
 	{
 	  mask = gdk_window_get_events (widget->window);
-	  mask |= gdk_ic_get_events (win->m_ic);
+	  mask = (GdkEventMask)(mask | gdk_ic_get_events (win->m_ic));
 	  gdk_window_set_events (widget->window, mask);
 
 	  if (GTK_WIDGET_HAS_FOCUS(widget))
@@ -2110,11 +2143,15 @@ void wxWindow::PostCreation()
     gtk_signal_connect( GTK_OBJECT(connect_widget), "realize",
                             GTK_SIGNAL_FUNC(gtk_window_realized_callback), (gpointer) this );
  
-    /* Initialize XIM support.  */
     if (m_wxwindow)
     {
+        /* Initialize XIM support.  */
         gtk_signal_connect( GTK_OBJECT(m_wxwindow), "realize",
                             GTK_SIGNAL_FUNC(gtk_wxwindow_realized_callback), (gpointer) this );
+			    
+        /* And resize XIM window.  */
+        gtk_signal_connect( GTK_OBJECT(m_wxwindow), "size_allocate",
+                            GTK_SIGNAL_FUNC(gtk_wxwindow_size_callback), (gpointer)this );
     }
     
     m_hasVMT = TRUE;
