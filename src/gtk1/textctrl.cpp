@@ -23,7 +23,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl,wxControl)
 
 void gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
-  win->m_modified = TRUE;
+  win->SetModified();
 };
 
 
@@ -153,16 +153,6 @@ bool wxTextCtrl::SaveFile( const wxString &WXUNUSED(file) )
   wxFAIL_MSG("wxTextCtrl::SaveFile not implemented");
 
   return FALSE;
-};
-
-bool wxTextCtrl::IsModified(void)
-{
-  return m_modified;
-};
-
-void wxTextCtrl::DiscardEdits(void)
-{
-  m_modified = FALSE;
 };
 
 /*
