@@ -28,9 +28,9 @@ list of brushes {\bf wxTheBrushList}, and calling the member function
 
 wxBrush uses a reference counting system, so assignments between brushes are very
 cheap. You can therefore use actual wxBrush objects instead of pointers without
-efficiency problems. Bear in mind, though, that changing a brush's properties may
-affect another brush which has been involved in an assignment with the first brush,
-because of the way internal brush data is shared.
+efficiency problems. Once one wxBrush object changes its data it will create its
+own brush data internally so that other brushes, which previously shared the
+data using the reference counting, are not affected.
 
 TODO: an overview for wxBrush.
 

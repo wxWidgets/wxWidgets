@@ -661,12 +661,18 @@ bool wxTable::CreateTable(void)
 	sprintf(sqlStmt, "DROP TABLE %s", tableName);
 	if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt, SQL_NTS) != SQL_SUCCESS)
 	{
-		// Check for sqlState = S0002, "Table or view not found".
-		// Ignore this error, bomb out on any other error.
-		// SQL Sybase Anwhere v5.5 returns an access violation error here
-		// (sqlstate = 42000) rather than an S0002.
+		/* Check for sqlState = S0002, "Table or view not found".
+		 * Ignore this error, bomb out on any other error.
+		 * SQL Sybase Anwhere v5.5 returns an access violation error here
+		 * (sqlstate = 42000) rather than an S0002. */
+		 
+		/* PostgreSQL 6.4.0 returns "08S01" or in written form
+		   "ERROR: Relation ... Does Not Exist, Robert Roebling */
+		
 		pDb->GetNextError(henv, hdbc, hstmt);
-		if (strcmp(pDb->sqlState, "S0002") && strcmp(pDb->sqlState, "42000"))
+		if (strcmp(pDb->sqlState, "S0002") && 
+		    strcmp(pDb->sqlState, "42000") &&
+		    strcmp(pDb->sqlState, "08S01"))
 		{
 			pDb->DispNextError();
 			pDb->DispAllErrors(henv, hdbc, hstmt);
@@ -829,7 +835,7 @@ bool wxTable::CreateIndex(char * idxName, bool unique, int noIdxCols, CidxDef *p
 		else
 			strcat(sqlStmt, " DESC");
 		if ((i + 1) < noIdxCols)
-			strcat(sqlStmt, ",");
+			strcat(sqlStmt, ", ");
 	}
 	
 	// Append closing parentheses

@@ -403,6 +403,27 @@ The following documents some miscellaneous C++ issues.
 
 wxWindows does not use templates since it is a notoriously unportable feature.
 
+\subsection{RTTI}
+
+wxWindows does not use run-time type information since wxWindows provides
+its own run-time type information system, implemented using macros.
+
+\subsection{Type of NULL}
+
+Some compilers (e.g. the native IRIX cc) define NULL to be 0L so that
+no conversion to pointers is allowed. Because of that, all these
+occurences of NULL in the GTK port use an explicit conversion such 
+as
+
+{\small
+\begin{verbatim}
+  wxWindow *my_window = (wxWindow*) NULL;
+\end{verbatim}
+}
+
+It is recommended to adhere to this in all code using wxWindows as
+this make the code (a bit) more portable.
+
 \subsection{Precompiled headers}
 
 Some compilers, such as Borland C++ and Microsoft C++, support

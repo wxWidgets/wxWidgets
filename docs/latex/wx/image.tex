@@ -7,7 +7,10 @@ via image format handlers. Functions are available to set and get image bits, so
 it can be used for basic image manipulation.
 
 A wxImage cannot (currently) be drawn directly to a wxDC. Instead, a platform-specific
-wxBitmap object must be created from it, and that bitmap drawn on the wxDC.
+wxBitmap object must be created from it, and that bitmap drawn on the wxDC, using
+wxDC::DrawBitmap.
+
+This class is currently only available under GTK and Windows.
 
 \wxheading{Derived from}
 
@@ -31,13 +34,15 @@ Copy constructor.
 
 \func{}{wxImage}{\param{const wxBitmap\&}{ bitmap}}
 
-Constructs an image from a platform-dependent bitmap.
+Constructs an image from a platform-dependent bitmap. This preserves
+mask information so that bitmaps and images can be converted back
+and forth without loss in that respect.
 
 \func{}{wxImage}{\param{int}{ width}, \param{int}{ height}}
 
 Creates an image with the given width and height.
 
-\func{}{wxImage}{\param{const wxString\& }{name}, \param{long}{ type = wxBITMAP\_TYPE\_PNG}}
+\func{}{wxImage}{\param{const wxString\& }{name}, \param{long}{ type = wxIMAGE\_TYPE\_PNG}}
 
 Loads an image from a file.
 
@@ -53,16 +58,14 @@ Loads an image from a file.
 
 \twocolwidtha{5cm}
 \begin{twocollist}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_BMP}}}{Load a Windows bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_GIF}}}{Load a GIF bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_XBM}}}{Load an X bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_XPM}}}{Load an XPM bitmap file.}
-\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PNG}}}{Load a PNG bitmap file.}
+\twocolitem{{\bf \indexit{wxIMAGE\_TYPE\_BMP}}}{Load a Windows bitmap file.}
+\twocolitem{{\bf \indexit{wxIMAGE\_TYPE\_PNG}}}{Load a PNG bitmap file.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration.
-If all possible wxWindows settings are used, the Windows platform supports BMP, BMP\_RESOURCE,
-XPM\_DATA, and XPM. Under X, the available formats are BMP, GIF, XBM, and XPM.}
+If all possible wxWindows settings are used, the loading a BMP (Windows bitmap) file
+and a PNG (portable network graphics) file is supported on all platforms that
+implement wxImage.}
 
 \wxheading{See also}
 
@@ -99,7 +102,13 @@ This function is called by wxWindows on exit.
 
 \constfunc{wxBitmap}{ConvertToBitmap}{\void}
 
-Converts the image to a platform-specific bitmap object.
+Converts the image to a platform-specific bitmap object. This has to be done
+to actually display an image as you cannot draw an image directly on a window.
+The resulting bitmap will use the colour depth of the current system which entails
+that a (crude) colour reduction has to take place. Especially when converting
+to 8-bit (or even less) bitmaps, the routine is slow and will reduce the
+quality of the resulting bitmap. A proper set of colour reduction methods has
+not yet been written.
 
 \membersection{wxImage::Create}\label{wximagecreate}
 
@@ -141,7 +150,7 @@ Finds the handler associated with the given image type.
 
 \docparam{extension}{The file extension, such as ``bmp".}
 
-\docparam{imageType}{The image type, such as wxBITMAP\_TYPE\_BMP.}
+\docparam{imageType}{The image type, such as wxIMAGE\_TYPE\_BMP.}
 
 \wxheading{Return value}
 
@@ -161,7 +170,9 @@ Returns the blue intensity at the given coordinate.
 
 \constfunc{unsigned char*}{GetData}{\void}
 
-Returns the image data as an array.
+Returns the image data as an array. This is most often used when doing
+direct image manipulation. The return value points to an array of
+chararcters in RGBGBRGB... format.
 
 \membersection{wxImage::GetGreen}\label{wximagegetgreen}
 
@@ -230,7 +241,8 @@ Returns TRUE if there is a mask active, FALSE otherwise.
 \func{static void}{InitStandardHandlers}{\void}
 
 Adds the standard image format handlers, which, depending on wxWindows
-configuration, can be handlers for Windows image, Windows image resource, and XPM.
+configuration, can be handlers for Windows BMP (loading) and PNG
+(loading and saving) file formats.
 
 This function is called by wxWindows on startup.
 
@@ -266,11 +278,8 @@ The meaning of {\it name} is determined by the {\it type} parameter.}
 
 \twocolwidtha{5cm}
 \begin{twocollist}
-\twocolitem{{\bf wxBITMAP\_TYPE\_BMP}}{Load a Windows image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_GIF}}{Load a GIF image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_XBM}}{Load an X image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Load an XPM image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Load a PNG image file.}
+\twocolitem{{\bf wxIMAGE\_TYPE\_BMP}}{Load a Windows image file.}
+\twocolitem{{\bf wxIMAGE\_TYPE\_PNG}}{Load a PNG image file.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration.}
@@ -316,18 +325,15 @@ Saves a image in the named file.
 
 \docparam{name}{A filename. The meaning of {\it name} is determined by the {\it type} parameter.}
 
-\docparam{type}{One of the following values:
+\docparam{type}{Currently only one type can be used:
 
 \twocolwidtha{5cm}
 \begin{twocollist}
-\twocolitem{{\bf wxBITMAP\_TYPE\_BMP}}{Save a Windows image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_GIF}}{Save a GIF image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_XBM}}{Save an X image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Save an XPM image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Save a PNG image file.}
+\twocolitem{{\bf wxIMAGE\_TYPE\_PNG}}{Save a PNG image file.}
 \end{twocollist}
 
-The validity of these flags depends on the platform and wxWindows configuration.}
+The validity of these flags depends on the platform and wxWindows configuration
+as well as user-added handlers.}
 
 \wxheading{Return value}
 
@@ -345,13 +351,19 @@ Depending on how wxWindows has been configured, not all formats may be available
 
 \func{wxImage}{Scale}{\param{int}{ width}, \param{int}{ height}}
 
-Returns a scaled version of the image.
+Returns a scaled version of the image. This is also useful for
+scaling bitmaps in general as the only other way to scale bitmaps
+is do blit a wxMemoryDC into another wxMemoryDC. Windows can such scaling
+itself, but on GTK scaling bitmaps is done using this routine 
+internally.
 
 \membersection{wxImage::SetData}\label{wximagesetdata}
 
 \func{void}{SetData}{\param{unsigned char*}{data}}
 
-Sets the image data.
+Sets the image data without performing checks. The data given must have 
+the size (width*height*3) or results will be unexpected. Don't use this
+method if you aren't sure you know what you are doing.
 
 \membersection{wxImage::SetMask}\label{wximagesetmask}
 
@@ -369,7 +381,10 @@ Sets the mask colour for this image.
 
 \func{void}{SetRGB}{\param{int }{x}, \param{int }{y}, \param{unsigned char }{red}, \param{unsigned char }{blue}, \param{unsigned char }{green}}
 
-Sets the pixel at the given coordinate.
+Sets the pixel at the given coordinate. This routine performs bounds-checks
+for the coordinate so it can be considered a safe way to manipulate the
+data, but in some cases this might be too slow so that the data will have to
+be set directly. In that case you have to get that data by calling GetData().
 
 \membersection{wxImage::operator $=$}
 

@@ -404,7 +404,9 @@ int MyApp::OnExit()
 
   // TODO: this simulates zero-memory leaks!
   // Otherwise there are just too many...
+#ifndef __WXGTK__
   wxDebugContext::SetCheckpoint();
+#endif
 
   return 0;
 }
