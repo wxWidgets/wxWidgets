@@ -2627,7 +2627,7 @@ if test "$wxUSE_MAC" = 1; then
     WX_ALL="${WX_ALL} \$(build_libdir)/lib${WX_LIBRARY}.r"
     WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall_res"
     AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
-    AC_CHECK_PROG(DEREZ, Derez, Derez, /Developer/Tools/Derez)
+    AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
     LIBWXMACRES="\$(top_builddir)/lib/lib${WX_LIBRARY}.r"
     LIBWXMACRESCOMP="\$(RESCOMP) Carbon.r -t APPL ${LIBWXMACRES} -o \$(BIN_PROGRAM)"
     LIBWXMACRESWXCONFIG="${RESCOMP} Carbon.r -t APPL \${prefix}/lib/${WX_RESOURCES_MACOSX_COMPILED} -o"
@@ -2647,6 +2647,8 @@ fi
 
 dnl defines HAVE_STDLIB_H
 AC_CHECK_HEADERS(stdlib.h)
+dnl defines HAVE_MALLOC_H
+AC_CHECK_HEADERS(malloc.h)
 dnl defines HAVE_UNISTD_H
 AC_CHECK_HEADERS(unistd.h)
 dnl defines HAVE_WCHAR_H
