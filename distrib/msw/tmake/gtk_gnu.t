@@ -14,7 +14,7 @@
 
     #! now transform these hashes into $project tags
     foreach $file (sort keys %wxGeneric) {
-        next if $wxCommon{$file} =~ /\bR\b/;
+        next if $wxGeneric{$file} =~ /\bR\b/;
 
         $file =~ s/cp?p?$/\$(OBJSUFF)/;
         $project{"WXGENERICOBJS"} .= '$(GENDIR)/' . $file . " "
@@ -83,11 +83,11 @@ RANLIB      = ranlib
 DEBUG       = 1
 
 # Misc options
-CPPOPTIONS  = __WXGTK__ -D__WXDEBUG__ -fno-rtti -fno-exceptions
-COPTIONS    = __WXGTK__ -D__WXDEBUG__
+CPPOPTIONS  = -D__WXGTK__ -D__WXDEBUG__ -D_REENTRANT -fno-rtti -fno-exceptions
+COPTIONS    = -D__WXGTK__ -D__WXDEBUG__ -D_REENTRANT
 CPPWARN     = -Wall
-CWARN       = -Wall
-OPTIMISE    = -O2
+CWARN       =
+OPTIMISE    = -O2 -fno-strength-reduce
 
 # object file suffix
 OBJSUFF     =o
@@ -132,7 +132,7 @@ GENERICOBJS = \
                 #$ ExpandList("WXGENERICOBJS");
 
 COMMONOBJS  = \
-		$(COMMDIR)/y_tab.$(OBJSUFF) \
+		$(COMMDIR)/parser.$(OBJSUFF) \
 		#$ ExpandList("WXCOMMONOBJS");
 
 HTMLOBJS = \
@@ -231,33 +231,37 @@ OBJECTS = $(GTKOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJ) $(UNIXOBJS) \
 
 all:    $(OBJECTS) $(WXLIB)
 
-$(WXLIB): $(OBJECTS) $(EXTRAOBJS)
-	ar $(AROPTIONS) $@ $(EXTRAOBJS) $(OBJECTS)
+$(WXLIB): $(OBJECTS)
+	ar $(AROPTIONS) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-$(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(WXINC)/wx/setup.h
+$(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDIR)/include/wx/setup.h
 
-$(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
-	$(CCLEX) -c $(CFLAGS) -DNO_CONFIGURE -o $@ $(COMMDIR)/y_tab.c
+$(COMMDIR)/parser.$(OBJSUFF):    $(COMMDIR)/parser.c $(COMMDIR)/lexer.c
+	$(CCLEX) -c $(CFLAGS) -o $@ $(COMMDIR)/parser.c
 
-
-$(COMMDIR)/lex_yy.c:	$(COMMDIR)/lexer.l
-	$(LEX) -o $(COMMDIR)/lex.yy.c $(COMMDIR)/lexer.l 
-	sed -e "s/BUFSIZ/5000/g" < $(COMMDIR)/lex.yy.c | \
-	sed -e "s/yyoutput(c)/void yyoutput(c)/g" | \
-        sed -e "s/YYLMAX 200/YYLMAX 5000/g" > $(COMMDIR)/lex_yy.c
-	rm -f $(COMMDIR)/lex.yy.c
-
-# Replace yacc with bison if you run into compilation
-# problems with y_tab.c.
-$(COMMDIR)/y_tab.c:	$(COMMDIR)/parser.y
+$(COMMDIR)/parser.c:	$(COMMDIR)/parser.y $(COMMDIR)/lexer.c
 	$(YACC) $(COMMDIR)/parser.y
-	mv y.tab.c $(COMMDIR)/y_tab.c
+	@sed -e "s;$(COMMDIR)/y.tab.c;parser.y;g" < y.tab.c | \
+	sed -e "s/BUFSIZ/5000/g"            | \
+	sed -e "s/YYLMAX 200/YYLMAX 5000/g" | \
+	sed -e "s/yy/PROIO_yy/g"            | \
+	sed -e "s/input/PROIO_input/g"      | \
+	sed -e "s/unput/PROIO_unput/g"      > $(COMMDIR)/parser.c
+	@$(RM) y.tab.c
+
+$(COMMDIR)/lexer.c:	$(COMMDIR)/lexer.l
+	$(LEX) $(COMMDIR)/lexer.l
+	@sed -e "s;$(COMMDIR)/lex.yy.c;lexer.l;g" < lex.yy.c | \
+	sed -e "s/yy/PROIO_yy/g"            | \
+	sed -e "s/input/PROIO_input/g"      | \
+	sed -e "s/unput/PROIO_unput/g"      > $(COMMDIR)/lexer.c
+	@$(RM) lex.yy.c
 
 clean:
 	rm -f $(GTKDIR)/*.$(OBJSUFF)
-	rm -f $(COMMDIR)/y_tab.c
-	rm -f $(COMMDIR)/lex_yy.c
+	rm -f $(COMMDIR)/parser.c
+	rm -f $(COMMDIR)/lexer.c
 	rm -f $(COMMDIR)/*.$(OBJSUFF)
 	rm -f $(GENDIR)/*.$(OBJSUFF)
 	rm -f $(PNGDIR)/*.$(OBJSUFF)
@@ -268,9 +272,3 @@ clean:
 	rm -f $(WXWIN)/lib/libwx_$(GUI).a
 
 cleanall: clean
-
-MFTYPE=gnu
-makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(GUI)_$(MFTYPE).t
-	cd $(WXWIN)\distrib\msw\tmake
-	tmake -t $(GUI)_$(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
-	copy makefile.$(MFTYPE) $(WXWIN)\src\$(GUI)
