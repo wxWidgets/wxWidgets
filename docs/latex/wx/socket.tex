@@ -105,7 +105,8 @@ handler macro to direct events to member functions that take a
 \membersection{Construction and destruction}
 
 \helpref{wxSocketBase}{wxsocketbaseconstruct}\\
-\helpref{\destruct{wxSocketBase}}{wxsocketbasedestruct}
+\helpref{\destruct{wxSocketBase}}{wxsocketbasedestruct}\\
+\helpref{wxDestroy}{wxsocketbasedestroy}
 
 \membersection{Socket state}
 
@@ -186,7 +187,9 @@ Default constructor. Don't use it directly; instead, use
 
 \func{}{\destruct{wxSocketBase}}{\void}
 
-Destructor.
+Destructor. Do not destroy a socket using the delete operator directly;
+use \helpref{wxsocketbasedestroy} instead. Also, do not create socket
+objects in the stack.
 
 %
 % Callback
@@ -252,8 +255,8 @@ A pointer to the previous user data.
 
 This function shuts down the socket, disabling further transmission and
 reception of data; it also disables events for the socket and frees the
-associated system resources. If you destroy a socket, Close is automatically
-called.
+associated system resources. If you \helpref{Destroy}{wxsocketbasedestroy}
+a socket, Close is automatically called.
 
 \wxheading{Remark/Warning}
 
@@ -261,6 +264,22 @@ Although Close immediately disables events for the socket, it is possible
 that event messages may be waiting in the application's event queue. The
 application must therefore be prepared to handle socket event messages
 even after calling Close.
+
+%
+% Discard
+%
+\membersection{wxSocketBase::Destroy}\label{wxsocketbasedestroy}
+
+\func{void}{Destroy}{\void}
+
+Destroys the socket safely. Use this function instead of the delete operator,
+since otherwise socket events could reach the application even after the
+socket has been destroyed. To prevent this problem, this function appends
+the wxSocket to a list of object to be deleted on idle time, after all
+events have been processed. For the same reason, you should avoid creating
+socket objects in the stack.
+
+Destroy calls \helpref{Close}{wxsocketbaseclose} automatically.
 
 %
 % Discard
@@ -400,6 +419,18 @@ will be sent.
 
 Returns TRUE if the socket is initialized and ready and FALSE in other
 cases.
+
+\wxheading{Remark/Warning}
+
+For \helpref{wxSocketClient}{wxsocketclient}, Ok won't return TRUE unless
+the client is connected to a server.
+
+For \helpref{wxSocketServer}{wxsocketserver}, Ok will return TRUE if the
+server could bind to the specified address and is already listening for
+new connections.
+
+Ok does not check for IO errors; use \helpref{Error}{wxsocketbaseerror}
+instead for that purpose.
 
 %
 % RestoreState
