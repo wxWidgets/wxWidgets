@@ -2,7 +2,7 @@
 // Name:        src/common/xti.cpp
 // Purpose:     runtime metadata information (extended class info
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     27/07/03
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997 Julian Smart
@@ -37,9 +37,9 @@
 // Enum Support
 // ----------------------------------------------------------------------------
 
-wxEnumData::wxEnumData( wxEnumMemberData* data ) 
+wxEnumData::wxEnumData( wxEnumMemberData* data )
 {
-	m_members = data ; 
+	m_members = data ;
     for ( m_count = 0; m_members[m_count].m_name ; m_count++)
 		{} ;
 }
@@ -82,13 +82,13 @@ const wxChar *wxEnumData::GetEnumMemberName(int value)
 	return wxT("") ;
 }
 
-int wxEnumData::GetEnumMemberValueByIndex( int idx ) 
+int wxEnumData::GetEnumMemberValueByIndex( int idx )
 {
 	// we should cache the count in order to avoid out-of-bounds errors
 	return m_members[idx].m_value ;
 }
 
-const char * wxEnumData::GetEnumMemberNameByIndex( int idx ) 
+const char * wxEnumData::GetEnumMemberNameByIndex( int idx )
 {
 	// we should cache the count in order to avoid out-of-bounds errors
 	return m_members[idx].m_name ;
@@ -186,17 +186,17 @@ void wxStringWriteValue(wxString & , char const * const & )
 
 
 // ----------------------------------------------------------------------------
-// value streaming 
+// value streaming
 // ----------------------------------------------------------------------------
 
 // convenience function (avoids including xml headers in users code)
 
-void wxXmlAddContentToNode( wxXmlNode* node , const wxString& data ) 
+void wxXmlAddContentToNode( wxXmlNode* node , const wxString& data )
 {
-	node->AddChild(new wxXmlNode(wxXML_TEXT_NODE, "value", data ) ); 
+	node->AddChild(new wxXmlNode(wxXML_TEXT_NODE, "value", data ) );
 }
 
-wxString wxXmlGetContentFromNode( wxXmlNode *node ) 
+wxString wxXmlGetContentFromNode( wxXmlNode *node )
 {
 	if ( node->GetChildren() )
 		return node->GetChildren()->GetContent() ;
@@ -210,36 +210,36 @@ wxString wxXmlGetContentFromNode( wxXmlNode *node )
 
 // long
 
-void wxStringReadValue(const wxString &s , long &data )
+template<> void wxStringReadValue(const wxString &s , long &data )
 {
 	wxSscanf(s, _T("%ld"), &data ) ;
 }
 
-void wxStringWriteValue(wxString &s , const long &data )
+template<> void wxStringWriteValue(wxString &s , const long &data )
 {
 	s = wxString::Format("%ld", data ) ;
 }
 
-// long
+// int
 
-void wxStringReadValue(const wxString &s , int &data )
+template<> void wxStringReadValue(const wxString &s , int &data )
 {
 	wxSscanf(s, _T("%d"), &data ) ;
 }
 
-void wxStringWriteValue(wxString &s , const int &data )
+template<> void wxStringWriteValue(wxString &s , const int &data )
 {
 	s = wxString::Format("%d", data ) ;
 }
 
 // wxString
 
-void wxStringReadValue(const wxString &s , wxString &data )
+template<> void wxStringReadValue(const wxString &s , wxString &data )
 {
 	data = s ;
 }
 
-void wxStringWriteValue(wxString &s , const wxString &data )
+template<> void wxStringWriteValue(wxString &s , const wxString &data )
 {
 	s = data ;
 }
@@ -252,24 +252,24 @@ void wxStringWriteValue(wxString &s , const wxString &data )
 
 // wxPoint
 
-void wxStringReadValue(const wxString &s , wxPoint &data )
+template<> void wxStringReadValue(const wxString &s , wxPoint &data )
 {
 	wxSscanf(s, _T("%d,%d"), &data.x , &data.y ) ;
 }
 
-void wxStringWriteValue(wxString &s , const wxPoint &data )
+template<> void wxStringWriteValue(wxString &s , const wxPoint &data )
 {
 	s = wxString::Format("%d,%d", data.x , data.y ) ;
 }
 
 WX_CUSTOM_TYPE_INFO(wxPoint)
 
-void wxStringReadValue(const wxString &s , wxSize &data )
+template<> void wxStringReadValue(const wxString &s , wxSize &data )
 {
 	wxSscanf(s, _T("%d,%d"), &data.x , &data.y ) ;
 }
 
-void wxStringWriteValue(wxString &s , const wxSize &data )
+template<> void wxStringWriteValue(wxString &s , const wxSize &data )
 {
 	s = wxString::Format("%d,%d", data.x , data.y ) ;
 }
@@ -278,7 +278,7 @@ WX_CUSTOM_TYPE_INFO(wxSize)
 
 // removing header dependancy on string tokenizer
 
-void wxSetStringToArray( const wxString &s , wxArrayString &array ) 
+void wxSetStringToArray( const wxString &s , wxArrayString &array )
 {
     wxStringTokenizer tokenizer(s, wxT("| \t\n"), wxTOKEN_STRTOK);
     wxString flag;
@@ -290,7 +290,7 @@ void wxSetStringToArray( const wxString &s , wxArrayString &array )
 }
 
 // ----------------------------------------------------------------------------
-// wxClassInfo 
+// wxClassInfo
 // ----------------------------------------------------------------------------
 
 
@@ -314,7 +314,7 @@ void wxClassInfo::Unregister(const char *WXUNUSED(name))
 const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName)
 {
     const wxPropertyInfo* info = FindPropertyInfo( PropertyName ) ;
-	
+
 	if ( info )
 		return info->GetAccessor() ;
 
