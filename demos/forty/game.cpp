@@ -410,8 +410,8 @@ void Game::LButtonDblClk(wxDC& dc, int x, int y)
 			{
 				for(i = 0; i < 4; i++)
 				{
-					Card* m_topCard;
-					if ((m_topCard = m_foundations[i]->GetTopCard()))
+					Card* m_topCard = m_foundations[i]->GetTopCard();
+					if ( m_topCard )
                     {
 						if (m_topCard->GetSuit() == card->GetSuit() &&
                             m_foundations[i + 4] != pile &&

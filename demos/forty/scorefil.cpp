@@ -138,8 +138,8 @@ void ScoreFile::ReadPlayersScore(
 						int& games,
 						int& score)
 {
-	long check;
-	long myWins, myGames, myScore;
+	long check = 0;
+	long myWins = 0, myGames = 0, myScore = 0;
 
 	games = wins = score = 0;
 

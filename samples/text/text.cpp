@@ -29,7 +29,7 @@
 #endif
 
 #if wxUSE_FILE
-	#include "wx/file.h"
+    #include "wx/file.h"
 #endif
 
 #if wxUSE_TOOLTIPS
@@ -159,7 +159,7 @@ enum
     TEXT_QUIT = 100,
     TEXT_ABOUT,
     TEXT_LOAD,
-	TEXT_SAVE,
+    TEXT_SAVE,
     TEXT_CLEAR,
 
     // clipboard menu
@@ -374,6 +374,13 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
 {
     LogEvent( _T("Char"), event);
 
+    wxWindow *win = (wxWindow *)event.GetEventObject();
+    const wxChar *data = (const wxChar *)(win->GetClientData());
+    if ( data )
+    {
+        wxLogMessage(_T(" (from control '%s')"), data);
+    }
+
 /*  How are we supposed to test wxTE_PROCESS_TAB with this code?
 
     if ( event.KeyCode() == WXK_TAB )
@@ -390,7 +397,7 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
 
 void MyTextCtrl::OnKeyUp(wxKeyEvent& event)
 {
-    LogEvent( _("Key up"), event);
+    LogEvent( _T("Key up"), event);
 
     event.Skip();
 }
@@ -446,10 +453,10 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
         case WXK_F5:
             // insert a blank line
             WriteText("\n");
-			break;
+            break;
 
-		default:
-			LogEvent( _("Key down"), event);
+        default:
+            LogEvent( wxT("Key down"), event);
     }
 
     event.Skip();
@@ -503,11 +510,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_multitext->SetToolTip("Press F1 here for statitics, F4 for capture and uncapture mouse.");
 #endif
 
-    m_tab = new MyTextCtrl( this, -1, "Multiline, allow <TAB> processing.",
+    m_tab = new MyTextCtrl( this, 100, "Multiline, allow <TAB> processing.",
       wxPoint(180,90), wxSize(240,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
+    m_tab->SetClientData(_T("tab"));
 
-    m_enter = new MyTextCtrl( this, -1, "Multiline, allow <ENTER> processing.",
+    m_enter = new MyTextCtrl( this, 100, "Multiline, allow <ENTER> processing.",
       wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE);
+    m_enter->SetClientData(_T("enter"));
 
     m_textrich = new MyTextCtrl(this, -1, "Allows more than 30Kb of text\n"
                                 "(even under broken Win9x)",

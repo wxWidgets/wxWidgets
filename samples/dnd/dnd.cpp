@@ -89,6 +89,81 @@ public:
 IMPLEMENT_APP(DnDApp);
 
 // ----------------------------------------------------------------------------
+// Define canvas class to show a bitmap
+// ----------------------------------------------------------------------------
+
+class DnDCanvasBitmap : public wxScrolledWindow
+{
+public:
+    DnDCanvasBitmap(wxWindow *parent) : wxScrolledWindow(parent) { }
+
+    void SetBitmap(const wxBitmap& bitmap)
+    {
+        m_bitmap = bitmap;
+
+        SetScrollbars(10, 10,
+                      m_bitmap.GetWidth() / 10, m_bitmap.GetHeight() / 10);
+
+        Refresh();
+    }
+
+    void OnPaint(wxPaintEvent& event)
+    {
+        wxPaintDC dc(this);
+
+        if ( m_bitmap.Ok() )
+        {
+            PrepareDC(dc);
+
+            dc.DrawBitmap(m_bitmap, 0, 0);
+        }
+    }
+
+private:
+    wxBitmap m_bitmap;
+
+    DECLARE_EVENT_TABLE()
+};
+
+#ifdef USE_METAFILES
+
+// and the same thing fo metafiles
+class DnDCanvasMetafile : public wxScrolledWindow
+{
+public:
+    DnDCanvasMetafile(wxWindow *parent) : wxScrolledWindow(parent) { }
+
+    void SetMetafile(const wxMetafile& metafile)
+    {
+        m_metafile = metafile;
+
+        SetScrollbars(10, 10,
+                      m_metafile.GetWidth() / 10, m_metafile.GetHeight() / 10);
+
+        Refresh();
+    }
+
+    void OnPaint(wxPaintEvent& event)
+    {
+        wxPaintDC dc(this);
+
+        if ( m_metafile.Ok() )
+        {
+            PrepareDC(dc);
+
+            m_metafile.Play(&dc);
+        }
+    }
+
+private:
+    wxMetafile m_metafile;
+
+    DECLARE_EVENT_TABLE()
+};
+
+#endif // USE_METAFILES
+
+// ----------------------------------------------------------------------------
 // Define a new frame type for the main frame
 // ----------------------------------------------------------------------------
 
@@ -135,7 +210,6 @@ private:
           *m_pLogPrev;
 
     wxString  m_strText;
-    wxBitmap  m_bitmap;
 };
 
 // ----------------------------------------------------------------------------
@@ -438,16 +512,19 @@ public:
             return m_shape->GetDataSize();
         }
 #ifdef USE_METAFILES
-        else if ( format == wxDF_METAFILE )
+        else if ( m_dobjMetaFile.IsSupported(format) )
         {
             if ( !m_hasMetaFile )
                 CreateMetaFile();
 
-            return m_dobjMetaFile.GetDataSize();
+            return m_dobjMetaFile.GetDataSize(format);
         }
 #endif // Windows
         else
         {
+            wxASSERT_MSG( m_dobjBitmap.IsSupported(format),
+                          "unexpected format" );
+
             if ( !m_hasBitmap )
                 CreateBitmap();
 
@@ -464,16 +541,19 @@ public:
             return TRUE;
         }
 #ifdef USE_METAFILES
-        else if ( format == wxDF_METAFILE )
+        else if ( m_dobjMetaFile.IsSupported(format) )
         {
             if ( !m_hasMetaFile )
                 CreateMetaFile();
 
-            return m_dobjMetaFile.GetDataHere(pBuf);
+            return m_dobjMetaFile.GetDataHere(format, pBuf);
         }
 #endif // Windows
         else
         {
+            wxASSERT_MSG( m_dobjBitmap.IsSupported(format),
+                          "unexpected format" );
+
             if ( !m_hasBitmap )
                 CreateBitmap();
 
@@ -628,6 +708,16 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// functions prototypes
+// ----------------------------------------------------------------------------
+
+static void ShowBitmap(const wxBitmap& bitmap);
+
+#ifdef USE_METAFILES
+static void ShowMetaFile(const wxMetaFile& metafile);
+#endif // USE_METAFILES
+
+// ----------------------------------------------------------------------------
 // IDs for the menu commands
 // ----------------------------------------------------------------------------
 
@@ -696,6 +786,16 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(DnDShapeDialog, wxDialog)
     EVT_BUTTON(Button_Colour, DnDShapeDialog::OnColour)
 END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(DnDCanvasBitmap, wxScrolledWindow)
+    EVT_PAINT(DnDCanvasBitmap::OnPaint)
+END_EVENT_TABLE()
+
+#ifdef USE_METAFILES
+BEGIN_EVENT_TABLE(DnDCanvasMetafile, wxScrolledWindow)
+    EVT_PAINT(DnDCanvasMetafile::OnPaint)
+END_EVENT_TABLE()
+#endif // USE_METAFILES
 
 // ============================================================================
 // implementation
@@ -863,15 +963,7 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxPaintDC dc(this);
     dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, "charter" ) );
-    dc.DrawText( "Drag text from here!", 20, h-50 );
-
-    if ( m_bitmap.Ok() )
-    {
-        // 4/5 is 80% taken by other windows, 20 is arbitrary margin
-        dc.DrawBitmap(m_bitmap,
-                      w - m_bitmap.GetWidth() - 20,
-                      (4*h)/5 + 20);
-    }
+    dc.DrawText( "Drag text from here!", 100, h-50 );
 }
 
 void DnDFrame::OnUpdateUIPasteText(wxUpdateUIEvent& event)
@@ -1114,9 +1206,11 @@ void DnDFrame::OnPasteBitmap(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        wxLogMessage(_T("Bitmap pasted from the clipboard") );
-        m_bitmap = data.GetBitmap();
-        Refresh();
+        const wxBitmap& bmp = data.GetBitmap();
+
+        wxLogMessage(_T("Bitmap %dx%d pasted from the clipboard"),
+                     bmp.GetWidth(), bmp.GetHeight());
+        ShowBitmap(bmp);
     }
 
     wxTheClipboard->Close();
@@ -1146,9 +1240,12 @@ void DnDFrame::OnPasteMetafile(wxCommandEvent& WXUNUSED(event))
         }
         else
         {
-            wxLogMessage(_T("Metafile pasted from the clipboard"));
+            const wxMetaFile& mf = data.GetMetafile();
 
-            // TODO: show it somewhere
+            wxLogMessage(_T("Metafile %dx%d pasted from the clipboard"),
+                         mf.GetWidth(), mf.GetHeight());
+
+            ShowMetaFile(mf);
         }
     }
 
@@ -1527,7 +1624,6 @@ void DnDShapeFrame::OnCopyShape(wxCommandEvent& event)
 {
     if ( m_shape )
     {
-#if 1
         wxClipboardLocker clipLocker;
         if ( !clipLocker )
         {
@@ -1537,22 +1633,6 @@ void DnDShapeFrame::OnCopyShape(wxCommandEvent& event)
         }
 
         wxTheClipboard->AddData(new DnDShapeDataObject(m_shape));
-#else
-        // VZ: temp test code, will remove
-        wxOpenClipboard();
-
-        wxMetaFileDC dcMF;
-
-        m_shape->Draw(dcMF);
-
-        wxMetafile *mf = dcMF.Close();
-
-        wxPoint pos = m_shape->GetPosition();
-        wxSize size = m_shape->GetSize();
-        wxSetClipboardData(wxDF_METAFILE, mf, pos.x + size.x, pos.y + size.y);
-
-        wxCloseClipboard();
-#endif
     }
 }
 
@@ -1639,20 +1719,20 @@ DnDShape *DnDShape::New(const void *buf)
 
 void DnDShapeDataObject::CreateMetaFile() const
 {
-    wxMetaFileDC dcMF;
+    wxPoint pos = m_shape->GetPosition();
+    wxSize size = m_shape->GetSize();
+
+    wxMetaFileDC dcMF(wxEmptyString, pos.x + size.x, pos.y + size.y);
 
     m_shape->Draw(dcMF);
 
     wxMetafile *mf = dcMF.Close();
 
-    wxPoint pos = m_shape->GetPosition();
-    wxSize size = m_shape->GetSize();
-    mf->SetWidth(pos.x + size.x);
-    mf->SetHeight(pos.y + size.y);
-
     DnDShapeDataObject *self = (DnDShapeDataObject *)this; // const_cast
     self->m_dobjMetaFile.SetMetafile(*mf);
     self->m_hasMetaFile = TRUE;
+
+    delete mf;
 }
 
 #endif // Windows
@@ -1676,3 +1756,40 @@ void DnDShapeDataObject::CreateBitmap() const
     self->m_hasBitmap = TRUE;
 }
 
+// ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
+
+static void ShowBitmap(const wxBitmap& bitmap)
+{
+    wxFrame *frame = new wxFrame(NULL, -1, _T("Bitmap view"));
+    frame->CreateStatusBar();
+    DnDCanvasBitmap *canvas = new DnDCanvasBitmap(frame);
+    canvas->SetBitmap(bitmap);
+
+    int w = bitmap.GetWidth(),
+        h = bitmap.GetHeight();
+    frame->SetStatusText(wxString::Format(_T("%dx%d"), w, h));
+
+    frame->SetClientSize(w > 100 ? 100 : w, h > 100 ? 100 : h);
+    frame->Show();
+}
+
+#ifdef USE_METAFILES
+
+static void ShowMetaFile(const wxMetaFile& metafile)
+{
+    wxFrame *frame = new wxFrame(NULL, -1, _T("Metafile view"));
+    frame->CreateStatusBar();
+    DnDCanvasMetafile *canvas = new DnDCanvasMetafile(frame);
+    canvas->SetMetafile(metafile);
+
+    wxSize size = metafile.GetSize();
+    frame->SetStatusText(wxString::Format(_T("%dx%d"), size.x, size.y));
+
+    frame->SetClientSize(size.x > 100 ? 100 : size.x,
+                         size.y > 100 ? 100 : size.y);
+    frame->Show();
+}
+
+#endif // USE_METAFILES
