@@ -29,7 +29,7 @@ CFLAGS =
 !endif
 # Standard preprocessor flags (common for CC and CXX) 
 !ifndef CPPFLAGS
-CPPFLAGS = 
+CPPFLAGS = -I$(BCCDIR)\include
 !endif
 # C++ compiler 
 !ifndef CXX
