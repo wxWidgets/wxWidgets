@@ -26,86 +26,249 @@ MAKE_CONST_WXSTRING(MessageBoxCaptionStr);
 //---------------------------------------------------------------------------
 
 
+DocStr(wxColourData,
+       "This class holds a variety of information related to colour dialogs.");
+    
 class wxColourData : public wxObject {
 public:
-    wxColourData();
+    DocCtorStr(
+        wxColourData(),
+        "Constructor, sets default values.");
+    
     ~wxColourData();
 
-    bool GetChooseFull();
-    wxColour GetColour();
-    wxColour GetCustomColour(int i);
-    void SetChooseFull(int flag);
-    void SetColour(const wxColour& colour);
-    void SetCustomColour(int i, const wxColour& colour);
+    
+    DocDeclStr(
+        bool , GetChooseFull(),
+        "Under Windows, determines whether the Windows colour dialog will display\n"
+        "the full dialog with custom colour selection controls. Has no meaning\n"
+        "under other platforms.  The default value is true.");
+    
+    DocDeclStr(
+        wxColour , GetColour(),
+        "Gets the colour (pre)selected by the dialog.");
+    
+    DocDeclStr(
+        wxColour , GetCustomColour(int i),
+        "Gets the i'th custom colour associated with the colour dialog. i should\n"
+        "be an integer between 0 and 15. The default custom colours are all white.");
+    
+    DocDeclStr(
+        void , SetChooseFull(int flag),
+        "Under Windows, tells the Windows colour dialog to display the full dialog\n"
+        "with custom colour selection controls. Under other platforms, has no effect.\n"
+        "The default value is true.");
+    
+    DocDeclStr(
+        void , SetColour(const wxColour& colour),
+        "Sets the default colour for the colour dialog.  The default colour is black.");
+    
+    DocDeclStr(
+        void , SetCustomColour(int i, const wxColour& colour),
+        "Sets the i'th custom colour for the colour dialog. i should be an integer\n"
+        "between 0 and 15. The default custom colours are all white.");
+    
 };
 
+
+DocStr(wxColourDialog,
+       "This class represents the colour chooser dialog.");
 
 class wxColourDialog : public wxDialog {
 public:
     %pythonAppend wxColourDialog   "self._setOORInfo(self)"
 
-    wxColourDialog(wxWindow* parent, wxColourData* data = NULL);
+   DocCtorStr(
+       wxColourDialog(wxWindow* parent, wxColourData* data = NULL),
+       "Constructor. Pass a parent window, and optionally a ColourData, which\n"
+       "will be copied to the colour dialog's internal ColourData instance.");
 
-    wxColourData& GetColourData();
-    int ShowModal();
+    DocDeclStr(
+        wxColourData& , GetColourData(),
+        "Returns a reference to the ColourData used by the dialog.");
 };
 
 
 //--------------------------------------------------------------------------------
 
+
+DocStr(wxDirDialog,
+       "This class represents the directory chooser dialog.");
+
+RefDoc(wxDirDialog, "
+ Styles
+    wxDD_NEW_DIR_BUTTON     Add \"Create new directory\" button and allow
+                            directory names to be editable. On Windows the new
+                            directory button is only available with recent
+                            versions of the common dialogs.");
+
 class wxDirDialog : public wxDialog {
 public:
     %pythonAppend wxDirDialog   "self._setOORInfo(self)"
     
-    wxDirDialog(wxWindow* parent,
-                const wxString& message = wxPyDirSelectorPromptStr,
-                const wxString& defaultPath = wxPyEmptyString,
-                long style = 0,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                const wxString& name = wxPyDirDialogNameStr);
+    DocCtorStr(
+        wxDirDialog(wxWindow* parent,
+                    const wxString& message = wxPyDirSelectorPromptStr,
+                    const wxString& defaultPath = wxPyEmptyString,
+                    long style = 0,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    const wxString& name = wxPyDirDialogNameStr),
+        "Constructor.  Use ShowModal method to show the dialog.");
 
 
-    wxString GetPath();
-    wxString GetMessage();
-    long GetStyle();
-    void SetMessage(const wxString& message);
-    void SetPath(const wxString& path);
-    int ShowModal();
+    DocDeclStr(
+        wxString , GetPath(),
+        "Returns the default or user-selected path.");
+    
+    DocDeclStr(
+        wxString , GetMessage(),
+        "Returns the message that will be displayed on the dialog.");
+    
+    DocDeclStr(
+        long , GetStyle(),
+        "Returns the dialog style.");
+    
+    DocDeclStr(
+        void , SetMessage(const wxString& message),
+        "Sets the message that will be displayed on the dialog.");
+    
+    DocDeclStr(
+        void , SetPath(const wxString& path),
+        "Sets the default path.");
+    
 };
 
 
 //---------------------------------------------------------------------------
 
+DocStr(wxFileDialog,
+       "This class represents the file chooser dialog.");
+
+RefDoc(wxFileDialog, "
+In Windows, this is the common file selector dialog. In X, this is a file
+selector box with somewhat less functionality. The path and filename are
+distinct elements of a full file pathname. If path is \"\", the current
+directory will be used. If filename is \"\", no default filename will be
+supplied. The wildcard determines what files are displayed in the file
+selector, and file extension supplies a type extension for the required
+filename.
+
+Both the X and Windows versions implement a wildcard filter. Typing a filename
+containing wildcards (*, ?) in the filename text item, and clicking on Ok,
+will result in only those files matching the pattern being displayed. The
+wildcard may be a specification for multiple types of file with a description
+for each, such as:
+
+   \"BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif\"
+
+ Styles
+    wx.OPEN              This is an open dialog.
+
+    wx.SAVE              This is a save dialog.
+
+    wx.HIDE_READONLY     For open dialog only: hide the checkbox allowing to
+                         open the file in read-only mode.
+
+    wx.OVERWRITE_PROMPT  For save dialog only: prompt for a confirmation if a
+                         file will be overwritten.
+
+    wx.MULTIPLE          For open dialog only: allows selecting multiple files.
+
+    wx.CHANGE_DIR        Change the current working directory to the directory
+                         where the file(s) chosen by the user are.
+");
+
+
+
 class wxFileDialog : public wxDialog {
 public:
     %pythonAppend wxFileDialog   "self._setOORInfo(self)"
+
+    DocCtorStr(
+        wxFileDialog(wxWindow* parent,
+                     const wxString& message = wxPyFileSelectorPromptStr,
+                     const wxString& defaultDir = wxPyEmptyString,
+                     const wxString& defaultFile = wxPyEmptyString,
+                     const wxString& wildcard = wxPyFileSelectorDefaultWildcardStr,
+                     long style = 0,
+                     const wxPoint& pos = wxDefaultPosition),
+        "Constructor.  Use ShowModal method to show the dialog.");
+
+
+    DocDeclStr(
+        void , SetMessage(const wxString& message),
+        "Sets the message that will be displayed on the dialog.");
     
-    wxFileDialog(wxWindow* parent,
-                 const wxString& message = wxPyFileSelectorPromptStr,
-                 const wxString& defaultDir = wxPyEmptyString,
-                 const wxString& defaultFile = wxPyEmptyString,
-                 const wxString& wildcard = wxPyFileSelectorDefaultWildcardStr,
-                 long style = 0,
-                 const wxPoint& pos = wxDefaultPosition);
+    DocDeclStr(
+        void , SetPath(const wxString& path),
+        "Sets the path (the combined directory and filename that will\n"
+        "be returned when the dialog is dismissed).");
+    
+    DocDeclStr(
+        void , SetDirectory(const wxString& dir),
+        "Sets the default directory.");
+    
+    DocDeclStr(
+        void , SetFilename(const wxString& name),
+        "Sets the default filename.");
+    
+    DocDeclStr(
+        void , SetWildcard(const wxString& wildCard),
+        "Sets the wildcard, which can contain multiple file types, for example:\n"
+        "    \"BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif\"");
+    
+    DocDeclStr(
+        void , SetStyle(long style),
+        "Sets the dialog style.");
+    
+    DocDeclStr(
+        void , SetFilterIndex(int filterIndex),
+        "Sets the default filter index, starting from zero.");
+    
+
+    DocDeclStr(
+        wxString , GetMessage() const,
+        "Returns the message that will be displayed on the dialog.");
+    
+    DocDeclStr(
+        wxString , GetPath() const,
+        "Returns the full path (directory and filename) of the selected file.");
+    
+    DocDeclStr(
+        wxString , GetDirectory() const,
+        "Returns the default directory.");
+    
+    DocDeclStr(
+        wxString , GetFilename() const,
+        "Returns the default filename.");
+    
+    DocDeclStr(
+        wxString , GetWildcard() const,
+        "Returns the file dialog wildcard.");
+    
+    DocDeclStr(
+        long , GetStyle() const,
+        "Returns the dialog style.");
+    
+    DocDeclStr(
+        int , GetFilterIndex() const,
+        "Returns the index into the list of filters supplied, optionally, in\n"
+        "the wildcard parameter. Before the dialog is shown, this is the index\n"
+        "which will be used when the dialog is first displayed. After the dialog\n"
+        "is shown, this is the index selected by the user.");
 
 
-    void SetMessage(const wxString& message);
-    void SetPath(const wxString& path);
-    void SetDirectory(const wxString& dir);
-    void SetFilename(const wxString& name);
-    void SetWildcard(const wxString& wildCard);
-    void SetStyle(long style);
-    void SetFilterIndex(int filterIndex);
+    DocStr(GetFilenames,
+        "Returns a list of filenames chosen in the dialog.  This function should\n"
+        "only be used with the dialogs which have wx.MULTIPLE style, use\n"
+        "GetFilename for the others.");
 
-    wxString GetMessage() const;
-    wxString GetPath() const;
-    wxString GetDirectory() const;
-    wxString GetFilename() const;
-    wxString GetWildcard() const;
-    long GetStyle() const;
-    int GetFilterIndex() const;
-
+    DocStr(GetPaths,
+        "Fills the array paths with the full paths of the files chosen. This\n"
+        "function should only be used with the dialogs which have wx.MULTIPLE style,\n"
+        "use GetPath for the others.");   
+    
     %extend {
         PyObject* GetFilenames() {
             wxArrayString arr;
