@@ -19,13 +19,11 @@
 
 #include "wx/stubs/statusbr.h"
 
-#if     !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBarXX, wxStatusBar);
 
 BEGIN_EVENT_TABLE(wxStatusBarXX, wxStatusBar)
     EVT_SIZE(wxStatusBarXX::OnSize)
 END_EVENT_TABLE()
-#endif  //USE_SHARED_LIBRARY
 
 
 // ============================================================================
