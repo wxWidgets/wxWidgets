@@ -604,7 +604,7 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
 
   region->GetSize(&w, &h);
 
-  wxStringList *stringList = oglFormatText(dc, s, (w-5), (h-5), region->GetFormatMode());
+  wxStringList *stringList = oglFormatText(dc, s, (w-2*m_textMarginX), (h-2*m_textMarginY), region->GetFormatMode());
   node = (wxNode*)stringList->GetFirst();
   while (node)
   {
@@ -623,7 +623,7 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
       (m_regions.GetCount() == 1) && !GraphicsInSizeToContents)
   {
     oglGetCentredTextExtent(dc, &(region->GetFormattedText()), m_xpos, m_ypos, w, h, &actualW, &actualH);
-    if ((actualW+m_textMarginX != w ) || (actualH+m_textMarginY != h))
+    if ((actualW+2*m_textMarginX != w ) || (actualH+2*m_textMarginY != h))
     {
       // If we are a descendant of a composite, must make sure the composite gets
       // resized properly
@@ -636,7 +636,7 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
 
         wxCompositeShape *composite = (wxCompositeShape *)topAncestor;
         composite->Erase(dc);
-        SetSize(actualW+m_textMarginX, actualH+m_textMarginY);
+        SetSize(actualW+2*m_textMarginX, actualH+2*m_textMarginY);
         Move(dc, m_xpos, m_ypos);
         composite->CalculateSize();
         if (composite->Selected())
@@ -653,15 +653,15 @@ void wxShape::FormatText(wxDC& dc, const wxString& s, int i)
       else
       {
         Erase(dc);
-        SetSize(actualW+m_textMarginX, actualH+m_textMarginY);
+        SetSize(actualW+2*m_textMarginX, actualH+2*m_textMarginY);
         Move(dc, m_xpos, m_ypos);
       }
-      SetSize(actualW+m_textMarginX, actualH+m_textMarginY);
+      SetSize(actualW+2*m_textMarginX, actualH+2*m_textMarginY);
       Move(dc, m_xpos, m_ypos);
       EraseContents(dc);
     }
   }
-  oglCentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, actualW, actualH, region->GetFormatMode());
+  oglCentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, actualW-2*m_textMarginX, actualH-2*m_textMarginY, region->GetFormatMode());
   m_formatted = TRUE;
 }
 
@@ -677,7 +677,7 @@ void wxShape::Recentre(wxDC& dc)
     if (node)
     {
       wxShapeRegion *region = (wxShapeRegion *)node->GetData();
-      oglCentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, w, h, region->GetFormatMode());
+      oglCentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, w-2*m_textMarginX, h-2*m_textMarginY, region->GetFormatMode());
     }
   }
 }
@@ -923,12 +923,12 @@ void wxShape::OnDrawContents(wxDC& dc)
     dc.SetBackgroundMode(wxTRANSPARENT);
     if (!m_formatted)
     {
-      oglCentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, bound_x, bound_y, region->GetFormatMode());
+      oglCentreText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, bound_x-2*m_textMarginX, bound_y-2*m_textMarginY, region->GetFormatMode());
       m_formatted = TRUE;
     }
     if (!GetDisableLabel())
     {
-      oglDrawFormattedText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, bound_x, bound_y, region->GetFormatMode());
+      oglDrawFormattedText(dc, &(region->GetFormattedText()), m_xpos, m_ypos, bound_x-2*m_textMarginX, bound_y-2*m_textMarginY, region->GetFormatMode());
     }
 }
 

@@ -287,9 +287,6 @@ demos/life/life.dsw
 demos/poem/poem.dsp
 demos/poem/poem.dsw
 
-utils/dialoged/src/DialogEdVC.dsp
-utils/dialoged/src/DialogEdVC.dsw
-
 utils/tex2rtf/src/Tex2RTFVC.dsp
 utils/tex2rtf/src/Tex2RTFVC.dsw
 

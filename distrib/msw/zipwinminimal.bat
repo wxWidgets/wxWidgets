@@ -51,8 +51,6 @@ erase /XY include\wx\generic\printps.cpp include\wx\generic\fontdlgg.h include\w
 erase /XY include\wx\generic\mdig.h src\generic\mdig.cpp
 erase /XY include\wx\*cw*.h
 
-erase /SXY docs\html\dialoged docs\html\tex2rtf
-
 cd %dest%
 
 erase wxMSW-%version%-Minimal.zip

@@ -47,8 +47,6 @@ cd %WXDIR%\demos
 erase /S *.exe
 cd %WXDIR%\contrib\samples
 erase /S *.exe
-cd %WXDIR%\utils\dialoged\src
-erase /S *.exe
 cd %WXDIR%\utils\tex2rtf\src
 erase /S *.exe
 
@@ -124,13 +122,6 @@ nmake -f makefile.vc FINAL=1
 copy *.exe %BUILDDEST%\VC6Release
 nmake -f makefile.vc clean FINAL=1
 cd %WXDIR%\contrib\src\ogl
-nmake -f makefile.vc clean FINAL=1
-
-Rem Compile Dialog Editor
-cd %WXDIR%\utils\dialoged\src
-nmake -f makefile.vc clean FINAL=1
-nmake -f makefile.vc FINAL=1
-copy *.exe %BUILDDEST%\VC6Release
 nmake -f makefile.vc clean FINAL=1
 
 Rem Compile Tex2RTF
@@ -276,13 +267,6 @@ make -f makefile.b32 clean FINAL=1
 cd %WXDIR%\contrib\src\ogl
 make -f makefile.b32 clean FINAL=1
 
-Rem Compile Dialog Editor
-cd %WXDIR%\utils\dialoged\src
-make -f makefile.b32 clean FINAL=1
-make -f makefile.b32 FINAL=1
-copy *.exe %BUILDDEST%\BC55Release
-make -f makefile.b32 clean FINAL=1
-
 Rem Compile Tex2RTF
 cd %WXDIR%\utils\tex2rtf\src
 make -f makefile.b32 clean FINAL=1
@@ -408,13 +392,6 @@ make -f makefile.g95 clean FINAL=1
 cd %WXDIR%\contrib\src\ogl
 make -f makefile.g95 clean FINAL=1
 
-Rem Compile Dialog Editor
-cd %WXDIR%\utils\dialoged\src
-make -f makefile.g95 clean FINAL=1
-make -f makefile.g95 FINAL=1
-copy *.exe %BUILDDEST%\Cygwin11Release
-make -f makefile.g95 clean FINAL=1
-
 Rem Compile Tex2RTF
 cd %WXDIR%\utils\tex2rtf\src
 make -f makefile.g95 clean FINAL=1
@@ -486,13 +463,6 @@ make -f makefile.g95 FINAL=1
 copy *.exe %BUILDDEST%\Ming2952Release
 make -f makefile.g95 clean FINAL=1
 cd %WXDIR%\contrib\src\ogl
-make -f makefile.g95 clean FINAL=1
-
-Rem Compile Dialog Editor
-cd %WXDIR%\utils\dialoged\src
-make -f makefile.g95 clean FINAL=1
-make -f makefile.g95 FINAL=1
-copy *.exe %BUILDDEST%\Ming2952Release
 make -f makefile.g95 clean FINAL=1
 
 Rem Compile Tex2RTF

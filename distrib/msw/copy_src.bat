@@ -201,40 +201,6 @@ copy penguin.lwo \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
 copy mondrian.ico \wxmsw_dist\wxMSW\utils\glcanvas\samples\penguin
 cd ..\..\..
 
-echo DialogEd..
-
-cd dialoged\src
-md \wxmsw_dist\wxMSW\utils\dialoged
-md \wxmsw_dist\wxMSW\utils\dialoged\src
-copy Makefile.* \wxmsw_dist\wxMSW\utils\dialoged\src
-copy dialoged.def \wxmsw_dist\wxMSW\utils\dialoged\src
-copy dialoged.rc \wxmsw_dist\wxMSW\utils\dialoged\src
-copy dialoged.ico \wxmsw_dist\wxMSW\utils\dialoged\src
-copy dialoged.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
-copy dlghndlr.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
-copy edlist.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
-copy edtree.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
-copy reseditr.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
-copy reswrite.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
-copy symbtabl.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
-copy winprop.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
-copy winstyle.cpp \wxmsw_dist\wxMSW\utils\dialoged\src
-copy dialoged.h \wxmsw_dist\wxMSW\utils\dialoged\src
-copy dlghndlr.h \wxmsw_dist\wxMSW\utils\dialoged\src
-copy edlist.h \wxmsw_dist\wxMSW\utils\dialoged\src
-copy edtree.h \wxmsw_dist\wxMSW\utils\dialoged\src
-copy reseditr.h \wxmsw_dist\wxMSW\utils\dialoged\src
-copy symbtabl.h \wxmsw_dist\wxMSW\utils\dialoged\src
-copy winprop.h \wxmsw_dist\wxMSW\utils\dialoged\src
-copy winstyle.h \wxmsw_dist\wxMSW\utils\dialoged\src
-
-cd bitmaps
-md \wxmsw_dist\wxMSW\utils\dialoged\src\bitmaps
-copy *.bmp \wxmsw_dist\wxMSW\utils\dialoged\src\bitmaps
-copy *.ico \wxmsw_dist\wxMSW\utils\dialoged\src\bitmaps
-cd ..\..\..
-
-
 cd ..
 
 echo Samples dir..

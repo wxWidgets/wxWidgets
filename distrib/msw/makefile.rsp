@@ -175,6 +175,5 @@ src/png/scripts/descrip.mms
 src/unix/descrip.mms
 src/zlib/descrip.mms
 src/regex/descrip.mms
-utils/dialoged/src/descrip.mms
 utils/helpview/src/descrip.mms
 utils/tex2rtf/src/descrip.mms

@@ -99,9 +99,6 @@ build_docs() {
     echo "Building wxWindows documents"
     nmake -f makefile.vc cleandocs docs
 
-    cd "$SRC/utils/dialoged/src"
-    nmake -f makefile.vc html htmlhelp htb hlp pdfrtf
-
     cd "$SRC/utils/tex2rtf/src"
     nmake -f makefile.vc html htmlhelp htb hlp pdfrtf
 
@@ -119,7 +116,6 @@ build_pdf() {
     echo "Building wxWindows PDF documents"
     if [ -e "$WORDEXE" ]; then
         "$WORDEXE" "$WXWIN\\docs\\pdf\\wx.rtf"
-        "$WORDEXE" "$WXWIN\\docs\\pdf\\dialoged.rtf"
         "$WORDEXE" "$WXWIN\\docs\\pdf\\tex2rtf.rtf"
         "$WORDEXE" "$WXWIN\\contrib\\docs\\pdf\\ogl.rtf"
         "$WORDEXE" "$WXWIN\\contrib\\docs\\mmedia\\ogl.rtf"
@@ -136,15 +132,6 @@ build_wxwin_vc() {
     echo Building wxWindows Release library in `pwd`
     echo Command: msdev wxvc.dsw /useenv /make "wxvc - Win32 Release" /rebuild
     msdev wxvc.dsw /useenv /make "wxvc - Win32 Release" /rebuild | egrep -v "$WARNINGS"
-}
-
-build_dialog_editor() {
-    echo "---------------------------------"
-    echo "Building Dialog Editor using VC++"
-    cd "$SRC/utils/dialoged/src"
-    msdev DialogEdVC.dsw /useenv /make "DialogEdVC - Win32 Release" /rebuild | egrep -v "$WARNINGS" | tee $TMPDIR/buildlog.txt
-
-    check_compile "Dialog Editor"
 }
 
 build_tex2rtf() {
@@ -166,15 +153,11 @@ build_life() {
 }
 
 build_executables() {
-    build_dialog_editor
     build_tex2rtf
     build_life
 }
 
 copy_files() {
-    cp "$SRC/utils/dialoged/src/Release/dialoged.exe" "$SRC/bin"
-    cp "$SRC/docs/winhelp/dialoged.hlp" "$SRC/docs/winhelp/dialoged.cnt" "$SRC/bin"
-
     cp "$SRC/utils/tex2rtf/src/Release/tex2rtf.exe" "$SRC/bin"
     cp "$SRC/docs/winhelp/tex2rtf.hlp" "$SRC/docs/winhelp/tex2rtf.cnt" "$SRC/bin"
 

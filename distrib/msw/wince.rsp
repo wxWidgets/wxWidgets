@@ -271,9 +271,6 @@ demos/life/lifeCE.vcw
 demos/poem/poemCE.vcp
 demos/poem/poemCE.vcw
 
-utils/dialoged/src/DialogEdCE.vcp
-utils/dialoged/src/DialogEdCE.vcw
-
 utils/tex2rtf/src/Tex2RTFCE.vcp
 utils/tex2rtf/src/Tex2RTFCE.vcw
 

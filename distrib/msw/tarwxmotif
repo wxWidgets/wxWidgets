@@ -38,7 +38,7 @@ rm -f $2/tiff.tgz
 echo Tarring...
 
 ### wxMotif
-ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/utilmake.rsp $1/distrib/msw/jpeg.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/wx_html.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/utils.rsp` > /tmp/wxmotif.txt
+ls `cat $1/distrib/msw/generic.rsp $1/distrib/msw/motif.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/utilmake.rsp $1/distrib/msw/jpeg.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/wx_html.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/utils.rsp` > /tmp/wxmotif.txt
 tar cvf $2/wxMotif-${WXVER}.tar -T /tmp/wxmotif.txt
 gzip $2/wxMotif-${WXVER}.tar
 mv $2/wxMotif-${WXVER}.tar.gz $2/wxMotif-${WXVER}.tgz

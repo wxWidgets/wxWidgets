@@ -76,9 +76,6 @@ zip -u -@ `$CYGPATHPROGW $DEST/wxMac-$VERSION.zip` < temp.txt
 expandlines $SRC/distrib/msw/tex2rtf.rsp temp.txt
 zip -u -@ `$CYGPATHPROGW $DEST/wxMac-$VERSION.zip` < temp.txt
 
-expandlines $SRC/distrib/msw/dialoged.rsp temp.txt
-zip -u -@ `$CYGPATHPROGW $DEST/wxMac-$VERSION.zip` < temp.txt
-
 expandlines $SRC/distrib/msw/ogl.rsp temp.txt
 zip -u -@ `$CYGPATHPROGW $DEST/wxMac-$VERSION.zip` < temp.txt
 

@@ -128,7 +128,7 @@ dospinos2()
     # unzip $ZIPFLAGS -o $APPDIR/distrib/os2/os2-specific.zip
     rm -f src/gtk/descrip.mms src/motif/descrip.mms docs/pdf/*.pdf
     rm -f src/tiff/*.mcp src/jpeg/*.mcp src/png/*.mcp src/zlib/*.mcp
-    rm -f -r docs/html/dialoged docs/html/tex2rtf
+    rm -f -r docs/html/tex2rtf
 
     # echo Making OS/2 files lower case...
     # no longer necessary
@@ -182,7 +182,7 @@ dospinmac()
     cd $DESTDIR/wxWindows-$VERSION
     unzip $ZIPFLAGS ../wxMac-$VERSION.zip
     rm -f src/gtk/descrip.mms src/motif/descrip.mms docs/pdf/*.pdf
-    rm -f -r docs/html/dialoged docs/html/tex2rtf docs/htmlhelp
+    rm -f -r docs/html/tex2rtf docs/htmlhelp
 
     echo Copying readme files...
     cp $APPDIR/docs/mac/readme.txt README-MAC.txt
@@ -355,15 +355,11 @@ dospinsetup()
     if [ ! -d bin ]; then
         mkdir bin
     fi
-    #cp $APPDIR/bin/dialoged.exe bin
-    #cp $APPDIR/bin/dialoged.hlp bin
-    #cp $APPDIR/bin/dialoged.chm bin
     cp $APPDIR/bin/tex2rtf.exe bin
     cp $APPDIR/bin/tex2rtf.chm bin
     cp $APPDIR/bin/widgets.exe bin
     cp $APPDIR/bin/life.exe bin
     cp $APPDIR/demos/life/breeder.lif bin
-    #cp $APPDIR/docs/htmlhelp/dialoged.chm bin
     cp $APPDIR/docs/htmlhelp/tex2rtf.chm bin
 
     if [ ! -d docs/pdf ]; then

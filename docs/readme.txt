@@ -86,7 +86,6 @@ wxMSW-x.y.z.zip                    Zip archive containing all the files that are
 As well as the core source, the wxMSW distribution contains:
 
 - Windows HTML Help versions of the documentation (docs/htmlhelp);
-- a Dialog Editor binary;
 - a Tex2RTF binary;
 - Life! sample binary.
 

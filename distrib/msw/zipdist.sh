@@ -55,11 +55,9 @@ dowise()
 
     # Now copy some binary files to 'bin'
     mkdir bin
-    cp $SRC/bin/dialoged.exe bin
     cp $SRC/bin/tex2rtf.exe bin
     cp $SRC/bin/dbgview.* bin
     cp $SRC/bin/life.exe bin
-    cp $SRC/docs/winhelp/dialoged.hlp $SRC/docs/winhelp/dialoged.cnt bin
     cp $SRC/docs/winhelp/tex2rtf.hlp $SRC/docs/winhelp/tex2rtf.cnt bin
 
     # Make wxMSW-xxx.zip
@@ -169,7 +167,6 @@ rm -f  $DEST/ogl3.zip
 rm -f  $DEST/tex2rtf2.zip
 rm -f  $DEST/jpeg.zip
 rm -f  $DEST/tiff.zip
-rm -f  $DEST/dialoged.zip
 rm -f  $DEST/utils.zip
 rm -f  $DEST/extradoc.zip
 rm -f  $DEST/*-win32.zip
@@ -280,13 +277,6 @@ zip -@ `$CYGPATHPROG -w $DEST/jpeg.zip` < temp.txt
 expandlines $SRC/distrib/msw/tiff.rsp temp.txt
 zip -@ `$CYGPATHPROG -w $DEST/tiff.zip` < temp.txt
 
-# Dialog Editor source and binary
-rm -f  $DEST/dialoged_source.zip
-expandlines $SRC/distrib/msw/dialoged.rsp temp.txt
-zip -@ `$CYGPATHPROG -w $DEST/dialoged_source.zip` < temp.txt
-zip -j `$CYGPATHPROG -w $DEST/dialoged.zip` $DEST/dialoged_source.zip $SRC/bin/dialoged.exe $SRC/docs/winhelp/dialoged.hlp $SRC/docs/winhelp/dialoged.cnt
-rm -f  $DEST/dialoged_source.zip
-
 # Misc. utils not in the main distribution
 expandlines $SRC/distrib/msw/utils.rsp temp.txt
 zip -@ `$CYGPATHPROG -w $DEST/utils.zip` < temp.txt
@@ -295,11 +285,8 @@ zip -@ -u `$CYGPATHPROG -w $DEST/utilmake.zip` < temp.txt
 
 rm -f temp.txt
 
-# Make dialoged-win32.zip and tex2rtf-win32.zip
-
 cd $SRC/bin
 
-zip `$CYGPATHPROG -w $DEST/dialoged-win32.zip` dialoged.*
 zip `$CYGPATHPROG -w $DEST/tex2rtf-win32.zip` tex2rtf.*
 
 cp $SRC/docs/changes.txt $DEST
