@@ -1,0 +1,59 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        debugrptpvw.tex
+%% Purpose:     wxDebugReportPreview documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     2005-03-21
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin 2005
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDebugReportPreview}}\label{wxdebugreportpreview}
+
+This class presents the debug report to the user and allows him to veto report
+entirely or remove some parts of it. Although not mandatory, using this class
+is strongly recommended as data included in the debug report might contain
+sensitive private information and the user should be notified about it as well
+as having a possibility to examine the data which had been gathered to check
+whether this is effectively the case and discard the debug report if it is.
+
+wxDebugReportPreview is an abstract base class, currently the only concrete
+class deriving from it is 
+\helpref{wxDebugReportPreviewStd}{wxdebugreportpreviewstd}.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/debugrpt.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxDebugReportPreview::wxDebugReportPreview}\label{wxdebugreportpreviewwxdebugreportpreview}
+
+\func{}{wxDebugReportPreview}{\void}
+
+Trivial default constructor.
+
+
+\membersection{wxDebugReportPreview::\destruct{wxDebugReportPreview}}\label{wxdebugreportpreviewdtor}
+
+\func{}{\destruct{wxDebugReportPreview}}{\void}
+
+dtor is trivial as well but should be virtual for a base class
+
+
+\membersection{wxDebugReportPreview::Show}\label{wxdebugreportpreviewshow}
+
+\constfunc{bool}{Show}{\param{wxDebugReport\& }{dbgrpt}}
+
+Present the report to the user and allow him to modify it by removing some or
+all of the files and, potentially, adding some notes. Return \true if the
+report should be processed or \false if the user chose to cancel report
+generation or removed all files from it.
+

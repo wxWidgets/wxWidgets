@@ -1,0 +1,51 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        debugrptup.tex
+%% Purpose:     wxDebugReportUpload documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     2005-03-21
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin 2005
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDebugReportUpload}}\label{wxdebugreportupload}
+
+This class is used to upload a compressed file using HTTP POST request. As this
+class derives from wxDebugReportCompress, before upload the report is
+compressed in a single .ZIP file.
+
+\wxheading{Derived from}
+
+\helpref{wxDebugReportCompress}{wxdebugreportcompress}
+
+\wxheading{Include files}
+
+<wx/debugrpt.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDebugReportUpload::wxDebugReportUpload}\label{wxdebugreportuploadwxdebugreportupload}
+
+\func{}{wxDebugReportUpload}{\param{const wxString\& }{url}, \param{const wxString\& }{input}, \param{const wxString\& }{action}, \param{const wxString\& }{curl = \_T("curl")}}
+
+This class will upload the compressed file created by its base class to an HTML
+multipart/form-data form at the specified address. The \arg{url} is the upload
+page address, \arg{input} is the name of the \texttt{"type=file"} control on
+the form used for the file name and \arg{action} is the value of the form
+action field. The report is uploaded using \texttt{\textit{curl}} program which
+should be available, the \arg{curl} parameter may be used to specify the full
+path to it.
+
+
+\membersection{wxDebugReportUpload::OnServerReply}\label{wxdebugreportuploadonserverreply}
+
+\func{bool}{OnServerReply}{\param{const wxArrayString\& }{WXUNUSED(reply)}}
+
+This function may be overridden in a derived class to show the output from
+curl: this may be an HTML page or anything else that the server returned.
+Value returned by this function becomes the return value of 
+\helpref{wxDebugReport::Process()}{wxdebugreportprocess}.
+
+
