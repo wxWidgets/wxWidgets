@@ -2187,6 +2187,7 @@ void wxPseudoMetaFile::GetBounds(double *boundMinX, double *boundMinY, double *b
       case DRAWOP_DRAW_RECT:
       case DRAWOP_DRAW_ROUNDED_RECT:
       case DRAWOP_DRAW_ELLIPSE:
+      case DRAWOP_DRAW_ELLIPTIC_ARC:
       case DRAWOP_DRAW_POINT:
       case DRAWOP_DRAW_TEXT:
       {
@@ -2204,7 +2205,8 @@ void wxPseudoMetaFile::GetBounds(double *boundMinX, double *boundMinY, double *b
         }
         else if (op->GetOp() == DRAWOP_DRAW_RECT ||
                  op->GetOp() == DRAWOP_DRAW_ROUNDED_RECT ||
-                 op->GetOp() == DRAWOP_DRAW_ELLIPSE)
+                 op->GetOp() == DRAWOP_DRAW_ELLIPSE ||
+                 op->GetOp() == DRAWOP_DRAW_ELLIPTIC_ARC)
         {
           if ((opDraw->m_x1 + opDraw->m_x2) < minX) minX = (opDraw->m_x1 + opDraw->m_x2);
           if ((opDraw->m_x1 + opDraw->m_x2) > maxX) maxX = (opDraw->m_x1 + opDraw->m_x2);
