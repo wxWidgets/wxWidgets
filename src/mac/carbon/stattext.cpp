@@ -61,10 +61,10 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
 const wxString punct = " ,.-;:!?";
 
-void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph)
+void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
 {
   int x = 0 ;
-  int y = 0 ;
+
   int i = 0 ;
   long width, height ;
   bool linedrawn = true;
@@ -128,7 +128,13 @@ void wxStaticText::OnDraw( wxDC &dc )
 {
     if (m_width <= 0 || m_height <= 0)
         return;
-
+/*
+    dc.Clear() ;
+    wxRect rect(0,0,m_width,m_height) ;
+    dc.SetFont(*wxSMALL_FONT) ;
+    
+    dc.DrawRectangle(rect) ;
+*/
   if ( !IsWindowHilited( (WindowRef) MacGetRootWindow() ) && 
     ( GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE ) 
       || GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE) ) )
@@ -143,17 +149,23 @@ void wxStaticText::OnDraw( wxDC &dc )
   wxString paragraph;
   int i = 0 ;
   wxString text = m_label;
-	while (i < text.Length())
-	{
-	  paragraph += text[i];
+  int y = 0 ;
+  while (i < text.Length())
+  {
 	  
   	if (text[i] == 13 || text[i] == 10)
-	    DrawParagraph(dc, paragraph);
-	    
+  	{
+	    DrawParagraph(dc, paragraph,y);
+	    paragraph = "" ;
+	}    
+	else
+	{
+        paragraph += text[i];
+    }
     ++i;
   }
   if (paragraph.Length() > 0)
-	  DrawParagraph(dc, paragraph);
+	  DrawParagraph(dc, paragraph,y);
 }
 
 void wxStaticText::OnPaint( wxPaintEvent &event ) 
