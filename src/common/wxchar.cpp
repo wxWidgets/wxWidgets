@@ -1329,36 +1329,16 @@ long     WXDLLEXPORT wxAtol(const wxChar *psz)
 
 wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
 {
-  static wxHashTable env(wxKEY_STRING);
-
-  // check if we already have stored the converted env var
-  wxObject *data = env.Get(name);
-  if (!data)
-  {
-    // nope, retrieve it,
 #if wxUSE_UNICODE
-    wxCharBuffer buffer = wxConvLocal.cWX2MB(name);
-    // printf( "buffer %s\n", (const char*) buffer );
-    const char *val = getenv( (const char *)buffer );
+    // NB: buffer returned by getenv() is allowed to be overwritten next
+    //     time getenv() is called, so it is OK to use static string
+    //     buffer to hold the data.
+    static wxWCharBuffer value((wxChar*)NULL);
+    value = wxConvLocal.cMB2WX(getenv(wxConvLocal.cWX2MB(name)));
+    return value.data();
 #else
-    const char *val = getenv( name );
+    return getenv(name);
 #endif
-
-    if (!val) return (wxChar *)NULL;
-    // printf( "home %s\n", val );
-
-    // convert it,
-#if wxUSE_UNICODE
-    data = (wxObject *)new wxString(val, wxConvLocal);
-#else
-    data = (wxObject *)new wxString(val);
-#endif
-
-    // and store it
-    env.Put(name, data);
-  }
-  // return converted env var
-  return (wxChar *)((wxString *)data)->c_str();
 }
 
 int WXDLLEXPORT wxSystem(const wxChar *psz)
