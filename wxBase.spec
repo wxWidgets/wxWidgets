@@ -27,14 +27,20 @@ the following platforms: Win32, generic Unix (Linux, FreeBSD, Solaris, HP-UX,
 %package devel
 Summary: wxBase headers needed for developping with wxBase
 Group: Development/Libraries
-Requires: wxBase
+Requires: wxBase = %{ver}
 
 %description devel
 Header files for wxBase. You need them to develop programs using wxBase.
 
+%package static
+Summary: wxBase static libraries
+Group: Development/Libraries
+
+%description static
+Static libraries for wxBase. You need them if you want to link statically against wxBase.
+
 %prep
 %setup -n wxBase-%{ver}
-./configure --prefix=%{pref} --enable-soname --disable-gui --disable-std_iostreams
 
 %build
 if [ "$SMP" != "" ]; then
@@ -42,12 +48,25 @@ if [ "$SMP" != "" ]; then
 else
   export MAKE="make"
 fi
-$MAKE
+
 (cd locale; make allmo)
+
+mkdir obj-shared
+cd obj-shared
+../configure --prefix=%{pref} --enable-soname --disable-gui --disable-std_iostreams
+$MAKE
+cd ..
+
+mkdir obj-static
+cd obj-static
+../configure --prefix=%{pref} --disable-shared --disable-gui --disable-std_iostreams
+$MAKE
+cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make prefix=$RPM_BUILD_ROOT%{pref} install
+(cd obj-static ; make prefix=$RPM_BUILD_ROOT%{pref} install)
+(cd obj-shared ; make prefix=$RPM_BUILD_ROOT%{pref} install)
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -89,3 +108,6 @@ fi
 %{_libdir}/wx/*
 %{_bindir}/wxbase-%{ver2}-config
 
+%files static
+%defattr (-,root,root)
+%{_libdir}/lib*.a

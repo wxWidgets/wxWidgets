@@ -33,22 +33,28 @@ Motif/LessTif, MS Windows, Mac) from the same source code.
 %package devel
 Summary: The GTK+ 1.2 port of the wxWindows library
 Group: X11/Libraries
-Requires: wxGTK
+Requires: wxGTK = %{ver}
 
 %description devel
 Header files for wxGTK, the GTK+ 1.2 port of the wxWindows library.
 
 %package gl
-Summary: The GTK+ 1.2 port of the wxWindows library, OpenGl add-on.
+Summary: The GTK+ 1.2 port of the wxWindows library, OpenGL add-on.
 Group: X11/Libraries
-Requires: wxGTK
+Requires: wxGTK = %{ver}
 
 %description gl
-OpenGl add-on library for wxGTK, the GTK+ 1.2 port of the wxWindows library.
+OpenGL add-on library for wxGTK, the GTK+ 1.2 port of the wxWindows library.
+
+%package static
+Summary: wxGTK static libraries
+Group: Development/Libraries
+
+%description static
+Static libraries for wxGTK. You need them if you want to link statically against wxGTK.
 
 %prep
 %setup -n wxGTK-%{ver}
-./configure --prefix=%{pref} --enable-soname --with-odbc --with-opengl
 
 %build
 if [ "$SMP" != "" ]; then
@@ -56,12 +62,25 @@ if [ "$SMP" != "" ]; then
 else
   export MAKE="make"
 fi
+
+(cd locale; make allmo)
+
+mkdir obj-shared
+cd obj-shared
+../configure --prefix=%{pref} --enable-soname --with-odbc --with-opengl
 $MAKE
-(cd locale ; make allmo)
+cd ..
+
+mkdir obj-static
+cd obj-static
+../configure --prefix=%{pref} --disable-shared --with-odbc --with-opengl
+$MAKE
+cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make prefix=$RPM_BUILD_ROOT%{pref} install
+(cd obj-static; make prefix=$RPM_BUILD_ROOT%{pref} install)
+(cd obj-shared; make prefix=$RPM_BUILD_ROOT%{pref} install)
 
 %post
 /sbin/ldconfig
@@ -113,3 +132,6 @@ fi
 %defattr(-,root,root)
 %{_libdir}/libwx_gtk_gl*
 
+%files static
+%defattr (-,root,root)
+%{_libdir}/lib*.a
