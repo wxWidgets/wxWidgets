@@ -36,35 +36,27 @@
 // conditional compilation
 // ----------------------------------------------------------------------------
 
-    // Note: WXPM/EMX has to be tested first, since we want to use
-    // native version, even if configure detected presence of DLOPEN.
-
+// Note: WXPM/EMX has to be tested first, since we want to use
+// native version, even if configure detected presence of DLOPEN.
 #if defined(__WXPM__) || defined(__EMX__) || defined(__WINDOWS__)
-typedef HMODULE             wxDllType;
+    typedef HMODULE             wxDllType;
 #elif defined(HAVE_DLOPEN)
-#include <dlfcn.h>
-typedef void               *wxDllType;
+    #include <dlfcn.h>
+    typedef void               *wxDllType;
 #elif defined(HAVE_SHL_LOAD)
-#include <dl.h>
-typedef shl_t               wxDllType;
+    #include <dl.h>
+    typedef shl_t               wxDllType;
 #elif defined(__DARWIN__)
-typedef void               *wxDllType;
+    typedef void               *wxDllType;
 #elif defined(__WXMAC__)
-typedef CFragConnectionID   wxDllType;
+    typedef CFragConnectionID   wxDllType;
 #else
-#error "Dynamic Loading classes can't be compiled on this platform, sorry."
+    #error "Dynamic Loading classes can't be compiled on this platform, sorry."
 #endif
 
-
-// ---------------------------------------------------------------------------
-// wxDynamicLibrary
-// ---------------------------------------------------------------------------
-
-//FIXME:  This class isn't really common at all, it should be moved
-//        into platform dependent files.
-
-// NOTE: this class is (deliberately) not virtual, do not attempt
-//       to use it polymorphically.
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
 enum wxDLFlags
 {
@@ -98,66 +90,76 @@ enum wxPluginCategory
     wxDL_PLUGIN_BASE,   // wxBase-only plugin
 };
 
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
+// when loading a function from a DLL you always have to cast the returned
+// "void *" pointer to the correct type and, even more annoyingly, you have to
+// repeat this type twice if you want to declare and define a function pointer
+// all in one line
+//
+// this macro makes this slightly less painful by allowing you to specify the
+// type only once, as the first parameter, and creating a variable of this type
+// called "pfn<name>" initialized with the "name" from the "dynlib"
+#define wxDYNLIB_FUNCTION(type, name, dynlib) \
+    type pfn ## name = (type)(dynlib).GetSymbol(_T(#name))
+
+// ---------------------------------------------------------------------------
+// wxDynamicLibrary
+// ---------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxDynamicLibrary
 {
 public:
-        // return a valid handle for the main program itself or NULL if
-        // back linking is not supported by the current platform (e.g. Win32)
-
+    // return a valid handle for the main program itself or NULL if back
+    // linking is not supported by the current platform (e.g. Win32)
     static wxDllType         GetProgramHandle();
 
-        // return the platform standard DLL extension (with leading dot)
-
+    // return the platform standard DLL extension (with leading dot)
     static const wxChar *GetDllExt() { return ms_dllext; }
 
-    wxDynamicLibrary() : m_handle(0) {}
+    wxDynamicLibrary() : m_handle(0) { }
     wxDynamicLibrary(const wxString& libname, int flags = wxDL_DEFAULT)
         : m_handle(0)
     {
         Load(libname, flags);
     }
+
+    // NOTE: this class is (deliberately) not virtual, do not attempt
+    //       to use it polymorphically.
     ~wxDynamicLibrary() { Unload(); }
 
-        // return TRUE if the library was loaded successfully
-
+    // return TRUE if the library was loaded successfully
     bool IsLoaded() const { return m_handle != 0; }
 
-        // load the library with the given name
-        // (full or not), return TRUE on success
-
+    // load the library with the given name (full or not), return true if ok
     bool Load(wxString libname, int flags = wxDL_DEFAULT);
 
-        // detach the library object from its handle, i.e. prevent the object
-        // from unloading the library in its dtor -- the caller is now
-        // responsible for doing this
+    // detach the library object from its handle, i.e. prevent the object from
+    // unloading the library in its dtor -- the caller is now responsible for
+    // doing this
     wxDllType Detach() { wxDllType h = m_handle; m_handle = 0; return h; }
 
-        // unload the library, also done automatically in dtor
-
+    // unload the library, also done automatically in dtor
     void Unload();
 
-        // Return the raw handle from dlopen and friends.
-
+    // Return the raw handle from dlopen and friends.
     wxDllType GetLibHandle() const { return m_handle; }
 
-        // resolve a symbol in a loaded DLL, such as a variable or function
-        // name.  'name' is the (possibly mangled) name of the symbol.
-        // (use extern "C" to export unmangled names)
-        //
-        // Since it is perfectly valid for the returned symbol to actually be
-        // NULL, that is not always indication of an error.  Pass and test the
-        // parameter 'success' for a true indication of success or failure to
-        // load the symbol.
-        //
-        // Returns a pointer to the symbol on success, or NULL if an error
-        // occurred or the symbol wasn't found.
-
+    // resolve a symbol in a loaded DLL, such as a variable or function name.
+    // 'name' is the (possibly mangled) name of the symbol. (use extern "C" to
+    // export unmangled names)
+    //
+    // Since it is perfectly valid for the returned symbol to actually be NULL,
+    // that is not always indication of an error.  Pass and test the parameter
+    // 'success' for a true indication of success or failure to load the
+    // symbol.
+    //
+    // Returns a pointer to the symbol on success, or NULL if an error occurred
+    // or the symbol wasn't found.
     void *GetSymbol(const wxString& name, bool *success = 0) const;
 
-#if WXWIN_COMPATIBILITY_2_2
-    operator bool() const { return IsLoaded(); }
-#endif
 
     // return platform-specific name of dynamic library with proper extension
     // and prefix (e.g. "foo.dll" on Windows or "libfoo.so" on Linux)
@@ -173,19 +175,20 @@ public:
     // string on others:
     static wxString GetPluginsDirectory();
 
+
+#if WXWIN_COMPATIBILITY_2_2
+    operator bool() const { return IsLoaded(); }
+#endif
+
 protected:
-
-        // Platform specific shared lib suffix.
-
+    // platform specific shared lib suffix.
     static const wxChar *ms_dllext;
 
-        // the handle to DLL or NULL
-
+    // the handle to DLL or NULL
     wxDllType m_handle;
 
-        // no copy ctor/assignment operators
-        // or we'd try to unload the library twice
-
+    // no copy ctor/assignment operators (or we'd try to unload the library
+    // twice)
     DECLARE_NO_COPY_CLASS(wxDynamicLibrary)
 };
 

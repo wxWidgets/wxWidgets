@@ -65,6 +65,7 @@ the corresponding topic.
 \helpref{wxDos2UnixFilename}{wxdos2unixfilename}\\
 \helpref{wxDynamicCastThis}{wxdynamiccastthis}\\
 \helpref{wxDynamicCast}{wxdynamiccast}\\
+\helpref{wxDYNLIB\_FUNCTION}{wxdynlibfunction}\\
 \helpref{wxEmptyClipboard}{wxemptyclipboard}\\
 \helpref{wxEnableTopLevelWindows}{wxenabletoplevelwindows}\\
 \helpref{wxEndBusyCursor}{wxendbusycursor}\\
@@ -2354,7 +2355,33 @@ Passes data to the clipboard.
 
 The clipboard must have previously been opened for this call to succeed.
 
+
 \section{Miscellaneous functions}\label{miscellany}
+
+\membersection{wxDYNLIB\_FUNCTION}\label{wxdynlibfunction}
+
+\func{}{wxDYNLIB\_FUNCTION}{\param{}{type}, \param{}{name}, \param{}{dynlib}}
+
+When loading a function from a DLL you always have to cast the returned 
+\tt{void *} pointer to the correct type and, even more annoyingly, you have to
+repeat this type twice if you want to declare and define a function pointer all
+in one line
+
+This macro makes this slightly less painful by allowing you to specify the
+type only once, as the first parameter, and creating a variable of this type
+named after the function but with {\tt pfn} prefix and initialized with the
+function \arg{name} from the \helpref{wxDynamicLibrary}{wxDynamicLibrary} 
+\arg{dynlib}.
+
+\wxheading{Parameters}
+
+\docparam{type}{the type of the function}
+
+\docparam{name}{the name of the function to load, not a string (without quotes,
+it is quoted automatically by the macro)}
+
+\docparam{dynlib}{the library to load the function from}
+
 
 \membersection{wxEXPLICIT}\label{wxexplicit}
 

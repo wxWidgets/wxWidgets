@@ -854,9 +854,6 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
     }
 }
 
-#define wxDYNLIB_FUNCTION(type, name, dll)                                    \
-    type pfn ## name = (type)dll.GetSymbol(_T(#name))
-
 /* static */
 int wxApp::GetComCtl32Version()
 {
