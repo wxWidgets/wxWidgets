@@ -1021,7 +1021,7 @@ public:
     //
 
     wxGrid( wxWindow *parent,
-            int x = -1, int y = -1, int w = -1, int h = -1,
+            int x, int y, int w = -1, int h = -1,
             long style = 0,
             const wxString& name = wxPanelNameStr )
         : wxScrolledWindow( parent, -1, wxPoint(x,y), wxSize(w,h), style, name )
