@@ -549,13 +549,14 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     wxFile file(dir + _T("horse.bmp"));
     if ( file.IsOpened() )
     {
-        size_t len = (size_t)file.Length();
-        void *data = malloc(len);
-        if ( file.Read(data, len) != len )
+        wxFileOffset len = file.Length();
+        size_t dataSize = (size_t)len;
+        void *data = malloc(dataSize);
+        if ( file.Read(data, dataSize) != len )
             wxLogError(_T("Reading bitmap file failed"));
         else
         {
-            wxMemoryInputStream mis(data, len);
+            wxMemoryInputStream mis(data, dataSize);
             if ( !image.LoadFile(mis) )
                 wxLogError(wxT("Can't load BMP image from stream"));
             else

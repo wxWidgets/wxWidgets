@@ -1102,7 +1102,6 @@ void ArchiveTestCase<Classes>::VerifyDir(wxString& path, size_t rootlen /*=0*/)
                 it != m_testEntries.end());
 
             const TestEntry& testEntry = *it->second;
-            size_t size = 0;
 
 #ifndef __WXMSW__
             CPPUNIT_ASSERT_MESSAGE("timestamp check" + error_context,
@@ -1114,7 +1113,7 @@ void ArchiveTestCase<Classes>::VerifyDir(wxString& path, size_t rootlen /*=0*/)
                 CPPUNIT_ASSERT_MESSAGE(
                     "entry not found in archive" + error_entry, in.Ok());
 
-                size = in.GetLength();
+                size_t size = in.GetLength();
                 wxCharBuffer buf(size);
                 CPPUNIT_ASSERT_MESSAGE("Read" + error_context,
                     in.Read(buf.data(), size).LastRead() == size);
