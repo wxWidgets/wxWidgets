@@ -19,6 +19,8 @@
 #include "wx/object.h"
 #include "wx/list.h"
 
+class WXDLLEXPORT wxMenu;
+
 // ----------------------------------------------------------------------------
 // wxCommand: a single command capable of performing itself
 // ----------------------------------------------------------------------------
