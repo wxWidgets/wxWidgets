@@ -48,8 +48,8 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxLocale;
-class WXDLLIMPEXP_BASE wxMsgCatalog;
 class WXDLLIMPEXP_BASE wxLanguageInfoArray;
+class wxMsgCatalog;
 
 // ============================================================================
 // locale support
