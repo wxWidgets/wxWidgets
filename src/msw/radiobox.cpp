@@ -38,6 +38,8 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/notebook.h"
+
 #include "wx/msw/private.h"
 
 #if wxUSE_TOOLTIPS
@@ -276,7 +278,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 
     // create the static box
     if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX | WS_GROUP,
-                           pos, size, title, 0) )
+                           pos, size, title, WS_EX_TRANSPARENT) )
         return false;
 
     // and now create the buttons
@@ -831,11 +833,23 @@ bool wxRadioBox::SetFont(const wxFont& font)
 
 WXLRESULT wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
+#if RADIOBTN_PARENT_IS_RADIOBOX
     switch ( nMsg )
     {
+        // handle this message to set correct colours for our buttons here
         case WM_CTLCOLORSTATIC:
-            return (WXLRESULT)GetStockObject(WHITE_BRUSH);
+            {
+                WXHDC hdc;
+                WXHWND hwnd;
+                UnpackCtlColor(wParam, lParam, &hdc, &hwnd);
+
+                WXHBRUSH hbr = MSWControlColor((WXHDC)hdc);
+                if ( hbr )
+                    return (WXLRESULT)hbr;
+                //else: fall through to default window proc
+            }
     }
+#endif // RADIOBTN_PARENT_IS_RADIOBOX
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
