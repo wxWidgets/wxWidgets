@@ -148,7 +148,122 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
         return TRUE;
     }
     else { // "PARAM"
-        if (m_Name == wxEmptyString && tag.GetParam(wxT("NAME")) == wxT("Name")) m_Name = tag.GetParam(wxT("VALUE"));
+        if (m_Name == wxEmptyString && tag.GetParam(wxT("NAME")) == wxT("Name")) 
+        {
+            m_Name = tag.GetParam(wxT("VALUE"));
+            if (m_Name.Find(wxT('&')) != -1) 
+            {
+        #define ESCSEQ(escape, subst)  \
+                          { _T("&") _T(escape) _T(";"), _T("&") _T(escape) _T(" "), _T(subst) } 
+                static wxChar* substitutions[][3] = 
+                        {
+                        ESCSEQ("quot", "\""),
+                        ESCSEQ("lt", "<"),
+                        ESCSEQ("gt", ">"),
+
+                        ESCSEQ("nbsp", " "),
+                        ESCSEQ("iexcl", "!"),
+                        ESCSEQ("cent", "¢"),
+
+                        ESCSEQ("yen", " "),
+                        ESCSEQ("brkbar", " "),
+                        ESCSEQ("sect", " "),
+                        ESCSEQ("uml", " "),
+
+                        ESCSEQ("copy", "(c)"),
+                        ESCSEQ("ordf", " "),
+                        ESCSEQ("laquo", " "),
+                        ESCSEQ("not", " "),
+
+                        ESCSEQ("reg", "(r)"),
+
+                        ESCSEQ("deg", " "),
+                        ESCSEQ("plusm", " "),
+
+                        ESCSEQ("acute", " "),
+                        ESCSEQ("micro", " "),
+                        ESCSEQ("para", " "),
+
+                        ESCSEQ("ordm", " "),
+                        ESCSEQ("raquo", " "),
+
+                        ESCSEQ("iquest", " "),
+                        ESCSEQ("Agrave", "À"),
+
+                        ESCSEQ("Acirc", "Â"),
+                        ESCSEQ("Atilde", "Ã"),
+                        ESCSEQ("Auml", "Ä"),
+                        ESCSEQ("Aring", " "),
+                        ESCSEQ("AElig", " "),
+                        ESCSEQ("Ccedil", "ç"),
+                        ESCSEQ("Egrave", "È"),
+                        ESCSEQ("Eacute", "É"),
+                        ESCSEQ("Ecirc", "Ê"),
+                        ESCSEQ("Euml", "Ë"),
+                        ESCSEQ("Igrave", "Ì"),
+
+                        ESCSEQ("Icirc", "Î"),
+                        ESCSEQ("Iuml", "Ï"),
+
+                        ESCSEQ("Ntilde", "Ñ"),
+                        ESCSEQ("Ograve", "Ò"),
+
+                        ESCSEQ("Ocirc", "Ô"),
+                        ESCSEQ("Otilde", "Õ"),
+                        ESCSEQ("Ouml", "Ö"),
+
+                        ESCSEQ("Oslash", " "),
+                        ESCSEQ("Ugrave", "Ù"),
+
+                        ESCSEQ("Ucirc", " "),
+                        ESCSEQ("Uuml", "Ü"),
+
+                        ESCSEQ("szlig", "§"),
+                        ESCSEQ("agrave;","à"),
+                        ESCSEQ("aacute", "á"),
+                        ESCSEQ("acirc", "â"),
+                        ESCSEQ("atilde", "ã"),
+                        ESCSEQ("auml", "ä"),
+                        ESCSEQ("aring", "a"),
+                        ESCSEQ("aelig", "ae"),
+                        ESCSEQ("ccedil", "ç"),
+                        ESCSEQ("egrave", "è"),
+                        ESCSEQ("eacute", "é"),
+                        ESCSEQ("ecirc", "ê"),
+                        ESCSEQ("euml", "ë"),
+                        ESCSEQ("igrave", "ì"),
+                        ESCSEQ("iacute", "í"),
+                        ESCSEQ("icirc", " "),
+                        ESCSEQ("iuml", "ï"),
+                        ESCSEQ("eth", " "),
+                        ESCSEQ("ntilde", "ñ"),
+                        ESCSEQ("ograve", "ò"),
+                        ESCSEQ("oacute", "ó"),
+                        ESCSEQ("ocirc", "ô"),
+                        ESCSEQ("otilde", "õ"),
+                        ESCSEQ("ouml", "ö"),
+                        ESCSEQ("divide", " "),
+                        ESCSEQ("oslash", " "),
+                        ESCSEQ("ugrave", "ù"),
+                        ESCSEQ("uacute", "ú"),
+                        ESCSEQ("ucirc", "û"),
+                        ESCSEQ("uuml", "ü"),
+
+                        ESCSEQ("yuml", ""),
+
+                        /* this one should ALWAYS stay the last one!!! */
+                        ESCSEQ("amp", "&"),
+
+                        { NULL, NULL, NULL }
+                        };
+
+                for (int i = 0; substitutions[i][0] != NULL; i++) 
+                {
+                    m_Name.Replace(substitutions[i][0], substitutions[i][2], TRUE);
+                    m_Name.Replace(substitutions[i][1], substitutions[i][2], TRUE);
+                }
+            }
+        }
         if (tag.GetParam(wxT("NAME")) == wxT("Local")) m_Page = tag.GetParam(wxT("VALUE"));
         if (tag.GetParam(wxT("NAME")) == wxT("ID")) tag.ScanParam(wxT("VALUE"), wxT("%i"), &m_ID);
         return FALSE;
