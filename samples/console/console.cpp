@@ -62,11 +62,12 @@
 //#define TEST_MIME
 //#define TEST_PATHLIST
 //#define TEST_REGCONF
+#define TEST_REGEX
 //#define TEST_REGISTRY
 //#define TEST_SNGLINST
 //#define TEST_SOCKETS
 //#define TEST_STREAMS
-#define TEST_STRINGS
+//#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
 //#define TEST_VCARD            -- don't enable this (VZ)
@@ -1709,6 +1710,178 @@ static void TestPathList()
 }
 
 #endif // TEST_PATHLIST
+
+// ----------------------------------------------------------------------------
+// regular expressions
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_REGEX
+
+#include <wx/regex.h>
+
+static void TestRegExCompile()
+{
+    wxPuts(_T("*** Testing RE compilation ***\n"));
+
+    static struct RegExCompTestData
+    {
+        const wxChar *pattern;
+        bool correct;
+    } regExCompTestData[] =
+    {
+        { _T("foo"), TRUE },
+        { _T("foo("), FALSE },
+        { _T("foo(bar"), FALSE },
+        { _T("foo(bar)"), TRUE },
+        { _T("foo["), FALSE },
+        { _T("foo[bar"), FALSE },
+        { _T("foo[bar]"), TRUE },
+        { _T("foo{"), TRUE },
+        { _T("foo{1"), FALSE },
+        { _T("foo{bar"), TRUE },
+        { _T("foo{1}"), TRUE },
+        { _T("foo{1,2}"), TRUE },
+        { _T("foo{bar}"), TRUE },
+        { _T("foo*"), TRUE },
+        { _T("foo**"), FALSE },
+        { _T("foo+"), TRUE },
+        { _T("foo++"), FALSE },
+        { _T("foo?"), TRUE },
+        { _T("foo??"), FALSE },
+        { _T("foo?+"), FALSE },
+    };
+
+    wxRegEx re;
+    for ( size_t n = 0; n < WXSIZEOF(regExCompTestData); n++ )
+    {
+        const RegExCompTestData& data = regExCompTestData[n];
+        bool ok = re.Compile(data.pattern);
+
+        wxPrintf(_T("'%s' is %sa valid RE (%s)\n"),
+                 data.pattern,
+                 ok ? _T("") : _T("not "),
+                 ok == data.correct ? _T("ok") : _T("ERROR"));
+    }
+}
+
+static void TestRegExMatch()
+{
+    wxPuts(_T("*** Testing RE matching ***\n"));
+
+    static struct RegExMatchTestData
+    {
+        const wxChar *pattern;
+        const wxChar *text;
+        bool correct;
+    } regExMatchTestData[] =
+    {
+        { _T("foo"), _T("bar"), FALSE },
+        { _T("foo"), _T("foobar"), TRUE },
+        { _T("^foo"), _T("foobar"), TRUE },
+        { _T("^foo"), _T("barfoo"), FALSE },
+        { _T("bar$"), _T("barbar"), TRUE },
+        { _T("bar$"), _T("barbar "), FALSE },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(regExMatchTestData); n++ )
+    {
+        const RegExMatchTestData& data = regExMatchTestData[n];
+
+        wxRegEx re(data.pattern);
+        bool ok = re.Matches(data.text);
+
+        wxPrintf(_T("'%s' %s %s (%s)\n"),
+                 data.pattern,
+                 ok ? _T("matches") : _T("doesn't match"),
+                 data.text,
+                 ok == data.correct ? _T("ok") : _T("ERROR"));
+    }
+}
+
+static void TestRegExSubmatch()
+{
+    wxPuts(_T("*** Testing RE subexpressions ***\n"));
+
+    wxRegEx re(_T("([[:alpha:]]+) ([[:alpha:]]+) ([[:digit:]]+).*([[:digit:]]+)$"));
+    if ( !re.IsValid() )
+    {
+        wxPuts(_T("ERROR: compilation failed."));
+        return;
+    }
+
+    wxString text = _T("Fri Jul 13 18:37:52 CEST 2001");
+
+    if ( !re.Matches(text) )
+    {
+        wxPuts(_T("ERROR: match expected."));
+    }
+    else
+    {
+        wxPrintf(_T("Entire match: %s\n"), re.GetMatch(text).c_str());
+
+        wxPrintf(_T("Date: %s/%s/%s, wday: %s\n"),
+                 re.GetMatch(text, 3).c_str(),
+                 re.GetMatch(text, 2).c_str(),
+                 re.GetMatch(text, 4).c_str(),
+                 re.GetMatch(text, 1).c_str());
+    }
+}
+
+static void TestRegExInteractive()
+{
+    wxPuts(_T("*** Testing RE interactively ***"));
+
+    for ( ;; )
+    {
+        char pattern[128];
+        printf("\nEnter a pattern: ");
+        if ( !fgets(pattern, WXSIZEOF(pattern), stdin) )
+            break;
+
+        // kill the last '\n'
+        pattern[strlen(pattern) - 1] = 0;
+
+        wxRegEx re;
+        if ( !re.Compile(pattern) )
+        {
+            continue;
+        }
+
+        char text[128];
+        for ( ;; )
+        {
+            printf("Enter text to match: ");
+            if ( !fgets(text, WXSIZEOF(text), stdin) )
+                break;
+
+            // kill the last '\n'
+            text[strlen(text) - 1] = 0;
+
+            if ( !re.Matches(text) )
+            {
+                printf("No match.\n");
+            }
+            else
+            {
+                printf("Pattern matches at '%s'\n", re.GetMatch(text).c_str());
+
+                size_t start, len;
+                for ( size_t n = 1; ; n++ )
+                {
+                    if ( !re.GetMatch(&start, &len, n) )
+                    {
+                        break;
+                    }
+
+                    printf("Subexpr %u matched '%s'\n",
+                           n, wxString(text + start, len).c_str());
+                }
+            }
+        }
+    }
+}
+
+#endif // TEST_REGEX
 
 // ----------------------------------------------------------------------------
 // registry and related stuff
@@ -4805,6 +4978,27 @@ int main(int argc, char **argv)
     }
 #endif // TEST_FILENAME
 
+#ifdef TEST_FTP
+    wxLog::AddTraceMask(FTP_TRACE_MASK);
+    if ( TestFtpConnect() )
+    {
+            TestFtpFileSize();
+        if ( 0 )
+        {
+            TestFtpList();
+            TestFtpDownload();
+            TestFtpMisc();
+            TestFtpUpload();
+        }
+        if ( 0 )
+        TestFtpInteractive();
+    }
+    //else: connecting to the FTP server failed
+
+    if ( 0 )
+        TestFtpWuFtpd();
+#endif // TEST_FTP
+
 #ifdef TEST_THREADS
     int nCPUs = wxThread::GetCPUCount();
     printf("This system has %d CPUs\n", nCPUs);
@@ -4873,6 +5067,17 @@ int main(int argc, char **argv)
     TestRegConfWrite();
 #endif // TEST_REGCONF
 
+#ifdef TEST_REGEX
+    // TODO: write a real test using src/regex/tests file
+    if ( 0 )
+    {
+        TestRegExCompile();
+        TestRegExMatch();
+        TestRegExSubmatch();
+    }
+    TestRegExInteractive();
+#endif // TEST_REGEX
+
 #ifdef TEST_REGISTRY
     if ( 0 )
         TestRegistryRead();
@@ -4886,27 +5091,6 @@ int main(int argc, char **argv)
     }
         TestSocketClient();
 #endif // TEST_SOCKETS
-
-#ifdef TEST_FTP
-    wxLog::AddTraceMask(FTP_TRACE_MASK);
-    if ( TestFtpConnect() )
-    {
-            TestFtpFileSize();
-        if ( 0 )
-        {
-            TestFtpList();
-            TestFtpDownload();
-            TestFtpMisc();
-            TestFtpUpload();
-        }
-        if ( 0 )
-        TestFtpInteractive();
-    }
-    //else: connecting to the FTP server failed
-
-    if ( 0 )
-        TestFtpWuFtpd();
-#endif // TEST_FTP
 
 #ifdef TEST_STREAMS
     if ( 0 )
