@@ -1386,6 +1386,8 @@ wxDateTime& wxDateTime::Set(double jdn)
 
     jdn *= MILLISECONDS_PER_DAY;
 
+    m_time.Assign(jdn);
+
     // JDNs always suppose an UTC date, so bring it back to local time zone
     // (also see GetJulianDayNumber() implementation)
     long tzDiff = GetTimeZone();
@@ -1395,9 +1397,7 @@ wxDateTime& wxDateTime::Set(double jdn)
         tzDiff -= 3600;
     }
 
-    jdn += tzDiff*1000; // tzDiff is in seconds
-
-    m_time.Assign(jdn);
+    m_time += tzDiff*1000; // tzDiff is in seconds
 
     return *this;
 }
