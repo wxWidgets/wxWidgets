@@ -436,9 +436,6 @@ void wxWindowMSW::Init()
     m_childrenDisabled = NULL;
     m_frozenness = 0;
 
-    // wxWnd
-    m_hMenu = 0;
-
     m_hWnd = 0;
 
     m_xThumbSize = 0;
@@ -4066,7 +4063,7 @@ WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
 
         // background is not inherited beyond the windows which have their own
         // fixed background such as top level windows and notebooks
-        if ( win->IsTopLevel() /* ProvidesBackground() */ )
+        if ( win->ProvidesBackground() )
             break;
     }
 

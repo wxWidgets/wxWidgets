@@ -83,7 +83,9 @@ public:
         { return m_useNativeStatusBar; };
 #endif // wxUSE_STATUSBAR
 
+#if wxUSE_MENUS
     WXHMENU GetWinMenu() const { return m_hMenu; }
+#endif // wxUSE_MENUS
 
     // event handlers
     bool HandlePaint();
@@ -141,6 +143,11 @@ protected:
 #if wxUSE_STATUSBAR
     static bool           m_useNativeStatusBar;
 #endif // wxUSE_STATUSBAR
+
+#if wxUSE_MENUS
+    // frame menu, NULL if none
+    WXHMENU m_hMenu;
+#endif // wxUSE_MENUS
 
 private:
 #if wxUSE_TOOLTIPS

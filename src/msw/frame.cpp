@@ -169,6 +169,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxTopLevelWindow)
 
 void wxFrame::Init()
 {
+#if wxUSE_MENUS
+    m_hMenu = NULL;
+#endif // wxUSE_MENUS
+
 #if wxUSE_TOOLTIPS
     m_hwndToolTip = 0;
 #endif
