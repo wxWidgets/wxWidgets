@@ -63,27 +63,18 @@ echo Removing backup files...
 rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
 
 rm -f $2/wx*-${WXVER}*.tar.gz
-rm -f $2/tex2rtf2-*.tar.gz
-rm -f $2/dialoged-*.tar.gz
-rm -f $2/ogl3-*.tar.gz
-rm -f $2/jpeg-*.tar.gz
-rm -f $2/tiff-*.tar.gz
-rm -f $2/stc-*.tar.gz
-rm -f $2/canvas-*.tar.gz
-rm -f $2/contrib-*.tar.gz
-rm -f $2/applet-*.tar.gz
-rm -f $2/wxxrc-*.tar.gz
 
 echo Tarring...
 
 ### Generic
-cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp > /tmp/wxgen_in.txt
-expandlines /tmp/wxgen_in.txt /tmp/wxgen.txt
-$TAR cf $2/wxWindows-${WXVER}-gen.tar -T /tmp/wxgen.txt
-gzip $2/wxWindows-${WXVER}-gen.tar
-mv $2/wxWindows-${WXVER}-gen.tar.gz $2/wxWindows-${WXVER}-gen.tgz
+#cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/makefile.rsp > /tmp/wxgen_in.txt
+#expandlines /tmp/wxgen_in.txt /tmp/wxgen.txt
+#$TAR cf $2/wxWindows-${WXVER}-gen.tar -T /tmp/wxgen.txt
+#gzip $2/wxWindows-${WXVER}-gen.tar
+#mv $2/wxWindows-${WXVER}-gen.tar.gz $2/wxWindows-${WXVER}-gen.tgz
 
 ### wxGTK
+cd $1
 cat $1/distrib/msw/generic.rsp $1/distrib/msw/contrib.rsp $1/distrib/msw/xml.rsp $1/distrib/msw/utils.rsp $1/distrib/msw/ogl.rsp $1/distrib/msw/tex2rtf.rsp $1/distrib/msw/dialoged.rsp $1/distrib/msw/gtk.rsp $1/distrib/msw/makefile.rsp $1/distrib/msw/tiff.rsp $1/distrib/msw/jpeg.rsp > /tmp/wxgtk_in.txt
 expandlines /tmp/wxgtk_in.txt /tmp/wxgtk.txt
 $TAR cf $2/wxGTK-${WXVER}.tar -T /tmp/wxgtk.txt
@@ -151,6 +142,7 @@ cd $2
 mkdir wxWindows-${WXVER}
 cd wxWindows-${WXVER}
 $TAR xf ../wxMac-${WXVER}.tar
+rm -f -r contrib/src/mmedia contrib/samples/mmedia
 cd ..
 rm -f wxMac-${WXVER}.tar
 $TAR cf $2/wxMac-${WXVER}.tar wxWindows-${WXVER}/*
@@ -158,21 +150,21 @@ rm -f -r wxWindows-${WXVER}
 gzip $2/wxMac-${WXVER}.tar
 
 ### Doc sources
-cd $1
-cat $1/distrib/msw/docsrc.rsp > /tmp/docsrc_in.txt
-expandlines /tmp/docsrc_in.txt /tmp/docsrc.txt
-$TAR cf $2/wxWindows-${WXVER}-doc.tar -T /tmp/docsrc.txt
-
-echo Re-tarring docs in a subdirectory...
-cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-doc.tar
-cd ..
-rm -f wxWindows-${WXVER}-doc.tar
-$TAR cf $2/wxWindows-${WXVER}-doc.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
-gzip $2/wxWindows-${WXVER}-doc.tar
+#cd $1
+#cat $1/distrib/msw/docsrc.rsp > /tmp/docsrc_in.txt
+#expandlines /tmp/docsrc_in.txt /tmp/docsrc.txt
+#$TAR cf $2/wxWindows-${WXVER}-doc.tar -T /tmp/docsrc.txt
+#
+#echo Re-tarring docs in a subdirectory...
+#cd $2
+#mkdir wxWindows-${WXVER}
+#cd wxWindows-${WXVER}
+#$TAR xf ../wxWindows-${WXVER}-doc.tar
+#cd ..
+#rm -f wxWindows-${WXVER}-doc.tar
+#$TAR cf $2/wxWindows-${WXVER}-doc.tar wxWindows-${WXVER}/*
+#rm -f -r wxWindows-${WXVER}
+#gzip $2/wxWindows-${WXVER}-doc.tar
 
 ### HTML docs
 cd $1
@@ -190,6 +182,23 @@ rm -f wxWindows-${WXVER}-html.tar
 $TAR cf $2/wxWindows-${WXVER}-html.tar wxWindows-${WXVER}/*
 rm -f -r wxWindows-${WXVER}
 gzip $2/wxWindows-${WXVER}-html.tar
+
+### HTB docs
+cd $1
+cat $1/distrib/msw/wx_htb.rsp > /tmp/htb_in.txt
+expandlines /tmp/htb_in.txt /tmp/htb.txt
+$TAR cf $2/wxWindows-${WXVER}-htb.tar -T /tmp/htb.txt
+
+echo Re-tarring HTB in a subdirectory...
+cd $2
+mkdir wxWindows-${WXVER}
+cd wxWindows-${WXVER}
+$TAR xf ../wxWindows-${WXVER}-htb.tar
+cd ..
+rm -f wxWindows-${WXVER}-htb.tar
+$TAR cf $2/wxWindows-${WXVER}-htb.tar wxWindows-${WXVER}/*
+rm -f -r wxWindows-${WXVER}
+gzip $2/wxWindows-${WXVER}-htb.tar
 
 ### PDF docs
 cd $1
@@ -209,72 +218,72 @@ rm -f -r wxWindows-${WXVER}
 gzip $2/wxWindows-${WXVER}-pdf.tar
 
 ### Tex2RTF
-cd $1
-cat $1/distrib/msw/tex2rtf.rsp > /tmp/tex2rtf_in.txt
-expandlines /tmp/tex2rtf_in.txt /tmp/tex2rtf.txt
-$TAR cf $2/wxWindows-${WXVER}-tex2rtf.tar -T /tmp/tex2rtf.txt
-
-echo Re-tarring Tex2RTF in a subdirectory...
-cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-tex2rtf.tar
-cd ..
-rm -f wxWindows-${WXVER}-tex2rtf.tar
-$TAR cf $2/wxWindows-${WXVER}-tex2rtf.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
-gzip $2/wxWindows-${WXVER}-tex2rtf.tar
+#cd $1
+#cat $1/distrib/msw/tex2rtf.rsp > /tmp/tex2rtf_in.txt
+#expandlines /tmp/tex2rtf_in.txt /tmp/tex2rtf.txt
+#$TAR cf $2/wxWindows-${WXVER}-tex2rtf.tar -T /tmp/tex2rtf.txt
+#
+#echo Re-tarring Tex2RTF in a subdirectory...
+#cd $2
+#mkdir wxWindows-${WXVER}
+#cd wxWindows-${WXVER}
+#$TAR xf ../wxWindows-${WXVER}-tex2rtf.tar
+#cd ..
+#rm -f wxWindows-${WXVER}-tex2rtf.tar
+#$TAR cf $2/wxWindows-${WXVER}-tex2rtf.tar wxWindows-${WXVER}/*
+#rm -f -r wxWindows-${WXVER}
+#gzip $2/wxWindows-${WXVER}-tex2rtf.tar
 
 ### OGL
-cd $1
-cat $1/distrib/msw/ogl.rsp > /tmp/ogl_in.txt
-expandlines /tmp/ogl_in.txt /tmp/ogl.txt
-$TAR cf $2/wxWindows-${WXVER}-ogl.tar -T /tmp/ogl.txt
-
-echo Re-tarring OGL in a subdirectory...
-cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-ogl.tar
-cd ..
-rm -f wxWindows-${WXVER}-ogl.tar
-$TAR cf $2/wxWindows-${WXVER}-ogl.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
-gzip $2/wxWindows-${WXVER}-ogl.tar
+#cd $1
+#cat $1/distrib/msw/ogl.rsp > /tmp/ogl_in.txt
+#expandlines /tmp/ogl_in.txt /tmp/ogl.txt
+#$TAR cf $2/wxWindows-${WXVER}-ogl.tar -T /tmp/ogl.txt
+#
+#echo Re-tarring OGL in a subdirectory...
+#cd $2
+#mkdir wxWindows-${WXVER}
+#cd wxWindows-${WXVER}
+#$TAR xf ../wxWindows-${WXVER}-ogl.tar
+#cd ..
+#rm -f wxWindows-${WXVER}-ogl.tar
+#$TAR cf $2/wxWindows-${WXVER}-ogl.tar wxWindows-${WXVER}/*
+#rm -f -r wxWindows-${WXVER}
+#gzip $2/wxWindows-${WXVER}-ogl.tar
 
 ### JPEG
-cd $1
-cat $1/distrib/msw/jpeg.rsp > /tmp/jpeg_in.txt
-expandlines /tmp/jpeg_in.txt /tmp/jpeg.txt
-$TAR cf $2/wxWindows-${WXVER}-jpeg.tar -T /tmp/jpeg.txt
-
-echo Re-tarring docs in a subdirectory...
-cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-jpeg.tar
-cd ..
-rm -f wxWindows-${WXVER}-jpeg.tar
-$TAR cf $2/wxWindows-${WXVER}-jpeg.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
-gzip $2/wxWindows-${WXVER}-jpeg.tar
+#cd $1
+#cat $1/distrib/msw/jpeg.rsp > /tmp/jpeg_in.txt
+#expandlines /tmp/jpeg_in.txt /tmp/jpeg.txt
+#$TAR cf $2/wxWindows-${WXVER}-jpeg.tar -T /tmp/jpeg.txt
+#
+#echo Re-tarring jpeg in a subdirectory...
+#cd $2
+#mkdir wxWindows-${WXVER}
+#cd wxWindows-${WXVER}
+#$TAR xf ../wxWindows-${WXVER}-jpeg.tar
+#cd ..
+#rm -f wxWindows-${WXVER}-jpeg.tar
+#$TAR cf $2/wxWindows-${WXVER}-jpeg.tar wxWindows-${WXVER}/*
+#rm -f -r wxWindows-${WXVER}
+#gzip $2/wxWindows-${WXVER}-jpeg.tar
 
 ### TIFF
-cd $1
-cat $1/distrib/msw/tiff.rsp > /tmp/tiff_in.txt
-expandlines /tmp/tiff_in.txt /tmp/tiff.txt
-$TAR cf $2/wxWindows-${WXVER}-tiff.tar -T /tmp/tiff.txt
-
-echo Re-tarring docs in a subdirectory...
-cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
-$TAR xf ../wxWindows-${WXVER}-tiff.tar
-cd ..
-rm -f wxWindows-${WXVER}-tiff.tar
-$TAR cf $2/wxWindows-${WXVER}-tiff.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
-gzip $2/wxWindows-${WXVER}-tiff.tar
+#cd $1
+#cat $1/distrib/msw/tiff.rsp > /tmp/tiff_in.txt
+#expandlines /tmp/tiff_in.txt /tmp/tiff.txt
+#$TAR cf $2/wxWindows-${WXVER}-tiff.tar -T /tmp/tiff.txt
+#
+#echo Re-tarring docs in a subdirectory...
+#cd $2
+#mkdir wxWindows-${WXVER}
+#cd wxWindows-${WXVER}
+#$TAR xf ../wxWindows-${WXVER}-tiff.tar
+#cd ..
+#rm -f wxWindows-${WXVER}-tiff.tar
+#$TAR cf $2/wxWindows-${WXVER}-tiff.tar wxWindows-${WXVER}/*
+#rm -f -r wxWindows-${WXVER}
+#gzip $2/wxWindows-${WXVER}-tiff.tar
 
 # Copy readme and other files
 cd $1
