@@ -32,7 +32,7 @@ class WXDLLEXPORT wxFrame;
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
-WX_DEFINE_ARRAY(wxAcceleratorEntry *, wxAcceleratorArray);
+WX_DEFINE_EXPORTED_ARRAY(wxAcceleratorEntry *, wxAcceleratorArray);
 
 // ----------------------------------------------------------------------------
 // Menu
