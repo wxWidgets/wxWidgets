@@ -8,7 +8,7 @@ CXX="@CXX@"
 LD="@SHARED_LD@"
 cross_compiling=@cross_compiling@
 target=@host_alias@
-static_flag=no
+static_flag=@STATIC_FLAG@
 
 usage()
 {

@@ -2829,6 +2829,12 @@ if test "$wxUSE_SHARED" = "no"; then
 
     WX_TARGET_LIBRARY_TYPE="a"
     INSTALL_LIBRARY='$(INSTALL_DATA)'
+
+    dnl wx-config should assume the --static flag by default if we don't have
+    dnl any shared libs anyhow
+    STATIC_FLAG="yes"
+else
+    STATIC_FLAG="no"
 fi
 
 if test "$wxUSE_MAC" = 1; then
@@ -5036,6 +5042,8 @@ AC_SUBST(SONAME_FLAGS)
 AC_SUBST(SONAME_FLAGS_GL)
 AC_SUBST(WX_TARGET_LIBRARY_SONAME)
 AC_SUBST(WX_TARGET_LIBRARY_TYPE)
+
+AC_SUBST(STATIC_FLAG)
 
 dnl debugging options
 AC_SUBST(WXDEBUG_DEFINE)
