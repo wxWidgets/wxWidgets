@@ -722,7 +722,7 @@ void wxScrollHelper::AdjustScrollbars()
         oldh = h;
 
         GetTargetSize( &w, &h );
-    } while ( w != oldw && h != oldh );
+    } while ( w != oldw || h != oldh );
 
 #ifdef __WXMOTIF__
     // Sorry, some Motif-specific code to implement a backing pixmap
