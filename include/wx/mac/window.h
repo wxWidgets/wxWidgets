@@ -29,16 +29,9 @@ class WXDLLEXPORT wxTopLevelWindowMac;
 // constants
 // ---------------------------------------------------------------------------
 
-// FIXME does anybody use those? they're unused by wxWindows...
-enum
-{
-    wxKEY_SHIFT = 1,
-    wxKEY_CTRL  = 2
-};
-
 class WXDLLEXPORT wxWindowMac: public wxWindowBase
 {
-  DECLARE_DYNAMIC_CLASS(wxWindowMac);
+  DECLARE_DYNAMIC_CLASS(wxWindowMac)
 
   friend class wxDC;
   friend class wxPaintDC;
