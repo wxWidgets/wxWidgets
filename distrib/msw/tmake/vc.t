@@ -162,7 +162,7 @@ HTMLOBJS = #$ ExpandList("WXHTMLOBJS");
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 # Normal, static library
-all:    setuph dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib jpeg tiff $(LIBTARGET)
+all:    setuph dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib jpeg tiff regex $(LIBTARGET)
 
 setuph:
     cd $(WXDIR)\include\wx\msw
@@ -407,12 +407,22 @@ clean_tiff:
     nmake -f makefile.vc clean
     cd $(WXDIR)\src\msw
 
+regex:
+    cd $(WXDIR)\src\regex
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG)
+    cd $(WXDIR)\src\msw
+
+clean_regex:
+    cd $(WXDIR)\src\regex
+    nmake -f makefile.vc clean
+    cd $(WXDIR)\src\msw
+
 rcparser:
     cd $(WXDIR)\utils\rcparser\src
     nmake -f makefile.vc FINAL=$(FINAL)
     cd $(WXDIR)\src\msw
 
-cleanall: clean clean_png clean_zlib clean_jpeg clean_tiff
+cleanall: clean clean_png clean_zlib clean_jpeg clean_tiff clean_regex
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).dll
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).lib
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).exp
