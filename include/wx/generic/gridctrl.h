@@ -110,7 +110,7 @@ private:
 
 #endif // wxUSE_COMBOBOX
 
-class wxGridCellAutoWrapStringEditor : public wxGridCellTextEditor
+class WXDLLEXPORT wxGridCellAutoWrapStringEditor : public wxGridCellTextEditor
 {
 public:
     wxGridCellAutoWrapStringEditor() : wxGridCellTextEditor() { }
@@ -122,7 +122,7 @@ public:
         { return new wxGridCellAutoWrapStringEditor; }
 };
 
-class wxGridCellAutoWrapStringRenderer : public wxGridCellStringRenderer
+class WXDLLEXPORT wxGridCellAutoWrapStringRenderer : public wxGridCellStringRenderer
 {
 public:
     wxGridCellAutoWrapStringRenderer() : wxGridCellStringRenderer() { }
