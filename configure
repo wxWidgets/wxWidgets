@@ -17948,8 +17948,14 @@ EOF
 
 
 
+if test "x$prefix" != "xNONE"; then
+    wxPREFIX=$prefix
+else
+    wxPREFIX=$ac_default_prefix
+fi
+
 cat >> confdefs.h <<EOF
-#define wxINSTALL_PREFIX $prefix
+#define wxINSTALL_PREFIX "$wxPREFIX"
 EOF
 
 
@@ -18099,7 +18105,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:18103: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:18109: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
