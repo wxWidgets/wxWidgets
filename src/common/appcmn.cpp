@@ -41,6 +41,7 @@
 #include "wx/thread.h"
 #include "wx/confbase.h"
 #include "wx/tokenzr.h"
+#include "wx/utils.h"
 
 #if !defined(__WXMSW__) || defined(__WXMICROWIN__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
