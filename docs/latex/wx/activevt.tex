@@ -21,6 +21,10 @@ function that takes a wxActivateEvent argument.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_ACTIVATE(func)}}{Process a wxEVT\_ACTIVATE event.}
 \twocolitem{{\bf EVT\_ACTIVATE\_APP(func)}}{Process a wxEVT\_ACTIVATE\_APP event.}
+\twocolitem{{\bf EVT\_HIBERNATE(func)}}{Process a hibernate event, supplying the member function.
+This event applies to wxApp only, and only on Windows SmartPhone and PocketPC. It is generated when the
+system is low on memory; the application should free up as much memory as possible, and restore
+full working when it receives a wxEVT\_ACTIVATE or wxEVT\_ACTIVATE\_APP event.}
 \end{twocollist}%
 
 \wxheading{Remarks}
@@ -33,8 +37,7 @@ An application is activated or deactivated when one of its frames becomes activa
 or a frame becomes inactivate resulting in all application frames being inactive. (Windows only)
 
 Please note that usually you should call \helpref{event.Skip()}{wxeventskip} in
-your handlers for these events as not doing so can result in strange effects,
-especially on Mac platform.
+your handlers for these events as not doing so can result in strange effects.
 
 \wxheading{See also}
 

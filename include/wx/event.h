@@ -273,6 +273,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_UPDATE_UI, 440)
     DECLARE_EVENT_TYPE(wxEVT_SIZING, 441)
     DECLARE_EVENT_TYPE(wxEVT_MOVING, 442)
+    DECLARE_EVENT_TYPE(wxEVT_HIBERNATE, 443)
 
         // Generic command events
         // Note: a click is a higher-level event than button down/up
@@ -1288,6 +1289,7 @@ private:
 /*
  wxEVT_ACTIVATE
  wxEVT_ACTIVATE_APP
+ wxEVT_HIBERNATE
  */
 
 class WXDLLIMPEXP_CORE wxActivateEvent : public wxEvent
@@ -2686,6 +2688,7 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
 #define EVT_CHILD_FOCUS(func)  wx__DECLARE_EVT0(wxEVT_CHILD_FOCUS, wxChildFocusEventHandler(func))
 #define EVT_ACTIVATE(func)  wx__DECLARE_EVT0(wxEVT_ACTIVATE, wxActivateEventHandler(func))
 #define EVT_ACTIVATE_APP(func)  wx__DECLARE_EVT0(wxEVT_ACTIVATE_APP, wxActivateEventHandler(func))
+#define EVT_HIBERNATE(func)  wx__DECLARE_EVT0(wxEVT_HIBERNATE, wxActivateEventHandler(func))
 #define EVT_END_SESSION(func)  wx__DECLARE_EVT0(wxEVT_END_SESSION, wxCloseEventHandler(func))
 #define EVT_QUERY_END_SESSION(func)  wx__DECLARE_EVT0(wxEVT_QUERY_END_SESSION, wxCloseEventHandler(func))
 #define EVT_DROP_FILES(func)  wx__DECLARE_EVT0(wxEVT_DROP_FILES, wxDropFilesEventHandler(func))

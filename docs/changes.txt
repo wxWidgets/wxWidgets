@@ -9,9 +9,10 @@ All:
 
 - wxURI::GetUser() only returns the user name now, use GetUserInfo() to get
   user and password as in 2.5.4; wxURI::GetPassword() added.
-- added wxDebugReport class.
-- added wxTempFileOutputStream by Stas Sergeev
-- fixed wxDateTime::SetToWeekDayInSameWeek(Sun, Monday_First)
+- Added wxDebugReport class.
+- Added wxTempFileOutputStream by Stas Sergeev.
+- Fixed wxDateTime::SetToWeekDayInSameWeek(Sun, Monday_First).
+- Added WXK_SPECIAL keycodes for special hardware buttons.
 
 All (GUI):
 
@@ -42,7 +43,7 @@ wxMac:
 
 wxPalmOS:
 
-- native wxRadioBox implementation.
+- Native wxRadioBox implementation.
 
 wxWinCE:
 
@@ -56,7 +57,10 @@ wxWinCE:
 - Frames have Ctrl+Q accelerator set automatically, as per the
   PocketPC guidelines
 - Documented issues in manual under wxWinCE topic.
-
+- Made (Un)RegisterHotKey WinCE-aware.
+- Sends wxEVT_HIBERNATE event.
+- Now fakes wxEVT_ACTIVATE_APP to be symmetrical with wxEVT_HIBERNATE.
+- Added wxTE_CAPITALIZE for CAPEDIT controls.
 
 2.5.4
 -----

@@ -153,6 +153,9 @@ private:
 #if wxUSE_TOOLTIPS
     WXHWND                m_hwndToolTip;
 #endif // tooltips
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    void* m_activateInfo;
+#endif
 
     // used by IconizeChildFrames(), see comments there
     bool m_wasMinimized;

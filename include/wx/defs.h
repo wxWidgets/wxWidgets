@@ -1941,7 +1941,7 @@ enum wxKeyCode
     WXK_SPACE   =    32,
     WXK_DELETE  =    127,
 
-    /* These are, by design, not compatable with unicode characters.
+    /* These are, by design, not compatible with unicode characters.
        If you want to get a unicode character from a key event, use
        wxKeyEvent::GetUnicodeKey instead.                           */
     WXK_START   = 300,
@@ -2046,7 +2046,29 @@ enum wxKeyCode
     WXK_WINDOWS_LEFT,
     WXK_WINDOWS_RIGHT,
     WXK_WINDOWS_MENU ,
-    WXK_COMMAND
+    WXK_COMMAND,
+
+    // Hardware-specific buttons
+    WXK_SPECIAL1 = 193,
+    WXK_SPECIAL2,
+    WXK_SPECIAL3,
+    WXK_SPECIAL4,
+    WXK_SPECIAL5,
+    WXK_SPECIAL6,
+    WXK_SPECIAL7,
+    WXK_SPECIAL8,
+    WXK_SPECIAL9,
+    WXK_SPECIAL10,
+    WXK_SPECIAL11,
+    WXK_SPECIAL12,
+    WXK_SPECIAL13,
+    WXK_SPECIAL14,
+    WXK_SPECIAL15,
+    WXK_SPECIAL16,
+    WXK_SPECIAL17,
+    WXK_SPECIAL18,
+    WXK_SPECIAL19,
+    WXK_SPECIAL20
 };
 
 #if wxUSE_HOTKEY

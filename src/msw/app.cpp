@@ -68,6 +68,10 @@
     #define  wxUSE_OLE 0
 #endif // broken compilers
 
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+#include <aygshell.h>
+#endif
+
 #if wxUSE_OLE
     #include <ole2.h>
 #endif
@@ -299,6 +303,10 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #if defined(__WIN95__) && !defined(__WXMICROWIN__)
     InitCommonControls();
 #endif // __WIN95__
+
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    SHInitExtraControls();
+#endif
 
     wxOleInitialize();
 

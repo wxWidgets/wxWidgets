@@ -2278,6 +2278,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
         case WM_ACTIVATEAPP:
+            // This implicitly sends a wxEVT_ACTIVATE_APP event
             wxTheApp->SetActive(wParam != 0, FindFocus());
             break;
 #endif
@@ -5794,6 +5795,25 @@ wxPoint wxGetMousePosition()
 
 #if wxUSE_HOTKEY
 
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+static void WinCEUnregisterHotKey(int modifiers, int id)
+{
+    // Register hotkeys for the hardware buttons
+    HINSTANCE hCoreDll;
+    typedef BOOL (WINAPI *UnregisterFunc1Proc)(UINT, UINT);
+
+    UnregisterFunc1Proc procUnregisterFunc;
+    hCoreDll = LoadLibrary(_T("coredll.dll"));
+    if (hCoreDll)
+    {
+        procUnregisterFunc = (UnregisterFunc1Proc)GetProcAddress(hCoreDll, _T("UnregisterFunc1"));
+        if (procUnregisterFunc)
+            procUnregisterFunc(modifiers, id);
+        FreeLibrary(hCoreDll);
+    }
+}
+#endif
+
 bool wxWindowMSW::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
 {
     UINT win_modifiers=0;
@@ -5805,6 +5825,12 @@ bool wxWindowMSW::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
         win_modifiers |= MOD_CONTROL;
     if ( modifiers & wxMOD_WIN )
         win_modifiers |= MOD_WIN;
+
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    // Required for PPC and Smartphone hardware buttons
+    if (keycode >= WXK_SPECIAL1 && keycode <= WXK_SPECIAL20)
+        WinCEUnregisterHotKey(win_modifiers, hotkeyId);
+#endif
 
     if ( !::RegisterHotKey(GetHwnd(), hotkeyId, win_modifiers, keycode) )
     {
@@ -5818,6 +5844,10 @@ bool wxWindowMSW::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
 
 bool wxWindowMSW::UnregisterHotKey(int hotkeyId)
 {
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    WinCEUnregisterHotKey(MOD_WIN, hotkeyId);
+#endif
+
     if ( !::UnregisterHotKey(GetHwnd(), hotkeyId) )
     {
         wxLogLastError(_T("UnregisterHotKey"));

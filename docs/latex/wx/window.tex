@@ -2280,7 +2280,8 @@ hotkey with this modifier/virtualKeyCode combination.
 \wxheading{Remarks}
 
 Use EVT\_HOTKEY(hotkeyId, fnc) in the event table to capture the event.
-This function is currently only implemented under MSW.
+This function is currently only implemented under Windows. It is used
+in the \helpref{Windows CE port}{wxwince} for detecting hardware button presses.
 
 \wxheading{See also}
 

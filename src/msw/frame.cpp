@@ -46,6 +46,12 @@
 #include <commctrl.h>
 #endif
 
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+#include "wx/msw/ole/oleutils.h"
+#include <aygshell.h>
+#include "wx/msw/winundef.h"
+#endif
+
 #if wxUSE_STATUSBAR
     #include "wx/statusbr.h"
     #include "wx/generic/statusbr.h"
@@ -177,6 +183,14 @@ void wxFrame::Init()
     m_hwndToolTip = 0;
 #endif
 
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    SHACTIVATEINFO* info = new SHACTIVATEINFO;
+    memset(info, 0, sizeof(SHACTIVATEINFO));
+    info->cbSize = sizeof(SHACTIVATEINFO);
+
+    m_activateInfo = (void*) info;
+#endif
+
     m_wasMinimized = false;
 }
 
@@ -213,6 +227,12 @@ wxFrame::~wxFrame()
 {
     m_isBeingDeleted = true;
     DeleteAllBars();
+
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+    SHACTIVATEINFO* info = (SHACTIVATEINFO*) m_activateInfo;
+    delete info;
+    m_activateInfo = NULL;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -932,6 +952,39 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
 
     switch ( message )
     {
+#if defined(__SMARTPHONE__) || defined(__POCKETPC__)
+        case WM_ACTIVATE:
+        {
+            SHACTIVATEINFO* info = (SHACTIVATEINFO*) m_activateInfo;
+            if (info)
+                SHHandleWMActivate(GetHwnd(), wParam, lParam, info, FALSE);
+            
+            // This implicitly sends a wxEVT_ACTIVATE_APP event
+            if (wxTheApp)
+                wxTheApp->SetActive(wParam != 0, FindFocus());
+            break;
+        }
+        case WM_SETTINGCHANGE:
+        {
+            SHACTIVATEINFO* info = (SHACTIVATEINFO*) m_activateInfo;
+            if (info)
+                SHHandleWMSettingChange(GetHwnd(), wParam, lParam, info);
+            processed = true;
+            break;
+        }
+        case WM_HIBERNATE:
+        {
+            wxActivateEvent event(wxEVT_HIBERNATE, true, wxID_ANY);
+            event.SetEventObject(wxTheApp);
+
+            if (wxTheApp)
+            {
+                processed = wxTheApp->ProcessEvent(event);
+            }
+            break;
+        }
+#endif
+
         case WM_CLOSE:
             // if we can't close, tell the system that we processed the
             // message - otherwise it would close us

@@ -102,6 +102,37 @@ according to the orientation, which you could detect in idle time, for example).
 However, if the input panel (SIP) is shown, windows do not yet resize accordingly. This will
 be implemented soon.
 
+\subsubsection{Closing top-level windows in wxWinCE}
+
+You won't get a wxCloseEvent when the user clicks on the X in the titlebar
+on Smartphone and PocketPC; the window is simply hidden instead. However the system may send the
+event to force the application to close down.
+
+\subsubsection{Hibernation in wxWinCE}
+
+Smartphone and PocketPC will send a wxEVT\_HIBERNATE to the application object in low
+memory conditions. Your application should release memory and close dialogs,
+and wake up again when the next wxEVT\_ACTIVATE or wxEVT\_ACTIVATE\_APP message is received.
+(wxEVT\_ACTIVATE\_APP is generated whenever a wxEVT\_ACTIVATE event is received
+in Smartphone and PocketPC, since these platforms do not support WM\_ACTIVATEAPP.)
+
+\subsubsection{Hardware buttons in wxWinCE}
+
+Special hardware buttons are sent to a window via the wxEVT\_HOTKEY event
+under Smartphone and PocketPC. You should first register each required button with \helpref{wxWindow::RegisterHotKey}{wxwindowregisterhotkey},
+and unregister the button when you're done with it. For example:
+
+\begin{verbatim}
+  win->RegisterHotKey(0, wxMOD_WIN, WXK_SPECIAL1);
+  win->UnregisterHotKey(0);
+\end{verbatim}
+
+You may have to register the buttons in a wxEVT_ACTIVATE event handler
+since other applications will grab the buttons.
+
+There is currently no method of finding out the names of the special
+buttons or how many there are.
+
 \subsubsection{Dialogs in wxWinCE}
 
 PocketPC dialogs have an OK button on the caption, and so you should generally
@@ -210,9 +241,6 @@ needs to be simplified (and speeded up).
 layout seems slow. Some analysis is required.
 \item {\bf Notification boxes.} The balloon-like notification messages, and their
 icons, should be implemented. This will be quite straightforward.
-\item {\bf WM\_SETTINGCHANGE.} This message needs to be handled by calling SHHandleWMSettingChange.
-\item {\bf WM\_ACTIVATE.} This message needs to be handled by calling SHHandleWMActivate.
-\item {\bf WM\_HIBERNATE.} We need to handle this message.
 \item {\bf SIP size.} We need to be able to get the area taken up by the SIP (input panel),
 and the remaining area, by calling SHSipInfo. We also may need to be able to show and hide
 the SIP programmatically, with SHSipPreference. See also the {\it Input Dialogs} topic in

@@ -280,6 +280,12 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     // do create the control - either an EDIT or RICHEDIT
     wxString windowClass = wxT("EDIT");
+    
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+    // A control that capitalizes the first letter
+    if (style & wxTE_CAPITALIZE)
+        windowClass = wxT("CAPEDIT");
+#endif    
 
 #if wxUSE_RICHEDIT
     if ( m_windowStyle & wxTE_AUTO_URL )
