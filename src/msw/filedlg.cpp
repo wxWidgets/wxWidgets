@@ -253,10 +253,16 @@ int wxFileDialog::ShowModal()
         msw_flags |= OFN_EXPLORER | OFN_ALLOWMULTISELECT;
     }
 
-    // if wxCHANGE_DIR flag is not given we shouldn't change the CWD
+    // if wxCHANGE_DIR flag is not given we shouldn't change the CWD which the
+    // standard dialog does by default
     if ( !(m_dialogStyle & wxCHANGE_DIR) )
     {
         msw_flags |= OFN_NOCHANGEDIR;
+    }
+
+    if ( m_dialogStyle & wxOVERWRITE_PROMPT )
+    {
+        msw_flags |= OFN_OVERWRITEPROMPT;
     }
 
     OPENFILENAME of;
@@ -279,14 +285,41 @@ int wxFileDialog::ShowModal()
     of.nMaxFileTitle     = wxMAXFILE + 1 + wxMAXEXT;    // Windows 3.0 and 3.1
 
     // Convert forward slashes to backslashes (file selector doesn't like
-    // forward slashes)
-    size_t i = 0;
-    size_t len = m_dir.Length();
-    for (i = 0; i < len; i++)
-        if (m_dir[i] == wxT('/'))
-            m_dir[i] = wxT('\\');
+    // forward slashes) and also squeeze multiple consecutive slashes into one
+    // as it doesn't like two backslashes in a row neither
+    wxString dir;
+    size_t len = m_dir.length();
+    dir.reserve(len);
+    for ( size_t i = 0; i < len; i++ )
+    {
+        wxChar ch = m_dir[i];
+        switch ( ch )
+        {
+            case _T('/'):
+                // convert to backslash
+                ch = _T('\\');
 
-    of.lpstrInitialDir   = m_dir.c_str();
+                // fall through
+
+            case _T('\\'):
+                while ( i < len - 1 )
+                {
+                    wxChar chNext = m_dir[i + 1];
+                    if ( chNext != _T('\\') && chNext != _T('/') )
+                        break;
+
+                    // ignore the next one
+                    i++;
+                }
+                // fall through
+
+            default:
+                // normal char
+                dir += ch;
+        }
+    }
+
+    of.lpstrInitialDir   = dir.c_str();
 
     of.Flags             = msw_flags;
 
@@ -446,22 +479,6 @@ int wxFileDialog::ShowModal()
             m_fileNames.Add(m_fileName);
             m_dir = wxPathOnly(fileNameBuffer);
         }
-
-
-        //=== Simulating the wxOVERWRITE_PROMPT >>============================
-
-        if ( (m_dialogStyle & wxOVERWRITE_PROMPT) &&
-             ::wxFileExists( fileNameBuffer ) )
-        {
-            wxString messageText;
-            messageText.Printf(_("Replace file '%s'?"), fileNameBuffer);
-
-            if ( wxMessageBox(messageText, m_message, wxYES_NO ) != wxYES )
-            {
-                success = FALSE;
-            }
-        }
-
     }
     else
     {
