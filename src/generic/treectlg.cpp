@@ -580,6 +580,15 @@ BEGIN_EVENT_TABLE(wxGenericTreeCtrl,wxScrolledWindow)
     EVT_IDLE           (wxGenericTreeCtrl::OnIdle)
 END_EVENT_TABLE()
 
+#if !defined(__WXMSW__) || defined(__WIN16__)
+/*
+ * wxTreeCtrl has to be a real class or we have problems with
+ * the run-time information.
+ */
+
+IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxGenericTreeCtrl)
+#endif
+
 // -----------------------------------------------------------------------------
 // construction/destruction
 // -----------------------------------------------------------------------------
@@ -1687,6 +1696,8 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
     int exposed_x = dc.LogicalToDeviceX( 0 );
     int exposed_y = dc.LogicalToDeviceY( item->GetY() );
 
+    bool drawLines = ((GetWindowStyle() & wxTR_NO_LINES) == 0);
+
     if (IsExposed( exposed_x, exposed_y, 10000, GetLineHeight(item) ))  // 10000 = very much
     {
         int startX = horizX;
@@ -1695,11 +1706,13 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 //        if (!item->HasChildren()) endX += (m_indent+5);
         if (!item->HasChildren()) endX += 20;
 
-        dc.DrawLine( startX, y, endX, y );
+        if (drawLines)
+            dc.DrawLine( startX, y, endX, y );
 
         if (item->HasPlus())
         {
-            dc.DrawLine( horizX+(m_indent+5), y, horizX+(m_indent+15), y );
+            if (drawLines)
+                dc.DrawLine( horizX+(m_indent+5), y, horizX+(m_indent+15), y );
             dc.SetPen( *wxGREY_PEN );
             dc.SetBrush( *wxWHITE_BRUSH );
             dc.DrawRectangle( horizX+(m_indent-5), y-4, 11, 9 );
@@ -1766,7 +1779,8 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
         if (count > 0)
         {
             semiOldY+=GetLineHeight(children[--n])/2;
-            dc.DrawLine( horizX+m_indent, oldY+5, horizX+m_indent, semiOldY );
+            if (drawLines)
+                dc.DrawLine( horizX+m_indent, oldY+5, horizX+m_indent, semiOldY );
         }
     }
 }

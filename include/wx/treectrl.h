@@ -27,10 +27,12 @@
     #include "wx/generic/treectlg.h"
 #endif
 
+/*
 #if !defined(__WXMSW__)
 #define wxTreeCtrl wxGenericTreeCtrl
 #define sm_classwxTreeCtrl sm_classwxGenericTreeCtrl
 #endif
+*/
 
 #endif
     // _WX_TREECTRL_H_BASE_

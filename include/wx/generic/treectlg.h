@@ -13,7 +13,7 @@
 #define _GENERIC_TREECTRL_H_
 
 #ifdef __GNUG__
-    #pragma interface "treectrg.h"
+    #pragma interface "treectlg.h"
 #endif
 
 #include "wx/defs.h"
@@ -393,6 +393,33 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGenericTreeCtrl)
 };
+
+#if !defined(__WXMSW__) || defined(__WIN16__)
+/*
+ * wxTreeCtrl has to be a real class or we have problems with
+ * the run-time information.
+ */
+
+class WXDLLEXPORT wxTreeCtrl: public wxGenericTreeCtrl
+{
+public:
+    DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
+
+    wxTreeCtrl() {}
+
+    wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+               const wxValidator &validator = wxDefaultValidator,
+               const wxString& name = wxTreeCtrlNameStr)
+    {
+        Create(parent, id, pos, size, style, validator, name);
+    }
+
+};
+
+#endif
 
 #endif // _GENERIC_TREECTRL_H_
 
