@@ -6,7 +6,7 @@ msgstr ""
 "Last-Translator: Patrick Hubers <phubers@solve-i-t.com>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso8859-1\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: ../src/generic/dirdlgg.cpp:551

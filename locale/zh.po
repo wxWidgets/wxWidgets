@@ -6,7 +6,7 @@ msgstr ""
 "Last-Translator: mrfx <mrfx@fm365.com>\n"
 "Language-Team: wxWindows tranlators <wx-translators@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=zh_CN.GB2312\n"
+"Content-Type: text/plain; charset=GB2312\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: ../src/generic/dirdlgg.cpp:551
