@@ -103,9 +103,16 @@ public:
                   const wxString& filespec = wxEmptyString,
                   int flags = wxDIR_DEFAULT) const;
 
-    // get next file in the enumeration started with either GetFirst() or
-    // GetFirstNormal()
+    // get next file in the enumeration started with GetFirst()
     bool GetNext(wxString *filename) const;
+
+    // return true if this directory has any files in it
+    bool HasFiles(const wxString& spec = wxEmptyString)
+        { wxString s; return GetFirst(&s, spec, wxDIR_FILES | wxDIR_HIDDEN); }
+
+    // return true if this directory has any subdirectories
+    bool HasSubDirs(const wxString& spec = wxEmptyString)
+        { wxString s; return GetFirst(&s, spec, wxDIR_DIRS | wxDIR_HIDDEN); }
 
     // enumerate all files in this directory and its subdirectories
     //

@@ -39,6 +39,7 @@
 #include "wx/log.h"
 #include "wx/sizer.h"
 #include "wx/tokenzr.h"
+#include "wx/dir.h"
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
@@ -147,10 +148,7 @@ void wxDirItemData::SetNewDirName( wxString path )
 
 bool wxDirItemData::HasSubDirs()
 {
-    wxString search = m_path + wxT("/*");
-    wxLogNull log;
-    wxString path = wxFindFirstFile( search, wxDIR );
-    return (bool)(!path.IsNull());
+    return wxDir(m_path).HasSubDirs();
 }
 
 //-----------------------------------------------------------------------------
@@ -315,27 +313,19 @@ void wxDirCtrl::OnExpandItem(wxTreeEvent &event)
     wxDirItemData *data = (wxDirItemData *)GetItemData(event.GetItem());
     wxASSERT(data);
 
-    wxString search,path,filename;
-
     m_paths.Clear();
     m_names.Clear();
-#ifdef __WXMSW__
-    search = data->m_path + _T("\\*.*");
-#else
-    search = data->m_path + _T("/*");
-#endif
-    for (path = wxFindFirstFile( search, wxDIR ); !path.IsNull();
-       path=wxFindNextFile() )
+
+    wxDir dir(data->m_path);
+
+    wxString filename;
+    bool cont = dir.GetFirst(&filename, "", wxDIR_DIRS | wxDIR_HIDDEN);
+    while ( cont )
     {
-        filename = wxFileNameFromPath( path );
-        /* Don't add "." and ".." to the tree. I think wxFindNextFile
-         * also checks this, but I don't quite understand what happens
-         * there. Also wxFindNextFile seems to swallow hidden dirs */
-        if ( (filename != _T(".")) && (filename != _T("..")) )
-        {
-            m_paths.Add(path);
-            m_names.Add(filename);
-        }
+        m_paths.Add(data->m_path);
+        m_names.Add(filename);
+
+        cont = dir.GetNext(&filename);
     }
 
     CreateItems( event.GetItem() );

@@ -126,6 +126,22 @@ empty) and flags, return TRUE on success.
 Continue enumerating files satisfying the criteria specified by the last call
 to \helpref{GetFirst}{wxdirgetfirst}.
 
+\membersection{wxDir::HasFiles}\label{wxdirhasfiles}
+
+\func{bool}{HasFiles}{\param{const wxString& }{filespec = wxEmptyString}}
+
+Returns {\tt TRUE} if the directory contains any files matching the given 
+{\it filespec}. If {\it filespec} is empty, look for any files at all. In any
+case, even hidden files are taken into account.
+
+\membersection{wxDir::HasSubDirs}\label{wxdirhassubdirs}
+
+\func{bool}{HasSubDirs}{\param{const wxString& }{dirspec = wxEmptyString}}
+
+Returns {\tt TRUE} if the directory contains any subdirectories (if a non
+empty {\it filespec} is given, only check for directories matching it).
+The hidden subdirectories are taken into account as well.
+
 \membersection{wxDir::Traverse}\label{wxdirtraverse}
 
 \func{size\_t}{Traverse}{\param{wxDirTraverser& }{sink}, \param{const wxString& }{filespec = wxEmptyString}, \param{int }{flags = wxDIR\_DEFAULT}}
