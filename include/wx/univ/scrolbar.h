@@ -16,6 +16,8 @@
     #pragma interface "univscrolbar.h"
 #endif
 
+#include "wx/univ/renderer.h"   // for wxHitTest
+
 class WXDLLEXPORT wxInputHandler;
 
 // ----------------------------------------------------------------------------
@@ -42,15 +44,17 @@ class WXDLLEXPORT wxInputHandler;
 class WXDLLEXPORT wxScrollBar : public wxScrollBarBase
 {
 public:
-    // the parts of the scrollbar
+    // scrollbar elements: they correspond to wxHT_SCROLLBAR_XXX constants but
+    // start from 0 which allows to use them as array indices
     enum Element
     {
         Element_Arrow_Line_1,
         Element_Arrow_Line_2,
         Element_Arrow_Page_1,
         Element_Arrow_Page_2,
-        Element_Thumb,
-        Element_Bar,
+        Element_Arrow_Thumb,
+        Element_Bar_1,
+        Element_Bar_2,
         Element_Max
     };
 
@@ -99,10 +103,8 @@ public:
                                const wxEvent& event);
 
     // wxScrollBar sub elements state (combination of wxCONTROL_XXX)
-    void SetState(Element elem, int flags)
-        { m_elementsState[elem] = flags; }
-    int GetState(Element elem) const
-        { return m_elementsState[elem]; }
+    void SetState(Element which, int flags) { m_elementsState[which] = flags; }
+    int GetState(Element which) const { return m_elementsState[which]; }
 
 protected:
     virtual wxSize DoGetBestSize() const;
@@ -110,7 +112,7 @@ protected:
 
     // SetThumbPosition() helper
     void DoSetThumb(int thumbPos);
-    
+
     // common part of all ctors
     void Init();
 

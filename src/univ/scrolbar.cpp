@@ -56,7 +56,7 @@ void wxScrollBar::Init()
     m_thumbPos =
     m_pageSize = 0;
 
-    for ( size_t n = 0; n < Element_Max; n++ )
+    for ( size_t n = 0; n < WXSIZEOF(m_elementsState); n++ )
     {
         m_elementsState[n] = 0;
     }

@@ -61,6 +61,7 @@ public:
     {
         Arrow_Normal,
         Arrow_Disabled,
+        Arrow_Pressed,
         Arrow_StateMax
     };
 
@@ -132,7 +133,7 @@ protected:
     void DrawRaisedBorder(wxDC& dc, wxRect *rect);
 
     // draw the border used for scrollbar arrows
-    void DrawArrowBorder(wxDC& dc, wxRect *rect);
+    void DrawArrowBorder(wxDC& dc, wxRect *rect, bool isPressed = FALSE);
 
     // public DrawArrow()s helper
     void DrawArrow(wxDC& dc, const wxRect& rect,
@@ -182,38 +183,26 @@ protected:
     wxWin32Renderer *m_renderer;
 };
 
-class wxWin32ButtonInputHandler : public wxWin32InputHandler
+class wxWin32ScrollBarInputHandler : public wxStdScrollBarInputHandler
 {
 public:
-    wxWin32ButtonInputHandler(wxWin32Renderer *renderer);
+    wxWin32ScrollBarInputHandler(wxWin32Renderer *renderer,
+                                 wxInputHandler *handler)
+        : wxStdScrollBarInputHandler(renderer, handler) { }
 
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxKeyEvent& event,
-                                 bool pressed);
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxMouseEvent& event);
+    // we don't highlight scrollbar elements, so there is no need to process
+    // mouse move events
+    virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event)
+    {
+        if ( event.Moving() )
+            return FALSE;
 
-private:
-    wxWindow *m_winCapture;
-};
+        return wxStdScrollBarInputHandler::OnMouseMove(control, event);
+    }
 
-class wxWin32ScrollBarInputHandler : public wxWin32InputHandler
-{
-public:
-    wxWin32ScrollBarInputHandler(wxWin32Renderer *renderer);
-
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxKeyEvent& event,
-                                 bool pressed);
-    virtual wxControlActions Map(wxControl *control,
-                                 const wxMouseEvent& event);
-
-private:
-    void Press(wxScrollBar *scrollbar, bool doIt) { }
-
-    wxWindow *m_winCapture;
-    int m_btnCapture;
-    wxHitTest m_htLast;
+protected:
+    virtual bool OnMouseLeave() { return TRUE; }
+    virtual bool IsAllowedButton(int button) { return button == 1; }
 };
 
 // ----------------------------------------------------------------------------
@@ -289,9 +278,10 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
         n = m_handlerNames.Add(control);
 
         if ( control == _T("wxButton") )
-            handler = new wxWin32ButtonInputHandler(m_renderer);
+            handler = new wxStdButtonInputHandler(GetInputHandler(_T("wxControl")));
         else if ( control == _T("wxScrollBar") )
-            handler = new wxWin32ScrollBarInputHandler(m_renderer);
+            handler = new wxWin32ScrollBarInputHandler(m_renderer,
+                                                       GetInputHandler(_T("wxControl")));
         else
             handler = new wxWin32InputHandler(m_renderer);
 
@@ -322,6 +312,10 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col,
     {
         case CONTROL:           return wxColour(0xc0c0c0);
         case CONTROL_TEXT:      return *wxBLACK;
+        case SCROLLBAR:         if ( flags & wxCONTROL_PRESSED )
+                                    return *wxBLACK;
+                                else
+                                    return wxColour(0xe0e0e0);
 
         case HIGHLIGHT:         return wxColour(0x800000);
         case HIGHLIGHT_TEXT:    return wxColour(0xffffff);
@@ -500,6 +494,8 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
         m_bmpArrows[Arrow_Normal][n].SetMask(mask);
         mask = new wxMask(m_bmpArrows[Arrow_Disabled][n], *wxWHITE);
         m_bmpArrows[Arrow_Disabled][n].SetMask(mask);
+
+        m_bmpArrows[Arrow_Pressed][n] = m_bmpArrows[Arrow_Normal][n];
     }
 }
 
@@ -624,10 +620,25 @@ void wxWin32Renderer::DrawRaisedBorder(wxDC& dc, wxRect *rect)
     DrawShadedRect(dc, rect, m_penLightGrey, m_penDarkGrey);
 }
 
-void wxWin32Renderer::DrawArrowBorder(wxDC& dc, wxRect *rect)
+void wxWin32Renderer::DrawArrowBorder(wxDC& dc, wxRect *rect, bool isPressed)
 {
-    DrawShadedRect(dc, rect, m_penLightGrey, m_penBlack);
-    DrawShadedRect(dc, rect, m_penHighlight, m_penDarkGrey);
+    if ( isPressed )
+    {
+        DrawRect(dc, rect, m_penDarkGrey);
+
+        // the arrow is usually drawn inside border of width 2 and is offset by
+        // another pixel in both directions when it's pressed - as the border
+        // in this case is more narrow as well, we have to adjust rect like
+        // this:
+        rect->Inflate(-1);
+        rect->x++;
+        rect->y++;
+    }
+    else
+    {
+        DrawShadedRect(dc, rect, m_penLightGrey, m_penBlack);
+        DrawShadedRect(dc, rect, m_penHighlight, m_penDarkGrey);
+    }
 }
 
 void wxWin32Renderer::DrawBorder(wxDC& dc,
@@ -912,7 +923,7 @@ void wxWin32Renderer::DrawArrowButton(wxDC& dc,
                                       wxArrowStyle arrowStyle)
 {
     wxRect rect = rectAll;
-    DrawArrowBorder(dc, &rect);
+    DrawArrowBorder(dc, &rect, arrowStyle == Arrow_Pressed);
     DrawArrow(dc, rect, arrowDir, arrowStyle);
 }
 
@@ -923,10 +934,6 @@ void wxWin32Renderer::DrawScrollbar(wxDC& dc,
                                     const wxRect& rect,
                                     const int *flags)
 {
-    int flagsSb = flags ? flags[0] : 0;
-    wxArrowStyle arrowStyle = flagsSb & wxCONTROL_DISABLED ? Arrow_Disabled
-                                                           : Arrow_Normal;
-
     // first, draw the arrows at the ends
     wxRect rectArrow[2];
     wxArrowDirection arrowDir[2];
@@ -952,24 +959,34 @@ void wxWin32Renderer::DrawScrollbar(wxDC& dc,
         arrowDir[1] = Arrow_Right;
     }
 
+    wxArrowStyle arrowStyle;
     for ( size_t nArrow = 0; nArrow < 2; nArrow++ )
     {
+        int flagsArrow = flags[wxScrollBar::Element_Arrow_Line_1 + nArrow];
+        if ( flagsArrow & wxCONTROL_PRESSED )
+            arrowStyle = Arrow_Pressed;
+        else if ( flagsArrow & wxCONTROL_DISABLED )
+            arrowStyle = Arrow_Disabled;
+        else
+            arrowStyle = Arrow_Normal;
+
         DrawArrowButton(dc, rectArrow[nArrow], arrowDir[nArrow], arrowStyle);
     }
 
-    // next draw the scrollbar area
+    // next draw the scrollbar area: in a normal state, we draw it all in one
+    // call to DoDrawBackground(), but when either part of the bar is pressed,
+    // we paint them separately
     wxRect rectBar = rect;
     if ( orient == wxVERTICAL )
-        rectBar.Inflate(0, -m_sizeScrollbarArrow.y);
+        rectBar.Inflate(0, -(m_sizeScrollbarArrow.y + 1));
     else
-        rectBar.Inflate(-m_sizeScrollbarArrow.x, 0);
+        rectBar.Inflate(-(m_sizeScrollbarArrow.x + 1), 0);
 
-    DoDrawBackground(dc, m_colHighlight, rectBar);
-
-    // and, finally, the thumb, if any
+    // calculate the thumb position
+    wxRect rectThumb;
     if ( thumbPosStart < thumbPosEnd )
     {
-        wxRect rectThumb = rectBar;
+        rectThumb = rectBar;
         if ( orient == wxVERTICAL )
         {
             rectThumb.y += (rectBar.height*thumbPosStart)/100;
@@ -980,7 +997,53 @@ void wxWin32Renderer::DrawScrollbar(wxDC& dc,
             rectThumb.x += (rectBar.width*thumbPosStart)/100;
             rectThumb.width = (rectBar.width*(thumbPosEnd - thumbPosStart))/100;
         }
+    }
+    //else: no thumb
 
+    if ( (flags[wxScrollBar::Element_Bar_1] & wxCONTROL_PRESSED) ||
+         (flags[wxScrollBar::Element_Bar_2] & wxCONTROL_PRESSED) )
+    {
+        // calculate the bounding boxes for each of 2 bar parts
+        wxRect rectBars[2];
+        rectBars[0] =
+        rectBars[1] = rectBar;
+        if ( orient == wxVERTICAL )
+        {
+            rectBars[0].SetTop(m_sizeScrollbarArrow.y);
+            rectBars[0].SetBottom(rectThumb.GetTop() - 1);
+            rectBars[1].SetTop(rectThumb.GetBottom() + 1);
+            rectBars[1].SetBottom(rectBar.GetBottom());
+        }
+        else // horizontal
+        {
+            rectBars[0].SetLeft(m_sizeScrollbarArrow.x);
+            rectBars[0].SetRight(rectThumb.GetLeft() - 1);
+            rectBars[1].SetLeft(rectThumb.GetRight() + 1);
+            rectBars[1].SetRight(rectBar.GetRight());
+        }
+
+        for ( size_t nBar = 0; nBar < 2; nBar++ )
+        {
+            DoDrawBackground(
+                              dc,
+                              m_scheme->Get
+                              (
+                                wxColourScheme::SCROLLBAR,
+                                flags[wxScrollBar::Element_Bar_1 + nBar]
+                              ),
+                              rectBars[nBar]
+                            );
+        }
+    }
+    else // nothing is pressed
+    {
+        DoDrawBackground(dc, m_scheme->Get(wxColourScheme::SCROLLBAR), rectBar);
+    }
+
+    // and, finally, the thumb, if any
+    if ( thumbPosStart < thumbPosEnd )
+    {
+        // we don't use the flags, the thumb never changes appearance
         DrawArrowBorder(dc, &rectThumb);
         DrawBackground(dc, rectThumb);
     }
@@ -1071,179 +1134,4 @@ wxControlActions wxWin32InputHandler::Map(wxControl *control,
                                           const wxMouseEvent& event)
 {
     return wxACTION_NONE;
-}
-
-// ----------------------------------------------------------------------------
-// wxWin32ButtonInputHandler
-// ----------------------------------------------------------------------------
-
-wxWin32ButtonInputHandler::wxWin32ButtonInputHandler(wxWin32Renderer *renderer)
-                         : wxWin32InputHandler(renderer)
-{
-    m_winCapture = NULL;
-}
-
-wxControlActions wxWin32ButtonInputHandler::Map(wxControl *control,
-                                                const wxKeyEvent& event,
-                                                bool pressed)
-{
-    int keycode = event.GetKeyCode();
-    if ( keycode == WXK_SPACE || keycode == WXK_RETURN )
-    {
-        return wxACTION_BUTTON_TOGGLE;
-    }
-
-    return wxWin32InputHandler::Map(control, event, pressed);
-}
-
-wxControlActions wxWin32ButtonInputHandler::Map(wxControl *control,
-                                                const wxMouseEvent& event)
-{
-    if ( event.IsButton() )
-    {
-        if ( event.ButtonDown() )
-        {
-            m_winCapture = wxWindow::FindFocus();
-            m_winCapture->CaptureMouse();
-        }
-        else // up
-        {
-            m_winCapture->ReleaseMouse();
-        }
-
-        return wxACTION_BUTTON_TOGGLE;
-    }
-
-    return wxWin32InputHandler::Map(control, event);
-}
-
-// ----------------------------------------------------------------------------
-// wxWin32ScrollBarInputHandler
-// ----------------------------------------------------------------------------
-
-wxWin32ScrollBarInputHandler::wxWin32ScrollBarInputHandler(wxWin32Renderer *renderer)
-                            : wxWin32InputHandler(renderer)
-{
-    m_winCapture = NULL;
-    m_htLast = wxHT_NOWHERE;
-}
-
-wxControlActions wxWin32ScrollBarInputHandler::Map(wxControl *control,
-                                                   const wxKeyEvent& event,
-                                                   bool pressed)
-{
-    // we only react to the key presses here
-    if ( pressed )
-    {
-        switch ( event.GetKeyCode() )
-        {
-            case WXK_DOWN:
-            case WXK_RIGHT:     return wxACTION_SCROLL_LINE_DOWN;
-            case WXK_UP:
-            case WXK_LEFT:      return wxACTION_SCROLL_LINE_UP;
-            case WXK_HOME:      return wxACTION_SCROLL_START;
-            case WXK_END:       return wxACTION_SCROLL_END;
-            case WXK_PRIOR:     return wxACTION_SCROLL_PAGE_UP;
-            case WXK_NEXT:      return wxACTION_SCROLL_PAGE_DOWN;
-        }
-    }
-
-    return wxWin32InputHandler::Map(control, event, pressed);
-}
-
-wxControlActions wxWin32ScrollBarInputHandler::Map(wxControl *control,
-                                                   const wxMouseEvent& event)
-{
-    if ( event.IsButton() )
-    {
-        // determine which part of the window mouse is in
-        wxScrollBar *scrollbar = wxStaticCast(control, wxScrollBar);
-        wxHitTest ht = m_renderer->HitTestScrollbar
-                                   (
-                                    scrollbar,
-                                    event.GetPosition()
-                                   );
-
-        // when the mouse is pressed on any scrollbar element, we capture it
-        // and hold capture until the same mouse button is released
-        if ( event.ButtonDown() )
-        {
-            if ( !m_winCapture )
-            {
-                m_btnCapture = -1;
-                for ( int i = 1; i <= 3; i++ )
-                {
-                    if ( event.ButtonDown(i) )
-                    {
-                        m_btnCapture = i;
-                        break;
-                    }
-                }
-
-                wxASSERT_MSG( m_btnCapture != -1, _T("unknown mouse button") );
-
-                m_winCapture = control;
-                m_winCapture->CaptureMouse();
-
-                // generate the command
-                bool hasAction = TRUE;
-                wxControlAction action;
-                switch ( ht )
-                {
-                    case wxHT_SCROLLBAR_ARROW_LINE_1:
-                        action = wxACTION_SCROLL_LINE_UP;
-                        break;
-
-                    case wxHT_SCROLLBAR_ARROW_LINE_2:
-                        action = wxACTION_SCROLL_LINE_DOWN;
-                        break;
-
-                    case wxHT_SCROLLBAR_BAR_1:
-                        action = wxACTION_SCROLL_PAGE_UP;
-                        break;
-
-                    case wxHT_SCROLLBAR_BAR_2:
-                        action = wxACTION_SCROLL_PAGE_DOWN;
-                        break;
-
-                    default:
-                        hasAction = FALSE;
-                }
-
-                if ( hasAction )
-                {
-                    control->PerformAction(action, event);
-                }
-
-                // remove highlighting and press the arrow instead
-                m_htLast = ht;
-                Press(scrollbar, TRUE);
-            }
-            //else: mouse already captured, nothing to do
-        }
-        // release mouse if the *same* button went up
-        else if ( event.ButtonUp(m_btnCapture) )
-        {
-            if ( m_winCapture )
-            {
-                m_winCapture->ReleaseMouse();
-                m_winCapture = NULL;
-
-                // unpress the arrow and highlight the current element
-                Press(scrollbar, TRUE);
-                m_htLast = ht;
-
-                control->Refresh();
-            }
-            else
-            {
-                // this is not supposed to happen as the button can't go up
-                // without going down previously and then we'd have
-                // m_winCapture by now
-                wxFAIL_MSG( _T("logic error in mouse capturing code") );
-            }
-        }
-    }
-
-    return wxWin32InputHandler::Map(control, event);
 }

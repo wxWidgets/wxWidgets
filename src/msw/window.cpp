@@ -1015,7 +1015,7 @@ void wxWindow::OnIdle(wxIdleEvent& event)
                 state |= MK_MBUTTON;
             if ( GetKeyState( VK_RBUTTON ) )
                 state |= MK_RBUTTON;
-  
+
             wxMouseEvent event(wxEVT_LEAVE_WINDOW);
             InitMouseEvent(event, pt.x, pt.y, state);
 
@@ -3273,13 +3273,22 @@ bool wxWindow::HandleMouseMove(int x, int y, WXUINT flags)
 {
     if ( !m_mouseInWindow )
     {
-        // Generate an ENTER event
-        m_mouseInWindow = TRUE;
+        // it would be wrogn to assume that just because we get a mouse move
+        // event the mouse is inside the window: although this is usually true,
+        // it is not if we had captured the mouse, so we need to check the
+        // mouse coordinates here
+        POINT pt;
+        ::GetCursorPos(&pt);
+        if ( ::WindowFromPoint(pt) == GetHwnd() )
+        {
+            // Generate an ENTER event
+            m_mouseInWindow = TRUE;
 
-        wxMouseEvent event(wxEVT_ENTER_WINDOW);
-        InitMouseEvent(event, x, y, flags);
+            wxMouseEvent event(wxEVT_ENTER_WINDOW);
+            InitMouseEvent(event, x, y, flags);
 
-        (void)GetEventHandler()->ProcessEvent(event);
+            (void)GetEventHandler()->ProcessEvent(event);
+        }
     }
 
 #if wxUSE_MOUSEEVENT_HACK

@@ -46,6 +46,7 @@ enum wxHitTest
     wxHT_NOWHERE,
 
     // scrollbar
+    wxHT_SCROLLBAR_FIRST = wxHT_NOWHERE,
     wxHT_SCROLLBAR_ARROW_LINE_1,    // left or upper arrow to scroll by line
     wxHT_SCROLLBAR_ARROW_LINE_2,    // right or down
     wxHT_SCROLLBAR_ARROW_PAGE_1,    // left or upper arrow to scroll by page
@@ -53,6 +54,7 @@ enum wxHitTest
     wxHT_SCROLLBAR_THUMB,           // on the thumb
     wxHT_SCROLLBAR_BAR_1,           // bar to the left/above the thumb
     wxHT_SCROLLBAR_BAR_2,           // bar to the right/below the thumb
+    wxHT_SCROLLBAR_LAST,
 
     wxHT_MAX
 };
