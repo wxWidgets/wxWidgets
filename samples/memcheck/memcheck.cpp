@@ -37,7 +37,7 @@
 
 // Normally, new is automatically defined to be the
 // debugging version. If not, this does it.
-#if !defined(new) && defined(WXDEBUG_NEW)
+#if !defined(new) && defined(WXDEBUG_NEW) && wxUSE_DEBUG_CONTEXT
 #define new WXDEBUG_NEW
 #endif
 
@@ -83,7 +83,16 @@ bool MyApp::OnInit(void)
   // Show the frame
   frame->Show(TRUE);
 
+#if wxUSE_DEBUG_CONTEXT
   wxDebugContext::SetCheckpoint();
+#endif
+
+  // object allocation
+  wxBrush* brush = new wxBrush(*wxRED);
+  wxBitmap* bitmap = new wxBitmap(100, 100);
+
+  // non-object allocation
+  char *ordinaryNonObject = new char[1000];
 
   wxString *thing = new wxString;
 
@@ -91,11 +100,9 @@ bool MyApp::OnInit(void)
   wxDateTime* date = new wxDateTime;
 #endif // wxUSE_DATETIME
 
-  // non-object allocation
-  char *ordinaryNonObject = new char[1000];
-
   const char *data = (const char*) thing ;
 
+#if wxUSE_DEBUG_CONTEXT
   // On MSW, Dump() crashes if using wxLogGui,
   // so use wxLogStderr instead.
   wxLog* oldLog = wxLog::SetActiveTarget(new wxLogStderr);
@@ -106,6 +113,7 @@ bool MyApp::OnInit(void)
 
   // Set back to wxLogGui
   delete wxLog::SetActiveTarget(oldLog);
+#endif
 
   // Don't delete these objects, to force wxApp to flag a memory leak.
 //  delete thing;
