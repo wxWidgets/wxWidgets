@@ -838,6 +838,10 @@ public:
 #endif // wxUSE_PALETTE
 
 protected:
+#if wxUSE_CONSTRAINTS
+    // satisfy the constraints for the windows but don't set the window sizes
+    void SatisfyConstraints();
+#endif // wxUSE_CONSTRAINTS
 
     // the window id - a number which uniquely identifies a window among
     // its siblings unless it is -1
@@ -850,7 +854,10 @@ protected:
 
     // the minimal allowed size for the window (no minimal size if variable(s)
     // contain(s) -1)
-    int                  m_minWidth, m_minHeight, m_maxWidth, m_maxHeight;
+    int                  m_minWidth,
+                         m_minHeight,
+                         m_maxWidth,
+                         m_maxHeight;
 
     // event handler for this window: usually is just 'this' but may be
     // changed with SetEventHandler()

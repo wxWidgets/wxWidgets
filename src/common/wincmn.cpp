@@ -446,14 +446,7 @@ void wxWindowBase::Fit()
 {
     if ( GetChildren().GetCount() > 0 )
     {
-        wxSize size = DoGetBestSize();
-
-        // for compatibility with the old versions and because it really looks
-        // slightly more pretty like this, add a pad
-        size.x += 7;
-        size.y += 14;
-
-        SetClientSize(size);
+        SetClientSize(DoGetBestSize());
     }
     //else: do nothing if we have no children
 }
@@ -461,7 +454,48 @@ void wxWindowBase::Fit()
 // return the size best suited for the current window
 wxSize wxWindowBase::DoGetBestSize() const
 {
-    if ( GetChildren().GetCount() > 0 )
+    if ( m_windowSizer )
+    {
+        return m_windowSizer->GetMinSize();
+    }
+#if wxUSE_CONSTRAINTS
+    else if ( m_constraints )
+    {
+        wxConstCast(this, wxWindowBase)->SatisfyConstraints();
+
+        // our minimal acceptable size is such that all our windows fit inside
+        int maxX = 0,
+            maxY = 0;
+
+        for ( wxWindowList::Node *node = GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
+        {
+            wxLayoutConstraints *c = node->GetData()->GetConstraints();
+            if ( !c )
+            {
+                // it's not normal that we have an unconstrained child, but
+                // what can we do about it?
+                continue;
+            }
+
+            int x = c->right.GetValue(),
+                y = c->bottom.GetValue();
+
+            if ( x > maxX )
+                maxX = x;
+
+            if ( y > maxY )
+                maxY = y;
+
+            // TODO: we must calculate the overlaps somehow, otherwise we
+            //       will never return a size bigger than the current one :-(
+        }
+
+        return wxSize(maxX, maxY);
+    }
+#endif // wxUSE_CONSTRAINTS
+    else if ( GetChildren().GetCount() > 0 )
     {
         // our minimal acceptable size is such that all our windows fit inside
         int maxX = 0,
@@ -500,6 +534,11 @@ wxSize wxWindowBase::DoGetBestSize() const
             if ( wy + wh > maxY )
                 maxY = wy + wh;
         }
+
+        // for compatibility with the old versions and because it really looks
+        // slightly more pretty like this, add a pad
+        maxX += 7;
+        maxY += 14;
 
         return wxSize(maxX, maxY);
     }
@@ -1342,15 +1381,17 @@ void wxWindowBase::DeleteRelatedConstraints()
         m_constraintsInvolvedIn = (wxWindowList *) NULL;
     }
 }
-#endif
+
+#endif // wxUSE_CONSTRAINTS
 
 void wxWindowBase::SetSizer(wxSizer *sizer, bool deleteOld)
 {
-    if (m_windowSizer && deleteOld) delete m_windowSizer;
+    if ( deleteOld )
+        delete m_windowSizer;
 
     m_windowSizer = sizer;
 
-    SetAutoLayout( sizer != 0 );
+    SetAutoLayout( sizer != NULL );
 }
 
 void wxWindowBase::SetSizerAndFit(wxSizer *sizer, bool deleteOld)
@@ -1358,6 +1399,33 @@ void wxWindowBase::SetSizerAndFit(wxSizer *sizer, bool deleteOld)
     SetSizer( sizer, deleteOld );
     sizer->SetSizeHints( (wxWindow*) this );
 }
+
+#if wxUSE_CONSTRAINTS
+
+void wxWindowBase::SatisfyConstraints()
+{
+    wxLayoutConstraints *constr = GetConstraints();
+    bool wasOk = constr && constr->AreSatisfied();
+
+    ResetConstraints();   // Mark all constraints as unevaluated
+
+    int noChanges = 1;
+
+    // if we're a top level panel (i.e. our parent is frame/dialog), our
+    // own constraints will never be satisfied any more unless we do it
+    // here
+    if ( wasOk )
+    {
+        while ( noChanges > 0 )
+        {
+            LayoutPhase1(&noChanges);
+        }
+    }
+
+    LayoutPhase2(&noChanges);
+}
+
+#endif // wxUSE_CONSTRAINTS
 
 bool wxWindowBase::Layout()
 {
@@ -1371,25 +1439,7 @@ bool wxWindowBase::Layout()
 #if wxUSE_CONSTRAINTS
     else
     {
-        wxLayoutConstraints *constr = GetConstraints();
-        bool wasOk = constr && constr->AreSatisfied();
-
-        ResetConstraints();   // Mark all constraints as unevaluated
-
-        // if we're a top level panel (i.e. our parent is frame/dialog), our
-        // own constraints will never be satisfied any more unless we do it
-        // here
-        if ( wasOk )
-        {
-            int noChanges = 1;
-            while ( noChanges > 0 )
-            {
-                constr->SatisfyConstraints(this, &noChanges);
-            }
-        }
-
-        DoPhase(1);           // Layout children
-        DoPhase(2);           // Layout grand children
+        SatisfyConstraints(); // Find the right constraints values
         SetConstraintSizes(); // Recursively set the real window sizes
     }
 #endif
@@ -1398,67 +1448,78 @@ bool wxWindowBase::Layout()
 }
 
 #if wxUSE_CONSTRAINTS
-// Do a phase of evaluating constraints: the default behaviour. wxSizers may
-// do a similar thing, but also impose their own 'constraints' and order the
-// evaluation differently.
+
+// first phase of the constraints evaluation: set our own constraints
 bool wxWindowBase::LayoutPhase1(int *noChanges)
 {
     wxLayoutConstraints *constr = GetConstraints();
-    if ( constr )
-    {
-        return constr->SatisfyConstraints(this, noChanges);
-    }
-    else
-        return TRUE;
+
+    return !constr || constr->SatisfyConstraints(this, noChanges);
 }
 
+// second phase: set the constraints for our children
 bool wxWindowBase::LayoutPhase2(int *noChanges)
 {
     *noChanges = 0;
 
     // Layout children
     DoPhase(1);
+
+    // Layout grand children
     DoPhase(2);
+
     return TRUE;
 }
 
 // Do a phase of evaluating child constraints
 bool wxWindowBase::DoPhase(int phase)
 {
-    int noIterations = 0;
-    int maxIterations = 500;
-    int noChanges = 1;
-    int noFailures = 0;
+    // the list containing the children for which the constraints are already
+    // set correctly
     wxWindowList succeeded;
-    while ((noChanges > 0) && (noIterations < maxIterations))
+
+    // the max number of iterations we loop before concluding that we can't set
+    // the constraints
+    static const int maxIterations = 500;
+
+    for ( int noIterations = 0; noIterations < maxIterations; noIterations++ )
     {
-        noChanges = 0;
-        noFailures = 0;
-        wxWindowList::Node *node = GetChildren().GetFirst();
-        while (node)
+        int noChanges = 0;
+
+        // loop over all children setting their constraints
+        for ( wxWindowList::Node *node = GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
         {
             wxWindow *child = node->GetData();
-            if ( !child->IsTopLevel() )
+            if ( child->IsTopLevel() )
             {
-                wxLayoutConstraints *constr = child->GetConstraints();
-                if ( constr )
-                {
-                    if ( !succeeded.Find(child) )
-                    {
-                        int tempNoChanges = 0;
-                        bool success = ( (phase == 1) ? child->LayoutPhase1(&tempNoChanges) : child->LayoutPhase2(&tempNoChanges) ) ;
-                        noChanges += tempNoChanges;
-                        if ( success )
-                        {
-                            succeeded.Append(child);
-                        }
-                    }
-                }
+                // top level children are not inside our client area
+                continue;
             }
-            node = node->GetNext();
+
+            if ( !child->GetConstraints() || succeeded.Find(child) )
+            {
+                // this one is either already ok or nothing we can do about it
+                continue;
+            }
+
+            int tempNoChanges = 0;
+            bool success = phase == 1 ? child->LayoutPhase1(&tempNoChanges)
+                                      : child->LayoutPhase2(&tempNoChanges);
+            noChanges += tempNoChanges;
+
+            if ( success )
+            {
+                succeeded.Append(child);
+            }
         }
 
-        noIterations++;
+        if ( !noChanges )
+        {
+            // constraints are set
+            break;
+        }
     }
 
     return TRUE;
