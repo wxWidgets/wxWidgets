@@ -251,10 +251,12 @@ void wxColourDatabase::Initialize ()
         {wxT("MAGENTA"), 255, 0, 255},
         {wxT("MAROON"), 176, 48, 96},
         {wxT("MEDIUM AQUAMARINE"), 102, 205, 170},
-        {wxT("MEDIUM GREY"), 100, 100, 100}, // not X colour
         {wxT("MEDIUM BLUE"), 0, 0, 205},
         {wxT("MEDIUM FOREST GREEN"), 107, 142, 35}, // not X colour
+        {wxT("MEDIUM GOLD"), 204, 127, 50}, // not X, "GOLD" in 2.4
         {wxT("MEDIUM GOLDENROD"), 234, 234, 173}, // not X colour
+        {wxT("MEDIUM GREY"), 100, 100, 100}, // not X colour
+        {wxT("MEDIUM ORANGE"), 204, 50, 50},   // not X, "ORANGE" in 2.4
         {wxT("MEDIUM ORCHID"), 186, 85, 211},
         {wxT("MEDIUM SEA GREEN"), 60, 179, 113},
         {wxT("MEDIUM SLATE BLUE"), 123, 104, 238},
