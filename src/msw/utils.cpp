@@ -1184,6 +1184,44 @@ WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
 
 #endif // wxUSE_GUI
 
+#if wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// Metafile helpers
+// ----------------------------------------------------------------------------
+
+extern void PixelToHIMETRIC(LONG *x, LONG *y)
+{
+    ScreenHDC hdcRef;
+
+    int iWidthMM = GetDeviceCaps(hdcRef, HORZSIZE),
+        iHeightMM = GetDeviceCaps(hdcRef, VERTSIZE),
+        iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
+        iHeightPels = GetDeviceCaps(hdcRef, VERTRES);
+
+    *x *= (iWidthMM * 100);
+    *x /= iWidthPels;
+    *y *= (iHeightMM * 100);
+    *y /= iHeightPels;
+}
+
+extern void HIMETRICToPixel(LONG *x, LONG *y)
+{
+    ScreenHDC hdcRef;
+
+    int iWidthMM = GetDeviceCaps(hdcRef, HORZSIZE),
+        iHeightMM = GetDeviceCaps(hdcRef, VERTSIZE),
+        iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
+        iHeightPels = GetDeviceCaps(hdcRef, VERTRES);
+
+    *x *= iWidthPels;
+    *x /= (iWidthMM * 100);
+    *y *= iHeightPels;
+    *y /= (iHeightMM * 100);
+}
+
+#endif // wxUSE_GUI
+
 #if 0
 //------------------------------------------------------------------------
 // wild character routines
