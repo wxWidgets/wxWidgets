@@ -657,12 +657,8 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     if ( m_x < 20 )
         m_x = 20 ;
 
-    m_width = size.x;
-    if (m_width == -1)
-        m_width = 20;
-    m_height = size.y;
-    if (m_height == -1)
-        m_height = 20;
+    m_width = WidthDefault(size.x);
+    m_height = HeightDefault(size.y);
 
     ::SetRect(&theBoundsRect, m_x, m_y , m_x + m_width, m_y + m_height);
 
