@@ -257,12 +257,12 @@ bool wxMovieCtrl::Stop()
 
 double wxMovieCtrl::GetPlaybackRate()
 {
-    return (double) (::GetMovieTimeScale(m_movie) / 0x10000f);
+    return ( ((double)::GetMovieRate(m_movie)) / 0x10000);
 }
 
 bool wxMovieCtrl::SetPlaybackRate(double dRate)
 {
-    ::SetMovieTimeScale(m_movie, (Fixed) (dRate * 0x10000));
+    ::SetMovieRate(m_movie, (Fixed) (dRate * 0x10000));
     return ::GetMoviesError() == noErr;
 }
 
