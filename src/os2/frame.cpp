@@ -108,6 +108,7 @@ void wxFrame::Init()
     m_nFsStatusBarHeight = 0;
     m_nFsToolBarHeight   = 0;
     m_bFsIsMaximized     = FALSE;
+    m_bWasMinimized      = FALSE;
     m_bFsIsShowing       = FALSE;
     m_bIsShown           = FALSE;
     m_pWinLastFocused    = (wxWindow *)NULL;
@@ -1328,10 +1329,30 @@ void wxFrame::IconizeChildFrames(
          pNode = pNode->GetNext() )
     {
         wxWindow*                   pWin = pNode->GetData();
+        wxFrame*                    pFrame = wxDynamicCast(pWin, wxFrame);
 
-        if (pWin->IsKindOf(CLASSINFO(wxFrame)) )
+        if ( pFrame
+#if wxUSE_MDI_ARCHITECTURE
+                && !wxDynamicCast(pFrame, wxMDIChildFrame)
+#endif // wxUSE_MDI_ARCHITECTURE
+           )
         {
-            ((wxFrame *)pWin)->Iconize(bIconize);
+            //
+            // We don't want to restore the child frames which had been
+            // iconized even before we were iconized, so save the child frame
+            // status when iconizing the parent frame and check it when
+            // restoring it.
+            //
+            if (bIconize)
+            {
+                pFrame->m_bWasMinimized = pFrame->IsIconized();
+            }
+
+            //
+            // This test works for both iconizing and restoring
+            //
+            if (!pFrame->m_bWasMinimized)
+                pFrame->Iconize(bIconize);
         }
     }
 } // end of wxFrame::IconizeChildFrames

@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1758,7 +1758,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -1872,6 +1872,8 @@ EXPORTS
       FindEntry__17wxFileConfigGroupCFPCc
       ;wxFileConfigEntry::SetValue(const wxString&,unsigned long)
       SetValue__17wxFileConfigEntryFRC8wxStringUl
+      ;wxFileConfig::wxFileConfig(wxInputStream&)
+      __ct__12wxFileConfigFR13wxInputStream
       ;wxFileConfig::RenameGroup(const wxString&,const wxString&)
       RenameGroup__12wxFileConfigFRC8wxStringT1
       ;wxFileConfig::Init()
@@ -1882,12 +1884,10 @@ EXPORTS
       LineListAppend__12wxFileConfigFRC8wxString
       ;wxFileConfig::DeleteGroup(const wxString&)
       DeleteGroup__12wxFileConfigFRC8wxString
-      ;wxFileConfig::Parse(wxTextFile&,unsigned long)
-      Parse__12wxFileConfigFR10wxTextFileUl
-      ;wxFileConfig::LineListInsert(const wxString&,wxFileConfigLineList*)
-      LineListInsert__12wxFileConfigFRC8wxStringP20wxFileConfigLineList
       ;wxFileConfig::Flush(unsigned long)
       Flush__12wxFileConfigFUl
+      ;wxFileConfig::LineListInsert(const wxString&,wxFileConfigLineList*)
+      LineListInsert__12wxFileConfigFRC8wxStringP20wxFileConfigLineList
       ;wxFileConfig::Read(const wxString&,wxString*,const wxString&) const
       Read__12wxFileConfigCFRC8wxStringP8wxStringT1
       ;wxFileConfig::RenameEntry(const wxString&,const wxString&)
@@ -1925,6 +1925,8 @@ EXPORTS
       Read__12wxFileConfigCFRC8wxStringP8wxString
       ;wxFileConfigGroup::DeleteEntry(const char*)
       DeleteEntry__17wxFileConfigGroupFPCc
+      ;wxFileConfig::Parse(wxTextBuffer&,unsigned long)
+      Parse__12wxFileConfigFR12wxTextBufferUl
       ;wxFileConfig::wxFileConfig(const wxString&,const wxString&,const wxString&,const wxString&,long)
       __ct__12wxFileConfigFRC8wxStringN31l
       ;wxFileConfigEntry::SetLine(wxFileConfigLineList*)
@@ -4582,8 +4584,8 @@ EXPORTS
       __ct__16wxStaticBoxSizerFP11wxStaticBoxi
       ;wxGridSizer::wxGridSizer(int,int,int)
       __ct__11wxGridSizerFiN21
-      ;wxSizer::DoSetItemMinSize(wxWindow*,int,int)
-      DoSetItemMinSize__7wxSizerFP8wxWindowiT2
+      ;wxSizer::DeleteWindows()
+      DeleteWindows__7wxSizerFv
       ;wxStaticBoxSizer::sm_classwxStaticBoxSizer
       sm_classwxStaticBoxSizer__16wxStaticBoxSizer
       ;wxGridSizer::sm_classwxGridSizer
@@ -4596,6 +4598,8 @@ EXPORTS
       RecalcSizes__15wxFlexGridSizerFv
       ;wxGridSizer::RecalcSizes()
       RecalcSizes__11wxGridSizerFv
+      ;wxSizer::DoSetItemMinSize(wxWindow*,int,int)
+      DoSetItemMinSize__7wxSizerFP8wxWindowiT2
       ;wxStaticBoxSizer::CalcMin()
       CalcMin__16wxStaticBoxSizerFv
       ;wxFlexGridSizer::CalcMin()
@@ -4646,8 +4650,10 @@ EXPORTS
       Remove__7wxSizerFP8wxWindow
       ;wxSizer::FitSize(wxWindow*)
       FitSize__7wxSizerFP8wxWindow
-      __vft15wxNotebookSizer8wxObject
+      ;wxSizer::Clear(unsigned long)
+      Clear__7wxSizerFUl
       __vft7wxSizer8wxObject
+      __vft15wxNotebookSizer8wxObject
       ;wxSizer::Remove(int)
       Remove__7wxSizerFi
       ;wxSizer::GetMinSize()
@@ -4688,6 +4694,8 @@ EXPORTS
       Remove__7wxSizerFP7wxSizer
       ;wxSizer::DoSetItemMinSize(wxSizer*,int,int)
       DoSetItemMinSize__7wxSizerFP7wxSizeriT2
+      ;wxSizerItem::DeleteWindows()
+      DeleteWindows__11wxSizerItemFv
       ;wxSizerItem::wxSizerItem(wxWindow*,int,int,int,wxObject*)
       __ct__11wxSizerItemFP8wxWindowiN22P8wxObject
       __vft16wxStaticBoxSizer8wxObject
@@ -5339,6 +5347,35 @@ EXPORTS
       __dt__13wxToolBarBaseFv
       ;wxToolBarBase::SetToolLongHelp(int,const wxString&)
       SetToolLongHelp__13wxToolBarBaseFiRC8wxString
+  ;From object file:  ..\common\textbuf.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxTextBuffer::GuessType() const
+      GuessType__12wxTextBufferCFv
+      ;wxTextBuffer::Close()
+      Close__12wxTextBufferFv
+      ;wxTextBuffer::Exists() const
+      Exists__12wxTextBufferCFv
+      __vft12wxTextBuffer
+      ;wxTextBuffer::Write(wxTextFileType,wxMBConv&)
+      Write__12wxTextBufferF14wxTextFileTypeR8wxMBConv
+      ;wxTextBuffer::Open(const wxString&,wxMBConv&)
+      Open__12wxTextBufferFRC8wxStringR8wxMBConv
+      ;wxTextBuffer::Create()
+      Create__12wxTextBufferFv
+      ;wxTextBuffer::Translate(const wxString&,wxTextFileType)
+      Translate__12wxTextBufferFRC8wxString14wxTextFileType
+      ;wxTextBuffer::~wxTextBuffer()
+      __dt__12wxTextBufferFv
+      ;wxTextBuffer::wxTextBuffer(const wxString&)
+      __ct__12wxTextBufferFRC8wxString
+      ;wxTextBuffer::typeDefault
+      typeDefault__12wxTextBuffer
+      ;wxTextBuffer::GetEOL(wxTextFileType)
+      GetEOL__12wxTextBufferF14wxTextFileType
+      ;wxTextBuffer::Open(wxMBConv&)
+      Open__12wxTextBufferFR8wxMBConv
+      ;wxTextBuffer::Create(const wxString&)
+      Create__12wxTextBufferFRC8wxString
   ;From object file:  ..\common\textcmn.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxTextCtrlBase::operator<<(double)
@@ -5367,6 +5404,8 @@ EXPORTS
       sm_classwxTextUrlEvent__14wxTextUrlEvent
       ;wxTextCtrlBase::~wxTextCtrlBase()
       __dt__14wxTextCtrlBaseFv
+      ;wxTextCtrlBase::GetStringSelection() const
+      GetStringSelection__14wxTextCtrlBaseCFv
       ;wxTextCtrlBase::GetDefaultStyle() const
       GetDefaultStyle__14wxTextCtrlBaseCFv
       ;wxTextCtrlBase::CanPaste() const
@@ -5386,34 +5425,19 @@ EXPORTS
       SetStyle__14wxTextCtrlBaseFlT1RC10wxTextAttr
   ;From object file:  ..\common\textfile.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxTextFile::Read(wxMBConv&)
-      Read__10wxTextFileFR8wxMBConv
-      ;wxTextFile::GuessType() const
-      GuessType__10wxTextFileCFv
-      ;wxTextFile::~wxTextFile()
-      __dt__10wxTextFileFv
-      ;wxTextFile::typeDefault
-      typeDefault__10wxTextFile
-      ;wxTextFile::Exists() const
-      Exists__10wxTextFileCFv
-      ;wxTextFile::Create()
-      Create__10wxTextFileFv
-      ;wxTextFile::GetEOL(wxTextFileType)
-      GetEOL__10wxTextFileF14wxTextFileType
-      ;wxTextFile::Translate(const wxString&,wxTextFileType)
-      Translate__10wxTextFileFRC8wxString14wxTextFileType
-      ;wxTextFile::Open(const wxString&,wxMBConv&)
-      Open__10wxTextFileFRC8wxStringR8wxMBConv
-      ;wxTextFile::Write(wxTextFileType,wxMBConv&)
-      Write__10wxTextFileF14wxTextFileTypeR8wxMBConv
-      ;wxTextFile::Open(wxMBConv&)
-      Open__10wxTextFileFR8wxMBConv
-      ;wxTextFile::Close()
-      Close__10wxTextFileFv
+      ;wxTextFile::OnRead(wxMBConv&)
+      OnRead__10wxTextFileFR8wxMBConv
+      __vft10wxTextFile12wxTextBuffer
+      ;wxTextFile::OnOpen(const wxString&,wxTextBuffer::wxTextBufferOpenMode)
+      OnOpen__10wxTextFileFRC8wxStringQ2_12wxTextBuffer20wxTextBufferOpenMode
+      ;wxTextFile::OnExists() const
+      OnExists__10wxTextFileCFv
+      ;wxTextFile::OnClose()
+      OnClose__10wxTextFileFv
+      ;wxTextFile::OnWrite(wxTextFileType,wxMBConv&)
+      OnWrite__10wxTextFileF14wxTextFileTypeR8wxMBConv
       ;wxTextFile::wxTextFile(const wxString&)
       __ct__10wxTextFileFRC8wxString
-      ;wxTextFile::Create(const wxString&)
-      Create__10wxTextFileFRC8wxString
   ;From object file:  ..\common\timercmn.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxTimerEvent::sm_classwxTimerEvent
@@ -5585,7 +5609,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -8591,6 +8615,8 @@ EXPORTS
       GetItemCount__10wxListCtrlCFv
       ;wxListMainWindow::GetImageSize(int,int&,int&) const
       GetImageSize__16wxListMainWindowCFiRiT2
+      ;wxListCtrl::Freeze()
+      Freeze__10wxListCtrlFv
       ;wxListHeaderWindow::DoDrawRect(wxDC*,int,int,int,int)
       DoDrawRect__18wxListHeaderWindowFP4wxDCiN32
       wxEVT_COMMAND_LIST_COL_BEGIN_DRAG
@@ -8770,6 +8796,10 @@ EXPORTS
       __vft16wxListMainWindow14wxScrollHelper
       ;wxListMainWindow::UpdateCurrent()
       UpdateCurrent__16wxListMainWindowFv
+      ;wxListMainWindow::Thaw()
+      Thaw__16wxListMainWindowFv
+      ;wxListCtrl::Thaw()
+      Thaw__10wxListCtrlFv
       ;wxListCtrl::SetItem(long,int,const wxString&,int)
       SetItem__10wxListCtrlFliRC8wxStringT2
       ;wxListMainWindow::InitScrolling()
@@ -8794,6 +8824,8 @@ EXPORTS
       GetBackgroundColour__10wxListCtrlCFv
       ;wxListLineData::GetAttr() const
       GetAttr__14wxListLineDataCFv
+      ;wxListMainWindow::Freeze()
+      Freeze__16wxListMainWindowFv
       ;wxListCtrl::CreateHeaderWindow()
       CreateHeaderWindow__10wxListCtrlFv
       ;wxListLineData::SetText(int,const wxString)
@@ -11262,6 +11294,8 @@ EXPORTS
       sm_classwxChoice__8wxChoice
       ;wxChoice::DoGetItemClientObject(int) const
       DoGetItemClientObject__8wxChoiceCFi
+      ;wxChoice::Free()
+      Free__8wxChoiceFv
       ;wxChoice::GetCount() const
       GetCount__8wxChoiceCFv
       ;wxChoice::SetString(int,const wxString&)
@@ -11359,6 +11393,8 @@ EXPORTS
       SetEditable__10wxComboBoxFUl
       ;wxComboBox::SetInsertionPointEnd()
       SetInsertionPointEnd__10wxComboBoxFv
+      ;wxComboBox::ProcessEditMsg(unsigned int,void*,void*)
+      ProcessEditMsg__10wxComboBoxFUiPvT2
       ;wxComboBox::SetValue(const wxString&)
       SetValue__10wxComboBoxFRC8wxString
       ;wxComboBox::SetInsertionPoint(long)
@@ -11371,6 +11407,7 @@ EXPORTS
       wxConstructorForwxComboBox__Fv
       ;wxComboBox::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,int,const wxString*,long,const wxValidator&,const wxString&)
       Create__10wxComboBoxFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizeT2PC8wxStringlRC11wxValidatorT3
+      wxComboEditWndProc
       ;wxComboBox::OS2Command(unsigned int,unsigned short)
       OS2Command__10wxComboBoxFUiUs
   ;From object file:  ..\os2\control.cpp
@@ -11404,6 +11441,8 @@ EXPORTS
       __vft9wxControl8wxObject
       ;wxControl::~wxControl()
       __dt__9wxControlFv
+      ;wxControl::OS2CreateControl(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxValidator&,const wxString&)
+      OS2CreateControl__9wxControlFP8wxWindowiRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
   ;From object file:  ..\os2\cursor.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxCursorRefData::~wxCursorRefData()

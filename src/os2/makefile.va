@@ -297,6 +297,7 @@ COMMONOBJS = \
   ..\common\$D\string.obj \
   ..\common\$D\sysopt.obj \
   ..\common\$D\tbarbase.obj \
+  ..\common\$D\textbuf.obj \
   ..\common\$D\textcmn.obj \
   ..\common\$D\textfile.obj \
   ..\common\$D\timercmn.obj \
@@ -425,6 +426,7 @@ COMLIBOBJS3 = \
   string.obj \
   sysopt.obj \
   tbarbase.obj \
+  textbuf.obj \
   textcmn.obj \
   textfile.obj \
   timercmn.obj \
@@ -788,6 +790,7 @@ $(COMLIBOBJS3):
   copy ..\common\$D\string.obj
   copy ..\common\$D\sysopt.obj
   copy ..\common\$D\tbarbase.obj
+  copy ..\common\$D\textbuf.obj
   copy ..\common\$D\textcmn.obj
   copy ..\common\$D\textfile.obj
   copy ..\common\$D\timercmn.obj

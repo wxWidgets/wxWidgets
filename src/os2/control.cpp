@@ -75,6 +75,38 @@ wxControl::~wxControl()
 }
 
 bool wxControl::OS2CreateControl(
+  wxWindow*                         pParent
+, wxWindowID                        vId
+, const wxPoint&                    rPos
+, const wxSize&                     rSize
+, long                              lStyle
+#if wxUSE_VALIDATORS
+, const wxValidator&                rValidator
+#endif
+, const wxString&                   rsName
+)
+{
+    //
+    // Even if it's possible to create controls without parents in some port,
+    // it should surely be discouraged because it doesn't work at all under
+    // Windows
+    //
+    if (!CreateBase( pParent
+                    ,vId
+                    ,rPos
+                    ,rSize
+                    ,lStyle
+#if wxUSE_VALIDATORS
+                    ,rValidator
+#endif
+                    ,rsName
+                   ))
+        return FALSE;
+    pParent->AddChild(this);
+    return TRUE;
+} // end of wxControl::OS2CreateControl
+
+bool wxControl::OS2CreateControl(
   const wxChar*                     zClassname
 , WXDWORD                           dwStyle
 , const wxPoint&                    rPos
@@ -99,6 +131,11 @@ bool wxControl::OS2CreateControl(
 
         return FALSE;
     }
+
+    PSZ                             zClass;
+
+    if ((strcmp(zClassname, "COMBOBOX")) == 0)
+        zClass = WC_COMBOBOX;
     dwStyle |= WS_VISIBLE;
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(GetParent()) // Parent window handle
                                        ,(PSZ)zClassname              // Window class
