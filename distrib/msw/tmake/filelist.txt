@@ -149,6 +149,7 @@ dndcmn.cpp	Common
 dobjcmn.cpp	Common
 docmdi.cpp	Common
 docview.cpp	Common
+dpycmn.cpp	Common
 dseldlg.cpp	Common
 dynarray.cpp	Common	Base
 dynlib.cpp	Common	Base
@@ -291,6 +292,7 @@ dib.cpp	MSW	LowLevel
 dibutils.cpp	MSW
 dir.cpp	MSW	Base
 dirdlg.cpp	MSW	Win32Only,LowLevel
+display.cpp	MSW	Win32Only,LowLevel
 dragimag.cpp	MSW
 dropsrc.cpp	MSW	OLE,LowLevel
 droptgt.cpp	MSW	OLE,LowLevel
@@ -813,6 +815,7 @@ dialup.h	WXH
 dir.h	WXH	Base
 dirctrl.h	WXH
 dirdlg.h	WXH
+display.h	WXH
 dnd.h	WXH
 docmdi.h	WXH
 docview.h	WXH
