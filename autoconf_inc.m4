@@ -4,30 +4,12 @@ dnl Do not modify, all changes will be overwritten!
 
     dnl Conditions:
 
-dnl ### begin block COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_1 ###
-    COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xMOTIF" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_1)
 dnl ### begin block COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0 ###
     COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xMOTIF" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0)
-dnl ### begin block COND_PLATFORM_MACOSX_1_USE_GUI_1 ###
-    COND_PLATFORM_MACOSX_1_USE_GUI_1="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_GUI" = "x1" ; then
-        COND_PLATFORM_MACOSX_1_USE_GUI_1=""
-    fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_USE_GUI_1)
-dnl ### begin block COND_PLATFORM_MACOSX_1_USE_GUI_0 ###
-    COND_PLATFORM_MACOSX_1_USE_GUI_0="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_GUI" = "x0" ; then
-        COND_PLATFORM_MACOSX_1_USE_GUI_0=""
-    fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_USE_GUI_0)
 dnl ### begin block COND_DEPS_TRACKING_0 ###
     COND_DEPS_TRACKING_0="#"
     if test "x$DEPS_TRACKING" = "x0" ; then
@@ -46,12 +28,6 @@ dnl ### begin block COND_TOOLKIT_MOTIF_USE_GUI_1 ###
         COND_TOOLKIT_MOTIF_USE_GUI_1=""
     fi
     AC_SUBST(COND_TOOLKIT_MOTIF_USE_GUI_1)
-dnl ### begin block COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_1 ###
-    COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xMAC" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_1)
 dnl ### begin block COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0 ###
     COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xMAC" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
@@ -100,12 +76,6 @@ dnl ### begin block COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0 ###
         COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0)
-dnl ### begin block COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_0 ###
-    COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xX11" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_0)
 dnl ### begin block COND_WXUSE_ODBC_BUILTIN ###
     COND_WXUSE_ODBC_BUILTIN="#"
     if test "x$wxUSE_ODBC" = "xbuiltin" ; then
@@ -124,12 +94,6 @@ dnl ### begin block COND_WXUNIV_1 ###
         COND_WXUNIV_1=""
     fi
     AC_SUBST(COND_WXUNIV_1)
-dnl ### begin block COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_1 ###
-    COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xOS2" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_1)
 dnl ### begin block COND_PLATFORM_UNIX_1 ###
     COND_PLATFORM_UNIX_1="#"
     if test "x$PLATFORM_UNIX" = "x1" ; then
@@ -166,18 +130,6 @@ dnl ### begin block COND_MONOLITHIC_1_SHARED_1 ###
         COND_MONOLITHIC_1_SHARED_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_1_SHARED_1)
-dnl ### begin block COND_PLATFORM_UNIX_1_USE_GUI_0 ###
-    COND_PLATFORM_UNIX_1_USE_GUI_0="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$USE_GUI" = "x0" ; then
-        COND_PLATFORM_UNIX_1_USE_GUI_0=""
-    fi
-    AC_SUBST(COND_PLATFORM_UNIX_1_USE_GUI_0)
-dnl ### begin block COND_PLATFORM_UNIX_1_USE_GUI_1 ###
-    COND_PLATFORM_UNIX_1_USE_GUI_1="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$USE_GUI" = "x1" ; then
-        COND_PLATFORM_UNIX_1_USE_GUI_1=""
-    fi
-    AC_SUBST(COND_PLATFORM_UNIX_1_USE_GUI_1)
 dnl ### begin block COND_TOOLKIT_X11 ###
     COND_TOOLKIT_X11="#"
     if test "x$TOOLKIT" = "xX11" ; then
@@ -202,12 +154,6 @@ dnl ### begin block COND_TOOLKIT_MGL_USE_GUI_1 ###
         COND_TOOLKIT_MGL_USE_GUI_1=""
     fi
     AC_SUBST(COND_TOOLKIT_MGL_USE_GUI_1)
-dnl ### begin block COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_1 ###
-    COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xCOCOA" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_1)
 dnl ### begin block COND_WXUSE_ZLIB_BUILTIN ###
     COND_WXUSE_ZLIB_BUILTIN="#"
     if test "x$wxUSE_ZLIB" = "xbuiltin" ; then
@@ -262,12 +208,6 @@ dnl ### begin block COND_USE_GUI_0 ###
         COND_USE_GUI_0=""
     fi
     AC_SUBST(COND_USE_GUI_0)
-dnl ### begin block COND_USE_GUI_0_USE_GUI_1 ###
-    COND_USE_GUI_0_USE_GUI_1="#"
-    if test "x$USE_GUI" = "x0" -a "x$USE_GUI" = "x1" ; then
-        COND_USE_GUI_0_USE_GUI_1=""
-    fi
-    AC_SUBST(COND_USE_GUI_0_USE_GUI_1)
 dnl ### begin block COND_TOOLKIT_MSW ###
     COND_TOOLKIT_MSW="#"
     if test "x$TOOLKIT" = "xMSW" ; then
@@ -316,12 +256,6 @@ dnl ### begin block COND_BUILD_RELEASE ###
         COND_BUILD_RELEASE=""
     fi
     AC_SUBST(COND_BUILD_RELEASE)
-dnl ### begin block COND_TOOLKIT_MGL_USE_GUI_1_WXUNIV_0 ###
-    COND_TOOLKIT_MGL_USE_GUI_1_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xMGL" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_MGL_USE_GUI_1_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_TOOLKIT_MGL_USE_GUI_1_WXUNIV_0)
 dnl ### begin block COND_USE_SOVERLINUX_1 ###
     COND_USE_SOVERLINUX_1="#"
     if test "x$USE_SOVERLINUX" = "x1" ; then
@@ -394,18 +328,6 @@ dnl ### begin block COND_TOOLKIT_GTK ###
         COND_TOOLKIT_GTK=""
     fi
     AC_SUBST(COND_TOOLKIT_GTK)
-dnl ### begin block COND_PLATFORM_WIN32_1_USE_GUI_0 ###
-    COND_PLATFORM_WIN32_1_USE_GUI_0="#"
-    if test "x$PLATFORM_WIN32" = "x1" -a "x$USE_GUI" = "x0" ; then
-        COND_PLATFORM_WIN32_1_USE_GUI_0=""
-    fi
-    AC_SUBST(COND_PLATFORM_WIN32_1_USE_GUI_0)
-dnl ### begin block COND_PLATFORM_WIN32_1_USE_GUI_1 ###
-    COND_PLATFORM_WIN32_1_USE_GUI_1="#"
-    if test "x$PLATFORM_WIN32" = "x1" -a "x$USE_GUI" = "x1" ; then
-        COND_PLATFORM_WIN32_1_USE_GUI_1=""
-    fi
-    AC_SUBST(COND_PLATFORM_WIN32_1_USE_GUI_1)
 dnl ### begin block COND_PLATFORM_WIN32_0 ###
     COND_PLATFORM_WIN32_0="#"
     if test "x$PLATFORM_WIN32" = "x0" ; then
