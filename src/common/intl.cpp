@@ -94,11 +94,11 @@ public:
  ~wxMsgCatalog();
 
   // load the catalog from disk (szDirPrefix corresponds to language)
-  bool Load(const char *szDirPrefix, const char *szName);
+  bool Load(const wxChar *szDirPrefix, const wxChar *szName);
   bool IsLoaded() const { return m_pData != NULL; }
 
   // get name of the catalog
-  const char *GetName() const { return m_pszName; }
+  const wxChar *GetName() const { return m_pszName; }
 
   // get the translated string: returns NULL if not found
   const char *GetString(const char *sz) const;
@@ -153,7 +153,7 @@ private:
 
   bool          m_bSwapped;   // wrong endianness?
 
-  char         *m_pszName;    // name of the domain
+  wxChar       *m_pszName;    // name of the domain
 };
 
 // ----------------------------------------------------------------------------
@@ -221,15 +221,15 @@ public:
 };
 
 // return all directories to search for given prefix
-static wxString GetAllMsgCatalogSubdirs(const char *prefix,
-                                        const char *lang)
+static wxString GetAllMsgCatalogSubdirs(const wxChar *prefix,
+                                        const wxChar *lang)
 {
     wxString searchPath;
 
     // search first in prefix/fr/LC_MESSAGES, then in prefix/fr and finally in
     // prefix (assuming the language is 'fr')
     searchPath << prefix << wxFILE_SEP_PATH << lang << wxFILE_SEP_PATH
-                         << "LC_MESSAGES" << wxPATH_SEP
+                         << _T("LC_MESSAGES") << wxPATH_SEP
                << prefix << wxFILE_SEP_PATH << lang << wxPATH_SEP
                << prefix << wxPATH_SEP;
 
@@ -237,7 +237,7 @@ static wxString GetAllMsgCatalogSubdirs(const char *prefix,
 }
 
 // construct the search path for the given language
-static wxString GetFullSearchPath(const char *lang)
+static wxString GetFullSearchPath(const wxChar *lang)
 {
     wxString searchPath;
 
@@ -251,29 +251,29 @@ static wxString GetFullSearchPath(const char *lang)
 
     // then take the current directory
     // FIXME it should be the directory of the executable
-    searchPath << GetAllMsgCatalogSubdirs(".", lang) << wxPATH_SEP;
+    searchPath << GetAllMsgCatalogSubdirs(_T("."), lang) << wxPATH_SEP;
 
     // and finally add some standard ones
     searchPath
-        << GetAllMsgCatalogSubdirs("/usr/share/locale", lang) << wxPATH_SEP
-        << GetAllMsgCatalogSubdirs("/usr/lib/locale", lang) << wxPATH_SEP
-        << GetAllMsgCatalogSubdirs("/usr/local/share/locale", lang);
+        << GetAllMsgCatalogSubdirs(_T("/usr/share/locale"), lang) << wxPATH_SEP
+        << GetAllMsgCatalogSubdirs(_T("/usr/lib/locale"), lang) << wxPATH_SEP
+        << GetAllMsgCatalogSubdirs(_T("/usr/local/share/locale"), lang);
 
     return searchPath;
 }
 
 // open disk file and read in it's contents
-bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
+bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName)
 {
   // FIXME VZ: I forgot the exact meaning of LC_PATH - anyone to remind me?
 #if 0
-  const char *pszLcPath = getenv("LC_PATH");
+  const wxChar *pszLcPath = wxGetenv("LC_PATH");
   if ( pszLcPath != NULL )
       strPath += pszLcPath + wxString(szDirPrefix) + MSG_PATH;
 #endif // 0
 
   wxString searchPath = GetFullSearchPath(szDirPrefix);
-  const char *sublocale = strchr(szDirPrefix, '_');
+  const wxChar *sublocale = wxStrchr(szDirPrefix, _T('_'));
   if ( sublocale )
   {
       // also add just base locale name: for things like "fr_BE" (belgium
@@ -352,8 +352,8 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
   m_nHashSize   = Swap(pHeader->nHashSize);
   m_pHashTable  = (size_t32 *)(m_pData + Swap(pHeader->ofsHashTable));
 
-  m_pszName = new char[strlen(szName) + 1];
-  strcpy(m_pszName, szName);
+  m_pszName = new wxChar[wxStrlen(szName) + 1];
+  wxStrcpy(m_pszName, szName);
 
   // everything is fine
   return TRUE;
@@ -416,9 +416,9 @@ wxLocale::wxLocale()
 }
 
 // NB: this function has (desired) side effect of changing current locale
-bool wxLocale::Init(const char *szName,
-                    const char *szShort,
-                    const char *szLocale,
+bool wxLocale::Init(const wxChar *szName,
+                    const wxChar *szShort,
+                    const wxChar *szLocale,
                     bool        bLoadDefault)
 {
   m_strLocale = szName;
@@ -427,7 +427,7 @@ bool wxLocale::Init(const char *szName,
   // change current locale (default: same as long name)
   if ( szLocale == NULL )
     szLocale = szName;
-  m_pszOldLocale = setlocale(LC_ALL, szLocale);
+  m_pszOldLocale = wxSetlocale(LC_ALL, szLocale);
   if ( m_pszOldLocale == NULL )
     wxLogError(_("locale '%s' can not be set."), szLocale);
 
@@ -446,7 +446,7 @@ bool wxLocale::Init(const char *szName,
   m_pMsgCat = NULL;
   bool bOk = TRUE;
   if ( bLoadDefault )
-    bOk = AddCatalog("wxstd");
+    bOk = AddCatalog(_T("wxstd"));
 
   return bOk;
 }
@@ -473,17 +473,18 @@ wxLocale::~wxLocale()
 
     // restore old locale
     wxSetLocale(m_pOldLocale);
-    setlocale(LC_ALL, m_pszOldLocale);
+    wxSetlocale(LC_ALL, m_pszOldLocale);
 }
 
 // get the translation of given string in current locale
-const char *wxLocale::GetString(const char *szOrigString,
-                                const char *szDomain) const
+const wxMB2WXbuf wxLocale::GetString(const wxChar *szOrigString,
+				     const wxChar *szDomain) const
 {
-  if ( IsEmpty(szOrigString) )
+  if ( wxIsEmpty(szOrigString) )
       return szDomain;
 
   const char *pszTrans = NULL;
+  const wxWX2MBbuf szOrgString = wxConv_libc.cWX2MB(szOrigString);
 
   wxMsgCatalog *pMsgCat;
   if ( szDomain != NULL ) {
@@ -491,12 +492,12 @@ const char *wxLocale::GetString(const char *szOrigString,
 
     // does the catalog exist?
     if ( pMsgCat != NULL )
-      pszTrans = pMsgCat->GetString(szOrigString);
+      pszTrans = pMsgCat->GetString(szOrgString);
   }
   else {
     // search in all domains
     for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext ) {
-      pszTrans = pMsgCat->GetString(szOrigString);
+      pszTrans = pMsgCat->GetString(szOrgString);
       if ( pszTrans != NULL )   // take the first found
         break;
     }
@@ -527,19 +528,19 @@ const char *wxLocale::GetString(const char *szOrigString,
       }
     }
 
-    return szOrigString;
+    return (wxMB2WXbuf)(szOrigString);
   }
   else
-    return pszTrans;
+    return (wxMB2WXbuf)(wxConv_libc.cMB2WX(pszTrans));
 }
 
 // find catalog by name in a linked list, return NULL if !found
-wxMsgCatalog *wxLocale::FindCatalog(const char *szDomain) const
+wxMsgCatalog *wxLocale::FindCatalog(const wxChar *szDomain) const
 {
 // linear search in the linked list
   wxMsgCatalog *pMsgCat;
   for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext ) {
-    if ( Stricmp(pMsgCat->GetName(), szDomain) == 0 )
+    if ( wxStricmp(pMsgCat->GetName(), szDomain) == 0 )
       return pMsgCat;
   }
 
@@ -547,13 +548,13 @@ wxMsgCatalog *wxLocale::FindCatalog(const char *szDomain) const
 }
 
 // check if the given catalog is loaded
-bool wxLocale::IsLoaded(const char *szDomain) const
+bool wxLocale::IsLoaded(const wxChar *szDomain) const
 {
   return FindCatalog(szDomain) != NULL;
 }
 
 // add a catalog to our linked list
-bool wxLocale::AddCatalog(const char *szDomain)
+bool wxLocale::AddCatalog(const wxChar *szDomain)
 {
   wxMsgCatalog *pMsgCat = new wxMsgCatalog;
 
