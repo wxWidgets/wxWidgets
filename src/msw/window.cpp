@@ -1067,7 +1067,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
                 break;
 
             case wxBORDER_RAISED:
-                *exstyle |= WS_EX_WINDOWEDGE;
+                *exstyle |= WS_EX_DLGMODALFRAME;
                 break;
 
             case wxBORDER_SUNKEN:
