@@ -1278,7 +1278,26 @@ AC_DEFUN(AC_BAKEFILE_SHARED_LD,
         dnl or with a double stage link in order to create a single module
         dnl "-init _wxWindowsDylibInit" not useful with lazy linking solved
 
-        cat <<EOF >shared-ld-sh
+	dnl If using newer dev tools then there is a -single_module flag that
+	dnl we can use to do this, otherwise we'll need to use a helper
+	dnl script.  Check the version of gcc to see which way we can go.
+	AC_CACHE_CHECK([for gcc 3.1 or later], wx_cv_gcc31, [
+          AC_TRY_COMPILE([],
+              [
+                  #if (__GNUC__ < 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ < 1))
+                      #error old gcc
+                  #endif
+              ],
+              [
+                  wx_cv_gcc31=yes
+              ],
+              [
+                  wx_cv_gcc31=no
+              ]
+          )
+	])
+	if test "$wx_cv_gcc31" = "no"; then
+            cat <<EOF >shared-ld-sh
 #!/bin/sh
 #-----------------------------------------------------------------------------
 #-- Name:        distrib/mac/shared-ld-sh
@@ -1350,7 +1369,7 @@ fi
 # Link the shared library from the single module created
 #
 if test \${verbose} = 1; then
-    echo "cc \${linking_flag} master.\$\$.o \${args}"
+    echo "c++ \${linking_flag} master.\$\$.o \${args}"
 fi
 c++ \${linking_flag} master.\$\$.o \${args}
 status=\$?
@@ -1365,17 +1384,21 @@ rm -f master.\$\$.o
 
 exit 0
 EOF
-        chmod +x shared-ld-sh
+            chmod +x shared-ld-sh
 
-        SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -undefined suppress -flat_namespace -o"
-        SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -undefined suppress -flat_namespace -o"
+	    dnl Use the shared-ld-sh helper script
+	    SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -o"
+	    SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -o"
+	else
+	    dnl Use the -single_module flag and let the linker do it for us
+            SHARED_LD_CC="\${CXX} -dynamiclib -single_module -o"
+            SHARED_LD_MODULE_CC="\${CXX} -bundle -single_module -o"
+	fi
         SHARED_LD_CXX="$SHARED_LD_CC"
         SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
         PIC_FLAG="-dynamic -fPIC"
         dnl FIXME - what about C libs? Gilles says to use c++ because it doesn't
         dnl         matter for C projects and matters for C++ ones
-        dnl FIXME - newer devel tools have linker flag to do this, the script
-        dnl         is not necessary - detect!
       ;;
 
       *-*-aix* )

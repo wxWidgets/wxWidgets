@@ -34389,7 +34389,63 @@ echo "${ECHO_T}$bakefile_cv_prog_icc" >&6
         CXXFLAGS="$CXXFLAGS -fno-common"
 
 
-        cat <<EOF >shared-ld-sh
+				echo "$as_me:$LINENO: checking for gcc 3.1 or later" >&5
+echo $ECHO_N "checking for gcc 3.1 or later... $ECHO_C" >&6
+if test "${wx_cv_gcc31+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+          cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+                  #if (__GNUC__ < 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ < 1))
+                      #error old gcc
+                  #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+
+                  wx_cv_gcc31=yes
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+                  wx_cv_gcc31=no
+
+
+fi
+rm -f conftest.$ac_objext conftest.$ac_ext
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_gcc31" >&5
+echo "${ECHO_T}$wx_cv_gcc31" >&6
+	if test "$wx_cv_gcc31" = "no"; then
+            cat <<EOF >shared-ld-sh
 #!/bin/sh
 #-----------------------------------------------------------------------------
 #-- Name:        distrib/mac/shared-ld-sh
@@ -34461,7 +34517,7 @@ fi
 # Link the shared library from the single module created
 #
 if test \${verbose} = 1; then
-    echo "cc \${linking_flag} master.\$\$.o \${args}"
+    echo "c++ \${linking_flag} master.\$\$.o \${args}"
 fi
 c++ \${linking_flag} master.\$\$.o \${args}
 status=\$?
@@ -34476,14 +34532,18 @@ rm -f master.\$\$.o
 
 exit 0
 EOF
-        chmod +x shared-ld-sh
+            chmod +x shared-ld-sh
 
-        SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -undefined suppress -flat_namespace -o"
-        SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -undefined suppress -flat_namespace -o"
+	    	    SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -o"
+	    SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -o"
+	else
+	                SHARED_LD_CC="\${CXX} -dynamiclib -single_module -o"
+            SHARED_LD_MODULE_CC="\${CXX} -bundle -single_module -o"
+	fi
         SHARED_LD_CXX="$SHARED_LD_CC"
         SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
         PIC_FLAG="-dynamic -fPIC"
-                                      ;;
+                      ;;
 
       *-*-aix* )
                 if test "x$GCC" != "xyes"; then
