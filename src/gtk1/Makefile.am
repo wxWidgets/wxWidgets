@@ -156,7 +156,6 @@ libwx_gtk2_la_SOURCES = \
  gauge.cpp \
  gdiobj.cpp \
  icon.cpp \
- joystick.cpp \
  listbox.cpp \
  main.cpp \
  mdi.cpp \
@@ -178,8 +177,6 @@ libwx_gtk2_la_SOURCES = \
  stattext.cpp \
  tbargtk.cpp \
  textctrl.cpp \
- threadno.cpp \
- threadsgi.cpp \
  timer.cpp \
  tooltip.cpp \
  treectrl.cpp \

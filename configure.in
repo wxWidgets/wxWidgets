@@ -1051,6 +1051,9 @@ AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(long, 4)
 AC_CHECK_SIZEOF(long long, 0)
 
+dnl for bytesex stuff
+AC_C_BIGENDIAN
+
 dnl check for iostream (as opposed to iostream.h) standard header
 WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
 
@@ -1160,7 +1163,7 @@ if test "$wxUSE_THREADS" = "yes"; then
   CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
 
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
-  LTLIBOBJS="$LTLIBOBJS $THREADS_OBJ"
+dnl  LTLIBOBJS="$LTLIBOBJS $THREADS_OBJ"
 
   dnl define autoconf macro to check for given function in both pthread and
   dnl posix4 libraries
@@ -1581,9 +1584,6 @@ if test "$wxUSE_RESOURCES" = "yes" ; then
   if test "$wxUSE_PROLOGIO" = "yes" ; then
     AC_DEFINE(wxUSE_RESOURCES)
     LTLIBOBJS="$LTLIBOBJS resource.lo"
-    if test "$wxUSE_GTK" = 1; then
-      LTLIBOBJS="$LTLIBOBJS utilsres.lo"
-    fi
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
   else
     AC_MSG_WARN([wxWindows ressource system requires PrologIO and can't be compiled without it.])
