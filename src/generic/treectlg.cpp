@@ -1212,7 +1212,8 @@ wxTreeItemId wxGenericTreeCtrl::AddRoot(const wxString& text,
         // if root is hidden, make sure we can navigate
         // into children
         m_anchor->SetHasPlus();
-        Expand(m_anchor);
+        m_anchor->Expand();
+        CalculatePositions();
     }
 
     if (!HasFlag(wxTR_MULTIPLE))
@@ -1356,6 +1357,8 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
 
     wxCHECK_RET( item, _T("invalid item in wxGenericTreeCtrl::Expand") );
+    wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(), 
+                 _T("can't expand hidden root") );
 
     if ( !item->HasPlus() )
         return;
@@ -1400,6 +1403,9 @@ void wxGenericTreeCtrl::ExpandAll(const wxTreeItemId& item)
 
 void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
 {
+    wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(), 
+                 _T("can't collapse hidden root") );
+
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
 
     if ( !item->IsExpanded() )
@@ -1680,10 +1686,22 @@ void wxGenericTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 
     // first expand all parent branches
     wxGenericTreeItem *parent = gitem->GetParent();
-    while ( parent )
+
+    if ( HasFlag(wxTR_HIDE_ROOT) )
     {
-        Expand(parent);
-        parent = parent->GetParent();
+        while ( parent != m_anchor )
+        {
+            Expand(parent);
+            parent = parent->GetParent();
+        }
+    }
+    else
+    {
+        while ( parent )
+        {
+            Expand(parent);
+            parent = parent->GetParent();
+        }
     }
 
     //if (parent) CalculatePositions();
