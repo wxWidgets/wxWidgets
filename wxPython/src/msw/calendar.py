@@ -169,7 +169,7 @@ class CalendarCtrl(core.Control):
         return "<%s.%s; proxy of C++ wxCalendarCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, DateTime date=DefaultDateTime, 
+        __init__(Window parent, int id=-1, DateTime date=DefaultDateTime, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
             String name=CalendarNameStr) -> CalendarCtrl

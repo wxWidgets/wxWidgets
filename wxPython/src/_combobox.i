@@ -61,7 +61,7 @@ public:
     RefDoc(wxComboBox, ""); // turn it off for the ctors
     
     DocCtorAStr(
-        wxComboBox(wxWindow* parent, wxWindowID id,
+        wxComboBox(wxWindow* parent, wxWindowID id=-1,
                    const wxString& value = wxPyEmptyString,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
@@ -82,7 +82,7 @@ public:
 
 
     DocDeclAStr(
-        bool, Create(wxWindow *parent, wxWindowID id,
+        bool, Create(wxWindow *parent, wxWindowID id=-1,
                      const wxString& value = wxPyEmptyString,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,

@@ -40,7 +40,7 @@ public:
     RefDoc(wxChoice, ""); // turn it off for the ctors
     
     DocCtorAStr(
-        wxChoice(wxWindow *parent, wxWindowID id,
+        wxChoice(wxWindow *parent, wxWindowID id=-1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  const wxArrayString& choices = wxPyEmptyStringArray,
@@ -59,7 +59,7 @@ public:
                 
 
     DocDeclAStr(
-        bool, Create(wxWindow *parent, wxWindowID id,
+        bool, Create(wxWindow *parent, wxWindowID id=-1,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      const wxArrayString& choices = wxPyEmptyStringArray,

@@ -203,7 +203,7 @@ public:
     RefDoc(wxCalendarCtrl, ""); // turn it off for the ctors
     
     wxCalendarCtrl(wxWindow *parent,
-                   wxWindowID id,
+                   wxWindowID id=-1,
                    const wxDateTime& date = wxDefaultDateTime,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
