@@ -323,10 +323,12 @@ void apAddContextHelpButton(wxWindow* parent, wxSizer* sizer, int sizerFlags, in
 #endif
 
     contextButton->SetHelpText(_("Invokes context-sensitive help for the clicked-on window."));
+#if 0
     if (wxGetApp().UsingTooltips())
     {
         contextButton->SetToolTip(_("Invokes context-sensitive help for the clicked-on window."));
     }
+#endif
 #endif
 }
 
