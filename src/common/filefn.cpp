@@ -62,7 +62,7 @@
 #endif
 
 #ifdef __WINDOWS__
-    #include "wx/msw/wrapwin.h"
+    #include "wx/msw/private.h"
     #include "wx/msw/mslu.h"
 
     // sys/cygwin.h is needed for cygwin_conv_to_full_win32_path()
@@ -73,6 +73,12 @@
             #include <sys/cygwin.h>
         #endif
     #endif // __GNUWIN32__
+
+    // io.h is needed for _get_osfhandle()
+    // Already included by filefn.h for many Windows compilers
+    #if defined __MWERKS__ || defined __CYGWIN__
+        #include <io.h>
+    #endif
 #endif // __WINDOWS__
 
 #if defined(__VMS__)
@@ -1879,20 +1885,29 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 
 // Return the type of an open file
 //
+// Some file types on some platforms seem seekable but in fact are not.
+// The main use of this function is to allow such cases to be detected
+// (IsSeekable() is implemented as wxGetFileKind() == wxFILE_KIND_DISK).
+//
+// This is important for the archive streams, which benefit greatly from
+// being able to seek on a stream, but which will produce corrupt archives
+// if they unknowingly seek on a non-seekable stream.
+// 
+// wxFILE_KIND_DISK is a good catch all return value, since other values
+// disable features of the archive streams. Some other value must be returned
+// for a file type that appears seekable but isn't.
+//
+// Known examples:
+//   *  Pipes on Windows
+//   *  Files on VMS with a record format other than StreamLF
+//
 wxFileKind wxGetFileKind(int fd)
 {
-#if !defined(__WXWINCE__) && !defined(__WXPALMOS__)
-    if (isatty(fd))
-        return wxFILE_KIND_TERMINAL;
-#endif
-
-#if defined(__WXPALMOS__)
-    return wxFILE_KIND_UNKNOWN;
-#elif defined(__WXWINCE__)
-    return wxFILE_KIND_UNKNOWN;
-#elif defined(__WXMSW__)
+#if defined __WXMSW__ && !defined __WXWINCE__ && defined wxGetOSFHandle
     switch (::GetFileType(wxGetOSFHandle(fd)) & ~FILE_TYPE_REMOTE)
     {
+        case FILE_TYPE_CHAR:
+            return wxFILE_KIND_TERMINAL;
         case FILE_TYPE_DISK:
             return wxFILE_KIND_DISK;
         case FILE_TYPE_PIPE:
@@ -1902,6 +1917,9 @@ wxFileKind wxGetFileKind(int fd)
     return wxFILE_KIND_UNKNOWN;
 
 #elif defined(__UNIX__)
+    if (isatty(fd))
+        return wxFILE_KIND_TERMINAL;
+
     struct stat st;
     fstat(fd, &st);
 
@@ -1918,10 +1936,8 @@ wxFileKind wxGetFileKind(int fd)
     return wxFILE_KIND_DISK;
 
 #else
-    if (lseek(fd, 0, SEEK_CUR) != -1)
-        return wxFILE_KIND_DISK;
-    else
-        return wxFILE_KIND_UNKNOWN;
+    (void)fd;
+    return wxFILE_KIND_DISK;
 #endif
 }
 

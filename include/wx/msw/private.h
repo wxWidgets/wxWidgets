@@ -174,6 +174,24 @@ extern LONG APIENTRY _EXPORT
 #define wxZeroMemory(obj)   memset((void*) & obj, 0, sizeof(obj))
 #endif
 
+// This one is a macro so that it can be tested with #ifdef, it will be
+// undefined if it cannot be implemented for a given compiler.
+// Vc++, bcc, dmc, ow, mingw, codewarrior (and rsxnt) have _get_osfhandle.
+// Cygwin has get_osfhandle. Others are currently unknown, e.g. Salford,
+// Intel, Visual Age.
+#if defined(__WXWINCE__)
+    #define wxGetOSFHandle(fd) ((HANDLE)fd)
+#elif defined(__CYGWIN__)
+    #define wxGetOSFHandle(fd) ((HANDLE)get_osfhandle(fd))
+#elif defined(__VISUALC__) \
+   || defined(__BORLANDC__) \
+   || defined(__WATCOMC__) \
+   || defined(__DMC__) \
+   || (defined(__GNUWIN32__) || defined(__MINGW32__)) \
+   || (defined(__MWERKS__) && defined(__MSL__))
+    #define wxGetOSFHandle(fd) ((HANDLE)_get_osfhandle(fd))
+#endif
+
 #if wxUSE_GUI
 
 #include <wx/gdicmn.h>

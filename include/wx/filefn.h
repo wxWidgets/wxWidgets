@@ -148,7 +148,6 @@ enum wxFileKind
     int wxWrite(int fd, const void *buf, unsigned int count);
     int wxEof(int fd);
     wxFileOffset wxSeek(int fd, wxFileOffset offset, int origin);
-    inline HANDLE wxGetOSFHandle(int fd) { return (HANDLE)fd; }
     #define wxLSeek wxSeek
     wxFileOffset wxTell(int fd);
     
@@ -351,20 +350,6 @@ enum wxFileKind
         #define   wxAccess     access
     #endif
 #endif // platforms
-
-#if defined(__WXMSW__) && !defined(__WXWINCE__)
-    // get the HANDLE associated with a file descriptor
-#   ifdef __CYGWIN__
-#       include "wx/msw/private.h" // for HANDLE
-#       include <io.h> // for get_osfhandle()
-        inline HANDLE wxGetOSFHandle(int fd) { return (HANDLE) get_osfhandle(fd); }
-#   else
-#       ifdef __BORLANDC__
-#           include "wx/msw/private.h" // for HANDLE
-#       endif
-        inline HANDLE wxGetOSFHandle(int fd) { return (HANDLE) _get_osfhandle(fd); }
-#   endif
-#endif
 
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
 //
