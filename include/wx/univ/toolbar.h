@@ -104,10 +104,13 @@ protected:
 
 private:
     wxToolBarTool    *m_captured;
-    wxCoord          m_maxWidth, m_maxHeight;
+    wxToolBarTool    *m_underMouse;
+    wxCoord           m_maxWidth, m_maxHeight;
     
 private:
     void OnMouse( wxMouseEvent &event );
+    void OnEnter( wxMouseEvent &event );
+    void OnLeave( wxMouseEvent &event );
     void RefreshTool( wxToolBarTool *tool );
     void DrawToolBarTool( wxToolBarTool *tool, wxDC &dc, bool down );
     void OnPaint( wxPaintEvent &event );

@@ -41,6 +41,8 @@ BEGIN_EVENT_TABLE(wxToolBar,wxToolBarBase)
     EVT_MOUSE_EVENTS( wxToolBar::OnMouse )
     EVT_PAINT( wxToolBar::OnPaint )
     EVT_SIZE( wxToolBar::OnSize )
+    EVT_ENTER_WINDOW( wxToolBar::OnEnter )
+    EVT_LEAVE_WINDOW( wxToolBar::OnLeave )
 END_EVENT_TABLE()
 
 bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
@@ -66,6 +68,8 @@ void wxToolBar::Init()
     m_maxHeight = 0;
 
     m_captured = NULL;
+    m_underMouse = NULL;
+    
     SetToolBitmapSize( wxSize(16,15) );
 }
 
@@ -98,14 +102,57 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
     // Created disabled-state bitmap on demand
     if (!enable && !tool->GetBitmap2().Ok())
     {
-        wxImage in(tool->GetBitmap1());
-        wxImage out(tool->GetBitmap1());
+        wxImage image( tool->GetBitmap1() );
 
-        wxCreateGreyedImage(in, out);
+        unsigned char bg_red = 180;
+        unsigned char bg_green = 180;
+        unsigned char bg_blue = 180;
+        
+        unsigned char mask_red = image.GetMaskRed();
+        unsigned char mask_green = image.GetMaskGreen();
+        unsigned char mask_blue = image.GetMaskBlue();
+        
+        bool has_mask = image.HasMask();
+        
+        int x,y;
+        for (y = 0; y < image.GetHeight(); y++)
+        {
+            for (x = 0; x < image.GetWidth(); x++) 
+            {
+                unsigned char red = image.GetRed(x,y);
+                unsigned char green = image.GetGreen(x,y);
+                unsigned char blue = image.GetBlue(x,y);
+                if (!has_mask || red != mask_red || green != mask_green || blue != mask_blue)
+                {
+                    red = (((wxInt32) red  - bg_red) >> 1) + bg_red;
+                    green = (((wxInt32) green  - bg_green) >> 1) + bg_green;
+                    blue = (((wxInt32) blue  - bg_blue) >> 1) + bg_blue;
+                    image.SetRGB( x, y, red, green, blue );                
+                }
+            }
+        }
 
-        tool->SetBitmap2(out.ConvertToBitmap());
+        for (y = 0; y < image.GetHeight(); y++)
+        {
+            for (x = y % 2; x < image.GetWidth(); x += 2) 
+            {
+                unsigned char red = image.GetRed(x,y);
+                unsigned char green = image.GetGreen(x,y);
+                unsigned char blue = image.GetBlue(x,y);
+                if (!has_mask || red != mask_red || green != mask_green || blue != mask_blue)
+                {
+                    red = (((wxInt32) red  - bg_red) >> 1) + bg_red;
+                    green = (((wxInt32) green  - bg_green) >> 1) + bg_green;
+                    blue = (((wxInt32) blue  - bg_blue) >> 1) + bg_blue;
+                    image.SetRGB( x, y, red, green, blue );
+                }
+            }
+        }
+
+        tool->SetBitmap2( image.ConvertToBitmap() );
     }
-    RefreshTool((wxToolBarTool*) tool);    
+    
+    RefreshTool((wxToolBarTool*) tool);
 #endif
 }
 
@@ -153,6 +200,17 @@ void wxToolBar::RefreshTool( wxToolBarTool *tool )
 void wxToolBar::DrawToolBarTool( wxToolBarTool *tool, wxDC &dc, bool down )
 {
     const wxBitmap& bitmap = (tool->IsEnabled() || !tool->GetBitmap2().Ok()) ? tool->GetBitmap1() : tool->GetBitmap2() ;
+    
+    if (HasFlag(wxTB_FLAT) && (tool != m_underMouse))
+    {
+        if (down)
+            dc.DrawBitmap( bitmap, tool->m_x+4, tool->m_y+4, TRUE );
+        else
+            dc.DrawBitmap( bitmap, tool->m_x+3, tool->m_y+3, TRUE );
+            
+        return;
+    }
+    
     if (down)
     {
         dc.DrawBitmap( bitmap, tool->m_x+4, tool->m_y+4, TRUE );
@@ -216,14 +274,18 @@ bool wxToolBar::Realize()
 
     int x;
     int y;
-
+    
     if (GetWindowStyleFlag() & wxTB_VERTICAL)
     {
+        m_xMargin += 1;   // Cannot help it, but otherwise it look ugly
+        
         x = m_xMargin;
         y = 5;
     }
     else
     {
+        m_yMargin += 1;   // Cannot help it, but otherwise it look ugly
+        
         y = m_yMargin;
         x = 5;
     }
@@ -283,11 +345,24 @@ bool wxToolBar::Realize()
         SetSize(sz.x, m_maxHeight);
     }
 
-    // Commenting out Robert's fix since the above should be
-    // more general
-    //    SetSize( x+16, m_defaultHeight + 14 );
-    
     return TRUE;
+}
+
+void wxToolBar::OnLeave(wxMouseEvent &event)
+{
+    if (HasFlag( wxTB_FLAT ))
+    {
+        wxToolBarTool *oldMouseUnder = m_underMouse;
+        if (m_underMouse)
+        {
+            m_underMouse = NULL;
+            RefreshTool( oldMouseUnder );
+        }
+    }
+}
+
+void wxToolBar::OnEnter(wxMouseEvent &event)
+{
 }
 
 void wxToolBar::OnMouse(wxMouseEvent &event)
@@ -308,6 +383,17 @@ void wxToolBar::OnMouse(wxMouseEvent &event)
             hit = tool;
             break;
         }
+    }
+    
+    wxToolBarTool *oldMouseUnder = m_underMouse;
+    if (HasFlag( wxTB_FLAT))
+    {
+        if (m_underMouse && (m_underMouse != hit))
+        {
+            m_underMouse = NULL;
+            RefreshTool( oldMouseUnder );
+        }
+        m_underMouse = hit;
     }
     
     if (event.LeftDown() && (hit) && hit->IsEnabled())
@@ -338,6 +424,10 @@ void wxToolBar::OnMouse(wxMouseEvent &event)
         ReleaseMouse();
         
         m_captured->m_isDown = FALSE;
+        
+        // Bad trick...
+        m_underMouse = NULL;
+        
         RefreshTool( m_captured );
         
         if (hit == m_captured)
@@ -351,6 +441,12 @@ void wxToolBar::OnMouse(wxMouseEvent &event)
         m_captured = NULL;
         
         return;
+    }
+    
+    if (HasFlag(wxTB_FLAT))
+    {
+        if (m_underMouse && (m_underMouse != oldMouseUnder))
+            RefreshTool( m_underMouse );
     }
 }
 
