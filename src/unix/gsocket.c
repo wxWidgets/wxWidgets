@@ -23,6 +23,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <errno.h>
 
 #include <string.h>
 #include <unistd.h>
@@ -343,7 +344,7 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
     return GSOCK_IOERR;
   }
 
-  GSocket_SetBlocking(sck, sck->m_blocking);
+  GSocket_SetNonBlocking(sck, sck->m_blocking);
   GSocket_SetTimeout(sck, sck->m_timeout);
 
   return GSOCK_NOERROR;
@@ -401,7 +402,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
   /* It is not a server */
   sck->m_server = FALSE;
 
-  GSocket_SetBlocking(sck, sck->m_blocking);
+  GSocket_SetNonBlocking(sck, sck->m_blocking);
   GSocket_SetTimeout(sck, sck->m_timeout);
 
   return GSOCK_NOERROR;
@@ -613,8 +614,12 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
   MASK_SIGNAL();
   ret = recv(socket->m_fd, buffer, size, 0);
   UNMASK_SIGNAL();
-  if (ret == -1) {
+  if (ret == -1 && errno != EAGAIN) {
     socket->m_error = GSOCK_IOERR;
+    return -1;
+  }
+  if (errno == EAGAIN) {
+    socket->m_error = GSOCK_TRYAGAIN;
     return -1;
   }
   return ret;
@@ -631,8 +636,12 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
   MASK_SIGNAL();
   ret = recvfrom(socket->m_fd, buffer, size, 0, &from, &fromlen);
   UNMASK_SIGNAL();
-  if (ret == -1) {
+  if (ret == -1 && errno != EAGAIN) {
     socket->m_error = GSOCK_IOERR;
+    return -1;
+  }
+  if (errno == EAGAIN) {
+    socket->m_error = GSOCK_TRYAGAIN;
     return -1;
   }
 
@@ -651,8 +660,12 @@ int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size)
   MASK_SIGNAL();
   ret = send(socket->m_fd, buffer, size, 0);
   UNMASK_SIGNAL();
-  if (ret == -1) {
+  if (ret == -1 && errno != EAGAIN) {
     socket->m_error = GSOCK_IOERR;
+    return -1;
+  }
+  if (errno == EAGAIN) {
+    socket->m_error = GSOCK_TRYAGAIN;
     return -1;
   }
   return ret;
@@ -673,13 +686,18 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
   MASK_SIGNAL();
   ret = sendto(socket->m_fd, buffer, size, 0, addr, len);
   UNMASK_SIGNAL();
-  if (ret == -1) {
-    socket->m_error = GSOCK_IOERR;
-    return -1;
-  }
 
   /* Frees memory allocated from _GAddress_translate_to */
   free(addr);
+
+  if (ret == -1 && errno != EAGAIN) {
+    socket->m_error = GSOCK_IOERR;
+    return -1;
+  }
+  if (errno == EAGAIN) {
+    socket->m_error = GSOCK_TRYAGAIN;
+    return -1;
+  }
 
   return ret;
 }
