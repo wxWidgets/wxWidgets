@@ -873,10 +873,8 @@ long wxMDIChildFrame::MSWWindowProc(WXUINT message,
             break;
 
         case WM_GETMINMAXINFO:
-            // let the default window proc calculate the size of MDI children
-            // frames because it is based on the size of the MDI client window,
-            // not on the values specified in wxWindow m_min/max variables
-            return MSWDefWindowProc(message, wParam, lParam);
+            processed = HandleGetMinMaxInfo((MINMAXINFO *)lParam);
+            break;
 
         case WM_MDIACTIVATE:
             {
@@ -1038,6 +1036,33 @@ bool wxMDIChildFrame::HandleWindowPosChanging(void *pos)
 #endif // Win95
 
     return FALSE;
+}
+
+bool wxMDIChildFrame::HandleGetMinMaxInfo(void *mmInfo)
+{
+    MINMAXINFO *info = (MINMAXINFO *)mmInfo;
+
+    // let the default window proc calculate the size of MDI children
+    // frames because it is based on the size of the MDI client window,
+    // not on the values specified in wxWindow m_max variables
+    bool processed = MSWDefWindowProc(WM_GETMINMAXINFO, 0, (LPARAM)mmInfo);
+
+    // but allow GetSizeHints() to set the min size
+    if ( m_minWidth != -1 )
+    {
+        info->ptMinTrackSize.x = m_minWidth;
+
+        processed = TRUE;
+    }
+
+    if ( m_minHeight != -1 )
+    {
+        info->ptMinTrackSize.y = m_minHeight;
+
+        processed = TRUE;
+    }
+
+    return TRUE;
 }
 
 // ---------------------------------------------------------------------------

@@ -163,7 +163,8 @@ MyFrame::MyFrame(wxWindow *parent,
                  const wxPoint& pos,
                  const wxSize& size,
                  const long style)
-       : wxMDIParentFrame(parent, id, title, pos, size, style)
+       : wxMDIParentFrame(parent, id, title, pos, size,
+                          style | wxNO_FULL_REPAINT_ON_RESIZE)
 {
     textWindow = new wxTextCtrl(this, -1, "A help window",
                                 wxDefaultPosition, wxDefaultSize,
@@ -345,7 +346,9 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
         : wxScrolledWindow(parent, -1, pos, size,
-                           wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
+                           wxSUNKEN_BORDER |
+                           wxNO_FULL_REPAINT_ON_RESIZE |
+                           wxVSCROLL | wxHSCROLL)
 {
     SetBackgroundColour(wxColour("WHITE"));
 
@@ -408,10 +411,14 @@ void MyCanvas::OnEvent(wxMouseEvent& event)
 MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title,
                  const wxPoint& pos, const wxSize& size,
                  const long style)
-       : wxMDIChildFrame(parent, -1, title, pos, size, style)
+       : wxMDIChildFrame(parent, -1, title, pos, size,
+                         style | wxNO_FULL_REPAINT_ON_RESIZE)
 {
     canvas = (MyCanvas *) NULL;
     my_children.Append(this);
+
+    // this should work for MDI frames as well as for normal ones
+    SetSizeHints(100, 100);
 }
 
 MyChild::~MyChild()
