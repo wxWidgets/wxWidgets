@@ -143,6 +143,7 @@ public:
     void      SetClient(WXHWND    c_Hwnd);
     void      SetClient(wxWindow* c_Window);
     wxWindow *GetClient();
+    HWND      GetFrame(void) const { return m_hFrame; }
 
  friend MRESULT EXPENTRY wxFrameWndProc(HWND  hWnd,ULONG ulMsg, MPARAM wParam, MPARAM lParam);
  friend MRESULT EXPENTRY wxFrameMainWndProc(HWND  hWnd,ULONG ulMsg, MPARAM wParam, MPARAM lParam);

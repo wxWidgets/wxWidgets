@@ -55,7 +55,9 @@ extern wxList WXDLLEXPORT wxPendingDelete;
 extern wxChar wxFrameClassName[];
 extern wxMenu *wxCurrentPopupMenu;
 
-extern void  wxAssociateWinWithHandle( HWND hWnd,wxWindow* pWin);
+extern void  wxAssociateWinWithHandle( HWND      hWnd
+                                      ,wxWindow* pWin
+                                     );
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -630,7 +632,7 @@ void wxFrame::InternalSetMenuBar()
         sError = wxPMErrorToStr(vError);
         wxLogError("Error setting parent for submenu. Error: %s\n", sError);
     }
-    WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
+    ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
 } // end of wxFrame::InternalSetMenuBar
 
 //
@@ -706,9 +708,9 @@ bool wxFrame::ShowFullScreen(
 
         if (lStyle & wxFULLSCREEN_NOMENUBAR)
         {
-            ::WinSetParent(m_hMenu, GetHWND(), FALSE);
-            ::WinSetOwner(m_hMenu, GetHWND());
-            ::WinSendMsg((HWND)GetHWND(), WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
+            ::WinSetParent(m_hMenu, m_hFrame, FALSE);
+            ::WinSetOwner(m_hMenu, m_hFrame);
+            ::WinSendMsg((HWND)m_hFrame, WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
         }
 
 #if wxUSE_STATUSBAR
@@ -732,16 +734,16 @@ bool wxFrame::ShowFullScreen(
         //
         // Save the 'normal' window style
         //
-        m_lFsOldWindowStyle = ::WinQueryWindowULong((HWND)GetHWND(), QWL_STYLE);
+        m_lFsOldWindowStyle = ::WinQueryWindowULong(m_hFrame, QWL_STYLE);
 
         //
-	    // Save the old position, width & height, maximize state
+        // Save the old position, width & height, maximize state
         //
         m_vFsOldSize = GetRect();
         m_bFsIsMaximized = IsMaximized();
 
         //
-	     // Decide which window style flags to turn off
+        // Decide which window style flags to turn off
         //
         LONG                        lNewStyle = m_lFsOldWindowStyle;
         LONG                        lOffFlags = 0;
@@ -756,7 +758,7 @@ bool wxFrame::ShowFullScreen(
         //
         // Change our window style to be compatible with full-screen mode
         //
-        ::WinSetWindowULong((HWND)GetHWND(), QWL_STYLE, (ULONG)lNewStyle);
+        ::WinSetWindowULong((HWND)m_hFrame, QWL_STYLE, (ULONG)lNewStyle);
 
         //
         // Resize to the size of the desktop
@@ -827,13 +829,13 @@ bool wxFrame::ShowFullScreen(
 
         if ((m_lFsStyle & wxFULLSCREEN_NOMENUBAR) && (m_hMenu != 0))
         {
-            ::WinSetParent(m_hMenu, GetHWND(), FALSE);
-            ::WinSetOwner(m_hMenu, GetHWND());
-            ::WinSendMsg((HWND)GetHWND(), WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
+            ::WinSetParent(m_hMenu, m_hFrame, FALSE);
+            ::WinSetOwner(m_hMenu, m_hFrame);
+            ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
         }
         Maximize(m_bFsIsMaximized);
 
-        ::WinSetWindowULong( (HWND)GetHWND()
+        ::WinSetWindowULong( m_hFrame
                             ,QWL_STYLE
                             ,(ULONG)m_lFsOldWindowStyle
                            );
@@ -1253,7 +1255,7 @@ bool wxFrame::HandlePaint()
             HPOINTER                hIcon;
 
             if (m_icon.Ok())
-                hIcon = (HPOINTER)::WinSendMsg(GetHWND(), WM_QUERYICON, 0L, 0L);
+                hIcon = (HPOINTER)::WinSendMsg(m_hFrame, WM_QUERYICON, 0L, 0L);
             else
                 hIcon = (HPOINTER)m_hDefaultIcon;
 
@@ -1721,7 +1723,7 @@ void wxFrame::SetClient(
         pOldClient->Show( FALSE );
         ::WinSetWindowUShort(pOldClient->GetHWND(), QWS_ID, (USHORT)pOldClient->GetId());
         // to avoid OS/2 bug need to update frame
-        ::WinSendMsg((HWND)this->GetHWND(), WM_UPDATEFRAME, (MPARAM)~0, 0);
+        ::WinSendMsg((HWND)this->GetFrame(), WM_UPDATEFRAME, (MPARAM)~0, 0);
         return;
     }
 
@@ -1746,11 +1748,11 @@ void wxFrame::SetClient(
     if( this->IsShown() )
     {
         this->Show();
-        ::WinSendMsg(GetHWND(), WM_UPDATEFRAME, (MPARAM)~0, 0);
+        ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)~0, 0);
     }
 }
 
 wxWindow* wxFrame::GetClient()
 {
-    return wxFindWinFromHandle((WXHWND)::WinWindowFromID(GetHWND(), FID_CLIENT));
+    return wxFindWinFromHandle((WXHWND)::WinWindowFromID(m_hFrame, FID_CLIENT));
 }

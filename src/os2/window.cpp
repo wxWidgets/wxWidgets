@@ -37,11 +37,6 @@
     #include <stdio.h>
 #endif
 
-#define DEBUG_PRINTF(NAME)   { static int raz=0; \
-  printf( #NAME " %i\n",raz); fflush(stdout);       \
-   raz++;                                        \
- }
-
 #if     wxUSE_OWNER_DRAWN
     #include "wx/ownerdrw.h"
 #endif
@@ -250,9 +245,6 @@ bool wxWindow::OS2Command(
 , WXWORD                            WXUNUSED(uId)
 )
 {
-
-DEBUG_PRINTF(wxWindow::OS2Command);
-
     return(FALSE);
 }
 
@@ -302,9 +294,6 @@ void wxWindow::Init()
     m_lLastMouseY = -1;
     m_nLastMouseEvent = -1;
 #endif // wxUSE_MOUSEEVENT_HACK
-
-DEBUG_PRINTF(wxWindow::Init-End);
-
 } // wxWindow::Init
 
 //
@@ -312,7 +301,6 @@ DEBUG_PRINTF(wxWindow::Init-End);
 //
 wxWindow::~wxWindow()
 {
-DEBUG_PRINTF(wxWindow::~wxWindow-Start);
     m_isBeingDeleted = TRUE;
 
     OS2DetachWindowMenu();
@@ -329,7 +317,6 @@ DEBUG_PRINTF(wxWindow::~wxWindow-Start);
         //
         wxRemoveHandleAssociation(this);
     }
-DEBUG_PRINTF(wxWindow::~wxWindow-End);
 } // end of wxWindow::~wxWindow
 
 bool wxWindow::Create(
@@ -518,7 +505,6 @@ bool wxWindow::SetFont(
   const wxFont&                     rFont
 )
 {
-DEBUG_PRINTF(wxWindow::SetFont);
     if (!wxWindowBase::SetFont(rFont))
     {
         // nothing to do
@@ -1338,10 +1324,12 @@ int wxWindow::GetCharHeight() const
     hPs = ::WinGetPS(GetHwnd());
 
     if(!GpiQueryFontMetrics(hPs, sizeof(FONTMETRICS), &vFontMetrics))
+    {
+        ::WinReleasePS(hPs);
         return (0);
-    else
-        return(vFontMetrics.lMaxAscender + vFontMetrics.lMaxDescender);
+    }
     ::WinReleasePS(hPs);
+    return(vFontMetrics.lMaxAscender + vFontMetrics.lMaxDescender);
 } // end of wxWindow::GetCharHeight
 
 int wxWindow::GetCharWidth() const
@@ -1352,10 +1340,12 @@ int wxWindow::GetCharWidth() const
     hPs = ::WinGetPS(GetHwnd());
 
     if(!GpiQueryFontMetrics(hPs, sizeof(FONTMETRICS), &vFontMetrics))
+    {
+        ::WinReleasePS(hPs);
         return (0);
-    else
-        return(vFontMetrics.lAveCharWidth);
+    }
     ::WinReleasePS(hPs);
+    return(vFontMetrics.lAveCharWidth);
 } // end of wxWindow::GetCharWidth
 
 void wxWindow::GetTextExtent(
@@ -1519,8 +1509,6 @@ MRESULT wxWindow::OS2DefWindowProc(
 , WXLPARAM                          lParam
 )
 {
-DEBUG_PRINTF(wxWindow::OS2DefWindowProc);
-
     if (m_fnOldWndProc)
         return (MRESULT)m_fnOldWndProc(GetHWND(), (ULONG)uMsg, (MPARAM)wParam, (MPARAM)lParam);
     else
@@ -1804,7 +1792,6 @@ MRESULT EXPENTRY wxWndProc(
     // Trace all ulMsgs - useful for the debugging
     //
 #ifdef __WXDEBUG__
-DEBUG_PRINTF(__WXDEBUG__wxWndProc);
     wxLogTrace(wxTraceMessages, wxT("Processing %s(wParam=%8lx, lParam=%8lx)"),
                wxGetMessageName(ulMsg), wParam, lParam);
 #endif // __WXDEBUG__
@@ -1933,7 +1920,6 @@ MRESULT wxWindow::OS2WindowProc(
             break;
 
         case WM_PAINT:
-DEBUG_PRINTF(WM_PAINT)
             bProcessed = HandlePaint();
             break;
 
@@ -1944,11 +1930,9 @@ DEBUG_PRINTF(WM_PAINT)
             //
             bProcessed = TRUE;
             mResult = (MRESULT)TRUE;
-DEBUG_PRINTF(WM_CLOSE)
             break;
 
         case WM_SHOW:
-DEBUG_PRINTF(WM_SHOW)
             bProcessed = HandleShow(wParam != 0, (int)lParam);
             break;
 
@@ -1987,11 +1971,9 @@ DEBUG_PRINTF(WM_SHOW)
             {
                 WORD id, cmd;
                 WXHWND hwnd;
-DEBUG_PRINTF(WM_COMMAND-in)
                 UnpackCommand(wParam, lParam, &id, &hwnd, &cmd);
 
                 bProcessed = HandleCommand(id, cmd, hwnd);
-DEBUG_PRINTF(WM_COMMAND-out)
             }
             break;
 
