@@ -4,8 +4,8 @@
 //              Drawer windows appear under their parent window and
 //              behave like a drawer, opening and closing to reveal
 //              content that does not need to be visible at all times.
-// Author:      Jason Bagley & Ryan Norton 
-// Modified by: 
+// Author:      Jason Bagley 
+// Modified by: Ryan Norton (To make it work :), plus bug fixes)
 // Created:     2004-30-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Jason Bagley; Art & Logic, Inc.
@@ -17,15 +17,15 @@
 #endif
 
 #include "wx/defs.h"
-
-#include "wx/mac/carbon/drawer.h"
 #include "wx/mac/private.h"
 
 #if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
 
+#include "wx/mac/carbon/drawer.h"
+
 IMPLEMENT_DYNAMIC_CLASS(wxDrawerWindow, wxWindow)
 
-// Use consants for now.
+// Use constants for now.
 // These can be made into member variables and set dynamically.
 const int kLeadingOffset = 20;
 const int kTrailingOffset = 20;
