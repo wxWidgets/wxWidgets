@@ -204,18 +204,6 @@ Checking in docs/changes.txt;
 new revision: 1.299; previous revision: 1.298
 
 
-26. Remove caching from wxInternetFSHandler
-
-Notes: leave in m_Chache variable (no longer used) and destructor (now empty)
-       in order to preserve binary compatibility
-Checking in fs_inet.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/fs_inet.h,v  <--  fs_inet.h
-new revision: 1.15; previous revision: 1.14
-Checking in fs_inet.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/fs_inet.cpp,v  <--  fs_inet.cpp
-new revision: 1.30; previous revision: 1.29
-
-
 27. Fix redistribution of the extra space between sizer items: all extra space
 used to be allocated to the first item which is wrong, it should be divided
 evenly among all of them.
