@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        settings.h
-// Author:      Vaclav Slavik
+// Author:      Vaclav Slavik, Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:   	wxWindows licence
@@ -55,29 +55,48 @@ wxColour wxSystemSettings::GetSystemColour(int WXUNUSED(index))
 
 wxFont wxSystemSettings::GetSystemFont(int index)
 {
-    bool isDefaultRequested = (index == wxSYS_DEFAULT_GUI_FONT);
-
-    if ( isDefaultRequested && gs_fontDefault )
+    switch (index)
     {
-        return *gs_fontDefault;
+        case wxSYS_OEM_FIXED_FONT:
+        case wxSYS_ANSI_FIXED_FONT:
+        case wxSYS_SYSTEM_FIXED_FONT:
+        {
+            return *wxNORMAL_FONT;
+        }
+        case wxSYS_ANSI_VAR_FONT:
+        case wxSYS_SYSTEM_FONT:
+        case wxSYS_DEVICE_DEFAULT_FONT:
+        case wxSYS_DEFAULT_GUI_FONT:
+        {
+            if ( !gs_fontDefault )
+                gs_fontDefault = new wxFont(10, wxSWISS, wxNORMAL, wxNORMAL, FALSE, "Arial");
+            return *gs_fontDefault;
+        }
+        default:
+            return wxNullFont;
     }
-
-    // FIXME_MGL
-    wxFont font(10, wxSWISS, wxNORMAL, wxNORMAL, FALSE, "Arial");
-
-    if ( isDefaultRequested )
-    {
-        // if we got here it means we hadn't cached it yet - do now
-        gs_fontDefault = new wxFont(font);
-    }
-
-    return font;
 }
 
 int wxSystemSettings::GetSystemMetric(int WXUNUSED(index))
 {
-    // FIXME_MGL
-    return 1;
+    int val;
+    
+    switch (index)
+    {
+        case wxSYS_SCREEN_X:
+            wxDisplaySize(&val, NULL);
+            return val;
+        case wxSYS_SCREEN_Y:
+            wxDisplaySize(NULL, &val);
+            return val;
+        case wxSYS_VSCROLL_X:
+        case wxSYS_HSCROLL_Y:
+            return 15; 
+            break;
+        default:
+            wxCHECK_MSG(index, 0, wxT("wxSystemSettings::GetSystemMetric not fully implemented"));
+            return 0;
+    }
 }
 
 bool wxSystemSettings::GetCapability(int index)
