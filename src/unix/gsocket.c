@@ -25,7 +25,7 @@
 
 #ifdef __VMS__
 #include <socket.h>
-struct	sockaddr_un {
+struct sockaddr_un {
     u_char  sun_len;        /* sockaddr len including null */
     u_char  sun_family;     /* AF_UNIX */
     char    sun_path[108];  /* path name (gag) */
@@ -109,7 +109,7 @@ struct	sockaddr_un {
     #define _GSocket_Disable_Events(socket)
     #define _GSocket_Install_Callback(socket, event)
     #define _GSocket_Uninstall_Callback(socket, event)
-#endif // wxUSE_GUI
+#endif /* wxUSE_GUI */
 
 /* Global initialisers */
 
