@@ -149,6 +149,12 @@ void wxRegion::Clear()
 
 bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
+    // work around for XUnionRectWithRegion() bug: taking a union with an empty
+    // rect results in an empty region (at least XFree 3.3.6 and 4.0 have this
+    // problem)
+    if ( !width || !height )
+        return TRUE;
+
     XRectangle rect;
     rect.x = x;
     rect.y = y;

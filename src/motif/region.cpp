@@ -200,8 +200,17 @@ void wxRegion::Clear()
 }
 
 //! Combine rectangle (x, y, w, h) with this.
-bool wxRegion::Combine(wxCoord x, wxCoord y, wxCoord width, wxCoord height, wxRegionOp op)
+bool
+wxRegion::Combine(wxCoord x, wxCoord y,
+                  wxCoord width, wxCoord height,
+                  wxRegionOp op)
 {
+    // work around for XUnionRectWithRegion() bug: taking a union with an empty
+    // rect results in an empty region (at least XFree 3.3.6 and 4.0 have this
+    // problem)
+    if ( op == wxRGN_OR && (!width || !height) )
+        return TRUE;
+
     // Don't change shared data
     if (!m_refData) {
         m_refData = new wxRegionRefData();
