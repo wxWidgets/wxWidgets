@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="wx_core" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="core" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -8624,6 +8624,162 @@ SOURCE=..\..\include\wx\wizard.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\wxhtml.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_all.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_bmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_bmpbt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_bttn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_cald.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_chckb.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_chckl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_choic.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_combo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_dlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_frame.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_gauge.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_gdctl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_html.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_listb.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_listc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_menu.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_notbk.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_panel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_radbt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_radbx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_scrol.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_scwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_sizer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_slidr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_spin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_split.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_statbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_stbmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_stbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_stlin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_sttxt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_text.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_tglbtn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_toolb.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_tree.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_unkwn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_wizrd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xmlres.h
 # End Source File
 # Begin Source File
 

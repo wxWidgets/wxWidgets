@@ -17,7 +17,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 	WXUNIV="$(WXUNIV)" UNICODE="$(UNICODE)" MSLU="$(MSLU)" BUILD="$(BUILD)" \
 	DEBUG_INFO="$(DEBUG_INFO)" DEBUG_FLAG="$(DEBUG_FLAG)" \
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" \
-	USE_OPENGL="$(USE_OPENGL)" USE_ODBC="$(USE_ODBC)" \
+	USE_XRC="$(USE_XRC)" USE_OPENGL="$(USE_OPENGL)" USE_ODBC="$(USE_ODBC)" \
 	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" OFFICIAL_BUILD="$(OFFICIAL_BUILD)" \
 	VENDOR="$(VENDOR)" CFG="$(CFG)" CPPUNIT_CFLAGS="$(CPPUNIT_CFLAGS)" \
 	CPPUNIT_LIBS="$(CPPUNIT_LIBS)" RUNTIME_LIBS="$(RUNTIME_LIBS)" \
@@ -169,7 +169,7 @@ MONODLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-DwxUSE_BASE=1 -DWXMAKINGDLL $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) \
+	-DwxUSE_BASE=1 -DWXMAKINGDLL $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) \
 	$(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.o \
@@ -208,6 +208,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_object.o \
 	$(OBJS)\monodll_process.o \
 	$(OBJS)\monodll_regex.o \
+	$(OBJS)\monodll_sstream.o \
 	$(OBJS)\monodll_stopwatch.o \
 	$(OBJS)\monodll_strconv.o \
 	$(OBJS)\monodll_stream.o \
@@ -267,7 +268,7 @@ MONOLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-DwxUSE_BASE=1 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) \
+	-DwxUSE_BASE=1 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) $(CPPFLAGS) \
 	$(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.o \
@@ -306,6 +307,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_object.o \
 	$(OBJS)\monolib_process.o \
 	$(OBJS)\monolib_regex.o \
+	$(OBJS)\monolib_sstream.o \
 	$(OBJS)\monolib_stopwatch.o \
 	$(OBJS)\monolib_strconv.o \
 	$(OBJS)\monolib_stream.o \
@@ -366,7 +368,7 @@ BASEDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
 	-DwxUSE_GUI=0 -DWXMAKINGDLL_BASE -DwxUSE_BASE=1 $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dummy.o \
 	$(OBJS)\basedll_appbase.o \
@@ -404,6 +406,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_object.o \
 	$(OBJS)\basedll_process.o \
 	$(OBJS)\basedll_regex.o \
+	$(OBJS)\basedll_sstream.o \
 	$(OBJS)\basedll_stopwatch.o \
 	$(OBJS)\basedll_strconv.o \
 	$(OBJS)\basedll_stream.o \
@@ -448,7 +451,7 @@ BASELIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-DwxUSE_GUI=0 -DwxUSE_BASE=1 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) \
+	-DwxUSE_GUI=0 -DwxUSE_BASE=1 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) \
 	$(CPPFLAGS) $(CXXFLAGS)
 BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dummy.o \
@@ -487,6 +490,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_object.o \
 	$(OBJS)\baselib_process.o \
 	$(OBJS)\baselib_regex.o \
+	$(OBJS)\baselib_sstream.o \
 	$(OBJS)\baselib_stopwatch.o \
 	$(OBJS)\baselib_strconv.o \
 	$(OBJS)\baselib_stream.o \
@@ -527,7 +531,7 @@ NETDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
 	-DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_NET $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_dummy.o \
 	$(OBJS)\netdll_fs_inet.o \
@@ -546,7 +550,7 @@ NETLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-DwxUSE_GUI=0 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) \
+	-DwxUSE_GUI=0 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) $(CPPFLAGS) \
 	$(CXXFLAGS)
 NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_dummy.o \
@@ -567,7 +571,7 @@ COREDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
 	-DWXUSINGDLL -DWXMAKINGDLL_CORE -DwxUSE_BASE=0 $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 COREDLL_OBJECTS =  \
 	$(OBJS)\coredll_dummy.o \
 	$(OBJS)\coredll_event.o \
@@ -582,7 +586,7 @@ CORELIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-DwxUSE_BASE=0 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) \
+	-DwxUSE_BASE=0 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) $(CPPFLAGS) \
 	$(CXXFLAGS)
 CORELIB_OBJECTS =  \
 	$(OBJS)\corelib_dummy.o \
@@ -598,7 +602,7 @@ ADVDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-DWXUSINGDLL -DWXMAKINGDLL_ADV $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) \
+	-DWXUSINGDLL -DWXMAKINGDLL_ADV $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) \
 	$(CPPFLAGS) $(CXXFLAGS)
 ADVDLL_OBJECTS =  \
 	$(OBJS)\advdll_dummy.o \
@@ -620,7 +624,7 @@ ADVLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 ADVLIB_OBJECTS =  \
 	$(OBJS)\advlib_dummy.o \
 	$(OBJS)\advlib_calctrl.o \
@@ -642,7 +646,7 @@ ODBCDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
 	-DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_ODBC $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 ODBCDLL_OBJECTS =  \
 	$(OBJS)\odbcdll_dummy.o \
 	$(OBJS)\odbcdll_db.o \
@@ -651,7 +655,7 @@ ODBCLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-DwxUSE_GUI=0 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) \
+	-DwxUSE_GUI=0 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) $(CPPFLAGS) \
 	$(CXXFLAGS)
 ODBCLIB_OBJECTS =  \
 	$(OBJS)\odbclib_dummy.o \
@@ -662,7 +666,7 @@ DBGRIDDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
 	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_DBGRID $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 DBGRIDDLL_OBJECTS =  \
 	$(OBJS)\dbgriddll_dummy.o \
 	$(OBJS)\dbgriddll_dbgrid.o
@@ -670,7 +674,7 @@ DBGRIDLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff \
 	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) \
+	-I..\..\src\expat\lib $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) \
 	$(CPPFLAGS) $(CXXFLAGS)
 DBGRIDLIB_OBJECTS =  \
 	$(OBJS)\dbgridlib_dummy.o \
@@ -679,7 +683,7 @@ HTMLDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-DWXUSINGDLL -DWXMAKINGDLL_HTML $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) \
+	-DWXUSINGDLL -DWXMAKINGDLL_HTML $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) \
 	$(CPPFLAGS) $(CXXFLAGS)
 HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_dummy.o \
@@ -709,7 +713,7 @@ HTMLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H 
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_dummy.o \
 	$(OBJS)\htmllib_helpbest.o \
@@ -739,7 +743,7 @@ XMLDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
 	-DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_XML $(__EXCEPTIONSFLAG) \
-	$(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 XMLDLL_OBJECTS =  \
 	$(OBJS)\xmldll_dummy.o \
 	$(OBJS)\xmldll_xml.o \
@@ -748,17 +752,110 @@ XMLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-DwxUSE_GUI=0 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) \
+	-DwxUSE_GUI=0 $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) $(CPPFLAGS) \
 	$(CXXFLAGS)
 XMLLIB_OBJECTS =  \
 	$(OBJS)\xmllib_dummy.o \
 	$(OBJS)\xmllib_xml.o \
 	$(OBJS)\xmllib_xtixml.o
+XRCDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
+	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
+	-DWXUSINGDLL -DWXMAKINGDLL_XRC $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) \
+	$(CPPFLAGS) $(CXXFLAGS)
+XRCDLL_OBJECTS =  \
+	$(OBJS)\xrcdll_dummy.o \
+	$(OBJS)\xrcdll_xh_bmpbt.o \
+	$(OBJS)\xrcdll_xh_bmp.o \
+	$(OBJS)\xrcdll_xh_bttn.o \
+	$(OBJS)\xrcdll_xh_cald.o \
+	$(OBJS)\xrcdll_xh_chckb.o \
+	$(OBJS)\xrcdll_xh_chckl.o \
+	$(OBJS)\xrcdll_xh_choic.o \
+	$(OBJS)\xrcdll_xh_combo.o \
+	$(OBJS)\xrcdll_xh_dlg.o \
+	$(OBJS)\xrcdll_xh_frame.o \
+	$(OBJS)\xrcdll_xh_gauge.o \
+	$(OBJS)\xrcdll_xh_gdctl.o \
+	$(OBJS)\xrcdll_xh_html.o \
+	$(OBJS)\xrcdll_xh_listb.o \
+	$(OBJS)\xrcdll_xh_listc.o \
+	$(OBJS)\xrcdll_xh_menu.o \
+	$(OBJS)\xrcdll_xh_notbk.o \
+	$(OBJS)\xrcdll_xh_panel.o \
+	$(OBJS)\xrcdll_xh_radbt.o \
+	$(OBJS)\xrcdll_xh_radbx.o \
+	$(OBJS)\xrcdll_xh_scrol.o \
+	$(OBJS)\xrcdll_xh_scwin.o \
+	$(OBJS)\xrcdll_xh_sizer.o \
+	$(OBJS)\xrcdll_xh_slidr.o \
+	$(OBJS)\xrcdll_xh_spin.o \
+	$(OBJS)\xrcdll_xh_split.o \
+	$(OBJS)\xrcdll_xh_statbar.o \
+	$(OBJS)\xrcdll_xh_stbmp.o \
+	$(OBJS)\xrcdll_xh_stbox.o \
+	$(OBJS)\xrcdll_xh_stlin.o \
+	$(OBJS)\xrcdll_xh_sttxt.o \
+	$(OBJS)\xrcdll_xh_text.o \
+	$(OBJS)\xrcdll_xh_tglbtn.o \
+	$(OBJS)\xrcdll_xh_toolb.o \
+	$(OBJS)\xrcdll_xh_tree.o \
+	$(OBJS)\xrcdll_xh_unkwn.o \
+	$(OBJS)\xrcdll_xh_wizrd.o \
+	$(OBJS)\xrcdll_xmlres.o \
+	$(OBJS)\xrcdll_xmlrsall.o
+XRCLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
+	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
+XRCLIB_OBJECTS =  \
+	$(OBJS)\xrclib_dummy.o \
+	$(OBJS)\xrclib_xh_bmpbt.o \
+	$(OBJS)\xrclib_xh_bmp.o \
+	$(OBJS)\xrclib_xh_bttn.o \
+	$(OBJS)\xrclib_xh_cald.o \
+	$(OBJS)\xrclib_xh_chckb.o \
+	$(OBJS)\xrclib_xh_chckl.o \
+	$(OBJS)\xrclib_xh_choic.o \
+	$(OBJS)\xrclib_xh_combo.o \
+	$(OBJS)\xrclib_xh_dlg.o \
+	$(OBJS)\xrclib_xh_frame.o \
+	$(OBJS)\xrclib_xh_gauge.o \
+	$(OBJS)\xrclib_xh_gdctl.o \
+	$(OBJS)\xrclib_xh_html.o \
+	$(OBJS)\xrclib_xh_listb.o \
+	$(OBJS)\xrclib_xh_listc.o \
+	$(OBJS)\xrclib_xh_menu.o \
+	$(OBJS)\xrclib_xh_notbk.o \
+	$(OBJS)\xrclib_xh_panel.o \
+	$(OBJS)\xrclib_xh_radbt.o \
+	$(OBJS)\xrclib_xh_radbx.o \
+	$(OBJS)\xrclib_xh_scrol.o \
+	$(OBJS)\xrclib_xh_scwin.o \
+	$(OBJS)\xrclib_xh_sizer.o \
+	$(OBJS)\xrclib_xh_slidr.o \
+	$(OBJS)\xrclib_xh_spin.o \
+	$(OBJS)\xrclib_xh_split.o \
+	$(OBJS)\xrclib_xh_statbar.o \
+	$(OBJS)\xrclib_xh_stbmp.o \
+	$(OBJS)\xrclib_xh_stbox.o \
+	$(OBJS)\xrclib_xh_stlin.o \
+	$(OBJS)\xrclib_xh_sttxt.o \
+	$(OBJS)\xrclib_xh_text.o \
+	$(OBJS)\xrclib_xh_tglbtn.o \
+	$(OBJS)\xrclib_xh_toolb.o \
+	$(OBJS)\xrclib_xh_tree.o \
+	$(OBJS)\xrclib_xh_unkwn.o \
+	$(OBJS)\xrclib_xh_wizrd.o \
+	$(OBJS)\xrclib_xmlres.o \
+	$(OBJS)\xrclib_xmlrsall.o
 GLDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	-DWXUSINGDLL -DWXMAKINGDLL_GL $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) \
+	-DWXUSINGDLL -DWXMAKINGDLL_GL $(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) \
 	$(CPPFLAGS) $(CXXFLAGS)
 GLDLL_OBJECTS =  \
 	$(OBJS)\gldll_dummy.o \
@@ -767,7 +864,7 @@ GLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
-	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_1_7) $(CPPFLAGS) $(CXXFLAGS)
+	$(__EXCEPTIONSFLAG) $(__EXCEPTIONSFLAG_12) $(CPPFLAGS) $(CXXFLAGS)
 GLLIB_OBJECTS =  \
 	$(OBJS)\gllib_dummy.o \
 	$(OBJS)\gllib_glcanvas.o
@@ -869,7 +966,46 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_htmllbox.o \
 	$(OBJS)\monodll_db.o \
 	$(OBJS)\monodll_dbtable.o \
-	$(OBJS)\monodll_dbgrid.o
+	$(OBJS)\monodll_dbgrid.o \
+	$(OBJS)\monodll_xh_bmpbt.o \
+	$(OBJS)\monodll_xh_bmp.o \
+	$(OBJS)\monodll_xh_bttn.o \
+	$(OBJS)\monodll_xh_cald.o \
+	$(OBJS)\monodll_xh_chckb.o \
+	$(OBJS)\monodll_xh_chckl.o \
+	$(OBJS)\monodll_xh_choic.o \
+	$(OBJS)\monodll_xh_combo.o \
+	$(OBJS)\monodll_xh_dlg.o \
+	$(OBJS)\monodll_xh_frame.o \
+	$(OBJS)\monodll_xh_gauge.o \
+	$(OBJS)\monodll_xh_gdctl.o \
+	$(OBJS)\monodll_xh_html.o \
+	$(OBJS)\monodll_xh_listb.o \
+	$(OBJS)\monodll_xh_listc.o \
+	$(OBJS)\monodll_xh_menu.o \
+	$(OBJS)\monodll_xh_notbk.o \
+	$(OBJS)\monodll_xh_panel.o \
+	$(OBJS)\monodll_xh_radbt.o \
+	$(OBJS)\monodll_xh_radbx.o \
+	$(OBJS)\monodll_xh_scrol.o \
+	$(OBJS)\monodll_xh_scwin.o \
+	$(OBJS)\monodll_xh_sizer.o \
+	$(OBJS)\monodll_xh_slidr.o \
+	$(OBJS)\monodll_xh_spin.o \
+	$(OBJS)\monodll_xh_split.o \
+	$(OBJS)\monodll_xh_statbar.o \
+	$(OBJS)\monodll_xh_stbmp.o \
+	$(OBJS)\monodll_xh_stbox.o \
+	$(OBJS)\monodll_xh_stlin.o \
+	$(OBJS)\monodll_xh_sttxt.o \
+	$(OBJS)\monodll_xh_text.o \
+	$(OBJS)\monodll_xh_tglbtn.o \
+	$(OBJS)\monodll_xh_toolb.o \
+	$(OBJS)\monodll_xh_tree.o \
+	$(OBJS)\monodll_xh_unkwn.o \
+	$(OBJS)\monodll_xh_wizrd.o \
+	$(OBJS)\monodll_xmlres.o \
+	$(OBJS)\monodll_xmlrsall.o
 endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
@@ -918,9 +1054,10 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_utilsgui.o \
 	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_window.o \
+	$(OBJS)\monodll_helpchm.o \
+	$(OBJS)\monodll_helpwin.o \
 	$(OBJS)\monodll_automtn.o \
 	$(OBJS)\monodll_uuid.o \
-	$(OBJS)\monodll_dirdlg.o \
 	$(OBJS)\monodll_statusbr.o \
 	$(OBJS)\monodll_prntdlgg.o \
 	$(OBJS)\monodll_accel.o \
@@ -933,6 +1070,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_combobox.o \
 	$(OBJS)\monodll_control.o \
 	$(OBJS)\monodll_dialog.o \
+	$(OBJS)\monodll_dirdlg.o \
 	$(OBJS)\monodll_dragimag.o \
 	$(OBJS)\monodll_filedlg.o \
 	$(OBJS)\monodll_frame.o \
@@ -968,8 +1106,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_treectrl.o \
 	$(OBJS)\monodll_fdrepdlg.o \
 	$(OBJS)\monodll_fontdlg.o \
-	$(OBJS)\monodll_helpchm.o \
-	$(OBJS)\monodll_helpwin.o \
 	$(OBJS)\monodll_accesscmn.o \
 	$(OBJS)\monodll_appcmn.o \
 	$(OBJS)\monodll_artprov.o \
@@ -1046,6 +1182,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_xpmdecod.o \
 	$(OBJS)\monodll_busyinfo.o \
 	$(OBJS)\monodll_choicdgg.o \
+	$(OBJS)\monodll_choicbkg.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
@@ -1114,9 +1251,10 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_utilsgui.o \
 	$(OBJS)\monodll_uxtheme.o \
 	$(OBJS)\monodll_window.o \
+	$(OBJS)\monodll_helpchm.o \
+	$(OBJS)\monodll_helpwin.o \
 	$(OBJS)\monodll_automtn.o \
 	$(OBJS)\monodll_uuid.o \
-	$(OBJS)\monodll_dirdlg.o \
 	$(OBJS)\monodll_accel.o \
 	$(OBJS)\monodll_colrdlgg.o \
 	$(OBJS)\monodll_dirdlgg.o \
@@ -1242,6 +1380,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_xpmdecod.o \
 	$(OBJS)\monodll_busyinfo.o \
 	$(OBJS)\monodll_choicdgg.o \
+	$(OBJS)\monodll_choicbkg.o \
 	$(OBJS)\monodll_dcpsg.o \
 	$(OBJS)\monodll_dirctrlg.o \
 	$(OBJS)\monodll_dragimgg.o \
@@ -1310,7 +1449,46 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_htmllbox.o \
 	$(OBJS)\monolib_db.o \
 	$(OBJS)\monolib_dbtable.o \
-	$(OBJS)\monolib_dbgrid.o
+	$(OBJS)\monolib_dbgrid.o \
+	$(OBJS)\monolib_xh_bmpbt.o \
+	$(OBJS)\monolib_xh_bmp.o \
+	$(OBJS)\monolib_xh_bttn.o \
+	$(OBJS)\monolib_xh_cald.o \
+	$(OBJS)\monolib_xh_chckb.o \
+	$(OBJS)\monolib_xh_chckl.o \
+	$(OBJS)\monolib_xh_choic.o \
+	$(OBJS)\monolib_xh_combo.o \
+	$(OBJS)\monolib_xh_dlg.o \
+	$(OBJS)\monolib_xh_frame.o \
+	$(OBJS)\monolib_xh_gauge.o \
+	$(OBJS)\monolib_xh_gdctl.o \
+	$(OBJS)\monolib_xh_html.o \
+	$(OBJS)\monolib_xh_listb.o \
+	$(OBJS)\monolib_xh_listc.o \
+	$(OBJS)\monolib_xh_menu.o \
+	$(OBJS)\monolib_xh_notbk.o \
+	$(OBJS)\monolib_xh_panel.o \
+	$(OBJS)\monolib_xh_radbt.o \
+	$(OBJS)\monolib_xh_radbx.o \
+	$(OBJS)\monolib_xh_scrol.o \
+	$(OBJS)\monolib_xh_scwin.o \
+	$(OBJS)\monolib_xh_sizer.o \
+	$(OBJS)\monolib_xh_slidr.o \
+	$(OBJS)\monolib_xh_spin.o \
+	$(OBJS)\monolib_xh_split.o \
+	$(OBJS)\monolib_xh_statbar.o \
+	$(OBJS)\monolib_xh_stbmp.o \
+	$(OBJS)\monolib_xh_stbox.o \
+	$(OBJS)\monolib_xh_stlin.o \
+	$(OBJS)\monolib_xh_sttxt.o \
+	$(OBJS)\monolib_xh_text.o \
+	$(OBJS)\monolib_xh_tglbtn.o \
+	$(OBJS)\monolib_xh_toolb.o \
+	$(OBJS)\monolib_xh_tree.o \
+	$(OBJS)\monolib_xh_unkwn.o \
+	$(OBJS)\monolib_xh_wizrd.o \
+	$(OBJS)\monolib_xmlres.o \
+	$(OBJS)\monolib_xmlrsall.o
 endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
@@ -1359,9 +1537,10 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_utilsgui.o \
 	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_window.o \
+	$(OBJS)\monolib_helpchm.o \
+	$(OBJS)\monolib_helpwin.o \
 	$(OBJS)\monolib_automtn.o \
 	$(OBJS)\monolib_uuid.o \
-	$(OBJS)\monolib_dirdlg.o \
 	$(OBJS)\monolib_statusbr.o \
 	$(OBJS)\monolib_prntdlgg.o \
 	$(OBJS)\monolib_accel.o \
@@ -1374,6 +1553,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_combobox.o \
 	$(OBJS)\monolib_control.o \
 	$(OBJS)\monolib_dialog.o \
+	$(OBJS)\monolib_dirdlg.o \
 	$(OBJS)\monolib_dragimag.o \
 	$(OBJS)\monolib_filedlg.o \
 	$(OBJS)\monolib_frame.o \
@@ -1409,8 +1589,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_treectrl.o \
 	$(OBJS)\monolib_fdrepdlg.o \
 	$(OBJS)\monolib_fontdlg.o \
-	$(OBJS)\monolib_helpchm.o \
-	$(OBJS)\monolib_helpwin.o \
 	$(OBJS)\monolib_accesscmn.o \
 	$(OBJS)\monolib_appcmn.o \
 	$(OBJS)\monolib_artprov.o \
@@ -1487,6 +1665,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_xpmdecod.o \
 	$(OBJS)\monolib_busyinfo.o \
 	$(OBJS)\monolib_choicdgg.o \
+	$(OBJS)\monolib_choicbkg.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
@@ -1555,9 +1734,10 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_utilsgui.o \
 	$(OBJS)\monolib_uxtheme.o \
 	$(OBJS)\monolib_window.o \
+	$(OBJS)\monolib_helpchm.o \
+	$(OBJS)\monolib_helpwin.o \
 	$(OBJS)\monolib_automtn.o \
 	$(OBJS)\monolib_uuid.o \
-	$(OBJS)\monolib_dirdlg.o \
 	$(OBJS)\monolib_accel.o \
 	$(OBJS)\monolib_colrdlgg.o \
 	$(OBJS)\monolib_dirdlgg.o \
@@ -1683,6 +1863,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_xpmdecod.o \
 	$(OBJS)\monolib_busyinfo.o \
 	$(OBJS)\monolib_choicdgg.o \
+	$(OBJS)\monolib_choicbkg.o \
 	$(OBJS)\monolib_dcpsg.o \
 	$(OBJS)\monolib_dirctrlg.o \
 	$(OBJS)\monolib_dragimgg.o \
@@ -1783,9 +1964,10 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_utilsgui.o \
 	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_window.o \
+	$(OBJS)\coredll_helpchm.o \
+	$(OBJS)\coredll_helpwin.o \
 	$(OBJS)\coredll_automtn.o \
 	$(OBJS)\coredll_uuid.o \
-	$(OBJS)\coredll_dirdlg.o \
 	$(OBJS)\coredll_statusbr.o \
 	$(OBJS)\coredll_prntdlgg.o \
 	$(OBJS)\coredll_accel.o \
@@ -1798,6 +1980,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_combobox.o \
 	$(OBJS)\coredll_control.o \
 	$(OBJS)\coredll_dialog.o \
+	$(OBJS)\coredll_dirdlg.o \
 	$(OBJS)\coredll_dragimag.o \
 	$(OBJS)\coredll_filedlg.o \
 	$(OBJS)\coredll_frame.o \
@@ -1833,8 +2016,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_treectrl.o \
 	$(OBJS)\coredll_fdrepdlg.o \
 	$(OBJS)\coredll_fontdlg.o \
-	$(OBJS)\coredll_helpchm.o \
-	$(OBJS)\coredll_helpwin.o \
 	$(OBJS)\coredll_accesscmn.o \
 	$(OBJS)\coredll_appcmn.o \
 	$(OBJS)\coredll_artprov.o \
@@ -1911,6 +2092,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_xpmdecod.o \
 	$(OBJS)\coredll_busyinfo.o \
 	$(OBJS)\coredll_choicdgg.o \
+	$(OBJS)\coredll_choicbkg.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
@@ -1979,9 +2161,10 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_utilsgui.o \
 	$(OBJS)\coredll_uxtheme.o \
 	$(OBJS)\coredll_window.o \
+	$(OBJS)\coredll_helpchm.o \
+	$(OBJS)\coredll_helpwin.o \
 	$(OBJS)\coredll_automtn.o \
 	$(OBJS)\coredll_uuid.o \
-	$(OBJS)\coredll_dirdlg.o \
 	$(OBJS)\coredll_accel.o \
 	$(OBJS)\coredll_colrdlgg.o \
 	$(OBJS)\coredll_dirdlgg.o \
@@ -2107,6 +2290,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_xpmdecod.o \
 	$(OBJS)\coredll_busyinfo.o \
 	$(OBJS)\coredll_choicdgg.o \
+	$(OBJS)\coredll_choicbkg.o \
 	$(OBJS)\coredll_dcpsg.o \
 	$(OBJS)\coredll_dirctrlg.o \
 	$(OBJS)\coredll_dragimgg.o \
@@ -2183,9 +2367,10 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_utilsgui.o \
 	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_window.o \
+	$(OBJS)\corelib_helpchm.o \
+	$(OBJS)\corelib_helpwin.o \
 	$(OBJS)\corelib_automtn.o \
 	$(OBJS)\corelib_uuid.o \
-	$(OBJS)\corelib_dirdlg.o \
 	$(OBJS)\corelib_statusbr.o \
 	$(OBJS)\corelib_prntdlgg.o \
 	$(OBJS)\corelib_accel.o \
@@ -2198,6 +2383,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_combobox.o \
 	$(OBJS)\corelib_control.o \
 	$(OBJS)\corelib_dialog.o \
+	$(OBJS)\corelib_dirdlg.o \
 	$(OBJS)\corelib_dragimag.o \
 	$(OBJS)\corelib_filedlg.o \
 	$(OBJS)\corelib_frame.o \
@@ -2233,8 +2419,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_treectrl.o \
 	$(OBJS)\corelib_fdrepdlg.o \
 	$(OBJS)\corelib_fontdlg.o \
-	$(OBJS)\corelib_helpchm.o \
-	$(OBJS)\corelib_helpwin.o \
 	$(OBJS)\corelib_accesscmn.o \
 	$(OBJS)\corelib_appcmn.o \
 	$(OBJS)\corelib_artprov.o \
@@ -2311,6 +2495,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_xpmdecod.o \
 	$(OBJS)\corelib_busyinfo.o \
 	$(OBJS)\corelib_choicdgg.o \
+	$(OBJS)\corelib_choicbkg.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
@@ -2379,9 +2564,10 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_utilsgui.o \
 	$(OBJS)\corelib_uxtheme.o \
 	$(OBJS)\corelib_window.o \
+	$(OBJS)\corelib_helpchm.o \
+	$(OBJS)\corelib_helpwin.o \
 	$(OBJS)\corelib_automtn.o \
 	$(OBJS)\corelib_uuid.o \
-	$(OBJS)\corelib_dirdlg.o \
 	$(OBJS)\corelib_accel.o \
 	$(OBJS)\corelib_colrdlgg.o \
 	$(OBJS)\corelib_dirdlgg.o \
@@ -2507,6 +2693,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_xpmdecod.o \
 	$(OBJS)\corelib_busyinfo.o \
 	$(OBJS)\corelib_choicdgg.o \
+	$(OBJS)\corelib_choicbkg.o \
 	$(OBJS)\corelib_dcpsg.o \
 	$(OBJS)\corelib_dirctrlg.o \
 	$(OBJS)\corelib_dragimgg.o \
@@ -2608,6 +2795,22 @@ __xmllib___depname = \
 	$(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.a
 endif
 endif
+ifeq ($(MONOLITHIC),0)
+ifeq ($(SHARED),1)
+ifeq ($(USE_XRC),1)
+__xrcdll___depname = \
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)252$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll
+endif
+endif
+endif
+ifeq ($(MONOLITHIC),0)
+ifeq ($(SHARED),0)
+ifeq ($(USE_XRC),1)
+__xrclib___depname = \
+	$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a
+endif
+endif
+endif
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
 ifeq ($(USE_OPENGL),1)
@@ -2676,10 +2879,10 @@ ifeq ($(USE_EXCEPTIONS),1)
 __EXCEPTIONSFLAG = 
 endif
 ifeq ($(USE_EXCEPTIONS),0)
-__EXCEPTIONSFLAG_1_7 = -fno-exceptions
+__EXCEPTIONSFLAG_12 = -fno-exceptions
 endif
 ifeq ($(USE_EXCEPTIONS),1)
-__EXCEPTIONSFLAG_1_7 = 
+__EXCEPTIONSFLAG_12 = 
 endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -2715,7 +2918,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: setup_h $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
+all: setup_h $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -2752,6 +2955,9 @@ clean:
 	-if exist $(LIBDIRNAME)\wxbase252$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml_gcc$(VENDORTAG).dll del $(LIBDIRNAME)\wxbase252$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml_gcc$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.a del $(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.a
 	-if exist $(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.a del $(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.a
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)252$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)252$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a
+	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)252$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_gcc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)252$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_gcc$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a
 	-if exist $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a del $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a
@@ -2960,6 +3166,26 @@ $(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.a: $(XMLLIB_OBJECTS)
 	if exist $@ del $@
 	ar rcu $@ $(XMLLIB_OBJECTS)
 	ranlib $@
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
+ifeq ($(SHARED),1)
+ifeq ($(USE_XRC),1)
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)252$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_gcc$(VENDORTAG).dll: $(XRCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a $(__htmldll___depname) $(__advdll___depname) $(__coredll___depname) $(__xmldll___depname) $(__basedll___depname)
+	$(CXX) -shared -o $@ $(XRCDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--out-implib,$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32  $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv.a $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a $(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.a $(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a
+endif
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
+ifeq ($(SHARED),0)
+ifeq ($(USE_XRC),1)
+$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.a: $(XRCLIB_OBJECTS)
+	if exist $@ del $@
+	ar rcu $@ $(XRCLIB_OBJECTS)
+	ranlib $@
+endif
 endif
 endif
 
@@ -3483,6 +3709,9 @@ $(OBJS)\monodll_process.o: ../../src/common/process.cpp
 $(OBJS)\monodll_regex.o: ../../src/common/regex.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_sstream.o: ../../src/common/sstream.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_stopwatch.o: ../../src/common/stopwatch.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -3627,6 +3856,9 @@ $(OBJS)\monodll_urlmsw.o: ../../src/msw/urlmsw.cpp
 $(OBJS)\monodll_colordlg.o: ../../src/msw/colordlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_dirdlg.o: ../../src/msw/dirdlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_dragimag.o: ../../src/msw/dragimag.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -3685,12 +3917,6 @@ $(OBJS)\monodll_treectrl.o: ../../src/msw/treectrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fontdlg.o: ../../src/msw/fontdlg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_helpchm.o: ../../src/msw/helpchm.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_helpwin.o: ../../src/msw/helpwin.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_colrdlgg.o: ../../src/generic/colrdlgg.cpp
@@ -3877,6 +4103,123 @@ $(OBJS)\monodll_dbtable.o: ../../src/common/dbtable.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dbgrid.o: ../../src/common/dbgrid.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_bmpbt.o: ../../src/xrc/xh_bmpbt.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_bmp.o: ../../src/xrc/xh_bmp.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_bttn.o: ../../src/xrc/xh_bttn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_cald.o: ../../src/xrc/xh_cald.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_chckb.o: ../../src/xrc/xh_chckb.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_chckl.o: ../../src/xrc/xh_chckl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_choic.o: ../../src/xrc/xh_choic.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_combo.o: ../../src/xrc/xh_combo.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_dlg.o: ../../src/xrc/xh_dlg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_frame.o: ../../src/xrc/xh_frame.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_gauge.o: ../../src/xrc/xh_gauge.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_gdctl.o: ../../src/xrc/xh_gdctl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_html.o: ../../src/xrc/xh_html.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_listb.o: ../../src/xrc/xh_listb.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_listc.o: ../../src/xrc/xh_listc.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_menu.o: ../../src/xrc/xh_menu.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_notbk.o: ../../src/xrc/xh_notbk.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_panel.o: ../../src/xrc/xh_panel.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_radbt.o: ../../src/xrc/xh_radbt.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_radbx.o: ../../src/xrc/xh_radbx.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_scrol.o: ../../src/xrc/xh_scrol.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_scwin.o: ../../src/xrc/xh_scwin.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_sizer.o: ../../src/xrc/xh_sizer.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_slidr.o: ../../src/xrc/xh_slidr.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_spin.o: ../../src/xrc/xh_spin.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_split.o: ../../src/xrc/xh_split.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_statbar.o: ../../src/xrc/xh_statbar.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_stbmp.o: ../../src/xrc/xh_stbmp.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_stbox.o: ../../src/xrc/xh_stbox.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_stlin.o: ../../src/xrc/xh_stlin.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_sttxt.o: ../../src/xrc/xh_sttxt.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_text.o: ../../src/xrc/xh_text.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_tglbtn.o: ../../src/xrc/xh_tglbtn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_tree.o: ../../src/xrc/xh_tree.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_unkwn.o: ../../src/xrc/xh_unkwn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_wizrd.o: ../../src/xrc/xh_wizrd.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xmlres.o: ../../src/xrc/xmlres.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xmlrsall.o: ../../src/xrc/xmlrsall.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xml.o: ../../src/xml/xml.cpp
@@ -4106,17 +4449,22 @@ $(OBJS)\monodll_window.o: ../../src/msw/window.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_helpchm.o: ../../src/msw/helpchm.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_helpwin.o: ../../src/msw/helpwin.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_automtn.o: ../../src/msw/ole/automtn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_uuid.o: ../../src/msw/ole/uuid.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_dirdlg.o: ../../src/msw/dirdlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
@@ -4856,6 +5204,11 @@ $(OBJS)\monodll_choicdgg.o: ../../src/generic/choicdgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_choicbkg.o: ../../src/generic/choicbkg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_dcpsg.o: ../../src/generic/dcpsg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
@@ -5058,6 +5411,9 @@ $(OBJS)\monolib_process.o: ../../src/common/process.cpp
 $(OBJS)\monolib_regex.o: ../../src/common/regex.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_sstream.o: ../../src/common/sstream.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_stopwatch.o: ../../src/common/stopwatch.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5202,6 +5558,9 @@ $(OBJS)\monolib_urlmsw.o: ../../src/msw/urlmsw.cpp
 $(OBJS)\monolib_colordlg.o: ../../src/msw/colordlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_dirdlg.o: ../../src/msw/dirdlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_dragimag.o: ../../src/msw/dragimag.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5260,12 +5619,6 @@ $(OBJS)\monolib_treectrl.o: ../../src/msw/treectrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fontdlg.o: ../../src/msw/fontdlg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_helpchm.o: ../../src/msw/helpchm.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_helpwin.o: ../../src/msw/helpwin.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_colrdlgg.o: ../../src/generic/colrdlgg.cpp
@@ -5452,6 +5805,123 @@ $(OBJS)\monolib_dbtable.o: ../../src/common/dbtable.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dbgrid.o: ../../src/common/dbgrid.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_bmpbt.o: ../../src/xrc/xh_bmpbt.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_bmp.o: ../../src/xrc/xh_bmp.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_bttn.o: ../../src/xrc/xh_bttn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_cald.o: ../../src/xrc/xh_cald.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_chckb.o: ../../src/xrc/xh_chckb.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_chckl.o: ../../src/xrc/xh_chckl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_choic.o: ../../src/xrc/xh_choic.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_combo.o: ../../src/xrc/xh_combo.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_dlg.o: ../../src/xrc/xh_dlg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_frame.o: ../../src/xrc/xh_frame.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_gauge.o: ../../src/xrc/xh_gauge.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_gdctl.o: ../../src/xrc/xh_gdctl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_html.o: ../../src/xrc/xh_html.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_listb.o: ../../src/xrc/xh_listb.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_listc.o: ../../src/xrc/xh_listc.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_menu.o: ../../src/xrc/xh_menu.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_notbk.o: ../../src/xrc/xh_notbk.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_panel.o: ../../src/xrc/xh_panel.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_radbt.o: ../../src/xrc/xh_radbt.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_radbx.o: ../../src/xrc/xh_radbx.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_scrol.o: ../../src/xrc/xh_scrol.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_scwin.o: ../../src/xrc/xh_scwin.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_sizer.o: ../../src/xrc/xh_sizer.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_slidr.o: ../../src/xrc/xh_slidr.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_spin.o: ../../src/xrc/xh_spin.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_split.o: ../../src/xrc/xh_split.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_statbar.o: ../../src/xrc/xh_statbar.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_stbmp.o: ../../src/xrc/xh_stbmp.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_stbox.o: ../../src/xrc/xh_stbox.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_stlin.o: ../../src/xrc/xh_stlin.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_sttxt.o: ../../src/xrc/xh_sttxt.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_text.o: ../../src/xrc/xh_text.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_tglbtn.o: ../../src/xrc/xh_tglbtn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_tree.o: ../../src/xrc/xh_tree.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_unkwn.o: ../../src/xrc/xh_unkwn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_wizrd.o: ../../src/xrc/xh_wizrd.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xmlres.o: ../../src/xrc/xmlres.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xmlrsall.o: ../../src/xrc/xmlrsall.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xml.o: ../../src/xml/xml.cpp
@@ -5681,17 +6151,22 @@ $(OBJS)\monolib_window.o: ../../src/msw/window.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_helpchm.o: ../../src/msw/helpchm.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_helpwin.o: ../../src/msw/helpwin.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_automtn.o: ../../src/msw/ole/automtn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_uuid.o: ../../src/msw/ole/uuid.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_dirdlg.o: ../../src/msw/dirdlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
@@ -6431,6 +6906,11 @@ $(OBJS)\monolib_choicdgg.o: ../../src/generic/choicdgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_choicbkg.o: ../../src/generic/choicbkg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_dcpsg.o: ../../src/generic/dcpsg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
@@ -6631,6 +7111,9 @@ $(OBJS)\basedll_process.o: ../../src/common/process.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_regex.o: ../../src/common/regex.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_sstream.o: ../../src/common/sstream.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_stopwatch.o: ../../src/common/stopwatch.cpp
@@ -6846,6 +7329,9 @@ $(OBJS)\baselib_process.o: ../../src/common/process.cpp
 $(OBJS)\baselib_regex.o: ../../src/common/regex.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
+$(OBJS)\baselib_sstream.o: ../../src/common/sstream.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
 $(OBJS)\baselib_stopwatch.o: ../../src/common/stopwatch.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
@@ -7056,6 +7542,9 @@ $(OBJS)\coredll_volume.o: ../../src/msw/volume.cpp
 $(OBJS)\coredll_colordlg.o: ../../src/msw/colordlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_dirdlg.o: ../../src/msw/dirdlg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_dragimag.o: ../../src/msw/dragimag.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -7114,12 +7603,6 @@ $(OBJS)\coredll_treectrl.o: ../../src/msw/treectrl.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_fontdlg.o: ../../src/msw/fontdlg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_helpchm.o: ../../src/msw/helpchm.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_helpwin.o: ../../src/msw/helpwin.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_colrdlgg.o: ../../src/generic/colrdlgg.cpp
@@ -7412,17 +7895,22 @@ $(OBJS)\coredll_window.o: ../../src/msw/window.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_helpchm.o: ../../src/msw/helpchm.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_helpwin.o: ../../src/msw/helpwin.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_automtn.o: ../../src/msw/ole/automtn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_uuid.o: ../../src/msw/ole/uuid.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_dirdlg.o: ../../src/msw/dirdlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
@@ -8162,6 +8650,11 @@ $(OBJS)\coredll_choicdgg.o: ../../src/generic/choicdgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_choicbkg.o: ../../src/generic/choicbkg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_dcpsg.o: ../../src/generic/dcpsg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
@@ -8283,6 +8776,9 @@ $(OBJS)\corelib_volume.o: ../../src/msw/volume.cpp
 $(OBJS)\corelib_colordlg.o: ../../src/msw/colordlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_dirdlg.o: ../../src/msw/dirdlg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_dragimag.o: ../../src/msw/dragimag.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -8341,12 +8837,6 @@ $(OBJS)\corelib_treectrl.o: ../../src/msw/treectrl.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_fontdlg.o: ../../src/msw/fontdlg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_helpchm.o: ../../src/msw/helpchm.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_helpwin.o: ../../src/msw/helpwin.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_colrdlgg.o: ../../src/generic/colrdlgg.cpp
@@ -8639,17 +9129,22 @@ $(OBJS)\corelib_window.o: ../../src/msw/window.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_helpchm.o: ../../src/msw/helpchm.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_helpwin.o: ../../src/msw/helpwin.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_automtn.o: ../../src/msw/ole/automtn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_uuid.o: ../../src/msw/ole/uuid.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_dirdlg.o: ../../src/msw/dirdlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
@@ -9389,6 +9884,11 @@ $(OBJS)\corelib_choicdgg.o: ../../src/generic/choicdgg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_choicbkg.o: ../../src/generic/choicbkg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_dcpsg.o: ../../src/generic/dcpsg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
@@ -9758,6 +10258,246 @@ $(OBJS)\xmllib_xml.o: ../../src/xml/xml.cpp
 
 $(OBJS)\xmllib_xtixml.o: ../../src/common/xtixml.cpp
 	$(CXX) -c -o $@ $(XMLLIB_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_dummy.o: ../../src/msw/dummy.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_bmpbt.o: ../../src/xrc/xh_bmpbt.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_bmp.o: ../../src/xrc/xh_bmp.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_bttn.o: ../../src/xrc/xh_bttn.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_cald.o: ../../src/xrc/xh_cald.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_chckb.o: ../../src/xrc/xh_chckb.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_chckl.o: ../../src/xrc/xh_chckl.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_choic.o: ../../src/xrc/xh_choic.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_combo.o: ../../src/xrc/xh_combo.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_dlg.o: ../../src/xrc/xh_dlg.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_frame.o: ../../src/xrc/xh_frame.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_gauge.o: ../../src/xrc/xh_gauge.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_gdctl.o: ../../src/xrc/xh_gdctl.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_html.o: ../../src/xrc/xh_html.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_listb.o: ../../src/xrc/xh_listb.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_listc.o: ../../src/xrc/xh_listc.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_menu.o: ../../src/xrc/xh_menu.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_notbk.o: ../../src/xrc/xh_notbk.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_panel.o: ../../src/xrc/xh_panel.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_radbt.o: ../../src/xrc/xh_radbt.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_radbx.o: ../../src/xrc/xh_radbx.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_scrol.o: ../../src/xrc/xh_scrol.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_scwin.o: ../../src/xrc/xh_scwin.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_sizer.o: ../../src/xrc/xh_sizer.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_slidr.o: ../../src/xrc/xh_slidr.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_spin.o: ../../src/xrc/xh_spin.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_split.o: ../../src/xrc/xh_split.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_statbar.o: ../../src/xrc/xh_statbar.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_stbmp.o: ../../src/xrc/xh_stbmp.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_stbox.o: ../../src/xrc/xh_stbox.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_stlin.o: ../../src/xrc/xh_stlin.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_sttxt.o: ../../src/xrc/xh_sttxt.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_text.o: ../../src/xrc/xh_text.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_tglbtn.o: ../../src/xrc/xh_tglbtn.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_tree.o: ../../src/xrc/xh_tree.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_unkwn.o: ../../src/xrc/xh_unkwn.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_wizrd.o: ../../src/xrc/xh_wizrd.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xmlres.o: ../../src/xrc/xmlres.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xmlrsall.o: ../../src/xrc/xmlrsall.cpp
+	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrclib_dummy.o: ../../src/msw/dummy.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_bmpbt.o: ../../src/xrc/xh_bmpbt.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_bmp.o: ../../src/xrc/xh_bmp.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_bttn.o: ../../src/xrc/xh_bttn.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_cald.o: ../../src/xrc/xh_cald.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_chckb.o: ../../src/xrc/xh_chckb.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_chckl.o: ../../src/xrc/xh_chckl.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_choic.o: ../../src/xrc/xh_choic.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_combo.o: ../../src/xrc/xh_combo.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_dlg.o: ../../src/xrc/xh_dlg.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_frame.o: ../../src/xrc/xh_frame.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_gauge.o: ../../src/xrc/xh_gauge.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_gdctl.o: ../../src/xrc/xh_gdctl.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_html.o: ../../src/xrc/xh_html.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_listb.o: ../../src/xrc/xh_listb.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_listc.o: ../../src/xrc/xh_listc.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_menu.o: ../../src/xrc/xh_menu.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_notbk.o: ../../src/xrc/xh_notbk.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_panel.o: ../../src/xrc/xh_panel.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_radbt.o: ../../src/xrc/xh_radbt.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_radbx.o: ../../src/xrc/xh_radbx.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_scrol.o: ../../src/xrc/xh_scrol.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_scwin.o: ../../src/xrc/xh_scwin.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_sizer.o: ../../src/xrc/xh_sizer.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_slidr.o: ../../src/xrc/xh_slidr.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_spin.o: ../../src/xrc/xh_spin.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_split.o: ../../src/xrc/xh_split.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_statbar.o: ../../src/xrc/xh_statbar.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_stbmp.o: ../../src/xrc/xh_stbmp.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_stbox.o: ../../src/xrc/xh_stbox.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_stlin.o: ../../src/xrc/xh_stlin.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_sttxt.o: ../../src/xrc/xh_sttxt.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_text.o: ../../src/xrc/xh_text.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_tglbtn.o: ../../src/xrc/xh_tglbtn.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_tree.o: ../../src/xrc/xh_tree.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_unkwn.o: ../../src/xrc/xh_unkwn.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_wizrd.o: ../../src/xrc/xh_wizrd.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xmlres.o: ../../src/xrc/xmlres.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xmlrsall.o: ../../src/xrc/xmlrsall.cpp
+	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\gldll_dummy.o: ../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(GLDLL_CXXFLAGS) $<

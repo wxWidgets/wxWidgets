@@ -61,6 +61,9 @@ USE_GUI = 1
 # Build wxHTML library (USE_GUI must be 1)? [0,1]
 USE_HTML = 1
 
+# Build wxXRC library (USE_GUI must be 1)? [0,1]
+USE_XRC = 1
+
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
 USE_OPENGL = 0
 

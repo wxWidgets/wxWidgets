@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="wx_base" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="base" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
@@ -602,6 +602,10 @@ SOURCE=..\..\src\common\process.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\regex.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\sstream.cpp
 # End Source File
 # Begin Source File
 
@@ -1228,6 +1232,10 @@ SOURCE=..\..\include\wx\scopeguard.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\snglinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\sstream.h
 # End Source File
 # Begin Source File
 

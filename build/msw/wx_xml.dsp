@@ -1,4 +1,4 @@
-# Microsoft Developer Studio Project File - Name="wx_xml" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="xml" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
