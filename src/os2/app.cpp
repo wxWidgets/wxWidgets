@@ -751,7 +751,7 @@ bool wxApp::ProcessMessage(
 
             for(pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
             {
-                if(pWnd->OS2TranslateMessage(pWxmsg))
+                if((bRc = pWnd->OS2TranslateMessage(pWxmsg)) == TRUE)
                     break;
             }
             if(!bRc)    // untranslated, should restore original value
