@@ -304,6 +304,7 @@
     src/generic/dcbuffer.cpp
     src/generic/dcpsg.cpp
     src/generic/dirctrlg.cpp
+    src/generic/dragimgg.cpp
     src/generic/grid.cpp
     src/generic/gridctrl.cpp
     src/generic/gridsel.cpp
@@ -2037,7 +2038,7 @@
             $(GUI_CMN_HDR) $(LOWLEVEL_HDR) $(UNIV_HDR)
         </if>
     </set>
-    
+
     <set var="ALL_HEADERS">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
         $(ALL_GUI_HEADERS)
