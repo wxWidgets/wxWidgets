@@ -156,6 +156,9 @@ public:
                    int x, int y, int width, int height, long style);
 
 protected:
+  // propagate our state change to all child frames
+  void IconizeChildFrames(bool bIconize);
+
   wxMenuBar *           m_frameMenuBar;
   wxStatusBar *         m_frameStatusBar;
   wxIcon                m_icon;

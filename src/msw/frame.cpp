@@ -112,8 +112,11 @@ bool wxFrame::Create(wxWindow *parent,
   int height = size.y;
 
   m_iconized = FALSE;
-  MSWCreate(m_windowId, (wxWindow *)parent, wxFrameClassName, this, (char *)(const char *)title,
-                   x, y, width, height, style);
+
+  // we pass NULL as parent to MSWCreate because frames with parents behave
+  // very strangely under Win95 shell
+  MSWCreate(m_windowId, NULL, wxFrameClassName, this, title,
+            x, y, width, height, style);
 
   wxModelessWindows.Append(this);
   return TRUE;
@@ -684,11 +687,20 @@ void wxFrame::MSWOnSize(int x, int y, WXUINT id)
 #endif
   switch (id)
   {
-    case SIZEFULLSCREEN:
     case SIZENORMAL:
+      // restore all child frames too
+      IconizeChildFrames(FALSE);
+
+      // fall through
+
+    case SIZEFULLSCREEN:
       m_iconized = FALSE;
     break;
+
     case SIZEICONIC:
+      // iconize all child frames too
+      IconizeChildFrames(TRUE);
+
       m_iconized = TRUE;
     break;
   }
@@ -982,8 +994,6 @@ wxToolBar* wxFrame::OnCreateToolBar(long style, wxWindowID id, const wxString& n
 
 void wxFrame::PositionToolBar(void)
 {
-    int cw, ch;
-
     RECT rect;
     ::GetClientRect((HWND) GetHWND(), &rect);
 
@@ -1011,3 +1021,16 @@ void wxFrame::PositionToolBar(void)
         }
     }
 }
+
+// propagate our state change to all child frames
+void wxFrame::IconizeChildFrames(bool bIconize)
+{
+  wxWindow *child = NULL;
+  for ( wxNode *node = GetChildren()->First(); node; node = node->Next() ) {
+    wxWindow *win = (wxWindow *)node->Data();
+    if ( win->IsKindOf(CLASSINFO(wxFrame)) ) {
+      ((wxFrame *)win)->Iconize(bIconize);
+    }
+  }
+}
+
