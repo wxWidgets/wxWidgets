@@ -43,6 +43,7 @@ public:
 	void NewGame(wxCommandEvent& event);
 	void Exit(wxCommandEvent& event);
 	void About(wxCommandEvent& event);
+	void Help(wxCommandEvent& event);
 	void Undo(wxCommandEvent& event);
 	void Redo(wxCommandEvent& event);
 	void Scores(wxCommandEvent& event);
@@ -55,10 +56,10 @@ public:
 	DECLARE_EVENT_TABLE()
 
 private:
-	enum MenuCommands { NEW_GAME = 10, SCORES, EXIT,
+	enum MenuCommands { NEW_GAME = 10, SCORES,
 						UNDO, REDO,
-                                                RIGHT_BUTTON_UNDO, HELPING_HAND, LARGE_CARDS,
-						ABOUT };
+                        RIGHT_BUTTON_UNDO, HELPING_HAND, LARGE_CARDS
+					};
 
 	wxMenuBar*		m_menuBar;
 	FortyCanvas*	m_canvas;

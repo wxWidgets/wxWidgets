@@ -39,8 +39,9 @@
 
 BEGIN_EVENT_TABLE(FortyFrame, wxFrame)
 	EVT_MENU(NEW_GAME, FortyFrame::NewGame)
-	EVT_MENU(EXIT, FortyFrame::Exit)
-	EVT_MENU(ABOUT, FortyFrame::About)
+	EVT_MENU(wxID_EXIT, FortyFrame::Exit)
+	EVT_MENU(wxID_ABOUT, FortyFrame::About)
+	EVT_MENU(wxID_HELP_CONTENTS, FortyFrame::Help)
 	EVT_MENU(UNDO, FortyFrame::Undo)
 	EVT_MENU(REDO, FortyFrame::Redo)
 	EVT_MENU(SCORES, FortyFrame::Scores)
@@ -131,8 +132,7 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, int x, int y, int 
 	wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
 #ifdef __WXMAC__
-	// we need this in order to allow the about menu relocation, since ABOUT is not the default id of the about menu 
-	wxApp::s_macAboutMenuItemId = ABOUT ;
+	wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 #endif
 	// set the icon
 #ifdef __WXMSW__
@@ -147,7 +147,7 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, int x, int y, int 
 	wxMenu* gameMenu = new wxMenu;
 	gameMenu->Append(NEW_GAME, _T("&New"), _T("Start a new game"));
 	gameMenu->Append(SCORES, _T("&Scores..."), _T("Displays scores"));
-	gameMenu->Append(EXIT, _T("E&xit"), _T("Exits Forty Thieves"));
+	gameMenu->Append(wxID_EXIT, _T("E&xit"), _T("Exits Forty Thieves"));
 
 	wxMenu* editMenu = new wxMenu;
 	editMenu->Append(UNDO, _T("&Undo"), _T("Undo the last move"));
@@ -174,7 +174,8 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, int x, int y, int 
         optionsMenu->Check(LARGE_CARDS, largecards ? TRUE : FALSE);
 
 	wxMenu* helpMenu = new wxMenu;
-	helpMenu->Append(ABOUT, _T("&About..."), _T("Displays information about the game"));
+	helpMenu->Append(wxID_HELP_CONTENTS, _T("&Help Contents"), _T("Displays information about playing the game"));
+	helpMenu->Append(wxID_ABOUT, _T("&About..."), _T("About Forty Thieves"));
 
 	m_menuBar = new wxMenuBar;
 	m_menuBar->Append(gameMenu,    _T("&Game"));
@@ -221,20 +222,16 @@ FortyFrame::NewGame(wxCommandEvent&)
 void
 FortyFrame::Exit(wxCommandEvent&)
 {
-#ifdef __WXGTK__
-	// wxGTK doesn't call OnClose() so we do it here
-//	if (OnClose())
-#endif
 	Close(TRUE);
 }
 
 void
-FortyFrame::About(wxCommandEvent&)
+FortyFrame::Help(wxCommandEvent& event)
 {
 #if wxUSE_HTML
     if (wxFileExists(wxT("about.htm")))
     {
-        FortyAboutDialog dialog(this, -1, wxT("About Forty Thieves"));
+        FortyAboutDialog dialog(this, -1, wxT("Forty Thieves Instructions"));
         if (dialog.ShowModal() == wxID_OK)
         {
         }
@@ -242,19 +239,23 @@ FortyFrame::About(wxCommandEvent&)
     else
 #endif
     {
-        wxMessageBox(
-            _T("Forty Thieves\n\n")
-            _T("A freeware program using the wxWindows\n")
-            _T("portable C++ GUI toolkit.\n")
-            _T("http://www.wxwindows.org\n")
-            _T("http://www.freiburg.linux.de/~wxxt\n\n")
-            _T("Author: Chris Breeze (c) 1992-1998\n")
-            _T("email: chris.breeze@iname.com"),
-            _T("About Forty Thieves"),
-            wxOK, this
-            );
+        About(event);
     }
 }
+
+void
+FortyFrame::About(wxCommandEvent&)
+{
+        wxMessageBox(
+            _T("Forty Thieves\n\n")
+            _T("A free card game written with the wxWidgets toolkit\n")
+            _T("Author: Chris Breeze (c) 1992-2004\n")
+            _T("email: chris@breezesys.com"),
+            _T("About Forty Thieves"),
+            wxOK|wxICON_INFORMATION, this
+            );
+}
+
 
 void
 FortyFrame::Undo(wxCommandEvent&)
