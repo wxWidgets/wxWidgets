@@ -1670,13 +1670,11 @@ wxCoord wxWindowDC::GetCharWidth() const
 #if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new( m_context );
 
-    if (!m_fontdesc)
-    {
-        char *crash = NULL;
-        *crash = 0;
-    }
-
-    pango_layout_set_font_description(layout, m_fontdesc);
+    if (m_fontdesc)
+	pango_layout_set_font_description(layout, m_fontdesc);
+    else
+	pango_layout_set_font_description(layout, this->GetFont().GetNativeFontInfo()->description);
+	
     pango_layout_set_text(layout, "H", 1 );
     int w,h;
     pango_layout_get_pixel_size(layout, &w, &h);
@@ -1706,14 +1704,11 @@ wxCoord wxWindowDC::GetCharHeight() const
 #if wxUSE_UNICODE
     PangoLayout *layout = pango_layout_new( m_context );
 
-    if (!m_fontdesc)
-    {
-        char *crash = NULL;
-        *crash = 0;
-    }
-
-    pango_layout_set_font_description(layout, m_fontdesc);
-
+    if (m_fontdesc)
+	pango_layout_set_font_description(layout, m_fontdesc);
+    else
+	pango_layout_set_font_description(layout, this->GetFont().GetNativeFontInfo()->description);
+	
     pango_layout_set_text(layout, "H", 1 );
     int w,h;
     pango_layout_get_pixel_size(layout, &w, &h);
@@ -1772,14 +1767,10 @@ void wxWindowDC::SetFont( const wxFont &font )
 
     m_font = font;
     
+    return;
+    
 #if wxUSE_UNICODE
-    if (m_font.Ok())
-    {
-        if (m_fontdesc)
-            pango_font_description_free( m_fontdesc );
-
-        m_fontdesc = pango_font_description_copy( m_font.GetNativeFontInfo()->description );
-    }
+    m_fontdesc = font.GetNativeFontInfo()->description;
 #endif
 }
 
