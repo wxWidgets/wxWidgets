@@ -28,6 +28,10 @@
     #include "wx/clipbrd.h"
 #endif
 
+#if wxUSE_FILE
+	#include "wx/file.h"
+#endif
+
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif
@@ -96,6 +100,8 @@ public:
     MyTextCtrl    *m_multitext;
     MyTextCtrl    *m_horizontal;
 
+    MyTextCtrl    *m_textrich;
+
     wxTextCtrl    *m_log;
 
 private:
@@ -127,6 +133,7 @@ public:
         { m_panel->DoMoveToEndOfEntry(); }
 
     void OnLogClear(wxCommandEvent& event);
+    void OnFileSave(wxCommandEvent& event);
     void OnFileLoad(wxCommandEvent& event);
 
     void OnIdle( wxIdleEvent& event );
@@ -152,6 +159,7 @@ enum
     TEXT_QUIT = 100,
     TEXT_ABOUT,
     TEXT_LOAD,
+	TEXT_SAVE,
     TEXT_CLEAR,
 
     // clipboard menu
@@ -171,12 +179,14 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *) NULL,
-            "Text wxWindows sample", 50, 50, 640, 420);
+            "Text wxWindows sample", 50, 50, 660, 420);
     frame->SetSizeHints( 500, 400 );
 
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(TEXT_CLEAR, "&Clear the log\tCtrl-C",
                       "Clear the log window contents");
+    file_menu->Append(TEXT_SAVE, "&Save file\tCtrl-S",
+                      "Save the text control contents to file");
     file_menu->Append(TEXT_LOAD, "&Load file\tCtrl-O",
                       "Load the sample file into text control");
     file_menu->AppendSeparator();
@@ -436,9 +446,11 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
         case WXK_F5:
             // insert a blank line
             WriteText("\n");
-    }
+			break;
 
-    LogEvent( _("Key down"), event);
+		default:
+			LogEvent( _("Key down"), event);
+    }
 
     event.Skip();
 }
@@ -496,6 +508,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_enter = new MyTextCtrl( this, -1, "Multiline, allow <ENTER> processing.",
       wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE);
+
+    m_textrich = new MyTextCtrl(this, -1, "Allows more than 30Kb of text\n"
+                                "(even under broken Win9x)",
+                                wxPoint(450, 10), wxSize(200, 230),
+                                wxTE_RICH | wxTE_MULTILINE);
 }
 
 void MyPanel::OnSize( wxSizeEvent &event )
@@ -613,6 +630,7 @@ void MyPanel::DoMoveToEndOfEntry()
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_QUIT,   MyFrame::OnQuit)
     EVT_MENU(TEXT_ABOUT,  MyFrame::OnAbout)
+    EVT_MENU(TEXT_SAVE,   MyFrame::OnFileSave)
     EVT_MENU(TEXT_LOAD,   MyFrame::OnFileLoad)
     EVT_MENU(TEXT_CLEAR,  MyFrame::OnLogClear)
 
@@ -702,9 +720,26 @@ void MyFrame::OnLogClear(wxCommandEvent& WXUNUSED(event))
     m_panel->m_log->Clear();
 }
 
+void MyFrame::OnFileSave(wxCommandEvent& event)
+{
+    if ( m_panel->m_textrich->SaveFile("dummy.txt") )
+    {
+#if wxUSE_FILE
+        // verify that the fil length is correct (it wasn't under Win95)
+        wxFile file("dummy.txt");
+        wxLogStatus(this, _T("Successfully saved file "
+                             "(text len = %ld, file size = %ld)"),
+                    m_panel->m_textrich->GetValue().length(),
+                    file.Length());
+#endif
+    }
+    else
+        wxLogStatus(this, _T("Couldn't save the file"));
+}
+
 void MyFrame::OnFileLoad(wxCommandEvent& event)
 {
-    if ( m_panel->m_multitext->LoadFile("text.rc") )
+    if ( m_panel->m_textrich->LoadFile("dummy.txt") )
         wxLogStatus(this, _T("Successfully loaded file"));
     else
         wxLogStatus(this, _T("Couldn't load the file"));
