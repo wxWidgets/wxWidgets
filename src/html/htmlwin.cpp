@@ -265,6 +265,14 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
         f = m_Parser->OpenURL(wxHTML_URL_PAGE, location);
 
+        // try to interpret 'location' as filename instead of URL:
+        if (f == NULL)
+        {
+            wxFileName fn(location);
+            wxString location2 = wxFileSystem::FileNameToURL(fn);
+            f = m_Parser->OpenURL(wxHTML_URL_PAGE, location2);
+        }
+
         if (f == NULL)
         {
             wxLogError(_("Unable to open requested HTML document: %s"), location.c_str());
@@ -344,6 +352,12 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
     return rt_val;
 }
 
+
+bool wxHtmlWindow::LoadFile(const wxFileName& filename)
+{
+    wxString url = wxFileSystem::FileNameToURL(filename);
+    return LoadPage(url);
+}
 
 
 bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
