@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        generic/renderg.cpp
-// Purpose:     generic implementation of wxRendererBase (for any platform)
+// Purpose:     generic implementation of wxRendererNative (for any platform)
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
@@ -28,13 +28,18 @@
     #include "wx/string.h"
 #endif //WX_PRECOMP
 
+#include "wx/gdicmn.h"
+#include "wx/dc.h"
+
+#include "wx/settings.h"
+
 #include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
-// wxRendererGeneric: our wxRendererBase implementation
+// wxRendererGeneric: our wxRendererNative implementation
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRendererGeneric : public wxRendererBase
+class WXDLLEXPORT wxRendererGeneric : public wxRendererNative
 {
 public:
     // draw the header control button (used by wxListCtrl)
@@ -59,7 +64,7 @@ public:
 // ----------------------------------------------------------------------------
 
 /* static */
-wxRendererNative *wxRendererGeneric::GetGeneric()
+wxRendererNative& wxRendererNative::GetGeneric()
 {
     static wxRendererGeneric s_rendererGeneric;
 
@@ -87,25 +92,30 @@ wxRendererGeneric::DrawHeaderButton(wxWindow *win,
                                     const wxRect& rect,
                                     int flags)
 {
-    const int m_corner = 1;
+    const int CORNER = 1;
 
-    dc->SetBrush( *wxTRANSPARENT_BRUSH );
+    const wxCoord x = rect.x,
+                  y = rect.y,
+                  w = rect.width,
+                  h = rect.height;
 
-    dc->SetPen( *wxBLACK_PEN );
-    dc->DrawLine( x+w-m_corner+1, y, x+w, y+h );  // right (outer)
-    dc->DrawRectangle( x, y+h, w+1, 1 );          // bottom (outer)
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+
+    dc.SetPen( *wxBLACK_PEN );
+    dc.DrawLine( x+w-CORNER+1, y, x+w, y+h );  // right (outer)
+    dc.DrawRectangle( x, y+h, w+1, 1 );        // bottom (outer)
 
     wxPen pen( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNSHADOW ), 1, wxSOLID );
 
-    dc->SetPen( pen );
-    dc->DrawLine( x+w-m_corner, y, x+w-1, y+h );  // right (inner)
-    dc->DrawRectangle( x+1, y+h-1, w-2, 1 );      // bottom (inner)
+    dc.SetPen( pen );
+    dc.DrawLine( x+w-CORNER, y, x+w-1, y+h );  // right (inner)
+    dc.DrawRectangle( x+1, y+h-1, w-2, 1 );    // bottom (inner)
 
-    dc->SetPen( *wxWHITE_PEN );
-    dc->DrawRectangle( x, y, w-m_corner+1, 1 );   // top (outer)
-    dc->DrawRectangle( x, y, 1, h );              // left (outer)
-    dc->DrawLine( x, y+h-1, x+1, y+h-1 );
-    dc->DrawLine( x+w-1, y, x+w-1, y+1 );
+    dc.SetPen( *wxWHITE_PEN );
+    dc.DrawRectangle( x, y, w-CORNER+1, 1 );   // top (outer)
+    dc.DrawRectangle( x, y, 1, h );            // left (outer)
+    dc.DrawLine( x, y+h-1, x+1, y+h-1 );
+    dc.DrawLine( x+w-1, y, x+w-1, y+1 );
 }
 
 // draw the plus or minus sign
@@ -126,7 +136,7 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow *win,
 
     dc.SetPen(*wxBLACK_PEN);
     dc.DrawLine(xMiddle - 2, yMiddle, xMiddle + 3, yMiddle);
-    if ( !item->IsExpanded() )
+    if ( flags & wxCONTROL_EXPANDED )
     {
         // turn "-" into "+"
         dc.DrawLine(xMiddle, yMiddle - 2, xMiddle, yMiddle + 3);

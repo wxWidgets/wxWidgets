@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        msw/renderer.cpp
-// Purpose:     implementation of wxRendererBase for Windows
+// Purpose:     implementation of wxRendererNative for Windows
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
@@ -31,10 +31,10 @@
 #include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
-// wxRendererMSW: our wxRendererBase implementation
+// wxRendererMSW: our wxRendererNative implementation
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRendererMSW : public wxDelegateRendererBase
+class WXDLLEXPORT wxRendererMSW : public wxDelegateRendererNative
 {
 };
 

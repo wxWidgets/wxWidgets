@@ -25,6 +25,10 @@
 #ifndef _WX_RENDERER_H_
 #define _WX_RENDERER_H_
 
+class WXDLLEXPORT wxDC;
+class WXDLLEXPORT wxRect;
+class WXDLLEXPORT wxWindow;
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        mac/renderer.cpp
-// Purpose:     implementation of wxRendererBase for Mac
+// Purpose:     implementation of wxRendererNative for Mac
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
@@ -31,10 +31,10 @@
 #include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
-// wxRendererMac: our wxRendererBase implementation
+// wxRendererMac: our wxRendererNative implementation
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRendererMac : public wxRendererBase
+class WXDLLEXPORT wxRendererMac : public wxRendererNative
 {
 public:
     // draw the header control button (used by wxListCtrl)

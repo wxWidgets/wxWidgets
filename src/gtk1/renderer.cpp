@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        gtk/renderer.cpp
-// Purpose:     implementation of wxRendererBase for wxGTK
+// Purpose:     implementation of wxRendererNative for wxGTK
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
@@ -30,13 +30,15 @@
 #include <gtk/gtk.h>
 #include "wx/gtk/win_gtk.h"
 
+#include "wx/window.h"
+#include "wx/dc.h"
 #include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
-// wxRendererGTK: our wxRendererBase implementation
+// wxRendererGTK: our wxRendererNative implementation
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRendererGTK : public wxDelegateRendererBase
+class WXDLLEXPORT wxRendererGTK : public wxDelegateRendererNative
 {
 public:
     // draw the header control button (used by wxListCtrl)
@@ -60,7 +62,7 @@ public:
 // ============================================================================
 
 /* static */
-wxRendererNative& wxRendererGTK::Get()
+wxRendererNative& wxRendererNative::Get()
 {
     static wxRendererGTK s_rendererGTK;
 
@@ -79,9 +81,10 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         GTK_PIZZA(win->m_wxwindow)->bin_window,
         flags & wxCONTROL_DISABLED ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL,
         GTK_SHADOW_OUT,
-        (GdkRectangle*) NULL, m_wxwindow,
+        (GdkRectangle*) NULL,
+        win->m_wxwindow,
         (char *)"button", // const_cast
-        dc.XLOG2DEV(rect.x) - 1, rect.y - 1, rect.width + 2, rect.h + 2
+        dc.XLOG2DEV(rect.x) - 1, rect.y - 1, rect.width + 2, rect.height + 2
     );
 }
 
