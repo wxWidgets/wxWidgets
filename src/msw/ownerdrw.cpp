@@ -35,7 +35,7 @@
 
 // ctor
 // ----
-wxOwnerDrawn::wxOwnerDrawn(const wxTString& str, 
+wxOwnerDrawn::wxOwnerDrawn(const wxString& str, 
                            bool bCheckable, bool bMenuItem)
             : m_strName(str)
 {

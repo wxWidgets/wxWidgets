@@ -54,7 +54,7 @@
 // -----------
 
 wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
-                       const wxTString& strName, const wxTString& strHelp,
+                       const wxString& strName, const wxString& strHelp,
                        bool bCheckable,
                        wxMenu *pSubMenu) :
 #if USE_OWNER_DRAWN

@@ -328,10 +328,10 @@ wxDefaultFileSelector(bool load, const char *what, const char *extension, const 
   char prompt[50];
   wxString str;
   if (load)
-    str = (const char*) wxTString("Load %s file");
+    str = "Load %s file";
   else
-    str = (const char*) wxTString("Save %s file");
-  sprintf(prompt, str, what);
+    str = "Save %s file";
+  sprintf(prompt, wxGetTranslation(str), what);
 
   if (*ext == '.') ext++;
   char wild[60];
