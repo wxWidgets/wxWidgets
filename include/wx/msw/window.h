@@ -28,6 +28,13 @@
 // a better solution should be found later...
 #define wxUSE_MOUSEEVENT_HACK 0
 
+#include "wx/hash.h"
+
+// pseudo-template HWND <-> wxWindow hash table
+WX_DECLARE_HASH(wxWindow, wxWindowList, wxWinHashTable);
+
+extern wxWinHashTable *wxWinHandleHash;
+
 // ---------------------------------------------------------------------------
 // constants
 // ---------------------------------------------------------------------------

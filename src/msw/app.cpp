@@ -124,7 +124,6 @@
 // ---------------------------------------------------------------------------
 
 extern wxChar *wxBuffer;
-extern wxList *wxWinHandleList;
 extern wxList WXDLLEXPORT wxPendingDelete;
 #ifndef __WXMICROWIN__
 extern void wxSetKeyboardHook(bool doIt);
@@ -295,7 +294,7 @@ bool wxApp::Initialize()
     wxRegisterPenWin();
 #endif
 
-    wxWinHandleList = new wxList(wxKEY_INTEGER);
+    wxWinHandleHash = new wxWinHashTable(wxKEY_INTEGER, 100);
 
     // This is to foil optimizations in Visual C++ that throw out dummy.obj.
     // PLEASE DO NOT ALTER THIS.
@@ -701,8 +700,7 @@ void wxApp::CleanUp()
     Ctl3dUnregister(wxhInstance);
 #endif
 
-    if (wxWinHandleList)
-        delete wxWinHandleList;
+    delete wxWinHandleHash;
 
     // GL: I'm annoyed ... I don't know where to put this and I don't want to
     // create a module for that as it's part of the core.

@@ -118,7 +118,6 @@
     #endif
 #endif
 
-
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
@@ -2594,14 +2593,11 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 // wxWindow <-> HWND map
 // ----------------------------------------------------------------------------
 
-wxList *wxWinHandleList = NULL;
+wxWinHashTable *wxWinHandleHash = NULL;
 
 wxWindow *wxFindWinFromHandle(WXHWND hWnd)
 {
-    wxNode *node = wxWinHandleList->Find((long)hWnd);
-    if ( !node )
-        return NULL;
-    return (wxWindow *)node->Data();
+    return wxWinHandleHash->Get((long)hWnd);
 }
 
 void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win)
@@ -2622,13 +2618,13 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win)
 #endif // __WXDEBUG__
     if (!oldWin)
     {
-        wxWinHandleList->Append((long)hWnd, win);
+        wxWinHandleHash->Put((long)hWnd, win);
     }
 }
 
 void wxRemoveHandleAssociation(wxWindowMSW *win)
 {
-    wxWinHandleList->DeleteObject(win);
+    wxWinHandleHash->Delete((long)win->GetHWND());
 }
 
 // ----------------------------------------------------------------------------
