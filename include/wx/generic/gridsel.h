@@ -29,10 +29,10 @@ public:
     bool IsSelection();
     bool IsInSelection ( int row, int col );
     void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
-    void SelectRow( int row, bool addToSelected = FALSE,
+    void SelectRow( int row,
                     bool ControlDown = FALSE,  bool ShiftDown = FALSE,
                     bool AltDown = FALSE, bool MetaDown = FALSE );
-    void SelectCol( int col, bool addToSelected = FALSE,
+    void SelectCol( int col,
                     bool ControlDown = FALSE,  bool ShiftDown = FALSE,
                     bool AltDown = FALSE, bool MetaDown = FALSE );
     void SelectBlock( int topRow, int leftCol,

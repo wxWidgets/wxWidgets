@@ -184,7 +184,7 @@ void wxGridSelection::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
     }
 }
 
-void wxGridSelection::SelectRow( int row, bool addToSelected,
+void wxGridSelection::SelectRow( int row,
                                  bool ControlDown,  bool ShiftDown,
                                  bool AltDown, bool MetaDown )
 {
@@ -277,7 +277,7 @@ void wxGridSelection::SelectRow( int row, bool addToSelected,
     m_grid->GetEventHandler()->ProcessEvent(gridEvt);
 }
 
-void wxGridSelection::SelectCol( int col, bool addToSelected,
+void wxGridSelection::SelectCol( int col,
                                  bool ControlDown,  bool ShiftDown,
                                  bool AltDown, bool MetaDown )
 {
@@ -586,7 +586,6 @@ void wxGridSelection::ToggleCellSelection( int row, int col,
                 n--; count--;
                 if ( !m_grid->GetBatchCount() )
                     ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );
-                return;
 
                 // Send event
                 wxGridEvent gridEvt( m_grid->GetId(),
@@ -596,6 +595,7 @@ void wxGridSelection::ToggleCellSelection( int row, int col,
                                      ControlDown, ShiftDown,
                                      AltDown, MetaDown );
                 m_grid->GetEventHandler()->ProcessEvent(gridEvt);
+                return;
             }
         }
     }
