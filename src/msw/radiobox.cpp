@@ -116,7 +116,8 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
   m_noRowsOrCols = majorDim;
   if (majorDim==0)
     m_majorDim = n ;
-  m_majorDim = majorDim ;
+  else // Seemed to make sense to put this 'else' here...  (RD)
+    m_majorDim = majorDim ;
 
   long msStyle = GROUP_FLAGS;
 
@@ -321,7 +322,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 wxRadioBox::~wxRadioBox(void)
 {
   m_isBeingDeleted = TRUE;
-  
+
   if (m_radioButtons)
   {
     int i;
@@ -642,7 +643,7 @@ void wxRadioBox::Enable(int item, bool enable)
 void wxRadioBox::Enable(bool enable)
 {
   wxControl::Enable(enable);
-  
+
   int i;
   for (i = 0; i < m_noItems; i++)
     ::EnableWindow((HWND) m_radioButtons[i], enable);
@@ -733,7 +734,7 @@ void wxRadioBox::SetLabelFont(wxFont *font)
     if (font)
     {
       font->RealizeResource();
-      
+
       if (font->GetResourceHandle())
         SendMessage(hWnd, WM_SETFONT,
                   (WPARAM)font->GetResourceHandle(),TRUE);
