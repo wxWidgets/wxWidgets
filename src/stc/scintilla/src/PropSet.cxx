@@ -71,6 +71,264 @@ bool EqualCaseInsensitive(const char *a, const char *b) {
 	return 0 == CompareCaseInsensitive(a, b);
 }
 
+// Since the CaseInsensitive functions declared in SString
+// are implemented here, I will for now put the non-inline
+// implementations of the SString members here as well, so
+// that I can quickly see what effect this has.
+
+SString::SString(int i) : sizeGrowth(sizeGrowthDefault) {
+	char number[32];
+	sprintf(number, "%0d", i);
+	s = StringAllocate(number);
+	sSize = sLen = (s) ? strlen(s) : 0;
+}
+
+SString::SString(double d, int precision) : sizeGrowth(sizeGrowthDefault) {
+	char number[32];
+	sprintf(number, "%.*f", precision, d);
+	s = StringAllocate(number);
+	sSize = sLen = (s) ? strlen(s) : 0;
+}
+
+bool SString::grow(lenpos_t lenNew) {
+	while (sizeGrowth * 6 < lenNew) {
+		sizeGrowth *= 2;
+	}
+	char *sNew = new char[lenNew + sizeGrowth + 1];
+	if (sNew) {
+		if (s) {
+			memcpy(sNew, s, sLen);
+			delete []s;
+		}
+		s = sNew;
+		s[sLen] = '\0';
+		sSize = lenNew + sizeGrowth;
+	}
+	return sNew != 0;
+}
+
+SString &SString::assign(const char *sOther, lenpos_t sSize_) {
+	if (!sOther) {
+		sSize_ = 0;
+	} else if (sSize_ == measure_length) {
+		sSize_ = strlen(sOther);
+	}
+	if (sSize > 0 && sSize_ <= sSize) {	// Does not allocate new buffer if the current is big enough
+		if (s && sSize_) {
+			memcpy(s, sOther, sSize_);
+		}
+		s[sSize_] = '\0';
+		sLen = sSize_;
+	} else {
+		delete []s;
+		s = StringAllocate(sOther, sSize_);
+		if (s) {
+			sSize = sSize_;	// Allow buffer bigger than real string, thus providing space to grow
+			sLen = strlen(s);
+		} else {
+			sSize = sLen = 0;
+		}
+	}
+	return *this;
+}
+
+bool SString::operator==(const SString &sOther) const {
+	if ((s == 0) && (sOther.s == 0))
+		return true;
+	if ((s == 0) || (sOther.s == 0))
+		return false;
+	return strcmp(s, sOther.s) == 0;
+}
+
+bool SString::operator==(const char *sOther) const {
+	if ((s == 0) && (sOther == 0))
+		return true;
+	if ((s == 0) || (sOther == 0))
+		return false;
+	return strcmp(s, sOther) == 0;
+}
+
+SString SString::substr(lenpos_t subPos, lenpos_t subLen) const {
+	if (subPos >= sLen) {
+		return SString();					// return a null string if start index is out of bounds
+	}
+	if ((subLen == measure_length) || (subPos + subLen > sLen)) {
+		subLen = sLen - subPos;		// can't substr past end of source string
+	}
+	return SString(s, subPos, subPos + subLen);
+}
+
+SString &SString::lowercase(lenpos_t subPos, lenpos_t subLen) {
+	if ((subLen == measure_length) || (subPos + subLen > sLen)) {
+		subLen = sLen - subPos;		// don't apply past end of string
+	}
+	for (lenpos_t i = subPos; i < subPos + subLen; i++) {
+		if (s[i] < 'A' || s[i] > 'Z')
+			continue;
+		else
+			s[i] = static_cast<char>(s[i] - 'A' + 'a');
+	}
+	return *this;
+}
+
+SString &SString::uppercase(lenpos_t subPos, lenpos_t subLen) {
+	if ((subLen == measure_length) || (subPos + subLen > sLen)) {
+		subLen = sLen - subPos;		// don't apply past end of string
+	}
+	for (lenpos_t i = subPos; i < subPos + subLen; i++) {
+		if (s[i] < 'a' || s[i] > 'z')
+			continue;
+		else
+			s[i] = static_cast<char>(s[i] - 'a' + 'A');
+	}
+	return *this;
+}
+
+SString &SString::append(const char *sOther, lenpos_t sLenOther, char sep) {
+	if (!sOther) {
+		return *this;
+	}
+	if (sLenOther == measure_length) {
+		sLenOther = strlen(sOther);
+	}
+	int lenSep = 0;
+	if (sLen && sep) {	// Only add a separator if not empty
+		lenSep = 1;
+	}
+	lenpos_t lenNew = sLen + sLenOther + lenSep;
+	// Conservative about growing the buffer: don't do it, unless really needed
+	if ((lenNew < sSize) || (grow(lenNew))) {
+		if (lenSep) {
+			s[sLen] = sep;
+			sLen++;
+		}
+		memcpy(&s[sLen], sOther, sLenOther);
+		sLen += sLenOther;
+		s[sLen] = '\0';
+	}
+	return *this;
+}
+
+SString &SString::insert(lenpos_t pos, const char *sOther, lenpos_t sLenOther) {
+	if (!sOther || pos > sLen) {
+		return *this;
+	}
+	if (sLenOther == measure_length) {
+		sLenOther = strlen(sOther);
+	}
+	lenpos_t lenNew = sLen + sLenOther;
+	// Conservative about growing the buffer: don't do it, unless really needed
+	if ((lenNew < sSize) || grow(lenNew)) {
+		lenpos_t moveChars = sLen - pos + 1;
+		for (lenpos_t i = moveChars; i > 0; i--) {
+			s[pos + sLenOther + i - 1] = s[pos + i - 1];
+		}
+		memcpy(s + pos, sOther, sLenOther);
+		sLen = lenNew;
+	}
+	return *this;
+}
+
+/**
+ * Remove @a len characters from the @a pos position, included.
+ * Characters at pos + len and beyond replace characters at pos.
+ * If @a len is 0, or greater than the length of the string
+ * starting at @a pos, the string is just truncated at @a pos.
+ */
+void SString::remove(lenpos_t pos, lenpos_t len) {
+	if (pos >= sLen) {
+		return;
+	}
+	if (len < 1 || pos + len >= sLen) {
+		s[pos] = '\0';
+		sLen = pos;
+	} else {
+		for (lenpos_t i = pos; i < sLen - len + 1; i++) {
+			s[i] = s[i+len];
+		}
+		sLen -= len;
+	}
+}
+
+bool SString::startswith(const char *prefix) {
+	lenpos_t lenPrefix = strlen(prefix);
+	if (lenPrefix > sLen) {
+		return false;
+	}
+	return strncmp(s, prefix, lenPrefix) == 0;
+}
+
+bool SString::endswith(const char *suffix) {
+	lenpos_t lenSuffix = strlen(suffix);
+	if (lenSuffix > sLen) {
+		return false;
+	}
+	return strncmp(s + sLen - lenSuffix, suffix, lenSuffix) == 0;
+}
+
+int SString::search(const char *sFind, lenpos_t start) const {
+	if (start < sLen) {
+		const char *sFound = strstr(s + start, sFind);
+		if (sFound) {
+			return sFound - s;
+		}
+	}
+	return -1;
+}
+
+int SString::substitute(char chFind, char chReplace) {
+	int c = 0;
+	char *t = s;
+	while (t) {
+		t = strchr(t, chFind);
+		if (t) {
+			*t = chReplace;
+			t++;
+			c++;
+		}
+	}
+	return c;
+}
+
+int SString::substitute(const char *sFind, const char *sReplace) {
+	int c = 0;
+	lenpos_t lenFind = strlen(sFind);
+	lenpos_t lenReplace = strlen(sReplace);
+	int posFound = search(sFind);
+	while (posFound >= 0) {
+		remove(posFound, lenFind);
+		insert(posFound, sReplace, lenReplace);
+		posFound = search(sFind, posFound + lenReplace);
+		c++;
+	}
+	return c;
+}
+
+char *SContainer::StringAllocate(lenpos_t len) {
+	if (len != measure_length) {
+		return new char[len + 1];
+	} else {
+		return 0;
+	}
+}
+
+char *SContainer::StringAllocate(const char *s, lenpos_t len) {
+	if (s == 0) {
+		return 0;
+	}
+	if (len == measure_length) {
+		len = strlen(s);
+	}
+	char *sNew = new char[len + 1];
+	if (sNew) {
+		memcpy(sNew, s, len);
+		sNew[len] = '\0';
+	}
+	return sNew;
+}
+
+// End SString functions
+
 PropSet::PropSet() {
 	superPS = 0;
 	for (int root = 0; root < hashRoots; root++)
@@ -596,8 +854,8 @@ const char *WordList::GetNearestWord(const char *wordStart, int searchLen /*= -1
 						// Found another word
 						first = pivot;
 						end = pivot - 1;
-					} 
-					else if (cond > 0) 
+					}
+					else if (cond > 0)
 						start = pivot + 1;
 					else if (cond <= 0)
 						break;
@@ -633,8 +891,8 @@ const char *WordList::GetNearestWord(const char *wordStart, int searchLen /*= -1
 						// Found another word
 						first = pivot;
 						end = pivot - 1;
-					} 
-					else if (cond > 0) 
+					}
+					else if (cond > 0)
 						start = pivot + 1;
 					else if (cond <= 0)
 						break;
@@ -695,8 +953,9 @@ char *WordList::GetNearestWords(
     const char *wordStart,
     int searchLen /*= -1*/,
     bool ignoreCase /*= false*/,
-    char otherSeparator /*= '\0'*/) {
-	int wordlen; // length of the word part (before the '(' brace) of the api array element
+    char otherSeparator /*= '\0'*/,
+    bool exactLen /*=false*/) {
+	unsigned int wordlen; // length of the word part (before the '(' brace) of the api array element
 	SString wordsNear;
 	wordsNear.setsizegrowth(1000);
 	int start = 0; // lower bound of the api array block to search
@@ -726,6 +985,8 @@ char *WordList::GetNearestWords(
 					(0 == CompareNCaseInsensitive(wordStart,
 						wordsNoCase[pivot], searchLen))) {
 					wordlen = LengthWord(wordsNoCase[pivot], otherSeparator) + 1;
+					if (exactLen && wordlen != LengthWord(wordStart, otherSeparator) + 1)
+						break;
 					wordsNear.append(wordsNoCase[pivot], wordlen, ' ');
 					++pivot;
 				}
@@ -752,6 +1013,8 @@ char *WordList::GetNearestWords(
 					(0 == strncmp(wordStart,
 						words[pivot], searchLen))) {
 					wordlen = LengthWord(words[pivot], otherSeparator) + 1;
+					if (exactLen && wordlen != LengthWord(wordStart, otherSeparator) + 1)
+						break;
 					wordsNear.append(words[pivot], wordlen, ' ');
 					++pivot;
 				}

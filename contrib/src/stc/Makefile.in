@@ -108,6 +108,14 @@ STCDLL_OBJECTS =  \
 	stcdll_LexTeX.o \
 	stcdll_LexVB.o \
 	stcdll_LexYAML.o \
+	stcdll_LexAPDL.o \
+	stcdll_LexAU3.o \
+	stcdll_LexBash.o \
+	stcdll_LexGui4Cli.o \
+	stcdll_LexKix.o \
+	stcdll_LexMSSQL.o \
+	stcdll_LexSpecman.o \
+	stcdll_LexVerilog.o \
 	stcdll_LineMarker.o \
 	stcdll_PropSet.o \
 	stcdll_RESearch.o \
@@ -174,6 +182,14 @@ STCLIB_OBJECTS =  \
 	stclib_LexTeX.o \
 	stclib_LexVB.o \
 	stclib_LexYAML.o \
+	stclib_LexAPDL.o \
+	stclib_LexAU3.o \
+	stclib_LexBash.o \
+	stclib_LexGui4Cli.o \
+	stclib_LexKix.o \
+	stclib_LexMSSQL.o \
+	stclib_LexSpecman.o \
+	stclib_LexVerilog.o \
 	stclib_LineMarker.o \
 	stclib_PropSet.o \
 	stclib_RESearch.o \
@@ -491,6 +507,30 @@ stcdll_LexVB.o: $(srcdir)/scintilla/src/LexVB.cxx
 stcdll_LexYAML.o: $(srcdir)/scintilla/src/LexYAML.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
+stcdll_LexAPDL.o: $(srcdir)/scintilla/src/LexAPDL.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexAU3.o: $(srcdir)/scintilla/src/LexAU3.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexBash.o: $(srcdir)/scintilla/src/LexBash.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexGui4Cli.o: $(srcdir)/scintilla/src/LexGui4Cli.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexKix.o: $(srcdir)/scintilla/src/LexKix.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexMSSQL.o: $(srcdir)/scintilla/src/LexMSSQL.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexSpecman.o: $(srcdir)/scintilla/src/LexSpecman.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexVerilog.o: $(srcdir)/scintilla/src/LexVerilog.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
 stcdll_LineMarker.o: $(srcdir)/scintilla/src/LineMarker.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
@@ -672,6 +712,30 @@ stclib_LexVB.o: $(srcdir)/scintilla/src/LexVB.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_LexYAML.o: $(srcdir)/scintilla/src/LexYAML.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexAPDL.o: $(srcdir)/scintilla/src/LexAPDL.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexAU3.o: $(srcdir)/scintilla/src/LexAU3.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexBash.o: $(srcdir)/scintilla/src/LexBash.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexGui4Cli.o: $(srcdir)/scintilla/src/LexGui4Cli.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexKix.o: $(srcdir)/scintilla/src/LexKix.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexMSSQL.o: $(srcdir)/scintilla/src/LexMSSQL.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexSpecman.o: $(srcdir)/scintilla/src/LexSpecman.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexVerilog.o: $(srcdir)/scintilla/src/LexVerilog.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_LineMarker.o: $(srcdir)/scintilla/src/LineMarker.cxx

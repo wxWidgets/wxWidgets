@@ -166,19 +166,38 @@ static void ColouriseDiffLine(char *lineBuffer, int endLine, Accessor &styler) {
 	// comment lines before the first "diff " or "--- ". If a real
 	// difference starts then each line starting with ' ' is a whitespace
 	// otherwise it is considered a comment (Only in..., Binary file...)
-	if (0 == strncmp(lineBuffer, "diff ", 3)) {
+	if (0 == strncmp(lineBuffer, "diff ", 5)) {
 		styler.ColourTo(endLine, SCE_DIFF_COMMAND);
-	} else if (0 == strncmp(lineBuffer, "--- ", 3)) {
-		styler.ColourTo(endLine, SCE_DIFF_HEADER);
-	} else if (0 == strncmp(lineBuffer, "+++ ", 3)) {
-		styler.ColourTo(endLine, SCE_DIFF_HEADER);
+	} else if (0 == strncmp(lineBuffer, "--- ", 4)) {
+		// In a context diff, --- appears in both the header and the position markers
+		if (atoi(lineBuffer+4) && !strchr(lineBuffer, '/'))
+			styler.ColourTo(endLine, SCE_DIFF_POSITION);
+		else
+			styler.ColourTo(endLine, SCE_DIFF_HEADER);
+	} else if (0 == strncmp(lineBuffer, "+++ ", 4)) {
+		// I don't know of any diff where "+++ " is a position marker, but for
+		// consistency, do the same as with "--- " and "*** ".
+		if (atoi(lineBuffer+4) && !strchr(lineBuffer, '/'))
+			styler.ColourTo(endLine, SCE_DIFF_POSITION);
+		else
+			styler.ColourTo(endLine, SCE_DIFF_HEADER);
 	} else if (0 == strncmp(lineBuffer, "====", 4)) {  // For p4's diff
 		styler.ColourTo(endLine, SCE_DIFF_HEADER);
- 	} else if (0 == strncmp(lineBuffer, "***", 3)) {
-		styler.ColourTo(endLine, SCE_DIFF_HEADER);
+	} else if (0 == strncmp(lineBuffer, "***", 3)) {
+		// In a context diff, *** appears in both the header and the position markers.
+		// Also ******** is a chunk header, but here it's treated as part of the
+		// position marker since there is no separate style for a chunk header.
+		if (lineBuffer[3] == ' ' && atoi(lineBuffer+4) && !strchr(lineBuffer, '/'))
+			styler.ColourTo(endLine, SCE_DIFF_POSITION);
+		else if (lineBuffer[3] == '*')
+			styler.ColourTo(endLine, SCE_DIFF_POSITION);
+		else
+			styler.ColourTo(endLine, SCE_DIFF_HEADER);
 	} else if (0 == strncmp(lineBuffer, "? ", 2)) {    // For difflib
 		styler.ColourTo(endLine, SCE_DIFF_HEADER);
 	} else if (lineBuffer[0] == '@') {
+		styler.ColourTo(endLine, SCE_DIFF_POSITION);
+	} else if (lineBuffer[0] >= '0' && lineBuffer[0] <= '9') {
 		styler.ColourTo(endLine, SCE_DIFF_POSITION);
 	} else if (lineBuffer[0] == '-' || lineBuffer[0] == '<') {
 		styler.ColourTo(endLine, SCE_DIFF_DELETED);
@@ -209,6 +228,37 @@ static void ColouriseDiffDoc(unsigned int startPos, int length, int, WordList *[
 		ColouriseDiffLine(lineBuffer, startPos + length - 1, styler);
 	}
 }
+
+static void FoldDiffDoc(unsigned int startPos, int length, int, WordList*[], Accessor &styler) {
+	int curLine = styler.GetLine(startPos);
+	int prevLevel = SC_FOLDLEVELBASE;
+	if (curLine > 0)
+		prevLevel = styler.LevelAt(curLine-1);
+
+	int curLineStart = styler.LineStart(curLine);
+	do {
+		int nextLevel = prevLevel;
+		if (prevLevel & SC_FOLDLEVELHEADERFLAG)
+			nextLevel = (prevLevel & SC_FOLDLEVELNUMBERMASK) + 1;
+		
+		int lineType = styler.StyleAt(curLineStart);
+		if (lineType == SCE_DIFF_COMMAND)
+			nextLevel = (SC_FOLDLEVELBASE + 1) | SC_FOLDLEVELHEADERFLAG;
+		else if (lineType == SCE_DIFF_HEADER) {
+			nextLevel = (SC_FOLDLEVELBASE + 2) | SC_FOLDLEVELHEADERFLAG;
+		} else if (lineType == SCE_DIFF_POSITION)
+			nextLevel = (SC_FOLDLEVELBASE + 3) | SC_FOLDLEVELHEADERFLAG;
+		
+		if ((nextLevel & SC_FOLDLEVELHEADERFLAG) && (nextLevel == prevLevel))
+			styler.SetLevel(curLine-1, prevLevel & ~SC_FOLDLEVELHEADERFLAG);
+
+		styler.SetLevel(curLine, nextLevel);
+		prevLevel = nextLevel;
+		
+		curLineStart = styler.LineStart(++curLine);
+	} while (static_cast<int>(startPos) + length > curLineStart);
+}
+
 
 static void ColourisePropsLine(
     char *lineBuffer,
@@ -427,14 +477,14 @@ static void ColouriseErrorListLine(
 		styler.ColourTo(endPos, SCE_ERR_DIFF_ADDITION);
 	} else if (lineBuffer[0] == '-' && lineBuffer[1] == '-' && lineBuffer[2] == '-') {
 		styler.ColourTo(endPos, SCE_ERR_DIFF_MESSAGE);
+	} else if (lineBuffer[0] == '-') {
+		styler.ColourTo(endPos, SCE_ERR_DIFF_DELETION);
 	} else if (strstart(lineBuffer, "cf90-")) {
 		// Absoft Pro Fortran 90/95 v8.2 error and/or warning message
 		styler.ColourTo(endPos, SCE_ERR_ABSF);
 	} else if (strstart(lineBuffer, "fortcom:")) {
 		// Intel Fortran Compiler v8.0 error/warning message
 		styler.ColourTo(endPos, SCE_ERR_IFORT);
-	} else if (lineBuffer[0] == '-') {
-		styler.ColourTo(endPos, SCE_ERR_DIFF_DELETION);
 	} else if (strstr(lineBuffer, "File \"") && strstr(lineBuffer, ", line ")) {
 		styler.ColourTo(endPos, SCE_ERR_PYTHON);
 	} else if (strstr(lineBuffer, " in ") && strstr(lineBuffer, " on line ")) {
@@ -456,7 +506,7 @@ static void ColouriseErrorListLine(
 	           (strstr(lineBuffer, "at line " ) < (lineBuffer + lengthLine)) &&
 	           strstr(lineBuffer, "file ") &&
 	           (strstr(lineBuffer, "file ") < (lineBuffer + lengthLine))) {
-		// Lua error message
+		// Lua 4 error message
 		styler.ColourTo(endPos, SCE_ERR_LUA);
 	} else if (strstr(lineBuffer, " at " ) &&
 	           (strstr(lineBuffer, " at " ) < (lineBuffer + lengthLine)) &&
@@ -478,6 +528,8 @@ static void ColouriseErrorListLine(
 		// Look for Microsoft <filename>(line) :message
 		// Look for Microsoft <filename>(line,pos)message
 		// Look for CTags \tmessage
+		// Look for Lua 5 traceback \t<filename>:<line>:message
+		bool initialTab = (lineBuffer[0] == '\t');
 		int state = 0;
 		for (unsigned int i = 0; i < lengthLine; i++) {
 			char ch = lineBuffer[i];
@@ -486,17 +538,17 @@ static void ColouriseErrorListLine(
 				chNext = lineBuffer[i+1];
 			if (state == 0) {
 				if (ch == ':') {
-					// May be GCC
+					// May be GCC, or might be Lua 5 (Lua traceback same but with tab prefix)
 					if ((chNext != '\\') && (chNext != '/')) {
 						// This check is not completely accurate as may be on
 						// GTK+ with a file name that includes ':'.
 						state = 1;
 					}
-				} else if ((ch == '(') && Is1To9(chNext)) {
+				} else if ((ch == '(') && Is1To9(chNext) && (!initialTab)) {
 					// May be Microsoft
-					// Check againt '0' often removes phone numbers
+					// Check against '0' often removes phone numbers
 					state = 10;
-				} else if (ch == '\t') {
+				} else if ((ch == '\t') && (!initialTab)) {
 					// May be CTags
 					state = 20;
 				}
@@ -520,10 +572,11 @@ static void ColouriseErrorListLine(
 					state = unRecognized;
 				}
 			} else if (state == 12) {
-				if ((ch == ' ') && (chNext == ':'))
+				if ((ch == ' ') && (chNext == ':')) {
 					state = 13;
-				else
+				} else {
 					state = unRecognized;
+				}
 			} else if (state == 14) {
 				if (ch == ')') {
 					state = 15;
@@ -548,7 +601,7 @@ static void ColouriseErrorListLine(
 			styler.ColourTo(endPos, SCE_ERR_GCC);
 		} else if ((state == 13) || (state == 14) || (state == 15)) {
 			styler.ColourTo(endPos, SCE_ERR_MS);
-		} else if (((state == 22) || (state == 24)) && (lineBuffer[0] != '\t')) {
+		} else if ((state == 22) || (state == 24)) {
 			styler.ColourTo(endPos, SCE_ERR_CTAG);
 		} else {
 			styler.ColourTo(endPos, SCE_ERR_DEFAULT);
@@ -696,7 +749,7 @@ static void ColouriseNullDoc(unsigned int startPos, int length, int, WordList *[
 }
 
 LexerModule lmBatch(SCLEX_BATCH, ColouriseBatchDoc, "batch", 0, batchWordListDesc);
-LexerModule lmDiff(SCLEX_DIFF, ColouriseDiffDoc, "diff", 0, emptyWordListDesc);
+LexerModule lmDiff(SCLEX_DIFF, ColouriseDiffDoc, "diff", FoldDiffDoc, emptyWordListDesc);
 LexerModule lmProps(SCLEX_PROPERTIES, ColourisePropsDoc, "props", FoldPropsDoc, emptyWordListDesc);
 LexerModule lmMake(SCLEX_MAKEFILE, ColouriseMakeDoc, "makefile", 0, emptyWordListDesc);
 LexerModule lmErrorList(SCLEX_ERRORLIST, ColouriseErrorListDoc, "errorlist", 0, emptyWordListDesc);

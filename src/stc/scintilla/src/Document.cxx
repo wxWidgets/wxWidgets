@@ -50,13 +50,14 @@ Document::Document() {
 	stylingBits = 5;
 	stylingBitsMask = 0x1F;
 	stylingMask = 0;
-	SetDefaultCharClasses();
+	SetDefaultCharClasses(true);
 	endStyled = 0;
 	styleClock = 0;
 	enteredCount = 0;
 	enteredReadOnlyCount = 0;
 	tabInChars = 8;
 	indentInChars = 0;
+	actualIndentInChars = 8;
 	useTabs = true;
 	tabIndents = true;
 	backspaceUnindents = false;
@@ -206,7 +207,7 @@ int Document::GetLastChild(int lineParent, int level) {
 }
 
 int Document::GetFoldParent(int line) {
-	int level = GetLevel(line);
+	int level = GetLevel(line) & SC_FOLDLEVELNUMBERMASK;
 	int lineLook = line - 1;
 	while ((lineLook > 0) && (
 	            (!(GetLevel(lineLook) & SC_FOLDLEVELHEADERFLAG)) ||
@@ -379,6 +380,9 @@ bool Document::DeleteChars(int pos, int len) {
 	return !cb.IsReadOnly();
 }
 
+/**
+ * Insert a styled string (char/style pairs) with a length.
+ */
 bool Document::InsertStyledString(int position, char *s, int insertLength) {
 	if (cb.IsReadOnly() && enteredReadOnlyCount == 0) {
 		enteredReadOnlyCount++;
@@ -498,6 +502,9 @@ int Document::Redo() {
 	return newPos;
 }
 
+/**
+ * Insert a single character.
+ */
 bool Document::InsertChar(int pos, char ch) {
 	char chs[2];
 	chs[0] = ch;
@@ -505,12 +512,16 @@ bool Document::InsertChar(int pos, char ch) {
 	return InsertStyledString(pos*2, chs, 2);
 }
 
-// Insert a null terminated string
+/**
+ * Insert a null terminated string.
+ */
 bool Document::InsertString(int position, const char *s) {
 	return InsertString(position, s, strlen(s));
 }
 
-// Insert a string with a length
+/**
+ * Insert a string with a length.
+ */
 bool Document::InsertString(int position, const char *s, size_t insertLength) {
 	bool changed = false;
 	char *sWithStyle = new char[insertLength * 2];
@@ -1163,21 +1174,21 @@ void Document::ChangeCase(Range r, bool makeUpperCase) {
 	}
 }
 
-void Document::SetDefaultCharClasses() {
+void Document::SetDefaultCharClasses(bool includeWordClass) {
 	// Initialize all char classes to default values
 	for (int ch = 0; ch < 256; ch++) {
 		if (ch == '\r' || ch == '\n')
 			charClass[ch] = ccNewLine;
 		else if (ch < 0x20 || ch == ' ')
 			charClass[ch] = ccSpace;
-		else if (ch >= 0x80 || isalnum(ch) || ch == '_')
+		else if (includeWordClass && (ch >= 0x80 || isalnum(ch) || ch == '_'))
 			charClass[ch] = ccWord;
 		else
 			charClass[ch] = ccPunctuation;
 	}
 }
 
-void Document::SetCharClasses(unsigned char *chars, charClassification newCharClass) {
+void Document::SetCharClasses(const unsigned char *chars, charClassification newCharClass) {
 	// Apply the newCharClass to the specifed chars
 	if (chars) {
 		while (*chars) {
@@ -1246,16 +1257,20 @@ bool Document::SetStyles(int length, char *styles) {
 
 bool Document::EnsureStyledTo(int pos) {
 	if (pos > GetEndStyled()) {
-		styleClock++;
-		if (styleClock > 0x100000) {
-			styleClock = 0;
-		}
+		IncrementStyleClock();
 		// Ask the watchers to style, and stop as soon as one responds.
 		for (int i = 0; pos > GetEndStyled() && i < lenWatchers; i++) {
 			watchers[i].watcher->NotifyStyleNeeded(this, watchers[i].userData, pos);
 		}
 	}
 	return pos <= GetEndStyled();
+}
+
+void Document::IncrementStyleClock() {
+	styleClock++;
+	if (styleClock > 0x100000) {
+		styleClock = 0;
+	}
 }
 
 bool Document::AddWatcher(DocWatcher *watcher, void *userData) {

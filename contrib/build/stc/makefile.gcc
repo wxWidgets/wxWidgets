@@ -77,6 +77,14 @@ STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_LexTeX.o \
 	$(OBJS)\stcdll_LexVB.o \
 	$(OBJS)\stcdll_LexYAML.o \
+	$(OBJS)\stcdll_LexAPDL.o \
+	$(OBJS)\stcdll_LexAU3.o \
+	$(OBJS)\stcdll_LexBash.o \
+	$(OBJS)\stcdll_LexGui4Cli.o \
+	$(OBJS)\stcdll_LexKix.o \
+	$(OBJS)\stcdll_LexMSSQL.o \
+	$(OBJS)\stcdll_LexSpecman.o \
+	$(OBJS)\stcdll_LexVerilog.o \
 	$(OBJS)\stcdll_LineMarker.o \
 	$(OBJS)\stcdll_PropSet.o \
 	$(OBJS)\stcdll_RESearch.o \
@@ -145,6 +153,14 @@ STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_LexTeX.o \
 	$(OBJS)\stclib_LexVB.o \
 	$(OBJS)\stclib_LexYAML.o \
+	$(OBJS)\stclib_LexAPDL.o \
+	$(OBJS)\stclib_LexAU3.o \
+	$(OBJS)\stclib_LexBash.o \
+	$(OBJS)\stclib_LexGui4Cli.o \
+	$(OBJS)\stclib_LexKix.o \
+	$(OBJS)\stclib_LexMSSQL.o \
+	$(OBJS)\stclib_LexSpecman.o \
+	$(OBJS)\stclib_LexVerilog.o \
 	$(OBJS)\stclib_LineMarker.o \
 	$(OBJS)\stclib_PropSet.o \
 	$(OBJS)\stclib_RESearch.o \
@@ -457,6 +473,30 @@ $(OBJS)\stcdll_LexVB.o: ../../src/stc/scintilla/src/LexVB.cxx
 $(OBJS)\stcdll_LexYAML.o: ../../src/stc/scintilla/src/LexYAML.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
+$(OBJS)\stcdll_LexAPDL.o: ../../src/stc/scintilla/src/LexAPDL.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexAU3.o: ../../src/stc/scintilla/src/LexAU3.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexBash.o: ../../src/stc/scintilla/src/LexBash.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexGui4Cli.o: ../../src/stc/scintilla/src/LexGui4Cli.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexKix.o: ../../src/stc/scintilla/src/LexKix.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexMSSQL.o: ../../src/stc/scintilla/src/LexMSSQL.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexSpecman.o: ../../src/stc/scintilla/src/LexSpecman.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexVerilog.o: ../../src/stc/scintilla/src/LexVerilog.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
 $(OBJS)\stcdll_LineMarker.o: ../../src/stc/scintilla/src/LineMarker.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
@@ -638,6 +678,30 @@ $(OBJS)\stclib_LexVB.o: ../../src/stc/scintilla/src/LexVB.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexYAML.o: ../../src/stc/scintilla/src/LexYAML.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexAPDL.o: ../../src/stc/scintilla/src/LexAPDL.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexAU3.o: ../../src/stc/scintilla/src/LexAU3.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexBash.o: ../../src/stc/scintilla/src/LexBash.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexGui4Cli.o: ../../src/stc/scintilla/src/LexGui4Cli.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexKix.o: ../../src/stc/scintilla/src/LexKix.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexMSSQL.o: ../../src/stc/scintilla/src/LexMSSQL.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexSpecman.o: ../../src/stc/scintilla/src/LexSpecman.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexVerilog.o: ../../src/stc/scintilla/src/LexVerilog.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LineMarker.o: ../../src/stc/scintilla/src/LineMarker.cxx

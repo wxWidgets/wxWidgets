@@ -49,7 +49,7 @@ void CallTip::RefreshColourPalette(Palette &pal, bool want) {
 }
 
 static bool IsArrowCharacter(char ch) {
-	return (ch >= 0) && (ch <= '\002');
+	return (ch == 0) || (ch == '\001') || (ch == '\002');
 }
 
 void CallTip::DrawChunk(Surface *surface, int &x, const char *s,

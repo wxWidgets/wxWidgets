@@ -627,21 +627,11 @@ void CellBuffer::RoomFor(int insertionLength) {
 	//Platform::DebugPrintf("need room %d %d\n", gaplen, insertionLength);
 	if (gaplen <= insertionLength) {
 		//Platform::DebugPrintf("need room %d %d\n", gaplen, insertionLength);
-		GapTo(length);
 		if (growSize * 6 < size)
 			growSize *= 2;
 		int newSize = size + insertionLength + growSize;
-		//Platform::DebugPrintf("moved gap %d\n", newSize);
-		char *newBody = new char[newSize];
-		memcpy(newBody, body, size);
-		delete []body;
-		body = newBody;
-		gaplen += newSize - size;
-		part2body = body + gaplen;
-		size = newSize;
-		//Platform::DebugPrintf("end need room %d %d - size=%d length=%d\n", gaplen, insertionLength,size,length);
+		Allocate(newSize);
 	}
-
 }
 
 // To make it easier to write code that uses ByteAt, a position outside the range of the buffer
@@ -789,6 +779,19 @@ int CellBuffer::ByteLength() {
 
 int CellBuffer::Length() {
 	return ByteLength() / 2;
+}
+
+void CellBuffer::Allocate(int newSize) {
+	if (newSize > length) {
+		GapTo(length);
+		char *newBody = new char[newSize];
+		memcpy(newBody, body, length);
+		delete []body;
+		body = newBody;
+		gaplen += newSize - size;
+		part2body = body + gaplen;
+		size = newSize;
+	}
 }
 
 int CellBuffer::Lines() {

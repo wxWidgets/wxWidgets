@@ -53,7 +53,7 @@
 ##     position -> integer position in a document
 ##     colour -> colour integer containing red, green and blue bytes.
 ##     string -> pointer to const character
-##     stringresult -> pointer to character
+##     stringresult -> pointer to character, NULL-> return size of result
 ##     cells -> pointer to array of cells, each cell containing a style byte and character byte
 ##     textrange -> range of a min and a max position with an output string
 ##     findtext -> searchrange, text -> foundposition
@@ -70,11 +70,13 @@
 ## Client code should ignore definitions containing types it does not understand, except
 ## for possibly #defining the constants
 
+## Line numbers and positions start at 0.
 ## String arguments may contain NUL ('\0') characters where the calls provide a length
 ## argument and retrieve NUL characters. All retrieved strings except for those retrieved
 ## by GetLine also have a NUL appended but client code should calculate the size that
 ## will be returned rather than relying upon the NUL whenever possible. Allow for the
-## extra NUL character when allocating buffers.
+## extra NUL character when allocating buffers. The size to allocate for a stringresult
+## can be determined by calling with a NULL (0) pointer.
 
 cat Basics
 
@@ -87,7 +89,7 @@ val SCI_START=2000
 val SCI_OPTIONAL_START=3000
 val SCI_LEXER_START=4000
 
-# Add text to the document.
+# Add text to the document at current position.
 fun void AddText=2001(int length, string text)
 
 # Add array of cells to document.
@@ -102,7 +104,7 @@ fun void ClearAll=2004(,)
 # Set all style bytes to 0, remove all folding information.
 fun void ClearDocumentStyle=2005(,)
 
-# The number of characters in the document.
+# Returns the number of characters in the document.
 get int GetLength=2006(,)
 
 # Returns the character byte at the position.
@@ -999,6 +1001,34 @@ set void SetWrapMode=2268(int mode,)
 # Retrieve whether text is word wrapped.
 get int GetWrapMode=2269(,)
 
+enu WrapVisualFlag=SC_WRAPVISUALFLAG_
+val SC_WRAPVISUALFLAG_NONE=0x0000
+val SC_WRAPVISUALFLAG_END=0x0001
+val SC_WRAPVISUALFLAG_START=0x0002
+
+# Set the display mode of visual flags for wrapped lines.
+set void SetWrapVisualFlags=2460(int wrapVisualFlags,)
+
+# Retrive the display mode of visual flags for wrapped lines.
+get int GetWrapVisualFlags=2461(,)
+
+enu WrapVisualLocation=SC_WRAPVISUALFLAGLOC_
+val SC_WRAPVISUALFLAGLOC_DEFAULT=0x0000
+val SC_WRAPVISUALFLAGLOC_END_BY_TEXT=0x0001
+val SC_WRAPVISUALFLAGLOC_START_BY_TEXT=0x0002
+
+# Set the location of visual flags for wrapped lines.
+set void SetWrapVisualFlagsLocation=2462(int wrapVisualFlagsLocation,)
+
+# Retrive the location of visual flags for wrapped lines.
+get int GetWrapVisualFlagsLocation=2463(,)
+
+# Set the start indent for wrapped lines.
+set void SetWrapStartIndent=2464(int indent,)
+
+# Retrive the start indent for wrapped lines.
+get int GetWrapStartIndent=2465(,)
+
 enu LineCache=SC_CACHE_
 val SC_CACHE_NONE=0
 val SC_CACHE_CARET=1
@@ -1550,6 +1580,9 @@ fun void SetCharsDefault=2444(,)
 # Get currently selected item position in the auto-completion list
 fun int AutoCGetCurrent=2445(,)
 
+# Enlarge the document to a particular size of text bytes.
+fun void Allocate=2446(int bytes,)
+
 # Start notifying the container of all key presses and commands.
 fun void StartRecord=3001(,)
 
@@ -1692,6 +1725,14 @@ val SCLEX_POWERBASIC=51
 val SCLEX_FORTH=52
 val SCLEX_ERLANG=53
 val SCLEX_OCTAVE=54
+val SCLEX_MSSQL=55
+val SCLEX_VERILOG=56
+val SCLEX_KIX=57
+val SCLEX_GUI4CLI=58
+val SCLEX_SPECMAN=59
+val SCLEX_AU3=60
+val SCLEX_APDL=61
+val SCLEX_BASH=62
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -1840,6 +1881,8 @@ val SCE_HP_CLASSNAME=99
 val SCE_HP_DEFNAME=100
 val SCE_HP_OPERATOR=101
 val SCE_HP_IDENTIFIER=102
+# PHP
+val SCE_HPHP_COMPLEX_VARIABLE=104
 # ASP Python
 val SCE_HPA_START=105
 val SCE_HPA_DEFAULT=106
@@ -1914,6 +1957,8 @@ val SCE_B_STRINGEOL=9
 val SCE_B_KEYWORD2=10
 val SCE_B_KEYWORD3=11
 val SCE_B_KEYWORD4=12
+val SCE_B_CONSTANT=13
+val SCE_B_ASM=14
 # Lexical states for SCLEX_PROPERTIES
 lex Properties=SCLEX_PROPERTIES SCE_PROPS_
 val SCE_PROPS_DEFAULT=0
@@ -1971,6 +2016,7 @@ val SCE_ERR_ELF=15
 val SCE_ERR_IFC=16
 val SCE_ERR_IFORT=17
 val SCE_ERR_ABSF=18
+val SCE_ERR_TIDY=19
 # Lexical states for SCLEX_BATCH
 lex Batch=SCLEX_BATCH SCE_BAT_
 val SCE_BAT_DEFAULT=0
@@ -2266,6 +2312,7 @@ val SCE_NSIS_SUBSECTIONDEF=10
 val SCE_NSIS_IFDEFINEDEF=11
 val SCE_NSIS_MACRODEF=12
 val SCE_NSIS_STRINGVAR=13
+val SCE_NSIS_NUMBER=14
 # Lexical states for SCLEX_MMIXAL
 lex MMIXAL=SCLEX_MMIXAL SCE_MMIXAL_
 val SCE_MMIXAL_LEADWS=0
@@ -2358,7 +2405,124 @@ val SCE_ERLANG_NODE_NAME=13
 val SCE_ERLANG_UNKNOWN=31
 # Lexical states for SCLEX_OCTAVE are identical to MatLab
 lex Octave=SCLEX_OCTAVE SCE_MATLAB_
-
+# Lexical states for SCLEX_MSSQL
+lex MSSQL=SCLEX_MSSQL SCE_MSSQL_
+val SCE_MSSQL_DEFAULT=0
+val SCE_MSSQL_COMMENT=1
+val SCE_MSSQL_LINE_COMMENT=2
+val SCE_MSSQL_NUMBER=3
+val SCE_MSSQL_STRING=4
+val SCE_MSSQL_OPERATOR=5
+val SCE_MSSQL_IDENTIFIER=6
+val SCE_MSSQL_VARIABLE=7
+val SCE_MSSQL_COLUMN_NAME=8
+val SCE_MSSQL_STATEMENT=9
+val SCE_MSSQL_DATATYPE=10
+val SCE_MSSQL_SYSTABLE=11
+val SCE_MSSQL_GLOBAL_VARIABLE=12
+val SCE_MSSQL_FUNCTION=13
+val SCE_MSSQL_STORED_PROCEDURE=14
+val SCE_MSSQL_DEFAULT_PREF_DATATYPE=15
+val SCE_MSSQL_COLUMN_NAME_2=16
+# Lexical states for SCLEX_VERILOG
+lex Verilog=SCLEX_VERILOG SCE_V_
+val SCE_V_DEFAULT=0
+val SCE_V_COMMENT=1
+val SCE_V_COMMENTLINE=2
+val SCE_V_COMMENTLINEBANG=3
+val SCE_V_NUMBER=4
+val SCE_V_WORD=5
+val SCE_V_STRING=6
+val SCE_V_WORD2=7
+val SCE_V_WORD3=8
+val SCE_V_PREPROCESSOR=9
+val SCE_V_OPERATOR=10
+val SCE_V_IDENTIFIER=11
+val SCE_V_STRINGEOL=12
+val SCE_V_USER=19
+# Lexical states for SCLEX_KIX
+lex Kix=SCLEX_KIX SCE_KIX_
+val SCE_KIX_DEFAULT=0
+val SCE_KIX_COMMENT=1
+val SCE_KIX_STRING1=2
+val SCE_KIX_STRING2=3
+val SCE_KIX_NUMBER=4
+val SCE_KIX_VAR=5
+val SCE_KIX_MACRO=6
+val SCE_KIX_KEYWORD=7
+val SCE_KIX_FUNCTIONS=8
+val SCE_KIX_OPERATOR=9
+val SCE_KIX_IDENTIFIER=31
+# Lexical states for SCLEX_GUI4CLI
+val SCE_GC_DEFAULT=0
+val SCE_GC_COMMENTLINE=1
+val SCE_GC_COMMENTBLOCK=2
+val SCE_GC_GLOBAL=3
+val SCE_GC_EVENT=4
+val SCE_GC_ATTRIBUTE=5
+val SCE_GC_CONTROL=6
+val SCE_GC_COMMAND=7
+val SCE_GC_STRING=8
+val SCE_GC_OPERATOR=9
+# Lexical states for SCLEX_SPECMAN
+lex Specman=SCLEX_SPECMAN SCE_SN_
+val SCE_SN_DEFAULT=0
+val SCE_SN_CODE=1
+val SCE_SN_COMMENTLINE=2
+val SCE_SN_COMMENTLINEBANG=3
+val SCE_SN_NUMBER=4
+val SCE_SN_WORD=5
+val SCE_SN_STRING=6
+val SCE_SN_WORD2=7
+val SCE_SN_WORD3=8
+val SCE_SN_PREPROCESSOR=9
+val SCE_SN_OPERATOR=10
+val SCE_SN_IDENTIFIER=11
+val SCE_SN_STRINGEOL=12
+val SCE_SN_REGEXTAG=13
+val SCE_SN_SIGNAL=14
+val SCE_SN_USER=19
+# Lexical states for SCLEX_AU3
+lex Au3=SCLEX_AU3 SCE_AU3_
+val SCE_AU3_DEFAULT=0
+val SCE_AU3_COMMENT=1
+val SCE_AU3_COMMENTBLOCK=2
+val SCE_AU3_NUMBER=3
+val SCE_AU3_FUNCTION=4
+val SCE_AU3_KEYWORD=5
+val SCE_AU3_MACRO=6
+val SCE_AU3_STRING=7
+val SCE_AU3_OPERATOR=8
+val SCE_AU3_VARIABLE=9
+val SCE_AU3_SENT=10
+val SCE_AU3_PREPROCESSOR=11
+# Lexical states for SCLEX_APDL
+lex APDL=SCLEX_APDL SCE_APDL_
+val SCE_APDL_DEFAULT=0
+val SCE_APDL_COMMENT=1
+val SCE_APDL_COMMENTBLOCK=2
+val SCE_APDL_NUMBER=3
+val SCE_APDL_STRING=4
+val SCE_APDL_WORD=5
+val SCE_APDL_COMMAND=6
+val SCE_APDL_PROCESSOR=7
+val SCE_APDL_FUNCTION=8
+# Lexical states for SCLEX_BASH
+lex Bash=SCLEX_BASH SCE_SH_
+val SCE_SH_DEFAULT=0
+val SCE_SH_ERROR=1
+val SCE_SH_COMMENTLINE=2
+val SCE_SH_NUMBER=3
+val SCE_SH_WORD=4
+val SCE_SH_STRING=5
+val SCE_SH_CHARACTER=6
+val SCE_SH_OPERATOR=7
+val SCE_SH_IDENTIFIER=8
+val SCE_SH_SCALAR=9
+val SCE_SH_PARAM=10
+val SCE_SH_BACKTICKS=11
+val SCE_SH_HERE_DELIM=12
+val SCE_SH_HERE_Q=13
 # Events
 
 evt void StyleNeeded=2000(int position)

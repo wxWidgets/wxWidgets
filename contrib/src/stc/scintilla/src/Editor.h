@@ -63,7 +63,7 @@ public:
 	bool containsCaret;
 	int edgeColumn;
 	char *chars;
-	char *styles;
+	unsigned char *styles;
 	char *indicators;
 	int *positions;
 	char bracePreviousStyles[2];
@@ -134,20 +134,27 @@ public:
 	char *s;
 	int len;
 	bool rectangular;
-	SelectionText() : s(0), len(0), rectangular(false) {}
+	int codePage;
+	int characterSet;
+	SelectionText() : s(0), len(0), rectangular(false), codePage(0), characterSet(0) {}
 	~SelectionText() {
-		Set(0, 0);
+		Free();
 	}
-	void Set(char *s_, int len_, bool rectangular_=false) {
+	void Free() {
+		Set(0, 0, 0, 0, false);
+	}
+	void Set(char *s_, int len_, int codePage_, int characterSet_, bool rectangular_) {
 		delete []s;
 		s = s_;
 		if (s)
 			len = len_;
 		else
 			len = 0;
+		codePage = codePage_;
+		characterSet = characterSet_;
 		rectangular = rectangular_;
 	}
-	void Copy(const char *s_, int len_, bool rectangular_=false) {
+	void Copy(const char *s_, int len_, int codePage_, int characterSet_, bool rectangular_) {
 		delete []s;
 		s = new char[len_];
 		if (s) {
@@ -158,7 +165,12 @@ public:
 		} else {
 			len = 0;
 		}
+		codePage = codePage_;
+		characterSet = characterSet_;
 		rectangular = rectangular_;
+	}
+	void Copy(const SelectionText &other) {
+		Copy(other.s, other.len, other.codePage, other.characterSet, other.rectangular);
 	}
 };
 
@@ -293,6 +305,10 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int wrapWidth;
 	int docLineLastWrapped;
 	int docLastLineToWrap;
+	int wrapVisualFlags;
+	int wrapVisualFlagsLocation;
+	int wrapVisualStartIndent;
+	int actualWrapVisualStartIndent;
 
 	Document *pdoc;
 
@@ -365,9 +381,11 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 		int width=LineLayout::wrapWidthInfinite);
 	ColourAllocated TextBackground(ViewStyle &vsDraw, bool overrideBackground, ColourAllocated background, bool inSelection, bool inHotspot, int styleMain, int i, LineLayout *ll);
 	void DrawIndentGuide(Surface *surface, int lineVisible, int lineHeight, int start, PRectangle rcSegment, bool highlight);
+	void DrawWrapMarker(Surface *surface, PRectangle rcPlace, bool isEndMarker, ColourAllocated wrapColour);
 	void DrawEOL(Surface *surface, ViewStyle &vsDraw, PRectangle rcLine, LineLayout *ll,
 		int line, int lineEnd, int xStart, int subLine, int subLineStart,
-		bool overrideBackground, ColourAllocated background);
+		bool overrideBackground, ColourAllocated background,
+		bool drawWrapMark, ColourAllocated wrapColour);
 	void DrawLine(Surface *surface, ViewStyle &vsDraw, int line, int lineVisible, int xStart,
 		PRectangle rcLine, LineLayout *ll, int subLine=0);
 	void RefreshPixMaps(Surface *surfaceWindow);

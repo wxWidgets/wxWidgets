@@ -98,6 +98,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	edgecolour.desired = source.edgecolour.desired;
 	edgeState = source.edgeState;
 	caretWidth = source.caretWidth;
+	someStylesProtected = false;
 	leftMarginWidth = source.leftMarginWidth;
 	rightMarginWidth = source.rightMarginWidth;
 	for (int i=0;i < margins; i++) {
@@ -111,7 +112,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	viewIndentationGuides = source.viewIndentationGuides;
 	viewEOL = source.viewEOL;
 	showMarkedLines = source.showMarkedLines;
-        extraFontFlag = source.extraFontFlag;
+	extraFontFlag = source.extraFontFlag;
 }
 
 ViewStyle::~ViewStyle() {
@@ -193,7 +194,7 @@ void ViewStyle::Init() {
 	viewIndentationGuides = false;
 	viewEOL = false;
 	showMarkedLines = true;
-        extraFontFlag = false;
+	extraFontFlag = false;
 }
 
 void ViewStyle::RefreshColourPalette(Palette &pal, bool want) {

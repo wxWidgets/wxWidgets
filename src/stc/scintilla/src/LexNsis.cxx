@@ -2,9 +2,9 @@
 /** @file LexNsis.cxx
  ** Lexer for NSIS
  **/
-// Copyright 2003 by Angelo Mandato <angelo@spaceblue.com>
+// Copyright 2003, 2004 by Angelo Mandato <angelo [at] spaceblue [dot] com>
+// Last Updated: 02/22/2004
 // The License.txt file describes the conditions under which this software may be distributed.
-
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -20,8 +20,8 @@
 #include "SciLexer.h"
 
 /*
-// Put in SciLexer.h
-#define SCLEX_NSIS 34
+// located in SciLexer.h
+#define SCLEX_NSIS 43
 
 #define SCE_NSIS_DEFAULT 0
 #define SCE_NSIS_COMMENT 1
@@ -37,10 +37,84 @@
 #define SCE_NSIS_IFDEFINEDEF 11
 #define SCE_NSIS_MACRODEF 12
 #define SCE_NSIS_STRINGVAR 13
+#define SCE_NSIS_NUMBER 14
 */
 
-static int classifyWordNsis(unsigned int start, unsigned int end, WordList *keywordLists[], Accessor &styler)
+static bool isNsisNumber(char ch)
 {
+  return (ch >= '0' && ch <= '9');
+}
+
+static bool isNsisChar(char ch)
+{
+  return (ch == '.' ) || (ch == '_' ) || isNsisNumber(ch) || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
+}
+
+static bool isNsisLetter(char ch)
+{
+  return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
+}
+
+static int NsisCmp( char *s1, char *s2, bool bIgnoreCase )
+{
+  if( bIgnoreCase )
+     return CompareCaseInsensitive( s1, s2);
+
+  return strcmp( s1, s2 );
+}
+
+static int calculateFoldNsis(unsigned int start, unsigned int end, int foldlevel, Accessor &styler )
+{
+  // If the word is too long, it is not what we are looking for
+  if( end - start > 13 )
+    return foldlevel;
+
+  // Check the style at this point, if it is not valid, then return zero
+  if( styler.StyleAt(end) != SCE_NSIS_FUNCTION && styler.StyleAt(end) != SCE_NSIS_SECTIONDEF &&
+      styler.StyleAt(end) != SCE_NSIS_SUBSECTIONDEF && styler.StyleAt(end) != SCE_NSIS_IFDEFINEDEF &&
+      styler.StyleAt(end) != SCE_NSIS_MACRODEF )
+        return foldlevel;
+
+  int newFoldlevel = foldlevel;
+  bool bIgnoreCase = false;
+  if( styler.GetPropertyInt("nsis.ignorecase") == 1 )
+    bIgnoreCase = true;
+
+  char s[15]; // The key word we are looking for has atmost 13 characters
+  for (unsigned int i = 0; i < end - start + 1 && i < 14; i++)
+	{
+		s[i] = static_cast<char>( styler[ start + i ] );
+		s[i + 1] = '\0';
+	}
+
+  if( s[0] == '!' )
+  {
+    if( NsisCmp(s, "!ifndef", bIgnoreCase) == 0 || NsisCmp(s, "!ifdef", bIgnoreCase ) == 0 || NsisCmp(s, "!macro", bIgnoreCase ) == 0 )
+      newFoldlevel++;
+    else if( NsisCmp(s, "!endif", bIgnoreCase) == 0 || NsisCmp(s, "!macroend", bIgnoreCase ) == 0 )
+      newFoldlevel--;
+  }
+  else
+  {
+    if( NsisCmp(s, "Function", bIgnoreCase) == 0 || NsisCmp(s, "Section", bIgnoreCase ) == 0 || NsisCmp(s, "SubSection", bIgnoreCase ) == 0 )
+      newFoldlevel++;
+    else if( NsisCmp(s, "FunctionEnd", bIgnoreCase) == 0 || NsisCmp(s, "SectionEnd", bIgnoreCase ) == 0 || NsisCmp(s, "SubSectionEnd", bIgnoreCase ) == 0 )
+      newFoldlevel--;
+  }
+
+  return newFoldlevel;
+}
+
+static int classifyWordNsis(unsigned int start, unsigned int end, WordList *keywordLists[], Accessor &styler )
+{
+  bool bIgnoreCase = false;
+  if( styler.GetPropertyInt("nsis.ignorecase") == 1 )
+    bIgnoreCase = true;
+
+  bool bUserVars = false;
+  if( styler.GetPropertyInt("nsis.uservars") == 1 )
+    bUserVars = true;
+
 	char s[100];
 
 	WordList &Functions = *keywordLists[0];
@@ -48,27 +122,29 @@ static int classifyWordNsis(unsigned int start, unsigned int end, WordList *keyw
 	WordList &Lables = *keywordLists[2];
 	WordList &UserDefined = *keywordLists[3];
 
-	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++)
+	for (unsigned int i = 0; i < end - start + 1 && i < 99; i++)
 	{
-		s[i] = static_cast<char>( styler[ start + i ] );
+    if( bIgnoreCase )
+      s[i] = static_cast<char>( tolower(styler[ start + i ] ) );
+    else
+		  s[i] = static_cast<char>( styler[ start + i ] );
 		s[i + 1] = '\0';
 	}
 
 	// Check for special words...
-
-	if( strcmp(s, "!macro") == 0 || strcmp(s, "!macroend") == 0 ) // Covers !micro and !microend
+	if( NsisCmp(s, "!macro", bIgnoreCase ) == 0 || NsisCmp(s, "!macroend", bIgnoreCase) == 0 ) // Covers !micro and !microend
 		return SCE_NSIS_MACRODEF;
 
-	if( strcmp(s, "!ifdef") == 0 ||  strcmp(s, "!ifndef") == 0 ||  strcmp(s, "!endif") == 0 )
+	if( NsisCmp(s, "!ifdef", bIgnoreCase ) == 0 ||  NsisCmp(s, "!ifndef", bIgnoreCase) == 0 ||  NsisCmp(s, "!endif", bIgnoreCase) == 0 )
 		return SCE_NSIS_IFDEFINEDEF;
 
-	if( strcmp(s, "Section") == 0 || strcmp(s, "SectionEnd") == 0 ) // Covers Section and SectionEnd
+	if( NsisCmp(s, "Section", bIgnoreCase ) == 0 || NsisCmp(s, "SectionEnd", bIgnoreCase) == 0 ) // Covers Section and SectionEnd
 		return SCE_NSIS_SECTIONDEF;
 
-	if( strcmp(s, "SubSection") == 0 || strcmp(s, "SubSectionEnd") == 0 ) // Covers SubSection and SubSectionEnd
+	if( NsisCmp(s, "SubSection", bIgnoreCase) == 0 || NsisCmp(s, "SubSectionEnd", bIgnoreCase) == 0 ) // Covers SubSection and SubSectionEnd
 		return SCE_NSIS_SUBSECTIONDEF;
 
-	if( strcmp(s, "Function") == 0 || strcmp(s, "FunctionEnd") == 0 ) // Covers SubSection and SubSectionEnd
+	if( NsisCmp(s, "Function", bIgnoreCase) == 0 || NsisCmp(s, "FunctionEnd", bIgnoreCase) == 0 ) // Covers SubSection and SubSectionEnd
 		return SCE_NSIS_FUNCTION;
 
 	if ( Functions.InList(s) )
@@ -83,11 +159,48 @@ static int classifyWordNsis(unsigned int start, unsigned int end, WordList *keyw
 	if( UserDefined.InList(s) )
 		return SCE_NSIS_USERDEFINED;
 
-	if( strlen(s) > 2 )
+	if( strlen(s) > 3 )
 	{
 		if( s[1] == '{' && s[strlen(s)-1] == '}' )
 			return SCE_NSIS_VARIABLE;
 	}
+
+  // See if the variable is a user defined variable
+  if( s[0] == '$' && bUserVars )
+  {
+    bool bHasSimpleNsisChars = true;
+    for (unsigned int j = 1; j < end - start + 1 && j < 99; j++)
+	  {
+      if( !isNsisChar( s[j] ) )
+      {
+        bHasSimpleNsisChars = false;
+        break;
+      }
+	  }
+
+    if( bHasSimpleNsisChars )
+      return SCE_NSIS_VARIABLE;
+  }
+
+  // To check for numbers
+  if( isNsisNumber( s[0] ) )
+  {
+    bool bHasSimpleNsisNumber = true;
+    for (unsigned int j = 1; j < end - start + 1 && j < 99; j++)
+	  {
+      if( s[j] == '\0' || s[j] == '\r' || s[j] == '\n' )
+        break;
+
+      if( !isNsisNumber( s[j] ) )
+      {
+        bHasSimpleNsisNumber = false;
+        break;
+      }
+	  }
+
+    if( bHasSimpleNsisNumber )
+      return SCE_NSIS_NUMBER;
+  }
 
 	return SCE_NSIS_DEFAULT;
 }
@@ -102,24 +215,18 @@ static void ColouriseNsisDoc(unsigned int startPos, int length, int, WordList *k
 	styler.StartSegment( startPos );
 
 	char cCurrChar;
-	bool bVarInString = true;
+	bool bVarInString = false;
+  bool bClassicVarInString = false;
 
 	unsigned int i;
 	for( i = startPos; i < nLengthDoc; i++ )
 	{
 		cCurrChar = styler.SafeGetCharAt( i );
-		char cNextChar = styler.SafeGetCharAt( i+1, EOF );
-
-
+		char cNextChar = styler.SafeGetCharAt(i+1);
 
 		switch(state)
 		{
 			case SCE_NSIS_DEFAULT:
-        if( cNextChar == EOF )
-        {
-          styler.ColourTo(i,SCE_NSIS_DEFAULT);
-			    break;
-        }
 				if( cCurrChar == ';' || cCurrChar == '#' ) // we have a comment line
 				{
 					styler.ColourTo(i-1, state );
@@ -131,6 +238,7 @@ static void ColouriseNsisDoc(unsigned int startPos, int length, int, WordList *k
 					styler.ColourTo(i-1, state );
 					state = SCE_NSIS_STRINGDQ;
 					bVarInString = false;
+          bClassicVarInString = false;
 					break;
 				}
 				if( cCurrChar == '\'' )
@@ -138,6 +246,7 @@ static void ColouriseNsisDoc(unsigned int startPos, int length, int, WordList *k
 					styler.ColourTo(i-1, state );
 					state = SCE_NSIS_STRINGRQ;
 					bVarInString = false;
+          bClassicVarInString = false;
 					break;
 				}
 				if( cCurrChar == '`' )
@@ -145,19 +254,25 @@ static void ColouriseNsisDoc(unsigned int startPos, int length, int, WordList *k
 					styler.ColourTo(i-1, state );
 					state = SCE_NSIS_STRINGLQ;
 					bVarInString = false;
+          bClassicVarInString = false;
 					break;
 				}
 
 				// NSIS KeyWord,Function, Variable, UserDefined:
-				if( cCurrChar == '$' || iswordchar(cCurrChar) || cCurrChar == '!' )
+				if( cCurrChar == '$' || isNsisChar(cCurrChar) || cCurrChar == '!' )
 				{
 					styler.ColourTo(i-1,state);
 				  state = SCE_NSIS_FUNCTION;
+
+          // If it is a number, we must check and set style here first...
+          if( isNsisNumber(cCurrChar) && (cNextChar == '\t' || cNextChar == ' ' || cNextChar == '\r' || cNextChar == '\n' ) )
+              styler.ColourTo( i, SCE_NSIS_NUMBER);
+
 					break;
 				}
 				break;
 			case SCE_NSIS_COMMENT:
-				if( cNextChar == '\n' || cNextChar == '\r' || cNextChar == EOF )
+				if( cNextChar == '\n' || cNextChar == '\r' )
         {
 				  styler.ColourTo(i,state);
           state = SCE_NSIS_DEFAULT;
@@ -187,35 +302,45 @@ static void ColouriseNsisDoc(unsigned int startPos, int length, int, WordList *k
 			case SCE_NSIS_FUNCTION:
 
 				// NSIS KeyWord:
-				if( (iswordchar(cCurrChar) && !iswordchar( cNextChar) && cNextChar != '}') || cCurrChar == '}' )
+        if( cCurrChar == '$' )
+          state = SCE_NSIS_DEFAULT;
+        else if( cCurrChar == '\\' && (cNextChar == 'n' || cNextChar == 'r' || cNextChar == 't' ) )
+          state = SCE_NSIS_DEFAULT;
+				else if( (isNsisChar(cCurrChar) && !isNsisChar( cNextChar) && cNextChar != '}') || cCurrChar == '}' )
 				{
 					state = classifyWordNsis( styler.GetStartSegment(), i, keywordLists, styler);
 					styler.ColourTo( i, state);
-					state = SCE_NSIS_DEFAULT; // Everything after goes back to the default state
+					state = SCE_NSIS_DEFAULT;
 				}
-				else if( !iswordchar( cCurrChar ) && cCurrChar != '{' && cCurrChar != '}' )
+				else if( !isNsisChar( cCurrChar ) && cCurrChar != '{' && cCurrChar != '}' )
 				{
+          if( classifyWordNsis( styler.GetStartSegment(), i-1, keywordLists, styler) == SCE_NSIS_NUMBER )
+             styler.ColourTo( i-1, SCE_NSIS_NUMBER );
+
 					state = SCE_NSIS_DEFAULT;
 
-					if( cCurrChar == '"' ) // Next
+					if( cCurrChar == '"' )
 					{
 						state = SCE_NSIS_STRINGDQ;
 						bVarInString = false;
+            bClassicVarInString = false;
 					}
-					if( cCurrChar == '`' )
+					else if( cCurrChar == '`' )
 					{
 						state = SCE_NSIS_STRINGLQ;
 						bVarInString = false;
+            bClassicVarInString = false;
 					}
-					if( cCurrChar == '\'' )
+					else if( cCurrChar == '\'' )
 					{
 						state = SCE_NSIS_STRINGRQ;
 						bVarInString = false;
+            bClassicVarInString = false;
 					}
-					if( cCurrChar == '#' || cCurrChar == ';' )
+					else if( cCurrChar == '#' || cCurrChar == ';' )
+          {
 						state = SCE_NSIS_COMMENT;
-
-					styler.ColourTo( i, state);
+          }
 				}
 				break;
 		}
@@ -226,25 +351,70 @@ static void ColouriseNsisDoc(unsigned int startPos, int length, int, WordList *k
 		}
 		else if( state == SCE_NSIS_STRINGDQ || state == SCE_NSIS_STRINGLQ || state == SCE_NSIS_STRINGRQ )
 		{
-			// Check for var in String..
-			if( bVarInString && (iswordchar(cCurrChar) || cCurrChar == '}') ) // || cCurrChar == '{' ) )
-			{
-				int nWordState = classifyWordNsis( styler.GetStartSegment(), i, keywordLists, styler);
+      bool bIngoreNextDollarSign = false;
+      bool bUserVars = false;
+      if( styler.GetPropertyInt("nsis.uservars") == 1 )
+        bUserVars = true;
+
+      if( bVarInString && cCurrChar == '$' )
+      {
+        bVarInString = false;
+        bIngoreNextDollarSign = true;
+      }
+      else if( bVarInString && cCurrChar == '\\' && (cNextChar == 'n' || cNextChar == 'r' || cNextChar == 't' ) )
+      {
+        bVarInString = false;
+        bIngoreNextDollarSign = true;
+      }
+
+      // Covers "$INSTDIR and user vars like $MYVAR"
+      else if( bVarInString && !isNsisChar(cNextChar) )
+      {
+        int nWordState = classifyWordNsis( styler.GetStartSegment(), i, keywordLists, styler);
 				if( nWordState == SCE_NSIS_VARIABLE )
-				{
 					styler.ColourTo( i, SCE_NSIS_STRINGVAR);
-					bVarInString = false;
-				}
-			}
-			if( cCurrChar == '$' )
+        else if( bUserVars )
+          styler.ColourTo( i, SCE_NSIS_STRINGVAR);
+        bVarInString = false;
+      }
+      // Covers "${TEST}..."
+      else if( bClassicVarInString && cNextChar == '}' )
+      {
+        styler.ColourTo( i+1, SCE_NSIS_STRINGVAR);
+				bClassicVarInString = false;
+      }
+
+      // Start of var in string
+			if( !bIngoreNextDollarSign && cCurrChar == '$' && cNextChar == '{' )
 			{
 				styler.ColourTo( i-1, state);
-				bVarInString = true;
+				bClassicVarInString = true;
+        bVarInString = false;
 			}
+      else if( !bIngoreNextDollarSign && cCurrChar == '$' )
+      {
+        styler.ColourTo( i-1, state);
+        bVarInString = true;
+        bClassicVarInString = false;
+      }
 		}
 	}
-}
 
+  // Colourise remaining document
+  switch( state )
+  {
+    case SCE_NSIS_COMMENT:
+    case SCE_NSIS_STRINGDQ:
+    case SCE_NSIS_STRINGLQ:
+    case SCE_NSIS_STRINGRQ:
+    case SCE_NSIS_VARIABLE:
+    case SCE_NSIS_STRINGVAR:
+      styler.ColourTo(nLengthDoc-1,state); break;
+
+    default:
+      styler.ColourTo(nLengthDoc-1,SCE_NSIS_DEFAULT); break;
+  }
+}
 
 static void FoldNsisDoc(unsigned int startPos, int length, int, WordList *[], Accessor &styler)
 {
@@ -252,87 +422,57 @@ static void FoldNsisDoc(unsigned int startPos, int length, int, WordList *[], Ac
 	if( styler.GetPropertyInt("fold") == 0 )
 		return;
 
-	unsigned int endPos = startPos + length;
-	int lineCurrent = styler.GetLine(startPos);
-	int levelCurrent = SC_FOLDLEVELBASE;
+  int lineCurrent = styler.GetLine(startPos);
+  unsigned int safeStartPos = styler.LineStart( lineCurrent );
+
+  bool bArg1 = true;
+  int nWordStart = -1;
+
+  int levelCurrent = SC_FOLDLEVELBASE;
 	if (lineCurrent > 0)
 		levelCurrent = styler.LevelAt(lineCurrent-1) >> 16;
 	int levelNext = levelCurrent;
-	char chNext = styler[startPos];
-	int styleNext = styler.StyleAt(startPos);
-	int style;
 
-	for (unsigned int i = startPos; i < endPos; i++)
+  for (unsigned int i = safeStartPos; i < startPos + length; i++)
 	{
-		char ch = chNext;
-		chNext = styler.SafeGetCharAt(i + 1);
-		style = styleNext;
-		styleNext = styler.StyleAt(i + 1);
-		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
-		// Functions Start: Function, Section, SubSection
-		// Functions End: FunctionEnd, SectionEnd, SubSectionEnd
-		// Label Start: !ifdef, !ifndef
-		// Label End: !endif
+    char chCurr = styler.SafeGetCharAt(i);
 
-		if( style == SCE_NSIS_FUNCTION )
-		{
-			if( styler.Match(i, "FunctionEnd") )
-				levelNext--;
-			else if( styler.Match(i, "Function") )
-				levelNext++;
-		}
-		else if( style == SCE_NSIS_SECTIONDEF )
-		{
-			if( styler.Match(i, "SectionEnd") )
-				levelNext--;
-			else if( styler.Match(i, "Section") )
-				levelNext++;
-		}
-		else if( style == SCE_NSIS_SUBSECTIONDEF )
-		{
-			if( styler.Match(i, "SubSectionEnd") )
-				levelNext--;
-			else if( styler.Match(i, "SubSection") )
-				levelNext++;
-		}
-		else if( style == SCE_NSIS_IFDEFINEDEF )
-		{
-			if( styler.Match(i, "!endif") )
-				levelNext--;
-			else if( styler.Match(i, "!ifdef") || styler.Match(i, "!ifndef"))
-				levelNext++;
-		}
-		else if( style == SCE_NSIS_MACRODEF )
-		{
-			if( styler.Match(i, "!macroend") )
-				levelNext--;
-			else if( styler.Match(i, "!macro") )
-				levelNext++;
-		}
+    if( bArg1 ) //&& chCurr != '\n' )
+    {
+      if( nWordStart == -1 && (isNsisLetter(chCurr) || chCurr == '!') )
+        nWordStart = i;
+      else if( !isNsisLetter(chCurr) && nWordStart > -1 )
+      {
+        int newLevel = calculateFoldNsis( nWordStart, i-1, levelNext, styler );
+        if( newLevel != levelNext )
+          levelNext = newLevel;
+        bArg1 = false;
+      }
+    }
 
-		if( atEOL )
-		{
-			int levelUse = levelCurrent;
+    if( chCurr == '\n' )
+    {
+      // If we are on a new line...
+      int levelUse = levelCurrent;
 			int lev = levelUse | levelNext << 16;
 			if (levelUse < levelNext)
 				lev |= SC_FOLDLEVELHEADERFLAG;
 			if (lev != styler.LevelAt(lineCurrent))
-			{
 				styler.SetLevel(lineCurrent, lev);
-			}
+
 			lineCurrent++;
 			levelCurrent = levelNext;
-		}
-	}
+      bArg1 = true; // New line, lets look at first argument again
+      nWordStart = -1;
+    }
+  }
 
 	int levelUse = levelCurrent;
 	int lev = levelUse | levelNext << 16;
 	if (levelUse < levelNext)
 		lev |= SC_FOLDLEVELHEADERFLAG;
 	if (lev != styler.LevelAt(lineCurrent))
-	{
 		styler.SetLevel(lineCurrent, lev);
-	}
 }
 
 static const char * const nsisWordLists[] = {

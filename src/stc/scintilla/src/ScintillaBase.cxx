@@ -297,7 +297,7 @@ void ScintillaBase::AutoCompleteCharacterAdded(char ch) {
 }
 
 void ScintillaBase::AutoCompleteCharacterDeleted() {
-	if (currentPos <= ac.posStart - ac.startLen) {
+	if (currentPos < ac.posStart - ac.startLen) {
 		ac.Cancel();
 	} else if (ac.cancelAtStartPos && (currentPos <= ac.posStart)) {
 		ac.Cancel();
@@ -314,6 +314,8 @@ void ScintillaBase::AutoCompleteCompleted() {
 		ac.lb->GetValue(item, selected, sizeof(selected));
 	}
 	ac.Cancel();
+	if (item == -1)
+		return;
 
 	if (listType > 0) {
 		userListSelected = selected;

@@ -193,7 +193,7 @@ long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) {
 //       this file.  Edit stc.cpp.in or gen_iface.py instead and regenerate.
 
 
-// Add text to the document.
+// Add text to the document at current position.
 void wxStyledTextCtrl::AddText(const wxString& text) {
                     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
                     SendMsg(2001, strlen(buf), (long)(const char*)buf);
@@ -219,7 +219,7 @@ void wxStyledTextCtrl::ClearDocumentStyle() {
     SendMsg(2005, 0, 0);
 }
 
-// The number of characters in the document.
+// Returns the number of characters in the document.
 int wxStyledTextCtrl::GetLength() {
     return SendMsg(2006, 0, 0);
 }
@@ -1514,6 +1514,36 @@ int wxStyledTextCtrl::GetWrapMode() {
     return SendMsg(2269, 0, 0);
 }
 
+// Set the display mode of visual flags for wrapped lines.
+void wxStyledTextCtrl::SetWrapVisualFlags(int wrapVisualFlags) {
+    SendMsg(2460, wrapVisualFlags, 0);
+}
+
+// Retrive the display mode of visual flags for wrapped lines.
+int wxStyledTextCtrl::GetWrapVisualFlags() {
+    return SendMsg(2461, 0, 0);
+}
+
+// Set the location of visual flags for wrapped lines.
+void wxStyledTextCtrl::SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation) {
+    SendMsg(2462, wrapVisualFlagsLocation, 0);
+}
+
+// Retrive the location of visual flags for wrapped lines.
+int wxStyledTextCtrl::GetWrapVisualFlagsLocation() {
+    return SendMsg(2463, 0, 0);
+}
+
+// Set the start indent for wrapped lines.
+void wxStyledTextCtrl::SetWrapStartIndent(int indent) {
+    SendMsg(2464, indent, 0);
+}
+
+// Retrive the start indent for wrapped lines.
+int wxStyledTextCtrl::GetWrapStartIndent() {
+    return SendMsg(2465, 0, 0);
+}
+
 // Sets the degree of caching of layout information.
 void wxStyledTextCtrl::SetLayoutCache(int mode) {
     SendMsg(2272, mode, 0);
@@ -2343,6 +2373,11 @@ void wxStyledTextCtrl::SetCharsDefault() {
 // Get currently selected item position in the auto-completion list
 int wxStyledTextCtrl::AutoCompGetCurrent() {
     return SendMsg(2445, 0, 0);
+}
+
+// Enlarge the document to a particular size of text bytes.
+void wxStyledTextCtrl::Allocate(int bytes) {
+    SendMsg(2446, bytes, 0);
 }
 
 // Start notifying the container of all key presses and commands.

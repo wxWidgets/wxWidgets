@@ -67,8 +67,8 @@ Style &Style::operator=(const Style &source) {
 
 void Style::Clear(ColourDesired fore_, ColourDesired back_, int size_,
                   const char *fontName_, int characterSet_,
-                  bool bold_, bool italic_, bool eolFilled_, 
-                  bool underline_, ecaseForced caseForce_, 
+                  bool bold_, bool italic_, bool eolFilled_,
+                  bool underline_, ecaseForced caseForce_,
 		  bool visible_, bool changeable_, bool hotspot_) {
 	fore.desired = fore_;
 	back.desired = back_;
@@ -102,7 +102,7 @@ void Style::ClearTo(const Style &source) {
 		source.eolFilled,
 		source.underline,
 		source.caseForce,
-		source.visible, 
+		source.visible,
 		source.changeable,
 		source.hotspot);
 }

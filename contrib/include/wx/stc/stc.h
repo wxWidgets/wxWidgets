@@ -204,6 +204,12 @@
 #define wxSTC_TIME_FOREVER 10000000
 #define wxSTC_WRAP_NONE 0
 #define wxSTC_WRAP_WORD 1
+#define wxSTC_WRAPVISUALFLAG_NONE 0x0000
+#define wxSTC_WRAPVISUALFLAG_END 0x0001
+#define wxSTC_WRAPVISUALFLAG_START 0x0002
+#define wxSTC_WRAPVISUALFLAGLOC_DEFAULT 0x0000
+#define wxSTC_WRAPVISUALFLAGLOC_END_BY_TEXT 0x0001
+#define wxSTC_WRAPVISUALFLAGLOC_START_BY_TEXT 0x0002
 #define wxSTC_CACHE_NONE 0
 #define wxSTC_CACHE_CARET 1
 #define wxSTC_CACHE_PAGE 2
@@ -349,6 +355,14 @@
 #define wxSTC_LEX_FORTH 52
 #define wxSTC_LEX_ERLANG 53
 #define wxSTC_LEX_OCTAVE 54
+#define wxSTC_LEX_MSSQL 55
+#define wxSTC_LEX_VERILOG 56
+#define wxSTC_LEX_KIX 57
+#define wxSTC_LEX_GUI4CLI 58
+#define wxSTC_LEX_SPECMAN 59
+#define wxSTC_LEX_AU3 60
+#define wxSTC_LEX_APDL 61
+#define wxSTC_LEX_BASH 62
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -499,6 +513,9 @@
 #define wxSTC_HP_OPERATOR 101
 #define wxSTC_HP_IDENTIFIER 102
 
+// PHP
+#define wxSTC_HPHP_COMPLEX_VARIABLE 104
+
 // ASP Python
 #define wxSTC_HPA_START 105
 #define wxSTC_HPA_DEFAULT 106
@@ -572,6 +589,8 @@
 #define wxSTC_B_KEYWORD2 10
 #define wxSTC_B_KEYWORD3 11
 #define wxSTC_B_KEYWORD4 12
+#define wxSTC_B_CONSTANT 13
+#define wxSTC_B_ASM 14
 
 // Lexical states for SCLEX_PROPERTIES
 #define wxSTC_PROPS_DEFAULT 0
@@ -629,6 +648,7 @@
 #define wxSTC_ERR_IFC 16
 #define wxSTC_ERR_IFORT 17
 #define wxSTC_ERR_ABSF 18
+#define wxSTC_ERR_TIDY 19
 
 // Lexical states for SCLEX_BATCH
 #define wxSTC_BAT_DEFAULT 0
@@ -923,6 +943,7 @@
 #define wxSTC_NSIS_IFDEFINEDEF 11
 #define wxSTC_NSIS_MACRODEF 12
 #define wxSTC_NSIS_STRINGVAR 13
+#define wxSTC_NSIS_NUMBER 14
 
 // Lexical states for SCLEX_MMIXAL
 #define wxSTC_MMIXAL_LEADWS 0
@@ -1012,6 +1033,126 @@
 #define wxSTC_ERLANG_SEPARATOR 12
 #define wxSTC_ERLANG_NODE_NAME 13
 #define wxSTC_ERLANG_UNKNOWN 31
+
+// Lexical states for SCLEX_OCTAVE are identical to MatLab
+// Lexical states for SCLEX_MSSQL
+#define wxSTC_MSSQL_DEFAULT 0
+#define wxSTC_MSSQL_COMMENT 1
+#define wxSTC_MSSQL_LINE_COMMENT 2
+#define wxSTC_MSSQL_NUMBER 3
+#define wxSTC_MSSQL_STRING 4
+#define wxSTC_MSSQL_OPERATOR 5
+#define wxSTC_MSSQL_IDENTIFIER 6
+#define wxSTC_MSSQL_VARIABLE 7
+#define wxSTC_MSSQL_COLUMN_NAME 8
+#define wxSTC_MSSQL_STATEMENT 9
+#define wxSTC_MSSQL_DATATYPE 10
+#define wxSTC_MSSQL_SYSTABLE 11
+#define wxSTC_MSSQL_GLOBAL_VARIABLE 12
+#define wxSTC_MSSQL_FUNCTION 13
+#define wxSTC_MSSQL_STORED_PROCEDURE 14
+#define wxSTC_MSSQL_DEFAULT_PREF_DATATYPE 15
+#define wxSTC_MSSQL_COLUMN_NAME_2 16
+
+// Lexical states for SCLEX_VERILOG
+#define wxSTC_V_DEFAULT 0
+#define wxSTC_V_COMMENT 1
+#define wxSTC_V_COMMENTLINE 2
+#define wxSTC_V_COMMENTLINEBANG 3
+#define wxSTC_V_NUMBER 4
+#define wxSTC_V_WORD 5
+#define wxSTC_V_STRING 6
+#define wxSTC_V_WORD2 7
+#define wxSTC_V_WORD3 8
+#define wxSTC_V_PREPROCESSOR 9
+#define wxSTC_V_OPERATOR 10
+#define wxSTC_V_IDENTIFIER 11
+#define wxSTC_V_STRINGEOL 12
+#define wxSTC_V_USER 19
+
+// Lexical states for SCLEX_KIX
+#define wxSTC_KIX_DEFAULT 0
+#define wxSTC_KIX_COMMENT 1
+#define wxSTC_KIX_STRING1 2
+#define wxSTC_KIX_STRING2 3
+#define wxSTC_KIX_NUMBER 4
+#define wxSTC_KIX_VAR 5
+#define wxSTC_KIX_MACRO 6
+#define wxSTC_KIX_KEYWORD 7
+#define wxSTC_KIX_FUNCTIONS 8
+#define wxSTC_KIX_OPERATOR 9
+#define wxSTC_KIX_IDENTIFIER 31
+
+// Lexical states for SCLEX_GUI4CLI
+#define wxSTC_GC_DEFAULT 0
+#define wxSTC_GC_COMMENTLINE 1
+#define wxSTC_GC_COMMENTBLOCK 2
+#define wxSTC_GC_GLOBAL 3
+#define wxSTC_GC_EVENT 4
+#define wxSTC_GC_ATTRIBUTE 5
+#define wxSTC_GC_CONTROL 6
+#define wxSTC_GC_COMMAND 7
+#define wxSTC_GC_STRING 8
+#define wxSTC_GC_OPERATOR 9
+
+// Lexical states for SCLEX_SPECMAN
+#define wxSTC_SN_DEFAULT 0
+#define wxSTC_SN_CODE 1
+#define wxSTC_SN_COMMENTLINE 2
+#define wxSTC_SN_COMMENTLINEBANG 3
+#define wxSTC_SN_NUMBER 4
+#define wxSTC_SN_WORD 5
+#define wxSTC_SN_STRING 6
+#define wxSTC_SN_WORD2 7
+#define wxSTC_SN_WORD3 8
+#define wxSTC_SN_PREPROCESSOR 9
+#define wxSTC_SN_OPERATOR 10
+#define wxSTC_SN_IDENTIFIER 11
+#define wxSTC_SN_STRINGEOL 12
+#define wxSTC_SN_REGEXTAG 13
+#define wxSTC_SN_SIGNAL 14
+#define wxSTC_SN_USER 19
+
+// Lexical states for SCLEX_AU3
+#define wxSTC_AU3_DEFAULT 0
+#define wxSTC_AU3_COMMENT 1
+#define wxSTC_AU3_COMMENTBLOCK 2
+#define wxSTC_AU3_NUMBER 3
+#define wxSTC_AU3_FUNCTION 4
+#define wxSTC_AU3_KEYWORD 5
+#define wxSTC_AU3_MACRO 6
+#define wxSTC_AU3_STRING 7
+#define wxSTC_AU3_OPERATOR 8
+#define wxSTC_AU3_VARIABLE 9
+#define wxSTC_AU3_SENT 10
+#define wxSTC_AU3_PREPROCESSOR 11
+
+// Lexical states for SCLEX_APDL
+#define wxSTC_APDL_DEFAULT 0
+#define wxSTC_APDL_COMMENT 1
+#define wxSTC_APDL_COMMENTBLOCK 2
+#define wxSTC_APDL_NUMBER 3
+#define wxSTC_APDL_STRING 4
+#define wxSTC_APDL_WORD 5
+#define wxSTC_APDL_COMMAND 6
+#define wxSTC_APDL_PROCESSOR 7
+#define wxSTC_APDL_FUNCTION 8
+
+// Lexical states for SCLEX_BASH
+#define wxSTC_SH_DEFAULT 0
+#define wxSTC_SH_ERROR 1
+#define wxSTC_SH_COMMENTLINE 2
+#define wxSTC_SH_NUMBER 3
+#define wxSTC_SH_WORD 4
+#define wxSTC_SH_STRING 5
+#define wxSTC_SH_CHARACTER 6
+#define wxSTC_SH_OPERATOR 7
+#define wxSTC_SH_IDENTIFIER 8
+#define wxSTC_SH_SCALAR 9
+#define wxSTC_SH_PARAM 10
+#define wxSTC_SH_BACKTICKS 11
+#define wxSTC_SH_HERE_DELIM 12
+#define wxSTC_SH_HERE_Q 13
 
 
 //-----------------------------------------
@@ -1339,7 +1480,7 @@ public:
 //       and regenerate
 
 
-    // Add text to the document.
+    // Add text to the document at current position.
     void AddText(const wxString& text);
 
     // Add array of cells to document.
@@ -1354,7 +1495,7 @@ public:
     // Set all style bytes to 0, remove all folding information.
     void ClearDocumentStyle();
 
-    // The number of characters in the document.
+    // Returns the number of characters in the document.
     int GetLength();
 
     // Returns the character byte at the position.
@@ -2071,6 +2212,24 @@ public:
     // Retrieve whether text is word wrapped.
     int GetWrapMode();
 
+    // Set the display mode of visual flags for wrapped lines.
+    void SetWrapVisualFlags(int wrapVisualFlags);
+
+    // Retrive the display mode of visual flags for wrapped lines.
+    int GetWrapVisualFlags();
+
+    // Set the location of visual flags for wrapped lines.
+    void SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation);
+
+    // Retrive the location of visual flags for wrapped lines.
+    int GetWrapVisualFlagsLocation();
+
+    // Set the start indent for wrapped lines.
+    void SetWrapStartIndent(int indent);
+
+    // Retrive the start indent for wrapped lines.
+    int GetWrapStartIndent();
+
     // Sets the degree of caching of layout information.
     void SetLayoutCache(int mode);
 
@@ -2574,6 +2733,9 @@ public:
 
     // Get currently selected item position in the auto-completion list
     int AutoCompGetCurrent();
+
+    // Enlarge the document to a particular size of text bytes.
+    void Allocate(int bytes);
 
     // Start notifying the container of all key presses and commands.
     void StartRecord();

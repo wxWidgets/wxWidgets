@@ -60,6 +60,16 @@
         scintilla/src/LexTeX.cxx
         scintilla/src/LexVB.cxx
         scintilla/src/LexYAML.cxx
+	
+        scintilla/src/LexAPDL.cxx
+        scintilla/src/LexAU3.cxx
+        scintilla/src/LexBash.cxx
+        scintilla/src/LexGui4Cli.cxx
+        scintilla/src/LexKix.cxx
+        scintilla/src/LexMSSQL.cxx
+        scintilla/src/LexSpecman.cxx
+        scintilla/src/LexVerilog.cxx
+
         scintilla/src/LineMarker.cxx
         scintilla/src/PropSet.cxx
         scintilla/src/RESearch.cxx

@@ -87,7 +87,7 @@ public:
 			userData = 0;
 		}
 	};
-	
+
 	enum charClassification { ccSpace, ccNewLine, ccWord, ccPunctuation };
 
 private:
@@ -116,6 +116,7 @@ public:
 	int dbcsCodePage;
 	int tabInChars;
 	int indentInChars;
+	int actualIndentInChars;
 	bool useTabs;
 	bool tabIndents;
 	bool backspaceUnindents;
@@ -193,6 +194,7 @@ public:
 	int NextWordStart(int pos, int delta);
 	int NextWordEnd(int pos, int delta);
 	int Length() { return cb.Length(); }
+	void Allocate(int newSize) { cb.Allocate(newSize*2); }
 	long FindText(int minPos, int maxPos, const char *s,
 		bool caseSensitive, bool word, bool wordStart, bool regExp, bool posix, int *length);
 	long FindText(int iMessage, unsigned long wParam, long lParam);
@@ -200,9 +202,9 @@ public:
 	int LinesTotal();
 
 	void ChangeCase(Range r, bool makeUpperCase);
-	
-	void SetDefaultCharClasses();
-	void SetCharClasses(unsigned char *chars, charClassification newCharClass);
+
+	void SetDefaultCharClasses(bool includeWordClass);
+	void SetCharClasses(const unsigned char *chars, charClassification newCharClass);
 	void SetStylingBits(int bits);
 	void StartStyling(int position, char mask);
 	bool SetStyleFor(int length, char style);
@@ -210,6 +212,7 @@ public:
 	int GetEndStyled() { return endStyled; }
 	bool EnsureStyledTo(int pos);
 	int GetStyleClock() { return styleClock; }
+	void IncrementStyleClock();
 
 	int SetLineState(int line, int state) { return cb.SetLineState(line, state); }
 	int GetLineState(int line) { return cb.GetLineState(line); }
@@ -226,6 +229,7 @@ public:
 	int ExtendStyleRange(int pos, int delta, bool singleLine = false);
 	int ParaUp(int pos);
 	int ParaDown(int pos);
+	int IndentSize() { return actualIndentInChars; }
 
 private:
 	charClassification WordCharClass(unsigned char ch);
@@ -237,8 +241,6 @@ private:
 	void NotifyModifyAttempt();
 	void NotifySavePoint(bool atSavePoint);
 	void NotifyModified(DocModification mh);
-
-	int IndentSize() { return indentInChars ? indentInChars : tabInChars; }
 };
 
 /**

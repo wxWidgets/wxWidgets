@@ -13,6 +13,10 @@
 #include "XPM.h"
 
 static const char *NextField(const char *s) {
+	// In case there are leading spaces in the string
+	while (*s && *s == ' ') {
+		s++;
+	}
 	while (*s && *s != ' ') {
 		s++;
 	}
@@ -70,8 +74,10 @@ void XPM::Init(const char *textForm) {
 	if ((0 == memcmp(textForm, "/* X", 4)) && (0 == memcmp(textForm, "/* XPM */", 9))) {
 		// Build the lines form out of the text form
 		const char **linesForm = LinesFormFromTextForm(textForm);
-		Init(linesForm);
-		delete []linesForm;
+		if (linesForm != 0) {
+			Init(linesForm);
+			delete []linesForm;
+		}
 	} else {
 		// It is really in line form
 		Init(reinterpret_cast<const char * const *>(textForm));
@@ -190,9 +196,11 @@ const char **XPM::LinesFormFromTextForm(const char *textForm) {
 	const char **linesForm = 0;
 	int countQuotes = 0;
 	int strings=1;
-	for (int j=0; countQuotes < (2*strings); j++) {
+	int j=0;
+	for (; countQuotes < (2*strings) && textForm[j] != '\0'; j++) {
 		if (textForm[j] == '\"') {
 			if (countQuotes == 0) {
+				// First field: width, height, number of colors, chars per pixel
 				const char *line0 = textForm + j + 1;
 				// Skip width
 				line0 = NextField(line0);
@@ -202,12 +210,23 @@ const char **XPM::LinesFormFromTextForm(const char *textForm) {
 				// Add 1 line for each colour
 				strings += atoi(line0);
 				linesForm = new const char *[strings];
+				if (linesForm == 0) {
+					break;	// Memory error!
+				}
 			}
-			if (linesForm && ((countQuotes & 1) == 0)) {
+			if (countQuotes / 2 >= strings) {
+				break;	// Bad height or number of colors!
+			}
+			if ((countQuotes & 1) == 0) {
 				linesForm[countQuotes / 2] = textForm + j + 1;
 			}
 			countQuotes++;
 		}
+	}
+	if (textForm[j] == '\0' || countQuotes / 2 > strings) {
+		// Malformed XPM! Height + number of colors too high or too low
+		delete []linesForm;
+		linesForm = 0;
 	}
 	return linesForm;
 }

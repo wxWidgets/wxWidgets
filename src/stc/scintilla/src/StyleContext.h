@@ -2,7 +2,7 @@
 /** @file StyleContext.cxx
  ** Lexer infrastructure.
  **/
-// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2004 by Neil Hodgson <neilh@scintilla.org>
 // This file is in the public domain.
 
 // All languages handled so far can treat all characters >= 0x80 as one class
@@ -155,4 +155,14 @@ inline bool IsASpaceOrTab(unsigned int ch) {
 
 inline bool IsADigit(unsigned int ch) {
 	return (ch >= '0') && (ch <= '9');
+}
+
+inline bool IsADigit(unsigned int ch, unsigned int base) {
+	if (base <= 10) {
+		return (ch >= '0') && (ch < '0' + base);
+	} else {
+		return ((ch >= '0') && (ch <= '9')) ||
+		       ((ch >= 'A') && (ch < 'A' + base - 10)) ||
+		       ((ch >= 'a') && (ch < 'a' + base - 10));
+	}
 }

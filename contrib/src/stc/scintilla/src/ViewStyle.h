@@ -89,8 +89,8 @@ public:
 	int edgeState;
 	int caretWidth;
 	bool someStylesProtected;
-        bool extraFontFlag;
-    
+	bool extraFontFlag;
+
 	ViewStyle();
 	ViewStyle(const ViewStyle &source);
 	~ViewStyle();
