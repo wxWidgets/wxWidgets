@@ -1319,6 +1319,7 @@ if eval "test $host != $build"; then
     AR=$host_alias-ar
     RANLIB=$host_alias-ranlib
     DLLTOOL=$host_alias-dlltool
+    RESCOMP=$host_alias-windres
     LD=$host_alias-ld
     NM=$host_alias-nm
     STRIP=$host_alias-strip
@@ -1555,6 +1556,11 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     dnl --- This will bloat the executable, but it'll work for now...
     LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
 
+	dnl add extra odbc libs if we have compiled in odbc
+	if test "$wxUSE_ODBC" = "yes" ; then
+		LIBS="$LIBS -lodbc32 -lole32 -loleaut32"
+	fi
+	
     dnl -mwindows is needed to avoid that spawning of a console window
     if test "$wxUSE_MINGW" = 1; then
         LDFLAGS="$LDFLAGS -mwindows"
@@ -1568,6 +1574,18 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     GENERICOBJS="\$(MSW_GENERICOBJS)"
     UNIXOBJS=
     GUIDIST=MSW_DIST
+
+    dnl we should calculate these
+    RCINCSWITCH="--include-dir"
+    RCDEFSWITCH="--define"
+    RCPREPROCESSOR="--preprocessor \"\$(CC) -c -E -xc-header -DRC_INVOKED\""
+    RCINPUTSWITCH="-i"
+    RCOUTPUTSWITCH="-o"
+    RESFLAGS="$RCPREPROCESSOR $RCINCSWITCH \$(top_srcdir)/include $RCINCSWITCH \$(top_srcdir)/\$(program_dir) $RCDEFSWITCH __WIN32__ $RCDEFSWITCH __WIN95__ $RCDEFSWITCH __GNUWIN32__"
+
+    dnl set optinal RES_PROGRAM_OPT to RES_PROGRAM
+    RESPROGRAM="\$(RES_PROGRAM)"
+
 fi
 
 if test "$wxUSE_GTK" = 1; then
@@ -3480,8 +3498,15 @@ dnl ---------------------------------------------------------------------------
 dnl get the string with OS info - used by wxGetOsDescription()
 dnl ---------------------------------------------------------------------------
 
-OSINFO=`uname -s -r -m`
-OSINFO="\"$OSINFO\""
+if test "$cross_compiling" = "yes"; then
+    dnl Use best guess from host as we can't use uname when cross compiling
+    OSINFO="\"$host\""
+else
+    dnl attualy work out OS version
+    OSINFO=`uname -s -r -m`
+    OSINFO="\"$OSINFO\""
+fi
+
 AC_DEFINE_UNQUOTED(WXWIN_OS_DESCRIPTION, $OSINFO)
 
 dnl ---------------------------------------------------------------------------
@@ -3627,6 +3652,21 @@ AC_SUBST(EXTRA_LIBS)
 AC_SUBST(EXTRADEFS)
 AC_SUBST(LIBS)
 AC_SUBST(LD_LIBS)
+
+dnl additional resurces settings
+AC_SUBST(RCINPUTSWITCH)
+AC_SUBST(RCOUTPUTSWITCH)
+AC_SUBST(RESPROGRAM)
+AC_SUBST(RESCOMP)
+AC_SUBST(RESFLAGS)
+
+dnl These seam to be missing
+AC_SUBST(DLLTOOL)
+AC_SUBST(AS)
+AC_SUBST(NM)
+AC_SUBST(LD)
+AC_SUBST(MAKEINFO)
+
 
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
 dnl itself (this is macro is required if SUBDIRS variable is used in Makefile.am
