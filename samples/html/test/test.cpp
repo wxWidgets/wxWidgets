@@ -110,7 +110,7 @@
    bool MyApp::OnInit()
    {
      wxInitAllImageHandlers();
-     #if wxUSE_FS_INET
+     #if wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
      wxFileSystem::AddHandler(new wxInternetFSHandler);
      #endif
 
