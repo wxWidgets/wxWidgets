@@ -972,23 +972,23 @@ public:
     // ------------------------------------------------------------------------
 
         // return the timespan for the given number of seconds
-    static wxTimeSpan Seconds(int sec) { return wxTimeSpan(0, 0, sec); }
+    static wxTimeSpan Seconds(long sec) { return wxTimeSpan(0, 0, sec); }
     static wxTimeSpan Second() { return Seconds(1); }
 
         // return the timespan for the given number of minutes
-    static wxTimeSpan Minutes(int min) { return wxTimeSpan(0, min, 0 ); }
+    static wxTimeSpan Minutes(long min) { return wxTimeSpan(0, min, 0 ); }
     static wxTimeSpan Minute() { return Minutes(1); }
 
         // return the timespan for the given number of hours
-    static wxTimeSpan Hours(int hours) { return wxTimeSpan(hours, 0, 0); }
+    static wxTimeSpan Hours(long hours) { return wxTimeSpan(hours, 0, 0); }
     static wxTimeSpan Hour() { return Hours(1); }
 
         // return the timespan for the given number of days
-    static wxTimeSpan Days(int days) { return Hours(24 * days); }
+    static wxTimeSpan Days(long days) { return Hours(24 * days); }
     static wxTimeSpan Day() { return Days(1); }
 
         // return the timespan for the given number of weeks
-    static wxTimeSpan Weeks(int days) { return Days(7 * days); }
+    static wxTimeSpan Weeks(long days) { return Days(7 * days); }
     static wxTimeSpan Week() { return Weeks(1); }
 
         // default ctor constructs the 0 time span
@@ -997,10 +997,10 @@ public:
         // from separate values for each component, date set to 0 (hours are
         // not restricted to 0..24 range, neither are minutes, seconds or
         // milliseconds)
-    inline wxTimeSpan(int hours,
-                      int minutes = 0,
-                      int seconds = 0,
-                      int milliseconds = 0);
+    inline wxTimeSpan(long hours,
+                      long minutes = 0,
+                      long seconds = 0,
+                      long milliseconds = 0);
 
         // default copy ctor is ok
 

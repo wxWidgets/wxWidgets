@@ -333,19 +333,18 @@ IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator,wxObject);
 
 wxRegionIterator::wxRegionIterator()
 {
-    m_current = 0;
+    Reset();
 }
 
 wxRegionIterator::wxRegionIterator( const wxRegion& region )
 {
-    m_region = region;
-    m_current = 0;
+    Reset(region);
 }
 
 void wxRegionIterator::Reset( const wxRegion& region )
 {
     m_region = region;
-    m_current = 0;
+    Reset();
 }
 
 wxRegionIterator::operator bool () const

@@ -317,6 +317,13 @@ typedef int wxWindowID;
     #define WXUNUSED(identifier) identifier
 #endif
 
+// some arguments are only used in debug mode, but unused in release one
+#ifdef __WXDEBUG__
+    #define WXUNUSED_UNLESS_DEBUG(param)  param
+#else
+    #define WXUNUSED_UNLESS_DEBUG(param)  WXUNUSED(param)
+#endif
+
 // ----------------------------------------------------------------------------
 // portable calling conventions macros
 // ----------------------------------------------------------------------------

@@ -70,8 +70,8 @@ public:
         m_height = size.y;
     }
 
-    long GetWidth() const { return m_width; }
-    long GetHeight() const { return m_height; }
+    wxCoord GetWidth() const { return m_width; }
+    wxCoord GetHeight() const { return m_height; }
 
     wxCoord               m_x;
     wxCoord               m_y;
@@ -303,8 +303,8 @@ bool wxToolBarSimple::Realize()
                     m_lastX = m_xMargin;
                     m_lastY += maxToolHeight + m_toolPacking;
                 }
-                tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
-                tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
+                tool->m_x = (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
+                tool->m_y = (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
 
                 m_lastX += maxToolWidth + m_toolPacking;
             }
@@ -316,8 +316,8 @@ bool wxToolBarSimple::Realize()
                     m_lastX += (maxToolWidth + m_toolPacking);
                     m_lastY = m_yMargin;
                 }
-                tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
-                tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
+                tool->m_x = (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
+                tool->m_y = (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
 
                 m_lastY += maxToolHeight + m_toolPacking;
             }
@@ -586,10 +586,10 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxToolBarToolBase *toolBase)
             }
             else
             {
-                long x = tool->m_x;
-                long y = tool->m_y;
-                long w = bitmap.GetWidth();
-                long h = bitmap.GetHeight();
+                wxCoord x = tool->m_x;
+                wxCoord y = tool->m_y;
+                wxCoord w = bitmap.GetWidth();
+                wxCoord h = bitmap.GetHeight();
                 wxPen thick_black_pen("BLACK", 3, wxSOLID);
 
                 memDC.SelectObject(bitmap);

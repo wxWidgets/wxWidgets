@@ -167,8 +167,8 @@ private:
                                           // children but has a [+] button
     int                 m_isBold      :1; // render the label in bold font
 
-    int                 m_x, m_y;
-    long                m_height, m_width;
+    wxCoord             m_x, m_y;
+    wxCoord             m_height, m_width;
     int                 m_xCross, m_yCross;
     int                 m_level;
 

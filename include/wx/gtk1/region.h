@@ -107,7 +107,7 @@ public:
     wxRegionIterator();
     wxRegionIterator(const wxRegion& region);
 
-    void Reset() { m_current = 0; }
+    void Reset() { m_current = 0u; }
     void Reset(const wxRegion& region);
 
     operator bool () const;
@@ -125,8 +125,8 @@ public:
     wxRect GetRect() const { return wxRect(GetX(), GetY(), GetWidth(), GetHeight()); }
 
 private:
-    long       m_current;
-    wxRegion   m_region;
+    size_t   m_current;
+    wxRegion m_region;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRegionIterator);

@@ -362,10 +362,10 @@ wxDateTime wxDateTime::ToTimezone(const wxDateTime::TimeZone& tz,
 // wxTimeSpan construction
 // ----------------------------------------------------------------------------
 
-wxTimeSpan::wxTimeSpan(int hours, int minutes, int seconds, int milliseconds)
+wxTimeSpan::wxTimeSpan(long hours, long minutes, long seconds, long milliseconds)
 {
     // assign first to avoid precision loss
-    m_diff = (long)hours;
+    m_diff = hours;
     m_diff *= 60l;
     m_diff += minutes;
     m_diff *= 60l;

@@ -162,8 +162,8 @@ void wxSplitterWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
 
 void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 {
-    wxCoord x = event.GetX(),
-            y = event.GetY();
+    wxCoord x = (wxCoord)event.GetX(),
+            y = (wxCoord)event.GetY();
 
     // reset the cursor
 #ifdef __WXMOTIF__

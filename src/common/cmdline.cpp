@@ -77,7 +77,7 @@ struct wxCmdLineOption
     // types increases, so always use the accessor functions and don't access
     // the fields directly!)
 
-    void Check(wxCmdLineParamType typ) const
+    void Check(wxCmdLineParamType WXUNUSED_UNLESS_DEBUG(typ)) const
     {
         wxASSERT_MSG( type == typ, _T("type mismatch in wxCmdLineOption") );
     }
@@ -188,7 +188,7 @@ void wxCmdLineParserData::SetArguments(int argc, char **argv)
     }
 }
 
-void wxCmdLineParserData::SetArguments(const wxString& cmdline)
+void wxCmdLineParserData::SetArguments(const wxString& WXUNUSED(cmdline))
 {
     // either use wxMSW wxApp::ConvertToStandardCommandArgs() or move its logic
     // here and use this method from it - but don't duplicate the code
