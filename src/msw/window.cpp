@@ -865,7 +865,8 @@ WXDWORD wxWindow::MakeExtendedStyle(long style, bool eliminateBorders)
             exStyle |= WS_EX_DLGMODALFRAME;
 #if defined(__WIN95__)
         if ( style & wxRAISED_BORDER )
-            exStyle |= WS_EX_WINDOWEDGE;
+            // It seems that WS_EX_WINDOWEDGE doesn't work, but WS_EX_DLGMODALFRAME does
+            exStyle |= WS_EX_DLGMODALFRAME; /* WS_EX_WINDOWEDGE */;
         if ( style & wxSTATIC_BORDER )
             exStyle |= WS_EX_STATICEDGE;
 #endif
