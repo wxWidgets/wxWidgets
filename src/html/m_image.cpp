@@ -539,11 +539,9 @@ wxHtmlImageCell::~wxHtmlImageCell()
 
 
 void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
-                           int WXUNUSED(view_y1), int view_y2,
+                           int WXUNUSED(view_y1), int WXUNUSED(view_y2),
                            wxHtmlRenderingInfo& WXUNUSED(info))
 {
-    if (y+m_PosY+m_Height > view_y2) return;
-    
     if ( m_showFrame )
     {
         dc.SetBrush(*wxTRANSPARENT_BRUSH);

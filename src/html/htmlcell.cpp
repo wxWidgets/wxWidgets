@@ -376,15 +376,13 @@ static void SwitchSelState(wxDC& dc, wxHtmlRenderingInfo& info,
 
 
 void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
-                          int WXUNUSED(view_y1), int view_y2,
+                          int WXUNUSED(view_y1), int WXUNUSED(view_y2),
                           wxHtmlRenderingInfo& info)
 {
 #if 0 // useful for debugging
     dc.SetPen(*wxBLACK_PEN);
     dc.DrawRectangle(x+m_PosX,y+m_PosY,m_Width /* VZ: +1? */ ,m_Height);
 #endif
-
-    if (y+m_PosY+m_Height > view_y2) return;
 
     bool drawSelectionAfterCell = false;
 
