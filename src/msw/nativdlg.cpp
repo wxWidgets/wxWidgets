@@ -183,6 +183,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
         {
             win = new wxRadioButton;
         }
+#if wxUSE_BMPBUTTON
 #if defined(__WIN32__) && defined(BS_BITMAP)
         else if (style & BS_BITMAP)
         {
@@ -201,6 +202,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
             // with a switch in the drawing code. Call default proc if BS_BITMAP.
             win = new wxBitmapButton;
         }
+#endif
         else if ((style1 == BS_PUSHBUTTON) || (style1 == BS_DEFPUSHBUTTON))
         {
             win = new wxButton;
@@ -256,6 +258,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 
         if ((style1 == SS_LEFT) || (style1 == SS_RIGHT) || (style1 == SS_SIMPLE))
             win = new wxStaticText;
+#if wxUSE_STATBMP
 #if defined(__WIN32__) && defined(BS_BITMAP)
         else if (style1 == SS_BITMAP)
         {
@@ -265,6 +268,7 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
             wxLogError(wxT("Please make SS_BITMAP statics into owner-draw buttons."));
         }
 #endif
+#endif	/* wxUSE_STATBMP */
     }
     else
     {
