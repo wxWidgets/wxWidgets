@@ -57,8 +57,8 @@ class WXDLLEXPORT wxPaintDC: public wxDC
   ~wxPaintDC(void);
 
  protected:
-    static WXHDC m_staticPaintHDC ;
-    static int m_staticPaintCount ;
+    static WXHDC ms_PaintHDC;
+    static uint  ms_PaintCount;
 };
 
 #endif

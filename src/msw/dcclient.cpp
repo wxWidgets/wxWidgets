@@ -29,6 +29,7 @@
 #endif
 
 #include "wx/dcclient.h"
+#include "wx/log.h"
 
 #include <windows.h>
 
@@ -98,47 +99,40 @@ static PAINTSTRUCT g_paintStruct;
 // Don't call Begin/EndPaint if it's already been called:
 // for example, if calling a base class OnPaint.
 
-WXHDC wxPaintDC::m_staticPaintHDC = 0;
-int wxPaintDC::m_staticPaintCount = 0;
+WXHDC wxPaintDC::ms_PaintHDC = 0;
+uint  wxPaintDC::ms_PaintCount = 0; // count of ms_PaintHDC usage
 
-wxPaintDC::wxPaintDC(wxWindow *the_canvas)
+wxPaintDC::wxPaintDC(wxWindow *canvas)
 {
-	if ( the_canvas && (m_staticPaintCount == 0))
-	{
-  		m_hDC = (WXHDC) ::BeginPaint((HWND) the_canvas->GetHWND(), &g_paintStruct);
-  		m_hDCCount ++;
-		m_staticPaintCount ++ ;
-		m_staticPaintHDC = m_hDC ;
-	}
-	else
-    {
-        wxDebugMsg("wxPaintDC: Using existing HDC\n");
-  		m_hDC = m_staticPaintHDC ;
-    }
+  wxCHECK_RET( canvas, "NULL canvas in wxPaintDC ctor" );
 
-  m_canvas = the_canvas;
+  m_canvas = canvas;
+  if ( ms_PaintCount > 0 ) {
+    // it means that we've already called BeginPaint and so we must just
+    // reuse the same HDC (BeginPaint shouldn't be called more than once)
+    wxASSERT( ms_PaintHDC );
+
+    m_hDC = ms_PaintHDC;
+    ms_PaintCount++;
+  }
+  else {
+    ms_PaintHDC =
+    m_hDC = (WXHDC)::BeginPaint((HWND)m_canvas->GetHWND(), &g_paintStruct);
+    ms_PaintCount = 1;
+    m_hDCCount++;
+  }
 }
 
-wxPaintDC::~wxPaintDC(void)
+wxPaintDC::~wxPaintDC()
 {
-	m_staticPaintCount -- ;
-
-	if (m_staticPaintCount == 0)
-	{
-		if ( m_hDC && m_canvas)
-		{
-  			::EndPaint((HWND) m_canvas->GetHWND(), &g_paintStruct);
-  			m_hDCCount --;
-			m_hDC = 0;
-		}
-        else
-            wxDebugMsg("~wxPaintDC: Did not release HDC\n");
-
-		m_staticPaintHDC = 0 ;
-	}
-    else
-    {
-        wxDebugMsg("~wxPaintDC: Did not release HDC\n");
+  if ( m_hDC ) {
+    if ( !--ms_PaintCount ) {
+      ::EndPaint((HWND)m_canvas->GetHWND(), &g_paintStruct);
+      m_hDCCount--;
+      m_hDC = NULL;
+      ms_PaintHDC = NULL;
     }
+    //else: ms_PaintHDC still in use
+  }
 }
 
