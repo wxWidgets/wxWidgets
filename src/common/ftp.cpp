@@ -155,7 +155,7 @@ bool wxFTP::SendCommand(const wxString& command, char exp_ret)
     return FALSE;
   }
   tmp_str = command + _T("\r\n");
-  wxWX2MBbuf tmp_buf = tmp_str.mb_str();
+  const wxWX2MBbuf tmp_buf = tmp_str.mb_str();
   if (Write(MBSTRINGCAST tmp_buf, strlen(tmp_buf)).Error()) {
     m_lastError = wxPROTO_NETERR;
     return FALSE;

@@ -106,7 +106,7 @@ void wxHTTP::SendHeaders()
     wxString buf;
     buf.Printf(_T("%s: %s\n\r"), head->GetKeyString(), str->GetData());
 
-    wxWX2MBbuf cbuf = buf.mb_str();
+    const wxWX2MBbuf cbuf = buf.mb_str();
     Write(cbuf, strlen(cbuf));
 
     head = head->Next();
@@ -187,7 +187,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 {
   char *tmp_buf;
   char buf[HTTP_BSIZE];
-  wxWX2MBbuf pathbuf = path.mb_str();
+  const wxWX2MBbuf pathbuf = path.mb_str();
 
   switch (req) {
   case wxHTTP_GET:
