@@ -313,19 +313,6 @@ void ShowAssertDialog(const wxChar *szFile, int nLine, const wxChar *szMsg)
 {
     // this variable can be set to true to suppress "assert failure" messages
     static bool s_bNoAsserts = FALSE;
-    static bool s_bInAssert = FALSE;        // FIXME MT-unsafe
-
-    if ( s_bInAssert )
-    {
-        // He-e-e-e-elp!! we're trapped in endless loop
-        wxTrap();
-
-        s_bInAssert = FALSE;
-
-        return;
-    }
-
-    s_bInAssert = TRUE;
 
     wxChar szBuf[4096];
 
@@ -396,13 +383,26 @@ void ShowAssertDialog(const wxChar *szFile, int nLine, const wxChar *szMsg)
         wxTrap();
 #endif // GUI/!GUI
     }
-
-    s_bInAssert = FALSE;
 }
 
 // this function is called when an assert fails
 void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
 {
+    // FIXME MT-unsafe
+    static bool s_bInAssert = FALSE;
+
+    if ( s_bInAssert )
+    {
+        // He-e-e-e-elp!! we're trapped in endless loop
+        wxTrap();
+
+        s_bInAssert = FALSE;
+
+        return;
+    }
+
+    s_bInAssert = TRUE;
+
     if ( !wxTheApp )
     {
         // by default, show the assert dialog box - we can't customize this
@@ -414,6 +414,8 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
         // let the app process it as it wants
         wxTheApp->OnAssert(szFile, nLine, szMsg);
     }
+
+    s_bInAssert = FALSE;
 }
 
 void wxAppBase::OnAssert(const wxChar *file, int line, const wxChar *msg)
