@@ -48,7 +48,7 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
   // created and used as the pushed/toggled image.
   // If toggle is TRUE, the button toggles between the two states.
   wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
-               bool toggle = FALSE, long xPos = -1, long yPos = -1, wxObject *clientData = NULL,
+               bool toggle = FALSE, wxCoord xPos = -1, wxCoord yPos = -1, wxObject *clientData = NULL,
                const wxString& helpString1 = "", const wxString& helpString2 = "");
 
   // Set default bitmap size
