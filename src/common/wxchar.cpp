@@ -119,6 +119,265 @@ size_t   WXDLLEXPORT wcslen(const wchar_t *s)
 }
 #endif
 
+#ifdef wxNEED_PRINTF_CONVERSION
+
+#define CONVERT_FORMAT_1  \
+    wxChar *new_format = (wxChar*) format; \
+    size_t old_len = wxStrlen( format ); \
+    int n = 0; \
+    size_t i; \
+    for (i = 0; i < old_len; i++) \
+    { \
+        if ( (format[i] == L'%') && \
+             ((i < old_len) && ((format[i+1] == L's') || (format[i+1] == L'c'))) && \
+             ((i == 0) || (format[i-1] != L'%')) ) \
+        { \
+            n++; \
+        } \
+    } \
+ \
+    if (n > 0) \
+    { \
+        new_format = new wxChar[old_len+n+1]; \
+        wxChar *s = new_format; \
+ \
+        for (i = 0; i < old_len+1; i++) \
+        { \
+            if ( (format[i] == L'%') && \
+                 ((i < old_len) && ((format[i+1] == L's') || (format[i+1] == L'c'))) && \
+                 ((i == 0) || (format[i-1] != L'%')) ) \
+            { \
+                *s = L'%'; \
+                s++; \
+                *s = L'l'; \
+                s++; \
+            } \
+            else \
+            { \
+                *s = format[i]; \
+                s++; \
+            } \
+        } \
+    }
+
+#define CONVERT_FORMAT_2 \
+    if (n > 0) \
+        delete [] new_format;
+    
+
+int wxScanf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_2
+{
+    CONVERT_FORMAT_1
+
+    va_list argptr;
+    va_start(argptr, format);
+
+    int ret = vwscanf( new_format, argptr );
+
+    CONVERT_FORMAT_2
+
+    va_end(argptr);
+    
+    return ret;
+}
+
+int wxSscanf( const wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3
+{
+    CONVERT_FORMAT_1
+
+    va_list argptr;
+    va_start(argptr, format);
+
+    int ret = vswscanf( str, new_format, argptr );
+
+    CONVERT_FORMAT_2
+
+    va_end(argptr);
+    
+    return ret;
+}
+
+int wxFscanf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3
+{
+    CONVERT_FORMAT_1
+
+    va_list argptr;
+    va_start(argptr, format);
+
+    int ret = vfwscanf(stream, new_format, argptr);
+
+    CONVERT_FORMAT_2
+
+    va_end(argptr);
+    
+    return ret;
+}
+
+int wxVsscanf( const wxChar *str, const wxChar *format, va_list ap )
+{
+    CONVERT_FORMAT_1
+
+    int ret = vswscanf( str, new_format, ap );
+    
+    CONVERT_FORMAT_2
+
+    return ret;
+}
+
+int wxPrintf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_2
+{
+    CONVERT_FORMAT_1
+
+    va_list argptr;
+    va_start(argptr, format);
+    
+    int ret = vwprintf( new_format, argptr );
+    
+    CONVERT_FORMAT_2
+
+    va_end(argptr);
+
+    return ret;
+}
+
+int wxSnprintf( wxChar *str, size_t size, const wxChar *format, ... ) ATTRIBUTE_PRINTF_4
+{
+    CONVERT_FORMAT_1
+
+    va_list argptr;
+    va_start(argptr, format);
+
+    int ret = vswprintf( str, size, new_format, argptr );
+
+    CONVERT_FORMAT_2
+
+    va_end(argptr);
+
+    return ret;
+}
+
+int wxSprintf( wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3
+{
+    CONVERT_FORMAT_1
+
+    va_list argptr;
+    va_start(argptr, format);
+
+    // Ugly
+    int ret = vswprintf( str, 10000, new_format, argptr );
+
+    CONVERT_FORMAT_2
+
+    va_end(argptr);
+
+    return ret;
+}
+
+int wxFprintf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3
+{
+    CONVERT_FORMAT_1
+
+    va_list argptr;
+    va_start( argptr, format );
+
+    int ret = vfwprintf( stream, new_format, argptr );
+
+    CONVERT_FORMAT_2
+
+    va_end(argptr);
+
+    return ret;
+}
+
+int wxVfprint( FILE *stream, const wxChar *format, va_list ap )
+{
+    CONVERT_FORMAT_1
+
+    int ret = vfwprintf( stream, new_format, ap );
+
+    CONVERT_FORMAT_2
+
+    return ret;
+}
+
+int wxVprintf( const wxChar *format, va_list ap )
+{
+    CONVERT_FORMAT_1
+
+    int ret = vwprintf( new_format, ap );
+
+    CONVERT_FORMAT_2
+
+    return ret;
+}
+
+int wxVsnprintf( wxChar *str, size_t size, const wxChar *format, va_list ap )
+{
+    CONVERT_FORMAT_1
+
+    int ret = vswprintf( str, size, new_format, ap );
+
+    CONVERT_FORMAT_2
+
+    return ret;
+}
+
+int wxVsprintf( wxChar *str, const wxChar *format, va_list ap )
+{
+    CONVERT_FORMAT_1
+
+    // This is so ugly
+    int ret = vswprintf(str, 10000, new_format, ap);
+
+    CONVERT_FORMAT_2
+
+    return ret;
+}
+#endif
+
+#if !defined(wxVsnprintf) && !defined(wxHAS_VSNPRINTF)
+int WXDLLEXPORT wxVsnprintf(wxChar *buf, size_t len,
+                            const wxChar *format, va_list argptr)
+{
+#if wxUSE_UNICODE
+    wxString s;
+    int iLen = s.PrintfV(format, argptr);
+    if ( iLen != -1 )
+    {
+        wxStrncpy(buf, s.c_str(), len);
+        buf[len-1] = wxT('\0');
+    }
+
+    return iLen;
+#else // ANSI
+    // vsnprintf() will not terminate the string with '\0' if there is not
+    // enough place, but we want the string to always be NUL terminated
+    int rc = wxVsnprintfA(buf, len - 1, format, argptr);
+    if ( rc == -1 )
+    {
+        buf[len] = 0;
+    }
+
+    return rc;
+#endif // Unicode/ANSI
+}
+#endif
+
+#if !defined(wxSnprintf) && !defined(wxHAS_SNPRINTF)
+int WXDLLEXPORT wxSnprintf(wxChar *buf, size_t len,
+                           const wxChar *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int iLen = wxVsnprintf(buf, len, format, argptr);
+
+    va_end(argptr);
+
+    return iLen;
+}
+#endif
+
 #if defined(__WIN32__) && defined(wxNEED_WX_CTYPE_H)
 inline WORD wxMSW_ctype(wxChar ch)
 {
