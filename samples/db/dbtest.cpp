@@ -1484,7 +1484,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
         if (wxGetApp().Contact->GetDb()->Catalog(wxEmptyString, wxT("catalog.txt")))
             wxMessageBox(wxT("The file 'catalog.txt' was created."));
         else
-            wxMessageBox(wxT("Creation of the file 'catalog.txt' was failed."));
+            wxMessageBox(wxT("Creation of the file 'catalog.txt' failed."));
         return;
     }
 
