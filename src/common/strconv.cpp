@@ -1785,6 +1785,8 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
 #ifdef __WINDOWS__
     static wxMBConv_win32 wxConvLibcObj;
+#elif defined(__WXMAC__) && !defined(__MACH__)
+    static wxMBConv_mac wxConvLibcObj ;
 #else
     static wxMBConvLibc wxConvLibcObj;
 #endif
