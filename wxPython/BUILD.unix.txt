@@ -121,21 +121,29 @@ D. If using the sources (either from the tarball or from CVS) then
    To make a static library and not make a shared library, use the
    --disable-shared and --enable-static flags.
 
-   NOTE: It has been discovered that some pre-built distributions of
-   Python are built with options that can cause incompatibilities
-   between wxPython and wxGTK.  Typically these are things like large
-   file support on the platforms that have it.  This causes some basic
-   types, like off_t, to be typedef'd differently causing the C++
-   method signatures to be incompatible and giving link errors.  The
-   way to fix this is to activate these same settings in the wxGTK
-   build, usually by looking at the flags and options used in
-   compiling wxPython that are different from the options used on
-   wxGTK compiles.  For example, on SuSE doing the following before
-   running wxGTK's configure seems to take care of it:
+   NOTE: There is a potential type mismatch between Python and wxGTK.
+   This happens if Python defines some flags that turn on 64-bit file
+   offset support and wxGTK does not.  This causes some basic types,
+   like off_t, to be typedef'd differently causing the C++ method
+   signatures to be incompatible and giving link errors at runtime.
+   If you get errors upon running a wxPython script that looks
+   something like this:
 
-   export CFLAGS="-D_FILE_OFFSET_BITS=64 -DHAVE_LARGEFILE_SUPPORT"
-   export CXXFLAGS=$CFLAGS
+     SeekI_13wxInputStream10wxSeekMode: referenced symbol not found
 
+   then that is probably the issue.  This can be fixed in the current
+   code by predefining these flags before wxGTK's configure is run,
+   for example:
+
+     export CFLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -DHAVE_LARGEFILE_SUPPORT"
+     export CXXFLAGS=$CFLAGS
+     ../configure --with-gtk --with-opengl --enable-debug
+
+   In the 2.3.3 final release there will be a real configure flag for
+   it, and it should be enabled by default.  You will be able to use
+   --enable-largefile or --disable-largefile to control it.  If you
+   still get this or a similar error with 2.3.3 then try disabling
+   largefile support in GTK.
 
 E. Now just compile and install.  You need to use GNU make, so if your
    system has something else get GNU make and build and install it and
@@ -206,6 +214,13 @@ B. As mentioned previouslly, wxPython is built with the standard
          make LINKCC=g++    # or whatever your C++ command is
 	 make install
 
+   I recently built Python 2.1.3 and Python 2.2.1 on Solaris and did
+   not have to resort to this workaround so apparently thigns are
+   getting better there.  I will leave this note here though in case
+   there are similar issues elsewhere.  However I did run into a
+   Python build issue that affects the wxPython build when attempting
+   to use SunCC instead of GNU gcc.  See the note below titled
+   "Building with non-GNU compilers" if you are interested.
 
 C. Change to the root wxPython directory and look at the setup.py
    file.  This is the script that configures and defines all the
@@ -279,8 +294,71 @@ F. If you would like to make a test build that doesn't overwrite the
 	 python demo.py
 
 
-That's all folks!
 
+4. Building with non-GNU compilers
+----------------------------------
+
+As mentioned above Python's distutils uses whatever compiler Python
+was compiled with to compile extension modules.  It also appears that
+distutils assumes that this compiler can compile C or C++ sources as
+distutils makes no differentiation between the two.  For builds using
+GNU gcc and a few other compilers this is not an issue as they will
+determine the type of souece from the file extension.  For SunCC (and
+probably other compilers that came from cfront) it won't work as the C
+compiler (cc) is totally separate from the C++ compiler (CC).  This
+causes distutils to attempt to compile the wxPython sources with the C
+compiler, which won't work.
+
+There may be better ways to get around this, but here is the
+workaround I devised.  I created a script that will execute either cc
+or CC based on the file extension given to it.  If Python uses this
+script for its compiler then it will also be used by extensions built
+with distutils and everybody will be more or less happy.  Here is a
+copy of the script I used.  It was a fairly quick rush job so there
+are probably issues with it but it worked for me.
+
+    #!/bin/bash
+    #--------------------------------------------------------------
+    # Try to determine type of file being compiled and then
+    # launch cc for C sources or CC for C++.
+    #
+
+    args=$@
+    is_C=
+
+    for arg in $args; do
+
+        # is the arg a file that exists?
+        if [ -e $arg ]; then
+
+            # does it end in ".c"?
+            if [ "${arg:${#arg}-2}" == ".c" ]; then
+                is_C=yes
+            fi
+        fi
+    done
+
+    # if the flag wasn't set then assume C++ and execute CC,
+    # otherwise execute cc.
+    if [ -z $is_C ]; then
+        exec CC -w $@
+    else
+        exec cc -w $@
+    fi
+    #--------------------------------------------------------------
+
+I called it pycc, put it in ${prefix}/bin and set its execute
+permission bit.
+
+The next step is to configure and build Python such that it uses pycc
+as it's compiler.  You can do that by setting CC in your environment
+before running configure, like this in bash:
+
+    exoprt CC=pycc
+    configure
+
+After making and installing Python with this configuration you should
+be able to build wxPython as described in the steps above.
 
 -----------------
 robin@alldunn.com
