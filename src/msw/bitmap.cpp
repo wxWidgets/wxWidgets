@@ -394,7 +394,7 @@ wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
     LPBITMAPINFO    lpDib;
     void            *lpBits = NULL;
 
-    wxASSERT( this->GetPalette() && this->GetPalette()->Ok() && (this->GetPalette()->GetHPALETTE() != NULL) );
+    wxASSERT( this->GetPalette() && this->GetPalette()->Ok() && (this->GetPalette()->GetHPALETTE() != 0) );
 
     tmpBitmap.SetPalette(this->GetPalette());
     memDC.SelectObject(tmpBitmap);

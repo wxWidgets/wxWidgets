@@ -30,6 +30,10 @@
 #include <windows.h>
 #endif
 
+#ifdef LoadLibrary
+#undef LoadLibrary
+#endif
+
 // ---------------------------------------------------------------------------
 // Global variables
 // ---------------------------------------------------------------------------
@@ -154,7 +158,11 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 #elif defined(__WINDOWS__)
   lib_name += ".dll";
 
-  HMODULE handle = LoadLibrary(lib_name);
+#ifdef UNICODE
+  HMODULE handle = LoadLibraryW(lib_name);
+#else
+  HMODULE handle = LoadLibraryA(lib_name);
+#endif
   if (!handle)
     return NULL;
 #else

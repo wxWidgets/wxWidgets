@@ -14,7 +14,6 @@
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
-#define IN_WX_MAIN_CPP
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
@@ -1021,6 +1020,4 @@ HINSTANCE wxGetInstance()
 #if (defined(_MSC_VER) && !defined(__WIN32__)) || defined(__GNUWIN32__)
 #include "main.cpp"
 #endif
-
-#undef IN_WX_MAIN_CPP
 

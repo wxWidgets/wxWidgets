@@ -85,8 +85,10 @@ example.obj: example.c zlib.h zconf.h
 minigzip.obj: minigzip.c zlib.h zconf.h
 	$(CC) -c $(CFLAGS) $*.c
 
+lib:    $(LIBTARGET)
+
 # we must cut the command line to fit in the MS/DOS 128 byte limit:
-$(LIBTARGET: $(OBJ1) $(OBJ2)
+$(LIBTARGET): $(OBJ1) $(OBJ2)
 	del $(LIBTARGET)
 	$(LIB) $(LIBTARGET) +$(OBJP1)
 	$(LIB) $(LIBTARGET) +$(OBJP2)

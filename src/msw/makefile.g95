@@ -65,10 +65,12 @@ GENERICOBJS= \
   $(GENDIR)/fontdlgg.$(OBJSUFF) \
   $(GENDIR)/gridg.$(OBJSUFF) \
   $(GENDIR)/helpxlp.$(OBJSUFF) \
+  $(GENDIR)/laywin.$(OBJSUFF) \
   $(GENDIR)/msgdlgg.$(OBJSUFF) \
   $(GENDIR)/panelg.$(OBJSUFF) \
   $(GENDIR)/printps.$(OBJSUFF) \
   $(GENDIR)/prntdlgg.$(OBJSUFF) \
+  $(GENDIR)/sashwin.$(OBJSUFF) \
   $(GENDIR)/scrolwin.$(OBJSUFF) \
   $(GENDIR)/splitter.$(OBJSUFF) \
   $(GENDIR)/statusbr.$(OBJSUFF) \
@@ -112,14 +114,28 @@ COMMONOBJS = \
   $(COMMDIR)/list.$(OBJSUFF) \
   $(COMMDIR)/string.$(OBJSUFF) \
   $(COMMDIR)/time.$(OBJSUFF) \
+  $(COMMDIR)/tokenzr.$(OBJSUFF) \
   $(COMMDIR)/y_tab.$(OBJSUFF) \
   $(COMMDIR)/stream.$(OBJSUFF) \
   $(COMMDIR)/fstream.$(OBJSUFF) \
   $(COMMDIR)/mstream.$(OBJSUFF) \
   $(COMMDIR)/zstream.$(OBJSUFF) \
   $(COMMDIR)/datstrm.$(OBJSUFF) \
+  $(COMMDIR)/objstrm.$(OBJSUFF) \
   $(COMMDIR)/extended.$(OBJSUFF) \
   $(COMMDIR)/wincmn.$(OBJSUFF)
+
+# Unfortunately, GnuWin32 fails with a syntax error in Sockets.h,
+# so remove socket code.
+#  $(COMMDIR)/socket.$(OBJSUFF) \
+#  $(COMMDIR)/sckaddr.$(OBJSUFF) \
+#  $(COMMDIR)/sckfile.$(OBJSUFF) \
+#  $(COMMDIR)/sckipc.$(OBJSUFF) \
+#  $(COMMDIR)/sckstrm.$(OBJSUFF) \
+#  $(COMMDIR)/protocol.$(OBJSUFF) \
+#  $(COMMDIR)/http.$(OBJSUFF) \
+#  $(COMMDIR)/ftp.$(OBJSUFF) \
+#  $(COMMDIR)/url.$(OBJSUFF) \
 
 MSWOBJS = \
   accel.$(OBJSUFF) \
@@ -201,12 +217,14 @@ MSWOBJS = \
   utils.$(OBJSUFF) \
   utilsexc.$(OBJSUFF) \
   wave.$(OBJSUFF) \
-  window.$(OBJSUFF) \
-  $(OLEDIR)/droptgt.$(OBJSUFF) \
-  $(OLEDIR)/dropsrc.$(OBJSUFF) \
-  $(OLEDIR)/dataobj.$(OBJSUFF) \
-  $(OLEDIR)/oleutils.$(OBJSUFF) \
-  $(OLEDIR)/uuid.$(OBJSUFF)
+  window.$(OBJSUFF)
+
+# OLE not supported yet by GnuWin32 (?)
+#  $(OLEDIR)/droptgt.$(OBJSUFF) \
+#  $(OLEDIR)/dropsrc.$(OBJSUFF) \
+#  $(OLEDIR)/dataobj.$(OBJSUFF) \
+#  $(OLEDIR)/oleutils.$(OBJSUFF) \
+#  $(OLEDIR)/uuid.$(OBJSUFF)
 
 OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS)
 
@@ -255,46 +273,6 @@ $(COMMDIR)/y_tab.c:	$(COMMDIR)/parser.y
 
 
 # Extra targets
-prologio:
-	cd $(WXDIR)/utils/prologio/src ; $(MAKE) -f makefile.g95
-	cd $(WXDIR)/src/msw
-
-clean_proio:
-	cd $(WXDIR)/utils/prologio/src; $(MAKE) -f makefile.g95 clean
-	cd $(WXDIR)/src/msw
-
-makedib:
-	cd $(WXDIR)/src/msw/dib ; $(MAKE) -f makefile.g95
-	cd $(WXDIR)/src/msw
-
-clean_dib:
-	cd $(WXDIR)/src/msw/dib; $(MAKE) -f makefile.g95 clean
-	cd $(WXDIR)/src/msw
-
-gauge:
-	cd $(WXDIR)/src/msw/gauge; $(MAKE) -f makefile.g95
-	cd $(WXDIR)/src/msw
-
-clean_gauge:
-	cd $(WXDIR)/src/msw/gauge; $(MAKE) -f makefile.g95 clean
-	cd $(WXDIR)/src/msw
-
-wxstring:
-	cd $(WXDIR)/contrib/wxstring; $(MAKE) -f makefile.g95 OPTIONS="$(OPTIONS)" DEBUG="$(DEBUG)"
-	cd $(WXDIR)/src/msw
-
-clean_wxstring:
-	cd $(WXDIR)/contrib/wxstring; $(MAKE) -f makefile.g95 clean
-	cd $(WXDIR)/src/msw
-
-itsy:
-	cd $(WXDIR)/src/msw/itsybits; $(MAKE) -f makefile.g95
-	cd $(WXDIR)/src/msw
-
-clean_itsy:
-	cd $(WXDIR)/contrib/itsybits; $(MAKE) -f makefile.g95 clean
-	cd $(WXDIR)/src/msw
-
 rcparser:
 	cd $(WXDIR)/utils/rcparser/src; $(MAKE)  -f makefile.g95
 	cd $(WXDIR)/src/msw
@@ -302,14 +280,6 @@ rcparser:
 clean_rcp:
 	cd $(WXDIR)/utils/rcparser/src; $(MAKE) -f makefile.g95 clean
 	cd $(WXDIR)/src/msw
-
-# +++start steve161(09.04.1995): added for wxString in \contrib\wxstring
-wxstring_ol:
-	cd ../../contrib/wxstring; $(MAKE) -f makefile.unx xview
-wxstring_motif:
-	cd ../../contrib/wxstring; $(MAKE) -f makefile.unx motif
-wxstring_hp:
-	cd ../../contrib/wxstring; $(MAKE) -f makefile.unx hp
 
 clean:
 	rm -f $(OBJECTS) $(EXTRAOBJS) ../common/y_tab.c ../common/lex_yy.c $(WXDIR)/lib/libwx$(GUISUFFIX).a core

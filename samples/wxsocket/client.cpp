@@ -123,7 +123,7 @@ bool MyApp::OnInit(void)
   frame->Show(TRUE);
   
   // Return the main frame window
-  return true;
+  return TRUE;
 }
 
 /*

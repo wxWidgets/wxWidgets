@@ -3,6 +3,9 @@
 #ifdef _MSC_VER
 #include <io.h>
 #endif
+#ifdef __GNUWIN32__
+#include <sys/unistd.h>
+#endif
 
 #include "wx/expr.h"
 

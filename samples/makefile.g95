@@ -29,6 +29,8 @@ all:
 	        cd $(WXDIR)/samples/toolbar; make -f makefile.g95
 	        cd $(WXDIR)/samples/dialogs; make -f makefile.g95
 	        cd $(WXDIR)/samples/docview; make -f makefile.g95
+	        cd $(WXDIR)/samples/docvwmdi; make -f makefile.g95
+	        cd $(WXDIR)/samples/sashtest; make -f makefile.g95
 	        cd $(WXDIR)/samples/controls; make -f makefile.g95
 	        cd $(WXDIR)/samples/nativdlg; make -f makefile.g95
 	        cd $(WXDIR)/samples/grid; make -f makefile.g95
@@ -37,8 +39,8 @@ all:
 	        cd $(WXDIR)/samples/dnd; make -f makefile.g95
 	        cd $(WXDIR)/samples/ownerdrw; make -f makefile.g95
 	        cd $(WXDIR)/samples/joytest; make -f makefile.g95
-	        cd $(WXDIR)/samples/regtest; make -f makefile.g95
 	        cd $(WXDIR)/samples/memcheck; make -f makefile.g95
+#	        cd $(WXDIR)/samples/regtest; make -f makefile.g95
 
 clean:
 	        cd $(WXDIR)/samples/splitter; make -f makefile.g95 clean
@@ -53,6 +55,8 @@ clean:
 	        cd $(WXDIR)/samples/treectrl; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/validate; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/docview; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/docvwmdi; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/sashtest; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/controls; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/nativdlg; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/grid; make -f makefile.g95 clean

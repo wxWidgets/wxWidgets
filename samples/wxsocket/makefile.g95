@@ -1,14 +1,13 @@
 #
 # File:		makefile.unx
-# Author:	Stefan Hammes
-# Created:	1995
+# Author:	Julian Smart
+# Created:	1993
 # Updated:	
-# Copyright:	(c) 1995
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
 #
 # "%W% %G%"
 #
-# Makefile for wxString example (UNIX).
-# Change the WXDIR directory, and CPPFLAGS and LDFLAGS, for your system.
+# Makefile for server/client example (UNIX).
 
 WXDIR = ../..
 
@@ -16,60 +15,32 @@ WXDIR = ../..
 # this central makefile.
 include $(WXDIR)/src/makeg95.env
 
-WXSOCKDIR = $(WXDIR)/contrib/wxsock
-WXSOCKLIB = $(WXSOCKDIR)/libwxsock.a
+OBJECTS=$(OBJDIR)/server.$(OBJSUFF) $(OBJDIR)/server_resources.$(OBJSUFF)\
+ $(OBJDIR)/client.$(OBJSUFF) $(OBJDIR)/client_resources.$(OBJSUFF)
 
-OBJECTS = $(OBJDIR)/wx_sock.$(OBJSUFF) $(OBJDIR)/wx_addr.$(OBJSUFF) \
-	$(OBJDIR)/wx_pkman.$(OBJSUFF) $(OBJDIR)/wx_skflt.$(OBJSUFF) \
-	$(OBJDIR)/wx_lzw.$(OBJSUFF) \
-	$(OBJDIR)/wx_url.$(OBJSUFF) $(OBJDIR)/wx_ftp.$(OBJSUFF) \
-	$(OBJDIR)/wx_file.$(OBJSUFF) $(OBJDIR)/wx_nipc.$(OBJSUFF) \
-	$(OBJDIR)/wx_wipc.$(OBJSUFF) $(OBJDIR)/wx_sipc.$(OBJSUFF)
+all:	$(OBJDIR) server$(GUISUFFIX) client$(GUISUFFIX)
 
-TESTOBJECTS = $(OBJDIR)/test.$(OBJSUFF)
-TESTPROGRAM = $(WXSTRINGDIR)/test$(GUISUFFIX)
-
-LDFLAGS =  $(XLIB) -L$(WXSOCKDIR) -L$(WXDIR)/lib
-
-XVIEWLDLIBS = -lwxstring_ol -lwx_ol -lxview -lolgx -lX11 -lm $(COMPLIBS)
-MOTIFLDLIBS = -lwxstring_motif -lwx_motif -lXm -lXt -lX11 -lm $(COMPLIBS)
-HPLDLIBS = -lwxstring_hp -lwx_hp -lXm -lXt -lX11 -lm $(HPCOMPLIBS)
-# Default
-LDLIBS=$(MOTIFLDLIBS)
-
-all:	$(OBJDIR) $(WXSOCKLIB)
-
-demo:	$(TESTPROGRAM)
-
-.SUFFIXES:
-
-# Comment this out if 'say' doesn't speak on your system, or make it beep perhaps!
-done:
-	say dun
-
-wx:
-	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx GUI=$(GUI)
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
 
-$(WXSOCKLIB): $(OBJECTS)	
-	rm -f $@
-	ar $(AROPTIONS) libwxsock.a $(OBJECTS)
-	$(RANLIB) libwxsock.a
+server$(GUISUFFIX): $(OBJDIR)/server.$(OBJSUFF) $(OBJDIR)/server_resources.$(OBJSUFF) $(WXLIB)
+	$(CC) $(LDFLAGS) -o server$(GUISUFFIX)$(EXESUFF) $(OBJDIR)/server.$(OBJSUFF) $(OBJDIR)/server_resources.$(OBJSUFF) $(LDLIBS)
 
-$(OBJDIR)/wx_sock.$(OBJSUFF):	wx_sock.$(SRCSUFF) wx_sock.h
-	$(CC) -c $(CPPFLAGS) -o $@ wx_sock.$(SRCSUFF)
+$(OBJDIR)/server.$(OBJSUFF):        server.$(SRCSUFF) server.h
+	$(CC) -c $(CPPFLAGS) -o $@ server.$(SRCSUFF)
 
-$(OBJDIR)/wx_addr.$(OBJSUFF):	wx_addr.$(SRCSUFF) wx_addr.h
-	$(CC) -c $(CPPFLAGS) -o $@ wx_addr.$(SRCSUFF)
+client$(GUISUFFIX): $(OBJDIR)/client.$(OBJSUFF) $(OBJDIR)/client_resources.$(OBJSUFF) $(WXLIB)
+	$(CC) $(LDFLAGS) -o client$(GUISUFFIX)$(EXESUFF) $(OBJDIR)/client.$(OBJSUFF) $(OBJDIR)/client_resources.$(OBJSUFF) $(LDLIBS)
 
-$(OBJDIR)/test.$(OBJSUFF):   test.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ test.$(SRCSUFF)
+$(OBJDIR)/client.$(OBJSUFF):        client.$(SRCSUFF) client.h
+	$(CC) -c $(CPPFLAGS) -o $@ client.$(SRCSUFF)
+        
+$(OBJDIR)/server_resources.o:  server.rc
+	$(RESCOMP) -i server.rc -o $(OBJDIR)/server_resources.o $(RESFLAGS)
 
-$(TESTPROGRAM): $(OBJDIR)/test.$(OBJSUFF) $(WXLIB) $(WXSOCKLIB)
-	$(CC) $(CPPFLAGS) $(LDFLAGS) -o test$(GUISUFFIX) $(OBJDIR)/test.$(OBJSUFF) $(XVIEW_LINK) $(LDLIBS)
+$(OBJDIR)/client_resources.o:  client.rc
+	$(RESCOMP) -i client.rc -o $(OBJDIR)/client_resources.o $(RESFLAGS)
 
 clean:
-	rm -f $(OBJECTS) test$(GUISUFFIX) $(WXSTRINGLIB) $(OBJDIR)/test.$(OBJSUFF) core
-
+	rm -f $(OBJECTS) server$(GUISUFFIX).exe client$(GUISUFFIX).exe core *.rsc *.res

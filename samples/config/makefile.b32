@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile : Builds minimal example
+# Makefile : Builds conftest example
 
 # WXWIN and BCCDIR are set by parent make
 
@@ -19,7 +19,7 @@ WXINC = $(WXDIR)\include\msw
 WXLIB = $(WXLIBDIR)\wx32.lib
 LIBS=$(WXLIB) cw32 import32 ole2w32
 
-TARGET=minimal
+TARGET=conftest
 
 !if "$(FINAL)" == "0"
 LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
@@ -32,7 +32,7 @@ DEBUG_FLAGS =
 !endif
 CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
 
-OBJECTS = minimal.obj
+OBJECTS = conftest.obj
 
 $(TARGET).exe:	$(OBJECTS) $(TARGET).res
   tlink32 $(LINKFLAGS) @&&!
@@ -49,7 +49,7 @@ $(LIBS)
 .c.obj:
 	bcc32 $(CPPFLAGS) -P- -c {$< }
 
-minimal.obj:      minimal.$(SRCSUFF)
+conftest.obj:      conftest.$(SRCSUFF)
 
 $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
     brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)

@@ -22,7 +22,6 @@
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
-#define IN_WX_MAIN_CPP
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
@@ -30,8 +29,6 @@
 #endif
 
 #include  <wx/setup.h>
-
-
 #include  <wx/log.h>
 
 #include <windows.h>

@@ -75,10 +75,12 @@ GENERICOBJS= \
   $(MSWDIR)\fontdlgg.obj \
   $(MSWDIR)\gridg.obj \
   $(MSWDIR)\helpxlp.obj \
+  $(MSWDIR)\laywin.obj \
   $(MSWDIR)\msgdlgg.obj \
   $(MSWDIR)\panelg.obj \
   $(MSWDIR)\printps.obj \
   $(MSWDIR)\prntdlgg.obj \
+  $(MSWDIR)\sashwin.obj \
   $(MSWDIR)\scrolwin.obj \
   $(MSWDIR)\splitter.obj \
   $(MSWDIR)\statusbr.obj \
@@ -578,6 +580,8 @@ $(MSWDIR)\gridg.obj:     $(GENDIR)\gridg.$(SRCSUFF)
 
 $(MSWDIR)\helpxlp.obj:     $(GENDIR)\helpxlp.$(SRCSUFF)
 
+$(MSWDIR)\laywin.obj:     $(GENDIR)\laywin.$(SRCSUFF)
+
 $(MSWDIR)\msgdlgg.obj:     $(GENDIR)\msgdlgg.$(SRCSUFF)
 
 $(MSWDIR)\panelg.obj:     $(GENDIR)\panelg.$(SRCSUFF)
@@ -585,6 +589,8 @@ $(MSWDIR)\panelg.obj:     $(GENDIR)\panelg.$(SRCSUFF)
 $(MSWDIR)\printps.obj:     $(GENDIR)\printps.$(SRCSUFF)
 
 $(MSWDIR)\prntdlgg.obj:     $(GENDIR)\prntdlgg.$(SRCSUFF)
+
+$(MSWDIR)\sashwin.obj:     $(GENDIR)\sashwin.$(SRCSUFF)
 
 $(MSWDIR)\scrolwin.obj:     $(GENDIR)\scrolwin.$(SRCSUFF)
 

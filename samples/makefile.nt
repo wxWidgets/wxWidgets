@@ -48,6 +48,8 @@ all:
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\docview
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+        cd $(WXDIR)\samples\docvwmdi
+        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\controls
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\nativdlg
@@ -62,14 +64,16 @@ all:
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\taskbar
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
-        cd $(WXDIR)\samples\memcheck
+        cd $(WXDIR)\samples\sashtest
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
-        cd $(WXDIR)\samples\regtest
+        cd $(WXDIR)\samples\memcheck
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\ownerdrw
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\checklst
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
+#        cd $(WXDIR)\samples\regtest
+#        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\samples\hello
 #        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
 #        cd $(WXDIR)\samples\fractal
@@ -116,6 +120,8 @@ clean:
         nmake -f makefile.nt clean
         cd $(WXDIR)\samples\docview
         nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\docvwmdi
+        nmake -f makefile.nt clean
         cd $(WXDIR)\samples\controls
         nmake -f makefile.nt clean
         cd $(WXDIR)\samples\nativdlg
@@ -135,6 +141,8 @@ clean:
         cd $(WXDIR)\samples\regtest
         nmake -f makefile.nt clean
         cd $(WXDIR)\samples\taskbar
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\samples\sashtest
         nmake -f makefile.nt clean
         cd $(WXDIR)\samples\memcheck
         nmake -f makefile.nt clean

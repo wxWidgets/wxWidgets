@@ -161,7 +161,11 @@ bool wxNotebook::Create(wxWindow *parent,
     return FALSE;
   }
 
-  SetWindowFont((HWND)m_hwnd, ::GetStockObject(DEFAULT_GUI_FONT), FALSE);
+  // Not all compilers recognise SetWindowFont
+//  SetWindowFont((HWND)m_hwnd, ::GetStockObject(DEFAULT_GUI_FONT), FALSE);
+  ::SendMessage((HWND) m_hwnd, WM_SETFONT,
+                  (WPARAM)::GetStockObject(DEFAULT_GUI_FONT),TRUE);
+
 
   if ( parent != NULL ) 
     parent->AddChild(this);

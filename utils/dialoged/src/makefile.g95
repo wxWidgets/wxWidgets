@@ -40,16 +40,16 @@ dialoged$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
 $(OBJDIR)/dialoged.$(OBJSUFF):	dialoged.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ dialoged.$(SRCSUFF)
 
-$(OBJDIR)/winprop.$(OBJSUFF):	winprop.h reseditr.h editrpal.h winprop.$(SRCSUFF)
+$(OBJDIR)/winprop.$(OBJSUFF):	winprop.h reseditr.h winprop.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ winprop.$(SRCSUFF)
 
-$(OBJDIR)/reswrite.$(OBJSUFF):	winprop.h reseditr.h editrpal.h reswrite.$(SRCSUFF)
+$(OBJDIR)/reswrite.$(OBJSUFF):	winprop.h reseditr.h reswrite.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ reswrite.$(SRCSUFF)
 
-$(OBJDIR)/reseditr.$(OBJSUFF):	winprop.h reseditr.h editrpal.h reseditr.$(SRCSUFF)
+$(OBJDIR)/reseditr.$(OBJSUFF):	winprop.h reseditr.h reseditr.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ reseditr.$(SRCSUFF)
 
-$(OBJDIR)/dlghndlr.$(OBJSUFF):	winprop.h reseditr.h editrpal.h dlghndlr.$(SRCSUFF)
+$(OBJDIR)/dlghndlr.$(OBJSUFF):	winprop.h reseditr.h dlghndlr.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ dlghndlr.$(SRCSUFF)
 
 $(OBJDIR)/edlist.$(OBJSUFF):	winprop.h edlist.h edlist.$(SRCSUFF)
@@ -59,10 +59,10 @@ $(OBJDIR)/edtree.$(OBJSUFF):	winprop.h edtree.h edtree.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ edtree.$(SRCSUFF)
 
 $(OBJDIR)/winstyle.$(OBJSUFF):	winstyle.h winstyle.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ edtree.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ winstyle.$(SRCSUFF)
 
 $(OBJDIR)/symbtabl.$(OBJSUFF):	symbtabl.h symbtabl.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ edtree.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ symbtabl.$(SRCSUFF)
 
 $(OBJDIR)/dialoged_resources.o:  dialoged.rc
 	$(RESCOMP) -i dialoged.rc -o $(OBJDIR)/dialoged_resources.o $(RESFLAGS)

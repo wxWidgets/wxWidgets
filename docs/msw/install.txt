@@ -116,6 +116,9 @@ Gotchas:
 - install.exe doesn't have built-in decompression because lzexpand.lib
   isn't available with Gnu-Win32. However, you can use it with external
   decompression utilities.
+- Doesn't compile socket-related files due to a syntax error in
+  GnuWin32's Sockets.h.
+- Doesn't compile src/msw/ole files, so no drag and drop.
 
 References:
 
