@@ -276,8 +276,6 @@
 // Set to 1 to use socket classes
 #define wxUSE_SOCKETS       1
 
-#if wxUSE_GUI
-
 // Set to 1 to enable virtual file systems (required by wxHTML)
 #define wxUSE_FILESYSTEM    1
 
@@ -293,18 +291,6 @@
 // Set to 1 to compile wxZlibInput/OutputStream classes. Also required by
 // wxUSE_LIBPNG.
 #define wxUSE_ZLIB          1
-
-#else // !wxUSE_GUI
-
-// although it is possible to compile all of those in wxBase, this is not done
-// by default
-#define wxUSE_FILESYSTEM    0
-#define wxUSE_FS_ZIP        0
-#define wxUSE_FS_INET       0
-#define wxUSE_ZIPSTREAM     0
-#define wxUSE_ZLIB          0
-
-#endif // wxUSE_GUI/!wxUSE_GUI
 
 // If enabled, the code written by Apple will be used to write, in a portable
 // way, float on the disk. See extended.c for the license which is different
