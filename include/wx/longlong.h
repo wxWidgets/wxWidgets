@@ -53,11 +53,6 @@
     #define wxUSE_LONGLONG_WX 1
 #endif // compiler
 
-// this macro allows to definea 64 bit constant in a portable way
-#define wxMakeLongLong(x, s) x ## s
-#define wxMakeLongLong2(x, s) wxMakeLongLong(x, s)
-#define wxLL(x) wxMakeLongLong2(x, wxLongLongSuffix)
-
 // the user may predefine wxUSE_LONGLONG_NATIVE and/or wxUSE_LONGLONG_NATIVE
 // to disable automatic testing (useful for the test program which defines
 // both classes) but by default we only use one class
