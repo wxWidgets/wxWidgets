@@ -1864,8 +1864,12 @@ wxRect wxWin32Renderer::GetBorderDimensions(wxBorder border) const
             break;
 
         default:
+        { 
+            // char *crash = NULL;
+            // *crash = 0;
             wxFAIL_MSG(_T("unknown border type"));
             // fall through
+        }
 
         case wxBORDER_DEFAULT:
         case wxBORDER_NONE:

@@ -101,7 +101,14 @@ bool wxListBox::Create(wxWindow *parent,
     if ( !(style & (wxLB_MULTIPLE | wxLB_EXTENDED)) )
         style |= wxLB_SINGLE;
 
-    if ( !wxControl::Create(parent, id, pos, size, style | wxVSCROLL , wxDefaultValidator, name) )
+#if wxUSE_TWO_WINDOWS
+    style |=  wxVSCROLL|wxHSCROLL;
+    if ((style & wxBORDER_MASK) == 0)
+        style |= wxBORDER_SUNKEN;
+#endif
+
+    if ( !wxControl::Create(parent, id, pos, size, style, 
+                            wxDefaultValidator, name) )
         return FALSE;
 
     SetWindow(this);

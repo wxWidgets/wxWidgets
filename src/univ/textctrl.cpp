@@ -691,6 +691,11 @@ bool wxTextCtrl::Create(wxWindow *parent,
         // create data object for single line controls
         m_data.sdata = new wxTextSingleLineData;
     }
+    
+#if wxUSE_TWO_WINDOWS
+    if ((style & wxBORDER_MASK) == 0)
+        style |= wxBORDER_SUNKEN;
+#endif
 
     if ( !wxControl::Create(parent, id, pos, size, style,
                             validator, name) )
