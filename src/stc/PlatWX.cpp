@@ -817,7 +817,7 @@ void ListBox::Select(int n) {
     if (n > 4)
         n = n - 4;
     else
-        n = 1;
+        n = 0;
     GETLB(id)->SetFirstItem(n);
 #endif
 }
