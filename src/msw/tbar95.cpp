@@ -36,7 +36,7 @@
     #include "wx/bitmap.h"
 #endif
 
-#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR && defined(__WIN95__)
+#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR && defined(__WIN95__) && !wxUSE_TOOLBAR_SIMPLE
 
 #include "wx/toolbar.h"
 

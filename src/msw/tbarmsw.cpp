@@ -32,7 +32,7 @@
     #include "wx/wx.h"
 #endif
 
-#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR
+#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR && !wxUSE_TOOLBAR_SIMPLE
 
 #if !defined(__WIN32__) && !wxUSE_IMAGE_LOADING_IN_MSW
     #error wxToolBar needs wxUSE_IMAGE_LOADING_IN_MSW under Win16
@@ -167,11 +167,17 @@ void wxToolBar::Init()
     m_hdcMono = 0;
     m_hbmMono = 0;
     m_hbmDefault = 0;
+
     m_defaultWidth = DEFAULTBITMAPX;
     m_defaultHeight = DEFAULTBITMAPY;
 
     m_xPos =
     m_yPos = -1;
+
+    m_maxWidth = m_maxHeight = 0;
+    m_pressedTool = m_currentTool = -1;
+    m_toolPacking = 1;
+    m_toolSeparation = 5;
 }
 
 bool wxToolBar::Create(wxWindow *parent,
@@ -195,24 +201,8 @@ bool wxToolBar::Create(wxWindow *parent,
         m_lastY = 3;
     }
 
-    m_maxWidth = m_maxHeight = 0;
-    m_pressedTool = m_currentTool = -1;
-    m_toolPacking = 1;
-    m_toolSeparation = 5;
-
     // Set it to grey
     SetBackgroundColour(wxColour(192, 192, 192));
-
-    m_hbrDither = 0;
-    m_rgbFace = 0;
-    m_rgbShadow = 0;
-    m_rgbHilight = 0;
-    m_rgbFrame = 0;
-    m_hdcMono = 0;
-    m_hbmMono = 0;
-    m_hbmDefault = 0;
-    m_defaultWidth = DEFAULTBITMAPX;
-    m_defaultHeight = DEFAULTBITMAPY;
 
     InitGlobalObjects();
 
@@ -268,12 +258,13 @@ wxToolBarTool *wxToolBar::AddTool(int id,
                                   const wxString& helpString1,
                                   const wxString& helpString2)
 {
-    // rmemeber the position for DoInsertTool()
+    // rememeber the position for DoInsertTool()
     m_xPos = xPos;
     m_yPos = yPos;
 
-    return AddTool(id, bitmap, pushedBitmap, toggle,
-                   xPos, yPos, clientData, helpString1, helpString2);
+    return wxToolBarBase::AddTool(id, bitmap, pushedBitmap, toggle,
+                                  xPos, yPos, clientData,
+                                  helpString1, helpString2);
 }
 
 void wxToolBar::OnPaint(wxPaintEvent& event)
@@ -448,7 +439,7 @@ void wxToolBar::DoToggleTool(wxToolBarTool *tool, bool WXUNUSED(toggle))
 void wxToolBar::DoSetToggle(wxToolBarTool * WXUNUSED(tool),
                             bool WXUNUSED(toggle))
 {
-    wxFAIL_MSG( _T("not implemented") );
+    // nothing to do
 }
 
 void wxToolBar::DoRedrawTool(wxToolBarTool *tool)
@@ -484,11 +475,16 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos),
     // VZ: didn't test whether it works, but why not...
     tool->Detach();
 
+    Refresh();
+
     return TRUE;
 }
 
 bool wxToolBar::DoInsertTool(size_t pos, wxToolBarTool *tool)
 {
+    wxCHECK_MSG( !tool->IsControl(), FALSE,
+                 _T("generic wxToolBar doesn't support controls") );
+
     // TODO: use the mapping code from wxToolBar95 to get it right in this class
 #if !defined(__WIN32__) && !defined(__WIN386__)
     wxBitmap bitmap2;
@@ -513,12 +509,15 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarTool *tool)
 
     tool->SetSize(GetToolSize());
 
-    // Calculate reasonable max size in case Layout() not called
-    if ((tool->m_x + tool->GetBitmap1().GetWidth() + m_xMargin) > m_maxWidth)
-        m_maxWidth = (tool->m_x + tool->GetWidth() + m_xMargin);
+    if ( tool->IsButton() )
+    {
+        // Calculate reasonable max size in case Layout() not called
+        if ((tool->m_x + tool->GetBitmap1().GetWidth() + m_xMargin) > m_maxWidth)
+            m_maxWidth = (tool->m_x + tool->GetWidth() + m_xMargin);
 
-    if ((tool->m_y + tool->GetBitmap1().GetHeight() + m_yMargin) > m_maxHeight)
-        m_maxHeight = (tool->m_y + tool->GetHeight() + m_yMargin);
+        if ((tool->m_y + tool->GetBitmap1().GetHeight() + m_yMargin) > m_maxHeight)
+            m_maxHeight = (tool->m_y + tool->GetHeight() + m_yMargin);
+    }
 
     return TRUE;
 }

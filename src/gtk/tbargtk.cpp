@@ -22,7 +22,7 @@
 
 #include "wx/toolbar.h"
 
-#if wxUSE_TOOLBAR
+#if wxUSE_TOOLBAR && !wxUSE_TOOLBAR_SIMPLE
 
 #include "wx/frame.h"
 

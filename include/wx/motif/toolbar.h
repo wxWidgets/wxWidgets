@@ -66,7 +66,6 @@ protected:
     virtual void DoSetToggle(wxToolBarTool *tool, bool toggle);
 
 private:
-    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)
 };
 
