@@ -77,14 +77,14 @@ IMPLEMENT_APP(wxEmulatorApp)
 
 static const wxCmdLineEntryDesc sg_cmdLineDesc[] =
 {
-    { wxCMD_LINE_OPTION, _T("u"), _T("use-display"),   _T("display number to use (default 100)") },
+    { wxCMD_LINE_OPTION, _T("u"), _T("use-display"),   _T("display number to use (default 100)"), (wxCmdLineParamType)0, 0 },
 
-    { wxCMD_LINE_SWITCH, _T("h"), _T("help"),   _T("displays help on the command line parameters") },
-    { wxCMD_LINE_SWITCH, _T("v"), _T("version"),    _T("print version") },
+    { wxCMD_LINE_SWITCH, _T("h"), _T("help"),   _T("displays help on the command line parameters"), (wxCmdLineParamType)0, 0 },
+    { wxCMD_LINE_SWITCH, _T("v"), _T("version"),    _T("print version"), (wxCmdLineParamType)0, 0 },
 
     { wxCMD_LINE_PARAM,  NULL, NULL, _T("config file 1"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 
-    { wxCMD_LINE_NONE }
+    { wxCMD_LINE_NONE, NULL, NULL, NULL, (wxCmdLineParamType)0, 0 }
 };
 
 
@@ -487,7 +487,7 @@ bool wxEmulatorInfo::Load(const wxString& appDir)
         m_emulatorScreenSize = wxSize(w, h);
     }
 
-    if (!m_emulatorBackgroundBitmapName.IsEmpty())
+    if (!m_emulatorBackgroundBitmapName.empty())
     {
         wxString absoluteBackgroundBitmapName = rootPath + wxString(wxFILE_SEP_PATH) + m_emulatorBackgroundBitmapName;
         if ( !wxFile::Exists(absoluteBackgroundBitmapName) )
@@ -575,10 +575,10 @@ wxString wxFindAppPath(const wxString& argv0, const wxString& cwd, const wxStrin
     wxString str;
 
     // Try appVariableName
-    if (!appVariableName.IsEmpty())
+    if (!appVariableName.empty())
     {
         str = wxGetenv(appVariableName);
-        if (!str.IsEmpty())
+        if (!str.empty())
             return str;
     }
 
@@ -602,7 +602,7 @@ wxString wxFindAppPath(const wxString& argv0, const wxString& cwd, const wxStrin
     wxPathList pathList;
     pathList.AddEnvList(wxT("PATH"));
     str = pathList.FindAbsoluteValidPath(argv0);
-    if (!str.IsEmpty())
+    if (!str.empty())
         return wxPathOnly(str);
 
     // Failed

@@ -37,8 +37,8 @@ void spVisitor::VisitAll( spContext& atContext,
                           bool sortContent
                         )
 {
-    mSiblingSkipped = FALSE;
-    mChildSkipped   = FALSE;
+    mSiblingSkipped = false;
+    mChildSkipped   = false;
     mContextMask    = SP_CTX_ANY; // FIXME:: should be an arg.
 
     if ( sortContent && !atContext.IsSorted() )
@@ -56,7 +56,7 @@ void spVisitor::VisitAll( spContext& atContext,
     for( size_t i = 0; i != members.size(); ++i )
     {
         if ( mSiblingSkipped )
-        
+
             return;
 
         if ( !mChildSkipped )
@@ -84,12 +84,12 @@ void spVisitor::RemoveCurrentContext()
 
 void spVisitor::SkipSiblings()
 {
-    mSiblingSkipped = TRUE;
+    mSiblingSkipped = true;
 }
 
 void spVisitor::SkipChildren()
 {
-    mChildSkipped = TRUE;
+    mChildSkipped = true;
 }
 
 void spVisitor::SetFilter( int contextMask )
@@ -125,7 +125,7 @@ spContext::spContext()
 
     : mpParent        ( NULL ),
       mpFirstOccurence( NULL ),
-      mAlreadySorted  ( FALSE ),
+      mAlreadySorted  ( false ),
 
       mSrcLineNo    (-1),
       mSrcOffset    (-1),
@@ -140,8 +140,8 @@ spContext::spContext()
 
       mVisibility( SP_VIS_PRIVATE ),
 
-      mIsVirtualContext         ( FALSE ),
-      mVirtualContextHasChildren( FALSE ),
+      mIsVirtualContext         ( false ),
+      mVirtualContextHasChildren( false ),
 
       mpUserData( NULL )
 {}
@@ -149,7 +149,7 @@ spContext::spContext()
 void spContext::RemoveChildren()
 {
     for( size_t i = 0; i != mMembers.size(); ++i )
-    
+
         delete mMembers[i];
 
     mMembers.erase( mMembers.begin(), mMembers.end() );
@@ -160,7 +160,7 @@ spContext::~spContext()
     RemoveChildren();
 
     for( size_t i = 0; i != mComments.size(); ++i )
-    
+
         delete mComments[i];
 }
 
@@ -201,7 +201,7 @@ void spContext::RemoveChild( spContext* pChild )
             return;
         }
 
-    // the given child should exist on the parent's list 
+    // the given child should exist on the parent's list
     wxASSERT( 0 );
 }
 
@@ -209,8 +209,8 @@ spContext* spContext::GetEnclosingContext( int mask )
 {
     spContext* cur = this->GetParent();
 
-    while ( cur && !(cur->GetContextType() & mask) ) 
-        
+    while ( cur && !(cur->GetContextType() & mask) )
+
         cur = cur->GetParent();
 
     return cur;
@@ -246,7 +246,7 @@ string spContext::GetFooterOfVirtualContextBody()
 }
 
 
-void spContext::SetVirtualContextBody( const string& body, 
+void spContext::SetVirtualContextBody( const string& body,
                                        bool          hasChildren,
                                        const string& footer )
 {
@@ -257,13 +257,13 @@ void spContext::SetVirtualContextBody( const string& body,
 
     // atuomaticllay becomes virtual context
 
-    mIsVirtualContext   = TRUE;
+    mIsVirtualContext   = true;
 }
 
 string spContext::GetBody( spContext* pCtx )
 {
-    if ( ( pCtx == NULL || pCtx == this ) && mIsVirtualContext ) 
-        
+    if ( ( pCtx == NULL || pCtx == this ) && mIsVirtualContext )
+
         return mVirtualContextBody;
 
     if ( GetParent() )
@@ -289,7 +289,7 @@ bool spContext::IsFirstOccurence()
 
 spContext* spContext::GetFirstOccurence()
 {
-    // this object should not itself be 
+    // this object should not itself be
     // the first occurence of the context
     wxASSERT( mpFirstOccurence != 0 );
 
@@ -322,7 +322,7 @@ spContext* spContext::FindContext( const string& identifier,
     {
         spContext& member = *mMembers[i];
 
-        if ( member.GetName() == identifier && 
+        if ( member.GetName() == identifier &&
              ( contextType & member.GetContextType() )
            )
 
@@ -330,7 +330,7 @@ spContext* spContext::FindContext( const string& identifier,
 
         if ( searchSubMembers )
         {
-            spContext* result = 
+            spContext* result =
                 member.FindContext( identifier, contextType, 1 );
 
             if ( result ) return result;
@@ -414,7 +414,7 @@ void spClass::SortMembers()
 
 spOperation::spOperation()
 
-    : mHasDefinition( FALSE )
+    : mHasDefinition( false )
 {
     mIsConstant =
     mIsVirtual =
@@ -428,7 +428,7 @@ string spOperation::GetFullName(MarkupTagsT tags)
     txt += mName;
     txt += "( ";
     txt += tags[TAG_BOLD].end;
-    
+
     for( size_t i = 0; i != mMembers.size(); ++i )
     {
         // DBG::
@@ -438,9 +438,9 @@ string spOperation::GetFullName(MarkupTagsT tags)
 
         if ( i != 0 )
             txt += ", ";
-        
+
         txt += tags[TAG_BOLD].start;
-        
+
         txt += param.mType;
 
         txt += tags[TAG_BOLD].end;
@@ -479,15 +479,15 @@ string spPreprocessorLine::CPP_GetIncludedFileNeme() const
 
     size_t i = 0;
 
-    while( i < mLine.length() && mLine[i] != '"' && mLine[i] != '<' ) 
-        
+    while( i < mLine.length() && mLine[i] != '"' && mLine[i] != '<' )
+
         ++i;
 
     ++i;
 
     size_t start = i;
 
-    while( i < mLine.length() && mLine[i] != '"' && mLine[i] != '>' ) 
+    while( i < mLine.length() && mLine[i] != '"' && mLine[i] != '>' )
 
         ++i;
 
@@ -567,7 +567,7 @@ void spContext::Dump(const wxString& indent) const
     }
 }
 
-void spContext::DumpThis(const wxString& indent) const
+void spContext::DumpThis(const wxString& WXUNUSED(indent)) const
 {
     wxFAIL_MSG("abstract base class can't be found in parser tree!");
 }

@@ -24,7 +24,7 @@ class wxEmulatorInfo: public wxObject
 public:
 
     wxEmulatorInfo() { Init(); }
-    wxEmulatorInfo(const wxEmulatorInfo& info) { Init(); Copy(info); }
+    wxEmulatorInfo(const wxEmulatorInfo& info) : wxObject() { Init(); Copy(info); }
 
     void operator= (const wxEmulatorInfo& info) { Copy(info); }
     void Copy(const wxEmulatorInfo& info);
