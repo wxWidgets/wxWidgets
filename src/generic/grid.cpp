@@ -3194,8 +3194,8 @@ bool wxGrid::CreateGrid( int numRows, int numCols,
         m_table = new wxGridStringTable( m_numRows, m_numCols );
         m_table->SetView( this );
         m_ownTable = TRUE;
-        Init();
         m_selection = new wxGridSelection( this, selmode );
+        Init();
         m_created = TRUE;
     }
     return m_created;
@@ -3234,8 +3234,8 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
         m_table->SetView( this );
         if (takeOwnership)
             m_ownTable = TRUE;
-        Init();
         m_selection = new wxGridSelection( this, selmode );
+        Init();
         m_created = TRUE;
     }
 
