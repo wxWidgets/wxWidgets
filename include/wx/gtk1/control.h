@@ -29,6 +29,8 @@ class wxControl;
 // wxControl
 //-----------------------------------------------------------------------------
 
+extern const wxChar* wxControlNameStr;
+
 class wxControl : public wxControlBase
 {
 public:
@@ -38,7 +40,17 @@ public:
                const wxPoint &pos = wxDefaultPosition,
                const wxSize &size = wxDefaultSize,
                long style = 0,
-               const wxString &name = wxPanelNameStr );
+               const wxString &name = wxControlNameStr );
+
+#if wxUSE_VALIDATORS
+    wxControl( wxWindow *parent,
+               wxWindowID id,
+               const wxPoint &pos = wxDefaultPosition,
+               const wxSize &size = wxDefaultSize,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString &name = wxControlNameStr );
+#endif
 
     // this function will filter out '&' characters and will put the accelerator
     // char (the one immediately after '&') into m_chAccel (TODO not yet)
@@ -50,7 +62,7 @@ protected:
 
     wxString   m_label;
     char       m_chAccel;  // enabled to avoid breaking binary compatibility later on
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxControl)
 };

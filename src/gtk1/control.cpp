@@ -36,6 +36,20 @@ wxControl::wxControl( wxWindow *parent,
     (void)Create(parent, id, pos, size, style, name);
 }
 
+#if wxUSE_VALIDATORS
+wxControl::wxControl( wxWindow *parent,
+                      wxWindowID id,
+                      const wxPoint &pos,
+                      const wxSize &size,
+                      long style,
+                      const wxValidator& validator,
+                      const wxString &name)
+{
+    (void)Create(parent, id, pos, size, style, name);
+    SetValidator(validator);
+}
+#endif
+
 void wxControl::SetLabel( const wxString &label )
 {
     m_label.Empty();

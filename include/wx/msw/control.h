@@ -18,6 +18,8 @@
 
 #include "wx/dynarray.h"
 
+WXDLLEXPORT_DATA(extern const wxChar*) wxControlNameStr;
+
 // General item class
 class WXDLLEXPORT wxControl : public wxControlBase
 {
@@ -25,7 +27,26 @@ class WXDLLEXPORT wxControl : public wxControlBase
 
 public:
    wxControl();
-   virtual ~wxControl();
+   wxControl(wxWindow *parent, wxWindowID id,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize, long style = 0,
+#if wxUSE_VALIDATORS
+             const wxValidator& validator = wxDefaultValidator,
+#endif
+             const wxString& name = wxControlNameStr)
+    {
+        Create(parent, id, pos, size, style, validator, name);
+    }
+
+    bool Create(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = 0,
+#if wxUSE_VALIDATORS
+            const wxValidator& validator = wxDefaultValidator,
+#endif
+            const wxString& name = wxControlNameStr);
+
+    virtual ~wxControl();
 
    // Simulates an event
    virtual void Command(wxCommandEvent& event) { ProcessCommand(event); }

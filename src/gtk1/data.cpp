@@ -130,6 +130,7 @@ wxColour   wxNullColour;
 wxPalette  wxNullPalette;
 
 /* Default window names */
+const wxChar *wxControlNameStr = wxT("control");
 const wxChar *wxButtonNameStr = wxT("button");
 const wxChar *wxCanvasNameStr = wxT("canvas");
 const wxChar *wxCheckBoxNameStr = wxT("check");

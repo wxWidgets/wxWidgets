@@ -56,6 +56,24 @@ wxControl::~wxControl()
     m_isBeingDeleted = TRUE;
 }
 
+
+bool wxControl::Create(wxWindow *parent, wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size, long style,
+#if wxUSE_VALIDATORS
+                       const wxValidator& validator,
+#endif
+                       const wxString& name)
+{
+    bool rval = wxWindow::Create(parent, id, pos, size, style, name);
+    if (rval) {
+#if wxUSE_VALIDATORS
+        SetValidator(validator);
+#endif
+    }
+    return rval;
+}
+
 bool wxControl::MSWCreateControl(const wxChar *classname,
                                  WXDWORD style,
                                  const wxPoint& pos,
