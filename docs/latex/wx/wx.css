@@ -1,6 +1,6 @@
 body
 {
-  padding: 0px 0px 0px 26px;
+  padding: 0px 0px 0px 0px;
   background: #ffffff; 
   color: #000000;
   font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -17,7 +17,6 @@ div
 h1, h2, h3, h4
 {
   font-family: Verdana, Arial, Helvetica, sans-serif;
-  margin-left: -26px;
 }
   
 h1
