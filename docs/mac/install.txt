@@ -113,17 +113,23 @@ with the Apple Developer Tools installed:
 4) ../configure
 5) make
 
-If you want to install the library, you need to be able to log in as "root".
-For this, "root" has to be activated in the NetInfo utility - there you will
-also have to choose a password for the "root" user. Then
+If you want to install the library into the system directories you'll need
+to do this as root.  The accepted way of running commands as root is to
+use the built-in sudo mechanism.  First of all, you must be using an
+account marked as a "Computer Administrator".  Then
 
-6) su
-7) type <PASSWORD>
-8) make install
-9) exit
+6) sudo make install
+7) type <YOUR OWN PASSWORD>
+
+Note that while using this method is okay for development, it is not
+recommended that you require endusers to install wxWindows into their
+system directories in order to use your program.  One way to avoid this
+is to configure wxWindows with --disable-shared.  Another way to avoid
+it is to make a framework for wxWindows.  Making frameworks is beyond
+the scope of this document.
 
 Note:
-You might want to configure a static library instead:
+We recommend you configure a static library instead:
 
 4) ../configure --disable-shared
 
@@ -131,6 +137,10 @@ or activate OpenGL:
 
 4) ../configure --with-opengl
 
+Note:
+It is rarely desirable to install non-Apple software into system directories.
+By configuring the library with --disable-shared and using the full path
+to wx-config with the --in-place option you can avoid installing the library.
 
 Problems with .xpm files
 ------------------------
