@@ -216,7 +216,7 @@ bool wxTextCtrl::Create(
     }
     else
     {
-        SetFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
+        SetFont(wxSystemSettings::GetFont(wxSYS_SYSTEM_FONT));
     }
     if (!rsValue.IsEmpty())
     {
@@ -267,7 +267,7 @@ void wxTextCtrl::SetupColours()
 {
     wxColour                        vBkgndColour;
 
-    vBkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
+    vBkgndColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
     SetBackgroundColour(vBkgndColour);
     SetForegroundColour(GetParent()->GetForegroundColour());
     if (m_bIsMLE)
@@ -959,7 +959,7 @@ WXHBRUSH wxTextCtrl::OnCtlColor(
     else
         ::GpiSetBackMix(hPS, BM_OVERPAINT);
     if (!IsEnabled() && (GetWindowStyle() & wxTE_MULTILINE) == 0)
-        vColBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+        vColBack = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     ::GpiSetBackColor(hPS, vColBack.GetPixel());
     ::GpiSetColor(hPS, vColFore.GetPixel());
     return (WXHBRUSH)pBackgroundBrush->GetResourceHandle();

@@ -47,7 +47,7 @@ END_EVENT_TABLE()
 wxDialog::wxDialog()
 {
   	m_isShown = FALSE;
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 }
 
 bool wxDialog::Create(wxWindow *parent, wxWindowID id,
@@ -58,7 +58,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
            const wxString& name)
 {
 
-  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+  SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
   
 
   if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
@@ -268,7 +268,7 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
 
 void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+  SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
   Refresh();
 }
 

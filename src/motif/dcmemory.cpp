@@ -58,7 +58,7 @@ wxMemoryDC::wxMemoryDC(void)
     m_oldFont = (WXFont) valReturn.font;
     SetBrush (* wxWHITE_BRUSH);
     SetPen (* wxBLACK_PEN);
-    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));    
+    SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));    
 };
 
 wxMemoryDC::wxMemoryDC( wxDC* dc )

@@ -173,7 +173,7 @@ static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)
    /* TODO: should scrollbars be affected? Should probably have separate
     * function to change them (by default, taken from wxSystemSettings)
     */
-    wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+    wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     wxWindow::DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
     wxWindow::DoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
 

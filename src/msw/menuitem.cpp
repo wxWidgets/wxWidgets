@@ -99,7 +99,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
 
 #if  wxUSE_OWNER_DRAWN
     // set default menu colors
-    #define SYS_COLOR(c) (wxSystemSettings::GetSystemColour(wxSYS_COLOUR_##c))
+    #define SYS_COLOR(c) (wxSystemSettings::GetColour(wxSYS_COLOUR_##c))
 
     SetTextColour(SYS_COLOR(MENUTEXT));
     SetBackgroundColour(SYS_COLOR(MENU));

@@ -669,7 +669,7 @@ void wxGenericTreeCtrl::Init()
 
     m_hilightBrush = new wxBrush
                          (
-                            wxSystemSettings::GetSystemColour
+                            wxSystemSettings::GetColour
                             (
                                 wxSYS_COLOUR_HIGHLIGHT
                             ),
@@ -678,7 +678,7 @@ void wxGenericTreeCtrl::Init()
 
     m_hilightUnfocusedBrush = new wxBrush
                               (
-                                 wxSystemSettings::GetSystemColour
+                                 wxSystemSettings::GetColour
                                  (
                                      wxSYS_COLOUR_BTNSHADOW
                                  ),
@@ -697,7 +697,7 @@ void wxGenericTreeCtrl::Init()
     m_renameTimer = new wxTreeRenameTimer( this );
     m_lastOnSame = FALSE;
 
-    m_normalFont = wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT );
+    m_normalFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     m_boldFont = wxFont( m_normalFont.GetPointSize(),
                          m_normalFont.GetFamily(),
                          m_normalFont.GetStyle(),
@@ -754,7 +754,7 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     SetValidator( validator );
 #endif
 
-    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
+    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX ) );
 
 //  m_dottedPen = wxPen( "grey", 0, wxDOT );  too slow under XFree86
     m_dottedPen = wxPen( wxT("grey"), 0, 0 );
@@ -2053,7 +2053,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
         wxColour colText;
         if ( item->IsSelected() )
         {
-            colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
         }
         else
         {
@@ -2061,7 +2061,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             if (attr && attr->HasTextColour())
                 colText = attr->GetTextColour();
             else
-                colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
+                colText = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
         }
 
         // prepare to draw

@@ -140,7 +140,7 @@ bool wxComboBox::Create(
     // A choice/combobox normally has a white background (or other, depending
     // on global settings) rather than inheriting the parent's background colour.
     //
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
     SetFont(pParent->GetFont());
 

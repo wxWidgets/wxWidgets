@@ -3636,9 +3636,9 @@ void wxGrid::Create()
     m_defaultCellAttr->SetFont(GetFont());
     m_defaultCellAttr->SetAlignment(wxALIGN_LEFT, wxALIGN_TOP);
     m_defaultCellAttr->SetTextColour(
-        wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT));
+        wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     m_defaultCellAttr->SetBackgroundColour(
-        wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+        wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     m_defaultCellAttr->SetRenderer(new wxGridCellStringRenderer);
     m_defaultCellAttr->SetEditor(new wxGridCellTextEditor);
 
@@ -3810,8 +3810,8 @@ void wxGrid::Init()
 
     m_selectingTopLeft = wxGridNoCellCoords;
     m_selectingBottomRight = wxGridNoCellCoords;
-    m_selectionBackground = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT);
-    m_selectionForeground = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    m_selectionBackground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    m_selectionForeground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 
     m_editable = TRUE;  // default for whole grid
 

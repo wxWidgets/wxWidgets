@@ -95,7 +95,7 @@ void wxPanel::InitDialog()
 // Responds to colour changes, and passes event on to children.
 void wxPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     Refresh();
 
     // Propagate the event to the non-top-level children

@@ -98,7 +98,7 @@ private:
     {
         wxSize size;
         wxClientDC dc(menubar);
-        dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+        dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
         dc.GetTextExtent(m_label, &size.x, &size.y);
 
         // adjust for the renderer we use and store the width
@@ -530,7 +530,7 @@ void wxPopupMenuWindow::DoDraw(wxControlRenderer *renderer)
     // never partially covered as it is always on top of everything
 
     wxDC& dc = renderer->GetDC();
-    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // FIXME: this should be done in the renderer, however when it is fixed
     //        wxPopupMenuWindow::RefreshItem() should be changed too!
@@ -1547,7 +1547,7 @@ void wxMenuBar::Attach(wxFrame *frame)
 
         SetCursor(wxCURSOR_ARROW);
 
-        SetFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
+        SetFont(wxSystemSettings::GetFont(wxSYS_SYSTEM_FONT));
 
         // calculate and set our height (it won't be changed any more)
         SetSize(-1, GetBestSize().y);
@@ -1715,7 +1715,7 @@ void wxMenuBar::RefreshItem(size_t pos)
 void wxMenuBar::DoDraw(wxControlRenderer *renderer)
 {
     wxDC& dc = renderer->GetDC();
-    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // redraw only the items which must be redrawn
 
@@ -1800,7 +1800,7 @@ wxSize wxMenuBar::DoGetBestClientSize() const
     if ( GetMenuCount() > 0 )
     {
         wxClientDC dc(wxConstCast(this, wxMenuBar));
-        dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+        dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
         dc.GetTextExtent(GetLabelTop(0), &size.x, &size.y);
 
         // adjust for the renderer we use

@@ -112,7 +112,7 @@ void wxStatusBarUniv::DoDraw(wxControlRenderer *renderer)
 
     // prepare the DC
     wxDC& dc = renderer->GetDC();
-    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // do draw the fields
     int flags = IsEnabled() ? 0 : wxCONTROL_DISABLED;
@@ -244,7 +244,7 @@ bool wxStatusBarUniv::GetFieldRect(int n, wxRect& rect) const
 wxCoord wxStatusBarUniv::GetHeight() const
 {
     wxClientDC dc(wxConstCast(this, wxStatusBarUniv));
-    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     return dc.GetCharHeight() + 2*GetBorderY();
 }

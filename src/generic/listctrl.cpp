@@ -827,7 +827,7 @@ protected:
 #ifdef __WXMAC__
         return *wxWHITE;
 #else
-        return wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT);
+        return wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT);
 #endif
     }
 
@@ -1595,7 +1595,7 @@ bool wxListLineData::SetAttributes(wxDC *dc,
     wxColour colText;
     if ( highlighted )
     {
-        colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+        colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     }
     else
     {
@@ -1786,7 +1786,7 @@ wxListHeaderWindow::wxListHeaderWindow( wxWindow *win,
     m_owner = owner;
     m_resizeCursor = new wxCursor( wxCURSOR_SIZEWE );
 
-    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE ) );
+    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 }
 
 wxListHeaderWindow::~wxListHeaderWindow()
@@ -1811,7 +1811,7 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 
     dc->SetBrush( *wxTRANSPARENT_BRUSH );
 
-    dc->SetPen( wxPen( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNSHADOW ) , 1 , wxSOLID ) );
+    dc->SetPen( wxPen( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNSHADOW ) , 1 , wxSOLID ) );
     dc->DrawLine( x+w-m_corner+1, y, x+w, y+h );  // right (outer)
     dc->DrawRectangle( x, y+h, w+1, 1 );          // bottom (outer)
 
@@ -1835,7 +1835,7 @@ void wxListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
     dc->DrawLine( x+w-m_corner+1, y, x+w, y+h );  // right (outer)
     dc->DrawRectangle( x, y+h, w+1, 1 );          // bottom (outer)
 
-    wxPen pen( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNSHADOW ), 1, wxSOLID );
+    wxPen pen( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNSHADOW ), 1, wxSOLID );
 
     dc->SetPen( pen );
     dc->DrawLine( x+w-m_corner, y, x+w-1, y+h );  // right (inner)
@@ -2307,7 +2307,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 
     m_highlightBrush = new wxBrush
                            (
-                            wxSystemSettings::GetSystemColour
+                            wxSystemSettings::GetColour
                             (
                                 wxSYS_COLOUR_HIGHLIGHT
                             ),
@@ -2316,7 +2316,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 
     m_highlightUnfocusedBrush = new wxBrush
                                     (
-                                       wxSystemSettings::GetSystemColour
+                                       wxSystemSettings::GetColour
                                        (
                                            wxSYS_COLOUR_BTNSHADOW
                                        ),
@@ -2329,7 +2329,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
     InitScrolling();
     SetScrollbars( m_xScroll, m_yScroll, 0, 0, 0, 0 );
 
-    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
+    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX ) );
 }
 
 wxListMainWindow::~wxListMainWindow()

@@ -380,10 +380,10 @@ void wxStatusBarGeneric::InitColours()
 {
     // Shadow colours
 #if defined(__WIN95__)
-    wxColour mediumShadowColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW));
+    wxColour mediumShadowColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW));
     m_mediumShadowPen = wxPen(mediumShadowColour, 1, wxSOLID);
 
-    wxColour hilightColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT));
+    wxColour hilightColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT));
     m_hilightPen = wxPen(hilightColour, 1, wxSOLID);
 #elif defined(__WXPM__)
     m_mediumShadowPen = wxPen("LIGHT GREY", 1, wxSOLID);
@@ -393,8 +393,8 @@ void wxStatusBarGeneric::InitColours()
     m_hilightPen = wxPen("WHITE", 1, wxSOLID);
 #endif
 
-    m_defaultStatusBarFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    m_defaultStatusBarFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 }
 
 // Responds to colour changes, and passes event on to children.

@@ -94,13 +94,13 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
   {
       // Is BMP height larger then text height?
       size_t adjustedHeight = m_bmpChecked.GetHeight() +
-                              wxSystemSettings::GetSystemMetric(wxSYS_EDGE_Y);
+                              wxSystemSettings::GetMetric(wxSYS_EDGE_Y);
       if (*pheight < adjustedHeight)
           *pheight = adjustedHeight;
 
       // Does BMP encroach on default check menu position?
       size_t adjustedWidth = m_bmpChecked.GetWidth() +
-                             (wxSystemSettings::GetSystemMetric(wxSYS_EDGE_X) * 2);
+                             (wxSystemSettings::GetMetric(wxSYS_EDGE_X) * 2);
       if (ms_nDefaultMarginWidth < adjustedWidth)
           *pwidth += adjustedWidth - ms_nDefaultMarginWidth;
 

@@ -183,7 +183,7 @@ wxPreviewCanvas::wxPreviewCanvas(wxPrintPreviewBase *preview, wxWindow *parent,
 wxScrolledWindow(parent, -1, pos, size, style, name)
 {
     m_printPreview = preview;
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     SetScrollbars(15, 18, 100, 100);
 }
@@ -213,7 +213,7 @@ void wxPreviewCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 // Responds to colour changes, and passes event on to children.
 void wxPreviewCanvas::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     Refresh();
 
     // Propagate the event to the non-top-level children

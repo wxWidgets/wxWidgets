@@ -125,7 +125,7 @@ wxGenericGrid::wxGenericGrid()
   m_cellBackgroundColour = *wxWHITE;
   m_labelTextColour = *wxBLACK;
 //  m_labelBackgroundColour = *wxLIGHT_GREY;
-  m_labelBackgroundColour = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
+  m_labelBackgroundColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
   m_labelBackgroundBrush = wxNullBrush;
   m_labelTextFont = wxNullFont;
   m_cellTextFont = wxNullFont;
@@ -138,9 +138,9 @@ wxGenericGrid::wxGenericGrid()
   m_inScroll = FALSE;
 
 #if defined(__WIN95__)
-  m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
+  m_scrollWidth = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 #elif defined(__WXGTK__)
-  m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
+  m_scrollWidth = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 #else
   m_scrollWidth = 16;
 #endif
@@ -195,7 +195,7 @@ bool wxGenericGrid::Create(wxWindow *parent,
   m_cellBackgroundColour = *wxWHITE;
   m_labelTextColour = *wxBLACK;
 //  m_labelBackgroundColour = *wxLIGHT_GREY;
-  m_labelBackgroundColour = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
+  m_labelBackgroundColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
   m_labelBackgroundBrush = wxNullBrush;
   m_labelTextFont = * wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxBOLD);
   m_cellTextFont = * wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
@@ -206,9 +206,9 @@ bool wxGenericGrid::Create(wxWindow *parent,
   m_inOnTextInPlace = FALSE;
   m_inScroll = FALSE;
 #if defined(__WIN95__)
-  m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
+  m_scrollWidth = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 #elif defined(__WXGTK__)
-  m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
+  m_scrollWidth = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 #else
   m_scrollWidth = 16;
 #endif

@@ -128,7 +128,7 @@ bool wxFrame::Create(wxWindow *parent,
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return FALSE;
 
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     wxModelessWindows.Append(this);
 
@@ -294,7 +294,7 @@ void wxFrame::InternalSetMenuBar()
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     Refresh();
 
 #if wxUSE_STATUSBAR

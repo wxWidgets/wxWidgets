@@ -238,7 +238,7 @@ wxListBox::~wxListBox()
 
 void wxListBox::SetupColours()
 {
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(GetParent()->GetForegroundColour());
 }
 
@@ -741,7 +741,7 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 
     wxDC dc;
     dc.SetHDC((WXHDC)hdc);
-    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_ANSI_VAR_FONT));
+    dc.SetFont(wxSystemSettings::GetFont(wxSYS_ANSI_VAR_FONT));
 
     pStruct->itemHeight = dc.GetCharHeight() + 2*OWNER_DRAWN_LISTBOX_EXTRA_SPACE;
     pStruct->itemWidth  = dc.GetCharWidth();

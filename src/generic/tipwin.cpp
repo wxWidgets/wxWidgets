@@ -122,7 +122,7 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     SetForegroundColour(*wxBLACK);
 
 #ifdef __WXMSW__
-    wxColour bkCol(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_INFOBK));
+    wxColour bkCol(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
 #else
     wxColour bkCol(wxColour(255, 255, 225));
 #endif
@@ -197,7 +197,7 @@ wxTipWindowView::wxTipWindowView(wxWindow *parent)
     // set colours
     SetForegroundColour(*wxBLACK);
 #ifdef __WXMSW__
-    wxColour bkCol(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_INFOBK));
+    wxColour bkCol(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
 #else
     wxColour bkCol(wxColour(255, 255, 225));
 #endif

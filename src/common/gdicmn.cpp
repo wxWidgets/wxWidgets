@@ -446,7 +446,7 @@ void wxInitializeStockObjects ()
   static const int sizeFont = 12;
   wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
 #else
-  wxNORMAL_FONT = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+  wxNORMAL_FONT = new wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
   static const int sizeFont = wxNORMAL_FONT->GetPointSize();
 #endif
 

@@ -218,7 +218,7 @@ bool wxToolBar::Create(
     wxRGBToColour(m_backgroundColour, GetSysColor(COLOR_BTNFACE));
     m_foregroundColour = *wxBLACK;
 
-    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // position it
     int x = pos.x;

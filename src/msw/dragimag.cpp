@@ -192,7 +192,7 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor)
 // Create a drag image from a string and optional cursor
 bool wxDragImage::Create(const wxString& str, const wxCursor& cursor)
 {
-    wxFont font(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    wxFont font(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     long w, h;
     wxScreenDC dc;

@@ -124,14 +124,14 @@ void wxWindowBase::InitBase()
 #endif // wxUSE_VALIDATORS
 
     // use the system default colours
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE);
-    m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+    m_foregroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
 
     // don't set the font here for wxMSW as we don't call WM_SETFONT here and
     // so the font is *not* really set - but calls to SetFont() later won't do
     // anything because m_font appears to be already set!
 #ifndef __WXMSW__
-    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 #endif // __WXMSW__
 
     // the colours/fonts are default for now

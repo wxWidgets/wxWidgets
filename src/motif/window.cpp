@@ -226,7 +226,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 
     parent->AddChild(this);
 
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     m_foregroundColour = *wxBLACK;
 
     //// TODO: we should probably optimize by only creating a
@@ -357,7 +357,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 
     // Scrolled widget needs to have its colour changed or we get a little blue
     // square where the scrollbars abutt
-    wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+    wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     DoChangeBackgroundColour(m_scrolledWindow, backgroundColour, TRUE);
     DoChangeBackgroundColour(m_drawingArea, backgroundColour, TRUE);
 
@@ -376,7 +376,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     // Without this, the cursor may not be restored properly (e.g. in splitter
     // sample).
     SetCursor(*wxSTANDARD_CURSOR);
-    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
     SetSize(pos.x, pos.y, size.x, size.y);
 
     return TRUE;
@@ -509,7 +509,7 @@ void wxWindow::CreateScrollbar(wxOrientation orientation)
 
         m_hScrollBar = (WXWidget) hScrollBar;
 
-        wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+        wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
         DoChangeBackgroundColour(m_hScrollBar, backgroundColour, TRUE);
 
         XtRealizeWidget(hScrollBar);
@@ -544,7 +544,7 @@ void wxWindow::CreateScrollbar(wxOrientation orientation)
             NULL);
 
         m_vScrollBar = (WXWidget) vScrollBar;
-        wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+        wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
         DoChangeBackgroundColour(m_vScrollBar, backgroundColour, TRUE);
 
         XtRealizeWidget(vScrollBar);
@@ -2870,7 +2870,7 @@ void wxWindow::ChangeBackgroundColour()
         DoChangeBackgroundColour(m_scrolledWindow, m_backgroundColour);
         // Have to set the scrollbar colours back since
         // the scrolled window seemed to change them
-        wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+        wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
         if (m_hScrollBar)
             DoChangeBackgroundColour(m_hScrollBar, backgroundColour);

@@ -205,7 +205,7 @@ WXHBRUSH wxRadioButton::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUN
     wxColour colBack = GetBackgroundColour();
 
     if (!IsEnabled())
-        colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+        colBack = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
     ::SetBkColor(hdc, wxColourToRGB(colBack));
     ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));

@@ -859,11 +859,11 @@ void wxWindowMac::WarpPointer (int x_pos, int y_pos)
 
 const wxBrush& wxWindowMac::MacGetBackgroundBrush() 
 {
-    if ( m_backgroundColour == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE) )
+    if ( m_backgroundColour == wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE) )
     {
         m_macBackgroundBrush.SetMacTheme( kThemeBrushDocumentWindowBackground ) ;
     }
-    else if (  m_backgroundColour == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE ) )
+    else if (  m_backgroundColour == wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE ) )
     {
         // on mac we have the difficult situation, that 3dface gray can be different colours, depending whether
         // it is on a notebook panel or not, in order to take care of that we walk up the hierarchy until we have
@@ -882,8 +882,8 @@ const wxBrush& wxWindowMac::MacGetBackgroundBrush()
                 }
 
                 {
-                    if ( parent->m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE ) 
-                      && parent->m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE) )
+                    if ( parent->m_backgroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE ) 
+                      && parent->m_backgroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE) )
                     {
                         // if we have any other colours in the hierarchy
                         m_macBackgroundBrush.SetColour( parent->m_backgroundColour ) ;

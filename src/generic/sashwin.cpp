@@ -660,11 +660,11 @@ void wxSashWindow::InitColours()
 {
     // Shadow colours
 #ifndef __WIN16__
-    m_faceColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
-    m_mediumShadowColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW);
-    m_darkShadowColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DDKSHADOW);
-    m_lightShadowColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT);
-    m_hilightColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT);
+    m_faceColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+    m_mediumShadowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW);
+    m_darkShadowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW);
+    m_lightShadowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT);
+    m_hilightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT);
 #else
     m_faceColour = *(wxTheColourDatabase->FindColour("LIGHT GREY"));
     m_mediumShadowColour = *(wxTheColourDatabase->FindColour("GREY"));

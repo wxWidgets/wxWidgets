@@ -149,9 +149,9 @@ bool wxFrame::Create(wxWindow *parent,
 
     m_windowStyle = style;
 
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
     m_foregroundColour = *wxBLACK;
-    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
     if ( id > -1 )
         m_windowId = id;
@@ -689,7 +689,7 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     Refresh();
 
     if ( m_frameStatusBar )

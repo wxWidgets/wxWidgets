@@ -186,7 +186,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     }
 
 
-    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_WINDOW ) );
+    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
     SetForegroundColour( parent->GetForegroundColour() );
 
     Show( TRUE );

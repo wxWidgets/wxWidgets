@@ -874,20 +874,20 @@ void wxSplitterWindow::InitColours()
 
     // Shadow colours
 #ifndef __WIN16__
-    wxColour faceColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    wxColour faceColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     m_facePen = new wxPen(faceColour, 1, wxSOLID);
     m_faceBrush = new wxBrush(faceColour, wxSOLID);
 
-    wxColour mediumShadowColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW));
+    wxColour mediumShadowColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW));
     m_mediumShadowPen = new wxPen(mediumShadowColour, 1, wxSOLID);
 
-    wxColour darkShadowColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DDKSHADOW));
+    wxColour darkShadowColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW));
     m_darkShadowPen = new wxPen(darkShadowColour, 1, wxSOLID);
 
-    wxColour lightShadowColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT));
+    wxColour lightShadowColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
     m_lightShadowPen = new wxPen(lightShadowColour, 1, wxSOLID);
 
-    wxColour hilightColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT));
+    wxColour hilightColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT));
     m_hilightPen = new wxPen(hilightColour, 1, wxSOLID);
 #else
     m_facePen = new wxPen("LIGHT GREY", 1, wxSOLID);

@@ -224,7 +224,7 @@ wxListBox::~wxListBox()
 
 void wxListBox::SetupColours()
 {
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(GetParent()->GetForegroundColour());
 } // end of wxListBox::SetupColours
 

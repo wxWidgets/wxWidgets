@@ -528,8 +528,8 @@ wxTabView::wxTabView(long style)
   m_shadowPen = wxGREY_PEN;
   m_backgroundPen = wxLIGHT_GREY_PEN;
   m_backgroundBrush = wxLIGHT_GREY_BRUSH;
-  m_tabFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
-  m_tabSelectedFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+  m_tabFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+  m_tabSelectedFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
   m_window = (wxWindow *) NULL;
 }
 

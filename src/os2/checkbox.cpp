@@ -153,7 +153,7 @@ wxSize wxCheckBox::DoGetBestSize() const
     {
         wxScreenDC                  vDc;
 
-        vDc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+        vDc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
         //
         // The height of a standard button in the dialog units is 8,

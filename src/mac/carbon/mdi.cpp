@@ -300,7 +300,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     {
        parent->AddChild(this);
     }
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
 
     wxModelessWindows.Append(this);
     return TRUE;

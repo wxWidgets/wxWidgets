@@ -35,11 +35,11 @@ IMPLEMENT_CLASS(wxEffects, wxObject)
 // Assume system colours
 wxEffects::wxEffects()
 {
-    m_highlightColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT) ;
-    m_lightShadow = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT) ;
-    m_faceColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) ;
-    m_mediumShadow = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW) ;
-    m_darkShadow = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DDKSHADOW) ;
+    m_highlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT) ;
+    m_lightShadow = wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT) ;
+    m_faceColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE) ;
+    m_mediumShadow = wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW) ;
+    m_darkShadow = wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW) ;
 }
 
 // Going from lightest to darkest

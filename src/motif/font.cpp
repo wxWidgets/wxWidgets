@@ -222,7 +222,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
 {
     if( !fontname )
     {
-        *this = wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT);
+        *this = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT);
         return TRUE;
     }
 

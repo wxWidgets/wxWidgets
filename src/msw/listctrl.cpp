@@ -280,7 +280,7 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
                       0, LVS_EX_FULLROWSELECT);
     }
 
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(GetParent()->GetForegroundColour());
 
     SubclassWin(m_hWnd);
@@ -2025,7 +2025,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     if ((GetWindowStyle() & wxLC_REPORT) == 0)
         return;
 
-    wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
+    wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
     dc.SetPen(pen);
     dc.SetBrush(* wxTRANSPARENT_BRUSH);
 

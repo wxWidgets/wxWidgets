@@ -84,9 +84,9 @@ void wxMenu::Init()
         AppendSeparator() ;
     }
 
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENU);
-    m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENUTEXT);
-    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_MENU);
+    m_foregroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
+    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 }
 
 // The wxWindow destructor will take care of deleting the submenus.
@@ -201,9 +201,9 @@ void wxMenuBar::Init()
     m_eventHandler = this;
     m_menuBarFrame = NULL;
     m_mainWidget = (WXWidget) NULL;
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENU);
-    m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENUTEXT);
-    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_MENU);
+    m_foregroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
+    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 }
 
 wxMenuBar::wxMenuBar(int n, wxMenu *menus[], const wxString titles[])

@@ -112,7 +112,7 @@ bool wxNotebook::Create(wxWindow *parent,
     if (!wxWindow::Create(parent, id, pos, size, style|wxNO_BORDER, name))
         return FALSE;
 
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
     SetTabView(new wxNotebookTabView(this));
 

@@ -170,7 +170,7 @@ WXHBRUSH wxComboBox::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSE
     wxColour colBack = GetBackgroundColour();
 
     if (!IsEnabled())
-        colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+        colBack = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
     ::SetBkColor(hdc, wxColourToRGB(colBack));
     ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
@@ -313,7 +313,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     // A choice/combobox normally has a white background (or other, depending
     // on global settings) rather than inheriting the parent's background colour.
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
     for ( int i = 0; i < n; i++ )
     {

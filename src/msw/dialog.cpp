@@ -98,7 +98,7 @@ void wxDialog::Init()
 
     m_windowDisabler = (wxWindowDisabler *)NULL;
 
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 }
 
 bool wxDialog::Create(wxWindow *parent,
@@ -122,7 +122,7 @@ bool wxDialog::Create(wxWindow *parent,
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return FALSE;
 
-    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     return TRUE;
 }
@@ -389,7 +389,7 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 #if wxUSE_CTL3D
     Ctl3dColorChange();
 #else
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     Refresh();
 #endif
 }

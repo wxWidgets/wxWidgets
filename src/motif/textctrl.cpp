@@ -665,7 +665,7 @@ void wxTextCtrl::ChangeBackgroundColour()
             XmNhorizontalScrollBar, &hsb,
             XmNverticalScrollBar, &vsb,
             NULL);
-        wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+        wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
         if (hsb)
             DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
         if (vsb)

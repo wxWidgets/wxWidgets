@@ -1380,7 +1380,7 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
     m_colHighlight = wxSCHEME_COLOUR(scheme, SHADOW_HIGHLIGHT);
     m_penHighlight = wxPen(m_colHighlight, 0, wxSOLID);
 
-    m_titlebarFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_titlebarFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
     m_titlebarFont.SetWeight(wxFONTWEIGHT_BOLD);
 
     // init the arrow bitmaps
@@ -2873,7 +2873,7 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
 {
     // prepare the dc: for now we draw all the items with the system font
     wxClientDC dc(win);
-    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // the height of a normal item
     wxCoord heightText = dc.GetCharHeight();

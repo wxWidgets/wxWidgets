@@ -179,7 +179,7 @@ wxSize wxButton::GetDefaultSize()
     {
         wxScreenDC                  vDc;
 
-        vDc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+        vDc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
         //
         // The size of a standard button in the dialog units is 50x14,

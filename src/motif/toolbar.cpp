@@ -196,7 +196,7 @@ bool wxToolBar::Create(wxWindow *parent,
     m_windowId = id;
 
     SetName(name);
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     m_foregroundColour = parent->GetForegroundColour();
     m_windowStyle = style;
 

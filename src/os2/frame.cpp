@@ -144,7 +144,7 @@ bool wxFrame::Create(
                                   ,rsName
                                  ))
         return FALSE;
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     wxModelessWindows.Append(this);
     return TRUE;
 } // end of wxFrame::Create
@@ -449,7 +449,7 @@ void wxFrame::OnSysColourChanged(
   wxSysColourChangedEvent&          rEvent
 )
 {
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     Refresh();
 
 #if wxUSE_STATUSBAR

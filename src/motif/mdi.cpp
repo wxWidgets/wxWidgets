@@ -335,9 +335,9 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     SetName(name);
     SetWindowStyleFlag(style);
 
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
     m_foregroundColour = *wxBLACK;
-    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
     if ( id > -1 )
         m_windowId = id;
@@ -621,7 +621,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     SetWindowStyleFlag(style);
 
     //    m_windowParent = parent;
-    //    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
+    //    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
 
     bool success = wxNotebook::Create(parent, wxID_NOTEBOOK_CLIENT_AREA, wxPoint(0, 0), wxSize(100, 100), 0);
     if (success)

@@ -417,7 +417,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     PostCreation();
 
-    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
+    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX ) );
     SetForegroundColour( parent->GetForegroundColour() );
     SetFont( parent->GetFont() );
 
@@ -1046,7 +1046,7 @@ wxSize wxListBox::DoGetBestSize() const
     }
 
     // Add room for the scrollbar
-    lbWidth += wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
+    lbWidth += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 
     // And just a bit more
     int cx, cy;

@@ -101,7 +101,7 @@ bool wxFrame::Create(wxWindow *parent,
            long style,
            const wxString& name)
 {
-  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+  SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return FALSE;
@@ -170,7 +170,7 @@ void wxFrame::PositionStatusBar()
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     Refresh();
 
     if ( m_frameStatusBar )

@@ -3006,7 +3006,7 @@ bool wxWindowOS2::OS2Create(
         return FALSE;
     }
     SubclassWin(m_hWnd);
-    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
     SetSize( nX
             ,nY
             ,nWidth

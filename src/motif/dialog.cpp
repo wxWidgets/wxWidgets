@@ -91,7 +91,7 @@ END_EVENT_TABLE()
 wxDialog::wxDialog()
 {
     m_modalShowing = FALSE;
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 }
 
 bool wxDialog::Create(wxWindow *parent, wxWindowID id,
@@ -105,7 +105,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     m_modalShowing = FALSE;
     m_dialogTitle = title;
 
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     m_foregroundColour = *wxBLACK;
 
     SetName(name);
@@ -151,7 +151,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
         XmStringFree(str);
     }
 
-    m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
     ChangeFont(FALSE);
 
     wxAddWindowToTable(dialogShell, this);
@@ -639,7 +639,7 @@ bool wxDialog::Destroy()
 
 void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 {
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     Refresh();
 }
 

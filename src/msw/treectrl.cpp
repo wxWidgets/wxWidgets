@@ -583,10 +583,10 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         return FALSE;
 
 #if wxUSE_COMCTL32_SAFELY
-    wxWindow::SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    wxWindow::SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     wxWindow::SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
 #elif 1
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
 #else
     // This works around a bug in the Windows tree control whereby for some versions
@@ -595,7 +595,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     // THIS FIX NOW REVERTED since it caused problems on _other_ systems.
     // Assume the user has an updated comctl32.dll.
     ::SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0,-1);
-    wxWindow::SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    wxWindow::SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
 #endif
 

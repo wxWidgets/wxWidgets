@@ -159,7 +159,7 @@ wxSize wxCheckBox::DoGetBestSize() const
     if ( !s_checkSize )
     {
         wxScreenDC dc;
-        dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+        dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
         s_checkSize = dc.GetCharHeight();
     }

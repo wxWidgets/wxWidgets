@@ -130,8 +130,8 @@ void wxStaticText::OnDraw( wxDC &dc )
         return;
 
   if ( !IsWindowHilited( (WindowRef) MacGetRootWindow() ) && 
-    ( GetBackgroundColour() == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE ) 
-      || GetBackgroundColour() == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE) ) )
+    ( GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE ) 
+      || GetBackgroundColour() == wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE) ) )
   {
     dc.SetTextForeground( wxColour( 0x80 , 0x80 , 0x80 ) ) ;
   }

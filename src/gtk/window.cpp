@@ -3536,7 +3536,7 @@ bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
 
     if ((m_wxwindow) &&
         (m_wxwindow->window) &&
-        (m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE)))
+        (m_backgroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)))
     {
         /* wxMSW doesn't clear the window here. I don't do that either to
           provide compatibility. call Clear() to do the job. */
@@ -3632,7 +3632,7 @@ void wxWindowGTK::SetWidgetStyle()
 
     GtkStyle *style = GetWidgetStyle();
 
-    if (m_font != wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ))
+    if (m_font != wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ))
     {
         gdk_font_unref( style->font );
         style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
@@ -3641,7 +3641,7 @@ void wxWindowGTK::SetWidgetStyle()
     if (m_foregroundColour.Ok())
     {
         m_foregroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
-        if (m_foregroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNTEXT))
+        if (m_foregroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT))
         {
             style->fg[GTK_STATE_NORMAL] = *m_foregroundColour.GetColor();
             style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
@@ -3667,7 +3667,7 @@ void wxWindowGTK::SetWidgetStyle()
     if (m_backgroundColour.Ok())
     {
         m_backgroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
-        if (m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE))
+        if (m_backgroundColour != wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE))
         {
             style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
             style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
@@ -3842,7 +3842,7 @@ bool wxWindowGTK::SetFont( const wxFont &font )
         return FALSE;
     }
 
-    wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
+    wxColour sysbg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
     if ( sysbg == m_backgroundColour )
     {
         m_backgroundColour = wxNullColour;

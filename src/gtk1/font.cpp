@@ -186,7 +186,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
 {
     if( !fontname )
     {
-         *this = wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT);
+         *this = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT);
          return TRUE;
     }
 
@@ -487,7 +487,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
     }
     else
     {
-        if (*this == wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT))
+        if (*this == wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT))
         {
             font = GtkGetDefaultGuiFont();
         }

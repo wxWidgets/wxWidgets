@@ -869,7 +869,7 @@ void wxLogDialog::CreateDetailsControls()
     // if the height as computed from list items exceeds, together with the
     // actual message & controls, the screen, make it smaller
     int heightMax =
-        (3*wxSystemSettings::GetSystemMetric(wxSYS_SCREEN_Y))/5 - GetSize().y;
+        (3*wxSystemSettings::GetMetric(wxSYS_SCREEN_Y))/5 - GetSize().y;
 
     m_listctrl->SetSize(-1, wxMin(height, heightMax));
 }

@@ -49,7 +49,7 @@ void wxDialog::Init()
     m_pOldFocus = (wxWindow *)NULL;
     m_isShown = FALSE;
     m_pWindowDisabler = (wxWindowDisabler *)NULL;
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 } // end of wxDialog::Init
 
 bool wxDialog::Create(
@@ -92,7 +92,7 @@ bool wxDialog::Create(
                                   ,rsName
                                  ))
         return FALSE;
-    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
     return TRUE;
 } // end of wxDialog::Create
 
@@ -392,7 +392,7 @@ void wxDialog::OnSysColourChanged(
   wxSysColourChangedEvent&          rEvent
 )
 {
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
     Refresh();
 } // end of wxDialog::OnSysColourChanged
 

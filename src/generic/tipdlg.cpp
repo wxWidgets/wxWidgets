@@ -181,7 +181,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     text->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD));
 #endif
 //
-//    text->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE));
+//    text->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
 
     m_text = new wxTextCtrl(this, -1, wxT(""),
                             wxDefaultPosition, wxSize(200, 160),

@@ -313,7 +313,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( !MSWCreateControl(windowClass, msStyle, pos, size, valueWin) )
         return FALSE;
 
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
 #if wxUSE_RICHEDIT
     if ( IsRich() )
@@ -1222,7 +1222,7 @@ WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSE
     wxColour colBack = GetBackgroundColour();
 
     if (!IsEnabled() && (GetWindowStyle() & wxTE_MULTILINE) == 0)
-        colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+        colBack = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
     ::SetBkColor(hdc, wxColourToRGB(colBack));
     ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
@@ -1241,7 +1241,7 @@ void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
 
 #if wxUSE_CTL3D
     if (m_useCtl3D)
-        col = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
+        col = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 #endif
 
     RECT rect;

@@ -248,7 +248,7 @@ void wxMDIParentFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     if ( m_clientWindow )
     {
-        m_clientWindow->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
+        m_clientWindow->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
         m_clientWindow->Refresh();
     }
 
@@ -1047,7 +1047,7 @@ bool wxMDIChildFrame::ResetWindowStyle(void *vrect)
 
 bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
 {
-    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
 
     // TODO:
 /*

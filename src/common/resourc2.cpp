@@ -1513,7 +1513,7 @@ bool wxWindow::LoadFromResource(wxWindow *parent, const wxString& resourceName, 
   if ((resource->GetResourceStyle() & wxRESOURCE_USE_DEFAULTS) != 0)
   {
     // No need to do this since it's done in wxPanel or wxDialog constructor.
-    // SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    // SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
   }
   else
   {
@@ -1525,9 +1525,9 @@ bool wxWindow::LoadFromResource(wxWindow *parent, const wxString& resourceName, 
 
   // Should have some kind of font at this point
   if (!GetFont().Ok())
-      SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+      SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
   if (!GetBackgroundColour().Ok())
-      SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+      SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
   // Only when we've created the window and set the font can we set the correct size,
   // if based on dialog units.
