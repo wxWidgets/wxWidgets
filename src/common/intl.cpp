@@ -1268,8 +1268,8 @@ wxString wxLocale::GetSystemEncodingName()
         {
             encname = _T("US-ASCII");
         }
-#endif // __SOLARIS__
         else
+#endif // __SOLARIS__
         {
             encname = wxConvLibc.cMB2WX(alang);
         }
