@@ -72,6 +72,8 @@ public:
     void OnMove(wxMoveEvent& event);
     void OnClose(wxCloseEvent& event);
 
+    void OnUpdateRefresh(wxUpdateUIEvent& event);
+
     DECLARE_EVENT_TABLE()
 };
 
