@@ -885,9 +885,12 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
     // in any case, our size changed - update
     sizer->SetSizeHints(this);
     sizer->Fit(this);
-    // JACS: can't call Show again, because it's a modal dialog
-    // and will generate an assert under MSW.
-    //Show(TRUE);
+#ifdef __WXGTK__
+    Show(TRUE);
+    // VS: this is neccessary in order to force frame redraw under
+    // WindowMaker or fvwm2 (and probably other broken WMs).
+    // Otherwise, detailed list wouldn't be displayed.
+#endif
 }
 
 wxLogDialog::~wxLogDialog()
