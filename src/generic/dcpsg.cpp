@@ -649,6 +649,9 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
 
         wxCoord xx = XLOG2DEV(points[0].x + xoffset);
         wxCoord yy = YLOG2DEV(points[0].y + yoffset);
+        
+        wxCoord xx0 = xx;
+        wxCoord yy0 = yy;
 
         fprintf( m_pstream, "%d %d moveto\n", xx, yy );
 
@@ -664,7 +667,8 @@ void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wx
             CalcBoundingBox( points[i].x + xoffset, points[i].y + yoffset);
         }
 
-        fprintf( m_pstream, "fill\n" );
+        fprintf( m_pstream, "%d %d lineto \n", xx0, yy0 );
+        fprintf( m_pstream, "stroke\n" );
     }
 }
 
@@ -838,7 +842,7 @@ void wxPostScriptDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord
                 "%d %d %d %d 0 360 ellipse\n"
                 "fill\n",
                 XLOG2DEV(x + width / 2), YLOG2DEV(y + height / 2),
-                XLOG2DEV(width / 2), YLOG2DEVREL(height / 2) );
+                XLOG2DEVREL(width / 2), YLOG2DEVREL(height / 2) );
 
         CalcBoundingBox( x - width, y - height );
         CalcBoundingBox( x + width, y + height );
@@ -853,7 +857,7 @@ void wxPostScriptDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord
                 "%d %d %d %d 0 360 ellipse\n"
                 "stroke\n",
                 XLOG2DEV(x + width / 2), YLOG2DEV(y + height / 2),
-                XLOG2DEV(width / 2), YLOG2DEVREL(height / 2) );
+                XLOG2DEVREL(width / 2), YLOG2DEVREL(height / 2) );
 
         CalcBoundingBox( x - width, y - height );
         CalcBoundingBox( x + width, y + height );
