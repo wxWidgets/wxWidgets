@@ -98,6 +98,10 @@
 #include <unistd.h>
 #endif
 
+#ifdef __DJGPP__
+#include <unistd.h>
+#endif
+
 #ifdef __MWERKS__
 #include <stat.h>
 #include <unistd.h>
