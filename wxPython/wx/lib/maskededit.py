@@ -5994,7 +5994,7 @@ class MaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
 ## events, we have to do it ourselves when we auto-complete.
 class MaskedComboBoxSelectEvent(wx.PyCommandEvent):
     def __init__(self, id, selection = 0, object=None):
-        wx.PyCommandEvent.__init__(self, wx.EVT_COMMAND_COMBOBOX_SELECTED, id)
+        wx.PyCommandEvent.__init__(self, wx.wxEVT_COMMAND_COMBOBOX_SELECTED, id)
 
         self.__selection = selection
         self.SetEventObject(object)
