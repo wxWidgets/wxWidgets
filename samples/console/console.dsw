@@ -14,6 +14,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "odbc"=..\..\build\msw\wx_odbc.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "base"=..\..\build\msw\wx_base.dsp - Package Owner=<4>
 
 Package=<5>
@@ -36,6 +48,9 @@ Package=<4>
 {{{
 Begin Project Dependency
 Project_Dep_Name net
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name odbc
 End Project Dependency
 Begin Project Dependency
 Project_Dep_Name base
