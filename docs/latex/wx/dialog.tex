@@ -280,6 +280,9 @@ propagate the notification to child windows and controls.
 
 \func{void}{SetModal}{\param{const bool}{ flag}}
 
+{\bf NB:} This function is deprecated and doesn't work for all ports, just use 
+\helpref{ShowModal}{wxdialogshowmodal} to show a modal dialog instead.
+
 Allows the programmer to specify whether the dialog box is modal (wxDialog::Show blocks control
 until the dialog is hidden) or modeless (control returns immediately).
 
