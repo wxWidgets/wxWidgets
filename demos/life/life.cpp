@@ -160,6 +160,11 @@ bool LifeApp::OnInit()
     frame->Show(TRUE);
     SetTopWindow(frame);
 
+    // just for Motif
+#ifdef __WXMOTIF__
+    frame->UpdateInfoText();
+#endif
+
     // enter the main message loop and run the app
     return TRUE;
 }
@@ -530,7 +535,7 @@ LifeNavigator::LifeNavigator(wxWindow *parent)
         bmpe = wxBITMAP(east),  
         bmps = wxBITMAP(south);
 
-#ifdef __WXMSW__
+#if !defined(__WXGTK__) && !defined(__WXMOTIF__)
     bmpn.SetMask(new wxMask(bmpn, *wxLIGHT_GREY));
     bmpw.SetMask(new wxMask(bmpw, *wxLIGHT_GREY));
     bmpc.SetMask(new wxMask(bmpc, *wxLIGHT_GREY));
@@ -583,6 +588,7 @@ LifeNavigator::LifeNavigator(wxWindow *parent)
 
 void LifeNavigator::OnClose(wxCloseEvent& event)
 {
+    // avoid if we can
     if (event.CanVeto())
         event.Veto();
     else
@@ -983,8 +989,9 @@ void LifeCanvas::OnScroll(wxScrollWinEvent& event)
         }
     }
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) // what about Motif?
-    // wxGTK updates the thumb automatically (wxMSW doesn't); reset it back
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+    // wxGTK and wxMotif update the thumb automatically (wxMSW doesn't);
+    // so reset it back as we always want it to be in the same position.
     if (type != wxEVT_SCROLLWIN_THUMBTRACK)
     {
         SetScrollbar(wxHORIZONTAL, m_viewportW, m_viewportW, 3 * m_viewportW);
