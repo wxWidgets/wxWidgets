@@ -804,6 +804,7 @@ UNIV_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/src/univ
 	mkdir $(DISTDIR)/src/univ/themes
 	cp $(INCDIR)/wx/univ/*.h $(DISTDIR)/include/wx/univ
+	cp $(INCDIR)/wx/univ/setup0.h $(DISTDIR)/include/wx/univ/setup.h
 	cp $(SRCDIR)/univ/files.lst $(DISTDIR)/src/univ
 	cp $(SRCDIR)/univ/*.cpp $(DISTDIR)/src/univ
 	cp $(SRCDIR)/univ/themes/*.cpp $(DISTDIR)/src/univ/themes
