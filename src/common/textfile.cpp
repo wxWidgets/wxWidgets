@@ -249,17 +249,17 @@ bool wxTextFile::Write(wxTextFileType typeNew)
   return fileTmp.Commit();
 }
 
-const char *wxTextFile::GetEOL(wxTextFileType type)
+const wxChar *wxTextFile::GetEOL(wxTextFileType type)
   {
     switch ( type ) {
-      case wxTextFileType_None: return "";
-      case wxTextFileType_Unix: return "\n";
-      case wxTextFileType_Dos:  return "\r\n";
-      case wxTextFileType_Mac:  return "\r";
+      case wxTextFileType_None: return _T("");
+      case wxTextFileType_Unix: return _T("\n");
+      case wxTextFileType_Dos:  return _T("\r\n");
+      case wxTextFileType_Mac:  return _T("\r");
 
       default:
-        wxFAIL_MSG("bad file type in wxTextFile::GetEOL.");
-        return (const char *) NULL;
+        wxFAIL_MSG(_T("bad file type in wxTextFile::GetEOL."));
+        return (const wxChar *) NULL;
     }
   }
 
