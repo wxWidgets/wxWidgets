@@ -285,8 +285,9 @@ SHRINK = _core.SHRINK
 GROW = _core.GROW
 EXPAND = _core.EXPAND
 SHAPED = _core.SHAPED
-ADJUST_MINSIZE = _core.ADJUST_MINSIZE
+FIXED_SIZE = _core.FIXED_SIZE
 TILE = _core.TILE
+ADJUST_MINSIZE = _core.ADJUST_MINSIZE
 BORDER_DEFAULT = _core.BORDER_DEFAULT
 BORDER_NONE = _core.BORDER_NONE
 BORDER_STATIC = _core.BORDER_STATIC
@@ -746,6 +747,24 @@ class Size(object):
     def GetHeight(*args, **kwargs):
         """GetHeight() -> int"""
         return _core.Size_GetHeight(*args, **kwargs)
+
+    def IsFullySpecified(*args, **kwargs):
+        """
+        IsFullySpecified() -> bool
+
+        Returns True if both components of the size are non-default values.
+        """
+        return _core.Size_IsFullySpecified(*args, **kwargs)
+
+    def SetDefaults(*args, **kwargs):
+        """
+        SetDefaults(Size size)
+
+        Combine this size with the other one replacing the default
+        components of this object (i.e. equal to -1) with those of the
+        other.
+        """
+        return _core.Size_SetDefaults(*args, **kwargs)
 
     def Get(*args, **kwargs):
         """
@@ -4794,8 +4813,9 @@ class PyApp(EvtHandler):
         """
         GetComCtl32Version() -> int
 
-        Returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
-        wasn't found at all.  Raises an exception on non-Windows platforms.
+        Returns 400, 470, 471, etc. for comctl32.dll 4.00, 4.70, 4.71 or
+        0 if it wasn't found at all.  Raises an exception on non-Windows
+        platforms.
         """
         return _core.PyApp_GetComCtl32Version(*args, **kwargs)
 
@@ -4852,8 +4872,9 @@ def PyApp_GetComCtl32Version(*args, **kwargs):
     """
     PyApp_GetComCtl32Version() -> int
 
-    Returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
-    wasn't found at all.  Raises an exception on non-Windows platforms.
+    Returns 400, 470, 471, etc. for comctl32.dll 4.00, 4.70, 4.71 or
+    0 if it wasn't found at all.  Raises an exception on non-Windows
+    platforms.
     """
     return _core.PyApp_GetComCtl32Version(*args, **kwargs)
 
@@ -5231,11 +5252,44 @@ def GetAccelFromString(*args, **kwargs):
     return _core.GetAccelFromString(*args, **kwargs)
 #---------------------------------------------------------------------------
 
-WINDOW_VARIANT_DEFAULT = _core.WINDOW_VARIANT_DEFAULT
+class VisualAttributes(object):
+    """struct containing all the visual attributes of a control"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxVisualAttributes instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__() -> VisualAttributes
+
+        struct containing all the visual attributes of a control
+        """
+        newobj = _core.new_VisualAttributes(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_core.delete_VisualAttributes):
+        """__del__()"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    font = property(_core.VisualAttributes_font_get, _core.VisualAttributes_font_set)
+    colFg = property(_core.VisualAttributes_colFg_get, _core.VisualAttributes_colFg_set)
+    colBg = property(_core.VisualAttributes_colBg_get, _core.VisualAttributes_colBg_set)
+
+class VisualAttributesPtr(VisualAttributes):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = VisualAttributes
+_core.VisualAttributes_swigregister(VisualAttributesPtr)
+NullAcceleratorTable = cvar.NullAcceleratorTable
+PanelNameStr = cvar.PanelNameStr
+
 WINDOW_VARIANT_NORMAL = _core.WINDOW_VARIANT_NORMAL
 WINDOW_VARIANT_SMALL = _core.WINDOW_VARIANT_SMALL
 WINDOW_VARIANT_MINI = _core.WINDOW_VARIANT_MINI
 WINDOW_VARIANT_LARGE = _core.WINDOW_VARIANT_LARGE
+WINDOW_VARIANT_MAX = _core.WINDOW_VARIANT_MAX
 class Window(EvtHandler):
     """
     wx.Window is the base class for all windows and represents any visible
@@ -5248,8 +5302,8 @@ class Window(EvtHandler):
         return "<%s.%s; proxy of C++ wxWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=PanelNameStr) -> Window
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=PanelNameStr) -> Window
 
         Construct and show a generic Window.
         """
@@ -5261,8 +5315,8 @@ class Window(EvtHandler):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=PanelNameStr) -> bool
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=PanelNameStr) -> bool
 
         Create the GUI part of the Window for 2-phase creation mode.
         """
@@ -5362,7 +5416,7 @@ class Window(EvtHandler):
         differs from class to class. For frames and dialogs, the value
         returned is the title. For buttons or static text controls, it is
         the button text. This function can be useful for meta-programs
-        (such as testing tools or special-needs access programs) which
+        such as testing tools or special-needs access programs)which
         need to identify windows by name.
         """
         return _core.Window_GetLabel(*args, **kwargs)
@@ -5380,7 +5434,7 @@ class Window(EvtHandler):
         """
         GetName() -> String
 
-        Returns the window's name.  This name is not guaranteed to be
+        Returns the windows name.  This name is not guaranteed to be
         unique; it is up to the programmer to supply an appropriate name
         in the window constructor or via wx.Window.SetName.
         """
@@ -5391,7 +5445,13 @@ class Window(EvtHandler):
         SetWindowVariant(int variant)
 
         Sets the variant of the window/font size to use for this window,
-        if the platform supports variants, (for example, wxMac.)
+        if the platform supports variants, for example, wxMac.  Variant values are:
+
+            wx.WINDOW_VARIANT_NORMAL    Normal size
+            wx.WINDOW_VARIANT_SMALL     Smaller size (about 25 % smaller than normal)
+            wx.WINDOW_VARIANT_MINI      Mini size (about 33 % smaller than normal)
+            wx.WINDOW_VARIANT_LARGE     Large size (about 25 % larger than normal)
+
         """
         return _core.Window_SetWindowVariant(*args, **kwargs)
 
@@ -5734,10 +5794,11 @@ class Window(EvtHandler):
         """
         return _core.Window_FitInside(*args, **kwargs)
 
-    def SetSizeHints(*args, **kwargs):
+    def SetSizeHints(*args):
         """
         SetSizeHints(int minW, int minH, int maxW=-1, int maxH=-1, int incW=-1, 
             int incH=-1)
+        SetSizeHints(Size minSize, Size maxSize=DefaultSize, Size incSize=DefaultSize)
 
         Allows specification of minimum and maximum window sizes, and window
         size increments. If a pair of values is not set (or set to -1), the
@@ -5745,18 +5806,19 @@ class Window(EvtHandler):
         will not be able to size the window outside the given bounds. The
         resizing increments are only significant under Motif or Xt.
         """
-        return _core.Window_SetSizeHints(*args, **kwargs)
+        return _core.Window_SetSizeHints(*args)
 
-    def SetVirtualSizeHints(*args, **kwargs):
+    def SetVirtualSizeHints(*args):
         """
         SetVirtualSizeHints(int minW, int minH, int maxW=-1, int maxH=-1)
+        SetVirtualSizeHints(Size minSize, Size maxSize=DefaultSize)
 
         Allows specification of minimum and maximum virtual window sizes. If a
         pair of values is not set (or set to -1), the default values will be
         used.  If this function is called, the user will not be able to size
         the virtual area of the window outside the given bounds.
         """
-        return _core.Window_SetVirtualSizeHints(*args, **kwargs)
+        return _core.Window_SetVirtualSizeHints(*args)
 
     def GetMinWidth(*args, **kwargs):
         """GetMinWidth() -> int"""
@@ -5777,6 +5839,10 @@ class Window(EvtHandler):
     def GetMaxSize(*args, **kwargs):
         """GetMaxSize() -> Size"""
         return _core.Window_GetMaxSize(*args, **kwargs)
+
+    def GetMinSize(*args, **kwargs):
+        """GetMinSize() -> Size"""
+        return _core.Window_GetMinSize(*args, **kwargs)
 
     def SetVirtualSize(*args, **kwargs):
         """
@@ -6210,6 +6276,49 @@ class Window(EvtHandler):
         """
         return _core.Window_GetValidator(*args, **kwargs)
 
+    def Validate(*args, **kwargs):
+        """
+        Validate() -> bool
+
+        Validates the current values of the child controls using their
+        validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY
+        extra style flag set, the method will also call Validate() of all
+        child windows.  Returns false if any of the validations failed.
+        """
+        return _core.Window_Validate(*args, **kwargs)
+
+    def TransferDataToWindow(*args, **kwargs):
+        """
+        TransferDataToWindow() -> bool
+
+        Transfers values to child controls from data areas specified by
+        their validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY
+        extra style flag set, the method will also call
+        TransferDataToWindow() of all child windows.
+        """
+        return _core.Window_TransferDataToWindow(*args, **kwargs)
+
+    def TransferDataFromWindow(*args, **kwargs):
+        """
+        TransferDataFromWindow() -> bool
+
+        Transfers values from child controls to data areas specified by
+        their validators. Returns false if a transfer failed.  If the
+        window has wx.WS_EX_VALIDATE_RECURSIVELY extra style flag set, the
+        method will also call TransferDataFromWindow() of all child
+        windows.
+        """
+        return _core.Window_TransferDataFromWindow(*args, **kwargs)
+
+    def InitDialog(*args, **kwargs):
+        """
+        InitDialog()
+
+        Sends an EVT_INIT_DIALOG event, whose handler usually transfers
+        data to the dialog via validators.
+        """
+        return _core.Window_InitDialog(*args, **kwargs)
+
     def SetAcceleratorTable(*args, **kwargs):
         """
         SetAcceleratorTable(AcceleratorTable accel)
@@ -6488,6 +6597,36 @@ class Window(EvtHandler):
         """
         return _core.Window_IsExposedRect(*args, **kwargs)
 
+    def GetDefaultAttributes(*args, **kwargs):
+        """
+        GetDefaultAttributes() -> VisualAttributes
+
+        Get the default attributes for an instance of this class.  This
+        is useful if you want to use the same font or colour in your own
+        control as in a standard control -- which is a much better idea
+        than hard coding specific colours or fonts which might look
+        completely out of place on the users system, especially if it
+        uses themes.
+        """
+        return _core.Window_GetDefaultAttributes(*args, **kwargs)
+
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _core.Window_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
     def SetBackgroundColour(*args, **kwargs):
         """
         SetBackgroundColour(Colour colour) -> bool
@@ -7091,8 +7230,6 @@ class WindowPtr(Window):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Window
 _core.Window_swigregister(WindowPtr)
-NullAcceleratorTable = cvar.NullAcceleratorTable
-PanelNameStr = cvar.PanelNameStr
 
 def PreWindow(*args, **kwargs):
     """
@@ -7146,6 +7283,22 @@ def Window_GetCapture(*args, **kwargs):
     Returns the window which currently captures the mouse or None
     """
     return _core.Window_GetCapture(*args, **kwargs)
+
+def Window_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    Window_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _core.Window_GetClassDefaultAttributes(*args, **kwargs)
 
 def DLG_PNT(win, point_or_x, y=None):
     """
@@ -7904,7 +8057,7 @@ class Control(Window):
         Command(CommandEvent event)
 
         Simulates the effect of the user issuing a command to the
-        item. See wxCommandEvent.
+        item. See wx.CommandEvent.
         """
         return _core.Control_Command(*args, **kwargs)
 
@@ -7924,6 +8077,23 @@ class Control(Window):
         """
         return _core.Control_SetLabel(*args, **kwargs)
 
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _core.Control_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
 class ControlPtr(Control):
     def __init__(self, this):
@@ -7942,6 +8112,22 @@ def PreControl(*args, **kwargs):
     val = _core.new_PreControl(*args, **kwargs)
     val.thisown = 1
     return val
+
+def Control_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    Control_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _core.Control_GetClassDefaultAttributes(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 

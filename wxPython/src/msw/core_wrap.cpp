@@ -242,85 +242,86 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxSize swig_types[33] 
 #define  SWIGTYPE_p_wxDC swig_types[34] 
 #define  SWIGTYPE_p_wxPySizer swig_types[35] 
-#define  SWIGTYPE_p_wxNotifyEvent swig_types[36] 
-#define  SWIGTYPE_p_wxPyEvent swig_types[37] 
-#define  SWIGTYPE_p_wxPropagationDisabler swig_types[38] 
-#define  SWIGTYPE_p_wxAppTraits swig_types[39] 
-#define  SWIGTYPE_p_wxArrayString swig_types[40] 
-#define  SWIGTYPE_p_wxShowEvent swig_types[41] 
-#define  SWIGTYPE_p_wxToolTip swig_types[42] 
-#define  SWIGTYPE_p_wxMaximizeEvent swig_types[43] 
-#define  SWIGTYPE_p_wxIconizeEvent swig_types[44] 
-#define  SWIGTYPE_p_wxActivateEvent swig_types[45] 
-#define  SWIGTYPE_p_wxMoveEvent swig_types[46] 
-#define  SWIGTYPE_p_wxSizeEvent swig_types[47] 
-#define  SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[48] 
-#define  SWIGTYPE_p_wxWindowCreateEvent swig_types[49] 
-#define  SWIGTYPE_p_wxIdleEvent swig_types[50] 
-#define  SWIGTYPE_p_wxMenuItem swig_types[51] 
-#define  SWIGTYPE_p_wxStaticBox swig_types[52] 
-#define  SWIGTYPE_p_long swig_types[53] 
-#define  SWIGTYPE_p_wxTIFFHandler swig_types[54] 
-#define  SWIGTYPE_p_wxXPMHandler swig_types[55] 
-#define  SWIGTYPE_p_wxPNMHandler swig_types[56] 
-#define  SWIGTYPE_p_wxJPEGHandler swig_types[57] 
-#define  SWIGTYPE_p_wxPCXHandler swig_types[58] 
-#define  SWIGTYPE_p_wxGIFHandler swig_types[59] 
-#define  SWIGTYPE_p_wxPNGHandler swig_types[60] 
-#define  SWIGTYPE_p_wxANIHandler swig_types[61] 
-#define  SWIGTYPE_p_wxMemoryFSHandler swig_types[62] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[63] 
-#define  SWIGTYPE_p_wxCURHandler swig_types[64] 
-#define  SWIGTYPE_p_wxICOHandler swig_types[65] 
-#define  SWIGTYPE_p_wxBMPHandler swig_types[66] 
-#define  SWIGTYPE_p_wxImageHandler swig_types[67] 
-#define  SWIGTYPE_p_wxFileSystemHandler swig_types[68] 
-#define  SWIGTYPE_p_wxPyFileSystemHandler swig_types[69] 
-#define  SWIGTYPE_p_wxInternetFSHandler swig_types[70] 
-#define  SWIGTYPE_p_wxZipFSHandler swig_types[71] 
-#define  SWIGTYPE_p_wxRect swig_types[72] 
-#define  SWIGTYPE_p_wxGBSpan swig_types[73] 
-#define  SWIGTYPE_p_wxPropagateOnce swig_types[74] 
-#define  SWIGTYPE_p_wxAcceleratorTable swig_types[75] 
-#define  SWIGTYPE_p_char swig_types[76] 
-#define  SWIGTYPE_p_wxGBPosition swig_types[77] 
-#define  SWIGTYPE_p_wxImage swig_types[78] 
-#define  SWIGTYPE_p_wxFrame swig_types[79] 
-#define  SWIGTYPE_p_wxScrollWinEvent swig_types[80] 
-#define  SWIGTYPE_p_wxImageHistogram swig_types[81] 
-#define  SWIGTYPE_p_byte swig_types[82] 
-#define  SWIGTYPE_p_wxPoint swig_types[83] 
-#define  SWIGTYPE_p_wxCursor swig_types[84] 
-#define  SWIGTYPE_p_wxObject swig_types[85] 
-#define  SWIGTYPE_p_wxPyInputStream swig_types[86] 
-#define  SWIGTYPE_p_wxOutputStream swig_types[87] 
-#define  SWIGTYPE_p_wxInputStream swig_types[88] 
-#define  SWIGTYPE_p_wxDateTime swig_types[89] 
-#define  SWIGTYPE_p_wxKeyEvent swig_types[90] 
-#define  SWIGTYPE_p_wxNavigationKeyEvent swig_types[91] 
-#define  SWIGTYPE_p_wxWindowDestroyEvent swig_types[92] 
-#define  SWIGTYPE_p_wxWindow swig_types[93] 
-#define  SWIGTYPE_p_wxMenuBar swig_types[94] 
-#define  SWIGTYPE_p_wxFileSystem swig_types[95] 
-#define  SWIGTYPE_p_wxBitmap swig_types[96] 
-#define  SWIGTYPE_p_wxMenuEvent swig_types[97] 
-#define  SWIGTYPE_p_wxContextMenuEvent swig_types[98] 
-#define  SWIGTYPE_p_unsigned_char swig_types[99] 
-#define  SWIGTYPE_p_wxCloseEvent swig_types[100] 
-#define  SWIGTYPE_p_wxEraseEvent swig_types[101] 
-#define  SWIGTYPE_p_wxMouseEvent swig_types[102] 
-#define  SWIGTYPE_p_wxPyApp swig_types[103] 
-#define  SWIGTYPE_p_wxCommandEvent swig_types[104] 
-#define  SWIGTYPE_p_wxPyCommandEvent swig_types[105] 
-#define  SWIGTYPE_p_wxPyDropTarget swig_types[106] 
-#define  SWIGTYPE_p_wxChildFocusEvent swig_types[107] 
-#define  SWIGTYPE_p_wxFocusEvent swig_types[108] 
-#define  SWIGTYPE_p_wxDropFilesEvent swig_types[109] 
-#define  SWIGTYPE_p_wxControlWithItems swig_types[110] 
-#define  SWIGTYPE_p_wxColour swig_types[111] 
-#define  SWIGTYPE_p_wxValidator swig_types[112] 
-#define  SWIGTYPE_p_wxPyValidator swig_types[113] 
-static swig_type_info *swig_types[115];
+#define  SWIGTYPE_p_wxVisualAttributes swig_types[36] 
+#define  SWIGTYPE_p_wxNotifyEvent swig_types[37] 
+#define  SWIGTYPE_p_wxPyEvent swig_types[38] 
+#define  SWIGTYPE_p_wxPropagationDisabler swig_types[39] 
+#define  SWIGTYPE_p_wxAppTraits swig_types[40] 
+#define  SWIGTYPE_p_wxArrayString swig_types[41] 
+#define  SWIGTYPE_p_wxShowEvent swig_types[42] 
+#define  SWIGTYPE_p_wxToolTip swig_types[43] 
+#define  SWIGTYPE_p_wxMaximizeEvent swig_types[44] 
+#define  SWIGTYPE_p_wxIconizeEvent swig_types[45] 
+#define  SWIGTYPE_p_wxActivateEvent swig_types[46] 
+#define  SWIGTYPE_p_wxMoveEvent swig_types[47] 
+#define  SWIGTYPE_p_wxSizeEvent swig_types[48] 
+#define  SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[49] 
+#define  SWIGTYPE_p_wxWindowCreateEvent swig_types[50] 
+#define  SWIGTYPE_p_wxIdleEvent swig_types[51] 
+#define  SWIGTYPE_p_wxMenuItem swig_types[52] 
+#define  SWIGTYPE_p_wxStaticBox swig_types[53] 
+#define  SWIGTYPE_p_long swig_types[54] 
+#define  SWIGTYPE_p_wxTIFFHandler swig_types[55] 
+#define  SWIGTYPE_p_wxXPMHandler swig_types[56] 
+#define  SWIGTYPE_p_wxPNMHandler swig_types[57] 
+#define  SWIGTYPE_p_wxJPEGHandler swig_types[58] 
+#define  SWIGTYPE_p_wxPCXHandler swig_types[59] 
+#define  SWIGTYPE_p_wxGIFHandler swig_types[60] 
+#define  SWIGTYPE_p_wxPNGHandler swig_types[61] 
+#define  SWIGTYPE_p_wxANIHandler swig_types[62] 
+#define  SWIGTYPE_p_wxMemoryFSHandler swig_types[63] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[64] 
+#define  SWIGTYPE_p_wxCURHandler swig_types[65] 
+#define  SWIGTYPE_p_wxICOHandler swig_types[66] 
+#define  SWIGTYPE_p_wxBMPHandler swig_types[67] 
+#define  SWIGTYPE_p_wxImageHandler swig_types[68] 
+#define  SWIGTYPE_p_wxFileSystemHandler swig_types[69] 
+#define  SWIGTYPE_p_wxPyFileSystemHandler swig_types[70] 
+#define  SWIGTYPE_p_wxInternetFSHandler swig_types[71] 
+#define  SWIGTYPE_p_wxZipFSHandler swig_types[72] 
+#define  SWIGTYPE_p_wxRect swig_types[73] 
+#define  SWIGTYPE_p_wxGBSpan swig_types[74] 
+#define  SWIGTYPE_p_wxPropagateOnce swig_types[75] 
+#define  SWIGTYPE_p_wxAcceleratorTable swig_types[76] 
+#define  SWIGTYPE_p_char swig_types[77] 
+#define  SWIGTYPE_p_wxGBPosition swig_types[78] 
+#define  SWIGTYPE_p_wxImage swig_types[79] 
+#define  SWIGTYPE_p_wxFrame swig_types[80] 
+#define  SWIGTYPE_p_wxScrollWinEvent swig_types[81] 
+#define  SWIGTYPE_p_wxImageHistogram swig_types[82] 
+#define  SWIGTYPE_p_byte swig_types[83] 
+#define  SWIGTYPE_p_wxPoint swig_types[84] 
+#define  SWIGTYPE_p_wxCursor swig_types[85] 
+#define  SWIGTYPE_p_wxObject swig_types[86] 
+#define  SWIGTYPE_p_wxPyInputStream swig_types[87] 
+#define  SWIGTYPE_p_wxOutputStream swig_types[88] 
+#define  SWIGTYPE_p_wxInputStream swig_types[89] 
+#define  SWIGTYPE_p_wxDateTime swig_types[90] 
+#define  SWIGTYPE_p_wxKeyEvent swig_types[91] 
+#define  SWIGTYPE_p_wxNavigationKeyEvent swig_types[92] 
+#define  SWIGTYPE_p_wxWindowDestroyEvent swig_types[93] 
+#define  SWIGTYPE_p_wxWindow swig_types[94] 
+#define  SWIGTYPE_p_wxMenuBar swig_types[95] 
+#define  SWIGTYPE_p_wxFileSystem swig_types[96] 
+#define  SWIGTYPE_p_wxBitmap swig_types[97] 
+#define  SWIGTYPE_p_wxMenuEvent swig_types[98] 
+#define  SWIGTYPE_p_wxContextMenuEvent swig_types[99] 
+#define  SWIGTYPE_p_unsigned_char swig_types[100] 
+#define  SWIGTYPE_p_wxCloseEvent swig_types[101] 
+#define  SWIGTYPE_p_wxEraseEvent swig_types[102] 
+#define  SWIGTYPE_p_wxMouseEvent swig_types[103] 
+#define  SWIGTYPE_p_wxPyApp swig_types[104] 
+#define  SWIGTYPE_p_wxCommandEvent swig_types[105] 
+#define  SWIGTYPE_p_wxPyCommandEvent swig_types[106] 
+#define  SWIGTYPE_p_wxPyDropTarget swig_types[107] 
+#define  SWIGTYPE_p_wxChildFocusEvent swig_types[108] 
+#define  SWIGTYPE_p_wxFocusEvent swig_types[109] 
+#define  SWIGTYPE_p_wxDropFilesEvent swig_types[110] 
+#define  SWIGTYPE_p_wxControlWithItems swig_types[111] 
+#define  SWIGTYPE_p_wxColour swig_types[112] 
+#define  SWIGTYPE_p_wxValidator swig_types[113] 
+#define  SWIGTYPE_p_wxPyValidator swig_types[114] 
+static swig_type_info *swig_types[116];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -1342,16 +1343,18 @@ wxPyApp *new_wxPyApp(){
 
 
  static const wxString wxPyPanelNameStr(wxPanelNameStr); 
+wxVisualAttributes *new_wxVisualAttributes(){ return new wxVisualAttributes; }
+void delete_wxVisualAttributes(wxVisualAttributes *self){}
 PyObject *wxWindow_GetChildren(wxWindow *self){
             wxWindowList& list = self->GetChildren();
             return wxPy_ConvertList(&list);
         }
 bool wxWindow_RegisterHotKey(wxWindow *self,int hotkeyId,int modifiers,int keycode){
-        
-
-
+        #if wxUSE_HOTKEY
+            return self->RegisterHotKey(hotkeyId, modifiers, keycode);
+        #else
             return False;
-        
+        #endif
         }
 bool wxWindow_UnregisterHotKey(wxWindow *self,int hotkeyId){
         
@@ -2329,6 +2332,66 @@ static PyObject *_wrap_Size_GetHeight(PyObject *self, PyObject *args, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Size_IsFullySpecified(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSize *arg1 = (wxSize *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Size_IsFullySpecified",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSize,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxSize const *)arg1)->IsFullySpecified();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Size_SetDefaults(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSize *arg1 = (wxSize *) 0 ;
+    wxSize *arg2 = 0 ;
+    wxSize temp2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "size", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Size_SetDefaults",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSize,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetDefaults((wxSize const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -21096,10 +21159,199 @@ static PyObject *_wrap_PanelNameStr_get() {
 }
 
 
+static PyObject *_wrap_new_VisualAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVisualAttributes *result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":new_VisualAttributes",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxVisualAttributes *)new_wxVisualAttributes();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxVisualAttributes, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_delete_VisualAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:delete_VisualAttributes",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVisualAttributes,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        delete_wxVisualAttributes(arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VisualAttributes_font_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
+    wxFont *arg2 = (wxFont *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "font", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VisualAttributes_font_set",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVisualAttributes,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxFont,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (arg1) (arg1)->font = *arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VisualAttributes_font_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
+    wxFont *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VisualAttributes_font_get",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVisualAttributes,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    result = (wxFont *)& ((arg1)->font);
+    
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxFont, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VisualAttributes_colFg_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
+    wxColour *arg2 = (wxColour *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "colFg", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VisualAttributes_colFg_set",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVisualAttributes,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxColour,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (arg1) (arg1)->colFg = *arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VisualAttributes_colFg_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
+    wxColour *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VisualAttributes_colFg_get",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVisualAttributes,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    result = (wxColour *)& ((arg1)->colFg);
+    
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxColour, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VisualAttributes_colBg_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
+    wxColour *arg2 = (wxColour *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "colBg", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VisualAttributes_colBg_set",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVisualAttributes,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxColour,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (arg1) (arg1)->colBg = *arg2;
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_VisualAttributes_colBg_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
+    wxColour *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:VisualAttributes_colBg_get",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxVisualAttributes,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    result = (wxColour *)& ((arg1)->colBg);
+    
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxColour, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * VisualAttributes_swigregister(PyObject *self, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxVisualAttributes, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
 static PyObject *_wrap_new_Window(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    int arg2 ;
+    int arg2 = (int) (int)-1 ;
     wxPoint const &arg3_defvalue = wxDefaultPosition ;
     wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
     wxSize const &arg4_defvalue = wxDefaultSize ;
@@ -21121,11 +21373,13 @@ static PyObject *_wrap_new_Window(PyObject *self, PyObject *args, PyObject *kwar
         (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOO:new_Window",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_Window",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (int const) SWIG_AsInt(obj1); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj1) {
+        arg2 = (int const) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj2) {
         {
             arg3 = &temp3;
@@ -21201,7 +21455,7 @@ static PyObject *_wrap_Window_Create(PyObject *self, PyObject *args, PyObject *k
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
-    int arg3 ;
+    int arg3 = (int) (int)-1 ;
     wxPoint const &arg4_defvalue = wxDefaultPosition ;
     wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
     wxSize const &arg5_defvalue = wxDefaultSize ;
@@ -21224,13 +21478,15 @@ static PyObject *_wrap_Window_Create(PyObject *self, PyObject *args, PyObject *k
         (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:Window_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:Window_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg3 = (int const) SWIG_AsInt(obj2); 
-    if (PyErr_Occurred()) SWIG_fail;
+    if (obj2) {
+        arg3 = (int const) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     if (obj3) {
         {
             arg4 = &temp4;
@@ -22712,7 +22968,7 @@ static PyObject *_wrap_Window_FitInside(PyObject *self, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_Window_SetSizeHints(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetSizeHints__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -22728,11 +22984,8 @@ static PyObject *_wrap_Window_SetSizeHints(PyObject *self, PyObject *args, PyObj
     PyObject * obj4 = 0 ;
     PyObject * obj5 = 0 ;
     PyObject * obj6 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "minW",(char *) "minH",(char *) "maxW",(char *) "maxH",(char *) "incW",(char *) "incH", NULL 
-    };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOO:Window_SetSizeHints",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OOO|OOOO:Window_SetSizeHints",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     arg2 = (int) SWIG_AsInt(obj1); 
@@ -22769,7 +23022,152 @@ static PyObject *_wrap_Window_SetSizeHints(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_Window_SetVirtualSizeHints(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_Window_SetSizeHints__SWIG_1(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxSize *arg2 = 0 ;
+    wxSize const &arg3_defvalue = wxDefaultSize ;
+    wxSize *arg3 = (wxSize *) &arg3_defvalue ;
+    wxSize const &arg4_defvalue = wxDefaultSize ;
+    wxSize *arg4 = (wxSize *) &arg4_defvalue ;
+    wxSize temp2 ;
+    wxSize temp3 ;
+    wxSize temp4 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO|OO:Window_SetSizeHints",&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = &temp3;
+            if ( ! wxSize_helper(obj2, &arg3)) SWIG_fail;
+        }
+    }
+    if (obj3) {
+        {
+            arg4 = &temp4;
+            if ( ! wxSize_helper(obj3, &arg4)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetSizeHints((wxSize const &)*arg2,(wxSize const &)*arg3,(wxSize const &)*arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_SetSizeHints(PyObject *self, PyObject *args) {
+    int argc;
+    PyObject *argv[8];
+    int ii;
+    
+    argc = PyObject_Length(args);
+    for (ii = 0; (ii < argc) && (ii < 7); ii++) {
+        argv[ii] = PyTuple_GetItem(args,ii);
+    }
+    if ((argc >= 2) && (argc <= 4)) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxWindow, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                _v = wxPySimple_typecheck(argv[1], wxT("wxSize"), 2);
+            }
+            if (_v) {
+                if (argc <= 2) {
+                    return _wrap_Window_SetSizeHints__SWIG_1(self,args);
+                }
+                {
+                    _v = wxPySimple_typecheck(argv[2], wxT("wxSize"), 2);
+                }
+                if (_v) {
+                    if (argc <= 3) {
+                        return _wrap_Window_SetSizeHints__SWIG_1(self,args);
+                    }
+                    {
+                        _v = wxPySimple_typecheck(argv[3], wxT("wxSize"), 2);
+                    }
+                    if (_v) {
+                        return _wrap_Window_SetSizeHints__SWIG_1(self,args);
+                    }
+                }
+            }
+        }
+    }
+    if ((argc >= 3) && (argc <= 7)) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxWindow, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            _v = SWIG_CheckInt(argv[1]);
+            if (_v) {
+                _v = SWIG_CheckInt(argv[2]);
+                if (_v) {
+                    if (argc <= 3) {
+                        return _wrap_Window_SetSizeHints__SWIG_0(self,args);
+                    }
+                    _v = SWIG_CheckInt(argv[3]);
+                    if (_v) {
+                        if (argc <= 4) {
+                            return _wrap_Window_SetSizeHints__SWIG_0(self,args);
+                        }
+                        _v = SWIG_CheckInt(argv[4]);
+                        if (_v) {
+                            if (argc <= 5) {
+                                return _wrap_Window_SetSizeHints__SWIG_0(self,args);
+                            }
+                            _v = SWIG_CheckInt(argv[5]);
+                            if (_v) {
+                                if (argc <= 6) {
+                                    return _wrap_Window_SetSizeHints__SWIG_0(self,args);
+                                }
+                                _v = SWIG_CheckInt(argv[6]);
+                                if (_v) {
+                                    return _wrap_Window_SetSizeHints__SWIG_0(self,args);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'Window_SetSizeHints'");
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_SetVirtualSizeHints__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 ;
@@ -22781,11 +23179,8 @@ static PyObject *_wrap_Window_SetVirtualSizeHints(PyObject *self, PyObject *args
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "minW",(char *) "minH",(char *) "maxW",(char *) "maxH", NULL 
-    };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OO:Window_SetVirtualSizeHints",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OOO|OO:Window_SetVirtualSizeHints",&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     arg2 = (int) SWIG_AsInt(obj1); 
@@ -22810,6 +23205,121 @@ static PyObject *_wrap_Window_SetVirtualSizeHints(PyObject *self, PyObject *args
     Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_SetVirtualSizeHints__SWIG_1(PyObject *self, PyObject *args) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxSize *arg2 = 0 ;
+    wxSize const &arg3_defvalue = wxDefaultSize ;
+    wxSize *arg3 = (wxSize *) &arg3_defvalue ;
+    wxSize temp2 ;
+    wxSize temp3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO|O:Window_SetVirtualSizeHints",&obj0,&obj1,&obj2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = &temp3;
+            if ( ! wxSize_helper(obj2, &arg3)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetVirtualSizeHints((wxSize const &)*arg2,(wxSize const &)*arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_SetVirtualSizeHints(PyObject *self, PyObject *args) {
+    int argc;
+    PyObject *argv[6];
+    int ii;
+    
+    argc = PyObject_Length(args);
+    for (ii = 0; (ii < argc) && (ii < 5); ii++) {
+        argv[ii] = PyTuple_GetItem(args,ii);
+    }
+    if ((argc >= 2) && (argc <= 3)) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxWindow, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            {
+                _v = wxPySimple_typecheck(argv[1], wxT("wxSize"), 2);
+            }
+            if (_v) {
+                if (argc <= 2) {
+                    return _wrap_Window_SetVirtualSizeHints__SWIG_1(self,args);
+                }
+                {
+                    _v = wxPySimple_typecheck(argv[2], wxT("wxSize"), 2);
+                }
+                if (_v) {
+                    return _wrap_Window_SetVirtualSizeHints__SWIG_1(self,args);
+                }
+            }
+        }
+    }
+    if ((argc >= 3) && (argc <= 5)) {
+        int _v;
+        {
+            void *ptr;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxWindow, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = 1;
+            }
+        }
+        if (_v) {
+            _v = SWIG_CheckInt(argv[1]);
+            if (_v) {
+                _v = SWIG_CheckInt(argv[2]);
+                if (_v) {
+                    if (argc <= 3) {
+                        return _wrap_Window_SetVirtualSizeHints__SWIG_0(self,args);
+                    }
+                    _v = SWIG_CheckInt(argv[3]);
+                    if (_v) {
+                        if (argc <= 4) {
+                            return _wrap_Window_SetVirtualSizeHints__SWIG_0(self,args);
+                        }
+                        _v = SWIG_CheckInt(argv[4]);
+                        if (_v) {
+                            return _wrap_Window_SetVirtualSizeHints__SWIG_0(self,args);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'Window_SetVirtualSizeHints'");
     return NULL;
 }
 
@@ -22933,6 +23443,36 @@ static PyObject *_wrap_Window_GetMaxSize(PyObject *self, PyObject *args, PyObjec
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxWindow const *)arg1)->GetMaxSize();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxSize * resultptr;
+        resultptr = new wxSize((wxSize &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxSize, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_GetMinSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxSize result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_GetMinSize",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxWindow const *)arg1)->GetMinSize();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -24259,6 +24799,115 @@ static PyObject *_wrap_Window_GetValidator(PyObject *self, PyObject *args, PyObj
 }
 
 
+static PyObject *_wrap_Window_Validate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_Validate",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Validate();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_TransferDataToWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_TransferDataToWindow",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->TransferDataToWindow();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_TransferDataFromWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_TransferDataFromWindow",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->TransferDataFromWindow();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_InitDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_InitDialog",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->InitDialog();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Window_SetAcceleratorTable(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -25121,6 +25770,68 @@ static PyObject *_wrap_Window_IsExposedRect(PyObject *self, PyObject *args, PyOb
     }
     {
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_GetDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxWindow *arg1 = (wxWindow *) 0 ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Window_GetDefaultAttributes",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = ((wxWindow const *)arg1)->GetDefaultAttributes();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Window_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:Window_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxWindow::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
     }
     return resultobj;
     fail:
@@ -32497,6 +33208,38 @@ static PyObject *_wrap_Control_SetLabel(PyObject *self, PyObject *args, PyObject
 }
 
 
+static PyObject *_wrap_Control_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:Control_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxControl::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * Control_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -32580,6 +33323,7 @@ static PyObject *_wrap_ItemContainer_AppendItems(PyObject *self, PyObject *args,
 #else
             PyObject* str  = PyObject_Str(item);
 #endif
+            if (PyErr_Occurred())  SWIG_fail;
             arg2->Add(Py2wxString(str));
             Py_DECREF(item);
             Py_DECREF(str);
@@ -39752,6 +40496,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Size_SetHeight", (PyCFunction) _wrap_Size_SetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Size_GetWidth", (PyCFunction) _wrap_Size_GetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Size_GetHeight", (PyCFunction) _wrap_Size_GetHeight, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_IsFullySpecified", (PyCFunction) _wrap_Size_IsFullySpecified, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Size_SetDefaults", (PyCFunction) _wrap_Size_SetDefaults, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Size_Get", (PyCFunction) _wrap_Size_Get, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Size_swigregister", Size_swigregister, METH_VARARGS },
 	 { (char *)"RealPoint_x_set", (PyCFunction) _wrap_RealPoint_x_set, METH_VARARGS | METH_KEYWORDS },
@@ -40410,6 +41156,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AcceleratorTable_Ok", (PyCFunction) _wrap_AcceleratorTable_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"AcceleratorTable_swigregister", AcceleratorTable_swigregister, METH_VARARGS },
 	 { (char *)"GetAccelFromString", (PyCFunction) _wrap_GetAccelFromString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_VisualAttributes", (PyCFunction) _wrap_new_VisualAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_VisualAttributes", (PyCFunction) _wrap_delete_VisualAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_font_set", (PyCFunction) _wrap_VisualAttributes_font_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_font_get", (PyCFunction) _wrap_VisualAttributes_font_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_colFg_set", (PyCFunction) _wrap_VisualAttributes_colFg_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_colFg_get", (PyCFunction) _wrap_VisualAttributes_colFg_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_colBg_set", (PyCFunction) _wrap_VisualAttributes_colBg_set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_colBg_get", (PyCFunction) _wrap_VisualAttributes_colBg_get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"VisualAttributes_swigregister", VisualAttributes_swigregister, METH_VARARGS },
 	 { (char *)"new_Window", (PyCFunction) _wrap_new_Window, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreWindow", (PyCFunction) _wrap_new_PreWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_Create", (PyCFunction) _wrap_Window_Create, METH_VARARGS | METH_KEYWORDS },
@@ -40458,13 +41213,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_CenterOnParent", (PyCFunction) _wrap_Window_CenterOnParent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_Fit", (PyCFunction) _wrap_Window_Fit, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_FitInside", (PyCFunction) _wrap_Window_FitInside, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Window_SetSizeHints", (PyCFunction) _wrap_Window_SetSizeHints, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Window_SetVirtualSizeHints", (PyCFunction) _wrap_Window_SetVirtualSizeHints, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_SetSizeHints", _wrap_Window_SetSizeHints, METH_VARARGS },
+	 { (char *)"Window_SetVirtualSizeHints", _wrap_Window_SetVirtualSizeHints, METH_VARARGS },
 	 { (char *)"Window_GetMinWidth", (PyCFunction) _wrap_Window_GetMinWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetMinHeight", (PyCFunction) _wrap_Window_GetMinHeight, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetMaxWidth", (PyCFunction) _wrap_Window_GetMaxWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetMaxHeight", (PyCFunction) _wrap_Window_GetMaxHeight, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetMaxSize", (PyCFunction) _wrap_Window_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetMinSize", (PyCFunction) _wrap_Window_GetMinSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetVirtualSize", (PyCFunction) _wrap_Window_SetVirtualSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetVirtualSizeWH", (PyCFunction) _wrap_Window_SetVirtualSizeWH, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetVirtualSize", (PyCFunction) _wrap_Window_GetVirtualSize, METH_VARARGS | METH_KEYWORDS },
@@ -40509,6 +41265,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_RemoveEventHandler", (PyCFunction) _wrap_Window_RemoveEventHandler, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetValidator", (PyCFunction) _wrap_Window_SetValidator, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetValidator", (PyCFunction) _wrap_Window_GetValidator, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_Validate", (PyCFunction) _wrap_Window_Validate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_TransferDataToWindow", (PyCFunction) _wrap_Window_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_TransferDataFromWindow", (PyCFunction) _wrap_Window_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_InitDialog", (PyCFunction) _wrap_Window_InitDialog, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetAcceleratorTable", (PyCFunction) _wrap_Window_SetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetAcceleratorTable", (PyCFunction) _wrap_Window_GetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_RegisterHotKey", (PyCFunction) _wrap_Window_RegisterHotKey, METH_VARARGS | METH_KEYWORDS },
@@ -40536,6 +41296,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_IsExposed", (PyCFunction) _wrap_Window_IsExposed, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_IsExposedPoint", (PyCFunction) _wrap_Window_IsExposedPoint, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_IsExposedRect", (PyCFunction) _wrap_Window_IsExposedRect, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetDefaultAttributes", (PyCFunction) _wrap_Window_GetDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Window_GetClassDefaultAttributes", (PyCFunction) _wrap_Window_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetBackgroundColour", (PyCFunction) _wrap_Window_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_SetForegroundColour", (PyCFunction) _wrap_Window_SetForegroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Window_GetBackgroundColour", (PyCFunction) _wrap_Window_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
@@ -40743,6 +41505,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Control_Command", (PyCFunction) _wrap_Control_Command, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Control_GetLabel", (PyCFunction) _wrap_Control_GetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Control_SetLabel", (PyCFunction) _wrap_Control_SetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Control_GetClassDefaultAttributes", (PyCFunction) _wrap_Control_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Control_swigregister", Control_swigregister, METH_VARARGS },
 	 { (char *)"ItemContainer_Append", (PyCFunction) _wrap_ItemContainer_Append, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ItemContainer_AppendItems", (PyCFunction) _wrap_ItemContainer_AppendItems, METH_VARARGS | METH_KEYWORDS },
@@ -41483,6 +42246,7 @@ static swig_type_info _swigt__p_int[] = {{"_p_int", 0, "int *", 0, 0, 0, 0},{"_p
 static swig_type_info _swigt__p_wxSize[] = {{"_p_wxSize", 0, "wxSize *", 0, 0, 0, 0},{"_p_wxSize", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxDC[] = {{"_p_wxDC", 0, "wxDC *", 0, 0, 0, 0},{"_p_wxDC", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPySizer[] = {{"_p_wxPySizer", 0, "wxPySizer *", 0, 0, 0, 0},{"_p_wxPySizer", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxVisualAttributes[] = {{"_p_wxVisualAttributes", 0, "wxVisualAttributes *", 0, 0, 0, 0},{"_p_wxVisualAttributes", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxNotifyEvent[] = {{"_p_wxNotifyEvent", 0, "wxNotifyEvent *", 0, 0, 0, 0},{"_p_wxNotifyEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyEvent[] = {{"_p_wxPyEvent", 0, "wxPyEvent *", 0, 0, 0, 0},{"_p_wxPyEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPropagationDisabler[] = {{"_p_wxPropagationDisabler", 0, "wxPropagationDisabler *", 0, 0, 0, 0},{"_p_wxPropagationDisabler", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -41599,6 +42363,7 @@ _swigt__p_int,
 _swigt__p_wxSize, 
 _swigt__p_wxDC, 
 _swigt__p_wxPySizer, 
+_swigt__p_wxVisualAttributes, 
 _swigt__p_wxNotifyEvent, 
 _swigt__p_wxPyEvent, 
 _swigt__p_wxPropagationDisabler, 
@@ -41992,8 +42757,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"GROW", SWIG_FromInt((int)wxGROW));
     PyDict_SetItemString(d,"EXPAND", SWIG_FromInt((int)wxEXPAND));
     PyDict_SetItemString(d,"SHAPED", SWIG_FromInt((int)wxSHAPED));
-    PyDict_SetItemString(d,"ADJUST_MINSIZE", SWIG_FromInt((int)wxADJUST_MINSIZE));
+    PyDict_SetItemString(d,"FIXED_SIZE", SWIG_FromInt((int)wxFIXED_SIZE));
     PyDict_SetItemString(d,"TILE", SWIG_FromInt((int)wxTILE));
+    PyDict_SetItemString(d,"ADJUST_MINSIZE", SWIG_FromInt((int)wxADJUST_MINSIZE));
     PyDict_SetItemString(d,"BORDER_DEFAULT", SWIG_FromInt((int)wxBORDER_DEFAULT));
     PyDict_SetItemString(d,"BORDER_NONE", SWIG_FromInt((int)wxBORDER_NONE));
     PyDict_SetItemString(d,"BORDER_STATIC", SWIG_FromInt((int)wxBORDER_STATIC));
@@ -42471,11 +43237,11 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"PRINT_POSTSCRIPT", SWIG_FromInt((int)wxPRINT_POSTSCRIPT));
     SWIG_addvarlink(SWIG_globals,(char*)"NullAcceleratorTable",_wrap_NullAcceleratorTable_get, _wrap_NullAcceleratorTable_set);
     SWIG_addvarlink(SWIG_globals,(char*)"PanelNameStr",_wrap_PanelNameStr_get, _wrap_PanelNameStr_set);
-    PyDict_SetItemString(d,"WINDOW_VARIANT_DEFAULT", SWIG_FromInt((int)wxWINDOW_VARIANT_DEFAULT));
     PyDict_SetItemString(d,"WINDOW_VARIANT_NORMAL", SWIG_FromInt((int)wxWINDOW_VARIANT_NORMAL));
     PyDict_SetItemString(d,"WINDOW_VARIANT_SMALL", SWIG_FromInt((int)wxWINDOW_VARIANT_SMALL));
     PyDict_SetItemString(d,"WINDOW_VARIANT_MINI", SWIG_FromInt((int)wxWINDOW_VARIANT_MINI));
     PyDict_SetItemString(d,"WINDOW_VARIANT_LARGE", SWIG_FromInt((int)wxWINDOW_VARIANT_LARGE));
+    PyDict_SetItemString(d,"WINDOW_VARIANT_MAX", SWIG_FromInt((int)wxWINDOW_VARIANT_MAX));
     SWIG_addvarlink(SWIG_globals,(char*)"DefaultValidator",_wrap_DefaultValidator_get, _wrap_DefaultValidator_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ControlNameStr",_wrap_ControlNameStr_get, _wrap_ControlNameStr_set);
     PyDict_SetItemString(d,"FLEX_GROWMODE_NONE", SWIG_FromInt((int)wxFLEX_GROWMODE_NONE));

@@ -11932,6 +11932,7 @@ static PyObject *_wrap_new_FileTypeInfoSequence(PyObject *self, PyObject *args, 
 #else
             PyObject* str  = PyObject_Str(item);
 #endif
+            if (PyErr_Occurred())  SWIG_fail;
             arg1->Add(Py2wxString(str));
             Py_DECREF(item);
             Py_DECREF(str);

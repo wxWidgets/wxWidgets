@@ -33,7 +33,12 @@ class Panel(core.Window):
         return _windows.Panel_Create(*args, **kwargs)
 
     def InitDialog(*args, **kwargs):
-        """InitDialog()"""
+        """
+        InitDialog()
+
+        Sends an EVT_INIT_DIALOG event, whose handler usually transfers
+        data to the dialog via validators.
+        """
         return _windows.Panel_InitDialog(*args, **kwargs)
 
 
@@ -683,8 +688,8 @@ class SplitterWindow(core.Window):
         return "<%s.%s; proxy of C++ wxSplitterWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=SP_3D, String name=SplitterNameStr) -> SplitterWindow
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=SP_3D, String name=SplitterNameStr) -> SplitterWindow
 
         Constructor.  Creates and shows a SplitterWindow.
         """
@@ -697,8 +702,8 @@ class SplitterWindow(core.Window):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=SP_3D, String name=SplitterNameStr) -> bool
+        Create(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=SP_3D, String name=SplitterNameStr) -> bool
 
         Create the GUI part of the SplitterWindow for the 2-phase create.
         """
@@ -1842,6 +1847,14 @@ class TaskBarIcon(core.EvtHandler):
         try:
             if self.thisown: destroy(self)
         except: pass
+
+    def Destroy(*args, **kwargs):
+        """
+        Destroy()
+
+        Deletes the C++ object this Python object is a proxy for.
+        """
+        return _windows.TaskBarIcon_Destroy(*args, **kwargs)
 
     def IsOk(*args, **kwargs):
         """IsOk() -> bool"""

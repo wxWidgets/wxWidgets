@@ -944,6 +944,23 @@ class ListBox(core.ControlWithItems):
         """SetItemFont(int item, Font f)"""
         return _controls.ListBox_SetItemFont(*args, **kwargs)
 
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _controls.ListBox_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
 class ListBoxPtr(ListBox):
     def __init__(self, this):
@@ -958,6 +975,22 @@ def PreListBox(*args, **kwargs):
     val = _controls.new_PreListBox(*args, **kwargs)
     val.thisown = 1
     return val
+
+def ListBox_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    ListBox_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _controls.ListBox_GetClassDefaultAttributes(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -3795,6 +3828,23 @@ class ListCtrl(core.Control):
         """GetMainWindow() -> Window"""
         return _controls.ListCtrl_GetMainWindow(*args, **kwargs)
 
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _controls.ListCtrl_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
 class ListCtrlPtr(ListCtrl):
     def __init__(self, this):
@@ -3808,6 +3858,22 @@ def PreListCtrl(*args, **kwargs):
     val = _controls.new_PreListCtrl(*args, **kwargs)
     val.thisown = 1
     return val
+
+def ListCtrl_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    ListCtrl_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _controls.ListCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -4452,6 +4518,23 @@ class TreeCtrl(core.Control):
         """GetBoundingRect(TreeItemId item, bool textOnly=False) -> PyObject"""
         return _controls.TreeCtrl_GetBoundingRect(*args, **kwargs)
 
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _controls.TreeCtrl_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
 class TreeCtrlPtr(TreeCtrl):
     def __init__(self, this):
@@ -4465,6 +4548,22 @@ def PreTreeCtrl(*args, **kwargs):
     val = _controls.new_PreTreeCtrl(*args, **kwargs)
     val.thisown = 1
     return val
+
+def TreeCtrl_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    TreeCtrl_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _controls.TreeCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
