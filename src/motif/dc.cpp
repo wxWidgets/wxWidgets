@@ -46,6 +46,11 @@ wxDC::wxDC()
     m_backgroundMode = wxTRANSPARENT;
 
     m_isInteractive = FALSE;
+
+    m_internalDeviceOriginX = 0;
+    m_internalDeviceOriginY = 0;
+    m_externalDeviceOriginX = 0;
+    m_externalDeviceOriginY = 0;
 }
 
 void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)

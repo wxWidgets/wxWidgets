@@ -18,6 +18,21 @@ Windows Help form: see the docs hierarchy.
 For a quick start, point your Web browser at docs/html/index.htm for a list of
 important documents and samples.
 
+Changes in this release
+-----------------------
+
+These are the major improvements:
+
+wxWindows 2.1
+=============
+
+- Integration of wxHTML widget and help controller into
+  wxWindows. wxHTML allows HTML viewing and printing.
+- New classes wxChrono, wxDialUpManager, wxFontEnumerator,
+  TODO
+- wxSocket and wxThread classes rewritten.
+- Documentation improvements.
+
 Platforms supported
 -------------------
 
@@ -68,18 +83,36 @@ tex2rtf2.zip            Tex2RTF documentation tool
 wxWindows for GTK distribution
 ------------------------------
 
-TODO
+wxGTK-2.x.x.tgz         wxGTK source distribution. You will
+                        need the HTML and/or PDF documentation
+                        from the zip set (above).
 
 wxWindows for Motif distribution
 --------------------------------
 
-TODO
+wxMotif-2.x.x.tgz       wxMotif source distribution. You will
+                        need the HTML and/or PDF documentation
+                        from the zip set (above).
 
 wxWindows for Windows distribution
 ----------------------------------
 
+As well as the core source, the Windows setup contains:
+
+- Windows Help versions of the documentation (docs/winhelp);
+- wxGLCanvas (OpenGL integration, in utils/glcanvas);
+- OGL 3 (Object Graphics Library, in utils/ogl);
+- wxTreeLayout (for tree drawing, in utils/wxtree);
+- a Dialog Editor binary;
+- the JPEG library.
+
 setup.exe               Setup file (Windows 95/98, NT)
 setup.*                 Other setup files
+
+wxWindows for Mac distribution
+------------------------------
+
+TODO
 
 Installation
 ------------
@@ -115,7 +148,7 @@ commercial applications using wxWindows.
 Documentation
 -------------
 
-See docs/changes.txt for a history of changes to wxWindows 2.
+See docs/changes.txt for a detailed history of changes to wxWindows 2.
 See docs/html/index.htm for an HTML index of the major documents.
 
 The Windows help files are located in docs/winhelp.

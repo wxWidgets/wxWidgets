@@ -32,6 +32,8 @@
 #include <Xm/RowColumn.h>
 #include <Xm/LabelG.h>
 
+#include "wx/motif/private.h"
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 #endif
@@ -187,8 +189,20 @@ int wxFileDialog::ShowModal()
     }
     else
         parentWidget = (Widget) wxTheApp->GetTopLevelWidget();
+    // prepare the arg list
+    Arg args[10];
+    int ac = 0;
 
-    Widget fileSel = XmCreateFileSelectionDialog(parentWidget, "file_selector", NULL, 0);
+    wxComputeColours (XtDisplay(parentWidget), & m_backgroundColour,
+        (wxColour*) NULL);
+
+    XtSetArg(args[ac], XmNbackground, g_itemColors[wxBACK_INDEX].pixel); ac++;
+    XtSetArg(args[ac], XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel); ac++;
+    XtSetArg(args[ac], XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel); ac++;
+    XtSetArg(args[ac], XmNforeground, g_itemColors[wxFORE_INDEX].pixel); ac++;
+
+
+    Widget fileSel = XmCreateFileSelectionDialog(parentWidget, "file_selector", args, ac);
     XtUnmanageChild(XmFileSelectionBoxGetChild(fileSel, XmDIALOG_HELP_BUTTON));
 
     Widget filterWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_FILTER_TEXT);
@@ -273,16 +287,9 @@ int wxFileDialog::ShowModal()
         XmNresizePolicy, XmRESIZE_NONE,
         NULL);
 #endif
-    DoChangeBackgroundColour((WXWidget) fileSel, m_backgroundColour);
+    //    DoChangeBackgroundColour((WXWidget) fileSel, m_backgroundColour);
     DoChangeBackgroundColour((WXWidget) filterWidget, *wxWHITE);
     DoChangeBackgroundColour((WXWidget) selectionWidget, *wxWHITE);
-
-    // apparently, this provokes a crash
-#if 0
-    DoChangeBackgroundColour((WXWidget) okWidget, m_backgroundColour, TRUE);
-    DoChangeBackgroundColour((WXWidget) cancelWidget, m_backgroundColour, TRUE);
-    DoChangeBackgroundColour((WXWidget) applyWidget, m_backgroundColour, TRUE);
-#endif
 
     wxChangeListBoxColours(this, dirListWidget);
     wxChangeListBoxColours(this, fileListWidget);

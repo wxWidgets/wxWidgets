@@ -177,8 +177,8 @@ make install
 ldconfig
 exit
   
-NB: DO NOT COMPILE WXGTK WITH GCC AND THREADS, SINCE ALL PROGRAMS WILL CRASH UPON 
-START-UP! Just always use egcs and be happy.
+NB: DO NOT COMPILE WXGTK WITH GCC AND THREADS, SINCE ALL PROGRAMS WILL
+CRASH UPON START-UP! Just always use egcs and be happy.
 
 * Building wxMotif on SGI
 --------------------------
@@ -203,7 +203,7 @@ The SGI native compiler support has only been tested on Irix 6.5.
 
 Usage:
 	./configure options
-`
+
 If you want to use system's C and C++ compiler,
 set environment variables CC and CCC as
 
@@ -417,8 +417,9 @@ and configure before you can type make.
 * Further notes by Julian Smart
 ---------------------------------
 
-- You may find the following script useful for compiling wxMotif:
-  Make this script executable with the command
+- You may find the following script useful for compiling wxMotif,
+  especially if installing from zips (which don't preserve file
+  permissions). Make this script executable with the command
   chmod a+x makewxmotif.
 
   -------:x-----Cut here-----:x-----
@@ -562,5 +563,5 @@ compiler and the error message(s) to the wxwin-developers mailing list at:
 
     wxwin-developers@wx.dent.med.uni-muenchen.de
 
-Julian Smart, February 1999.
-julian.smart@ukonline.co.uk
+Julian Smart, Robert Roebling and Vadim Zeitlin, November 1999.
+

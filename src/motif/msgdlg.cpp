@@ -125,16 +125,6 @@ int wxMessageDialog::ShowModal()
         dialogCreateFunction = XmCreateInformationDialog;
     }
 
-    // prepare the arg list
-    Arg args[2];
-    int ac = 0;
-
-    wxXmString text(m_message);
-    wxXmString title(m_caption);
-    XtSetArg(args[ac], XmNmessageString, text()); ac++;
-    XtSetArg(args[ac], XmNdialogTitle, title()); ac++;
-
-    // do create message box
     Widget wParent = m_parent ? GetWidget(m_parent) : (Widget) 0;
     if ( !wParent )
     {
@@ -148,6 +138,25 @@ int wxMessageDialog::ShowModal()
 
         wParent = GetWidget(window);
     }
+
+    // prepare the arg list
+    Arg args[10];
+    int ac = 0;
+
+    wxXmString text(m_message);
+    wxXmString title(m_caption);
+    XtSetArg(args[ac], XmNmessageString, text()); ac++;
+    XtSetArg(args[ac], XmNdialogTitle, title()); ac++;
+
+    wxComputeColours (XtDisplay(wParent), & m_backgroundColour,
+        (wxColour*) NULL);
+
+    XtSetArg(args[ac], XmNbackground, g_itemColors[wxBACK_INDEX].pixel); ac++;
+    XtSetArg(args[ac], XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel); ac++;
+    XtSetArg(args[ac], XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel); ac++;
+    XtSetArg(args[ac], XmNforeground, g_itemColors[wxFORE_INDEX].pixel); ac++;
+
+    // do create message box
 
     Widget wMsgBox = (*dialogCreateFunction)(wParent, "", args, ac);
 
