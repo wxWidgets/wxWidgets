@@ -215,16 +215,17 @@ int wxNotebook::SetSelection(
 
     if (nPage != m_nSelection)
     {
-        wxNotebookEvent             event( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
-                                          ,m_windowId
-                                         );
+        wxNotebookEvent             vEvent( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
+                                           ,m_windowId
+                                          );
+
         vEvent.SetSelection(nPage);
         vEvent.SetOldSelection(m_nSelection);
         vEvent.SetEventObject(this);
         if (!GetEventHandler()->ProcessEvent(vEvent) || vEvent.IsAllowed())
         {
-            
-            // 
+
+            //
             // Program allows the page change
             //
             vEvent.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
