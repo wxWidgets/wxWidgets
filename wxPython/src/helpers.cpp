@@ -440,7 +440,7 @@ void wxPyApp::_BootstrapApp()
         setlocale(LC_NUMERIC, "C");
 #endif
 
-        wxSystemOptions::SetOptionInt(wxT("mac.textcontrol-use-mlte"), 1);
+        wxSystemOptions::SetOption(wxT("mac.textcontrol-use-mlte"), 1);
         
         // The stock objects were all NULL when they were loaded into
         // SWIG generated proxies, so re-init those now...
