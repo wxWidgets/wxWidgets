@@ -1477,7 +1477,13 @@ void wxGenericTreeCtrl::UnselectAllChildren(wxGenericTreeItem *item)
 
 void wxGenericTreeCtrl::UnselectAll()
 {
-    UnselectAllChildren((wxGenericTreeItem*) GetRootItem().m_pItem);
+    wxTreeItemId rootItem = GetRootItem();
+
+    // the tree might not have the root item at all
+    if ( rootItem )
+    {
+        UnselectAllChildren((wxGenericTreeItem*) rootItem.m_pItem);
+    }
 }
 
 // Recursive function !
