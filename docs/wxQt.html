@@ -1,0 +1,67 @@
+      $Id$
+    <br>
+    <H1>Proposal for a wxQt project</H1>
+    <p>
+      Following the recent discussions
+      and flamewars about KDE vs Gnome, I got worried that we see a
+      repetition of the same damaging infighting from which Unix has
+      suffered before. Competition is a good thing, but the current
+      situation leaves application developers with a difficult decision to
+      make: Write for KDE, using qt/harmony or write for Gnome, using GTK?
+      Whatever happens to these projects, we will end up with a lot of
+      duplicated efforts and a mix of applications written for either of the
+      two environments. The result will not be the consistent look and feel
+      that both projects aim for.
+    <p>
+      
+      The people on the wxWindows developers team thought that we might have
+      a solution for this problem, if we can get some outside help to get it
+      done. Let me explain: wxWindows is a cross-platform development
+      toolkit, a library of C++ classes which provide GUI concepts as well
+      as other cross-platform issues such as container classes, debug
+      features or configuration management. It has been around since 1992G
+      and started by supporting Motif, XView and MS-Windows, with a direct
+      X11/Xt port added later. Last year, a major rewrite was started and we
+      now have a much advanced library, available for MS Windows, with a
+      Motif port under construction. Later last year, Robert Roebling set
+      out on a one-man project to build wxGTK, a gtk-based implementation of
+      wxWindows which in less than a year has become sufficiently stable to
+      use it as the main development platform of rather large
+      applications. The original wxWindows license is a variant of the LGPL,
+      which should meet no objections from the free software community. In
+      fact, this has been an open source project long before the term became
+      commonly used. wxGTK is covered under the LGPL itself.
+    <p>
+      
+      Our idea is, that if this is good enough to work across different
+      operating systems (a MacOS port is under construction, too), it could
+      easily bridge the gap between KDE and Gnome. The quick evolution of
+      wxGTK has shown that a new port based on an existing widget set or
+      toolkit can easily be created by a small team within few
+      months. Therefore, we would like to start a project for a Qt/Harmony
+      based wxWindow library, wxQt. It would then be possible for
+      application developers to write the same source and copile it either
+      for KDE, Gnome or even any of the other supported systems.
+    <p>
+      
+      But for this we need help. The core developers are all pretty busy on
+      the existing ports, but we could provide significant help and support
+      for any such effort. A wxQt port could also recycle lots of existing
+      code from the other ports.
+
+      Please, join us in this effort and, if you feel that you could
+      contribute, join the wxWindows developers mainling list for further
+      discussions. Just send a mail containing "<tt>subscribe</tt>" to
+    <tt>wxwin-developers-request@x.dent.med.uni-muenchen.de</tt>
+    <p>
+      You can find some more information about wxWindows at the following places:
+<ul>
+<li>The <a href="http://web.ukonline.co.uk/julian.smart/wxwin/">wxWindows homepage</a>.
+<li>The <a href="http://www.freiburg.linux.de/~wxxt/">wxGTK homepage</a>
+<li>The <a href="http://Ballueder.home.ml.org/M/">home of <em>M</em></a>, an email client developed using wxGTK, showing several <a href="http://Ballueder.home.ml.org/M/screenshots/">screenshots</a> of how it actually looks like.
+</ul>
+<p>
+    <hr>
+    Karsten Ballueder <tt><a
+	href="mailto:Ballueder@usa.net">Ballueder@usa.net</a> <a
+    href="http://Ballueder.home.ml.org/">http://Ballueder.home.ml.org/</a></tt>
