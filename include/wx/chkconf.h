@@ -878,7 +878,7 @@
 #       endif
 #   endif /* !defined(wxUSE_DIALUP_MANAGER) */
 
-#   if !(wxUSE_DYNAMIC_LOADER || wxUSE_DYNLIB_CLASS)
+#   if !wxUSE_DYNAMIC_LOADER
 #       if wxUSE_MS_HTML_HELP
 #           ifdef wxABORT_ON_CONFIG_ERROR
 #               error "wxUSE_MS_HTML_HELP requires wxUSE_DYNAMIC_LOADER."
