@@ -72,17 +72,6 @@ protected:
     // common part of all ctors
     void Init();
 
-    // create a new frame, return FALSE if it couldn't be created
-    bool CreateFrame(const wxString& title,
-                     const wxPoint& pos,
-                     const wxSize& size);
-
-    // create a new dialog using the given dialog template from resources,
-    // return FALSE if it couldn't be created
-    bool CreateDialog(const wxString& title,
-                      const wxPoint& pos,
-                      const wxSize& size);
-
     // is the frame currently iconized?
     bool m_iconized;
 
@@ -97,6 +86,9 @@ protected:
     bool                  m_fsIsShowing;
     wxString              m_title;
 };
+
+// list of all frames and modeless dialogs
+//extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
 
 #endif // _WX_X11_TOPLEVEL_H_
 

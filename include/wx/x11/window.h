@@ -81,12 +81,6 @@ public:
         const wxFont *theFont = (const wxFont *) NULL)
         const;
     
-    virtual void SetScrollbar( int orient, int pos, int thumbVisible,
-        int range, bool refresh = TRUE );
-    virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
-    virtual int GetScrollPos( int orient ) const;
-    virtual int GetScrollThumb( int orient ) const;
-    virtual int GetScrollRange( int orient ) const;
     virtual void ScrollWindow( int dx, int dy,
         const wxRect* rect = (wxRect *) NULL );
     

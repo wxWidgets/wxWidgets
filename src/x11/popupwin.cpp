@@ -16,9 +16,7 @@
 #if wxUSE_POPUPWIN
 
 #include "wx/popupwin.h"
-#include "wx/frame.h"
 #include "wx/app.h"
-#include "wx/cursor.h"
 
 #include "wx/x11/private.h"
 
@@ -40,11 +38,58 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     }
 
     // All dialogs should really have this style
+    m_windowStyle = style;
     m_windowStyle |= wxTAB_TRAVERSAL;
 
+    m_parent = parent;
     if (m_parent) m_parent->AddChild( this );
 
-    // TODO: implementation
+    wxTopLevelWindows.Append(this);
+    
+    Display *xdisplay = wxGlobalDisplay();
+    int xscreen = DefaultScreen( xdisplay );
+    Visual *xvisual = DefaultVisual( xdisplay, xscreen );
+    Window xparent = RootWindow( xdisplay, xscreen );
+    
+    XSetWindowAttributes xattributes;
+    XSizeHints size_hints;
+    XWMHints wm_hints;
+    
+    long xattributes_mask =
+        CWEventMask |
+        CWBorderPixel | CWBackPixel;
+    xattributes.background_pixel = BlackPixel( xdisplay, xscreen );
+    xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
+    xattributes.override_redirect = False;
+    
+    Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 
+       0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
+    
+    XSelectInput( xdisplay, xwindow,
+        ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
+        ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
+        KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
+        PropertyChangeMask );
+
+    m_mainWindow = (WXWindow) xwindow;
+    wxAddWindowToTable( xwindow, (wxWindow*) this );
+    
+    XSetTransientForHint( xdisplay, xwindow, xparent );
+    
+    size_hints.flags = PSize;
+    size_hints.width = size.x;
+    size_hints.height = size.y;
+    XSetWMNormalHints( xdisplay, xwindow, &size_hints);
+    
+    wm_hints.flags = InputHint | StateHint /* | WindowGroupHint */;
+    wm_hints.input = True;
+    wm_hints.initial_state = NormalState;
+    XSetWMHints( xdisplay, xwindow, &wm_hints);
+    
+    Atom wm_delete_window = XInternAtom( xdisplay, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols( xdisplay, xwindow, &wm_delete_window, 1);
+    
+    wxSetWMDecorations((Window) GetMainWindow(), style);
 
     return TRUE;
 }
@@ -56,14 +101,12 @@ void wxPopupWindow::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(
 
 void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
-    // TODO
+    wxWindowX11::DoSetSize(x, y, width, height, sizeFlags);
 }
+
 bool wxPopupWindow::Show( bool show )
 {
-    // TODO?
-    bool ret = wxWindow::Show( show );
-
-    return ret;
+    return wxWindow11::Show( show );
 }
 
 #endif // wxUSE_POPUPWIN

@@ -127,21 +127,6 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     m_foregroundColour = *wxBLACK;
 
-#if 0
-    // TODO: How to create more interesting borders?
-    // Will presumably have to create multiple windows.
-    if (style & wxSIMPLE_BORDER)
-    {
-        m_borderSize = 1;
-    } else if (style & wxSUNKEN_BORDER)
-    {
-        m_borderSize = 1;
-    } else if (style & wxRAISED_BORDER)
-    {
-        m_borderSize = 1;
-    }
-#endif
-
     int w = size.GetWidth();
     int h = size.GetHeight();
     int x = size.GetX();
@@ -173,12 +158,9 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
     wxAddWindowToTable(window, (wxWindow*) this);
 
-    // If a subwindow, show.
-//    if (parent && !parent->IsKindOf(CLASSINFO(wxTopLevelWindowX11)) && parent->IsShown())
-    {
-        m_isShown = TRUE;
-        XMapWindow(wxGlobalDisplay(), window);
-    }
+    // Is a subwindow, so map immediately
+    m_isShown = TRUE;
+    XMapWindow(wxGlobalDisplay(), window);
 
     // Without this, the cursor may not be restored properly (e.g. in splitter
     // sample).
@@ -226,8 +208,7 @@ wxWindowX11::~wxWindowX11()
 
 void wxWindowX11::SetFocus()
 {
-#if 0
-    Window wMain = (Window) GetMainWidget();
+    Window wMain = (Window) GetMainWindow();
     if (wMain)
     {
         XSetInputFocus(wxGlobalDisplay(), wMain, RevertToParent, CurrentTime);
@@ -237,7 +218,6 @@ void wxWindowX11::SetFocus()
         wmhints.input = True;
         XSetWMHints(wxGlobalDisplay(), wMain, &wmhints)
     }
-#endif
 }
 
 // Get the window with the focus
@@ -311,7 +291,6 @@ void wxWindowX11::DoCaptureMouse()
     if ( m_winCaptured )
         return;
 
-    // TODO: should we also call XGrabButton, XGrabKeyboard?
     if (GetMainWindow())
     {
         int res = XGrabPointer(wxGlobalDisplay(), (Window) GetMainWindow(),
@@ -323,10 +302,45 @@ void wxWindowX11::DoCaptureMouse()
             None, /* cursor */ // TODO: This may need to be set to the cursor of this window
             CurrentTime);
 
-        if (res == GrabSuccess)
+        if (res != GrabSuccess)
         {
-            m_winCaptured = TRUE;
+            wxLogDebug("Failed to grab pointer.");
+            return;
         }
+
+        res = XGrabButton(wxGlobalDisplay(), AnyButton, AnyModifier,
+            (Window) GetMainWindow(),
+            FALSE,
+            ButtonPressMask | ButtonReleaseMask | ButtonMotionMask,
+	        GrabModeAsync,
+	        GrabModeAsync,
+            None,
+            None);
+
+        if (res != GrabSuccess)
+        {
+            wxLogDebug("Failed to grab mouse buttons.");
+            XUngrabPointer(wxGlobalDisplay(), CurrentTime);
+            return;
+        }
+
+        res = XGrabKeyboard(wxGlobalDisplay(), (Window) GetMainWindow(),
+            FALSE,
+            ShiftMask, LockMask, Control-Mask, Mod1Mask, Mod2Mask, Mod3Mask, Mod4Mask, and Mod5Mask.,
+            GrabModeAsync,
+	        GrabModeAsync,
+            CurrentTime);
+
+        if (res != GrabSuccess)
+        {
+            wxLogDebug("Failed to grab keyboard.");
+            XUngrabPointer(wxGlobalDisplay(), CurrentTime);
+            XUngrabButton(wxGlobalDisplay(), AnyButton, AnyModifier,
+                (Window) GetMainWindow());
+            return;
+        }
+
+        m_winCaptured = TRUE;
     }
 }
 
@@ -338,9 +352,13 @@ void wxWindowX11::DoReleaseMouse()
 
     Window wMain = (Window)GetMainWindow();
 
-    // TODO: should we also call XUngrabButton, XUngrabKeyboard?
     if ( wMain )
+    {
         XUngrabPointer(wxGlobalDisplay(), wMain);
+        XUngrabButton(wxGlobalDisplay(), AnyButton, AnyModifier,
+                wMain);
+        XUngrabKeyboard(wxGlobalDisplay(), CurrentTime);
+    }
 
     m_winCaptured = FALSE;
 }
@@ -384,40 +402,6 @@ void wxWindowX11::WarpPointer (int x, int y)
 {
     if (m_mainWidget)
         XWarpPointer( wxGlobalDisplay(), None, (Window) m_mainWidget, 0, 0, 0, 0, x, y);
-}
-
-// ---------------------------------------------------------------------------
-// scrolling stuff
-// ---------------------------------------------------------------------------
-
-int wxWindowX11::GetScrollPos(int orient) const
-{
-    return 0;
-}
-
-// This now returns the whole range, not just the number of positions that we
-// can scroll.
-int wxWindowX11::GetScrollRange(int WXUNUSED(orient)) const
-{
-    return 0;
-}
-
-int wxWindowX11::GetScrollThumb(int orient) const
-{
-    // TODO
-    return 0;
-}
-
-void wxWindowX11::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
-{
-    // TODO
-}
-
-// New function that will replace some of the above.
-void wxWindowX11::SetScrollbar(int WXUNUSED(orient), int WXUNUSED(pos), int WXUNUSED(thumbVisible),
-                            int WXUNUSED(range), bool WXUNUSED(refresh))
-{
-    // TODO
 }
 
 // Does a physical scroll
@@ -1083,79 +1067,6 @@ WXWindow wxWindowX11::GetMainWindow() const
 }
 
 // ----------------------------------------------------------------------------
-// callbacks
-// ----------------------------------------------------------------------------
-
-// TODO: implement wxWindow scrollbar, presumably using wxScrollBar
-#if 0
-static void wxScrollBarCallback(Widget scrollbar,
-                                XtPointer clientData,
-                                XmScrollBarCallbackStruct *cbs)
-{
-    wxWindow *win = wxGetWindowFromTable(scrollbar);
-    int orientation = (int) clientData;
-
-    wxEventType eventType = wxEVT_NULL;
-    switch (cbs->reason)
-    {
-    case XmCR_INCREMENT:
-        {
-            eventType = wxEVT_SCROLLWIN_LINEDOWN;
-            break;
-        }
-    case XmCR_DECREMENT:
-        {
-            eventType = wxEVT_SCROLLWIN_LINEUP;
-            break;
-        }
-    case XmCR_DRAG:
-        {
-            eventType = wxEVT_SCROLLWIN_THUMBTRACK;
-            break;
-        }
-    case XmCR_VALUE_CHANGED:
-        {
-            eventType = wxEVT_SCROLLWIN_THUMBRELEASE;
-            break;
-        }
-    case XmCR_PAGE_INCREMENT:
-        {
-            eventType = wxEVT_SCROLLWIN_PAGEDOWN;
-            break;
-        }
-    case XmCR_PAGE_DECREMENT:
-        {
-            eventType = wxEVT_SCROLLWIN_PAGEUP;
-            break;
-        }
-    case XmCR_TO_TOP:
-        {
-            eventType = wxEVT_SCROLLWIN_TOP;
-            break;
-        }
-    case XmCR_TO_BOTTOM:
-        {
-            eventType = wxEVT_SCROLLWIN_BOTTOM;
-            break;
-        }
-    default:
-        {
-            // Should never get here
-            wxFAIL_MSG("Unknown scroll event.");
-            break;
-        }
-    }
-
-    wxScrollWinEvent event(eventType,
-                           cbs->value,
-                           ((orientation == XmHORIZONTAL) ?
-                            wxHORIZONTAL : wxVERTICAL));
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent(event);
-}
-#endif
-
-// ----------------------------------------------------------------------------
 // TranslateXXXEvent() functions
 // ----------------------------------------------------------------------------
 
@@ -1395,6 +1306,17 @@ bool wxWindowX11::SetBackgroundColour(const wxColour& col)
 {
     if ( !wxWindowBase::SetBackgroundColour(col) )
         return FALSE;
+
+    if (!GetMainWindow())
+        return FALSE;
+
+    XSetWindowAttributes attrib;
+    attrib.background_pixel = col.AllocColour(wxGlobalDisplay());
+
+    XChangeWindowAttributes(wxGlobalDisplay(),
+        (Window) GetMainWindow(),
+        CWBackPixel,
+        & attrib);
 
     return TRUE;
 }

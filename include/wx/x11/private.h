@@ -65,10 +65,12 @@ Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 extern XColor g_itemColors[];
 extern int wxComputeColours (Display *display, wxColour * back, wxColour * fore);
 
-extern void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
-extern void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
-
 extern Window wxGetWindowParent(Window window);
+
+// Set the window manager decorations according to the
+// given wxWindows style
+bool wxSetWMDecorations(Window w, long style);
+bool wxMWMIsRunning(Window w);
 
 // For convenience
 inline Display* wxGlobalDisplay() { return (Display*) wxGetDisplay(); }

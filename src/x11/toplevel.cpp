@@ -41,12 +41,8 @@
 #include "X11/Xatom.h"
 #include "X11/Xutil.h"
 
-// Set the window manager decorations according to the
-// given wxWindows style
-#if 0
-static bool SetWMDecorations(Widget w, long style);
-#endif
-static bool MWMIsRunning(Window w);
+// list of all frames and modeless dialogs
+// wxWindowList wxModelessWindows;
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowX11 creation
@@ -66,22 +62,6 @@ void wxTopLevelWindowX11::Init()
     m_fsIsShowing = FALSE;
 }
 
-bool wxTopLevelWindowX11::CreateDialog(const wxString& title,
-                                       const wxPoint& pos,
-                                       const wxSize& size)
-{
-    // TODO
-    return FALSE;
-}
-
-bool wxTopLevelWindowX11::CreateFrame(const wxString& title,
-                                      const wxPoint& pos,
-                                      const wxSize& size)
-{
-    // TODO
-    return FALSE;
-}
-
 bool wxTopLevelWindowX11::Create(wxWindow *parent,
                                  wxWindowID id,
                                  const wxString& title,
@@ -94,10 +74,14 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     Init();
 
     m_windowStyle = style;
+    m_parent = parent;
 
     SetName(name);
 
     m_windowId = id == -1 ? NewControlId() : id;
+
+    if (parent)
+        parent->AddChild(this);
 
     wxTopLevelWindows.Append(this);
     
@@ -119,6 +103,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     
     Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 
        0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
+    m_mainWindow = (WXWindow) xwindow;
     
     XSelectInput( xdisplay, xwindow,
         ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
@@ -143,9 +128,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     Atom wm_delete_window = XInternAtom( xdisplay, "WM_DELETE_WINDOW", False);
     XSetWMProtocols( xdisplay, xwindow, &wm_delete_window, 1);
     
-#if 0
-    SetWMDecorations((Window) GetMainWindow(), style);
-#endif
+    wxSetWMDecorations((Window) GetMainWindow(), style);
 
     SetTitle(title);
     
@@ -262,7 +245,6 @@ void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
 
     if (icon.Ok() && GetMainWindow())
     {
-#if 0
         XWMHints *wmHints = XAllocWMHints();
         wmHints.icon_pixmap = (Pixmap) icon.GetPixmap();
 
@@ -277,7 +259,6 @@ void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
         XSetWMHints(wxGlobalDisplay(), (Window) GetMainWindow(),
             wmHints);
         XFree(wmHints);
-#endif
     }
 }
 
@@ -290,6 +271,8 @@ void wxTopLevelWindowX11::SetTitle(const wxString& title)
             (const char*) title);
         XSetIconName(wxGlobalDisplay(), (Window) GetMainWindow(),
             (const char*) title);
+
+        // Use this if the platform doesn't supply the above functions.
 #if 0
         XTextProperty textProperty;
         textProperty.value = (unsigned char*) title;
@@ -335,8 +318,7 @@ struct MwmHints {
 
 // Set the window manager decorations according to the
 // given wxWindows style
-#if 0
-static bool SetWMDecorations(Widget w, long style)
+bool wxSetWMDecorations(Window w, long style)
 {
     if (!MWMIsRunning(w))
         return FALSE;
@@ -398,9 +380,8 @@ static bool SetWMDecorations(Widget w, long style)
 
     return TRUE;
 }
-#endif
 
-static bool MWMIsRunning(Window w)
+bool wxMWMIsRunning(Window w)
 {
     Display *dpy = (Display*)wxGetDisplay();
     Atom motifWmInfo = XInternAtom(dpy, "_MOTIF_WM_INFO", False);

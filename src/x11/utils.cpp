@@ -180,25 +180,11 @@ void wxBell()
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-#if 0
-    // FIXME TODO
-    // This code is WRONG!! Does NOT return the
-    // Motif version of the libs but the X protocol
-    // version!
-    Display *display = XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
-    if (majorVsn)
-        *majorVsn = ProtocolVersion (display);
-    if (minorVsn)
-        *minorVsn = ProtocolRevision (display);
-
-    return wxMOTIF_X;
-#else
     if (majorVsn)
         *majorVsn = 0;
     if (minorVsn)
         *minorVsn = 0;
     return wxX11;
-#endif
 }
 
 // ----------------------------------------------------------------------------

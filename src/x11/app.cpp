@@ -296,8 +296,6 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     while (window && !(win = wxGetWindowFromTable(window)))
         window = wxGetWindowParent(window);
 
-    // TODO: shouldn't all the ProcessEvents below
-    // be win->GetEventHandler()->ProcessEvent?
     switch (event->type)
     {
         case KeyPress:
