@@ -353,6 +353,8 @@ private:
     class WXDLLEXPORT name : public wxListBase                                          \
     {                                                                       \
     public:                                                                 \
+        typedef nodetype Node;                                              \
+                                                                            \
         name(wxKeyType keyType = wxKEY_NONE) : wxListBase(keyType)          \
             { }                                                             \
         name(size_t count, T *elements[])                                   \
