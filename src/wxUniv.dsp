@@ -980,6 +980,10 @@ SOURCE=.\msw\gdiobj.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\glcanvas.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\helpbest.cpp
 # End Source File
 # Begin Source File
@@ -996,11 +1000,19 @@ SOURCE=.\msw\icon.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\joystick.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\main.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\msw\mimetype.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\minifram.cpp
 # End Source File
 # Begin Source File
 
@@ -1036,11 +1048,19 @@ SOURCE=.\msw\snglinst.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\taskbar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\thread.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\msw\timer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\tooltip.cpp
 # End Source File
 # Begin Source File
 
@@ -1057,6 +1077,10 @@ SOURCE=.\msw\utilsexc.cpp
 # Begin Source File
 
 SOURCE=.\msw\volume.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\wave.cpp
 # End Source File
 # Begin Source File
 

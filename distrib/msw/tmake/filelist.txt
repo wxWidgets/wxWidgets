@@ -307,13 +307,13 @@ gauge95.cpp	MSW	Win32Only
 gaugemsw.cpp	MSW	NotWin32
 gdiimage.cpp	MSW	LowLevel
 gdiobj.cpp	MSW	LowLevel
-glcanvas.cpp	MSW
+glcanvas.cpp	MSW	LowLevel
 helpchm.cpp	MSW	Win32Only,LowLevel
 helpwin.cpp	MSW	LowLevel
 icon.cpp	MSW	LowLevel
 imaglist.cpp	MSW	Win32Only
 iniconf.cpp	MSW
-joystick.cpp	MSW
+joystick.cpp	MSW	LowLevel
 listbox.cpp	MSW
 listctrl.cpp	MSW	Win32Only
 main.cpp	MSW	LowLevel,Base
@@ -353,21 +353,21 @@ statbr95.cpp	MSW	Win32Only
 statline.cpp	MSW
 stattext.cpp	MSW
 tabctrl.cpp	MSW
-taskbar.cpp	MSW	Win32Only
+taskbar.cpp	MSW	Win32Only,LowLevel
 tbar95.cpp	MSW	Win32Only
 tbarmsw.cpp	MSW	NotWin32
 textctrl.cpp	MSW
 tglbtn.cpp	MSW
 thread.cpp	MSW	Win32Only,Base,LowLevel
 timer.cpp	MSW	LowLevel
-tooltip.cpp	MSW	Win32Only
+tooltip.cpp	MSW	Win32Only,LowLevel
 toplevel.cpp	MSW	LowLevel
 treectrl.cpp	MSW	Win32Only
 utils.cpp	MSW	Base,LowLevel
 utilsexc.cpp	MSW	Base,LowLevel
 uuid.cpp	MSW	OLE
 volume.cpp	MSW	Base
-wave.cpp	MSW
+wave.cpp	MSW	LowLevel
 window.cpp	MSW	LowLevel
 
 dialup.cpp	Unix	NotMac
