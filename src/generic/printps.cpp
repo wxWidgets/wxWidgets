@@ -257,6 +257,7 @@ wxDC* wxPostScriptPrinter::PrintDialog(wxWindow *parent)
 
 bool wxPostScriptPrinter::Setup(wxWindow *parent)
 {
+#if 0
     wxGenericPrintDialog* dialog = new wxGenericPrintDialog(parent, & m_printDialogData);
     dialog->GetPrintDialogData().SetSetupDialog(true);
 
@@ -268,8 +269,11 @@ bool wxPostScriptPrinter::Setup(wxWindow *parent)
     }
 
     dialog->Destroy();
-
+    
     return (ret == wxID_OK);
+#endif
+
+    return wxID_CANCEL;
 }
 
 // ----------------------------------------------------------------------------
