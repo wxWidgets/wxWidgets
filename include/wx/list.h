@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:   	wxWindows license
+// Licence:       wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -163,6 +163,9 @@ protected:
     void *GetData() const { return m_data; }
     void SetData(void *data) { m_data = data; }
 
+    // get 0-based index of this node within the list or NOT_FOUND
+    int IndexOf() const;
+
     virtual void DeleteData() { }
 
 private:
@@ -248,7 +251,7 @@ protected:
     bool DeleteNode(wxNodeBase *node);
         // finds object pointer and deletes node (and object if DeleteContents
         // is on), returns FALSE if object not found
-    bool DeleteObject(void *object);  
+    bool DeleteObject(void *object);
 
     // search (all return NULL if item not found)
         // by data
@@ -256,6 +259,9 @@ protected:
 
         // by key
     wxNodeBase *Find(const wxListKey& key) const;
+
+    // get 0-based index of object or NOT_FOUND
+    int IndexOf( void *object ) const;
 
     // this function allows the sorting of arbitrary lists by giving
     // a function to compare two list elements. The list is sorted in place.
@@ -377,6 +383,9 @@ private:
         virtual nodetype *Find(const wxListKey& key) const                  \
             { return (nodetype *)wxListBase::Find(key); }                   \
                                                                             \
+        int IndexOf( T *object ) const                                      \
+            { return wxListBase::IndexOf(object); }                         \
+                                                                            \
         void Sort(wxSortFuncFor_##name func)                                \
             { wxListBase::Sort((wxSortCompareFunction)func); }              \
                                                                             \
@@ -430,7 +439,7 @@ public:
 // -----------------------------------------------------------------------------
 // wxStringList class for compatibility with the old code
 // -----------------------------------------------------------------------------
-    
+
 WX_DECLARE_LIST_2(char, wxStringListBase, wxStringListNode);
 
 class WXDLLEXPORT wxStringList : public wxStringListBase

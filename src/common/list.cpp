@@ -68,7 +68,7 @@ bool wxListKey::operator==(wxListKeyValue value) const
         case wxKEY_INTEGER:
             return m_key.integer == value.integer;
     }
-}                                
+}
 
 // -----------------------------------------------------------------------------
 // wxNodeBase
@@ -82,28 +82,28 @@ wxNodeBase::wxNodeBase(wxListBase *list,
     m_data = data;
     m_previous = previous;
     m_next = next;
-    
+
     switch ( key.GetKeyType() )
     {
         case wxKEY_NONE:
             break;
-        
+
         case wxKEY_INTEGER:
             m_key.integer = key.GetNumber();
             break;
-        
+
         case wxKEY_STRING:
             // to be free()d later
             m_key.string = strdup(key.GetString());
             break;
-        
+
         default:
             wxFAIL_MSG("invalid key type");
     }
-    
+
     if ( previous )
         previous->m_next = this;
-    
+
     if ( next )
         next->m_previous = this;
 }
@@ -117,6 +117,25 @@ wxNodeBase::~wxNodeBase()
     {
         m_list->DetachNode(this);
     }
+}
+
+int wxNodeBase::IndexOf() const
+{
+    wxCHECK_MSG( m_list, NOT_FOUND, "node doesn't belong to a list in IndexOf");
+
+    // It would be more efficient to implement IndexOf() completely inside
+    // wxListBase (only traverse the list once), but this is probably a more
+    // reusable way of doing it. Can always be optimized at a later date (since
+    // IndexOf() resides in wxListBase as well) if efficiency is a problem.
+    int i;
+    wxNodeBase *prev = m_previous;
+
+    for( i = 0; prev; i++ )
+    {
+        prev = prev->m_previous;
+    }
+
+    return i;
 }
 
 // -----------------------------------------------------------------------------
@@ -302,6 +321,13 @@ wxNodeBase *wxListBase::Find(void *object) const
 
     // not found
     return (wxNodeBase *)NULL;
+}
+
+int wxListBase::IndexOf(void *object) const
+{
+    wxNodeBase *node = Find( object );
+
+    return node ? node->IndexOf() : NOT_FOUND;
 }
 
 void wxListBase::DoDeleteNode(wxNodeBase *node)
@@ -498,7 +524,7 @@ void wxStringList::DoCopy(const wxStringList& other)
     size_t count = other.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        Add(other.Item(n)->GetData()); 
+        Add(other.Item(n)->GetData());
     }
 }
 
