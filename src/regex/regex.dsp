@@ -100,7 +100,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\regex.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\regex.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\regexu.lib"
 
 !ELSEIF  "$(CFG)" == "regex - Win32 Debug Unicode"
 
@@ -123,7 +123,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\regexd.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\regexd.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\regexud.lib"
 
 !ENDIF 
 
