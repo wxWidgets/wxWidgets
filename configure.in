@@ -1131,27 +1131,6 @@ else
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl When we are using gcc on OS/2, we want to be either using resources (PM)
-dnl or a more complete POSIX emulation for Motif/GTK+/X11
-dnl ---------------------------------------------------------------------------
-dnl (OS/2-only piece)
-case "${host}" in
-  *-pc-os2_emx | *-pc-os2-emx )
-      dnl Explicitly link -lstdcpp, since we are using "gcc" not "g++"/"c++".
-      LIBS="$LIBS -lstdcpp"
-      if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
-          dnl More complete Unix emulation for unix-like ports
-          dnl by linking in POSIX/2's cExt (if available).
-          AC_CHECK_LIB(cExt, drand48, LIBS="$LIBS -lcExt")
-      else
-          dnl Include resources for the "native" port (wxPM).
-          RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
-      fi
-  ;;
-esac
-dnl (end of OS/2-only piece)
-
-dnl ---------------------------------------------------------------------------
 dnl When we are using Cygwin with Motif/GTK+, we want it to appear like
 dnl 'just' a POSIX platform, so the Win32 API must not be available
 dnl ---------------------------------------------------------------------------
@@ -1359,6 +1338,27 @@ AC_PROG_LEX
 
 dnl needed for making link to setup.h
 AC_PROG_LN_S
+
+dnl ---------------------------------------------------------------------------
+dnl When we are using gcc on OS/2, we want to be either using resources (PM)
+dnl or a more complete POSIX emulation for Motif/GTK+/X11
+dnl ---------------------------------------------------------------------------
+dnl (OS/2-only piece)
+case "${host}" in
+  *-pc-os2_emx | *-pc-os2-emx )
+      dnl Explicitly link -lstdcpp, since we are using "gcc" not "g++"/"c++".
+      LIBS="$LIBS -lstdcpp"
+      if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
+          dnl More complete Unix emulation for unix-like ports
+          dnl by linking in POSIX/2's cExt (if available).
+          AC_CHECK_LIB(cExt, drand48, LIBS="$LIBS -lcExt")
+      else
+          dnl Include resources for the "native" port (wxPM).
+          RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
+      fi
+  ;;
+esac
+dnl (end of OS/2-only piece)
 
 dnl ------------------------------------------------------------------------
 dnl Check for headers
