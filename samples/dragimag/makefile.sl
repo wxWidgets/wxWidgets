@@ -1,11 +1,7 @@
-#
-# File:		makefile.sl
-# Author:	Julian Smart
-# Created:	1998
-#
-# Makefile : Builds a wxWindows sample for Salford C++, WIN32
+# Purpose: makefile for dragimag example (Salford C++)
+# Created: 2000-03-15
 
-PROGRAM = test
+PROGRAM = dragimag
 OBJECTS = $(PROGRAM).obj
 
 include ..\..\src\makeprog.sl
@@ -14,5 +10,5 @@ all:        wx $(TARGET)
 
 wx:
     cd $(WXDIR)\src\msw ^ mk32 -f makefile.sl all
-    cd $(WXDIR)\samples\test
+    cd $(WXDIR)\samples\dragimag
 

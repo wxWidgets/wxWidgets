@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.h
+// Name:        dragimag.h
 // Purpose:     wxDragImage sample
 // Author:      Julian Smart
 // Modified by:

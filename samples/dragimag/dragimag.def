@@ -1,5 +1,5 @@
-NAME         Minimal
-DESCRIPTION  'Minimal wxWindows application'
+NAME         Dragimag
+DESCRIPTION  'wxWindows dragimag sample'
 EXETYPE      WINDOWS
 CODE         PRELOAD MOVEABLE DISCARDABLE
 DATA         PRELOAD MOVEABLE MULTIPLE

@@ -15,7 +15,7 @@ WXUSINGDLL=0
 
 !include $(WXDIR)\src\makeva.env
 
-PROGRAM=$D\test
+PROGRAM=$D\dragimag
 OBJECTS = $(PROGRAM).obj
 
 !if [md $D]

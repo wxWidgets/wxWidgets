@@ -1,13 +1,5 @@
-#
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
-#
-# "%W% %G%"
-#
-# Makefile for test example (UNIX).
+# Purpose: makefile for dragimag example (TWIN)
+# Created: 2000-03-15
 
 WXDIR = ../..
 
@@ -15,29 +7,29 @@ WXDIR = ../..
 # this central makefile.
 include $(WXDIR)/src/maketwin.env
 
-OBJECTS = $(OBJDIR)/test.$(OBJSUFF) $(OBJDIR)/test_resources.$(OBJSUFF)
+OBJECTS = $(OBJDIR)/dragimag.$(OBJSUFF) $(OBJDIR)/dragimag.$(OBJSUFF)
 
-all:    $(OBJDIR) test$(GUISUFFIX)$(EXESUFF)
+all:    $(OBJDIR) dragimag$(GUISUFFIX)$(EXESUFF)
 
 wx:
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
 
-test$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o test$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+dragimag$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o dragimag$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
 
-$(OBJDIR)/test.$(OBJSUFF):	test.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ test.$(SRCSUFF)
+$(OBJDIR)/dragimag.$(OBJSUFF):	dragimag.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ dragimag.$(SRCSUFF)
 
-test_resources.c:  test.rc
-	$(RESCOMP) $(RCINPUTSWITCH) test.rc $(RCOUTPUTSWITCH) test_resources.c $(RESFLAGS)
+dragimag.c:  dragimag.rc
+	$(RESCOMP) $(RCINPUTSWITCH) dragimag.rc $(RCOUTPUTSWITCH) dragimag.c $(RESFLAGS)
 
-$(OBJDIR)/test_resources.$(OBJSUFF):	test_resources.c
-	$(CC) -c $(CPPFLAGS) -o $@ test_resources.c
+$(OBJDIR)/dragimag.$(OBJSUFF):	dragimag.c
+	$(CC) -c $(CPPFLAGS) -o $@ dragimag.c
 
-#$(OBJDIR)/test_resources.o:  test.rc
-#	$(RESCOMP) $(RCINPUTSWITCH) test.rc $(RCOUTPUTSWITCH) $(OBJDIR)/test_resources.o $(RESFLAGS)
+#$(OBJDIR)/dragimag.o:  dragimag.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) dragimag.rc $(RCOUTPUTSWITCH) $(OBJDIR)/dragimag.o $(RESFLAGS)
 
 clean:
-	rm -f $(OBJECTS) test$(GUISUFFIX).exe core *.rsc *.res
+	rm -f $(OBJECTS) dragimag$(GUISUFFIX).exe core *.rsc *.res

@@ -1,16 +1,17 @@
-# Symantec C++ makefile
+# Purpose: makefile for dragimag example (Symantec C++)
+# Created: 2000-03-15
 
 WXDIR = $(WXWIN)
 WXLIB = $(WXDIR)\lib\wx.lib
 INCDIR = $(WXDIR)\include
 INCLUDE=$(INCDIR)
-TARGET=test
+TARGET=dragimag
 
 include $(WXDIR)\src\makesc.env
 
-test.exe: test.obj $(DEFFILE) test.res
+dragimag.exe: dragimag.obj $(DEFFILE) dragimag.res
 	*$(CC) $(LDFLAGS) -o$@ $** $(LIBS)
-    *$(RC) -k test.res
+    *$(RC) -k dragimag.res
 
 sc32.def:
      echo EXETYPE NT > sc32.def

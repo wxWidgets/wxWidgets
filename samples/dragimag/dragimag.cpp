@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.cpp
+// Name:        dragimag.cpp
 // Purpose:     wxDragImage sample
 // Author:      Julian Smart
 // Modified by:
@@ -17,10 +17,10 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
-#include <wx/image.h>
+#include "wx/image.h"
 
 // Under Windows, change this to 1
 // to use wxGenericDragImage
@@ -28,13 +28,13 @@
 #define wxUSE_GENERIC_DRAGIMAGE 0
 
 #if wxUSE_GENERIC_DRAGIMAGE
-#include <wx/generic/dragimgg.h>
+#include "wx/generic/dragimgg.h"
 #define wxDragImage wxGenericDragImage
 #else
-#include <wx/dragimag.h>
+#include "wx/dragimag.h"
 #endif
 
-#include "test.h"
+#include "dragimag.h"
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"
