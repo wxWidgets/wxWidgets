@@ -82,4 +82,6 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+int WXDLLEXPORT wxEntry( int argc, char *argv[] );
+
 #endif // __GTKAPPH__
