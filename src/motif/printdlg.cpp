@@ -14,7 +14,7 @@
 #endif
 
 #include "wx/object.h"
-#include "wx/stubs/printdlg.h"
+#include "wx/motif/printdlg.h"
 #include "wx/dcprint.h"
 
 // Use generic page setup dialog: use your own native one if one exists.

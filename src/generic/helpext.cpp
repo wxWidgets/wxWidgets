@@ -127,7 +127,7 @@ wxExtHelpController::LoadFile(const wxString& ifile)
          file = ifile;
    
       if(! wxDirExists(file))
-         return false;
+         return FALSE;
       
       mapFile << file << WXEXTHELP_SEPARATOR << WXEXTHELP_MAPFILE;
    }
@@ -135,7 +135,7 @@ wxExtHelpController::LoadFile(const wxString& ifile)
       mapFile = m_MapFile;
 
    if(! wxFileExists(mapFile))
-      return false;
+      return FALSE;
 
    DeleteList();
    m_MapList = new wxList;
@@ -143,7 +143,7 @@ wxExtHelpController::LoadFile(const wxString& ifile)
    
    FILE *input = fopen(mapFile.c_str(),"rt");
    if(! input)
-      return false;
+      return FALSE;
    do
    {
       if(fgets(buffer,WXEXTHELP_BUFLEN,input) && *buffer != WXEXTHELP_COMMENTCHAR)
@@ -171,7 +171,7 @@ wxExtHelpController::LoadFile(const wxString& ifile)
    fclose(input);
    
    m_MapFile = file; // now it's valid
-   return true;
+   return TRUE;
 }
 
 bool
@@ -196,7 +196,7 @@ wxExtHelpController::CallBrowser(wxString const &relativeURL)
                  << WXEXTHELP_SEPARATOR << relativeURL << ")"; 
          success = wxExecute(command);
          if(success != 0 ) // returns PID on success
-            return true;
+            return TRUE;
       }
    }
    command = m_BrowserName;
@@ -209,7 +209,7 @@ bool
 wxExtHelpController::DisplayContents(void)
 {
    if(! m_NumOfEntries)
-      return false;
+      return FALSE;
    wxBusyCursor b; // display a busy cursor
    return KeywordSearch("");
 }
@@ -218,7 +218,7 @@ bool
 wxExtHelpController::DisplaySection(int sectionNo)
 {
    if(! m_NumOfEntries)
-      return false;
+      return FALSE;
 
    wxBusyCursor b; // display a busy cursor
    wxNode *node = m_MapList->First();
@@ -230,7 +230,7 @@ wxExtHelpController::DisplaySection(int sectionNo)
          return CallBrowser(entry->url);
       node = node->Next();
    }
-   return false;
+   return FALSE;
 }
 
 bool
@@ -243,7 +243,7 @@ bool
 wxExtHelpController::KeywordSearch(const wxString& k)
 {
    if(! m_NumOfEntries)
-      return false;
+      return FALSE;
 
    wxBusyCursor b; // display a busy cursor
    wxString     *choices = new wxString[m_NumOfEntries];
@@ -282,7 +282,7 @@ wxExtHelpController::KeywordSearch(const wxString& k)
    else if(idx == 0)
    {
       wxMessageBox(_("No entries found."));
-      rc = false;
+      rc = FALSE;
    }
    else
    {
@@ -292,7 +292,7 @@ wxExtHelpController::KeywordSearch(const wxString& k)
       if(idx != -1)
          rc = CallBrowser(urls[idx]);
       else
-         rc = false;
+         rc = FALSE;
    }
    delete[] urls;
    delete[] choices;
@@ -304,7 +304,7 @@ wxExtHelpController::KeywordSearch(const wxString& k)
 bool
 wxExtHelpController::Quit(void)
 {
-   return true;
+   return TRUE;
 }
 
 void

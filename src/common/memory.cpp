@@ -965,7 +965,7 @@ void * operator new (size_t size)
 #endif
 }
 
-#if !( defined (_MSC_VER) && (_MSC_VER <= 1020) )
+#if wxUSE_ARRAY_MEMORY_OPERATORS
 void * operator new[] (size_t size)
 {
 #ifdef NO_DEBUG_ALLOCATION
@@ -976,7 +976,7 @@ void * operator new[] (size_t size)
 }
 #endif
 
-#if !( defined (_MSC_VER) && (_MSC_VER <= 1020) )
+#if wxUSE_ARRAY_MEMORY_OPERATORS
 void * operator new[] (size_t size, char * fileName, int lineNum)
 {
 #ifdef NO_DEBUG_ALLOCATION
@@ -1011,7 +1011,7 @@ void operator delete[](void* pData, char* /* fileName */, int /* lineNum */)
 }
 #endif
 
-#if !( defined (_MSC_VER) && (_MSC_VER <= 1020) )
+#if wxUSE_ARRAY_MEMORY_OPERATORS
 
 void operator delete[] (void * buf)
 {

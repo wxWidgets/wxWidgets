@@ -197,15 +197,18 @@ class WXDLLEXPORT wxObject
 #endif
 
   // Cause problems for VC++
-#ifndef _MSC_VER 
+// #ifndef _MSC_VER
+#if !defined(_MSC_VER) && wxUSE_ARRAY_MEMORY_OPERATORS
   void * operator new[] (size_t size, char * fileName = NULL, int lineNum = 0);
   void operator delete[] (void * buf);
 #endif
 
+/*
 #ifdef __MWERKS__
   void * operator new[] (size_t size, char * fileName  , int lineNum = 0);
   void operator delete[] (void * buf);
 #endif
+*/
 
 #endif
 

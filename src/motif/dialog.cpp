@@ -478,7 +478,7 @@ int wxDialog::ShowModal()
     XEvent event;
 
     // Loop until we signal that the dialog should be closed
-    while ((wxModalShowingStack.Number() > 0) && (bool)wxModalShowingStack.First()->Data())
+    while ((wxModalShowingStack.Number() > 0) && ((int)(wxModalShowingStack.First()->Data()) != 0))
     {
 //        XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
 

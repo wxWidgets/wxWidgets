@@ -15,7 +15,11 @@ wxWindows 2.0 for Motif installation
 
 - Edit src/make.env to change options according to your local
   environment. In particular, change WXDIR to where wxWindows is
-  found on your system.
+  found on your system, or set the WXWIN environment variable
+  before compilation, e.g.:
+
+    export WXWIN=/home/jacs/wx2
+
   Later, there will be a better makefile system
   and/or alternate make.env files as per wxWindows 1.68.
   Please feel free to contribute settings files for your environment.

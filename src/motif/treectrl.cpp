@@ -13,8 +13,8 @@
 #pragma implementation "treectrl.h"
 #endif
 
-#include "wx/stubs/textctrl.h"
-#include "wx/stubs/treectrl.h"
+#include "wx/motif/textctrl.h"
+#include "wx/motif/treectrl.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)

@@ -13,7 +13,7 @@
 #pragma implementation "helpxxxx.h"
 #endif
 
-#include "wx/stubs/helpxxxx.h"
+#include "wx/motif/helpxxxx.h"
 
 #include <string.h>
 

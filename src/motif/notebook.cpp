@@ -400,11 +400,21 @@ void wxNotebook::OnIdle(wxIdleEvent& event)
 {
     static bool s_bFirstTime = TRUE;
     if ( s_bFirstTime ) {
+      /*
+      wxSize sz(GetSize());
+      sz.x ++;
+      SetSize(sz);
+      sz.x --;
+      SetSize(sz);
+      */
+
+      /*
       wxSize sz(GetSize());
       wxSizeEvent sizeEvent(sz, GetId());
       sizeEvent.SetEventObject(this);
       GetEventHandler()->ProcessEvent(sizeEvent);
       Refresh();
+      */
       s_bFirstTime = FALSE;
     }
     event.Skip();

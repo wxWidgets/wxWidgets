@@ -34,8 +34,12 @@
 #include <netdb.h>
 #include <signal.h>
 
-#ifdef __SVR4__
+#if defined(__SVR4__) && !defined(__HPUX__)
 #include <sys/systeminfo.h>
+#endif
+
+#if (defined(__SUNCC__) || defined(__CLCC__))
+#include <sysent.h>
 #endif
 
 #include <Xm/Xm.h>
@@ -57,7 +61,7 @@ extern wxList wxTopLevelWindows;
 // Get full hostname (eg. DoDo.BSn-Germany.crg.de)
 bool wxGetHostName(char *buf, int maxSize)
 {
-#if defined(SVR4) && !defined(__hpux)
+#if defined(__SVR4__) && !defined(__HPUX__)
   return (sysinfo (SI_HOSTNAME, buf, maxSize) != -1);
 #else /* BSD Sockets */
   char name[255];
@@ -487,7 +491,7 @@ void wxXMergeDatabases (wxApp * theApp, Display * display)
       size_t len;
       environment = GetIniFile (filename, NULL);
       len = strlen (environment);
-#if defined(SVR4) && !defined(__hpux)
+#if defined(__SVR4__) && !defined(__HPUX__)
       (void) sysinfo (SI_HOSTNAME, environment + len, 1024 - len);
 #else
       (void) gethostname (environment + len, 1024 - len);

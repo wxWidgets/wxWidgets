@@ -14,7 +14,7 @@
 #pragma implementation "fontdlg.h"
 #endif
 
-#include "wx/stubs/fontdlg.h"
+#include "wx/motif/fontdlg.h"
 #include "wx/cmndata.h"
 
 #if !USE_SHARED_LIBRARY

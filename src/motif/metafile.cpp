@@ -16,7 +16,7 @@
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/dc.h"
-#include "wx/stubs/metafile.h"
+#include "wx/motif/metafile.h"
 #include "wx/clipbrd.h"
 
 extern bool wxClipboardIsOpen;

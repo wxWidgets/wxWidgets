@@ -13,8 +13,8 @@
 #pragma implementation "print.h"
 #endif
 
-#include "wx/stubs/print.h"
-#include "wx/stubs/printdlg.h"
+#include "wx/motif/print.h"
+#include "wx/motif/printdlg.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxPrinter, wxPrinterBase)

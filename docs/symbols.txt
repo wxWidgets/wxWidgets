@@ -50,7 +50,7 @@ __BORLANDC__    Borland C++
 __WATCOMC__     Watcom C++
 __SYMANTECC__   Symantec C++
 __VISUALC__     VC++
-__SUNCC__
+__SUNCC__       Sun CC
 __XLC__         ?? compiler
 
 wxWindows modes:

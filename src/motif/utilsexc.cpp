@@ -36,11 +36,11 @@
 
 #else
 
-#if defined(_AIX) || defined(__xlC__)
+#if defined(__AIX__) || defined(__xlC__)
 #include <sys/socket.h>
 #include <sys/select.h>
 #else
-#ifndef DG
+#ifndef __DATA_GENERAL__
 #include <sys/syscall.h>
 #endif
 #endif

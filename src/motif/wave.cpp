@@ -15,7 +15,7 @@
 
 #include "wx/object.h"
 #include "wx/string.h"
-#include "wx/stubs/wave.h"
+#include "wx/motif/wave.h"
 
 wxWave::wxWave()
   : m_waveData(NULL), m_waveLength(0), m_isResource(FALSE)

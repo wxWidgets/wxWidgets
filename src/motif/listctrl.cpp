@@ -13,8 +13,8 @@
 #pragma implementation "listctrl.h"
 #endif
 
-#include "wx/stubs/textctrl.h"
-#include "wx/stubs/listctrl.h"
+#include "wx/motif/textctrl.h"
+#include "wx/motif/listctrl.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)

@@ -44,6 +44,13 @@ bool MyApp::OnInit(void)
 #else
   frame = new MyFrame((wxFrame*) NULL, -1, (char *) "Notebook", wxPoint(-1, -1), wxSize(365, 390), wxDEFAULT_FRAME_STYLE);
 
+  // Problem with Motif whereby it doesn't size properly unless
+  // you set the size again (to a different size than before,
+  // since SetSize is optimized)
+#ifdef __WXMOTIF__
+  frame->SetSize(-1, -1, 370, 390);
+#endif
+
   return TRUE;
 #endif
 }
@@ -82,7 +89,7 @@ void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
   (void)new wxButton(panel1, -1, "Press me", wxPoint(10, 10));
   (void)new wxTextCtrl(panel1, -1, "1234", wxPoint(10, 40), wxSize(120, 150));
   
-  notebook->AddPage(panel1, "Cat");
+  notebook->AddPage(panel1, "Cat", TRUE);
 
   wxPanel *panel2 = new wxPanel(notebook, -1);
   panel2->SetBackgroundColour(wxColour("BLUE"));

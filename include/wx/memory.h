@@ -53,17 +53,25 @@ void wxDebugFree(void * buf, bool isVect = FALSE);
 #undef new
 #endif
 
+#if defined(__SUNCC__)
+#define wxUSE_ARRAY_MEMORY_OPERATORS 0
+#elif !( defined (_MSC_VER) && (_MSC_VER <= 1020) ) || defined( __MWERKS__)
+#define wxUSE_ARRAY_MEMORY_OPERATORS 1
+#else
+#define wxUSE_ARRAY_MEMORY_OPERATORS 0
+#endif
+
 // Added JACS 25/11/98: needed for some compilers
 void * operator new (size_t size);
 
-#if !( defined (_MSC_VER) && (_MSC_VER <= 1020) ) || defined( __MWERKS__)
+#if wxUSE_ARRAY_MEMORY_OPERATORS
 void * operator new[] (size_t size);
 #endif
 
 void * operator new (size_t size, char * fileName, int lineNum);
 void operator delete (void * buf);
 
-#if !( defined (_MSC_VER) && (_MSC_VER <= 1020) ) || defined( __MWERKS__)
+#if wxUSE_ARRAY_MEMORY_OPERATORS
 void * operator new[] (size_t size, char * fileName, int lineNum);
 void operator delete[] (void * buf);
 #endif

@@ -125,7 +125,7 @@ void wxObject::operator delete(void* pData, char* /* fileName */, int /* lineNum
 #endif
 
 // Cause problems for VC++ - crashes
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) && wxUSE_ARRAY_MEMORY_OPERATORS
 void * wxObject::operator new[] (size_t size, char * fileName, int lineNum)
 {
   return wxDebugAlloc(size, fileName, lineNum, TRUE, TRUE);

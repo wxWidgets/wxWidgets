@@ -41,6 +41,14 @@
 #endif
 #endif
 
+#if defined(sun) || defined(__SUN__)
+# if !defined(__GNUG__)
+#  ifndef __SUNCC__
+#   define __SUNCC__
+#  endif
+# endif
+#endif
+
 // suppress some Visual C++ warnings
 #ifdef _MSC_VER
 #   pragma warning(disable:4244)    // cobversion from double to float
@@ -114,6 +122,9 @@
     #define bool unsigned int
 #elif defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
     typedef unsigned int bool;
+#elif defined(__SUNCC__)
+    // If we use int, we get identically overloaded functions in config.cpp
+    typedef unsigned char bool;
 #endif
 
 #if ( defined(_MSC_VER) && (_MSC_VER <= 800) ) || defined(__GNUWIN32__)
