@@ -2331,6 +2331,25 @@ int wxWindowDC::GetDepth() const
 
 IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
 
+// Limit the paint region to the window size. Sometimes
+// the paint region is too big, and this risks X11 errors
+static void wxLimitRegionToSize(wxRegion& region, const wxSize& sz)
+{
+    wxRect originalRect = region.GetBox();
+    wxRect rect(originalRect);
+    if (rect.width + rect.x > sz.x)
+        rect.width = sz.x - rect.x;
+    if (rect.height + rect.y > sz.y)
+        rect.height = sz.y - rect.y;
+    if (rect != originalRect)
+    {
+        region = wxRegion(rect);
+        wxLogTrace(wxT("painting"), wxT("Limiting region from %d, %d, %d, %d to %d, %d, %d, %d\n"),
+                   originalRect.x, originalRect.y, originalRect.width, originalRect.height,
+                   rect.x, rect.y, rect.width, rect.height);
+    }
+}
+
 wxPaintDC::wxPaintDC( wxWindow *win )
          : wxClientDC( win )
 {
@@ -2338,11 +2357,18 @@ wxPaintDC::wxPaintDC( wxWindow *win )
     if (!win->m_clipPaintRegion)
         return;
 
+    wxSize sz = win->GetSize();
     m_paintClippingRegion = win->GetUpdateRegion();
+    wxLimitRegionToSize(m_paintClippingRegion, sz);
+    
     GdkRegion *region = m_paintClippingRegion.GetRegion();
     if ( region )
     {
         m_currentClippingRegion.Union( m_paintClippingRegion );
+        wxLimitRegionToSize(m_currentClippingRegion, sz);
+
+        if (sz.x <= 0 || sz.y <= 0)
+            return ;
 
         gdk_gc_set_clip_region( m_penGC, region );
         gdk_gc_set_clip_region( m_brushGC, region );
