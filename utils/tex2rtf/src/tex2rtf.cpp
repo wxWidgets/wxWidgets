@@ -105,7 +105,11 @@ void ShowOptions(void);
 
 #ifdef NO_GUI
 
-extern char *wxBuffer; // we must init it, otherwise tex2rtf will crash
+#if wxUSE_GUI || !defined(__UNIX__)
+// wxBase for Unix does not have wxBuffer
+extern 
+#endif
+char *wxBuffer; // we must init it, otherwise tex2rtf will crash
 
 int main(int argc, char **argv)
 #else
