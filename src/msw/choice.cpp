@@ -32,6 +32,7 @@
     #include "wx/choice.h"
     #include "wx/utils.h"
     #include "wx/log.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/msw/private.h"
