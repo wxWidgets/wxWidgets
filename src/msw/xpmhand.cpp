@@ -102,8 +102,9 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap,
         {
             XpmToBitmap(bitmap, ximage, xmask, xpmAttr);
 
-            XpmFree(xpmAttr.pixels);
             XpmFreeAttributes(&xpmAttr);
+            if (xpmAttr.pixels) // VS: should never happen
+                XpmFree(xpmAttr.pixels);
             XImageFree(ximage);
             if (xmask)
                 XDestroyImage(xmask);
@@ -200,8 +201,9 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap,
       {
           XpmToBitmap(bitmap, ximage, xmask, xpmAttr);
 
-          XpmFree(xpmAttr.pixels);
           XpmFreeAttributes(&xpmAttr);
+          if (xpmAttr.pixels) // VS: should never happen
+              XpmFree(xpmAttr.pixels);
           XImageFree(ximage); // releases the malloc, but does not destroy bitmap
           if (xmask)
               XDestroyImage(xmask);
