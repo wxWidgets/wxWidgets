@@ -1369,7 +1369,7 @@ private:
  wxEVT_DESTROY
  */
 
-class WXDLLEXPORT wxWindowCreateEvent : public wxEvent
+class WXDLLEXPORT wxWindowCreateEvent : public wxCommandEvent
 {
     DECLARE_DYNAMIC_CLASS(wxWindowCreateEvent)
 
@@ -1379,7 +1379,7 @@ public:
     wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
 };
 
-class WXDLLEXPORT wxWindowDestroyEvent : public wxEvent
+class WXDLLEXPORT wxWindowDestroyEvent : public wxCommandEvent
 {
     DECLARE_DYNAMIC_CLASS(wxWindowDestroyEvent)
 

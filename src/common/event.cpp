@@ -524,14 +524,12 @@ void wxQueryNewPaletteEvent::CopyObject(wxObject& obj_d) const
 }
 
 wxWindowCreateEvent::wxWindowCreateEvent(wxWindow *win)
-                   : wxEvent()
 {
     SetEventType(wxEVT_CREATE);
     SetEventObject(win);
 }
 
 wxWindowDestroyEvent::wxWindowDestroyEvent(wxWindow *win)
-                    : wxEvent()
 {
     SetEventType(wxEVT_DESTROY);
     SetEventObject(win);
