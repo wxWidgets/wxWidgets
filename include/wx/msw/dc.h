@@ -158,6 +158,7 @@ public:
   {
     SetClippingRegion(rect.x, rect.y, rect.width, rect.height);
   }
+  virtual void SetClippingRegion(const wxRegion& region);
 
   virtual void SetPalette(const wxPalette& palette);
 #if WXWIN_COMPATIBILITY

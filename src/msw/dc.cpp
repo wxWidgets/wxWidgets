@@ -181,6 +181,22 @@ void wxDC::SetClippingRegion(long cx, long cy, long cw, long ch)
   DoClipping((WXHDC) m_hDC);
 }
 
+void wxDC::SetClippingRegion(const wxRegion& region)
+{
+  if (!region.GetHRGN())
+    return;
+
+  wxRect box = region.GetBox();
+
+  m_clipping = TRUE;
+  m_clipX1 = box.x;
+  m_clipY1 = box.y;
+  m_clipX2 = box.x + box.width;
+  m_clipY2 = box.y + box.height;
+
+  ExtSelectClipRgn((HDC) m_hDC, (HRGN) region.GetHRGN(), RGN_AND);
+}
+
 void wxDC::DoClipping(WXHDC dc)
 {
   if (m_clipping && dc)
@@ -194,11 +210,14 @@ void wxDC::DestroyClippingRegion(void)
 {
   if (m_clipping && m_hDC)
   {
+    // TODO: this should restore the previous clipping region,
+    // so that OnPaint processing works correctly, and the update clipping region
+    // doesn't get destroyed after the first DestroyClippingRegion.
     HRGN rgn = CreateRectRgn(0, 0, 32000, 32000);
     SelectClipRgn((HDC) m_hDC, rgn);
     DeleteObject(rgn);
-   }
-   m_clipping = FALSE;
+  }
+  m_clipping = FALSE;
 }
 
 bool wxDC::CanDrawBitmap(void) const

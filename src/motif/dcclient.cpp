@@ -2045,6 +2045,34 @@ void wxWindowDC::SetClippingRegion( long x, long y, long width, long height )
   }
 };
 
+void wxWindowDC::SetClippingRegion( const wxRegion& region )
+{
+  wxRect box = region.GetBox();
+
+  wxDC::SetClippingRegion( box.x, box.y, box.width, box.height );
+
+  if (m_userRegion)
+    XDestroyRegion ((Region) m_userRegion);
+  m_userRegion = (WXRegion) XCreateRegion ();
+
+  XUnionRegion((Region) m_userRegion, (Region) region.GetXRegion(), (Region) m_userRegion);
+
+  SetDCClipping ();
+
+  // Needs to work differently for Pixmap: without this,
+  // there's a nasty (Display*) m_display bug. 8/12/94
+  if (m_window && m_window->GetBackingPixmap())
+  {
+    XRectangle rects[1];
+    rects[0].x = XLOG2DEV_2(box.x);
+    rects[0].y = YLOG2DEV_2(box.y);
+    rects[0].width = XLOG2DEVREL(box.width);
+    rects[0].height = YLOG2DEVREL(box.height);
+    XSetClipRectangles((Display*) m_display, (GC) m_gcBacking, 0, 0, rects, 1, Unsorted);
+  }
+};
+
+
 void wxWindowDC::DestroyClippingRegion(void)
 {
   wxDC::DestroyClippingRegion();

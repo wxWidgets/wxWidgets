@@ -288,6 +288,14 @@ wxRegionContain wxRegion::Contains(const wxRect& rect) const
     return Contains(x, y, w, h);
 }
 
+// Get internal region handle
+WXHRGN wxRegion::GetHRGN() const
+{
+    if (!m_refData)
+        return (WXHRGN) 0;
+    return (WXHRGN) M_REGION;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //																			 //
 //							   wxRegionIterator								 //

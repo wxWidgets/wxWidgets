@@ -89,6 +89,7 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     virtual void SetPalette( const wxPalette& palette );
     
     virtual void SetClippingRegion( long x, long y, long width, long height );
+    virtual void SetClippingRegion( const wxRegion& region );
     virtual void DestroyClippingRegion(void);
     
     virtual void DrawSpline( wxList *points );

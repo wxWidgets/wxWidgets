@@ -101,6 +101,9 @@ public:
 	bool Combine(long x, long y, long width, long height, wxRegionOp op);
 	bool Combine(const wxRegion& region, wxRegionOp op);
 	bool Combine(const wxRect& rect, wxRegionOp op);
+
+    // Get internal region handle
+    WXHRGN GetHRGN() const;
 };
 
 class WXDLLEXPORT wxRegionIterator : public wxObject {

@@ -533,11 +533,15 @@ whether text will be drawn with a background colour or not.
 
 \func{void}{SetClippingRegion}{\param{long}{ x}, \param{long}{ y}, \param{long}{ width}, \param{long}{ height}}
 
-Sets the clipping region for the DC. The clipping region is a rectangular area
-to which drawing is restricted.  Possible uses for the clipping region are for clipping text
+\func{void}{SetClippingRegion}{\param{const wxRegion\&}{ region}}
+
+Sets the clipping region for the DC. The clipping region is an area
+to which drawing is restricted. Possible uses for the clipping region are for clipping text
 or for speeding up window redraws when only a known area of the screen is damaged.
 
-See also \helpref{wxDC::DestroyClippingRegion}{wxdcdestroyclippingregion}.
+\wxheading{See also}
+
+\helpref{wxDC::DestroyClippingRegion}{wxdcdestroyclippingregion}, \helpref{wxRegion}{wxregion}
 
 \membersection{wxDC::SetPalette}\label{wxdcsetpalette}
 

@@ -448,8 +448,19 @@ void wxWindowDC::SetPalette( const wxPalette& WXUNUSED(palette) )
 void wxWindowDC::SetClippingRegion( long x, long y, long width, long height )
 {
   wxDC::SetClippingRegion( x, y, width, height );
+
+  // TODO
   
 };
+
+void wxWindowDC::SetClippingRegion( const wxRegion& region )
+{
+  wxRect box = region.GetBox();
+
+  wxDC::SetClippingRegion( box.x, box.y, box.width, box.height );
+
+  // TODO
+}
 
 void wxWindowDC::DestroyClippingRegion(void)
 {

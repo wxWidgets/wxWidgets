@@ -206,9 +206,7 @@ bool wxRegion::Combine(const wxRegion& region, wxRegionOp op)
             break ;
     }
 
-    // TODO combine region
-
-	return FALSE;
+  return FALSE;
 }
 
 bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)

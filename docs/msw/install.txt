@@ -79,6 +79,8 @@ Here are the steps required:
   extra files to use the wxWindows makefiles. You can find these
   files in ports/mingw32 on the ftp site or CD-ROM, as extra.zip.
   These should be extracted to the Mingw32 directory.
+  IMPORTANT: also see mingw32.txt in this directory (docs/msw)
+  about a fix that has to be applied to a Mingw32 header file.
 
 - Modify the file wx/src/cygnus.bat (or mingw32.bat or mingegcs.bat)
   to set up appropriate variables, if necessary mounting drives.
