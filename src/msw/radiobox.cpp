@@ -368,9 +368,9 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int xx = x;
     int yy = y;
 
-    if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         xx = currentX;
-    if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         yy = currentY;
 
 #if RADIOBTN_PARENT_IS_RADIOBOX

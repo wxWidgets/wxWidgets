@@ -324,9 +324,9 @@ void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+  if (x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     x1 = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+  if (y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     y1 = currentY;
 
   AdjustForParentClientOrigin(x1, y1, sizeFlags);
