@@ -94,7 +94,17 @@ bool wxStaticText::Create(wxWindow *parent,
     if(!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
         return false;
 
-    return wxControl::PalmCreateField(label, pos, size, false, false, leftAlign);
+    // note that wxALIGN_LEFT is equal to 0 so we shouldn't
+    // test for it using & operator
+
+    JustificationType align = leftAlign;
+
+    if ( style & wxALIGN_CENTRE )
+        align = centerAlign ;
+    else if ( style & wxALIGN_RIGHT )
+        align = rightAlign;
+
+    return wxControl::PalmCreateField(label, pos, size, false, false, align);
 }
 
 wxBorder wxStaticText::GetDefaultBorder() const

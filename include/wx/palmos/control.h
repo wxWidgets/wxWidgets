@@ -78,7 +78,7 @@ public:
 protected:
     // regardless how deeply we are in wxWidgets hierarchy always get correct form
     FormType* GetParentForm() const;
-    uint16_t GetObjectIndex() const;
+    FormType* GetObjectFormIndex(uint16_t& index) const;
     void* GetObjectPtr() const;
 
     // choose the default border for this window

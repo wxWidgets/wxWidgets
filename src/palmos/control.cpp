@@ -74,6 +74,15 @@ wxControl::~wxControl()
 {
     SetLabel(wxEmptyString);
     m_isBeingDeleted = true;
+
+    DestroyChildren();
+
+    uint16_t index;
+    FormType* form = GetObjectFormIndex(index);
+    if(form!=NULL && index!=frmInvalidObjectId)
+    {
+        FrmRemoveObject((FormType **)&form,index);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -119,7 +128,7 @@ bool wxControl::PalmCreateControl(ControlStyleType style,
                                ( size.y == wxDefaultCoord ) ? winUndefConstraint : size.y,
                                stdFont,
                                groupID,
-                               false
+                               true
                            );
 
     if(control==NULL)
@@ -191,19 +200,21 @@ FormType* wxControl::GetParentForm() const
     return tlw->GetForm();
 }
 
-uint16_t wxControl::GetObjectIndex() const
+FormType* wxControl::GetObjectFormIndex(uint16_t& index) const
 {
     FormType* form = GetParentForm();
-    if(form==NULL)return frmInvalidObjectId;
-    return FrmGetObjectIndex(form, GetId());
+    if(form!=NULL)
+        index = FrmGetObjectIndex(form, GetId());
+    else
+        index = frmInvalidObjectId;
+    return form;
 }
 
 void* wxControl::GetObjectPtr() const
 {
-    FormType* form = GetParentForm();
-    if(form==NULL)return NULL;
-    uint16_t index = FrmGetObjectIndex(form, GetId());
-    if(index==frmInvalidObjectId)return NULL;
+    uint16_t index;
+    FormType* form = GetObjectFormIndex(index);
+    if(form==NULL || index==frmInvalidObjectId)return NULL;
     return FrmGetObjectPtr(form,index);
 }
 
