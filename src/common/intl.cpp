@@ -614,7 +614,8 @@ bool wxLocale::Init(const wxChar *szName,
 
     wxCHECK_MSG( szLocale, FALSE, _T("no locale to set in wxLocale::Init()") );
   }
-  m_pszOldLocale = wxSetlocale(LC_ALL, szLocale);
+
+  m_pszOldLocale = wxStrdup(wxSetlocale(LC_ALL, szLocale));
   if ( m_pszOldLocale == NULL )
     wxLogError(_("locale '%s' can not be set."), szLocale);
 
@@ -803,12 +804,15 @@ bool wxLocale::Init(int language, int flags)
 #endif
 
 #ifndef WX_NO_LOCALE_SUPPORT
-     wxChar *szLocale = retloc ? wxStrdup(retloc) : NULL;
+    wxChar *szLocale = retloc ? wxStrdup(retloc) : NULL;
     bool ret = Init(name, canonical, retloc,
                     (flags & wxLOCALE_LOAD_DEFAULT) != 0,
                     (flags & wxLOCALE_CONV_ENCODING) != 0);
-    if (szLocale)
-        free(szLocale);
+    free(szLocale);
+
+    if ( ret )
+        m_language = lang;
+
     return ret;
 #endif
 }
@@ -1499,6 +1503,7 @@ wxLocale::~wxLocale()
     // restore old locale
     wxSetLocale(m_pOldLocale);
     wxSetlocale(LC_ALL, m_pszOldLocale);
+    free((wxChar *)m_pszOldLocale);     // const_cast
 }
 
 // get the translation of given string in current locale
