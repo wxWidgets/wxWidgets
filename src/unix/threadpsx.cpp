@@ -257,7 +257,7 @@ private:
     // this (mutex, cond) pair is used to synchronize the main thread and this
     // thread in several situations:
     //  1. The thread function blocks until condition is signaled by Run() when
-    //     it's initially created - this allows create thread in "suspended"
+    //     it's initially created - this allows thread creation in "suspended"
     //     state
     //  2. The Delete() function blocks until the condition is signaled when the
     //     thread exits.
@@ -279,9 +279,10 @@ void *wxThreadInternal::PthreadStart(void *ptr)
     wxThread *thread = (wxThread *)ptr;
     wxThreadInternal *pthread = thread->p_internal;
 
-    if ( pthread_setspecific(gs_keySelf, thread) != 0 )
+    int rc = pthread_setspecific(gs_keySelf, thread);
+    if ( rc != 0 )
     {
-        wxLogError(_("Can not start thread: error writing TLS."));
+        wxLogSysError(rc, _("Can not start thread: error writing TLS."));
 
         return (void *)-1;
     }
@@ -386,6 +387,12 @@ void wxThreadInternal::Pause()
 {
     wxCHECK_RET( m_state == STATE_PAUSED,
                  "thread must first be paused with wxThread::Pause()." );
+
+    // don't pause the thread which is being terminated - this would lead to
+    // deadlock if the thread is paused after Delete() had called Resume() but
+    // before it had time to call Cancel()
+    if ( m_cancelled )
+        return;
 
     // wait until the condition is signaled from Resume()
     m_condSuspend.Wait(m_mutexSuspend);
