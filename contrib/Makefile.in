@@ -13,3 +13,6 @@ clean:
 
 samples:
 	cd samples; $(MAKE)
+
+install:
+	cd src; $(MAKE) install
