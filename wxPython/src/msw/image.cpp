@@ -106,12 +106,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
-    wxImage* wxNullImage() {
-        return new wxImage;
-    }
-
-    wxImage* wxEmptyImage(int width, int height) {
-        return new wxImage(width, height);
+    wxImage* wxEmptyImage(int width=0, int height=0) {
+        if (width == 0 && height == 0)
+            return new wxImage;
+        else
+            return new wxImage(width, height);
     }
 
     wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype) {
@@ -121,43 +120,24 @@ static char* wxStringErrorMsg = "string type is required for parameter";
     wxImage* wxImageFromBitmap(const wxBitmap &bitmap) {
         return new wxImage(bitmap);
     }
+
+#if 0
+extern wxImage  wxNullImage; 
+
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
-static PyObject *_wrap_wxNullImage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxImage * _result;
-    char *_kwnames[] = {  NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxNullImage",_kwnames)) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxImage *)wxNullImage();
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxImage_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxEmptyImage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxImage * _result;
-    int  _arg0;
-    int  _arg1;
+    int  _arg0 = (int ) 0;
+    int  _arg1 = (int ) 0;
     char *_kwnames[] = { "width","height", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ii:wxEmptyImage",_kwnames,&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:wxEmptyImage",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -294,6 +274,21 @@ static PyObject *_wrap_wxInitAllImageHandlers(PyObject *self, PyObject *args, Py
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
+}
+
+static int _wrap_wxNullImage_set(PyObject *val) {
+
+    PyErr_SetString(PyExc_TypeError,"Variable wxNullImage is read-only.");
+    return 1;
+}
+
+static PyObject *_wrap_wxNullImage_get() {
+    PyObject * pyobj;
+    char ptemp[128];
+
+    SWIG_MakePtr(ptemp,(char *) &wxNullImage,"_wxImage_p");
+    pyobj = PyString_FromString(ptemp);
+    return pyobj;
 }
 
 #define wxImageHandler_GetName(_swigobj)  (_swigobj->GetName())
@@ -2231,7 +2226,6 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImageFromBitmap", (PyCFunction) _wrap_wxImageFromBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageFromMime", (PyCFunction) _wrap_wxImageFromMime, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEmptyImage", (PyCFunction) _wrap_wxEmptyImage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxNullImage", (PyCFunction) _wrap_wxNullImage, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus
@@ -2454,6 +2448,8 @@ SWIGEXPORT(void) initimagec() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("imagec", imagecMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"cvar", SWIG_globals);
+	 SWIG_addvarlink(SWIG_globals,"wxNullImage",_wrap_wxNullImage_get, _wrap_wxNullImage_set);
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

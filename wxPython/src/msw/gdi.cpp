@@ -1309,13 +1309,13 @@ static PyObject *_wrap_new_wxBitmap(PyObject *self, PyObject *args, PyObject *kw
     PyObject * _resultobj;
     wxBitmap * _result;
     wxString * _arg0;
-    long  _arg1;
+    wxBitmapType  _arg1;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "name","type", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:new_wxBitmap",_kwnames,&_obj0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:new_wxBitmap",_kwnames,&_obj0,&_arg1)) 
         return NULL;
 {
 #if PYTHON_API_VERSION >= 1009

@@ -170,17 +170,15 @@ public:
 };
 
 // Alternate constructors
-%new wxImage* wxNullImage();
-%new wxImage* wxEmptyImage(int width, int height);
+%new wxImage* wxEmptyImage(int width=0, int height=0);
 %new wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype);
 %new wxImage* wxImageFromBitmap(const wxBitmap &bitmap);
 %{
-    wxImage* wxNullImage() {
-        return new wxImage;
-    }
-
-    wxImage* wxEmptyImage(int width, int height) {
-        return new wxImage(width, height);
+    wxImage* wxEmptyImage(int width=0, int height=0) {
+        if (width == 0 && height == 0)
+            return new wxImage;
+        else
+            return new wxImage(width, height);
     }
 
     wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype) {
@@ -192,8 +190,22 @@ public:
     }
 %}
 
-
 void wxInitAllImageHandlers();
+
+
+%readonly
+%{
+#if 0
+%}
+
+extern wxImage    wxNullImage;
+
+%readwrite
+%{
+#endif
+%}
+
+
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

@@ -58,7 +58,7 @@ class wxBitmap
 //: public wxGDIImage
 {
 public:
-    wxBitmap(const wxString& name, long type);
+    wxBitmap(const wxString& name, wxBitmapType type);
     ~wxBitmap();
 
     wxPalette* GetPalette();
