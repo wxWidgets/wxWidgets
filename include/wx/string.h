@@ -1433,14 +1433,6 @@ inline bool operator>=(const wxString& s1, const wxChar  * s2)
 inline bool operator>=(const wxChar  * s1, const wxString& s2)
     { return s2.Cmp(s1) <= 0; }
 
-#endif // !wxUSE_STL
-
-// comparison with char
-inline bool operator==(wxChar c, const wxString& s) { return s.IsSameAs(c); }
-inline bool operator==(const wxString& s, wxChar c) { return s.IsSameAs(c); }
-inline bool operator!=(wxChar c, const wxString& s) { return !s.IsSameAs(c); }
-inline bool operator!=(const wxString& s, wxChar c) { return !s.IsSameAs(c); }
-
 #if wxUSE_UNICODE
 inline bool operator==(const wxString& s1, const wxWCharBuffer& s2)
     { return (s1.Cmp((const wchar_t *)s2) == 0); }
@@ -1461,15 +1453,11 @@ inline bool operator!=(const wxCharBuffer& s1, const wxString& s2)
     { return (s2.Cmp((const char *)s1) != 0); }
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-#if !wxUSE_STL
-
 wxString WXDLLIMPEXP_BASE operator+(const wxString& string1,  const wxString& string2);
 wxString WXDLLIMPEXP_BASE operator+(const wxString& string, wxChar ch);
 wxString WXDLLIMPEXP_BASE operator+(wxChar ch, const wxString& string);
 wxString WXDLLIMPEXP_BASE operator+(const wxString& string, const wxChar *psz);
 wxString WXDLLIMPEXP_BASE operator+(const wxChar *psz, const wxString& string);
-
-#endif // !wxUSE_STL
 
 #if wxUSE_UNICODE
 inline wxString operator+(const wxString& string, const wxWCharBuffer& buf)
@@ -1482,6 +1470,15 @@ inline wxString operator+(const wxString& string, const wxCharBuffer& buf)
 inline wxString operator+(const wxCharBuffer& buf, const wxString& string)
     { return (const char *)buf + string; }
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
+#endif // !wxUSE_STL
+
+// comparison with char (those are not defined by std::[w]string and so should
+// be always available)
+inline bool operator==(wxChar c, const wxString& s) { return s.IsSameAs(c); }
+inline bool operator==(const wxString& s, wxChar c) { return s.IsSameAs(c); }
+inline bool operator!=(wxChar c, const wxString& s) { return !s.IsSameAs(c); }
+inline bool operator!=(const wxString& s, wxChar c) { return !s.IsSameAs(c); }
 
 // ---------------------------------------------------------------------------
 // Implementation only from here until the end of file
