@@ -2732,7 +2732,8 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
     PostCreation();
 
-    Show( TRUE );
+    if ( IsShown() )
+        gtk_widget_show( m_widget );
 
     return TRUE;
 }
