@@ -44,17 +44,28 @@
 #else
 #define INCL_PM
 #define INCL_GPI
+#define INCL_DEV
 #include<os2.h>
 typedef unsigned long COLORREF;
+/*
 // RGB under OS2 is more like a PALETTEENTRY struct under Windows so we need a real RGB def
-//#define OS2RGB(r,g,b) ((ULONG ((BYTE) (r) | ((UINT) (g) << 8)) | (((ULONG)(BYTE)(b)) << 16)))
-#define OS2RGB(r,g,b) ((unsigned long)r<<16|(unsigned long)g<<8|(unsigned long)b)
-
-#define GetBValue(rgb) ((BYTE)((rgb) >> 16))
-#define GetGValue(rgb) ((BYTE)(((WORD)(rgb)) >> 8))
-#define GetRValue(rgb) ((BYTE)(rgb))
-typedef UINT    WORD;
+// #define OS2RGB(r,g,b) ((ULONG ((BYTE) (r) | ((UINT) (g) << 8)) | (((ULONG)(BYTE)(b)) << 16)))
+*/
+#ifndef OS2RGB
+#  define OS2RGB(r,g,b) ((unsigned long)r<<16|(unsigned long)g<<8|(unsigned long)b)
 #endif
+
+#ifndef GetBValue
+#  define GetBValue(rgb) ((BYTE)((rgb) >> 16))
+#endif
+#ifndef GetGValue
+#  define GetGValue(rgb) ((BYTE)(((UINT)(rgb)) >> 8))
+#endif
+#ifndef GetRValue
+#  define GetRValue(rgb) ((BYTE)(rgb))
+#endif
+typedef UINT    WORD;
+#endif /* else __OS2__ */
 
 
 /*
@@ -80,7 +91,12 @@ FUNC(boundCheckingRealloc, void *, (void *p, long s));
 /* define MSW types for X window types,
    I don't know much about MSW, but the following defines do the job */
 
+#if !defined(__OS2__)
 typedef HDC Display;			/* this should be similar */
+#else
+typedef HPS Display;
+#endif
+
 typedef void *Screen;			/* not used */
 typedef void *Visual;			/* not used yet, is for GRAY, COLOR,
 					 * MONO */

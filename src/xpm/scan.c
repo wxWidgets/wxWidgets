@@ -273,11 +273,8 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
 # endif /* AMIGA */
 #else
 
-#ifndef __OS2__
 	    ErrorStatus = MSWGetImagePixels(display, shapeimage, width, height,
 		    			&pmap, storeMaskPixel);
-/* calling convention all messed up OS/2 -- figure out later */
-#endif
 
 #endif /* ndef for FOR_MSW */
 
@@ -318,10 +315,8 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
 # endif /* AMIGA */
 #else
 
-#ifndef __VISAGECPP30__
 	    ErrorStatus = MSWGetImagePixels(display, image, width, height, &pmap,
 		    			storePixel);
-#endif
 
 #endif
 
@@ -601,7 +596,7 @@ ScanOtherColors(display, colors, ncolors, pixels, mask, cpp, attributes)
 #else
 		sprintf(buf, "#%02x%02x%02x",
 			xcolor->red, xcolor->green, xcolor->blue);
-#endif			
+#endif
 		color->c_color = (char *) xpmstrdup(buf);
 	    }
 	    if (!color->c_color) {
@@ -1026,7 +1021,7 @@ MSWGetImagePixels(display, image, width, height, pmap, storeFunc)
     Pixel pixel;
 #ifdef __OS2__
      HAB          hab;
-     HPS          hps;
+     HDC          shapedc;
      DEVOPENSTRUC dop = {NULL, "DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL};
      SIZEL        sizl = {0, 0};
      POINTL       point;
@@ -1035,8 +1030,9 @@ MSWGetImagePixels(display, image, width, height, pmap, storeFunc)
     iptr = pmap->pixelindex;
 
 #ifdef __OS2__
-    hps = GpiCreatePS(hab, *display, &sizl, GPIA_ASSOC | PU_PELS);
-    GpiSetBitmap(hps, image->bitmap);
+    shapedc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
+    *display = GpiCreatePS(hab, shapedc, &sizl, GPIA_ASSOC | PU_PELS);
+    GpiSetBitmap(*display, image->bitmap);
 #else
     SelectObject(*display, image->bitmap);
 #endif
@@ -1046,7 +1042,7 @@ MSWGetImagePixels(display, image, width, height, pmap, storeFunc)
 #ifdef __OS2__
      point.x = x;
      point.y = y;
-     pixel = GpiQueryPel(hps, &point);
+     pixel = GpiQueryPel(*display, &point);
 #else
 	    pixel = GetPixel(*display, x, y);
 #endif

@@ -141,21 +141,9 @@ LFUNC(APutImagePixels, void, (XImage *ximage, unsigned int width,
 # endif/* AMIGA */
 #else  /* FOR_MSW */
 /* FOR_MSW pixel routine */
-#ifdef __OS2__
-LFUNC(MSWPutImagePixels, void, (
-  HPS           hps
-, Display*      dc
-, XImage*       image
-, unsigned int  width
-, unsigned int  height
-, unsigned int* pixelindex
-, Pixel*        pixels
-));
-#else
 LFUNC(MSWPutImagePixels, void, (Display *dc, XImage *image,
 				unsigned int width, unsigned int height,
 				unsigned int *pixelindex, Pixel *pixels));
-#endif
 #endif /* FOR_MSW */
 
 #ifdef NEED_STRCASECMP
@@ -1008,14 +996,8 @@ XpmCreateImageFromXpmImage(display, image,
 			image->data, image_pixels);
 # endif
 #else  /* FOR_MSW */
-#ifdef __OS2__
- hps = GpiCreatePS(hab, *display, &sizl, GPIA_ASSOC|PU_PELS);
-	MSWPutImagePixels(hps, display, ximage, image->width, image->height,
-			  image->data, image_pixels);
-#else
 	MSWPutImagePixels(display, ximage, image->width, image->height,
 			  image->data, image_pixels);
-#endif
 #endif
     }
     /* create the shape mask image */
@@ -1034,14 +1016,8 @@ XpmCreateImageFromXpmImage(display, image,
 			image->data, mask_pixels);
 # endif
 #else  /* FOR_MSW */
-#ifdef __OS2__
- hps = GpiCreatePS(hab, *display, &sizl, GPIA_ASSOC|PU_PELS);
-	MSWPutImagePixels(hps, display, shapeimage, image->width, image->height,
-			  image->data, mask_pixels);
-#else
 	MSWPutImagePixels(display, shapeimage, image->width, image->height,
 			  image->data, mask_pixels);
-#endif
 #endif
 
     }
@@ -1961,8 +1937,7 @@ APutImagePixels (
 #ifdef __OS2__
 /* Visual Age cannot deal with old, non-ansi, code */
 static void MSWPutImagePixels(
-  HPS           hps
-, Display*      dc
+  Display*      dc
 , XImage*       image
 , unsigned int  width
 , unsigned int  height
@@ -1987,7 +1962,7 @@ MSWPutImagePixels(dc, image, width, height, pixelindex, pixels)
 #ifdef __OS2__
     POINTL                                point;
 
-    obm = GpiSetBitmap(hps, image->bitmap);
+    obm = GpiSetBitmap(*dc, image->bitmap);
 #else
     obm = SelectObject(*dc, image->bitmap);
 #endif
@@ -1997,8 +1972,8 @@ MSWPutImagePixels(dc, image, width, height, pixelindex, pixels)
 #ifdef __OS2__
      point.x = x;
      point.y = y;
-     GpiSetColor(hps, (LONG)pixels[*(data++)]);
-     GpiSetPel(hps, &point);
+     GpiSetColor(*dc, (LONG)pixels[*(data++)]);
+     GpiSetPel(*dc, &point);
 #else
 
 	    SetPixel(*dc, x, y, pixels[*(data++)]); /* data is [x+y*width] */
@@ -2006,7 +1981,7 @@ MSWPutImagePixels(dc, image, width, height, pixelindex, pixels)
 	}
     }
 #ifdef __OS2__
-    GpiSetBitmap(hps, obm);
+    GpiSetBitmap(*dc, obm);
 #else
     SelectObject(*dc, obm);
 #endif
@@ -2604,7 +2579,6 @@ ParseAndPutPixels(
     unsigned int a, x, y;
 #ifdef __OS2__
      HAB          hab;
-     HPS          hps;
      DEVOPENSTRUC dop = {NULL, "DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL};
      SIZEL        sizl = {0, 0};
      POINTL       point;
@@ -2623,8 +2597,8 @@ ParseAndPutPixels(
 	    if ( shapeimage ) {
 #ifdef __OS2__
       shapedc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
-      hps = GpiCreatePS(hab, *dc, &sizl, GPIA_ASSOC | PU_PELS);
-      sobm = GpiSetBitmap(hps, shapeimage->bitmap);
+      *dc = GpiCreatePS(hab, shapedc, &sizl, GPIA_ASSOC | PU_PELS);
+      sobm = GpiSetBitmap(*dc, shapeimage->bitmap);
 #else
 		shapedc = CreateCompatibleDC(*dc);
 		sobm = SelectObject(shapedc, shapeimage->bitmap);
@@ -2633,7 +2607,7 @@ ParseAndPutPixels(
 	        shapedc = NULL;
 	    }
 #ifdef __OS2__
-     obm = GpiSetBitmap(hps, image->bitmap);
+        obm = GpiSetBitmap(*dc, image->bitmap);
 #else
 	    obm = SelectObject(*dc, image->bitmap);
 #endif
@@ -2658,19 +2632,19 @@ ParseAndPutPixels(
 				      shape_pixels[colidx[c] - 1]);
 #else
 #ifdef __OS2__
-     point.x = x;
-     point.y = y;
-     GpiSetColor(hps, (LONG)image_pixels[colidx[c] - 1]);
-     GpiSetPel(hps, &point);
+            point.x = x;
+            point.y = y;
+            GpiSetColor(*dc, (LONG)image_pixels[colidx[c] - 1]);
+            GpiSetPel(*dc, &point);
 #else
 			SetPixel(*dc, x, y, image_pixels[colidx[c] - 1]);
 #endif
 			if (shapedc) {
 #ifdef __OS2__
-     point.x = x;
-     point.y = y;
-     GpiSetColor(hps, (LONG)shape_pixels[colidx[c] - 1]);
-     GpiSetPel(hps, &point);
+                point.x = x;
+                point.y = y;
+                GpiSetColor(*dc, (LONG)shape_pixels[colidx[c] - 1]);
+                GpiSetPel(*dc, &point);
 #else
 			    SetPixel(shapedc, x, y, shape_pixels[colidx[c] - 1]);
 #endif
@@ -2683,15 +2657,16 @@ ParseAndPutPixels(
 #ifdef FOR_MSW
 	    if ( shapedc ) {
 #ifdef __OS2__
-         GpiSetBitmap(hps, sobm);
-         DevCloseDC(shapedc);
+            GpiSetBitmap(*dc, sobm);
+            GpiDestroyPS(*dc);
+            DevCloseDC(shapedc);
 #else
 	        SelectObject(shapedc, sobm);
-		DeleteDC(shapedc);
+		    DeleteDC(shapedc);
 #endif
 	    }
 #ifdef __OS2__
-     GpiSetBitmap(hps, obm);
+        GpiSetBitmap(*dc, obm);
 #else
 	    SelectObject(*dc, obm);
 #endif
@@ -2709,6 +2684,9 @@ if (cidx[f]) XpmFree(cidx[f]);}
 	    /* array of pointers malloced by need */
 	    unsigned short *cidx[256];
 	    int char1;
+#ifdef __OS2__
+	    HDC shapedc;
+#endif
 
 	    bzero((char *)cidx, 256 * sizeof(unsigned short *)); /* init */
 	    for (a = 0; a < ncolors; a++) {
@@ -2740,25 +2718,25 @@ if (cidx[f]) XpmFree(cidx[f]);}
 					  shape_pixels[cidx[cc1][cc2] - 1]);
 #else
 #ifdef __OS2__
-     *dc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
-     hps = GpiCreatePS(hab, *dc, &sizl, GPIA_ASSOC | PU_PELS);
+            shapedc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
+            *dc = GpiCreatePS(hab, shapedc, &sizl, GPIA_ASSOC | PU_PELS);
 
-     GpiSetBitmap(hps, image->bitmap);
-     point.x = x;
-     point.y = y;
-     GpiSetColor(hps, (LONG)image_pixels[cidx[cc1][cc2] - 1]);
-     GpiSetPel(hps, &point);
+            GpiSetBitmap(*dc, image->bitmap);
+            point.x = x;
+            point.y = y;
+            GpiSetColor(*dc, (LONG)image_pixels[cidx[cc1][cc2] - 1]);
+            GpiSetPel(*dc, &point);
 #else
-			SelectObject(*dc, image->bitmap);
-			SetPixel(*dc, x, y, image_pixels[cidx[cc1][cc2] - 1]);
+    	    SelectObject(*dc, image->bitmap);
+	    	SetPixel(*dc, x, y, image_pixels[cidx[cc1][cc2] - 1]);
 #endif
 			if (shapeimage) {
 #ifdef __OS2__
-     GpiSetBitmap(hps, shapeimage->bitmap);
-     point.x = x;
-     point.y = y;
-     GpiSetColor(hps, (LONG)shape_pixels[cidx[cc1][cc2] - 1]);
-     GpiSetPel(hps, &point);
+                GpiSetBitmap(*dc, shapeimage->bitmap);
+                point.x = x;
+                point.y = y;
+                GpiSetColor(*dc, (LONG)shape_pixels[cidx[cc1][cc2] - 1]);
+                GpiSetPel(*dc, &point);
 #else
 			    SelectObject(*dc, shapeimage->bitmap);
 			    SetPixel(*dc, x, y,
@@ -2785,6 +2763,9 @@ if (cidx[f]) XpmFree(cidx[f]);}
 	{
 	    char *s;
 	    char buf[BUFSIZ];
+#ifdef __OS2__
+	    HDC shapedc;
+#endif
 
 	    buf[cpp] = '\0';
 	    if (USE_HASHTABLE) {
@@ -2806,14 +2787,15 @@ if (cidx[f]) XpmFree(cidx[f]);}
 				      shape_pixels[HashColorIndex(slot)]);
 #else
 #ifdef __OS2__
-     *dc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
-     hps = GpiCreatePS(hab, *dc, &sizl, GPIA_ASSOC | PU_PELS);
 
-     GpiSetBitmap(hps, image->bitmap);
-     point.x = x;
-     point.y = y;
-     GpiSetColor(hps, (LONG)image_pixels[HashColorIndex(slot)]);
-     GpiSetPel(hps, &point);
+            shapedc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
+            *dc = GpiCreatePS(hab, shapedc, &sizl, GPIA_ASSOC | PU_PELS);
+
+            GpiSetBitmap(*dc, image->bitmap);
+            point.x = x;
+            point.y = y;
+            GpiSetColor(*dc, (LONG)image_pixels[HashColorIndex(slot)]);
+            GpiSetPel(*dc, &point);
 #else
 			SelectObject(*dc, image->bitmap);
 			SetPixel(*dc, x, y,
@@ -2821,11 +2803,11 @@ if (cidx[f]) XpmFree(cidx[f]);}
 #endif
 			if (shapeimage) {
 #ifdef __OS2__
-     GpiSetBitmap(hps, shapeimage->bitmap);
-     point.x = x;
-     point.y = y;
-     GpiSetColor(hps, (LONG)shape_pixels[HashColorIndex(slot)]);
-     GpiSetPel(hps, &point);
+                GpiSetBitmap(*dc, shapeimage->bitmap);
+                point.x = x;
+                point.y = y;
+                GpiSetColor(*dc, (LONG)shape_pixels[HashColorIndex(slot)]);
+                GpiSetPel(*dc, &point);
 #else
 			    SelectObject(*dc, shapeimage->bitmap);
 			    SetPixel(*dc, x, y,
@@ -2852,25 +2834,26 @@ if (cidx[f]) XpmFree(cidx[f]);}
 			    XPutPixel(shapeimage, x, y, shape_pixels[a]);
 #else
 #ifdef __OS2__
-     *dc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
-     hps = GpiCreatePS(hab, *dc, &sizl, GPIA_ASSOC | PU_PELS);
 
-     GpiSetBitmap(hps, image->bitmap);
-     point.x = x;
-     point.y = y;
-     GpiSetColor(hps, (LONG)image_pixels[a]);
-     GpiSetPel(hps, &point);
+            shapedc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
+            *dc = GpiCreatePS(hab, shapedc, &sizl, GPIA_ASSOC | PU_PELS);
+
+            GpiSetBitmap(*dc, image->bitmap);
+            point.x = x;
+            point.y = y;
+            GpiSetColor(*dc, (LONG)image_pixels[a]);
+            GpiSetPel(*dc, &point);
 #else
 			SelectObject(*dc, image->bitmap);
 			SetPixel(*dc, x, y, image_pixels[a]);
 #endif
 			if (shapeimage) {
 #ifdef __OS2__
-     GpiSetBitmap(hps, image->bitmap);
-     point.x = x;
-     point.y = y;
-     GpiSetColor(hps, (LONG)shape_pixels[a]);
-     GpiSetPel(hps, &point);
+                GpiSetBitmap(*dc, image->bitmap);
+                point.x = x;
+                point.y = y;
+                GpiSetColor(*dc, (LONG)shape_pixels[a]);
+                GpiSetPel(*dc, &point);
 #else
 			    SelectObject(*dc, shapeimage->bitmap);
 			    SetPixel(*dc, x, y, shape_pixels[a]);
