@@ -446,6 +446,27 @@ void Window::SetTitle(const char *s) {
 }
 
 
+class wxSTCListBox : public wxListBox {
+public:
+    wxSTCListBox(wxWindow* parent, wxWindowID id)
+        : wxListBox(parent, id, wxDefaultPosition, wxDefaultSize,
+                    0, NULL, wxLB_SINGLE | wxLB_SORT | wxSIMPLE_BORDER)
+        {}
+
+    void OnFocus(wxFocusEvent& event) {
+        GetParent()->SetFocus();
+        event.Skip();
+    }
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+
+BEGIN_EVENT_TABLE(wxSTCListBox, wxListBox)
+    EVT_SET_FOCUS(wxSTCListBox::OnFocus)
+END_EVENT_TABLE()
+
 
 ListBox::ListBox() {
 }
@@ -454,8 +475,9 @@ ListBox::~ListBox() {
 }
 
 void ListBox::Create(Window &parent, int ctrlID) {
-    id = new wxListBox(parent.id, ctrlID, wxDefaultPosition, wxDefaultSize,
-                       0, NULL, wxLB_SINGLE | wxLB_SORT);
+    id = new wxSTCListBox(parent.id, ctrlID);
+    //id = new wxListBox(parent.id, ctrlID,  wxDefaultPosition, wxDefaultSize,
+    //                   0, NULL, wxLB_SINGLE | wxLB_SORT | wxSIMPLE_BORDER);
 }
 
 PRectangle ListBox::GetDesiredRect() {
@@ -463,6 +485,10 @@ PRectangle ListBox::GetDesiredRect() {
     PRectangle rc;
     rc.top = 0;
     rc.left = 0;
+    if (sz.x > 150)   // TODO: A better way to determine these max sizes
+        sz.x = 150;
+    if (sz.y > 100)
+        sz.y = 100;
     rc.right = sz.x;
     rc.bottom = sz.y;
 
