@@ -215,7 +215,7 @@ public:
 
 protected:
     // event handlers
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
     void OnSetCursor(wxSetCursorEvent& event);
 #endif // wxMSW
 
