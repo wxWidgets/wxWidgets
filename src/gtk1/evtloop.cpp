@@ -28,11 +28,8 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#endif //WX_PRECOMP
-
-#include "wx/app.h"
 #include "wx/evtloop.h"
+#include "wx/app.h"
 
 #include <gtk/gtk.h>
 

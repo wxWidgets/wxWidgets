@@ -15,13 +15,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/thread.h"
 #include <stdio.h>
 #include <unistd.h>
 
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/prctl.h>
-#include "wx/thread.h"
 #include "wx/module.h"
 #include "wx/utils.h"
 #include "wx/log.h"

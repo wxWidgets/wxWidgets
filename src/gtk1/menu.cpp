@@ -15,11 +15,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/menu.h"
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/app.h"
 #include "wx/bitmap.h"
-#include "wx/menu.h"
 
 #if wxUSE_ACCEL
     #include "wx/accel.h"

@@ -28,10 +28,9 @@
     #pragma hdrstop
 #endif
 
+#include "wx/scrolwin.h"
 #include "wx/utils.h"
 #include "wx/dcclient.h"
-
-#include "wx/scrolwin.h"
 #include "wx/panel.h"
 #include "wx/sizer.h"
 

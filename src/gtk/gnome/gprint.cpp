@@ -442,14 +442,34 @@ bool wxGnomePrintDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord
 
 void wxGnomePrintDC::DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y )
 {
+    DoDrawBitmap( icon, x, y, true );
 }
 
 void wxGnomePrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask )
 {
+    if (!bitmap.Ok()) return;
+    
+#if 0
+    // TODO do something clever here
+    if (bitmap.HasPixbuf())
+    {
+    }
+    else
+#endif
+    {
+        wxImage image = bitmap.ConvertToImage();
+
+        if (!image.Ok()) return;
+
+    	gnome_print_moveto (m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
+        gnome_print_rgbimage( m_gpc, (guchar*) image.GetData(), image.GetWidth(), image.GetHeight(), image.GetWidth()*3 );
+    }
 }
 
 void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
 {
+    return;
+
     if (m_textForegroundColour.Ok())
     {
         unsigned char red = m_textForegroundColour.Red();

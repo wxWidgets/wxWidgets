@@ -15,8 +15,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/gdicmn.h"
 #include "wx/colour.h"
+#include "wx/gdicmn.h"
 #include "wx/gtk/private.h"
 
 #include <gdk/gdk.h>

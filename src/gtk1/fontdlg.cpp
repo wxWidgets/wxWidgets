@@ -20,8 +20,8 @@
 
 #ifndef __WXGPE__
 
-#include "wx/fontutil.h"
 #include "wx/fontdlg.h"
+#include "wx/fontutil.h"
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/debug.h"

@@ -22,10 +22,10 @@
 
 #if wxUSE_MSGDLG && defined(__WXGTK20__) && !defined(__WXGPE__)
 
+#include "wx/msgdlg.h"
 #include "wx/gtk/private.h"
 #include <gtk/gtk.h>
 
-#include "wx/msgdlg.h"
 #include "wx/intl.h"
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)

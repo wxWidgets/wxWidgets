@@ -24,6 +24,7 @@
 
 #include "wx/defs.h"
 
+#include "wx/frame.h"
 #include "wx/dialog.h"
 #include "wx/control.h"
 #include "wx/app.h"

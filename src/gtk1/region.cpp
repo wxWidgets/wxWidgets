@@ -23,10 +23,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/log.h"
-
 #include "wx/region.h"
-
+#include "wx/log.h"
 #include "wx/gtk/private.h"
 
 #ifndef __WXGTK20__

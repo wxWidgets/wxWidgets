@@ -16,8 +16,8 @@
 
 #include "wx/defs.h"
 
-#include "wx/palette.h"
 #include "wx/bitmap.h"
+#include "wx/palette.h"
 #include "wx/icon.h"
 #include "wx/filefn.h"
 #include "wx/image.h"

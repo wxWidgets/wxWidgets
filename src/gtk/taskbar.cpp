@@ -16,6 +16,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/gtk/taskbarpriv.h"
 #include "wx/log.h"
 #include "wx/frame.h"
 
@@ -25,7 +26,6 @@
 #include <gtk/gtkversion.h>
 #if GTK_CHECK_VERSION(2, 1, 0)
 
-#include "wx/gtk/taskbarpriv.h"
 #include "eggtrayicon.h"
 
 wxTaskBarIconAreaBase::wxTaskBarIconAreaBase()

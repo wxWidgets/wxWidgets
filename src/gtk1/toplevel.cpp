@@ -28,6 +28,7 @@
 
 #include "wx/defs.h"
 
+#include "wx/toplevel.h"
 #include "wx/log.h"
 #include "wx/dialog.h"
 #include "wx/control.h"

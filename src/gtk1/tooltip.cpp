@@ -18,8 +18,8 @@
 
 #if wxUSE_TOOLTIPS
 
-#include "wx/window.h"
 #include "wx/tooltip.h"
+#include "wx/window.h"
 
 #include "wx/gtk/private.h"
 
