@@ -25,7 +25,8 @@
 #include "wx/app.h"
 #include "wx/msgdlg.h"
 #include "wx/cursor.h"
-#include "wx/window.h" // for wxTopLevelWindows
+#include "wx/dcmemory.h"
+#include "wx/bitmap.h"
 
 #include <ctype.h>
 #include <stdarg.h>
