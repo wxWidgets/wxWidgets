@@ -46,6 +46,10 @@
 
 #include "wx/msw/private.h"
 
+#if wxUSE_UXTHEME
+#include "wx/msw/uxtheme.h"
+#endif
+
 // include <commctrl.h> "properly"
 #include "wx/msw/wrapcctl.h"
 
@@ -247,18 +251,25 @@ bool wxToolBar::Create(wxWindow *parent,
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // workaround for flat toolbar on Windows XP classic style
+#if wxUSE_UXTHEME
     if ( style & wxTB_FLAT )
     {
-        DWORD dwToolbarStyle;
-
-        dwToolbarStyle = (DWORD)::SendMessage(GetHwnd(), TB_GETSTYLE, 0, 0L );
-        
-        if ((dwToolbarStyle & TBSTYLE_FLAT) == 0)
+        wxUxThemeEngine *p = wxUxThemeEngine::Get();
+        if ( !p || !p->IsThemeActive() )
         {
-            dwToolbarStyle |= TBSTYLE_FLAT;
-            ::SendMessage(GetHwnd(), TB_SETSTYLE, 0, (LPARAM)dwToolbarStyle );
+            DWORD dwToolbarStyle;
+
+            dwToolbarStyle = (DWORD)::SendMessage(GetHwnd(), TB_GETSTYLE, 0, 0L );
+        
+            if ((dwToolbarStyle & TBSTYLE_FLAT) == 0)
+            {
+                dwToolbarStyle |= TBSTYLE_FLAT;
+                ::SendMessage(GetHwnd(), TB_SETSTYLE, 0, (LPARAM)dwToolbarStyle );
+            }
         }
     }
+#endif
+    
     return TRUE;
 }
 
