@@ -313,7 +313,17 @@ int wxRegExImpl::Replace(wxString *text,
                     size_t start, len;
                     if ( !GetMatch(&start, &len, index) )
                     {
-                        wxFAIL_MSG( _T("invalid back reference") );
+                        // we can't do it because GetMatch() returns FALSE
+                        // even for a valid back reference index if it didn't
+                        // match for this expression (e.g. it when alternative
+                        // branches were used and the one contained the back
+                        // ref didn't match)
+                        //
+                        // it would be better to distinguish between this case
+                        // and really invalid index, but I don't know how to
+                        // do it
+
+                        //wxFAIL_MSG( _T("invalid back reference") );
 
                         // just eat it...
                     }
