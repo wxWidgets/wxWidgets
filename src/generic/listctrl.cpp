@@ -2665,9 +2665,11 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     {
         // TODO: optimize it too! this is less simple than for report view but
         //       enumerating all items is still not a way to do it!!
-        for ( current = 0; current < count && !hitResult; current++ )
+        for ( current = 0; current < count; current++ )
         {
             hitResult = HitTestLine(current, x, y);
+            if ( hitResult )
+                break;
         }
     }
 
