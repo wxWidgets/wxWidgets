@@ -805,7 +805,10 @@ enum wxAlignment
     wxALIGN_CENTRE_VERTICAL   = wxALIGN_CENTER_VERTICAL,
 
     wxALIGN_CENTER            = (wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL),
-    wxALIGN_CENTRE            = wxALIGN_CENTER
+    wxALIGN_CENTRE            = wxALIGN_CENTER,
+
+    // a mask to extract alignment from the combination of flags
+    wxALIGN_MASK              = 0x0f00
 };
 
 enum wxStretch
@@ -815,6 +818,24 @@ enum wxStretch
     wxGROW                    = 0x2000,
     wxEXPAND                  = wxGROW,
     wxSHAPED                  = 0x4000
+};
+
+// border flags: the values are chosen for backwards compatibility
+enum wxBorder
+{
+    // this is different from wxBORDER_NONE as by default the controls do have
+    // border
+    wxBORDER_DEFAULT = 0,
+
+    wxBORDER_NONE   = 0x00200000,
+    wxBORDER_STATIC = 0x01000000,
+    wxBORDER_SIMPLE = 0x02000000,
+    wxBORDER_RAISED = 0x04000000,
+    wxBORDER_SUNKEN = 0x08000000,
+    wxBORDER_DOUBLE = 0x10000000,
+
+    // a mask to extract border style from the combination of flags
+    wxBORDER_MASK   = 0x1f200000
 };
 
 // ----------------------------------------------------------------------------
@@ -841,15 +862,15 @@ enum wxStretch
 #define wxHSCROLL               0x40000000
 #define wxCAPTION               0x20000000
 
-// New styles
-#define wxDOUBLE_BORDER         0x10000000
-#define wxSUNKEN_BORDER         0x08000000
-#define wxRAISED_BORDER         0x04000000
-#define wxBORDER                0x02000000
-#define wxSIMPLE_BORDER         wxBORDER
-#define wxSTATIC_BORDER         0x01000000
+// New styles (border styles are now in their own enum)
+#define wxDOUBLE_BORDER         wxBORDER_DOUBLE
+#define wxSUNKEN_BORDER         wxBORDER_SUNKEN
+#define wxRAISED_BORDER         wxBORDER_RAISED
+#define wxBORDER                wxBORDER_SIMPLE
+#define wxSIMPLE_BORDER         wxBORDER_SIMPLE
+#define wxSTATIC_BORDER         wxBORDER_STATIC
 #define wxTRANSPARENT_WINDOW    0x00100000
-#define wxNO_BORDER             0x00200000
+#define wxNO_BORDER             wxBORDER_NONE
 
 // Override CTL3D etc. control colour processing to allow own background
 // colour.

@@ -13,10 +13,10 @@
 #define _WX_UNIV_STATTEXT_H_
 
 #ifdef __GNUG__
-    #pragma interface "stattext.h"
+    #pragma interface "univstattext.h"
 #endif
 
-class WXDLLEXPORT wxStaticText : wxStaticTextBase
+class WXDLLEXPORT wxStaticText : public wxStaticTextBase
 {
 public:
     // usual ctor
@@ -49,12 +49,16 @@ public:
                 long style = 0,
                 const wxString &name = wxStaticTextNameStr);
 
+    // implementation only from now on
+
+    virtual void SetLabel(const wxString& label);
+
 protected:
     // calculate the optimal size for the label
     virtual wxSize DoGetBestSize() const;
 
     // draw the control
-    virtual void DoDraw(wxDC& dc, wxRenderer *renderer);
+    virtual void DoDraw(wxControlRenderer *renderer);
 };
 
 #endif // _WX_UNIV_STATTEXT_H_

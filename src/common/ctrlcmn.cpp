@@ -113,5 +113,25 @@ void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
     }
 }
 
+// ----------------------------------------------------------------------------
+// border stuff
+// ----------------------------------------------------------------------------
+
+wxBorder wxControlBase::GetBorder() const
+{
+    wxBorder border = (wxBorder)(m_windowStyle & wxBORDER_MASK);
+    if ( border == wxBORDER_DEFAULT )
+    {
+        border = GetDefaultBorder();
+    }
+
+    return border;
+}
+
+wxBorder wxControlBase::GetDefaultBorder() const
+{
+    return wxBORDER_NONE;
+}
+
 #endif // wxUSE_CONTROLS
 

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        univ/stattext.cpp
-// Purpose:     wxStaticText
+// Name:        univ/button.cpp
+// Purpose:     wxButton
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     14.08.00
@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "univstattext.h"
+    #pragma implementation "univbutton.h"
 #endif
 
 #include "wx/wxprec.h"
@@ -31,7 +31,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
-    #include "wx/stattext.h"
+    #include "wx/button.h"
     #include "wx/validate.h"
 #endif
 
@@ -42,18 +42,33 @@
 // implementation
 // ============================================================================
 
+IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
+
 // ----------------------------------------------------------------------------
 // creation
 // ----------------------------------------------------------------------------
 
-bool wxStaticText::Create(wxWindow *parent,
-                          wxWindowID id,
-                          const wxString &label,
-                          const wxPoint &pos,
-                          const wxSize &size,
-                          long style,
-                          const wxString &name)
+void wxButton::Init()
 {
+    m_isPressed =
+    m_isDefault = FALSE;
+}
+
+bool wxButton::Create(wxWindow *parent,
+                      wxWindowID id,
+                      const wxString &label,
+                      const wxPoint &pos,
+                      const wxSize &size,
+                      long style,
+                      const wxValidator& validator,
+                      const wxString &name)
+{
+    // center label by default
+    if ( !(style & wxALIGN_MASK) )
+    {
+        style |= wxALIGN_CENTRE | wxALIGN_CENTRE_VERTICAL;
+    }
+
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
@@ -69,18 +84,17 @@ bool wxStaticText::Create(wxWindow *parent,
     return TRUE;
 }
 
+wxButton::~wxButton()
+{
+}
+
 // ----------------------------------------------------------------------------
 // size management
 // ----------------------------------------------------------------------------
 
-void wxStaticText::SetLabel(const wxString& label)
+wxSize wxButton::DoGetBestSize() const
 {
-    wxControl::SetLabel(label);
-}
-
-wxSize wxStaticText::DoGetBestSize() const
-{
-    wxClientDC dc(wxConstCast(this, wxStaticText));
+    wxClientDC dc(wxConstCast(this, wxButton));
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 
@@ -93,11 +107,20 @@ wxSize wxStaticText::DoGetBestSize() const
 // drawing
 // ----------------------------------------------------------------------------
 
-void wxStaticText::DoDraw(wxControlRenderer *renderer)
+void wxButton::DoDraw(wxControlRenderer *renderer)
 {
-    wxControl::DoDraw(renderer);
-
+    renderer->DrawButtonBorder();
     renderer->DrawLabel();
 }
 
+// ----------------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------------
+
+void wxButton::SetDefault()
+{
+    m_isDefault = TRUE;
+}
+
 #endif // wxUSE_STATTEXT
+

@@ -29,55 +29,74 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/univ/renderer.h"
-    #include "wx/univ/theme.h"
 #endif // WX_PRECOMP
 
-// ----------------------------------------------------------------------------
-// dummy theme class
-// ----------------------------------------------------------------------------
-
-class wxDummyRenderer : public wxRenderer
-{
-public:
-    virtual void DrawLabel(wxDC& dc, wxWindow *window) { }
-    virtual void DrawBorder(wxDC& dc, wxWindow *window) { }
-};
-
-class wxDummyTheme : public wxTheme
-{
-public:
-    wxDummyTheme()
-    {
-        m_renderer = new wxDummyRenderer;
-    }
-
-    virtual ~wxDummyTheme()
-    {
-        delete m_renderer;
-    }
-
-    virtual wxRenderer *GetRenderer() { return m_renderer; }
-    virtual wxInputHandler *GetInputHandler() { return NULL; }
-    virtual wxColourScheme *GetColourScheme() { return NULL; }
-
-private:
-    wxDummyRenderer *m_renderer;
-};
+#include "wx/univ/renderer.h"
+#include "wx/univ/theme.h"
 
 // ============================================================================
 // implementation
 // ============================================================================
 
+wxTheme::wxThemeInfo *wxTheme::ms_allThemes = (wxTheme::wxThemeInfo *)NULL;
+wxTheme *wxTheme::ms_theme = (wxTheme *)NULL;
+
 // ----------------------------------------------------------------------------
-// creation of the default theme (called by wxApp::OnInitGui)
+// "dynamic" theme creation
 // ----------------------------------------------------------------------------
 
-wxTheme *wxTheme::ms_theme = (wxTheme *)NULL;
+wxTheme::wxThemeInfo::wxThemeInfo(wxTheme::Constructor c,
+                                  const wxChar *n,
+                                  const wxChar *d)
+       : ctor(c), name(n), desc(d)
+{
+    // insert us (in the head of) the linked list
+    next = ms_allThemes;
+    ms_allThemes = this;
+}
+
+/* static */ wxTheme *wxTheme::Create(const wxString& name)
+{
+    // find the theme in the list by name
+    wxThemeInfo *info = ms_allThemes;
+    while ( info )
+    {
+        if ( name == info->name )
+        {
+            return info->ctor();
+        }
+
+        info = info->next;
+    }
+
+    return (wxTheme *)NULL;
+}
+
+// ----------------------------------------------------------------------------
+// the default theme (called by wxApp::OnInitGui)
+// ----------------------------------------------------------------------------
 
 /* static */ bool wxTheme::CreateDefault()
 {
-    ms_theme = new wxDummyTheme;
+    wxCHECK_MSG( !ms_theme, TRUE, _T("we already have a theme") );
+
+#if defined(__WXMSW__)
+    ms_theme = Create(_T("win32"));
+#endif
+
+    // fallback to the first one in the list
+    if ( !ms_theme && ms_allThemes )
+    {
+        ms_theme = ms_allThemes->ctor();
+    }
+
+    // abort if still nothing
+    if ( !ms_theme )
+    {
+        wxLogError(_("Failed to initialize GUI: no built-in themes found."));
+
+        return FALSE;
+    }
 
     return TRUE;
 }

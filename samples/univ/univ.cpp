@@ -34,6 +34,8 @@
     #include "wx/frame.h"
     #include "wx/dcclient.h"
 
+    #include "wx/button.h"
+    #include "wx/statbox.h"
     #include "wx/stattext.h"
 #endif
 
@@ -97,10 +99,60 @@ bool MyUnivApp::OnInit()
 // ----------------------------------------------------------------------------
 
 MyUnivFrame::MyUnivFrame(const wxString& title)
-           : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(300, 150))
+           : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(600, 400))
 {
+    SetBackgroundColour(*wxLIGHT_GREY);
+
     new wxStaticText(this, _T("Test static text"), wxPoint(10, 10));
-    new wxStaticText(this, _T("Ctrl-click to exit."), wxPoint(40, 10));
+    new wxStaticText(this,
+                     _T("&Multi line\n(and very very very very long)\nstatic text"),
+                     wxPoint(210, 10));
+
+    (new wxStaticText(this, _T("&Disabled text"), wxPoint(10, 30)))->Disable();
+
+    wxStaticText *text;
+    text = new wxStaticText(this, _T("Demo of &border styles:"), wxPoint(10, 60));
+    text->SetFont(*wxITALIC_FONT);
+    text->SetBackgroundColour(*wxWHITE);
+    text->SetForegroundColour(*wxBLUE);
+
+    wxCoord x = 10;
+    #define CREATE_STATIC_BORDER_DEMO(border) \
+        (new wxStaticText(this, -1,  _T(#border), \
+                     wxPoint(x, 100), wxSize(70, -1), wx##border##_BORDER)); \
+        x += 80
+
+    CREATE_STATIC_BORDER_DEMO(NO);
+    CREATE_STATIC_BORDER_DEMO(SIMPLE);
+    CREATE_STATIC_BORDER_DEMO(SUNKEN);
+    CREATE_STATIC_BORDER_DEMO(RAISED);
+    CREATE_STATIC_BORDER_DEMO(STATIC);
+    CREATE_STATIC_BORDER_DEMO(DOUBLE);
+
+    #undef CREATE_STATIC_BORDER_DEMO
+
+    wxStaticBox *box = new wxStaticBox(this, _T("&Alignments demo:"),
+                                       wxPoint(10, 150),
+                                       wxSize(500, 120));
+    box->SetForegroundColour(*wxRED);
+
+    x = 15;
+    #define CREATE_STATIC_ALIGN_DEMO(align) \
+        (new wxStaticText(this, -1,  _T(#align), \
+                     wxPoint(x, 175), wxSize(70, 70), \
+                     wxSIMPLE_BORDER | wxALIGN_##align)); \
+        x += 80
+
+    CREATE_STATIC_ALIGN_DEMO(LEFT);
+    CREATE_STATIC_ALIGN_DEMO(RIGHT);
+    CREATE_STATIC_ALIGN_DEMO(CENTRE);
+    CREATE_STATIC_ALIGN_DEMO(TOP);
+    CREATE_STATIC_ALIGN_DEMO(BOTTOM);
+    CREATE_STATIC_ALIGN_DEMO(CENTRE_VERTICAL);
+
+    #undef CREATE_STATIC_ALIGN_DEMO
+
+    new wxButton(this, -1, _T("&Press me"), wxPoint(10, 300));
 }
 
 void MyUnivFrame::OnLeftUp(wxMouseEvent& event)

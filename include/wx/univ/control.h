@@ -16,6 +16,8 @@
     #pragma interface "control.h"
 #endif
 
+class WXDLLEXPORT wxControlRenderer;
+
 class WXDLLEXPORT wxControl : public wxControlBase
 {
 public:
@@ -35,12 +37,35 @@ public:
     virtual void SetLabel(const wxString &label);
     virtual wxString GetLabel() const;
 
+    // get the state information
+    virtual bool IsFocused() const;
+    virtual bool IsPressed() const;
+    virtual bool IsDefault() const;
+
+    // implementation only from now on
+
+    // return the index of the accel char in the label or -1 if none
+    int GetAccelIndex() const { return m_indexAccel; }
+
+    // return the accel char itself or 0 if none
+    wxChar GetAccelChar() const
+    {
+        return m_indexAccel == -1 ? _T('\0') : m_label[m_indexAccel];
+    }
+
 protected:
-    wxString   m_label;
-    wxChar     m_chAccel;
+    // draw the controls contents
+    virtual void DoDraw(wxControlRenderer *renderer);
+
+    // event handlers
+    void OnPaint(wxPaintEvent& event);
 
 private:
+    wxString   m_label;
+    int        m_indexAccel;
+
     DECLARE_DYNAMIC_CLASS(wxControl)
+    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_UNIV_CONTROL_H_

@@ -27,22 +27,24 @@ DECLARE_DYNAMIC_CLASS(wxStaticText)
 public:
     wxStaticText() { }
 
-    wxStaticText(wxWindow *parent, wxWindowID id,
-        const wxString& label,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize,
-        long style = 0,
-        const wxString& name = wxStaticTextNameStr)
+    wxStaticText(wxWindow *parent,
+                 wxWindowID id,
+                 const wxString& label,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 const wxString& name = wxStaticTextNameStr)
     {
         Create(parent, id, label, pos, size, style, name);
     }
 
-    bool Create(wxWindow *parent, wxWindowID id,
-        const wxString& label,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize,
-        long style = 0,
-        const wxString& name = wxStaticTextNameStr);
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxStaticTextNameStr);
 
     // accessors
     void SetLabel(const wxString& label);

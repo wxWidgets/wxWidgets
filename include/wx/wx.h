@@ -47,6 +47,8 @@
 #include "wx/msgdlg.h"
 #include "wx/cmndata.h"
 
+#include "wx/control.h"
+#include "wx/ctrlsub.h"
 #include "wx/bmpbuttn.h"
 #include "wx/checkbox.h"
 #include "wx/choice.h"

@@ -163,6 +163,9 @@ public:
     // top level window functions
     // --------------------------
 
+        // return TRUE if the active window belongs to our app
+    virtual bool IsActive() const = 0;
+
         // set the "main" top level window
     void SetTopWindow(wxWindow *win) { m_topWindow = win; }
 

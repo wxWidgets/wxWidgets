@@ -78,11 +78,6 @@ BEGIN_EVENT_TABLE(wxWindowBase, wxEvtHandler)
     EVT_SYS_COLOUR_CHANGED(wxWindowBase::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindowBase::OnInitDialog)
     EVT_MIDDLE_DOWN(wxWindowBase::OnMiddleClick)
-
-#ifdef __WXUNIVERSAL__
-    EVT_PAINT(wxWindowBase::OnPaint)
-#endif // __WXUNIVERSAL__
-
 END_EVENT_TABLE()
 
 // ============================================================================

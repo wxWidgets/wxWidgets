@@ -256,6 +256,14 @@ public:
     void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle)
         { DoDrawRotatedText(text, pt.x, pt.y, angle); }
 
+    // this verson puts text into the given rectangle and aligns is as
+    // specified by alignment parameter; it also will emphasize the character
+    // with the given index if it is != -1 and return the boundign rectangle
+    virtual void DrawLabel(const wxString& text, const wxRect& rect,
+                           int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                           int indexAccel = -1,
+                           wxRect *rectBounding = NULL);
+
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
               wxDC *source, wxCoord xsrc, wxCoord ysrc,
               int rop = wxCOPY, bool useMask = FALSE)
@@ -332,12 +340,20 @@ public:
     virtual wxCoord GetCharHeight() const = 0;
     virtual wxCoord GetCharWidth() const = 0;
 
+    // only works for single line strings
     void GetTextExtent(const wxString& string,
                        wxCoord *x, wxCoord *y,
                        wxCoord *descent = NULL,
                        wxCoord *externalLeading = NULL,
                        wxFont *theFont = NULL) const
         { DoGetTextExtent(string, x, y, descent, externalLeading, theFont); }
+
+    // works for single as well as multi-line strings
+    virtual void GetMultiLineTextExtent(const wxString& text,
+                                        wxCoord *width,
+                                        wxCoord *height,
+                                        wxCoord *heightLine = NULL,
+                                        wxFont *font = NULL);
 
     // size and resolution
     // -------------------

@@ -1,19 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/button.h
-// Purpose:     wxButton class
-// Author:      Julian Smart
+///////////////////////////////////////////////////////////////////////////////
+// Name:        wx/univ/button.h
+// Purpose:     wxButton for wxUniversal
+// Author:      Vadim Zeitlin
 // Modified by:
-// Created:     01/02/97
+// Created:     15.08.00
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
-// Licence:     wxWindows licence
-/////////////////////////////////////////////////////////////////////////////
+// Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+// Licence:     wxWindows license
+///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BUTTON_H_
-#define _WX_BUTTON_H_
+#ifndef _WX_UNIV_BUTTON_H_
+#define _WX_UNIV_BUTTON_H_
 
 #ifdef __GNUG__
-#pragma interface "button.h"
+    #pragma interface "univbutton.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -23,7 +23,7 @@
 class WXDLLEXPORT wxButton : public wxButtonBase
 {
 public:
-    wxButton() { }
+    wxButton() { Init(); }
     wxButton(wxWindow *parent,
              wxWindowID id,
              const wxString& label,
@@ -33,6 +33,8 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxButtonNameStr)
     {
+        Init();
+
         Create(parent, id, label, pos, size, style, validator, name);
     }
 
@@ -49,27 +51,18 @@ public:
 
     virtual void SetDefault();
 
-    // implementation from now on
-    virtual void Command(wxCommandEvent& event);
-    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
-
-#ifdef __WIN32__
-    // coloured buttons support
-    virtual bool SetBackgroundColour(const wxColour &colour);
-    virtual bool SetForegroundColour(const wxColour &colour);
-
-    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
-
-private:
-    void MakeOwnerDrawn();
-#endif // __WIN32__
+    virtual bool IsPressed() const { return m_isPressed; }
+    virtual bool IsDefault() const { return m_isDefault; }
 
 protected:
-    // send a notification event, return TRUE if processed
-    bool SendClickEvent();
-
     virtual wxSize DoGetBestSize() const;
+    virtual void DoDraw(wxControlRenderer *renderer);
+
+    // common part of all ctors
+    void Init();
+
+    bool m_isPressed,
+         m_isDefault;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxButton)
@@ -77,3 +70,4 @@ private:
 
 #endif
     // _WX_BUTTON_H_
+

@@ -65,7 +65,8 @@
 #define wxUSE_FONTMAP 0
 #define wxUSE_MIMETYPE 0
 
-#define wxUSE_BUTTON       0
+#define wxUSE_CONTROLS     1
+#define wxUSE_BUTTON       1
 #define wxUSE_BMPBUTTON    0
 #define wxUSE_CARET        0
 #define wxUSE_CHECKBOX     0
@@ -82,8 +83,9 @@
 #define wxUSE_SLIDER       0
 #define wxUSE_SPINBTN      0
 #define wxUSE_SPINCTRL     0
+#define wxUSE_STATBOX      1
 #define wxUSE_STATLINE     0
-#define wxUSE_STATTEXT     0
+#define wxUSE_STATTEXT     1
 #define wxUSE_STATLBMP     0
 #define wxUSE_STATUSBAR    0
 #define wxUSE_TOOLTIPS     0

@@ -45,6 +45,13 @@ public:
     // if the button was clicked)
     virtual void Command(wxCommandEvent &event);
 
+    // get the control alignment (left/right/centre, top/bottom/centre)
+    int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
+
+    // get the control border style: uses the current style and falls back to
+    // the default style for this class otherwise
+    wxBorder GetBorder() const;
+
 protected:
     // creates the control (calls wxWindowBase::CreateBase inside) and adds it
     // to the list of parents children
@@ -61,6 +68,10 @@ protected:
 
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;
+
+    // override this to change the default (i.e. used when no style is
+    // specified) border for the control
+    virtual wxBorder GetDefaultBorder() const;
 };
 
 // ----------------------------------------------------------------------------

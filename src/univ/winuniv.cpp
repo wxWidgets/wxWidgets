@@ -33,10 +33,10 @@
     #include "wx/dc.h"
     #include "wx/dcclient.h"
     #include "wx/event.h"
-
-    #include "wx/univ/renderer.h"
-    #include "wx/univ/theme.h"
 #endif // WX_PRECOMP
+
+#include "wx/univ/renderer.h"
+#include "wx/univ/theme.h"
 
 // ----------------------------------------------------------------------------
 // macros
@@ -57,7 +57,7 @@
 void wxWindowBase::OnPaint(wxPaintEvent& event)
 {
     // get the renderer and the DC to use
-    wxRenderer *renderer = wxTheme::Get()->GetRenderer();
+    wxWindowRenderer renderer = wxTheme::Get()->GetRenderer();
     wxPaintDC dc(self);
 
     // draw the border
@@ -70,7 +70,7 @@ void wxWindowBase::OnPaint(wxPaintEvent& event)
 // draw the border
 void wxWindowBase::DoDrawBorder(wxDC& dc, wxRenderer *renderer)
 {
-    if ( !(m_windowStyle & wxNO_BORDER) )
+    if ( !IsTopLevel() && !(m_windowStyle & wxNO_BORDER) )
     {
         renderer->DrawBorder(dc, self);
     }

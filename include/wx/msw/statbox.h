@@ -16,17 +16,9 @@
     #pragma interface "statbox.h"
 #endif
 
-#if wxUSE_STATBOX
-
-#include "wx/control.h"
-
-WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBoxNameStr;
-
 // Group box
-class WXDLLEXPORT wxStaticBox : public wxControl
+class WXDLLEXPORT wxStaticBox : public wxStaticBoxBase
 {
-DECLARE_DYNAMIC_CLASS(wxStaticBox)
-
 public:
     wxStaticBox() { }
 
@@ -57,9 +49,10 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
-};
 
-#endif // wxUSE_STATBOX
+private:
+    DECLARE_DYNAMIC_CLASS(wxStaticBox)
+};
 
 #endif
     // _WX_STATBOX_H_

@@ -837,6 +837,7 @@ wxApp::wxApp()
     m_printMode = wxPRINT_WINDOWS;
     m_exitOnFrameDelete = TRUE;
     m_auto3D = TRUE;
+    m_isActive = FALSE;
 }
 
 wxApp::~wxApp()

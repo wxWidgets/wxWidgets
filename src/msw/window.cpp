@@ -169,9 +169,12 @@ wxWindow *wxWindow::FindItem(long id) const
     wxControl *item = wxDynamicCast(this, wxControl);
     if ( item )
     {
-        // i it we or one of our "internal" children?
-        if ( item->GetId() == id ||
-             (item->GetSubcontrols().Index(id) != wxNOT_FOUND) )
+        // is it we or one of our "internal" children?
+        if ( item->GetId() == id
+#ifndef __WXUNIVERSAL__
+                || (item->GetSubcontrols().Index(id) != wxNOT_FOUND)
+#endif // __WXUNIVERSAL__
+           )
         {
             return item;
         }
@@ -313,7 +316,13 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 
     parent->AddChild(this);
 
-    DWORD msflags = 0;
+    // all windows are created visible
+    DWORD msflags = WS_CHILD | WS_VISIBLE;
+
+#ifdef __WXUNIVERSAL__
+    // no 3d effects, we draw them ourselves
+    WXDWORD exStyle = 0;
+#else // !wxUniversal
     if ( style & wxBORDER )
         msflags |= WS_BORDER;
 /* Not appropriate for non-frame/dialog windows, and
@@ -321,8 +330,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     if ( style & wxTHICK_FRAME )
         msflags |= WS_THICKFRAME;
 */
-    //msflags |= WS_CHILD /* | WS_CLIPSIBLINGS */  | WS_VISIBLE;
-    msflags |= WS_CHILD | WS_VISIBLE;
     if ( style & wxCLIP_CHILDREN )
         msflags |= WS_CLIPCHILDREN;
 
@@ -344,13 +351,12 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
         m_lDlgCode = DLGC_WANTARROWS | DLGC_WANTCHARS |
                      DLGC_WANTTAB | DLGC_WANTMESSAGE;
     }
+#endif // wxUniversal/!wxUniversal
 
-    MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
-              pos.x, pos.y,
-              WidthDefault(size.x), HeightDefault(size.y),
-              msflags, NULL, exStyle);
-
-    return TRUE;
+    return MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
+                     pos.x, pos.y,
+                     WidthDefault(size.x), HeightDefault(size.y),
+                     msflags, NULL, exStyle);
 }
 
 // ---------------------------------------------------------------------------
@@ -1876,6 +1882,24 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
             break;
 
+#ifdef __WXUNIVERSAL__
+        case WM_ACTIVATEAPP:
+            {
+                // refresh the focused window
+                static wxWindow *s_lastFocus = NULL;
+                wxTheApp->SetActive(wParam != 0);
+                if ( !wParam )
+                {
+                    // we're being de activated
+                    s_lastFocus = FindFocus();
+                }
+
+                if ( s_lastFocus )
+                    s_lastFocus->Refresh();
+            }
+            break;
+#endif // __WXUNIVERSAL__
+
         case WM_ACTIVATE:
             {
                 WXWORD state, minimized;
@@ -2986,11 +3010,15 @@ bool wxWindow::HandlePaint()
 // Can be called from an application's OnPaint handler
 void wxWindow::OnPaint(wxPaintEvent& event)
 {
+#ifdef __WXUNIVERSAL__
+    event.Skip();
+#else
     HDC hDC = (HDC) wxPaintDC::FindDCInCache((wxWindow*) event.GetEventObject());
     if (hDC != 0)
     {
         MSWDefWindowProc(WM_PAINT, (WPARAM) hDC, 0);
     }
+#endif
 }
 
 bool wxWindow::HandleEraseBkgnd(WXHDC hdc)
