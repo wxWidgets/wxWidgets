@@ -52,7 +52,7 @@ public:
     // MSW-specific
     bool ProcessCommand(wxCommandEvent& event);
 
-#ifdef WXWIN_COMPATIBILITY
+#if WXWIN_COMPATIBILITY
     wxMenu(const wxString& title, const wxFunction func)
         : wxMenuBase(title)
     {
@@ -140,7 +140,7 @@ public:
     virtual wxString GetLabelTop( size_t pos ) const;
 
     // compatibility: these functions are deprecated
-#ifdef WXWIN_COMPATIBILITY
+#if WXWIN_COMPATIBILITY
     void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
     wxEvtHandler *GetEventHandler() { return m_eventHandler; }
 
@@ -179,7 +179,7 @@ protected:
     // common part of all ctors
     void Init();
 
-#ifdef WXWIN_COMPATIBILITY
+#if WXWIN_COMPATIBILITY
     wxEvtHandler *m_eventHandler;
 #endif // WXWIN_COMPATIBILITY
 
