@@ -322,11 +322,14 @@ void *wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name, bool *su
 #elif defined(__WXPM__) || defined(__EMX__)
     wxDllGetSymbol(dllHandle, symbol);
 
-#else
-    // mb_str() is necessary in Unicode build
-    symbol = wxDllGetSymbol(dllHandle, name.mb_str());
+#else // Windows or Unix
 
-#endif
+    // mb_str() is necessary in Unicode build
+    //
+    // "void *" cast is needed by gcc 3.1 + w32api 1.4, don't ask me why
+    symbol = (void *)wxDllGetSymbol(dllHandle, name.mb_str());
+
+#endif // OS
 
     if ( !symbol )
     {
