@@ -82,7 +82,7 @@ class DoodlePad(wx.Window):
 
         # create our own data format and use it in a
         # custom data object
-        ldata = wx.CustomDataObject(wx.CustomDataFormat("DoodleLines"))
+        ldata = wx.CustomDataObject("DoodleLines")
         ldata.SetData(linesdata)
 
         # Also create a Bitmap version of the drawing
@@ -125,8 +125,7 @@ class DoodleDropTarget(wx.PyDropTarget):
         self.dv = window
 
         # specify the type of data we will accept
-        self.df = wx.CustomDataFormat("DoodleLines")
-        self.data = wx.CustomDataObject(self.df)
+        self.data = wx.CustomDataObject("DoodleLines")
         self.SetDataObject(self.data)
 
 
@@ -216,8 +215,8 @@ class CustomDnDPanel(wx.Panel):
                             "Draw a little picture in this window\n"
                             "then switch the mode below and drag the\n"
                             "picture to the lower window or to another\n"
-                            "application that accepts BMP's as a drop\n"
-                             "target.\n"
+                            "application that accepts Bitmaps as a\n"
+                             "drop target.\n"
                             )
 
         rb1 = wx.RadioButton(self, -1, "Draw", style=wx.RB_GROUP)

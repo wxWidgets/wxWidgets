@@ -132,7 +132,7 @@ class TestPrintPanel(wx.Panel):
         printerDialog.ShowModal();
 
         # this makes a copy of the wx.PrintData instead of just saving
-        # a reference to the one inside the printDialogData that will
+        # a reference to the one inside the PrintDialogData that will
         # be destroyed when the dialog is destroyed
         self.printData = wx.PrintData( printerDialog.GetPrintDialogData().GetPrintData() )
         

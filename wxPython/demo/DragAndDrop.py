@@ -48,16 +48,19 @@ class ClipTextPanel(wx.Panel):
     def OnCopy(self, evt):
         self.do = wx.TextDataObject()
         self.do.SetText(self.text.GetValue())
-        wx.TheClipboard.Open()
-        wx.TheClipboard.SetData(self.do)
-        wx.TheClipboard.Close()
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(self.do)
+            wx.TheClipboard.Close()
+        else:
+            wx.MessageBox("Unable to open the clipboard", "Error")
 
 
     def OnPaste(self, evt):
+        success = False
         do = wx.TextDataObject()
-        wx.TheClipboard.Open()
-        success = wx.TheClipboard.GetData(do)
-        wx.TheClipboard.Close()
+        if wx.TheClipboard.Open():
+            success = wx.TheClipboard.GetData(do)
+            wx.TheClipboard.Close()
 
         if success:
             self.text.SetValue(do.GetText())
@@ -73,14 +76,19 @@ class ClipTextPanel(wx.Panel):
         if dlg.ShowModal() == wx.ID_OK:
             bmp = wx.Bitmap(dlg.GetPath(), wx.BITMAP_TYPE_BMP)
             bmpdo = wx.BitmapDataObject(bmp)
-            wx.TheClipboard.Open()
-            wx.TheClipboard.SetData(bmpdo)
-            wx.TheClipboard.Close()
+            if wx.TheClipboard.Open():
+                wx.TheClipboard.SetData(bmpdo)
+                wx.TheClipboard.Close()
 
-            wx.MessageBox(
-                "The bitmap is now in the Clipboard.  Switch to a graphics\n"
-                "editor and try pasting it in..."
-                )
+                wx.MessageBox(
+                    "The bitmap is now in the Clipboard.  Switch to a graphics\n"
+                    "editor and try pasting it in..."
+                    )
+            else:
+                wx.MessageBox(
+                    "There is no data in the clipboard in the required format",
+                    "Error"
+                    )
 
         dlg.Destroy()
 
