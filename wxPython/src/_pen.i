@@ -61,15 +61,37 @@ public:
             wxPyEndBlockThreads(blocked);
             return retval;
         }
+
+        void _SetDashes(PyObject* _self, PyObject* pyDashes) {
+            bool blocked = wxPyBeginBlockThreads();
+            int size = PyList_Size(pyDashes);
+            wxDash* dashes = (wxDash*)byte_LIST_helper(pyDashes);
+
+            // black magic warning!  The array of wxDashes needs to exist as
+            // long as the pen does because wxPen does not copy the array.  So
+            // stick a copy in a Python string object and attach it to _self,
+            // and then call SetDashes with a pointer to that array.  Then
+            // when the Python pen object is destroyed the array will be
+            // cleaned up too.
+            PyObject* strDashes = PyString_FromStringAndSize((char*)dashes, size*sizeof(wxDash));
+            PyObject_SetAttrString(_self, "_dashes", strDashes);
+                        
+            self->SetDashes(size, (wxDash*)PyString_AS_STRING(strDashes));
+            delete [] dashes;
+            Py_DECREF(strDashes);
+            wxPyEndBlockThreads(blocked);
+        }
     }
-    
-    %extend {
-        bool __eq__(const wxPen* other) { return other ? (*self == *other) : False; }
-        bool __ne__(const wxPen* other) { return other ? (*self != *other) : True;  }
+    %pythoncode {
+    def SetDashes(self, dashes):
+        """
+        Associate a list of dash lengths with the Pen.
+        """
+        self._SetDashes(self, dashes)
     }
 
+    
 #ifndef __WXMAC__
-//  wxDash* GetDash() const;
     int GetDashCount() const;
 #endif
     
@@ -78,42 +100,13 @@ public:
     void SetStipple(wxBitmap& stipple);
 #endif
 
+    
+    %extend {
+        bool __eq__(const wxPen* other) { return other ? (*self == *other) : False; }
+        bool __ne__(const wxPen* other) { return other ? (*self != *other) : True;  }
+    }
     %pythoncode { def __nonzero__(self): return self.Ok() }
 };
 
-
-// The list of ints for the dashes needs to exist for the life of the pen
-// so we make it part of the class to save it.  See pyclasses.h
-
-%{
-wxPyPen::~wxPyPen()
-{
-    if (m_dash)
-        delete [] m_dash;
-}
-
-void wxPyPen::SetDashes(int nb_dashes, const wxDash *dash)
-{
-    if (m_dash)
-        delete [] m_dash;
-    m_dash = new wxDash[nb_dashes];
-    for (int i=0; i<nb_dashes; i++) {
-        m_dash[i] = dash[i];
-    }
-    wxPen::SetDashes(nb_dashes, m_dash);
-} 
-%}
-
-
-class wxPyPen : public wxPen {
-public:
-    wxPyPen(wxColour& colour, int width=1, int style=wxSOLID);
-    ~wxPyPen();
-
-    void SetDashes(int dashes, wxDash* dashes_array);
-};
-
-// wxPyPen is aliased to wxPen
-%pythoncode { Pen = PyPen };
 
 //---------------------------------------------------------------------------

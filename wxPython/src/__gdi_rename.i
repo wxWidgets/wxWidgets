@@ -7,7 +7,6 @@
 %rename(Colour)                             wxColour;
 %rename(Palette)                            wxPalette;
 %rename(Pen)                                wxPen;
-%rename(PyPen)                              wxPyPen;
 %rename(Brush)                              wxBrush;
 %rename(Bitmap)                             wxBitmap;
 %rename(Mask)                               wxMask;

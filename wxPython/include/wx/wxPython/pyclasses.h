@@ -76,22 +76,6 @@ public:
 //---------------------------------------------------------------------------
 
 
-class wxPyPen : public wxPen {
-public:
-    wxPyPen(wxColour& colour, int width=1, int style=wxSOLID)
-        : wxPen(colour, width, style)
-        { m_dash = NULL; }
-    ~wxPyPen();
-
-    void SetDashes(int nb_dashes, const wxDash *dash);
-
-private:
-    wxDash* m_dash;
-};
-
-
-//---------------------------------------------------------------------------
-
 class wxPyTimer : public wxTimer
 {
 public:
