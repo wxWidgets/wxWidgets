@@ -17,13 +17,13 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <wx/object.h>
+#include "wx/object.h"
 class wxList;
 class wxDC;
 class wxMouseEvent;
 #endif
 
-#include <wx/string.h>
+#include "wx/string.h"
 
 #if wxUSE_TREELAYOUT
 
