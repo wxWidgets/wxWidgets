@@ -60,9 +60,6 @@ public:
 
     ~wxDialog();
 
-    void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
-    int GetReturnCode() const { return m_returnCode; }
-
     virtual bool Destroy();
 
     virtual void DoSetClientSize(int width, int height);
@@ -132,8 +129,7 @@ private:
     WXHWND                m_hwndToolTip;
 #endif // tooltips
 
-    int m_returnCode;
-
+private:
     DECLARE_EVENT_TABLE()
 };
 

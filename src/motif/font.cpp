@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -35,13 +35,13 @@ wxXFont::wxXFont()
 
 wxXFont::~wxXFont()
 {
-    XFontStruct* fontStruct = (XFontStruct*) m_fontStruct;
     XmFontList fontList = (XmFontList) m_fontList;
-    
+
     XmFontListFree (fontList);
-    
+
     // TODO: why does freeing the font produce a segv???
     // Note that XFreeFont wasn't called in wxWin 1.68 either.
+    // XFontStruct* fontStruct = (XFontStruct*) m_fontStruct;
     //        XFreeFont((Display*) m_display, fontStruct);
 }
 
@@ -65,7 +65,7 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data)
     m_weight = data.m_weight;
     m_underlined = data.m_underlined;
     m_faceName = data.m_faceName;
-    
+
     // Don't have to copy actual fonts, because they'll be created
     // on demand.
 }
@@ -91,7 +91,7 @@ wxFont::wxFont()
 wxFont::wxFont(int pointSize, int family, int style, int weight, bool underlined, const wxString& faceName)
 {
     Create(pointSize, family, style, weight, underlined, faceName);
-    
+
     if ( wxTheFontList )
         wxTheFontList->Append(this);
 }
@@ -100,16 +100,16 @@ bool wxFont::Create(int pointSize, int family, int style, int weight, bool under
 {
     UnRef();
     m_refData = new wxFontRefData;
-    
+
     M_FONTDATA->m_family = family;
     M_FONTDATA->m_style = style;
     M_FONTDATA->m_weight = weight;
     M_FONTDATA->m_pointSize = pointSize;
     M_FONTDATA->m_underlined = underlined;
     M_FONTDATA->m_faceName = faceName;
-    
+
     RealizeResource();
-    
+
     return TRUE;
 }
 
@@ -143,54 +143,54 @@ void wxFont::Unshare()
 void wxFont::SetPointSize(int pointSize)
 {
     Unshare();
-    
+
     M_FONTDATA->m_pointSize = pointSize;
-    
+
     RealizeResource();
 }
 
 void wxFont::SetFamily(int family)
 {
     Unshare();
-    
+
     M_FONTDATA->m_family = family;
-    
+
     RealizeResource();
 }
 
 void wxFont::SetStyle(int style)
 {
     Unshare();
-    
+
     M_FONTDATA->m_style = style;
-    
+
     RealizeResource();
 }
 
 void wxFont::SetWeight(int weight)
 {
     Unshare();
-    
+
     M_FONTDATA->m_weight = weight;
-    
+
     RealizeResource();
 }
 
 void wxFont::SetFaceName(const wxString& faceName)
 {
     Unshare();
-    
+
     M_FONTDATA->m_faceName = faceName;
-    
+
     RealizeResource();
 }
 
 void wxFont::SetUnderlined(bool underlined)
 {
     Unshare();
-    
+
     M_FONTDATA->m_underlined = underlined;
-    
+
     RealizeResource();
 }
 
@@ -276,10 +276,10 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
 {
     if (!Ok())
         return (wxXFont*) NULL;
-    
+
     long intScale = long(scale * 100.0 + 0.5); // key for wxXFont
     int pointSize = (M_FONTDATA->m_pointSize * 10 * intScale) / 100;
-    
+
     wxNode* node = M_FONTDATA->m_fonts.First();
     while (node)
     {
@@ -288,17 +288,17 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
             return f;
         node = node->Next();
     }
-    
+
     WXFontStructPtr font = LoadQueryFont(pointSize, M_FONTDATA->m_family,
         M_FONTDATA->m_style, M_FONTDATA->m_weight, M_FONTDATA->m_underlined);
-    
+
     if (!font)
     {
         // search up and down by stepsize 10
         int max_size = pointSize + 20 * (1 + (pointSize/180));
         int min_size = pointSize - 20 * (1 + (pointSize/180));
         int i;
-        
+
         // Search for smaller size (approx.)
         for (i=pointSize-10; !font && i >= 10 && i >= min_size; i -= 10)
             font = LoadQueryFont(i, M_FONTDATA->m_family, M_FONTDATA->m_style, M_FONTDATA->m_weight, M_FONTDATA->m_underlined);
@@ -307,7 +307,7 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
             font = LoadQueryFont(i, M_FONTDATA->m_family, M_FONTDATA->m_style, M_FONTDATA->m_weight, M_FONTDATA->m_underlined);
         // Try default family
         if (!font && M_FONTDATA->m_family != wxDEFAULT)
-            font = LoadQueryFont(pointSize, wxDEFAULT, M_FONTDATA->m_style, 
+            font = LoadQueryFont(pointSize, wxDEFAULT, M_FONTDATA->m_style,
             M_FONTDATA->m_weight, M_FONTDATA->m_underlined);
         // Bogus font
         if (!font)
@@ -368,12 +368,12 @@ WXFontStructPtr wxFont::LoadQueryFont(int pointSize, int family, int style,
     default:           xweight = "*";
         break;
     }
-    
+
     sprintf(wxBuffer, "-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-*-*",
         xfamily, xweight, xstyle, pointSize);
-    
+
     Display *dpy = (Display*) wxGetDisplay();
     XFontStruct* font = XLoadQueryFont(dpy, wxBuffer);
-    
+
     return (WXFontStructPtr) font;
 }

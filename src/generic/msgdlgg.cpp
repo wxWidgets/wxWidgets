@@ -28,8 +28,7 @@
     #include "wx/statbmp.h"
     #include "wx/layout.h"
     #include "wx/intl.h"
-    #include "wx/dcclient.h"
-    #include "wx/settings.h"
+    #include "wx/icon.h"
 #endif
 
 #include <stdio.h>
@@ -169,11 +168,11 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 
     // get the longest caption and also calc the number of buttons
     size_t nBtn, nButtons = 0;
-    long width, widthBtnMax = 0;
+    int width, widthBtnMax = 0;
     for ( nBtn = 0; nBtn < Btn_Max; nBtn++ ) {
         if ( buttons[nBtn] ) {
             nButtons++;
-            dc.GetTextExtent(buttons[nBtn]->GetLabel(), &width, NULL);
+            GetTextExtent(buttons[nBtn]->GetLabel(), &width, NULL);
             if ( width > widthBtnMax )
                 widthBtnMax = width;
         }

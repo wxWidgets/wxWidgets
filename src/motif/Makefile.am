@@ -54,6 +54,7 @@ libwx_motif_la_SOURCES = \
  db.cpp \
  dbtable.cpp \
  dcbase.cpp \
+ dlgcmn.cpp \
  docmdi.cpp \
  docview.cpp \
  dynlib.cpp \
@@ -129,6 +130,7 @@ libwx_motif_la_SOURCES = \
  statusbr.cpp \
  tabg.cpp \
  textdlgg.cpp \
+ tipdlg.cpp \
  treectrl.cpp \
 \
  threadpsx.cpp \

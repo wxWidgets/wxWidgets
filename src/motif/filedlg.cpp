@@ -36,11 +36,11 @@
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 #endif
 
-#define	DEFAULT_FILE_SELECTOR_SIZE 0
+#define DEFAULT_FILE_SELECTOR_SIZE 0
 // Let Motif defines the size of File
 // Selector Box (if 1), or fix it to
 // wxFSB_WIDTH x wxFSB_HEIGHT (if 0)
-#define	wxFSB_WIDTH                600
+#define wxFSB_WIDTH                600
 #define wxFSB_HEIGHT               500
 
 
@@ -51,27 +51,27 @@ wxString wxFileSelector(const char *title,
 {
     // If there's a default extension specified but no filter, we create a suitable
     // filter.
-    
+
     wxString filter2("");
     if ( defaultExtension && !filter )
         filter2 = wxString("*.") + wxString(defaultExtension) ;
     else if ( filter )
         filter2 = filter;
-    
+
     wxString defaultDirString;
     if (defaultDir)
         defaultDirString = defaultDir;
     else
         defaultDirString = "";
-    
+
     wxString defaultFilenameString;
     if (defaultFileName)
         defaultFilenameString = defaultFileName;
     else
         defaultFilenameString = "";
-    
+
     wxFileDialog fileDialog(parent, title, defaultDirString, defaultFilenameString, filter2, flags, wxPoint(x, y));
-    
+
     if ( fileDialog.ShowModal() == wxID_OK )
     {
         return fileDialog.GetPath();
@@ -89,11 +89,11 @@ wxString wxFileSelectorEx(const char *title,
                        wxWindow* parent,
                        int       x,
                        int       y)
-                       
+
 {
     wxFileDialog fileDialog(parent, title ? title : "", defaultDir ? defaultDir : "",
         defaultFileName ? defaultFileName : "", filter ? filter : "", flags, wxPoint(x, y));
-    
+
     if ( fileDialog.ShowModal() == wxID_OK )
     {
         *defaultFilterIndex = fileDialog.GetFilterIndex();
@@ -106,7 +106,7 @@ wxString wxFileSelectorEx(const char *title,
 wxString wxFileDialog::m_fileSelectorAnswer = "";
 bool wxFileDialog::m_fileSelectorReturned = FALSE;
 
-void wxFileSelCancel( Widget WXUNUSED(fs), XtPointer WXUNUSED(client_data), 
+void wxFileSelCancel( Widget WXUNUSED(fs), XtPointer WXUNUSED(client_data),
                      XmFileSelectionBoxCallbackStruct *WXUNUSED(cbs) )
 {
     wxFileDialog::m_fileSelectorAnswer = "";
@@ -145,11 +145,11 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
 static void wxChangeListBoxColours(wxWindow* win, Widget widget)
 {
-    win->DoChangeBackgroundColour((WXWidget) widget, *wxWHITE);
+    wxWindow::DoChangeBackgroundColour((WXWidget) widget, *wxWHITE);
 
     // Change colour of the scrolled areas of the listboxes
     Widget listParent = XtParent (widget);
-    win->DoChangeBackgroundColour((WXWidget) listParent, *wxWHITE, TRUE);
+    wxWindow::DoChangeBackgroundColour((WXWidget) listParent, *wxWHITE, TRUE);
 
     Widget hsb = (Widget) 0;
     Widget vsb = (Widget) 0;
@@ -157,13 +157,13 @@ static void wxChangeListBoxColours(wxWindow* win, Widget widget)
         XmNhorizontalScrollBar, &hsb,
         XmNverticalScrollBar, &vsb,
         NULL);
-    
+
    /* TODO: should scrollbars be affected? Should probably have separate
     * function to change them (by default, taken from wxSystemSettings)
     */
     wxColour backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
-    win->DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
-    win->DoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
+    wxWindow::DoChangeBackgroundColour((WXWidget) hsb, backgroundColour, TRUE);
+    wxWindow::DoChangeBackgroundColour((WXWidget) vsb, backgroundColour, TRUE);
 
     if (hsb)
       XtVaSetValues (hsb,
@@ -178,7 +178,7 @@ static void wxChangeListBoxColours(wxWindow* win, Widget widget)
 int wxFileDialog::ShowModal()
 {
     wxBeginBusyCursor();
-    
+
     //  static char fileBuf[512];
     Widget parentWidget = (Widget) 0;
     if (m_parent)
@@ -187,7 +187,7 @@ int wxFileDialog::ShowModal()
     }
     else
         parentWidget = (Widget) wxTheApp->GetTopLevelWidget();
-    
+
     Widget fileSel = XmCreateFileSelectionDialog(parentWidget, "file_selector", NULL, 0);
     XtUnmanageChild(XmFileSelectionBoxGetChild(fileSel, XmDIALOG_HELP_BUTTON));
 
@@ -195,18 +195,22 @@ int wxFileDialog::ShowModal()
     Widget selectionWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_TEXT);
     Widget dirListWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_DIR_LIST);
     Widget fileListWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_LIST);
+
+    // code using these vars disabled
+#if 0
     Widget okWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_OK_BUTTON);
     Widget applyWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_APPLY_BUTTON);
     Widget cancelWidget = XmFileSelectionBoxGetChild(fileSel, XmDIALOG_CANCEL_BUTTON);
+#endif
 
-    
+
     Widget shell = XtParent(fileSel);
-    
+
     if (!m_message.IsNull())
         XtVaSetValues(shell, XmNtitle, (char*) (const char*) m_message, NULL);
-    
+
     wxString entirePath("");
-    
+
     if ((m_dir != "") && (m_fileName != ""))
     {
         entirePath = m_dir + wxString("/") + m_fileName;
@@ -219,12 +223,12 @@ int wxFileDialog::ShowModal()
     {
         entirePath = m_fileName;
     }
-    
+
     if (entirePath != "")
     {
         XmTextSetString(selectionWidget, (char*) (const char*) entirePath);
     }
-    
+
     if (m_wildCard != "")
     {
         wxString filter("");
@@ -232,28 +236,28 @@ int wxFileDialog::ShowModal()
             filter = m_dir + wxString("/") + m_wildCard;
         else
             filter = m_wildCard;
-        
+
         XmTextSetString(filterWidget, (char*) (const char*) filter);
         XmFileSelectionDoSearch(fileSel, NULL);
     }
-    
+
     // Suggested by Terry Gitnick, 16/9/97, because of change in Motif
     // file selector on Solaris 1.5.1.
     if ( m_dir != "" )
     {
         XmString thePath = XmStringCreateLtoR ((char*) (const char*) m_dir,
             XmSTRING_DEFAULT_CHARSET);
-        
+
         XtVaSetValues (fileSel,
             XmNdirectory, thePath,
             NULL);
-        
+
         XmStringFree(thePath);
     }
-    
+
     XtAddCallback(fileSel, XmNcancelCallback, (XtCallbackProc)wxFileSelCancel, (XtPointer)NULL);
     XtAddCallback(fileSel, XmNokCallback, (XtCallbackProc)wxFileSelOk, (XtPointer)NULL);
-    
+
     //#if XmVersion > 1000
     // I'm not sure about what you mean with XmVersion.
     // If this is for Motif1.1/Motif1.2, then check XmVersion>=1200
@@ -273,22 +277,23 @@ int wxFileDialog::ShowModal()
     DoChangeBackgroundColour((WXWidget) filterWidget, *wxWHITE);
     DoChangeBackgroundColour((WXWidget) selectionWidget, *wxWHITE);
 
-    /* For some reason this crashes
+    // apparently, this provokes a crash
+#if 0
     DoChangeBackgroundColour((WXWidget) okWidget, m_backgroundColour, TRUE);
     DoChangeBackgroundColour((WXWidget) cancelWidget, m_backgroundColour, TRUE);
     DoChangeBackgroundColour((WXWidget) applyWidget, m_backgroundColour, TRUE);
-    */
+#endif
 
     wxChangeListBoxColours(this, dirListWidget);
     wxChangeListBoxColours(this, fileListWidget);
-    
+
     XtManageChild(fileSel);
 
     m_fileSelectorAnswer = "";
     m_fileSelectorReturned = FALSE;
-    
+
     wxEndBusyCursor();
-    
+
     XtAddGrab(XtParent(fileSel), TRUE, FALSE);
     XEvent event;
     while (!m_fileSelectorReturned)
@@ -296,13 +301,13 @@ int wxFileDialog::ShowModal()
         XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
     }
     XtRemoveGrab(XtParent(fileSel));
-    
+
     XmUpdateDisplay((Widget) wxTheApp->GetTopLevelWidget()); // Experimental
-    
+
     //  XtDestroyWidget(fileSel);
     XtUnmapWidget(XtParent(fileSel));
     XtDestroyWidget(XtParent(fileSel));
-    
+
     // Now process all events, because otherwise
     // this might remain on the screen
     XSync(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()), FALSE);
@@ -312,11 +317,11 @@ int wxFileDialog::ShowModal()
         XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
         XtDispatchEvent(&event);
     }
-    
+
     m_path = m_fileSelectorAnswer;
     m_fileName = wxFileNameFromPath(m_fileSelectorAnswer);
     m_dir = wxPathOnly(m_path);
-    
+
     if (m_fileName == "")
         return wxID_CANCEL;
     else
@@ -328,19 +333,20 @@ static wxString
 wxDefaultFileSelector(bool load, const char *what, const char *extension, const char *default_name, wxWindow *parent)
 {
     char *ext = (char *)extension;
-    
-    char prompt[50];
+
+    wxString prompt;
     wxString str;
     if (load)
-        str = "Load %s file";
+        str = _("Load %s file");
     else
-        str = "Save %s file";
-    sprintf(prompt, wxGetTranslation(str), what);
-    
-    if (*ext == '.') ext++;
-    char wild[60];
-    sprintf(wild, "*.%s", ext);
-    
+        str = _("Save %s file");
+    prompt.Printf(str, what);
+
+    if (*ext == '.')
+        ext++;
+    wxString wild;
+    wild.Printf("*.%s", ext);
+
     return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
 }
 

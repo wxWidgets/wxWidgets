@@ -6,22 +6,20 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DIALOG_H_
 #define _WX_DIALOG_H_
 
 #ifdef __GNUG__
-#pragma interface "dialog.h"
+    #pragma interface "dialog.h"
 #endif
-
-#include "wx/panel.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxDialogNameStr;
 
 // Dialog boxes
-class WXDLLEXPORT wxDialog : public wxPanel
+class WXDLLEXPORT wxDialog : public wxDialogBase
 {
 DECLARE_DYNAMIC_CLASS(wxDialog)
 
@@ -67,34 +65,17 @@ public:
     void Lower();
 
     virtual bool IsIconized() const;
-    void Fit();
 
     void SetTitle(const wxString& title);
     wxString GetTitle() const ;
 
-    //  bool OnClose();
-    void OnCharHook(wxKeyEvent& event);
-    void OnCloseWindow(wxCloseEvent& event);
-
     void SetModal(bool flag);
 
-    virtual void Centre(int direction = wxBOTH);
-    virtual bool IsModal() const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
+    virtual bool IsModal() const
+        { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
 
     virtual int ShowModal();
     virtual void EndModal(int retCode);
-
-    void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
-    int GetReturnCode() const { return m_returnCode; }
-
-    // Standard buttons
-    void OnOK(wxCommandEvent& event);
-    void OnApply(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
-    void OnPaint(wxPaintEvent &event);
-
-    // Responds to colour changes
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // Implementation
     virtual void ChangeFont(bool keepOriginalSize = TRUE);
@@ -103,11 +84,24 @@ public:
     inline WXWidget GetTopWidget() const { return m_mainWidget; }
     inline WXWidget GetClientWidget() const { return m_mainWidget; }
 
+    // Standard buttons
+    void OnOK(wxCommandEvent& event);
+    void OnApply(wxCommandEvent& event);
+    void OnCancel(wxCommandEvent& event);
+
+    void OnPaint(wxPaintEvent &event);
+
+    // Responds to colour changes
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+    //  bool OnClose();
+    void OnCharHook(wxKeyEvent& event);
+    void OnCloseWindow(wxCloseEvent& event);
+
 public:
     //// Motif-specific
     bool          m_modalShowing;
     wxString      m_dialogTitle;
-    int           m_returnCode;
 
 protected:
     virtual void DoSetSize(int x, int y,

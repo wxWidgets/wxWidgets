@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma implementation "windowbase.h"
+    #pragma implementation "tipdlg.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -36,6 +36,11 @@
     #include "wx/statbox.h"
     #include "wx/statbmp.h"
     #include "wx/dialog.h"
+    #include "wx/icon.h"
+    #include "wx/intl.h"
+    #include "wx/layout.h"
+    #include "wx/settings.h"
+    #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
 #include "wx/statline.h"
@@ -175,7 +180,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     wxIcon icon("wxICON_TIP");
 #else
     #include "wx/generic/tip.xpm"
-    wxIcon icon(info);
+    wxIcon icon(tipIcon);
 #endif
 
     wxStaticBitmap *bmp = new wxStaticBitmap(this, -1, icon);

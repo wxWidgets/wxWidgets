@@ -14,8 +14,6 @@ LIBS = $(GUILIBS)
 
 VPATH = .:${srcdir}:${srcdir}/../common:${srcdir}/../generic:${EXTRA_VPATH}
 
-EXTRA_DIST = "${srcdir}/../common ${srcdir}/../generic ${srcdir}"
-
 lib_LTLIBRARIES = @WX_LIBRARY_NAME@
 EXTRA_LTLIBRARIES = libwx_gtk.la libwx_motif.la libwx_msw.la
 

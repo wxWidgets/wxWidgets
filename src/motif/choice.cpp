@@ -119,10 +119,11 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     // that I have found the code responsible for this behaviour.
 #if XmVersion >= 1002
 #if XmVersion <  2000
-    Widget optionLabel = XmOptionLabelGadget ((Widget) m_buttonWidget);
     // JACS, 24/1/99: this seems to cause a malloc crash later on, e.g.
     // in controls sample.
-    //    XtUnmanageChild (optionLabel);
+    //
+    // Widget optionLabel = XmOptionLabelGadget ((Widget) m_buttonWidget);
+    // XtUnmanageChild (optionLabel);
 #endif
 #endif
 

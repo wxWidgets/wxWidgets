@@ -2,8 +2,9 @@
 // Name:        gridg.h
 // Purpose:     wxGenericGrid
 // Author:      Julian Smart
-// Modified by: Michael Bedward 20 April 1999
-//                Added edit in place facility
+// Modified by: Michael Bedward 
+//                Added edit in place facility, 20 April 1999
+//                Added cursor key control, 29 Jun 1999
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
@@ -226,7 +227,9 @@ public:
     void OnMouseEvent(wxMouseEvent& event);
     void OnSize(wxSizeEvent& event);
     void OnText(wxCommandEvent& ev);
+    void OnTextEnter(wxCommandEvent& ev);
     void OnTextInPlace(wxCommandEvent& ev);
+    void OnTextInPlaceEnter(wxCommandEvent& ev);
     void OnGridScroll(wxScrollEvent& ev);
 
 protected:

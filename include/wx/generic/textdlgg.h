@@ -20,6 +20,8 @@
 
 #include "wx/dialog.h"
 
+class WXDLLEXPORT wxTextCtrl;
+
 // Handy dialog functions (will be converted into classes at some point)
 WXDLLEXPORT_DATA(extern const wxChar*) wxGetTextFromUserPromptStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;

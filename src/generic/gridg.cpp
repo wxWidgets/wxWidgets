@@ -2,38 +2,40 @@
 // Name:        gridg.cpp
 // Purpose:     wxGenericGrid
 // Author:      Julian Smart
-// Modified by: Michael Bedward 20 Apr 1999
-//                Added edit in place facility
+// Modified by: Michael Bedward
+//                Added edit in place facility, 20 Apr 1999
+//                Added cursor key control, 29 Jun 1999
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "gridg.h"
-#pragma interface
+    #pragma implementation "gridg.h"
+    #pragma interface
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/utils.h"
-  #include "wx/dcclient.h"
-  #include "wx/dcmemory.h"
-  #include "wx/textctrl.h"
+    #include "wx/utils.h"
+    #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
+    #include "wx/textctrl.h"
+    #include "wx/settings.h"
 #endif
 
 #include <string.h>
 
 #include "wx/string.h"
+
 #include "wx/generic/gridg.h"
-#include "wx/settings.h"
 
 // Set to zero to use no double-buffering
 #ifdef __WXMSW__
@@ -56,6 +58,8 @@ BEGIN_EVENT_TABLE(wxGenericGrid, wxPanel)
     EVT_MOUSE_EVENTS(wxGenericGrid::OnMouseEvent)
     EVT_TEXT(wxGRID_TEXT_CTRL, wxGenericGrid::OnText)
     EVT_TEXT(wxGRID_EDIT_IN_PLACE_TEXT_CTRL, wxGenericGrid::OnTextInPlace)
+    EVT_TEXT_ENTER(wxGRID_TEXT_CTRL, wxGenericGrid::OnTextEnter)
+    EVT_TEXT_ENTER(wxGRID_EDIT_IN_PLACE_TEXT_CTRL, wxGenericGrid::OnTextInPlaceEnter)
     EVT_COMMAND_SCROLL(wxGRID_HSCROLL, wxGenericGrid::OnGridScroll)
     EVT_COMMAND_SCROLL(wxGRID_VSCROLL, wxGenericGrid::OnGridScroll)
 
@@ -92,7 +96,7 @@ wxGenericGrid::wxGenericGrid(void)
 
   m_editInPlace = TRUE;
   m_inOnTextInPlace = FALSE;
-  
+
 #if defined(__WIN95__)
   m_scrollWidth = wxSystemSettings::GetSystemMetric(wxSYS_VSCROLL_X);
 #elif defined(__WXGTK__)
@@ -215,7 +219,7 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
   m_textItem = new wxTextCtrl(m_editingPanel, wxGRID_TEXT_CTRL, "",
                               wxPoint(m_editControlPosition.x, m_editControlPosition.y),
                               wxSize(m_editControlPosition.width, -1),
-                              0);
+                              wxTE_PROCESS_ENTER);
   m_textItem->Show(TRUE);
   m_textItem->SetFocus();
   int controlW, controlH;
@@ -233,12 +237,12 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
 //  SetSize(pos.x, pos.y, size.x, size.y);
 
   m_inPlaceTextItem = new wxTextCtrl( (wxPanel*)this, wxGRID_EDIT_IN_PLACE_TEXT_CTRL, "",
-				      wxPoint( m_currentRect.x-2, m_currentRect.y-2 ), 
-				      wxSize( m_currentRect.width+4, m_currentRect.height+4 ), 
-				      wxNO_BORDER );
+                                      wxPoint( m_currentRect.x-2, m_currentRect.y-2 ),
+                                      wxSize( m_currentRect.width+4, m_currentRect.height+4 ),
+                                      wxNO_BORDER | wxTE_PROCESS_ENTER );
   m_inPlaceTextItem->Show(TRUE);
   m_inPlaceTextItem->SetFocus();
-  
+
   return TRUE;
 }
 
@@ -800,8 +804,8 @@ void wxGenericGrid::DrawColumnLabel(wxDC *dc, wxRect *rect, int col)
     rect2.height -= 4;
     dc->SetTextForeground(GetLabelTextColour());
     dc->SetFont(GetLabelTextFont());
-	if ( !cell->GetTextValue().IsNull() )
-    	DrawTextRect(dc, cell->GetTextValue(), &rect2, GetLabelAlignment(wxHORIZONTAL));
+        if ( !cell->GetTextValue().IsNull() )
+            DrawTextRect(dc, cell->GetTextValue(), &rect2, GetLabelAlignment(wxHORIZONTAL));
   }
 }
 
@@ -853,8 +857,8 @@ void wxGenericGrid::DrawRowLabel(wxDC *dc, wxRect *rect, int row)
     rect2.height -= 4;
     dc->SetTextForeground(GetLabelTextColour());
     dc->SetFont(GetLabelTextFont());
-	if ( !cell->GetTextValue().IsNull() )
-    	DrawTextRect(dc, cell->GetTextValue(), &rect2, GetLabelAlignment(wxVERTICAL));
+        if ( !cell->GetTextValue().IsNull() )
+            DrawTextRect(dc, cell->GetTextValue(), &rect2, GetLabelAlignment(wxVERTICAL));
   }
 }
 
@@ -931,8 +935,8 @@ void wxGenericGrid::DrawCellValue(wxDC *dc, wxRect *rect, int row, int col)
       dc->SetTextForeground(cell->GetTextColour());
       dc->SetFont(cell->GetFont());
 
-	  if ( !cell->GetTextValue().IsNull() )
-      	DrawTextRect(dc, cell->GetTextValue(), &rect2, cell->GetAlignment());
+          if ( !cell->GetTextValue().IsNull() )
+              DrawTextRect(dc, cell->GetTextValue(), &rect2, cell->GetAlignment());
     }
   }
 }
@@ -970,16 +974,16 @@ void wxGenericGrid::AdjustScrollbars(void)
     int widthCount = 0;
 
     int i;
-	int nx = 0;
+        int nx = 0;
     for (i = m_scrollPosX ; i < m_totalCols; i++)
     {
       widthCount += m_colWidths[i];
-	  // A partial bit doesn't count, we still have to scroll to see the
-	  // rest of it
+          // A partial bit doesn't count, we still have to scroll to see the
+          // rest of it
       if (widthCount + m_leftOfSheet + m_verticalLabelWidth > (cw-vertScrollBarWidth))
         break;
-	  else
-   	    nx ++;
+          else
+               nx ++;
 
     }
 
@@ -993,16 +997,16 @@ void wxGenericGrid::AdjustScrollbars(void)
     int heightCount = 0;
 
     int i;
-	int ny = 0;
+        int ny = 0;
     for (i = m_scrollPosY ; i < m_totalRows; i++)
     {
       heightCount += m_rowHeights[i];
-	  // A partial bit doesn't count, we still have to scroll to see the
-	  // rest of it
+          // A partial bit doesn't count, we still have to scroll to see the
+          // rest of it
       if (heightCount + m_topOfSheet + m_horizontalLabelHeight > (ch-horizScrollBarHeight))
         break;
-	  else
-	    ny ++;
+          else
+            ny ++;
     }
 
     noVertSteps += ny;
@@ -1010,8 +1014,8 @@ void wxGenericGrid::AdjustScrollbars(void)
 
   if (m_totalGridWidth + vertScrollBarWidth <= cw)
   {
-	if ( m_hScrollBar )
-    	m_hScrollBar->Show(FALSE);
+        if ( m_hScrollBar )
+            m_hScrollBar->Show(FALSE);
     SetScrollPosX(0);
   }
   else
@@ -1068,7 +1072,7 @@ void wxGenericGrid::AdjustScrollbars(void)
 void wxGenericGrid::OnSize(wxSizeEvent& WXUNUSED(event) )
 {
   if (!m_vScrollBar || !m_hScrollBar)
-	  return;
+          return;
 
   AdjustScrollbars();
 
@@ -1350,7 +1354,7 @@ void wxGenericGrid::OnMouseEvent(wxMouseEvent& ev)
         SetCursor(*wxSTANDARD_CURSOR);
         int cw, ch;
         GetClientSize(&cw, &ch);
-		wxSizeEvent evt;
+                wxSizeEvent evt;
         OnSize(evt);
         break;
       }
@@ -1416,17 +1420,17 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
     {
       HighlightCell(dc);
     }
-  
+
 
   // Highlight the new cell and copy its content to the edit control
   SetCurrentRect(m_wCursorRow, m_wCursorColumn);
   wxGridCell *cell = GetCell(m_wCursorRow, m_wCursorColumn);
   if (cell)
   {
-	if ( cell->GetTextValue().IsNull() )
-		m_textItem->SetValue("");
-	else
-    	m_textItem->SetValue(cell->GetTextValue());
+        if ( cell->GetTextValue().IsNull() )
+                m_textItem->SetValue("");
+        else
+            m_textItem->SetValue(cell->GetTextValue());
   }
 
   SetGridClippingRegion(dc);
@@ -1434,30 +1438,30 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
 
   if ( m_editable && m_editInPlace )
     {
-      m_inPlaceTextItem->SetSize( m_currentRect.x-2, m_currentRect.y-2, 
-				  m_currentRect.width+4, m_currentRect.height+4 );
+      m_inPlaceTextItem->SetSize( m_currentRect.x-2, m_currentRect.y-2,
+                                  m_currentRect.width+4, m_currentRect.height+4 );
 
       if ( cell )
-	{
-	  if ( cell->GetTextValue().IsNull() )
-	    {
-	      m_inPlaceTextItem->SetValue( "" );
-	    }
-	  else
-	    {
-	      m_inPlaceTextItem->SetFont( cell->GetFont() );
-	      m_inPlaceTextItem->SetValue( cell->GetTextValue() );
-	    }
-	}
-      
+        {
+          if ( cell->GetTextValue().IsNull() )
+            {
+              m_inPlaceTextItem->SetValue( "" );
+            }
+          else
+            {
+              m_inPlaceTextItem->SetFont( cell->GetFont() );
+              m_inPlaceTextItem->SetValue( cell->GetTextValue() );
+            }
+        }
+
       m_inPlaceTextItem->Show(TRUE);
       m_inPlaceTextItem->SetFocus();
     }
   else
-    {      
+    {
       // 1) Why isn't this needed for Windows??
       // Probably because of the SetValue?? JS.
-      // 2) Arrrrrgh. This isn't needed anywhere, 
+      // 2) Arrrrrgh. This isn't needed anywhere,
       // of course. One hour of debugging... RR.
       //
       // 3) It *is* needed for Motif - michael
@@ -1472,7 +1476,7 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
 
   OnSelectCell(row, col);
   wxGridEvent g_evt2(GetId(), wxEVT_GRID_SELECT_CELL, this, row, col);
-  GetEventHandler()->ProcessEvent(g_evt2);  
+  GetEventHandler()->ProcessEvent(g_evt2);
 }
 
 wxGridCell *wxGenericGrid::OnCreateCell(void)
@@ -1529,22 +1533,22 @@ void wxGenericGrid::HighlightCell(wxDC *dc)
   dc->DrawLine( m_currentRect.x + 1,
                 m_currentRect.y + 1,
                 m_currentRect.x + m_currentRect.width - 1,
-		m_currentRect.y + 1);
+                m_currentRect.y + 1);
   // Right
   dc->DrawLine( m_currentRect.x + m_currentRect.width - 1,
                 m_currentRect.y + 1,
                 m_currentRect.x + m_currentRect.width - 1,
-		m_currentRect.y +m_currentRect.height - 1 );
+                m_currentRect.y +m_currentRect.height - 1 );
   // Bottom
   dc->DrawLine( m_currentRect.x + m_currentRect.width - 1,
                 m_currentRect.y + m_currentRect.height - 1,
                 m_currentRect.x + 1,
-		m_currentRect.y + m_currentRect.height - 1);
+                m_currentRect.y + m_currentRect.height - 1);
   // Left
   dc->DrawLine( m_currentRect.x + 1,
                 m_currentRect.y + m_currentRect.height - 1,
-		m_currentRect.x + 1,
-		m_currentRect.y + 1);
+                m_currentRect.x + 1,
+                m_currentRect.y + 1);
 
   dc->SetLogicalFunction(wxCOPY);
 }
@@ -2011,8 +2015,8 @@ void wxGenericGrid::SetEditable(bool edit)
 
     if (m_inPlaceTextItem)
       {
-	m_inPlaceTextItem->Show(TRUE);
-	m_inPlaceTextItem->SetFocus();
+        m_inPlaceTextItem->Show(TRUE);
+        m_inPlaceTextItem->SetFocus();
       }
   }
   else
@@ -2023,10 +2027,10 @@ void wxGenericGrid::SetEditable(bool edit)
       m_textItem->Show(FALSE);
       m_editingPanel->Show(FALSE);
     }
-    
+
     if ( m_inPlaceTextItem )
       {
-	m_inPlaceTextItem->Show(FALSE);
+        m_inPlaceTextItem->Show(FALSE);
       }
   }
   UpdateDimensions();
@@ -2053,37 +2057,37 @@ void wxGenericGrid::SetEditInPlace(bool edit)
   if ( m_editInPlace != edit )
     {
       m_editInPlace = edit;
-      
+
       if ( m_editInPlace )  // switched on
-	{
-	  if ( m_currentRectVisible && m_editable )
-	    {
-	      m_inPlaceTextItem->SetSize( m_currentRect.x-2, m_currentRect.y-2, 
-					  m_currentRect.width+4, m_currentRect.height+4 );
+        {
+          if ( m_currentRectVisible && m_editable )
+            {
+              m_inPlaceTextItem->SetSize( m_currentRect.x-2, m_currentRect.y-2,
+                                          m_currentRect.width+4, m_currentRect.height+4 );
 
-	      wxGridCell *cell = GetCell(m_wCursorRow, m_wCursorColumn);
+              wxGridCell *cell = GetCell(m_wCursorRow, m_wCursorColumn);
 
-	      if ( cell )
-		{
-		  if ( cell->GetTextValue().IsNull() )
-		    {
-		      m_inPlaceTextItem->SetValue( "" );
-		    }
-		  else
-		    {
-		      m_inPlaceTextItem->SetFont( cell->GetFont() );
-		      m_inPlaceTextItem->SetValue( cell->GetTextValue() );
-		    }
-		}
-	  
-	      m_inPlaceTextItem->Show( TRUE );
-	      m_inPlaceTextItem->SetFocus();	  
-	    }
-	}
+              if ( cell )
+                {
+                  if ( cell->GetTextValue().IsNull() )
+                    {
+                      m_inPlaceTextItem->SetValue( "" );
+                    }
+                  else
+                    {
+                      m_inPlaceTextItem->SetFont( cell->GetFont() );
+                      m_inPlaceTextItem->SetValue( cell->GetTextValue() );
+                    }
+                }
+
+              m_inPlaceTextItem->Show( TRUE );
+              m_inPlaceTextItem->SetFocus();
+            }
+        }
       else  // switched off
-	{
-	  m_inPlaceTextItem->Show( FALSE );
-	}
+        {
+          m_inPlaceTextItem->Show( FALSE );
+        }
     }
 }
 
@@ -2558,30 +2562,49 @@ void wxGenericGrid::OnText(wxCommandEvent& WXUNUSED(ev) )
       wxGenericGrid *grid = this;
       wxGridCell *cell = grid->GetCell(grid->GetCursorRow(), grid->GetCursorColumn());
       if (cell && grid->CurrentCellVisible())
-	{
-	  cell->SetTextValue(grid->GetTextItem()->GetValue());
-	  if ( m_editInPlace && !m_inOnTextInPlace )
-	    {
-	      m_inPlaceTextItem->SetValue( grid->GetTextItem()->GetValue() );
-	    }
-    
-	  wxClientDC dc(grid);
+        {
+          cell->SetTextValue(grid->GetTextItem()->GetValue());
+          if ( m_editInPlace && !m_inOnTextInPlace )
+            {
+              m_inPlaceTextItem->SetValue( grid->GetTextItem()->GetValue() );
+            }
 
-	  dc.BeginDrawing();
-	  grid->SetGridClippingRegion(& dc);
-	  grid->DrawCellBackground(& dc, &grid->GetCurrentRect(), grid->GetCursorRow(), grid->GetCursorColumn());
-	  grid->DrawCellValue(& dc, &grid->GetCurrentRect(), grid->GetCursorRow(), grid->GetCursorColumn());
-	  if ( !(m_editable && m_editInPlace ) ) grid->HighlightCell(& dc);
-	  dc.DestroyClippingRegion();
-	  dc.EndDrawing();
+          wxClientDC dc(grid);
 
-	  //grid->OnCellChange(grid->GetCursorRow(), grid->GetCursorColumn());
-	  wxGridEvent g_evt(GetId(), wxEVT_GRID_CELL_CHANGE, grid,
-			    grid->GetCursorRow(), grid->GetCursorColumn());
-	  GetEventHandler()->ProcessEvent(g_evt);
+          dc.BeginDrawing();
+          grid->SetGridClippingRegion(& dc);
+          grid->DrawCellBackground(& dc, &grid->GetCurrentRect(), grid->GetCursorRow(), grid->GetCursorColumn());
+          grid->DrawCellValue(& dc, &grid->GetCurrentRect(), grid->GetCursorRow(), grid->GetCursorColumn());
+          if ( !(m_editable && m_editInPlace ) ) grid->HighlightCell(& dc);
+          dc.DestroyClippingRegion();
+          dc.EndDrawing();
 
-	  //    grid->DrawCellText();
-	}
+          //grid->OnCellChange(grid->GetCursorRow(), grid->GetCursorColumn());
+          wxGridEvent g_evt(GetId(), wxEVT_GRID_CELL_CHANGE, grid,
+                            grid->GetCursorRow(), grid->GetCursorColumn());
+          GetEventHandler()->ProcessEvent(g_evt);
+
+          //    grid->DrawCellText();
+        }
+    }
+}
+
+void wxGenericGrid::OnTextEnter(wxCommandEvent& WXUNUSED(ev) )
+{
+  // move the cursor down the current row (if possible)
+  // when the enter key has been pressed
+  //
+  if ( m_editable )
+    {
+      if ( GetCursorRow() < GetRows()-1 )
+        {
+          wxClientDC dc( this );
+          dc.BeginDrawing();
+          OnSelectCellImplementation(& dc,
+                                     GetCursorRow()+1,
+                                     GetCursorColumn() );
+          dc.EndDrawing();
+        }
     }
 }
 
@@ -2592,12 +2615,31 @@ void wxGenericGrid::OnTextInPlace(wxCommandEvent& ev )
       wxGenericGrid *grid = this;
       wxGridCell *cell = grid->GetCell(grid->GetCursorRow(), grid->GetCursorColumn());
       if (cell && grid->CurrentCellVisible())
-	{
-	  m_inOnTextInPlace = TRUE;
-	  grid->GetTextItem()->SetValue( m_inPlaceTextItem->GetValue() );
-	  OnText( ev );    
-	  m_inOnTextInPlace = FALSE;
-	}
+        {
+          m_inOnTextInPlace = TRUE;
+          grid->GetTextItem()->SetValue( m_inPlaceTextItem->GetValue() );
+          OnText( ev );
+          m_inOnTextInPlace = FALSE;
+        }
+    }
+}
+
+void wxGenericGrid::OnTextInPlaceEnter(wxCommandEvent& WXUNUSED(ev) )
+{
+  // move the cursor down the current row (if possible)
+  // when the enter key has been pressed
+  //
+  if ( m_editable )
+    {
+      if ( GetCursorRow() < GetRows()-1 )
+        {
+          wxClientDC dc( this );
+          dc.BeginDrawing();
+          OnSelectCellImplementation(& dc,
+                                     GetCursorRow()+1,
+                                     GetCursorColumn() );
+          dc.EndDrawing();
+        }
     }
 }
 
@@ -2606,7 +2648,7 @@ void wxGenericGrid::OnGridScroll(wxScrollEvent& ev)
   static bool inScroll = FALSE;
 
   if ( inScroll )
-	return;
+        return;
 
   if ( m_editInPlace ) m_inPlaceTextItem->Show(FALSE);
 
@@ -2639,10 +2681,10 @@ void wxGenericGrid::OnGridScroll(wxScrollEvent& ev)
 
   if ( m_editInPlace && m_currentRectVisible )
     {
-      m_inPlaceTextItem->SetSize( m_currentRect.x-2, m_currentRect.y-2, 
-				  m_currentRect.width+4, m_currentRect.height+4 );
+      m_inPlaceTextItem->SetSize( m_currentRect.x-2, m_currentRect.y-2,
+                                  m_currentRect.width+4, m_currentRect.height+4 );
       m_inPlaceTextItem->Show( TRUE );
-      m_inPlaceTextItem->SetFocus();	  
+      m_inPlaceTextItem->SetFocus();
     }
 
   inScroll = FALSE;

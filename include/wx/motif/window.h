@@ -173,6 +173,10 @@ public:
     void ClearUpdateRegion() { m_updateRegion.Clear(); }
     void SetUpdateRegion(const wxRegion& region) { m_updateRegion = region; }
 
+    // sets the fore/background colour for the given widget
+    static void DoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
+    static void DoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
+
 protected:
     // event handlers (not virtual by design)
     void OnIdle(wxIdleEvent& event);
@@ -212,8 +216,6 @@ protected:
 public:
     // Change properties
     virtual void ChangeFont(bool keepOriginalSize = TRUE);             // Change to the current font (often overridden)
-    virtual void DoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
-    virtual void DoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
 
     // Change background and foreground colour using current background colour
     // setting (Motif generates foreground based on background)

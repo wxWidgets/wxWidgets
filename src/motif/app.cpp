@@ -32,7 +32,7 @@
 #include "wx/intl.h"
 
 #if wxUSE_THREADS
-#include "wx/thread.h"
+    #include "wx/thread.h"
 #endif
 
 #if wxUSE_WX_RESOURCES

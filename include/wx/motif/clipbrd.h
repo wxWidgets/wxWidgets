@@ -9,7 +9,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CLIPBRD_H_
@@ -20,11 +20,11 @@
 #endif
 
 #include "wx/defs.h"
-#include "wx/setup.h"
+
+#if wxUSE_CLIPBOARD
 
 #include "wx/dataobj.h"
 
-#include "wx/list.h"
 #include "wx/module.h"
 
 bool WXDLLEXPORT wxOpenClipboard();
@@ -48,35 +48,35 @@ class WXDLLEXPORT wxClipboard: public wxObject
   DECLARE_DYNAMIC_CLASS(wxClipboard)
 
 public:
- 
+
   wxClipboard();
   ~wxClipboard();
 
   // open the clipboard before SetData() and GetData()
   virtual bool Open();
-  
+
   // close the clipboard after SetData() and GetData()
   virtual void Close();
-  
+
   // can be called several times
   virtual bool SetData( wxDataObject *data );
 
-  // format available on the clipboard ? 
-  // supply ID if private format, the same as wxPrivateDataObject::SetId() 
+  // format available on the clipboard ?
+  // supply ID if private format, the same as wxPrivateDataObject::SetId()
   virtual bool IsSupported( wxDataFormat format );
-  
+
   // fill data with data on the clipboard (if available)
   virtual bool GetData( wxDataObject *data );
-  
+
   // clears wxTheClipboard and the system's clipboard if possible
   virtual void Clear();
 
   /// If primary == TRUE, use primary selection in all further ops,
   /// primary=FALSE resets it.
   inline void UsePrimarySelection(bool primary = TRUE) { m_usePrimary = primary; }
-    
- // implementation 
- 
+
+ // implementation
+
   bool              m_open;
   wxList            m_data;
   bool              m_usePrimary;
@@ -92,7 +92,7 @@ WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
 class wxClipboardModule: public wxModule
 {
   DECLARE_DYNAMIC_CLASS(wxClipboardModule)
-  
+
 public:
     wxClipboardModule() {}
     bool OnInit();
@@ -154,7 +154,7 @@ class WXDLLEXPORT wxClipboard : public wxObject
   char *GetClipboardData(char *format, long *length, long time);
 
   /* Get the clipboard client directly. Will be NULL if clipboard data
-     is a string, or if some other application owns the clipboard. 
+     is a string, or if some other application owns the clipboard.
      This can be useful for shortcutting data translation, if the
      clipboard user can check for a specific client. (This is used
      by the wxMediaEdit class.) */
@@ -169,6 +169,8 @@ WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
 
 #endif
   // Old clipboard class
+
+#endif // wxUSE_CLIPBOARD
 
 #endif
     // _WX_CLIPBRD_H_

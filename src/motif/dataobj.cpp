@@ -4,12 +4,16 @@
 // Author:      Julian Smart
 // Id:          $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
 #pragma implementation "dataobj.h"
 #endif
+
+#include "wx/defs.h"
+
+#if wxUSE_CLIPBOARD
 
 #include "wx/dataobj.h"
 #include "wx/app.h"
@@ -298,3 +302,4 @@ void wxPrivateDataObject::WriteData( const void *data, void *dest ) const
     memcpy( dest, data, GetSize() );
 }
 
+#endif // wxUSE_CLIPBOARD

@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/dialog.h
+// Purpose:     wxDialogBase class
+// Author:      Vadim Zeitlin
+// Modified by:
+// Created:     29.06.99
+// RCS-ID:      $Id$
+// Copyright:   (c) Vadim Zeitlin
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_DIALOG_H_BASE_
 #define _WX_DIALOG_H_BASE_
 
@@ -6,6 +17,12 @@
 
 class WXDLLEXPORT wxDialogBase : public wxPanel
 {
+public:
+    // the modal dialogs have a return code - usually the id of the last
+    // pressed button
+    void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
+    int GetReturnCode() const { return m_returnCode; }
+
 protected:
     // functions to help with dialog layout
     // ------------------------------------
@@ -43,6 +60,9 @@ protected:
     // as the height of just text which may be retrieved from
     // wxGetCharHeight())
     long GetStandardTextHeight();
+
+    // the return code from modal dialog
+    int m_returnCode;
 };
 
 #if defined(__WXMSW__)

@@ -14,6 +14,10 @@
 #pragma implementation "clipbrd.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_CLIPBOARD
+
 #include "wx/app.h"
 #include "wx/frame.h"
 #include "wx/bitmap.h"
@@ -529,3 +533,4 @@ char *wxClipboard::GetClipboardData(char *format, long *length, long time)
 }
 #endif
 
+#endif // wxUSE_CLIPBOARD
