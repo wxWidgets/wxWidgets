@@ -48,7 +48,6 @@ struct _GSocket
   int m_non_blocking;
   int m_server;
   int m_stream;
-  int m_oriented;
   int m_establishing;
   int m_reusable;
   struct timeval m_timeout;

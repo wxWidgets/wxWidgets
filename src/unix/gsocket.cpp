@@ -456,7 +456,6 @@ GSocketError GSocketBSD::SetServer()
   /* Initialize all fields */
   m_stream   = TRUE;
   m_server   = TRUE;
-  m_oriented = TRUE;
 
   /* Create the socket */
   m_fd = socket(m_local->m_realfamily, SOCK_STREAM, 0);
@@ -562,7 +561,6 @@ GSocket *GSocketBSD::WaitConnection()
   /* Initialize all fields */
   connection->m_server   = FALSE;
   connection->m_stream   = TRUE;
-  connection->m_oriented = TRUE;
 
   /* Setup the peer address field */
   connection->m_peer = GAddress_new();
@@ -639,7 +637,6 @@ GSocketError GSocketBSD::Connect(GSocketStream stream)
 
   /* Streamed or dgram socket? */
   m_stream   = (stream == GSOCK_STREAMED);
-  m_oriented = TRUE;
   m_server   = FALSE;
   m_establishing = FALSE;
 
@@ -749,7 +746,6 @@ GSocketError GSocketBSD::SetNonOriented()
   /* Initialize all fields */
   m_stream   = FALSE;
   m_server   = FALSE;
-  m_oriented = FALSE;
 
   /* Create the socket */
   m_fd = socket(m_local->m_realfamily, SOCK_DGRAM, 0);

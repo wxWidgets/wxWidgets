@@ -466,7 +466,6 @@ GSocketError GSocket_SetServer(GSocket *sck)
   /* Initialize all fields */
   sck->m_stream   = TRUE;
   sck->m_server   = TRUE;
-  sck->m_oriented = TRUE;
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_STREAM, 0);
@@ -572,7 +571,6 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
   /* Initialize all fields */
   connection->m_server   = FALSE;
   connection->m_stream   = TRUE;
-  connection->m_oriented = TRUE;
 
   /* Setup the peer address field */
   connection->m_peer = GAddress_new();
@@ -659,7 +657,6 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 
   /* Streamed or dgram socket? */
   sck->m_stream   = (stream == GSOCK_STREAMED);
-  sck->m_oriented = TRUE;
   sck->m_server   = FALSE;
   sck->m_establishing = FALSE;
 
@@ -769,7 +766,6 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
   /* Initialize all fields */
   sck->m_stream   = FALSE;
   sck->m_server   = FALSE;
-  sck->m_oriented = FALSE;
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_DGRAM, 0);
