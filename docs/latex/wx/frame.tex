@@ -40,6 +40,11 @@ z-order and not shown in the taskbar. Without this style, frames are created as 
 the parent window, and frame titles are shown in the taskbar. Windows and GTK.}
 \twocolitem{\windowstyle{wxFRAME\_TOOL\_WINDOW}}{Causes a frame with a small titlebar to be created;
 the frame title does not appear in the taskbar. Windows only.}
+\twocolitem{\windowstyle{wxFRAME\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
+caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
+a wxEVT\_HELP event if the user clicked on an application window. {\it Note} that this is an extended
+style and must be set by calling \helpref{SetExtraStyle}{wxwindowsetextrastyle} before Create is called (two-step construction).
+You cannot use this style together with wxMAXIMIZE\_BOX or wxMINIMIZE\_BOX.}
 \end{twocollist}
 
 The default frame style is for normal, resizeable frames. To create a frame

@@ -1397,7 +1397,7 @@ Find a menu item identifier associated with the given frame's menu bar.
 
 <wx/utils.h>
 
-\membersection{::wxFindWindowByLabel}
+\membersection{::wxFindWindowByLabel}\label{wxfindwindowbylabel}
 
 \func{wxWindow *}{wxFindWindowByLabel}{\param{const wxString\& }{label}, \param{wxWindow *}{parent=NULL}}
 
@@ -1424,6 +1424,20 @@ If no such named window is found, {\bf wxFindWindowByLabel} is called.
 \wxheading{Include files}
 
 <wx/utils.h>
+
+\membersection{::wxFindWindowAtPoint}\label{wxfindwindowatpoint}
+
+\func{wxWindow *}{wxFindWindowAtPoint}{\param{const wxPoint\& }{pt}}
+
+Find the deepest window at the given mouse position in screen coordinates,
+returning the window if found, or NULL if not.
+
+\membersection{::wxFindWindowAtPointer}\label{wxfindwindowatpointer}
+
+\func{wxWindow *}{wxFindWindowAtPointer}{\param{wxPoint\& }{pt}}
+
+Find the deepest window at the mouse pointer position, returning the window
+and current pointer position in screen coordinates.
 
 \membersection{::wxGetActiveWindow}\label{wxgetactivewindow}
 
@@ -1471,9 +1485,9 @@ under Windows, Linux and Solaris.
 
 <wx/utils.h>
 
-\membersection{::wxGetMousePosition}
+\membersection{::wxGetMousePosition}\label{wxgetmouseposition}
 
-\func{void}{wxGetMousePosition}{\param{int* }{x}, \param{int* }{y}}
+\func{wxPoint}{wxGetMousePosition}{\void}
 
 Returns the mouse position in screen coordinates.
 

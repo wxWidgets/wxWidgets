@@ -43,6 +43,10 @@ dialog to respond to system close events.
 \twocolitem{\windowstyle{wxSTAY\_ON\_TOP}}{The dialog stays on top of all other windows (Windows only).}
 \twocolitem{\windowstyle{wxNO\_3D}}{Under Windows, specifies that the child controls
 should not have 3D borders unless specified in the control.}
+\twocolitem{\windowstyle{wxDIALOG\_EX\_CONTEXTHELP}}{Under Windows, puts a query button on the
+caption. When pressed, Windows will go into a context-sensitive help mode and wxWindows will send
+a wxEVT\_HELP event if the user clicked on an application window. {\it Note} that this is an extended
+style and must be set by calling \helpref{SetExtraStyle}{wxwindowsetextrastyle} before Create is called (two-step construction).}
 \end{twocollist}
 
 Under Unix or Linux, MWM (the Motif Window Manager) or other window managers reckognizing
