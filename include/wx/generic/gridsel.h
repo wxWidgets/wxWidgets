@@ -11,7 +11,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_NEW_GRID
+#if wxUSE_GRID
 
 #ifndef __WXGRIDSEL_H__
 #define __WXGRIDSEL_H__
