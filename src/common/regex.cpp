@@ -49,7 +49,7 @@
 
 #include "wx/regex.h"
 
-#if wxUSE_UNICODE
+#ifdef wx_wchar
     #define regerror wx_regerror
     #define regfree wx_regfree
 #endif
@@ -146,17 +146,17 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode) const
     {
         len++;
 
-#if wxUSE_UNICODE
+#ifdef wx_wchar
         wxCharBuffer buf(len);
 
         (void)regerror(errorcode, &m_RegEx, (char *)buf.data(), len);
 
         msg = wxString(buf.data(), wxConvLibc);
-#else // !Unicode
+#else 
         (void)regerror(errorcode, &m_RegEx, msg.GetWriteBuf(len), len);
 
         msg.UngetWriteBuf();
-#endif // Unicode/!Unicode
+#endif 
     }
     else // regerror() returned 0
     {
@@ -187,7 +187,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
 
 
     // compile it
-#if wxUSE_UNICODE
+#ifdef wx_wchar
     int errorcode = wx_regcomp(&m_RegEx, expr, expr.Length(), REG_ADVANCED);
 #else
     int errorcode = regcomp(&m_RegEx, expr.mb_str(), flagsRE);
@@ -266,7 +266,7 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
     }
 
     // do match it
-#if wxUSE_UNICODE
+#ifdef wx_wchar
 	rm_detail_t rd;
     int rc = wx_regexec(&self->m_RegEx, str, wxStrlen(str), &rd, m_nMatches, m_Matches, flagsRE);
 #else
