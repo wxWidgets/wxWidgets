@@ -683,7 +683,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
 #endif
 
     // Create the tree control.
-    if ( !MSWCreateControl(WC_TREEVIEW, wstyle) )
+    if ( !MSWCreateControl(WC_TREEVIEW, wstyle, pos, size) )
         return false;
 
 #if wxUSE_COMCTL32_SAFELY
@@ -754,8 +754,6 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         SetStateImageList(&imagelistCheckboxes);
     }
 #endif // 0
-
-    SetSize(pos.x, pos.y, size.x, size.y);
 
     wxSetCCUnicodeFormat(GetHwnd());
 
