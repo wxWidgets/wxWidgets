@@ -253,11 +253,7 @@ long wxExecute( const wxString& command, int flags, wxProcess *process )
     argv[argc] = NULL;
 
     // do execute the command
-#if wxUSE_UNICODE
-    long lRc = -1;
-#else
     long lRc = wxExecute(argv, flags, process);
-#endif
 
     // clean up
     argc = 0;
