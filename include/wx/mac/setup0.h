@@ -433,6 +433,14 @@
 // wxWave class
 #define wxUSE_WAVE      1
 
+// XML parsing classes. Note that their API will change in the future, so
+// using wxXmlDocument and wxXmlNode in your app is not recommended.
+//
+// Default is 1
+//
+// Recommended setting: 1 (needed by XRC)
+#define wxUSE_XML       1
+
 // ----------------------------------------------------------------------------
 // Individual GUI controls
 // ----------------------------------------------------------------------------
