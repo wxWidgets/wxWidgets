@@ -110,7 +110,7 @@ public:
             CaptureMouse();
         }
         else {
-            ReleaseMouse();
+            if (HasCapture()) ReleaseMouse();
         }
         return retval;
     }

@@ -701,8 +701,8 @@ END_EVENT_TABLE()
 
 
 
-// #undef  wxSTC_USE_POPUP
-// #define wxSTC_USE_POPUP 0
+#undef  wxSTC_USE_POPUP
+#define wxSTC_USE_POPUP 0  // wxPopupWindow just doesn't work well in this case...
 
 // A window to place the listbox upon.  If wxPopupWindow is supported then
 // that will be used so the listbox can extend beyond the client area of the
