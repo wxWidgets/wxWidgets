@@ -1042,7 +1042,7 @@ wxRenameFile (const wxString& file1, const wxString& file2)
     return TRUE;
 #else
   // Normal system call
-  if (0 == wxRename (wxFNSTRINGCAST file1.fn_str(), wxFNSTRINGCAST file2.fn_str()))
+  if (0 == wxRename (wxCSTRINGCAST file1, wxCSTRINGCAST file2))
     return TRUE;
 #endif
   // Try to copy
