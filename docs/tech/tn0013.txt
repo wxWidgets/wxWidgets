@@ -8,6 +8,9 @@ This note explains what should be done, step by step, to prepare the packages
 for a wxGTK distribution. Note that the same instructions should be used for
 the other Unix-based ports including wxMotif, wxX11 and wxBase.
 
+See distrib/msw/makerpm for a script that embodies some of the steps
+below.
+
 1. Preparing the sources
 ------------------------
 
