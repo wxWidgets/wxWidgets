@@ -78,6 +78,9 @@ wxSize wxStaticText::DoGetBestSize() const
     }
     if ( m_label.Length() == 0 )
         bounds.h = 0 ;
+        
+    bounds.h += MacGetLeftBorderSize() + MacGetRightBorderSize() ;
+    bounds.v += MacGetTopBorderSize() + MacGetBottomBorderSize() ;    
     return wxSize(bounds.h, bounds.v);
 }
 
