@@ -715,8 +715,8 @@ void wxWindow::SubclassWin(
 
     wxAssociateWinWithHandle(hwnd, this);
 
-    m_fnOldWndProc = (WXFARPROC) ::WinSubclassWindow(hwnd, wxWndProc);
-    ::WinSetWindowULong(hwnd, QWS_USER, wxWndProc);
+    m_fnOldWndProc = (WXFARPROC) ::WinSubclassWindow(hwnd, (PFNWP)wxWndProc);
+    ::WinSetWindowULong(hwnd, QWS_USER, (ULONG)wxWndProc);
 } // end of wxWindow::SubclassWin
 
 void wxWindow::UnsubclassWin()
@@ -767,11 +767,11 @@ WXDWORD wxWindow::MakeExtendedStyle(
 //
 WXDWORD wxWindow::Determine3DEffects(
   WXDWORD                           dwDefaultBorderStyle
-, YBool*                            pbWant3D
+, bool*                             pbWant3D
 ) const
 {
-    WXDWORD                         dwStyle = 0L; 
-   
+    WXDWORD                         dwStyle = 0L;
+
     //
     // Native PM does not have any specialize 3D effects like WIN32 does
     //
@@ -853,7 +853,7 @@ void wxWindow::OnIdle(
 
             if (::WinGetKeyState(HWND_DESKTOP, VK_SHIFT) != 0)
                 nState |= VK_SHIFT;
-            if (::WinGetKeyState(HWND_DESKTOP, VK_CTRL) != 0;
+            if (::WinGetKeyState(HWND_DESKTOP, VK_CTRL) != 0);
                 nState |= VK_CTRL;
 
             wxMouseEvent            rEvent(wxEVT_LEAVE_WINDOW);
@@ -863,7 +863,7 @@ void wxWindow::OnIdle(
                            ,vPoint.y
                            ,nState
                           );
-            (void)GetEventHandler()->ProcessEvent(event);
+            (void)GetEventHandler()->ProcessEvent(rEvent);
         }
     }
     UpdateWindowUI();
@@ -911,7 +911,7 @@ void wxWindow::Refresh(
             RECTL                   vOs2Rect;
 
             vOs2Rect.xLeft   = pRect->x;
-            vOS2Rect.yTop    = pRect->y;
+            vOs2Rect.yTop    = pRect->y;
             vOs2Rect.xRight  = pRect->x + pRect->width;
             vOs2Rect.yBottom = pRect->y + pRect->height;
 
@@ -931,7 +931,7 @@ void wxWindow::SetDropTarget(
   wxDropTarget*                     pDropTarget
 )
 {
-    if (m_dropTarget != 0) 
+    if (m_dropTarget != 0)
     {
         m_dropTarget->Revoke(m_hWnd);
         delete m_dropTarget;
@@ -953,7 +953,7 @@ void wxWindow::DragAcceptFiles(
     HWND                            hWnd = GetHwnd();
 
     if (hWnd && bAccept)
-        ::DragAcceptDroppedFiles(hWnd, NULL, NULL, DO_COPY, 0L);
+        ::DrgAcceptDroppedFiles(hWnd, NULL, NULL, DO_COPY, 0L);
 } // end of wxWindow::DragAcceptFiles
 
 // ----------------------------------------------------------------------------
@@ -968,7 +968,7 @@ void wxWindow::DoSetToolTip(
 {
     wxWindowBase::DoSetToolTip(pTooltip);
 
-    if (m_pTooltip)
+    if (m_tooltip)
         m_tooltip->SetWindow(this);
 } // end of wxWindow::DoSetToolTip
 
@@ -979,7 +979,7 @@ void wxWindow::DoSetToolTip(
 // ---------------------------------------------------------------------------
 
 // Get total size
-void wxWindow::DoGetSize( 
+void wxWindow::DoGetSize(
   int*                              pWidth
 , int*                              pHeight
 ) const
@@ -1030,7 +1030,7 @@ void wxWindow::DoGetPosition(
         {
             RECTL                   vRect2;
 
-            ::WinQueryWindowRect(hParentWnd, vRect2);
+            ::WinQueryWindowRect(hParentWnd, &vRect2);
             vPoint.x -= vRect.xLeft;
             vPoint.y -= vRect.yBottom;
         }
@@ -1047,7 +1047,7 @@ void wxWindow::DoGetPosition(
 
     if (pX)
         *pX = vPoint.x;
-    if  y)
+    if  (pY)
         *pY = vPoint.y;
 } // end of wxWindow::DoGetPosition
 
@@ -1057,14 +1057,14 @@ void wxWindow::DoScreenToClient(
 ) const
 {
     HWND                            hWnd = GetHwnd();
-    RECTL                           vRect;
+    SWP                             vSwp;
 
-    ::WinQueryWindowPos(hWnd, &vRect);
-    
+    ::WinQueryWindowPos(hWnd, &vSwp);
+
     if (pX)
-        *pX -= vRect.xLeft;
+        *pX -= vSwp.x;
     if (pY)
-        *pY -= vRect.yBottom;
+        *pY -= vSwp.y;
 } // end of wxWindow::DoScreenToClient
 
 void wxWindow::DoClientToScreen(
@@ -1073,14 +1073,14 @@ void wxWindow::DoClientToScreen(
 ) const
 {
     HWND                            hWnd = GetHwnd();
-    RECTL                           vRect;
+    SWP                             vSwp;
 
-    ::WinQueryWindowPos(hWnd, &vRect);
+    ::WinQueryWindowPos(hWnd, &vSwp);
 
     if (pX)
-        *pX += vRect.xLeft;
+        *pX += vSwp.x;
     if (pY)
-        *pY += vRect.yBottom;
+        *pY += vSwp.y;
 } // end of wxWindow::DoClientToScreen
 
 //
@@ -1099,9 +1099,9 @@ void wxWindow::DoGetClientSize(
     hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
     ::WinQueryWindowRect(hWndClient, &vRect);
 
-    if (pX)
+    if (pWidth)
         *pWidth  = vRect.xRight;
-    if (pY)
+    if (pHeight)
         *pHeight = vRect.yTop;
 } // end of wxWindow::DoGetClientSize
 
@@ -1112,16 +1112,14 @@ void wxWindow::DoMoveWindow(
 , int                               nHeight
 )
 {
-    ::WinSetWindowPos(
-    if ( !::MoveWindow( GetHwnd()
-                       ,HWND_TOP
-                       ,(LONG)nX
-                       ,(LONG)nY
-                       ,(LONG)nWidth
-                       ,(LONG)nHeight
-                       ,SWP_SIZE | SWP_MOVE
-                       ,
-                      ))
+    if ( !::WinSetWindowPos( GetHwnd()
+                            ,HWND_TOP
+                            ,(LONG)nX
+                            ,(LONG)nY
+                            ,(LONG)nWidth
+                            ,(LONG)nHeight
+                            ,SWP_SIZE | SWP_MOVE
+                           ))
     {
         wxLogLastError("MoveWindow");
     }
@@ -1152,7 +1150,7 @@ void wxWindow::DoSetSize(
     int                             nCurrentY;
     int                             nCurrentWidth;
     int                             nCurrentHeight;
-    wxSize                          size(-1, -1);
+    wxSize                          vSize(-1, -1);
 
     GetPosition( &nCurrentX
                 ,&nCurrentY
@@ -1164,9 +1162,9 @@ void wxWindow::DoSetSize(
     //
     // ... and don't do anything (avoiding flicker) if it's already ok
     //
-    if ( nX == nCurrentX && 
+    if ( nX == nCurrentX &&
          nY == nCurrentY &&
-         nWidth == nCurrentWidth && 
+         nWidth == nCurrentWidth &&
          nHeight == nCurrentHeight
        )
     {
@@ -1175,7 +1173,7 @@ void wxWindow::DoSetSize(
 
     if (nX == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         nX = nCurrentX;
-    if (y == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (nY == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         nY = nCurrentY;
 
     AdjustForParentClientOrigin( nX
@@ -1236,7 +1234,7 @@ void wxWindow::DoSetClientSize(
     RECT                            vRect2;
     RECT                            vRect3;
 
-    hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
+    hClientWnd = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
     ::WinQueryWindowRect(hClientWnd, &vRect2);
 
     if (pParent)
@@ -1263,7 +1261,7 @@ void wxWindow::DoSetClientSize(
     if (pParent)
     {
         vPoint.x -= vRect3.xLeft;
-        vPoint.y -= vRect3.xBottom;
+        vPoint.y -= vRect3.yBottom;
     }
 
     DoMoveWindow( vPoint.x
@@ -1304,7 +1302,7 @@ void wxWindow::AdjustForParentClientOrigin(
         if (!(nSizeFlags & wxSIZE_NO_ADJUSTMENTS) && pParent)
         {
             wxPoint                 vPoint(pParent->GetClientAreaOrigin());
-            rX += vPoint.x; 
+            rX += vPoint.x;
             rY += vPoint.y;
         }
     }
@@ -1322,7 +1320,7 @@ int wxWindow::GetCharHeight() const
 
     hPs = ::WinGetPS(GetHwnd());
 
-    if(!GipQueryFontMetrics(hPs, sizeof(FONTMETIRCS), &vFontMetrics);
+    if(!GpiQueryFontMetrics(hPs, sizeof(FONTMETRICS), &vFontMetrics))
         return (0);
     else
         return(vFontMetrics.lMaxAscender + vFontMetrics.lMaxDescender);
@@ -1331,16 +1329,19 @@ int wxWindow::GetCharHeight() const
 
 int wxWindow::GetCharWidth() const
 {
+    HPS                             hPs;
+    FONTMETRICS                     vFontMetrics;
+
     hPs = ::WinGetPS(GetHwnd());
 
-    if(!GipQueryFontMetrics(hPs, sizeof(FONTMETIRCS), &vFontMetrics);
+    if(!GpiQueryFontMetrics(hPs, sizeof(FONTMETRICS), &vFontMetrics))
         return (0);
     else
         return(vFontMetrics.lAveCharWidth);
     ::WinReleasePS(hPs);
 } // end of wxWindow::GetCharWidth
 
-void wxWindow::GetTextExtent( 
+void wxWindow::GetTextExtent(
   const wxString&                   rString
 , int*                              pX
 , int*                              pY
