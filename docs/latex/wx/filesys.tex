@@ -89,6 +89,16 @@ f = fs -> OpenFile("hello.htm"); // opens file 'subdir/folder/hello.htm' !!
 
 Returns actual path (set by \helpref{ChangePathTo}{wxfilesystemchangepathto}).
 
+\membersection{wxFileSystem::FileNameToURL}\label{wxfilesystemfilenametourl}
+
+\func{static wxString}{FileNameToURL}{\param{wxFileName }{filename}}
+
+Converts filename into URL.
+
+\wxheading{See also}
+
+\helpref{wxFileSystem::URLToFileName}{wxfilesystemurltofilename},
+\helpref{wxFileName}{wxfilename}
 
 \membersection{wxFileSystem::FindFirst}\label{wxfilesystemfindfirst}
 
@@ -114,3 +124,14 @@ or NULL if failed. It first tries to open the file in relative scope
 (based on value passed to ChangePathTo() method) and then as an
 absolute path.
 
+\membersection{wxFileSystem::URLToFileName}\label{wxfilesystemurltofilename}
+
+\func{static wxFileName}{URLToFileName}{\param{const wxString& }{url}}
+
+Converts URL into well-formed filename. The URL must use {\tt file}
+protocol.
+
+\wxheading{See also}
+
+\helpref{wxFileSystem::FileNameToURL}{wxfilesystemfilenametourl},
+\helpref{wxFileName}{wxfilename}

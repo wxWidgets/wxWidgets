@@ -89,9 +89,9 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
 
     if (right.GetChar(0) == wxT('/')) right = right.Mid(1);
 
-    wxString leftFilename = wxFileSystem::URLToNativePath(left);
+    wxFileName leftFilename = wxFileSystem::URLToFileName(left);
 
-    s = new wxZipInputStream(leftFilename, right);
+    s = new wxZipInputStream(leftFilename.GetFullPath(), right);
     if (s && s->IsOk() )
     {
         return new wxFSFile(s,
@@ -137,7 +137,8 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
     }
 
     m_ZipFile = left;
-    m_Archive = (void*) unzOpen(m_ZipFile.mb_str());
+    wxString nativename = wxFileSystem::URLToFileName(m_ZipFile).GetFullPath();
+    m_Archive = (void*) unzOpen(nativename.mb_str());
     m_Pattern = right.AfterLast(wxT('/'));
     m_BaseDir = right.BeforeLast(wxT('/'));
 
