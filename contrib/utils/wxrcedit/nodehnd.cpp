@@ -44,19 +44,25 @@ void NodeInfo::Read(const wxString& filename)
     Node.Empty();
 
     wxPathList list;
+    // if modifying, don't forget to modify it in all places --
+    // search for wxINSTALL_PREFIX in editor.cpp
     list.Add(".");
     list.Add("./df");
-    #ifdef __UNIX__
+#ifdef __UNIX__ 
     list.Add(wxGetHomeDir() + "/.wxrcedit");
+    #ifdef wxINSTALL_PREFIX
+    list.Add(wxINSTALL_PREFIX "/share/wx/wxrcedit");
     #endif
+#endif
     
     wxString path = list.FindValidPath(filename);
     if (path.IsEmpty()) return;
     
     wxTextFile tf;
     tf.Open(path);
-    if (!tf.IsOpened()) return;
     
+    if (!tf.IsOpened()) return;
+
     for (size_t i = 0; i < tf.GetLineCount(); i++)
     {
         if (tf[i].IsEmpty() || tf[i][0] == '#') continue;
@@ -357,7 +363,7 @@ void NodeHandlerSizer::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNode 
         parent->AddChild(cnd);
     }
     
-    if (node->GetName() == "spacer")
+    if (node->GetName() == "spacer" || node->GetName() == "sizeritem")
     {
         if (insert_before)
             cnd->InsertChild(node, insert_before);
@@ -466,10 +472,17 @@ void NodeHandlerNotebook::InsertNode(wxXmlNode *parent, wxXmlNode *node, wxXmlNo
     }
     
     {
-        wxXmlNode *itemnode = new wxXmlNode(wxXML_ELEMENT_NODE, "notebookpage");
-        wxXmlNode *winnode = new wxXmlNode(wxXML_ELEMENT_NODE, "window");
-        itemnode->AddChild(winnode);
-        winnode->AddChild(node);
+        wxXmlNode *itemnode;
+        
+        if (node->GetName() == "notebookpage")
+            itemnode = node;
+        else
+        {
+            itemnode = new wxXmlNode(wxXML_ELEMENT_NODE, "notebookpage");
+            wxXmlNode *winnode = new wxXmlNode(wxXML_ELEMENT_NODE, "window");
+            itemnode->AddChild(winnode);
+            winnode->AddChild(node);
+        }
 
         if (insert_before)
             cnd->InsertChild(itemnode, insert_before);

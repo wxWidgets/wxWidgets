@@ -91,6 +91,8 @@ class EditorFrame : public wxFrame
         wxList m_Handlers;
 
         wxXmlNode *m_SelectedNode;
+        
+        wxXmlNode *m_Clipboard;
 
         wxString m_FileName;
         wxXmlDocument *m_Resource;
@@ -107,6 +109,9 @@ class EditorFrame : public wxFrame
         void OnPropSel(wxListEvent& event);
         void OnNewNode(wxCommandEvent& event);
         void OnRightClickTree(wxPoint pos);
+        void OnClipboardAction(wxCommandEvent& event);
+        
+        void DeleteSelectedNode();
 };
 
 
