@@ -90,7 +90,7 @@ void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
   wxNode *node = m_headers.Find(header);
 
   if (!node)
-    m_headers.Append(header.MakeUpper(), (wxObject *)(new wxString(h_data)));
+    m_headers.Append(header.Upper(), (wxObject *)(new wxString(h_data)));
   else {
     wxString *str = (wxString *)node->Data();
     (*str) = h_data;
