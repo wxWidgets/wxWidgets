@@ -37,7 +37,8 @@ GIZMOSDLL_OBJECTS =  \
 	$(OBJS)\gizmosdll_ledctrl.obj \
 	$(OBJS)\gizmosdll_multicell.obj \
 	$(OBJS)\gizmosdll_splittree.obj \
-	$(OBJS)\gizmosdll_statpict.obj
+	$(OBJS)\gizmosdll_statpict.obj \
+	$(OBJS)\gizmosdll_xh_statpict.obj
 GIZMOSLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_22)$(__DEBUGRUNTIME_17) /DWIN32 \
 	$(__DEBUGINFO_1) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos.pdb \
@@ -54,7 +55,8 @@ GIZMOSLIB_OBJECTS =  \
 	$(OBJS)\gizmoslib_ledctrl.obj \
 	$(OBJS)\gizmoslib_multicell.obj \
 	$(OBJS)\gizmoslib_splittree.obj \
-	$(OBJS)\gizmoslib_statpict.obj
+	$(OBJS)\gizmoslib_statpict.obj \
+	$(OBJS)\gizmoslib_xh_statpict.obj
 
 ### Conditionally set variables: ###
 
@@ -383,6 +385,9 @@ $(OBJS)\gizmosdll_splittree.obj: ../../src/gizmos\splittree.cpp
 $(OBJS)\gizmosdll_statpict.obj: ../../src/gizmos\statpict.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GIZMOSDLL_CXXFLAGS) $**
 
+$(OBJS)\gizmosdll_xh_statpict.obj: ../../src/gizmos\xh_statpict.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(GIZMOSDLL_CXXFLAGS) $**
+
 $(OBJS)\gizmoslib_dummy.obj: ../../src/gizmos\..\..\..\src\msw\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GIZMOSLIB_CXXFLAGS) /Ycwx/wxprec.h $**
 
@@ -402,5 +407,8 @@ $(OBJS)\gizmoslib_splittree.obj: ../../src/gizmos\splittree.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GIZMOSLIB_CXXFLAGS) $**
 
 $(OBJS)\gizmoslib_statpict.obj: ../../src/gizmos\statpict.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(GIZMOSLIB_CXXFLAGS) $**
+
+$(OBJS)\gizmoslib_xh_statpict.obj: ../../src/gizmos\xh_statpict.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GIZMOSLIB_CXXFLAGS) $**
 

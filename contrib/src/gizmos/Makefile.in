@@ -64,7 +64,8 @@ GIZMOSDLL_OBJECTS =  \
 	gizmosdll_ledctrl.o \
 	gizmosdll_multicell.o \
 	gizmosdll_splittree.o \
-	gizmosdll_statpict.o
+	gizmosdll_statpict.o \
+	gizmosdll_xh_statpict.o
 GIZMOSDLL_ODEP =  $(___pch_wxprec_gizmosdll_wx_wxprec_h_gch___depname)
 GIZMOSLIB_CXXFLAGS = $(__gizmoslib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -75,7 +76,8 @@ GIZMOSLIB_OBJECTS =  \
 	gizmoslib_ledctrl.o \
 	gizmoslib_multicell.o \
 	gizmoslib_splittree.o \
-	gizmoslib_statpict.o
+	gizmoslib_statpict.o \
+	gizmoslib_xh_statpict.o
 GIZMOSLIB_ODEP =  $(___pch_wxprec_gizmoslib_wx_wxprec_h_gch___depname)
 
 ### Conditionally set variables: ###
@@ -206,7 +208,7 @@ all: $(__gizmosdll___depname) $(__gizmoslib___depname)
 
 install: all $(__install_gizmosdll___depname) $(__install_gizmoslib___depname)
 	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-$(WX_RELEASE)$(WX_FLAVOUR)
-	for f in wx/gizmos/dynamicsash.h wx/gizmos/editlbox.h wx/gizmos/ledctrl.h wx/gizmos/multicell.h wx/gizmos/splittree.h wx/gizmos/statpict.h wx/gizmos/gizmos.h; do \
+	for f in wx/gizmos/dynamicsash.h wx/gizmos/editlbox.h wx/gizmos/ledctrl.h wx/gizmos/multicell.h wx/gizmos/splittree.h wx/gizmos/statpict.h wx/gizmos/xh_statpict.h wx/gizmos/gizmos.h; do \
 	if test ! -d $(DESTDIR)$(includedir)/wx-$(WX_RELEASE)$(WX_FLAVOUR)/`dirname $$f` ; then \
 	$(INSTALL_DIR) $(DESTDIR)$(includedir)/wx-$(WX_RELEASE)$(WX_FLAVOUR)/`dirname $$f`; \
 	fi; \
@@ -276,6 +278,9 @@ gizmosdll_splittree.o: $(srcdir)/splittree.cpp $(GIZMOSDLL_ODEP)
 gizmosdll_statpict.o: $(srcdir)/statpict.cpp $(GIZMOSDLL_ODEP)
 	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $(srcdir)/statpict.cpp
 
+gizmosdll_xh_statpict.o: $(srcdir)/xh_statpict.cpp $(GIZMOSDLL_ODEP)
+	$(CXXC) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $(srcdir)/xh_statpict.cpp
+
 gizmoslib_dynamicsash.o: $(srcdir)/dynamicsash.cpp $(GIZMOSLIB_ODEP)
 	$(CXXC) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $(srcdir)/dynamicsash.cpp
 
@@ -293,6 +298,9 @@ gizmoslib_splittree.o: $(srcdir)/splittree.cpp $(GIZMOSLIB_ODEP)
 
 gizmoslib_statpict.o: $(srcdir)/statpict.cpp $(GIZMOSLIB_ODEP)
 	$(CXXC) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $(srcdir)/statpict.cpp
+
+gizmoslib_xh_statpict.o: $(srcdir)/xh_statpict.cpp $(GIZMOSLIB_ODEP)
+	$(CXXC) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $(srcdir)/xh_statpict.cpp
 
 
 # Include dependency info, if present:

@@ -543,6 +543,10 @@ SOURCE=../../src/gizmos\..\..\..\src\msw\version.rc
 !ENDIF
 
 # End Source File
+# Begin Source File
+
+SOURCE=../../src/gizmos\xh_statpict.cpp
+# End Source File
 # End Group
 # End Target
 # End Project

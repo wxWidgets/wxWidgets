@@ -235,7 +235,8 @@ GIZMOSDLL_OBJECTS =  &
 	$(OBJS)\gizmosdll_ledctrl.obj &
 	$(OBJS)\gizmosdll_multicell.obj &
 	$(OBJS)\gizmosdll_splittree.obj &
-	$(OBJS)\gizmosdll_statpict.obj
+	$(OBJS)\gizmosdll_statpict.obj &
+	$(OBJS)\gizmosdll_xh_statpict.obj
 GIZMOSLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -250,7 +251,8 @@ GIZMOSLIB_OBJECTS =  &
 	$(OBJS)\gizmoslib_ledctrl.obj &
 	$(OBJS)\gizmoslib_multicell.obj &
 	$(OBJS)\gizmoslib_splittree.obj &
-	$(OBJS)\gizmoslib_statpict.obj
+	$(OBJS)\gizmoslib_statpict.obj &
+	$(OBJS)\gizmoslib_xh_statpict.obj
 
 
 all : $(OBJS)
@@ -317,6 +319,9 @@ $(OBJS)\gizmosdll_splittree.obj :  .AUTODEPEND ../../src/gizmos\splittree.cpp
 $(OBJS)\gizmosdll_statpict.obj :  .AUTODEPEND ../../src/gizmos\statpict.cpp
 	$(CXX) -zq -fo=$^@ $(GIZMOSDLL_CXXFLAGS) $<
 
+$(OBJS)\gizmosdll_xh_statpict.obj :  .AUTODEPEND ../../src/gizmos\xh_statpict.cpp
+	$(CXX) -zq -fo=$^@ $(GIZMOSDLL_CXXFLAGS) $<
+
 $(OBJS)\gizmoslib_dummy.obj :  .AUTODEPEND ../../src/gizmos\..\..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(GIZMOSLIB_CXXFLAGS) $<
 
@@ -336,5 +341,8 @@ $(OBJS)\gizmoslib_splittree.obj :  .AUTODEPEND ../../src/gizmos\splittree.cpp
 	$(CXX) -zq -fo=$^@ $(GIZMOSLIB_CXXFLAGS) $<
 
 $(OBJS)\gizmoslib_statpict.obj :  .AUTODEPEND ../../src/gizmos\statpict.cpp
+	$(CXX) -zq -fo=$^@ $(GIZMOSLIB_CXXFLAGS) $<
+
+$(OBJS)\gizmoslib_xh_statpict.obj :  .AUTODEPEND ../../src/gizmos\xh_statpict.cpp
 	$(CXX) -zq -fo=$^@ $(GIZMOSLIB_CXXFLAGS) $<
 
