@@ -39,7 +39,7 @@
 #include  <wx/config.h>
 
 // we must include (one of) these files for wxConfigBase::Create
-#if defined(__MSWIN__) && defined(wxCONFIG_WIN32_NATIVE)
+#if defined(__WXMSW__) && defined(wxCONFIG_WIN32_NATIVE)
   #ifdef __WIN32__
     #include  <wx/msw/regconf.h>
   #else  //WIN16
@@ -56,7 +56,8 @@
 // global and class static variables
 // ----------------------------------------------------------------------------
 
-wxConfigBase *wxConfigBase::ms_pConfig = NULL;
+wxConfigBase *wxConfigBase::ms_pConfig     = NULL;
+bool          wxConfigBase::ms_bAutoCreate = TRUE;
 
 // ============================================================================
 // implementation
@@ -75,17 +76,21 @@ wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
 
 wxConfigBase *wxConfigBase::Create()
 {
-  return ms_pConfig =
-  #if defined(__MSWIN__) && defined(wxCONFIG_WIN32_NATIVE)
-    #ifdef __WIN32__
-      new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
-    #else  //WIN16
-      #error "Sorry, no wxIniConfig yet..."
-      //new wxIniConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+  if ( ms_bAutoCreate && ms_pConfig == NULL ) {
+    ms_pConfig =
+    #if defined(__WXMSW__) && defined(wxCONFIG_WIN32_NATIVE)
+      #ifdef __WIN32__
+        new wxRegConfig(wxTheApp->GetVendorName() + '\\' 
+                        + wxTheApp->GetAppName());
+      #else  //WIN16
+        new wxIniConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+      #endif
+    #else // either we're under Unix or wish to use files even under Windows
+      new wxFileConfig(wxTheApp->GetAppName());
     #endif
-  #else // either we're under Unix or wish to use files even under Windows
-    new wxFileConfig(wxTheApp->GetAppName());
-  #endif
+  }
+
+  return ms_pConfig;
 }
 
 const char *wxConfigBase::Read(const char *szKey, const char *szDefault) const

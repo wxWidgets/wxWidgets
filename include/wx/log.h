@@ -74,7 +74,8 @@ public:
   bool HasPendingMessages() const { return m_bHasMessages; }
 
   // only one sink is active at each moment
-    // get current log target
+    // get current log target, will call wxApp::CreateLogTarget() to create one
+    // if 
   static wxLog *GetActiveTarget();
     // change log target, pLogger = NULL disables logging,
     // returns the previous log target
@@ -90,6 +91,9 @@ public:
   void SetTimeStampFormat(const char *szTF) { m_szTimeFormat = szTF; }
     // trace mask (see wxTraceXXX constants for details)
   static void SetTraceMask(wxTraceMask ulMask) { ms_ulTraceMask = ulMask; }
+    // should GetActiveTarget() try to create a new log object if the current
+    // is NULL?
+  static void DontCreateOnDemand() { ms_bAutoCreate = FALSE; }
 
   // accessors
     // gets the verbose status
@@ -119,8 +123,8 @@ protected:
 private:
   // static variables
   // ----------------
-  static wxLog      *ms_pLogger;       // currently active log sink
-  static bool        ms_bInitialized;  // any log targets created?
+  static wxLog      *ms_pLogger;      // currently active log sink
+  static bool        ms_bAutoCreate;  // automatically create new log targets?
   static wxTraceMask ms_ulTraceMask;  // controls wxLogTrace behaviour
 };
 

@@ -124,7 +124,7 @@ wxString wxFileConfig::GetLocalDir()
         strDir << szHome;
     #else   // Win16
       // Win16 has no idea about home, so use the current directory instead
-      strDir = ".\\"; 
+      strDir = ".\\";
     #endif  // WIN16/32
   #endif  // UNIX/Win
 
@@ -222,16 +222,13 @@ wxFileConfig::wxFileConfig(const wxString& strLocal, const wxString& strGlobal)
   // if the path is not absolute, prepend the standard directory to it
 
   if ( !strLocal.IsEmpty() && !wxIsPathSeparator(strLocal[0u]) )
-  {
-     m_strLocalFile = GetLocalDir();
-     m_strLocalFile << strLocal;
-  }
-  
+    m_strLocalFile = GetLocalDir();
+  m_strLocalFile << strLocal;
+
   if ( !strGlobal.IsEmpty() && !wxIsPathSeparator(strGlobal[0u]) )
-  {
-     m_strGlobalFile = GetGlobalDir();
-     m_strGlobalFile << strGlobal;
-  }
+    m_strGlobalFile = GetGlobalDir();
+  m_strGlobalFile << strGlobal;
+
   Init();
 }
 
@@ -671,9 +668,6 @@ bool wxFileConfig::DeleteAll()
 {
   CleanUp();
 
-  m_strLocalFile = m_strGlobalFile = "";
-  Init();
-
   const char *szFile = m_strLocalFile;
 
   if ( remove(szFile) == -1 )
@@ -682,6 +676,9 @@ bool wxFileConfig::DeleteAll()
   szFile = m_strGlobalFile;
   if ( remove(szFile) )
     wxLogSysError(_("can't delete system configuration file '%s'"), szFile);
+
+  m_strLocalFile = m_strGlobalFile = "";
+  Init();
 
   return TRUE;
 }

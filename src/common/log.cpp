@@ -216,19 +216,22 @@ wxLog::wxLog()
 
 wxLog *wxLog::GetActiveTarget()
 {
-  if ( !ms_bInitialized ) {
+  if ( ms_bAutoCreate && ms_pLogger == NULL ) {
     // prevent infinite recursion if someone calls wxLogXXX() from
     // wxApp::CreateLogTarget()
-    ms_bInitialized = TRUE;
+    static bool s_bInGetActiveTarget = FALSE;
+    if ( !s_bInGetActiveTarget ) {
+      s_bInGetActiveTarget = TRUE;
 
-    #ifdef  WX_TEST_MINIMAL
-      ms_pLogger = new wxLogStderr;
-    #else
-      // ask the application to create a log target for us
-      ms_pLogger = wxTheApp->CreateLogTarget();
-    #endif
+      #ifdef  WX_TEST_MINIMAL
+        ms_pLogger = new wxLogStderr;
+      #else
+        // ask the application to create a log target for us
+        ms_pLogger = wxTheApp->CreateLogTarget();
+      #endif
 
-    // do nothing if it fails - what can we do?
+      // do nothing if it fails - what can we do?
+    }
   }
 
   return ms_pLogger;
@@ -239,8 +242,6 @@ wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
   // flush the old messages before changing
   if ( ms_pLogger != NULL )
     ms_pLogger->Flush();
-
-  ms_bInitialized = TRUE;
 
   wxLog *pOldLogger = ms_pLogger;
   ms_pLogger = pLogger;
@@ -705,7 +706,7 @@ wxLogWindow::~wxLogWindow()
 // static variables
 // ----------------------------------------------------------------------------
 wxLog      *wxLog::ms_pLogger      = NULL;
-bool        wxLog::ms_bInitialized = FALSE;
+bool        wxLog::ms_bAutoCreate  = TRUE;
 wxTraceMask wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 
 // ----------------------------------------------------------------------------

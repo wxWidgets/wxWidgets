@@ -88,13 +88,16 @@ public:
   // static functions
     // sets the config object, returns the previous pointer
   static wxConfigBase *Set(wxConfigBase *pConfig);
-    // get the config object, creates it on demand
+    // get the config object, creates it on demand unless DontCreateOnDemand
+    // was called
   static wxConfigBase *Get() { if ( !ms_pConfig ) Create(); return ms_pConfig; }
     // create a new config object: this function will create the "best"
     // implementation of wxConfig available for the current platform, see
     // comments near definition wxCONFIG_WIN32_NATIVE for details. It returns
     // the created object and also sets it as ms_pConfig.
   static wxConfigBase *Create();
+    // should Get() try to create a new log object if the current one is NULL?
+  static void DontCreateOnDemand() { ms_bAutoCreate = FALSE; }
 
   // ctor & virtual dtor
     // environment variable expansion is on by default
@@ -211,6 +214,7 @@ private:
 
   // static variables
   static wxConfigBase *ms_pConfig;
+  static bool          ms_bAutoCreate;
 };
 
 // ----------------------------------------------------------------------------
@@ -229,3 +233,4 @@ private:
 #endif
 
 #endif  //_wxCONFIG_H
+
