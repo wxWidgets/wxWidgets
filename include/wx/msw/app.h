@@ -81,7 +81,7 @@ public:
     static bool UnregisterWindowClasses();
 
     // Convert Windows to argc, argv style
-    void ConvertToStandardCommandArgs(char* p);
+    void ConvertToStandardCommandArgs(const char* p);
 
     // message processing
     // ------------------

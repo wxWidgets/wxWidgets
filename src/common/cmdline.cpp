@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/cmdline.h"
+
 #if wxUSE_CMDLINE_PARSER
 
 #ifndef WX_PRECOMP
@@ -42,7 +44,6 @@
 #include <ctype.h>
 
 #include "wx/datetime.h"
-#include "wx/cmdline.h"
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -201,44 +202,9 @@ void wxCmdLineParserData::SetArguments(const wxString& cmdLine)
 
     m_arguments.Add(wxTheApp->GetAppName());
 
-    // Break up string
-    // Treat strings enclosed in double-quotes as single arguments
-    int i = 0;
-    int len = cmdLine.Length();
-    while (i < len)
-    {
-        // Skip whitespace
-        while ((i < len) && wxIsspace(cmdLine.GetChar(i)))
-            i ++;
+    wxArrayString args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
 
-        if (i < len)
-        {
-            if (cmdLine.GetChar(i) == wxT('"')) // We found the start of a string
-            {
-                i ++;
-                int first = i;
-                while ((i < len) && (cmdLine.GetChar(i) != wxT('"')))
-                    i ++;
-
-                wxString arg(cmdLine.Mid(first, (i - first)));
-
-                m_arguments.Add(arg);
-
-                if (i < len)
-                    i ++; // Skip past 2nd quote
-            }
-            else // Unquoted argument
-            {
-                int first = i;
-                while ((i < len) && !wxIsspace(cmdLine.GetChar(i)))
-                    i ++;
-
-                wxString arg(cmdLine.Mid(first, (i - first)));
-
-                m_arguments.Add(arg);
-            }
-        }
-    }
+    WX_APPEND_ARRAY(m_arguments, args);
 }
 
 int wxCmdLineParserData::FindOption(const wxString& name)
@@ -964,7 +930,7 @@ void wxCmdLineParser::Usage()
 }
 
 // ----------------------------------------------------------------------------
-// global functions
+// private functions
 // ----------------------------------------------------------------------------
 
 static wxString GetTypeName(wxCmdLineParamType type)
@@ -985,3 +951,96 @@ static wxString GetTypeName(wxCmdLineParamType type)
 }
 
 #endif // wxUSE_CMDLINE_PARSER
+
+// ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
+
+/* static */
+wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxChar *p)
+{
+    wxArrayString args;
+
+    wxString arg;
+    arg.reserve(1024);
+
+    bool isInsideQuotes = FALSE;
+    for ( ;; )
+    {
+        // skip white space
+        while ( *p == _T(' ') || *p == _T('\t') )
+            p++;
+
+        // anything left?
+        if ( *p == _T('\0') )
+            break;
+
+        // parse this parameter
+        arg.clear();
+        for ( ;; p++ )
+        {
+            // do we have a (lone) backslash?
+            bool isQuotedByBS = FALSE;
+            while ( *p == _T('\\') )
+            {
+                p++;
+
+                // if we have 2 backslashes in a row, output one
+                if ( isQuotedByBS )
+                {
+                    arg += _T('\\');
+                    isQuotedByBS = FALSE;
+                }
+                else // the next char is quoted
+                {
+                    isQuotedByBS = TRUE;
+                }
+            }
+
+            bool skipChar = FALSE,
+                 endParam = FALSE;
+            switch ( *p )
+            {
+                case _T('"'):
+                    if ( !isQuotedByBS )
+                    {
+                        // don't put the quote itself in the arg
+                        skipChar = TRUE;
+
+                        isInsideQuotes = !isInsideQuotes;
+                    }
+                    //else: insert a literal quote
+
+                    break;
+
+                case _T(' '):
+                case _T('\t'):
+                    if ( isInsideQuotes )
+                    {
+                        // preserve it, skip endParam below
+                        break;
+                    }
+                    //else: fall through
+
+                case _T('\0'):
+                    endParam = TRUE;
+                    break;
+            }
+
+            // end of argument?
+            if ( endParam )
+                break;
+
+            // otherwise copy this char to arg
+            if ( !skipChar )
+            {
+                arg += *p;
+            }
+        }
+
+        args.Add(arg);
+    }
+
+    return args;
+}
+

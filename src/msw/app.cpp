@@ -45,9 +45,10 @@
     #include "wx/dynarray.h"
     #include "wx/wxchar.h"
     #include "wx/icon.h"
+    #include "wx/log.h"
 #endif
 
-#include "wx/log.h"
+#include "wx/cmdline.h"
 #include "wx/module.h"
 
 #include "wx/msw/private.h"
@@ -548,73 +549,28 @@ bool wxApp::UnregisterWindowClasses()
 // Convert Windows to argc, argv style
 // ---------------------------------------------------------------------------
 
-void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
+void wxApp::ConvertToStandardCommandArgs(const char* lpCmdLine)
 {
-    wxStringList args;
+    // break the command line in words
+    wxArrayString args =
+        wxCmdLineParser::ConvertStringToArgs(wxConvertMB2WX(lpCmdLine));
 
-    wxString cmdLine(lpCmdLine);
-    int count = 0;
+    // +1 here for the program name
+    argc = args.GetCount() + 1;
 
-    // Get application name
-    wxChar name[260]; // 260 is MAX_PATH value from windef.h
-    ::GetModuleFileName(wxhInstance, name, WXSIZEOF(name));
+    // and +1 here for the terminating NULL
+    argv = new wxChar *[argc + 1];
 
-    args.Add(name);
-    count++;
+    argv[0] = new wxChar[260]; // 260 is MAX_PATH value from windef.h
+    ::GetModuleFileName(wxhInstance, argv[0], 260);
 
-    wxStrcpy(name, wxFileNameFromPath(name));
-    wxStripExtension(name);
-    wxTheApp->SetAppName(name);
-
-    // Break up string
-    // Treat strings enclosed in double-quotes as single arguments
-    int i = 0;
-    int len = cmdLine.Length();
-    while (i < len)
+    for ( int i = 1; i < argc; i++ )
     {
-        // Skip whitespace
-        while ((i < len) && wxIsspace(cmdLine.GetChar(i)))
-            i ++;
-
-        if (i < len)
-        {
-            if (cmdLine.GetChar(i) == wxT('"')) // We found the start of a string
-            {
-                i ++;
-                int first = i;
-                while ((i < len) && (cmdLine.GetChar(i) != wxT('"')))
-                    i ++;
-
-                wxString arg(cmdLine.Mid(first, (i - first)));
-
-                args.Add(arg);
-                count ++;
-
-                if (i < len)
-                    i ++; // Skip past 2nd quote
-            }
-            else // Unquoted argument
-            {
-                int first = i;
-                while ((i < len) && !wxIsspace(cmdLine.GetChar(i)))
-                    i ++;
-
-                wxString arg(cmdLine.Mid(first, (i - first)));
-
-                args.Add(arg);
-                count ++;
-            }
-        }
+        argv[i] = copystring(args[i - 1]);
     }
 
-    wxTheApp->argv = new wxChar*[count + 1];
-    for (i = 0; i < count; i++)
-    {
-        wxString arg(args[i]);
-        wxTheApp->argv[i] = copystring((const wxChar*)arg);
-    }
-    wxTheApp->argv[count] = NULL; // argv[] is a NULL-terminated list
-    wxTheApp->argc = count;
+    // argv[] must be NULL-terminated
+    argv[argc] = NULL;
 }
 
 //// Cleans up any wxWindows internal structures left lying around

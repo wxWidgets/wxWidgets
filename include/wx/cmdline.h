@@ -191,8 +191,11 @@ public:
     // gets the value of Nth parameter (as string only for now)
     wxString GetParam(size_t n = 0u) const;
 
-	// Resets switches and options
-	void Reset();
+    // Resets switches and options
+    void Reset();
+
+    // break down the command line in arguments
+    static wxArrayString ConvertStringToArgs(const wxChar *cmdline);
 
 private:
     // common part of all ctors
@@ -201,6 +204,17 @@ private:
     struct wxCmdLineParserData *m_data;
 };
 
-#endif // wxUSE_CMDLINE_PARSER
+#else // !wxUSE_CMDLINE_PARSER
+
+// this function is always available (even if !wxUSE_CMDLINE_PARSER) because it
+// is used by wxWin itself under Windows
+class WXDLLEXPORT wxCmdLineParser
+{
+public:
+    static wxArrayString ConvertStringToArgs(const wxChar *cmdline);
+};
+
+#endif // wxUSE_CMDLINE_PARSER/!wxUSE_CMDLINE_PARSER
 
 #endif // _WX_CMDLINE_H_
+

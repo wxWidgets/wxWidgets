@@ -39,42 +39,46 @@
 // conditional compilation
 // ----------------------------------------------------------------------------
 
-// what to test (in alphabetic order)?
-
-//#define TEST_ARRAYS
-//#define TEST_CHARSET
-//#define TEST_CMDLINE
-//#define TEST_DATETIME
-//#define TEST_DIR
-//#define TEST_DLLLOADER
-//#define TEST_ENVIRON
-//#define TEST_EXECUTE
-//#define TEST_FILE
-#define TEST_FILECONF
-//#define TEST_FILENAME
-//#define TEST_FILETIME
-//#define TEST_FTP
-//#define TEST_HASH
-//#define TEST_INFO_FUNCTIONS
-//#define TEST_LIST
-//#define TEST_LOCALE
-//#define TEST_LOG
-//#define TEST_LONGLONG
-//#define TEST_MIME
-//#define TEST_PATHLIST
-//#define TEST_REGCONF
-//#define TEST_REGEX
-//#define TEST_REGISTRY
-//#define TEST_SNGLINST
-//#define TEST_SOCKETS
-//#define TEST_STREAMS
-//#define TEST_STRINGS
-//#define TEST_THREADS
-//#define TEST_TIMER
-//#define TEST_VCARD            -- don't enable this (VZ)
-//#define TEST_WCHAR
-//#define TEST_ZIP
-//#define TEST_ZLIB
+// what to test (in alphabetic order)? uncomment the line below to do all tests
+//#define TEST_ALL
+#ifdef TEST_ALL
+    #define TEST_ARRAYS
+    #define TEST_CHARSET
+    #define TEST_CMDLINE
+    #define TEST_DATETIME
+    #define TEST_DIR
+    #define TEST_DLLLOADER
+    #define TEST_ENVIRON
+    #define TEST_EXECUTE
+    #define TEST_FILE
+    #define TEST_FILECONF
+    #define TEST_FILENAME
+    #define TEST_FILETIME
+    #define TEST_FTP
+    #define TEST_HASH
+    #define TEST_INFO_FUNCTIONS
+    #define TEST_LIST
+    #define TEST_LOCALE
+    #define TEST_LOG
+    #define TEST_LONGLONG
+    #define TEST_MIME
+    #define TEST_PATHLIST
+    #define TEST_REGCONF
+    #define TEST_REGEX
+    #define TEST_REGISTRY
+    #define TEST_SNGLINST
+    #define TEST_SOCKETS
+    #define TEST_STREAMS
+    #define TEST_STRINGS
+    #define TEST_THREADS
+    #define TEST_TIMER
+    // #define TEST_VCARD            -- don't enable this (VZ)
+    #define TEST_WCHAR
+    #define TEST_ZIP
+    #define TEST_ZLIB
+#else
+    #define TEST_CMDLINE
+#endif
 
 #ifdef TEST_SNGLINST
     #include "wx/snglinst.h"
@@ -178,6 +182,8 @@ static void TestCharset()
 #include "wx/cmdline.h"
 #include "wx/datetime.h"
 
+#if wxUSE_CMDLINE_PARSER
+
 static void ShowCmdLine(const wxCmdLineParser& parser)
 {
     wxString s = "Input files: ";
@@ -207,6 +213,32 @@ static void ShowCmdLine(const wxCmdLineParser& parser)
         s << "Project:\t" << strVal << '\n';
 
     wxLogMessage(s);
+}
+
+#endif // wxUSE_CMDLINE_PARSER
+
+static void TestCmdLineConvert()
+{
+    static const char *cmdlines[] =
+    {
+        "arg1 arg2",
+        "-a \"-bstring 1\" -c\"string 2\" \"string 3\"",
+        "literal \\\" and \"\"",
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(cmdlines); n++ )
+    {
+        const char *cmdline = cmdlines[n];
+        printf("Parsing: %s\n", cmdline);
+        wxArrayString args = wxCmdLineParser::ConvertStringToArgs(cmdline);
+
+        size_t count = args.GetCount();
+        printf("\targc = %u\n", count);
+        for ( size_t arg = 0; arg < count; arg++ )
+        {
+            printf("\targv[%u] = %s\n", arg, args[arg]);
+        }
+    }
 }
 
 #endif // TEST_CMDLINE
@@ -4944,6 +4976,9 @@ int main(int argc, char **argv)
 #endif // TEST_CHARSET
 
 #ifdef TEST_CMDLINE
+    TestCmdLineConvert();
+
+#if wxUSE_CMDLINE_PARSER
     static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
         { wxCMD_LINE_SWITCH, _T("h"), _T("help"), "show this help message",
@@ -4984,6 +5019,8 @@ int main(int argc, char **argv)
             wxLogMessage("Syntax error detected, aborting.");
             break;
     }
+#endif // wxUSE_CMDLINE_PARSER
+
 #endif // TEST_CMDLINE
 
 #ifdef TEST_STRINGS
