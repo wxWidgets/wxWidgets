@@ -756,8 +756,6 @@ void wxHtmlHelpFrame::CreateContents()
             imaged[it->m_Level] = TRUE;
         }
     }
-
-    m_ContentsBox->Expand(roots[0]);
 }
 
 
