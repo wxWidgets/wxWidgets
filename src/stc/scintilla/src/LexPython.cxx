@@ -33,6 +33,13 @@ static void ClassifyWordPy(unsigned int start, unsigned int end, WordList &keywo
 		chAttr = SCE_P_NUMBER;
 	else if (keywords.InList(s))
 		chAttr = SCE_P_WORD;
+	// make sure that dot-qualifiers inside the word are lexed correct
+	else for (unsigned int i = 0; i < end - start + 1; i++) {
+		if (styler[start + i] == '.') {
+			styler.ColourTo(start + i - 1, chAttr);
+			styler.ColourTo(start + i, SCE_P_OPERATOR);
+		}
+	}
 	styler.ColourTo(end, chAttr);
 	strcpy(prevWord, s);
 }

@@ -113,9 +113,10 @@ public:
 	bool CanUndo() { return cb.CanUndo(); }
 	bool CanRedo() { return cb.CanRedo(); }
 	void DeleteUndoHistory() { cb.DeleteUndoHistory(); }
-	undoCollectionType SetUndoCollection(undoCollectionType collectUndo) {
+	bool SetUndoCollection(bool collectUndo) {
 		return cb.SetUndoCollection(collectUndo);
 	}
+	bool IsCollectingUndo() { return cb.IsCollectingUndo(); }
 	void BeginUndoAction() { cb.BeginUndoAction(); }
 	void EndUndoAction() { cb.EndUndoAction(); }
 	void SetSavePoint();
@@ -124,9 +125,11 @@ public:
 	int GetLineIndentation(int line);
 	void SetLineIndentation(int line, int indent);
 	int GetLineIndentPosition(int line);
+	int GetColumn(int position);
 	void Indent(bool forwards, int lineBottom, int lineTop);
 	void ConvertLineEnds(int eolModeSet);
 	void SetReadOnly(bool set) { cb.SetReadOnly(set); }
+	bool IsReadOnly() { return cb.IsReadOnly(); }
 
 	void InsertChar(int pos, char ch);
 	void InsertString(int position, const char *s);
@@ -153,6 +156,7 @@ public:
 
 	int SetLevel(int line, int level);
 	int GetLevel(int line) { return cb.GetLevel(line); }
+	void ClearLevels() { cb.ClearLevels(); }
 	int GetLastChild(int lineParent, int level=-1);
 	int GetFoldParent(int line);
 
@@ -160,8 +164,9 @@ public:
 	int ExtendWordSelect(int pos, int delta);
 	int NextWordStart(int pos, int delta);
 	int Length() { return cb.Length(); }
-	long FindText(int minPos, int maxPos, const char *s, bool caseSensitive, bool word);
-	long FindText(WORD iMessage,WPARAM wParam,LPARAM lParam);
+	long FindText(int minPos, int maxPos, const char *s, 
+		bool caseSensitive, bool word, bool wordStart);
+	long FindText(int iMessage, unsigned long wParam, long lParam);
 	int LinesTotal();
 	
 	void ChangeCase(Range r, bool makeUpperCase);
@@ -186,6 +191,8 @@ public:
 private:
 	bool IsDBCS(int pos);
 	bool IsWordChar(unsigned char ch);
+	bool IsWordStartAt(int pos);
+	bool IsWordEndAt(int pos);
 	bool IsWordAt(int start, int end);
 	void ModifiedAt(int pos);
 	

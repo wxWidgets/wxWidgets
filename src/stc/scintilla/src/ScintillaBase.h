@@ -47,13 +47,15 @@ protected:
 	
 	virtual void AddCharUTF(char *s, unsigned int len);
 	void Command(int cmdId);
-	virtual int KeyCommand(UINT iMessage);
+	virtual void CancelModes();
+	virtual int KeyCommand(unsigned int iMessage);
 	
 	void AutoCompleteStart(int lenEntered, const char *list);
 	void AutoCompleteCancel();
 	void AutoCompleteMove(int delta);
 	void AutoCompleteChanged(char ch=0);
-	void AutoCompleteCompleted();
+	void AutoCompleteCompleted(char fillUp='\0');
+	void AutoCompleteMoveToCurrentWord();
 
 	virtual void CreateCallTipWindow(PRectangle rc) = 0;
 		
@@ -65,7 +67,7 @@ protected:
 	virtual void NotifyStyleToNeeded(int endStyleNeeded);
 public:
 	// Public so scintilla_send_message can use it
-	virtual LRESULT WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam);
+	virtual long WndProc(unsigned int iMessage, unsigned long wParam, long lParam);
 };
 
 #endif

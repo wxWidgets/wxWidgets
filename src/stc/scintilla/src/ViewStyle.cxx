@@ -69,10 +69,12 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	selforeground.desired = source.selforeground.desired;
 	selbackset = source.selbackset;
 	selbackground.desired = source.selbackground.desired;
+	selbackground2.desired = source.selbackground2.desired;
 	selbar.desired = source.selbar.desired;
 	selbarlight.desired = source.selbarlight.desired;
 	caretcolour.desired = source.caretcolour.desired;
 	edgecolour.desired = source.edgecolour.desired;
+	edgeState = source.edgeState;
 	leftMarginWidth = source.leftMarginWidth;
 	rightMarginWidth = source.rightMarginWidth;
 	for (int i=0;i < margins; i++) {
@@ -83,6 +85,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	fixedColumnWidth = source.fixedColumnWidth;
 	zoomLevel = source.zoomLevel;
 	viewWhitespace = source.viewWhitespace;
+	viewIndentationGuides = source.viewIndentationGuides;
 	viewEOL = source.viewEOL;
 	showMarkedLines = source.showMarkedLines;		
 }
@@ -111,6 +114,7 @@ void ViewStyle::Init() {
 	selforeground.desired = Colour(0xff, 0, 0);
 	selbackset = true;
 	selbackground.desired = Colour(0xc0, 0xc0, 0xc0);
+	selbackground2.desired = Colour(0xb0, 0xb0, 0xb0);
 	selbar.desired = Platform::Chrome();
 	selbarlight.desired = Platform::ChromeHighlight();
 	styles[STYLE_LINENUMBER].fore.desired = Colour(0, 0, 0);
@@ -118,6 +122,7 @@ void ViewStyle::Init() {
 	//caretcolour.desired = Colour(0xff, 0, 0);
 	caretcolour.desired = Colour(0, 0, 0);
 	edgecolour.desired = Colour(0xc0, 0xc0, 0xc0);
+	edgeState = EDGE_NONE;
 	
 	leftMarginWidth = 1;
 	rightMarginWidth = 1;
@@ -142,7 +147,8 @@ void ViewStyle::Init() {
 			maskInLine &= ~ms[margin].mask;
 	}
 	zoomLevel = 0;
-	viewWhitespace = false;
+	viewWhitespace = wsInvisible;
+	viewIndentationGuides = false;
 	viewEOL = false;
 	showMarkedLines = true;
 }
@@ -162,6 +168,7 @@ void ViewStyle::RefreshColourPalette(Palette &pal, bool want) {
 	}
 	pal.WantFind(selforeground, want);
 	pal.WantFind(selbackground, want);
+	pal.WantFind(selbackground2, want);
 	pal.WantFind(selbar, want);
 	pal.WantFind(selbarlight, want);
 	pal.WantFind(caretcolour, want);
@@ -203,7 +210,7 @@ void ViewStyle::ResetDefaultStyle() {
 	styles[STYLE_DEFAULT].Clear(Colour(0,0,0), Colour(0xff,0xff,0xff),
 	        Platform::DefaultFontSize(), fontNames.Save(Platform::DefaultFont()), 
 		SC_CHARSET_DEFAULT,
-		false, false, false, false);
+		false, false, false, false, true);
 }
 
 void ViewStyle::ClearStyles() {
@@ -219,7 +226,8 @@ void ViewStyle::ClearStyles() {
 				styles[STYLE_DEFAULT].bold, 
 				styles[STYLE_DEFAULT].italic,
 				styles[STYLE_DEFAULT].eolFilled,
-				styles[STYLE_DEFAULT].underline);
+				styles[STYLE_DEFAULT].underline,
+				styles[STYLE_DEFAULT].visible);
 		}
 	}
 	styles[STYLE_LINENUMBER].back.desired = Platform::Chrome();

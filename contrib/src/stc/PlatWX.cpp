@@ -456,7 +456,25 @@ ListBox::~ListBox() {
 void ListBox::Create(Window &parent, int ctrlID) {
     id = new wxListBox(parent.id, ctrlID, wxDefaultPosition, wxDefaultSize,
                        0, NULL, wxLB_SINGLE | wxLB_SORT);
-    ((wxListBox*)id)->Show(FALSE);
+}
+
+PRectangle ListBox::GetDesiredRect() {
+    wxSize sz = ((wxListBox*)id)->GetBestSize();
+    PRectangle rc;
+    rc.top = 0;
+    rc.left = 0;
+    rc.right = sz.x;
+    rc.bottom = sz.y;
+
+    return rc;
+}
+
+void ListBox::SetAverageCharWidth(int width) {
+    aveCharWidth = width;
+}
+
+void ListBox::SetFont(Font &font) {
+    Window::SetFont(font);
 }
 
 void ListBox::Clear() {

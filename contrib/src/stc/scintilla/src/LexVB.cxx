@@ -20,20 +20,21 @@
 static int classifyWordVB(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler) {
 
 	char s[100];
-	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
-	for (unsigned int i = 0; i < end - start + 1 && i < 30; i++) {
+	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.') ||
+		(styler[start] == '&' && tolower(styler[start+1]) == 'h');
+	unsigned int i;
+	for (i = 0; i < end - start + 1 && i < 30; i++) {
 		s[i] = static_cast<char>(tolower(styler[start + i]));
-		s[i + 1] = '\0';
 	}
+	s[i] = '\0';
 	char chAttr = SCE_C_DEFAULT;
 	if (wordIsNumber)
 		chAttr = SCE_C_NUMBER;
 	else {
-		if (keywords.InList(s)) {
+		if (strcmp(s, "rem") == 0)
+			chAttr = SCE_C_COMMENTLINE;
+		else if (keywords.InList(s))
 			chAttr = SCE_C_WORD;
-			if (strcmp(s, "rem") == 0)
-				chAttr = SCE_C_COMMENTLINE;
-		}
 	}
 	styler.ColourTo(end, chAttr);
 	if (chAttr == SCE_C_COMMENTLINE)
@@ -49,6 +50,7 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 	
 	styler.StartAt(startPos);
 
+	int visibleChars = 0;
 	int state = initStyle;
 	char chNext = styler[startPos];
 	styler.StartSegment(startPos);
@@ -63,6 +65,17 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 			continue;
 		}
 
+		if (ch == '\r' || ch == '\n') {
+			// End of line
+			if (state == SCE_C_COMMENTLINE || state == SCE_C_PREPROCESSOR) {
+				styler.ColourTo(i - 1, state);
+				state = SCE_C_DEFAULT;
+			}
+			visibleChars = 0;
+		}
+		if (!isspace(ch))
+			visibleChars++;
+
 		if (state == SCE_C_DEFAULT) {
 			if (iswordstart(ch)) {
 				styler.ColourTo(i - 1, state);
@@ -73,6 +86,16 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 			} else if (ch == '\"') {
 				styler.ColourTo(i - 1, state);
 				state = SCE_C_STRING;
+			} else if (ch == '#' && visibleChars == 1) {
+				// Preprocessor commands are alone on their line
+				styler.ColourTo(i - 1, state);
+				state = SCE_C_PREPROCESSOR;
+			} else if (ch == '&' && tolower(chNext) == 'h') {
+				styler.ColourTo(i - 1, state);
+				state = SCE_C_WORD;
+			} else if (isoperator(ch)) {
+				styler.ColourTo(i - 1, state);
+				styler.ColourTo(i, SCE_C_OPERATOR);
 			}
 		} else if (state == SCE_C_WORD) {
 			if (!iswordchar(ch)) {
@@ -82,16 +105,14 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 						state = SCE_C_COMMENTLINE;
 					} else if (ch == '\"') {
 						state = SCE_C_STRING;
+					} else if (isoperator(ch)) {
+						styler.ColourTo(i - 1, state);
+						styler.ColourTo(i, SCE_C_OPERATOR);
 					}
 				}
 			}
 		} else {
-			if (state == SCE_C_COMMENTLINE) {
-				if (ch == '\r' || ch == '\n') {
-					styler.ColourTo(i - 1, state);
-					state = SCE_C_DEFAULT;
-				}
-			} else if (state == SCE_C_STRING) {
+			if (state == SCE_C_STRING) {
 				// VB doubles quotes to preserve them
 				if (ch == '\"') {
 					styler.ColourTo(i, state);

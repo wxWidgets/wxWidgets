@@ -27,6 +27,7 @@ OBJECTS = \
 	$(S)/ViewStyle.$(OBJSUFF) \
 	$(S)/LexCPP.$(OBJSUFF)	\
 	$(S)/LexHTML.$(OBJSUFF)	\
+	$(S)/LexLua.$(OBJSUFF) \
 	$(S)/LexOthers.$(OBJSUFF) \
 	$(S)/LexPerl.$(OBJSUFF)	\
 	$(S)/LexPython.$(OBJSUFF) \
@@ -35,6 +36,7 @@ OBJECTS = \
 	$(S)/DocumentAccessor.$(OBJSUFF)\
 	$(S)/UniConversion.$(OBJSUFF)	\
 	$(S)/WindowAccessor.$(OBJSUFF)	\
+	$(S)/PosRegExp.$(OBJSUFF) \
 	PlatWX.$(OBJSUFF) \
 	ScintillaWX.$(OBJSUFF) \
 	stc.$(OBJSUFF)

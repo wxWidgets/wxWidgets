@@ -24,7 +24,7 @@ protected:
 public:
 	DocumentAccessor(Document *pdoc_, PropSet &props_) : 
 		Accessor(), pdoc(pdoc_), props(props_), 
-		lenDoc(-1), validLen(0), chFlags(0) {
+		lenDoc(-1), validLen(0), chFlags(0), chWhile(0) {
 	}
 	~DocumentAccessor();
 	char StyleAt(int position);
