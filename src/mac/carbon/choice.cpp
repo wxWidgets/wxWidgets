@@ -177,8 +177,12 @@ void wxChoice::SetString(int n, const wxString& s)
 
 wxString wxChoice::GetString(int n) const
 {
+    wxCHECK_MSG( n >= 0 && (size_t)n < m_strings.GetCount(), _T(""),
+                    _T("wxChoice::GetString(): invalid index") );
+
     return m_strings[n] ;
 }
+
 // ----------------------------------------------------------------------------
 // client data
 // ----------------------------------------------------------------------------
