@@ -125,6 +125,8 @@ public:
     void   SetToolTipCtrl(WXHWND hHwndTT) { m_hWndToolTip = hHwndTT; }
 #endif // tooltips
 
+    virtual void SendSizeEvent(void);
+
     void      SetClient(WXHWND    c_Hwnd);
     void      SetClient(wxWindow* c_Window);
     wxWindow *GetClient();

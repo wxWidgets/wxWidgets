@@ -72,6 +72,9 @@ public:
            virtual bool SetFont(const wxFont &rFont);
            virtual void SetFocus(void);
     inline virtual void SetValue(int nVal) { wxSpinButton::SetValue(nVal); }
+                   void SetSelection( long lFrom
+                                     ,long lTo
+                                    );
 
            virtual bool Show(bool bShow = TRUE);
 

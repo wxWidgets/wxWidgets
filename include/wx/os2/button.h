@@ -84,9 +84,9 @@ protected:
     void            SetTmpDefault(void);
     void            UnsetTmpDefault(void);
 
-    static void UpdateDefaultStyle( wxWindow* pWinDefault
-                                   ,wxWindow* pWinOldDefault
-                                  );
+    static void     SetDefaultStyle( wxButton* pButton
+                                    ,bool      bOn
+                                   );
 
     virtual wxSize  DoGetBestSize(void) const;
     virtual WXDWORD OS2GetStyle( long     style

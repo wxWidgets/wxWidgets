@@ -602,20 +602,21 @@ private:
                               ,WXWPARAM    wParam = 0
                              ) const;
 
-
-    DECLARE_DYNAMIC_CLASS(wxWindowOS2);
-    DECLARE_NO_COPY_CLASS(wxWindowOS2)
-    DECLARE_EVENT_TABLE()
-
-private:
+    wxWindowList*                   m_pChildrenDisabled;
     HWND                            m_hWndScrollBarHorz;
     HWND                            m_hWndScrollBarVert;
     SWP                             m_vWinSwp;
     bool                            m_bIsActivePage;
 
+    DECLARE_DYNAMIC_CLASS(wxWindowOS2);
+    DECLARE_NO_COPY_CLASS(wxWindowOS2)
+    DECLARE_EVENT_TABLE()
+
+    //
     // Virtual function hiding supression
+    //
     inline virtual bool Reparent(wxWindowBase* pNewParent)
-    { return(wxWindowBase::Reparent(pNewParent));};
+    { return(wxWindowBase::Reparent(pNewParent));}
 }; // end of wxWindow
 
 class wxWindowCreationHook
