@@ -208,7 +208,7 @@ bool wxDialog::EnableCloseButton(bool enable)
     if ( !::EnableMenuItem(hmenu, SC_CLOSE,
                            MF_BYCOMMAND | (enable ? MF_ENABLED : MF_GRAYED)) )
     {
-        wxLogLastError(_T("DeleteMenu(SC_CLOSE)"));
+        wxLogLastError(_T("EnableMenuItem(SC_CLOSE)"));
 
         return FALSE;
     }

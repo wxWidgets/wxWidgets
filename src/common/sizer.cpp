@@ -383,6 +383,9 @@ wxSize wxSizer::GetMaxWindowSize( wxWindow *WXUNUSED(window) )
     wxRect rect = wxGetClientDisplayRect();
     wxSize sizeMax (rect.width,rect.height);
 
+    // Sorry, but this bit is wrong -- it makes a window that should just be
+    // able to fit onto the screen, not fit on the screen. -- JACS
+#if 0
     // Make the max size a bit smaller than the visible portion of
     // the screen.  A window which takes the entire screen doesn't
     // look very nice either
@@ -391,6 +394,7 @@ wxSize wxSizer::GetMaxWindowSize( wxWindow *WXUNUSED(window) )
 
     sizeMax.y *= 9;
     sizeMax.y /= 10;
+#endif
 
     return sizeMax;
 }
