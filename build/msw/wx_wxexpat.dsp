@@ -54,8 +54,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -77,8 +77,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -100,8 +100,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -123,8 +123,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -146,8 +146,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -169,8 +169,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -192,8 +192,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_dll\wxexpat.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -215,8 +215,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxexpatd.pdb /I "..\..\lib\vc_dll" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -238,8 +238,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -261,8 +261,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -284,8 +284,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -307,8 +307,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -330,8 +330,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -353,8 +353,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -376,8 +376,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /GX /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /Fd..\..\lib\vc_lib\wxexpat.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -399,8 +399,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\wxexpat"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
-# ADD CPP /nologo /FD /MDd /W1 /Od /GR /GX /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD BASE CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
+# ADD CPP /nologo /FD /MDd /W1 /Od /GR /EHsc /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxexpatd.pdb /I "..\..\lib\vc_lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "COMPILED_FROM_DSP" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
