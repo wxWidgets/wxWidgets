@@ -72,6 +72,14 @@ void wxCanvasObject::Move( int x, int y )
     }
 }
 
+bool wxCanvasObject::IsHit( int x, int y, int margin )
+{
+    return ((x >= m_area.x-margin) &&
+            (x <= m_area.x+m_area.width+margin) &&
+            (y >= m_area.y-margin) &&
+            (y <= m_area.y+m_area.height+margin));
+}
+
 void wxCanvasObject::WriteSVG( wxTextOutputStream &stream )
 {
 }
@@ -102,6 +110,93 @@ void wxCanvasRect::Render( int clip_x, int clip_y, int clip_width, int clip_heig
 }
 
 void wxCanvasRect::WriteSVG( wxTextOutputStream &stream )
+{
+}
+
+//----------------------------------------------------------------------------
+// wxCanvasLine
+//----------------------------------------------------------------------------
+
+wxCanvasLine::wxCanvasLine( int x, int y, int w, int h, unsigned char red, unsigned char green, unsigned char blue )
+   : wxCanvasObject( x, y, w, h )
+{
+    m_red = red;
+    m_green = green;
+    m_blue = blue;
+}
+
+void wxCanvasLine::Render( int clip_x, int clip_y, int clip_width, int clip_height )
+{
+    wxImage *image = m_owner->GetBuffer();
+
+    if ((m_area.width == 0) && (m_area.height == 0))
+    {
+        image->SetRGB( m_area.x, m_area.y, m_red, m_green, m_blue );
+    }
+    else
+    {
+        int x1 = m_area.x;
+        int y1 = m_area.y;
+        int x2 = m_area.x+m_area.width;
+        int y2 = m_area.y+m_area.height;
+
+        wxInt32 d, ii, jj, di, ai, si, dj, aj, sj;
+        di = x1 - x2;
+        ai = abs(di) << 1;
+        si = (di < 0)? -1 : 1;
+        dj = y1 - y2;
+        aj = abs(dj) << 1;
+        sj = (dj < 0)? -1 : 1;
+
+        ii = x2;
+        jj = y2;
+  
+        if (ai > aj)
+        {
+            // iterate over i
+            d = aj - (ai >> 1);        
+               
+            while (ii != x1)
+            {
+                if ((ii >= clip_x) && (ii <= clip_x+clip_width) &&
+                    (jj >= clip_y) && (jj <= clip_y+clip_height))
+                {
+                    image->SetRGB( ii, jj, m_red, m_blue, m_green );
+                }
+                if (d >= 0)
+                {
+                    jj += sj;
+                    d  -= ai;   
+                }
+                ii += si;
+                d  += aj;
+            }
+        }
+        else
+        {
+            // iterate over j
+            d = ai - (aj >> 1);
+
+            while (jj != y1)
+            {
+                if ((ii >= clip_x) && (ii <= clip_x+clip_width) &&
+                    (jj >= clip_y) && (jj <= clip_y+clip_height))
+                {
+                    image->SetRGB( ii, jj, m_red, m_blue, m_green );
+                }
+                if (d >= 0)
+                {
+                    ii += si;
+                    d  -= aj;   
+                }
+                jj += sj;
+                d  += ai;
+            }
+        }
+    }
+}
+
+void wxCanvasLine::WriteSVG( wxTextOutputStream &stream )
 {
 }
 
@@ -349,6 +444,8 @@ wxCanvas::wxCanvas( wxWindow *parent, wxWindowID id,
     m_red = 0;
     m_green = 0;
     m_blue = 0;
+    m_lastMouse = (wxCanvasObject*)NULL;
+    m_frozen = FALSE;
 }
 
 wxCanvas::~wxCanvas()
@@ -375,6 +472,8 @@ void wxCanvas::SetColour( unsigned char red, unsigned char green, unsigned char 
     m_green = green;
     m_blue = blue;
     
+    if (m_frozen) return;
+    
     unsigned char *data = m_buffer.GetData();
     
     for (int y = 0; y < m_buffer.GetHeight(); y++)
@@ -389,8 +488,31 @@ void wxCanvas::SetColour( unsigned char red, unsigned char green, unsigned char 
         }
 }
 
+void wxCanvas::Freeze()
+{
+    m_frozen = TRUE;
+}
+
+void wxCanvas::Thaw()
+{
+    wxNode *node = m_updateRects.First();
+    while (node)
+    {
+        wxRect *rect = (wxRect*) node->Data();
+        delete rect;
+        m_updateRects.DeleteNode( node );
+        node = m_updateRects.First();
+    }
+    
+    m_frozen = FALSE;
+    
+    Update( 0, 0, m_buffer.GetWidth(), m_buffer.GetHeight() );
+}
+
 void wxCanvas::Update( int x, int y, int width, int height )
 {
+    if (m_frozen) return;
+    
     // clip to buffer
     if (x < 0)
     {
@@ -620,7 +742,79 @@ void wxCanvas::OnPaint(wxPaintEvent &event)
 
 void wxCanvas::OnMouse(wxMouseEvent &event)
 {
-    // Propagate to objects here
+    // should we implement mouse capture ?
+
+    int x = event.GetX();
+    int y = event.GetY();
+    CalcUnscrolledPosition( x, y, &x, &y );
+    
+    if (event.GetEventType() == wxEVT_MOTION)
+    {
+        wxNode *node = m_objects.First();
+        while (node)
+        {
+            wxCanvasObject *obj = (wxCanvasObject*) node->Data();
+        
+            if (!obj->IsControl())
+            { 
+                if (obj->IsHit(x,y))
+                {
+                    wxMouseEvent child_event( wxEVT_MOTION );
+                    child_event.SetEventObject( obj );
+                    child_event.m_x = x + obj->GetX();
+                    child_event.m_y = y + obj->GetY();
+                    child_event.m_leftDown = event.m_leftDown;
+                    child_event.m_rightDown = event.m_rightDown;
+                    child_event.m_middleDown = event.m_middleDown;
+                    child_event.m_controlDown = event.m_controlDown;
+                    child_event.m_shiftDown = event.m_shiftDown;
+                    child_event.m_altDown = event.m_altDown;
+                    child_event.m_metaDown = event.m_metaDown;
+                    
+                    if ((obj != m_lastMouse) && (m_lastMouse != NULL))
+                    {
+                        child_event.SetEventType( wxEVT_LEAVE_WINDOW );
+                        child_event.SetEventObject( m_lastMouse );
+                        child_event.m_x = x + m_lastMouse->GetX();
+                        child_event.m_y = y + m_lastMouse->GetY();
+                        m_lastMouse->ProcessEvent( child_event );
+                        
+                        m_lastMouse = obj;
+                        child_event.SetEventType( wxEVT_ENTER_WINDOW );
+                        child_event.SetEventObject( m_lastMouse );
+                        child_event.m_x = x + m_lastMouse->GetX();
+                        child_event.m_y = y + m_lastMouse->GetY();
+                        m_lastMouse->ProcessEvent( child_event );
+                        
+                        child_event.SetEventType( wxEVT_MOTION );
+                        child_event.SetEventObject( obj );
+                    }
+                    obj->ProcessEvent( child_event );
+                    return;
+                }
+            }
+            node = node->Next();
+        }
+        if (m_lastMouse)
+        {
+            wxMouseEvent child_event( wxEVT_LEAVE_WINDOW );
+            child_event.SetEventObject( m_lastMouse );
+            child_event.m_x = x + m_lastMouse->GetX();
+            child_event.m_y = y + m_lastMouse->GetY();
+            child_event.m_leftDown = event.m_leftDown;
+            child_event.m_rightDown = event.m_rightDown;
+            child_event.m_middleDown = event.m_middleDown;
+            child_event.m_controlDown = event.m_controlDown;
+            child_event.m_shiftDown = event.m_shiftDown;
+            child_event.m_altDown = event.m_altDown;
+            child_event.m_metaDown = event.m_metaDown;
+            m_lastMouse->ProcessEvent( child_event );
+            
+            m_lastMouse = (wxCanvasObject*) NULL;
+            return;
+        }
+    }
+    event.Skip();
 }
 
 void wxCanvas::OnSize(wxSizeEvent &event)

@@ -34,6 +34,8 @@ public:
     wxCanvasObject( int x, int y, int width, int height );
     
     virtual void Move( int x, int y );
+    virtual bool IsHit( int x, int y, int margin = 0 );
+    
     virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
     virtual void WriteSVG( wxTextOutputStream &stream );
     
@@ -66,6 +68,24 @@ class wxCanvasRect: public wxCanvasObject
 {
 public:
     wxCanvasRect( int x, int y, int w, int h, unsigned char red, unsigned char green, unsigned char blue );
+    
+    virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
+    virtual void WriteSVG( wxTextOutputStream &stream );
+    
+private:
+    unsigned char m_red;
+    unsigned char m_green;
+    unsigned char m_blue;
+};
+
+//----------------------------------------------------------------------------
+// wxCanvasLine
+//----------------------------------------------------------------------------
+
+class wxCanvasLine: public wxCanvasObject
+{
+public:
+    wxCanvasLine( int x, int y, int w, int h, unsigned char red, unsigned char green, unsigned char blue );
     
     virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
     virtual void WriteSVG( wxTextOutputStream &stream );
@@ -125,6 +145,7 @@ public:
     void CreateBuffer();
     void SetRGB( unsigned char red, unsigned char green, unsigned char blue );
     void SetFlag( int flag );
+    int GetFlag()              { return m_flag; }
     
 private:
     wxString        m_text;
@@ -157,6 +178,9 @@ public:
     virtual void Update( int x, int y, int width, int height );
     virtual void UpdateNow();
     
+    virtual void Freeze();
+    virtual void Thaw();
+    
     virtual void Prepend( wxCanvasObject* obj );
     virtual void Append( wxCanvasObject* obj );
     virtual void Insert( size_t before, wxCanvasObject* obj );
@@ -168,11 +192,14 @@ public:
     void BlitBuffer( wxDC &dc );
     
 private:
-    wxImage        m_buffer;
-    bool           m_needUpdate;
-    wxList         m_updateRects;
-    wxList         m_objects;
-    unsigned char  m_green,m_red,m_blue;
+    wxImage          m_buffer;
+    bool             m_needUpdate;
+    wxList           m_updateRects;
+    wxList           m_objects;
+    unsigned char    m_green,m_red,m_blue;
+    bool             m_frozen;
+    wxCanvasObject  *m_lastMouse;
+    
     
     friend class wxCanvasObject;
     
