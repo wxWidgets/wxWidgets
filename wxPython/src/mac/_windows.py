@@ -2802,8 +2802,10 @@ class ProgressDialog(Frame):
         Update(self, int value, String newmsg=EmptyString) -> bool
 
         Updates the dialog, setting the progress bar to the new value and, if
-        given changes the message above it. Returns true unless the Cancel
-        button has been pressed.
+        given changes the message above it. The value given should be less
+        than or equal to the maximum value given to the constructor and the
+        dialog is closed if it is equal to the maximum.  Returns true unless
+        the Cancel button has been pressed.
 
         If false is returned, the application can either immediately destroy
         the dialog or ask the user for the confirmation and if the abort is
