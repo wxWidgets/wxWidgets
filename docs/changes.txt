@@ -81,6 +81,7 @@ All (GUI):
 - wxToolBar::ToggleTool() now works for radio buttons (Dag Ågren)
 - wxListCtrl now sends an END_LABEL event if editing was cancelled, too
 - bug in wxRect ctor from two [out of order] wxPoints fixed (Steve Cornett)
+- status text is now restored after wxMenu help is shown in it
 
 wxMSW:
 
