@@ -1113,7 +1113,7 @@ wxTreeListHeaderWindow::wxTreeListHeaderWindow( wxWindow *win,
     m_owner = owner;
     m_resizeCursor = new wxCursor(wxCURSOR_SIZEWE);
 
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(
+    SetBackgroundColour(wxSystemSettings::GetColour(
                             wxSYS_COLOUR_BTNFACE));
 }
 
@@ -1139,7 +1139,7 @@ void wxTreeListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 
     dc->SetBrush( *wxTRANSPARENT_BRUSH );
 
-    dc->SetPen( wxPen(wxSystemSettings::GetSystemColour(
+    dc->SetPen( wxPen(wxSystemSettings::GetColour(
                           wxSYS_COLOUR_BTNSHADOW), 1, wxSOLID));
     dc->DrawLine( x+w-m_corner+1, y, x+w, y+h );  // right (outer)
     dc->DrawRectangle( x, y+h, w+1, 1 );          // bottom (outer)
@@ -1164,7 +1164,7 @@ void wxTreeListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
     dc->DrawLine( x+w-m_corner+1, y, x+w, y+h );  // right (outer)
     dc->DrawRectangle( x, y+h, w+1, 1 );          // bottom (outer)
 
-    wxPen pen(wxSystemSettings::GetSystemColour(
+    wxPen pen(wxSystemSettings::GetColour(
                   wxSYS_COLOUR_BTNSHADOW ), 1, wxSOLID);
 
     dc->SetPen( pen );
@@ -1228,7 +1228,7 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     // function to set it separately
     //dc.SetTextForeground( *wxBLACK );
     dc.SetTextForeground(wxSystemSettings::
-                            GetSystemColour( wxSYS_COLOUR_WINDOWTEXT ));
+                            GetColour( wxSYS_COLOUR_WINDOWTEXT ));
 
     int x = HEADER_OFFSET_X;
 
@@ -1859,7 +1859,7 @@ void wxTreeListMainWindow::Init()
 
     m_hilightBrush = new wxBrush
                          (
-                            wxSystemSettings::GetSystemColour
+                            wxSystemSettings::GetColour
                             (
                                 wxSYS_COLOUR_HIGHLIGHT
                             ),
@@ -1868,7 +1868,7 @@ void wxTreeListMainWindow::Init()
 
     m_hilightUnfocusedBrush = new wxBrush
                               (
-                                 wxSystemSettings::GetSystemColour
+                                 wxSystemSettings::GetColour
                                  (
                                      wxSYS_COLOUR_BTNSHADOW
                                  ),
@@ -1936,7 +1936,7 @@ bool wxTreeListMainWindow::Create(wxTreeListCtrl *parent,
     SetValidator( validator );
 #endif
 
-    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
+    SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX ) );
 
 #ifdef __WXMSW__
     {
@@ -3314,7 +3314,7 @@ void wxTreeListMainWindow::PaintItem(wxTreeListItem *item, wxDC& dc)
     if (item->IsSelected() && HasFlag(wxTR_FULL_ROW_HIGHLIGHT)) {
             dc.SetBrush(*(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush));
             dc.SetPen(*wxBLACK_PEN);
-            colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     } else {
         wxColour colBg;
         if (attr && attr->HasBackgroundColour()) {
@@ -3380,7 +3380,7 @@ void wxTreeListMainWindow::PaintItem(wxTreeListItem *item, wxDC& dc)
             int width = wxMin(text_w+2, colwidth - text_x - x_colstart);
             dc.DrawRectangle(text_x-1, item->GetY() + offset, width, total_h-offset);
             dc.SetBackgroundMode(wxTRANSPARENT);
-            dc.SetTextForeground(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+            dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
         }else{
             dc.SetTextForeground(colText);
         }
