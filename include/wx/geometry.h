@@ -298,9 +298,9 @@ public :
     inline wxPoint2DDouble();
     inline wxPoint2DDouble( wxDouble x , wxDouble y );
     inline wxPoint2DDouble( const wxPoint2DDouble &pt );
-    wxPoint2DDouble( const wxPoint2DInt &pt ) 
+    wxPoint2DDouble( const wxPoint2DInt &pt )
 		{ 	m_x = (wxDouble) pt.m_x ; m_y = (wxDouble) pt.m_y ; }
-	wxPoint2DDouble( const wxPoint &pt ) 
+	wxPoint2DDouble( const wxPoint &pt )
 		{ 	m_x = (wxDouble) pt.x ; m_y = (wxDouble) pt.y ; }
 
     // two different conversions to integers, floor and rounding
@@ -386,7 +386,7 @@ inline wxDouble wxPoint2DDouble::GetVectorLength() const
     return sqrt( (m_x)*(m_x) + (m_y)*(m_y) ) ;
 }
 
-inline void wxPoint2DDouble::SetVectorLength( wxDouble length ) 
+inline void wxPoint2DDouble::SetVectorLength( wxDouble length )
 {
     wxDouble before = GetVectorLength() ;
     m_x = (m_x * length / before) ;
@@ -763,9 +763,17 @@ inline wxRect2DInt::wxRect2DInt( const wxPoint2DInt &a , const wxPoint2DInt &b)
     m_height = abs( a.m_y - b.m_y );
 }
 
+inline wxRect2DInt::wxRect2DInt( const wxPoint2DInt& pos, const wxSize& size)
+{
+    m_x = pos.m_x;
+    m_y = pos.m_y;
+    m_width = size.x;
+    m_height = size.y;
+}
+
 inline bool wxRect2DInt::operator == (const wxRect2DInt& rect) const
-{ 
-    return (m_x==rect.m_x && m_y==rect.m_y && 
+{
+    return (m_x==rect.m_x && m_y==rect.m_y &&
             m_width==rect.m_width && m_height==rect.m_height);
 }
 
