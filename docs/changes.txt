@@ -209,6 +209,7 @@ Unix:
 wxGTK
 
 - fixed compilation with --disable-compat-22
+- set the event object correctly for wxMenu events (Bob Balfour)
 
 wxMSW:
 
