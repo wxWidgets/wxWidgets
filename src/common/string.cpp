@@ -101,6 +101,24 @@ extern const char *g_szNul = &g_strEmpty.dummy;
 #define   NAMESPACE   std::
 #endif
 
+#ifdef __WXMSW__
+  #ifdef _MSC_VER
+    #define wxVsprintf     _vsnprintf
+  #endif
+#else
+   #if defined ( HAVE_VSNPRINTF )
+     #define wxVsprintf       vsnprintf
+   #endif
+#endif
+
+#ifndef wxVsprintf
+  #ifdef HAVE_VPRINTF
+    #define wxVsprintf(buffer,len,format,argptr) vsprintf(buffer,format, argptr)
+    #pragma message("Using sprintf() because no snprintf()-like function defined")
+  #else
+    #pragma error("No vsnprintf() or vsprintf() function available.")
+  #endif
+#endif
 
 NAMESPACE istream& operator>>(NAMESPACE istream& is, wxString& WXUNUSED(str))
 {
@@ -932,19 +950,6 @@ int wxString::PrintfV(const char* pszFormat, va_list argptr)
 
   return iLen;
 #else
-#ifdef __WXMSW__
-  #ifdef _MSC_VER
-    #define wxVsprintf     _vsnprintf
-  #endif
-#else // guess that any Unix has snprintf() - feel free to insert additional
-      // platform/compiler tests here if this is not the case for you
-  #define wxVsprintf       vsnprintf
-#endif
-  
-#ifndef wxVsprintf
-  #pragma message("Using sprintf() because no snprintf()-like function defined")
-  #define wxVsprintf vsprintf
-#endif
 
   // static buffer to avoid dynamic memory allocation each time
   static char s_szScratch[1024];
