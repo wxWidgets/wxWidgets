@@ -310,8 +310,11 @@ int wxFileDialog::ShowModal()
                     if ( chNext != _T('\\') && chNext != _T('/') )
                         break;
 
-                    // ignore the next one
-                    i++;
+                    // ignore the next one, unless it is at the start of a UNC path
+                    if (i > 0)
+                        i++;
+                    else
+                        break;    
                 }
                 // fall through
 
