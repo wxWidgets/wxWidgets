@@ -2884,8 +2884,6 @@ void wxGenericTreeCtrl::Edit( const wxTreeItemId& item )
         return;
     }
 
-    m_itemEdited = itemEdit;
-
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
