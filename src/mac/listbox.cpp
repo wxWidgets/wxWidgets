@@ -181,7 +181,9 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
 }
 
 extern "C" void MacDrawStringCell(Rect *cellRect, Cell lCell, ListHandle theList, long refCon) ;
+// resources ldef ids
 const short kwxMacListWithVerticalScrollbar = 128 ;
+const short kwxMacListWithVerticalAndHorizontalScrollbar = 129 ;
 
 // ============================================================================
 // list box control implementation
@@ -224,6 +226,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     Str255 fontName ;
     SInt16 fontSize ;
     Style fontStyle ;
+	SInt16 fontNum ;
 #if TARGET_CARBON
 	GetThemeFont(kThemeViewsFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
 #else
@@ -237,7 +240,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     Size asize;
 
 
-    CreateListBoxControl( MAC_WXHWND(parent->MacGetRootWindow()), &bounds, false, 0, 1, false, true,
+    CreateListBoxControl( MAC_WXHWND(parent->MacGetRootWindow()), &bounds, false, 0, 1, (style & wxLB_HSCROLL), true,
                           kwxMacListItemHeight, kwxMacListItemHeight, false, &listDef, (ControlRef *)&m_macControl );
 
     GetControlData( (ControlHandle) m_macControl, kControlNoPart, kControlListBoxListHandleTag,
@@ -251,8 +254,8 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     long    result ;
     wxStAppResource resload ;
     m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false ,
-                  kwxMacListWithVerticalScrollbar , 0 , 0,
-                  kControlListBoxProc , (long) this ) ;
+                  (style & wxLB_HSCROLL) ? kwxMacListWithVerticalAndHorizontalScrollbar : kwxMacListWithVerticalScrollbar , 
+                  0 , 0, kControlListBoxProc , (long) this ) ;
     ::GetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
                sizeof( ListHandle ) , (char*) &m_macList  , &result ) ;
 

@@ -22,6 +22,21 @@ resource 'ldes' ( 128 )
 	}
 } ;
 
+resource 'ldes' ( 129 )
+{
+	versionZero 
+	{
+		0 , 
+		0 ,
+		0 , 
+		0 , 
+		hasVertScroll , 
+		hasHorizScroll , 
+		0 , 
+		noGrowSpace , 
+	}
+} ;
+
 data 'CURS' (10) {
 	$"0000 03E0 0630 0808 1004 31C6 2362 2222"            
 	$"2362 31C6 1004 0808 0630 03E0 0000 0000"            
