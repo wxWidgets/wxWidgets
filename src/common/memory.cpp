@@ -950,6 +950,7 @@ void operator delete[] (void * buf)
   wxDebugFree(buf, true);
 }
 #endif
+#endif // wxUSE_GLOBAL_MEMORY_OPERATORS
 
 // TODO: store whether this is a vector or not.
 void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool WXUNUSED(isVect) )
@@ -1061,7 +1062,6 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
     free((char *)st);
 }
 
-#endif // wxUSE_GLOBAL_MEMORY_OPERATORS
 #endif // __WXDEBUG__
 
 // Trace: send output to the current debugging stream
