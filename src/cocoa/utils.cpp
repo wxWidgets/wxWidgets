@@ -44,12 +44,6 @@ void wxClientDisplayRect(int *x,int *y,int *width,int *height)
         *height=768;
 }
 
-int wxGetOsVersion(int *majorVsn, int *minorVsn)
-{
-    // TODO
-    return 0;
-}
-
 // Return TRUE if we have a colour display
 bool wxColourDisplay()
 {
