@@ -352,9 +352,15 @@ enum wxFileKind
     #endif
 #endif // platforms
 
-#if defined __WXMSW__ && !defined __WXWINCE__ 
+#if defined __WXMSW__ && !defined __WXWINCE__
     // get the HANDLE associated with a file descriptor
-    inline HANDLE wxGetOSFHandle(int fd) { return (HANDLE)_get_osfhandle(fd); }
+#   ifdef __CYGWIN__
+#       include "wx/msw/private.h" // for HANDLE
+#       include <io.h> // for get_osfhandle()
+        inline HANDLE wxGetOSFHandle(int fd) { return (HANDLE) get_osfhandle(fd); }
+#   else
+        inline HANDLE wxGetOSFHandle(int fd) { return (HANDLE) _get_osfhandle(fd); }
+#   endif
 #endif
 
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
