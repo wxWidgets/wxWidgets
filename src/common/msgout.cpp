@@ -104,7 +104,7 @@ void wxMessageOutputMessageBox::Printf(const wxChar* format, ...)
 
     wxString title;
     if ( wxTheApp )
-        title.Printf(_("%s message"), wxTheApp->GetAppName().c_str());
+        title.Printf(_T("%s message"), wxTheApp->GetAppName().c_str());
 
     ::wxMessageBox(out, title);
 }
