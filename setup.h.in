@@ -1053,8 +1053,8 @@
 /* The number of bytes in a int.  */
 #undef SIZEOF_INT
 
-/* The number of bytes in a int *.  */
-#undef SIZEOF_INT_P
+/* The number of bytes in a pointer.  */
+#undef SIZEOF_VOID_P
 
 /* The number of bytes in a long.  */
 #undef SIZEOF_LONG
@@ -1064,6 +1064,9 @@
 
 /* The number of bytes in a short.  */
 #undef SIZEOF_SHORT
+
+/* The number of bytes in a size_t.  */
+#undef SIZEOF_SIZE_T
 
 /* Define if size_t on your machine is the same type as unsigned int. */
 #undef wxSIZE_T_IS_UINT

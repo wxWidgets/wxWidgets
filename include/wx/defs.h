@@ -622,15 +622,6 @@ typedef wxUint16 wxWord;
 
 /*  32bit */
 #ifdef __WINDOWS__
-    #if defined(__WIN64__)
-        /*  you may remove this #error and try to compile the library, please */
-        /*  report the results to wx-dev@lists.wxwindows.org if you do! */
-        #error "wxWindows hasn't been tested under Win64, continue at your own risk"
-
-        /*  the same definitions as for Win32 _should_ work here as only */
-        /*  sizeof(void *) changes, but it must be tested first */
-    #endif /*  __WIN64__ */
-
     /*  Win64 uses LLP64 model and so ints and longs have the same size as in */
     /*  Win32 */
     #if defined(__WIN32__)
@@ -643,13 +634,25 @@ typedef wxUint16 wxWord;
             #define SIZEOF_LONG 4
             #define SIZEOF_WCHAR_T 2
 
-            #define wxSIZE_T_IS_UINT
+            /*
+               under Win64 sizeof(size_t) == 8 and so it is neither unsigned
+               int nor unsigned long!
+             */
+            #ifdef __WIN64__
+                #define SIZEOF_SIZE_T 8
+
+                #undef wxSIZE_T_IS_UINT
+            #else /* Win32 */
+                #define SIZEOF_SIZE_T 4
+
+                #define wxSIZE_T_IS_UINT
+            #endif
             #undef wxSIZE_T_IS_ULONG
 
             #ifdef __WIN64__
-                #define SIZEOF_INT_P 8
+                #define SIZEOF_VOID_P 8
             #else /*  Win32 */
-                #define SIZEOF_INT_P 4
+                #define SIZEOF_VOID_P 4
             #endif /*  Win64/32 */
         #endif /*  !defined(SIZEOF_INT) */
     #else
@@ -678,10 +681,14 @@ typedef wxUint16 wxWord;
             #error "Unknown sizeof(int) value, what are you compiling for?"
         #endif
     #else /*  !defined(SIZEOF_INT) */
-        /*  assume sizeof(int) == 4 -- what else can we do? */
+        /*  assume default 32bit machine -- what else can we do? */
         wxCOMPILE_TIME_ASSERT( sizeof(int) == 4, IntMustBeExactly4Bytes);
+        wxCOMPILE_TIME_ASSERT( sizeof(size_t) == 4, SizeTMustBeExactly4Bytes);
+        wxCOMPILE_TIME_ASSERT( sizeof(void *) == 4, PtrMustBeExactly4Bytes);
 
         #define SIZEOF_INT 4
+        #define SIZEOF_SIZE_T 4
+        #define SIZEOF_VOID_P 4
 
         typedef int wxInt32;
         typedef unsigned int wxUint32;
@@ -704,6 +711,22 @@ typedef wxUint16 wxWord;
 
 typedef wxUint32 wxDword;
 
+/*
+   Define an integral type big enough to contain all of long, size_t and void *.
+ */
+#if SIZEOF_LONG >= SIZEOF_VOID_P && SIZEOF_LONG >= SIZEOF_SIZE_T
+    /* normal case */
+    typedef unsigned long wxUIntPtr;
+#elif SIZEOF_SIZE_T >= SIZEOF_VOID_P
+    /* Win64 case */
+    typedef size_t wxUIntPtr;
+#else
+    /*
+       This should never happen for the current architectures but if you're
+       using one where it does, please contact wx-dev@lists.wxwindows.org.
+     */
+    #error "Pointers can't be stored inside integer types."
+#endif
 
 /*  64 bit */
 
