@@ -91,7 +91,7 @@ bool MyApp::OnInit(void)
     else
     {
         //// Create a template relating text documents to their views
-        (void) new wxDocTemplate(m_docManager, _T("Text"), _T("*.txt"), _T(""), _T("txt"), _T("Text Doc"), _T("Text View"),
+        (void) new wxDocTemplate(m_docManager, _T("Text"), _T("*.txt;*.text"), _T(""), _T("txt;text"), _T("Text Doc"), _T("Text View"),
         CLASSINFO(TextEditDocument), CLASSINFO(TextEditView));
 #ifdef __WXMAC__
         wxFileName::MacRegisterDefaultTypeAndCreator( "txt" , 'TEXT' , 'WXMA' ) ;
