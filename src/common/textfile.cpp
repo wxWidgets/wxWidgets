@@ -61,21 +61,22 @@ bool wxTextFile::OnExists() const
 
 bool wxTextFile::OnOpen(const wxString &strBufferName, wxTextBufferOpenMode OpenMode)
 {
-    wxFile::OpenMode FileOpenMode = wxFile::read;
-    int                             nAssertVal = 0;
+    wxFile::OpenMode FileOpenMode;
 
-    switch (OpenMode)
-  {
+    switch ( OpenMode )
+    {
+        default:
+            wxFAIL_MSG( _T("unknown open mode in wxTextFile::Open") );
+            // fall through
+
         case ReadAccess :
             FileOpenMode = wxFile::read;
             break;
+
         case WriteAccess :
             FileOpenMode = wxFile::write;
             break;
-        default :
-            wxASSERT(nAssertVal); // Should not happen.
-            break;
-  }
+    }
 
     return m_file.Open(strBufferName.c_str(), FileOpenMode);
 }
