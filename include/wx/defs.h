@@ -2150,7 +2150,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSView);
 typedef WX_NSView WXWidget; /*  wxWindows BASE definition */
 #endif /*  __WXCOCOA__ */
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#ifdef __WXMSW__
 
 /*  the keywords needed for WinMain() declaration */
 #ifdef __WIN16__
@@ -2165,7 +2165,7 @@ typedef WX_NSView WXWidget; /*  wxWindows BASE definition */
 #  endif
 #endif /*  Win16/32 */
 
-/*  Stand-ins for Windows types or OS/2, to avoid #including all of windows.h or os2.h */
+/*  Stand-ins for Windows types to avoid #including all of windows.h */
 typedef void *          WXHWND;
 typedef void *          WXHANDLE;
 typedef void *          WXHICON;
@@ -2199,11 +2199,6 @@ typedef void *          WXLPCREATESTRUCT;
 
 typedef WXHWND          WXWidget;
 
-#endif /*  MSW or OS2 */
-
-
-#ifdef __WXMSW__
-
 #ifdef __WIN64__
 typedef unsigned __int64    WXWPARAM;
 typedef __int64            WXLPARAM;
@@ -2223,6 +2218,35 @@ typedef int             (__stdcall *WXFARPROC)();
 
 
 #if defined(__WXPM__) || defined(__EMX__)
+#ifdef __WXPM__
+/*  Stand-ins for OS/2 types, to avoid #including all of os2.h */
+typedef unsigned long   WXHWND;
+typedef unsigned long   WXHANDLE;
+typedef unsigned long   WXHICON;
+typedef unsigned long   WXHFONT;
+typedef unsigned long   WXHMENU;
+typedef unsigned long   WXHPEN;
+typedef unsigned long   WXHBRUSH;
+typedef unsigned long   WXHPALETTE;
+typedef unsigned long   WXHCURSOR;
+typedef unsigned long   WXHRGN;
+typedef unsigned long   WXHACCEL;
+typedef unsigned long   WXHBITMAP;
+typedef unsigned long   WXHDC;
+typedef unsigned int    WXUINT;
+typedef unsigned long   WXDWORD;
+typedef unsigned short  WXWORD;
+
+typedef unsigned long   WXCOLORREF;
+typedef void *          WXMSG;
+typedef unsigned long   WXHTREEITEM;
+
+typedef void *          WXDRAWITEMSTRUCT;
+typedef void *          WXMEASUREITEMSTRUCT;
+typedef void *          WXLPCREATESTRUCT;
+
+typedef WXHWND          WXWidget;
+#endif
 #ifdef __EMX__
 /* Need a well-known type for WXFARPROC
    below. MPARAM is typedef'ed too late. */
