@@ -920,26 +920,40 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 
     return result ;
 }
-
-void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
-{
-#ifdef __DARWIN__
-    FSRef theRef;
-
-    // get the FSRef associated with the POSIX path
-    (void) FSPathMakeRef((const UInt8 *) path, &theRef, NULL);
-    // convert the FSRef to an FSSpec
-    (void) FSGetCatalogInfo(&theRef, kFSCatInfoNone, NULL, NULL, spec, NULL);
-#else
-    FSpLocationFromFullPath( strlen(path) , path , spec ) ;
-#endif
-}
-
 #ifndef __DARWIN__
 // Mac file names are POSIX (Unix style) under Darwin
 // therefore the conversion functions below are not needed
 
 static char sMacFileNameConversion[ 1000 ] ;
+
+#endif
+void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
+{
+	OSStatus err = noErr ;
+#ifdef __DARWIN__
+    FSRef theRef;
+
+    // get the FSRef associated with the POSIX path
+    err = FSPathMakeRef((const UInt8 *) path, &theRef, NULL);
+    // convert the FSRef to an FSSpec
+    err = FSGetCatalogInfo(&theRef, kFSCatInfoNone, NULL, NULL, spec, NULL);
+#else
+	if ( strchr( path , ':' ) == NULL )
+    {
+    	// try whether it is a volume / or a mounted volume
+        strncpy( sMacFileNameConversion , path , 1000 ) ;
+        sMacFileNameConversion[998] = 0 ;
+        strcat( sMacFileNameConversion , ":" ) ;
+        err = FSpLocationFromFullPath( strlen(sMacFileNameConversion) , sMacFileNameConversion , spec ) ;
+    }
+    else
+    {
+    	err = FSpLocationFromFullPath( strlen(path) , path , spec ) ;
+    }
+#endif
+}
+
+#ifndef __DARWIN__
 
 wxString wxMac2UnixFilename (const char *str)
 {
