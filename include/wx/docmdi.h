@@ -23,7 +23,7 @@
  * Use this instead of wxMDIParentFrame
  */
 
-class wxDocMDIParentFrame: public wxMDIParentFrame
+class WXDLLEXPORT wxDocMDIParentFrame: public wxMDIParentFrame
 {
   DECLARE_CLASS(wxDocMDIParentFrame)
  public:
