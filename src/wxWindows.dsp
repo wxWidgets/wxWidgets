@@ -542,10 +542,6 @@ SOURCE=.\common\gifdecod.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\gzstream.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\hash.cpp
 # End Source File
 # Begin Source File
@@ -2107,10 +2103,6 @@ SOURCE=..\include\wx\grid.h
 # Begin Source File
 
 SOURCE=..\include\wx\gsocket.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\gzstream.h
 # End Source File
 # Begin Source File
 
