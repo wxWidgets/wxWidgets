@@ -497,6 +497,8 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 {
     m_isBeingDeleted = TRUE;
+    
+    gtk_window_set_focus( GTK_WINDOW(m_widget), NULL );
 
     wxTopLevelWindows.DeleteObject( this );
 
