@@ -154,33 +154,9 @@ public:
 };
 #endif
 
-//-----------------------------------------------------------------------------
-// wxBMPHandler
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxBMPHandler: public wxImageHandler
-{
-  DECLARE_DYNAMIC_CLASS(wxBMPHandler)
-
-public:
-
-  inline wxBMPHandler()
-  {
-      m_name = "BMP file";
-      m_extension = "bmp";
-      m_type = wxBITMAP_TYPE_BMP;
-      m_mime = "image/bmp";
-  };
-
-#if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
-  virtual bool DoCanRead( wxInputStream& stream );
-#endif
-};
-
-
-
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxPNMHandler
+// ----------------------------------------------------------------------------
 
 #if wxUSE_PNM
 class WXDLLEXPORT wxPNMHandler : public wxImageHandler
