@@ -1,0 +1,107 @@
+# File:     makefile.vc
+# Author:   Julian Smart
+# Created:  2002
+# Updated:
+# Copyright: (c) 2002, Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile : Builds documents using VC++ nmake
+#
+
+WXDIR=$(WXWIN)
+THISDIR=$(WXDIR)\contrib\docs\latex\gizmos
+DOCDIR = $(WXDIR)\docs
+WAITFLAG=/w
+
+docs:   dirs winhelp html pdfrtf htb htmlhelp
+winhelp:    $(DOCDIR)/winhelp/gizmos.hlp
+rtf:    $(THISDIR)/latex/gizmos/gizmos.rtf
+pdfrtf: $(DOCDIR)/pdf/gizmos.rtf
+htb:	$(DOCDIR)\htb\gizmos.htb
+html:	$(DOCDIR)\html\gizmos\gizmos.htm
+htmlhelp: $(DOCDIR)\htmlhelp\gizmos.chm
+
+dirs:
+        -mkdir $(DOCDIR)\winhelp
+        -mkdir $(DOCDIR)\html
+        -mkdir $(DOCDIR)\html\gizmos
+        -mkdir $(DOCDIR)\htmlhelp
+        -mkdir $(DOCDIR)\htb
+        -mkdir $(DOCDIR)\pdf
+
+$(DOCDIR)/winhelp/gizmos.hlp:         $(THISDIR)/gizmos.rtf $(THISDIR)/gizmos.hpj
+        cd $(THISDIR)
+        -erase gizmos.ph
+        hc gizmos
+        -erase $(DOCDIR)\winhelp\gizmos.hlp
+        -erase $(DOCDIR)\winhelp\gizmos.cnt
+        move gizmos.hlp $(DOCDIR)\winhelp\gizmos.hlp
+        move gizmos.cnt $(DOCDIR)\winhelp\gizmos.cnt
+        cd $(THISDIR)
+
+$(THISDIR)/gizmos.rtf:         $(THISDIR)/classes.tex $(THISDIR)/body.tex $(THISDIR)/topics.tex $(THISDIR)/manual.tex
+        cd $(THISDIR)
+        -start $(WAITFLAG) tex2rtf $(THISDIR)/manual.tex $(THISDIR)/gizmos.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)/pdf/gizmos.rtf:         $(THISDIR)/classes.tex $(THISDIR)/body.tex $(THISDIR)/topics.tex $(THISDIR)/manual.tex
+        cd $(THISDIR)
+        -copy *.wmf $(DOCDIR)\pdf
+        -copy *.bmp $(DOCDIR)\pdf
+        -start $(WAITFLAG) tex2rtf $(THISDIR)/manual.tex $(DOCDIR)/pdf/gizmos.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\gizmos\gizmos.htm:         $(THISDIR)\classes.tex $(THISDIR)\body.tex $(THISDIR)/topics.tex $(THISDIR)\manual.tex
+        cd $(THISDIR)
+        -mkdir $(DOCDIR)\html\gizmos
+        copy *.gif $(DOCDIR)\html\gizmos
+        -start $(WAITFLAG) tex2rtf $(THISDIR)\manual.tex $(DOCDIR)\html\gizmos\gizmos.htm -twice -html
+        -erase $(DOCDIR)\html\gizmos\*.con
+        -erase $(DOCDIR)\html\gizmos\*.ref
+        -erase $(THISDIR)\*.con
+        -erase $(THISDIR)\*.ref
+         cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\gizmos.chm : $(DOCDIR)\html\gizmos\gizmos.htm $(DOCDIR)\html\gizmos\gizmos.hhp
+	cd $(DOCDIR)\html\gizmos
+	-hhc gizmos.hhp
+    -mkdir ..\..\htmlhelp
+    -erase $(DOCDIR)\htmlhelp\gizmos.chm
+    move gizmos.chm ..\..\htmlhelp
+	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\gizmos.htb: $(DOCDIR)\html\gizmos\gizmos.htm
+	cd $(WXDIR)\docs\html\gizmos
+    -erase gizmos.zip gizmos.htb
+    zip gizmos.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move gizmos.zip $(DOCDIR)\htb\gizmos.htb
+    cd $(THISDIR)
+
+# In order to force document reprocessing
+touchmanual:
+    -touch $(WXDIR)\docs\latex\gizmos\manual.tex
+
+updatedocs: touchmanual alldocs
+
+cleandocs:
+    -erase $(DOCDIR)\winhelp\gizmos.hlp
+    -erase $(DOCDIR)\winhelp\gizmos.cnt
+    -erase $(DOCDIR)\html\gizmos\*.htm
+    -erase $(DOCDIR)\pdf\gizmos.rtf
+    -erase $(THISDIR)\gizmos.rtf
+    -erase $(THISDIR)\gizmos.PH
+    -erase $(DOCDIR)\htmlhelp\gizmos.chm
+    -erase $(DOCDIR)\htb\gizmos.htb
+
+# Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
+# Office StartUp folder, and PDFMaker should be installed.
+#updatepdf:  # touchmanual pdfrtf
+#    start $(WAITFLAG) "winword d:\wx2\wxWindows\docs\latex\pdf\gizmos.rtf /mGeneratePDF"
+
+
