@@ -309,8 +309,7 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
   {
     // start drag operation
 
-    wxTextDataObject data(m_strText);
-    wxDropSource dragSource(data, this);
+    wxDropSource dragSource( new wxTextDataObject (m_strText), this );
     const char *pc;
 
     switch ( dragSource.DoDragDrop(TRUE) ) 

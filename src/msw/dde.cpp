@@ -420,7 +420,7 @@ bool wxDDEConnection::Disconnect(void)
   return (DdeDisconnect((HCONV) m_hConv) != 0);
 }
 
-bool wxDDEConnection::Execute(char *data, int size, wxDataFormat format)
+bool wxDDEConnection::Execute(char *data, int size, wxIPCFormat format)
 {
   DWORD result;
   if (size < 0)
@@ -432,7 +432,7 @@ bool wxDDEConnection::Execute(char *data, int size, wxDataFormat format)
     NULL, format, XTYP_EXECUTE, 5000, &result) ? TRUE : FALSE);
 }
 
-char *wxDDEConnection::Request(const wxString& item, int *size, wxDataFormat format)
+char *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat format)
 {
   DWORD result;
   HSZ atom = DDEGetAtom(item);
@@ -452,7 +452,7 @@ char *wxDDEConnection::Request(const wxString& item, int *size, wxDataFormat for
   else return NULL;
 }
 
-bool wxDDEConnection::Poke(const wxString& item, char *data, int size, wxDataFormat format)
+bool wxDDEConnection::Poke(const wxString& item, char *data, int size, wxIPCFormat format)
 {
   DWORD result;
   if (size < 0)
@@ -484,7 +484,7 @@ bool wxDDEConnection::StopAdvise(const wxString& item)
 }
 
 // Calls that SERVER can make
-bool wxDDEConnection::Advise(const wxString& item, char *data, int size, wxDataFormat format)
+bool wxDDEConnection::Advise(const wxString& item, char *data, int size, wxIPCFormat format)
 {
   if (size < 0)
     size = strlen(data);
@@ -579,7 +579,7 @@ DWORD /* lData2 */)
       {
         DWORD len = DdeGetData(hData, (LPBYTE)(connection->m_bufPtr), connection->m_bufSize, 0);
         DdeFreeDataHandle(hData);
-        if (connection->OnExecute(connection->m_topicName, connection->m_bufPtr, (int)len, (wxDataFormat) wFmt))
+        if (connection->OnExecute(connection->m_topicName, connection->m_bufPtr, (int)len, (wxIPCFormat) wFmt))
           return (DDERETURN)DDE_FACK;
         else
           return (DDERETURN)DDE_FNOTPROCESSED;
@@ -598,7 +598,7 @@ DWORD /* lData2 */)
                      CP_WINANSI);
 
         int user_size = -1;
-        char *data = connection->OnRequest(connection->m_topicName, wxString(item_name), &user_size, (wxDataFormat) wFmt);
+        char *data = connection->OnRequest(connection->m_topicName, wxString(item_name), &user_size, (wxIPCFormat) wFmt);
         if (data)
         {
           if (user_size < 0) user_size = strlen(data);
@@ -622,7 +622,7 @@ DWORD /* lData2 */)
                      CP_WINANSI);
         DWORD len = DdeGetData(hData, (LPBYTE)(connection->m_bufPtr), connection->m_bufSize, 0);
         DdeFreeDataHandle(hData);
-        connection->OnPoke(connection->m_topicName, wxString(item_name), connection->m_bufPtr, (int)len, (wxDataFormat) wFmt);
+        connection->OnPoke(connection->m_topicName, wxString(item_name), connection->m_bufPtr, (int)len, (wxIPCFormat) wFmt);
         return (DDERETURN)DDE_FACK;
       } else return (DDERETURN)DDE_FNOTPROCESSED;
       break;
@@ -684,7 +684,7 @@ DWORD /* lData2 */)
 
         DWORD len = DdeGetData(hData, (LPBYTE)(connection->m_bufPtr), connection->m_bufSize, 0);
         DdeFreeDataHandle(hData);
-        if (connection->OnAdvise(connection->m_topicName, wxString(item_name), connection->m_bufPtr, (int)len, (wxDataFormat) wFmt))
+        if (connection->OnAdvise(connection->m_topicName, wxString(item_name), connection->m_bufPtr, (int)len, (wxIPCFormat) wFmt))
           return (DDERETURN)DDE_FACK;
         else
           return (DDERETURN)DDE_FNOTPROCESSED;

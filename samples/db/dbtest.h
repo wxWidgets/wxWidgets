@@ -26,7 +26,7 @@ enum		DialogModes {mView,mCreate,mEdit,mSearch};
 
 
 // Name of the table to be created/opened
-const char	CONTACT_TABLE_NAME[]		=	"CONTACTS";
+const char	CONTACT_TABLE_NAME[]		=	"contacts";
 
 // Nuber of columns in the above table
 const int	CONTACT_NO_COLS			= 12;		// 0-11

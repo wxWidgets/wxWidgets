@@ -20,6 +20,28 @@
 #include "wx/object.h"
 #include "wx/string.h"
 
+enum wxIPCFormat
+{
+  wxIPC_INVALID =          0,
+  wxIPC_TEXT =             1,  /* CF_TEXT */
+  wxIPC_BITMAP =           2,  /* CF_BITMAP */
+  wxIPC_METAFILE =         3,  /* CF_METAFILEPICT */
+  wxIPC_SYLK =             4,
+  wxIPC_DIF =              5,
+  wxIPC_TIFF =             6,
+  wxIPC_OEMTEXT =          7,  /* CF_OEMTEXT */
+  wxIPC_DIB =              8,  /* CF_DIB */
+  wxIPC_PALETTE =          9,
+  wxIPC_PENDATA =          10,
+  wxIPC_RIFF =             11,
+  wxIPC_WAVE =             12,
+  wxIPC_UNICODETEXT =      13,
+  wxIPC_ENHMETAFILE =      14,
+  wxIPC_FILENAME =         15, /* CF_HDROP */
+  wxIPC_LOCALE =           16,
+  wxIPC_PRIVATE =          20
+};
+
 class WXDLLEXPORT wxDDEServerBase;
 class WXDLLEXPORT wxDDEClientBase;
 
@@ -31,15 +53,15 @@ class WXDLLEXPORT wxConnectionBase: public wxObject
   inline ~wxConnectionBase(void) {}
 
   // Calls that CLIENT can make
-  virtual bool Execute(char *data, int size = -1, wxDataFormat format = wxDF_TEXT ) = 0;
-  virtual bool Execute(const wxString& str) { return Execute((char *)(const char *)str, -1, wxDF_TEXT); }
-  virtual char *Request(const wxString& item, int *size = (int *) NULL, wxDataFormat format = wxDF_TEXT) = 0;
-  virtual bool Poke(const wxString& item, char *data, int size = -1, wxDataFormat format = wxDF_TEXT) = 0;
+  virtual bool Execute(char *data, int size = -1, wxIPCFormat format = wxIPC_TEXT ) = 0;
+  virtual bool Execute(const wxString& str) { return Execute((char *)(const char *)str, -1, wxIPC_TEXT); }
+  virtual char *Request(const wxString& item, int *size = (int *) NULL, wxIPCFormat format = wxIPC_TEXT) = 0;
+  virtual bool Poke(const wxString& item, char *data, int size = -1, wxIPCFormat format = wxIPC_TEXT) = 0;
   virtual bool StartAdvise(const wxString& item) = 0;
   virtual bool StopAdvise(const wxString& item) = 0;
 
   // Calls that SERVER can make
-  virtual bool Advise(const wxString& item, char *data, int size = -1, wxDataFormat format = wxDF_TEXT) = 0;
+  virtual bool Advise(const wxString& item, char *data, int size = -1, wxIPCFormat format = wxIPC_TEXT) = 0;
 
   // Calls that both can make
   virtual bool Disconnect(void) = 0;

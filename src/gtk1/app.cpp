@@ -19,6 +19,7 @@
 #include "wx/memory.h"
 #include "wx/font.h"
 #include "wx/settings.h"
+#include "wx/dialog.h"
 #if wxUSE_WX_RESOURCES
 #include "wx/resource.h"
 #endif
@@ -158,11 +159,14 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 
 wxApp::wxApp()
 {
-    m_idleTag = 0;
+    wxTheApp = this;
+    
     m_topWindow = (wxWindow *) NULL;
     m_exitOnFrameDelete = TRUE;
+    
+    m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
+    
     m_colorCube = (unsigned char*) NULL;
-    wxTheApp = this;
 }
 
 wxApp::~wxApp(void)
@@ -172,35 +176,36 @@ wxApp::~wxApp(void)
     if (m_colorCube) free(m_colorCube);
 }
 
-bool wxApp::InitVisual()
+bool wxApp::OnInitGui()
 {
     /* Nothing to do for 15, 16, 24, 32 bit displays */
 
     GdkVisual *visual = gdk_visual_get_system();
     if (visual->depth > 8) return TRUE;
-
-    /* this initiates the standard palette as defined by GdkImlib
-       in the GNOME libraries. it ensures that all GNOME applications
-       use the same 64 colormap entries on 8-bit displays so you
-       can use several rather graphics-heavy applications at the
-       same time */
     
-    /*
-    GdkColormap *cmap = gdk_colormap_new( gdk_visual_get_system(), TRUE );
+        /* this initiates the standard palette as defined by GdkImlib
+           in the GNOME libraries. it ensures that all GNOME applications
+           use the same 64 colormap entries on 8-bit displays so you
+           can use several rather graphics-heavy applications at the
+           same time.
+	   NOTE: this doesn't really seem to work this way... */
 
-    for (int i = 0; i < 64; i++)
-    {
-        GdkColor col;
-        col.red    = g_palette[i*3 + 0] << 8;
-        col.green  = g_palette[i*3 + 1] << 8;
-        col.blue   = g_palette[i*3 + 2] << 8;
-        col.pixel  = 0;
+        /*
+        GdkColormap *cmap = gdk_colormap_new( gdk_visual_get_system(), TRUE );
 
-        gdk_color_alloc( cmap, &col );
-    }
+        for (int i = 0; i < 64; i++)
+        {
+            GdkColor col;
+            col.red    = g_palette[i*3 + 0] << 8;
+            col.green  = g_palette[i*3 + 1] << 8;
+            col.blue   = g_palette[i*3 + 2] << 8;
+            col.pixel  = 0;
+
+            gdk_color_alloc( cmap, &col );
+        }
 	
-    gtk_widget_set_default_colormap( cmap );
-    */
+        gtk_widget_set_default_colormap( cmap );
+        */
     
     /* initialize color cube for 8-bit color reduction dithering */
     
@@ -235,25 +240,9 @@ bool wxApp::InitVisual()
 	    }
 	}
     }
+
     
     return TRUE;
-}
-
-bool wxApp::OnInitGui(void)
-{
-    m_idleTag = gtk_idle_add( wxapp_idle_callback, NULL );
-    
-    return TRUE;
-}
-
-bool wxApp::OnInit(void)
-{
-    return TRUE;
-}
-
-int wxApp::OnRun(void)
-{
-    return MainLoop();
 }
 
 bool wxApp::ProcessIdle(void)
@@ -330,11 +319,6 @@ bool wxApp::SendIdleEvents( wxWindow* win )
     return needMore ;
 }
 
-int wxApp::OnExit(void)
-{
-    return 0;
-}
-
 int wxApp::MainLoop(void)
 {
     gtk_main();
@@ -389,39 +373,43 @@ void wxApp::SetTopWindow( wxWindow *win )
     m_topWindow = win;
 }
 
-void wxApp::CommonInit(void)
+bool wxApp::Initialize(void)
 {
-  wxSystemSettings::Init();
+    wxBuffer = new char[BUFSIZ + 512];
+
+    wxClassInfo::InitializeClasses();
+    
+    wxSystemSettings::Init();
   
-  wxTheFontNameDirectory =  new wxFontNameDirectory;
-  wxTheFontNameDirectory->Initialize();
+    wxTheFontNameDirectory =  new wxFontNameDirectory;
+    wxTheFontNameDirectory->Initialize();
 
-  wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
-  wxTheColourDatabase->Initialize();
+    wxTheColourDatabase = new wxColourDatabase( wxKEY_STRING );
+    wxTheColourDatabase->Initialize();
 
-  wxInitializeStockLists();
-  wxInitializeStockObjects();
+    wxInitializeStockLists();
+    wxInitializeStockObjects();
 
 #if wxUSE_WX_RESOURCES
-  wxTheResourceCache = new wxResourceCache(wxKEY_STRING);
+    wxTheResourceCache = new wxResourceCache( wxKEY_STRING );
   
-  wxInitializeResourceSystem();
+    wxInitializeResourceSystem();
 #endif
 
-  wxImage::InitStandardHandlers();
+    wxImage::InitStandardHandlers();
 
-//  g_globalCursor = new wxCursor;
+    /* no global cursor under X
+       g_globalCursor = new wxCursor; */
+       
+    wxModule::RegisterModules();
+    if (!wxModule::InitializeModules()) return FALSE;
+    
+    return TRUE;
 }
 
-void wxApp::CommonCleanUp(void)
+void wxApp::CleanUp(void)
 {
-    if (wxTheColourDatabase) delete wxTheColourDatabase;
-    wxTheColourDatabase = (wxColourDatabase*) NULL;
-    
-    if (wxTheFontNameDirectory) delete wxTheFontNameDirectory;
-    wxTheFontNameDirectory = (wxFontNameDirectory*) NULL;
-    
-    wxDeleteStockObjects();
+    wxModule::CleanUpModules();
 
 #if wxUSE_WX_RESOURCES
     wxFlushResources();
@@ -432,16 +420,47 @@ void wxApp::CommonCleanUp(void)
     wxCleanUpResourceSystem();
 #endif
 
+    if (wxTheColourDatabase) delete wxTheColourDatabase;
+    wxTheColourDatabase = (wxColourDatabase*) NULL;
+    
+    if (wxTheFontNameDirectory) delete wxTheFontNameDirectory;
+    wxTheFontNameDirectory = (wxFontNameDirectory*) NULL;
+    
+    wxDeleteStockObjects();
+
     wxDeleteStockLists();
 
     wxImage::CleanUpHandlers();
 
+    delete wxTheApp;
+    wxTheApp = (wxApp*) NULL;
+
+    /* check for memory leaks */
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+    if (wxDebugContext::CountObjectsLeft() > 0)
+    {
+        wxLogDebug("There were memory leaks.\n");
+        wxDebugContext::Dump();
+        wxDebugContext::PrintStatistics();
+    }
+#endif
+
+    /* do this as the very last thing because everything else can log messages */
+    wxLog::DontCreateOnDemand();
+    
+    wxLog *oldLog = wxLog::SetActiveTarget( (wxLog*) NULL );
+    if (oldLog) delete oldLog;
+
     wxSystemSettings::Done();
+    
+    wxClassInfo::CleanUpClasses();
+
+    delete[] wxBuffer;
 }
 
 wxLog *wxApp::CreateLogTarget()
 {
-  return new wxLogGui;
+    return new wxLogGui;
 }
 
 //-----------------------------------------------------------------------------
@@ -450,10 +469,11 @@ wxLog *wxApp::CreateLogTarget()
 
 int wxEntry( int argc, char *argv[] )
 {
-    wxBuffer = new char[BUFSIZ + 512];
+    gtk_set_locale();
 
-    wxClassInfo::InitializeClasses();
+    gtk_init( &argc, &argv );
 
+    if (!wxApp::Initialize()) return 0;
 
     if (!wxTheApp)
     {
@@ -485,22 +505,11 @@ int wxEntry( int argc, char *argv[] )
     wxStripExtension( name );
     wxTheApp->SetAppName( name );
 
-    gtk_set_locale();
-
-    gtk_init( &argc, &argv );
-
-    if (!wxTheApp->InitVisual()) return 0;
-
-    wxApp::CommonInit();
-
     if (!wxTheApp->OnInitGui()) return 0;
 
-    wxModule::RegisterModules();
-    if (!wxModule::InitializeModules()) return FALSE;
-    
-    // Here frames insert themselves automatically
-    // into wxTopLevelWindows by getting created
-    // in OnInit().
+    /* Here frames insert themselves automatically
+     * into wxTopLevelWindows by getting created
+     * in OnInit(). */
 
     if (!wxTheApp->OnInit()) return 0;
 
@@ -510,34 +519,31 @@ int wxEntry( int argc, char *argv[] )
 
     if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
 
-    wxTheApp->DeletePendingObjects();
+    wxWindow *topWindow = wxTheApp->GetTopWindow();
+    if (topWindow)
+    {
+        /* Forcibly delete the window. */
+        if (topWindow->IsKindOf(CLASSINFO(wxFrame)) ||
+            topWindow->IsKindOf(CLASSINFO(wxDialog)) )
+        {
+            topWindow->Close( TRUE );
+            wxTheApp->DeletePendingObjects();
+        }
+        else
+        {
+            delete topWindow;
+            wxTheApp->SetTopWindow( (wxWindow*) NULL );
+        }
+    }
 
     wxTheApp->OnExit();
 
-    wxModule::CleanUpModules();
+    /* flush the logged messages if any */
+    wxLog *log = wxLog::GetActiveTarget();
+    if (log != NULL && log->HasPendingMessages())
+        log->Flush();
 
-    wxApp::CommonCleanUp();
-
-    delete wxTheApp;
-    wxTheApp = (wxApp*) NULL;
-
-    wxClassInfo::CleanUpClasses();
-
-    delete[] wxBuffer;
-
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
-
-    if (wxDebugContext::CountObjectsLeft() > 0)
-    {
-        wxLogDebug("There were memory leaks.\n");
-        wxDebugContext::Dump();
-        wxDebugContext::PrintStatistics();
-    }
-
-#endif
-
-    wxLog *oldLog = wxLog::SetActiveTarget( (wxLog*) NULL );
-    if (oldLog) delete oldLog;
+    wxApp::CleanUp();
 
     return retValue;
 }

@@ -211,7 +211,7 @@ bool wxTCPConnection::Disconnect (void)
   return TRUE;
 }
 
-bool wxTCPConnection::Execute (char *data, int size, wxDataFormat format)
+bool wxTCPConnection::Execute (char *data, int size, wxIPCFormat format)
 {
   if (!m_sock->IsConnected())
     return FALSE;
@@ -229,7 +229,7 @@ bool wxTCPConnection::Execute (char *data, int size, wxDataFormat format)
   return TRUE;
 }
 
-char *wxTCPConnection::Request (const wxString& item, int *size, wxDataFormat format)
+char *wxTCPConnection::Request (const wxString& item, int *size, wxIPCFormat format)
 {
   if (!m_sock->IsConnected())
     return NULL;
@@ -258,7 +258,7 @@ char *wxTCPConnection::Request (const wxString& item, int *size, wxDataFormat fo
   }
 }
 
-bool wxTCPConnection::Poke (const wxString& item, char *data, int size, wxDataFormat format)
+bool wxTCPConnection::Poke (const wxString& item, char *data, int size, wxIPCFormat format)
 {
   if (!m_sock->IsConnected())
     return FALSE;
@@ -314,7 +314,7 @@ bool wxTCPConnection::StopAdvise (const wxString& item)
 
 // Calls that SERVER can make
 bool wxTCPConnection::Advise (const wxString& item,
-                              char *data, int size, wxDataFormat format)
+                              char *data, int size, wxIPCFormat format)
 {
   if (!m_sock->IsConnected())
     return FALSE;
@@ -358,9 +358,9 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
   case IPC_EXECUTE: {
     char *data;
     size_t size; 
-    wxDataFormat format;
+    wxIPCFormat format;
     
-    format = (wxDataFormat)codeci->Read8();
+    format = (wxIPCFormat)codeci->Read8();
     size = codeci->Read32();
     data = new char[size];
     codeci->Read(data, size);
@@ -373,10 +373,10 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
   case IPC_ADVISE: {
     char *data;
     size_t size;
-    wxDataFormat format;
+    wxIPCFormat format;
 
     item = codeci->ReadString();
-    format = (wxDataFormat)codeci->Read8();
+    format = (wxIPCFormat)codeci->Read8();
     size = codeci->Read32();
     data = new char[size];
     codeci->Read(data, size);
@@ -409,12 +409,12 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
     break;
   }
   case IPC_POKE: {
-    wxDataFormat format;
+    wxIPCFormat format;
     size_t size;
     char *data;
 
     item = codeci->ReadString();
-    format = (wxDataFormat)codeci->Read8();
+    format = (wxIPCFormat)codeci->Read8();
     size = codeci->Read32();
     data = new char[size];
     codeci->Read(data, size);
@@ -426,10 +426,10 @@ void Client_OnRequest(wxSocketBase& sock, wxSocketBase::wxRequestEvent evt,
     break;
   }
   case IPC_REQUEST: {
-    wxDataFormat format;
+    wxIPCFormat format;
 
     item = codeci->ReadString();
-    format = (wxDataFormat)codeci->Read8();
+    format = (wxIPCFormat)codeci->Read8();
 
     int user_size = -1;
     char *user_data = connection->OnRequest (topic_name, item, &user_size, format);

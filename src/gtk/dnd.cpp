@@ -171,8 +171,7 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 	break;
       case wxDF_PRIVATE:
         wxPrivateDropTarget *pdt = (wxPrivateDropTarget *)this;
-        strcpy( buf, "applications/" );
-	strcat( buf, WXSTRINGCAST pdt->GetID() );
+	strcpy( buf, WXSTRINGCAST pdt->GetID() );
         format.target = buf;
 	valid++;
       default:
@@ -533,10 +532,17 @@ static void gtk_target_callback( GtkWidget *widget,
 
 wxDropTarget::wxDropTarget()
 {
+    m_format = (wxDataFormat*) NULL;
 }
 
 wxDropTarget::~wxDropTarget()
 {
+    if (m_format) delete m_format;
+}
+
+wxDataFormat &wxDropTarget::GetFormat(size_t n) const
+{
+    return (*m_format);
 }
 
 void wxDropTarget::UnregisterWidget( GtkWidget *widget )
@@ -556,8 +562,7 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
   
     for ( size_t i = 0; i < GetFormatCount(); i++ )
     {
-        wxDataFormat df = GetFormat( i );
-        switch (df) 
+        switch (GetFormat(i).GetType()) 
         {
             case wxDF_TEXT:
 	    {
@@ -577,7 +582,6 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 	    {
 	        if (i > 0) formats += ";";
                 wxPrivateDropTarget *pdt = (wxPrivateDropTarget *)this;
-                formats += "applications/";
                 formats += pdt->GetId();
 	        valid++;
 		break;
@@ -605,6 +609,11 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 // wxTextDropTarget
 // ----------------------------------------------------------------------------
 
+wxTextDropTarget::wxTextDropTarget()
+{
+    m_format = new wxDataFormat( wxDF_TEXT );
+}
+
 bool wxTextDropTarget::OnDrop( long x, long y, const void *data, size_t WXUNUSED(size) )
 {
     OnDropText( x, y, (const char*)data );
@@ -625,11 +634,6 @@ size_t wxTextDropTarget::GetFormatCount() const
     return 1;
 }
 
-wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
-{
-    return wxDF_TEXT;
-}
-
 // ----------------------------------------------------------------------------
 // wxPrivateDropTarget
 // ----------------------------------------------------------------------------
@@ -637,6 +641,13 @@ wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
 wxPrivateDropTarget::wxPrivateDropTarget()
 {
     m_id = wxTheApp->GetAppName();
+    m_format = new wxDataFormat( m_id );
+}
+
+void wxPrivateDropTarget::SetId( const wxString& id )
+{
+    m_id = id;
+    m_format->SetId( id );
 }
 
 size_t wxPrivateDropTarget::GetFormatCount() const
@@ -644,14 +655,14 @@ size_t wxPrivateDropTarget::GetFormatCount() const
     return 1;
 }
 
-wxDataFormat wxPrivateDropTarget::GetFormat(size_t WXUNUSED(n)) const
-{
-    return wxDF_PRIVATE;
-}
-
 // ----------------------------------------------------------------------------
 // wxFileDropTarget
 // ----------------------------------------------------------------------------
+
+wxFileDropTarget::wxFileDropTarget()
+{
+    m_format = new wxDataFormat( wxDF_FILENAME );
+}    
 
 bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * const aszFiles[] )
 {
@@ -698,11 +709,6 @@ size_t wxFileDropTarget::GetFormatCount() const
     return 1;
 }
 
-wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
-{
-    return wxDF_FILENAME;
-}
-
 //-------------------------------------------------------------------------
 // wxDropSource
 //-------------------------------------------------------------------------
@@ -712,64 +718,76 @@ shape_motion (GtkWidget      *widget,
 	      GdkEventMotion * /*event*/);
 	      
 //-----------------------------------------------------------------------------
-// drag request
+// "drag_request_event"
+//-----------------------------------------------------------------------------
 
-void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source )
+void gtk_drag_callback( GtkWidget *widget, GdkEventDragRequest *event, wxDropSource *source )
 {
-    wxDataObject *data = source->m_data;
-
-    switch (data->GetFormat())
+    wxDataBroker *data = source->m_data;
+    
+    if (!data) return;
+    
+    wxNode *node = data->m_dataObjects.First();
     {
-        case wxDF_PRIVATE:
-	{
-            wxPrivateDataObject *pdo = (wxPrivateDataObject*) data;
-	    
-            gtk_widget_dnd_data_set( widget, 
-	                             event,
-				     (unsigned char*) pdo->GetData(), 
-				     (int) pdo->GetDataSize() );
-	    
-	    break;
-	}
-        case wxDF_TEXT:
-	{
-	    wxTextDataObject *text_object = (wxTextDataObject*) data;
-	    
-	    wxString text = text_object->GetText();
-	    
-	    char *s = WXSTRINGCAST text;
-	    
-            gtk_widget_dnd_data_set( widget, 
-	                             event, 
-				     (unsigned char*) s, 
-				     (int) text.Length()+1 );
+        wxDataObject *dobj = (wxDataObject*) node->Data();
 	
-	    break;
-	}
-	
-        case wxDF_FILENAME:
+	if ((strcmp(event->data_type,"file:ALL") == 0) &&
+	    (dobj->GetFormat().GetType() == wxDF_FILENAME))
 	{
-	    wxFileDataObject *file_object = (wxFileDataObject*) data;
+	    wxFileDataObject *file_object = (wxFileDataObject*) dobj;
 	    
 	    wxString text = file_object->GetFiles();
 	    
 	    char *s = WXSTRINGCAST text;
 	    
             gtk_widget_dnd_data_set( widget, 
-	                             event, 
+	                             (GdkEvent*)event, 
 				     (unsigned char*) s, 
 				     (int) text.Length()+1 );
 	
-	    break;
-	}
-	
-	default:
-	{
+            source->m_retValue = wxDragCopy;
+	    
 	    return;
 	}
+	
+	if ((strcmp(event->data_type,"text/plain") == 0) &&
+	    (dobj->GetFormat().GetType() == wxDF_TEXT))
+	{
+	    wxTextDataObject *text_object = (wxTextDataObject*) dobj;
+	    
+	    wxString text = text_object->GetText();
+	    
+	    char *s = WXSTRINGCAST text;
+	    
+            gtk_widget_dnd_data_set( widget, 
+	                             (GdkEvent*)event, 
+				     (unsigned char*) s, 
+				     (int) text.Length()+1 );
+	
+            source->m_retValue = wxDragCopy;
+	    
+	    return;
+	}
+	
+	if (dobj->GetFormat().GetType() == wxDF_PRIVATE)
+	{
+            wxPrivateDataObject *pdo = (wxPrivateDataObject*) dobj;
+	    
+	    if (pdo->GetId() == event->data_type)
+	    {
+                gtk_widget_dnd_data_set( widget, 
+	                             (GdkEvent*)event,
+				     (unsigned char*) pdo->GetData(), 
+				     (int) pdo->GetSize() );
+				     
+                source->m_retValue = wxDragCopy;
+	    
+		return;
+	    }
+	}
+	
+	node = node->Next();
    }
-  
-  source->m_retValue = wxDragCopy;
 }
 
 wxDropSource::wxDropSource( wxWindow *win )
@@ -780,14 +798,14 @@ wxDropSource::wxDropSource( wxWindow *win )
     m_widget = win->m_widget;
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
   
-    m_data = (wxDataObject *) NULL;
+    m_data = (wxDataBroker*) NULL;
     m_retValue = wxDragCancel;
 
     m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
     m_goaheadCursor = wxCursor( wxCURSOR_HAND );
 }
 
-wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
+wxDropSource::wxDropSource( wxDataObject *data, wxWindow *win )
 {
     g_blockEventsOnDrag = TRUE;
   
@@ -796,20 +814,60 @@ wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
     m_retValue = wxDragCancel;
   
-    m_data = &data;
+    if (data)
+    {
+        m_data = new wxDataBroker();
+	m_data->Add( data );
+    }
+    else
+    {
+        m_data = (wxDataBroker*) NULL;
+    }
 
     m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
     m_goaheadCursor = wxCursor( wxCURSOR_HAND );
 }
 
-void wxDropSource::SetData( wxDataObject &data )
+wxDropSource::wxDropSource( wxDataBroker *data, wxWindow *win )
 {
-    m_data = &data;  
+    g_blockEventsOnDrag = TRUE;
+  
+    m_window = win;
+    m_widget = win->m_widget;
+    if (win->m_wxwindow) m_widget = win->m_wxwindow;
+    m_retValue = wxDragCancel;
+  
+    m_data = data;
+
+    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+}
+
+void wxDropSource::SetData( wxDataObject *data )
+{
+    if (m_data) delete m_data;
+    
+    if (data)
+    {
+        m_data = new wxDataBroker();
+	m_data->Add( data );
+    }
+    else
+    {
+        m_data = (wxDataBroker*) NULL;
+    }
+}
+
+void wxDropSource::SetData( wxDataBroker *data )
+{
+    if (m_data) delete m_data;
+    
+    m_data = data;
 }
 
 wxDropSource::~wxDropSource(void)
 {
-//    if (m_data) delete m_data;
+    if (m_data) delete m_data;
 
     g_blockEventsOnDrag = FALSE;
 }
@@ -926,29 +984,33 @@ void wxDropSource::RegisterWindow(void)
 
     wxString formats;
     
-    wxDataFormat df = m_data->GetFormat();
-  
-    switch (df) 
+    wxNode *node = m_data->m_dataObjects.First();
+    while (node)
     {
-        case wxDF_TEXT:
-	{ 
-            formats += "text/plain";
-	    break;
+        wxDataObject* dobj = (wxDataObject*) node->Data();
+    
+        switch (dobj->GetFormat().GetType()) 
+        {
+            case wxDF_TEXT:
+	    { 
+                  formats += "text/plain";
+	          break;
+	    }
+            case wxDF_FILENAME:
+	    {
+                  formats += "file:ALL";
+	          break;
+	    }
+            case wxDF_PRIVATE:
+	    {
+	          wxPrivateDataObject* pdo = (wxPrivateDataObject*) m_data;
+	          formats += pdo->GetId();
+	          break;
+	    }
+            default:
+              break;
 	}
-        case wxDF_FILENAME:
-	{
-            formats += "file:ALL";
-	    break;
-	}
-        case wxDF_PRIVATE:
-	{
-	    wxPrivateDataObject* pdo = (wxPrivateDataObject*) m_data;
-	    formats += "applications/";
-	    formats += pdo->GetId();
-	    break;
-	}
-        default:
-            break;
+	node = node->Next();
     }
   
     char *str = WXSTRINGCAST formats;

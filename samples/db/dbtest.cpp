@@ -622,10 +622,7 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
 	// The constructed where clause below has a sub-query within it "SELECT MIN(NAME) FROM %s" 
 	// to achieve a single row (in this case the first name in alphabetical order).
 	
-	Contact->whereStr.Printf("NAME = 'Robert'",Contact->tableName);
-/*
 	Contact->whereStr.Printf("NAME = (SELECT MIN(NAME) FROM %s)",Contact->tableName);
-*/
 	
 	// NOTE: (const char*) returns a pointer which may not be valid later, so this is short term use only
 	Contact->where = (char*) (const char*) Contact->whereStr;
@@ -786,12 +783,9 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 		}
 
 		// Previous record not available, retrieve first record in table
-		Contact->whereStr  = "NAME = 'Robert' ";
-/*
 		Contact->whereStr  = "NAME = (SELECT MIN(NAME) FROM ";
 		Contact->whereStr += Contact->tableName;
 		Contact->whereStr += ")";
-*/
 		Contact->where = (char*) (const char*) Contact->whereStr;
 		if (!Contact->Query())
 		{
@@ -842,10 +836,9 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 		if (strcmp(qryWhere, (const char*) Contact->qryWhereStr))
 		{
 			Contact->orderBy		= "NAME";
-/*
 			Contact->whereStr		= "NAME = (SELECT MIN(NAME) FROM ";
 			Contact->whereStr		+= CONTACT_TABLE_NAME;
-*/
+			
 			// Append the query where string (if there is one)
 			Contact->qryWhereStr	= qryWhere;
 			if (strlen(qryWhere))
@@ -885,12 +878,11 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 
 		// Query the first record in the table
 		Contact->orderBy		= "NAME";
-		Contact->whereStr		= "NAME = 'Robert' ";
-/*
+
 		Contact->whereStr		= "NAME = (SELECT MIN(NAME) FROM ";
 		Contact->whereStr		+= CONTACT_TABLE_NAME;
 		Contact->whereStr		+= ")";
-*/
+
 		Contact->where			= (char*) (const char*) Contact->whereStr;
 		if (!Contact->Query())
 		{
@@ -1210,10 +1202,8 @@ bool CeditorDlg::GetNextRec()
 {
 	wxString w;
 
-/*
+
 	w  = "NAME = (SELECT MIN(NAME) FROM ";
-*/
-	w  = "NAME = (SELECT NAME FROM ";
 	w += Contact->tableName;
 	w += " WHERE NAME > '";
 	w += Contact->Name;

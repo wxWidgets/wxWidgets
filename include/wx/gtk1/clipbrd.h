@@ -51,35 +51,29 @@ public:
   wxClipboard();
   ~wxClipboard();
 
-  // open the clipboard before SetData() and GetData()
+  /* open the clipboard before SetData() and GetData() */
   virtual bool Open();
   
-  // close the clipboard after SetData() and GetData()
+  /* close the clipboard after SetData() and GetData() */
   virtual void Close();
   
-  // can be called several times
-  virtual bool SetData( wxDataObject *data );
+  /* set the clipboard data. the clipboard will delete the broker later */
+  virtual bool SetData( wxDataBroker *data );
 
-  // format available on the clipboard ? 
-  // supply ID if private format, the same as wxPrivateDataObject::SetId() 
-  virtual bool IsSupportedFormat( wxDataFormat format, const wxString &id = "" );
-  
-  // fill data with data on the clipboard (if available)
+  /* fill data with data on the clipboard (if available) */
   virtual bool GetData( wxDataObject *data );
   
-  // clears wxTheClipboard and the system's clipboard if possible
+  /* clears wxTheClipboard and the system's clipboard if possible */
   virtual void Clear();
 
- // implementation 
- 
-  GdkAtom    GetTargetAtom( wxDataFormat format, const wxString &id = "" );
+  /* implementation */ 
  
   bool              m_open;
   
   bool              m_ownsClipboard;
   bool              m_ownsPrimarySelection;
   
-  wxList            m_dataObjects;
+  wxDataBroker     *m_dataBroker;
   GtkWidget        *m_clipboardWidget;
   
   bool              m_formatSupported;

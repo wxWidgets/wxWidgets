@@ -738,6 +738,8 @@ typedef enum
 // Don't do parent client adjustments (for implementation only)
 #define wxSIZE_NO_ADJUSTMENTS   0x0008
 
+#ifndef __WXGTK__
+
 enum wxDataFormat
 {
   wxDF_INVALID =          0,
@@ -759,6 +761,8 @@ enum wxDataFormat
   wxDF_LOCALE =           16,
   wxDF_PRIVATE =          20
 };
+
+#endif
 
 /* Virtual keycodes */
 

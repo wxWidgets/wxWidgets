@@ -61,15 +61,16 @@ class wxApp: public wxEvtHandler
     static void SetInitializerFunction(wxAppInitializerFunction fn) { m_appInitFn = fn; }
     static wxAppInitializerFunction GetInitializerFunction() { return m_appInitFn; }
 
-    /* this may have to be overwritten when special, non-default visuals have
-       to be set. it is also platform dependent as only X knows about displays
-       and visuals. */
-    virtual bool InitVisual();
-
-    virtual bool OnInit();
+    /* override for altering the way wxGTK intializes the GUI (palette/visual/colorcube).
+     * under wxMSW, OnInitGui() does nothing by default. when overriding this method,
+     * the code in it is likely to be platform dependent, otherwise use OnInit(). */
     virtual bool OnInitGui();
-    virtual int OnRun();
-    virtual int OnExit();
+    
+    /* override to create top level frame, display splash screen etc. */
+    virtual bool OnInit() { return FALSE; }
+    
+    virtual int OnRun() { return MainLoop(); }
+    virtual int OnExit() { return 0; }
 
     wxWindow *GetTopWindow();
     void SetTopWindow( wxWindow *win );
@@ -105,14 +106,15 @@ class wxApp: public wxEvtHandler
     void SetPrintMode(int WXUNUSED(mode) ) {};
     int GetPrintMode() const { return wxPRINT_POSTSCRIPT; };
 
-    // override this function to create default log target of arbitrary
-    // user-defined classv (default implementation creates a wxLogGui object)
+    /* override this function to create default log target of arbitrary
+     * user-defined classv (default implementation creates a wxLogGui object) */
     virtual wxLog *CreateLogTarget();
 
-  // GTK implementation
+  /* GTK implementation */
 
-    static void CommonInit();
-    static void CommonCleanUp();
+    static bool Initialize();
+    static bool InitialzeVisual();
+    static void CleanUp();
 
     bool ProcessIdle();
     void DeletePendingObjects();

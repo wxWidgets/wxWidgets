@@ -74,17 +74,17 @@ public:
 
   // Calls that CLIENT can make
   bool Execute(char *data, int size = -1,
-               wxDataFormat format = wxDF_TEXT);
+               wxIPCFormat format = wxIPC_TEXT);
   char *Request(const wxString& item, int *size = NULL,
-                wxDataFormat format = wxDF_TEXT);
+                wxIPCFormat format = wxIPC_TEXT);
   bool Poke(const wxString& item, char *data, int size = -1,
-            wxDataFormat format = wxDF_TEXT);
+            wxIPCFormat format = wxIPC_TEXT);
   bool StartAdvise(const wxString& item);
   bool StopAdvise(const wxString& item);
 
   // Calls that SERVER can make
   bool Advise(const wxString& item, char *data, int size = -1,
-              wxDataFormat format = wxDF_TEXT);
+              wxIPCFormat format = wxIPC_TEXT);
 
   // Calls that both can make
   bool Disconnect();

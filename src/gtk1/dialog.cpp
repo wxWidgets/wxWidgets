@@ -134,7 +134,16 @@ bool wxDialog::Create( wxWindow *parent,
 wxDialog::~wxDialog()
 {
     wxTopLevelWindows.DeleteObject( this );
-    if (wxTopLevelWindows.Number() == 0) wxTheApp->ExitMainLoop();
+    
+    if (wxTheApp->GetTopWindow() == this)
+    {
+        wxTheApp->SetTopWindow( (wxWindow*) NULL );
+    }
+    
+    if (wxTopLevelWindows.Number() == 0)
+    {  
+        wxTheApp->ExitMainLoop();
+    }
 }
 
 void wxDialog::SetTitle( const wxString& title )

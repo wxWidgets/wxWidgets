@@ -193,7 +193,16 @@ wxFrame::~wxFrame()
     if (m_frameToolBar) delete m_frameToolBar;
 
     wxTopLevelWindows.DeleteObject( this );
-    if (wxTopLevelWindows.Number() == 0) wxTheApp->ExitMainLoop();
+    
+    if (wxTheApp->GetTopWindow() == this)
+    {
+        wxTheApp->SetTopWindow( (wxWindow*) NULL );
+    }
+    
+    if (wxTopLevelWindows.Number() == 0)
+    {  
+        wxTheApp->ExitMainLoop();
+    }
 }
 
 bool wxFrame::Show( bool show )
