@@ -18,28 +18,11 @@
 
 #include "wx/control.h"
 
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
-#endif
-
 WXDLLEXPORT_DATA(extern const char*) wxTextCtrlNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
 // Single-line text item
-class WXDLLEXPORT wxTextCtrl: public wxControl
-
-// TODO Some platforms/compilers don't like inheritance from streambuf.
-
-#if (defined(__BORLANDC__) && !defined(__WIN32__)) || defined(__MWERKS__)
-#define NO_TEXT_WINDOW_STREAM
-#endif
-
-#ifndef NO_TEXT_WINDOW_STREAM
-, public streambuf
-#endif
-
+class WXDLLEXPORT wxTextCtrl: public wxTextCtrlBase
 {
   DECLARE_DYNAMIC_CLASS(wxTextCtrl)
     
@@ -53,9 +36,6 @@ public:
                     const wxSize& size = wxDefaultSize, long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
                     const wxString& name = wxTextCtrlNameStr)
-#ifndef NO_TEXT_WINDOW_STREAM
-    :streambuf()
-#endif
   {
     Create(parent, id, value, pos, size, style, validator, name);
   }
@@ -76,63 +56,94 @@ public:
   virtual wxString GetLineText(long lineNo) const;
   virtual int GetNumberOfLines() const;
 
+  virtual bool IsModified() const;
+  virtual bool IsEditable() const;
+
+  // If the return values from and to are the same, there is no selection.
+  virtual void GetSelection(long* from, long* to) const;
+
   // operations
   // ----------
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  
+
+  // editing
+
+  virtual void Clear();
+  virtual void Replace(long from, long to, const wxString& value);
+  virtual void Remove(long from, long to);
+
+  // load the controls contents from the file
+  virtual bool LoadFile(const wxString& file);
+
+  // clears the dirty flag
+  virtual void DiscardEdits();
+
+  // writing text inserts it at the current position, appending always
+  // inserts it at the end
+  virtual void WriteText(const wxString& text);
+  virtual void AppendText(const wxString& text);
+
+  // translate between the position (which is just an index in the text ctrl
+  // considering all its contents as a single strings) and (x, y) coordinates
+  // which represent column and line.
+  virtual long XYToPosition(long x, long y) const;
+  virtual bool PositionToXY(long pos, long *x, long *y) const;
+
+  virtual void ShowPosition(long pos);
+
   // Clipboard operations
   virtual void Copy();
   virtual void Cut();
   virtual void Paste();
   
+  virtual bool CanCopy() const;
+  virtual bool CanCut() const;
+  virtual bool CanPaste() const;
+
+  // Undo/redo
+  virtual void Undo();
+  virtual void Redo();
+
+  virtual bool CanUndo() const;
+  virtual bool CanRedo() const;
+
+  // Insertion point
   virtual void SetInsertionPoint(long pos);
   virtual void SetInsertionPointEnd();
-  virtual long GetInsertionPoint() const ;
-  virtual long GetLastPosition() const ;
-  virtual void Replace(long from, long to, const wxString& value);
-  virtual void Remove(long from, long to);
+  virtual long GetInsertionPoint() const;
+  virtual long GetLastPosition() const;
+
   virtual void SetSelection(long from, long to);
   virtual void SetEditable(bool editable);
-  
-  // streambuf implementation
-#ifndef NO_TEXT_WINDOW_STREAM
-  int overflow(int i);
-  int sync();
-  int underflow();
-#endif
-  
-  wxTextCtrl& operator<<(const wxString& s);
-  wxTextCtrl& operator<<(int i);
-  wxTextCtrl& operator<<(long i);
-  wxTextCtrl& operator<<(float f);
-  wxTextCtrl& operator<<(double d);
-  wxTextCtrl& operator<<(const char c);
-  
-  virtual bool LoadFile(const wxString& file);
-  virtual bool SaveFile(const wxString& file);
-  virtual void WriteText(const wxString& text);
-  virtual void AppendText(const wxString& text);
-  virtual void DiscardEdits();
-  virtual bool IsModified() const;
-  
-  virtual long XYToPosition(long x, long y) const ;
-  virtual void PositionToXY(long pos, long *x, long *y) const ;
-  virtual void ShowPosition(long pos);
-  virtual void Clear();
-	virtual bool MacCanFocus() const { return true ; }
-  
-  // callbacks
-  // ---------
-  void OnDropFiles(wxDropFilesEvent& event);
-	void OnChar(wxKeyEvent& event); // Process 'enter' if required
-//  void OnEraseBackground(wxEraseEvent& event);
-  
-  // Implementation
-  // --------------
-  virtual void Command(wxCommandEvent& event);
 
+    // Implementation from now on
+    // --------------------------
+
+    // Implementation
+    // --------------
+    virtual void Command(wxCommandEvent& event);
+
+    virtual bool AcceptsFocus() const;
+
+    // callbacks
+    void OnDropFiles(wxDropFilesEvent& event);
+    void OnChar(wxKeyEvent& event); // Process 'enter' if required
+
+    void OnCut(wxCommandEvent& event);
+    void OnCopy(wxCommandEvent& event);
+    void OnPaste(wxCommandEvent& event);
+    void OnUndo(wxCommandEvent& event);
+    void OnRedo(wxCommandEvent& event);
+
+    void OnUpdateCut(wxUpdateUIEvent& event);
+    void OnUpdateCopy(wxUpdateUIEvent& event);
+    void OnUpdatePaste(wxUpdateUIEvent& event);
+    void OnUpdateUndo(wxUpdateUIEvent& event);
+    void OnUpdateRedo(wxUpdateUIEvent& event);
+
+   	virtual bool MacCanFocus() const { return true ; }
+    
 protected:
-  wxString  m_fileName;
+  virtual wxSize DoGetBestSize() const;
   
   DECLARE_EVENT_TABLE()
 };

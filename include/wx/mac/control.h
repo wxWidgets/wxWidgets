@@ -25,13 +25,21 @@ class WXDLLEXPORT wxControl : public wxControlBase
 
 public:
    wxControl();
-   virtual ~wxControl();
+   wxControl(wxWindow *parent, wxWindowID id,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize, long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = wxControlNameStr)
+    {
+        Create(parent, id, pos, size, style, validator, name);
+    }
 
     bool Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxControlNameStr);
+   virtual ~wxControl();
 
    // Simulates an event
    virtual void Command(wxCommandEvent& event) { ProcessCommand(event); }
@@ -49,7 +57,8 @@ public:
 
 	 	virtual bool						Enable(bool enabled) ;
 	 	virtual bool						Show(bool show) ;
-	 		 	
+	 		
+	 	virtual void						MacRedrawControl () ; 	
 		virtual void 						MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
 		virtual	void						MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString label , 
 				           					 const wxPoint& pos,
@@ -91,12 +100,12 @@ protected:
 
 protected:
    // For controls like radiobuttons which are really composite
-		ControlHandle		m_macControl ;
-		int							m_macHorizontalBorder ;
-		int							m_macVerticalBorder ;
-   wxList m_subControls;
+	ControlHandle		m_macControl ;
+   	wxList m_subControls;
+	int							m_macHorizontalBorder ;
+	int							m_macVerticalBorder ;
 
-   virtual wxSize DoGetBestSize() const ;
+   virtual wxSize DoGetBestSize() const;
 
 private:
    DECLARE_EVENT_TABLE()

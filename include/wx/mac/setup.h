@@ -12,128 +12,22 @@
 #ifndef _WX_SETUP_H_
 #define _WX_SETUP_H_
 
-// ----------------------------------------------------------------------------
-// global settings
-// ----------------------------------------------------------------------------
-
-// define this to 0 when building wxBase library
-#define wxUSE_GUI            1
+/*
+ * General features
+ *
+ */
  
-// ----------------------------------------------------------------------------
-// compatibility settings
-// ----------------------------------------------------------------------------
-
-// This setting determines the compatibility with 1.68 API:
-// Level 0: no backward compatibility, all new features
-// Level 1: some extra methods are defined for compatibility.
-//
-// Default is 0.
-//
-// Recommended setting: 0 (in fact the compatibility code is now very minimal
-// so there is little advantage to setting it to 1.
-#define WXWIN_COMPATIBILITY  0
-
+#define wxUSE_GEOMETRY 1
 #define WORDS_BIGENDIAN 1
 
-// ----------------------------------------------------------------------------
-// non GUI features selection
-// ----------------------------------------------------------------------------
-
-// Set wxUSE_LONGLONG to 1 to compile the wxLongLong class. This is a 64 bit
-// integer which is implemented in terms of native 64 bit integers if any or
-// uses emulation otherwise.
-//
-// This class is required by wxDateTime and so you should enable it if you want
-// to use wxDateTime. For most modern platforms, it will use the native 64 bit
-// integers in which case (almost) all of its functions are inline and it
-// almost does not take any space, so there should be no reason to switch it
-// off.
-//
-// Recommended setting: 1
-#define wxUSE_LONGLONG      1
-
-
-// Set wxUSE_TIMEDATE to 1 to compile the wxDateTime and related classes which
-// allow to manipulate dates, times and time intervals. wxDateTime replaces the
-// old wxTime and wxDate classes which are still provided for backwards
-// compatibility (and implemented in terms of wxDateTime).
-//
-// Note that this class is relatively new and is still officially in alpha
-// stage because some features are not yet (fully) implemented. It is already
-// quite useful though and should only be disabled if you are aiming at
-// absolutely minimal version of the library.
-//
-// Requires: wxUSE_LONGLONG
-//
-// Recommended setting: 1
-#define wxUSE_TIMEDATE      1
-
-// Setting wxUSE_CONFIG to 1 enables the use of wxConfig and related classes
-// which allow the application to store its settings in the persistent
-// storage. Setting this to 1 will also enable on-demand creation of the
-// global config object in wxApp.
-//
-// See also wxUSE_CONFIG_NATIVE below.
-//
-// Recommended setting: 1
 #define wxUSE_CONFIG           1
+                                // Use wxConfig, with CreateConfig in wxApp
 
-// ----------------------------------------------------------------------------
-// Optional controls
-// ----------------------------------------------------------------------------
-
-// wxToolBar related settings: if wxUSE_TOOLBAR is 0, don't compile any toolbar
-// classes at all. Otherwise, use the native toolbar class unless
-// wxUSE_TOOLBAR_NATIVE is 0. Additionally, the generic toolbar class which
-// supports some features which might not be supported by the native wxToolBar
-// class may be compiled in if wxUSE_TOOLBAR_SIMPLE is 1.
-//
-// Default is 1 for all settings.
-//
-// Recommended setting: 1 for wxUSE_TOOLBAR and wxUSE_TOOLBAR_NATIVE and 0 for
-// wxUSE_TOOLBAR_SIMPLE (the default is 1 mainly for backwards compatibility).
-#define wxUSE_TOOLBAR 1
-#define wxUSE_TOOLBAR_NATIVE 1
-#define wxUSE_TOOLBAR_SIMPLE 0
-
-// wxNotebook is a control with several "tabs" located on one of its sides. It
-// may be used ot logically organise the data presented to the user instead of
-// putting everything in one huge dialog. It replaces wxTabControl and related
-// classes of wxWin 1.6x.
-//
-// Default is 1.
-//
-// Recommended setting: 1
-#define wxUSE_NOTEBOOK 1
-
-
-// The corresponding controls will be compiled in if wxUSE_<CONTROL> is set to
-// 1 and not compiled into the library otherwise.
-//
-// Default is 1 for everything.
-//
-// Recommended setting: 1 (library might fail to compile for some combinations
-// of disabled controls) 
-#define wxUSE_COMBOBOX     1
-#define wxUSE_CHOICE       1
-#define wxUSE_RADIOBTN     1
-#define wxUSE_RADIOBOX     1
-#define wxUSE_SCROLLBAR    1
-#define wxUSE_CHECKBOX     1
-#define wxUSE_LISTBOX      1
-#define wxUSE_SPINBTN      1
-#define wxUSE_SPINCTRL     1
-#define wxUSE_STATLINE     1
-#define wxUSE_CHECKLISTBOX 1
-#define wxUSE_CHOICE       1
-#define wxUSE_CARET        1
-#define wxUSE_SLIDER       1
-
-// ----------------------------------------------------------------------------
-// Postscript support settings
-// ----------------------------------------------------------------------------
-
-
+#define WXWIN_COMPATIBILITY  0
+                                // Compatibility with 1.66 API.
+                                // Level 0: no backward compatibility, all new features
+                                // Level 1: wxDC, OnSize (etc.) compatibility, but
+                                //          some new features such as event tables
 #define wxUSE_POSTSCRIPT  0
                         	// 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
@@ -142,7 +36,7 @@
                                 // 0 for no Metafile and metafile device context
 #define wxUSE_IPC         0
                                 // 0 for no interprocess comms
-#define wxUSE_HELP        0
+#define wxUSE_HELP        1
                                 // 0 for no help facility
 #define wxUSE_RESOURCES   1
                         	// 0 for no wxGetResource/wxWriteResource
@@ -161,6 +55,7 @@
                                 // 0 for no drag and drop
 
 #define wxUSE_TOOLBAR       1
+#define wxUSE_TOOLBAR_NATIVE       1
                                     // Define 1 to use toolbar classes
 #define wxUSE_BUTTONBAR     1
                                     // Define 1 to use buttonbar classes (enhanced toolbar
@@ -238,7 +133,11 @@
                                   // wxObject::delete *IF* __WXDEBUG__ is also defined.
                                   // WARNING: this code may not work with all architectures, especially
                                   // if alignment is an issue.
+#ifndef __MWERKS__
+#define wxUSE_DEBUG_CONTEXT       0
+#else
 #define wxUSE_DEBUG_CONTEXT       1
+#endif
                                   // If 1, enables wxDebugContext, for
                                   // writing error messages to file, etc. 
                                   // If __WXDEBUG__ is not defined, will still use
@@ -262,27 +161,17 @@
                                   // Set this to 0 if your compiler can't cope
                                   // with omission of prototype parameters.
 
-#define wxUSE_ODBC 1
-                                  // Define 1 to use ODBC classes
+#define wxUSE_ODBC                   1
+                                    // Define 1 to use ODBC classes
 
 
-#define wxODBC_FWD_ONLY_CURSORS 1
-                                  // For backward compatibility reasons, this parameter now only
-                                  // controls the default scrolling method used by cursors.  This
-                                  // default behavior can be overriden by setting the second param
-                                  // of wxDB::GetDbConnection() to indicate whether the connection
-                                  // (and any wxTable()s that use the connection) should support
-                                  // forward only scrolling of cursors, or both forward and backward
-                                  // Support for backward scrolling cursors is dependent on the
-                                  // data source as well as the ODBC driver being used.
-
-#define wxODBC_BACKWARD_COMPATABILITY 0
-                                  // Default is 0.  Set to 1 to use the deprecated classes, enum
-                                  // types, function, member variables.  With a setting of 1, full
-                                  // backward compatability with the 2.0.x release is possible.
-                                  // It is STRONGLY recommended that this be set to 0, as 
-                                  // future development will be done only on the non-deprecated
-                                  // functions/classes/member variables/etc.
+#define wxODBC_FWD_ONLY_CURSORS   1
+                                  // Some databases/ODBC drivers only allow forward scrolling cursors.
+                                  // Unless you specifically want to use backward scrolling
+                                  // cursors, and you know that all of the databases/ODBC drivers
+                                  // that you will use these odbc classes with allow backward 
+                                  // scrolling cursors, this setting should remain set to 1
+                                  // for maximum database/driver compatibilty
 
 
 
@@ -298,9 +187,13 @@
 #define wxUSE_STREAMS       1
                                   // If enabled (1), compiles wxWindows streams classes
 
+#ifndef __MWERKS__
+#define wxUSE_STD_IOSTREAM     0
+#else
 #define wxUSE_STD_IOSTREAM  1
                                   // Use standard C++ streams if 1. If 0, use wxWin
                                   // streams implementation.
+#endif
 
 #define wxUSE_WXCONFIG      1
                                   // if enabled, compiles built-in OS independent wxConfig
@@ -314,8 +207,13 @@
                                   // Use zlib for compression in streams and PNG code
 #define wxUSE_LIBPNG        1
                                   // Use PNG bitmap code
-#define wxUSE_LIBJPEG       0
+#define wxUSE_LIBJPEG       1
                                   // Use JPEG bitmap code
+#define wxUSE_LIBTIFF		1                                  
+                                  // Use TIFF bitmap code
+#define wxUSE_GIF			1
+									// Use GIF bitmap code
+                                  
 #define wxUSE_SERIAL        0
                                   // Use serialization (requires utils/serialize)
 #define wxUSE_DYNLIB_CLASS  0
@@ -324,10 +222,12 @@
 #define wxUSE_TOOLTIPS      1
                                   // Define to use wxToolTip class and
                                   // wxWindow::SetToolTip() method
-#define wxUSE_SOCKETS       0 // 0
+#define wxUSE_SOCKETS       1 // 0
                                   // Set to 1 to use socket classes
 #define wxUSE_HTML          1 // 0
                                   // Set to 1 to use wxHTML sub-library
+#define wxUSE_FILESYSTEM    1 
+                                 
 #define wxUSE_FS_ZIP        1 // 0
 #define wxUSE_FS_INET       1 // 0     // Set to 1 to enable virtual file systems
 
@@ -371,9 +271,6 @@
 
 // text entry dialog and wxGetTextFromUser function
 #define wxUSE_TEXTDLG 1
-
-// wxToolBar class
-#define wxUSE_TOOLBAR 1
 
 // wxStatusBar class
 #define wxUSE_STATUSBAR 1

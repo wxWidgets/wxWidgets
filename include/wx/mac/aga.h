@@ -77,8 +77,37 @@ OSErr AGAGetRootControl( WindowPtr inWindow , ControlHandle *outControl ) ;
 void			AGASetThemeWindowBackground		(WindowRef 				inWindow,
 								 ThemeBrush 			inBrush,
 								 Boolean 				inUpdate) ;
+void			AGAApplyThemeBackground			(ThemeBackgroundKind 	inKind,
+								 const Rect *			bounds,
+								 ThemeDrawState 		inState,
+								 SInt16 				inDepth,
+								 Boolean 				inColorDev) ;
 void AGAMoveControl( ControlHandle inControl , short x , short y ) ;
 void AGASizeControl( ControlHandle inControl , short x , short y ) ;
+
+class AGAPortHelper 
+{
+public :
+	AGAPortHelper( GrafPtr newport) ; 
+	AGAPortHelper() ;
+	void Setup( GrafPtr newport ) ;
+	void Clear() ;
+	bool IsCleared() { return clip == NULL ; }
+	GrafPtr GetCurrentPort() { return nport ; }
+	~AGAPortHelper() ;
+
+private :
+				GrafPtr			nport ;
+				GrafPtr			port ;
+				PenState		oldPenState ;
+				RGBColor		oldForeColor ;
+				RGBColor		oldBackColor ;
+				RgnHandle		clip ;
+				short			font ;
+				short			size ;
+				short			style ;
+				short 			mode ;
+} ;
 
 
 #endif

@@ -1,16 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        mac/tooltip.h
 // Purpose:     wxToolTip class - tooltip control
-// Author:      Vadim Zeitlin
+// Author:      Stefan Csomor
 // Modified by:
 // Created:     31.01.99
 // RCS-ID:      $Id$
-// Copyright:   (c) 1999 Robert Roebling, Vadim Zeitlin
+// Copyright:   (c) 1999 Robert Roebling, Vadim Zeitlin, Stefan Csomor
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-
-//TO ADAPT...
 
 class wxToolTip : public wxObject
 {
@@ -33,18 +31,16 @@ public:
     static void Enable(bool flag);
         // set the delay after which the tooltip appears
     static void SetDelay(long milliseconds);
+    static void NotifyWindowDelete( WindowRef win ) ;
 
-    // implementation
-    //void RelayEvent(WXMSG *msg);
+    // implementation only from now on
+    // -------------------------------
+
+    // should be called in response to mouse events
+    static void RelayEvent(wxWindow *win , wxMouseEvent &event);
+    static void RemoveToolTips();
 
 private:
-    // create the tooltip ctrl for our parent frame if it doesn't exist yet
-    // and return its window handle
-    WXHWND GetToolTipCtrl();
-
-    // remove this tooltip from the tooltip control
-    void Remove();
-
     wxString  m_text;           // tooltip text
     wxWindow *m_window;         // window we're associated with
 };

@@ -21,6 +21,7 @@
 #include "wx/icon.h"
 #include "wx/font.h"
 #include "wx/gdicmn.h"
+#include "wx/mac/aga.h"
 
 //-----------------------------------------------------------------------------
 // constants
@@ -47,15 +48,65 @@ extern int wxPageNumber;
 // wxDC
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDC: public wxObject
+class WXDLLEXPORT wxDC: public wxDCBase
 {
-  DECLARE_ABSTRACT_CLASS(wxDC)
+  DECLARE_DYNAMIC_CLASS(wxDC)
 
   public:
 
-    wxDC(void);
-    ~wxDC(void);
+    wxDC();
+    ~wxDC();
     
+
+    // implement base class pure virtuals
+    // ----------------------------------
+
+    virtual void Clear();
+
+    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; };
+    virtual void EndDoc(void) {};
+    
+    virtual void StartPage(void) {};
+    virtual void EndPage(void) {};
+
+    virtual void SetFont(const wxFont& font);
+    virtual void SetPen(const wxPen& pen);
+    virtual void SetBrush(const wxBrush& brush);
+    virtual void SetBackground(const wxBrush& brush);
+    virtual void SetBackgroundMode(int mode);
+    virtual void SetPalette(const wxPalette& palette);
+
+    virtual void DestroyClippingRegion();
+
+    virtual wxCoord GetCharHeight() const;
+    virtual wxCoord GetCharWidth() const;
+    virtual void DoGetTextExtent(const wxString& string,
+                                 wxCoord *x, wxCoord *y,
+                                 wxCoord *descent = NULL,
+                                 wxCoord *externalLeading = NULL,
+                                 wxFont *theFont = NULL) const;
+
+    virtual bool CanDrawBitmap() const;
+    virtual bool CanGetTextExtent() const;
+    virtual int GetDepth() const;
+    virtual wxSize GetPPI() const;
+
+    virtual void SetMapMode(int mode);
+    virtual void SetUserScale(double x, double y);
+
+    virtual void SetLogicalScale(double x, double y);
+    virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
+    virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
+    virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
+    virtual void SetLogicalFunction(int function);
+
+    virtual void SetTextForeground(const wxColour& colour) ;
+    virtual void SetTextBackground(const wxColour& colour) ;
+
+//
+//
+
+/*
     void BeginDrawing(void) {};
     void EndDrawing(void) {};
     
@@ -165,20 +216,9 @@ class WXDLLEXPORT wxDC: public wxObject
     }
 
     virtual bool CanGetTextExtent(void) const ;
-    virtual void GetTextExtent( const wxString &string, long *width, long *height,
-                     long *descent = NULL, long *externalLeading = NULL,
-                     wxFont *theFont = NULL, bool use16 = FALSE ) const ;
     virtual void GetTextExtent( const wxString &string, int *width, int *height,
                      int *descent = NULL, int *externalLeading = NULL,
-                     wxFont *theFont = NULL, bool use16 = FALSE ) const 
-    {
-    	long lwidth,lheight,ldescent,lexternal ;
-    	GetTextExtent( string, &lwidth,&lheight,&ldescent,&lexternal,theFont,use16 ) ;
-    	*width = lwidth ;
-    	*height = lheight ;
-    	if (descent) *descent = ldescent ;
-    	if (externalLeading) *externalLeading = lexternal ;
-    }
+                     wxFont *theFont = NULL, bool use16 = FALSE ) const ;
     virtual wxCoord GetCharWidth(void) const;
     virtual wxCoord GetCharHeight(void) const;
     
@@ -227,27 +267,16 @@ class WXDLLEXPORT wxDC: public wxObject
     inline wxSize GetSize(void) const { int w, h; GetSize(&w, &h); return wxSize(w, h); }
     virtual void GetSizeMM( long* width, long* height ) const;
     
-    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; };
-    virtual void EndDoc(void) {};
-    virtual void StartPage(void) {};
-    virtual void EndPage(void) {};
     
-    virtual void SetMapMode( int mode );
     virtual int GetMapMode(void) const { return m_mappingMode; };
     
-    virtual void SetUserScale( double x, double y );
     virtual void GetUserScale( double *x, double *y );
-    virtual void SetLogicalScale( double x, double y );
     virtual void GetLogicalScale( double *x, double *y );
     
-    virtual void SetLogicalOrigin( long x, long y );
     virtual void GetLogicalOrigin( long *x, long *y );
-    virtual void SetDeviceOrigin( long x, long y );
     virtual void GetDeviceOrigin( long *x, long *y );
     virtual void SetInternalDeviceOrigin( long x, long y );
     virtual void GetInternalDeviceOrigin( long *x, long *y );
-
-    virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
     
     virtual void SetOptimization( bool WXUNUSED(optimize) ) {};
     virtual bool GetOptimization(void) { return m_optimize; };
@@ -261,10 +290,12 @@ class WXDLLEXPORT wxDC: public wxObject
     virtual long LogicalToDeviceXRel(long x) const;
     virtual long LogicalToDeviceYRel(long y) const;
 
+    void CalcBoundingBox( long x, long y );
+*/
+
+    void ComputeScaleAndOrigin(void);
   public:
   
-    void CalcBoundingBox( long x, long y );
-    void ComputeScaleAndOrigin(void);
     
     long XDEV2LOG(long x) const
 	{
@@ -327,6 +358,71 @@ class WXDLLEXPORT wxDC: public wxObject
 	    return (long)((double)(y) * m_scaleY - 0.5);
 	}
   
+//
+
+protected:
+    virtual void DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
+                             int style = wxFLOOD_SURFACE);
+
+    virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const;
+
+    virtual void DoDrawPoint(wxCoord x, wxCoord y);
+    virtual void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
+
+    virtual void DoDrawArc(wxCoord x1, wxCoord y1,
+                           wxCoord x2, wxCoord y2,
+                           wxCoord xc, wxCoord yc);
+    
+    virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
+                                   double sa, double ea);
+
+    virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    virtual void DoDrawRoundedRectangle(wxCoord x, wxCoord y,
+                                        wxCoord width, wxCoord height,
+                                        double radius);
+    virtual void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+
+    virtual void DoCrossHair(wxCoord x, wxCoord y);
+
+    virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
+    virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
+                              bool useMask = FALSE);
+
+    virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y);
+    virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
+                                   double angle);
+
+    virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
+                        wxDC *source, wxCoord xsrc, wxCoord ysrc,
+                        int rop = wxCOPY, bool useMask = FALSE);
+
+    // this is gnarly - we can't even call this function DoSetClippingRegion()
+    // because of virtual function hiding
+    virtual void DoSetClippingRegionAsRegion(const wxRegion& region);
+    virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
+                                     wxCoord width, wxCoord height);
+    virtual void DoGetClippingRegion(wxCoord *x, wxCoord *y,
+                                     wxCoord *width, wxCoord *height)
+    {
+        GetClippingBox(x, y, width, height);
+    }
+
+    virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoGetSizeMM(int* width, int* height) const;
+
+    virtual void DoDrawLines(int n, wxPoint points[],
+                             wxCoord xoffset, wxCoord yoffset);
+    virtual void DoDrawPolygon(int n, wxPoint points[],
+                               wxCoord xoffset, wxCoord yoffset,
+                               int fillStyle = wxODDEVEN_RULE);
+
+#if wxUSE_SPLINES
+    virtual void DoDrawSpline(wxList *points);
+#endif // wxUSE_SPLINES
+
+
+//
+
   public:
     
     bool         m_ok;
@@ -375,6 +471,8 @@ class WXDLLEXPORT wxDC: public wxObject
     
     bool         m_needComputeScaleX,m_needComputeScaleY;         // not yet used
     
+    float        m_scaleFactor;  // wxPSDC wants to have this. Will disappear.
+    
     long         m_clipX1,m_clipY1,m_clipX2,m_clipY2;
     long         m_minX,m_maxX,m_minY,m_maxY;
 
@@ -397,7 +495,7 @@ class WXDLLEXPORT wxDC: public wxObject
 	GrafPtr				m_macOrigPort ;
 	Rect					m_macClipRect ;
 	Point					m_macLocalOrigin ;
-	
+	AGAPortHelper			m_macPortHelper ;
 	void					MacSetupPort() const ;
 	void					MacVerifySetup() const { if ( m_macPortId != m_macCurrentPortId ) MacSetupPort() ; } 
 

@@ -65,39 +65,35 @@ public:
     ~wxDialog();
 
     virtual bool Destroy();
-
-    virtual void DoSetClientSize(int width, int height);
-
-    virtual void GetPosition(int *x, int *y) const;
-
     bool Show(bool show);
-    bool IsShown() const;
     void Iconize(bool iconize);
+    virtual bool IsIconized() const;
+
+    virtual bool IsTopLevel() const { return TRUE; }
+
+    void SetModal(bool flag);
+    virtual bool IsModal() const;
+
+    // For now, same as Show(TRUE) but returns return code
+    virtual int ShowModal();
+
+    // may be called to terminate the dialog with the given return code
+    virtual void EndModal(int retCode);
+
+    // returns TRUE if we're in a modal loop
+    bool IsModalShowing() const;
 
 #if WXWIN_COMPATIBILITY
     bool Iconized() const { return IsIconized(); };
 #endif
 
-    virtual bool IsIconized() const;
-    void Fit();
+    // implementation
+    // --------------
 
-    void SetTitle(const wxString& title);
-    wxString GetTitle() const ;
-
-    void OnSize(wxSizeEvent& event);
+    // event handlers
     bool OnClose();
     void OnCharHook(wxKeyEvent& event);
-    void OnPaint(wxPaintEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
-
-    void SetModal(bool flag);
-
-    virtual void Centre(int direction = wxBOTH);
-    virtual bool IsModal() const;
-
-    // For now, same as Show(TRUE) but returns return code
-    virtual int ShowModal();
-    virtual void EndModal(int retCode);
 
     // Standard buttons
     void OnOK(wxCommandEvent& event);
@@ -107,22 +103,12 @@ public:
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-    // implementation
-    // --------------
+    // override more base class virtuals
+    virtual void DoGetPosition(int *x, int *y) const;
+    virtual void DoSetClientSize(int width, int height);
 
-    bool IsModalShowing() const { return m_modalShowing; }
-    virtual bool IsTopLevel() const { return TRUE; }
-
-  // tooltip management
-#if wxUSE_TOOLTIPS
-    wxMacToolTip* GetToolTipCtrl() const { return m_hwndToolTip; }
-    void SetToolTipCtrl(wxMacToolTip *tt) { m_hwndToolTip = tt; }
-    wxMacToolTip* m_hwndToolTip ;
-#endif // tooltips
-
-protected:
-    bool   m_modalShowing;
-    WXHWND m_hwndOldFocus;  // the window which had focus before we were shown
+    // show modal dialog and enter modal loop
+    void DoShowModal();
 
 private:
     DECLARE_EVENT_TABLE()

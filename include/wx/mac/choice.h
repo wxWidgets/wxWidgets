@@ -26,7 +26,7 @@ class WXDLLEXPORT wxChoice: public wxControl
   DECLARE_DYNAMIC_CLASS(wxChoice)
 
  public:
-  inline wxChoice() { m_noStrings = 0; }
+  inline wxChoice() {}
 
   inline wxChoice(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
@@ -58,7 +58,7 @@ class WXDLLEXPORT wxChoice: public wxControl
   virtual wxString GetStringSelection() const ;
   virtual bool SetStringSelection(const wxString& sel);
 
-  virtual inline int Number() const { return m_noStrings; }
+  virtual inline int Number() const { return m_strings.GetCount(); }
   virtual void Command(wxCommandEvent& event);
 
   virtual inline void SetColumns(int WXUNUSED(n) = 1 ) { /* No effect */ } ;
@@ -66,7 +66,7 @@ class WXDLLEXPORT wxChoice: public wxControl
 	void		MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
 
 protected:
-  int m_noStrings;
+  wxArrayString m_strings;
   MenuHandle	m_macPopUpMenuHandle ;
 };
 

@@ -60,6 +60,9 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
   // Add all the buttons
 
 	virtual void MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+	virtual wxString MacGetToolTipString( wxPoint &where ) ;
+	void OnPaint(wxPaintEvent& event) ;
+	void OnMouse(wxMouseEvent& event) ;
 protected:
     // common part of all ctors
     void Init();

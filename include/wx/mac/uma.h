@@ -16,12 +16,13 @@
 
 #define UMA_USE_8_6 0 
 
-// define this to be 1 if you have the carbon libs (weak linked or PreCarbon.lib)
-
-#define UMA_USE_CARBON 0
-
+#if __POWERPC__
 #define UMA_USE_APPEARANCE 1
 #define UMA_USE_WINDOWMGR 1
+#else
+#define UMA_USE_APPEARANCE 0
+#define UMA_USE_WINDOWMGR 0
+#endif
 
 #if !UMA_USE_8_6 && UMA_USE_WINDOWMGR
 #undef UMA_USE_WINDOWMGR
@@ -29,7 +30,8 @@
 #endif
 
 #if !TARGET_CARBON
-	typedef short MenuItemIndex  ;
+//  this is now defined in the latest headers
+//	typedef short MenuItemIndex  ;
 #endif
 
 void UMAInitToolbox( UInt16 inMoreMastersCalls) ;
@@ -43,14 +45,32 @@ bool UMAGetProcessModeDoesActivateOnFGSwitch() ;
 
 // menu manager
 
-void 			UMASetMenuTitle( MenuRef menu , ConstStr255Param title ) ;
-UInt32 		UMAMenuEvent( EventRecord *inEvent ) ;
+void 			UMASetMenuTitle( MenuRef menu , StringPtr title ) ;
+UInt32 			UMAMenuEvent( EventRecord *inEvent ) ;
 void 			UMAEnableMenuItem( MenuRef inMenu , MenuItemIndex item ) ;	
 void 			UMADisableMenuItem( MenuRef inMenu , MenuItemIndex item ) ;	
+void			UMAAppendSubMenuItem( MenuRef menu , StringPtr label , SInt16 submenuid ) ;
+void			UMAInsertSubMenuItem( MenuRef menu , StringPtr label , MenuItemIndex item , SInt16 submenuid  ) ;
+void			UMAAppendMenuItem( MenuRef menu , StringPtr label , SInt16 key= 0, UInt8 modifiers = 0 ) ;
+void			UMAInsertMenuItem( MenuRef menu , StringPtr label , MenuItemIndex item , SInt16 key = 0 , UInt8 modifiers = 0 ) ;
+void			UMASetMenuItemText( MenuRef menu , MenuItemIndex item , StringPtr label ) ;
+
+MenuRef			UMANewMenu( SInt16 menuid , StringPtr label ) ;
+void 			UMADisposeMenu( MenuRef menu ) ;
+
+// handling the menubar
+
+void			UMADeleteMenu( SInt16 menuId ) ;
+void			UMAInsertMenu( MenuRef insertMenu , SInt16 afterId ) ;
+void			UMADrawMenuBar() ;
+
 // quickdraw
 
 void			UMAShowWatchCursor() ;
 void			UMAShowArrowCursor() ;
+
+void			UMAPrOpen() ;
+void			UMAPrClose() ;
 
 // window manager
 
@@ -74,6 +94,11 @@ void 			UMADrawControl( ControlHandle inControl ) ;
 
 void 			UMAActivateControl( ControlHandle inControl ) ;
 void			UMADeactivateControl( ControlHandle inControl ) ;
+void			UMAApplyThemeBackground			(ThemeBackgroundKind 	inKind,
+								 const Rect *			bounds,
+								 ThemeDrawState 		inState,
+								 SInt16 				inDepth,
+								 Boolean 				inColorDev);
 void			UMASetThemeWindowBackground		(WindowRef 				inWindow,
 								 ThemeBrush 			inBrush,
 								 Boolean 				inUpdate)	;
@@ -190,5 +215,25 @@ WindowRef UMAGetActiveNonFloatingWindow() ;
 
 void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate ) ;
 
+#if !TARGET_CARBON
+#define GetPortTextFont( p) ((p)->txFont )
+#define GetPortTextSize( p) ((p)->txSize )
+#define GetPortTextFace( p) ((p)->txFace )
+#define GetPortTextMode( p) ((p)->txMode )
+#define GetRegionBounds( r , b) ((*b) = (**r).rgnBBox)
+#define GetPortBounds( p , b) ((*b) = p->portRect )
+#define GetWindowPortBounds( p , b) ((*b) = p->portRect )
+#define	GetPortVisibleRegion( p, r ) CopyRgn( p->visRgn , r )
+#define GetQDGlobalsWhite( a ) (&((*a) = qd.white))
+#define GetQDGlobalsBlack( a ) (&((*a) = qd.black))
+#define GetQDGlobalsScreenBits( a ) (*a) = qd.screenBits
+#define GetQDGlobalsArrow( a ) (&((*a) = qd.arrow))
+#define GetControlBounds( c , b ) ((*b) = (**c).contrlRect )
+#define GetPortBitMapForCopyBits( p ) ((BitMap*) &(((CGrafPtr)p)->portPixMap ))
+#endif
+
+// Appearance Drawing
+
+OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
 
 #endif

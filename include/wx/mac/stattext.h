@@ -44,14 +44,15 @@ class WXDLLEXPORT wxStaticText: public wxControl
            const wxString& name = wxStaticTextNameStr);
 
   // accessors
-  void SetLabel(const wxString& , bool resize );
-  void SetLabel( const wxString &str ) { SetLabel( str , true ) ; }
+  void SetLabel( const wxString &str ) ;
   // operations
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
   virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
   // events
   void OnPaint( wxPaintEvent &event ) ;
+  void OnDraw( wxDC &dc ) ;
   wxSize DoGetBestSize() const ;
+  virtual bool AcceptsFocus() const { return FALSE; }
  private :
  	wxString	m_label ;
 

@@ -17,8 +17,18 @@
 #endif
 
 #include "wx/object.h"
+#include "wx/mac/macnotfy.h"
 
-class WXDLLEXPORT wxTimer: public wxObject
+class wxTimer ;
+
+typedef struct MacTimerInfo
+{
+    TMTask m_task;
+    wxMacNotifierTableRef m_table ;
+    wxTimer* m_timer ;
+} ;
+
+class WXDLLEXPORT wxTimer: public wxTimerBase
 {
 public:
     wxTimer();
@@ -28,19 +38,9 @@ public:
                        bool one_shot = FALSE); // Start timer
     virtual void Stop();                       // Stop timer
 
-    virtual void Notify() = 0;                 // Override this member
+    virtual bool IsRunning() const ;
 
-    // Returns the current interval time (0 if stop)
-    int Interval() const { return m_milli; }; 
-    bool OneShot() const { return m_oneShot; }
-
-protected:
-    bool m_oneShot ;
-    int  m_milli ;
-    int  m_lastMilli ;
-
-    long m_id;
-
+    MacTimerInfo m_info;
 private:
     DECLARE_ABSTRACT_CLASS(wxTimer)
 };
