@@ -1201,6 +1201,7 @@ settings.h	MSWH
 setup0.h	MSWH
 slider95.h	MSWH
 slidrmsw.h	MSWH
+spinctrl.h	MSWH
 spinbutt.h	MSWH
 spinctrl.h	MSWH
 statbmp.h	MSWH
