@@ -899,6 +899,8 @@ void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
 {
   assert(socket != NULL);
 
+  GSocket_Debug( ("GSocket_SetNonBlocking: %d\n", (int)non_block) );
+
   socket->m_non_blocking = non_block;
 }
 
@@ -1064,6 +1066,8 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
   /* Linux select() will overwrite the struct on return */
   tv.tv_sec  = (socket->m_timeout / 1000);
   tv.tv_usec = (socket->m_timeout % 1000) * 1000;
+
+  GSocket_Debug( ("m_non_blocking has: %d\n", (int)socket->m_non_blocking) );
 
   if (!socket->m_non_blocking)
   {
