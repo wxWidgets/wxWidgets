@@ -72,12 +72,16 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
     
     if ( win )
     {
-        int x = 0 , y = 0;
-        win->MacWindowToRootWindow( &x,&y ) ;
-        // get area including focus rect
-        CopyRgn( (RgnHandle) ((wxWindow*)win)->MacGetVisibleRegion(true).GetWXHRGN() , m_newClip ) ;
-        if ( !EmptyRgn( m_newClip ) )
-            OffsetRgn( m_newClip , x , y ) ;
+        // guard against half constructed objects, this just leads to a empty clip
+        if( win->GetPeer() )
+        {
+            int x = 0 , y = 0;
+            win->MacWindowToRootWindow( &x,&y ) ;
+            // get area including focus rect
+            CopyRgn( (RgnHandle) ((wxWindow*)win)->MacGetVisibleRegion(true).GetWXHRGN() , m_newClip ) ;
+            if ( !EmptyRgn( m_newClip ) )
+                OffsetRgn( m_newClip , x , y ) ;
+        }
 
         SetClip( m_newClip ) ;
     }
