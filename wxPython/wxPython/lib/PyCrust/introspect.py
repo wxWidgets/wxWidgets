@@ -7,6 +7,7 @@ __version__ = "$Revision$"[11:-2]
 
 import inspect
 import string
+import types
 
 def getAutoCompleteList(command='', locals=None, includeMagic=1, \
                         includeSingle=1, includeDouble=1):
@@ -35,11 +36,13 @@ def getAttributeNames(object, includeMagic=1, includeSingle=1, includeDouble=1):
     for item in getAllAttributeNames(object):
         dict[item] = None
     attributes += dict.keys()
-    attributes.sort(lambda x, y: cmp(x.lower(), y.lower()))
+    attributes.sort(lambda x, y: cmp(x.upper(), y.upper()))
     if not includeSingle:
         attributes = filter(lambda item: item[0]!='_' or item[1]=='_', attributes)
     if not includeDouble:
         attributes = filter(lambda item: item[:2]!='__', attributes)
+    # Make sure we haven't picked up any bogus attributes somehow.
+    attributes = [attribute for attribute in attributes if hasattr(object, attribute)]
     return attributes
 
 def getAllAttributeNames(object):
@@ -47,12 +50,22 @@ def getAllAttributeNames(object):
     
     Recursively walk through a class and all base classes.
     """
+    # !!!
+    # !!! Do Not use hasattr() as a test anywhere in this function,
+    # !!! because it is unreliable with remote objects - xmlrpc, soap, etc.
+    # !!! 
     attributes = []
     # Wake up sleepy objects - a hack for ZODB objects in "ghost" state.
     wakeupcall = dir(object)
     del wakeupcall
     # Get attributes available through the normal convention.
     attributes += dir(object)
+    try:
+        keys = object.__dict__.keys()
+    except:
+        pass
+    else:
+        attributes += keys
     # For a class instance, get the attributes for the class.
     if hasattr(object, '__class__'):
         # Break a circular reference. This happens with extension classes.
@@ -61,9 +74,18 @@ def getAllAttributeNames(object):
         else:
             attributes += getAllAttributeNames(object.__class__)
     # Also get attributes from any and all parent classes.
-    if hasattr(object, '__bases__'):
-        for base in object.__bases__:
-            attributes += getAllAttributeNames(base)
+    try:
+        bases = object.__bases__
+    except:
+        pass
+    else:
+        if isinstance(bases, type(())):
+            for base in bases:
+                if type(base) is types.TypeType:
+                    # Break a circular reference. Happens in Python 2.2.
+                    pass
+                else:
+                    attributes += getAllAttributeNames(base)
     return attributes
 
 def getCallTip(command='', locals=None):

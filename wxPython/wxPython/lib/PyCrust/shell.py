@@ -31,8 +31,7 @@ if wxPlatform == '__WXMSW__':
             }
     # Versions of wxPython prior to 2.3.2 had a sizing bug on Win platform.
     # The font was 2 points too large. So we need to reduce the font size.
-    if ((wxMAJOR_VERSION, wxMINOR_VERSION) == (2, 3) and wxRELEASE_NUMBER < 2) \
-    or (wxMAJOR_VERSION <= 2 and wxMINOR_VERSION <= 2):
+    if (wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER) < (2, 3, 2):
         faces['size'] -= 2
         faces['lnsize'] -= 2
 else:  # GTK
@@ -72,8 +71,28 @@ class ShellFacade:
             self.__dict__[method] = getattr(other, method)
         d = self.__dict__
         d['other'] = other
-        d['help'] = 'There is no help available, yet.'
-        
+        d['helpText'] = \
+"""
+* Key bindings:
+Home              Go to the beginning of the command or line.
+Shift+Home        Select to the beginning of the command or line.
+Shift+End         Select to the end of the line.
+End               Go to the end of the line.
+Ctrl+C            Copy selected text, removing prompts.
+Ctrl+Shift+C      Copy selected text, retaining prompts.
+Ctrl+X            Cut selected text.
+Ctrl+V            Paste from clipboard.
+Ctrl+Up Arrow     Retrieve Previous History item.
+Alt+P             Retrieve Previous History item.
+Ctrl+Down Arrow   Retrieve Next History item.
+Alt+N             Retrieve Next History item.
+F8                Command-completion of History item.
+                  (Type a few characters of a previous command and then press F8.)
+"""
+
+    def help(self):
+        """Display some useful information about how to use the shell."""
+        self.write(self.helpText)
 
     def __getattr__(self, name):
         if hasattr(self.other, name):
@@ -138,10 +157,9 @@ class Shell(wxStyledTextCtrl):
                                   stdout=PseudoFileOut(self.writeOut), \
                                   stderr=PseudoFileErr(self.writeErr), \
                                   *args, **kwds)
-        # Keep track of the most recent prompt starting and ending positions.
-        self.promptPos = [0, 0]
-        # Keep track of the most recent non-continuation prompt.
-        self.prompt1Pos = [0, 0]
+        # Keep track of the last non-continuation prompt positions.
+        self.promptPosStart = 0
+        self.promptPosEnd = 0
         # Keep track of multi-line commands.
         self.more = 0
         # Create the command history.  Commands are added into the front of
@@ -253,7 +271,7 @@ class Shell(wxStyledTextCtrl):
         """Configure font size, typeface and color for lexer."""
         
         # Default style
-        self.StyleSetSpec(wxSTC_STYLE_DEFAULT, "face:%(mono)s,size:%(size)d" % faces)
+        self.StyleSetSpec(wxSTC_STYLE_DEFAULT, "face:%(mono)s,size:%(size)d,back:%(backcol)s" % faces)
 
         self.StyleClearAll()
 
@@ -287,7 +305,7 @@ class Shell(wxStyledTextCtrl):
             return
         key = event.KeyCode()
         currpos = self.GetCurrentPos()
-        stoppos = self.promptPos[1]
+        stoppos = self.promptPosEnd
         if key == ord('.'):
             # The dot or period key activates auto completion.
             # Get the command between the prompt and the cursor.
@@ -317,7 +335,6 @@ class Shell(wxStyledTextCtrl):
         altDown = event.AltDown()
         shiftDown = event.ShiftDown()
         currpos = self.GetCurrentPos()
-        stoppos = self.promptPos[1]
         # Return is used to submit a command to the interpreter.
         if key == WXK_RETURN:
             if self.AutoCompActive(): self.AutoCompCancel()
@@ -330,16 +347,20 @@ class Shell(wxStyledTextCtrl):
         elif controlDown and altDown:
             event.Skip()
         # Cut to the clipboard.
-        elif controlDown and key in (ord('X'), ord('x')):
+        elif (controlDown and key in (ord('X'), ord('x'))) \
+        or (shiftDown and key == WXK_DELETE):
             self.Cut()
         # Copy to the clipboard.
-        elif controlDown and not shiftDown and key in (ord('C'), ord('c')):
+        elif controlDown and not shiftDown \
+            and key in (ord('C'), ord('c'), WXK_INSERT):
             self.Copy()
         # Copy to the clipboard, including prompts.
-        elif controlDown and shiftDown and key in (ord('C'), ord('c')):
+        elif controlDown and shiftDown \
+            and key in (ord('C'), ord('c'), WXK_INSERT):
             self.CopyWithPrompts()
         # Paste from the clipboard.
-        elif controlDown and key in (ord('V'), ord('v')):
+        elif (controlDown and key in (ord('V'), ord('v'), WXK_INSERT)) \
+        or (shiftDown and key == WXK_INSERT):
             self.Paste()
         # Retrieve the previous command from the history buffer.
         elif (controlDown and key == WXK_UP) \
@@ -354,22 +375,23 @@ class Shell(wxStyledTextCtrl):
             self.OnHistorySearch()
         # Home needs to be aware of the prompt.
         elif key == WXK_HOME:
-            if currpos >= stoppos:
+            home = self.promptPosEnd
+            if currpos >= home:
                 if event.ShiftDown():
                     # Select text from current position to end of prompt.
-                    self.SetSelection(self.GetCurrentPos(), stoppos)
+                    self.SetSelection(self.GetCurrentPos(), home)
                 else:
-                    self.SetCurrentPos(stoppos)
-                    self.SetAnchor(stoppos)
+                    self.SetCurrentPos(home)
+                    self.SetAnchor(home)
             else:
                 event.Skip()
         # Basic navigation keys should work anywhere.
         elif key in (WXK_END, WXK_LEFT, WXK_RIGHT, WXK_UP, WXK_DOWN, \
                      WXK_PRIOR, WXK_NEXT):
             event.Skip()
-        # Don't backspace over the latest prompt.
+        # Don't backspace over the latest non-continuation prompt.
         elif key == WXK_BACK:
-            if currpos > self.prompt1Pos[1]:
+            if currpos > self.promptPosEnd:
                 event.Skip()
         # Only allow these keys after the latest prompt.
         elif key in (WXK_TAB, WXK_DELETE):
@@ -459,23 +481,23 @@ class Shell(wxStyledTextCtrl):
         if thepos == endpos:
             self.interp.more = 0
             if self.getCommand():
-                command = self.GetTextRange(self.prompt1Pos[1], endpos)
+                command = self.GetTextRange(self.promptPosEnd, endpos)
             else:
                 # This is a hack, now that we allow editing of previous
                 # lines, which throws off our promptPos values.
                 newend = endpos - len(self.getCommand(rstrip=0))
-                command = self.GetTextRange(self.prompt1Pos[1], newend)
+                command = self.GetTextRange(self.promptPosEnd, newend)
             command = command.replace(os.linesep + sys.ps2, '\n')
             self.push(command)
         # Or replace the current command with the other command.
-        elif thepos < self.prompt1Pos[0]:
+        elif thepos < self.promptPosStart:
             theline = self.GetCurrentLine()
             command = self.getCommand(rstrip=0)
             # If the new line contains a command (even an invalid one).
             if command:
                 command = self.getMultilineCommand()
                 self.SetCurrentPos(endpos)
-                startpos = self.prompt1Pos[1]
+                startpos = self.promptPosEnd
                 self.SetSelection(startpos, endpos)
                 self.ReplaceSelection('')
                 self.write(command)
@@ -485,7 +507,7 @@ class Shell(wxStyledTextCtrl):
                 self.SetCurrentPos(thepos)
                 self.SetAnchor(thepos)
         # Or add a new line to the current single or multi-line command.
-        elif thepos > self.prompt1Pos[1]:
+        elif thepos > self.promptPosEnd:
             self.write(os.linesep)
             self.more = 1
             self.prompt()
@@ -601,12 +623,11 @@ class Shell(wxStyledTextCtrl):
             prompt = str(sys.ps1)
         pos = self.GetCurLine()[1]
         if pos > 0: self.write(os.linesep)
-        self.promptPos[0] = self.GetCurrentPos()
-        if not self.more: self.prompt1Pos[0] = self.GetCurrentPos()
-        self.write(prompt)
-        self.promptPos[1] = self.GetCurrentPos()
         if not self.more:
-            self.prompt1Pos[1] = self.GetCurrentPos()
+            self.promptPosStart = self.GetCurrentPos()
+        self.write(prompt)
+        if not self.more:
+            self.promptPosEnd = self.GetCurrentPos()
             # Keep the undo feature from undoing previous responses.
             self.EmptyUndoBuffer()
         # XXX Add some autoindent magic here if more.
@@ -732,8 +753,8 @@ class Shell(wxStyledTextCtrl):
     def CanCut(self):
         """Return true if text is selected and can be cut."""
         if self.GetSelectionStart() != self.GetSelectionEnd() \
-        and self.GetSelectionStart() >= self.prompt1Pos[1] \
-        and self.GetSelectionEnd() >= self.prompt1Pos[1]:
+        and self.GetSelectionStart() >= self.promptPosEnd \
+        and self.GetSelectionEnd() >= self.promptPosEnd:
             return 1
         else:
             return 0
@@ -751,7 +772,7 @@ class Shell(wxStyledTextCtrl):
 
     def CanEdit(self):
         """Return true if editing should succeed."""
-        return self.GetCurrentPos() >= self.prompt1Pos[1]
+        return self.GetCurrentPos() >= self.promptPosEnd
 
     def Cut(self):
         """Remove selection and place it on the clipboard."""

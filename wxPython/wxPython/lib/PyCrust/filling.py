@@ -52,9 +52,9 @@ class FillingTree(wxTreeCtrl):
         objtype = type(object)
         if objtype is types.DictType:
             dict = object
-        elif (objtype in (types.ClassType, types.InstanceType, \
-                          types.ModuleType)) \
-        or hasattr(object, '__class__'):
+        elif (objtype in (types.ClassType, \
+                          types.InstanceType, \
+                          types.ModuleType)):
             for key in introspect.getAttributeNames(object):
                 # Believe it or not, some attributes can disappear, such as
                 # the exc_traceback attribute of the sys module. So this is
@@ -74,7 +74,7 @@ class FillingTree(wxTreeCtrl):
         if not children:
             return
         list = children.keys()
-        list.sort()
+        list.sort(lambda x, y: cmp(x.lower(), y.lower()))
         for item in list:
             itemtext = str(item)
             # Show string dictionary items with single quotes, except for
