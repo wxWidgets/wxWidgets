@@ -159,6 +159,10 @@ Unix:
 - fixed priorities of mailcap entries (David Hart)
 - added "wx-config --libs=std,<extra>" syntax (i.e. support for "std")
 
+wxODBC:
+- Full unicode support is now available
+- BLOB support is working
+
 
 2.5.1
 -----
