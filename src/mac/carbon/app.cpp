@@ -322,12 +322,12 @@ MenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
                           &menuRef);
 #endif // 0
 
-        wxMenuEvent event(GetEventKind(event) == kEventMenuOpening
+        wxMenuEvent wxevent(GetEventKind(event) == kEventMenuOpening
                         ? wxEVT_MENU_OPEN
                         : wxEVT_MENU_CLOSE);
-        event.SetEventObject(win);
+        wxevent.SetEventObject(win);
 
-        (void)win->GetEventHandler()->ProcessEvent(event);
+        (void)win->GetEventHandler()->ProcessEvent(wxevent);
     }
 
     return eventNotHandledErr;
