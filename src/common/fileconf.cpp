@@ -99,8 +99,8 @@ static wxString GetAppName(const wxString& appname);
 // "template" array types
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_SORTED_ARRAY(wxFileConfigEntry *, ArrayEntries);
-WX_DEFINE_SORTED_ARRAY(wxFileConfigGroup *, ArrayGroups);
+WX_DEFINE_SORTED_EXPORTED_ARRAY(wxFileConfigEntry *, ArrayEntries);
+WX_DEFINE_SORTED_EXPORTED_ARRAY(wxFileConfigGroup *, ArrayGroups);
 
 // ----------------------------------------------------------------------------
 // wxFileConfigLineList
