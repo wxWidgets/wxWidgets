@@ -441,7 +441,7 @@ Under Windows, OnQueryEndSession is called in response to the WM\_QUERYENDSESSIO
 
 \membersection{wxApp::ProcessMessage}\label{wxappprocessmessage}
 
-\func{bool}{ProcessMessage}{\param{MSG *}{msg}}
+\func{bool}{ProcessMessage}{\param{WXMSG *}{msg}}
 
 Windows-only function for processing a message. This function
 is called from the main message loop, checking for windows that
@@ -456,7 +456,7 @@ the PreTranslateMessage function:
 // Provide wxWindows message loop compatibility
 BOOL CTheApp::PreTranslateMessage(MSG *msg)
 {
-  if (wxTheApp && wxTheApp->ProcessMessage(msg))
+  if (wxTheApp && wxTheApp->ProcessMessage((WXMSW *)msg))
     return TRUE;
   else
     return CWinApp::PreTranslateMessage(msg);
