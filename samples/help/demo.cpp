@@ -44,6 +44,11 @@
 
 #define USE_HTML_HELP 1
 
+// Define this to 0 to use the help controller as the help
+// provider, or to 1 to use the 'simple help provider'
+// (the one implemented with wxTipWindow).
+#define USE_SIMPLE_HELP_PROVIDER 0
+
 #if !wxUSE_HTML
 #undef USE_HTML_HELP
 #define USE_HTML_HELP 0
@@ -257,8 +262,11 @@ bool MyApp::OnInit()
 {
     // Create a simple help provider to make SetHelpText() do something.
     // Note that this must be set before any SetHelpText() calls are made.
-    //wxHelpProvider::Set(new wxSimpleHelpProvider);
+#if USE_SIMPLE_HELP_PROVIDER
+    wxSimpleHelpProvider* provider = new wxSimpleHelpProvider;
+#else
     wxHelpControllerHelpProvider* provider = new wxHelpControllerHelpProvider;
+#endif
     wxHelpProvider::Set(provider);
 
 #if wxUSE_HTML
@@ -278,10 +286,12 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame("HelpDemo wxWindows App",
                                  wxPoint(50, 50), wxSize(450, 340));
 
+#if !USE_SIMPLE_HELP_PROVIDER
 #if wxUSE_MS_HTML_HELP
     provider->SetHelpController(& frame->GetMSHtmlHelpController());
 #else
     provider->SetHelpController(& frame->GetHelpController());
+#endif
 #endif
 
     frame->Show(TRUE);
