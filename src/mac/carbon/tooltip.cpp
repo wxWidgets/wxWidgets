@@ -256,7 +256,6 @@ void wxMacToolTip::Draw()
         ::GetFontInfo(&fontInfo);
         short lineh = fontInfo.ascent + fontInfo.descent + fontInfo.leading;
         short height = 0 ;
-        //    short width = TextWidth( m_label , 0 ,m_label.Length() ) ;
         
         int i = 0 ;
         int length = m_label.Length() ;

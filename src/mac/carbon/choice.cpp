@@ -238,7 +238,20 @@ wxSize wxChoice::DoGetBestSize() const
         // Find the widest line
         for(int i = 0; i < GetCount(); i++) {
             wxString str(GetString(i));
-            wLine = ::TextWidth( str.c_str() , 0 , str.Length() ) ;
+        #if wxUSE_UNICODE
+            Point bounds={0,0} ;
+            SInt16 baseline ;
+            ::GetThemeTextDimensions( wxMacCFStringHolder( str ) ,
+                kThemeCurrentPortFont,
+                kThemeStateActive,
+                false,
+                &bounds,
+                &baseline );
+            wLine = bounds.h ;
+        #else
+            wxCharBuffer text = wxMacStringToCString( str ) ;
+            wLine = ::TextWidth( text , 0 , strlen(text) ) ;
+        #endif
             lbWidth = wxMax(lbWidth, wLine);
         }
         // Add room for the popup arrow
