@@ -1404,7 +1404,7 @@ void GSocketBSD::Detected_Write()
 /* Compatibility functions for GSocket */
 GSocket *GSocket_new(void)
 {
-    GSocket *newsocket = wxTheApp->GetTraits()->CreateGSocket();
+    GSocket *newsocket = new GSocketBSDGUIShim();
     if(newsocket->IsOk())
         return newsocket;
     delete newsocket;

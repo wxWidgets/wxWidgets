@@ -605,14 +605,5 @@ GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
 #endif // !__WXMAC__ || __DARWIN__
 }
 
-GSocketBSD* wxGUIAppTraitsBase::CreateGSocket()
-{
-#ifdef wxUSE_GSOCKET_CPLUSPLUS
-    return new GSocketBSDGUIShim();
-#else
-    return NULL;
-#endif
-}
-
 #endif
 

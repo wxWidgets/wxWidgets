@@ -29,9 +29,6 @@ extern "C"
     struct GSocketGUIFunctionsTable;
 }
 
-// FIXME: Eventually unify Mac OS 9
-class GSocketBSD;
-
 // ----------------------------------------------------------------------------
 // toolkit information
 // ----------------------------------------------------------------------------
@@ -116,10 +113,6 @@ public:
 #if wxUSE_SOCKETS
     // return table of GUI callbacks for GSocket code or NULL in wxBase
     virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable() = 0;
-
-    // return a new GSocket with the EventLoop_* stuff implemented.
-    // or at least stubbed (i.e. wxBase)
-    virtual GSocketBSD* CreateGSocket() = 0;
 #endif
 
 
@@ -175,7 +168,6 @@ public:
     virtual wxRendererNative *CreateRenderer();
 #if wxUSE_SOCKETS
     virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable();
-    virtual GSocketBSD* CreateGSocket();
 #endif
 
 #ifdef __WXDEBUG__
@@ -206,9 +198,6 @@ public:
     virtual wxRendererNative *CreateRenderer();
 #if wxUSE_SOCKETS
     virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable();
-    // return a new GSocket with the EventLoop_* stuff implemented.
-    // TODO: Remove this because each GUI should implement it separately
-    virtual GSocketBSD* CreateGSocket();
 #endif
 
 #ifdef __WXDEBUG__
