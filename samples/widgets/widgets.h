@@ -51,6 +51,11 @@ protected:
                                           wxWindowID id = -1,
                                           wxTextCtrl **ppText = NULL);
 
+    // create a checkbox and add it to the sizer
+    wxCheckBox *CreateCheckBoxAndAddToSizer(wxSizer *sizer,
+                                            const wxString& label,
+                                            wxWindowID id = -1);
+
 public:
     // the head of the linked list containinginfo about all pages
     static WidgetsPageInfo *ms_widgetPages;

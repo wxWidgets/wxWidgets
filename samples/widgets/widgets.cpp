@@ -223,7 +223,7 @@ bool WidgetsApp::OnInit()
 // ----------------------------------------------------------------------------
 
 WidgetsFrame::WidgetsFrame(const wxString& title)
-            : wxFrame(NULL, -1, title, wxPoint(0, 0))
+            : wxFrame(NULL, -1, title, wxPoint(0, 50))
 {
     // init everything
     m_lboxLog = (wxListBox *)NULL;
@@ -385,5 +385,16 @@ wxSizer *WidgetsPage::CreateSizerWithTextAndButton(wxWindowID idBtn,
                                                    wxTextCtrl **ppText)
 {
     return CreateSizerWithText(new wxButton(this, idBtn, label), id, ppText);
+}
+
+wxCheckBox *WidgetsPage::CreateCheckBoxAndAddToSizer(wxSizer *sizer,
+                                                     const wxString& label,
+                                                     wxWindowID id)
+{
+    wxCheckBox *checkbox = new wxCheckBox(this, id, label);
+    sizer->Add(checkbox, 0, wxLEFT | wxRIGHT, 5);
+    sizer->Add(0, 2, 0, wxGROW); // spacer
+
+    return checkbox;
 }
 

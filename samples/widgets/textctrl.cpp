@@ -255,17 +255,20 @@ TextWidgetsPage::TextWidgetsPage(wxNotebook *notebook, wxImageList *imaglist)
                                       WXSIZEOF(modes), modes,
                                       1, wxRA_SPECIFY_COLS);
 
-    m_chkPassword = new wxCheckBox(this, TextPage_Password, _T("&Password control"));
-    m_chkWrapLines = new wxCheckBox(this, TextPage_WrapLines, _T("Line &wrap"));
-    m_chkReadonly = new wxCheckBox(this, -1, _T("&Read-only mode"));
-
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     sizerLeft->Add(m_radioTextLines, 0, wxGROW | wxALL, 5);
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
-    sizerLeft->Add(m_chkPassword, 0, wxLEFT | wxRIGHT, 5);
-    sizerLeft->Add(m_chkWrapLines, 0, wxLEFT | wxRIGHT, 5);
-    sizerLeft->Add(m_chkReadonly, 0, wxLEFT | wxRIGHT, 5);
+
+    m_chkPassword = CreateCheckBoxAndAddToSizer(
+                        sizerLeft, _T("&Password control"), TextPage_Password
+                    );
+    m_chkWrapLines = CreateCheckBoxAndAddToSizer(
+                        sizerLeft, _T("Line &wrap"), TextPage_WrapLines
+                     );
+    m_chkReadonly = CreateCheckBoxAndAddToSizer(
+                        sizerLeft, _T("&Read-only mode")
+                    );
 
     wxButton *btn = new wxButton(this, TextPage_Reset, _T("&Reset"));
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);

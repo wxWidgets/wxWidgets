@@ -278,11 +278,16 @@ void wxDCBase::DrawLabel(const wxString& text,
 
     // draw the bitmap first
     wxCoord x0 = x,
-            y0 = y;
+            y0 = y,
+            width0 = width;
     if ( bitmap.Ok() )
     {
         DrawBitmap(bitmap, x, y, TRUE /* use mask */);
-        x += bitmap.GetWidth() + 4;
+
+        wxCoord offset = bitmap.GetWidth() + 4;
+        x += offset;
+        width -= offset;
+
         y += (height - heightText) / 2;
     }
 
@@ -297,15 +302,44 @@ void wxDCBase::DrawLabel(const wxString& text,
     {
         if ( *pc == _T('\n') || *pc == _T('\0') )
         {
+            int xRealStart = x; // init it here to avoid compielr warnings
+
             if ( !curLine.empty() )
             {
-                DrawText(curLine, x, y);
+                // NB: can't test for !(alignment & wxALIGN_LEFT) because
+                //     wxALIGN_LEFT is 0
+                if ( alignment & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL) )
+                {
+                    wxCoord widthLine;
+                    GetTextExtent(curLine, &widthLine, NULL);
+
+                    if ( alignment & wxALIGN_RIGHT )
+                    {
+                        xRealStart += width - widthLine;
+                    }
+                    else // if ( alignment & wxALIGN_CENTRE_HORIZONTAL )
+                    {
+                        xRealStart += (width - widthLine) / 2;
+                    }
+                }
+                //else: left aligned, nothing to do
+
+                DrawText(curLine, xRealStart, y);
+            }
+
+            y += heightLine;
+
+            // do we have underscore in this line? we can check yUnderscore
+            // because it is set below to just y + heightLine if we do
+            if ( y == yUnderscore )
+            {
+                // adjust the horz positions to account for the shift
+                startUnderscore += xRealStart;
+                endUnderscore += xRealStart;
             }
 
             if ( *pc == _T('\0') )
                 break;
-
-            y += heightLine;
 
             curLine.clear();
         }
@@ -335,8 +369,7 @@ void wxDCBase::DrawLabel(const wxString& text,
 
         yUnderscore--;
 
-        DrawLine(x + startUnderscore, yUnderscore,
-                 x + endUnderscore, yUnderscore);
+        DrawLine(startUnderscore, yUnderscore, endUnderscore, yUnderscore);
     }
 
     // return bounding rect if requested
@@ -346,5 +379,5 @@ void wxDCBase::DrawLabel(const wxString& text,
     }
 
     CalcBoundingBox(x0, y0);
-    CalcBoundingBox(x0 + width, y0 + height);
+    CalcBoundingBox(x0 + width0, y0 + height);
 }
