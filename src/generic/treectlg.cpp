@@ -44,7 +44,7 @@
 
 class WXDLLEXPORT wxGenericTreeItem;
 
-WX_DEFINE_ARRAY(wxGenericTreeItem *, wxArrayGenericTreeItems);
+WX_DEFINE_EXPORTED_ARRAY(wxGenericTreeItem *, wxArrayGenericTreeItems);
 //WX_DEFINE_OBJARRAY(wxArrayTreeItemIds);
 
 // ----------------------------------------------------------------------------
