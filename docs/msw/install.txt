@@ -34,20 +34,8 @@ program contains the following:
 - Tex2RTF source;
 - Dialog Editor binary.
 
-Alternatively, you may unarchive the set of .zip files by hand,
-where x is the minor version number and y is the release number:
-
-wx2_x_y_gen.zip            Generic source code and samples (required)
-wx2_x_y_msw.zip            Windows-specific source code and samples (required)
-wx2_x_y_doc.zip            Documentation source code (not required)
-wx2_x_y_hlp.zip            WinHelp documentation
-wx2_x_y_pdf.zip            Acrobat PDF documentation
-wx2_x_y_htm.zip            HTML documentation
-wx2_x_y_vc.zip             MS VC++ 5.0 project files
-wx2_x_y_cw.zip             Metrowerks CodeWarrior project files
-wx2_x_y_bc.zip             BC++ 5 project files
-jpeg.zip                   Use this to allow wxImage to read and write JPEG files
-tiff.zip                   Use this to allow wxImage to read and write TIFF files
+Alternatively, you may unarchive the .zip form by hand:
+wxMSW-x.y.z.zip where x.y.z is the version number.
 
 Unarchive the required files plus any optional documentation
 files into a suitable directory such as c:\wx.
@@ -204,7 +192,8 @@ web site or CD-ROM.
 
 Note (6): to create your own IDE files, see the technical note on the
 wxWindows web site or CD-ROM, entitled "Compiling wxWindows
-applications in the VC++ IDE". You can also copy .dsp and .dsw
+applications in the VC++ IDE" (technical note docs/tech/tn0010.htm in the
+wxWindows distribution). You can also copy .dsp and .dsw
 files from an existing wxWindows sample and adapt them.
 
 Visual C++ 1.5 compilation (16-bit)

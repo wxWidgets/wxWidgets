@@ -34,9 +34,10 @@
     #include "wx/colour.h"
     #include "wx/settings.h"
     #include "wx/log.h"
-    #include "wx/toolbar.h"
-    #include "wx/statusbr.h"
 #endif
+
+#include "wx/toolbar.h"
+#include "wx/statusbr.h"
 
 #include "wx/generic/panelg.h"
 

@@ -33,6 +33,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/button.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/menu.h"
