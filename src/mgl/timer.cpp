@@ -17,6 +17,7 @@
 #if wxUSE_TIMER
 
 #include "wx/log.h"
+#include "wx/module.h"
 #include "wx/mgl/private.h"
 
 extern "C" ulong _EVT_getTicks();
@@ -28,12 +29,15 @@ extern "C" ulong _EVT_getTicks();
 class wxTimerDesc
 {
 public:
-    wxTimerDesc(wxTimer *t) : timer(t), running(FALSE), next(NULL), prev(NULL) {}
+    wxTimerDesc(wxTimer *t) : 
+        timer(t), running(FALSE), next(NULL), prev(NULL), 
+        shotTime(0), deleteFlag(NULL) {}
 
     wxTimer         *timer;
     bool             running;
     wxTimerDesc     *next, *prev;
-    unsigned long    shotTime;
+    unsigned long    shotTime;  
+    volatile bool   *deleteFlag; // see comment in ~wxTimer
 };
 
 class wxTimerScheduler
@@ -51,6 +55,9 @@ private:
 
 void wxTimerScheduler::QueueTimer(wxTimerDesc *desc, unsigned long when)
 {
+    if ( desc->running )
+        return; // already scheduled
+        
     if ( when == 0 )
         when = _EVT_getTicks() + desc->timer->GetInterval();
     desc->shotTime = when;
@@ -92,24 +99,29 @@ void wxTimerScheduler::NotifyTimers()
 {
     if ( m_timers )
     {
+        bool oneShot;
+        volatile bool timerDeleted;
         unsigned long now = _EVT_getTicks();
         wxTimerDesc *desc;
 
-        wxLogTrace("mgl_timer", "notifying timers, time is %i", now);
-        
         while ( m_timers && m_timers->shotTime <= now )
         {
             desc = m_timers;
-            bool oneShot = desc->timer->IsOneShot();
+            oneShot = desc->timer->IsOneShot();
             RemoveTimer(desc);
 
+            timerDeleted = FALSE;
+            desc->deleteFlag = &timerDeleted;
             desc->timer->Notify();
-            wxLogTrace("mgl_timer", "notified timer %p sheduled for %i", 
-                       desc->timer, desc->shotTime);
-
-            if ( !oneShot )
+            
+            if ( !timerDeleted )
             {
-                QueueTimer(desc, now + desc->timer->GetInterval());
+                wxLogTrace("mgl_timer", "notified timer %p sheduled for %i", 
+                           desc->timer, desc->shotTime);
+
+                desc->deleteFlag = NULL;
+                if ( !oneShot )
+                    QueueTimer(desc, now + desc->timer->GetInterval());
             }
         }
     }
@@ -123,29 +135,30 @@ void wxTimerScheduler::NotifyTimers()
 
 IMPLEMENT_ABSTRACT_CLASS(wxTimer,wxObject)
 
-wxTimerScheduler *wxTimer::ms_scheduler = NULL;
-size_t wxTimer::ms_timersCnt = 0;
+wxTimerScheduler *gs_scheduler = NULL;
 
 void wxTimer::Init()
 {
-    if ( ms_timersCnt++ == 0 )
-        ms_scheduler = new wxTimerScheduler;
+    if ( !gs_scheduler )
+        gs_scheduler = new wxTimerScheduler;
     m_desc = new wxTimerDesc(this);
-    wxLogTrace("mgl_timer", "--added timer (count=%i)", ms_timersCnt);
 }
 
 wxTimer::~wxTimer()
 {
+    wxLogTrace("mgl_timer", "destroying timer %p...", this);
     if ( IsRunning() )
         Stop();
 
-    if ( --ms_timersCnt == 0 )
-    {
-        delete ms_scheduler;
-        ms_scheduler = NULL;
-    }
+    // NB: this is a hack: wxTimerScheduler must have some way of knowing
+    //     that wxTimer object was deleted under its hands -- this may 
+    //     happen if somebody is really nasty and deletes the timer
+    //     from wxTimer::Notify()
+    if ( m_desc->deleteFlag != NULL )
+        *m_desc->deleteFlag = TRUE;
+
     delete m_desc;
-    wxLogTrace("mgl_timer", "--removed timer (count=%i)", ms_timersCnt);
+    wxLogTrace("mgl_timer", "    ...done destroying timer %p...", this);
 }
 
 bool wxTimer::IsRunning() const
@@ -161,7 +174,7 @@ bool wxTimer::Start(int millisecs, bool oneShot)
     if ( !wxTimerBase::Start(millisecs, oneShot) )
         return FALSE;
     
-    ms_scheduler->QueueTimer(m_desc);
+    gs_scheduler->QueueTimer(m_desc);
     return TRUE;
 }
 
@@ -169,12 +182,28 @@ void wxTimer::Stop()
 {
     if ( !m_desc->running ) return;
     
-    ms_scheduler->RemoveTimer(m_desc);
+    gs_scheduler->RemoveTimer(m_desc);
 }
 
 /*static*/ void wxTimer::NotifyTimers()
 {
-    ms_scheduler->NotifyTimers();
+    if ( gs_scheduler )
+        gs_scheduler->NotifyTimers();
 }
+
+
+
+// A module to deallocate memory properly:
+class wxTimerModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxTimerModule)
+public:
+    wxTimerModule() {}
+    bool OnInit() { return TRUE; }
+    void OnExit() { delete gs_scheduler; gs_scheduler = NULL; }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxTimerModule, wxModule)
+
 
 #endif //wxUSE_TIMER
