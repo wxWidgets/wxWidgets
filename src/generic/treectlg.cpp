@@ -1878,6 +1878,8 @@ size_t wxGenericTreeCtrl::GetSelections(wxArrayTreeItemIds &array) const
 
 void wxGenericTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
+    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
+
     if (!item.IsOk()) return;
 
     wxGenericTreeItem *gitem = (wxGenericTreeItem*) item.m_pItem;
