@@ -188,6 +188,7 @@ private:
     wxColour    m_darkShadowColour;
     wxColour    m_hilightColour;
     wxColour    m_faceColour;
+    bool        m_mouseCaptured;
 
 DECLARE_EVENT_TABLE()
 };
