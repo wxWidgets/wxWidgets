@@ -1824,8 +1824,10 @@ if test "$wxUSE_SHARED" = "yes"; then
         AC_MSG_ERROR(unknown system type ${host}.)
     esac
 
-    dnl set target to shared
-    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
+    dnl set target to shared if not explicitly chose static before
+    if test "x$WX_TARGET_LIBRARY" = "x"; then
+        WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
+    fi
 else
     dnl set target to static
     WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
