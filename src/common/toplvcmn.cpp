@@ -73,6 +73,22 @@ bool wxTopLevelWindowBase::Destroy()
     return TRUE;
 }
 
+wxSize wxTopLevelWindowBase::GetMaxSize() const
+{
+    wxSize  size( GetMaxWidth(), GetMaxHeight() );
+    int     w, h;
+
+    wxClientDisplayRect( 0, 0, &w, &h );
+
+    if( size.GetWidth() == -1 )
+        size.SetWidth( w );
+
+    if( size.GetHeight() == -1 )
+        size.SetHeight( h );
+
+    return size;
+}
+
 // ----------------------------------------------------------------------------
 // wxTopLevelWindow size management: we exclude the areas taken by
 // menu/status/toolbars from the client area, so the client area is what's
@@ -175,3 +191,5 @@ bool wxTopLevelWindowBase::SendIconizeEvent(bool iconized)
 
     return GetEventHandler()->ProcessEvent(event);
 }
+
+// vi:sts=4:sw=4:et

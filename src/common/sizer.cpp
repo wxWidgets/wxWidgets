@@ -419,29 +419,19 @@ void wxSizer::Layout()
 
 void wxSizer::SetSizeHints( wxWindow *window )
 {
+    // Preserve the window's max size hints, but set the
+    // lower bound according to the sizer calculations.
+
     wxSize size = FitSize( window );
-    window->SetSizeHints( size.x, size.y );
+    window->SetSizeHints( size.x,
+                          size.y,
+                          window->GetMaxWidth(),
+                          window->GetMaxHeight() );
 }
 
-wxSize wxSizer::GetMaxWindowSize( wxWindow *WXUNUSED(window) )
+wxSize wxSizer::GetMaxWindowSize( wxWindow *window )
 {
-    wxRect rect = wxGetClientDisplayRect();
-    wxSize sizeMax (rect.width,rect.height);
-
-    // Sorry, but this bit is wrong -- it makes a window that should just be
-    // able to fit onto the screen, not fit on the screen. -- JACS
-#if 0
-    // Make the max size a bit smaller than the visible portion of
-    // the screen.  A window which takes the entire screen doesn't
-    // look very nice either
-    sizeMax.x *= 9;
-    sizeMax.x /= 10;
-
-    sizeMax.y *= 9;
-    sizeMax.y /= 10;
-#endif
-
-    return sizeMax;
+    return window->GetMaxSize();
 }
 
 wxSize wxSizer::GetMinWindowSize( wxWindow *window )
@@ -459,9 +449,11 @@ wxSize wxSizer::FitSize( wxWindow *window )
     wxSize size     = GetMinWindowSize( window );
     wxSize sizeMax  = GetMaxWindowSize( window );
 
-    if ( size.x > sizeMax.x )
+    // Limit the size if sizeMax != wxDefaultSize
+
+    if ( size.x > sizeMax.x && sizeMax.x != -1 )
         size.x = sizeMax.x;
-    if ( size.y > sizeMax.y )
+    if ( size.y > sizeMax.y && sizeMax.y != -1 )
         size.y = sizeMax.y;
 
     return size;
@@ -1183,3 +1175,5 @@ wxSize wxNotebookSizer::CalcMin()
 }
 
 #endif // wxUSE_NOTEBOOK
+
+// vi:sts=4:sw=4:et

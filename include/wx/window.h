@@ -298,6 +298,9 @@ public:
     int GetMaxWidth() const { return m_maxWidth; }
     int GetMaxHeight() const { return m_maxHeight; }
 
+        // Override this method to control the values given to Sizers etc.
+    virtual wxSize GetMaxSize() const { return wxSize( m_maxWidth, m_maxHeight ); }
+
     // window state
     // ------------
 
@@ -1077,3 +1080,5 @@ inline int NewControlId() { return wxWindowBase::NewControlId(); }
 
 #endif
     // _WX_WINDOW_H_BASE_
+
+// vi:sts=4:sw=4:et

@@ -113,6 +113,7 @@ public:
     // override some base class virtuals
     virtual bool Destroy();
     virtual bool IsTopLevel() const { return TRUE; }
+    virtual wxSize GetMaxSize() const;
 
     // event handlers
     void OnCloseWindow(wxCloseEvent& event);
@@ -191,3 +192,5 @@ protected:
 
 
 #endif // _WX_TOPLEVEL_BASE_H_
+
+// vi:sts=4:sw=4:et

@@ -1748,3 +1748,4 @@ void wxWindowBase::ReleaseMouse()
                GetCapture());
 }
 
+// vi:sts=4:sw=4:et
