@@ -92,8 +92,6 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
     
-    void DeletePendingObjects();
-    
     WXWindow       GetTopLevelWidget() const { return m_topLevelWidget; }
     WXColormap     GetMainColormap(WXDisplay* display);
     long           GetMaxRequestSize() const { return m_maxRequestSize; }
