@@ -123,9 +123,8 @@ enum enumDummy {enumDum1};
 */
 const int wxDB_PATH_MAX                 = 254;
 
-extern wxChar const *SQL_LOG_FILENAME;
-extern wxChar const *SQL_CATALOG_FILENAME;
-
+WXDLLEXPORT_DATA(extern wxChar const *) SQL_LOG_FILENAME;
+WXDLLEXPORT_DATA(extern wxChar const *) SQL_CATALOG_FILENAME;
 
 // Database Globals
 const int DB_TYPE_NAME_LEN            = 40;
@@ -458,7 +457,8 @@ enum wxDBMS
 // why the connection failed.  Note: as each wxDb object is closed, it
 // will overwrite the errors of the previously destroyed wxDb object in
 // this variable.
-extern wxChar DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
+
+WXDLLEXPORT_DATA(extern wxChar) DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
 
 
 class WXDLLEXPORT wxDb
