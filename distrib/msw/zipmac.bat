@@ -1,5 +1,6 @@
 @echo off
 Rem Zips up an archive of Mac and generic wxWindows files.
+Rem Produces wxMac-ver.zip, wxWindows-ver-HTML.zip
 set src=%wxwin%
 set dest=%src%\deliver
 
@@ -31,6 +32,7 @@ zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
 zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\dialoged.rsp
 zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\ogl.rsp
 zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\xml.rsp
-Rem zip -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\wx_html.rsp
+
+zip -@ %dest%\wxWindows-%version%-HTML.zip < %src%\distrib\msw\wx_html.rsp
 
 cd %dest%
