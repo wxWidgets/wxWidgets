@@ -1639,6 +1639,7 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
     }
 
     m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
+    m_textCtrl->SetParent(this);
     m_textCtrl->SetHWND((WXHWND)hWnd);
     m_textCtrl->SubclassWin((WXHWND)hWnd);
 
