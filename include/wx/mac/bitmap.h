@@ -186,8 +186,8 @@ public:
   int GetBitmapType() const;
   
   inline wxBitmap& operator = (const wxBitmap& bitmap) { if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
-  inline bool operator == (const wxBitmap& bitmap) { return m_refData == bitmap.m_refData; }
-  inline bool operator != (const wxBitmap& bitmap) { return m_refData != bitmap.m_refData; }
+  inline bool operator == (const wxBitmap& bitmap) const { return m_refData == bitmap.m_refData; }
+  inline bool operator != (const wxBitmap& bitmap) const { return m_refData != bitmap.m_refData; }
 
   static void InitStandardHandlers();
 protected:
