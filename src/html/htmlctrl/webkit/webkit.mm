@@ -145,6 +145,7 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     SetInitialFrameRect(pos,sizeInstance);
 #else
     m_macIsUserPane = false;
+    m_peer = new wxMacControl();
     wxControl::Create(parent, m_windowID, pos, size, style , validator , name);
     WebInitForCarbon();
     HIWebViewCreate( (HIViewRef*) *m_peer );
