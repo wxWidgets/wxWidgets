@@ -92,7 +92,7 @@ Copies this URI from another URI.
 
 \func{void}{Create}{\param{const wxChar* }{uri}}
 
-Creates this URI from the string {\tt uri}.
+Creates this URI from the string \arg{uri}.
 
 \docparam{uri}{string to initialize from}
 
@@ -217,64 +217,64 @@ that is postfixed by a '@' character.
 
 \constfunc{bool}{HasFragment}{\void}
 
-Returns true if the Fragment component of the URI exists.
+Returns \true if the Fragment component of the URI exists.
 
 \membersection{wxURI::HasPath}\label{wxurihaspath}
 
 \constfunc{bool}{HasPath}{\void}
 
-Returns true if the Path component of the URI exists.
+Returns \true if the Path component of the URI exists.
 
 \membersection{wxURI::HasPort}\label{wxurihasport}
 
 \constfunc{bool}{HasPort}{\void}
 
-Returns true if the Port component of the URI exists.
+Returns \true if the Port component of the URI exists.
 
 
 \membersection{wxURI::HasQuery}\label{wxurihasquery}
 
 \constfunc{bool}{HasQuery}{\void}
 
-Returns true if the Query component of the URI exists.
+Returns \true if the Query component of the URI exists.
 
 
 \membersection{wxURI::HasScheme}\label{wxurihasscheme}
 
 \constfunc{bool}{HasScheme}{\void}
 
-Returns true if the Scheme component of the URI exists.
+Returns \true if the Scheme component of the URI exists.
 
 
 \membersection{wxURI::HasServer}\label{wxurihasserver}
 
 \constfunc{bool}{HasServer}{\void}
 
-Returns true if the Server component of the URI exists.
+Returns \true if the Server component of the URI exists.
 
 
 \membersection{wxURI::HasUser}\label{wxurihasuser}
 
 \constfunc{bool}{HasUser}{\void}
 
-Returns true if the User component of the URI exists.
+Returns \true if the User component of the URI exists.
 
 
 \membersection{wxURI::IsReference}\label{wxuriisreference}
 
 \constfunc{bool}{IsReference}{\void}
 
-Returns true if a valid [absolute] URI, otherwise this URI
+Returns \true if a valid [absolute] URI, otherwise this URI
 is a URI reference and not a full URI, and IsReference
-returns false.
+returns \false.
 
 
 \membersection{wxURI::operator ==}\label{wxurioperatorcompare}
 
 \func{void}{operator ==}{\param{const wxURI\& }{uricomp}}
 
-Compares this URI to another URI, and returns true if 
-this URI equals {\tt uricomp}, otherwise it returns false.
+Compares this URI to another URI, and returns \true if 
+this URI equals \arg{uricomp}, otherwise it returns \false.
 
 \docparam{uricomp}{URI to compare to}
 
