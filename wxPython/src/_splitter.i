@@ -304,6 +304,33 @@ are resized and the sash and border are redrawn.", "");
     
 
     DocDeclStr(
+        void , SetSashGravity(double gravity),
+        "Set the sash gravity.  Gravity is a floating-point factor between 0.0
+and 1.0 which controls position of sash while resizing the
+`wx.SplitterWindow`.  The gravity specifies how much the left/top
+window will grow while resizing.","
+
+Example values:
+
+    ======= =======================================
+    0.0      Only the bottom or right window is
+             automaticaly resized.
+    0.5      Both windows grow equally.
+    1.0      Only left/top window grows.
+
+The default value of sash gravity is 0.0. That value is compatible
+with the previous (before gravity was introduced) behaviour of the 
+`wx.SplitterWindow`.");
+
+    DocDeclStr(
+        double , GetSashGravity() const,
+        "Gets the sash gravity.
+
+:see: `SetSashGravity`
+", "");
+    
+
+    DocDeclStr(
         void , SetMinimumPaneSize(int min),
         "Sets the minimum pane size in pixels.
 
