@@ -63,7 +63,7 @@ wxChar wxTextInputStream::NextNonSeparators()
 
 }
 
-inline bool wxTextInputStream::EatEOL(const wxChar &c)
+bool wxTextInputStream::EatEOL(const wxChar &c)
 {
     if (c == wxT('\n')) return TRUE; // eat on UNIX
 
@@ -143,12 +143,16 @@ wxUint8 wxTextInputStream::Read8()
 
 double wxTextInputStream::ReadDouble()
 {
-    /* I only implemented a simple float parser */
-    // VZ: what about using strtod()?? (TODO)
-    double f;
-    int sign;
+    /* I only implemented a simple float parser
+     * VZ: what about using strtod()?? (TODO)
+     */
 
-    if (!m_input) return 0;
+    double f;
+    int theSign;
+
+    if (!m_input)
+        return 0;
+
     int c = NextNonSeparators();
     if (c==(wxChar)0) return 0;
 
@@ -156,22 +160,22 @@ double wxTextInputStream::ReadDouble()
     if (! (c == wxT('.') || c == wxT(',') || c == wxT('-') || c == wxT('+') || isdigit(c)) )
     {
         m_input.Ungetch(c);
-        return 0.0;
+        return 0;
     }
 
     if (c == wxT('-'))
     {
-        sign = -1;
+        theSign = -1;
         c = m_input.GetC();
     } else
     if (c == wxT('+'))
     {
-        sign = 1;
+        theSign = 1;
         c = m_input.GetC();
     }
     else
     {
-        sign = 1;
+        theSign = 1;
     }
 
     while (isdigit(c))
@@ -219,8 +223,7 @@ double wxTextInputStream::ReadDouble()
         m_input.Ungetch(c);
     }
 
-    f *= sign;
-
+    f *= theSign;
     return f;
 }
 
