@@ -664,9 +664,11 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     //     explanation why this line is mandatory
     png_set_write_fn( png_ptr, &wxinfo, wx_PNG_stream_writer, NULL);
 
+    const bool usesAlpha = (image->HasAlpha() || image->HasMask() );
+    const int bytesPerPixel = usesAlpha ? 4 : 3;
     png_set_IHDR( png_ptr, info_ptr, image->GetWidth(), image->GetHeight(), 8,
-        PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
-        PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+        usesAlpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB,
+        PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 
     png_color_8 sig_bit;
     sig_bit.red = 8;
@@ -678,7 +680,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     png_set_shift( png_ptr, &sig_bit );
     png_set_packing( png_ptr );
 
-    unsigned char *data = (unsigned char *)malloc( image->GetWidth()*4 );
+    unsigned char *data = (unsigned char *)malloc( image->GetWidth()*bytesPerPixel );
     if (!data)
     {
         png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
@@ -690,23 +692,27 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         unsigned char *ptr = image->GetData() + (y * image->GetWidth() * 3);
         for (int x = 0; x < image->GetWidth(); x++)
         {
-            data[(x << 2) + 0] = *ptr++;
-            data[(x << 2) + 1] = *ptr++;
-            data[(x << 2) + 2] = *ptr++;
-            if ( image->HasAlpha() )
+            register const int index = x * bytesPerPixel;
+            data[index + 0] = *ptr++;
+            data[index + 1] = *ptr++;
+            data[index + 2] = *ptr++;
+
+            if (usesAlpha)
             {
-                data[(x << 2) + 3] = image->GetAlpha(x, y);
-            }
-            else if (( !image->HasMask() ) || \
-                (data[(x << 2) + 0] != image->GetMaskRed()) || \
-                (data[(x << 2) + 1] != image->GetMaskGreen()) || \
-                (data[(x << 2) + 2] != image->GetMaskBlue()))
-            {
-                data[(x << 2) + 3] = 255;
-            }
-            else
-            {
-                data[(x << 2) + 3] = 0;
+                if ( image->HasAlpha() )
+                {
+                    data[index + 3] = image->GetAlpha(x, y);
+                }
+                else if ( (data[index + 0] != image->GetMaskRed())
+                    || (data[index + 1] != image->GetMaskGreen())
+                    || (data[index + 2] != image->GetMaskBlue()) )
+                {
+                    data[index + 3] = 255;
+                }
+                else
+                {
+                    data[index + 3] = 0;
+                }
             }
         }
         png_bytep row_ptr = data;
