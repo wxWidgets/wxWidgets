@@ -288,6 +288,8 @@ PD_CAN_ABORT = _core_.PD_CAN_ABORT
 PD_ELAPSED_TIME = _core_.PD_ELAPSED_TIME
 PD_ESTIMATED_TIME = _core_.PD_ESTIMATED_TIME
 PD_REMAINING_TIME = _core_.PD_REMAINING_TIME
+PD_SMOOTH = _core_.PD_SMOOTH
+PD_CAN_SKIP = _core_.PD_CAN_SKIP
 DD_NEW_DIR_BUTTON = _core_.DD_NEW_DIR_BUTTON
 DD_DEFAULT_STYLE = _core_.DD_DEFAULT_STYLE
 MENU_TEAROFF = _core_.MENU_TEAROFF
@@ -5284,6 +5286,12 @@ def SetDefaultPyEncoding(*args, **kwargs):
 
     Sets the encoding that wxPython will use when it needs to convert a
     Python string or unicode object to or from a wxString.
+
+    The default encoding is the value of ``locale.getdefaultlocale()[1]``
+    but please be aware that the default encoding within the same locale
+    may be slightly different on different platforms.  For example, please
+    see http://www.alanwood.net/demos/charsetdiffs.html for differences
+    between the common latin/roman encodings.
     """
     return _core_.SetDefaultPyEncoding(*args, **kwargs)
 
@@ -6023,11 +6031,18 @@ class Window(EvtHandler):
 
         Sets the position and size of the window in pixels.  The sizeFlags
         parameter indicates the interpretation of the other params if they are
-        -1.  wx.SIZE_AUTO*: a -1 indicates that a class-specific default
-        shoudl be used.  wx.SIZE_USE_EXISTING: existing dimensions should be
-        used if -1 values are supplied.  wxSIZE_ALLOW_MINUS_ONE: allow
-        dimensions of -1 and less to be interpreted as real dimensions, not
-        default values.
+        equal to -1.
+
+            ========================  ======================================
+            wx.SIZE_AUTO              A -1 indicates that a class-specific
+                                      default should be used.
+            wx.SIZE_USE_EXISTING      Axisting dimensions should be used if
+                                      -1 values are supplied.
+            wxSIZE_ALLOW_MINUS_ONE    Allow dimensions of -1 and less to be
+                                      interpreted as real dimensions, not
+                                      default values.
+            ========================  ======================================
+
         """
         return _core_.Window_SetDimensions(*args, **kwargs)
 
@@ -9759,7 +9774,7 @@ class PySizer(Sizer):
 
     When `Layout` is called it first calls `CalcMin` followed by
     `RecalcSizes` so you can optimize a bit by saving the results of
-    `CalcMin` and resuing them in `RecalcSizes`.
+    `CalcMin` and reusing them in `RecalcSizes`.
 
     :see: `wx.SizerItem`, `wx.Sizer.GetChildren`
 
@@ -10166,6 +10181,70 @@ class FlexGridSizerPtr(FlexGridSizer):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = FlexGridSizer
 _core_.FlexGridSizer_swigregister(FlexGridSizerPtr)
+
+class StdDialogButtonSizer(BoxSizer):
+    """
+    A special sizer that knows how to order and position standard buttons
+    in order to conform to the current platform's standards.  You simply
+    need to add each `wx.Button` to the sizer, and be sure to create the
+    buttons using the standard ID's.  Then call `Finalize` and the sizer
+    will take care of the rest.
+
+    """
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxStdDialogButtonSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(self) -> StdDialogButtonSizer"""
+        newobj = _core_.new_StdDialogButtonSizer(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def AddButton(*args, **kwargs):
+        """
+        AddButton(self, wxButton button)
+
+        Use this to add the buttons to this sizer.  Do not use the `Add`
+        method in the base class.
+        """
+        return _core_.StdDialogButtonSizer_AddButton(*args, **kwargs)
+
+    def Finalise(*args, **kwargs):
+        """
+        Finalise(self)
+
+        This funciton needs to be called after all the buttons have been added
+        to the sizer.  It will reorder them and position them in a platform
+        specifc manner.
+        """
+        return _core_.StdDialogButtonSizer_Finalise(*args, **kwargs)
+
+    def GetAffirmativeButton(*args, **kwargs):
+        """GetAffirmativeButton(self) -> wxButton"""
+        return _core_.StdDialogButtonSizer_GetAffirmativeButton(*args, **kwargs)
+
+    def GetApplyButton(*args, **kwargs):
+        """GetApplyButton(self) -> wxButton"""
+        return _core_.StdDialogButtonSizer_GetApplyButton(*args, **kwargs)
+
+    def GetNegativeButton(*args, **kwargs):
+        """GetNegativeButton(self) -> wxButton"""
+        return _core_.StdDialogButtonSizer_GetNegativeButton(*args, **kwargs)
+
+    def GetCancelButton(*args, **kwargs):
+        """GetCancelButton(self) -> wxButton"""
+        return _core_.StdDialogButtonSizer_GetCancelButton(*args, **kwargs)
+
+    def GetHelpButton(*args, **kwargs):
+        """GetHelpButton(self) -> wxButton"""
+        return _core_.StdDialogButtonSizer_GetHelpButton(*args, **kwargs)
+
+
+class StdDialogButtonSizerPtr(StdDialogButtonSizer):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = StdDialogButtonSizer
+_core_.StdDialogButtonSizer_swigregister(StdDialogButtonSizerPtr)
 
 #---------------------------------------------------------------------------
 
@@ -10968,7 +11047,13 @@ if RELEASE_VERSION != _core_.RELEASE_VERSION:
 
 #----------------------------------------------------------------------------
 
-# Set the default string conversion encoding from the locale
+# Set the default string<-->unicode conversion encoding from the
+# locale.  This encoding is used when string or unicode objects need
+# to be converted in order to pass them to wxWidgets.  Please be aware
+# that the default encoding within the same locale may be slightly
+# different on different platforms.  For example, please see
+# http://www.alanwood.net/demos/charsetdiffs.html for differences
+# between the common latin/roman encodings.
 import locale
 default = locale.getdefaultlocale()[1]
 if default:

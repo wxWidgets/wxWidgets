@@ -670,6 +670,10 @@ class Dialog(TopLevelWindow):
         """CreateButtonSizer(self, long flags) -> Sizer"""
         return _windows_.Dialog_CreateButtonSizer(*args, **kwargs)
 
+    def CreateStdDialogButtonSizer(*args, **kwargs):
+        """CreateStdDialogButtonSizer(self, long flags) -> StdDialogButtonSizer"""
+        return _windows_.Dialog_CreateStdDialogButtonSizer(*args, **kwargs)
+
     def IsModal(*args, **kwargs):
         """IsModal(self) -> bool"""
         return _windows_.Dialog_IsModal(*args, **kwargs)
@@ -3010,7 +3014,7 @@ class ProgressDialog(Frame):
         Updates the dialog, setting the progress bar to the new value and, if
         given changes the message above it. The value given should be less
         than or equal to the maximum value given to the constructor and the
-        dialog is closed if it is equal to the maximum.  Returns true unless
+        dialog is closed if it is equal to the maximum.  Returns True unless
         the Cancel button has been pressed.
 
         If false is returned, the application can either immediately destroy
