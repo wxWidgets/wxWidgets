@@ -47,7 +47,6 @@ class WXDLLIMPEXP_BASE wxZipFSHandler : public wxFileSystemHandler
         wxZipFilenameHashMap *m_DirsFound;
 
         wxString DoFind();
-        void CloseArchive(class wxZipInputStream *archive);
 
     DECLARE_NO_COPY_CLASS(wxZipFSHandler)
 };

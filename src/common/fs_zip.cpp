@@ -32,11 +32,32 @@
 #include "wx/fs_zip.h"
 
 
+//---------------------------------------------------------------------------
+// wxZipFSInputStream
+//---------------------------------------------------------------------------
+// Helper class for wxZipFSHandler
+
+class wxZipFSInputStream : public wxZipInputStream
+{
+    public:
+       wxZipFSInputStream(wxFSFile *file)
+               : wxZipInputStream(*file->GetStream())
+       {
+            m_file = file;
+#if 1 //WXWIN_COMPATIBILITY_2_6
+            m_allowSeeking = true;
+#endif
+       }
+
+       virtual ~wxZipFSInputStream() { delete m_file; }
+
+    private:
+       wxFSFile *m_file;
+};
+
 //----------------------------------------------------------------------------
 // wxZipFSHandler
 //----------------------------------------------------------------------------
-
-
 
 wxZipFSHandler::wxZipFSHandler() : wxFileSystemHandler()
 {
@@ -51,18 +72,9 @@ wxZipFSHandler::wxZipFSHandler() : wxFileSystemHandler()
 wxZipFSHandler::~wxZipFSHandler()
 {
     if (m_Archive)
-        CloseArchive(m_Archive);
+        delete m_Archive;
     if (m_DirsFound)
         delete m_DirsFound;
-}
-
-
-
-void wxZipFSHandler::CloseArchive(wxZipInputStream *archive)
-{
-    wxInputStream *stream = archive->GetFilterInputStream();
-    delete archive;
-    delete stream;
 }
 
 
@@ -70,24 +82,15 @@ void wxZipFSHandler::CloseArchive(wxZipInputStream *archive)
 bool wxZipFSHandler::CanOpen(const wxString& location)
 {
     wxString p = GetProtocol(location);
-    return (p == wxT("zip")) &&
-           (GetProtocol(GetLeftLocation(location)) == wxT("file"));
+    return (p == wxT("zip"));
 }
 
 
-
-
-wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
+wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& fs, const wxString& location)
 {
     wxString right = GetRightLocation(location);
     wxString left = GetLeftLocation(location);
-    wxInputStream *s;
-
-    if (!GetProtocol(left).IsSameAs(wxT("file")))
-    {
-        wxLogError(_("ZIP handler currently supports only local files!"));
-        return NULL;
-    }
+    wxZipInputStream *s;
 
     if (right.Contains(wxT("./")))
     {
@@ -99,12 +102,22 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
 
     if (right.GetChar(0) == wxT('/')) right = right.Mid(1);
 
-    wxFileName leftFilename = wxFileSystem::URLToFileName(left);
+    wxFSFile *leftFile = fs.OpenFile(left);
+    if (!leftFile)
+       return NULL;
 
-    s = new wxZipInputStream(leftFilename.GetFullPath(), right);
-    if (s && s->IsOk() )
+    s = new wxZipFSInputStream(leftFile);
+    if (s && s->IsOk())
     {
-        return new wxFSFile(s,
+       wxZipEntry *ent;
+       bool found = false;
+       while (!found && (ent = s->GetNextEntry())) {
+           if (ent->GetInternalName() == right)
+               found = true;
+           delete ent;
+       }
+       if (found)
+           return new wxFSFile(s,
                             left + wxT("#zip:") + right,
                             GetMimeTypeFromExt(location),
                             GetAnchor(location)
@@ -129,14 +142,8 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
 
     if (m_Archive)
     {
-        CloseArchive(m_Archive);
+        delete m_Archive;
         m_Archive = NULL;
-    }
-
-    if (!GetProtocol(left).IsSameAs(wxT("file")))
-    {
-        wxLogError(_("ZIP handler currently supports only local files!"));
-        return wxEmptyString;
     }
 
     switch (flags)
@@ -150,13 +157,10 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
     }
 
     m_ZipFile = left;
-    wxString nativename = wxFileSystem::URLToFileName(m_ZipFile).GetFullPath();
 
-    wxFFileInputStream *fs = new wxFFileInputStream(nativename);
-    if (fs->Ok())
-        m_Archive = new wxZipInputStream(*fs);
-    else
-        delete fs;
+    wxFSFile *leftFile = wxFileSystem().OpenFile(left);
+    if (leftFile)
+        m_Archive = new wxZipFSInputStream(leftFile);
 
     m_Pattern = right.AfterLast(wxT('/'));
     m_BaseDir = right.BeforeLast(wxT('/'));
@@ -193,7 +197,7 @@ wxString wxZipFSHandler::DoFind()
         wxZipEntry *entry = m_Archive->GetNextEntry();
         if (!entry)
         {
-            CloseArchive(m_Archive);
+            delete m_Archive;
             m_Archive = NULL;
             break;
         }
