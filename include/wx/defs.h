@@ -497,7 +497,7 @@ typedef  wxUint16        wxWord;
 #define wxSUNKEN_BORDER     0x08000000
 #define wxRAISED_BORDER     0x04000000
 #define wxBORDER            0x02000000
-#define wxSIMPLE_BORDER     0x02000000
+#define wxSIMPLE_BORDER     wxBORDER
 #define wxSTATIC_BORDER     0x01000000
 #define wxTRANSPARENT_WINDOW 0x00100000
 #define wxNO_BORDER         0x00200000
@@ -517,6 +517,10 @@ typedef  wxUint16        wxWord;
 // Add this style to a panel to get tab traversal working
 // outside of dialogs.
 #define wxTAB_TRAVERSAL     0x00080000
+
+// Add this style if the control wants to get all keyboard messages (under
+// Windows, it won't normally get the dialog navigation key events)
+#define wxWANTS_CHARS       0x00040000
 
 // Orientations
 #define wxHORIZONTAL     0x01

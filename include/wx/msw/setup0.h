@@ -178,6 +178,7 @@
 #define wxUSE_VALIDATORS 1
 #define wxUSE_ACCEL 1
 #define wxUSE_SASH 1
+#define wxUSE_TEXTDLG 1
 
 /*
  * Finer detail

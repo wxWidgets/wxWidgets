@@ -1776,6 +1776,14 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             }
             break;
 
+        case WM_GETDLGCODE:
+            if ( GetWindowStyleFlag() & wxWANTS_CHARS )
+            {
+                rc.result = DLGC_WANTARROWS | DLGC_WANTCHARS | DLGC_WANTTAB;
+                processed = TRUE;
+            }
+            break;
+
         case WM_KEYDOWN:
             // If this has been processed by an event handler,
             // return 0 now (we've handled it).
