@@ -1,7 +1,12 @@
-// griddemo.h
-//
-//  grid test program
-//
+/////////////////////////////////////////////////////////////////////////////
+// Name:        griddemo.h
+// Purpose:     Grid control wxWindows sample
+// Author:      Michael Bedward
+// Modified by:
+// RCS-ID:      $Id$
+// Copyright:   (c) Michael Bedward, Julian Smart
+// Licence:     wxWindows license
+/////////////////////////////////////////////////////////////////////////////
 
 
 #ifndef griddemo_h

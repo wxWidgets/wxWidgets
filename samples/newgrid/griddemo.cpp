@@ -1,7 +1,12 @@
-// griddemo.cpp
-//
-//  grid test program
-
+/////////////////////////////////////////////////////////////////////////////
+// Name:        griddemo.cpp
+// Purpose:     Grid control wxWindows sample
+// Author:      Michael Bedward
+// Modified by:
+// RCS-ID:      $Id$
+// Copyright:   (c) Michael Bedward, Julian Smart
+// Licence:     wxWindows license
+/////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
 #pragma implementation
