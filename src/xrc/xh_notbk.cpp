@@ -101,6 +101,8 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
                    GetStyle(wxT("style")),
                    GetName());
 
+        SetupWindow(nb);
+
         wxNotebook *old_par = m_notebook;
         m_notebook = nb;
         bool old_ins = m_isInside;
