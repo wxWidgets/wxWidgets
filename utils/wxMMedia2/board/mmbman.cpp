@@ -30,7 +30,7 @@
     #include "wx/wx.h"
 #endif
 
-// Personnal headers
+// Personal headers
 
 #include "wx/stream.h"
 #include "wx/wfstream.h"
@@ -49,6 +49,15 @@
 
 #ifdef __WIN32__
 #include "sndwin.h"
+#endif
+
+#include "vidbase.h"
+#ifdef __UNIX__
+#include "vidxanm.h"
+#endif
+
+#ifdef __WIN32__
+#include "vidwin.h"
 #endif
 
 #include "mmboard.h"
@@ -89,12 +98,45 @@ protected:
   wxSoundFileStream *m_file_stream;
 
   MMBoardTime m_length;
+  wxUint8 m_file_type;
+};
+
+class MMBoardVideoFile: public MMBoardFile {
+public:
+  MMBoardVideoFile(const wxString& filename);
+  ~MMBoardVideoFile();
+
+  bool NeedWindow();
+
+  void SetWindow(wxWindow *window);
+  
+  void Play();
+  void Pause();
+  void Resume();
+  void Stop();
+
+  MMBoardTime GetPosition();
+  MMBoardTime GetLength();
+
+  bool IsStopped();
+  bool IsPaused();
+
+  wxString GetStringType();
+  wxString GetStringInformation();
+
+protected:
+  wxWindow *m_output_window;
+  wxInputStream *m_input_stream;
+  wxVideoBaseDriver *m_video_driver;
 };
 
 // ----------------------------------------------------------------------------
 // Implementation
 // ----------------------------------------------------------------------------
 
+#define MMBoard_UNKNOWNTYPE 0
+#define MMBoard_WAVE 1
+#define MMBoard_AIFF 2
 
 // ----------------------------------------------------------------------------
 // MMBoardSoundFile
@@ -107,9 +149,11 @@ MMBoardSoundFile::MMBoardSoundFile(const wxString& filename)
 
   m_file_stream = GetDecoder();
   
-  if (!m_file_stream)
+  if (!m_file_stream) {
     SetError(MMBoard_UnknownFile);
-
+    return;
+  }
+    
   // Compute length
   wxUint32 length, seconds;
 
@@ -122,7 +166,8 @@ MMBoardSoundFile::MMBoardSoundFile(const wxString& filename)
 
 MMBoardSoundFile::~MMBoardSoundFile()
 {
-  delete m_file_stream;
+  if (m_file_stream)
+    delete m_file_stream;
   MMBoardManager::UnrefSoundStream(m_output_stream);
   delete m_input_stream;
 }
@@ -133,15 +178,19 @@ wxSoundFileStream *MMBoardSoundFile::GetDecoder()
 
   // First, we try a Wave decoder
   f_stream = new wxSoundWave(*m_input_stream, *m_output_stream);
+  m_file_type = MMBoard_WAVE;
   if (f_stream->CanRead())
     return f_stream;
   delete f_stream;
 
   // Then, a AIFF decoder
   f_stream = new wxSoundAiff(*m_input_stream, *m_output_stream);
+  m_file_type = MMBoard_AIFF;
   if (f_stream->CanRead())
     return f_stream;
   delete f_stream;
+
+  m_file_type = MMBoard_UNKNOWNTYPE;
 
   // TODO: automate
 
@@ -212,7 +261,17 @@ void MMBoardSoundFile::Stop()
 
 wxString MMBoardSoundFile::GetStringType()
 {
-  return wxString("WAVE file");
+  switch (m_file_type) {
+  case MMBoard_WAVE:
+    return wxString("WAVE file");
+    break;
+  case MMBoard_AIFF:
+    return wxString("AIFF file");
+    break;
+  default:
+    return wxString("Unknown file");
+    break;
+  }
 }
 
 wxString MMBoardSoundFile::GetStringInformation()
@@ -254,6 +313,101 @@ wxString MMBoardSoundFile::GetStringInformation()
 
 
 // ----------------------------------------------------------------------------
+// MMBoardVideoFile
+
+MMBoardVideoFile::MMBoardVideoFile(const wxString& filename)
+{
+  m_output_window = NULL;
+  m_input_stream = new wxFileInputStream(filename);
+  
+#if defined(__UNIX__)
+  m_video_driver = new wxVideoXANIM(*m_input_stream);
+#elif defined(__WIN32__)
+  m_video_driver = new wxVideoWindows(m_input_stream);
+#else
+  m_video_driver = NULL;
+  SetError(MMBoard_UnknownFile);
+#endif
+}
+
+MMBoardVideoFile::~MMBoardVideoFile()
+{
+  if (m_video_driver)
+    delete m_video_driver;
+
+  delete m_input_stream;
+}
+
+bool MMBoardVideoFile::NeedWindow()
+{
+  return TRUE;
+}
+
+void MMBoardVideoFile::SetWindow(wxWindow *window)
+{
+  m_output_window = window;
+  m_video_driver->AttachOutput(*window);
+}
+
+void MMBoardVideoFile::Play()
+{
+  m_video_driver->Play();
+}
+
+void MMBoardVideoFile::Pause()
+{
+  m_video_driver->Pause();
+}
+
+void MMBoardVideoFile::Resume()
+{
+  m_video_driver->Resume();
+}
+
+void MMBoardVideoFile::Stop()
+{
+  m_video_driver->Stop();
+}
+
+MMBoardTime MMBoardVideoFile::GetPosition()
+{
+  MMBoardTime btime;
+
+  btime.seconds = btime.minutes = btime.hours = 0;
+  return btime;
+}
+
+MMBoardTime MMBoardVideoFile::GetLength()
+{
+  MMBoardTime btime;
+
+  btime.seconds = btime.minutes = btime.hours = 1;
+  return btime;
+}
+
+bool MMBoardVideoFile::IsStopped()
+{
+  return FALSE;
+}
+
+bool MMBoardVideoFile::IsPaused()
+{
+  return FALSE;
+}
+
+wxString MMBoardVideoFile::GetStringType()
+{
+  return wxString("Video XANIM");
+}
+
+wxString MMBoardVideoFile::GetStringInformation()
+{
+  return wxString("No info");
+}
+
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
 // MMBoardFile
 
 MMBoardFile::MMBoardFile()
@@ -275,12 +429,20 @@ MMBoardFile *MMBoardManager::Open(const wxString& filename)
 {
   MMBoardFile *file;
 
+  // Test the audio codec
   file = new MMBoardSoundFile(filename);
-  if (file->GetError()) {
-    delete file;
-    return NULL;
-  }
-  return file;
+  if (!file->GetError())
+    return file;
+  delete file;
+
+  // Test the video codec
+  file = new MMBoardVideoFile(filename);
+  if (!file->GetError())
+    return file;
+  delete file;
+
+  // Arrrgh, we just could not see what is that file ...
+  return NULL;
 }
 
 DECLARE_APP(MMBoardApp)

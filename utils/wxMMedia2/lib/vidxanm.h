@@ -56,7 +56,7 @@ public:
 
   bool IsCapable(wxVideoType v_type);
 
-  bool AttachOutput(wxVideoOutput& output);
+  bool AttachOutput(wxWindow& output);
   void DetachOutput();
 
 protected:

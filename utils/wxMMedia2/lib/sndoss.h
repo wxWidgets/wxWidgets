@@ -34,7 +34,6 @@ class wxSoundStreamOSS : public wxSoundStream {
   bool StartProduction(int evt);
   bool StopProduction();
 
-  void SetDuplexMode(bool duplex) {}
   bool QueueFilled() const;
 
   // You should not call this.

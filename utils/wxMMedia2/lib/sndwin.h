@@ -23,7 +23,6 @@ class WXDLLEXPORT wxSoundStreamWin : public wxSoundStream {
   wxSoundStream& Read(void *buffer, wxUint32 len); 
 
   bool SetSoundFormat(wxSoundFormatBase& base);
-  void SetDuplexMode(bool on) {}
 
   bool StartProduction(int evt);
   bool StopProduction();

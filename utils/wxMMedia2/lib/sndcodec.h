@@ -22,7 +22,6 @@ class wxSoundStreamCodec: public wxSoundStream {
   bool StartProduction(int evt);
   bool StopProduction();
 
-  void SetDuplexMode(bool duplex);
   wxUint32 GetBestSize() const;
 
  protected:

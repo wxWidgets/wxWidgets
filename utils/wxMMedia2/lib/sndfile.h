@@ -56,28 +56,42 @@ class wxSoundFileStream: public wxSoundStream {
   wxSoundFileStream(wxOutputStream& stream, wxSoundStream& io_sound);
   ~wxSoundFileStream();
 
+  // Usual sound file calls (Play, Stop, ...)
   bool Play();
   bool Record(unsigned long time);
   bool Stop();
   bool Pause();
   bool Resume();
 
+  // Functions which return the current state
   bool IsStopped() const { return m_state == wxSOUND_FILE_STOPPED; }
   bool IsPaused() const { return m_state == wxSOUND_FILE_PAUSED; }
 
+  // A user should not call these two functions. Several things must be done before calling them.
+  // Users should use Play(), ... 
   bool StartProduction(int evt);
   bool StopProduction();
 
+  // These three functions deals with the length, the position in the sound file.
+  // All the values are expressed in bytes. If you need the values expressed in terms of
+  // time, you have to use GetSoundFormat().GetTimeFromBytes(...)
   wxUint32 GetLength();
   wxUint32 GetPosition();
+  wxUint32 SetPosition(wxUint32 new_position);
 
+  // These two functions use the sound format specified by GetSoundFormat(). All samples
+  // must be encoded in that format. 
   wxSoundStream& Read(void *buffer, wxUint32 len); 
   wxSoundStream& Write(const void *buffer, wxUint32 len);
 
-  void SetDuplexMode(bool duplex);
-
+  // This function set the sound format of the file. !! It must be used only when you are
+  // in output mode (concerning the file) !! If you are in input mode (concerning the file)
+  // You can't use this function to modify the format of the samples returned by Read() !
+  // For this action, you must use wxSoundRouterStream applied to wxSoundFileStream. 
   bool SetSoundFormat(const wxSoundFormatBase& format);
 
+  // You should use this function to test whether this file codec can read the stream you passed
+  // to it.
   virtual bool CanRead() { return FALSE; }
 
  protected:

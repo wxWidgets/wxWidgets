@@ -33,8 +33,6 @@ class wxSoundStreamESD : public wxSoundStream {
   bool StartProduction(int evt);
   bool StopProduction();
 
-  void SetDuplexMode(bool duplex) {}
-
   // You should not call this.
   void WakeUpEvt(int evt);
 

@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #define DEFINE_CONV(name, input_type, output_type, convert) \
 static void Convert_##name##(const char *buf_in, char *buf_out, wxUint32 len) \
 {\
@@ -8,7 +10,7 @@ static void Convert_##name##(const char *buf_in, char *buf_out, wxUint32 len) \
   while (len > 0) { \
     src = *t_buf_in++; \
     *t_buf_out++ = convert; \
-    len--; \
+    len -= sizeof(input_type); \
   } \
 }
 

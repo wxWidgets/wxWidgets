@@ -85,6 +85,9 @@ public:
   void OnPause(wxCommandEvent& event);
   void OnRefreshInfo(wxEvent& event);
 
+  void OpenVideoWindow();
+  void CloseVideoWindow();
+
 private:
   // any class wishing to process wxWindows events must use this macro
   DECLARE_EVENT_TABLE()
@@ -98,8 +101,13 @@ private:
   wxSlider *m_positionSlider;
   wxBitmapButton *m_playButton, *m_pauseButton, *m_stopButton, *m_ejectButton;
   wxStaticText *m_fileType, *m_infoText;
+  wxWindow *m_video_window;
+
+  wxPanel *m_panel;
+  wxSizer *m_sizer;
 
   wxTimer *m_refreshTimer;
+
 };
 
 // ----------------------------------------------------------------------------
@@ -260,16 +268,16 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
     // Misc variables
     m_opened_file = NULL;
 
-    wxPanel *panel = new wxPanel(this, -1);
+    m_panel = new wxPanel(this, -1);
 
     // Initialize main slider
-    m_positionSlider = new wxSlider( panel, MMBoard_PositionSlider, 0, 0, 60,
+    m_positionSlider = new wxSlider( m_panel, MMBoard_PositionSlider, 0, 0, 60,
 				     wxDefaultPosition, wxSize(300, -1),
 				     wxSL_HORIZONTAL | wxSL_AUTOTICKS);
     m_positionSlider->SetPageSize(60);  // 60 secs
 
     // Initialize info panel
-    wxPanel *infoPanel = new wxPanel( panel, -1);
+    wxPanel *infoPanel = new wxPanel( m_panel, -1);
     infoPanel->SetBackgroundColour(*wxBLACK);
     infoPanel->SetForegroundColour(*wxWHITE);
 
@@ -296,13 +304,13 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
     wxBitmap *eject_bmp = new wxBitmap(eject_xpm);
     wxBitmap *pause_bmp = new wxBitmap(pause_xpm);
 
-    m_playButton = new wxBitmapButton(panel, MMBoard_PlayButton, *play_bmp);
+    m_playButton = new wxBitmapButton(m_panel, MMBoard_PlayButton, *play_bmp);
     m_playButton->Enable(FALSE);
-    m_pauseButton = new wxBitmapButton(panel, MMBoard_PauseButton, *pause_bmp);
+    m_pauseButton = new wxBitmapButton(m_panel, MMBoard_PauseButton, *pause_bmp);
     m_pauseButton->Enable(FALSE);
-    m_stopButton = new wxBitmapButton(panel, MMBoard_StopButton, *stop_bmp);
+    m_stopButton = new wxBitmapButton(m_panel, MMBoard_StopButton, *stop_bmp);
     m_stopButton->Enable(FALSE);
-    m_ejectButton = new wxBitmapButton(panel, MMBoard_EjectButton, *eject_bmp);
+    m_ejectButton = new wxBitmapButton(m_panel, MMBoard_EjectButton, *eject_bmp);
     m_ejectButton->Enable(FALSE);
     
     buttonSizer->Add(m_playButton, 0, wxALL, 2);
@@ -311,21 +319,27 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
     buttonSizer->Add(m_ejectButton, 0, wxALL, 2);
 
     // Top sizer
-    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(new wxStaticLine(panel, -1), 0, wxGROW | wxCENTRE, 0);
-    sizer->Add(m_positionSlider, 0, wxCENTRE | wxGROW | wxALL, 2);
-    sizer->Add(new wxStaticLine(panel, -1), 0, wxGROW | wxCENTRE, 0);
-    sizer->Add(buttonSizer, 0, wxALL, 0);
-    sizer->Add(new wxStaticLine(panel, -1), 0, wxGROW | wxCENTRE, 0);
-    sizer->Add(infoPanel, 1, wxCENTRE | wxGROW, 0);
+    m_sizer = new wxBoxSizer(wxVERTICAL);
+    m_sizer->Add(new wxStaticLine(m_panel, -1), 0, wxGROW | wxCENTRE, 0);
+    m_sizer->Add(m_positionSlider, 0, wxCENTRE | wxGROW | wxALL, 2);
+    m_sizer->Add(new wxStaticLine(m_panel, -1), 0, wxGROW | wxCENTRE, 0);
+    m_sizer->Add(buttonSizer, 0, wxALL, 0);
+    m_sizer->Add(new wxStaticLine(m_panel, -1), 0, wxGROW | wxCENTRE, 0);
+    m_sizer->Add(infoPanel, 1, wxCENTRE | wxGROW, 0);
     
-    panel->SetSizer(sizer);
-    panel->SetAutoLayout(TRUE);
-    sizer->Fit(this);
-    sizer->SetSizeHints(this);
+    m_panel->SetSizer(m_sizer);
+    m_panel->SetAutoLayout(TRUE);
+    m_sizer->Fit(this);
+    m_sizer->SetSizeHints(this);
 
     // Timer
     m_refreshTimer = new wxTimer(this, MMBoard_RefreshInfo);
+
+    // Video window
+    m_video_window = NULL;
+
+    // Multimedia file
+    m_opened_file = NULL;
 }
 
 MMBoardFrame::~MMBoardFrame()
@@ -334,6 +348,30 @@ MMBoardFrame::~MMBoardFrame()
     delete m_opened_file;
 
   delete m_refreshTimer;
+}
+
+void MMBoardFrame::OpenVideoWindow()
+{
+  if (m_video_window)
+    return;
+
+  m_video_window = new wxWindow(m_panel, -1, wxDefaultPosition, wxSize(400, 400));
+  m_video_window->SetBackgroundColour(*wxBLACK);
+  m_sizer->Prepend(m_video_window, 0, wxCENTRE, 0);
+
+  m_sizer->Fit(this);
+}
+
+void MMBoardFrame::CloseVideoWindow()
+{
+  if (!m_video_window)
+    return;
+
+  m_sizer->Remove(m_video_window);
+  delete m_video_window;
+  m_video_window = NULL;
+
+  m_sizer->Fit(this);
 }
 
 // event handlers
@@ -357,6 +395,14 @@ void MMBoardFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MMBoardFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
   wxString selected_file;
+
+  if (m_opened_file) {
+    if (!m_opened_file->IsStopped()) {
+      wxCommandEvent event2;
+      OnStop(event2);
+    }
+    delete m_opened_file;
+  }
 
   // select a file to be opened
   selected_file = wxLoadFileSelector("multimedia", "*", NULL, this);
@@ -382,6 +428,12 @@ void MMBoardFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
   // Enable a few buttons
   m_playButton->Enable(TRUE);
   m_ejectButton->Enable(TRUE);
+
+  if (m_opened_file->NeedWindow()) {
+    OpenVideoWindow();
+    m_opened_file->SetWindow(m_video_window);
+  } else
+    CloseVideoWindow();
 }
 
 void MMBoardFrame::UpdateInfoText()

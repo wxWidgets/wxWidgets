@@ -2,7 +2,7 @@
 // Name: sndfile.cpp
 // Purpose:
 // Date: 08/11/1999
-// Author: Guilhem Lavaux <lavaux@easynet.fr> (C) 1999
+// Author: Guilhem Lavaux <lavaux@easynet.fr> (C) 1999, 2000
 // CVSID: $Id$
 // --------------------------------------------------------------------------
 #include <wx/wxprec.h>
@@ -296,10 +296,6 @@ wxSoundStream& wxSoundFileStream::Write(const void *buffer, wxUint32 len)
   return *this;
 }
 
-void wxSoundFileStream::SetDuplexMode(bool duplex)
-{
-}
-
 bool wxSoundFileStream::StartProduction(int evt)
 {
   m_sndio->SetEventHandler(this);
@@ -335,6 +331,23 @@ wxUint32 wxSoundFileStream::GetPosition()
     PrepareToPlay();
 
   return m_length-m_bytes_left;
+}
+
+wxUint32 wxSoundFileStream::SetPosition(wxUint32 new_position)
+{
+  if (!m_prepared && m_input != NULL && GetError() == wxSOUND_NOERR)
+    PrepareToPlay();
+
+  if (!m_prepared)
+    return 0;
+
+  if (new_position >= m_length) {
+    m_bytes_left = 0;
+    return m_length;
+  }
+
+  m_bytes_left = m_length-new_position;
+  return new_position;
 }
 
 void wxSoundFileStream::OnSoundEvent(int evt)

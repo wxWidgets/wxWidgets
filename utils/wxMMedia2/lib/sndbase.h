@@ -137,9 +137,6 @@ class wxSoundStream {
   // Sets the event handler: if it is non-null, all events are routed to it.
   void SetEventHandler(wxSoundStream *handler) { m_handler = handler; }
 
-  // Initializes the full duplex mode.
-  virtual void SetDuplexMode(bool duplex) = 0;
-
   wxSoundError GetError() const { return m_snderror; }
   wxUint32 GetLastAccess() const { return m_lastcount; }
 

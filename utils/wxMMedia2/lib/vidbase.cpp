@@ -25,27 +25,8 @@
 #endif
 
 IMPLEMENT_ABSTRACT_CLASS(wxVideoBaseDriver, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxVideoOutput, wxWindow)
-
-wxVideoOutput::wxVideoOutput()
-  : wxWindow()
-{
-  m_dyn_size = TRUE;
-}
-
-wxVideoOutput::wxVideoOutput(wxWindow *parent, const wxWindowID id, const wxPoint& position,
-			     const wxSize& size, const long style,
-			     const wxString& name)
-  : wxWindow(parent, id, position, size, style, name)
-{
-  m_dyn_size = TRUE;
-}
 
 ///
-wxVideoOutput::~wxVideoOutput()
-{
-}
-
 wxVideoBaseDriver::wxVideoBaseDriver()
 {
   m_video_output = NULL;
@@ -60,7 +41,7 @@ wxVideoBaseDriver::~wxVideoBaseDriver()
 {
 }
 
-bool wxVideoBaseDriver::AttachOutput(wxVideoOutput& output)
+bool wxVideoBaseDriver::AttachOutput(wxWindow& output)
 {
   m_video_output = &output;
   return TRUE;
@@ -76,9 +57,8 @@ void wxVideoBaseDriver::DetachOutput()
 wxFrame *wxVideoCreateFrame(wxVideoBaseDriver *vid_drv)
 {
   wxFrame *frame = new wxFrame(NULL, -1, "Video Output", wxDefaultPosition, wxSize(100, 100));
-  wxVideoOutput *vid_out = new wxVideoOutput(frame, -1, wxPoint(0, 0), wxSize(300, 300));
+  wxWindow *vid_out = new wxWindow(frame, -1, wxPoint(0, 0), wxSize(300, 300));
 
-  vid_out->DynamicSize(TRUE);
   frame->Layout();
   frame->Show(TRUE);
 

@@ -15,6 +15,10 @@
 #else
 #include <wx/wx.h>
 #endif
+
+// Pizza !
+#include <wx/gtk/win_gtk.h>
+
 #include <X11/Xlib.h>
 #include <X11/Intrinsic.h>
 #ifdef __WXGTK__
@@ -144,7 +148,7 @@ bool wxVideoXANIM::IsCapable(wxVideoType v_type)
     return FALSE;
 }
 
-bool wxVideoXANIM::AttachOutput(wxVideoOutput& out)
+bool wxVideoXANIM::AttachOutput(wxWindow& out)
 {
   if (!wxVideoBaseDriver::AttachOutput(out))
     return FALSE;
@@ -202,14 +206,16 @@ bool wxVideoXANIM::RestartXANIM()
     return FALSE;
   
   // Check if we can change the size of the window dynamicly
-  xanim_chg_size =  m_video_output->DynamicSize();
+  xanim_chg_size = TRUE;
   // Get current display
 #ifdef __WXGTK__
   m_internal->xanim_dpy = gdk_display;
   // We absolutely need the window to be realized.
-  gtk_widget_realize(m_video_output->m_wxwindow);
+  GtkPizza *pizza = GTK_PIZZA( m_video_output->m_wxwindow );
+  GdkWindow *window = pizza->bin_window;
+
   m_internal->xanim_window =
-            ((GdkWindowPrivate *)m_video_output->m_wxwindow->window)->xwindow;
+            ((GdkWindowPrivate *)window)->xwindow;
 #endif
   // Get the XANIM atom
   m_internal->xanim_atom = XInternAtom(m_internal->xanim_dpy,

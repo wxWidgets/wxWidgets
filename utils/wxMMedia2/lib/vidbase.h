@@ -36,44 +36,20 @@ typedef enum {
 
 ///
 class wxVideoBaseDriver;
-class wxVideoOutput : public wxWindow {
-  ///
-  DECLARE_DYNAMIC_CLASS(wxVideoOutput)
-protected:
-  bool m_dyn_size;
-public:
-  ///
-  wxVideoOutput();
-  ///
-  wxVideoOutput(wxWindow *parent, const wxWindowID id,
-                const wxPoint& pos = wxDefaultPosition,
-		const wxSize& size = wxDefaultSize, const long style = 0,
-                const wxString& name = "video_output");
-  ///
-  virtual ~wxVideoOutput();
-  
-  ///
-  bool DynamicSize() { return m_dyn_size; }
-  ///
-  void DynamicSize(bool dyn) { m_dyn_size = dyn; }
-};
 
 ///
 class wxVideoBaseDriver : public wxObject {
   ///
   DECLARE_ABSTRACT_CLASS(wxVideoBaseDriver)
 protected:
-  wxVideoOutput *m_video_output;
+  wxWindow *m_video_output;
 public:
-  friend class wxVideoOutput;
- 
   //
   wxVideoBaseDriver();
   //
   wxVideoBaseDriver(wxInputStream& str);
   //
   virtual ~wxVideoBaseDriver();
-
 
   //
   virtual bool Play() = 0;
@@ -98,7 +74,7 @@ public:
   virtual void OnFinished() {}
 
   //
-  virtual bool AttachOutput(wxVideoOutput& output);
+  virtual bool AttachOutput(wxWindow& output);
   //
   virtual void DetachOutput();
 };
