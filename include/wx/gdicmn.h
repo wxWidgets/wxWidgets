@@ -426,9 +426,8 @@ public:
     // add a new colour to the database
     void AddColour(const wxString& name, const wxColour& colour);
 
-    // deprecated, use Find()/Add() instead
-    wxColour *FindColour(const wxString& name);
-    void AddColour(const wxString& name, wxColour *colour);
+    // deprecated, use Find() instead
+    wxDEPRECATED( wxColour *FindColour(const wxString& name) );
 
 
 #ifdef __WXPM__

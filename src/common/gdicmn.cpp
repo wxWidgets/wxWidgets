@@ -473,18 +473,21 @@ wxString wxColourDatabase::FindName(const wxColour& colour) const
 
 wxColour *wxColourDatabase::FindColour(const wxString& name)
 {
-    wxColour col = Find(name);
-    if ( !col.Ok() )
+    // using a static variable here is not the most elegant solution but unless
+    // we want to make wxStringToColourHashMap public (i.e. move it to the
+    // header) so that we could have a member function returning
+    // wxStringToColourHashMap::iterator, there is really no good way to do it
+    // otherwise
+    //
+    // and knowing that this function is going to disappear in the next release
+    // anyhow I don't want to waste time on this
+    static wxColour s_col;
+
+    s_col = Find(name);
+    if ( !s_col.Ok() )
         return NULL;
 
-    return new wxColour(col);
-}
-
-void wxColourDatabase::AddColour(const wxString& name, wxColour *colour)
-{
-    wxCHECK_RET( colour, _T("NULL pointer in wxColourDatabase::AddColour") );
-
-    AddColour(name, wxColour(*colour));
+    return &s_col;
 }
 
 // ============================================================================
