@@ -446,7 +446,7 @@ wxSize wxWizard::GetPageSize() const
     return wxSize(m_width, m_height);
 }
 
-void wxWizard::OnCancel(wxCommandEvent& WXUNUSED(event))
+void wxWizard::OnCancel(wxCommandEvent& WXUNUSED(eventUnused))
 {
     // this function probably can never be called when we don't have an active
     // page, but a small extra check won't hurt
