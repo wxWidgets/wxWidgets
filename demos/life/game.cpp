@@ -50,7 +50,7 @@
 
 #define HASH(x, y) (((x >> 3) & 0x7f) << 7) + ((y >> 3) & 0x7f)
 
-#define HASHSIZE   32768      // hash table size (do not change!)
+#define HASHSIZE   16384      // hash table size (do not change!)
 #define CELLBOX    8          // cells in a cellbox (do not change!)
 
 
@@ -879,12 +879,27 @@ bool Life::NextTic()
         c->m_live1 = t1;
         c->m_live2 = t2;
 
-        // count alive cells (TODO: find a better way to do this)
+        // count alive cells
+#if 1
+        wxUint32 t1_, t2_;
+
+        t1_ = (t1  & 0x55555555) + (t1  >> 1 & 0x55555555);
+        t1_ = (t1_ & 0x33333333) + (t1_ >> 2 & 0x33333333);
+
+        t2_ = (t2  & 0x55555555) + (t2  >> 1 & 0x55555555);
+        t2_ = (t2_ & 0x33333333) + (t2_ >> 2 & 0x33333333) + t1_;
+        t2_ = (t2_ & 0x0F0F0F0F) + (t2_ >> 4 & 0x0F0F0F0F);
+        t2_ = (t2_ & 0x00FF00FF) + (t2_ >> 8 & 0x00FF00FF);
+
+        m_numcells += (t2_ & 0xFF) + (t2_ >> 16 & 0xFF);
+#else
+        // Original, slower code
         for (int i = 0; i < 32; i++)
         {
             if (t1 & (1 << i)) m_numcells++;
             if (t2 & (1 << i)) m_numcells++;
         }
+#endif
 
         changed |= ((t1 ^ c->m_old1) || (t2 ^ c->m_old2));
 
