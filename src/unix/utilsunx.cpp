@@ -666,12 +666,6 @@ long wxExecute(wxChar **argv,
     }
     else if ( pid == 0 )  // we're in child
     {
-#if wxUSE_GUI
-        // reading side can be safely closed but we should keep the write one
-        // opened
-        pipeEndProcDetect.Detach(wxPipe::Write);
-#endif // wxUSE_GUI
-
         // These lines close the open file descriptors to to avoid any
         // input/output which might block the process or irritate the user. If
         // one wants proper IO for the subprocess, the right thing to do is to
@@ -696,16 +690,23 @@ long wxExecute(wxChar **argv,
                 if ( fd != STDERR_FILENO )
                     close(fd);
             }
+        }
 
 #ifndef __VMS
-            if ( flags & wxEXEC_MAKE_GROUP_LEADER )
-            {
-                // Set process group to child process' pid.  Then killing -pid
-                // of the parent will kill the process and all of its children.
-                setsid();
-            }
-#endif // !__VMS
+        if ( flags & wxEXEC_MAKE_GROUP_LEADER )
+        {
+            // Set process group to child process' pid.  Then killing -pid
+            // of the parent will kill the process and all of its children.
+            setsid();
         }
+#endif // !__VMS
+
+#if wxUSE_GUI
+        // reading side can be safely closed but we should keep the write one
+        // opened
+        pipeEndProcDetect.Detach(wxPipe::Write);
+        pipeEndProcDetect.Close();
+#endif // wxUSE_GUI
 
         // redirect stdin, stdout and stderr
         if ( pipeIn.IsOk() )
