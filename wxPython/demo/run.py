@@ -44,7 +44,7 @@ class RunDemoApp(wx.App):
         self.name = name
         self.demoModule = module
         self.useShell = useShell
-        wx.App.__init__(self, 0)
+        wx.App.__init__(self, redirect=False)
 
 
     def OnInit(self):
