@@ -308,7 +308,7 @@ improving the compiler.
 Cygwin b19/b20/Mingw32 compilation
 ----------------------------------
 
-wxWindows 2.0 supports Cygwin (formerly GnuWin32) b19, b20, Mingw32, and Mingw32/EGCS.
+wxWindows 2 supports Cygwin (formerly GnuWin32) b19, b20, Mingw32, and Mingw32/EGCS.
 
 Thanks are due to Keith Garry Boyce (garp@opustel.com) and Cygnus for making
 it all possible.
@@ -328,8 +328,12 @@ Here are the steps required:
   If you have already have downloaded bison, flex, make, rm, mv
   from elsewhere, you won't need this.
 
-  IMPORTANT: also see mingw32.txt in this directory (docs/msw)
-  about a fix that has to be applied to a Mingw32 header file.
+  If using Mingw32 2.8.1, see also see mingw32.txt in this directory
+  (docs/msw) about a fix that has to be applied to a Mingw32 header file.
+
+  If using Mingw32 2.95 with wxWindows 2.1 or above, and wish to use OLE, you
+  should hand-patch in Mingw32-gcc295.patches (located in the top-level of the
+  wxWindows 2 installation).
 
 - Modify the file wx/src/cygnus.bat (or mingw32.bat or mingegcs.bat)
   to set up appropriate variables, if necessary mounting drives.
@@ -338,16 +342,13 @@ Here are the steps required:
 - For Cygwin, make sure there's a \tmp directory on your
   Windows drive or bison will crash.
 
-- Edit wx/src/makeg95.env and search for MINGW32. Take note of
-  the comments for adjusting settings to suit Cygwin or
-  Mingw32. Basically, this is just a case of adding the __MINGW32__ symbol
-  to OPTIONS for Mingw32, or removing it for Cygnus Cygwin.
-  For Mingw32/EGCS, add both __MINGW32__ and __EGCS__.
-  You may need to remove -loldnames from WINLIBS for Mingw32, or add it for
-  Cygwin.
+- makeg95.env configuation:
 
-- Mingw32 may not support winsock.h, so comment out
-  socket-related files in src/msw/makefile.g95.
+- Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
+  the file to either 1 (you have Mingw32) or 0 (you have Cygwin32).
+
+- Mingw32 may not support winsock.h, so if you have a problem
+  here, comment out socket-related files in src/msw/makefile.g95.
 
 - Set your WXWIN variable to where wxWindows is installed.
   *** IMPORTANT: For Cygwin/Mingw32, use forward slashes in the path, not
