@@ -58,7 +58,7 @@
 #include "wx/msw/gsockmsw.h"
 #include "wx/gsocket.h"
 
-extern "C" HINSTANCE wxGetInstance(void);
+extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance(void);
 #define INSTANCE wxGetInstance()
 
 #else
