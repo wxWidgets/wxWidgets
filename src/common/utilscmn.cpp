@@ -876,7 +876,7 @@ bool wxSafeYield(wxWindow *win, bool onlyIfNeeded)
 {
     wxWindowDisabler wd(win);
 
-    bool rc
+    bool rc;
     if (onlyIfNeeded)
         rc = wxYieldIfNeeded();
     else
