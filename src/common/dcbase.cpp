@@ -370,27 +370,76 @@ void wxDCBase::DoDrawSpline( wxList *points )
 // ----------------------------------------------------------------------------
 
 
-// Each element of the array will be the width of the string up to and
+// Each element of the widths array will be the width of the string up to and
 // including the coresoponding character in text.  This is the generic
 // implementation, the port-specific classes should do this with native APIs
-// if available.
+// if available and if faster.  Note: pango_layout_index_to_pos is much slower
+// than calling GetTextExtent!!
+
+#define FWC_SIZE 128
+
+class FontWidthCache
+{
+public:
+    FontWidthCache() : m_scaleX(1), m_widths(NULL) { }
+    ~FontWidthCache() { delete []m_widths; }
+    
+    void Reset() 
+    { 
+        if (!m_widths) 
+	    m_widths = new int[FWC_SIZE];
+	    
+        memset(m_widths, 0, sizeof(int)*FWC_SIZE); 
+    } 
+    
+    wxFont m_font;
+    double m_scaleX;
+    int *m_widths;
+};
+
+static FontWidthCache s_fontWidthCache;
 
 bool wxDCBase::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
     int totalWidth = 0;
-    size_t i;
 
+    size_t i, len = text.Length();
     widths.Empty();
-    widths.Add(0, text.Length());
+    widths.Add(0, len);
+    int w, h;
     
+    // reset the cache if font or horizontal scale have changed
+    if (!s_fontWidthCache.m_widths ||
+        (s_fontWidthCache.m_scaleX != m_scaleX) ||
+        (s_fontWidthCache.m_font != GetFont()))
+    {
+        s_fontWidthCache.Reset();
+        s_fontWidthCache.m_font = GetFont();
+        s_fontWidthCache.m_scaleX = m_scaleX;
+    }
+
     // Calculate the position of each character based on the widths of
     // the previous characters
-    for (i=0; i<text.Length(); i++) {
-        int w, h;
-        GetTextExtent(text[i], &w, &h);
+    for (i=0; i<len; i++) 
+    {
+        const wxChar c = text[i];
+        unsigned int c_int = (unsigned int)c;
+
+        if ((c_int < FWC_SIZE) && (s_fontWidthCache.m_widths[c_int] != 0)) 
+        {
+            w = s_fontWidthCache.m_widths[c_int];
+        }
+        else 
+        {
+            GetTextExtent(c, &w, &h);
+            if (c_int < FWC_SIZE)
+                s_fontWidthCache.m_widths[c_int] = w;
+        }
+
         totalWidth += w;
         widths[i] = totalWidth;
     }
+    
     return true;
 }
 
