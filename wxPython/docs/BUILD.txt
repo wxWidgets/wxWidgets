@@ -141,7 +141,6 @@ place, then do the same for wxPython.
 
         make $* \
             && make -C contrib/src/gizmos $* \
-            && make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0" $* \
             && make -C contrib/src/stc $* 
    
    So you just use .make as if it where make, but don't forget to set
@@ -393,11 +392,7 @@ accordingly if you are using the bash shell.
 
 	%WXDIR%\contrib\build\gizmos
 	%WXDIR%\contrib\build\stc
-	%WXDIR%\contrib\build\ogl
 
-    Note, that the ogl lib build will need an additional flag::
-
-	CPPFLAGS="-DwxUSE_DEPRECATED=0"
 
 7.  When that is all done it will have built the main wxWidgets DLLs
     and also some of the contribs DLLs.  There should be a ton of DLLs
