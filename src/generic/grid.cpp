@@ -7102,110 +7102,110 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                                 int textOrientation )
 {
     wxArrayString lines;
-
+    
     StringToLines( value, lines );
-
-
+    
+    
     //Forward to new API.
     DrawTextRectangle(  dc,
-                        lines,
-                        rect,
-                        horizAlign,
-                        vertAlign,
-                        textOrientation );
-
+        lines,
+        rect,
+        horizAlign,
+        vertAlign,
+        textOrientation );
+    
 }
 
 void wxGrid::DrawTextRectangle( wxDC& dc,
-                                const wxArrayString& lines,
-                                const wxRect& rect,
-                                int horizAlign,
-                                int vertAlign,
-                                int textOrientation )
+                               const wxArrayString& lines,
+                               const wxRect& rect,
+                               int horizAlign,
+                               int vertAlign,
+                               int textOrientation )
 {
     long textWidth, textHeight;
     long lineWidth, lineHeight;
     int nLines;
-
+    
     dc.SetClippingRegion( rect );
-
+    
     nLines = lines.GetCount();
     if( nLines > 0 )
     {
-      int l;
-      float x, y;
-
-      if( textOrientation == wxHORIZONTAL )
-      GetTextBoxSize(dc, lines, &textWidth, &textHeight);
-      else
-         GetTextBoxSize( dc, lines, &textHeight, &textWidth );
-
-      switch( vertAlign )
-      {
+        int l;
+        float x = 0.0, y = 0.0;
+        
+        if( textOrientation == wxHORIZONTAL )
+            GetTextBoxSize(dc, lines, &textWidth, &textHeight);
+        else
+            GetTextBoxSize( dc, lines, &textHeight, &textWidth );
+        
+        switch( vertAlign )
+        {
         case wxALIGN_BOTTOM:
             if( textOrientation == wxHORIZONTAL )
-          y = rect.y + (rect.height - textHeight - 1);
+                y = rect.y + (rect.height - textHeight - 1);
             else
-               x = rect.x + rect.width - textWidth;
-          break;
-
+                x = rect.x + rect.width - textWidth;
+            break;
+            
         case wxALIGN_CENTRE:
             if( textOrientation == wxHORIZONTAL )
-          y = rect.y + ((rect.height - textHeight)/2);
+                y = rect.y + ((rect.height - textHeight)/2);
             else
-               x = rect.x + ((rect.width - textWidth)/2);
-          break;
-
+                x = rect.x + ((rect.width - textWidth)/2);
+            break;
+            
         case wxALIGN_TOP:
         default:
             if( textOrientation == wxHORIZONTAL )
-          y = rect.y + 1;
+                y = rect.y + 1;
             else
-               x = rect.x + 1;
-          break;
-      }
-
-      // Align each line of a multi-line label
-      for( l = 0; l < nLines; l++ )
-      {
-        dc.GetTextExtent(lines[l], &lineWidth, &lineHeight);
-
-        switch( horizAlign )
-        {
-          case wxALIGN_RIGHT:
-               if( textOrientation == wxHORIZONTAL )
-            x = rect.x + (rect.width - lineWidth - 1);
-               else
-                  y = rect.y + lineWidth + 1;
-            break;
-
-          case wxALIGN_CENTRE:
-               if( textOrientation == wxHORIZONTAL )
-            x = rect.x + ((rect.width - lineWidth)/2);
-               else
-                  y = rect.y + rect.height - ((rect.height - lineWidth)/2);
-            break;
-
-          case wxALIGN_LEFT:
-          default:
-               if( textOrientation == wxHORIZONTAL )
-            x = rect.x + 1;
-               else
-                  y = rect.y + rect.height - 1;
+                x = rect.x + 1;
             break;
         }
-
-         if( textOrientation == wxHORIZONTAL )
-         {
-        dc.DrawText( lines[l], (int)x, (int)y );
-        y += lineHeight;
-      }
-         else
-         {
-            dc.DrawRotatedText( lines[l], (int)x, (int)y, 90.0 );
-            x += lineHeight;
-         }
-      }
+        
+        // Align each line of a multi-line label
+        for( l = 0; l < nLines; l++ )
+        {
+            dc.GetTextExtent(lines[l], &lineWidth, &lineHeight);
+            
+            switch( horizAlign )
+            {
+            case wxALIGN_RIGHT:
+                if( textOrientation == wxHORIZONTAL )
+                    x = rect.x + (rect.width - lineWidth - 1);
+                else
+                    y = rect.y + lineWidth + 1;
+                break;
+                
+            case wxALIGN_CENTRE:
+                if( textOrientation == wxHORIZONTAL )
+                    x = rect.x + ((rect.width - lineWidth)/2);
+                else
+                    y = rect.y + rect.height - ((rect.height - lineWidth)/2);
+                break;
+                
+            case wxALIGN_LEFT:
+            default:
+                if( textOrientation == wxHORIZONTAL )
+                    x = rect.x + 1;
+                else
+                    y = rect.y + rect.height - 1;
+                break;
+            }
+            
+            if( textOrientation == wxHORIZONTAL )
+            {
+                dc.DrawText( lines[l], (int)x, (int)y );
+                y += lineHeight;
+            }
+            else
+            {
+                dc.DrawRotatedText( lines[l], (int)x, (int)y, 90.0 );
+                x += lineHeight;
+            }
+        }
     }
     dc.DestroyClippingRegion();
 }
