@@ -6,7 +6,7 @@
 // Created:     03/02/99
 // RCS-ID:      $Id: 
 // Copyright:   (c) Stefan Csomor
-// Licence:   	LGPL licence
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef H_UMA
