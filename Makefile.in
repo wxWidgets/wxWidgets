@@ -1350,6 +1350,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/frame.h \
 	wx/mac/gauge.h \
 	wx/mac/gdiobj.h \
+	wx/mac/glcanvas.h \
 	wx/mac/gsockmac.h \
 	wx/mac/helpxxxx.h \
 	wx/mac/icon.h \
@@ -1378,6 +1379,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/region.h \
 	wx/mac/scrolbar.h \
 	wx/mac/slider.h \
+	wx/mac/sound.h \
 	wx/mac/spinbutt.h \
 	wx/mac/spinctrl.h \
 	wx/mac/statbmp.h \

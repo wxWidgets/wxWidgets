@@ -1688,6 +1688,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/frame.h
     wx/mac/gauge.h
     wx/mac/gdiobj.h
+    wx/mac/glcanvas.h
     wx/mac/gsockmac.h
     wx/mac/helpxxxx.h
     wx/mac/icon.h
@@ -1716,6 +1717,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/region.h
     wx/mac/scrolbar.h
     wx/mac/slider.h
+    wx/mac/sound.h
     wx/mac/spinbutt.h
     wx/mac/spinctrl.h
     wx/mac/statbmp.h
