@@ -128,7 +128,182 @@ MPCriticalRegionID gs_guiCritical = kInvalidID;
 // wxMutex implementation
 // ----------------------------------------------------------------------------
 
-#if 0 
+#if TARGET_API_MAC_OSX
+#define wxUSE_MAC_SEMAPHORE_MUTEX 0
+#define wxUSE_MAC_CRITICAL_REGION_MUTEX 0
+#define wxUSE_MAC_PTHREADS_MUTEX 1
+#else
+#define wxUSE_MAC_SEMAPHORE_MUTEX 0
+#define wxUSE_MAC_CRITICAL_REGION_MUTEX 1
+#define wxUSE_MAC_PTHREADS_MUTEX 0
+#endif
+
+#if wxUSE_MAC_PTHREADS_MUTEX 
+
+#include <pthread.h>
+
+class wxMutexInternal
+{
+public:
+    wxMutexInternal(wxMutexType mutexType);
+    ~wxMutexInternal();
+
+    wxMutexError Lock();
+    wxMutexError TryLock();
+    wxMutexError Unlock();
+
+    bool IsOk() const { return m_isOk; }
+
+private:
+    pthread_mutex_t m_mutex;
+    bool m_isOk;
+
+    // wxConditionInternal uses our m_mutex
+    friend class wxConditionInternal;
+};
+
+#ifdef HAVE_PTHREAD_MUTEXATTR_T
+// on some systems pthread_mutexattr_settype() is not in the headers (but it is
+// in the library, otherwise we wouldn't compile this code at all)
+extern "C" int pthread_mutexattr_settype(pthread_mutexattr_t *, int);
+#endif
+
+wxMutexInternal::wxMutexInternal(wxMutexType mutexType)
+{
+    int err;
+    switch ( mutexType )
+    {
+        case wxMUTEX_RECURSIVE:
+            // support recursive locks like Win32, i.e. a thread can lock a
+            // mutex which it had itself already locked
+            //
+            // unfortunately initialization of recursive mutexes is non
+            // portable, so try several methods
+#ifdef HAVE_PTHREAD_MUTEXATTR_T
+            {
+                pthread_mutexattr_t attr;
+                pthread_mutexattr_init(&attr);
+                pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+
+                err = pthread_mutex_init(&m_mutex, &attr);
+            }
+#elif defined(HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER)
+            // we can use this only as initializer so we have to assign it
+            // first to a temp var - assigning directly to m_mutex wouldn't
+            // even compile
+            {
+                pthread_mutex_t mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+                m_mutex = mutex;
+            }
+#else // no recursive mutexes
+            err = EINVAL;
+#endif // HAVE_PTHREAD_MUTEXATTR_T/...
+            break;
+
+        default:
+            wxFAIL_MSG( _T("unknown mutex type") );
+            // fall through
+
+        case wxMUTEX_DEFAULT:
+            err = pthread_mutex_init(&m_mutex, NULL);
+            break;
+    }
+
+    m_isOk = err == 0;
+    if ( !m_isOk )
+    {
+        wxLogApiError( wxT("pthread_mutex_init()"), err);
+    }
+}
+
+wxMutexInternal::~wxMutexInternal()
+{
+    if ( m_isOk )
+    {
+        int err = pthread_mutex_destroy(&m_mutex);
+        if ( err != 0 )
+        {
+            wxLogApiError( wxT("pthread_mutex_destroy()"), err);
+        }
+    }
+}
+
+wxMutexError wxMutexInternal::Lock()
+{
+    int err = pthread_mutex_lock(&m_mutex);
+    switch ( err )
+    {
+        case EDEADLK:
+            // only error checking mutexes return this value and so it's an
+            // unexpected situation -- hence use assert, not wxLogDebug
+            wxFAIL_MSG( _T("mutex deadlock prevented") );
+            return wxMUTEX_DEAD_LOCK;
+
+        case EINVAL:
+            wxLogDebug(_T("pthread_mutex_lock(): mutex not initialized."));
+            break;
+
+        case 0:
+            return wxMUTEX_NO_ERROR;
+
+        default:
+            wxLogApiError(_T("pthread_mutex_lock()"), err);
+    }
+
+    return wxMUTEX_MISC_ERROR;
+}
+
+wxMutexError wxMutexInternal::TryLock()
+{
+    int err = pthread_mutex_trylock(&m_mutex);
+    switch ( err )
+    {
+        case EBUSY:
+            // not an error: mutex is already locked, but we're prepared for
+            // this
+            return wxMUTEX_BUSY;
+
+        case EINVAL:
+            wxLogDebug(_T("pthread_mutex_trylock(): mutex not initialized."));
+            break;
+
+        case 0:
+            return wxMUTEX_NO_ERROR;
+
+        default:
+            wxLogApiError(_T("pthread_mutex_trylock()"), err);
+    }
+
+    return wxMUTEX_MISC_ERROR;
+}
+
+wxMutexError wxMutexInternal::Unlock()
+{
+    int err = pthread_mutex_unlock(&m_mutex);
+    switch ( err )
+    {
+        case EPERM:
+            // we don't own the mutex
+            return wxMUTEX_UNLOCKED;
+
+        case EINVAL:
+            wxLogDebug(_T("pthread_mutex_unlock(): mutex not initialized."));
+            break;
+
+        case 0:
+            return wxMUTEX_NO_ERROR;
+
+        default:
+            wxLogApiError(_T("pthread_mutex_unlock()"), err);
+    }
+
+    return wxMUTEX_MISC_ERROR;
+}
+
+
+#endif
+
+#if wxUSE_MAC_SEMAPHORE_MUTEX 
 
 class wxMutexInternal
 {
@@ -217,7 +392,9 @@ wxMutexError wxMutexInternal::Unlock()
 	return wxMUTEX_NO_ERROR;
 }
 
-#else
+#endif
+
+#if wxUSE_MAC_CRITICAL_REGION_MUTEX
 
 class wxMutexInternal
 {
