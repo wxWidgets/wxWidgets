@@ -143,6 +143,9 @@ bool wxYield()
     /* it's necessary to call ProcessIdle() to update the frames sizes which
        might have been changed (it also will update other things set from
        OnUpdateUI() which is a nice (and desired) side effect) */
+    while (wxTheApp->ProcessIdle()) { }
+       
+#if 0
     for ( wxWindowList::Node *node = wxTopLevelWindows.GetFirst();
           node;
           node = node->GetNext() )
@@ -150,6 +153,7 @@ bool wxYield()
         wxWindow *win = node->GetData();
         win->OnInternalIdle();
     }
+#endif
 
     if (wxTheApp->m_idleTag)
     {
