@@ -1057,6 +1057,7 @@ public:
     int GetKeyCode();
     %pragma(python) addtoclass = "GetCode = GetKeyCode"
     const wxString& GetLabel();
+    bool IsEditCancelled() const;
 };
 
 
