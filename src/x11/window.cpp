@@ -216,7 +216,7 @@ void wxWindowX11::SetFocus()
         XWMHints wmhints;
         wmhints.flags = InputHint;
         wmhints.input = True;
-        XSetWMHints(wxGlobalDisplay(), wMain, &wmhints)
+        XSetWMHints(wxGlobalDisplay(), wMain, &wmhints);
     }
 }
 
@@ -326,7 +326,6 @@ void wxWindowX11::DoCaptureMouse()
 
         res = XGrabKeyboard(wxGlobalDisplay(), (Window) GetMainWindow(),
             FALSE,
-            ShiftMask, LockMask, Control-Mask, Mod1Mask, Mod2Mask, Mod3Mask, Mod4Mask, and Mod5Mask.,
             GrabModeAsync,
 	        GrabModeAsync,
             CurrentTime);
@@ -1311,7 +1310,7 @@ bool wxWindowX11::SetBackgroundColour(const wxColour& col)
         return FALSE;
 
     XSetWindowAttributes attrib;
-    attrib.background_pixel = col.AllocColour(wxGlobalDisplay());
+    attrib.background_pixel = ((wxColour&)col).AllocColour(wxGlobalDisplay());
 
     XChangeWindowAttributes(wxGlobalDisplay(),
         (Window) GetMainWindow(),

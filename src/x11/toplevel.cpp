@@ -103,7 +103,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     
     Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 
        0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
-    m_mainWindow = (WXWindow) xwindow;
+    m_mainWidget = (WXWindow) xwindow;
     
     XSelectInput( xdisplay, xwindow,
         ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
@@ -246,14 +246,14 @@ void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
     if (icon.Ok() && GetMainWindow())
     {
         XWMHints *wmHints = XAllocWMHints();
-        wmHints.icon_pixmap = (Pixmap) icon.GetPixmap();
+        wmHints->icon_pixmap = (Pixmap) icon.GetPixmap();
 
-        wmHints.flags = IconPixmapHint;
+        wmHints->flags = IconPixmapHint;
 
         if (icon.GetMask())
         {
-            wmHints.flags |= IconMaskHint;
-            wmHints.icon_mask = (Pixmap) icon.GetMask()->GetPixmap();
+            wmHints->flags |= IconMaskHint;
+            wmHints->icon_mask = (Pixmap) icon.GetMask()->GetPixmap();
         }
 
         XSetWMHints(wxGlobalDisplay(), (Window) GetMainWindow(),
@@ -320,7 +320,7 @@ struct MwmHints {
 // given wxWindows style
 bool wxSetWMDecorations(Window w, long style)
 {
-    if (!MWMIsRunning(w))
+    if (!wxMWMIsRunning(w))
         return FALSE;
 
     Atom mwm_wm_hints = XInternAtom(wxGlobalDisplay(),"_MOTIF_WM_HINTS", False);
@@ -374,7 +374,7 @@ bool wxSetWMDecorations(Window w, long style)
 
     XChangeProperty(wxGlobalDisplay(),
 		    w,
-		    mwm_wm_hints, mem_wm_hints,
+		    mwm_wm_hints, mwm_wm_hints,
 		    32, PropModeReplace,
 		    (unsigned char *) &hints, PROP_MOTIF_WM_HINTS_ELEMENTS);
 

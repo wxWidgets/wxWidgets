@@ -150,6 +150,10 @@
 
 #include "wx/cmdproc.h"
 
+#if wxUSE_CLIPBOARD
+#include "wx/dataobj.h"
+#endif
+
 // turn extra wxTextCtrl-specific debugging on/off
 #define WXDEBUG_TEXT
 

@@ -19,6 +19,8 @@
 #include "wx/app.h"
 
 #include "wx/x11/private.h"
+#include "X11/Xatom.h"
+#include "X11/Xutil.h"
 
 //-----------------------------------------------------------------------------
 // wxPopupWindow
@@ -61,8 +63,10 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     xattributes.background_pixel = BlackPixel( xdisplay, xscreen );
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
     xattributes.override_redirect = False;
+
+    wxSize size(2, 2);
     
-    Window xwindow = XCreateWindow( xdisplay, xparent, pos.x, pos.y, size.x, size.y, 
+    Window xwindow = XCreateWindow( xdisplay, xparent, 0, 0, size.x, size.y, 
        0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
     
     XSelectInput( xdisplay, xwindow,
@@ -71,7 +75,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
         KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
         PropertyChangeMask );
 
-    m_mainWindow = (WXWindow) xwindow;
+    m_mainWidget = (WXWindow) xwindow;
     wxAddWindowToTable( xwindow, (wxWindow*) this );
     
     XSetTransientForHint( xdisplay, xwindow, xparent );
@@ -106,7 +110,7 @@ void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlag
 
 bool wxPopupWindow::Show( bool show )
 {
-    return wxWindow11::Show( show );
+    return wxWindowX11::Show( show );
 }
 
 #endif // wxUSE_POPUPWIN

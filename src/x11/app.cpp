@@ -349,7 +349,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 
             if (event->xclient.message_type == wm_protocols)
             {
-                if (event->xclient.data.l[0] == wm_delete_window)
+                if ((Atom) (event->xclient.data.l[0]) == wm_delete_window)
                 {
                     if (win)
                     {
