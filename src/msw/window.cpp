@@ -4382,7 +4382,7 @@ void wxWindow::OnIdle(wxIdleEvent& event)
             // Generate a LEAVE event
             m_mouseInWindow = FALSE;
 
-            int state;
+            int state = 0;
             if (::GetKeyState(VK_SHIFT) != 0)
                 state |= MK_SHIFT;
             if (::GetKeyState(VK_CONTROL) != 0)
