@@ -96,7 +96,7 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
                          wxCoord maxLength, wxTipWindow** windowPtr)
            : wxFrame(parent, -1, _T(""),
                      wxDefaultPosition, wxDefaultSize,
-                     wxNO_BORDER | wxFRAME_FLOAT_ON_PARENT)
+                     wxNO_BORDER | wxFRAME_NO_TASKBAR )
 {
     // set colours
     SetForegroundColour(*wxBLACK);
@@ -250,12 +250,7 @@ void wxTipWindowView::OnPaint(wxPaintEvent& WXUNUSED(event))
     // first filll the background
     dc.SetBrush(wxBrush(GetBackgroundColour(), wxSOLID));
 
-    // Under Windows, you apparently get a thin black border whether you like it or not :-(
-#ifdef __WXMSW__
-    dc.SetPen( * wxTRANSPARENT_PEN );
-#else
     dc.SetPen( * wxBLACK_PEN );
-#endif
     dc.DrawRectangle(rect);
 
     // and then draw the text line by line
