@@ -441,52 +441,17 @@ Metrowerks CodeWarrior compilation
          minimal.rc and minimal.cpp and adding the files griddemo.rc and 
          griddemo.cpp.  Build and run....
 
-
-Symantec C++ compilation
-------------------------
-
-1. Make sure your WXWIN variable is set, and uses the FAT (short
-   name) form.
-2. Edit setup.h and set wxUSE_DRAG_AND_DROP to 0.
-3. Change directory to wx\src\msw. Type 'make -f makefile.sc' to
-   make the wxWindows core library.
-4. Change directory to wx\samples\minimal and type 'make -f makefile.sc'
-   to make this sample.
-
-Note: the minimal sample doesn't link properly ('Error: no
-start address').
-32-bit compilation only (partially) supported at present, using SC++ 6.1.
-Some functionality is missing using this compiler (see makefile).
-Add -D__WIN95__ if your SC++ has Windows 95 support, and ignore
-Step (2). 16-bit compilation is left as an exercise for the user!
-
-Salford C++ compilation
------------------------
-
-1. Make sure your WXWIN variable is set, and uses the FAT (short
-   name) form.
-2. Edit SALFORDDIR and RESOURCEDIR in src/makesl.env as per
-   notes.
-3. Change directory to wx\src\msw. Type 'mk32 -f makefile.sl all' to
-   make the wxWindows core library.
-4. Change directory to wx\samples\minimal and type 'mk32 -f makefile.sl'
-   to make this sample.
-
-Unfortunately, Salford C++ seems to have problems with its code generation for
-operations on objects, as seen in wxFrame::OnMenuHighlight
-(minimal sample) or wxWindow::SetValidator (mdi sample). Also the
-the debugging version of the library is 90MB, with samples coming in
-at 40MB :-) However, wxWindows at least makes a good test suite for
-improving the compiler.
-
 Cygwin/Mingw32 compilation
 ----------------------------------
 
 wxWindows 2 supports Cygwin (formerly GnuWin32) betas and
-releases, and Mingw32.
+releases, and Mingw32. Cygwin can be downloaded from:
 
-Thanks are due to Keith Garry Boyce (garp@opustel.com), Cygnus
-and others for making it all possible.
+    http://sources.redhat.com/cygwin
+
+and Mingw32 from:
+
+    http://www.mingw.org
 
 Both Cygwin and MinGW can be used with the same makefiles.
 
@@ -494,24 +459,42 @@ NOTE: some notes specific to old Cygwin ( < 1.1.x )
       and MinGW ( < 1.0 ) are at the end of this section
       ( see OLD VERSIONS )
 
-
 There are two methods of compiling wxWindows, by using the
 makefiles provided or by using 'configure'.
 
-Retrieve and install the latest version of Cygwin, or Mingw32, as per the
-instructions with either of these packages.
+Retrieve and install the latest version of Cygwin, or Mingw32, as per
+the instructions with either of these packages.
 
-If using Mingw32, you need some extra files to use the wxWindows
-makefiles. You can find these files in ports/mingw32 on the
-wxWindows ftp site or CD-ROM, as extra.zip. 
+If using Mingw32, you can download the add-on MSYS package to
+provide Unix-like tools that you'll need to build wxWindows.
+
+The solution prior to MSYS was to download extra utilities from
+ports/mingw32 on the wxWindows ftp site or CD-ROM:
 
   ftp://biolp22.york.ac.uk/pub/ports/mingw32/extra.zip
   
-These should be extracted to the Mingw32 directory. If you have 
-already downloaded rm, cp, mv from elsewhere, you won't need this.
+These should be extracted to a directory in your path. If you have 
+already downloaded rm, cp, mv from elsewhere, or are using
+MSYS, you won't need all of these files. However if using MSYS
+and configure to build wxWindows, you will need to unzip the
+following files from extra.zip and place them in e.g. an
+extrabin directory which you then add to your path:
 
-Using makefiles
-===============
+  bison.exe bison.hairy bison.simple flex.exe
+
+You will also need to set these variables:
+
+  set BISON_SIMPLE=c:\apps\mingw2.0.0-3\extrabin\bison.simple
+  set BISON_HAIRY=c:\apps\mingw2.0.0-3\extrabin\bison.hairy
+
+Here we're setting them in DOS before invoking 'sh', but you
+could set them within the shell instead.
+
+The 'configure' method uses flex and bison, whereas the
+direct makefile method uses pregenerated C files.
+
+Using makefiles directly
+========================
 
 NOTE: The makefile are for compilation under Cygwin, MSYS, or
       command.com/cmd.exe, they won't work in other environments
@@ -523,9 +506,11 @@ Here are the steps required using the provided makefiles:
   *** IMPORTANT: For Cygwin/Mingw32, use forward slashes in the path, not
   backslashes.
 
-- Check src/makeg95.env to see that MINGW32VERSION is set to correctly
-  reflect the version of gcc that you have. Edit it as needed.
-  
+- Edit src/makeg95.env and set the MINGW32 variable at the top of
+  the file to either 1 (you have Mingw32) or 0 (if you have
+  Cygwin). If using Mingw32, also set the MINGW32VERSION variable
+  appropriately.
+
 - Use the makefile.g95 files for compiling wxWindows and samples,
   e.g. to compile a debugging version of wxWindows:
   > cd c:\wx\src\msw
@@ -582,7 +567,8 @@ system to generate appropriate makefiles, as used on Unix
 and Mac OS X systems.
 
 Change directory to the root of the wxWindows distribution,
-make a build directory, and then run configure and make.
+make a build directory, run 'sh', and then from this shell
+run configure and make.
 
 For example:
 
@@ -594,7 +580,6 @@ For example:
   cd samples/minimal
   make
   ./minimal.exe
-
 
 Notes:
 
@@ -661,20 +646,45 @@ OLD VERSIONS:
   bison for ordinary wxWindows compilation: a pre-generated .c file is
   supplied).
 
-- Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
-  the file to either 1 (you have Mingw32 or Cygwin 1.x releases) or 0
-  (if you have Cygwin betas). If using Mingw32, also set the
-  MINGW32VERSION variable appropriately.
-
 - If using GnuWin32 b18, you will need to copy windres.exe
   from e.g. the Mingw32 distribution, to a directory in your path.
 
-References:
+Symantec C++ compilation
+------------------------
 
- - The Cygwin site is at
-     http://sources.redhat.com/cygwin
- - Mingw32 is available at:
-     ftp://www.mingw.org
+1. Make sure your WXWIN variable is set, and uses the FAT (short
+   name) form.
+2. Edit setup.h and set wxUSE_DRAG_AND_DROP to 0.
+3. Change directory to wx\src\msw. Type 'make -f makefile.sc' to
+   make the wxWindows core library.
+4. Change directory to wx\samples\minimal and type 'make -f makefile.sc'
+   to make this sample.
+
+Note: the minimal sample doesn't link properly ('Error: no
+start address').
+32-bit compilation only (partially) supported at present, using SC++ 6.1.
+Some functionality is missing using this compiler (see makefile).
+Add -D__WIN95__ if your SC++ has Windows 95 support, and ignore
+Step (2). 16-bit compilation is left as an exercise for the user!
+
+Salford C++ compilation
+-----------------------
+
+1. Make sure your WXWIN variable is set, and uses the FAT (short
+   name) form.
+2. Edit SALFORDDIR and RESOURCEDIR in src/makesl.env as per
+   notes.
+3. Change directory to wx\src\msw. Type 'mk32 -f makefile.sl all' to
+   make the wxWindows core library.
+4. Change directory to wx\samples\minimal and type 'mk32 -f makefile.sl'
+   to make this sample.
+
+Unfortunately, Salford C++ seems to have problems with its code generation for
+operations on objects, as seen in wxFrame::OnMenuHighlight
+(minimal sample) or wxWindow::SetValidator (mdi sample). Also the
+the debugging version of the library is 90MB, with samples coming in
+at 40MB :-) However, wxWindows at least makes a good test suite for
+improving the compiler.
 
 TWIN32 and gcc on Linux
 -----------------------
