@@ -192,7 +192,7 @@ wxWindowBase::wxWindowBase()
     m_maxVirtualWidth =
     m_maxVirtualHeight = -1;
 
-    m_windowVariant = wxWINDOW_VARIANT_DEFAULT ;
+    m_windowVariant = wxWINDOW_VARIANT_NORMAL ;
 
     // Whether we're using the current theme for this window (wxGTK only for now)
     m_themeEnabled = false;
@@ -650,8 +650,6 @@ void wxWindowBase::DoSetWindowVariant( wxWindowVariant variant )
             break ;
         case wxWINDOW_VARIANT_LARGE :
             font.SetPointSize( size * 5 / 4 ) ;
-            break ;
-        case wxWINDOW_VARIANT_DEFAULT :
             break ;
         default:
             wxFAIL_MSG(_T("unexpected window variant"));
