@@ -407,7 +407,7 @@ for file in $inputFiles ; do
     *)
         # we do not want to export weak symbols in general, so we filter
         # those out using grep.
-        doCommand "emxexp -u $file | grep -v weak$ >> $tmpdefFile || true"
+        doCommand "emxexp -u $file >> $tmpdefFile || true"
         ;;
     esac
 done

@@ -1559,6 +1559,10 @@ case "${host}" in
               LIBS="$LIBS -lstdc++"
           fi
       fi
+      if test "$wxUSE_SHARED" = "yes" -a "$wxUSE_OMF" = "no"; then
+        AC_MSG_WARN([Building DLLs requires OMF mode, enabled])
+        wxUSE_OMF=yes
+      fi
       if test "$wxUSE_OMF" = "yes"; then
         LDFLAGS="$LDFLAGS -Zomf -Zlinker /PMTYPE:PM -Zlinker /EXEPACK"
       fi
