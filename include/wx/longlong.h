@@ -57,7 +57,7 @@
 #else // no native long long type
     // we don't give warnings for the compilers we know about that they don't
     // have any 64 bit integer type
-    #if !defined(__VISAGECPP__) && \
+    #if 0 // !defined(__VISAGECPP__) && \
         !defined(__VISUALC__) && \
         !defined(__BORLANDC__)
         #warning "Your compiler does not appear to support 64 bit integers, "\
