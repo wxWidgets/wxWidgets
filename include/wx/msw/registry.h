@@ -28,10 +28,13 @@
 // ----------------------------------------------------------------------------
 // types used in this module
 // ----------------------------------------------------------------------------
+
+/*
 #ifndef   HKEY_DEFINED
   #define HKEY_DEFINED
   #define HKEY unsigned long
 #endif
+*/
 
 typedef unsigned long ulong;
 
@@ -87,7 +90,7 @@ public:
     // get the short name of a standard key
   static const char *GetStdKeyShortName(size_t key);
     // get StdKey from root HKEY
-  static StdKey GetStdKeyFromHkey(HKEY hkey);
+  static StdKey GetStdKeyFromHkey(WXHKEY hkey);
 
   // extacts the std key prefix from the string (return value) and
   // leaves only the part after it (i.e. modifies the string passed!)
@@ -113,7 +116,7 @@ public:
     // the name is relative to the parent key
   void  SetName(const wxRegKey& keyParent, const wxString& strKey);
     // hKey should be opened and will be closed in wxRegKey dtor
-  void  SetHkey(HKEY hKey);
+  void  SetHkey(WXHKEY hKey);
 
   // get infomation about the key
     // get the (full) key name. Abbreviate std root keys if bShortPrefix.
@@ -200,7 +203,7 @@ private:
   wxRegKey(const wxRegKey& key);            // not implemented
   wxRegKey& operator=(const wxRegKey& key); // not implemented
 
-  HKEY        m_hKey,           // our handle
+  WXHKEY        m_hKey,           // our handle
               m_hRootKey;       // handle of the top key (i.e. StdKey)
   wxString    m_strKey;         // key name (relative to m_hRootKey)
 

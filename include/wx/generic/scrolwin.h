@@ -83,21 +83,16 @@ public:
   // Actual size in pixels when scrolling is taken into account
   virtual void GetVirtualSize(int *x, int *y) const;
 
+  // Set the scale factor, used in PrepareDC
+  inline void SetScale(double xs, double ys) { m_scaleX = xs; m_scaleY = ys; }
+  inline double GetScaleX() const { return m_scaleX; }
+  inline double GetScaleY() const { return m_scaleY; }
+
   virtual void CalcScrolledPosition(int x, int y, int *xx, int *yy) const ;
   virtual void CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const ;
 
   // Adjust the scrollbars
   virtual void AdjustScrollbars(void);
-
-/*
-#if WXWIN_COMPATIBILITY
-  virtual void OldOnScroll(wxCommandEvent& WXUNUSED(event));
-  virtual void OldOnPaint(void);                 // Called when needs painting
-  virtual void OldOnSize(int width, int height);           // Called on resize
-  virtual void OldOnMouseEvent(wxMouseEvent& event);  // Called on mouse event
-  virtual void OldOnChar(wxKeyEvent& event);     // Called on character event
-#endif
-*/
 
   void OnScroll(wxScrollEvent& event);
   void OnSize(wxSizeEvent& event);
@@ -130,6 +125,8 @@ protected:
   int                   m_yScrollLines;
   int                   m_xScrollLinesPerPage;
   int                   m_yScrollLinesPerPage;
+  double                m_scaleX;
+  double                m_scaleY;
 
 DECLARE_EVENT_TABLE()
 };
