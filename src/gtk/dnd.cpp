@@ -711,7 +711,7 @@ void wxDropSource::PrepareIcon( int hot_x, int hot_y, GdkDragContext *context )
     gtk_drag_set_icon_widget( context, m_iconWindow, hot_x, hot_y );
 }
 
-wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
+wxDragResult wxDropSource::DoDragDrop( bool allowMove )
 {
     wxASSERT_MSG( m_data, wxT("wxDragSource: no data") );
 
@@ -764,9 +764,11 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
     /* don't start dragging if no button is down */
     if (button_number)
     {
+        GdkDragAction action = GDK_ACTION_COPY;
+	if (allowMove) action = (GdkDragAction)(GDK_ACTION_MOVE|GDK_ACTION_COPY);
         GdkDragContext *context = gtk_drag_begin( m_widget,
                                               target_list,
-                                              (GdkDragAction)(GDK_ACTION_COPY|GDK_ACTION_MOVE),
+					      action,
                                               button_number,  /* number of mouse button which started drag */
                                               (GdkEvent*) &event );
 

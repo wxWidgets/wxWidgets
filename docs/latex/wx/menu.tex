@@ -170,6 +170,24 @@ Checks or unchecks the menu item.
 
 \helpref{wxMenu::IsChecked}{wxmenuischecked}
 
+\membersection{wxMenu::Delete}\label{wxmenudelete}
+
+\func{void}{Delete}{\param{int }{id}}
+
+Deletes the menu item from the menu.
+
+\wxheading{Parameters}
+
+\docparam{id}{Menu item to be deleted.}
+
+\wxheading{Remarks}
+
+Does not delete a sub menu, if any.
+
+\wxheading{See also}
+
+\helpref{wxMenu::FindItemForId}{wxmenufinditemforid}
+
 \membersection{wxMenu::Enable}\label{wxmenuenable}
 
 \func{void}{Enable}{\param{int}{ id}, \param{const bool}{ enable}}
@@ -198,7 +216,7 @@ Finds the menu item id for a menu item string.
 
 \wxheading{Return value}
 
-Menu item identifier, or -1 if none is found.
+Menu item identifier, or wxNOT_FOUND if none is found.
 
 \wxheading{Remarks}
 
@@ -211,14 +229,14 @@ before matching.
 
 \membersection{wxMenu::FindItemForId}\label{wxmenufinditemforid}
 
-\constfunc{wxMenuItem*}{FindItemForId}{\param{int}{ id}, \param{wxMenu **}{ menuForItem = NULL}}
+\constfunc{wxMenuItem*}{FindItemForId}{\param{int}{ id}}
+\constfunc{wxMenuItem*}{FindItem}{\param{int}{ id}}
 
 Finds the menu item object associated with the given menu item identifier.
 
 \wxheading{Parameters}
 
 \docparam{id}{Menu item identifier.}
-\docparam{menuForItem}{will be filled with the menu for this item if not NULL.}
 
 \wxheading{Return value}
 
@@ -515,22 +533,23 @@ Finds the menu item id for a menu name/menu item string pair.
 
 \wxheading{Return value}
 
-The menu item identifier, or -1 if none was found.
+The menu item identifier, or wxNOT_FOUND if none was found.
 
 \wxheading{Remarks}
 
 Any special menu codes are stripped out of source and target strings
 before matching.
 
-\membersection{wxMenuBar::FindItemForId}\label{wxmenubarfinditemforid}
+\membersection{wxMenuBar::FindItem}\label{wxmenubarfinditem}
 
-\constfunc{wxMenuItem *}{FindItemForId}{\param{int}{ id}}
+\constfunc{wxMenuItem *}{FindItem}{\param{int}{ id}, \param{wxMenu}{ **menu = NULL}
 
-Finds the menu item object associated with the given menu item identifier,
+Finds the menu item object associated with the given menu item identifier.
 
 \wxheading{Parameters}
 
 \docparam{id}{Menu item identifier.}
+\docparam{menu}{If not NULL, menu will get set to the associated menu.}
 
 \wxheading{Return value}
 

@@ -461,6 +461,7 @@ dde.h	W
 debug.h	W	B
 defs.h	W	B
 dialog.h	W
+dialup.h	W
 dirdlg.h	W
 dnd.h	W
 docmdi.h	W

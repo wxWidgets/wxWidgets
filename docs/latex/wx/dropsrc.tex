@@ -44,14 +44,6 @@ call \helpref{wxDropSource::SetData}{wxdropsourcesetdata} later.
 
 {\it win} is required by wxGTK and therefore should always be set.
 
-\func{}{wxDropSource}{\param{wxDataObject\& }{data}, \param{wxWindow*}{ win = NULL}}
-
-\wxheading{Parameters}
-
-\docparam{data}{A reference to the \helpref{data object}{wxdataobject} associated with the drop source.}
-
-\docparam{win}{Only used by wxGTK. TODO}
-
 \membersection{wxDropSource::\destruct{wxDropSource}}\label{wxdropsourcedtor}
 
 \func{virtual }{\destruct{wxDropSource}}{\void}
@@ -64,16 +56,15 @@ Sets the data \helpref{data object}{wxdataobject} associated with the drop sourc
 
 \membersection{wxDropSource::DoDragDrop}\label{wxdropsourcedodragdrop}
 
-\func{virtual wxDragResult}{DoDragDrop}{\param{bool }{bAllowMove = FALSE}}
+\func{virtual wxDragResult}{DoDragDrop}{\param{bool }{allowMove = FALSE}}
 
 Do it (call this in response to a mouse button press, for example).
 
-If {\bf bAllowMove} is FALSE, data can only be copied. Under GTK, data
-is always copied.
+If {\bf allowMove} is FALSE, data can only be copied.
 
 \membersection{wxDropSource::GiveFeedback}\label{wxdropsourcegivefeedback}
 
-\func{virtual bool}{GiveFeedback}{\param{wxDragResult }{effect}, \param{bool }{bScrolling}}
+\func{virtual bool}{GiveFeedback}{\param{wxDragResult }{effect}, \param{bool }{scrolling}}
 
 Overridable: you may give some custom UI feedback during the drag and drop operation
 in this function. It is called on each mouse move, so your implementation must not be too
@@ -81,12 +72,12 @@ slow.
 
 \wxheading{Parameters}
 
-\docparam{effect}{The effect to implement. One of wxDragCopy, wxDragMove. MSW only. }
+\docparam{effect}{The effect to implement. One of wxDragCopy, wxDragMove and wxDragNone. }
 
-\docparam{bScrolling}{TRUE if the window is scrolling. MSW only. }
+\docparam{scrolling}{TRUE if the window is scrolling. MSW only. }
 
 \wxheading{Return value}
 
 Return FALSE if you want default feedback, or TRUE if you implement your own
-feedback.
+feedback. The return values is ignored under GTK.
 

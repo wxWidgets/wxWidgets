@@ -39,26 +39,26 @@ make install
 ldconfig
 exit
 
-When you run into problems, please read the INSTALL.txt and
+When you run into problems, please read the INSTALL.txt and 
 follow those instructions. If you still don't have any success,
-please send a bug report to one of our mailing lists (see
-my homepage) INCLUDING A DESCRIPTION OF YOUR SYSTEM AND 
-YOUR PROBLEM, SUCH AS YOUR VERSION OF GTK, WXGTK, WHAT
-DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know 
-this has no effect, but I tried...
+please send a bug report to one of our mailing list, INCLUDING 
+A DESCRIPTION OF YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR 
+VERSION OF GTK, WXGTK, WHAT DISTRIBUTION YOU USE AND WHAT ERROR 
+WAS REPORTED. I know this has no effect, but I tried...
 
 The library produced by the install process will be called 
-libwx_gtk.a (static) and libwx_gtk-2.1.so.0.0.0 (shared) so that 
-once a binary incompatible version of wxWindows/Gtk comes out 
-we'll augment the library version number to avoid linking problems.
+libwx_gtk.a (static) and libwx_gtk-2.1.so.11.0.0 (shared) so 
+that once a binary incompatible version of wxWindows/Gtk comes 
+out we'll augment the library version number to avoid linking 
+problems.
 
 Please send problems concerning installation, feature requests, 
 bug reports or comments to the wxWindows users list. Information 
 on how to subscribe is available from my homepage.
 
-wxWindows/Gtk doesn't come with any guarantee whatsoever. It might 
-crash your harddisk or destroy your monitor. It doesn't claim to be
-suitable for any special or general purpose.
+wxWindows/Gtk doesn't come with any guarantee whatsoever. It 
+might crash your harddisk or destroy your monitor. It doesn't 
+claim to be suitable for any special or general purpose.
 
   Regards,
 

@@ -259,6 +259,13 @@ Gets the green value of the mask colour.
 
 Gets the red value of the mask colour.
 
+\membersection{wxImage::GetSubImage}\label{wximagegetsubimage}
+
+\constfunc{wxImage}{GetSubImage}{\param{const wxRect&}{rect}}
+
+Returns a sub image of the current one as long as the rect belongs entirely to 
+the image.
+
 \membersection{wxImage::GetWidth}\label{wximagegetwidth}
 
 \constfunc{int}{GetWidth}{\void}
@@ -458,8 +465,8 @@ Returns a scaled version of the image. This is also useful for
 scaling bitmaps in general as the only other way to scale bitmaps
 is to blit a wxMemoryDC into another wxMemoryDC.
 
-NB: although Windows can do such scaling itself but in the GTK port, scaling
-bitmaps is done using this routine internally.
+It may be mentioned that the GTK post uses this function internally
+to scale bitmaps when using mapping mode in wxDC. 
 
 Example:
 
@@ -483,13 +490,6 @@ Example:
 \wxheading{See also}
 
 \helpref{Rescale}{wximagerescale}
-
-\membersection{wxImage::GetSubImage}\label{wximagegetsubimage}
-
-\constfunc{wxImage}{GetSubImage}{\param{const wxRect&}{rect}}
-
-Returns a sub image of the current one as long as the rect belongs entirely to 
-the image.
 
 \membersection{wxImage::SetData}\label{wximagesetdata}
 

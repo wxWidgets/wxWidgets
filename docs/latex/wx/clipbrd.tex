@@ -6,8 +6,8 @@ clipboard class from wxWindows 1.xx, which has the same name but a different imp
 To use the clipboard, you call member functions of the global {\bf wxTheClipboard} object.
 
 Call \helpref{wxClipboard::Open}{wxclipboardopen} to get ownership of the clipboard. If this operation returns TRUE, you
-now own the clipboard. Call \helpref{wxClipboard::AddData}{wxclipboardadddata} to put data
-on the clipboard (one or more times), or \helpref{wxClipboard::GetData}{wxclipboardgetdata} to
+now own the clipboard. Call \helpref{wxClipboard::SetData}{wxclipboardsetdata} to put data
+on the clipboard, or \helpref{wxClipboard::GetData}{wxclipboardgetdata} to
 retrieve data from the clipboard. Call \helpref{wxClipboard::Close}{wxclipboardclose} to close
 the clipboard and relinquish ownership. You should keep the clipboard open only momentarily.
 
@@ -26,10 +26,10 @@ For example:
   // Read some text
   if (wxTheClipboard->Open())
   {
-    if (wxTheClipboard->IsSupported( "STRING" ))
+    if (wxTheClipboard->IsSupported( wxDF_TEXT ))
     {
       wxTextDataObject data;
-      wxTheClipboard->GetData( &data );
+      wxTheClipboard->GetData( data );
       wxMessageBox( data.GetText() );
     }  
     wxTheClipboard->Close();
@@ -62,13 +62,6 @@ Constructor.
 
 Destructor.
 
-\membersection{wxClipboard::AddData}\label{wxclipboardadddata}
-
-\func{bool}{AddData}{\param{wxDataObject*}{ data}}
-
-Call this function to add a data object to the clipboard. This function can be called several times
-to put different formats on the clipboard.
-
 \membersection{wxClipboard::Clear}\label{wxclipboardclear}
 
 \func{void}{Clear}{\void}
@@ -83,14 +76,14 @@ Call this function to close the clipboard, having opened it with \helpref{wxClip
 
 \membersection{wxClipboard::GetData}\label{wxclipboardgetdata}
 
-\func{bool}{GetData}{\param{wxDataObject*}{ data}}
+\func{bool}{GetData}{\param{wxDataObject\&}{ data}}
 
 Call this function to fill {\it data} with data on the clipboard, if available in the required
 format. Returns TRUE on success.
 
 \membersection{wxClipboard::IsSupported}\label{wxclipboardissupported}
 
-\func{bool}{IsSupported}{\param{wxDataFormat}{ format}}
+\func{bool}{IsSupported}{\param{const wxDataFormat\&}{ format}}
 
 Returns TRUE if the format of the given data object is available on the clipboard.
 

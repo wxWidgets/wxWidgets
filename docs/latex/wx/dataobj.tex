@@ -1,43 +1,34 @@
 \section{\class{wxDataObject}}\label{wxdataobject}
 
 A wxDataObject represents data that can be copied to or from the clipboard, or
-dragged and dropped.
+dragged and dropped. There are two classes directly derived from wxDataObject:
+wxDataObjectSimple and wxDataObjectComposite. As you will guess, wxDataObjectSimple
+holds data for a single format (such as HTML or text) and wxDataObjectComposite
+can hold any number of wxDataObjectSimple classes. Please note that this is an
+easy way to use Drag'n'Drop and the clipboard with multiple formats, but not the
+most efficient one as each wxDataObjectSimple would contain the whole data in its
+respective formars. Now imagine that you want to paste 200 pages of text in your
+proprietary format, as well as Word, RTF, HTML, Unicode and plain text to the
+clipboard and even today's computers are in trouble. For this case, you will have
+to derive from wxDataObject directly and make it enumerate its formats and provide
+the data in the requested format on demand.
 
-There are several predefined data object classes, such as \helpref{wxFileDataObject}{wxfiledataobject}, 
-\helpref{wxTextDataObject}{wxtextdataobject}, and \helpref{wxBitmapDataObject}{wxbitmapdataobject} which
-can be used without change or can be altered (by deriving a new class from them) in order to deliver
-data and data size on-demand. There is no need to ever use wxDataObject itself or derive directly from it.
-
-You may also derive your own data object classes from \helpref{wxPrivateDataObject}{wxprivatedataobject} 
-for user-defined types. The format of user-defined data is given as mime-type string literal, 
-such as "application/word" or "image/png". These strings are used as they are under Unix (so 
-far only GTK) to identify a format and are translated into their Windows equivalent under 
-Win32 (using the OLE IDataObject for data exchange to and from the clipboard and for Drag'n'Drop).
-Note that the format string translation under Windows is not yet finnished.
-
-As mentioned above, data may be placed into the \helpref{wxClipboard}{wxclipboard} 
-or a \helpref{wxDropSource}{wxdropsource} instance either directly or on-demand. 
-As long as only one format is offerred, putting data directly into the clipboard may 
-be sufficient. But imagine that you paste a large piece of text to the clipboard and 
-offer it in "text/plain", "text/rtf", "text/html", "application/word" and your own 
-format for internal use - here offering data on-demand is required to minimize memory 
-consumption. This would generally get implemented using a central object that
-contains clipboard information in the format with the maximum of information. Note
-that neither the GTK data transfer mechanisms for the clipboard and Drag'n'Drop
+Note that neither the GTK data transfer mechanisms for the clipboard and Drag'n'Drop
 nor the OLE data transfer copies any data until another application actually
 requests the data. This is in contrast to the "feel" offered to the user of a
 program who would normally think that the data resides in the clipboard after
 having pressed "Copy" - in reality it is only declared to be available.
 
-Let's assume that you have written an HTML editor and want it to paste contents
-in the formats "text/plain" and "text/html" to the clipboard. For offering
-data on-demand in "text/plain" you would derive your class from \helpref{wxTextDataObject}{wxtextdataobject} 
-and for offering data on-demand in "text/html" you would derive your own class from 
-\helpref{wxPrivateDataObject}{wxprivatedataobject} and set its ID string
-identifying the format to "text/html" using \helpref{wxPrivateDataObject::SetId}{wxprivatedataobjectsetid}. 
-In your two derived classed you'd then have a pointer or reference to the central
-data container and you'd override the methods returning the size of the
-available data and the WriteData() methods in both classes.
+There are several predefined data object classes derived from wxDataObjectSimple:
+\helpref{wxFileDataObject}{wxfiledataobject}, \helpref{wxTextDataObject}{wxtextdataobject} 
+and \helpref{wxBitmapDataObject}{wxbitmapdataobject} which can be used without change.
+
+You may also derive your own data object classes from \helpref{wxCustomDataObject}{wxprivatedataobject} 
+for user-defined types. The format of user-defined data is given as mime-type string literal, 
+such as "application/word" or "image/png". These strings are used as they are under Unix (so 
+far only GTK) to identify a format and are translated into their Windows equivalent under 
+Win32 (using the OLE IDataObject for data exchange to and from the clipboard and for Drag'n'Drop).
+Note that the format string translation under Windows is not yet finnished.
 
 \wxheading{Derived from}
 
@@ -71,18 +62,34 @@ Constructor.
 
 Destructor.
 
-\membersection{wxDataObject::WriteData}\label{wxdataobjectwritedata}
+\membersection{wxDataObject::GetFormatCount}\label{wxdataobjectgetformatcount}
 
-\constfunc{virtual void}{WriteData}{\param{void}{*dest} }
+\constfunc{virtual size_t}{GetFormatCount}{\void}
 
-Write the data owned by this class to {\it dest}. This method is a pure
-virtual function and must be overridden.
+Return the number of available formats.
 
-\membersection{wxDataObject::GetSize}\label{wxdataobjectgetdatasize}
+\membersection{wxDataObject::GetDataHere}\label{wxdataobjectgetdatahere}
 
-\constfunc{virtual size\_t}{GetSize}{\void}
+\constfunc{virtual bool}{GetDataHere}{\param{const wxDataFormat\&}{ format}, \param{void}{*buf} }
 
-Returns the data size. This method is a pure
-virtual function and must be overridden.
+The method will write the data of the format {\it format} in the buffer {\it buf}.
+
+\membersection{wxDataObject::GetDataSize}\label{wxdataobjectgetdatasize}
+
+\constfunc{virtual size\_t}{GetDataSize}{\param{const wxDataFormat\&}{ format} }
+
+Returns the data size of the given format {\it format}.
+
+\membersection{wxDataObject::GetPreferredFormat}\label{wxdataobjectgetpreferredformat}
+
+\constfunc{virtual wxDataFormat}{GetPreferredFormat}{\void}
+
+Returns the preferred format. Usually the first format in the list of available formats.
+
+\membersection{wxDataObject::SetData}\label{wxdataobjectsetdata}
+
+\func{virtual bool}{SetData}{\param{const wxDataFormat\&}{ format}, \param{size_t}{ len}, \param{const void}{*buf} }
+
+Set the data of the format {\it format} and the size {\it len} provided in the buffer {\it buf}.
 
 

@@ -1411,7 +1411,7 @@ else
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
-  DEFAULT_wxUSE_NEW_GRID=yes
+  DEFAULT_wxUSE_NEW_GRID=no
   DEFAULT_wxUSE_IMAGLIST=yes
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
@@ -3869,7 +3869,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
-  DEFAULT_wxUSE_NEW_GRID=yes
+  DEFAULT_wxUSE_NEW_GRID=no
   DEFAULT_wxUSE_IMAGLIST=yes
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
@@ -11837,6 +11837,7 @@ trap 'rm -fr `echo "
             samples/html/about/Makefile
             samples/html/help/Makefile
             samples/html/printing/Makefile
+            samples/html/helpview/Makefile
             samples/html/test/Makefile
             samples/html/zip/Makefile
             samples/html/virtual/Makefile
@@ -12051,6 +12052,7 @@ CONFIG_FILES=\${CONFIG_FILES-"wx-config
             samples/html/about/Makefile
             samples/html/help/Makefile
             samples/html/printing/Makefile
+            samples/html/helpview/Makefile
             samples/html/test/Makefile
             samples/html/zip/Makefile
             samples/html/virtual/Makefile

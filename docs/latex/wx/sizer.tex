@@ -77,7 +77,7 @@ to indicate if a child of a sizer can change its size in the main orientation of
 0 stands for not changable and a value of more than zero in interpreted relative to the value of other
 children of the same wxBoxSizer. You might, e.g., have a horizontal wxBoxSizer with three children, two
 of which are supposed to change their size with the sizer, then the two stretchable windows would get a
-value of 1 each to make them grow and shrink equally with the sizer's vertical dimension.}
+value of 1 each to make them grow and shrink equally with the sizer's horizontal dimension.}
 
 \docparam{flag}{This parameter can be used to set a number of flags which can be combined using
 the binary OR operator |. Two main behaviours are defined using these flags: One is the border
@@ -89,7 +89,7 @@ if you created a wxBoxSizer with the wxVERTICAL option, these flags will be rele
 sizer changes its horizontal size. A child may get resized to completely fill out the new size (using
 either wxGROW or wxEXPAND), may get centered (wxCENTER or wxCENTRE) or may get aligned to either
 side (wxALIGN\_LEFT and wxALIGN\_TOP are set to 0 and thus represent the default, wxALIGN\_RIGHT and
-wxALIGN\_BOTTOM have their obvious meaning.}
+wxALIGN\_BOTTOM have their obvious meaning).}
 
 \docparam{border}{Determines the border width, if the {\it flag} parameter is set to any border.}
 

@@ -1,10 +1,10 @@
 
 1st November '99: wxWindows 2.1.11 released
 
-There is still a unresolved problem with bitmap to image
+There is still an unresolved problem with bitmap to image
 conversion on big-endian architectures (such as Solaris),
 where color values get exchanged. I'd need help on this
-one.
+one as I have no BE computer.
 
 Enlightment has struck the majority of the developers and
 they have chosen to use the Linux kernel numbering scheme
@@ -13,13 +13,12 @@ release will be called wxWindows 2.2.X, development snapshots
 will be called 2.1.X.
 
 A lot of discussion has been wasted on how to maintain a
-once released stable version will be maintained. It was
-almost universally agreed that only a commercial entity
-will have the motivation ($$$) to do that - so far there
-is no wxWindows Inc.
+once released stable version. It was almost universally 
+agreed that only a commercial entity will have the motivation 
+($$$) to do that - so far there is no wxWindows Inc.
 
 Support for GTK 1.0 has been dropped. This version has
-been tested with GTK 1.2.3 and GTK 1.2.6 - it is known
+been tested with GTK 1.2.3 and GTK 1.2.6 - it might
 not work with some other versions.
 
 Rewritten the support for multiple-format Drag'n'Drop and

@@ -860,6 +860,10 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/html/help/*.cpp $(DISTDIR)/samples/html/help
 	mkdir $(DISTDIR)/samples/html/help/helpfiles
 	cp $(SAMPDIR)/html/help/helpfiles/*.??? $(DISTDIR)/samples/html/help/helpfiles
+	mkdir $(DISTDIR)/samples/html/helpview
+	cp $(SAMPDIR)/html/helpview/Makefile.in $(DISTDIR)/samples/html/helpview
+	cp $(SAMPDIR)/html/helpview/*.cpp $(DISTDIR)/samples/html/helpview
+	cp $(SAMPDIR)/html/helpview/*.zip $(DISTDIR)/samples/html/helpview
 	mkdir $(DISTDIR)/samples/html/printing
 	cp $(SAMPDIR)/html/printing/Makefile.in $(DISTDIR)/samples/html/printing
 	cp $(SAMPDIR)/html/printing/*.cpp $(DISTDIR)/samples/html/printing
