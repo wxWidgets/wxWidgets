@@ -60,7 +60,7 @@ public:
     virtual ~wxPrinterBase();
 
     virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
-    virtual void ReportError(wxWindow *parent, wxPrintout *printout, char *message);
+    virtual void ReportError(wxWindow *parent, wxPrintout *printout, const wxString& message);
 
     wxPrintDialogData& GetPrintDialogData() const
         { return (wxPrintDialogData&) m_printDialogData; }

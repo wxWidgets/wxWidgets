@@ -265,7 +265,7 @@ bool wxGridCellEnumEditor::EndEdit(int row, int col, wxGrid* grid)
         if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_NUMBER))
             grid->GetTable()->SetValueAsLong(row, col, pos);
         else
-            grid->GetTable()->SetValue(row, col,wxString::Format("%i",pos));
+            grid->GetTable()->SetValue(row, col,wxString::Format(wxT("%i"),pos));
     }
 
     return changed;

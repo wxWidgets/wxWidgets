@@ -66,7 +66,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 // ----------------------------------------------------------------------------
 
 // Microsoft compiler loves underscores, feed them to it
-#ifdef  __VISUALC__
+#if defined( __VISUALC__ ) || defined( __GNUWIN32__ )
     // functions
     #define   wxClose      _close
     #define   wxRead       _read

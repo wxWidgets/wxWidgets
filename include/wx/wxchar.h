@@ -63,6 +63,11 @@
         #define wxHAVE_TCHAR_FUNCTIONS
     #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
         #define wxHAVE_TCHAR_FUNCTIONS
+    #elif defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 0, 6 )
+        #define wxHAVE_TCHAR_FUNCTIONS
+        #include <stddef.h>
+        #include <string.h>
+        #include <ctype.h>
     #endif
 #elif defined(__VISAGECPP__) && (__IBMCPP__ >= 400)
     // VisualAge 4.0+ supports TCHAR
@@ -116,6 +121,12 @@
 #  include <tchar.h>
 
 #  if wxUSE_UNICODE // temporary - preserve binary compatibility
+#if defined(__GNUWIN32__)
+    #define _TCHAR   TCHAR
+    #define _TSCHAR  TCHAR
+    #define _TUCHAR  TCHAR
+#endif
+
 typedef  _TCHAR      wxChar;
 typedef  _TSCHAR     wxSChar;
 typedef  _TUCHAR     wxUChar;

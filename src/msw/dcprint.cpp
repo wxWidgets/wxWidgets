@@ -224,16 +224,18 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
     deviceName.clear();
 
     LPDEVNAMES  lpDevNames;
-    LPSTR       lpszDriverName;
-    LPSTR       lpszDeviceName;
-    LPSTR       lpszPortName;
+    LPTSTR      lpszDriverName;
+    LPTSTR      lpszDeviceName;
+    LPTSTR      lpszPortName;
 
     PRINTDLG    pd;
 
     // Cygwin has trouble believing PRINTDLG is 66 bytes - thinks it is 68
 #ifdef __GNUWIN32__
+    memset(&pd, 0, 66);
     pd.lStructSize    = 66; // sizeof(PRINTDLG);
 #else
+    memset(&pd, 0, sizeof(PRINTDLG));
     pd.lStructSize    = sizeof(PRINTDLG);
 #endif
 
@@ -256,9 +258,9 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
     if (pd.hDevNames)
     {
         lpDevNames = (LPDEVNAMES)GlobalLock(pd.hDevNames);
-        lpszDriverName = (LPSTR)lpDevNames + lpDevNames->wDriverOffset;
-        lpszDeviceName = (LPSTR)lpDevNames + lpDevNames->wDeviceOffset;
-        lpszPortName   = (LPSTR)lpDevNames + lpDevNames->wOutputOffset;
+        lpszDriverName = (LPTSTR)lpDevNames + lpDevNames->wDriverOffset;
+        lpszDeviceName = (LPTSTR)lpDevNames + lpDevNames->wDeviceOffset;
+        lpszPortName   = (LPTSTR)lpDevNames + lpDevNames->wOutputOffset;
 
         deviceName = lpszDeviceName;
         portName = lpszPortName;

@@ -222,7 +222,7 @@ wxDragResult wxDropSource::DoDragDrop(bool bAllowMove)
   }
   else {
     if ( FAILED(hr) ) {
-      wxLogApiError("DoDragDrop", hr);
+      wxLogApiError(wxT("DoDragDrop"), hr);
       wxLogError(wxT("Drag & drop operation failed."));
     }
     else {

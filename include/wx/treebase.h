@@ -144,7 +144,7 @@ static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
                                           wxTREE_HITTEST_ONITEMLABEL;
 
 // tree ctrl default name
-WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxTreeCtrlNameStr;
 
 // ----------------------------------------------------------------------------
 // wxTreeItemAttr: a structure containing the visual attributes of an item

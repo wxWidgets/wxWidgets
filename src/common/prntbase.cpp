@@ -115,7 +115,7 @@ wxWindow *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout *WXUNUSE
     return dialog;
 }
 
-void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout), char *message)
+void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout), const wxString& message)
 {
     wxMessageBox(message, _("Printing Error"), wxOK, parent);
 }

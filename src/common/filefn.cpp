@@ -78,6 +78,7 @@
 #endif // native Win compiler
 
 #ifdef __GNUWIN32__
+    #include <wchar.h>
     #ifndef __TWIN32__
         #include <sys/unistd.h>
     #endif
@@ -1113,7 +1114,10 @@ wxRenameFile (const wxString& file1, const wxString& file2)
 
 bool wxRemoveFile(const wxString& file)
 {
-#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
+#if defined(__VISUALC__) \
+ || defined(__BORLANDC__) \
+ || defined(__WATCOMC__) \
+ || defined(__GNUWIN32__)
   int res = wxRemove(file);
 #else
   int res = unlink(OS_FILENAME(file));
