@@ -102,22 +102,19 @@ extern const char *g_szNul = &g_strEmpty.dummy;
 #endif
 
 #ifdef __WXMSW__
-  #ifdef _MSC_VER
-    #define wxVsprintf     _vsnprintf
-  #endif
+    #ifdef _MSC_VER
+        #define wxVsprintf     _vsnprintf
+    #endif
 #else
-   #if defined ( HAVE_VSNPRINTF )
-     #define wxVsprintf       vsnprintf
-   #endif
+    #if defined ( HAVE_VSNPRINTF )
+        #define wxVsprintf       vsnprintf
+    #endif
 #endif
 
 #ifndef wxVsprintf
-  #ifdef HAVE_VPRINTF
+    // vsprintf() is ANSI so we can always use it, but it's unsafe!
     #define wxVsprintf(buffer,len,format,argptr) vsprintf(buffer,format, argptr)
     #pragma message("Using sprintf() because no snprintf()-like function defined")
-  #else
-    #pragma error("No vsnprintf() or vsprintf() function available.")
-  #endif
 #endif
 
 NAMESPACE istream& operator>>(NAMESPACE istream& is, wxString& WXUNUSED(str))
