@@ -183,6 +183,13 @@ Checking in docs/changes.txt;
 new revision: 1.236; previous revision: 1.235
 done
 
+15. wxCondition docs updates (just change true/false back to TRUE/FALSE)
+
+Checking in docs/latex/wx/conditn.tex;
+/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/conditn.tex,v  <--  conditn.tex
+new revision: 1.11; previous revision: 1.10
+done
+
 
 15. XRC fixes for <object_ref> and relative file names
 
@@ -235,4 +242,10 @@ Checking in wxWindowsW7.xml;
 new revision: 1.6; previous revision: 1.5
 done
 
+20. Fix for wxProgressDialog::Update() signature:
+
+Checking in docs/latex/wx/progdlg.tex;
+/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/progdlg.tex,v  <--  progdlg.tex
+new revision: 1.10; previous revision: 1.9
+done
 
