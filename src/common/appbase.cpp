@@ -51,8 +51,15 @@
 #endif
 
 #if defined(__WXMAC__)
-  #include  "wx/mac/private.h"  // includes mac headers
-#endif
+    // VZ: MacTypes.h is enough under Mac OS X (where I could test it) but
+    //     I don't know which headers are needed under earlier systems so
+    //     include everything when in doubt
+    #ifdef __DARWIN__
+        #include  "MacTypes.h"
+    #else
+        #include  "wx/mac/private.h"  // includes mac headers
+    #endif
+#endif // __WXMAC__
 
 // ----------------------------------------------------------------------------
 // private functions prototypes
