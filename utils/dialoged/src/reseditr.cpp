@@ -70,17 +70,17 @@ wxResourceManager *wxResourceManager::sm_currentResourceManager = NULL;
 #include "bitmaps/load.xpm"
 #include "bitmaps/save.xpm"
 #include "bitmaps/new.xpm"
-#include "bitmaps/vert.xbm"
-#include "bitmaps/alignt.xbm"
-#include "bitmaps/alignb.xbm"
-#include "bitmaps/horiz.xbm"
-#include "bitmaps/alignl.xbm"
-#include "bitmaps/alignr.xbm"
-#include "bitmaps/copysize.xbm"
-#include "bitmaps/tofront.xbm"
-#include "bitmaps/toback.xbm"
-#include "bitmaps/help.xbm"
-#include "bitmaps/wxwin.xbm"
+#include "bitmaps/vert.xpm"
+#include "bitmaps/alignt.xpm"
+#include "bitmaps/alignb.xpm"
+#include "bitmaps/horiz.xpm"
+#include "bitmaps/alignl.xpm"
+#include "bitmaps/alignr.xpm"
+#include "bitmaps/copysize.xpm"
+#include "bitmaps/tofront.xpm"
+#include "bitmaps/toback.xpm"
+#include "bitmaps/help.xpm"
+#include "bitmaps/wxwin.xpm"
 #endif
 
 /*
@@ -174,7 +174,7 @@ bool wxResourceManager::Initialize()
     m_bitmapImage = new wxBitmap("WXWINBMP", wxBITMAP_TYPE_BMP_RESOURCE);
 #endif
 #ifdef __WXGTK__
-    m_bitmapImage = new wxBitmap(wxwin_bits, wxwin_width, wxwin_height);
+    m_bitmapImage = new wxBitmap( wxwin_xpm );
 #endif
   }
 
@@ -734,16 +734,16 @@ wxToolBar *wxResourceManager::OnCreateToolBar(wxFrame *parent)
   wxBitmap ToolbarLoadBitmap( load_xpm );
   wxBitmap ToolbarSaveBitmap( save_xpm);
   wxBitmap ToolbarNewBitmap( new_xpm );
-  wxBitmap ToolbarVertBitmap(vert_bits, vert_width, vert_height);
-  wxBitmap ToolbarAlignTBitmap(alignt_bits, alignt_width, alignt_height);
-  wxBitmap ToolbarAlignBBitmap(alignb_bits, alignb_width, alignb_height);
-  wxBitmap ToolbarHorizBitmap(horiz_bits, horiz_width, horiz_height);
-  wxBitmap ToolbarAlignLBitmap(alignl_bits, alignl_width, alignl_height);
-  wxBitmap ToolbarAlignRBitmap(alignr_bits, alignr_width, alignr_height);
-  wxBitmap ToolbarCopySizeBitmap(copysize_bits, copysize_width, copysize_height);
-  wxBitmap ToolbarToBackBitmap(toback_bits, toback_width, toback_height);
-  wxBitmap ToolbarToFrontBitmap(tofront_bits, tofront_width, tofront_height);
-  wxBitmap ToolbarHelpBitmap(help_bits, help_width, help_height);
+  wxBitmap ToolbarVertBitmap( vert_xpm );
+  wxBitmap ToolbarAlignTBitmap( alignt_xpm );
+  wxBitmap ToolbarAlignBBitmap( alignb_xpm );
+  wxBitmap ToolbarHorizBitmap( horiz_xpm );
+  wxBitmap ToolbarAlignLBitmap( alignl_xpm );
+  wxBitmap ToolbarAlignRBitmap( alignr_xpm );
+  wxBitmap ToolbarCopySizeBitmap( copysize_xpm );
+  wxBitmap ToolbarToBackBitmap( toback_xpm );
+  wxBitmap ToolbarToFrontBitmap( tofront_xpm );
+  wxBitmap ToolbarHelpBitmap( help_xpm );
 #endif
 
   // Create the toolbar
