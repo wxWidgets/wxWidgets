@@ -363,6 +363,10 @@ bool FindEndEnvironment(char *buffer, int *pos, char *env)
 bool readingVerbatim = FALSE;
 bool readInVerbatim = FALSE;  // Within a verbatim, but not nec. verbatiminput
 
+// Switched this off because e.g. \verb${$ causes it to fail. There is no
+// detection of \verb yet.
+#define CHECK_BRACES 0
+
 unsigned long leftCurly = 0;
 unsigned long rightCurly = 0;
 static wxString currentFileName = "";
@@ -386,6 +390,8 @@ bool read_a_line(char *buf)
       readInVerbatim = FALSE;
 
     ch = getc(Inputs[CurrentInputIndex]);
+
+#if CHECK_BRACES
     if (ch == '{' && !readInVerbatim)
        leftCurly++;
     if (ch == '}' && !readInVerbatim)
@@ -394,7 +400,7 @@ bool read_a_line(char *buf)
        if (rightCurly > leftCurly)
        {
            wxString errBuf;
-           errBuf.Printf("An extra right Curly brace ('}') was detected at line %lu inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+           errBuf.Printf("An extra right Curly brace ('}') was detected at line %l inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
            OnError((char *)errBuf.c_str());
 
            // Reduce the count of right curly braces, so the mismatched count
@@ -402,6 +408,7 @@ bool read_a_line(char *buf)
            rightCurly--;
        }
     }
+#endif
 
     if (ch != EOF)
     {
@@ -475,6 +482,7 @@ bool read_a_line(char *buf)
       if (CurrentInputIndex > 0) 
          ch = ' '; // No real end of file
       CurrentInputIndex --;
+#if CHECK_BRACES
       if (leftCurly != rightCurly)
       {
         wxString errBuf;
@@ -483,7 +491,7 @@ bool read_a_line(char *buf)
       }
       leftCurly = 0;
       rightCurly = 0;
-
+#endif
       if (readingVerbatim)
       {
         readingVerbatim = FALSE;
@@ -642,12 +650,14 @@ bool read_a_line(char *buf)
            strncmp(buf, "\\end{toocomplex}", 16) == 0)
     readInVerbatim = FALSE;
 
+#if CHECK_BRACES
   if (ch == EOF && leftCurly != rightCurly)
   {
     wxString errBuf;
     errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurly,rightCurly);
     OnError((char *)errBuf.c_str());
   }
+#endif
 
   return (ch == EOF);
 }
