@@ -31,9 +31,9 @@ enum {
 
 // Flags
 enum {
-    wxZLIB_NO_HEADER = 1,   // raw deflate stream, no header or checksum
-    wxZLIB_ZLIB = 2,        // zlib header and checksum
-    wxZLIB_GZIP = 3         // gzip header and checksum, requires zlib 1.2+
+    wxZLIB_NO_HEADER = 0,   // raw deflate stream, no header or checksum
+    wxZLIB_ZLIB = 1,        // zlib header and checksum
+    wxZLIB_GZIP = 2         // gzip header and checksum, requires zlib 1.2+
 };
 
 class WXDLLIMPEXP_BASE wxZlibInputStream: public wxFilterInputStream {
