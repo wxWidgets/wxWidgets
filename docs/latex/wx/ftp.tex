@@ -103,11 +103,13 @@ enum TransferMode
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxFTP::wxFTP}
 
 \func{}{wxFTP}{\void}
 
 Default constructor.
+
 
 \membersection{wxFTP::\destruct{wxFTP}}
 
@@ -115,12 +117,14 @@ Default constructor.
 
 Destructor will close the connection if connected.
 
+
 \membersection{wxFTP::Abort}\label{wxftpabort}
 
 \func{bool}{Abort}{\void}
 
 Aborts the download currently in process, returns {\tt true} if ok, {\tt false} 
 if an error occured.
+
 
 \membersection{wxFTP::CheckCommand}
 
@@ -133,12 +137,14 @@ the expected result.
 
 true if the command has been sent successfully, else false.
 
+
 \membersection{wxFTP::SendCommand}\label{wxftpsendcommand}
 
 \func{char}{SendCommand}{\param{const wxString\&}{ command}}
 
 Send the specified {\it command} to the FTP server and return the first
 character of the return code.
+
 
 \membersection{wxFTP::GetLastResult}
 
@@ -149,12 +155,14 @@ command.
 
 % ----------------------------------------------------------------------------
 
+
 \membersection{wxFTP::ChDir}
 
 \func{bool}{ChDir}{\param{const wxString\&}{ dir}}
 
 Change the current FTP working directory.
 Returns true if successful.
+
 
 \membersection{wxFTP::MkDir}
 
@@ -163,12 +171,14 @@ Returns true if successful.
 Create the specified directory in the current FTP working directory.
 Returns true if successful.
 
+
 \membersection{wxFTP::RmDir}
 
 \func{bool}{RmDir}{\param{const wxString\&}{ dir}}
 
 Remove the specified directory from the current FTP working directory.
 Returns true if successful.
+
 
 \membersection{wxFTP::Pwd}
 
@@ -178,6 +188,7 @@ Returns the current FTP working directory.
 
 % ----------------------------------------------------------------------------
 
+
 \membersection{wxFTP::Rename}
 
 \func{bool}{Rename}{\param{const wxString\&}{ src}, \param{const wxString\&}{ dst}}
@@ -185,6 +196,7 @@ Returns the current FTP working directory.
 Rename the specified {\it src} element to {\it dst}. Returns true if successful.
 
 % ----------------------------------------------------------------------------
+
 
 \membersection{wxFTP::RmFile}
 
@@ -194,17 +206,30 @@ Delete the file specified by {\it path}. Returns true if successful.
 
 % ----------------------------------------------------------------------------
 
+
 \membersection{wxFTP::SetAscii}
 
 \func{bool}{SetAscii}{\void}
 
 Sets the transfer mode to ASCII. It will be used for the next transfer.
 
+
 \membersection{wxFTP::SetBinary}
 
 \func{bool}{SetBinary}{\void}
 
 Sets the transfer mode to binary (IMAGE). It will be used for the next transfer.
+
+
+\membersection{wxFTP::SetPassive}
+
+\func{void}{SetPassive}{\param{bool }{pasv}}
+
+If \arg{pasv} is \true, passive connection to the FTP server is used. This is
+the default as it works with practically all firewalls. If the server doesn't
+support passive move, you may call this function with \false argument to use
+active connection.
+
 
 \membersection{wxFTP::SetTransferMode}
 
@@ -216,6 +241,7 @@ transfer.
 If this function is never called, binary transfer mode is used by default.
 
 % ----------------------------------------------------------------------------
+
 
 \membersection{wxFTP::SetUser}
 
@@ -232,6 +258,7 @@ The default value of the user name is "anonymous".
 This parameter can be included in a URL if you want to use the URL manager.
 For example, you can use: "ftp://a\_user:a\_password@a.host:service/a\_directory/a\_file"
 to specify a user and a password.
+
 
 \membersection{wxFTP::SetPassword}
 
@@ -253,11 +280,13 @@ to specify a user and a password.
 
 % ----------------------------------------------------------------------------
 
+
 \membersection{wxFTP::FileExists}\label{wxftpfileexists}
 
 \func{bool}{FileExists}{\param{const wxString\&}{ filename}}
 
 Returns {\tt true} if the given remote file exists, {\tt false} otherwise.
+
 
 \membersection{wxFTP::GetFileSize}\label{wxftpgetfilesize}
 
@@ -267,6 +296,7 @@ Returns the file size in bytes or $-1$ if the file doesn't exist or the size
 couldn't be determined. Notice that this size can be approximative size only
 and shouldn't be used for allocating the buffer in which the remote file is
 copied, for example.
+
 
 \membersection{wxFTP::GetDirList}\label{wxftpgetdirlist}
 
@@ -302,6 +332,7 @@ otherwise.
 
 \helpref{GetFilesList}{wxftpgetfileslist}
 
+
 \membersection{wxFTP::GetFilesList}\label{wxftpgetfileslist}
 
 \func{bool}{GetFilesList}{\param{wxArrayString\& }{files}, \param{const wxString\&}{ wildcard = ""}}
@@ -315,6 +346,7 @@ Return value: true if the file list was successfully retrieved, false
 otherwise.
 
 % ----------------------------------------------------------------------------
+
 
 \membersection{wxFTP::GetOutputStream}
 
@@ -333,6 +365,7 @@ An initialized write-only stream.
 \helpref{wxOutputStream}{wxoutputstream}
 
 % ----------------------------------------------------------------------------
+
 
 \membersection{wxFTP::GetInputStream}\label{wxftpgetinput}
 

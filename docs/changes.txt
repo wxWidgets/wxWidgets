@@ -208,6 +208,8 @@ All:
 - basic UDP sockets support (Lenny Maiorani)
 - fixed wxDateTime::GetWeekDayName() for some dates (Daniel Kaps)
 - deprecated wxDateTime::SetToTheWeek() in favour of SetToWeekOfYear()
+- active mode support in wxFTP (Randall Fox)
+- sped up wxHTTP and wxFTP
 
 All (GUI):
 
