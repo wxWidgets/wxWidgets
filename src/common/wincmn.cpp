@@ -149,6 +149,8 @@ void wxWindowBase::InitBase()
     m_hasBgCol =
     m_hasFgCol =
     m_hasFont = FALSE;
+    
+    m_isBeingDeleted = FALSE;
 
     // no style bits
     m_exStyle =
