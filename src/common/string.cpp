@@ -1461,12 +1461,16 @@ void wxArrayString::Remove(const char *sz)
 
   // need a critical section to protect access to gs_compareFunction and
   // gs_sortAscending variables
-  static wxCriticalSection gs_critsectStringSort;
+  static wxCriticalSection *gs_critsectStringSort = NULL;
 
   // call this before the value of the global sort vars is changed/after
   // you're finished with them
-  #define START_SORT()     gs_critsectStringSort.Enter()
-  #define END_SORT()       gs_critsectStringSort.Leave()
+  #define START_SORT()     wxASSERT( !gs_critsectStringSort );                \
+                           gs_critsectStringSort = new wxCriticalSection;     \
+                           gs_critsectStringSort->Enter()
+  #define END_SORT()       gs_critsectStringSort->Leave();                    \
+                           delete gs_critsectStringSort;                      \
+                           gs_critsectStringSort = NULL
 #else // !threads
   #define START_SORT()
   #define END_SORT()

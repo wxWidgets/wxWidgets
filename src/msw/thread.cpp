@@ -257,29 +257,22 @@ private:
 
 wxCriticalSection::wxCriticalSection()
 {
-    m_critsect = NULL;
+    m_critsect = new wxCriticalSectionInternal;
 }
 
 wxCriticalSection::~wxCriticalSection()
 {
-    wxASSERT_MSG( !m_critsect, "Forgot to Leave() critical section" );
+    delete m_critsect;
 }
 
 void wxCriticalSection::Enter()
 {
-    m_critsect = new wxCriticalSectionInternal;
-
     ::EnterCriticalSection(*m_critsect);
 }
 
 void wxCriticalSection::Leave()
 {
-    wxCHECK_RET( m_critsect, "Leave() without matching Enter()" );
-
     ::LeaveCriticalSection(*m_critsect);
-
-    delete m_critsect;
-    m_critsect = NULL;
 }
 
 // ----------------------------------------------------------------------------
