@@ -46,6 +46,10 @@ public:
 
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return FALSE; }
+
+protected:
+    // usually overridden base class virtuals
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 };
 
 #endif // _WX_MSW_STATLINE_H_

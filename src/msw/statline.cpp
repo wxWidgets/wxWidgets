@@ -52,48 +52,27 @@ IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)
 // wxStaticLine
 // ----------------------------------------------------------------------------
 
-bool wxStaticLine::Create( wxWindow *parent,
-                           wxWindowID id,
-                           const wxPoint &pos,
-                           const wxSize &size,
-                           long style,
-                           const wxString &name)
+bool wxStaticLine::Create(wxWindow *parent,
+                          wxWindowID id,
+                          const wxPoint& pos,
+                          const wxSize& sizeOrig,
+                          long style,
+                          const wxString &name)
 {
-    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
+    wxSize size = AdjustSize(sizeOrig);
+
+    if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
-    parent->AddChild(this);
+    return MSWCreateControl(_T("STATIC"), _T(""), pos, size, style);
+}
 
-    wxSize sizeReal = AdjustSize(size);
+WXDWORD wxStaticLine::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
-    DWORD wstyle = WS_CHILD | WS_VISIBLE | SS_GRAYRECT | SS_SUNKEN | SS_NOTIFY;
-
-    if ( style & wxCLIP_SIBLINGS )
-        wstyle |= WS_CLIPSIBLINGS;
-
-
-    m_hWnd = (WXHWND)::CreateWindow
-                       (
-                        wxT("STATIC"),
-                        wxT(""),
-                        wstyle,
-                        pos.x, pos.y, sizeReal.x, sizeReal.y,
-                        GetWinHwnd(parent),
-                        (HMENU)m_windowId,
-                        wxGetInstance(),
-                        NULL
-                       );
-
-    if ( !m_hWnd )
-    {
-        wxLogDebug(wxT("Failed to create static control"));
-
-        return FALSE;
-    }
-
-    SubclassWin(m_hWnd);
-
-    return TRUE;
+    // add our default styles
+    return msStyle | SS_GRAYRECT | SS_SUNKEN | SS_NOTIFY | WS_CLIPSIBLINGS;
 }
 
 #endif // wxUSE_STATLINE
