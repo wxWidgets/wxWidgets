@@ -47,6 +47,12 @@ public:
     wxWindowDC(wxWindow *win);
 
     virtual ~wxWindowDC();
+
+    // PM specific stuff
+    HPS                     m_hPS;
+private:
+    HAB                     m_hab;
+    SIZEL                   m_PageSize;
 };
 
 class WXDLLEXPORT wxClientDC : public wxWindowDC

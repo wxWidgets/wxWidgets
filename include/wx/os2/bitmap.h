@@ -81,7 +81,9 @@ public:
   wxPalette     m_bitmapPalette;
   int           m_quality;
 
-/*  WXHBITMAP     m_hBitmap; TODO: platform-specific handle */
+  WXHBITMAP     m_hBitmap;
+  wxDC *        m_selectedInto; // So bitmap knows whether it's been selected into
+
   wxMask *      m_bitmapMask; // Optional mask
 };
 
@@ -184,14 +186,13 @@ public:
 protected:
   static wxList sm_handlers;
 
-/*
   // TODO: Implementation
 public:
   void SetHBITMAP(WXHBITMAP bmp);
   inline WXHBITMAP GetHBITMAP() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hBitmap : 0); }
-  bool FreeResource(bool force = FALSE);
-*/
-
+  inline void SetSelectedInto(wxDC *dc) { if (M_BITMAPDATA) M_BITMAPDATA->m_selectedInto = dc; }
+  inline wxDC *GetSelectedInto(void) const { return (M_BITMAPDATA ? M_BITMAPDATA->m_selectedInto : (wxDC*) NULL); }
+//  bool FreeResource(bool force = FALSE);
 };
 #endif
   // _WX_BITMAP_H_

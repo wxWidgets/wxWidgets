@@ -25,11 +25,12 @@ class WXDLLEXPORT wxMemoryDC: public wxPaintDC
   public:
     wxMemoryDC(void);
     wxMemoryDC( wxDC *dc ); // Create compatible DC
+
     ~wxMemoryDC(void);
     virtual void SelectObject( const wxBitmap& bitmap );
     void GetSize( int *width, int *height ) const;
 
-  private: 
+  private:
     friend wxPaintDC;
     wxBitmap  m_selected;
 };

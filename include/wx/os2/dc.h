@@ -155,6 +155,20 @@ class WXDLLEXPORT wxDC: public wxDCBase
     virtual void SetInternalDeviceOrigin( long x, long y );
     virtual void GetInternalDeviceOrigin( long *x, long *y );
 
+    virtual void SetRop(WXHDC cdc);
+    virtual void DoClipping(WXHDC cdc);
+    virtual void SelectOldObjects(WXHDC dc);
+
+    wxWindow *GetWindow() const { return m_canvas; }
+    void SetWindow(wxWindow *win) { m_canvas = win; }
+
+    WXHDC GetHDC() const { return m_hDC; }
+    void SetHDC(WXHDC dc, bool bOwnsDC = FALSE)
+    {
+        m_hDC = dc;
+        m_bOwnsDC = bOwnsDC;
+    }
+
 private:
 
 #if WXWIN_COMPATIBILITY
@@ -177,13 +191,14 @@ protected:
     // ------------------------------------------------------------------------
 
     // Owner canvas and selected in bitmap (if bitmap is GDI object selected)
-    wxWindow*         m_owner;
-    wxBitmap*         m_bitmap;
+    wxWindow*         m_canvas;
+    wxBitmap          m_selectedBitmap;
 
     // our HDC and its usage count: we only free it when the usage count drops
     // to 0
     WXHDC             m_hDC;
     int               m_hDCCount;
+    bool              m_bOwnsDC:1;
 
     // Store all old GDI objects when do a SelectObject, so we can select them
     // back in (this unselecting user's objects) so we can safely delete the

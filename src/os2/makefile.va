@@ -300,6 +300,10 @@ OS2OBJS = \
   ..\os2\$D\cursor.obj \
   ..\os2\$D\data.obj \
   ..\os2\$D\dc.obj \
+  ..\os2\$D\dcclient.obj \
+  ..\os2\$D\dcmemory.obj \
+  ..\os2\$D\dcprint.obj \
+  ..\os2\$D\dcscreen.obj \
   ..\os2\$D\dialog.obj \
   ..\os2\$D\frame.obj \
   ..\os2\$D\window.obj
@@ -322,6 +326,10 @@ OS2LIBOBJS = \
   cursor.obj \
   data.obj \
   dc.obj \
+  dcclient.obj \
+  dcmemory.obj \
+  dcprint.obj \
+  dcscreen.obj \
   dialog.obj \
   frame.obj \
   window.obj
@@ -488,6 +496,10 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\cursor.obj
   copy ..\os2\$D\data.obj
   copy ..\os2\$D\dc.obj
+  copy ..\os2\$D\dcclient.obj
+  copy ..\os2\$D\dcmemory.obj
+  copy ..\os2\$D\dcprint.obj
+  copy ..\os2\$D\dcscreen.obj
   copy ..\os2\$D\dialog.obj
   copy ..\os2\$D\frame.obj
   copy ..\os2\$D\window.obj

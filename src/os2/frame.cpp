@@ -201,7 +201,7 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
     dc.SetFont(statusBar->GetFont());
 
     long x, y;
-    dc.GetTextExtent("X", &x, &y, NULL, NULL, NULL, FALSE);
+    dc.GetTextExtent("X", &x, &y, NULL, NULL, NULL);
 
     int height = (int)( (y  * 1.1) + 2* statusBar->GetBorderY());
 

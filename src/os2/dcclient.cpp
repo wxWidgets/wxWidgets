@@ -32,7 +32,7 @@
 #include "wx/log.h"
 #include "wx/window.h"
 
-#include "wx/msw/private.h"
+#include "wx/os2/private.h"
 
 #include "wx/dcclient.h"
 
@@ -72,7 +72,7 @@ WX_DEFINE_OBJARRAY(wxArrayDCInfo);
 // global variables
 // ----------------------------------------------------------------------------
 
-static PAINTSTRUCT g_paintStruct;
+static RECT        g_paintStruct;
 
 #ifdef __WXDEBUG__
     // a global variable which we check to verify that wxPaintDC are only
@@ -100,7 +100,19 @@ wxWindowDC::wxWindowDC(wxWindow *the_canvas)
   m_canvas = the_canvas;
   m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(the_canvas) );
   m_hDCCount++;
-
+  //
+  // default under PM is that Window and Client DC's are the same
+  // so we offer a separate Presentation Space to use for the
+  // entire window.  Otherwise, calling BeginPaint will just create
+  // chached-micro client presentation space
+  //
+   m_hPS = GpiCreatePS( m_hab
+                       ,m_hDC
+                       ,&m_PageSize
+                       ,PU_PELS | GPIF_LONG | GPIA_ASSOC
+                      );
+  ::GpiAssociate(m_hPS, NULLHANDLE);
+  ::GpiAssociate(m_hPS, m_hDC);
   SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
 
@@ -113,8 +125,12 @@ wxWindowDC::~wxWindowDC()
     //
     // In PM one does not explicitly close or release an open WindowDC
     // They automatically close with the window, unless explicitly detached
+    // but we need to destroy our PS
     //
-    m_hDC = 0;
+    ::GpiAssociate(m_hPS, NULLHANDLE);
+    ::GpiDestroyPS(m_hPS);
+    m_hPS = NULLHANDLE;
+    m_hDC = NULLHANDLE;
   }
 
   m_hDCCount--;
@@ -132,13 +148,15 @@ wxClientDC::wxClientDC()
 wxClientDC::wxClientDC(wxWindow *the_canvas)
 {
   m_canvas = the_canvas;
-  m_hDC = (WXHDC) ::GetDC(GetWinHwnd(the_canvas));
 
-  // the background mode is only used for text background
-  // and is set in DrawText() to OPAQUE as required, other-
-  // wise always TRANSPARENT, RR
-  ::SetBkMode( GetHdc(), TRANSPARENT );
+  //
+  // default under PM is that Window and Client DC's are the same
+  //
+  m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(the_canvas));
 
+  //
+  // Default mode is BM_LEAVEALONE so we make no call Set the mix
+  //
   SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
 
@@ -148,7 +166,9 @@ wxClientDC::~wxClientDC()
   {
     SelectOldObjects(m_hDC);
 
-    ::ReleaseDC(GetWinHwnd(m_canvas), GetHdc());
+    // We don't explicitly release Device contexts in PM and
+    // the cached micro PS is already gone
+
     m_hDC = 0;
   }
 }
@@ -205,15 +225,9 @@ wxPaintDC::wxPaintDC(wxWindow *canvas)
     }
     else // not in cache, create a new one
     {
-        m_hDC = (WXHDC)::BeginPaint(GetWinHwnd(m_canvas), &g_paintStruct);
+        m_hDC = (WXHDC)::WinBeginPaint(GetWinHwnd(m_canvas), NULLHANDLE, &g_paintStruct);
         ms_cache.Add(new wxPaintDCInfo(m_canvas, this));
     }
-
-    // the background mode is only used for text background
-    // and is set in DrawText() to OPAQUE as required, other-
-    // wise always TRANSPARENT, RR
-    ::SetBkMode( GetHdc(), TRANSPARENT );
-
     SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
 }
 
@@ -230,7 +244,7 @@ wxPaintDC::~wxPaintDC()
 
         if ( !--info->count )
         {
-            ::EndPaint(GetWinHwnd(m_canvas), &g_paintStruct);
+            ::WinEndPaint(m_hPS);
 
             ms_cache.Remove(index);
         }

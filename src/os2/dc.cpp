@@ -108,14 +108,15 @@ long wxDCBase::LogicalToDeviceYRel(long y) const
 
 wxDC::wxDC(void)
 {
-    m_owner  = NULL;
-    m_bitmap = NULL;
+    m_canvas  = NULL;
 
     m_oldBitmap  = 0;
     m_oldPen     = 0;
     m_oldBrush   = 0;
     m_oldFont    = 0;
     m_oldPalette = 0;
+
+    m_bOwnsDC = FALSE;
     m_hDC        = 0;
     m_hDCCount   = 0;
 };
@@ -392,6 +393,94 @@ void wxDC::DoDrawSpline(wxList *points)
    // TODO
 }
 #endif
+
+void wxDC::SetRop(WXHDC dc)
+{
+    if (!dc || m_logicalFunction < 0)
+        return;
+
+    int c_rop;
+    // These may be wrong
+    switch (m_logicalFunction)
+    {
+// TODO: Figure this stuff out
+        //    case wxXOR: c_rop = R2_XORPEN; break;
+//    case wxXOR: c_rop = R2_NOTXORPEN; break;
+//    case wxINVERT: c_rop = R2_NOT; break;
+//    case wxOR_REVERSE: c_rop = R2_MERGEPENNOT; break;
+//    case wxAND_REVERSE: c_rop = R2_MASKPENNOT; break;
+//    case wxCLEAR: c_rop = R2_WHITE; break;
+//    case wxSET: c_rop = R2_BLACK; break;
+//    case wxSRC_INVERT: c_rop = R2_NOTCOPYPEN; break;
+//    case wxOR_INVERT: c_rop = R2_MERGENOTPEN; break;
+//    case wxAND: c_rop = R2_MASKPEN; break;
+//    case wxOR: c_rop = R2_MERGEPEN; break;
+//    case wxAND_INVERT: c_rop = R2_MASKNOTPEN; break;
+//    case wxEQUIV:
+//    case wxNAND:
+//    case wxCOPY:
+    default:
+//      c_rop = R2_COPYPEN;
+        break;
+    }
+//    SetROP2((HDC) dc, c_rop);
+}
+
+void wxDC::DoClipping(WXHDC dc)
+{
+    if (m_clipping && dc)
+    {
+//      TODO:
+//      IntersectClipRect((HDC) dc, XLOG2DEV(m_clipX1), YLOG2DEV(m_clipY1),
+//                                  XLOG2DEV(m_clipX2), YLOG2DEV(m_clipY2));
+    }
+}
+
+// This will select current objects out of the DC,
+// which is what you have to do before deleting the
+// DC.
+void wxDC::SelectOldObjects(WXHDC dc)
+{
+    if (dc)
+    {
+        if (m_oldBitmap)
+        {
+//            ::SelectObject((HDC) dc, (HBITMAP) m_oldBitmap);
+            if (m_selectedBitmap.Ok())
+            {
+                m_selectedBitmap.SetSelectedInto(NULL);
+            }
+        }
+        m_oldBitmap = 0;
+        if (m_oldPen)
+        {
+//            ::SelectObject((HDC) dc, (HPEN) m_oldPen);
+        }
+        m_oldPen = 0;
+        if (m_oldBrush)
+        {
+//            ::SelectObject((HDC) dc, (HBRUSH) m_oldBrush);
+        }
+        m_oldBrush = 0;
+        if (m_oldFont)
+        {
+//            ::SelectObject((HDC) dc, (HFONT) m_oldFont);
+        }
+        m_oldFont = 0;
+        if (m_oldPalette)
+        {
+//            ::SelectPalette((HDC) dc, (HPALETTE) m_oldPalette, TRUE);
+        }
+        m_oldPalette = 0;
+    }
+
+    m_brush = wxNullBrush;
+    m_pen = wxNullPen;
+    m_palette = wxNullPalette;
+    m_font = wxNullFont;
+    m_backgroundBrush = wxNullBrush;
+    m_selectedBitmap = wxNullBitmap;
+}
 
 //
 // Private functions

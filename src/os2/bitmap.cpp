@@ -428,3 +428,12 @@ void wxBitmap::InitStandardHandlers()
     AddHandler(new wxICOFileHandler);
 */
 }
+
+void wxBitmap::SetHBITMAP(WXHBITMAP bmp)
+{
+  if (!M_BITMAPDATA)
+  m_refData = new wxBitmapRefData;
+
+  M_BITMAPDATA->m_hBitmap = bmp;
+}
+
