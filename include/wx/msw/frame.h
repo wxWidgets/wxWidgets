@@ -67,16 +67,11 @@ public:
   void GetPosition(int *x, int *y) const ;
   wxPoint GetPosition() const { return wxWindow::GetPosition(); }
 
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
-  void ClientToScreen(int *x, int *y) const;
-  wxPoint ClientToScreen(const wxPoint& pt) const { return wxWindow::ClientToScreen(pt); }
+  virtual void ClientToScreen(int *x, int *y) const;
 
-  void ScreenToClient(int *x, int *y) const;
-  wxPoint ScreenToClient(const wxPoint& pt) const { return wxWindow::ScreenToClient(pt); }
+  virtual void ScreenToClient(int *x, int *y) const;
 
   virtual bool OnClose(void);
 

@@ -1304,23 +1304,6 @@ void wxSizer::SetSize(int x, int y, int w, int h, int WXUNUSED(flags))
   }
 }
 
-void wxSizer::Move(int x, int y)
-{
-  wxLayoutConstraints *constr = GetConstraints();
-  if (x != -1)
-  {
-    sizerX = x;
-    if (constr)
-      constr->left.SetValue(x);
-  }
-  if (y != -1)
-  {
-    sizerY = y;
-    if (constr)
-      constr->top.SetValue(y);
-  }
-}
-
 void wxSizer::GetSize(int *w, int *h) const
 {
   *w = sizerWidth;

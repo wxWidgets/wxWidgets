@@ -28,7 +28,7 @@ class WXDLLEXPORT wxDialog: public wxPanel
   bool m_modalShowing;
 public:
 
-  wxDialog(void);
+  wxDialog();
 
   // Constructor with a modal flag, but no window id - the old convention
   inline wxDialog(wxWindow *parent,
@@ -59,30 +59,29 @@ public:
            long style = wxDEFAULT_DIALOG_STYLE,
            const wxString& name = wxDialogNameStr);
 
-  ~wxDialog(void);
+  ~wxDialog();
 
-  virtual bool Destroy(void);
+  virtual bool Destroy();
 
-  void SetClientSize(int width, int height);
+  virtual void SetClientSize(int width, int height);
 
-  void GetPosition(int *x, int *y) const;
-  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
+  virtual void GetPosition(int *x, int *y) const;
 
   bool Show(bool show);
-  bool IsShown(void) const ;
+  bool IsShown() const ;
   void Iconize(bool iconize);
 
 #if WXWIN_COMPATIBILITY
-  inline bool Iconized(void) const { return IsIconized(); };
+  inline bool Iconized() const { return IsIconized(); };
 #endif
 
-  virtual bool IsIconized(void) const;
-  void Fit(void);
+  virtual bool IsIconized() const;
+  void Fit();
 
   void SetTitle(const wxString& title);
-  wxString GetTitle(void) const ;
+  wxString GetTitle() const ;
 
-  bool OnClose(void);
+  bool OnClose();
   void OnCharHook(wxKeyEvent& event);
   void OnPaint(wxPaintEvent& event);
   void OnCloseWindow(wxCloseEvent& event);
@@ -90,10 +89,10 @@ public:
   void SetModal(bool flag);
 
   virtual void Centre(int direction = wxBOTH);
-  virtual bool IsModal(void) const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
+  virtual bool IsModal() const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
 
   // For now, same as Show(TRUE) but returns return code
-  virtual int ShowModal(void);
+  virtual int ShowModal();
   virtual void EndModal(int retCode);
 
   // Standard buttons
@@ -109,7 +108,7 @@ public:
   virtual long MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
   virtual bool MSWProcessMessage(WXMSG* pMsg);
 //  virtual bool MSWOnEraseBkgnd(WXHDC pDC);
-  virtual bool MSWOnClose(void);
+  virtual bool MSWOnClose();
   inline bool IsModalShowing() const { return m_modalShowing ; }
   virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
   			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
