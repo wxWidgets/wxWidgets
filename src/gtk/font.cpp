@@ -162,18 +162,18 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     xFontName = tokenizer.GetNextToken();
     if(!xFontName)
         return FALSE;
-        
+
     return TRUE;
 }
 
 wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
-    
+
     s.Printf(_T("%d;%s"),
              0,                         // version
              xFontName.c_str());
-             
+
     return s;
 }
 
@@ -185,8 +185,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
 void wxFont::Init()
 {
-    if (wxTheFontList)
-        wxTheFontList->Append( this );
 }
 
 wxFont::wxFont(const wxNativeFontInfo& info)
@@ -334,8 +332,6 @@ void wxFont::Unshare()
 
 wxFont::~wxFont()
 {
-    if (wxTheFontList)
-        wxTheFontList->DeleteObject( this );
 }
 
 // ----------------------------------------------------------------------------

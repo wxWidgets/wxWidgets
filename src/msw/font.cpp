@@ -370,8 +370,6 @@ wxString wxNativeFontInfo::ToString() const
 
 void wxFont::Init()
 {
-    if ( wxTheFontList )
-        wxTheFontList->Append(this);
 }
 
 bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)
@@ -420,8 +418,6 @@ bool wxFont::Create(int pointSize,
 
 wxFont::~wxFont()
 {
-    if ( wxTheFontList )
-        wxTheFontList->DeleteObject(this);
 }
 
 // ----------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        brush.cpp
+// Name:        src/motif/brush.cpp
 // Purpose:     wxBrush
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -38,40 +38,30 @@ wxBrushRefData::~wxBrushRefData()
 // Brushes
 wxBrush::wxBrush()
 {
-    if ( wxTheBrushList )
-        wxTheBrushList->AddBrush(this);
 }
 
 wxBrush::~wxBrush()
 {
-    if ( wxTheBrushList )
-        wxTheBrushList->RemoveBrush(this);
 }
 
 wxBrush::wxBrush(const wxColour& col, int Style)
 {
     m_refData = new wxBrushRefData;
-    
+
     M_BRUSHDATA->m_colour = col;
     M_BRUSHDATA->m_style = Style;
-    
+
     RealizeResource();
-    
-    if ( wxTheBrushList )
-        wxTheBrushList->AddBrush(this);
 }
 
 wxBrush::wxBrush(const wxBitmap& stipple)
 {
     m_refData = new wxBrushRefData;
-    
+
     M_BRUSHDATA->m_style = wxSTIPPLE;
     M_BRUSHDATA->m_stipple = stipple;
-    
+
     RealizeResource();
-    
-    if ( wxTheBrushList )
-        wxTheBrushList->AddBrush(this);
 }
 
 void wxBrush::Unshare()
@@ -92,36 +82,36 @@ void wxBrush::Unshare()
 void wxBrush::SetColour(const wxColour& col)
 {
     Unshare();
-    
+
     M_BRUSHDATA->m_colour = col;
-    
+
     RealizeResource();
 }
 
 void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
 {
     Unshare();
-    
+
     M_BRUSHDATA->m_colour.Set(r, g, b);
-    
+
     RealizeResource();
 }
 
 void wxBrush::SetStyle(int Style)
 {
     Unshare();
-    
+
     M_BRUSHDATA->m_style = Style;
-    
+
     RealizeResource();
 }
 
 void wxBrush::SetStipple(const wxBitmap& Stipple)
 {
     Unshare();
-    
+
     M_BRUSHDATA->m_stipple = Stipple;
-    
+
     RealizeResource();
 }
 

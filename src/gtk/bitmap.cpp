@@ -255,14 +255,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxGDIObject)
 
 wxBitmap::wxBitmap()
 {
-    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap( int width, int height, int depth )
 {
     Create( width, height, depth );
-
-    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 }
 
 bool wxBitmap::Create( int width, int height, int depth )
@@ -322,8 +319,6 @@ bool wxBitmap::CreateFromXpm( const char **bits )
 
     M_BMPDATA->m_bpp = visual->depth;  // ?
 
-    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
-
     return TRUE;
 }
 
@@ -333,8 +328,6 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     wxCHECK_MSG( depth == -1 || depth == 1, FALSE, wxT("invalid bitmap depth") )
 
     m_refData = new wxBitmapRefData();
-
-    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 
     // ------
     // convertion to mono bitmap:
@@ -774,15 +767,11 @@ wxImage wxBitmap::ConvertToImage() const
 wxBitmap::wxBitmap( const wxBitmap& bmp )
 {
     Ref( bmp );
-
-    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap( const wxString &filename, int type )
 {
     LoadFile( filename, type );
-
-    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth))
@@ -797,19 +786,17 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth
     M_BMPDATA->m_bpp = 1;
 
     wxCHECK_RET( M_BMPDATA->m_bitmap, wxT("couldn't create bitmap") );
-
-    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::~wxBitmap()
 {
-    if (wxTheBitmapList) wxTheBitmapList->DeleteObject(this);
 }
 
 wxBitmap& wxBitmap::operator = ( const wxBitmap& bmp )
 {
-    if (*this == bmp) return (*this);
-    Ref( bmp );
+    if ( m_refData != bmp.m_refData )
+        Ref( bmp );
+
     return *this;
 }
 

@@ -143,17 +143,7 @@ void wxApp::CleanUp()
 
     // Destroy all GDI lists, etc.
 
-    delete wxTheBrushList;
-    wxTheBrushList = NULL;
-
-    delete wxThePenList;
-    wxThePenList = NULL;
-
-    delete wxTheFontList;
-    wxTheFontList = NULL;
-
-    delete wxTheBitmapList;
-    wxTheBitmapList = NULL;
+    wxDeleteStockLists();
 
     delete wxTheColourDatabase;
     wxTheColourDatabase = NULL;

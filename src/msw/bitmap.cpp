@@ -107,8 +107,6 @@ void wxBitmap::Init()
 {
     // m_refData = NULL; done in the base class ctor
 
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 #ifdef __WIN32__
@@ -222,8 +220,6 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 
 wxBitmap::~wxBitmap()
 {
-    if (wxTheBitmapList)
-        wxTheBitmapList->DeleteObject(this);
 }
 
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
@@ -615,8 +611,6 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     // check the wxBitmap object
     GetBitmapData()->SetOk();
 #endif // WXWIN_COMPATIBILITY_2
-
-    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 
     return TRUE;
 #endif

@@ -56,7 +56,7 @@ wxPenRefData::wxPenRefData( const wxPenRefData& data )
     m_countDashes = data.m_countDashes;
 /*
     if (data.m_dash)  TODO
-      m_dash = new 
+      m_dash = new
 */
     m_dash = data.m_dash;
 }
@@ -69,7 +69,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxPen,wxGDIObject)
 
 wxPen::wxPen()
 {
-    if (wxThePenList) wxThePenList->AddPen( this );
 }
 
 wxPen::wxPen( const wxColour &colour, int width, int style )
@@ -78,25 +77,22 @@ wxPen::wxPen( const wxColour &colour, int width, int style )
     M_PENDATA->m_width = width;
     M_PENDATA->m_style = style;
     M_PENDATA->m_colour = colour;
-
-    if (wxThePenList) wxThePenList->AddPen( this );
 }
 
 wxPen::wxPen( const wxPen& pen )
 {
     Ref( pen );
-    if (wxThePenList) wxThePenList->AddPen( this );
 }
 
 wxPen::~wxPen()
 {
-    if (wxThePenList) wxThePenList->RemovePen( this );
 }
 
 wxPen& wxPen::operator = ( const wxPen& pen )
 {
-    if (*this == pen) return (*this);
-    Ref( pen );
+    if ( m_refData != pen.m_refData )
+        Ref( pen );
+
     return *this;
 }
 
@@ -153,20 +149,20 @@ void wxPen::SetWidth( int width )
     M_PENDATA->m_width = width;
 }
 
-int wxPen::GetDashes( wxDash **ptr ) const 
+int wxPen::GetDashes( wxDash **ptr ) const
 {
-     *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL); 
+     *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);
      return (M_PENDATA ? M_PENDATA->m_countDashes : 0);
 }
 
-int wxPen::GetDashCount() const 
-{ 
-    return (M_PENDATA->m_countDashes); 
+int wxPen::GetDashCount() const
+{
+    return (M_PENDATA->m_countDashes);
 }
 
-wxDash* wxPen::GetDash() const 
-{ 
-    return (wxDash*)M_PENDATA->m_dash; 
+wxDash* wxPen::GetDash() const
+{
+    return (wxDash*)M_PENDATA->m_dash;
 }
 
 int wxPen::GetCap() const

@@ -120,15 +120,10 @@ wxList wxBitmap::sm_handlers;
 wxBitmap::wxBitmap()
 {
     m_refData = NULL;
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::~wxBitmap()
 {
-    if (wxTheBitmapList)
-        wxTheBitmapList->DeleteObject(this);
 }
 
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
@@ -136,33 +131,21 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     m_refData = new wxBitmapRefData;
 
     (void) Create((void*) bits, wxBITMAP_TYPE_XBM_DATA, width, height, depth);
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap(int w, int h, int d)
 {
     (void)Create(w, h, d);
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap(void *data, long type, int width, int height, int depth)
 {
     (void) Create(data, type, width, height, depth);
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 wxBitmap::wxBitmap(const wxString& filename, long type)
 {
     LoadFile(filename, (int)type);
-
-    if ( wxTheBitmapList )
-        wxTheBitmapList->AddBitmap(this);
 }
 
 // Create from XPM data
@@ -1256,8 +1239,6 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     wxCHECK_MSG( depth == -1, FALSE, wxT("invalid bitmap depth") )
 
     m_refData = new wxBitmapRefData();
-      
-    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 
     int width = image.GetWidth();
     int height = image.GetHeight();

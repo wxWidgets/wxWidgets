@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        font.cpp
+// Name:        src/motif/font.cpp
 // Purpose:     wxFont class
 // Author:      Julian Smart
 // Modified by:
@@ -196,8 +196,6 @@ wxFont::wxFont(const wxNativeFontInfo& info)
 
 void wxFont::Init()
 {
-    if ( wxTheFontList )
-        wxTheFontList->Append(this);
 }
 
 bool wxFont::Create(int pointSize,
@@ -219,8 +217,6 @@ bool wxFont::Create(int pointSize,
 
 wxFont::~wxFont()
 {
-    if ( wxTheFontList )
-        wxTheFontList->DeleteObject(this);
 }
 
 // ----------------------------------------------------------------------------
@@ -412,3 +408,4 @@ WXFontList wxFont::GetFontList(double scale, WXDisplay* display) const
 
     return (f ? f->m_fontList : (WXFontList) 0);
 }
+

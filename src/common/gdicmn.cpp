@@ -418,7 +418,8 @@ wxString wxColourDatabase::FindName (const wxColour& colour) const
     return name;
 }
 
-void wxInitializeStockLists () {
+void wxInitializeStockLists()
+{
   wxTheBrushList = new wxBrushList;
   wxThePenList = new wxPenList;
   wxTheFontList = new wxFontList;
@@ -530,14 +531,19 @@ void wxDeleteStockObjects ()
   wxDELETE(wxCROSS_CURSOR);
 }
 
-void wxDeleteStockLists() {
+void wxDeleteStockLists()
+{
   wxDELETE(wxTheBrushList);
   wxDELETE(wxThePenList);
   wxDELETE(wxTheFontList);
   wxDELETE(wxTheBitmapList);
 }
 
-wxBitmapList::wxBitmapList ()
+// ============================================================================
+// wxTheXXXList stuff (semi-obsolete)
+// ============================================================================
+
+wxBitmapList::wxBitmapList()
 {
 }
 
@@ -602,10 +608,9 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
         return NULL;
     }
 
-    // Yes, we can return a pointer to this in a later FindOrCreatePen call,
-    // because we created it within FindOrCreatePen. Safeguards against
-    // returning a pointer to an automatic variable and hanging on to it
-    // (dangling pointer).
+    AddPen(pen);
+
+    // we'll delete it ourselves later
     pen->SetVisible(TRUE);
 
     return pen;
@@ -653,12 +658,11 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
         return NULL;
     }
 
+    AddBrush(brush);
+
+    // we'll delete it ourselves later
     brush->SetVisible(TRUE);
 
-    // Yes, we can return a pointer to this in a later FindOrCreateBrush call,
-    // because we created it within FindOrCreateBrush. Safeguards against
-    // returning a pointer to an automatic variable and hanging on to it
-    // (dangling pointer).
     return brush;
 }
 
@@ -758,6 +762,8 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
         // font not found, create the new one
         font = new wxFont(pointSize, family, style, weight,
                           underline, facename, encoding);
+
+        AddFont(font);
 
         // and mark it as being cacheable
         font->SetVisible(TRUE);
