@@ -1121,7 +1121,11 @@ wxLayoutWindow::Copy(bool invalidate)
    wxLayoutDataObject *wldo = new wxLayoutDataObject;
    wxLayoutList *llist = m_llist->GetSelection(wldo, invalidate);
    if(! llist)
+   {
+      delete wldo;
+      delete data;
       return FALSE;
+   }
    // Export selection as text:
    wxString text;
    wxLayoutExportObject *exp;
@@ -1134,6 +1138,7 @@ wxLayoutWindow::Copy(bool invalidate)
    }
    delete llist;
 
+   bool rc;
    // The exporter always appends a newline, so we chop it off if it
    // is there:
    {
@@ -1144,19 +1149,20 @@ wxLayoutWindow::Copy(bool invalidate)
          text = text.Mid(0,len-1);
    }
 
-   if (!wxTheClipboard->Open())
-       return FALSE;
-
+   if (wxTheClipboard->Open())
+   {
 #if wxUSE_PRIVATE_CLIPBOARD_FORMAT
-   data->Add(wldo, TRUE /* preferred */);
-   data->Add(new wxTextDataObject(text));
-#else
-   wxTextDataObject *data = new wxTextDataObject( text );
+      data->Add(wldo, TRUE /* preferred */);
+      data->Add(new wxTextDataObject(text));
 #endif
+      rc = wxTheClipboard->SetData( data );
+      wxTheClipboard->Close();
+   }
+   else
+      rc = FALSE;
 
-   bool rc = wxTheClipboard->SetData( data );
-
-   wxTheClipboard->Close();
+   delete wldo;
+   delete data;
    return rc;
 }
 
