@@ -54,7 +54,6 @@ class MyFrame : public wxFrame
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
 
-        void OnPrintSetup(wxCommandEvent& event);
         void OnPageSetup(wxCommandEvent& event);
         void OnPrint(wxCommandEvent& event);
         void OnPreview(wxCommandEvent& event);
@@ -85,7 +84,6 @@ enum
     Minimal_Print,
     Minimal_Preview,
     Minimal_PageSetup,
-    Minimal_PrintSetup,
     Minimal_Open,
     Minimal_PrintSmall,
     Minimal_PrintNormal,
@@ -106,7 +104,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Print, MyFrame::OnPrint)
     EVT_MENU(Minimal_Preview, MyFrame::OnPreview)
     EVT_MENU(Minimal_PageSetup, MyFrame::OnPageSetup)
-    EVT_MENU(Minimal_PrintSetup, MyFrame::OnPrintSetup)
     EVT_MENU(Minimal_Open, MyFrame::OnOpen)
     EVT_MENU(Minimal_PrintSmall, MyFrame::OnPrintSmall)
     EVT_MENU(Minimal_PrintNormal, MyFrame::OnPrintNormal)
@@ -128,6 +125,7 @@ IMPLEMENT_APP(MyApp)
 // the application class
 // ----------------------------------------------------------------------------
 // `Main program' equivalent: the program execution "starts" here
+
 bool MyApp::OnInit()
 {
 #if wxUSE_LIBPNG
@@ -169,7 +167,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Minimal_Open, _("Open...\tCtrl-O"));
     menuFile->AppendSeparator();
     menuFile->Append(Minimal_PageSetup, _("Page Setup"));
-    menuFile->Append(Minimal_PrintSetup, _("Printer Setup"));
     menuFile->Append(Minimal_Print, _("Print..."));
     menuFile->Append(Minimal_Preview, _("Preview..."));
     menuFile->AppendSeparator();
@@ -230,12 +227,6 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(_("HTML printing sample\n\n(c) Vaclav Slavik, 1999"));
-}
-
-
-void MyFrame::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
-{
-    m_Prn -> PrinterSetup();
 }
 
 
