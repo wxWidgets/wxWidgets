@@ -74,7 +74,7 @@ public:                                                                     \
     classname& operator=(const chartype *str)                               \
     {                                                                       \
         free(m_str);                                                        \
-        m_str = str ? strdup(str) : NULL;                                   \
+        m_str = str ? strdupfunc(str) : NULL;                               \
         return *this;                                                       \
     }                                                                       \
                                                                             \
