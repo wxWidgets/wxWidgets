@@ -86,7 +86,7 @@
     provides a single "unified" interface for masked controls.  Those for
     masked.TextCtrl, masked.ComboBox and masked.IpAddrCtrl are all documented
     below; the others have their own demo pages and interface descriptions.
-    (See end of following discussion for how to configure the wxMaskedCtrl()
+    (See end of following discussion for how to configure the wx.MaskedCtrl()
     to select the above control types.)
 
 
@@ -528,7 +528,7 @@ Naming Conventions
                         the function for getting the start and end of the
                         current text selection.  The reason for this is
                         that not all controls have the same function name for
-                        doing this; eg. wxTextCtrl uses .GetSelection(),
+                        doing this; eg. wx.TextCtrl uses .GetSelection(),
                         whereas we had to write a .GetMark() function for
                         wxComboBox, because .GetSelection() for the control
                         gets the currently selected list item from the combo
@@ -1581,7 +1581,7 @@ class Field:
 class MaskedEditMixin:
     """
     This class allows us to abstract the masked edit functionality that could
-    be associated with any text entry control. (eg. wxTextCtrl, wxComboBox, etc.)
+    be associated with any text entry control. (eg. wx.TextCtrl, wx.ComboBox, etc.)
     """
     valid_ctrl_params = {
               'mask': 'XXXXXXXXXXXXX',          ## mask string for formatting this control
@@ -2684,10 +2684,11 @@ class MaskedEditMixin:
 ##            dbg(indent=0)
             return bValid
 
-        ##! WS: For some inexplicable reason, every wxTextCtrl.SetValue
-        ## call is generating two (2) EVT_TEXT events.
+        ##! WS: For some inexplicable reason, every wx.TextCtrl.SetValue
+        ## call is generating two (2) EVT_TEXT events.  On certain platforms,
+        ## (eg. linux/GTK) the 1st is an empty string value.
         ## This is the only mechanism I can find to mask this problem:
-        if newvalue == self._curValue:
+        if newvalue == self._curValue or len(newvalue) == 0:
 ##            dbg('ignoring bogus text change event', indent=0)
             pass
         else:
@@ -4890,7 +4891,7 @@ class MaskedEditMixin:
         """
         This event handler is currently necessary to work around new default
         behavior as of wxPython2.3.3;
-        The TAB key auto selects the entire contents of the wxTextCtrl *after*
+        The TAB key auto selects the entire contents of the wx.TextCtrl *after*
         the EVT_SET_FOCUS event occurs; therefore we can't query/adjust the selection
         *here*, because it hasn't happened yet.  So to prevent this behavior, and
         preserve the correct selection when the focus event is not due to tab,
@@ -4999,7 +5000,7 @@ class MaskedEditMixin:
                 if self._isFloat and groupcharpos > self._decimalpos:
                     # 1st one found on right-hand side is past decimal point
 ##                    dbg('groupchar in fraction; illegal')
-                    valid = False
+                    return False
                 elif self._isFloat:
                     integer = value[:self._decimalpos].strip()
                 else:
@@ -5153,7 +5154,7 @@ class MaskedEditMixin:
 
         The trouble is that, a priori, there's no explicit notification of
         why the focus event we received.  However, the whole reason we need to
-        do this is because the default behavior on TAB traveral in a wxTextCtrl is
+        do this is because the default behavior on TAB traveral in a wx.TextCtrl is
         now to select the entire contents of the window, something we don't want.
         So we can *now* test the selection range, and if it's "the whole text"
         we can assume the cause, change the insertion point to the start of
@@ -5258,11 +5259,11 @@ class MaskedEditMixin:
 ##        dbg('current value: "%s"' % value)
         sel_start, sel_to = self._GetSelection()                   ## check for a range of selected text
 ##        dbg('selected text: "%s"' % value[sel_start:sel_to].strip())
-        do = wxTextDataObject()
+        do = wx.TextDataObject()
         do.SetText(value[sel_start:sel_to].strip())
-        wxTheClipboard.Open()
-        wxTheClipboard.SetData(do)
-        wxTheClipboard.Close()
+        wx.TheClipboard.Open()
+        wx.TheClipboard.SetData(do)
+        wx.TheClipboard.Close()
 
         if sel_to - sel_start != 0:
             self._OnErase()
@@ -5274,27 +5275,27 @@ class MaskedEditMixin:
 #
 ##    def _Copy( self ):
 ##        """
-##        Override the wxTextCtrl's .Copy function, with our own
+##        Override the wx.TextCtrl's .Copy function, with our own
 ##        that does validation.  Need to strip trailing spaces.
 ##        """
 ##        sel_start, sel_to = self._GetSelection()
 ##        select_len = sel_to - sel_start
-##        textval = wxTextCtrl._GetValue(self)
+##        textval = wx.TextCtrl._GetValue(self)
 ##
-##        do = wxTextDataObject()
+##        do = wx.TextDataObject()
 ##        do.SetText(textval[sel_start:sel_to].strip())
-##        wxTheClipboard.Open()
-##        wxTheClipboard.SetData(do)
-##        wxTheClipboard.Close()
+##        wx.TheClipboard.Open()
+##        wx.TheClipboard.SetData(do)
+##        wx.TheClipboard.Close()
 
 
     def _getClipboardContents( self ):
         """ Subroutine for getting the current contents of the clipboard.
         """
-        do = wxTextDataObject()
-        wxTheClipboard.Open()
-        success = wxTheClipboard.GetData(do)
-        wxTheClipboard.Close()
+        do = wx.TextDataObject()
+        wx.TheClipboard.Open()
+        success = wx.TheClipboard.GetData(do)
+        wx.TheClipboard.Close()
 
         if not success:
             return None
@@ -6352,7 +6353,7 @@ i=1
 ##      non-british spellings still supported for backward-compatibility.
 ##  20. Added '&' mask specification character for punctuation only (no letters
 ##      or digits).
-##  21. Added (in a separate file) wxMaskedCtrl() factory function to provide
+##  21. Added (in a separate file) wx.MaskedCtrl() factory function to provide
 ##      unified interface to the masked edit subclasses.
 ##
 ##
@@ -6376,7 +6377,7 @@ i=1
 ##   2. Fixed EUDATE* autoformats, fixed IsDateType mask list, and added ability to
 ##      use 3-char months for dates, and EUDATETIME, and EUDATEMILTIME autoformats.
 ##   3. Made all date autoformats automatically pick implied "datestyle".
-##   4. Added IsModified override, since base wxTextCtrl never reports modified if
+##   4. Added IsModified override, since base wx.TextCtrl never reports modified if
 ##      .SetValue used to change the value, which is what the masked edit controls
 ##      use internally.
 ##   5. Fixed bug in date position adjustment on 2 to 4 digit date conversion when
