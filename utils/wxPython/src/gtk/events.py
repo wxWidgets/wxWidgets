@@ -605,6 +605,29 @@ class wxSysColourChangedEvent(wxSysColourChangedEventPtr):
 
 
 
+class wxPyEventPtr(wxCommandEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self):
+        if self.thisown == 1 :
+            eventsc.delete_wxPyEvent(self.this)
+    def SetUserData(self,arg0):
+        val = eventsc.wxPyEvent_SetUserData(self.this,arg0)
+        return val
+    def GetUserData(self):
+        val = eventsc.wxPyEvent_GetUserData(self.this)
+        return val
+    def __repr__(self):
+        return "<C wxPyEvent instance>"
+class wxPyEvent(wxPyEventPtr):
+    def __init__(self,*args) :
+        self.this = apply(eventsc.new_wxPyEvent,()+args)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------

@@ -36,8 +36,7 @@ information on downloading source or binaries.""",
     if d.ShowModal() == wx.wxID_CANCEL:
 	d = wx.wxMessageDialog(wx.NULL, "I kid you not! Pressing Cancel won't help you!", "Not a joke", wx.wxOK)
 	d.ShowModal()
-    import sys
-    sys.exit()
+    raise ImportError
 
 #
 # Plotting classes...

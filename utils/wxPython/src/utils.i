@@ -26,7 +26,7 @@
 
 %{
 #ifdef SEPARATE
-    static wxString wxPyEmptyStr("");
+    wxString wxPyEmptyStr("");
 #endif
 %}
 
@@ -131,7 +131,12 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1999/05/01 04:40:57  RD
+// wxPython 2.0b9, second phase (gtk)
+// Added gobs of stuff, see wxPython/README.txt for details
+//
 // Revision 1.4  1999/04/30 03:29:19  RD
+//
 // wxPython 2.0b9, first phase (win32)
 // Added gobs of stuff, see wxPython/README.txt for details
 //

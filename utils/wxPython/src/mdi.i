@@ -76,7 +76,7 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdFrameCallbacks(self)"
 
     void Activate();
-    void Maximize();
+    void Maximize(bool maximize);
     void Restore();
 
 };
@@ -95,7 +95,12 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.7  1999/05/01 04:40:57  RD
+// wxPython 2.0b9, second phase (gtk)
+// Added gobs of stuff, see wxPython/README.txt for details
+//
 // Revision 1.6  1999/02/25 07:08:34  RD
+//
 // wxPython version 2.0b5
 //
 // Revision 1.5  1998/12/15 20:41:21  RD

@@ -2,9 +2,11 @@
 Makefile
 Makefile.pre
 Setup
+Setup.in.new
 Setup.save
 Setup.save
 config.c
+glcanvas.h
 glcanvasc.exp
 make.bat
 sedscript

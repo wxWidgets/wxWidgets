@@ -318,106 +318,113 @@ class wxFontDialog(wxFontDialogPtr):
 
 
 
-class wxPageSetupDataPtr :
+class wxPageSetupDialogDataPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def __del__(self):
         if self.thisown == 1 :
-            cmndlgsc.delete_wxPageSetupData(self.this)
+            cmndlgsc.delete_wxPageSetupDialogData(self.this)
     def EnableHelp(self,arg0):
-        val = cmndlgsc.wxPageSetupData_EnableHelp(self.this,arg0)
+        val = cmndlgsc.wxPageSetupDialogData_EnableHelp(self.this,arg0)
         return val
     def EnableMargins(self,arg0):
-        val = cmndlgsc.wxPageSetupData_EnableMargins(self.this,arg0)
+        val = cmndlgsc.wxPageSetupDialogData_EnableMargins(self.this,arg0)
         return val
     def EnableOrientation(self,arg0):
-        val = cmndlgsc.wxPageSetupData_EnableOrientation(self.this,arg0)
+        val = cmndlgsc.wxPageSetupDialogData_EnableOrientation(self.this,arg0)
         return val
     def EnablePaper(self,arg0):
-        val = cmndlgsc.wxPageSetupData_EnablePaper(self.this,arg0)
+        val = cmndlgsc.wxPageSetupDialogData_EnablePaper(self.this,arg0)
         return val
     def EnablePrinter(self,arg0):
-        val = cmndlgsc.wxPageSetupData_EnablePrinter(self.this,arg0)
+        val = cmndlgsc.wxPageSetupDialogData_EnablePrinter(self.this,arg0)
         return val
-    def GetPaperSize(self):
-        val = cmndlgsc.wxPageSetupData_GetPaperSize(self.this)
-        val = wxPointPtr(val)
-        val.thisown = 1
+    def GetDefaultMinMargins(self):
+        val = cmndlgsc.wxPageSetupDialogData_GetDefaultMinMargins(self.this)
+        return val
+    def GetEnableMargins(self):
+        val = cmndlgsc.wxPageSetupDialogData_GetEnableMargins(self.this)
+        return val
+    def GetEnableOrientation(self):
+        val = cmndlgsc.wxPageSetupDialogData_GetEnableOrientation(self.this)
+        return val
+    def GetEnablePaper(self):
+        val = cmndlgsc.wxPageSetupDialogData_GetEnablePaper(self.this)
+        return val
+    def GetEnablePrinter(self):
+        val = cmndlgsc.wxPageSetupDialogData_GetEnablePrinter(self.this)
+        return val
+    def GetEnableHelp(self):
+        val = cmndlgsc.wxPageSetupDialogData_GetEnableHelp(self.this)
+        return val
+    def GetDefaultInfo(self):
+        val = cmndlgsc.wxPageSetupDialogData_GetDefaultInfo(self.this)
         return val
     def GetMarginTopLeft(self):
-        val = cmndlgsc.wxPageSetupData_GetMarginTopLeft(self.this)
+        val = cmndlgsc.wxPageSetupDialogData_GetMarginTopLeft(self.this)
         val = wxPointPtr(val)
         val.thisown = 1
         return val
     def GetMarginBottomRight(self):
-        val = cmndlgsc.wxPageSetupData_GetMarginBottomRight(self.this)
+        val = cmndlgsc.wxPageSetupDialogData_GetMarginBottomRight(self.this)
         val = wxPointPtr(val)
         val.thisown = 1
         return val
     def GetMinMarginTopLeft(self):
-        val = cmndlgsc.wxPageSetupData_GetMinMarginTopLeft(self.this)
+        val = cmndlgsc.wxPageSetupDialogData_GetMinMarginTopLeft(self.this)
         val = wxPointPtr(val)
         val.thisown = 1
         return val
     def GetMinMarginBottomRight(self):
-        val = cmndlgsc.wxPageSetupData_GetMinMarginBottomRight(self.this)
+        val = cmndlgsc.wxPageSetupDialogData_GetMinMarginBottomRight(self.this)
         val = wxPointPtr(val)
         val.thisown = 1
         return val
-    def GetOrientation(self):
-        val = cmndlgsc.wxPageSetupData_GetOrientation(self.this)
+    def GetPaperId(self):
+        val = cmndlgsc.wxPageSetupDialogData_GetPaperId(self.this)
         return val
-    def GetDefaultMinMargins(self):
-        val = cmndlgsc.wxPageSetupData_GetDefaultMinMargins(self.this)
+    def GetPaperSize(self):
+        val = cmndlgsc.wxPageSetupDialogData_GetPaperSize(self.this)
+        val = wxSizePtr(val)
+        val.thisown = 1
         return val
-    def GetEnableMargins(self):
-        val = cmndlgsc.wxPageSetupData_GetEnableMargins(self.this)
-        return val
-    def GetEnableOrientation(self):
-        val = cmndlgsc.wxPageSetupData_GetEnableOrientation(self.this)
-        return val
-    def GetEnablePaper(self):
-        val = cmndlgsc.wxPageSetupData_GetEnablePaper(self.this)
-        return val
-    def GetEnablePrinter(self):
-        val = cmndlgsc.wxPageSetupData_GetEnablePrinter(self.this)
-        return val
-    def GetEnableHelp(self):
-        val = cmndlgsc.wxPageSetupData_GetEnableHelp(self.this)
-        return val
-    def GetDefaultInfo(self):
-        val = cmndlgsc.wxPageSetupData_GetDefaultInfo(self.this)
-        return val
-    def SetPaperSize(self,arg0):
-        val = cmndlgsc.wxPageSetupData_SetPaperSize(self.this,arg0.this)
-        return val
-    def SetMarginTopLeft(self,arg0):
-        val = cmndlgsc.wxPageSetupData_SetMarginTopLeft(self.this,arg0.this)
-        return val
-    def SetMarginBottomRight(self,arg0):
-        val = cmndlgsc.wxPageSetupData_SetMarginBottomRight(self.this,arg0.this)
-        return val
-    def SetMinMarginTopLeft(self,arg0):
-        val = cmndlgsc.wxPageSetupData_SetMinMarginTopLeft(self.this,arg0.this)
-        return val
-    def SetMinMarginBottomRight(self,arg0):
-        val = cmndlgsc.wxPageSetupData_SetMinMarginBottomRight(self.this,arg0.this)
-        return val
-    def SetOrientation(self,arg0):
-        val = cmndlgsc.wxPageSetupData_SetOrientation(self.this,arg0)
-        return val
-    def SetDefaultMinMargins(self,arg0):
-        val = cmndlgsc.wxPageSetupData_SetDefaultMinMargins(self.this,arg0)
+    def GetPrintData(self):
+        val = cmndlgsc.wxPageSetupDialogData_GetPrintData(self.this)
+        val = wxPrintDataPtr(val)
         return val
     def SetDefaultInfo(self,arg0):
-        val = cmndlgsc.wxPageSetupData_SetDefaultInfo(self.this,arg0)
+        val = cmndlgsc.wxPageSetupDialogData_SetDefaultInfo(self.this,arg0)
+        return val
+    def SetDefaultMinMargins(self,arg0):
+        val = cmndlgsc.wxPageSetupDialogData_SetDefaultMinMargins(self.this,arg0)
+        return val
+    def SetMarginTopLeft(self,arg0):
+        val = cmndlgsc.wxPageSetupDialogData_SetMarginTopLeft(self.this,arg0.this)
+        return val
+    def SetMarginBottomRight(self,arg0):
+        val = cmndlgsc.wxPageSetupDialogData_SetMarginBottomRight(self.this,arg0.this)
+        return val
+    def SetMinMarginTopLeft(self,arg0):
+        val = cmndlgsc.wxPageSetupDialogData_SetMinMarginTopLeft(self.this,arg0.this)
+        return val
+    def SetMinMarginBottomRight(self,arg0):
+        val = cmndlgsc.wxPageSetupDialogData_SetMinMarginBottomRight(self.this,arg0.this)
+        return val
+    def SetPaperId(self,arg0):
+        val = cmndlgsc.wxPageSetupDialogData_SetPaperId(self.this,arg0)
+        return val
+    def SetPaperSize(self,arg0):
+        val = cmndlgsc.wxPageSetupDialogData_SetPaperSize(self.this,arg0.this)
+        return val
+    def SetPrintData(self,arg0):
+        val = cmndlgsc.wxPageSetupDialogData_SetPrintData(self.this,arg0.this)
         return val
     def __repr__(self):
-        return "<C wxPageSetupData instance>"
-class wxPageSetupData(wxPageSetupDataPtr):
+        return "<C wxPageSetupDialogData instance>"
+class wxPageSetupDialogData(wxPageSetupDialogDataPtr):
     def __init__(self) :
-        self.this = cmndlgsc.new_wxPageSetupData()
+        self.this = cmndlgsc.new_wxPageSetupDialogData()
         self.thisown = 1
 
 
@@ -429,7 +436,7 @@ class wxPageSetupDialogPtr(wxDialogPtr):
         self.thisown = 0
     def GetPageSetupData(self):
         val = cmndlgsc.wxPageSetupDialog_GetPageSetupData(self.this)
-        val = wxPageSetupDataPtr(val)
+        val = wxPageSetupDialogDataPtr(val)
         return val
     def ShowModal(self):
         val = cmndlgsc.wxPageSetupDialog_ShowModal(self.this)
@@ -449,81 +456,85 @@ class wxPageSetupDialog(wxPageSetupDialogPtr):
 
 
 
-class wxPrintDataPtr :
+class wxPrintDialogDataPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def __del__(self):
         if self.thisown == 1 :
-            cmndlgsc.delete_wxPrintData(self.this)
+            cmndlgsc.delete_wxPrintDialogData(self.this)
     def EnableHelp(self,arg0):
-        val = cmndlgsc.wxPrintData_EnableHelp(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_EnableHelp(self.this,arg0)
         return val
     def EnablePageNumbers(self,arg0):
-        val = cmndlgsc.wxPrintData_EnablePageNumbers(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_EnablePageNumbers(self.this,arg0)
         return val
     def EnablePrintToFile(self,arg0):
-        val = cmndlgsc.wxPrintData_EnablePrintToFile(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_EnablePrintToFile(self.this,arg0)
         return val
     def EnableSelection(self,arg0):
-        val = cmndlgsc.wxPrintData_EnableSelection(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_EnableSelection(self.this,arg0)
         return val
     def GetAllPages(self):
-        val = cmndlgsc.wxPrintData_GetAllPages(self.this)
+        val = cmndlgsc.wxPrintDialogData_GetAllPages(self.this)
         return val
     def GetCollate(self):
-        val = cmndlgsc.wxPrintData_GetCollate(self.this)
+        val = cmndlgsc.wxPrintDialogData_GetCollate(self.this)
         return val
     def GetFromPage(self):
-        val = cmndlgsc.wxPrintData_GetFromPage(self.this)
+        val = cmndlgsc.wxPrintDialogData_GetFromPage(self.this)
         return val
     def GetMaxPage(self):
-        val = cmndlgsc.wxPrintData_GetMaxPage(self.this)
+        val = cmndlgsc.wxPrintDialogData_GetMaxPage(self.this)
         return val
     def GetMinPage(self):
-        val = cmndlgsc.wxPrintData_GetMinPage(self.this)
+        val = cmndlgsc.wxPrintDialogData_GetMinPage(self.this)
         return val
     def GetNoCopies(self):
-        val = cmndlgsc.wxPrintData_GetNoCopies(self.this)
+        val = cmndlgsc.wxPrintDialogData_GetNoCopies(self.this)
         return val
-    def GetOrientation(self):
-        val = cmndlgsc.wxPrintData_GetOrientation(self.this)
+    def GetPrintData(self):
+        val = cmndlgsc.wxPrintDialogData_GetPrintData(self.this)
+        val = wxPrintDataPtr(val)
+        return val
+    def GetPrintToFile(self):
+        val = cmndlgsc.wxPrintDialogData_GetPrintToFile(self.this)
         return val
     def GetToPage(self):
-        val = cmndlgsc.wxPrintData_GetToPage(self.this)
+        val = cmndlgsc.wxPrintDialogData_GetToPage(self.this)
         return val
     def SetCollate(self,arg0):
-        val = cmndlgsc.wxPrintData_SetCollate(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_SetCollate(self.this,arg0)
         return val
     def SetFromPage(self,arg0):
-        val = cmndlgsc.wxPrintData_SetFromPage(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_SetFromPage(self.this,arg0)
         return val
     def SetMaxPage(self,arg0):
-        val = cmndlgsc.wxPrintData_SetMaxPage(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_SetMaxPage(self.this,arg0)
         return val
     def SetMinPage(self,arg0):
-        val = cmndlgsc.wxPrintData_SetMinPage(self.this,arg0)
-        return val
-    def SetOrientation(self,arg0):
-        val = cmndlgsc.wxPrintData_SetOrientation(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_SetMinPage(self.this,arg0)
         return val
     def SetNoCopies(self,arg0):
-        val = cmndlgsc.wxPrintData_SetNoCopies(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_SetNoCopies(self.this,arg0)
+        return val
+    def SetPrintData(self,arg0):
+        val = cmndlgsc.wxPrintDialogData_SetPrintData(self.this,arg0.this)
         return val
     def SetPrintToFile(self,arg0):
-        val = cmndlgsc.wxPrintData_SetPrintToFile(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_SetPrintToFile(self.this,arg0)
         return val
     def SetSetupDialog(self,arg0):
-        val = cmndlgsc.wxPrintData_SetSetupDialog(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_SetSetupDialog(self.this,arg0)
         return val
     def SetToPage(self,arg0):
-        val = cmndlgsc.wxPrintData_SetToPage(self.this,arg0)
+        val = cmndlgsc.wxPrintDialogData_SetToPage(self.this,arg0)
         return val
     def __repr__(self):
-        return "<C wxPrintData instance>"
-class wxPrintData(wxPrintDataPtr):
+        return "<C wxPrintDialogData instance>"
+class wxPrintDialogData(wxPrintDialogDataPtr):
     def __init__(self) :
-        self.this = cmndlgsc.new_wxPrintData()
+        self.this = cmndlgsc.new_wxPrintDialogData()
         self.thisown = 1
 
 
@@ -533,9 +544,9 @@ class wxPrintDialogPtr(wxDialogPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetPrintData(self):
-        val = cmndlgsc.wxPrintDialog_GetPrintData(self.this)
-        val = wxPrintDataPtr(val)
+    def GetPrintDialogData(self):
+        val = cmndlgsc.wxPrintDialog_GetPrintDialogData(self.this)
+        val = wxPrintDialogDataPtr(val)
         return val
     def GetPrintDC(self):
         val = cmndlgsc.wxPrintDialog_GetPrintDC(self.this)

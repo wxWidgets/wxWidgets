@@ -70,8 +70,8 @@ class wxMDIChildFramePtr(wxFramePtr):
     def Activate(self):
         val = mdic.wxMDIChildFrame_Activate(self.this)
         return val
-    def Maximize(self):
-        val = mdic.wxMDIChildFrame_Maximize(self.this)
+    def Maximize(self,arg0):
+        val = mdic.wxMDIChildFrame_Maximize(self.this,arg0)
         return val
     def Restore(self):
         val = mdic.wxMDIChildFrame_Restore(self.this)

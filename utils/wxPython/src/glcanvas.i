@@ -123,16 +123,23 @@ void glNormalPointerEXT(GLenum type, GLsizei stride, GLsizei count, const GLvoid
 void glTexCoordPointerEXT(GLint size, GLenum type, GLsizei stride, GLsizei count, const GLvoid *pointer);
 void glVertexPointerEXT(GLint size, GLenum type, GLsizei stride, GLsizei count, const GLvoid *pointer);
 
+#ifndef __WXGTK__
 /* EXT_color_subtable */
 void glColorSubtableEXT(GLenum target, GLsizei start, GLsizei count, GLenum format, GLenum type, const GLvoid *table);
+#endif
 
 /* EXT_color_table */
 void glColorTableEXT(GLenum target, GLenum internalformat, GLsizei width, GLenum format, GLenum type, const GLvoid *table);
+#ifndef __WXGTK__
 void glCopyColorTableEXT(GLenum target, GLenum internalformat, GLint x, GLint y, GLsizei width);
+#endif
 void glGetColorTableEXT(GLenum target, GLenum format, GLenum type, GLvoid *table);
+#ifndef __WXGTK__
 void glGetColorTableParamaterfvEXT(GLenum target, GLenum pname, GLfloat *params);
 void glGetColorTavleParameterivEXT(GLenum target, GLenum pname, GLint *params);
+#endif
 
+#ifndef __WXGTK__
 /* SGI_compiled_vertex_array */
 void glLockArraysSGI(GLint first, GLsizei count);
 void glUnlockArraysSGI();
@@ -149,7 +156,7 @@ void glIndexMaterialSGI(GLenum face, GLenum mode);
 
 /* WIN_swap_hint */
 void glAddSwapHintRectWin(GLint x, GLint y, GLsizei width, GLsizei height);
-
+#endif
 
 //----------------------------------------------------------------------
 // From GL.H
@@ -199,8 +206,10 @@ enum {
     GL_BACK,
     GL_BACK_LEFT,
     GL_BACK_RIGHT,
+#ifndef __WXGTK__
     GL_BGRA_EXT,
     GL_BGR_EXT,
+#endif
     GL_BITMAP,
     GL_BITMAP_TOKEN,
     GL_BLEND,
@@ -303,7 +312,9 @@ enum {
     GL_DONT_CARE,
     GL_DOUBLE,
     GL_DOUBLEBUFFER,
+#ifndef __WXGTK__
     GL_DOUBLE_EXT,
+#endif
     GL_DRAW_BUFFER,
     GL_DRAW_PIXEL_TOKEN,
     GL_DST_ALPHA,
@@ -324,7 +335,9 @@ enum {
     GL_EXP,
     GL_EXP2,
     GL_EXTENSIONS,
+#ifndef __WXGTK__
     GL_EXT_bgra,
+#endif
     GL_EXT_paletted_texture,
     GL_EXT_vertex_array,
     GL_EYE_LINEAR,
@@ -346,7 +359,6 @@ enum {
     GL_FOG_HINT,
     GL_FOG_INDEX,
     GL_FOG_MODE,
-    GL_FOG_SPECULAR_TEXTURE_WIN,
     GL_FOG_START,
     GL_FRONT,
     GL_FRONT_AND_BACK,
@@ -470,8 +482,6 @@ enum {
     GL_MAX_ATTRIB_STACK_DEPTH,
     GL_MAX_CLIENT_ATTRIB_STACK_DEPTH,
     GL_MAX_CLIP_PLANES,
-    GL_MAX_ELEMENTS_INDICES_WIN,
-    GL_MAX_ELEMENTS_VERTICES_WIN,
     GL_MAX_EVAL_ORDER,
     GL_MAX_LIGHTS,
     GL_MAX_LIST_NESTING,
@@ -530,8 +540,6 @@ enum {
     GL_PACK_SWAP_BYTES,
     GL_PASS_THROUGH_TOKEN,
     GL_PERSPECTIVE_CORRECTION_HINT,
-    GL_PHONG_HINT_WIN,
-    GL_PHONG_WIN,
     GL_PIXEL_MAP_A_TO_A,
     GL_PIXEL_MAP_A_TO_A_SIZE,
     GL_PIXEL_MAP_B_TO_B,
@@ -736,8 +744,6 @@ enum {
     GL_VERTEX_ARRAY_TYPE_EXT,
     GL_VIEWPORT,
     GL_VIEWPORT_BIT,
-    GL_WIN_draw_range_elements,
-    GL_WIN_swap_hint,
     GL_XOR,
     GL_ZERO,
     GL_ZOOM_X,
@@ -1086,7 +1092,12 @@ void glViewport (GLint x, GLint y, GLsizei width, GLsizei height);
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1999/05/01 04:40:57  RD
+// wxPython 2.0b9, second phase (gtk)
+// Added gobs of stuff, see wxPython/README.txt for details
+//
 // Revision 1.1  1999/04/30 03:29:18  RD
+//
 // wxPython 2.0b9, first phase (win32)
 // Added gobs of stuff, see wxPython/README.txt for details
 //

@@ -16,6 +16,9 @@ class wxEvtHandlerPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def ProcessEvent(self,arg0):
+        val = windowsc.wxEvtHandler_ProcessEvent(self.this,arg0.this)
+        return val
     def Connect(self,arg0,arg1,arg2,arg3):
         val = windowsc.wxEvtHandler_Connect(self.this,arg0,arg1,arg2,arg3)
         return val
@@ -306,6 +309,16 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def ConvertDialogSizeToPixels(self,arg0):
         val = windowsc.wxWindow_ConvertDialogSizeToPixels(self.this,arg0.this)
+        val = wxSizePtr(val)
+        val.thisown = 1
+        return val
+    def DLG_PNT(self,arg0):
+        val = windowsc.wxWindow_DLG_PNT(self.this,arg0.this)
+        val = wxPointPtr(val)
+        val.thisown = 1
+        return val
+    def DLG_SZE(self,arg0):
+        val = windowsc.wxWindow_DLG_SZE(self.this,arg0.this)
         val = wxSizePtr(val)
         val.thisown = 1
         return val
@@ -634,8 +647,9 @@ class wxMenuItemPtr :
     def __repr__(self):
         return "<C wxMenuItem instance>"
 class wxMenuItem(wxMenuItemPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self) :
+        self.this = windowsc.new_wxMenuItem()
+        self.thisown = 1
 
 
 

@@ -335,6 +335,7 @@ PYMODULES = $(GENCODEDIR)/wx.py        $(GENCODEDIR)/events.py    \
             $(GENCODEDIR)/windows2.py  $(GENCODEDIR)/cmndlgs.py   \
             $(GENCODEDIR)/frames.py    $(GENCODEDIR)/stattool.py   \
 	    $(GENCODEDIR)/utils.py     $(GENCODEDIR)/windows3.py  \
+	    $(GENCODEDIR)/image.py     $(GENCODEDIR)/glcanvas.py  \
 	    __init__.py
 
 
@@ -350,12 +351,6 @@ $(GENCODEDIR)/%.py : %.i
 $(GENCODEDIR)/wx.cpp $(GENCODEDIR)/wx.py : wx.i my_typemaps.i _defs.i _extras.py
 	swig $(SWIGFLAGS) -o $(GENCODEDIR)/wx.cpp wx.i
 
-ifdef SEPARATE
-$(GENCODEDIR)/utils.cpp $(GENCODEDIR)/utils.py : utils.i my_typemaps.i
-	swig $(SWIGFLAGS) -o $(GENCODEDIR)/utils.cpp utils.i
-else
-$(GENCODEDIR)/utils.cpp     $(GENCODEDIR)/utils.py     : utils.i      my_typemaps.i _defs.i
-endif
 
 # define some dependencies
 $(GENCODEDIR)/windows.cpp   $(GENCODEDIR)/windows.py   : windows.i    my_typemaps.i _defs.i
@@ -370,10 +365,16 @@ $(GENCODEDIR)/controls2.cpp $(GENCODEDIR)/controls2.py : controls2.i  my_typemap
 $(GENCODEDIR)/cmndlgs.cpp   $(GENCODEDIR)/cmndlgs.py   : cmndlgs.i    my_typemaps.i _defs.i
 $(GENCODEDIR)/frames.cpp    $(GENCODEDIR)/frames.py    : frames.i     my_typemaps.i _defs.i
 $(GENCODEDIR)/stattool.cpp  $(GENCODEDIR)/stattool.py  : stattool.i   my_typemaps.i _defs.i
+$(GENCODEDIR)/image.cpp     $(GENCODEDIR)/image.py     : image.i      my_typemaps.i _defs.i
 $(GENCODEDIR)/utils.cpp     $(GENCODEDIR)/utils.py     : utils.i      my_typemaps.i _defs.i
+$(GENCODEDIR)/glcanvas.cpp  $(GENCODEDIR)/glcanvas.py  : glcanvas.i   my_typemaps.i _defs.i
 
 $(GENCODEDIR)/helpers.cpp:
 	ln -s `pwd`/helpers.cpp $@
+
+$(GENCODEDIR)/_glcanvas.cpp:
+	-cp $(WXWIN)/utils/glcanvas/$(GENCODEDIR)/glcanvas.cpp $@
+	-cp $(WXWIN)/utils/glcanvas/$(GENCODEDIR)/glcanvas.h ./glcanvas.h
 
 
 wxInstall :	sharedmods $(PYMODULES)

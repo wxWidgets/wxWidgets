@@ -324,9 +324,12 @@ class wxTreeItemDataPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
-        if self.thisown == 1 :
-            controls2c.delete_wxTreeItemData(self.this)
+    def GetData(self):
+        val = controls2c.wxTreeItemData_GetData(self.this)
+        return val
+    def SetData(self,arg0):
+        val = controls2c.wxTreeItemData_SetData(self.this,arg0)
+        return val
     def GetId(self):
         val = controls2c.wxTreeItemData_GetId(self.this)
         val = wxTreeItemIdPtr(val)
@@ -337,8 +340,8 @@ class wxTreeItemDataPtr :
     def __repr__(self):
         return "<C wxTreeItemData instance>"
 class wxTreeItemData(wxTreeItemDataPtr):
-    def __init__(self) :
-        self.this = controls2c.new_wxTreeItemData()
+    def __init__(self,*args) :
+        self.this = apply(controls2c.new_wxTreeItemData,()+args)
         self.thisown = 1
 
 
@@ -414,10 +417,6 @@ class wxTreeCtrlPtr(wxControlPtr):
     def GetItemSelectedImage(self,arg0):
         val = controls2c.wxTreeCtrl_GetItemSelectedImage(self.this,arg0.this)
         return val
-    def GetItemData(self,arg0):
-        val = controls2c.wxTreeCtrl_GetItemData(self.this,arg0.this)
-        val = wxTreeItemDataPtr(val)
-        return val
     def SetItemText(self,arg0,arg1):
         val = controls2c.wxTreeCtrl_SetItemText(self.this,arg0.this,arg1)
         return val
@@ -427,11 +426,21 @@ class wxTreeCtrlPtr(wxControlPtr):
     def SetItemSelectedImage(self,arg0,arg1):
         val = controls2c.wxTreeCtrl_SetItemSelectedImage(self.this,arg0.this,arg1)
         return val
+    def SetItemHasChildren(self,arg0,*args):
+        val = apply(controls2c.wxTreeCtrl_SetItemHasChildren,(self.this,arg0.this,)+args)
+        return val
+    def GetItemData(self,arg0):
+        val = controls2c.wxTreeCtrl_GetItemData(self.this,arg0.this)
+        val = wxTreeItemDataPtr(val)
+        return val
     def SetItemData(self,arg0,arg1):
         val = controls2c.wxTreeCtrl_SetItemData(self.this,arg0.this,arg1.this)
         return val
-    def SetItemHasChildren(self,arg0,*args):
-        val = apply(controls2c.wxTreeCtrl_SetItemHasChildren,(self.this,arg0.this,)+args)
+    def GetPyData(self,arg0):
+        val = controls2c.wxTreeCtrl_GetPyData(self.this,arg0.this)
+        return val
+    def SetPyData(self,arg0,arg1):
+        val = controls2c.wxTreeCtrl_SetPyData(self.this,arg0.this,arg1)
         return val
     def IsVisible(self,arg0):
         val = controls2c.wxTreeCtrl_IsVisible(self.this,arg0.this)

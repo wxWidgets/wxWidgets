@@ -7,6 +7,7 @@
 *shared*
 
 CCC=c++
+WXWIN=../../..
 GENCODEDIR=gtk
 srcdir=$(GENCODEDIR)
 WX_CONFIG_CFLAGS=`wx-config --cflags`
@@ -27,21 +28,19 @@ MY_LINKCC=$(CCC)
 
 
 ## Pick one of these, or set your own.  This is where the wxPython module
-## should be installed.  It should be a  subdirectory named wxPython.
+## should be installed.  It should be a subdirectory named wxPython.
 TARGETDIR=..
 #TARGETDIR=$(BINLIBDEST)/site-packages/wxPython
 #TARGETDIR=$(BINLIBDEST)/wxPython
 
-SEPARATE=-DSEPARATE
-
-utilsc  utils.cpp \
-	-I. $(WX_CONFIG_CFLAGS) \
-	-DSWIG_GLOBAL -DWXP_WITH_THREAD $(SEPARATE) -Xlinker $(WX_CONFIG_LIBS)
 
 wxc	wx.cpp helpers.cpp windows.cpp events.cpp misc.cpp gdi.cpp \
 	mdi.cpp controls.cpp controls2.cpp windows2.cpp cmndlgs.cpp \
-	frames.cpp stattool.cpp windows3.cpp \
+	frames.cpp stattool.cpp windows3.cpp image.cpp \
+	utils.cpp \
+	## comment out the next line to disable wxGLCanvas
+	_glcanvas.cpp glcanvas.cpp -DWITH_GLCANVAS -lGL -lGLU \
 	-I. $(WX_CONFIG_CFLAGS) -I/usr/local/lib/glib/include \
 	-DSWIG_GLOBAL -DWXP_WITH_THREAD $(SEPARATE) -Xlinker $(WX_CONFIG_LIBS)
 
-
+##-Xlinker -Bstatic

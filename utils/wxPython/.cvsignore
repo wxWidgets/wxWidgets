@@ -1,4 +1,6 @@
 *.zip
+*.pyc
+*.pyo
 .cvsignore
 .emacs.desktop
 __init__.py

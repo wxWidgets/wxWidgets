@@ -73,9 +73,6 @@ class wxConfigPtr :
     def ReadFloat(self,arg0,*args):
         val = apply(utilsc.wxConfig_ReadFloat,(self.this,arg0,)+args)
         return val
-    def SetAppName(self,arg0):
-        val = utilsc.wxConfig_SetAppName(self.this,arg0)
-        return val
     def SetExpandEnvVars(self,*args):
         val = apply(utilsc.wxConfig_SetExpandEnvVars,(self.this,)+args)
         return val
@@ -84,9 +81,6 @@ class wxConfigPtr :
         return val
     def SetRecordDefaults(self,*args):
         val = apply(utilsc.wxConfig_SetRecordDefaults,(self.this,)+args)
-        return val
-    def SetVendorName(self,arg0):
-        val = utilsc.wxConfig_SetVendorName(self.this,arg0)
         return val
     def Write(self,arg0,arg1):
         val = utilsc.wxConfig_Write(self.this,arg0,arg1)

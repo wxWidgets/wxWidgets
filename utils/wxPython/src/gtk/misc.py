@@ -561,6 +561,10 @@ def wxSetCursor(arg0):
     val = miscc.wxSetCursor(arg0.this)
     return val
 
+wxNewId = miscc.wxNewId
+
+wxRegisterId = miscc.wxRegisterId
+
 NewId = miscc.NewId
 
 RegisterId = miscc.RegisterId
@@ -606,6 +610,8 @@ wxIsBusy = miscc.wxIsBusy
 wxNow = miscc.wxNow
 
 wxYield = miscc.wxYield
+
+wxSafeYield = miscc.wxSafeYield
 
 wxGetResource = miscc.wxGetResource
 

@@ -3,7 +3,7 @@ wxPython\*.txt
 wxPython\demo\*.py
 wxPython\demo\bitmaps\*.bmp
 wxPython\demo\bitmaps\*.ico
-
+wxPython\demo\README.txt
 
 
 wxPython\src\*.i
