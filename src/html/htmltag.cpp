@@ -45,7 +45,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
     const wxChar *src = source.c_str();
     int i, tg, pos, stpos;
     int lng = source.Length();
-    wxChar dummy[256];
+    wxChar tagBuffer[256];
 
     m_Cache = NULL;
     m_CacheSize = 0;
@@ -58,17 +58,19 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                 m_Cache = (sCacheItem*) realloc(m_Cache, (m_CacheSize + CACHE_INCREMENT) * sizeof(sCacheItem));
             tg = m_CacheSize++;
             m_Cache[tg].Key = stpos = pos++;
-            dummy[0] = 0; i = 0;
-            while (src[pos] != wxT('>') &&
-                   src[pos] != wxT(' ') && src[pos] != wxT('\r') && 
-                   src[pos] != wxT('\n') && src[pos] != wxT('\t')) {
-                dummy[i] = src[pos++];
-                if ((dummy[i] >= wxT('a')) && (dummy[i] <= wxT('z'))) dummy[i] -= (wxT('a') - wxT('A'));
-                i++;
+
+            int i;
+            for ( i = 0;
+                  pos < lng && i < (int)WXSIZEOF(tagBuffer) - 1 &&
+                  src[pos] != wxT('>') && !wxIsspace(src[pos]);
+                  i++, pos++ )
+            {
+                tagBuffer[i] = wxToupper(src[pos]);
             }
-            dummy[i] = 0;
+            tagBuffer[i] = _T('\0');
+
             m_Cache[tg].Name = new wxChar[i+1];
-            memcpy(m_Cache[tg].Name, dummy, (i+1)*sizeof(wxChar));
+            memcpy(m_Cache[tg].Name, tagBuffer, (i+1)*sizeof(wxChar));
 
             while (src[pos] != wxT('>')) pos++;
 
@@ -76,7 +78,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
                 m_Cache[tg].End1 = m_Cache[tg].End2 = -2;
                 // find matching begin tag:
                 for (i = tg; i >= 0; i--)
-                    if ((m_Cache[i].End1 == -1) && (wxStrcmp(m_Cache[i].Name, dummy+1) == 0)) {
+                    if ((m_Cache[i].End1 == -1) && (wxStrcmp(m_Cache[i].Name, tagBuffer+1) == 0)) {
                         m_Cache[i].End1 = stpos;
                         m_Cache[i].End2 = pos + 1;
                         break;
