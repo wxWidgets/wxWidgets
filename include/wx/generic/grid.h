@@ -195,46 +195,6 @@ class wxGridStringTable : public wxGridTableBase
 
 
 
-#if 0
-
-// ------ sketchy experimental code to create a grid table for a given type
-//
-//    This doesn't work at the moment !!
-//
-
-#define _WX_DECLARE_GRIDTABLE( T, name )                        \
-                                                                \
-                                                                \
-WX_DECLARE_ARRAY( T, T##Row )                                   \
-WX_DECLARE_OBJARRAY( T##Row, T##Array )                         \
-                                                                \
-class WXDLLEXPORT name : public wxGridTableBase                 \
-{                                                               \
-    T##Array m_data;                                            \
-    int m_numRows;                                              \
-    int m_numCols;                                              \
-                                                                \
-  public:                                                       \
-    name() { }                                                  \
-    name( int numRows, int numCols );                           \
-    ~name();                                                    \
-                                                                \
-    wxString GetValue( int row, int col );                      \
-    wxString SetValue( int row, int col, const wxString& s );   \
-                                                                \
-    DECLARE_DYNAMIC_CLASS( name )                               \
-}
-
-
-#define WX_DECLARE_GRIDTABLE(T, name)    \
-  typedef T name##var;                   \
-  _WX_DECLARE_GRIDTABLE(name##var, name)
-
-
-#endif  // if 0
-
-
-
 //////////////////////////////////////////////////////////////////////
 //
 //  Grid view classes
@@ -411,7 +371,6 @@ class wxGrid : public wxPanel
     bool       m_cellEditCtrlEnabled;
     wxWindow*  m_topEditCtrl;
     bool       m_topEditCtrlEnabled;
-
     
     // ------ internal init and update functions
     //
