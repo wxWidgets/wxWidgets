@@ -490,9 +490,8 @@ WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
             break;
 
         case WM_SIZE:
-            // as we don't (usually) resize the MDI client to exactly fit the
-            // client area (we put it below the toolbar, above statusbar &c),
-            // we should not pass this one to DefFrameProc
+            // though we don't (usually) resize the MDI client to exactly fit the
+            // client area we need to pass this one to DefFrameProc to allow the children to show
             break;
     }
 
