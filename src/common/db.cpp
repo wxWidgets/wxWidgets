@@ -35,6 +35,7 @@
 
 #include "wx/wxprec.h"
 
+
 // Use this line for wxWindows v1.x
 //#include "wx_ver.h"
 // Use this line for wxWindows v2.x
@@ -2463,8 +2464,8 @@ wxDBMS wxDb::Dbms(void)
  */
 {
     wxChar baseName[25+1];
-
     wxStrncpy(baseName,dbInf.dbmsName,25);
+  
     if (!wxStricmp(dbInf.dbmsName,"Adaptive Server Anywhere"))
         return(dbmsSYBASE_ASA);
     if (!wxStricmp(dbInf.dbmsName,"SQL Server"))  // Sybase Adaptive Server
@@ -2480,6 +2481,7 @@ wxDBMS wxDb::Dbms(void)
     if (!wxStricmp(baseName,"Informix"))
         return(dbmsINFORMIX);
 
+
     baseName[6] = 0;
     if (!wxStricmp(baseName,"Oracle"))
         return(dbmsORACLE);
@@ -2487,6 +2489,8 @@ wxDBMS wxDb::Dbms(void)
         return(dbmsACCESS);
     if (!wxStricmp(dbInf.dbmsName,"MySQL"))
         return(dbmsMY_SQL);
+    if (!wxStricmp(baseName,"Sybase"))             
+      return(dbmsSYBASE_ASA);
 
     baseName[5] = 0;
     if (!wxStricmp(baseName,"DBASE"))

@@ -559,8 +559,7 @@ bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const char *
         return(FALSE);
 
     // Execute the SQL SELECT statement
-    int retcode;
-
+    int retcode;   
     retcode = SQLExecDirect(hstmt, (UCHAR FAR *) (queryType == DB_SELECT_STATEMENT ? pSqlStmt : sqlStmt), SQL_NTS);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO)
         return(pDb->DispAllErrors(henv, hdbc, hstmt));
@@ -1077,11 +1076,12 @@ bool wxDbTable::DropTable()
     if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt.c_str(), SQL_NTS) != SQL_SUCCESS)
     {
         // Check for "Base table not found" error and ignore
-        pDb->GetNextError(henv, hdbc, hstmt);
+        pDb->GetNextError(henv, hdbc, hstmt);	
         if (wxStrcmp(pDb->sqlState,"S0002"))  // "Base table not found"
         {
             // Check for product specific error codes
             if (!((pDb->Dbms() == dbmsSYBASE_ASA && !wxStrcmp(pDb->sqlState,"42000"))   ||  // 5.x (and lower?)
+		  (pDb->Dbms() == dbmsSYBASE_ASA && !wxStrcmp(pDb->sqlState,"37000"))   ||
                   (pDb->Dbms() == dbmsMY_SQL     && !wxStrcmp(pDb->sqlState,"S1000"))   ||  // untested
                   (pDb->Dbms() == dbmsPOSTGRES   && !wxStrcmp(pDb->sqlState,"08S01"))))     // untested
             {
