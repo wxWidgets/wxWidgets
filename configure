@@ -42870,7 +42870,9 @@ echo "$as_me: executing $ac_dest commands" >&6;}
             if test -f wx-config; then
                 chmod +x wx-config
                 mv -f wx-config lib/wx/config/${WXCONFIG_DATA_FILE}
-                ( cd lib/wx/config ; ${LN_S} ${WXCONFIG_DATA_FILE} ${TOOLCHAIN_NAME} )
+                ( cd lib/wx/config ;
+                  rm -f ${TOOLCHAIN_NAME}
+                  ${LN_S} ${WXCONFIG_DATA_FILE} ${TOOLCHAIN_NAME} )
                 rm -f wx${TOOLCHAIN_NAME}-config
                 ${LN_S} wx-config wx${TOOLCHAIN_NAME}-config
             fi
