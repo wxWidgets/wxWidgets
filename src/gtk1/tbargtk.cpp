@@ -354,6 +354,7 @@ bool wxToolBar::AddControl(wxControl *control)
     
     wxToolBarTool *tool = new wxToolBarTool(control);
     
+    tool -> m_item = NULL;
     gtk_toolbar_append_widget( m_toolbar, control->m_widget, (const char *) NULL, (const char *) NULL );
     
     GtkRequisition req;
