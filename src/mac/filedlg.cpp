@@ -19,6 +19,7 @@
 #include "wx/dialog.h"
 #include "wx/filedlg.h"
 #include "wx/intl.h"
+#include "wx/tokenzr.h"
 
 #ifndef __DARWIN__
   #include "PLStringFuncs.h"
@@ -269,7 +270,7 @@ void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
         current += filter2.GetChar(i) ;
        }
     }
-    if ( filterIndex > 0 )
+//    if ( filterIndex > 0 )
     {
       wxASSERT_MSG( !isName , "incorrect format of format string" ) ;
       myData->extensions[filterIndex] = current.MakeUpper() ;
@@ -300,8 +301,6 @@ void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
 	}
 
 }
-
-#if !TARGET_CARBON
 void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const char *filter , FileFilterYDUPP fileFilter, StandardFileReply *theSFR )
 {
 	Point 				thePt;
@@ -313,6 +312,7 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 	ModalFilterYDUPP	myModalFilterUPP;
 	OSErr				err;
 	SFTypeList			types ;
+	
 	
 	// presumably we're running System 7 or later so CustomGetFile is
 	// available
@@ -326,6 +326,8 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 	MakeUserDataRec( &myData , filter ) ;
 	// display the dialog
 
+#if !TARGET_CARBON
+	
 	dlgHookUPP = NULL ;
 //	dlgHookUPP = NewDlgHookYDProc(SFGetFolderDialogHook);
 	myModalFilterUPP = NewModalFilterYDProc(SFGetFolderModalDialogFilter);
@@ -348,7 +350,8 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 					
 	DisposeRoutineDescriptor(dlgHookUPP);
 	DisposeRoutineDescriptor(myModalFilterUPP);
-
+#else
+#endif	
 	// if cancel wasn't pressed and no fatal error occurred...
 	
 	if (theSFR->sfGood)
@@ -402,7 +405,6 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 		}
 	}
 }
-#endif
 
 static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecPtr data)
 {
@@ -420,27 +422,30 @@ static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecP
     if ( data->numfilters > 0 )
     {
 	//for ( int i = 0 ; i < data->numfilters ; ++i )
-	int i = data->currentfilter ;
-	if ( data->extensions[i].Right(2) == ".*" )
-	    return true ;
+	    int i = data->currentfilter ;
+	    if ( data->extensions[i].Right(2) == ".*" )
+	      return true ;
 	
-	{
-	    if ( type == data->filtermactypes[i] )
-		return true ;
+	    {
+	      if ( type == data->filtermactypes[i] )
+		      return true ;
 	    
-	    wxString extension = data->extensions[i] ;
-	    if ( extension.GetChar(0) == '*' )
-		extension = extension.Mid(1) ;
-	    
-	    if ( file.Len() >= extension.Len() && extension == file.Right(extension.Len() ) )
-		return true ;
-	}
-	return false ;
+	      wxStringTokenizer tokenizer( data->extensions[i] , ";" ) ;
+	      while( tokenizer.HasMoreTokens() )
+	      {
+	        wxString extension = tokenizer.GetNextToken() ;
+  	      if ( extension.GetChar(0) == '*' )
+  		      extension = extension.Mid(1) ;
+  	    
+  	      if ( file.Len() >= extension.Len() && extension == file.Right(extension.Len() ) )
+  		      return true ;
+		    }
+	    }
+	    return false ;
     }
     return true ;
 }
 
-#if !TARGET_CARBON
 static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dataPtr)
 {	
 	OpenUserDataRecPtr data = (OpenUserDataRecPtr) dataPtr ;
@@ -465,7 +470,6 @@ static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dat
 		
 	return false ;
 }
-#endif
 
 // end wxmac
 
@@ -561,11 +565,7 @@ pascal Boolean CrossPlatformFilterCallback (
 		if (theItem->descriptorType == typeFSS && !theInfo->isFolder)
 		{
 		  FSSpec	spec;
-#if TARGET_CARBON
-		  ::AEGetDescData(theItem, &spec, sizeof(FSSpec) ) ;
-#else
-		  memcpy( &spec , (*theItem->dataHandle) , sizeof(FSSpec) ) ;
-#endif
+		  memcpy( &spec , *theItem->dataHandle , sizeof(FSSpec) ) ;
 		  display = CheckFile( spec.name , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
 		}
 	}
@@ -614,10 +614,15 @@ int wxFileDialog::ShowModal()
 
 		StandardFileReply	reply ;
 		FileFilterYDUPP crossPlatformFileFilterUPP = 0 ;
+		#if !TARGET_CARBON
 		crossPlatformFileFilterUPP = 
 			NewFileFilterYDProc(CrossPlatformFileFilter);
+		#endif
+
 		ExtendedOpenFile( prompt , path , m_wildCard , crossPlatformFileFilterUPP, &reply);
+		#if !TARGET_CARBON
 		DisposeFileFilterYDUPP(crossPlatformFileFilterUPP);
+		#endif
 		if ( reply.sfGood == false )
 		{
 			m_path = "" ;
@@ -625,7 +630,7 @@ int wxFileDialog::ShowModal()
 		}
 		else
 		{
-			m_path = wxMacFSSpec2MacFilename( &reply.sfFile ) ;
+			m_path = wxMacFSSpec2UnixFilename( &reply.sfFile ) ;
 			return wxID_OK ;
 		}
 	}
@@ -762,12 +767,13 @@ int wxFileDialog::ShowModal()
 		
 			FSSpec  outFileSpec ;
 			AEDesc specDesc ;
+			AEKeyword keyWord ;
 			
 			long count ;
 			::AECountItems( &mNavReply.selection , &count ) ;
 			for ( long i = 1 ; i <= count ; ++i )
 			{
-				OSErr err = ::AEGetNthDesc( &mNavReply.selection , i , typeFSS, NULL , &specDesc);
+				OSErr err = ::AEGetNthDesc( &mNavReply.selection , i , typeFSS, &keyWord , &specDesc);
 				if ( err != noErr ) {
 					m_path = "" ;
 					return wxID_CANCEL ;
@@ -787,7 +793,7 @@ int wxFileDialog::ShowModal()
 	         m_path = m_paths[ 0 ] ;
 	         m_fileName = wxFileNameFromPath(m_path);
 	         m_dir = wxPathOnly(m_path);
-            
+       NavDisposeReply( &mNavReply ) ;
 			return wxID_OK ;
 		}
 		return wxID_CANCEL;
