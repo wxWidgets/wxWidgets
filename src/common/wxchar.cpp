@@ -653,9 +653,19 @@ int vwscanf(const wxChar *format, va_list argptr)
 
 int vswscanf(const wxChar *ws, const wxChar *format, va_list argptr)
 {
-    wxFAIL_MSG( _T("TODO") );
-
-    return -1;
+    // The best we can do without proper Unicode support in glibc is to
+    // convert the strings into MB representation and run ANSI version
+    // of the function. This doesn't work with %c and %s because of difference
+    // in size of char and wchar_t, though.
+    
+    wxCHECK_MSG( wxStrstr(format, _T("%s")) == NULL, -1,
+                 _T("incomplete vswscanf implementation doesn't allow %s") );
+    wxCHECK_MSG( wxStrstr(format, _T("%c")) == NULL, -1,
+                 _T("incomplete vswscanf implementation doesn't allow %c") );
+    
+    va_list argcopy;
+    wxVaCopy(argcopy, argptr);
+    return vsscanf(wxConvLibc.cWX2MB(ws), wxConvLibc.cWX2MB(format), argcopy);
 }
 
 int vfwscanf(FILE *stream, const wxChar *format, va_list argptr)
