@@ -1,33 +1,25 @@
 \section{Changes since 2.4.x}\label{changes}
 
-Listed here are the depreciated and incompatible changes made to wxWidgets.
+Listed here are the deprecated and incompatible changes made to wxWidgets.
 
 For other changes (such as additional features, bug fixes, etc.) see the changes.txt file located in the docs directory of your wxWidgets directory.
 
+\subsection{Incompatible changes since 2.4.x}
 
-
-\subsection{Incompatible changes since 2.4.x}\label{incompatiblesince24}
-
-\subsubsection{wxEvent and its derivatives loosing public variable members}\label{wxeventpublictoprotected}
+\wxheading{wxEvent and its derivatives losing public variable members}
 
 \helpref{wxEvent}{wxevent} and its \helpref{derivatives}{eventhandlingoverview} do not have their public variable members public anymore.
-Use the Get/Set accessors as you always should have.
+Please use Get/Set accessors.
 
+\wxheading{New window repainting behaviour}
 
+Windows are no longer fully repainted when resized; use the new style \windowstyle{wxFULL\_REPAINT\_ON\_RESIZE} to force this (\windowstyle{wxNO\_FULL\_REPAINT\_ON\_RESIZE} still exists but doesn't do anything any more, this behaviour is default now).
 
-\subsubsection{New window repainting behaviour}\label{newwindowrepainting}
-
-Windows are no longer fully repainted when resized, use new style \windowstyle{wxFULL\_REPAINT\_ON\_RESIZE} to force this (\windowstyle{wxNO\_FULL\_REPAINT\_ON\_RESIZE} still exists but doesn't do anything any more, this behaviour is default now).
-
-
-
-\subsubsection{Window class member changes}\label{windowclassmemberchanges}
+\wxheading{Window class member changes}
 
 wxWindow::m\_font and m\_backgroundColour/m\_foregroundColour are no longer always set, use \helpref{GetFont()}{wxwindowgetfont}, \helpref{GetBack}{wxwindowgetbackgroundcolour}/\helpref{ForegroundColour()}{wxwindowgetforegroundcolour} to access them, and they will be dynamically determined if necessary.
 
-
-
-\subsubsection{Sizers Internal Overhaul}\label{sizersinternaloverhaul}
+\wxheading{Sizers Internal Overhaul}
 
 \helpref{The Sizers}{sizeroverview} have had some fundamental internal changes in the 2.5.2 and 2.5.3 releases intended to make them do more of the "Right Thing" but also be as backwards compatible as possible.  First a bit about how things used to work:
 
@@ -116,8 +108,7 @@ sizer->Add(win);
 \end{itemize}
 
 
-
-\subsubsection{Massive wxURL Rewrite}\label{wxurlrewrite}
+\wxheading{Massive wxURL Rewrite}
 
 \helpref{wxURL}{wxurl} has undergone some radical changes.
 
@@ -132,9 +123,7 @@ sizer->Add(win);
 \item ConvertFromURI has been replaced by \helpref{wxURI::Unescape}{wxuriunescape}.
 \end{itemize}
 
-
-
-\subsubsection{Less drastic incompatible changes since 2.4.x}\label{24incompatiblelessdrastic}
+\wxheading{Less drastic incompatible changes since 2.4.x}
 
 - no initialization/cleanup can be done in \helpref{wxApp}{wxappctor}/\helpref{~wxApp}{wxappdtor} because they are
   now called much earlier/later than before; please move any exiting code
@@ -220,10 +209,9 @@ sizer->Add(win);
 - wxSystemSettings::GetSystem*() members deprecated and replaced with wxSystemSettings::Get*().
 
 
+\subsection{Depreciated changes since 2.4.x}
 
-\subsection{Depreciated changes since 2.4.x}\label{depreciatedsince24}
-
-- wxURL::GetInputStream() and similar functionality has been depreciated in
+- wxURL::GetInputStream() and similar functionality has been deprecated in
   favor of other ways of connecting, such as though sockets or wxFileSystem.
 
 - wxDocManager::GetNoHistoryFiles() renamed to \helpref{GetHistoryFilesCount()}{wxdocmanagergethistoryfilescount}
@@ -277,4 +265,5 @@ sizer->Add(win);
 
 - obsolete and not used wxUSE\_GENERIC\_DIALOGS\_IN\_MSW has been removed
 
-- wxDbTable::wxDbTable with wxChar* deprecated, same with wxString& instead
+- wxDbTable::wxDbTable with wxChar* deprecated, same with wxString& instead.
+
