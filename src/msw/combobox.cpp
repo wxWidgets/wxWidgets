@@ -213,11 +213,12 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
     return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
 }
 
-WXHBRUSH wxComboBox::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-                               WXUINT WXUNUSED(message),
-                               WXWPARAM WXUNUSED(wParam),
-                               WXLPARAM WXUNUSED(lParam)
-    )
+WXHBRUSH wxComboBox::OnCtlColor(WXHDC pDC,
+                                WXHWND WXUNUSED(pWnd),
+                                WXUINT WXUNUSED(nCtlColor),
+                                WXUINT WXUNUSED(message),
+                                WXWPARAM WXUNUSED(wParam),
+                                WXLPARAM WXUNUSED(lParam))
 {
     HDC hdc = (HDC)pDC;
     wxColour colBack = GetBackgroundColour();
@@ -234,8 +235,29 @@ WXHBRUSH wxComboBox::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSE
 }
 
 // ----------------------------------------------------------------------------
-// wxComboBox
+// wxComboBox callbacks
 // ----------------------------------------------------------------------------
+
+long wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    // handle WM_CTLCOLOR messages from our EDIT control to be able to set its
+    // colour correctly (to be the same as our own one)
+    switch ( nMsg )
+    {
+        // we have to handle both: one for the normal case and the other for
+        // wxCB_READONLY
+        case WM_CTLCOLOREDIT:
+        case WM_CTLCOLORSTATIC:
+            WXWORD nCtlColor;
+            WXHDC hdc;
+            WXHWND hwnd;
+            UnpackCtlColor(wParam, lParam, &nCtlColor, &hdc, &hwnd);
+
+            return OnCtlColor(hdc, hwnd, nCtlColor, nMsg, wParam, lParam);
+    }
+
+    return wxChoice::MSWWindowProc(nMsg, wParam, lParam);
+}
 
 bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
 {
