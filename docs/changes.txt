@@ -208,6 +208,7 @@ All:
 - basic UDP sockets support (Lenny Maiorani)
 - fixed wxDateTime::GetWeekDayName() for some dates (Daniel Kaps)
 - support for comma in contrib gizmo wxLEDNumberCtrl (Grant Likely)
+- deprecated wxDateTime::SetToTheWeek() in favour of SetToWeekOfYear()
 
 All (GUI):
 
