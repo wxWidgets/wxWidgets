@@ -197,6 +197,43 @@ class wxIcon(wxIconPtr):
 
 
 
+class wxIconBundlePtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,gdic=gdic):
+        if self.thisown == 1 :
+            gdic.delete_wxIconBundle(self)
+    def AddIcon(self, *_args, **_kwargs):
+        val = apply(gdic.wxIconBundle_AddIcon,(self,) + _args, _kwargs)
+        return val
+    def AddIconFromFile(self, *_args, **_kwargs):
+        val = apply(gdic.wxIconBundle_AddIconFromFile,(self,) + _args, _kwargs)
+        return val
+    def GetIcon(self, *_args, **_kwargs):
+        val = apply(gdic.wxIconBundle_GetIcon,(self,) + _args, _kwargs)
+        if val: val = wxIconPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxIconBundle instance at %s>" % (self.this,)
+class wxIconBundle(wxIconBundlePtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gdic.new_wxIconBundle,_args,_kwargs)
+        self.thisown = 1
+
+
+
+def wxIconBundleFromFile(*_args,**_kwargs):
+    val = wxIconBundlePtr(apply(gdic.new_wxIconBundleFromFile,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+def wxIconBundleFromIcon(*_args,**_kwargs):
+    val = wxIconBundlePtr(apply(gdic.new_wxIconBundleFromIcon,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+
 class wxCursorPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this

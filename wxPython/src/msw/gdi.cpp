@@ -62,6 +62,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/fontmap.h>
 #include <wx/fontutil.h>
 #include <wx/dcbuffer.h>
+#include <wx/iconbndl.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -2758,6 +2759,254 @@ static PyObject *_wrap_wxIcon_CopyFromBitmap(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define new_wxIconBundle() (new wxIconBundle())
+static PyObject *_wrap_new_wxIconBundle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIconBundle * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxIconBundle",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxIconBundle *)new_wxIconBundle();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxIconBundle_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define new_wxIconBundleFromFile(_swigarg0,_swigarg1) (new wxIconBundle(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxIconBundleFromFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIconBundle * _result;
+    wxString * _arg0;
+    long  _arg1;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "file","type", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:new_wxIconBundleFromFile",_kwnames,&_obj0,&_arg1)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxIconBundle *)new_wxIconBundleFromFile(*_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxIconBundle_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
+#define new_wxIconBundleFromIcon(_swigarg0) (new wxIconBundle(_swigarg0))
+static PyObject *_wrap_new_wxIconBundleFromIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIconBundle * _result;
+    wxIcon * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "icon", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxIconBundleFromIcon",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxIconBundleFromIcon. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxIconBundle *)new_wxIconBundleFromIcon(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxIconBundle_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxIconBundle(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxIconBundle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIconBundle * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxIconBundle",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIconBundle_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxIconBundle. Expected _wxIconBundle_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete_wxIconBundle(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxIconBundle_AddIcon(_swigobj,_swigarg0)  (_swigobj->AddIcon(_swigarg0))
+static PyObject *_wrap_wxIconBundle_AddIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIconBundle * _arg0;
+    wxIcon * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","icon", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxIconBundle_AddIcon",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIconBundle_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIconBundle_AddIcon. Expected _wxIconBundle_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxIconBundle_AddIcon. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxIconBundle_AddIcon(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxIconBundle_AddIconFromFile(_swigobj,_swigarg0,_swigarg1)  (_swigobj->AddIcon(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxIconBundle_AddIconFromFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIconBundle * _arg0;
+    wxString * _arg1;
+    long  _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","file","type", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOl:wxIconBundle_AddIconFromFile",_kwnames,&_argo0,&_obj1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIconBundle_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIconBundle_AddIconFromFile. Expected _wxIconBundle_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxIconBundle_AddIconFromFile(_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxIconBundle_GetIcon(_swigobj,_swigarg0)  (_swigobj->GetIcon(_swigarg0))
+static PyObject *_wrap_wxIconBundle_GetIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxIcon * _result;
+    wxIconBundle * _arg0;
+    wxSize * _arg1;
+    PyObject * _argo0 = 0;
+    wxSize  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","size", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxIconBundle_GetIcon",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIconBundle_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxIconBundle_GetIcon. Expected _wxIconBundle_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxSize_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxIcon & _result_ref = wxIconBundle_GetIcon(_arg0,*_arg1);
+    _result = (wxIcon *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxIcon_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
     return _resultobj;
 }
 
@@ -13340,6 +13589,13 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxCursor_GetHandle", (PyCFunction) _wrap_wxCursor_GetHandle, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxCursor", (PyCFunction) _wrap_delete_wxCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxCursor", (PyCFunction) _wrap_new_wxCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIconBundle_GetIcon", (PyCFunction) _wrap_wxIconBundle_GetIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIconBundle_AddIconFromFile", (PyCFunction) _wrap_wxIconBundle_AddIconFromFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxIconBundle_AddIcon", (PyCFunction) _wrap_wxIconBundle_AddIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxIconBundle", (PyCFunction) _wrap_delete_wxIconBundle, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxIconBundleFromIcon", (PyCFunction) _wrap_new_wxIconBundleFromIcon, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxIconBundleFromFile", (PyCFunction) _wrap_new_wxIconBundleFromFile, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxIconBundle", (PyCFunction) _wrap_new_wxIconBundle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIcon_CopyFromBitmap", (PyCFunction) _wrap_wxIcon_CopyFromBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIcon_SetSize", (PyCFunction) _wrap_wxIcon_SetSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIcon_SetDepth", (PyCFunction) _wrap_wxIcon_SetDepth, METH_VARARGS | METH_KEYWORDS },

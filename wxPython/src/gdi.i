@@ -21,6 +21,7 @@
 #include <wx/fontmap.h>
 #include <wx/fontutil.h>
 #include <wx/dcbuffer.h>
+#include <wx/iconbndl.h>
 %}
 
 //----------------------------------------------------------------------
@@ -265,6 +266,38 @@ public:
         return icon;
     }
 %}
+
+//---------------------------------------------------------------------------
+
+class wxIconBundle
+{
+public:
+    // default constructor
+    wxIconBundle();
+
+    // initializes the bundle with the icon(s) found in the file
+    %name(wxIconBundleFromFile) wxIconBundle( const wxString& file, long type );
+
+    // initializes the bundle with a single icon
+    %name(wxIconBundleFromIcon)wxIconBundle( const wxIcon& icon );
+
+    ~wxIconBundle();
+
+    // adds the icon to the collection, if the collection already
+    // contains an icon with the same width and height, it is
+    // replaced
+    void AddIcon( const wxIcon& icon );
+
+    // adds all the icons contained in the file to the collection,
+    // if the collection already contains icons with the same
+    // width and height, they are replaced
+    %name(AddIconFromFile)void AddIcon( const wxString& file, long type );
+
+    // returns the icon with the given size; if no such icon exists,
+    // returns the icon with size wxSYS_ICON_[XY]; if no such icon exists,
+    // returns the first icon in the bundle
+    const wxIcon& GetIcon( const wxSize& size ) const;
+};
 
 //---------------------------------------------------------------------------
 
