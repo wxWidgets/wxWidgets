@@ -434,7 +434,7 @@ void EditorFrame::RefreshPreview(wxXmlNode *node)
     if (node->GetName() == "dialog")
     {
         wxDialog *dlg = new wxDialog;
-        if (res->LoadDialog(dlg, this, node->GetPropVal("name", "-1")))
+        if (res->LoadDialog(dlg, NULL, node->GetPropVal("name", "-1")))
         {
             if (pos.x != -1) dlg->Move(pos);
             dlg->Show(TRUE);
@@ -476,6 +476,18 @@ void EditorFrame::RefreshPreview(wxXmlNode *node)
             m_Preview->Show(TRUE);
             m_Preview->SetFocus();
         }
+    }
+
+    else if (node->GetName() == "toolbar")
+    {
+        wxFrame *frame = new wxFrame(NULL, -1, _("Menu preview"), pos, size);
+        frame->SetToolBar(res->LoadToolBar(frame, node->GetPropVal("name", "-1")));
+        frame->CreateStatusBar();
+        if (m_Preview) m_Preview->Close(TRUE);
+        m_Preview = frame;
+        m_Preview->SetName("preview_window");
+        m_Preview->Show(TRUE);
+        m_Preview->SetFocus();
     }
     
     delete res;
