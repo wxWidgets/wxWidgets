@@ -835,7 +835,9 @@ bool wxThread::IsMain()
 
 void wxThread::Yield()
 {
+#ifdef HAVE_SCHED_YIELD
     sched_yield();
+#endif
 }
 
 void wxThread::Sleep(unsigned long milliseconds)
