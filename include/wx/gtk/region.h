@@ -53,7 +53,7 @@ class wxRegion : public wxGDIObject
 {
 public:
     wxRegion() { }
-
+    
     wxRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
     {
         InitRect(x, y, w, h);
@@ -115,6 +115,10 @@ public:
     wxRegionContain Contains(const wxRect& rect) const;
 
 public:
+    // Init with GdkRegion, set ref count to 2 so that
+    // the C++ class will not destroy the region!
+    wxRegion( GdkRegion *region );
+    
     GdkRegion *GetRegion() const;
 
 protected:

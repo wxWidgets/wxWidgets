@@ -201,8 +201,11 @@ public:
     GdkICAttr           *m_icattr;
 #endif
 
+#ifndef __WXGTK20__
     // The area to be cleared (and not just refreshed)
+    // We cannot make this distinction under GTK 2.0.
     wxRegion             m_clearRegion;
+#endif
 
     // scrolling stuff
     GtkAdjustment       *m_hAdjust,*m_vAdjust;
