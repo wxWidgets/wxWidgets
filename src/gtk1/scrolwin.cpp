@@ -325,10 +325,8 @@ void wxScrolledWindow::DoSetVirtualSize( int x, int y )
     wxPanel::DoSetVirtualSize( x, y );
     AdjustScrollbars();
 
-#if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
         Layout();
-#endif
 }
 
 /*

@@ -353,7 +353,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         rect.y,
         rect.width,
         rect.height,
-        isVert ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL
+        !isVert ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL
     );
 #else // GTK+ 1.x
 
