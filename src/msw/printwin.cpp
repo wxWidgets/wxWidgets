@@ -322,7 +322,7 @@ bool wxWindowsPrinter::Setup(wxWindow *WXUNUSED(parent))
 
     return (ret == wxID_OK);
 #else
-    return wxID_CANCEL;
+    return false;
 #endif
 }
 
