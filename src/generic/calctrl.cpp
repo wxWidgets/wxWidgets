@@ -288,12 +288,12 @@ void wxCalendarCtrl::ShowCurrentControls()
 
 wxControl *wxCalendarCtrl::GetMonthControl() const
 {
-    return AllowMonthChange() ? m_comboMonth : m_staticMonth;
+    return AllowMonthChange() ? (wxControl *)m_comboMonth : (wxControl *)m_staticMonth;
 }
 
 wxControl *wxCalendarCtrl::GetYearControl() const
 {
-    return AllowYearChange() ? m_spinYear : m_staticYear;
+    return AllowYearChange() ? (wxControl *)m_spinYear : (wxControl *)m_staticYear;
 }
 
 void wxCalendarCtrl::EnableYearChange(bool enable)
