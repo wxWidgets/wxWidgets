@@ -24,6 +24,7 @@
     #include "wx/dc.h"
     #include "wx/scrolwin.h"
     #include "wx/timer.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #include "wx/html/forcelnk.h"
@@ -448,7 +449,17 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
     if ( m_window->GetClientRect().Intersects(rect) && 
          m_gifDecoder->ConvertToImage(&img) )
     {
-        SetImage(img);
+        if ( (int)m_gifDecoder->GetWidth() != m_Width ||
+             (int)m_gifDecoder->GetHeight() != m_Height ||
+             m_gifDecoder->GetLeft() != 0 || m_gifDecoder->GetTop() != 0 )
+        {
+            wxBitmap bmp(img);
+            wxMemoryDC dc;
+            dc.SelectObject(*m_bitmap);
+            dc.DrawBitmap(bmp, m_gifDecoder->GetLeft(), m_gifDecoder->GetTop());
+        }
+        else
+            SetImage(img);
         m_window->Refresh(img.HasMask(), &rect);
     }
 
