@@ -9,6 +9,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/*
+    TODO:
+
+    1. typing in the text should select the string in listbox
+    2. scrollbars in lsitbox are unusable
+    3. the initially selected item is not selected
+ */
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -129,22 +137,6 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// wxComboLboxEventHandler forwards wxEVT_COMMAND_LISTBOX_SELECTED from the
-// listbox to the combo
-// ----------------------------------------------------------------------------
-
-class wxComboLboxEventHandler : public wxEvtHandler
-{
-public:
-    wxComboLboxEventHandler(wxComboControl *combo) { m_combo = combo; }
-
-    virtual bool ProcessEvent(wxEvent& event);
-
-private:
-    wxComboControl *m_combo;
-};
-
-// ----------------------------------------------------------------------------
 // event tables and such
 // ----------------------------------------------------------------------------
 
@@ -220,7 +212,6 @@ bool wxComboControl::Create(wxWindow *parent,
     // create the popup window immediately here to allow creating the controls
     // with parent == GetPopupWindow() from the derived class ctor
     m_winPopup = new wxPopupComboWindow(this);
-    m_winPopup->Hide();
 
     // have to disable this window to avoid interfering it with message
     // processing to the text and the button... but pretend it is enabled to
@@ -317,8 +308,8 @@ void wxComboControl::ShowPopup()
     control->SetSize(0, 0, sizePopup.x, sizePopup.y);
 
     // show it
+    m_winPopup->Popup(m_text);
     m_popup->SetSelection(m_text->GetValue());
-    m_winPopup->Popup();
 }
 
 void wxComboControl::HidePopup()
@@ -372,25 +363,6 @@ void wxComboTextCtrl::OnText(wxCommandEvent& event)
 }
 
 // ----------------------------------------------------------------------------
-// wxComboLboxEventHandler
-// ----------------------------------------------------------------------------
-
-bool wxComboLboxEventHandler::ProcessEvent(wxEvent& event)
-{
-    if ( event.GetEventType() == wxEVT_COMMAND_LISTBOX_SELECTED )
-    {
-        // all fields are already filled by the listbox, just change the event
-        // type and send it to the combo
-        wxCommandEvent event2 = (wxCommandEvent &)event;
-        event2.SetEventType(wxEVT_COMMAND_COMBOBOX_SELECTED);
-
-        return m_combo->ProcessEvent(event2);
-    }
-
-    return wxEvtHandler::ProcessEvent(event);
-}
-
-// ----------------------------------------------------------------------------
 // wxComboListBox
 // ----------------------------------------------------------------------------
 
@@ -417,6 +389,15 @@ bool wxComboListBox::SetSelection(const wxString& value)
 
 void wxComboListBox::OnSelect(wxCommandEvent& event)
 {
+    // first let the user code have the event
+
+    // all fields are already filled by the listbox, just change the event
+    // type and send it to the combo
+    wxCommandEvent event2 = (wxCommandEvent &)event;
+    event2.SetEventType(wxEVT_COMMAND_COMBOBOX_SELECTED);
+    m_combo->ProcessEvent(event2);
+
+    // next update the combo and close the listbox
     m_combo->OnSelect(event.GetString());
 }
 
@@ -453,7 +434,6 @@ bool wxComboBox::Create(wxWindow *parent,
     wxComboListBox *combolbox = new wxComboListBox(this);
     m_lbox = combolbox;
     m_lbox->Set(n, choices);
-    m_lbox->PushEventHandler(new wxComboLboxEventHandler(this));
 
     SetPopupControl(combolbox);
 
@@ -462,7 +442,6 @@ bool wxComboBox::Create(wxWindow *parent,
 
 wxComboBox::~wxComboBox()
 {
-    m_lbox->PopEventHandler(TRUE /* delete it */);
 }
 
 // ----------------------------------------------------------------------------

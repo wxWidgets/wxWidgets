@@ -61,27 +61,32 @@ class WXDLLEXPORT wxPopupComboWindow : public wxPopupWindow
 {
 public:
     wxPopupComboWindow(wxComboControl *parent);
+    virtual ~wxPopupComboWindow();
 
     bool Create(wxComboControl *parent);
 
-    // popup the window (this will show it too)
-    virtual void Popup();
+    // popup the window (this will show it too) and keep focus at winFocus
+    // (itself if it's NULL), dismiss the popup if we lose focus
+    virtual void Popup(wxWindow *focus);
 
     // hide the window
     virtual void Dismiss();
 
 protected:
-    // event handlers
-    void OnLeftDown(wxMouseEvent& event);
-    void OnKillFocus(wxFocusEvent& event);
-
     // dismiss and notify the combo
     void DismissAndNotify();
+
+    // remove our event handlers
+    void PopHandlers();
 
     // the child of this popup if any
     wxWindow *m_child;
 
-    DECLARE_EVENT_TABLE()
+    // the window which has the focus while we're shown
+    wxWindow *m_focus;
+
+    friend class wxPopupWindowHandler;
+    friend class wxPopupFocusHandler;
 };
 
 #endif // _WX_POPUPWIN_H_BASE_

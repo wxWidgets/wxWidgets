@@ -36,13 +36,54 @@
     #include "wx/combobox.h"        // wxComboControl
 #endif //WX_PRECOMP
 
+#include "wx/univ/renderer.h"
+
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+// event handlers which we use to intercept events which cause the popup to
+// disappear
+class wxPopupWindowHandler : public wxEvtHandler
+{
+public:
+    wxPopupWindowHandler(wxPopupComboWindow *popup) { m_popup = popup; }
+
+protected:
+    // event handlers
+    void OnLeftDown(wxMouseEvent& event);
+
+private:
+    wxPopupComboWindow *m_popup;
+
+    DECLARE_EVENT_TABLE()
+};
+
+class wxPopupFocusHandler : public wxEvtHandler
+{
+public:
+    wxPopupFocusHandler(wxPopupComboWindow *popup) { m_popup = popup; }
+
+protected:
+    // event handlers
+    void OnKillFocus(wxFocusEvent& event);
+
+private:
+    wxPopupComboWindow *m_popup;
+
+    DECLARE_EVENT_TABLE()
+};
+
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxPopupComboWindow, wxPopupWindow)
-    EVT_LEFT_DOWN(wxPopupComboWindow::OnLeftDown)
-    //EVT_KILL_FOCUS(wxPopupComboWindow::OnKillFocus)
+BEGIN_EVENT_TABLE(wxPopupWindowHandler, wxEvtHandler)
+    EVT_LEFT_DOWN(wxPopupWindowHandler::OnLeftDown)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
+    EVT_KILL_FOCUS(wxPopupFocusHandler::OnKillFocus)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -78,6 +119,13 @@ void wxPopupWindowBase::Position()
         y -= heightParent + heightSelf;
     }
 
+#ifdef __WXUNIVERSAL__
+    wxRect rectBorders = m_winParent->GetRenderer()->
+                            GetBorderDimensions(m_winParent->GetBorder());
+    ptOrigin.x -= rectBorders.x;
+    y -= rectBorders.y;
+#endif // __WXUNIVERSAL__
+
     Move(ptOrigin.x, y);
 }
 
@@ -87,9 +135,15 @@ void wxPopupWindowBase::Position()
 
 wxPopupComboWindow::wxPopupComboWindow(wxComboControl *parent)
 {
-    m_child = (wxWindow *)NULL;
+    m_child =
+    m_focus = (wxWindow *)NULL;
 
     (void)Create(parent);
+}
+
+wxPopupComboWindow::~wxPopupComboWindow()
+{
+    PopHandlers();
 }
 
 bool wxPopupComboWindow::Create(wxComboControl *parent)
@@ -97,26 +151,42 @@ bool wxPopupComboWindow::Create(wxComboControl *parent)
     return wxPopupWindow::Create(parent);
 }
 
-void wxPopupComboWindow::Popup()
+void wxPopupComboWindow::PopHandlers()
+{
+    if ( m_child )
+    {
+        m_child->PopEventHandler(TRUE /* delete it */);
+        m_child->ReleaseMouse();
+        m_child = NULL;
+    }
+
+    if ( m_focus )
+    {
+        m_focus->PopEventHandler(TRUE /* delete it */);
+        m_focus = NULL;
+    }
+}
+
+void wxPopupComboWindow::Popup(wxWindow *winFocus)
 {
     const wxWindowList& children = GetChildren();
     if ( children.GetCount() )
     {
         m_child = children.GetFirst()->GetData();
-        m_child->SetFocus();
         m_child->CaptureMouse();
+        m_child->PushEventHandler(new wxPopupWindowHandler(this));
     }
 
     Show();
+
+    m_focus = winFocus ? winFocus : this;
+    m_focus->SetFocus();
+    m_focus->PushEventHandler(new wxPopupFocusHandler(this));
 }
 
 void wxPopupComboWindow::Dismiss()
 {
-    if ( m_child )
-    {
-        m_child->ReleaseMouse();
-        m_child = NULL;
-    }
+    PopHandlers();
 
     Hide();
 }
@@ -128,7 +198,11 @@ void wxPopupComboWindow::DismissAndNotify()
     ((wxComboControl *)m_winParent)->OnDismiss();
 }
 
-void wxPopupComboWindow::OnLeftDown(wxMouseEvent& event)
+// ----------------------------------------------------------------------------
+// wxPopupWindowHandler
+// ----------------------------------------------------------------------------
+
+void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 {
     // clicking the mouse outside of this window makes us disappear
     wxCoord x, y;
@@ -139,7 +213,7 @@ void wxPopupComboWindow::OnLeftDown(wxMouseEvent& event)
 
     if ( ht == wxHT_WINDOW_OUTSIDE )
     {
-        DismissAndNotify();
+        m_popup->DismissAndNotify();
     }
     else
     {
@@ -147,10 +221,14 @@ void wxPopupComboWindow::OnLeftDown(wxMouseEvent& event)
     }
 }
 
-void wxPopupComboWindow::OnKillFocus(wxFocusEvent& event)
+// ----------------------------------------------------------------------------
+// wxPopupFocusHandler
+// ----------------------------------------------------------------------------
+
+void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 {
     // when we lose focus we always disappear
-    DismissAndNotify();
+    m_popup->DismissAndNotify();
 }
 
 #endif // wxUSE_POPUPWIN

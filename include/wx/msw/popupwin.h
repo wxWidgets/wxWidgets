@@ -28,7 +28,9 @@ public:
         return wxPopupWindowBase::Create(parent) &&
                wxWindow::Create(parent, -1,
                                 wxDefaultPosition, wxDefaultSize,
-                                wxPOPUP_WINDOW);
+                                // don't use the border - child will have its
+                                // own
+                                wxBORDER_NONE | wxPOPUP_WINDOW);
     }
 };
 

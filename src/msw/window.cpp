@@ -359,6 +359,10 @@ bool wxWindowMSW::Create(wxWindow *parent,
     {
         // a popup window floats on top of everything
         exStyle |= WS_EX_TOPMOST | WS_EX_TOOLWINDOW;
+
+        // it is also created hidden as other top level windows
+        msflags &= ~WS_VISIBLE;
+        m_isShown = FALSE;
     }
 
     return MSWCreate(m_windowId, parent, wxCanvasClassName,

@@ -4527,9 +4527,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 PerformAction(wxACTION_TEXT_INSERT, -1, _T('\n'));
             }
         }
-        else if ( keycode < 255 &&
-                  keycode != WXK_DELETE &&
-                  keycode != WXK_BACK )
+        else if ( keycode < 255 && isprint(keycode) )
         {
             PerformAction(wxACTION_TEXT_INSERT, -1, (wxChar)keycode);
 
@@ -4538,6 +4536,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         }
     }
 #ifdef __WXDEBUG__
+    // Ctrl-R refreshes the control in debug mode
     else if ( event.ControlDown() && event.GetKeyCode() == 'r' )
         Refresh();
 #endif // __WXDEBUG__
