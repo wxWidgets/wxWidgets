@@ -20,9 +20,9 @@
 #define WXEXTHELP_SEPARATOR '/'
 #ifndef WXEXTHELP_DEFAULTBROWSER
 /// Default browser name.
-#   define WXEXTHELP_DEFAULTBROWSER "kdehelp"
+#   define WXEXTHELP_DEFAULTBROWSER "netscape"
 /// Is default browse a variant of netscape?
-#   define WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE false
+#   define WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE true
 #endif
 /// Name of environment variable to set help browser.
 #define   WXEXTHELP_ENVVAR_BROWSER   "WX_HELPBROWSER"
