@@ -101,9 +101,9 @@ static wxString ConstructLibraryName(const wxString& basename)
 #elif defined(__UNIX__)
 #   if defined(__HPUX__)
         fullname << ".sl";
-#   else	//__HPUX__
+#   else //__HPUX__
         fullname << ".so";
-#   endif	//__HPUX__
+#   endif //__HPUX__
 #endif
 
     return fullname;
@@ -206,8 +206,8 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
 
 #if defined(__WXMAC__)
     FSSpec myFSSpec ;
-    Ptr	myMainAddr ;
-    Str255	myErrName ;
+    Ptr myMainAddr ;
+    Str255 myErrName ;
 
     wxMacPathToFSSpec( libname , &myFSSpec ) ;
     if (GetDiskFragment( &myFSSpec , 0 , kCFragGoesToEOF , "\p" , kPrivateCFragCopy , &handle , &myMainAddr ,
@@ -218,10 +218,10 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
         return NULL ;
     }
 #elif defined(__WXPM__) || defined(__EMX__)
-    char                            zError[256] = "";
+    char zError[256] = "";
     wxDllOpen(zError, libname, handle);
 #else // !Mac
-    handle = wxDllOpen(libname.c_str());
+    handle = wxDllOpen(libname);
 #endif // OS
 
     if ( !handle )
@@ -254,7 +254,7 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
 #if defined( __WXMAC__ )
     Ptr symAddress ;
     CFragSymbolClass symClass ;
-    Str255	symName ;
+    Str255 symName ;
 
     strcpy( (char*) symName , name ) ;
     c2pstr( (char*) symName ) ;
@@ -264,7 +264,7 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
 #elif defined( __WXPM__ ) || defined(__EMX__)
     wxDllGetSymbol(dllHandle, symbol);
 #else
-    symbol = wxDllGetSymbol(dllHandle, name.mb_str());
+    symbol = wxDllGetSymbol(dllHandle, name);
 #endif
 
     if ( !symbol )
