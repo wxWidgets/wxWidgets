@@ -414,6 +414,16 @@ bool wxTextCtrl::Create( wxWindow *parent,
             gtk_entry_set_editable( GTK_ENTRY(m_text), FALSE );
 #ifdef __WXGTK20__
         else
+            gtk_text_view_set_editable( GTK_TEXT_VIEW( m_text), FALSE);
+#else
+    }
+    else
+    {
+        if (multi_line)
+            gtk_text_set_editable( GTK_TEXT(m_text), 1 );
+#endif
+    }
+
 #ifdef __WXGTK20__
     if (multi_line)
     {
@@ -434,16 +444,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
 #endif // gtk+-2.3.5
 #endif // __WXGTK20__
-            gtk_text_view_set_editable( GTK_TEXT_VIEW( m_text), FALSE);
-#else
-    }
-    else
-    {
-        if (multi_line)
-            gtk_text_set_editable( GTK_TEXT(m_text), 1 );
-#endif
-    }
-
     
     // We want to be notified about text changes.
 #ifdef __WXGTK20__
