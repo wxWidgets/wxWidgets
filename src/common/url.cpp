@@ -423,7 +423,7 @@ bool wxURLModule::OnInit()
     // down the program startup (especially if there is no DNS server
     // available, in which case it may take up to 1 minute)
 
-    if ( getenv("HTTP_PROXY") )
+    if ( wxGetenv("HTTP_PROXY") )
     {
         wxURL::ms_useDefaultProxy = true;
     }
