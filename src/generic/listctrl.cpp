@@ -620,15 +620,42 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
         case wxLC_ICON:
         {
             m_bound_all.width = m_spacing;
-            m_bound_all.height = m_spacing+13;
             wxNode *node = m_items.First();
             if (node)
             {
                 wxListItemData *item = (wxListItemData*)node->Data();
                 wxString s = item->GetText();
+                if (s.IsEmpty()) s = wxT("H");
                 wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
+                if (lh < 15) lh = 15;
+                lw += 4;
+                lh += 3;
+                
+                m_bound_all.height = m_spacing+lh;
                 if (lw > m_spacing) m_bound_all.width = lw;
+                m_bound_label.width = lw;
+                m_bound_label.height = lh;
+                
+                if (item->HasImage())
+                {
+                    int w = 0;
+                    int h = 0;
+                    m_owner->GetImageSize( item->GetImage(), w, h );
+                    m_bound_icon.width = w + 8;
+                    m_bound_icon.height = h + 8;
+                }
+                
+                if (!item->HasText())
+                {
+                    m_bound_hilight.width = m_bound_icon.width;
+                    m_bound_hilight.height = m_bound_icon.height;
+                }
+                else
+                {
+                    m_bound_hilight.width = m_bound_label.width;
+                    m_bound_hilight.height = m_bound_label.height;
+                }
             }
             break;
         }
@@ -638,24 +665,34 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
             if (node)
             {
                 wxListItemData *item = (wxListItemData*)node->Data();
+                
                 wxString s = item->GetText();
+                if (s.IsEmpty()) s = wxT("H");
                 wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
+                if (lh < 15) lh = 15;
+                lw += 4;
+                lh += 3;
+                m_bound_label.width = lw;
+                m_bound_label.height = lh;
+                
                 m_bound_all.width = lw;
                 m_bound_all.height = lh;
+                
                 if (item->HasImage())
                 {
-#ifdef __WIN16__
                     int w = 0;
                     int h = 0;
-#else
-                    wxCoord w = 0;
-                    wxCoord h = 0;
-#endif
                     m_owner->GetImageSize( item->GetImage(), w, h );
+                    m_bound_icon.width = w;
+                    m_bound_icon.height = h;
+                    
                     m_bound_all.width += 4 + w;
                     if (h > m_bound_all.height) m_bound_all.height = h;
                 }
+                
+                m_bound_hilight.width = m_bound_all.width;
+                m_bound_hilight.height = m_bound_all.height;
             }
             break;
         }
@@ -667,12 +704,14 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
             while (node)
             {
                 wxListItemData *item = (wxListItemData*)node->Data();
-                wxString s;
-                item->GetText( s );
-                if (s.IsNull()) s = "H";
+                wxString s = item->GetText();
+                if (s.IsEmpty()) s = wxT("H");
                 wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
                 if (lh < 15) lh = 15;
+                lw += 4;
+                lh += 3;
+                
                 item->SetSize( item->GetWidth(), lh );
                 m_bound_all.width += lw;
                 m_bound_all.height = lh;
@@ -691,63 +730,38 @@ void wxListLineData::SetPosition( wxDC *dc, int x, int y, int window_width )
     {
         case wxLC_ICON:
         {
-            AssignRect( m_bound_icon, 0, 0, 0, 0 );
-            AssignRect( m_bound_label, 0, 0, 0, 0 );
-            AssignRect( m_bound_hilight, m_bound_all );
             wxNode *node = m_items.First();
             if (node)
             {
                 wxListItemData *item = (wxListItemData*)node->Data();
                 if (item->HasImage())
                 {
-                    wxListItemData *item = (wxListItemData*)node->Data();
-                    int w = 0;
-                    int h = 0;
-                    m_owner->GetImageSize( item->GetImage(), w, h );
-                    m_bound_icon.x = m_bound_all.x + (m_spacing/2) - (w/2);
-                    m_bound_icon.y = m_bound_all.y + m_spacing - h - 5;
-                    m_bound_icon.width = w;
-                    m_bound_icon.height = h;
-                    if (!item->HasText())
-                    {
-                        AssignRect( m_bound_hilight, m_bound_icon );
-                        m_bound_hilight.x -= 5;
-                        m_bound_hilight.y -= 5;
-                        m_bound_hilight.width += 9;
-                        m_bound_hilight.height += 9;
-                    }
+                    m_bound_icon.x = m_bound_all.x + 4 + (m_spacing/2) - (m_bound_icon.width/2);
+                    m_bound_icon.y = m_bound_all.y + 4;
                 }
                 if (item->HasText())
                 {
-                    wxString s;
-                    item->GetText( s );
-                    wxCoord lw,lh;
-                    dc->GetTextExtent( s, &lw, &lh );
                     if (m_bound_all.width > m_spacing)
-                        m_bound_label.x = m_bound_all.x;
+                        m_bound_label.x = m_bound_all.x + 2;
                     else
-                        m_bound_label.x = m_bound_all.x +  (m_spacing/2) - lw/2;
-                    m_bound_label.y = m_bound_all.y + m_bound_all.height - lh;
-                    m_bound_label.width = lw;
-                    m_bound_label.height = lh;
-                    AssignRect( m_bound_hilight, m_bound_label );
-                    m_bound_hilight.x -= 2;
-                    m_bound_hilight.y -= 2;
-                    m_bound_hilight.width += 4;
-                    m_bound_hilight.height += 4;
+                        m_bound_label.x = m_bound_all.x + 2 + (m_spacing/2) - (m_bound_label.width/2);
+                    m_bound_label.y = m_bound_all.y + m_bound_all.height + 2 - m_bound_label.height;
+                    m_bound_hilight.x = m_bound_label.x - 2;
+                    m_bound_hilight.y = m_bound_label.y - 2;
+                }
+                else
+                {
+                    m_bound_hilight.x = m_bound_icon.x - 4;
+                    m_bound_hilight.y = m_bound_icon.y - 4;
                 }
             }
             break;
         }
         case wxLC_LIST:
         {
-            AssignRect( m_bound_label, m_bound_all );
-            m_bound_all.x -= 2;
-            m_bound_all.y -= 2;
-            m_bound_all.width += 4;
-            m_bound_all.height += 3;
-            AssignRect( m_bound_hilight, m_bound_all );
-            AssignRect( m_bound_icon, 0, 0, 0, 0 );
+            m_bound_hilight.x = m_bound_all.x;
+            m_bound_hilight.y = m_bound_all.y;
+            m_bound_label.y = m_bound_all.y + 2;
             wxNode *node = m_items.First();
             if (node)
             {
@@ -756,51 +770,31 @@ void wxListLineData::SetPosition( wxDC *dc, int x, int y, int window_width )
                 {
                     m_bound_icon.x = m_bound_all.x + 2;
                     m_bound_icon.y = m_bound_all.y + 2;
-                    int w;
-                    int h;
-                    m_owner->GetImageSize( item->GetImage(), w, h );
-                    m_bound_icon.width = w;
-                    m_bound_icon.height = h;
-                    m_bound_label.x += 4 + w;
-                    m_bound_label.width -= 4 + w;
+                    m_bound_label.x = m_bound_all.x + 6 + m_bound_icon.width;
+                }
+                else
+                {
+                    m_bound_label.x = m_bound_all.x + 2;
                 }
             }
             break;
         }
         case wxLC_REPORT:
         {
-            wxCoord lw,lh;
-            dc->GetTextExtent( "H", &lw, &lh );
-            if (lh < 15) lh = 15;
             m_bound_all.x = 0;
-            m_bound_all.y -= 0;
-            m_bound_all.height = lh+3;
             m_bound_all.width = window_width;
             AssignRect( m_bound_hilight, m_bound_all );
-            AssignRect( m_bound_label, m_bound_all );
-            AssignRect( m_bound_icon, 0, 0, 0, 0 );
+            m_bound_label.x = m_bound_all.x + 2;
+            m_bound_label.y = m_bound_all.y + 2;
             wxNode *node = m_items.First();
             if (node)
             {
                 wxListItemData *item = (wxListItemData*)node->Data();
-                wxString s;
-                item->GetText( s );
-                if (s.IsEmpty()) s = wxT("H");
-                wxCoord lw,lh;
-                dc->GetTextExtent( s, &lw, &lh );
-                if (lh < 15) lh = 15;
-                m_bound_label.width = lw;
-                m_bound_label.height = lh;
                 if (item->HasImage())
                 {
                     m_bound_icon.x = m_bound_all.x + 2;
                     m_bound_icon.y = m_bound_all.y + 2;
-                    int w;
-                    int h;
-                    m_owner->GetImageSize( item->GetImage(), w, h );
-                    m_bound_icon.width = w;
-                    m_bound_icon.height = h;
-                    m_bound_label.x += 4 + w;
+                    m_bound_label.x += 4 + m_bound_icon.width;
                 }
             }
             break;
@@ -2586,7 +2580,7 @@ void wxListMainWindow::CalculatePositions()
     line->CalculateSize( &dc, iconSpacing );
     int dummy = 0;
     line->GetSize( dummy, lineSpacing );
-    lineSpacing += 4;
+    lineSpacing += 1;
 
     int clientWidth = 0;
     int clientHeight = 0;
@@ -2643,8 +2637,8 @@ void wxListMainWindow::CalculatePositions()
         for (int tries = 0; tries < 2; tries++)
         {
             entireWidth = 0;
-            int x = 5;  // painting is done at x-2
-            int y = 5;  // painting is done at y-2
+            int x = 2;
+            int y = 2;
             int maxWidth = 0;
             m_visibleLines = 0;
             int m_currentVisibleLines = 0;

@@ -581,14 +581,11 @@ void MyCanvas::DrawDefault(wxDC& dc)
     dc.FloodFill(0, 0, wxColour(255, 0, 0));
 #endif //
 
-    dc.DrawIcon( wxICON(mondrian), 40, 40 );
-
     dc.DrawCheckMark(5, 80, 15, 15);
     dc.DrawCheckMark(25, 80, 30, 30);
     dc.DrawCheckMark(60, 80, 60, 60);
 
     // this is the test for "blitting bitmap into DC damages selected brush" bug
-    wxIcon m_std_icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
     wxCoord rectSize = m_std_icon.GetWidth() + 10;
     wxCoord x = 100;
     dc.SetPen(*wxTRANSPARENT_PEN);
@@ -911,6 +908,14 @@ void MyCanvas::DrawRegions(wxDC& dc)
     
     dc.SetBrush( *wxGREY_BRUSH );
     dc.DrawRectangle( 10,10,310,310 );
+    
+    if (m_smile_bmp.Ok())
+    {
+        dc.DrawBitmap( m_smile_bmp, 140, 20, TRUE );
+        dc.DrawBitmap( m_smile_bmp, 140, 290, TRUE );
+        dc.DrawBitmap( m_smile_bmp, 110, 80, TRUE );
+        dc.DrawBitmap( m_smile_bmp, 210, 80, TRUE );
+    }
 }
 
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))

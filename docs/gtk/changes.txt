@@ -1,13 +1,29 @@
+12th March '2000: wxWindows 2.1.14 released
 
-20th February '2000: wxWindows 2.1.14 released
+Added wxDragImage class for dragging easily images.
 
-Minor changes to socket code.
+The DEB and RPM packages now conform better to various
+standards.
+
+Renamed wx-config to wxgtk-config so that motif can be co-installed
+on the same machine (with wxmotif-config).
+
+Speed up for drawing by resuing once created DCs instead of
+creating and destroying them all the time.
+
+Corrections to clipping region code (among others related to
+simultaneous bitmap clipping).
+
+A few more improvements to tab traversal.
+
+A number of changes to socket code.
 
 Added code for rotating images.
 
-Much work on the new grid class has been done.
+Much work on the new grid class has been done. Very cool now.
 
-wxPlotWindow is now useful and works.
+wxPlotWindow is now useful and works. Added on-off lines useful for
+displaying trigger signals.
 
 Corrected one more bug in the TIFF handler.
 
@@ -20,7 +36,8 @@ Added default keyboard handling to wxScrolledWindow.
 Fixed slightly overoptimized window colour and style handling.
 This will expose a bug in the GtkPixmap theme, or more exactly
 in ImLib's image cashing so that wxGTK currently doesn't work
-well with pixamp themes.
+well with pixmap themes. As a result, wxGTK will disable all
+widget settings when using this theme.
 
 Fixed bug in drawing code that made GTK pick the wrong pen
 style when using the default.
