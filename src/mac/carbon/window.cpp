@@ -689,16 +689,18 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 		MacRepositionScrollBars() ;
 		if ( doMove )
 		{
-    		wxMoveEvent event(wxPoint(m_x, m_y), m_windowId);
+	        wxPoint point(m_x, m_y);
+    		wxMoveEvent event(point, m_windowId);
     		event.SetEventObject(this);
     		GetEventHandler()->ProcessEvent(event) ;
     	}
     	if ( doResize )
     	{
-			MacRepositionScrollBars() ;
-	    	wxSizeEvent event(wxSize(m_width, m_height), m_windowId);
-	    	event.SetEventObject(this);
-	    	GetEventHandler()->ProcessEvent(event);
+	    MacRepositionScrollBars() ;
+	    wxSize size(m_width, m_height);
+	    wxSizeEvent event(size, m_windowId);
+	    event.SetEventObject(this);
+	    GetEventHandler()->ProcessEvent(event);
     	}
 	}
 }
@@ -757,7 +759,8 @@ bool wxWindow::Show(bool show)
 	  	UMASelectWindow( m_macWindowData->m_macWindow ) ;
 		// no need to generate events here, they will get them triggered by macos
 		// actually they should be , but apparently they are not
-	    wxSizeEvent event(wxSize(m_width, m_height), m_windowId);
+	    wxSize size(m_width, m_height);
+	    wxSizeEvent event(size, m_windowId);
 	    event.SetEventObject(this);
 	    GetEventHandler()->ProcessEvent(event);
 	  }
