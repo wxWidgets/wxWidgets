@@ -42,6 +42,7 @@ All GUI ports:
 - implemented alignment for wxGrid bool editor and renderer
 - support wxListCtrl columns alignment for all platforms and not just MSW
 - added wxToolBar Add/InsertTool(tool) (Janusz Piwowarski)
+- fixed user dash handling for MSW and GTK (Ken Edwards)
 - WXR resources can now be used in Unicode builds
 - it is now possible to use several wxFileHistory objects in the same menu
   by giving them different base IDs (Dimitri Schoolwerth)

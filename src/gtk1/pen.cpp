@@ -52,6 +52,11 @@ public:
 
     bool operator == (const wxPenRefData& data) const
     {
+        // It is impossible to tell if the dashes have changed
+        // so the only thing to do is assume they have
+        if (m_countDashes != 0 || data.m_countDashes != 0)
+            return false;
+
         return (m_style == data.m_style &&
                 m_width == data.m_width &&
                 m_joinStyle == data.m_joinStyle &&

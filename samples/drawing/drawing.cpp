@@ -464,18 +464,27 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 
     dc.DrawText(_T("User dash"), x + 150, y + 140);
     wxPen ud( wxT("black"), width, wxUSER_DASH );
-    wxDash dash1[1];
-    dash1[0] = 0;
-    ud.SetDashes( 1, dash1 );
+    wxDash dash1[6];
+    dash1[0] = 8;  // Long dash  <---------+
+    dash1[1] = 2;  // Short gap            |
+    dash1[2] = 3;  // Short dash           |
+    dash1[3] = 2;  // Short gap            |
+    dash1[4] = 3;  // Short dash           |
+    dash1[5] = 2;  // Short gap and repeat +
+    ud.SetDashes( 6, dash1 );
+    dc.SetPen( ud );
     dc.DrawLine( x+20, y+140, 100, y+140 );
-    dash1[0] = 1;
-    ud.SetDashes( 1, dash1 );
+    dash1[0] = 5;  // Make first dash shorter
+    ud.SetDashes( 6, dash1 );
+    dc.SetPen( ud );
     dc.DrawLine( x+20, y+150, 100, y+150 );
-    dash1[0] = 2;
-    ud.SetDashes( 1, dash1 );
+    dash1[2] = 5;  // Make second dash longer
+    ud.SetDashes( 6, dash1 );
+    dc.SetPen( ud );
     dc.DrawLine( x+20, y+160, 100, y+160 );
-    dash1[0] = 0x7F;
-    ud.SetDashes( 1, dash1 );
+    dash1[4] = 5;  // Make third dash longer
+    ud.SetDashes( 6, dash1 );
+    dc.SetPen( ud );
     dc.DrawLine( x+20, y+170, 100, y+170 );
 }
 

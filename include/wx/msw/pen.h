@@ -53,6 +53,7 @@ private:
 };
 
 #define M_PENDATA ((wxPenRefData *)m_refData)
+#define wxPENDATA(x) ((wxPenRefData *)(x).m_refData)
 
 // Pen
 class WXDLLEXPORT wxPen: public wxGDIObject
@@ -66,8 +67,28 @@ public:
   ~wxPen();
 
   inline wxPen& operator = (const wxPen& pen) { if (*this == pen) return (*this); Ref(pen); return *this; }
-  inline bool operator == (const wxPen& pen) const { return m_refData == pen.m_refData; }
-  inline bool operator != (const wxPen& pen) const { return m_refData != pen.m_refData; }
+  inline bool operator == (const wxPen& pen) const 
+  { 
+      // It is impossible to know if the user dashes have changed, 
+      // so we must assume that they have
+      if ( m_refData && pen.m_refData )
+      {
+          if ( M_PENDATA->m_nbDash != 0 || wxPENDATA(pen)->m_nbDash != 0 )
+              return false;
+      }
+      return m_refData == pen.m_refData;
+  }
+  inline bool operator != (const wxPen& pen) const 
+  { 
+      // It is impossible to know if the user dashes have changed, 
+      // so we must assume that they have
+      if ( m_refData && pen.m_refData )
+      {
+          if ( M_PENDATA->m_nbDash != 0 || wxPENDATA(pen)->m_nbDash != 0 )
+              return true;
+      }
+      return m_refData != pen.m_refData; 
+  }
 
   virtual bool Ok() const { return (m_refData != NULL) ; }
 
