@@ -166,7 +166,7 @@
     </template>
 
     <template id="wx_append">
-        <ldflags>$(EXTRALIBS)</ldflags>
+        <ldlibs>$(EXTRALIBS)</ldlibs>
         <!-- link against builtin 3rd party libs, if needed: -->
         <sys-lib>$(LIB_TIFF)</sys-lib>
         <sys-lib>$(LIB_JPEG)</sys-lib>
