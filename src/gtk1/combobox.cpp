@@ -42,7 +42,7 @@ static void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox 
 
     combo->m_alreadySent = TRUE;
 
-    wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, combo->GetId());
+    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId());
     event.SetInt( combo->GetSelection() );
     wxString tmp( combo->GetStringSelection() );
     event.SetString( WXSTRINGCAST(tmp) );
@@ -54,7 +54,7 @@ static void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox 
 //  "changed"
 //-----------------------------------------------------------------------------
 
-static void 
+static void
 gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->m_windowId );
