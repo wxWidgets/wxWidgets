@@ -17,5 +17,36 @@
 #include "wx/stubs/timer.h"
 #endif
 
+class wxChrono
+{
+public: 
+  wxChrono();
+  
+  void Start(long t=0);
+  void Pause();
+  void Resume();
+
+  long Time();
+
+private:
+  long m_t0;
+  long m_pause;
+};
+
+// Timer functions (milliseconds)
+void WXDLLEXPORT wxStartTimer();
+
+// Gets time since last wxStartTimer or wxGetElapsedTime
+long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
+
+// EXPERIMENTAL: comment this out if it doesn't compile.
+bool WXDLLEXPORT wxGetLocalTime(long *timeZone, int *dstObserved);
+
+// Get number of seconds since 00:00:00 GMT, Jan 1st 1970.
+long WXDLLEXPORT wxGetCurrentTime();
+
+// Get number of milliseconds since 00:00:00 GMT, Jan 1st 1970.
+long WXDLLEXPORT wxGetCurrentUTime();
+
 #endif
     // _WX_TIMER_H_BASE_

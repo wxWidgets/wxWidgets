@@ -25,22 +25,6 @@
 class wxTimer;
 
 //-----------------------------------------------------------------------------
-// global functions
-//-----------------------------------------------------------------------------
-
-/* Timer functions (milliseconds) */
-void wxStartTimer();
-
-/* Gets time since last wxStartTimer or wxGetElapsedTime */
-long wxGetElapsedTime(bool resetTimer = TRUE);
-
-/* EXPERIMENTAL: comment this out if it doesn't compile. */
-bool wxGetLocalTime(long *timeZone, int *dstObserved);
-
-/* Get number of seconds since 00:00:00 GMT, Jan 1st 1970. */
-long wxGetCurrentTime();
-
-//-----------------------------------------------------------------------------
 // wxTimer
 //-----------------------------------------------------------------------------
 

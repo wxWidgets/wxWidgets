@@ -73,31 +73,28 @@ extern "C" int gettimeofday(struct timeval *tp, void *);
 long wxStartTime = 0;
 void wxStartTimer(void)
 {
-#if defined(__EMX__) || defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || \
-    (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
-  struct timeval tp;
-#if defined(__EMX__) || defined(__SYSV__) || (defined (__GNUWIN32__) && !defined (__MINGW32__))
-  gettimeofday(&tp, (struct timezone *)NULL);
-#else
-  gettimeofday(&tp);
-#endif
-  wxStartTime = 1000*tp.tv_sec + tp.tv_usec/1000;
-#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || \
-       defined(__MINGW32__) || defined(__MWERKS__) || defined(__FreeBSD__) )
-  time_t t0;
-  struct tm *tp;
-  time(&t0);
-  tp = localtime(&t0);
-  wxStartTime = 1000*(60*(60*tp->tm_hour+tp->tm_min)+tp->tm_sec);
-#else
-  struct timeb tp;
-  ftime(&tp);
-  wxStartTime = 1000*tp.time + tp.millitm;
-#endif
+  wxStartTime=wxGetCurrentUTime();
 }
 
 // Returns elapsed time in milliseconds
 long wxGetElapsedTime(bool resetTimer)
+{
+  long oldTime = wxStartTime;
+  long newTime=wxGetCurrentUTime();
+
+  if (resetTimer) wxStartTime = newTime;
+  return newTime - oldTime;
+}
+
+
+// Get number of seconds since 00:00:00 GMT, Jan 1st 1970.
+long wxGetCurrentTime(void)
+{
+  return wxGetCurrentUTime()/1000;
+}
+
+// return GMT time in millisecond
+long wxGetCurrentUTime()
 {
 #if defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || \
     (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
@@ -107,30 +104,56 @@ long wxGetElapsedTime(bool resetTimer)
 #else
   gettimeofday(&tp);
 #endif
-  long oldTime = wxStartTime;
-  long newTime = 1000*tp.tv_sec + tp.tv_usec / 1000;
-  if (resetTimer)
-    wxStartTime = newTime;
+  return (1000*tp.tv_sec + tp.tv_usec / 1000);
 #elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || \
   defined(__MINGW32__)|| defined(__MWERKS__) || defined(__FreeBSD__))
   time_t t0;
   struct tm *tp;
   time(&t0);
   tp = localtime(&t0);
-  long oldTime = wxStartTime;
-  long newTime = 1000*(60*(60*tp->tm_hour+tp->tm_min)+tp->tm_sec);
-  if (resetTimer)
-    wxStartTime = newTime;
+  return 1000*(60*(60*tp->tm_hour+tp->tm_min)+tp->tm_sec);
 #else
   struct timeb tp;
   ftime(&tp);
-  long oldTime = wxStartTime;
-  long newTime = 1000*tp.time + tp.millitm;
-  if (resetTimer)
-    wxStartTime = newTime;
+  return (1000*tp.time + tp.millitm);
 #endif
-  return newTime - oldTime;
 }
+
+//---------------
+// wxChrono class
+// This class encapsulates the above fonctions,
+// such that several wxChrono can be created 
+// simultaneously
+
+wxChrono::wxChrono()
+{
+  Start();
+}
+
+void wxChrono::Start(long t)
+{
+  m_t0=wxGetCurrentUTime()-t;
+  m_pause=0;
+}
+
+void wxChrono::Pause()
+{
+  m_pause=wxGetCurrentUTime()-m_t0;
+}
+
+void wxChrono::Resume()
+{
+  m_t0=wxGetCurrentUTime()-m_pause;
+  m_pause=0;
+}
+
+long wxChrono::Time()
+{
+  if (m_pause) return m_pause;
+  return wxGetCurrentUTime()-m_t0;
+}
+
+
 
 // EXPERIMENTAL: comment this out if it doesn't compile.
 #ifndef __VMS__
@@ -205,27 +228,3 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   return TRUE;
 }
 #endif
-
-// Get number of seconds since 00:00:00 GMT, Jan 1st 1970.
-long wxGetCurrentTime(void)
-{
-#if defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) // || defined(__AIXV3__)
-  struct timeval tp;
-#if defined(__SYSV__) || (defined (__GNUWIN32__) && !defined (__MINGW32__) || defined(__FreeBSD__))
-  gettimeofday(&tp, (struct timezone *)NULL);
-#else
-  gettimeofday(&tp);
-#endif
-  return tp.tv_sec;
-#else // (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__))
-  return time(0);
-#endif
-/*
-#else
-  struct timeb tp;
-  ftime(&tp);
-  return tp.time;
-#endif
-*/
-}
-
