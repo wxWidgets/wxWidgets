@@ -35,7 +35,7 @@ class TestPanel(wxPanel):
                   if i not in ['eclouds', 'logo']]
 
         self.throbbers['plain']['throbber'] = Throbber(self, -1,
-                                                       images, #size=(36, 36),
+                                                       images, size=(36, 36),
                                                        frameDelay = 0.1)
         self.throbbers['reverse']['throbber'] = Throbber(self, -1, images, #size=(36, 36),
                                                          frameDelay = 0.07)
@@ -79,8 +79,7 @@ class TestPanel(wxPanel):
 
         EVT_LEFT_DOWN(self.otherThrobber, self.OnClickThrobber)
 
-        staticBox = wxStaticBox(self, -1, "")
-        box = wxStaticBoxSizer(staticBox)
+        box = wxBoxSizer(wxVERTICAL)
         sizer = RowColSizer()
         box.Add(sizer, 1, wxEXPAND|wxALL, 5)
         sizer.AddGrowableCol(1)
@@ -150,8 +149,13 @@ class TestPanel(wxPanel):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = TestPanel(nb, log)
-    return win
+    if wxPlatform == "__WXMAC__":
+        wxMessageBox("This demo currently fails on the Mac, I think because of the lack of EVT_WINDOW_DESTROY...",
+                     "Sorry")
+        return
+    else:
+        win = TestPanel(nb, log)
+        return win
 
 #----------------------------------------------------------------------
 
