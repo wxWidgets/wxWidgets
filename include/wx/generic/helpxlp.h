@@ -6,10 +6,8 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
-
-/* sccsid[] = "@(#)wx_help.h	1.2 5/9/94" */
 
 #ifndef __HELPXLPH__
 #define __HELPXLPH__
@@ -26,10 +24,9 @@
 #include "wx/helpbase.h"
 
 #ifdef __WXMSW__
-#include "wx/dde.h"
+    #include "wx/dde.h"
 #else
-// Or whatever it'll be called
-#include "wx/ipctcp.h"
+    #include "wx/sckipc.h"
 #endif
 
 class WXDLLEXPORT wxXLPHelpController;
