@@ -69,8 +69,8 @@
 #endif
 
 #if wxUSE_OLE
-   // use OLE clipboard
-   #define wxUSE_OLE_CLIPBOARD 1
+    // use OLE clipboard
+    #define wxUSE_OLE_CLIPBOARD 1
 #else // !wxUSE_DATAOBJ
     // use Win clipboard API
     #define wxUSE_OLE_CLIPBOARD 0
@@ -828,7 +828,5 @@ bool wxClipboard::GetData( wxDataObject& data )
 #endif // wxUSE_OLE_CLIPBOARD/wxUSE_DATAOBJ
 }
 
-#else
-//    #error "Please turn wxUSE_CLIPBOARD on to compile this file."
 #endif // wxUSE_CLIPBOARD
 
