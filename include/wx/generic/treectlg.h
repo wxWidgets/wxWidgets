@@ -221,9 +221,11 @@ public:
         // the same!
 
         // get the first child of this item
-    wxTreeItemId GetFirstChild(const wxTreeItemId& item, long& cookie) const;
+    wxTreeItemId GetFirstChild(const wxTreeItemId& item,
+                               wxTreeItemIdValue& cookie) const;
         // get the next child
-    wxTreeItemId GetNextChild(const wxTreeItemId& item, long& cookie) const;
+    wxTreeItemId GetNextChild(const wxTreeItemId& item,
+                              wxTreeItemIdValue& cookie) const;
         // get the last child of this item - this method doesn't use cookies
     wxTreeItemId GetLastChild(const wxTreeItemId& item) const;
 
@@ -342,13 +344,20 @@ public:
         // NB: this function is not reentrant and not MT-safe (FIXME)!
     void SortChildren(const wxTreeItemId& item);
 
+#if WXWIN_COMPATIBILITY_2_4
     // deprecated functions: use Set/GetItemImage directly
-        // get the selected item image
     int GetItemSelectedImage(const wxTreeItemId& item) const
         { return GetItemImage(item, wxTreeItemIcon_Selected); }
-        // set the selected item image
     void SetItemSelectedImage(const wxTreeItemId& item, int image)
         { SetItemImage(item, image, wxTreeItemIcon_Selected); }
+
+    // use the versions taking wxTreeItemIdValue cookies
+    wxDEPRECATED( wxTreeItemId GetFirstChild(const wxTreeItemId& item,
+                                             long& cookie) const );
+    wxDEPRECATED( wxTreeItemId GetNextChild(const wxTreeItemId& item,
+                                            long& cookie) const );
+#endif // WXWIN_COMPATIBILITY_2_4
+
 
     // implementation only from now on
 

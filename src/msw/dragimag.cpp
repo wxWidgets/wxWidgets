@@ -251,8 +251,9 @@ bool wxDragImage::Create(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
 {
     if ( m_hImageList )
         ImageList_Destroy(GetHimageList());
-    m_hImageList = (WXHIMAGELIST) TreeView_CreateDragImage((HWND) treeCtrl.GetHWND(), (HTREEITEM) (WXHTREEITEM) id);
-    return TRUE;
+    m_hImageList = (WXHIMAGELIST)
+        TreeView_CreateDragImage(GetHwndOf(&treeCtrl), (HTREEITEM) id.m_pItem);
+    return m_hImageList != 0;
 }
 #endif
 

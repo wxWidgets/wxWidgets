@@ -34,7 +34,7 @@
 // ----------------------------------------------------------------------------
 
 // Using this typedef removes an ambiguity when calling Remove()
-typedef unsigned long wxTreeItemIdValue;
+typedef void *wxTreeItemIdValue;
 
 class WXDLLEXPORT wxTreeItemId
 {
@@ -43,11 +43,8 @@ public:
         // 0 is invalid value for HTREEITEM
     wxTreeItemId() { m_pItem = 0; }
 
-        // this one is used in the generic version
-    wxTreeItemId(void *pItem) { m_pItem = (long) pItem; }
-
-        // and this one under MSW
-    wxTreeItemId(long lItem) { m_pItem = lItem; }
+        // construct wxTreeItemId from the native item id
+    wxTreeItemId(void *pItem) { m_pItem = pItem; }
 
         // default copy ctor/assignment operator are ok for us
 
@@ -95,7 +92,7 @@ protected:
     wxTreeItemId m_pItem;
 };
 
-WX_DEFINE_EXPORTED_ARRAY_LONG(wxTreeItemId, wxArrayTreeItemIds);
+WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxTreeItemId, wxArrayTreeItemIds);
 
 // ----------------------------------------------------------------------------
 // constants
