@@ -44,7 +44,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
 {
     int style = dialog->GetStyle();
     gchar* text = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
-    wxString filename(wxGTK_CONV_BACK(text));
+    wxString filename = wxConvFileName->cMB2WX( text );
     if ( filename.empty() )
     {
         // this is totally lame but better than silent error
