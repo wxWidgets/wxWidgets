@@ -1267,13 +1267,6 @@ void wxImage::InitStandardHandlers()
 #if wxUSE_STREAMS
     AddHandler(new wxBMPHandler);
 #endif // wxUSE_STREAMS
-
-#if wxUSE_XPM && !defined(__WXGTK__) && !defined(__WXMOTIF__)
-    // NB: keep this #ifdef in sync with the one in imagall.cpp -
-    //     they must complement each other so that there's always exactly
-    //     one XPM handler added after calling wxInitAllImageHandlers()
-    AddHandler(new wxXPMHandler);
-#endif
 }
 
 void wxImage::CleanUpHandlers()

@@ -60,11 +60,7 @@ void wxInitAllImageHandlers()
   wxImage::AddHandler( new wxCURHandler );
   wxImage::AddHandler( new wxANIHandler );
 #endif
-#if wxUSE_XPM && (defined(__WXGTK__) || defined(__WXMOTIF__))
-  // NB: keep this #ifdef in sync with the one in image.cpp
-  //     (wxImage::InitStandardHandlers) - they must complement each other
-  //     so that there's always exactly one XPM handler added after calling
-  //     wxInitAllImageHandlers()
+#if wxUSE_XPM
   wxImage::AddHandler( new wxXPMHandler );
 #endif
 }
