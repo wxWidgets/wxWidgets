@@ -25,7 +25,7 @@ class TestPanel(wx.Panel):
                     (25,25))
 
         bmp = wx.Bitmap(opj('bitmaps/toucan.png'))
-        if wx.Platform == "__WXGTK__":
+        if "__WXGTK__" in wx.PlatformInfo:
             # try to make up for it a bit...
             bmp.SetMaskColour("black")
             
