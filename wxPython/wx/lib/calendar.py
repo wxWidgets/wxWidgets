@@ -140,15 +140,15 @@ class CalDraw:
         self.set_y_end = ymarg
 
     def InitScale(self):        # scale position values
-        self.sizew = self.set_sizew * self.pwidth
-        self.sizeh = self.set_sizeh * self.pheight
+        self.sizew = int(self.set_sizew * self.pwidth)
+        self.sizeh = int(self.set_sizeh * self.pheight)
 
-        self.cx_st = self.set_cx_st * self.pwidth       # draw start position
-        self.cy_st = self.set_cy_st * self.pheight
+        self.cx_st = int(self.set_cx_st * self.pwidth)       # draw start position
+        self.cy_st = int(self.set_cy_st * self.pheight)
 
-        self.x_mrg = self.set_x_mrg * self.pwidth         # calendar draw margins
-        self.y_mrg = self.set_y_mrg * self.pheight
-        self.y_end = self.set_y_end * self.pheight
+        self.x_mrg = int(self.set_x_mrg * self.pwidth)         # calendar draw margins
+        self.y_mrg = int(self.set_y_mrg * self.pheight)
+        self.y_end = int(self.set_y_end * self.pheight)
 
     def DrawCal(self, DC, sel_lst=[]):
         self.DC = DC
@@ -246,6 +246,8 @@ class CalDraw:
         cnt = 0
         for y in self.gridy[1:-1]:
             for x in self.gridx[:-1]:
+                assert type(y) == int
+                assert type(x) == int
                 rect = wx.Rect(x, y, self.dl_w, self.dl_h)  # create rect region
                 self.rg[cnt] = rect
                 cnt = cnt + 1
