@@ -3516,7 +3516,7 @@ class wxMaskedEditMixin:
             start, end = fraction._extent
             wxCallAfter(self._SetInsertionPoint, start)
             if fraction._selectOnFieldEntry:
-                dbg('queuing selection after decimal point to:' (start, end))
+                dbg('queuing selection after decimal point to:', (start, end))
                 wxCallAfter(self._SetSelection, start, end)
             keep_processing = False
 
