@@ -39,7 +39,9 @@
     #include "wx/statusbr.h"
 #endif //WX_PRECOMP
 
+#include "wx/settings.h"
 #include "wx/x11/private.h"
+#include "X11/Xutil.h"
 
 bool wxMWMIsRunning(Window w);
 
@@ -88,7 +90,12 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     int xscreen = DefaultScreen( xdisplay );
     Visual *xvisual = DefaultVisual( xdisplay, xscreen );
     Window xparent = RootWindow( xdisplay, xscreen );
+    Colormap cm = DefaultColormap( xdisplay, xscreen );
     
+    // TODO: For dialogs, this should be wxSYS_COLOUR_3DFACE
+    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
+    m_backgroundColour.CalcPixel( (WXColormap) cm );
+
     XSetWindowAttributes xattributes;
     XSizeHints size_hints;
     XWMHints wm_hints;
@@ -96,7 +103,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     long xattributes_mask =
         CWOverrideRedirect |
         CWBorderPixel | CWBackPixel;
-    xattributes.background_pixel = BlackPixel( xdisplay, xscreen );
+    xattributes.background_pixel = m_backgroundColour.GetPixel();
     xattributes.border_pixel = BlackPixel( xdisplay, xscreen );
     xattributes.override_redirect = False;
     

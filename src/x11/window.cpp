@@ -149,7 +149,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
         xdisplay, parentWindow,
         x, y, w, h, 0, 
         m_backgroundColour.GetPixel(),
-        m_foregroundColour.GetPixel() );
+        m_backgroundColour.GetPixel() );
         
     m_mainWidget = (WXWindow) window;
 
@@ -956,7 +956,7 @@ void wxWindowX11::X11SendPaintEvents()
 {
     m_clipPaintRegion = TRUE;
 
-    if (!m_clearRegion.IsEmpty())
+    //    if (!m_clearRegion.IsEmpty())
     {
         wxWindowDC dc( (wxWindow*)this );
         dc.SetClippingRegion( m_clearRegion );
