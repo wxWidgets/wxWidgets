@@ -29,7 +29,7 @@ class App(wxApp):
 
 
 def main():
-    application = App(0)
+    application = App(1)
     application.MainLoop()
 
 if __name__ == '__main__':

@@ -1000,8 +1000,6 @@ class Frame(wxFrame):
         frame = self
         wxFrame.__init__(self, None, -1, '', pos, size)
         self.CreateStatusBar()
-        #progpath = os.path.split(__file__)[0]
-        #icon = wxIcon(os.path.join(progpath, 'xrced.ico'), wxBITMAP_TYPE_ICO)
         icon = wxEmptyIcon()
         icon.CopyFromBitmap(images.getIconBitmap())
         self.SetIcon(icon)
@@ -1924,7 +1922,7 @@ class App(wxApp):
         del conf
 
 def main():
-    app = App()
+    app = App(1)
     app.MainLoop()
     app.OnExit()
 
