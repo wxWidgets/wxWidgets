@@ -44,4 +44,4 @@ MemoryFSHandler_AddFile
 # given prefix and will put a reference in the local module.
 EVT*
 WXK*
-
+__version__*
