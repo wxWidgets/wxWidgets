@@ -1140,6 +1140,34 @@ static PyObject *_wrap_wxWindow_CenterOnScreen(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxWindow_Clear(_swigobj)  (_swigobj->Clear())
+static PyObject *_wrap_wxWindow_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_Clear",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_Clear. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxWindow_Clear(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxWindow_ClientToScreenXY(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ClientToScreen(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxWindow_ClientToScreenXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10026,6 +10054,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_Close", (PyCFunction) _wrap_wxWindow_Close, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ClientToScreen", (PyCFunction) _wrap_wxWindow_ClientToScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_ClientToScreenXY", (PyCFunction) _wrap_wxWindow_ClientToScreenXY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_Clear", (PyCFunction) _wrap_wxWindow_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_CenterOnScreen", (PyCFunction) _wrap_wxWindow_CenterOnScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_CentreOnScreen", (PyCFunction) _wrap_wxWindow_CentreOnScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_CenterOnParent", (PyCFunction) _wrap_wxWindow_CenterOnParent, METH_VARARGS | METH_KEYWORDS },
