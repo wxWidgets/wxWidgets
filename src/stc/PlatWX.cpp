@@ -751,9 +751,17 @@ public:
         // things to look right...
         lv->SetFocus();
 
-        Hide();
+    // On OSX and (possibly others) there can still be pending
+    // messages/events for the list control when Scintilla wants to
+    // close it, so do a pending delete of it instead of destroying
+    // immediately.
+    bool Destroy() {
+        if ( !wxPendingDelete.Member(this) )
+            wxPendingDelete.Append(this);
+        return TRUE;
     }
 
+    
     int IconWidth() {
         wxImageList* il = lv->GetImageList(wxIMAGE_LIST_SMALL);
         if (il != NULL) {
