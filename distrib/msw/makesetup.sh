@@ -647,7 +647,8 @@ makesetup()
     cp $WEBFILES/site/i18n.htm $APPDIR/docs/html
 
     # Copy setup0.h files to setup.h
-    cp $APPDIR/include/wx/os2/setup0.h $APPDIR/include/wx/os2/setup.h
+    # OS/2 always built with configure now
+    # cp $APPDIR/include/wx/os2/setup0.h $APPDIR/include/wx/os2/setup.h
     cp $APPDIR/include/wx/msw/setup0.h $APPDIR/include/wx/msw/setup.h
     cp $APPDIR/include/wx/univ/setup0.h $APPDIR/include/wx/univ/setup.h
 

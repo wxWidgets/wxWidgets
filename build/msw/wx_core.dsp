@@ -7619,6 +7619,10 @@ SOURCE=..\..\include\wx\msw\ole\uuid.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\uxtheme.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\window.h
 # End Source File
 # Begin Source File
@@ -8680,6 +8684,10 @@ SOURCE=..\..\include\wx\xrc\xh_choic.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_combo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_datectrl.h
 # End Source File
 # Begin Source File
 

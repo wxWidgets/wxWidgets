@@ -130,6 +130,9 @@ samples/listctrl/listctrl.vcw
 samples/mdi/mdi.vcp
 samples/mdi/mdi.vcw
 
+samples/mediaplayer/mediaplayer.vcp
+samples/mediaplayer/mediaplayer.vcw
+
 samples/memcheck/memcheck.vcp
 samples/memcheck/memcheck.vcw
 

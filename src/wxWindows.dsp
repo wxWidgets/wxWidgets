@@ -3031,6 +3031,10 @@ SOURCE=..\include\wx\xrc\xh_combo.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\xrc\xh_datectrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\xrc\xh_dlg.h
 # End Source File
 # Begin Source File
@@ -3596,6 +3600,10 @@ SOURCE=..\include\wx\msw\toplevel.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\treectrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\uxtheme.h
 # End Source File
 # Begin Source File
 

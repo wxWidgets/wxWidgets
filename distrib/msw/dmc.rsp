@@ -104,13 +104,13 @@ samples/opengl/makefile.dmc
 samples/opengl/penguin/makefile.dmc
 samples/ownerdrw/makefile.dmc
 samples/png/makefile.dmc
+samples/popup/makefile.dmc
 samples/printing/makefile.dmc
 samples/propsize/makefile.dmc
 samples/regtest/makefile.dmc
 samples/render/makefile.dmc
 samples/richedit/makefile.dmc
 samples/rotate/makefile.dmc
-samples/rttitest/makefile.dmc
 samples/sashtest/makefile.dmc
 samples/scroll/makefile.dmc
 samples/scrollsub/makefile.dmc
