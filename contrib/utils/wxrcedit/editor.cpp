@@ -315,6 +315,19 @@ void EditorFrame::RefreshTree()
 
 
 
+
+static void RecursivelyExpand(wxTreeCtrl *t, wxTreeItemId item)
+{
+    t->Expand(item);
+    long cookie;
+    wxTreeItemId id = t->GetFirstChild(item, cookie);
+    while (id.IsOk())
+    {
+        RecursivelyExpand(t, id);
+        id = t->GetNextChild(item, cookie);
+    }
+}
+
 bool EditorFrame::SelectNode(wxXmlNode *node, wxTreeItemId *root)
 {
     if (root == NULL)
@@ -335,14 +348,16 @@ bool EditorFrame::SelectNode(wxXmlNode *node, wxTreeItemId *root)
         nd = (dt) ? dt->Node : NULL;
         if (nd == node) 
         {
+            RecursivelyExpand(m_TreeCtrl, *root);
             m_TreeCtrl->SelectItem(item);
             m_TreeCtrl->EnsureVisible(item);
-            return TRUE;
+            return TRUE; 
         }
         if (m_TreeCtrl->ItemHasChildren(item) && SelectNode(node, &item)) 
-            return TRUE;
+            return TRUE; 
         item = m_TreeCtrl->GetNextChild(*root, cookie);
     }
+
     return FALSE;
 }
 
@@ -390,18 +405,6 @@ void EditorFrame::NotifyChanged(int change_type)
 }
 
 
-
-static void RecursivelyExpand(wxTreeCtrl *t, wxTreeItemId item)
-{
-    t->Expand(item);
-    long cookie;
-    wxTreeItemId id = t->GetFirstChild(item, cookie);
-    while (id.IsOk())
-    {
-        RecursivelyExpand(t, id);
-        id = t->GetNextChild(item, cookie);
-    }
-}
 
 void EditorFrame::OnTreeSel(wxTreeEvent& event)
 {

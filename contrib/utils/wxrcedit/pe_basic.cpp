@@ -24,6 +24,7 @@
 #include "xmlhelpr.h"
 #include "editor.h"
 #include "preview.h"
+#include "nodehnd.h"
 
 
 BEGIN_EVENT_TABLE(PropEditCtrlTxt, PropEditCtrl)
@@ -166,7 +167,8 @@ class PropEditCtrlCoordXY : public PropEditCtrlInt
             if (m_c[1].IsEmpty()) m_c[1] = _T("-1");
             wxString s;
             s << m_c[0] << _T(',') << m_c[1];
-            if (m_dlg) s << _T('d');
+            wxString prev = XmlReadValue(GetNode(), m_PropInfo->Name);
+            if (prev[prev.Len()-1] == _T('d')) s << _T('d');
             XmlWriteValue(GetNode(), m_PropInfo->Name, s);
             m_TreeCtrl->SetItemBold(m_TreeCtrl->GetParent(m_TreeItem), TRUE);
         }
@@ -199,7 +201,6 @@ class PropEditCtrlCoordXY : public PropEditCtrlInt
     
     protected:
         wxString m_c[2];
-        bool m_dlg;
         int m_which;
 };
 
@@ -213,7 +214,7 @@ class PropEditCtrlCoordDlg : public PropEditCtrlBool
         virtual void ReadValue()
         {
             wxString s = XmlReadValue(GetNode(), m_PropInfo->Name);
-            if (s.IsEmpty()) m_Choice->SetSelection(0);
+            if (s.IsEmpty()) m_Choice->SetSelection(1);
             else if (s[s.Length()-1] == _T('d'))
                 m_Choice->SetSelection(1);
             else
@@ -232,7 +233,9 @@ class PropEditCtrlCoordDlg : public PropEditCtrlBool
         {
             PropertyInfo *pi = &(((PETreeData*)m_TreeCtrl->GetItemData(ti))->PropInfo);
             wxString s = XmlReadValue(GetNode(), pi->Name);
-            if (s.IsEmpty() || s[s.Length()-1] != _T('d'))
+            if (s.IsEmpty())
+                return _("true");
+            else if (s[s.Length()-1] != _T('d'))
                 return _("false");
             else
                 return _("true");
@@ -356,10 +359,12 @@ wxTreeItemId PropEditCtrlDim::CreateTreeEntry(wxTreeItemId parent, const Propert
 
 // --------------------- PropEditCtrlXMLID -----------------------------
 
+#define REAL_NODE (NodeHandler::Find(GetNode())->GetRealNode(GetNode()))
+
 
 void PropEditCtrlXMLID::ReadValue()
 {
-    m_TextCtrl->SetValue(GetNode()->GetPropVal(_T("name"), wxEmptyString));
+    m_TextCtrl->SetValue(REAL_NODE->GetPropVal(_T("name"), wxEmptyString));
 }
 
 
@@ -369,8 +374,8 @@ void PropEditCtrlXMLID::WriteValue()
     wxString s =m_TextCtrl->GetValue();
     if (s.IsEmpty()) s = _T("-1");
 
-    GetNode()->DeleteProperty(_T("name"));
-    GetNode()->AddProperty(_T("name"), s);
+    REAL_NODE->DeleteProperty(_T("name"));
+    REAL_NODE->AddProperty(_T("name"), s);
 
     m_TreeCtrl->SetItemBold(m_TreeItem, TRUE);
     EditorFrame::Get()->NotifyChanged(CHANGED_TREE_SELECTED);
@@ -381,7 +386,7 @@ void PropEditCtrlXMLID::WriteValue()
 void PropEditCtrlXMLID::Clear()
 {
     EndEdit();
-    GetNode()->DeleteProperty(_T("name"));
+    REAL_NODE->DeleteProperty(_T("name"));
     m_TreeCtrl->SetItemBold(m_TreeItem, FALSE);
     EditorFrame::Get()->NotifyChanged(CHANGED_TREE_SELECTED);
 }
@@ -425,16 +430,15 @@ void PropEditCtrlXMLID::OnDetails()
 
 wxString PropEditCtrlXMLID::GetValueAsText(wxTreeItemId ti)
 {
-    return GetNode()->GetPropVal(_T("name"), wxEmptyString);
+    return REAL_NODE->GetPropVal(_T("name"), wxEmptyString);
 }
 
 
 
 bool PropEditCtrlXMLID::IsPresent(const PropertyInfo& pinfo)
 {
-    return GetNode()->HasProp(_T("name"));
+    return REAL_NODE->HasProp(_T("name"));
 }
 
-
-
+#undef REAL_NODE
 
