@@ -28,6 +28,11 @@
 
 #if wxUSE_HELP && wxUSE_MS_HTML_HELP && defined(__WIN95__)
 #include "wx/msw/helpchm.h"
+#include "wx/dynlib.h"
+ 
+#ifndef WX_PRECOMP
+#include <windows.h>
+#endif
 
 // This is found in the HTML Help Workshop installation,
 // along with htmlhelp.lib.
@@ -41,6 +46,65 @@
 
 #include <string.h>
 
+// utility functions to manage the loading/unloading
+// of hhctrl.ocx
+#ifndef UNICODE
+typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCSTR, UINT, DWORD );
+#define HTMLHELP_NAME "HtmlHelpA"
+#else
+typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCWSTR, UINT, DWORD );
+#define HTMLHELP_NAME "HtmlHelpW"
+#endif
+// dll handle/reference count
+static HTMLHELP gs_htmlHelp = 0;
+static wxDllType gs_dllHandle = 0;
+static int gs_dllCount = 0;
+
+static bool LoadHtmlHelpLibrary()
+{
+    if( !gs_dllCount )
+    {
+        gs_dllHandle = wxDllLoader::LoadLibrary( "hhctrl.ocx" );
+        if( !gs_dllHandle )
+        {
+            wxLogError(_("MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."));
+            return FALSE;
+        }
+        else
+        {
+            gs_dllCount = 1;
+            gs_htmlHelp = (HTMLHELP)wxDllLoader::GetSymbol( gs_dllHandle, HTMLHELP_NAME );
+
+            if( !gs_htmlHelp )
+            {
+                wxLogError(_("Failed to initialize MS HTML Help."));
+
+                wxDllLoader::UnloadLibrary(gs_dllHandle);
+                gs_dllHandle = 0;
+                gs_dllCount = 0;
+
+                return FALSE ;
+            }
+        }
+    }
+    else
+    {
+        ++gs_dllCount;
+    }
+
+    return TRUE;
+}
+
+static void UnloadHtmlHelpLibrary()
+{
+    if( gs_dllCount != 0 && !--gs_dllCount )
+    {
+        wxDllLoader::UnloadLibrary( gs_dllHandle );
+        gs_dllHandle = 0;
+        gs_htmlHelp = 0;
+    }
+}
+
 static HWND GetSuitableHWND()
 {
     if (wxTheApp->GetTopWindow())
@@ -53,6 +117,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxCHMHelpController, wxHelpControllerBase)
 
 bool wxCHMHelpController::Initialize(const wxString& filename)
 {
+    // warn on failure
+    if( !LoadHtmlHelpLibrary() )
+        return FALSE;
+
     m_helpFile = filename;
     return TRUE;
 }
@@ -70,7 +138,7 @@ bool wxCHMHelpController::DisplayContents()
 
     wxString str = GetValidFilename(m_helpFile);
 
-    HtmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_HELP_FINDER, 0L);
+    gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_HELP_FINDER, 0L);
     return TRUE;
 }
 
@@ -85,7 +153,7 @@ bool wxCHMHelpController::DisplaySection(const wxString& section)
     bool isFilename = (section.Find(wxT(".htm")) != -1);
 
     if (isFilename)
-        HtmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_DISPLAY_TOPIC, (DWORD) (const wxChar*) section);
+        gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_DISPLAY_TOPIC, (DWORD) (const wxChar*) section);
     else
         KeywordSearch(section);
     return TRUE;
@@ -98,7 +166,7 @@ bool wxCHMHelpController::DisplaySection(int section)
 
     wxString str = GetValidFilename(m_helpFile);
 
-    HtmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_HELP_CONTEXT, (DWORD)section);
+    gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_HELP_CONTEXT, (DWORD)section);
     return TRUE;
 }
 
@@ -123,7 +191,7 @@ bool wxCHMHelpController::DisplayContextPopup(int contextId)
     popup.pszFont = NULL;
     popup.pszText = NULL;
 
-    HtmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_DISPLAY_TEXT_POPUP, (DWORD) & popup);
+    gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_DISPLAY_TEXT_POPUP, (DWORD) & popup);
     return TRUE;
 }
 
@@ -140,7 +208,7 @@ bool wxCHMHelpController::DisplayTextPopup(const wxString& text, const wxPoint& 
     popup.pszFont = NULL;
     popup.pszText = (const wxChar*) text;
 
-    HtmlHelp(GetSuitableHWND(), NULL, HH_DISPLAY_TEXT_POPUP, (DWORD) & popup);
+    gs_htmlHelp(GetSuitableHWND(), NULL, HH_DISPLAY_TEXT_POPUP, (DWORD) & popup);
     return TRUE;
 }
 
@@ -165,13 +233,15 @@ bool wxCHMHelpController::KeywordSearch(const wxString& k)
     link.pszWindow =    NULL ;
     link.fIndexOnFail = TRUE ;
 
-    HtmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_KEYWORD_LOOKUP, (DWORD)& link);
+    gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_KEYWORD_LOOKUP, (DWORD)& link);
     return TRUE;
 }
 
 bool wxCHMHelpController::Quit()
 {
-    HtmlHelp(GetSuitableHWND(), 0, HH_CLOSE_ALL, 0L);
+    gs_htmlHelp(GetSuitableHWND(), 0, HH_CLOSE_ALL, 0L);
+    UnloadHtmlHelpLibrary();
+
     return TRUE;
 }
 
