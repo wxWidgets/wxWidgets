@@ -1,37 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for sashtest example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=sashtest
+OBJECTS = $(TARGET).o
 
-OBJECTS = $(OBJDIR)/sashtest.$(OBJSUFF) $(OBJDIR)/sashtest_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) sashtest$(GUISUFFIX)$(EXESUFF)
-
-wx:
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-sashtest$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o sashtest$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
-
-$(OBJDIR)/sashtest.$(OBJSUFF):	sashtest.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ sashtest.$(SRCSUFF)
-
-$(OBJDIR)/sashtest_resources.o:  sashtest.rc
-	$(RESCOMP) -i sashtest.rc -o $(OBJDIR)/sashtest_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) sashtest$(GUISUFFIX).exe core *.rsc *.res

@@ -1,38 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for treetest example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=treetest
+OBJECTS = $(TARGET).o
 
-OBJECTS = $(OBJDIR)/treetest.$(OBJSUFF) $(OBJDIR)/treetest_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) treetest$(GUISUFFIX)$(EXESUFF)
-
-wx:
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-treetest$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o treetest$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
-
-$(OBJDIR)/treetest.$(OBJSUFF):	treetest.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ treetest.$(SRCSUFF)
-
-$(OBJDIR)/treetest_resources.o:  treetest.rc
-	$(RESCOMP) -i treetest.rc -o $(OBJDIR)/treetest_resources.o $(RESFLAGS)
-
-
-clean:
-	rm -f $(OBJECTS) treetest$(GUISUFFIX).exe core *.rsc *.res

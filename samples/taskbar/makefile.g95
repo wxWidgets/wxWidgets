@@ -1,37 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for taskbar example
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=tbtest
+OBJECTS = $(TARGET).o
 
-OBJECTS = $(OBJDIR)/tbtest.$(OBJSUFF) $(OBJDIR)/tbtest_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) tbtest$(GUISUFFIX)$(EXESUFF)
-
-wx:
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-tbtest$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o tbtest$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
-
-$(OBJDIR)/tbtest.$(OBJSUFF):	tbtest.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ tbtest.$(SRCSUFF)
-
-$(OBJDIR)/tbtest_resources.o:  tbtest.rc
-	$(RESCOMP) -i tbtest.rc -o $(OBJDIR)/tbtest_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) tbtest$(GUISUFFIX).exe core *.rsc *.res

@@ -1,37 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for oleauto example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=oleauto
+OBJECTS = $(TARGET).o
 
-OBJECTS = $(OBJDIR)/oleauto.$(OBJSUFF) $(OBJDIR)/oleauto_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) oleauto$(GUISUFFIX)$(EXESUFF)
-
-wx:
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-oleauto$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o oleauto$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
-
-$(OBJDIR)/oleauto.$(OBJSUFF):	oleauto.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ oleauto.$(SRCSUFF)
-
-$(OBJDIR)/oleauto_resources.o:  oleauto.rc
-	$(RESCOMP) -i oleauto.rc -o $(OBJDIR)/oleauto_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) oleauto$(GUISUFFIX).exe core *.rsc *.res

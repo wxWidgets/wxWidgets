@@ -1,43 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for docview example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=docview
+OBJECTS = $(TARGET).o view.o doc.o
 
-OBJECTS = $(OBJDIR)/docview.$(OBJSUFF) $(OBJDIR)/view.$(OBJSUFF) $(OBJDIR)/doc.$(OBJSUFF)\
- $(OBJDIR)/docview_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-
-all:    $(OBJDIR) docview$(GUISUFFIX)
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-docview$(GUISUFFIX): $(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o docview$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(XVIEW_LINK) $(LDLIBS)
-
-$(OBJDIR)/docview.$(OBJSUFF):        docview.$(SRCSUFF) docview.h doc.h view.h
-	$(CC) -c $(CPPFLAGS) -o $@ docview.$(SRCSUFF)
-
-$(OBJDIR)/doc.$(OBJSUFF):        doc.$(SRCSUFF) doc.h
-	$(CC) -c $(CPPFLAGS) -o $@ doc.$(SRCSUFF)
-
-$(OBJDIR)/view.$(OBJSUFF):        view.$(SRCSUFF) view.h
-	$(CC) -c $(CPPFLAGS) -o $@ view.$(SRCSUFF)
-
-$(OBJDIR)/docview_resources.o:  docview.rc
-	$(RESCOMP) -i docview.rc -o $(OBJDIR)/docview_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) docview$(GUISUFFIX).exe core *.rsc *.res

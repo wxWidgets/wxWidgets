@@ -88,6 +88,9 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\image
         nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\dde
+        nmake -f client.vc FINAL=$(FINAL)
+        nmake -f server.vc FINAL=$(FINAL)
 #        cd $(WXDIR)\samples\regtest
 #        nmake -f makefile.vc FINAL=$(FINAL)
 
@@ -156,4 +159,8 @@ clean:
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\image
         nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\dde
+        nmake -f client.vc clean
+        nmake -f server.vc clean
+        cd $(WXDIR)\samples
 

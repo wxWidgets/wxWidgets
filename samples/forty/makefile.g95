@@ -1,61 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for Forty Thieves example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=forty
+OBJECTS = $(TARGET).o canvas.o card.o game.o pile.o playerdg.o scoredg.o scorefil.o
 
-OBJECTS = $(OBJDIR)/forty.$(OBJSUFF) $(OBJDIR)/canvas.$(OBJSUFF) $(OBJDIR)/card.$(OBJSUFF)\
- $(OBJDIR)/game.$(OBJSUFF) $(OBJDIR)/pile.$(OBJSUFF) $(OBJDIR)/playerdg.$(OBJSUFF)\
- $(OBJDIR)/scoredg.$(OBJSUFF) $(OBJDIR)/scorefil.$(OBJSUFF)\
- $(OBJDIR)/forty_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) forty$(GUISUFFIX)$(EXESUFF)
-
-wx:
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-forty$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o forty$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
-
-$(OBJDIR)/forty.$(OBJSUFF):	forty.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ forty.$(SRCSUFF)
-
-$(OBJDIR)/canvas.$(OBJSUFF):	canvas.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ canvas.$(SRCSUFF)
-
-$(OBJDIR)/card.$(OBJSUFF):	card.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ card.$(SRCSUFF)
-
-$(OBJDIR)/playerdg.$(OBJSUFF):	playerdg.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ playerdg.$(SRCSUFF)
-
-$(OBJDIR)/scoredg.$(OBJSUFF):	scoredg.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ scoredg.$(SRCSUFF)
-
-$(OBJDIR)/scorefil.$(OBJSUFF):	scorefil.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ scorefil.$(SRCSUFF)
-
-$(OBJDIR)/pile.$(OBJSUFF):	pile.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ pile.$(SRCSUFF)
-
-$(OBJDIR)/game.$(OBJSUFF):	game.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ game.$(SRCSUFF)
-
-$(OBJDIR)/forty_resources.o:  forty.rc
-	$(RESCOMP) -i forty.rc -o $(OBJDIR)/forty_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) forty$(GUISUFFIX).exe core *.rsc *.res

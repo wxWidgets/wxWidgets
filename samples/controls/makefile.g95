@@ -1,37 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for controls example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=controls
+OBJECTS = $(TARGET).o
 
-OBJECTS = $(OBJDIR)/controls.$(OBJSUFF) $(OBJDIR)/controls_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) controls$(GUISUFFIX)$(EXESUFF)
-
-wx:
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-controls$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o controls$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
-
-$(OBJDIR)/controls.$(OBJSUFF):	controls.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ controls.$(SRCSUFF)
-
-$(OBJDIR)/controls_resources.o:  controls.rc
-	$(RESCOMP) -i controls.rc -o $(OBJDIR)/controls_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) controls$(GUISUFFIX).exe core *.rsc *.res

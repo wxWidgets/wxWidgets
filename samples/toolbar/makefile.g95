@@ -1,40 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for Buttonbar example (UNIX).
-# Change the WXDIR directory, and CPPFLAGS and LDFLAGS, for your system.
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=test
+OBJECTS = $(TARGET).o
 
-TESTOBJECTS = $(OBJDIR)/test.$(OBJSUFF) $(OBJDIR)/test_resources.$(OBJSUFF)
-TESTPROGRAM = test$(GUISUFFIX)
-
-all:	$(OBJDIR) $(TESTPROGRAM)
-
-demo:	$(TESTPROGRAM)
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-$(OBJDIR)/test.$(OBJSUFF):		test.h test.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ test.$(SRCSUFF)
-
-$(TESTPROGRAM): $(TESTOBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o test$(GUISUFFIX)$(EXESUFF) $(TESTOBJECTS) $(LDLIBS)
-
-$(OBJDIR)/test_resources.o:  test.rc
-	$(RESCOMP) -i test.rc -o $(OBJDIR)/test_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) test$(GUISUFFIX).exe $(TESTOBJECTS) core *.res *.rsc
+include $(WXDIR)/src/makeprog.g95
 

@@ -520,7 +520,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
 void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
 {
-#if wxUSE_CLIPBOARD
+  // We test for wxUSE_DRAG_AND_DROP also, because data objects
+  // may not be implemented for compilers that can't cope with the OLE
+  // parts in wxUSE_DRAG_AND_DROP.
+
+#if wxUSE_CLIPBOARD && wxUSE_DRAG_AND_DROP
   if (!wxTheClipboard->Open())
   {
      *m_text << "Error opening the clipboard.\n";
@@ -563,7 +567,7 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
 
 void MyPanel::OnCopyToClipboard( wxCommandEvent &WXUNUSED(event) )
 {
-#if wxUSE_CLIPBOARD
+#if wxUSE_CLIPBOARD && wxUSE_DRAG_AND_DROP
   wxString text( m_multitext->GetLineText(0) );
 
   if (text.IsEmpty())

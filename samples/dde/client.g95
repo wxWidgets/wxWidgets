@@ -9,7 +9,7 @@
 
 WXDIR = ../..
 
-TARGET=conftest
+TARGET=client
 OBJECTS = $(TARGET).o
 
 include $(WXDIR)/src/makeprog.g95

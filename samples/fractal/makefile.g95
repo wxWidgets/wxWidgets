@@ -1,37 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for fractal example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=fractal
+OBJECTS = $(TARGET).o
 
-OBJECTS = $(OBJDIR)/fractal.$(OBJSUFF) $(OBJDIR)/fractal_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) fractal$(GUISUFFIX)$(EXESUFF)
-
-wx:
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-fractal$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o fractal$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
-
-$(OBJDIR)/fractal.$(OBJSUFF):	fractal.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ fractal.$(SRCSUFF)
-
-$(OBJDIR)/fractal_resources.o:  fractal.rc
-	$(RESCOMP) -i fractal.rc -o $(OBJDIR)/fractal_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) fractal$(GUISUFFIX).exe core *.rsc *.res

@@ -1,37 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for minimal example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=memcheck
+OBJECTS = $(TARGET).o
 
-OBJECTS = $(OBJDIR)/memcheck.$(OBJSUFF) $(OBJDIR)/memcheck_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) memcheck$(GUISUFFIX)$(EXESUFF)
-
-wx:
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-memcheck$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o memcheck$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
-
-$(OBJDIR)/memcheck.$(OBJSUFF):	memcheck.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ memcheck.$(SRCSUFF)
-
-$(OBJDIR)/memcheck_resources.o:  memcheck.rc
-	$(RESCOMP) -i memcheck.rc -o $(OBJDIR)/memcheck_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) memcheck$(GUISUFFIX).exe core *.rsc *.res

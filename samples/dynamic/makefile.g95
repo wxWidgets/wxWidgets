@@ -1,37 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for dynamic example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=dynamic
+OBJECTS = $(TARGET).o
 
-OBJECTS = $(OBJDIR)/dynamic.$(OBJSUFF) $(OBJDIR)/dynamic_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) dynamic$(GUISUFFIX)$(EXESUFF)
-
-wx:
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-dynamic$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o dynamic$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
-
-$(OBJDIR)/dynamic.$(OBJSUFF):	dynamic.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ dynamic.$(SRCSUFF)
-
-$(OBJDIR)/dynamic_resources.o:  dynamic.rc
-	$(RESCOMP) -i dynamic.rc -o $(OBJDIR)/dynamic_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) dynamic$(GUISUFFIX).exe core *.rsc *.res

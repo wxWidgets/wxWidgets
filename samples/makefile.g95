@@ -7,72 +7,88 @@
 #
 # "%W% %G%"
 #
-# Makefile : Builds samples for Win95, GnuWin32
+# Makefile : Builds samples for Win95, Cygwin
 # info
 
 # Set WXDIR for your system
-SHELL=cmd.exe
+# SHELL=cmd.exe
 WXDIR = ..
 
 THISDIR=$(WXDIR)/samples
 
 all:
-	        $(MAKE) -C $(WXDIR)/samples/bombs -f makefile.g95
-	        $(MAKE) -C $(WXDIR)/samples/fractal -f makefile.g95
-	        $(MAKE) -C $(WXDIR)/samples/splitter -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/resource -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/controls -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/listctrl -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/treectrl -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/validate -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/mdi -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/minimal -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/layout -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/printing -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/proplist -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/toolbar -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/dialogs -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/docview -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/docvwmdi -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/sashtest -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/controls -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/nativdlg -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/grid -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/internat -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/checklst -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/dnd -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/ownerdrw -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/joytest -f makefile.g95
-	        $(MAKE) -C  $(WXDIR)/samples/memcheck -f makefile.g95
-#	        $(MAKE) -C  $(WXDIR)/samples/regtest -f makefile.g95
+	        cd $(WXDIR)/samples/bombs; make -f makefile.g95
+	        cd $(WXDIR)/samples/fractal; make -f makefile.g95
+	        cd $(WXDIR)/samples/splitter; make -f makefile.g95
+	        cd  $(WXDIR)/samples/resource; make -f makefile.g95
+	        cd  $(WXDIR)/samples/controls; make -f makefile.g95
+	        cd  $(WXDIR)/samples/listctrl; make -f makefile.g95
+	        cd  $(WXDIR)/samples/treectrl; make -f makefile.g95
+	        cd  $(WXDIR)/samples/validate; make -f makefile.g95
+	        cd  $(WXDIR)/samples/mdi; make -f makefile.g95
+	        cd  $(WXDIR)/samples/minimal; make -f makefile.g95
+	        cd  $(WXDIR)/samples/layout; make -f makefile.g95
+	        cd  $(WXDIR)/samples/printing; make -f makefile.g95
+	        cd  $(WXDIR)/samples/proplist; make -f makefile.g95
+	        cd  $(WXDIR)/samples/toolbar; make -f makefile.g95
+	        cd  $(WXDIR)/samples/dialogs; make -f makefile.g95
+	        cd  $(WXDIR)/samples/docview; make -f makefile.g95
+	        cd  $(WXDIR)/samples/docvwmdi; make -f makefile.g95
+	        cd  $(WXDIR)/samples/sashtest; make -f makefile.g95
+	        cd  $(WXDIR)/samples/controls; make -f makefile.g95
+	        cd  $(WXDIR)/samples/nativdlg; make -f makefile.g95
+	        cd  $(WXDIR)/samples/grid; make -f makefile.g95
+	        cd  $(WXDIR)/samples/internat; make -f makefile.g95
+	        cd  $(WXDIR)/samples/checklst; make -f makefile.g95
+	        cd  $(WXDIR)/samples/ownerdrw; make -f makefile.g95
+	        cd  $(WXDIR)/samples/joytest; make -f makefile.g95
+	        cd  $(WXDIR)/samples/memcheck; make -f makefile.g95
+	        cd  $(WXDIR)/samples/image; make -f makefile.g95
+	        cd  $(WXDIR)/samples/wxpoem; make -f makefile.g95
+	        cd  $(WXDIR)/samples/notebook; make -f makefile.g95
+	        cd  $(WXDIR)/samples/thread; make -f makefile.g95
+	        cd  $(WXDIR)/samples/minifram; make -f makefile.g95
+	        cd  $(WXDIR)/samples/forty; make -f makefile.g95
+	        cd  $(WXDIR)/samples/dde; make -f client.g95
+	        cd  $(WXDIR)/samples/dde; make -f server.g95
+#	        cd  $(WXDIR)/samples/dnd; make -f makefile.g95
+#	        cd  $(WXDIR)/samples/regtest; make -f makefile.g95
 
 clean:
-	        $(MAKE) -C  $(WXDIR)/samples/bombs -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/fractal -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/splitter -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/mdi -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/minimal -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/layout -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/printing -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/proplist -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/toolbar -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/dialogs -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/resource -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/listctrl -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/treectrl -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/validate -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/docview -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/docvwmdi -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/sashtest -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/controls -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/nativdlg -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/grid -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/internat -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/checklst -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/dnd -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/ownerdrw -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/regtest -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/joytest -f makefile.g95 clean
-	        $(MAKE) -C  $(WXDIR)/samples/memcheck -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/bombs; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/fractal; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/splitter; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/mdi; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/minimal; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/layout; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/printing; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/proplist; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/toolbar; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/dialogs; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/resource; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/listctrl; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/treectrl; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/validate; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/docview; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/docvwmdi; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/sashtest; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/controls; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/nativdlg; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/grid; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/internat; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/checklst; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/ownerdrw; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/regtest; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/joytest; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/memcheck; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/image; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/wxpoem; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/notebook; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/thread; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/minifram; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/forty; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/dnd; make -f makefile.g95 clean
+	        cd  $(WXDIR)/samples/dde; make -f client.g95 clean
+	        cd  $(WXDIR)/samples/dde; make -f server.g95 clean
 
 

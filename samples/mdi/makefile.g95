@@ -1,35 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for mdi example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=mdi
+OBJECTS = $(TARGET).o
 
-OBJECTS = $(OBJDIR)/mdi.$(OBJSUFF) $(OBJDIR)/mdi_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) mdi.exe
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-mdi.exe: $(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o mdi.exe $(OBJECTS) $(LDLIBS)
-
-$(OBJDIR)/mdi.$(OBJSUFF):        mdi.$(SRCSUFF) mdi.h
-	$(CC) -c $(CPPFLAGS) -o $@ mdi.$(SRCSUFF)
-
-$(OBJDIR)/mdi_resources.o:  mdi.rc
-	$(RESCOMP) -i mdi.rc -o $(OBJDIR)/mdi_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) mdi$(GUISUFFIX).exe core *.res *.rsc

@@ -1,37 +1,16 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1993
-# Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
 #
-# "%W% %G%"
-#
-# Makefile for wxpoem example (UNIX).
+# Makefile for wxWindows sample (Cygwin/Mingw32).
 
 WXDIR = ../..
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/makeg95.env
+TARGET=wxpoem
+OBJECTS = $(TARGET).o
 
-OBJECTS = $(OBJDIR)/wxpoem.$(OBJSUFF) $(OBJDIR)/wxpoem_resources.$(OBJSUFF)
+include $(WXDIR)/src/makeprog.g95
 
-all:    $(OBJDIR) wxpoem$(GUISUFFIX)$(EXESUFF)
-
-wx:
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-wxpoem$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o wxpoem$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
-
-$(OBJDIR)/wxpoem.$(OBJSUFF):	wxpoem.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ wxpoem.$(SRCSUFF)
-
-$(OBJDIR)/wxpoem_resources.o:  wxpoem.rc
-	$(RESCOMP) -i wxpoem.rc -o $(OBJDIR)/wxpoem_resources.o $(RESFLAGS)
-
-clean:
-	rm -f $(OBJECTS) wxpoem$(GUISUFFIX).exe core *.rsc *.res
