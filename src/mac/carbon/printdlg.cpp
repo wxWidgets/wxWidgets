@@ -19,6 +19,13 @@
 #include "wx/msgdlg.h"
 #include "wx/mac/uma.h"
 
+#if defined(TARGET_CARBON) && !defined(__DARWIN__)
+#  if PM_USE_SESSION_APIS
+#    include <PMCore.h>
+#  endif
+#  include <PMApplication.h>
+#endif
+
 // Use generic page setup dialog: use your own native one if one exists.
 
 #if !USE_SHARED_LIBRARY
@@ -72,7 +79,7 @@ int wxPrintDialog::ShowModal()
 	wxString message ;
 
 #if !TARGET_CARBON	
-	err = ::UMAPrOpen() ;
+	err = ::UMAPrOpen(NULL) ;
 	if ( err == noErr )
 	{
 		m_printDialogData.ConvertToNative() ;
@@ -89,7 +96,7 @@ int wxPrintDialog::ShowModal()
 		wxMessageDialog dialog( NULL , message  , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
 	}
-	::UMAPrClose() ;
+	::UMAPrClose(NULL) ;
 #else
   #if PM_USE_SESSION_APIS
     PMPrintSession macPrintSession = kPMNoReference;
@@ -224,7 +231,7 @@ int wxPageSetupDialog::ShowModal()
 	wxString message ;
 
 #if !TARGET_CARBON
-	err = ::UMAPrOpen() ;
+	err = ::UMAPrOpen(NULL) ;
 	if ( err == noErr )
 	{
 		m_pageSetupData.ConvertToNative() ;
@@ -241,7 +248,7 @@ int wxPageSetupDialog::ShowModal()
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
 		dialog.ShowModal();
 	}
-	::UMAPrClose() ;
+	::UMAPrClose(NULL) ;
 #else
   #if PM_USE_SESSION_APIS
     PMPrintSession macPrintSession = kPMNoReference;

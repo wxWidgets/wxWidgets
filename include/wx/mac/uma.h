@@ -54,13 +54,8 @@ void			UMAInsertMenuItem( MenuRef menu , StringPtr label , MenuItemIndex item , 
 void			UMAShowWatchCursor() ;
 void			UMAShowArrowCursor() ;
 
-#if TARGET_CARBON && PM_USE_SESSION_APIS
-OSStatus		UMAPrOpen(PMPrintSession *macPrintSession) ;
-OSStatus		UMAPrClose(PMPrintSession *macPrintSession) ;
-#else
-OSStatus		UMAPrOpen() ;
-OSStatus		UMAPrClose() ;
-#endif
+OSStatus		UMAPrOpen(void *macPrintSession) ;
+OSStatus		UMAPrClose(void *macPrintSession) ;
 
 // window manager
 

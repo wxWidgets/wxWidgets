@@ -4,7 +4,13 @@
 #include <MacTextEditor.h>
 
 #ifndef __DARWIN__
-  #include <Navigation.h>
+#  include <Navigation.h>
+#  if defined(TARGET_CARBON)
+#    if PM_USE_SESSION_APIS
+#      include <PMCore.h>
+#    endif
+#    include <PMApplication.h>
+#  endif
 #endif
 
 // since we have decided that we only support 8.6 upwards we are
@@ -255,11 +261,7 @@ void UMAInsertMenuItem( MenuRef menu , StringPtr l , MenuItemIndex item , SInt16
 
 int gPrOpenCounter = 0 ;
 
-#if TARGET_CARBON && PM_USE_SESSION_APIS
-OSStatus UMAPrOpen(PMPrintSession *macPrintSession)
-#else
-OSStatus UMAPrOpen()
-#endif
+OSStatus UMAPrOpen(void *macPrintSession)
 {
 #if !TARGET_CARBON
 	OSErr err = noErr ;
@@ -277,7 +279,7 @@ OSStatus UMAPrOpen()
 	if ( gPrOpenCounter == 1 )
 	{
   #if PM_USE_SESSION_APIS
-	    err = PMCreateSession(macPrintSession) ;
+	    err = PMCreateSession((PMPrintSession *)macPrintSession) ;
   #else
 	    err = PMBegin() ;
   #endif
@@ -287,11 +289,7 @@ OSStatus UMAPrOpen()
 #endif
 }
 
-#if TARGET_CARBON && PM_USE_SESSION_APIS
-OSStatus UMAPrClose(PMPrintSession *macPrintSession)
-#else
-OSStatus UMAPrClose()
-#endif
+OSStatus UMAPrClose(void *macPrintSession)
 {
 #if !TARGET_CARBON
 	OSErr err = noErr ;
@@ -310,8 +308,8 @@ OSStatus UMAPrClose()
 	if ( gPrOpenCounter == 1 )
 	{
   #if PM_USE_SESSION_APIS
-	    err = PMRelease(*macPrintSession) ;
-	    *macPrintSession = kPMNoReference;
+	    err = PMRelease(*(PMPrintSession *)macPrintSession) ;
+	    *(PMPrintSession *)macPrintSession = kPMNoReference;
   #else
 	    err = PMEnd() ;
   #endif
