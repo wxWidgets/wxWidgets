@@ -1,40 +1,60 @@
 \section{wxGrid classes overview}\label{gridoverview}
 
-wxGrid is a class for displaying and editing tabular information.
+Classes: \helpref{wxGrid}{wxgrid}
 
-To use wxGrid, include the wxgrid.h header file and link with the
-wxGrid library. Create a wxGrid object, or, if you need to override
-some default behaviour, create an object of a class derived from wxGrid.
-You need to call CreateGrid before there are any cells in the grid.
+\subsection{Introduction}
+wxGrid and its related classes are used for displaying and editing tabular data.
 
-All row and column positions start from zero, and dimensions are in pixels.
-
-If you make changes to row or column dimensions, call UpdateDimensions and
-then AdjustScrollbars. If you make changes to the grid appearance (such as
-a change of cell background colour or font), call Refresh for the changes
-to be shown.
-
-\subsection{Example}
-
-The following fragment is taken from the file samples/grid/test.cpp. Note the
-call to UpdateDimensions, which is required if the application
-has changed any dimensions such as column width or row height.
-You may also need to call AdjustScrollbars. In this case, AdjustScrollbars
-isn't necessary because it will be called by wxGrid::OnSize which is invoked
-when the window is first displayed.
+\subsection{Getting started: a simple example}
+For simple applications you need only refer to the wxGrid class in your
+code.  This example shows how you might create a grid in a frame or
+dialog constructor and illustrates some of the formatting functions. 
 
 \begin{verbatim}
-  // Make a grid
-  frame->grid = new wxGrid(frame, 0, 0, 400, 400);
 
-  frame->grid->CreateGrid(10, 8);
-  frame->grid->SetColumnWidth(3, 200);
-  frame->grid->SetRowHeight(4, 45);
-  frame->grid->SetCellValue("First cell", 0, 0);
-  frame->grid->SetCellValue("Another cell", 1, 1);
-  frame->grid->SetCellValue("Yet another cell", 2, 2);
-  frame->grid->SetCellTextFont(wxTheFontList->FindOrCreateFont(12, wxROMAN, wxITALIC, wxNORMAL), 0, 0);
-  frame->grid->SetCellTextColour(*wxRED, 1, 1);
-  frame->grid->SetCellBackgroundColour(*wxCYAN, 2, 2);
-  frame->grid->UpdateDimensions();
+    // Create a wxGrid object
+    
+    grid = new wxGrid( this,
+                       -1,
+                       wxPoint( 0, 0 ),
+                       wxSize( 400, 300 ) );
+
+    // Then we call CreateGrid to set the dimensions of the grid
+    // (100 rows and 10 columns in this example)
+    grid->CreateGrid( 100, 10 );
+
+    // We can set the sizes of individual rows and columns
+    // in pixels
+    grid->SetRowSize( 0, 60 );
+    grid->SetColSize( 0, 120 );
+    
+    // And set grid cell contents as strings
+    grid->SetCellValue( 0, 0, "wxGrid is good" );
+
+    // We can specify that some cells are read-only
+    grid->SetCellValue( 0, 3, "This is read-only" );
+    grid->SetReadOnly( 0, 3 );
+
+    // Colours can be specified for grid cell contents
+    grid->SetCellValue(3, 3, "green on grey");
+    grid->SetCellTextColour(3, 3, *wxGREEN);
+    grid->SetCellBackgroundColour(3, 3, *wxLIGHT_GREY);
+
+    // We can specify the some cells will store numeric 
+    // values rather than strings. Here we set grid column 5 
+    // to hold floating point values displayed with width of 6 
+    // and precision of 2
+    grid->SetColFormatFloat(5, 6, 2);
+    grid->SetCellValue(0, 6, "3.1415");
+
 \end{verbatim}
+
+\subsection{A more complex example}
+Yet to be written
+
+\subsection{How the wxGrid classes relate to each other}
+Yet to be written
+
+\subsection{Keyboard and mouse actions}
+Yet to be written
+
