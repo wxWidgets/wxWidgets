@@ -28,6 +28,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+#include <wx/icon.h>
+#include <wx/intl.h>
 #endif // WX_PRECOMP
 
 #include "wx/dir.h"
@@ -388,7 +390,7 @@ wxArrayString wxFSVolume::GetVolumes(int flagsSet, int flagsUnset)
     while (*pVol)
     {
         FilteredAdd(list, pVol, flagsSet, flagsUnset);
-        pVol = pVol + _tcslen(pVol) + 1;
+        pVol = pVol + wxStrlen(pVol) + 1;
     }
 
     // Cleanup.
