@@ -126,7 +126,7 @@ protected:
 
     // event handlers
     void OnIdle(wxIdleEvent& event);
-    
+
     // forces update of thumb's visual appearence (does nothing if m_dirty=FALSE)
     void UpdateThumb();
 
@@ -135,6 +135,9 @@ protected:
 
     // common part of all ctors
     void Init();
+
+    // is this scrollbar attached to a window or a standalone control?
+    bool IsStandalone() const;
 
 private:
     // total range of the scrollbar in logical units

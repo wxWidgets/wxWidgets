@@ -165,22 +165,26 @@ wxScrollBar::~wxScrollBar()
 {
 }
 
+// ----------------------------------------------------------------------------
+// misc accessors
+// ----------------------------------------------------------------------------
+
+bool wxScrollBar::IsStandalone() const
+{
+    wxWindow *parent = GetParent();
+    if ( !parent )
+    {
+        return TRUE;
+    }
+
+    return (parent->GetScrollbar(wxHORIZONTAL) != this) &&
+           (parent->GetScrollbar(wxVERTICAL) != this);
+}
+
 bool wxScrollBar::AcceptsFocus() const
 {
-    if (!wxWindow::AcceptsFocus()) return FALSE;
-    
-    wxWindow *parent = (wxWindow*) GetParent();
-    
-    if (parent)
-    {
-        if ((parent->GetScrollbar( wxHORIZONTAL ) == this) ||
-            (parent->GetScrollbar( wxVERTICAL ) == this))
-        {
-            return FALSE;
-        }
-    }
-    
-    return TRUE;
+    // the window scrollbars never accept focus
+    return wxScrollBarBase::AcceptsFocus() && IsStandalone();
 }
 
 // ----------------------------------------------------------------------------
@@ -543,6 +547,16 @@ bool wxScrollBar::PerformAction(const wxControlAction& action,
     bool changed = m_thumbPos != thumbOld;
     if ( notify || changed )
     {
+        if ( IsStandalone() )
+        {
+            // we should generate EVT_SCROLL events for the standalone
+            // scrollbars and not the EVT_SCROLLWIN ones
+            //
+            // NB: we assume that scrollbar events are sequentially numbered
+            //     but this should be ok as other code relies on this as well
+            scrollType += wxEVT_SCROLL_TOP - wxEVT_SCROLLWIN_TOP;
+        }
+
         wxScrollWinEvent event(scrollType, m_thumbPos,
                                IsVertical() ? wxVERTICAL : wxHORIZONTAL);
         event.SetEventObject(this);
