@@ -85,18 +85,9 @@ WX_DEFINE_EXPORTED_LIST( wxSizerItemList );
     minsize
 */
 
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxSizerItem
-//---------------------------------------------------------------------------
-
-void wxSizerItem::Init()
-{
-    m_window = NULL;
-    m_sizer = NULL;
-    m_show = true;
-    m_userData = NULL;
-    m_zoneRect = wxRect(0,0,0,0);
-}
+// ----------------------------------------------------------------------------
 
 void wxSizerItem::Init(const wxSizerFlags& flags)
 {
@@ -107,56 +98,6 @@ void wxSizerItem::Init(const wxSizerFlags& flags)
     m_border = flags.GetBorderInPixels();
 }
 
-wxSizerItem::wxSizerItem( int width, int height, int proportion, int flag, int border, wxObject* userData )
-    : m_window( NULL )
-    , m_sizer( NULL )
-    , m_size( wxSize( width, height ) ) // size is set directly
-    , m_minSize( m_size )               // minimal size is the initial size
-    , m_proportion( proportion )
-    , m_border( border )
-    , m_flag( flag )
-    , m_zoneRect()
-    , m_show( true )
-    , m_userData( userData )
-{
-    SetRatio( m_size );
-}
-
-wxSizerItem::wxSizerItem( wxWindow *window, int proportion, int flag, int border, wxObject* userData )
-    : m_window( window )
-    , m_sizer( NULL )
-    , m_proportion( proportion )
-    , m_border( border )
-    , m_flag( flag )
-    , m_zoneRect()
-    , m_show( true )
-    , m_userData( userData )
-{
-    if (flag & wxFIXED_MINSIZE)
-        window->SetMinSize(window->GetSize());
-    m_minSize = window->GetSize();
-
-    // aspect ratio calculated from initial size
-    SetRatio( m_minSize );
-
-    // m_size is calculated later
-}
-
-wxSizerItem::wxSizerItem( wxSizer *sizer, int proportion, int flag, int border, wxObject* userData )
-    : m_window( NULL )
-    , m_sizer( sizer )
-    , m_proportion( proportion )
-    , m_border( border )
-    , m_flag( flag )
-    , m_zoneRect()
-    , m_show( true )
-    , m_ratio( 0.0 )
-    , m_userData( userData )
-{
-    // m_minSize is calculated later
-    // m_size is calculated later
-}
-
 wxSizerItem::wxSizerItem()
 {
     Init();
@@ -164,32 +105,149 @@ wxSizerItem::wxSizerItem()
     m_proportion = 0;
     m_border = 0;
     m_flag = 0;
+
+    m_kind = Item_None;
+}
+
+// window item
+void wxSizerItem::SetWindow(wxWindow *window)
+{
+    wxCHECK_RET( window, _T("NULL window in wxSizerItem::SetWindow()") );
+
+    m_kind = Item_Window;
+    m_window = window;
+
+    // window doesn't become smaller than its initial size, whatever happens
+    m_minSize = window->GetSize();
+
+    if ( m_flag & wxFIXED_MINSIZE )
+        window->SetMinSize(m_minSize);
+
+    // aspect ratio calculated from initial size
+    SetRatio(m_minSize);
+}
+
+wxSizerItem::wxSizerItem(wxWindow *window,
+                         int proportion,
+                         int flag,
+                         int border,
+                         wxObject* userData)
+           : m_proportion(proportion),
+             m_border(border),
+             m_flag(flag),
+             m_userData(userData)
+{
+    SetWindow(window);
+}
+
+// sizer item
+void wxSizerItem::SetSizer(wxSizer *sizer)
+{
+    m_kind = Item_Sizer;
+    m_sizer = sizer;
+}
+
+wxSizerItem::wxSizerItem(wxSizer *sizer,
+                         int proportion,
+                         int flag,
+                         int border,
+                         wxObject* userData)
+           : m_proportion(proportion),
+             m_border(border),
+             m_flag(flag),
+             m_ratio(0.0),
+             m_userData(userData)
+{
+    SetSizer(sizer);
+
+    // m_minSize is set later
+}
+
+// spacer item
+void wxSizerItem::SetSpacer(const wxSize& size)
+{
+    m_kind = Item_Spacer;
+    m_spacer = new wxSizerSpacer(size);
+    m_minSize = size;
+    SetRatio(size);
+}
+
+wxSizerItem::wxSizerItem(int width,
+                         int height,
+                         int proportion,
+                         int flag,
+                         int border,
+                         wxObject* userData)
+           : m_minSize(width, height), // minimal size is the initial size
+             m_proportion(proportion),
+             m_border(border),
+             m_flag(flag),
+             m_userData(userData)
+{
+    SetSpacer(width, height);
 }
 
 wxSizerItem::~wxSizerItem()
 {
     delete m_userData;
 
-    if ( m_window )
+    switch ( m_kind )
     {
-        m_window->SetContainingSizer(NULL);
+        case Item_None:
+            break;
+
+        case Item_Window:
+            m_window->SetContainingSizer(NULL);
+            break;
+
+        case Item_Sizer:
+            delete m_sizer;
+            break;
+
+        case Item_Spacer:
+            delete m_spacer;
+            break;
+
+        case Item_Max:
+        default:
+            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
     }
-    else // we must be a sizer
-    {
-        delete m_sizer;
-    }
+}
+
+wxSize wxSizerItem::GetSpacer() const
+{
+    wxSize size;
+    if ( m_kind == Item_Spacer )
+        size = m_spacer->GetSize();
+
+    return size;
 }
 
 
 wxSize wxSizerItem::GetSize() const
 {
     wxSize ret;
-    if (IsSizer())
-        ret = m_sizer->GetSize();
-    else
-    if (IsWindow())
-        ret = m_window->GetSize();
-    else ret = m_size;
+    switch ( m_kind )
+    {
+        case Item_None:
+            break;
+
+        case Item_Window:
+            ret = m_window->GetSize();
+            break;
+
+        case Item_Sizer:
+            ret = m_sizer->GetSize();
+            break;
+
+        case Item_Spacer:
+            ret = m_spacer->GetSize();
+            break;
+
+        case Item_Max:
+        default:
+            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
+    }
 
     if (m_flag & wxWEST)
         ret.x += m_border;
@@ -294,53 +352,106 @@ void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
         size.y -= m_border;
     }
 
-    if (IsSizer())
-        m_sizer->SetDimension( pos.x, pos.y, size.x, size.y );
+    m_rect = wxRect(pos, size);
 
-    m_zoneRect = wxRect(pos, size);
-    if (IsWindow())
-        m_window->SetSize( pos.x, pos.y, size.x, size.y, wxSIZE_ALLOW_MINUS_ONE );
+    switch ( m_kind )
+    {
+        case Item_None:
+            wxFAIL_MSG( _T("can't set size of uninitialized sizer item") );
+            break;
 
-    m_size = size;
+        case Item_Window:
+            m_window->SetSize(pos.x, pos.y, size.x, size.y,
+                              wxSIZE_ALLOW_MINUS_ONE);
+            break;
+
+        case Item_Sizer:
+            m_sizer->SetDimension(pos.x, pos.y, size.x, size.y);
+            break;
+
+        case Item_Spacer:
+            m_spacer->SetSize(size);
+            break;
+
+        case Item_Max:
+        default:
+            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
+    }
 }
 
 void wxSizerItem::DeleteWindows()
 {
-    if (m_window)
+    switch ( m_kind )
     {
-         m_window->Destroy();
-         m_window = NULL;
+        case Item_None:
+        case Item_Spacer:
+            break;
+
+        case Item_Window:
+            m_window->Destroy();
+            break;
+
+        case Item_Sizer:
+            m_sizer->DeleteWindows();
+            break;
+
+        case Item_Max:
+        default:
+            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
     }
 
-    if (m_sizer)
-        m_sizer->DeleteWindows();
-}
-
-bool wxSizerItem::IsWindow() const
-{
-    return (m_window != NULL);
-}
-
-bool wxSizerItem::IsSizer() const
-{
-    return (m_sizer != NULL);
-}
-
-bool wxSizerItem::IsSpacer() const
-{
-    return (m_window == NULL) && (m_sizer == NULL);
+    m_kind = Item_None;
 }
 
 void wxSizerItem::Show( bool show )
 {
-    m_show = show;
+    switch ( m_kind )
+    {
+        case Item_None:
+            wxFAIL_MSG( _T("can't show uninitialized sizer item") );
+            break;
 
-    if( IsWindow() )
-        m_window->Show( show );
-    else if( IsSizer() )
-        m_sizer->ShowItems( show );
+        case Item_Window:
+            m_window->Show(show);
+            break;
 
-    // ... nothing else to do to hide/show spacers
+        case Item_Sizer:
+            m_sizer->ShowItems(show);
+            break;
+
+        case Item_Spacer:
+            m_spacer->Show(show);
+            break;
+
+        case Item_Max:
+        default:
+            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
+    }
+}
+
+bool wxSizerItem::IsShown() const
+{
+    switch ( m_kind )
+    {
+        case Item_None:
+            wxFAIL_MSG( _T("uninitialized sizer item") );
+            break;
+
+        case Item_Window:
+            return m_window->IsShown();
+
+        case Item_Sizer:
+            return m_sizer->IsShown();
+
+        case Item_Spacer:
+            return m_spacer->IsShown();
+
+        case Item_Max:
+        default:
+            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
+    }
+
+    return false;
 }
 
 void wxSizerItem::SetOption( int option )
@@ -359,8 +470,8 @@ int wxSizerItem::GetOption() const
 //---------------------------------------------------------------------------
 
 wxSizer::wxSizer()
-        :m_minSize()
 {
+    m_isShown = true;
 }
 
 wxSizer::~wxSizer()
@@ -372,7 +483,7 @@ wxSizerItem* wxSizer::Insert( size_t index, wxSizerItem *item )
 {
     m_children.Insert( index, item );
 
-    if( item->GetWindow() )
+    if ( item->GetWindow() )
         item->GetWindow()->SetContainingSizer( this );
 
     return item;
@@ -417,7 +528,7 @@ bool wxSizer::Remove( int index )
 
     wxSizerItem *item = node->GetData();
 
-    if( item->IsWindow() )
+    if ( item->IsWindow() )
         item->GetWindow()->SetContainingSizer( NULL );
 
     delete item;
@@ -481,9 +592,9 @@ bool wxSizer::Detach( int index )
 
     wxSizerItem *item = node->GetData();
 
-    if( item->IsSizer() )
+    if ( item->IsSizer() )
         item->DetachSizer();
-    else if( item->IsWindow() )
+    else if ( item->IsWindow() )
         item->GetWindow()->SetContainingSizer( NULL );
 
     delete item;
@@ -620,7 +731,7 @@ wxSize wxSizer::GetMaxClientSize( wxWindow *window ) const
 {
     wxSize maxSize( window->GetMaxSize() );
 
-    if( maxSize != wxDefaultSize )
+    if ( maxSize != wxDefaultSize )
     {
         wxSize size( window->GetSize() );
         wxSize client_size( window->GetClientSize() );
