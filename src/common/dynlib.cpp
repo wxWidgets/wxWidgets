@@ -331,9 +331,9 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
     CFragSymbolClass    symClass;
     Str255              symName;
 #if TARGET_CARBON
-    c2pstrcpy( (StringPtr) symName, name );
+    c2pstrcpy( (StringPtr) symName, name.fn_str() );
 #else
-    strcpy( (char *)symName, name );
+    strcpy( (char *)symName, name.fn_str() );
     c2pstr( (char *)symName );
 #endif
     if( FindSymbol( m_handle, symName, &symAddress, &symClass ) == noErr )

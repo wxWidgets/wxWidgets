@@ -196,7 +196,7 @@ const off_t wxInvalidOffset = (off_t)-1;
 // implementation
 // ============================================================================
 
-#if defined(__WXMAC__) && !defined(__DARWIN__)
+#if defined(__WXMAC__) && !defined(__DARWIN__) && !defined(wxUSE_UNICODE)
 
 WXDLLEXPORT int wxStat( const wxChar *file_name, wxStructStat *buf )
 {

@@ -1205,7 +1205,7 @@ WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
 }
 #endif // wxNEED_WX_STRING_H
 
-#if defined(__WXMAC__) && !defined(__DARWIN__)
+#if defined(__WXMAC__) && !defined(__DARWIN__) && !defined(wxUSE_UNICODE)
 WXDLLEXPORT FILE * wxFopen(const wxChar *path, const wxChar *mode)
 {
     return fopen( wxMacStringToCString(path), mode );
