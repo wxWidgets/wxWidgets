@@ -163,8 +163,10 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
 	gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_toolbar) );
 	gtk_widget_show( GTK_WIDGET(m_toolbar) );
 	
+#if (GTK_MINOR_VERSION > 0)
 	if (style & wxTB_FLAT)
             gtk_handle_box_set_shadow_type( GTK_HANDLE_BOX(m_widget), GTK_SHADOW_NONE );
+#endif
     }
     else
     {     
