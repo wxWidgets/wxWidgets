@@ -102,7 +102,7 @@ int wxFileDialog::ShowModal(void)
 }
 
 
-char *wxFileSelector( const char *title,
+wxString wxFileSelector( const char *title,
                       const char *defaultDir, const char *defaultFileName,
                       const char *defaultExtension, const char *filter, int flags,
                       wxWindow *parent, int x, int y )
@@ -129,16 +129,15 @@ char *wxFileSelector( const char *title,
 
     if ( fileDialog.ShowModal() == wxID_OK )
     {
-        strcpy(wxBuffer, (const char *)fileDialog.GetPath());
-        return wxBuffer;
+        return fileDialog.GetPath();
     }
     else
     {
-        return (char *) NULL;
+        return wxEmptyString;
     }
 }
 
-char* wxLoadFileSelector( const char *what, const char *extension, const char *default_name, wxWindow *parent )
+wxString wxLoadFileSelector( const char *what, const char *extension, const char *default_name, wxWindow *parent )
 {
     char *ext = (char *)extension;
 
@@ -153,7 +152,7 @@ char* wxLoadFileSelector( const char *what, const char *extension, const char *d
     return wxFileSelector (prompt, (const char *) NULL, default_name, ext, wild, 0, parent);
 }
 
-char* wxSaveFileSelector(const char *what, const char *extension, const char *default_name,
+wxString wxSaveFileSelector(const char *what, const char *extension, const char *default_name,
          wxWindow *parent )
 {
     char *ext = (char *)extension;
