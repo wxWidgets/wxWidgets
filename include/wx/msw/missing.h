@@ -430,6 +430,38 @@ typedef struct {
     #define TVM_SETTEXTCOLOR        (TV_FIRST + 30)
 #endif
 
+#ifndef TVN_GETINFOTIP
+    #ifdef UNICODE
+        #define TVN_GETINFOTIP TVN_GETINFOTIPW
+    #else
+        #define TVN_GETINFOTIP TVN_GETINFOTIPA
+    #endif
+#endif
+
+#ifndef NMTVGETINFOTIP
+    struct NMTVGETINFOTIPA
+    {
+        NMHDR     hdr;
+        LPSTR     pszText;
+        int       cchTextMax;
+        HTREEITEM hItem;
+        LPARAM    lParam;
+    };
+    struct NMTVGETINFOTIPW
+    {
+        NMHDR     hdr;
+        LPWSTR     pszText;
+        int       cchTextMax;
+        HTREEITEM hItem;
+        LPARAM    lParam;
+    };
+    #ifdef UNICODE
+        #define NMTVGETINFOTIP NMTVGETINFOTIPW
+    #else
+        #define NMTVGETINFOTIP NMTVGETINFOTIPA
+    #endif
+#endif
+
 // ----------------------------------------------------------------------------
 // Misc stuff
 // ----------------------------------------------------------------------------
