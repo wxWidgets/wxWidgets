@@ -375,22 +375,22 @@ wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
 void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
 {
   wxClientDC dc(this);
-  return item.m_pItem->SetText(text, dc);
+  item.m_pItem->SetText(text, dc);
 }
 
 void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image)
 {
-  return item.m_pItem->SetImage(image);
+  item.m_pItem->SetImage(image);
 }
 
 void wxTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image)
 {
-  return item.m_pItem->SetSelectedImage(image);
+  item.m_pItem->SetSelectedImage(image);
 }
 
 void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
 {
-  return item.m_pItem->SetData(data);
+  item.m_pItem->SetData(data);
 }
 
 void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
@@ -467,7 +467,7 @@ wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
   wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
 
   size_t n = (size_t)(index + 1);
-  return n == siblings.Count() ? NULL : siblings[n];
+  return n == siblings.Count() ? (wxGenericTreeItem*)NULL : siblings[n];
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
@@ -486,7 +486,7 @@ wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
   int index = siblings.Index(i);
   wxASSERT( index != NOT_FOUND ); // I'm not a child of my parent?
 
-  return index == 0 ? NULL : siblings[(size_t)(index - 1)];
+  return index == 0 ? (wxGenericTreeItem*)NULL : siblings[(size_t)(index - 1)];
 }
 
 wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const

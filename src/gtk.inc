@@ -129,7 +129,8 @@ LIB_CPP_SRC=\
  generic/splitter.cpp \
  generic/statusbr.cpp \
  generic/tabg.cpp \
- generic/textdlgg.cpp
+ generic/textdlgg.cpp \
+ generic/treectrl.cpp
   
 LIB_C_SRC=\
  common/extended.c \
