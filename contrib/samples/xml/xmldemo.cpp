@@ -30,9 +30,9 @@
 // need because it includes almost all "standard" wxWindows headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
-    #include "wx/image.h"
 #endif
 
+#include "wx/image.h"
 #include "wx/xml/xmlres.h"
 
 // ----------------------------------------------------------------------------
@@ -112,7 +112,7 @@ bool MyApp::OnInit()
 {
     wxImage::AddHandler(new wxGIFHandler);
     wxTheXmlResource->InitAllHandlers();
-    wxTheXmlResource->Load("rc/resource.xml");
+    wxTheXmlResource->Load("rc/resource.xrc");
 
     MyFrame *frame = new MyFrame("XML resources demo",
                                  wxPoint(50, 50), wxSize(450, 340));
