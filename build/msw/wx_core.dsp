@@ -7476,6 +7476,10 @@ SOURCE=..\..\include\wx\msw\slidrmsw.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\sound.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\spinbutt.h
 # End Source File
 # Begin Source File
@@ -7545,10 +7549,6 @@ SOURCE=..\..\include\wx\msw\treectrl.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\ole\uuid.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\wave.h
 # End Source File
 # Begin Source File
 
@@ -8409,6 +8409,10 @@ SOURCE=..\..\include\wx\sizer.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\slider.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\sound.h
 # End Source File
 # Begin Source File
 

@@ -428,8 +428,8 @@
 // wxSystemOptions class
 #define wxUSE_SYSTEM_OPTIONS 1
 
-// wxWave class
-#define wxUSE_WAVE      1
+// wxSound class
+#define wxUSE_SOUND      1
 
 // XML parsing classes. Note that their API will change in the future, so
 // using wxXmlDocument and wxXmlNode in your app is not recommended.

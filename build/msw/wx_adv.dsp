@@ -470,11 +470,11 @@ SOURCE=..\..\src\msw\joystick.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\taskbar.cpp
+SOURCE=..\..\src\msw\sound.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\wave.cpp
+SOURCE=..\..\src\msw\taskbar.cpp
 # End Source File
 # End Group
 # Begin Group "Generic Sources"
@@ -705,11 +705,11 @@ SOURCE=..\..\include\wx\msw\joystick.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\taskbar.h
+SOURCE=..\..\include\wx\msw\sound.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\wave.h
+SOURCE=..\..\include\wx\msw\taskbar.h
 # End Source File
 # End Group
 # Begin Group "Generic Headers"
@@ -778,6 +778,10 @@ SOURCE=..\..\include\wx\laywin.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\sashwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\sound.h
 # End Source File
 # Begin Source File
 

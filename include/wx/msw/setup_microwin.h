@@ -389,8 +389,8 @@
 // contribute us a makefile for src/regex for it
 #define wxUSE_REGEX       0
 
-// wxWave class
-#define wxUSE_WAVE      0
+// wxSound class
+#define wxUSE_SOUND      0
 
 // ----------------------------------------------------------------------------
 // Individual GUI controls

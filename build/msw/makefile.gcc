@@ -635,8 +635,8 @@ ADVDLL_OBJECTS =  \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
 	$(OBJS)\advdll_joystick.o \
-	$(OBJS)\advdll_taskbar.o \
-	$(OBJS)\advdll_wave.o
+	$(OBJS)\advdll_sound.o \
+	$(OBJS)\advdll_taskbar.o
 ADVLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
@@ -657,8 +657,8 @@ ADVLIB_OBJECTS =  \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
 	$(OBJS)\advlib_joystick.o \
-	$(OBJS)\advlib_taskbar.o \
-	$(OBJS)\advlib_wave.o
+	$(OBJS)\advlib_sound.o \
+	$(OBJS)\advlib_taskbar.o
 ODBCDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	-I..\..\include -I$(SETUPHDIR) -Wall -I..\..\src\tiff -I..\..\src\jpeg \
@@ -866,8 +866,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
 	$(OBJS)\monodll_joystick.o \
+	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
-	$(OBJS)\monodll_wave.o \
 	$(OBJS)\monodll_helpbest.o \
 	$(OBJS)\monodll_helpctrl.o \
 	$(OBJS)\monodll_helpdata.o \
@@ -1308,8 +1308,8 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
 	$(OBJS)\monolib_joystick.o \
+	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
-	$(OBJS)\monolib_wave.o \
 	$(OBJS)\monolib_helpbest.o \
 	$(OBJS)\monolib_helpctrl.o \
 	$(OBJS)\monolib_helpdata.o \
@@ -3824,10 +3824,10 @@ $(OBJS)\monodll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 $(OBJS)\monodll_joystick.o: ../../src/msw/joystick.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_taskbar.o: ../../src/msw/taskbar.cpp
+$(OBJS)\monodll_sound.o: ../../src/msw/sound.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_wave.o: ../../src/msw/wave.cpp
+$(OBJS)\monodll_taskbar.o: ../../src/msw/taskbar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_helpbest.o: ../../src/msw/helpbest.cpp
@@ -5401,10 +5401,10 @@ $(OBJS)\monolib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 $(OBJS)\monolib_joystick.o: ../../src/msw/joystick.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_taskbar.o: ../../src/msw/taskbar.cpp
+$(OBJS)\monolib_sound.o: ../../src/msw/sound.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_wave.o: ../../src/msw/wave.cpp
+$(OBJS)\monolib_taskbar.o: ../../src/msw/taskbar.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_helpbest.o: ../../src/msw/helpbest.cpp
@@ -9556,10 +9556,10 @@ $(OBJS)\advdll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 $(OBJS)\advdll_joystick.o: ../../src/msw/joystick.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
-$(OBJS)\advdll_taskbar.o: ../../src/msw/taskbar.cpp
+$(OBJS)\advdll_sound.o: ../../src/msw/sound.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
-$(OBJS)\advdll_wave.o: ../../src/msw/wave.cpp
+$(OBJS)\advdll_taskbar.o: ../../src/msw/taskbar.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advlib_dummy.o: ../../src/msw/dummy.cpp
@@ -9604,10 +9604,10 @@ $(OBJS)\advlib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 $(OBJS)\advlib_joystick.o: ../../src/msw/joystick.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
-$(OBJS)\advlib_taskbar.o: ../../src/msw/taskbar.cpp
+$(OBJS)\advlib_sound.o: ../../src/msw/sound.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
-$(OBJS)\advlib_wave.o: ../../src/msw/wave.cpp
+$(OBJS)\advlib_taskbar.o: ../../src/msw/taskbar.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\odbcdll_dummy.o: ../../src/msw/dummy.cpp

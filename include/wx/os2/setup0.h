@@ -372,7 +372,7 @@
                                 // needed for wxCanvas
 #define wxUSE_MENUS               1
 
-#define wxUSE_WAVE                1
+#define wxUSE_SOUND                1
 
 #define wxUSE_REGEX               1
 

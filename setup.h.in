@@ -605,7 +605,7 @@
 /*
  * Use wave class
  */
-#define wxUSE_WAVE 0
+#define wxUSE_SOUND 0
 /*
  * Use config system
  */

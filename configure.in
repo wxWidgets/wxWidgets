@@ -413,7 +413,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_FFILE=no
   DEFAULT_wxUSE_TEXTBUFFER=no
   DEFAULT_wxUSE_TEXTFILE=no
-  DEFAULT_wxUSE_WAVE=no
+  DEFAULT_wxUSE_SOUND=no
   DEFAULT_wxUSE_INTL=no
   DEFAULT_wxUSE_CONFIG=no
   DEFAULT_wxUSE_FONTMAP=no
@@ -596,7 +596,7 @@ else
   DEFAULT_wxUSE_FFILE=yes
   DEFAULT_wxUSE_TEXTBUFFER=yes
   DEFAULT_wxUSE_TEXTFILE=yes
-  DEFAULT_wxUSE_WAVE=yes
+  DEFAULT_wxUSE_SOUND=yes
   DEFAULT_wxUSE_INTL=yes
   DEFAULT_wxUSE_CONFIG=yes
   DEFAULT_wxUSE_FONTMAP=yes
@@ -877,7 +877,7 @@ WX_ARG_ENABLE(textbuf,       [  --enable-textbuf        use wxTextBuffer class],
 WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
 WX_ARG_ENABLE(timer,         [  --enable-timer          use wxTimer class], wxUSE_TIMER)
 WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
-WX_ARG_ENABLE(wave,          [  --enable-wave           use wxWave class], wxUSE_WAVE)
+WX_ARG_ENABLE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
 WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
 WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZipInputStream], wxUSE_ZIPSTREAM)
 WX_ARG_ENABLE(gzstream,      [  --enable-gzstream       use wxGzipInputStream], wxUSE_GZSTREAM)
@@ -4456,7 +4456,7 @@ if test "$wxUSE_TIMER" = "yes"; then
 fi
 
 WITH_PLUGIN_SDL=0
-if test "$wxUSE_WAVE" = "yes"; then
+if test "$wxUSE_SOUND" = "yes"; then
   dnl Unix implementation needs additional checks because audio support
   dnl comes in many favours:
   if test "$USE_UNIX" = "1" ; then
@@ -4476,7 +4476,7 @@ if test "$wxUSE_WAVE" = "yes"; then
     fi
   fi
  
-  AC_DEFINE(wxUSE_WAVE)
+  AC_DEFINE(wxUSE_SOUND)
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sound"
 fi
 

@@ -1668,14 +1668,14 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 @COND_TOOLKIT_GTK@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_GTK@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
 @COND_TOOLKIT_MAC@ADVANCED_PLATFORM_HDR = \
-@COND_TOOLKIT_MAC@	wx/mac/joystick.h wx/mac/wave.h
+@COND_TOOLKIT_MAC@	wx/mac/joystick.h wx/mac/sound.h
 @COND_TOOLKIT_MOTIF@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_MOTIF@	wx/unix/joystick.h wx/unix/sound.h \
 @COND_TOOLKIT_MOTIF@	wx/unix/taskbarx11.h
 @COND_TOOLKIT_MSW@ADVANCED_PLATFORM_HDR = \
-@COND_TOOLKIT_MSW@	wx/msw/joystick.h wx/msw/taskbar.h wx/msw/wave.h
+@COND_TOOLKIT_MSW@	wx/msw/joystick.h wx/msw/sound.h wx/msw/taskbar.h
 @COND_TOOLKIT_PM@ADVANCED_PLATFORM_HDR = wx/os2/joystick.h \
-@COND_TOOLKIT_PM@	wx/os2/wave.h
+@COND_TOOLKIT_PM@	wx/os2/sound.h
 @COND_TOOLKIT_X11@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_X11@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
 @COND_USE_GUI_1_WXUNIV_0@GUI_CORE_HEADERS = $(GUI_HDR)
@@ -2729,7 +2729,7 @@ COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarx11.o
 @COND_TOOLKIT_GTK@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS)
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS = \
-@COND_TOOLKIT_MAC@	monodll_joystick.o monodll_wave.o
+@COND_TOOLKIT_MAC@	monodll_joystick.o monodll_sound.o
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_joystick.o \
@@ -2737,10 +2737,10 @@ COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarx11.o
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS = \
-@COND_TOOLKIT_MSW@	monodll_taskbarcmn.o monodll_joystick.o \
-@COND_TOOLKIT_MSW@	monodll_taskbar.o monodll_wave.o
+@COND_TOOLKIT_MSW@	monodll_taskbarcmn.o monodll_joystick.o monodll_sound.o \
+@COND_TOOLKIT_MSW@	monodll_taskbar.o
 @COND_TOOLKIT_PM@__ADVANCED_PLATFORM_SRC_OBJECTS = \
-@COND_TOOLKIT_PM@	monodll_joystick.o monodll_wave.o
+@COND_TOOLKIT_PM@	monodll_joystick.o monodll_sound.o
 COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_joystick.o \
@@ -3513,7 +3513,7 @@ COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_taskbarx11.o
 @COND_TOOLKIT_GTK@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK___ADVANCED_PLATFORM_SRC_OBJECTS_1)
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = \
-@COND_TOOLKIT_MAC@	monolib_joystick.o monolib_wave.o
+@COND_TOOLKIT_MAC@	monolib_joystick.o monolib_sound.o
 COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_taskbarcmn.o \
 	monolib_joystick.o \
@@ -3521,10 +3521,10 @@ COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_taskbarx11.o
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___ADVANCED_PLATFORM_SRC_OBJECTS_1)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = \
-@COND_TOOLKIT_MSW@	monolib_taskbarcmn.o monolib_joystick.o \
-@COND_TOOLKIT_MSW@	monolib_taskbar.o monolib_wave.o
+@COND_TOOLKIT_MSW@	monolib_taskbarcmn.o monolib_joystick.o monolib_sound.o \
+@COND_TOOLKIT_MSW@	monolib_taskbar.o
 @COND_TOOLKIT_PM@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = \
-@COND_TOOLKIT_PM@	monolib_joystick.o monolib_wave.o
+@COND_TOOLKIT_PM@	monolib_joystick.o monolib_sound.o
 COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_taskbarcmn.o \
 	monolib_joystick.o \
@@ -5150,15 +5150,15 @@ COND_USE_SOSYMLINKS_1___advdll___so_symlinks_inst_cmd = rm -f \
 @COND_TOOLKIT_GTK@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
 @COND_TOOLKIT_GTK@	advdll_taskbarx11.o
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_MAC@	advdll_joystick.o advdll_wave.o
+@COND_TOOLKIT_MAC@	advdll_joystick.o advdll_sound.o
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_MOTIF@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
 @COND_TOOLKIT_MOTIF@	advdll_taskbarx11.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_MSW@	advdll_taskbarcmn.o advdll_joystick.o advdll_taskbar.o \
-@COND_TOOLKIT_MSW@	advdll_wave.o
+@COND_TOOLKIT_MSW@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
+@COND_TOOLKIT_MSW@	advdll_taskbar.o
 @COND_TOOLKIT_PM@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
-@COND_TOOLKIT_PM@	advdll_joystick.o advdll_wave.o
+@COND_TOOLKIT_PM@	advdll_joystick.o advdll_sound.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_X11@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
 @COND_TOOLKIT_X11@	advdll_taskbarx11.o
@@ -5176,15 +5176,15 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 @COND_TOOLKIT_GTK@	advlib_taskbarcmn.o advlib_joystick.o advlib_sound.o \
 @COND_TOOLKIT_GTK@	advlib_taskbarx11.o
 @COND_TOOLKIT_MAC@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_MAC@	advlib_joystick.o advlib_wave.o
+@COND_TOOLKIT_MAC@	advlib_joystick.o advlib_sound.o
 @COND_TOOLKIT_MOTIF@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_MOTIF@	advlib_taskbarcmn.o advlib_joystick.o advlib_sound.o \
 @COND_TOOLKIT_MOTIF@	advlib_taskbarx11.o
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_MSW@	advlib_taskbarcmn.o advlib_joystick.o advlib_taskbar.o \
-@COND_TOOLKIT_MSW@	advlib_wave.o
+@COND_TOOLKIT_MSW@	advlib_taskbarcmn.o advlib_joystick.o advlib_sound.o \
+@COND_TOOLKIT_MSW@	advlib_taskbar.o
 @COND_TOOLKIT_PM@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
-@COND_TOOLKIT_PM@	advlib_joystick.o advlib_wave.o
+@COND_TOOLKIT_PM@	advlib_joystick.o advlib_sound.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_X11@	advlib_taskbarcmn.o advlib_joystick.o advlib_sound.o \
 @COND_TOOLKIT_X11@	advlib_taskbarx11.o
@@ -9657,14 +9657,11 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/os2/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_wave.o: $(srcdir)/src/msw/wave.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_sound.o: $(srcdir)/src/msw/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1@monodll_wave.o: $(srcdir)/src/mac/wave.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1@monodll_sound.o: $(srcdir)/src/mac/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_PM_USE_GUI_1@monodll_wave.o: $(srcdir)/src/os2/wave.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -9674,6 +9671,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1@monodll_sound.o: $(srcdir)/src/os2/sound.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -12264,14 +12264,11 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/os2/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_wave.o: $(srcdir)/src/msw/wave.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_sound.o: $(srcdir)/src/msw/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1@monolib_wave.o: $(srcdir)/src/mac/wave.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1@monolib_sound.o: $(srcdir)/src/mac/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_PM_USE_GUI_1@monolib_wave.o: $(srcdir)/src/os2/wave.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -12281,6 +12278,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM_USE_GUI_1@monolib_sound.o: $(srcdir)/src/os2/sound.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -17280,14 +17280,11 @@ advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_PM@advdll_joystick.o: $(srcdir)/src/os2/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW@advdll_wave.o: $(srcdir)/src/msw/wave.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW@advdll_sound.o: $(srcdir)/src/msw/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC@advdll_wave.o: $(srcdir)/src/mac/wave.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MAC@advdll_sound.o: $(srcdir)/src/mac/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_PM@advdll_wave.o: $(srcdir)/src/os2/wave.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF@advdll_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
@@ -17297,6 +17294,9 @@ advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_X11@advdll_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM@advdll_sound.o: $(srcdir)/src/os2/sound.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
@@ -17376,14 +17376,11 @@ advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_PM@advlib_joystick.o: $(srcdir)/src/os2/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MSW@advlib_wave.o: $(srcdir)/src/msw/wave.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW@advlib_sound.o: $(srcdir)/src/msw/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC@advlib_wave.o: $(srcdir)/src/mac/wave.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MAC@advlib_sound.o: $(srcdir)/src/mac/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_PM@advlib_wave.o: $(srcdir)/src/os2/wave.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF@advlib_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
@@ -17393,6 +17390,9 @@ advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_X11@advlib_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_PM@advlib_sound.o: $(srcdir)/src/os2/sound.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
@@ -18439,6 +18439,11 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/sockets/makefile.unx $(DISTDIR)/samples/sockets
 	cp $(SAMPDIR)/sockets/*.cpp $(DISTDIR)/samples/sockets
 	cp $(SAMPDIR)/sockets/*.xpm $(DISTDIR)/samples/sockets
+
+	mkdir $(DISTDIR)/samples/sound
+	cp $(SAMPDIR)/sound/Makefile.in $(DISTDIR)/samples/sound
+	cp $(SAMPDIR)/sound/*.cpp $(DISTDIR)/samples/sound
+	cp $(SAMPDIR)/sound/*.wav $(DISTDIR)/samples/sound
 
 	mkdir $(DISTDIR)/samples/splitter
 	cp $(SAMPDIR)/splitter/Makefile.in $(DISTDIR)/samples/splitter

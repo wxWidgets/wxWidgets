@@ -1474,6 +1474,10 @@ SOURCE=.\msw\snglinst.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\sound.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\spinbutt.cpp
 # End Source File
 # Begin Source File
@@ -1559,10 +1563,6 @@ SOURCE=.\msw\uxtheme.cpp
 # Begin Source File
 
 SOURCE=.\msw\volume.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\wave.cpp
 # End Source File
 # Begin Source File
 
@@ -2502,6 +2502,10 @@ SOURCE=..\include\wx\socket.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\sound.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\spinbutt.h
 # End Source File
 # Begin Source File
@@ -3110,6 +3114,10 @@ SOURCE=..\include\wx\msw\slidrmsw.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\sound.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\spinbutt.h
 # End Source File
 # Begin Source File
@@ -3175,10 +3183,6 @@ SOURCE=..\include\wx\msw\toplevel.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\treectrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\wave.h
 # End Source File
 # Begin Source File
 
