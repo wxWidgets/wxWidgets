@@ -5,7 +5,7 @@
 
 LIBNAME=libpng12
 PNGMAJ = 0
-PNGMIN = 1.2.4
+PNGMIN = 1.2.6
 PNGVER = $(PNGMAJ).$(PNGMIN)
 
 # Where make install puts libpng.a, libpng12.so, and libpng12/png.h
@@ -30,10 +30,14 @@ ABI=
 WARNMORE=-fullwarn
 # Note: -KPIC is the default anyhow
 #CFLAGS= $(ABI) -I$(ZLIBINC) -O $(WARNMORE) -KPIC -DPNG_USE_PNGGCCRD # -g -DPNG_DEBUG=5
-CFLAGS=$(ABI) -I$(ZLIBINC) -O $(WARNMORE) -DPNG_USE_PNGGCCRD -DPNG_NO_ASSEMBLER_CODE
+CFLAGS=$(ABI) -I$(ZLIBINC) -O $(WARNMORE) -DPNG_USE_PNGGCCRD \
+  -DPNG_NO_ASSEMBLER_CODE
 LDFLAGS_A=$(ABI) -L. -L$(ZLIBLIB) -lpng12 -lz -lm
 LDFLAGS=$(ABI) -L. -L$(ZLIBLIB) -lpng -lz -lm
-LDSHARED=cc $(ABI) -shared -soname $(LIBNAME).so.$(PNGMAJ)
+LDSHARED=cc $(ABI) -shared -soname $(LIBNAME).so.$(PNGMAJ) \
+  -set_version sgi$(PNGMAJ).0
+LDLEGACY=cc $(ABI) -shared -soname libpng.so.3 \
+  -set_version sgi$3.0
 # See "man dso" for info about shared objects
 
 RANLIB=echo
@@ -78,10 +82,12 @@ libpng.pc:
 libpng-config:
 	( cat scripts/libpng-config-head.in; \
 	echo prefix=\"$(prefix)\"; \
-	echo cppflags=\"-I$(INCPATH)/$(LIBNAME) -DPNG_USE_PNGGCCRD \
-		-DPNG_NO_ASSEMBLER_CODE\"; \
-	echo cflags=\"$(ABI)\"; \
-	echo ldflags=\"-L$(LIBPATH) -rpath $(LIBPATH) \"; \
+	echo I_opts=\"-I$(INCPATH)/$(LIBNAME)\"; \
+	echo cppflags=\"-DPNG_USE_PNGGCCRD -DPNG_NO_ASSEMBLER_CODE\"; \
+	echo ccopts=\"$(ABI)\"; \
+	echo ldopts=\"$(ABI)\"; \
+	echo L_opts=\"-L$(LIBPATH)\"; \
+	echo libdir=\"$(LIBPATH)\"; \
 	echo libs=\"-lpng12 -lz -lm\"; \
 	cat scripts/libpng-config-body.in ) > libpng-config
 	chmod +x libpng-config
@@ -95,6 +101,9 @@ $(LIBNAME).so.$(PNGMAJ): $(LIBNAME).so.$(PNGVER)
 $(LIBNAME).so.$(PNGVER): $(OBJS)
 	$(LDSHARED) -o $@ $(OBJS)
 	rm -f $(LIBNAME).so $(LIBNAME).so.$(PNGMAJ)
+
+libpng.so.3.$(PNGMIN): $(OBJS)
+	$(LDLEGACY) -o $@ $(OBJS)
 
 pngtest: pngtest.o libpng.a
 	$(CC) -o pngtest $(CFLAGS) pngtest.o $(LDFLAGS)
@@ -120,18 +129,21 @@ install-static: install-headers libpng.a
 	-@/bin/rm -f $(DL)/libpng.a
 	(cd $(DL); ln -sf $(LIBNAME).a libpng.a)
 
-install-shared: install-headers $(LIBNAME).so.$(PNGVER) libpng.pc
+install-shared: install-headers $(LIBNAME).so.$(PNGVER) libpng.pc \
+	libpng.so.3.$(PNGMIN)
 	-@if [ ! -d $(DL) ]; then mkdir $(DL); fi
-	-@/bin/rm -f $(DL)/$(LIBNAME).so.$(PNGMAJ)* $(DL)/$(LIBNAME).so
+	-@/bin/rm -f $(DL)/$(LIBNAME).so.$(PNGVER)* $(DL)/$(LIBNAME).so
+	-@/bin/rm -f $(DL)/$(LIBNAME).so.$(PNGMAJ)
 	-@/bin/rm -f $(DL)/libpng.so
 	-@/bin/rm -f $(DL)/libpng.so.3
-	-@/bin/rm -f $(DL)/libpng.so.3.*
+	-@/bin/rm -f $(DL)/libpng.so.3.$(PNGMIN)*
 	cp $(LIBNAME).so.$(PNGVER) $(DL)
+	cp libpng.so.3.$(PNGMIN) $(DL)
 	chmod 755 $(DL)/$(LIBNAME).so.$(PNGVER)
+	chmod 755 $(DL)/libpng.so.3.$(PNGMIN)
 	(cd $(DL); \
-	ln -sf $(LIBNAME).so.$(PNGVER) libpng.so; \
-	ln -sf $(LIBNAME).so.$(PNGVER) libpng.so.3; \
-	ln -sf $(LIBNAME).so.$(PNGVER) libpng.so.3.$(PNGMIN); \
+	ln -sf libpng.so.3.$(PNGMIN) libpng.so.3; \
+	ln -sf libpng.so.3 libpng.so; \
 	ln -sf $(LIBNAME).so.$(PNGVER) $(LIBNAME).so.$(PNGMAJ); \
 	ln -sf $(LIBNAME).so.$(PNGMAJ) $(LIBNAME).so)
 	-@if [ ! -d $(DL)/pkgconfig ]; then mkdir $(DL)/pkgconfig; fi
@@ -169,14 +181,16 @@ test-installed:
 	echo
 	echo Testing installed dynamic shared library.
 	$(CC) -I$(ZLIBINC) \
-	   `$(BINPATH)/libpng12-config --cppflags --cflags` pngtest.c \
-	   -L$(ZLIBLIB) -rpath $(ZLIBLIB) \
-	   -o pngtesti `$(BINPATH)/libpng12-config --ldflags --libs`
+	   `$(BINPATH)/libpng12-config --cflags` pngtest.c \
+	   -L$(ZLIBLIB) -rpath $(ZLIBLIB):`$(BINPATH)/libpng12-config --libdir` \
+	   -o pngtesti `$(BINPATH)/libpng12-config --ldflags`
 	./pngtesti pngtest.png
 
 clean:
 	rm -f *.o libpng.a pngtest pngtesti pngout.png libpng.pc libpng-config \
-	$(LIBNAME).so $(LIBNAME).so.$(PNGMAJ)* so_locations
+	$(LIBNAME).so $(LIBNAME).so.$(PNGMAJ)* \
+	libpng.so.3.$(PNGMIN) \
+	so_locations
 
 DOCS = ANNOUNCE CHANGES INSTALL KNOWNBUG LICENSE README TODO Y2KINFO
 writelock:

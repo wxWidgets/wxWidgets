@@ -1,37 +1,117 @@
 
-Libpng 1.2.5rc3 - September 18, 2002
+Libpng 1.2.6 - August 15, 2004
 
 This is not intended to be a public release.  It will be replaced
 within a few weeks by a public version or by another test version.
 
-Changes since the last public release (1.2.4):
+Changes since the last public release (1.2.5):
 
-version 1.2.4patch01 [July 20, 2002]
-  Revised makefile.cygwin to use DLL number 12 instead of 13.
-version 1.2.5beta1 [August 6, 2002]
-  Added code to contrib/gregbook/readpng2.c to ignore unused chunks.
-  Replaced toucan.png in contrib/gregbook (it has been corrupt since 1.0.11)
-  Removed some stray *.o files from contrib/gregbook.
-  Changed png_error() to png_warning() about "Too much data" in pngpread.c
-    and about "Extra compressed data" in pngrutil.c.
-  Prevent png_ptr->pass from exceeding 7 in png_push_finish_row().
-  Updated makefile.hggcc
-  Updated png.c and pnggccrd.c handling of return from png_mmx_support()
-version 1.2.5beta2 [August 15, 2002]
-  Only issue png_warning() about "Too much data" in pngpread.c when avail_in
-    is nonzero.
-  Updated makefiles to install a separate libpng.so.3 with its own rpath.
-version 1.2.5rc1 and 1.0.15rc1 [August 24, 2002]
-  Revised makefiles to not remove previous minor versions of shared libraries.
-version 1.2.5rc2 and 1.0.15rc2 [September 16, 2002]
-  Revised 13 makefiles to remove "-lz" and "-L$(ZLIBLIB)", etc., from shared
-    library loader directive.
-  Added missing "$OBJSDLL" line to makefile.gcmmx.
-  Added missing "; fi" to makefile.32sunu.
-version 1.2.5rc3 and 1.0.15rc3 [September 18, 2002]
-  Revised libpng-config script.
+  Commented out warning about uninitialized mmx_support in pnggccrd.c.
+  Changed "IBMCPP__" flag to "__IBMCPP__" in pngconf.h.
+  Relocated two more misplaced PNGAPI lines in pngtest.c
+  Fixed memory overrun bug in png_do_read_filler() with 16-bit datastreams,
+    introduced in version 1.0.2.
+  Fixed potential overrun in pngerror.c by using strncpy instead of memcpy.
+  Revised makefile.macosx, makefile.dec, makefile.aix, and makefile.32sunu.
+  Changed the one instance of "ln -sf" to "ln -f -s" in each Sun makefile.
+  Fixed potential overrun in pngerror.c by using strncpy instead of memcpy.
+  Added "#!/bin/sh" at the top of configure, for recognition of the
+    'x' flag under Cygwin (Cosmin).
+  Optimized vacuous tests that silence compiler warnings, in png.c (Cosmin).
+  Added support for PNG_USER_CONFIG, in pngconf.h (Cosmin).
+  Fixed the special memory handler for Borland C under DOS, in pngmem.c
+    (Cosmin).
+  Removed some spurious assignments in pngrutil.c (Cosmin).
+  Replaced 65536 with 65536L, and 0xffff with 0xffffL, to silence warnings
+    on 16-bit platforms (Cosmin).
+  Enclosed shift op expressions in parentheses, to silence warnings (Cosmin).
+  Used proper type png_fixed_point, to avoid problems on 16-bit platforms,
+    in png_handle_sRGB() (Cosmin).
+  Added compression_type to png_struct, and optimized the window size
+    inside the deflate stream (Cosmin).
+  Fixed definition of isnonalpha(), in pngerror.c and pngrutil.c (Cosmin).
+  Fixed handling of unknown chunks that come after IDAT (Cosmin).
+  Allowed png_error() and png_warning() to work even if png_ptr == NULL
+    (Cosmin).
+  Replaced row_info->rowbytes with row_bytes in png_write_find_filter()
+    (Cosmin).
+  Fixed definition of PNG_LIBPNG_VER_DLLNUM (Simon-Pierre).
+  Used PNG_LIBPNG_VER and PNG_LIBPNG_VER_STRING instead of the hardcoded
+    values in png.c (Simon-Pierre, Cosmin).
+  Initialized png_libpng_ver[] with PNG_LIBPNG_VER_STRING (Simon-Pierre).
+  Replaced PNG_LIBPNG_VER_MAJOR with PNG_LIBPNG_VER_DLLNUM in png.rc
+    (Simon-Pierre).
+  Moved the definition of PNG_HEADER_VERSION_STRING near the definitions
+    of the other PNG_LIBPNG_VER_... symbols in png.h (Cosmin).
+  Relocated #ifndef PNGAPI guards in pngconf.h (Simon-Pierre, Cosmin).
+  Updated scripts/makefile.vc(a)win32 (Cosmin).
+  Updated the MSVC project (Simon-Pierre, Cosmin).
+  Updated the Borland C++ Builder project (Cosmin).
+  Avoided access to asm_flags in pngvcrd.c, if PNG_1_0_X is defined (Cosmin).
+  Commented out warning about uninitialized mmx_support in pngvcrd.c (Cosmin).
+  Removed scripts/makefile.bd32 and scripts/pngdef.pas (Cosmin).
+  Added extra guard around inclusion of Turbo C memory headers, in pngconf.h
+    (Cosmin).
+  Renamed projects/msvc/ to projects/visualc6/, and projects/borland/ to
+    projects/cbuilder5/ (Cosmin).
+  Moved projects/visualc6/png32ms.def to scripts/pngw32.def,
+    and projects/visualc6/png.rc to scripts/pngw32.rc (Cosmin).
+  Added projects/visualc6/pngtest.dsp; removed contrib/msvctest/ (Cosmin).
+  Updated contrib/visupng/VisualPng.dsp (Cosmin).
+  Updated contrib/visupng/cexcept.h to version 2.0.0 (Cosmin).
+  Added a separate distribution with "configure" and supporting files (Junichi).
+  Added user ability to change png_size_t via a PNG_SIZE_T macro.
+  Added png_sizeof() and png_convert_size() functions.
+  Added PNG_SIZE_MAX (maximum value of a png_size_t variable.
+  Added check in png_malloc_default() for (size_t)size != (png_uint_32)size
+    which would indicate an overflow.
+  Changed sPLT failure action from png_error to png_warning and abandon chunk.
+  Changed sCAL and iCCP failures from png_error to png_warning and abandon.
+  Added png_get_uint_31(png_ptr, buf) function.
+  Added PNG_UINT_32_MAX macro.
+  Renamed PNG_MAX_UINT to PNG_UINT_31_MAX.
+  Made png_zalloc() issue a png_warning and return NULL on potential
+    overflow.
+  Revised "clobber list" in pnggccrd.c so it will compile under gcc-3.4.
+  Revised Borland portion of png_malloc() to return NULL or issue
+    png_error() according to setting of PNG_FLAG_MALLOC_NULL_MEM_OK.
+  Added PNG_NO_SEQUENTIAL_READ_SUPPORTED macro to conditionally remove
+    sequential read support.
+  Added some "#if PNG_WRITE_SUPPORTED" blocks.
+  #ifdef'ed out some redundancy in png_malloc_default().
+  Use png_malloc instead of png_zalloc to allocate the pallete.
+  Rearranged order of processing of color types in png_handle_tRNS().
+  Added PNG_ROWBYTES macro to calculate rowbytes without integer overflow.
+  Updated makefile.darwin and removed makefile.macosx from scripts directory.
+  Imposed default one million column, one-million row limits on the image
+    dimensions, and added png_set_user_limits() function and
+    PNG_SET_USER_LIMITS_SUPPORTED macro to override them.
+  Fixed wrong cast of returns from png_get_user_width|height_max().
+  Fixed buffer overflow vulnerability in png_handle_tRNS()
+  Fixed integer arithmetic overflow vulnerability in png_read_png().
+  Fixed some harmless bugs in png_handle_sBIT, etc, that would cause
+    duplicate chunk types to go undetected.
+  Changed some "keep the compiler happy" from empty statements to returns,
+Revised libpng.txt to remove 1.2.x stuff from the 1.0.x distribution
+  Revised makefile.darwin and makefile.solaris.  Removed makefile.macosx.
+  Revised pngtest's png_debug_malloc() to use png_malloc() instead of
+     png_malloc_default() which is not supposed to be exported.
+  Fixed old bug in RGB to Gray transformation.
+  Fixed problem with 64-bit compilers by casting arguments to abs()
+    to png_int_32.
+  Changed "ln -sf" to "ln -f -s" in three makefiles (solaris, sco, so9).
+  Changed "HANDLE_CHUNK_*" to "PNG_HANDLE_CHUNK_*" (Cosmin)
+  Added "-@/bin/rm -f $(DL)/$(LIBNAME).so.$(PNGMAJ)" to 15 *NIX makefiles.
+  Added code to update the row_info->colortype in png_do_read_filler() (MSB).
+  Eliminated use of "abs()" in testing cHRM and gAMA values, to avoid
+    trouble with some 64-bit compilers.  Created PNG_OUT_OF_RANGE() macro.
+  Revised documentation of png_set_keep_unknown_chunks().
+  Check handle_as_unknown status in pngpread.c, as in pngread.c previously.
+  Moved  "PNG_HANDLE_CHUNK_*" macros out of PNG_INTERNAL section of png.h
+  Added "rim" definitions for CONST4 and CONST6 in pnggccrd.c
+  Revised pngtest so memory allocation testing is only done when PNG_DEBUG==1.
 
 Send comments/corrections/commendations to
-png-implement@ccrc.wustl.edu or to randeg@alum.rpi.edu
+png-implement@ccrc.wustl.edu or to glennrp@users.sourceforge.net
 
 Glenn R-P

@@ -631,7 +631,7 @@ void write_png(char *file_name /* , ... other image information ... */)
 
    /* set the palette if there is one.  REQUIRED for indexed-color images */
    palette = (png_colorp)png_malloc(png_ptr, PNG_MAX_PALETTE_LENGTH
-             * sizeof (png_color));
+             * png_sizeof (png_color));
    /* ... set palette colors ... */
    png_set_PLTE(png_ptr, info_ptr, palette, PNG_MAX_PALETTE_LENGTH);
    /* You must not free palette here, because png_set_PLTE only makes a link to
@@ -741,6 +741,7 @@ void write_png(char *file_name /* , ... other image information ... */)
    png_uint_32 k, height, width;
    png_byte image[height][width*bytes_per_pixel];
    png_bytep row_pointers[height];
+
    for (k = 0; k < height; k++)
      row_pointers[k] = image + k*width*bytes_per_pixel;
 
