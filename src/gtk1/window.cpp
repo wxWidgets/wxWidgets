@@ -1831,7 +1831,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
     wxMouseEvent event( wxEVT_MOTION );
     InitMouseEvent(win, event, gdk_event);
 
-    if ( g_captureWindow )
+    if ( !g_captureWindow )
     {
         // synthetize a mouse enter or leave event if needed
         GdkWindow *winUnderMouse = gdk_window_at_pointer(NULL, NULL);
@@ -3110,11 +3110,11 @@ void wxWindowGTK::OnInternalIdle()
 
     if (cursor.Ok())
     {
-        /* I now set the cursor anew in every OnInternalIdle call
-           as setting the cursor in a parent window also effects the
-           windows above so that checking for the current cursor is
-           not possible. */
-
+        // We now set the cursor anew in every OnInternalIdle call
+        // as setting the cursor in a parent window also effects the
+        // windows above so that checking for the current cursor is
+        // not possible.
+        
         if (m_wxwindow)
         {
             GdkWindow *window = GTK_PIZZA(m_wxwindow)->bin_window;
