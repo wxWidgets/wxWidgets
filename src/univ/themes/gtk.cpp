@@ -1503,20 +1503,21 @@ void wxGTKRenderer::DrawTab(wxDC& dc,
                         : wxSCHEME_COLOUR(m_scheme, SCROLLBAR);
     DoDrawBackground(dc, col, rect);
 
-    // draw the text, image and the focus around them (if necessary)
-    wxRect rectLabel = rect;
-    rectLabel.Deflate(1, 1);
-
-    wxRect rectLabelText;
-    dc.DrawLabel(label, bitmap, rectLabel, wxALIGN_CENTRE,
-                 indexAccel, &rectLabelText);
     if ( flags & wxCONTROL_FOCUSED )
     {
         // draw the focus rect
-        rectLabelText.Inflate(3);
-        DrawRect(dc, &rectLabelText, m_penBlack);
+        wxRect rectBorder = rect;
+        rectBorder.Deflate(4, 3);
+        if ( dir == wxBOTTOM )
+            rectBorder.Offset(0, -1);
+
+        DrawRect(dc, &rectBorder, m_penBlack);
     }
 
+    // draw the text, image and the focus around them (if necessary)
+    wxRect rectLabel = rect;
+    rectLabel.Deflate(1, 1);
+    dc.DrawLabel(label, bitmap, rectLabel, wxALIGN_CENTRE, indexAccel);
 
     // now draw the tab itself
     wxCoord x = rect.x,
@@ -1557,10 +1558,14 @@ void wxGTKRenderer::DrawTab(wxDC& dc,
             dc.DrawLine(x, y - (flags & wxCONTROL_SELECTED ? 1 : 0),
                         x, y2);
 
+            // it doesn't work like this (TODO: implement it properly)
+#if 0
             // erase the corner of the tab to the right
-            dc.DrawPoint(x2, y - 2);
+            dc.SetPen(m_penLightGrey);
             dc.DrawPoint(x2 - 1, y - 2);
-            dc.DrawPoint(x2 - 1, y - 1);
+            dc.DrawPoint(x2 - 2, y - 2);
+            dc.DrawPoint(x2 - 2, y - 1);
+#endif // 0
 
             dc.SetPen(m_penBlack);
             dc.DrawLine(x + 1, y2, x2, y2);
