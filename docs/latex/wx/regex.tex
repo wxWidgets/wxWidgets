@@ -51,6 +51,7 @@ No base class
 \wxheading{Data structures}
 
 Flags for regex compilation to be used with \helpref{Compile()}{wxregexcompile}:
+
 \begin{verbatim}
 enum
 {
@@ -79,7 +80,8 @@ enum
 Flags for regex matching to be used with \helpref{Matches()}{wxregexmatches}.
 
 These flags are mainly useful when doing several matches in a long string
-to prevent erroneous matches for \verb|'^'| and \verb|'$'|
+to prevent erroneous matches for \verb|'^'| and {\tt '\$'}:
+
 \begin{verbatim}
 enum
 {
@@ -89,6 +91,31 @@ enum
     // '$' doesn't match at the end of line
     wxRE_NOTEOL = 64
 }
+\end{verbatim}
+
+\wxheading{Examples}
+
+A bad example of processing some text containing email addresses (the example
+is bad because the real email addresses can have more complicated form than
+{\tt user@host.net}):
+
+\begin{verbatim}
+wxString text;
+...
+wxRegEx reEmail = "([^@]+)@([[:alnum:].-_].)+([[:alnum:]]+)";
+if ( reEmail.Matches(text) )
+{
+    wxString text = reEmail.GetMatch(email);
+    wxString username = reEmail.GetMatch(email, 1);
+    if ( reEmail.GetMatch(email, 3) == "com" ) // .com TLD?
+    {
+        ...
+    }
+}
+
+// or we could do this to hide the email address
+size_t count = reEmail.ReplaceAll(text, "HIDDEN@\\2\\3");
+printf("text now contains %u hidden addresses", count);
 \end{verbatim}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -116,7 +143,7 @@ dtor not virtual, don't derive from this class
 
 \func{bool}{Compile}{\param{const wxString\& }{pattern}, \param{int }{flags = wxRE\_DEFAULT}}
 
-Compile the string into regular expression, return {\tt TRUE} if ok or {\tt FALSE}
+Compile the string into regular expression, return {\tt TRUE} if ok or {\tt FALSE} 
 if string has a syntax error.
 
 \membersection{wxRegEx::IsValid}\label{wxregexisvalid}
