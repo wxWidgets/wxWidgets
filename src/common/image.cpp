@@ -1369,9 +1369,8 @@ wxBitmap wxImage::ConvertToBitmap() const
         height = bmpHeight; 
     else
     {
-        div_t result = div( bmpHeight, height );
-        numDIB = result.quot;
-        hRemain = result.rem;
+        numDIB = bmpHeight / height;
+        hRemain = bmpHeight % height;
         if( hRemain >0 )  numDIB++;
     }
     
