@@ -46,7 +46,6 @@
 # pragma warning(disable:4244)
 #endif
 
-
 //////////////////////////////////////////////////////////////////////////////////
 // Currently Only MS-Windows/NT, XView and Motif are supported
 //
@@ -57,6 +56,7 @@
 # define __X__
 #endif
 
+#ifdef __WXMSW__
 // wxWindows checks for WIN32, not __WIN32__
 #if ((defined(WIN32) || defined(__NT__)) && !defined(__WIN32__) && !defined(__WXSTUBS__))
 #define __WIN32__
@@ -69,6 +69,8 @@
 #if !defined(__WIN95__) && (WINVER >= 0x0400)
 #define __WIN95__
 #endif
+
+#endif // wxMSW
 
 // Make sure the environment is set correctly
 #if defined(__WXMSW__) && defined(__X__)
