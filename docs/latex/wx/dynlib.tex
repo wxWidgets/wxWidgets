@@ -23,6 +23,7 @@ done in the objects destructor automatically.
 %\helpref{wxDllLoader}{wxdllloader}
 
 
+
 \membersection{wxDynamicLibrary::wxDynamicLibrary}\label{wxdynamiclibrarywxdynamiclibrary}
 
 \func{}{wxDynamicLibrary}{\void}
@@ -30,6 +31,7 @@ done in the objects destructor automatically.
 \func{}{wxDynamicLibrary}{\param{const wxString\& }{name}, \param{int }{flags = wxDL\_DEFAULT}}
 
 Constructor. Second form calls \helpref{Load}{wxdynamiclibraryload}.
+
 
 \membersection{wxDynamicLibrary::CanonicalizeName}\label{wxdynamiclibrarycanonicalizename}
 
@@ -51,6 +53,7 @@ The possible values for \arg{cat} are:
 \helpref{CanonicalizePluginName}{wxdynamiclibrarycanonicalizepluginname}
 
 
+
 \membersection{wxDynamicLibrary::CanonicalizePluginName}\label{wxdynamiclibrarycanonicalizepluginname}
 
 \func{wxString}{CanonicalizePluginName}{\param{const wxString\& }{name}, \param{wxPluginCategory}{ cat = wxDL\_PLUGIN\_GUI}}
@@ -68,6 +71,7 @@ The possible values for \arg{cat} are:
     \twocolitem{wxDL\_PLUGIN\_BASE}{plugin which only uses wxBase}
 \end{twocollist}
 
+
 \membersection{wxDynamicLibrary::Detach}\label{wxdynamiclibrarydetach}
 
 \func{wxDllType}{Detach}{\void}
@@ -76,9 +80,10 @@ Detaches this object from its library handle, i.e. the object will not unload
 the library any longer in its destructor but it is now the callers
 responsability to do this using \helpref{Unload}{wxdynamiclibraryunload}.
 
+
 \membersection{wxDynamicLibrary::GetSymbol}\label{wxdynamiclibrarygetsymbol}
 
-\constfunc{void*}{GetSymbol}{\param{const wxString\& }{name}}
+\constfunc{void *}{GetSymbol}{\param{const wxString\& }{name}}
 
 Returns pointer to symbol {\it name} in the library or NULL if the library
 contains no such symbol.
@@ -87,11 +92,24 @@ contains no such symbol.
 
 \helpref{wxDYNLIB\_FUNCTION}{wxdynlibfunction}
 
+
+\membersection{wxDynamicLibrary::HasSymbol}\label{wxdynamiclibraryhassymbol}
+
+\constfunc{bool}{HasSymbol}{\param{const wxString\& }{name}}
+
+Returns \true if the symbol with the given \arg{name} is present in the dynamic
+library, \false otherwise. Unlike \helpref{GetSymbol}{wxdynamiclibrarygetsymbol},
+this function doesn't log an error message if the symbol is not found.
+
+\newsince{2.5.4}
+
+
 \membersection{wxDynamicLibrary::IsLoaded}\label{wxdynamiclibraryisloaded}
 
 \constfunc{bool}{IsLoaded}{\void}
 
 Returns \true if the library was successfully loaded, \false otherwise.
+
 
 \membersection{wxDynamicLibrary::Load}\label{wxdynamiclibraryload}
 
@@ -109,6 +127,7 @@ the library name (this is done by default).}
 \end{twocollist}
 
 Returns \true if the library was successfully loaded, \false otherwise.
+
 
 \membersection{wxDynamicLibrary::Unload}\label{wxdynamiclibraryunload}
 

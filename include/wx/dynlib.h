@@ -151,6 +151,16 @@ public:
     // Return the raw handle from dlopen and friends.
     wxDllType GetLibHandle() const { return m_handle; }
 
+    // check if the given symbol is present in the library, useful to verify if
+    // a loadable module is our plugin, for example, without provoking error
+    // messages from GetSymbol()
+    bool HasSymbol(const wxString& name) const
+    {
+        bool ok;
+        DoGetSymbol(name, &ok);
+        return ok;
+    }
+
     // resolve a symbol in a loaded DLL, such as a variable or function name.
     // 'name' is the (possibly mangled) name of the symbol. (use extern "C" to
     // export unmangled names)
@@ -186,6 +196,10 @@ public:
 #endif
 
 protected:
+    // the real implementation of GetSymbol()
+    void *DoGetSymbol(const wxString& name, bool *success = 0) const;
+
+
     // platform specific shared lib suffix.
     static const wxChar *ms_dllext;
 

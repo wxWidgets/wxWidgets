@@ -314,12 +314,11 @@ void wxDynamicLibrary::Unload(wxDllType handle)
 #endif
 }
 
-void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
+void *wxDynamicLibrary::DoGetSymbol(const wxString &name, bool *success) const
 {
     wxCHECK_MSG( IsLoaded(), NULL,
                  _T("Can't load symbol from unloaded library") );
 
-    bool     failed = false;
     void    *symbol = 0;
 
     wxUnusedVar(symbol);
@@ -360,6 +359,15 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
 #error  "runtime shared lib support not implemented"
 #endif
 
+    if ( success )
+        *success = symbol != NULL;
+
+    return symbol;
+}
+
+void *wxDynamicLibrary::GetSymbol(const wxString& name, bool *success) const
+{
+    void *symbol = DoGetSymbol(name, success);
     if ( !symbol )
     {
 #if defined(HAVE_DLERROR) && !defined(__EMX__)
@@ -376,17 +384,13 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
             wxLogError(wxT("%s"), err);
         }
 #else
-        failed = true;
         wxLogSysError(_("Couldn't find symbol '%s' in a dynamic library"),
                       name.c_str());
 #endif
     }
-    if( success )
-        *success = !failed;
 
     return symbol;
 }
-
 
 /*static*/
 wxString
