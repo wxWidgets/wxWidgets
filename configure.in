@@ -269,6 +269,8 @@ SEARCH_INCLUDE="\
     /usr/lpp/Xamples/include  \
                               \
     /usr/local/include/gtk    \
+    /usr/local/include/Xm     \
+    /usr/local/include/qt     \
     /usr/X11R6/include/Xm     \
     /usr/X11/include/Xm       \
     /usr/include/qt           \
@@ -670,7 +672,6 @@ DEFAULT_wxUSE_APPLE_IEEE=1
 DEFAULT_wxUSE_IOSTREAMH=1
 
 DEFAULT_wxUSE_ZLIB=1
-DEFAULT_wxUSE_GDK_IMLIB=1
 DEFAULT_wxUSE_LIBPNG=1
 DEFAULT_wxUSE_ODBC=0
 
@@ -779,10 +780,6 @@ dnl ----------------------------------------------------------------
 AC_OVERRIDES(zlib,zlib,
 **--with-zlib             use zlib for LZW comression,
 wxUSE_ZLIB)
-
-AC_OVERRIDES(gdk_imlib,gdk_imlib,
-**--with-gdk_imlib        use Raster's gdk_imlib (Image library),
-wxUSE_GDK_IMLIB)
 
 AC_OVERRIDES(libpng,libpng,
 **--with-libpng           use libpng (PNG image format),
@@ -962,19 +959,19 @@ dnl ----------------------------------------------------------------
 dnl
 dnl AC_OVERRIDES(metafile, metafile,
 dnl **--with-metafile         use metafile (no effect),
-dnl wxwxUSE_METAFILE)
+dnl wxUSE_METAFILE)
 dnl
 dnl AC_OVERRIDES(help,help,
 dnl **--with-help             use help (no effect),
-dnl wxwxUSE_HELP)
+dnl wxUSE_HELP)
 dnl
 dnl AC_OVERRIDES(wxgraph,wxgraph,
 dnl **--with-wxgraph          use wxgraph (no effect),
-dnl wxwxUSE_WXGRAPH)
+dnl wxUSE_WXGRAPH)
 dnl
 dnl AC_OVERRIDES(wxtree,wxtree,
 dnl **--with-wxtree           use wxtree (no effect),
-dnl wxwxUSE_WXTREE)
+dnl wxUSE_WXTREE)
 dnl
 dnl AC_OVERRIDES(package,message,helpmessage,variable)
 dnl
@@ -1141,10 +1138,6 @@ dnl ----------------------------------------------------------------
 
 if test "$wxUSE_ZLIB" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_ZLIB,$wxUSE_ZLIB)
-fi
-
-if test "$wxUSE_GDK_IMLIB" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_GDK_IMLIB,$wxUSE_GDK_IMLIB)
 fi
 
 if test "$wxUSE_LIBPNG" = 1 ; then
@@ -1362,19 +1355,19 @@ dnl ----------------------------------------------------------------
 dnl thread support
 dnl ----------------------------------------------------------------
 
-wxwxUSE_THREADS=1
+wxUSE_THREADS=1
 THREADS_LINK=""
 UNIX_THREAD="gtk/threadno.cpp"
 
 AC_OVERRIDES(threads,threads,
 **--without-threads       Force disabling threads,
-wxwxUSE_THREADS)
+wxUSE_THREADS)
 
 dnl AC_ARG_WITH(threads,
 dnl [**--without-threads       Force disabling threads ],
-dnl [wxwxUSE_THREADS="$withval"])
+dnl [wxUSE_THREADS="$withval"])
 
-if test "$wxwxUSE_THREADS" = "1"; then
+if test "$wxUSE_THREADS" = "1"; then
   UNIX_THREAD="gtk/threadno.cpp"
 
   dnl For glibc 2 users who have the old libc 5 too
@@ -1401,17 +1394,21 @@ if test "$wxwxUSE_THREADS" = "1"; then
   ])
 fi
 
+if test "$wxUSE_MOTIF" = "1"; then
+  UNIX_THREAD="motif/thread.cpp"
+fi
+
 if test -z "$UNIX_THREAD"; then
-  wxwxUSE_THREADS=0
+  wxUSE_THREADS=0
 fi
 
 AC_SUBST(UNIX_THREAD)
 AC_SUBST(THREADS_LINK)
-AC_DEFINE(wxwxUSE_THREADS)
+AC_DEFINE(wxUSE_THREADS)
 
 dnl   defines UNIX_THREAD it contains the source file to use for threads. (GL)
 dnl   defines THREADS_LINK it contains the thread library to link with. (GL)
-dnl   defines wxwxUSE_THREADS if thread support is activated. (GL)
+dnl   defines wxUSE_THREADS if thread support is activated. (GL)
 
 dnl ----------------------------------------------------------------
 dnl search for opengl

@@ -44,10 +44,6 @@
  */
 #undef wxUSE_ZLIB
 /*
- * Use gdk_imlib
- */
-#undef wxUSE_GDK_IMLIB
-/*
  * Use libpng
  */
 #undef wxUSE_LIBPNG

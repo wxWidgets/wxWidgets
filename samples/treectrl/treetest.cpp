@@ -238,7 +238,7 @@ void MyTreeCtrl::OnItemCollapsing(wxTreeEvent& event)
   }
 }
 
-void MyTreeCtrl::OnKeyDown(wxTreeEvent& event)
+void MyTreeCtrl::OnKeyDown(wxTreeEvent& WXUNUSED(event))
 {
   // show some info about this item
   wxTreeItemId itemId = GetSelection();

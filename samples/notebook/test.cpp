@@ -50,9 +50,6 @@ bool MyApp::OnInit(void)
 
 void MyApp::InitTabView(wxNotebook* notebook, wxWindow* window)
 {
-  int dialogWidth = 365;
-  int dialogHeight = 390;
-  
   m_okButton = new wxButton(window, wxID_OK, "Close", wxPoint(-1, -1), wxSize(80, 25));
   m_cancelButton = new wxButton(window, wxID_CANCEL, "Cancel", wxPoint(-1, -1), wxSize(80, 25));
   m_helpButton = new wxButton(window, wxID_HELP, "Help", wxPoint(-1, -1), wxSize(80, 25));
@@ -131,9 +128,6 @@ void MyDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event) )
 
 void MyDialog::Init(void)
 {
-  int dialogWidth = 365;
-  int dialogHeight = 390;
-  
   m_notebook = new wxNotebook(this, ID_NOTEBOOK);
 
   wxLayoutConstraints* c = new wxLayoutConstraints;
@@ -179,9 +173,6 @@ void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event) )
 
 void MyFrame::Init(void)
 {
-  int dialogWidth = 365;
-  int dialogHeight = 390;
-
   m_panel = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL|wxCLIP_CHILDREN);
 
   // Note, omit the wxTAB_STYLE_COLOUR_INTERIOR, so we will guarantee a match

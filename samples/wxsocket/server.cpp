@@ -166,7 +166,7 @@ MyFrame::~MyFrame()
 }
 
 // Intercept menu commands
-void MyFrame::Menu_Exit(wxCommandEvent& event)
+void MyFrame::Menu_Exit(wxCommandEvent& WXUNUSED(event))
 {
   Close(TRUE);
 }
