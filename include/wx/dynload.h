@@ -97,6 +97,18 @@ enum wxDLFlags
 #endif
 };
 
+enum wxDynamicLibraryCategory
+{
+    wxDL_LIBRARY,       // standard library
+    wxDL_MODULE,        // loadable module/plugin
+};
+
+enum wxPluginCategory
+{
+    wxDL_PLUGIN_GUI,    // plugin that uses GUI classes
+    wxDL_PLUGIN_BASE,   // wxBase-only plugin
+};
+
 
 class WXDLLIMPEXP_BASE wxDynamicLibrary
 {
@@ -158,6 +170,20 @@ public:
 #if WXWIN_COMPATIBILITY_2_2
     operator bool() const { return IsLoaded(); }
 #endif
+
+    // return platform-specific name of dynamic library with proper extension
+    // and prefix (e.g. "foo.dll" on Windows or "libfoo.so" on Linux)
+    static wxString CanonicalizeName(const wxString& name,
+                                     wxDynamicLibraryCategory cat = wxDL_LIBRARY);
+
+    // return name of wxWindows plugin (adds compiler and version info
+    // to the filename):
+    static wxString CanonicalizePluginName(const wxString& name,
+                                           wxPluginCategory cat);
+
+    // return plugin directory on platforms where it makes sense and empty
+    // string on others:
+    static wxString GetPluginsDirectory();
 
 protected:
 

@@ -34,6 +34,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/hash.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/filename.h"        // for SplitPath()
@@ -302,6 +303,99 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
         *success = !failed;
 
     return symbol;
+}
+    
+
+/*static*/
+wxString wxDynamicLibrary::CanonicalizeName(const wxString& name,
+                                            wxDynamicLibraryCategory cat)
+{
+#ifdef __UNIX__
+    if ( cat == wxDL_MODULE )
+        return name + GetDllExt();
+    else
+        return wxString(_T("lib")) + name + GetDllExt();
+#else
+    return name + GetDllExt();
+#endif
+}
+
+/*static*/
+wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
+                                                  wxPluginCategory cat)
+{
+    wxString suffix;
+    if ( cat == wxDL_PLUGIN_GUI )
+    {
+        suffix = wxString::FromAscii(
+#if defined(__WXMSW__)
+                "msw"
+#elif defined(__WXGTK__)
+                "gtk"
+#elif defined(__WXMGL__)
+                "mgl"
+#elif defined(__WXMOTIF__)
+                "motif"
+#elif defined(__WXOS2__)
+                "pm"
+#elif defined(__WXX11__)
+                "x11"
+#elif defined(__WXMAC__)
+                "mac"
+#elif defined(__WXCOCOA__)
+                "cocoa"
+#endif
+       );
+
+#ifdef __WXUNIVERSAL__
+        suffix << _T("univ");
+#endif
+    }
+#if wxUSE_UNICODE
+    suffix << _T('u');
+#endif
+#ifdef __WXDEBUG__
+    suffix << _T('d');
+#endif
+
+    if ( !suffix.empty() )
+        suffix = wxString(_T("_")) + suffix;
+
+#ifdef __UNIX__
+    #if (wxMINOR_VERSION % 2) == 0
+        #define wxDLLVER(x,y,z) "-" #x "." #y
+    #else
+        #define wxDLLVER(x,y,z) "-" #x "." #y "." #z
+    #endif
+#else
+    #if (wxMINOR_VERSION % 2) == 0
+        #define wxDLLVER(x,y,z) #x #y
+    #else
+        #define wxDLLVER(x,y,z) #x #y #z
+    #endif
+#endif
+    suffix << wxString::FromAscii(wxDLLVER(wxMAJOR_VERSION, wxMINOR_VERSION,
+                                           wxRELEASE_NUMBER));
+#undef wxDLLVER
+
+    return CanonicalizeName(name + suffix, wxDL_MODULE);
+}
+    
+/*static*/
+wxString wxDynamicLibrary::GetPluginsDirectory()
+{
+#ifdef __UNIX__
+    wxString format = wxGetInstallPrefix();
+    format << wxFILE_SEP_PATH
+           << wxT("lib") << wxFILE_SEP_PATH
+           << wxT("wx") << wxFILE_SEP_PATH
+           << wxT("%i.%i");
+    wxString dir;
+    dir.Printf(format.c_str(), wxMAJOR_VERSION, wxMINOR_VERSION);
+    return dir;
+#else
+    return wxEmptyString;
+#endif
 }
 
 
