@@ -61,7 +61,7 @@ public:
     wxVideoXANIMOutput();
 
     void OnTerminate(int pid, int status);
-    
+
     bool IsTerminated() const;
 protected:
     bool m_terminated;
@@ -121,11 +121,11 @@ wxVideoXANIM::wxVideoXANIM(wxInputStream& str)
     m_paused         = FALSE;
     m_size[0]        = 0;
     m_size[1]        = 0;
-    
+
     m_filename       = wxGetTempFileName("vidxa");
     m_remove_file    = TRUE;
     wxFileOutputStream fout(m_filename);
-    
+
     fout << str;
 
     CollectInfo();
@@ -142,7 +142,7 @@ wxVideoXANIM::wxVideoXANIM(const wxString& filename)
     m_remove_file    = FALSE;
     m_size[0]        = 0;
     m_size[1]        = 0;
-    
+
     CollectInfo();
 }
 
@@ -152,7 +152,7 @@ wxVideoXANIM::~wxVideoXANIM()
         Stop();
     delete m_internal;
     delete m_xanim_detector;
-    
+
     if (m_remove_file)
         wxRemoveFile(m_filename);
 }
@@ -163,7 +163,7 @@ wxVideoXANIM::~wxVideoXANIM()
 bool wxVideoXANIM::Play()
 {
     if (!m_paused && m_xanim_started)
-        return TRUE; 
+        return TRUE;
     if (!m_video_output) {
         wxVideoCreateFrame(this);
 	return TRUE;
@@ -203,12 +203,12 @@ bool wxVideoXANIM::Stop()
     SendCommand("q");
 
     // We are waiting for the termination of the subprocess.
-    while (m_xanim_started) { 
+    while (m_xanim_started) {
       wxYield();
     }
 
     m_paused = FALSE;
-    
+
     return TRUE;
 }
 
@@ -315,7 +315,7 @@ bool wxVideoXANIM::AttachOutput(wxWindow& out)
 {
     if (!wxVideoBaseDriver::AttachOutput(out))
         return FALSE;
-    
+
     return TRUE;
 }
 
@@ -348,7 +348,7 @@ bool wxVideoXANIM::SendCommand(const char *command, char **ret,
         int prop_format;
 	Atom prop_type;
 	unsigned long extra;
-	
+
 	XGetWindowProperty(m_internal->xanim_dpy, m_internal->xanim_window,
 			   m_internal->xanim_ret, 0, 16, True, AnyPropertyType,
 			   &prop_type, &prop_format, (unsigned long *)size,
@@ -362,7 +362,7 @@ bool wxVideoXANIM::CollectInfo()
     wxVideoXANIMOutput *xanimProcess;
     wxString xanim_command;
     wxStringTokenizer tokenizer;
-    
+
     xanimProcess = new wxVideoXANIMOutput;
     xanim_command = wxT("xanim +v +Zv -Ae ");
     xanim_command += m_filename;
@@ -371,22 +371,22 @@ bool wxVideoXANIM::CollectInfo()
 
     wxInputStream *infoStream = xanimProcess->GetInputStream();
     wxString totalOutput;
-        
+
     while (infoStream->LastError() == wxSTREAM_NOERROR) {
         char line[100];
 
         infoStream->Read(line, sizeof(line)-1);
         if (infoStream->LastRead() == 0)
             break;
-        
+
         line[infoStream->LastRead()] = 0;
-       
-        totalOutput += line;        
+
+        totalOutput += line;
     }
 
     // This is good for everything ... :-)
     int position = totalOutput.Find(wxT("Video Codec:"));
-    
+
     totalOutput.Remove(0, position+13);
 
     position = totalOutput.Find(wxT("depth="));
@@ -398,11 +398,11 @@ bool wxVideoXANIM::CollectInfo()
     // the rest of the line
     wxString token = tokenizer.GetNextToken();
     unsigned long my_long;
-    
+
 #define GETINT(i) \
 totalOutput.ToULong(&my_long); \
 i = my_long;
-    
+
     // 'Audio Codec:'
     totalOutput = tokenizer.GetString();
     totalOutput.Remove(0, totalOutput.Find(wxT(":"))+2);
@@ -456,10 +456,10 @@ bool wxVideoXANIM::RestartXANIM()
     unsigned long extra;
     char prop[4];
     bool xanim_chg_size;
-    
+
     if (!m_video_output || m_xanim_started)
         return FALSE;
-    
+
     // Check if we can change the size of the window dynamicly
     xanim_chg_size = TRUE;
     // Get current display
@@ -467,24 +467,24 @@ bool wxVideoXANIM::RestartXANIM()
     m_internal->xanim_dpy = gdk_display;
     GtkPizza *pizza = GTK_PIZZA( m_video_output->m_wxwindow );
     GdkWindow *window = pizza->bin_window;
-    
+
     m_internal->xanim_window =
         ((GdkWindowPrivate *)window)->xwindow;
 #endif
     // Get the XANIM atom
     m_internal->xanim_atom = XInternAtom(m_internal->xanim_dpy,
 					 "XANIM_PROPERTY", False);
-    
+
     // Build the command
     xanim_command.Printf(wxT("xanim -Zr +Ze +Sr +f +W%d +f +q "
-			     "+Av70 %s %s"), m_internal->xanim_window,
+			     "+Av70 %s %s"), (int)m_internal->xanim_window,
 			 (xanim_chg_size) ? _T("") : _T(""),
 			 WXSTRINGCAST m_filename);
-    
+
         // Execute it
     if (!wxExecute(xanim_command, FALSE, m_xanim_detector))
         return FALSE;
-    
+
     // Wait for XAnim to be ready
     nitems = 0;
     m_xanim_started = TRUE;
@@ -498,17 +498,17 @@ bool wxVideoXANIM::RestartXANIM()
     }
 
     wxSize vibrato_size;
-    
+
     vibrato_size = m_video_output->GetSize();
-    
+
     vibrato_size.SetWidth(vibrato_size.GetWidth()+1);
     m_video_output->SetSize(vibrato_size);
     vibrato_size.SetWidth(vibrato_size.GetWidth()-1);
     m_video_output->SetSize(vibrato_size);
     // Very useful ! Actually it "should" sends a SETSIZE event to XAnim
     // FIXME: This event is not sent !!
-    
+
     m_paused = FALSE;
-    
+
     return TRUE;
 }

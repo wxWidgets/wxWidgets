@@ -51,7 +51,7 @@ wxUint32 wxSoundStreamPcm::GetBestSize() const
 // -----------------------------------------------------------------------
 
 #define DEFINE_CONV(name, input_type, output_type, convert) \
-static void Convert_##name##(const void *buf_in, void *buf_out, wxUint32 len) \
+static void Convert_##name(const void *buf_in, void *buf_out, wxUint32 len) \
 {\
   register input_type src; \
   register const input_type *t_buf_in = (input_type *)buf_in; \
@@ -112,7 +112,7 @@ DEFINE_CONV(16_swap_16_sign_swap, wxUint16, wxUint16, (src ^ 0x80))
 //   XX swapped stereo -> YY swapped mono
 //   XX swapped stereo -> YY swapped mono sign
 
-static wxSoundStreamPcm::ConverterType s_converters[4][3][2] = { 
+static wxSoundStreamPcm::ConverterType s_converters[4][3][2] = {
     {
         {
             NULL,
@@ -152,10 +152,10 @@ static wxSoundStreamPcm::ConverterType s_converters[4][3][2] = {
         },
         {
             NULL,
-            NULL 
+            NULL
         },
     },
-    
+
     {
         {
             NULL,                               /* 16 -> 16 */
@@ -186,7 +186,7 @@ wxSoundStream& wxSoundStreamPcm::Read(void *buffer, wxUint32 len)
 
     // We must have a multiple of 2
     len &= 0x01;
-    
+
     if (!m_function_in) {
         m_sndio->Read(buffer, len);
         m_lastcount = m_sndio->GetLastAccess();
@@ -195,7 +195,7 @@ wxSoundStream& wxSoundStreamPcm::Read(void *buffer, wxUint32 len)
     }
 
     in_bufsize = GetReadSize(len);
-    
+
     if (len <= m_best_size) {
         m_sndio->Read(m_prebuffer, in_bufsize);
         m_snderror  = m_sndio->GetError();
@@ -203,11 +203,11 @@ wxSoundStream& wxSoundStreamPcm::Read(void *buffer, wxUint32 len)
             m_lastcount = 0;
             return *this;
         }
-        
+
         m_function_in(m_prebuffer, buffer, m_sndio->GetLastAccess());
     } else {
         char *temp_buffer;
-        
+
         temp_buffer = new char[in_bufsize];
         m_sndio->Read(temp_buffer, in_bufsize);
 
@@ -216,21 +216,21 @@ wxSoundStream& wxSoundStreamPcm::Read(void *buffer, wxUint32 len)
             m_lastcount = 0;
             return *this;
         }
-        
+
         m_function_in(temp_buffer, buffer, m_sndio->GetLastAccess());
-        
+
         delete[] temp_buffer;
     }
-    
+
     m_lastcount = (wxUint32)(m_sndio->GetLastAccess() * m_multiplier_in);
-    
+
     return *this;
 }
 
 wxSoundStream& wxSoundStreamPcm::Write(const void *buffer, wxUint32 len)
 {
     wxUint32 out_bufsize;
-    
+
     if (!m_function_out) {
         m_sndio->Write(buffer, len);
         m_lastcount = m_sndio->GetLastAccess();
@@ -252,17 +252,17 @@ wxSoundStream& wxSoundStreamPcm::Write(const void *buffer, wxUint32 len)
         }
     } else {
         char *temp_buffer;
-        
+
         temp_buffer = new char[out_bufsize];
         m_function_out(buffer, temp_buffer, len);
-        
+
         m_sndio->Write(temp_buffer, out_bufsize);
         m_snderror =  m_sndio->GetError();
         if (m_snderror != wxSOUND_NOERROR) {
             m_lastcount = 0;
             return *this;
         }
-        
+
         delete[] temp_buffer;
     }
 
@@ -275,7 +275,7 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
 {
     wxSoundFormatBase *new_format;
     wxSoundFormatPcm *pcm_format, *pcm_format2;
-    
+
     if (m_sndio->SetSoundFormat(format)) {
         m_function_out = NULL;
         m_function_in = NULL;
@@ -287,7 +287,7 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
     }
     if (m_sndformat)
         delete m_sndformat;
-    
+
     new_format = m_sndio->GetSoundFormat().Clone();
     pcm_format = (wxSoundFormatPcm *)&format;
     pcm_format2 = (wxSoundFormatPcm *)new_format;
@@ -317,7 +317,7 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
 
     int table_no, table_no2;
     int i_sign, i_swap;
-    
+
     switch (pcm_format->GetBPS()) {
         case 8:
             table_no = 0;
@@ -340,7 +340,7 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
             // TODO: Add something here: error, log, ...
             return FALSE;
     }
-    
+
     if (pcm_format2->Signed() != pcm_format->Signed())
         i_sign = 1;
     else
@@ -389,14 +389,14 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
         m_best_size = (wxUint32)(m_sndio->GetBestSize() *
                                  m_multiplier_out);
     }
-    
+
     m_prebuffer = new char[m_prebuffer_size];
-    
+
     bool SetSoundFormatReturn;
 
     SetSoundFormatReturn = m_sndio->SetSoundFormat(*new_format);
     wxASSERT( SetSoundFormatReturn );
-    
+
     m_sndformat = new_format;
     return TRUE;
 }
@@ -429,14 +429,14 @@ void ResamplingShrink_##DEPTH##(const void *source, void *destination, wxUint32 
 
     source_data = (wxUint##DEPTH## *)source;
     dest_data   = (wxUint##DEPTH## *)destination;
-    
+
     pos = m_saved_pos;
     while (len > 0) {
         // Increment the position in the input buffer
         pos += m_pitch;
         if (pos & INTMASK) {
             pos &= FLOATMASK;
-            
+
             *dest_data ++ = *source_data;
         }
         len--;
