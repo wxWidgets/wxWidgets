@@ -27793,8 +27793,8 @@ WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_u
 
 
 if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
-            WX_RESOURCES_MACOSX_ASCII="libwx_${TOOLCHAIN_NAME}.${WX_CURRENT}.r"
-    WX_RESOURCES_MACOSX_DATA="libwx_${TOOLCHAIN_NAME}.${WX_CURRENT}.rsrc"
+            WX_RESOURCES_MACOSX_ASCII="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.r"
+    WX_RESOURCES_MACOSX_DATA="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.rsrc"
 
         LIBWXMACRES="\$(top_builddir)lib/${WX_RESOURCES_MACOSX_ASCII}"
 
