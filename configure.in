@@ -2062,6 +2062,8 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     if test "$wxUSE_MAC" = 1; then
         if test "$wxUSE_PRECOMP" = "yes"; then
             CPPFLAGS="$CPPFLAGS -cpp-precomp"
+        else
+            CPPFLAGS="$CPPFLAGS -no-cpp-precomp"
         fi
         CPPFLAGS="$CPPFLAGS -I/Developer/Headers/FlatCarbon -I\${top_srcdir}/src/mac/morefile"
         CFLAGS="$CFLAGS -fpascal-strings"
@@ -3668,6 +3670,7 @@ if test "$wxUSE_DATETIME" = "yes"; then
     AC_CHECK_FUNCS(strptime)
 
     dnl check for timezone variable
+    dnl   doesn't exist under Darwin / Mac OS X which uses tm_gmtoff instead
     AC_CACHE_CHECK(for timezone variable in <time.h>,
                    wx_cv_var_timezone,
                    [
@@ -3708,7 +3711,7 @@ if test "$wxUSE_DATETIME" = "yes"; then
                                             ],
                                             [
                                                 if test "$USE_DOS" = 0 ; then
-                                                    AC_MSG_ERROR(no timezone variable)
+                                                    AC_MSG_WARN(no timezone variable, will use tm_gmtoff instead)
                                                 fi
                                             ]
                                         )
