@@ -219,12 +219,14 @@ All (GUI):
   of showing popup menu; calling wxTaskBarIcon::PopupMenu directly
   is discouraged
 - added ..._CMD_...(id) variants for wxGrid event table entry macros
-- added wxWindow::Navigate for programmatic navigation to the next control.
+- added wxWindow::Navigate for programmatic navigation to the next control
 - wxTextCtrl::OnChar now inserts a tab character if wxTE_PROCESS_TAB is set
 - added wxKeyEvent::GetUnicodeKey()
 - added wxKeyEvent::CmdDown() and wxMouseEvent::CmdDown()
 - implemented wxListCtrl::FindItem() for non-MSW (Robin Stoll)
 - added status bar fields styles support (Tim Kosse)
+- added convenience functions wxSizer::AddSpacer() and
+  wxSizer::AddStretchSpacer() (as well as Prepend and Insert variants)
 - added samples/splash
 - added support for stock buttons
 - added wxTopLevelWindow::RequestUserAttention()
