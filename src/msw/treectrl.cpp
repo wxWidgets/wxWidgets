@@ -97,7 +97,6 @@
 // looks quite ugly.
 #define wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE 0
 
-
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -459,15 +458,36 @@ private:
 IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
 
 // ----------------------------------------------------------------------------
-// variables
+// constants
 // ----------------------------------------------------------------------------
 
-// handy table for sending events
-static wxEventType g_events[2][2] =
+// indices in gs_expandEvents table below
+enum
+{
+    IDX_COLLAPSE,
+    IDX_EXPAND,
+    IDX_WHAT_MAX
+};
+
+enum
+{
+    IDX_DONE,
+    IDX_DOING,
+    IDX_HOW_MAX
+};
+
+// handy table for sending events - it has to be initialized during run-time
+// now so can't be const any more
+static /* const */ wxEventType gs_expandEvents[IDX_WHAT_MAX][IDX_HOW_MAX];
+
+/*
+   but logically it's a const table with the following entries:
+=
 {
     { wxEVT_COMMAND_TREE_ITEM_COLLAPSED, wxEVT_COMMAND_TREE_ITEM_COLLAPSING },
     { wxEVT_COMMAND_TREE_ITEM_EXPANDED,  wxEVT_COMMAND_TREE_ITEM_EXPANDING  }
 };
+*/
 
 // ============================================================================
 // implementation
@@ -518,13 +538,12 @@ void wxTreeCtrl::Init()
     m_dragImage = NULL;
     m_htSelStart = 0;
 
-    // Initialize static array of events, because with the new event system,
-    // they may not be initialized yet.
-
-    g_events[0][0] = wxEVT_COMMAND_TREE_ITEM_COLLAPSED;
-    g_events[0][1] = wxEVT_COMMAND_TREE_ITEM_COLLAPSING;
-    g_events[1][0] = wxEVT_COMMAND_TREE_ITEM_EXPANDED;
-    g_events[1][1] = wxEVT_COMMAND_TREE_ITEM_EXPANDING;
+    // initialize the global array of events now as it can't be done statically
+    // with the wxEVT_XXX values being allocated during run-time only
+    gs_expandEvents[IDX_COLLAPSE][IDX_DONE] = wxEVT_COMMAND_TREE_ITEM_COLLAPSED;
+    gs_expandEvents[IDX_COLLAPSE][IDX_DOING] = wxEVT_COMMAND_TREE_ITEM_COLLAPSING;
+    gs_expandEvents[IDX_EXPAND][IDX_DONE] = wxEVT_COMMAND_TREE_ITEM_EXPANDED;
+    gs_expandEvents[IDX_EXPAND][IDX_DOING] = wxEVT_COMMAND_TREE_ITEM_EXPANDING;
 }
 
 bool wxTreeCtrl::Create(wxWindow *parent,
@@ -556,13 +575,12 @@ bool wxTreeCtrl::Create(wxWindow *parent,
 
     if ( m_windowStyle & wxTR_LINES_AT_ROOT )
         wstyle |= TVS_LINESATROOT;
-    
+
     if ( m_windowStyle & wxTR_FULL_ROW_HIGHLIGHT )
-    {    
+    {
         if ( wxTheApp->GetComCtl32Version() >= 471 )
             wstyle |= TVS_FULLROWSELECT;
     }
-
 
     // using TVS_CHECKBOXES for emulation of a multiselection tree control
     // doesn't work without the new enough headers
@@ -1498,17 +1516,15 @@ void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
     {
         wxTreeEvent event(wxEVT_NULL, m_windowId);
         event.m_item = item;
-
-        bool isExpanded = IsExpanded(item);
-
         event.SetEventObject(this);
 
-        // FIXME return value of {EXPAND|COLLAPS}ING event handler is discarded
-        event.SetEventType(g_events[isExpanded][TRUE]);
-        GetEventHandler()->ProcessEvent(event);
+        // note that the {EXPAND|COLLAPS}ING event is sent by TreeView_Expand()
+        // itself
+        event.SetEventType(gs_expandEvents[IsExpanded(item) ? IDX_EXPAND
+                                                            : IDX_COLLAPSE]
+                                          [IDX_DONE]);
 
-        event.SetEventType(g_events[isExpanded][FALSE]);
-        GetEventHandler()->ProcessEvent(event);
+        (void)GetEventHandler()->ProcessEvent(event);
     }
     //else: change didn't took place, so do nothing at all
 }
@@ -2129,23 +2145,26 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 NM_TREEVIEW* tv = (NM_TREEVIEW*)lParam;
 
-                bool expand = FALSE;
+                int what;
                 switch ( tv->action )
                 {
+                    default:
+                        wxLogDebug(wxT("unexpected code %d in TVN_ITEMEXPAND message"), tv->action);
+                        // fall through
+
                     case TVE_EXPAND:
-                        expand = TRUE;
+                        what = IDX_EXPAND;
                         break;
 
                     case TVE_COLLAPSE:
-                        expand = FALSE;
+                        what = IDX_COLLAPSE;
                         break;
-
-                    default:
-                        wxLogDebug(wxT("unexpected code %d in TVN_ITEMEXPAND message"), tv->action);
                 }
 
-                bool ing = ((int)hdr->code == TVN_ITEMEXPANDING);
-                eventType = g_events[expand][ing];
+                int how = (int)hdr->code == TVN_ITEMEXPANDING ? IDX_DOING
+                                                              : IDX_DONE;
+
+                eventType = gs_expandEvents[what][how];
 
                 event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
             }
@@ -2404,6 +2423,25 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             *result = !event.IsAllowed();
             break;
 
+        case TVN_ITEMEXPANDED:
+            // the item is not refreshed properly after expansion when it has
+            // an image depending on the expanded/collapsed state - bug in
+            // comctl32.dll or our code?
+            {
+                NM_TREEVIEW* tv = (NM_TREEVIEW*)lParam;
+                if ( tv->action == TVE_EXPAND )
+                {
+                    wxTreeItemId id = (WXHTREEITEM)tv->itemNew.hItem;
+
+                    int image = GetItemImage(id, wxTreeItemIcon_Expanded);
+                    if ( image != -1 )
+                    {
+                        RefreshItem(id);
+                    }
+                }
+            }
+            break;
+
         case TVN_GETDISPINFO:
             // NB: so far the user can't set the image himself anyhow, so do it
             //     anyway - but this may change later
@@ -2431,7 +2469,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                                           : wxTreeItemIcon_Selected
                         );
                 }
-			}
+            }
             break;
 
         //default:
