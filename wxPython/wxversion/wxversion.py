@@ -41,11 +41,12 @@ def require(versions):
     """
     Search for a wxPython installation that matches version.
 
-        :param version: Specifies the version to look for, it can either be
-                        a sting or a list of strings.  Each string is
-                        compared to the installed wxPythons and the best
-                        match is added to the sys.path, allowing an 'import
-                        wx' to find that version.
+        :param version: Specifies the version to look for, it can
+                        either be a string or a list of strings.  Each
+                        string is compared to the installed wxPythons
+                        and the best match is inserted into the
+                        sys.path, allowing an 'import wx' to find that
+                        version.
 
                         The version string is composed of the dotted
                         version number (at least 2 of the 4 components)
