@@ -187,7 +187,7 @@ void wxFontRefData::Init(int pointSize,
     switch (m_family)
     {
         case wxFONTFAMILY_TELETYPE:
-           pango_font_description_set_family( m_nativeFontInfo.description, "monospaced" );
+           pango_font_description_set_family( m_nativeFontInfo.description, "monospace" );
            break;
         case wxFONTFAMILY_SWISS:
            pango_font_description_set_family( m_nativeFontInfo.description, "serif" );
@@ -274,7 +274,7 @@ wxFontRefData::wxFontRefData(const wxString& fontname)
             break;
     }
     
-    if (m_faceName == wxT("monospaced"))
+    if (m_faceName == wxT("monospace"))
     {
         m_family = wxFONTFAMILY_TELETYPE;
     }
