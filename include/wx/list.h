@@ -349,7 +349,7 @@ private:
 //     retrieved from it.
 
 #define WX_DECLARE_LIST_3(T, Tbase, name, nodetype)                         \
-    typedef int (*wxSortFuncFor_##name)(const T *, const T *);              \
+    typedef int (*wxSortFuncFor_##name)(const T **, const T **);            \
                                                                             \
     class WXDLLEXPORT nodetype : public wxNodeBase                          \
     {                                                                       \
