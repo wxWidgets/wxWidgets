@@ -98,7 +98,7 @@ struct wxCmdLineOption
     void SetDateVal(const wxDateTime val)
         { Check(wxCMD_LINE_VAL_DATE); m_dateVal = val; m_hasVal = TRUE; }
 
-    void SetHasValue() { m_hasVal = TRUE; }
+    void SetHasValue(bool hasValue = TRUE) { m_hasVal = hasValue; }
     bool HasValue() const { return m_hasVal; }
 
 public:
@@ -475,6 +475,18 @@ wxString wxCmdLineParser::GetParam(size_t n) const
     return m_data->m_parameters[n];
 }
 
+// Resets switches and options
+void wxCmdLineParser::Reset()
+{
+	unsigned int i;
+	for (i = 0; i < m_data->m_options.Count(); i++)
+	{
+		wxCmdLineOption& opt = m_data->m_options[(size_t)i];
+		opt.SetHasValue(FALSE);
+	}
+}
+
+
 // ----------------------------------------------------------------------------
 // the real work is done here
 // ----------------------------------------------------------------------------
@@ -489,6 +501,8 @@ int wxCmdLineParser::Parse()
     size_t currentParam = 0;    // the index in m_paramDesc
 
     size_t countParam = m_data->m_paramDesc.GetCount();
+
+	Reset();
 
     // parse everything
     wxString arg;

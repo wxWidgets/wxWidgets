@@ -187,6 +187,9 @@ public:
     // gets the value of Nth parameter (as string only for now)
     wxString GetParam(size_t n = 0u) const;
 
+	// Resets switches and options
+	void Reset();
+
 private:
     // common part of all ctors
     void Init();
