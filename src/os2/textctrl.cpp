@@ -159,8 +159,8 @@ bool wxTextCtrl::Create(
     //
     if ( m_windowStyle & wxTE_MULTILINE )
     {
+        lSstyle |= MLS_BORDER | MLS_WORDWRAP;
         m_bIsMLE = TRUE;
-        m_windowStyle |= wxTE_PROCESS_ENTER;
 
         if ((m_windowStyle & wxTE_NO_VSCROLL) == 0)
             lSstyle |= MLS_VSCROLL;
@@ -284,6 +284,14 @@ void wxTextCtrl::SetupColours()
     vBkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
     SetBackgroundColour(vBkgndColour);
     SetForegroundColour(GetParent()->GetForegroundColour());
+    if (m_bIsMLE)
+    {
+        ::WinSendMsg( GetHwnd()
+                     ,MLM_SETTEXTCOLOR
+                     ,(MPARAM)GetParent()->GetForegroundColour().GetPixel()
+                     ,(MPARAM)MLE_RGB
+                    );
+    }
 } // end of wxTextCtrl::SetupColours
 
 // ----------------------------------------------------------------------------
