@@ -552,6 +552,9 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
         val = apply(htmlc.wxHtmlWindow_GetParser,(self,) + _args, _kwargs)
         if val: val = wxHtmlWinParserPtr(val) 
         return val
+    def base_OnLinkClicked(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_base_OnLinkClicked,(self,) + _args, _kwargs)
+        return val
     def base_OnSetTitle(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_base_OnSetTitle,(self,) + _args, _kwargs)
         return val
@@ -732,4 +735,4 @@ wx.wxHtmlContainerCellPtr   = wxHtmlContainerCellPtr
 wx.wxHtmlWidgetCellPtr      = wxHtmlWidgetCellPtr
 wx.HtmlHistoryItemPtr       = HtmlHistoryItemPtr
 wx.wxHtmlWindowPtr          = wxHtmlWindowPtr
-wx.wxHtmlLinkInfoPtr        = wxHtmlLinkInfo
+wx.wxHtmlLinkInfoPtr        = wxHtmlLinkInfoPtr

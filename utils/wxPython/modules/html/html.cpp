@@ -221,6 +221,7 @@ public:
     PYPRIVATE;
 };
 
+
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 
 void wxPyHtmlWindow::OnLinkClicked(wxHtmlLinkInfo* link) {
@@ -4406,6 +4407,42 @@ static PyObject *_wrap_wxHtmlWindow_GetParser(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxHtmlWindow_base_OnLinkClicked(_swigobj,_swigarg0)  (_swigobj->base_OnLinkClicked(_swigarg0))
+static PyObject *_wrap_wxHtmlWindow_base_OnLinkClicked(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyHtmlWindow * _arg0;
+    wxHtmlLinkInfo * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","link", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlWindow_base_OnLinkClicked",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyHtmlWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlWindow_base_OnLinkClicked. Expected _wxPyHtmlWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlLinkInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlWindow_base_OnLinkClicked. Expected _wxHtmlLinkInfo_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxHtmlWindow_base_OnLinkClicked(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxHtmlWindow_base_OnSetTitle(_swigobj,_swigarg0)  (_swigobj->base_OnSetTitle(_swigarg0))
 static PyObject *_wrap_wxHtmlWindow_base_OnSetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5421,6 +5458,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "delete_wxHtmlDCRenderer", (PyCFunction) _wrap_delete_wxHtmlDCRenderer, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlDCRenderer", (PyCFunction) _wrap_new_wxHtmlDCRenderer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_base_OnSetTitle", (PyCFunction) _wrap_wxHtmlWindow_base_OnSetTitle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlWindow_base_OnLinkClicked", (PyCFunction) _wrap_wxHtmlWindow_base_OnLinkClicked, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_GetParser", (PyCFunction) _wrap_wxHtmlWindow_GetParser, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_GetInternalRepresentation", (PyCFunction) _wrap_wxHtmlWindow_GetInternalRepresentation, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_HistoryClear", (PyCFunction) _wrap_wxHtmlWindow_HistoryClear, METH_VARARGS | METH_KEYWORDS },

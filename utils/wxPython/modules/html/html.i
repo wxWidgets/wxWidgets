@@ -417,6 +417,7 @@ public:
     PYPRIVATE;
 };
 
+
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 
 void wxPyHtmlWindow::OnLinkClicked(wxHtmlLinkInfo* link) {
@@ -433,6 +434,7 @@ void wxPyHtmlWindow::base_OnLinkClicked(wxHtmlLinkInfo* link) {
     wxHtmlWindow::OnLinkClicked(link);
 }
 %}
+
 
 
 %name(wxHtmlWindow) class wxPyHtmlWindow : public wxScrolledWindow {
@@ -467,6 +469,7 @@ public:
     wxHtmlWinParser* GetParser();
 
 
+    void base_OnLinkClicked(wxHtmlLinkInfo* link);
     void base_OnSetTitle(const char* title);
 };
 

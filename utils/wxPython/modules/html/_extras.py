@@ -11,4 +11,4 @@ wx.wxHtmlContainerCellPtr   = wxHtmlContainerCellPtr
 wx.wxHtmlWidgetCellPtr      = wxHtmlWidgetCellPtr
 wx.HtmlHistoryItemPtr       = HtmlHistoryItemPtr
 wx.wxHtmlWindowPtr          = wxHtmlWindowPtr
-wx.wxHtmlLinkInfoPtr        = wxHtmlLinkInfo
+wx.wxHtmlLinkInfoPtr        = wxHtmlLinkInfoPtr
