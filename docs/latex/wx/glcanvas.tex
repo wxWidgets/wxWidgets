@@ -7,15 +7,13 @@ To use this class, create a wxGLCanvas window, call \helpref{wxGLCanvas::SetCurr
 to direct normal OpenGL commands to the window, and then call \helpref{wxGLCanvas::SwapBuffers}{wxglcanvasswapbuffers} 
 to show the OpenGL buffer on the window.
 
-Please note that despite deriving from wxScrolledWindow, scrolling is not enabled for this class under
-Windows.
-
-To switch wxGLCanvas support on under Windows, edit setup.h and set wxUSE\_GLCANVAS to 1. On Unix,
-pass --with-opengl to configure to compile using OpenGL or Mesa.
+To switch wxGLCanvas support on under Windows, edit setup.h and set
+{\tt wxUSE\_GLCANVAS} to $1$. You may also need to have to add
+{\tt opengl32.lib} to the list of libraries your program is linked with. On
+Unix, pass {\tt --with-opengl} to configure to compile using OpenGL or Mesa.
 
 \wxheading{Derived from}
 
-\helpref{wxScrolledWindow}{wxscrolledwindow}\\
 \helpref{wxWindow}{wxwindow}\\
 \helpref{wxEvtHandler}{wxevthandler}\\
 \helpref{wxObject}{wxobject}
