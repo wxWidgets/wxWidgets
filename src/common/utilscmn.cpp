@@ -1041,3 +1041,10 @@ wxString wxGetFullHostName()
     return buf;
 }
 
+wxString wxGetHomeDir()
+{
+    wxString home;
+    wxGetHomeDir(&home);
+
+    return home;
+}

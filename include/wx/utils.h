@@ -212,6 +212,7 @@ WXDLLEXPORT bool wxGetUserName(wxChar *buf, int maxSize);
 WXDLLEXPORT wxString wxGetUserName();
 
 // Get current Home dir and copy to dest (returns pstr->c_str())
+WXDLLEXPORT wxString wxGetHomeDir();
 WXDLLEXPORT const wxChar* wxGetHomeDir(wxString *pstr);
 
 // Get the user's home dir (caller must copy --- volatile)

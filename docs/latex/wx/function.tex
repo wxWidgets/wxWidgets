@@ -1284,11 +1284,15 @@ Under X only, returns the current display name. See also \helpref{wxSetDisplayNa
 
 <wx/utils.h>
 
-\membersection{::wxGetHomeDir}
+\membersection{::wxGetHomeDir}\label{wxgethomedir}
 
-\func{wxString}{wxGetHomeDir}{\param{const wxString\& }{buf}}
+\func{wxString}{wxGetHomeDir}{\void}
 
-Fills the buffer with a string representing the user's home directory (Unix only).
+Return the (current) user's home directory.
+
+\wxheading{See also:}
+
+\helpref{wxGetUserHome}{wxgetuserhome}
 
 \wxheading{Include files}
 
@@ -1300,8 +1304,7 @@ Fills the buffer with a string representing the user's home directory (Unix only
 
 Copies the host name of the machine the program is running on into the
 buffer {\it buf}, of maximum size {\it bufSize}, returning TRUE if
-successful. Under Unix, this will return a machine name. Under Windows,
-this returns ``windows''.
+successful.
 
 \wxheading{Include files}
 
@@ -1429,6 +1432,18 @@ See also \helpref{wxWriteResource}{wxwriteresource}, \helpref{wxConfigBase}{wxco
 Copies the user's login identity (such as ``jacs'') into the buffer {\it
 buf}, of maximum size {\it bufSize}, returning TRUE if successful.
 Under Windows, this returns ``user''.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+\membersection{::wxGetUserHome}\label{wxgetuserhome}
+
+\func{const wxChar *}{wxGetUserHome}{\param{const wxString\& }{user = ""}}
+
+Returns the home directory for the given user. If the username is empty
+(default value), this function behaves like 
+\helpref{wxGetHomeDir}{wxgethomedir}.
 
 \wxheading{Include files}
 
