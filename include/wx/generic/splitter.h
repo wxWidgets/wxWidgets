@@ -212,6 +212,9 @@ protected:
 protected:
     // common part of all ctors
     void Init();
+    
+    // adjusts sash position with respect to min. pane and window sizes
+    void AdjustSashPosition(int &sashPos);
 
     int         m_splitMode;
     bool        m_permitUnsplitAlways;

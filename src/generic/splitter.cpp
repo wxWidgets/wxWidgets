@@ -689,6 +689,37 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
     screenDC.SetBrush(wxNullBrush);
 }
 
+void wxSplitterWindow::AdjustSashPosition(int &sashPos)
+{
+    int w, h;
+    GetClientSize(&w, &h);
+    int window_size = (m_splitMode == wxSPLIT_VERTICAL) ? w : h;
+    wxWindow *win;
+
+    if ( sashPos < m_minimumPaneSize )
+        sashPos = m_minimumPaneSize;
+    else if ( sashPos > window_size - m_minimumPaneSize )
+        sashPos = window_size - m_minimumPaneSize;
+    
+    win = GetWindow1();
+    if ( win )
+    {
+        int minSize = (m_splitMode == wxSPLIT_VERTICAL) ? 
+                       win->GetMinWidth() : win->GetMinHeight();
+        if ( minSize != -1 && sashPos < minSize + GetBorderSize() )
+            sashPos = minSize + GetBorderSize();
+    }
+
+    win = GetWindow2();
+    if ( win )
+    {
+        int minSize = (m_splitMode == wxSPLIT_VERTICAL) ? 
+                       win->GetMinWidth() : win->GetMinHeight();
+        if ( minSize != -1 && sashPos > window_size - minSize - GetBorderSize() )
+            sashPos = window_size - minSize - GetBorderSize();
+    }
+}
+
 // Position and size subwindows.
 // Note that the border size applies to each subwindow, not
 // including the edges next to the sash.
@@ -763,6 +794,8 @@ bool wxSplitterWindow::SplitVertically(wxWindow *window1, wxWindow *window2, int
         m_sashPosition = w + sashPosition;   // It's negative so adding is subtracting
     else    // default
         m_sashPosition = w/2;
+        
+    AdjustSashPosition(m_sashPosition);
 
     SizeWindows();
 
@@ -786,6 +819,8 @@ bool wxSplitterWindow::SplitHorizontally(wxWindow *window1, wxWindow *window2, i
         m_sashPosition = h + sashPosition; // It's negative so adding is subtracting
     else    // default
         m_sashPosition = h/2;
+
+    AdjustSashPosition(m_sashPosition);
 
     SizeWindows();
 
@@ -855,6 +890,7 @@ bool wxSplitterWindow::ReplaceWindow(wxWindow *winOld, wxWindow *winNew)
 void wxSplitterWindow::SetSashPosition(int position, bool redraw)
 {
     m_sashPosition = position;
+    AdjustSashPosition(m_sashPosition);
 
     if ( redraw )
     {
@@ -945,10 +981,7 @@ void wxSplitterWindow::OnSashPosChanged(wxSplitterEvent& event)
     if ( !unsplit_scenario )
     {
         // If resultant pane would be too small, enlarge it
-        if ( newSashPosition < m_minimumPaneSize )
-            newSashPosition = m_minimumPaneSize;
-        if ( newSashPosition > window_size - m_minimumPaneSize )
-            newSashPosition = window_size - m_minimumPaneSize;
+        AdjustSashPosition(newSashPosition);
     }
 
     // If the result is out of bounds it means minimum size is too big,
