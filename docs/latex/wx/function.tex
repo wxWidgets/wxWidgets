@@ -223,8 +223,6 @@ the corresponding topic.
 \helpref{wxSysErrorCode}{wxsyserrorcode}\\
 \helpref{wxSysErrorMsg}{wxsyserrormsg}\\
 \helpref{wxT}{wxt}\\
-\helpref{wxToLower}{wxtolower}\\
-\helpref{wxToUpper}{wxtoupper}\\
 \helpref{wxTraceLevel}{wxtracelevel}\\
 \helpref{wxTrace}{wxtrace}\\
 \helpref{wxTransferFileToStream}{wxtransferfiletostream}\\
@@ -1582,28 +1580,6 @@ wxTRANSLATE() in the above, it wouldn't work as expected because there would be
 no translations for the weekday names in the program message catalog and
 wxGetTranslation wouldn't find them.
 
-
-
-\membersection{::wxToLower}\label{wxtolower}
-
-\func{char}{wxToLower}{\param{char }{ch}}
-
-Converts the character to lower case. This is implemented as a macro for efficiency.
-
-\wxheading{Include files}
-
-<wx/utils.h>
-
-
-\membersection{::wxToUpper}\label{wxtoupper}
-
-\func{char}{wxToUpper}{\param{char }{ch}}
-
-Converts the character to upper case. This is implemented as a macro for efficiency.
-
-\wxheading{Include files}
-
-<wx/utils.h>
 
 
 \membersection{::wxVsnprintf}\label{wxvsnprintf}
