@@ -86,7 +86,7 @@ class WXDLLEXPORT wxSpinCtrl;
 // in the grid. You may pass it to the wxGridCellAttr (below) to change the
 // format of one given cell or to wxGrid::SetDefaultRenderer() to change the
 // view of all cells. This is an ABC, you will normally use one of the
-// predefined derived classes or derive oyur own class from it.
+// predefined derived classes or derive your own class from it.
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxGridCellRenderer
@@ -197,7 +197,7 @@ protected:
 private:
     // formatting parameters
     int m_width,
-        m_precision;
+    m_precision;
 
     wxString m_format;
 };
@@ -862,7 +862,7 @@ public:
             wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = 0,
+            long style = wxWANTS_CHARS,
             const wxString& name = wxPanelNameStr );
 
     ~wxGrid();
@@ -1250,9 +1250,10 @@ public:
 
     wxGrid( wxWindow *parent,
             int x, int y, int w = -1, int h = -1,
-            long style = 0,
+            long style = wxWANTS_CHARS,
             const wxString& name = wxPanelNameStr )
-        : wxScrolledWindow( parent, -1, wxPoint(x,y), wxSize(w,h), style, name )
+        : wxScrolledWindow( parent, -1, wxPoint(x,y), wxSize(w,h), 
+                            (style|wxWANTS_CHARS), name )
         {
             Create();
         }

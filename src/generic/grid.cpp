@@ -2512,7 +2512,7 @@ END_EVENT_TABLE()
 wxGridRowLabelWindow::wxGridRowLabelWindow( wxGrid *parent,
                                             wxWindowID id,
                                             const wxPoint &pos, const wxSize &size )
-  : wxWindow( parent, id, pos, size )
+  : wxWindow( parent, id, pos, size, wxWANTS_CHARS )
 {
     m_owner = parent;
 }
@@ -2565,7 +2565,7 @@ END_EVENT_TABLE()
 wxGridColLabelWindow::wxGridColLabelWindow( wxGrid *parent,
                                             wxWindowID id,
                                             const wxPoint &pos, const wxSize &size )
-  : wxWindow( parent, id, pos, size )
+  : wxWindow( parent, id, pos, size, wxWANTS_CHARS )
 {
     m_owner = parent;
 }
@@ -2618,7 +2618,7 @@ END_EVENT_TABLE()
 wxGridCornerLabelWindow::wxGridCornerLabelWindow( wxGrid *parent,
                                                   wxWindowID id,
                                                   const wxPoint &pos, const wxSize &size )
-  : wxWindow( parent, id, pos, size )
+  : wxWindow( parent, id, pos, size, wxWANTS_CHARS )
 {
     m_owner = parent;
 }
@@ -2672,7 +2672,7 @@ wxGridWindow::wxGridWindow( wxGrid *parent,
                             wxGridRowLabelWindow *rowLblWin,
                             wxGridColLabelWindow *colLblWin,
                             wxWindowID id, const wxPoint &pos, const wxSize &size )
-        : wxPanel( parent, id, pos, size, 0, "grid window" )
+        : wxPanel( parent, id, pos, size, wxWANTS_CHARS, "grid window" )
 {
     m_owner = parent;
     m_rowLabelWin = rowLblWin;
@@ -2747,7 +2747,7 @@ wxGrid::wxGrid( wxWindow *parent,
                  const wxSize& size,
                  long style,
                  const wxString& name )
-  : wxScrolledWindow( parent, id, pos, size, style, name ),
+  : wxScrolledWindow( parent, id, pos, size, (style | wxWANTS_CHARS), name ),
     m_colMinWidths(wxKEY_INTEGER, GRID_HASH_SIZE)
 {
     Create();
