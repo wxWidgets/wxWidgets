@@ -30,6 +30,9 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
+        return false;
+
     Rect bounds ;
     Str255 title ;
     

@@ -34,6 +34,10 @@ wxTabCtrl::wxTabCtrl()
 bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
 {
+    if ( !wxControl::Create(parent, id, pos, size,
+                            style, wxDefaultValidator, name) )
+        return false;
+
     Rect bounds ;
     Str255 title ;
     

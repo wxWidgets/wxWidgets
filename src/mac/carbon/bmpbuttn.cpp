@@ -29,6 +29,10 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
            const wxValidator& validator,
            const wxString& name)
 {
+    if ( !wxBitmapButtonBase::Create(parent, id, _T(""), pos, size,
+                                     style, validator, name) )
+        return false;
+
     m_bmpNormal = bitmap;
  
     m_marginX = 0;
@@ -39,16 +43,11 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
     int width = size.x;
     int height = size.y;
 
-    if (id == -1)
-        m_windowId = NewControlId();
-    else
-        m_windowId = id;
-
     if ( width == -1 && bitmap.Ok())
-    width = bitmap.GetWidth() + 2*m_marginX;
+        width = bitmap.GetWidth() + 2*m_marginX;
 
     if ( height == -1 && bitmap.Ok())
-    height = bitmap.GetHeight() + 2*m_marginY;
+        height = bitmap.GetHeight() + 2*m_marginY;
 
     Rect bounds ;
     Str255 title ;

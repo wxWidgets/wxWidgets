@@ -46,6 +46,9 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    if ( !wxChoiceBase::Create(parent, id, pos, size, style, validator, name) )
+        return false;
+
     Rect bounds ;
     Str255 title ;
 

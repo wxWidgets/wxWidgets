@@ -175,6 +175,9 @@ bool wxNotebook::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
+    if ( !wxNotebookBase::Create(parent, id, pos, size, style, name) )
+        return false;
+
     Rect bounds ;
     Str255 title ;
 

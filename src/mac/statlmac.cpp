@@ -49,6 +49,10 @@ bool wxStaticLine::Create( wxWindow *parent,
                            long style,
                            const wxString &name)
 {
+    if ( !wxStaticLineBase::Create(parent, id, pos, size,
+                                   style, wxDefaultValidator, name) )
+        return false;
+
     Rect bounds ;
     Str255 title ;
     

@@ -300,23 +300,8 @@ void wxControl::MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString l
              const wxString& name , WXRECTPTR outBounds , unsigned char* maclabel ) 
 {
     m_label = label ;
-  SetName(name);
-  if ( &validator )
-    SetValidator(validator);
 
-  m_windowStyle = style;
-  parent->AddChild(this);
-
-  m_backgroundColour = parent->GetBackgroundColour() ;
-  m_foregroundColour = parent->GetForegroundColour() ;
-
-  if (id == -1)
-      m_windowId = NewControlId();
-  else
-      m_windowId = id;
-
-   // These sizes will be adjusted in MacPostControlCreate
-
+    // These sizes will be adjusted in MacPostControlCreate
     m_width = size.x ;
     m_height = size.y ;
     m_x = pos.x ;

@@ -183,6 +183,10 @@ bool wxCheckListBox::Create(wxWindow *parent,
                             const wxValidator& validator,
                             const wxString &name)
 {
+    if ( !wxCheckListBoxBase::Create(parent, id, pos, size,
+                                     n, choices, style, validator, name) )
+        return false;
+
     m_noItems = 0 ; // this will be increased by our append command
     m_selected = 0;
     

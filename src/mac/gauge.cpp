@@ -29,6 +29,9 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    if ( !wxGaugeBase::Create(parent, id, range, pos, s, style, validator, name) )
+        return false;
+
     wxSize size = s ;
     Rect bounds ;
     Str255 title ;

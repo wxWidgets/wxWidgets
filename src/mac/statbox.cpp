@@ -38,6 +38,10 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
+    if ( !wxControl::Create(parent, id, pos, size,
+                            style, wxDefaultValidator, name) )
+        return false;
+
     Rect bounds ;
     Str255 title ;
     

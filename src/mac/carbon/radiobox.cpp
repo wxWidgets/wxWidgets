@@ -102,6 +102,9 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
                         int majorDim, long style,
                         const wxValidator& val, const wxString& name)
 {
+    if ( !wxControl::Create(parent, id, pos, size, style, val, name) )
+        return false;
+
     int i;
     
     m_noItems = n;
@@ -124,8 +127,15 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     
     for (i = 0; i < n; i++)
     {
-        wxRadioButton *radBtn = new wxRadioButton(this, NewControlId(), wxStripMenuCodes(choices[i]),wxPoint(5,20*i+10),
-            wxDefaultSize , i == 0 ? wxRB_GROUP : 0 ) ;
+        wxRadioButton *radBtn = new wxRadioButton
+                                    (
+                                        this,
+                                        wxID_ANY,
+                                        wxStripMenuCodes(choices[i]),
+                                        wxPoint(5,20*i+10),
+                                        wxDefaultSize,
+                                        i == 0 ? wxRB_GROUP : 0
+                                    );
         if ( i == 0 )
             m_radioButtonCycle = radBtn ;
         //        m_radioButtonCycle=radBtn->AddInCycle(m_radioButtonCycle);

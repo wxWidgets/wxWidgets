@@ -41,22 +41,17 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
-    SetName(name);
-    m_backgroundColour = parent->GetBackgroundColour() ;
-    m_foregroundColour = parent->GetForegroundColour() ;
-
-    if ( id == -1 )
-        m_windowId = (int)NewControlId();
-    else
-        m_windowId = id;
-
-    m_windowStyle = style;
     m_label = wxStripMenuCodes(label) ;
 
-    bool ret = wxControl::Create( parent, id, pos, size, style , wxDefaultValidator , name );
+    if ( !wxControl::Create( parent, id, pos, size, style,
+                             wxDefaultValidator , name ) )
+    {
+        return false;
+    }
+
     SetBestSize( size ) ;
 
-    return ret;
+    return true;
 }
 
 const wxString punct = wxT(" ,.-;:!?");

@@ -202,6 +202,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
                        const wxValidator& validator,
                        const wxString& name)
 {
+    if ( !wxListBoxBase::Create(parent, id, pos, size, style, validator, name) )
+        return false;
+
     m_noItems = 0 ; // this will be increased by our append command
     m_selected = 0;
 
