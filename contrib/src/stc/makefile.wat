@@ -67,7 +67,12 @@ $(STCLIB): $(OBJECTS)
 	*wlib /b /c /n /P=256 $(STCLIB) $(OBJECTS)
 
 clean:   .SYMBOLIC
-    -erase *.obj *.bak *.err *.pch $(STCLIB) *.lbc
+    -erase *.obj 
+    -erase *.bak 
+    -erase *.err 
+    -erase *.pch 
+    -erase $(STCLIB) 
+    -erase *.lbc
 
 .EXTENSIONS: .cxx
 .cxx: $(S)
