@@ -342,16 +342,9 @@ bool wxControlContainer::DoSetFocus()
     wxLogTrace(_T("focus"), _T("SetFocus on wxPanel 0x%08lx."),
                (unsigned long)m_winParent->GetHandle());
 
-    // FIXME: this recursion protection is needed for wxMac,
-    // but on Windows (at least), it breaks focus handling.
-    // This needs to be investigated further.
-#ifdef __WXMAC__
     if (m_inSetFocus)
         return true;
-#endif    
-
-    m_inSetFocus = true;
-    
+ 
     // when the panel gets the focus we move the focus to either the last
     // window that had the focus or the first one that can get it unless the
     // focus had been already set to some other child
@@ -362,7 +355,6 @@ bool wxControlContainer::DoSetFocus()
         if ( win == m_winParent )
         {
             // our child already has focus, don't take it away from it
-            m_inSetFocus = false;
             return true;
         }
 
@@ -375,6 +367,9 @@ bool wxControlContainer::DoSetFocus()
 
         win = win->GetParent();
     }
+    
+    // protect against infinite recursion:
+    m_inSetFocus = true;
 
     bool ret = SetFocusToChild();
 
