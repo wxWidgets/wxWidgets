@@ -141,6 +141,7 @@ void wxToolBarBase::OnRightClick(int toolIndex, long x, long y)
 {
     wxCommandEvent event(wxEVT_COMMAND_TOOL_RCLICKED, toolIndex);
     event.SetEventObject(this);
+    event.SetInt(toolIndex);
 
     GetEventHandler()->ProcessEvent(event);
 }
@@ -151,6 +152,7 @@ void wxToolBarBase::OnMouseEnter ( int toolIndex )
 {
     wxCommandEvent event(wxEVT_COMMAND_TOOL_ENTER, toolIndex);
     event.SetEventObject(this);
+    event.SetInt(toolIndex);
 
     GetEventHandler()->ProcessEvent(event);
 }
