@@ -279,7 +279,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     // program under Win9x w/o MSLU emulation layer - if so, abort right now
     // as it has no chance to work
 #if wxUSE_UNICODE && !wxUSE_UNICODE_MSLU
-    if ( wxGetOsVersion() != wxWINDOWS_NT && wxGetOsVersion() != wxWINDOWS_CE )
+    if ( wxGetOsVersion() != wxWINDOWS_NT && wxGetOsVersion() != wxWINDOWS_CE && wxGetOsVersion() != wxWINDOWS_SMARTPHONE && wxGetOsVersion() != wxWINDOWS_POCKETPC )
     {
         // note that we can use MessageBoxW() as it's implemented even under
         // Win9x - OTOH, we can't use wxGetTranslation() because the file APIs

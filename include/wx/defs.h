@@ -604,7 +604,9 @@ enum
     wxWIN32S,                 /*  Windows 32S API */
     wxWIN95,                  /*  Windows 95 */
     wxWIN386,                 /*  Watcom 32-bit supervisor modus */
-    wxWINDOWS_CE,             /*  Windows CE */
+    wxWINDOWS_CE,             /*  Windows CE (generic) */
+    wxWINDOWS_POCKETPC,       /*  Windows CE PocketPC */
+    wxWINDOWS_SMARTPHONE,     /*  Windows CE Smartphone */
     wxMGL_UNIX,               /*  MGL with direct hardware access */
     wxMGL_X,                  /*  MGL on X */
     wxMGL_WIN32,              /*  MGL on Win32 */

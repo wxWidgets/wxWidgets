@@ -1210,6 +1210,11 @@ wxToolkitInfo& wxAppTraits::GetToolkitInfo()
             s_major = info.dwMajorVersion;
             s_minor = info.dwMinorVersion;
 
+#ifdef __SMARTPHONE__
+            s_ver = wxWINDOWS_SMARTPHONE;
+#elif defined(__POCKETPC__)
+            s_ver = wxWINDOWS_POCKETPC;
+#else
             switch ( info.dwPlatformId )
             {
                 case VER_PLATFORM_WIN32s:
@@ -1223,12 +1228,10 @@ wxToolkitInfo& wxAppTraits::GetToolkitInfo()
                 case VER_PLATFORM_WIN32_NT:
                     s_ver = wxWINDOWS_NT;
                     break;
-#ifdef __WXWINCE__
                 case VER_PLATFORM_WIN32_CE:
                     s_ver = wxWINDOWS_CE;
-                    break;
-#endif
             }
+#endif            
         }
     }
 

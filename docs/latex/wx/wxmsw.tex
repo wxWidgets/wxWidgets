@@ -34,7 +34,7 @@ the amount of spacing used by sizers, for which you can
 use a macro such as this:
 
 \begin{verbatim}
-#if defined(__WXWINCE__
+#if defined(__WXWINCE__)
     #define wxLARGESMALL(large,small) small
 #else
     #define wxLARGESMALL(large,small) large
@@ -52,8 +52,17 @@ You can test the return value of wxSystemSettings::GetScreenType()
 for a qualitative assessment of what kind of display is available,
 or use wxGetDisplaySize() if you need more information.
 
+You can also use wxGetOsVersion to test for a version of Windows CE at
+run-time (see the next section). However, because different builds
+are currently required to target different kinds of device, these
+values are hard-wired according to the build, and you cannot
+dynamically adapt the same executable for different major Windows CE
+platforms. This would require a different approach to the way
+wxWidgets adapts its behaviour (such as for menubars) to suit the
+style of device.
+
 See the "Life!" example (demos/life) for an example of
-an application that has been tailored for Windows CE use.
+an application that has been tailored for PocketPC and Smartphone use.
 
 \subsubsection{Testing for WinCE SDKs}
 
@@ -68,6 +77,14 @@ Use these preprocessor symbols to test for the different types of device or SDK:
 \twocolitem{\_\_POCKETPC\_\_}{Microsoft-powered PocketPC devices with touch-screen}
 \twocolitem{\_\_WINCE\_STANDARDSDK\_\_}{Microsoft-powered Windows CE devices, for generic Windows CE applications}
 \twocolitem{\_\_WINCE\_NET\_\_}{Microsoft-powered Windows CE .NET devices (\_WIN32\_WCE is 400 or greater)}
+\end{twocollist}
+
+wxGetOsVersion will return these values:
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{wxWINDOWS\_POCKETPC}{The application is running under PocketPC.}
+\twocolitem{wxWINDOWS\_SMARTPHONE}{The application is running under Smartphone.}
+\twocolitem{wxWINDOWS\_CE}{The application is running under Windows CE (built with the Standard SDK).}
 \end{twocollist}
 
 \subsubsection{Window sizing in wxWinCE}
