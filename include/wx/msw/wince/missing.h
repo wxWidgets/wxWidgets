@@ -25,7 +25,7 @@ inline BOOL IsIconic( HWND WXUNUSED(hWnd) )
     return FALSE;
 }
 
-#ifdef WIN32_PLATFORM_PSPC
+#ifdef __POCKETPC__
 #define SM_CXCURSOR             13
 #define SM_CYCURSOR             14
 #endif

@@ -41,7 +41,7 @@
 
 // Use the WinCE-specific toolbar only if we're either compiling
 // with a WinCE earlier than 4, or we wish to emulate a PocketPC-style UI
-#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
+#if wxUSE_TOOLBAR && wxUSE_TOOLBAR_NATIVE && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
 
 #include "wx/toolbar.h"
 
@@ -56,7 +56,7 @@
 #include <ole2.h>
 #include <shellapi.h>
 #include <commctrl.h>
-#if _WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP)
+#if _WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__)
   #include <aygshell.h>
 #endif
 #include "wx/msw/wince/missing.h"
@@ -249,7 +249,7 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size, wxMenuB
     if (m_menuBar)
         m_menuBar->SetToolBar(this);
 
-#if _WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP)
+#if _WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__)
     // Create the menubar.
     SHMENUBARINFO mbi;
     

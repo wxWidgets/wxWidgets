@@ -155,8 +155,7 @@ wxPoint wxFrameBase::GetClientAreaOrigin() const
 {
     wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
 
-#if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__) && \
-  (!defined(__WXWINCE__) || (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP)))
+#if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__)
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
     {
@@ -173,15 +172,6 @@ wxPoint wxFrameBase::GetClientAreaOrigin() const
         }
     }
 #endif // wxUSE_TOOLBAR
-
-#if defined(__WXWINCE__) && defined(WCE_PLATFORM_STANDARDSDK)
-	if (GetMenuBar() && GetMenuBar()->GetCommandBar())
-	{
-		RECT rect;
-		::GetWindowRect((HWND) GetMenuBar()->GetCommandBar(), &rect);
-		pt.y += (rect.bottom - rect.top);
-	}
-#endif
 
     return pt;
 }

@@ -46,7 +46,7 @@
   #include <ole2.h>
   #include <shellapi.h>
   // Standard SDK doesn't have aygshell.dll: see include/wx/msw/wince/libraries.h
-  #if _WIN32_WCE < 400 || !defined(WCE_PLATFORM_STANDARDSDK)
+  #if _WIN32_WCE < 400 || !defined(__WINCE_STANDARDSDK__)
     #include <aygshell.h>
   #endif
 #include "wx/msw/wince/missing.h"
@@ -388,7 +388,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
         y = (sizeDpy.y - h) / 2;
     }
 
-#if !defined(__WXWINCE__) || defined(WCE_PLATFORM_STANDARDSDK)
+#if !defined(__WXWINCE__) || defined(__WINCE_STANDARDSDK__)
     if ( !::MoveWindow(GetHwnd(), x, y, w, h, FALSE) )
     {
         wxLogLastError(wxT("MoveWindow"));
@@ -414,7 +414,7 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
     WXDWORD flags = MSWGetCreateWindowFlags(&exflags);
 
 #if (defined(_WIN32_WCE) && _WIN32_WCE < 400) || \
-    defined(WIN32_PLATFORM_PSPC) || \
+    defined(__POCKETPC__) || \
     defined(__SMARTPHONE__)
 	// Always expand to fit the screen in PocketPC or SmartPhone
 	wxSize sz(wxDefaultSize);
@@ -515,10 +515,12 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         );
     }
 
-	// Native look is full screen window on Smartphones
-#ifdef __SMARTPHONE__
+	// Native look is full screen window on Smartphones and Standard SDK
+#if defined(__WXWINCE__)
     if ( style & wxMAXIMIZE )
-	    Maximize();
+	{
+	    this->Maximize();
+	}
 #endif
 
     return ret;
@@ -565,6 +567,11 @@ bool wxTopLevelWindowMSW::Show(bool show)
             // show and maximize
             nShowCmd = SW_MAXIMIZE;
 
+			// This is necessary, or no window appears
+#ifdef __WINCE_STANDARDSDK__
+			DoShowWindow(SW_SHOW);
+#endif
+
             m_maximizeOnShow = FALSE;
         }
         else // just show
@@ -581,6 +588,13 @@ bool wxTopLevelWindowMSW::Show(bool show)
     }
 
     DoShowWindow(nShowCmd);
+
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
+    // Addornments have to be added when the frame is the correct size
+    wxFrame* frame = wxDynamicCast(this, wxFrame);
+    if (frame && frame->GetMenuBar())
+        frame->GetMenuBar()->AddAdornments(GetWindowStyleFlag());
+#endif
 
     if ( show )
     {
@@ -950,7 +964,7 @@ wxDlgProc(HWND hDlg,
 
         // Standard SDK doesn't have aygshell.dll: see
         // include/wx/msw/wince/libraries.h
-#if defined(__WXWINCE__) && !defined(WCE_PLATFORM_STANDARDSDK)
+#if defined(__WXWINCE__) && !defined(__WINCE_STANDARDSDK__)
         SHINITDLGINFO shidi;
         shidi.dwMask = SHIDIM_FLAGS;
         shidi.dwFlags = SHIDIF_DONEBUTTON |

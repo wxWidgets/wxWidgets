@@ -172,14 +172,15 @@ public:
     virtual void Detach();
     virtual void Attach(wxFrame *frame);
 
-#if wxUSE_TOOLBAR && defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
+#if wxUSE_TOOLBAR && defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
     // Under WinCE, a menubar is owned by the frame's toolbar
     void SetToolBar(wxToolBar* toolBar) { m_toolBar = toolBar; }
     wxToolBar* GetToolBar() const { return m_toolBar; }
 #endif
 
-#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP))
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
     WXHWND GetCommandBar() const { return m_commandBar; }
+    bool AddAdornments(long style);
 #endif
 
 #if wxUSE_ACCEL
@@ -224,8 +225,9 @@ protected:
     // Not using a combined wxToolBar/wxMenuBar? then use
     // a commandbar in WinCE .NET to implement the
     // menubar, since there is no ::SetMenu function.
-#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP))
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
     WXHWND      m_commandBar;
+    bool        m_adornmentsAdded;
 #endif
 
 private:

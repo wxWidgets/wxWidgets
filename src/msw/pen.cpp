@@ -394,7 +394,7 @@ void wxPen::SetCap(int Cap)
 
 int wx2msPenStyle(int wx_style)
 {
-    int cstyle;
+    int cstyle = PS_SOLID;
     switch (wx_style)
     {
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)

@@ -318,7 +318,7 @@ void wxFrame::PositionStatusBar()
 
 void wxFrame::AttachMenuBar(wxMenuBar *menubar)
 {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
     if (!GetToolBar())
     {
         wxToolBar* toolBar = new wxToolBar(this, -1,
@@ -354,7 +354,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
     }
     else // set new non NULL menu bar
     {
-#if !defined(__WXWINCE__) || (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP))
+#if !defined(__WXWINCE__) || (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
         // Can set a menubar several times.
         if ( menubar->GetHMenu() )
         {
@@ -417,7 +417,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
     if (show)
     {
 #if wxUSE_TOOLBAR
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
         // TODO: hide commandbar
 #else
         wxToolBar *theToolBar = GetToolBar();
@@ -462,7 +462,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
     else
     {
 #if wxUSE_TOOLBAR
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
         // TODO: show commandbar
 #else
         wxToolBar *theToolBar = GetToolBar();
@@ -508,7 +508,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
 
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
     // We may already have a toolbar from calling SetMenuBar.
     if (GetToolBar())
         return GetToolBar();
@@ -526,7 +526,7 @@ void wxFrame::PositionToolBar()
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
     {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
         // We want to do something different in WinCE, because
         // the toolbar should be associated with the commandbar,
         // and not an independent window.
@@ -805,7 +805,7 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
         PositionToolBar();
 #endif // wxUSE_TOOLBAR
 
-#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP))
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
 		// Position the menu command bar
 		if (GetMenuBar() && GetMenuBar()->GetCommandBar())
 		{
@@ -995,4 +995,46 @@ bool wxFrame::HandleInitMenuPopup(WXHMENU hMenu)
     event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
+}
+
+// ----------------------------------------------------------------------------
+// wxFrame size management: we exclude the areas taken by menu/status/toolbars
+// from the client area, so the client area is what's really available for the
+// frame contents
+// ----------------------------------------------------------------------------
+
+// get the origin of the client area in the client coordinates
+wxPoint wxFrame::GetClientAreaOrigin() const
+{
+    wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
+
+#if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__) && \
+  (!defined(__WXWINCE__) || (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__)))
+    wxToolBar *toolbar = GetToolBar();
+    if ( toolbar && toolbar->IsShown() )
+    {
+        int w, h;
+        toolbar->GetSize(&w, &h);
+
+        if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
+        {
+            pt.x += w;
+        }
+        else
+        {
+            pt.y += h;
+        }
+    }
+#endif // wxUSE_TOOLBAR
+
+#if defined(__WXWINCE__) && defined(__WINCE_STANDARDSDK__)
+	if (GetMenuBar() && GetMenuBar()->GetCommandBar())
+	{
+		RECT rect;
+		::GetWindowRect((HWND) GetMenuBar()->GetCommandBar(), &rect);
+		pt.y += (rect.bottom - rect.top);
+	}
+#endif
+
+    return pt;
 }

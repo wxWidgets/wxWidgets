@@ -745,7 +745,9 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
             0, NULL);
 
     // copy it to our buffer and free memory
-    if( lpMsgBuf != 0 ) {
+    // Crashes on SmartPhone
+#if !defined(__SMARTPHONE__)
+     if( lpMsgBuf != 0 ) {
         wxStrncpy(s_szBuf, (const wxChar *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
         s_szBuf[WXSIZEOF(s_szBuf) - 1] = wxT('\0');
 
@@ -760,7 +762,9 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
                 s_szBuf[len - 2] = wxT('\0');
         }
     }
-    else {
+    else
+#endif
+    {
         s_szBuf[0] = wxT('\0');
     }
 

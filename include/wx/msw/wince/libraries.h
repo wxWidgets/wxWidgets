@@ -27,16 +27,16 @@
     #pragma comment(lib,"commdlg.lib")
 #endif
 
-#if defined(WCE_PLATFORM_STANDARDSDK)
+#if defined(__WINCE_STANDARDSDK__)
     // DoDragDrop:
     #pragma comment(lib,"olece400.lib")
-#elif defined(WIN32_PLATFORM_PSPC)
+#elif defined(__POCKETPC__)
     // PocketPC build:
     // DoDragDrop:
     #pragma comment(lib,"ceshell.lib")
 
     #pragma comment(lib,"aygshell.lib")
-#elif defined(WIN32_PLATFORM_WFSP)
+#elif defined(__SMARTPHONE__)
     // Smartphone build:
     #pragma comment(lib,"ceshell.lib")
     #pragma comment(lib,"aygshell.lib")

@@ -109,6 +109,7 @@ protected:
     // override base class virtuals
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetClientSize(int width, int height);
+	virtual wxPoint GetClientAreaOrigin() const;
 
 #if wxUSE_MENUS_NATIVE
     // perform MSW-specific action when menubar is changed
