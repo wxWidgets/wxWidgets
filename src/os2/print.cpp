@@ -21,7 +21,7 @@
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
-#include "wx/os2/print.h"
+#include "wx/os2/printos2.h"
 #include "wx/generic/prntdlgg.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxOS2Printer, wxPrinterBase)
@@ -31,8 +31,8 @@ IMPLEMENT_CLASS(wxOS2PrintPreview, wxPrintPreviewBase)
  * Printer
  */
 
-wxOS2Printer::wxOS2Printer(wxPrintData *data):
-  wxPrinterBase((wxPrintDialogData*)data)
+wxOS2Printer::wxOS2Printer(wxPrintDialogData *data):
+  wxPrinterBase(data)
 {
 }
 
@@ -71,6 +71,12 @@ bool wxOS2Printer::Setup(wxWindow *parent)
  * Print preview
  */
 
+wxOS2PrintPreview::wxOS2PrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting, wxPrintDialogData *data):
+  wxPrintPreviewBase(printout, printoutForPrinting, data)
+{
+    DetermineScaling();
+}
+
 wxOS2PrintPreview::wxOS2PrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting, wxPrintData *data):
   wxPrintPreviewBase(printout, printoutForPrinting, data)
 {
@@ -85,7 +91,7 @@ bool wxOS2PrintPreview::Print(bool interactive)
 {
     if (!m_printPrintout)
         return FALSE;
-//    wxPrinter printer(&m_printData);
+//    wxOS2Printer printer(&m_printData);
 //    return printer.Print(m_previewFrame, m_printPrintout, interactive);
     return FALSE;
 }
