@@ -1836,8 +1836,20 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
         }
         else // this entry didn't exist in the local file
         {
-            // add a new line to the file
+            // add a new line to the file: note the hack for the root group
+            // which is special in that it doesn't have its own group line
+            // (something like "[/]") and so the line we get for it may be not
+            // its line at all if it doesn't have any entries
+            //
+            // this is definitely not the right place to fix it but changing
+            // the root group to have NULL m_pLine will probably break too
+            // much stuff elsewhere so I don't dare to do it...
             wxFileConfigLineList *line = Group()->GetLastEntryLine();
+            if ( !Group()->Parent() && line == Group()->GetGroupLine() )
+            {
+                // prepend the first root group entry to the head of the list
+                line = NULL;
+            }
             m_pLine = Group()->Config()->LineListInsert(strLine, line);
 
             Group()->SetLastEntry(this);
