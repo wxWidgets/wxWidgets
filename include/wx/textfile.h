@@ -20,10 +20,11 @@
 
 #include "wx/defs.h"
 
+#include "wx/textbuf.h"
+
 #if wxUSE_TEXTFILE
 
 #include "wx/file.h"
-#include "wx/textbuf.h"
 
 // ----------------------------------------------------------------------------
 // wxTextFile
