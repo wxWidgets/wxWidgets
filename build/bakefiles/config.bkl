@@ -48,9 +48,14 @@
     <if cond="FORMAT=='autoconf'"> 
         <option name="TOOLKIT"/>
         <option name="TOOLKIT_LOWERCASE"/>
+        <option name="TOOLKIT_VERSION"/>
         <option name="EXTRALIBS"/>
         <option name="top_builddir"/>
         <option name="SAMPLES_RPATH_FLAG"/>
+    </if>
+
+    <if cond="FORMAT!='autoconf'">
+        <set var="TOOLKIT_VERSION"></set>
     </if>
 
 </makefile>

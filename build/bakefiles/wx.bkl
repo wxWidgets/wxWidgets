@@ -18,6 +18,8 @@
 
     <!-- wxWindows variant where everything is in one library: -->
     <include file="monolithic.bkl"/>
+    <!-- ...and when there are multiple libraries: -->
+    <!-- <include file="multilib.bkl"/> -->
     
 
     <!-- Samples target (not dependency of 'all'): -->
@@ -25,14 +27,41 @@
         <dir>samples</dir>
     </subproject>
 
-    <!-- <fragment format="autoconf" file="fragment_autoconf"/> -->
-
     <!-- "make install": -->
     <if cond="FORMAT=='autoconf'">
         <data-files>
             <files>wxwin.m4</files>
             <install-to>$(DATADIR)/aclocal</install-to>
         </data-files>
+
+        <data-files-tg id="install-afm" cond="USE_GUI=='1'">
+            <files>misc/afm/*.afm</files>
+            <install-to>$(DATADIR)/wx/$(WXVER_MAJOR).$(WXVER_MINOR)/afm</install-to>
+        </data-files-tg>
+        <data-files-tg id="install-gsafm" cond="USE_GUI=='1'">
+            <files>misc/gs_afm/*.afm</files>
+            <install-to>$(DATADIR)/wx/$(WXVER_MAJOR).$(WXVER_MINOR)/gs_afm</install-to>
+        </data-files-tg>
+
+        <action id="install-wxconfig">
+            <dependency-of>install</dependency-of>
+            <command>
+                $(INSTALL_DIR) $(BINDIR)
+                $(INSTALL_PROGRAM) wx$(TOOLCHAIN_NAME)-config $(BINDIR)
+                (cd $(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) wx$(TOOLCHAIN_NAME)-config wx-config)
+            </command>
+        </action>
+
+        <data-files>
+            <srcdir>$(BUILDDIR)</srcdir>
+            <files>lib/wx/include/$(TOOLCHAIN_NAME)/wx/setup.h</files>
+            <install-to>$(LIBDIR)/wx/include/$(TOOLCHAIN_NAME)/wx</install-to>
+        </data-files>
+
+        <headers>
+            <srcdir>$(SRCDIR)/include</srcdir>
+            <files>$(ALL_HEADERS)</files>
+        </headers>
     </if>
 
 </makefile>
