@@ -30,6 +30,8 @@
 
 #include "wx/progdlg.h"
 
+#include "../sample.xpm"
+
 // define this to use wxExecute in the exec tests, otherwise just use system
 #define USE_EXECUTE
 
@@ -401,7 +403,7 @@ bool MyApp::OnInit()
     menuBar->Append(menuHelp, _T("&Help"));
 
     frame->SetMenuBar(menuBar);
-
+    
     // Show the frame
     frame->Show(true);
 
@@ -415,6 +417,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title,
                  int x, int y, int w, int h)
        : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
+    SetIcon(wxIcon(sample_xpm));
+    
     m_nRunning = m_nCount = 0;
 
     m_dlgProgress = (wxProgressDialog *)NULL;
