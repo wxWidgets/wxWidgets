@@ -92,6 +92,7 @@ wxGTK:
 
 - fixes to wxTextCtrl scrolling under GTK2 (Nerijus Baliunas)
 - fix for crash when using user-dashed lines (Chris Borgolte)
+- fixed wxChoice::Delete() in presence of client data
 
 
 2.5.0
