@@ -4,7 +4,7 @@
 // Author:      Vaclav Slavik
 //              (based on GTK & MSW implementations)
 // RCS-ID:      $Id$
-// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
+// Copyright:   (c) 2001-2002 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -66,6 +66,9 @@ MGLDevCtx *g_displayDC = NULL;
 
 // the window that has keyboard focus: 
 static wxWindowMGL *gs_focusedWindow = NULL;
+// the window that is about to be focused after currently focused 
+// one looses focus:
+static wxWindow *gs_toBeFocusedWindow = NULL;
 // the window that is currently under mouse cursor:
 static wxWindowMGL *gs_windowUnderMouse = NULL;
 // the window that has mouse capture
@@ -666,8 +669,14 @@ void wxWindowMGL::SetFocus()
 {
     if ( gs_focusedWindow == this ) return;
 
+    wxWindowMGL *oldFocusedWindow = gs_focusedWindow;
+
     if ( gs_focusedWindow )
+    {
+        gs_toBeFocusedWindow = (wxWindow*)this;
         gs_focusedWindow->KillFocus();
+        gs_toBeFocusedWindow = NULL;
+    }
     
     gs_focusedWindow = this;
     
@@ -691,6 +700,7 @@ void wxWindowMGL::SetFocus()
     
     wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
     event.SetEventObject(this);
+    event.SetWindow((wxWindow*)oldFocusedWindow);
     GetEventHandler()->ProcessEvent(event);
 
 #if wxUSE_CARET
@@ -719,6 +729,7 @@ void wxWindowMGL::KillFocus()
 
     wxFocusEvent event(wxEVT_KILL_FOCUS, GetId());
     event.SetEventObject(this);
+    event.SetWindow(gs_toBeFocusedWindow);
     GetEventHandler()->ProcessEvent(event);
 }
 
