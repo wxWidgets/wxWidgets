@@ -3520,6 +3520,35 @@ WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_u
 
 
 
+if test "$wxUSE_COCOA" = 1; then
+    AC_LANG_SAVE
+    AC_WX_LANG_OBJECTIVEC
+dnl Recent AppKit/NSEvent.h include parts of IOKit which eventually
+dnl gets IOKit/graphics/IOGraphicsTypes.h included which typedefs
+dnl Point but only if MacTypes.h was not included first.  Of course,
+dnl if MacTypes.h is included later then you're screwed when it
+dnl tries to typedef Point.  Defining __Point__ will cause IOGraphicsTypes.h
+dnl to not typedef Point and thus fix the problem.
+    AC_MSG_CHECKING([if AppKit/NSEvent.h conflicts with CoreFoundation])
+    AC_TRY_COMPILE([#include <AppKit/NSEvent.h>
+#include <CoreFoundation/CoreFoundation.h>
+        ],[],
+        [AC_MSG_RESULT([no])],
+        [AC_MSG_RESULT([yes])
+        AC_MSG_CHECKING([if defining __Point__ will fix it])
+        AC_TRY_COMPILE([#define __Point__ 1
+#include <AppKit/NSEvent.h>
+#include <CoreFoundation/CoreFoundation.h>
+            ],[],
+            [AC_MSG_RESULT([yes])
+            AC_DEFINE(__Point__)
+            ],
+            [AC_MSG_FAILURE([no])]
+        )]
+    )
+    AC_LANG_RESTORE
+fi
+
 if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
     dnl base name of the resource file for wxMac must be the same
     dnl as library installation base name (-install_name)

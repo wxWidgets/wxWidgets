@@ -78,6 +78,18 @@ XLCXX=`test $wx_compiler_xlc = yes && echo yes`
 AC_LANG_POP(C++)
 ])
 
+dnl ===========================================================================
+dnl Objective-C(++) related macros
+dnl ===========================================================================
+m4_define([AC_WX_LANG_OBJECTIVEC],
+[AC_LANG(C)
+ac_ext=m
+])
+
+m4_define([AC_WX_LANG_OBJECTIVECPLUSPLUS],
+[AC_LANG(C++)
+ac_ext=mm
+])
 
 dnl ===========================================================================
 dnl macros to find the a file in the list of include/lib paths

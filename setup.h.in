@@ -110,6 +110,9 @@
 #undef __POWERPC__
 #undef TARGET_CARBON
 
+/* Hack to make IOGraphicsTypes.h not define Point conflicting with MacTypes */
+#undef __Point__
+
 /* MS-DOS with DJGPP */
 #undef __DOS__
 
