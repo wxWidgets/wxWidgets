@@ -31,35 +31,30 @@ IMPLEMENT_DYNAMIC_CLASS(wxPanel, wxWindow)
 
 BEGIN_EVENT_TABLE(wxPanel, wxWindow)
   EVT_SYS_COLOUR_CHANGED(wxPanel::OnSysColourChanged)
+  EVT_NAVIGATION_KEY(wxPanel::OnNavigationKey)
 END_EVENT_TABLE()
 
 #endif
 
-wxPanel::wxPanel(void)
+wxPanel::wxPanel()
 {
-  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-  SetDefaultBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 }
 
 bool wxPanel::Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
+                     const wxPoint& pos,
+                     const wxSize& size,
+                     long style,
+                     const wxString& name)
 {
   bool ret = wxWindow::Create(parent, id, pos, size, style, name);
 
-  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-  SetDefaultBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
-  SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
-  return ret;
-}
+  if ( ret ) {
+    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetDefaultBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+  }
 
-void wxPanel::OnPaint(wxPaintEvent& WXUNUSED(event))
-{
-	// No: if you call the default procedure, it makes
-	// the following painting code not work.
-//	wxWindow::OnPaint(event);
+  return ret;
 }
 
 void wxPanel::InitDialog(void)
@@ -67,6 +62,11 @@ void wxPanel::InitDialog(void)
  	wxInitDialogEvent event(GetId());
  	event.SetEventObject(this);
  	GetEventHandler()->ProcessEvent(event);
+}
+
+void wxPanel::SetFocus()
+{
+  SetFocusToNextChild();
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -80,3 +80,79 @@ void wxPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
     wxWindow::OnSysColourChanged(event);
 }
 
+void wxPanel::OnNavigationKey(wxNavigationKeyEvent& event)
+{
+  // don't process these ones here
+  if ( event.IsWindowChange() ) {
+    event.Skip();
+    return;
+  }
+
+  // first of all, find the window which currently has the focus
+  wxNode *node = GetChildren()->First();
+  wxWindow *winFocus = event.GetCurrentFocus();
+  if ( winFocus == NULL )
+    winFocus = wxWindow::FindFocus();
+  while ( node != NULL ) {
+    if ( node->Data() == winFocus )
+      break;
+
+    node = node->Next();
+  }
+
+  if ( !SetFocusToNextChild(node, event.GetDirection()) )
+    event.Skip();
+}
+
+// set focus to the next child which accepts it (or first/last if node == NULL)
+bool wxPanel::SetFocusToNextChild(wxNode *node, bool bForward)
+{
+  // @@ using typed list would be better...
+  #define WIN(node) ((wxWindow *)(node->Data()))
+
+  bool bFound = FALSE;  // have we found a window we will set focus to?
+
+  wxList *children = GetChildren();
+  if ( node == NULL ) {
+    // we've never had focus before
+    node = bForward ? children->First() : children->Last();
+    if ( node == NULL ) {
+      // no children
+      return FALSE;
+    }
+
+    bFound = WIN(node)->AcceptsFocus();
+  }
+  else {
+    // just to be sure it's the right one
+    wxASSERT( WIN(node)->AcceptsFocus() );
+  }
+
+  // find the next child which accepts focus
+  while ( !bFound ) {
+    node = bForward ? node->Next() : node->Previous();
+    if ( node == NULL ) {
+      // ask parent if he doesn't want to advance focus to the next panel
+      if ( GetParent() != NULL ) {
+        wxNavigationKeyEvent event;
+        event.SetDirection(bForward);
+        event.SetWindowChange(FALSE);
+        event.SetCurrentFocus(this);
+
+        if ( GetParent()->ProcessEvent(event) )
+          return TRUE;
+      }
+
+      // wrap around
+      node = bForward ? children->First() : children->Last();
+    }
+
+    bFound = WIN(node)->AcceptsFocus();
+  }
+
+  WIN(node)->SetFocus();
+
+  #undef WIN
+
+  return TRUE;
+}
