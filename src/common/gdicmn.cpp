@@ -217,8 +217,6 @@ bool wxRect::Intersects(const wxRect& rect) const
 // wxColourDatabase
 // ============================================================================
 
-WX_DECLARE_STRING_HASH_MAP( wxColour *, wxStringToColourHashMap );
-
 // ----------------------------------------------------------------------------
 // wxColourDatabase ctor/dtor
 // ----------------------------------------------------------------------------
