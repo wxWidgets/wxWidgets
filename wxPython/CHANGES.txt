@@ -30,9 +30,13 @@ Patrick O'Brien's PyCrust package has been renamed to Py and now
 includes several new tools.  As part of the change the location of the
 pacakge has changed as well, it is now accessible as "from wxPython
 import py" (or "from wx import py" using the new namespace.)  There
-are still some transition moudules in the wxPython.lib.PyCrust mackage
+are still some transition modules in the wxPython.lib.PyCrust package
 that will issue a warning and then import what is needed from the new
 package.  These will be removed in a future release.
+
+Added __nonzero__ method to wxTreeItemId, wxBitmap, wxImage, wxFont,
+and most other classes that have an Ok or IsOK method.  This allows
+code like "if obj: ..." to be the same as "if obj.IsOk(): ..."
 
 
 
