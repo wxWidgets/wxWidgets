@@ -770,6 +770,15 @@ int wxWindowMSW::GetScrollPage(int orient) const
 
 #endif // WXWIN_COMPATIBILITY
 
+inline int GetScrollPosition(HWND hWnd, int wOrient)
+{
+#ifdef __WXMICROWIN__
+    return ::GetScrollPosWX(hWnd, wOrient);
+#else
+    return ::GetScrollPos(hWnd, wOrient);
+#endif
+}
+
 int wxWindowMSW::GetScrollPos(int orient) const
 {
     int wOrient;
@@ -777,17 +786,11 @@ int wxWindowMSW::GetScrollPos(int orient) const
         wOrient = SB_HORZ;
     else
         wOrient = SB_VERT;
+
     HWND hWnd = GetHwnd();
-    if ( hWnd )
-    {
-#ifdef __WXMICROWIN__
-        return ::GetScrollPosWX(hWnd, wOrient);
-#else
-        return ::GetScrollPos(hWnd, wOrient);
-#endif
-    }
-    else
-        return 0;
+    wxCHECK_MSG( hWnd, 0, _T("no HWND in GetScrollPos") );
+
+    return GetScrollPosition(hWnd, wOrient);
 }
 
 // This now returns the whole range, not just the number
@@ -940,30 +943,44 @@ void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
     ::ScrollWindow(GetHwnd(), dx, dy, prect ? &rect : NULL, NULL);
 }
 
-static void ScrollVertically(HWND hwnd, int kind, int count)
+static bool ScrollVertically(HWND hwnd, int kind, int count)
 {
+    int posStart = GetScrollPosition(hwnd, SB_VERT);
+
+    int pos = posStart;
     for ( int n = 0; n < count; n++ )
     {
         ::SendMessage(hwnd, WM_VSCROLL, kind, 0);
+
+        int posNew = GetScrollPosition(hwnd, SB_VERT);
+        if ( posNew == pos )
+        {
+            // don't bother to continue, we're already at top/bottom
+            break;
+        }
+
+        pos = posNew;
     }
+
+    return pos != posStart;
 }
 
-void wxWindowMSW::ScrollLines(int lines)
+bool wxWindowMSW::ScrollLines(int lines)
 {
     bool down = lines > 0;
 
-    ScrollVertically(GetHwnd(),
-                     down ? SB_LINEDOWN : SB_LINEUP,
-                     down ? lines : -lines);
+    return ScrollVertically(GetHwnd(),
+                            down ? SB_LINEDOWN : SB_LINEUP,
+                            down ? lines : -lines);
 }
 
-void wxWindowMSW::ScrollPages(int pages)
+bool wxWindowMSW::ScrollPages(int pages)
 {
     bool down = pages > 0;
 
-    ScrollVertically(GetHwnd(),
-                     down ? SB_PAGEDOWN : SB_PAGEUP,
-                     down ? pages : -pages);
+    return ScrollVertically(GetHwnd(),
+                            down ? SB_PAGEDOWN : SB_PAGEUP,
+                            down ? pages : -pages);
 }
 
 // ---------------------------------------------------------------------------

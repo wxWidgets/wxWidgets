@@ -664,13 +664,16 @@ public:
                                const wxRect* rect = (wxRect *) NULL ) = 0;
 
         // scrolls window by line/page: note that not all controls support this
-    virtual void ScrollLines(int WXUNUSED(lines)) { }
-    virtual void ScrollPages(int WXUNUSED(pages)) { }
+        //
+        // return TRUE if the position changed, FALSE otherwise
+    virtual bool ScrollLines(int WXUNUSED(lines)) { return FALSE; }
+    virtual bool ScrollPages(int WXUNUSED(pages)) { return FALSE; }
 
-    void LineUp() { ScrollLines(-1); }
-    void LineDown() { ScrollLines(1); }
-    void PageUp() { ScrollPages(-1); }
-    void PageDown() { ScrollPages(1); }
+        // convenient wrappers for ScrollLines/Pages
+    bool LineUp() { return ScrollLines(-1); }
+    bool LineDown() { return ScrollLines(1); }
+    bool PageUp() { return ScrollPages(-1); }
+    bool PageDown() { return ScrollPages(1); }
 
     // context-sensitive help
     // ----------------------

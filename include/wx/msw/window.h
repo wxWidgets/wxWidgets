@@ -118,8 +118,8 @@ public:
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = (wxRect *) NULL );
 
-    virtual void ScrollLines(int lines);
-    virtual void ScrollPages(int pages);
+    virtual bool ScrollLines(int lines);
+    virtual bool ScrollPages(int pages);
 
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );

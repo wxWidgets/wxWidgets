@@ -148,6 +148,10 @@ public:
     virtual void Freeze();
     virtual void Thaw();
 
+    // textctrl specific scrolling
+    virtual bool ScrollLines(int lines);
+    virtual bool ScrollPages(int pages);
+
     // wxGTK-specific: called recursively by Enable,
     // to give widgets an oppprtunity to correct their colours after they
     // have been changed by Enable
@@ -158,6 +162,13 @@ protected:
 
     // common part of all ctors
     void Init();
+
+    // get the vertical adjustment, if any, NULL otherwise
+    GtkAdjustment *GetVAdj() const;
+
+    // scroll the control by the given number of pixels, return true if the
+    // scroll position changed
+    bool DoScroll(GtkAdjustment *adj, int diff);
 
 private:
     // change the font for everything in this control

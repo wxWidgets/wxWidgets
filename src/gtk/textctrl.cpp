@@ -1296,6 +1296,10 @@ wxSize wxTextCtrl::DoGetBestSize() const
     return wxSize(80, ret.y);
 }
 
+// ----------------------------------------------------------------------------
+// freeze/thaw
+// ----------------------------------------------------------------------------
+
 void wxTextCtrl::Freeze()
 {
     if ( HasFlag(wxTE_MULTILINE) )
@@ -1311,3 +1315,59 @@ void wxTextCtrl::Thaw()
         gtk_text_thaw(GTK_TEXT(m_text));
     }
 }
+
+// ----------------------------------------------------------------------------
+// scrolling
+// ----------------------------------------------------------------------------
+
+GtkAdjustment *wxTextCtrl::GetVAdj() const
+{
+    return HasFlag(wxTE_MULTILINE) ? GTK_TEXT(m_text)->vadj : NULL;
+}
+
+bool wxTextCtrl::DoScroll(GtkAdjustment *adj, int diff)
+{
+    float value = adj->value + diff;
+
+    if ( value < 0 )
+        value = 0;
+
+    float upper = adj->upper - adj->page_size;
+    if ( value > upper )
+        value = upper;
+
+    // did we noticeably change the scroll position?
+    if ( fabs(adj->value - value) < 0.2 )
+    {
+        // well, this is what Robert does in wxScrollBar, so it must be good...
+        return FALSE;
+    }
+
+    adj->value = value;
+
+    gtk_signal_emit_by_name(GTK_OBJECT(adj), "value_changed");
+
+    return TRUE;
+}
+
+bool wxTextCtrl::ScrollLines(int lines)
+{
+    GtkAdjustment *adj = GetVAdj();
+    if ( !adj )
+        return FALSE;
+
+    // this is hardcoded to 10 in GTK+ 1.2 (great idea)
+    static const int KEY_SCROLL_PIXELS = 10;
+
+    return DoScroll(adj, lines*KEY_SCROLL_PIXELS);
+}
+
+bool wxTextCtrl::ScrollPages(int pages)
+{
+    GtkAdjustment *adj = GetVAdj();
+    if ( !adj )
+        return FALSE;
+
+    return DoScroll(adj, pages*adj->page_increment);
+}
+
