@@ -1690,6 +1690,12 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
 
 
 
+%{
+#ifdef __WXMSW__
+#include <wx/msw/private.h>  // to get wxGetWindowId
+#endif
+%}
+
 %inline %{
     wxWindow* wxWindow_FromHWND(wxWindow* parent, unsigned long _hWnd) {
 #ifdef __WXMSW__
