@@ -274,7 +274,7 @@ public:
     void OnLast();
     void OnGoto();
     void OnPrint();
-    void OnPrint(wxCommandEvent& WXUNUSED(event)) { OnPrint(); }
+    void OnPrintButton(wxCommandEvent& WXUNUSED(event)) { OnPrint(); }
     void OnNextButton(wxCommandEvent & WXUNUSED(event)) { OnNext(); }
     void OnPreviousButton(wxCommandEvent & WXUNUSED(event)) { OnPrevious(); }
     void OnFirstButton(wxCommandEvent & WXUNUSED(event)) { OnFirst(); }
