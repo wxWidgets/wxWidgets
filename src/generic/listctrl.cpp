@@ -314,12 +314,16 @@ private:
 //  wxListMainWindow (internal)
 //-----------------------------------------------------------------------------
 
+WX_DECLARE_LIST(wxListHeaderData, wxListHeaderDataList);
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxListHeaderDataList);
+
 class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
 {
 public:
     long                 m_mode;
     wxListLineDataArray  m_lines;
-    wxList               m_columns;
+    wxListHeaderDataList m_columns;
     wxListLineData      *m_current;
     wxListLineData      *m_currentEdit;
     int                  m_visibleLines;
@@ -2501,12 +2505,12 @@ int wxListMainWindow::GetItemSpacing( bool isSmall )
 void wxListMainWindow::SetColumn( int col, wxListItem &item )
 {
     m_dirty = TRUE;
-    wxNode *node = m_columns.Nth( col );
+    wxListHeaderDataList::Node *node = m_columns.Item( col );
     if (node)
     {
         if (item.m_width == wxLIST_AUTOSIZE_USEHEADER)
             item.m_width = GetTextLength( item.m_text )+7;
-        wxListHeaderData *column = (wxListHeaderData*)node->Data();
+        wxListHeaderData *column = node->GetData();
         column->SetItem( item );
     }
 
@@ -2521,8 +2525,6 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
                  _T("SetColumnWidth() can only be called in report mode.") );
 
     m_dirty = TRUE;
-
-    wxNode *node = (wxNode*) NULL;
 
     if (width == wxLIST_AUTOSIZE_USEHEADER)
     {
@@ -2562,10 +2564,10 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
         width = max+10;
     }
 
-    node = m_columns.Nth( col );
+    wxListHeaderDataList::Node *node = m_columns.Item( col );
     if (node)
     {
-        wxListHeaderData *column = (wxListHeaderData*)node->Data();
+        wxListHeaderData *column = node->GetData();
         column->SetWidth( width );
     }
 
@@ -2588,10 +2590,10 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
 
 void wxListMainWindow::GetColumn( int col, wxListItem &item )
 {
-    wxNode *node = m_columns.Nth( col );
+    wxListHeaderDataList::Node *node = m_columns.Item( col );
     if (node)
     {
-        wxListHeaderData *column = (wxListHeaderData*)node->Data();
+        wxListHeaderData *column = node->GetData();
         column->GetItem( item );
     }
     else
@@ -2606,21 +2608,16 @@ void wxListMainWindow::GetColumn( int col, wxListItem &item )
 
 int wxListMainWindow::GetColumnWidth( int col )
 {
-    wxNode *node = m_columns.Nth( col );
-    if (node)
-    {
-        wxListHeaderData *column = (wxListHeaderData*)node->Data();
-        return column->GetWidth();
-    }
-    else
-    {
-        return 0;
-    }
+    wxListHeaderDataList::Node *node = m_columns.Item( col );
+    wxCHECK_MSG( node, 0, _T("invalid column index") );
+
+    wxListHeaderData *column = node->GetData();
+    return column->GetWidth();
 }
 
 int wxListMainWindow::GetColumnCount()
 {
-    return m_columns.Number();
+    return m_columns.GetCount();
 }
 
 int wxListMainWindow::GetCountPerPage()
@@ -2997,12 +2994,12 @@ void wxListMainWindow::DeleteItem( long index )
 
 void wxListMainWindow::DeleteColumn( int col )
 {
-    wxCHECK_RET( col < (int)m_columns.GetCount(),
-               wxT("attempting to delete inexistent column in wxListView") );
+    wxListHeaderDataList::Node *node = m_columns.Item( col );
+
+    wxCHECK_RET( node, wxT("invalid column index in DeleteColumn()") );
 
     m_dirty = TRUE;
-    wxNode *node = m_columns.Nth( col );
-    if (node) m_columns.DeleteNode( node );
+    m_columns.DeleteNode( node );
 }
 
 void wxListMainWindow::DeleteAllItems()
@@ -3137,9 +3134,8 @@ void wxListMainWindow::InsertColumn( long col, wxListItem &item )
         wxListHeaderData *column = new wxListHeaderData( item );
         if ((col >= 0) && (col < (int)m_columns.GetCount()))
         {
-            wxNode *node = m_columns.Nth( (size_t)col );
-            if (node)
-                 m_columns.Insert( node, column );
+            wxListHeaderDataList::Node *node = m_columns.Item( col );
+            m_columns.Insert( node, column );
         }
         else
         {
@@ -3676,7 +3672,8 @@ bool wxListCtrl::DeleteAllItems()
 
 bool wxListCtrl::DeleteAllColumns()
 {
-    for ( size_t n = 0; n < m_mainWin->m_columns.GetCount(); n++ )
+    size_t count = m_mainWin->m_columns.GetCount();
+    for ( size_t n = 0; n < count; n++ )
         DeleteColumn(n);
 
     return TRUE;
