@@ -140,8 +140,7 @@ bool wxMenuItem::IsChecked() const
 {
     int flag = ::GetMenuState(GetHMenuOf(m_parentMenu), GetId(), MF_BYCOMMAND);
 
-    // don't "and" with MF_ENABLED because its value is 0
-    return (flag & MF_DISABLED) == 0;
+    return (flag & MF_CHECKED) != 0;
 }
 
 wxString wxMenuItem::GetLabel() const
