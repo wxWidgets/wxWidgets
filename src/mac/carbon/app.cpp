@@ -555,6 +555,8 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacAppEventHandler )
 WXIMPORT char std::__throws_bad_alloc ;
 #endif
 
+#if __WXDEBUG__
+
 pascal static void wxMacAssertOutputHandler(OSType componentSignature, UInt32 options, 
     const char *assertionString, const char *exceptionLabelString, 
     const char *errorString, const char *fileName, long lineNumber, void *value, ConstStr255Param outputMsg)
@@ -590,6 +592,8 @@ pascal static void wxMacAssertOutputHandler(OSType componentSignature, UInt32 op
         wxString::Format( wxT("%s %s value (%p)") ,exceptionStr, errorStr , value ) ) ;
 #endif
 }
+
+#endif //__WXDEBUG__
 
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
