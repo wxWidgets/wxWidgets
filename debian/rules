@@ -123,6 +123,7 @@ build-gtk-python-stamp: build-gtk-shared-stamp
 		&& touch gtk/*.cpp gtk/*.py \
 		&& ../distrib/build.py -b WXDIR=../../.. WXCONFIG='$(wxconfig)'
 	cd utils/wxPython/modules/html \
+		&& touch *.cpp *.py \
 		&& ../../distrib/build.py -b WXDIR=../../../.. WXCONFIG='$(wxconfig)'
 	cd utils/wxPython/modules/utils \
 		&& ../../distrib/build.py -b WXDIR=../../../.. WXCONFIG='$(wxconfig)'
