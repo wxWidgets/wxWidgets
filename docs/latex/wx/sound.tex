@@ -2,8 +2,8 @@
 
 This class represents a short sound (loaded from Windows WAV file), that
 can be stored in memory and played. Currently this class is implemented
-on Windows and Unix (and uses either
-\urlref{Open Sound System}{http://www.opensound.com/oss.html} or
+on Windows and Unix (and uses either 
+\urlref{Open Sound System}{http://www.opensound.com/oss.html} or 
 \urlref{Simple DirectMedia Layer}{http://www.libsdl.org/}).
 
 \wxheading{Derived from}
@@ -79,13 +79,13 @@ Returns \true on success, \false otherwise.
 The possible values for \arg{flags} are:
 
 \begin{twocollist}
-    \twocolitem{wxSOUND\_SYNC}{{\tt Play} will block and wait until the sound is
-    replayed.}
-    \twocolitem{wxSOUND\_ASYNC}{Sound is played asynchronously,
-    {\tt Play} returns immediately}
-    \twocolitem{wxSOUND\_ASYNC | wxSOUND\_LOOP}{Sound is played asynchronously
-    and loops until another sound is played,
-    \helpref{wxSound::Stop}{wxsoundstop} is called or the program terminates.}
+\twocolitem{wxSOUND\_SYNC}{{\tt Play} will block and wait until the sound is
+replayed.}
+\twocolitem{wxSOUND\_ASYNC}{Sound is played asynchronously, 
+{\tt Play} returns immediately}
+\twocolitem{wxSOUND\_ASYNC | wxSOUND\_LOOP}{Sound is played asynchronously
+and loops until another sound is played, 
+\helpref{wxSound::Stop}{wxsoundstop} is called or the program terminates.}
 \end{twocollist}
 
 The static form is shorthand for this code:
@@ -98,3 +98,4 @@ wxSound(filename).Play(flags);
 \func{static void}{Stop}{\void}
 
 If a sound is played, this function stops it.
+
