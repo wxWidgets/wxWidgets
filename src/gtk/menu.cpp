@@ -591,6 +591,9 @@ wxString wxMenuBar::GetLabelTop( size_t pos ) const
             continue;
         }
 
+        // don't remove ampersands '&' since if we have them in the menu title
+        // it means that they were doubled to indicate "&" instead of accelerator
+
         label += *pc;
     }
 
@@ -778,7 +781,7 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
-        if ( *pc == wxT('_')  )
+        if ( *pc == wxT('_') )
         {
             // GTK 1.2 escapes "xxx_xxx" to "xxx__xxx"
             pc++;
@@ -796,9 +799,15 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
         }
 #endif
 
+        if ( (*pc == wxT('&')) && (*(pc+1) != wxT('&')) )
+        {
+            // wxMSW escapes "&"
+            // "&" is doubled to indicate "&" instead of accelerator
+            continue;
+        }
+        
         label += *pc;
     }
-
     return label;
 }
 
@@ -970,6 +979,9 @@ wxString wxMenuItem::GetFactoryPath() const
             // remove '_' unconditionally
             continue;
         }
+
+        // don't remove ampersands '&' since if we have them in the menu item title
+        // it means that they were doubled to indicate "&" instead of accelerator
 
         path += *pc;
     }
