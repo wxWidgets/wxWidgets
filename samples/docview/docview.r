@@ -1,4 +1,8 @@
-#include "Types.r"
+#ifdef __DARWIN__
+#  include <Carbon.r>
+#else
+#  include <Types.r>
+#endif
 
 resource 'BNDL' (128) {
 	'WXMA',
