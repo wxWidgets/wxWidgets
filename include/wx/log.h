@@ -368,7 +368,7 @@ private:
 class WXDLLEXPORT wxLogPassThrough : public wxLogChain
 {
 public:
-    wxLogPassThrough() : wxLogChain(this) { }
+    wxLogPassThrough();
 };
 
 // ----------------------------------------------------------------------------

@@ -615,6 +615,24 @@ void wxLogChain::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
     }
 }
 
+// ----------------------------------------------------------------------------
+// wxLogPassThrough
+// ----------------------------------------------------------------------------
+
+#ifdef __VISUALC__
+    // "'this' : used in base member initializer list" - so what?
+    #pragma warning(disable:4355)
+#endif // VC++
+
+wxLogPassThrough::wxLogPassThrough()
+                : wxLogChain(this)
+{
+}
+
+#ifdef __VISUALC__
+    #pragma warning(default:4355)
+#endif // VC++
+
 // ============================================================================
 // Global functions/variables
 // ============================================================================
