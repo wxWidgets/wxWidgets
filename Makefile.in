@@ -1199,10 +1199,10 @@ COND_WXUSE_EXPAT_BUILTIN___wxexpat___depname = \
 @COND_PLATFORM_UNIX_1@PLUGIN_VERSION0 = $(WX_VERSION)
 @COND_PLATFORM_UNIX_0@PLUGVERDELIM = 
 @COND_PLATFORM_UNIX_1@PLUGVERDELIM = -
-@COND_BUILD_DEBUG_UNICODE_0@PLUGINSUFFIX = d
-@COND_BUILD_DEBUG_UNICODE_1@PLUGINSUFFIX = ud
 @COND_BUILD_RELEASE_UNICODE_0@PLUGINSUFFIX = 
+@COND_BUILD_DEBUG_UNICODE_0@PLUGINSUFFIX = d
 @COND_BUILD_RELEASE_UNICODE_1@PLUGINSUFFIX = u
+@COND_BUILD_DEBUG_UNICODE_1@PLUGINSUFFIX = ud
 @COND_TOOLKIT_WINCE@BASE_WINCE_SRC = src/msw/wince/time.cpp
 @COND_TOOLKIT_WINCE@BASE_WINCE_HDR = wx/msw/wince/time.h \
 @COND_TOOLKIT_WINCE@	wx/msw/wince/chkconf.h
@@ -1216,6 +1216,73 @@ COND_WXUSE_EXPAT_BUILTIN___wxexpat___depname = \
 @COND_TOOLKIT_PM@OPENGL_HDR = wx/os2/glcanvas.h
 @COND_TOOLKIT_WINCE@OPENGL_HDR = wx/msw/glcanvas.h
 @COND_TOOLKIT_X11@OPENGL_HDR = wx/x11/glcanvas.h
+COND_TOOLKIT__BASE_MACOSX_HDR =  \
+	wx/unix/apptbase.h \
+	wx/unix/apptrait.h \
+	wx/unix/execute.h \
+	wx/unix/mimetype.h \
+	wx/unix/pipe.h \
+	wx/unix/stackwalk.h \
+	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfstring.h \
+	wx/mac/corefoundation/hid.h \
+	wx/mac/corefoundation/stdpaths.h
+@COND_TOOLKIT_@BASE_MACOSX_HDR = $(COND_TOOLKIT__BASE_MACOSX_HDR)
+COND_TOOLKIT_COCOA_BASE_MACOSX_HDR =  \
+	wx/unix/apptbase.h \
+	wx/unix/apptrait.h \
+	wx/unix/execute.h \
+	wx/unix/mimetype.h \
+	wx/unix/pipe.h \
+	wx/unix/stackwalk.h \
+	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfstring.h \
+	wx/mac/corefoundation/hid.h \
+	wx/mac/corefoundation/stdpaths.h
+@COND_TOOLKIT_COCOA@BASE_MACOSX_HDR = $(COND_TOOLKIT_COCOA_BASE_MACOSX_HDR)
+COND_TOOLKIT_GTK_BASE_MACOSX_HDR =  \
+	wx/unix/apptbase.h \
+	wx/unix/apptrait.h \
+	wx/unix/execute.h \
+	wx/unix/mimetype.h \
+	wx/unix/pipe.h \
+	wx/unix/stackwalk.h \
+	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfstring.h \
+	wx/mac/corefoundation/hid.h \
+	wx/mac/corefoundation/stdpaths.h
+@COND_TOOLKIT_GTK@BASE_MACOSX_HDR = $(COND_TOOLKIT_GTK_BASE_MACOSX_HDR)
+COND_TOOLKIT_MAC_BASE_MACOSX_HDR =  \
+	wx/mac/corefoundation/cfstring.h \
+	wx/mac/corefoundation/hid.h \
+	wx/mac/corefoundation/stdpaths.h \
+	wx/unix/stdpaths.h
+@COND_TOOLKIT_MAC@BASE_MACOSX_HDR = $(COND_TOOLKIT_MAC_BASE_MACOSX_HDR)
+COND_TOOLKIT_MOTIF_BASE_MACOSX_HDR =  \
+	wx/unix/apptbase.h \
+	wx/unix/apptrait.h \
+	wx/unix/execute.h \
+	wx/unix/mimetype.h \
+	wx/unix/pipe.h \
+	wx/unix/stackwalk.h \
+	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfstring.h \
+	wx/mac/corefoundation/hid.h \
+	wx/mac/corefoundation/stdpaths.h
+@COND_TOOLKIT_MOTIF@BASE_MACOSX_HDR = $(COND_TOOLKIT_MOTIF_BASE_MACOSX_HDR)
+COND_TOOLKIT_X11_BASE_MACOSX_HDR =  \
+	wx/unix/apptbase.h \
+	wx/unix/apptrait.h \
+	wx/unix/execute.h \
+	wx/unix/mimetype.h \
+	wx/unix/pipe.h \
+	wx/unix/stackwalk.h \
+	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfstring.h \
+	wx/mac/corefoundation/hid.h \
+	wx/mac/corefoundation/stdpaths.h
+@COND_TOOLKIT_X11@BASE_MACOSX_HDR = $(COND_TOOLKIT_X11_BASE_MACOSX_HDR)
+@COND_PLATFORM_MACOSX_1@BASE_PLATFORM_HDR = $(BASE_MACOSX_HDR)
 COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -1240,21 +1307,6 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/wrapwin.h \
 	$(BASE_WINCE_HDR)
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR)
-COND_TOOLKIT_COCOA_BASE_PLATFORM_HDR =  \
-	wx/unix/apptbase.h \
-	wx/unix/apptrait.h \
-	wx/unix/execute.h \
-	wx/unix/mimetype.h \
-	wx/unix/pipe.h \
-	wx/unix/stackwalk.h \
-	wx/unix/stdpaths.h
-@COND_TOOLKIT_COCOA@BASE_PLATFORM_HDR = $(COND_TOOLKIT_COCOA_BASE_PLATFORM_HDR)
-COND_TOOLKIT_MAC_BASE_PLATFORM_HDR =  \
-	wx/mac/corefoundation/cfstring.h \
-	wx/mac/corefoundation/hid.h \
-	wx/mac/corefoundation/stdpaths.h \
-	wx/unix/stdpaths.h
-@COND_TOOLKIT_MAC@BASE_PLATFORM_HDR = $(COND_TOOLKIT_MAC_BASE_PLATFORM_HDR)
 @COND_PLATFORM_MACOSX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_MACOS_1@NET_PLATFORM_HDR = wx/mac/carbon/gsockmac.h
 @COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
@@ -24063,6 +24115,8 @@ MACX_DIST: ALL_GUI_DIST
 
 # TODO: Distribute some files
 COCOA_DIST: ALL_GUI_DIST
+	mkdir $(DISTDIR)/include/wx/cocoa
+	cp $(INCDIR)/wx/cocoa/*.h $(DISTDIR)/include/wx/cocoa
 	cp $(COCOADIR)/*.mm $(DISTDIR)/src/cocoa
 
 MSW_DIST: ALL_GUI_DIST
