@@ -2,10 +2,10 @@
 // Name:        src/palmos/stattext.cpp
 // Purpose:     wxStaticText
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native wxStaticText implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -29,7 +29,6 @@
 #endif
 
 #include "wx/stattext.h"
-#include "wx/palmos/private.h"
 
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxStaticTextStyle )
@@ -92,7 +91,10 @@ bool wxStaticText::Create(wxWindow *parent,
                           long style,
                           const wxString& name)
 {
-    return false;
+    if(!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
+        return false;
+
+    return wxControl::PalmCreateField(label, pos, size, false, false, leftAlign);
 }
 
 wxBorder wxStaticText::GetDefaultBorder() const
@@ -100,24 +102,10 @@ wxBorder wxStaticText::GetDefaultBorder() const
     return wxBORDER_NONE;
 }
 
-WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
-{
-    return 0;
-}
-
 wxSize wxStaticText::DoGetBestSize() const
 {
     return wxSize(0,0);
 }
-
-void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)
-{
-}
-
-void wxStaticText::SetLabel(const wxString& label)
-{
-}
-
 
 bool wxStaticText::SetFont(const wxFont& font)
 {

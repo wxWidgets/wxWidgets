@@ -528,7 +528,7 @@
 #define wxUSE_SPINCTRL     0    // wxSpinCtrl
 #define wxUSE_STATBOX      0    // wxStaticBox
 #define wxUSE_STATLINE     0    // wxStaticLine
-#define wxUSE_STATTEXT     0    // wxStaticText
+#define wxUSE_STATTEXT     1    // wxStaticText
 #define wxUSE_STATBMP      0    // wxStaticBitmap
 #define wxUSE_TEXTCTRL     0    // wxTextCtrl
 #define wxUSE_TOGGLEBTN    1    // requires wxButton

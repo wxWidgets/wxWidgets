@@ -86,7 +86,7 @@
 // ----------------------------------------------------------------------------
 
 #if defined(__WXPALMOS__)
-int wxWindowBase::ms_lastControlId = 65535;
+int wxWindowBase::ms_lastControlId = 32767;
 #elif defined(__WXPM__)
 int wxWindowBase::ms_lastControlId = 2000;
 #else

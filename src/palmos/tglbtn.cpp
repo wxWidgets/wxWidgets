@@ -60,8 +60,10 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString& name)
 {
-    wxControl::PalmCreateControl(pushButtonCtl, parent, id, label, pos, size);
-    return true;
+    if(!wxControl::Create(parent, id, pos, size, style, validator, name))
+        return false;
+
+    return wxControl::PalmCreateControl(pushButtonCtl, label, pos, size);
 }
 
 wxBorder wxToggleButton::GetDefaultBorder() const
@@ -82,6 +84,14 @@ void wxToggleButton::SetValue(bool val)
 bool wxToggleButton::GetValue() const
 {
     return GetBoolValue();
+}
+
+bool wxToggleButton::SendClickEvent()
+{
+    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, GetId());
+    event.SetInt(GetValue());
+    event.SetEventObject(this);
+    return ProcessCommand(event);
 }
 
 void wxToggleButton::Command(wxCommandEvent & event)

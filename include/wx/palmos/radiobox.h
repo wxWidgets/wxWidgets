@@ -2,10 +2,10 @@
 // Name:        wx/palmos/radiobox.h
 // Purpose:     wxRadioBox class
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native wxRadioBox implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -85,14 +85,14 @@ public:
     virtual int GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
-    virtual void Enable(int n, bool enable = TRUE);
-    virtual void Show(int n, bool show = TRUE);
+    virtual void Enable(int n, bool enable = true);
+    virtual void Show(int n, bool show = true);
     virtual int GetColumnCount() const;
     virtual int GetRowCount() const;
 
-    virtual bool Show(bool show = TRUE);
+    virtual bool Show(bool show = true);
     void SetFocus();
-    virtual bool Enable(bool enable = TRUE);
+    virtual bool Enable(bool enable = true);
     void SetLabelFont(const wxFont& WXUNUSED(font)) {};
     void SetButtonFont(const wxFont& font) { SetFont(font); }
 
@@ -104,15 +104,12 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
-
     // FIXME: are they used? missing "Do" prefix?
     void GetSize(int *x, int *y) const;
     void GetPosition(int *x, int *y) const;
 
     virtual bool SetFont(const wxFont& font);
 
-    WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                                 WXUINT message,
                                 WXWPARAM wParam, WXLPARAM lParam);

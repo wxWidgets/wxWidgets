@@ -2,10 +2,10 @@
 // Name:        src/palmos/radiobox.cpp
 // Purpose:     wxRadioBox implementation
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native wxRadioBox implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -150,11 +150,6 @@ int wxRadioBox::GetNumHor() const
     return 0;
 }
 
-bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
-{
-    return FALSE;
-}
-
 // Radio box item
 wxRadioBox::wxRadioBox()
 {
@@ -297,11 +292,6 @@ bool wxRadioBox::SetFont(const wxFont& font)
 // ----------------------------------------------------------------------------
 // our window proc
 // ----------------------------------------------------------------------------
-
-WXLRESULT wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    return 0;
-}
 
 WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
                                WXUINT WXUNUSED(message),

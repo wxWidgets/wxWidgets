@@ -269,7 +269,16 @@ bool wxWindowPalm::Create(wxWindow *parent,
                          long style,
                          const wxString& name)
 {
-    return false;
+    wxCHECK_MSG( parent, false, wxT("can't create wxWindow without parent") );
+
+    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
+        return false;
+
+    parent->AddChild(this);
+
+    InheritAttributes();
+
+    return true;
 }
 
 FormType *wxWindowPalm::GetFormPtr()

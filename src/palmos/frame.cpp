@@ -224,8 +224,10 @@ bool wxFrame::HandleMenuOpen()
     return true;
 }
 
-bool wxFrame::HandleMenuSelect(int ItemID)
+bool wxFrame::HandleMenuSelect(EventType* event)
 {
+    int ItemID = event->data.menu.itemID;
+
     if (!m_frameMenuBar)
         return false;
 

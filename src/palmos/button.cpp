@@ -170,8 +170,10 @@ bool wxButton::Create(wxWindow *parent,
     if( palmLabel.empty() && wxIsStockID(id) )
         palmLabel = wxGetStockLabel(id);
 
-    wxControl::PalmCreateControl(buttonCtl, parent, id, palmLabel, palmPos, palmSize);
-    return true;
+    if(!wxControl::Create(parent, id, palmPos, palmSize, style, validator, name))
+        return false;
+
+    return wxControl::PalmCreateControl(buttonCtl, palmLabel, palmPos, palmSize);
 }
 
 wxButton::~wxButton()
@@ -221,11 +223,14 @@ wxButton::SetDefaultStyle(wxButton *btn, bool on)
 
 bool wxButton::SendClickEvent()
 {
-    return false;
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
+    event.SetEventObject(this);
+    return ProcessCommand(event);
 }
 
 void wxButton::Command(wxCommandEvent &event)
 {
+    ProcessCommand(event);
 }
 
 #endif // wxUSE_BUTTON

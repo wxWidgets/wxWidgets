@@ -106,8 +106,10 @@ bool wxCheckBox::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString& name)
 {
-    wxControl::PalmCreateControl(checkboxCtl, parent, id, label, pos, size);
-    return true;
+    if(!wxControl::Create(parent, id, pos, size, style, validator, name))
+        return false;
+
+    return wxControl::PalmCreateControl(checkboxCtl, label, pos, size);
 }
 
 wxSize wxCheckBox::DoGetBestSize() const
@@ -123,6 +125,14 @@ void wxCheckBox::SetValue(bool val)
 bool wxCheckBox::GetValue() const
 {
     return GetBoolValue();
+}
+
+bool wxCheckBox::SendClickEvent()
+{
+    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, GetId());
+    event.SetInt(GetValue());
+    event.SetEventObject(this);
+    return ProcessCommand(event);
 }
 
 void wxCheckBox::Command(wxCommandEvent& event)

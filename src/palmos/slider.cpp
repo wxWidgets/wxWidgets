@@ -109,8 +109,9 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-    SetParent(parent);
-    SetId( id == wxID_ANY ? NewControlId() : id );
+    if(!wxControl::Create(parent, id, pos, size, style, validator, name))
+        return false;
+
     FormType* form = GetParentForm();
     if(form==NULL)
         return false;
@@ -145,29 +146,41 @@ wxSlider::~wxSlider()
 
 int wxSlider::GetMin() const
 {
+    ControlType *control = (ControlType *)GetObjectPtr();
+    if(control==NULL)
+        return 0;
     uint16_t ret;
-    CtlGetSliderValues(m_control, &ret, NULL, NULL, NULL);
+    CtlGetSliderValues(control, &ret, NULL, NULL, NULL);
     return ret;
 }
 
 int wxSlider::GetMax() const
 {
+    ControlType *control = (ControlType *)GetObjectPtr();
+    if(control==NULL)
+        return 0;
     uint16_t ret;
-    CtlGetSliderValues(m_control, NULL, &ret, NULL, NULL);
+    CtlGetSliderValues(control, NULL, &ret, NULL, NULL);
     return ret;
 }
 
 int wxSlider::GetPageSize() const
 {
+    ControlType *control = (ControlType *)GetObjectPtr();
+    if(control==NULL)
+        return 0;
     uint16_t ret;
-    CtlGetSliderValues(m_control, NULL, NULL, &ret, NULL);
+    CtlGetSliderValues(control, NULL, NULL, &ret, NULL);
     return ret;
 }
 
 int wxSlider::GetValue() const
 {
+    ControlType *control = (ControlType *)GetObjectPtr();
+    if(control==NULL)
+        return 0;
     uint16_t ret;
-    CtlGetSliderValues(m_control, NULL, NULL, NULL, &ret);
+    CtlGetSliderValues(control, NULL, NULL, NULL, &ret);
     return ret;
 }
 
@@ -175,19 +188,6 @@ void wxSlider::SetValue(int value)
 {
     SetIntValue(value);
 }
-
-void wxSlider::DoGetSize(int *width, int *height) const
-{
-}
-
-void wxSlider::GetPosition(int *x, int *y) const
-{
-}
-
-void wxSlider::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-}
-
 
 wxSize wxSlider::DoGetBestSize() const
 {

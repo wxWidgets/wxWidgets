@@ -86,7 +86,7 @@ public:
 
 #if wxUSE_MENUS_NATIVE
     bool HandleMenuOpen();
-    bool HandleMenuSelect(int ItemID);
+    bool HandleMenuSelect(EventType* event);
 #endif // wxUSE_MENUS_NATIVE
 
 protected:
@@ -118,7 +118,7 @@ protected:
     // handle WM_INITMENUPOPUP message
     bool HandleInitMenuPopup(WXHMENU hMenu);
 
-    virtual bool IsMDIChild() const { return FALSE; }
+    virtual bool IsMDIChild() const { return false; }
 
     // get default (wxWidgets) icon for the frame
     virtual WXHICON GetDefaultIcon() const;

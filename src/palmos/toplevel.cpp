@@ -40,8 +40,13 @@
 #endif //WX_PRECOMP
 
 #include "wx/module.h"
-
 #include "wx/display.h"
+
+// controls for sending select event
+#include "wx/button.h"
+#include "wx/checkbox.h"
+#include "wx/radiobut.h"
+#include "wx/tglbtn.h"
 
 // ----------------------------------------------------------------------------
 // globals
@@ -240,6 +245,32 @@ bool wxTopLevelWindowPalm::SetShape(const wxRegion& region)
 // wxTopLevelWindow event handling
 // ----------------------------------------------------------------------------
 
+bool wxTopLevelWindowPalm::HandleControlSelect(EventType* event)
+{
+    int id = event->data.ctlSelect.controlID;
+    wxWindow* win = FindWindowById(id,this);
+    if(win==NULL)
+        return false;
+
+    wxButton* button = wxDynamicCast(win,wxButton);
+    if(button)
+        return button->SendClickEvent();
+
+    wxCheckBox* checkbox = wxDynamicCast(win,wxCheckBox);
+    if(checkbox)
+        return checkbox->SendClickEvent();
+
+    wxToggleButton* toggle = wxDynamicCast(win,wxToggleButton);
+    if(toggle)
+        return toggle->SendClickEvent();
+
+    wxRadioButton* radio = wxDynamicCast(win,wxRadioButton);
+    if(radio)
+        return radio->SendClickEvent();
+
+    return false;
+}
+
 void wxTopLevelWindowPalm::OnActivate(wxActivateEvent& event)
 {
 }
@@ -258,29 +289,26 @@ void wxTopLevelWindowPalm::OnActivate(wxActivateEvent& event)
  * finds a better solution, please let me know.  My email address is
  * wbo@freeshell.org
  */
-static Boolean FrameFormHandleEvent(EventType* pEvent)
+static Boolean FrameFormHandleEvent(EventType* event)
 {
     wxFrame*    frame = wxDynamicCast(ActiveParentFrame,wxFrame);
-    Boolean     fHandled = false;
-    FormType*   pForm;
-    WinHandle   hWindow;
-    int         ItemID=0;
+    Boolean     handled = false;
 
-    switch (pEvent->eType) {
+    switch (event->eType) {
         case ctlSelectEvent:
+            handled = frame->HandleControlSelect(event);
             break;
 #if wxUSE_MENUS_NATIVE
         case menuOpenEvent:
-            fHandled = frame->HandleMenuOpen();
+            handled = frame->HandleMenuOpen();
             break;
         case menuEvent:
-            ItemID = pEvent->data.menu.itemID;
-            fHandled = frame->HandleMenuSelect(ItemID);
+            handled = frame->HandleMenuSelect(event);
             break;
 #endif
         default:
             break;
     }
 
-    return fHandled;
+    return handled;
 }

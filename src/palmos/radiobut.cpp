@@ -102,6 +102,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
 
 void wxRadioButton::Init()
 {
+    m_radioStyle = pushButtonCtl;
 }
 
 bool wxRadioButton::Create(wxWindow *parent,
@@ -113,8 +114,16 @@ bool wxRadioButton::Create(wxWindow *parent,
                            const wxValidator& validator,
                            const wxString& name)
 {
-    wxControl::PalmCreateControl(pushButtonCtl, parent, id, label, pos, size);
-    return true;
+    if(!wxControl::Create(parent, id, pos, size, style, validator, name))
+        return false;
+
+    return wxControl::PalmCreateControl(
+                          // be sure only one of two possibilities was taken
+                          m_radioStyle == checkboxCtl ? checkboxCtl : pushButtonCtl,
+                          label,
+                          pos,
+                          size
+                      );
 }
 
 // ----------------------------------------------------------------------------
@@ -134,6 +143,14 @@ bool wxRadioButton::GetValue() const
 // ----------------------------------------------------------------------------
 // wxRadioButton event processing
 // ----------------------------------------------------------------------------
+
+bool wxRadioButton::SendClickEvent()
+{
+    wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, GetId());
+    event.SetInt(GetValue());
+    event.SetEventObject(this);
+    return ProcessCommand(event);
+}
 
 void wxRadioButton::Command (wxCommandEvent& event)
 {

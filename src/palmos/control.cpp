@@ -44,6 +44,7 @@
 #include "wx/checkbox.h"
 #include "wx/tglbtn.h"
 #include "wx/radiobut.h"
+#include "wx/slider.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -62,6 +63,12 @@ END_EVENT_TABLE()
 // ----------------------------------------------------------------------------
 // wxControl ctor/dtor
 // ----------------------------------------------------------------------------
+
+void wxControl::Init()
+{
+    m_palmControl = false;
+    m_palmField = false;
+}
 
 wxControl::~wxControl()
 {
@@ -91,38 +98,79 @@ bool wxControl::Create(wxWindow *parent,
 }
 
 bool wxControl::PalmCreateControl(ControlStyleType style,
-                                  wxWindow *parent,
-                                  wxWindowID id,
                                   const wxString& label,
                                   const wxPoint& pos,
-                                  const wxSize& size)
+                                  const wxSize& size,
+                                  int groupID)
 {
-    SetParent(parent);
-    SetId( id == wxID_ANY ? NewControlId() : id );
     FormType* form = GetParentForm();
     if(form==NULL)
         return false;
 
     m_label = label;
 
-    m_control = CtlNewControl(
-                    (void **)&form,
-                    GetId(),
-                    style,
-                    m_label.c_str(),
-                    ( pos.x == wxDefaultCoord ) ? winUndefConstraint : pos.x,
-                    ( pos.y == wxDefaultCoord ) ? winUndefConstraint : pos.y,
-                    ( size.x == wxDefaultCoord ) ? winUndefConstraint : size.x,
-                    ( size.y == wxDefaultCoord ) ? winUndefConstraint : size.y,
-                    stdFont,
-                    0,
-                    false
-                );
+    ControlType *control = CtlNewControl(
+                               (void **)&form,
+                               GetId(),
+                               style,
+                               m_label.c_str(),
+                               ( pos.x == wxDefaultCoord ) ? winUndefConstraint : pos.x,
+                               ( pos.y == wxDefaultCoord ) ? winUndefConstraint : pos.y,
+                               ( size.x == wxDefaultCoord ) ? winUndefConstraint : size.x,
+                               ( size.y == wxDefaultCoord ) ? winUndefConstraint : size.y,
+                               stdFont,
+                               groupID,
+                               false
+                           );
 
-    if(m_control==NULL)
+    if(control==NULL)
         return false;
 
+    m_palmControl = true;
+
     Show();
+    return true;
+}
+
+bool wxControl::PalmCreateField(const wxString& label,
+                                const wxPoint& pos,
+                                const wxSize& size,
+                                bool editable,
+                                bool underlined,
+                                JustificationType justification)
+{
+    FormType* form = GetParentForm();
+    if(form==NULL)
+        return false;
+
+    m_label = label;
+
+    FieldType *field = FldNewField(
+                           (void **)&form,
+                           GetId(),
+                           ( pos.x == wxDefaultCoord ) ? winUndefConstraint : pos.x,
+                           ( pos.y == wxDefaultCoord ) ? winUndefConstraint : pos.y,
+                           ( size.x == wxDefaultCoord ) ? winUndefConstraint : size.x,
+                           ( size.y == wxDefaultCoord ) ? winUndefConstraint : size.y,
+                           stdFont,
+                           10,
+                           editable,
+                           underlined,
+                           false,
+                           false,
+                           justification,
+                           false,
+                           false,
+                           false
+                       );
+
+    if(field==NULL)
+        return false;
+
+    m_palmField = true;
+
+    Show();
+    SetLabel(label);
     return true;
 }
 
@@ -141,6 +189,22 @@ FormType* wxControl::GetParentForm() const
     if(!tlw)
         return NULL;
     return tlw->GetForm();
+}
+
+uint16_t wxControl::GetObjectIndex() const
+{
+    FormType* form = GetParentForm();
+    if(form==NULL)return frmInvalidObjectId;
+    return FrmGetObjectIndex(form, GetId());
+}
+
+void* wxControl::GetObjectPtr() const
+{
+    FormType* form = GetParentForm();
+    if(form==NULL)return NULL;
+    uint16_t index = FrmGetObjectIndex(form, GetId());
+    if(index==frmInvalidObjectId)return NULL;
+    return FrmGetObjectPtr(form,index);
 }
 
 wxBorder wxControl::GetDefaultBorder() const
@@ -216,19 +280,21 @@ void wxControl::DoGetSize( int *width, int *height ) const
 
 bool wxControl::Enable(bool enable)
 {
-    if( m_control == NULL )
+    ControlType *control = (ControlType *)GetObjectPtr();
+    if( (IsPalmControl()) || (control == NULL))
         return false;
-    if( IsEnabled() == enable)
+    if( CtlEnabled(control) == enable)
         return false;
-    CtlSetEnabled( m_control, enable);
+    CtlSetEnabled( control, enable);
     return true;
 }
 
 bool wxControl::IsEnabled() const
 {
-    if( m_control == NULL )
+    ControlType *control = (ControlType *)GetObjectPtr();
+    if( (IsPalmControl()) || (control == NULL))
         return false;
-    return CtlEnabled(m_control);
+    return CtlEnabled(control);
 }
 
 bool wxControl::IsShown() const
@@ -251,31 +317,75 @@ bool wxControl::Show( bool show )
     return true;
 }
 
+void wxControl::SetFieldLabel(const wxString& label)
+{
+    FieldType* field = (FieldType*)GetObjectPtr();
+    if(field==NULL)
+        return;
+
+    uint16_t newSize = label.Length() + 1;
+    MemHandle strHandle = FldGetTextHandle(field);
+    FldSetTextHandle(field, NULL );
+    if (strHandle)
+    {
+        if(MemHandleResize(strHandle, newSize)!=errNone)
+            strHandle = 0;
+    }
+    else
+    {
+        strHandle = MemHandleNew( newSize );
+    }
+    if(!strHandle)
+        return;
+
+    char* str = (char*) MemHandleLock( strHandle );
+    if(str==NULL)
+        return;
+
+    strcpy(str, label.c_str());
+    MemHandleUnlock(strHandle);
+    FldSetTextHandle(field, strHandle);
+    FldRecalculateField(field, true);
+}
+
+void wxControl::SetControlLabel(const wxString& label)
+{
+}
+
 void wxControl::SetLabel(const wxString& label)
 {
-    // setting in wrong control causes crash
-    if ( ( wxDynamicCast(this,wxButton) != NULL ) ||
-         ( wxDynamicCast(this,wxCheckBox) != NULL ) ||
-         ( wxDynamicCast(this,wxRadioButton) != NULL ) ||
-         ( wxDynamicCast(this,wxToggleButton) != NULL ) )
-    {
-        m_label = label;
-        // TODO: as manual states, it crashes here
-        // needs own manipulation on used string pointers
-        // CtlSetLabel(m_control,m_label);
-    }
+    if(IsPalmField())
+        SetFieldLabel(label);
+
+    // unlike other native controls, slider has no label
+    if(IsPalmControl() && !wxDynamicCast(this,wxSlider))
+        SetControlLabel(label);
+}
+
+wxString wxControl::GetFieldLabel()
+{
+    FieldType* field = (FieldType*)GetObjectPtr();
+    if(field==NULL)
+        return wxEmptyString;
+    return FldGetTextPtr(field);
+}
+
+wxString wxControl::GetControlLabel()
+{
+    ControlType* control = (ControlType*)GetObjectPtr();
+    if(control==NULL)
+        return wxEmptyString;
+    return CtlGetLabel(control);
 }
 
 wxString wxControl::GetLabel()
 {
-    // setting in wrong control causes crash
-    if ( wxDynamicCast(this,wxButton) ||
-         wxDynamicCast(this,wxCheckBox) ||
-         wxDynamicCast(this,wxRadioButton) ||
-         wxDynamicCast(this,wxToggleButton) )
-    {
-        return m_label;
-    }
+    if(IsPalmField())
+        return GetFieldLabel();
+
+    // unlike other native controls, slider has no label
+    if(IsPalmControl() && !wxDynamicCast(this,wxSlider))
+        return GetControlLabel();
 
     return wxEmptyString;
 }

@@ -119,6 +119,7 @@ wxPalmOS:
 - native wxSlider implementation
 - native wxToggleButton implementation
 - native wxRadioButton implementation
+- native wxStaticText implementation
 
 
 2.5.3

@@ -51,6 +51,10 @@ public:
 
     // implementation only from now on
     virtual void Command(wxCommandEvent& event);
+
+    // send a notification event, return true if processed
+    bool SendClickEvent();
+
     virtual void ApplyParentThemeBackground(const wxColour& bg)
         { SetBackgroundColour(bg); }
 
@@ -62,6 +66,8 @@ private:
     // common part of all ctors
     void Init();
 
+    // pushButtonCtl or checkboxCtl
+    ControlStyleType m_radioStyle;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxRadioButton)
 };
 

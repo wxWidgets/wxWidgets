@@ -46,8 +46,6 @@ public:
     virtual int GetValue() const;
     virtual void SetValue(int);
 
-    void GetPosition(int *x, int *y) const;
-
     void SetRange(int minValue, int maxValue);
 
     int GetMin() const;
@@ -73,12 +71,6 @@ public:
     void Command(wxCommandEvent& event);
 
 protected:
-    virtual void DoGetSize(int *width, int *height) const;
-
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
-
     virtual wxSize DoGetBestSize() const;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider)

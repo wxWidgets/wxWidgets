@@ -34,6 +34,8 @@ private:
     #include "wx/cocoa/stattext.h"
 #elif defined(__WXPM__)
     #include "wx/os2/stattext.h"
+#elif defined(__WXPALMOS__)
+    #include "wx/palmos/stattext.h"
 #endif
 
 #endif // wxUSE_STATTEXT

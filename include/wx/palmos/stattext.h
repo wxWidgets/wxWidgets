@@ -2,10 +2,10 @@
 // Name:        wx/palmos/stattext.h
 // Purpose:     wxStaticText class
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Wlodzimierz ABX Skiba - native wxStaticText implementation
 // Created:     10/13/04
 // RCS-ID:      $Id$
-// Copyright:   (c) William Osborne
+// Copyright:   (c) William Osborne, Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -41,16 +41,12 @@ public:
                 const wxString& name = wxStaticTextNameStr);
 
     // override some methods to resize the window properly
-    virtual void SetLabel(const wxString& label);
     virtual bool SetFont( const wxFont &font );
 
 protected:
     // implement/override some base class virtuals
     virtual wxBorder GetDefaultBorder() const;
-    virtual void DoSetSize(int x, int y, int w, int h,
-                           int sizeFlags = wxSIZE_AUTO);
     virtual wxSize DoGetBestSize() const;
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText)
 };

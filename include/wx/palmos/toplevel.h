@@ -84,6 +84,9 @@ public:
     // interface to native frame structure
     FormType *GetForm() const;
 
+    // handle controls
+    bool HandleControlSelect(EventType* event);
+
 protected:
     // common part of all ctors
     void Init();

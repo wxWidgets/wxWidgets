@@ -22,7 +22,7 @@
 class WXDLLEXPORT wxControl : public wxControlBase
 {
 public:
-    wxControl() { }
+    wxControl() { Init(); }
 
     wxControl(wxWindow *parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -30,6 +30,7 @@ public:
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = wxControlNameStr)
     {
+        Init();
         Create(parent, id, pos, size, style, validator, name);
     }
 
@@ -77,6 +78,8 @@ public:
 protected:
     // regardless how deeply we are in wxWidgets hierarchy always get correct form
     FormType* GetParentForm() const;
+    uint16_t GetObjectIndex() const;
+    void* GetObjectPtr() const;
 
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const;
@@ -85,6 +88,12 @@ protected:
     void SetBoolValue(bool value);
     bool GetBoolValue() const;
     void SetIntValue(int val);
+
+    // native labels access
+    void SetFieldLabel(const wxString& label);
+    void SetControlLabel(const wxString& label);
+    wxString GetFieldLabel();
+    wxString GetControlLabel();
 
     // return default best size (doesn't really make any sense, override this)
     virtual wxSize DoGetBestSize() const;
@@ -99,11 +108,19 @@ protected:
     // supposed to had been already set and so is used instead when this
     // function is called)
     bool PalmCreateControl(ControlStyleType style,
-                           wxWindow *parent,
-                           wxWindowID id,
                            const wxString& label,
                            const wxPoint& pos,
-                           const wxSize& size);
+                           const wxSize& size,
+                           int groupID = 0);
+    inline bool IsPalmControl() const { return m_palmControl; }
+
+    bool PalmCreateField(const wxString& label,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         bool editable,
+                         bool underlined,
+                         JustificationType justification);
+    inline bool IsPalmField() const { return m_palmField; }
 
     // this is a helper for the derived class GetClassDefaultAttributes()
     // implementation: it returns the right colours for the classes which
@@ -117,9 +134,13 @@ protected:
     // holds the ids (not HWNDs!) of the sub controls
     wxArrayLong m_subControls;
 
-    ControlType *m_control;
-
 private:
+
+    bool m_palmControl:1;
+    bool m_palmField:1;
+
+    // common part of all ctors
+    void Init();
 
     virtual void DoGetBounds( RectangleType &rect ) const;
 
