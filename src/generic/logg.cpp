@@ -717,7 +717,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     for ( size_t n = 0; n < count; n++ )
     {
         wxString msg = messages[n];
-        msg.Replace("\n", " ");
+        msg.Replace(wxT("\n"), wxT(" "));
         m_messages.Add(msg);
         m_severity.Add(severity[n]);
         m_times.Add(times[n]);
