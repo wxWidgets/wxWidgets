@@ -268,23 +268,15 @@ enum wxFontEncoding
     wxFONTENCODING_MAX
 };
 
+
 class wxFont {
 public:
-    // I'll do it this way to use long-lived objects and not have to
-    // worry about when python may delete the object.
-    %addmethods {
-        wxFont( int pointSize, int family, int style, int weight,
-                int underline=FALSE, char* faceName = "",
-                wxFontEncoding encoding=wxFONTENCODING_DEFAULT) {
-
-            return wxTheFontList->FindOrCreateFont(pointSize, family, style, weight,
-                                                   underline, faceName, encoding);
-        }
-        // NO Destructor.
-    }
+    wxFont( int pointSize, int family, int style, int weight,
+            int underline=FALSE, char* faceName = "",
+            wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
+    ~wxFont();
 
     bool Ok();
-
     wxString GetFaceName();
     int GetFamily();
 #ifdef __WXMSW__
@@ -316,6 +308,18 @@ public:
         wxFont::SetDefaultEncoding(encoding);
     }
 %}
+
+
+class wxFontList {
+public:
+
+    void AddFont(wxFont* font);
+    wxFont * FindOrCreateFont(int point_size, int family, int style, int weight,
+                              bool underline = FALSE, const char* facename = NULL,
+                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    void RemoveFont(wxFont *font);
+};
+
 
 //----------------------------------------------------------------------
 
@@ -352,19 +356,28 @@ public:
 %}
 
 
+
+class wxColourDatabase {
+public:
+
+    wxColour *FindColour(const wxString& colour);
+    wxString FindName(const wxColour& colour) const;
+
+    %addmethods {
+        void Append(const wxString& name, int red, int green, int blue) {
+            self->Append(name.c_str(), new wxColour(red, green, blue));
+        }
+    }
+};
+
+
 //----------------------------------------------------------------------
 
 
 class wxPen {
 public:
-    // I'll do it this way to use long-lived objects and not have to
-    // worry about when python may delete the object.
-    %addmethods {
-        wxPen(wxColour* colour, int width=1, int style=wxSOLID) {
-            return wxThePenList->FindOrCreatePen(*colour, width, style);
-        }
-        // NO Destructor.
-    }
+    wxPen(wxColour& colour, int width=1, int style=wxSOLID);
+    ~wxPen();
 
     int GetCap();
     wxColour& GetColour();
@@ -389,20 +402,23 @@ public:
 #endif
 };
 
+
+class wxPenList {
+public:
+
+    void AddPen(wxPen* pen);
+    wxPen* FindOrCreatePen(const wxColour& colour, int width, int style);
+    void RemovePen(wxPen* pen);
+};
+
+
+
 //----------------------------------------------------------------------
 
 class wxBrush {
 public:
-    // I'll do it this way to use long-lived objects and not have to
-    // worry about when python may delete the object.
-    %addmethods {
-        wxBrush(const wxColour* colour, int style=wxSOLID) {
-            return wxTheBrushList->FindOrCreateBrush(*colour, style);
-        }
-        // NO Destructor.
-    }
-
-//      wxBrush(const wxColour& colour, int style=wxSOLID);
+    wxBrush(const wxColour& colour, int style=wxSOLID);
+    ~wxBrush();
 
     wxColour& GetColour();
     wxBitmap * GetStipple();
@@ -411,6 +427,15 @@ public:
     void SetColour(wxColour &colour);
     void SetStipple(wxBitmap& bitmap);
     void SetStyle(int style);
+};
+
+
+class wxBrushList {
+public:
+
+    void AddBrush(wxBrush *brush);
+    wxBrush * FindOrCreateBrush(const wxColour& colour, int style);
+    void RemoveBrush(wxBrush *brush);
 };
 
 //----------------------------------------------------------------------
@@ -658,6 +683,13 @@ extern wxBrush  wxNullBrush;
 extern wxPalette wxNullPalette;
 extern wxFont   wxNullFont;
 extern wxColour wxNullColour;
+
+
+extern wxFontList*       wxTheFontList;
+extern wxPenList*        wxThePenList;
+extern wxBrushlist*      wxTheBrushList;
+extern wxColourDatabase* wxTheColourDatabase;
+
 
 %readwrite
 %{

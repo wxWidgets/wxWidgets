@@ -216,6 +216,9 @@ class wxFontPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def __del__(self,gdic=gdic):
+        if self.thisown == 1 :
+            gdic.delete_wxFont(self)
     def Ok(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_Ok,(self,) + _args, _kwargs)
         return val
@@ -283,6 +286,29 @@ class wxFont(wxFontPtr):
 
 
 
+class wxFontListPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def AddFont(self, *_args, **_kwargs):
+        val = apply(gdic.wxFontList_AddFont,(self,) + _args, _kwargs)
+        return val
+    def FindOrCreateFont(self, *_args, **_kwargs):
+        val = apply(gdic.wxFontList_FindOrCreateFont,(self,) + _args, _kwargs)
+        if val: val = wxFontPtr(val) 
+        return val
+    def RemoveFont(self, *_args, **_kwargs):
+        val = apply(gdic.wxFontList_RemoveFont,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxFontList instance at %s>" % (self.this,)
+class wxFontList(wxFontListPtr):
+    def __init__(self,this):
+        self.this = this
+
+
+
+
 class wxColourPtr :
     def __init__(self,this):
         self.this = this
@@ -321,10 +347,36 @@ class wxColour(wxColourPtr):
 
 
 
+class wxColourDatabasePtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def FindColour(self, *_args, **_kwargs):
+        val = apply(gdic.wxColourDatabase_FindColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) 
+        return val
+    def FindName(self, *_args, **_kwargs):
+        val = apply(gdic.wxColourDatabase_FindName,(self,) + _args, _kwargs)
+        return val
+    def Append(self, *_args, **_kwargs):
+        val = apply(gdic.wxColourDatabase_Append,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxColourDatabase instance at %s>" % (self.this,)
+class wxColourDatabase(wxColourDatabasePtr):
+    def __init__(self,this):
+        self.this = this
+
+
+
+
 class wxPenPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def __del__(self,gdic=gdic):
+        if self.thisown == 1 :
+            gdic.delete_wxPen(self)
     def GetCap(self, *_args, **_kwargs):
         val = apply(gdic.wxPen_GetCap,(self,) + _args, _kwargs)
         return val
@@ -382,10 +434,36 @@ class wxPen(wxPenPtr):
 
 
 
+class wxPenListPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def AddPen(self, *_args, **_kwargs):
+        val = apply(gdic.wxPenList_AddPen,(self,) + _args, _kwargs)
+        return val
+    def FindOrCreatePen(self, *_args, **_kwargs):
+        val = apply(gdic.wxPenList_FindOrCreatePen,(self,) + _args, _kwargs)
+        if val: val = wxPenPtr(val) 
+        return val
+    def RemovePen(self, *_args, **_kwargs):
+        val = apply(gdic.wxPenList_RemovePen,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxPenList instance at %s>" % (self.this,)
+class wxPenList(wxPenListPtr):
+    def __init__(self,this):
+        self.this = this
+
+
+
+
 class wxBrushPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def __del__(self,gdic=gdic):
+        if self.thisown == 1 :
+            gdic.delete_wxBrush(self)
     def GetColour(self, *_args, **_kwargs):
         val = apply(gdic.wxBrush_GetColour,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) 
@@ -415,6 +493,29 @@ class wxBrush(wxBrushPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxBrush,_args,_kwargs)
         self.thisown = 1
+
+
+
+
+class wxBrushListPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def AddBrush(self, *_args, **_kwargs):
+        val = apply(gdic.wxBrushList_AddBrush,(self,) + _args, _kwargs)
+        return val
+    def FindOrCreateBrush(self, *_args, **_kwargs):
+        val = apply(gdic.wxBrushList_FindOrCreateBrush,(self,) + _args, _kwargs)
+        if val: val = wxBrushPtr(val) 
+        return val
+    def RemoveBrush(self, *_args, **_kwargs):
+        val = apply(gdic.wxBrushList_RemoveBrush,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxBrushList instance at %s>" % (self.this,)
+class wxBrushList(wxBrushListPtr):
+    def __init__(self,this):
+        self.this = this
 
 
 
@@ -980,6 +1081,9 @@ wxNullBrush = wxBrushPtr(gdic.cvar.wxNullBrush)
 wxNullPalette = wxPalettePtr(gdic.cvar.wxNullPalette)
 wxNullFont = wxFontPtr(gdic.cvar.wxNullFont)
 wxNullColour = wxColourPtr(gdic.cvar.wxNullColour)
+wxTheFontList = wxFontListPtr(gdic.cvar.wxTheFontList)
+wxThePenList = wxPenListPtr(gdic.cvar.wxThePenList)
+wxTheColourDatabase = wxColourDatabasePtr(gdic.cvar.wxTheColourDatabase)
 wxIMAGELIST_DRAW_NORMAL = gdic.wxIMAGELIST_DRAW_NORMAL
 wxIMAGELIST_DRAW_TRANSPARENT = gdic.wxIMAGELIST_DRAW_TRANSPARENT
 wxIMAGELIST_DRAW_SELECTED = gdic.wxIMAGELIST_DRAW_SELECTED

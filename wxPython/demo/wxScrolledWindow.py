@@ -42,16 +42,16 @@ class MyCanvas(wxScrolledWindow):
 
     def DoDrawing(self, dc):
         dc.BeginDrawing()
-        pen1 = wxPen(wxNamedColour('RED'))
-        dc.SetPen(pen1)
+        #pen1 = wxPen(wxNamedColour('RED'))
+        dc.SetPen(wxPen(wxNamedColour('RED')))
         dc.DrawRectangle(5, 5, 50, 50)
 
         dc.SetBrush(wxLIGHT_GREY_BRUSH)
         dc.SetPen(wxPen(wxNamedColour('BLUE'), 4))
         dc.DrawRectangle(15, 15, 50, 50)
 
-        font = wxFont(14, wxSWISS, wxNORMAL, wxNORMAL)
-        dc.SetFont(font)
+        #font = wxFont(14, wxSWISS, wxNORMAL, wxNORMAL)
+        dc.SetFont(wxFont(14, wxSWISS, wxNORMAL, wxNORMAL))
         dc.SetTextForeground(wxColour(0xFF, 0x20, 0xFF))
         te = dc.GetTextExtent("Hello World")
         dc.DrawText("Hello World", 60, 65)
@@ -81,11 +81,8 @@ class MyCanvas(wxScrolledWindow):
         dc.DrawRectangle(50,500,50,50)
         dc.DrawRectangle(100,500,50,50)
 
-        dc.SetPen(pen1)
+        dc.SetPen(wxPen(wxNamedColour('RED')))
         dc.DrawEllipticArc(200, 500, 50, 75, 0, 90)
-
-        #from wxPython import dch
-        #dch.FillRect(dc, wxRect(50, 400, 50, 50), wxBLACK)
 
         self.DrawSavedLines(dc)
         dc.EndDrawing()
