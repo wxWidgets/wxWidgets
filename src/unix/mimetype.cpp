@@ -322,6 +322,9 @@ ArrayIconHandlers wxMimeTypesManagerImpl::ms_iconHandlers;
 // with blank lines separating the entries and indented lines starting with
 // TABs. We're interested in the field icon-filename whose value is the path
 // containing the icon.
+//
+// Update (Chris Elliott): apparently there may be an optional "[lang]" prefix
+// just before the field name.
 
 void wxGNOMEIconHandler::LoadIconsFromKeyFile(const wxString& filename)
 {
@@ -388,6 +391,16 @@ void wxGNOMEIconHandler::LoadIconsFromKeyFile(const wxString& filename)
         {
             // this is a field=value ling
             pc++; // skip leading TAB
+
+            // skip optional "[lang]"
+            if ( *pc == _T('[') )
+            {
+                while ( *pc )
+                {
+                    if ( *pc++ == _T(']') )
+                        break;
+                }
+            }
 
             static const int lenField = 13; // strlen("icon-filename")
             if ( wxStrncmp(pc, _T("icon-filename"), lenField) == 0 )
