@@ -166,7 +166,7 @@
         <debug-info>$(DEBUGFLAG)</debug-info>
         <optimize>$(OPTIMIZEFLAG)</optimize>
         <threading>multi</threading>
-        <runtime-libs>dynamic</runtime-libs>
+        <runtime-libs>$(RUNTIME_LIBS)</runtime-libs>
         <if cond="FORMAT!='autoconf'">
             <cppflags>$(EXTRACFLAGS)</cppflags>
         </if>

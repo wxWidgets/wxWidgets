@@ -85,7 +85,9 @@
         <option name="EXTRALIBS"/>
         <option name="EXTRALIBS_GUI"/>
         <option name="SAMPLES_RPATH_FLAG"/>
+        
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>
+        <set var="RUNTIME_LIBS">dynamic</set>
     </if>
 
     
@@ -94,6 +96,16 @@
     <!-- ================================================================== -->
 
     <if cond="FORMAT!='autoconf'">
+        <option name="RUNTIME_LIBS">
+            <values>dynamic static</values>
+            <default-value>dynamic</default-value>
+            <description>
+                Version of C runtime library to use. You can change this to
+                static if SHARED=0, but it is highly recommended to not do
+                it if SHARED=1 unless you know what you are doing.
+            </description>
+        </option>
+        
         <set var="WXTOPDIR"/> <!-- to be overriden on bakefile cmd line -->
 
         <set var="TOOLKIT">MSW</set>
