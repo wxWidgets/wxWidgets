@@ -101,17 +101,6 @@ bool wxApp::Initialize()
     wxInitializeStockLists();
     wxInitializeStockObjects();
 
-    // For PostScript printing
-#if wxUSE_POSTSCRIPT
-    /* Done using wxModule now
-    wxInitializePrintSetupData();
-    wxThePrintPaperDatabase = new wxPrintPaperDatabase;
-    wxThePrintPaperDatabase->CreateDatabase();
-    */
-#endif
-
-    wxBitmap::InitStandardHandlers();
-
     wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
 
     wxModule::RegisterModules();
@@ -135,16 +124,6 @@ void wxApp::CleanUp()
 
     delete wxTheColourDatabase;
     wxTheColourDatabase = NULL;
-
-#if wxUSE_POSTSCRIPT
-    /* Done using wxModule now
-    wxInitializePrintSetupData(FALSE);
-    delete wxThePrintPaperDatabase;
-    wxThePrintPaperDatabase = NULL;
-    */
-#endif
-
-    wxBitmap::CleanUpHandlers();
 
     wxClassInfo::CleanUpClasses();
 
@@ -232,8 +211,8 @@ int wxEntry( int argc, char *argv[] )
     if ( pLog != NULL && pLog->HasPendingMessages() )
         pLog->Flush();
 
-    delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
-    // for further messages
+    // So dialog boxes aren't used for further messages
+    delete wxLog::SetActiveTarget(new wxLogStderr);
 
     if (wxTheApp->GetTopWindow())
     {
@@ -522,7 +501,8 @@ void wxExit()
 
     wxApp::CleanUp();
     /*
-    * Exit in some platform-specific way. Not recommended that the app calls this:
+    * Exit in some platform-specific way.
+    * Not recommended that the app calls this:
     * only for emergencies.
     */
     exit(retValue);
