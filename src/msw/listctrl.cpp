@@ -1501,7 +1501,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // if your compiler is as broken as this, you should really change it: this
     // code is needed for normal operation! #ifdef below is only useful for
     // automatic rebuilds which are done with a very old compiler version
-#ifdef LVM_FIRST
+#ifdef HDN_BEGINTRACKA
 
     // check for messages from the header (in report view)
     HWND hwndHdr = ListView_GetHeader(GetHwnd());
@@ -1509,11 +1509,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // is it a message from the header?
     if ( nmhdr->hwndFrom == hwndHdr )
     {
-#ifdef __WATCOMC__
         HD_NOTIFY *nmHDR = (HD_NOTIFY *)nmhdr;
-#else
-        NMHEADER *nmHDR = (NMHEADER *)nmhdr;
-#endif
+
         event.m_itemIndex = -1;
 
         switch ( nmhdr->code )
@@ -1589,7 +1586,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         }
     }
     else
-#endif // defined(LVM_FIRST)
+#endif // defined(HDN_BEGINTRACKA)
         if ( nmhdr->hwndFrom == GetHwnd() )
     {
         // almost all messages use NM_LISTVIEW

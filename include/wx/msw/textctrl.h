@@ -171,6 +171,9 @@ protected:
     // common part of all ctors
     void Init();
 
+    // intercept WM_GETDLGCODE
+    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
     // call this to increase the size limit (will do nothing if the current
     // limit is big enough)
     //

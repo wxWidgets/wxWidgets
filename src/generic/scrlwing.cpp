@@ -1102,11 +1102,6 @@ bool wxGenericScrolledWindow::Create(wxWindow *parent,
 
     bool ok = wxPanel::Create(parent, id, pos, size, style, name);
 
-#ifdef __WXMSW__
-    // we need to process arrows ourselves for scrolling
-    m_lDlgCode |= DLGC_WANTARROWS;
-#endif // __WXMSW__
-
     return ok;
 }
 
@@ -1122,6 +1117,25 @@ void wxGenericScrolledWindow::OnPaint(wxPaintEvent& event)
 
     event.Skip();
 }
+
+#ifdef __WXMSW__
+long
+wxGenericScrolledWindow::MSWWindowProc(WXUINT nMsg,
+                                       WXWPARAM wParam,
+                                       WXLPARAM lParam)
+{
+    long rc = wxPanel::MSWWindowProc(nMsg, wParam, lParam);
+
+    // we need to process arrows ourselves for scrolling
+    if ( nMsg == WM_GETDLGCODE )
+    {
+        rc |= DLGC_WANTARROWS;
+    }
+
+    return rc;
+}
+
+#endif // __WXMSW__
 
 #if WXWIN_COMPATIBILITY
 

@@ -234,21 +234,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( m_windowStyle & wxTE_NOHIDESEL )
         msStyle |= ES_NOHIDESEL;
 
-    // we always want the characters and the arrows
-    m_lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
-
-    // we may have several different cases:
-    // 1. normal case: both TAB and ENTER are used for dialog navigation
-    // 2. ctrl which wants TAB for itself: ENTER is used to pass to the next
-    //    control in the dialog
-    // 3. ctrl which wants ENTER for itself: TAB is used for dialog navigation
-    // 4. ctrl which wants both TAB and ENTER: Ctrl-ENTER is used to pass to
-    //    the next control
-    if ( m_windowStyle & wxTE_PROCESS_ENTER )
-        m_lDlgCode |= DLGC_WANTMESSAGE;
-    if ( m_windowStyle & wxTE_PROCESS_TAB )
-        m_lDlgCode |= DLGC_WANTTAB;
-
     // do create the control - either an EDIT or RICHEDIT
     wxString windowClass = wxT("EDIT");
 
@@ -1171,6 +1156,32 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
     // no, we didn't process it
     event.Skip();
+}
+
+long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    // we always want the characters and the arrows
+    if ( nMsg == WM_GETDLGCODE )
+    {
+        // we always want the chars and the arrows
+        long lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
+
+        // we may have several different cases:
+        // 1. normal case: both TAB and ENTER are used for dialog navigation
+        // 2. ctrl which wants TAB for itself: ENTER is used to pass to the next
+        //    control in the dialog
+        // 3. ctrl which wants ENTER for itself: TAB is used for dialog navigation
+        // 4. ctrl which wants both TAB and ENTER: Ctrl-ENTER is used to pass to
+        //    the next control
+        if ( m_windowStyle & wxTE_PROCESS_ENTER )
+            lDlgCode |= DLGC_WANTMESSAGE;
+        if ( m_windowStyle & wxTE_PROCESS_TAB )
+            lDlgCode |= DLGC_WANTTAB;
+
+        return lDlgCode;
+    }
+
+    return wxTextCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))

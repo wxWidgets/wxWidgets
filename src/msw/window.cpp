@@ -303,9 +303,6 @@ void wxWindowMSW::Init()
 
     m_hWnd = 0;
 
-    // pass WM_GETDLGCODE to DefWindowProc()
-    m_lDlgCode = 0;
-
     m_xThumbSize = 0;
     m_yThumbSize = 0;
     m_backgroundTransparent = FALSE;
@@ -414,14 +411,6 @@ bool wxWindowMSW::Create(wxWindow *parent,
                           wxDOUBLE_BORDER)) )
     {
         msflags |= WS_BORDER;
-    }
-
-    // calculate the value to return from WM_GETDLGCODE handler
-    if ( GetWindowStyleFlag() & wxWANTS_CHARS )
-    {
-        // want everything: i.e. all keys and WM_CHAR message
-        m_lDlgCode = DLGC_WANTARROWS | DLGC_WANTCHARS |
-                     DLGC_WANTTAB | DLGC_WANTMESSAGE;
     }
 #endif // wxUniversal/!wxUniversal
 
@@ -2369,9 +2358,11 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 #endif // defined(WM_DRAWITEM)
 
         case WM_GETDLGCODE:
-            if ( m_lDlgCode )
+            if ( GetWindowStyleFlag() & wxWANTS_CHARS )
             {
-                rc.result = m_lDlgCode;
+                // want everything: i.e. all keys and WM_CHAR message
+                rc.result = DLGC_WANTARROWS | DLGC_WANTCHARS |
+                            DLGC_WANTTAB | DLGC_WANTMESSAGE;
                 processed = TRUE;
             }
             //else: get the dlg code from the DefWindowProc()

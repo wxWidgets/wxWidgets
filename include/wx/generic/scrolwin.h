@@ -42,7 +42,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 class WXDLLEXPORT wxGenericScrolledWindow : public wxPanel,
                                             public wxScrollHelper
 {
- public:
+public:
     wxGenericScrolledWindow() : wxScrollHelper(this) { }
     wxGenericScrolledWindow(wxWindow *parent,
                      wxWindowID id = -1,
@@ -70,6 +70,12 @@ protected:
     // this is needed for wxEVT_PAINT processing hack described in
     // wxScrollHelperEvtHandler::ProcessEvent()
     void OnPaint(wxPaintEvent& event);
+
+    // we need to return a special WM_GETDLGCODE value to process just the
+    // arrows but let the other navigation characters through
+#ifdef __WXMSW__
+    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+#endif // __WXMSW__
 
 private:
     DECLARE_ABSTRACT_CLASS(wxGenericScrolledWindow)

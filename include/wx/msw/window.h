@@ -422,9 +422,6 @@ protected:
 
     WXHMENU               m_hMenu; // Menu, if any
 
-    // the return value of WM_GETDLGCODE handler
-    long m_lDlgCode;
-
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
