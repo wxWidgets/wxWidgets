@@ -620,6 +620,10 @@ SOURCE=.\common\socket.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\statbar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\strconv.cpp
 # End Source File
 # Begin Source File
