@@ -2109,6 +2109,27 @@ wxTreeItemId wxGenericTreeCtrl::HitTest(const wxPoint& point, int& flags)
     return m_anchor->HitTest( wxPoint(x, y), this, flags);
 }
 
+// get the bounding rectangle of the item (or of its label only)
+bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
+                         wxRect& rect,
+                         bool textOnly) const
+{
+    wxCHECK2_MSG( item.IsOk(), FALSE, _T("invalid item in wxGenericTreeCtrl::GetBoundingRect") );
+
+    wxGenericTreeItem *i = (wxGenericTreeItem*) item.m_pItem;
+
+    int startX, startY;
+    GetViewStart(& startX, & startY);
+
+    rect.x = i->GetX() - startX*PIXELS_PER_UNIT; rect.y = i->GetY()*PIXELS_PER_UNIT;
+    rect.width = i->GetWidth(); rect.height = i->GetHeight();
+
+    return TRUE;
+
+    // wxFAIL_MSG(wxT("GetBoundingRect unimplemented"));
+    // return FALSE;
+}
+
 /* **** */
 
 void wxGenericTreeCtrl::Edit( const wxTreeItemId& item )

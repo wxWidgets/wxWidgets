@@ -281,6 +281,11 @@ public:
         { int dummy; return HitTest(point, dummy); }
     wxTreeItemId HitTest(const wxPoint& point, int& flags);
 
+        // get the bounding rectangle of the item (or of its label only)
+    bool GetBoundingRect(const wxTreeItemId& item,
+                         wxRect& rect,
+                         bool textOnly = FALSE) const;
+
         // Start editing the item label: this (temporarily) replaces the item
         // with a one line edit control. The item will be selected if it hadn't
         // been before.
