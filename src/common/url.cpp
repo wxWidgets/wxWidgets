@@ -464,12 +464,16 @@ wxString wxURL::ConvertFromURI(const wxString& uri)
       i++;
       if (uri[i] >= wxT('A') && uri[i] <= wxT('F'))
         code = (uri[i] - wxT('A') + 10) * 16;
+      else if (uri[i] >= wxT('a') && uri[i] <= wxT('f'))
+        code = (uri[i] - wxT('a') + 10) * 16;
       else
         code = (uri[i] - wxT('0')) * 16;
 
       i++;
       if (uri[i] >= wxT('A') && uri[i] <= wxT('F'))
         code += (uri[i] - wxT('A')) + 10;
+      else if (uri[i] >= wxT('a') && uri[i] <= wxT('f'))
+        code += (uri[i] - wxT('a')) + 10;
       else
         code += (uri[i] - wxT('0'));
 
