@@ -990,7 +990,7 @@ static wxString GetTypeName(wxCmdLineParamType type)
 
 /*
    This function is mainly used under Windows (as under Unix we always get the
-   command line arguments as agrc/argv anyhow) and so it tries to handle the
+   command line arguments as argc/argv anyhow) and so it tries to handle the
    Windows path names (separated by backslashes) correctly. For this it only
    considers that a backslash may be used to escape another backslash (but
    normally this is _not_ needed) or a quote but nothing else.
