@@ -128,7 +128,7 @@
 #define wxUSE_CLIPBOARD   0
 #define wxUSE_SPLINES     0
 #define wxUSE_DRAG_AND_DROP 0
-#define wxUSE_XPM_IN_MSW   0
+#define wxUSE_XPM_IN_MSW   1
 #define wxUSE_IMAGE_LOADING_IN_MSW        1
 #define wxUSE_RESOURCE_LOADING_IN_MSW     0
 #define wxUSE_WX_RESOURCES        0

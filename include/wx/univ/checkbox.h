@@ -81,18 +81,6 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
 
-    // set/get the margins between the checkbox bitmap and the border and
-    // between the bitmap and the label and above it
-    void SetMargins(wxCoord marginLeft, wxCoord marginRight, wxCoord marginTop)
-    {
-        m_checkMarginLeft = marginLeft;
-        m_checkMarginRight = marginRight;
-        m_checkMarginTop = marginTop;
-    }
-    wxCoord GetLeftMargin() const { return m_checkMarginLeft; }
-    wxCoord GetRightMargin() const { return m_checkMarginRight; }
-    wxCoord GetTopMargin() const { return m_checkMarginTop; }
-
     // set/get the bitmaps to use for the checkbox indicator
     void SetBitmap(const wxBitmap& bmp, State state, Status status);
     wxBitmap GetBitmap(State state, Status status) const;
@@ -120,20 +108,12 @@ protected:
     // common part of all ctors
     void Init();
 
-    // set the margins to the default values if they were not set yet
-    void SetMargins();
-
 private:
     // the current check status
     Status m_status;
 
     // the bitmaps to use for the different states
     wxBitmap m_bitmaps[State_Max][Status_Max];
-
-    // the distance between the checkbox and the label/border (-1 means default)
-    wxCoord m_checkMarginLeft,
-            m_checkMarginRight,
-            m_checkMarginTop;
 
     // is the checkbox currently pressed?
     bool m_isPressed;

@@ -87,7 +87,6 @@ public:
                            int flags = 0,
                            int alignment = wxALIGN_LEFT,
                            int indexAccel = -1);
-    virtual void DrawCheckBoxFocusBorder(wxDC& dc, wxRect *rect);
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -110,6 +109,13 @@ public:
                           const wxString& label,
                           const wxRect& rect,
                           int flags = 0);
+    virtual void DrawCheckButton(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& bitmap,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 wxAlignment align = wxALIGN_LEFT,
+                                 int indexAccel = -1);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
     virtual wxRect GetBorderDimensions(wxBorder border) const;
@@ -127,13 +133,6 @@ public:
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
         { return fontHeight + 2; }
-
-    virtual wxSize GetCheckBitmapSize(wxCoord *marginLeft,
-                                      wxCoord *marginRight,
-                                      wxCoord *marginTop) const;
-    virtual wxSize GetRadioBitmapSize(wxCoord *marginLeft,
-                                      wxCoord *marginRight,
-                                      wxCoord *marginTop) const;
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -758,11 +757,6 @@ bool wxGTKRenderer::AreScrollbarsInsideBorder() const
 // borders
 // ----------------------------------------------------------------------------
 
-void wxGTKRenderer::DrawCheckBoxFocusBorder(wxDC& dc, wxRect *rect)
-{
-    DrawRect(dc, rect, m_penBlack);
-}
-
 void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
                                      const wxRect& rectTotal,
                                      int flags,
@@ -956,6 +950,53 @@ void wxGTKRenderer::DrawItem(wxDC& dc,
     {
         dc.SetTextForeground(colFg);
     }
+}
+
+// ----------------------------------------------------------------------------
+// check/radion buttons
+// ----------------------------------------------------------------------------
+
+void wxGTKRenderer::DrawCheckButton(wxDC& dc,
+                                    const wxString& label,
+                                    const wxBitmap& bitmap,
+                                    const wxRect& rectTotal,
+                                    int flags,
+                                    wxAlignment align,
+                                    int indexAccel)
+{
+    wxRect rect = rectTotal;
+
+    if ( flags & wxCONTROL_FOCUSED )
+    {
+        // draw the focus border around everything
+        DrawRect(dc, &rect, m_penBlack);
+    }
+
+    // calculate the position of the bitmap and of the label
+    wxCoord xBmp,
+            yBmp = rect.y + (rect.height - bitmap.GetHeight()) / 2;
+
+    wxRect rectLabel;
+    dc.GetMultiLineTextExtent(label, NULL, &rectLabel.height);
+    rectLabel.y = rect.y + (rect.height - rectLabel.height) / 2;
+
+    if ( align == wxALIGN_RIGHT )
+    {
+        xBmp = rect.GetRight() - bitmap.GetWidth();
+        rectLabel.x = rect.x + 2;
+        rectLabel.SetRight(xBmp);
+    }
+    else // normal (checkbox to the left of the text) case
+    {
+        xBmp = rect.x + 2;
+        rectLabel.x = xBmp + bitmap.GetWidth() + 4;
+        rectLabel.SetRight(rect.GetRight());
+    }
+
+    dc.DrawBitmap(bitmap, xBmp, yBmp, TRUE /* use mask */);
+
+    DrawLabel(dc, label, rectLabel, flags,
+              wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL, indexAccel);
 }
 
 // ----------------------------------------------------------------------------
@@ -1346,38 +1387,6 @@ int wxGTKRenderer::PixelToScrollbar(const wxScrollBar *scrollbar,
 {
     return StandardPixelToScrollbar(scrollbar, coord,
                                     GetScrollbarArrowSize(scrollbar));
-}
-
-// ----------------------------------------------------------------------------
-// check/radio bitmaps geometry
-// ----------------------------------------------------------------------------
-
-wxSize wxGTKRenderer::GetCheckBitmapSize(wxCoord *marginLeft,
-                                         wxCoord *marginRight,
-                                         wxCoord *marginTop) const
-{
-    if ( marginLeft )
-        *marginLeft = 2;
-    if ( marginRight )
-        *marginRight = 5;
-    if ( marginTop )
-        *marginTop = 1;
-
-    return wxSize(10, 10);
-}
-
-wxSize wxGTKRenderer::GetRadioBitmapSize(wxCoord *marginLeft,
-                                         wxCoord *marginRight,
-                                         wxCoord *marginTop) const
-{
-    if ( marginLeft )
-        *marginLeft = 1;
-    if ( marginRight )
-        *marginRight = 4;
-    if ( marginTop )
-        *marginTop = 1;
-
-    return wxSize(11, 11);
 }
 
 // ----------------------------------------------------------------------------

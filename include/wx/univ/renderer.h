@@ -104,9 +104,6 @@ public:
                             int flags = 0,
                             wxRect *rectIn = (wxRect *)NULL) = 0;
 
-    // draw a check/radio focus border
-    virtual void DrawCheckBoxFocusBorder(wxDC& dc, wxRect *rect) = 0;
-
     // draw push button border and return the rectangle left for the label
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
@@ -157,6 +154,15 @@ public:
                           const wxRect& rect,
                           int flags = 0) = 0;
 
+    // draw a checkbutton
+    virtual void DrawCheckButton(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& bitmap,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 wxAlignment align = wxALIGN_LEFT,
+                                 int indexAccel = -1) = 0;
+
     // geometry functions
     // ------------------
 
@@ -196,16 +202,6 @@ public:
 
     // get the height of a listbox item from the base font height
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight) = 0;
-
-    // get the standard size of the checkbox bitmap and the margins around it
-    virtual wxSize GetCheckBitmapSize(wxCoord *marginLeft,
-                                      wxCoord *marginRight,
-                                      wxCoord *marginTop) const = 0;
-
-    // get the standard size of the radio btn bitmap and the margins around it
-    virtual wxSize GetRadioBitmapSize(wxCoord *marginLeft,
-                                      wxCoord *marginRight,
-                                      wxCoord *marginTop) const = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -292,8 +288,6 @@ public:
     virtual void DrawVerticalLine(wxDC& dc,
                                   wxCoord x, wxCoord y1, wxCoord y2)
         { m_renderer->DrawVerticalLine(dc, x, y1, y2); }
-    virtual void DrawCheckBoxFocusBorder(wxDC& dc, wxRect *rect)
-        { m_renderer->DrawCheckBoxFocusBorder(dc, rect); }
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -322,6 +316,15 @@ public:
                           const wxRect& rect,
                           int flags = 0)
         { m_renderer->DrawItem(dc, label, rect, flags); }
+    virtual void DrawCheckButton(wxDC& dc,
+                                 const wxString& label,
+                                 const wxBitmap& bitmap,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 wxAlignment align = wxALIGN_LEFT,
+                                 int indexAccel = -1)
+        { m_renderer->DrawCheckButton(dc, label, bitmap, rect,
+                                      flags, align, indexAccel); }
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }
@@ -347,18 +350,6 @@ public:
         { return m_renderer->PixelToScrollbar(scrollbar, coord); }
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
         { return m_renderer->GetListboxItemHeight(fontHeight); }
-    virtual wxSize GetCheckBitmapSize(wxCoord *marginLeft,
-                                      wxCoord *marginRight,
-                                      wxCoord *marginTop) const
-        { return m_renderer->GetCheckBitmapSize(marginLeft,
-                                                marginRight,
-                                                marginTop); }
-    virtual wxSize GetRadioBitmapSize(wxCoord *marginLeft,
-                                      wxCoord *marginRight,
-                                      wxCoord *marginTop) const
-        { return m_renderer->GetRadioBitmapSize(marginLeft,
-                                                marginRight,
-                                                marginTop); }
 
 protected:
     wxRenderer *m_renderer;
@@ -392,10 +383,6 @@ public:
                     wxStretch stretch = wxSTRETCH_NOT);
     void DrawBackgroundBitmap();
     void DrawScrollbar(const wxScrollBar *scrollbar, int thumbPosOld);
-    void DrawLabelBox(const wxBitmap& bitmap,
-                      wxCoord marginLeft,
-                      wxCoord marginRight,
-                      wxCoord marginTop);
 
     // accessors
     wxWindow *GetWindow() const { return m_window; }

@@ -54,9 +54,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 
 void wxCheckBox::Init()
 {
-    m_checkMarginLeft =
-    m_checkMarginRight =
-    m_checkMarginTop = -1;
     m_isPressed = FALSE;
     m_status = Status_Unchecked;
 }
@@ -131,47 +128,38 @@ void wxCheckBox::DoDraw(wxControlRenderer *renderer)
     else
         state = State_Normal;
 
-    SetMargins();
+    wxDC& dc = renderer->GetDC();
+    dc.SetFont(GetFont());
+    dc.SetTextForeground(GetForegroundColour());
 
-    renderer->DrawLabelBox(GetBitmap(state, m_status),
-                           m_checkMarginLeft,
-                           m_checkMarginRight,
-                           m_checkMarginTop);
+    renderer->GetRenderer()->
+        DrawCheckButton(dc,
+                        GetLabel(),
+                        GetBitmap(state, m_status),
+                        renderer->GetRect(),
+                        flags,
+                        GetWindowStyle() & wxALIGN_RIGHT ? wxALIGN_RIGHT
+                                                         : wxALIGN_LEFT,
+                        GetAccelIndex());
 }
 
 // ----------------------------------------------------------------------------
 // geometry calculations
 // ----------------------------------------------------------------------------
 
-void wxCheckBox::SetMargins()
-{
-    wxCoord *left = m_checkMarginLeft == -1 ? &m_checkMarginLeft : NULL,
-            *right = m_checkMarginRight == -1 ? &m_checkMarginRight : NULL,
-            *top = m_checkMarginTop == -1 ? &m_checkMarginTop : NULL;
-    if ( left || right || top )
-    {
-        GetRenderer()->GetCheckBitmapSize(left, right, top);
-    }
-}
-
 wxSize wxCheckBox::DoGetBestClientSize() const
 {
-    wxCheckBox *self = wxConstCast(this, wxCheckBox);
-
-    self->SetMargins();
-
-    wxClientDC dc(self);
+    wxClientDC dc(wxConstCast(this, wxCheckBox));
+    dc.SetFont(GetFont());
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 
     wxBitmap bmp = GetBitmap(State_Normal, Status_Checked);
     if ( height < bmp.GetHeight() )
         height = bmp.GetHeight();
-    height += GetCharHeight();
+    height += GetCharHeight()/2;
 
-    width += bmp.GetWidth()
-                + m_checkMarginLeft + m_checkMarginRight
-                + GetCharWidth();
+    width += bmp.GetWidth() + 2*GetCharWidth();
 
     return wxSize(width, height);
 }
