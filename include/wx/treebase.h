@@ -28,8 +28,9 @@
 
 // ----------------------------------------------------------------------------
 // wxTreeItemId identifies an element of the tree. In this implementation, it's
-// just a trivial wrapper around Win32 HTREEITEM. It's opaque for the
-// application.
+// just a trivial wrapper around Win32 HTREEITEM or a pointer to some private
+// data structure in the generic version. It's opaque for the application and
+// the only method which can be used by user code is IsOk().
 // ----------------------------------------------------------------------------
 
 // Using this typedef removes an ambiguity when calling Remove()
@@ -37,13 +38,16 @@ typedef unsigned long wxTreeItemIdValue;
 
 class WXDLLEXPORT wxTreeItemId
 {
-friend class WXDLLEXPORT wxTreeCtrl;
-friend class WXDLLEXPORT wxGenericTreeCtrl;
-friend class WXDLLEXPORT wxTreeEvent;
 public:
     // ctors
         // 0 is invalid value for HTREEITEM
     wxTreeItemId() { m_pItem = 0; }
+
+        // this one is used in the generic version
+    wxTreeItemId(void *pItem) { m_pItem = (long) pItem; }
+
+        // and this one under MSW
+    wxTreeItemId(long lItem) { m_pItem = lItem; }
 
         // default copy ctor/assignment operator are ok for us
 
@@ -52,13 +56,7 @@ public:
     bool IsOk() const { return m_pItem != 0; }
 
     // deprecated: only for compatibility
-    wxTreeItemId(long itemId) { m_pItem = itemId; }
-    //operator long() const { return m_pItem; }
     operator wxTreeItemIdValue() const { return m_pItem; }
-
-    void operator=(long item) { m_pItem = item; }
-
-    wxTreeItemId(void *pItem) { m_pItem = (long) pItem; }
 
     wxTreeItemIdValue m_pItem;
 };
