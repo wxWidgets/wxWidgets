@@ -60,6 +60,8 @@ static void gtk_pizza_draw          (GtkWidget        *widget,
 #endif /* __WXGTK20__ */
 static gint gtk_pizza_expose        (GtkWidget        *widget,
                                      GdkEventExpose   *event);
+static void gtk_pizza_style_set     (GtkWidget *widget,
+                                     GtkStyle  *previous_style);
 static void gtk_pizza_add           (GtkContainer     *container,
                                      GtkWidget        *widget);
 static void gtk_pizza_remove        (GtkContainer     *container,
@@ -164,6 +166,7 @@ gtk_pizza_class_init (GtkPizzaClass *klass)
     widget_class->draw = gtk_pizza_draw;
 #endif
     widget_class->expose_event = gtk_pizza_expose;
+    widget_class->style_set = gtk_pizza_style_set;
 
     container_class->add = gtk_pizza_add;
     container_class->remove = gtk_pizza_remove;
@@ -587,7 +590,7 @@ gtk_pizza_realize (GtkWidget *widget)
     widget->style = gtk_style_attach (widget->style, widget->window);
     gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
     gtk_style_set_background (widget->style, pizza->bin_window, GTK_STATE_NORMAL );
-    
+ 
 /*
     gdk_window_set_back_pixmap( widget->window, NULL, FALSE );
     gdk_window_set_back_pixmap( pizza->bin_window, NULL, FALSE );
@@ -805,6 +808,18 @@ gtk_pizza_expose (GtkWidget      *widget,
     return TRUE;
     
 #endif
+}
+
+static void
+gtk_pizza_style_set(GtkWidget *widget, GtkStyle  *previous_style)
+{
+    if (GTK_WIDGET_REALIZED(widget))
+    {
+        gtk_style_set_background(widget->style, widget->window, GTK_STATE_NORMAL);
+        gtk_style_set_background(widget->style, GTK_PIZZA(widget)->bin_window, GTK_STATE_NORMAL );
+    }
+
+    (* GTK_WIDGET_CLASS (pizza_parent_class)->style_set) (widget, previous_style);
 }
 
 static void
