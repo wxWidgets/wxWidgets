@@ -1671,7 +1671,11 @@ void wxWindowMSW::GetTextExtent(const wxString& string,
     wxASSERT_MSG( !theFont || theFont->Ok(),
                     _T("invalid font in GetTextExtent()") );
 
-    const wxFont fontToUse(theFont ? *theFont : GetFont());
+    wxFont fontToUse;
+    if (theFont)
+        fontToUse = *theFont;
+    else
+        fontToUse = GetFont();
 
     WindowHDC hdc(GetHwnd());
     SelectInHDC selectFont(hdc, GetHfontOf(fontToUse));
