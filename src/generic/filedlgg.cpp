@@ -1540,50 +1540,98 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
 // global functions
 // ----------------------------------------------------------------------------
 
-wxString
-wxFileSelectorEx(const wxChar *message,
-                 const wxChar *default_path,
-                 const wxChar *default_filename,
-                 int *WXUNUSED(indexDefaultExtension),
-                 const wxChar *wildcard,
-                 int flags,
-                 wxWindow *parent,
-                 int x, int y)
+// common part of both wxFileSelectorEx() and wxFileSelector()
+static wxString
+DoSelectFile(const wxChar *title,
+             const wxChar *defaultDir,
+             const wxChar *defaultFileName,
+             const wxChar *defaultExtension,
+             int *indexDefaultExtension,
+             const wxChar *filter,
+             int flags,
+             wxWindow *parent,
+             int x,
+             int y)
 {
-    // TODO: implement this somehow
-    return wxFileSelector(message, default_path, default_filename, wxT(""),
-                          wildcard, flags, parent, x, y);
-}
+    // the filter may be either given explicitly or created automatically from
+    // the default extension
+    wxString filterReal;
+    if ( filter )
+    {
+        // the user has specified the filter explicitly, use it
+        filterReal = filter;
+    }
+    else if ( !wxIsEmpty(defaultExtension) )
+    {
+        // create the filter to match the given extension
+        filterReal << wxT("*.") << defaultExtension;
+    }
 
-wxString wxFileSelector( const wxChar *title,
-                      const wxChar *defaultDir, const wxChar *defaultFileName,
-                      const wxChar *defaultExtension, const wxChar *filter, int flags,
-                      wxWindow *parent, int x, int y )
-{
-    wxString filter2;
-    if ( defaultExtension && !filter )
-        filter2 = wxString(wxT("*.")) + wxString(defaultExtension) ;
-    else if ( filter )
-        filter2 = filter;
+    wxFileDialog fileDialog(parent,
+                            title,
+                            defaultDir,
+                            defaultFileName,
+                            filterReal,
+                            flags,
+                            wxPoint(x, y));
 
-    wxString defaultDirString;
-    if (defaultDir)
-        defaultDirString = defaultDir;
-
-    wxString defaultFilenameString;
-    if (defaultFileName)
-        defaultFilenameString = defaultFileName;
-
-    wxFileDialog fileDialog( parent, title, defaultDirString, defaultFilenameString, filter2, flags, wxPoint(x, y) );
-
+    wxString path;
     if ( fileDialog.ShowModal() == wxID_OK )
     {
-        return fileDialog.GetPath();
+        path = fileDialog.GetPath();
+        if ( indexDefaultExtension )
+        {
+            *indexDefaultExtension = fileDialog.GetFilterIndex();
+        }
     }
-    else
-    {
-        return wxEmptyString;
-    }
+
+    return path;
+}
+
+wxString
+wxFileSelectorEx(const wxChar *title,
+                 const wxChar *defaultDir,
+                 const wxChar *defaultFileName,
+                 int *indexDefaultExtension,
+                 const wxChar *filter,
+                 int flags,
+                 wxWindow *parent,
+                 int x,
+                 int y)
+{
+    return DoSelectFile(title,
+                        defaultDir,
+                        defaultFileName,
+                        wxT(""),                // def ext determined by index
+                        indexDefaultExtension,
+                        filter,
+                        flags,
+                        parent,
+                        x,
+                        y);
+}
+
+wxString
+wxFileSelector(const wxChar *title,
+               const wxChar *defaultDir,
+               const wxChar *defaultFileName,
+               const wxChar *defaultExtension,
+               const wxChar *filter,
+               int flags,
+               wxWindow *parent,
+               int x,
+               int y)
+{
+    return DoSelectFile(title,
+                        defaultDir,
+                        defaultFileName,
+                        defaultExtension,
+                        NULL,               // not interested in filter index
+                        filter,
+                        flags,
+                        parent,
+                        x,
+                        y);
 }
 
 static wxString GetWildcardString(const wxChar *ext)
