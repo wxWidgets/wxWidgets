@@ -325,52 +325,93 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
          m_IfconfigPath = "/usr/sbin/ifconfig";
    }
 
+   wxLogNull ln; // suppress all error messages
    // Let´s try the ifconfig method first, should be fastest:
    if(m_CanUseIfconfig != 0) // unknown or yes
    {
       wxASSERT(m_IfconfigPath.length());
-
+      
       wxString tmpfile = wxGetTempFileName("_wxdialuptest");
-      wxString cmd = m_IfconfigPath;
-      cmd << " >" << tmpfile;
-      if(wxExecute(m_IfconfigPath,TRUE /* sync */) == 0)
+      wxString cmd = "/bin/sh -c \'";
+      cmd << m_IfconfigPath << " >" << tmpfile <<  '\'';
+      /* I tried to add an option to wxExecute() to not close stdout,
+         so we could let ifconfig write directly to the tmpfile, but
+         this does not work. That should be faster, as it doesn´t call 
+         the shell first. I have no idea why. :-(  (KB) */
+#if 0
+      // temporarily redirect stdout/stderr:
+      int
+         new_stdout = dup(STDOUT_FILENO),
+         new_stderr = dup(STDERR_FILENO);
+      close(STDOUT_FILENO);
+      close(STDERR_FILENO);
+
+      int
+         // new stdout:
+         output_fd = open(tmpfile, O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR),
+         // new stderr:
+         null_fd = open("/dev/null", O_CREAT, S_IRUSR|S_IWUSR);
+      // verify well behaved unix behaviour:
+      wxASSERT(output_fd == STDOUT_FILENO);
+      wxASSERT(null_fd == STDERR_FILENO);
+      int rc = wxExecute(m_IfconfigPath,TRUE /* sync */,NULL ,wxEXECUTE_DONT_CLOSE_FDS);
+      close(null_fd); close(output_fd);
+      // restore old stdout, stderr:
+      int test;
+      test = dup(new_stdout); close(new_stdout); wxASSERT(test == STDOUT_FILENO);
+      test = dup(new_stderr); close(new_stderr); wxASSERT(test == STDERR_FILENO);
+      if(rc == 0)
+#endif
+      if(wxExecute(cmd,TRUE /* sync */) == 0)
       {
          m_CanUseIfconfig = 1;
-         wxString cmd1 = "grep ppp <"+tmpfile;  // PPP
-         wxString cmd2 = "grep sl <"+tmpfile;   // SLIP
-         wxString cmd3 = "grep pl <"+tmpfile;   // PLIP
-         if(wxExecute(cmd1,TRUE) == 0
-            || wxExecute(cmd2,TRUE) == 0
-            || wxExecute(cmd3,TRUE) == 0
-            )
-            m_IsOnline = 1;
+         wxFile file;
+         if( file.Open(tmpfile) )
+         {
+            char *output = new char [file.Length()+1];
+            output[file.Length()] = '\0';
+            if(file.Read(output,file.Length()) == file.Length())
+            {
+               if(strstr(output,"ppp")   // ppp
+                  || strstr(output,"sl") // slip
+                  || strstr(output,"pl") // plip
+                  )
+                  m_IsOnline = 1;
+               else
+                  m_IsOnline = 0;
+            }
+            file.Close();
+            delete [] output;
+         }
+         // else m_IsOnline remains -1 as we don't know for sure
       }
       else // could not run ifconfig correctly
          m_CanUseIfconfig = 0; // don´t try again
-      wxRemoveFile(tmpfile);
+      (void) wxRemoveFile(tmpfile);
       if(m_IsOnline != -1) // we are done
          return;
    }
 
    // second method: try to connect to well known host:
+   // This can be used under Win 9x, too!
    struct hostent     *hp;
    struct sockaddr_in  serv_addr;
-   int    sockfd;
+   int	sockfd;
 
    m_IsOnline = 0; // assume false
    if((hp = gethostbyname(m_BeaconHost)) == NULL)
       return; // no DNS no net
-
-   serv_addr.sin_family        = hp->h_addrtype;
+   
+   serv_addr.sin_family		= hp->h_addrtype;
    memcpy(&serv_addr.sin_addr,hp->h_addr, hp->h_length);
-   serv_addr.sin_port        = htons(m_BeaconPort);
-   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0)
-   {
+   serv_addr.sin_port		= htons(m_BeaconPort);
+   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0) 
+   {	
       //  sys_error("cannot create socket for gw");
       return;
    }
    if( connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
-   {
+   {	
       //sys_error("cannot connect to server");
       return;
    }
