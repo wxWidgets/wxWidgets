@@ -29,6 +29,7 @@
 #include "gtk/gtk.h"
 #include "wx/gtk/win_gtk.h"
 #include "gdk/gdkkeysyms.h"
+#include "gdk/gdkx.h"
 
 //-----------------------------------------------------------------------------
 // constants
@@ -1043,3 +1044,25 @@ void wxFrame::SetIcon( const wxIcon &icon )
     gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
 }
 
+void wxFrame::Maximize(bool WXUNUSED(maximize)) 
+{
+}
+
+void wxFrame::Restore() 
+{
+}
+
+void wxFrame::Iconize( bool iconize ) 
+{ 
+   if (iconize)
+   {
+        XIconifyWindow( GDK_WINDOW_XDISPLAY( m_widget->window ),
+	                GDK_WINDOW_XWINDOW( m_widget->window ),
+			DefaultScreen( GDK_DISPLAY() ) );
+   }
+}
+
+bool wxFrame::IsIconized() const 
+{ 
+    return FALSE; 
+}

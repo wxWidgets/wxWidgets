@@ -33,7 +33,7 @@ class wxFileInputStream: public wxInputStream {
   ~wxFileInputStream();
 
   char Peek();
-  size_t StreamSize() const;
+  size_t GetSize() const;
 
   bool Ok() const { return m_file->IsOpened(); }
 
@@ -61,7 +61,7 @@ class wxFileOutputStream: public wxOutputStream {
 //     { return wxOutputStream::Write(buffer, size); }
 
   void Sync();
-  size_t StreamSize() const;
+  size_t GetSize() const;
 
   bool Ok() const { return m_file->IsOpened(); }
 

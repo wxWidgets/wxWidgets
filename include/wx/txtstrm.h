@@ -43,6 +43,9 @@ public:
 
  protected:
   wxInputStream *m_input;
+  
+  wxChar NextNonWhiteSpace();
+  void SkipIfEndOfLine( wxChar c );
 };
 
 class WXDLLEXPORT wxTextOutputStream {
@@ -55,7 +58,7 @@ class WXDLLEXPORT wxTextOutputStream {
   void Write8(wxUint8 i);
   void WriteDouble(double d);
   void WriteString(const wxString& string);
-
+  
   wxTextOutputStream& operator<<(const wxChar *string);
   wxTextOutputStream& operator<<(const wxString& string);
   wxTextOutputStream& operator<<(wxChar c);

@@ -67,7 +67,7 @@ char wxFileInputStream::Peek()
   return 0;
 }
 
-size_t wxFileInputStream::StreamSize() const
+size_t wxFileInputStream::GetSize() const
 {
   return m_file->Length();
 }
@@ -161,7 +161,7 @@ void wxFileOutputStream::Sync()
   m_file->Flush();
 }
 
-size_t wxFileOutputStream::StreamSize() const
+size_t wxFileOutputStream::GetSize() const
 {
   return m_file->Length();
 }

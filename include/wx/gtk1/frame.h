@@ -91,11 +91,11 @@ public:
     virtual void MakeModal(bool modal = TRUE);
 
     virtual void SetIcon( const wxIcon &icon );
-    virtual void Iconize( bool WXUNUSED(iconize)) { }
-    virtual bool IsIconized() const { return FALSE; }
     bool Iconized() const { return IsIconized(); }
-    virtual void Maximize(bool WXUNUSED(maximize)) {}
-    virtual void Restore() {}
+    virtual void Maximize( bool maximize );
+    virtual void Restore();
+    virtual void Iconize( bool iconize );
+    virtual bool IsIconized() const;
 
     virtual void Command( int id );
     

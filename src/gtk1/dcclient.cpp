@@ -1010,7 +1010,7 @@ void wxWindowDC::SetBrush( const wxBrush &brush )
     if ((m_brush.GetStyle() == wxSTIPPLE) && (m_brush.GetStipple()->Ok()))
     {
         if (m_brush.GetStipple()->GetPixmap())
-            gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetPixmap() );
+            gdk_gc_set_tile( m_brushGC, m_brush.GetStipple()->GetPixmap() );
         else
             gdk_gc_set_stipple( m_brushGC, m_brush.GetStipple()->GetBitmap() );
     }
@@ -1055,9 +1055,12 @@ void wxWindowDC::SetBackground( const wxBrush &brush )
  
     gdk_gc_set_fill( m_bgGC, fillStyle );
   
-    if (m_backgroundBrush.GetStyle() == wxSTIPPLE)
+    if ((m_backgroundBrush.GetStyle() == wxSTIPPLE) && (m_backgroundBrush.GetStipple()->Ok()))
     {
-        gdk_gc_set_stipple( m_bgGC, m_backgroundBrush.GetStipple()->GetPixmap() );
+        if (m_brush.GetStipple()->GetPixmap())
+            gdk_gc_set_tile( m_bgGC, m_brush.GetStipple()->GetPixmap() );
+        else
+            gdk_gc_set_stipple( m_bgGC, m_brush.GetStipple()->GetBitmap() );
     }
   
     if (IS_HATCH(m_backgroundBrush.GetStyle()))

@@ -55,8 +55,9 @@ class WXDLLEXPORT wxStreamBase {
   wxStreamBase();
   virtual ~wxStreamBase();
 
+  bool operator!() const { return (LastError() != wxSTR_NOERROR); }
   wxStreamError LastError() const { return m_lasterror; }
-  virtual size_t StreamSize() const { return ~((size_t)0); }
+  virtual size_t GetSize() const { return ~((size_t)0); }
 
  protected:
 
@@ -147,7 +148,7 @@ class WXDLLEXPORT wxFilterInputStream: public wxInputStream {
   char Peek() { return m_parent_i_stream->Peek(); }
 
   wxStreamError LastError() const { return m_parent_i_stream->LastError(); }
-  size_t StreamSize() const { return m_parent_i_stream->StreamSize(); }
+  size_t GetSize() const { return m_parent_i_stream->GetSize(); }
 
  protected:
   wxInputStream *m_parent_i_stream;
@@ -160,7 +161,7 @@ class WXDLLEXPORT wxFilterOutputStream: public wxOutputStream {
   ~wxFilterOutputStream();
 
   wxStreamError LastError() const { return m_parent_o_stream->LastError(); }
-  size_t StreamSize() const { return m_parent_o_stream->StreamSize(); }
+  size_t GetSize() const { return m_parent_o_stream->GetSize(); }
 
  protected:
   wxOutputStream *m_parent_o_stream;

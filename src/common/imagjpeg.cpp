@@ -106,10 +106,10 @@ void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
         src = (my_src_ptr) cinfo->src;
     }
     src = (my_src_ptr) cinfo->src;
-    src->pub.bytes_in_buffer = infile.StreamSize(); /* forces fill_input_buffer on first read */
-    src->buffer = (JOCTET *) malloc (infile.StreamSize());
+    src->pub.bytes_in_buffer = infile.GetSize(); /* forces fill_input_buffer on first read */
+    src->buffer = (JOCTET *) malloc (infile.GetSize());
     src->pub.next_input_byte = src->buffer; /* until buffer loaded */
-    infile.Read(src->buffer, infile.StreamSize());
+    infile.Read(src->buffer, infile.GetSize());
     
     src->pub.init_source = my_init_source;
     src->pub.fill_input_buffer = my_fill_input_buffer;

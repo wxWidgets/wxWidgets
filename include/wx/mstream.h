@@ -22,7 +22,7 @@ class wxMemoryInputStream: public wxInputStream {
  public:
   wxMemoryInputStream(const char *data, size_t length);
   virtual ~wxMemoryInputStream();
-  virtual size_t StreamSize() const { return m_length; }
+  virtual size_t GetSize() const { return m_length; }
 
   char Peek();
 
@@ -41,7 +41,7 @@ class wxMemoryOutputStream:  public wxOutputStream {
  public:
   wxMemoryOutputStream(char *data = NULL, size_t length = 0);
   virtual ~wxMemoryOutputStream();
-  virtual size_t StreamSize() const { return m_o_streambuf->GetLastAccess(); }
+  virtual size_t GetSize() const { return m_o_streambuf->GetLastAccess(); }
 
   wxStreamBuffer *OutputStreamBuffer() const { return m_o_streambuf; }
 
