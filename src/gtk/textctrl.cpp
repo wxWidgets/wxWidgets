@@ -1057,6 +1057,36 @@ void wxTextCtrl::ShowPosition( long pos )
     }
 }
 
+#ifdef __WXGTK20__
+
+wxTextCtrlHitTestResult
+wxTextCtrl::HitTest(const wxPoint& pt, long *pos) const
+{
+    if ( !IsMultiLine() )
+    {
+        // not supported
+        return wxTE_HT_UNKNOWN;
+    }
+
+    int x, y;
+    gtk_text_view_window_to_buffer_coords
+    (
+        GTK_TEXT_VIEW(m_text),
+        GTK_TEXT_WINDOW_TEXT,
+        pt.x, pt.y,
+        &x, &y
+    );
+
+    GtkTextIter iter;
+    gtk_text_view_get_iter_at_location(GTK_TEXT_VIEW(m_text), &iter, x, y);
+    if ( pos )
+        *pos = gtk_text_iter_get_offset(&iter);
+
+    return wxTE_HT_ON_TEXT;
+}
+
+#endif // __WXGTK20__
+
 long wxTextCtrl::GetInsertionPoint() const
 {
     wxCHECK_MSG( m_text != NULL, 0, wxT("invalid text ctrl") );

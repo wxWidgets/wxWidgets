@@ -2952,6 +2952,18 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
     return res;
 }
 
+wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pt, long *pos) const
+{
+    wxTextCoord x, y;
+    wxTextCtrlHitTestResult rc = HitTest(pt, &x, &y);
+    if ( rc != wxTE_HT_UNKNOWN && pos )
+    {
+        *pos = XYToPosition(x, y);
+    }
+
+    return rc;
+}
+
 wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pos,
                                             wxTextCoord *colOut,
                                             wxTextCoord *rowOut) const

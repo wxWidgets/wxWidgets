@@ -191,6 +191,7 @@ public:
     void RemoveSelection();
     wxString GetSelectionText() const;
 
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const;
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                             wxTextCoord *col,
                                             wxTextCoord *row) const;

@@ -662,15 +662,24 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
             msg = GetMouseEventDesc(ev);
         }
 
-        msg << _T(" at (") << ev.GetX() << _T(", ") << ev.GetY() << _T(") ")
-            << _T("Flags: ")
+        msg << _T(" at (") << ev.GetX() << _T(", ") << ev.GetY() << _T(") ");
+
+        long pos;
+        wxTextCtrlHitTestResult rc = HitTest(ev.GetPosition(), &pos);
+        if ( rc != wxTE_HT_UNKNOWN )
+        {
+            msg << _T("at position ") << pos;
+        }
+
+        msg << _T("[Flags: ")
             << GetChar( ev.LeftIsDown(), _T('1') )
             << GetChar( ev.MiddleIsDown(), _T('2') )
             << GetChar( ev.RightIsDown(), _T('3') )
             << GetChar( ev.ControlDown(), _T('C') )
             << GetChar( ev.AltDown(), _T('A') )
             << GetChar( ev.ShiftDown(), _T('S') )
-            << GetChar( ev.MetaDown(), _T('M') );
+            << GetChar( ev.MetaDown(), _T('M') )
+            << _T(']');
 
         wxLogMessage(msg);
     }

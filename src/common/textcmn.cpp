@@ -496,9 +496,25 @@ void wxTextCtrlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 // ----------------------------------------------------------------------------
 
 wxTextCtrlHitTestResult
+wxTextCtrlBase::HitTest(const wxPoint& pt, wxTextCoord *x, wxTextCoord *y) const
+{
+    // implement in terms of the other overload as the native ports typically
+    // can get the position and not (x, y) pair directly (although wxUniv
+    // directly gets x and y -- and so overrides this method as well)
+    long pos;
+    wxTextCtrlHitTestResult rc = HitTest(pt, &pos);
+
+    if ( rc != wxTE_HT_UNKNOWN )
+    {
+        PositionToXY(pos, x, y);
+    }
+
+    return rc;
+}
+
+wxTextCtrlHitTestResult
 wxTextCtrlBase::HitTest(const wxPoint& WXUNUSED(pt),
-                        wxTextCoord * WXUNUSED(col),
-                        wxTextCoord * WXUNUSED(row)) const
+                        long * WXUNUSED(pos)) const
 {
     // not implemented
     return wxTE_HT_UNKNOWN;

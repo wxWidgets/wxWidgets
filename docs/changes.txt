@@ -226,16 +226,17 @@ Unix:
 
 wxGTK:
 
+- wxGTK uses GTK+ 2.x by default now, you have to pass --disable-gtk2 to
+  configure if you want to use GTK+ 1.2
 - fixed many rendering artifacts and wrong colours with lots of GTK+ themes
 - implemented wxColourDialog as native dialog
+- implemented wxTextCtrl::HitTest() (GTK+ >= 2)
 - wxTreeCtrl::GetCount() counts root as well now (compatible with MSW)
 - added support for wxCHK_3STATE style (GTK2 only)
 - implemented text underlining under GTK2
 - implemented wxFRAME_NO_TASKBAR style (GTK >= 2.2)
 - implemented support for wxSYS_DCLICK_?, wxSYS_DRAG_? and wxSYS_CURSOR_?
   in wxSystemSettings::GetMetric (Mart Raudsepp)
-- wxGTK uses GTK+ 2.x by default now, you have to pass --disable-gtk2 to
-  configure if you want to use GTK+ 1.2
 - implemented wxTopLevel::IsMaximized() for GTK+2 and WMs that implement
   freedesktop.org's wm-spec (Mart Raudsepp)
 

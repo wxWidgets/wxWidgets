@@ -330,6 +330,7 @@ public:
     //
     // NB: pt is in device coords (not adjusted for the client area origin nor
     //     scrolling)
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const;
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                             wxTextCoord *col,
                                             wxTextCoord *row) const;
