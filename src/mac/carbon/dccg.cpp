@@ -105,6 +105,20 @@ wxMacWindowStateSaver::~wxMacWindowStateSaver()
     SetThemeDrawingState( m_themeDrawingState , true ) ;
 }
 
+// minimal implementation only used for appearance drawing < 10.3
+
+wxMacPortSetter::wxMacPortSetter( const wxDC* dc ) :
+    m_ph( (GrafPtr) dc->m_macPort )
+{
+    wxASSERT( dc->Ok() ) ;
+    m_dc = dc ;
+//    dc->MacSetupPort(&m_ph) ;
+}
+wxMacPortSetter::~wxMacPortSetter()
+{
+//    m_dc->MacCleanupPort(&m_ph) ;
+}
+
 //-----------------------------------------------------------------------------
 // Local functions
 //-----------------------------------------------------------------------------
@@ -1228,7 +1242,7 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     }
 
     wxMemoryDC* memdc = dynamic_cast<wxMemoryDC*>(source) ;
-    if ( memdc )
+    if ( memdc && logical_func == wxCOPY )
     {
         wxBitmap blit = memdc->GetSelectedObject() ;
         wxASSERT_MSG( blit.Ok() , wxT("Invalid bitmap for blitting") ) ;
@@ -1256,7 +1270,7 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     }
     else
     {
-        wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts") ) ;
+        return FALSE ; // wxFAIL_MSG( wxT("Blitting is only supported from bitmap contexts") ) ;
     }
     return TRUE;
 }
