@@ -82,7 +82,17 @@ bool wxInternetFSHandler::CanOpen(const wxString& location)
 
 wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
-    wxString right = GetProtocol(location) + wxT(":") + GetRightLocation(location);
+    wxString myloc(GetRightLocation(location));
+    
+    // fix malformed url:
+    if (myloc.Left(2) != wxT("//")) 
+    {
+        if (myloc[0] != wxT('/')) myloc = wxT("//") + myloc;
+        else myloc = wxT("/") + myloc;
+    }
+    if (myloc.Mid(2).Find(wxT('/')) == wxNOT_FOUND) myloc << wxT('/');
+
+    wxString right = GetProtocol(location) + wxT(":") + myloc;
     wxInputStream *s;
     wxString content;
     wxInetCacheNode *info;
