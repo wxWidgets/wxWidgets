@@ -1327,7 +1327,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 	long yy = YLOG2DEVMAC(y);
 #if TARGET_CARBON
 	bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
-	if ( m_font.GetNoAntiAliasing() )
+	if ( IsKindOf(CLASSINFO( wxPrinterDC ) ) ||  m_font.GetNoAntiAliasing() )
 	    useDrawThemeText = false ;
 #endif
 	MacInstallFont() ;
@@ -1474,7 +1474,7 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
 	::GetFontInfo( &fi ) ;
 #if TARGET_CARBON	
 	bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
-	if ( ((wxFont*)&m_font)->GetNoAntiAliasing() )
+	if ( IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
 	    useGetThemeText = false ;
 #endif
 	if ( height )
