@@ -26,7 +26,9 @@ wxPen, wxBitmap and others.
 
 \func{}{wxObject}{\void}
 
-Default constructor.
+\func{}{wxObject}{\param{const wxObject\&}{ other}}
+
+Default and copy constructors.
 
 \membersection{wxObject::\destruct{wxObject}}
 
@@ -48,19 +50,15 @@ Pointer to an object which is the object's reference-counted data.
 \helpref{wxObject::GetRefData}{wxobjectgetrefdata},\rtfsp
 \helpref{wxObjectRefData}{wxobjectrefdata}
 
-\membersection{wxObject::CopyObject}\label{wxobjectcopyobject}
-
-\func{virtual void}{CopyObject}{\param{wxObject\&}{ object\_dest}}
-
-Create a copy of this object in object\_dest. Must perform a full copy of self
-so that object\_dest will be valid after this object is deleted
-
 \membersection{wxObject::Dump}\label{wxobjectdump}
 
 \func{void}{Dump}{\param{ostream\&}{ stream}}
 
-A virtual function that should be redefined by derived classes to allow dumping of
+A virtual function that may be redefined by derived classes to allow dumping of
 memory states.
+
+This function is only defined in debug build and doesn't exist at all if
+{\tt \_\_WXDEBUG\_\_} is not defined.
 
 \wxheading{Parameters}
 
@@ -70,10 +68,11 @@ memory states.
 
 Currently wxWindows does not define Dump for derived classes, but
 programmers may wish to use it for their own applications. Be sure to
-call the Dump member of the class's base class to allow all information to be dumped.
+call the Dump member of the class's base class to allow all information to be
+dumped.
 
-The implementation of this function just writes the class name of the object
-in debug build (\_\_WXDEBUG\_\_ defined), otherwise it does nothing.
+The implementation of this function in wxObject just writes the class name of
+the object.
 
 \membersection{wxObject::GetClassInfo}\label{wxobjectgetclassinfo}
 
