@@ -373,6 +373,9 @@ Platform: %s""" % (VERSION, self.revision, self.interp.revision,
 
     def OnUpdateUI(self, event):
         """Check for matching braces."""
+        # If the auto-complete window is up let it do its thing.
+        if self.AutoCompActive():
+            return
         braceAtCaret = -1
         braceOpposite = -1
         charBefore = None
@@ -431,17 +434,20 @@ Platform: %s""" % (VERSION, self.revision, self.interp.revision,
             # Add the autocomplete character to the end of the command.
             command = self.GetTextRange(stoppos, currpos) + chr(key)
             self.write(chr(key))
-            if self.autoComplete: self.autoCompleteShow(command)
+            if self.autoComplete: 
+                self.autoCompleteShow(command)
         elif key == ord('('):
             # The left paren activates a call tip and cancels
             # an active auto completion.
-            if self.AutoCompActive(): self.AutoCompCancel()
+            if self.AutoCompActive(): 
+                self.AutoCompCancel()
             # Get the command between the prompt and the cursor.
             # Add the '(' to the end of the command.
             self.ReplaceSelection('')
             command = self.GetTextRange(stoppos, currpos) + '('
             self.write('(')
-            if self.autoCallTip: self.autoCallTipShow(command)
+            if self.autoCallTip: 
+                self.autoCallTipShow(command)
         else:
             # Allow the normal event handling to take place.
             event.Skip()
@@ -449,6 +455,10 @@ Platform: %s""" % (VERSION, self.revision, self.interp.revision,
     def OnKeyDown(self, event):
         """Key down event handler."""
 
+        # If the auto-complete window is up let it do its thing.
+        if self.AutoCompActive():
+            event.Skip()
+            return
         # Prevent modification of previously submitted commands/responses.
         key = event.KeyCode()
         controlDown = event.ControlDown()
@@ -459,20 +469,17 @@ Platform: %s""" % (VERSION, self.revision, self.interp.revision,
         selecting = self.GetSelectionStart() != self.GetSelectionEnd()
         # Return (Enter) is used to submit a command to the interpreter.
         if not controlDown and key == wx.WXK_RETURN:
-            if self.AutoCompActive(): self.AutoCompCancel()
-            if self.CallTipActive(): self.CallTipCancel()
+            if self.CallTipActive(): 
+                self.CallTipCancel()
             self.processLine()
         # Ctrl+Return (Cntrl+Enter) is used to insert a line break.
         elif controlDown and key == wx.WXK_RETURN:
-            if self.AutoCompActive(): self.AutoCompCancel()
-            if self.CallTipActive(): self.CallTipCancel()
+            if self.CallTipActive(): 
+                self.CallTipCancel()
             if currpos == endpos:
                 self.processLine()
             else:
                 self.insertLineBreak()
-        # If the auto-complete window is up let it do its thing.
-        elif self.AutoCompActive():
-            event.Skip()
         # Let Ctrl-Alt-* get handled normally.
         elif controlDown and altDown:
             event.Skip()
@@ -901,7 +908,7 @@ Platform: %s""" % (VERSION, self.revision, self.interp.revision,
                     includeMagic=self.autoCompleteIncludeMagic, 
                     includeSingle=self.autoCompleteIncludeSingle, 
                     includeDouble=self.autoCompleteIncludeDouble)
-        if list:
+        if list and len(list) < 2000:
             options = ' '.join(list)
             offset = 0
             self.AutoCompShow(offset, options)
