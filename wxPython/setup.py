@@ -273,7 +273,8 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
 
                 if BUILD_RENAMERS:
                     # first run build_renamers
-                    cmd = [ sys.executable, './distrib/build_renamers.py',
+                    cmd = [ sys.executable, '-u',
+                            './distrib/build_renamers.py',
                             i_file, '-D'+WXPLAT, ]
                     msg(' '.join(cmd))
                     spawn(cmd)
@@ -662,7 +663,6 @@ swig_sources = run_swig(['core.i'], 'src', GENDIR, PKGDIR,
                           'src/_filesys.i',
                           'src/_gdicmn.i',
                           'src/_image.i',
-                          'src/_intl.i',
                           'src/_menu.i',
                           'src/_obj.i',
                           'src/_sizers.i',
@@ -725,6 +725,8 @@ swig_sources = run_swig(['gdi.i'], 'src', GENDIR, PKGDIR,
                          'src/_region.i',           'src/_palette.i',
                          'src/_stockobjs.i',        'src/_dragimg.i',
                          'src/_effects.i',
+                          'src/_intl.i',
+                          'src/_intl_ex.py',
                           ])
 ext = Extension('_gdi', ['src/drawlist.cpp'] + swig_sources,
                 include_dirs =  includes,
