@@ -24,6 +24,12 @@
 #include <wx/wx.h>
 #include <wx/dnd.h>
 
+#ifdef STCISDLL
+#define STCDLLEXPORT WXDLLEXPORT
+#else
+#define STCDLLEXPORT
+#endif
+
 //----------------------------------------------------------------------
 
 // Should a wxPopupWindow be used for the call tips and autocomplete windows?
@@ -45,8 +51,11 @@ class  ScintillaWX;                      // forward declare
 class  WordList;
 struct SCNotification;
 
-
-extern const wxChar* wxSTCNameStr;
+#ifndef SWIG
+extern STCDLLEXPORT const wxChar* wxSTCNameStr;
+class STCDLLEXPORT wxStyledTextCtrl;
+class STCDLLEXPORT wxStyledTextEvent;
+#endif
 
 //----------------------------------------------------------------------
 
@@ -210,7 +219,7 @@ private:
 
 //----------------------------------------------------------------------
 
-// SWIG can't handle "#if" type of conditionals, onlu "#ifdef"
+// SWIG can't handle "#if" type of conditionals, only "#ifdef"
 #ifdef SWIG
 #define STC_USE_DND 1
 #else
