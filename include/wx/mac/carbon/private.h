@@ -118,9 +118,9 @@ WXDLLEXPORT void wxMacFilename2FSSpec( const wxChar *path , FSSpec *spec ) ;
 #  ifndef __DARWIN__
 // Mac file names are POSIX (Unix style) under Darwin, so these are not needed
 WXDLLEXPORT wxString wxMacFSSpec2UnixFilename( const FSSpec *spec ) ;
-WXDLLEXPORT void wxUnixFilename2FSSpec( const char *path , FSSpec *spec ) ;
-WXDLLEXPORT wxString wxMac2UnixFilename( const char *s) ;
-WXDLLEXPORT wxString wxUnix2MacFilename( const char *s);
+WXDLLEXPORT void wxUnixFilename2FSSpec( const wxChar *path , FSSpec *spec ) ;
+WXDLLEXPORT wxString wxMac2UnixFilename( const wxChar *s) ;
+WXDLLEXPORT wxString wxUnix2MacFilename( const wxChar *s);
 #  endif
 
 // utils.h
