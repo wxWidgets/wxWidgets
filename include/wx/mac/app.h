@@ -58,6 +58,10 @@ class WXDLLEXPORT wxApp: public wxAppBase
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
     
+#if wxUSE_GUI
+    // setting up all MacOS Specific Event-Handlers etc
+    virtual bool OnInitGui();
+#endif // wxUSE_GUI
     // implementation only
     void OnIdle(wxIdleEvent& event);
     void OnEndSession(wxCloseEvent& event);
@@ -86,10 +90,12 @@ public:
     static bool Initialize();
     static void CleanUp();
     
-    virtual bool OnInit();
     void DeletePendingObjects();
     bool IsExiting() { return !m_keepGoing ; }
-    
+#if TARGET_CARBON
+	WXEVENTHANDLERREF	MacGetEventHandler() { return m_macEventHandler ; }
+#endif
+
 public:
     static long           sm_lastMessageTime;
     static wxWindow*      s_captureWindow ;
@@ -106,6 +112,11 @@ protected:
     // mac specifics
 
 public:
+#if TARGET_CARBON
+	// public to avoid change in initialization order of handlers
+	// could be moved into a override of OnInitGui eventually
+	WXEVENTHANDLERREF	  m_macEventHandler ;
+#endif
     static bool           s_macDefaultEncodingIsPC ;
     static bool           s_macSupportPCMenuShortcuts ;
     static long           s_macAboutMenuItemId ;
@@ -130,10 +141,20 @@ public:
     
     virtual void          MacSuspend( bool convertClipboard ) ;
     virtual void          MacResume( bool convertClipboard ) ;
-
     virtual void          MacConvertPrivateToPublicScrap() ;
     virtual void          MacConvertPublicToPrivateScrap() ;
+    
+#if !TARGET_CARBON
+    virtual void          MacHandleMenuSelect( int menuid , int menuitem ) ;
+    virtual void          MacHandleMouseUpEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleOSEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleDiskEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleActivateEvent( WXEVENTREF ev ) ;
+    virtual void          MacHandleUpdateEvent( WXEVENTREF ev ) ;
+#endif
+    virtual void          MacHandleMouseDownEvent( WXEVENTREF ev ) ;
 
+    void				  MacHandleMenuCommand( wxUint32 command ) ;
     // event main methods
 
     void                  MacDoOneEvent() ;
@@ -143,16 +164,9 @@ public:
   
     // primary events
 	
-    virtual void          MacHandleMouseDownEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleMouseUpEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleActivateEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleUpdateEvent( WXEVENTREF ev ) ;
     virtual void          MacHandleKeyDownEvent( WXEVENTREF ev ) ;
     virtual void          MacHandleKeyUpEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleDiskEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleOSEvent( WXEVENTREF ev ) ;
     virtual void          MacHandleHighLevelEvent( WXEVENTREF ev ) ;
-    virtual void          MacHandleMenuSelect( int menuid , int menuitem ) ;
     
     virtual bool          MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
     virtual bool          MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;

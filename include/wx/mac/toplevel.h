@@ -75,13 +75,15 @@ public:
     virtual void Clear() ;
     virtual WXWidget MacGetContainerForEmbedding() ;
     WXWindow MacGetWindowRef() { return m_macWindow ; }
-    virtual void MacActivate( WXEVENTREF ev , bool inIsActivating ) ;
+    virtual void MacActivate( long timestamp , bool inIsActivating ) ;
     virtual void MacUpdate( long timestamp ) ;
+#if !TARGET_CARBON
     virtual void MacMouseDown( WXEVENTREF ev , short windowPart ) ;
     virtual void MacMouseUp( WXEVENTREF ev , short windowPart ) ;
     virtual void MacMouseMoved( WXEVENTREF ev , short windowPart ) ;
     virtual void MacKeyDown( WXEVENTREF ev ) ;
-    virtual void MacFireMouseEvent( WXEVENTREF ev ) ;
+#endif
+    virtual void MacFireMouseEvent( wxUint16 kind , wxInt32 x , wxInt32 y ,wxUint32 modifiers , long timestamp ) ;
     virtual void Raise();
     virtual void Lower();
     virtual void SetTitle( const wxString& title);
@@ -89,7 +91,10 @@ public:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     void MacInvalidate( const WXRECTPTR rect, bool eraseBackground ) ;
     short MacGetWindowBackgroundTheme() const { return m_macWindowBackgroundTheme ; }
-    virtual void MacInstallEventHandler() ;
+
+#if TARGET_CARBON
+	WXEVENTHANDLERREF	MacGetEventHandler() { return m_macEventHandler ; }
+#endif
 protected:
     // common part of all ctors
     void Init();
@@ -107,9 +112,12 @@ protected:
     wxWindowMac* m_macFocus ;
     WXHRGN m_macNoEraseUpdateRgn ;
     bool m_macNeedsErasing ;
-    void* m_macEventHandler ;
 
     static WXWindow s_macWindowInUpdate ;
+private :
+#if TARGET_CARBON
+	WXEVENTHANDLERREF	m_macEventHandler ;
+#endif
 };
 
 // list of all frames and modeless dialogs
