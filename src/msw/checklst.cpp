@@ -40,6 +40,7 @@
 #include "wx/settings.h"
 #include "wx/dcmemory.h"
 #include "wx/msw/checklst.h"
+#include "wx/log.h"
 
 #include <windows.h>
 #include <windowsx.h>

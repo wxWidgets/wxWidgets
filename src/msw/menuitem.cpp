@@ -38,6 +38,7 @@
 
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
+#include "wx/log.h"
 
 #include <windows.h>
 

@@ -272,6 +272,8 @@ WXDLLEXPORT_DATA(extern wxMBConv) wxConvLibc, wxConvFile;
 #define wxConv_file wxConvFile
 WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
 #define wxConv_current wxConvCurrent
+#define wxFNCONV(name) name
+#define FNSTRINGCAST WXSTRINGCAST
 #endif//wxUSE_WCHAR_T
 
 // ---------------------------------------------------------------------------

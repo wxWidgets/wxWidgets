@@ -37,6 +37,7 @@
 
 #include "wx/gdicmn.h"
 #include "wx/cmndata.h"
+#include "wx/log.h"
 
 #include "wx/paper.h"
 

@@ -35,6 +35,7 @@
 #include "wx/statusbr.h"
 #include "wx/toolbar.h"
 #include "wx/menuitem.h"
+#include "wx/log.h"
 
 #ifdef LoadAccelerators
 #undef LoadAccelerators

@@ -216,6 +216,8 @@ inline WORD __wxMSW_ctype(wxChar ch)
   #else
    #define wxUSE_WCHAR_T 0
   #endif
+ #elif defined(__GNUWIN32__) && !defined(__MINGW32__) // Cygwin (not Mingw32) doesn't have wcslen.h, needed in buffer.h
+  #define wxUSE_WCHAR_T 0
  #else
   // add additional compiler checks if this fails
   #define wxUSE_WCHAR_T 1

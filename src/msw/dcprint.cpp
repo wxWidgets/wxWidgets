@@ -24,6 +24,7 @@
 #endif
 
 #include "wx/dcprint.h"
+#include "wx/log.h"
 #include "math.h"
 
 #include <windows.h>
@@ -194,7 +195,7 @@ bool wxPrinterDC::StartDoc(const wxString& message)
     if (ret <= 0)
     {
         DWORD lastError = GetLastError();
-        wxDebugMsg("wxDC::StartDoc failed with error: %d\n", lastError);
+        wxLogDebug("wxDC::StartDoc failed with error: %d\n", lastError);
     }
 #endif
     
