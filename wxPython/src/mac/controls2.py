@@ -1102,6 +1102,9 @@ class wxTreeCtrlPtr(wxControlPtr):
     def ScrollTo(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_ScrollTo,(self,) + _args, _kwargs)
         return val
+    def GetEditControl(self, *_args, **_kwargs):
+        val = apply(controls2c.wxTreeCtrl_GetEditControl,(self,) + _args, _kwargs)
+        return val
     def EditLabel(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeCtrl_EditLabel,(self,) + _args, _kwargs)
         return val
