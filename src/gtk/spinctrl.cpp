@@ -105,6 +105,8 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
         new_size.x = size_best.x;
     if (new_size.y == -1)
         new_size.y = size_best.y;
+    if (new_size.y > size_best.y)
+        new_size.y = size_best.y;
     if ((new_size.x != size.x) || (new_size.y != size.y))
         SetSize( new_size.x, new_size.y );
 

@@ -70,5 +70,6 @@ rm -rf $RPM_BUILD_ROOT
 %{pref}/include/wx/*
 %dir %{pref}/lib/wx
 %{pref}/lib/wx/*
+%attr(755, -, -) %{pref}/bin/wxgtk-config
 %attr(755, -, -) %{pref}/bin/wx-config
 

@@ -483,7 +483,13 @@ void wxGridCellTextEditor::SetSize(const wxRect& rectOrig)
     // unix
     //
 #if defined(__WXGTK__)
-    rect.Inflate(rect.x ? 1 : 0, rect.y ? 1 : 0);
+    if (rect.x != 0)
+    {
+        rect.x += 1;
+        rect.y += 1;
+        rect.width -= 1;
+        rect.height -= 1;
+    }
 #else // !GTK
     int extra_x = ( rect.x > 2 )? 2 : 1;
     int extra_y = ( rect.y > 2 )? 2 : 1;
@@ -5455,9 +5461,10 @@ void wxGrid::ShowCellEditControl()
                                new wxGridCellEditorEvtHandler(this, editor));
             }
 
+            editor->Show( TRUE, attr );
+            
             editor->SetSize( rect );
 
-            editor->Show( TRUE, attr );
             editor->BeginEdit(row, col, this);
             attr->DecRef();
          }

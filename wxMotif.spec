@@ -1,7 +1,7 @@
 # Note that this is NOT a relocatable package
 %define pref /usr
-%define ver 2.1.0
-%define rel 8
+%define ver 2.1.14
+%define rel 0
 
 Summary: The Motif port of the wxWindows library
 Name: wxMotif
