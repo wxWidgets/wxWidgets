@@ -359,6 +359,8 @@ positioned at, adjusted for spanning.
 class wxGridBagSizer : public wxFlexGridSizer
 {
 public:
+    %pythonAppend wxGridBagSizer "self._setOORInfo(self)"
+
     DocCtorStr(
         wxGridBagSizer(int vgap = 0, int hgap = 0 ),
         "Constructor, with optional parameters to specify the gap between the
