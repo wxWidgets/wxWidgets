@@ -1142,7 +1142,7 @@ class SplitterWindow(_core.Window):
         """
         SetSashSize(self, int width)
 
-        Sets the sash size.  Currently a NOP.
+        Sets the sash size.
         """
         return _windows_.SplitterWindow_SetSashSize(*args, **kwargs)
 

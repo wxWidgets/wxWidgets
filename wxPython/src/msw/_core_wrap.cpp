@@ -38663,7 +38663,8 @@ static PyObject *_wrap_SizerItem_SetRatioWH(PyObject *, PyObject *args, PyObject
 static PyObject *_wrap_SizerItem_SetRatioSize(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizerItem *arg1 = (wxSizerItem *) 0 ;
-    wxSize arg2 ;
+    wxSize *arg2 = 0 ;
+    wxSize temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -38674,18 +38675,12 @@ static PyObject *_wrap_SizerItem_SetRatioSize(PyObject *, PyObject *args, PyObje
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxSizerItem, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        wxSize * argp;
-        SWIG_Python_ConvertPtr(obj1, (void **)&argp, SWIGTYPE_p_wxSize, SWIG_POINTER_EXCEPTION);
-        if (SWIG_arg_fail(2)) SWIG_fail;
-        if (argp == NULL) {
-            SWIG_null_ref("wxSize");
-        }
-        if (SWIG_arg_fail(2)) SWIG_fail;
-        arg2 = *argp;
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetRatio(arg2);
+        (arg1)->SetRatio((wxSize const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -48836,6 +48831,69 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"WXK_WINDOWS_MENU", SWIG_From_int((int)(WXK_WINDOWS_MENU))); 
     }
     {
+        PyDict_SetItemString(d,"WXK_COMMAND", SWIG_From_int((int)(WXK_COMMAND))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL1", SWIG_From_int((int)(WXK_SPECIAL1))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL2", SWIG_From_int((int)(WXK_SPECIAL2))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL3", SWIG_From_int((int)(WXK_SPECIAL3))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL4", SWIG_From_int((int)(WXK_SPECIAL4))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL5", SWIG_From_int((int)(WXK_SPECIAL5))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL6", SWIG_From_int((int)(WXK_SPECIAL6))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL7", SWIG_From_int((int)(WXK_SPECIAL7))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL8", SWIG_From_int((int)(WXK_SPECIAL8))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL9", SWIG_From_int((int)(WXK_SPECIAL9))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL10", SWIG_From_int((int)(WXK_SPECIAL10))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL11", SWIG_From_int((int)(WXK_SPECIAL11))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL12", SWIG_From_int((int)(WXK_SPECIAL12))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL13", SWIG_From_int((int)(WXK_SPECIAL13))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL14", SWIG_From_int((int)(WXK_SPECIAL14))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL15", SWIG_From_int((int)(WXK_SPECIAL15))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL16", SWIG_From_int((int)(WXK_SPECIAL16))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL17", SWIG_From_int((int)(WXK_SPECIAL17))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL18", SWIG_From_int((int)(WXK_SPECIAL18))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL19", SWIG_From_int((int)(WXK_SPECIAL19))); 
+    }
+    {
+        PyDict_SetItemString(d,"WXK_SPECIAL20", SWIG_From_int((int)(WXK_SPECIAL20))); 
+    }
+    {
         PyDict_SetItemString(d,"PAPER_NONE", SWIG_From_int((int)(wxPAPER_NONE))); 
     }
     {
@@ -49481,6 +49539,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d, "wxEVT_UPDATE_UI", PyInt_FromLong(wxEVT_UPDATE_UI));
     PyDict_SetItemString(d, "wxEVT_SIZING", PyInt_FromLong(wxEVT_SIZING));
     PyDict_SetItemString(d, "wxEVT_MOVING", PyInt_FromLong(wxEVT_MOVING));
+    PyDict_SetItemString(d, "wxEVT_HIBERNATE", PyInt_FromLong(wxEVT_HIBERNATE));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LEFT_CLICK", PyInt_FromLong(wxEVT_COMMAND_LEFT_CLICK));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LEFT_DCLICK", PyInt_FromLong(wxEVT_COMMAND_LEFT_DCLICK));
     PyDict_SetItemString(d, "wxEVT_COMMAND_RIGHT_CLICK", PyInt_FromLong(wxEVT_COMMAND_RIGHT_CLICK));

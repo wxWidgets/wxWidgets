@@ -37679,6 +37679,9 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"TE_RICH2", SWIG_From_int((int)(wxTE_RICH2))); 
     }
     {
+        PyDict_SetItemString(d,"TE_CAPITALIZE", SWIG_From_int((int)(wxTE_CAPITALIZE))); 
+    }
+    {
         PyDict_SetItemString(d,"TEXT_ALIGNMENT_DEFAULT", SWIG_From_int((int)(wxTEXT_ALIGNMENT_DEFAULT))); 
     }
     {

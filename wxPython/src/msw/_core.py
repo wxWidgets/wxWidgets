@@ -504,6 +504,27 @@ WXK_NUMPAD_DIVIDE = _core_.WXK_NUMPAD_DIVIDE
 WXK_WINDOWS_LEFT = _core_.WXK_WINDOWS_LEFT
 WXK_WINDOWS_RIGHT = _core_.WXK_WINDOWS_RIGHT
 WXK_WINDOWS_MENU = _core_.WXK_WINDOWS_MENU
+WXK_COMMAND = _core_.WXK_COMMAND
+WXK_SPECIAL1 = _core_.WXK_SPECIAL1
+WXK_SPECIAL2 = _core_.WXK_SPECIAL2
+WXK_SPECIAL3 = _core_.WXK_SPECIAL3
+WXK_SPECIAL4 = _core_.WXK_SPECIAL4
+WXK_SPECIAL5 = _core_.WXK_SPECIAL5
+WXK_SPECIAL6 = _core_.WXK_SPECIAL6
+WXK_SPECIAL7 = _core_.WXK_SPECIAL7
+WXK_SPECIAL8 = _core_.WXK_SPECIAL8
+WXK_SPECIAL9 = _core_.WXK_SPECIAL9
+WXK_SPECIAL10 = _core_.WXK_SPECIAL10
+WXK_SPECIAL11 = _core_.WXK_SPECIAL11
+WXK_SPECIAL12 = _core_.WXK_SPECIAL12
+WXK_SPECIAL13 = _core_.WXK_SPECIAL13
+WXK_SPECIAL14 = _core_.WXK_SPECIAL14
+WXK_SPECIAL15 = _core_.WXK_SPECIAL15
+WXK_SPECIAL16 = _core_.WXK_SPECIAL16
+WXK_SPECIAL17 = _core_.WXK_SPECIAL17
+WXK_SPECIAL18 = _core_.WXK_SPECIAL18
+WXK_SPECIAL19 = _core_.WXK_SPECIAL19
+WXK_SPECIAL20 = _core_.WXK_SPECIAL20
 PAPER_NONE = _core_.PAPER_NONE
 PAPER_LETTER = _core_.PAPER_LETTER
 PAPER_LEGAL = _core_.PAPER_LEGAL
@@ -3093,6 +3114,7 @@ wxEVT_IDLE = _core_.wxEVT_IDLE
 wxEVT_UPDATE_UI = _core_.wxEVT_UPDATE_UI
 wxEVT_SIZING = _core_.wxEVT_SIZING
 wxEVT_MOVING = _core_.wxEVT_MOVING
+wxEVT_HIBERNATE = _core_.wxEVT_HIBERNATE
 wxEVT_COMMAND_LEFT_CLICK = _core_.wxEVT_COMMAND_LEFT_CLICK
 wxEVT_COMMAND_LEFT_DCLICK = _core_.wxEVT_COMMAND_LEFT_DCLICK
 wxEVT_COMMAND_RIGHT_CLICK = _core_.wxEVT_COMMAND_RIGHT_CLICK
@@ -3126,6 +3148,7 @@ EVT_KILL_FOCUS = wx.PyEventBinder( wxEVT_KILL_FOCUS )
 EVT_CHILD_FOCUS = wx.PyEventBinder( wxEVT_CHILD_FOCUS )
 EVT_ACTIVATE = wx.PyEventBinder( wxEVT_ACTIVATE )
 EVT_ACTIVATE_APP = wx.PyEventBinder( wxEVT_ACTIVATE_APP )
+EVT_HIBERNATE = wx.PyEventBinder( wxEVT_HIBERNATE )     
 EVT_END_SESSION = wx.PyEventBinder( wxEVT_END_SESSION )
 EVT_QUERY_END_SESSION = wx.PyEventBinder( wxEVT_QUERY_END_SESSION )
 EVT_DROP_FILES = wx.PyEventBinder( wxEVT_DROP_FILES )
@@ -9880,7 +9903,7 @@ class Sizer(Object):
 
     def Hide(self, item, recursive=False):
         """
-        A convenience method for Show(item, False, recursive).
+        A convenience method for `Show`(item, False, recursive).
         """
         return self.Show(item, False, recursive)
 
@@ -11229,14 +11252,17 @@ if RELEASE_VERSION != _core_.RELEASE_VERSION:
 # http://www.alanwood.net/demos/charsetdiffs.html for differences
 # between the common latin/roman encodings.
 import locale
+import codecs
 try:
     default = locale.getdefaultlocale()[1]
-except ValueError:
-    default = "iso8859-1"
+    codecs.lookup(default)
+except (ValueError, LookupError):
+    default = _sys.getdefaultencoding()
 if default:
     wx.SetDefaultPyEncoding(default)
 del default
 del locale
+del codecs
 
 #----------------------------------------------------------------------------
 
