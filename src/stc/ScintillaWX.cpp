@@ -429,13 +429,45 @@ long ScintillaWX::DefWndProc(unsigned int /*iMessage*/, unsigned long /*wParam*/
 }
 
 long ScintillaWX::WndProc(unsigned int iMessage, unsigned long wParam, long lParam) {
-//      switch (iMessage) {
-//      case EM_CANPASTE:
-//          return CanPaste();
-//      default:
-        return ScintillaBase::WndProc(iMessage, wParam, lParam);
-//      }
-//      return 0;
+      switch (iMessage) {
+      case SCI_CALLTIPSHOW: {
+          // NOTE: This is copied here from scintilla/src/ScintillaBase.cxx
+          // because of the little tweak that needs done below.  When updating
+          // new versions double check that this is still needed, and that any
+          // new code there is copied here too.
+          AutoCompleteCancel();
+          if (!ct.wCallTip.Created()) {
+              Point pt = LocationFromPosition(wParam);
+              pt.y += vs.lineHeight;
+              PRectangle rc = ct.CallTipStart(currentPos, pt,
+                                              reinterpret_cast<char *>(lParam),
+                                              vs.styles[STYLE_DEFAULT].fontName,
+                                              vs.styles[STYLE_DEFAULT].sizeZoomed,
+                                              IsUnicodeMode());
+              // If the call-tip window would be out of the client
+              // space, adjust so it displays above the text.
+              PRectangle rcClient = GetClientRectangle();
+              if (rc.bottom > rcClient.bottom) {
+#ifdef __WXGTK__
+                  int offset = int(vs.lineHeight * 1.25)  + rc.Height();
+#else
+                  int offset = vs.lineHeight + rc.Height();
+#endif
+                  rc.top -= offset;
+                  rc.bottom -= offset;
+              }
+              // Now display the window.
+              CreateCallTipWindow(rc);
+              ct.wCallTip.SetPositionRelative(rc, wMain);
+              ct.wCallTip.Show();
+          }
+      }
+          break;
+
+      default:
+          return ScintillaBase::WndProc(iMessage, wParam, lParam);
+      }
+      return 0;
 }
 
 
@@ -607,11 +639,10 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
 
 void ScintillaWX::DoAddChar(int key) {
 #if wxUSE_UNICODE
-    char ansiChars[3];
-    ansiChars[0] = key;
-    ansiChars[1] = 0;
-    wxString uniChar(ansiChars, wxConvLocal);
-    wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(uniChar);
+    wxChar wszChars[2];
+    wszChars[0] = key;
+    wszChars[1] = 0;
+    wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(wszChars);
     AddCharUTF((char*)buf.data(), strlen(buf));
 #else
     AddChar(key);
