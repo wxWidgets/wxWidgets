@@ -495,6 +495,8 @@ void wxFrame::PositionToolBar()
         else
         {
             tw = width;
+            if ( toolbar->GetWindowStyleFlag() & wxTB_FLAT )
+                th -= 3;
         }
 
         // use the 'real' MSW position here, don't offset relativly to the
