@@ -594,10 +594,15 @@ void wxComboBox::Delete(int n)
 
 void wxComboBox::Clear()
 {
-#if USE_HICOMBOBOX
-    //TODO
-#else
     FreeData();
+#if USE_HICOMBOBOX
+    for ( CFIndex i = GetCount() - 1 ; i >= 0 ; ++ i )
+        verify_noerr( HIComboBoxRemoveItemAtIndex( (HIViewRef) m_macControl, i ) );
+    wxMacCFStringHolder cf(wxEmptyString,m_font.GetEncoding()) ;
+    CFStringRef cfr = cf ;
+    SetControlData((ControlRef) m_macControl,kHIComboBoxEditTextPart,kControlEditTextCFStringTag, 
+           sizeof(CFStringRef),(Ptr) &cfr);
+#else
     m_choice->Clear();
 #endif
 }
@@ -605,8 +610,7 @@ void wxComboBox::Clear()
 int wxComboBox::GetSelection() const
 {
 #if USE_HICOMBOBOX
-    int result =  GetControl32BitValue( (HIViewRef) m_macControl ) -1;
-    return result;
+    return FindString( GetStringSelection() ) ;
 #else
     return m_choice->GetSelection();
 #endif
@@ -653,11 +657,20 @@ wxString wxComboBox::GetString(int n) const
 
 wxString wxComboBox::GetStringSelection() const
 {
+#if USE_HICOMBOBOX
+    CFStringRef cfr ;
+    verify_noerr(GetControlData((ControlRef) m_macControl,kHIComboBoxEditTextPart,kControlEditTextCFStringTag, 
+           sizeof(CFStringRef),(Ptr) &cfr,NULL));
+    // takes of release responsibility
+    wxMacCFStringHolder cf( cfr ) ;
+    return cf.AsString() ;
+#else
     int sel = GetSelection ();
     if (sel > -1)
         return wxString(this->GetString (sel));
     else
         return wxEmptyString;
+#endif
 }
 
 bool wxComboBox::SetStringSelection(const wxString& sel)
@@ -675,7 +688,9 @@ bool wxComboBox::SetStringSelection(const wxString& sel)
 void wxComboBox::SetString(int n, const wxString& s) 
 {
 #if USE_HICOMBOBOX
-
+    verify_noerr ( HIComboBoxInsertTextItemAtIndex( (HIViewRef) m_macControl, (CFIndex) n, 
+        wxMacCFStringHolder(s, m_font.GetEncoding()) ) );
+    verify_noerr ( HIComboBoxRemoveItemAtIndex( (HIViewRef) m_macControl, (CFIndex) n + 1 ) );
 #else
     m_choice->SetString( n , s ) ;
 #endif
@@ -684,14 +699,11 @@ void wxComboBox::SetString(int n, const wxString& s)
 
 wxInt32 wxComboBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
-/*
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
     event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(GetStringSelection());
     ProcessCommand(event);
     return noErr ;
-*/
-    return eventNotHandledErr ;
 }
 
