@@ -154,7 +154,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     // 1) dir ctrl
     m_dirCtrl = NULL; // this is neccessary, event handler called from
                       // wxGenericDirCtrl would crash otherwise!
-    long dirStyle = wxDIRCTRL_DIR_ONLY|wxSUNKEN_BORDER;
+    long dirStyle = wxDIRCTRL_DIR_ONLY | wxDEFAULT_CONTROL_BORDER;
 
 #ifdef __WXMSW__
     if (style & wxDD_NEW_DIR_BUTTON)
@@ -199,10 +199,12 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     SetAutoLayout( true );
     SetSizer( topsizer );
 
+#if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
 
     Centre( wxBOTH );
+#endif
 }
 
 void wxGenericDirDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
