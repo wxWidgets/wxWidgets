@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        spinbutt.cpp
+// Name:        msw/spinbutt.cpp
 // Purpose:     wxSpinButton
 // Author:      Julian Smart
 // Modified by:
@@ -30,11 +30,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
 #endif
-
-// Can't resolve reference to CreateUpDownControl in
-// TWIN32, but could probably use normal CreateWindow instead.
 
 #if wxUSE_SPINBTN
 
@@ -42,6 +38,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
+// Can't resolve reference to CreateUpDownControl in
+// TWIN32, but could probably use normal CreateWindow instead.
 #if defined(__WIN95__) && !defined(__TWIN32__)
 
 #include "wx/msw/private.h"
