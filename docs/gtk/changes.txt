@@ -1,11 +1,29 @@
 
 *** wxWindows 2.3.3 ***
 
+Implemented new ref-counting for GDI classes.
+
+New implemenation of wxCondition.
+
+Implemented actual comparisons between GDI classes instead of
+comparing just the ref-count.
+
+Fixed wxMiniFrame again.
+
+Added wxCursor creation from wxImage.
+
+Added inlined wxHashMap class.
+
+Redone thread wake-up code for immediate wake-up instead
+of 50 ms pause. This gives apps 100% CPU time for background
+tasks.
+
 New behaviour for wxWindow::Refresh() as it now produces a 
 delayed refresh. Call the new wxWindow::Update() to force
 an immediate update.
 
-Support for more SGI hardware (12-bit mode among others).
+Support for more SGI hardware (12-bit mode among others) and
+corrections to wxImage code for special SGI visuals.
 
 Changed wxDC::Blit() to honour source DC's logical coordinates.
 
@@ -14,16 +32,14 @@ tasks (unlike thread work).
 
 Various updates to wxHTML.
 
-Some wxFont changes for better mixing of native fonts
-and wxFont's accessors.
-
-Corrections to wxImage code for special SGI visuals.
+Some wxFont changes for better mixing of native fonts and
+wxFont's accessors.
 
 Added IFF image handler.
 
 Added ICO, CUR and ANI image handler.
 
-wxFrame::SetMenuBar() works again.
+wxFrame::SetMenuBar() corrected.
 
 wxButton honours wxBU_EXACTFIT.
 

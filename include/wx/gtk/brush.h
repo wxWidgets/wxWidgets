@@ -34,15 +34,19 @@ class wxBrush;
 class wxBrush: public wxGDIObject
 {
 public:
-    wxBrush();
+    wxBrush() { }
+    
     wxBrush( const wxColour &colour, int style );
     wxBrush( const wxBitmap &stippleBitmap );
-    wxBrush( const wxBrush &brush );
     ~wxBrush();
-    wxBrush& operator = ( const wxBrush& brush );
+    
+    wxBrush( const wxBrush &brush ) { Ref(brush); }
+    wxBrush& operator = ( const wxBrush& brush ) { Ref(brush); return *this; }
+    
+    bool Ok() const { return m_refData != NULL; }
+    
     bool operator == ( const wxBrush& brush ) const;
-    bool operator != ( const wxBrush& brush ) const;
-    bool Ok() const;
+    bool operator != (const wxBrush& brush) const { return !(*this == brush); }
 
     int GetStyle() const;
     wxColour &GetColour() const;
@@ -53,9 +57,11 @@ public:
     void SetStyle( int style );
     void SetStipple( const wxBitmap& stipple );
 
-    void Unshare();
-
 private:
+    // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    
     DECLARE_DYNAMIC_CLASS(wxBrush)
 };
 

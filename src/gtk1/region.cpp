@@ -133,20 +133,20 @@ wxObjectRefData *wxRegion::CloneRefData(const wxObjectRefData *data) const
 {
     return new wxRegionRefData(*(wxRegionRefData *)data);
 }
+
 // ----------------------------------------------------------------------------
 // wxRegion comparison
 // ----------------------------------------------------------------------------
 
 bool wxRegion::operator==( const wxRegion& region )
 {
+    if (m_refData == region.m_refData) return TRUE;
+
+    if (!m_refData || !region.m_refData) return FALSE;
+    
     // compare the regions themselves, not the pointers to ref data!
     return gdk_region_equal(M_REGIONDATA->m_region,
                             M_REGIONDATA_OF(region)->m_region);
-}
-
-bool wxRegion::operator != ( const wxRegion& region )
-{
-    return !(*this == region);
 }
 
 // ----------------------------------------------------------------------------

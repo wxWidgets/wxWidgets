@@ -40,13 +40,18 @@ typedef    gchar wxGTKDash;
 class wxPen: public wxGDIObject
 {
 public:
-    wxPen();
+    wxPen() { }
+    
     wxPen( const wxColour &colour, int width, int style );
-    wxPen( const wxPen& pen );
     ~wxPen();
-    wxPen& operator = ( const wxPen& pen );
+    
+    wxPen( const wxPen& pen ) { Ref(pen); }
+    wxPen& operator = ( const wxPen& pen ) { Ref(pen); return *this; }
+    
+    bool Ok() const { return m_refData != NULL; }
+    
     bool operator == ( const wxPen& pen ) const;
-    bool operator != ( const wxPen& pen ) const;
+    bool operator != (const wxPen& pen) const { return !(*this == pen); }
 
     void SetColour( const wxColour &colour );
     void SetColour( int red, int green, int blue );
@@ -64,12 +69,12 @@ public:
     int GetDashes(wxDash **ptr) const;
     int GetDashCount() const;
     wxDash* GetDash() const;
-    
-    bool Ok() const;
-
-    void Unshare();
 
 private:    
+    // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    
     DECLARE_DYNAMIC_CLASS(wxPen)
 };
 

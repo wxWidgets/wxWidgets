@@ -805,30 +805,6 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     if (gdk_event->count == 0)
         win->GtkSendPaintEvents();
 
-    // The following code will result in all window-less widgets
-    // being redrawn if the wxWindows class is given a chance to
-    // paint *anything* because it will then be allowed to paint
-    // over the window-less widgets.
-    GList *children = pizza->children;
-    while (children)
-    {
-        GtkPizzaChild *child = (GtkPizzaChild*) children->data;
-        children = children->next;
-
-        GdkEventExpose child_event = *gdk_event;
-
-        if (GTK_WIDGET_NO_WINDOW (child->widget) &&
-            GTK_WIDGET_DRAWABLE (child->widget) /* &&
-            gtk_widget_intersect (child->widget, &gdk_event->area, &child_event.area)*/ )
-        {
-            child_event.area.x = child->widget->allocation.x;
-            child_event.area.y = child->widget->allocation.y;
-            child_event.area.width = child->widget->allocation.width;
-            child_event.area.height = child->widget->allocation.height;
-            gtk_widget_event (child->widget, (GdkEvent*) &child_event);
-        }
-    }
-
     return TRUE;
 }
 
@@ -3439,9 +3415,38 @@ void wxWindowGTK::GtkSendPaintEvents()
     paint_event.SetEventObject( this );
     GetEventHandler()->ProcessEvent( paint_event );
 
-    m_updateRegion.Clear();
-
     m_clipPaintRegion = FALSE;
+
+    GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
+    if (g_list_length(pizza->children) > 0)
+    {
+        // The following code will result in all window-less widgets
+        // being redrawn because the wxWindows class is allowed to
+        // paint over the window-less widgets.
+        GList *children = pizza->children;
+        while (children)
+        {
+            GtkPizzaChild *child = (GtkPizzaChild*) children->data;
+            children = children->next;
+
+            if (GTK_WIDGET_NO_WINDOW (child->widget) &&
+                GTK_WIDGET_DRAWABLE (child->widget))
+            {
+                // Get intersection of widget area and update region
+                wxRegion region( m_updateRegion );
+                region.Intersect( child->widget->allocation.x,
+                                  child->widget->allocation.y,
+                                  child->widget->allocation.width,
+                                  child->widget->allocation.height );
+                
+                // Redraw the whole widget anyway
+                if (!region.IsEmpty())
+                    gtk_widget_draw( child->widget, NULL );
+            }
+        }
+    }
+
+    m_updateRegion.Clear();
 }
 
 void wxWindowGTK::Clear()

@@ -230,6 +230,10 @@ void wxObject::Ref(const wxObject& clone)
     DEBUG_PRINTF(wxObject::Ref)
 #endif
 
+    // nothing to be done
+    if (m_refData == clone.m_refData)
+        return;
+
     // delete reference to old data
     UnRef();
 

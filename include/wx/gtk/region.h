@@ -71,13 +71,15 @@ public:
     }
 
     wxRegion( size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
-    virtual ~wxRegion();
+    ~wxRegion();
 
-    wxRegion( const wxRegion& r ) { Ref(r); }
-    wxRegion& operator = ( const wxRegion& r ) { Ref(r); return *this; }
+    wxRegion( const wxRegion& region ) { Ref(region); }
+    wxRegion& operator = ( const wxRegion& region ) { Ref(region); return *this; }
+
+    bool Ok() const { return m_refData != NULL; }
 
     bool operator == ( const wxRegion& region );
-    bool operator != ( const wxRegion& region );
+    bool operator != ( const wxRegion& region ) { return !(*this == region); }
 
     void Clear();
 
