@@ -569,11 +569,19 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
             else
                 flags |= wxTREE_HITTEST_ONITEMLOWERPART;
 
-            // 5 is the size of the plus sign
             int xCross = m_x - theCtrl->GetSpacing();
+#ifdef __WXMAC__
+            // according to the drawing code the triangels are drawn
+            // at -4 , -4  from the position up to +10/+10 max
+            if ((point.x > xCross-4) && (point.x < xCross+10) &&
+                (point.y > y_mid-4) && (point.y < y_mid+10) &&
+                HasPlus() && theCtrl->HasButtons() )
+#else
+            // 5 is the size of the plus sign
             if ((point.x > xCross-5) && (point.x < xCross+5) &&
                 (point.y > y_mid-5) && (point.y < y_mid+5) &&
                 HasPlus() && theCtrl->HasButtons() )
+#endif
             {
                 flags |= wxTREE_HITTEST_ONITEMBUTTON;
                 return this;
