@@ -45,6 +45,8 @@
     }
 
     foreach $file (sort keys %wxUNIX) {
+        next if $wxUNIX{$file} =~ /\bNotMGL\b/;
+
         ($fileobj = $file) =~ s/cp?p?$/\o/;
 
         $project{"MGL_SOURCES"} .= "unix/" . $file . " ";

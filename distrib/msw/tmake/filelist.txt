@@ -350,9 +350,9 @@ wave.cpp	MSW
 window.cpp	MSW	LowLevel
 
 dialup.cpp	Unix	NotMac
-dir.cpp	Unix	Base,NotMac
-fontenum.cpp	Unix	NotMac
-fontutil.cpp	Unix	NotMac
+dir.cpp	Unix	Base,NotMac,NotMGL
+fontenum.cpp	Unix	NotMac,NotMGL
+fontutil.cpp	Unix	NotMac,NotMGL
 gsocket.c	Unix	Base,NotMac
 mimetype.cpp	Unix	Base,NotMac
 snglinst.cpp	Unix	Base
@@ -1444,11 +1444,12 @@ brush.cpp	MGL	LowLevel
 pen.cpp	MGL	LowLevel
 font.cpp	MGL	LowLevel
 data.cpp	MGL	LowLevel
-#fontenum.cpp	MGL	LowLevel
-#fontutil.cpp	MGL	LowLevel
+fontenum.cpp	MGL	LowLevel
+fontutil.cpp	MGL	LowLevel
 evtloop.cpp	MGL	LowLevel
 app.cpp	MGL	LowLevel
 bitmap.cpp	MGL	LowLevel
+dir.cpp	MGL	LowLevel
 clipbrd.cpp	MGL	LowLevel
 cursor.cpp	MGL	LowLevel
 dcclient.cpp	MGL	LowLevel
