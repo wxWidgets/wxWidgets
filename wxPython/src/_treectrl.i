@@ -522,6 +522,8 @@ public:
     wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
 
 
+    // NOTE: These are a copy of the same methods in gizmos.i, be sure to
+    // update both at the same time.  (Or find a good way to refactor!)
     %extend {
         // Get the first child of this item.  Returns a wxTreeItemId and an
         // opaque "cookie" value that should be passed to GetNextChild in
