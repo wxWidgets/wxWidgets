@@ -424,11 +424,11 @@ public:
 
         // Override these methods for windows that have a virtual size
         // independent of their client size.  eg. the virtual area of a
-        // wxScrolledWindow. 
+        // wxScrolledWindow.
 
     virtual void DoSetVirtualSize( int x, int y );
     virtual wxSize DoGetVirtualSize() const;
-    
+
         // Return the largest of ClientSize and BestSize (as determined
         // by a sizer, interior children, or other means)
 
@@ -759,6 +759,14 @@ public:
             m_inheritBgCol = false;
     }
     wxColour GetBackgroundColour() const;
+    bool InheritsBackgroundColour() const
+    {
+        return m_inheritBgCol;
+    }
+    bool UseBgCol() const
+    {
+        return m_hasBgCol;
+    }
 
     // if the window shouldn't inherit its colour from the parent, override
     // this function to return true

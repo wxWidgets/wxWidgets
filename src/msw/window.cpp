@@ -4041,7 +4041,7 @@ WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
         // windows for which a custom colour had been explicitly set with
         // SetOwnBackgroundColour() and so shouldn't affect its children
         if ( win->ProvidesBackground() ||
-                (win->m_hasBgCol && !win->m_inheritBgCol) )
+                (win->UseBgCol() && !win->InheritsBackgroundColour()) )
             break;
     }
 

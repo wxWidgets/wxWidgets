@@ -150,7 +150,6 @@ public:
 
     // return true if we should use the colours/fonts returned by the
     // corresponding GetXXX() methods instead of the default ones
-    bool UseBgCol() const { return m_hasBgCol; }
     bool UseFgCol() const { return m_hasFgCol; }
     bool UseFont() const { return m_hasFont; }
 
