@@ -117,6 +117,7 @@ Package: libwxgtk=V-python
 Architecture: any
 Section: interpreters
 Depends: python (>=2.2), python (<<2.3), ${shlibs:Depends}
+Recommends: python2.2-xml
 Suggests: wxwin=V-doc, wxwin=V-examples
 Conflicts: libwxgtk=V-python-contrib, python-wxwin, libwxgtk2.2-python
 Replaces: libwxgtk=V-python-contrib, python-wxwin, libwxgtk2.2-python
@@ -126,7 +127,8 @@ Description: wxWindows Cross-platform C++ GUI toolkit (wxPython binding)
  currently supports subsets of GTK+, Motif, and MS Windows.
  .
  This package provides a Python binding to the wxGTK library and it's
- contrib libs.
+ contrib libs.  If you wish to use xrced you'll also need the python-xml
+ package installed.
 
 Package: libwxgtk=V-contrib
 Architecture: any
