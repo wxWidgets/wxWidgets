@@ -82,6 +82,8 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_LIST_KEY_DOWN(LIST_CTRL, MyListCtrl::OnListKeyDown)
     EVT_LIST_ITEM_ACTIVATED(LIST_CTRL, MyListCtrl::OnActivated)
     EVT_LIST_COL_CLICK(LIST_CTRL, MyListCtrl::OnColClick)
+
+    EVT_CHAR(MyListCtrl::OnChar)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -579,6 +581,13 @@ void MyListCtrl::OnActivated(wxListEvent& event)
 void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
     LogEvent(event, _T("OnListKeyDown"));
+
+    event.Skip();
+}
+
+void MyListCtrl::OnChar(wxKeyEvent& event)
+{
+    wxLogMessage(_T("Got char event."));
 }
 
 void MyListCtrl::LogEvent(const wxListEvent& event, const wxChar *eventName)
