@@ -18,12 +18,16 @@ on the command line.
 """
 
 import wx                  # This module uses the new wx namespace
+import sys, os
+
+# stuff for debugging
 print "wx.VERSION_STRING = ", wx.VERSION_STRING
+print "pid:", os.getpid()
+##raw_input("Press a key...")
 
 assertMode = wx.PYAPP_ASSERT_DIALOG
 ##assertMode = wx.PYAPP_ASSERT_EXCEPTION
 
-import sys, os
 
 #----------------------------------------------------------------------------
 

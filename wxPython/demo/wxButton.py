@@ -11,13 +11,12 @@ class TestPanel(wxPanel):
                          style=wxNO_FULL_REPAINT_ON_RESIZE)
         self.log = log
 
-        b = wxButton(self, 10, "Hello", wxPoint(20, 20))
+        b = wxButton(self, 10, "Default Button", wxPoint(20, 20))
         EVT_BUTTON(self, 10, self.OnClick)
-        b.SetBackgroundColour(wxBLUE)
-        b.SetForegroundColour(wxWHITE)
         b.SetDefault()
+        b.SetSize(b.GetBestSize())
 
-        b = wxButton(self, 20, "HELLO AGAIN!", wxPoint(20, 60), wxSize(120, 45))
+        b = wxButton(self, 20, "HELLO AGAIN!", wxPoint(20, 80), wxSize(120, 45))
         EVT_BUTTON(self, 20, self.OnClick)
         b.SetToolTipString("This is a Hello button...")
 
