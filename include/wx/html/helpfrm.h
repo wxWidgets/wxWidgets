@@ -29,6 +29,7 @@
 #include "wx/listbox.h"
 #include "wx/choice.h"
 #include "wx/combobox.h"
+#include "wx/stattext.h"
 #include "wx/html/htmlwin.h"
 
 
@@ -63,6 +64,7 @@ enum
     wxID_HTML_SEARCHLIST,
     wxID_HTML_SEARCHBUTTON,
     wxID_HTML_SEARCHCHOICE,
+    wxID_HTML_COUNTINFO,
     wxID_HTML_HELPFRAME // the id of wxHtmlHelpController's helpframe
 }
 ;
@@ -195,6 +197,7 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         wxButton *m_SearchButton;
         wxListBox *m_SearchList;
         wxChoice *m_SearchChoice;
+        wxStaticText *m_IndexCountInfo;
 
         wxComboBox *m_Bookmarks;
         wxArrayString m_BookmarksNames, m_BookmarksPages;
