@@ -699,8 +699,11 @@ void GridFrame::SetCellBgColour( wxCommandEvent& WXUNUSED(ev) )
     wxColour col = wxGetColourFromUser(this);
     if ( col.Ok() )
     {
+        // Check the new Refresh function by passing it a rectangle
+        // which exactly fits the grid.
+        wxRect r(wxPoint(0, 0), grid->GetSize());
         grid->SetDefaultCellBackgroundColour(col);
-        grid->Refresh();
+        grid->Refresh(TRUE, &r);
     }
 }
 
