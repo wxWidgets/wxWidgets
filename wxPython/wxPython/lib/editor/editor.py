@@ -449,7 +449,7 @@ class wxEditor(wxScrolledWindow):
         self.MouseToCol(event.GetX())
 
     def OnMotion(self, event):
-        if event.LeftIsDown():
+        if event.LeftIsDown() and self.HasCapture():
             self.Selecting = true
             self.MouseToCursor(event)
             self.SelectUpdate()
@@ -462,6 +462,9 @@ class wxEditor(wxScrolledWindow):
         self.CaptureMouse()
 
     def OnLeftUp(self, event):
+        if not self.HasCapture():
+            return
+
         if self.SelectEnd is None:
             self.OnClick()
         else:
