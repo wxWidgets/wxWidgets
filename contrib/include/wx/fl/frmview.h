@@ -123,7 +123,7 @@ public:
 
     int GetActiveViewNo();
     wxFrameView* GetActiveView();
-    wxNode* GetActiveViewNode();
+    wxObjectList::compatibility_iterator GetActiveViewNode();
 
     wxFrameView* GetView( int viewNo );
 

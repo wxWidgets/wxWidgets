@@ -406,7 +406,7 @@ void wxFrameLayout::ReparentWindow( wxWindow* pChild, wxWindow* pNewParent )
 
 void wxFrameLayout::DestroyBarWindows()
 {
-    wxNode* pSpy = mBarSpyList.GetFirst();
+    wxObjectList::compatibility_iterator pSpy = mBarSpyList.GetFirst();
 
     while( pSpy )
     {
@@ -436,7 +436,7 @@ void wxFrameLayout::DestroyBarWindows()
 
 void wxFrameLayout::ShowFloatedWindows( bool show )
 {
-    wxNode* pNode = mFloatedFrames.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mFloatedFrames.GetFirst();
 
     while( pNode )
     {
@@ -496,7 +496,7 @@ wxFrameLayout::~wxFrameLayout()
     if ( mpNECursor     ) 
         delete mpNECursor;
 
-    wxNode* pSpy = mBarSpyList.GetFirst();
+    wxObjectList::compatibility_iterator pSpy = mBarSpyList.GetFirst();
 
     while( pSpy )
     {
@@ -723,7 +723,7 @@ void wxFrameLayout::SetBarState( cbBarInfo* pBar, int newState, bool updateNow )
         {
             pBar->mpBarWnd->Show(false); // to avoid flicker upon reparenting
 
-            wxNode* pNode = mFloatedFrames.GetFirst();
+            wxObjectList::compatibility_iterator pNode = mFloatedFrames.GetFirst();
 
             while( pNode )
             {
@@ -741,7 +741,7 @@ void wxFrameLayout::SetBarState( cbBarInfo* pBar, int newState, bool updateNow )
 
                         pBar->mAlignment = pBar->mDimInfo.mLRUPane;
 
-                    mFloatedFrames.DeleteNode( pNode );
+                    mFloatedFrames.Erase( pNode );
 
                     pFFrm->Show( false );
                     pFFrm->Destroy(); break;
@@ -834,7 +834,7 @@ void wxFrameLayout::RepositionFloatedBar( cbBarInfo* pBar )
 {
     if ( !(mFloatingOn && pBar->mFloatingOn)) return;
 
-    wxNode* pNode = mFloatedFrames.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mFloatedFrames.GetFirst();
 
     while( pNode )
     {
@@ -2181,7 +2181,7 @@ cbDockPane::~cbDockPane()
     for ( i = 0; i != mRows.Count(); ++i )
         delete mRows[i];
 
-    mRowShapeData.DeleteContents( true );
+    WX_CLEAR_LIST(wxList,mRowShapeData)
     
     // NOTE:: control bar infromation structures are cleaned-up
     //        in wxFrameLayout's destructor, using global control-bar list
@@ -3472,7 +3472,11 @@ cbBarInfo* cbDockPane::GetBarInfoByWindow( wxWindow* pBarWnd )
 
 void cbDockPane::GetRowShapeData( cbRowInfo* pRow, wxList* pLst )
 {
-    pLst->DeleteContents( true );
+    if(pLst)
+    {
+        WX_CLEAR_LIST(wxList,*pLst);
+    }
+
     pLst->Clear();
 
     size_t i;
@@ -3494,7 +3498,7 @@ void cbDockPane::SetRowShapeData( cbRowInfo* pRow, wxList* pLst )
     if ( pLst->GetFirst() == NULL )
         return;
 
-    wxNode* pData = pLst->GetFirst();
+    wxObjectList::compatibility_iterator pData = pLst->GetFirst();
 
     size_t i;
     for ( i = 0; i != pRow->mBars.Count(); ++i )

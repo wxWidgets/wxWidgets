@@ -25,7 +25,7 @@ struct GCItem
     wxList    mRefs;   // references to other nodes
 };
 
-inline void* gc_node_to_obj( wxNode* pGCNode )
+inline void* gc_node_to_obj( wxObjectList::compatibility_iterator pGCNode )
 {
     return ( (GCItem*) (pGCNode->GetData()) )->mpObj;
 }

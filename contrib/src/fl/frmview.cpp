@@ -168,7 +168,7 @@ void wxFrameManager::DestroyViews()
 {
     DeactivateCurrentView();
 
-    wxNode* pNode = mViews.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mViews.GetFirst();
 
     while ( pNode )
     {
@@ -184,7 +184,7 @@ void wxFrameManager::DestroyViews()
 
 int wxFrameManager::GetViewNo( wxFrameView* pView )
 {
-    wxNode* pNode = mViews.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mViews.GetFirst();
     int n = 0;
 
     while ( pNode )
@@ -225,7 +225,7 @@ void wxFrameManager::EnableMenusForView( wxFrameView* pView, bool enable )
 
 void wxFrameManager::SyncAllMenus()
 {
-    wxNode* pNode = mViews.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mViews.GetFirst();
     int i = 0;
 
     while ( pNode )
@@ -261,7 +261,7 @@ void wxFrameManager::Init( wxWindow* pMainFrame, const wxString& settingsFile )
     mSettingsFile = settingsFile;
     mpFrameWnd    = pMainFrame;
 
-    wxNode* pNode = mViews.GetFirst();
+    wxObjectList::compatibility_iterator pNode = mViews.GetFirst();
 
     while ( pNode )
     {
@@ -318,13 +318,13 @@ int wxFrameManager::GetActiveViewNo()
 
 wxFrameView* wxFrameManager::GetActiveView()
 {
-    wxNode* pNode = mViews.Item( mActiveViewNo );
+    wxObjectList::compatibility_iterator pNode = mViews.Item( mActiveViewNo );
 
     if ( pNode ) return (wxFrameView*)pNode->GetData();
             else return NULL;
 }
 
-wxNode* wxFrameManager::GetActiveViewNode()
+wxObjectList::compatibility_iterator wxFrameManager::GetActiveViewNode()
 {
     return mViews.Item( mActiveViewNo );
 }
@@ -341,7 +341,7 @@ wxWindow* wxFrameManager::GetParentWindow()
 
 wxFrameView* wxFrameManager::GetView( int viewNo )
 {
-    wxNode* pNode = mViews.Item( viewNo );
+    wxObjectList::compatibility_iterator pNode = mViews.Item( viewNo );
 
     if ( pNode ) return (wxFrameView*)pNode->GetData();
             else return NULL;
