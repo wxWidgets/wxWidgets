@@ -26,9 +26,7 @@
     defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX) || \
     defined(__EMX__)
 
-    #ifndef __UNIX__
-        #define __UNIX__
-    #endif // Unix
+    #define __UNIX_LIKE__
 
     // Helps SGI compilation, apparently
     #ifdef __SGI__
@@ -189,6 +187,12 @@
 // just in case they were defined in setup.h
 #undef PACKAGE
 #undef VERSION
+
+// if we're on a Unixsystem but didn't use configure (so that setup.h didn't
+// define __UNIX__), do define __UNIX__ now
+#if !defined(__UNIX__) && defined(__UNIX_LIKE__)
+    #define __UNIX__
+#endif // Unix
 
 #include "wx/version.h"
 
