@@ -217,7 +217,7 @@ void wxDialog::EndModal(int retCode)
 }
 
 // Standard buttons
-void wxDialog::OnOK(wxCommandEvent& event)
+void wxDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
   if ( Validate() && TransferDataFromWindow() )
   {
@@ -225,19 +225,19 @@ void wxDialog::OnOK(wxCommandEvent& event)
   }
 }
 
-void wxDialog::OnApply(wxCommandEvent& event)
+void wxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
 {
   if (Validate())
     TransferDataFromWindow();
   // TODO probably need to disable the Apply button until things change again
 }
 
-void wxDialog::OnCancel(wxCommandEvent& event)
+void wxDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-        EndModal(wxID_CANCEL);
+    EndModal(wxID_CANCEL);
 }
 
-void wxDialog::OnCloseWindow(wxCloseEvent& event)
+void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     // We'll send a Cancel message by default,
     // which may close the dialog.
@@ -267,7 +267,7 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
     closing.DeleteObject(this);
 }
 
-void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
+void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 {
   SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
   Refresh();
