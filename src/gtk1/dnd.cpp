@@ -128,6 +128,7 @@ static char * page_xpm[] = {
 #include "gtk/gtkdnd.h"
 #include "gtk/gtkselection.h"
 
+
 // ----------------------------------------------------------------------------
 // "drag_leave"
 // ----------------------------------------------------------------------------
@@ -210,6 +211,8 @@ static gboolean target_drag_drop( GtkWidget *widget,
        return FALSE, otherwise, if you aren't accepting
        the drop, call gtk_drag_finish() with success == FALSE
        otherwise call gtk_drag_data_get()" */
+
+//    printf( "drop.\n" );
        
     /* this seems to make a difference between not accepting
        due to wrong target area and due to wrong format. let
@@ -274,6 +277,8 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
     /* Owen Taylor: "call gtk_drag_finish() with
        success == TRUE" */
 
+//    printf( "data received.\n" );
+       
     /* strangely, we get a "drag_data_received" event even when
        we don't request them. this checks this. */
     if (!drop_target->m_currentDataObject) return;
@@ -317,9 +322,9 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
     drop_target->m_waiting = FALSE;
 }
 
-// ----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // wxDropTarget
-// ----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 wxDropTarget::wxDropTarget()
 {
@@ -362,8 +367,8 @@ bool wxDropTarget::IsSupported( wxDataFormat format )
     {
         GdkAtom formatAtom = (GdkAtom) GPOINTER_TO_INT(child->data);
   
-/*        char *name = gdk_atom_name( formatAtom );
-        if (name) printf( "Format available: %s.\n", name ); */
+//        char *name = gdk_atom_name( formatAtom );
+//        if (name) printf( "Format available: %s.\n", name );
   
         if (formatAtom == format.GetAtom()) return TRUE;
         child = child->next;
@@ -387,8 +392,13 @@ bool wxDropTarget::GetData( wxDataObject *data )
 		       m_dragTime );
 		       
     /* wait for the "drag_data_received" event */
+    
+//    printf( "pre wait.\n" );
+    
     m_waiting = TRUE;
-    while (m_waiting) gtk_main_iteration();
+    while (m_waiting) wxYield();
+    
+//    printf( "post wait.\n" );
     
     m_currentDataObject = (wxDataObject*) NULL;
     
@@ -542,14 +552,99 @@ void wxFileDropTarget::OnData( int x, int y )
     free( files );
 }
 
-//-------------------------------------------------------------------------
-// wxDropSource
-//-------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+// "drag_data_get"
+//----------------------------------------------------------------------------
 
+static void  
+source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
+		       GdkDragContext     *context,
+		       GtkSelectionData   *selection_data,
+		       guint               WXUNUSED(info),
+		       guint               WXUNUSED(time),
+		       wxDropSource       *drop_source )
+{
+    char *name = gdk_atom_name( selection_data->target );
+    if (name) printf( "Format requested: %s.\n", name );
+    
+    wxNode *node = drop_source->m_data->m_dataObjects.First();
+    while (node)
+    {
+        wxDataObject *data_object = (wxDataObject*) node->Data();
+	if (data_object->GetFormat().GetAtom() == selection_data->target)
+	{
+	    size_t data_size = data_object->GetSize();
+	    if (data_size > 0)
+	    {
+	        guchar *buffer = new guchar[data_size];
+		data_object->WriteData( buffer );
+		
+                gtk_selection_data_set( selection_data,
+			                selection_data->target,
+			                8,   /* 8-bit */
+					buffer, 
+					data_size );
+					
+		free( buffer );
+		
+	        /* so far only copy, no moves. TODO. */
+                drop_source->m_retValue = wxDragCopy;
+	    
+	        return;
+	    }
+	}
+    
+        node = node->Next();
+    }
+    
+    drop_source->m_retValue = wxDragCancel;
+}
+  
+//----------------------------------------------------------------------------
+// "drag_data_delete"
+//----------------------------------------------------------------------------
+
+static void source_drag_data_delete( GtkWidget          *WXUNUSED(widget),
+			             GdkDragContext     *WXUNUSED(context),
+		                     wxDropSource       *drop_source )
+{
+//    printf( "Delete the data!\n" );
+
+    drop_source->m_retValue = wxDragMove;
+}
+  
+//----------------------------------------------------------------------------
+// "drag_begin"
+//----------------------------------------------------------------------------
+
+static void source_drag_begin( GtkWidget          *WXUNUSED(widget),
+			       GdkDragContext     *WXUNUSED(context),
+		               wxDropSource       *WXUNUSED(drop_source) )
+{
+//    printf( "drag_begin.\n" );
+}
+  
+//----------------------------------------------------------------------------
+// "drag_end"
+//----------------------------------------------------------------------------
+
+static void source_drag_end( GtkWidget          *WXUNUSED(widget),
+			     GdkDragContext     *WXUNUSED(context),
+		             wxDropSource       *drop_source )
+{
+//    printf( "drag_end.\n" );
+
+    drop_source->m_waiting = FALSE;
+}
+  
+//---------------------------------------------------------------------------
+// wxDropSource
+//---------------------------------------------------------------------------
 
 wxDropSource::wxDropSource( wxWindow *win, const wxIcon &go, const wxIcon &stop )
 {
     g_blockEventsOnDrag = TRUE;
+    m_waiting = TRUE;
   
     m_window = win;
     m_widget = win->m_widget;
@@ -569,7 +664,7 @@ wxDropSource::wxDropSource( wxWindow *win, const wxIcon &go, const wxIcon &stop 
 
 wxDropSource::wxDropSource( wxDataObject *data, wxWindow *win, const wxIcon &go, const wxIcon &stop )
 {
-    g_blockEventsOnDrag = TRUE;
+    m_waiting = TRUE;
   
     m_window = win;
     m_widget = win->m_widget;
@@ -597,8 +692,6 @@ wxDropSource::wxDropSource( wxDataObject *data, wxWindow *win, const wxIcon &go,
 
 wxDropSource::wxDropSource( wxDataBroker *data, wxWindow *win )
 {
-    g_blockEventsOnDrag = TRUE;
-  
     m_window = win;
     m_widget = win->m_widget;
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
@@ -645,53 +738,89 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   
     if (!m_data) return (wxDragResult) wxDragNone;
   
-    static GtkWidget *drag_icon = (GtkWidget*) NULL;
-    static GtkWidget *drop_icon = (GtkWidget*) NULL;
+    g_blockEventsOnDrag = TRUE;
+  
+    RegisterWindow();
+    
+    m_waiting = TRUE;
 
-    GdkPoint hotspot_1 = {0,-5 };
-      
-    if (!drag_icon)
+    GtkTargetList *target_list = gtk_target_list_new( (GtkTargetEntry*) NULL, 0 );
+    gtk_target_list_add( target_list, gdk_atom_intern( "STRING", FALSE ), 0, 0 );
+    
+    GdkEventMotion event;
+    event.window = m_widget->window;
+    int x = 0;
+    int y = 0;
+    GdkModifierType state;
+    gdk_window_get_pointer( event.window, &x, &y, &state );
+    event.x = x;
+    event.y = y;
+    event.state = state;
+    
+    /* GTK wants to know which button was pressed which caused the dragging */
+    int button_number = 0;
+    if (event.state & GDK_BUTTON1_MASK) button_number = 1;
+    else if (event.state & GDK_BUTTON2_MASK) button_number = 2;
+    else if (event.state & GDK_BUTTON3_MASK) button_number = 3;
+
+    /* don't start dragging if no button is down */
+    if (button_number)
     {
-/*
-	  drag_icon = shape_create_icon ( m_stopIcon,
-					 440, 140, 0,0, GTK_WINDOW_POPUP);
-	  
-	  gtk_signal_connect (GTK_OBJECT (drag_icon), "destroy",
-			      GTK_SIGNAL_FUNC(gtk_widget_destroyed),
-			      &drag_icon);
-
-	  gtk_widget_hide (drag_icon);
-*/
-    }
-      
-    GdkPoint hotspot_2 = {-5,-5};
+        GdkDragContext *context = gtk_drag_begin( m_widget,
+                                              target_list,
+					      GDK_ACTION_COPY,
+					      button_number,  /* number of mouse button which started drag */
+					      (GdkEvent*) &event );
 	
-    if (!drop_icon)
-    {
-/*
-	  drop_icon = shape_create_icon ( m_goIcon,
-					 440, 140, 0,0, GTK_WINDOW_POPUP);
-	  
-	  gtk_signal_connect (GTK_OBJECT (drop_icon), "destroy",
-			      GTK_SIGNAL_FUNC(gtk_widget_destroyed),
-			      &drop_icon);
-
-	  gtk_widget_hide (drop_icon);
-*/
-    }
+        wxMask *mask = m_goIcon.GetMask();
+        GdkBitmap *bm = (GdkBitmap *) NULL;
+        if (mask) bm = mask->GetBitmap();
+	GdkPixmap *pm = m_goIcon.GetPixmap();
 	
+        gtk_drag_set_icon_pixmap( context,
+	                          gtk_widget_get_colormap( m_widget ),
+				  pm,
+				  bm,
+				  0,
+				  0 );
+    
+        while (m_waiting) wxYield();
+    }
 
-    return FALSE;
+    g_blockEventsOnDrag = FALSE;
+    
+    UnregisterWindow();
+
+    return m_retValue;
 }
 
-void wxDropSource::RegisterWindow(void)
-{
-    if (!m_data) return;
-}
-
-void wxDropSource::UnregisterWindow(void)
+void wxDropSource::RegisterWindow()
 {
     if (!m_widget) return;
+    
+    gtk_signal_connect( GTK_OBJECT(m_widget), "drag_data_get",
+		      GTK_SIGNAL_FUNC (source_drag_data_get), (gpointer) this);
+    gtk_signal_connect (GTK_OBJECT(m_widget), "drag_data_delete",
+		      GTK_SIGNAL_FUNC (source_drag_data_delete),  (gpointer) this );
+    gtk_signal_connect (GTK_OBJECT(m_widget), "drag_begin",
+		      GTK_SIGNAL_FUNC (source_drag_begin),  (gpointer) this );
+    gtk_signal_connect (GTK_OBJECT(m_widget), "drag_end",
+		      GTK_SIGNAL_FUNC (source_drag_end),  (gpointer) this );
+
+}
+
+void wxDropSource::UnregisterWindow()
+{
+    if (!m_widget) return;
+    
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
+		      GTK_SIGNAL_FUNC(source_drag_data_get), (gpointer) this );
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
+		      GTK_SIGNAL_FUNC(source_drag_data_delete), (gpointer) this );
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
+		      GTK_SIGNAL_FUNC(source_drag_begin), (gpointer) this );
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
+		      GTK_SIGNAL_FUNC(source_drag_end), (gpointer) this );
 }
 
 

@@ -94,6 +94,8 @@ public:
     
     wxIcon        m_goIcon;
     wxIcon        m_stopIcon;
+    
+    bool          m_waiting;
 };
 
 #include "gtk/gtk.h"
