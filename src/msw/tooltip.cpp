@@ -382,11 +382,9 @@ void wxToolTip::SetWindow(wxWindow *win)
     //     something like this where the derived class can do such things
     //     itself instead of wxToolTip "knowing" about them all
     wxComboBox *combo = wxDynamicCast(control, wxComboBox);
-    if ( combo )
+    if ( combo && !(combo->GetWindowStyle() & wxCB_READONLY))
     {
-        WXHWND hwndComboEdit = combo->GetWindowStyle() & wxCB_READONLY
-                                ? combo->GetHWND()
-                                : combo->GetEditHWND();
+        WXHWND hwndComboEdit = combo->GetEditHWND();
         if ( hwndComboEdit )
         {
             Add(hwndComboEdit);
