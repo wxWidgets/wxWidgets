@@ -298,52 +298,28 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
     }
     while ( rc == -1 && errno == EINTR );
 
-    if (rc == -1)
+    // notify user about termination if required
+    if ( proc_data->process )
     {
-        // JACS: this could happen if the process was terminated and waitpid called,
-        // so commenting out for now.
-        //wxLogSysError(_("Waiting for subprocess termination failed (return code = -1)"));
+        proc_data->process->OnTerminate
+                            (
+                                proc_data->pid,
+                                (rc == 0) && WIFEXITED(status)
+                                    ? WEXITSTATUS(status)
+                                    : -1
+                            );
     }
-    else if (! (WIFEXITED(status)))
+    // clean up
+    if ( proc_data->pid > 0 )
     {
-        wxLogSysError(_("Waiting for subprocess termination failed (WIFEXITED returned zero)"));
-	
-       /* AFAIK, this can only happen if something went wrong within
-          wxGTK, i.e. due to a race condition or some serious bug.
-          After having fixed the order of statements in
-          GTK_EndProcessDetector(). (KB)
-       */
+       delete proc_data;
     }
-    else if (WIFSIGNALED(status))
+    else
     {
-        wxLogSysError(_("Waiting for subprocess termination failed (signal not caught)"));
-	
-       /* AFAIK, this can only happen if something went wrong within
-          wxGTK, i.e. due to a race condition or some serious bug.
-          After having fixed the order of statements in
-          GTK_EndProcessDetector(). (KB)
-       */
-    }
-    // else
-    {
-        // notify user about termination if required
-        if (proc_data->process)
-        {
-            proc_data->process->OnTerminate(proc_data->pid,
-                                            WEXITSTATUS(status));
-        }
-        // clean up
-        if ( proc_data->pid > 0 )
-        {
-           delete proc_data;
-        }
-        else
-        {
-           // wxExecute() will know about it
-           proc_data->exitcode = status;
+       // wxExecute() will know about it
+       proc_data->exitcode = status;
 
-           proc_data->pid = 0;
-        }
+       proc_data->pid = 0;
     }
 }
 
