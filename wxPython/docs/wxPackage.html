@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
+<title>The wxPython wx Package</title>
+<meta name="author" content="Patrick K. O'Brien" />
+<meta name="organization" content="Orbtech" />
+<meta name="date" content="2003-05-04" />
+<link rel="stylesheet" href="default.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="the-wxpython-wx-package">
+<h1 class="title">The wxPython wx Package</h1>
+<h2 class="subtitle" id="or-how-to-survive-the-new-wx-namespace-changes">Or, how to survive the new wx namespace changes.</h2>
+<table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name" />
+<col class="docinfo-content" />
+<tbody valign="top">
+<tr><th class="docinfo-name">Author:</th>
+<td>Patrick K. O'Brien</td></tr>
+<tr><th class="docinfo-name">Contact:</th>
+<td><a class="first last reference" href="mailto:pobrien&#64;orbtech.com">pobrien&#64;orbtech.com</a></td></tr>
+<tr><th class="docinfo-name">Organization:</th>
+<td><a class="first last reference" href="http://www.orbtech.com/">Orbtech</a></td></tr>
+<tr><th class="docinfo-name">Date:</th>
+<td>2003-05-04</td></tr>
+<tr><th class="docinfo-name">Revision:</th>
+<td>1.1.2.2</td></tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#introduction" id="id1" name="id1">Introduction</a></li>
+<li><a class="reference" href="#why-change-anything" id="id2" name="id2">Why change anything?</a></li>
+<li><a class="reference" href="#what-does-the-new-wx-package-do" id="id3" name="id3">What does the new wx package do?</a></li>
+<li><a class="reference" href="#will-any-of-this-effect-my-existing-code" id="id4" name="id4">Will any of this effect my existing code?</a></li>
+<li><a class="reference" href="#how-does-the-new-wx-package-work" id="id5" name="id5">How does the new wx package work?</a></li>
+<li><a class="reference" href="#what-about-all-the-other-modules-like-grid-html-and-stc" id="id6" name="id6">What about all the other modules, like grid, html, and stc?</a></li>
+<li><a class="reference" href="#how-do-i-use-this-new-wx-package" id="id7" name="id7">How do I use this new wx package?</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#id1" name="introduction">Introduction</a></h1>
+<p>Big things sometimes come in small packages.  This is certainly true
+of the new wx package, which is being introduced as a way to allow the
+&quot;wx&quot; prefix to be dropped from the names of all wxPython classes,
+functions, and constants.</p>
+</div>
+<div class="section" id="why-change-anything">
+<h1><a class="toc-backref" href="#id2" name="why-change-anything">Why change anything?</a></h1>
+<p>This change is being made for a couple of reasons.  The first reason
+is to discourage the use of <tt class="literal"><span class="pre">import</span> <span class="pre">*</span></tt>, which is a dangerous
+technique that can create name conflicts and bloated namespaces.</p>
+<p>The second reason is to remove what some perceive to be a &quot;wart.&quot;  For
+example, the following code is rather ugly in that the &quot;wx&quot; prefix on
+the wxFrame class name is no longer useful when you're using the wx
+module prefix:</p>
+<pre class="literal-block">
+from wxPython import wx
+
+class Frame(wx.wxFrame)
+</pre>
+<p>The new wx package allows you to write code like this, instead:</p>
+<pre class="literal-block">
+import wx
+
+class Frame(wx.Frame)
+</pre>
+<p>The third reason is that the wxWindows project intends to do the same
+thing (implement a new wx namespace and drop the &quot;wx&quot; prefix) and we
+want wxPython to lead the way.</p>
+</div>
+<div class="section" id="what-does-the-new-wx-package-do">
+<h1><a class="toc-backref" href="#id3" name="what-does-the-new-wx-package-do">What does the new wx package do?</a></h1>
+<p>As a way of getting to this new syntax as quickly as possible, the
+code in this new wx package was created.  What it does is alter the
+existing wx namespace dynamically.  By making the changes on-the-fly
+at runtime, we can try out the new syntax before any permanent changes
+are made to the underlying class library.  The downside of making
+these changes at runtime is that there is a slight delay when you
+<tt class="literal"><span class="pre">import</span> <span class="pre">wx</span></tt>; the upside is that you can start using the new syntax
+now.</p>
+</div>
+<div class="section" id="will-any-of-this-effect-my-existing-code">
+<h1><a class="toc-backref" href="#id4" name="will-any-of-this-effect-my-existing-code">Will any of this effect my existing code?</a></h1>
+<p>No.  Your existing code will continue to work and be supported for
+some time.  It will be up to you to decide when to switch to the new
+syntax.  But all new documentation and code examples will use the new
+syntax.  So don't wait too long.  You wouldn't want anyone calling you
+old-fashioned, would you?</p>
+</div>
+<div class="section" id="how-does-the-new-wx-package-work">
+<h1><a class="toc-backref" href="#id5" name="how-does-the-new-wx-package-work">How does the new wx package work?</a></h1>
+<p>It's pretty simple, and pretty clever.  The wx directory contains an
+<tt class="literal"><span class="pre">__init__.py</span></tt> file, making it a Python package.  (In contrast, the
+old wxPython.wx module is a module, not a package.)  When you <tt class="literal"><span class="pre">import</span>
+<span class="pre">wx</span></tt> the code in the <tt class="literal"><span class="pre">__init__.py</span></tt> file is executed, and that's
+where all the magic takes place.  Let's take a look at the code inside
+the <tt class="literal"><span class="pre">__init__.py</span></tt> file:</p>
+<pre class="literal-block">
+&quot;&quot;&quot;wx package
+
+Provides a way to drop the wx prefix from wxPython objects.&quot;&quot;&quot;
+
+__author__ = &quot;Patrick K. O'Brien &lt;pobrien&#64;orbtech.com&gt;&quot;
+__cvsid__ = &quot;$Id$&quot;
+__revision__ = &quot;$Revision$&quot;[11:-2]
+
+from wxPython import wx
+
+import types
+
+d_new = globals()
+d_old = wx.__dict__
+
+for old, obj in d_old.items():
+    if type(obj) is types.ModuleType or old.startswith('_'):
+        # Skip modules and private names.
+        continue
+    new = old
+    if old.startswith('EVT_'):
+        # Leave name unmodified; add to the new wx namespace.
+        d_new[new] = obj
+    elif old.startswith('wxEVT_'):
+        # Leave name unmodified; add to the new wx namespace.
+        d_new[new] = obj
+    else:
+        if old.startswith('wx'):
+            # Remove the 'wx' prefix.
+            new = old[2:]
+        # Add to the new wx package namespace.
+        d_new[new] = obj
+
+del d_new
+del d_old
+del new
+del obj
+del old
+del types
+
+del wx
+
+</pre>
+<p>Namespaces in Python are implemented as dictionaries.  The dictionary
+used to create the wx package's namespace is accessible using the
+<tt class="literal"><span class="pre">globals()</span></tt> function.  The dictionary used to create the old
+wxPython.wx module's namespace is <tt class="literal"><span class="pre">wx.__dict__</span></tt>.  Once we have these
+two dictionaries, it's a simple matter of iterating through one,
+changing the names, adding the renamed object to the other dictionary,
+and cleaning up a few local variables and imported modules.  Voila!</p>
+</div>
+<div class="section" id="what-about-all-the-other-modules-like-grid-html-and-stc">
+<h1><a class="toc-backref" href="#id6" name="what-about-all-the-other-modules-like-grid-html-and-stc">What about all the other modules, like grid, html, and stc?</a></h1>
+<p>There's more to wxPython than just the wx namespace.  And we've got
+those extra modules covered as well.  For each of those modules (as
+well as the lib package) we've got matching modules in the new wx
+package.  Let's take a look at a few of them.</p>
+<p>Here is <tt class="literal"><span class="pre">html.py</span></tt>:</p>
+<pre class="literal-block">
+&quot;&quot;&quot;Provides a way to drop the wx prefix from wxPython objects.&quot;&quot;&quot;
+
+__author__ = &quot;Patrick K. O'Brien &lt;pobrien&#64;orbtech.com&gt;&quot;
+__cvsid__ = &quot;$Id$&quot;
+__revision__ = &quot;$Revision$&quot;[11:-2]
+
+import wx
+from wx import prefix
+
+from wxPython import html
+prefix.rename(d_new=globals(), d_old=html.__dict__)
+del html
+
+del prefix
+del wx
+
+</pre>
+<p>And here is <tt class="literal"><span class="pre">lib/dialogs.py</span></tt>:</p>
+<pre class="literal-block">
+&quot;&quot;&quot;Provides a way to drop the wx prefix from wxPython objects.&quot;&quot;&quot;
+
+__author__ = &quot;Patrick K. O'Brien &lt;pobrien&#64;orbtech.com&gt;&quot;
+__cvsid__ = &quot;$Id$&quot;
+__revision__ = &quot;$Revision$&quot;[11:-2]
+
+import wx
+from wx import prefix
+
+from wxPython.lib import dialogs
+prefix.rename(d_new=globals(), d_old=dialogs.__dict__)
+del dialogs
+
+del prefix
+del wx
+
+</pre>
+<p>As you can see, they both rely on the <tt class="literal"><span class="pre">prefix.rename()</span></tt> function
+defined in <tt class="literal"><span class="pre">prefix.py</span></tt>:</p>
+<pre class="literal-block">
+&quot;&quot;&quot;Renaming utility.
+
+Provides a way to drop the wx prefix from wxPython objects.&quot;&quot;&quot;
+
+__author__ = &quot;Patrick K. O'Brien &lt;pobrien&#64;orbtech.com&gt;&quot;
+__cvsid__ = &quot;$Id$&quot;
+__revision__ = &quot;$Revision$&quot;[11:-2]
+
+import types
+
+def rename(d_new, d_old):
+    for old, obj in d_old.items():
+        if type(obj) is types.ModuleType or old.startswith('_'):
+            # Skip modules and private names.
+            continue
+##         mod = d_old['__name__']
+##         if hasattr(obj, '__module__') and not obj.__module__.startswith(mod):
+##             # Skip objects imported from other modules, except those
+##             # related to the current module, such as stc_.
+##             continue
+        new = old
+        if old.startswith('EVT_') or old.startswith('wxEVT_'):
+            # Leave these names unmodified.
+            pass 
+        elif old.startswith('wx'):
+            new = old[2:]
+        if new:
+            d_new[new] = d_old[old]
+
+</pre>
+<p>Again, the technique is very similar to the one used by the wx
+package.</p>
+</div>
+<div class="section" id="how-do-i-use-this-new-wx-package">
+<h1><a class="toc-backref" href="#id7" name="how-do-i-use-this-new-wx-package">How do I use this new wx package?</a></h1>
+<p>The wx package is automatically created when you install wxPython
+version 2.4.1 or higher.  So all you have to do is:</p>
+<pre class="literal-block">
+import wx
+</pre>
+<p>Example programs are included in the wxPython/samples/wx_examples
+directory, and are documented in the <a class="reference" href="wxPythonExamples.html">wxPythonExamples</a> documentation
+file.</p>
+<p>Good luck.  I hope you like the new wx package as much as I do.</p>
+</div>
+</div>
+<hr class="footer"/>
+<div class="footer">
+<a class="reference" href="wxPackage.txt">View document source</a>.
+Generated on: 2003-05-04 19:38 UTC.
+Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+</div>
+</body>
+</html>
