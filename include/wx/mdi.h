@@ -1,6 +1,10 @@
 #ifndef _WX_MDI_H_BASE_
 #define _WX_MDI_H_BASE_
 
+#include "wx/setup.h"
+
+#if wxUSE_MDI_ARCHITECTURE
+
 #if defined(__WXUNIVERSAL__)
 #include "wx/generic/mdig.h"
 #elif defined(__WXMSW__)
@@ -16,6 +20,8 @@
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/mdi.h"
 #endif
+
+#endif // wxUSE_MDI_ARCHITECTURE
 
 #endif
     // _WX_MDI_H_BASE_
