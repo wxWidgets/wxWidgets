@@ -113,6 +113,11 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
     }
 }
 
+void wxFileDialog::GetFilenames(wxArrayString& files) const
+{
+    files = m_fileNames;
+}
+
 void wxFileDialog::SetPath(const wxString& path)
 {
     wxString ext;

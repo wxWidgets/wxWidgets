@@ -33,6 +33,7 @@ public:
 
     virtual void SetPath(const wxString& path);
     virtual void GetPaths(wxArrayString& paths) const;
+    virtual void GetFilenames(wxArrayString& files) const;
 
     virtual int ShowModal();
 
