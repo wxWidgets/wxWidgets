@@ -195,7 +195,11 @@ wxString wxIPV4address::Hostname()
 
   h_ent = gethostbyaddr((char *)&(m_addr->sin_addr), sizeof(m_addr->sin_addr),
 			GetFamily());
-  return wxString(h_ent->h_name);
+			
+  if (!h_ent)
+     return wxString("");
+  else
+     return wxString(h_ent->h_name);
 }
 
 unsigned short wxIPV4address::Service()

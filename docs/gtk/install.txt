@@ -8,6 +8,18 @@ like to read install instructions just do (in the base dir):
 make
 make install
 
+* The most simple errors
+------------------------
+
+configure reports, that you don't have GTK 1.0.X installed
+although you are certainly sure you have. Well, you have
+installed it, but you also have another version of the
+GTK installed, which you may need to removed including
+other versions of glib (and its headers).
+
+* The most simple program
+-------------------------
+
 Now create your super-application myfoo.app and compile anywhere 
 with
 
@@ -79,7 +91,7 @@ make install
 NB: I included thread support in wxWindows/Gtk, as this 
 problem will disappear in the near future when all major 
 Linux Variants have moved to glibc 2. Also, the Linux
-Base Standard will include glibc 2 and Posic threads.
+Base Standard will include glibc 2 and Posix threads.
 
 * Create your configuration
 -----------------------------

@@ -1,12 +1,12 @@
 Summary: The GTK+ 1.0 port of wxWindows library
 Name: wxGTK
-Version: 2.0 beta 2
+Version: 2.0.1
 Release: 1
-Copyright: LGPL
+Copyright: wxWindows Licence
 Group: X11/Libraries
-Source0: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source
+Source: ftp://wesley.informatik.uni-freiburg.de/pub/linux/wxxt/source/wxGTK2b3.tgz
 URL: http://www.freiburg.linux.de/~wxxt/docs.html
-Packager: Michael Kiefte <mkiefte@gpu.srv.ualberta.ca>
+Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
 Requires: gtk+ >= 1.0.4
 
 %description
@@ -17,7 +17,7 @@ wxWindows is a free C++ library for cross-platform GUI development. With wxWindo
 ./configure --prefix=/usr --with-threads
 
 %build
-make src
+make
 
 %install
 make install
@@ -29,11 +29,11 @@ make install
 /sbin/ldconfig
 
 %files
-%doc docs/gtk/COPYING.LIB docs/gtk/install.txt docs/gtk/licence.txt docs/gtk/readme.txt docs/symbols.txt docs/gtk/todo.txt
+%doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
 /usr/include/wx
 /usr/lib/wx
-/usr/lib/libwx_gtk2.a
 /usr/lib/libwx_gtk2.so
 /usr/lib/libwx_gtk2.so.0
 /usr/lib/libwx_gtk2.so.0.1
 /usr/bin/wx-config
+
