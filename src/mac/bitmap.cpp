@@ -199,33 +199,34 @@ wxBitmapRefData::wxBitmapRefData()
     m_bitmapType = kMacBitmapTypeUnknownType ;
 }
 
-wxBitmapRefData::~wxBitmapRefData()
+// TODO move this do a public function of Bitmap Ref
+static void DisposeBitmapRefData(wxBitmapRefData *data)
 {
-	switch (m_bitmapType)
+	switch (data->m_bitmapType)
 	{
 		case kMacBitmapTypePict :
 			{
-				if ( m_hPict )
+				if ( data->m_hPict )
 				{
-					KillPicture( m_hPict ) ;
-					m_hPict = NULL ;
+					KillPicture( data->m_hPict ) ;
+					data->m_hPict = NULL ;
 				}
 			}
 			break ;
 		case kMacBitmapTypeGrafWorld :
 			{
-				if ( m_hBitmap )
+				if ( data->m_hBitmap )
 				{
-					wxMacDestroyGWorld( m_hBitmap ) ;
-					m_hBitmap = NULL ;
+					wxMacDestroyGWorld( data->m_hBitmap ) ;
+					data->m_hBitmap = NULL ;
 				}
 			}
 			break ;
 		case kMacBitmapTypeIcon :
-        	if ( m_hIcon )
+        	if ( data->m_hIcon )
         	{
-        		DisposeCIcon( m_hIcon ) ;
-        		m_hIcon = NULL ;
+        		DisposeCIcon( data->m_hIcon ) ;
+        		data->m_hIcon = NULL ;
         	}
 		
 		default :
@@ -233,11 +234,16 @@ wxBitmapRefData::~wxBitmapRefData()
 			break ;
 	}
 	
-  if (m_bitmapMask)
+  if (data->m_bitmapMask)
   {
-    delete m_bitmapMask;
-    m_bitmapMask = NULL;
+    delete data->m_bitmapMask;
+    data->m_bitmapMask = NULL;
   }
+}
+
+wxBitmapRefData::~wxBitmapRefData()
+{
+  DisposeBitmapRefData( this ) ;
 }
 
 wxList wxBitmapBase::sm_handlers;
@@ -438,7 +444,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
            RGBColor  color;
 
            bitmap = GetHBITMAP();
-           subbitmap = wxMacCreateGWorld(rect.width, rect.height, GetDepth());
+           subbitmap = ref->m_hBitmap ;
            LockPixels(GetGWorldPixMap(bitmap));
            LockPixels(GetGWorldPixMap(subbitmap));
 
@@ -454,7 +460,6 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
            }
            UnlockPixels(GetGWorldPixMap(bitmap));
            UnlockPixels(GetGWorldPixMap(subbitmap));
-           ret.SetHBITMAP(subbitmap);
        }
    }
    SetGWorld( origPort, origDevice );
@@ -487,9 +492,11 @@ int wxBitmap::GetBitmapType() const
 
 void wxBitmap::SetHBITMAP(WXHBITMAP bmp)
 {
+    DisposeBitmapRefData( M_BITMAPDATA ) ;
+    
     M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
     M_BITMAPDATA->m_hBitmap = bmp ;
-	M_BITMAPDATA->m_ok = (M_BITMAPDATA->m_hBitmap != NULL ) ;
+	  M_BITMAPDATA->m_ok = (M_BITMAPDATA->m_hBitmap != NULL ) ;
 }
 
 bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
