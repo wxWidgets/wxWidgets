@@ -19,7 +19,7 @@
 
 #if wxUSE_COMBOBOX
 
-class WXXMLDLLEXPORT wxComboBoxXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxComboBoxXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxComboBoxXmlHandler)
 public:

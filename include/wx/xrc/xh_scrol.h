@@ -20,7 +20,7 @@
 
 
 
-class WXXMLDLLEXPORT wxScrollBarXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxScrollBarXmlHandler : public wxXmlResourceHandler
 {
 	DECLARE_DYNAMIC_CLASS(wxScrollBarXmlHandler)
     enum

@@ -17,7 +17,7 @@
 
 #include "wx/xrc/xmlres.h"
 
-class WXXMLDLLEXPORT wxButtonXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxButtonXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxButtonXmlHandler)
 public:

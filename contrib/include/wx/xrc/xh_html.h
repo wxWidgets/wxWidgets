@@ -21,7 +21,7 @@
 
 #if wxUSE_HTML
 
-class WXXMLDLLEXPORT wxHtmlWindowXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxHtmlWindowXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxHtmlWindowXmlHandler)
 public:

@@ -17,7 +17,7 @@
 
 #include "wx/xrc/xmlres.h"
 
-class WXXMLDLLEXPORT wxCheckListXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxCheckListXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxCheckListXmlHandler)
 public:

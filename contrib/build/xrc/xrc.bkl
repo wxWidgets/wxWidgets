@@ -98,12 +98,14 @@
     </headers>
 
     <dll id="xrcdll" template="wx_contrib_dll" cond="SHARED=='1'">
-        <define>WXMAKINGDLL</define>
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_XRC</define>
         <include>$(SRCDIR)/expat/xmlparse</include>
         <include>$(SRCDIR)/expat/xmltok</include>
         <sources>$(XRC_SRC)</sources>
-        <wx-lib>core</wx-lib>
         <wx-lib>html</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
     </dll>
     
     <lib id="xrclib" template="wx_contrib_lib" cond="SHARED=='0'">

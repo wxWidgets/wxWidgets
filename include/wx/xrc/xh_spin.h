@@ -19,7 +19,7 @@
 #include "wx/defs.h"
 
 #if wxUSE_SPINBTN
-class WXXMLDLLEXPORT wxSpinButtonXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxSpinButtonXmlHandler : public wxXmlResourceHandler
 {
 	DECLARE_DYNAMIC_CLASS(wxSpinButtonXmlHandler)
     enum
@@ -37,7 +37,7 @@ public:
 #endif
 
 #if wxUSE_SPINCTRL
-class WXXMLDLLEXPORT wxSpinCtrlXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxSpinCtrlXmlHandler : public wxXmlResourceHandler
 {
 	DECLARE_DYNAMIC_CLASS(wxSpinCtrlXmlHandler)
     enum

@@ -20,7 +20,7 @@
 
 class WXDLLEXPORT wxNotebook;
 
-class WXXMLDLLEXPORT wxNotebookXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxNotebookXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxNotebookXmlHandler)
 public:

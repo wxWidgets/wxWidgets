@@ -18,7 +18,7 @@
 #include "wx/xrc/xmlres.h"
 
 
-class WXXMLDLLEXPORT wxBitmapXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxBitmapXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxBitmapXmlHandler)
 public:
@@ -27,7 +27,7 @@ public:
     virtual bool CanHandle(wxXmlNode *node);
 };
 
-class WXXMLDLLEXPORT wxIconXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxIconXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxIconXmlHandler)
 public:

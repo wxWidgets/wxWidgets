@@ -17,7 +17,7 @@
 
 #include "wx/xrc/xmlres.h"
 
-class WXXMLDLLEXPORT wxCalendarCtrlXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxCalendarCtrlXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxCalendarCtrlXmlHandler)
 public:

@@ -20,7 +20,7 @@
 
 class WXDLLEXPORT wxSizer;
 
-class WXXMLDLLEXPORT wxSizerXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxSizerXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxSizerXmlHandler)
 public:

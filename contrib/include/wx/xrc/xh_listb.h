@@ -19,7 +19,7 @@
 
 #if wxUSE_LISTBOX
 
-class WXXMLDLLEXPORT wxListBoxXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxListBoxXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxListBoxXmlHandler)
 public:

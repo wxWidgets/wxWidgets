@@ -20,16 +20,18 @@
 #include "wx/object.h"
 #include "wx/list.h"
 
-#ifdef WXXMLISDLL
-#define WXXMLDLLEXPORT WXDLLEXPORT
-#else
-#define WXXMLDLLEXPORT
+#ifdef WXMAKINGDLL_XRC
+    #define WXDLLIMPEXP_XRC WXEXPORT
+#elif defined(WXUSINGDLL)
+    #define WXDLLIMPEXP_XRC WXIMPORT
+#else // not making nor using DLL
+    #define WXDLLIMPEXP_XRC
 #endif
 
-class WXXMLDLLEXPORT wxXmlNode;
-class WXXMLDLLEXPORT wxXmlProperty;
-class WXXMLDLLEXPORT wxXmlDocument;
-class WXXMLDLLEXPORT wxXmlIOHandler;
+class WXDLLIMPEXP_XRC wxXmlNode;
+class WXDLLIMPEXP_XRC wxXmlProperty;
+class WXDLLIMPEXP_XRC wxXmlDocument;
+class WXDLLIMPEXP_XRC wxXmlIOHandler;
 class WXDLLEXPORT wxInputStream;
 class WXDLLEXPORT wxOutputStream;
 
@@ -58,7 +60,7 @@ enum wxXmlNodeType
 // Example: in <img src="hello.gif" id="3"/> "src" is property with value
 //          "hello.gif" and "id" is prop. with value "3".
 
-class WXXMLDLLEXPORT wxXmlProperty
+class WXDLLIMPEXP_XRC wxXmlProperty
 {
 public:
     wxXmlProperty() : m_next(NULL) {}
@@ -91,7 +93,7 @@ private:
 // If wxUSE_UNICODE is 0, all strings are encoded in the encoding given to Load
 // (default is UTF-8).
 
-class WXXMLDLLEXPORT wxXmlNode
+class WXDLLIMPEXP_XRC wxXmlNode
 {
 public:
     wxXmlNode() : m_properties(NULL), m_parent(NULL),
@@ -161,7 +163,7 @@ private:
 
 // This class holds XML data/document as parsed by XML parser.
 
-class WXXMLDLLEXPORT wxXmlDocument : public wxObject
+class WXDLLIMPEXP_XRC wxXmlDocument : public wxObject
 {
 public:
     wxXmlDocument();

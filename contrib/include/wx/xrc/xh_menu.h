@@ -17,7 +17,7 @@
 
 #include "wx/xrc/xmlres.h"
 
-class WXXMLDLLEXPORT wxMenuXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxMenuXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxMenuXmlHandler)
 public:
@@ -29,7 +29,7 @@ private:
     bool m_insideMenu;
 };
 
-class WXXMLDLLEXPORT wxMenuBarXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxMenuBarXmlHandler : public wxXmlResourceHandler
 {
 	DECLARE_DYNAMIC_CLASS(wxMenuBarXmlHandler)
     public:

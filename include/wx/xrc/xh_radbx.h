@@ -19,7 +19,7 @@
 
 #if wxUSE_RADIOBOX
 
-class WXXMLDLLEXPORT wxRadioBoxXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxRadioBoxXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxRadioBoxXmlHandler)
 public:

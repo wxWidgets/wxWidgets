@@ -18,7 +18,7 @@
 #include "wx/xrc/xmlres.h"
 
 
-class WXXMLDLLEXPORT wxStaticBoxXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxStaticBoxXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxStaticBoxXmlHandler)
 public:

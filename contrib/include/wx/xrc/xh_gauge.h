@@ -22,7 +22,7 @@
 #include "wx/xrc/xmlres.h"
 
 
-class WXXMLDLLEXPORT wxGaugeXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxGaugeXmlHandler : public wxXmlResourceHandler
 {
 	DECLARE_DYNAMIC_CLASS(wxGaugeXmlHandler)
     enum

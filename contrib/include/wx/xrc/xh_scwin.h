@@ -20,7 +20,7 @@
 
 
 
-class WXXMLDLLEXPORT wxScrolledWindowXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxScrolledWindowXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxScrolledWindowXmlHandler)
 public:

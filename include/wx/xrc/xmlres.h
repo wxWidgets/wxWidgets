@@ -36,9 +36,9 @@ class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxToolBar;
 
-class WXXMLDLLEXPORT wxXmlResourceHandler;
-class WXXMLDLLEXPORT wxXmlSubclassFactory;
-class WXXMLDLLEXPORT wxXmlSubclassFactoriesList;
+class WXDLLIMPEXP_XRC wxXmlResourceHandler;
+class WXDLLIMPEXP_XRC wxXmlSubclassFactory;
+class WXDLLIMPEXP_XRC wxXmlSubclassFactoriesList;
 class wxXmlResourceModule;
 
 
@@ -46,14 +46,14 @@ class wxXmlResourceModule;
 // encoded in root node of XRC file as "version" property).
 //
 // Rules for increasing version number:
-//   - change it only if you made incompatible change to the format. Addition of new
-//     attribute to control handler is _not_ incompatible change, because older
-//     versions of the library may ignore it.
+//   - change it only if you made incompatible change to the format. Addition
+//     of new attribute to control handler is _not_ incompatible change, because
+//     older versions of the library may ignore it.
 //   - if you change version number, follow these steps:
 //       - set major, minor and release numbers to respective version numbers of
 //         the wxWindows library (see wx/version.h)
-//       - reset revision to 0 unless the first three are same as before, in which
-//         case you should increase revision by one
+//       - reset revision to 0 unless the first three are same as before,
+//         in which case you should increase revision by one
 #define WX_XMLRES_CURRENT_VERSION_MAJOR            2
 #define WX_XMLRES_CURRENT_VERSION_MINOR            3
 #define WX_XMLRES_CURRENT_VERSION_RELEASE          0
@@ -66,7 +66,7 @@ class wxXmlResourceModule;
                  WX_XMLRES_CURRENT_VERSION_RELEASE * 256 + \
                  WX_XMLRES_CURRENT_VERSION_REVISION)
 
-class WXXMLDLLEXPORT wxXmlResourceDataRecord
+class WXDLLIMPEXP_XRC wxXmlResourceDataRecord
 {
 public:
     wxXmlResourceDataRecord() : Doc(NULL), Time(wxDateTime::Now()) {}
@@ -78,11 +78,9 @@ public:
 };
 
 
-#ifdef WXXMLISDLL
-WX_DECLARE_EXPORTED_OBJARRAY(wxXmlResourceDataRecord, wxXmlResourceDataRecords);
-#else
-WX_DECLARE_OBJARRAY(wxXmlResourceDataRecord, wxXmlResourceDataRecords);
-#endif
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxXmlResourceDataRecord,
+                                  wxXmlResourceDataRecords,
+                                  WXDLLIMPEXP_XRC);
 
 enum wxXmlResourceFlags
 {
@@ -93,7 +91,7 @@ enum wxXmlResourceFlags
 // This class holds XML resources from one or more .xml files
 // (or derived forms, either binary or zipped -- see manual for
 // details).
-class WXXMLDLLEXPORT wxXmlResource : public wxObject
+class WXDLLIMPEXP_XRC wxXmlResource : public wxObject
 {
 public:
     // Constructor.
@@ -125,10 +123,10 @@ public:
     void InitAllHandlers();
 
     // Initialize only a specific handler (or custom handler). Convention says
-    // that handler name is equal to the control's name plus 'XmlHandler', for example
-    // wxTextCtrlXmlHandler, wxHtmlWindowXmlHandler. The XML resource compiler
-    // (xmlres) can create include file that contains initialization code for
-    // all controls used within the resource.
+    // that handler name is equal to the control's name plus 'XmlHandler', for
+    // example wxTextCtrlXmlHandler, wxHtmlWindowXmlHandler. The XML resource
+    // compiler (xmlres) can create include file that contains initialization
+    // code for all controls used within the resource.
     void AddHandler(wxXmlResourceHandler *handler);
 
     // Add a new handler at the begining of the handler list
@@ -300,7 +298,7 @@ private:
 // wxXmlResourceHandler is an abstract base class for resource handlers
 // capable of creating a control from an XML node.
 
-class WXXMLDLLEXPORT wxXmlResourceHandler : public wxObject
+class WXDLLIMPEXP_XRC wxXmlResourceHandler : public wxObject
 {
 DECLARE_ABSTRACT_CLASS(wxXmlResourceHandler)
 public:
@@ -460,10 +458,11 @@ void wxXmlInitResourceModule();
 // register your subclasses via wxWindows' RTTI mechanism. This class is useful
 // only for language bindings developer who need a way to implement subclassing
 // in wxWindows ports that don't support wxRTTI (e.g. wxPython).
-class WXXMLDLLEXPORT wxXmlSubclassFactory
+class WXDLLIMPEXP_XRC wxXmlSubclassFactory
 {
 public:
-    // Try to create instance of given class and return it, return NULL on failure:
+    // Try to create instance of given class and return it, return NULL on
+    // failure:
     virtual wxObject *Create(const wxString& className) = 0;
     virtual ~wxXmlSubclassFactory() {}
 };

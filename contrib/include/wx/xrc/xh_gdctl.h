@@ -19,7 +19,7 @@
 
 #if wxUSE_DIRDLG
 
-class WXXMLDLLEXPORT wxGenericDirCtrlXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxGenericDirCtrlXmlHandler : public wxXmlResourceHandler
 {
 DECLARE_DYNAMIC_CLASS(wxGenericDirCtrlXmlHandler)
 public:

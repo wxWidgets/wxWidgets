@@ -20,7 +20,7 @@
 
 #if wxUSE_SLIDER
 
-class WXXMLDLLEXPORT wxSliderXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxSliderXmlHandler : public wxXmlResourceHandler
 {
 	DECLARE_DYNAMIC_CLASS(wxSliderXmlHandler)
     enum
