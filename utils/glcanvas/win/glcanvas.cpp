@@ -141,13 +141,12 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id,
         SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
     }
 
-    m_hDC = (WXHDC) ::GetDC((HWND) GetHWND());
+	m_hDC = (WXHDC) ::GetDC((HWND) GetHWND());
 
     SetupPixelFormat();
     SetupPalette(palette);
 
     m_glContext = new wxGLContext(TRUE, this, palette);
-
 }
 
 wxGLCanvas::wxGLCanvas( wxWindow *parent,
@@ -156,9 +155,9 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent,
               int *attribList, const wxPalette& palette )
   : wxScrolledWindow()
 {
-    m_glContext = (wxGLContext*) NULL;
+   m_glContext = (wxGLContext*) NULL;
 
-    bool ret = Create(parent, id, pos, size, style, name);
+   bool ret = Create(parent, id, pos, size, style, name);
 
     if ( ret )
     {
@@ -172,6 +171,33 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent,
     SetupPalette(palette);
 
     m_glContext = new wxGLContext(TRUE, this, palette, shared );
+}
+
+// Not very usefull for wxMSW, but this is to be wxGTK compliant
+
+wxGLCanvas::wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared, wxWindowID id,
+                        const wxPoint& pos, const wxSize& size, long style, const wxString& name,
+                        int *attribList, const wxPalette& palette ):
+  wxScrolledWindow()
+{
+    m_glContext = (wxGLContext*) NULL;
+
+    bool ret = Create(parent, id, pos, size, style, name);
+
+    if ( ret )
+    {
+        SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+        SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    }
+
+	m_hDC = (WXHDC) ::GetDC((HWND) GetHWND());
+
+    SetupPixelFormat();
+    SetupPalette(palette);
+
+    wxGLContext *sharedContext=0;
+    if (shared) sharedContext=shared->GetContext();
+    m_glContext = new wxGLContext(TRUE, this, palette, sharedContext );
 }
 
 wxGLCanvas::~wxGLCanvas()

@@ -69,12 +69,6 @@ class wxGLCanvas: public wxScrolledWindow
 {
    DECLARE_CLASS(wxGLCanvas)
  public:
-   wxGLCanvas()
-   {
-       m_glContext = (wxGLContext*) NULL;
-       m_hDC = 0;
-   }
-
    wxGLCanvas(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
         const wxString& name = "GLCanvas", int *attribList = 0, const wxPalette& palette = wxNullPalette);
@@ -82,7 +76,9 @@ class wxGLCanvas: public wxScrolledWindow
         wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "GLCanvas", 
 	      int *attribList = (int*) NULL, const wxPalette& palette = wxNullPalette );
-
+   wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared = (wxGLCanvas *)NULL, wxWindowID id = -1, 
+        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0, 
+		const wxString& name = "GLCanvas", int *attribList = 0, const wxPalette& palette = wxNullPalette );
    ~wxGLCanvas();
 
    // Replaces wxWindow::Create functionality, since we need to use a different window class
