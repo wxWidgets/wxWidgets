@@ -166,6 +166,9 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
   SetMenuBar(menuBar);
 
   m_splitter = new MySplitterWindow(this, SPLITTER_WINDOW);
+  
+  wxSize sz( m_splitter->GetSize() );
+  wxLogMessage( "Initial splitter size: %d %d\n", (int)sz.x, (int)sz.y );
 
   m_leftCanvas = new MyCanvas(m_splitter, CANVAS1, 0, 0, 400, 400, "Test1" );
   m_leftCanvas->SetBackgroundColour(*wxRED);
