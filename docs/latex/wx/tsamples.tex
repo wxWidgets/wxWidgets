@@ -54,6 +54,45 @@ Unix and uses the Registry under Windows.
 See \helpref{wxConfig overview}{wxconfigoverview} for the descriptions of all
 features of this class.
 
+\subsection{Controls sample}\label{samplecontrols}
+
+The controls sample is the main test program for most simple controls used in
+wxWindows. The sample tests their basic functionality, events, placement,
+modification in terms of colour and font as well as the possibility to change
+the controls programmatically, such as adding item to a list box etc. Apart
+from that, the sample uses a \helpref{wxNotebook}{wxnotebook} and tests most
+fetaures of this special control (using bitmap in the tabs, using
+\helpref{wxSizers}{wxsizer} and \helpref{constraints}{wxlayoutconstraints} within
+notebook pages, advanving pages programmatically and vetoing a page change
+by intercepting the \helpref{wxNotebookEvent}{wxnotebookevent}.
+
+The various controls tested are listed here:
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxButton}{wxbutton}}{Push button control, displaying text}
+\twocolitem{\helpref{wxBitmapButton}{wxbitmapbutton}}{Push button control, displaying a bitmap}
+\twocolitem{\helpref{wxCheckBox}{wxcheckbox}}{Checkbox control}
+\twocolitem{\helpref{wxChoice}{wxchoice}}{Choice control (a combobox without the editable area)}
+\twocolitem{\helpref{wxComboBox}{wxcombobox}}{A choice with an editable area}
+\twocolitem{\helpref{wxGauge}{wxgauge}}{A control to represent a varying quantity, such as time remaining}
+\twocolitem{\helpref{wxStaticBox}{wxstaticbox}}{A static, or group box for visually grouping related controls}
+\twocolitem{\helpref{wxListBox}{wxlistbox}}{A list of strings for single or multiple selection}
+\twocolitem{wxSpinCtrl}{A spin ctrl with a text field and a `up-down' control}
+\twocolitem{\helpref{wxSpinButton}{wxspinbutton}}{A spin or `up-down' control}
+\twocolitem{\helpref{wxStaticText}{wxstatictext}}{One or more lines of non-editable text}
+\twocolitem{\helpref{wxStaticBitmap}{wxstaticbitmap}}{A control to display a bitmap}
+\twocolitem{\helpref{wxRadioBox}{wxradiobox}}{A group of radio buttons}
+\twocolitem{\helpref{wxRadioButton}{wxradiobutton}}{A round button to be used with others in a mutually exclusive way}
+\twocolitem{\helpref{wxSlider}{wxslider}}{A slider that can be dragged by the user}
+\end{twocollist}
+
+\subsection{Database sample}\label{sampledb}
+
+The database sample is a small test program showing how to use the ODBC
+classes written by Remstar Intl. These classes are documented in a separate
+manual available from the wxWindows homepage. Obviously, this sample
+requires a database with ODBC support to be correctly installed on your
+system.
+
 \subsection{Dialogs sample}\label{sampledialogs}
 
 This sample shows how to use the common dialogs available from wxWindows. These
@@ -181,6 +220,24 @@ a \helpref{wxBoxSizer}{wxboxsizer} in a simple dialog and the other one
 showing how to use sizers in connection with a \helpref{wxNotebook}{wxnotebook}
 class. See also \helpref{wxNotebookSizer}{wxnotebooksizer} and 
 \helpref{wxSizer}{wxsizer}.
+
+\subsection{Image sample}\label{sampleimage}
+
+The image sample demonstrates the use of the \helpref{wxImage}{wximage} class
+and shows how to download images in a variety of formats, currently PNG, GIF,
+TIFF, JPEG, BMP, PNM and PCX. The top of the sample shows to rectangles, one
+of which is drawn directly in the window, the other one is drawn into a
+\helpref{wxBitmap}{wxbitmap}, converted to a wxImage, saved as a PNG image
+and then reloaded from the PNG file again so that conversions between wxImage
+and wxBitmap as well as loading and save PNG files are tested.
+
+At the bottom of the main frame is a test for using a mono-chrome bitmap by
+drawing into a \helpref{wxMemoryDC}{wxmemorydc}. The bitmap is then drawn
+specifying the foreground and background colours with 
+\helpref{wxDC::SetTextForeground}{wxdcsettextforeground} and 
+\helpref{wxDC::SetTextBackground}{wxdcsettextbackground} (on the left). The
+bitmap is then converted to a wxImage and the foreground colour (black) is
+replaced with red using \helpref{wxImage::Replace}{wximagereplace}.
 
 \subsection{Text sample}\label{sampletext}
 
