@@ -127,7 +127,16 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
 
     m_statusStrings[number] = text;
 
-    Refresh();
+    wxRect rect;
+    GetFieldRect(number, rect);
+    wxClientDC dc(this);
+
+    dc.SetBackground( wxBrush(GetBackgroundColour(), wxSOLID) );
+    dc.SetClippingRegion( rect.x+1, rect.y+1, rect.width-1, rect.height-1 );
+    dc.Clear();
+    dc.DestroyClippingRegion();
+
+    DrawFieldText( dc, number );
 }
 
 wxString wxStatusBarGeneric::GetStatusText(int n) const
@@ -151,7 +160,7 @@ void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
     {
         // not an error, see the comment above
         m_statusWidths = (int *)NULL;
-
+        Refresh();
         return;
     }
 
@@ -174,6 +183,7 @@ void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
     {
         m_statusWidths[i] = widths_field[i];
     }
+    Refresh();
 }
 
 void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
