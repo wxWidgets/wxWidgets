@@ -202,7 +202,7 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
     m_lowdate = wxDefaultDateTime;
     m_highdate = wxDefaultDateTime;
 
-    if ( !(GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
+    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
         m_spinYear = new wxYearSpinCtrl(this);
         m_staticYear = new wxStaticText(GetParent(), -1, m_date.Format(_T("%Y")),
@@ -231,7 +231,10 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
         sizeReal = size;
     }
 
-    SetSize(sizeReal);
+    // we need to set the position as well because the main control position
+    // is not the same as the one specified in pos if we have the controls
+    // above it
+    SetSize(pos.x, pos.y, sizeReal.x, sizeReal.y);
 
     SetBackgroundColour(*wxWHITE);
     SetFont(*wxSWISS_FONT);
@@ -306,7 +309,7 @@ bool wxCalendarCtrl::Enable(bool enable)
 
 void wxCalendarCtrl::ShowCurrentControls()
 {
-    if ( !(GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
+    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
         if ( AllowMonthChange() )
         {
@@ -685,22 +688,16 @@ wxSize wxCalendarCtrl::DoGetBestSize() const
     ((wxCalendarCtrl *)this)->RecalcGeometry(); // const_cast
 
     wxCoord width = 7*m_widthCol,
-            height = 7*m_heightRow + m_rowOffset;
+            height = 7*m_heightRow + m_rowOffset + VERT_MARGIN;
 
-    // the combobox doesn't report its height correctly (it returns the
-    // height including the drop down list) so don't use it
-
-    if ( !(GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
+    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
-        height += VERT_MARGIN + m_spinYear->GetBestSize().y;
-    }
-    else
-    {
-        height += VERT_MARGIN;
+        // the combobox doesn't report its height correctly (it returns the
+        // height including the drop down list) so don't use it
+        height += m_spinYear->GetBestSize().y;
     }
 
-//    if ( GetWindowStyle() & (wxRAISED_BORDER | wxSUNKEN_BORDER) ) // This doesn't work. Default is wxBORDER_DEFAULT (0)
-    if ( !(GetWindowStyle() & wxBORDER_NONE) )
+    if ( !HasFlag(wxBORDER_NONE) )
     {
         // the border would clip the last line otherwise
         height += 6;
@@ -719,10 +716,9 @@ void wxCalendarCtrl::DoSetSize(int x, int y,
 
 void wxCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
-    int xDiff = 0;
-    int yDiff = 0;
+    int yDiff;
 
-    if ( !(GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
+    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
         wxSize sizeCombo = m_comboMonth->GetSize();
         wxSize sizeStatic = m_staticMonth->GetSize();
@@ -732,13 +728,17 @@ void wxCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
         m_comboMonth->Move(x, y);
         m_staticMonth->SetSize(x, y + dy, sizeCombo.x, sizeStatic.y);
 
-        xDiff = sizeCombo.x + HORZ_MARGIN;
+        int xDiff = sizeCombo.x + HORZ_MARGIN;
 
         m_spinYear->SetSize(x + xDiff, y, width - xDiff, sizeCombo.y);
         m_staticYear->SetSize(x + xDiff, y + dy, width - xDiff, sizeStatic.y);
 
         wxSize sizeSpin = m_spinYear->GetSize();
         yDiff = wxMax(sizeSpin.y, sizeCombo.y) + VERT_MARGIN;
+    }
+    else // no controls on the top
+    {
+        yDiff = 0;
     }
 
     wxControl::DoMoveWindow(x, y + yDiff, width, height - yDiff);
@@ -822,9 +822,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     wxCoord y = 0;
 
-/////////////////////////////////////////////////////////////////////////////////////////
-
-    if ( (GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
+    if ( HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
         // draw the sequential month-selector
 
@@ -894,8 +892,6 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         y += m_heightRow;
     }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-
     // first draw the week days
     if ( IsExposed(0, y, 7*m_widthCol, m_heightRow) )
     {
@@ -907,7 +903,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.SetTextForeground(m_colHeaderFg);
         dc.SetBrush(wxBrush(m_colHeaderBg, wxSOLID));
         dc.SetPen(wxPen(m_colHeaderBg, 1, wxSOLID));
-        dc.DrawRectangle(0, y, 7*m_widthCol, m_heightRow);
+        dc.DrawRectangle(0, y, GetClientSize().x, m_heightRow);
 
         bool startOnMonday = (GetWindowStyle() & wxCAL_MONDAY_FIRST) != 0;
         for ( size_t wd = 0; wd < 7; wd++ )
@@ -919,7 +915,6 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                 n = wd;
             wxCoord dayw, dayh;
             dc.GetTextExtent(m_weekdays[n], &dayw, &dayh);
-//            dc.DrawText(m_weekdays[n], wd*m_widthCol + 1, y);
             dc.DrawText(m_weekdays[n], (wd*m_widthCol) + ((m_widthCol- dayw) / 2), y); // center the day-name
         }
     }
