@@ -1545,7 +1545,11 @@ static wxBitmap CreateAntialiasedBitmap(const wxImage& img)
             if (smask > 2)
                 ps[0] = ps[1] = ps[2] = mr;
             else
-                ps[0] = sr >> 2, ps[1] = sg >> 2, ps[2] = sb >> 2;
+            {
+                ps[0] = (unsigned char)(sr >> 2);
+                ps[1] = (unsigned char)(sg >> 2);
+                ps[2] = (unsigned char)(sb >> 2);
+            }
             ps += 3;
         }
         p1 += size*2 * 3, p2 += size*2 * 3;

@@ -1183,10 +1183,10 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
                 char tmpbuf[2];
                 tmpbuf[0] = (char) keycode;
                 tmpbuf[1] = '\0';
-                bool is_decimal_point =
-                  ( wxString(tmpbuf, *wxConvCurrent) ==
-                    wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
-                                      wxLOCALE_CAT_NUMBER) );
+                wxString strbuf(tmpbuf, *wxConvCurrent);
+                bool is_decimal_point = 
+                    ( strbuf == wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
+                                                  wxLOCALE_CAT_NUMBER) );
                 if ( (keycode < 128) &&
                      (wxIsdigit(keycode) || tolower(keycode) == 'e' ||
                       is_decimal_point || keycode == '+' || keycode == '-') )
@@ -9546,26 +9546,30 @@ void wxGrid::SetColSize( int col, int width )
 void wxGrid::SetColMinimalWidth( int col, int width )
 {
     if (width > GetColMinimalAcceptableWidth()) {
-        m_colMinWidths[col] = width;
+        wxLongToLongHashMap::const_key_type key = (wxLongToLongHashMap::const_key_type)col;
+        m_colMinWidths[key] = width;
     }
 }
 
 void wxGrid::SetRowMinimalHeight( int row, int width )
 {
     if (width > GetRowMinimalAcceptableHeight()) {
-       m_rowMinHeights[row] = width;
+        wxLongToLongHashMap::const_key_type key = (wxLongToLongHashMap::const_key_type)row;
+        m_rowMinHeights[key] = width;
     }
 }
 
 int wxGrid::GetColMinimalWidth(int col) const
 {
-    wxLongToLongHashMap::const_iterator it = m_colMinWidths.find(col);
+    wxLongToLongHashMap::const_key_type key = (wxLongToLongHashMap::const_key_type)col;
+    wxLongToLongHashMap::const_iterator it = m_colMinWidths.find(key);
     return it != m_colMinWidths.end() ? (int)it->second : m_minAcceptableColWidth;
 }
 
 int wxGrid::GetRowMinimalHeight(int row) const
 {
-    wxLongToLongHashMap::const_iterator it = m_rowMinHeights.find(row);
+    wxLongToLongHashMap::const_key_type key = (wxLongToLongHashMap::const_key_type)row;
+    wxLongToLongHashMap::const_iterator it = m_rowMinHeights.find(key);
     return it != m_rowMinHeights.end() ? (int)it->second : m_minAcceptableRowHeight;
 }
 

@@ -261,12 +261,12 @@ private:
 
     // tree ctrl images for the normal, selected, expanded and
     // expanded+selected states
-    short               m_images[wxTreeItemIcon_Max];
+    int                 m_images[wxTreeItemIcon_Max];
 
     wxCoord             m_x;            // (virtual) offset from top
     wxCoord             m_y;            // (virtual) offset from left
-    short               m_width;        // width of this item
-    unsigned char       m_height;       // height of this item
+    int                 m_width;        // width of this item
+    int                 m_height;       // height of this item
 
     // use bitfields to save size
     int                 m_isCollapsed :1;

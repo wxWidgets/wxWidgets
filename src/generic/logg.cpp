@@ -252,7 +252,7 @@ void wxLogGui::Flush()
 
     wxString appName = wxTheApp->GetAppName();
     if ( !!appName )
-        appName[0u] = wxToupper(appName[0u]);
+        appName[0u] = (wxChar)wxToupper(appName[0u]);
 
     long style;
     wxString titleFormat;
