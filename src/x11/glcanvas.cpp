@@ -18,6 +18,8 @@
 
 #if wxUSE_GLCANVAS
 
+#error Sorry, wxGLCanvas does not work yet with wxX11
+
 #include "wx/glcanvas.h"
 #include "wx/utils.h"
 #include "wx/app.h"
