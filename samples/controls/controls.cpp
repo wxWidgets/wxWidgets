@@ -105,7 +105,7 @@ public:
 #endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
-    void OnSpinCtrl(wxSpinEvent& event);
+    void OnSpinCtrl(wxCommandEvent& event);
 #endif // wxUSE_SPINCTRL
 
     void OnEnableAll(wxCommandEvent& event);
@@ -258,7 +258,7 @@ bool MyApp::OnInit()
     frame->Show(TRUE);
     frame->SetCursor(wxCursor(wxCURSOR_HAND));
 
-    frame->GetPanel()->m_notebook->SetSelection(3);
+    //frame->GetPanel()->m_notebook->SetSelection(3);
 
     SetTopWindow(frame);
 
@@ -367,7 +367,7 @@ EVT_UPDATE_UI (ID_BTNPROGRESS,          MyPanel::OnUpdateShowProgress)
 EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
 #endif // wxUSE_SPINBTN
 #if wxUSE_SPINCTRL
-EVT_SPIN      (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
+EVT_SPINCTRL  (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
 #endif // wxUSE_SPINCTRL
 EVT_BUTTON    (ID_BUTTON_LABEL,         MyPanel::OnUpdateLabel)
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
@@ -380,7 +380,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_text = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,50), wxSize(100,50), wxTE_MULTILINE );
     //  m_text->SetBackgroundColour("wheat");
 
-    delete wxLog::SetActiveTarget(new wxLogStderr);
+    //delete wxLog::SetActiveTarget(new wxLogStderr);
 
     m_notebook = new wxNotebook( this, ID_NOTEBOOK, wxPoint(0,0), wxSize(200,150) );
 
@@ -469,6 +469,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
     wxButton *button = new wxButton( panel, ID_LISTBOX_FONT, "Set &Italic font", wxPoint(340,130), wxSize(140,30) );
+
+    button->SetDefault();
+
+    button->SetForegroundColour(*wxBLUE);
+
 #if wxUSE_TOOLTIPS
     button->SetToolTip( "Press here to set italic font" );
 #endif // wxUSE_TOOLTIPS
@@ -610,10 +615,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     (void)new wxBitmapButton(panel, -1, bitmap, wxPoint(100, 20));
 
+#if 0
     bitmap = wxBitmap("../../utils/wxPython/tests/bitmaps/test2.bmp",
                       wxBITMAP_TYPE_BMP);
     bitmap.SetMask(new wxMask(bitmap, *wxBLUE));
     (void)new wxBitmapButton(panel, -1, bitmap, wxPoint(300, 120));
+#endif
 
     wxBitmap bmp1(wxTheApp->GetStdIcon(wxICON_INFORMATION)),
              bmp2(wxTheApp->GetStdIcon(wxICON_WARNING)),
@@ -726,6 +733,7 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
         SetBackgroundColour(s_colOld);
         s_colOld = wxNullColour;
 
+        m_lbSelectThis->SetForegroundColour("yellow");
         m_lbSelectThis->SetBackgroundColour("blue");
     }
     else
@@ -733,6 +741,7 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
         s_colOld = GetBackgroundColour();
         SetBackgroundColour("green");
 
+        m_lbSelectThis->SetForegroundColour("white");
         m_lbSelectThis->SetBackgroundColour("red");
     }
 
@@ -793,6 +802,8 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
                     cb->SetToolTip( "Click to disable listbox" );
 #endif // wxUSE_TOOLTIPS
                 m_listbox->Enable( event.GetInt() == 0 );
+                m_lbSelectThis->Enable( event.GetInt() == 0 );
+                m_lbSelectNum->Enable( event.GetInt() == 0 );
                 m_listboxSorted->Enable( event.GetInt() == 0 );
                 break;
             }
@@ -1031,10 +1042,11 @@ void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 
 #if wxUSE_SPINCTRL
 
-void MyPanel::OnSpinCtrl(wxSpinEvent& event)
+void MyPanel::OnSpinCtrl(wxCommandEvent& event)
 {
     wxString s;
-    s.Printf(_T("Current value of spin ctrl is %d\n"), m_spinctrl->GetValue());
+    s.Printf(_T("Spin ctrl changed: now %d (from event: %d)\n"),
+             m_spinctrl->GetValue(), event.GetInt());
     m_text->AppendText(s);
 }
 
