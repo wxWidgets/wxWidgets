@@ -2418,11 +2418,14 @@ bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
 
 void wxListMainWindow::RefreshLine( size_t line )
 {
-    size_t visibleFrom, visibleTo;
-    GetVisibleLinesRange(&visibleFrom, &visibleTo);
+    if ( HasFlag(wxLC_REPORT) )
+    {
+        size_t visibleFrom, visibleTo;
+        GetVisibleLinesRange(&visibleFrom, &visibleTo);
 
-    if ( line < visibleFrom || line > visibleTo )
-        return;
+        if ( line < visibleFrom || line > visibleTo )
+            return;
+    }
 
     wxRect rect = GetLineRect(line);
 
