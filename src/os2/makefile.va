@@ -659,9 +659,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\valgen.obj
   copy ..\common\$D\validate.obj
   copy ..\common\$D\valtext.obj
-  copy ..\common\$D\variant.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\variant.obj
   copy ..\common\$D\wfstream.obj
   copy ..\common\$D\wincmn.obj
   copy ..\common\$D\wxchar.obj

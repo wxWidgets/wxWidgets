@@ -3,17 +3,16 @@
 // Purpose:     wxFrame class
 // Author:      David Webster
 // Modified by:
-// Created:     10/06/99
+// Created:     10/27/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
-// Licence:     wxWindows licence
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FRAME_H_
 #define _WX_FRAME_H_
 
 #include "wx/window.h"
-#include "wx/toolbar.h"
 #include "wx/os2/accel.h"
 #include "wx/icon.h"
 
@@ -23,35 +22,34 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxStatusLineNameStr;
 
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
+class WXDLLEXPORT wxToolBar;
 
-class WXDLLEXPORT wxFrame: public wxWindow
+class WXDLLEXPORT wxFrame : public wxWindow
 {
-  DECLARE_DYNAMIC_CLASS(wxFrame)
+    DECLARE_DYNAMIC_CLASS(wxFrame)
 
 public:
     wxFrame();
-    inline wxFrame( wxWindow*       parent
-                   ,wxWindowID      id
-                   ,const wxString& title
-                   ,const wxPoint&  pos = wxDefaultPosition
-                   ,const wxSize&   size = wxDefaultSize
-                   ,long            style = wxDEFAULT_FRAME_STYLE
-                   ,const wxString& name = wxFrameNameStr
-                  )
+    wxFrame(wxWindow *parent,
+        wxWindowID id,
+        const wxString& title,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = wxDEFAULT_FRAME_STYLE,
+        const wxString& name = wxFrameNameStr)
     {
         Create(parent, id, title, pos, size, style, name);
     }
 
     ~wxFrame();
 
-    bool Create( wxWindow*       parent
-                ,wxWindowID      id
-                ,const wxString& title
-                ,const wxPoint&  pos = wxDefaultPosition
-                ,const wxSize&   size = wxDefaultSize
-                ,long            style = wxDEFAULT_FRAME_STYLE
-                ,const wxString& name = wxFrameNameStr
-               );
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr);
 
     virtual bool Destroy();
 
@@ -66,10 +64,10 @@ public:
     void DetachMenuBar();
     // Set menu bar
     void SetMenuBar(wxMenuBar *menu_bar);
-    virtual wxMenuBar *GetMenuBar() const ;
+    virtual wxMenuBar *GetMenuBar() const;
 
     // Call this to simulate a menu command
-    inline bool Command(int id) { return ProcessCommand(id); }
+    bool Command(int id) { return ProcessCommand(id); }
 
     // process menu command: returns TRUE if processed
     bool ProcessCommand(int id);
@@ -202,7 +200,7 @@ protected:
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
-    wxToolBar *           m_frameToolBar;
+    wxToolBar*            m_frameToolBar;
 #endif // wxUSE_TOOLBAR
 
 private:

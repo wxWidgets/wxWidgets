@@ -16,7 +16,7 @@
 #include "wx/wx.h"
 #endif
 
-#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR && defined(__WIN95__)
+#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR
 
 #include "malloc.h"
 #define INCL_PM
@@ -157,14 +157,16 @@ bool wxToolBar::Create(wxWindow *parent,
   // Toolbar-specific initialisation
   ::SendMessage(hWndToolbar, TB_BUTTONSTRUCTSIZE,
                 (WPARAM)sizeof(TBBUTTON), (LPARAM)0);
-*/
   m_hWnd = (WXHWND) hWndToolbar;
+
   if (parent)
       parent->AddChild(this);
 
   SubclassWin((WXHWND)hWndToolbar);
 
   return TRUE;
+*/
+  return FALSE;
 }
 
 wxToolBar::~wxToolBar()
@@ -553,6 +555,8 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 
 void wxMapBitmap(HBITMAP hBitmap, int width, int height)
 {
+// TODO:
+/*
   COLORMAP ColorMap[] = {
     {BGR_BUTTONTEXT,    COLOR_BTNTEXT},     // black
     {BGR_BUTTONSHADOW,  COLOR_BTNSHADOW},   // dark grey
@@ -581,29 +585,26 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
     {
         for ( j = 0; j < height; j++)
         {
-//            COLORREF pixel = ::GetPixel(hdcMem, i, j);
-/*
+            COLORREF pixel = ::GetPixel(hdcMem, i, j);
             BYTE red = GetRValue(pixel);
             BYTE green = GetGValue(pixel);
             BYTE blue = GetBValue(pixel);
-*/
 
             for ( k = 0; k < NUM_MAPS; k ++)
             {
                 if ( ColorMap[k].from == pixel )
                 {
-//                    /* COLORREF actualPixel = */ ::SetPixel(hdcMem, i, j, ColorMap[k].to);
+                    COLORREF actualPixel = ::SetPixel(hdcMem, i, j, ColorMap[k].to);
                     break;
                 }
             }
         }
     }
 
-
-//    SelectObject(hdcMem, hbmOld);
-//    DeleteObject(hdcMem);
+    SelectObject(hdcMem, hbmOld);
+    DeleteObject(hdcMem);
   }
-
+*/
 }
 
 // Some experiments...
