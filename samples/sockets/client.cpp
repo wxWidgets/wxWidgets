@@ -36,8 +36,7 @@
 
 #include "wx/socket.h"
 #include "wx/url.h"
-#include "wx/protocol/http.h"
-#include "wx/progdlg.h"
+#include "wx/wfstream.h"
 
 // --------------------------------------------------------------------------
 // resources
@@ -66,16 +65,25 @@ public:
   MyFrame();
   ~MyFrame();
 
-  // event handlers (these functions should _not_ be virtual)
+  // event handlers for File menu
   void OnQuit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
+
+  // event handlers for Socket menu
   void OnOpenConnection(wxCommandEvent& event);
   void OnTest1(wxCommandEvent& event);
   void OnTest2(wxCommandEvent& event);
   void OnTest3(wxCommandEvent& event);
   void OnCloseConnection(wxCommandEvent& event);
-  void OnSocketEvent(wxSocketEvent& event);
+
+  // event handlers for Protocols menu
+  void OnTestURL(wxCommandEvent& event);
+
+  // event handlers for DatagramSocket menu
   void OnDatagram(wxCommandEvent& event);
+
+  // socket event handler
+  void OnSocketEvent(wxSocketEvent& event);
 
   // convenience functions
   void UpdateStatusBar();
@@ -87,6 +95,7 @@ private:
   wxMenu         *m_menuFile;
   wxMenu         *m_menuSocket;
   wxMenu         *m_menuDatagramSocket;
+  wxMenu         *m_menuProtocols;
   wxMenuBar      *m_menuBar;
   bool            m_busy;
 
@@ -109,6 +118,7 @@ enum
   CLIENT_TEST2,
   CLIENT_TEST3,
   CLIENT_CLOSE,
+  CLIENT_TESTURL,
   CLIENT_DGRAM,
 
   // id for socket
@@ -120,15 +130,16 @@ enum
 // --------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-  EVT_MENU(CLIENT_QUIT,  MyFrame::OnQuit)
-  EVT_MENU(CLIENT_ABOUT, MyFrame::OnAbout)
-  EVT_MENU(CLIENT_OPEN,  MyFrame::OnOpenConnection)
-  EVT_MENU(CLIENT_TEST1, MyFrame::OnTest1)
-  EVT_MENU(CLIENT_TEST2, MyFrame::OnTest2)
-  EVT_MENU(CLIENT_TEST3, MyFrame::OnTest3)
-  EVT_MENU(CLIENT_CLOSE, MyFrame::OnCloseConnection)
-  EVT_MENU(CLIENT_DGRAM, MyFrame::OnDatagram)
-  EVT_SOCKET(SOCKET_ID,  MyFrame::OnSocketEvent)
+  EVT_MENU(CLIENT_QUIT,     MyFrame::OnQuit)
+  EVT_MENU(CLIENT_ABOUT,    MyFrame::OnAbout)
+  EVT_MENU(CLIENT_OPEN,     MyFrame::OnOpenConnection)
+  EVT_MENU(CLIENT_TEST1,    MyFrame::OnTest1)
+  EVT_MENU(CLIENT_TEST2,    MyFrame::OnTest2)
+  EVT_MENU(CLIENT_TEST3,    MyFrame::OnTest3)
+  EVT_MENU(CLIENT_CLOSE,    MyFrame::OnCloseConnection)
+  EVT_MENU(CLIENT_DGRAM,    MyFrame::OnDatagram)
+  EVT_MENU(CLIENT_TESTURL,  MyFrame::OnTestURL)
+  EVT_SOCKET(SOCKET_ID,     MyFrame::OnSocketEvent)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -160,7 +171,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
-                             _T("wxSocket demo: Client"),
+                             _("wxSocket demo: Client"),
                              wxDefaultPosition, wxSize(300, 200))
 {
   // Give the frame an icon
@@ -168,27 +179,31 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
 
   // Make menus
   m_menuFile = new wxMenu();
-  m_menuFile->Append(CLIENT_ABOUT, _T("&About...\tCtrl-A"), _T("Show about dialog"));
+  m_menuFile->Append(CLIENT_ABOUT, _("&About...\tCtrl-A"), _("Show about dialog"));
   m_menuFile->AppendSeparator();
-  m_menuFile->Append(CLIENT_QUIT, _T("E&xit\tAlt-X"), _T("Quit client"));
+  m_menuFile->Append(CLIENT_QUIT, _("E&xit\tAlt-X"), _("Quit client"));
 
   m_menuSocket = new wxMenu();
-  m_menuSocket->Append(CLIENT_OPEN, _T("&Open session"), _T("Connect to server"));
+  m_menuSocket->Append(CLIENT_OPEN, _("&Open session"), _("Connect to server"));
   m_menuSocket->AppendSeparator();
-  m_menuSocket->Append(CLIENT_TEST1, _T("Test &1"), _T("Test basic functionality"));
-  m_menuSocket->Append(CLIENT_TEST2, _T("Test &2"), _T("Test ReadMsg and WriteMsg"));
-  m_menuSocket->Append(CLIENT_TEST3, _T("Test &3"), _T("Test large data transfer"));
+  m_menuSocket->Append(CLIENT_TEST1, _("Test &1"), _("Test basic functionality"));
+  m_menuSocket->Append(CLIENT_TEST2, _("Test &2"), _("Test ReadMsg and WriteMsg"));
+  m_menuSocket->Append(CLIENT_TEST3, _("Test &3"), _("Test large data transfer"));
   m_menuSocket->AppendSeparator();
-  m_menuSocket->Append(CLIENT_CLOSE, _T("&Close session"), _T("Close connection"));
+  m_menuSocket->Append(CLIENT_CLOSE, _("&Close session"), _("Close connection"));
 
   m_menuDatagramSocket = new wxMenu();
-  m_menuDatagramSocket->Append(CLIENT_DGRAM, _T("Send Datagram"), _T("Test UDP sockets"));
+  m_menuDatagramSocket->Append(CLIENT_DGRAM, _("Send Datagram"), _("Test UDP sockets"));
+
+  m_menuProtocols = new wxMenu();
+  m_menuProtocols->Append(CLIENT_TESTURL, _("Test URL"), _("Get data from the specified URL"));
 
   // Append menus to the menubar
   m_menuBar = new wxMenuBar();
-  m_menuBar->Append(m_menuFile, _T("&File"));
-  m_menuBar->Append(m_menuSocket, _T("&Socket"));
-  m_menuBar->Append(m_menuDatagramSocket, _T("&DatagramSocket"));
+  m_menuBar->Append(m_menuFile, _("&File"));
+  m_menuBar->Append(m_menuSocket, _("&SocketClient"));
+  m_menuBar->Append(m_menuDatagramSocket, _("&DatagramSocket"));
+  m_menuBar->Append(m_menuProtocols, _("&Protocols"));
   SetMenuBar(m_menuBar);
 
   // Status bar
@@ -197,8 +212,8 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
   // Make a panel with a textctrl in it
   m_panel = new wxPanel(this, -1, wxPoint(0, 0), GetClientSize());
   m_text  = new wxTextCtrl(m_panel, -1,
-                           _T("Welcome to wxSocket demo: Client\n")
-                           _T("Client ready\n\n"),
+                           _("Welcome to wxSocket demo: Client\n"
+                             "Client ready\n"),
                            wxPoint(0, 0), m_panel->GetClientSize(),
                            wxTE_MULTILINE | wxTE_READONLY);
 
@@ -229,9 +244,9 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-  wxMessageBox(_T("wxSocket demo: Client\n")
-               _T("(c) 1999 Guillermo Rodriguez Garcia\n"),
-               _T("About Client"),
+  wxMessageBox(_("wxSocket demo: Client\n"
+                 "(c) 1999 Guillermo Rodriguez Garcia\n"),
+               _("About Client"),
                wxOK | wxICON_INFORMATION, this);
 }
 
@@ -242,27 +257,66 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
   m_menuSocket->Enable(CLIENT_OPEN, FALSE);
   m_menuSocket->Enable(CLIENT_CLOSE, FALSE);
 
-  // Ask server address
+  // Ask user for server address
   wxString hostname = wxGetTextFromUser(
-    _T("Enter the address of the wxSocket demo server:"),
-    _T("Connect ..."),
-    _T("localhost"));
+    _("Enter the address of the wxSocket demo server:"),
+    _("Connect ..."),
+    _("localhost"));
 
   addr.Hostname(hostname);
   addr.Service(3000);
 
-  // Non-blocking connect
-  m_text->AppendText(_T("Trying to connect (timeout = 10 sec) ...\n"));
-  m_sock->Connect(addr, TRUE);
-//  m_sock->WaitOnConnect(10);
+  // Mini-tutorial for Connect() :-)
+  // ---------------------------
+  //
+  // There are two ways to use Connect(): blocking and non-blocking,
+  // depending on the value passed as the 'wait' (2nd) parameter.
+  //
+  // Connect(addr, TRUE) will wait until the connection completes,
+  // returning TRUE on success and FALSE on failure. This call blocks
+  // the GUI (this might be changed in future releases to honour the
+  // wxSOCKET_BLOCK flag).
+  //
+  // Connect(addr, FALSE) will issue a nonblocking connection request
+  // and return immediately. If the return value is TRUE, then the
+  // connection has been already succesfully established. If it is
+  // FALSE, you must wait for the request to complete, either with
+  // WaitOnConnect() or by watching wxSOCKET_CONNECTION / LOST
+  // events (please read the documentation).
+  //
+  // WaitOnConnect() itself never blocks the GUI (this might change
+  // in the future to honour the wxSOCKET_BLOCK flag). This call will
+  // return TRUE if the connection request completed succesfully, or
+  // FALSE otherwise, which in turn might mean:
+  //   a) that the specified timeout ellapsed, or
+  //   b) that the connection request failed.
+  // Use IsConnected() to distinguish between these two.
+  //
+  // So, in a brief, you should do one of the following things:
+  //
+  // For blocking Connect:
+  //
+  //   bool success = Connect(addr, TRUE);
+  //
+  // For nonblocking Connect:
+  //
+  //   Connect(addr, FALSE);
+  //   WaitOnConnect(seconds, millis);
+  //   success = IsConnected();
+  // 
+  // And that's all :-)
+  //
+  m_text->AppendText(_("\nTrying to connect (timeout = 10 sec) ...\n"));
+  m_sock->Connect(addr, FALSE);
+  m_sock->WaitOnConnect(10);
 
   if (m_sock->IsConnected())
-    m_text->AppendText(_T("Succeeded ! Connection established\n"));
+    m_text->AppendText(_("Succeeded ! Connection established\n"));
   else
   {
     m_sock->Close();
-    m_text->AppendText(_T("Failed ! Unable to connect\n"));
-    wxMessageBox(_T("Can't connect to the specified host"), _T("Alert !"));
+    m_text->AppendText(_("Failed ! Unable to connect\n"));
+    wxMessageBox(_("Can't connect to the specified host"), _("Alert !"));
   }
   
   UpdateStatusBar();
@@ -270,15 +324,15 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
-  char *buf1;
-  char *buf2;
+  const char *buf1;
+  char       *buf2;
   unsigned char len;
 
   // Disable socket menu entries (exception: Close Session)
   m_busy = TRUE;
   UpdateStatusBar();
 
-  m_text->AppendText(_T("\n=== Test 1 begins ===\n"));
+  m_text->AppendText(_("\n=== Test 1 begins ===\n"));
 
   // Tell the server which test we are running
   char c = 0xBE;
@@ -298,31 +352,31 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
   //
   m_sock->SetFlags(wxSOCKET_WAITALL);
 
-  buf1 = _T("Test string (less than 256 chars!)");
+  buf1 = _("Test string (less than 256 chars!)");
   len  = wxStrlen(buf1) + 1;
   buf2 = new char[len];
 
-  m_text->AppendText(_T("Sending a test buffer to the server ..."));
+  m_text->AppendText(_("Sending a test buffer to the server ..."));
   m_sock->Write((char *)&len, 1);
   m_sock->Write(buf1, len);
-  m_text->AppendText(m_sock->Error() ? _T("failed !\n") : _T("done\n"));
+  m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
 
-  m_text->AppendText(_T("Receiving the buffer back from server ..."));
+  m_text->AppendText(_("Receiving the buffer back from server ..."));
   m_sock->Read(buf2, len);
-  m_text->AppendText(m_sock->Error() ? _T("failed !\n") : _T("done\n"));
+  m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
 
-  m_text->AppendText(_T("Comparing the two buffers ..."));
+  m_text->AppendText(_("Comparing the two buffers ..."));
   if (memcmp(buf1, buf2, len) != 0)
   {
-    m_text->AppendText(_T("failed!\n"));
-    m_text->AppendText(_T("Test 1 failed !\n"));
+    m_text->AppendText(_("failed!\n"));
+    m_text->AppendText(_("Test 1 failed !\n"));
   }
   else
   {
-    m_text->AppendText(_T("done\n"));
-    m_text->AppendText(_T("Test 1 passed !\n"));
+    m_text->AppendText(_("done\n"));
+    m_text->AppendText(_("Test 1 passed !\n"));
   }
-  m_text->AppendText(_T("=== Test 1 ends ===\n"));
+  m_text->AppendText(_("=== Test 1 ends ===\n"));
 
   delete[] buf2;
   m_busy = FALSE;
@@ -339,7 +393,7 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
   m_busy = TRUE;
   UpdateStatusBar();
 
-  m_text->AppendText(_T("\n=== Test 2 begins ===\n"));
+  m_text->AppendText(_("\n=== Test 2 begins ===\n"));
 
   // Tell the server which test we are running
   char c = 0xCE;
@@ -355,43 +409,43 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
   m_sock->SetFlags(wxSOCKET_WAITALL);
 
   wxString s = wxGetTextFromUser(
-    _T("Enter an arbitrary string to send to the server:"),
-    _T("Test 2 ..."),
-    _T("Yes I like wxWindows!"));
+    _("Enter an arbitrary string to send to the server:"),
+    _("Test 2 ..."),
+    _("Yes I like wxWindows!"));
 
   msg1 = (char *)s.c_str();
   len  = wxStrlen(msg1) + 1;
   msg2 = new char[len];
 
-  m_text->AppendText(_T("Sending the string with WriteMsg ..."));
+  m_text->AppendText(_("Sending the string with WriteMsg ..."));
   m_sock->WriteMsg(msg1, len);
-  m_text->AppendText(m_sock->Error() ? _T("failed !\n") : _T("done\n"));
-  m_text->AppendText(_T("Waiting for an event (timeout = 2 sec)\n"));
+  m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
+  m_text->AppendText(_("Waiting for an event (timeout = 2 sec)\n"));
 
   // Wait until data available (will also return if the connection is lost)
   m_sock->WaitForRead(2);
 
   if (m_sock->IsData())
   {
-    m_text->AppendText(_T("Reading the string back with ReadMsg ..."));
+    m_text->AppendText(_("Reading the string back with ReadMsg ..."));
     m_sock->ReadMsg(msg2, len);
-    m_text->AppendText(m_sock->Error() ? _T("failed !\n") : _T("done\n"));
-    m_text->AppendText(_T("Comparing the two buffers ..."));
+    m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
+    m_text->AppendText(_("Comparing the two buffers ..."));
     if (memcmp(msg1, msg2, len) != 0)
     {
-      m_text->AppendText(_T("failed!\n"));  
-      m_text->AppendText(_T("Test 2 failed !\n"));
+      m_text->AppendText(_("failed!\n"));  
+      m_text->AppendText(_("Test 2 failed !\n"));
     }
     else
     {
-      m_text->AppendText(_T("done\n"));
-      m_text->AppendText(_T("Test 2 passed !\n"));
+      m_text->AppendText(_("done\n"));
+      m_text->AppendText(_("Test 2 passed !\n"));
     }
   }
   else
-    m_text->AppendText(_T("Timeout ! Test 2 failed.\n"));
+    m_text->AppendText(_("Timeout ! Test 2 failed.\n"));
 
-  m_text->AppendText(_T("=== Test 2 ends ===\n"));
+  m_text->AppendText(_("=== Test 2 ends ===\n"));
 
   delete[] msg2;
   m_busy = FALSE;
@@ -408,7 +462,7 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
   m_busy = TRUE;
   UpdateStatusBar();
 
-  m_text->AppendText(_T("\n=== Test 3 begins ===\n"));
+  m_text->AppendText(_("\n=== Test 3 begins ===\n"));
 
   // Tell the server which test we are running
   char c = 0xDE;
@@ -429,27 +483,27 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
   for (int i = 0; i < len * 1024; i ++)
     buf1[i] = (char)(i % 256);
 
-  m_text->AppendText(_T("Sending a large buffer (32K) to the server ..."));
+  m_text->AppendText(_("Sending a large buffer (32K) to the server ..."));
   m_sock->Write((char *)&len, 1);
   m_sock->Write(buf1, len * 1024);
-  m_text->AppendText(m_sock->Error() ? _T("failed !\n") : _T("done\n"));
+  m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
 
-  m_text->AppendText(_T("Receiving the buffer back from server ..."));
+  m_text->AppendText(_("Receiving the buffer back from server ..."));
   m_sock->Read(buf2, len * 1024);
-  m_text->AppendText(m_sock->Error() ? _T("failed !\n") : _T("done\n"));
+  m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
 
-  m_text->AppendText(_T("Comparing the two buffers ..."));
+  m_text->AppendText(_("Comparing the two buffers ..."));
   if (memcmp(buf1, buf2, len) != 0)
   {
-    m_text->AppendText(_T("failed!\n"));
-    m_text->AppendText(_T("Test 3 failed !\n"));
+    m_text->AppendText(_("failed!\n"));
+    m_text->AppendText(_("Test 3 failed !\n"));
   }
   else
   {
-    m_text->AppendText(_T("done\n"));
-    m_text->AppendText(_T("Test 3 passed !\n"));
+    m_text->AppendText(_("done\n"));
+    m_text->AppendText(_("Test 3 passed !\n"));
   }
-  m_text->AppendText(_T("=== Test 3 ends ===\n"));
+  m_text->AppendText(_("=== Test 3 ends ===\n"));
 
   delete[] buf2;
   m_busy = FALSE;
@@ -466,16 +520,61 @@ void MyFrame::OnDatagram(wxCommandEvent& WXUNUSED(event))
 {
 }
 
+void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
+{
+  // Note that we are creating a new socket here, so this
+  // won't mess with the client/server demo.
+
+  // Ask for the URL
+  m_text->AppendText(_("\n=== URL test begins ===\n"));
+  wxString urlname = wxGetTextFromUser(_("Enter an URL to get"),
+                                       _("URL:"),
+                                       _("http://localhost"));
+
+  // Parse the URL
+  wxURL url(urlname);
+
+  // Try to get the input stream (connects to the given URL)
+  m_text->AppendText(_("Trying to establish connection...\n"));
+  wxYield();
+  wxInputStream *data = url.GetInputStream();
+  if (!data)
+  {
+    m_text->AppendText(_("Error: couldn't read from URL\n"));
+    m_text->AppendText(_("=== URL test ends ===\n"));
+    return;
+  }
+
+  // Print the contents type and file size
+  wxString s;
+  s.Printf(_("Contents type: %s\n"
+             "File size: %i\n"
+             "Starting to download...\n"),
+             url.GetProtocol().GetContentType().c_str(),
+             data->GetSize());
+  m_text->AppendText(s);
+  wxYield();
+
+  // Get the data
+  wxFileOutputStream sout("test.url");
+  data->Read(sout);
+  m_text->AppendText(_("Results written to file: test.url\n"));
+  m_text->AppendText(_("Done.\n"));
+  m_text->AppendText(_("=== URL test ends ===\n"));
+
+  delete data;
+}
+
 void MyFrame::OnSocketEvent(wxSocketEvent& event)
 {
-  wxString s = _T("OnSocketEvent: ");
+  wxString s = _("OnSocketEvent: ");
 
   switch(event.SocketEvent())
   {
-    case wxSOCKET_INPUT      : s.Append(_T("wxSOCKET_INPUT\n")); break;
-    case wxSOCKET_LOST       : s.Append(_T("wxSOCKET_LOST\n")); break;
-    case wxSOCKET_CONNECTION : s.Append(_T("wxSOCKET_CONNECTION\n")); break;
-    default                  : s.Append(_T("Unexpected event !\n")); break;
+    case wxSOCKET_INPUT      : s.Append(_("wxSOCKET_INPUT\n")); break;
+    case wxSOCKET_LOST       : s.Append(_("wxSOCKET_LOST\n")); break;
+    case wxSOCKET_CONNECTION : s.Append(_("wxSOCKET_CONNECTION\n")); break;
+    default                  : s.Append(_("Unexpected event !\n")); break;
   }
 
   m_text->AppendText(s);
@@ -490,14 +589,14 @@ void MyFrame::UpdateStatusBar()
 
   if (!m_sock->IsConnected())
   {
-    s.Printf(_T("Not connected"));
+    s.Printf(_("Not connected"));
   }
   else
   {
     wxIPV4address addr;
 
     m_sock->GetPeer(addr);
-    s.Printf(_T("%s : %d"), (addr.Hostname()).c_str(), addr.Service());
+    s.Printf(_("%s : %d"), (addr.Hostname()).c_str(), addr.Service());
   }
 
   SetStatusText(s, 1);
