@@ -166,7 +166,6 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         nTimeLabels++;
 
         m_elapsed = CreateLabel(_("Elapsed time : "), &lastWindow);
-        SetTimeLabel(0, m_elapsed);
     }
 
     if ( style & wxPD_ESTIMATED_TIME )
@@ -240,6 +239,14 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     Show(TRUE);
     Enable(TRUE); // enable this window
+
+    // this one can be initialized even if the others are unknown for now
+    //
+    // NB: do it after calling Layout() to keep the labels correctly aligned
+    if ( m_elapsed )
+    {
+        SetTimeLabel(0, m_elapsed);
+    }
 
     // Update the display (especially on X, GTK)
     wxYield();
