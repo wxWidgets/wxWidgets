@@ -1,4 +1,5 @@
 UNIVOBJS = \
+           bmpbuttn.o \
            button.o \
            colschem.o \
            control.o \
@@ -14,6 +15,7 @@ UNIVOBJS = \
            win32.o
 
 UNIVDEPS = \
+           bmpbuttn.d \
            button.d \
            colschem.d \
            control.d \

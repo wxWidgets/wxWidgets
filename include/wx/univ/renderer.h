@@ -259,13 +259,18 @@ public:
     wxControlRenderer(wxControl *control, wxDC& dc, wxRenderer *renderer);
 
     // operations
-    void DrawLabel();
+    void DrawLabel(const wxBitmap& bitmap = wxNullBitmap,
+                   wxCoord marginX = 0, wxCoord marginY = 0);
     void DrawBorder();
     void DrawButtonBorder();
     // the line must be either horizontal or vertical
     void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
     void DrawFrame();
     void DrawBitmap(const wxBitmap& bitmap);
+    void DrawBitmap(const wxBitmap& bitmap,
+                    const wxRect& rect,
+                    int alignment = wxALIGN_CENTRE | wxALIGN_CENTRE_VERTICAL,
+                    wxStretch stretch = wxSTRETCH_NOT);
     void DrawBackgroundBitmap();
     void DrawScrollbar(const wxScrollBar *scrollbar);
 
@@ -276,9 +281,6 @@ public:
 
     const wxRect& GetRect() const { return m_rect; }
     wxRect& GetRect() { return m_rect; }
-
-protected:
-    void DoDrawBitmap(const wxBitmap& bmp, int alignment, wxStretch stretch);
 
 private:
     wxControl *m_ctrl;

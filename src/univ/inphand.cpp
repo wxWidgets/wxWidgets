@@ -156,8 +156,11 @@ wxControlActions wxStdButtonInputHandler::Map(wxControl *control,
         }
         else // up
         {
-            m_winCapture->ReleaseMouse();
-            m_winCapture = NULL;
+            if ( m_winCapture )
+            {
+                m_winCapture->ReleaseMouse();
+                m_winCapture = NULL;
+            }
 
             if ( m_winHasMouse )
             {

@@ -162,9 +162,8 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize,
 
 wxSize wxScrollBar::DoGetBestSize() const
 {
-    wxSize sz(140, 140);
-    wxTheme::Get()->GetRenderer()->AdjustSize(&sz, this);
-    return sz;
+    // completely arbitrary
+    return AdjustSize(wxSize(140, 140));
 }
 
 // ----------------------------------------------------------------------------

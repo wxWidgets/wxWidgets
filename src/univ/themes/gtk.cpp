@@ -249,7 +249,7 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
         // create a new handler
         n = m_handlerNames.Add(control);
 
-        if ( control == _T("wxButton") )
+        if ( control.Matches(_T("wx*Button")) )
             handler = new wxStdButtonInputHandler(GetInputHandler(_T("wxControl")));
         else if ( control == _T("wxScrollBar") )
             handler = new wxGTKScrollBarInputHandler(m_renderer,
@@ -284,7 +284,7 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col,
         case CONTROL:           
                                 if ( flags & wxCONTROL_PRESSED )
                                 {
-                                    return wxColour(0x7f7f7f);
+                                    return wxColour(0xc3c3c3);
                                 }
                                 else if ( flags & wxCONTROL_CURRENT )
                                 {
@@ -892,9 +892,14 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
 {
     if ( wxDynamicCast(window, wxButton) )
     {
-        // TODO
+        // TODO: this is ad hoc...
         size->x += 3*window->GetCharWidth();
-        size->y = (11*(window->GetCharHeight() + 8))/10;
+        wxCoord minBtnHeight = (11*(window->GetCharHeight() + 8))/10;
+        if ( size->y < minBtnHeight )
+            size->y = minBtnHeight;
+
+        // button border width
+        size->y += 4;
     }
     else
     {

@@ -241,7 +241,7 @@ void wxDCBase::DrawLabel(const wxString& text,
     {
         x = rect.GetRight() - width;
     }
-    else if ( alignment & wxALIGN_CENTRE )
+    else if ( alignment & wxALIGN_CENTRE_HORIZONTAL )
     {
         x = (rect.GetLeft() + rect.GetRight() - width) / 2;
     }

@@ -64,16 +64,7 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     SetBitmap(label);
 
     // and adjust our size to fit it after this
-    if ( size.x == -1 || size.y == -1 )
-    {
-        wxSize sizeBest = DoGetBestSize();
-        if ( size.x != -1 )
-            sizeBest.x = size.x;
-        if ( size.y != -1 )
-            sizeBest.y = size.y;
-
-        SetSize(sizeBest);
-    }
+    SetBestSize(size);
 
     return TRUE;
 }
@@ -113,9 +104,7 @@ wxIcon wxStaticBitmap::GetIcon() const
 
 wxSize wxStaticBitmap::DoGetBestSize() const
 {
-    wxSize sz = wxStaticBitmapBase::DoGetBestSize();
-    wxTheme::Get()->GetRenderer()->AdjustSize(&sz, this);
-    return sz;
+    return AdjustSize(wxStaticBitmapBase::DoGetBestSize());
 }
 
 void wxStaticBitmap::DoDraw(wxControlRenderer *renderer)

@@ -186,17 +186,39 @@ void wxControlRenderer::DrawBorder()
     m_renderer->DrawBackground(m_dc, m_rect, flags);
 }
 
-void wxControlRenderer::DrawLabel()
+void wxControlRenderer::DrawLabel(const wxBitmap& bitmap,
+                                  wxCoord marginX, wxCoord marginY)
 {
     m_dc.SetFont(m_ctrl->GetFont());
     m_dc.SetTextForeground(m_ctrl->GetForegroundColour());
 
-    m_renderer->DrawLabel(m_dc,
-                          m_ctrl->GetLabel(),
-                          m_rect,
-                          m_ctrl->GetStateFlags(),
-                          m_ctrl->GetAlignment(),
-                          m_ctrl->GetAccelIndex());
+    wxRect rectLabel = m_rect;
+    if ( bitmap.Ok() )
+    {
+        wxRect rectBmp;
+        int width = bitmap.GetWidth();
+        rectBmp.x = m_rect.x + marginX;
+        rectBmp.y = m_rect.y + marginY;
+        rectBmp.width = width;
+        rectBmp.height = m_rect.height - marginY;
+
+        DrawBitmap(bitmap, rectBmp, wxALIGN_CENTRE | wxALIGN_CENTRE_VERTICAL);
+
+        width += 2*marginX;
+        rectLabel.x += width;
+        rectLabel.width -= width;
+    }
+
+    wxString label = m_ctrl->GetLabel();
+    if ( !label.empty() )
+    {
+        m_renderer->DrawLabel(m_dc,
+                              label,
+                              rectLabel,
+                              m_ctrl->GetStateFlags(),
+                              m_ctrl->GetAlignment(),
+                              m_ctrl->GetAccelIndex());
+    }
 }
 
 void wxControlRenderer::DrawFrame()
@@ -225,9 +247,9 @@ void wxControlRenderer::DrawButtonBorder()
 void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap)
 {
     int style = m_ctrl->GetWindowStyle();
-    DoDrawBitmap(bitmap,
-                 style & wxALIGN_MASK,
-                 style & wxBI_EXPAND ? wxEXPAND : wxSTRETCH_NOT);
+    DrawBitmap(bitmap, m_rect,
+               style & wxALIGN_MASK,
+               style & wxBI_EXPAND ? wxEXPAND : wxSTRETCH_NOT);
 }
 
 void wxControlRenderer::DrawBackgroundBitmap()
@@ -237,13 +259,16 @@ void wxControlRenderer::DrawBackgroundBitmap()
     wxStretch stretch;
     wxBitmap bmp = m_ctrl->GetBackgroundBitmap(&alignment, &stretch);
 
-    DoDrawBitmap(bmp, alignment, stretch);
+    DrawBitmap(bmp, m_rect, alignment, stretch);
 }
 
-void wxControlRenderer::DoDrawBitmap(const wxBitmap& bmp,
-                                     int alignment,
-                                     wxStretch stretch)
+void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap,
+                                   const wxRect& rect,
+                                   int alignment,
+                                   wxStretch stretch)
 {
+    // we may change the bitmap if we stretch it
+    wxBitmap bmp = bitmap;
     if ( !bmp.Ok() )
         return;
 
@@ -255,9 +280,9 @@ void wxControlRenderer::DoDrawBitmap(const wxBitmap& bmp,
     if ( stretch & wxTILE )
     {
         // tile the bitmap
-        for ( ; x < m_rect.width; x += width )
+        for ( ; x < rect.width; x += width )
         {
-            for ( y = 0; y < m_rect.height; y += height )
+            for ( y = 0; y < rect.height; y += height )
             {
                 m_dc.DrawBitmap(bmp, x, y);
             }
@@ -266,34 +291,34 @@ void wxControlRenderer::DoDrawBitmap(const wxBitmap& bmp,
     else if ( stretch & wxEXPAND )
     {
         // stretch bitmap to fill the entire control
-        bmp = wxImage(bmp).Scale(m_rect.width, m_rect.height).ConvertToBitmap();
+        bmp = wxImage(bmp).Scale(rect.width, rect.height).ConvertToBitmap();
     }
     else // not stretched, not tiled
     {
         if ( alignment & wxALIGN_RIGHT )
         {
-            x = m_rect.GetRight() - width;
+            x = rect.GetRight() - width;
         }
         else if ( alignment & wxALIGN_CENTRE )
         {
-            x = (m_rect.GetLeft() + m_rect.GetRight() - width) / 2;
+            x = (rect.GetLeft() + rect.GetRight() - width) / 2;
         }
         else // alignment & wxALIGN_LEFT
         {
-            x = m_rect.GetLeft();
+            x = rect.GetLeft();
         }
 
         if ( alignment & wxALIGN_BOTTOM )
         {
-            y = m_rect.GetBottom() - height;
+            y = rect.GetBottom() - height;
         }
         else if ( alignment & wxALIGN_CENTRE_VERTICAL )
         {
-            y = (m_rect.GetTop() + m_rect.GetBottom() - height) / 2;
+            y = (rect.GetTop() + rect.GetBottom() - height) / 2;
         }
         else // alignment & wxALIGN_TOP
         {
-            y = m_rect.GetTop();
+            y = rect.GetTop();
         }
     }
 

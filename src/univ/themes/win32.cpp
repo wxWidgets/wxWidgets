@@ -283,7 +283,7 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
         // create a new handler
         n = m_handlerNames.Add(control);
 
-        if ( control == _T("wxButton") )
+        if ( control.Matches(_T("wx*Button")) )
             handler = new wxStdButtonInputHandler(GetInputHandler(_T("wxControl")));
         else if ( control == _T("wxScrollBar") )
             handler = new wxWin32ScrollBarInputHandler(m_renderer,

@@ -767,23 +767,20 @@ protected:
     static int WidthDefault(int w) { return w == -1 ? 20 : w; }
     static int HeightDefault(int h) { return h == -1 ? 20 : h; }
 
-    // sets the size to be size but take width and/or height from
-    // DoGetBestSize() if width/height of size is -1
-    //
-    // NB: when calling this function from the ctor, the DoGetBestSize() of
-    //     the class with the same name as the ctor, not the real (most
-    //     derived) one - but this is what we usually want
-    void SetSizeOrDefault(const wxSize& size = wxDefaultSize)
+    // set the best size for the control if the default size was given:
+    // replaces the fields of size == -1 with the best values for them and
+    // calls SetSize() if needed
+    void SetBestSize(const wxSize& size)
     {
         if ( size.x == -1 || size.y == -1 )
         {
-            wxSize sizeDef = GetBestSize();
-            SetSize( size.x == -1 ? sizeDef.x : size.x,
-                     size.y == -1 ? sizeDef.y : size.y);
-        }
-        else
-        {
-            SetSize(size);
+            wxSize sizeBest = DoGetBestSize();
+            if ( size.x != -1 )
+                sizeBest.x = size.x;
+            if ( size.y != -1 )
+                sizeBest.y = size.y;
+
+            SetSize(sizeBest);
         }
     }
 

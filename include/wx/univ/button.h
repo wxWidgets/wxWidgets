@@ -18,6 +18,8 @@
 
 class WXDLLEXPORT wxInputHandler;
 
+#include "wx/bitmap.h"
+
 // ----------------------------------------------------------------------------
 // the actions supported by this control
 // ----------------------------------------------------------------------------
@@ -35,6 +37,21 @@ class WXDLLEXPORT wxButton : public wxButtonBase
 {
 public:
     wxButton() { Init(); }
+    wxButton(wxWindow *parent,
+             wxWindowID id,
+             const wxBitmap& bitmap,
+             const wxString& label,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = wxButtonNameStr)
+    {
+        Init();
+
+        Create(parent, id, bitmap, label, pos, size, style, validator, name);
+    }
+
     wxButton(wxWindow *parent,
              wxWindowID id,
              const wxString& label,
@@ -56,20 +73,36 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxButtonNameStr)
+    {
+        return Create(parent, id, wxNullBitmap, label,
+                      pos, size, style, validator, name);
+    }
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxBitmap& bitmap,
+                const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxButtonNameStr);
 
     virtual ~wxButton();
 
+    virtual void SetImageLabel(const wxBitmap& bitmap);
+    virtual void SetImageMargins(wxCoord x, wxCoord y);
     virtual void SetDefault();
 
     virtual bool IsPressed() const { return m_isPressed; }
     virtual bool IsDefault() const { return m_isDefault; }
 
     // wxButton actions
-    void Press();
-    void Release();
     void Toggle();
-    void Click();
+    virtual void Press();
+    virtual void Release();
+    virtual void Click();
 
 protected:
     virtual bool PerformAction(const wxControlAction& action,
@@ -80,8 +113,14 @@ protected:
     // common part of all ctors
     void Init();
 
+    // current state
     bool m_isPressed,
          m_isDefault;
+
+    // the (optional) image to show and the margins around it
+    wxBitmap m_bitmap;
+    wxCoord  m_marginBmpX,
+             m_marginBmpY;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxButton)

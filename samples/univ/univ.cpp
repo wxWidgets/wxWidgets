@@ -34,6 +34,7 @@
     #include "wx/frame.h"
     #include "wx/dcclient.h"
 
+    #include "wx/bmpbuttn.h"
     #include "wx/button.h"
     #include "wx/scrolbar.h"
     #include "wx/statbmp.h"
@@ -47,6 +48,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/generic/tip.xpm"
+#include "open.xpm"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -201,12 +203,33 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     sb->SetScrollbar(0, 10, 100, 10);
     sb = new wxScrollBar(this, -1, wxPoint(200, 330), wxSize(-1, 150), wxSB_VERTICAL);
     sb->SetScrollbar(50, 50, 100, 10);
+
+    new wxButton(this, -1, wxBitmap(open_xpm), _T("&Open..."), wxPoint(10, 420));
+
+    wxBitmap bmp1(wxTheApp->GetStdIcon(wxICON_INFORMATION)),
+             bmp2(wxTheApp->GetStdIcon(wxICON_WARNING)),
+             bmp3(wxTheApp->GetStdIcon(wxICON_QUESTION));
+    wxBitmapButton *bmpBtn = new wxBitmapButton
+                                 (
+                                  this, -1,
+                                  bmp1,
+                                  wxPoint(10, 470)
+                                 );
+    bmpBtn->SetBitmapSelected(bmp2);
+    bmpBtn->SetBitmapFocus(bmp3);
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)
 {
-    wxLogDebug(_T("Button %d pressed."),
-               event.GetId() == Univ_Button1 ? 1 : 2);
+    int btn = event.GetId();
+    if ( btn == Univ_Button1 || btn == Univ_Button2 )
+    {
+        wxLogDebug(_T("Button %d pressed."), btn == Univ_Button1 ? 1 : 2);
+    }
+    else
+    {
+        wxLogDebug(_T("Another button pressed."));
+    }
 }
 
 void MyUnivFrame::OnLeftUp(wxMouseEvent& event)

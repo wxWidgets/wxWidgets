@@ -140,6 +140,17 @@ int wxControl::GetStateFlags() const
 }
 
 // ----------------------------------------------------------------------------
+// size
+// ----------------------------------------------------------------------------
+
+wxSize wxControl::AdjustSize(const wxSize& size) const
+{
+    wxSize sz = size;
+    wxTheme::Get()->GetRenderer()->AdjustSize(&sz, this);
+    return sz;
+}
+
+// ----------------------------------------------------------------------------
 // mnemonics handling
 // ----------------------------------------------------------------------------
 
@@ -267,7 +278,8 @@ void wxControl::DoDraw(wxControlRenderer *renderer)
 
 void wxControl::OnFocus(wxFocusEvent& event)
 {
-    Refresh();
+    // do nothing here for now...
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------

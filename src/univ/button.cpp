@@ -39,6 +39,14 @@
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// default margins around the image
+static const wxCoord DEFAULT_BTN_MARGIN_X = 6;
+static const wxCoord DEFAULT_BTN_MARGIN_Y = 3;
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -57,6 +65,7 @@ void wxButton::Init()
 
 bool wxButton::Create(wxWindow *parent,
                       wxWindowID id,
+                      const wxBitmap& bitmap,
                       const wxString &label,
                       const wxPoint &pos,
                       const wxSize &size,
@@ -67,20 +76,26 @@ bool wxButton::Create(wxWindow *parent,
     // center label by default
     if ( !(style & wxALIGN_MASK) )
     {
-        style |= wxALIGN_CENTRE | wxALIGN_CENTRE_VERTICAL;
+        style |= wxALIGN_CENTRE_VERTICAL;
+
+        // normally, buttons are centered, but it looks better to put them
+        // near the image for the buttons which have one
+        if ( bitmap.Ok() )
+        {
+            style |= wxALIGN_LEFT;
+        }
+        else
+        {
+            style |= wxALIGN_CENTRE_HORIZONTAL;
+        }
     }
 
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
     SetLabel(label);
-
-    if ( size.x == -1 || size.y == -1 )
-    {
-        wxSize sizeBest = DoGetBestSize();
-        SetSize(size.x == -1 ? sizeBest.x : size.x,
-                size.y == -1 ? sizeBest.y : size.y);
-    }
+    SetImageLabel(bitmap);
+    SetBestSize(size);
 
     return TRUE;
 }
@@ -99,9 +114,17 @@ wxSize wxButton::DoGetBestSize() const
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 
-    wxSize sz(width, height);
-    wxTheme::Get()->GetRenderer()->AdjustSize(&sz, this);
-    return sz;
+    if ( m_bitmap.Ok() )
+    {
+        // allocate extra space for the bitmap
+        wxCoord heightBmp = m_bitmap.GetHeight() + 2*m_marginBmpY;
+        if ( height < heightBmp )
+            height = heightBmp;
+
+        width += m_bitmap.GetWidth() + 2*m_marginBmpX;
+    }
+
+    return AdjustSize(wxSize(width, height));
 }
 
 // ----------------------------------------------------------------------------
@@ -111,7 +134,7 @@ wxSize wxButton::DoGetBestSize() const
 void wxButton::DoDraw(wxControlRenderer *renderer)
 {
     renderer->DrawButtonBorder();
-    renderer->DrawLabel();
+    renderer->DrawLabel(m_bitmap, m_marginBmpX, m_marginBmpY);
 }
 
 // ----------------------------------------------------------------------------
@@ -130,7 +153,10 @@ void wxButton::Release()
 
 void wxButton::Toggle()
 {
-    m_isPressed = !m_isPressed;
+    if ( m_isPressed )
+        Release();
+    else
+        Press();
 
     if ( !m_isPressed )
     {
@@ -166,8 +192,21 @@ bool wxButton::PerformAction(const wxControlAction& action,
 }
 
 // ----------------------------------------------------------------------------
-//
+// misc
 // ----------------------------------------------------------------------------
+
+void wxButton::SetImageLabel(const wxBitmap& bitmap)
+{
+    m_bitmap = bitmap;
+    m_marginBmpX = DEFAULT_BTN_MARGIN_X;
+    m_marginBmpY = DEFAULT_BTN_MARGIN_Y;
+}
+
+void wxButton::SetImageMargins(wxCoord x, wxCoord y)
+{
+    m_marginBmpX = x;
+    m_marginBmpY = y;
+}
 
 void wxButton::SetDefault()
 {

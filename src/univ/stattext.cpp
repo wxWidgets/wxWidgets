@@ -84,9 +84,7 @@ wxSize wxStaticText::DoGetBestSize() const
     wxCoord width, height;
     dc.GetMultiLineTextExtent(GetLabel(), &width, &height);
 
-    wxSize sz(width, height);
-    wxTheme::Get()->GetRenderer()->AdjustSize(&sz, this);
-    return sz;
+    return AdjustSize(wxSize(width, height));
 }
 
 // ----------------------------------------------------------------------------

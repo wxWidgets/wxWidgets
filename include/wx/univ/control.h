@@ -124,7 +124,7 @@ public:
     int GetStateFlags() const;
 
     // operations
-    void SetCurrent(bool doit = TRUE);
+    virtual void SetCurrent(bool doit = TRUE);
 
     // implementation only from now on
 
@@ -157,6 +157,9 @@ protected:
 
     // draw the controls contents
     virtual void DoDraw(wxControlRenderer *renderer);
+
+    // adjust the size of the control to take into account its borders
+    wxSize AdjustSize(const wxSize& size) const;
 
     // event handlers
     void OnMouse(wxMouseEvent& event);
