@@ -180,6 +180,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_arrays.obj &
 	$(OBJS)\test_longlong.obj &
 	$(OBJS)\test_strings.obj &
+	$(OBJS)\test_unicode.obj &
 	$(OBJS)\test_bstream.obj &
 	$(OBJS)\test_ffilestream.obj &
 	$(OBJS)\test_filestream.obj &
@@ -193,7 +194,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\test.exe
+all : .SYMBOLIC $(OBJS)\test.exe data
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -212,6 +213,10 @@ $(OBJS)\test.exe :  $(TEST_OBJECTS)
 	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\test.lbc library %i
 	@%append $(OBJS)\test.lbc
 	wlink @$(OBJS)\test.lbc
+
+data : .SYMBOLIC 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\test_test.obj :  .AUTODEPEND .\test.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
@@ -238,6 +243,9 @@ $(OBJS)\test_longlong.obj :  .AUTODEPEND .\longlong\longlong.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_strings.obj :  .AUTODEPEND .\strings\strings.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_unicode.obj :  .AUTODEPEND .\strings\unicode.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_bstream.obj :  .AUTODEPEND .\streams\bstream.cpp

@@ -17,6 +17,7 @@
             arrays/arrays.cpp
             longlong/longlong.cpp
             strings/strings.cpp
+            strings/unicode.cpp
             streams/bstream.cpp
             streams/ffilestream.cpp
             streams/filestream.cpp
@@ -25,5 +26,9 @@
         </sources>
         <wx-lib>base</wx-lib>
     </exe>
+
+    <wx-data id="data">
+        <files>testdata.fc</files>
+    </wx-data>
 
 </makefile>

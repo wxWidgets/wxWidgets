@@ -32,6 +32,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_arrays.obj \
 	$(OBJS)\test_longlong.obj \
 	$(OBJS)\test_strings.obj \
+	$(OBJS)\test_unicode.obj \
 	$(OBJS)\test_bstream.obj \
 	$(OBJS)\test_ffilestream.obj \
 	$(OBJS)\test_filestream.obj \
@@ -205,7 +206,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe
+all: $(OBJS)\test.exe data
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -218,6 +219,10 @@ $(OBJS)\test.exe: $(TEST_OBJECTS)
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(CPPUNIT_LIBS) @<<
 	$(TEST_OBJECTS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib odbc32.lib
 <<
+
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\test_test.obj: .\test.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
@@ -244,6 +249,9 @@ $(OBJS)\test_longlong.obj: .\longlong\longlong.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_strings.obj: .\strings\strings.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_unicode.obj: .\strings\unicode.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_bstream.obj: .\streams\bstream.cpp

@@ -39,6 +39,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_arrays.obj \
 	$(OBJS)\test_longlong.obj \
 	$(OBJS)\test_strings.obj \
+	$(OBJS)\test_unicode.obj \
 	$(OBJS)\test_bstream.obj \
 	$(OBJS)\test_ffilestream.obj \
 	$(OBJS)\test_filestream.obj \
@@ -146,7 +147,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe
+all: $(OBJS)\test.exe data
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -162,6 +163,10 @@ $(OBJS)\test.exe: $(TEST_OBJECTS)
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(CPPUNIT_LIBS) @&&|
 	c0x32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
+
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\test_test.obj: .\test.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
@@ -188,6 +193,9 @@ $(OBJS)\test_longlong.obj: .\longlong\longlong.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_strings.obj: .\strings\strings.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_unicode.obj: .\strings\unicode.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_bstream.obj: .\streams\bstream.cpp

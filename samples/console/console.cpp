@@ -84,7 +84,6 @@
     #define TEST_TEXTSTREAM
     #define TEST_THREADS
     #define TEST_TIMER
-    #define TEST_UNICODE
     // #define TEST_VCARD            -- don't enable this (VZ)
 //    #define TEST_VOLUME   --FIXME! (RN)
     #define TEST_WCHAR
@@ -3823,43 +3822,6 @@ static void TestFSVolume()
 // wide char and Unicode support
 // ----------------------------------------------------------------------------
 
-#ifdef TEST_UNICODE
-
-static void TestUnicodeToFromAscii()
-{
-    wxPuts(_T("Testing wxString::To/FromAscii()\n"));
-
-    static const char *msg = "Hello, world!";
-    wxString s = wxString::FromAscii(msg);
-
-    wxPrintf(_T("Message in Unicode: %s\n"), s.c_str());
-    printf("Message in ASCII: %s\n", (const char *)s.ToAscii());
-
-    wxPutchar(_T('\n'));
-}
-
-#include "wx/textfile.h"
-
-static void TestUnicodeTextFileRead()
-{
-    wxPuts(_T("Testing wxTextFile in Unicode build\n"));
-
-    wxTextFile file;
-    if ( file.Open(_T("testdata.fc"), wxConvLocal) )
-    {
-        const size_t count = file.GetLineCount();
-        for ( size_t n = 0; n < count; n++ )
-        {
-            const wxString& s = file[n];
-
-            wxPrintf(_T("Line %u: \"%s\" (len %u, last char = '%c')\n"),
-                     (unsigned)n, s.c_str(), (unsigned)s.length(), s.Last());
-        }
-    }
-}
-
-#endif // TEST_UNICODE
-
 #ifdef TEST_WCHAR
 
 #include "wx/strconv.h"
@@ -5904,13 +5866,6 @@ int main(int argc, char **argv)
 #ifdef TEST_VOLUME
     TestFSVolume();
 #endif // TEST_VOLUME
-
-#ifdef TEST_UNICODE
-    TestUnicodeTextFileRead();
-    #if TEST_ALL
-        TestUnicodeToFromAscii();
-    #endif
-#endif // TEST_UNICODE
 
 #ifdef TEST_WCHAR
     TestUtf8();

@@ -483,6 +483,10 @@ SOURCE=.\test.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\strings\unicode.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\regex\wxregex.cpp
 # End Source File
 # Begin Source File
