@@ -1,288 +1,389 @@
 CHANGES - changes for libpng
 
 version 0.2
-   added reader into png.h
-   fixed small problems in stub file
+  added reader into png.h
+  fixed small problems in stub file
 version 0.3
-   added pull reader
-   split up pngwrite.c to several files
-   added pnglib.txt
-   added example.c
-   cleaned up writer, adding a few new tranformations
-   fixed some bugs in writer
-   interfaced with zlib 0.5
-   added K&R support
-   added check for 64 KB blocks for 16 bit machines
+  added pull reader
+  split up pngwrite.c to several files
+  added pnglib.txt
+  added example.c
+  cleaned up writer, adding a few new tranformations
+  fixed some bugs in writer
+  interfaced with zlib 0.5
+  added K&R support
+  added check for 64 KB blocks for 16 bit machines
 version 0.4
-   cleaned up code and commented code
-   simplified time handling into png_time
-   created png_color_16 and png_color_8 to handle color needs
-   cleaned up color type defines
-   fixed various bugs
-   made various names more consistant
-   interfaced with zlib 0.71
-   cleaned up zTXt reader and writer (using zlib's Reset functions)
-   split transformations into pngrtran.c and pngwtran.c
+  cleaned up code and commented code
+  simplified time handling into png_time
+  created png_color_16 and png_color_8 to handle color needs
+  cleaned up color type defines
+  fixed various bugs
+  made various names more consistant
+  interfaced with zlib 0.71
+  cleaned up zTXt reader and writer (using zlib's Reset functions)
+  split transformations into pngrtran.c and pngwtran.c
 version 0.5
-   interfaced with zlib 0.8
-   fixed many reading and writing bugs
-   saved using 3 spaces instead of tabs
+  interfaced with zlib 0.8
+  fixed many reading and writing bugs
+  saved using 3 spaces instead of tabs
 version 0.6
-   added png_large_malloc() and png_large_free()
-   added png_size_t
-   cleaned up some compiler warnings
-   added png_start_read_image()
+  added png_large_malloc() and png_large_free()
+  added png_size_t
+  cleaned up some compiler warnings
+  added png_start_read_image()
 version 0.7
-   cleaned up lots of bugs
-   finished dithering and other stuff
-   added test program
-   changed name from pnglib to libpng
+  cleaned up lots of bugs
+  finished dithering and other stuff
+  added test program
+  changed name from pnglib to libpng
 version 0.71 [June, 1995]
-   changed pngtest.png for zlib 0.93
-   fixed error in libpng.txt and example.c
+  changed pngtest.png for zlib 0.93
+  fixed error in libpng.txt and example.c
 version 0.8
-   cleaned up some bugs
-   added png_set_filler()
-   split up pngstub.c into pngmem.c, pngio.c, and pngerror.c
-   added #define's to remove unwanted code
-   moved png_info_init() to png.c
-   added old_size into png_realloc()
-   added functions to manually set filtering and compression info
-   changed compression parameters based on image type
-   optimized filter selection code
-   added version info
-   changed external functions passing floats to doubles (k&r problems?)
-   put all the configurable stuff in pngconf.h
-   enabled png_set_shift to work with paletted images on read
-   added png_read_update_info() - updates info structure with
-      transformations
+  cleaned up some bugs
+  added png_set_filler()
+  split up pngstub.c into pngmem.c, pngio.c, and pngerror.c
+  added #define's to remove unwanted code
+  moved png_info_init() to png.c
+  added old_size into png_realloc()
+  added functions to manually set filtering and compression info
+  changed compression parameters based on image type
+  optimized filter selection code
+  added version info
+  changed external functions passing floats to doubles (k&r problems?)
+  put all the configurable stuff in pngconf.h
+  enabled png_set_shift to work with paletted images on read
+  added png_read_update_info() - updates info structure with
+     transformations
 version 0.81 [August, 1995]
-   incorporated Tim Wegner's medium model code (thanks, Tim)
+  incorporated Tim Wegner's medium model code (thanks, Tim)
 version 0.82 [September, 1995]
-   [unspecified changes]
+  [unspecified changes]
 version 0.85 [December, 1995]
-   added more medium model code (almost everything's a far)
-   added i/o, error, and memory callback functions
-   fixed some bugs (16 bit, 4 bit interlaced, etc.)
-   added first run progressive reader (barely tested)
+  added more medium model code (almost everything's a far)
+  added i/o, error, and memory callback functions
+  fixed some bugs (16 bit, 4 bit interlaced, etc.)
+  added first run progressive reader (barely tested)
 version 0.86 [January, 1996]
-   fixed bugs
-   improved documentation
+  fixed bugs
+  improved documentation
 version 0.87 [January, 1996]
-   fixed medium model bugs
-   fixed other bugs introduced in 0.85 and 0.86
-   added some minor documentation
+  fixed medium model bugs
+  fixed other bugs introduced in 0.85 and 0.86
+  added some minor documentation
 version 0.88 [January, 1996]
-   fixed progressive bugs
-   replaced tabs with spaces
-   cleaned up documentation
-   added callbacks for read/write and warning/error functions
+  fixed progressive bugs
+  replaced tabs with spaces
+  cleaned up documentation
+  added callbacks for read/write and warning/error functions
 version 0.89 [July, 1996]
-   added new initialization API to make libpng work better with shared libs
-      we now have png_create_read_struct(), png_create_write_struct(),
-      png_create_info_struct(), png_destroy_read_struct(), and
-      png_destroy_write_struct() instead of the separate calls to
-      malloc and png_read_init(), png_info_init(), and png_write_init()
-   changed warning/error callback functions to fix bug - this means you
-      should use the new initialization API if you were using the old
-      png_set_message_fn() calls, and that the old API no longer exists
-      so that people are aware that they need to change their code
-   changed filter selection API to allow selection of multiple filters
-      since it didn't work in previous versions of libpng anyways
-   optimized filter selection code    
-   fixed png_set_background() to allow using an arbitrary RGB color for
-      paletted images
-   fixed gamma and background correction for paletted images, so
-      png_correct_palette is not needed unless you are correcting an
-      external palette (you will need to #define PNG_CORRECT_PALETTE_SUPPORTED
-      in pngconf.h) - if nobody uses this, it may disappear in the future.
-   fixed bug with Borland 64K memory allocation (Alexander Lehmann)
-   fixed bug in interlace handling (Smarasderagd, I think)
-   added more error checking for writing and image to reduce invalid files
-   separated read and write functions so that they won't both be linked
-      into a binary when only reading or writing functionality is used
-   new pngtest image also has interlacing and zTXt
-   updated documentation to reflect new API
+  added new initialization API to make libpng work better with shared libs
+     we now have png_create_read_struct(), png_create_write_struct(),
+     png_create_info_struct(), png_destroy_read_struct(), and
+     png_destroy_write_struct() instead of the separate calls to
+     malloc and png_read_init(), png_info_init(), and png_write_init()
+  changed warning/error callback functions to fix bug - this means you
+     should use the new initialization API if you were using the old
+     png_set_message_fn() calls, and that the old API no longer exists
+     so that people are aware that they need to change their code
+  changed filter selection API to allow selection of multiple filters
+     since it didn't work in previous versions of libpng anyways
+  optimized filter selection code
+  fixed png_set_background() to allow using an arbitrary RGB color for
+     paletted images
+  fixed gamma and background correction for paletted images, so
+     png_correct_palette is not needed unless you are correcting an
+     external palette (you will need to #define PNG_CORRECT_PALETTE_SUPPORTED
+     in pngconf.h) - if nobody uses this, it may disappear in the future.
+  fixed bug with Borland 64K memory allocation (Alexander Lehmann)
+  fixed bug in interlace handling (Smarasderagd, I think)
+  added more error checking for writing and image to reduce invalid files
+  separated read and write functions so that they won't both be linked
+     into a binary when only reading or writing functionality is used
+  new pngtest image also has interlacing and zTXt
+  updated documentation to reflect new API
 version 0.90 [January, 1997]
-   made CRC errors/warnings on critical and ancillary chunks configurable
-   libpng will use the zlib CRC routines by (compile-time) default
-   changed DOS small/medium model memory support - needs zlib 1.04 (Tim Wegner)
-   added external C++ wrapper statements to png.h (Gilles Dauphin)
-   allow PNG file to be read when some or all of file signature has already
-      been read from the beginning of the stream.  ****This affects the size
-      of info_struct and invalidates all programs that use a shared libpng****
-   fixed png_filler() declarations
-   fixed? background color conversions
-   fixed order of error function pointers to match documentation
-   current chunk name is now available in png_struct to reduce the number
-      of nearly identical error messages (will simplify multi-lingual
-      support when available)
-   try to get ready for unknown-chunk callback functions:
-      - previously read critical chunks are flagged, so the chunk handling
-        routines can determine if the chunk is in the right place
-      - all chunk handling routines have the same prototypes, so we will
-        be able to handle all chunks via a callback mechanism
-   try to fix Linux "setjmp" buffer size problems
+  made CRC errors/warnings on critical and ancillary chunks configurable
+  libpng will use the zlib CRC routines by (compile-time) default
+  changed DOS small/medium model memory support - needs zlib 1.04 (Tim Wegner)
+  added external C++ wrapper statements to png.h (Gilles Dauphin)
+  allow PNG file to be read when some or all of file signature has already
+     been read from the beginning of the stream.  ****This affects the size
+     of info_struct and invalidates all programs that use a shared libpng****
+  fixed png_filler() declarations
+  fixed? background color conversions
+  fixed order of error function pointers to match documentation
+  current chunk name is now available in png_struct to reduce the number
+     of nearly identical error messages (will simplify multi-lingual
+     support when available)
+  try to get ready for unknown-chunk callback functions:
+     - previously read critical chunks are flagged, so the chunk handling
+       routines can determine if the chunk is in the right place
+     - all chunk handling routines have the same prototypes, so we will
+       be able to handle all chunks via a callback mechanism
+  try to fix Linux "setjmp" buffer size problems
 version 0.95 [March, 1997]
-   fixed bug in pngwutil.c allocating "up_row" twice and "avg_row" never
-   fixed bug in PNG file signature compares when start != 0
-   changed parameter type of png_set_filler(...filler...) from png_byte
-      to png_uint_32
-   added test for MACOS to ensure that both math.h and fp.h are not #included
-   added macros for libpng to be compiled as a Windows DLL (Andreas Kupries)
-   added "packswap" transformation, which changes the endianness of
-      packed-pixel bytes (Kevin Bracey)
-   added "strip_alpha" transformation, which removes the alpha channel of
-      input images without using it (not neccesarily a good idea)
-   added "swap_alpha" transformation, which puts the alpha channel in front
-      of the color bytes instead of after
-   removed all implicit variable tests which assume NULL == 0 (I think)
-   changed several variables to "png_size_t" to show 16/32-bit limitations
-   added new pCAL chunk read/write support
-   added experimental filter selection weighting (Greg Roelofs)
-   removed old png_set_rgbx() and png_set_xrgb() functions that have been
-      obsolete for about 2 years now (use png_set_filler() instead)
-   added macros to read 16- and 32-bit ints directly from buffer, to be
-      used only on those systems that support it (namely PowerPC and 680x0)
-      With some testing, this may become the default for MACOS/PPC systems.
-   only calculate CRC on data if we are going to use it
-   added macros for zTXt compression type PNG_zTXt_COMPRESSION_???
-   added macros for simple libpng debugging output selectable at compile time
-   removed PNG_READ_END_MODE in progressive reader (Smarasderagd)
-   more description of info_struct in libpng.txt and png.h
-   more instructions in example.c
-   more chunk types tested in pngtest.c
-   renamed pngrcb.c to pngset.c, and all png_read_<chunk> functions to be
-      png_set_<chunk>.  We now have corresponding png_get_<chunk>
-      functions in pngget.c to get infomation in info_ptr.  This isolates
-      the application from the internal organization of png_info_struct
-      (good for shared library implementations).
+  fixed bug in pngwutil.c allocating "up_row" twice and "avg_row" never
+  fixed bug in PNG file signature compares when start != 0
+  changed parameter type of png_set_filler(...filler...) from png_byte
+     to png_uint_32
+  added test for MACOS to ensure that both math.h and fp.h are not #included
+  added macros for libpng to be compiled as a Windows DLL (Andreas Kupries)
+  added "packswap" transformation, which changes the endianness of
+     packed-pixel bytes (Kevin Bracey)
+  added "strip_alpha" transformation, which removes the alpha channel of
+     input images without using it (not neccesarily a good idea)
+  added "swap_alpha" transformation, which puts the alpha channel in front
+     of the color bytes instead of after
+  removed all implicit variable tests which assume NULL == 0 (I think)
+  changed several variables to "png_size_t" to show 16/32-bit limitations
+  added new pCAL chunk read/write support
+  added experimental filter selection weighting (Greg Roelofs)
+  removed old png_set_rgbx() and png_set_xrgb() functions that have been
+     obsolete for about 2 years now (use png_set_filler() instead)
+  added macros to read 16- and 32-bit ints directly from buffer, to be
+     used only on those systems that support it (namely PowerPC and 680x0)
+     With some testing, this may become the default for MACOS/PPC systems.
+  only calculate CRC on data if we are going to use it
+  added macros for zTXt compression type PNG_zTXt_COMPRESSION_???
+  added macros for simple libpng debugging output selectable at compile time
+  removed PNG_READ_END_MODE in progressive reader (Smarasderagd)
+  more description of info_struct in libpng.txt and png.h
+  more instructions in example.c
+  more chunk types tested in pngtest.c
+  renamed pngrcb.c to pngset.c, and all png_read_<chunk> functions to be
+     png_set_<chunk>.  We now have corresponding png_get_<chunk>
+     functions in pngget.c to get infomation in info_ptr.  This isolates
+     the application from the internal organization of png_info_struct
+     (good for shared library implementations).
 version 0.96 [May, 1997]
-   fixed serious bug with < 8bpp images introduced in 0.95
-   fixed 256-color transparency bug (Greg Roelofs)
-   fixed up documentation (Greg Roelofs, Laszlo Nyul)
-   fixed "error" in pngconf.h for Linux setjmp() behaviour
-   fixed DOS medium model support (Tim Wegner)
-   fixed png_check_keyword() for case with error in static string text
-   added read of CRC after IEND chunk for embedded PNGs (Laszlo Nyul)
-   added typecasts to quiet compiler errors
-   added more debugging info
+  fixed serious bug with < 8bpp images introduced in 0.95
+  fixed 256-color transparency bug (Greg Roelofs)
+  fixed up documentation (Greg Roelofs, Laszlo Nyul)
+  fixed "error" in pngconf.h for Linux setjmp() behaviour
+  fixed DOS medium model support (Tim Wegner)
+  fixed png_check_keyword() for case with error in static string text
+  added read of CRC after IEND chunk for embedded PNGs (Laszlo Nyul)
+  added typecasts to quiet compiler errors
+  added more debugging info
 version 0.97 [January, 1998]
-   removed PNG_USE_OWN_CRC capability
-   relocated png_set_crc_action from pngrutil.c to pngrtran.c
-   fixed typecasts of "new_key", etc. (Andreas Dilger)
-   added RFC 1152 [sic] date support
-   fixed bug in gamma handling of 4-bit grayscale
-   added 2-bit grayscale gamma handling (Glenn R-P)
-   added more typecasts. 65536L becomes (png_uint_32)65536L, etc. (Glenn R-P)
-   minor corrections in libpng.txt
-   added simple sRGB support (Glenn R-P)
-   easier conditional compiling, e.g. define PNG_READ/WRITE_NOT_FULLY_SUPPORTED;
-      all configurable options can be selected from command-line instead
-      of having to edit pngconf.h (Glenn R-P)
-   fixed memory leak in pngwrite.c (free info_ptr->text) (Glenn R-P)
-   added more conditions for png_do_background, to avoid changing
-      black pixels to background when a background is supplied and
-      no pixels are transparent
-   repaired PNG_NO_STDIO behaviour
-   tested NODIV support and made it default behaviour (Greg Roelofs)
-   added "-m" option and PNGTEST_DEBUG_MEMORY to pngtest (John Bowler)
-   regularized version numbering scheme and bumped shared-library major
-      version number to 2 to avoid problems with libpng 0.89 apps (Greg Roelofs)
+  removed PNG_USE_OWN_CRC capability
+  relocated png_set_crc_action from pngrutil.c to pngrtran.c
+  fixed typecasts of "new_key", etc. (Andreas Dilger)
+  added RFC 1152 [sic] date support
+  fixed bug in gamma handling of 4-bit grayscale
+  added 2-bit grayscale gamma handling (Glenn R-P)
+  added more typecasts. 65536L becomes (png_uint_32)65536L, etc. (Glenn R-P)
+  minor corrections in libpng.txt
+  added simple sRGB support (Glenn R-P)
+  easier conditional compiling, e.g. define PNG_READ/WRITE_NOT_FULLY_SUPPORTED;
+     all configurable options can be selected from command-line instead
+     of having to edit pngconf.h (Glenn R-P)
+  fixed memory leak in pngwrite.c (free info_ptr->text) (Glenn R-P)
+  added more conditions for png_do_background, to avoid changing
+     black pixels to background when a background is supplied and
+     no pixels are transparent
+  repaired PNG_NO_STDIO behaviour
+  tested NODIV support and made it default behaviour (Greg Roelofs)
+  added "-m" option and PNGTEST_DEBUG_MEMORY to pngtest (John Bowler)
+  regularized version numbering scheme and bumped shared-library major
+     version number to 2 to avoid problems with libpng 0.89 apps (Greg Roelofs)
 version 0.98 [January, 1998]
-   cleaned up some typos in libpng.txt and in code documentation
-   fixed memory leaks in pCAL chunk processing (Glenn R-P and John Bowler)
-   cosmetic change "display_gamma" to "screen_gamma" in pngrtran.c
-   changed recommendation about file_gamma for PC images to .51 from .45,
-      in example.c and libpng.txt, added comments to distinguish between
-      screen_gamma, viewing_gamma, and display_gamma.
-   changed all references to RFC1152 to read RFC1123 and changed the
-      PNG_TIME_RFC1152_SUPPORTED macro to PNG_TIME_RFC1123_SUPPORTED
-   added png_invert_alpha capability (Glenn R-P -- suggestion by Jon Vincent)
-   changed srgb_intent from png_byte to int to avoid compiler bugs
+  cleaned up some typos in libpng.txt and in code documentation
+  fixed memory leaks in pCAL chunk processing (Glenn R-P and John Bowler)
+  cosmetic change "display_gamma" to "screen_gamma" in pngrtran.c
+  changed recommendation about file_gamma for PC images to .51 from .45,
+     in example.c and libpng.txt, added comments to distinguish between
+     screen_gamma, viewing_gamma, and display_gamma.
+  changed all references to RFC1152 to read RFC1123 and changed the
+     PNG_TIME_RFC1152_SUPPORTED macro to PNG_TIME_RFC1123_SUPPORTED
+  added png_invert_alpha capability (Glenn R-P -- suggestion by Jon Vincent)
+  changed srgb_intent from png_byte to int to avoid compiler bugs
 version 0.99 [January 30, 1998]
-   free info_ptr->text instead of end_info_ptr->text in pngread.c (John Bowler)
-   fixed a longstanding "packswap" bug in pngtrans.c
-   fixed some inconsistencies in pngconf.h that prevented compiling with
-      PNG_READ_GAMMA_SUPPORTED and PNG_READ_hIST_SUPPORTED undefined
-   fixed some typos and made other minor rearrangement of libpng.txt (Andreas)
-   changed recommendation about file_gamma for PC images to .50 from .51 in
-      example.c and libpng.txt, and changed file_gamma for sRGB images to .45
-   added a number of functions to access information from the png structure
-      png_get_image_height(), etc. (Glenn R-P, suggestion by Brad Pettit)
-   added TARGET_MACOS similar to zlib-1.0.8
-   define PNG_ALWAYS_EXTERN when __MWERKS__ && WIN32 are defined
-   added type casting to all png_malloc() function calls
+  free info_ptr->text instead of end_info_ptr->text in pngread.c (John Bowler)
+  fixed a longstanding "packswap" bug in pngtrans.c
+  fixed some inconsistencies in pngconf.h that prevented compiling with
+     PNG_READ_GAMMA_SUPPORTED and PNG_READ_hIST_SUPPORTED undefined
+  fixed some typos and made other minor rearrangement of libpng.txt (Andreas)
+  changed recommendation about file_gamma for PC images to .50 from .51 in
+     example.c and libpng.txt, and changed file_gamma for sRGB images to .45
+  added a number of functions to access information from the png structure
+     png_get_image_height(), etc. (Glenn R-P, suggestion by Brad Pettit)
+  added TARGET_MACOS similar to zlib-1.0.8
+  define PNG_ALWAYS_EXTERN when __MWERKS__ && WIN32 are defined
+  added type casting to all png_malloc() function calls
 version 0.99a [January 31, 1998]
-   Added type casts and parentheses to all returns that return a value.(Tim W.)
+  Added type casts and parentheses to all returns that return a value.(Tim W.)
 version 0.99b [February 4, 1998]
-   Added type cast png_uint_32 on malloc function calls where needed.
-   Changed type of num_hist from png_uint_32 to int (same as num_palette).
-   Added checks for rowbytes overflow, in case png_size_t is less than 32 bits.
-   Renamed makefile.elf to makefile.lnx.
+  Added type cast png_uint_32 on malloc function calls where needed.
+  Changed type of num_hist from png_uint_32 to int (same as num_palette).
+  Added checks for rowbytes overflow, in case png_size_t is less than 32 bits.
+  Renamed makefile.elf to makefile.lnx.
 version 0.99c [February 7, 1998]
-   More type casting.  Removed erroneous overflow test in pngmem.c.
-   Added png_buffered_memcpy() and png_buffered_memset(), apply them to rowbytes.
-   Added UNIX manual pages libpng.3 (incorporating libpng.txt) and  png.5.
+  More type casting.  Removed erroneous overflow test in pngmem.c.
+  Added png_buffered_memcpy() and png_buffered_memset(), apply them to rowbytes.
+  Added UNIX manual pages libpng.3 (incorporating libpng.txt) and  png.5.
 version 0.99d [February 11, 1998]
-   Renamed "far_to_near()" "png_far_to_near()"
-   Revised libpng.3
-   Version 99c "buffered" operations didn't work as intended.  Replaced them
-     with png_memcpy_check() and png_memset_check().
-   Added many "if (png_ptr == NULL) return" to quell compiler warnings about
-     unused png_ptr, mostly in pngget.c and pngset.c.
-   Check for overlength tRNS chunk present when indexed-color PLTE is read.
-   Cleaned up spelling errors in libpng.3/libpng.txt
-   Corrected a problem with png_get_tRNS() which returned undefined trans array
+  Renamed "far_to_near()" "png_far_to_near()"
+  Revised libpng.3
+  Version 99c "buffered" operations didn't work as intended.  Replaced them
+    with png_memcpy_check() and png_memset_check().
+  Added many "if (png_ptr == NULL) return" to quell compiler warnings about
+    unused png_ptr, mostly in pngget.c and pngset.c.
+  Check for overlength tRNS chunk present when indexed-color PLTE is read.
+  Cleaned up spelling errors in libpng.3/libpng.txt
+  Corrected a problem with png_get_tRNS() which returned undefined trans array
 version 0.99e [February 28, 1998]
-   Corrected png_get_tRNS() again.
-   Add parentheses for easier reading of pngget.c, fixed "||" should be "&&".
-   Touched up example.c to make more of it compileable, although the entire
-     file still can't be compiled (Willem van Schaik)
-   Fixed a bug in png_do_shift() (Bryan Tsai)
-   Added a space in png.h prototype for png_write_chunk_start()
-   Replaced pngtest.png with one created with zlib 1.1.1
-   Changed pngtest to report PASS even when file size is different (Jean-loup G.)
-   Corrected some logic errors in png_do_invert_alpha() (Chris Patterson)
+  Corrected png_get_tRNS() again.
+  Add parentheses for easier reading of pngget.c, fixed "||" should be "&&".
+  Touched up example.c to make more of it compileable, although the entire
+    file still can't be compiled (Willem van Schaik)
+  Fixed a bug in png_do_shift() (Bryan Tsai)
+  Added a space in png.h prototype for png_write_chunk_start()
+  Replaced pngtest.png with one created with zlib 1.1.1
+  Changed pngtest to report PASS even when file size is different (Jean-loup G.)
+  Corrected some logic errors in png_do_invert_alpha() (Chris Patterson)
 version 0.99f [March 5, 1998]
-   Corrected a bug in pngpread() introduced in version 99c (Kevin Bracey)
-   Moved makefiles into a "scripts" directory, and added INSTALL instruction file
-   Added makefile.os2 and pngos2.def (A. Zabolotny) and makefile.s2x (W. Sebok)
-   Added pointers to "note on libpng versions" in makefile.lnx and README
-   Added row callback feature when reading and writing nonprogressive rows
-      and added a test of this feature in pngtest.c
-   Added user transform callbacks, with test of the feature in pngtest.c
+  Corrected a bug in pngpread() introduced in version 99c (Kevin Bracey)
+  Moved makefiles into a "scripts" directory, and added INSTALL instruction file
+  Added makefile.os2 and pngos2.def (A. Zabolotny) and makefile.s2x (W. Sebok)
+  Added pointers to "note on libpng versions" in makefile.lnx and README
+  Added row callback feature when reading and writing nonprogressive rows
+     and added a test of this feature in pngtest.c
+  Added user transform callbacks, with test of the feature in pngtest.c
 version 0.99g [March 6, 1998, morning]
-   Minor changes to pngtest.c to suppress compiler warnings.
-   Removed "beta" language from documentation.
+  Minor changes to pngtest.c to suppress compiler warnings.
+  Removed "beta" language from documentation.
 version 0.99h [March 6, 1998, evening]
-   Minor changes to previous minor changes to pngtest.c 
-   Changed PNG_READ_NOT_FULLY_SUPPORTED to PNG_READ_TRANSFORMS_NOT_SUPPORTED
-   and added PNG_PROGRESSIVE_READ_NOT_SUPPORTED macro
+  Minor changes to previous minor changes to pngtest.c
+  Changed PNG_READ_NOT_FULLY_SUPPORTED to PNG_READ_TRANSFORMS_NOT_SUPPORTED
+  and added PNG_PROGRESSIVE_READ_NOT_SUPPORTED macro
 version 1.00 [March 7, 1998]
-   Changed several typedefs in pngrutil.c
-   Added makefile.wat (Pawel Mrochen), updated makefile.tc3 (Willem van Schaik)
-   replaced "while(1)" with "for(;;)"
-   added PNGARG() to prototypes in pngtest.c and removed some prototypes
-   updated some of the makefiles (Tom Lane)
-   changed some typedefs (s_start, etc.) in pngrutil.c
-   fixed dimensions of "short_months" array in pngwrite.c
-   Replaced ansi2knr.c with the one from jpeg-v6
+  Changed several typedefs in pngrutil.c
+  Added makefile.wat (Pawel Mrochen), updated makefile.tc3 (Willem van Schaik)
+  replaced "while(1)" with "for(;;)"
+  added PNGARG() to prototypes in pngtest.c and removed some prototypes
+  updated some of the makefiles (Tom Lane)
+  changed some typedefs (s_start, etc.) in pngrutil.c
+  fixed dimensions of "short_months" array in pngwrite.c
+  Replaced ansi2knr.c with the one from jpeg-v6
 version 1.0.0 [March 8, 1998]
-   Changed name from 1.00 to 1.0.0 (Adam Costello)
-   Added smakefile.ppc (with SCOPTIONS.ppc) for Amiga PPC (Andreas Kleinert)
+  Changed name from 1.00 to 1.0.0 (Adam Costello)
+  Added smakefile.ppc (with SCOPTIONS.ppc) for Amiga PPC (Andreas Kleinert)
 version 1.0.0a [March 9, 1998]
-   Fixed three bugs in pngrtran.c to make gamma+background handling consistent
-   (Greg Roelofs)
-   Changed format of the PNG_LIBPNG_VER integer to xyyzz instead of xyz
-   for major, minor, and bugfix releases.  This is 10001. (Adam Costello,
-   Tom Lane)
-   Make months range from 1-12 in png_convert_to_rfc1123
+  Fixed three bugs in pngrtran.c to make gamma+background handling consistent
+  (Greg Roelofs)
+  Changed format of the PNG_LIBPNG_VER integer to xyyzz instead of xyz
+  for major, minor, and bugfix releases.  This is 10001. (Adam Costello,
+  Tom Lane)
+  Make months range from 1-12 in png_convert_to_rfc1123
 version 1.0.0b [March 13, 1998]
-   Quieted compiler complaints about two empty "for" loops in pngrutil.c
-   Minor changes to makefile.s2x
-   Removed #ifdef/#endif around a png_free() in pngread.c
+  Quieted compiler complaints about two empty "for" loops in pngrutil.c
+  Minor changes to makefile.s2x
+  Removed #ifdef/#endif around a png_free() in pngread.c
 version 1.0.1 [March 14, 1998]
-   Changes makefile.s2x to reduce security risk of using a relative pathname
-   Fixed some typos in the documentation (Greg).
-   Fixed a problem with value of "channels" returned by png_read_update_info()
+  Changed makefile.s2x to reduce security risk of using a relative pathname
+  Fixed some typos in the documentation (Greg).
+  Fixed a problem with value of "channels" returned by png_read_update_info()
+version 1.0.1a [April 21, 1998]
+  Optimized Paeth calculations by replacing abs() function calls with intrinsics
+  plus other loop optimizations. Improves avg decoding speed by about 20%.
+  Commented out i386istic "align" compiler flags in makefile.lnx.
+  Reduced the default warning level in some makefiles, to make them consistent.
+  Removed references to IJG and JPEG in the ansi2knr.c copyright statement.
+  Fixed a bug in png_do_strip_filler with XXRRGGBB => RRGGBB transformation.
+  Added grayscale and 16-bit capability to png_do_read_filler().
+  Fixed a bug in pngset.c, introduced in version 0.99c, that sets rowbytes
+    too large when writing an image with bit_depth < 8 (Bob Dellaca).
+  Corrected some bugs in the experimental weighted filtering heuristics.
+  Moved a misplaced pngrutil code block that truncates tRNS if it has more
+    than num_palette entries -- test was done before num_palette was defined.
+  Fixed a png_convert_to_rfc1123() bug that converts day 31 to 0 (Steve Eddins).
+  Changed compiler flags in makefile.wat for better optimization (Pawel Mrochen).
+version 1.0.1b [May 2, 1998]
+  Relocated png_do_gray_to_rgb() within png_do_read_transformations() (Greg).
+  Relocated the png_composite macros from pngrtran.c to png.h (Greg).
+  Added makefile.sco (contributed by Mike Hopkirk).
+  Fixed two bugs (missing definitions of "istop") introduced in libpng-1.0.1a.
+  Fixed a bug in pngrtran.c that would set channels=5 under some circumstances.
+  More work on the Paeth-filtering, achieving imperceptible speedup (A Kleinert).
+  More work on loop optimization which may help when compiled with C++ compilers.
+  Added warnings when people try to use transforms they've defined out.
+  Collapsed 4 "i" and "c" loops into single "i" loops in pngrtran and pngwtran.
+  Revised paragraph about png_set_expand() in libpng.txt and libpng.3 (Greg)
+version 1.0.1c [May 11, 1998]
+  Fixed a bug in pngrtran.c (introduced in libpng-1.0.1a) where the masks for
+    filler bytes should have been 0xff instead of 0xf.
+  Added max_pixel_depth=32 in pngrutil.c when using FILLER with palette images.
+  Moved PNG_WRITE_WEIGHTED_FILTER_SUPPORTED and PNG_WRITE_FLUSH_SUPPORTED
+    out of the PNG_WRITE_TRANSFORMS_NOT_SUPPORTED block of pngconf.h
+  Added "PNG_NO_WRITE_TRANSFORMS" etc., as alternatives for *_NOT_SUPPORTED,
+    for consistency, in pngconf.h
+  Added individual "ifndef PNG_NO_[CAPABILITY]" in pngconf.h to make it easier
+    to remove unwanted capabilities via the compile line
+  Made some corrections to grammar (which, it's) in documentation (Greg).
+  Corrected example.c, use of row_pointers in png_write_image().
+version 1.0.1d [May 24, 1998]
+  Corrected several statements that used side effects illegally in pngrutil.c
+    and pngtrans.c, that were introduced in version 1.0.1b
+  Revised png_read_rows() to avoid repeated if-testing for NULL (A Kleinert)
+  More corrections to example.c, use of row_pointers in png_write_image()
+    and png_read_rows().
+  Added pngdll.mak and pngdef.pas to scripts directory, contributed by
+    Bob Dellaca, to make a png32bd.dll with Borland C++ 4.5
+  Fixed error in example.c with png_set_text: num_text is 3, not 2 (Guido V.)
+  Changed several loops from count-down to count-up, for consistency.
+version 1.0.1e [June 6, 1998]
+  Revised libpng.txt and libpng.3 description of png_set_read|write_fn(), and
+    added warnings when people try to set png_read_fn and png_write_fn in
+    the same structure.
+  Added a test such that png_do_gamma will be done when num_trans==0
+    for truecolor images that have defined a background.  This corrects an
+    error that was introduced in libpng-0.90 that can cause gamma processing
+    to be skipped.
+  Added tests in png.h to include "trans" and "trans_values" in structures
+    when PNG_READ_BACKGROUND_SUPPORTED or PNG_READ_EXPAND_SUPPORTED is defined.
+  Add png_free(png_ptr->time_buffer) in png_destroy_read_struct()
+  Moved png_convert_to_rfc_1123() from pngwrite.c to png.c
+  Added capability for user-provided malloc_fn() and free_fn() functions,
+    and revised pngtest.c to demonstrate their use, replacing the
+    PNGTEST_DEBUG_MEM feature.
+  Added makefile.w32, for Microsoft C++ 4.0 and later (Tim Wegner).
+version 1.0.2 [June 14, 1998]
+  Fixed two bugs in makefile.bor .
+version 1.0.2a [December 30, 1998]
+  Replaced and extended code that was removed from png_set_filler() in 1.0.1a.
+  Fixed a bug in png_do_filler() that made it fail to write filler bytes in
+    the left-most pixel of each row (Kevin Bracey).
+  Changed "static pngcharp tIME_string" to "static char tIME_string[30]"
+    in pngtest.c (Duncan Simpson).
+  Fixed a bug in pngtest.c that caused pngtest to try to write a tIME chunk
+    even when no tIME chunk was present in the source file.
+  Fixed a problem in pngrutil.c: gray_to_rgb didn't always work with 16-bit.
+  Fixed a problem in png_read_push_finish_row(), which would not skip some
+    passes that it should skip, for images that are less than 3 pixels high.
+  Interchanged the order of calls to png_do_swap() and png_do_shift()
+    in pngwtran.c (John Cromer).
+  Added #ifdef PNG_DEBUG/#endif surrounding use of PNG_DEBUG in png.h .
+  Changed "bad adaptive filter type" from error to warning in pngrutil.c .
+  Fixed a documentation error about default filtering with 8-bit indexed-color.
+  Separated the PNG_NO_STDIO macro into PNG_NO_STDIO and PNG_NO_CONSOLE_IO
+    (L. Peter Deutsch).
+  Added png_set_rgb_to_gray() and png_get_rgb_to_gray_status() functions.
+  Added png_get_copyright() and png_get_header_version() functions.
+  Revised comments on png_set_progressive_read_fn() in libpng.txt and example.c
+  Added information about debugging in libpng.txt and libpng.3 .
+  Changed "ln -sf" to "ln -s -f" in makefile.s2x, makefile.lnx, and makefile.sco.
+  Removed lines after Dynamic Dependencies" in makefile.aco .
+  Revised makefile.dec to make a shared library (Jeremie Petit).
+  Removed trailing blanks from all files. 
+version 1.0.2a [January 6, 1999]
+  Removed misplaced #endif and #ifdef PNG_NO_EXTERN near the end of png.h
+  Added "if" tests to silence complaints about unused png_ptr in png.h and png.c
+  Changed "check_if_png" function in example.c to return true (nonzero) if PNG.
+  Changed libpng.txt to demonstrate png_sig_cmp() instead of png_check_sig()
+    which is obsolete.
+version 1.0.3 [January 14, 1999]
+  Added makefile.hux, for Hewlett Packard HPUX 10.20 and 11.00 (Jim Rice)
+  Added a statement of Y2K compliance in png.h, libpng.1, and Y2KINFO.

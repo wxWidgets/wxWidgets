@@ -1,12 +1,11 @@
 
 /* pngset.c - storage of image information into info struct
  *
- * libpng 1.0.1
+ * libpng 1.0.3 - January 14, 1999
  * For conditions of distribution and use, see copyright notice in png.h
  * Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.
  * Copyright (c) 1996, 1997 Andreas Dilger
- * Copyright (c) 1998, Glenn Randers-Pehrson
- * March 15, 1998
+ * Copyright (c) 1998, 1999 Glenn Randers-Pehrson
  *
  * The functions here are used during reads to store data from the file
  * into the info struct, and during writes to store application data
@@ -15,7 +14,7 @@
  */
 
 #define PNG_INTERNAL
-#include "../png/png.h"
+#include "png.h"
 
 #if defined(PNG_READ_bKGD_SUPPORTED) || defined(PNG_WRITE_bKGD_SUPPORTED)
 void
@@ -108,13 +107,14 @@ png_set_IHDR(png_structp png_ptr, png_infop info_ptr,
 
    /* check for overflow */
    rowbytes_per_pixel = (info_ptr->pixel_depth + 7) >> 3;
-   info_ptr->rowbytes = info_ptr->width * rowbytes_per_pixel;
    if (( width > (png_uint_32)2147483647L/rowbytes_per_pixel))
    {
       png_warning(png_ptr,
          "Width too large to process image data; rowbytes will overflow.");
       info_ptr->rowbytes = (png_size_t)0;
    }
+   else
+      info_ptr->rowbytes = (info_ptr->width * info_ptr->pixel_depth + 7) >> 3;
 }
 
 #if defined(PNG_READ_oFFs_SUPPORTED) || defined(PNG_WRITE_oFFs_SUPPORTED)

@@ -1,7 +1,9 @@
 /* ansi2knr.c */
-/* Convert ANSI C function definitions to K&R ("traditional C") syntax */
 
-/*
+/* Convert ANSI C function definitions to K&R ("traditional C") syntax
+Copyright (C) 1989 Aladdin Enterprises.  All rights reserved.
+Copyright (C) 1988 Richard M. Stallman
+
 ansi2knr is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY.  No author or distributor accepts responsibility to anyone for the
 consequences of using it or for whether it serves any particular purpose or
@@ -12,12 +14,12 @@ Everyone is granted permission to copy, modify and redistribute ansi2knr,
 but only under the conditions described in the GPL.  A copy of this license
 is supposed to have been given to you along with ansi2knr so you can know
 your rights and responsibilities.  It should be in a file named COPYLEFT.
-[In the IJG distribution, the GPL appears below, not in a separate file.]
+[In the LIBPNG distribution, the GPL appears below, not in a separate file.]
 Among other things, the copyright notice and this notice must be preserved
 on all copies.
 
 We explicitly state here what we believe is already implied by the GPL: if
-the ansi2knr program is distributed as a separate set of sources and a
+the ansi2knr program is distributed as a separate source file and a
 separate executable file which are aggregated on a storage medium together
 with another program, this in itself does not bring the other program under
 the GPL, nor does the mere fact that such a program or the procedures for
@@ -27,7 +29,7 @@ program under the GPL.
 
 /*
 ---------- Here is the GNU GPL file COPYLEFT, referred to above ----------
------ These terms do NOT apply to the JPEG software itself; see README ------
+----- These terms do NOT apply to the LIBPNG software itself; see README ------
 
 		    GHOSTSCRIPT GENERAL PUBLIC LICENSE
 		    (Clarified 11 Feb 1988)

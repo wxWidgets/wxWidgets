@@ -1,21 +1,20 @@
 
 /* pngerror.c - stub functions for i/o and memory allocation
  *
- * libpng 1.0.1
+ * libpng 1.0.3 - January 14, 1999
  * For conditions of distribution and use, see copyright notice in png.h
  * Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.
  * Copyright (c) 1996, 1997 Andreas Dilger
- * Copyright (c) 1998, Glenn Randers-Pehrson
- * March 15, 1998
+ * Copyright (c) 1998, 1999 Glenn Randers-Pehrson
  *
- * This file provides a location for all error handling.  Users which
+ * This file provides a location for all error handling.  Users who
  * need special error handling are expected to write replacement functions
  * and use png_set_error_fn() to use those functions.  See the instructions
  * at each function.
  */
 
 #define PNG_INTERNAL
-#include "../png/png.h"
+#include "png.h"
 
 static void png_default_error PNGARG((png_structp png_ptr,
                                       png_const_charp message));
@@ -52,7 +51,7 @@ png_warning(png_structp png_ptr, png_const_charp message)
       png_default_warning(png_ptr, message);
 }
 
-/* These utilities are used internally to build an error message which relates
+/* These utilities are used internally to build an error message that relates
  * to the current chunk.  The chunk name comes from png_ptr->chunk_name,
  * this is used to prefix the message.  The message is limited in length
  * to 63 bytes, the name characters are output as hex digits wrapped in []
@@ -114,7 +113,7 @@ png_chunk_warning(png_structp png_ptr, png_const_charp message)
 static void
 png_default_error(png_structp png_ptr, png_const_charp message)
 {
-#ifndef PNG_NO_STDIO
+#ifndef PNG_NO_CONSOLE_IO
    fprintf(stderr, "libpng error: %s\n", message);
 #endif
 
@@ -131,18 +130,17 @@ png_default_error(png_structp png_ptr, png_const_charp message)
 
 /* This function is called when there is a warning, but the library thinks
  * it can continue anyway.  Replacement functions don't have to do anything
- * here if you don't want to.  In the default configuration, png_ptr is
+ * here if you don't want them to.  In the default configuration, png_ptr is
  * not used, but it is passed in case it may be useful.
  */
 static void
 png_default_warning(png_structp png_ptr, png_const_charp message)
 {
-   if (png_ptr == NULL)
-      return;
-
-#ifndef PNG_NO_STDIO
+#ifndef PNG_NO_CONSOLE_IO
    fprintf(stderr, "libpng warning: %s\n", message);
 #endif
+   if (png_ptr == NULL)
+      return;
 }
 
 /* This function is called when the application wants to use another method

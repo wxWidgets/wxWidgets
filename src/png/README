@@ -1,4 +1,4 @@
-README for libpng 1.0.1 (shared library 2.1)
+README for libpng 1.0.3 - January 14, 1999 (shared library 2.1)
 See the note about version numbers near the top of png.h
 
 See INSTALL for instructions on how to install libpng.
@@ -159,6 +159,7 @@ Files in this distribution:
         makefile.std  =>  Generic UNIX makefile
         makefile.knr  =>  Archaic UNIX Makefile that converts files with ansi2knr
         makefile.dec  =>  DEC Alpha UNIX makefile
+        makefile.hux  =>  HPUX (10.20 and 11.00) makefile
         makefile.sgi  =>  Silicon Graphics IRIX makefile
         makefile.sun  =>  Sun makefile
         makefile.s2x  =>  Solaris 2.X makefile (gcc, creates libpng.so.2.1.0)
@@ -173,11 +174,14 @@ Files in this distribution:
         build.bat     =>  MS-DOS batch file for Borland compiler
         makefile.dj2  =>  DJGPP 2 makefile
         makefile.msc  =>  Microsoft C makefile
+        makefile.w32  =>  makefile for Microsoft Visual C++ 4.0 and later
         makefile.tc3  =>  Turbo C 3.0 makefile
         makefile.os2  =>  OS/2 Makefile (gcc and emx, requires pngos2.def)
         makefile.wat  =>  Watcom 10a+ Makefile, 32-bit flat memory model
         pngos2.def    =>  OS/2 module definition file used by makefile.os2
         makevms.com   =>  VMS build script
+        pngdll.mak    =>  To make a png32bd.dll with Borland C++ 4.5
+        pngdef.pas    =>  Defines for a png32bd.dll with Borland C++ 4.5
 
 Good luck, and happy coding.
 

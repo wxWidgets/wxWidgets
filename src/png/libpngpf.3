@@ -1,6 +1,6 @@
-.TH LIBPNGPF 3 "March 15, 1998"
+.TH LIBPNGPF 3 "January 14, 1999"
 .SH NAME
-libpng \- Portable Network Graphics (PNG) Reference Library
+libpng \- Portable Network Graphics (PNG) Reference Library 1.0.3 - January 14, 1999
 (private functions)
 .SH SYNOPSIS
 #include <png.h>
@@ -31,9 +31,14 @@ int png_crc_finish (png_structp png_ptr, png_uint_32 skip);
 void png_crc_read (png_structp png_ptr, png_bytep buf,
 png_size_t length);
 
-png_voidp png_create_struct (int type);
+png_voidp png_create_struct (int type, png_malloc_ptr malloc_fn);
+
+png_voidp png_create_struct_2 (int type);
 
 void png_destroy_struct (png_voidp struct_ptr);
+
+void png_destroy_struct_2 (png_voidp struct_ptr, png_free_ptr
+free_fn);
 
 void png_do_background (png_row_infop row_info, png_bytep row,
 png_color_16p trans_values, png_color_16p background,
@@ -83,7 +88,7 @@ row);
 
 void png_do_read_transformations (png_structp png_ptr);
 
-void png_do_rgb_to_gray (png_row_infop row_info, png_bytep
+int png_do_rgb_to_gray (png_row_infop row_info, png_bytep
 row);
 
 void png_do_shift (png_row_infop row_info, png_bytep row,
