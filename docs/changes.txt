@@ -43,11 +43,15 @@ wxPalmOS:
 wxWinCE:
 
 - Added wxNB_FLAT for flat-look notebooks on Windows CE.
-- Titlebar OK button on PocketPC now looks for OK, Cancel, Close buttons.
+- Titlebar OK button on PocketPC now sends command set by SetAffirmativeId.
+  You can also override wxDialog::DoOK if you need more flexibility.
 - Dialog size now takes into account SIP or menubar.
 - Panels more naturally white on PocketPC.
 - wxDIALOG_EX_CONTEXTHELP ignored on WinCE since it interferes
   with correct titlebar style.
+- Frames have Ctrl+Q accelerator set automatically, as per the
+  PocketPC guidelines
+- Documented issues in manual under wxWinCE topic.
 
 
 2.5.4

@@ -79,6 +79,14 @@ public:
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
+#ifdef __POCKETPC__
+    // Responds to the OK button in a PocketPC titlebar. This
+    // can be overridden, or you can change the id used for
+    // sending the event with SetAffirmativeId. Returns false
+    // if the event was not processed.
+    virtual bool DoOK();
+#endif
+
     // Windows callbacks
     WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 

@@ -433,6 +433,31 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
     Refresh();
 }
 
+#ifdef __POCKETPC__
+// Responds to the OK button in a PocketPC titlebar. This
+// can be overridden, or you can change the id used for
+// sending the event, by calling SetAffirmativeId.
+bool wxDialog::DoOK()
+{
+    wxButton *btn = wxDynamicCast(FindWindow(GetAffirmativeId()), wxButton);
+
+    if ( btn && btn->IsEnabled() )
+    {
+        // If we have this button, press it
+        btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+        return true;
+    }
+    else
+    {
+        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetAffirmativeId());
+        event.SetEventObject(this);
+
+        return GetEventHandler()->ProcessEvent(event);
+    }    
+}
+#endif
+
+
 // ---------------------------------------------------------------------------
 // dialog window proc
 // ---------------------------------------------------------------------------
@@ -450,32 +475,13 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
         {
             switch ( LOWORD(wParam) )
             {
-#ifndef __SMARTPHONE__
+#ifdef __POCKETPC__
                 case IDOK:
-                    // First, try the OK button, since it's closest in meaning.
-                    wxButton *btn = wxDynamicCast(FindWindow(wxID_OK), wxButton);
-
-                    // Next, try Cancel or Close buttons
-                    if (!btn)
-                        btn = wxDynamicCast(FindWindow(wxID_CANCEL), wxButton);
-                    if (!btn)
-                        btn = wxDynamicCast(FindWindow(wxID_CLOSE), wxButton);
-
-                    if ( btn && btn->IsEnabled() )
-                    {
-                        // if we do have a cancel button, do press it
-                        btn->MSWCommand(BN_CLICKED, 0 /* unused */);
-                        processed = true;
-                        break;
-                    }
-                    else
-                    {
-                        // Finally, if there aren't appropriate buttons,
-                        // act as if it were the normal close button.
+                    processed = DoOK();
+                    if (!processed)
                         processed = !Close();
-                    }
-
-#else // ifdef __SMARTPHONE__
+#endif
+#ifdef __SMARTPHONE__
                 case IDM_LEFT:
                 case IDM_RIGHT:
                     processed = HandleCommand( LOWORD(wParam) , 0 , NULL );

@@ -42,27 +42,24 @@ to one of the symbols above so this should be tested first.}
 \twocolitem{\_\_X\_\_}{any X11-based GUI toolkit except GTK+}
 \end{twocollist}
 
-Mac situation is a bit confusing so a few extra words to explain it: there are
-2 wx ports to Mac OS. One of them, wxMac, exists in 2 versions: Classic and
+There are two wxWidgets ports to Mac OS. One of them, wxMac, exists in two versions: Classic and
 Carbon. The Classic version is the only one to work on Mac OS version 8. The
 Carbon version may be built either as CFM or Mach-O (binary format, like ELF)
 and the former may run under OS 9 while the latter only runs under OS X.
 Finally, there is a new Cocoa port which can only be used under OS X. To
 summarize:
+
 \begin{itemize}
-    \item If you want to test for all Mac platforms, classic and OS X, you
-        should test both \texttt{\_\_WXMAC\_\_} and \texttt{\_\_WXCOCOA\_\_}
-    \item If you want to test for any GUI Mac port under OS X, use
-        \texttt{\_\_WXOSX\_\_}
-    \item If you want to test for any port under Mac OS X, including, for
-        example, wxGTK and also wxBase, use \texttt{\_\_DARWIN\_\_} (see below)
+\item If you want to test for all Mac platforms, classic and OS X, you
+should test both \texttt{\_\_WXMAC\_\_} and \texttt{\_\_WXCOCOA\_\_}.
+\item If you want to test for any GUI Mac port under OS X, use 
+\texttt{\_\_WXOSX\_\_}.
+\item If you want to test for any port under Mac OS X, including, for
+example, wxGTK and also wxBase, use \texttt{\_\_DARWIN\_\_} (see below).
 \end{itemize}
 
-
-Note to implementors: although some of the symbols above don't start with 
-\texttt{\_\_WX} prefix, they really should always use it, so please do start
-any new symbols with it.
-
+The convention is to use the \texttt{\_\_WX} prefix for these
+symbols, although this has not always been followed.
 
 \subsection{Operating systems}\label{osconst}
 
@@ -110,15 +107,20 @@ compiler used.
 
 \subsection{Hardware type}\label{hardwareconst}
 
-Combination of these symbols with GUI symbols describes real hardware
-(like \_\_PDA\_\_ $&&$ \_\_WXWINCE\_\_ $==$ PocketPC devices).
+% Note: previous documentation referred to __SMARTPHONE__ as a generic (non-MS-specific) symbol
+% but we should go back to using it for a specific SDK, because trying to be
+% generic doesn't really work
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\_\_SMARTPHONE\_\_}{Mobile devices with dialog capability through 
-phone buttons and small display}
-\twocolitem{\_\_PDA\_\_}{Personal digital assistant usually with touch screen and
-middle sized screen}
-\twocolitem{\_\_HANDHELD\_\_}{Small enough but powerful computer}
+\twocolitem{\_\_SMARTPHONE\_\_}{Microsoft-powered mobile devices with phone buttons and a small display}
+\twocolitem{\_\_POCKETPC\_\_}{Microsoft-powered PocketPC devices with touch-screen}
+\twocolitem{\_\_WINCE\_STANDARDSDK\_\_}{Microsoft-powered Windows CE devices, for generic Windows CE applications}
+\twocolitem{\_\_WINCE\_NET\_\_}{Microsoft-powered Windows CE .NET devices (\_WIN32\_WCE is 400 or greater)}
+% Note to doc writers: these symbols are pretty useless because of the blurred
+% dividing lines between these machines, plus they're not actually used.
+%\twocolitem{\_\_PDA\_\_}{Personal digital assistant usually with touch screen and
+%middle sized screen (not yet defined anywhere)}
+%\twocolitem{\_\_HANDHELD\_\_}{Small enough but powerful computer (not yet defined anywhere)}
 \end{twocollist}
 
 

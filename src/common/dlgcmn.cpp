@@ -56,7 +56,8 @@ WX_DELEGATE_TO_CONTROL_CONTAINER(wxDialogBase)
 void wxDialogBase::Init()
 {
     m_returnCode = 0;
-
+    m_affirmativeId = wxID_OK;
+    
     // the dialogs have this flag on by default to prevent the events from the
     // dialog controls from reaching the parent frame which is usually
     // undesirable and can lead to unexpected and hard to find bugs
@@ -228,6 +229,11 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
             yes->SetFocus();
         }
     }
+    
+    if (flags & wxOK)
+        SetAffirmativeId(wxID_OK);
+    else if (flags & wxYES)
+        SetAffirmativeId(wxID_YES);
 
     return sizer;
 }

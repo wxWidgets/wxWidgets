@@ -185,31 +185,42 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
         msflags |= WS_POPUP;
 #endif
 
-    // normally we consider that all windows without caption must be popups,
+    // normally we consider that all windows without a caption must be popups,
     // but CE is an exception: there windows normally do not have the caption
     // but shouldn't be made popups as popups can't have menus and don't look
     // like normal windows anyhow
+
+    // TODO: Smartphone appears to like wxCAPTION, but we should check that
+    // we need it.
+#if defined(__SMARTPHONE__) || !defined(__WXWINCE__)
     if ( style & wxCAPTION )
         msflags |= WS_CAPTION;
 #ifndef __WXWINCE__
     else
         msflags |= WS_POPUP;
 #endif // !__WXWINCE__
+#endif
 
     // next translate the individual flags
     if ( style & wxMINIMIZE_BOX )
         msflags |= WS_MINIMIZEBOX;
     if ( style & wxMAXIMIZE_BOX )
         msflags |= WS_MAXIMIZEBOX;
+
+#ifndef __WXWINCE__    
     if ( style & wxSYSTEM_MENU )
         msflags |= WS_SYSMENU;
+#endif
 
     // NB: under CE these 2 styles are not supported currently, we should
     //     call Minimize()/Maximize() "manually" if we want to support them
     if ( style & wxMINIMIZE )
         msflags |= WS_MINIMIZE;
+
+#if !defined(__POCKETPC__)
     if ( style & wxMAXIMIZE )
         msflags |= WS_MAXIMIZE;
+#endif
 
     // Keep this here because it saves recoding this function in wxTinyFrame
     if ( style & (wxTINY_CAPTION_VERT | wxTINY_CAPTION_HORIZ) )
@@ -509,10 +520,12 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         ret = CreateFrame(title, pos, sizeReal);
     }
 
+#ifndef __WXWINCE__
     if ( ret && !(GetWindowStyleFlag() & wxCLOSE_BOX) )
     {
         EnableCloseButton(false);
     }
+#endif
 
     // for some reason we need to manually send ourselves this message as
     // otherwise the mnemonics are always shown -- even if they're configured
@@ -531,8 +544,10 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         );
     }
 
-    // Native look is full screen window on Smartphones and Standard SDK
-#if defined(__WXWINCE__)
+    // Native look is full screen window on Smartphones and Standard SDK.
+    // TODO: check that we need this (if we're passing default values to ctor).
+    // Also check that there really is a difference between PocketPC and Smartphone in this regard.
+#if defined(__WXWINCE__) && (defined(__SMARTPHONE__) || defined(__WINCE_STANDARDSDK__))
     if ( style & wxMAXIMIZE )
     {
         this->Maximize();
@@ -1025,10 +1040,9 @@ wxDlgProc(HWND hDlg,
         // under CE, add a "Ok" button in the dialog title bar and make it full
         // screen
         //
-        // VZ: we should probably allow for overriding this, e.g. by including
-        //     MAXIMIZED flag in the dialog style by default and doing this
-        //     only if it is present...
-
+        // TODO: find the window for this HWND, and take into account
+        // wxMAXIMIZE and wxCLOSE_BOX. For now, assume both are present.
+        //
         // Standard SDK doesn't have aygshell.dll: see
         // include/wx/msw/wince/libraries.h
 #if defined(__WXWINCE__) && !defined(__WINCE_STANDARDSDK__) && !defined(__HANDHELDPC__)
