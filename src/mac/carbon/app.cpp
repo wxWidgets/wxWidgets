@@ -36,6 +36,8 @@
 #include "wx/tooltip.h"
 #include "wx/textctrl.h"
 #include "wx/menu.h"
+#include "wx/docview.h"
+
 #if wxUSE_WX_RESOURCES
 #  include "wx/resource.h"
 #endif
@@ -72,6 +74,8 @@ extern char *wxBuffer;
 extern wxList wxPendingDelete;
 extern wxList *wxWinMacWindowList;
 extern wxList *wxWinMacControlList;
+
+static bool s_inYield = FALSE;
 
 wxApp *wxTheApp = NULL;
 
@@ -136,12 +140,39 @@ pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long WX
 }
 
 // new virtual public method in wxApp
-void wxApp::MacOpenFile(const wxString & WXUNUSED(fileName) )
+void wxApp::MacOpenFile(const wxString & fileName )
 {
+    wxDocManager* dm = wxDocManager::GetDocumentManager() ;
+    if ( dm )
+        dm->CreateDocument(fileName , wxDOC_SILENT ) ;
 }
 
-void wxApp::MacPrintFile(const wxString & WXUNUSED(fileName) )
+void wxApp::MacPrintFile(const wxString & fileName )
 {
+    wxDocManager* dm = wxDocManager::GetDocumentManager() ;
+    if ( dm )
+    {
+        wxDocument *doc = dm->CreateDocument(fileName , wxDOC_SILENT ) ;
+        if ( doc )
+        {
+            wxView* view = doc->GetFirstView() ;
+            if( view )
+            {
+                wxPrintout *printout = view->OnCreatePrintout();
+                if (printout)
+                {
+                    wxPrinter printer;
+                    printer.Print(view->GetFrame(), printout, TRUE);
+                    delete printout;
+                }
+            }
+            if (doc->Close())
+            {
+                doc->DeleteAllViews();
+                dm->RemoveDocument(doc) ;
+            }
+        }
+    }
 }
 
 void wxApp::MacNewFile()
@@ -1322,8 +1353,6 @@ void wxCYield()
 
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    static bool s_inYield = FALSE;
-
     if (s_inYield)
     {
         if ( !onlyIfNeeded )
@@ -1560,8 +1589,12 @@ void wxApp::MacHandleOneEvent( WXEVENTREF evr )
 
 void wxApp::MacHandleHighLevelEvent( WXEVENTREF evr )
 {
+    // we must avoid reentrancy problems when processing high level events eg printing
+    bool former = s_inYield ;
+    s_inYield = TRUE ;
     EventRecord* ev = (EventRecord*) evr ;
     ::AEProcessAppleEvent( ev ) ;
+    s_inYield = former ;
 }
 
 bool s_macIsInModalLoop = false ;
