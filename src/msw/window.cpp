@@ -1165,15 +1165,11 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
         }
 
         // to make the dialog navigation work with the nested panels we must
-        // use this style but, unfortunately, it hangs NT4 in some situations
-        // so we shouldn't use it -- even though it means that keyboard accels
-        // in, e.g. wxWizard, don't work
-#if 0
+        // use this style
         if ( flags & wxTAB_TRAVERSAL )
         {
             *exstyle |= WS_EX_CONTROLPARENT;
         }
-#endif // 0
     }
 
     return style;
@@ -2084,10 +2080,18 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
         // place edit control from being closed with Escape in a dialog
         if ( msg->message != WM_KEYDOWN || msg->wParam != VK_ESCAPE )
         {
-            if ( ::IsDialogMessage(GetHwnd(), msg) )
+            // ::IsDialogMessage() can enter in an infinite loop when
+            // WS_EX_CONTROLPARENT is specified and the currently focused
+            // window is disabled or hidden, so don't call it in this case
+            HWND hwndFocus = ::GetFocus();
+            if ( !hwndFocus ||
+                  ::IsWindowEnabled(hwndFocus) && ::IsWindowVisible(hwndFocus) )
             {
-                // IsDialogMessage() did something...
-                return TRUE;
+                if ( ::IsDialogMessage(GetHwnd(), msg) )
+                {
+                    // IsDialogMessage() did something...
+                    return TRUE;
+                }
             }
         }
     }
