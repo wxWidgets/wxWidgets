@@ -1041,6 +1041,9 @@ bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
         return false;
 
     m_hasBgCol = colour.Ok();
+    if ( m_backgroundStyle != wxBG_STYLE_CUSTOM )
+        m_backgroundStyle = m_hasBgCol ? wxBG_STYLE_COLOUR : wxBG_STYLE_SYSTEM;
+
     m_inheritBgCol = m_hasBgCol;
     m_backgroundColour = colour;
     SetThemeEnabled( !m_hasBgCol && !m_foregroundColour.Ok() );
