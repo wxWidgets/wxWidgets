@@ -12,11 +12,14 @@ importantly, that you know what you are doing!  ;-)
 If you want to also install the version of wxPython you build to be in
 your site-packages dir and be your default version of wxPython, then a
 few additional steps are needed, and you may want to use slightly
-different options.  See INSTALL.txt for more details.  If you only use
-the instructions in this BUILD.txt file then you will end up with a
-separate installation of wxPython and you can switch back and forth
-between this and the release version that you may already have
-installed.
+different options.  See the INSTALL_ document for more details.  If
+you only use the instructions in this BUILD_ document file then you
+will end up with a separate installation of wxPython and you can
+switch back and forth between this and the release version that you
+may already have installed.
+
+.. _INSTALL: INSTALL.html
+.. _BUILD: BUILD.html
 
 If you want to make changes to any of the ``*.i`` files, (SWIG interface
 definition files,) or to regenerate the extension sources or renamer
@@ -31,6 +34,13 @@ command-line variable named SWIG to be the full path name of the
 executable and the wxPython build will use it.  See below for an
 example.
 
+In the text below I'll use WXDIR with environment variable syntax
+(either $WXDIR or %WXDIR%) to refer to the top level directory were
+your wxWidgerts and wxPython sources are located.  It will equate to
+whereever you checked out the wxWidgets module from CVS, or untarred
+the wxPythonSrc tarball to.  You can either substitute the $WXDIR text
+below with your actual dir, or set the value in the environment and
+use it just like you see it below.
 
 
 
@@ -51,6 +61,7 @@ place, then do the same for wxPython.
    rerun the script without having to remember the options I used
    before::
 
+	 cd $WXDIR
          mkdir bld
          cd bld
          ../configure --prefix=/opt/wx/2.5 \
@@ -116,10 +127,11 @@ place, then do the same for wxPython.
 
 
 3. I also have a script to help me build wxPython and it is checked in
-   to the CVS as wxWidgets/wxPython/b, but probably don't want to use
-   it as it's very cryptic and expects that you want to run SWIG, so
-   if you don't have the latest patched up version of SWIG then you'll
-   probably get stuck.  So I'll just give the raw commands instead.
+   to the CVS as wxWidgets/wxPython/b, but you probably don't want to
+   use it as it's very cryptic and expects that you want to run SWIG,
+   so if you don't have the latest patched up version of SWIG then
+   you'll probably get stuck.  So I'll just give the raw commands
+   instead.
 
    We're not going to install the development version of wxPython with
    these commands, so it won't impact your already installed version
@@ -134,10 +146,10 @@ place, then do the same for wxPython.
    using python2.3.
 
    Make sure that the first wx-config found on the PATH is the one you
-   installed above, and then change to the wxWidgets/wxPython dir and
+   installed above, and then change to the $WXDIR/wxPython dir and
    run the this command::
 
-         cd wxPython
+         cd $WXDIR/wxPython
          python2.3 setup.py build_ext --inplace --debug
 
    If your new wx-config script is not on the PATH, or there is some
@@ -163,24 +175,25 @@ place, then do the same for wxPython.
    module.
 
    When the setup.py command is done you should have fully populated
-   wxPython and wx packages locally in wxWidgets/wxPython/wxPython and
-   .../wx, with all the extension modules (``*.so`` files) located in the
-   wx package.
+   wxPython and wx packages locally in $WXDIR/wxPython/wxPython and
+   $WXDIR/wxPython/wx, with all the extension modules (``*.so`` files)
+   located in the wx package.
 
 
 4. To run code with the development verison of wxPython, just set the
-   PYTHONPATH to the wxPython dir in the CVS tree.  For example::
+   PYTHONPATH to the wxPython dir located in the source tree.  For
+   example::
 
-        export LD_LIBRARY=/opt/wx/2.5/lib
-        export PYTHONPATH=/myprojects/wxWidgets/wxPython
-        cd /myprojects/wxWidgets/wxPython/demo
+        export LD_LIBRARY_PATH=/opt/wx/2.5/lib
+        export PYTHONPATH=$WXDIR/wxPython
+        cd $WXDIR/wxPython/demo
         python2.3 demo.py
 
    OS X NOTE: You need to use "pythonw" on the command line to run
    wxPython applications.  This version of the Python executable is
    part of the Python Framework and is allowed to interact with the
    display.  You can also double click on a .py or a .pyw file from
-   the finder (assuming that PythonLauncher is still associated with
+   the finder (assuming that the PythonLauncher app is associated with
    these file extensions) and it will launch the Framework version of
    Python for you.  For information about creating Applicaiton Bundles
    of your wxPython apps please see the wiki and the mail lists.
@@ -207,10 +220,11 @@ modules using that compiler, and then make a few changes to setup.py
 to accomodate that.  (And send the patches to me.)  If you plan on
 using VisualStudio.Net (a.k.a. MSVC 7.1) keep in mind that you'll also
 have to build Python and any other extension modules that you use with
-that compiler because a different version of the C runtime likbrary is
+that compiler because a different version of the C runtime library is
 used.  The Python executable that comes from PythonLabs and the
 wxPython extensions that I distribute are built with MSVC 6 with all
-the Service Packs applied.
+the Service Packs applied.  This policy will change with Python 2.4
+and MSVC 7.1 will be used starting with that version.
 
 If you want to build a debugable version of wxWidgets and wxPython you
 will need to have also built a debug version of Python and any other
@@ -223,25 +237,28 @@ it.
 
 Just like the unix versions I also use some scripts to help me build
 wxWidgets, but I use some non-standard stuff to do it.  So if you want
-to use them too you'll need to get a copy or 4DOS or 4NT from
+to use my scripts you'll need to get a copy or 4DOS or 4NT from
 http://www.jpsoft.com/ and also a copy of unix-like cat and sed
 programs.  You can also do by hand what my scripts are doing, but
-there are a lof steps involved and I won't be going into details
-here.  There is a copy of my build scripts in wxWidgets\wxPython\distrib\msw
+there are alot of steps involved and I won't be going into details
+here.  There is a copy of my build scripts in %WXDIR%\wxPython\distrib\msw
+that you can use for reference (if you don't use them directly) for
+adapting these instructions to your specific needs.  The directions
+below assume that you are using my scripts.
 
 
 1. Set an environment variable to the root of the wxWidgets source
-   tree::
+   tree.  This is used by the makefiles::
 
-         set WXWIN=e:\projects\wxWidgets
+         set WXWIN=%WXDIR%
 
 2. Copy setup0.h to setup.h
 
-         cd %WXWIN%\include\wx\msw
+         cd %WXDIR%\include\wx\msw
          copy setup0.h setup.h
 
 
-3. Edit %WXWIN%\include\wx\msw\setup.h and change a few settings.
+3. Edit %WXDIR%\include\wx\msw\setup.h and change a few settings.
    Some of them are changed by my build scripts depending on the type
    of build (debug/hybrid, unicode/ansi). I change a few of the other
    defaults to have these values::
@@ -256,13 +273,14 @@ here.  There is a copy of my build scripts in wxWidgets\wxPython\distrib\msw
          wxUSE_DISPLAY                  1
          
 
-4. Make sure that %WXWIN%\lib\vc_dll directory is on the PATH.  The
+4. Make sure that %WXDIR%\lib\vc_dll directory is on the PATH.  The
    wxWidgets DLLs will end up there as part of the build and so you'll
    need it on the PATH for them to be found at runtime.
 
 
-5. Change to the %WXWIN%\build\msw directory and copy my build scripts
-   there.
+5. Change to the %WXDIR%\build\msw directory and copy my build scripts
+   there from their default location in %WXDIR%\wxPython\distrib\msw
+   if they are not present already.
 
 
 6. Use the .make.btm command to build wxWidgets.  It needs one
@@ -301,11 +319,11 @@ here.  There is a copy of my build scripts in wxWidgets\wxPython\distrib\msw
    version the rest of the time.  If you ever do want to install the
    development verison please refer to INSTALL.txt.
 
-   Change to the wxWidgets\wxPython dir and run the this command,
+   Change to the %WXDIR%\wxPython dir and run the this command,
    makeing sure that you use the version of python that you want to
    build for (if you have more than one on your system)::
 
-         cd %WXWIN%\wxPython
+         cd %WXDIR%\wxPython
          python setup.py build_ext --inplace 
 
    If you are wanting to have the source files regenerated with swig,
@@ -326,16 +344,16 @@ here.  There is a copy of my build scripts in wxWidgets\wxPython\distrib\msw
    use them.  The debug and hybrid(release) versions can coexist.
 
    When the setup.py command is done you should have fully populated
-   wxPython and wx packages locally in wxWidgets/wxPython/wxPython and
-   wxWidgets/wxPython/wx, with all the extension modules (``*.pyd``
+   wxPython and wx packages locally in %WXDIR%/wxPython/wxPython and
+   %WXDIR%/wxPython/wx, with all the extension modules (``*.pyd``
    files) located in the wx package.
 
 
 9. To run code with the development verison of wxPython, just set the
    PYTHONPATH to the wxPython dir in the CVS tree.  For example::
 
-        set PYTHONPATH=e:\projects\wxWidgets\wxPython
-        cd e:\projects\wxWidgets\wxPython
+        set PYTHONPATH=%WXDIR%\wxPython
+	cd %WXDIR\wxPython\demo
         python demo.py
 
 

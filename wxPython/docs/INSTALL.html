@@ -11,10 +11,10 @@
 <div class="document" id="installing-wxpython-2-5-from-source">
 <h1 class="title">Installing wxPython 2.5 from Source</h1>
 <p>This document will describe the few differences and additions to the
-content in BUILD.txt for installing wxPython built from source.
-Please follow the intstructions both in this file and in BUILD.txt to
-perform this task.  Where there is overlap the items described here
-will take precedence.</p>
+content in the <a class="reference" href="BUILD.html">BUILD</a> document for installing wxPython built from
+source.  Please follow the intstructions both in this file and in
+<a class="reference" href="BUILD.html">BUILD</a> to perform this task.  Where there is overlap the items
+described here will take precedence for doing installations.</p>
 <div class="section" id="installing-on-unix-like-systems-not-os-x">
 <h1><a name="installing-on-unix-like-systems-not-os-x">Installing on Unix-like Systems (not OS X)</a></h1>
 <ol class="arabic">
@@ -38,10 +38,10 @@ runtime assertions turned into Python exceptions where possible.
 It does add extra code to the build but probably not enough to
 worry about it.  However if you want to get as lean a build as
 possible you can leave it out, but if your code does something bad
-then instead of exceptions you'll likely get a crash.</p>
-<blockquote>
-<p>--enable-debug_flag </p>
-</blockquote>
+then instead of exceptions you'll likely get a crash:</p>
+<pre class="literal-block">
+--enable-debug_flag \
+</pre>
 <p>If you are building a private copy of wxWidgets (IOW, not installed
 in a standard library location) then it can be kind of a hassle to
 always have to set the LD_LIBRARY_PATH variable so wxPython can
