@@ -43,9 +43,22 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
     m_imageList = NULL;
     
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 1, 
-        kControlTabSmallProc , (long) this ) ;
+
+    UInt16 tabstyle = kControlTabDirectionNorth ;
+    ControlTabSize tabsize = kControlTabSizeLarge ;
+    if ( GetWindowVariant() == wxWINDOW_VARIANT_SMALL )
+        tabsize = kControlTabSizeSmall ;
+    else if ( GetWindowVariant() == wxWINDOW_VARIANT_MINI )
+    {
+        if (UMAGetSystemVersion() >= 0x1030 )
+            tabsize = 3 ; 
+        else
+            tabsize = kControlSizeSmall; 
+    }
     
+    verify_noerr ( CreateTabsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds ,
+     tabsize , tabstyle, 0, NULL, (ControlRef*) &m_macControl) ); 
+
     MacPostControlCreate(pos,size) ;
     return TRUE ;
 }

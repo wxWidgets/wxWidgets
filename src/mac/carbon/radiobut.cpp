@@ -38,10 +38,10 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
     m_label = label ;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 1, 
-          kControlRadioButtonProc , (long) this ) ;
     
+    verify_noerr ( CreateRadioButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
+        0 , false /* no autotoggle */ , (ControlRef*) &m_macControl ) ) ;
+
     MacPostControlCreate(pos,size) ;
 
   m_cycle = this ;
@@ -101,10 +101,11 @@ void wxRadioButton::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-void wxRadioButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown)) 
+wxInt32 wxRadioButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )  
 {
+    // if already set -> no action
     if ( GetValue() )
-      return ;
+      return noErr;
       
       wxRadioButton *cycle, *old = NULL ;
     cycle=this->NextInCycle();
@@ -130,6 +131,7 @@ void wxRadioButton::MacHandleControlClick( WXWidget control , wxInt16 controlpar
     event2.SetEventObject(this);
     event2.SetInt( true );
     ProcessCommand(event2);
+    return noErr ;
 }
 
 wxRadioButton *wxRadioButton::AddInCycle(wxRadioButton *cycle)

@@ -64,9 +64,9 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
     m_label = label ;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , kControlBehaviorToggles , 1, 
-          kControlBevelButtonNormalBevelProc  , (long) this ) ;
-    wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
+    
+    verify_noerr ( CreateBevelButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
+        kControlBevelButtonNormalBevel , kControlBehaviorToggles , NULL , 0 , 0 , 0 , (ControlRef*) &m_macControl ) ) ;
     
     MacPostControlCreate(pos,size) ;
     
@@ -101,15 +101,13 @@ void wxToggleButton::Command(wxCommandEvent & event)
    ProcessCommand(event);
 }
 
-void wxToggleButton::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 controlpart , bool WXUNUSED(mouseStillDown) ) 
+wxInt32 wxToggleButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
-    if ( controlpart != kControlNoPart )
-    {
-        wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
-        event.SetInt(GetValue());
-        event.SetEventObject(this);
-        ProcessCommand(event);
-    }
+    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
+    event.SetInt(GetValue());
+    event.SetEventObject(this);
+    ProcessCommand(event);
+    return noErr ;
 }
 
 #endif // wxUSE_TOGGLEBTN

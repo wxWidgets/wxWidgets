@@ -45,9 +45,9 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     }
     
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , range, 
-        kControlProgressBarProc , (long) this ) ;
-    
+    verify_noerr ( CreateProgressBarControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 
+     m_gaugePos , 0 , m_rangeMax , false /* not indeterminate */ , (ControlRef*) &m_macControl ) ) ;
+       
     MacPostControlCreate(pos,size) ;
     
     return TRUE;

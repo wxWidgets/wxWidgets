@@ -41,8 +41,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
     if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
     {
-        m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 1, 
-          kControlPushButtonProc , (long) this ) ;
+        verify_noerr ( CreatePushButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , (ControlRef*) &m_macControl ) ) ;
     }
     else
     {
@@ -132,13 +131,11 @@ void wxButton::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxButton::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 controlpart , bool WXUNUSED(mouseStillDown) ) 
+wxInt32 wxButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
-    if ( controlpart != kControlNoPart )
-    {
-        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId );
-        event.SetEventObject(this);
-        ProcessCommand(event);
-    }
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId );
+    event.SetEventObject(this);
+    ProcessCommand(event);
+    return noErr ;
 }
 

@@ -26,7 +26,6 @@
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 
 BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
-    EVT_MOUSE_EVENTS( wxToolBar::OnMouse ) 
     EVT_PAINT( wxToolBar::OnPaint ) 
 END_EVENT_TABLE()
 #endif
@@ -233,34 +232,21 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
     SInt16 behaviour = kControlBehaviorOffsetContents ;
     if ( CanBeToggled() )
         behaviour += kControlBehaviorToggles ;
-    
-    if ( info.contentType != kControlNoContent ) 
-    {
-        m_controlHandle = ::NewControl( window , &toolrect , "\p" , true , 0 , 
-                                        behaviour + info.contentType , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
         
-        ::SetControlData( m_controlHandle , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
-    }
-    else
-    {
-        m_controlHandle = ::NewControl( window , &toolrect , "\p" , true , 0 , 
-                                        behaviour  , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
-    }
+    CreateBevelButtonControl( window , &toolrect , CFSTR("") , kControlBevelButtonNormalBevel , behaviour , &info , 
+        0 , 0 , 0 , &m_controlHandle ) ;
+        
     InstallControlEventHandler( (ControlRef) m_controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this,NULL);
+        
     UMAShowControl( m_controlHandle ) ;
     if ( !IsEnabled() )
-    {
-        UMADeactivateControl( m_controlHandle ) ;
-    }
+        DisableControl( m_controlHandle ) ;
+
     if ( CanBeToggled() && IsToggled() )
-    {
         ::SetControl32BitValue( m_controlHandle , 1 ) ;
-    }
     else
-    {
         ::SetControl32BitValue( m_controlHandle , 0 ) ;
-    }
     
     ControlRef container = (ControlRef) tbar->GetHandle() ;
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
@@ -404,27 +390,6 @@ void wxToolBar::SetToolBitmapSize(const wxSize& size)
 wxSize wxToolBar::GetToolSize() const
 {
     return wxSize(m_defaultWidth + 4, m_defaultHeight + 4);
-}
-
-void wxToolBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED( mouseStillDown ) ) 
-{
-    wxToolBarToolsList::Node *node;
-    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
-    {
-        wxToolBarTool* tool = (wxToolBarTool*) node->GetData() ; 
-        if ( tool->IsButton() )
-        {
-           if( tool->GetControlHandle() == control ) 
-           {
-                if ( tool->CanBeToggled() )
-                {
-                    tool->Toggle( GetControl32BitValue( (ControlRef) control ) ) ;
-                }
-                OnLeftClick( tool->GetId() , tool -> IsToggled() ) ;
-                break ;
-           }
-        }
-    }
 }
 
 void wxToolBar::SetRows(int nRows)
@@ -575,58 +540,6 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
     UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
 
     event.Skip() ;
-}
-
-void  wxToolBar::OnMouse( wxMouseEvent &event ) 
-{
-    if (event.GetEventType() == wxEVT_LEFT_DOWN || event.GetEventType() == wxEVT_LEFT_DCLICK )
-    {
-            
-        int x = event.m_x ;
-        int y = event.m_y ;
-        
-        MacClientToRootWindow( &x , &y ) ;
-            
-        ControlRef   control ;
-        Point       localwhere ;
-        SInt16      controlpart ;
-        WindowRef   window = (WindowRef) MacGetTopLevelWindowRef() ;
-        
-        localwhere.h = x ;
-        localwhere.v = y ;
-    
-        short modifiers = 0;
-        
-        if ( !event.m_leftDown && !event.m_rightDown )
-            modifiers  |= btnState ;
-    
-        if ( event.m_shiftDown )
-            modifiers |= shiftKey ;
-            
-        if ( event.m_controlDown )
-            modifiers |= controlKey ;
-    
-        if ( event.m_altDown )
-            modifiers |= optionKey ;
-    
-        if ( event.m_metaDown )
-            modifiers |= cmdKey ;
-    
-        controlpart = ::FindControl( localwhere , window , &control ) ;
-        {
-            if ( control && ::IsControlActive( control ) )
-            {
-                {
-                    controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
-                    wxTheApp->s_lastMouseDown = 0 ;
-                    if ( control && controlpart != kControlNoPart ) // otherwise we will get the event twice
-                    {
-                        MacHandleControlClick((WXWidget)  control , controlpart , false /* not down anymore */ ) ;
-                    }
-                }
-            }
-        }
-    }
 }
 
 #endif // wxUSE_TOOLBAR

@@ -79,18 +79,13 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;    
     
-    procID = kControlSliderProc + kControlSliderLiveFeedback;
-    if(style & wxSL_AUTOTICKS) {
-        procID += kControlSliderHasTickMarks;
-    }
-    
-    
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, "\p", true,
-        value, minValue, maxValue, procID, (long) this);
-    
-    wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
-    
-    ::SetControlAction( (ControlRef) m_macControl , wxMacLiveScrollbarActionUPP ) ;
+    UInt16 tickMarks = 0 ;
+    if ( style & wxSL_AUTOTICKS )
+        tickMarks = maxValue - minValue ;
+        
+    verify_noerr ( CreateSliderControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 
+    value , minValue , maxValue , kControlSliderPointsDownOrRight , tickMarks , true /* liveTracking */ ,
+        wxMacLiveScrollbarActionUPP , (ControlRef*) &m_macControl ) ) ;
         
     if(style & wxSL_VERTICAL) {
         SetSizeHints(10, -1, 10, -1);  // Forces SetSize to use the proper width
@@ -245,10 +240,7 @@ void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bo
     
     wxEventType scrollEvent = wxEVT_NULL ;
     
-   if ( mouseStillDown )
-        scrollEvent = wxEVT_SCROLL_THUMBTRACK;
-    else
-        scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
+    scrollEvent = wxEVT_SCROLL_THUMBTRACK;
     
     wxScrollEvent event(scrollEvent, m_windowId);
     event.SetPosition(value);
@@ -261,6 +253,30 @@ void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bo
     
     GetEventHandler()->ProcessEvent( cevent );
 }
+
+wxInt32 wxSlider::MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF mevent ) 
+{
+    SInt16 value = ::GetControl32BitValue( (ControlRef) m_macControl ) ;
+    
+    SetValue( value ) ;        
+    
+    wxEventType scrollEvent = wxEVT_NULL ;
+    
+    scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
+    
+    wxScrollEvent event(scrollEvent, m_windowId);
+    event.SetPosition(value);
+    event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent(event);
+    
+    wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, m_windowId );
+    cevent.SetInt( value );
+    cevent.SetEventObject( this );
+    
+    GetEventHandler()->ProcessEvent( cevent );
+    return noErr ;
+}
+
 
 /* This is overloaded in wxSlider so that the proper width/height will always be used
 * for the slider different values would cause redrawing and mouse detection problems */

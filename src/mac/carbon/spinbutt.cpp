@@ -51,11 +51,9 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
         return FALSE;
     
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 100, 
-        kControlLittleArrowsProc , (long) this ) ;
-    
-    wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
+        
+    verify_noerr ( CreateLittleArrowsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 0 , m_min , m_max , 1 ,
+     (ControlRef*) &m_macControl ) ) ;
     
     MacPostControlCreate(pos,size) ;
     
@@ -150,14 +148,12 @@ void wxSpinButton::MacHandleValueChanged( int inc )
     }
 }
 
-void wxSpinButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown)) 
+wxInt32 wxSpinButton::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF event )  
 {
-    if ( (ControlRef) m_macControl == NULL )
-        return ;
-    
     int nScrollInc = 0;
+    wxMacCarbonEvent cEvent( (EventRef) event ) ;
     
-    switch( controlpart )
+    switch( cEvent.GetParameter<ControlPartCode>(kEventParamControlPart,typeControlPartCode) )
     {
     case kControlUpButtonPart :
         nScrollInc = 1;
@@ -167,7 +163,7 @@ void wxSpinButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart
         break ;
     }
     MacHandleValueChanged( nScrollInc ) ;
-    
+    return noErr ;
 }
 
 // ----------------------------------------------------------------------------

@@ -66,8 +66,9 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
         return false;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , -12345 , 0 ,
-        kControlPopupButtonProc + kControlPopupFixedWidthVariant , (long) this ) ;
+
+    verify_noerr ( CreatePopupButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
+        -12345 , false /* no variable width */ , 0 , 0 , 0 , (ControlRef*) &m_macControl ) ) ;
 
     m_macPopUpMenuHandle =  NewUniqueMenu() ;
     SetControlData( (ControlRef) m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
@@ -228,7 +229,7 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
     return (wxClientData *)DoGetItemClientData(n);
 }
 
-void wxChoice::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown)) 
+wxInt32 wxChoice::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )  
 {
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
     int n = GetSelection();
@@ -244,6 +245,7 @@ void wxChoice::MacHandleControlClick( WXWidget control , wxInt16 controlpart , b
             event.SetClientData( GetClientData(n) );
         ProcessCommand(event);
     }
+    return noErr ;
 }
 
 wxSize wxChoice::DoGetBestSize() const

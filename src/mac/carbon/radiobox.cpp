@@ -137,8 +137,8 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     if ( bounds.bottom <= bounds.top )
         bounds.bottom = bounds.top + 100 ;
    
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 1, 
-        kControlGroupBoxTextTitleProc , (long) this ) ;
+    verify_noerr(CreateGroupBoxControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()),&bounds, CFSTR("") , 
+        true /*primary*/ , (ControlRef*)&m_macControl ) ) ;  
     
     for (i = 0; i < n; i++)
     {

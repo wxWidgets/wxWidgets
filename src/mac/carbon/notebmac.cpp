@@ -44,7 +44,6 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
 
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
-    EVT_MOUSE_EVENTS(wxNotebook::OnMouse)
 
     EVT_SIZE(wxNotebook::OnSize)
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
@@ -126,7 +125,8 @@ bool wxNotebook::Create(wxWindow *parent,
             tabsize = kControlSizeSmall; 
     }
 
-    ::CreateTabsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , tabsize , tabstyle, 0, NULL, (ControlRef*) &m_macControl); 
+    verify_noerr ( CreateTabsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds ,
+     tabsize , tabstyle, 0, NULL, (ControlRef*) &m_macControl) ); 
     
     MacPostControlCreate(pos,size) ;
     return TRUE ;
@@ -567,88 +567,32 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     SetControl32BitValue( (ControlRef) m_macControl , m_nSelection + 1 ) ;
 }
 
-
-void  wxNotebook::OnMouse( wxMouseEvent &event )
+wxInt32 wxNotebook::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
-    if ( (ControlRef) m_macControl == NULL )
+    OSStatus status = eventNotHandledErr ;
+    
+    SInt32 newSel = GetControl32BitValue( (ControlRef) m_macControl ) - 1 ;
+    if ( newSel != m_nSelection )
     {
-        event.Skip() ;
-        return ;
-    }
+        wxNotebookEvent changing(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId,
+            newSel , m_nSelection);
+        changing.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(changing);
 
-    if (event.GetEventType() == wxEVT_LEFT_DOWN || event.GetEventType() == wxEVT_LEFT_DCLICK )
-    {
-        int x = event.m_x ;
-        int y = event.m_y ;
-
-#if TARGET_API_MAC_OSX
-		// OS Needs it in window not client coordinates
-		wxPoint origin = GetClientAreaOrigin() ;
-		x += origin.x ;
-		y += origin.y ;
-#else
-		// OS Needs it in tlw content area coordinates
-		MacClientToRootWindow( &x , &y ) ;
-#endif
-
-        ControlRef   control ;
-        Point       localwhere ;
-        SInt16      controlpart ;
-
-        localwhere.h = x ;
-        localwhere.v = y ;
-
-        short modifiers = 0;
-
-        if ( !event.m_leftDown && !event.m_rightDown )
-            modifiers  |= btnState ;
-
-        if ( event.m_shiftDown )
-            modifiers |= shiftKey ;
-
-        if ( event.m_controlDown )
-            modifiers |= controlKey ;
-
-        if ( event.m_altDown )
-            modifiers |= optionKey ;
-
-        if ( event.m_metaDown )
-            modifiers |= cmdKey ;
-
-        control = (ControlRef) m_macControl ;
-        if ( control && ::IsControlActive( control ) )
+        if(changing.IsAllowed())
         {
-            {
-                wxNotebookEvent changing(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId,
-                    ::GetControl32BitValue(control) - 1, m_nSelection);
-                changing.SetEventObject(this);
-                GetEventHandler()->ProcessEvent(changing);
+            wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId,
+                newSel, m_nSelection);
+            event.SetEventObject(this);
 
-                if(changing.IsAllowed())
-                {
-                    controlpart = ::HandleControlClick(control, localwhere, modifiers,
-                        (ControlActionUPP) -1);
-                    wxTheApp->s_lastMouseDown = 0 ;
-
-                    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId,
-                        ::GetControl32BitValue(control) - 1, m_nSelection);
-                    event.SetEventObject(this);
-
-                    GetEventHandler()->ProcessEvent(event);
-                }
-            }
+            GetEventHandler()->ProcessEvent(event);
         }
+        else
+        {
+            SetControl32BitValue( (ControlRef) m_macControl , m_nSelection + 1 ) ;
+        }
+        status = noErr ;
     }
-}
-
-
-void wxNotebook::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED( mouseStillDown ) )
-{
-#if 0
-    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId , ::GetControl32BitValue((ControlRef)m_macControl) - 1, m_nSelection);
-    event.SetEventObject(this);
-
-    ProcessEvent(event);
-#endif
+    return status ;
 }
 

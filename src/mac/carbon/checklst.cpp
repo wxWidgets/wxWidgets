@@ -244,7 +244,6 @@ bool wxCheckListBox::Create(wxWindow *parent,
     }
         listDef.u.userProc = macCheckListDefUPP ;
 
-#if TARGET_CARBON
     Size asize;
 
 
@@ -257,32 +256,7 @@ bool wxCheckListBox::Create(wxWindow *parent,
     SetControlReference( (ControlRef) m_macControl, (long) this);
     SetControlVisibility( (ControlRef) m_macControl, false, false);
 
-#else
 
-    long    result ;
-
-    wxStAppResource resload ;
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true ,
-                  kwxMacListWithVerticalScrollbar , 0 , 0, 
-                  kControlListBoxProc , (long) this ) ;
-    ::GetControlData( (ControlRef) m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
-               sizeof( ListHandle ) , (char*) &m_macList  , &result ) ;
-
-    HLock( (Handle) m_macList ) ;
-    ldefHandle ldef ;
-    ldef = (ldefHandle) NewHandle( sizeof(ldefRec) ) ;
-    if (  (**(ListHandle)m_macList).listDefProc != NULL )
-    {
-      (**ldef).instruction = 0x4EF9;  /* JMP instruction */
-      (**ldef).function = (void(*)()) listDef.u.userProc;
-      (**(ListHandle)m_macList).listDefProc = (Handle) ldef ;
-    }
-        
-    Point pt = (**(ListHandle)m_macList).cellSize ;
-    pt.v = 14 ;
-    LCellSize( pt , (ListHandle)m_macList ) ;
-    LAddColumn( 1 , 0 , (ListHandle)m_macList ) ;
-#endif
     OptionBits  options = 0;
     if ( style & wxLB_MULTIPLE )
     {

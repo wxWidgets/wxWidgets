@@ -531,12 +531,13 @@ void wxComboBox::SetString(int n, const wxString& s)
 }
 
 
-void wxComboBox::MacHandleControlClick( WXWidget WXUNUSED(control) , wxInt16 WXUNUSED(controlpart) , bool WXUNUSED(mouseStillDown)) 
+wxInt32 wxComboBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
     event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(GetStringSelection());
     ProcessCommand(event);
+    return noErr ;
 }
 

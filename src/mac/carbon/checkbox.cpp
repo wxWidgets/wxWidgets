@@ -38,16 +38,15 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
     m_label = label ;
 
-    SInt16 maxValue = 1 /* kControlCheckboxCheckedValue */;
+    SInt32 maxValue = 1 /* kControlCheckboxCheckedValue */;
     if (style & wxCHK_3STATE)
-    {
         maxValue = 2 /* kControlCheckboxMixedValue */;
-    }
-
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , maxValue, 
-          kControlCheckBoxProc , (long) this ) ;
+    verify_noerr( CreateCheckBoxControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds ,
+        CFSTR("") , 0 , false , (ControlRef*) &m_macControl ) ) ;
+
+    SetControl32BitMaximum( (ControlRef) m_macControl , maxValue ) ;
     
     MacPostControlCreate(pos,size) ;
 
@@ -95,7 +94,7 @@ void wxCheckBox::DoSet3StateValue(wxCheckBoxState val)
     MacRedrawControl() ;
 }
 
-void wxCheckBox::MacHandleControlClick( WXWidget WXUNUSED(control), wxInt16 WXUNUSED(controlpart) , bool WXUNUSED(mouseStillDown) ) 
+wxInt32 wxCheckBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
     wxCheckBoxState state = Get3StateValue();
@@ -122,11 +121,13 @@ void wxCheckBox::MacHandleControlClick( WXWidget WXUNUSED(control), wxInt16 WXUN
     {
         state = wxCHK_UNCHECKED;
     }
-        Set3StateValue(state);
+    Set3StateValue(state);
 
     event.SetInt(state);
     event.SetEventObject(this);
     ProcessCommand(event);
+
+    return noErr ;
 }
 
 // Bitmap checkbox
