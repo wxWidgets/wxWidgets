@@ -92,7 +92,7 @@ class WXDLLIMPEXP_BASE wxObjectRefData;
 class WXDLLIMPEXP_BASE wxEvent;
 class WXDLLIMPEXP_BASE wxEvtHandler;
 
-typedef void (wxEvtHandler::*wxObjectEventFunction)(wxEvent&);
+typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 
 #if wxUSE_FUNC_TEMPLATE_POINTER
 #  define wxTO_STRING(type) wxToStringConverter<type>
