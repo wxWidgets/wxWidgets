@@ -100,6 +100,7 @@ public:
     void DoCopyToClipboard();
 #endif // wxUSE_CLIPBOARD
 
+    void DoRemoveText();
     void DoMoveToEndOfText();
     void DoMoveToEndOfEntry();
 
@@ -120,6 +121,10 @@ public:
     wxTextCtrl    *m_log;
 
 private:
+    // get the currently focused text control or return the default one is no
+    // text ctrl has focus
+    wxTextCtrl *GetFocusedText(wxTextCtrl *textDef);
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -146,6 +151,8 @@ public:
         { DoAddText(true); }
     void OnAddText( wxCommandEvent& event )
         { DoAddText(false); }
+    void OnRemoveText( wxCommandEvent& event )
+        { m_panel->DoRemoveText(); }
 
     void OnMoveToEndOfText( wxCommandEvent &event )
         { m_panel->DoMoveToEndOfText(); }
@@ -263,6 +270,7 @@ enum
     TEXT_LINE_UP,
     TEXT_PAGE_DOWN,
     TEXT_PAGE_UP,
+    TEXT_REMOVE,
 
     // log menu
     TEXT_LOG_KEY,
@@ -315,6 +323,8 @@ bool MyApp::OnInit()
     wxMenu *menuText = new wxMenu;
     menuText->Append(TEXT_ADD_SOME, "&Append some text\tCtrl-A");
     menuText->Append(TEXT_ADD_FREEZE, "&Append text with freeze/thaw\tShift-Ctrl-A");
+    menuText->Append(TEXT_REMOVE, "&Remove first 10 characters\tCtrl-X");
+    menuText->AppendSeparator();
     menuText->Append(TEXT_MOVE_ENDTEXT, "Move cursor to the end of &text");
     menuText->Append(TEXT_MOVE_ENDENTRY, "Move cursor to the end of &entry");
     menuText->Append(TEXT_SET_EDITABLE, "Toggle &editable state", "", TRUE);
@@ -838,6 +848,14 @@ void MyPanel::OnSize( wxSizeEvent &event )
     event.Skip();
 }
 
+wxTextCtrl *MyPanel::GetFocusedText(wxTextCtrl *textDef)
+{
+    wxWindow *win = FindFocus();
+
+    wxTextCtrl *text = win ? wxDynamicCast(win, wxTextCtrl) : NULL;
+    return text ? text : textDef;
+}
+
 #if wxUSE_CLIPBOARD
 void MyPanel::DoPasteFromClipboard()
 {
@@ -939,6 +957,11 @@ void MyPanel::DoMoveToEndOfEntry()
     m_text->SetFocus();
 }
 
+void MyPanel::DoRemoveText()
+{
+    GetFocusedText(m_multitext)->Remove(0, 10);
+}
+
 //----------------------------------------------------------------------
 // MyFrame
 //----------------------------------------------------------------------
@@ -965,6 +988,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_CLIPBOARD_COPY,     MyFrame::OnCopyToClipboard)
 #endif // wxUSE_CLIPBOARD
 
+    EVT_MENU(TEXT_REMOVE,             MyFrame::OnRemoveText)
     EVT_MENU(TEXT_ADD_SOME,           MyFrame::OnAddText)
     EVT_MENU(TEXT_ADD_FREEZE,         MyFrame::OnAddTextFreeze)
     EVT_MENU(TEXT_MOVE_ENDTEXT,       MyFrame::OnMoveToEndOfText)
