@@ -227,5 +227,24 @@ Set the version of your Mingw installation here.
         </set>
         <set var="EXTRACFLAGS">$(GCCFLAGS) -DHAVE_W32API_H</set>
     </if>
+
     
+
+    <!-- ================================================================== -->
+    <!--            Project files - hardcode some defaults                  -->
+    <!-- ================================================================== -->
+
+    <if cond="FORMAT_SUPPORTS_CONDITIONS=='0'">
+        <set var="RUNTIME_LIBS">dynamic</set>
+        <set var="OFFICIAL_BUILD">0</set>
+        <set var="USE_HTML">1</set>
+        <set var="USE_OPENGL">1</set>
+        <set var="USE_ODBC">1</set>
+        <set var="MONOLITHIC">0</set>
+        <set var="USE_GUI">1</set>
+        <set var="DEBUG_INFO">default</set>
+        <set var="DEBUG_FLAG">default</set>
+        <set var="MSLU">0</set>
+    </if>
+
 </makefile>
