@@ -187,6 +187,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/utilscmn.cpp
 </set>
 <set var="BASE_CMN_HDR" hints="files">
+    wx/afterstd.h
     wx/app.h
     wx/apptrait.h
     wx/arrimpl.cpp
@@ -525,7 +526,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     wx/accel.h
     wx/access.h
-    wx/afterstd.h
     wx/artprov.h
     wx/bitmap.h
     wx/busyinfo.h
@@ -2256,7 +2256,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(LOWLEVEL_HDR)
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(HTML_HDR)
-            $(OPENGL_HDR) $(ODBC_HDR) $(DBGRID_HDR)
+            $(OPENGL_HDR) $(DBGRID_HDR)
         </if>
     </set>
 
@@ -2264,7 +2264,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="ALL_BASE_HEADERS" make_var="1" hints="files">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
         $(NET_CMN_HDR) $(NET_PLATFORM_HDR)
-        $(XML_HDR)
+        $(XML_HDR) $(ODBC_HDR)
     </set>
 
     <set var="ALL_HEADERS" make_var="1" hints="files">
@@ -2281,7 +2281,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(BASE_AND_GUI_DARWIN_SRC)
         $(BASE_AND_GUI_WIN32_SRC)
         $(NET_CMN_SRC) $(NET_UNIX_SRC) $(NET_WIN32_SRC) $(NET_MAC_SRC)
-        $(XML_SRC)
+        $(XML_SRC) $(ODBC_SRC)
     </set>
 
 </makefile>
