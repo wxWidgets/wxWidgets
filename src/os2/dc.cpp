@@ -282,6 +282,62 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
    // TODO
 }
 
+void wxDC::DoDrawRotatedText(const wxString& text,
+                             wxCoord x, wxCoord y,
+                             double angle)
+{
+   // TODO:
+   /*
+    if ( angle == 0.0 )
+    {
+        DoDrawText(text, x, y);
+    }
+    else
+    {
+        LOGFONT lf;
+        wxFillLogFont(&lf, &m_font);
+
+        // GDI wants the angle in tenth of degree
+        long angle10 = (long)(angle * 10);
+        lf.lfEscapement = angle10;
+        lf. lfOrientation = angle10;
+
+        HFONT hfont = ::CreateFontIndirect(&lf);
+        if ( !hfont )
+        {
+            wxLogLastError("CreateFont");
+        }
+        else
+        {
+            HFONT hfontOld = ::SelectObject(GetHdc(), hfont);
+
+            DrawAnyText(text, x, y);
+
+            (void)::SelectObject(GetHdc(), hfontOld);
+        }
+
+        // call the bounding box by adding all four vertices of the rectangle
+        // containing the text to it (simpler and probably not slower than
+        // determining which of them is really topmost/leftmost/...)
+        wxCoord w, h;
+        GetTextExtent(text, &w, &h);
+
+        double rad = DegToRad(angle);
+
+        // "upper left" and "upper right"
+        CalcBoundingBox(x, y);
+        CalcBoundingBox(x + w*cos(rad), y - h*sin(rad));
+        CalcBoundingBox(x + h*sin(rad), y + h*cos(rad));
+
+        // "bottom left" and "bottom right"
+        x += (wxCoord)(h*sin(rad));
+        y += (wxCoord)(h*cos(rad));
+        CalcBoundingBox(x, y);
+        CalcBoundingBox(x + h*sin(rad), y + h*cos(rad));
+    }
+*/
+}
+
 // ---------------------------------------------------------------------------
 // set GDI objects
 // ---------------------------------------------------------------------------
