@@ -1,4 +1,0 @@
-#include "wx/msw/wx.rc"
-
-wiztest     BITMAP  wiztest.bmp
-wiztest2    BITMAP  wiztest2.bmp
