@@ -93,7 +93,9 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
   wxString choices[2];
   choices[0] = _("All");
   choices[1] = _("Pages");
-
+  
+  fromText = (wxTextCtrl*)NULL;
+  
   rangeRadioBox = new wxRadioBox(this, wxPRINTID_RANGE, _("Print Range"),
     wxPoint(5, yPos), wxSize(-1, -1), 2, choices, 2);
   rangeRadioBox->SetSelection(1);
@@ -186,12 +188,14 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 
 void wxGenericPrintDialog::OnRange(wxCommandEvent& event)
 {
-  if (event.GetInt() == 0)
+  if (!fromText) return;
+
+  if (event.GetInt() == 1)
   {
     fromText->Enable(FALSE);
     toText->Enable(FALSE);
   }
-  else if (event.GetInt() == 1)
+  else if (event.GetInt() == 0)
   {
     fromText->Enable(TRUE);
     toText->Enable(TRUE);

@@ -102,7 +102,9 @@ public:
   wxWindow *GetParent();
 
   wxEvtHandler *GetEventHandler();
-  void SetEventhandler( wxEvtHandler *handler );
+  void SetEventHandler( wxEvtHandler *handler );
+  void PushEventHandler( wxEvtHandler *handler );
+  wxEvtHandler *PopEventHandler( bool deleteHandler = FALSE );
 
   virtual wxValidator *GetValidator();
   virtual void SetValidator( wxValidator *validator );

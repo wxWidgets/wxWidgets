@@ -76,6 +76,10 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
   void DrawOpenSpline(wxList *points);
 
   void DrawIcon(const wxIcon& icon, long x, long y);
+#ifdef __WXGTK__
+  void DrawIcon(const wxIcon& icon, long x, long y, bool WXUNUSED(usemask) ) 
+    { DrawIcon( icon, x, y ); }
+#endif
   void DrawText(const wxString& text, long x, long y, bool use16 = FALSE);
 
   void Clear(void);

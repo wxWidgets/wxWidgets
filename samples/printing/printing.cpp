@@ -56,6 +56,11 @@ float     zoom_factor = 1.0;
 #include "aiai.xbm"
 #endif
 
+#ifdef __WXGTK__
+#include "folder.xpm"
+#endif
+
+
 // Writes a header on a page. Margin units are in millimetres.
 bool WritePageHeader(wxPrintout *printout, wxDC *dc, char *text, float mmToLogical);
 
@@ -319,6 +324,9 @@ void MyFrame::Draw(wxDC& dc)
   dc.SetPen(wxBLACK_PEN);
   dc.DrawLine(0, 0, 200, 200);
   dc.DrawLine(200, 0, 0, 200);
+  
+  wxIcon my_icon( folder_xpm );
+  dc.DrawIcon( my_icon, 100, 100, TRUE );
 }
 
 void MyFrame::OnSize(wxSizeEvent& event )

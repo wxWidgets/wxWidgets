@@ -94,7 +94,9 @@ class wxDC: public wxObject
     virtual void DrawSpline( int n, wxPoint points[] );
     
     virtual bool CanDrawBitmap(void) const = 0;
-    virtual void DrawIcon( const wxIcon &icon, long x, long y, bool useMask=FALSE );
+    virtual void DrawIcon( const wxIcon &icon, long x, long y )
+      { DrawIcon( icon, x, y, TRUE ); }
+    virtual void DrawIcon( const wxIcon &icon, long x, long y, bool useMask );
             void DrawBitmap( const wxBitmap &bmp, long x, long y, bool useMask=FALSE )
 	    { DrawIcon( *((wxIcon*)(&bmp)), x, y, useMask ); }
     virtual bool Blit( long xdest, long ydest, long width, long height,

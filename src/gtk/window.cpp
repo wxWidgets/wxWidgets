@@ -1544,9 +1544,35 @@ wxEvtHandler *wxWindow::GetEventHandler(void)
   return m_eventHandler;
 }
 
-void wxWindow::SetEventhandler( wxEvtHandler *handler )
+void wxWindow::SetEventHandler( wxEvtHandler *handler )
 {
   m_eventHandler = handler;
+}
+
+void wxWindow::PushEventHandler(wxEvtHandler *handler)
+{
+	handler->SetNextHandler(GetEventHandler());
+	SetEventHandler(handler);
+}
+
+wxEvtHandler *wxWindow::PopEventHandler(bool deleteHandler)
+{
+	if ( GetEventHandler() )
+	{
+		wxEvtHandler *handlerA = GetEventHandler();
+		wxEvtHandler *handlerB = handlerA->GetNextHandler();
+		handlerA->SetNextHandler(NULL);
+		SetEventHandler(handlerB);
+		if ( deleteHandler )
+		{
+			delete handlerA;
+			return NULL;
+		}
+		else
+			return handlerA;
+	}
+	else
+		return NULL;
 }
 
 wxValidator *wxWindow::GetValidator(void)
