@@ -543,15 +543,11 @@ public:
     void SetStateImageList(wxImageList *imageList);
     void SetButtonsImageList(wxImageList *imageList);
 
-    %addtofunc AssignImageList      "args[1].thisown = 0";
+    %apply SWIGTYPE *DISOWN { wxImageList *imageList };
     void AssignImageList(wxImageList *imageList);
-
-    %addtofunc AssignStateImageList      "args[1].thisown = 0";
     void AssignStateImageList(wxImageList *imageList);
-
-    %addtofunc AssignButtonsImageList      "args[1].thisown = 0";
     void AssignButtonsImageList(wxImageList *imageList);
-
+    %clear wxImageList *imageList;
 
 
     // adds a column
