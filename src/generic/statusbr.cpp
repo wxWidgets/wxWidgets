@@ -88,8 +88,12 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
   SetThemeEnabled( true );
 
   // Don't wish this to be found as a child
+  // JACS: this is not true for the Windows native version,
+  // so why should it be true here? This control can be used
+  // as a child of an arbitrary window, not just for frames.
+  // Commenting out.
 #ifndef __WXMAC__
-  parent->GetChildren().DeleteObject(this);
+  // parent->GetChildren().DeleteObject(this);
 #endif
   InitColours();
   
