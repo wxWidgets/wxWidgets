@@ -4643,7 +4643,10 @@ AC_OUTPUT([
             dnl Otherwise running config.status or rerunning configure
             dnl would stomp the wx-config link or try to move it onto
             dnl itself.
-            if test ! -L wx-config; then
+            dnl Use -h instead of -L to test for link (GD)
+            dnl   -h is documented as obsolete under Mac OS X but works
+            dnl   -L is obsolete under Solaris8
+            if test ! -h wx-config; then
                 chmod +x wx-config
                 mv wx-config wx${TOOLCHAIN_NAME}-config
                 ${LN_S} wx${TOOLCHAIN_NAME}-config wx-config

@@ -18753,7 +18753,7 @@ cat >> $CONFIG_STATUS <<EOF
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 
-                                                            if test ! -L wx-config; then
+                                                                                                if test ! -h wx-config; then
                 chmod +x wx-config
                 mv wx-config wx${TOOLCHAIN_NAME}-config
                 ${LN_S} wx${TOOLCHAIN_NAME}-config wx-config
