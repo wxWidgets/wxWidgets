@@ -193,7 +193,7 @@ public:
     GtkWidget           *m_focusWidget;
 
 #ifdef __WXGTK20__
-    GtkIMMulticontext   *m_imContext;
+    GtkIMContext       *m_imContext;
 #else
 #if HAVE_XIM
     // XIM support for wxWidgets

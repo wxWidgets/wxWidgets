@@ -2369,7 +2369,7 @@ typedef GtkWidget *WXWidget;
 
 #ifdef __WXGTK20__
 /* Input method thing */
-typedef struct _GtkIMMulticontext    GtkIMMulticontext;
+typedef struct _GtkIMContext       GtkIMContext;
 #endif /*  __WXGTK20__ */
 
 #endif /*  __WXGTK__ */

@@ -1142,7 +1142,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         key_code = wxTranslateKeySymToWXKey(gdk_event->keyval, FALSE /* isChar */);
         if ( !key_code && win->m_imContext )
         {
-            gtk_im_context_filter_keypress ( (GtkIMContext*) win->m_imContext, gdk_event );
+            gtk_im_context_filter_keypress(win->m_imContext, gdk_event );
             ret = TRUE;
         }
         else
@@ -2311,7 +2311,7 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
     if (win->m_imContext)
     {
         GtkPizza *pizza = GTK_PIZZA( m_widget );
-        gtk_im_context_set_client_window( (GtkIMContext*) win->m_imContext, pizza->bin_window );
+        gtk_im_context_set_client_window( win->m_imContext, pizza->bin_window );
     }
 #endif
 
@@ -2697,13 +2697,13 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
 #ifdef __WXGTK20__
     // Create input method handler
-    m_imContext = (GtkIMMulticontext*) gtk_im_multicontext_new ();
+    m_imContext = gtk_im_multicontext_new();
 
     // Cannot handle drawing preedited text yet
-    gtk_im_context_set_use_preedit( (GtkIMContext*) m_imContext, FALSE );
+    gtk_im_context_set_use_preedit( m_imContext, FALSE );
 
     g_signal_connect (G_OBJECT (m_imContext), "commit",
-        G_CALLBACK (gtk_wxwindow_commit_cb), this);
+                      G_CALLBACK (gtk_wxwindow_commit_cb), this);
 #endif
 
     gtk_widget_show( m_wxwindow );
@@ -2804,13 +2804,13 @@ void wxWindowGTK::PostCreation()
 
 #ifdef __WXGTK20__
         // Create input method handler
-        m_imContext = (GtkIMMulticontext*) gtk_im_multicontext_new ();
+        m_imContext = gtk_im_multicontext_new();
 
         // Cannot handle drawing preedited text yet
-        gtk_im_context_set_use_preedit( (GtkIMContext*) m_imContext, FALSE );
+        gtk_im_context_set_use_preedit( m_imContext, FALSE );
 
         g_signal_connect (G_OBJECT (m_imContext), "commit",
-            G_CALLBACK (gtk_wxwindow_commit_cb), this);
+                          G_CALLBACK (gtk_wxwindow_commit_cb), this);
 #endif
         }
 
