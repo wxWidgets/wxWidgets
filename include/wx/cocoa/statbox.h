@@ -27,23 +27,18 @@ class WXDLLEXPORT wxStaticBox: public wxStaticBoxBase, protected wxCocoaNSBox
 // ------------------------------------------------------------------------
 public:
     wxStaticBox() { }
-    wxStaticBox(wxWindow *parent, wxWindowID winid,
-            const wxString& title,
+    wxStaticBox(wxWindow *parent, wxWindowID winid, const wxString& title,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = 0, const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxStaticBoxNameStr)
+            long style = 0, const wxString& name = wxStaticBoxNameStr)
     {
-        Create(parent, winid, title, pos, size, style, validator, name);
+        Create(parent, winid, title, pos, size, style, name);
     }
 
-    bool Create(wxWindow *parent, wxWindowID winid,
-            const wxString& title,
+    bool Create(wxWindow *parent, wxWindowID winid, const wxString& title,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = 0,
-            const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxStaticBoxNameStr);
+            long style = 0, const wxString& name = wxStaticBoxNameStr);
     virtual ~wxStaticBox();
 
 // ------------------------------------------------------------------------

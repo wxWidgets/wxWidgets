@@ -27,14 +27,11 @@ END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxStaticBox,NSBox,NSView,NSView)
 
 bool wxStaticBox::Create(wxWindow *parent, wxWindowID winid,
-           const wxString& title,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style, const wxValidator& validator,
-           const wxString& name)
+           const wxString& title, const wxPoint& pos, const wxSize& size,
+           long style, const wxString& name)
 {
     wxAutoNSAutoreleasePool pool;
-    if(!CreateControl(parent,winid,pos,size,style,validator,name))
+    if(!CreateControl(parent,winid,pos,size,style,wxDefaultValidator,name))
         return false;
     m_cocoaNSView = NULL;
     SetNSBox([[NSBox alloc] initWithFrame:MakeDefaultNSRect(size)]);
