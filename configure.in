@@ -261,6 +261,7 @@ case "${host}" in
     AC_DEFINE(__EMX__)
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_PM=1
+    LIBS="$LIBS -lstdcpp"
   ;;
 
   powerpc-*-darwin* )
@@ -1053,6 +1054,21 @@ WX_ARG_ENABLE(xpm,         [  --enable-xpm            use xpm images (XPM file f
 WX_ARG_ENABLE(ico_cur,     [  --enable-icocur         use Windows ICO and CUR formats], wxUSE_ICO_CUR)
 
 fi
+
+dnl General settings (needed for GUI and non-GUI compilations alike).
+dnl Path separator; ':' for unix, ';' for OS/2
+dnl Stem for flex output; lexyy for OS/2, lex.yy otherwise
+case "${host}" in
+  *-pc-os2_emx | *-pc-os2-emx )
+    dnl PATH_IFS is autodetected by OS/2's configure (usually ';')
+    LEX_STEM="lexyy"
+  ;;
+  *)
+    PATH_IFS=':'
+    LEX_STEM="lex.yy"
+  ;;
+esac
+
 dnl for GUI only
 
 dnl cache the options values before (may be) aborting below
@@ -1094,18 +1110,9 @@ if test "$wxUSE_GUI" = "yes"; then
                   + ${wxUSE_WINE:-0} + ${wxUSE_MSW:-0} + ${wxUSE_MGL:-0} + ${wxUSE_MICROWIN:-0} + ${wxUSE_X11:-0}`
 
     dnl Allow wxUSE_PM only for OS/2 with EMX.
-    dnl Path separator; ':' for unix.
-    dnl Stem for flex output; lexyy for OS/2, lex.yy otherwise
     case "${host}" in
       *-pc-os2_emx | *-pc-os2-emx )
-        # PATH_IFS is autodetected by OS/2's configure (usually ';')
         NUM_TOOLKITS=`expr ${NUM_TOOLKITS} + ${wxUSE_PM:-0}`
-        LEX_STEM="lexyy"
-      ;;
-      *)
-        PATH_IFS=':'
-        LEX_STEM="lex.yy"
-      ;;
     esac
 
     case "$NUM_TOOLKITS" in
@@ -1135,7 +1142,6 @@ if test "$wxUSE_GUI" = "yes"; then
       fi
     done
 else
-    PATH_IFS=':'
     AC_MSG_RESULT(base ($host_alias hosted) only)
 fi
 
@@ -2511,6 +2517,10 @@ if test "$wxUSE_MAC" = 1; then
     LIBWXMACRES="\$(top_builddir)/lib/lib${WX_LIBRARY}.r"
     LIBWXMACRESCOMP="\$(RESCOMP) Carbon.r -t APPL ${LIBWXMACRES} -o \$(BIN_PROGRAM)"
     LIBWXMACRESWXCONFIG="${RESCOMP} Carbon.r -t APPL \${prefix}/lib/${WX_RESOURCES_MACOSX_COMPILED} -o"
+else
+    if test "$wxUSE_PM" = 1; then
+        LIBWXMACRESCOMP="emxbind -ep \$(BIN_PROGRAM)"
+    fi
 fi
 
 dnl ------------------------------------------------------------------------
@@ -3734,10 +3744,12 @@ fi
 if test "$wxUSE_SOCKETS" = "yes"; then
     dnl under MSW we always have sockets
     if test "$TOOLKIT" != "MSW"; then
-        dnl under Solaris, socket functions live in -lsocket
+        dnl under Solaris and OS/2, socket functions live in -lsocket
         AC_CHECK_FUNC(socket,,
             AC_CHECK_LIB(socket, socket,
-                INET_LINK="$INET_LINK -lsocket",
+                if test "$INET_LINK" != " -lsocket"; then
+                    INET_LINK="$INET_LINK -lsocket",
+                fi
                 [
                     AC_MSG_WARN([socket library not found - sockets will be disabled])
                     wxUSE_SOCKETS=no
