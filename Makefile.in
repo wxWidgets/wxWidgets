@@ -613,6 +613,7 @@ BASE_DIST: ALL_DIST
 	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
 	cp $(DOCDIR)/base/todo.txt $(DISTDIR)/TODO.txt
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
+	cp $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	cp $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
 	cp $(WXDIR)/src/common/unzip.h $(DISTDIR)/src/common
 	list='$(HEADERS)'; for p in $$list; do \
@@ -621,6 +622,17 @@ BASE_DIST: ALL_DIST
 	list='$(SOURCES)'; for p in $$list; do \
 	  cp $(WXDIR)/src/$$p $(DISTDIR)/src/$$p; \
 	done
+
+	mkdir $(DISTDIR)/samples
+	cp $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
+	cp $(SAMPDIR)/configure $(DISTDIR)/samples
+	cp $(SAMPDIR)/configure.in $(DISTDIR)/samples
+
+	mkdir $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/Makefile.in $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/makefile.unx $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/console.cpp $(DISTDIR)/samples/console
+	cp $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
 
 GTK_DIST: ALL_GUI_DIST
 	cp $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
