@@ -274,3 +274,12 @@ CVS: [RR] wxWindows/src/gtk minifram.cpp,1.29,1.30
 When applying, be careful to not pick later revision of font.cpp -- 2.5 doesn't
 have wxFont::GetInternalFont while 2.4 must have it because of binary
 compatibility!
+
+
+23. Use GNOME2's /usr/share/pixmaps/document-icons in wxMimeTypesManager
+
+Checking in mimetype.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/unix/mimetype.cpp,v  <--  mimetype.cpp
+new revision: 1.29; previous revision: 1.28
+done
+
