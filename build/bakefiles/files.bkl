@@ -966,7 +966,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/private.h
     wx/motif/radiobox.h
     wx/motif/radiobut.h
-    wx/motif/region.h
     wx/motif/scrolbar.h
     wx/motif/slider.h
     wx/motif/spinbutt.h
