@@ -57,11 +57,6 @@ wxClassInfo wxObject::sm_classwxObject((wxChar *) wxT("wxObject"), (wxChar *) NU
 wxClassInfo* wxClassInfo::sm_first = (wxClassInfo *) NULL;
 wxHashTable* wxClassInfo::sm_classTable = (wxHashTable*) NULL;
 
-#if defined(__WXDEBUG__) && defined(__VISAGECPP__)
-  int wxObject::N = 0;  // total number of objects
-  int wxObject::Nid = 0;// object serial counter
-#endif // __WXDEBUG__
-
 // These are here so we can avoid 'always true/false' warnings
 // by referring to these instead of TRUE/FALSE
 const bool wxTrue = TRUE;
@@ -77,12 +72,6 @@ wxObject::wxObject()
 #if wxUSE_SERIAL
     m_serialObj = (wxObject_Serialize *)NULL;
 #endif
-#if defined(__WXDEBUG__) && defined(__VISAGECPP__)
-    id = Nid++;
-    N++;
-//  {  printf("wxObject %i/%i \t",id,N);
-//  }
-#endif
 }
 
 wxObject::~wxObject()
@@ -92,11 +81,6 @@ wxObject::~wxObject()
     if (m_serialObj)
         delete m_serialObj;
 #endif
-#if defined(__WXDEBUG__) && defined(__VISAGECPP__)
-     N--;
-//  {  printf("~wxObject %i/%i \t",id,N);
-//  }
-#endif  //__WXDEBUG__
 }
 
 /*
@@ -309,7 +293,7 @@ wxObject *wxCreateDynamicObject(const wxChar *name)
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
  DEBUG_PRINTF(wxObject *wxCreateDynamicObject)
 #endif
-     
+
     if (wxClassInfo::sm_classTable)
     {
         wxClassInfo *info = (wxClassInfo *)wxClassInfo::sm_classTable->Get(name);
@@ -347,7 +331,7 @@ void wxObject::StoreObject( wxObjectOutputStream& stream )
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
  DEBUG_PRINTF(wxObject::StoreObject)
 #endif
-     
+
     wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
     wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
 
@@ -376,7 +360,7 @@ void wxObject::LoadObject( wxObjectInputStream& stream )
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
  DEBUG_PRINTF(wxObject::LoadObject)
 #endif
-     
+
     wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
     wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
 
