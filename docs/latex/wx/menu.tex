@@ -199,7 +199,7 @@ before matching.
 
 \helpref{wxMenu::FindItemForId}{wxmenufinditemforid}
 
-\membersection{wxMenu::FindItemForId}\label{wxmenufinditemforid}
+\membersection{wxMenu::FindItemForId}\label{wxmenufinditem}
 
 \constfunc{wxMenuItem*}{FindItemForId}{\param{int}{ id}, \param{wxMenu **}{ menuForItem = NULL}}
 
@@ -504,9 +504,9 @@ The menu item identifier, or -1 if none was found.
 Any special menu codes are stripped out of source and target strings
 before matching.
 
-\membersection{wxMenuBar::FindItemById}\label{wxmenubarfinditembyid}
+\membersection{wxMenuBar::FindItemForId}\label{wxmenubarfinditemforid}
 
-\constfunc{wxMenuItem *}{FindItemById}{\param{int}{ id}}
+\constfunc{wxMenuItem *}{FindItemForId}{\param{int}{ id}}
 
 Finds the menu item object associated with the given menu item identifier,
 

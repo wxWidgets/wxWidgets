@@ -198,6 +198,10 @@ wxPrintData::wxPrintData()
 
 wxPrintData::wxPrintData(const wxPrintData& printData)
 {
+#ifdef __WXMSW__
+    m_devMode = NULL;
+#endif
+
     (*this) = printData;
 }
 

@@ -761,7 +761,7 @@ void wxFrame::MSWOnMenuHighlight(WXWORD nItem, WXWORD nFlags, WXHMENU hSysMenu)
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent(event);
   }
-  else if (nFlags != MF_SEPARATOR)
+  else if ((nFlags != MF_SEPARATOR) && (nItem != 0) && (nItem != 65535))
   {
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, nItem);
     event.SetEventObject( this );
@@ -863,7 +863,7 @@ void wxFrame::OnMenuHighlight(wxMenuEvent& event)
     if ( menuId != -1 )
     {
       wxMenuBar *menuBar = GetMenuBar();
-      if (menuBar)
+      if (menuBar && menuBar->FindItem(menuId))
       {
         // set status text even if the string is empty - this will at
         // least remove the string from the item which was previously
