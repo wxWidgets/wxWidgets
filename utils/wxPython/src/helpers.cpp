@@ -75,6 +75,8 @@ int  wxPyApp::MainLoop(void) {
 
 void wxPyApp::AfterMainLoop(void) {
     // more stuff from wxEntry...
+
+#ifdef __WXMSW__
     if (wxPythonApp->GetTopWindow()) {
         // Forcibly delete the window.
         if (wxPythonApp->GetTopWindow()->IsKindOf(CLASSINFO(wxFrame)) ||
@@ -88,6 +90,10 @@ void wxPyApp::AfterMainLoop(void) {
             wxPythonApp->SetTopWindow(NULL);
         }
     }
+#endif
+#ifdef __WXGTK__
+      wxPythonApp->DeletePendingObjects();
+#endif
 
     wxPythonApp->OnExit();
 #ifdef __WXMSW__
@@ -105,26 +111,19 @@ void wxPyApp::AfterMainLoop(void) {
 //----------------------------------------------------------------------
 
 
-
-// Start the user application, user App's OnInit method is a parameter here
-PyObject* __wxStart(PyObject* /* self */, PyObject* args)
+// This is where we pick up the first part of the wxEntry functionality...
+// The rest is in __wxStart and  AfterMainLoop.  Thi function is called when
+// wxpc is imported.  (Before there is a wxApp object.)
+void __wxPreStart()
 {
-    PyObject*   onInitFunc = NULL;
-    PyObject*   arglist;
-    PyObject*   result;
-    long        bResult;
+    // Bail out if there is already windows created.  This means that the
+    // toolkit has already been initialized, as in embedding wxPython in
+    // a C++ wxWindows app.
+    if (wxTopLevelWindows.Number() > 0)
+        return;
 
-    if (!PyArg_ParseTuple(args, "O", &onInitFunc))
-        return NULL;
-
-// This is where we pick up one part of the wxEntry functionality...
-// the rest is in AfterMainLoop.
 #ifdef __WXMSW__
     wxApp::Initialize((WXHINSTANCE)wxhInstance);
-
-    wxPythonApp->argc = 0;
-    wxPythonApp->argv = NULL;
-    wxPythonApp->OnInitGui();
 #endif
 #ifdef __WXGTK__
     wxClassInfo::InitializeClasses();
@@ -137,11 +136,8 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
         argv[x] = PyString_AsString(PyList_GetItem(sysargv, x));
     argv[argc] = NULL;
 
-
-    wxPythonApp->argc = argc;
-    wxPythonApp->argv = argv;
-
-    gtk_init( &wxPythonApp->argc, &wxPythonApp->argv );
+    gtk_init( &argc, &argv );
+    delete [] argv;
 
 #ifdef USE_GDK_IMLIB
     gdk_imlib_init();
@@ -150,9 +146,36 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 #endif
 
     wxApp::CommonInit();
-    wxTheApp->OnInitGui();
-
 #endif
+
+}
+
+
+
+static char* __nullArgv[1] = { 0 };
+
+// Start the user application, user App's OnInit method is a parameter here
+PyObject* __wxStart(PyObject* /* self */, PyObject* args)
+{
+    PyObject*   onInitFunc = NULL;
+    PyObject*   arglist;
+    PyObject*   result;
+    long        bResult;
+
+
+    if (!PyArg_ParseTuple(args, "O", &onInitFunc))
+        return NULL;
+
+    if (wxTopLevelWindows.Number() > 0) {
+        PyErr_SetString(PyExc_TypeError, "Only 1 wxApp per process!");
+        return NULL;
+    }
+
+
+    // This is the next part of the wxEntry functionality...
+    wxPythonApp->argc = 0;
+    wxPythonApp->argv = __nullArgv;
+    wxPythonApp->OnInitGui();
 
 
     // Call the Python App's OnInit function
@@ -628,6 +651,9 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.8  1998/08/27 21:59:08  RD
+// Some chicken-and-egg problems solved for wxPython on wxGTK
+//
 // Revision 1.7  1998/08/27 00:00:26  RD
 // - more tweaks
 // - have discovered some problems but not yet discovered solutions...

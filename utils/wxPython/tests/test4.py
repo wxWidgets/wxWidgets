@@ -507,11 +507,6 @@ class MyApp(wxApp):
 
 def main():
     app = MyApp(0)
-    import wxPython.gdi
-    reload(wxPython.gdi)
-    print wxPython.gdi.wxBLUE
-    print wxPython.gdi.wxBLUE.this
-
     app.MainLoop()
 
 
@@ -521,15 +516,20 @@ def t():
 
 
 # for focused testing...
-def t2():
+def main2():
     class T2App(wxApp):
         def OnInit(self):
             frame = TestLayoutConstraints(NULL)
             frame.Show(true)
             self.SetTopWindow(frame)
+            return true
 
     app = T2App(0)
     app.MainLoop()
+
+def t2():
+    import pdb
+    pdb.run('main2()')
 
 
 
@@ -540,6 +540,9 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.4  1998/08/27 21:59:51  RD
+# Some chicken-and-egg problems solved for wxPython on wxGTK
+#
 # Revision 1.3  1998/08/27 00:01:17  RD
 # - more tweaks
 # - have discovered some problems but not yet discovered solutions...

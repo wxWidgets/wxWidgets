@@ -33,9 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.3  1998/08/27 00:00:54  RD
- * - more tweaks
- * - have discovered some problems but not yet discovered solutions...
+ * Revision 1.4  1998/08/27 21:59:29  RD
+ * Some chicken-and-egg problems solved for wxPython on wxGTK
  *
  ************************************************************************/
 
@@ -1673,6 +1672,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
 
 
+    __wxPreStart();     // initialize the GUI toolkit, if needed.
 
 //    wxPyWindows = new wxHashTable(wxKEY_INTEGER, 100);
 

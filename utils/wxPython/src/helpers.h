@@ -30,6 +30,7 @@ extern wxPyApp *wxPythonApp;
 
 //----------------------------------------------------------------------
 
+void      __wxPreStart();
 PyObject* __wxStart(PyObject*, PyObject* args);
 
 extern PyObject* wxPython_dict;
@@ -102,6 +103,9 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/08/27 21:59:09  RD
+// Some chicken-and-egg problems solved for wxPython on wxGTK
+//
 // Revision 1.3  1998/08/16 04:31:09  RD
 // More wxGTK work.
 //

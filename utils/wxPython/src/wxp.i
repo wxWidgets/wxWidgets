@@ -112,6 +112,7 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
 
 %init %{
 
+    __wxPreStart();     // initialize the GUI toolkit, if needed.
 
 //    wxPyWindows = new wxHashTable(wxKEY_INTEGER, 100);
 
@@ -139,6 +140,9 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1998/08/27 21:59:10  RD
+// Some chicken-and-egg problems solved for wxPython on wxGTK
+//
 // Revision 1.5  1998/08/27 00:00:28  RD
 // - more tweaks
 // - have discovered some problems but not yet discovered solutions...
