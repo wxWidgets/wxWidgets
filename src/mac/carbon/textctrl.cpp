@@ -51,6 +51,8 @@
 #include "TextEncodingConverter.h"
 #include "wx/mac/uma.h"
 
+#define TE_UNLIMITED_LENGTH 0xFFFFFFFFUL
+
 extern wxApp *wxTheApp ;
 
 // CS:TODO we still have a problem getting properly at the text events of a control because under Carbon
@@ -83,7 +85,7 @@ extern wxApp *wxTheApp ;
     should refer to a user pane control that you have either created
     yourself or extracted from a dialog's control heirarchy using
     the GetDialogItemAsControl routine.  */
-OSStatus mUPOpenControl(ControlHandle theControl, bool multiline);
+OSStatus mUPOpenControl(ControlHandle theControl, long wxStyle);
 
 /* Utility Routines */
 
@@ -457,12 +459,12 @@ static pascal ControlPartCode TPPaneFocusProc(ControlHandle theControl, ControlF
     should refer to a user pane control that you have either created
     yourself or extracted from a dialog's control heirarchy using
     the GetDialogItemAsControl routine.  */
-OSStatus mUPOpenControl(ControlHandle theControl, bool multiline) 
+OSStatus mUPOpenControl(ControlHandle theControl, long wxStyle ) 
 {
     Rect bounds;
     WindowRef theWindow;
     STPTextPaneVars **tpvars, *varsp;
-    OSStatus err;
+    OSStatus err = noErr ;
     RGBColor rgbWhite = {0xFFFF, 0xFFFF, 0xFFFF};
     TXNBackground tback;
     
@@ -481,7 +483,7 @@ OSStatus mUPOpenControl(ControlHandle theControl, bool multiline)
     HLock((Handle) tpvars);
     varsp = *tpvars;
         /* set the initial settings for our private data */
-    varsp->fMultiline = multiline ;
+    varsp->fMultiline = wxStyle & wxTE_MULTILINE ;
     varsp->fInFocus = false;
     varsp->fIsActive = true;
     varsp->fTEActive = true; // in order to get a deactivate
@@ -514,11 +516,33 @@ OSStatus mUPOpenControl(ControlHandle theControl, bool multiline)
     SetPort(varsp->fDrawingEnvironment);
 
         /* create the new edit field */
+        
+    TXNFrameOptions frameOptions = 
+        kTXNDontDrawCaretWhenInactiveMask ;
+    if ( ! ( wxStyle & wxTE_NOHIDESEL ) )
+	    frameOptions |= kTXNDontDrawSelectionWhenInactiveMask ;
+	
+	if ( wxStyle & wxTE_MULTILINE )
+	{
+	    if ( ! ( wxStyle & wxTE_DONTWRAP ) )
+	        frameOptions |= kTXNAlwaysWrapAtViewEdgeMask ;
+	    else
+	    {
+	        frameOptions |= kTXNAlwaysWrapAtViewEdgeMask ;
+	        frameOptions |= kTXNWantHScrollBarMask ;
+	    }
+	        
+	    if ( !(wxStyle & wxTE_NO_VSCROLL ) )
+	        frameOptions |= kTXNWantVScrollBarMask ;
+	}
+	else
+	    frameOptions |= kTXNSingleLineOnlyMask ;
+	    
+	if ( wxStyle & wxTE_READONLY )
+	    frameOptions |= kTXNReadOnlyMask ;
+  
     TXNNewObject(NULL, varsp->fOwner, &varsp->fRTextArea,
-      ( multiline ? kTXNWantVScrollBarMask : 0 ) |
-        kTXNDontDrawCaretWhenInactiveMask |
-        kTXNDontDrawSelectionWhenInactiveMask |
-        kTXNAlwaysWrapAtViewEdgeMask ,
+	    frameOptions ,
         kTXNTextEditStyleFrameType,
         kTXNTextensionFile,
         kTXNSystemDefaultEncoding, 
@@ -537,9 +561,9 @@ OSStatus mUPOpenControl(ControlHandle theControl, bool multiline)
             {   kTXNQDFontStyleAttribute , kTXNQDFontStyleAttributeSize , {  (void*) normal } } ,
         } ;
 
-    OSStatus status = TXNSetTypeAttributes (varsp->fTXNRec, sizeof( typeAttr ) / sizeof(TXNTypeAttributes) , typeAttr,
-      kTXNStartOffset,
-      kTXNEndOffset);
+    err = TXNSetTypeAttributes (varsp->fTXNRec, sizeof( typeAttr ) / sizeof(TXNTypeAttributes) , typeAttr,
+          kTXNStartOffset,
+          kTXNEndOffset);
         /* set the field's background */
     tback.bgType = kTXNBackgroundTypeRGB;
     tback.bg.color = rgbWhite;
@@ -551,7 +575,7 @@ OSStatus mUPOpenControl(ControlHandle theControl, bool multiline)
         we assume that the window is going to be the 'active' window. */
     TPActivatePaneText(tpvars, varsp->fIsActive && varsp->fInFocus);
         /* all done */
-    return noErr;
+    return err;
 }
 
 
@@ -585,6 +609,7 @@ wxTextCtrl::wxTextCtrl()
   m_macTXNvars = NULL ;
   m_macUsesTXN = false ;
   m_editable = true ;
+  m_maxLength = TE_UNLIMITED_LENGTH ;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -658,6 +683,10 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_windowStyle |= wxTE_PROCESS_ENTER;
     }
 
+    if ( m_windowStyle & wxTE_READONLY)
+    {
+        m_editable = FALSE ;
+    }
 
     if ( !m_macUsesTXN )
     {
@@ -671,13 +700,13 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     {
         short featurSet;
 
-        featurSet = kControlSupportsEmbedding | kControlSupportsFocus // | kControlWantsIdle
+        featurSet = kControlSupportsEmbedding | kControlSupportsFocus  | kControlWantsIdle
                 | kControlWantsActivate | kControlHandlesTracking | kControlHasSpecialBackground
                 | kControlGetsFocusOnClick | kControlSupportsLiveFeedback;
             /* create the control */
         m_macControl = NewControl(MAC_WXHWND(parent->MacGetRootWindow()), &bounds, "\p", true, featurSet, 0, featurSet, kControlUserPaneProc, 0);
             /* set up the mUP specific features and data */
-        mUPOpenControl((ControlHandle) m_macControl, m_windowStyle & wxTE_MULTILINE );
+    	mUPOpenControl((ControlHandle) m_macControl, m_windowStyle );
         if ( parent )
         {
             parent->MacGetTopLevelWindow()->MacInstallEventHandler() ;
@@ -787,8 +816,71 @@ void wxTextCtrl::SetValue(const wxString& st)
         TXNSetData( ((TXNObject) m_macTXN), kTXNTextData,  (void*)value.c_str(), value.Length(),
                     kTXNStartOffset, kTXNEndOffset);
     }
-    
     MacRedrawControl() ;
+}
+
+void wxTextCtrl::SetMaxLength(unsigned long len) 
+{
+    m_maxLength = len ;
+}
+
+bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
+{
+    if ( m_macUsesTXN )
+    {
+		TXNTypeAttributes typeAttr[4] ;
+		Str255 fontName = "\pMonaco" ;
+		SInt16 fontSize = 12 ;
+		Style fontStyle = normal ;
+		RGBColor color ;
+		int attrCounter = 0 ;
+		if ( style.HasFont() )
+		{
+		    const wxFont &font = style.GetFont() ;
+		    CopyCStringToPascal( font.GetFaceName().c_str() , fontName ) ;
+		    fontSize = font.GetPointSize() ;
+		    if ( font.GetUnderlined() )
+		        fontStyle |= underline ;
+		    if ( font.GetWeight() == wxBOLD )
+		        fontStyle |= bold ;
+		    if ( font.GetStyle() == wxITALIC )
+		        fontStyle |= italic ;
+		        
+		    typeAttr[attrCounter].tag = kTXNQDFontNameAttribute ;
+		    typeAttr[attrCounter].size = kTXNQDFontNameAttributeSize ;
+		    typeAttr[attrCounter].data.dataPtr = (void*) fontName ;
+		    typeAttr[attrCounter+1].tag = kTXNQDFontSizeAttribute ;
+		    typeAttr[attrCounter+1].size = kTXNFontSizeAttributeSize ;
+		    typeAttr[attrCounter+1].data.dataValue =  (fontSize << 16) ;
+		    typeAttr[attrCounter+2].tag = kTXNQDFontStyleAttribute ;
+		    typeAttr[attrCounter+2].size = kTXNQDFontStyleAttributeSize ;
+		    typeAttr[attrCounter+2].data.dataValue = fontStyle ;
+		    attrCounter += 3 ;
+		    
+		}
+		if ( style.HasTextColour() )
+		{
+		    typeAttr[attrCounter].tag = kTXNQDFontColorAttribute ;
+		    typeAttr[attrCounter].size = kTXNQDFontColorAttributeSize ;
+		    typeAttr[attrCounter].data.dataPtr = (void*) &color ;
+		    color = MAC_WXCOLORREF(style.GetTextColour().GetPixel()) ;
+		    attrCounter += 1 ;
+		}
+           
+        if ( attrCounter > 0 )
+        {
+            OSStatus status = TXNSetTypeAttributes ((TXNObject)m_macTXN, attrCounter , typeAttr,
+                start,end);
+        }
+    }
+    return TRUE ;
+}
+
+bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
+{
+    wxTextCtrlBase::SetDefaultStyle( style ) ;
+    SetStyle( kTXNUseCurrentSelection , kTXNUseCurrentSelection , GetDefaultStyle() ) ;
+    return TRUE ;
 }
 
 // Clipboard operations
@@ -1058,8 +1150,12 @@ void wxTextCtrl::WriteText(const wxString& text)
     }
     else
     {
+	    long start , end , dummy ;
+	    GetSelection( &start , &dummy ) ;
         TXNSetData( ((TXNObject) m_macTXN), kTXNTextData, (void*) (const char*)value, value.Length(),
           kTXNUseCurrentSelection, kTXNUseCurrentSelection);
+    	GetSelection( &dummy , &end ) ;
+        SetStyle( start , end , GetDefaultStyle() ) ;
     }
     MacRedrawControl() ;
 }
