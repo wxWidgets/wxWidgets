@@ -261,7 +261,7 @@ void wxChoice::DoSetSize(int x, int y,
     wxControl::DoSetSize(x, y, width, -1, sizeFlags);
 }
 
-wxSize wxChoice::DoGetBestSize()
+wxSize wxChoice::DoGetBestSize() const
 {
     // find the widest string
     int wLine;

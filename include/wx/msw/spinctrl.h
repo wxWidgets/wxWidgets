@@ -54,10 +54,15 @@ public:
     // because the base class already has one returning int!)
     void SetValue(const wxString& text);
 
-    // override some of the base class virtuals
+    // implementation only from now on
+    // -------------------------------
+
     virtual void SetValue(int val) { wxSpinButton::SetValue(val); }
     virtual int GetValue() const;
     virtual bool SetFont(const wxFont &font);
+
+    virtual bool Enable(bool enable = TRUE);
+    virtual bool Show(bool show = TRUE);
 
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);

@@ -74,7 +74,7 @@ protected:
     virtual wxClientData* DoGetItemClientObject( int n ) const;
 
     // MSW implementation
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);

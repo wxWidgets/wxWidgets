@@ -40,7 +40,8 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxString& name = wxCalendarNameStr)
-        : wxControl(parent, id, pos, size, style, wxDefaultValidator, name)
+        : wxControl(parent, id, pos, size,
+                    style | wxWANTS_CHARS, wxDefaultValidator, name)
     {
         Init();
 
@@ -55,6 +56,8 @@ public:
                 long style = 0,
                 const wxString& name = wxCalendarNameStr);
 
+    virtual ~wxCalendarCtrl();
+
     // set/get the current date
     void SetDate(const wxDateTime& date);
     const wxDateTime& GetDate() const { return m_date; }
@@ -63,17 +66,12 @@ public:
     // value
     bool HitTest(const wxPoint& pos, wxDateTime *date);
 
-private:
-    // common part of all ctors
-    void Init();
+    // implementation only from now on
+    // -------------------------------
 
-    // override some base class virtuals
-    virtual wxSize DoGetBestSize() const;
-    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
-    virtual void DoMoveWindow(int x, int y, int width, int height);
-
-    // (re)calc m_widthCol and m_heightRow
-    void RecalcGeometry();
+    // forward these functions to all subcontrols
+    virtual bool Enable(bool enable = TRUE);
+    virtual bool Show(bool show = TRUE);
 
     // event handlers
     void OnPaint(wxPaintEvent& event);
@@ -81,6 +79,20 @@ private:
     void OnChar(wxKeyEvent& event);
     void OnMonthChange(wxCommandEvent& event);
     void OnYearChange(wxSpinEvent& event);
+
+private:
+    // common part of all ctors
+    void Init();
+
+    // override some base class virtuals
+    virtual wxSize DoGetBestSize() const;
+    virtual void DoGetPosition(int *x, int *y) const;
+    virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+
+    // (re)calc m_widthCol and m_heightRow
+    void RecalcGeometry();
 
     // set the date and send the notification
     void SetDateAndNotify(const wxDateTime& date);

@@ -325,11 +325,31 @@ void wxComboBox::SetSelection(long from, long to)
 #endif
 }
 
-void wxComboBox::DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags)
+void wxComboBox::DoMoveWindow(int x, int y, int width, int height)
 {
-    wxControl::DoSetSize(x, y, width, height, sizeFlags);
+    int cx, cy;
+    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+
+    int n = GetCount();
+    if ( !n )
+        n = 10;
+
+    height = n * EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
+
+    wxControl::DoMoveWindow(x, y, width, height);
+}
+
+wxSize wxComboBox::DoGetBestSize() const
+{
+    // the choice calculates the horz size correctly, but not the vertical
+    // component: correct it
+    wxSize size = wxChoice::DoGetBestSize();
+
+    int cx, cy;
+    wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+    size.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
+
+    return size;
 }
 
 #endif

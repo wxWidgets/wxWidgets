@@ -85,7 +85,8 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // before using DoGetBestSize(), have to set style to let the base class
     // know whether this is a horizontal or vertical control (we're always
     // vertical)
-    SetWindowStyle(style | wxSP_VERTICAL);
+    style |= wxSP_VERTICAL;
+    SetWindowStyle(style);
 
     // calculate the sizes: the size given is the toal size for both controls
     // and we need to fit them both in the given width (height is the same)
@@ -144,8 +145,10 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // couldn't call DoGetBestSize() before as font wasn't set
     if ( sizeText.y <= 0 )
     {
-        // make it the same height as the button then
-        sizeText.y = DoGetBestSize().y;
+        int cx, cy;
+        wxGetCharSize(GetHWND(), &cx, &cy, &GetFont());
+
+        sizeText.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
     }
 
     DoMoveWindow(pos.x, pos.y,
@@ -170,7 +173,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
 void wxSpinCtrl::SetValue(const wxString& text)
 {
-    if ( ::SetWindowText((HWND)m_hwndBuddy, text.c_str()) )
+    if ( !::SetWindowText((HWND)m_hwndBuddy, text.c_str()) )
     {
         wxLogLastError("SetWindowText(buddy)");
     }
@@ -188,7 +191,7 @@ int wxSpinCtrl::GetValue() const
 }
 
 // ----------------------------------------------------------------------------
-// when setting font, we need to do it for both controls
+// forward some methods to subcontrols
 // ----------------------------------------------------------------------------
 
 bool wxSpinCtrl::SetFont(const wxFont& font)
@@ -201,6 +204,30 @@ bool wxSpinCtrl::SetFont(const wxFont& font)
 
     WXHANDLE hFont = GetFont().GetResourceHandle();
     (void)::SendMessage((HWND)m_hwndBuddy, WM_SETFONT, (WPARAM)hFont, TRUE);
+
+    return TRUE;
+}
+
+bool wxSpinCtrl::Show(bool show)
+{
+    if ( !wxControl::Show(show) )
+    {
+        return FALSE;
+    }
+
+    ::ShowWindow((HWND)m_hwndBuddy, show ? SW_SHOW : SW_HIDE);
+
+    return TRUE;
+}
+
+bool wxSpinCtrl::Enable(bool enable)
+{
+    if ( !wxControl::Enable(enable) )
+    {
+        return FALSE;
+    }
+
+    ::EnableWindow((HWND)m_hwndBuddy, enable);
 
     return TRUE;
 }

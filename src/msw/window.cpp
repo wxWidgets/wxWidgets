@@ -1841,6 +1841,11 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
            break;
 
         case WM_LBUTTONDOWN:
+           // set focus to this window
+           SetFocus();
+
+           // fall through
+
         case WM_LBUTTONUP:
         case WM_LBUTTONDBLCLK:
         case WM_RBUTTONDOWN:
@@ -1950,6 +1955,8 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 case VK_RETURN:
                 case VK_BACK:
                 case VK_TAB:
+                case VK_ADD:
+                case VK_SUBTRACT:
                     // but set processed to FALSE, not TRUE to still pass them to
                     // the control's default window proc - otherwise built-in
                     // keyboard handling won't work

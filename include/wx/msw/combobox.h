@@ -78,9 +78,8 @@ public:
     virtual bool MSWCommand(WXUINT param, WXWORD id);
 
 protected:
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual wxSize DoGetBestSize() const;
 };
 
 #endif // wxUSE_COMBOBOX
