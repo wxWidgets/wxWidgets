@@ -19,7 +19,13 @@
 // wxEvtHandler: the base class for all objects handling wxWindows events
 class wxEvtHandler : public wxObject {
 public:
+    // turn off this typemap
+    %typemap(out) wxEvtHandler*;    
+
     wxEvtHandler();
+
+    // Turn it back on again
+    %typemap(out) wxEvtHandler* { $result = wxPyMake_wxObject($1, $owner); }
 
     wxEvtHandler* GetNextHandler();
     wxEvtHandler* GetPreviousHandler();
@@ -69,8 +75,7 @@ public:
     %extend {
         void _setOORInfo(PyObject* _self) {
             if (_self && _self != Py_None) {
-                if (!self->GetClientObject())
-                    self->SetClientObject(new wxPyOORClientData(_self));
+                self->SetClientObject(new wxPyOORClientData(_self));
             }
             else {
                 wxPyOORClientData* data = (wxPyOORClientData*)self->GetClientObject();

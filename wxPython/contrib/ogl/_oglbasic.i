@@ -82,15 +82,18 @@ public:
 class wxPyShapeEvtHandler : public wxObject {
 public:
     %pythonAppend wxPyShapeEvtHandler "self._setOORandCallbackInfo(PyShapeEvtHandler)"
-    
+     %typemap(out) wxPyShapeEvtHandler*;    // turn off this typemap
+   
     wxPyShapeEvtHandler(wxPyShapeEvtHandler *prev = NULL,
                         wxPyShape *shape = NULL);
 
+    %typemap(out) wxPyShapeEvtHandler*      { $result = wxPyMake_wxShapeEvtHandler($1, $owner); }
+
+    
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %extend {
         void _setOORInfo(PyObject* _self) {
-            if (!self->GetClientObject())
-                self->SetClientObject(new wxPyOORClientData(_self));
+            self->SetClientObject(new wxPyOORClientData(_self));
         }
     }
     %pythoncode {
@@ -147,8 +150,11 @@ public:
 class wxPyShape : public wxPyShapeEvtHandler {
 public:
     %pythonAppend wxPyShape "self._setOORandCallbackInfo(PyShape)"
-    
+    %typemap(out) wxPyShape*;    // turn off this typemap
+
     wxPyShape(wxPyShapeCanvas *can = NULL);  
+
+    %typemap(out) wxPyShape*                { $result = wxPyMake_wxShapeEvtHandler($1, $owner); }
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 

@@ -168,6 +168,7 @@ class wxNotebook : public wxBookCtrl {
 public:
     %pythonAppend wxNotebook         "self._setOORInfo(self)"
     %pythonAppend wxNotebook()       ""
+    %typemap(out) wxNotebook*;    // turn off this typemap
 
     wxNotebook(wxWindow *parent,
                wxWindowID id=-1,
@@ -176,6 +177,9 @@ public:
                long style = 0,
                const wxString& name = wxPyNOTEBOOK_NAME);
     %name(PreNotebook)wxNotebook();
+
+    // Turn it back on again
+    %typemap(out) wxNotebook* { $result = wxPyMake_wxObject($1, $owner); }
 
     bool Create(wxWindow *parent,
                wxWindowID id=-1,

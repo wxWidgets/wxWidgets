@@ -1592,6 +1592,7 @@ class wxGrid : public wxScrolledWindow
 {
 public:
     %pythonAppend wxGrid "self._setOORInfo(self)"
+    %typemap(out) wxGrid*;    // turn off this typemap
 
     wxGrid( wxWindow *parent,
             wxWindowID id=-1,
@@ -1601,6 +1602,10 @@ public:
             const wxString& name = wxPyPanelNameStr);
 
     %name(PreGrid) wxGrid();
+
+    
+    // Turn it back on again
+    %typemap(out) wxGrid* { $result = wxPyMake_wxObject($1, $owner); }
 
 
     bool Create( wxWindow *parent,

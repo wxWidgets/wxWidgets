@@ -538,8 +538,11 @@ public:
 class wxPyDivisionShape : public wxPyCompositeShape {
 public:
     %pythonAppend wxPyDivisionShape "self._setOORandCallbackInfo(PyDivisionShape)"
+    %typemap(out) wxPyDivisionShape*;    // turn off this typemap
     
     wxPyDivisionShape();
+
+    %typemap(out) wxPyDivisionShape*        { $result = wxPyMake_wxShapeEvtHandler($1, $owner); }
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 

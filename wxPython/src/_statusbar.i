@@ -30,11 +30,15 @@ class wxStatusBar : public wxWindow
 public:
     %pythonAppend wxStatusBar         "self._setOORInfo(self)"
     %pythonAppend wxStatusBar()       ""
+    %typemap(out) wxStatusBar*;    // turn off this typemap
     
     wxStatusBar(wxWindow* parent, wxWindowID id = -1,
                 long style = wxDEFAULT_STATUSBAR_STYLE,
                 const wxString& name = wxPyStatusLineNameStr);
     %name(PreStatusBar)wxStatusBar();
+
+    // Turn it back on again
+    %typemap(out) wxStatusBar* { $result = wxPyMake_wxObject($1, $owner); }
 
     bool Create(wxWindow* parent, wxWindowID id=-1,
                 long style = wxST_SIZEGRIP,

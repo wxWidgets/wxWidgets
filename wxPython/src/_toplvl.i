@@ -151,6 +151,7 @@ class wxFrame : public wxTopLevelWindow {
 public:
     %pythonAppend wxFrame         "self._setOORInfo(self)"
     %pythonAppend wxFrame()       ""
+    %typemap(out) wxFrame*;    // turn off this typemap
 
     wxFrame(wxWindow* parent, const wxWindowID id=-1,
             const wxString& title = wxPyEmptyString,
@@ -160,6 +161,10 @@ public:
             const wxString& name = wxPyFrameNameStr);
     %name(PreFrame)wxFrame();
 
+    // Turn it back on again
+    %typemap(out) wxFrame* { $result = wxPyMake_wxObject($1, $owner); }
+
+    
     bool Create(wxWindow* parent, const wxWindowID id=-1,
                 const wxString& title = wxPyEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
@@ -265,6 +270,7 @@ class wxDialog : public wxTopLevelWindow {
 public:
     %pythonAppend wxDialog   "self._setOORInfo(self)"
     %pythonAppend wxDialog() ""
+    %typemap(out) wxDialog*;    // turn off this typemap
 
     wxDialog(wxWindow* parent,
              const wxWindowID id=-1,
@@ -274,6 +280,9 @@ public:
              long style = wxDEFAULT_DIALOG_STYLE,
              const wxString& name = wxPyDialogNameStr);
     %name(PreDialog)wxDialog();
+
+    // Turn it back on again
+    %typemap(out) wxDialog* { $result = wxPyMake_wxObject($1, $owner); }
 
     bool Create(wxWindow* parent,
                 const wxWindowID id=-1,

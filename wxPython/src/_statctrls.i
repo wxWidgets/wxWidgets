@@ -29,6 +29,7 @@ class wxStaticBox : public wxControl {
 public:
     %pythonAppend wxStaticBox         "self._setOORInfo(self)"
     %pythonAppend wxStaticBox()       ""
+    %typemap(out) wxStaticBox*;    // turn off this typemap
 
     wxStaticBox(wxWindow* parent, wxWindowID id=-1,
                 const wxString& label = wxPyEmptyString,
@@ -37,6 +38,9 @@ public:
                 long style = 0,
                 const wxString& name = wxPyStaticBoxNameStr);
     %name(PreStaticBox)wxStaticBox();
+
+    // Turn it back on again
+    %typemap(out) wxStaticBox* { $result = wxPyMake_wxObject($1, $owner); }
 
     bool Create(wxWindow* parent, wxWindowID id=-1,
                 const wxString& label = wxPyEmptyString,

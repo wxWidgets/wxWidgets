@@ -65,6 +65,7 @@ class wxButton : public wxControl
 public:
     %pythonAppend wxButton         "self._setOORInfo(self)"
     %pythonAppend wxButton()       ""
+    %typemap(out) wxButton*;    // turn off this typemap
 
 
     DocCtorStr(
@@ -81,6 +82,10 @@ public:
         wxButton(),
         "Precreate a Button for 2-phase creation.", "",
         PreButton);
+
+    // Turn it back on again
+    %typemap(out) wxButton* { $result = wxPyMake_wxObject($1, $owner); }
+
 
     DocDeclStr(
         bool , Create(wxWindow* parent, wxWindowID id=-1,
@@ -154,6 +159,7 @@ class wxBitmapButton : public wxButton
 public:
     %pythonAppend wxBitmapButton         "self._setOORInfo(self)"
     %pythonAppend wxBitmapButton()       ""
+    %typemap(out) wxBitmapButton*;    // turn off this typemap
 
     DocCtorStr(
         wxBitmapButton(wxWindow* parent, wxWindowID id=-1,
@@ -169,6 +175,10 @@ public:
         wxBitmapButton(),
         "Precreate a BitmapButton for 2-phase creation.", "",
         PreBitmapButton);
+
+    // Turn it back on again
+    %typemap(out) wxBitmapButton* { $result = wxPyMake_wxObject($1, $owner); }
+
 
     DocDeclStr(
         bool , Create(wxWindow* parent, wxWindowID id=-1,

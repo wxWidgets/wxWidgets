@@ -199,6 +199,7 @@ class wxWindow : public wxEvtHandler
 public:
     %pythonAppend wxWindow         "self._setOORInfo(self)"
     %pythonAppend wxWindow()       ""
+    %typemap(out) wxWindow*;    // turn off this typemap
 
     DocCtorStr(
         wxWindow(wxWindow* parent, const wxWindowID id=-1,
@@ -213,7 +214,10 @@ public:
         "Precreate a Window for 2-phase creation.", "",
         PreWindow);
     
+    // Turn it back on again
+    %typemap(out) wxWindow* { $result = wxPyMake_wxObject($1, $owner); }
 
+    
     DocDeclStr(
         bool , Create(wxWindow* parent, const wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition,

@@ -391,7 +391,8 @@ class wxToolBar : public wxToolBarBase {
 public:
     %pythonAppend wxToolBar         "self._setOORInfo(self)"
     %pythonAppend wxToolBar()       ""
-    
+    %typemap(out) wxToolBar*;    // turn off this typemap
+ 
     wxToolBar(wxWindow *parent,
               wxWindowID id=-1,
               const wxPoint& pos = wxDefaultPosition,
@@ -399,6 +400,9 @@ public:
               long style = wxNO_BORDER | wxTB_HORIZONTAL,
               const wxString& name = wxPyToolBarNameStr);
     %name(PreToolBar)wxToolBar();
+
+    // Turn it back on again
+    %typemap(out) wxToolBar* { $result = wxPyMake_wxObject($1, $owner); }
 
     bool Create(wxWindow *parent,
               wxWindowID id=-1,

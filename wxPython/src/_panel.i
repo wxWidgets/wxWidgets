@@ -29,6 +29,7 @@ class wxPanel : public wxWindow
 public:
     %pythonAppend wxPanel         "self._setOORInfo(self)"
     %pythonAppend wxPanel()       ""
+    %typemap(out) wxPanel*;    // turn off this typemap
 
     wxPanel(wxWindow* parent,
             const wxWindowID id=-1,
@@ -37,6 +38,9 @@ public:
             long style = wxTAB_TRAVERSAL | wxNO_BORDER,
             const wxString& name = wxPyPanelNameStr);
     %name(PrePanel)wxPanel();
+
+    // Turn it back on again
+    %typemap(out) wxPanel* { $result = wxPyMake_wxObject($1, $owner); }
 
     bool Create(wxWindow* parent,
                 const wxWindowID id=-1,
@@ -66,6 +70,7 @@ class wxScrolledWindow : public wxPanel
 public:
     %pythonAppend wxScrolledWindow         "self._setOORInfo(self)"
     %pythonAppend wxScrolledWindow()       ""
+    %typemap(out) wxScrolledWindow*;    // turn off this typemap
 
     wxScrolledWindow(wxWindow* parent,
                      const wxWindowID id = -1,
@@ -74,6 +79,9 @@ public:
                      long style = wxHSCROLL | wxVSCROLL,
                      const wxString& name = wxPyPanelNameStr);
     %name(PreScrolledWindow)wxScrolledWindow();
+
+    // Turn it back on again
+    %typemap(out) wxScrolledWindow* { $result = wxPyMake_wxObject($1, $owner); }
 
     bool Create(wxWindow* parent,
                 const wxWindowID id = -1,

@@ -50,6 +50,7 @@ public:
     %pythonAppend wxPyApp
        "self._setCallbackInfo(self, PyApp)
         self._setOORInfo(self)";
+    %typemap(out) wxPyApp*;    // turn off this typemap
 
     DocStr(wxPyApp,
            "Create a new application object, starting the bootstrap process.", "");
@@ -61,6 +62,10 @@ public:
     }
 
     ~wxPyApp();
+
+    // Turn it back on again
+    %typemap(out) wxPyApp* { $result = wxPyMake_wxObject($1, $owner); }
+
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 

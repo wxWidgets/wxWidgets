@@ -340,6 +340,9 @@ SWIG_AsDouble(PyObject *obj)
 // to the real derived type, if possible.  See wxPyMake_wxObject in
 // helpers.cpp
 
+// NOTE: For those classes that also call _setOORInfo these typemaps should be
+// disabled for the constructor.
+
 %typemap(out) wxEvtHandler*             { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxMenu*                   { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxValidator*              { $result = wxPyMake_wxObject($1, $owner); }
@@ -349,7 +352,6 @@ SWIG_AsDouble(PyObject *obj)
 %typemap(out) wxDC*                     { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxFSFile*                 { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxFileSystem*             { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxGridTableBase*          { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxImageList*              { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxListItem*               { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxMenuItem*               { $result = wxPyMake_wxObject($1, $owner); }
@@ -365,7 +367,7 @@ SWIG_AsDouble(PyObject *obj)
 %typemap(out) wxControl*                { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxFrame*                  { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxGrid*                   { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxListCtrl*               { $result = wxPyMake_wxObject($1, $owner); }
+//%typemap(out) wxListCtrl*               { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxMDIChildFrame*          { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxMDIClientWindow*        { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxMenuBar*                { $result = wxPyMake_wxObject($1, $owner); }
@@ -375,12 +377,12 @@ SWIG_AsDouble(PyObject *obj)
 %typemap(out) wxTextCtrl*               { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxToolBar*                { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxToolBarBase*            { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxTreeCtrl*               { $result = wxPyMake_wxObject($1, $owner); }
+//%typemap(out) wxTreeCtrl*               { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxPyTreeCtrl*             { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxWindow*                 { $result = wxPyMake_wxObject($1, $owner); }
-%typemap(out) wxHtmlWindow*             { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxPyHtmlWindow*           { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxWizardPage*             { $result = wxPyMake_wxObject($1, $owner); }
+%typemap(out) wxPyWizardPage*           { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxPanel*                  { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxDialog*                 { $result = wxPyMake_wxObject($1, $owner); }
 %typemap(out) wxScrolledWindow*         { $result = wxPyMake_wxObject($1, $owner); }

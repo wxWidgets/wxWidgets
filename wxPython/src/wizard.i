@@ -207,6 +207,7 @@ public:
 
     %pythonAppend wxPyWizardPage   "self._setCallbackInfo(self, PyWizardPage);self._setOORInfo(self)"
     %pythonAppend wxPyWizardPage() ""
+    %typemap(out) wxPyWizardPage*;    // turn off this typemap
     
     // ctor accepts an optional bitmap which will be used for this page instead
     // of the default one for this wizard (should be of the same size). Notice
@@ -224,6 +225,9 @@ public:
     }
 
     %name(PrePyWizardPage)wxPyWizardPage();
+
+    // Turn it back on again
+    %typemap(out) wxPyWizardPage* { $result = wxPyMake_wxObject($1, $owner); }
 
     %extend {
         bool Create(wxWizard *parent,

@@ -791,6 +791,7 @@ MustHaveApp(wxPyHtmlWindow);
 public:
     %pythonAppend wxPyHtmlWindow      "self._setCallbackInfo(self, HtmlWindow); self._setOORInfo(self)"
     %pythonAppend wxPyHtmlWindow()    ""
+    %typemap(out) wxPyHtmlWindow*;    // turn off this typemap
     
     wxPyHtmlWindow(wxWindow *parent, int id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -798,6 +799,9 @@ public:
                  int style=wxHW_DEFAULT_STYLE,
                  const wxString& name = wxPyHtmlWindowNameStr);
     %name(PreHtmlWindow)wxPyHtmlWindow();
+
+    // Turn it back on again
+    %typemap(out) wxPyHtmlWindow* { $result = wxPyMake_wxObject($1, $owner); }
 
     bool Create(wxWindow *parent, int id = -1,
                 const wxPoint& pos = wxDefaultPosition,

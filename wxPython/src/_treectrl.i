@@ -315,6 +315,7 @@ MustHaveApp(wxPyTreeCtrl);
 public:
     %pythonAppend wxPyTreeCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, TreeCtrl)"
     %pythonAppend wxPyTreeCtrl()       ""
+    %typemap(out) wxPyTreeCtrl*;    // turn off this typemap
    
     wxPyTreeCtrl(wxWindow *parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -323,6 +324,9 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxPyTreeCtrlNameStr);
     %name(PreTreeCtrl)wxPyTreeCtrl();
+
+    // Turn it back on again
+    %typemap(out) wxPyTreeCtrl* { $result = wxPyMake_wxObject($1, $owner); }
 
     bool Create(wxWindow *parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,

@@ -165,6 +165,7 @@ class wxTextCtrl : public wxControl
 public:
     %pythonAppend wxTextCtrl         "self._setOORInfo(self)"
     %pythonAppend wxTextCtrl()       ""
+    %typemap(out) wxTextCtrl*;    // turn off this typemap
 
     wxTextCtrl(wxWindow* parent, wxWindowID id=-1,
                const wxString& value = wxPyEmptyString,
@@ -174,6 +175,9 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxPyTextCtrlNameStr);
     %name(PreTextCtrl)wxTextCtrl();
+
+    // Turn it back on again
+    %typemap(out) wxTextCtrl* { $result = wxPyMake_wxObject($1, $owner); }
 
     bool Create(wxWindow* parent, wxWindowID id=-1,
                const wxString& value = wxPyEmptyString,

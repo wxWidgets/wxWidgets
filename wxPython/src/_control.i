@@ -34,6 +34,7 @@ class wxControl : public wxWindow
 public:
     %pythonAppend wxControl         "self._setOORInfo(self)"
     %pythonAppend wxControl()       ""
+    %typemap(out) wxControl*;    // turn off this typemap
 
     DocCtorStr(
         wxControl(wxWindow *parent,
@@ -50,6 +51,10 @@ __init__ as a plain old wx.Control is not very useful.", "");
         wxControl(),
         "Precreate a Control control for 2-phase creation", "",
         PreControl);
+
+    // Turn it back on again
+    %typemap(out) wxControl* { $result = wxPyMake_wxObject($1, $owner); }
+
 
     DocDeclStr(
         bool , Create(wxWindow *parent,

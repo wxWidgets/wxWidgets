@@ -33,10 +33,15 @@ class wxValidator : public wxEvtHandler
 {
 public:
     %pythonAppend wxValidator "self._setOORInfo(self)"
+    %typemap(out) wxValidator*;    // turn off this typemap
+
     wxValidator();
     //~wxValidator();
 
+    // Turn it back on again
+    %typemap(out) wxValidator* { $result = wxPyMake_wxObject($1, $owner); }
 
+    
     // Make a clone of this validator (or return NULL)
     wxValidator* Clone();
 
