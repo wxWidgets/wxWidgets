@@ -28,61 +28,6 @@ enum {
     wxBU_AUTODRAW,
 };
 
-// enum wxStockItemID
-// {
-//     wxSTOCK_NONE = 0,
-//     wxSTOCK_ADD,
-//     wxSTOCK_APPLY,
-//     wxSTOCK_BOLD,
-//     wxSTOCK_CANCEL,
-//     wxSTOCK_CLEAR,
-//     wxSTOCK_CLOSE,
-//     wxSTOCK_COPY,
-//     wxSTOCK_CUT,
-//     wxSTOCK_DELETE,
-//     wxSTOCK_FIND,
-//     wxSTOCK_FIND_AND_REPLACE,
-//     wxSTOCK_GO_BACK,
-//     wxSTOCK_GO_DOWN,
-//     wxSTOCK_GO_FORWARD,
-//     wxSTOCK_GO_UP,
-//     wxSTOCK_HELP,
-//     wxSTOCK_HOME,
-//     wxSTOCK_INDENT,
-//     wxSTOCK_INDEX,
-//     wxSTOCK_ITALIC,
-//     wxSTOCK_JUSTIFY_CENTER,
-//     wxSTOCK_JUSTIFY_FILL,
-//     wxSTOCK_JUSTIFY_LEFT,
-//     wxSTOCK_JUSTIFY_RIGHT,
-//     wxSTOCK_NEW,
-//     wxSTOCK_NO,
-//     wxSTOCK_OK,
-//     wxSTOCK_OPEN,
-//     wxSTOCK_PASTE,
-//     wxSTOCK_PREFERENCES,
-//     wxSTOCK_PRINT,
-//     wxSTOCK_PRINT_PREVIEW,
-//     wxSTOCK_PROPERTIES,
-//     wxSTOCK_QUIT,
-//     wxSTOCK_REDO,
-//     wxSTOCK_REFRESH,
-//     wxSTOCK_REMOVE,
-//     wxSTOCK_REVERT_TO_SAVED,
-//     wxSTOCK_SAVE,
-//     wxSTOCK_SAVE_AS,
-//     wxSTOCK_STOP,
-//     wxSTOCK_UNDELETE,
-//     wxSTOCK_UNDERLINE,
-//     wxSTOCK_UNDO,
-//     wxSTOCK_UNINDENT,
-//     wxSTOCK_YES,
-//     wxSTOCK_ZOOM_100,
-//     wxSTOCK_ZOOM_FIT,
-//     wxSTOCK_ZOOM_IN,
-//     wxSTOCK_ZOOM_OUT
-// };
-
 //---------------------------------------------------------------------------
 
 DocStr(wxButton,
@@ -112,7 +57,6 @@ Events
 
 :see: `wx.BitmapButton`
 ");
-//, `wx.StockButton`
 
 
 MustHaveApp(wxButton);
@@ -133,92 +77,73 @@ public:
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxPyButtonNameStr),
-        "Create and show a button.", "");
+        "Create and show a button.  The preferred way to create standard
+buttons is to use a standard ID and an empty label.  In this case
+wxWigets will automatically use a stock label that coresponds to the
+ID given.  In additon, the button will be decorated with stock icons
+under GTK+ 2.", "
+
+The stock IDs and coresponding labels are
+
+    ==================      ====================
+    wx.ID_ADD               'Add'
+    wx.ID_APPLY             '\&Apply'
+    wx.ID_BOLD              '\&Bold'
+    wx.ID_CANCEL            '\&Cancel'
+    wx.ID_CLEAR             '\&Clear'
+    wx.ID_CLOSE             '\&Close'
+    wx.ID_COPY              '\&Copy'
+    wx.ID_CUT               'Cu\&t'
+    wx.ID_DELETE            '\&Delete'
+    wx.ID_FIND              '\&Find'
+    wx.ID_REPLACE           'Find and rep\&lace'
+    wx.ID_BACKWARD          '\&Back'
+    wx.ID_DOWN              '\&Down'
+    wx.ID_FORWARD           '\&Forward'
+    wx.ID_UP                '\&Up'
+    wx.ID_HELP              '\&Help'
+    wx.ID_HOME              '\&Home'
+    wx.ID_INDENT            'Indent'
+    wx.ID_INDEX             '\&Index'
+    wx.ID_ITALIC            '\&Italic'
+    wx.ID_JUSTIFY_CENTER    'Centered'
+    wx.ID_JUSTIFY_FILL      'Justified'
+    wx.ID_JUSTIFY_LEFT      'Align Left'
+    wx.ID_JUSTIFY_RIGHT     'Align Right'
+    wx.ID_NEW               '\&New'
+    wx.ID_NO                '\&No'
+    wx.ID_OK                '\&OK'
+    wx.ID_OPEN              '\&Open'
+    wx.ID_PASTE             '\&Paste'
+    wx.ID_PREFERENCES       '\&Preferences'
+    wx.ID_PRINT             '\&Print'
+    wx.ID_PREVIEW           'Print previe\&w'
+    wx.ID_PROPERTIES        '\&Properties'
+    wx.ID_EXIT              '\&Quit'
+    wx.ID_REDO              '\&Redo'
+    wx.ID_REFRESH           'Refresh'
+    wx.ID_REMOVE            'Remove'
+    wx.ID_REVERT_TO_SAVED   'Revert to Saved'
+    wx.ID_SAVE              '\&Save'
+    wx.ID_SAVEAS            'Save \&As...'
+    wx.ID_STOP              '\&Stop'
+    wx.ID_UNDELETE          'Undelete'
+    wx.ID_UNDERLINE         '\&Underline'
+    wx.ID_UNDO              '\&Undo'
+    wx.ID_UNINDENT          '\&Unindent'
+    wx.ID_YES               '\&Yes'
+    wx.ID_ZOOM_100          '\&Actual Size'
+    wx.ID_ZOOM_FIT          'Zoom to \&Fit'
+    wx.ID_ZOOM_IN           'Zoom \&In'
+    wx.ID_ZOOM_OUT          'Zoom \&Out'
+    ==================      ====================
+");
 
     DocCtorStrName(
         wxButton(),
         "Precreate a Button for 2-phase creation.", "",
         PreButton);
 
-//     DocCtorStrName(
-//         wxButton(wxWindow *parent, wxWindowID id,
-//                  wxStockItemID stock,
-//                  const wxString& descriptiveLabel = wxPyEmptyString,
-//                  const wxPoint& pos = wxDefaultPosition,
-//                  long style = 0,
-//                  const wxValidator& validator = wxDefaultValidator,
-//                  const wxString& name = wxButtonNameStr),
-//         "Used to create a stock `wx.Button`.  Stock buttons are commonly used
-// buttons such as OK or Cancel. They have standard label and dimensions
-// and may have different appearance on some platforms (e.g. GTK+ 2
-// decorates them with icons). Using this from is the preferred way of
-// creating standard buttons.", "
-
-//     :param stock: The stock ID of the button to create. One of the following:
-
-//             ============================
-//              ``wx.STOCK_NONE``
-//              ``wx.STOCK_ADD``
-//              ``wx.STOCK_APPLY``
-//              ``wx.STOCK_BOLD``
-//              ``wx.STOCK_CANCEL``
-//              ``wx.STOCK_CLEAR``
-//              ``wx.STOCK_CLOSE``
-//              ``wx.STOCK_COPY``
-//              ``wx.STOCK_CUT``
-//              ``wx.STOCK_DELETE``
-//              ``wx.STOCK_FIND``
-//              ``wx.STOCK_FIND_AND_REPLACE``
-//              ``wx.STOCK_GO_BACK``
-//              ``wx.STOCK_GO_DOWN``
-//              ``wx.STOCK_GO_FORWARD``
-//              ``wx.STOCK_GO_UP``
-//              ``wx.STOCK_HELP``
-//              ``wx.STOCK_HOME``
-//              ``wx.STOCK_INDENT``
-//              ``wx.STOCK_INDEX``
-//              ``wx.STOCK_ITALIC``
-//              ``wx.STOCK_JUSTIFY_CENTER``
-//              ``wx.STOCK_JUSTIFY_FILL``
-//              ``wx.STOCK_JUSTIFY_LEFT``
-//              ``wx.STOCK_JUSTIFY_RIGHT``
-//              ``wx.STOCK_NEW``
-//              ``wx.STOCK_NO``
-//              ``wx.STOCK_OK``
-//              ``wx.STOCK_OPEN``
-//              ``wx.STOCK_PASTE``
-//              ``wx.STOCK_PREFERENCES``
-//              ``wx.STOCK_PRINT``
-//              ``wx.STOCK_PRINT_PREVIEW``
-//              ``wx.STOCK_PROPERTIES``
-//              ``wx.STOCK_QUIT``
-//              ``wx.STOCK_REDO``
-//              ``wx.STOCK_REFRESH``
-//              ``wx.STOCK_REMOVE``
-//              ``wx.STOCK_REVERT_TO_SAVED``
-//              ``wx.STOCK_SAVE``
-//              ``wx.STOCK_SAVE_AS``
-//              ``wx.STOCK_STOP``
-//              ``wx.STOCK_UNDELETE``
-//              ``wx.STOCK_UNDERLINE``
-//              ``wx.STOCK_UNDO``
-//              ``wx.STOCK_UNINDENT``
-//              ``wx.STOCK_YES``
-//              ``wx.STOCK_ZOOM_100``
-//              ``wx.STOCK_ZOOM_FIT``
-//              ``wx.STOCK_ZOOM_IN``
-//              ``wx.STOCK_ZOOM_OUT``
-//             ============================
-
-
-//     :param descriptiveLabel: Optional label to be used on platforms
-// where standard buttons have descriptive rather than generic
-// labels. Mac is one such platforms, well-behaved Mac apps should use
-// descriptive labels (e.g. \"Save\" and \"Don't Save\" instead of \"OK\"
-// and \"Cancel\"). This argument is ignored on other platforms.",
-//         StockButton);
-
-    
     // Turn it back on again
     %typemap(out) wxButton* { $result = wxPyMake_wxObject($1, $owner); }
 

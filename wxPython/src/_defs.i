@@ -546,6 +546,32 @@ enum {
     wxID_RETRY,
     wxID_IGNORE,
 
+    wxID_ADD,
+    wxID_REMOVE,
+
+    wxID_UP,
+    wxID_DOWN,
+    wxID_HOME,
+    wxID_REFRESH,
+    wxID_STOP,
+    wxID_INDEX,
+
+    wxID_BOLD,
+    wxID_ITALIC,
+    wxID_JUSTIFY_CENTER,
+    wxID_JUSTIFY_FILL,
+    wxID_JUSTIFY_RIGHT,
+    wxID_JUSTIFY_LEFT,
+    wxID_UNDERLINE,
+    wxID_INDENT,
+    wxID_UNINDENT,
+    wxID_ZOOM_100,
+    wxID_ZOOM_FIT,
+    wxID_ZOOM_IN,
+    wxID_ZOOM_OUT,
+    wxID_UNDELETE,
+    wxID_REVERT_TO_SAVED,
+   
     wxID_HIGHEST,
 
     wxOPEN,
@@ -696,6 +722,14 @@ enum wxBorder
     wxBORDER_SUNKEN,
     wxBORDER_DOUBLE,
     wxBORDER_MASK,
+};
+
+
+enum wxBackgroundStyle
+{
+  wxBG_STYLE_SYSTEM,
+  wxBG_STYLE_COLOUR,
+  wxBG_STYLE_CUSTOM
 };
 
 
