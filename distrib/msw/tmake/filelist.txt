@@ -98,6 +98,7 @@ wizard.cpp	G
 
 appcmn.cpp	C	B
 choiccmn.cpp	C
+cmdline.cpp	C	B
 cmndata.cpp	C
 clipcmn.cpp	C
 config.cpp	C	B
@@ -527,6 +528,7 @@ checklst.h	W
 choicdlg.h	W
 choice.h	W
 clipbrd.h	W
+cmdline.cpp	W	B
 cmndata.h	W
 colordlg.h	W
 colour.h	W
