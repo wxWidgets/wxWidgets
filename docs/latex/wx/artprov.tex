@@ -176,11 +176,12 @@ The bitmap if one of registered providers recognizes the ID or wxNullBitmap othe
 Same as \helpref{wxArtProvider::GetBitmap}{wxartprovidergetbitmap}, but
 return a wxIcon object (or wxNullIcon on failure).
 
-\func{static wxSize}{GetSize}{\param{const wxArtClient\& }{client}, \param{bool }{platform_default = false}}
+\func{static wxSize}{GetSizeHint}{\param{const wxArtClient\& }{client}, \param{bool }{platform_default = false}}
 
-Returns the default size for the given art {\it client} by either using the topmost 
-wxArtProvider or if {\it platform_default} is \true then return a suitable default size for 
-{\it client} depending on the current platform.
+Returns a suitable size hint for the given {\it wxArtClient}. If 
+{\it platform_default} is \true, return a size based on the current platform, 
+otherwise return the size from the topmost wxArtProvider. {\it wxDefaultSize} may be 
+returned if the client doesn't have a specified size, like wxART_OTHER for example.
 
 \membersection{wxArtProvider::PopProvider}\label{wxartproviderctor}
 

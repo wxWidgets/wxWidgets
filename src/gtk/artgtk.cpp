@@ -136,7 +136,7 @@ GtkIconSize wxArtClientToIconSize(const wxArtClient& client)
     else if (client == wxART_BUTTON)
         return GTK_ICON_SIZE_BUTTON;
     else
-        return GTK_ICON_SIZE_BUTTON; // this is arbitrary
+        return GTK_ICON_SIZE_INVALID; // this is arbitrary
 }
 
 static GtkIconSize FindClosestIconSize(const wxSize& size)
@@ -244,6 +244,10 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
     GtkIconSize stocksize = (size == wxDefaultSize) ?
                                 wxArtClientToIconSize(client) : 
                                 FindClosestIconSize(size);
+
+    // we must have some size, this is arbitrary
+    if (stocksize == GTK_ICON_SIZE_INVALID)
+        stocksize = GTK_ICON_SIZE_BUTTON;
 
     // allow passing GTK+ stock IDs to wxArtProvider:
     if (!stockid)

@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/artprov.h"
+#include "wx/image.h"
 
 // ----------------------------------------------------------------------------
 // wxDefaultArtProvider
@@ -143,13 +144,7 @@ protected:
 
 #undef static
 
-// ----------------------------------------------------------------------------
-// CreateBitmap routine
-// ----------------------------------------------------------------------------
-
-wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
-                                            const wxArtClient& WXUNUSED(client),
-                                            const wxSize& WXUNUSED(size))
+wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
 {
     // wxMessageBox icons:
     ART_MSGBOX(wxART_ERROR,       wxICON_ERROR,       error)
@@ -194,4 +189,39 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
     ART(wxART_CROSS_MARK,                          cross)
 
     return wxNullBitmap;
+}
+
+// ----------------------------------------------------------------------------
+// CreateBitmap routine
+// ----------------------------------------------------------------------------
+
+wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
+                                            const wxArtClient& client,
+                                            const wxSize& reqSize)
+{
+    wxBitmap bmp = wxDefaultArtProvider_CreateBitmap(id);
+
+    if (bmp.Ok())
+    {
+        // fit into transparent image with desired size hint from the client
+        if (reqSize == wxDefaultSize)
+        {
+            // find out if there is a desired size for this client
+            wxSize bestSize = GetSizeHint(client);
+            if (bestSize != wxDefaultSize)
+            {
+                int bmp_w = bmp.GetWidth();
+                int bmp_h = bmp.GetHeight();
+                // want default size but it's smaller, paste into transparent image
+                if ((bmp_h < bestSize.x) && (bmp_w < bestSize.y))
+                {
+                    wxPoint offset((bestSize.x - bmp_w)/2, (bestSize.y - bmp_h)/2);
+                    wxImage img = bmp.ConvertToImage();
+                    img.Resize(bestSize, offset);
+                    bmp = wxBitmap(img);
+                }        
+            }
+        }      
+    }
+    return bmp;
 }

@@ -151,16 +151,14 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
 
 /*static*/ wxBitmap wxArtProvider::GetBitmap(const wxArtID& id,
                                              const wxArtClient& client,
-                                             const wxSize& reqSize)
+                                             const wxSize& size)
 {
     // safety-check against writing client,id,size instead of id,client,size:
     wxASSERT_MSG( client.Last() == _T('C'), _T("invalid 'client' parameter") );
 
     wxCHECK_MSG( sm_providers, wxNullBitmap, _T("no wxArtProvider exists") );
 
-    wxSize bestSize = (reqSize != wxDefaultSize) ? reqSize : GetSize(client);
-
-    wxString hashId = wxArtProviderCache::ConstructHashID(id, client, bestSize);
+    wxString hashId = wxArtProviderCache::ConstructHashID(id, client, size);
 
     wxBitmap bmp;
     if ( !sm_cache->GetBitmap(hashId, &bmp) )
@@ -168,25 +166,15 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
         for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
              node; node = node->GetNext())
         {
-            bmp = node->GetData()->CreateBitmap(id, client, bestSize);
+            bmp = node->GetData()->CreateBitmap(id, client, size);
             if ( bmp.Ok() )
             {
 #if wxUSE_IMAGE
-                int bmp_w = bmp.GetWidth();
-                int bmp_h = bmp.GetHeight();
-                // want default size but it's smaller, paste into transparent image
-                if ((reqSize == wxDefaultSize) &&
-                    (bmp_h < bestSize.x) && (bmp_w < bestSize.y))
-                {
-                     wxPoint offset((bestSize.x - bmp_w)/2, (bestSize.y - bmp_h)/2);
-                     wxImage img = bmp.ConvertToImage();
-                     img.Resize(bestSize, offset);
-                     bmp = wxBitmap(img);
-                }
-                else if ( (bmp_w != bestSize.x) || (bmp_h != bestSize.y) )
+                if ( size != wxDefaultSize &&
+                     (bmp.GetWidth() != size.x || bmp.GetHeight() != size.y) )
                 {
                     wxImage img = bmp.ConvertToImage();
-                    img.Rescale(bestSize.x, bestSize.y);
+                    img.Rescale(size.x, size.y);
                     bmp = wxBitmap(img);
                 }
 #endif
@@ -218,36 +206,45 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include <gtk/gtk.h>
     extern GtkIconSize wxArtClientToIconSize(const wxArtClient& client);
-#endif // __WXGTK__
+#endif // defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
 
-/*static*/ wxSize wxArtProvider::GetSize(const wxArtClient& client,
+/*static*/ wxSize wxArtProvider::GetSizeHint(const wxArtClient& client,
                                          bool platform_dependent)
 {
     if (!platform_dependent)
     {
         wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
         if (node)
-            return node->GetData()->DoGetSize(client);
-
-        // else return platform dependent size
+            return node->GetData()->DoGetSizeHint(client);
     }
 
+        // else return platform dependent size
+
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+    // Gtk has specific sizes for each client, see artgtk.cpp
     GtkIconSize gtk_size = wxArtClientToIconSize(client);
+    // no size hints for this client
+    if (gtk_size == GTK_ICON_SIZE_INVALID)
+        return wxDefaultSize;
     gint width, height;
     gtk_icon_size_lookup( gtk_size, &width, &height);
     return wxSize(width, height);
 #else // !GTK+ 2
+    // NB: These size hints may have to be adjusted per platform
     if (client == wxART_TOOLBAR)
-        return wxSize(32, 32);
+        return wxSize(16, 15);
     else if (client == wxART_MENU)
+        return wxSize(16, 15);
+    else if (client == wxART_FRAME_ICON)
         return wxSize(16, 15);
     else if (client == wxART_CMN_DIALOG || client == wxART_MESSAGE_BOX)
         return wxSize(32, 32);
+    else if (client == wxART_HELP_BROWSER)
+        return wxSize(16, 15);
     else if (client == wxART_BUTTON)
         return wxSize(16, 15);
-    else
-        return wxSize(16, 15); // this is arbitrary
+    else // wxART_OTHER or perhaps a user's client, no specified size
+        return wxDefaultSize;      
 #endif // GTK+ 2/else
 }
 
