@@ -5,29 +5,39 @@ if [ -z $1 ]; then
     exit 1
 fi
 
-if [ ! -f wxPython.spec.in ]; then
-    echo "Please run this script from the directory containing the wxPython.spec.in file."
+if [ ! -f wxPython.spec ]; then
+    echo "Please run this script from the directory containing the wxPython.spec file."
     exit 1
 fi
 
 
 
-strip /usr/lib/python1.5/site-packages/wxPython/*.so
-strip /usr/lib/libwxPyHelpers.so
+#strip /usr/lib/python1.5/site-packages/wxPython/*.so
+#strip /usr/lib/libwxPyHelpers.so
+#
+#cat wxPython.spec.in | sed s/__VERSION__/$1/g > wxPython.spec
+#
+#mkdir /usr/doc/wxPython-$1
+#cp ../README.txt /usr/doc/wxPython-$1
+#cp ../../../docs/preamble.txt /usr/doc/wxPython-$1
+#cp ../../../docs/licence.txt /usr/doc/wxPython-$1
+#cp ../../../docs/licendoc.txt /usr/doc/wxPython-$1
+#cp ../../../docs/lgpl.txt /usr/doc/wxPython-$1
+#cp ../../../docs/gpl.txt /usr/doc/wxPython-$1
+#
+#rpm -bb wxPython.spec
+#
+#mv /usr/src/redhat/RPMS/*/wxPython*.rpm .
+#chown rd:users wxPython*.rpm
+#
+#rm -r /usr/doc/wxPython-$1
 
-cat wxPython.spec.in | sed s/__VERSION__/$1/g > wxPython.spec
-
-mkdir /usr/doc/wxPython-$1
-cp ../README.txt /usr/doc/wxPython-$1
-cp ../../../docs/preamble.txt /usr/doc/wxPython-$1
-cp ../../../docs/licence.txt /usr/doc/wxPython-$1
-cp ../../../docs/licendoc.txt /usr/doc/wxPython-$1
-cp ../../../docs/lgpl.txt /usr/doc/wxPython-$1
-cp ../../../docs/gpl.txt /usr/doc/wxPython-$1
-
-rpm -bb wxPython.spec
+cp -f  wxPython-$1.tar.gz /usr/src/redhat/SOURCES
+rpm -ba wxPython.spec
 
 mv /usr/src/redhat/RPMS/*/wxPython*.rpm .
+mv /usr/src/redhat/SRPMS/wxPython*.rpm .
 chown rd:users wxPython*.rpm
-
-rm -r /usr/doc/wxPython-$1
+rm -rf /usr/lib/python1.5/site-packages/wxPython/
+rm -f /usr/lib/libwxPyHelpers.so
+rm -rf rm -rf /usr/doc/wxPython-$1

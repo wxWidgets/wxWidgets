@@ -30,17 +30,17 @@ feel (and runtime speed) on the platforms it is supported on.
 
 %build
 cd src
-python ../distrib/build.py -b
+python ../distrib/build.py -b WXPSRCDIR=$PWD
 cd ../modules/html
-python ../../distrib/build.py -b
+python ../../distrib/build.py -b WXPSRCDIR=../../src
 cd ../utils
-python ../../distrib/build.py -b
+python ../../distrib/build.py -b WXPSRCDIR=../../src
 cd ../glcanvas
-python ../../distrib/build.py -b
+python ../../distrib/build.py -b WXPSRCDIR=../../src
 cd ../ogl
-python ../../distrib/build.py -b
+python ../../distrib/build.py -b WXPSRCDIR=../../src
 cd ../stc
-python ../../distrib/build.py -b
+python ../../distrib/build.py -b WXPSRCDIR=../../src
 
 
 %install
