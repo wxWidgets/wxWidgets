@@ -1833,6 +1833,10 @@ class HtmlListBox(VListBox):
         """SetItemCount(self, size_t count)"""
         return _windows_.HtmlListBox_SetItemCount(*args, **kwargs)
 
+    def GetFileSystem(*args, **kwargs):
+        """GetFileSystem(self) -> FileSystem"""
+        return _windows_.HtmlListBox_GetFileSystem(*args, **kwargs)
+
 
 class HtmlListBoxPtr(HtmlListBox):
     def __init__(self, this):
