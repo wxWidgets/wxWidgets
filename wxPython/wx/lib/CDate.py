@@ -7,6 +7,10 @@
 # Version       0.2 1999/11/08
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
+# Updated:      12/01/2004
+# Action:       Cast the year variable to an integer under the Date Class
+# Reason:       When the year was compared in the isleap() function, if it was
+#               in a string format, then an error was raised.    
 
 import time
 
@@ -119,7 +123,7 @@ class Date:
     def __init__(self, year, month, day):
         self.julian = julianDay(year, month, day)
         self.month = month
-        self.year = year
+        self.year = int(year)
         self.day_of_week = dayOfWeek(self.julian)
         self.days_in_month = daysPerMonth(self.month, self.year)
 
