@@ -37,9 +37,9 @@ class WXDLLEXPORT wxDrawObject
 public:
 
     wxDrawObject()
-    {
-        ResetBoundingBox();
-    }
+        : m_isBBoxValid(FALSE)
+        , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
+    { }
 
     virtual ~wxDrawObject() { }
 
@@ -103,33 +103,34 @@ class WXDLLEXPORT wxDCBase : public wxObject
 {
 public:
     wxDCBase()
+        : m_colour(wxColourDisplay())
+        , m_ok(TRUE)
+        , m_clipping(FALSE)
+        , m_isInteractive(0)
+        , m_isBBoxValid(FALSE)
+        , m_logicalOriginX(0), m_logicalOriginY(0)
+        , m_deviceOriginX(0), m_deviceOriginY(0)
+        , m_logicalScaleX(1.0), m_logicalScaleY(1.0)
+        , m_userScaleX(1.0), m_userScaleY(1.0)
+        , m_scaleX(1.0), m_scaleY(1.0)
+        , m_signX(1), m_signY(1)
+        , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
+        , m_clipX1(0), m_clipY1(0), m_clipX2(0), m_clipY2(0)
+        , m_logicalFunction(wxCOPY)
+        , m_backgroundMode(wxTRANSPARENT)
+        , m_mappingMode(wxMM_TEXT)
+        , m_pen()
+        , m_brush()
+        , m_backgroundBrush(*wxTRANSPARENT_BRUSH)
+        , m_textForegroundColour(*wxBLACK)
+        , m_textBackgroundColour(*wxWHITE)
+        , m_font()
+#if wxUSE_PALETTE
+        , m_palette()
+        , m_hasCustomPalette(FALSE)
+#endif // wxUSE_PALETTE
     {
-        m_clipping = FALSE;
-        m_ok = TRUE;
-
         ResetBoundingBox();
-
-        m_signX = m_signY = 1;
-
-        m_logicalOriginX = m_logicalOriginY =
-        m_deviceOriginX = m_deviceOriginY = 0;
-
-        m_logicalScaleX = m_logicalScaleY =
-        m_userScaleX = m_userScaleY =
-        m_scaleX = m_scaleY = 1.0;
-
-        m_logicalFunction = wxCOPY;
-
-        m_backgroundMode = wxTRANSPARENT;
-
-        m_mappingMode = wxMM_TEXT;
-
-        m_backgroundBrush = *wxTRANSPARENT_BRUSH;
-
-        m_textForegroundColour = *wxBLACK;
-        m_textBackgroundColour = *wxWHITE;
-
-        m_colour = wxColourDisplay();
     }
 
     ~wxDCBase() { }
@@ -781,7 +782,7 @@ private:
 class WXDLLEXPORT wxDCTextColourChanger
 {
 public:
-    wxDCTextColourChanger(wxDC& dc) : m_dc(dc) { }
+    wxDCTextColourChanger(wxDC& dc) : m_dc(dc), m_colFgOld() { }
 
     ~wxDCTextColourChanger()
     {

@@ -31,21 +31,27 @@ class WXDLLEXPORT wxTopLevelWindowMac;
 
 class WXDLLEXPORT wxWindowMac: public wxWindowBase
 {
-  DECLARE_DYNAMIC_CLASS(wxWindowMac)
-
-  friend class wxDC;
-  friend class wxPaintDC;
-
+    DECLARE_DYNAMIC_CLASS(wxWindowMac)
+        
+    friend class wxDC;
+    friend class wxPaintDC;
+    
 public:
 	
-    wxWindowMac() { Init(); }
+    wxWindowMac()
+        : m_macBackgroundBrush()
+        , m_macVisibleRegion()
+        , m_x(0), m_y(0), m_width(0), m_height(0)
+        , m_hScrollBar(NULL), m_vScrollBar(NULL)
+        , m_label(wxEmptyString)
+        { Init(); }
 
     wxWindowMac(wxWindowMac *parent,
-             wxWindowID id,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxString& name = wxPanelNameStr)
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxPanelNameStr)
     {
         Init();
         Create(parent, id, pos, size, style, name);
@@ -144,12 +150,12 @@ public:
     // implementation from now on
     // --------------------------
 
-	void MacClientToRootWindow( int *x , int *y ) const ;
-	void MacRootWindowToClient( int *x , int *y ) const ;
-	void MacWindowToRootWindow( int *x , int *y ) const ;
-	void MacRootWindowToWindow( int *x , int *y ) const ;
+    void MacClientToRootWindow( int *x , int *y ) const ;
+    void MacRootWindowToClient( int *x , int *y ) const ;
+    void MacWindowToRootWindow( int *x , int *y ) const ;
+    void MacRootWindowToWindow( int *x , int *y ) const ;
 	
-	virtual wxString MacGetToolTipString( wxPoint &where ) ;
+    virtual wxString MacGetToolTipString( wxPoint &where ) ;
 
     // simple accessors
     // ----------------
@@ -203,71 +209,72 @@ public:
     bool IsUserEnabled() const { return IsEnabled(); }
 #endif // WXWIN_COMPATIBILITY
 
-public :
-	static bool							MacGetWindowFromPoint( const wxPoint &point , wxWindowMac** outWin ) ;
-	virtual bool						MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac** outWin ) ;
-	virtual	void						MacRedraw( WXHRGN updatergn , long time , bool erase) ;
-	virtual bool						MacCanFocus() const { return true ; }
-
-	virtual bool						MacDispatchMouseEvent(wxMouseEvent& event ) ;
-	// this should not be overriden in classes above wxWindowMac because it is called from its destructor via DeleteChildren
-  virtual void            RemoveChild( wxWindowBase *child );
-	virtual void 						MacPaintBorders( int left , int top ) ;
-	WXWindow						    MacGetRootWindow() const  ;
-	wxTopLevelWindowMac*                MacGetTopLevelWindow() const ;
-
-	virtual WXWidget 				    MacGetContainerForEmbedding() ;
-	
-	virtual long						MacGetLeftBorderSize() const ;
-	virtual long						MacGetRightBorderSize() const ;
-	virtual long						MacGetTopBorderSize() const ;
-	virtual long						MacGetBottomBorderSize() const ;
-
-	static long							MacRemoveBordersFromStyle( long style ) ;
-	virtual void 						MacSuperChangedPosition() ;
-	virtual void                        MacTopLevelWindowChangedPosition() ;
-	virtual void						MacSuperShown( bool show ) ;
-	virtual void                        MacSuperEnabled( bool enable ) ;
-	bool								MacIsReallyShown() const ;
-	virtual void                        Update() ;
-	// for compatibility
-	void                                MacUpdateImmediately() { Update() ; }
-	
-//	virtual bool						MacSetPortDrawingParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindowMac* rootwin )  ;
-//	virtual void						MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) ;
-//	virtual void						MacGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) ;
-	const wxBrush&                      MacGetBackgroundBrush() ;
-    const wxRegion&                     MacGetVisibleRegion() ;
-	bool								MacIsWindowScrollbar( const wxScrollBar* sb ) { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
-	static wxWindowMac*					s_lastMouseWindow ;
+public:
+    static bool          MacGetWindowFromPoint( const wxPoint &point , wxWindowMac** outWin ) ;
+    virtual bool         MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac** outWin ) ;
+    virtual void         MacRedraw( WXHRGN updatergn , long time , bool erase) ;
+    virtual bool         MacCanFocus() const { return true ; }
+    
+    virtual bool         MacDispatchMouseEvent(wxMouseEvent& event ) ;
+    // this should not be overriden in classes above wxWindowMac because it is called from its destructor via DeleteChildren
+    virtual void         RemoveChild( wxWindowBase *child );
+    virtual void         MacPaintBorders( int left , int top ) ;
+    WXWindow             MacGetRootWindow() const  ;
+    wxTopLevelWindowMac* MacGetTopLevelWindow() const ;
+    
+    virtual WXWidget     MacGetContainerForEmbedding() ;
+    
+    virtual long         MacGetLeftBorderSize() const ;
+    virtual long         MacGetRightBorderSize() const ;
+    virtual long         MacGetTopBorderSize() const ;
+    virtual long         MacGetBottomBorderSize() const ;
+    
+    static long          MacRemoveBordersFromStyle( long style ) ;
+    virtual void         MacSuperChangedPosition() ;
+    virtual void         MacTopLevelWindowChangedPosition() ;
+    virtual void         MacSuperShown( bool show ) ;
+    virtual void         MacSuperEnabled( bool enable ) ;
+    bool                 MacIsReallyShown() const ;
+    virtual void         Update() ;
+    // for compatibility
+    void                 MacUpdateImmediately() { Update() ; }
+        
+//    virtual bool         MacSetPortDrawingParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindowMac* rootwin )  ;
+//    virtual void         MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) ;
+//    virtual void         MacGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) ;
+    const wxBrush&       MacGetBackgroundBrush() ;
+    const wxRegion&      MacGetVisibleRegion() ;
+    bool                 MacIsWindowScrollbar( const wxScrollBar* sb )
+        { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
+    static wxWindowMac*  s_lastMouseWindow ;
 private:
 protected:
-//	RgnHandle					m_macUpdateRgn ;
-//	bool						m_macEraseOnRedraw ;
-    wxBrush                                 m_macBackgroundBrush ;
-    wxRegion                                m_macVisibleRegion ;
-	int 									m_x ;
-	int 									m_y ;	
-	int 									m_width ;
-	int 									m_height ;
-
-	wxScrollBar*					m_hScrollBar ;
-	wxScrollBar*					m_vScrollBar ;
-	wxString						m_label ;
-
-	void									MacCreateScrollBars( long style ) ;
-	void									MacRepositionScrollBars() ;
+//    RgnHandle            m_macUpdateRgn ;
+//    bool                 m_macEraseOnRedraw ;
+    wxBrush              m_macBackgroundBrush ;
+    wxRegion             m_macVisibleRegion ;
+    int                  m_x ;
+    int                  m_y ;
+    int                  m_width ;
+    int                  m_height ;
+    
+    wxScrollBar*         m_hScrollBar ;
+    wxScrollBar*         m_vScrollBar ;
+    wxString             m_label ;
+    
+    void                 MacCreateScrollBars( long style ) ;
+    void                 MacRepositionScrollBars() ;
 
     // additional (MSW specific) flags
-    bool                  m_useCtl3D:1; // Using CTL3D for this control
-    bool                  m_backgroundTransparent:1;
-    bool                  m_mouseInWindow:1;
-    bool                  m_doubleClickAllowed:1;
-    bool                  m_winCaptured:1;
+    bool                 m_useCtl3D:1; // Using CTL3D for this control
+    bool                 m_backgroundTransparent:1;
+    bool                 m_mouseInWindow:1;
+    bool                 m_doubleClickAllowed:1;
+    bool                 m_winCaptured:1;
 
     // the size of one page for scrolling
-    int                   m_xThumbSize;
-    int                   m_yThumbSize;
+    int                  m_xThumbSize;
+    int                  m_yThumbSize;
 
 //    WXHMENU               m_hMenu; // Menu, if any
 

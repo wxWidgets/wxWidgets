@@ -250,7 +250,9 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
             wxCMD_LINE_SWITCH,
             _T(""),
             OPTION_VERBOSE,
-            gettext_noop("generate verbose log messages")
+            gettext_noop("generate verbose log messages"),
+            wxCMD_LINE_VAL_NONE,
+            0x0
         },
 #endif // wxUSE_LOG
 
@@ -260,7 +262,8 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
             _T(""),
             OPTION_THEME,
             gettext_noop("specify the theme to use"),
-            wxCMD_LINE_VAL_STRING
+            wxCMD_LINE_VAL_STRING,
+            0x0
         },
 #endif // __WXUNIVERSAL__
 
@@ -273,12 +276,20 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
             _T(""),
             OPTION_MODE,
             gettext_noop("specify display mode to use (e.g. 640x480-16)"),
-            wxCMD_LINE_VAL_STRING
+            wxCMD_LINE_VAL_STRING,
+            0x0
         },
 #endif // __WXMGL__
 
         // terminator
-        { wxCMD_LINE_NONE }
+        {
+            wxCMD_LINE_NONE,
+            _T(""),
+            _T(""),
+            _T(""),
+            wxCMD_LINE_VAL_NONE,
+            0x0
+        }
     };
 
     parser.SetDesc(cmdLineDesc);
