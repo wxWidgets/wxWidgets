@@ -30,7 +30,7 @@
 
 #include  <wx/setup.h>
 
-#if USE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 
 #include  <wx/log.h>
 #include  <wx/msw/ole/oleutils.h>

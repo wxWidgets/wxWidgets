@@ -822,7 +822,7 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
 
       XmString label_str = XmStringCreateSimple (wxBuffer);
       buttonWidget = XtVaCreateManagedWidget (wxBuffer,
-#if USE_GADGETS
+#if wxUSE_GADGETS
 					 xmCascadeButtonGadgetClass, (Widget) parent,
 #else
 					 xmCascadeButtonWidgetClass, (Widget) parent,

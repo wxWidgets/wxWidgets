@@ -24,7 +24,7 @@
 #include "wx/wx.h"
 #endif
 
-#if USE_TOOLBAR
+#if wxUSE_TOOLBAR
 
 #include "wx/tbarsmpl.h"
 

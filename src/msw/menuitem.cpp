@@ -38,7 +38,7 @@
 // ----------------------------------------------------------------------------
 
 #if     !defined(USE_SHARED_LIBRARY) || !USE_SHARED_LIBRARY
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
   IMPLEMENT_DYNAMIC_CLASS2(wxMenuItem, wxObject, wxOwnerDrawn)
 #else   //!USE_OWNER_DRAWN
   IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
@@ -57,7 +57,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
                        const wxString& strName, const wxString& strHelp,
                        bool bCheckable,
                        wxMenu *pSubMenu) :
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
                         wxOwnerDrawn(strName, bCheckable),
 #else   //no owner drawn support
                         m_bCheckable(bCheckable),
@@ -67,7 +67,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
 {
   wxASSERT( pParentMenu != NULL );
 
-#if  USE_OWNER_DRAWN
+#if  wxUSE_OWNER_DRAWN
     // set default menu colors
     #define SYS_COLOR(c) (wxSystemSettings::GetSystemColour(wxSYS_COLOUR_##c))
     

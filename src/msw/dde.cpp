@@ -24,7 +24,7 @@
 #include "wx/defs.h"
 #endif
 
-#if USE_IPC
+#if wxUSE_IPC
 
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
@@ -782,4 +782,4 @@ void DDEPrintError(void)
 }
 
 #endif
-  // USE_IPC
+  // wxUSE_IPC

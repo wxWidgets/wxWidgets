@@ -23,9 +23,9 @@
 // ----------------------------------------------------------------------------
 
 // it won't compile without it anyhow
-#ifndef USE_CONFIG
-  #error "Please define USE_CONFIG or remove config.cpp from your makefile"
-#endif // USE_CONFIG
+#ifndef wxUSE_CONFIG
+  #error "Please define wxUSE_CONFIG or remove config.cpp from your makefile"
+#endif // wxUSE_CONFIG
 
 // ----------------------------------------------------------------------------
 // constants

@@ -122,7 +122,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
-#if USE_RESOURCES
+#if wxUSE_RESOURCES
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
     // TODO
@@ -194,7 +194,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
   }
   else return FALSE;
 }
-#endif // USE_RESOURCES
+#endif // wxUSE_RESOURCES
 
 static int wxBusyCursorCount = 0;
 

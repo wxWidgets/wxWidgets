@@ -27,7 +27,7 @@
 #include <wx/wxexpr.h>
 #endif
 
-#if USE_IOSTREAMH
+#if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else
 #include <iostream>

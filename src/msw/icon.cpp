@@ -32,12 +32,12 @@
 #include "wx/msw/private.h"
 #include "assert.h"
 
-#if USE_XPM_IN_MSW
+#if wxUSE_XPM_IN_MSW
 #define FOR_MSW 1
 #include "..\..\contrib\wxxpm\libxpm.34b\lib\xpm34.h"
 #endif
 
-#if USE_RESOURCE_LOADING_IN_MSW
+#if wxUSE_RESOURCE_LOADING_IN_MSW
 #include "wx/msw/curico.h"
 #include "wx/msw/curicop.h"
 #endif
@@ -119,7 +119,7 @@ void wxIcon::SetHICON(WXHICON ico)
 bool wxICOFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
     int desiredWidth, int desiredHeight)
 {
-#if USE_RESOURCE_LOADING_IN_MSW
+#if wxUSE_RESOURCE_LOADING_IN_MSW
   if ( bitmap->IsKindOf(CLASSINFO(wxIcon)) )
   {
     wxIcon *icon = (wxIcon *)bitmap;

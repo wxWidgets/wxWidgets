@@ -37,11 +37,11 @@
 #include "wx/msgdlg.h"
 #endif
 
-#if     USE_OWNER_DRAWN
+#if     wxUSE_OWNER_DRAWN
 #include "wx/ownerdrw.h"
 #endif
 
-#if     USE_DRAG_AND_DROP
+#if     wxUSE_DRAG_AND_DROP
 #include "wx/msw/ole/droptgt.h"
 #endif
 
@@ -264,7 +264,7 @@ wxWindow::wxWindow(void)
   m_lastEvent = -1;
   m_returnCode = 0;
 
-#if  USE_DRAG_AND_DROP
+#if  wxUSE_DRAG_AND_DROP
   m_pDropTarget = NULL;
 #endif
 }
@@ -284,7 +284,7 @@ wxWindow::~wxWindow(void)
   // Have to delete constraints/sizer FIRST otherwise
   // sizers may try to look at deleted windows as they
   // delete themselves.
-#if USE_CONSTRAINTS
+#if wxUSE_CONSTRAINTS
   DeleteRelatedConstraints();
   if (m_constraints)
   {
@@ -379,7 +379,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   m_sizerParent = NULL;
   m_autoLayout = FALSE;
   m_windowValidator = NULL;
-#if  USE_DRAG_AND_DROP
+#if  wxUSE_DRAG_AND_DROP
   m_pDropTarget = NULL;
 #endif
 
@@ -538,7 +538,7 @@ wxEvtHandler *wxWindow::PopEventHandler(bool deleteHandler)
     return NULL;
 }
 
-#if    USE_DRAG_AND_DROP
+#if    wxUSE_DRAG_AND_DROP
 
 void wxWindow::SetDropTarget(wxDropTarget *pDropTarget)
 {
@@ -1591,7 +1591,7 @@ bool wxWindow::MSWOnDestroy(void)
   wxDebugMsg("wxWindow::MSWOnDestroy %d\n", handle);
 #endif
   // delete our drop target if we've got one
-  #if USE_DRAG_AND_DROP
+  #if wxUSE_DRAG_AND_DROP
     if ( m_pDropTarget != NULL ) {
       m_pDropTarget->Revoke(m_hWnd);
 
@@ -1745,7 +1745,7 @@ void wxWindow::MSWOnDropFiles(WXWPARAM wParam)
 
 bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 {
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
     if ( id == 0 ) {    // is it a menu item?
       DRAWITEMSTRUCT *pDrawStruct = (DRAWITEMSTRUCT *)itemStruct;
       wxMenuItem *pMenuItem = (wxMenuItem *)(pDrawStruct->itemData);
@@ -1766,7 +1766,7 @@ bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 #endif  // owner-drawn menus
 
   wxWindow *item = FindItem(id);
-#if USE_DYNAMIC_CLASSES
+#if wxUSE_DYNAMIC_CLASSES
   if (item && item->IsKindOf(CLASSINFO(wxControl)))
   {
     return ((wxControl *)item)->MSWOnDraw(itemStruct);
@@ -1778,7 +1778,7 @@ bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 
 bool wxWindow::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 {
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
     if ( id == 0 ) {    // is it a menu item?
       MEASUREITEMSTRUCT *pMeasureStruct = (MEASUREITEMSTRUCT *)itemStruct;
       wxMenuItem *pMenuItem = (wxMenuItem *)(pMeasureStruct->itemData);
@@ -1790,7 +1790,7 @@ bool wxWindow::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 #endif  // owner-drawn menus
 
   wxWindow *item = FindItem(id);
-#if USE_DYNAMIC_CLASSES
+#if wxUSE_DYNAMIC_CLASSES
   if (item && item->IsKindOf(CLASSINFO(wxControl)))
   {
     return ((wxControl *)item)->MSWOnMeasure(itemStruct);

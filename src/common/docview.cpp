@@ -24,7 +24,7 @@
 #include "wx/defs.h"
 #endif
 
-#if USE_DOC_VIEW_ARCHITECTURE
+#if wxUSE_DOC_VIEW_ARCHITECTURE
 
 #ifndef WX_PRECOMP
 #include "wx/string.h"
@@ -53,7 +53,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#if USE_IOSTREAMH
+#if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else
 #include <iostream>
@@ -68,7 +68,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDocTemplate, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxDocManager, wxEvtHandler)
 IMPLEMENT_CLASS(wxDocChildFrame, wxFrame)
 IMPLEMENT_CLASS(wxDocParentFrame, wxFrame)
-#if USE_PRINTING_ARCHITECTURE
+#if wxUSE_PRINTING_ARCHITECTURE
 IMPLEMENT_DYNAMIC_CLASS(wxDocPrintout, wxPrintout)
 #endif
 IMPLEMENT_CLASS(wxCommand, wxObject)
@@ -535,7 +535,7 @@ bool wxView::OnClose(bool WXUNUSED(deleteWindow))
   return GetDocument() ? GetDocument()->Close() : TRUE;
 }
 
-#if USE_PRINTING_ARCHITECTURE
+#if wxUSE_PRINTING_ARCHITECTURE
 wxPrintout *wxView::OnCreatePrintout(void)
 {
   return new wxDocPrintout(this);
@@ -1447,7 +1447,7 @@ bool wxDocParentFrame::OnClose(void)
   return m_docManager->Clear(FALSE);
 }
 
-#if USE_PRINTING_ARCHITECTURE
+#if wxUSE_PRINTING_ARCHITECTURE
 
 wxDocPrintout::wxDocPrintout(wxView *view, const wxString& title):
   wxPrintout(WXSTRINGCAST title)
@@ -1940,4 +1940,4 @@ bool wxTransferStreamToFile(istream& stream, const wxString& filename)
 }
 
 #endif
-  // End USE_DOC_VIEW_ARCHITECTURE
+  // End wxUSE_DOC_VIEW_ARCHITECTURE

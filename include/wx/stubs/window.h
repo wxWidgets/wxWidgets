@@ -67,11 +67,11 @@ class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxValidator;
 
-#if USE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 class WXDLLEXPORT wxDropTarget;
 #endif
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
 class WXDLLEXPORT wxResourceTable;
 class WXDLLEXPORT wxItemResource;
 #endif
@@ -193,7 +193,7 @@ public:
   // Enable or disable the window
   virtual void Enable(bool enable);
 
-#if USE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
   // Associate a drop target with this window (if the window already had a drop
   // target, it's deleted!) and return the current drop target (may be NULL).
   void          SetDropTarget(wxDropTarget *pDropTarget);
@@ -336,7 +336,7 @@ public:
   virtual void OnDefaultAction(wxControl *initiatingItem);
 
   // Resource loading
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
   virtual bool LoadFromResource(wxWindow *parent, const wxString& resourceName, const wxResourceTable *table = NULL);
   virtual wxControl *CreateItem(const wxItemResource *childResource, const wxResourceTable *table = NULL);
 #endif
@@ -486,7 +486,7 @@ protected:
   wxColour              m_defaultForegroundColour;
   wxAcceleratorTable    m_acceleratorTable;
 
-#if USE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
   wxDropTarget         *m_pDropTarget;    // the current drop target or NULL
 #endif  //USE_DRAG_AND_DROP
 

@@ -97,7 +97,7 @@ void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
 
 void wxMDIParentFrame::OnSize(wxSizeEvent& event)
 {
-#if USE_CONSTRAINTS
+#if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
       Layout();
 #endif

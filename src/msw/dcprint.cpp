@@ -30,7 +30,7 @@
 
 #include <windows.h>
 
-#if USE_COMMON_DIALOGS
+#if wxUSE_COMMON_DIALOGS
 #include <commdlg.h>
 #endif
 
@@ -61,7 +61,7 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_nam
   if (!file.IsNull() && file != "")
     m_filename = file;
 
-#if USE_COMMON_DIALOGS
+#if wxUSE_COMMON_DIALOGS
    if (interactive)
    {
      PRINTDLG pd;

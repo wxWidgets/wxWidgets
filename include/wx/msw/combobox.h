@@ -18,7 +18,7 @@
 
 #include "wx/choice.h"
 
-#if USE_COMBOBOX
+#if wxUSE_COMBOBOX
 
 WXDLLEXPORT_DATA(extern const char*) wxComboBoxNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
@@ -78,6 +78,6 @@ class WXDLLEXPORT wxComboBox: public wxChoice
   virtual bool MSWCommand(WXUINT param, WXWORD id);
 };
 
-#endif // USE_COMBOBOX
+#endif // wxUSE_COMBOBOX
 #endif
     // _WX_COMBOBOX_H_

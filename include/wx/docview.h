@@ -21,7 +21,7 @@
 #include "wx/cmndata.h"
 #include "wx/string.h"
 
-#if USE_PRINTING_ARCHITECTURE
+#if wxUSE_PRINTING_ARCHITECTURE
 #include "wx/print.h"
 #endif
 
@@ -189,7 +189,7 @@ class WXDLLEXPORT wxView: public wxEvtHandler
 
   inline wxDocManager *GetDocumentManager(void) const { return m_viewDocument->GetDocumentManager(); }
 
-#if USE_PRINTING_ARCHITECTURE
+#if wxUSE_PRINTING_ARCHITECTURE
   virtual wxPrintout *OnCreatePrintout(void);
 #endif
 
@@ -415,7 +415,7 @@ DECLARE_EVENT_TABLE()
  * Provide simple default printing facilities
  */
 
-#if USE_PRINTING_ARCHITECTURE
+#if wxUSE_PRINTING_ARCHITECTURE
 class WXDLLEXPORT wxDocPrintout: public wxPrintout
 {
   DECLARE_DYNAMIC_CLASS(wxDocPrintout)

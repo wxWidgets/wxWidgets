@@ -20,7 +20,7 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
   class WXDLLEXPORT wxOwnerDrawn;
 
   // define the array of list box items
@@ -63,7 +63,7 @@ class WXDLLEXPORT wxListBox: public wxControl
 
   bool MSWCommand(WXUINT param, WXWORD id);
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
   bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
   bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
 
@@ -125,7 +125,7 @@ class WXDLLEXPORT wxListBox: public wxControl
   int m_noItems;
   int m_selected;
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
   // control items
   wxListBoxItemsArray m_aItems;
 #endif

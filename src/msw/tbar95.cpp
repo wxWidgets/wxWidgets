@@ -24,7 +24,7 @@
 #include "wx.h"
 #endif
 
-#if USE_BUTTONBAR && USE_TOOLBAR && defined(__WIN95__)
+#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR && defined(__WIN95__)
 
 #ifndef __GNUWIN32__
 #include "malloc.h"

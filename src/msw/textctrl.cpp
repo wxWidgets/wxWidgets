@@ -25,7 +25,7 @@
 #include "wx/settings.h"
 #endif
 
-#if USE_CLIPBOARD
+#if wxUSE_CLIPBOARD
 #include "wx/app.h"
 #include "wx/clipbrd.h"
 #endif

@@ -24,7 +24,7 @@
 #include "wx/defs.h"
 #endif
 
-#if USE_DOC_VIEW_ARCHITECTURE
+#if wxUSE_DOC_VIEW_ARCHITECTURE
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -149,5 +149,5 @@ bool wxDocMDIChildFrame::OnClose(void)
 }
 
 #endif
-    // USE_DOC_VIEW_ARCHITECTURE
+    // wxUSE_DOC_VIEW_ARCHITECTURE
 

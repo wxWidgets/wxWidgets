@@ -24,7 +24,7 @@
 #include "wx/setup.h"
 #endif
 
-#if USE_COMBOBOX
+#if wxUSE_COMBOBOX
 
 #include "wx/combobox.h"
 #include "wx/clipbrd.h"
@@ -257,7 +257,7 @@ long wxComboBox::GetLastPosition() const
 
 void wxComboBox::Replace(long from, long to, const wxString& value)
 {
-#if USE_CLIPBOARD
+#if wxUSE_CLIPBOARD
     HWND hWnd = (HWND) GetHWND();
     long fromChar = from;
     long toChar = to;
@@ -317,5 +317,5 @@ void wxComboBox::SetSelection(long from, long to)
 }
 
 #endif
- // USE_COMBOBOX
+ // wxUSE_COMBOBOX
 

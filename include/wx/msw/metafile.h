@@ -19,7 +19,7 @@
 
 #include "wx/setup.h"
 
-#if USE_METAFILE
+#if wxUSE_METAFILE
 #include "wx/dc.h"
 
 /*
@@ -99,6 +99,6 @@ bool WXDLLEXPORT wxMakeMetaFilePlaceable(const wxString& filename, float scale =
 // Optional origin and extent
 bool WXDLLEXPORT wxMakeMetaFilePlaceable(const wxString& filename, int x1, int y1, int x2, int y2, float scale = 1.0, bool useOriginAndExtent = TRUE);
 
-#endif // USE_METAFILE
+#endif // wxUSE_METAFILE
 #endif
     // _WX_METAFIILE_H_

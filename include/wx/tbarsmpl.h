@@ -18,7 +18,7 @@
 
 #include "wx/defs.h"
 
-#if USE_TOOLBAR
+#if wxUSE_TOOLBAR
 
 #include "wx/bitmap.h"
 #include "wx/list.h"
@@ -75,7 +75,7 @@ DECLARE_EVENT_TABLE()
 
 };
 
-#endif // USE_TOOLBAR
+#endif // wxUSE_TOOLBAR
 #endif
     // _WX_TBARSMPLH__
 

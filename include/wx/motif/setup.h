@@ -17,9 +17,9 @@
  *
  */
 
-#define USE_CONSTRAINTS       1
+#define wxUSE_CONSTRAINTS       1
                                 // Use constraints mechanism
-#define USE_CONFIG           1
+#define wxUSE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
 #define _WX_GOODCOMPILER__
                                 // gcc can have problems, but Windows compilers
@@ -30,51 +30,51 @@
                                 // Level 1: wxDC, OnSize (etc.) compatibility, but
                                 //          some new features such as event tables
 
-#define USE_POSTSCRIPT  1
+#define wxUSE_POSTSCRIPT  1
                         	// 0 for no PostScript device context
-#define USE_AFM_FOR_POSTSCRIPT 0
+#define wxUSE_AFM_FOR_POSTSCRIPT 0
                                 // 1 to use font metric files in GetTextExtent
-#define USE_METAFILE    1
+#define wxUSE_METAFILE    1
                                 // 0 for no Metafile and metafile device context
-#define USE_IPC         1
+#define wxUSE_IPC         1
                                 // 0 for no interprocess comms
-#define USE_HELP        1
+#define wxUSE_HELP        1
                                 // 0 for no help facility
-#define USE_RESOURCES   1
+#define wxUSE_RESOURCES   1
                         	// 0 for no wxGetResource/wxWriteResource
-#define USE_CLIPBOARD   1
+#define wxUSE_CLIPBOARD   1
                         	// 0 for no clipboard functions
-#define USE_SPLINES     1
+#define wxUSE_SPLINES     1
                             	// 0 for no splines
-#define USE_XFIG_SPLINE_CODE  1
+#define wxUSE_XFIG_SPLINE_CODE  1
                            	// 1 for XFIG spline code, 0 for AIAI spline code.
 // AIAI spline code is slower, but freer of copyright issues.
                             	// 0 for no splines
 
-#define USE_TOOLBAR     1
+#define wxUSE_TOOLBAR     1
                             // Use toolbars
-#define USE_DRAG_AND_DROP 1
+#define wxUSE_DRAG_AND_DROP 1
                         	// 0 for no drag and drop
 
-#define USE_WX_RESOURCES        1
+#define wxUSE_WX_RESOURCES        1
                                   // Use .wxr resource mechanism (requires PrologIO library)
 
-#define USE_DOC_VIEW_ARCHITECTURE 1
+#define wxUSE_DOC_VIEW_ARCHITECTURE 1
                                   // Set to 0 to disable document/view architecture
-#define USE_PRINTING_ARCHITECTURE  1
+#define wxUSE_PRINTING_ARCHITECTURE  1
                                     // Set to 0 to disable print/preview architecture code
-#define USE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
+#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
                                     // Set to 0 to disable PostScript print/preview architecture code
                                     // under Windows (just use Windows printing).
-#define USE_DYNAMIC_CLASSES     1
+#define wxUSE_DYNAMIC_CLASSES     1
                                   // If 1, enables provision of run-time type information.
                                   // NOW MANDATORY: don't change.
-#define USE_MEMORY_TRACING      1
+#define wxUSE_MEMORY_TRACING      1
                                   // If 1, enables debugging versions of wxObject::new and
                                   // wxObject::delete *IF* WXDEBUG is also defined.
                                   // WARNING: this code may not work with all architectures, especially
                                   // if alignment is an issue.
-#define USE_DEBUG_CONTEXT       1
+#define wxUSE_DEBUG_CONTEXT       1
                                   // If 1, enables wxDebugContext, for
                                   // writing error messages to file, etc. 
                                   // If WXDEBUG is not defined, will still use
@@ -83,7 +83,7 @@
                                   // since you may well need to output
                                   // an error log in a production
                                   // version (or non-debugging beta)
-#define USE_GLOBAL_MEMORY_OPERATORS 0
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
                                   // In debug mode, cause new and delete to be redefined globally.
                                   // If this causes problems (e.g. link errors), set this to 0.
 
@@ -91,18 +91,18 @@
                                   // Set this to 0 if your compiler can't cope
                                   // with omission of prototype parameters.
 
-#define USE_C_MAIN 0
+#define wxUSE_C_MAIN 0
                                   // Set to 1 to use main.c instead of main.cpp (UNIX only)
 
-#define USE_ODBC                   0
+#define wxUSE_ODBC                   0
                                     // Define 1 to use ODBC classes
 
-#define USE_IOSTREAMH     1
+#define wxUSE_IOSTREAMH     1
                                   // VC++ 4.2 and above allows <iostream> and <iostream.h>
                                   // but you can't mix them. Set to 1 for <iostream.h>,
                                   // 0 for <iostream>
 
-#define USE_WXCONFIG      1
+#define wxUSE_WXCONFIG      1
                                   // if enabled, compiles built-in OS independent wxConfig
                                   // class and it's file (any platform) and registry (Win)
                                   // based implementations
@@ -111,7 +111,7 @@
  *
  */
 
-#define USE_APPLE_IEEE	  1
+#define wxUSE_APPLE_IEEE	  1
 				// if enabled, the float codec written by Apple
 				// will be used to write, in a portable way,
 				// float on the disk

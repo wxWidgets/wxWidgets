@@ -94,13 +94,22 @@ bool wxPalette::Ok(void) const
 
 bool wxPalette::Create( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
+  wxFAIL_MSG("not implemented");
+
+  return FALSE;
 };
 
 int wxPalette::GetPixel( const unsigned char red, const unsigned char green, const unsigned char blue ) const
 {
+  wxFAIL_MSG("not implemented");
+
+  return 0;
 };
 
 bool wxPalette::GetRGB( int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const
 {
+  wxFAIL_MSG("not implemented");
+
+  return 0;
 };
 

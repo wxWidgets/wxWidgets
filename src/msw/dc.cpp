@@ -35,7 +35,7 @@
 #include <math.h>
 #include <fstream.h>
 
-#if USE_COMMON_DIALOGS
+#if wxUSE_COMMON_DIALOGS
 #include <commdlg.h>
 #endif
 
@@ -1326,9 +1326,9 @@ void wxDC::GetSizeMM(long *width, long *height) const
   *height = h;
 }
 
-#if USE_SPLINES
+#if wxUSE_SPLINES
 #include "xfspline.inc"
-#endif // USE_SPLINES
+#endif // wxUSE_SPLINES
 
 void wxDC::DrawPolygon(wxList *list, long xoffset, long yoffset,int fillStyle)
 {
@@ -1370,7 +1370,7 @@ void wxDC::SetTextBackground(const wxColour& colour)
     m_textBackgroundColour = colour;
 }
 
-#if USE_SPLINES
+#if wxUSE_SPLINES
 // Make a 3-point spline
 void wxDC::DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3)
 {

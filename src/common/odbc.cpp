@@ -23,7 +23,7 @@
 
 #include "wx/defs.h"
 
-#if USE_ODBC
+#if wxUSE_ODBC
 
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
@@ -1827,4 +1827,4 @@ bool wxQueryField::IsDirty(void) {
   return dirty;
 }
 
-#endif // USE_ODBC
+#endif // wxUSE_ODBC

@@ -34,12 +34,12 @@
 
 #include "assert.h"
 
-#if USE_XPM_IN_MSW
+#if wxUSE_XPM_IN_MSW
 #define FOR_MSW 1
 #include "..\..\contrib\wxxpm\libxpm.34b\lib\xpm34.h"
 #endif
 
-#if USE_RESOURCE_LOADING_IN_MSW
+#if wxUSE_RESOURCE_LOADING_IN_MSW
 #include "wx/msw/curico.h"
 #include "wx/msw/curicop.h"
 #endif
@@ -88,21 +88,21 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
   }
   else if (flags & wxBITMAP_TYPE_CUR)
   {
-#if USE_RESOURCE_LOADING_IN_MSW
+#if wxUSE_RESOURCE_LOADING_IN_MSW
     M_CURSORDATA->m_hCursor = (WXHCURSOR) ReadCursorFile((char *)(const char *)cursor_file, wxGetInstance(), &M_CURSORDATA->m_width, &M_CURSORDATA->m_height);
 	M_CURSORDATA->m_destroyCursor = TRUE;
 #endif
   }
   else if (flags & wxBITMAP_TYPE_ICO)
   {
-#if USE_RESOURCE_LOADING_IN_MSW
+#if wxUSE_RESOURCE_LOADING_IN_MSW
     M_CURSORDATA->m_hCursor = (WXHCURSOR) IconToCursor((char *)(const char *)cursor_file, wxGetInstance(), hotSpotX, hotSpotY, &M_CURSORDATA->m_width, &M_CURSORDATA->m_height);
 	M_CURSORDATA->m_destroyCursor = TRUE;
 #endif
   }
   else if (flags & wxBITMAP_TYPE_BMP)
   {
-#if USE_RESOURCE_LOADING_IN_MSW
+#if wxUSE_RESOURCE_LOADING_IN_MSW
     HBITMAP hBitmap = 0;
     HPALETTE hPalette = 0;
     bool success = ReadDIB((char *)(const char *)cursor_file, &hBitmap, &hPalette) != 0;

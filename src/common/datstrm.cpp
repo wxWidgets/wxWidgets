@@ -74,7 +74,7 @@ extern "C" double ConvertFromIeeeExtended(const unsigned char *bytes);
 
 double wxDataInputStream::ReadDouble()
 {
-#if USE_APPLE_IEEE
+#if wxUSE_APPLE_IEEE
   char buf[10];
 
   Read(buf, 10);
@@ -192,7 +192,7 @@ void wxDataOutputStream::WriteDouble(double d)
 {
   char buf[10];
 
-#if USE_APPLE_IEEE
+#if wxUSE_APPLE_IEEE
   ConvertToIeeeExtended(d, (unsigned char *)buf);
 #else
 #  pragma warning "wxDataStream::WriteDouble() not using IeeeExtended - will not work!"

@@ -127,7 +127,7 @@ const char *wxFatalErrorStr = "wxWindows Fatal Error";
 const char *wxFloatToStringStr = "%.2f";
 const char *wxDoubleToStringStr = "%.2f";
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
 wxPrintPaperDatabase* wxThePrintPaperDatabase = NULL;
 #endif
 

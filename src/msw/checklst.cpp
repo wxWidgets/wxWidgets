@@ -24,7 +24,7 @@
 #pragma hdrstop
 #endif
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
 
 #include <windows.h>
 

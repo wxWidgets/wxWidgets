@@ -33,9 +33,9 @@
 
 // Set to zero to use no double-buffering
 #ifdef __WXMSW__
-#define USE_DOUBLE_BUFFERING 1
+#define wxUSE_DOUBLE_BUFFERING 1
 #else
-#define USE_DOUBLE_BUFFERING 0
+#define wxUSE_DOUBLE_BUFFERING 0
 #endif
 
 #define wxGRID_DRAG_NONE       0
@@ -418,7 +418,7 @@ void wxGenericGrid::OnPaint(wxPaintEvent& WXUNUSED(event))
   int w, h;
   GetClientSize(&w, &h);
 
-  bool useDoubleBuffering = (bool) USE_DOUBLE_BUFFERING;
+  bool useDoubleBuffering = (bool) wxUSE_DOUBLE_BUFFERING;
   if (useDoubleBuffering)
   {
     // Reuse the old bitmap if possible

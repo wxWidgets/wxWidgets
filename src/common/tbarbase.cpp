@@ -29,7 +29,7 @@
 #include <windows.h>
 #endif
 
-#if USE_TOOLBAR
+#if wxUSE_TOOLBAR
 
 #include "wx/tbarbase.h"
 
@@ -615,7 +615,7 @@ void wxToolBarBase::AdjustScrollbars(void)
 // Default OnSize resets scrollbars, if any
 void wxToolBarBase::OnSize(wxSizeEvent& event)
 {
-#if USE_CONSTRAINTS
+#if wxUSE_CONSTRAINTS
   if (GetAutoLayout())
     Layout();
 #endif

@@ -25,7 +25,7 @@
 #endif
 
 #if !USE_DOC_VIEW_ARCHITECTURE
-#error You must set USE_DOC_VIEW_ARCHITECTURE to 1 in wx_setup.h!
+#error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in wx_setup.h!
 #endif
 
 #include "ogledit.h"

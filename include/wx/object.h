@@ -21,7 +21,7 @@
 
 class WXDLLEXPORT wxObject;
 
-#if USE_DYNAMIC_CLASSES
+#if wxUSE_DYNAMIC_CLASSES
 
 #ifdef __GNUWIN32__
 #ifdef GetClassName
@@ -89,7 +89,7 @@ public:
 
 wxObject* WXDLLEXPORT wxCreateDynamicObject(const char *name);
 
-#ifdef USE_SERIAL
+#ifdef wxUSE_SERIAL
 wxObject* WXDLLEXPORT wxCreateStoredObject( wxInputStream& stream );
 #endif
 
@@ -155,7 +155,7 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 
 // Unfortunately Borland seems to need this include.
 #ifdef __BORLANDC__
-#if USE_IOSTREAMH
+#if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else
 #include <iostream>
@@ -178,7 +178,7 @@ class WXDLLEXPORT wxObject
 
   bool IsKindOf(wxClassInfo *info) const;
 
-#if WXDEBUG && USE_MEMORY_TRACING
+#if WXDEBUG && wxUSE_MEMORY_TRACING
   void * operator new (size_t size, char * fileName = NULL, int lineNum = 0);
   void operator delete (void * buf);
   
@@ -195,11 +195,11 @@ class WXDLLEXPORT wxObject
 
 #endif
 
-#if WXDEBUG || USE_DEBUG_CONTEXT
+#if WXDEBUG || wxUSE_DEBUG_CONTEXT
   virtual void Dump(ostream& str);
 #endif
 
-#ifdef USE_SERIAL
+#ifdef wxUSE_SERIAL
   virtual void StoreObject( wxObjectOutputStream &stream );
   virtual void LoadObject( wxObjectInputStream &stream );
 #endif
@@ -215,7 +215,7 @@ class WXDLLEXPORT wxObject
 
 protected:
   wxObjectRefData*      m_refData;
-#ifdef USE_SERIAL
+#ifdef wxUSE_SERIAL
   wxObject_Serialize*   m_serialObj;
 #endif
 };
@@ -237,7 +237,7 @@ private:
     int m_count;
 };
 
-#if WXDEBUG && USE_GLOBAL_MEMORY_OPERATORS
+#if WXDEBUG && wxUSE_GLOBAL_MEMORY_OPERATORS
 //#ifndef WXDEBUG_NEW
 //#define WXDEBUG_NEW new(__FILE__,__LINE__)
 //#endif

@@ -23,7 +23,7 @@
 #include "wx/filefn.h"
 #include "wx/process.h"
 
-#if USE_IOSTREAMH
+#if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else
 #include <iostream>
@@ -182,7 +182,7 @@ class WXDLLEXPORT wxDebugStreamBuf: public streambuf
     int sync(void);
 };
 
-// #if WXDEBUG && USE_GLOBAL_MEMORY_OPERATORS
+// #if WXDEBUG && wxUSE_GLOBAL_MEMORY_OPERATORS
 // #define new WXDEBUG_NEW
 // #endif
 
@@ -237,7 +237,7 @@ WXDLLEXPORT_DATA(extern const char*) wxFatalErrorStr;
 void WXDLLEXPORT wxFatalError(const wxString& msg, const wxString& title = wxFatalErrorStr);
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
-#if USE_RESOURCES
+#if wxUSE_RESOURCES
 bool WXDLLEXPORT wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file = "");
 bool WXDLLEXPORT wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file = "");
 bool WXDLLEXPORT wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file = "");
@@ -247,7 +247,7 @@ bool WXDLLEXPORT wxGetResource(const wxString& section, const wxString& entry, c
 bool WXDLLEXPORT wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file = "");
 bool WXDLLEXPORT wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file = "");
 bool WXDLLEXPORT wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file = "");
-#endif // USE_RESOURCES
+#endif // wxUSE_RESOURCES
 
 // Get current Home dir and copy to dest (returns pstr->c_str())
 const char* WXDLLEXPORT wxGetHomeDir(wxString *pstr);

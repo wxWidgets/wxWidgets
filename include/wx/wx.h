@@ -65,7 +65,7 @@
 #include "wx/dirdlg.h"
 #include "wx/cmndata.h"
 #include "wx/intl.h"
-#ifdef USE_SERIAL
+#ifdef wxUSE_SERIAL
 #include "wx/objstrm.h"
 #include "wx/serbase.h"
 #endif

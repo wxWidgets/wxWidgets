@@ -67,13 +67,13 @@ typedef signed short int SHORT ;
 #define DLGPROC FARPROC
 #endif
 
-#if USE_PENWIN
+#if wxUSE_PENWIN
 void WXDLLEXPORT wxRegisterPenWin(void);
 void WXDLLEXPORT wxCleanUpPenWin(void);
 void WXDLLEXPORT wxEnablePenAppHooks (bool hook);
 #endif
 
-#if USE_ITSY_BITSY
+#if wxUSE_ITSY_BITSY
 #define IBS_HORZCAPTION    0x4000L
 #define IBS_VERTCAPTION    0x8000L
 

@@ -25,7 +25,7 @@
 // an exception to the general rule that a normal header doesn't include other
 // headers - only because ownerdrw.h is not always included and I don't want
 // to write #ifdef's everywhere...
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
 #include  "wx/ownerdrw.h"
 #endif
 
@@ -40,7 +40,7 @@
 // wxMenuItem: an item in the menu, optionally implements owner-drawn behaviour
 // ----------------------------------------------------------------------------
 class WXDLLEXPORT wxMenuItem: public wxObject
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
                             , public wxOwnerDrawn
 #endif
 {
@@ -79,7 +79,7 @@ private:
   bool        m_bEnabled,       // enabled or greyed?
               m_bChecked;       // checked? (only if checkable)
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
   // wxOwnerDrawn base class already has these variables - nothing to do
 
 #else   //!owner drawn

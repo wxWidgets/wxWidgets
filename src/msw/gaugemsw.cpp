@@ -24,7 +24,7 @@
 #include "wx/defs.h"
 #endif
 
-#if USE_GAUGE 
+#if wxUSE_GAUGE 
 
 #include "wx/msw/gaugemsw.h"
 #include "wx/msw/private.h"
@@ -1171,4 +1171,4 @@ zyzgForceRepaint3D:
 
 /** EOF: zyzgauge.c **/
 
-#endif // USE_GAUGE
+#endif // wxUSE_GAUGE

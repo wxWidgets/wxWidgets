@@ -34,7 +34,7 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 #endif
 
-#if USE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
 bool wxFrame::m_useNativeStatusBar = TRUE;
 #else
 bool wxFrame::m_useNativeStatusBar = FALSE;
@@ -312,7 +312,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 void wxFrame::OnSize(wxSizeEvent& event)
 {
   // if we're using constraints - do use them
-  #if USE_CONSTRAINTS
+  #if wxUSE_CONSTRAINTS
     if ( GetAutoLayout() ) {
       Layout();
       return;

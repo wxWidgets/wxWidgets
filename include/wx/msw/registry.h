@@ -19,7 +19,7 @@
 // ----------------------------------------------------------------------------
 // mutable hack (see also registry.cpp)
 // ----------------------------------------------------------------------------
-#if   USE_MUTABLE
+#if   wxUSE_MUTABLE
   #define MUTABLE mutable
 #else
   #define MUTABLE

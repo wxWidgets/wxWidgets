@@ -16,7 +16,7 @@
 #pragma interface "tbar95.h"
 #endif
 
-#if USE_BUTTONBAR && USE_TOOLBAR
+#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR
 #include "wx/tbarbase.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
@@ -93,6 +93,6 @@ protected:
 DECLARE_EVENT_TABLE()
 };
 
-#endif // USE_TOOL/BUTTONBAR
+#endif // wxUSE_TOOL/BUTTONBAR
 #endif
     // _WX_TBAR95_H_

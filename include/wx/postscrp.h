@@ -19,7 +19,7 @@
 #include "wx/dc.h"
 #include "wx/dialog.h"
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
 
 class WXDLLIMPORT ofstream;
 class WXDLLEXPORT wxPostScriptDC: public wxDC
@@ -294,6 +294,6 @@ class WXDLLEXPORT wxPrintPaperDatabase: public wxList
 
 WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;
 
-#endif // USE_POSTSCRIPT
+#endif // wxUSE_POSTSCRIPT
 #endif
         // _WX_POSTSCRPH__

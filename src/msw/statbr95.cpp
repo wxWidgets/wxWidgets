@@ -47,7 +47,7 @@
 #include  <commctrl.h>
 #endif
 
-#if     USE_NATIVE_STATUSBAR
+#if     wxUSE_NATIVE_STATUSBAR
 
 #if     !USE_SHARED_LIBRARY
   IMPLEMENT_DYNAMIC_CLASS(wxStatusBar95, wxStatusBar);

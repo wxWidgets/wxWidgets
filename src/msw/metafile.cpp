@@ -24,7 +24,7 @@
 #include "wx/setup.h"
 #endif
 
-#if USE_METAFILE
+#if wxUSE_METAFILE
 
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
@@ -374,4 +374,4 @@ bool wxMakeMetaFilePlaceable(const wxString& filename, int x1, int y1, int x2, i
   return TRUE;
 }
 
-#endif // USE_METAFILE
+#endif // wxUSE_METAFILE

@@ -26,7 +26,7 @@
 
 #include "wx/generic/helpxlp.h"
 
-#if USE_HELP
+#if wxUSE_HELP
 #include <time.h>
 
 #ifdef __X__
@@ -263,4 +263,4 @@ bool wxXLPHelpConnection::OnDisconnect(void)
   return TRUE;
 }
 
-#endif // USE_HELP
+#endif // wxUSE_HELP

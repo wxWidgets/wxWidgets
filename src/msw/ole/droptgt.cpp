@@ -30,7 +30,7 @@
 
 #include  <wx/setup.h>
 
-#if USE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 
 #include  <wx/log.h>
 
@@ -416,4 +416,4 @@ wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
 }
 
 #endif
- // USE_DRAG_AND_DROP
+ // wxUSE_DRAG_AND_DROP

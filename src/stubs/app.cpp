@@ -29,11 +29,11 @@
 #include "wx/module.h"
 #include "wx/memory.h"
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
 #include "wx/resource.h"
 #endif
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
 #include "wx/postscrp.h"
 #endif
 
@@ -61,7 +61,7 @@ bool wxApp::Initialize()
   wxBuffer = new char[BUFSIZ + 512];
 #endif
 
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
   streambuf* sBuf = new wxDebugStreamBuf;
   ostream* oStr = new ostream(sBuf) ;
@@ -75,12 +75,12 @@ bool wxApp::Initialize()
   wxTheColourDatabase->Initialize();
   wxInitializeStockObjects();
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
   wxInitializeResourceSystem();
 #endif
 
   // For PostScript printing
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
   wxInitializePrintSetupData();
   wxThePrintPaperDatabase = new wxPrintPaperDatabase;
   wxThePrintPaperDatabase->CreateDatabase();
@@ -98,7 +98,7 @@ void wxApp::CleanUp()
 {
   wxModule::CleanUpModules();
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
   wxCleanUpResourceSystem();
 #endif
 
@@ -121,7 +121,7 @@ void wxApp::CleanUp()
   delete wxTheColourDatabase;
   wxTheColourDatabase = NULL;
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
   wxInitializePrintSetupData(FALSE);
   delete wxThePrintPaperDatabase;
   wxThePrintPaperDatabase = NULL;
@@ -192,7 +192,7 @@ int wxEntry( int argc, char *argv[] )
   delete wxTheApp;
   wxTheApp = NULL;
   
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
   // At this point we want to check if there are any memory
   // blocks that aren't part of the wxDebugContext itself,
   // as a special case. Then when dumping we need to ignore

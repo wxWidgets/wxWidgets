@@ -40,7 +40,7 @@
 #undef LoadAccelerators
 #endif
 
-#if USE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
 #include <wx/msw/statbr95.h>
 #endif
 
@@ -62,7 +62,7 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 #endif
 
-#if USE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
 bool wxFrame::m_useNativeStatusBar = TRUE;
 #else
 bool wxFrame::m_useNativeStatusBar = FALSE;
@@ -357,7 +357,7 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
 {
     wxStatusBar *statusBar = NULL;
 
-#if USE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
     if (UsesNativeStatusBar())
     {
         statusBar = new wxStatusBar95(this, id, style);
@@ -421,7 +421,7 @@ void wxFrame::PositionStatusBar(void)
 {
   // native status bar positions itself
   if (m_frameStatusBar
-#if USE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
    && !m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95))
 #endif
     )
@@ -590,7 +590,7 @@ void wxFrame::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *
 
   // Keep this in wxFrame because it saves recoding this function
   // in wxTinyFrame
-#if USE_ITSY_BITSY
+#if wxUSE_ITSY_BITSY
   if (style & wxTINY_CAPTION_VERT)
     msflags |= IBS_VERTCAPTION;
   if (style & wxTINY_CAPTION_HORIZ)
@@ -709,7 +709,7 @@ void wxFrame::MSWOnSize(int x, int y, WXUINT id)
  if (!m_iconized)
  {
   // forward WM_SIZE to status bar control
-#if USE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
   if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
   {
     wxSizeEvent event(wxSize(x, y), m_frameStatusBar->GetId());
@@ -804,7 +804,7 @@ bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
 void wxFrame::OnSize(wxSizeEvent& event)
 {
   // if we're using constraints - do use them
-  #if USE_CONSTRAINTS
+  #if wxUSE_CONSTRAINTS
     if ( GetAutoLayout() ) {
       Layout();
       return;

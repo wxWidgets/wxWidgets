@@ -18,7 +18,7 @@
 
 #include "wx/wx.h"
 
-#if USE_HELP
+#if wxUSE_HELP
 
 // Defines the API for help controllers
 class WXDLLEXPORT wxHelpControllerBase: public wxObject
@@ -46,6 +46,6 @@ class WXDLLEXPORT wxHelpControllerBase: public wxObject
   virtual void OnQuit(void) {};
 };
 
-#endif // USE_HELP
+#endif // wxUSE_HELP
 #endif
     // _WX_HELPBASEH__

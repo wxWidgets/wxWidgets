@@ -16,7 +16,7 @@
 #pragma interface "statbr95.h"
 #endif
 
-#if       USE_NATIVE_STATUSBAR
+#if       wxUSE_NATIVE_STATUSBAR
 
 class WXDLLEXPORT wxStatusBar95 : public wxStatusBar
 {
@@ -50,6 +50,6 @@ protected:
   void SetFieldsWidth();
 };
 
-#endif  // USE_NATIVE_STATUSBAR
+#endif  // wxUSE_NATIVE_STATUSBAR
 
 #endif  //_STATBR95_H

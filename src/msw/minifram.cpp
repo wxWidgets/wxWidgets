@@ -26,7 +26,7 @@
 #include "wx/utils.h"
 #endif
 
-#if USE_ITSY_BITSY
+#if wxUSE_ITSY_BITSY
 
 #include "wx/minifram.h"
 #include "wx/msw/private.h"
@@ -177,14 +177,14 @@ wxMiniFrame::~wxMiniFrame(void)
 //    Unfortunately there is a bug in the Windows 3.0 8514 driver
 //    in using ExtTextOut() to a memory DC.  If you are drawing
 //    to an off screen bitmap, then blitting that bitmap to the
-//    display, do not #define USE_EXTTEXTOUT below.
+//    display, do not #define wxUSE_EXTTEXTOUT below.
 //
 //    The following macro (DRAWFASTRECT) draws a filled rectangle
 //    with no border and a solid color.  It uses the current back-
 //    ground color as the fill color.
 //////////////////////////////////////////////////////////////////////
-#define USE_EXTTEXTOUT
-#ifdef USE_EXTTEXTOUT
+#define wxUSE_EXTTEXTOUT
+#ifdef wxUSE_EXTTEXTOUT
    #define DRAWFASTRECT(hdc,lprc) ExtTextOut(hdc,0,0,ETO_OPAQUE,lprc,NULL,0,NULL)
 #else
    #define DRAWFASTRECT(hdc,lprc) {\
@@ -1589,4 +1589,4 @@ void PASCAL DrawArrow( HDC hdc, LPRECT lprc, UINT uiStyle )
 
 }  // DrawArrow()   
 
-#endif // USE_ITSY_BITSY
+#endif // wxUSE_ITSY_BITSY

@@ -19,7 +19,7 @@
 #include "wx/defs.h"
 #include "wx/setup.h"
 
-#if USE_CLIPBOARD
+#if wxUSE_CLIPBOARD
 
 #include "wx/list.h"
 
@@ -106,6 +106,6 @@ void WXDLLEXPORT wxInitClipboard(void);
 /* The clipboard */
 WXDLLEXPORT_DATA(extern wxClipboard*) wxTheClipboard;
 
-#endif // USE_CLIPBOARD
+#endif // wxUSE_CLIPBOARD
 #endif
     // _WX_CLIPBRD_H_

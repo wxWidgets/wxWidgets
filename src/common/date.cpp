@@ -28,7 +28,7 @@
 
 #include "wx/setup.h"
 
-#if USE_TIMEDATE
+#if wxUSE_TIMEDATE
 
 #include "wx/date.h"
 #include <wx/intl.h>
@@ -37,7 +37,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#if USE_IOSTREAMH
+#if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else
 #include <iostream>

@@ -161,7 +161,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_HELP, MyFrame::OnAbout)
     EVT_CLOSE(MyFrame::OnCloseWindow)
     EVT_TOOL_RANGE(wxID_OPEN, wxID_PASTE, MyFrame::OnToolLeftClick)
-    EVT_TOOL_ENTER(ID_TOOLBAR, MyFrame::OnToolEnter)
+    EVT_TOOL_ENTER(wxID_OPEN, MyFrame::OnToolEnter)
 END_EVENT_TABLE()
 
 // Define my frame constructor

@@ -21,7 +21,7 @@
 #endif
 
 #if !USE_CONSTRAINTS
-#error You must set USE_CONSTRAINTS to 1 in wx_setup.h!
+#error You must set wxUSE_CONSTRAINTS to 1 in wx_setup.h!
 #endif
 
 #include <ctype.h>

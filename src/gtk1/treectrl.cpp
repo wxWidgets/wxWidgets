@@ -16,7 +16,7 @@
 #include "wx/settings.h"
 #include "wx/log.h"
 
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
 #include "../gdk_imlib/gdk_imlib.h"
 #endif
 

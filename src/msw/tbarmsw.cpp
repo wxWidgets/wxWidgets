@@ -24,7 +24,7 @@
 #include "wx.h"
 #endif
 
-#if USE_BUTTONBAR && USE_TOOLBAR
+#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR
 
 #ifndef __GNUWIN32__
 #include "malloc.h"
@@ -47,7 +47,7 @@
 /////// Non-Windows 95 implementation
 
 #if !USE_IMAGE_LOADING_IN_MSW
-#error If USE_IMAGE_LOADING_IN_MSW is set to 0, then USE_BUTTONBAR must be set to 0 too.
+#error If wxUSE_IMAGE_LOADING_IN_MSW is set to 0, then wxUSE_BUTTONBAR must be set to 0 too.
 #endif
 
 #if !USE_SHARED_LIBRARY

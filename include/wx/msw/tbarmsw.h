@@ -16,7 +16,7 @@
 #pragma interface "tbarmsw.h"
 #endif
 
-#if USE_BUTTONBAR && USE_TOOLBAR
+#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR
 #include "wx/tbarbase.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxButtonBarNameStr;
@@ -118,6 +118,6 @@ DECLARE_EVENT_TABLE()
 #define wxTBSTATE_HIDDEN          0x08    // button is hidden
 #define wxTBSTATE_INDETERMINATE   0x10    // button is indeterminate
 
-#endif // USE_TOOL/BUTTONBAR
+#endif // wxUSE_TOOL/BUTTONBAR
 #endif
     // _WX_TBARMSW_H_

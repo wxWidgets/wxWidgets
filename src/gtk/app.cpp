@@ -25,7 +25,7 @@
 
 #include "unistd.h"
 
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
 #include "../gdk_imlib/gdk_imlib.h"
 #endif
 
@@ -243,7 +243,7 @@ void wxApp::CommonInit(void)
 {
 
 /*
-#if USE_RESOURCES
+#if wxUSE_RESOURCES
   (void) wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
 #endif
 */
@@ -262,7 +262,7 @@ void wxApp::CommonInit(void)
   wxInitializeResourceSystem();
 
   // For PostScript printing
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
   wxInitializePrintSetupData();
   wxThePrintPaperDatabase = new wxPrintPaperDatabase;
   wxThePrintPaperDatabase->CreateDatabase();
@@ -310,7 +310,7 @@ int wxEntry( int argc, char *argv[] )
 
   wxClassInfo::InitializeClasses();
 
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
   streambuf* sBuf = new wxDebugStreamBuf;
   ostream* oStr = new ostream(sBuf) ;
@@ -352,7 +352,7 @@ int wxEntry( int argc, char *argv[] )
   
   gtk_init( &argc, &argv );
 
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
 
   gdk_imlib_init();
 
@@ -393,7 +393,7 @@ int wxEntry( int argc, char *argv[] )
   
   delete[] wxBuffer;
   
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
   
   if (wxDebugContext::CountObjectsLeft() > 0)
   {

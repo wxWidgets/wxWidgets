@@ -25,7 +25,7 @@
 #include "wx/setup.h"
 #endif
 
-#if USE_CLIPBOARD
+#if wxUSE_CLIPBOARD
 
 #ifndef WX_PRECOMP
 #include "wx/app.h"
@@ -121,7 +121,7 @@ bool wxSetClipboardData(int dataFormat, wxObject *obj, int width, int height)
     }
     case wxDF_DIB:
     {
-#if USE_IMAGE_LOADING_IN_MSW
+#if wxUSE_IMAGE_LOADING_IN_MSW
       HBITMAP hBitmap=(HBITMAP) ((wxBitmap *)obj)->GetHBITMAP();
       HANDLE hDIB=BitmapToDIB(hBitmap,NULL); // NULL==uses system palette
       bool success = (::SetClipboardData(CF_DIB,hDIB) != 0);
@@ -131,7 +131,7 @@ bool wxSetClipboardData(int dataFormat, wxObject *obj, int width, int height)
       return success;
       break;
     }
-#if USE_METAFILE
+#if wxUSE_METAFILE
     case wxDF_METAFILE:
     {
       wxMetaFile *wxMF = (wxMetaFile *)obj;
@@ -461,5 +461,5 @@ char *wxClipboard::GetClipboardData(char *format, long *length, long time)
 }
 
 
-#endif // USE_CLIPBOARD
+#endif // wxUSE_CLIPBOARD
 

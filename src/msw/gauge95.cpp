@@ -24,7 +24,7 @@
 #include "wx/defs.h"
 #endif
 
-#if USE_GAUGE && defined(__WIN95__)
+#if wxUSE_GAUGE && defined(__WIN95__)
 
 #include "wx/msw/gauge95.h"
 #include "wx/msw/private.h"
@@ -178,4 +178,4 @@ void wxGauge95::SetBackgroundColour(const wxColour& col)
   m_backgroundColour = col ;
 }
 
-#endif // USE_GAUGE
+#endif // wxUSE_GAUGE

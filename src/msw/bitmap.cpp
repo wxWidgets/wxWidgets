@@ -36,7 +36,7 @@
 
 #include "assert.h"
 
-#if USE_XPM_IN_MSW
+#if wxUSE_XPM_IN_MSW
 #define FOR_MSW 1
 #include "../../contrib/wxxpm/libxpm.34b/lib/xpm34.h"
 #endif
@@ -168,7 +168,7 @@ wxBitmap::wxBitmap(const wxString& filename, long type)
     wxTheBitmapList->AddBitmap(this);
 }
 
-#if USE_XPM_IN_MSW
+#if wxUSE_XPM_IN_MSW
 // Create from data
 wxBitmap::wxBitmap(const char **data, wxItem *WXUNUSED(anItem))
 {
@@ -642,7 +642,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBMPFileHandler, wxBitmapHandler)
 bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
     int desiredWidth, int desiredHeight)
 {
-#if USE_IMAGE_LOADING_IN_MSW
+#if wxUSE_IMAGE_LOADING_IN_MSW
     wxPalette *palette = NULL;
     bool success = FALSE;
 /*
@@ -666,7 +666,7 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
 
 bool wxBMPFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *pal)
 {
-#if USE_IMAGE_LOADING_IN_MSW
+#if wxUSE_IMAGE_LOADING_IN_MSW
     wxPalette *actualPalette = (wxPalette *)pal;
     if (!actualPalette && (!M_BITMAPHANDLERDATA->m_bitmapPalette.IsNull()))
       actualPalette = & (M_BITMAPHANDLERDATA->m_bitmapPalette);
@@ -696,7 +696,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxXPMFileHandler, wxBitmapHandler)
 bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
     int desiredWidth, int desiredHeight)
 {
-#if USE_XPM_IN_MSW
+#if wxUSE_XPM_IN_MSW
     XImage *ximage;
     XpmAttributes xpmAttr;
     HDC     dc;
@@ -738,7 +738,7 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
 
 bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette)
 {
-#if USE_XPM_IN_MSW
+#if wxUSE_XPM_IN_MSW
       HDC     dc = NULL;
 
       Visual *visual = NULL;
@@ -788,7 +788,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxXPMDataHandler, wxBitmapHandler)
 
 bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth)
 {
-#if USE_XPM_IN_MSW
+#if wxUSE_XPM_IN_MSW
   XImage *ximage;
   int     ErrorStatus;
   XpmAttributes xpmAttr;

@@ -43,7 +43,7 @@
   #include  <wx/wx.h>
 #endif //WX_PRECOMP
 
-#if USE_ODBC
+#if wxUSE_ODBC
 
 #include <wx/db.h>
 
@@ -1317,4 +1317,4 @@ bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDes
 }  // GetDataSource()
 
 #endif
-    // USE_ODBC
+    // wxUSE_ODBC

@@ -18,7 +18,7 @@
 
 #include "wx/wx.h"
 
-#if USE_HELP
+#if wxUSE_HELP
 
 #include "wx/helpbase.h"
 
@@ -49,6 +49,6 @@ protected:
   wxString m_helpFile;
 };
 
-#endif // USE_HELP
+#endif // wxUSE_HELP
 #endif
     // _WX_HELPWIN_H_

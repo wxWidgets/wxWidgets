@@ -127,11 +127,11 @@ const char *wxFatalErrorStr = "wxWindows Fatal Error";
 const char *wxFloatToStringStr = "%.2f";
 const char *wxDoubleToStringStr = "%.2f";
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
 wxPrintPaperDatabase* wxThePrintPaperDatabase = NULL;
 #endif
 
-#if USE_SHARED_LIBRARY
+#if wxUSE_SHARED_LIBRARY
 ///// Event tables (also must be in one, statically-linked file for shared libraries)
 
 // This is the base, wxEvtHandler 'bootstrap' code which is expanded manually here

@@ -23,11 +23,11 @@
   info, or to be a straight call to the new operator.
 */
 
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
 #include <stddef.h>
 
-#if USE_IOSTREAMH
+#if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else
 #include <iostream>
@@ -48,7 +48,7 @@ void wxDebugFree(void * buf, bool isVect = FALSE);
 // Currently, these merely call malloc and free; only the wxObject
 // operators do something interesting. But this allows WXDEBUG_NEW to
 // work for all 'new's in a file.
-#if USE_GLOBAL_MEMORY_OPERATORS
+#if wxUSE_GLOBAL_MEMORY_OPERATORS
 
 #ifdef new
 #undef new

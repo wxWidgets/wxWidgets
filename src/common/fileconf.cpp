@@ -28,18 +28,19 @@
 #endif  //__BORLANDC__
 
 #ifndef   WX_PRECOMP
-  #include  <wx/string.h>
-  #include  <wx/intl.h>
+  #include  "wx/string.h"
+  #include  "wx/intl.h"
 #endif  //WX_PRECOMP
 
-#include  <wx/app.h>
-#include  <wx/dynarray.h>
-#include  <wx/file.h>
-#include  <wx/log.h>
-#include  <wx/textfile.h>
-#include  <wx/config.h>
-#include  <wx/fileconf.h>
-#include  <wx/utils.h>
+#include  "wx/app.h"
+#include  "wx/dynarray.h"
+#include  "wx/file.h"
+#include  "wx/log.h"
+#include  "wx/textfile.h"
+#include  "wx/config.h"
+#include  "wx/fileconf.h"
+
+#include  "wx/utils.h"    // for wxGetHomeDir
 
 // _WINDOWS_ is defined when windows.h is included,
 // __WXMSW__ is defined for MS Windows compilation

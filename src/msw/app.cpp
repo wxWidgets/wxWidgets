@@ -40,7 +40,7 @@
 #include "wx/log.h"
 #include "wx/module.h"
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
   #include "wx/resource.h"
 #endif
 
@@ -122,7 +122,7 @@ bool wxApp::Initialize()
   #endif // debug build under MS VC++
 */
 
-  #if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+  #if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     #if defined(_WINDLL)
       streambuf* sBuf = NULL;
     #else  // EXE
@@ -131,11 +131,11 @@ bool wxApp::Initialize()
 
     ostream* oStr = new ostream(sBuf) ;
     wxDebugContext::SetStream(oStr, sBuf);
-  #endif  // USE_MEMORY_TRACING
+  #endif  // wxUSE_MEMORY_TRACING
 
   wxClassInfo::InitializeClasses();
 
-  #if USE_RESOURCES
+  #if wxUSE_RESOURCES
     wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
   #endif
 
@@ -145,12 +145,12 @@ bool wxApp::Initialize()
   wxInitializeStockLists();
   wxInitializeStockObjects();
 
-  #if USE_WX_RESOURCES
+  #if wxUSE_WX_RESOURCES
     wxInitializeResourceSystem();
   #endif
 
   // For PostScript printing
-  #if USE_POSTSCRIPT
+  #if wxUSE_POSTSCRIPT
     wxInitializePrintSetupData();
     wxThePrintPaperDatabase = new wxPrintPaperDatabase;
     wxThePrintPaperDatabase->CreateDatabase();
@@ -201,7 +201,7 @@ bool wxApp::Initialize()
   wxDisableButtonBrush = ::CreateBrushIndirect( & lb ) ;
   ::DeleteObject( (HGDIOBJ)lb.lbHatch ) ;
 
-  #if USE_PENWINDOWS
+  #if wxUSE_PENWINDOWS
     wxRegisterPenWin();
   #endif
 
@@ -435,7 +435,7 @@ void wxApp::CleanUp()
   //// COMMON CLEANUP
   wxModule::CleanUpModules();
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
   wxCleanUpResourceSystem();
 
 //  wxDefaultResourceTable->ClearTable();
@@ -456,7 +456,7 @@ void wxApp::CleanUp()
   delete wxTheColourDatabase;
   wxTheColourDatabase = NULL;
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
   wxInitializePrintSetupData(FALSE);
   delete wxThePrintPaperDatabase;
   wxThePrintPaperDatabase = NULL;
@@ -476,7 +476,7 @@ void wxApp::CleanUp()
     FreeLibrary(gs_hRichEdit);
 #endif
 
-#if USE_PENWINDOWS
+#if wxUSE_PENWINDOWS
   wxCleanUpPenWin();
 #endif
 
@@ -589,7 +589,7 @@ int wxEntry(WXHINSTANCE hInstance,
   delete wxTheApp;
   wxTheApp = NULL;
 
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
   // At this point we want to check if there are any memory
   // blocks that aren't part of the wxDebugContext itself,
   // as a special case. Then when dumping we need to ignore

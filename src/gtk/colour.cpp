@@ -15,7 +15,7 @@
 
 #include "wx/gdicmn.h"
 
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
 #include "../gdk_imlib/gdk_imlib.h"
 #endif
 
@@ -208,7 +208,7 @@ void wxColour::CalcPixel( GdkColormap *cmap )
   if ((M_COLDATA->m_hasPixel) && (M_COLDATA->m_colormap == cmap)) return;
   M_COLDATA->FreeColour();
   
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
 
   int r = M_COLDATA->m_color.red >> SHIFT;
   int g = M_COLDATA->m_color.green >> SHIFT;

@@ -363,7 +363,7 @@ wxInputStream& wxInputStream::operator>>(float& f)
   return *this;
 }
 
-#if USE_SERIAL
+#if wxUSE_SERIAL
 wxInputStream& wxInputStream::operator>>(wxObject *& obj)
 {
   wxObjectInputStream obj_s(*this);
@@ -544,7 +544,7 @@ wxOutputStream& wxOutputStream::operator<<(double f)
   return Write(strfloat, strfloat.Len());
 }
 
-#if USE_SERIAL
+#if wxUSE_SERIAL
 wxOutputStream& wxOutputStream::operator<<(wxObject& obj)
 {
   wxObjectOutputStream obj_s(*this);

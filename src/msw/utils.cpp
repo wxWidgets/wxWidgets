@@ -189,7 +189,7 @@ bool wxGetUserName(char *buf, int maxSize)
     return *buf ? TRUE : FALSE;
 //  }
 #else
-#if !defined(__WATCOMC__) && !defined(__GNUWIN32__) && USE_PENWINDOWS
+#if !defined(__WATCOMC__) && !defined(__GNUWIN32__) && wxUSE_PENWINDOWS
   extern HANDLE g_hPenWin; // PenWindows Running?
   if (g_hPenWin)
   {
@@ -366,7 +366,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 #  ifdef __WINDOWS_386__
   retValue = wxWIN386;
 #  else
-#    if !defined(__WATCOMC__) && !defined(GNUWIN32) && USE_PENWINDOWS
+#    if !defined(__WATCOMC__) && !defined(GNUWIN32) && wxUSE_PENWINDOWS
   extern HANDLE g_hPenWin;
   retValue = g_hPenWin ? wxPENWINDOWS : wxWINDOWS ;
 #    endif
@@ -379,7 +379,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
-#if USE_RESOURCES
+#if wxUSE_RESOURCES
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
   if (file != "")
@@ -469,7 +469,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
   }
   else return FALSE;
 }
-#endif // USE_RESOURCES
+#endif // wxUSE_RESOURCES
 
 // Old cursor
 static HCURSOR wxBusyCursorOld = 0;

@@ -18,7 +18,7 @@
 
 #include "wx/setup.h"
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
 #include <stdio.h>
 
 // A few further types not in wx_types.h

@@ -22,7 +22,7 @@
 
 #include "wx/defs.h"
 
-#if USE_CONSTRAINTS
+#if wxUSE_CONSTRAINTS
 
 #ifndef WX_PRECOMP
 #include "wx/window.h"

@@ -333,7 +333,7 @@ void wxScrolledWindow::AdjustScrollbars(void)
 // Default OnSize resets scrollbars, if any
 void wxScrolledWindow::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-#if USE_CONSTRAINTS
+#if wxUSE_CONSTRAINTS
   if (GetAutoLayout())
     Layout();
 #endif

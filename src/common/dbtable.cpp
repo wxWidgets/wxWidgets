@@ -39,7 +39,7 @@
   #include  <wx/wx.h>
 #endif //WX_PRECOMP
 
-#if USE_ODBC
+#if wxUSE_ODBC
 
 #include <wx/dbtable.h>
 
@@ -1442,4 +1442,4 @@ bool wxTable::Refresh(void)
 }  // wxTable::Refresh()
 
 #endif
-    // USE_ODBC
+    // wxUSE_ODBC

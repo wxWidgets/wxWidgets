@@ -38,7 +38,7 @@
 #include "wx/checkbox.h"
 #include "wx/slider.h"
 #include "wx/statbox.h"
-#if USE_GAUGE
+#if wxUSE_GAUGE
 #include "wx/gauge.h"
 #endif
 #include "wx/textctrl.h"
@@ -46,11 +46,11 @@
 #include "wx/intl.h"
 #endif
 
-#if USE_SCROLLBAR
+#if wxUSE_SCROLLBAR
 #include "wx/scrolbar.h"
 #endif
 
-#if USE_COMBOBOX
+#if wxUSE_COMBOBOX
 #include "wx/combobox.h"
 #endif
 
@@ -58,7 +58,7 @@
 
 #include "wx/log.h"
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
 
 #include <ctype.h>
 #include <math.h>
@@ -389,7 +389,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
             bitmap = wxResourceCreateBitmap(childResource->GetValue4(), (wxResourceTable *)this);
             childResource->SetBitmap(bitmap);
           }
-#if USE_BITMAP_MESSAGE
+#if wxUSE_BITMAP_MESSAGE
           if (bitmap)
            control = new wxStaticBitmap(parent, id, *bitmap,
              wxPoint(childResource->GetX(), childResource->GetY()),
@@ -421,7 +421,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
 
         ((wxCheckBox *)control)->SetValue((childResource->GetValue1() != 0));
       }
-#if USE_GAUGE
+#if wxUSE_GAUGE
    else if (itemType == wxString("wxGauge"))
       {
         control = new wxGauge(parent, id, (int)childResource->GetValue2(),
@@ -432,7 +432,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
         ((wxGauge *)control)->SetValue((int)childResource->GetValue1());
       }
 #endif
-#if USE_RADIOBUTTON
+#if wxUSE_RADIOBUTTON
    else if (itemType == wxString("wxRadioButton"))
       {
         control = new wxRadioButton(parent, id, childResource->GetTitle(), // (int)childResource->GetValue1(),
@@ -441,7 +441,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
            childResource->GetStyle(), wxDefaultValidator, childResource->GetName());
       }
 #endif
-#if USE_SCROLLBAR
+#if wxUSE_SCROLLBAR
    else if (itemType == wxString("wxScrollBar"))
       {
         control = new wxScrollBar(parent, id,
@@ -521,7 +521,7 @@ wxControl *wxResourceTable::CreateItem(wxWindow *parent, wxItemResource *childRe
         if (strings)
           delete[] strings;
       }
-#if USE_COMBOBOX
+#if wxUSE_COMBOBOX
    else if (itemType == wxString("wxComboBox"))
       {
         wxStringList *stringList = childResource->GetStringValues();
@@ -890,7 +890,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
         controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
     }
   }
-#if USE_RADIOBUTTON
+#if wxUSE_RADIOBUTTON
   else if (controlType == "wxRadioButton")
   {
     // Check for default value
@@ -1089,7 +1089,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
      }
    }
   }
-#if USE_COMBOBOX
+#if wxUSE_COMBOBOX
   else if (controlType == "wxComboBox")
   {
     PrologExpr *textValue = expr->Nth(count);
@@ -2189,7 +2189,7 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
       }
       case wxBITMAP_TYPE_XPM_DATA:
       {
-#if (defined(__WXGTK__)) || (defined(__WXMSW__) && USE_XPM_IN_MSW)
+#if (defined(__WXGTK__)) || (defined(__WXMSW__) && wxUSE_XPM_IN_MSW)
         wxItemResource *item = table->FindResource(name);
         if (!item)
         {
@@ -2358,7 +2358,7 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
       {
       // *** XPM ICON NOT YET IMPLEMENTED IN WXWINDOWS ***
 /*
-#if (defined(__WXGTK__)) || (defined(__WXMSW__) && USE_XPM_IN_MSW)
+#if (defined(__WXGTK__)) || (defined(__WXMSW__) && wxUSE_XPM_IN_MSW)
         wxItemResource *item = table->FindResource(name);
         if (!item)
         {
@@ -2938,4 +2938,4 @@ wxControl *wxWindow::CreateItem(const wxItemResource *resource, const wxResource
   return table->CreateItem((wxWindow *)this, (wxItemResource *)resource);
 }
 
-#endif // USE_WX_RESOURCES
+#endif // wxUSE_WX_RESOURCES

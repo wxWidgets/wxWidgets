@@ -30,7 +30,7 @@
 
 #include "wx/msw/private.h"
 
-#if USE_COMMON_DIALOGS
+#if wxUSE_COMMON_DIALOGS
 #include <commdlg.h>
 #endif
 

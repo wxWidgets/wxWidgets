@@ -106,7 +106,7 @@ class WXDLLEXPORT wxInputStream {
   wxInputStream& operator>>(int& i);
   wxInputStream& operator>>(long& i);
   wxInputStream& operator>>(float& i);
-#if USE_SERIAL
+#if wxUSE_SERIAL
   wxInputStream& operator>>(wxObject *& obj);
 #endif
 
@@ -160,7 +160,7 @@ class WXDLLEXPORT wxOutputStream {
   wxOutputStream& operator<<(int i);
   wxOutputStream& operator<<(long i);
   wxOutputStream& operator<<(double f);
-#if USE_SERIAL
+#if wxUSE_SERIAL
   wxOutputStream& operator<<(wxObject& obj);
 #endif
 

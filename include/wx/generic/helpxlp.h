@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include "wx/wx.h"
 
-#if USE_HELP
+#if wxUSE_HELP
 
 #include "wx/helpbase.h"
 
@@ -122,6 +122,6 @@ class WXDLLEXPORT wxXLPHelpController: public wxHelpControllerBase
   wxXLPHelpClient		helpClient;
 };
 
-#endif // USE_HELP
+#endif // wxUSE_HELP
 #endif
     // __HELPXLPH__

@@ -24,7 +24,7 @@
 #include "wx/defs.h"
 #endif
 
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
 #ifdef __GNUG__
 // #pragma implementation
@@ -37,7 +37,7 @@
 
 #include <stdlib.h>
 
-#if USE_IOSTREAMH
+#if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else
 #include <iostream>
@@ -888,7 +888,7 @@ int wxDebugContext::CountObjectsLeft(void)
 // We'll only do malloc and free for the moment: leave the interesting
 // stuff for the wxObject versions.
 
-#if WXDEBUG && USE_GLOBAL_MEMORY_OPERATORS
+#if WXDEBUG && wxUSE_GLOBAL_MEMORY_OPERATORS
 
 #ifdef new
 #undef new
@@ -1110,7 +1110,7 @@ void wxTraceLevel(int level, const char *fmt ...)
 #endif
 }
 
-#else // USE_MEMORY_TRACING && WXDEBUG
+#else // wxUSE_MEMORY_TRACING && WXDEBUG
 void wxTrace(const char *WXUNUSED(fmt) ...)
 {
 }

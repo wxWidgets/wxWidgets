@@ -22,7 +22,7 @@
 #include "helpers.h"
 
 #ifdef __WXGTK__
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
 #include "gdk_imlib/gdk_imlib.h"
 #endif
 #endif
@@ -139,7 +139,7 @@ void __wxPreStart()
     gtk_init( &argc, &argv );
     delete [] argv;
 
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
     gdk_imlib_init();
     gtk_widget_push_visual(gdk_imlib_get_visual());
     gtk_widget_push_colormap(gdk_imlib_get_colormap());
@@ -651,6 +651,10 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.9  1998/09/25 13:28:52  VZ
+// USE_xxx constants renamed to wxUSE_xxx. This is an incompatible change, you
+// must recompile everything after upgrading!
+//
 // Revision 1.8  1998/08/27 21:59:08  RD
 // Some chicken-and-egg problems solved for wxPython on wxGTK
 //

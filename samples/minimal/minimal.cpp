@@ -70,6 +70,9 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
+    void OnPopupMenu(wxCommandEvent& event);
+    void OnRightDown(wxMouseEvent& event);
+
 private:
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
@@ -85,6 +88,8 @@ enum
     // menu items
     Minimal_Quit = 1,
     Minimal_About,
+    Minimal_Test1,
+    Minimal_Test2,
 
     // controls start here (the numbers are, of course, arbitrary)
     Minimal_Text = 1000,
@@ -100,6 +105,10 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
+
+    EVT_MENU_RANGE(Minimal_Test1, Minimal_Test2, MyFrame::OnPopupMenu)
+
+    EVT_RIGHT_DOWN(MyFrame::OnRightDown)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -161,17 +170,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetMenuBar(menuBar);
 
     // create a status bar just for fun (by default with 1 pane only)
-    CreateStatusBar();
+    CreateStatusBar(2);
     SetStatusText("Welcome to wxWindows!");
-
-    // now create some controls
-
-    // a panel first - if there were several controls, it would allow us to
-    // navigate between them from the keyboard
-    wxPanel *panel = new wxPanel(this, -1, wxPoint(0, 0), wxSize(400, 200));
-
-    // and a static control whose parent is the panel
-    (void)new wxStaticText(panel, -1, "Hello, world!", wxPoint(10, 10));
 }
 
 
@@ -187,4 +187,29 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox("This is a minimal sample\nA second line in the message box",
                  "About Minimal", wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnPopupMenu(wxCommandEvent& event)
+{
+  wxString str;
+  str.Printf("Test%d clicked.", event.GetId() == Minimal_Test1 ? 1 : 2);
+  SetStatusText(str, 1);
+}
+
+void MyFrame::OnRightDown(wxMouseEvent& event)
+{
+  class MyMenu : public wxMenu
+  {
+  public:
+    MyMenu()
+    {
+      Append(Minimal_Test1, "Test&1");
+      AppendSeparator();
+      Append(Minimal_Test2, "Test&2");
+    }
+
+    ~MyMenu() { printf("menu destroyed"); }
+  } *menu = new MyMenu;
+
+  PopupMenu(menu, event.GetX(), event.GetY());
 }

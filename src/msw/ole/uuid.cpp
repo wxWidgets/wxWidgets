@@ -26,7 +26,7 @@
 
 #include  <wx/setup.h>
 
-#if USE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 
 // standard headers
 #include  <rpc.h>                       // UUID related functions
@@ -149,4 +149,4 @@ void Uuid::UuidToCForm()
 }
 
 #endif
-  // USE_DRAG_AND_DROP
+  // wxUSE_DRAG_AND_DROP

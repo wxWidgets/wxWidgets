@@ -26,7 +26,7 @@
 
 #include "wx/msw/private.h"
 
-#if USE_PENWINDOWS
+#if wxUSE_PENWINDOWS
 
 #ifdef __BORLANDC__
 #define RPA_DEFAULT 1
@@ -85,11 +85,11 @@ void wxEnablePenAppHooks (bool hook)
 }
 
 #endif
-  // End USE_PENWINDOWS
+  // End wxUSE_PENWINDOWS
 
 void wxRegisterPenWin(void)
 {
-#if USE_PENWINDOWS
+#if wxUSE_PENWINDOWS
 ///////////////////////////////////////////////////////////////////////
 // If running on a Pen Windows system, register this app so all
 // EDIT controls in dialogs are replaced by HEDIT controls.
@@ -108,7 +108,7 @@ void wxRegisterPenWin(void)
 
 void wxCleanUpPenWin(void)
 {
-#if USE_PENWINDOWS
+#if wxUSE_PENWINDOWS
   if (g_hPenWin) {
     // Unregister this app
     if (RegPenApp != NULL)

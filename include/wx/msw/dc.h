@@ -133,7 +133,7 @@ public:
     return Blit(destPt.x, destPt.y, sz.x, sz.y, source, srcPt.x, srcPt.y, rop, useMask);
   }
 
-#if USE_SPLINES
+#if wxUSE_SPLINES
   // Splines
   // 3-point spline
   virtual void DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3);

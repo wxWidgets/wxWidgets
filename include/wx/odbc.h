@@ -11,7 +11,7 @@
 
 #include "wx/setup.h"
 
-#if USE_ODBC
+#if wxUSE_ODBC
 
 #ifdef __GNUG__
 #pragma interface "odbc.h"
@@ -331,4 +331,4 @@ class WXDLLEXPORT wxRecordSet: public wxObject
 
 #endif
 
-#endif  // USE_ODBC
+#endif  // wxUSE_ODBC

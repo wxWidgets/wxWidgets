@@ -35,7 +35,7 @@
 #include "wx/utils.h"
 #endif
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
 #include "wx/ownerdrw.h"
 #endif
 
@@ -177,7 +177,7 @@ void wxMenu::Append(wxMenuItem *pItem)
   LPCSTR pData;
   wxString name("");
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
   if ( pItem->IsOwnerDrawn() ) {  // want to get {Measure|Draw}Item messages?
     // item draws itself, pass pointer to it in data parameter
     flags |= MF_OWNERDRAW;

@@ -168,7 +168,7 @@ const char *wxUserResourceStr = "TEXT";
 #endif
 
 
-#if USE_SHARED_LIBRARY
+#if wxUSE_SHARED_LIBRARY
 /*
  * For wxWindows to be made into a dynamic library (e.g. Sun),
  * all IMPLEMENT_... macros must be in one place.
@@ -192,13 +192,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 #include "wx/choice.h"
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 
-#if USE_CLIPBOARD
+#if wxUSE_CLIPBOARD
 #include "wx/clipbrd.h"
 IMPLEMENT_DYNAMIC_CLASS(wxClipboard, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxClipboardClient, wxObject)
 #endif
 
-#if USE_COMBOBOX
+#if wxUSE_COMBOBOX
 #include "wx/combobox.h"
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 #endif
@@ -238,7 +238,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPrintData, wxObject)
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
 
-#if !defined(wx_msw) || USE_GENERIC_DIALOGS_IN_MSW
+#if !defined(wx_msw) || wxUSE_GENERIC_DIALOGS_IN_MSW
 #include "wx/generic/colordlg.h"
 #include "wx/generic/fontdlg.h"
 IMPLEMENT_DYNAMIC_CLASS(wxGenericColourDialog, wxDialog)
@@ -273,7 +273,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxIntPoint, wxObject)
 #endif
 */
 
-#if defined(wx_x) || (defined(wx_msw) && USE_PORTABLE_FONTS_IN_MSW)
+#if defined(wx_x) || (defined(wx_msw) && wxUSE_PORTABLE_FONTS_IN_MSW)
 IMPLEMENT_DYNAMIC_CLASS(wxFontNameDirectory, wxObject)
 #endif
 
@@ -289,7 +289,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxNode, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxList, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxStringList, wxList)
 
-#if USE_PRINTING_ARCHITECTURE
+#if wxUSE_PRINTING_ARCHITECTURE
 #include "wx/print.h"
 IMPLEMENT_DYNAMIC_CLASS(wxPrintDialog, wxDialog)
 IMPLEMENT_DYNAMIC_CLASS(wxPrinterBase, wxObject)
@@ -306,7 +306,7 @@ IMPLEMENT_CLASS(wxGenericPrintDialog, wxDialog)
 IMPLEMENT_CLASS(wxGenericPrintSetupDialog, wxDialog)
 #endif
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
 #include "wx/postscrp.h"
 IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintSetupData, wxObject)
@@ -315,7 +315,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperDatabase, wxList)
 #endif
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
 #include "wx/resource.h"
 IMPLEMENT_DYNAMIC_CLASS(wxItemResource, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxResourceTable, wxHashTable)
@@ -352,12 +352,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxList)
 #include "wx/process.h"
 IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)
 
-#if USE_TIMEDATE
+#if wxUSE_TIMEDATE
 #include "wx/date.h"
 IMPLEMENT_DYNAMIC_CLASS(wxDate, wxObject)
 #endif
 
-#if USE_DOC_VIEW_ARCHITECTURE
+#if wxUSE_DOC_VIEW_ARCHITECTURE
 #include "wx/docview.h"
 //IMPLEMENT_ABSTRACT_CLASS(wxDocItem, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxDocument, wxEvtHandler)
@@ -366,7 +366,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDocTemplate, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxDocManager, wxEvtHandler)
 IMPLEMENT_CLASS(wxDocChildFrame, wxFrame)
 IMPLEMENT_CLASS(wxDocParentFrame, wxFrame)
-#if USE_PRINTING_ARCHITECTURE
+#if wxUSE_PRINTING_ARCHITECTURE
 IMPLEMENT_DYNAMIC_CLASS(wxDocPrintout, wxPrintout)
 #endif
 IMPLEMENT_CLASS(wxCommand, wxObject)
@@ -374,7 +374,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCommandProcessor, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxFileHistory, wxObject)
 #endif
 
-#if USE_CONSTRAINTS
+#if wxUSE_CONSTRAINTS
 #include "wx/layout.h"
 IMPLEMENT_DYNAMIC_CLASS(wxIndividualLayoutConstraint, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxLayoutConstraints, wxObject)
@@ -382,7 +382,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSizer, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxRowColSizer, wxSizer)
 #endif
 
-#if USE_TOOLBAR
+#if wxUSE_TOOLBAR
 #include "wx/tbarbase.h"
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarTool, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarBase, wxControl)
@@ -453,7 +453,7 @@ BEGIN_EVENT_TABLE(wxStatusBar, wxWindow)
     EVT_SYS_COLOUR_CHANGED(wxStatusBar::OnSysColourChanged)
 END_EVENT_TABLE()
 
-#if USE_TIMEDATE
+#if wxUSE_TIMEDATE
 #include "wx/time.h"
 IMPLEMENT_DYNAMIC_CLASS(wxTime, wxObject)
 #endif
@@ -491,7 +491,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxICOResourceHandler, wxBitmapHandler)
 #include "wx/statbox.h"
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 
-#if USE_IPC
+#if wxUSE_IPC
 #include "wx/dde.h"
 IMPLEMENT_ABSTRACT_CLASS(wxDDEObject, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxDDEServer, wxDDEObject)
@@ -516,7 +516,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
 IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 
-#if USE_METAFILE
+#if wxUSE_METAFILE
 #include "wx/metafile.h"
 IMPLEMENT_DYNAMIC_CLASS(wxMetaFile, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxMetaFileDC, wxDC)
@@ -568,7 +568,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPanel, wxWindow)
 #include "wx/dirdlg.h"
 #include "wx/choicdlg.h"
 
-#if !defined(wx_msw) || USE_GENERIC_DIALOGS_IN_MSW
+#if !defined(wx_msw) || wxUSE_GENERIC_DIALOGS_IN_MSW
 #include "wx/generic/msgdlgg.h"
 IMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog)
 #endif
@@ -582,7 +582,7 @@ IMPLEMENT_CLASS(wxDirDialog, wxDialog)
 IMPLEMENT_CLASS(wxMessageDialog)
 #endif
 
-#if USE_GAUGE
+#if wxUSE_GAUGE
 #ifdef wx_motif
 #include "../../contrib/xmgauge/gauge.h"
 #endif
@@ -705,7 +705,7 @@ BEGIN_EVENT_TABLE(wxControl, wxWindow)
   EVT_ERASE_BACKGROUND(wxControl::OnEraseBackground)
 END_EVENT_TABLE()
 
-#if !defined(wx_msw) || USE_GENERIC_DIALOGS_IN_MSW
+#if !defined(wx_msw) || wxUSE_GENERIC_DIALOGS_IN_MSW
 BEGIN_EVENT_TABLE(wxGenericMessageDialog, wxDialog)
   EVT_BUTTON(wxID_YES, wxGenericMessageDialog::OnYes)
   EVT_BUTTON(wxID_NO, wxGenericMessageDialog::OnNo)

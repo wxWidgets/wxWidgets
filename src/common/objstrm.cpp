@@ -24,7 +24,7 @@
 #include "wx/setup.h"
 #endif
 
-#if USE_SERIAL
+#if wxUSE_SERIAL
 
 #include "wx/object.h"
 #include "wx/objstrm.h"

@@ -34,7 +34,7 @@
 #include "wx/mdi.h"
 #include "wx/msw/private.h"
 
-#if USE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
 #include <wx/msw/statbr95.h>
 #endif
 
@@ -266,7 +266,7 @@ void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
 
 void wxMDIParentFrame::OnSize(wxSizeEvent& event)
 {
-#if USE_CONSTRAINTS
+#if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
       Layout();
 #endif
@@ -280,7 +280,7 @@ void wxMDIParentFrame::OnSize(wxSizeEvent& event)
 
 /* Already done in MSWOnSize
   // forward WM_SIZE to status bar control
-#if USE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
   if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
     ((wxStatusBar95 *)m_frameStatusBar)->OnSize(event);
 #endif
@@ -303,7 +303,7 @@ void wxMDIParentFrame::OldOnSize(int x, int y)
   GetEventHandler()->ProcessEvent(event);
 #else
 
-#if USE_CONSTRAINTS
+#if wxUSE_CONSTRAINTS
   if (GetAutoLayout())
     Layout();
 #endif
@@ -443,7 +443,7 @@ void wxMDIParentFrame::MSWOnSize(int x, int y, WXUINT id)
  if (!m_iconized)
  {
   // forward WM_SIZE to status bar control
-#if USE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
   if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
   {
     wxSizeEvent event(wxSize(x, y), m_frameStatusBar->GetId());
@@ -918,7 +918,7 @@ void wxMDIChildFrame::MSWOnSize(int x, int y, WXUINT id)
   if (!m_iconized)
   {
     // forward WM_SIZE to status bar control
-#if USE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
     if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
     {
       wxSizeEvent event(wxSize(x, y), m_frameStatusBar->GetId());

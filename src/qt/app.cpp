@@ -28,7 +28,7 @@
 #include "wx/log.h"
 #include "wx/module.h"
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
 #include "wx/resource.h"
 #endif
 
@@ -63,12 +63,12 @@ void wxApp::CommonInit()
   wxTheColourDatabase->Initialize();
   wxInitializeStockObjects();
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
   wxInitializeResourceSystem();
 #endif
 
   // For PostScript printing
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
   wxInitializePrintSetupData();
   wxThePrintPaperDatabase = new wxPrintPaperDatabase;
   wxThePrintPaperDatabase->CreateDatabase();
@@ -84,7 +84,7 @@ void wxApp::CommonCleanUp()
 {
   wxModule::CleanUpModules();
 
-#if USE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
   wxCleanUpResourceSystem();
 #endif
 
@@ -106,7 +106,7 @@ void wxApp::CommonCleanUp()
   delete wxTheColourDatabase;
   wxTheColourDatabase = NULL;
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
   wxInitializePrintSetupData(FALSE);
   delete wxThePrintPaperDatabase;
   wxThePrintPaperDatabase = NULL;
@@ -125,7 +125,7 @@ int wxEntry( int argc, char *argv[] )
 {
   wxClassInfo::InitializeClasses();
   
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
 #if !defined(_WINDLL)
   streambuf* sBuf = new wxDebugStreamBuf;
@@ -182,7 +182,7 @@ int wxEntry( int argc, char *argv[] )
   
   wxApp::CommonCleanUp();
   
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
   // At this point we want to check if there are any memory
   // blocks that aren't part of the wxDebugContext itself,
   // as a special case. Then when dumping we need to ignore

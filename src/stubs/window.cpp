@@ -31,7 +31,7 @@
 #include "wx/menuitem.h"
 #include "wx/log.h"
 
-#if  USE_DRAG_AND_DROP
+#if  wxUSE_DRAG_AND_DROP
 #include "wx/dnd.h"
 #endif
 
@@ -80,7 +80,7 @@ wxWindow::wxWindow()
     m_defaultForegroundColour = *wxBLACK ;
     m_defaultBackgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE) ;
 
-#if  USE_DRAG_AND_DROP
+#if  wxUSE_DRAG_AND_DROP
     m_pDropTarget = NULL;
 #endif
 }
@@ -91,7 +91,7 @@ wxWindow::~wxWindow()
 	// Have to delete constraints/sizer FIRST otherwise
 	// sizers may try to look at deleted windows as they
 	// delete themselves.
-#if USE_CONSTRAINTS
+#if wxUSE_CONSTRAINTS
     DeleteRelatedConstraints();
     if (m_constraints)
     {
@@ -158,7 +158,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     m_autoLayout = FALSE;
     m_windowValidator = NULL;
 
-#if USE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
     m_pDropTarget = NULL;
 #endif
 
@@ -250,7 +250,7 @@ wxEvtHandler *wxWindow::PopEventHandler(bool deleteHandler)
 		return NULL;
 }
 
-#if    USE_DRAG_AND_DROP
+#if    wxUSE_DRAG_AND_DROP
 
 void wxWindow::SetDropTarget(wxDropTarget *pDropTarget)
 {

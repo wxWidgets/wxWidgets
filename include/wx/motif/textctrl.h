@@ -18,7 +18,7 @@
 
 #include "wx/control.h"
 
-#if USE_IOSTREAMH
+#if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else
 #include <iostream>

@@ -24,7 +24,7 @@
 
 #include "wx/defs.h"
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
 
 #ifndef WX_PRECOMP
 #include "wx/intl.h"
@@ -48,7 +48,7 @@
 #include "wx/msw/private.h"
 #endif
 
-#if USE_IOSTREAMH
+#if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else
 #include <iostream>
@@ -127,7 +127,7 @@ double UnderlineThickness = 0.0F;
 #define _MAXPATHLEN 500
 
 /* See "wxspline.inc" and "xfspline.inc" */
-#if USE_XFIG_SPLINE_CODE
+#if wxUSE_XFIG_SPLINE_CODE
 static const char *wxPostScriptHeaderSpline = " \
 /DrawSplineSection {\n\
 	/y3 exch def\n\
@@ -148,7 +148,7 @@ static const char *wxPostScriptHeaderSpline = " \
 // No extra PS header for this spline implementation.
 static const char *wxPostScriptHeaderSpline = (char *) NULL;
 
-#endif /* USE_XFIG_SPLINE_CODE */
+#endif /* wxUSE_XFIG_SPLINE_CODE */
 
 // steve, 05.09.94
 // VMS has a bug in the ofstream class.

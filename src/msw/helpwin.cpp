@@ -26,7 +26,7 @@
 
 #include "wx/msw/helpwin.h"
 
-#if USE_HELP
+#if wxUSE_HELP
 #include <time.h>
 
 #ifdef __WXMSW__
@@ -145,4 +145,4 @@ void wxWinHelpController::OnQuit(void)
 {
 }
 
-#endif // USE_HELP
+#endif // wxUSE_HELP

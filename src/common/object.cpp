@@ -22,7 +22,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/hash.h"
-#ifdef USE_SERIAL
+#ifdef wxUSE_SERIAL
 #include "wx/objstrm.h"
 #include "wx/serbase.h"
 #endif
@@ -31,11 +31,11 @@
 #include <string.h>
 #include <assert.h>
 
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 #include "wx/memory.h"
 #endif
 
-#if WXDEBUG || USE_DEBUG_CONTEXT
+#if WXDEBUG || wxUSE_DEBUG_CONTEXT
   // for wxObject::Dump
   #include <iostream.h>
 #endif
@@ -53,7 +53,7 @@ wxHashTable* wxClassInfo::sm_classTable = (wxHashTable*) NULL;
 wxObject::wxObject(void)
 {
   m_refData = (wxObjectRefData *) NULL;
-#ifdef USE_SERIAL
+#ifdef wxUSE_SERIAL
   m_serialObj = (wxObject_Serialize *)NULL;
 #endif
 }
@@ -61,7 +61,7 @@ wxObject::wxObject(void)
 wxObject::~wxObject(void)
 {
 	UnRef();
-#ifdef USE_SERIAL
+#ifdef wxUSE_SERIAL
 	if (m_serialObj)
 	  delete m_serialObj;
 #endif
@@ -83,7 +83,7 @@ bool wxObject::IsKindOf(wxClassInfo *info) const
     return FALSE;
 }
 
-#if WXDEBUG || USE_DEBUG_CONTEXT
+#if WXDEBUG || wxUSE_DEBUG_CONTEXT
 void wxObject::Dump(ostream& str)
 {
   if (GetClassInfo() && GetClassInfo()->GetClassName())
@@ -93,7 +93,7 @@ void wxObject::Dump(ostream& str)
 }
 #endif
 
-#if WXDEBUG && USE_MEMORY_TRACING
+#if WXDEBUG && wxUSE_MEMORY_TRACING
 
 #ifdef new
 #undef new
@@ -258,7 +258,7 @@ wxObject *wxCreateDynamicObject(const char *name)
     return (wxObject*) NULL;
 }
 
-#ifdef USE_SERIAL
+#ifdef wxUSE_SERIAL
 
 #include "wx/serbase.h"
 #include "wx/dynlib.h"

@@ -38,7 +38,7 @@
 #undef GetCharWidth
 #endif
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
   #include  "wx/ownerdrw.h"
 #endif
 
@@ -53,7 +53,7 @@
 // list box item declaration and implementation
 // ============================================================================
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
 
 class wxListBoxItem : public wxOwnerDrawn
 {
@@ -183,7 +183,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
   if (m_windowStyle & wxLB_SORT)
     wstyle |= LBS_SORT;
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       // we don't support LBS_OWNERDRAWVARIABLE yet
       wstyle |= LBS_OWNERDRAWFIXED;
@@ -229,7 +229,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     SendMessage(wx_list, LB_ADDSTRING, 0, (LPARAM)(const char *)choices[ui]);
   }
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       for (ui = 0; ui < (size_t)n; ui++) {
         // create new item which will process WM_{DRAW|MEASURE}ITEM messages
@@ -255,7 +255,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox(void)
 {
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
     size_t uiCount = m_aItems.Count();
     while ( uiCount-- != 0 ) {
       delete m_aItems[uiCount];
@@ -294,7 +294,7 @@ void wxListBox::Append(const wxString& item)
   int index = ListBox_AddString(hwnd, item);
   m_noItems ++;
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       wxOwnerDrawn *pNewItem = CreateItem(-1); // dummy argument
       pNewItem->SetName(item);
@@ -311,7 +311,7 @@ void wxListBox::Append(const wxString& item, char *Client_data)
   int index = ListBox_AddString(hwnd, item);
   m_noItems ++;
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       // client data must be pointer to wxOwnerDrawn, otherwise we would crash
       // in OnMeasure/OnDraw.
@@ -337,7 +337,7 @@ void wxListBox::Set(int n, const wxString *choices, char** clientData)
   }
   m_noItems = n;
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       // first delete old items
       size_t ui = m_aItems.Count();
@@ -592,7 +592,7 @@ wxListBox::InsertItems(int nItems, const wxString items[], int pos)
     ListBox_InsertString(hwnd, i + pos, items[i]);
   m_noItems += nItems;
 
-  #if USE_OWNER_DRAWN
+  #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
       for ( i = 0; i < nItems; i++ ) {
         wxOwnerDrawn *pNewItem = CreateItem((size_t)(pos + i));
@@ -628,7 +628,7 @@ void wxListBox::SetString(int N, const wxString& s)
   if (sel >= 0)
     SetSelection(sel);
 
-#if       USE_OWNER_DRAWN
+#if       wxUSE_OWNER_DRAWN
   if ( m_windowStyle & wxLB_OWNERDRAW )
 	  // update item's text
 	  m_aItems[N]->SetName(s);
@@ -764,7 +764,7 @@ long wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
   return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
-#if USE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
 
 // drawing
 // -------
@@ -818,4 +818,4 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 }
 
 #endif
-  // USE_OWNER_DRAWN
+  // wxUSE_OWNER_DRAWN

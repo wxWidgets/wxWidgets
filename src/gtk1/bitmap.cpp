@@ -16,7 +16,7 @@
 #include "wx/icon.h"
 #include "gdk/gdkprivate.h"
 
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
 
 #include "../gdk_imlib/gdk_imlib.h"
 #include "gdk/gdkx.h"        // GDK_DISPLAY
@@ -50,7 +50,7 @@ wxMask::wxMask( const wxBitmap& WXUNUSED(bitmap) )
 
 wxMask::~wxMask(void)
 {
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
   // do not delete the mask, gdk_imlib does it for you
 #else
   if (m_bitmap) gdk_bitmap_unref( m_bitmap );
@@ -80,7 +80,7 @@ class wxBitmapRefData: public wxObjectRefData
     int             m_width;
     int             m_height;
     int             m_bpp;
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
     GdkImlibImage  *m_image;
 #endif
     wxPalette      *m_palette;
@@ -95,14 +95,14 @@ wxBitmapRefData::wxBitmapRefData(void)
   m_height = 0;
   m_bpp = 0;
   m_palette = (wxPalette *) NULL;
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
   m_image = (GdkImlibImage *) NULL;
 #endif
 }
 
 wxBitmapRefData::~wxBitmapRefData(void)
 {
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
   if (m_pixmap) gdk_imlib_free_pixmap( m_pixmap );
   if (m_image) gdk_imlib_kill_image( m_image );
 #else
@@ -141,7 +141,7 @@ wxBitmap::wxBitmap( char **bits )
 {
   m_refData = new wxBitmapRefData();
 
-#ifndef USE_GDK_IMLIB
+#ifndef wxUSE_GDK_IMLIB
 
   GdkBitmap *mask = NULL;
   
@@ -323,7 +323,7 @@ void wxBitmap::Resize( int height, int width )
     return;
   }
   
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
   
   if (M_BMPDATA->m_bitmap)
   {
@@ -360,7 +360,7 @@ bool wxBitmap::SaveFile( const wxString &name, int WXUNUSED(type),
     return FALSE;
   }
   
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
 
   if (M_BMPDATA->m_bitmap)
   {
@@ -383,7 +383,7 @@ bool wxBitmap::SaveFile( const wxString &name, int WXUNUSED(type),
 
 bool wxBitmap::LoadFile( const wxString &name, int WXUNUSED(type) )
 {
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
 
   UnRef();
   m_refData = new wxBitmapRefData();
@@ -465,7 +465,7 @@ void wxBitmap::RecreateImage(void)
     return;
   }
   
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
 
   DestroyImage();
   
@@ -520,7 +520,7 @@ void wxBitmap::Render(void)
     return;
   }
   
-#ifdef USE_GDK_IMLIB
+#ifdef wxUSE_GDK_IMLIB
 
   if (!M_BMPDATA->m_image) RecreateImage();
   

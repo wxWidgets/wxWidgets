@@ -26,10 +26,10 @@
 
 #include "wx/helpbase.h"
 
-#if USE_HELP
+#if wxUSE_HELP
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxHelpControllerBase, wxObject)
 #endif
 
-#endif // USE_HELP
+#endif // wxUSE_HELP

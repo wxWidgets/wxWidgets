@@ -56,7 +56,7 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount)
   return FALSE;
 }
 
-#if USE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 
 // ----------------------------------------------------------------------------
 // Debug support
@@ -187,4 +187,4 @@ void wxLogRelease(const char *szInterface, ULONG cRef)
 #endif  //WXDEBUG
 
 #endif
-  // USE_DRAG_AND_DROP
+  // wxUSE_DRAG_AND_DROP
