@@ -133,9 +133,9 @@
 #elif defined(__WATCOMC__)
     typedef unsigned int bool;
 #elif defined(__SUNCC__)
-    #ifdef __SUNPRO_C
+    #ifdef __SUNPRO_CC
         // starting from version 5.0 Sun CC understands 'bool'
-        #if __SUNPRO_C <= 0x0420
+        #if __SUNPRO_CC <= 0x0420
             // If we use int, we get identically overloaded functions in config.cpp
             typedef unsigned char bool;
         #endif // Sun CC version
