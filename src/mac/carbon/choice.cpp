@@ -92,7 +92,7 @@ void wxChoice::Delete(int n)
 
     ::DeleteMenuItem( m_macPopUpMenuHandle , n + 1) ;
     m_strings.Remove( n ) ;
-    m_datas.Remove( n ) ;
+    m_datas.RemoveAt( n ) ;
 	SetControlMaximum( m_macControl , GetCount()) ;
 }
 

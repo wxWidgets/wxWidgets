@@ -17,7 +17,7 @@
 // headers
 // ----------------------------------------------------------------------------
 #ifdef __GNUG__
-#pragma implementation "notebook.h"
+  #pragma implementation "notebook.h"
 #endif
 
 #include  <wx/string.h>
@@ -202,7 +202,7 @@ wxNotebookPage* wxNotebook::DoRemovePage(int nPage)
 {
     wxCHECK( IS_VALID_PAGE(nPage), NULL );
     wxNotebookPage* page = m_pages[nPage] ;
-    m_pages.Remove(nPage);
+    m_pages.RemoveAt(nPage);
 
     MacSetupTabs();
 

@@ -166,7 +166,7 @@ void wxListBox::Delete(int N)
     }
 #endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
 	m_stringArray.Remove( N ) ;
-	m_dataArray.Remove( N ) ;
+	m_dataArray.RemoveAt( N ) ;
 	m_noItems --;
 	
 	MacDelete( N ) ;
