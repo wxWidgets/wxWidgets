@@ -20,7 +20,6 @@
 //-----------------------------------------------------------------------------
 
 class wxTimerDesc;
-class wxTimerScheduler;
 
 class WXDLLEXPORT wxTimer : public wxTimerBase
 {
@@ -43,9 +42,6 @@ protected:
 
 private:
     wxTimerDesc *m_desc;
-    
-    static wxTimerScheduler *ms_scheduler;
-    static size_t            ms_timersCnt;
     
     DECLARE_ABSTRACT_CLASS(wxTimer)
 };
