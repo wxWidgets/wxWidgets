@@ -251,8 +251,11 @@
 // If enabled (1), compiles wxWidgets streams classes
 #define wxUSE_STREAMS       1
 
-// Use standard C++ streams if 1. If 0, use wxWin streams implementation.
+// Use standard C++ streams if 1. If 0, use wxWin streams implementation only.
 #define wxUSE_STD_IOSTREAM  0
+
+// Enable converion to  standard C++ string if 1.
+#define wxUSE_STD_STRING  0
 
 // ----------------------------------------------------------------------------
 // non GUI features selection
