@@ -161,6 +161,30 @@ def wxGetApp(*_args, **_kwargs):
 
 wxApp_CleanUp = wxc.wxApp_CleanUp
 
+wxPyApp_GetMacDefaultEncodingIsPC = wxc.wxPyApp_GetMacDefaultEncodingIsPC
+
+wxPyApp_GetMacSupportPCMenuShortcuts = wxc.wxPyApp_GetMacSupportPCMenuShortcuts
+
+wxPyApp_GetMacAboutMenuItemId = wxc.wxPyApp_GetMacAboutMenuItemId
+
+wxPyApp_GetMacPreferencesMenuItemId = wxc.wxPyApp_GetMacPreferencesMenuItemId
+
+wxPyApp_GetMacExitMenuItemId = wxc.wxPyApp_GetMacExitMenuItemId
+
+wxPyApp_GetMacHelpMenuTitleName = wxc.wxPyApp_GetMacHelpMenuTitleName
+
+wxPyApp_SetMacDefaultEncodingIsPC = wxc.wxPyApp_SetMacDefaultEncodingIsPC
+
+wxPyApp_SetMacSupportPCMenuShortcuts = wxc.wxPyApp_SetMacSupportPCMenuShortcuts
+
+wxPyApp_SetMacAboutMenuItemId = wxc.wxPyApp_SetMacAboutMenuItemId
+
+wxPyApp_SetMacPreferencesMenuItemId = wxc.wxPyApp_SetMacPreferencesMenuItemId
+
+wxPyApp_SetMacExitMenuItemId = wxc.wxPyApp_SetMacExitMenuItemId
+
+wxPyApp_SetMacHelpMenuTitleName = wxc.wxPyApp_SetMacHelpMenuTitleName
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------
@@ -1781,6 +1805,21 @@ class wxApp(wxPyApp):
 
     def RestoreStdio(self):
         sys.stdout, sys.stderr = self.saveStdio
+
+
+# change from wxPyApp_ to wxApp_
+wxApp_GetMacDefaultEncodingIsPC = wxc.wxPyApp_GetMacDefaultEncodingIsPC
+wxApp_GetMacSupportPCMenuShortcuts = wxc.wxPyApp_GetMacSupportPCMenuShortcuts
+wxApp_GetMacAboutMenuItemId = wxc.wxPyApp_GetMacAboutMenuItemId
+wxApp_GetMacPreferencesMenuItemId = wxc.wxPyApp_GetMacPreferencesMenuItemId
+wxApp_GetMacExitMenuItemId = wxc.wxPyApp_GetMacExitMenuItemId
+wxApp_GetMacHelpMenuTitleName = wxc.wxPyApp_GetMacHelpMenuTitleName
+wxApp_SetMacDefaultEncodingIsPC = wxc.wxPyApp_SetMacDefaultEncodingIsPC
+wxApp_SetMacSupportPCMenuShortcuts = wxc.wxPyApp_SetMacSupportPCMenuShortcuts
+wxApp_SetMacAboutMenuItemId = wxc.wxPyApp_SetMacAboutMenuItemId
+wxApp_SetMacPreferencesMenuItemId = wxc.wxPyApp_SetMacPreferencesMenuItemId
+wxApp_SetMacExitMenuItemId = wxc.wxPyApp_SetMacExitMenuItemId
+wxApp_SetMacHelpMenuTitleName = wxc.wxPyApp_SetMacHelpMenuTitleName
 
 
 #----------------------------------------------------------------------------
