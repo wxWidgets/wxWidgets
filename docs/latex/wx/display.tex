@@ -16,6 +16,7 @@ None
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxDisplay::wxDisplay}\label{wxdisplayconstr}
 
 \func{}{wxDisplay}{\param{size\_t }{index = 0}}
@@ -25,8 +26,8 @@ Constructor, setting up a wxDisplay instance with the specified display.
 \wxheading{Parameters}
 
 \docparam{index}{The index of the display to use.  This must be non-negative
-and lower than the value returned by \helpref{GetCount()}{wxdisplaygetcount},
-inclusive.}
+and lower than the value returned by \helpref{GetCount()}{wxdisplaygetcount}.}
+
 
 \membersection{wxDisplay::\destruct{wxDisplay}}
 
@@ -34,17 +35,20 @@ inclusive.}
 
 Destructor.
 
+
 \membersection{wxDisplay::GetCount}\label{wxdisplaygetcount}
 
 \func{static size\_t}{GetCount}{\void}
 
 Returns the number of connected displays.
 
+
 \membersection{wxDisplay::GetDepth}\label{wxdisplaygetdepth}
 
 \constfunc{int }{GetDepth}{\void}
 
 Returns the bit depth of the display whose index was passed to the constructor.
+
 
 \membersection{wxDisplay::GetFromPoint}\label{wxdisplaygetfrompoint}
 
@@ -57,6 +61,7 @@ the point is not on any connected display.
 
 \docparam{pt}{The point to locate.}
 
+
 \membersection{wxDisplay::GetGeometry}\label{wxdisplaygetgeometry}
 
 \constfunc{wxRect }{GetGeometry}{\void}
@@ -64,11 +69,13 @@ the point is not on any connected display.
 Returns the bounding rectangle of the display whose index was passed to the
 constructor.
 
+
 \membersection{wxDisplay::GetName}\label{wxdisplaygetname}
 
 \constfunc{wxString }{GetName}{\void}
 
 Returns the display's name.  A name is not available on all platforms.
+
 
 \membersection{wxDisplay::IsColour}\label{wxdisplayiscolour}
 
@@ -76,11 +83,13 @@ Returns the display's name.  A name is not available on all platforms.
 
 Returns true if the display is color (has a depth greater than 1).
 
+
 \membersection{wxDisplay::IsColor}\label{wxdisplayiscolor}
 
 \constfunc{bool }{IsColor}{\void}
 
 Same as \helpref{IsColour()}{wxdisplayiscolour}.
+
 
 \membersection{wxDisplay::IsPrimary}\label{wxdisplayisprimary}
 
