@@ -706,6 +706,17 @@ class ParamOrient(RadioBox):
         if not value: value = 'wxHORIZONTAL'
         self.SetStringSelection(self.seulav[value])
 
+class ParamOrientation(RadioBox):
+    values = {'horizontal': 'horizontal', 'vertical': 'vertical'}
+    seulav = {'horizontal': 'horizontal', 'vertical': 'vertical'}
+    def __init__(self, parent, name):
+        RadioBox.__init__(self, parent, -1, choices=self.values.keys(), name=name)
+    def GetValue(self):
+        return self.values[self.GetStringSelection()]
+    def SetValue(self, value):
+        if not value: value = 'vertical'
+        self.SetStringSelection(self.seulav[value])
+
 class ParamFile(PPanel):
     def __init__(self, parent, name):
         PPanel.__init__(self, parent, name)

@@ -83,6 +83,7 @@ class Tools(wxPanel):
              (ID_NEW.LIST_CTRL, images.getToolListCtrlBitmap()),
              
              (ID_NEW.NOTEBOOK, images.getToolNotebookBitmap()),
+             (ID_NEW.SPLITTER_WINDOW, images.getToolSplitterWindowBitmap()),
 
              (ID_NEW.UNKNOWN, images.getToolUnknownBitmap())]
             ]
@@ -245,7 +246,8 @@ class Tools(wxPanel):
                 self.EnableGroup(GROUP_CONTROLS)
                 self.EnableGroupItems(GROUP_CONTROLS,
                                       [ ID_NEW.TREE_CTRL,
-                                        ID_NEW.NOTEBOOK ],
+                                        ID_NEW.NOTEBOOK,
+                                        ID_NEW.SPLITTER_WINDOW ],
                                       False)
             elif state == STATE_MENU:
                 self.EnableGroup(GROUP_MENUS)

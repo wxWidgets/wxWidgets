@@ -73,6 +73,7 @@ class ID_NEW:
     LIST_CTRL = wxNewId()
     CHECK_LIST = wxNewId()
     NOTEBOOK = wxNewId()
+    SPLITTER_WINDOW = wxNewId()
     SCROLLED_WINDOW = wxNewId()
     HTML_WINDOW = wxNewId()
     CALENDAR_CTRL = wxNewId()
@@ -146,6 +147,7 @@ class PullDownMenu:
             ID_NEW.LIST_CTRL: 'wxListCtrl',
             ID_NEW.CHECK_LIST: 'wxCheckListBox',
             ID_NEW.NOTEBOOK: 'wxNotebook',
+            ID_NEW.SPLITTER_WINDOW: 'wxSplitterWindow',
             ID_NEW.SCROLLED_WINDOW: 'wxScrolledWindow',
             ID_NEW.HTML_WINDOW: 'wxHtmlWindow',
             ID_NEW.CALENDAR_CTRL: 'wxCalendarCtrl',
@@ -172,6 +174,7 @@ class PullDownMenu:
         self.containers = [
              (ID_NEW.PANEL, 'Panel', 'Create panel'),
              (ID_NEW.NOTEBOOK, 'Notebook', 'Create notebook control'),
+             (ID_NEW.SPLITTER_WINDOW, 'SplitterWindow', 'Create splitter window'),
              (ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar'),
             ]
         self.sizers = [
@@ -221,6 +224,7 @@ class PullDownMenu:
             ['container', 'Containers',
              (ID_NEW.PANEL, 'Panel', 'Create panel'),
              (ID_NEW.NOTEBOOK, 'Notebook', 'Create notebook control'),
+             (ID_NEW.SPLITTER_WINDOW, 'SplitterWindow', 'Create splitter window'),
              (ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar'),
              ],
             ['sizer', 'Sizers',

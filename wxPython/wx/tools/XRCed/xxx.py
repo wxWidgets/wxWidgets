@@ -496,6 +496,13 @@ class xxxNotebook(xxxContainer):
     paramDict = {'usenotebooksizer': ParamBool}
     winStyles = ['wxNB_FIXEDWIDTH', 'wxNB_LEFT', 'wxNB_RIGHT', 'wxNB_BOTTOM']
 
+class xxxSplitterWindow(xxxContainer):
+    allParams = ['orientation', 'sashpos', 'minsize', 'pos', 'size', 'style']
+    paramDict = {'orientation': ParamOrientation, 'sashpos': ParamUnit, 'minsize': ParamUnit }
+    winStyles = ['wxSP_3D', 'wxSP_3DSASH', 'wxSP_3DBORDER', 'wxSP_BORDER',
+    			 'wxSP_NOBORDER', 'wxSP_PERMIT_UNSPLIT', 'wxSP_LIVE_UPDATE',
+    			 'wxSP_NO_XP_THEME' ]
+
 class xxxGenericDirCtrl(xxxObject):
     allParams = ['defaultfolder', 'filter', 'defaultfilter', 'pos', 'size', 'style']
     paramDict = {'defaultfilter': ParamInt}
@@ -785,6 +792,7 @@ xxxDict = {
     'wxListCtrl': xxxListCtrl,
     'wxCheckListBox': xxxCheckList,
     'wxNotebook': xxxNotebook,
+    'wxSplitterWindow': xxxSplitterWindow,
     'notebookpage': xxxNotebookPage,
     'wxHtmlWindow': xxxHtmlWindow,
     'wxCalendarCtrl': xxxCalendarCtrl,

@@ -51,13 +51,13 @@ class Panel(wxNotebook):
         topSizer = page.GetSizer()
         sizer = topSizer.GetChildren()[0].GetSizer()
         for w in page.GetChildren():
-            sizer.RemoveWindow(w)
+            sizer.Remove(w)
             if isinstance(w, ParamPage):
                 # With SetParent, we wouldn't need this
                 w.Reparent(self.cacheParent)
             else:
                 w.Destroy()
-        topSizer.RemoveSizer(sizer)
+        topSizer.Remove(sizer)
         # Create new windows
         sizer = wxBoxSizer(wxVERTICAL)
         # Special case - resize html window
