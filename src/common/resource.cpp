@@ -2645,7 +2645,7 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
             }
         default:
             {
-#ifdef __WXGTK__
+#if defined( __WXGTK__ ) || defined( __WXMOTIF__ )
                 wxLogWarning(_("Icon resource specification %s not found."), (const wxChar*) resource);
                 break;
 #else
