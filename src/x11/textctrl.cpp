@@ -1071,7 +1071,7 @@ void wxTextCtrl::SearchForBrackets()
     char bracket = ' ';
     
     if (m_cursorX > 0)
-        bracket = current[m_cursorX-1];
+        bracket = current[(size_t) m_cursorX-1];
         
     if (bracket == ')' || bracket == ']' || bracket == '}')
     {
