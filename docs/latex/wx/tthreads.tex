@@ -38,14 +38,14 @@ more robust and will undoubtedly save you countless problems (example: under
 Win32 a thread can only access GDI objects such as pens, brushes, \&c created by
 itself and not by the other threads).
 
-For communication between secondar threads and the main thread, use may use 
+For communication between secondary threads and the main thread, you may use 
 \helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingevent}
 or its short version \helpref{wxPostEvent}{wxpostevent}. These functions
 have thread safe implementation so that they can be used as they are for
-sending event from one thread to another. However there is no built in method
+sending events from one thread to another. However there is no built in method
 to send messages to the worker threads and you will need to use the available
 synchronization classes to implement the solution which suits your needs
-yourself. In particular, please notice that it is \emph{not} enough to derive
+yourself. In particular, please note that it is \emph{not} enough to derive
 your class from \helpref{wxThread}{wxthread} and 
 \helpref{wxEvtHandler}{wxevthandler} to send messages to it: in fact, this does
 \emph{not} work at all.

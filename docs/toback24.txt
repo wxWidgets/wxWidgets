@@ -209,7 +209,7 @@ Checking in window.cpp;
 /pack/cvsroots/wxwindows/wxWidgets/src/msw/window.cpp,v  <--  window.cpp
 new revision: 1.431; previous revision: 1.430
 
-29. Fix infinite loop in IsDialoMessage when a panel is reparented after
+29. Fix infinite loop in IsDialogMessage when a panel is reparented after
     creation (as happens with XRC)
 Checking in src/msw/window.cpp;
 /pack/cvsroots/wxwindows/wxWidgets/src/msw/window.cpp,v  <--  window.cpp

@@ -89,8 +89,8 @@ and "subclass". "class" must always be present, it tells XRC what wxWidgets
 object should be created in this place. The other two are optional.  "name" is
 ID used to identify the object. It is the value passed to the XRCID() macro and
 is also used to construct wxWindow's id and name attributes and must be unique
-among all children of the neareset container object (wxDialog, wxFrame,
-wxPanel, wxNotebook) upside from the object in XML nodes hiearchy (two distinct
+among all children of the nearest container object (wxDialog, wxFrame,
+wxPanel, wxNotebook) upside from the object in XML nodes hierarchy (two distinct
 containers may contain objects with same "name", though). "subclass" is
 optional name of class whose constructor will be called instead of the
 constructor for "class". Subclass must be available in the program that loads
@@ -109,10 +109,10 @@ is allowed to register new object handlers within XRC and extend it to accept
 new <object> classes (and therefore different <object>'s child nodes).
 
 <object_ref> node is identical to <object>, except that it does _not_ have
-"class" property and has additonal required property "ref". It's concept is
+"class" property and has additional required property "ref". It's concept is
 similar to Unix symlinks: value of the "ref" property is equal to the value of
 "name" property of some existing node (called referred node) in the resources
-(not neccessary top-level).  Referred node's "class" property and all subnodes
+(not necessary top-level).  Referred node's "class" property and all subnodes
 are copied in place of the referee <object_ref> node which is then processed as
 regular <object> node. If the <object_ref> node itself has child nodes, then
 these nodes _override_ any nodes from the referred node.
@@ -154,7 +154,7 @@ by XRC parser according to this table:
     "__"   -> "_"
     "\n"   -> line break (C character '\n')
     "\r"   -> carriage return (C character '\r')
-    "\t"   -> tabelator (C character '\t')
+    "\t"   -> tab (C character '\t')
     "\\"   -> "\"
               (introduced in version 2.5.3.0, not done in earlier versions)
 
@@ -196,7 +196,7 @@ Style[wxSomeClass]
 ------------------
 List of style flags that can be passed to wxSomeClass' constructor. Flags are
 written in same way as in C++ code (e.g. "wxSUNKEN_BORDER",
-"wxHW_SCROLLBAR_NEVER") and are delimined with any combination of whitespaces
+"wxHW_SCROLLBAR_NEVER") and are delimited with any combination of whitespaces
 and '|'. Possible flags are class-dependent and are not described in this
 technote. Please refer to wxWidgets manual for all styles that given class can
 accept; if XRC does not accept a flag listed in wxWidgets documentation, it is
@@ -209,7 +209,7 @@ Attribute value is interpreted as filename (either absolute or relative to
 the location of XRC resource file). In addition, attribute node may have
 "stock_id" and "stock_client" properties. Their values may be any of wxArtID (or
 wxArtClient respectively) values as used by wxArtProvider (because the user may
-define own constants, efectively any string is legal here). Examples are
+define own constants, effectively any string is legal here). Examples are
 "wxART_FILE_OPEN" (id) or "wxART_MENU" (client).
 
 Any of "stock_id" or "stock_client" properties or the filename may be omitted.
@@ -321,8 +321,8 @@ orientation                "horizontal"|"vertical" horizontal
 
 wxSplitterWindow must have at least one and at most two children objects.
 If there's only one child object, it is passed to wxSplitterWindow::Initialize
-and the splitter is created unsplitted. If there are two children, the
-splitter is created splitted, either horizontally or vertically depending
+and the splitter is created unsplit. If there are two children, the
+splitter is created split, either horizontally or vertically depending
 on the value of "orientation" attribute.
 
 wxStatusBar

@@ -80,7 +80,7 @@ It is highly desirable to let the users know what stock bitmaps are available
 in wxWidgets. The "artprov" sample serves this purpose: it contains a browser
 dialog that displays all available art resources.
 
-It has to be updated to accomodate for new bitmaps. Fortunately, this is
+It has to be updated to accommodate for new bitmaps. Fortunately, this is
 trivial: open $(wx)/samples/artprov/artbrows.cpp in text editor and
 ART_ICON(wxART_MY_BITMAP) line to the FillBitmaps() function.
 

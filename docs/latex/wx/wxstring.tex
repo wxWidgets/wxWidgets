@@ -492,7 +492,7 @@ wxString DeleteAllVowels(const wxString& original)
 
 \end{verbatim}
 
-because it will avoid the need of reallocating string memory many times (in case
+because it will avoid the need to reallocate string memory many times (in case
 of long strings). Note that it does not set the maximal length of a string - it
 will still expand if more than {\it nLen} characters are stored in it. Also, it
 does not truncate the existing string (use 
@@ -597,7 +597,7 @@ Case-sensitive comparison. Returns 0 if equal, 1 if greater or -1 if less.
 
 \constfunc{bool}{Contains}{\param{const wxString\&}{ str}}
 
-Returns 1 if target appears anyhere in wxString; else 0.
+Returns 1 if target appears anywhere in wxString; else 0.
 
 \membersection{wxString::Empty}\label{wxstringempty}
 
@@ -1045,7 +1045,7 @@ familiar with C) results.
 
 \constfunc{bool}{ToULong}{\param{unsigned long}{ *val}, \param{int }{base = $10$}}
 
-Attempts to convert the string to a ansigned integer in base {\it base}.
+Attempts to convert the string to a unsigned integer in base {\it base}.
 Returns {\tt true} on success in which case the number is stored in the
 location pointed to by {\it val} or {\tt false} if the string does not
 represent a valid number in the given base.
@@ -1122,7 +1122,7 @@ The macro wxWX2WCbuf is defined as the correct return type (without const).
 \constfunc{bool}{operator!}{\void}
 
 Empty string is false, so !string will only return true if the string is empty.
-This allows the tests for NULLness of a {\it const char *} pointer and emptyness
+This allows the tests for NULLness of a {\it const char *} pointer and emptiness
 of the string to look the same in the code and makes it easier to port old code
 to wxString.
 
@@ -1145,8 +1145,8 @@ constructor (see \helpref{wxString constructors}{wxstringconstruct}).
 
 \membersection{wxString::operator $+$}\label{wxstringoperatorplus}
 
-Concatenation: all these operators return a new strign equal to the sum of the
-operands.
+Concatenation: all these operators return a new string equal to the
+concatenation of the operands.
 
 \func{wxString}{operator $+$}{\param{const wxString\&}{ x}, \param{const wxString\&}{ y}}
 
@@ -1248,7 +1248,7 @@ These comparisons are case-sensitive.
 \section{\class{wxStringBuffer}}\label{wxstringbuffer}
 
 This tiny class allows to conveniently access the \helpref{wxString}{wxstring} 
-internal buffer as a writable pointer without any risk to forget to restore
+internal buffer as a writable pointer without any risk of forgetting to restore
 the string to the usable state later.
 
 For example, assuming you have a low-level OS function called 

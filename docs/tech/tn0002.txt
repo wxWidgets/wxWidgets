@@ -12,7 +12,7 @@ First of all, here is what you will need:
       mirror (RPMs and DEBs are also available from the usual places)
 
    b) for Windows you can download the precompiled binaries from
-      www.wxwidgets.org or install PoEdit (poedit.sourceforge.org) and
+      www.wxwidgets.org or install PoEdit (poedit.sourceforge.net) and
       add <installdir>/poEdit/bin to your path (so it can find xgettext).
 
 2. A way to run a program recursively on an entire directory from the command
@@ -65,6 +65,9 @@ Author:  VZ
 Version: $Id$
 
 $Log$
+Revision 1.5  2004/10/22 19:12:59  KH
+*** empty log message ***
+
 Revision 1.4  2004/05/04 08:26:58  JS
 Name change replacements
 

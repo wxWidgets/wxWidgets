@@ -426,7 +426,7 @@ Dialog units are used for maintaining a dialog's proportions even if the font ch
 
 \helpref{wxWindow::ConvertDialogToPixels}{wxwindowconvertdialogtopixels}
 
-\pythonnote{In place of a single overloaded method name, wxPythonimplements the following methods:\par
+\pythonnote{In place of a single overloaded method name, wxPython implements the following methods:\par
 \indented{2cm}{\begin{twocollist}
 \twocolitem{{\bf ConvertDialogPointToPixels(point)}}{Accepts and returns a wxPoint}
 \twocolitem{{\bf ConvertDialogSizeToPixels(size)}}{Accepts and returns a wxSize}
@@ -670,7 +670,7 @@ Gets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxa
 
 \membersection{wxWindow::GetAccessible}\label{wxwindowgetaccessible}
 
-\func{wxAccessibile*}{GetAccessible}{\void}
+\func{wxAccessible*}{GetAccessible}{\void}
 
 Returns the accessible object for this window, if any.
 
@@ -1319,8 +1319,8 @@ the window overrides \helpref{ShouldInheritColours}{wxwindowshouldinheritcolours
 to return \false, the colours will not be changed no matter what and only the
 font might.
 
-This rather complicated logic is necessary in order to accomodate the
-different usage scenarius. The most common one is when all default attributes
+This rather complicated logic is necessary in order to accommodate the
+different usage scenarios. The most common one is when all default attributes
 are used and in this case, nothing should be inherited as in modern GUIs
 different controls use different fonts (and colours) than their siblings so
 they can't inherit the same value from the parent. However it was also deemed
@@ -2379,7 +2379,7 @@ Sets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxa
 
 \membersection{wxWindow::SetAccessible}\label{wxwindowsetaccessible}
 
-\func{void}{SetAccessible}{\param{wxAccessibile*}{ accessible}}
+\func{void}{SetAccessible}{\param{wxAccessible*}{ accessible}}
 
 Sets the accessible for this window. Any existing accessible for this window
 will be deleted first, if not identical to {\it accessible}.
@@ -3248,7 +3248,7 @@ See \helpref{Window styles}{windowstyles} for more information about flags.
 
 This function can be called under all platforms but only does anything under
 Mac OS X 10.3+ currently. Under this system, each of the standard control can
-exist in several sizes which correpond to the elements of wxWindowVariant
+exist in several sizes which correspond to the elements of wxWindowVariant
 enum:
 \begin{verbatim}
 enum wxWindowVariant

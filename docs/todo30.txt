@@ -74,7 +74,7 @@ Core
     We need a (GUI) tool to generate the project/makefiles for all supported
     platforms/compilers. Not sure if it should be used for the library itself
     (would be nice to have something like "make menuconfig" for Linux kernel
-     which allows you to navigate easily amon all of the configure/setup.h
+     which allows you to navigate easily among all of the configure/setup.h
      options but there is a problem with distributing such tool as it can't be
      compiled by the user because it is needed before the library is built) but
     we definitely need it for the users makefiles.
@@ -119,7 +119,7 @@ Modules/Plugins
 Architecture
 ------------
 
-We aim to arrive at a lazy initializiation of modules only when they are first 
+We aim to arrive at a lazy initialization of modules only when they are first 
 needed. Dependency information between modules is needed. Dynamic Plug-In
 loading and unloading must be compatible with that.
 

@@ -319,7 +319,7 @@ This function is used to request a "new" wxDb instance for use by the program.
 The wxDb instance returned is also opened (see \helpref{wxDb::Open}{wxdbopen}).
 
 This function (along with wxDbFreeConnection() and wxDbCloseConnection())
-maintain a cached of wxDb instances for user/re-use by a program.  When a
+maintain a cache of wxDb instances for user/re-use by a program.  When a
 program needs a wxDb instance, it may call this function to obtain a wxDb
 instance.  If there is a wxDb instance in the cache that is currently unused
 that matches the connection requirements specified in {\it'pDbConfig'} then

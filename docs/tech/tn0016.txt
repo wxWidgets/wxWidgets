@@ -83,11 +83,11 @@ All files used by main libraries are listed in files.bkl. The file is
 organized into variables for toolkits, platforms and libraries. The variables
 come in pairs: there's always FOO_SRC for source files and FOO_HDR for header
 files. Platform or toolkit specific files are grouped together in variable
-with platform or tookit name in them, e.g. BASE_WIN32_SRC, BASE_UNIX_SRC,
+with platform or toolkit name in them, e.g. BASE_WIN32_SRC, BASE_UNIX_SRC,
 GTK_SRC, MOTIF_SRC.
 
 Note: A side effect of this toolkit-centric organization is that one file may
-      be present several times in files.bkl in different contenxt.
+      be present several times in files.bkl in different contexts.
 
 When you are adding a file, you must put it into appropriate variable. This is
 easy if you are adding the file to library that is always built from same
@@ -194,7 +194,7 @@ f) Update configure.in and wx-config.in to contain information about
    the library and needed linker flags:
    * Add "foo" to either CORE_BASE_LIBS or CORE_GUI_LIBS in configure.in so
      that wxFoo is not treated as contrib library in monolithic build.
-   * If wxFoo links against additional libraries, add neccessary linker
+   * If wxFoo links against additional libraries, add necessary linker
      flags and libraries to ldflags_foo and ldlibs_foo variables in
      wx-config.in (both are optional).
 

@@ -8,7 +8,7 @@ shadow objects for most of wxWidgets' classes and which store
 a handle to such a shadow class as client data in that class.
 This data can either be of type void - in which case the data
 {\it container} does not take care of freeing the data again
-or it is of type wxClientData or its derivates. In that case the
+or it is of type wxClientData or its derivatives. In that case the
 container (e.g. a control) will free the memory itself later.
 Note that you {\it must not} assign both void data and data
 derived from the wxClientData class to a container.
@@ -52,7 +52,7 @@ Virtual destructor.
 This class is a mixin that provides storage and management of "client
 data." This data can either be of type void - in which case the data
 {\it container} does not take care of freeing the data again
-or it is of type wxClientData or its derivates. In that case the
+or it is of type wxClientData or its derivatives. In that case the
 container will free the memory itself later.
 Note that you {\it must not} assign both void data and data
 derived from the wxClientData class to a container.

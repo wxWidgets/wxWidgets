@@ -56,7 +56,7 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
       size to be used by the sizers.
 
     * The best size of a window is cached so it doesn't need to
-      recaculated on every layout.  wxWindow::InvalidateBestSize was
+      recalculated on every layout.  wxWindow::InvalidateBestSize was
       added and should be called (usually just internally in control
       methods) whenever something is done that would make the best
       size change.
@@ -130,7 +130,7 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
   Previously, the application terminated if there were no top level windows;
   now it terminates if there are no top level windows or taskbar icons left.
 - wxZlibInputStream is not by default compatible with the output of the
-  2.4.x version of wxZlibOutputStream. However, there is a compatibilty mode,
+  2.4.x version of wxZlibOutputStream. However, there is a compatibility mode,
   switched on by passing wxZLIB_24COMPATIBLE to the constructor.
 - when WXWIN_COMPATIBILITY_2_4 == 0 wxHashTable uses a new implementation
   not using wxList keyed interface (the same used when wxUSE_STL == 1),
@@ -292,7 +292,7 @@ Unix:
 
 wxCocoa:
 
-- added Unicode compatability layer for OSX 10.2
+- added Unicode compatibility layer for OSX 10.2
 - fixed so that wxCocoa runs in OSX 10.2 
 - Tooltips now supported
 - wxSound now supported
@@ -303,7 +303,7 @@ wxMac:
 
 - fixed MLTE text control GetLineText and GetLineLength on OSX 
 - added OSX wxTaskBarIcon implementation for the OSX Dock 
-- added Unicode compatability layer for OSX 10.2
+- added Unicode compatibility layer for OSX 10.2
 - wxGetKeyState now works with nearly all wx key codes
 
 wxGTK:
@@ -357,7 +357,7 @@ wxWinCE:
 
 - added native WinCE driven smartphone wxTextCtrl implementation using spinners
 - added native WinCE driven smartphone wxChoice implementation using spinners
-- added automatized but customizable handling of native WinCE driven smartphone menus
+- added automated but customizable handling of native WinCE driven smartphone menus
 - fixed wxRadioBox and wxStaticBox
 
 wxHTML:
@@ -411,7 +411,7 @@ wxMSW:
 - wxFileName::GetModificationTime() works with opened files too now
 - wxDC::GetClippingBox() now works even for clipping regions created by Windows
 - fixed wxFileDataObject in Unicode build (Alex D)
-- subdindented paragraphs support (Tim Kosse)
+- subindented paragraphs support (Tim Kosse)
 
 wxGTK:
 
@@ -554,7 +554,7 @@ wxMac:
 - use same average character width as other ports when calculating dialog units
 - implemented handling of mouse wheel
 - fix for long file names (longer than 32 characters) in file dialogs
-- use unix sockets for Mach-o builds
+- use Unix sockets for Mach-o builds
 
 wxMotif:
 
@@ -638,7 +638,7 @@ All GUI ports:
 - it is now possible to use several wxFileHistory objects in the same menu
   by giving them different base IDs (Dimitri Schoolwerth)
 - Added wxTLW::SetShape with implementations for wxMSW and wxGTK (so far)
-- FL: rmoved const from EnableTool parameters
+- FL: removed const from EnableTool parameters
 - FL: signal child window when toolbar is closed
 - In various places, changed tests for pathsep on last char of string to call
   wxEndsWithPathSeparator(s)
@@ -712,7 +712,7 @@ wxGTK:
 - added wxTextCtrl::SetSelection implementation for GTK+ 2
 - fixed wxTextCtrl::IsEditable() for GTK+ 2
 - fixed wxStaticText alignment for GTK+ 2 (Kevin Hock)
-- don't consume 100% CPU when showing a poup menu
+- don't consume 100% CPU when showing a popup menu
 
 wxMac:
 
@@ -736,7 +736,7 @@ wxMSW:
 - libraries built with makefile.g95 have a _min or _cyg suffix (MinGW/Cygwin)
 - when using DLL, wxLocalFSHandler was not being exported
 - fixed problem with wxEvtHandler object not removed from wxPendingEvents
-- Windows XP manifest is now included in wx.rc; it is no longer neccessary
+- Windows XP manifest is now included in wx.rc; it is no longer necessary
   to ship .exe.manifest file with applications to support XP themes
 - wxLocale::Init no longer reports error if trying to set Unicode-only locale
   or if user's default locale is Unicode-only
@@ -936,7 +936,7 @@ wxThread and related classes:
 ! wxCondition now *must* be used with a mutex, please read the (updated) class
   documentation for details and revise your code accordingly: this change was
   unfortunately needed as it was impossible to ensure the correct behaviour
-  (i.e. absense of race conditions) using the old API.
+  (i.e. absence of race conditions) using the old API.
 
 - wxMutex is not recursive any more in POSIX implementation (it hasn't been
   recursive in 2.2.x but was in 2.3.1 and 2.3.2), please refer to the class
@@ -1086,7 +1086,7 @@ wxMSW:
 - wxLB_SORT style can be used with wxCheckListBox
 - wxWindowDC and wxClientDC::GetSize() works correctly now
 - Added wxTB_NODIVIDER and wxTB_NOALIGN so native toolbar can be used in FL
-- Multiline labels in buttons are now supoprted (simply use "\n" in the label)
+- Multiline labels in buttons are now supported (simply use "\n" in the label)
 - Implemented wxMouseCaptureChangedEvent and made wxGenericDragImage check it
   has the capture before release it.
 - fixed bugs in multiple selection wxCheckListBox
@@ -2231,7 +2231,7 @@ At this point, the following has been achieved:
 - Toolbar class hierarchy revised:
   wxToolBarBase
   wxToolBarSimple (= old wxToolBar)
-  wxToolBar95 (= old wxButtonBar under Win95
+  wxToolBar95 (= old wxButtonBar under Win95)
   wxToolBarMSW (= old wxButtonBar under WIN16/WIN32)
 - Constraint system debugged somewhat (sizers now work properly).
 - wxFileDialog, wxDirDialog added; other common dialogs now

@@ -20,7 +20,7 @@ window using \helpref{wxWindow::SetAccessible}{wxwindowsetaccessible}.
 All functions return an indication of success, failure, or not implemented
 using values of the wxAccStatus enum type.
 
-If you return wxACC\_NOT\_IMPLEMENTED from any functioon, the system will try to
+If you return wxACC\_NOT\_IMPLEMENTED from any function, the system will try to
 implement the appropriate functionality. However this will not work with
 all functions.
 
@@ -52,11 +52,11 @@ may be one of the following:
 \begin{verbatim}
 typedef enum
 {
-    wxACC\_FAIL,             // The function failed
-    wxACC\_FALSE,            // The function returned false
-    wxACC\_OK,               // The function completed successfully
-    wxACC\_NOT\_IMPLEMENTED, // The function is not implemented
-    wxACC\_NOT\_SUPPORTED    // The function is not supported
+    wxACC_FAIL,            // The function failed
+    wxACC_FALSE,           // The function returned false
+    wxACC_OK,              // The function completed successfully
+    wxACC_NOT_IMPLEMENTED, // The function is not implemented
+    wxACC_NOT_SUPPORTED    // The function is not supported
 } wxAccStatus
 \end{verbatim}
 }
@@ -68,14 +68,14 @@ the following:
 \begin{verbatim}
 typedef enum
 {
-    wxNAVDIR\_DOWN,
-    wxNAVDIR\_FIRSTCHILD,
-    wxNAVDIR\_LASTCHILD,
-    wxNAVDIR\_LEFT,
-    wxNAVDIR\_NEXT,
-    wxNAVDIR\_PREVIOUS,
-    wxNAVDIR\_RIGHT,
-    wxNAVDIR\_UP
+    wxNAVDIR_DOWN,
+    wxNAVDIR_FIRSTCHILD,
+    wxNAVDIR_LASTCHILD,
+    wxNAVDIR_LEFT,
+    wxNAVDIR_NEXT,
+    wxNAVDIR_PREVIOUS,
+    wxNAVDIR_RIGHT,
+    wxNAVDIR_UP
 } wxNavDir
 \end{verbatim}
 }
@@ -86,68 +86,68 @@ by the following type:
 {\small 
 \begin{verbatim}
 typedef enum {  
-    wxROLE\_NONE,
-    wxROLE\_SYSTEM\_ALERT,
-    wxROLE\_SYSTEM\_ANIMATION,
-    wxROLE\_SYSTEM\_APPLICATION,
-    wxROLE\_SYSTEM\_BORDER,
-    wxROLE\_SYSTEM\_BUTTONDROPDOWN,
-    wxROLE\_SYSTEM\_BUTTONDROPDOWNGRID,
-    wxROLE\_SYSTEM\_BUTTONMENU,
-    wxROLE\_SYSTEM\_CARET,
-    wxROLE\_SYSTEM\_CELL,
-    wxROLE\_SYSTEM\_CHARACTER,
-    wxROLE\_SYSTEM\_CHART,
-    wxROLE\_SYSTEM\_CHECKBUTTON,
-    wxROLE\_SYSTEM\_CLIENT,
-    wxROLE\_SYSTEM\_CLOCK,
-    wxROLE\_SYSTEM\_COLUMN,
-    wxROLE\_SYSTEM\_COLUMNHEADER,
-    wxROLE\_SYSTEM\_COMBOBOX,
-    wxROLE\_SYSTEM\_CURSOR,
-    wxROLE\_SYSTEM\_DIAGRAM,
-    wxROLE\_SYSTEM\_DIAL,
-    wxROLE\_SYSTEM\_DIALOG,
-    wxROLE\_SYSTEM\_DOCUMENT,
-    wxROLE\_SYSTEM\_DROPLIST,
-    wxROLE\_SYSTEM\_EQUATION,
-    wxROLE\_SYSTEM\_GRAPHIC,
-    wxROLE\_SYSTEM\_GRIP,
-    wxROLE\_SYSTEM\_GROUPING,
-    wxROLE\_SYSTEM\_HELPBALLOON,
-    wxROLE\_SYSTEM\_HOTKEYFIELD,
-    wxROLE\_SYSTEM\_INDICATOR,
-    wxROLE\_SYSTEM\_LINK,
-    wxROLE\_SYSTEM\_LIST,
-    wxROLE\_SYSTEM\_LISTITEM,
-    wxROLE\_SYSTEM\_MENUBAR,
-    wxROLE\_SYSTEM\_MENUITEM,
-    wxROLE\_SYSTEM\_MENUPOPUP,
-    wxROLE\_SYSTEM\_OUTLINE,
-    wxROLE\_SYSTEM\_OUTLINEITEM,
-    wxROLE\_SYSTEM\_PAGETAB,
-    wxROLE\_SYSTEM\_PAGETABLIST,
-    wxROLE\_SYSTEM\_PANE,
-    wxROLE\_SYSTEM\_PROGRESSBAR,
-    wxROLE\_SYSTEM\_PROPERTYPAGE,
-    wxROLE\_SYSTEM\_PUSHBUTTON,
-    wxROLE\_SYSTEM\_RADIOBUTTON,
-    wxROLE\_SYSTEM\_ROW,
-    wxROLE\_SYSTEM\_ROWHEADER,
-    wxROLE\_SYSTEM\_SCROLLBAR,
-    wxROLE\_SYSTEM\_SEPARATOR,
-    wxROLE\_SYSTEM\_SLIDER,
-    wxROLE\_SYSTEM\_SOUND,
-    wxROLE\_SYSTEM\_SPINBUTTON,
-    wxROLE\_SYSTEM\_STATICTEXT,
-    wxROLE\_SYSTEM\_STATUSBAR,
-    wxROLE\_SYSTEM\_TABLE,
-    wxROLE\_SYSTEM\_TEXT,
-    wxROLE\_SYSTEM\_TITLEBAR,
-    wxROLE\_SYSTEM\_TOOLBAR,
-    wxROLE\_SYSTEM\_TOOLTIP,
-    wxROLE\_SYSTEM\_WHITESPACE,
-    wxROLE\_SYSTEM\_WINDOW
+    wxROLE_NONE,
+    wxROLE_SYSTEM_ALERT,
+    wxROLE_SYSTEM_ANIMATION,
+    wxROLE_SYSTEM_APPLICATION,
+    wxROLE_SYSTEM_BORDER,
+    wxROLE_SYSTEM_BUTTONDROPDOWN,
+    wxROLE_SYSTEM_BUTTONDROPDOWNGRID,
+    wxROLE_SYSTEM_BUTTONMENU,
+    wxROLE_SYSTEM_CARET,
+    wxROLE_SYSTEM_CELL,
+    wxROLE_SYSTEM_CHARACTER,
+    wxROLE_SYSTEM_CHART,
+    wxROLE_SYSTEM_CHECKBUTTON,
+    wxROLE_SYSTEM_CLIENT,
+    wxROLE_SYSTEM_CLOCK,
+    wxROLE_SYSTEM_COLUMN,
+    wxROLE_SYSTEM_COLUMNHEADER,
+    wxROLE_SYSTEM_COMBOBOX,
+    wxROLE_SYSTEM_CURSOR,
+    wxROLE_SYSTEM_DIAGRAM,
+    wxROLE_SYSTEM_DIAL,
+    wxROLE_SYSTEM_DIALOG,
+    wxROLE_SYSTEM_DOCUMENT,
+    wxROLE_SYSTEM_DROPLIST,
+    wxROLE_SYSTEM_EQUATION,
+    wxROLE_SYSTEM_GRAPHIC,
+    wxROLE_SYSTEM_GRIP,
+    wxROLE_SYSTEM_GROUPING,
+    wxROLE_SYSTEM_HELPBALLOON,
+    wxROLE_SYSTEM_HOTKEYFIELD,
+    wxROLE_SYSTEM_INDICATOR,
+    wxROLE_SYSTEM_LINK,
+    wxROLE_SYSTEM_LIST,
+    wxROLE_SYSTEM_LISTITEM,
+    wxROLE_SYSTEM_MENUBAR,
+    wxROLE_SYSTEM_MENUITEM,
+    wxROLE_SYSTEM_MENUPOPUP,
+    wxROLE_SYSTEM_OUTLINE,
+    wxROLE_SYSTEM_OUTLINEITEM,
+    wxROLE_SYSTEM_PAGETAB,
+    wxROLE_SYSTEM_PAGETABLIST,
+    wxROLE_SYSTEM_PANE,
+    wxROLE_SYSTEM_PROGRESSBAR,
+    wxROLE_SYSTEM_PROPERTYPAGE,
+    wxROLE_SYSTEM_PUSHBUTTON,
+    wxROLE_SYSTEM_RADIOBUTTON,
+    wxROLE_SYSTEM_ROW,
+    wxROLE_SYSTEM_ROWHEADER,
+    wxROLE_SYSTEM_SCROLLBAR,
+    wxROLE_SYSTEM_SEPARATOR,
+    wxROLE_SYSTEM_SLIDER,
+    wxROLE_SYSTEM_SOUND,
+    wxROLE_SYSTEM_SPINBUTTON,
+    wxROLE_SYSTEM_STATICTEXT,
+    wxROLE_SYSTEM_STATUSBAR,
+    wxROLE_SYSTEM_TABLE,
+    wxROLE_SYSTEM_TEXT,
+    wxROLE_SYSTEM_TITLEBAR,
+    wxROLE_SYSTEM_TOOLBAR,
+    wxROLE_SYSTEM_TOOLTIP,
+    wxROLE_SYSTEM_WHITESPACE,
+    wxROLE_SYSTEM_WINDOW
 } wxAccRole
 \end{verbatim}
 }
@@ -157,18 +157,18 @@ Objects are represented by the following type:
 {\small 
 \begin{verbatim}
 typedef enum {
-    wxOBJID\_WINDOW =    0x00000000,
-    wxOBJID\_SYSMENU =   0xFFFFFFFF,
-    wxOBJID\_TITLEBAR =  0xFFFFFFFE,
-    wxOBJID\_MENU =      0xFFFFFFFD,
-    wxOBJID\_CLIENT =    0xFFFFFFFC,
-    wxOBJID\_VSCROLL =   0xFFFFFFFB,
-    wxOBJID\_HSCROLL =   0xFFFFFFFA,
-    wxOBJID\_SIZEGRIP =  0xFFFFFFF9,
-    wxOBJID\_CARET =     0xFFFFFFF8,
-    wxOBJID\_CURSOR =    0xFFFFFFF7,
-    wxOBJID\_ALERT =     0xFFFFFFF6,
-    wxOBJID\_SOUND =     0xFFFFFFF5
+    wxOBJID_WINDOW =    0x00000000,
+    wxOBJID_SYSMENU =   0xFFFFFFFF,
+    wxOBJID_TITLEBAR =  0xFFFFFFFE,
+    wxOBJID_MENU =      0xFFFFFFFD,
+    wxOBJID_CLIENT =    0xFFFFFFFC,
+    wxOBJID_VSCROLL =   0xFFFFFFFB,
+    wxOBJID_HSCROLL =   0xFFFFFFFA,
+    wxOBJID_SIZEGRIP =  0xFFFFFFF9,
+    wxOBJID_CARET =     0xFFFFFFF8,
+    wxOBJID_CURSOR =    0xFFFFFFF7,
+    wxOBJID_ALERT =     0xFFFFFFF6,
+    wxOBJID_SOUND =     0xFFFFFFF5
 } wxAccObject
 \end{verbatim}
 }
@@ -180,12 +180,12 @@ this type:
 \begin{verbatim}
 typedef enum
 {
-    wxACC\_SEL\_NONE            = 0,
-    wxACC\_SEL\_TAKEFOCUS       = 1,
-    wxACC\_SEL\_TAKESELECTION   = 2,
-    wxACC\_SEL\_EXTENDSELECTION = 4,
-    wxACC\_SEL\_ADDSELECTION    = 8,
-    wxACC\_SEL\_REMOVESELECTION = 16
+    wxACC_SEL_NONE            = 0,
+    wxACC_SEL_TAKEFOCUS       = 1,
+    wxACC_SEL_TAKESELECTION   = 2,
+    wxACC_SEL_EXTENDSELECTION = 4,
+    wxACC_SEL_ADDSELECTION    = 8,
+    wxACC_SEL_REMOVESELECTION = 16
 } wxAccSelectionFlags
 \end{verbatim}
 }
@@ -194,32 +194,32 @@ States are represented by the following:
 
 {\small 
 \begin{verbatim}
-#define wxACC\_STATE\_SYSTEM\_ALERT\_HIGH       0x00000001
-#define wxACC\_STATE\_SYSTEM\_ALERT\_MEDIUM     0x00000002
-#define wxACC\_STATE\_SYSTEM\_ALERT\_LOW        0x00000004
-#define wxACC\_STATE\_SYSTEM\_ANIMATED         0x00000008
-#define wxACC\_STATE\_SYSTEM\_BUSY             0x00000010
-#define wxACC\_STATE\_SYSTEM\_CHECKED          0x00000020
-#define wxACC\_STATE\_SYSTEM\_COLLAPSED        0x00000040
-#define wxACC\_STATE\_SYSTEM\_DEFAULT          0x00000080
-#define wxACC\_STATE\_SYSTEM\_EXPANDED         0x00000100
-#define wxACC\_STATE\_SYSTEM\_EXTSELECTABLE    0x00000200
-#define wxACC\_STATE\_SYSTEM\_FLOATING         0x00000400
-#define wxACC\_STATE\_SYSTEM\_FOCUSABLE        0x00000800
-#define wxACC\_STATE\_SYSTEM\_FOCUSED          0x00001000
-#define wxACC\_STATE\_SYSTEM\_HOTTRACKED       0x00002000
-#define wxACC\_STATE\_SYSTEM\_INVISIBLE        0x00004000
-#define wxACC\_STATE\_SYSTEM\_MARQUEED         0x00008000
-#define wxACC\_STATE\_SYSTEM\_MIXED            0x00010000
-#define wxACC\_STATE\_SYSTEM\_MULTISELECTABLE  0x00020000
-#define wxACC\_STATE\_SYSTEM\_OFFSCREEN        0x00040000
-#define wxACC\_STATE\_SYSTEM\_PRESSED          0x00080000
-#define wxACC\_STATE\_SYSTEM\_PROTECTED        0x00100000
-#define wxACC\_STATE\_SYSTEM\_READONLY         0x00200000
-#define wxACC\_STATE\_SYSTEM\_SELECTABLE       0x00400000
-#define wxACC\_STATE\_SYSTEM\_SELECTED         0x00800000
-#define wxACC\_STATE\_SYSTEM\_SELFVOICING      0x01000000
-#define wxACC\_STATE\_SYSTEM\_UNAVAILABLE      0x02000000
+#define wxACC_STATE_SYSTEM_ALERT_HIGH       0x00000001
+#define wxACC_STATE_SYSTEM_ALERT_MEDIUM     0x00000002
+#define wxACC_STATE_SYSTEM_ALERT_LOW        0x00000004
+#define wxACC_STATE_SYSTEM_ANIMATED         0x00000008
+#define wxACC_STATE_SYSTEM_BUSY             0x00000010
+#define wxACC_STATE_SYSTEM_CHECKED          0x00000020
+#define wxACC_STATE_SYSTEM_COLLAPSED        0x00000040
+#define wxACC_STATE_SYSTEM_DEFAULT          0x00000080
+#define wxACC_STATE_SYSTEM_EXPANDED         0x00000100
+#define wxACC_STATE_SYSTEM_EXTSELECTABLE    0x00000200
+#define wxACC_STATE_SYSTEM_FLOATING         0x00000400
+#define wxACC_STATE_SYSTEM_FOCUSABLE        0x00000800
+#define wxACC_STATE_SYSTEM_FOCUSED          0x00001000
+#define wxACC_STATE_SYSTEM_HOTTRACKED       0x00002000
+#define wxACC_STATE_SYSTEM_INVISIBLE        0x00004000
+#define wxACC_STATE_SYSTEM_MARQUEED         0x00008000
+#define wxACC_STATE_SYSTEM_MIXED            0x00010000
+#define wxACC_STATE_SYSTEM_MULTISELECTABLE  0x00020000
+#define wxACC_STATE_SYSTEM_OFFSCREEN        0x00040000
+#define wxACC_STATE_SYSTEM_PRESSED          0x00080000
+#define wxACC_STATE_SYSTEM_PROTECTED        0x00100000
+#define wxACC_STATE_SYSTEM_READONLY         0x00200000
+#define wxACC_STATE_SYSTEM_SELECTABLE       0x00400000
+#define wxACC_STATE_SYSTEM_SELECTED         0x00800000
+#define wxACC_STATE_SYSTEM_SELFVOICING      0x01000000
+#define wxACC_STATE_SYSTEM_UNAVAILABLE      0x02000000
 \end{verbatim}
 }
 
@@ -228,48 +228,48 @@ as follows:
 
 {\small 
 \begin{verbatim}
-#define wxACC\_EVENT\_SYSTEM\_SOUND              0x0001
-#define wxACC\_EVENT\_SYSTEM\_ALERT              0x0002
-#define wxACC\_EVENT\_SYSTEM\_FOREGROUND         0x0003
-#define wxACC\_EVENT\_SYSTEM\_MENUSTART          0x0004
-#define wxACC\_EVENT\_SYSTEM\_MENUEND            0x0005
-#define wxACC\_EVENT\_SYSTEM\_MENUPOPUPSTART     0x0006
-#define wxACC\_EVENT\_SYSTEM\_MENUPOPUPEND       0x0007
-#define wxACC\_EVENT\_SYSTEM\_CAPTURESTART       0x0008
-#define wxACC\_EVENT\_SYSTEM\_CAPTUREEND         0x0009
-#define wxACC\_EVENT\_SYSTEM\_MOVESIZESTART      0x000A
-#define wxACC\_EVENT\_SYSTEM\_MOVESIZEEND        0x000B
-#define wxACC\_EVENT\_SYSTEM\_CONTEXTHELPSTART   0x000C
-#define wxACC\_EVENT\_SYSTEM\_CONTEXTHELPEND     0x000D
-#define wxACC\_EVENT\_SYSTEM\_DRAGDROPSTART      0x000E
-#define wxACC\_EVENT\_SYSTEM\_DRAGDROPEND        0x000F
-#define wxACC\_EVENT\_SYSTEM\_DIALOGSTART        0x0010
-#define wxACC\_EVENT\_SYSTEM\_DIALOGEND          0x0011
-#define wxACC\_EVENT\_SYSTEM\_SCROLLINGSTART     0x0012
-#define wxACC\_EVENT\_SYSTEM\_SCROLLINGEND       0x0013
-#define wxACC\_EVENT\_SYSTEM\_SWITCHSTART        0x0014
-#define wxACC\_EVENT\_SYSTEM\_SWITCHEND          0x0015
-#define wxACC\_EVENT\_SYSTEM\_MINIMIZESTART      0x0016
-#define wxACC\_EVENT\_SYSTEM\_MINIMIZEEND        0x0017
-#define wxACC\_EVENT\_OBJECT\_CREATE                 0x8000
-#define wxACC\_EVENT\_OBJECT\_DESTROY                0x8001
-#define wxACC\_EVENT\_OBJECT\_SHOW                   0x8002
-#define wxACC\_EVENT\_OBJECT\_HIDE                   0x8003
-#define wxACC\_EVENT\_OBJECT\_REORDER                0x8004
-#define wxACC\_EVENT\_OBJECT\_FOCUS                  0x8005
-#define wxACC\_EVENT\_OBJECT\_SELECTION              0x8006
-#define wxACC\_EVENT\_OBJECT\_SELECTIONADD           0x8007
-#define wxACC\_EVENT\_OBJECT\_SELECTIONREMOVE        0x8008
-#define wxACC\_EVENT\_OBJECT\_SELECTIONWITHIN        0x8009
-#define wxACC\_EVENT\_OBJECT\_STATECHANGE            0x800A
-#define wxACC\_EVENT\_OBJECT\_LOCATIONCHANGE         0x800B
-#define wxACC\_EVENT\_OBJECT\_NAMECHANGE             0x800C
-#define wxACC\_EVENT\_OBJECT\_DESCRIPTIONCHANGE      0x800D
-#define wxACC\_EVENT\_OBJECT\_VALUECHANGE            0x800E
-#define wxACC\_EVENT\_OBJECT\_PARENTCHANGE           0x800F
-#define wxACC\_EVENT\_OBJECT\_HELPCHANGE             0x8010
-#define wxACC\_EVENT\_OBJECT\_DEFACTIONCHANGE        0x8011
-#define wxACC\_EVENT\_OBJECT\_ACCELERATORCHANGE      0x8012
+#define wxACC_EVENT_SYSTEM_SOUND              0x0001
+#define wxACC_EVENT_SYSTEM_ALERT              0x0002
+#define wxACC_EVENT_SYSTEM_FOREGROUND         0x0003
+#define wxACC_EVENT_SYSTEM_MENUSTART          0x0004
+#define wxACC_EVENT_SYSTEM_MENUEND            0x0005
+#define wxACC_EVENT_SYSTEM_MENUPOPUPSTART     0x0006
+#define wxACC_EVENT_SYSTEM_MENUPOPUPEND       0x0007
+#define wxACC_EVENT_SYSTEM_CAPTURESTART       0x0008
+#define wxACC_EVENT_SYSTEM_CAPTUREEND         0x0009
+#define wxACC_EVENT_SYSTEM_MOVESIZESTART      0x000A
+#define wxACC_EVENT_SYSTEM_MOVESIZEEND        0x000B
+#define wxACC_EVENT_SYSTEM_CONTEXTHELPSTART   0x000C
+#define wxACC_EVENT_SYSTEM_CONTEXTHELPEND     0x000D
+#define wxACC_EVENT_SYSTEM_DRAGDROPSTART      0x000E
+#define wxACC_EVENT_SYSTEM_DRAGDROPEND        0x000F
+#define wxACC_EVENT_SYSTEM_DIALOGSTART        0x0010
+#define wxACC_EVENT_SYSTEM_DIALOGEND          0x0011
+#define wxACC_EVENT_SYSTEM_SCROLLINGSTART     0x0012
+#define wxACC_EVENT_SYSTEM_SCROLLINGEND       0x0013
+#define wxACC_EVENT_SYSTEM_SWITCHSTART        0x0014
+#define wxACC_EVENT_SYSTEM_SWITCHEND          0x0015
+#define wxACC_EVENT_SYSTEM_MINIMIZESTART      0x0016
+#define wxACC_EVENT_SYSTEM_MINIMIZEEND        0x0017
+#define wxACC_EVENT_OBJECT_CREATE                 0x8000
+#define wxACC_EVENT_OBJECT_DESTROY                0x8001
+#define wxACC_EVENT_OBJECT_SHOW                   0x8002
+#define wxACC_EVENT_OBJECT_HIDE                   0x8003
+#define wxACC_EVENT_OBJECT_REORDER                0x8004
+#define wxACC_EVENT_OBJECT_FOCUS                  0x8005
+#define wxACC_EVENT_OBJECT_SELECTION              0x8006
+#define wxACC_EVENT_OBJECT_SELECTIONADD           0x8007
+#define wxACC_EVENT_OBJECT_SELECTIONREMOVE        0x8008
+#define wxACC_EVENT_OBJECT_SELECTIONWITHIN        0x8009
+#define wxACC_EVENT_OBJECT_STATECHANGE            0x800A
+#define wxACC_EVENT_OBJECT_LOCATIONCHANGE         0x800B
+#define wxACC_EVENT_OBJECT_NAMECHANGE             0x800C
+#define wxACC_EVENT_OBJECT_DESCRIPTIONCHANGE      0x800D
+#define wxACC_EVENT_OBJECT_VALUECHANGE            0x800E
+#define wxACC_EVENT_OBJECT_PARENTCHANGE           0x800F
+#define wxACC_EVENT_OBJECT_HELPCHANGE             0x8010
+#define wxACC_EVENT_OBJECT_DEFACTIONCHANGE        0x8011
+#define wxACC_EVENT_OBJECT_ACCELERATORCHANGE      0x8012
 \end{verbatim}
 }
 
@@ -426,7 +426,7 @@ Navigates from {\it fromId} to {\it toId}/{\it toObject}.
 
 \membersection{wxAccessible::NotifyEvent}\label{wxaccessiblenotifyevent}
 
-\func{virtual static void}{NotifyEvent}{\param{int}{ eventType}, \param{wxWindow* }{window}, \param{wxAccObjectt }{objectType}, \param{int }{objectType}}
+\func{virtual static void}{NotifyEvent}{\param{int}{ eventType}, \param{wxWindow* }{window}, \param{wxAccObject }{objectType}, \param{int }{objectType}}
 
 Allows the application to send an event when something changes in an accessible object.
 

@@ -5,7 +5,7 @@
 
 This filter stream decompresses a stream that is in zlib or gzip format.
 Note that reading the gzip format requires zlib version 1.2.1 or greater,
-(the builtin version does support gzips).
+(the builtin version does support gzip format).
 
 The stream is not seekable, \helpref{SeekI()}{wxinputstreamseeki} returns
  {\it wxInvalidOffset}. Also \helpref{GetSize()}{wxstreambasegetsize} is
@@ -42,8 +42,8 @@ deflate stream embedded in a higher level protocol.
 %if WXWIN_COMPATIBILITY_2_4
 This version is not by default compatible with the output produced by
 the version of {\it wxZlibOutputStream} in wxWidgets 2.4.x. However,
-there is a compatibilty mode, which is switched on by passing
-wxZLIB\_24COMPATIBLE for flags. Note that in when operating in compatibilty
+there is a compatibility mode, which is switched on by passing
+wxZLIB\_24COMPATIBLE for flags. Note that in when operating in compatibility
 mode error checking is very much reduced.
 %endif
 
@@ -76,7 +76,7 @@ Returns true if zlib library in use can handle gzip compressed data.
 This stream compresses all data written to it. The compressed output can be
 in zlib or gzip format.
 Note that writing the gzip format requires zlib version 1.2.1 or greater
-(the builtin version does support gzips).
+(the builtin version does support gzip format).
 
 The stream is not seekable, \helpref{SeekO()}{wxoutputstreamseeko} returns
  {\it wxInvalidOffset}.

@@ -4,7 +4,7 @@ and many tests have still to be done.
 The compilation was tested with
     -OpenVMS Alpha 7.2-1
     -DECC 6.2
-    -Compac C++ 6.2
+    -Compaq C++ 6.2
     -DECWindows 1.2-5
     -GTK1.2.8 (for wxGTK)
     
@@ -12,7 +12,7 @@ To get everything compiled you'll need to have installed prior to compiling
 wxWidgets:
     -Bison
       get it from http://www.openvms.digital.com/freeware/
-      You' have to fix the following bug:
+      You'll have to fix the following bug:
         add the following 3 lines in BISON.SIMPLE
 	  #elif __VMS
 	  #include <stdlib.h>

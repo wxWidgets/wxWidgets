@@ -132,7 +132,7 @@ See the \helpref{artprov}{sampleartprovider} sample for an example of wxArtProvi
 
 Derived art provider classes must override this method to create requested 
 art resource. Note that returned bitmaps are cached by wxArtProvider and it is therefore
-not neccessary to optimize CreateBitmap for speed (e.g. you may create wxBitmap objects
+not necessary to optimize CreateBitmap for speed (e.g. you may create wxBitmap objects
 from XPMs here).
 
 \wxheading{Parameters}
@@ -142,7 +142,7 @@ from XPMs here).
 \docparam{client}{wxArtClient identifier of the client (i.e. who is asking for the bitmap).
 This only servers as a hint.}
 
-\docparam{size}{Prefered size of the bitmap. The function may return a bitmap of different
+\docparam{size}{Preferred size of the bitmap. The function may return a bitmap of different
 dimensions, it will be automatically rescaled to meet client's request.}
 
 \wxheading{Note}

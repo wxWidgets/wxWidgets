@@ -45,7 +45,7 @@ please look at the printout sample code.
     {
       // Pass two printout objects: for preview, and possible printing.
       wxPrintPreview *preview = new wxPrintPreview(new MyPrintout, new MyPrintout);
-      wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", 100, 100, 600, 650);
+      wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
       frame->Centre(wxBOTH);
       frame->Initialize();
       frame->Show(true);
