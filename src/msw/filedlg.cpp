@@ -340,6 +340,7 @@ int wxFileDialog::ShowModal()
                 dir += _T('\\');
 
             m_path = dir + m_fileName;
+            m_filterIndex = (int)of.nFilterIndex - 1;
         }
         else
         {
