@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////////////////////////
+// Name:       sndpcm.cpp
+// Purpose:    wxMMedia
+// Author:     Guilhem Lavaux
+// Created:    1998
+// Updated:    1999
+// Copyright:  (C) 1997, 1998, 1999, Guilhem Lavaux
+// License:    wxWindows license
+////////////////////////////////////////////////////////////////////////////////
 #ifdef __GNUG__
 #pragma implementation "sndpcm.h"
 #endif
@@ -106,9 +115,11 @@ void wxSoundPcmCodec::InputSwapAndSign16()
   } else {
     while (StreamOk()) {
       temp = GET();
+      temp2 = GET();
       PUT(temp ^ signer1);
       if (!StreamOk()) {
         m_in_sound->WriteBack(temp);
+        m_in_sound->WriteBack(temp2);
         break;
       }
       PUT(GET() ^ signer2);
@@ -164,6 +175,7 @@ void wxSoundPcmCodec::OutputSwapAndSign16()
       PUT(temp ^ signer1);
       if (!StreamOk()) {
         m_in_sound->WriteBack(temp);
+        m_in_sound->WriteBack(temp2);
         break;
       }
       PUT(temp2 ^ signer2);

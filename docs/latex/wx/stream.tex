@@ -48,6 +48,16 @@ functionnalities of a ``normal'' stream.
 \wxheading{Warning}
 
 The "read\_write" mode may not work: it isn't completely finished.
+You can create "memory" streams by this way:
+\begin{verbatim}
+  wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::read)
+  wxInputStream *input = new wxInputStream(sb);
+
+  sb->Fixed(FALSE); // It can change the size of the buffer.
+
+  // input is now a read-only memory stream.
+\end{verbatim}
+But you should care about destroying the stream buffer \it{YOURSELF}.
 
 \wxheading{See also}
 

@@ -30,11 +30,18 @@ TRUE, if the connection is established, else FALSE.
 
 Creates a new input stream on the the specified path. You can use all but seek
 functionnality of wxStream. Seek isn't available on all stream. For example,
-http or ftp streams doesn't deal with it.
+http or ftp streams doesn't deal with it. Other functions like StreamSize and
+Tell aren't available for the moment for this sort of stream.
+You will be notified when the EOF is reached by an error.
 
 \wxheading{Return value}
 
-Returns the initialized stream. You will have to delete it yourself.
+Returns the initialized stream. You will have to delete it yourself once you
+don't use it anymore. The destructor closes the network connection.
+
+\wxheading{See also}
+
+\helpref{wxInputStream}{wxinputstream}
 
 % ----------------------------------------------------------------------------
 \membersection{wxProtocol::Abort}\label{wxprotoabort}
@@ -43,7 +50,9 @@ Returns the initialized stream. You will have to delete it yourself.
 
 Abort the current stream.
 
-\it{WARNING: It is advised to destroy the input stream instead of aborting the stream this way.}
+\wxheading{Warning}
+
+It is advised to destroy the input stream instead of aborting the stream this way.
 
 \wxheading{Return value}
 
@@ -89,4 +98,3 @@ Sets the authentication user. It is mainly useful when FTP is used.
 \func{void}{SetPassword}{\param{const wxString\&}{ user}}
 
 Sets the authentication password. It is mainly useful when FTP is used.
-

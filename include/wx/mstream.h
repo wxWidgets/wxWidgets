@@ -27,10 +27,4 @@ class wxMemoryOutputStream:  public wxOutputStream {
   virtual ~wxMemoryOutputStream();
 };
 
-class wxMemoryStream: public wxMemoryInputStream, public wxMemoryOutputStream {
- public:
-  wxMemoryStream(char *data = NULL, size_t length = 0);
-  virtual ~wxMemoryStream();
-};
-
 #endif

@@ -17,7 +17,6 @@
 #endif
 #include <wx/stream.h>
 #include <wx/wfstream.h>
-#include <wx/mstream.h>
 
 #include "mmfile.h"
 
@@ -44,16 +43,18 @@ wxMMediaFile::wxMMediaFile(wxInputStream& is, bool preload, bool seekable)
     m_tmpfname((char *)NULL), m_mfname((char *)NULL),
     m_seekable(seekable)
 {
-/*
   if (preload) {
-    wxMemoryStream *tmpstream = new wxMemoryStream();
+    wxStreamBuffer *streamb = new wxStreamBuffer(wxStreamBuffer::read_write);
 
-    m_o_temp = tmpstream;
-    m_i_temp = tmpstream;
+    streamb->Fixed(FALSE);
+    streamb->Flushable(FALSE);
+
+    m_o_temp = new wxOutputStream(streamb);
+    m_i_temp = new wxInputStream(streamb);
 
     m_o_temp->Write(is);
+    streamb->ResetBuffer();
   }
-*/
 }
 
 wxMMediaFile::wxMMediaFile(const wxString& fname)
@@ -75,16 +76,18 @@ void wxMMediaFile::SetFile(wxInputStream& str, bool preload, bool seekable)
   m_ostream = NULL;
   m_seekable = seekable;
 
-/*
   if (preload) {
-    wxMemoryStream *tmpstream = new wxMemoryStream();
+    wxStreamBuffer *streamb = new wxStreamBuffer(wxStreamBuffer::read_write);
 
-    m_i_temp = tmpstream;
-    m_o_temp = tmpstream;
+    streamb->Fixed(FALSE);
+    streamb->Flushable(FALSE);
 
-    m_o_temp->Write(str);
+    m_o_temp = new wxOutputStream(streamb);
+    m_i_temp = new wxInputStream(streamb);
+
+    m_o_temp->Write(is);
+    streamb->ResetBuffer();
   }
-*/
 }
 
 void wxMMediaFile::SetFile(wxOutputStream& str, bool seekable)
@@ -113,7 +116,9 @@ void wxMMediaFile::CleanUpPrevious()
     if (m_ostream)
       m_ostream->Write(*m_i_temp);
 
-    delete m_i_temp; // Only one delete because m_tmpo* and m_tmpi* are linked
+    delete m_i_temp->StreamBuffer();
+    delete m_i_temp;
+    delete m_o_temp;
 
     if (m_tmpfname)
       wxRemoveFile(m_tmpfname);

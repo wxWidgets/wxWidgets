@@ -358,6 +358,7 @@ bool wxSocketBase::Close()
 wxSocketBase& wxSocketBase::Read(char* buffer, size_t nbytes)
 {
   m_lcount = GetPushback(buffer, nbytes, FALSE);
+  nbytes -= m_lcount;
 
   // If we have got the whole needed buffer or if we don't want to
   // wait then it returns immediately.

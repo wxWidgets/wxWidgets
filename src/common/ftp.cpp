@@ -328,6 +328,7 @@ bool wxFTP::Abort(void)
 wxInputStream *wxFTP::GetInputStream(const wxString& path)
 {
   wxString tmp_str;
+  size_t calc_size;
 
   if (!SendCommand("TYPE I", '2'))
     return NULL;

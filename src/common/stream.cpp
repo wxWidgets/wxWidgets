@@ -285,6 +285,9 @@ size_t wxStreamBuffer::Read(void *buffer, size_t size)
 {
   wxASSERT(m_stream != NULL);
 
+  if (m_mode == write)
+    return 0;
+
   // ------------------
   // Buffering disabled
   // ------------------
@@ -334,6 +337,9 @@ size_t wxStreamBuffer::Read(wxStreamBuffer *s_buf)
   char buf[BUF_TEMP_SIZE];
   size_t s = 0, bytes_read = BUF_TEMP_SIZE;
 
+  if (m_mode == write)
+    return 0;
+
   while (bytes_read == BUF_TEMP_SIZE) {
     bytes_read = Read(buf, bytes_read);
     bytes_read = s_buf->Write(buf, bytes_read);
@@ -345,6 +351,9 @@ size_t wxStreamBuffer::Read(wxStreamBuffer *s_buf)
 size_t wxStreamBuffer::Write(const void *buffer, size_t size)
 {
   wxASSERT(m_stream != NULL);
+
+  if (m_mode == read)
+    return 0;
 
   // ------------------
   // Buffering disabled
@@ -391,6 +400,9 @@ size_t wxStreamBuffer::Write(wxStreamBuffer *sbuf)
 {
   char buf[BUF_TEMP_SIZE];
   size_t s = 0, bytes_count = BUF_TEMP_SIZE, b_count2;
+
+  if (m_mode == read)
+    return 0;
 
   while (bytes_count == BUF_TEMP_SIZE) {
     b_count2 = sbuf->Read(buf, bytes_count);
