@@ -62,25 +62,25 @@ def main():
     logTruncate()
 
     try:
-##         logSeparator("Cleanup")
-##         os.chdir(WXDIR + '/src/msw')
-##         do('make cleandll FINAL=1')
+        logSeparator("Cleanup")
+        os.chdir(WXDIR + '/src/msw')
+        do('make cleandll FINAL=1')
 
-##         logSeparator("Building Documentation...")
-##         os.chdir(WXDIR + '/src/msw')
-##         do('make touchmanual htmlhelp')
-##         validateFile(WXDIR + '/docs/htmlhelp/wx.chm')
+        logSeparator("Building Documentation...")
+        os.chdir(WXDIR + '/src/msw')
+        do('make touchmanual htmlhelp')
+        validateFile(WXDIR + '/docs/htmlhelp/wx.chm')
 
-##         logSeparator("Building wxWindows and other libraries...")
-##         os.chdir(WXDIR + '/src/msw')
-##         do('make dll pch FINAL=1')
-##         validateFile(WXDIR + '/lib/wx'+dllVer+'.dll')
+        logSeparator("Building wxWindows and other libraries...")
+        os.chdir(WXDIR + '/src/msw')
+        do('make dll pch FINAL=1')
+        validateFile(WXDIR + '/lib/wx'+dllVer+'.dll')
 
 
 
-##         logSeparator("Cleaning wxPython build directory...")
-##         os.chdir(WXPYDIR)
-##         do('buildall.bat -c')
+        logSeparator("Cleaning wxPython build directory...")
+        os.chdir(WXPYDIR)
+        do('buildall.bat -c')
         os.rename('build.local', 'build.local.save')
         f = open("build.local", "w")
         f.write("""

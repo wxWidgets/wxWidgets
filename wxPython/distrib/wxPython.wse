@@ -195,7 +195,7 @@ end
 item: End Block
 end
 item: Display Graphic
-  Pathname=c:\Projects\wxp\distrib\wxPython.BMP
+  Pathname=C:\PROJECTS\wx\wxPython\distrib\wxPython.bmp
   X Position=32784
   Y Position=16
   Flags=0000001010000000
@@ -824,126 +824,126 @@ item: Install File
   Flags=0000001010010010
 end
 item: Install File
-  Source=c:\Projects\wxp\wxPython\*.py
+  Source=c:\Projects\wx\wxPython\wxPython\*.py
   Destination=%MAINDIR%\wxPython
   Description=wxPython shadow class modules
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\wxPython\*.pyd
+  Source=c:\Projects\wx\wxPython\wxPython\*.pyd
   Destination=%MAINDIR%\wxPython
   Description=wxPython extension modules
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\wxPython\*.txt
+  Source=c:\Projects\wx\wxPython\wxPython\*.txt
   Destination=%MAINDIR%\wxPython
   Description=README file
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\wxPython\lib\*.py
+  Source=c:\Projects\wx\wxPython\wxPython\lib\*.py
   Destination=%MAINDIR%\wxPython\lib
   Description=wxPython Standard Library
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\wxPython\lib\sizers\*.py
+  Source=c:\Projects\wx\wxPython\wxPython\lib\sizers\*.py
   Destination=%MAINDIR%\wxPython\lib\sizers
   Description=wxPython Standard Library
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\wxPython\lib\editor\*.py
+  Source=c:\Projects\wx\wxPython\wxPython\lib\editor\*.py
   Destination=%MAINDIR%\wxPython\lib\editor
   Description=wxPython Standard Library
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\*.py
+  Source=c:\Projects\wx\wxPython\demo\*.py
   Destination=%MAINDIR%\wxPython\demo
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\README.txt
+  Source=c:\Projects\wx\wxPython\demo\README.txt
   Destination=%MAINDIR%\wxPython\demo\README.txt
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\*.xml
+  Source=c:\Projects\wx\wxPython\demo\*.xml
   Destination=%MAINDIR%\wxPython\demo
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\bitmaps\*.bmp
+  Source=c:\Projects\wx\wxPython\demo\bitmaps\*.bmp
   Destination=%MAINDIR%\wxPython\demo\bitmaps
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\bitmaps\*.gif
+  Source=c:\Projects\wx\wxPython\demo\bitmaps\*.gif
   Destination=%MAINDIR%\wxPython\demo\bitmaps
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\bitmaps\*.jpg
+  Source=c:\Projects\wx\wxPython\demo\bitmaps\*.jpg
   Destination=%MAINDIR%\wxPython\demo\bitmaps
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\bitmaps\*.png
+  Source=c:\Projects\wx\wxPython\demo\bitmaps\*.png
   Destination=%MAINDIR%\wxPython\demo\bitmaps
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\bitmaps\*.ico
+  Source=c:\Projects\wx\wxPython\demo\bitmaps\*.ico
   Destination=%MAINDIR%\wxPython\demo\bitmaps
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\data\*.htm
+  Source=c:\Projects\wx\wxPython\demo\data\*.htm
   Destination=%MAINDIR%\wxPython\demo\data
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\data\*.png
+  Source=c:\Projects\wx\wxPython\demo\data\*.png
   Destination=%MAINDIR%\wxPython\demo\data
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\data\grid.i
+  Source=c:\Projects\wx\wxPython\demo\data\grid.i
   Destination=%MAINDIR%\wxPython\demo\data\grid.i
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\data\stc.h
+  Source=c:\Projects\wx\wxPython\demo\data\stc.h
   Destination=%MAINDIR%\wxPython\demo\data\stc.h
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wxp\demo\data\tips.txt
+  Source=c:\Projects\wx\wxPython\demo\data\tips.txt
   Destination=%MAINDIR%\wxPython\demo\data\tips.txt
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=C:\PROJECTS\wx\utils\wxPython\README.txt
+  Source=C:\PROJECTS\wx\wxPython\README.txt
   Destination=%MAINDIR%\wxPython\README.txt
   Flags=0000000010000010
 end
 item: Install File
-  Source=C:\PROJECTS\wx\utils\wxPython\CHANGES.txt
+  Source=C:\PROJECTS\wx\wxPython\CHANGES.txt
   Destination=%MAINDIR%\wxPython\CHANGES.txt
   Flags=0000000010000010
 end
