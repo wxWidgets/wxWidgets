@@ -272,7 +272,7 @@ if [ $skiplinux != yes ]; then
     
     echo "Fetching the results..."
     scp root@$LINUX_HOST:$LINUX_BUILD/wxPythonGTK*.i[0-9]86.rpm  $STAGING_DIR
-    ssh root@$LINUX_HOST "$LINUX_BUILD/wxPythonGTK*.i[0-9]86.rpm"
+    ssh root@$LINUX_HOST "rm $LINUX_BUILD/wxPythonGTK*.i[0-9]86.rpm"
 fi
 
 

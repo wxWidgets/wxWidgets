@@ -18,7 +18,7 @@ set -o errexit
 
 echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
 
-if [ $# -lt 5 ]; then
+if [ $# -lt 4]; then
     echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER..."
     exit 1
 fi
@@ -43,9 +43,9 @@ for ver in $PYVER; do
 done
 
 
-echo "Copying RPMs to $DESTDIR..."
-cp  wxPythonGTK*.i[0-9]86.rpm $DESTDIR
-cd $DESTDIR
+#echo "Copying RPMs to $DESTDIR..."
+#cp  wxPythonGTK*.i[0-9]86.rpm $DESTDIR
+#cd $DESTDIR
 
 
 if [ $SKIPCLEAN != yes ]; then 
