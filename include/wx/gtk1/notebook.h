@@ -108,9 +108,7 @@ public:
     bool DoPhase(int phase);
 #endif
 
-    // set all page's font
-    bool SetFont(const wxFont& font);
-    
+    // set all page's attributes
     void DoApplyWidgetStyle(GtkRcStyle *style);
 
     // report if window belongs to notebook
