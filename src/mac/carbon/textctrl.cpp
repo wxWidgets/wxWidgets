@@ -252,6 +252,7 @@ public :
                              const wxSize& size, long style ) ;
     virtual OSStatus SetFocus( ControlFocusPart focusPart ) ;
     virtual bool HasFocus() const ;
+    virtual bool NeedsFocusRect() const;
 protected :
     HIViewRef m_scrollView ;
     HIViewRef m_textView ;
@@ -299,7 +300,6 @@ public :
                              const wxSize& size, long style ) ;
     ~wxMacMLTEClassicControl() ;
     virtual void VisibilityChanged(bool shown) ;
-    virtual bool NeedsFocusRect() const;
 protected :
     OSStatus                 DoCreate();
 public :
