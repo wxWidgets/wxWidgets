@@ -16,7 +16,6 @@
             src/scriptbinder.cpp
             src/sourcepainter.cpp
             src/srcparser.cpp
-            src/wx_extra_imps.cpp
         </sources>
         <wx-lib>base</wx-lib>
     </exe>
