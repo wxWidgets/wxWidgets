@@ -107,8 +107,8 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
     // menu icons and checkmarks
     if (ms_nDefaultMarginWidth == 0)
     {
-       ms_nDefaultMarginWidth = wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth;
-       ms_nLastMarginWidth = wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth;
+       ms_nDefaultMarginWidth = ::GetSystemMetrics(SM_CXMENUCHECK) + wxSystemSettings::GetMetric(wxSYS_EDGE_X);
+       ms_nLastMarginWidth = ms_nDefaultMarginWidth;
     }
 
     if (wxMSWSystemMenuFontModule::ms_systemMenuFont->Ok() && bMenuItem)

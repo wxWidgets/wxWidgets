@@ -170,8 +170,12 @@ void wxMenuItem::Init()
 
     #undef  SYS_COLOR
 
-    // we don't want normal items be owner-drawn
+    // setting default colors switched ownerdraw on: switch it off again
     ResetOwnerDrawn();
+
+    //  switch ownerdraw back on if using a non default margin
+    if ( GetId() != wxID_SEPARATOR )
+        SetMarginWidth(GetMarginWidth());
 
     // tell the owner drawing code to to show the accel string as well
     SetAccelString(m_text.AfterFirst(_T('\t')));
