@@ -834,13 +834,13 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
 	
 		if ( event.m_metaDown )
 			modifiers |= cmdKey ;
-
+/*
 #if TARGET_CARBON
         control = FindControlUnderMouse( localwhere , window , &controlpart ) ;
 #else
-//        control = FindControlUnderMouse( localwhere , window , &controlpart ) ;
 		controlpart = FindControl( localwhere , window , &control ) ;
 #endif
+*/
 		{
 		/*
 			if ( AcceptsFocus() && FindFocus() != this )
@@ -848,18 +848,17 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
 				SetFocus() ;
 			}
 		*/
+		    control = m_macControl ;
 			if ( control && ::IsControlActive( control ) )
 			{
 				{
-					if ( controlpart == kControlIndicatorPart && !UMAHasAppearance() )
-						controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) NULL ) ;
-					else
-						controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
+					controlpart = ::HandleControlClick( control , localwhere , modifiers , (ControlActionUPP) -1 ) ;
 					wxTheApp->s_lastMouseDown = 0 ;
-					if ( control && ! ( ( UMAHasAppearance() || (controlpart != kControlIndicatorPart) ) 
-						&& (IsKindOf( CLASSINFO( wxScrollBar ) ) ) ) ) // otherwise we will get the event twice
+					if ( control && controlpart != kControlNoPart &&
+					    ! IsKindOf( CLASSINFO( wxScrollBar ) ) 
+					) // otherwise we will get the event twice for scrollbar
 					{
-						MacHandleControlClick( control , controlpart ) ;
+					    MacHandleControlClick( control , controlpart ) ;
 					}
 				}
 			}
