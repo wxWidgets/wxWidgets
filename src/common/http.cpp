@@ -218,6 +218,8 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     break;
   case wxHTTP_POST:
     request = wxT("POST");
+    if ( GetHeader( wxT("Content-Length") ).IsNull() )
+      SetHeader( wxT("Content-Length"), wxString::Format( wxT("%ld"), m_post_buf.Len() ) );
     break;
   default:
     return FALSE;
@@ -230,7 +232,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     SetHeader(wxT("User-Agent"), wxT("wxWidgets 2.x"));
 
   SaveState();
-  SetFlags(wxSOCKET_NONE);
+  SetFlags( wxThread::IsMain() ? wxSOCKET_NONE : wxSOCKET_BLOCK );
   Notify(FALSE);
 
   wxString buf;
@@ -241,7 +243,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
   Write("\r\n", 2);
 
   if ( req == wxHTTP_POST ) {
-    Write(m_post_buf, m_post_buf.Len());
+    Write(m_post_buf.mbc_str(), m_post_buf.Len());
     m_post_buf = wxEmptyString;
   }
 
