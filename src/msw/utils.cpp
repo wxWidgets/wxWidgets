@@ -382,25 +382,55 @@ const wxChar* wxGetHomeDir(wxString *pstr)
     #endif
   #else   // Windows
     #ifdef  __WIN32__
-      const wxChar *szHome = wxGetenv(wxT("HOMEDRIVE"));
-      if ( szHome != NULL )
-        strDir << szHome;
-      szHome = wxGetenv(wxT("HOMEPATH"));
-      if ( szHome != NULL ) {
-        strDir << szHome;
+      strDir.clear();
 
-        // the idea is that under NT these variables have default values
-        // of "%systemdrive%:" and "\\". As we don't want to create our
-        // config files in the root directory of the system drive, we will
-        // create it in our program's dir. However, if the user took care
-        // to set HOMEPATH to something other than "\\", we suppose that he
-        // knows what he is doing and use the supplied value.
-        if ( wxStrcmp(szHome, wxT("\\")) != 0 )
-          return strDir.c_str();
+      // If we have a valid HOME directory, as is used on many machines that
+      // have unix utilities on them, we should use that.
+      const wxChar *szHome = wxGetenv(wxT("HOME"));
+
+      if ( szHome != NULL )
+      {
+        strDir = szHome;
+      }
+      else // no HOME, try HOMEDRIVE/PATH
+      {
+          szHome = wxGetenv(wxT("HOMEDRIVE"));
+          if ( szHome != NULL )
+            strDir << szHome;
+          szHome = wxGetenv(wxT("HOMEPATH"));
+
+          if ( szHome != NULL )
+          {
+            strDir << szHome;
+
+            // the idea is that under NT these variables have default values
+            // of "%systemdrive%:" and "\\". As we don't want to create our
+            // config files in the root directory of the system drive, we will
+            // create it in our program's dir. However, if the user took care
+            // to set HOMEPATH to something other than "\\", we suppose that he
+            // knows what he is doing and use the supplied value.
+            if ( wxStrcmp(szHome, wxT("\\")) == 0 )
+              strDir.clear();
+          }
       }
 
+      if ( strDir.empty() )
+      {
+          // If we have a valid USERPROFILE directory, as is the case in
+          // Windows NT, 2000 and XP, we should use that as our home directory.
+          szHome = wxGetenv(wxT("USERPROFILE"));
+
+          if ( szHome != NULL )
+            strDir = szHome;
+      }
+
+      if ( !strDir.empty() )
+      {
+          return strDir.c_str();
+      }
+      //else: fall back to the prograrm directory
     #else   // Win16
-      // Win16 has no idea about home, so use the working directory instead
+      // Win16 has no idea about home, so use the executable directory instead
     #endif  // WIN16/32
 
     // 260 was taken from windef.h
@@ -915,7 +945,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
 #if defined(__WIN32__) && !defined(__SC__)
     static int ver = -1, major = -1, minor = -1;
-    
+
     if ( ver == -1 )
     {
         OSVERSIONINFO info;
@@ -949,7 +979,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
         *majorVsn = major;
     if (minorVsn && minor != -1)
         *minorVsn = minor;
-    
+
     return ver;
 #else // Win16
     int retValue = wxWINDOWS;
