@@ -253,24 +253,25 @@ wxString wxFileData::GetHint() const
 {
     wxString s = m_filePath;
     s += wxT("  ");
+
     if (IsDir())
-        s += wxT("<DIR> ");
+        s += _("<DIR>");
     else if (IsLink())
-        s += wxT("<LINK> ");
+        s += _("<LINK>");
     else if (IsDrive())
+        s += _("<DRIVE>");
+    else // plain file
+        s += wxString::Format( _("%ld bytes"), m_size );
+
+    s += wxT(' ');
+
+    if ( !IsDrive() )
     {
-        s += wxT("<DRIVE> ");
-        return s;
-    }
-    else
-    {
-        s += wxString::Format( "%ld", m_size );
-        s += wxT(" bytes ");
+        s << GetModificationTime()
+          << wxT("  ")
+          << m_permissions;
     }
 
-    s += GetModificationTime();
-    s += wxT("  ");
-    s += m_permissions;
     return s;
 };
 
