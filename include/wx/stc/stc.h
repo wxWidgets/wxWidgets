@@ -2730,6 +2730,7 @@ private:
     void OnListBox(wxCommandEvent& evt);
     void OnIdle(wxIdleEvent& evt);
     
+    virtual wxSize DoGetBestSize() const;
 
     // Turn notifications from Scintilla into events
     void NotifyChange();

@@ -168,6 +168,8 @@ void wxStyledTextCtrl::Create(wxWindow *parent,
     // Put Scintilla into unicode (UTF-8) mode
     SetCodePage(wxSTC_CP_UTF8);
 #endif
+
+    SetBestFittingSize(size);
 }
 
 
@@ -2754,6 +2756,14 @@ void wxStyledTextCtrl::OnListBox(wxCommandEvent& WXUNUSED(evt)) {
 
 void wxStyledTextCtrl::OnIdle(wxIdleEvent& evt) {
     m_swx->DoOnIdle(evt);
+}
+
+
+wxSize wxStyledTextCtrl::DoGetBestSize() const
+{
+    // What would be the best size for a wxSTC?
+    // Just give a reasonable minimum until something else can be figured out.
+    return wxSize(200,100);
 }
 
 
