@@ -340,7 +340,6 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 
 //---------------------------------------------------------------------------
 
-#ifdef __WXMSW__
 wxPyMenu::wxPyMenu(const wxString& title, PyObject* _func)
     : wxMenu(title, (wxFunction)(func ? MenuCallback : NULL)), func(0) {
 
@@ -373,7 +372,7 @@ void wxPyMenu::MenuCallback(wxMenu& menu, wxCommandEvent& evt) {
     Py_DECREF(evtobj);
     Py_DECREF(menuobj);
 }
-#endif
+
 
 //---------------------------------------------------------------------------
 
@@ -1060,6 +1059,9 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/08/16 04:31:06  RD
+// More wxGTK work.
+//
 // Revision 1.3  1998/08/15 07:36:36  RD
 // - Moved the header in the .i files out of the code that gets put into
 // the .cpp files.  It caused CVS conflicts because of the RCS ID being

@@ -179,14 +179,18 @@ void wxEndBusyCursor();
 long wxExecute(const wxString& command, bool sync = FALSE);
 wxWindow * wxFindWindowByLabel(const wxString& label, wxWindow *parent=NULL);
 wxWindow * wxFindWindowByName(const wxString& name, wxWindow *parent=NULL);
+#ifdef __WXMSW__
 wxWindow * wxGetActiveWindow();
 long wxGetElapsedTime(bool resetTimer = TRUE);
+#endif
 long wxGetFreeMemory();
 void wxGetMousePosition(int* OUTPUT, int* OUTPUT);
 bool wxIsBusy();
 wxString wxNow();
 bool wxShell(const wxString& command = wxPyEmptyStr);
+#ifdef __WXMSW__
 void wxStartTimer();
+#endif
 bool wxYield();
 
 int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
@@ -277,6 +281,7 @@ public:
 //---------------------------------------------------------------------------
 // Accelerator Entry and Table
 
+#ifdef __WXMSW__
 class wxAcceleratorEntry {
 public:
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0);
@@ -296,11 +301,14 @@ public:
     // ~wxAcceleratorEntry(); *** ?
 
 };
-
+#endif
 //---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3  1998/08/16 04:31:10  RD
+// More wxGTK work.
+//
 // Revision 1.2  1998/08/15 07:36:41  RD
 // - Moved the header in the .i files out of the code that gets put into
 // the .cpp files.  It caused CVS conflicts because of the RCS ID being
