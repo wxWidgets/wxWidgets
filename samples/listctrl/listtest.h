@@ -25,7 +25,7 @@ public:
                const wxSize& size,
                long style)
         : wxListCtrl(parent, id, pos, size, style),
-          m_attr(*wxCYAN, *wxLIGHT_GREY, wxNullFont)
+          m_attr(*wxBLUE, *wxLIGHT_GREY, wxNullFont)
         {
         }
 
