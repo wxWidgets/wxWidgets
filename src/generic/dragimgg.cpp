@@ -250,7 +250,9 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
         (*backing) = wxBitmap(clientSize.x, clientSize.y);
 
     if (!m_fullScreen)
+    {
         m_windowDC = new wxClientDC(window);
+    }
     else
     {
         m_windowDC = new wxScreenDC;
@@ -370,7 +372,8 @@ bool wxGenericDragImage::Show()
 bool wxGenericDragImage::UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC,
     const wxRect& sourceRect, const wxRect& destRect) const
 {
-    return destDC.Blit(destRect.x, destRect.y, destRect.width, destRect.height, & windowDC, sourceRect.x, sourceRect.y);
+    return destDC.Blit(destRect.x, destRect.y, destRect.width, destRect.height, & windowDC,
+        sourceRect.x, sourceRect.y);
 }
 
 bool wxGenericDragImage::Hide()
