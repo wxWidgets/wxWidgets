@@ -26,20 +26,23 @@
 // ----------------------------------------------------------------------------
 // wxTextFile
 // ----------------------------------------------------------------------------
+
+// the line termination type
+enum wxTextFileType
+{
+    wxTextFileType_None,  // incomplete (the last line of the file only)
+    wxTextFileType_Unix,  // line is terminated with 'LF' = 0xA = 10 = '\n'
+    wxTextFileType_Dos,   //                         'CR' 'LF'
+    wxTextFileType_Mac    //                         'CR' = 0xD = 13 = '\r'
+};
+
+WX_DEFINE_ARRAY(wxTextFileType, ArrayFileType);
+
 class wxTextFile
 {
 public:
-  // constants
-  enum Type
-  {
-    Type_None,  // incomplete (the last line of the file only)
-    Type_Unix,  // line is terminated with 'LF' = 0xA = 10 = '\n'
-    Type_Dos,   //                         'CR' 'LF'
-    Type_Mac    //                         'CR' = 0xD = 13 = '\r'
-  };
-
   // default type for current platform (determined at compile time)
-  static const Type typeDefault;
+  static const wxTextFileType typeDefault;
 
   // ctors
     // def ctor, use Open(string)
@@ -87,29 +90,31 @@ public:
     { return m_aLines[m_nCurLine = m_aLines.Count() - 1]; }
 
     // get the type of the line (see also GetEOL)
-  Type GetLineType(size_t n) const { return m_aTypes[n]; }
+  wxTextFileType GetLineType(size_t n) const { return m_aTypes[n]; }
     // guess the type of file (m_file is supposed to be opened)
-  Type GuessType() const;
+  wxTextFileType GuessType() const;
     // get the name of the file
   const char *GetName() const { return m_strFile.c_str(); }
 
   // add/remove lines
     // add a line to the end
-  void AddLine(const wxString& str, Type type = typeDefault) 
+  void AddLine(const wxString& str, wxTextFileType type = typeDefault) 
     { m_aLines.Add(str); m_aTypes.Add(type); }
     // insert a line before the line number n
-  void InsertLine(const wxString& str, size_t n, Type type = typeDefault) 
+  void InsertLine(const wxString& str,
+                  size_t n,
+                  wxTextFileType type = typeDefault) 
     { m_aLines.Insert(str, n); m_aTypes.Insert(type, n); }
     // delete one line
   void RemoveLine(size_t n) { m_aLines.Remove(n); m_aTypes.Remove(n); }
 
   // change the file on disk (default argument means "don't change type")
   // possibly in another format
-  bool Write(Type typeNew = Type_None);
+  bool Write(wxTextFileType typeNew = wxTextFileType_None);
 
   // get the file termination string
   // Note: implementation moved to textfile to prevent warning due to switch.
-  static const char *GetEOL(Type type = typeDefault);
+  static const char *GetEOL(wxTextFileType type = typeDefault);
 
   // dtor
   ~wxTextFile();
@@ -121,8 +126,6 @@ private:
 
   // read the file in memory (m_file is supposed to be just opened)
   bool Read();
-
-  WX_DEFINE_ARRAY(Type, ArrayFileType);
 
   wxFile        m_file;     // current file
 

@@ -38,15 +38,15 @@
 // ----------------------------------------------------------------------------
 
 // default type is the native one
-const wxTextFile::Type wxTextFile::typeDefault = wxTextFile::
+const wxTextFileType wxTextFile::typeDefault =
 #if   defined(__WINDOWS__)
-  Type_Dos;
+  wxTextFileType_Dos;
 #elif defined(__UNIX__)
-  Type_Unix;
+  wxTextFileType_Unix;
 #elif defined(__WXMAC__)
-  Type_Mac;
+  wxTextFileType_Mac;
 #else
-  Type_None;
+  wxTextFileType_None;
   #error  "wxTextFile: unsupported platform."
 #endif
 
@@ -93,7 +93,7 @@ bool wxTextFile::Open()
 
 // analyse some lines of the file trying to guess it's type.
 // if it fails, it assumes the native type for our platform.
-wxTextFile::Type wxTextFile::GuessType() const
+wxTextFileType wxTextFile::GuessType() const
 {
   // file should be opened and we must be in it's beginning
   wxASSERT( m_file.IsOpened() && m_file.Tell() == 0 );
@@ -110,9 +110,9 @@ wxTextFile::Type wxTextFile::GuessType() const
 
   #define   AnalyseLine(n)              \
     switch ( m_aTypes[n] ) {            \
-      case Type_Unix: nUnix++; break;   \
-      case Type_Dos:  nDos++;  break;   \
-      case Type_Mac:  nMac++;  break;   \
+      case wxTextFileType_Unix: nUnix++; break;   \
+      case wxTextFileType_Dos:  nDos++;  break;   \
+      case wxTextFileType_Mac:  nMac++;  break;   \
       default: wxFAIL_MSG(_("unknown line terminator")); \
     }
 
@@ -133,8 +133,9 @@ wxTextFile::Type wxTextFile::GuessType() const
   }
   else {
     #define   GREATER_OF(t1, t2) n##t1 == n##t2 ? typeDefault               \
-                                                : n##t1 > n##t2 ? Type_##t1 \
-                                                                : Type_##t2
+                                                : n##t1 > n##t2             \
+                                                    ? wxTextFileType_##t1     \
+                                                    : wxTextFileType_##t2
 
 // Watcom C++ doesn't seem to be able to handle the macro
 #if defined(__WATCOMC__)
@@ -146,7 +147,7 @@ wxTextFile::Type wxTextFile::GuessType() const
       return GREATER_OF(Unix, Mac);
     else {
       // nDos == nUnix
-      return nMac > nDos ? Type_Mac : typeDefault;
+      return nMac > nDos ? wxTextFileType_Mac : typeDefault;
     }
 #endif
 
@@ -179,7 +180,8 @@ bool wxTextFile::Read()
         case '\n':
           // Dos/Unix line termination
           m_aLines.Add(str);
-          m_aTypes.Add(chLast == '\r' ? Type_Dos : Type_Unix);
+          m_aTypes.Add(chLast == '\r' ? wxTextFileType_Dos
+                                      : wxTextFileType_Unix);
           str.Empty();
           chLast = '\n';
           break;
@@ -188,7 +190,7 @@ bool wxTextFile::Read()
           if ( chLast == '\r' ) {
             // Mac empty line
             m_aLines.Add("");
-            m_aTypes.Add(Type_Mac);
+            m_aTypes.Add(wxTextFileType_Mac);
           }
           else
             chLast = '\r';
@@ -198,7 +200,7 @@ bool wxTextFile::Read()
           if ( chLast == '\r' ) {
             // Mac line termination
             m_aLines.Add(str);
-            m_aTypes.Add(Type_Mac);
+            m_aTypes.Add(wxTextFileType_Mac);
             chLast = ch;
             str = ch;
           }
@@ -212,14 +214,14 @@ bool wxTextFile::Read()
 
   // anything in the last line?
   if ( !str.IsEmpty() ) {
-    m_aTypes.Add(Type_None);  // no line terminator
+    m_aTypes.Add(wxTextFileType_None);  // no line terminator
     m_aLines.Add(str);
   }
 
   return TRUE;
 }
 
-bool wxTextFile::Write(Type typeNew)
+bool wxTextFile::Write(wxTextFileType typeNew)
 {
   wxTempFile fileTmp(m_strFile);
 
@@ -231,20 +233,21 @@ bool wxTextFile::Write(Type typeNew)
   size_t nCount = m_aLines.Count();
   for ( size_t n = 0; n < nCount; n++ ) {
     fileTmp.Write(m_aLines[n] +
-                  GetEOL(typeNew == Type_None ? m_aTypes[n] : typeNew));
+                  GetEOL(typeNew == wxTextFileType_None ? m_aTypes[n]
+                                                        : typeNew));
   }
 
   // replace the old file with this one
   return fileTmp.Commit();
 }
 
-const char *wxTextFile::GetEOL(Type type)
+const char *wxTextFile::GetEOL(wxTextFileType type)
   {
     switch ( type ) {
-      case Type_None: return "";
-      case Type_Unix: return "\n";
-      case Type_Dos:  return "\r\n";
-      case Type_Mac:  return "\r";
+      case wxTextFileType_None: return "";
+      case wxTextFileType_Unix: return "\n";
+      case wxTextFileType_Dos:  return "\r\n";
+      case wxTextFileType_Mac:  return "\r";
 
       default:
         wxFAIL_MSG("bad file type in wxTextFile::GetEOL.");
