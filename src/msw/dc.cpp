@@ -29,6 +29,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/image.h"
     #include "wx/window.h"
     #include "wx/dc.h"
     #include "wx/utils.h"
