@@ -3088,7 +3088,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             // remember the old cursor because we will change it while
             // dragging
             m_oldCursor = m_cursor;
-            
+
             // in a single selection control, hide the selection temporarily
             if ( !(GetWindowStyleFlag() & wxTR_MULTIPLE) )
             {
@@ -3562,6 +3562,20 @@ wxGenericTreeCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return attr;
 #endif
 }
+
+#if WXWIN_COMPATIBILITY_2_4
+
+int wxGenericTreeCtrl::GetItemSelectedImage(const wxTreeItemId& item) const
+{
+    return GetItemImage(item, wxTreeItemIcon_Selected);
+}
+
+void wxGenericTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image)
+{
+    SetItemImage(item, image, wxTreeItemIcon_Selected);
+}
+
+#endif // WXWIN_COMPATIBILITY_2_4
 
 #if WXWIN_COMPATIBILITY_2_2
 

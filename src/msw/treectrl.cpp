@@ -1719,6 +1719,26 @@ wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parent,
                         image, selImage, NULL);
 }
 
+wxImageList *wxTreeCtrl::GetImageList(int) const
+{
+    return GetImageList();
+}
+
+void wxTreeCtrl::SetImageList(wxImageList *imageList, int)
+{
+    SetImageList(imageList);
+}
+
+int wxTreeCtrl::GetItemSelectedImage(const wxTreeItemId& item) const
+{
+    return GetItemImage(item, wxTreeItemIcon_Selected);
+}
+
+void wxTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image)
+{
+    SetItemImage(item, image, wxTreeItemIcon_Selected);
+}
+
 #endif // WXWIN_COMPATIBILITY_2_4
 
 wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
@@ -1900,10 +1920,12 @@ void wxTreeCtrl::Toggle(const wxTreeItemId& item)
 }
 
 #if WXWIN_COMPATIBILITY_2_4
+
 void wxTreeCtrl::ExpandItem(const wxTreeItemId& item, int action)
 {
     DoExpand(item, action);
 }
+
 #endif
 
 void wxTreeCtrl::Unselect()

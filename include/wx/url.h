@@ -71,9 +71,9 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_4
     //Use the proper wxURI accessors instead
-    wxString GetProtocolName() const { return m_scheme; }
-    wxString GetHostName() const     { return m_server; }
-    wxString GetPath() const         { return m_path; }
+    wxDEPRECATED( wxString GetProtocolName() const );
+    wxDEPRECATED( wxString GetHostName() const );
+    wxDEPRECATED( wxString GetPath() const );
 
     //Use wxURI instead - this does not work that well
     wxDEPRECATED( static wxString ConvertToValidURI(

@@ -346,9 +346,9 @@ void wxTreeCtrl::Init ()
 {
     m_pImageListNormal     = NULL;
     m_pImageListState      = NULL;
-    m_bOwnsImageListNormal = FALSE;
-    m_bOwnsImageListState  = FALSE;
-    m_bHasAnyAttr          = FALSE;
+    m_bOwnsImageListNormal = false;
+    m_bOwnsImageListState  = false;
+    m_bHasAnyAttr          = false;
     m_pDragImage           = NULL;
 
     //
@@ -440,7 +440,7 @@ wxTreeCtrl::~wxTreeCtrl ()
         {
             delete (wxTreeItemAttr *)pNode->Data();
         }
-        m_bHasAnyAttr = FALSE;
+        m_bHasAnyAttr = false;
     }
     DeleteTextCtrl();
 
@@ -544,6 +544,30 @@ wxImageList* wxTreeCtrl::GetImageList () const
     return m_pImageListNormal;
 } // end of wxTreeCtrl::GetImageList
 
+#if WXWIN_COMPATIBILITY_2_4
+
+wxImageList* wxTreeCtrl::GetImageList(int nVal) const
+{
+    return GetImageList();
+}
+
+void wxTreeCtrl::SetImageList(wxImageList* pImageList, int nVal)
+{
+    SetImageList(pImageList);
+}
+
+int wxTreeCtrl::GetItemSelectedImage(const wxTreeItemId& rItem) const
+{
+    return GetItemImage(rItem, wxTreeItemIcon_Selected);
+}
+
+void wxTreeCtrl::SetItemSelectedImage(const wxTreeItemId& rItem, int nImage)
+{
+    SetItemImage(rItem, nImage, wxTreeItemIcon_Selected);
+}
+
+#endif // WXWIN_COMPATIBILITY_2_4
+
 wxImageList* wxTreeCtrl::GetStateImageList () const
 {
     return m_pImageListNormal;
@@ -568,7 +592,7 @@ void wxTreeCtrl::SetImageList (
 {
     if (m_bOwnsImageListNormal)
         delete m_pImageListNormal;
-    m_bOwnsImageListNormal = FALSE;
+    m_bOwnsImageListNormal = false;
 } // end of wxTreeCtrl::SetImageList
 
 void wxTreeCtrl::SetStateImageList (
@@ -577,21 +601,21 @@ void wxTreeCtrl::SetStateImageList (
 {
     if (m_bOwnsImageListState)
         delete m_pImageListState;
-    m_bOwnsImageListState = FALSE;
+    m_bOwnsImageListState = false;
 } // end of wxTreeCtrl::SetStateImageList
 
 void wxTreeCtrl::AssignImageList (
   wxImageList*                      WXUNUSED(pImageList)
 )
 {
-    m_bOwnsImageListNormal = TRUE;
+    m_bOwnsImageListNormal = true;
 } // end of wxTreeCtrl::AssignImageList
 
 void wxTreeCtrl::AssignStateImageList (
   wxImageList*                      WXUNUSED(pImageList)
 )
 {
-    m_bOwnsImageListState = TRUE;
+    m_bOwnsImageListState = true;
 } // end of wxTreeCtrl::AssignStateImageList
 
 size_t wxTreeCtrl::GetChildrenCount (
@@ -974,7 +998,7 @@ void wxTreeCtrl::SetItemTextColour (
 , const wxColour&                   rCol
 )
 {
-    m_bHasAnyAttr = TRUE;
+    m_bHasAnyAttr = true;
 
     long                            lId = (long)rItem.m_pItem;
     wxTreeItemAttr*                 pAttr = (wxTreeItemAttr *)m_vAttrs.Get(lId);
@@ -993,7 +1017,7 @@ void wxTreeCtrl::SetItemBackgroundColour (
 , const wxColour&                   rCol
 )
 {
-    m_bHasAnyAttr = TRUE;
+    m_bHasAnyAttr = true;
 
     long                            lId = (long)rItem.m_pItem;
     wxTreeItemAttr*                 pAttr = (wxTreeItemAttr *)m_vAttrs.Get(lId);
@@ -1012,7 +1036,7 @@ void wxTreeCtrl::SetItemFont (
 , const wxFont&                     rFont
 )
 {
-    m_bHasAnyAttr = TRUE;
+    m_bHasAnyAttr = true;
 
     long                            lId = (long)rItem.m_pItem;
     wxTreeItemAttr*                 pAttr = (wxTreeItemAttr *)m_vAttrs.Get(lId);
@@ -1478,6 +1502,8 @@ wxTreeItemId wxTreeCtrl::DoInsertItem (
     return wxTreeItemId((long)pRecord->m_ulItemId);
 }
 
+#if WXWIN_COMPATIBILITY_2_4
+
 // for compatibility only
 wxTreeItemId wxTreeCtrl::InsertItem (
   const wxTreeItemId&               rParent
@@ -1495,6 +1521,8 @@ wxTreeItemId wxTreeCtrl::InsertItem (
                         ,NULL
                        );
 } // end of wxTreeCtrl::InsertItem
+
+#endif // WXWIN_COMPATIBILITY_2_4
 
 wxTreeItemId wxTreeCtrl::AddRoot (
   const wxString&                   rsText
@@ -1736,6 +1764,8 @@ void wxTreeCtrl::Toggle (
             );
 } // end of wxTreeCtrl::Toggle
 
+#if WXWIN_COMPATIBILITY_2_4
+
 void wxTreeCtrl::ExpandItem (
   const wxTreeItemId&               rItem
 , int                               nAction
@@ -1745,6 +1775,8 @@ void wxTreeCtrl::ExpandItem (
              ,nAction
             );
 } // end of wxTreeCtrl::ExpandItem
+
+#endif // WXWIN_COMPATIBILITY_2_4
 
 void wxTreeCtrl::Unselect ()
 {
@@ -1767,7 +1799,7 @@ void wxTreeCtrl::UnselectAll ()
         for (size_t n = 0; n < nCount; n++)
         {
             SetItemCheck( aSelections[n]
-                         ,FALSE
+                         ,false
                         );
         }
     }
@@ -2051,7 +2083,7 @@ MRESULT wxTreeCtrl::OS2WindowProc (
                         vEventType = wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT;
                         vEvent.m_item = pRecord->m_ulItemId;
                         vEvent.m_label = pRecord->m_vRecord.pszTree;
-                        vEvent.m_editCancelled = FALSE;
+                        vEvent.m_editCancelled = false;
                     }
                     break;
 
@@ -2066,11 +2098,11 @@ MRESULT wxTreeCtrl::OS2WindowProc (
                         vEvent.m_label = pRecord->m_vRecord.pszTree;
                         if (pRecord->m_vRecord.pszTree == NULL)
                         {
-                            vEvent.m_editCancelled = TRUE;
+                            vEvent.m_editCancelled = true;
                         }
                         else
                         {
-                            vEvent.m_editCancelled = FALSE;
+                            vEvent.m_editCancelled = false;
                         }
                     }
                     break;

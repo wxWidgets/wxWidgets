@@ -1237,6 +1237,21 @@ bool wxURI::IsDigit(const wxChar& c)
 
 #include "wx/url.h"
 
+wxString wxURL::GetProtocolName() const
+{
+    return m_scheme;
+}
+
+wxString wxURL::GetHostName() const
+{
+    return m_server;
+}
+
+wxString wxURL::GetPath() const
+{
+    return m_path;
+}
+
 //Note that this old code really doesn't convert to a URI that well and looks
 //more like a dirty hack than anything else...
 

@@ -358,10 +358,8 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_4
     // deprecated functions: use Set/GetItemImage directly
-    int GetItemSelectedImage(const wxTreeItemId& item) const
-        { return GetItemImage(item, wxTreeItemIcon_Selected); }
-    void SetItemSelectedImage(const wxTreeItemId& item, int image)
-        { SetItemImage(item, image, wxTreeItemIcon_Selected); }
+    wxDEPRECATED( int GetItemSelectedImage(const wxTreeItemId& item) const );
+    wxDEPRECATED( void SetItemSelectedImage(const wxTreeItemId& item, int image) );
 
     // use the versions taking wxTreeItemIdValue cookies (note that
     // GetNextChild() is not inside wxDEPRECATED on purpose, as otherwise we
@@ -449,7 +447,7 @@ protected:
     // incremental search data
     wxString             m_findPrefix;
     wxTimer             *m_findTimer;
-    
+
     bool                 m_dropEffectAboveItem;
 
     // the common part of all ctors

@@ -395,14 +395,12 @@ public:
                             long insertAfter = wxTREE_INSERT_LAST) );
 
         // use Set/GetImageList and Set/GetStateImageList
-    wxImageList *GetImageList(int) const { return GetImageList(); }
-    void SetImageList(wxImageList *imageList, int) { SetImageList(imageList); }
+    wxDEPRECATED( wxImageList *GetImageList(int) const );
+    wxDEPRECATED( void SetImageList(wxImageList *imageList, int) );
 
     // use Set/GetItemImage directly
-    int GetItemSelectedImage(const wxTreeItemId& item) const
-        { return GetItemImage(item, wxTreeItemIcon_Selected); }
-    void SetItemSelectedImage(const wxTreeItemId& item, int image)
-        { SetItemImage(item, image, wxTreeItemIcon_Selected); }
+    wxDEPRECATED( int GetItemSelectedImage(const wxTreeItemId& item) const );
+    wxDEPRECATED( void SetItemSelectedImage(const wxTreeItemId& item, int image) );
 
     // use the versions taking wxTreeItemIdValue cookies
     wxDEPRECATED( wxTreeItemId GetFirstChild(const wxTreeItemId& item,

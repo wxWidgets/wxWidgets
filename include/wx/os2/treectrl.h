@@ -556,18 +556,15 @@ public:
     //
     // Use Set/GetImageList and Set/GetStateImageList
     //
-    wxImageList* GetImageList(int nVal) const
-        { return GetImageList(); }
-    void SetImageList(wxImageList* pImageList, int nVal)
-        { SetImageList(pImageList); }
+    wxDEPRECATED( wxImageList* GetImageList(int nVal) const );
+    wxDEPRECATED( void SetImageList(wxImageList* pImageList, int nVal) );
 
     //
     // Use Set/GetItemImage directly
     //
-    int GetItemSelectedImage(const wxTreeItemId& rItem) const
-        { return GetItemImage(rItem, wxTreeItemIcon_Selected); }
-    void SetItemSelectedImage(const wxTreeItemId& rItem, int nImage)
-        { SetItemImage(rItem, nImage, wxTreeItemIcon_Selected); }
+    wxDEPRECATED( int GetItemSelectedImage(const wxTreeItemId& rItem) const );
+    wxDEPRECATED( void SetItemSelectedImage(const wxTreeItemId& rItem, int nImage) );
+
     //
     // For this enumeration function you must pass in a "cookie" parameter
     // which is opaque for the application but is necessary for the library
