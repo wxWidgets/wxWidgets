@@ -1429,7 +1429,7 @@ void wxWindowDC::Clear()
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
-    wxRect rect( wxPoint( 0, 0 ), GetSize() );
+    wxRect rect( GetSize() );
     Clear( rect );
 }
 

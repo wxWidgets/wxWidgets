@@ -241,7 +241,7 @@ void wxListbook::OnSize(wxSizeEvent& event)
 #if wxUSE_LINE_IN_LISTBOOK
     if ( m_line )
     {
-        wxRect rectLine(wxPoint(0, 0), sizeClient);
+        wxRect rectLine(sizeClient);
 
         switch ( GetWindowStyle() & wxLB_ALIGN_MASK )
         {
