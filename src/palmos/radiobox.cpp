@@ -233,7 +233,7 @@ wxRadioBox::~wxRadioBox()
 {
 }
 
-wxRadioButton *wxRadioBox::GetRadioButton(int i)
+wxRadioButton *wxRadioBox::GetRadioButton(int i) const
 {
     return (wxRadioButton *)m_radios.Get(i);
 }
@@ -252,6 +252,8 @@ void wxRadioBox::DoGetSize( int *width, int *height ) const
 
 void wxRadioBox::DoMoveWindow(int x, int y, int width, int height)
 {
+    wxRect oldRect = GetRect();
+
     m_size.x = width;
     m_size.y = height;
 
@@ -282,6 +284,9 @@ void wxRadioBox::DoMoveWindow(int x, int y, int width, int height)
             }
         }
     }
+
+    // refresh old and new area
+    GetParent()->RefreshRect(oldRect.Union(GetRect()));
 }
 
 // get the origin of the client area in the client coordinates
@@ -292,6 +297,9 @@ wxPoint wxRadioBox::GetClientAreaOrigin() const
 
 void wxRadioBox::SetString(int item, const wxString& label)
 {
+    wxRadioButton *btn = GetRadioButton(item);
+    if(btn)
+        btn->SetLabel(label);
 }
 
 void wxRadioBox::SetSelection(int N)
@@ -307,9 +315,10 @@ int wxRadioBox::GetSelection() const
 // Find string for position
 wxString wxRadioBox::GetString(int item) const
 {
-    wxString ret;
-
-    return ret;
+    wxRadioButton *btn = GetRadioButton(item);
+    if(btn)
+        return btn->GetLabel();
+    return wxEmptyString;
 }
 
 // ----------------------------------------------------------------------------
@@ -354,14 +363,21 @@ bool wxRadioBox::Enable(int item, bool enable)
 
 bool wxRadioBox::Show(bool show)
 {
-    // TODO
-    return false;
+    for(int i=0; i<GetCount(); i++)
+        Show(i, show);
+    return true;
 }
 
 // Show a specific button
 bool wxRadioBox::Show(int item, bool show)
 {
-    // TODO
+    wxRadioButton *btn = GetRadioButton(item);
+    if(btn)
+    {
+        bool ret = btn->Show(show);
+        RefreshRect(btn->GetRect());
+        return ret;
+    }
     return false;
 }
 
@@ -385,7 +401,7 @@ void wxRadioBox::Refresh(bool eraseBack, const wxRect *rect)
         area.SetSize(rect->GetSize());
     }
 
-    GetParent()->Refresh( eraseBack , &area );
+    GetParent()->RefreshRect(area);
 }
 
 void wxRadioBox::Command(wxCommandEvent & event)

@@ -163,7 +163,7 @@ protected:
 private:
 
     void Init();
-    wxRadioButton *GetRadioButton(int i);
+    wxRadioButton *GetRadioButton(int i) const;
 
     wxPoint m_pos;
     wxSize m_size;
