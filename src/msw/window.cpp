@@ -54,6 +54,7 @@
 #endif
 
 #include "wx/module.h"
+#include "wx/sysopt.h"
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
@@ -1146,7 +1147,8 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     // using this flag results in very significant reduction in flicker,
     // especially with controls inside the static boxes (as the interior of the
     // box is not redrawn twice)
-    style |= WS_CLIPCHILDREN;
+    if (!wxSystemOptions::GetOptionInt(wxT("msw.window.no-clip-children")) == 1)
+        style |= WS_CLIPCHILDREN;
 
     // it doesn't seem useful to use WS_CLIPSIBLINGS here as we officially
     // don't support overlapping windows and it only makes sense for them and,
