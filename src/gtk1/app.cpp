@@ -479,7 +479,7 @@ GdkVisual *wxApp::GetGdkVisual()
     GdkVisual *visual = NULL;
     
     if (m_glVisualInfo)
-        visual = gdkx_visual_get( ((XVisualInfo *) wxTheApp->m_glVisualInfo)->visualid );
+        visual = gdkx_visual_get( ((XVisualInfo *) m_glVisualInfo)->visualid );
     else
         visual = gdk_window_get_visual( wxGetRootWindow()->window );
         
