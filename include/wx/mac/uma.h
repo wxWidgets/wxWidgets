@@ -217,6 +217,10 @@ WindowRef UMAGetActiveNonFloatingWindow() ;
 */
 void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate ) ;
 
+OSStatus UMAGetHelpMenu(
+  MenuRef *        outHelpMenu,
+  MenuItemIndex *  outFirstCustomItemIndex);      /* can be NULL */
+
 #if !TARGET_CARBON
 #define GetPortTextFont( p) ((p)->txFont )
 #define GetPortTextSize( p) ((p)->txSize )
