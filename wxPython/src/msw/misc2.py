@@ -561,6 +561,8 @@ wxPostEvent = misc2c.wxPostEvent
 
 wxWakeUpIdle = misc2c.wxWakeUpIdle
 
+wxSafeYield = misc2c.wxSafeYield
+
 wxShowTip = misc2c.wxShowTip
 
 def wxCreateFileTipProvider(*_args, **_kwargs):

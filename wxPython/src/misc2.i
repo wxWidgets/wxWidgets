@@ -366,6 +366,8 @@ public:
 void wxPostEvent(wxEvtHandler *dest, wxEvent& event);
 void wxWakeUpIdle();
 
+bool wxSafeYield(wxWindow* win=NULL);
+
 //----------------------------------------------------------------------
 
 

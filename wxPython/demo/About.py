@@ -13,8 +13,9 @@ class MyAboutBox(wxDialog):
 <center><table bgcolor="#458154" width="100%%" cellspacing="0"
 cellpadding="0" border="1">
 <tr>
-    <td align="center"><h1>wxPython %s</h1>
-    Running on Python %s
+    <td align="center">
+    <h1>wxPython %s</h1>
+    Running on Python %s<br>
     </td>
 </tr>
 </table>

@@ -42,6 +42,12 @@ Changed the build to make one big extension module instead of one for
 the core and each contrib.  This allowed me to do away with the
 libwxPyHelpers.so on unix systems.
 
+Lots of little fixes here and there.
+
+Some hacks on wxGTK to try and make the AutoComplete listbox in the
+wxStyledTextCtrl to behave better.  It's still not as nice as on
+wxMSW, but at least it's a bit more usable now.
+
 
 
 

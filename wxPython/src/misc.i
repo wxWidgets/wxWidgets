@@ -292,7 +292,6 @@ wxString wxGetOsDescription();
 void wxSleep(int secs);
 void wxUsleep(unsigned long milliseconds);
 bool wxYield();
-bool wxSafeYield();
 void wxEnableTopLevelWindows(bool enable);
 
 %inline %{

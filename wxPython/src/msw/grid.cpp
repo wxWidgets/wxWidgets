@@ -595,7 +595,7 @@ public:
     }
 
 
-    wxGridCellEditor *Clone() const {
+    wxGridCellEditor*Clone() const {
         wxGridCellEditor* rval = NULL;
         bool doSave = wxPyRestoreThread();
         if (m_myInst.findCallback("Clone")) {

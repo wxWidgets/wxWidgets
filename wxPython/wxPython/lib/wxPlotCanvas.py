@@ -184,7 +184,7 @@ class PlotCanvas(wx.wxWindow):
     def OnPaint(self, event):
 	pdc = wx.wxPaintDC(self)
 	if self.last_draw is not None:
-	    apply(self.draw, self.last_draw + (pdc,))
+            apply(self.draw, self.last_draw + (pdc,))
 
     def reconfigure(self, event):
 	(new_width,new_height) = self.GetClientSizeTuple()
@@ -342,7 +342,7 @@ class PlotCanvas(wx.wxWindow):
 	ticks = []
 	t = -grid*Numeric.floor(-lower/grid)
 	while t <= upper:
-	    ticks.append(t, format % (t,))
+	    ticks.append( (t, format % (t,)) )
 	    t = t + grid
 	return ticks
 

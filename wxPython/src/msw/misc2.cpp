@@ -1207,6 +1207,32 @@ static PyObject *_wrap_wxWakeUpIdle(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
+static PyObject *_wrap_wxSafeYield(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWindow * _arg0 = (wxWindow *) NULL;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "win", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:wxSafeYield",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSafeYield. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxSafeYield(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxShowTip(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
@@ -4944,6 +4970,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxDragIcon", (PyCFunction) _wrap_wxDragIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCreateFileTipProvider", (PyCFunction) _wrap_wxCreateFileTipProvider, METH_VARARGS | METH_KEYWORDS },
 	 { "wxShowTip", (PyCFunction) _wrap_wxShowTip, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSafeYield", (PyCFunction) _wrap_wxSafeYield, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWakeUpIdle", (PyCFunction) _wrap_wxWakeUpIdle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPostEvent", (PyCFunction) _wrap_wxPostEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_SetBlinkTime", (PyCFunction) _wrap_wxCaret_SetBlinkTime, METH_VARARGS | METH_KEYWORDS },

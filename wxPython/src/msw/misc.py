@@ -651,8 +651,6 @@ wxUsleep = miscc.wxUsleep
 
 wxYield = miscc.wxYield
 
-wxSafeYield = miscc.wxSafeYield
-
 wxEnableTopLevelWindows = miscc.wxEnableTopLevelWindows
 
 wxGetResource = miscc.wxGetResource

@@ -81,6 +81,10 @@ item: Set Variable
   Variable=PYTHONVER
   Value=1.5
 end
+item: Set Variable
+  Variable=SAMEDIR
+  Value=1
+end
 item: Remark
 end
 item: Get Registry Key Value
@@ -813,10 +817,23 @@ item: Install File
   Destination=%SYS%\Msvcrt.dll
   Flags=0000001010000011
 end
+item: If/While Statement
+  Variable=SAMEDIR
+  Value=0
+end
 item: Install File
   Source=c:\projects\wx\lib\wx22_2.dll
   Destination=%SYS%\wx22_2.dll
   Flags=0000001010010010
+end
+item: Else Statement
+end
+item: Install File
+  Source=c:\projects\wx\lib\wx22_2.dll
+  Destination=%MAINDIR%\wxPython\wx22_2.dll
+  Flags=0000000010010010
+end
+item: End Block
 end
 item: Install File
   Source=c:\Projects\wx\wxPython\wxPython\*.py
@@ -1332,7 +1349,7 @@ item: Custom Dialog Set
     end
     item: Push Button
       Rectangle=90 68 153 82
-      Alternate=0%MAINDIR%\wxPython\README.txt
+      Alternate=0%MAINDIR%\wxPython\docs\README.txt
       Action=6
       Enabled Color=00000000000000001111111111111111
       Create Flags=01010000000000010000000000000000
