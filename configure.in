@@ -224,6 +224,9 @@ case "${host}" in
     USE_AIX=1
     USE_SYSV=1
     USE_SVR4=1
+    dnl Irvin Probst <irvin.probst@fr.thalesgroup.com> reports that the shared
+    dnl libraries under AIX have the same suffix as the normal ones
+    SO_SUFFIX=a
     AC_DEFINE(__AIX__)
     AC_DEFINE(__SYSV__)
     AC_DEFINE(__SVR4__)
@@ -2554,7 +2557,12 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
 
       *-*-aix* )
-        SHARED_LD="/usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o"
+        dnl the abs path below used to be hardcoded here so I guess it must
+        dnl be some sort of standard location under AIX?
+        AC_CHECK_PROG(AIX_CXX_LD, makeC++SharedLib,
+                      makeC++SharedLib, /usr/lpp/xlC/bin/makeC++SharedLib)
+
+        SHARED_LD="$(AIX_CXX_LD) -p 0 -o"
       ;;
 
       *-*-cygwin* | *-*-mingw32* )
