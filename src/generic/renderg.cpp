@@ -71,6 +71,13 @@ public:
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
+    virtual wxRendererVersion GetVersion() const
+    {
+        return wxRendererVersion(wxRendererVersion::Current_Version,
+                                 wxRendererVersion::Current_Age);
+    }
+
+
     // Cleanup by deleting standard renderer
     static void Cleanup();
 

@@ -83,6 +83,9 @@ private:
 
     bool m_initialized;
 
+    // just to suppress a gcc warning
+    friend class wxRendererPtrDummyFriend;
+
     DECLARE_NO_COPY_CLASS(wxRendererPtr)
 };
 
@@ -122,6 +125,11 @@ private:
 // ============================================================================
 // wxRendererNative implementation
 // ============================================================================
+
+wxRendererNative::~wxRendererNative()
+{
+    // empty but necessary
+}
 
 // ----------------------------------------------------------------------------
 // Managing the global renderer
@@ -171,10 +179,24 @@ wxRendererNative *wxRendererNative::Load(const wxString& name)
     if ( !pfnwxCreateRenderer )
         return NULL;
 
+    // create a renderer object
     wxRendererNative *renderer = (*pfnwxCreateRenderer)();
     if ( !renderer )
         return NULL;
 
+    // check that its version is compatible with ours
+    wxRendererVersion ver = renderer->GetVersion();
+    if ( !wxRendererVersion::IsCompatible(ver) )
+    {
+        wxLogError(_("Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."),
+                   name.c_str(), ver.version, ver.age);
+        delete renderer;
+
+        return NULL;
+    }
+
+    // finally wrap the renderer in an object which will delete it and unload
+    // the library when it is deleted and return it to the caller
     return new wxRendererFromDynLib(dll, renderer);
 }
 

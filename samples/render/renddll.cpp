@@ -70,6 +70,12 @@ public:
         return wxSplitterRenderParams(0, 0, 0);
     }
 
+    virtual wxRendererVersion GetVersion() const
+    {
+        return wxRendererVersion(wxRendererVersion::Current_Version,
+                                 wxRendererVersion::Current_Age);
+    }
+
 #if 0 // just for debugging
     MyDllRenderer()
     {

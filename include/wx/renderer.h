@@ -85,6 +85,37 @@ struct WXDLLEXPORT wxSplitterRenderParams
     const bool isHotSensitive;
 };
 
+// wxRendererNative interface version
+struct WXDLLEXPORT wxRendererVersion
+{
+    wxRendererVersion(int version_, int age_) : version(version_), age(age_) { }
+
+    // default copy ctor, assignment operator and dtor are ok
+
+    // the current version and age of wxRendererNative interface: different
+    // versions are incompatible (in both ways) while the ages inside the same
+    // version are upwards compatible, i.e. the version of the renderer must
+    // match the version of the main program exactly while the age may be
+    // highergreater or equal to it
+    //
+    // NB: don't forget to increment age after adding any new virtual function!
+    enum
+    {
+        Current_Version = 1,
+        Current_Age = 5
+    };
+
+
+    // check if the given version is compatible with the current one
+    static bool IsCompatible(const wxRendererVersion& ver)
+    {
+        return ver.version == Current_Version && ver.age >= Current_Age;
+    }
+
+    const int version;
+    const int age;
+};
+
 // ----------------------------------------------------------------------------
 // wxRendererNative: abstracts drawing methods needed by the native controls
 // ----------------------------------------------------------------------------
@@ -92,8 +123,6 @@ struct WXDLLEXPORT wxSplitterRenderParams
 class WXDLLEXPORT wxRendererNative
 {
 public:
-    virtual ~wxRendererNative() { } // stop GCC warning
-
     // drawing functions
     // -----------------
 
@@ -160,6 +189,18 @@ public:
     //
     // return the previous renderer used with Set() or NULL if none
     static wxRendererNative *Set(wxRendererNative *renderer);
+
+
+    // miscellaneous stuff
+    // -------------------
+
+    // this function is used for version checking: Load() refuses to load any
+    // DLLs implementing an older or incompatible version; it should be
+    // implemented simply by returning wxRendererVersion::Current_XXX values
+    virtual wxRendererVersion GetVersion() const = 0;
+
+    // virtual dtor for any base class
+    virtual ~wxRendererNative();
 };
 
 // ----------------------------------------------------------------------------
@@ -206,6 +247,9 @@ public:
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }
+
+    virtual wxRendererVersion GetVersion() const
+        { return m_rendererNative.GetVersion(); }
 
 protected:
     wxRendererNative& m_rendererNative;

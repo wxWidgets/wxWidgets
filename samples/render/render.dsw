@@ -2,7 +2,8 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 # WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
 
 ###############################################################################
-Project: "renddll"=render_renddll.dsp - Package Owner=<4>
+
+Project: "basedll"=..\..\build\msw\wx_basedll.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -14,13 +15,49 @@ Package=<4>
 
 ###############################################################################
 
-Project: "render"=render_render.dsp - Package Owner=<4>
+Project: "coredll"=..\..\build\msw\wx_coredll.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
 }}}
 
 Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "renddll"=.\render_renddll.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "render"=.\render_render.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
 {{{
 }}}
 
