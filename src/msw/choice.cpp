@@ -52,7 +52,7 @@ wxBEGIN_FLAGS( wxChoiceStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -76,26 +76,26 @@ wxEND_FLAGS( wxChoiceStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxChoice, wxControl,"wx/choice.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxChoice)
-	wxEVENT_PROPERTY( Select , wxEVT_COMMAND_CHOICE_SELECTED , wxCommandEvent )
+    wxEVENT_PROPERTY( Select , wxEVT_COMMAND_CHOICE_SELECTED , wxCommandEvent )
 
     wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     wxPROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	wxPROPERTY( Selection ,int, SetSelection, GetSelection, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( Selection ,int, SetSelection, GetSelection, EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     wxPROPERTY_FLAGS( WindowStyle , wxChoiceStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxChoice)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_4( wxChoice , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
+wxCONSTRUCTOR_4( wxChoice , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size )
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 #endif
 /*
-	TODO PROPERTIES
-		selection (long)
-		content (list)
-			item
+    TODO PROPERTIES
+        selection (long)
+        content (list)
+            item
 */
 
 // ============================================================================
@@ -130,36 +130,12 @@ bool wxChoice::Create(wxWindow *parent,
 bool wxChoice::CreateAndInit(wxWindow *parent,
                              wxWindowID id,
                              const wxPoint& pos,
-                             const wxSize& sizeOrig,
+                             const wxSize& size,
                              int n, const wxString choices[],
                              long style,
                              const wxValidator& validator,
                              const wxString& name)
 {
-    // this is a bit hackish but we want to prevent MSWCreateControl() from
-    // calling SetBestSize() (which it would do if any of the size components
-    // is not given) because it wouldn't calculate it correctly if we have any
-    // strings as they're not yet added to the control when it is called
-    //
-    // so: if we have any strings, we fudge the size parameter so that
-    // SetBestSize() is not called by MSWCreateControl() but then we do call it
-    // manually below
-    bool autoSize = false;
-    wxSize size = sizeOrig;
-    if ( n )
-    {
-        if ( size.x < 0 )
-        {
-            size.x = 1;
-            autoSize = true;
-        }
-        if ( size.y < 0 )
-        {
-            size.y = 1;
-            autoSize = true;
-        }
-    }
-
     // initialize wxControl
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
@@ -180,22 +156,7 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
     }
 
     // and now we may finally size the control properly (if needed)
-    if ( autoSize )
-    {
-        // we do the same thing as SetBestSize() but we need sizeBest here
-        wxSize sizeBest = DoGetBestSize();
-        if ( size.x != -1 )
-            sizeBest.x = sizeOrig.x;
-        if ( size.y != -1 )
-            sizeBest.y = sizeOrig.y;
-
-        SetSize(sizeBest);
-
-        // this is our true initial size, not the (1, 1) we had during
-        // CreateControl() call above: this is especially important if we're
-        // added to a sizer as we don't want to be shrunk to nothing by it
-        m_initialSize = sizeBest;
-    }
+    SetBestSize(size);
 
     return TRUE;
 }
