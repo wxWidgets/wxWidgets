@@ -21,24 +21,22 @@
 
 // Use generic page setup dialog: use your own native one if one exists.
 
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxPrintDialog, wxDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxMacPrintDialog, wxPrintDialogBase)
 IMPLEMENT_CLASS(wxPageSetupDialog, wxDialog)
-#endif
 
-wxPrintDialog::wxPrintDialog()
+wxMacPrintDialog::wxMacPrintDialog()
 {
     m_dialogParent = NULL;
     m_printerDC = NULL;
     m_destroyDC = TRUE;
 }
 
-wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintDialogData* data)
+wxMacPrintDialog::wxMacPrintDialog(wxWindow *p, wxPrintDialogData* data)
 {
     Create(p, data);
 }
 
-wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintData* data)
+wxMacPrintDialog::wxMacPrintDialog(wxWindow *p, wxPrintData* data)
 {
     wxPrintDialogData data2;
     if ( data )
@@ -47,7 +45,7 @@ wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintData* data)
     Create(p, &data2);
 }
 
-bool wxPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
+bool wxMacPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
 {
     m_dialogParent = p;
     m_printerDC = NULL;
@@ -59,7 +57,7 @@ bool wxPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
     return TRUE;
 }
 
-wxPrintDialog::~wxPrintDialog()
+wxMacPrintDialog::~wxMacPrintDialog()
 {
     if (m_destroyDC && m_printerDC) {
         delete m_printerDC;
@@ -67,7 +65,7 @@ wxPrintDialog::~wxPrintDialog()
     }
 }
 
-int wxPrintDialog::ShowModal()
+int wxMacPrintDialog::ShowModal()
 {
     m_printDialogData.ConvertToNative() ;
     int result = m_printDialogData.GetPrintData().m_nativePrintData->ShowPrintDialog() ;
@@ -77,7 +75,7 @@ int wxPrintDialog::ShowModal()
     return result ;
 }
 
-wxDC *wxPrintDialog::GetPrintDC()
+wxDC *wxMacPrintDialog::GetPrintDC()
 {
     return new wxPrinterDC( m_printDialogData.GetPrintData() ) ;
 }

@@ -20,6 +20,7 @@
 
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
+#include "wx/printdlg.h"
 
 /*
  * wxPrinterDialog
@@ -27,28 +28,29 @@
  */
 
 class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxPrintDialog: public wxDialog
+class WXDLLEXPORT wxMacPrintDialog: public wxPrintDialogBase
 {
-  DECLARE_DYNAMIC_CLASS(wxPrintDialog)
-
- public:
-  wxPrintDialog();
-    wxPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
-  wxPrintDialog(wxWindow *parent, wxPrintData* data );
-  ~wxPrintDialog();
+public:
+    wxMacPrintDialog();
+    wxMacPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
+    wxMacPrintDialog(wxWindow *parent, wxPrintData* data );
+    ~wxMacPrintDialog();
 
     bool Create(wxWindow *parent, wxPrintDialogData* data = NULL);
-  virtual int ShowModal();
+    virtual int ShowModal();
 
-  wxPrintDialogData& GetPrintDialogData() { return m_printDialogData; }
-  wxPrintData& GetPrintData() { return m_printDialogData.GetPrintData(); }
-  virtual wxDC *GetPrintDC();
+    virtual wxPrintDialogData& GetPrintDialogData() { return m_printDialogData; }
+    virtual wxPrintData& GetPrintData() { return m_printDialogData.GetPrintData(); }
+    virtual wxDC *GetPrintDC();
 
- private:
-  wxPrintDialogData   m_printDialogData;
-  wxDC*             m_printerDC;
-  bool              m_destroyDC;
-  wxWindow*         m_dialogParent;
+private:
+    wxPrintDialogData   m_printDialogData;
+    wxDC*               m_printerDC;
+    bool                m_destroyDC;
+    wxWindow*           m_dialogParent;
+  
+private:
+    DECLARE_DYNAMIC_CLASS(wxPrintDialog)
 };
 
 class WXDLLEXPORT wxPageSetupDialog: public wxDialog

@@ -20,6 +20,7 @@
 
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
+#include "wx/printdlg.h"
 
 class WXDLLEXPORT wxDC;
 
@@ -27,15 +28,12 @@ class WXDLLEXPORT wxDC;
 // wxPrinterDialog: the common dialog for printing.
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPrintDialog : public wxDialog
+class WXDLLEXPORT wxWindowsPrintDialog : public wxPrintDialogBase
 {
-    DECLARE_DYNAMIC_CLASS(wxPrintDialog)
-
 public:
-    wxPrintDialog();
-    wxPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
-    wxPrintDialog(wxWindow *parent, wxPrintData* data);
-    virtual ~wxPrintDialog();
+    wxWindowsPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
+    wxWindowsPrintDialog(wxWindow *parent, wxPrintData* data);
+    virtual ~wxWindowsPrintDialog();
 
     bool Create(wxWindow *parent, wxPrintDialogData* data = NULL);
     virtual int ShowModal();
@@ -44,13 +42,14 @@ public:
     wxPrintData& GetPrintData() { return m_printDialogData.GetPrintData(); }
     virtual wxDC *GetPrintDC();
 
-private:
     wxPrintDialogData m_printDialogData;
     wxDC*             m_printerDC;
     bool              m_destroyDC;
     wxWindow*         m_dialogParent;
 
-    DECLARE_NO_COPY_CLASS(wxPrintDialog)
+private:
+    DECLARE_NO_COPY_CLASS(wxWindowsPrintDialog)
+    DECLARE_CLASS(wxWindowsPrintDialog)
 };
 
 class WXDLLEXPORT wxPageSetupDialog: public wxDialog

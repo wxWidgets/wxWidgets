@@ -33,6 +33,7 @@ class WXDLLEXPORT wxChoice;
 class WXDLLEXPORT wxPrintout;
 class WXDLLEXPORT wxPrinterBase;
 class WXDLLEXPORT wxPrintDialog;
+class WXDLLEXPORT wxPrintDialogBase;
 class WXDLLEXPORT wxPrintPreviewBase;
 class WXDLLEXPORT wxPreviewCanvas;
 class WXDLLEXPORT wxPreviewControlBar;
@@ -64,12 +65,18 @@ public:
     virtual bool HasPrintSetupDialog() = 0;
     
     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData* data ) = 0;
+    
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
                                                     wxPrintout *printout = NULL, 
                                                     wxPrintDialogData *data = NULL ) = 0;
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
                                                     wxPrintout *printout, 
                                                     wxPrintData *data ) = 0;
+
+    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
+                                                  wxPrintDialogData *data = NULL ) = 0;
+    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
+                                                  wxPrintData *data ) = 0;
     
     static void SetPrintFactory( wxPrintFactory *factory );
     static wxPrintFactory *GetFactory();
@@ -85,12 +92,18 @@ public:
         { return true; }
     
     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData *data );
+    
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
                                                     wxPrintout *printout = NULL, 
                                                     wxPrintDialogData *data = NULL );
     virtual wxPrintPreviewBase *CreatePrintPreview( wxPrintout *preview, 
                                                     wxPrintout *printout,
                                                     wxPrintData *data );
+                                                    
+    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
+                                                  wxPrintDialogData *data = NULL );
+    virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
+                                                  wxPrintData *data );
 };
 
 //----------------------------------------------------------------------------
@@ -110,8 +123,7 @@ public:
     virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
     virtual void ReportError(wxWindow *parent, wxPrintout *printout, const wxString& message);
 
-    wxPrintDialogData& GetPrintDialogData() const
-        { return (wxPrintDialogData&) m_printDialogData; }
+    virtual wxPrintDialogData& GetPrintDialogData() const;
     bool GetAbort() const { return sm_abortIt; }
 
     static wxPrinterError GetLastError() { return sm_lastError; }
@@ -154,6 +166,8 @@ public:
     virtual bool Setup(wxWindow *parent);
     virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true);
     virtual wxDC* PrintDialog(wxWindow *parent);
+    
+    virtual wxPrintDialogData& GetPrintDialogData() const;
 
 protected:
     wxPrinterBase    *m_pimpl;

@@ -121,6 +121,30 @@ wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *previe
 #endif
 }
 
+wxPrintDialogBase *wxNativePrintFactory::CreatePrintDialog( wxWindow *parent, 
+                                                  wxPrintDialogData *data )
+{
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    return new wxWindowsPrintDialog( parent, data );
+#elif defined(__WXMAC__)
+    return new wxMacPrintDialog( parent, data );
+#else
+    return new wxGenericPrintDialog( parent, data );
+#endif
+}
+
+wxPrintDialogBase *wxNativePrintFactory::CreatePrintDialog( wxWindow *parent, 
+                                                  wxPrintData *data )
+{
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    return new wxWindowsPrintDialog( parent, data );
+#elif defined(__WXMAC__)
+    return new wxMacPrintDialog( parent, data );
+#else
+    return new wxGenericPrintDialog( parent, data );
+#endif
+}
+
 //----------------------------------------------------------------------------
 // wxPrinterBase
 //----------------------------------------------------------------------------
@@ -167,6 +191,11 @@ void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout)
     wxMessageBox(message, _("Printing Error"), wxOK, parent);
 }
 
+wxPrintDialogData& wxPrinterBase::GetPrintDialogData() const
+{
+    return (wxPrintDialogData&) m_printDialogData;
+}
+
 //----------------------------------------------------------------------------
 // wxPrinter
 //----------------------------------------------------------------------------
@@ -206,6 +235,63 @@ bool wxPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 wxDC* wxPrinter::PrintDialog(wxWindow *parent)
 {
     return m_pimpl->PrintDialog( parent );
+}
+
+wxPrintDialogData& wxPrinter::GetPrintDialogData() const
+{
+    return m_pimpl->GetPrintDialogData();
+}
+
+// ---------------------------------------------------------------------------
+// wxPrintDialogBase: the common dialog for printing.
+// ---------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxPrintDialogBase, wxObject)
+
+wxPrintDialogBase::wxPrintDialogBase(wxWindow *parent, wxWindowID id, 
+    const wxString &title, const wxPoint &pos, const wxSize &size, long style ) :
+    wxDialog( parent, id, title, pos, size, style )
+{
+}
+
+// ---------------------------------------------------------------------------
+// wxPrintDialog: the common dialog for printing.
+// ---------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxPrintDialog, wxObject)
+
+wxPrintDialog::wxPrintDialog(wxWindow *parent, wxPrintDialogData* data)
+{
+    m_pimpl = wxPrintFactory::GetFactory()->CreatePrintDialog( parent, data );
+}
+
+wxPrintDialog::wxPrintDialog(wxWindow *parent, wxPrintData* data)
+{
+    m_pimpl = wxPrintFactory::GetFactory()->CreatePrintDialog( parent, data );
+}
+
+wxPrintDialog::~wxPrintDialog()
+{
+    delete m_pimpl;
+}
+
+int wxPrintDialog::ShowModal()
+{
+    return m_pimpl->ShowModal();
+}
+
+wxPrintDialogData& wxPrintDialog::GetPrintDialogData()
+{
+    return m_pimpl->GetPrintDialogData();
+}
+
+wxPrintData& wxPrintDialog::GetPrintData()
+{
+    return m_pimpl->GetPrintData();
+}
+wxDC *wxPrintDialog::GetPrintDC()
+{
+    return m_pimpl->GetPrintDC();
 }
 
 //----------------------------------------------------------------------------

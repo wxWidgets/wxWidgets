@@ -23,6 +23,7 @@
 
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
+#include "wx/printdlg.h"
 
 #if wxUSE_POSTSCRIPT
     #include "wx/dcps.h"
@@ -76,7 +77,7 @@ enum
 // ----------------------------------------------------------------------------
 
 #if wxUSE_POSTSCRIPT
-class WXDLLEXPORT wxGenericPrintDialog : public wxDialog
+class WXDLLEXPORT wxGenericPrintDialog : public wxPrintDialogBase
 {
 public:
     wxGenericPrintDialog(wxWindow *parent,

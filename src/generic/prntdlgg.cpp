@@ -73,14 +73,7 @@
 
 #if wxUSE_POSTSCRIPT
 
-IMPLEMENT_CLASS(wxGenericPrintDialog, wxDialog)
 IMPLEMENT_CLASS(wxGenericPrintSetupDialog, wxDialog)
-
-BEGIN_EVENT_TABLE(wxGenericPrintDialog, wxDialog)
-    EVT_BUTTON(wxID_OK, wxGenericPrintDialog::OnOK)
-    EVT_BUTTON(wxPRINTID_SETUP, wxGenericPrintDialog::OnSetup)
-    EVT_RADIOBOX(wxPRINTID_RANGE, wxGenericPrintDialog::OnRange)
-END_EVENT_TABLE()
 
 #endif // wxUSE_POSTSCRIPT
 
@@ -102,9 +95,17 @@ extern wxPrintPaperDatabase *wxThePrintPaperDatabase;
 // Generic print dialog for non-Windows printing use.
 // ----------------------------------------------------------------------------
 
+IMPLEMENT_CLASS(wxGenericPrintDialog, wxPrintDialogBase)
+
+BEGIN_EVENT_TABLE(wxGenericPrintDialog, wxPrintDialogBase)
+    EVT_BUTTON(wxID_OK, wxGenericPrintDialog::OnOK)
+    EVT_BUTTON(wxPRINTID_SETUP, wxGenericPrintDialog::OnSetup)
+    EVT_RADIOBOX(wxPRINTID_RANGE, wxGenericPrintDialog::OnRange)
+END_EVENT_TABLE()
+
 wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
                                            wxPrintDialogData* data)
-                    : wxDialog(parent, wxID_ANY, _("Print"),
+                    : wxPrintDialogBase(parent, wxID_ANY, _("Print"),
                                wxPoint(0, 0), wxSize(600, 600),
                                wxDEFAULT_DIALOG_STYLE |
                                wxTAB_TRAVERSAL)
@@ -117,7 +118,7 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
 
 wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
                                            wxPrintData* data)
-                    : wxDialog(parent, wxID_ANY, _("Print"),
+                    : wxPrintDialogBase(parent, wxID_ANY, _("Print"),
                                wxPoint(0, 0), wxSize(600, 600),
                                wxDEFAULT_DIALOG_STYLE |
                                wxTAB_TRAVERSAL)
@@ -228,7 +229,7 @@ int wxGenericPrintDialog::ShowModal()
             // Transfer settings to  the print dialog's print data.
             m_printDialogData.GetPrintData() = genericPrintSetupDialog->GetPrintData();
         }
-        genericPrintSetupDialog->Destroy();
+        // genericPrintSetupDialog->Destroy();
 
         // Restore the wxPrintData settings again (uncomment if any settings become common
         // to both dialogs)
@@ -575,15 +576,13 @@ void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
     wxPrintDialogData data;
     data = GetPageSetupData().GetPrintData();
     data.SetSetupDialog(true);
-    wxPrintDialog *printDialog = new wxPrintDialog(this, & data);
-    printDialog->ShowModal();
+    wxPrintDialog printDialog(this, & data);
+    printDialog.ShowModal();
 
     // Transfer the page setup print settings from the page dialog to this dialog again, in case
     // the page setup dialog changed something.
-    GetPageSetupData().GetPrintData() = printDialog->GetPrintDialogData().GetPrintData();
+    GetPageSetupData().GetPrintData() = printDialog.GetPrintDialogData().GetPrintData();
     GetPageSetupData().CalculatePaperSizeFromId(); // Make sure page size reflects the id in wxPrintData
-
-    printDialog->Destroy();
 
     // Now update the dialog in case the page setup dialog changed some of our settings.
     TransferDataToWindow();

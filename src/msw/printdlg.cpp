@@ -36,6 +36,7 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/cmndata.h"
 #include "wx/printdlg.h"
 #include "wx/dcprint.h"
 
@@ -50,33 +51,17 @@
 #endif
 
 // ---------------------------------------------------------------------------
-// wxWin macros
-// ---------------------------------------------------------------------------
-
-    IMPLEMENT_DYNAMIC_CLASS(wxPrintDialog, wxDialog)
-    IMPLEMENT_CLASS(wxPageSetupDialog, wxDialog)
-
-// ===========================================================================
-// implementation
-// ===========================================================================
-
-// ---------------------------------------------------------------------------
 // wxPrintDialog
 // ---------------------------------------------------------------------------
 
-wxPrintDialog::wxPrintDialog()
-{
-    m_dialogParent = NULL;
-    m_printerDC = NULL;
-    m_destroyDC = true;
-}
+IMPLEMENT_CLASS(wxWindowsPrintDialog, wxPrintDialogBase)
 
-wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintDialogData* data)
+wxWindowsPrintDialog::wxWindowsPrintDialog(wxWindow *p, wxPrintDialogData* data)
 {
     Create(p, data);
 }
 
-wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintData* data)
+wxWindowsPrintDialog::wxWindowsPrintDialog(wxWindow *p, wxPrintData* data)
 {
     wxPrintDialogData data2;
     if ( data )
@@ -85,7 +70,7 @@ wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintData* data)
     Create(p, &data2);
 }
 
-bool wxPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
+bool wxWindowsPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
 {
     m_dialogParent = p;
     m_printerDC = NULL;
@@ -99,13 +84,13 @@ bool wxPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
     return true;
 }
 
-wxPrintDialog::~wxPrintDialog()
+wxWindowsPrintDialog::~wxWindowsPrintDialog()
 {
     if (m_destroyDC && m_printerDC)
         delete m_printerDC;
 }
 
-int wxPrintDialog::ShowModal()
+int wxWindowsPrintDialog::ShowModal()
 {
     m_printDialogData.ConvertToNative();
 
@@ -134,7 +119,7 @@ int wxPrintDialog::ShowModal()
     }
 }
 
-wxDC *wxPrintDialog::GetPrintDC()
+wxDC *wxWindowsPrintDialog::GetPrintDC()
 {
     if (m_printerDC)
     {
@@ -148,6 +133,8 @@ wxDC *wxPrintDialog::GetPrintDC()
 // ---------------------------------------------------------------------------
 // wxPageSetupDialog
 // ---------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxPageSetupDialog, wxDialog)
 
 wxPageSetupDialog::wxPageSetupDialog()
 {
