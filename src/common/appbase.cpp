@@ -37,9 +37,7 @@
 #include "wx/apptrait.h"
 #include "wx/cmdline.h"
 #include "wx/confbase.h"
-#if wxUSE_FILENAME
-    #include "wx/filename.h"
-#endif // wxUSE_FILENAME
+#include "wx/filename.h"
 #include "wx/msgout.h"
 #include "wx/tokenzr.h"
 
@@ -132,11 +130,7 @@ bool wxAppConsole::Initialize(int& argc, wxChar **argv)
     if ( m_appName.empty() && argv )
     {
         // the application name is, by default, the name of its executable file
-#if wxUSE_FILENAME
         wxFileName::SplitPath(argv[0], NULL, &m_appName, NULL);
-#else // !wxUSE_FILENAME
-        m_appName = argv[0];
-#endif // wxUSE_FILENAME/!wxUSE_FILENAME
     }
 
     return true;
