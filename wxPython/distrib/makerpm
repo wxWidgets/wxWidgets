@@ -40,4 +40,8 @@ mv /usr/src/redhat/SRPMS/wxPython*.rpm .
 chown rd:users wxPython*.rpm
 rm -rf /usr/lib/python1.5/site-packages/wxPython/
 rm -f /usr/lib/libwxPyHelpers*
-rm -rf rm -rf /usr/doc/wxPython-$1
+rm -rf /usr/doc/wxPython-$1
+
+
+
+

@@ -51,11 +51,6 @@ below.)
    shared library.  You can check where the wxPython build will expect
    to find them by running "wx-config --cflags" and "wx-config --libs"
 
-   If you want the optional OGL (Object Graphics Library) and STC
-   (Styled Text Control) then you need to go to contrib/src/ogl and
-   contrib/src/stc and run "make install" in each of those
-   directories.
-
 
 1b. Building wxWindows on Win32.
 
