@@ -67,7 +67,7 @@ public:
 
     bool Create(const wxNativeFontInfo& fontinfo);
 
-    ~wxFont();
+    ~wxFont() {}
 
     // assignment
     wxFont& operator=(const wxFont& font);
@@ -98,7 +98,7 @@ public:
 
 protected:
     // common part of all ctors
-    void Init();
+    void Init() {}
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFont)

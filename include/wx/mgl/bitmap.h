@@ -75,7 +75,7 @@ private:
 class WXDLLEXPORT wxBitmap: public wxBitmapBase
 {
 public:
-    wxBitmap();
+    wxBitmap() {}
     wxBitmap(int width, int height, int depth = -1);
     wxBitmap(const char bits[], int width, int height, int depth = 1);
     wxBitmap(const char **bits) { CreateFromXpm(bits); }
@@ -83,7 +83,7 @@ public:
     wxBitmap(const wxBitmap& bmp);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
     wxBitmap(const wxImage& image, int depth = -1);
-    ~wxBitmap();
+    ~wxBitmap() {}
     wxBitmap& operator = (const wxBitmap& bmp);
     bool operator == (const wxBitmap& bmp) const;
     bool operator != (const wxBitmap& bmp) const;

@@ -35,11 +35,11 @@ class WXDLLEXPORT wxPen;
 class WXDLLEXPORT wxPen: public wxGDIObject
 {
 public:
-    wxPen();
+    wxPen() {}
     wxPen(const wxColour &colour, int width, int style);
     wxPen(const wxBitmap& stipple, int width);
     wxPen(const wxPen& pen);
-    ~wxPen();
+    ~wxPen() {}
     wxPen& operator = (const wxPen& pen);
     bool operator == (const wxPen& pen) const;
     bool operator != (const wxPen& pen) const;

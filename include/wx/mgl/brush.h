@@ -35,11 +35,11 @@ class WXDLLEXPORT wxBrush;
 class WXDLLEXPORT wxBrush: public wxGDIObject
 {
 public:
-    wxBrush();
+    wxBrush() {}
     wxBrush(const wxColour &colour, int style);
     wxBrush(const wxBitmap &stippleBitmap);
     wxBrush(const wxBrush &brush);
-    ~wxBrush();
+    ~wxBrush() {}
     wxBrush& operator = (const wxBrush& brush);
     bool operator == (const wxBrush& brush) const;
     bool operator != (const wxBrush& brush) const;
