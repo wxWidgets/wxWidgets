@@ -421,8 +421,8 @@ void wxWindowMac::MacClientToRootWindow( int *x , int *y ) const
 {
  	if ( m_macWindowData == NULL)
 	{
-		if(x)   *x += m_x ;
-		if(y)   *y += m_y ;
+        if(x)   *x += m_x + MacGetLeftBorderSize();
+        if(y)   *y += m_y + MacGetTopBorderSize();
 		GetParent()->MacClientToRootWindow( x , y ) ;
 	}
 }
@@ -431,8 +431,8 @@ void wxWindowMac::MacRootWindowToClient( int *x , int *y ) const
 {
 	if ( m_macWindowData == NULL)
 	{
-		if(x)   *x -= m_x ;
-	    if(y)   *y -= m_y ;
+       if(x)   *x -= m_x + MacGetLeftBorderSize();
+      if(y)   *y -= m_y + MacGetTopBorderSize();
 		GetParent()->MacRootWindowToClient( x , y ) ;
 	}
 }
@@ -1213,33 +1213,34 @@ void wxWindowMac::MacPaintBorders( )
     if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
     {
     	bool sunken = HasFlag( wxSUNKEN_BORDER ) ;
-    	RGBColor pen1 = sunken ? white : black ;
-    	RGBColor pen2 = sunken ? shadow : face ;
-    	RGBColor pen3 = sunken ? face : shadow ;
-    	RGBColor pen4 = sunken ? black : white ;
-    	
-    	RGBForeColor( &pen1 ) ;
-    	{
-			Rect rect = { 0 , 0 , m_height , m_width } ;
-    		FrameRect( &rect ) ;
-    	}
-    	RGBForeColor( &pen2 ) ;
-    	{
-			Rect rect = { 1 , 1 , m_height -1 , m_width -1} ;
-    		FrameRect( &rect ) ;
-    	}
-    	RGBForeColor( &pen3 ) ;
-    	{
-			Rect rect = { 0 , 0 , m_height -2 , m_width -2} ;
-    		FrameRect( &rect ) ;
-    	}
-    	RGBForeColor( &pen4 ) ;
-    	{
-    		MoveTo( 0 , 0 ) ;
-    		LineTo( m_width - 3 , 0 ) ;
-    		MoveTo( 0 , 0 ) ;
-    		LineTo( 0 , m_height - 3 ) ;
-    	}
+        RGBForeColor( &face );
+        MoveTo( 0 , m_height - 2 );
+        LineTo( 0 , 0 );
+        LineTo( m_width - 2 , 0 );
+
+        MoveTo( 2 , m_height - 3 );
+        LineTo( m_width - 3 , m_height - 3 );
+        LineTo( m_width - 3 , 2 );
+
+        RGBForeColor( sunken ? &face : &black );
+        MoveTo( 0 , m_height - 1 );
+        LineTo( m_width - 1 , m_height - 1 );
+        LineTo( m_width - 1 , 0 );
+
+        RGBForeColor( sunken ? &shadow : &white );
+        MoveTo( 1 , m_height - 3 );
+        LineTo( 1, 1 );
+        LineTo( m_width - 3 , 1 );
+
+        RGBForeColor( sunken ? &white : &shadow );
+        MoveTo( 1 , m_height - 2 );
+        LineTo( m_width - 2 , m_height - 2 );
+        LineTo( m_width - 2 , 1 );
+
+        RGBForeColor( sunken ? &black : &face );
+        MoveTo( 2 , m_height - 4 );
+        LineTo( 2 , 2 );
+        LineTo( m_width - 4 , 2 );
     }
     else if (HasFlag(wxSIMPLE_BORDER))
     {
@@ -1247,69 +1248,6 @@ void wxWindowMac::MacPaintBorders( )
 		RGBForeColor( &black ) ;
     	FrameRect( &rect ) ;
     }
-/*
-	if ( this->GetParent() )
-	{
-	    wxPaintDC dc(GetParent());
-	    GetParent()->PrepareDC(dc);
-	
-	    if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) )
-	    {
-	    	bool sunken = HasFlag( wxSUNKEN_BORDER ) ;
-	
-			wxPen m_penButton3DShadow( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_3DSHADOW ), 1, wxSOLID ) ;
-			wxPen m_penButton3DFace( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_3DFACE ), 1, wxSOLID ) ;
-	    	
-			wxPen wxPen1 = sunken ? *wxWHITE_PEN : *wxBLACK_PEN;
-			wxPen wxPen2 = sunken ? m_penButton3DShadow : m_penButton3DShadow;
-			wxPen wxPen3 = sunken ? m_penButton3DFace : m_penButton3DShadow;
-			wxPen wxPen4 = sunken ? *wxBLACK_PEN : *wxWHITE_PEN;
-		
-			dc.SetPen(wxPen1);
-			dc.DrawRectangle(m_x, m_y, m_width, m_height);          // outer - right and button
-		
-		    dc.SetPen(wxPen2);
-			dc.DrawRectangle(m_x+1, m_y+1, m_width-1, m_height-1);      // outer - left and top
-		
-		    dc.SetPen(wxPen3);
-			dc.DrawRectangle(m_x, m_y, m_width-2, m_height-2);          // inner - right and button
-		
-		    dc.SetPen(wxPen4);
-			dc.DrawLine(m_x, m_y, m_x + m_width-3, m_y);                 // inner - left and top
-			dc.DrawLine(m_x, m_y, m_x, m_y + m_height-3);
-	    }
-	    else if (HasFlag(wxDOUBLE_BORDER))
-	    {
-	    	bool sunken = HasFlag( wxSUNKEN_BORDER ) ;
-	
-			wxPen m_penButton3DShadow( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_3DSHADOW ), 1, wxSOLID ) ;
-			wxPen m_penButton3DFace( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_3DFACE ), 1, wxSOLID ) ;
-	    	
-			wxPen wxPen1 = sunken ? *wxWHITE_PEN : *wxBLACK_PEN;
-			wxPen wxPen2 = sunken ? m_penButton3DShadow : m_penButton3DShadow;
-			wxPen wxPen3 = sunken ? m_penButton3DFace : m_penButton3DShadow;
-			wxPen wxPen4 = sunken ? *wxBLACK_PEN : *wxWHITE_PEN;
-		
-			dc.SetPen(wxPen1);
-			dc.DrawRectangle(m_x, m_y, m_width, m_height);          // outer - right and button
-		
-		    dc.SetPen(wxPen2);
-			dc.DrawRectangle(m_x+1, m_y+1, m_width-1, m_height-1);      // outer - left and top
-		
-		    dc.SetPen(wxPen3);
-			dc.DrawRectangle(m_x, m_y, m_width-2, m_height-2);          // inner - right and button
-		
-		    dc.SetPen(wxPen4);
-			dc.DrawLine(m_x, m_y, m_x + m_width-3, m_y);                 // inner - left and top
-			dc.DrawLine(m_x, m_y, m_x, m_y + m_height-3);
-	    }
-	    else if (HasFlag(wxSIMPLE_BORDER))
-	    {
-			dc.SetPen(*wxBLACK_PEN);
-			dc.DrawRectangle(m_x, m_y, m_width, m_height);         
-	    }
-    }
- */
 }
 
 // New function that will replace some of the above.
@@ -2345,11 +2283,11 @@ long wxWindowMac::MacGetLeftBorderSize( ) const
 
     if (m_windowStyle & wxRAISED_BORDER || m_windowStyle & wxSUNKEN_BORDER )
     {
-		return 2 ;
+		return 3 ;
     }
     else if (  m_windowStyle &wxDOUBLE_BORDER)
     {
-		return 2 ;
+		return 3 ;
     }
     else if (m_windowStyle &wxSIMPLE_BORDER)
     {
@@ -2373,7 +2311,7 @@ long wxWindowMac::MacGetRightBorderSize( ) const
     }
     else if (m_windowStyle &wxSIMPLE_BORDER)
     {
-    	return 3 ;
+    	return 1 ;
     }
 	return 0 ;
 }
@@ -2385,11 +2323,11 @@ long wxWindowMac::MacGetTopBorderSize( ) const
 
     if (m_windowStyle & wxRAISED_BORDER || m_windowStyle & wxSUNKEN_BORDER )
     {
-		return 2 ;
+		return 3 ;
     }
     else if (  m_windowStyle &wxDOUBLE_BORDER)
     {
-		return 2 ;
+		return 3 ;
     }
     else if (m_windowStyle &wxSIMPLE_BORDER)
     {
@@ -2413,7 +2351,7 @@ long wxWindowMac::MacGetBottomBorderSize( ) const
     }
     else if (m_windowStyle &wxSIMPLE_BORDER)
     {
-    	return 3 ;
+    	return 1 ;
     }
 	return 0 ;
 }
