@@ -556,8 +556,8 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetAcceleratorTable,(self,) + _args, _kwargs)
         if val: val = wxAcceleratorTablePtr(val) 
         return val
-    def base_OnPaint(self, *_args, **_kwargs):
-        val = apply(windowsc.wxWindow_base_OnPaint,(self,) + _args, _kwargs)
+    def OnPaint(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_OnPaint,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)

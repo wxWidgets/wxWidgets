@@ -402,7 +402,7 @@ public:
     wxAcceleratorTable *GetAcceleratorTable();
 
 #ifdef __WXMSW__
-    // This seems pretty bogus, but is currently needed for SplitTree
+    // A way to do the native draw first...  Too bad it isn't in wxGTK too.
     void OnPaint(wxPaintEvent& event);
 #endif
 };

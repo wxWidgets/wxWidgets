@@ -10,7 +10,6 @@ class TestTree(wxRemotelyScrolledTreeCtrl):
                  style=wxTR_HAS_BUTTONS):
         wxRemotelyScrolledTreeCtrl.__init__(self, parent, ID, pos, size, style)
         ##self.SetBackgroundColour("LIGHT BLUE")
-        EVT_PAINT(self, self.OnPaint)
 
         # make an image list
         im1 = im2 = -1
@@ -27,34 +26,6 @@ class TestTree(wxRemotelyScrolledTreeCtrl):
                 child = self.AppendItem(item, "Child %d" % j, im2)
 
         self.Expand(root)
-
-    def OnPaint(self, evt):
-        dc = wxPaintDC(self)
-
-        wxTreeCtrl.OnPaint(self, evt)
-
-        # Reset the device origin since it may have been set
-        dc.SetDeviceOrigin(0, 0)
-
-        pen = wxPen(wxSystemSettings_GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID)
-        dc.SetPen(pen)
-        dc.SetBrush(wxTRANSPARENT_BRUSH)
-
-        clientSize = self.GetClientSize()
-        cy = 0
-        h = self.GetFirstVisibleItem()
-        while h.Ok():
-            rect = self.GetBoundingRect(h)
-            if rect is not None:
-                cy = rect.GetTop()
-                dc.DrawLine(0, cy, clientSize.x, cy)
-                lastH = h
-            h = self.GetNextVisible(h)
-
-        rect = self.GetBoundingRect(lastH)
-        if rect is not None:
-            cy = rect.GetBottom()
-            dc.DrawLine(0, cy, clientSize.x, cy)
 
 
 
@@ -99,7 +70,8 @@ class TestPanel(wxPanel):
                                       style=wxNO_BORDER | wxCLIP_CHILDREN | wxVSCROLL)
         splitter = wxThinSplitterWindow(scroller, -1, style=wxSP_3DBORDER | wxCLIP_CHILDREN)
         splitter.SetSashSize(2)
-        self.tree = TestTree(splitter, -1, style=wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxNO_BORDER)
+        self.tree = TestTree(splitter, -1, style =
+                             wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxTR_ROW_LINES | wxNO_BORDER )
         valueWindow = TestValueWindow(splitter, -1, style=wxNO_BORDER)
 
         splitter.SplitVertically(self.tree, valueWindow)

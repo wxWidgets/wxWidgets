@@ -1274,8 +1274,6 @@ public:
         return (val1,val2)
 "
 
-    // This seems pretty bogus, but is currently needed for SplitTree
-    void OnPaint(wxPaintEvent& event);
 };
 
 
