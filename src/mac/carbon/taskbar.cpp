@@ -182,7 +182,7 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     CGImageRef pImage;
     
 #if wxMAC_USE_CORE_GRAPHICS        
-    pImage = bmp.CGImageCreate() ;
+    pImage = (CGImageRef) bmp.CGImageCreate() ;
 #else
     wxMask* mask = bmp.GetMask();
     if (!mask)
