@@ -395,7 +395,7 @@ methodOverrideMap = {
          int   len  = end - start;
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
+         wxMemoryBuffer mbuf(len+2);
          char* buf = (char*)mbuf.GetWriteBuf(len+1);
          SendMsg(%s, 0, (long)buf);
          mbuf.UngetWriteBuf(len);
