@@ -158,7 +158,8 @@ void wxCaret::OnSetFocus()
 {
     m_hasFocus = TRUE;
 
-    Refresh();
+    if ( IsVisible() )
+        Refresh();
 }
 
 void wxCaret::OnKillFocus()
