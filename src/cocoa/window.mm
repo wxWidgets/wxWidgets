@@ -22,6 +22,9 @@
 #import <AppKit/NSScrollView.h>
 #import <AppKit/NSColor.h>
 #import <AppKit/NSClipView.h>
+#import <Foundation/NSException.h>
+
+#include <objc/objc-runtime.h>
 
 // Turn this on to paint green over the dummy views for debugging
 #undef WXCOCOA_FILL_DUMMY_VIEW
@@ -346,8 +349,21 @@ bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
         wxLogDebug(wxT("Paint event recursion!"));
         return false;
     }
-    //FIXME: should probably turn that rect into the update region
     m_isInPaint = TRUE;
+
+    // Set m_updateRegion
+    const NSRect *rects = &rect; // The bounding box of the region
+    int countRects = 1;
+    // Try replacing the larger rectangle with a list of smaller ones:
+NS_DURING
+    // This only works on Panther
+//    [GetNSView() getRectsBeingDrawn:&rects count:&countRects];
+    // This compiles everywhere (and still only works on Panther)
+    objc_msgSend(GetNSView(),@selector(getRectsBeingDrawn:count:),&rects,&countRects);
+NS_HANDLER
+NS_ENDHANDLER
+    m_updateRegion = wxRegion(rects,countRects);
+
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
     bool ret = GetEventHandler()->ProcessEvent(event);
