@@ -1068,7 +1068,7 @@
 // ----------------------------------------------------------------------------
 
 #ifndef wxUSE_NORLANDER_HEADERS
-#if ((defined(__MINGW32__) && defined(__CYGWIN__)) ||defined(__WINE__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
+#if (defined(__WATCOMC__) && (__WATCOMC__ >= 1200)) || ((defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95))))
 #   define wxUSE_NORLANDER_HEADERS 1
 #else
 #   define wxUSE_NORLANDER_HEADERS 0
@@ -1182,7 +1182,7 @@
 #define wxUSE_DEBUG_NEW_ALWAYS 0
 #endif
 
-#if defined(__WXMSW__) && defined(__WATCOMC__)
+#if defined(__WXMSW__) && (defined(__WATCOMC__) && __WATCOMC__ < 1200)
 /*
 #undef  wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 0

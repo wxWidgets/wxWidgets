@@ -38,6 +38,7 @@ wxMSW:
 - wxCaret::SetSize() doesn't hide the caret any longer as it used to
 - wxCheckListBox::Check() doesn't send CHECKLISTBOX_TOGGLE event any more
 - fixed bug with wxTR_EDIT_LABELS not workign with wxTR_MULTIPLE
+- fixes for compilation with OpenWatcom compiler
 
 OLD CHANGES
 ===========

@@ -28,11 +28,12 @@
 #include "wx/log.h"
 #include "wx/app.h"
 
-// NB: Some compilers define boolean type in Windows headers (e.g. Watcom C++).
+// NB: Some compilers define boolean type in Windows headers 
+//     (e.g. Watcom C++, but not Open Watcom).
 //     This causes a conflict with jmorecfg.h header from libjpeg, so we have
 //     to make sure libjpeg won't try to define boolean itself. This is done by
 //     defining HAVE_BOOLEAN.
-#if defined(__WXMSW__) && (defined(__MWERKS__) || defined(__WATCOMC__))
+#if defined(__WXMSW__) && (defined(__MWERKS__) || (defined(__WATCOMC__) && __WATCOMC__ < 1200))
     #define HAVE_BOOLEAN
     #include <windows.h>
 #endif
