@@ -199,8 +199,10 @@ private :
     WindowRef m_data ;
 } ;
 
-wxWindow *wxFindControlFromMacControl(ControlRef inControl ) ;
-wxTopLevelWindowMac* wxFindWinFromMacWindow( WindowRef inWindow ) ;
+wxWindow *              wxFindControlFromMacControl(ControlRef inControl ) ;
+wxTopLevelWindowMac*    wxFindWinFromMacWindow( WindowRef inWindow ) ;
+wxMenu*                 wxFindMenuFromMacMenu(MenuRef inMenuRef) ;
+
 extern wxWindow* g_MacLastWindow ;
 pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
 Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true ) ;
@@ -282,7 +284,7 @@ public :
         return SetParameter<T>( inName, wxMacGetEventParamType<T>() , &data ) ;
     }
     
-    EventKind GetKind()
+    UInt32 GetKind()
     {
         return ::GetEventKind( m_eventRef ) ;
     }
