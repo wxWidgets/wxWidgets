@@ -85,7 +85,11 @@ public:
     int GetSelection();
     bool SetPageText(int nPage, const wxString& strText);
     wxString GetPageText(int nPage) const;
+
     void SetImageList(wxImageList* imageList);
+    void AssignImageList(wxImageList *imageList) ;
+    %pragma(python) addtomethod = "AssignImageList:_args[0].thisown = 0"
+
     wxImageList* GetImageList();
     int  GetPageImage(int nPage);
     bool SetPageImage(int nPage, int nImage);
