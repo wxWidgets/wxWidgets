@@ -949,6 +949,84 @@ class DemoErrorPanel(wx.Panel):
 
 #---------------------------------------------------------------------------
 
+class DemoTaskBarIcon(wx.TaskBarIcon):
+    TBMENU_RESTORE = wx.NewId()
+    TBMENU_CLOSE   = wx.NewId()
+    TBMENU_CHANGE  = wx.NewId()
+    TBMENU_REMOVE  = wx.NewId()
+    
+    def __init__(self, frame):
+        wx.TaskBarIcon.__init__(self)
+        self.frame = frame
+
+        # Set the image
+        icon = self.MakeIcon(images.getMondrianImage())
+        self.SetIcon(icon, "wxPython Demo")
+        
+        # bind some events
+        self.Bind(wx.EVT_TASKBAR_LEFT_DCLICK, self.OnTaskBarActivate)
+        self.Bind(wx.EVT_MENU, self.OnTaskBarActivate, id=self.TBMENU_RESTORE)
+        self.Bind(wx.EVT_MENU, self.OnTaskBarClose, id=self.TBMENU_CLOSE)
+        self.Bind(wx.EVT_MENU, self.OnTaskBarChange, id=self.TBMENU_CHANGE)
+        self.Bind(wx.EVT_MENU, self.OnTaskBarRemove, id=self.TBMENU_REMOVE)
+
+
+    def CreatePopupMenu(self):
+        """
+        This method is called by the base class when it needs to popup
+        the menu for the default EVT_RIGHT_DOWN event.  Just create
+        the menu how you want it and return it from this function,
+        the base class takes care of the rest.
+        """
+        menu = wx.Menu()
+        menu.Append(self.TBMENU_RESTORE, "Restore wxPython Demo")
+        menu.Append(self.TBMENU_CLOSE,   "Close wxPython Demo")
+        menu.AppendSeparator()
+        menu.Append(self.TBMENU_CHANGE, "Change the TB Icon")
+        menu.Append(self.TBMENU_REMOVE, "Remove the TB Icon")
+        return menu
+
+
+    def MakeIcon(self, img):
+        """
+        The various platforms have different requirements for the
+        icon size...
+        """
+        if "wxMSW" in wx.PlatformInfo:
+            img.Scale(16, 16)
+        elif "wxGTK" in wx.PlatformInfo:
+            img.Scale(22, 22)
+        # wxMac can be any size upto 128.128....
+        icon = wx.IconFromBitmap(img.ConvertToBitmap() )
+        return icon
+    
+
+    def OnTaskBarActivate(self, evt):
+        if self.frame.IsIconized():
+            self.frame.Iconize(False)
+        if not self.frame.IsShown():
+            self.frame.Show(True)
+        self.frame.Raise()
+
+
+    def OnTaskBarClose(self, evt):
+        self.frame.Close()
+
+        # because of the way wx.TaskBarIcon.PopupMenu is implemented we have to
+        # prod the main idle handler a bit to get the window to actually close
+        wx.GetApp().ProcessIdle()
+    
+
+    def OnTaskBarChange(self, evt):
+        icon = self.MakeIcon(images.getRobinImage())
+        self.SetIcon(icon, "This is a new icon")
+
+
+    def OnTaskBarRemove(self, evt):
+        self.RemoveIcon()
+
+
+#---------------------------------------------------------------------------
 class wxPythonDemo(wx.Frame):
     overviewText = "wxPython Overview"
 
@@ -967,19 +1045,7 @@ class wxPythonDemo(wx.Frame):
         icon = images.getMondrianIcon()
         self.SetIcon(icon)
 
-        if wx.Platform != '__WXMAC__':
-            # setup a taskbar icon, and catch some events from it
-            dim = 16  # (may want to use 22 on wxGTK, but 16 looks okay too)
-            icon = wx.IconFromBitmap(
-                images.getMondrianImage().Scale(dim,dim).ConvertToBitmap() )
-            #icon = wx.Icon('bmp_source/mondrian.ico', wx.BITMAP_TYPE_ICO)
-            #icon = images.getMondrianIcon()
-            self.tbicon = wx.TaskBarIcon()
-            self.tbicon.SetIcon(icon, "wxPython Demo")
-            self.tbicon.Bind(wx.EVT_TASKBAR_LEFT_DCLICK, self.OnTaskBarActivate)
-            self.tbicon.Bind(wx.EVT_TASKBAR_RIGHT_UP, self.OnTaskBarMenu)
-            self.tbicon.Bind(wx.EVT_MENU, self.OnTaskBarActivate, id=self.TBMENU_RESTORE)
-            self.tbicon.Bind(wx.EVT_MENU, self.OnTaskBarClose, id=self.TBMENU_CLOSE)
+        self.tbicon = DemoTaskBarIcon(self)
 
         wx.CallAfter(self.ShowTip)
 
@@ -1457,6 +1523,7 @@ class wxPythonDemo(wx.Frame):
         self.demoPage = None
         self.codePage = None
         self.mainmenu = None
+        self.tbicon.Destroy()
         self.Destroy()
 
 
@@ -1493,34 +1560,6 @@ class wxPythonDemo(wx.Frame):
             self.tree.SelectItem(selectedDemo)
             self.tree.EnsureVisible(selectedDemo)
 
-
-    #---------------------------------------------
-    def OnTaskBarActivate(self, evt):
-        if self.IsIconized():
-            self.Iconize(False)
-        if not self.IsShown():
-            self.Show(True)
-        self.Raise()
-
-    #---------------------------------------------
-
-    TBMENU_RESTORE = 1000
-    TBMENU_CLOSE   = 1001
-
-    def OnTaskBarMenu(self, evt):
-        menu = wx.Menu()
-        menu.Append(self.TBMENU_RESTORE, "Restore wxPython Demo")
-        menu.Append(self.TBMENU_CLOSE,   "Close")
-        self.tbicon.PopupMenu(menu)
-        menu.Destroy()
-
-    #---------------------------------------------
-    def OnTaskBarClose(self, evt):
-        self.Close()
-
-        # because of the way wx.TaskBarIcon.PopupMenu is implemented we have to
-        # prod the main idle handler a bit to get the window to actually close
-        wx.GetApp().ProcessIdle()
 
 
     #---------------------------------------------
