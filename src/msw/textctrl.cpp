@@ -1286,26 +1286,35 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
     if ( nMsg == WM_GETDLGCODE )
     {
-        // we always want the chars and the arrows
-        long lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
+        if ( IsEditable() )
+        {
+            // we always want the chars and the arrows
+            long lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
 
-        // we may have several different cases:
-        // 1. normal case: both TAB and ENTER are used for dialog navigation
-        // 2. ctrl which wants TAB for itself: ENTER is used to pass to the
-        //    next control in the dialog
-        // 3. ctrl which wants ENTER for itself: TAB is used for dialog
-        //    navigation
-        // 4. ctrl which wants both TAB and ENTER: Ctrl-ENTER is used to pass
-        //    to the next control
+            // we may have several different cases:
+            // 1. normal case: both TAB and ENTER are used for dlg navigation
+            // 2. ctrl which wants TAB for itself: ENTER is used to pass to the
+            //    next control in the dialog
+            // 3. ctrl which wants ENTER for itself: TAB is used for dialog
+            //    navigation
+            // 4. ctrl which wants both TAB and ENTER: Ctrl-ENTER is used to go
+            //    to the next control
 
-        // the multiline edit control should always get <Return> for itself
-        if ( HasFlag(wxTE_PROCESS_ENTER) || HasFlag(wxTE_MULTILINE) )
-            lDlgCode |= DLGC_WANTMESSAGE;
+            // the multiline edit control should always get <Return> for itself
+            if ( HasFlag(wxTE_PROCESS_ENTER) || HasFlag(wxTE_MULTILINE) )
+                lDlgCode |= DLGC_WANTMESSAGE;
 
-        if ( HasFlag(wxTE_PROCESS_TAB) )
-            lDlgCode |= DLGC_WANTTAB;
+            if ( HasFlag(wxTE_PROCESS_TAB) )
+                lDlgCode |= DLGC_WANTTAB;
 
-        lRc |= lDlgCode;
+            lRc |= lDlgCode;
+        }
+        else // !editable
+        {
+            // when the control can't be edited by user, it doesn't need any
+            // extra keys at all
+            lRc = 0;
+        }
     }
 
     return lRc;
