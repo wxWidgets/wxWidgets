@@ -74,7 +74,7 @@ protected:
     virtual struct objc_object* CocoaDataSource_objectForTableColumn(
         WX_NSTableColumn tableColumn, int rowIndex);
     WX_NSMutableArray m_cocoaItems;
-    wxArrayPtrVoid m_clientData;
+    wxArrayPtrVoid m_itemClientData;
     struct objc_object *m_cocoaDataSource;
 // ------------------------------------------------------------------------
 // Implementation

@@ -63,9 +63,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
         [m_cocoaItems addObject: wxNSStringWithWxString(choices[i])];
     }
     // Remove everything
-    m_clientData.Clear();
+    m_itemClientData.Clear();
     // Initialize n elements to NULL
-    m_clientData.SetCount(n,NULL);
+    m_itemClientData.SetCount(n,NULL);
 
     SetNSTableView([[NSTableView alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
@@ -142,7 +142,7 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     {
         [m_cocoaItems insertObject: wxNSStringWithWxString(items[i])
             atIndex: pos];
-        m_clientData.Insert(NULL,pos);
+        m_itemClientData.Insert(NULL,pos);
     }
     [GetNSTableView() reloadData];
 }
@@ -151,12 +151,12 @@ void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
 {
     // Remove everything
     [m_cocoaItems removeAllObjects];
-    m_clientData.Clear();
+    m_itemClientData.Clear();
     // Provide the data
     for(size_t i=0; i < items.GetCount(); i++)
     {
         [m_cocoaItems addObject: wxNSStringWithWxString(items[i])];
-        m_clientData.Add(clientData[i]);
+        m_itemClientData.Add(clientData[i]);
     }
     [GetNSTableView() reloadData];
 }
