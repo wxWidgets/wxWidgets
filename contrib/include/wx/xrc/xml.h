@@ -100,12 +100,8 @@ private:
 // element with name="title", irrelevant content and one child (wxXML_TEXT_NODE
 // with content="hi").
 //
-// If wxUSE_UNICODE is 0, all strings are encoded in UTF-8 encoding (same as
-// ASCII for characters 0-127). You can use wxMBConvUTF8 to convert then to
-// desired encoding:
-//
-//     wxCSConv myConv("iso8859-2");
-//     wxString s(cMB2WC(node->GetContent().c_str()), myConv);
+// If wxUSE_UNICODE is 0, all strings are encoded in the encoding given to Load
+// (default is UTF-8).
 
 class WXXMLDLLEXPORT wxXmlNode
 {
@@ -175,18 +171,18 @@ private:
 
 
 
-// This class holds XML data/document as parsed by libxml. Note that
-// internal representation is independant on libxml and you can use
-// it without libxml (see Load/SaveBinary).
+// This class holds XML data/document as parsed by XML parser.
 
 class WXXMLDLLEXPORT wxXmlDocument : public wxObject
 {
 public:
     wxXmlDocument() : wxObject(), m_version(wxT("1.0")), m_root(NULL)  {}
     wxXmlDocument(const wxString& filename,
-                  wxXmlIOType io_type = wxXML_IO_AUTO);
+                  wxXmlIOType io_type = wxXML_IO_AUTO,
+                  const wxString& encoding = wxT("UTF-8"));
     wxXmlDocument(wxInputStream& stream,
-                  wxXmlIOType io_type = wxXML_IO_AUTO);
+                  wxXmlIOType io_type = wxXML_IO_AUTO,
+                  const wxString& encoding = wxT("UTF-8"));
     ~wxXmlDocument() { delete m_root; }
 
     wxXmlDocument(const wxXmlDocument& doc);
@@ -194,10 +190,12 @@ public:
 
     // Parses .xml file and loads data. Returns TRUE on success, FALSE
     // otherwise.
-    // NOTE: Any call to this method will result into linking against libxml
-    //       and app's binary size will grow by ca. 250kB
-    bool Load(const wxString& filename, wxXmlIOType io_type = wxXML_IO_AUTO);
-    bool Load(wxInputStream& stream, wxXmlIOType io_type = wxXML_IO_AUTO);
+    bool Load(const wxString& filename,
+              wxXmlIOType io_type = wxXML_IO_AUTO,
+              const wxString& encoding = wxT("UTF-8"));
+    bool Load(wxInputStream& stream,
+              wxXmlIOType io_type = wxXML_IO_AUTO,
+              const wxString& encoding = wxT("UTF-8"));
 
     // Saves document as .xml file.
     bool Save(const wxString& filename,
@@ -214,15 +212,20 @@ public:
     wxString GetVersion() const { return m_version; }
     // Returns encoding of document (may be empty).
     // Note: this is the encoding original fail was saved in, *not* the
-    // encoding of in-memory representation! Data in wxXmlNode are always
-    // stored in wchar_t (in Unicode build) or UTF-8 encoded
-    // (if wxUSE_UNICODE is 0).
-    wxString GetEncoding() const { return m_encoding; }
+    // encoding of in-memory representation!
+    wxString GetFileEncoding() const { return m_fileEncoding; }
 
     // Write-access methods:
     void SetRoot(wxXmlNode *node) { delete m_root ; m_root = node; }
     void SetVersion(const wxString& version) { m_version = version; }
-    void SetEncoding(const wxString& encoding) { m_encoding = encoding; }
+    void SetFileEncoding(const wxString& encoding) { m_fileEncoding = encoding; }
+
+#if !wxUSE_UNICODE
+    // Returns encoding of in-memory representation of the document
+    // (same as passed to Load or ctor, defaults to UTF-8).
+    // NB: this is meaningless in Unicode build where data are stored as wchar_t*
+    wxString GetEncoding() const { return m_encoding; }
+#endif
 
     static void AddHandler(wxXmlIOHandler *handler);
     static void CleanUpHandlers();
@@ -232,7 +235,11 @@ protected:
     static wxList *sm_handlers;
 
 private:
-    wxString m_version, m_encoding;
+    wxString   m_version;
+    wxString   m_fileEncoding;
+#if !wxUSE_UNICODE
+    wxString   m_encoding;
+#endif
     wxXmlNode *m_root;
 
     void DoCopy(const wxXmlDocument& doc);
@@ -252,7 +259,8 @@ class WXXMLDLLEXPORT wxXmlIOHandler : public wxObject
         virtual bool CanLoad(wxInputStream& stream) = 0;
         virtual bool CanSave() = 0;
 
-        virtual bool Load(wxInputStream& stream, wxXmlDocument& doc) = 0;
+        virtual bool Load(wxInputStream& stream, wxXmlDocument& doc, 
+                          const wxString& encoding) = 0;
         virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc) = 0;
 };
 

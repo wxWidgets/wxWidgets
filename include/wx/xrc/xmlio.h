@@ -27,7 +27,8 @@ public:
     virtual bool CanLoad(wxInputStream& stream);
     virtual bool CanSave() { return FALSE; }
 
-    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc);
+    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc,
+                      const wxString& encoding);
     virtual bool Save(wxOutputStream& WXUNUSED(stream), const wxXmlDocument& WXUNUSED(doc))
         { return FALSE; }
 };
@@ -40,7 +41,8 @@ public:
     virtual bool CanLoad(wxInputStream& WXUNUSED(stream)) { return FALSE; }
     virtual bool CanSave() { return TRUE; }
 
-    virtual bool Load(wxInputStream& WXUNUSED(stream), wxXmlDocument& WXUNUSED(doc)) 
+    virtual bool Load(wxInputStream& WXUNUSED(stream), wxXmlDocument& WXUNUSED(doc),
+                      const wxString& WXUNUSED(encoding))
         { return FALSE; }
     virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc);
 };
@@ -55,7 +57,8 @@ public:
     virtual bool CanLoad(wxInputStream& stream);
     virtual bool CanSave() { return TRUE; }
 
-    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc);
+    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc,
+                      const wxString& encoding);
     virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc);
 
 protected:
@@ -75,7 +78,8 @@ public:
     virtual wxXmlIOType GetType() { return wxXML_IO_BINZ; }
     virtual bool CanLoad(wxInputStream& stream);
 
-    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc);
+    virtual bool Load(wxInputStream& stream, wxXmlDocument& doc,
+                      const wxString& encoding);
     virtual bool Save(wxOutputStream& stream, const wxXmlDocument& doc);
 };
 
