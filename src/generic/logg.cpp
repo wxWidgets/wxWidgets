@@ -57,18 +57,11 @@
   #include  "wx/msw/private.h"
 #endif // Windows
 
-// may be defined to 0 for old behavior (using wxMessageBox) - shouldn't be
-// changed normally (that's why it's here and not in setup.h).
-// Actually it now is in setup.h.
-#ifndef wxUSE_LOG_DIALOG
-#define wxUSE_LOG_DIALOG 1
-#endif
-
 #if wxUSE_LOG_DIALOG
     #include "wx/listctrl.h"
     #include "wx/imaglist.h"
     #include "wx/image.h"
-#else // !wxUSE_TEXTFILE
+#else // !wxUSE_LOG_DIALOG
     #include "wx/msgdlg.h"
 #endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
 
