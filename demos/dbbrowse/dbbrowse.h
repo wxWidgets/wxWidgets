@@ -27,15 +27,15 @@ class MainFrame: public wxFrame
 
  public:
   // menu callbacks
-  void OnQuit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
   void OnHelp(wxCommandEvent& event);
+  void OnQuit(wxCommandEvent& event);
   //--------------------------------------------------------------------------------------
-  wxHtmlHelpController *p_Help;
+  int DiffW, DiffH;                  // Needed the saving of Frame size
   //--------------------------------------------------------------------------------------
-  int DiffW, DiffH;
-  MainDoc *pDoc;
-  DocSplitterWindow *p_Splitter;
+  DocSplitterWindow    *p_Splitter;  // for Document Views
+  MainDoc              *pDoc;        // Self made Document
+  wxHtmlHelpController *p_Help;      // Help System
   //--------------------------------------------------------------------------------------
  DECLARE_EVENT_TABLE()
 };

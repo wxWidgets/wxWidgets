@@ -262,7 +262,8 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
 MainFrame::MainFrame(wxFrame *frame, char *title,  const wxPoint& pos, const wxSize& size):
   wxFrame(frame, -1, title,  pos, size)
 {
- //--- Everything is done in MainApp -----------------------------------------------------
+ p_Splitter = NULL; pDoc = NULL; p_Help = NULL;    // Keep the Pointers clean !
+ //--- Everything else is done in MainApp::OnInit() --------------------------------------
 }
 //----------------------------------------------------------------------------------------
 MainFrame::~MainFrame(void)
@@ -284,8 +285,8 @@ MainFrame::~MainFrame(void)
  // we want here!)
  // delete wxConfigBase::Set((wxConfigBase *) NULL);
  p_ProgramCfg->Flush(TRUE);        // saves   Objekt
- if (!frame->pDoc)                 // If we have a Valid Document
-  delete frame->pDoc;              // Cleanup (MainDoc::~MainDoc)
+ if (pDoc)                         // If we have a Valid Document
+  delete pDoc;                     // Cleanup (MainDoc::~MainDoc)
 } // MainFrame::~MainFrame(void)
 //----------------------------------------------------------------------------------------
 void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
