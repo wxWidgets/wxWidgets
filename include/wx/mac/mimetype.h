@@ -12,17 +12,22 @@
 #ifndef _MIMETYPE_IMPL_H
 #define _MIMETYPE_IMPL_H
 
+#ifdef __GNUG__
+    #pragma interface "mimetype.h"
+#endif
 
 #include "wx/defs.h"
 #include "wx/mimetype.h"
-
 
 
 class wxMimeTypesManagerImpl
 {
 public :
     wxMimeTypesManagerImpl() { }
-
+#ifdef __WXMAC_X__
+    ~wxMimeTypesManagerImpl() { }
+#endif
+ 
     // implement containing class functions
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
     wxFileType *GetOrAllocateFileTypeFromExtension(const wxString& ext) ;
