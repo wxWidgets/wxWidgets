@@ -48,6 +48,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/dir.cpp
     src/unix/mimetype.cpp
     src/unix/snglinst.cpp
+    src/unix/stdpaths.cpp
     src/unix/threadpsx.cpp
 </set>
 <set var="BASE_AND_GUI_UNIX_SRC" hints="files">
@@ -59,6 +60,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/execute.h
     wx/unix/mimetype.h
     wx/unix/pipe.h
+    wx/unix/stdpaths.h
 </set>
 
 <set var="BASE_WIN32_SRC" hints="files">
@@ -164,6 +166,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/object.cpp
     src/common/process.cpp
     src/common/regex.cpp
+    src/common/stdpbase.cpp
     src/common/sstream.cpp
     src/common/stopwatch.cpp
     src/common/strconv.cpp
@@ -263,6 +266,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/snglinst.h
     wx/sstream.h
     wx/stack.h
+    wx/stdpaths.h
     wx/stockitem.h
     wx/stopwatch.h
     wx/strconv.h
@@ -1087,6 +1091,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/region.cpp
     src/msw/renderer.cpp
     src/msw/settings.cpp
+    src/msw/stdpaths.cpp
     src/msw/timer.cpp
     src/msw/tooltip.cpp
     src/msw/toplevel.cpp
