@@ -99,6 +99,12 @@ class WXDLLEXPORT wxHashTable: public wxObject
   void DeleteContents(bool flag);
   void Clear(void);
 
+  // Returns number of nodes
+  size_t GetCount() const { return m_count; }
+
+ private:
+   size_t m_count;             // number of elements in the hashtable
+
 };
 
 #endif

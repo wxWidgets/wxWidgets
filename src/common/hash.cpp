@@ -36,6 +36,7 @@ wxHashTable::wxHashTable (int the_key_type, int size)
   n = 0;
   hash_table = (wxList**) NULL;
   Create(the_key_type, size);
+  m_count = 0;
 /*
   n = size;
   current_position = -1;
@@ -112,6 +113,7 @@ void wxHashTable::Put (long key, long value, wxObject * object)
     hash_table[position] = new wxList (wxKEY_INTEGER);
 
   hash_table[position]->Append (value, object);
+  m_count++;
 }
 
 void wxHashTable::Put (long key, const wxChar *value, wxObject * object)
@@ -126,6 +128,7 @@ void wxHashTable::Put (long key, const wxChar *value, wxObject * object)
     hash_table[position] = new wxList (wxKEY_INTEGER);
 
   hash_table[position]->Append (value, object);
+  m_count++;
 }
 
 void wxHashTable::Put (long key, wxObject * object)
@@ -140,6 +143,7 @@ void wxHashTable::Put (long key, wxObject * object)
     hash_table[position] = new wxList (wxKEY_INTEGER);
 
   hash_table[position]->Append (k, object);
+  m_count++;
 }
 
 void wxHashTable::Put (const wxChar *key, wxObject * object)
@@ -150,6 +154,7 @@ void wxHashTable::Put (const wxChar *key, wxObject * object)
     hash_table[position] = new wxList (wxKEY_STRING);
 
   hash_table[position]->Append (key, object);
+  m_count++;
 }
 
 wxObject *wxHashTable::Get (long key, long value) const
@@ -239,6 +244,7 @@ wxObject *wxHashTable::Delete (long key)
 	{
 	  wxObject *data = node->Data ();
 	  delete node;
+	  m_count--;
 	  return data;
 	}
       else
@@ -258,6 +264,7 @@ wxObject *wxHashTable::Delete (const wxChar *key)
 	{
 	  wxObject *data = node->Data ();
 	  delete node;
+	  m_count--;
 	  return data;
 	}
       else
@@ -282,6 +289,7 @@ wxObject *wxHashTable::Delete (long key, int value)
 	{
 	  wxObject *data = node->Data ();
 	  delete node;
+	  m_count--;
 	  return data;
 	}
       else
@@ -301,6 +309,7 @@ wxObject *wxHashTable::Delete (long key, const wxChar *value)
 	{
 	  wxObject *data = node->Data ();
 	  delete node;
+	  m_count--;
 	  return data;
 	}
       else
@@ -375,5 +384,6 @@ void wxHashTable::Clear (void)
       if (hash_table[i])
 	hash_table[i]->Clear ();
     }
+  m_count = 0;
 }
 
