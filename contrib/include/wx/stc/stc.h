@@ -2478,13 +2478,14 @@ inline wxString stc2wx(const char* str) {
 #endif
 }
 
-inline wxString stc2wx(const char* str, size_t len) {
 #if wxUSE_UNICODE
-    return wxString(str, wxConvUTF8, len);
+wxString stc2wx(const char* str, size_t len);
 #else
+inline wxString stc2wx(const char* str, size_t len) {
     return wxString(str, len);
-#endif
 }
+#endif
+
 
 #if wxUSE_UNICODE
 inline const wxWX2MBbuf wx2stc(const wxString& str) {
