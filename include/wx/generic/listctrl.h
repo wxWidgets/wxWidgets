@@ -70,7 +70,7 @@ public:
         Create(parent, id, pos, size, style, validator, name);
     }
     ~wxListCtrl();
-    
+
     bool Create( wxWindow *parent,
                  wxWindowID id = -1,
                  const wxPoint &pos = wxDefaultPosition,
@@ -140,7 +140,7 @@ public:
     bool ScrollList( int dx, int dy );
     bool SortItems( wxListCtrlCompare fn, long data );
     bool Update( long item );
-    
+
     void OnIdle( wxIdleEvent &event );
     void OnSize( wxSizeEvent &event );
 
@@ -167,7 +167,7 @@ public:
     wxImageList         *m_imageListNormal;
     wxImageList         *m_imageListSmall;
     wxImageList         *m_imageListState;  // what's that ?
-    bool                 m_ownsImageListNormal, 
+    bool                 m_ownsImageListNormal,
                          m_ownsImageListSmall,
                          m_ownsImageListState;
     wxListHeaderWindow  *m_headerWin;

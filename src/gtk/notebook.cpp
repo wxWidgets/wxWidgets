@@ -342,16 +342,6 @@ int wxNotebook::GetSelection() const
     return m_selection;
 }
 
-int wxNotebook::GetPageCount() const
-{
-    return (int) g_list_length( GTK_NOTEBOOK(m_widget)->children );
-}
-
-int wxNotebook::GetRowCount() const
-{
-    return 1;
-}
-
 wxString wxNotebook::GetPageText( int page ) const
 {
     wxCHECK_MSG( m_widget != NULL, wxT(""), wxT("invalid notebook") );

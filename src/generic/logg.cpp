@@ -52,8 +52,6 @@
 #include "wx/textfile.h"
 #include "wx/statline.h"
 
-#if wxUSE_LOG
-
 #ifdef  __WXMSW__
   // for OutputDebugString()
   #include  "wx/msw/private.h"

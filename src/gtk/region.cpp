@@ -87,6 +87,7 @@ wxRegionRefData::wxRegionRefData(const wxRegionRefData& refData)
     m_region = regCopy;
 #endif
 
+#if OLDCODE
     wxNode *node = refData.m_rects.First();
     while (node)
     {
@@ -94,6 +95,7 @@ wxRegionRefData::wxRegionRefData(const wxRegionRefData& refData)
         m_rects.Append( (wxObject*) new wxRect(*r) );
         node = node->Next();
     }
+#endif
 }
 
 wxRegionRefData::~wxRegionRefData()
@@ -116,8 +118,6 @@ wxRegionRefData::~wxRegionRefData()
 // ----------------------------------------------------------------------------
 
 #define M_REGIONDATA ((wxRegionRefData *)m_refData)
-
-IMPLEMENT_DYNAMIC_CLASS(wxRegion,wxGDIObject);
 
 wxRegion::wxRegion()
 {
@@ -566,8 +566,6 @@ wxList *wxRegion::GetRectList() const
 
 #if OLDCODE
 
-IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator,wxObject);
-
 wxRegionIterator::wxRegionIterator()
 {
     Reset();
@@ -700,8 +698,6 @@ void wxRIRefData::CreateRects( const wxRegion& region )
     }
   }
 }
-
-IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator,wxObject);
 
 wxRegionIterator::wxRegionIterator()
 {

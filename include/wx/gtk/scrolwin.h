@@ -39,7 +39,7 @@ class WXDLLEXPORT wxScrolledWindow : public wxPanel
 public:
     wxScrolledWindow()
         { Init(); }
-        
+
     wxScrolledWindow(wxWindow *parent,
                      wxWindowID id = -1,
                      const wxPoint& pos = wxDefaultPosition,
@@ -47,7 +47,7 @@ public:
                      long style = wxScrolledWindowStyle,
                      const wxString& name = wxPanelNameStr)
         { Create(parent, id, pos, size, style, name); }
-        
+
     void Init();
 
     bool Create(wxWindow *parent,
@@ -110,7 +110,7 @@ public:
 
     // Adjust the scrollbars
     virtual void AdjustScrollbars();
-    
+
     // Set the scale factor, used in PrepareDC
     void SetScale(double xs, double ys) { m_scaleX = xs; m_scaleY = ys; }
     double GetScaleX() const { return m_scaleX; }
@@ -121,7 +121,7 @@ public:
     void OnSize(wxSizeEvent& event);
     void OnPaint(wxPaintEvent& event);
     void OnChar(wxKeyEvent& event);
-    
+
     void GtkVScroll( float value );
     void GtkHScroll( float value );
     void GtkVConnectEvent();
@@ -131,10 +131,10 @@ public:
 
     // Calculate scroll increment
     virtual int CalcScrollInc(wxScrollWinEvent& event);
-    
+
     // Overridden from wxWindows due callback being static
     virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
-    
+
 protected:
     wxWindow             *m_targetWindow;
     int                   m_xScrollPixelsPerLine;
@@ -147,7 +147,7 @@ protected:
     int                   m_yScrollLines;
     int                   m_xScrollLinesPerPage;
     int                   m_yScrollLinesPerPage;
-    
+
     double                m_scaleY,m_scaleX;
 
 private:
