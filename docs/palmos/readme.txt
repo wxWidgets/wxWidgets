@@ -1,3 +1,64 @@
+                              wxPalm README
+                              =============
+
+NB: wxPalm is currently in pre-alpha stage -- but it's already fun!
+
+I. Building wxPalm under Windows
+--------------------------------
+
+First, you need the freely distributable Palm OS Developer Studio available at
+
+                http://www.palmos.com/dev/dl/dl_tools/dl_pods/
+
+Beware, its installation takes about 350Mb (without cygwin tools which I didn't
+install as I already had them), so make sure you have enough disk space for it
+and for wxWidgets build tree (another 50Mb).
+
+The Developer Studio is Eclipse-based and so is a GUI environment, however it
+is also possible to build Palm applications from the command line using the
+usual GNU tools. Both methods are covered below, choose one which you prefer.
+
+a) Using command line tools:
+    - If you have installed Developer Studion in a non default location (e.g.
+      d:\PalmOS), you will need to set the environment variables:
+
+                set TOOLS_DIR=D:/PalmOS/PalmOSTools/
+                set SDK_LOCATION=D:/PalmOS/sdk-6/
+
+      Don't use backslashes and don't forget the trailing slash. On the bright
+      side, spaces don't need to be escaped in any way.
+
+    - create a lib/gcc_lib/palmos/wx directory
+    - copy include/wx/palmos/setup0.h to lib/gcc_lib/palmos/wx/setup.h
+        TODO: modify Makefile to do it automatically
+
+    - ensure that the directories d:\PalmOS\PalmOSTools and the one containing
+      GNU tools (i.e. cygwin bin directory) are in your PATH
+
+    - go to build/palmos and run make
+
+    - you should end up with DebugSim/wxWidgets.prc: this is the Palm database
+      which you can load into the emulator
+
+    - to test it, run the emulator (you need PalmOS 6 one!) after seting
+      another env var:
+
+                set PALMSOURCE_SIM_PATH=wxWindows\build\palmos\DebugSim
+
+      wait until the emulator finishes to boot, right click it and choose
+      "Install" in the menu, select wxWindows.prc in the file open dialog.
+      You should see "Minimal App" with a familiar icon appear in the list,
+      click it and it should start.
+
+
+b) Using IDE:
+    TODO: write this after checking that the instructions below work
+
+
+
+
+Original note from William Osborne follow:
+
 wxWidgets 2.5.3 CVS 10-18-2004
 ------------------------------
 
