@@ -57,6 +57,9 @@ samples/docview/docview.vcw
 samples/docvwmdi/docvwmdi.vcp
 samples/docvwmdi/docvwmdi.vcw
 
+samples/drawer/drawer.vcp
+samples/drawer/drawer.vcw
+
 samples/drawing/drawing.vcp
 samples/drawing/drawing.vcw
 
@@ -264,69 +267,62 @@ demos/life/life.vcw
 demos/poem/poem.vcp
 demos/poem/poem.vcw
 
-utils/tex2rtf/src/Tex2RTF.vcp
-utils/tex2rtf/src/Tex2RTF.vcw
+utils/tex2rtf/src/tex2rtf.vcp
+utils/tex2rtf/src/tex2rtf.vcw
 
 utils/hhp2cached/hhp2cached.vcp
 utils/hhp2cached/hhp2cached.vcw
 
-utils/helpgen/src/HelpGen.vcp
-utils/helpgen/src/HelpGen.vcw
+utils/helpgen/src/helpgen.vcp
+utils/helpgen/src/helpgen.vcw
 
 utils/helpview/src/helpview.vcp
 utils/helpview/src/helpview.vcw
 utils/helpview/src/client.vcp
 utils/helpview/src/client.vcw
 
-contrib/src/ogl/Ogl.vcp
-contrib/src/ogl/Ogl.vcw
+contrib/src/ogl/ogl.vcp
+contrib/src/ogl/ogl.vcw
 
-contrib/samples/ogl/ogledit/Ogledit.vcp
-contrib/samples/ogl/ogledit/Ogledit.vcw
-contrib/samples/ogl/studio/Studio.vcp
-contrib/samples/ogl/studio/Studio.vcw
+contrib/samples/ogl/ogledit/ogledit.vcp
+contrib/samples/ogl/ogledit/ogledit.vcw
+contrib/samples/ogl/studio/studio.vcp
+contrib/samples/ogl/studio/studio.vcw
 
-contrib/src/xrc/Xrc.vcp
-contrib/src/xrc/Xrc.vcw
+src/xrc/xrc.vcp
+src/xrc/xrc.vcw
 
-contrib/samples/xrc/XrcDemo.vcp
-contrib/samples/xrc/XrcDemo.vcw
+samples/xrc/xrcdemo.vcp
+samples/xrc/xrcdemo.vcw
 
-contrib/src/mmedia/Mmedia.vcp
-contrib/src/mmedia/MMedia.vcw
+contrib/src/mmedia/mmedia.vcp
+contrib/src/mmedia/mmedia.vcw
 
-contrib/samples/mmedia/Mmboard.vcp
-contrib/samples/mmedia/Mmboard.vcw
+contrib/samples/mmedia/mmboard.vcp
+contrib/samples/mmedia/mmboard.vcw
 
-contrib/src/stc/Stc.vcp
-contrib/src/stc/Stc.vcw
+contrib/src/stc/stc.vcp
+contrib/src/stc/stc.vcw
 
-contrib/samples/stc/StcTest.vcp
-contrib/samples/stc/StcTest.vcw
+contrib/samples/stc/stctest.vcp
+contrib/samples/stc/stctest.vcw
 
 contrib/utils/wxrc/wxrc.vcp
 contrib/utils/wxrc/wxrc.vcw
 
-contrib/utils/convertrc/Convert.vcp
-contrib/utils/convertrc/Convert.vcw
+contrib/utils/convertrc/convert.vcp
+contrib/utils/convertrc/convert.vcw
 
-contrib/utils/wxrcedit/wxRcEdit.vcp
-contrib/utils/wxrcedit/wxRcEdit.vcw
+contrib/utils/wxrcedit/wxrcedit.vcp
+contrib/utils/wxrcedit/wxrcedit.vcw
 
-contrib/src/canvas/Canvas.vcp
-contrib/src/canvas/Canvas.vcw
-contrib/samples/canvas/simple/Simple.vcp
-contrib/samples/canvas/simple/Simple.vcw
-contrib/samples/canvas/test/Test.vcp
-contrib/samples/canvas/test/Test.vcw
+contrib/src/plot/plot.vcp
+contrib/src/plot/plot.vcw
+contrib/samples/plot/plot.vcp
+contrib/samples/plot/plot.vcw
 
-contrib/src/plot/Plot.vcp
-contrib/src/plot/Plot.vcw
-contrib/samples/plot/Plot.vcp
-contrib/samples/plot/Plot.vcw
-
-contrib/src/gizmos/Gizmos.vcp
-contrib/src/gizmos/Gizmos.vcw
+contrib/src/gizmos/gizmos.vcp
+contrib/src/gizmos/gizmos.vcw
 contrib/samples/gizmos/dynsash/dynsash.vcp
 contrib/samples/gizmos/dynsash/dynsash.vcw
 contrib/samples/gizmos/dynsash_switch/dynsash_switch.vcp
@@ -335,13 +331,13 @@ contrib/samples/gizmos/editlbox/editlbox.vcp
 contrib/samples/gizmos/editlbox/editlbox.vcw
 contrib/samples/gizmos/multicell/multicell.vcp
 contrib/samples/gizmos/multicell/multicell.vcw
-contrib/samples/gizmos/splittree/Tree.vcp
-contrib/samples/gizmos/splittree/Tree.vcw
+contrib/samples/gizmos/splittree/splittree.vcp
+contrib/samples/gizmos/splittree/splittree.vcw
 
-contrib/src/animate/Animate.vcp
-contrib/src/animate/Animate.vcw
-contrib/samples/animate/AniTest.vcp
-contrib/samples/animate/AniTest.vcw
+contrib/src/animate/animate.vcp
+contrib/src/animate/animate.vcw
+contrib/samples/animate/anitest.vcp
+contrib/samples/animate/anitest.vcw
 
 contrib/src/fl/fl.vcp
 contrib/src/fl/fl.vcw
@@ -356,8 +352,8 @@ contrib/samples/fl/fl_sample2/fl_demo.vcw
 contrib/samples/fl/fl_sample3/fl_demo.vcp
 contrib/samples/fl/fl_sample3/fl_demo.vcw
 
-contrib/src/net/Net.vcp
-contrib/src/net/Net.vcw
+contrib/src/net/net.vcp
+contrib/src/net/net.vcw
 
 contrib/src/deprecated/deprecated.vcp
 
@@ -370,4 +366,10 @@ contrib/samples/deprecated/resource/resource.vcw
 contrib/samples/deprecated/treelay/treelay.vcp
 contrib/samples/deprecated/treelay/treelay.vcw
 
+contrib/src/foldbar/foldbar.vcp
+contrib/src/foldbar/foldbar.vcw
+contrib/samples/foldbar/extended/extended.vcp
+contrib/samples/foldbar/extended/extended.vcw
+contrib/samples/foldbar/foldpanelbar/foldpanelbar.vcp
+contrib/samples/foldbar/foldpanelbar/foldpanelbar.vcw
 

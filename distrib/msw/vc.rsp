@@ -73,6 +73,9 @@ samples/docvwmdi/docvwmdi.dsw
 samples/dragimag/dragimag.dsp
 samples/dragimag/dragimag.dsw
 
+samples/drawer/drawer.dsp
+samples/drawer/drawer.dsw
+
 samples/drawing/drawing.dsp
 samples/drawing/drawing.dsw
 
@@ -84,9 +87,6 @@ samples/erase/erase.dsw
 
 samples/event/event.dsp
 samples/event/event.dsw
-
-samples/except/except.dsp
-samples/except/except.dsw
 
 samples/except/except.dsp
 samples/except/except.dsw
@@ -291,6 +291,9 @@ demos/life/life.dsw
 demos/poem/poem.dsp
 demos/poem/poem.dsw
 
+utils/wxrc/wxrc.dsp
+utils/wxrc/wxrc.dsw
+
 utils/tex2rtf/src/tex2rtf_tex2rtf.dsp
 utils/tex2rtf/src/tex2rtf_tex2rtf_gui.dsp
 
@@ -310,11 +313,8 @@ contrib/samples/ogl/ogledit/ogledit.dsw
 contrib/samples/ogl/studio/studio.dsp
 contrib/samples/ogl/studio/studio.dsw
 
-contrib/build/xrc/xrc.dsp
-contrib/build/xrc/xrc.dsw
-
-contrib/samples/xrc/xrcdemo.dsp
-contrib/samples/xrc/xrcdemo.dsw
+samples/xrc/xrcdemo.dsp
+samples/xrc/xrcdemo.dsw
 
 contrib/build/mmedia/mmedia.dsp
 contrib/build/mmedia/mmedia.dsw
@@ -327,9 +327,6 @@ contrib/build/stc/stc.dsw
 
 contrib/samples/stc/stctest.dsp
 contrib/samples/stc/stctest.dsw
-
-contrib/utils/wxrc/wxrc.dsp
-contrib/utils/wxrc/wxrc.dsw
 
 contrib/utils/convertrc/convertrc.dsp
 contrib/utils/convertrc/convertrc.dsw
@@ -382,4 +379,7 @@ contrib/samples/deprecated/resource/resource.dsw
 contrib/samples/deprecated/treelay/treelay.dsp
 contrib/samples/deprecated/treelay/treelay.dsw
 
+contrib/src/foldbar/foldbar.dsp
+contrib/samples/foldbar/extended/extended.dsp
+contrib/samples/foldbar/foldpanelbar/foldpanelbar.dsp
 

@@ -17,6 +17,7 @@ samples/dnd/Makefile.in
 samples/docview/Makefile.in
 samples/docvwmdi/Makefile.in
 samples/dragimag/Makefile.in
+samples/drawer/Makefile.in
 samples/drawing/Makefile.in
 samples/dynamic/Makefile.in
 samples/erase/Makefile.in
@@ -111,6 +112,7 @@ contrib/Makefile.in
 contrib/src/Makefile.in
 contrib/src/applet/Makefile.in
 contrib/src/canvas/Makefile.in
+contrib/src/foldbar/Makefile.in
 contrib/src/ogl/Makefile.in
 contrib/src/mmedia/Makefile.in
 contrib/src/stc/Makefile.in
@@ -121,9 +123,9 @@ contrib/src/fl/Makefile.in
 contrib/src/net/Makefile.in
 
 contrib/samples/Makefile.in
-contrib/samples/canvas/test/Makefile.in
-contrib/samples/canvas/simple/Makefile.in
-contrib/samples/canvas/Makefile.in
+contrib/samples/foldbar/Makefile.in
+contrib/samples/foldbar/extended/Makefile.in
+contrib/samples/foldbar/foldpanelbar/Makefile.in
 contrib/samples/gizmos/Makefile.in
 contrib/samples/gizmos/multicell/Makefile.in
 contrib/samples/gizmos/splittree/Makefile.in

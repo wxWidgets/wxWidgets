@@ -33,6 +33,7 @@ samples/docview/*W7.xml
 samples/docvwmdi/*W7.xml
 samples/dragimag/*W7.xml
 samples/drawing/*W7.xml
+samples/drawer/*W7.xml
 samples/dynamic/*W7.xml
 samples/erase/*W7.xml
 samples/event/*W7.xml
@@ -94,18 +95,22 @@ demos/forty/*W7.xml
 demos/fractal/*W7.xml
 demos/life/*W7.xml
 
+src/xrc/*W7.xml
+samples/xrc/*W7.xml
+utils/wxrc/*W7.xml
+utils/convertrc/*W7.xml
+utils/wxrcedit/*W7.xml
+
+contrib/src/foldbar/*W7.xml
+contrib/samples/foldbar/extended/*W7.xml
+contrib/samples/foldbar/foldpanelbar/*W7.xml
 contrib/src/ogl/*W7.xml
 contrib/samples/ogl/ogledit/*W7.xml
 contrib/samples/ogl/studio/*W7.xml
-contrib/src/xrc/*W7.xml
-contrib/samples/xrc/*W7.xml
 contrib/src/mmedia/*W7.xml
 contrib/samples/mmedia/*W7.xml
 contrib/src/stc/*W7.xml
 contrib/samples/stc/*W7.xml
-contrib/utils/wxrc/*W7.xml
-contrib/utils/convertrc/*W7.xml
-contrib/utils/wxrcedit/*W7.xml
 contrib/src/canvas/*W7.xml
 contrib/samples/canvas/simple/*W7.xml
 contrib/samples/canvas/test/*W7.xml

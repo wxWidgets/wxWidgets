@@ -10,6 +10,7 @@ setup.h.in
 install-sh
 mkinstalldirs
 wx-config.in
+wx-config-inplace.in
 version-script.in
 setup.h_vms
 regen
@@ -465,12 +466,6 @@ samples/event/*.pro
 samples/event/*.bkl
 
 samples/except/*.cpp
-samples/except/*.rc
-samples/except/makefile*
-samples/except/*.xpm
-samples/except/*.bkl
-
-samples/except/*.cpp
 samples/except/*.h
 samples/except/makefile*
 samples/except/*.rc
@@ -741,6 +736,8 @@ samples/internat/ja/*.mo
 samples/internat/ja/*.po
 samples/internat/ka/*.mo
 samples/internat/ka/*.po
+samples/internat/pl/*.mo
+samples/internat/pl/*.po
 samples/internat/*.bkl
 
 samples/ipc/*.cpp
@@ -1337,6 +1334,7 @@ demos/forty/*.txt
 demos/forty/*.pro
 demos/forty/*.bkl
 demos/forty/*.r
+demos/forty/*.htm
 
 demos/fractal/*.cpp
 demos/fractal/*.h
@@ -1422,8 +1420,12 @@ tests/*.cpp
 tests/*.fc
 
 tests/arrays/*.cpp
+tests/datetime/*.cpp
+tests/filename/*.cpp
 tests/filesys/*.cpp
+tests/fontmap/*.cpp
 tests/formatconverter/*.cpp
+tests/hashes/*.cpp
 tests/longlong/*.cpp
 tests/mbconv/*.cpp
 

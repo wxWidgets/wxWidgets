@@ -2,7 +2,7 @@
 
 # Make a distribution of an application on MSW.
 # Example:
-# ../distrib/msw/makesetup.sh --wxmsw --verbose &> | cat > log
+# ../distrib/msw/makesetup.sh --wxmsw --verbose &> log
 
 # If your zip accepts Cygwin-style paths, then
 # use cygpath, else substitute echo
@@ -16,6 +16,7 @@ SPINOS2=0
 SPINDOCS=1
 SPINALL=1
 SPINWXALL=1
+GETMAKEFILES=0
 VERBOSE=0
 ZIPFLAGS=
 
@@ -23,7 +24,7 @@ PROGNAME=$0
 SCRIPTDIR=$WXWIN/distrib/msw
 WEBFILES=c:/wx2dev/wxWebSite
 # Set this to the required version
-VERSION=2.5.2
+VERSION=2.5.3
 
 . $SCRIPTDIR/setup.var
 
@@ -256,38 +257,38 @@ dospinwxall()
 {
     cd $APPDIR
 
-    # Create wxWidgets-$VERSION-win.zip which is used to create wxMSW
+    # Create wxWidgets-$VERSION-all.zip which is used to create wxMSW
     echo Zipping individual components
-    rm -f $DESTDIR/wxWidgets-$VERSION-win.zip
-    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/generic.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/makefile.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/msw.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/ogl.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/mmedia.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/stc.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/tex2rtf.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/jpeg.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/tiff.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/xml.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/contrib.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/deprecated.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/utils.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/utilmake.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/univ.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/wince.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/dmc.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/cw.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/cw_mac.rsp
+    rm -f $DESTDIR/wxWidgets-$VERSION-all.zip
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/generic.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/makefile.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/msw.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/ogl.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/mmedia.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/stc.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/tex2rtf.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/jpeg.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/tiff.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/xml.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/contrib.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/deprecated.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/utils.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/utilmake.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/univ.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/wince.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/dmc.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/cw.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/cw_mac.rsp
 
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/x11.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/cocoa.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/motif.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/mac.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/wince.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/mgl.rsp
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-win.zip < $APPDIR/distrib/msw/os2.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/x11.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/cocoa.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/motif.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/mac.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/wince.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/mgl.rsp
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < $APPDIR/distrib/msw/os2.rsp
 
-#    rearchive wxWidgets-$VERSION-win.zip wxWidgets-$VERSION $DESTDIR
+#    rearchive wxWidgets-$VERSION-all.zip wxWidgets-$VERSION $DESTDIR
 
     if [ -d $DESTDIR/wxWidgets-$VERSION ]; then
         rm -f -r $DESTDIR/wxWidgets-$VERSION
@@ -295,7 +296,7 @@ dospinwxall()
 
     mkdir $DESTDIR/wxWidgets-$VERSION
     cd $DESTDIR/wxWidgets-$VERSION
-    unzip $ZIPFLAGS ../wxWidgets-$VERSION-win.zip
+    unzip $ZIPFLAGS ../wxWidgets-$VERSION-all.zip
 
     echo Copying readme files...
     cp $APPDIR/docs/licence.txt LICENCE.txt
@@ -305,7 +306,7 @@ dospinwxall()
 
     cd $DESTDIR
 
-    rm -f $DESTDIR/wxWidgets-$VERSION-win.zip
+    rm -f $DESTDIR/wxWidgets-$VERSION-all.zip
     zip $ZIPFLAGS -r wxAll-$VERSION.zip wxWidgets-$VERSION/*
 }
 
@@ -676,6 +677,21 @@ makesetup()
     fi
 }
 
+# Get the makefiles that aren't in CVS and unarchive them
+getmakefiles()
+{
+    echo Getting eVC++ project files...
+    curl http://biolpc22.york.ac.uk/pub/CVS_Makefiles/wx-mk-evcprj.zip --output /c/transit/wx-mk-evcprj.zip
+    echo Getting Digital Mars makefiles...
+    curl http://biolpc22.york.ac.uk/pub/CVS_Makefiles/wx-mk-dmars.zip --output /c/transit/wx-mk-dmars.zip
+
+    cd $APPDIR
+    echo Unarchiving makefiles and project files...
+    unzip -o -a /c/transit/wx-mk-evcprj.zip
+    unzip -o -a /c/transit/wx-mk-dmars.zip
+    echo Done getting makefiles and project files.
+}
+
 # We can't use e.g. this:
 # ls `cat $SRC/distrib/msw/makefile.rsp` zip -@ -u $DEST/wxWidgets-$VERSION-gen.zip
 # because there's not enough space on the command line, plus we need to ignore the
@@ -713,6 +729,7 @@ usage()
     echo "    --wxall           Build wxAll zip distribution"
     echo "    --docs            Build docs archives"
     echo "    --all             Build all distributions (the default)"
+    echo "    --getmakefiles    Get out-of-CVS makefiles and unarchive into the wxWidgets source tree"
     echo "    --verbose         Verbose zip operation"
     echo.
     echo Note that options only override settings in $SCRIPTDIR/setup.var.
@@ -728,9 +745,10 @@ for i in "$@"; do
 	--upx) UPX=1 ;;
 	--no-upx) UPX=0 ;;
 	--wxmac) SPINMAC=1; SPINALL=0 ;;
-	--wxmsw) SPINMSW=1; SPINALL=0 ;;
+	--wxmsw) SPINMSW=1; SPINALL=0; SPINWXALL=0 ;;
 	--wxos2) SPINOS2=1; SPINALL=0 ;;
 	--wxall) SPINWXALL=1; SPINALL=0 ;;
+	--getmakefiles) GETMAKEFILES=1; SPINALL=0 ;;
 	--docs) SPINDOCS=1; SPINALL=0 ;;
 	--all) SPINALL=1 ;;
 	--verbose) VERBOSE=1 ;;
@@ -741,7 +759,13 @@ for i in "$@"; do
     esac
 done
 
+
 doinit
+
+if [ "$GETMAKEFILES" = "1" ]; then
+    getmakefiles
+    exit
+fi
 
 # findversion
 makesetup

@@ -25,6 +25,17 @@ src/png/*.mcp
 src/regex/*M?.xml
 src/regex/*.mcp
 
+src/xrc/*M?.xml
+src/xrc/*.mcp
+samples/xrc/*M?.xml
+samples/xrc/*.mcp
+utils/wxrc/*M?.xml
+utils/wxrc/*.mcp
+contrib/utils/convertrc/*M?.xml
+contrib/utils/convertrc/*.mcp
+contrib/utils/wxrcedit/*M?.xml
+contrib/utils/wxrcedit/*.mcp
+
 samples/artprov/*M?.xml
 samples/artprov/*.mcp
 samples/calendar/*M?.xml
@@ -52,6 +63,7 @@ samples/docvwmdi/*.mcp
 samples/dragimag/*M?.xml
 samples/dragimag/*.mcp
 samples/drawing/*M?.xml
+samples/drawer/*M?.xml
 samples/drawing/*.mcp
 samples/dynamic/*M?.xml
 samples/dynamic/*.mcp
@@ -187,12 +199,6 @@ contrib/samples/ogl/ogledit/*.mcp
 contrib/samples/ogl/studio/*M?.xml
 contrib/samples/ogl/studio/*.mcp
 
-contrib/src/xrc/*M?.xml
-contrib/src/xrc/*.mcp
-
-contrib/samples/xrc/*M?.xml
-contrib/samples/xrc/*.mcp
-
 contrib/src/mmedia/*M?.xml
 contrib/src/mmedia/*.mcp
 
@@ -205,21 +211,12 @@ contrib/src/stc/*.mcp
 contrib/samples/stc/*M?.xml
 contrib/samples/stc/*.mcp
 
-contrib/utils/wxrc/*M?.xml
-contrib/utils/wxrc/*.mcp
-
-contrib/utils/convertrc/*M?.xml
-contrib/utils/convertrc/*.mcp
-
-contrib/utils/wxrcedit/*M?.xml
-contrib/utils/wxrcedit/*.mcp
-
-contrib/src/canvas/*M?.xml
-contrib/src/canvas/*.mcp
-contrib/samples/canvas/simple/*M?.xml
-contrib/samples/canvas/simple/*.mcp
-contrib/samples/canvas/test/*M?.xml
-contrib/samples/canvas/test/*.mcp
+contrib/src/foldbar/*M?.xml
+contrib/src/foldbar/*.mcp
+contrib/samples/foldbar/extended/*M?.xml
+contrib/samples/foldbar/extended/*.mcp
+contrib/samples/foldbar/foldpanelbar/*M?.xml
+contrib/samples/foldbar/foldpanelbar/*.mcp
 
 contrib/src/plot/*M?.xml
 contrib/src/plot/*.mcp

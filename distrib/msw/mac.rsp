@@ -19,6 +19,11 @@ samples/html/htmlctrl/makefile.wat
 samples/html/htmlctrl/makefile.bcc
 samples/html/htmlctrl/*.bkl
 
+samples/drawer/*.cpp
+samples/drawer/*.h
+samples/drawer/makefile*
+samples/drawer/*.bkl
+
 src/wxWindows.pbproj/project.pbxproj
 src/wxWindows.xcode/project.pbxproj
 

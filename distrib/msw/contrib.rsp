@@ -13,6 +13,11 @@ contrib/build/fl/*.dsw
 contrib/build/fl/*.dsp
 contrib/build/fl/makefile*
 
+contrib/build/foldbar/*.bkl
+contrib/build/foldbar/*.dsw
+contrib/build/foldbar/*.dsp
+contrib/build/foldbar/makefile*
+
 contrib/build/gizmos/*.bkl
 contrib/build/gizmos/*.dsw
 contrib/build/gizmos/*.dsp
@@ -47,13 +52,6 @@ contrib/build/svg/*.bkl
 contrib/build/svg/*.dsw
 contrib/build/svg/*.dsp
 contrib/build/svg/makefile*
-
-contrib/build/xrc/*.bkl
-contrib/build/xrc/*.dsw
-contrib/build/xrc/*.dsp
-contrib/build/xrc/makefile*
-
-
 
 contrib/configure.in
 contrib/configure
@@ -301,4 +299,21 @@ contrib/samples/svg/svgtest.dsp
 contrib/samples/svg/svgtest.dsw
 contrib/samples/svg/*.bkl
 contrib/samples/svg/bitmaps/*.xpm
+
+contrib/src/foldbar/*.cpp
+contrib/src/foldbar/*.ico
+contrib/src/foldbar/*.xpm
+contrib/include/wx/foldbar/*.h
+contrib/samples/foldbar/extended/*.cpp
+contrib/samples/foldbar/extended/*.h
+contrib/samples/foldbar/extended/*.xpm
+contrib/samples/foldbar/extended/*.ico
+contrib/samples/foldbar/extended/*.rc
+contrib/samples/foldbar/extended/make*
+contrib/samples/foldbar/foldpanelbar/*.cpp
+contrib/samples/foldbar/foldpanelbar/*.h
+contrib/samples/foldbar/foldpanelbar/*.xpm
+contrib/samples/foldbar/foldpanelbar/*.ico
+contrib/samples/foldbar/foldpanelbar/*.rc
+contrib/samples/foldbar/foldpanelbar/make*
 

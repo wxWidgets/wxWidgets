@@ -10,7 +10,6 @@ contrib/build/ogl/makefile.dmc
 contrib/build/plot/makefile.dmc
 contrib/build/stc/makefile.dmc
 contrib/build/svg/makefile.dmc
-contrib/build/xrc/makefile.dmc
 contrib/samples/animate/makefile.dmc
 contrib/samples/deprecated/proplist/makefile.dmc
 contrib/samples/deprecated/resource/makefile.dmc
@@ -28,10 +27,11 @@ contrib/samples/ogl/studio/makefile.dmc
 contrib/samples/plot/makefile.dmc
 contrib/samples/stc/makefile.dmc
 contrib/samples/svg/makefile.dmc
-contrib/samples/xrc/makefile.dmc
 contrib/utils/convertrc/makefile.dmc
-contrib/utils/wxrc/makefile.dmc
 contrib/utils/wxrcedit/makefile.dmc
+contrib/src/foldbar/makefile.dmc
+contrib/samples/foldbar/extended/makefile.dmc
+contrib/samples/foldbar/foldpanelbar/makefile.dmc
 demos/bombs/makefile.dmc
 demos/dbbrowse/makefile.dmc
 demos/forty/makefile.dmc
@@ -128,6 +128,7 @@ samples/treectrl/makefile.dmc
 samples/typetest/makefile.dmc
 samples/validate/makefile.dmc
 samples/vscroll/makefile.dmc
+samples/xrc/makefile.dmc
 samples/widgets/makefile.dmc
 samples/wizard/makefile.dmc
 tests/makefile.dmc
@@ -138,3 +139,5 @@ utils/helpview/src/makefile.dmc
 utils/hhp2cached/makefile.dmc
 utils/makefile.dmc
 utils/tex2rtf/src/makefile.dmc
+utils/wxrc/makefile.dmc
+
