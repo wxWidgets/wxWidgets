@@ -120,6 +120,21 @@ public:
 
     int  GetAssertMode();
     void SetAssertMode(int mode);
+
+
+    static bool GetMacDefaultEncodingIsPC();
+    static bool GetMacSupportPCMenuShortcuts();
+    static long GetMacAboutMenuItemId();
+    static long GetMacPreferencesMenuItemId();
+    static long GetMacExitMenuItemId();
+    static wxString GetMacHelpMenuTitleName();
+
+    static void SetMacDefaultEncodingIsPC(bool val);
+    static void SetMacSupportPCMenuShortcuts(bool val);
+    static void SetMacAboutMenuItemId(long val);
+    static void SetMacPreferencesMenuItemId(long val);
+    static void SetMacExitMenuItemId(long val);
+    static void SetMacHelpMenuTitleName(const wxString& val);
 };
 
 %inline %{

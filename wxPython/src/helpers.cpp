@@ -222,6 +222,105 @@ void wxPyApp::OnAssert(const wxChar *file,
 }
 #endif
 
+
+/*static*/
+bool wxPyApp::GetMacDefaultEncodingIsPC() {
+#ifdef __WXMAC__
+    return s_macDefaultEncodingIsPC;
+#else
+    return 0;
+#endif
+}
+
+/*static*/
+bool wxPyApp::GetMacSupportPCMenuShortcuts() {
+#ifdef __WXMAC__
+    return s_macSupportPCMenuShortcuts;
+#else
+    return 0;
+#endif
+}
+
+/*static*/
+long wxPyApp::GetMacAboutMenuItemId() {
+#ifdef __WXMAC__
+    return s_macAboutMenuItemId;
+#else
+    return 0;
+#endif
+}
+
+/*static*/
+long wxPyApp::GetMacPreferencesMenuItemId() {
+#ifdef __WXMAC__
+    return s_macPreferencesMenuItemId;
+#else
+    return 0;
+#endif
+}
+
+/*static*/
+long wxPyApp::GetMacExitMenuItemId() {
+#ifdef __WXMAC__
+    return s_macExitMenuItemId;
+#else
+    return 0;
+#endif
+}
+
+/*static*/
+wxString wxPyApp::GetMacHelpMenuTitleName() {
+#ifdef __WXMAC__
+    return s_macHelpMenuTitleName;
+#else
+    return wxEmptyString;
+#endif
+}
+
+/*static*/
+void wxPyApp::SetMacDefaultEncodingIsPC(bool val) {
+#ifdef __WXMAC__
+    s_macDefaultEncodingIsPC = val;
+#endif
+}
+
+/*static*/
+void wxPyApp::SetMacSupportPCMenuShortcuts(bool val) {
+#ifdef __WXMAC__
+    s_macSupportPCMenuShortcuts = val;
+#endif
+}
+
+/*static*/
+void wxPyApp::SetMacAboutMenuItemId(long val) {
+#ifdef __WXMAC__
+    s_macAboutMenuItemId = val;
+#endif
+}
+
+/*static*/
+void wxPyApp::SetMacPreferencesMenuItemId(long val) {
+#ifdef __WXMAC__
+    s_macPreferencesMenuItemId = val;
+#endif
+}
+
+/*static*/
+void wxPyApp::SetMacExitMenuItemId(long val) {
+#ifdef __WXMAC__
+    s_macExitMenuItemId = val;
+#endif
+}
+
+/*static*/
+void wxPyApp::SetMacHelpMenuTitleName(const wxString& val) {
+#ifdef __WXMAC__
+    s_macHelpMenuTitleName = val;
+#endif
+}
+
+
+
 //---------------------------------------------------------------------
 //----------------------------------------------------------------------
 

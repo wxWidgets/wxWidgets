@@ -279,6 +279,7 @@ class wxPythonDemo(wxFrame):
         exitID = wxNewId()
         menu.Append(exitID, 'E&xit\tAlt-X', 'Get the heck outta here!')
         EVT_MENU(self, exitID, self.OnFileExit)
+        wxApp_SetMacExitMenuItemId(exitID)
         self.mainmenu.Append(menu, '&File')
 
         # Make a Demo menu
@@ -302,6 +303,7 @@ class wxPythonDemo(wxFrame):
         menu.Append(findnextID, 'Find &Next\tF3', 'Find Next')
         menu.AppendSeparator()
         menu.Append(helpID, '&About\tCtrl-H', 'wxPython RULES!!!')
+        wxApp_SetMacAboutMenuItemId(helpID)
         EVT_MENU(self, helpID, self.OnHelpAbout)
         EVT_MENU(self, findID, self.OnHelpFind)
         EVT_MENU(self, findnextID, self.OnFindNext)

@@ -46,6 +46,22 @@ constants being added to Python.  Added code to wx.py to test for the
 existence of the new constants and to create suitable values if not
 present.
 
+Added some static wxApp functions that help with integration with the
+Mac UI.  They are no-ops on other platforms so it doesn't hurt to
+always call them.  The functions are:
+
+       wxApp_GetMacDefaultEncodingIsPC
+       wxApp_GetMacSupportPCMenuShortcuts
+       wxApp_GetMacAboutMenuItemId
+       wxApp_GetMacPreferencesMenuItemId
+       wxApp_GetMacExitMenuItemId
+       wxApp_GetMacHelpMenuTitleName
+       wxApp_SetMacDefaultEncodingIsPC
+       wxApp_SetMacSupportPCMenuShortcuts
+       wxApp_SetMacAboutMenuItemId
+       wxApp_SetMacPreferencesMenuItemId
+       wxApp_SetMacExitMenuItemId
+       wxApp_SetMacHelpMenuTitleName
 
 
 
