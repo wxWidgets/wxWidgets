@@ -277,7 +277,7 @@ off_t wxFile::Read(void *pBuf, off_t nCount)
     // note: we have to use scope resolution operator because there is also an
     // enum value "read"
 #ifdef __MWERKS__
-    int iRc = ::read(m_fd, (char*) pBuf, nCount);
+    int iRc = ::read(m_fd, (char *) pBuf, nCount);
 #else
     int iRc = ::wxRead(m_fd, pBuf, nCount);
 #endif
@@ -294,10 +294,11 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 {
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
+    // have to use scope resolution for the same reason as above
 #ifdef __MWERKS__
-    int iRc = ::write(m_fd, (const char*) pBuf, nCount);
+    int iRc = ::write(m_fd, (const char *) pBuf, nCount);
 #else
-    int iRc = ::write(m_fd, pBuf, nCount);
+    int iRc = ::wxWrite(m_fd, pBuf, nCount);
 #endif
     if ( iRc == -1 ) {
         wxLogSysError(_("can't write to file descriptor %d"), m_fd);
@@ -386,8 +387,7 @@ off_t wxFile::Length() const
 #else // !VC++
     int iRc = wxTell(m_fd);
     if ( iRc != -1 ) {
-        // @ have to use const_cast :-(
-        int iLen = ((wxFile *)this)->SeekEnd();
+        int iLen = ((wxFile *)this)->SeekEnd(); // const_cast
         if ( iLen != -1 ) {
             // restore old position
             if ( ((wxFile *)this)->Seek(iRc) == -1 ) {
@@ -416,7 +416,7 @@ bool wxFile::Eof() const
     int iRc;
 
 #if defined(__UNIX__) || defined(__GNUWIN32__) || defined( __MWERKS__ ) || defined(__SALFORDC__)
-    // @@ this doesn't work, of course, on unseekable file descriptors
+    // FIXME this doesn't work, of course, on unseekable file descriptors
     off_t ofsCur = Tell(),
     ofsMax = Length();
     if ( ofsCur == wxInvalidOffset || ofsMax == wxInvalidOffset )
