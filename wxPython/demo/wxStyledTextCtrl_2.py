@@ -111,7 +111,7 @@ class PythonSTC(wxStyledTextCtrl):
         # Comment-blocks
         self.StyleSetSpec(wxSTC_P_COMMENTBLOCK, "fore:#7F7F7F,size:%(size)d" % faces)
         # End of line where string is not closed
-        self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eolfilled,size:%(size)d" % faces)
+        self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eol,size:%(size)d" % faces)
 
 
         self.SetCaretForeground("BLUE")
