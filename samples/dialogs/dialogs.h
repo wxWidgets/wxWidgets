@@ -10,12 +10,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*
-This sample shows how to use the common dialogs available from wxWidgets. 
+This sample shows how to use the common dialogs available from wxWidgets.
 It also shows that generic implementations of common dialogs can be exchanged
 with native dialogs and can coexist in one application. The need for generic
 dialogs addition is recognized thanks to setup of below USE_*** setting. Their
-combinations reflects conditions of makefiles and project files to avoid unresolved 
-references during linking. For now some generic dialogs are added in static builds 
+combinations reflects conditions of makefiles and project files to avoid unresolved
+references during linking. For now some generic dialogs are added in static builds
 of MSW, MAC and OS2
 */
 
@@ -70,9 +70,13 @@ of MSW, MAC and OS2
     ((USE_WXMSW || USE_WXPM) && USE_GENERIC_DIALOGS && wxUSE_FONTDLG)
 
 
-// Turn to 0 if there is any reason for not presenting difference between 
-// modal and modeless dialogs (ie. not implemented it in your port yet)
-#define USE_MODAL_PRESENTATION       1
+// Turn USE_MODAL_PRESENTATION to 0 if there is any reason for not presenting difference
+// between modal and modeless dialogs (ie. not implemented it in your port yet)
+#if defined(__SMARTPHONE__)
+    #define USE_MODAL_PRESENTATION 0
+#else
+    #define USE_MODAL_PRESENTATION 1
+#endif
 
 
 // Define a new application type
@@ -232,7 +236,7 @@ private:
 class MyCanvas: public wxScrolledWindow
 {
 public:
-    MyCanvas(wxWindow *parent) : 
+    MyCanvas(wxWindow *parent) :
        wxScrolledWindow(parent,wxID_ANY,wxDefaultPosition,wxDefaultSize,wxNO_FULL_REPAINT_ON_RESIZE) { }
 
     void OnPaint(wxPaintEvent& event);
