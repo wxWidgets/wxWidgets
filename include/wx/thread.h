@@ -212,8 +212,12 @@ private:
 // just mutexes make all wxCriticalSection class functions inline
 #if !defined(__WXMSW__) && !defined(__WXPM__)
     #define wxCRITSECT_IS_MUTEX 1
+
+    #define wxCRITSECT_INLINE inline
 #else // MSW || OS2
     #define wxCRITSECT_IS_MUTEX 0
+
+    #define wxCRITSECT_INLINE
 #endif // MSW/!MSW
 
 // you should consider wxCriticalSectionLocker whenever possible instead of
@@ -222,14 +226,14 @@ class WXDLLEXPORT wxCriticalSection
 {
 public:
     // ctor & dtor
-    wxCriticalSection();
-    ~wxCriticalSection();
+    wxCRITSECT_INLINE wxCriticalSection();
+    wxCRITSECT_INLINE ~wxCriticalSection();
 
     // enter the section (the same as locking a mutex)
-    void Enter();
+    wxCRITSECT_INLINE void Enter();
 
     // leave the critical section (same as unlocking a mutex)
-    void Leave();
+    wxCRITSECT_INLINE void Leave();
 
 private:
 #if wxCRITSECT_IS_MUTEX
@@ -251,12 +255,15 @@ private:
 
 #if wxCRITSECT_IS_MUTEX
     // implement wxCriticalSection using mutexes
-    wxCriticalSection::wxCriticalSection() { }
-    wxCriticalSection::~wxCriticalSection() { }
+    inline wxCriticalSection::wxCriticalSection() { }
+    inline wxCriticalSection::~wxCriticalSection() { }
 
-    void wxCriticalSection::Enter() { (void)m_mutex.Lock(); }
-    void wxCriticalSection::Leave() { (void)m_mutex.Unlock(); }
+    inline void wxCriticalSection::Enter() { (void)m_mutex.Lock(); }
+    inline void wxCriticalSection::Leave() { (void)m_mutex.Unlock(); }
 #endif // wxCRITSECT_IS_MUTEX
+
+#undef wxCRITSECT_INLINE
+#undef wxCRITSECT_IS_MUTEX
 
 // wxCriticalSectionLocker is the same to critical sections as wxMutexLocker is
 // to th mutexes
