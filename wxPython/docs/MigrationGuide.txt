@@ -189,7 +189,7 @@ the official form of the wxPython classes.  For example::
 You shouldn't need to migrate all your modules over to use the new
 package and names right away as there are modules in place that try to
 provide as much backwards compatibility of the names as possible.  If
-you rewrote the above sample using "from wxPython.wx import *", the
+you rewrote the above sample using "from wxPython.wx import * ", the
 old wxNames, and the old style of event binding it will still work
 just fine.
 
@@ -275,7 +275,7 @@ that are affected are listed here::
     Blit(destPt, size, sourceDC, srcPt,
          rop = wxCOPY, useMask = FALSE, srcPtMask = wx.DefaultPosition)
 
-    SetClippingRegionXY SetClippingRegion(x, y, width, height)
+    SetClippingRegionXY(x, y, width, height)
     SetClippingRegion(point, size)
     SetClippingRect(rect)
     SetClippingRegionAsRegion(region);
