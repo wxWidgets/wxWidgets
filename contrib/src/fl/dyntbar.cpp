@@ -29,7 +29,7 @@
 #include "wx/fl/dyntbar.h"
 #include "wx/fl/newbmpbtn.h"
 
-IMPLEMENT_DYNAMIC_CLASS( wxDynamicToolBar, wxToolBarBase )
+IMPLEMENT_DYNAMIC_CLASS( wxDynamicToolBar, wxObject )
 
 BEGIN_EVENT_TABLE( wxDynamicToolBar, wxToolBarBase )
 

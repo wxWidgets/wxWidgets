@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SAMPLES=proplist resources treelay
+CONTRIB_SAMPLES=proplist resource treelay
 
 all:
 	@for d in $(CONTRIB_SAMPLES); do (cd $$d && $(MAKE)); done

@@ -38,6 +38,7 @@ XRCDEMO_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../include $(CXXFLAGS)
 XRCDEMO_OBJECTS =  \
+	$(__xrcdemo___win32rc) \
 	xrcdemo_xrcdemo.o \
 	xrcdemo_myframe.o \
 	xrcdemo_derivdlg.o \
@@ -108,7 +109,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 	$(__INC_TIFF_p_1) $(__INC_JPEG_p_1) $(__INC_PNG_p_1) $(__INC_ZLIB_p_1) \
 	$(__INC_ODBC_p_1) $(__INC_REGEX_p_1) $(__INC_EXPAT_p_1) -i $(srcdir) \
 	$(__DLLFLAG_p_1) -i $(srcdir)/../../include -o xrcdemo$(EXEEXT) Carbon.r \
-	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r
+	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.r samples/sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_1 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = \
 @COND_MONOLITHIC_0@	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
@@ -129,6 +130,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__xrcdemo___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__xrcdemo___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C xrcdemo$(EXEEXT)
+@COND_PLATFORM_WIN32_1@__xrcdemo___win32rc = xrcdemo_sample_rc.o
 @COND_PLATFORM_WIN32_1@__xrcdemo___win32rc = xrcdemo_xrcdemo_rc.o
 
 ### Targets: ###
@@ -158,7 +160,7 @@ install-strip: install
 
 uninstall: 
 
-xrcdemo$(EXEEXT): $(XRCDEMO_OBJECTS) $(__xrcdemo___win32rc)
+xrcdemo$(EXEEXT): $(XRCDEMO_OBJECTS) $(__xrcdemo___win32rc) $(__xrcdemo___win32rc)
 	$(CXX) -o $@ $(XRCDEMO_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  -lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_XML_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__xrcdemo___mac_rezcmd)
 	$(__xrcdemo___mac_setfilecmd)
@@ -171,6 +173,9 @@ xrcdemo_derivdlg.o: $(srcdir)/derivdlg.cpp
 
 xrcdemo_myframe.o: $(srcdir)/myframe.cpp
 	$(CXXC) -c -o $@ $(XRCDEMO_CXXFLAGS) $<
+
+xrcdemo_sample_rc.o: $(srcdir)/samples/sample.rc
+	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__INC_EXPAT_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2)
 
 xrcdemo_xrcdemo.o: $(srcdir)/xrcdemo.cpp
 	$(CXXC) -c -o $@ $(XRCDEMO_CXXFLAGS) $<
