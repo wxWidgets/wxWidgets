@@ -364,11 +364,13 @@ bool wxNotebook::InsertPage(int nPage,
 
 void wxNotebook::OnSize(wxSizeEvent& event)
 {
-  // emulate page change (it's esp. important to do it first time because
-  // otherwise our page would stay invisible)
-  int nSel = m_nSelection;
-  m_nSelection = -1;
-  SetSelection(nSel);
+  // make sure the current page is shown and has focus (it's useful because all
+  // pages are created invisible initially)
+  if ( m_nSelection != -1 ) {
+    wxNotebookPage *pPage = m_aPages[m_nSelection];
+    pPage->Show(TRUE);
+    pPage->SetFocus();
+  }
 
   // fit the notebook page to the tab control's display area
   RECT rc;
