@@ -193,23 +193,7 @@ void wxFrame::Raise()
 {
 }
 
-// generate an artificial resize event
-void wxFrame::SendSizeEvent()
-{
-}
-
 #if wxUSE_MENUS_NATIVE
-
-void wxFrame::AttachMenuBar(wxMenuBar *menubar)
-{
-    wxFrameBase::AttachMenuBar(menubar);
-
-    if ( !menubar )
-    {
-        // actually remove the menu from the frame
-        m_hMenu = (WXHMENU)0;
-    }
-}
 
 void wxFrame::InternalSetMenuBar()
 {
@@ -291,24 +275,9 @@ void wxFrame::IconizeChildFrames(bool bIconize)
 {
 }
 
-WXHICON wxFrame::GetDefaultIcon() const
-{
-    // we don't have any standard icons (any more)
-    return (WXHICON)0;
-}
-
 // ===========================================================================
 // message processing
 // ===========================================================================
-
-// ---------------------------------------------------------------------------
-// preprocessing
-// ---------------------------------------------------------------------------
-
-bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
-{
-    return false;
-}
 
 // ---------------------------------------------------------------------------
 // our private (non virtual) message handlers
@@ -324,20 +293,6 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
     return false;
 }
 
-bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
-{
-    return false;
-}
-
-// ---------------------------------------------------------------------------
-// the window proc for wxFrame
-// ---------------------------------------------------------------------------
-
-WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-    return false;
-}
-
 // ----------------------------------------------------------------------------
 // wxFrame size management: we exclude the areas taken by menu/status/toolbars
 // from the client area, so the client area is what's really available for the
@@ -347,6 +302,8 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
 // get the origin of the client area in the client coordinates
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
-    wxPoint pt;
+    Coord x, y;
+    WinWindowToDisplayPt(&x,&y);
+    wxPoint pt(x,y);
     return pt;
 }
