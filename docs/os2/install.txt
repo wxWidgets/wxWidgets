@@ -17,7 +17,7 @@ Unarchiving
 At this time there is no comprehensive setup.exe type installation program.
 wxWindows for OS/2 requires you download various .zip files and unpack them
 to your desired location on your system.  Pick a location say,
-C:\wx\wxwindows, copy the .zip files to there and unzip them ensuring you
+C:\wx\wxWindows-2.2.3, copy the .zip files to there and unzip them ensuring you
 unzip the subdirectories as well.  You will need:
 
 - All common, generic and OS2-specific wxWindows source;
@@ -29,6 +29,9 @@ unzip the subdirectories as well.  You will need:
 - TIFF library source;
 - PNG library source;
 - ZLIB library source;
+
+All but the documentation is included in wxOS2-2.3.3.zip, documentation
+must be downloaded separately from the wxWindows Web site.
 
 Other add-on packages are available from the wxWindows Web site, such as:
 
@@ -43,34 +46,42 @@ General installation notes
 After unzipping everything your directory tree should look something like
 this:
 
-x:\wx\wxwindows\docs (your HTML reference manual)
-x:\wx\wxwindows\include\wx
-x:\wx\wxwindows\include\wx\generic
-x:\wx\wxwindows\include\wx\html
-x:\wx\wxwindows\include\wx\os2
-x:\wx\wxwindows\samples\....  (all the sample directories)
-x:\wx\wxwindows\src
-x:\wx\wxwindows\src\common
-x:\wx\wxwindows\src\generic
-x:\wx\wxwindows\src\html
-x:\wx\wxwindows\src\jpeg
-x:\wx\wxwindows\src\os2
-x:\wx\wxwindows\src\png
-x:\wx\wxwindows\src\tiff
-x:\wx\wxwindows\src\zlib
+x:\wx\wxWindows-2.2.3\docs (your HTML reference manual)
+x:\wx\wxWindows-2.2.3\include\wx
+x:\wx\wxWindows-2.2.3\include\wx\generic
+x:\wx\wxWindows-2.2.3\include\wx\html
+x:\wx\wxWindows-2.2.3\include\wx\os2
+x:\wx\wxWindows-2.2.3\samples\....  (all the sample directories)
+x:\wx\wxWindows-2.2.3\src
+x:\wx\wxWindows-2.2.3\src\common
+x:\wx\wxWindows-2.2.3\src\generic
+x:\wx\wxWindows-2.2.3\src\html
+x:\wx\wxWindows-2.2.3\src\jpeg
+x:\wx\wxWindows-2.2.3\src\os2
+x:\wx\wxWindows-2.2.3\src\png
+x:\wx\wxWindows-2.2.3\src\tiff
+x:\wx\wxWindows-2.2.3\src\zlib
 
-You will need to ensure you have a \lib directory as well,
-x:\wx\wxwindows\lib.
-
-Set a WXWIN environment variable in your config.sys,
-SET WXWIN=X:\WX\WXWINDOWS;
+If you are using VisualAge, you will also need to ensure you have a
+\lib directory as well, x:\wx\wxWindows-2.2.3\lib
+and you will have to set a WXWIN environment variable in your
+config.sys,
+SET WXWIN=X:\WX\WXWINDOWS-2.2.3;
 
 Compilation
 -----------
 
-For now, only VisualAge V3.0 FP 8 is supported.  However, the library has
-been successfully compiled with EMX and Watcom C++.  As those build
-environments get a bit more "formalized", I will add them here.
+For now, only VisualAge V3.0 FP 8 and EMX-0.9d (with fix4) are supported.
+However, the library has been successfully compiled with Watcom C++ as
+well. As those build environments get a bit more "formalized", I will add
+them here.
+
+Compilation with VisualAge on the one hand and EMX on the other hand are
+rather different, VisualAge is essentially following Windows' way of doing
+it, EMX is following the example of the unix ports.
+
+Compilation with VisualAge
+--------------------------
 
 In addition to VisualAge V3.0 Fixpack 8 you will need the following inorder
 to successfully build and use wxWindows for OS/2:
@@ -145,3 +156,71 @@ VisualAge 3.0, that you use the dynamically linked library. The library is
 very large and even the most trivial statically linked .exe can be very
 large and take a long time to link.  The release builds are much smaller,
 however.  Fortunately, EMX seems to build much smaller static executables.
+
+Compilation using EMX
+---------------------
+
+In addition to EMX-0.9d you will need a rather complete Unix-like
+environment, starting with a shell (e.g. ash) and most of the
+GNU file/text/shell utilities, but also flex, bison, sed, grep, awk
+and GNU make.
+
+The first thing to do is to decide on a build directory. You can either
+do in-tree builds or you can do the build in a directory separated from
+the source directory. The later has the advantage, that it is much easier
+to compile and maintain several ports of wxWindows on OS/2 - if you are
+developping cross-platform applications you might want to compile (and
+update) e.g. wxGTK or wxX11 as well.
+
+In the following, let's assume you decided to build in
+\wx\wxWindows-2.2.3\build\pm. Now we need to set some environment
+variables, namely MAKE_SHELL (to a Unix like shell, let's assume ash)
+and INSTALL (to point to the install script. If you omit this, configure
+might find something like the system's tcpip\pcomos\install.exe which will
+not do the thing you want), e.g.
+SET MAKE_SHELL=ash
+SET INSTALL=/wx/wxWindows-2.2.3/install-sh.
+
+Now run the provided configure script by executing e.g.
+`ash -c "../../configure \
+   --prefix=directory_where_you_want_wxWindows_to_be_installed"'
+from within the build directory (the relative path might be different
+depending on the build directory you selected).
+If you are already running some unix-like shell and not cmd, you may
+of course ommit the `ash -c' part in the above command.
+This will create a whole directory structure containing lib and sample
+directories which each essentially contain a suitable makefile.
+
+Calling `make' now should start a compile run which hopefully ends
+with a library being placed in the lib subdirectory.
+
+Now you can change in the samples subdirectory and call make to compile
+all samples, however currently not all will work on OS/2, so you might
+prefer to change into the directory of a specific sample
+(e.g. samples\minimal) and call make there to just build this one example.
+Essentially, each sample that's not working indicates an area, where help
+in porting wxWindows to OS/2 would be appreciated.
+
+Finally, you can run `make install' which should install wxWindows to
+the desired place.
+Note that we also install the wx-config script which wants to help you
+compiling your own applications, e.g. `wx-config --cxxflags` will emit the
+flags that are needed for compiling source code which includes wxWindows
+headers, `wx-config --libs` will emit the flags needed for linking against
+wxWindows (wx-config is assuming you are calling it from a unix-like shell!).
+
+For building a DLL, the only supported way currently is to first build the
+static library and then use Andrew Zabolotny's dllar.cmd. However, this
+works quite nicely.
+
+Finally, if you also want to build a different port, e.g. wxGTK, you
+essentially have to use the procedure described above, the only difference
+being that you have to pass a switch to configure indicating which port
+to build. If you do not do this in a separate build directory (e.g.
+\wxWindows-2.2.3\build\gtk), you'll have to do a `make clean' first.
+The magical switches that have to be passed to configure for the various
+ports are --with-gtk (wxGTK), --with-motif (wxMotif), --with-x11 (wxX11),
+and --disable-gui (wxBase). Note that contrary to the native, PM based
+OS/2 port, all of those ports work slightly better with POSIX/2's cExt
+library. If include and library path include the suitable paths, -lcExt
+is automatically appended to the linker flags by the configure script. 
