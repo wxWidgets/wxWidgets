@@ -3,7 +3,7 @@
  * Name:    gsocket.c
  * Authors: Guilhem Lavaux,
  *          Guillermo Rodriguez Garcia <guille@iies.es> (maintainer)
- * Purpose: GSocket main Unix-style file
+ * Purpose: GSocket main Unix and OS/2 file
  * Licence: The wxWindows licence
  * CVSID:   $Id$
  * -------------------------------------------------------------------------
@@ -17,44 +17,49 @@
 #include "wx/setup.h"
 #endif
 
-#ifndef __EMX__
-/* I don't see, why this include is needed, but it seems to be necessary
-   sometimes. For EMX, including C++ headers into plain C source breaks
-   compilation, so don't do it there.                                   */
+#if defined(__VISAGECPP__)
+/* Seems to be needed by Visual Age C++, though I don't see how it manages
+   to not break on including a C++ header into a plain C source file      */
 #include "wx/defs.h"
+#define BSD_SELECT /* use Berkley Sockets select */
 #endif
 
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
-#define BSD_SELECT /* use Berkley Sockets select */
-
 #include <assert.h>
 #include <sys/types.h>
-
-#ifdef __EMX__
-#include <sys/time.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <errno.h>
-#include <unistd.h>
-#include <sys/un.h>
-#define HAVE_INET_ADDR
-
-#else
-
+#ifdef __VISAGECPP__
 #include <string.h>
-
 #include <sys/time.h>
 #include <types.h>
 #include <netinet/in.h>
+#endif
 #include <netdb.h>
-#include <nerrno.h>
+#include <sys/ioctl.h>
 
+#ifdef __VMS__
+#include <socket.h>
+struct sockaddr_un
+{
+    u_char  sun_len;        /* sockaddr len including null */
+    u_char  sun_family;     /* AF_UNIX */
+    char    sun_path[108];  /* path name (gag) */
+};
+#else
+#include <sys/socket.h>
+#include <sys/un.h>
 #endif
 
-#if defined(__VISAGECPP__) && __IBMCPP__ < 400
-
+#ifndef __VISAGECPP__
+#include <sys/time.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <errno.h>
+#include <string.h>
+#include <unistd.h>
+#else
+#include <nerrno.h>
+#  if __IBMCPP__ < 400
 #include <machine/endian.h>
 #include <socket.h>
 #include <ioctl.h>
@@ -63,15 +68,15 @@
 
 #define EBADF   SOCEBADF
 
-#else
-
+#    ifdef min
+#    undef min
+#    endif
+#  else
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <sys/select.h>
 
-#ifdef __EMX__
-#define soclose(a) close(a)
-#else
+#define close(a) soclose(a)
 #define select(a,b,c,d,e) bsdselect(a,b,c,d,e)
 int _System bsdselect(int,
                       struct fd_set *,
@@ -79,39 +84,46 @@ int _System bsdselect(int,
                       struct fd_set *,
                       struct timeval *);
 int _System soclose(int);
-#endif
-#endif
-
-#include <stdio.h>
-#if (defined(__VISAGECPP__) && __IBMCPP__ < 400) || defined(__EMX__)
-#  ifdef min
-#  undef min
 #  endif
-#  include <stdlib.h>
 #endif
+#include <stdio.h>
+#include <stdlib.h>
 #include <stddef.h>
 #include <ctype.h>
-#include <stdlib.h>
-
+#ifdef sun
+#  include <sys/filio.h>
+#endif
+#ifdef sgi
+#  include <bstring.h>
+#endif
 #include <signal.h>
 
 #ifndef SOCKLEN_T
 
-#ifdef __GLIBC__
-#      if __GLIBC__ == 2
-#         define SOCKLEN_T socklen_t
-#      endif
+#ifdef VMS
+#  define SOCKLEN_T unsigned int
 #else
-#      define SOCKLEN_T int
+#  ifdef __GLIBC__
+#    if __GLIBC__ == 2
+#      define SOCKLEN_T socklen_t
+#    endif
+#  else
+#    define SOCKLEN_T int
+#  endif
 #endif
 
-#endif
+#endif /* SOCKLEN_T */
 
 /*
  * MSW defines this, Unices don't.
  */
 #ifndef INVALID_SOCKET
 #define INVALID_SOCKET -1
+#endif
+
+/* UnixWare reportedly needs this for FIONBIO definition */
+#ifdef __UNIXWARE__
+#include <sys/filio.h>
 #endif
 
 /*
@@ -249,7 +261,7 @@ GSocket *GSocket_new(void)
 void GSocket_close(GSocket *socket)
 {
     _GSocket_Disable_Events(socket);
-    soclose(socket->m_fd);
+    close(socket->m_fd);
     socket->m_fd = INVALID_SOCKET;
 }
 
@@ -297,7 +309,6 @@ void GSocket_Shutdown(GSocket *socket)
     socket->m_cbacks[evt] = NULL;
 
   socket->m_detected = GSOCK_LOST_FLAG;
-  _GSocket_Disable_Events(socket);
 }
 
 /* Address handling */
@@ -462,8 +473,11 @@ GSocketError GSocket_SetServer(GSocket *sck)
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
-
+#if defined(__EMX__) || defined(__VISAGECPP__)
   ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
+#else
+  ioctl(sck->m_fd, FIONBIO, &arg);
+#endif
   _GSocket_Enable_Events(sck);
 
   /* Bind to the local address,
@@ -567,8 +581,11 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
     socket->m_error = err;
     return NULL;
   }
-
+#if defined(__EMX__) || defined(__VISAGECPP__)
   ioctl(connection->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
+#else
+  ioctl(connection->m_fd, FIONBIO, &arg);
+#endif
   _GSocket_Enable_Events(connection);
 
   return connection;
@@ -636,8 +653,11 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
-
+#if defined(__EMX__) || defined(__VISAGECPP__)
   ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
+#else
+  ioctl(sck->m_fd, FIONBIO, &arg);
+#endif
   _GSocket_Enable_Events(sck);
 
   /* Connect it to the peer address, with a timeout (see below) */
@@ -740,8 +760,11 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
-
+#if defined(__EMX__) || defined(__VISAGECPP__)
   ioctl(sck->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
+#else
+  ioctl(sck->m_fd, FIONBIO, &arg);
+#endif
   _GSocket_Enable_Events(sck);
 
   /* Bind to the local address,
@@ -1140,10 +1163,10 @@ GSocketError _GSocket_Input_Timeout(GSocket *socket)
     if (ret == -1)
     {
       GSocket_Debug(( "GSocket_Input_Timeout, select returned -1\n" ));
-      if (errno == EBADF) GSocket_Debug(( "Invalid file descriptor\n" ));
-      if (errno == EINTR) GSocket_Debug(( "A non blocked signal was caught\n" ));
-      if (errno == EINVAL) GSocket_Debug(( "The highest number descriptor is negative\n" ));
-      if (errno == ENOMEM) GSocket_Debug(( "Not enough memory\n" ));
+      if (errno == EBADF) { GSocket_Debug(( "Invalid file descriptor\n" )); }
+      if (errno == EINTR) { GSocket_Debug(( "A non blocked signal was caught\n" )); }
+      if (errno == EINVAL) { GSocket_Debug(( "The highest number descriptor is negative\n" )); }
+      if (errno == ENOMEM) { GSocket_Debug(( "Not enough memory\n" )); }
       socket->m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
@@ -1181,17 +1204,19 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
     if (ret == -1)
     {
       GSocket_Debug(( "GSocket_Output_Timeout, select returned -1\n" ));
-      if (errno == EBADF) GSocket_Debug(( "Invalid file descriptor\n" ));
-      if (errno == EINTR) GSocket_Debug(( "A non blocked signal was caught\n" ));
-      if (errno == EINVAL) GSocket_Debug(( "The highest number descriptor is negative\n" ));
-      if (errno == ENOMEM) GSocket_Debug(( "Not enough memory\n" ));
+      if (errno == EBADF) { GSocket_Debug(( "Invalid file descriptor\n" )); }
+      if (errno == EINTR) { GSocket_Debug(( "A non blocked signal was caught\n" )); }
+      if (errno == EINVAL) { GSocket_Debug(( "The highest number descriptor is negative\n" )); }
+      if (errno == ENOMEM) { GSocket_Debug(( "Not enough memory\n" )); }
       socket->m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
-    if ( ! FD_ISSET(socket->m_fd, &writefds) )
-      GSocket_Debug(( "GSocket_Output_Timeout is buggy!\n" ));
-    else
-      GSocket_Debug(( "GSocket_Output_Timeout seems correct\n" ));
+    if ( ! FD_ISSET(socket->m_fd, &writefds) ) {
+        GSocket_Debug(( "GSocket_Output_Timeout is buggy!\n" ));
+    }
+    else {
+        GSocket_Debug(( "GSocket_Output_Timeout seems correct\n" ));
+    }
   }
   else
   {
@@ -1246,13 +1271,14 @@ int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size)
 {
   int ret;
 
-#ifdef __EMX__
+#ifndef __VISAGECPP__
   MASK_SIGNAL();
   ret = send(socket->m_fd, buffer, size, 0);
   UNMASK_SIGNAL();
 #else
   ret = send(socket->m_fd, (char *)buffer, size, 0);
 #endif
+
   return ret;
 }
 
@@ -1275,7 +1301,7 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
     return -1;
   }
 
-#ifdef __EMX__
+#ifndef __VISAGECPP__
   MASK_SIGNAL();
   ret = sendto(socket->m_fd, buffer, size, 0, addr, len);
   UNMASK_SIGNAL();
@@ -1451,7 +1477,7 @@ void GAddress_destroy(GAddress *address)
   if (address->m_addr)
     free(address->m_addr);
 
-/*    free(address); */
+  free(address);
 }
 
 void GAddress_SetFamily(GAddress *address, GAddressType type)
@@ -1569,8 +1595,7 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   if (inet_aton(hostname, addr) == 0)
   {
 #elif defined(HAVE_INET_ADDR)
-  addr->s_addr = inet_addr(hostname);
-  if ( addr->s_addr == -1 )
+  if ( (addr->s_addr = inet_addr(hostname)) == -1 )
   {
 #else
   /* Use gethostbyname by default */
@@ -1720,7 +1745,7 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
  * -------------------------------------------------------------------------
  */
 
-#ifdef __EMX__
+#ifndef __VISAGECPP__
 GSocketError _GAddress_Init_UNIX(GAddress *address)
 {
   address->m_len  = sizeof(struct sockaddr_un);
@@ -1769,8 +1794,6 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
 
   return GSOCK_NOERROR;
 }
-#endif
-  /* __EMX__ */
-#endif
-  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
+#endif  /* !defined(__VISAGECPP__) */
+#endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
 
