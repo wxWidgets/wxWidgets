@@ -353,8 +353,6 @@ void wxHtmlTableCell::ComputeMinMaxWidths()
 {
     if (m_NumCols == 0 || m_ColsInfo[0].minWidth != -1) return;
     
-    int left, right, width;
-
     for (int c = 0; c < m_NumCols; c++)
     {
         for (int r = 0; r < m_NumRows; r++)
@@ -363,11 +361,9 @@ void wxHtmlTableCell::ComputeMinMaxWidths()
             if (cell.flag == cellUsed)
             {
                 cell.cont->Layout(2*m_Padding + 1);
-                cell.cont->GetHorizontalConstraints(&left, &right);
-                width = right - left;
+                int width = cell.cont->GetWidth();
                 width -= (cell.colspan-1) * m_Spacing;
                 // HTML 4.0 says it is acceptable to distribute min/max
-                // width of spanning cells evently
                 width /= cell.colspan;
                 for (int j = 0; j < cell.colspan; j++)
                     if (width > m_ColsInfo[c+j].minWidth)
@@ -437,13 +433,18 @@ void wxHtmlTableCell::Layout(int w)
         wpix -= wtemp;
 
         // 1c. setup defalut columns (no width specification supplied):
-        // NOTE! This algorithm doesn't conform to HTML standard : it assigns equal widths
-        // instead of optimal
+        // FIXME: This algorithm doesn't conform to HTML standard : it assigns
+        //        equal widths instead of optimal
         for (i = j = 0; i < m_NumCols; i++)
             if (m_ColsInfo[i].width == 0) j++;
         for (i = 0; i < m_NumCols; i++)
             if (m_ColsInfo[i].width == 0)
-                m_ColsInfo[i].pixwidth = wpix / j;
+            {
+                // FIXME: this is not optimal, because if we allocate more than
+                //        wpix/j pixels to one column, we should try to allocate
+                //        smaller place to other columns
+                m_ColsInfo[i].pixwidth = wxMax(wpix/j, m_ColsInfo[i].minWidth);
+            }
     }
 
     /* 2.  compute positions of columns: */
@@ -508,6 +509,15 @@ void wxHtmlTableCell::Layout(int w)
         }
         m_Height = ypos[m_NumRows];
         delete[] ypos;
+    }
+
+    /* 4. adjust table's width if it was too small: */
+    if (m_NumCols > 0)
+    {
+        int twidth = m_ColsInfo[m_NumCols-1].leftpos + 
+                     m_ColsInfo[m_NumCols-1].pixwidth + m_Spacing;
+        if (twidth > m_Width)
+            m_Width = twidth;
     }
 }
 
