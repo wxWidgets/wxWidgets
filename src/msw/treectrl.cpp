@@ -2275,13 +2275,6 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 // newly selected item
                 ::SelectItem(GetHwnd(), htItem);
                 ::SetFocus(GetHwnd(), htItem);
-
-                // default WM_RBUTTONUP handler enters modal loop inside
-                // DefWindowProc() waiting for WM_RBUTTONDOWN and then sends
-                // the resulting WM_CONTEXTMENU to the parent window, not us,
-                // which completely breaks everything so simply don't let it
-                // see this message at all
-                processed = true;
                 break;
 
 #if !wxUSE_CHECKBOXES_IN_MULTI_SEL_TREE
@@ -2539,6 +2532,19 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         rc = wxControl::MSWWindowProc(nMsg, wParam, lParam);
 
     return rc;
+}
+
+WXLRESULT
+wxTreeCtrl::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    // default WM_RBUTTONDOWN handler enters modal loop inside DefWindowProc()
+    // waiting for WM_RBUTTONUP and then sends the resulting WM_CONTEXTMENU to
+    // the parent window, not us, which completely breaks everything so simply
+    // don't let it see this message at all
+    if ( nMsg == WM_RBUTTONDOWN )
+        return 0;
+
+    return wxControl::MSWDefWindowProc(nMsg, wParam, lParam);
 }
 
 // process WM_NOTIFY Windows message
