@@ -1561,8 +1561,7 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
             m_printData.SetFilename(filename);
         }
 
-        // FIXME: use fn_str() here under Unicode?
-        m_pstream = wxFopen( m_printData.GetFilename().c_str(), wxT("w+") );
+        m_pstream = wxFopen( m_printData.GetFilename().fn_str(), wxT("w+") );
 
         if (!m_pstream)
         {
@@ -1972,7 +1971,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         {
             afmName = data->GetFontMetricPath();
             afmName << wxFILE_SEP_PATH << name;
-            afmFile = wxFopen(afmName,wxT("r"));
+            afmFile = wxFopen(afmName.fn_str(),wxT("r"));
         }
 
 #if defined(__UNIX__) && !defined(__VMS__)
@@ -1986,7 +1985,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                    << wxT("afm") << wxFILE_SEP_PATH
 #endif
                    << name;
-           afmFile = wxFopen(afmName,wxT("r"));
+           afmFile = wxFopen(afmName.fn_str(),wxT("r"));
         }
 #endif
 

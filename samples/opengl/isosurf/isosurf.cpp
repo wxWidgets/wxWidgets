@@ -77,7 +77,7 @@ static GLfloat yrot;
 
 static void read_surface( const wxChar *filename )
 {
-    FILE *f = wxFopen(filename,_T("r"));
+    FILE *f = wxFopen(wxFNCONV(filename),_T("r"));
     if (!f)
     {
         wxString msg = _T("Couldn't read ");
