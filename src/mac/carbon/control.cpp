@@ -891,6 +891,10 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
             }
         }
     }
+    else
+    {
+    	event.Skip() ;
+    }
 }
 
 bool wxControl::MacCanFocus() const
