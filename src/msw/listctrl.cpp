@@ -1197,9 +1197,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( hdr1->code )
     {
         case LVN_BEGINRDRAG:
-	    eventType = wxEVT_COMMAND_LIST_BEGIN_RDRAG;
+        eventType = wxEVT_COMMAND_LIST_BEGIN_RDRAG;
             // fall through
-	    
+
         case LVN_BEGINDRAG:
             if ( eventType == wxEVT_NULL )
             {
@@ -1343,60 +1343,62 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // else translate it into wxEVT_COMMAND_LIST_ITEM_ACTIVATED event
             eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
             break;
-	    
-        case NM_RCLICK: 
-	    /* TECH NOTE: NM_RCLICK isn't really good enough here. We want to
-	       subclass and check for the actual WM_RBUTTONDOWN message, because
-	       NM_RCLICK waits for the WM_RBUTTONUP message as well before firing off.
-	       We want to have notify events for both down -and- up. */
-	    {
-		    // if the user processes it in wxEVT_COMMAND_RIGHT_CLICK(), don't do
-		    // anything else
-		    if ( wxControl::MSWOnNotify(idCtrl, lParam, result) ) {
-    		    return TRUE;
-		    }
-    		
-		    // else translate it into wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK event
-		    LV_HITTESTINFO lvhti;
-#ifdef __GNUWIN32__
-		    memset(&lvhti,0,sizeof(LV_HITTESTINFO));
-#else
-		    ZeroMemory(&lvhti, sizeof(LV_HITTESTINFO)); // must set all fields to 0
-#endif
-    		::GetCursorPos(&(lvhti.pt));
-		    ::ScreenToClient(GetHwnd(),&(lvhti.pt));
 
-#ifndef LVHT_ONITEM
-#define LVHT_ONITEM	(LVHT_ONITEMICON|LVHT_ONITEMLABEL|LVHT_ONITEMSTATEICON)
-#endif
-
-		    if(ListView_HitTest(GetHwnd(),&lvhti)!=-1) {
-    			if(lvhti.flags & LVHT_ONITEM) {
-				    eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
-				    event.m_itemIndex = lvhti.iItem;
-			    }
+        case NM_RCLICK:
+        /* TECH NOTE: NM_RCLICK isn't really good enough here. We want to
+           subclass and check for the actual WM_RBUTTONDOWN message, because
+           NM_RCLICK waits for the WM_RBUTTONUP message as well before firing off.
+           We want to have notify events for both down -and- up. */
+        {
+            // if the user processes it in wxEVT_COMMAND_RIGHT_CLICK(), don't do
+            // anything else
+            if ( wxControl::MSWOnNotify(idCtrl, lParam, result) ) {
+                return TRUE;
             }
-	    }
-	        break;
-      
-	    /*
-	      case NM_MCLICK: // ***** THERE IS NO NM_MCLICK. Subclass anyone? ******
-	      {
-	      // if the user processes it in wxEVT_COMMAND_MIDDLE_CLICK(), don't do
-	      // anything else
-	      if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
-	      {
-	      return TRUE;
-	      }
-	      
-	      // else translate it into wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK event
-	      eventType = wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK;
-	      NMITEMACTIVATE* hdr = (NMITEMACTIVATE*)lParam;
-	      event.m_itemIndex = hdr->iItem;
-	      }
-	      break;
-	    */
-	    
+
+            // else translate it into wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK event
+            LV_HITTESTINFO lvhti;
+#ifdef __GNUWIN32__
+            memset(&lvhti,0,sizeof(LV_HITTESTINFO));
+#else
+            ZeroMemory(&lvhti, sizeof(LV_HITTESTINFO)); // must set all fields to 0
+#endif
+            ::GetCursorPos(&(lvhti.pt));
+            ::ScreenToClient(GetHwnd(),&(lvhti.pt));
+            if ( ListView_HitTest(GetHwnd(),&lvhti) != -1 )
+            {
+                // older headers don't have this symbol
+#ifndef LVHT_ONITEM
+    #define LVHT_ONITEM \
+                (LVHT_ONITEMICON | LVHT_ONITEMLABEL | LVHT_ONITEMSTATEICON)
+#endif
+                if ( lvhti.flags & LVHT_ONITEM )
+                {
+                    eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
+                    event.m_itemIndex = lvhti.iItem;
+                }
+            }
+        }
+            break;
+
+        /*
+          case NM_MCLICK: // ***** THERE IS NO NM_MCLICK. Subclass anyone? ******
+          {
+          // if the user processes it in wxEVT_COMMAND_MIDDLE_CLICK(), don't do
+          // anything else
+          if ( wxControl::MSWOnNotify(idCtrl, lParam, result) )
+          {
+          return TRUE;
+          }
+
+          // else translate it into wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK event
+          eventType = wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK;
+          NMITEMACTIVATE* hdr = (NMITEMACTIVATE*)lParam;
+          event.m_itemIndex = hdr->iItem;
+          }
+          break;
+        */
+
         case LVN_SETDISPINFO:
             {
                 eventType = wxEVT_COMMAND_LIST_SET_INFO;
