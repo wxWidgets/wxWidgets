@@ -1,0 +1,9 @@
+      *   Last change:  JS   26 Oct 98    6:29 pm
+NAME         Test
+DESCRIPTION  'Notebook test'
+EXETYPE      WINDOWS
+STUB         'WINSTUB.EXE'
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE MULTIPLE
+HEAPSIZE     1024
+STACKSIZE    16192
