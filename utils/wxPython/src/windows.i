@@ -90,7 +90,7 @@ public:
     %name(GetClientSizeTuple) void GetClientSize(int *OUTPUT, int *OUTPUT);
     wxSize GetClientSize();
     wxLayoutConstraints * GetConstraints();
-    //wxEvtHandler* GetEventHandler();
+    wxEvtHandler* GetEventHandler();
 
     wxFont& GetFont();
     wxColour GetForegroundColour();
@@ -128,8 +128,8 @@ public:
     %name(MoveXY)void Move(int x, int y);
     void Move(const wxPoint& point);
 
-    //wxEvtHandler* PopEventHandler(bool deleteHandler = FALSE);
-    //void PushEventHandler(wxEvtHandler* handler);
+    wxEvtHandler* PopEventHandler(bool deleteHandler = FALSE);
+    void PushEventHandler(wxEvtHandler* handler);
 
     %name(PopupMenuXY)bool PopupMenu(wxMenu *menu, int x, int y);
     bool PopupMenu(wxMenu *menu, const wxPoint& pos);
@@ -172,7 +172,7 @@ public:
     void SetClientSize(const wxSize& size);
     //void SetPalette(wxPalette* palette);
     void SetCursor(const wxCursor&cursor);
-    //void SetEventHandler(wxEvtHandler* handler);
+    void SetEventHandler(wxEvtHandler* handler);
     void SetTitle(const wxString& title);
     bool Show(bool show);
     bool TransferDataFromWindow();
@@ -249,7 +249,7 @@ public:
     wxButton* GetDefaultItem();
     void SetDefaultItem(wxButton *btn);
 
-    // fix a SWIG turd...
+    // fix some SWIG trouble...
     %pragma(python) addtoclass = "
     def GetDefaultItem(self):
         import controls
