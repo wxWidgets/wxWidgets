@@ -172,6 +172,11 @@ public:
     // (i.e. in idle time, implemented in OnInternalIdle() ).
     void GtkUpdateSize() { m_sizeSet = FALSE; }
 
+    // fix up the mouse event coords, used by wxListBox only so far
+    virtual void FixUpMouseEvent(GtkWidget * WXUNUSED(widget),
+                                 wxCoord& WXUNUSED(x),
+                                 wxCoord& WXUNUSED(y)) { }
+
     // position and size of the window
     int                  m_x, m_y;
     int                  m_width, m_height;
@@ -252,7 +257,8 @@ public:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 
-    // common part of all ctors (can't be virtual because called from ctor)
+protected:
+    // common part of all ctors (not virtual because called from ctor)
     void Init();
 
 private:

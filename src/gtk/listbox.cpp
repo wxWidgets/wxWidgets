@@ -1064,4 +1064,13 @@ wxSize wxListBox::DoGetBestSize() const
     return wxSize(lbWidth, lbHeight);
 }
 
-#endif
+void wxListBox::FixUpMouseEvent(GtkWidget *widget, wxCoord& x, wxCoord& y)
+{
+    // the mouse event coords are relative to the listbox items, we need to
+    // translate them to the normal client coords
+    x += widget->allocation.x;
+    y += widget->allocation.y;
+}
+
+#endif // wxUSE_LISTBOX
+

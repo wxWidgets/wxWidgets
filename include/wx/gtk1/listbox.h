@@ -97,6 +97,8 @@ public:
     int        m_prevSelection;
     bool       m_blockEvent;
     
+    virtual void FixUpMouseEvent(GtkWidget *widget, wxCoord& x, wxCoord& y);
+
 protected:
     virtual wxSize DoGetBestSize() const;
 
