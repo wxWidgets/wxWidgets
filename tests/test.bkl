@@ -31,6 +31,7 @@
             streams/filestream.cpp
             streams/memstream.cpp
             streams/sstream.cpp
+            streams/textstreamtest.cpp
             streams/zlibstream.cpp
             uris/uris.cpp
         </sources>

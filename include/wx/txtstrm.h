@@ -121,6 +121,8 @@ public:
     virtual void WriteDouble(double d);
     virtual void WriteString(const wxString& string);
 
+    wxTextOutputStream& PutChar(wxChar c);
+
     wxTextOutputStream& operator<<(const wxChar *string);
     wxTextOutputStream& operator<<(const wxString& string);
     wxTextOutputStream& operator<<(char c);
