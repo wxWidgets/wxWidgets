@@ -1222,6 +1222,8 @@ void wxApp::OnIdle(wxIdleEvent& event)
     wxMacProcessNotifierAndPendingEvents();
 
   s_inOnIdle = FALSE;
+  if(!wxMenuBar::MacGetInstalledMenuBar() && wxMenuBar::MacGetCommonMenuBar())
+    wxMenuBar::MacGetCommonMenuBar()->MacInstallMenuBar();
 }
 
 void wxWakeUpIdle()
