@@ -49,6 +49,7 @@ public:
 
     // the menu we're in
     wxMenu *GetMenu() const { return m_parentMenu; }
+    void SetMenu(wxMenu* menu) { m_parentMenu = menu; }
 
     // get/set id
     void SetId(int id) { m_id = id; }
