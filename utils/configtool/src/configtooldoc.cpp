@@ -548,8 +548,11 @@ bool ctConfigToolDoc::DoOpen(wxSimpleHtmlTag* tag, ctConfigItem* parent)
 /// Clear dependencies
 void ctConfigToolDoc::ClearDependencies(ctConfigItem* item)
 {
-    if (!item)
+    if (!item) {
         item = GetTopItem();
+        if (!item)
+            return;
+    }
 
     item->GetDependents().Clear();
     for ( wxObjectList::compatibility_iterator node = item->GetChildren().GetFirst(); node; node = node->GetNext() )
@@ -569,6 +572,9 @@ void ctConfigToolDoc::RefreshDependencies()
 /// Refresh dependencies
 void ctConfigToolDoc::RefreshDependencies(ctConfigItem* item)
 {
+    if (item==NULL)
+        return;
+
     wxArrayString requiresArr;
     wxString requires = item->GetPropertyString(wxT("requires"));
     wxString precludes = item->GetPropertyString(wxT("precludes"));
