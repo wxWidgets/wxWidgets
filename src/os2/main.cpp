@@ -9,10 +9,5 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-int wxEntry(int argc, char *argv[]);
-
-int main(int argc, char* argv[])
-{
-  return wxEntry(argc, argv);
-}
+// We don't put main() in the library any more. SN.
 
