@@ -640,27 +640,6 @@ the button text. This function can be useful for meta-programs (such as testing
 tools or special-needs access programs) which need to identify windows
 by name.
 
-\membersection{wxWindow::GetPosition}
-
-\constfunc{virtual void}{GetPosition}{\param{int* }{x}, \param{int* }{y}}
-
-This gets the position of the window in pixels, relative to the parent window or
-if no parent, relative to the whole display.
-
-\wxheading{Parameters}
-
-\docparam{x}{Receives the x position of the window.}
-
-\docparam{y}{Receives the y position of the window.}
-
-\pythonnote{In place of a single overloaded method name, wxPython
-implements the following methods:\par
-\indented{2cm}{\begin{twocollist}
-\twocolitem{{\bf GetPosition()}}{Returns a wxPoint}
-\twocolitem{{\bf GetPositionTuple()}}{Returns a tuple (x, y)}
-\end{twocollist}}
-}
-
 \membersection{wxWindow::GetName}\label{wxwindowgetname}
 
 \constfunc{virtual wxString }{GetName}{\void}
@@ -681,6 +660,29 @@ name in the window constructor or via \helpref{wxWindow::SetName}{wxwindowsetnam
 \constfunc{virtual wxWindow*}{GetParent}{\void}
 
 Returns the parent of the window, or NULL if there is no parent.
+
+\membersection{wxWindow::GetPosition}\label{wxwindowgetposition}
+
+\constfunc{virtual void}{GetPosition}{\param{int* }{x}, \param{int* }{y}}
+
+\constfunc{wxPoint}{GetPosition}{\void}
+
+This gets the position of the window in pixels, relative to the parent window or
+if no parent, relative to the whole display.
+
+\wxheading{Parameters}
+
+\docparam{x}{Receives the x position of the window.}
+
+\docparam{y}{Receives the y position of the window.}
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf GetPosition()}}{Returns a wxPoint}
+\twocolitem{{\bf GetPositionTuple()}}{Returns a tuple (x, y)}
+\end{twocollist}}
+}
 
 \membersection{wxWindow::GetRect}\label{wxwindowgetrect}
 
