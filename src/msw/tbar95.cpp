@@ -196,6 +196,8 @@ void wxToolBar::Init()
 
     m_defaultWidth = DEFAULTBITMAPX;
     m_defaultHeight = DEFAULTBITMAPY;
+
+    m_pInTool = 0;
 }
 
 bool wxToolBar::Create(wxWindow *parent,
@@ -895,7 +897,9 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
     pt.x = x;
     pt.y = y;
     int index = (int)::SendMessage(GetHwnd(), TB_HITTEST, 0, (LPARAM)&pt);
-    if ( index < 0 )
+    // MBN: when the point ( x, y ) is close to the toolbar border
+    //      TB_HITTEST returns m_nButtons ( not -1 )
+    if ( index < 0 || (size_t)index >= m_nButtons )
     {
         // it's a separator or there is no tool at all there
         return (wxToolBarToolBase *)NULL;
