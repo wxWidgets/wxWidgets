@@ -381,7 +381,7 @@ void wxRemotelyScrolledTreeCtrl::CalcTreeSize(const wxTreeItemId& id, wxRect& re
         rect = CombineRectangles(rect, itemSize);
     }
 
-    long cookie;
+    wxTreeItemIdValue cookie;
     wxTreeItemId childId = GetFirstChild(id, cookie);
     while (childId != 0)
     {
@@ -542,7 +542,17 @@ wxThinSplitterWindow::wxThinSplitterWindow(wxWindow* parent, wxWindowID id,
       long style):
       wxSplitterWindow(parent, id, pos, sz, style)
 {
+    wxColour faceColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    m_facePen = new wxPen(faceColour, 1, wxSOLID);
+    m_faceBrush = new wxBrush(faceColour, wxSOLID);
 }
+
+wxThinSplitterWindow::~wxThinSplitterWindow()
+{
+    delete m_facePen;
+    delete m_faceBrush;
+}
+
 
 void wxThinSplitterWindow::SizeWindows()
 {
@@ -581,7 +591,7 @@ void wxThinSplitterWindow::DrawSash(wxDC& dc)
         {
             y1 = 2; h1 -= 3;
         }
-        dc.DrawRectangle(m_sashPosition, y1, m_sashSize, h1);
+        dc.DrawRectangle(m_sashPosition, y1, GetSashSize(), h1);
     }
     else
     {
@@ -595,7 +605,7 @@ void wxThinSplitterWindow::DrawSash(wxDC& dc)
         {
             x1 = 2; w1 -= 3;
         }
-        dc.DrawRectangle(x1, m_sashPosition, w1, m_sashSize);
+        dc.DrawRectangle(x1, m_sashPosition, w1, GetSashSize());
     }
 
     dc.SetPen(wxNullPen);

@@ -170,6 +170,7 @@ public:
       const wxPoint& pos = wxDefaultPosition,
       const wxSize& sz = wxDefaultSize,
       long style = wxSP_3D | wxCLIP_CHILDREN);
+    ~wxThinSplitterWindow();
 
 //// Overrides
 
@@ -189,6 +190,9 @@ public:
 
 //// Data members
 protected:
+    wxPen*      m_facePen;
+    wxBrush*    m_faceBrush;
+
     DECLARE_EVENT_TABLE()
 };
 

@@ -13,6 +13,7 @@
   #pragma implementation "statpict.h"
 #endif
 
+#include "wx/wxprec.h"
 #include "wx/defs.h"
 
 #include "wx/gizmos/statpict.h"
