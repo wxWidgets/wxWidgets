@@ -99,7 +99,7 @@ static void wxPushOrPopEventHandlers(wxContextHelp* help, wxWindow* win, bool pu
     else
         win->PopEventHandler(TRUE);
 
-    wxWindowList::Node* node = win->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
     while (node)
     {
         wxWindow* child = node->GetData();
