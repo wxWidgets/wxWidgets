@@ -75,6 +75,9 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
 
     for (unsigned int i=0; i<selection_data->length/sizeof(GdkAtom); i++)
     {
+      char *name = gdk_atom_name (atoms[i]);
+      if (name) printf( "Format available: %s.\n", name );
+      
         if (atoms[i] == clipboard->m_targetRequested)
         {
             clipboard->m_formatSupported = TRUE;

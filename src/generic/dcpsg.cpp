@@ -995,10 +995,9 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
 
     if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
     {
-       long redPS = (long) (((int) red) / 255.0);
-       long bluePS = (long) (((int) blue) / 255.0);
-       long greenPS = (long) (((int) green) / 255.0);
-
+       float redPS = (float)(red) / 255.0;
+       float bluePS = (float)(blue) / 255.0;
+       float greenPS = (float)(green) / 255.0;
        *m_pstream << redPS << " " << greenPS << " " << bluePS << " setrgbcolor\n";
 
        m_currentRed = red;
@@ -1016,9 +1015,9 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
     m_brush = brush;
 
     // Brush colour
-    unsigned char red = m_brush.GetColour ().Red ();
-    unsigned char blue = m_brush.GetColour ().Blue ();
-    unsigned char green = m_brush.GetColour ().Green ();
+    unsigned char red = m_brush.GetColour().Red();
+    unsigned char blue = m_brush.GetColour().Blue();
+    unsigned char green = m_brush.GetColour().Green();
 
     if (!m_colour)
     {
@@ -1036,9 +1035,9 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
 
     if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
     {
-       long redPS = (long) (((int) red) / 255.0);
-       long bluePS = (long) (((int) blue) / 255.0);
-       long greenPS = (long) (((int) green) / 255.0);
+       float redPS = (float)(red) / 255.0;
+       float bluePS = (float)(blue) / 255.0;
+       float greenPS = (float)(green) / 255.0;
        *m_pstream << redPS << " " << greenPS << " " << bluePS << " setrgbcolor\n";
        m_currentRed = red;
        m_currentBlue = blue;
@@ -1074,9 +1073,9 @@ void wxPostScriptDC::DrawText( const wxString& text, long x, long y, bool WXUNUS
 
         if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
         {
-            long redPS = (long) (((int) red) / 255.0);
-            long bluePS = (long) (((int) blue) / 255.0);
-            long greenPS = (long) (((int) green) / 255.0);
+            float redPS = (float)(red) / 255.0;
+            float bluePS = (float)(blue) / 255.0;
+            float greenPS = (float)(green) / 255.0;
             *m_pstream << redPS << " " << greenPS << " " << bluePS << " setrgbcolor\n";
 
             m_currentRed = red;
