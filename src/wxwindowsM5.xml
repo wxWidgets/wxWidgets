@@ -607,7 +607,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>O0ø</VALUE></SETTING>
+                    <SETTING><VALUE>LÀø</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -3024,15 +3024,6 @@
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:generic:</ACCESSPATH>
-                    <PATH>:spinctlg.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:toplvcmn.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -3269,6 +3260,42 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:generic:</ACCESSPATH>
                     <PATH>:dirctrlg.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:msgout.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:settcmn.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:dynload.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>:display.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -5067,13 +5094,6 @@
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:generic:</ACCESSPATH>
-                    <PATH>:spinctlg.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:toplvcmn.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -5258,6 +5278,34 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:generic:</ACCESSPATH>
                     <PATH>:dirctrlg.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:msgout.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:settcmn.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:dynload.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>:display.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -5812,7 +5860,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>O0ø</VALUE></SETTING>
+                    <SETTING><VALUE>LÀø</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -8049,15 +8097,6 @@
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:generic:</ACCESSPATH>
-                    <PATH>:spinctlg.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:toplvcmn.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -8432,6 +8471,40 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:generic:</ACCESSPATH>
                     <PATH>:dirctrlg.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:msgout.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:dynload.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>settcmn.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>:display.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -10090,13 +10163,6 @@
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:generic:</ACCESSPATH>
-                    <PATH>:spinctlg.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:toplvcmn.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -10381,6 +10447,32 @@
                     <PATH>:dirctrlg.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:msgout.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:dynload.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>settcmn.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>:display.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
             </LINKORDER>
         </TARGET>
         <TARGET>
@@ -10577,7 +10669,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>O0ø</VALUE></SETTING>
+                    <SETTING><VALUE>LÀø</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -11653,7 +11745,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>O0ø</VALUE></SETTING>
+                    <SETTING><VALUE>LÀø</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -14070,15 +14162,6 @@
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:generic:</ACCESSPATH>
-                    <PATH>:spinctlg.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:toplvcmn.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -14315,6 +14398,42 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:generic:</ACCESSPATH>
                     <PATH>:dirctrlg.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:msgout.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:settcmn.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:dynload.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>:display.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -16113,13 +16232,6 @@
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:generic:</ACCESSPATH>
-                    <PATH>:spinctlg.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:toplvcmn.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -16304,6 +16416,34 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:generic:</ACCESSPATH>
                     <PATH>:dirctrlg.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:msgout.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:settcmn.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:dynload.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>:display.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -16858,7 +16998,7 @@
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>O0ø</VALUE></SETTING>
+                    <SETTING><VALUE>LÀø</VALUE></SETTING>
                     <SETTING><VALUE></VALUE></SETTING>
                 </SETTING>
 
@@ -19277,15 +19417,6 @@
                 <FILE>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:generic:</ACCESSPATH>
-                    <PATH>:spinctlg.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:toplvcmn.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -19522,6 +19653,40 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:generic:</ACCESSPATH>
                     <PATH>:dirctrlg.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:msgout.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:dynload.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>settcmn.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>:display.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
@@ -21322,13 +21487,6 @@
                 <FILEREF>
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>:generic:</ACCESSPATH>
-                    <PATH>:spinctlg.cpp</PATH>
-                    <PATHFORMAT>MacOS</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:common:</ACCESSPATH>
                     <PATH>:toplvcmn.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
@@ -21513,6 +21671,32 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>:generic:</ACCESSPATH>
                     <PATH>:dirctrlg.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:msgout.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:common:</ACCESSPATH>
+                    <PATH>:dynload.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>settcmn.cpp</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>:mac:</ACCESSPATH>
+                    <PATH>:display.cpp</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -22253,6 +22437,14 @@
                 <PATHTYPE>PathRelative</PATHTYPE>
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>:common:</ACCESSPATH>
+                <PATH>:dynload.cpp</PATH>
+                <PATHFORMAT>MacOS</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>Classic Debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>:common:</ACCESSPATH>
                 <PATH>:effects.cpp</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
@@ -22661,6 +22853,14 @@
                 <PATHTYPE>PathRelative</PATHTYPE>
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>:common:</ACCESSPATH>
+                <PATH>:msgout.cpp</PATH>
+                <PATHFORMAT>MacOS</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>Classic Debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>:common:</ACCESSPATH>
                 <PATH>:mstream.cpp</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
@@ -22790,6 +22990,14 @@
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>:common:</ACCESSPATH>
                 <PATH>:sckstrm.cpp</PATH>
+                <PATHFORMAT>MacOS</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>Classic Debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>:common:</ACCESSPATH>
+                <PATH>:settcmn.cpp</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
@@ -23277,14 +23485,6 @@
                 <PATHTYPE>PathRelative</PATHTYPE>
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>:generic:</ACCESSPATH>
-                <PATH>:spinctlg.cpp</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
-                <TARGETNAME>Classic Debug</TARGETNAME>
-                <PATHTYPE>PathRelative</PATHTYPE>
-                <PATHROOT>Project</PATHROOT>
-                <ACCESSPATH>:generic:</ACCESSPATH>
                 <PATH>:splash.cpp</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
@@ -23748,6 +23948,14 @@
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>:mac:</ACCESSPATH>
                 <PATH>:dirmac.cpp</PATH>
+                <PATHFORMAT>MacOS</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>Classic Debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>:mac:</ACCESSPATH>
+                <PATH>:display.cpp</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
