@@ -1706,11 +1706,6 @@ class wxMaskedEditMixin:
         reset_fillchar = reset_args.has_key('fillChar') and reset_args['fillChar']
         reset_default = reset_args.has_key('defaultValue') and reset_args['defaultValue']
 
-        self._emptyInvalid = False
-        for field in self._fields.values():
-            if field._emptyInvalid:
-                self._emptyInvalid = True   # if any field is required to be filled, color appropriately
-
         self._calcTemplate(reset_fillchar, reset_default)
 
         # Propagate control-level formatting and character constraints to each
@@ -3111,11 +3106,8 @@ class wxMaskedEditMixin:
         if self._valid:
             dbg('valid')
             if self.IsEmpty():
-                if self._emptyInvalid:
-                    dbg('setting background to', self._invalidBackgroundColor)
-                else:
-                    dbg('setting background to', self._emptyBackgroundColor)
-                    self.SetBackgroundColour(self._emptyBackgroundColor)
+                dbg('setting background to', self._emptyBackgroundColor)
+                self.SetBackgroundColour(self._emptyBackgroundColor)
             else:
                 self.SetBackgroundColour(self._validBackgroundColor)
         else:
@@ -3397,12 +3389,13 @@ class wxMaskedEditMixin:
             valid = self._validateGeneric(value)
             dbg("valid value?", valid)
 
-        if valid and self._emptyInvalid:
-            for field in self._fields.values():
-                start, end = field._extent
-                if field.IsEmpty(value[start:end]):
-                    valid = False
-                    break
+        if valid:
+            for field in self._fields.values(): # (includes field -1, ie: "global setting")
+                if field._emptyInvalid:
+                    start, end = field._extent
+                    if field.IsEmpty(value[start:end]):
+                        valid = False
+                        break
 
         dbg('valid?', valid)
 
@@ -4943,6 +4936,13 @@ i=1
 ##  2. Allow optional monetary symbols (eg. $, pounds, etc.) at front of a "decimal"
 ##     control.
 ##  3. Fix shift-left selection for wxMaskedComboBox.
+##  4. Make .SetValue do a right-justified paste if the control is right justified or
+##     right-insert.  (making numeric controls easier to populate.)
+##  5. Allow for european conventions of , for "decimal point" and . for "group char".
+##  6. Transform notion of "decimal control" to be less "entire control"-centric,
+##     so that monetary symbols can be included and still have the appropriate
+##     semantics.  (Big job, as currently written, but would make control even
+##     more useful for business applications.)
 
 
 ## CHANGELOG:
