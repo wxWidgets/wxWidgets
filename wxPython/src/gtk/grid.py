@@ -69,6 +69,9 @@ class wxGridCellRendererPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def _setOORInfo(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellRenderer__setOORInfo,(self,) + _args, _kwargs)
+        return val
     def SetParameters(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellRenderer_SetParameters,(self,) + _args, _kwargs)
         return val
@@ -87,7 +90,6 @@ class wxGridCellRendererPtr :
         return val
     def Clone(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellRenderer_Clone,(self,) + _args, _kwargs)
-        if val: val = wxGridCellRendererPtr(val) 
         return val
     def __repr__(self):
         return "<C wxGridCellRenderer instance at %s>" % (self.this,)
@@ -115,6 +117,7 @@ class wxPyGridCellRenderer(wxPyGridCellRendererPtr):
         self.this = apply(gridc.new_wxPyGridCellRenderer,_args,_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyGridCellRenderer)
+        self._setOORInfo(self)
 
 
 
@@ -129,6 +132,7 @@ class wxGridCellStringRenderer(wxGridCellStringRendererPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellStringRenderer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -143,6 +147,7 @@ class wxGridCellNumberRenderer(wxGridCellNumberRendererPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellNumberRenderer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -169,6 +174,7 @@ class wxGridCellFloatRenderer(wxGridCellFloatRendererPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellFloatRenderer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -183,6 +189,7 @@ class wxGridCellBoolRenderer(wxGridCellBoolRendererPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellBoolRenderer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -197,6 +204,7 @@ class wxGridCellDateTimeRenderer(wxGridCellDateTimeRendererPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellDateTimeRenderer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -211,6 +219,7 @@ class wxGridCellEnumRenderer(wxGridCellEnumRendererPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellEnumRenderer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -225,6 +234,7 @@ class wxGridCellAutoWrapStringRenderer(wxGridCellAutoWrapStringRendererPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellAutoWrapStringRenderer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -233,6 +243,9 @@ class wxGridCellEditorPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def _setOORInfo(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellEditor__setOORInfo,(self,) + _args, _kwargs)
+        return val
     def IsCreated(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_IsCreated,(self,) + _args, _kwargs)
         return val
@@ -265,7 +278,6 @@ class wxGridCellEditorPtr :
         return val
     def Clone(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_Clone,(self,) + _args, _kwargs)
-        if val: val = wxGridCellEditorPtr(val) 
         return val
     def SetSize(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_SetSize,(self,) + _args, _kwargs)
@@ -341,6 +353,7 @@ class wxPyGridCellEditor(wxPyGridCellEditorPtr):
         self.this = apply(gridc.new_wxPyGridCellEditor,_args,_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyGridCellEditor)
+        self._setOORInfo(self)
 
 
 
@@ -355,6 +368,7 @@ class wxGridCellTextEditor(wxGridCellTextEditorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellTextEditor,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -369,6 +383,7 @@ class wxGridCellNumberEditor(wxGridCellNumberEditorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellNumberEditor,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -383,6 +398,7 @@ class wxGridCellFloatEditor(wxGridCellFloatEditorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellFloatEditor,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -397,6 +413,7 @@ class wxGridCellBoolEditor(wxGridCellBoolEditorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellBoolEditor,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -411,6 +428,7 @@ class wxGridCellChoiceEditor(wxGridCellChoiceEditorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellChoiceEditor,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -425,6 +443,7 @@ class wxGridCellEnumEditor(wxGridCellEnumEditorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellEnumEditor,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -439,6 +458,7 @@ class wxGridCellAutoWrapStringEditor(wxGridCellAutoWrapStringEditorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellAutoWrapStringEditor,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -453,9 +473,11 @@ class wxGridCellAttrPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def _setOORInfo(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellAttr__setOORInfo,(self,) + _args, _kwargs)
+        return val
     def Clone(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_Clone,(self,) + _args, _kwargs)
-        if val: val = wxGridCellAttrPtr(val) 
         return val
     def MergeWith(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_MergeWith,(self,) + _args, _kwargs)
@@ -528,11 +550,9 @@ class wxGridCellAttrPtr :
         return val
     def GetRenderer(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_GetRenderer,(self,) + _args, _kwargs)
-        if val: val = wxGridCellRendererPtr(val) 
         return val
     def GetEditor(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_GetEditor,(self,) + _args, _kwargs)
-        if val: val = wxGridCellEditorPtr(val) 
         return val
     def IsReadOnly(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttr_IsReadOnly,(self,) + _args, _kwargs)
@@ -546,6 +566,7 @@ class wxGridCellAttr(wxGridCellAttrPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellAttr,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -554,9 +575,11 @@ class wxGridCellAttrProviderPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def _setOORInfo(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellAttrProvider__setOORInfo,(self,) + _args, _kwargs)
+        return val
     def GetAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttrProvider_GetAttr,(self,) + _args, _kwargs)
-        if val: val = wxGridCellAttrPtr(val) 
         return val
     def SetAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellAttrProvider_SetAttr,(self,) + _args, _kwargs)
@@ -579,6 +602,7 @@ class wxGridCellAttrProvider(wxGridCellAttrProviderPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridCellAttrProvider,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -592,7 +616,6 @@ class wxPyGridCellAttrProviderPtr(wxGridCellAttrProviderPtr):
         return val
     def base_GetAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridCellAttrProvider_base_GetAttr,(self,) + _args, _kwargs)
-        if val: val = wxGridCellAttrPtr(val) 
         return val
     def base_SetAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridCellAttrProvider_base_SetAttr,(self,) + _args, _kwargs)
@@ -618,12 +641,14 @@ class wxGridTableBasePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def _setOORInfo(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridTableBase__setOORInfo,(self,) + _args, _kwargs)
+        return val
     def SetAttrProvider(self, *_args, **_kwargs):
         val = apply(gridc.wxGridTableBase_SetAttrProvider,(self,) + _args, _kwargs)
         return val
     def GetAttrProvider(self, *_args, **_kwargs):
         val = apply(gridc.wxGridTableBase_GetAttrProvider,(self,) + _args, _kwargs)
-        if val: val = wxGridCellAttrProviderPtr(val) 
         return val
     def SetView(self, *_args, **_kwargs):
         val = apply(gridc.wxGridTableBase_SetView,(self,) + _args, _kwargs)
@@ -711,7 +736,6 @@ class wxGridTableBasePtr(wxObjectPtr):
         return val
     def GetAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxGridTableBase_GetAttr,(self,) + _args, _kwargs)
-        if val: val = wxGridCellAttrPtr(val) 
         return val
     def SetAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxGridTableBase_SetAttr,(self,) + _args, _kwargs)
@@ -788,7 +812,6 @@ class wxPyGridTableBasePtr(wxGridTableBasePtr):
         return val
     def base_GetAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridTableBase_base_GetAttr,(self,) + _args, _kwargs)
-        if val: val = wxGridCellAttrPtr(val) 
         return val
     def base_SetAttr(self, *_args, **_kwargs):
         val = apply(gridc.wxPyGridTableBase_base_SetAttr,(self,) + _args, _kwargs)
@@ -806,6 +829,7 @@ class wxPyGridTableBase(wxPyGridTableBasePtr):
         self.this = apply(gridc.new_wxPyGridTableBase,_args,_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyGridTableBase)
+        self._setOORInfo(self)
 
 
 
@@ -820,6 +844,7 @@ class wxGridStringTable(wxGridStringTablePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gridc.new_wxGridStringTable,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -1320,11 +1345,9 @@ class wxGridPtr(wxScrolledWindowPtr):
         return val
     def GetDefaultRenderer(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetDefaultRenderer,(self,) + _args, _kwargs)
-        if val: val = wxGridCellRendererPtr(val) 
         return val
     def GetCellRenderer(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetCellRenderer,(self,) + _args, _kwargs)
-        if val: val = wxGridCellRendererPtr(val) 
         return val
     def SetDefaultEditor(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_SetDefaultEditor,(self,) + _args, _kwargs)
@@ -1334,11 +1357,9 @@ class wxGridPtr(wxScrolledWindowPtr):
         return val
     def GetDefaultEditor(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetDefaultEditor,(self,) + _args, _kwargs)
-        if val: val = wxGridCellEditorPtr(val) 
         return val
     def GetCellEditor(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetCellEditor,(self,) + _args, _kwargs)
-        if val: val = wxGridCellEditorPtr(val) 
         return val
     def GetCellValue(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetCellValue,(self,) + _args, _kwargs)
@@ -1396,19 +1417,15 @@ class wxGridPtr(wxScrolledWindowPtr):
         return val
     def GetDefaultEditorForCell(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetDefaultEditorForCell,(self,) + _args, _kwargs)
-        if val: val = wxGridCellEditorPtr(val) 
         return val
     def GetDefaultRendererForCell(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetDefaultRendererForCell,(self,) + _args, _kwargs)
-        if val: val = wxGridCellRendererPtr(val) 
         return val
     def GetDefaultEditorForType(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetDefaultEditorForType,(self,) + _args, _kwargs)
-        if val: val = wxGridCellEditorPtr(val) 
         return val
     def GetDefaultRendererForType(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_GetDefaultRendererForType,(self,) + _args, _kwargs)
-        if val: val = wxGridCellRendererPtr(val) 
         return val
     def SetMargins(self, *_args, **_kwargs):
         val = apply(gridc.wxGrid_SetMargins,(self,) + _args, _kwargs)
@@ -1604,6 +1621,8 @@ wxGRID_VALUE_FLOAT = gridc.wxGRID_VALUE_FLOAT
 wxGRID_VALUE_CHOICE = gridc.wxGRID_VALUE_CHOICE
 wxGRID_VALUE_TEXT = gridc.wxGRID_VALUE_TEXT
 wxGRID_VALUE_LONG = gridc.wxGRID_VALUE_LONG
+wxGRID_VALUE_CHOICEINT = gridc.wxGRID_VALUE_CHOICEINT
+wxGRID_VALUE_DATETIME = gridc.wxGRID_VALUE_DATETIME
 cvar = gridc.cvar
 wxGridNoCellCoords = wxGridCellCoordsPtr(gridc.cvar.wxGridNoCellCoords)
 wxGridNoCellRect = wxRectPtr(gridc.cvar.wxGridNoCellRect)

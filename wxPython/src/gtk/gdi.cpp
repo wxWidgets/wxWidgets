@@ -5392,6 +5392,7 @@ static PyObject *_wrap_wxDC_EndPage(PyObject *self, PyObject *args, PyObject *kw
 #define wxDC_FloodFill(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->FloodFill(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_wxDC_FloodFill(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    bool  _result;
     wxDC * _arg0;
     long  _arg1;
     long  _arg2;
@@ -5419,12 +5420,11 @@ static PyObject *_wrap_wxDC_FloodFill(PyObject *self, PyObject *args, PyObject *
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxDC_FloodFill(_arg0,_arg1,_arg2,*_arg3,_arg4);
+    _result = (bool )wxDC_FloodFill(_arg0,_arg1,_arg2,*_arg3,_arg4);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 

@@ -517,6 +517,7 @@ wxDF_ENHMETAFILE = clip_dndc.wxDF_ENHMETAFILE
 wxDF_FILENAME = clip_dndc.wxDF_FILENAME
 wxDF_LOCALE = clip_dndc.wxDF_LOCALE
 wxDF_PRIVATE = clip_dndc.wxDF_PRIVATE
+wxDF_HTML = clip_dndc.wxDF_HTML
 wxDF_MAX = clip_dndc.wxDF_MAX
 cvar = clip_dndc.cvar
 wxFormatInvalid = wxDataFormatPtr(clip_dndc.cvar.wxFormatInvalid)

@@ -3672,6 +3672,7 @@ SWIGEXPORT(void) initclip_dndc() {
 	 PyDict_SetItemString(d,"wxDF_FILENAME", PyInt_FromLong((long) wxDF_FILENAME));
 	 PyDict_SetItemString(d,"wxDF_LOCALE", PyInt_FromLong((long) wxDF_LOCALE));
 	 PyDict_SetItemString(d,"wxDF_PRIVATE", PyInt_FromLong((long) wxDF_PRIVATE));
+	 PyDict_SetItemString(d,"wxDF_HTML", PyInt_FromLong((long) wxDF_HTML));
 	 PyDict_SetItemString(d,"wxDF_MAX", PyInt_FromLong((long) wxDF_MAX));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxFormatInvalid",_wrap_wxPyFormatInvalid_get, _wrap_wxPyFormatInvalid_set);

@@ -42,7 +42,7 @@ from printfw import *
 from sizers import *
 
 from filesys import *
-class wxHtmlBookRecordPtr(wxObjectPtr):
+class wxHtmlBookRecordPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0

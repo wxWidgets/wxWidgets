@@ -245,6 +245,14 @@ class wxSizerPtr(wxObjectPtr):
         else:
             apply(self.SetItemMinSizeWindow, args)
      
+    
+    def GetSizeTuple(self):
+        return self.GetSize().asTuple()
+    def GetPositionTuple(self):
+        return self.GetPosition().asTuple()
+    def GetMinSizeTuple(self):
+        return self.GetMinSize().asTuple()
+    
 class wxSizer(wxSizerPtr):
     def __init__(self,this):
         self.this = this
