@@ -10,11 +10,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*
-    TODO:
-
-    1. show how SetPriority() works.
-    2. use worker threads to update progress controls instead of writing
-       messages - it will be more visual
+    TODO: use worker threads to update progress controls instead of writing
+          messages - it will be more visual
  */
 
 #ifdef __GNUG__
@@ -47,19 +44,20 @@ WX_DEFINE_ARRAY(wxThread *, wxArrayThread);
 // Define a new application type
 class MyApp : public wxApp
 {
- public:
-  // all the threads currently alive - as soon as the thread terminates, it's
-  // removed from the array
-  wxArrayThread m_threads;
+public:
+    virtual bool OnInit();
 
-  // crit section protects access to all of the arrays below
-  wxCriticalSection m_critsect;
- public:
-  bool OnInit();
+public:
+    // all the threads currently alive - as soon as the thread terminates, it's
+    // removed from the array
+    wxArrayThread m_threads;
+
+    // crit section protects access to all of the arrays below
+    wxCriticalSection m_critsect;
 };
 
 // Create a new application object
-IMPLEMENT_APP  (MyApp)
+IMPLEMENT_APP(MyApp)
 
 // Define a new frame type
 class MyFrame: public wxFrame
@@ -87,7 +85,6 @@ public:
 private:
     // helper function - creates a new thread (but doesn't run it)
     MyThread *CreateThread();
-
 
     // just some place to put our messages in
     wxTextCtrl *m_txtctrl;
@@ -152,7 +149,8 @@ void *MyThread::Entry()
 {
     wxString text;
 
-    text.Printf("Thread 0x%x started.\n", GetID());
+    text.Printf("Thread 0x%x started (priority = %d).\n",
+                GetID(), GetPriority());
     WriteText(text);
 
     for ( m_count = 0; m_count < 10; m_count++ )
@@ -211,21 +209,21 @@ bool MyApp::OnInit()
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(TEST_CLEAR, "&Clear log");
+    file_menu->Append(TEST_CLEAR, "&Clear log\tCtrl-L");
     file_menu->AppendSeparator();
     file_menu->Append(TEST_ABOUT, "&About");
     file_menu->AppendSeparator();
-    file_menu->Append(TEST_QUIT, "E&xit");
+    file_menu->Append(TEST_QUIT, "E&xit\tAlt-X");
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, "&File");
 
     wxMenu *thread_menu = new wxMenu;
-    thread_menu->Append(TEST_START_THREAD, "&Start a new thread");
+    thread_menu->Append(TEST_START_THREAD, "&Start a new thread\tCtrl-N");
     thread_menu->Append(TEST_START_THREADS, "Start &many threads at once");
-    thread_menu->Append(TEST_STOP_THREAD, "S&top a running thread");
+    thread_menu->Append(TEST_STOP_THREAD, "S&top a running thread\tCtrl-S");
     thread_menu->AppendSeparator();
-    thread_menu->Append(TEST_PAUSE_THREAD, "&Pause a running thread");
-    thread_menu->Append(TEST_RESUME_THREAD, "&Resume suspended thread");
+    thread_menu->Append(TEST_PAUSE_THREAD, "&Pause a running thread\tCtrl-P");
+    thread_menu->Append(TEST_RESUME_THREAD, "&Resume suspended thread\tCtrl-R");
     menu_bar->Append(thread_menu, "&Thread");
     frame->SetMenuBar(menu_bar);
 
@@ -285,7 +283,19 @@ void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
     // first create them all...
     for ( n = 0; n < count; n++ )
     {
-        threads.Add(CreateThread());
+        wxThread *thr = CreateThread();
+
+        // we want to show the effect of SetPriority(): the first thread will
+        // have the lowest priority, the second - the highest, all the rest
+        // the normal one
+        if ( n == 0 )
+            thr->SetPriority(WXTHREAD_MIN_PRIORITY);
+        else if ( n == 1 )
+            thr->SetPriority(WXTHREAD_MAX_PRIORITY);
+        else
+            thr->SetPriority(WXTHREAD_DEFAULT_PRIORITY);
+
+        threads.Add(thr);
     }
 
     wxString msg;
