@@ -380,8 +380,8 @@ wxString wxExpandEnvVars(const wxString& str)
               // under Unix, OTOH, this warning could be useful for the user to
               // understand why isn't the variable expanded as intended
               #ifndef __WXMSW__
-                wxLogWarning(_("Environment variables expansion failed: missing '%c' at position %d in '%s'."),
-                             (char)bracket, m + 1, str.c_str());
+                wxLogWarning(_("Environment variables expansion failed: missing '%c' at position %u in '%s'."),
+                             (char)bracket, (unsigned int) (m + 1), str.c_str());
               #endif // __WXMSW__
             }
             else {
