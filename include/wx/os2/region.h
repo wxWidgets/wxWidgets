@@ -15,6 +15,7 @@
 #include "wx/list.h"
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
+#include "wx/os2/private.h"
 
 class WXDLLEXPORT wxRect;
 class WXDLLEXPORT wxPoint;
