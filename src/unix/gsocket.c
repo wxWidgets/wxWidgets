@@ -1087,13 +1087,13 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
       return GSOCK_TIMEDOUT;
     }
     if ( ! FD_ISSET(socket->m_fd, &writefds) )
-      GSocket_Debug(( "GSocket_Output_Timeout is buggy!" ));
+      GSocket_Debug(( "GSocket_Output_Timeout is buggy!\n" ));
     else
-      GSocket_Debug(( "GSocket_Output_Timeout seems correct" ));
+      GSocket_Debug(( "GSocket_Output_Timeout seems correct\n" ));
   }
   else
   {
-    GSocket_Debug(( "GSocket_Output_Timeout, didn't try select!" ));
+    GSocket_Debug(( "GSocket_Output_Timeout, didn't try select!\n" ));
   }
 
   return GSOCK_NOERROR;
