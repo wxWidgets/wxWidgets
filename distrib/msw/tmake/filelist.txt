@@ -567,6 +567,7 @@ gauge.cpp	Motif
 gdiobj.cpp	Motif
 glcanvas.cpp	Motif
 icon.cpp	Motif
+joystick.cpp	Motif
 listbox.cpp	Motif
 main.cpp	Motif
 mdi.cpp	Motif
@@ -1086,7 +1087,6 @@ control.h	MotifH
 cursor.h	MotifH
 dataform.h	MotifH
 dataobj.h	MotifH
-dataobj2.h	MotifH
 dc.h	MotifH
 dcclient.h	MotifH
 dcmemory.h	MotifH
