@@ -544,9 +544,9 @@ void wxListBox::DoSetItemClientData(int N, void *Client_data)
         wxFAIL_MSG(wxT("Can't use client data with owner-drawn listboxes"));
     }
 #endif // wxUSE_OWNER_DRAWN
-    wxASSERT_MSG( m_dataArray.GetCount() >= N , "invalid client_data array" ) ;
+    wxASSERT_MSG( m_dataArray.GetCount() >= (size_t) N , "invalid client_data array" ) ;
 
-    if ( m_dataArray.GetCount() > N )
+    if ( m_dataArray.GetCount() > (size_t) N )
     {
         m_dataArray[N] = (char*) Client_data ;
     }
@@ -815,12 +815,13 @@ void wxListBox::MacSetRedraw( bool doDraw )
 void wxListBox::MacDoClick()
 {
     wxArrayInt aSelections;
-    int n, count = GetSelections(aSelections);
+    int n ;
+    size_t count = GetSelections(aSelections);
 
     if ( count == m_selectionPreImage.GetCount() )
     {
         bool hasChanged = false ;
-        for ( int i = 0 ; i < count ; ++i )
+        for ( size_t i = 0 ; i < count ; ++i )
         {
             if ( aSelections[i] != m_selectionPreImage[i] )
             {
@@ -864,8 +865,6 @@ void wxListBox::MacDoDoubleClick()
     event.SetEventObject( this );
 	GetEventHandler()->ProcessEvent(event) ;
 }
-
-static long sLastTypeIn = 0 ;
 
 void wxListBox::OnChar(wxKeyEvent& event)
 {
