@@ -3667,28 +3667,33 @@ bool wxWindowMSW::HandleGetMinMaxInfo(void *mmInfo)
     MINMAXINFO *info = (MINMAXINFO *)mmInfo;
 
     bool rc = FALSE;
+    
+    int minWidth = GetMinWidth(),
+        minHeight = GetMinHeight(),
+        maxWidth = GetMaxWidth(),
+        maxHeight = GetMaxHeight();
 
-    if ( m_minWidth != -1 )
+    if ( minWidth != -1 )
     {
-        info->ptMinTrackSize.x = m_minWidth;
+        info->ptMinTrackSize.x = minWidth;
         rc = TRUE;
     }
 
-    if ( m_minHeight != -1 )
+    if ( minHeight != -1 )
     {
-        info->ptMinTrackSize.y = m_minHeight;
+        info->ptMinTrackSize.y = minHeight;
         rc = TRUE;
     }
 
-    if ( m_maxWidth != -1 )
+    if ( maxWidth != -1 )
     {
-        info->ptMaxTrackSize.x = m_maxWidth;
+        info->ptMaxTrackSize.x = maxWidth;
         rc = TRUE;
     }
 
-    if ( m_maxHeight != -1 )
+    if ( maxHeight != -1 )
     {
-        info->ptMaxTrackSize.y = m_maxHeight;
+        info->ptMaxTrackSize.y = maxHeight;
         rc = TRUE;
     }
 

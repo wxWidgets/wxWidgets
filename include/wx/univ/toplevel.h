@@ -138,6 +138,9 @@ public:
     // move/resize the frame interactively, i.e. let the user do it
     virtual void InteractiveMove(int flags = wxINTERACTIVE_MOVE);
 
+    virtual int GetMinWidth() const;
+    virtual int GetMinHeight() const;
+
 protected:
     // handle titlebar button click event
     virtual void ClickTitleBarButton(long button);

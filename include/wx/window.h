@@ -293,8 +293,8 @@ public:
                                int maxW = -1, int maxH = -1,
                                int incW = -1, int incH = -1 );
 
-    int GetMinWidth() const { return m_minWidth; }
-    int GetMinHeight() const { return m_minHeight; }
+    virtual int GetMinWidth() const { return m_minWidth; }
+    virtual int GetMinHeight() const { return m_minHeight; }
     int GetMaxWidth() const { return m_maxWidth; }
     int GetMaxHeight() const { return m_maxHeight; }
 

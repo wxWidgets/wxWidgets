@@ -61,6 +61,9 @@ public:
     virtual void PositionToolBar();
 #endif // wxUSE_TOOLBAR
 
+    virtual int GetMinWidth() const;
+    virtual int GetMinHeight() const;
+
 protected:
     void OnSize(wxSizeEvent& event);
 

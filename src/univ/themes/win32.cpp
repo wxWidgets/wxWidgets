@@ -311,6 +311,7 @@ public:
                                  int flags = 0);
     virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const;
     virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const;
+    virtual wxSize GetFrameMinSize(int flags) const;
     virtual wxSize GetFrameIconSize() const;
     virtual int HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags) const;
 
@@ -3421,13 +3422,62 @@ void wxWin32Renderer::DrawFrameTitle(wxDC& dc,
     wxRect r = GetFrameClientArea(rect, flags & ~wxTOPLEVEL_TITLEBAR);
     r.height = FRAME_TITLEBAR_HEIGHT;
     if ( flags & wxTOPLEVEL_ICON )
+    {
         r.x += FRAME_TITLEBAR_HEIGHT;
+        r.width -= FRAME_TITLEBAR_HEIGHT + 2;
+    }
     else
+    {
         r.x += 1;
+        r.width -= 3;
+    }
+
+    if ( flags & wxTOPLEVEL_BUTTON_CLOSE )
+        r.width -= FRAME_BUTTON_WIDTH + 2;
+    if ( flags & wxTOPLEVEL_BUTTON_MAXIMIZE )
+        r.width -= FRAME_BUTTON_WIDTH;
+    if ( flags & wxTOPLEVEL_BUTTON_RESTORE )
+        r.width -= FRAME_BUTTON_WIDTH;
+    if ( flags & wxTOPLEVEL_BUTTON_ICONIZE )
+        r.width -= FRAME_BUTTON_WIDTH;
+    if ( flags & wxTOPLEVEL_BUTTON_HELP )
+        r.width -= FRAME_BUTTON_WIDTH;
 
     dc.SetFont(m_titlebarFont);
     dc.SetTextForeground(col);
-    dc.DrawLabel(title, wxNullBitmap, r, wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
+    
+    wxCoord textW;
+    dc.GetTextExtent(title, &textW, NULL);
+    if ( textW > r.width )
+    {
+        // text is too big, let's shorten it and add "..." after it:
+        size_t len = title.length();
+        wxCoord WSoFar, letterW;
+
+        dc.GetTextExtent(wxT("..."), &WSoFar, NULL);
+        if ( WSoFar > r.width )
+        {
+            // not enough space to draw anything
+            return;
+        }
+
+        wxString s;
+        s.Alloc(len);
+        for (size_t i = 0; i < len; i++)
+        {
+            dc.GetTextExtent(title[i], &letterW, NULL);
+            if ( letterW + WSoFar > r.width )
+                break;
+            WSoFar += letterW;
+            s << title[i];
+        }
+        s << wxT("...");
+        dc.DrawLabel(s, wxNullBitmap, r, 
+                     wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
+    }
+    else
+        dc.DrawLabel(title, wxNullBitmap, r, 
+                     wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL);
 }
 
 void wxWin32Renderer::DrawFrameIcon(wxDC& dc,
@@ -3514,6 +3564,40 @@ wxSize wxWin32Renderer::GetFrameTotalSize(const wxSize& clientSize,
     }
     if ( flags & wxTOPLEVEL_TITLEBAR )
         s.y += FRAME_TITLEBAR_HEIGHT;
+
+    return s;
+}
+
+wxSize wxWin32Renderer::GetFrameMinSize(int flags) const
+{
+    wxSize s(0, 0);
+
+    if ( (flags & wxTOPLEVEL_BORDER) && !(flags & wxTOPLEVEL_MAXIMIZED) )
+    {
+        int border = (flags & wxTOPLEVEL_RESIZEABLE) ?
+                        RESIZEABLE_FRAME_BORDER_THICKNESS :
+                        FRAME_BORDER_THICKNESS;
+        s.x += 2*border;
+        s.y += 2*border;
+    }
+
+    if ( flags & wxTOPLEVEL_TITLEBAR )
+    {
+        s.y += FRAME_TITLEBAR_HEIGHT;
+
+        if ( flags & wxTOPLEVEL_ICON )
+            s.x += FRAME_TITLEBAR_HEIGHT + 2;
+        if ( flags & wxTOPLEVEL_BUTTON_CLOSE )
+            s.x += FRAME_BUTTON_WIDTH + 2;
+        if ( flags & wxTOPLEVEL_BUTTON_MAXIMIZE )
+            s.x += FRAME_BUTTON_WIDTH;
+        if ( flags & wxTOPLEVEL_BUTTON_RESTORE )
+            s.x += FRAME_BUTTON_WIDTH;
+        if ( flags & wxTOPLEVEL_BUTTON_ICONIZE )
+            s.x += FRAME_BUTTON_WIDTH;
+        if ( flags & wxTOPLEVEL_BUTTON_HELP )
+            s.x += FRAME_BUTTON_WIDTH;
+    }
 
     return s;
 }

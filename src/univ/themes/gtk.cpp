@@ -239,6 +239,7 @@ public:
     // titlebars
     virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const;
     virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const;
+    virtual wxSize GetFrameMinSize(int flags) const;
     virtual wxSize GetFrameIconSize() const;
     virtual int HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags) const;
     
@@ -2471,6 +2472,11 @@ wxRect wxGTKRenderer::GetFrameClientArea(const wxRect& rect, int flags) const
 wxSize wxGTKRenderer::GetFrameTotalSize(const wxSize& clientSize, int flags) const
 {
     return clientSize;
+}
+
+wxSize wxGTKRenderer::GetFrameMinSize(int flags) const
+{
+    return wxSize(0,0);
 }
 
 wxSize wxGTKRenderer::GetFrameIconSize() const

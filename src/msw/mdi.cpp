@@ -1034,17 +1034,20 @@ bool wxMDIChildFrame::HandleGetMinMaxInfo(void *mmInfo)
     // not on the values specified in wxWindow m_max variables
     bool processed = MSWDefWindowProc(WM_GETMINMAXINFO, 0, (LPARAM)mmInfo) != 0;
 
+    int minWidth = GetMinWidth(),
+        minHeight = GetMinHeight();
+
     // but allow GetSizeHints() to set the min size
-    if ( m_minWidth != -1 )
+    if ( minWidth != -1 )
     {
-        info->ptMinTrackSize.x = m_minWidth;
+        info->ptMinTrackSize.x = minWidth;
 
         processed = TRUE;
     }
 
-    if ( m_minHeight != -1 )
+    if ( minHeight != -1 )
     {
-        info->ptMinTrackSize.y = m_minHeight;
+        info->ptMinTrackSize.y = minHeight;
 
         processed = TRUE;
     }

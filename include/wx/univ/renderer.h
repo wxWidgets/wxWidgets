@@ -412,6 +412,9 @@ public:
     // get size of whole top level window, given size of its client area size
     virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const = 0;
 
+    // get the minimal size of top level window
+    virtual wxSize GetFrameMinSize(int flags) const = 0;
+
     // get titlebar icon size
     virtual wxSize GetFrameIconSize() const = 0;
 
@@ -761,6 +764,8 @@ public:
         { return m_renderer->GetFrameClientArea(rect, flags); }
     virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const
         { return m_renderer->GetFrameTotalSize(clientSize, flags); }
+    virtual wxSize GetFrameMinSize(int flags) const
+        { return m_renderer->GetFrameMinSize(flags); }
     virtual wxSize GetFrameIconSize() const
         { return m_renderer->GetFrameIconSize(); }
     virtual int HitTestFrame(const wxRect& rect,

@@ -2726,10 +2726,15 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
              if (height == -1) m_height = 26;
         }
 
-        if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
-        if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
-        if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
-        if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
+        int minWidth = GetMinWidth(),
+            minHeight = GetMinHeight(),
+            maxWidth = GetMaxWidth(),
+            maxHeight = GetMaxHeight();
+
+        if ((minWidth != -1) && (m_width < minWidth)) m_width = minWidth;
+        if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;
+        if ((maxWidth != -1) && (m_width > maxWidth)) m_width = maxWidth;
+        if ((maxHeight != -1) && (m_height > maxHeight)) m_height = maxHeight;
 
         int border = 0;
         int bottom_border = 0;
