@@ -252,6 +252,18 @@ void wxDbConnectInf::SetPassword(const wxString &password)
 /********** wxDbColFor Constructor **********/
 wxDbColFor::wxDbColFor()
 {
+    Initialize();
+}  // wxDbColFor::wxDbColFor()
+
+
+wxDbColFor::~wxDbColFor()
+{
+}  // wxDbColFor::~wxDbColFor()
+
+
+/********** wxDbColFor::Initialize() **********/
+void wxDbColFor::Initialize()
+{
     s_Field.Empty();
     int i;
     for (i=0; i<7; i++)
@@ -264,12 +276,7 @@ wxDbColFor::wxDbColFor()
     i_dbDataType  = 0;
     i_sqlDataType = 0;
     Format(1,DB_DATA_TYPE_VARCHAR,0,0,0);  // the Function that does the work
-}  // wxDbColFor::wxDbColFor()
-
-
-wxDbColFor::~wxDbColFor()
-{
-}  // wxDbColFor::~wxDbColFor()
+}  // wxDbColFor::Initialize()
 
 
 /********** wxDbColFor::Format() **********/
@@ -358,6 +365,7 @@ int wxDbColFor::Format(int Nation, int dbDataType, SWORD sqlDataType,
 }  // wxDbColFor::Format()
 
 
+
 /********** wxDbColInf Constructor **********/
 wxDbColInf::wxDbColInf()
 {
@@ -414,11 +422,8 @@ wxDbTableInf::~wxDbTableInf()
 /********** wxDbInf Constructor *************/
 wxDbInf::wxDbInf()
 {
-    catalog[0]      = 0;
-    schema[0]       = 0;
-    numTables       = 0;
-    pTableInf       = NULL;
-}  // wxDbInf::wxDbFor()
+    Initialize();
+}  // wxDbInf::wxDbInf()
 
 
 /********** wxDbInf Destructor *************/
@@ -430,8 +435,18 @@ wxDbInf::~wxDbInf()
 }  // wxDbInf::~wxDbInf()
 
 
+/********** wxDbInf::Initialize() *************/
+void wxDbInf::Initialize()
+{
+    catalog[0]      = 0;
+    schema[0]       = 0;
+    numTables       = 0;
+    pTableInf       = NULL;
+}  // wxDbInf::Initialize()
+
+
 /********** wxDb Constructors **********/
-wxDb::wxDb(HENV &aHenv, bool FwdOnlyCursors)
+wxDb::wxDb(const HENV &aHenv, bool FwdOnlyCursors)
 {
     // Copy the HENV into the db class
     henv = aHenv;
@@ -706,6 +721,13 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
     return(TRUE);
 
 } // wxDb::Open()
+
+
+bool wxDb::Open(wxDbConnectInf *dbConnectInf)
+{
+    return Open(dbConnectInf->GetDsn(), dbConnectInf->GetUserID(),
+                dbConnectInf->GetPassword());
+}  // wxDb::Open()
 
 
 bool wxDb::Open(wxDb *copyDb)
@@ -3491,7 +3513,7 @@ wxDb WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCurso
     pList->Uid      = pDbConfig->GetUserID();
     pList->AuthStr  = pDbConfig->GetPassword();
 
-    pList->PtrDb = new wxDb((HENV)pDbConfig->GetHenvAddress(),FwdOnlyCursors);
+    pList->PtrDb = new wxDb(pDbConfig->GetHenv(), FwdOnlyCursors);
 
     bool opened = FALSE;
 
