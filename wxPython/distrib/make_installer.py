@@ -96,6 +96,7 @@ Source: "wxPython\lib\mixins\*.py";         DestDir: "{app}\wxPython\lib\mixins"
 Source: "wxPython\lib\PyCrust\*.py";        DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
 Source: "wxPython\lib\PyCrust\*.txt";       DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
 Source: "wxPython\lib\PyCrust\*.ico";       DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
+Source: "wxPython\lib\PyCrust\decor\*.py";  DestDir: "{app}\wxPython\lib\PyCrust\decor"; Components: core
 Source: "wxPython\lib\colourchooser\*.py";  DestDir: "{app}\wxPython\lib\colourchooser"; Components: core
 
 %(LOCALE)s
