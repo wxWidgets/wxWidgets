@@ -169,8 +169,6 @@ public:
     #include "wx/mac/dataobj.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dataobj.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/dnd.h"
 #endif
 
 // ----------------------------------------------------------------------------

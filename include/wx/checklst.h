@@ -40,8 +40,6 @@ public:
     #include "wx/mac/checklst.h"
 #elif defined(__WXPM__)
     #include "wx/os2/checklst.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/checklst.h"
 #endif
 
 #endif // wxUSE_CHECKLISTBOX

@@ -96,8 +96,6 @@ public:
     #include "wx/mac/clipbrd.h"
 #elif defined(__WXPM__)
     #include "wx/os2/clipbrd.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/clipbrd.h"
 #endif
 
 // ----------------------------------------------------------------------------

@@ -124,8 +124,6 @@ private:
     #include "wx/mac/accel.h"
 #elif defined(__WXPM__)
     #include "wx/os2/accel.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/accel.h"
 #endif
 
 WXDLLEXPORT_DATA(extern wxAcceleratorTable) wxNullAcceleratorTable;

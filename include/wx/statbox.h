@@ -30,8 +30,6 @@ public:
 #include "wx/mac/statbox.h"
 #elif defined(__WXPM__)
 #include "wx/os2/statbox.h"
-#elif defined(__WXSTUBS__)
-#include "wx/stubs/statbox.h"
 #endif
 
 #endif // wxUSE_STATBOX

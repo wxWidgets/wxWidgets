@@ -15,8 +15,6 @@
 #include "wx/mac/msgdlg.h"
 #elif defined(__WXPM__)
 #include "wx/os2/msgdlg.h"
-#elif defined(__WXSTUBS__)
-#include "wx/generic/msgdlgg.h"
 #endif
 
 // ----------------------------------------------------------------------------

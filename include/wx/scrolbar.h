@@ -50,8 +50,6 @@ public:
     #include "wx/mac/scrolbar.h"
 #elif defined(__WXPM__)
     #include "wx/os2/scrolbar.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/scrolbar.h"
 #endif
 
 #endif // wxUSE_SCROLLBAR

@@ -26,8 +26,6 @@ public:
     #include "wx/mac/stattext.h"
 #elif defined(__WXPM__)
     #include "wx/os2/stattext.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/stattext.h"
 #endif
 
 #endif // wxUSE_STATTEXT

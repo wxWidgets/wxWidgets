@@ -102,8 +102,6 @@ public:
     #include "wx/mac/slider.h"
 #elif defined(__WXPM__)
     #include "wx/os2/slider.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/slider.h"
 #endif
 
 #endif // wxUSE_SLIDER

@@ -278,8 +278,6 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
     #include  "wx/mac/notebook.h"
 #elif defined(__WXPM__)
     #include  "wx/os2/notebook.h"
-#elif defined(__WXSTUBS__)
-    #include  "wx/stubs/notebook.h"
 #endif
 
 #endif // wxUSE_NOTEBOOK

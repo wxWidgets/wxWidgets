@@ -44,8 +44,6 @@ public:
     #include "wx/mac/checkbox.h"
 #elif defined(__WXPM__)
     #include "wx/os2/checkbox.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/checkbox.h"
 #endif
 
 #endif // wxUSE_CHECKBOX

@@ -93,8 +93,6 @@
            #include "wx/mac/toolbar.h"
         #elif defined(__WXPM__)
            #include "wx/os2/toolbar.h"
-        #elif defined(__WXSTUBS__)
-           #include "wx/stubs/toolbar.h"
         #endif
     #endif // !wxUSE_TOOLBAR_NATIVE/wxUSE_TOOLBAR_NATIVE
 #endif // wxUSE_TOOLBAR

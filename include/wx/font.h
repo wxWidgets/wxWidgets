@@ -219,8 +219,6 @@ private:
     #include "wx/mac/font.h"
 #elif defined(__WXPM__)
     #include "wx/os2/font.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/font.h"
 #endif
 
 // ----------------------------------------------------------------------------

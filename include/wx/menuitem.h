@@ -163,8 +163,6 @@ private:
     #include "wx/mac/menuitem.h"
 #elif defined(__WXPM__)
     #include "wx/os2/menuitem.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/menuitem.h"
 #endif
 #endif // wxUSE_BASE_CLASSES_ONLY/!wxUSE_BASE_CLASSES_ONLY
 

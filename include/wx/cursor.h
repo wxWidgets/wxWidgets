@@ -15,8 +15,6 @@
 #include "wx/mac/cursor.h"
 #elif defined(__WXPM__)
 #include "wx/os2/cursor.h"
-#elif defined(__WXSTUBS__)
-#include "wx/stubs/cursor.h"
 #endif
 
 #include "wx/utils.h"

@@ -168,8 +168,6 @@ protected:
 #include "wx/mac/bitmap.h"
 #elif defined(__WXPM__)
 #include "wx/os2/bitmap.h"
-#elif defined(__WXSTUBS__)
-#include "wx/stubs/bitmap.h"
 #endif
 
 #endif

@@ -23,8 +23,6 @@
     #include "wx/generic/treectlg.h"
 #elif defined(__WXPM__)
     #include "wx/generic/treectlg.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/generic/treectlg.h"
 #endif
 
 /*

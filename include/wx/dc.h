@@ -770,8 +770,6 @@ private:
     #include "wx/mac/dc.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dc.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/dc.h"
 #endif
 
 // ----------------------------------------------------------------------------

@@ -15,8 +15,6 @@
 #include "wx/mac/tooltip.h"
 #elif defined(__WXPM__)
 #include "wx/os2/tooltip.h"
-#elif defined(__WXSTUBS__)
-// #include "wx/stubs/tooltip.h"
 #endif
 
 #endif

@@ -15,8 +15,6 @@
 #include "wx/mac/brush.h"
 #elif defined(__WXPM__)
 #include "wx/os2/brush.h"
-#elif defined(__WXSTUBS__)
-#include "wx/stubs/brush.h"
 #endif
 
 #endif

@@ -215,8 +215,6 @@ protected:
     #include "wx/mac/dnd.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dnd.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/dnd.h"
 #endif
 
 // ----------------------------------------------------------------------------

@@ -541,8 +541,6 @@ protected:
     #include "wx/mac/menu.h"
 #elif defined(__WXPM__)
     #include "wx/os2/menu.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/menu.h"
 #endif
 #endif // wxUSE_BASE_CLASSES_ONLY/!wxUSE_BASE_CLASSES_ONLY
 

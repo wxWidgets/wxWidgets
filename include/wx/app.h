@@ -425,8 +425,6 @@ protected:
         #include "wx/mac/app.h"
     #elif defined(__WXPM__)
         #include "wx/os2/app.h"
-    #elif defined(__WXSTUBS__)
-        #include "wx/stubs/app.h"
     #endif
 #else // !GUI
     // can't use typedef because wxApp forward declared as a class

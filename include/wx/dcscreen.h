@@ -15,8 +15,6 @@
 #include "wx/mac/dcscreen.h"
 #elif defined(__WXPM__)
 #include "wx/os2/dcscreen.h"
-#elif defined(__WXSTUBS__)
-#include "wx/stubs/dcscreen.h"
 #endif
 
 #endif

@@ -15,8 +15,6 @@
 #include "wx/mac/dcclient.h"
 #elif defined(__WXPM__)
 #include "wx/os2/dcclient.h"
-#elif defined(__WXSTUBS__)
-#include "wx/stubs/dcclient.h"
 #endif
 
 #endif

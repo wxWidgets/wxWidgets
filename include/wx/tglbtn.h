@@ -37,8 +37,6 @@ END_DECLARE_EVENT_TYPES()
 #  include "wx/mac/tglbtn.h"
 # elif defined(__WXPM__)
 #  include "wx/os2/tglbtn.h"
-# elif defined(__WXSTUBS__)
-#  include "wx/stubs/tglbtn.h"
 */
 #endif
 

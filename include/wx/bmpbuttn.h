@@ -90,8 +90,6 @@ private:
     #include "wx/mac/bmpbuttn.h"
 #elif defined(__WXPM__)
     #include "wx/os2/bmpbuttn.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/bmpbuttn.h"
 #endif
 
 #endif // wxUSE_BMPBUTTON

@@ -13,8 +13,6 @@
 #include "wx/mac/minifram.h"
 #elif defined(__WXPM__)
 #include "wx/os2/minifram.h"
-#elif defined(__WXSTUBS__)
-#include "wx/stubs/minifram.h"
 #endif
 
 #endif

@@ -86,8 +86,6 @@ protected:
     #include "wx/mac/spinbutt.h"
 #elif defined(__WXPM__)
     #include "wx/os2/spinbutt.h"
-#elif defined(__WXSTUBS__)
-    #include "wx/stubs/spinbutt.h"
 #endif
 
 // ----------------------------------------------------------------------------
