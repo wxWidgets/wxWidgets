@@ -1420,7 +1420,7 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
             int xx1 = child->m_x;
             int yy1 = child->m_y;
             int xx2 = child->m_x + child->m_width;
-            int yy2 = child->m_x + child->m_height;
+            int yy2 = child->m_y + child->m_height;
 
             // left
             if (((xx >= xx1) && (xx <= xx1+10) && (yy >= yy1) && (yy <= yy2)) ||
