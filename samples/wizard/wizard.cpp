@@ -78,6 +78,7 @@ public:
     void OnAbout(wxCommandEvent& event);
     void OnRunWizard(wxCommandEvent& event);
     void OnWizardCancel(wxWizardEvent& event);
+    void OnWizardFinished(wxWizardEvent& event);
 
 private:
     // any class wishing to process wxWindows events must use this macro
@@ -278,6 +279,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Wizard_Run,   MyFrame::OnRunWizard)
 
     EVT_WIZARD_CANCEL(-1, MyFrame::OnWizardCancel)
+    EVT_WIZARD_FINISHED(-1, MyFrame::OnWizardFinished)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxRadioboxPage, wxWizardPageSimple)
@@ -387,6 +389,11 @@ void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
     }
 
     wizard->Destroy();
+}
+
+void MyFrame::OnWizardFinished(wxWizardEvent& WXUNUSED(event))
+{
+    wxLogStatus(this, wxT("The wizard finished successfully."));
 }
 
 void MyFrame::OnWizardCancel(wxWizardEvent& WXUNUSED(event))
