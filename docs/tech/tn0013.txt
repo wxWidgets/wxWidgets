@@ -79,7 +79,7 @@ a) Setting up the RPM tree: you should have the RPM tree set up properly
    there -- like this you won't forget to update them after redoing "make
    dist").
 
-b) Start RPM build by going to RPM_ROOT directory and typing "rpm -ba
+b) Start RPM build by going to RPM_ROOT directory and typing "rpmbuild -ba
    SPECS/wxGTK.spec". It may be a good idea to append "2>&1 | tee wxGTK.out"
    (or "|& tee" if you're using the one true shell ;-) as it might be not
    easy to detect errors in the verbose rpm output if anything goes wrong.
