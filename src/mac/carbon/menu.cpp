@@ -209,10 +209,34 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 			if ( pos == (size_t)-1 )
 			{
 				UMAAppendMenuItem(MAC_WXHMENU(m_hMenu), label,key,modifiers);
+				if ( pItem->GetBitmap().Ok() )
+				{
+					ControlButtonContentInfo info ;
+					wxMacCreateBitmapButton( &info , pItem->GetBitmap() , true ) ;
+					if ( info.contentType != kControlNoContent )
+					{
+						if ( info.contentType == kControlContentCIconHandle )
+							SetMenuItemIconHandle( MAC_WXHMENU(m_hMenu) , CountMenuItems(MAC_WXHMENU(m_hMenu) ) ,
+								kMenuColorIconType , (Handle) info.u.cIconHandle ) ;
+				    }
+						
+				}
 			}
 			else
 			{
 				UMAInsertMenuItem(MAC_WXHMENU(m_hMenu), label , pos,key,modifiers);
+				if ( pItem->GetBitmap().Ok() )
+				{
+					ControlButtonContentInfo info ;
+					wxMacCreateBitmapButton( &info , pItem->GetBitmap() , true ) ;
+					if ( info.contentType != kControlNoContent )
+					{
+						if ( info.contentType == kControlContentCIconHandle )
+							SetMenuItemIconHandle( MAC_WXHMENU(m_hMenu) , pos ,
+								kMenuColorIconType , (Handle) info.u.cIconHandle ) ;
+				    }
+						
+				}
 			}
   			if ( pItem->GetId() == idMenuTitle ) 
   			{

@@ -218,20 +218,24 @@ CIconHandle wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDepth ,
 
     if ( mask )
     {
+    	Rect r ;
+    	GetPortBounds( image , &r ) ;
       LockPixels(GetGWorldPixMap(mask) ) ;
       CopyBits(GetPortBitMapForCopyBits(mask) ,
-          &(**icon).iconBMap , &imageBounds , &imageBounds, srcCopy , nil ) ;
+          &(**icon).iconBMap , &r , &r, srcCopy , nil ) ;
       CopyBits(GetPortBitMapForCopyBits(mask) ,
-          &(**icon).iconMask , &imageBounds , &imageBounds, srcCopy , nil ) ;
+          &(**icon).iconMask , &r , &r, srcCopy , nil ) ;
       UnlockPixels(GetGWorldPixMap( mask ) ) ;
     }
     else
     {
+    	Rect r ;
+    	GetPortBounds( image , &r ) ;
         LockPixels(GetGWorldPixMap(image));
       CopyBits(GetPortBitMapForCopyBits(image) ,
-          &(**icon).iconBMap , &imageBounds , &imageBounds, srcCopy , nil ) ;
+          &(**icon).iconBMap , &r , &r, srcCopy , nil ) ;
       CopyBits(GetPortBitMapForCopyBits(image) ,
-          &(**icon).iconMask , &imageBounds , &imageBounds, srcCopy , nil ) ;
+          &(**icon).iconMask , &r , &r, srcCopy , nil ) ;
         UnlockPixels(GetGWorldPixMap(image));
     }
     
@@ -289,7 +293,7 @@ PicHandle wxMacCreatePict(GWorldPtr wp, GWorldPtr mask)
   return pict;                  
 }
 
-void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap ) 
+void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , bool forceColorIcon ) 
 {
     memset( info , 0 , sizeof(ControlButtonContentInfo) ) ;
     if ( bitmap.Ok() )
@@ -305,11 +309,11 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
         }
         else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
         {
-            if ( (bmap->m_width == bmap->m_height) && (bmap->m_width & 0x3 == 0) )
+            if ( (forceColorIcon || bmap->m_width == bmap->m_height) && ((bmap->m_width & 0x3) == 0) )
             {
                 info->contentType = kControlContentCIconHandle ;
                 if ( bitmap.GetMask() )
-                {
+                { 
                     info->u.cIconHandle = wxMacCreateCIcon( MAC_WXHBITMAP(bmap->m_hBitmap) , MAC_WXHBITMAP(bitmap.GetMask()->GetMaskBitmap()) ,
                                                            8 , bmap->m_width ) ;
                 }
