@@ -1899,7 +1899,7 @@ public:
 #if wxUSE_FONTMAP
     wxMBConv_cocoa(const wxChar* name)
     {
-        Init( wxCFStringEncFromFontEnc(wxFontMapper::Get()->CharsetToEncoding(name, false) ) ) ;
+        Init( wxCFStringEncFromFontEnc(wxFontMapperBase::Get()->CharsetToEncoding(name, false) ) ) ;
     }
 #endif
 
@@ -2047,7 +2047,7 @@ public:
 #if wxUSE_FONTMAP
     wxMBConv_mac(const wxChar* name)
     {
-        Init( wxMacGetSystemEncFromFontEnc(wxFontMapper::Get()->CharsetToEncoding(name, false) ) ) ;
+        Init( wxMacGetSystemEncFromFontEnc(wxFontMapperBase::Get()->CharsetToEncoding(name, false) ) ) ;
     }
 #endif
 
@@ -2210,7 +2210,7 @@ public:
     wxMBConv_wxwin(const wxChar* name)
     {
         if (name)
-            m_enc = wxFontMapper::Get()->CharsetToEncoding(name, false);
+            m_enc = wxFontMapperBase::Get()->CharsetToEncoding(name, false);
         else
             m_enc = wxFONTENCODING_SYSTEM;
 
@@ -2369,7 +2369,7 @@ wxMBConv *wxCSConv::DoCreate() const
 
 #if wxUSE_FONTMAP
         if ( name.empty() )
-            name = wxFontMapper::Get()->GetEncodingName(m_encoding);
+            name = wxFontMapperBase::Get()->GetEncodingName(m_encoding);
 #endif // wxUSE_FONTMAP
 
         wxMBConv_iconv *conv = new wxMBConv_iconv(name);
@@ -2440,7 +2440,7 @@ wxMBConv *wxCSConv::DoCreate() const
         // use "false" to suppress interactive dialogs -- we can be called from
         // anywhere and popping up a dialog from here is the last thing we want to
         // do
-        enc = wxFontMapper::Get()->CharsetToEncoding(m_name, false);
+        enc = wxFontMapperBase::Get()->CharsetToEncoding(m_name, false);
     }
 #endif // wxUSE_FONTMAP
 
@@ -2496,7 +2496,7 @@ wxMBConv *wxCSConv::DoCreate() const
                    m_name ? m_name
                       :
 #if wxUSE_FONTMAP
-                         wxFontMapper::GetEncodingDescription(m_encoding).c_str()
+                         wxFontMapperBase::GetEncodingDescription(m_encoding).c_str()
 #else // !wxUSE_FONTMAP
                          wxString::Format(_("encoding %s"), m_encoding).c_str()
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP

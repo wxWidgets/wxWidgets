@@ -1410,7 +1410,7 @@ extern long wxCharsetToCodepage(const wxChar *name)
     if ( !name )
         return -1;
 
-    wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(name, false);
+    wxFontEncoding enc = wxFontMapperBase::Get()->CharsetToEncoding(name, false);
     if ( enc == wxFONTENCODING_SYSTEM )
         return -1;
 

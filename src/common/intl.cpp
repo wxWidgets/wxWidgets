@@ -1243,7 +1243,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
     if ( convertEncoding )
     {
         wxFontEncoding targetEnc = wxFONTENCODING_SYSTEM;
-        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(m_charset, false);
+        wxFontEncoding enc = wxFontMapperBase::Get()->CharsetToEncoding(m_charset, false);
         if ( enc == wxFONTENCODING_SYSTEM )
         {
             convertEncoding = false; // unknown encoding
@@ -2321,7 +2321,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     wxString encname = GetSystemEncodingName();
     if ( !encname.empty() )
     {
-        wxFontEncoding enc = wxFontMapper::Get()->
+        wxFontEncoding enc = (wxFontMapperBase::Get())->
             CharsetToEncoding(encname, false /* not interactive */);
 
         // on some modern Linux systems (RedHat 8) the default system locale
