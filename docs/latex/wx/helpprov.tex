@@ -74,3 +74,11 @@ This version associates the given text with all windows with this id.
 May be used to set the same help string for all Cancel buttons in
 the application, for example.
 
+\membersection{wxHelpProvider::RemoveHelp}\label{wxhelpproviderremovehelp}
+
+\func{void}{RemoveHelp}{\param{wxWindowBase* }{window}}
+
+Removes the association between the window pointer and the help text. This is
+called by the wxWindow destructor. Without this, the table of help strings will fill up
+and when window pointers are reused, the wrong help string will be found.
+
