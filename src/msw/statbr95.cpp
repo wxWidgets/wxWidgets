@@ -78,7 +78,7 @@ LRESULT APIENTRY wxStatusBarProc(HWND hwnd,
         sb->MSWWindowProc(message, wParam, lParam);
     }
 
-    return ::CallWindowProc(gs_wndprocStatBar, hwnd, message, wParam, lParam);
+    return ::CallWindowProc(CASTWNDPROC gs_wndprocStatBar, hwnd, message, wParam, lParam);
 }
 
 // ============================================================================

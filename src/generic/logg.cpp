@@ -654,7 +654,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     wxBoxSizer *sizerButtons = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizerAll = new wxBoxSizer(wxHORIZONTAL);
 
-    wxButton *btnOk = new wxButton(this, wxID_OK, _T("Ok"));
+    wxButton *btnOk = new wxButton(this, wxID_OK, _T("OK"));
     sizerButtons->Add(btnOk, 0, wxCENTRE|wxBOTTOM, MARGIN/2);
     m_btnDetails = new wxButton(this, wxID_MORE, _T("&Details >>"));
     sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);
