@@ -163,8 +163,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
 	for (i = 0; i < noArgs; i++)
 	{
 		// Again, reverse args
-		wxVariant& theVariant = INVOKEARG((noArgs-1) - i);
-		if (!ConvertVariantToOle(theVariant, oleArgs[i]))
+		if (!ConvertVariantToOle(INVOKEARG((noArgs-1) - i), oleArgs[i]))
 			return FALSE; // TODO: clean up memory at this point
 	}
 
@@ -509,7 +508,11 @@ bool wxAutomationObject::ConvertVariantToOle(const wxVariant& variant, VARIANTAR
     else if (type == "bool")
     {
         oleVariant.vt = VT_BOOL;
+#ifdef __WATCOMC__
+        oleVariant.bool = variant.GetBool();
+#else
         oleVariant.boolVal = variant.GetBool();
+#endif
     }
     else if (type == "string")
     {
@@ -633,7 +636,11 @@ bool wxAutomationObject::ConvertOleToVariant(const VARIANTARG& oleVariant, wxVar
 
 	case VT_BOOL:
 		{
+#ifdef __WATCOMC__
+			variant = (bool) (oleVariant.bool != 0);
+#else
 			variant = (bool) (oleVariant.boolVal != 0);
+#endif
 			break;
 		}
 	case VT_R8:

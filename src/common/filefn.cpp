@@ -71,7 +71,8 @@
 
 #include "wx/setup.h"
 
-#if defined(HAVE_FNMATCH_H) || defined(__GNUWIN32__)
+// No, Cygwin doesn't appear to have fnmatch.h after all.
+#if defined(HAVE_FNMATCH_H)
 #include   "fnmatch.h"
 #endif
 
@@ -846,7 +847,7 @@ wxRenameFile (const wxString& file1, const wxString& file2)
 
 bool wxRemoveFile(const wxString& file)
 {
-#if defined(_MSC_VER) || defined(__BORLANDC__)
+#if defined(_MSC_VER) || defined(__BORLANDC__) || defined(__WATCOMC__)
   int flag = remove(WXSTRINGCAST file);
 #else
   int flag = unlink(WXSTRINGCAST file);
@@ -1406,7 +1407,7 @@ bool wxIsWild( const wxString& pattern )
 
 bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 
-#if defined(HAVE_FNMATCH_H) || defined(__GNUWIN32__)
+#if defined(HAVE_FNMATCH_H)
 {
    if(dot_special)
       return fnmatch(pat.c_str(), text.c_str(), FNM_PERIOD) == 0;
@@ -1415,7 +1416,8 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 }
 #else
 
-#pragma error Broken implementation of wxMatchWild() -- needs fixing!
+// #pragma error Broken implementation of wxMatchWild() -- needs fixing!
+
    /*
     * WARNING: this code is broken!
     */

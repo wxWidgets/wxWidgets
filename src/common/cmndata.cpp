@@ -33,10 +33,15 @@
 #ifdef __WXMSW__
 #include <windows.h>
 
-#ifndef __WIN32__
+#if !defined(__WIN32__)
 #include <print.h>
 #include <commdlg.h>
 #endif
+
+#if defined(__WATCOMC__)
+#include <commdlg.h>
+#endif
+
 #endif
 
 #if !USE_SHARED_LIBRARY

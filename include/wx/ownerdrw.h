@@ -132,4 +132,5 @@ private:
             m_nMarginWidth; // space occupied by bitmap to the left of the item
 };
 
-#endif  //_OWNERDRW_H
+#endif
+  // _OWNERDRW_H

@@ -1,0 +1,1486 @@
+#!/bin/sh
+# N.B. make sure this really is a true Bourne-compatible shell.
+
+# !!!! WARNING !!! THIS IS IN DEVELOPMENT AND HAS NOT BEEN
+# TESTED. DO NOT USE YET!
+# Use src/motif/makefile.unx directly instead, with the 'motif'
+# target.
+
+###############################################################
+# wxinstal -- wxWindows for Motif installation script.        #
+# Julian Smart, December 1998                                 #
+# Usage: wxinstall [optional wxWindows target directory]      #
+# Note: this uses plain makefiles. You can also use the       #
+# configure system: see docs/motif/install.txt.               #
+###############################################################
+
+########### Edit these variables for your system. #############
+########### ALSO edit wx/src/make.env once unarchived #########
+
+# Editor
+MYEDITOR=$EDITOR
+if [ "$MYEDITOR" = "" ]
+then
+  MYEDITOR=emacs
+fi
+
+# Pager
+MYPAGER=$PAGER
+if [ "$MYPAGER" = "" ]
+then
+  MYPAGER=more
+fi
+
+# wxWindows directory to install to
+WXDIR=`pwd`
+if [ ! "$1" = "" ]
+then
+  WXDIR=$1
+fi
+
+# Target (motif, xview)
+GUITARGET=motif
+
+# Archive prefix, dependent on version number
+ARCHIVE=wx200
+
+# Platform. 1 = generic platform
+PLATFORM=1
+
+# Current directory
+CURRENTDIR=`pwd`
+
+# PostScript viewer, if any
+POSTSCRIPTVIEWER=ghostview
+
+# PostScript viewer, if any
+HTMLVIEWER=netscape
+
+# Don't change this
+GUISUFFIX=_motif
+
+if [ "$GUITARGET" = "motif" ]
+then
+  GUISUFFIX=_motif
+fi
+
+# If you add platforms, you just need
+# to adjust this number, and
+# add environment variables
+# for a description and the filename.
+
+PLATFORMCOUNT=12
+
+PLATFORM1="Generic/Linux with gcc"
+PLATFORMFILE1="linux.env"
+
+PLATFORM2="Solaris with gcc"
+PLATFORMFILE2="sol_gcc.env"
+
+PLATFORM3="Solaris with Sun C++"
+PLATFORMFILE3="sol_sun.env"
+
+PLATFORM4="SunOS 4.x.x with gcc"
+PLATFORMFILE4="sunosgcc.env"
+
+PLATFORM5="FreeBSD with gcc"
+PLATFORMFILE5="freebsd.env"
+
+PLATFORM6="AIX with gcc"
+PLATFORMFILE6="aixgcc.env"
+
+PLATFORM7="AIX with CSet++"
+PLATFORMFILE7="aixcset.env"
+
+PLATFORM8="Data General"
+PLATFORMFILE8="datagen.env"
+
+PLATFORM9="HPUX"
+PLATFORMFILE9="hp.env"
+
+PLATFORM10="IRIX"
+PLATFORMFILE10="irix.env"
+
+PLATFORM11="DEC OSF"
+PLATFORMFILE11="decosf.env"
+
+PLATFORM12="VAX VMS"
+PLATFORMFILE12="vms.env"
+
+install_from_tar()
+{
+  if [ -f $CURRENTDIR/$ARCHIVE"gen.tar" ]
+  then
+    if [ ! -d $WXDIR ]
+    then
+      echo Making directory $WXDIR
+      mkdir $WXDIR
+    fi
+    if [ ! -d $WXDIR ]
+    then
+      echo $WXDIR" cannot be created!"
+    else
+      echo Untarring $CURRENTDIR/$ARCHIVE"*.tar."
+      echo Please be patient...
+      cd $WXDIR
+      tar xf $CURRENTDIR/$ARCHIVE"gen.tar"
+      tar xf $CURRENTDIR/$ARCHIVE"mot.tar"
+      echo If you saw no errors, untarring was successful.
+    fi
+  else
+    echo $CURRENTDIR/$ARCHIVE"gen.tar" not found.
+  fi
+
+  # Unarchive HTML documentation if found
+  if [ -f $CURRENTDIR/$ARCHIVE"htm.tar" ]
+  then
+    echo Untarring HTML documentation $CURRENTDIR/$ARCHIVE"htm.tar."
+    echo Please be patient...
+    cd $WXDIR
+    tar xf $CURRENTDIR/$ARCHIVE"htm.tar"
+  fi
+
+  # Unarchive PDF documentation if found
+  if [ -f $CURRENTDIR/$ARCHIVE"pdf.tar" ]
+  then
+    echo Untarring PDF documentation $CURRENTDIR/$ARCHIVE"pdf.tar."
+    echo Please be patient...
+    cd $WXDIR
+    tar xf $CURRENTDIR/$ARCHIVE"pdf.tar"
+  fi
+
+  cd $CURRENTDIR
+}
+
+install_from_gzip()
+{
+  if [ -f $CURRENTDIR/$ARCHIVE"gen.tgz" ]
+  then
+    echo Unarchiving $CURRENTDIR/$ARCHIVE"gen.tgz"
+    gzip -c -d $CURRENTDIR/$ARCHIVE"gen.tgz" | tar xf -
+    echo Unarchiving $CURRENTDIR/$ARCHIVE"mot.tgz"
+    gzip -c -d $CURRENTDIR/$ARCHIVE"mot.tgz" | tar xf -
+
+    # Optional: PDF documentation
+    if [ -f $CURRENTDIR/$ARCHIVE"pdf.tgz" ]
+    then
+      echo Unarchiving $CURRENTDIR/$ARCHIVE"ps.tgz"
+      gzip -c -d $CURRENTDIR/$ARCHIVE"pdf.tgz" | tar xf -
+    fi
+
+    # Optional: HTML documentation
+    if [ -f $CURRENTDIR/$ARCHIVE"htm.tgz" ]
+    then
+      echo Unarchiving $CURRENTDIR/$ARCHIVE"htm.tgz"
+      gzip -c -d $CURRENTDIR/$ARCHIVE"htm.tgz" | tar xf -
+    fi
+
+  else
+    echo $CURRENTDIR/$ARCHIVE"gen.tgz" not found. Please place in the current directory.
+  fi
+  cd $CURRENTDIR
+}
+
+install_from_zip()
+{
+  if [ -f $CURRENTDIR/$ARCHIVE"gen.zip" ]
+  then
+    if [ ! -d $WXDIR ]
+    then
+      echo Making directory $WXDIR
+      mkdir $WXDIR
+    fi
+    if [ ! -d $WXDIR ]
+    then
+      echo $WXDIR" cannot be created!"
+    else
+      echo Untarring $CURRENTDIR/$ARCHIVE"*.zip."
+      echo Please be patient...
+      cd $WXDIR
+      unzip -a -o $CURRENTDIR/$ARCHIVE"gen.zip"
+      unzip -a -o $CURRENTDIR/$ARCHIVE"mot.zip"
+      echo If you saw no errors, unzipping was successful.
+    fi
+  else
+    echo $CURRENTDIR/$ARCHIVE"gen.zip" not found.
+  fi
+
+  # Unarchive HTML documentation if found
+  if [ -f $CURRENTDIR/$ARCHIVE"htm.zip" ]
+  then
+    echo Unzipping HTML documentation $CURRENTDIR/$ARCHIVE"htm.zip."
+    echo Please be patient...
+    cd $WXDIR
+    unzip -a -o $CURRENTDIR/$ARCHIVE"htm.zip"
+  fi
+
+  # Unarchive PDF documentation if found
+  if [ -f $CURRENTDIR/$ARCHIVE"pdf.zip" ]
+  then
+    echo Unzipping PDF documentation $CURRENTDIR/$ARCHIVE"pdf.zip."
+    echo Please be patient...
+    cd $WXDIR
+    unzip -a -o $CURRENTDIR/$ARCHIVE"pdf.zip"
+  fi
+
+  cd $CURRENTDIR
+}
+
+edit_make_env()
+{
+  cd $CURRENTDIR
+
+  if [ -f $WXDIR/src/make.env ]
+  then
+    echo ""
+    echo "If the files are unarchived ok, you should edit the file"
+    echo $WXDIR"/src/make.env"
+    echo "since this sets many options for your wxWindows"
+    echo "compilation environment."
+    echo ""
+    echo "Would you like to edit the file now? (y/n)"
+    echo
+    read ans
+    if [ "$ans" = "y" ]
+    then
+      $MYEDITOR $WXDIR/src/make.env
+      echo ""
+      echo Ok, if you get compilation or link errors in the installation,
+      echo $WXDIR"/src/make.env is the first place to look."
+      echo ""
+      echo "Press return to continue."
+      read ans
+    fi
+  else
+    echo ""
+    echo "Uh-oh, cannot find "$WXDIR"/src/make.env; probably you have not unarchived"
+    echo "properly yet."
+    echo ""
+    echo "Press return to continue."
+    read ans
+  fi
+}
+
+install_from_archive()
+{
+  echo
+  echo "Install from Archive"
+  echo "--------------------"
+
+  echo "1) Install from "$ARCHIVE"gen.zip, "$ARCHIVE"mot.zip"
+  echo "   and "$ARCHIVE"htm.zip if present."
+  echo "2) Install from "$ARCHIVE"gen.tgz, "$ARCHIVE"mot.tgz"
+  echo "   and "$ARCHIVE"htm.tgz if present."
+  echo "0) Quit."
+  echo
+  read archans
+
+  if [ "$archans" = "1" ]
+  then
+    install_from_zip
+  fi
+  if [ "$archans" = "2" ]
+  then
+    install_from_gzip
+  fi
+}
+
+make_main_library()
+{
+  if [ ! -d $WXDIR/src ]
+  then
+    echo "Source directory not found: please unarchive first."
+    echo Press return to continue.
+    read ans
+  else
+    echo
+    echo Making the wxWindows main library. It will go in
+    echo $WXDIR/lib.
+    echo
+    echo Please press RETURN to continue, and then make yourself a coffee.
+    echo 
+    read ans
+    if [ ! -d $WXDIR/lib ]
+    then
+      mkdir $WXDIR/lib
+    fi
+
+    cd $WXDIR/src/motif
+    make -f makefile.unx $GUITARGET 2>&1 | tee -a $CURRENTDIR/make.log
+    cd $CURRENTDIR
+
+    if [ -f $WXDIR/lib/libwx$GUISUFFIX".a" ]
+    then  
+      echo
+      echo "If you saw no errors, wxWindows was compiled. See the file make.log"
+      echo "for errors and warnings."
+    else
+      echo
+      echo $WXDIR/lib/libwx$GUISUFFIX".a was not built."
+      echo "Please check make.env, and read install.txt and faq.txt/ps."
+      echo
+      echo "Press return to continue."
+      echo
+      read ans
+    fi
+  fi
+}
+
+###############################################################
+# Make peripheral components                                  #
+###############################################################
+
+make_wxtree()
+{
+  if [ ! -d $WXDIR/utils/wxtree ]
+  then
+    echo wxTree directory does not exist.
+    echo Press return to continue.
+    read ans
+  else
+    echo
+    echo Making the wxTree library. It will go in
+    echo $WXDIR/utils/wxtree/lib.
+    echo
+    cd $WXDIR/utils/wxtree/src
+    make -f makefile.unx $GUITARGET 2>&1 | tee $CURRENTDIR/make.log
+    cd $CURRENTDIR
+    echo
+    echo "If you saw no errors, the wxTree library was compiled. See the file make.log"
+    echo "for errors and warnings."
+  fi
+}
+
+make_wxgraph()
+{
+  if [ ! -d $WXDIR/utils/wxgraph ]
+  then
+    echo wxGraph directory does not exist.
+    echo Press return to continue.
+    read ans
+  else
+    echo
+    echo Making the wxGraph library. It will go in
+    echo $WXDIR/utils/wxgraph/lib.
+    echo
+    cd $WXDIR/utils/wxgraph/src
+    make -f makefile.unx $GUITARGET 2>&1 | tee $CURRENTDIR/make.log
+    cd $CURRENTDIR
+    echo
+    echo "If you saw no errors, the wxGraph library was compiled. See the file make.log"
+    echo "for errors and warnings."
+  fi
+}
+
+make_colour()
+{
+  if [ ! -d $WXDIR/utils/colours ]
+  then
+    echo $WXDIR/utils/colours directory does not exist.
+    echo Press return to continue.
+    read ans
+  else
+    echo
+    echo Making the Colour sampler. It will go in
+    echo $WXDIR/utils/colours
+    echo
+    cd $WXDIR/utils/colours
+    make -f makefile.unx $GUITARGET 2>&1 | tee $CURRENTDIR/make.log
+    cd $CURRENTDIR
+    echo
+    echo "If you saw no errors, the Colour sampler was compiled. See the file make.log"
+    echo "for errors and warnings."
+    echo ""
+    if [ -f $WXDIR/utils/colours/colours$GUISUFFIX ]
+    then
+      echo "Run the Colour sampler? (y/n)"
+      echo ""
+      read ans1
+      if [ "$ans1" = "y" ]
+      then
+        $WXDIR/utils/colours/colours$GUISUFFIX
+      fi
+    fi
+  fi
+}
+
+make_wxhelp()
+{
+  if [ ! -d $WXDIR/utils/wxhelp ]
+  then
+    echo wxHelp directory does not exist.
+    echo Press return to continue.
+    read ans
+  else
+    echo
+    echo Making the wxHelp program. It will go in
+    echo $WXDIR/utils/wxhelp/src.
+    echo
+    cd $WXDIR/utils/wxhelp/src
+    make -f makefile.unx $GUITARGET 2>&1 | tee $CURRENTDIR/make.log
+    cd $CURRENTDIR
+    echo
+    echo "If you saw no errors, the wxHelp program was compiled. See the file make.log"
+    echo "for errors and warnings."
+  fi
+}
+
+make_tex2rtf()
+{
+  if [ ! -d $WXDIR/utils/tex2rtf ]
+  then
+    echo Tex2RTF directory does not exist.
+    echo Press return to continue.
+    read ans
+  else
+    echo
+    echo Making the Tex2RTF utility. It will go in
+    echo $WXDIR/utils/tex2rtf/src.
+    echo
+    cd $WXDIR/utils/tex2rtf/src
+    make -f makefile.unx $GUITARGET 2>&1 | tee $CURRENTDIR/make.log
+    cd $CURRENTDIR
+    echo
+    echo "If you saw no errors, the Tex2RTF program was compiled. See the file make.log"
+    echo "for errors and warnings."
+  fi
+}
+
+###############################################################
+# Make samples                                                  #
+###############################################################
+
+make_controls()
+{
+  echo
+  echo Making the Controls sample. It will be made as
+  echo $WXDIR/samples/controls/controls$GUISUFFIX
+  echo
+  cd $WXDIR/samples/constrols
+  make -f makefile.unx $GUITARGET 2>&1 | tee $CURRENTDIR/make.log
+  cd $CURRENTDIR
+  echo
+  echo "If you saw no errors, the Controls sample was compiled. See the file make.log"
+  echo "for errors and warnings."
+}
+
+make_minimal()
+{
+  echo
+  echo Making the Minimal sample. It will be made as
+  echo $WXDIR/samples/minimal/minimal$GUISUFFIX
+  echo
+  cd $WXDIR/samples/minimal
+  make -f makefile.unx $GUITARGET 2>&1 | tee $CURRENTDIR/make.log
+  cd $CURRENTDIR
+  echo
+  echo "If you saw no errors, the Minimal sample was compiled. See the file make.log"
+  echo "for errors and warnings."
+}
+
+make_mdi()
+{
+  echo
+  echo Making the Mdi sample. It will be made as
+  echo $WXDIR/samples/mdi/mdi$GUISUFFIX
+  echo
+  cd $WXDIR/samples/mdi
+  make -f makefile.unx $GUITARGET 2>&1 | tee $CURRENTDIR/make.log
+  cd $CURRENTDIR
+  echo
+  echo "If you saw no errors, the MDI sample was compiled. See the file make.log"
+  echo "for errors and warnings."
+}
+
+make_animate()
+{
+  echo
+  echo Making the Animate sample. It will be made as
+  echo $WXDIR/samples/animate/anim$GUISUFFIX
+  echo
+  cd $WXDIR/samples/animate
+  make -f makefile.unx $GUITARGET 2>&1 | tee $CURRENTDIR/make.log
+  cd $CURRENTDIR
+  echo
+  echo "If you saw no errors, the Animate sample was compiled. See the file make.log"
+  echo "for errors and warnings."
+}
+
+make_fractal()
+{
+  echo
+  echo Making the Fractal sample. It will be made as
+  echo $WXDIR/samples/fractal/fractal$GUISUFFIX
+  echo
+  cd $WXDIR/samples/fractal
+  make -f makefile.unx $GUITARGET 2>&1 | tee $CURRENTDIR/make.log
+  cd $CURRENTDIR
+  echo
+  echo "If you saw no errors, the Fractal sample was compiled. See the file make.log"
+  echo "for errors and warnings."
+}
+
+make_all_periph_components()
+{
+  make_wxtree
+#  make_dialoged
+#  make_wxgraph
+#  make_wxhelp
+#  make_tex2rtf
+}
+
+about_periph_components()
+{
+  clear
+  echo "About the Peripheral Components"
+  echo "-------------------------------"
+  echo
+  echo "These are libraries and programs that are considered useful"
+  echo "enough to put in the main wxWindows distribution."
+  echo
+  echo wxTree A tree-drawing library, with sample
+  echo ------
+  echo    
+#  echo wxGraph A node and arc graph-drawing library, with sample
+#  echo -------
+#  echo    
+#  echo "Press return to continue"
+#  read ans
+#  clear
+#  echo wxHelp The wxWindows on-line help program
+#  echo ------
+#  echo
+#  echo
+#  echo "Tex2RTF LaTeX->RTF, HTML converter"
+#  echo -------
+#  echo
+  echo "Press return to continue"
+  read ans
+  clear
+}
+
+make_peripheral_components()
+{
+  compoption='none'
+  while [ "$compoption" != "0" ]
+  do
+    echo
+    echo "Peripheral Component Options"
+    echo "----------------------------"
+    echo " 1) Make wxTree layout library"
+    echo "10) Make all the above"
+    echo "----------------------------"
+    echo " ?) About these components"
+    echo "----------------------------"
+    echo " 0) Quit."
+    echo
+    read compoption
+
+    if [ "$compoption" = "1" ]
+    then
+      make_wxtree
+    fi
+    if [ "$compoption" = "10" ]
+    then
+      make_all_periph_components
+    fi
+    if [ "$compoption" = "?" ]
+    then
+      about_periph_components
+    fi
+  done
+}
+
+make_all_samples()
+{
+  echo
+  echo "Note: compiling all samples is going to use up bags of disk space."
+  echo "Continue? (y/n)"
+  echo
+  read ans
+
+  if [ "$ans" = "y" ]
+  then
+    cd $WXDIR/samples
+    make -f makefile.unx all$GUISUFFIX
+  fi
+}
+
+make_samples()
+{
+  compoption='none'
+  while [ "$compoption" != "0" ]
+  do
+    echo
+    echo "Sample compilation options"
+    echo "------------------------"
+    echo "1) Make Minimal sample"
+    echo "2) Make MDI sample
+    echo "3) Make all samples"
+    echo "4) Run a sample"
+    echo "------------------------"
+    echo "0) Quit."
+    echo
+    read compoption
+
+    if [ "$compoption" = "1" ]
+    then
+      make_minimal
+    fi
+    if [ "$compoption" = "2" ]
+    then
+      make_mdi
+    fi
+    if [ "$compoption" = "3" ]
+    then
+      make_all_samples
+    fi
+    if [ "$compoption" = "4" ]
+    then
+      run_samples
+    fi
+  done
+}
+
+# Find a platform filename, using 'arg' as input and output
+platform_filename()
+{
+  case "$arg" in
+    1) arg=$PLATFORMFILE1;;
+    2) arg=$PLATFORMFILE2;;
+    3) arg=$PLATFORMFILE3;;
+    4) arg=$PLATFORMFILE4;;
+    5) arg=$PLATFORMFILE5;;
+    6) arg=$PLATFORMFILE6;;
+    7) arg=$PLATFORMFILE7;;
+    8) arg=$PLATFORMFILE8;;
+    9) arg=$PLATFORMFILE9;;
+    10) arg=$PLATFORMFILE10;;
+    11) arg=$PLATFORMFILE11;;
+    12) arg=$PLATFORMFILE12;;
+    13) arg=$PLATFORMFILE13;;
+    14) arg=$PLATFORMFILE14;;
+    15) arg=$PLATFORMFILE15;;
+    16) arg=$PLATFORMFILE16;;
+    17) arg=$PLATFORMFILE17;;
+    18) arg=$PLATFORMFILE18;;
+    19) arg=$PLATFORMFILE19;;
+    20) arg=$PLATFORMFILE20;;
+    *) arg=''
+  esac
+}
+
+platform_description()
+{
+  case "$arg" in
+    1) arg=$PLATFORM1;;
+    2) arg=$PLATFORM2;;
+    3) arg=$PLATFORM3;;
+    4) arg=$PLATFORM4;;
+    5) arg=$PLATFORM5;;
+    6) arg=$PLATFORM6;;
+    7) arg=$PLATFORM7;;
+    8) arg=$PLATFORM8;;
+    9) arg=$PLATFORM9;;
+    10) arg=$PLATFORM10;;
+    11) arg=$PLATFORM11;;
+    12) arg=$PLATFORM12;;
+    13) arg=$PLATFORM13;;
+    14) arg=$PLATFORM14;;
+    15) arg=$PLATFORM15;;
+    16) arg=$PLATFORM16;;
+    17) arg=$PLATFORM17;;
+    18) arg=$PLATFORM18;;
+    19) arg=$PLATFORM19;;
+    20) arg=$PLATFORM20;;
+    *) arg=''
+  esac
+}
+
+###############################################################
+# Select a platform
+###############################################################
+
+select_platform()
+{
+  echo
+  echo "Select a platform"
+  echo "----------------------------"
+  echo "Note: this copies a file from $WXDIR/src/makeenvs"
+  echo "to $WXDIR/src/make.env. If you have"
+  echo "restarted the installation, the current option listed"
+  echo "may not reflect the current make.env."
+  echo
+  echo "You may wish to edit a .env file in $WXDIR/src/makeenvs"
+  echo "instead of src/make.env, which might be overwritten in future"
+  echo "installations."
+  echo
+  echo "In any event, a backup of make.env is made (make.bak) before it is"
+  echo "overwritten."
+  echo
+  echo "Please press return to continue."
+  read dummy
+
+  compoption='none'
+  selectdone=0
+  while [ "$selectdone" = "0" ]
+  do
+    echo
+    echo "Select a platform"
+    echo "----------------------------"
+    echo
+
+    i=1
+    while [ $i -le $PLATFORMCOUNT ]
+    do
+      arg=$i
+      platform_description
+      plat=$arg
+      markit=" "
+      if [ "$PLATFORM" = "$i" ]
+      then
+        markit="*"
+      fi
+      echo " "$markit" "$i") "$plat
+      i=`expr $i + 1`
+    done
+    echo
+    echo "   e) Edit the current src/make.env"
+    echo
+    echo "Enter a choice, return for default: "
+    read compoption
+
+    if [ "$compoption" = "e" ]
+    then
+      $MYEDITOR $WXDIR/src/make.env
+    else
+      if [ "$compoption" != "" ]
+      then
+        arg=$compoption
+        platform_description
+        plat=$arg
+
+        arg=$compoption
+        platform_filename
+        platfile=$arg
+
+        if [ "$platfile" != "" ]
+        then
+          if [ ! -f $WXDIR"/src/makeenvs/"$platfile ]
+          then
+            echo "Sorry, this platform is not catered for yet."
+            echo "Try using the generic settings instead."
+            echo ""
+            echo "Press return to continue."
+            read dummy
+          else
+            selectdone=1
+            PLATFORM=$compoption
+            cp -f $WXDIR/src/make.env $WXDIR/src/make.bak
+            cp -f $WXDIR/src/makeenvs/$platfile $WXDIR/src/make.env
+          fi
+        fi
+      else
+        selectdone=1
+      fi
+    fi
+  done
+}
+
+###############################################################
+# Run samples                                                   #
+###############################################################
+
+run_controls()
+{
+  if [ ! -f $WXDIR"/samples/controls/controls"$GUISUFFIX ]
+  then
+    echo The Controls sample has not been compiled yet.
+  else
+    echo
+    echo "Running "$WXDIR"/samples/controls/controls"$GUISUFFIX
+    echo
+    cd $WXDIR"/samples/controls"
+    "controls"$GUISUFFIX
+    cd $CURRENTDIR
+  fi
+}
+
+run_minimal()
+{
+  if [ ! -f $WXDIR"/samples/minimal/minimal"$GUISUFFIX ]
+  then
+    echo The Minimal sample has not been compiled yet.
+  else
+    echo
+    echo "Running "$WXDIR"/samples/minimal/minimal"$GUISUFFIX
+    echo
+    cd $WXDIR"/samples/minimal"
+    "minimal"$GUISUFFIX
+    cd $CURRENTDIR
+  fi
+}
+
+run_form()
+{
+  if [ ! -f $WXDIR"/samples/form/form"$GUISUFFIX ]
+  then
+    echo The Form sample has not been compiled yet.
+  else
+    echo
+    echo "Running "$WXDIR"/samples/form/form"$GUISUFFIX
+    echo
+    cd $WXDIR"/samples/form"
+    "form"$GUISUFFIX
+    cd $CURRENTDIR
+  fi
+}
+
+run_animate()
+{
+  if [ ! -f $WXDIR"/samples/animate/anim"$GUISUFFIX ]
+  then
+    echo The Animate sample has not been compiled yet.
+  else
+    echo
+    echo "Running "$WXDIR"/samples/animate/anim"$GUISUFFIX
+    echo
+    cd $WXDIR"/samples/animate"
+    "anim"$GUISUFFIX
+    cd $CURRENTDIR
+  fi
+}
+
+run_fractal()
+{
+  if [ ! -f $WXDIR"/samples/fractal/fractal"$GUISUFFIX ]
+  then
+    echo The Fractal sample has not been compiled yet.
+  else
+    echo
+    echo "Running "$WXDIR"/samples/fractal/fractal"$GUISUFFIX
+    echo
+    cd $WXDIR"/samples/fractal"
+    "fractal"$GUISUFFIX
+    cd $CURRENTDIR
+  fi
+}
+
+run_ipc()
+{
+  if [ ! -f $WXDIR"/samples/ipc/client"$GUISUFFIX ]
+  then
+    echo The IPC samples have not been compiled yet.
+  else
+    echo
+    echo "Running "$WXDIR"/samples/ipc/client"$GUISUFFIX,
+    echo "        "$WXDIR"/samples/ipc/server"$GUISUFFIX
+    echo
+    cd $WXDIR"/samples/ipc"
+    echo "Starting server..."
+    "server"$GUISUFFIX &
+    echo "Waiting 10 seconds..."
+    sleep 10
+    echo "Starting client..."
+    "client"$GUISUFFIX
+    cd $CURRENTDIR
+  fi
+}
+
+run_samples()
+{
+  runoption='none'
+  while [ "$runoption" != "0" ]
+  do
+    echo
+    echo "Run a wxWindows sample"
+    echo "--------------------"
+    echo "Note: this is a small selection. For more, please"
+    echo "browse the samples subdirectory."
+    echo
+    echo "1) Run Minimal sample"
+    echo "2) Run MDI sample"
+    echo "--------------------"
+    echo "0) Quit."
+    echo
+    read runoption
+
+    if [ "$runoption" = "1" ]
+    then
+      run_minimal
+    fi
+    if [ "$runoption" = "2" ]
+    then
+      run_mdi
+    fi
+  done
+}
+
+make_all()
+{
+  make_main_library
+  make_all_periph_components
+  make_all_samples
+}
+
+remove_component()
+{
+  if [ -d $COMPONENT ]
+  then
+    echo "Remove "$COMPONENT": are you sure? (y/n) "
+    echo
+    read ans
+    if [ "$ans" = "y" ]
+    then
+      rm -f -r $COMPONENT
+    fi
+  fi
+}
+
+remove_components()
+{
+  compoption='none'
+  while [ "$compoption" != "0" ]
+  do
+    if [ -f $WXDIR/docs/pdf/wx.pdf ]
+    then
+      PDFMANUALSOK="*"
+    else
+      PDFMANUALSOK=" "
+    fi
+  
+    if [ -f $WXDIR/docs/html/wx/wx.htm ]
+    then
+      HTMLMANUALSOK="*"
+    else
+      HTMLMANUALSOK=" "
+    fi
+  
+    if [ -d $WXDIR/utils/wxtree ]
+    then
+      WXTREEOK="*"
+    else
+      WXTREEOK=" "
+    fi
+  
+#    if [ -d $WXDIR/utils/wxgraph ]
+#    then
+#      WXGRAPHOK="*"
+#    else
+#      WXGRAPHOK=" "
+#   fi
+#
+#    if [ -d $WXDIR/utils/wxhelp ]
+#    then
+#      WXHELPOK="*"
+#    else
+#      WXHELPOK=" "
+#    fi
+#
+#    if [ -d $WXDIR/utils/tex2rtf ]
+#    then
+#      TEX2RTFOK="*"
+#    else
+#      TEX2RTFOK=" "
+#    fi
+
+    if [ -d $WXDIR/utils/dialoged ]
+    then
+      DIALOGEDOK="*"
+    else
+      DIALOGEDOK=" "
+    fi
+
+    echo
+    echo "Remove a wxWindows component (* means it's installed)"
+    echo "-----------------------------------------------------"
+    echo "wxWindows currently takes up this many KB:"
+    du -s $WXDIR
+    echo "-----------------------------------------------------"
+    echo " 1) "$PDFMANUALSOK"Remove PDF manuals"
+    echo " 2) "$HTMLMANUALSOK"Remove HTML manuals"
+    echo " 3) "$WXTREEOK"Remove wxTree library"
+#    echo " 4) "$WXGRAPHOK"Remove wxGraph library"
+#    echo " 8) "$TEX2RTFOK"Remove Tex2RTF/HTML/WinHelp/wxHelp converter"
+    echo " 4) "$DIALOGEDOK"Remove Dialog Editor"
+    echo "------------------------------------------------------"
+    echo " 0) Quit."
+    echo
+    read compoption
+
+    if [ "$compoption" = "1" ]
+    then
+      rm -f -r $WXDIR/pdf
+    fi
+    if [ "$compoption" = "2" ]
+    then
+      rm -f -r $WXDIR/html
+    fi
+    if [ "$compoption" = "3" ]
+    then
+      COMPONENT=$WXDIR/utils/wxtree
+      remove_component
+    fi
+    if [ "$compoption" = "4" ]
+    then
+      COMPONENT=$WXDIR/utils/dialoged
+      remove_component
+    fi
+  done
+}
+
+clean_component()
+{
+  if [ -d $COMPONENT ]
+  then
+    cd $COMPONENT
+    make -f makefile.unx clean$GUISUFFIX
+    cd $CURRENTDIR
+  fi
+}
+
+clean_samples()
+{
+  cd $WXDIR/samples
+  make -f makefile.unx clean$GUISUFFIX
+  cd $CURRENTDIR
+}
+
+#         -f $WXDIR/samples/pressup/pressup$GUISUFFIX -o \
+#         -f $WXDIR/samples/bombs/bombs$GUISUFFIX -o \
+#         -f $WXDIR/samples/fractal/fractal$GUISUFFIX -o \
+#         -f $WXDIR/samples/animate/anim$GUISUFFIX -o \
+#         -f $WXDIR/samples/ipc/server$GUISUFFIX -o \
+
+clean_components()
+{
+  compoption='none'
+  olddu=""
+  while [ "$compoption" != "0" ]
+  do
+    if [ -f $WXDIR/samples/controls/controls$GUISUFFIX -o \
+         -f $WXDIR/samples/forty/forty$GUISUFFIX -o \
+         -f $WXDIR/samples/splitter/splitter$GUISUFFIX -o \
+         -f $WXDIR/samples/docview/docview$GUISUFFIX -o \
+         -f $WXDIR/samples/wxpoem/wxpoem$GUISUFFIX -o \
+         -f $WXDIR/samples/printing/printing$GUISUFFIX -o \
+         -f $WXDIR/samples/resource/resource$GUISUFFIX -o \
+         -f $WXDIR/samples/layout/layout$GUISUFFIX -o \
+         -f $WXDIR/samples/toolbar/test$GUISUFFIX -o \
+         -f $WXDIR/samples/dialogs/dialogs$GUISUFFIX -o \
+         -f $WXDIR/samples/types/types$GUISUFFIX -o \
+         -f $WXDIR/samples/mdi/mdi$GUISUFFIX -o \
+         -f $WXDIR/samples/minimal/minimal$GUISUFFIX ]
+    then
+      SAMPLESOK="*"
+    else
+      SAMPLESOK=" "
+    fi
+
+    if [ -f $WXDIR/lib/libwx$GUISUFFIX".a" ]
+    then
+      WXOK="*"
+    else
+      WXOK=" "
+    fi
+
+    if [ -f $WXDIR/utils/tex2rtf/src/objects$GUISUFFIX/tex2rtf.o ]
+    then
+      TEX2RTFOK="*"
+    else
+      TEX2RTFOK=" "
+    fi
+
+    if [ -f $WXDIR/utils/dialoged/src/dialoged$GUISUFFIX ]
+    then
+      DIALOGEDOK="*"
+    else
+      DIALOGEDOK=" "
+    fi
+
+    echo
+    echo "Cleanup a wxWindows component (* means objects/binaries exist, - means unknown)"
+    echo "-----------------------------------------------------"
+    echo "wxWindows currently takes up this many KB:"
+    newdu=`du -s $WXDIR`
+    if [ "$olddu" = "" ]
+    then
+      theline=$newdu
+    else
+      theline=$newdu" (previous usage was "$olddu")"
+    fi
+    echo $theline
+    olddu=$newdu
+    echo "-----------------------------------------------------"
+    echo " 1) "$WXOK"Clean wxWindows library"
+    echo " 2) "$SAMPLESOK"Clean all wxWindows samples"
+    echo " 3) -Clean all utilities"
+    echo " 4) "$TEX2RTFOK"Clean Tex2RTF/HTML/WinHelp/wxHelp converter"
+    echo " 5) "$DIALOGEDOK"Clean Dialoged Editor tool"
+    echo "------------------------------------------------------"
+    echo " 0) Quit."
+    echo
+    read compoption
+
+    if [ "$compoption" = "1" ]
+    then
+      COMPONENT=$WXDIR/src/x
+      clean_component
+    fi
+    if [ "$compoption" = "2" ]
+    then
+      cd $WXDIR/samples
+      make -f makefile.unx clean$GUISUFFIX
+      cd $CURRENTDIR
+    fi
+    if [ "$compoption" = "3" ]
+    then
+      cd $WXDIR/utils
+      make -f makefile.unx clean$GUISUFFIX
+      cd $CURRENTDIR
+    fi
+    if [ "$compoption" = "4" ]
+    then
+      COMPONENT=$WXDIR/utils/tex2rtf/src
+      clean_component
+    fi
+    if [ "$compoption" = "5" ]
+    then
+      COMPONENT=$WXDIR/utils/dialoged/src
+      clean_component
+    fi
+  done
+}
+
+# Select a target
+select_target()
+{
+  compoption='none'
+  selectdone=0
+  while [ "$selectdone" = "0" ]
+  do
+    echo
+    echo "Select a target"
+    echo "---------------"
+    echo " 1) Motif"
+    echo
+    read compoption
+
+    if [ "$compoption" = "1" ]
+    then
+      selectdone=1
+      GUITARGET=motif
+      GUISUFFIX=_motif
+    fi
+  done
+}
+
+# Select a target
+select_dir()
+{
+  echo ""
+  echo "Select wxWindows directory"
+  echo "--------------------------"
+  echo ""
+  echo "Current directory: " $WXDIR
+  echo ""
+  echo "New directory: (return for existing value):"
+  read inp
+  if [ "$inp" != "" ]
+  then
+    WXDIR=$inp
+  fi
+}
+
+### View manual ###
+
+view_manual()
+{
+  if [ ! -d $WXDIR ]
+  then
+    echo "Sorry -- you must unarchive the distribution before you can"
+    echo "look at the manual."
+  else
+    manoption='none'
+    while [ "$manoption" != "0" ]
+    do
+      echo
+      echo "View wxWindows documentation"
+      echo "----------------------------"
+      echo "1) The installation instructions, using "$MYPAGER
+      echo "2) readme.txt, using "$MYPAGER
+      echo "3) The change log, using "$MYPAGER
+      echo "4) The HTML manual hierarchy, using $HTMLVIEWER"
+      echo "--------------------"
+      echo "0) Quit."
+      echo
+      read manoption
+
+      if [ "$manoption" = "1" ]
+      then
+        if [ -f $WXDIR"/docs/motif/install.txt" ]
+        then
+          $MYPAGER $WXDIR/docs/motif/install.txt
+        else
+          if [ -f "install.txt" ]
+          then
+            $MYPAGER "install.txt"
+          else
+            if [ -f $WXDIR/"install.txt" ]
+            then
+              $MYPAGER $WXDIR/"install.txt"
+            else
+              echo
+              echo "Sorry, cannot find install.txt. Perhaps you did not ftp"
+              echo "it along with the archives, and/or you haven't unarchived"
+              echo "the sources yet. Please press return to continue."
+              echo
+              read ans
+            fi
+          fi
+        fi
+      fi
+      if [ "$manoption" = "2" ]
+      then
+        if [ -f $WXDIR"/docs/motif/readme.txt" ]
+        then
+          $MYPAGER $WXDIR/docs/motif/readme.txt
+        else
+          if [ -f "readme.txt" ]
+          then
+            $MYPAGER "readme.txt"
+          else
+            if [ -f $WXDIR/"readme.txt" ]
+            then
+              $MYPAGER $WXDIR/"readme.txt"
+            else
+              echo
+              echo "Sorry, cannot find readme.txt. Perhaps you did not ftp"
+              echo "it along with the archives, and/or you haven't unarchived"
+              echo "the sources yet. Please press return to continue."
+              echo
+              read ans
+            fi
+          fi
+        fi
+      fi
+      if [ "$manoption" = "3" ]
+      then
+        if [ -f $WXDIR"/docs/motif/changes.txt" ]
+        then
+          $MYPAGER $WXDIR/docs/motif/changes.txt
+        else
+          if [ -f "changes.txt" ]
+          then
+            $MYPAGER "changes.txt"
+          else
+            if [ -f $WXDIR/"changes.txt" ]
+            then
+              $MYPAGER $WXDIR/"changes.txt"
+            else
+              echo
+              echo "Sorry, cannot find changes.txt. Perhaps you did not ftp"
+              echo "it along with the archives, and/or you haven't unarchived"
+              echo "the sources yet. Please press return to continue."
+              echo
+              read ans
+            fi
+          fi
+        fi
+      fi
+      if [ "$manoption" = "4" ]
+      then
+          $HTMLVIEWER $WXDIR"/docs/html/index.htm"
+      fi
+    done
+  fi
+}
+
+preliminary_notes()
+{
+  selectdone1=0
+  ans="n"
+  while [ "$ans" != "y" ]
+  do
+#    clear
+    echo
+    echo The GUI target is GUITARGET=$GUITARGET "."
+    echo
+    echo The directory to install to is WXDIR=$WXDIR
+    echo
+    arg=$PLATFORM
+    platform_description
+    echo The selected platform is $arg
+    echo
+    echo "Please check these settings carefully."
+    echo "Are they correct for your system? (y/n)"
+    echo
+
+    read ans
+
+    if [ "$ans" != "y" ]
+    then
+      select_target
+      select_dir
+      select_platform
+    fi
+  done
+
+    clear
+    echo ""
+    echo "Configuring wxWindows"
+    echo "---------------------"
+    echo ""
+    echo "Most makefile settings to do with compilers, platforms and"
+    echo "directories are kept in "$WXDIR"/src/make.env."
+    echo ""
+    echo "If you get a compiler error or warning, please strongly"
+    echo "suspect this file, and if necessary edit it from the first"
+    echo "option on the Main Menu."
+    echo ""
+    echo "Some suggestions for settings are contained in make.env,"
+    echo "and further information is in "$WXDIR"/install/install.txt."
+    echo
+    echo wxWindows itself can be tailored to remove certain features
+    echo "(such as PostScript support), or select library preferences, by"
+    echo "editing the file "$WXDIR"/include/wx/motif/setup.h."
+    echo
+    echo The setup.h defaults are probably ok for now though.
+    echo
+    echo "Please press return to continue."
+    read ans
+    echo
+    clear
+    echo ""
+    echo "Configuring wxWindows (cont'd)"
+    echo "--------------------- --------"
+    echo ""
+    echo "By default (at least for GNU compiler use), debugging information"
+    echo "is included. This will make the libraries and binaries"
+    echo "a lot bigger than if you left debugging information out."
+    echo
+    echo "So you might want to set DEBUG to nothing in make.env"
+    echo "to disable debugging information, at least for a first look at wxWindows."
+    echo
+    echo "Please press return to continue."
+    read ans
+    echo
+    clear
+    echo
+    echo "You may wish to choose 'View documentation' now..."
+}
+
+  ############# MAIN BIT OF THE SCRIPT #################
+  clear
+  echo
+  echo "-------------------------------------------"
+  echo "Welcome to the wxWindows 2.0 installation."
+  echo "-------------------------------------------"
+  echo
+  echo "This script will install from the archives:"
+  echo ""
+  echo "  "$ARCHIVE"gen.zip, "$ARCHIVE"mot.zip"
+  echo ""
+  echo "and, if present, HTML and PDF archives."
+  echo ""
+  echo "This installation is best done from a new directory where"
+  echo "wxWindows will be installed, and which contains the .zip files."
+  echo "For example, ~/wx."
+
+  select_dir
+
+  if [ ! -f $WXDIR/src/make.env ]
+  then
+    install_from_archive
+  fi
+
+  preliminary_notes
+
+  useroption='none'
+  while [ "$useroption" != "0" ]
+  do
+    echo
+    echo "wxWindows Installation Main Menu"
+    echo "--------------------------------"
+    echo
+    echo " 1) Install from archive."
+    echo " 2) Make main wxWindows library."
+    echo " 3) Make a peripheral component."
+    echo " 4) Make a sample."
+    echo " 5) Make absolutely everything."
+    echo " 6) Run a sample."
+    echo " 7) View documentation."
+    echo " 8) Clean objects/binaries, saving space."
+    echo " 9) Remove wxWindows components from disk."
+    echo "10) Edit make.env."
+    echo "11) Change the selected target platform"
+    echo "-----------------------------------"
+    echo " 0) Exit from installation."
+    echo
+    read useroption
+
+    if [ "$useroption" = "1" ]
+    then
+      install_from_archive
+    fi
+    if [ "$useroption" = "2" ]
+    then
+      make_main_library
+    fi
+    if [ "$useroption" = "3" ]
+    then
+      make_peripheral_components
+    fi
+    if [ "$useroption" = "4" ]
+    then
+      make_samples
+    fi
+    if [ "$useroption" = "5" ]
+    then
+      make_all
+    fi
+    if [ "$useroption" = "6" ]
+    then
+      run_samples
+    fi
+    if [ "$useroption" = "7" ]
+    then
+      view_manual
+    fi
+    if [ "$useroption" = "8" ]
+    then
+      clean_components
+    fi
+    if [ "$useroption" = "9" ]
+    then
+      remove_components
+    fi
+    if [ "$useroption" = "10" ]
+    then
+      edit_make_env
+    fi
+    if [ "$useroption" = "11" ]
+    then
+      select_platform
+    fi
+  done
+  clear
+  echo ""
+  echo "Goodbye! I hope your wxWindows installation was successful."
+  echo ""
+  echo "You can subscribe to the mailing list wxwin-users"
+  echo "for further assistance from experienced users."
+  echo ""
+  echo "Information is also available via the World Wide Web at:"
+  echo ""
+  echo "http://web.ukonline.co.uk/julian.smart/wxwin"
+  echo ""
+  echo "If all else fails, please contact me, Julian Smart, at:"
+  echo ""
+  echo "julian.smart@ukonline.co.uk"
+  echo ""
+  echo "If you have any suggestions, bug reports or patches,"
+  echo "please email me at the above address."
+  echo ""
+
+

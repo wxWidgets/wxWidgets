@@ -12,6 +12,7 @@ src/makeb32.env
 src/makebcc.env
 src/makemsw.env
 src/makewat.env
+src/makeprog.wat
 src/makesc.env
 src/makeg95.env
 src/makem95.env

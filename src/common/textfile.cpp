@@ -136,6 +136,10 @@ wxTextFile::Type wxTextFile::GuessType() const
                                                 : n##t1 > n##t2 ? Type_##t1 \
                                                                 : Type_##t2
 
+// Watcom C++ doesn't seem to be able to handle the macro
+#if defined(__WATCOMC__)
+    return typeDefault;
+#else
     if ( nDos > nUnix )
       return GREATER_OF(Dos, Mac);
     else if ( nDos < nUnix )
@@ -144,6 +148,7 @@ wxTextFile::Type wxTextFile::GuessType() const
       // nDos == nUnix
       return nMac > nDos ? Type_Mac : typeDefault;
     }
+#endif
 
     #undef    GREATER_OF
   }

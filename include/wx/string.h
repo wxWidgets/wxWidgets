@@ -87,6 +87,8 @@ inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
   return _stricmp(psz1, psz2);
 #elif defined(__BORLANDC__)
   return stricmp(psz1, psz2);
+#elif defined(__WATCOMC__)
+  return stricmp(psz1, psz2);
 #elif   defined(__UNIX__) || defined(__GNUWIN32__)
   return strcasecmp(psz1, psz2);
 #else
