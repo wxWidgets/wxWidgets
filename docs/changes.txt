@@ -187,6 +187,7 @@ versions, please update your code to not use them.
 - The wxHIDE_READONLY flag for wxFileDialog was not implemented
   and has now been removed
 - wxTaskBarIcon::OnXXX() virtual methods: use events instead
+- obsolete and not used wxUSE_GENERIC_DIALOGS_IN_MSW has been removed
 
 
 OTHER CHANGES

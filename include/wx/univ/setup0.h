@@ -702,15 +702,6 @@
 // common dialogs
 // ----------------------------------------------------------------------------
 
-// Define 1 to use generic dialogs in Windows, even though they duplicate
-// native common dialog (e.g. wxColourDialog). This is mainly useful for
-// testing.
-//
-// Default is 0
-//
-// Recommended setting: 0
-#define wxUSE_GENERIC_DIALOGS_IN_MSW 0
-
 // On rare occasions (e.g. using DJGPP) may want to omit common dialogs (e.g.
 // file selector, printer dialog). Switching this off also switches off the
 // printing architecture and interactive wxPrinterDC.

@@ -3217,28 +3217,6 @@ wxColourDialog and wxDirDialog.</description>
             <notes></notes>
             <setting type="bool-check">
                 <active>1</active>
-                <enabled>0</enabled>
-                <name>wxUSE_GENERIC_DIALOGS_IN_MSW</name>
-                <description>&lt;B&gt;Generic dialog support in Windows&lt;/B&gt;&lt;P&gt;
-
-Define 1 to use generic dialogs in Windows, even though they duplicate native common dialog (e.g. wxColourDialog). This is mainly useful for testing.&lt;P&gt;
-
-Default: 0. Recommended setting: 0
-</description>
-                <default-state>1</default-state>
-                <requires></requires>
-                <precludes></precludes>
-                <enabled-if></enabled-if>
-                <enabled-if-not></enabled-if-not>
-                <indeterminate-if></indeterminate-if>
-                <exclusivity></exclusivity>
-                <context></context>
-                <configure-command></configure-command>
-                <help-topic>Common dialogs overview</help-topic>
-                <notes></notes>
-            </setting>
-            <setting type="bool-check">
-                <active>1</active>
                 <enabled>1</enabled>
                 <name>wxUSE_COMMON_DIALOGS</name>
                 <description>&lt;B&gt;Common dialogs&lt;/B&gt;&lt;P&gt;
