@@ -330,7 +330,8 @@ inline void* wxCheckCast(void *ptr)
  ((className *)wxCheckCast(wxDynamicCast(obj, className)))
 
 #else  // !__WXDEBUG__
-#define wxStaticCast(obj, className) wx_static_cast(className *, obj)
+#define wxStaticCast(obj, className) \
+    wx_const_cast(className *, wx_static_cast(const className *, obj))
 
 #endif  // __WXDEBUG__
 
