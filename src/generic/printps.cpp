@@ -227,7 +227,7 @@ bool wxPostScriptPrintPreview::Print(bool interactive)
 
 void wxPostScriptPrintPreview::DetermineScaling(void)
 {
-    char *paperType = wxThePrintSetupData->GetPaperName();
+    const char *paperType = wxThePrintSetupData->GetPaperName();
     if (!paperType)
       paperType = "A4 210 x 297 mm";
 
