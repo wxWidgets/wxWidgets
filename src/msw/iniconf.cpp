@@ -304,6 +304,7 @@ bool wxIniConfig::Read(const wxString& szKey, wxString *pstr) const
     return FALSE;
   }
   else {
+  	*pstr = szBuf ;
     return TRUE;
   }
 }
@@ -332,6 +333,7 @@ bool wxIniConfig::Read(const wxString& szKey, wxString *pstr,
     return FALSE;
   }
   else {
+  	*pstr = szBuf ;
     return TRUE;
   }
 }
