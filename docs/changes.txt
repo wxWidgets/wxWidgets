@@ -81,6 +81,8 @@ All GUI ports:
   default extension for the template
 - Speeded up wxImage::Scale using fixed point arithmetic (Wade Brainerd)
 - Added BLOB support to wxDB (John Skiff)
+- Wizard now validates as well as doing data transfer when
+  pressing Back or Next
 
 Unix:
 
