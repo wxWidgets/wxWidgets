@@ -108,7 +108,7 @@ private:
     int getcode(int bits, int abfin);
     int dgif(GIFImage *img, int interl, int bits);
 
-protected:
+public:
     // get data of current frame
     int GetFrameIndex() const;
     unsigned char* GetData() const;

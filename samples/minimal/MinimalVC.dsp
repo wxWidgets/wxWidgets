@@ -143,8 +143,8 @@ LINK32=link.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "MinimalVC___Win32_UnivRelease"
-# PROP BASE Intermediate_Dir "MinimalVC___Win32_UnivRelease"
+# PROP BASE Output_Dir "UnivRelease"
+# PROP BASE Intermediate_Dir "UnivRelease"
 # PROP BASE Ignore_Export_Lib 0
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
