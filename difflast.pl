@@ -31,7 +31,7 @@ sub get_last_rev($)
     my $file = $_[0];
 
     my $basename = $file;
-    $basename =~ s@^.*/([^/]\+)@$1@;
+    $basename =~ s@^.*/@@;
 
     # first get the current version: try the Id RCS tag in the file itself
     # first, use "cvs status" if this fails
@@ -64,7 +64,7 @@ sub process_file($)
     if ( !$revlast ) {
         warn "Failed to get the last revision for $file, skipping.\n"
     }
-    elsif ( $revlast =~ "\.0" ) {
+    elsif ( $revlast =~ '\.0' ) {
         warn "No previous revision of the file $file.\n"
     }
     else {
