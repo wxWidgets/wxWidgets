@@ -144,21 +144,37 @@
 // Default is 1 for everything.
 //
 // Recommended setting: 1 (library might fail to compile for some combinations
-// of disabled controls) 
-#define wxUSE_COMBOBOX     1
-#define wxUSE_CHOICE       1
-#define wxUSE_RADIOBTN     1
-#define wxUSE_RADIOBOX     1
-#define wxUSE_SCROLLBAR    1
+// of disabled controls)
+#define wxUSE_CARET        1
 #define wxUSE_CHECKBOX     1
+#define wxUSE_CHECKLISTBOX 1
+#define wxUSE_CHOICE       1
+#define wxUSE_COMBOBOX     1
+#define wxUSE_GAUGE        1
 #define wxUSE_LISTBOX      1
+#define wxUSE_RADIOBOX     1
+#define wxUSE_RADIOBTN     1
+#define wxUSE_SCROLLBAR    1
+#define wxUSE_SLIDER       1
 #define wxUSE_SPINBTN      1
 #define wxUSE_SPINCTRL     1
 #define wxUSE_STATLINE     1
-#define wxUSE_CHECKLISTBOX 1
-#define wxUSE_CHOICE       1
-#define wxUSE_CARET        1
-#define wxUSE_SLIDER       1
+
+// this setting is obsolete, value is ignored
+#define wxUSE_BUTTONBAR    1
+
+// wxGrid class comes in two flavours: the original (pre wxWin 2.2) one and
+// the new, much imporved and enhanced version. The new version is backwards
+// compatible with the old one and should be used whenever possible, i.e. if
+// you set wxUSE_GRID to 1, set wxUSE_NEW_GRID to 1 too.
+//
+// Default is 1 for both options.
+//
+// Recommended setting: 1 for wxUSE_NEW_GRID, 0 if you have an old code using
+// wxGrid and 100% backwards compatible (with all old wxGrid quirks) is
+// essential.
+#define wxUSE_GRID         1
+#define wxUSE_NEW_GRID     1
 
 // ----------------------------------------------------------------------------
 // Metafiles support
@@ -180,6 +196,26 @@
 #define wxUSE_METAFILE              1
 #define wxUSE_ENH_METAFILE          1
 #define wxUSE_WIN_METAFILES_ALWAYS  0
+
+// ----------------------------------------------------------------------------
+// Big GUI components
+// ----------------------------------------------------------------------------
+
+// wxHTML sublibrary allows to display HTML in wxWindow programs and much,
+// much more.
+//
+// Default is 1.
+//
+// Recommended setting: 1 (wxHTML is great!), set to 0 if you want compile a
+// smaller library.
+#define wxUSE_HTML          1
+
+// wxPlot is a class to display functions plots in wxWindow.
+//
+// Default is 1.
+//
+// Recommended setting: 1
+#define wxUSE_PLOT           1
 
 // ----------------------------------------------------------------------------
 // Postscript support settings
@@ -208,16 +244,6 @@
 #define wxUSE_DRAG_AND_DROP 1
                                 // 0 for no drag and drop
 
-#define wxUSE_BUTTONBAR    1
-                                // Define 1 to use buttonbar classes (enhanced toolbar
-                                // for MS Windows)
-#define wxUSE_GAUGE        1
-                                // Define 1 to use Microsoft's gauge (Windows)
-                                // or Bull's gauge (Motif) library (both in contrib).
-#define wxUSE_NEW_GRID     1
-                                // Define 1 to use the new wxGrid class
-                                // (still under development, define 0 to
-                                //  use existing wxGrid class)
 #define wxUSE_XPM_IN_MSW   1
                                 // Define 1 to support the XPM package in wxBitmap.
 #define wxUSE_IMAGE_LOADING_IN_MSW        1
@@ -333,8 +359,6 @@
                                 // wxWindow::SetToolTip() method
 #define wxUSE_SOCKETS       1
                                 // Set to 1 to use socket classes
-#define wxUSE_HTML          1
-                                // Set to 1 to use wxHTML sub-library
 #define wxUSE_FS_ZIP        1
 #define wxUSE_FS_INET       1   // Set to 1 to enable virtual file systems
 
