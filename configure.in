@@ -3949,6 +3949,10 @@ fi
 
 if test "$wxUSE_UNICODE" = "yes" ; then
   AC_DEFINE(wxUSE_UNICODE)
+  
+  if test "$wxUSE_MSW" != 1; then
+      wxUSE_UNICODE_MSLU=no
+  fi
 
   if test "$wxUSE_MSW" = 1 -a "$wxUSE_UNICODE_MSLU" = "yes"; then
         AC_CHECK_LIB(unicows,main,
