@@ -31,7 +31,9 @@ IMPLEMENT_ABSTRACT_CLASS(wxSizerItem, wxObject);
 IMPLEMENT_ABSTRACT_CLASS(wxSizer, wxObject);
 IMPLEMENT_ABSTRACT_CLASS(wxBoxSizer, wxSizer);
 IMPLEMENT_ABSTRACT_CLASS(wxStaticBoxSizer, wxBoxSizer);
+#if wxUSE_NOTEBOOK
 IMPLEMENT_ABSTRACT_CLASS(wxNotebookSizer, wxSizer);
+#endif
 
 //---------------------------------------------------------------------------
 // wxSizerItem
@@ -563,6 +565,8 @@ wxSize wxStaticBoxSizer::CalcMin()
 // wxNotebookSizer
 //---------------------------------------------------------------------------
 
+#if wxUSE_NOTEBOOK
+
 wxNotebookSizer::wxNotebookSizer( wxNotebook *nb )
 {
     wxASSERT_MSG( nb, wxT("wxNotebookSizer needs a notebook") );
@@ -619,4 +623,4 @@ wxSize wxNotebookSizer::CalcMin()
     return wxSize( borderX + maxX, borderY + maxY );
 }
 
-
+#endif // wxUSE_NOTEBOOK
