@@ -4602,8 +4602,8 @@ void wxGenericListCtrl::CalculateAndSetHeaderHeight()
         m_headerWin->GetTextExtent(wxT("Hg"), &w, &h, &d);
         h += d + 2 * HEADER_OFFSET_Y + EXTRA_HEIGHT;
 
-        // only update if there is not enough space
-        if ( h > m_headerHeight )
+        // only update if changed
+        if ( h != m_headerHeight )
         {
             m_headerHeight = h;
 
