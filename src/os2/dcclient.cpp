@@ -300,11 +300,13 @@ wxPaintDC::wxPaintDC(
                                     );
 
             ::WinFillRect(hPS, &g_paintStruct,  m_pCanvas->GetBackgroundColour().GetPixel());
+            ::WinQueryWindowRect( GetWinHwnd(m_pCanvas)
+                                 ,&m_vRclPaint
+                                );
         }
 
         m_bIsPaintTime   = TRUE;
         m_hDC = (WXHDC) -1; // to satisfy those anonizmous efforts
-        m_vRclPaint = g_paintStruct;
         ms_cache.Add(new wxPaintDCInfo(m_pCanvas, this));
     }
     SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
