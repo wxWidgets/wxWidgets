@@ -836,7 +836,7 @@ wxMenu* wxMenuBar::Replace(
     m_titles[nPos] = Title;
     if (IsAttached())
     {
-        ::WinSendMsg((HWND)m_hMenu, MM_DELETEITEM, MPFROM2SHORT(nId, TRUE), (MPARAM)0);
+        ::WinSendMsg((HWND)m_hMenu, MM_REMOVEITEM, MPFROM2SHORT(nId, TRUE), (MPARAM)0);
         ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)Title.c_str());
 
 #if wxUSE_ACCEL
@@ -939,7 +939,7 @@ wxMenu* wxMenuBar::Remove(
     }
     if (IsAttached())
     {
-        ::WinSendMsg((HWND)GetHmenu(), MM_DELETEITEM, MPFROM2SHORT(nId, TRUE), (MPARAM)0);
+        ::WinSendMsg((HWND)GetHmenu(), MM_REMOVEITEM, MPFROM2SHORT(nId, TRUE), (MPARAM)0);
         pMenu->Detach();
 
 #if wxUSE_ACCEL
