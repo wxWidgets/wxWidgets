@@ -92,9 +92,9 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     return TRUE;
 }
 
-void wxPopupWindow::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height) )
+void wxPopupWindow::DoMoveWindow(int x, int y, int width, int height )
 {
-    wxFAIL_MSG( wxT("DoMoveWindow called for wxPopupWindow") );
+    wxWindowX11::DoMoveWindow( x, y, width, height );
 }
 
 void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )

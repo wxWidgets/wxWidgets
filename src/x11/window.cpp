@@ -645,7 +645,7 @@ void wxWindowX11::DoGetClientSize(int *x, int *y) const
 
     if (window)
     {
-        XSync(wxGlobalDisplay(), False);
+        XSync(wxGlobalDisplay(), False);  // Is this really a good idea?
         XWindowAttributes attr;
         Status status = XGetWindowAttributes( wxGlobalDisplay(), window, &attr );
         wxASSERT(status);
@@ -660,72 +660,70 @@ void wxWindowX11::DoGetClientSize(int *x, int *y) const
 
 void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    if (!GetMainWindow())
-        return;
+    Window xwindow = (Window) GetMainWindow();
 
-    XWindowChanges windowChanges;
-    windowChanges.x = 0;
-    windowChanges.y = 0;
-    windowChanges.width = 0;
-    windowChanges.height = 0;
-    windowChanges.stack_mode = 0;
-    int valueMask = 0;
+    wxCHECK_RET( xwindow, wxT("invalid window") );
+
+    XWindowAttributes attr;
+    Status status = XGetWindowAttributes( wxGlobalDisplay(), xwindow, &attr );
+    wxCHECK_RET( status, wxT("invalid window attributes") );
+        
+    int new_x = attr.x;
+    int new_y = attr.y;
+    int new_w = attr.width;
+    int new_h = attr.height;
+            
 
     if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
-	int yy = 0;
+        int yy = 0;
         AdjustForParentClientOrigin( x, yy, sizeFlags);
-        windowChanges.x = x;
-        valueMask |= CWX;
+        new_x = x;
     }
     if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
-	int xx = 0;
+        int xx = 0;
         AdjustForParentClientOrigin( xx, y, sizeFlags);
-        windowChanges.y = y;
-        valueMask |= CWY;
+        new_y = y;
     }
-    if (width != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (width != -1)
     {
-        windowChanges.width = width /* - m_borderSize*2 */;
-	if (windowChanges.width == 0)
-	    windowChanges.width = 1;
-        valueMask |= CWWidth;
+        new_w = width;
+        if (new_w <= 0)
+            new_w = 20;
     }
-    if (height != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    if (height != -1)
     {
-        windowChanges.height = height /* -m_borderSize*2*/;
-	if (windowChanges.height == 0)
-	    windowChanges.height = 1;
-        valueMask |= CWHeight;
+        new_h = height;
+        if (new_h <= 0)
+            new_h = 20;
     }
-
-    XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
-        valueMask, & windowChanges);
-    XSync(wxGlobalDisplay(), False);
+    
+    DoMoveWindow( new_x, new_y, new_w, new_h );
 }
 
 void wxWindowX11::DoSetClientSize(int width, int height)
 {
-    if (!GetMainWindow())
-        return;
+    Window xwindow = (Window) GetMainWindow();
 
-    XWindowChanges windowChanges;
-    int valueMask = 0;
+    wxCHECK_RET( xwindow, wxT("invalid window") );
 
+    XWindowAttributes attr;
+    Status status = XGetWindowAttributes( wxGlobalDisplay(), xwindow, &attr );
+    wxCHECK_RET( status, wxT("invalid window attributes") );
+        
+    int new_x = attr.x;
+    int new_y = attr.y;
+    int new_w = attr.width;
+    int new_h = attr.height;
+            
     if (width != -1)
-    {
-        windowChanges.width = width ;
-        valueMask |= CWWidth;
-    }
+        new_w = width;
+        
     if (height != -1)
-    {
-        windowChanges.height = height ;
-        valueMask |= CWHeight;
-    }
-    XConfigureWindow(wxGlobalDisplay(), (Window) GetMainWindow(),
-        valueMask, & windowChanges);
-    XSync(wxGlobalDisplay(), False);
+        new_h = height;
+    
+    DoMoveWindow( new_x, new_y, new_w, new_h );
 }
 
 // For implementation purposes - sometimes decorations make the client area
@@ -780,7 +778,19 @@ void wxWindowX11::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW,
 
 void wxWindowX11::DoMoveWindow(int x, int y, int width, int height)
 {
-    DoSetSize(x, y, width, height);
+    Window xwindow = (Window) GetMainWindow();
+
+    wxCHECK_RET( xwindow, wxT("invalid window") );
+
+    XWindowChanges windowChanges;
+    windowChanges.x = x;
+    windowChanges.y = y;
+    windowChanges.width = width;
+    windowChanges.height = height;
+    windowChanges.stack_mode = 0;
+    int valueMask = CWX | CWY | CWWidth | CWHeight;
+
+    XConfigureWindow( wxGlobalDisplay(), xwindow, valueMask, &windowChanges );
 }
 
 // ---------------------------------------------------------------------------
