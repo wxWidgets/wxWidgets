@@ -723,7 +723,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     for ( size_t n = 0; n < numTries; n++ )
     {
         // 3 hex digits is enough for numTries == 1000 < 4096
-        pathTry = path + wxString::Format(_T("%.03x"), n);
+        pathTry = path + wxString::Format(_T("%.03x"), (unsigned int) n);
         if ( !wxFile::Exists(pathTry) )
         {
             break;
