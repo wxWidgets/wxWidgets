@@ -80,6 +80,11 @@ static bool inTable = FALSE;
 // This is defined in the Tex2Any library.
 extern char *BigBuffer;
 
+// DHS Two-column table dimensions.
+static int TwoColWidthA = -1;
+static int TwoColWidthB = -1;
+
+
 class HyperReference: public wxObject
 {
  public:
@@ -1193,8 +1198,12 @@ void HTMLOnMacro(int macroId, int no_args, bool start)
   {
     if ( start )
         TexOutput("\n<TABLE>\n");
-    else
+    else {
         TexOutput("\n</TABLE>\n");
+    // DHS 
+        TwoColWidthA = -1;
+        TwoColWidthB = -1;
+    }
     break;
   }
   case ltPAR:
@@ -2093,17 +2102,29 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
 */
     if (arg_no == 1)
     {
-        if ( start )
-            TexOutput("\n<TR><TD VALIGN=TOP>\n");
-        else
+      if ( start ) {
+        // DHS
+	if (TwoColWidthA > -1) {
+          char buf[100];
+          sprintf(buf,"\n<TR><TD VALIGN=TOP WIDTH=%d>\n",TwoColWidthA);
+          TexOutput(buf);
+        } else
+          TexOutput("\n<TR><TD VALIGN=TOP>\n");
+      }  else
             TexOutput("\n</TD>\n");
     }
     if (arg_no == 2)
     {
-        if ( start )
-            TexOutput("\n<TD VALIGN=TOP>\n");
-        else
-            TexOutput("\n</TD></TR>\n");
+      // DHS
+      if ( start ) {
+	if (TwoColWidthB > -1) {
+          char buf[100];
+          sprintf(buf,"\n<TD VALIGN=TOP WIDTH=%d>\n",TwoColWidthB);
+          TexOutput(buf);
+        } else 
+           TexOutput("\n<TD VALIGN=TOP>\n");
+      }  else
+           TexOutput("\n</TD></TR>\n");
     }
     return TRUE;
     break;
@@ -2155,6 +2176,30 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
     }
     else
       TexOutput("<HR><P>\n");
+    break;
+  }
+  // DHS
+  case ltTWOCOLWIDTHA:
+  {
+    if (start)
+    {
+      char *val = GetArgData();
+      float points = ParseUnitArgument(val);
+      TwoColWidthA = (int)((points * 100.0) / 72.0);
+    }
+    return FALSE;
+    break;
+  }
+  // DHS
+  case ltTWOCOLWIDTHB:
+  {
+    if (start)
+    {
+      char *val = GetArgData();
+      float points = ParseUnitArgument(val);
+      TwoColWidthB = (int)((points * 100.0) / 72.0);
+    }
+    return FALSE;
     break;
   }
   /*
