@@ -3530,8 +3530,8 @@ class NotebookSizerPtr(NotebookSizer):
         self.__class__ = NotebookSizer
 _controls_.NotebookSizer_swigregister(NotebookSizerPtr)
 
-NotebookSizer = wx._deprecated(NotebookSizer, "NotebookSizer is no longer needed.") 
-BookCtrlSizer = wx._deprecated(BookCtrlSizer, "BookCtrlSizer is no longer needed.") 
+NotebookSizer.__init__ = wx._deprecated(NotebookSizer.__init__, "NotebookSizer is no longer needed.") 
+BookCtrlSizer.__init__ = wx._deprecated(BookCtrlSizer.__init__, "BookCtrlSizer is no longer needed.") 
 #---------------------------------------------------------------------------
 
 TOOL_STYLE_BUTTON = _controls_.TOOL_STYLE_BUTTON
