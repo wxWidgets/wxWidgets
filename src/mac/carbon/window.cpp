@@ -2018,6 +2018,9 @@ void wxWindowMac::MacEnabledStateChanged()
 bool wxWindowMac::MacIsReallyShown()
 {
     // only under OSX the visibility of the TLW is taken into account
+    if ( m_isBeingDeleted )
+        return false ;
+        
 #if TARGET_API_MAC_OSX
     if ( m_peer && m_peer->Ok() )
         return m_peer->IsVisible();
@@ -2731,7 +2734,7 @@ wxRegion wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
     Rect r ;
     RgnHandle visRgn = NewRgn() ;
     RgnHandle tempRgn = NewRgn() ;
-    if ( m_peer->IsVisible())
+    if ( !m_isBeingDeleted && m_peer->IsVisible())
     {
         m_peer->GetRect( &r ) ;
         r.left -= MacGetLeftBorderSize() ;
