@@ -127,7 +127,7 @@ bool wxAppConsole::Initialize(int& argc, wxChar **argv)
     this->argc = argc;
     this->argv = argv;
 
-    if ( m_appName.empty() )
+    if ( m_appName.empty() && argv )
     {
         // the application name is, by default, the name of its executable file
 #if wxUSE_FILENAME
