@@ -3885,6 +3885,12 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     AC_LANG_RESTORE
 fi
 
+if test "$wxUSE_STACKWALKER" = "yes" -a "$USE_WIN32" != "1" -a "$USE_UNIX" != "1"; then 
+    AC_MSG_WARN([wxStackWalker is only available on Win32 and UNIX... disabled])
+    wxUSE_STACKWALKER=no
+fi
+
+
 dnl check for the function for temp files creation
 AC_CHECK_FUNCS(mkstemp mktemp, break)
 

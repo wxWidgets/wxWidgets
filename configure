@@ -31589,6 +31589,13 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 fi
 
+if test "$wxUSE_STACKWALKER" = "yes" -a "$USE_WIN32" != "1" -a "$USE_UNIX" != "1"; then
+    { echo "$as_me:$LINENO: WARNING: wxStackWalker is only available on Win32 and UNIX... disabled" >&5
+echo "$as_me: WARNING: wxStackWalker is only available on Win32 and UNIX... disabled" >&2;}
+    wxUSE_STACKWALKER=no
+fi
+
+
 
 
 for ac_func in mkstemp mktemp
