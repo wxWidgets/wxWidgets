@@ -60,7 +60,7 @@ public:
     int GetSelection() const;
 
     wxString GetString( int n ) const;
-    void SetLabel( const wxString& label );
+    void SetString( int n, const wxString& label );
 
     void Show( int item, bool show );
     void Enable( int item, bool enable );
@@ -76,11 +76,13 @@ public:
 #if WXWIN_COMPATIBILITY_2_2
     int Number() const { return GetCount(); }
     wxString GetLabel(int n) const { return GetString(n); }
-    void SetLabel( int item, const wxString& label );
+    void SetLabel( int item, const wxString& label )
+        { SetString(item, label); }
 #endif // WXWIN_COMPATIBILITY_2_2
 
     // we have to override those to avoid virtual function name hiding
     wxString GetLabel() const { return wxControl::GetLabel(); }
+    void SetLabel( const wxString& label );
     bool Show( bool show );
     bool Enable( bool enable );
 

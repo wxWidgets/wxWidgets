@@ -510,13 +510,6 @@ wxString wxRadioBox::GetString( int n ) const
     return wxString( label->label );
 }
 
-wxString wxRadioBox::GetLabel( int item ) const
-{
-    wxCHECK_MSG( m_widget != NULL, wxT(""), wxT("invalid radiobox") );
-
-    return GetString( item );
-}
-
 void wxRadioBox::SetLabel( const wxString& label )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid radiobox") );
