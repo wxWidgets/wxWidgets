@@ -575,6 +575,7 @@ else
   DEFAULT_wxUSE_LIBPNG=yes
   DEFAULT_wxUSE_LIBJPEG=yes
   DEFAULT_wxUSE_LIBTIFF=yes
+  DEFAULT_wxUSE_LIBMSPACK=yes
   DEFAULT_wxUSE_ODBC=no
   DEFAULT_wxUSE_OPENGL=no
 
@@ -768,6 +769,7 @@ WX_ARG_ENABLE(gtk2,        [  --enable-gtk2           use GTK+ 2.0 if available 
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
+WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
@@ -2199,6 +2201,25 @@ if test "$wxUSE_EXPAT" != "no"; then
     if test "$wxUSE_EXPAT" = "builtin" ; then
         dnl Expat needs this:
         AC_CONFIG_SUBDIRS([src/expat])
+    fi
+fi
+
+
+dnl ------------------------------------------------------------------------
+dnl Check for libmspack
+dnl ------------------------------------------------------------------------
+
+if test "$wxUSE_LIBMSPACK" != "no"; then
+    
+    AC_CHECK_HEADER([mspack.h], [found_mspack_h=1])
+    if test "x$found_mspack_h" = "x1"; then
+        AC_CHECK_LIB(mspack, mspack_create_chm_decompressor,
+                     MSPACK_LINK=" -lmspack")
+    fi
+    if test "x$MSPACK_LINK" = "x" ; then
+        wxUSE_LIBMSPACK=no
+    else
+        AC_DEFINE(wxUSE_LIBMSPACK)
     fi
 fi
 
@@ -5662,6 +5683,7 @@ CXXFLAGS=`echo $CODE_GEN_FLAGS $CODE_GEN_FLAGS_CXX $EXTRA_CFLAGS $CXXFLAGS $CXXW
 LIBS=`echo $LIBS | sed 's/ \+/ /g'`
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
+EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_ODBC="$ODBC_LINK"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK | sed 's/ \+/ /g'`
@@ -5752,6 +5774,7 @@ AC_SUBST(MONOLITHIC)
 AC_SUBST(LIBS)
 AC_SUBST(EXTRALIBS)
 AC_SUBST(EXTRALIBS_XML)
+AC_SUBST(EXTRALIBS_HTML)
 AC_SUBST(EXTRALIBS_ODBC)
 AC_SUBST(EXTRALIBS_GUI)
 AC_SUBST(EXTRALIBS_OPENGL)
@@ -6046,6 +6069,7 @@ echo "                                       tiff               ${wxUSE_LIBTIFF-
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       odbc               ${wxUSE_ODBC}"
 echo "                                       expat              ${wxUSE_EXPAT}"
+echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 
 echo ""
 

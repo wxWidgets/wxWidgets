@@ -99,6 +99,11 @@ wxGTK:
 - fix for crash when using user-dashed lines (Chris Borgolte)
 - fixed wxChoice::Delete() in presence of client data
 
+wxHTML:
+
+- wxHtmlHelpController now supports compressed MS HTML Help files (*.chm)
+  on Unix (Markus Sinner)
+
 
 2.5.0
 -----

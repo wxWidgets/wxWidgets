@@ -1389,22 +1389,29 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
 
         case wxID_HTML_OPENFILE :
             {
+                wxString filemask = wxString(
+                    _("HTML files (*.html;*.htm)|*.html;*.htm|")) +
+                    _("Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|") +
+                    _("HTML Help Project (*.hhp)|*.hhp|") +
+#if wxUSE_LIBMSPACK
+                    _("Compressed HTML Help file (*.chm)|*.chm|") +
+#endif
+                    _("All files (*.*)|*");
                 wxString s = wxFileSelector(_("Open HTML document"),
                                             wxEmptyString,
                                             wxEmptyString,
                                             wxEmptyString,
-                                            _(
-"HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|\
-Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|\
-HTML Help Project (*.hhp)|*.hhp|\
-All files (*.*)|*"
-                                            ),
+                                            filemask,
                                             wxOPEN | wxFILE_MUST_EXIST,
                                             this);
                 if (!s.IsEmpty())
                 {
                     wxString ext = s.Right(4).Lower();
-                    if (ext == _T(".zip") || ext == _T(".htb") || ext == _T(".hhp"))
+                    if (ext == _T(".zip") || ext == _T(".htb") ||
+#if wxUSE_LIBMSPACK
+                        ext == _T(".chm") ||
+#endif
+                        ext == _T(".hhp"))
                     {
                         wxBusyCursor bcur;
                         m_Data->AddBook(s);

@@ -38,6 +38,12 @@
 #if wxUSE_HELP
     #include "wx/tipwin.h"
 #endif
+    
+
+#if wxUSE_LIBMSPACK
+#include "wx/html/forcelnk.h"
+FORCE_LINK(wxhtml_chm_support)
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpController, wxHelpControllerBase)
 
@@ -187,10 +193,15 @@ bool wxHtmlHelpController::Initialize(const wxString& file)
         {
             actualFilename = dir + filename + wxString(wxT(".hhp"));
             if (!wxFileExists(actualFilename))
-                return FALSE;
+            {
+#if wxUSE_LIBMSPACK
+                actualFilename = dir + filename + wxString(wxT(".chm"));
+                if (!wxFileExists(actualFilename))
+#endif
+                    return false;
+            }
         }
     }
-
     return AddBook(wxFileName(actualFilename));
 }
 

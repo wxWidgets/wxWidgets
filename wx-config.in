@@ -64,6 +64,7 @@ CORE_GUI_LIBS="@CORE_GUI_LIBS@"
 ldlibs_base="@WXCONFIG_EXTRALIBS@"
 ldlibs_core="@EXTRALIBS_GUI@"
 ldlibs_xml="@EXTRALIBS_XML@"
+ldlibs_html="@EXTRALIBS_HTML@"
 ldlibs_odbc="@EXTRALIBS_ODBC@"
 
 ldflags_gl="@LDFLAGS_GL@"

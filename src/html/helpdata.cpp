@@ -570,14 +570,24 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
 
 bool wxHtmlHelpData::AddBook(const wxString& book)
 {
-    if (book.Right(4).Lower() == wxT(".zip") ||
-        book.Right(4).Lower() == wxT(".htb") /*html book*/)
+    wxString extension(book.Right(4).Lower());
+    if (extension == wxT(".zip") ||
+#if wxUSE_LIBMSPACK
+        extension == wxT(".chm") /*compressed html help book*/ ||
+#endif
+        extension == wxT(".htb") /*html book*/)
     {
         wxFileSystem fsys;
         wxString s;
         bool rt = FALSE;
 
-        s = fsys.FindFirst(book + wxT("#zip:") + wxT("*.hhp"), wxFILE);
+#if wxUSE_LIBMSPACK
+        if (extension == wxT(".chm"))
+            s = fsys.FindFirst(book + wxT("#chm:*.hhp"), wxFILE);
+        else
+#endif
+            s = fsys.FindFirst(book + wxT("#zip:*.hhp"), wxFILE);
+
         while (!s.IsEmpty())
         {
             if (AddBook(s)) rt = TRUE;
