@@ -376,7 +376,8 @@ wxCursor::wxCursor(int cursor_type)
     case wxCURSOR_QUESTION_ARROW:
     {
 //      refData->m_hCursor = (WXHCURSOR) LoadImage(wxGetInstance(), wxT("wxCURSOR_QARROW"), IMAGE_CURSOR, 16, 16, LR_MONOCHROME);
-      refData->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_QARROW"));
+//      refData->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_QARROW"));
+      refData->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_HELP);
       break;
     }
     case wxCURSOR_BLANK:
