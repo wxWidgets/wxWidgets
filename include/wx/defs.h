@@ -810,6 +810,7 @@ enum wxStretch
 // and Win32 and is silently ignored under all other platforms
 #define wxTE_RICH           0x0080
 #define wxTE_NO_VSCROLL     0x0100
+#define wxTE_AUTO_SCROLL    0x0200
 
 /*
  * wxComboBox style flags
