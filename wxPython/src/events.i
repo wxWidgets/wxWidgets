@@ -193,6 +193,15 @@ public:
 
 //---------------------------------------------------------------------------
 
+class wxMouseCaptureChangedEvent : public wxEvent
+{
+public:
+    wxMouseCaptureChangedEvent(wxWindowID id = 0, wxWindow* gainedCapture = NULL);
+    wxWindow* GetCapturedWindow() const;
+};
+
+//---------------------------------------------------------------------------
+
 class wxKeyEvent: public wxEvent {
 public:
     wxKeyEvent(int keyEventType);

@@ -389,6 +389,23 @@ class wxMouseEvent(wxMouseEventPtr):
 
 
 
+class wxMouseCaptureChangedEventPtr(wxEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetCapturedWindow(self, *_args, **_kwargs):
+        val = apply(eventsc.wxMouseCaptureChangedEvent_GetCapturedWindow,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxMouseCaptureChangedEvent instance at %s>" % (self.this,)
+class wxMouseCaptureChangedEvent(wxMouseCaptureChangedEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxMouseCaptureChangedEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxKeyEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this

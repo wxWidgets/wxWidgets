@@ -198,6 +198,9 @@ def EVT_MOUSE_EVENTS(win, func):
     win.Connect(-1, -1, wxEVT_LEAVE_WINDOW,  func)
     win.Connect(-1, -1, wxEVT_ENTER_WINDOW,  func)
 
+def EVT_MOUSE_CAPTURE_CHANGED(win, func):
+    win.Connect(-1, -1, wxEVT_MOUSE_CAPTURE_CHANGED, func)
+
 # EVT_COMMAND
 def EVT_COMMAND(win, id, cmd, func):
     win.Connect(id, -1, cmd, func)

@@ -119,9 +119,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Create(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Create,(self,) + _args, _kwargs)
         return val
-    def CaptureMouse(self, *_args, **_kwargs):
-        val = apply(windowsc.wxWindow_CaptureMouse,(self,) + _args, _kwargs)
-        return val
     def Center(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Center,(self,) + _args, _kwargs)
         return val
@@ -368,9 +365,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def RefreshRect(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_RefreshRect,(self,) + _args, _kwargs)
         return val
-    def ReleaseMouse(self, *_args, **_kwargs):
-        val = apply(windowsc.wxWindow_ReleaseMouse,(self,) + _args, _kwargs)
-        return val
     def RemoveChild(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_RemoveChild,(self,) + _args, _kwargs)
         return val
@@ -473,9 +467,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def Validate(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Validate,(self,) + _args, _kwargs)
-        return val
-    def WarpPointer(self, *_args, **_kwargs):
-        val = apply(windowsc.wxWindow_WarpPointer,(self,) + _args, _kwargs)
         return val
     def ConvertDialogPointToPixels(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_ConvertDialogPointToPixels,(self,) + _args, _kwargs)
@@ -602,6 +593,18 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def SetDefaultItem(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetDefaultItem,(self,) + _args, _kwargs)
+        return val
+    def WarpPointer(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_WarpPointer,(self,) + _args, _kwargs)
+        return val
+    def CaptureMouse(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_CaptureMouse,(self,) + _args, _kwargs)
+        return val
+    def ReleaseMouse(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_ReleaseMouse,(self,) + _args, _kwargs)
+        return val
+    def HasCapture(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_HasCapture,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
@@ -1143,6 +1146,10 @@ wxWindow_NewControlId = windowsc.wxWindow_NewControlId
 wxWindow_NextControlId = windowsc.wxWindow_NextControlId
 
 wxWindow_PrevControlId = windowsc.wxWindow_PrevControlId
+
+def wxWindow_GetCapture(*_args, **_kwargs):
+    val = apply(windowsc.wxWindow_GetCapture,_args,_kwargs)
+    return val
 
 wxMenuItem_GetLabelFromText = windowsc.wxMenuItem_GetLabelFromText
 

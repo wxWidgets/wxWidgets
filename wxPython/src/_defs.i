@@ -956,6 +956,8 @@ enum wxEventType {
  wxEVT_MIDDLE_DCLICK,
  wxEVT_RIGHT_DCLICK,
 
+ wxEVT_MOUSE_CAPTURE_CHANGED,
+
  // Non-client mouse events
  wxEVT_NC_LEFT_DOWN,
  wxEVT_NC_LEFT_UP,

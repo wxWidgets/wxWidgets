@@ -195,7 +195,6 @@ public:
     %pragma(python) addtomethod = "wxPreWindow:val._setOORInfo(val)"
 
 
-    void CaptureMouse();
     void Center(int direction = wxBOTH);
     void Centre(int direction = wxBOTH);
     void CentreOnParent(int direction = wxBOTH );
@@ -313,7 +312,6 @@ public:
     void Refresh(bool eraseBackground = TRUE, const wxRect* rect = NULL);
     void RefreshRect(const wxRect& rect);
 
-    void ReleaseMouse();
     void RemoveChild(wxWindow* child);
     bool Reparent( wxWindow* newParent );
 
@@ -364,7 +362,6 @@ public:
     bool TransferDataToWindow();
     void UpdateWindowUI();
     bool Validate();
-    void WarpPointer(int x, int y);
 
     %name(ConvertDialogPointToPixels) wxPoint ConvertDialogToPixels(const wxPoint& pt);
     %name(ConvertDialogSizeToPixels)  wxSize  ConvertDialogToPixels(const wxSize& sz);
@@ -438,6 +435,23 @@ public:
 
     wxWindow* GetDefaultItem();
     wxWindow* SetDefaultItem(wxWindow *btn);
+
+
+    // move the mouse to the specified position
+    void WarpPointer(int x, int y);
+
+    // start or end mouse capture, these functions maintain the stack of
+    // windows having captured the mouse and after calling ReleaseMouse()
+    // the mouse is not released but returns to the window which had had
+    // captured it previously (if any)
+    void CaptureMouse();
+    void ReleaseMouse();
+
+    // get the window which currently captures the mouse or NULL
+    static wxWindow *GetCapture();
+
+    // does this window have the capture?
+    bool HasCapture() const;
 };
 
 
