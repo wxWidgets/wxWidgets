@@ -658,31 +658,40 @@ bool wxListCtrl::SetItem(wxListItem& info)
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
 
+    item.cchTextMax = 0;
+    if ( !ListView_SetItem(GetHwnd(), &item) )
+    {
+        wxLogDebug(_T("ListView_SetItem() failed"));
+
+        return FALSE;
+    }
+
+    // we need to update the item immediately to show the new image
+    bool updateNow = (info.m_mask & wxLIST_MASK_IMAGE) != 0;
+
     // check whether it has any custom attributes
     if ( info.HasAttributes() )
     {
+        wxListItemAttr *attr = (wxListItemAttr *)m_attrs.Get(item.iItem);
 
-        wxListItemAttr *attr;
-        attr = (wxListItemAttr*) m_attrs.Get(item.iItem);
-
-        if (attr == NULL)
-
+        if ( attr == NULL )
             m_attrs.Put(item.iItem, (wxObject *)new wxListItemAttr(*info.GetAttributes()));
-
-        else *attr = *info.GetAttributes();
+        else
+            *attr = *info.GetAttributes();
 
         m_hasAnyAttr = TRUE;
+
+        // if the colour has changed, we must redraw the item
+        updateNow = TRUE;
     }
 
-    item.cchTextMax = 0;
-    bool ok = ListView_SetItem(GetHwnd(), &item) != 0;
-    if ( ok && (info.m_mask & wxLIST_MASK_IMAGE) )
+    if ( updateNow )
     {
-        // make the change visible
+        // we need this to make the change visible right now
         ListView_Update(GetHwnd(), item.iItem);
     }
 
-    return ok;
+    return TRUE;
 }
 
 long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
