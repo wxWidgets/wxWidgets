@@ -58,13 +58,13 @@ fi
 
 mkdir obj-shared
 cd obj-shared
-../configure --prefix=%{pref} --enable-soname --with-mgl
+../configure --prefix=%{pref} --enable-soname --with-mgl --disable-fs_inet
 $MAKE
 cd ..
 
 mkdir obj-static
 cd obj-static
-../configure --prefix=%{pref} --disable-shared --with-mgl
+../configure --prefix=%{pref} --disable-shared --with-mgl --disable-fs_inet
 $MAKE
 cd ..
 
