@@ -305,8 +305,8 @@ wxListCtrl::~wxListCtrl()
 
     if ( m_textCtrl )
     {
-        m_textCtrl->UnsubclassWin();
         m_textCtrl->SetHWND(0);
+        m_textCtrl->UnsubclassWin();
         delete m_textCtrl;
         m_textCtrl = NULL;
     }
@@ -1072,8 +1072,8 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 
     if (m_textCtrl)
     {
-        m_textCtrl->UnsubclassWin();
         m_textCtrl->SetHWND(0);
+        m_textCtrl->UnsubclassWin();
         delete m_textCtrl;
         m_textCtrl = NULL;
     }
@@ -1088,29 +1088,15 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 // End label editing, optionally cancelling the edit
 bool wxListCtrl::EndEditLabel(bool WXUNUSED(cancel))
 {
-    wxFAIL;
+    wxFAIL_MSG( _T("not implemented") );
 
-    /* I don't know how to implement this: there's no such macro as ListView_EndEditLabelNow.
-     * ???
-     bool success = (ListView_EndEditLabelNow(GetHwnd(), cancel) != 0);
-
-     if (m_textCtrl)
-     {
-     m_textCtrl->UnsubclassWin();
-     m_textCtrl->SetHWND(0);
-     delete m_textCtrl;
-     m_textCtrl = NULL;
-     }
-     return success;
-     */
     return FALSE;
 }
-
 
 // Ensures this item is visible
 bool wxListCtrl::EnsureVisible(long item)
 {
-    return (ListView_EnsureVisible(GetHwnd(), (int) item, FALSE) != 0);
+    return ListView_EnsureVisible(GetHwnd(), (int) item, FALSE) != 0;
 }
 
 // Find an item whose label matches this string, starting from the item after 'start'
@@ -1422,6 +1408,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
                 LV_DISPINFO *info = (LV_DISPINFO *)lParam;
                 wxConvertFromMSWListItem(this, event.m_item, info->item, GetHwnd());
+                event.m_itemIndex = event.m_item.m_itemId;
             }
             break;
 
@@ -1456,6 +1443,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 wxConvertFromMSWListItem(this, event.m_item, info->item);
                 if ( info->item.pszText == NULL || info->item.iItem == -1 )
                     return FALSE;
+
+                event.m_itemIndex = event.m_item.m_itemId;
             }
             break;
 
